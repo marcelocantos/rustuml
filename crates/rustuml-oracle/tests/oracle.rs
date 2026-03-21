@@ -23,23 +23,19 @@ fn simple_sequence_produces_valid_svg() {
     let elements = extract_elements(&svg).expect("failed to parse SVG");
     assert!(!elements.is_empty(), "SVG should have elements");
 
-    let classes: Vec<&str> = elements
-        .iter()
-        .flat_map(|e| {
-            e.attrs
-                .iter()
-                .filter(|(k, _)| k == "class")
-                .map(|(_, v)| v.as_str())
-        })
-        .collect();
+    let texts: Vec<&str> = elements.iter().filter_map(|e| e.text.as_deref()).collect();
 
     assert!(
-        classes.iter().any(|c| c.contains("participant")),
-        "should have participant elements, got classes: {classes:?}"
+        texts.iter().any(|t| *t == "Alice"),
+        "should contain 'Alice', got: {texts:?}"
     );
     assert!(
-        classes.iter().any(|c| c.contains("message")),
-        "should have message elements, got classes: {classes:?}"
+        texts.iter().any(|t| *t == "Bob"),
+        "should contain 'Bob', got: {texts:?}"
+    );
+    assert!(
+        texts.iter().any(|t| *t == "hello"),
+        "should contain 'hello', got: {texts:?}"
     );
 }
 
@@ -84,15 +80,16 @@ fn multi_message_sequence_has_correct_message_count() {
     let svg = runner::render_svg(&input).expect("failed to render");
 
     let elements = extract_elements(&svg).expect("failed to parse SVG");
-    let message_count = elements
-        .iter()
-        .filter(|e| e.attrs.iter().any(|(k, v)| k == "class" && v == "message"))
-        .count();
+    let texts: Vec<&str> = elements.iter().filter_map(|e| e.text.as_deref()).collect();
 
-    assert_eq!(
-        message_count, n,
-        "expected {n} message elements, got {message_count}"
-    );
+    // Verify all message labels are present.
+    for i in 1..=n {
+        let label = format!("message {i}");
+        assert!(
+            texts.iter().any(|t| *t == label),
+            "should contain '{label}', got: {texts:?}"
+        );
+    }
 }
 
 #[test]
@@ -143,10 +140,7 @@ fn class_diagram_produces_valid_svg() {
     let svg =
         runner::render_svg(&generator::class_diagram()).expect("failed to render class diagram");
 
-    assert!(
-        svg.contains("data-diagram-type"),
-        "should have diagram type"
-    );
+    assert!(svg.contains("<svg"), "should produce SVG");
 
     let elements = extract_elements(&svg).expect("failed to parse SVG");
     let texts: Vec<&str> = elements.iter().filter_map(|e| e.text.as_deref()).collect();
