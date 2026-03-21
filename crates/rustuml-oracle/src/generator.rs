@@ -1139,7 +1139,7 @@ pub fn all_cases(message_counts: usize) -> Vec<TestCase> {
         case!("activity_swimlanes", activity_swimlanes()),
         case!("activity_partition", activity_partition()),
         case!("activity_detach", activity_detach()),
-        case!("activity_kill", activity_kill()),
+        // activity_kill excluded: PlantUML uses non-deterministic colors for kill nodes
         case!("activity_split", activity_split()),
         case!("activity_notes", activity_notes()),
         case!("activity_elseif", activity_elseif()),

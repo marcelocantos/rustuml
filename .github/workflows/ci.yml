@@ -8,6 +8,7 @@ on:
 
 env:
   CARGO_TERM_COLOR: always
+  PLANTUML_VERSION: "1.2025.2"
 
 jobs:
   check:
@@ -44,18 +45,21 @@ jobs:
           distribution: temurin
           java-version: 21
 
+      - name: Install Graphviz
+        run: sudo apt-get update && sudo apt-get install -y graphviz
+
       - name: Cache PlantUML JAR
         id: cache-plantuml
         uses: actions/cache@v4
         with:
           path: /tmp/plantuml.jar
-          key: plantuml-1.2024.8
+          key: plantuml-${{ env.PLANTUML_VERSION }}
 
       - name: Download PlantUML JAR
         if: steps.cache-plantuml.outputs.cache-hit != 'true'
         run: |
           curl -L -o /tmp/plantuml.jar \
-            https://github.com/plantuml/plantuml/releases/download/v1.2024.8/plantuml-1.2024.8.jar
+            "https://github.com/plantuml/plantuml/releases/download/v${PLANTUML_VERSION}/plantuml-${PLANTUML_VERSION}.jar"
 
       - name: Start PlantUML server
         run: |
@@ -68,4 +72,10 @@ jobs:
       - name: Run oracle tests
         env:
           PLANTUML_URL: http://127.0.0.1:8787
+          PLANTUML_JAR: /tmp/plantuml.jar
         run: cargo test --test oracle
+
+      - name: Run proptest oracle tests
+        env:
+          PLANTUML_URL: http://127.0.0.1:8787
+        run: cargo test --test proptest_oracle
