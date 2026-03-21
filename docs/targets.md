@@ -30,17 +30,17 @@
 - **Status**: converging — 107 test cases across 12 diagram types (sequence, class, state, activity, component, use case, deployment, timing, gantt, mindmap, WBS, JSON, YAML, salt, nwdiag). 214 renders per run, all passing. Server-based runner. Remaining: CI integration, property-based random generation for 10k+ scale.
 - **Discovered**: 2026-03-22
 
-### 🎯T1.2 Graphviz DOT layout algorithm ported to Rust
+### 🎯T1.2 Hierarchical graph layout engine in Rust
 - **Weight**: 4 (value 20 / cost 5)
 - **Estimated-cost**: 5
 - **Parent**: 🎯T1
 - **Acceptance**:
-  - DOT hierarchical layout algorithm produces node positions and edge routes from graph descriptions
-  - Output is structurally equivalent to Graphviz for the graph inputs PlantUML generates
-  - Code is clearly separated in its own crate, licensed EPL-2.0
+  - Hierarchical (Sugiyama) layout produces node positions and edge routes from graph descriptions
+  - Output is topologically correct for the graph inputs PlantUML generates (same nodes, edges, relative ordering — not pixel-identical to Graphviz)
+  - Code is in its own crate (`rustuml-layout`), licensed Apache-2.0
   - No external Graphviz binary required
-- **Context**: Graphviz is PlantUML's primary layout engine for entity diagrams (class, component, object, deployment, etc.). The Java codebase already has a partial port (Smetana, ~45k lines) that proves feasibility but has known fidelity gaps. Porting from the C original (not Smetana) avoids inheriting those gaps. Graphviz recently moved to EPL-2.0 which allows combination with Apache 2.0 code.
-- **Status**: identified
+- **Context**: PlantUML uses Graphviz DOT for entity diagrams (class, component, object, deployment). Rather than porting ~43k lines of C/Java, we use layout-rs (MIT, 726 stars, full Sugiyama pipeline with spline routing) as the foundation and wrap it for PlantUML's needs. This gives us a working layout engine quickly and positions us to improve layout quality (line disambiguation, modern aesthetics) beyond what Graphviz provides.
+- **Status**: converging — rustuml-layout crate created wrapping layout-rs (Sugiyama algorithm). Produces SVG with node positions and edge routes. Needs PlantUML-specific shape/style support and integration with rendering pipeline.
 - **Discovered**: 2026-03-22
 
 ### 🎯T1.3 PlantUML parser and TIM preprocessor ported to Rust
