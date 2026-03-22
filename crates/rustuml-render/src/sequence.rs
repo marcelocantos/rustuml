@@ -5,12 +5,13 @@
 
 use rustuml_parser::diagram::sequence::*;
 
+use crate::metrics;
 use crate::svg::SvgBuilder;
 
-const PARTICIPANT_WIDTH: f64 = 100.0;
+const MIN_PARTICIPANT_WIDTH: f64 = 60.0;
 const PARTICIPANT_HEIGHT: f64 = 35.0;
 const PARTICIPANT_GAP: f64 = 50.0;
-const PARTICIPANT_PADDING: f64 = 10.0;
+const PARTICIPANT_PADDING: f64 = 16.0;
 const MESSAGE_HEIGHT: f64 = 40.0;
 const TOP_MARGIN: f64 = 20.0;
 const LEFT_MARGIN: f64 = 20.0;
@@ -20,8 +21,20 @@ const SMALL_FONT: f64 = 11.0;
 /// Render a sequence diagram to SVG.
 pub fn render(diagram: &SequenceDiagram) -> String {
     let n = diagram.participants.len().max(1);
+
+    // Calculate participant widths based on text metrics.
+    let participant_widths: Vec<f64> = diagram
+        .participants
+        .iter()
+        .map(|p| {
+            let text_w = metrics::text_width(&p.label, FONT_SIZE);
+            (text_w + PARTICIPANT_PADDING * 2.0).max(MIN_PARTICIPANT_WIDTH)
+        })
+        .collect();
+
+    let total_participant_width: f64 = participant_widths.iter().sum();
     let total_width =
-        LEFT_MARGIN * 2.0 + (n as f64) * PARTICIPANT_WIDTH + ((n - 1) as f64) * PARTICIPANT_GAP;
+        LEFT_MARGIN * 2.0 + total_participant_width + ((n - 1) as f64) * PARTICIPANT_GAP;
 
     // Count events that consume vertical space.
     let event_count = diagram
@@ -43,17 +56,23 @@ pub fn render(diagram: &SequenceDiagram) -> String {
 
     let mut svg = SvgBuilder::new(total_width, total_height);
 
-    // Build participant x-coordinate map.
-    let px: Vec<f64> = (0..n)
-        .map(|i| LEFT_MARGIN + (i as f64) * (PARTICIPANT_WIDTH + PARTICIPANT_GAP))
-        .collect();
+    // Build participant x-coordinate map (left edge of each box).
+    let mut px: Vec<f64> = Vec::with_capacity(n);
+    let mut x = LEFT_MARGIN;
+    for (i, _) in diagram.participants.iter().enumerate() {
+        px.push(x);
+        x += participant_widths[i] + PARTICIPANT_GAP;
+    }
+    if px.is_empty() {
+        px.push(LEFT_MARGIN);
+    }
 
     let participant_center = |id: &str| -> f64 {
         diagram
             .participants
             .iter()
             .position(|p| p.id == id)
-            .map(|i| px[i] + PARTICIPANT_WIDTH / 2.0)
+            .map(|i| px[i] + participant_widths[i] / 2.0)
             .unwrap_or(0.0)
     };
 
@@ -61,17 +80,10 @@ pub fn render(diagram: &SequenceDiagram) -> String {
     let box_y = TOP_MARGIN;
     for (i, p) in diagram.participants.iter().enumerate() {
         let x = px[i];
-        svg.rounded_rect(
-            x,
-            box_y,
-            PARTICIPANT_WIDTH,
-            PARTICIPANT_HEIGHT,
-            5.0,
-            "#E2E2F0",
-            "#000",
-        );
+        let w = participant_widths[i];
+        svg.rounded_rect(x, box_y, w, PARTICIPANT_HEIGHT, 5.0, "#E2E2F0", "#000");
         svg.text(
-            x + PARTICIPANT_WIDTH / 2.0,
+            x + w / 2.0,
             box_y + PARTICIPANT_HEIGHT / 2.0 + 5.0,
             &p.label,
             "middle",
@@ -83,7 +95,7 @@ pub fn render(diagram: &SequenceDiagram) -> String {
     let lifeline_start = box_y + PARTICIPANT_HEIGHT;
     let lifeline_end = total_height - TOP_MARGIN - PARTICIPANT_HEIGHT;
     for (i, _p) in diagram.participants.iter().enumerate() {
-        let cx = px[i] + PARTICIPANT_WIDTH / 2.0;
+        let cx = px[i] + participant_widths[i] / 2.0;
         svg.line_segment(cx, lifeline_start, cx, lifeline_end, "#999", true);
     }
 
@@ -206,17 +218,10 @@ pub fn render(diagram: &SequenceDiagram) -> String {
     let bottom_y = total_height - TOP_MARGIN - PARTICIPANT_HEIGHT;
     for (i, p) in diagram.participants.iter().enumerate() {
         let x = px[i];
-        svg.rounded_rect(
-            x,
-            bottom_y,
-            PARTICIPANT_WIDTH,
-            PARTICIPANT_HEIGHT,
-            5.0,
-            "#E2E2F0",
-            "#000",
-        );
+        let w = participant_widths[i];
+        svg.rounded_rect(x, bottom_y, w, PARTICIPANT_HEIGHT, 5.0, "#E2E2F0", "#000");
         svg.text(
-            x + PARTICIPANT_WIDTH / 2.0,
+            x + w / 2.0,
             bottom_y + PARTICIPANT_HEIGHT / 2.0 + 5.0,
             &p.label,
             "middle",
