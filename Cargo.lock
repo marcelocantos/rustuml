@@ -737,6 +737,7 @@ dependencies = [
  "anyhow",
  "proptest",
  "roxmltree 0.20.0",
+ "rustuml-parser",
  "serde",
  "serde_json",
  "ureq",
