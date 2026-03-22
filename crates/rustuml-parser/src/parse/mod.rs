@@ -6,6 +6,7 @@
 pub mod activity;
 pub mod class;
 pub mod component;
+pub mod deployment;
 pub mod sequence;
 pub mod state;
 pub mod usecase;
@@ -64,6 +65,16 @@ fn detect_uml_subtype(lines: &[String]) -> UmlSubtype {
         {
             return UmlSubtype::Activity;
         }
+        // Deployment diagram indicators.
+        if trimmed.starts_with("node ")
+            || trimmed.starts_with("artifact ")
+            || trimmed.starts_with("cloud ")
+            || trimmed.starts_with("storage ")
+            || trimmed.starts_with("frame ")
+            || trimmed.starts_with("folder ")
+        {
+            return UmlSubtype::Deployment;
+        }
         // Component diagram indicators.
         if trimmed.starts_with("component ") || (trimmed.starts_with('[') && trimmed.ends_with(']'))
         {
@@ -113,6 +124,7 @@ enum UmlSubtype {
     Activity,
     Component,
     UseCase,
+    Deployment,
 }
 
 /// Parse YAML input into a diagram model.
@@ -192,6 +204,10 @@ pub fn parse_with_base(
             UmlSubtype::UseCase => {
                 let uc = usecase::parse_usecase(&lines)?;
                 Ok(Diagram::UseCase(uc))
+            }
+            UmlSubtype::Deployment => {
+                let dep = deployment::parse_deployment(&lines)?;
+                Ok(Diagram::Deployment(dep))
             }
         },
         other => Err(ParseError {
