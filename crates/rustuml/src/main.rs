@@ -87,7 +87,13 @@ fn main() {
         })
     };
 
-    match rustuml_parser::parse::parse_auto(&input) {
+    let base_dir = if input_path != "-" {
+        std::path::Path::new(input_path).parent()
+    } else {
+        None
+    };
+
+    match rustuml_parser::parse::parse_auto_with_base(&input, base_dir) {
         Ok(diagram) => match output_mode {
             OutputMode::Ast => println!("{diagram:#?}"),
             OutputMode::Yaml => {
