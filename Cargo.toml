@@ -1,5 +1,5 @@
 [workspace]
-members = ["crates/rustuml", "crates/rustuml-layout", "crates/rustuml-oracle", "crates/rustuml-parser"]
+members = ["crates/rustuml", "crates/rustuml-layout", "crates/rustuml-oracle", "crates/rustuml-parser", "crates/rustuml-render"]
 resolver = "2"
 
 [workspace.package]
