@@ -70,9 +70,7 @@ pub fn render(diagram: &StateDiagram) -> String {
     for (id, x, y) in &state_positions {
         if id == "[*]" {
             // Initial/final state — filled circle.
-            // Approximate circle with a small square (proper SVG circle TBD).
-            let r = INITIAL_R;
-            svg.rect(*x - r, *y - r, r * 2.0, r * 2.0, "#000", "#000");
+            svg.circle(*x, *y, INITIAL_R, "#000", "#000");
         } else {
             // Find the state definition.
             let state_def = diagram.states.iter().find(|s| s.id == *id);
