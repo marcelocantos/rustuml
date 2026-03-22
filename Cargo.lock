@@ -548,6 +548,7 @@ dependencies = [
 name = "rustuml-render"
 version = "0.1.0"
 dependencies = [
+ "rustuml-layout",
  "rustuml-parser",
 ]
 

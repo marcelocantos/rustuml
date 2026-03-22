@@ -5,4 +5,5 @@ edition.workspace = true
 license.workspace = true
 
 [dependencies]
+rustuml-layout = { path = "../rustuml-layout" }
 rustuml-parser = { path = "../rustuml-parser" }
