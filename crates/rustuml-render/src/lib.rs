@@ -12,11 +12,17 @@ pub mod style;
 pub mod svg;
 
 use rustuml_parser::diagram::Diagram;
+use style::Theme;
 
-/// Render a parsed diagram to SVG.
+/// Render a parsed diagram to SVG using the default theme.
 pub fn render_svg(diagram: &Diagram) -> String {
+    render_svg_with_theme(diagram, &Theme::default())
+}
+
+/// Render a parsed diagram to SVG with a specific theme.
+pub fn render_svg_with_theme(diagram: &Diagram, theme: &Theme) -> String {
     match diagram {
-        Diagram::Sequence(seq) => sequence::render(seq),
+        Diagram::Sequence(seq) => sequence::render(seq, theme),
         Diagram::Class(cls) => class::render(cls),
         Diagram::State(st) => state::render(st),
         Diagram::Activity(act) => activity::render(act),

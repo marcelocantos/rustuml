@@ -6,6 +6,7 @@
 use rustuml_parser::diagram::sequence::*;
 
 use crate::metrics;
+use crate::style::Theme;
 use crate::svg::SvgBuilder;
 
 const MIN_PARTICIPANT_WIDTH: f64 = 60.0;
@@ -19,7 +20,8 @@ const FONT_SIZE: f64 = 13.0;
 const SMALL_FONT: f64 = 11.0;
 
 /// Render a sequence diagram to SVG.
-pub fn render(diagram: &SequenceDiagram) -> String {
+pub fn render(diagram: &SequenceDiagram, theme: &Theme) -> String {
+    let ss = &theme.sequence;
     let n = diagram.participants.len().max(1);
 
     // Calculate participant widths based on text metrics.
@@ -81,7 +83,15 @@ pub fn render(diagram: &SequenceDiagram) -> String {
     for (i, p) in diagram.participants.iter().enumerate() {
         let x = px[i];
         let w = participant_widths[i];
-        svg.rounded_rect(x, box_y, w, PARTICIPANT_HEIGHT, 5.0, "#E2E2F0", "#000");
+        svg.rounded_rect(
+            x,
+            box_y,
+            w,
+            PARTICIPANT_HEIGHT,
+            5.0,
+            &ss.participant_background,
+            &ss.participant_border,
+        );
         svg.text(
             x + w / 2.0,
             box_y + PARTICIPANT_HEIGHT / 2.0 + 5.0,
@@ -96,7 +106,14 @@ pub fn render(diagram: &SequenceDiagram) -> String {
     let lifeline_end = total_height - TOP_MARGIN - PARTICIPANT_HEIGHT;
     for (i, _p) in diagram.participants.iter().enumerate() {
         let cx = px[i] + participant_widths[i] / 2.0;
-        svg.line_segment(cx, lifeline_start, cx, lifeline_end, "#999", true);
+        svg.line_segment(
+            cx,
+            lifeline_start,
+            cx,
+            lifeline_end,
+            &ss.lifeline_color,
+            true,
+        );
     }
 
     // Render events.
@@ -113,7 +130,7 @@ pub fn render(diagram: &SequenceDiagram) -> String {
                 let to_x = if msg.to == "]" { total_width } else { to_x };
 
                 let dashed = msg.arrow.line == LineStyle::Dotted;
-                svg.line_segment(from_x, y, to_x, y, "#000", dashed);
+                svg.line_segment(from_x, y, to_x, y, &ss.participant_border, dashed);
 
                 // Arrow head (pointing right or left).
                 if to_x > from_x {
@@ -131,7 +148,14 @@ pub fn render(diagram: &SequenceDiagram) -> String {
                 y += MESSAGE_HEIGHT;
             }
             Event::Divider(text) => {
-                svg.line_segment(LEFT_MARGIN, y, total_width - LEFT_MARGIN, y, "#999", true);
+                svg.line_segment(
+                    LEFT_MARGIN,
+                    y,
+                    total_width - LEFT_MARGIN,
+                    y,
+                    &ss.lifeline_color,
+                    true,
+                );
                 let mid = total_width / 2.0;
                 svg.text(mid, y - 3.0, text, "middle", SMALL_FONT);
                 y += MESSAGE_HEIGHT;
@@ -161,7 +185,14 @@ pub fn render(diagram: &SequenceDiagram) -> String {
                     NotePosition::Over => anchor_x - note_w / 2.0,
                 };
 
-                svg.rect(note_x, y - note_h / 2.0, note_w, note_h, "#FEFFDD", "#000");
+                svg.rect(
+                    note_x,
+                    y - note_h / 2.0,
+                    note_w,
+                    note_h,
+                    &ss.note_background,
+                    &ss.participant_border,
+                );
                 svg.text(
                     note_x + PARTICIPANT_PADDING,
                     y + 4.0,
@@ -179,7 +210,7 @@ pub fn render(diagram: &SequenceDiagram) -> String {
                     total_width - LEFT_MARGIN * 2.0 + 10.0,
                     20.0,
                     "none",
-                    "#999",
+                    &ss.lifeline_color,
                 );
                 let label_text = match &g.label {
                     Some(l) => format!("{:?} {l}", g.kind),
@@ -194,7 +225,7 @@ pub fn render(diagram: &SequenceDiagram) -> String {
                     y,
                     total_width - LEFT_MARGIN + 5.0,
                     y,
-                    "#999",
+                    &ss.lifeline_color,
                     true,
                 );
                 svg.text(LEFT_MARGIN, y + 12.0, label, "start", SMALL_FONT);
@@ -219,7 +250,15 @@ pub fn render(diagram: &SequenceDiagram) -> String {
     for (i, p) in diagram.participants.iter().enumerate() {
         let x = px[i];
         let w = participant_widths[i];
-        svg.rounded_rect(x, bottom_y, w, PARTICIPANT_HEIGHT, 5.0, "#E2E2F0", "#000");
+        svg.rounded_rect(
+            x,
+            bottom_y,
+            w,
+            PARTICIPANT_HEIGHT,
+            5.0,
+            &ss.participant_background,
+            &ss.participant_border,
+        );
         svg.text(
             x + w / 2.0,
             bottom_y + PARTICIPANT_HEIGHT / 2.0 + 5.0,
@@ -271,7 +310,7 @@ mod tests {
 
     #[test]
     fn produces_valid_svg() {
-        let svg = render(&simple_diagram());
+        let svg = render(&simple_diagram(), &Theme::default());
         assert!(svg.starts_with("<svg"));
         assert!(svg.contains("</svg>"));
         assert!(svg.contains("Alice"));
@@ -281,7 +320,7 @@ mod tests {
 
     #[test]
     fn has_participant_boxes() {
-        let svg = render(&simple_diagram());
+        let svg = render(&simple_diagram(), &Theme::default());
         // Two boxes at top, two at bottom.
         let rect_count = svg.matches("<rect").count();
         assert!(
@@ -292,14 +331,14 @@ mod tests {
 
     #[test]
     fn has_lifelines() {
-        let svg = render(&simple_diagram());
+        let svg = render(&simple_diagram(), &Theme::default());
         // Dashed vertical lines.
         assert!(svg.contains("stroke-dasharray"));
     }
 
     #[test]
     fn has_arrow() {
-        let svg = render(&simple_diagram());
+        let svg = render(&simple_diagram(), &Theme::default());
         assert!(svg.contains("<polygon"), "should have arrow head polygon");
     }
 
