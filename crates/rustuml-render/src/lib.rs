@@ -17,6 +17,7 @@ pub mod object;
 pub mod mindmap;
 pub mod pdf;
 pub mod png;
+pub mod salt;
 pub mod sequence;
 pub mod skinparam;
 pub mod state;
@@ -80,5 +81,6 @@ fn render_with_theme(diagram: &Diagram, theme: &Theme) -> String {
         Diagram::Object(obj) => object::render(obj, theme),
         Diagram::Wbs(w) => wbs::render(w, theme),
         Diagram::Math(m) => math::render(m, theme),
+        Diagram::Salt(s) => salt::render(s, theme),
     }
 }

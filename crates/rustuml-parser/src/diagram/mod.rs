@@ -15,6 +15,7 @@ pub mod json_diagram;
 pub mod math;
 pub mod mindmap;
 pub mod object;
+pub mod salt;
 pub mod sequence;
 pub mod state;
 pub mod timing;
@@ -41,6 +42,7 @@ pub enum Diagram {
     Timing(timing::TimingDiagram),
     Wbs(wbs::WbsDiagram),
     Math(math::MathDiagram),
+    Salt(salt::SaltDiagram),
 }
 
 /// Source location for error reporting.

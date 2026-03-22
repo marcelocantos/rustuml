@@ -12,6 +12,7 @@ pub mod json_diagram;
 pub mod math;
 pub mod mindmap;
 pub mod object;
+pub mod salt;
 pub mod sequence;
 pub mod state;
 pub mod timing;
@@ -288,6 +289,10 @@ pub fn parse_with_base(
         "latex" => {
             let m = math::parse_math(&lines, true)?;
             Ok(Diagram::Math(m))
+        }
+        "salt" => {
+            let s = salt::parse_salt(&lines)?;
+            Ok(Diagram::Salt(s))
         }
         other => Err(ParseError {
             line: 1,
