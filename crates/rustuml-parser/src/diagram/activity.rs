@@ -4,16 +4,17 @@
 //! Activity diagram model (v3 / new syntax).
 
 use super::DiagramMeta;
+use serde::{Deserialize, Serialize};
 
 /// A complete activity diagram.
-#[derive(Debug)]
+#[derive(Debug, Serialize, Deserialize)]
 pub struct ActivityDiagram {
     pub meta: DiagramMeta,
     pub steps: Vec<ActivityStep>,
 }
 
 /// A step in an activity diagram.
-#[derive(Debug)]
+#[derive(Debug, Serialize, Deserialize)]
 pub enum ActivityStep {
     Start,
     Stop,
@@ -44,19 +45,19 @@ pub enum ActivityStep {
     Kill,
 }
 
-#[derive(Debug)]
+#[derive(Debug, Serialize, Deserialize)]
 pub struct IfBlock {
     pub condition: String,
     pub then_label: Option<String>,
 }
 
-#[derive(Debug)]
+#[derive(Debug, Serialize, Deserialize)]
 pub struct ElseIfBranch {
     pub condition: String,
     pub then_label: Option<String>,
 }
 
-#[derive(Debug)]
+#[derive(Debug, Serialize, Deserialize)]
 pub struct WhileBlock {
     pub condition: String,
     pub is_label: Option<String>,

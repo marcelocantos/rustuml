@@ -4,9 +4,10 @@
 //! Sequence diagram model.
 
 use super::DiagramMeta;
+use serde::{Deserialize, Serialize};
 
 /// A complete sequence diagram.
-#[derive(Debug)]
+#[derive(Debug, Serialize, Deserialize)]
 pub struct SequenceDiagram {
     pub meta: DiagramMeta,
     pub participants: Vec<Participant>,
@@ -15,7 +16,7 @@ pub struct SequenceDiagram {
 }
 
 /// A participant (lifeline) in a sequence diagram.
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct Participant {
     pub id: String,
     pub label: String,
@@ -24,7 +25,7 @@ pub struct Participant {
 }
 
 /// The visual shape of a participant.
-#[derive(Debug, Clone, Copy, PartialEq, Eq, Default)]
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Default, Serialize, Deserialize)]
 pub enum ParticipantKind {
     #[default]
     Participant,
@@ -38,7 +39,7 @@ pub enum ParticipantKind {
 }
 
 /// A sequence diagram event (message, note, group boundary, etc.).
-#[derive(Debug)]
+#[derive(Debug, Serialize, Deserialize)]
 pub enum Event {
     Message(Message),
     Note(Note),
@@ -58,7 +59,7 @@ pub enum Event {
 }
 
 /// A message arrow between participants.
-#[derive(Debug)]
+#[derive(Debug, Serialize, Deserialize)]
 pub struct Message {
     pub from: String,
     pub to: String,
@@ -68,21 +69,21 @@ pub struct Message {
 }
 
 /// Arrow style for a message.
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct Arrow {
     pub line: LineStyle,
     pub head: ArrowHead,
     pub direction: ArrowDirection,
 }
 
-#[derive(Debug, Clone, Copy, PartialEq, Eq, Default)]
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Default, Serialize, Deserialize)]
 pub enum LineStyle {
     #[default]
     Solid,
     Dotted,
 }
 
-#[derive(Debug, Clone, Copy, PartialEq, Eq, Default)]
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Default, Serialize, Deserialize)]
 pub enum ArrowHead {
     #[default]
     Filled,
@@ -92,7 +93,7 @@ pub enum ArrowHead {
     None,
 }
 
-#[derive(Debug, Clone, Copy, PartialEq, Eq)]
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Serialize, Deserialize)]
 pub enum ArrowDirection {
     LeftToRight,
     RightToLeft,
@@ -101,7 +102,7 @@ pub enum ArrowDirection {
 }
 
 /// Activation change triggered by a message.
-#[derive(Debug, Clone, Copy, PartialEq, Eq)]
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Serialize, Deserialize)]
 pub enum ActivationChange {
     Activate,
     Deactivate,
@@ -109,14 +110,14 @@ pub enum ActivationChange {
 }
 
 /// A note attached to one or more participants.
-#[derive(Debug)]
+#[derive(Debug, Serialize, Deserialize)]
 pub struct Note {
     pub position: NotePosition,
     pub participants: Vec<String>,
     pub text: String,
 }
 
-#[derive(Debug, Clone, Copy, PartialEq, Eq)]
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Serialize, Deserialize)]
 pub enum NotePosition {
     Left,
     Right,
@@ -124,13 +125,13 @@ pub enum NotePosition {
 }
 
 /// Start of a grouping construct (alt, opt, loop, etc.).
-#[derive(Debug)]
+#[derive(Debug, Serialize, Deserialize)]
 pub struct GroupStart {
     pub kind: GroupKind,
     pub label: Option<String>,
 }
 
-#[derive(Debug, Clone, Copy, PartialEq, Eq)]
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Serialize, Deserialize)]
 pub enum GroupKind {
     Alt,
     Opt,
@@ -142,26 +143,26 @@ pub enum GroupKind {
 }
 
 /// An "else" branch within a group.
-#[derive(Debug)]
+#[derive(Debug, Serialize, Deserialize)]
 pub struct GroupElse {
     pub label: Option<String>,
 }
 
 /// A reference to another diagram.
-#[derive(Debug)]
+#[derive(Debug, Serialize, Deserialize)]
 pub struct Ref {
     pub participants: Vec<String>,
     pub text: String,
 }
 
 /// A return message (shorthand for dotted reply).
-#[derive(Debug)]
+#[derive(Debug, Serialize, Deserialize)]
 pub struct ReturnMessage {
     pub label: String,
 }
 
 /// Auto-numbering configuration.
-#[derive(Debug)]
+#[derive(Debug, Serialize, Deserialize)]
 pub struct AutoNumber {
     pub start: u32,
     pub step: u32,

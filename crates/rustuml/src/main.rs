@@ -7,12 +7,16 @@ fn main() {
     let args: Vec<String> = std::env::args().collect();
 
     if args.len() < 2 || args[1] == "--help" || args[1] == "-h" {
-        eprintln!("Usage: rustuml [options] <file.puml>");
-        eprintln!("       cat file.puml | rustuml [options] -");
+        eprintln!("Usage: rustuml [options] <file>");
+        eprintln!("       cat file | rustuml [options] -");
+        eprintln!();
+        eprintln!("Input formats: PlantUML (.puml), YAML (.yaml/.yml), JSON (.json)");
+        eprintln!("Format is auto-detected from content, or use file extension.");
         eprintln!();
         eprintln!("Options:");
         eprintln!("  -tsvg       Output SVG (default)");
-        eprintln!("  --ast       Print parsed AST instead of rendering");
+        eprintln!("  --ast       Print parsed AST (Debug format)");
+        eprintln!("  --yaml      Print parsed diagram as YAML");
         eprintln!("  --version   Print version");
         eprintln!("  --help      Print this help");
         std::process::exit(if args.len() < 2 { 1 } else { 0 });
@@ -23,13 +27,14 @@ fn main() {
         return;
     }
 
-    let mut ast_mode = false;
+    let mut output_mode = OutputMode::Svg;
     let mut input_arg = None;
 
     for arg in &args[1..] {
         match arg.as_str() {
-            "--ast" => ast_mode = true,
-            "-tsvg" => {} // default, accepted but no-op
+            "--ast" => output_mode = OutputMode::Ast,
+            "--yaml" => output_mode = OutputMode::Yaml,
+            "-tsvg" => output_mode = OutputMode::Svg,
             _ => input_arg = Some(arg.as_str()),
         }
     }
@@ -52,17 +57,26 @@ fn main() {
         })
     };
 
-    match rustuml_parser::parse::parse(&input) {
-        Ok(diagram) => {
-            if ast_mode {
-                println!("{diagram:#?}");
-            } else {
-                print!("{}", rustuml_render::render_svg(&diagram));
+    match rustuml_parser::parse::parse_auto(&input) {
+        Ok(diagram) => match output_mode {
+            OutputMode::Ast => println!("{diagram:#?}"),
+            OutputMode::Yaml => {
+                print!(
+                    "{}",
+                    serde_yaml::to_string(&diagram).expect("YAML serialization failed")
+                );
             }
-        }
+            OutputMode::Svg => print!("{}", rustuml_render::render_svg(&diagram)),
+        },
         Err(e) => {
             eprintln!("parse error: {e}");
             std::process::exit(1);
         }
     }
+}
+
+enum OutputMode {
+    Svg,
+    Ast,
+    Yaml,
 }

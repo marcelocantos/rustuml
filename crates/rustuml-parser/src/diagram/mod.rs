@@ -2,35 +2,45 @@
 // SPDX-License-Identifier: Apache-2.0
 
 //! Diagram models — the typed ASTs produced by parsing.
+//!
+//! All types derive `Serialize`/`Deserialize` so diagrams can be
+//! specified in YAML or JSON as an alternative to PlantUML text syntax.
 
 pub mod activity;
 pub mod class;
 pub mod sequence;
 pub mod state;
 
+use serde::{Deserialize, Serialize};
+
 /// A parsed diagram, ready for layout and rendering.
-#[derive(Debug)]
+#[derive(Debug, Serialize, Deserialize)]
+#[serde(tag = "type", content = "diagram")]
 pub enum Diagram {
     Sequence(sequence::SequenceDiagram),
     Class(class::ClassDiagram),
     State(state::StateDiagram),
     Activity(activity::ActivityDiagram),
-    // Future: Component, UseCase, etc.
 }
 
 /// Source location for error reporting.
-#[derive(Debug, Clone, Copy, PartialEq, Eq)]
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Serialize, Deserialize)]
 pub struct Span {
     pub line: usize,
     pub col: usize,
 }
 
 /// Common metadata that any diagram can carry.
-#[derive(Debug, Default)]
+#[derive(Debug, Default, Serialize, Deserialize)]
 pub struct DiagramMeta {
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub title: Option<String>,
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub header: Option<String>,
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub footer: Option<String>,
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub caption: Option<String>,
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub legend: Option<String>,
 }

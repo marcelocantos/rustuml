@@ -7,3 +7,4 @@ license.workspace = true
 [dependencies]
 rustuml-parser = { path = "../rustuml-parser" }
 rustuml-render = { path = "../rustuml-render" }
+serde_yaml = "0.9"
