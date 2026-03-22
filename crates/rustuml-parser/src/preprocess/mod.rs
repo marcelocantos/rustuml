@@ -37,6 +37,7 @@ struct PreprocessContext {
     in_block_comment: bool,
     base_dir: Option<PathBuf>,
     include_depth: usize,
+    foreach_stack: Vec<ForEachState>,
 }
 
 const MAX_INCLUDE_DEPTH: usize = 10;
@@ -44,6 +45,12 @@ const MAX_INCLUDE_DEPTH: usize = 10;
 struct CondState {
     active: bool,
     has_matched: bool,
+}
+
+struct ForEachState {
+    var_name: String,
+    values: Vec<String>,
+    body_lines: Vec<String>,
 }
 
 impl PreprocessContext {
@@ -54,6 +61,7 @@ impl PreprocessContext {
             in_block_comment: false,
             base_dir,
             include_depth: 0,
+            foreach_stack: Vec::new(),
         }
     }
 
@@ -92,6 +100,12 @@ impl PreprocessContext {
 
             // Skip @start/@end tags.
             if trimmed.starts_with("@start") || trimmed.starts_with("@end") {
+                continue;
+            }
+
+            // Foreach buffering — must be checked first so body lines
+            // aren't processed as directives.
+            if self.try_foreach(trimmed, &mut output) {
                 continue;
             }
 
@@ -149,6 +163,76 @@ impl PreprocessContext {
             }
             return true;
         }
+        false
+    }
+
+    fn try_foreach(&mut self, line: &str, output: &mut Vec<String>) -> bool {
+        // !foreach $var in ["a", "b", "c"]
+        static RE: LazyLock<Regex> =
+            LazyLock::new(|| Regex::new(r#"^!foreach\s+\$(\w+)\s+in\s+\[(.+)\]$"#).unwrap());
+
+        if let Some(caps) = RE.captures(line) {
+            if !self.is_active() {
+                return true;
+            }
+            let var_name = caps[1].to_string();
+            let values_str = &caps[2];
+
+            // Parse the values list (comma-separated, possibly quoted).
+            let values: Vec<String> = values_str
+                .split(',')
+                .map(|v| v.trim().trim_matches('"').trim_matches('\'').to_string())
+                .collect();
+
+            // Collect body lines until !endfor.
+            // This is a simplified implementation that doesn't support nesting.
+            // For now, we store the foreach state and handle it in process().
+            // Actually, since we process line-by-line, we need a different approach.
+            // Store the foreach and buffer lines until !endfor.
+            self.foreach_stack.push(ForEachState {
+                var_name,
+                values,
+                body_lines: Vec::new(),
+            });
+            return true;
+        }
+
+        if line == "!endfor" || line == "!endforeach" {
+            if let Some(foreach) = self.foreach_stack.pop() {
+                if self.is_active() {
+                    // Expand: for each value, substitute and process body lines.
+                    for val in &foreach.values {
+                        let old_val = self.defines.get(&foreach.var_name).cloned();
+                        self.defines.insert(foreach.var_name.clone(), val.clone());
+
+                        for body_line in &foreach.body_lines {
+                            let expanded = self.substitute_vars(body_line);
+                            if !expanded.trim().is_empty() {
+                                output.push(expanded);
+                            }
+                        }
+
+                        // Restore previous value.
+                        match old_val {
+                            Some(v) => {
+                                self.defines.insert(foreach.var_name.clone(), v);
+                            }
+                            None => {
+                                self.defines.remove(&foreach.var_name);
+                            }
+                        }
+                    }
+                }
+            }
+            return true;
+        }
+
+        // If we're inside a foreach, buffer the line.
+        if let Some(foreach) = self.foreach_stack.last_mut() {
+            foreach.body_lines.push(line.to_string());
+            return true;
+        }
+
         false
     }
 
@@ -490,5 +574,40 @@ mod tests {
         assert_eq!(lines, vec!["Alice -> Bob : hi"]);
 
         let _ = std::fs::remove_dir_all(&dir);
+    }
+
+    #[test]
+    fn foreach_basic() {
+        let input = "@startuml\n!foreach $name in [\"Alice\", \"Bob\", \"Charlie\"]\nparticipant $name\n!endfor\n@enduml";
+        let lines = preprocess(input);
+        assert_eq!(
+            lines,
+            vec![
+                "participant Alice",
+                "participant Bob",
+                "participant Charlie"
+            ]
+        );
+    }
+
+    #[test]
+    fn foreach_with_message() {
+        let input = "@startuml\n!foreach $x in [\"a\", \"b\"]\nAlice -> Bob : $x\n!endfor\n@enduml";
+        let lines = preprocess(input);
+        assert_eq!(lines, vec!["Alice -> Bob : a", "Alice -> Bob : b"]);
+    }
+
+    #[test]
+    fn foreach_preserves_other_vars() {
+        let input = "@startuml\n!define WHO Alice\n!foreach $x in [\"hello\", \"world\"]\n$WHO -> Bob : $x\n!endfor\n@enduml";
+        let lines = preprocess(input);
+        assert_eq!(lines, vec!["Alice -> Bob : hello", "Alice -> Bob : world"]);
+    }
+
+    #[test]
+    fn foreach_endforeach() {
+        let input = "@startuml\n!foreach $x in [\"a\"]\nline $x\n!endforeach\n@enduml";
+        let lines = preprocess(input);
+        assert_eq!(lines, vec!["line a"]);
     }
 }
