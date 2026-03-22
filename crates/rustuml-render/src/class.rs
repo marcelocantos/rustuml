@@ -9,6 +9,7 @@
 use rustuml_layout::graph::{Direction, LayoutGraph};
 use rustuml_parser::diagram::class::*;
 
+use crate::metrics;
 use crate::svg::SvgBuilder;
 
 const CLASS_MIN_WIDTH: f64 = 120.0;
@@ -17,7 +18,6 @@ const MEMBER_HEIGHT: f64 = 18.0;
 const FONT_SIZE: f64 = 13.0;
 const SMALL_FONT: f64 = 11.0;
 const PADDING: f64 = 8.0;
-const CHAR_WIDTH: f64 = 7.5;
 const MARGIN: f64 = 30.0;
 
 /// Render a class diagram to SVG.
@@ -132,12 +132,12 @@ fn calc_class_dim(entity: &ClassEntity) -> ClassDim {
         EntityKind::Class => None,
     };
 
-    let name_width = entity.label.len() as f64 * CHAR_WIDTH + PADDING * 2.0;
-    let kind_width = kind_label.map_or(0.0, |k| k.len() as f64 * CHAR_WIDTH + PADDING * 2.0);
+    let name_width = metrics::text_width(&entity.label, FONT_SIZE) + PADDING * 2.0;
+    let kind_width = kind_label.map_or(0.0, |k| metrics::text_width(k, SMALL_FONT) + PADDING * 2.0);
     let member_max_width = entity
         .members
         .iter()
-        .map(|m| format_member(m).len() as f64 * CHAR_WIDTH + PADDING * 2.0)
+        .map(|m| metrics::text_width(&format_member(m), SMALL_FONT) + PADDING * 2.0)
         .fold(0.0_f64, f64::max);
 
     let width = CLASS_MIN_WIDTH
