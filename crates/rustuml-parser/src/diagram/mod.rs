@@ -9,6 +9,7 @@
 pub mod activity;
 pub mod class;
 pub mod component;
+pub mod deployment;
 pub mod sequence;
 pub mod state;
 pub mod usecase;
@@ -25,6 +26,7 @@ pub enum Diagram {
     Activity(activity::ActivityDiagram),
     Component(component::ComponentDiagram),
     UseCase(usecase::UseCaseDiagram),
+    Deployment(deployment::DeploymentDiagram),
 }
 
 /// Source location for error reporting.
