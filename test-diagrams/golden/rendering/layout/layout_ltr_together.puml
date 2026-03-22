@@ -1,0 +1,13 @@
+@startuml
+left to right direction
+together {
+  class Service
+  class Repository
+}
+class Controller
+class Model
+Controller --> Service
+Service --> Repository
+Repository --> Model
+
+@enduml

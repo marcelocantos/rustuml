@@ -1,0 +1,16 @@
+@startuml
+state System {
+  state Auth {
+    [*] --> LoggedOut
+    LoggedOut --> LoggedIn : login
+    LoggedIn --> LoggedOut : logout
+  }
+  state Session {
+    [*] --> Active
+    Active --> Expired : timeout
+    Expired --> [*]
+  }
+  Auth --> Session : authenticated
+}
+
+@enduml

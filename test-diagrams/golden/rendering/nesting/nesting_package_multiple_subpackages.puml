@@ -1,0 +1,26 @@
+@startuml
+package Application {
+  package Controllers {
+    class UserCtrl
+    class ProductCtrl
+    class OrderCtrl
+  }
+  package Services {
+    class UserSvc
+    class ProductSvc
+    class OrderSvc
+  }
+  package Repositories {
+    class UserRepo
+    class ProductRepo
+    class OrderRepo
+  }
+}
+UserCtrl --> UserSvc
+ProductCtrl --> ProductSvc
+OrderCtrl --> OrderSvc
+UserSvc --> UserRepo
+ProductSvc --> ProductRepo
+OrderSvc --> OrderRepo
+
+@enduml

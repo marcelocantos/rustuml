@@ -1,0 +1,10 @@
+@startuml
+left to right direction
+[*] --> Idle
+Idle --> Processing : start
+Processing --> Done : finish
+Processing --> Error : fail
+Error --> Idle : reset
+Done --> [*]
+
+@enduml

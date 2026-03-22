@@ -1,0 +1,22 @@
+@startuml
+class L0
+class L1
+class L2
+class L3
+class L4
+class L5
+class L6
+class L7
+class L8
+class L9
+L0 <|-- L1
+L1 <|-- L2
+L2 <|-- L3
+L3 <|-- L4
+L4 <|-- L5
+L5 <|-- L6
+L6 <|-- L7
+L7 <|-- L8
+L8 <|-- L9
+
+@enduml

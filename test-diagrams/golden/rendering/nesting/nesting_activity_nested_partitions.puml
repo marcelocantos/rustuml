@@ -1,0 +1,19 @@
+@startuml
+|#LightBlue|CustomerDept|
+start
+:Submit Order;
+|#LightGreen|SalesDept|
+:Review Order;
+if (Approve?) then (yes)
+  |WarehouseDept|
+  :Pick Items;
+  :Pack;
+  |ShippingDept|
+  :Ship;
+else (no)
+  |CustomerDept|
+  :Notify Rejection;
+endif
+stop
+
+@enduml

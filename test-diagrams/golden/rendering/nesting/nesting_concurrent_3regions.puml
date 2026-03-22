@@ -1,0 +1,22 @@
+@startuml
+state ThreeWay {
+  state "Audio" as Audio {
+    [*] --> Playing
+    Playing --> Paused
+    Paused --> Playing
+    Playing --> [*]
+  }
+  --
+  state "Video" as Video {
+    [*] --> Rendering
+    Rendering --> [*]
+  }
+  --
+  state "Network" as Network {
+    [*] --> Connecting
+    Connecting --> Connected
+    Connected --> [*]
+  }
+}
+
+@enduml

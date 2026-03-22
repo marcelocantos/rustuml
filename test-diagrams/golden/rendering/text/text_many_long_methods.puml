@@ -1,0 +1,9 @@
+@startuml
+class VerboseService {
+  +ResponseObject processComplexRequestWithMultipleParameters(RequestObject request, ConfigObject config, ContextObject context)
+  +ValidationResult validateAndTransformInput(InputObject rawInput, SchemaObject schema)
+  +CompletableFuture<ResultObject> executeAsynchronouslyWithRetry(TaskObject task, RetryPolicy policy)
+  +List<ReportObject> generateComprehensiveReport(DateRange range, FilterCriteria criteria)
+}
+
+@enduml

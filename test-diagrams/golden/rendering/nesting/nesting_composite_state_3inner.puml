@@ -1,0 +1,10 @@
+@startuml
+state Processing {
+  [*] --> Validate
+  Validate --> Transform : valid
+  Transform --> Persist
+  Persist --> [*]
+  Validate --> [*] : invalid
+}
+
+@enduml

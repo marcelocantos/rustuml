@@ -1,0 +1,15 @@
+@startuml
+left to right direction
+node "Web Server" {
+  artifact "Frontend App"
+}
+node "App Server" {
+  artifact "Backend API"
+}
+node "DB Server" {
+  database "PostgreSQL"
+}
+"Frontend App" --> "Backend API" : HTTP
+"Backend API" --> "PostgreSQL" : SQL
+
+@enduml

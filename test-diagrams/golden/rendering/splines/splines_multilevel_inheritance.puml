@@ -1,0 +1,16 @@
+@startuml
+skinparam linetype ortho
+abstract class Animal
+class Mammal
+class Bird
+class Dog
+class Cat
+class Eagle
+Animal <|-- Mammal
+Animal <|-- Bird
+Mammal <|-- Dog
+Mammal <|-- Cat
+Bird <|-- Eagle
+Dog --> Cat : chases
+
+@enduml

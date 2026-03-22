@@ -1,0 +1,6 @@
+@startuml
+class MyClass {
+  +ResultType veryLongMethodNameWithManyParameters(FirstParameterType firstParam, SecondParameterType secondParam, ThirdParameterType thirdParam)
+}
+
+@enduml

@@ -1,0 +1,17 @@
+@startuml
+skinparam linetype ortho
+class Hub
+class A
+class B
+class C
+class D
+class E
+class F
+Hub --> A
+Hub --> B
+Hub --> C
+Hub --> D
+Hub --> E
+Hub --> F
+
+@enduml

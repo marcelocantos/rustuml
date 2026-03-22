@@ -1,0 +1,13 @@
+@startuml
+state Outer {
+  state Inner {
+    [*] --> A
+    A --> B
+    B --> [*]
+  }
+  [*] --> Inner
+  Inner --> Done
+  Done --> [*]
+}
+
+@enduml

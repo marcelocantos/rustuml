@@ -1,0 +1,15 @@
+@startuml
+state Concurrent {
+  state "Region A" as RA {
+    [*] --> A1
+    A1 --> A2
+    A2 --> [*]
+  }
+  --
+  state "Region B" as RB {
+    [*] --> B1
+    B1 --> [*]
+  }
+}
+
+@enduml

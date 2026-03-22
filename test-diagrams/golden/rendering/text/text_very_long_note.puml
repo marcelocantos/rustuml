@@ -1,0 +1,11 @@
+@startuml
+class DocumentedClass
+note right of DocumentedClass
+  This note contains a very long description that goes into
+  significant detail about the class. It spans multiple lines
+  and tests how the renderer handles large text blocks in notes.
+  Additional lines keep adding content to stress the layout.
+  Final line of the note.
+end note
+
+@enduml

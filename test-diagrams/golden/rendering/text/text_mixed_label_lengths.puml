@@ -1,0 +1,9 @@
+@startuml
+class Short
+class AVeryMuchLongerClassName
+class Medium123
+Short --> AVeryMuchLongerClassName : a very long connector label that describes the relationship
+Short --> Medium123 : short
+AVeryMuchLongerClassName --> Medium123 :
+
+@enduml

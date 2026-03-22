@@ -1,0 +1,19 @@
+@startuml
+|User|
+start
+:Submit Request;
+|System|
+:Validate Input;
+if (Valid?) then (yes)
+  |Backend|
+  :Process;
+  :Save;
+  |System|
+  :Send Confirmation;
+else (no)
+  :Return Error;
+endif
+|User|
+stop
+
+@enduml

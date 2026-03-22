@@ -1,0 +1,14 @@
+@startuml
+node Datacenter {
+  node Rack {
+    node Server {
+      node VM {
+        artifact Container {
+          component App
+        }
+      }
+    }
+  }
+}
+
+@enduml

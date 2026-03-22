@@ -1,0 +1,20 @@
+@startuml
+left to right direction
+package Frontend {
+  class Controller
+  class View
+}
+package Backend {
+  class API
+  class Logic
+}
+package Database {
+  class DAO
+  class Model
+}
+Controller --> API
+API --> Logic
+Logic --> DAO
+DAO --> Model
+
+@enduml

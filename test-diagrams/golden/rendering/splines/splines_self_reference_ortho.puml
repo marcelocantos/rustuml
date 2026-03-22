@@ -1,0 +1,6 @@
+@startuml
+skinparam linetype ortho
+class Node
+Node --> Node : next
+
+@enduml

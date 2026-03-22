@@ -1,0 +1,8 @@
+@startuml
+class Customer {
+  +String name
+  +String 電話番号
+}
+note right : 顧客エンティティ
+
+@enduml
