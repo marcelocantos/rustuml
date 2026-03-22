@@ -78,12 +78,12 @@ impl TimingParser {
     fn try_time_point(&mut self, line: &str) -> bool {
         static RE: LazyLock<Regex> = LazyLock::new(|| Regex::new(r"^@(-?\d+)$").unwrap());
 
-        if let Some(caps) = RE.captures(line) {
-            if let Ok(t) = caps[1].parse::<i64>() {
-                self.current_time = t;
-                self.time_points.insert(t);
-                return true;
-            }
+        if let Some(caps) = RE.captures(line)
+            && let Ok(t) = caps[1].parse::<i64>()
+        {
+            self.current_time = t;
+            self.time_points.insert(t);
+            return true;
         }
         false
     }

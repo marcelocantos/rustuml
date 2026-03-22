@@ -135,17 +135,17 @@ pub fn render(diagram: &GanttDiagram, _theme: &Theme) -> String {
     // ── Dependency arrows ─────────────────────────────────────────────────────
 
     for (i, task) in diagram.tasks.iter().enumerate() {
-        if let TaskStart::AfterTask(dep_name) = &task.start {
-            if let Some(dep_idx) = diagram.tasks.iter().position(|t| &t.name == dep_name) {
-                let (dep_start, dep_dur) = resolved[dep_idx];
-                // Arrow from end of predecessor bar to start of this bar.
-                let ax1 = chart_x + (dep_start + dep_dur) as f64 * DAY_WIDTH;
-                let ay1 = row_y[dep_idx] + ROW_HEIGHT / 2.0;
-                let ax2 = chart_x + resolved[i].0 as f64 * DAY_WIDTH;
-                let ay2 = row_y[i] + ROW_HEIGHT / 2.0;
+        if let TaskStart::AfterTask(dep_name) = &task.start
+            && let Some(dep_idx) = diagram.tasks.iter().position(|t| &t.name == dep_name)
+        {
+            let (dep_start, dep_dur) = resolved[dep_idx];
+            // Arrow from end of predecessor bar to start of this bar.
+            let ax1 = chart_x + (dep_start + dep_dur) as f64 * DAY_WIDTH;
+            let ay1 = row_y[dep_idx] + ROW_HEIGHT / 2.0;
+            let ax2 = chart_x + resolved[i].0 as f64 * DAY_WIDTH;
+            let ay2 = row_y[i] + ROW_HEIGHT / 2.0;
 
-                draw_elbow_arrow(&mut svg, ax1, ay1, ax2, ay2);
-            }
+            draw_elbow_arrow(&mut svg, ax1, ay1, ax2, ay2);
         }
     }
 
