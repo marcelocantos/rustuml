@@ -4,9 +4,10 @@
 //! Class diagram model.
 
 use super::DiagramMeta;
+use serde::{Deserialize, Serialize};
 
 /// A complete class diagram.
-#[derive(Debug)]
+#[derive(Debug, Serialize, Deserialize)]
 pub struct ClassDiagram {
     pub meta: DiagramMeta,
     pub entities: Vec<ClassEntity>,
@@ -15,7 +16,7 @@ pub struct ClassDiagram {
 }
 
 /// A class, interface, enum, or other entity.
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct ClassEntity {
     pub id: String,
     pub label: String,
@@ -25,7 +26,7 @@ pub struct ClassEntity {
 }
 
 /// The kind of entity in a class diagram.
-#[derive(Debug, Clone, Copy, PartialEq, Eq, Default)]
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Default, Serialize, Deserialize)]
 pub enum EntityKind {
     #[default]
     Class,
@@ -37,7 +38,7 @@ pub enum EntityKind {
 }
 
 /// A field or method in a class.
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct Member {
     pub name: String,
     pub return_type: Option<String>,
@@ -47,7 +48,7 @@ pub struct Member {
     pub kind: MemberKind,
 }
 
-#[derive(Debug, Clone, Copy, PartialEq, Eq, Default)]
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Default, Serialize, Deserialize)]
 pub enum Visibility {
     #[default]
     Default,
@@ -57,14 +58,14 @@ pub enum Visibility {
     Package,
 }
 
-#[derive(Debug, Clone, Copy, PartialEq, Eq)]
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Serialize, Deserialize)]
 pub enum MemberKind {
     Field,
     Method,
 }
 
 /// A relationship (association, inheritance, etc.) between entities.
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct Relationship {
     pub from: String,
     pub to: String,
@@ -74,7 +75,7 @@ pub struct Relationship {
     pub to_multiplicity: Option<String>,
 }
 
-#[derive(Debug, Clone, Copy, PartialEq, Eq)]
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Serialize, Deserialize)]
 pub enum RelationshipKind {
     Inheritance,
     Implementation,
@@ -85,7 +86,7 @@ pub enum RelationshipKind {
 }
 
 /// A package grouping entities.
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct Package {
     pub name: String,
     pub entities: Vec<String>,

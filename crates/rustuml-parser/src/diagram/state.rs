@@ -4,9 +4,10 @@
 //! State diagram model.
 
 use super::DiagramMeta;
+use serde::{Deserialize, Serialize};
 
 /// A complete state diagram.
-#[derive(Debug)]
+#[derive(Debug, Serialize, Deserialize)]
 pub struct StateDiagram {
     pub meta: DiagramMeta,
     pub states: Vec<State>,
@@ -14,7 +15,7 @@ pub struct StateDiagram {
 }
 
 /// A state in a state diagram.
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct State {
     pub id: String,
     pub label: String,
@@ -23,7 +24,7 @@ pub struct State {
     pub substates: Vec<String>,
 }
 
-#[derive(Debug, Clone, Copy, PartialEq, Eq, Default)]
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Default, Serialize, Deserialize)]
 pub enum StateKind {
     #[default]
     Normal,
@@ -37,7 +38,7 @@ pub enum StateKind {
 }
 
 /// A transition between states.
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct Transition {
     pub from: String,
     pub to: String,
