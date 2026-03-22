@@ -79,3 +79,8 @@ jobs:
         env:
           PLANTUML_URL: http://127.0.0.1:8787
         run: cargo test --test proptest_oracle
+
+      - name: Run matrix oracle tests
+        env:
+          PLANTUML_URL: http://127.0.0.1:8787
+        run: cargo test --test matrix_oracle
