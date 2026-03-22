@@ -1,0 +1,25 @@
+@startuml
+class Animal {
+  +String name
+  +void speak()
+}
+class Dog {
+  +void fetch()
+}
+Animal <|-- Dog
+@enduml
+
+@startuml
+class Shape {
+  +double area()
+}
+class Circle {
+  +double radius
+}
+class Rectangle {
+  +double width
+  +double height
+}
+Shape <|-- Circle
+Shape <|-- Rectangle
+@enduml

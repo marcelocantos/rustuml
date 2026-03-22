@@ -1,0 +1,10 @@
+@startuml
+!$color = "red"
+skinparam backgroundColor $color
+Alice -> Bob : In red context
+@enduml
+
+@startuml
+' $color should not be defined here
+Alice -> Bob : In default context
+@enduml

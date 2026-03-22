@@ -1,0 +1,15 @@
+@startuml
+Alice -> Bob : Hello
+Bob --> Alice : Hi there
+@enduml
+
+@startuml
+start
+:Step A;
+if (condition?) then (yes)
+  :Step B;
+else (no)
+  :Step C;
+endif
+stop
+@enduml

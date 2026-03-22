@@ -1,0 +1,11 @@
+@startuml
+!$x = 1
+note : x = $x
+Alice -> Bob : Message $x
+@enduml
+
+@startuml
+!$x = 2
+note : x = $x
+Carol -> Dave : Message $x
+@enduml

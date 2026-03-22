@@ -1,0 +1,28 @@
+@startgantt
+title Project Timeline
+[Task A] lasts 7 days
+[Task B] starts at [Task A]'s end
+[Task B] lasts 5 days
+[Task C] starts at [Task B]'s end
+[Task C] lasts 10 days
+@endgantt
+
+@startwbs
+* Project
+** Planning
+*** Requirements
+*** Design
+** Development
+*** Frontend
+*** Backend
+** Testing
+@endwbs
+
+@startmindmap
+* Root
+** Branch A
+*** Leaf 1
+*** Leaf 2
+** Branch B
+*** Leaf 3
+@endmindmap

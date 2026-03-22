@@ -1,0 +1,12 @@
+!procedure $stdflow($from, $to)
+  $from -> $to : request
+  $to --> $from : response
+!endprocedure
+
+@startuml
+$stdflow("Alice", "Bob")
+@enduml
+
+@startuml
+$stdflow("Carol", "Dave")
+@enduml

@@ -1,0 +1,21 @@
+@startuml
+class Animal {
+  +String name
+  +void speak()
+}
+class Dog {
+  +void fetch()
+}
+Animal <|-- Dog
+@enduml
+
+@startuml
+start
+:Step A;
+if (condition?) then (yes)
+  :Step B;
+else (no)
+  :Step C;
+endif
+stop
+@enduml

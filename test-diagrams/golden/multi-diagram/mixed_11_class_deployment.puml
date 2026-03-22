@@ -1,0 +1,20 @@
+@startuml
+class Animal {
+  +String name
+  +void speak()
+}
+class Dog {
+  +void fetch()
+}
+Animal <|-- Dog
+@enduml
+
+@startuml
+node WebServer {
+  artifact app.war
+}
+node Database {
+  artifact db.sql
+}
+WebServer --> Database : JDBC
+@enduml

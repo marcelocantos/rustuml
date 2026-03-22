@@ -1,0 +1,18 @@
+@startuml seq001
+Alice -> Bob : Hello
+Bob --> Alice : Hi there
+@enduml
+
+@startuml seq002
+participant Client
+participant Server
+Client -> Server : GET /api/data
+Server --> Client : 200 OK
+@enduml
+
+@startuml seq003
+Alice -> Bob : Request
+Bob -> Carol : Forward
+Carol --> Bob : Response
+Bob --> Alice : Reply
+@enduml
