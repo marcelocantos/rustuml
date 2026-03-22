@@ -1,0 +1,11 @@
+@startuml
+!$bg = "LightYellow"
+!$border = "DarkOrange"
+
+skinparam classBackgroundColor $bg
+skinparam classBorderColor $border
+
+class VarSkinClass {
+  theme: String = "yellow"
+}
+@enduml

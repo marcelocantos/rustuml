@@ -1,0 +1,26 @@
+@startuml
+title "Class Diagram 257"
+class Entity1_257 {
+  - id : Long
+  + getId() : Long
+  + process_1() : void
+}
+class Entity2_257 {
+  - id : Long
+  + getId() : Long
+  + process_2() : void
+}
+class Entity3_257 {
+  - id : Long
+  + getId() : Long
+  + process_3() : void
+}
+class Entity4_257 {
+  - id : Long
+  + getId() : Long
+  + process_4() : void
+}
+Entity1_257 --|> Entity2_257
+Entity2_257 --|> Entity3_257
+Entity3_257 --|> Entity4_257
+@enduml

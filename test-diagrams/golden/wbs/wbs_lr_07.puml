@@ -1,0 +1,10 @@
+@startwbs
+* Root 7
+**[#violet] Right 0
+**[#lightblue] Right 1
+**[#lightgreen] Right 2
+**[#red] Right 3
+**[#blue] Right 4
+--[#green] Left 0
+--[#yellow] Left 1
+@endwbs

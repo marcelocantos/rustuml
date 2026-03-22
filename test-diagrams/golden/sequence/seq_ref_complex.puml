@@ -1,0 +1,8 @@
+@startuml
+participant Alice
+participant Bob
+participant Charlie
+Alice -> Bob : start
+ref over Alice, Bob, Charlie : Complex Reference
+Bob --> Alice : done
+@enduml

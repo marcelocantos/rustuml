@@ -1,0 +1,8 @@
+@startuml
+title "Combo Variant 45"
+class Class1_45 { +method1() }
+class Class2_45 { +method2() }
+class Class3_45 { +method3() }
+Class1_45 --> Class2_45
+Class2_45 --> Class3_45
+@enduml

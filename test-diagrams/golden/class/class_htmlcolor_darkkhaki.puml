@@ -1,0 +1,5 @@
+@startuml
+class ColorTest #DarkKhaki {
+  +void method()
+}
+@enduml

@@ -1,0 +1,5 @@
+@startuml
+interface Variant {
+  {static} +String CONST
+}
+@enduml

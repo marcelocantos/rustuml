@@ -1,0 +1,6 @@
+@startuml
+skinparam defaultFontName Courier
+Alice -> Bob : hello
+Bob --> Alice : world
+note right : note
+@enduml

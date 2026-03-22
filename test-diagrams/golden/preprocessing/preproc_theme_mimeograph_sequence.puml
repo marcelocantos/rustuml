@@ -1,0 +1,8 @@
+@startuml
+!theme mimeograph
+participant Alice
+participant Bob
+Alice -> Bob : hello from mimeograph
+Bob --> Alice : reply
+note right : mimeograph theme
+@enduml

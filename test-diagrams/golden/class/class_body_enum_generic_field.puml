@@ -1,0 +1,5 @@
+@startuml
+enum Variant {
+  +List<String> items
+}
+@enduml

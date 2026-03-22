@@ -1,0 +1,23 @@
+@startuml
+package Level0 {
+  package Level1 {
+    package Level2 {
+      package Level3 {
+        package Level4 {
+          package Level5 {
+            package Level6 {
+              package Level7 {
+                package Level8 {
+                  package Level9 {
+                    class DeepClass
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}
+@enduml

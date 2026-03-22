@@ -1,0 +1,14 @@
+@startmindmap
+* Databases
+** PostgreSQL
+*** SQL
+** MySQL
+*** SQL
+** MongoDB
+*** NoSQL
+-- Redis
+--- Cache
+-- Cassandra
+--- Wide
+
+@endmindmap

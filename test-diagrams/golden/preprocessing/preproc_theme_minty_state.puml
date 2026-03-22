@@ -1,0 +1,7 @@
+@startuml
+!theme minty
+[*] --> Idle
+Idle --> Running : start
+Running --> Stopped : stop
+Stopped --> [*]
+@enduml

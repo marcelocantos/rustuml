@@ -1,0 +1,16 @@
+@startuml
+!include <archimate/Archimate>
+
+Business_Actor(e0, "Element 0")
+Business_Role(e1, "Element 1")
+Business_Process(e2, "Element 2")
+Application_Component(e3, "Element 3")
+Application_Service(e4, "Element 4")
+Technology_Node(e5, "Element 5")
+
+Rel_Realization(e0, e1, "")
+Rel_Association(e1, e2, "")
+Rel_Serving(e2, e3, "")
+Rel_Composition(e3, e4, "")
+Rel_Aggregation(e4, e5, "")
+@enduml

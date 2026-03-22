@@ -1,0 +1,6 @@
+@startuml
+annotation RequestMapping {
+  +String value()
+  +String method() default "GET"
+}
+@enduml

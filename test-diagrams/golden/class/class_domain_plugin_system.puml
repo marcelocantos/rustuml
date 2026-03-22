@@ -1,0 +1,32 @@
+@startuml
+interface Plugin {
+  +String getName()
+  +String getVersion()
+  +void initialize(PluginContext ctx)
+  +void destroy()
+}
+interface PluginContext {
+  +void registerService(String name, Object service)
+  +Object getService(String name)
+  +void log(String message)
+}
+class PluginManager {
+  -plugins: Map<String, Plugin>
+  +void loadPlugin(Plugin p)
+  +void unloadPlugin(String name)
+  +Plugin getPlugin(String name)
+}
+class PluginRegistry {
+  +void register(Class<? extends Plugin> cls)
+  +List<Plugin> createInstances()
+}
+class DefaultPluginContext {
+  +void registerService(String name, Object service)
+  +Object getService(String name)
+  +void log(String message)
+}
+PluginManager --> Plugin
+PluginManager --> PluginContext
+DefaultPluginContext ..|> PluginContext
+PluginRegistry ..> Plugin
+@enduml

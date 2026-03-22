@@ -1,0 +1,14 @@
+@startuml
+object Obj0_16 { val = 160 }
+object Obj1_16 { val = 161 }
+object Obj2_16 { val = 162 }
+object Obj3_16 { val = 163 }
+object Obj4_16 { val = 164 }
+object Obj5_16 { val = 165 }
+Obj0_16 --> Obj1_16
+Obj1_16 --> Obj2_16
+Obj2_16 --> Obj3_16
+Obj3_16 --> Obj4_16
+Obj4_16 --> Obj5_16
+Obj5_16 --> Obj0_16
+@enduml

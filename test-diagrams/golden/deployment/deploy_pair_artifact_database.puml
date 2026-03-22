@@ -1,0 +1,5 @@
+@startuml
+artifact Source
+database Target
+Source --> Target
+@enduml

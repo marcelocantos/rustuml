@@ -1,0 +1,16 @@
+@startuml
+robust "TX" as tx
+robust "RX" as rx
+@0
+tx is idle
+rx is idle
+@50
+tx is transmitting
+@100
+rx is receiving
+tx is idle
+@150
+rx is idle
+@50 <-> @100 : propagation delay
+@100 <-> @150 : processing time
+@enduml

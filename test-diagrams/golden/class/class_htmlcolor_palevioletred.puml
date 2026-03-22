@@ -1,0 +1,5 @@
+@startuml
+class ColorTest #PaleVioletRed {
+  +void method()
+}
+@enduml

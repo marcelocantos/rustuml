@@ -1,0 +1,5 @@
+@startuml
+skinparam sequenceParticipantBackgroundColor #FFD700/#FFFFFF
+skinparam sequenceParticipantBorderColor #DAA520
+Alice -> Bob : gradient test
+@enduml

@@ -1,0 +1,10 @@
+@startuml
+skinparam state {
+  BackgroundColor LightBlue
+  BorderColor DarkBlue
+  FontSize 14
+}
+[*] --> A
+A --> B
+B --> [*]
+@enduml

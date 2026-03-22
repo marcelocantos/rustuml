@@ -1,0 +1,6 @@
+@startuml
+database "Named Database" as P #red
+participant Other
+P -> Other : database red call
+Other --> P : reply
+@enduml

@@ -1,0 +1,21 @@
+@startuml
+node "Docker Host" {
+  component "nginx" <<container>>
+  component "auth-service" <<container>>
+  component "user-service" <<container>>
+  component "product-service" <<container>>
+  component "order-service" <<container>>
+  database "postgres" <<container>>
+  queue "rabbitmq" <<container>>
+  component "redis" <<container>>
+  nginx --> "auth-service"
+  nginx --> "user-service"
+  nginx --> "product-service"
+  nginx --> "order-service"
+  "user-service" --> "postgres"
+  "product-service" --> "postgres"
+  "order-service" --> "postgres"
+  "order-service" --> "rabbitmq"
+  "user-service" --> "redis"
+}
+@enduml

@@ -1,0 +1,65 @@
+@startuml
+title "Embedded System State Machine"
+
+[*] --> Reset
+
+state Reset {
+  [*] --> BootROM
+  BootROM --> LoadBootloader : ROM OK
+  LoadBootloader --> VerifyImage : loaded
+  VerifyImage --> [*] : verified
+  VerifyImage --> ErrorState : invalid signature
+}
+
+state Operational {
+  [*] --> Idle
+
+  state Idle {
+    [*] --> LowPower
+    LowPower --> Active : interrupt
+    Active --> LowPower : timeout / enter_sleep()
+  }
+
+  state Processing {
+    [*] --> ReadSensors
+    ReadSensors --> Compute : data_ready / buffer()
+    Compute --> WriteOutput : done / update()
+    WriteOutput --> [*] : ack
+  }
+
+  state Communication {
+    [*] --> Listen
+    Listen --> Receive : data_in
+    Receive --> Process : frame_complete
+    Process --> Transmit : response_ready
+    Transmit --> Listen : sent
+  }
+
+  Idle --> Processing : task_scheduled [CPU >= 10%]
+  Processing --> Idle : task_done
+  Idle --> Communication : packet_received
+  Communication --> Idle : comm_done
+
+  state ErrorRecovery {
+    [*] --> LogError
+    LogError --> AttemptRetry : retriable
+    LogError --> FatalError : non_retriable
+    AttemptRetry --> [*] : success
+    AttemptRetry --> FatalError : max_retries / alert()
+  }
+
+  Processing --> ErrorRecovery : exception
+  Communication --> ErrorRecovery : timeout / log()
+  ErrorRecovery --> Idle : recovered
+}
+
+state ErrorState {
+  [*] --> DisplayError
+  DisplayError --> WaitForReset : user_ack
+}
+
+Reset --> Operational : boot_ok / start()
+Operational --> ErrorState : fatal_error
+Operational --> Reset : watchdog_timeout
+ErrorState --> Reset : reset_requested
+@enduml

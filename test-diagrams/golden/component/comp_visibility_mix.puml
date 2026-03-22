@@ -1,0 +1,7 @@
+@startuml
+component PublicAPI <<public>>
+component InternalService <<internal>>
+component PrivateImpl <<private>>
+PublicAPI --> InternalService
+InternalService --> PrivateImpl
+@enduml

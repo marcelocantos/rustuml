@@ -1,0 +1,6 @@
+@startuml
+queue Alice
+participant Bob
+Alice -> Bob : queue sends solid
+Bob -> Alice : queue receives solid
+@enduml

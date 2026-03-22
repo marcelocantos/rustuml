@@ -1,0 +1,7 @@
+@startuml
+component Comp1
+component Comp2
+interface IFoo
+Comp1 --( IFoo
+IFoo -- Comp2
+@enduml

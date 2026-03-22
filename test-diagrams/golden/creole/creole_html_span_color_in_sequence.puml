@@ -1,0 +1,4 @@
+@startuml
+Alice -> Bob : <span style='color:blue'>span color</span>
+note right : <span style='color:blue'>span color</span>
+@enduml

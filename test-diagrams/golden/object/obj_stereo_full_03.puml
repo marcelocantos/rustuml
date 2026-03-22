@@ -1,0 +1,8 @@
+@startuml
+object MyObj <<database>> #yellow {
+  id = 3
+  type = "database"
+  active = true
+}
+note right : Stereotype: database
+@enduml

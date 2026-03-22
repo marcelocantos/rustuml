@@ -1,0 +1,10 @@
+@startuml
+Alice -> Bob : broadcast
+Alice -> Charlie : broadcast
+Alice -> Dave : broadcast
+alt ok
+  Alice -> Bob : confirm
+else error
+  Alice -> Bob : retry
+end
+@enduml

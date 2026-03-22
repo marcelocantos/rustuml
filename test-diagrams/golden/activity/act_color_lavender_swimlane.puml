@@ -1,0 +1,7 @@
+@startuml
+
+|#lavender|Colored Lane|
+start
+:Action;
+stop
+@enduml

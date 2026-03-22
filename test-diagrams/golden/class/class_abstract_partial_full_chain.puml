@@ -1,0 +1,18 @@
+@startuml
+abstract class Fully {
+  {abstract} +void m1()
+  {abstract} +void m2()
+  {abstract} +void m3()
+}
+abstract class Partial {
+  +void m1()
+  {abstract} +void m2()
+  {abstract} +void m3()
+}
+class Concrete {
+  +void m2()
+  +void m3()
+}
+Fully <|-- Partial
+Partial <|-- Concrete
+@enduml

@@ -1,0 +1,32 @@
+@startmindmap
+* Company Strategy
+** Products
+*** Product A
+**** Features
+***** Feature 1
+***** Feature 2
+**** Roadmap
+*** Product B
+**** MVP
+**** Version 2
+** Markets
+*** North America
+**** USA
+**** Canada
+*** Europe
+**** UK
+**** Germany
+**** France
+-- Operations
+--- Engineering
+---- Frontend
+---- Backend
+---- DevOps
+--- Finance
+---- Accounting
+---- Budgeting
+-- HR
+--- Recruiting
+--- Training
+--- Benefits
+@endmindmap

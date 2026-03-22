@@ -1,0 +1,6 @@
+@startuml
+[*] --> A
+A -right---> : / doIt()
+A --> B
+B --> [*]
+@enduml

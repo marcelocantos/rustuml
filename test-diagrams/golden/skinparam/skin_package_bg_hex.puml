@@ -1,0 +1,12 @@
+@startuml
+skinparam packageBackgroundColor #F5F5DC
+package "Package A" {{
+  class ClassA
+  class ClassB
+}}
+package "Package B" {{
+  class ClassC
+  class ClassD
+}}
+ClassA --> ClassC
+@enduml

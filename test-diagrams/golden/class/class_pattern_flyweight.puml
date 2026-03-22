@@ -1,0 +1,24 @@
+@startuml
+interface Flyweight {
+  +void operation(ExtrinsicState s)
+}
+class ConcreteFlyweight {
+  -intrinsicState: String
+  +void operation(ExtrinsicState s)
+}
+class UnsharedFlyweight {
+  -allState: String
+  +void operation(ExtrinsicState s)
+}
+class FlyweightFactory {
+  -flyweights: Map<String, Flyweight>
+  +Flyweight getFlyweight(String key)
+}
+class ExtrinsicState {
+  +String data
+}
+ConcreteFlyweight ..|> Flyweight
+UnsharedFlyweight ..|> Flyweight
+FlyweightFactory --> ConcreteFlyweight
+FlyweightFactory --> UnsharedFlyweight
+@enduml

@@ -1,0 +1,6 @@
+@startuml
+interface Combo <<service>>  {
+  +String name
+  +void method()
+}
+@enduml

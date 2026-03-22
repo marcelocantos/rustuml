@@ -1,0 +1,5 @@
+@startuml
+Alice -> Alice: self message
+Alice -> Alice: another self
+Bob -> Bob: bob self
+@enduml

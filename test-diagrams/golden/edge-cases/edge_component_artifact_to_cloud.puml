@@ -1,0 +1,5 @@
+@startuml
+artifact MyA
+cloud MyB
+MyA --> MyB
+@enduml

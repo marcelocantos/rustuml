@@ -1,0 +1,7 @@
+@startuml
+class Sorter<T extends Comparable<T>> {
+  +List<T> data
+  --
+  +List<T> sort()
+}
+@enduml

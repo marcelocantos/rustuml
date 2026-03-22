@@ -1,0 +1,8 @@
+@startuml
+skinparam cloud {
+  BackgroundColor LightGreen
+}
+cloud MyElem
+node AppServer
+AppServer --> MyElem
+@enduml

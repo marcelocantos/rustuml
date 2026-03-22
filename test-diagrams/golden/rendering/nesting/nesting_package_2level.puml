@@ -1,0 +1,10 @@
+@startuml
+package Outer {
+  package Inner {
+    class A
+    class B
+  }
+  class C
+}
+
+@enduml

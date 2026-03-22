@@ -1,0 +1,5 @@
+@startuml
+component "<back:yellow>bg</back> comp" as C830
+interface "<back:yellow>bg</back> iface" as I830
+C830 -- I830
+@enduml

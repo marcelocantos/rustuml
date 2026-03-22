@@ -1,0 +1,9 @@
+@startmindmap
+*[#yellow] Topic 3
+**[#orange] Right 3.1
+***[#white] Sub 3.1.1
+**[#pink] Right 3.2
+--[#cyan] Left 3.1
+---[#white] Sub 3.L.1
+--[#violet] Left 3.2
+@endmindmap

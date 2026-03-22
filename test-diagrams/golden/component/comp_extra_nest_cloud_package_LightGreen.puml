@@ -1,0 +1,9 @@
+@startuml
+cloud Outer #LightGreen {
+  package Inner {
+    component X
+    component Y
+    X --> Y
+  }
+}
+@enduml

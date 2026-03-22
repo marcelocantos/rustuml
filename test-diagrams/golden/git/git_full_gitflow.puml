@@ -1,0 +1,22 @@
+@startgit
+commit id:"initial"
+branch develop
+checkout develop
+commit id:"dev-start"
+branch feature/api
+checkout feature/api
+commit id:"api-1"
+commit id:"api-2"
+checkout develop
+merge feature/api
+commit id:"dev-release-prep"
+checkout master
+merge develop tag:"v1.0"
+branch hotfix/urgent
+checkout hotfix/urgent
+commit id:"hotfix"
+checkout master
+merge hotfix/urgent tag:"v1.0.1"
+checkout develop
+merge hotfix/urgent
+@endgit

@@ -1,0 +1,5 @@
+@startuml
+node MyA
+database MyB
+MyA --> MyB
+@enduml

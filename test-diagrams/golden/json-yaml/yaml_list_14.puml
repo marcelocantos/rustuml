@@ -1,0 +1,8 @@
+@startyaml
+mylist:
+  - item0
+  - item1
+  - item2
+  - item3
+count: 4
+@endyaml

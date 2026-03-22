@@ -1,0 +1,19 @@
+@startuml
+node "Production Server" {
+  artifact "web-app.war" {
+    component Frontend
+    component API
+  }
+  artifact "backend.jar" {
+    component Service
+    component Repository
+  }
+}
+node "Database Server" {
+  artifact "postgres" {
+    database MainDB
+  }
+}
+Repository --> MainDB
+
+@enduml

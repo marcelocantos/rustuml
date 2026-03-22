@@ -1,0 +1,8 @@
+@startwbs
+* Root 6
+**[#cyan] Right 0
+**[#violet] Right 1
+**[#lightblue] Right 2
+**[#lightgreen] Right 3
+--[#blue] Left 0
+@endwbs

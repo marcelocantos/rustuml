@@ -1,0 +1,6 @@
+@startuml
+boundary "Named Boundary" as P #red
+participant Other
+P -> Other : boundary red call
+Other --> P : reply
+@enduml

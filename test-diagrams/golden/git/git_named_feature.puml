@@ -1,0 +1,9 @@
+@startgit
+commit
+branch feature/auth
+checkout feature/auth
+commit id:"add-login"
+commit id:"add-logout"
+checkout master
+merge feature/auth
+@endgit

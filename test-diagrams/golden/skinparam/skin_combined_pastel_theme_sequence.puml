@@ -1,0 +1,13 @@
+@startuml
+skinparam backgroundColor #FFF5E4
+skinparam classBackgroundColor #FFE3E1
+skinparam classBorderColor #FF9B9B
+skinparam sequenceParticipantBackgroundColor #FFE3E1
+skinparam sequenceParticipantBorderColor #FF9B9B
+skinparam noteBackgroundColor #FFF5E4
+skinparam noteBorderColor #FF9B9B
+
+Alice -> Bob : request
+Bob --> Alice : response
+note right : note
+@enduml

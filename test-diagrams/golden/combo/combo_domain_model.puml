@@ -1,0 +1,143 @@
+@startuml
+skinparam class {
+  BackgroundColor #FFF9C4
+  BorderColor #F57F17
+}
+skinparam package {
+  BackgroundColor #FFF3E0
+}
+
+title "Insurance Domain Model"
+
+package "Policy Management" {
+  class Policy {
+    - id : UUID
+    - number : String
+    - status : PolicyStatus
+    - effectiveDate : LocalDate
+    - expiryDate : LocalDate
+    - premium : Money
+    + renew() : Policy
+    + cancel(reason : String) : void
+    + endorse(change : Endorsement) : Policy
+  }
+
+  enum PolicyStatus {
+    DRAFT
+    ACTIVE
+    SUSPENDED
+    CANCELLED
+    EXPIRED
+  }
+
+  class Endorsement {
+    - id : UUID
+    - type : EndorsementType
+    - effectiveDate : LocalDate
+    - premiumChange : Money
+    + apply(policy : Policy) : void
+  }
+
+  class Coverage {
+    - type : CoverageType
+    - limit : Money
+    - deductible : Money
+    - premium : Money
+  }
+}
+
+package "Party Management" {
+  abstract class Party {
+    - id : UUID
+    - name : String
+    - contacts : List<Contact>
+  }
+
+  class Individual extends Party {
+    - dob : LocalDate
+    - taxId : String
+    - gender : Gender
+  }
+
+  class Organization extends Party {
+    - registrationNumber : String
+    - taxId : String
+    - industry : String
+  }
+
+  class Contact {
+    - type : ContactType
+    - value : String
+    - isPrimary : boolean
+  }
+
+  class Address {
+    - line1 : String
+    - line2 : String
+    - city : String
+    - state : String
+    - zip : String
+    - country : String
+  }
+}
+
+package "Claims" {
+  class Claim {
+    - id : UUID
+    - number : String
+    - status : ClaimStatus
+    - lossDate : LocalDate
+    - reportedDate : LocalDate
+    - description : String
+    - reservedAmount : Money
+    - paidAmount : Money
+    + open() : void
+    + investigate() : void
+    + settle(amount : Money) : void
+    + deny(reason : String) : void
+    + close() : void
+  }
+
+  enum ClaimStatus {
+    OPEN
+    UNDER_INVESTIGATION
+    SETTLED
+    DENIED
+    CLOSED
+  }
+
+  class Payment {
+    - id : UUID
+    - amount : Money
+    - method : PaymentMethod
+    - processedAt : Instant
+  }
+
+  class Document {
+    - id : UUID
+    - type : DocumentType
+    - url : String
+    - uploadedAt : Instant
+  }
+}
+
+package "Underwriting" {
+  class RiskAssessment {
+    - id : UUID
+    - score : int
+    - factors : Map<String, Double>
+    - assessedAt : Instant
+    + computePremium() : Money
+  }
+}
+
+Policy "1" *-- "1..*" Coverage : includes
+Policy "0..*" -- "1" Party : insures
+Policy "0..*" -- "1" RiskAssessment : based on
+Policy "1" *-- "0..*" Endorsement : has
+Claim "0..*" -- "1" Policy : against
+Claim "1" *-- "0..*" Payment : has
+Claim "1" *-- "0..*" Document : supported by
+Party "1" *-- "0..*" Contact : has
+Party "1" *-- "0..*" Address : at
+@enduml

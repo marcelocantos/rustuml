@@ -1,0 +1,44 @@
+@startuml
+
+title Support Ticket Workflow
+
+|Customer|
+start
+:Submit ticket;
+
+|Support Bot|
+:Auto-categorize;
+if (resolved by FAQ?) then (yes)
+  :Send FAQ answer;
+  |Customer|
+  :Rate answer;
+  stop
+else (no)
+  |Support Agent|
+  :Assign ticket;
+  repeat
+    :Investigate;
+    if (need more info?) then (yes)
+      :Request info;
+      |Customer|
+      :Provide info;
+      |Support Agent|
+    else (no)
+      :Prepare solution;
+      :Test solution;
+    endif
+  repeatwhile (solved?) is (no)
+  :Send solution;
+  |Customer|
+  :Test solution;
+  if (satisfied?) then (yes)
+    :Close ticket;
+    stop
+  else (no)
+    :Escalate;
+    |Support Agent|
+    :Senior review;
+    stop
+  endif
+endif
+@enduml

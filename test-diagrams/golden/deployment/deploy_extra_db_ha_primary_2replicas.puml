@@ -1,0 +1,11 @@
+@startuml
+node AppServer
+database Primary
+database Replica1
+database Replica2
+node "Failover Monitor"
+AppServer --> Primary : read/write
+Primary --> Replica1 : async
+Primary --> Replica2 : async
+"Failover Monitor" --> Primary : health check
+@enduml

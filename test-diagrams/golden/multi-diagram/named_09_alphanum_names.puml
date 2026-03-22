@@ -1,0 +1,15 @@
+@startuml seq_v2_final
+Alice -> Bob : Hello
+Bob --> Alice : Hi there
+@enduml
+
+@startuml cls_v1_draft
+class Animal {
+  +String name
+  +void speak()
+}
+class Dog {
+  +void fetch()
+}
+Animal <|-- Dog
+@enduml

@@ -1,0 +1,6 @@
+@startuml
+title Process 42 Steps
+start
+:Action;
+stop
+@enduml

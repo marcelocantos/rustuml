@@ -1,0 +1,37 @@
+@startuml
+
+title Microservice Request Flow
+|API Gateway|
+start
+:Receive request;
+:Authenticate;
+if (valid token?) then (yes)
+  :Rate check;
+  if (within limit?) then (yes)
+    fork
+      |Auth Service|
+      :Get permissions;
+      fork again
+      |Cache|
+      :Check cache;
+    end fork
+    if (cache hit?) then (yes)
+      :Return cached;
+    else (no)
+      |Business Service|
+      :Process request;
+      |Cache|
+      :Store result;
+      |Business Service|
+      :Return result;
+    endif
+  else (no)
+    :429 Too Many Requests;
+  endif
+else (no)
+  :401 Unauthorized;
+endif
+|API Gateway|
+:Send response;
+stop
+@enduml

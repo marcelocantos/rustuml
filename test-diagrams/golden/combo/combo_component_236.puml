@@ -1,0 +1,10 @@
+@startuml
+title "Component Diagram 236"
+package "System236" {
+  [Service1_236]
+  [Service2_236]
+  [Service3_236]
+}
+[Service1_236] --> [Service2_236]
+[Service2_236] --> [Service3_236]
+@enduml

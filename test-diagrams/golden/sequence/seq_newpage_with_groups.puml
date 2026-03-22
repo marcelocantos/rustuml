@@ -1,0 +1,13 @@
+@startuml
+Alice -> Bob : begin
+alt path A
+  Bob -> Charlie : A
+  Charlie --> Bob : done A
+else path B
+  Bob -> Dave : B
+  Dave --> Bob : done B
+end
+newpage Second Page
+Bob --> Alice : complete
+note over Alice : all done
+@enduml

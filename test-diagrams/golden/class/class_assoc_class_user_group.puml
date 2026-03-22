@@ -1,0 +1,10 @@
+@startuml
+class User
+class Group
+class Membership {
+  +Date joinedAt
+  +String permissions
+  +boolean isAdmin
+}
+(User, Group) .. Membership
+@enduml

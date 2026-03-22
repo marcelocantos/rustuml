@@ -1,0 +1,4 @@
+@startuml
+caption **Bold Caption**
+Alice -> Bob : hello
+@enduml

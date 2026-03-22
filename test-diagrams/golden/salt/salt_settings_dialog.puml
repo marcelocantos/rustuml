@@ -1,0 +1,16 @@
+@startsalt
+{^Settings
+  {/
+    General | Display | Network | Privacy
+    {
+      Theme:    | ^Light^
+      Language: | ^English^
+      Font size:| ^Medium^
+      [X] Auto-save
+      [ ] Spell check
+      ..
+      [Apply] | [Reset to defaults]
+    }
+  }
+}
+@endsalt

@@ -1,0 +1,6 @@
+@startuml
+note as N
+  __underlined text__
+  __another underlined line__
+end note
+@enduml

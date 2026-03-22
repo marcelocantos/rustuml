@@ -1,0 +1,5 @@
+@startuml
+class Source
+class Target
+Source -right-> Target
+@enduml

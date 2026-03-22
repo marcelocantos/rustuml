@@ -1,0 +1,6 @@
+@startuml
+entity "Named Entity" as P #red
+participant Other
+P -> Other : entity red call
+Other --> P : reply
+@enduml

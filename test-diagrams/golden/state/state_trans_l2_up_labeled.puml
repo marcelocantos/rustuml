@@ -1,0 +1,6 @@
+@startuml
+[*] --> A
+A -up--> : event
+A --> B : event
+B --> [*]
+@enduml

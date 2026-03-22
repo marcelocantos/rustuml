@@ -1,0 +1,5 @@
+@startuml
+Alice -> Bob ++ : create
+Bob --> Alice -- : ready
+Alice -> Bob !! : destroy
+@enduml

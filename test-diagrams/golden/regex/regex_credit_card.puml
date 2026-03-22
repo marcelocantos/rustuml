@@ -1,0 +1,3 @@
+@startregex
+\d{4}[\s-]?\d{4}[\s-]?\d{4}[\s-]?\d{4}
+@endregex

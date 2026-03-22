@@ -1,0 +1,67 @@
+@startuml
+entity School {
+  * id : INT <<PK>>
+  --
+  name : VARCHAR(200)
+  address : VARCHAR(300)
+  principal : VARCHAR(200)
+}
+entity Class {
+  * id : INT <<PK>>
+  * school_id : INT <<FK>>
+  --
+  name : VARCHAR(50)
+  grade_level : INT
+  room : VARCHAR(20)
+  year : INT
+}
+entity Teacher {
+  * id : INT <<PK>>
+  * school_id : INT <<FK>>
+  --
+  name : VARCHAR(200)
+  email : VARCHAR(200)
+  subjects : VARCHAR(300)
+}
+entity Student {
+  * id : INT <<PK>>
+  * school_id : INT <<FK>>
+  * class_id : INT <<FK>>
+  --
+  name : VARCHAR(200)
+  dob : DATE
+  guardian_name : VARCHAR(200)
+  guardian_phone : VARCHAR(20)
+}
+entity Subject {
+  * id : INT <<PK>>
+  --
+  name : VARCHAR(100)
+  code : VARCHAR(20)
+  credit_hours : INT
+}
+entity ClassSubject {
+  * class_id : INT <<FK>>
+  * subject_id : INT <<FK>>
+  * teacher_id : INT <<FK>>
+  --
+  schedule : VARCHAR(200)
+}
+entity Grade {
+  * id : INT <<PK>>
+  * student_id : INT <<FK>>
+  * subject_id : INT <<FK>>
+  --
+  term : VARCHAR(20)
+  score : DECIMAL(5,2)
+  letter_grade : CHAR(2)
+}
+School ||--o{ Class : "has"
+School ||--o{ Teacher : "employs"
+Class ||--o{ Student : "enrolls"
+Class ||--o{ ClassSubject : "teaches"
+Subject ||--o{ ClassSubject : "covered by"
+Teacher ||--o{ ClassSubject : "teaches"
+Student ||--o{ Grade : "receives"
+Subject ||--o{ Grade : "graded in"
+@enduml

@@ -1,0 +1,4 @@
+@startuml
+object "null" as nullObj
+nullObj : value = null
+@enduml

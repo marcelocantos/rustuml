@@ -1,0 +1,12 @@
+@startuml
+skinparam ClassFontStyle bold
+class A {
+  +String field
+  +void method()
+}
+class B {
+  -int count
+  +void process()
+}
+A --> B : uses
+@enduml

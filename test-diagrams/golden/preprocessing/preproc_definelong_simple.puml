@@ -1,0 +1,11 @@
+@startuml
+!definelong SIGNATURE(name, ret)
+  +name(): ret
+!enddefinelong
+
+class MyClass {
+  SIGNATURE(getName, String)
+  SIGNATURE(getAge, int)
+  SIGNATURE(isActive, boolean)
+}
+@enduml

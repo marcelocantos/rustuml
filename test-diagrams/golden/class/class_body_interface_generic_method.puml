@@ -1,0 +1,5 @@
+@startuml
+interface Variant {
+  +<T> T cast(Object o)
+}
+@enduml

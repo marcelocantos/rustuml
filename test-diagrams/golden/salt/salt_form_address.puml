@@ -1,0 +1,14 @@
+@startsalt
+{^Address Form
+  Street: | "                    "
+  City: | "                    "
+  State: | "                    "
+  ZIP: | "                    "
+  Country: | "                    "
+    ..
+  [X] I agree to terms
+  [ ] Subscribe to newsletter
+  ..
+  [Submit] | [Reset] | [Cancel]
+}
+@endsalt

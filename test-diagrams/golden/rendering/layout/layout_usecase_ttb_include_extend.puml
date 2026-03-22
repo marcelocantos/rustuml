@@ -1,0 +1,16 @@
+@startuml
+top to bottom direction
+actor User
+actor Admin
+usecase Login
+usecase ViewDash as "View Dashboard"
+usecase ManageUsers as "Manage Users"
+usecase Logout
+User --> Login
+User --> ViewDash
+Admin --> ManageUsers
+ViewDash .> Login : <<include>>
+ManageUsers .> Login : <<include>>
+Logout .> Login : <<extend>>
+
+@enduml

@@ -1,0 +1,14 @@
+@startuml
+|Client|
+start
+:Request;
+|Server|
+if (valid?) then (yes)
+  |DB|
+  :Cached response;
+else (no)
+  :Process;
+endif
+|Client|
+stop
+@enduml

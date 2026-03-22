@@ -1,0 +1,10 @@
+@startuml
+start
+repeat
+  if (abort?) then (yes)
+    kill
+  endif
+  :Work;
+repeatwhile (more?) is (yes)
+stop
+@enduml

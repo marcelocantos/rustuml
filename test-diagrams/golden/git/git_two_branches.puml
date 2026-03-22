@@ -1,0 +1,10 @@
+@startgit
+commit
+branch feat1
+checkout feat1
+commit
+checkout master
+branch feat2
+checkout feat2
+commit
+@endgit

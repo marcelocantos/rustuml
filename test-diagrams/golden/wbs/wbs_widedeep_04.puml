@@ -1,0 +1,14 @@
+@startwbs
+*[#orange] Root 4
+** Task 0
+** Task 1
+** Task 2
+** Task 3
+** Task 4
+** Task 5
+** Task 6
+** Deep branch
+** Sublevel 0
+*** Sublevel 1
+**** Sublevel 2
+@endwbs

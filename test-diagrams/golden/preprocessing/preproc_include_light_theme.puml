@@ -1,0 +1,7 @@
+@startuml
+!includesub preproc_include_theme_file.iuml!LIGHT_THEME
+class LightClass {
+  +field: String
+  +method(): void
+}
+@enduml

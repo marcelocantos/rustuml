@@ -1,0 +1,10 @@
+@startuml
+autonumber 1 2
+Alice -> Bob : 1
+Bob --> Alice : 3
+autonumber stop
+Alice -> Bob : unnumbered
+autonumber resume 2
+Alice -> Bob : 5
+Bob --> Alice : 7
+@enduml

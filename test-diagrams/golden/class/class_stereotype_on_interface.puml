@@ -1,0 +1,6 @@
+@startuml
+interface Repository <<repository>> {
+  +void save(Object o)
+  +Object findById(int id)
+}
+@enduml

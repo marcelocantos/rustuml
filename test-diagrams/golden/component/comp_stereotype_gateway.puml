@@ -1,0 +1,5 @@
+@startuml
+component Foo <<gateway>>
+component Bar <<gateway>>
+Foo --> Bar
+@enduml

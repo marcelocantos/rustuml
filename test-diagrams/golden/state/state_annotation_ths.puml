@@ -1,0 +1,8 @@
+@startuml
+title Test Diagram
+skinparam state { BackgroundColor LightBlue }
+hide empty description
+[*] --> A
+A --> B
+B --> [*]
+@enduml

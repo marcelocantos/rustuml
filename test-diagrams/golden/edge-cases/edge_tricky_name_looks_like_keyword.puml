@@ -1,0 +1,6 @@
+@startuml
+class note
+class actor
+class boundary
+class control
+@enduml

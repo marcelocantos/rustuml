@@ -1,0 +1,5 @@
+@startuml
+class SpotX << (X,#FF7700) Custom >> {
+  +void method()
+}
+@enduml

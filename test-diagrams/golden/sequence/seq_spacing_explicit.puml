@@ -1,0 +1,7 @@
+@startuml
+Alice -> Bob : hello
+||45||
+Bob --> Alice : hi
+||10||
+Alice -> Bob : again
+@enduml

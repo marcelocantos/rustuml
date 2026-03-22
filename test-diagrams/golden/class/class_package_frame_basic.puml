@@ -1,0 +1,7 @@
+@startuml
+package mypackage <<frame>> {
+  class MyClass {
+    +void method()
+  }
+}
+@enduml

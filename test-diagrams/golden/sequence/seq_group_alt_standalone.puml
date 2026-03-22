@@ -1,0 +1,10 @@
+@startuml
+A -> B : go
+alt condition
+  B -> C : action
+  C --> B : done
+else other
+  B -> B : handle
+end
+B --> A : result
+@enduml

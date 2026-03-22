@@ -1,0 +1,10 @@
+@startuml
+class Student
+class Course
+class Enrollment {
+  +Date enrollDate
+  +String grade
+  +boolean isActive
+}
+(Student, Course) .. Enrollment
+@enduml

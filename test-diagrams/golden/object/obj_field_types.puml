@@ -1,0 +1,10 @@
+@startuml
+object AllTypes {
+  string_field = "hello"
+  int_field = 42
+  float_field = 3.14
+  bool_field = true
+  null_field = null
+  empty_field = ""
+}
+@enduml

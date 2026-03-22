@@ -1,0 +1,6 @@
+@startuml
+actor "Alice Smith" as A
+participant Bob
+A -> Bob : hello
+Bob --> A : hi
+@enduml

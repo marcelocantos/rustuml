@@ -1,0 +1,7 @@
+@startuml
+entity A
+entity B
+A -> B : hello
+note over A, B : note over two entitys
+B --> A : hi
+@enduml

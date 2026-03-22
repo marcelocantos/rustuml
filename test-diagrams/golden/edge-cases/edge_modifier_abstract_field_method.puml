@@ -1,0 +1,6 @@
+@startuml
+class Foo {
+  {abstract} myField: String
+  {abstract} myMethod(): void
+}
+@enduml

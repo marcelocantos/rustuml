@@ -1,0 +1,5 @@
+@startuml
+!define ACTOR Alice
+!define TARGET Bob
+ACTOR -> TARGET : hello
+@enduml

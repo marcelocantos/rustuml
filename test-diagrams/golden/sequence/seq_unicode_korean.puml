@@ -1,0 +1,4 @@
+@startuml
+Alice -> Bob : 한국어 메시지
+Bob --> Alice : 한국어 메시지 reply
+@enduml

@@ -1,0 +1,4 @@
+@startuml
+Alice -->> Bob ++ : thin_dotted activate up
+Bob -->> Alice -- : return
+@enduml

@@ -1,0 +1,5 @@
+@startuml
+skinparam backgroundColor #FAFAFA
+Alice -> Bob : background test
+note right : #FAFAFA
+@enduml

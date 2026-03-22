@@ -1,0 +1,4 @@
+@startuml
+Alice -> Bob : <back:#FFEECC>hex bg</back>
+note right : <back:#FFEECC>hex bg</back>
+@enduml

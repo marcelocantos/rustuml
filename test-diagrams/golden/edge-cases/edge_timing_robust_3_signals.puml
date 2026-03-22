@@ -1,0 +1,21 @@
+@startuml
+robust "Signal 0" as S0
+robust "Signal 1" as S1
+robust "Signal 2" as S2
+@0
+S0 is Low
+S1 is High
+S2 is Unknown
+@20
+S0 is High
+S1 is Unknown
+S2 is HighZ
+@40
+S0 is Unknown
+S1 is HighZ
+S2 is Low
+@60
+S0 is HighZ
+S1 is Low
+S2 is High
+@enduml

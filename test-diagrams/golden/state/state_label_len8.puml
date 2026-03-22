@@ -1,0 +1,5 @@
+@startuml
+[*] --> A
+A --> B : this is quite a long transition label indeed
+B --> [*]
+@enduml

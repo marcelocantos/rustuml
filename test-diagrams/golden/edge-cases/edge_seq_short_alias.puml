@@ -1,0 +1,6 @@
+@startuml
+participant "Long Name" as LN
+participant "Another Long Name" as ALN
+LN -> ALN: hi
+ALN --> LN: ok
+@enduml

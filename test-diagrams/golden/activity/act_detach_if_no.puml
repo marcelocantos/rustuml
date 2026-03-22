@@ -1,0 +1,10 @@
+@startuml
+start
+if (cond?) then (yes)
+  :Normal;
+else (no)
+  :detach trigger;
+  detach
+endif
+stop
+@enduml

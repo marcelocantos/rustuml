@@ -1,0 +1,4 @@
+@startuml
+Alice -> Bob : 中文 日本語 한국어
+note right : 中文 日本語 한국어
+@enduml

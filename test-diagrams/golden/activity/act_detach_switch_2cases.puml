@@ -1,0 +1,11 @@
+@startuml
+start
+switch (v?)
+case (1)
+  :Case 1;
+case (2)
+  :detach case;
+  detach
+endswitch
+stop
+@enduml

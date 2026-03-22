@@ -1,0 +1,7 @@
+@startuml
+package MyContainer <<service>> {
+  component Foo
+  component Bar
+  Foo --> Bar
+}
+@enduml

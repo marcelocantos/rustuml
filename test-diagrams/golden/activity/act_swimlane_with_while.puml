@@ -1,0 +1,13 @@
+@startuml
+
+|Producer|
+start
+while (more data?) is (yes)
+  :Produce item;
+  |Consumer|
+  :Consume item;
+  |Producer|
+endwhile (done)
+|Consumer|
+stop
+@enduml

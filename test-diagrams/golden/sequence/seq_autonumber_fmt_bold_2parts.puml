@@ -1,0 +1,7 @@
+@startuml
+autonumber "<b>##</b>"
+participant P0
+participant P1
+P0 -> P1 : msg
+P1 -> P0 : msg
+@enduml

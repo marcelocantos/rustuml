@@ -1,0 +1,24 @@
+@startuml
+class HeavyClass {
+  +void method01()
+  +void method02()
+  +void method03()
+  +void method04()
+  +void method05()
+  +void method06()
+  +void method07()
+  +void method08()
+  +void method09()
+  +void method10()
+  +void method11()
+  +void method12()
+  +void method13()
+  +void method14()
+  +void method15()
+  +void method16()
+  +void method17()
+  +void method18()
+  +void method19()
+  +void method20()
+}
+@enduml

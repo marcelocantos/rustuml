@@ -1,0 +1,10 @@
+@startyaml
+fruits:
+  - apple
+  - banana
+  - cherry
+numbers:
+  - 1
+  - 2
+  - 3
+@endyaml

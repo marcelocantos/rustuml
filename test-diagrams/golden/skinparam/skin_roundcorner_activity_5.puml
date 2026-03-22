@@ -1,0 +1,7 @@
+@startuml
+skinparam activityRoundCorner 5
+
+
+
+start\n:action;\nstop
+@enduml

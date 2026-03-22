@@ -1,0 +1,15 @@
+@startuml
+skinparam backgroundColor #2B2B2B
+skinparam ParticipantBackgroundColor #3C3F41
+skinparam ParticipantFontColor white
+skinparam SequenceArrowColor #6897BB
+skinparam SequenceLifeLineBorderColor #6897BB
+participant Alice
+participant Bob
+participant Charlie
+Alice -> Bob : request
+note over Alice : note
+Bob -> Charlie : delegate
+Charlie --> Bob : result
+Bob --> Alice : response
+@enduml

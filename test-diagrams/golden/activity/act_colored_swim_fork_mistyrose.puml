@@ -1,0 +1,11 @@
+@startuml
+
+|#mistyrose|Colored Lane|
+start
+fork
+  :P1;
+fork again
+  :P2;
+end fork
+stop
+@enduml

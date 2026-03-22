@@ -1,0 +1,13 @@
+@startuml
+object Obj16A <<boundary>> #cyan {
+  id = 16
+  name = "obj16a"
+  active = true
+}
+object Obj16B #violet {
+  ref = 16
+  label = "obj16b"
+}
+Obj16A --> Obj16B : "ref_16"
+note right of Obj16A : Object variant 16
+@enduml

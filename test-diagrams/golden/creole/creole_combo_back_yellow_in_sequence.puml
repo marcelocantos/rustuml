@@ -1,0 +1,5 @@
+@startuml
+participant "Part 867" as P
+Alice -> P : <back:yellow>bg</back>
+P --> Alice : <back:yellow>bg</back> reply
+@enduml

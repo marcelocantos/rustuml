@@ -1,0 +1,13 @@
+@startuml
+
+start
+repeat
+  :Get input;
+  if (valid?) then (yes)
+    :Process;
+  else (no)
+    :Show error;
+  endif
+repeatwhile (continue?) is (yes)
+stop
+@enduml

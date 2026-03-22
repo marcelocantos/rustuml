@@ -1,0 +1,5 @@
+@startuml
+storage Source
+node Target
+Source --> Target
+@enduml

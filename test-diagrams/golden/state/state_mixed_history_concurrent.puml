@@ -1,0 +1,17 @@
+@startuml
+state Application {
+  state UI {
+    state H <<history>>
+    [*] --> H
+    H --> Screen1
+    Screen1 --> Screen2 : navigate
+    Screen2 --> Screen1 : back
+  }
+  [*] --> UI
+  --
+  [*] --> Background
+  Background --> [*]
+}
+[*] --> Application
+Application --> [*]
+@enduml

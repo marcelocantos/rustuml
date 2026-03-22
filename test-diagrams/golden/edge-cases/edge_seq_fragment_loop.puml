@@ -1,0 +1,7 @@
+@startuml
+Alice -> Bob: before
+loop 1, 10
+  Alice -> Bob: inside
+end
+Alice -> Bob: after
+@enduml

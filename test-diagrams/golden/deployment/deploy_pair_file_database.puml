@@ -1,0 +1,5 @@
+@startuml
+file Source
+database Target
+Source --> Target
+@enduml

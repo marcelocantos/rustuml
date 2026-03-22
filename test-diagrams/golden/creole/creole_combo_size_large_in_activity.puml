@@ -1,0 +1,8 @@
+@startuml
+:<size:20>large</size> start;
+if (<size:20>large</size> condition?) then (yes)
+  :<size:20>large</size> true branch;
+else (no)
+  :<size:20>large</size> false branch;
+endif
+@enduml

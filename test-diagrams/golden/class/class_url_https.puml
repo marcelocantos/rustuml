@@ -1,0 +1,5 @@
+@startuml
+class MyClass [[https://example.com/path/to/page]] {
+  +void method()
+}
+@enduml

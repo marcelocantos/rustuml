@@ -1,0 +1,5 @@
+@startuml
+state A #LimeGreen
+[*] --> A
+A --> [*]
+@enduml

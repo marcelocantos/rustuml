@@ -1,0 +1,13 @@
+@startuml
+object Obj9A <<actor>> #lightgreen {
+  id = 9
+  name = "obj9a"
+  active = true
+}
+object Obj9B #red {
+  ref = 9
+  label = "obj9b"
+}
+Obj9A --> Obj9B : "ref_9"
+note right of Obj9A : Object variant 9
+@enduml

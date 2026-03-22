@@ -1,0 +1,14 @@
+@startuml
+title "Combo Variant 23"
+[Component1_23]
+[Component2_23]
+[Component3_23]
+[Component4_23]
+[Component5_23]
+[Component6_23]
+[Component1_23] --> [Component2_23]
+[Component2_23] --> [Component3_23]
+[Component3_23] --> [Component4_23]
+[Component4_23] --> [Component5_23]
+[Component5_23] --> [Component6_23]
+@enduml

@@ -1,0 +1,9 @@
+@startuml
+[*] --> A
+note right of A
+  <b>Bold</b> text
+  <i>Italic</i> text
+  <u>Underline</u>
+end note
+A --> [*]
+@enduml

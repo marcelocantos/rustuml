@@ -1,0 +1,3 @@
+@startuml
+Alice -> Bob: __underline text__
+@enduml

@@ -1,0 +1,12 @@
+@startuml
+start
+label loop_start
+:do work;
+if (done?) then (yes)
+  goto end
+else (no)
+  goto loop_start
+endif
+label end
+stop
+@enduml

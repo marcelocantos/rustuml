@@ -1,0 +1,5 @@
+@startuml
+class SpotClassE << (E,#purple) SpotE >> {
+  +void method()
+}
+@enduml

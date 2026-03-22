@@ -1,0 +1,4 @@
+@startuml
+Alice -> Bob : <em>em tag</em>
+note right : <em>em tag</em>
+@enduml

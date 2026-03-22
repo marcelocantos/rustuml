@@ -1,0 +1,12 @@
+@startsalt
+{^Profile Form
+  Full Name: | "                    "
+  Bio: | "                    "
+  Website: | "                    "
+  Twitter: | "                    "
+  GitHub: | "                    "
+  
+  ..
+  [Submit] | [Reset] | [Cancel]
+}
+@endsalt

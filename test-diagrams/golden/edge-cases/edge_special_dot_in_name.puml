@@ -1,0 +1,7 @@
+@startuml
+package com.example {
+  class Foo
+  class Bar
+}
+com.example.Foo --> com.example.Bar
+@enduml

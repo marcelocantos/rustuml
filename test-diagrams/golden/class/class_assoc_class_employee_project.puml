@@ -1,0 +1,10 @@
+@startuml
+class Employee
+class Project
+class WorkAssignment {
+  +Date startDate
+  +int hoursPerWeek
+  +String role
+}
+(Employee, Project) .. WorkAssignment
+@enduml

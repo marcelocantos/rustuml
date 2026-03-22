@@ -1,0 +1,13 @@
+@startuml
+object Producer {
+  name = "producer"
+}
+object Queue {
+  name = "queue"
+}
+object Consumer {
+  name = "consumer"
+}
+Producer --> Queue
+Queue --> Consumer
+@enduml

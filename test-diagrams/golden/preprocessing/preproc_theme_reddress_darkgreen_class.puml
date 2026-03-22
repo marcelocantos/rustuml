@@ -1,0 +1,10 @@
+@startuml
+!theme reddress-darkgreen
+class ThemeTest {
+  +name: String
+  +method(): void
+}
+class Child extends ThemeTest {
+  +extra: int
+}
+@enduml

@@ -1,0 +1,6 @@
+@startuml
+Alice -> Bob : hello
+legend
+  ""mono legend text""
+end legend
+@enduml

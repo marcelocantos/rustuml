@@ -1,0 +1,4 @@
+@startuml
+title ~~Strike Title~~
+Alice -> Bob : hello
+@enduml

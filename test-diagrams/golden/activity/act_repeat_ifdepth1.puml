@@ -1,0 +1,12 @@
+@startuml
+
+start
+repeat
+  if (cond1?) then (yes)
+  :  Action;
+  else (no)
+    :Alt 1;
+  endif
+repeatwhile (more?) is (yes)
+stop
+@enduml

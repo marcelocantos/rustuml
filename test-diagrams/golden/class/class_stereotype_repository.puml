@@ -1,0 +1,6 @@
+@startuml
+class MyClass <<repository>> {
+  -instance: MyClass
+  +getInstance(): MyClass
+}
+@enduml

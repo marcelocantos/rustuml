@@ -1,0 +1,12 @@
+@startyaml
+colors:
+  - red
+  - green
+  - blue
+  - yellow
+  - orange
+  - purple
+  - cyan
+  - magenta
+count: 8
+@endyaml

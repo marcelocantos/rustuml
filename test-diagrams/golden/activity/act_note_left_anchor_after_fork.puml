@@ -1,0 +1,11 @@
+@startuml
+
+start
+fork
+  :A;
+fork again
+  :B;
+end fork
+note left: Note after after fork
+stop
+@enduml

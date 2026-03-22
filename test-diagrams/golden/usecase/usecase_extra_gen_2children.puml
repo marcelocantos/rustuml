@@ -1,0 +1,15 @@
+@startuml
+actor Parent
+actor Child1
+actor Child2
+usecase BaseUC
+usecase SpecialUC
+usecase CommonUC
+Child1 --|> Parent
+Child2 --|> Parent
+Parent --> BaseUC
+Child1 --> SpecialUC
+Child2 --> SpecialUC
+BaseUC .> CommonUC : <<include>>
+SpecialUC .> CommonUC : <<include>>
+@enduml

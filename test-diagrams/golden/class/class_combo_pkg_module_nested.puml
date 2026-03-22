@@ -1,0 +1,9 @@
+@startuml
+module Outer {
+  module Inner {
+    class MyClass {
+      +void method()
+    }
+  }
+}
+@enduml

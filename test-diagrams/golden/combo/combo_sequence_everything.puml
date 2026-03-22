@@ -1,0 +1,93 @@
+@startuml
+skinparam sequenceArrowThickness 2
+skinparam sequenceGroupBackgroundColor #F3F3F3
+skinparam sequenceLifeLineBorderColor #999999
+
+title "Full-Featured Sequence Diagram"
+header Auth Flow v2.0
+footer Confidential
+
+actor User as U
+participant "Browser" as B
+participant "API Gateway" as GW
+participant "Auth Service" as AUTH
+participant "User Service" as USR
+database "DB" as DB
+queue "Event Bus" as EB
+
+autonumber
+
+== Login Flow ==
+
+U -> B : enter credentials
+B -> GW : POST /auth/login
+activate GW
+
+GW -> AUTH : validate(credentials)
+activate AUTH
+
+AUTH -> DB : SELECT user WHERE email=?
+activate DB
+DB --> AUTH : user_record
+deactivate DB
+
+alt valid credentials
+  AUTH -> AUTH : generate_tokens()
+  AUTH --> GW : {access_token, refresh_token}
+  deactivate AUTH
+
+  GW -> EB : publish(UserLoggedIn)
+  GW --> B : 200 OK + tokens
+  B --> U : dashboard
+
+else invalid credentials
+  AUTH --> GW : 401 Unauthorized
+  deactivate AUTH
+  GW --> B : 401 Unauthorized
+  B --> U : error message
+end
+
+deactivate GW
+
+== Profile Update ==
+
+U -> B : edit profile
+B -> GW : PUT /users/me
+activate GW
+note right of GW : Requires valid JWT
+
+GW -> AUTH : verify_token(jwt)
+activate AUTH
+AUTH --> GW : valid / {user_id}
+deactivate AUTH
+
+GW -> USR : updateProfile(user_id, data)
+activate USR
+USR -> DB : UPDATE users SET ...
+activate DB
+DB --> USR : 1 row updated
+deactivate DB
+
+USR -> EB : publish(ProfileUpdated)
+USR --> GW : updated_profile
+deactivate USR
+
+GW --> B : 200 OK
+B --> U : success
+
+deactivate GW
+
+loop every 15 min
+  B -> GW : POST /auth/refresh
+  GW -> AUTH : refresh(token)
+  AUTH --> GW : new_access_token
+  GW --> B : 200 OK + new_token
+end
+
+group Error Handling
+  B -> GW : any_request
+  GW -->x B : 500 Internal Error
+  note right : Log and alert
+end
+
+@enduml

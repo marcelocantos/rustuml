@@ -1,0 +1,6 @@
+@startuml
+
+start
+#pink:Colored action;
+stop
+@enduml

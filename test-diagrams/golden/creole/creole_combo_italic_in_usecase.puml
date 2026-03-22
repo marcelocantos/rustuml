@@ -1,0 +1,5 @@
+@startuml
+actor "//italic// Actor" as A490
+usecase "//italic// Case" as UC490
+A490 --> UC490
+@enduml

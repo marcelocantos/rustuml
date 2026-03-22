@@ -1,0 +1,8 @@
+@startuml
+!define RENDER_STATE
+
+!ifdef RENDER_STATE
+[*] --> GuardedState
+GuardedState --> [*]
+!endif
+@enduml

@@ -1,0 +1,10 @@
+@startuml
+skinparam stateBorderThickness 2
+[*] --> Idle
+Idle : entry / init
+Idle --> Active : start
+Active : do / process
+Active --> Paused : pause
+Paused --> Active : resume
+Active --> [*] : stop
+@enduml

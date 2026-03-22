@@ -1,0 +1,8 @@
+@startmindmap
+* <<cloud>> Main Topic
+** <<database>> Data
+*** <<table>> Users
+*** <<table>> Orders
+** <<server>> Services
+*** <<api>> REST API
+@endmindmap

@@ -1,0 +1,7 @@
+@startuml
+Alice -> Bob : request
+opt logging enabled
+  Bob -> Logger : log request
+end
+Bob --> Alice : response
+@enduml

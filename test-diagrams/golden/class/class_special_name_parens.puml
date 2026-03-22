@@ -1,0 +1,7 @@
+@startuml
+class "Class(WithParens)" {
+  +void method()
+}
+class Other
+"Class(WithParens)" --> Other
+@enduml

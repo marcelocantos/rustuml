@@ -1,0 +1,20 @@
+@startuml
+package Platform {
+  package Core {
+    interface IStorage
+    interface IMessaging
+    component StorageImpl
+    component MessagingImpl
+  }
+  package Applications {
+    component App1
+    component App2
+  }
+}
+App1 --> IStorage
+App2 --> IStorage
+App1 --> IMessaging
+StorageImpl ..|> IStorage
+MessagingImpl ..|> IMessaging
+
+@enduml

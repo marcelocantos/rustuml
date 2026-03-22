@@ -1,0 +1,25 @@
+@startuml
+entity Contract {
+  * id : INT <<PK>>
+  --
+  title : VARCHAR(200)
+  start_date : DATE
+  end_date : DATE
+}
+entity ContractPartyA {
+  * id : INT <<PK>>
+  * contract_id : INT <<FK>>
+  --
+  name : VARCHAR(200)
+  role : VARCHAR(100)
+}
+entity ContractPartyB {
+  * id : INT <<PK>>
+  * contract_id : INT <<FK>>
+  --
+  name : VARCHAR(200)
+  role : VARCHAR(100)
+}
+Contract ||--|| ContractPartyA : "party A"
+Contract ||--|| ContractPartyB : "party B"
+@enduml

@@ -1,0 +1,8 @@
+@startuml
+A -> B : init
+par
+  A -> B : solid branch 1
+and
+  A -> C : solid branch 2
+end
+@enduml

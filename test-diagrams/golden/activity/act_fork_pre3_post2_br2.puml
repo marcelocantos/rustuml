@@ -1,0 +1,14 @@
+@startuml
+start
+:Pre 1;
+:Pre 2;
+:Pre 3;
+fork
+  :Branch 1;
+fork again
+  :Branch 2;
+end fork
+:Post 1;
+:Post 2;
+stop
+@enduml

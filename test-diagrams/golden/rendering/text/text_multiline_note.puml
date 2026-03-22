@@ -1,0 +1,10 @@
+@startuml
+class Service
+note right of Service
+  This is line one of the note.
+  This is line two of the note.
+  This is line three of the note.
+  And this is line four.
+end note
+
+@enduml

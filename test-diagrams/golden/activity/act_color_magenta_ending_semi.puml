@@ -1,0 +1,6 @@
+@startuml
+
+start
+#magenta:Action with semi;
+stop
+@enduml

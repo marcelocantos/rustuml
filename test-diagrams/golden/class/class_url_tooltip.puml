@@ -1,0 +1,5 @@
+@startuml
+class MyClass [[http://example.com{Tooltip text here}]] {
+  +void method()
+}
+@enduml

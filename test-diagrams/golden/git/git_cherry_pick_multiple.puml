@@ -1,0 +1,10 @@
+@startgit
+commit id:"base"
+branch hotfix
+checkout hotfix
+commit id:"fix1"
+commit id:"fix2"
+checkout master
+cherry-pick id:"fix1"
+cherry-pick id:"fix2"
+@endgit

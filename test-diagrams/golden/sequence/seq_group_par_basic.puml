@@ -1,0 +1,9 @@
+@startuml
+Alice -> Bob : start
+par
+  Bob -> Charlie : parallel 1
+and
+  Bob -> Dave : parallel 2
+end
+Bob --> Alice : done
+@enduml

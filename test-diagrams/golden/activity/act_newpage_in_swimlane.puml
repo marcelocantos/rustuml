@@ -1,0 +1,14 @@
+@startuml
+
+|Lane A|
+start
+:Page 1 action A;
+|Lane B|
+:Page 1 action B;
+newpage Page 2
+|Lane A|
+:Page 2 action A;
+|Lane B|
+:Page 2 action B;
+stop
+@enduml

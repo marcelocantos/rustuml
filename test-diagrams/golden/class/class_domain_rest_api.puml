@@ -1,0 +1,31 @@
+@startuml
+package api {
+  class UserController <<controller>> {
+    +Response getUser(int id)
+    +Response createUser(UserDTO dto)
+    +Response updateUser(int id, UserDTO dto)
+    +Response deleteUser(int id)
+  }
+  class UserDTO {
+    +String username
+    +String email
+    +String password
+  }
+  class Response {
+    +int statusCode
+    +Object body
+    +String message
+  }
+}
+package service {
+  class UserService <<service>> {
+    +User getUser(int id)
+    +User createUser(UserDTO dto)
+    +User updateUser(int id, UserDTO dto)
+    +void deleteUser(int id)
+  }
+}
+api.UserController ..> service.UserService
+api.UserController ..> api.UserDTO
+api.UserController ..> api.Response
+@enduml

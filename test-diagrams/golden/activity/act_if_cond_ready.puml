@@ -1,0 +1,12 @@
+@startuml
+
+start
+:Prepare;
+if (ready?) then (ready)
+  :Handle ready;
+else (not ready)
+  :Handle not ready;
+endif
+:Continue;
+stop
+@enduml

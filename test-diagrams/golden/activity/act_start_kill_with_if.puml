@@ -1,0 +1,10 @@
+@startuml
+start
+if (c?) then (yes)
+  :Y;
+  kill
+else (no)
+  :N;
+  stop
+endif
+@enduml

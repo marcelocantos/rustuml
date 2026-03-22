@@ -1,0 +1,5 @@
+@startuml
+note as N
+  <back:#FFEECC>hex bg</back>
+end note
+@enduml

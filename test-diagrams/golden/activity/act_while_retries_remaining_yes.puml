@@ -1,0 +1,8 @@
+@startuml
+
+start
+while (retries remaining?) is (yes)
+  :Process iteration;
+endwhile (no)
+stop
+@enduml

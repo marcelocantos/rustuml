@@ -1,0 +1,10 @@
+@startuml
+class مستخدم {
+  بيانات: String
+  +طريقة(): void
+}
+class نظام {
+  بيانات: int
+}
+مستخدم --> نظام
+@enduml

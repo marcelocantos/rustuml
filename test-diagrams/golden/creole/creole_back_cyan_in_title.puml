@@ -1,0 +1,4 @@
+@startuml
+title <back:cyan>cyan bg</back>
+Alice -> Bob : hello
+@enduml

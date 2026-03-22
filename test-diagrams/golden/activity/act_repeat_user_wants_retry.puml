@@ -1,0 +1,9 @@
+@startuml
+
+start
+repeat
+  :Attempt action;
+  :Check result;
+repeatwhile (user wants retry?) is (yes)
+stop
+@enduml

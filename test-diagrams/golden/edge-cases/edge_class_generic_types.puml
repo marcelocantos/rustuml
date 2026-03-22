@@ -1,0 +1,11 @@
+@startuml
+class Container<T> {
+  items: List<T>
+  get(i: int): T
+  add(item: T): void
+}
+class Pair<K, V> {
+  key: K
+  value: V
+}
+@enduml

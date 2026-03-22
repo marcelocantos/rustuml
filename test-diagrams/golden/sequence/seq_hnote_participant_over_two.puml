@@ -1,0 +1,7 @@
+@startuml
+participant A
+participant B
+A -> B : hello
+hnote over A, B : hnote over two participants
+B --> A : hi
+@enduml

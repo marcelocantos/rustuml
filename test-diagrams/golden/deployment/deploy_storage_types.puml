@@ -1,0 +1,11 @@
+@startuml
+node AppServer
+storage "Block Storage" as BS
+storage "Object Storage" as OS
+database "Relational DB" as RDB
+database "NoSQL DB" as NDB
+AppServer --> BS : mount
+AppServer --> OS : S3 API
+AppServer --> RDB : JDBC
+AppServer --> NDB : MongoDB driver
+@enduml

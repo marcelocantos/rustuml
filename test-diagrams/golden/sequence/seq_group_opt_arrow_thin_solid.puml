@@ -1,0 +1,7 @@
+@startuml
+A -> B : init
+opt cond
+  A ->> B : thin_solid in opt
+  B --> A : ack
+end
+@enduml

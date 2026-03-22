@@ -1,0 +1,16 @@
+@startuml
+enum Status {
+  ACTIVE
+  INACTIVE
+  --
+  +String display()
+  {static} +Status fromString(String s)
+}
+enum Status {
+  ACTIVE = 1
+  INACTIVE = 2
+  PENDING = 3
+}
+class Entity
+Entity --> Status
+@enduml

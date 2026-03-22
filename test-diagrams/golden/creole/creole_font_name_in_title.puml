@@ -1,0 +1,4 @@
+@startuml
+title <font:Courier>courier font</font>
+Alice -> Bob : hello
+@enduml

@@ -1,0 +1,6 @@
+@startuml
+class MyClass <<singleton>> #FF7700 {
+  -instance: MyClass
+  +getInstance(): MyClass
+}
+@enduml

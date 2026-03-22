@@ -1,0 +1,13 @@
+@startuml
+
+start
+:First action;
+if (condition?) then (yes)
+  :Yes action;
+  newpage
+  :Continue yes;
+else (no)
+  :No action;
+endif
+stop
+@enduml

@@ -1,0 +1,5 @@
+@startuml
+class ColorTest #Aqua {
+  +void method()
+}
+@enduml

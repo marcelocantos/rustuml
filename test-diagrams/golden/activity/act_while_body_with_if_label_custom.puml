@@ -1,0 +1,12 @@
+@startuml
+
+start
+while (condition?) is (continue)
+if (inner?) then (yes)
+  :Inner yes;
+else (no)
+  :Inner no;
+endif
+endwhile (finished)
+stop
+@enduml

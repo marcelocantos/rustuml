@@ -1,0 +1,8 @@
+@startuml
+!pragma teoz true
+Alice -> Bob : a
+Bob -> Charlie : b
+note right of Charlie : note
+Charlie --> Bob : c
+Bob --> Alice : d
+@enduml

@@ -1,0 +1,9 @@
+@startuml
+
+|Lane1|
+start
+#blue:Colored in lane;
+|Lane2|
+:Normal in lane;
+stop
+@enduml

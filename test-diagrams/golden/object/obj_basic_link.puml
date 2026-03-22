@@ -1,0 +1,9 @@
+@startuml
+object Person {
+  name = "Alice"
+}
+object Address {
+  city = "Wonderland"
+}
+Person --> Address
+@enduml

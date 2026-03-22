@@ -1,0 +1,15 @@
+@startuml
+component "Source Control" as SC
+component "CI Server" as CI
+component "Test Runner" as TR
+component "Build Server" as BS
+component "Artifact Store" as AS
+component "Deploy Agent" as DA
+cloud "Production" as PROD
+SC --> CI : webhook
+CI --> TR : triggers
+TR --> BS : on success
+BS --> AS : publishes
+AS --> DA : deploys
+DA --> PROD : updates
+@enduml

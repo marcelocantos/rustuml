@@ -1,0 +1,6 @@
+@startuml
+class Repository [[https://github.com/example/repo Repo Source]] {
+  + save()
+  + find()
+}
+@enduml

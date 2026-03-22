@@ -1,0 +1,15 @@
+@startuml
+cloud "AWS" {
+  node "Compute Instance" <<vm>> {
+    component "App Server"
+    component "Cache"
+  }
+  database "Managed DB"
+  storage "Object Storage"
+  queue "Message Queue"
+  "App Server" --> "Managed DB"
+  "App Server" --> "Cache"
+  "App Server" --> "Message Queue"
+  "App Server" --> "Object Storage"
+}
+@enduml

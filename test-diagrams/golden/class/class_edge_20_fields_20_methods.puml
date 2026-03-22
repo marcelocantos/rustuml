@@ -1,0 +1,45 @@
+@startuml
+class MassiveClass {
+  +String field01
+  +String field02
+  +String field03
+  +String field04
+  +String field05
+  +String field06
+  +String field07
+  +String field08
+  +String field09
+  +String field10
+  +String field11
+  +String field12
+  +String field13
+  +String field14
+  +String field15
+  +String field16
+  +String field17
+  +String field18
+  +String field19
+  +String field20
+  --
+  +void method01()
+  +void method02()
+  +void method03()
+  +void method04()
+  +void method05()
+  +void method06()
+  +void method07()
+  +void method08()
+  +void method09()
+  +void method10()
+  +void method11()
+  +void method12()
+  +void method13()
+  +void method14()
+  +void method15()
+  +void method16()
+  +void method17()
+  +void method18()
+  +void method19()
+  +void method20()
+}
+@enduml

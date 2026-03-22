@@ -1,0 +1,8 @@
+@startuml
+skinparam shadowing false
+class A {
+  +void method()
+}
+class B
+A --> B
+@enduml

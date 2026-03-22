@@ -1,0 +1,22 @@
+@startuml
+package "Presentation Layer" {
+  component UI
+  component ViewModel
+}
+package "Business Layer" {
+  component ServiceA
+  component ServiceB
+  component DomainModel
+}
+package "Data Layer" {
+  component Repository
+  database Database
+}
+UI --> ViewModel
+ViewModel --> ServiceA
+ViewModel --> ServiceB
+ServiceA --> DomainModel
+ServiceB --> DomainModel
+DomainModel --> Repository
+Repository --> Database
+@enduml

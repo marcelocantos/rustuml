@@ -1,0 +1,7 @@
+@startuml
+database MyPkg {
+  class MyClass {
+    +void method()
+  }
+}
+@enduml

@@ -1,0 +1,9 @@
+@startuml
+component A
+component B
+A --> B : main path
+note on link
+  This is the critical
+  path for performance
+end note
+@enduml

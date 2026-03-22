@@ -1,0 +1,5 @@
+@startuml
+class MyClass
+note right : This is **bold** and this is //italic// and this is **//both//**
+
+@enduml

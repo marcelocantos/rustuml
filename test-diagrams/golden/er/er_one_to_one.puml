@@ -1,0 +1,17 @@
+@startuml
+entity User {
+  * id : INT <<PK>>
+  --
+  username : VARCHAR(50)
+  password_hash : CHAR(64)
+}
+entity UserProfile {
+  * id : INT <<PK>>
+  * user_id : INT <<FK>>
+  --
+  full_name : VARCHAR(200)
+  bio : TEXT
+  avatar_url : VARCHAR(500)
+}
+User ||--|| UserProfile : "has"
+@enduml

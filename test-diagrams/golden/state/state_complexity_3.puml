@@ -1,0 +1,11 @@
+@startuml
+[*] --> S1
+S1 --> S2 : event1
+S2 --> S3
+S3 --> S4 : event3 [guard3] / action3
+S4 --> S5 : event4
+S5 --> S6
+S6 --> S7 : event6 [guard6] / action6
+S7 --> S8 : event7
+S8 --> [*]
+@enduml

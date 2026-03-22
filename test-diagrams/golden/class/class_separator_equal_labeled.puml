@@ -1,0 +1,7 @@
+@startuml
+class MyClass {
+  +String name
+  == label ==
+  +void method()
+}
+@enduml

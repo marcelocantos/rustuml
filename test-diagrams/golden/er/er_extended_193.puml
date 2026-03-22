@@ -1,0 +1,58 @@
+@startuml
+entity Primary193 {
+  * id : INT <<PK>>
+  --
+  code : VARCHAR(20)
+  label : VARCHAR(100)
+  is_active : BOOLEAN
+  created_at : TIMESTAMP
+}
+entity Related193_1 {
+  * id : INT <<PK>>
+  * primary_id : INT <<FK>>
+  --
+  value : VARCHAR(200)
+  sort_order : INT
+}
+entity Related193_2 {
+  * id : INT <<PK>>
+  * primary_id : INT <<FK>>
+  --
+  value : VARCHAR(200)
+  sort_order : INT
+}
+entity Related193_3 {
+  * id : INT <<PK>>
+  * primary_id : INT <<FK>>
+  --
+  value : VARCHAR(200)
+  sort_order : INT
+}
+entity Related193_4 {
+  * id : INT <<PK>>
+  * primary_id : INT <<FK>>
+  --
+  value : VARCHAR(200)
+  sort_order : INT
+}
+entity Related193_5 {
+  * id : INT <<PK>>
+  * primary_id : INT <<FK>>
+  --
+  value : VARCHAR(200)
+  sort_order : INT
+}
+entity Related193_6 {
+  * id : INT <<PK>>
+  * primary_id : INT <<FK>>
+  --
+  value : VARCHAR(200)
+  sort_order : INT
+}
+Primary193 ||--o{ Related193_1 : "has"
+Primary193 ||--o{ Related193_2 : "has"
+Primary193 ||--o{ Related193_3 : "has"
+Primary193 ||--o{ Related193_4 : "has"
+Primary193 ||--o{ Related193_5 : "has"
+Primary193 ||--o{ Related193_6 : "has"
+@enduml

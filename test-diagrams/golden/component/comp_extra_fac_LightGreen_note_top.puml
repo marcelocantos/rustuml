@@ -1,0 +1,4 @@
+@startuml
+component MyComp <<facade>> #LightGreen
+note top of MyComp : Tagged component
+@enduml

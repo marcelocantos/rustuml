@@ -1,0 +1,14 @@
+@startuml
+interface Describable {
+  +String getDescription()
+}
+enum Season {
+  SPRING
+  SUMMER
+  AUTUMN
+  WINTER
+  --
+  +String getDescription()
+}
+Season ..|> Describable
+@enduml

@@ -1,0 +1,37 @@
+@startuml
+title Kitchen Sink State
+
+[*] --> Idle
+
+state Idle {
+  [*] --> Waiting
+  Waiting --> Waiting : tick
+}
+
+state Processing {
+  [*] --> Analyzing
+  Analyzing --> Executing
+  Executing --> [*]
+  --
+  [*] --> Logging
+  Logging --> [*]
+}
+
+state ErrorHandling <<choice>>
+
+Idle --> Processing : start
+Processing --> ErrorHandling : complete
+ErrorHandling --> Idle : no error
+ErrorHandling --> Failed : error
+
+state Failed {
+  entry / log error
+  exit / cleanup
+}
+
+Failed --> [*] : abandon
+Failed --> Idle : retry
+
+note right of Processing: Main work
+note left of Idle: Waiting for input
+@enduml

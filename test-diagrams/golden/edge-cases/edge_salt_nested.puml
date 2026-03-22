@@ -1,0 +1,14 @@
+@startsalt
+{
+  Outer form
+  {
+    Inner group 1
+    "Field 1" | "        "
+  }
+  {
+    Inner group 2
+    "Field 2" | "        "
+  }
+  [Submit]
+}
+@endsalt

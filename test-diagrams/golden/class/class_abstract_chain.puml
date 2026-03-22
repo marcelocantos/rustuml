@@ -1,0 +1,14 @@
+@startuml
+abstract class A {
+  +{abstract} void method1()
+}
+abstract class B {
+  +void method1()
+  +{abstract} void method2()
+}
+class C {
+  +void method2()
+}
+A <|-- B
+B <|-- C
+@enduml

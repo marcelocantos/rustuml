@@ -1,0 +1,12 @@
+@startuml
+Alice -> Bob : start
+alt success
+  loop 3 times
+    Bob -> DB : query
+    DB --> Bob : data
+  end
+  Bob --> Alice : ok
+else failure
+  Bob --> Alice : error
+end
+@enduml

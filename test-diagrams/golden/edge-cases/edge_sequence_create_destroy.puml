@@ -1,0 +1,7 @@
+@startuml
+Alice -> Bob: hello
+create Charlie
+Alice -> Charlie: create
+Alice -> Charlie: use
+destroy Charlie
+@enduml

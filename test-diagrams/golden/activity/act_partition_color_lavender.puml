@@ -1,0 +1,9 @@
+@startuml
+
+start
+partition #lavender "Colored lavender" {
+  :Action in lavender partition;
+  :Another action;
+}
+stop
+@enduml

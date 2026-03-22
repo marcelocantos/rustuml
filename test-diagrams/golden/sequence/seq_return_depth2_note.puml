@@ -1,0 +1,8 @@
+@startuml
+P0 -> P1 ++ : call 1
+note over P0 : before return 1
+P1 -> P2 ++ : call 2
+note over P1 : before return 2
+return result 2
+return result 1
+@enduml

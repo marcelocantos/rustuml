@@ -1,0 +1,12 @@
+@startnwdiag
+nwdiag {
+  network lan {
+    address = "192.168.0.0/24"
+    server00
+    server01
+    server02
+    server03
+    server04
+  }
+}
+@endnwdiag

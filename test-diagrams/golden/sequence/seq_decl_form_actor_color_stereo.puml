@@ -1,0 +1,6 @@
+@startuml
+actor Alice #green <<user>>
+participant Bob
+Alice -> Bob : hello
+Bob --> Alice : hi
+@enduml

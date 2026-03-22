@@ -1,0 +1,4 @@
+@startuml
+Alice -> Bob : café naïve résumé
+note right : café naïve résumé
+@enduml

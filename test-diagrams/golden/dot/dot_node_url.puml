@@ -1,0 +1,7 @@
+@startdot
+digraph G {
+  A [URL="http://example.com", label="Click me"]
+  B [tooltip="Hover text"]
+  A -> B
+}
+@enddot

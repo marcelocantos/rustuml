@@ -1,0 +1,8 @@
+@startuml
+[*] --> A
+A --> A : self0
+A --> A : self1
+A --> A : self2
+A --> A : self3
+A --> [*]
+@enduml

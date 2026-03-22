@@ -1,0 +1,5 @@
+@startuml
+!include <tupadr3/common>
+!include <tupadr3/font-awesome/server>
+node AppServer <<FA_SERVER>>
+@enduml

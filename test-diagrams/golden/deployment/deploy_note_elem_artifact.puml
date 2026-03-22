@@ -1,0 +1,4 @@
+@startuml
+artifact MyElem
+note right of MyElem : Note on artifact
+@enduml

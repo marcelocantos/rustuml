@@ -1,0 +1,6 @@
+@startuml
+class MyClass #FF7700 {
+  +String field
+  +void method()
+}
+@enduml

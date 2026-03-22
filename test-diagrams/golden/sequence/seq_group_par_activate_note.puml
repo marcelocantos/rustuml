@@ -1,0 +1,13 @@
+@startuml
+Alice -> Bob ++ : start
+par
+  Bob -> Charlie ++ : branch 1
+  note over Charlie : branch 1 note
+  Charlie --> Bob -- : done 1
+and
+  Bob -> Dave ++ : branch 2
+  note over Dave : branch 2 note
+  Dave --> Bob -- : done 2
+end
+Bob --> Alice -- : all done
+@enduml

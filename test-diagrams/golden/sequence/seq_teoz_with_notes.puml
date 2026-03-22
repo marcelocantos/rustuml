@@ -1,0 +1,6 @@
+@startuml
+!pragma teoz true
+Alice -> Bob : a
+note over Alice : note
+Bob --> Alice : b
+@enduml

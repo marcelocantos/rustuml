@@ -1,0 +1,5 @@
+@startuml
+state A #Khaki
+[*] --> A
+A --> [*]
+@enduml

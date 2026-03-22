@@ -1,0 +1,25 @@
+@startuml
+|Lane1|
+start
+if (cond1?) then (yes)
+  :Action depth 1;
+  if (cond2?) then (yes)
+    :Action depth 2;
+    if (cond3?) then (yes)
+      :Action depth 3;
+      if (cond4?) then (yes)
+        :Action depth 4;
+      else (no)
+        :Alt 4;
+      endif
+    else (no)
+      :Alt 3;
+    endif
+  else (no)
+    :Alt 2;
+  endif
+else (no)
+  :Alt 1;
+endif
+stop
+@enduml

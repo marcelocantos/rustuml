@@ -1,0 +1,9 @@
+@startuml
+class Queue<T> {
+  -head: Node<T>
+  -tail: Node<T>
+  +void enqueue(T item)
+  +T dequeue()
+  +boolean isEmpty()
+}
+@enduml

@@ -1,0 +1,3 @@
+@startuml
+Alice -> Bob : start **bold** middle //italic// end __under__
+@enduml

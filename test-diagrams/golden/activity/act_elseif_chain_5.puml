@@ -1,0 +1,15 @@
+@startuml
+start
+if (cond 1?) then (branch 1)
+  :Action 1;
+elseif (cond 2?) then (branch 2)
+  :Action 2;
+elseif (cond 3?) then (branch 3)
+  :Action 3;
+elseif (cond 4?) then (branch 4)
+  :Action 4;
+else (default)
+  :Default action;
+endif
+stop
+@enduml

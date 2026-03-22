@@ -1,0 +1,7 @@
+@startuml
+!pragma teoz true
+participant P0
+participant P1
+P0 -> P1 : start
+P1 --> P0 : done
+@enduml

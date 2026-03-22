@@ -1,0 +1,12 @@
+@startuml
+class MyClass {
+  +String publicField
+  -int privateField
+  -- Private Methods --
+  -void privateMethod()
+  == Public Interface ==
+  +void publicMethod()
+  .. Notes ..
+  +String toString()
+}
+@enduml

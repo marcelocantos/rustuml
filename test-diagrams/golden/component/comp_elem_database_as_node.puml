@@ -1,0 +1,5 @@
+@startuml
+database Source
+component Target
+Source --> Target
+@enduml

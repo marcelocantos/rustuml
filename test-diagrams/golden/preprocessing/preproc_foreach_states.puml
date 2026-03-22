@@ -1,0 +1,11 @@
+@startuml
+[*] --> Idle
+
+!foreach $state in ["Idle", "Processing", "Done"]
+  $state : state $state
+!endforeach
+
+Idle --> Processing : start
+Processing --> Done : finish
+Done --> [*]
+@enduml

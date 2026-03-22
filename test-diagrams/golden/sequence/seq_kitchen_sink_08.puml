@@ -1,0 +1,26 @@
+@startuml
+participant "Web Browser" as B
+participant "API Server" as S
+participant "Auth Module" as A
+participant "Database" as DB
+participant "Cache" as C
+participant "Logger" as L
+participant "Notification" as N
+
+autonumber
+
+B -> S ++ : POST /register {email, password}
+S -> L : log request
+S -> A ++ : hash password
+A --> S -- : hashed_pw
+S -> DB ++ : INSERT user
+DB --> S -- : user_id=42
+S -> C ++ : cache user 42
+C --> S -- : ok
+S -> N ++ : send welcome email
+N --> S -- : queued
+S -> L : log success
+S --> B -- : 201 {user_id: 42}
+
+note over B, N : Registration complete — all systems notified
+@enduml

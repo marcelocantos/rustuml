@@ -1,0 +1,8 @@
+@startuml
+skinparam component {
+  BorderStyle dashed
+}
+component A
+component B
+A --> B
+@enduml

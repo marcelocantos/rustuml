@@ -1,0 +1,4 @@
+@startuml
+state "__UnderlineState__" as S
+[*] --> S
+@enduml

@@ -1,0 +1,5 @@
+@startuml
+node AppNode <<embedded>>
+database DataStore
+AppNode --> DataStore : TCP
+@enduml

@@ -1,0 +1,7 @@
+@startuml
+opt cond
+Alice -> Bob : broadcast
+Alice -> Charlie : broadcast
+Alice -> Dave : broadcast
+end
+@enduml

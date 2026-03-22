@@ -1,0 +1,12 @@
+@startuml
+autonumber
+Alice -> Bob : 1
+alt path
+  Bob -> Charlie : 2
+  Charlie --> Bob : 3
+else other
+  Bob -> Dave : 4
+  Dave --> Bob : 5
+end
+Bob --> Alice : 6
+@enduml

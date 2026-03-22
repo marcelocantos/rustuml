@@ -1,0 +1,3 @@
+@startuml
+Alice -> Bob : <color:blue>__text__</color>
+@enduml

@@ -1,0 +1,5 @@
+@startuml
+class ReturnTypes {
+  +Map<String, Object> method()
+}
+@enduml

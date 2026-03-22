@@ -1,0 +1,16 @@
+@startuml
+
+(*) --> "Start Process"
+
+"Start Process" --> "Validate Input"
+if "Is valid?" then
+  -->[yes] "Process Data"
+  "Process Data" --> "Generate Output"
+  "Generate Output" --> "Send Result"
+  "Send Result" --> (*)
+else
+  -->[no] "Log Error"
+  "Log Error" --> "Notify User"
+  "Notify User" --> (*)
+endif
+@enduml

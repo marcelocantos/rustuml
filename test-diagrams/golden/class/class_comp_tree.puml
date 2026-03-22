@@ -1,0 +1,23 @@
+@startuml
+class House {
+  +String address
+}
+class Room {
+  +String name
+  +double area
+}
+class Furniture {
+  +String type
+}
+class Door {
+  +boolean isOpen
+}
+class Window {
+  +double width
+  +double height
+}
+House "1" *-- "1..*" Room
+Room "1" *-- "0..*" Furniture
+Room "1" *-- "1..*" Door
+Room "1" *-- "0..*" Window
+@enduml

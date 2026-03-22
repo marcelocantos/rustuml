@@ -1,0 +1,12 @@
+@startuml
+class Foo {
+  +publicField: String
+  -privateField: int
+  #protectedField: float
+  ~packageField: double
+  +publicMethod(): void
+  -privateMethod(): void
+  #protectedMethod(): void
+  ~packageMethod(): void
+}
+@enduml

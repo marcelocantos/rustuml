@@ -1,0 +1,6 @@
+@startuml
+set namespaceSeparator ::
+class org::example::Foo
+class org::example::Bar
+org::example::Foo --> org::example::Bar
+@enduml

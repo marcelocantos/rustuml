@@ -1,0 +1,7 @@
+@startuml
+class Foo
+class Bar
+class ToRemove
+Foo --> ToRemove
+remove ToRemove
+@enduml

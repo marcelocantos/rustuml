@@ -1,0 +1,5 @@
+@startuml
+annotation Pattern {
+  +String regexp()
+}
+@enduml

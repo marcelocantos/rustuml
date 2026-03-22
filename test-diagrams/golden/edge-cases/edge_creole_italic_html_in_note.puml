@@ -1,0 +1,5 @@
+@startuml
+note as N1
+  <i>html italic</i>
+end note
+@enduml

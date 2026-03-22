@@ -1,0 +1,5 @@
+@startuml
+node MyA
+cloud MyB
+MyA --> MyB
+@enduml

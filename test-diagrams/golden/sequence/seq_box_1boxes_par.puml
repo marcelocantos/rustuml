@@ -1,0 +1,14 @@
+@startuml
+box "Box 1" #lightblue
+  participant B0A
+  participant B0B
+end box
+
+B0A -> B0B : internal 0
+
+par
+  B0A -> B0B : par 1
+and
+  B0A -> B0B : par 2
+end
+@enduml

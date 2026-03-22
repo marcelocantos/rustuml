@@ -1,0 +1,9 @@
+@startuml
+class ManyMethods5 {
+  +void method01()
+  +void method02()
+  +void method03()
+  +void method04()
+  +void method05()
+}
+@enduml

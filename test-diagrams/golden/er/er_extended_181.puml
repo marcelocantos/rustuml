@@ -1,0 +1,42 @@
+@startuml
+entity Primary181 {
+  * id : INT <<PK>>
+  --
+  code : VARCHAR(20)
+  label : VARCHAR(100)
+  is_active : BOOLEAN
+  created_at : TIMESTAMP
+}
+entity Related181_1 {
+  * id : INT <<PK>>
+  * primary_id : INT <<FK>>
+  --
+  value : VARCHAR(200)
+  sort_order : INT
+}
+entity Related181_2 {
+  * id : INT <<PK>>
+  * primary_id : INT <<FK>>
+  --
+  value : VARCHAR(200)
+  sort_order : INT
+}
+entity Related181_3 {
+  * id : INT <<PK>>
+  * primary_id : INT <<FK>>
+  --
+  value : VARCHAR(200)
+  sort_order : INT
+}
+entity Related181_4 {
+  * id : INT <<PK>>
+  * primary_id : INT <<FK>>
+  --
+  value : VARCHAR(200)
+  sort_order : INT
+}
+Primary181 ||--o{ Related181_1 : "has"
+Primary181 ||--o{ Related181_2 : "has"
+Primary181 ||--o{ Related181_3 : "has"
+Primary181 ||--o{ Related181_4 : "has"
+@enduml

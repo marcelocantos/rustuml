@@ -1,0 +1,10 @@
+@startuml
+object Base7 { id = 7 }
+object Left7 { l = 7 }
+object Right7 { r = 7 }
+object Bottom7 { b = 7 }
+Base7 --> Left7
+Base7 --> Right7
+Left7 --> Bottom7
+Right7 --> Bottom7
+@enduml

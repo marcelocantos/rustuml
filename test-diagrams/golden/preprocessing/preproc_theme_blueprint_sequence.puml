@@ -1,0 +1,8 @@
+@startuml
+!theme blueprint
+participant Alice
+participant Bob
+Alice -> Bob : hello from blueprint
+Bob --> Alice : reply
+note right : blueprint theme
+@enduml

@@ -1,0 +1,11 @@
+@startuml
+!define FONT_SIZE 14
+!define BORDER_THICK 2
+
+skinparam defaultFontSize FONT_SIZE
+skinparam classBorderThickness BORDER_THICK
+
+class NumericClass {
+  value: int
+}
+@enduml

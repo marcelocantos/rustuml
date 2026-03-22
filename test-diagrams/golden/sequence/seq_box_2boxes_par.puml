@@ -1,0 +1,19 @@
+@startuml
+box "Box 1" #lightblue
+  participant B0A
+  participant B0B
+end box
+box "Box 2" #lightyellow
+  participant B1A
+  participant B1B
+end box
+
+B0A -> B0B : internal 0
+B0B -> B1A : cross 0-1
+
+par
+  B0A -> B0B : par 1
+and
+  B0A -> B0B : par 2
+end
+@enduml

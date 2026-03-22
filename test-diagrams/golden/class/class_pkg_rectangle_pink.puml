@@ -1,0 +1,7 @@
+@startuml
+rectangle myPkg #pink {
+  class MyClass {
+    +void method()
+  }
+}
+@enduml

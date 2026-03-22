@@ -1,0 +1,5 @@
+@startuml
+file Source
+queue Target
+Source --> Target
+@enduml

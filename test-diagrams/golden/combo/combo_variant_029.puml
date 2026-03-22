@@ -1,0 +1,18 @@
+@startuml
+title "Combo Variant 29"
+state S1_29
+state S2_29
+state S3_29
+state S4_29
+state S5_29
+state S6_29
+state S7_29
+[*] --> S1_29
+S1_29 --> S2_29
+S2_29 --> S3_29
+S3_29 --> S4_29
+S4_29 --> S5_29
+S5_29 --> S6_29
+S6_29 --> S7_29
+S7_29 --> [*]
+@enduml

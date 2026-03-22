@@ -1,0 +1,3 @@
+@startjson
+{"items":[{"product_id":"string","quantity":"integer"}],"shipping":{"address":"string","method":"string"},"payment":{"method":"string"}}
+@endjson

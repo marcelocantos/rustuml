@@ -1,0 +1,6 @@
+@startuml
+@enduml
+
+@startuml
+Alice -> Bob : After empty block
+@enduml

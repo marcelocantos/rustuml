@@ -1,0 +1,10 @@
+@startuml
+class Foo {
+  == Section A ==
+  field1: String
+  -- Section B --
+  field2: int
+  .. Section C ..
+  method(): void
+}
+@enduml

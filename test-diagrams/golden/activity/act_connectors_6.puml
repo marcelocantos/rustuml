@@ -1,0 +1,16 @@
+@startuml
+start
+(A)
+:Step 1;
+(B)
+:Step 2;
+(C)
+:Step 3;
+(D)
+:Step 4;
+(E)
+:Step 5;
+(F)
+:Step 6;
+stop
+@enduml

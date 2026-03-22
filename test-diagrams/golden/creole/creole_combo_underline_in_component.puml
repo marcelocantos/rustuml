@@ -1,0 +1,5 @@
+@startuml
+component "__underline__ comp" as C520
+interface "__underline__ iface" as I520
+C520 -- I520
+@enduml

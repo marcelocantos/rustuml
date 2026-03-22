@@ -1,0 +1,9 @@
+@startuml
+component Server {
+  interface HTTP
+  interface HTTPS
+}
+component Client
+Client --( HTTP
+Client --( HTTPS
+@enduml

@@ -1,0 +1,6 @@
+@startuml
+interface MyType {
+  +void method()
+}
+note left of MyType : Note with\nmultiple lines\nof content
+@enduml

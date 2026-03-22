@@ -1,0 +1,7 @@
+@startuml
+class A <<internal>>
+class B <<public>> {
+  +void method()
+}
+hide <<internal>>
+@enduml

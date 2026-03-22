@@ -1,0 +1,16 @@
+@startuml
+!define PRIMARY #ED7D31
+!define DARK #A55720
+!define LIGHT #FBE9D8
+
+skinparam classBackgroundColor LIGHT
+skinparam classBorderColor PRIMARY
+skinparam classHeaderBackgroundColor PRIMARY
+skinparam classArrowColor PRIMARY
+skinparam classFontColor DARK
+
+class "Orange Themed Class" {
+  +field: String
+  +method(): void
+}
+@enduml

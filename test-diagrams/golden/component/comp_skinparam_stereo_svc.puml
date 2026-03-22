@@ -1,0 +1,9 @@
+@startuml
+skinparam component {
+  BackgroundColor<<service>> LightGreen
+  BorderColor<<service>> DarkGreen
+}
+component MyComp <<service>>
+component OtherComp <<service>>
+MyComp --> OtherComp
+@enduml

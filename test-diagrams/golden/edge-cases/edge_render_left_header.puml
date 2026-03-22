@@ -1,0 +1,6 @@
+@startuml
+left header
+Left side header
+end header
+class Foo
+@enduml

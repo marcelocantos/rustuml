@@ -1,0 +1,20 @@
+@startyaml
+stages:
+  - build
+  - test
+  - deploy
+build_job:
+  stage: build
+  script:
+    - make build
+test_job:
+  stage: test
+  script:
+    - make test
+deploy_job:
+  stage: deploy
+  script:
+    - make deploy
+  only:
+    - main
+@endyaml

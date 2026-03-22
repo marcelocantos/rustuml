@@ -1,0 +1,7 @@
+@startuml
+node "My Container" #LightBlue <<cloud>> {
+  component Service <<service>>
+  component Worker <<worker>>
+  Service --> Worker
+}
+@enduml

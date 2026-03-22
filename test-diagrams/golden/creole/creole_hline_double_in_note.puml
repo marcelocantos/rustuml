@@ -1,0 +1,7 @@
+@startuml
+note as N
+  section one
+  ====
+  section two
+end note
+@enduml

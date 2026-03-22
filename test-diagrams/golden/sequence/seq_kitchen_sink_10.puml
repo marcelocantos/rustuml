@@ -1,0 +1,67 @@
+@startuml
+actor Developer
+participant "Git Client" as Git
+boundary "CI/CD Pipeline" as CI
+control "Build Server" as Build
+control "Test Runner" as Test
+control "Deploy Agent" as Deploy
+database "Artifact Store" as Artifacts
+participant "Staging Env" as Staging
+participant "Production" as Prod
+
+title Deployment Pipeline
+
+Developer -> Git : git push origin feature
+Git -> CI ++ : webhook: push event
+
+== Build Stage ==
+CI -> Build ++ : trigger build
+Build -> Artifacts : fetch dependencies
+Artifacts --> Build : deps ok
+Build -> Build : compile
+Build -> Build : package
+Build -> Artifacts ++ : store artifact
+Artifacts --> Build -- : artifact_id=789
+Build --> CI -- : build success
+
+== Test Stage ==
+CI -> Test ++ : run tests
+Test -> Artifacts ++ : fetch artifact 789
+Artifacts --> Test -- : artifact
+par test suites
+  Test -> Test : unit tests
+and
+  Test -> Test : integration tests
+and
+  Test -> Test : security scan
+end
+Test --> CI -- : all tests pass
+
+== Deploy Stage ==
+alt approved for deploy
+  CI -> Deploy ++ : deploy to staging
+  Deploy -> Artifacts ++ : fetch artifact
+  Artifacts --> Deploy -- : binary
+  Deploy -> Staging ++ : update
+  Staging --> Deploy -- : healthy
+  Deploy --> CI -- : staging ok
+
+  CI -> Developer : staging deployed
+  Developer -> Staging : smoke test
+  Staging --> Developer : looks good
+
+  Developer -> CI : approve production
+  CI -> Deploy ++ : deploy to production
+  Deploy -> Prod ++ : rolling update
+  loop each instance
+    Prod -> Prod : drain traffic
+    Prod -> Prod : update
+    Prod -> Prod : health check
+  end
+  Prod --> Deploy -- : all healthy
+  Deploy --> CI -- : prod deployed
+  CI --> Developer -- : deployment complete!
+else build or tests failed
+  CI --> Developer -- : pipeline failed
+end
+@enduml

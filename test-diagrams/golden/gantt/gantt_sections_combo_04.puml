@@ -1,0 +1,30 @@
+@startgantt
+Project starts 2024-01-01
+
+section Section 1
+[T0_0] lasts 4 days
+[T0_1] lasts 8 days
+[T0_1] starts at [T0_0]'s end
+[T0_2] lasts 12 days
+[T0_2] starts at [T0_1]'s end
+-- Checkpoint --
+
+section Section 2
+[T1_0] lasts 8 days
+[T1_0] starts at [T0_2]'s end
+[T1_1] lasts 12 days
+[T1_1] starts at [T1_0]'s end
+[T1_2] lasts 16 days
+[T1_2] starts at [T1_1]'s end
+-- Checkpoint --
+
+section Section 3
+[T2_0] lasts 12 days
+[T2_0] starts at [T1_2]'s end
+[T2_1] lasts 16 days
+[T2_1] starts at [T2_0]'s end
+[T2_2] lasts 20 days
+[T2_2] starts at [T2_1]'s end
+-- Checkpoint --
+
+@endgantt

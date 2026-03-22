@@ -1,0 +1,5 @@
+@startuml
+skinparam SequenceArrowThickness 2
+Alice -> Bob : hello
+Bob --> Alice : hi
+@enduml

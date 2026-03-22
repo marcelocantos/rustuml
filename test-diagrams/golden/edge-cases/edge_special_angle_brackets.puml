@@ -1,0 +1,9 @@
+@startuml
+class Container<T> {
+  get(): T
+  set(value: T): void
+}
+class Map<K, V> {
+  get(key: K): V
+}
+@enduml

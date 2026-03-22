@@ -1,0 +1,7 @@
+@startwbs
+*[#violet] Root Task
+** Subtask A
+**[#violet] Subtask B
+*** Detail B1
+** Subtask C
+@endwbs

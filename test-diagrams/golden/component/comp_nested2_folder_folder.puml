@@ -1,0 +1,11 @@
+@startuml
+folder Outer {
+  folder Inner {
+    component Alpha
+    component Beta
+    Alpha --> Beta
+  }
+  component Gamma
+  Inner --> Gamma
+}
+@enduml

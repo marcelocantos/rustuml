@@ -1,0 +1,8 @@
+@startsalt
+{+
+  ID   | Name    | Email              | Role
+  1    | Alice   | alice@example.com  | Admin
+  2    | Bob     | bob@example.com    | User
+  3    | Charlie | charlie@example.com| Mod
+}
+@endsalt

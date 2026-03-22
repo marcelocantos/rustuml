@@ -1,0 +1,12 @@
+@startuml
+!procedure $request($from, $to, $msg)
+  $from -> $to : $msg
+  activate $to
+  $to --> $from : response
+  deactivate $to
+!endprocedure
+
+$request(Client, Server, "GET /users")
+$request(Client, Server, "POST /users")
+$request(Client, Server, "DELETE /users/1")
+@enduml

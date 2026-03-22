@@ -1,0 +1,11 @@
+@startuml
+
+|Lane A|
+start
+:Action in A;
+|Lane B|
+:Action in B;
+|Lane A|
+:Back in A;
+stop
+@enduml

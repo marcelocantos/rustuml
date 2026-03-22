@@ -1,0 +1,6 @@
+@startuml
+[*] --> A
+A -left---> : click [valid] / doIt()
+A --> B
+B --> [*]
+@enduml

@@ -1,0 +1,20 @@
+@startuml
+start
+:Page 1 action 1;
+:Page 1 action 2;
+if (continue to page 2?) then (yes)
+else (no)
+  stop
+endif
+newpage Page 2
+:Page 2 action 1;
+:Page 2 action 2;
+if (continue to page 3?) then (yes)
+else (no)
+  stop
+endif
+newpage Page 3
+:Page 3 action 1;
+:Page 3 action 2;
+stop
+@enduml

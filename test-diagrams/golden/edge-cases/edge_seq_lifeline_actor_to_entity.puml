@@ -1,0 +1,5 @@
+@startuml
+actor A1
+entity E2
+A1 -> E2: message
+@enduml

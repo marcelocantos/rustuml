@@ -1,0 +1,6 @@
+@startuml
+annotation Table {
+  +String name()
+  +String schema() default ""
+}
+@enduml

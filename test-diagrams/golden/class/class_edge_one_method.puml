@@ -1,0 +1,5 @@
+@startuml
+class OneMethod {
+  +void run()
+}
+@enduml

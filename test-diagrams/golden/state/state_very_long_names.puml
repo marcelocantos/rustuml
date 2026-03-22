@@ -1,0 +1,7 @@
+@startuml
+state "This is a very long state name with many words" as VLONG1
+state "Another very long state name for testing purposes" as VLONG2
+[*] --> VLONG1
+VLONG1 --> VLONG2 : some event with a long label too
+VLONG2 --> [*]
+@enduml

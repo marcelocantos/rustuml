@@ -1,0 +1,58 @@
+@startuml
+entity Primary168 {
+  * id : INT <<PK>>
+  --
+  code : VARCHAR(20)
+  label : VARCHAR(100)
+  is_active : BOOLEAN
+  created_at : TIMESTAMP
+}
+entity Related168_1 {
+  * id : INT <<PK>>
+  * primary_id : INT <<FK>>
+  --
+  value : VARCHAR(200)
+  sort_order : INT
+}
+entity Related168_2 {
+  * id : INT <<PK>>
+  * primary_id : INT <<FK>>
+  --
+  value : VARCHAR(200)
+  sort_order : INT
+}
+entity Related168_3 {
+  * id : INT <<PK>>
+  * primary_id : INT <<FK>>
+  --
+  value : VARCHAR(200)
+  sort_order : INT
+}
+entity Related168_4 {
+  * id : INT <<PK>>
+  * primary_id : INT <<FK>>
+  --
+  value : VARCHAR(200)
+  sort_order : INT
+}
+entity Related168_5 {
+  * id : INT <<PK>>
+  * primary_id : INT <<FK>>
+  --
+  value : VARCHAR(200)
+  sort_order : INT
+}
+entity Related168_6 {
+  * id : INT <<PK>>
+  * primary_id : INT <<FK>>
+  --
+  value : VARCHAR(200)
+  sort_order : INT
+}
+Primary168 ||--o{ Related168_1 : "has"
+Primary168 ||--o{ Related168_2 : "has"
+Primary168 ||--o{ Related168_3 : "has"
+Primary168 ||--o{ Related168_4 : "has"
+Primary168 ||--o{ Related168_5 : "has"
+Primary168 ||--o{ Related168_6 : "has"
+@enduml

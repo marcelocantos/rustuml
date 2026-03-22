@@ -1,0 +1,27 @@
+@startuml
+start
+if (v == 1?) then (1)
+  :One;
+elseif (v == 2?) then (2)
+  :Two;
+elseif (v == 3?) then (3)
+  :Three;
+elseif (v == 4?) then (4)
+  :Four;
+elseif (v == 5?) then (5)
+  :Five;
+elseif (v == 6?) then (6)
+  :Six;
+elseif (v == 7?) then (7)
+  :Seven;
+elseif (v == 8?) then (8)
+  :Eight;
+elseif (v == 9?) then (9)
+  :Nine;
+elseif (v == 10?) then (10)
+  :Ten;
+else (other)
+  :Other;
+endif
+stop
+@enduml

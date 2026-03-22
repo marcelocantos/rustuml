@@ -1,0 +1,11 @@
+@startuml
+class MyClass {
+  field: String
+  -- fields --
+  other: Int
+  == methods ==
+  doSomething()
+  .. helpers ..
+  helper()
+}
+@enduml

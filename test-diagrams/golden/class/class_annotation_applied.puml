@@ -1,0 +1,11 @@
+@startuml
+annotation Service
+annotation Autowired
+class UserService {
+  <<Service>>
+  +UserRepository repo
+}
+class UserRepository {
+  +User findById(int id)
+}
+@enduml

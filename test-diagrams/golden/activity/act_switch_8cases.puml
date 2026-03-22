@@ -1,0 +1,22 @@
+@startuml
+start
+switch (val?)
+case (1)
+  :Case 1 action;
+case (2)
+  :Case 2 action;
+case (3)
+  :Case 3 action;
+case (4)
+  :Case 4 action;
+case (5)
+  :Case 5 action;
+case (6)
+  :Case 6 action;
+case (7)
+  :Case 7 action;
+case (8)
+  :Case 8 action;
+endswitch
+stop
+@enduml

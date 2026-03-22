@@ -1,0 +1,24 @@
+@startsalt
+{+
+  File | Edit | View | Reports | Help
+  ---
+  {
+    {^Navigation
+      [X] Dashboard
+      [ ] Users
+      [ ] Settings
+      [ ] Reports
+    } |
+    {^Main Content
+      {#
+        Metric      | Value | Change
+        Active Users| 1234  | +5%
+        Revenue     | $9.8K | +12%
+        Orders      | 456   | -2%
+      }
+      ..
+      [Refresh] | [Export]
+    }
+  }
+}
+@endsalt

@@ -1,0 +1,13 @@
+@startuml
+[*] --> S1
+S1 --> S1 : retry
+S2 --> S2 : retry
+S3 --> S3 : retry
+S4 --> S4 : retry
+S5 --> S5 : retry
+S1 --> S2 : next
+S2 --> S3 : next
+S3 --> S4 : next
+S4 --> S5 : next
+S5 --> [*]
+@enduml

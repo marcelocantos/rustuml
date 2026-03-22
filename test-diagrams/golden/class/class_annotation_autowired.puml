@@ -1,0 +1,5 @@
+@startuml
+annotation Autowired {
+  +boolean required() default true
+}
+@enduml

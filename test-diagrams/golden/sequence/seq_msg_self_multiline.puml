@@ -1,0 +1,3 @@
+@startuml
+Alice -> Alice : first line\nsecond line\nthird line
+@enduml

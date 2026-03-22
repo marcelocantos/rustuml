@@ -1,0 +1,15 @@
+@startsalt
+{
+  Label0: | "            "
+  Label1: | "            "
+  Label2: | "            "
+  ..
+  [X] Check option 0
+  ..
+  (X) Radio 0
+  ( ) Radio 1
+  ( ) Radio 2
+  ..
+  [Submit]
+}
+@endsalt

@@ -1,0 +1,22 @@
+@startuml
+interface Command {
+  +void execute()
+  +void undo()
+}
+class Invoker {
+  -command: Command
+  +void setCommand(Command c)
+  +void executeCommand()
+}
+class Receiver {
+  +void action()
+}
+class ConcreteCommand {
+  -receiver: Receiver
+  +void execute()
+  +void undo()
+}
+ConcreteCommand ..|> Command
+Invoker --> Command
+ConcreteCommand --> Receiver
+@enduml

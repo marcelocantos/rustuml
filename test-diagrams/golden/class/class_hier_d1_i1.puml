@@ -1,0 +1,8 @@
+@startuml
+class Level01 {
+  +void m1()
+}
+
+interface Iface1
+Level01 ..|> Iface1
+@enduml

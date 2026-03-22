@@ -1,0 +1,15 @@
+@startuml
+class L1 { +void method1() }
+class L2 { +void method2() }
+class L3 { +void method3() }
+class L4 { +void method4() }
+class L5 { +void method5() }
+class L6 { +void method6() }
+class L7 { +void method7() }
+L1 <|-- L2
+L2 <|-- L3
+L3 <|-- L4
+L4 <|-- L5
+L5 <|-- L6
+L6 <|-- L7
+@enduml

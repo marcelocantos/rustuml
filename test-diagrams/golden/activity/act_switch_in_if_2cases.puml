@@ -1,0 +1,15 @@
+@startuml
+
+start
+if (outer?) then (yes)
+  switch (val?)
+case (1)
+    :C1;
+case (2)
+    :C2;
+  endswitch
+else (no)
+  :Alt;
+endif
+stop
+@enduml

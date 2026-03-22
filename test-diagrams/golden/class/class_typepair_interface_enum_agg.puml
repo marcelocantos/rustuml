@@ -1,0 +1,5 @@
+@startuml
+interface TypeA
+enum TypeB
+TypeA o-- TypeB
+@enduml

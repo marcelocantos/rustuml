@@ -1,0 +1,5 @@
+@startuml
+class Foo #purple {
+  field: String
+}
+@enduml

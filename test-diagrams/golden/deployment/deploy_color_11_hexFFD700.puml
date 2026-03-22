@@ -1,0 +1,5 @@
+@startuml
+node AppNode #FFD700
+node DBNode #FFD700
+AppNode --> DBNode
+@enduml

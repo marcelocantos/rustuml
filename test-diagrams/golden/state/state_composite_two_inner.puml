@@ -1,0 +1,9 @@
+@startuml
+[*] --> Outer
+state Outer {
+  [*] --> A
+  A --> B
+  B --> [*]
+}
+Outer --> [*]
+@enduml

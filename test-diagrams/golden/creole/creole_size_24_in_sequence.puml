@@ -1,0 +1,4 @@
+@startuml
+Alice -> Bob : <size:24>size 24 text</size>
+note right : <size:24>size 24 note</size>
+@enduml

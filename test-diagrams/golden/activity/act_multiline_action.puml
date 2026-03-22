@@ -1,0 +1,7 @@
+@startuml
+
+start
+:Line 1\nLine 2\nLine 3;
+:Action with\nmultiple lines;
+stop
+@enduml

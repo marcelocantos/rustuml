@@ -1,0 +1,20 @@
+@startuml
+participant Client
+participant Server
+participant External
+
+Client -> Server ++ : request
+
+loop retry up to 3 times
+  Server -> External ++ : attempt
+  alt success
+    External --> Server -- : result
+    break
+  else failure
+    External --> Server -- : error
+    ... wait 1 second ...
+  end
+end
+
+Server --> Client -- : final result
+@enduml

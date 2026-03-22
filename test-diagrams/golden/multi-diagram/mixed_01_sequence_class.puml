@@ -1,0 +1,15 @@
+@startuml
+Alice -> Bob : Hello
+Bob --> Alice : Hi there
+@enduml
+
+@startuml
+class Animal {
+  +String name
+  +void speak()
+}
+class Dog {
+  +void fetch()
+}
+Animal <|-- Dog
+@enduml

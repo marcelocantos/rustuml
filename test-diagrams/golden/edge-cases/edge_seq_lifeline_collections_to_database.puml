@@ -1,0 +1,5 @@
+@startuml
+collections Col1
+database DB2
+Col1 -> DB2: message
+@enduml

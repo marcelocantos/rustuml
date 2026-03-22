@@ -1,0 +1,9 @@
+@startuml
+skinparam classAttributeIconSize 12
+class MyClass {
+  +publicField: String
+  -privateField: int
+  #protectedField: boolean
+  ~packageField: Date
+}
+@enduml

@@ -1,0 +1,6 @@
+@startuml
+skinparam ClassFontStyle italic
+class MyClass {
+  +void method()
+}
+@enduml

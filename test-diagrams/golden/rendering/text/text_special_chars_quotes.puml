@@ -1,0 +1,7 @@
+@startuml
+class Config {
+  +String getValue(String "key")
+}
+note right : Use \"quoted\" keys
+
+@enduml

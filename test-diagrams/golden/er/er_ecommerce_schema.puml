@@ -1,0 +1,103 @@
+@startuml
+skinparam linetype ortho
+
+package "Users" {
+  entity User {
+    * id : INT <<PK>>
+    --
+    email : VARCHAR(200) UNIQUE
+    password_hash : CHAR(64)
+    created_at : TIMESTAMP
+    is_active : BOOLEAN
+  }
+  entity Address {
+    * id : INT <<PK>>
+    * user_id : INT <<FK>>
+    --
+    street : VARCHAR(200)
+    city : VARCHAR(100)
+    state : VARCHAR(50)
+    zip : VARCHAR(20)
+    country : CHAR(2)
+    is_default : BOOLEAN
+  }
+}
+
+package "Catalog" {
+  entity Category {
+    * id : INT <<PK>>
+    --
+    name : VARCHAR(100)
+    parent_id : INT <<FK>>
+    slug : VARCHAR(100)
+  }
+  entity Product {
+    * id : INT <<PK>>
+    * category_id : INT <<FK>>
+    --
+    sku : VARCHAR(50) UNIQUE
+    name : VARCHAR(200)
+    description : TEXT
+    price : DECIMAL(10,2)
+    stock : INT
+    weight_kg : DECIMAL(6,3)
+  }
+  entity ProductImage {
+    * id : INT <<PK>>
+    * product_id : INT <<FK>>
+    --
+    url : VARCHAR(500)
+    alt_text : VARCHAR(200)
+    sort_order : INT
+  }
+}
+
+package "Orders" {
+  entity Cart {
+    * id : INT <<PK>>
+    * user_id : INT <<FK>>
+    --
+    created_at : TIMESTAMP
+    updated_at : TIMESTAMP
+  }
+  entity CartItem {
+    * cart_id : INT <<FK>>
+    * product_id : INT <<FK>>
+    --
+    quantity : INT
+    added_at : TIMESTAMP
+  }
+  entity Order {
+    * id : INT <<PK>>
+    * user_id : INT <<FK>>
+    * shipping_address_id : INT <<FK>>
+    --
+    status : ENUM
+    subtotal : DECIMAL(10,2)
+    shipping : DECIMAL(10,2)
+    tax : DECIMAL(10,2)
+    total : DECIMAL(10,2)
+    placed_at : TIMESTAMP
+  }
+  entity OrderItem {
+    * order_id : INT <<FK>>
+    * product_id : INT <<FK>>
+    --
+    quantity : INT
+    unit_price : DECIMAL(10,2)
+    line_total : DECIMAL(10,2)
+  }
+}
+
+User ||--o{ Address : "has"
+User ||--o{ Cart : "has"
+User ||--o{ Order : "places"
+Category ||--o{ Category : "parent of"
+Category ||--o{ Product : "contains"
+Product ||--o{ ProductImage : "has"
+Cart ||--o{ CartItem : "contains"
+CartItem }o--|| Product : "references"
+Order ||--o{ OrderItem : "contains"
+OrderItem }o--|| Product : "includes"
+Order }o--|| Address : "ships to"
+@enduml

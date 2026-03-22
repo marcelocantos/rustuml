@@ -1,0 +1,11 @@
+@startuml
+
+start
+floating note right
+  This is a multiline
+  floating note
+  with three lines
+end note
+:Action;
+stop
+@enduml

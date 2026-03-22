@@ -1,0 +1,26 @@
+@startuml
+!define TEST
+!define MOCK
+
+!ifdef TEST
+  !ifdef MOCK
+    note as N
+      Both TEST and MOCK active
+    end note
+  !else
+    note as N
+      Only TEST active
+    end note
+  !endif
+!else
+  !ifdef MOCK
+    note as N
+      Only MOCK active
+    end note
+  !else
+    note as N
+      Neither active
+    end note
+  !endif
+!endif
+@enduml

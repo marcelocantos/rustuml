@@ -1,0 +1,27 @@
+@startuml
+
+start
+:Init;
+repeat
+  :Attempt;
+  if (A fails?) then (yes)
+    :Handle A failure;
+  else (no)
+    if (B fails?) then (yes)
+      :Handle B failure;
+    else (no)
+      :Success;
+      break
+    endif
+  endif
+backward
+  :Increment counter;
+  :Log attempt;
+  if (max retries?) then (yes)
+    :Fatal failure;
+    stop
+  endif
+repeatwhile (not done?) is (retry)
+:Finalize;
+stop
+@enduml

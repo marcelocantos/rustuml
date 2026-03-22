@@ -1,0 +1,14 @@
+@startuml
+
+header
+  Company Name
+end header
+start
+:Action;
+if (cond?) then (yes)
+  :Yes;
+else (no)
+  :No;
+endif
+stop
+@enduml

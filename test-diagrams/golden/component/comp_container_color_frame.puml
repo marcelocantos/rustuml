@@ -1,0 +1,7 @@
+@startuml
+frame MyContainer #LightGreen {
+  component Foo #Pink
+  component Bar #LightBlue
+  Foo --> Bar
+}
+@enduml

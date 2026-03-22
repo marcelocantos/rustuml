@@ -1,0 +1,8 @@
+@startuml
+P0 -> P1 ++ #red : depth 1 solid
+P1 -> P2 ++ #blue : depth 2 solid
+P2 -> P3 ++ #red : depth 3 solid
+return return 3
+return return 2
+return return 1
+@enduml

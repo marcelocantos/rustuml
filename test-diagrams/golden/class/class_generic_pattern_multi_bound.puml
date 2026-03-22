@@ -1,0 +1,7 @@
+@startuml
+class Processor<T extends Runnable & Serializable> {
+  +T task
+  --
+  +void run()
+}
+@enduml

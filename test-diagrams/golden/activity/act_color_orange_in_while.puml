@@ -1,0 +1,8 @@
+@startuml
+
+start
+while (loop?) is (yes)
+  #orange:Colored in loop;
+endwhile
+stop
+@enduml

@@ -1,0 +1,19 @@
+@startuml
+start
+partition "P1" {
+repeat
+  :R;
+repeatwhile (m?)
+}
+partition "P2" {
+repeat
+  :R;
+repeatwhile (m?)
+}
+partition "P3" {
+repeat
+  :R;
+repeatwhile (m?)
+}
+stop
+@enduml

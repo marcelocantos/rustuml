@@ -1,0 +1,13 @@
+@startuml
+folder Pkg1 {
+  folder Pkg2 {
+    folder Pkg3 {
+      folder Pkg4 {
+            class C1 { +void m1() }
+            class C2 { +void m2() }
+            class C3 { +void m3() }
+}
+}
+}
+}
+@enduml

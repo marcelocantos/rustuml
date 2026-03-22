@@ -1,0 +1,7 @@
+@startsalt
+{^Warning Dialog
+  This action cannot be undone.
+  ..
+  [Proceed] | [Go Back]
+}
+@endsalt

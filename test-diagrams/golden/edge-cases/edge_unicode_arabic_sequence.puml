@@ -1,0 +1,6 @@
+@startuml
+participant "مستخدم" as U
+participant "نظام" as S
+U -> S: طلب تسجيل الدخول
+S --> U: نجح تسجيل الدخول
+@enduml

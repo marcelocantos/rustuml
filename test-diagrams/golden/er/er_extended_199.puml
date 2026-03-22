@@ -1,0 +1,66 @@
+@startuml
+entity Primary199 {
+  * id : INT <<PK>>
+  --
+  code : VARCHAR(20)
+  label : VARCHAR(100)
+  is_active : BOOLEAN
+  created_at : TIMESTAMP
+}
+entity Related199_1 {
+  * id : INT <<PK>>
+  * primary_id : INT <<FK>>
+  --
+  value : VARCHAR(200)
+  sort_order : INT
+}
+entity Related199_2 {
+  * id : INT <<PK>>
+  * primary_id : INT <<FK>>
+  --
+  value : VARCHAR(200)
+  sort_order : INT
+}
+entity Related199_3 {
+  * id : INT <<PK>>
+  * primary_id : INT <<FK>>
+  --
+  value : VARCHAR(200)
+  sort_order : INT
+}
+entity Related199_4 {
+  * id : INT <<PK>>
+  * primary_id : INT <<FK>>
+  --
+  value : VARCHAR(200)
+  sort_order : INT
+}
+entity Related199_5 {
+  * id : INT <<PK>>
+  * primary_id : INT <<FK>>
+  --
+  value : VARCHAR(200)
+  sort_order : INT
+}
+entity Related199_6 {
+  * id : INT <<PK>>
+  * primary_id : INT <<FK>>
+  --
+  value : VARCHAR(200)
+  sort_order : INT
+}
+entity Related199_7 {
+  * id : INT <<PK>>
+  * primary_id : INT <<FK>>
+  --
+  value : VARCHAR(200)
+  sort_order : INT
+}
+Primary199 ||--o{ Related199_1 : "has"
+Primary199 ||--o{ Related199_2 : "has"
+Primary199 ||--o{ Related199_3 : "has"
+Primary199 ||--o{ Related199_4 : "has"
+Primary199 ||--o{ Related199_5 : "has"
+Primary199 ||--o{ Related199_6 : "has"
+Primary199 ||--o{ Related199_7 : "has"
+@enduml

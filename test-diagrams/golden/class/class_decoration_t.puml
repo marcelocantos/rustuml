@@ -1,0 +1,6 @@
+@startuml
+title My Diagram Title
+class A
+class B
+A --> B
+@enduml

@@ -1,0 +1,25 @@
+@startuml
+interface Component {
+  +void operation()
+}
+class ConcreteComponent {
+  +void operation()
+}
+abstract class Decorator {
+  -component: Component
+  +void operation()
+}
+class ConcreteDecoratorA {
+  +void operation()
+  +void extraBehavior()
+}
+class ConcreteDecoratorB {
+  +void operation()
+  +void extraBehavior()
+}
+ConcreteComponent ..|> Component
+Decorator ..|> Component
+Decorator o-- Component
+ConcreteDecoratorA --|> Decorator
+ConcreteDecoratorB --|> Decorator
+@enduml

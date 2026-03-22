@@ -1,0 +1,11 @@
+@startuml
+autonumber 10
+Alice -> Bob ++ : call
+alt ok
+  Bob -> Charlie ++ : delegate
+  Charlie --> Bob -- : result
+  Bob --> Alice -- : success
+else
+  Bob --> Alice -- : error
+end
+@enduml

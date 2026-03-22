@@ -1,0 +1,7 @@
+@startuml
+class Printer<? extends Shape> {
+  +List<? extends Shape> shapes
+  --
+  +void printAll()
+}
+@enduml

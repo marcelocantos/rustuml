@@ -1,0 +1,30 @@
+@startuml
+!function $entity($name)
+  !return $name + "Entity"
+!endfunction
+
+!function $repo($name)
+  !return $name + "Repository"
+!endfunction
+
+!procedure $crud_stack($name)
+  class $entity($name) {
+    +id: Long
+    +name: String
+    +createdAt: Date
+  }
+  interface $repo($name) {
+    +findById(id: Long): $entity($name)
+    +save(e: $entity($name)): void
+    +delete(id: Long): void
+  }
+  $repo($name) ..> $entity($name) : manages
+!endprocedure
+
+$crud_stack(User)
+$crud_stack(Product)
+$crud_stack(Order)
+
+UserEntity --> OrderEntity : places
+OrderEntity --> ProductEntity : contains
+@enduml

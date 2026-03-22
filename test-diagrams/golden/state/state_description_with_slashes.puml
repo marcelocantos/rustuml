@@ -1,0 +1,7 @@
+@startuml
+state A : entry / do something
+state A : do / main activity
+state A : exit / cleanup
+[*] --> A
+A --> [*]
+@enduml

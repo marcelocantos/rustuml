@@ -1,0 +1,6 @@
+@startuml
+Alice -> Bob : hello
+legend
+  //italic legend text//
+end legend
+@enduml

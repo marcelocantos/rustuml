@@ -1,0 +1,14 @@
+@startuml
+@startjson
+{
+  "string": "hello",
+  "number": 42,
+  "float": 3.14,
+  "boolean_true": true,
+  "boolean_false": false,
+  "null": null,
+  "array": [1, 2, 3],
+  "object": {"key": "value"}
+}
+@endjson
+@enduml

@@ -1,0 +1,7 @@
+@startuml
+hide methods
+enum MyType {
+  +String field
+  +void method()
+}
+@enduml

@@ -1,0 +1,11 @@
+@startuml
+!foreach $color in ["Red", "Green", "Blue"]
+  skinparam participant$color {
+    BackgroundColor $color
+  }
+!endforeach
+
+participant A
+participant B
+A -> B : colored
+@enduml

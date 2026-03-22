@@ -1,0 +1,5 @@
+@startuml
+state "**bold** State" as S905
+[*] --> S905
+S905 : **bold** description
+@enduml

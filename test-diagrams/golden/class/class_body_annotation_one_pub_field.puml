@@ -1,0 +1,5 @@
+@startuml
+annotation Variant {
+  +String name
+}
+@enduml

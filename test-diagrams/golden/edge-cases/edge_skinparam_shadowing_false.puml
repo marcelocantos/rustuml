@@ -1,0 +1,6 @@
+@startuml
+skinparam shadowing false
+class Foo
+class Bar
+Foo --> Bar
+@enduml

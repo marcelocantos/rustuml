@@ -1,0 +1,10 @@
+@startuml
+skinparam packageStyle rectangle
+package Frontend {
+  class UI
+}
+package Backend {
+  class API
+}
+UI --> API
+@enduml

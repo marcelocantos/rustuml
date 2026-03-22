@@ -1,0 +1,9 @@
+@startuml
+A -> B : go
+par
+  B -> C : action 1
+and
+  B -> D : action 2
+end
+B --> A : result
+@enduml

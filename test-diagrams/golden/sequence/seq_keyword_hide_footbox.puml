@@ -1,0 +1,7 @@
+@startuml
+hide footbox
+Alice -> Bob ++ : request
+Bob -> Charlie ++ : delegate
+return charlie done
+return bob done
+@enduml

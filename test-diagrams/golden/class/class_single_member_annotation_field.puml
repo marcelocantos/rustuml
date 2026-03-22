@@ -1,0 +1,5 @@
+@startuml
+annotation OneMember {
+  +String single
+}
+@enduml

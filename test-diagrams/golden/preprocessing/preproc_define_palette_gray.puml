@@ -1,0 +1,16 @@
+@startuml
+!define PRIMARY #808080
+!define DARK #404040
+!define LIGHT #F0F0F0
+
+skinparam classBackgroundColor LIGHT
+skinparam classBorderColor PRIMARY
+skinparam classHeaderBackgroundColor PRIMARY
+skinparam classArrowColor PRIMARY
+skinparam classFontColor DARK
+
+class "Gray Themed Class" {
+  +field: String
+  +method(): void
+}
+@enduml

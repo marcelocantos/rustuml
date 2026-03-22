@@ -1,0 +1,11 @@
+!define TITLE My Diagram Title
+
+@startuml first
+title TITLE (First)
+Alice -> Bob : Hello
+@enduml
+
+@startuml second
+title TITLE (Second)
+Carol -> Dave : Hi
+@enduml

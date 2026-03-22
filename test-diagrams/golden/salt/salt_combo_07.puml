@@ -1,0 +1,10 @@
+@startsalt
+{
+  Field0: | "               "
+  Field1: | "               "
+  Field2: | "               "
+  Field3: | "               "
+  ..
+  [Btn0] | [Btn1]
+}
+@endsalt

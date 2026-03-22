@@ -1,0 +1,6 @@
+@startuml
+state S1 <<entryPoint>>
+[*] --> S1
+S1 --> A
+A --> [*]
+@enduml

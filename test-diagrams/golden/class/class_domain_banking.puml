@@ -1,0 +1,32 @@
+@startuml
+abstract class Account {
+  #int accountNumber
+  #double balance
+  +void deposit(double amount)
+  +{abstract} void withdraw(double amount)
+  +double getBalance()
+}
+class SavingsAccount {
+  -double interestRate
+  +void withdraw(double amount)
+  +void applyInterest()
+}
+class CheckingAccount {
+  -double overdraftLimit
+  +void withdraw(double amount)
+}
+class Customer {
+  +String name
+  +String email
+  +List<Account> accounts
+}
+class Transaction {
+  +Date date
+  +double amount
+  +String description
+}
+Account <|-- SavingsAccount
+Account <|-- CheckingAccount
+Customer "1" o-- "*" Account
+Account "1" *-- "*" Transaction
+@enduml

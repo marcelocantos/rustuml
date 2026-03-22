@@ -1,0 +1,8 @@
+@startuml
+
+start
+while (condition?)
+  :Loop body;
+endwhile
+stop
+@enduml

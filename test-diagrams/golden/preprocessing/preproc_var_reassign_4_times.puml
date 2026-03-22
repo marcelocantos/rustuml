@@ -1,0 +1,11 @@
+@startuml
+!$x = 0
+!$x = $x + 1
+!$x = $x + 2
+!$x = $x + 3
+!$x = $x + 4
+
+note as N
+  final x = $x (sum 1..4 = 10)
+end note
+@enduml

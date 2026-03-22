@@ -1,0 +1,6 @@
+@startuml
+state ps <<exitPoint>> #red
+[*] --> A
+A --> ps
+ps --> [*]
+@enduml

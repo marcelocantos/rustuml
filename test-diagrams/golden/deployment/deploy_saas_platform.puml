@@ -1,0 +1,24 @@
+@startuml
+cloud "SaaS Platform" {
+  rectangle "Tenant A" {
+    node "App Instance A"
+    database "DB A"
+    "App Instance A" --> "DB A"
+  }
+  rectangle "Tenant B" {
+    node "App Instance B"
+    database "DB B"
+    "App Instance B" --> "DB B"
+  }
+  rectangle "Shared Services" {
+    node "Auth Service"
+    node "Billing Service"
+    queue "Event Bus"
+  }
+}
+"App Instance A" --> "Auth Service"
+"App Instance B" --> "Auth Service"
+"App Instance A" --> "Event Bus"
+"App Instance B" --> "Event Bus"
+"Event Bus" --> "Billing Service"
+@enduml

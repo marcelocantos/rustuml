@@ -1,0 +1,8 @@
+@startuml
+participant A
+!if %function_exists("noSuchFunc")
+  note over A : exists
+!else
+  note over A : not found
+!endif
+@enduml

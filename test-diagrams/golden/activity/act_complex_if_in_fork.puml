@@ -1,0 +1,20 @@
+@startuml
+
+start
+fork
+  if (cond1?) then (yes)
+    :F1 yes;
+  else (no)
+    :F1 no;
+  endif
+fork again
+  if (cond2?) then (yes)
+    :F2 yes;
+  else (no)
+    :F2 no;
+  endif
+fork again
+  :F3 simple;
+end fork
+stop
+@enduml

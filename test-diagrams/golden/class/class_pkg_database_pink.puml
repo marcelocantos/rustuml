@@ -1,0 +1,7 @@
+@startuml
+database myPkg #pink {
+  class MyClass {
+    +void method()
+  }
+}
+@enduml

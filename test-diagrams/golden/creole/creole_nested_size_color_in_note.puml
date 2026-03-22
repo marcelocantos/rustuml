@@ -1,0 +1,5 @@
+@startuml
+note as N
+  <size:20><color:green>large green</color></size>
+end note
+@enduml

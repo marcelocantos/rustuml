@@ -1,0 +1,6 @@
+@startuml
+hide <<service>> stereotype
+class Foo <<service>>
+class Bar <<repository>>
+Foo --> Bar
+@enduml

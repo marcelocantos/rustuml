@@ -1,0 +1,10 @@
+@startsalt
+{
+  Text | "        "
+  Password | "*****   "
+  Combo | ^Choice^  ^
+  Check | [] unchecked | [X] checked
+  Radio | () unset | (X) set
+  Slider | [----------]
+}
+@endsalt

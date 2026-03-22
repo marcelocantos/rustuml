@@ -1,0 +1,14 @@
+@startuml
+
+start
+if (split?) then (yes)
+  fork
+    :P1;
+  fork again
+    :P2;
+  end fork
+else (no)
+  :Single;
+endif
+stop
+@enduml

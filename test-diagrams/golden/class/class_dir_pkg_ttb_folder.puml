@@ -1,0 +1,10 @@
+@startuml
+top to bottom direction
+folder A {
+  class ClassA { +void m() }
+}
+folder B {
+  class ClassB { +void m() }
+}
+A.ClassA --> B.ClassB
+@enduml

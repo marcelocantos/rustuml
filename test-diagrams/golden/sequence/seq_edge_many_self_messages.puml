@@ -1,0 +1,23 @@
+@startuml
+participant Alice
+Alice -> Alice : self 0
+Alice -> Alice : self 1
+Alice -> Alice : self 2
+Alice -> Alice : self 3
+Alice -> Alice : self 4
+Alice -> Alice : self 5
+Alice -> Alice : self 6
+Alice -> Alice : self 7
+Alice -> Alice : self 8
+Alice -> Alice : self 9
+Alice -> Alice : self 10
+Alice -> Alice : self 11
+Alice -> Alice : self 12
+Alice -> Alice : self 13
+Alice -> Alice : self 14
+Alice -> Alice : self 15
+Alice -> Alice : self 16
+Alice -> Alice : self 17
+Alice -> Alice : self 18
+Alice -> Alice : self 19
+@enduml

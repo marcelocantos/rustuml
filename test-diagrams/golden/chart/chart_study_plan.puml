@@ -1,0 +1,17 @@
+@startboard
+Learning Roadmap
+
++Not Started+
+* Rust ownership
+* Async/await patterns
+
++Studying+
+* Trait objects
+
++Practicing+
+* Lifetime annotations
+
++Mastered+
+* Basic ownership
+* Borrowing rules
+@endboard

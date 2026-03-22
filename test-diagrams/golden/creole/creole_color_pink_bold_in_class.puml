@@ -1,0 +1,5 @@
+@startuml
+class C {
+  <color:pink>**field**</color>: String
+}
+@enduml

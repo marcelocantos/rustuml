@@ -1,0 +1,7 @@
+@startuml
+
+start
+#7744FF:Colored action;
+:Normal action;
+stop
+@enduml

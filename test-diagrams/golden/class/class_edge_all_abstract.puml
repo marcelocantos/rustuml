@@ -1,0 +1,7 @@
+@startuml
+abstract class A
+abstract class B
+abstract class C
+A <|-- B
+B <|-- C
+@enduml

@@ -1,0 +1,11 @@
+@startuml
+start
+if (L1?) then (yes)
+  repeat
+    :Repeat 1;
+  repeatwhile (m1?)
+else (no)
+  :Alt;
+endif
+stop
+@enduml

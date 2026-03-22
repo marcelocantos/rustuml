@@ -1,0 +1,12 @@
+@startuml
+
+start
+repeat
+  :Attempt operation;
+  :Check result;
+backward
+  :Log failure;
+  :Reset state;
+repeatwhile (failed?) is (retry)
+stop
+@enduml

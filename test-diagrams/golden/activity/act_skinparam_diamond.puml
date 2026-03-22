@@ -1,0 +1,12 @@
+@startuml
+
+skinparam activityDiamondBackgroundColor lightblue
+skinparam activityDiamondBorderColor navy
+start
+if (condition?) then (yes)
+  :Yes;
+else (no)
+  :No;
+endif
+stop
+@enduml

@@ -1,0 +1,4 @@
+@startuml
+Alice -> Bob : Русское сообщение
+Bob --> Alice : Русское сообщение reply
+@enduml

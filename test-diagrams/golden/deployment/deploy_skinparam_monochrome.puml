@@ -1,0 +1,8 @@
+@startuml
+skinparam monochrome true
+node Server
+database DB
+artifact app.war
+Server --> DB
+app.war --> Server
+@enduml

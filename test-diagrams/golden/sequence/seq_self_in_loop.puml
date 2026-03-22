@@ -1,0 +1,5 @@
+@startuml
+loop condition
+  Alice -> Alice : self in loop
+end
+@enduml

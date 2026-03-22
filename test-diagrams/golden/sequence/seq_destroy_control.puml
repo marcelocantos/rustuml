@@ -1,0 +1,7 @@
+@startuml
+participant Alice
+create control Target
+Alice -> Target : use
+Target --> Alice : done
+destroy Target
+@enduml

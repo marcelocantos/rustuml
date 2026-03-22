@@ -1,0 +1,7 @@
+@startuml
+queue A
+participant B
+A -> B : hello
+rnote over A : rnote over queue
+B --> A : hi
+@enduml

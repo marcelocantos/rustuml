@@ -1,0 +1,6 @@
+@startuml
+skinparam dpi 150
+class Foo
+class Bar
+Foo --> Bar
+@enduml

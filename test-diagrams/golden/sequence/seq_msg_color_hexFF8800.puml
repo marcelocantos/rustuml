@@ -1,0 +1,4 @@
+@startuml
+Alice -[##FF8800]> Bob : colored #FF8800
+Bob -[##FF8800]--> Alice : dotted #FF8800
+@enduml

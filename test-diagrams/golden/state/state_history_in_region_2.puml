@@ -1,0 +1,15 @@
+@startuml
+state Composite {
+  [*] --> P
+  P --> Q
+  Q --> [*]
+  --
+  state H2 <<history>>
+  [*] --> H2
+  H2 --> M
+  M --> N
+  N --> M
+}
+[*] --> Composite
+Composite --> [*]
+@enduml

@@ -1,0 +1,16 @@
+@startuml
+[*] --> Idle
+Idle --> Running : start
+Running --> Idle : stop
+Running --> [*] : finish
+@enduml
+
+@startuml
+actor User
+actor Admin
+usecase Login
+usecase ManageUsers
+User --> Login
+Admin --> Login
+Admin --> ManageUsers
+@enduml

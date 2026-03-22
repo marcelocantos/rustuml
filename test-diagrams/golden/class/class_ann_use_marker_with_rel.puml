@@ -1,0 +1,7 @@
+@startuml
+annotation MyAnnotation
+class Target {
+  +void method()
+}
+Target ..> MyAnnotation
+@enduml

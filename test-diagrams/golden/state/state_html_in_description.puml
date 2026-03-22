@@ -1,0 +1,5 @@
+@startuml
+state A : <b>bold</b> and <i>italic</i>
+[*] --> A
+A --> [*]
+@enduml

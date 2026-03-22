@@ -1,0 +1,8 @@
+@startgantt
+Project starts 2024-01-01
+[Requirements] lasts 10 days
+[Design] lasts 7 days
+[Development] lasts 20 days
+[Testing] lasts 10 days
+[Deployment] lasts 3 days
+@endgantt

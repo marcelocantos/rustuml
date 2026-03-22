@@ -1,0 +1,6 @@
+@startuml
+skinparam backgroundColor #F0F0F0
+[*] --> A
+A --> B
+B --> [*]
+@enduml

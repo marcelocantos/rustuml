@@ -1,0 +1,8 @@
+@startuml
+skinparam state {
+  AttributeFontColor Gray
+}
+[*] --> A
+A --> B : event
+B --> [*]
+@enduml

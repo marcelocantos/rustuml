@@ -1,0 +1,6 @@
+@startuml
+class Company
+class Employee
+Company "1" *-- "*" Employee
+Company "1" o-- "0..*" Department
+@enduml

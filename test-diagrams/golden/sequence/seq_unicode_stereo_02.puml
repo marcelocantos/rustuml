@@ -1,0 +1,6 @@
+@startuml
+participant "Service 1" <<외부>>
+participant "Client 1"
+"Service 1" -> "Client 1" : call
+"Client 1" --> "Service 1" : reply
+@enduml

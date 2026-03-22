@@ -1,0 +1,3 @@
+@startmath
+F(\omega) = \int_{-\infty}^{\infty} f(t) e^{-i\omega t} dt
+@endmath

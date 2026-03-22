@@ -1,0 +1,31 @@
+@startuml
+class Hospital {
+  +String name
+  +String address
+}
+class Doctor {
+  +String name
+  +String specialty
+  +void diagnose(Patient p)
+}
+class Patient {
+  +String name
+  +Date birthDate
+  +String medicalHistory
+}
+class Appointment {
+  +DateTime scheduledTime
+  +String reason
+  +void confirm()
+  +void cancel()
+}
+class Prescription {
+  +String medication
+  +String dosage
+  +int days
+}
+Hospital o-- Doctor
+Doctor "1" -- "*" Appointment
+Patient "1" -- "*" Appointment
+Appointment -- Prescription
+@enduml

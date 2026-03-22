@@ -1,0 +1,11 @@
+@startuml
+start
+partition "Part 1" {
+if (cond?) then (yes)
+  :Yes;
+else (no)
+  :No;
+endif
+}
+stop
+@enduml

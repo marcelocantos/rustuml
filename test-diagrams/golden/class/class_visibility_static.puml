@@ -1,0 +1,7 @@
+@startuml
+class MyClass {
+  {static} +String staticPublic
+  {static} -int staticPrivate
+  {static} +void staticMethod()
+}
+@enduml

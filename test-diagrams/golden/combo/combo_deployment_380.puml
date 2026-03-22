@@ -1,0 +1,18 @@
+@startuml
+title "Deployment Diagram 380"
+node "Server1_380" as s1 {
+  component "App1" as a1
+}
+node "Server2_380" as s2 {
+  component "App2" as a2
+}
+node "Server3_380" as s3 {
+  component "App3" as a3
+}
+node "Server4_380" as s4 {
+  component "App4" as a4
+}
+a1 --> a2
+a2 --> a3
+a3 --> a4
+@enduml

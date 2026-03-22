@@ -1,0 +1,21 @@
+@startuml
+state fork1 <<fork>>
+state join1 <<join>>
+[*] --> fork1
+fork1 --> C1S1
+C1S1 --> C1S2
+C1S2 --> join1
+fork1 --> C2S1
+C2S1 --> C2S2
+C2S2 --> join1
+fork1 --> C3S1
+C3S1 --> C3S2
+C3S2 --> join1
+fork1 --> C4S1
+C4S1 --> C4S2
+C4S2 --> join1
+fork1 --> C5S1
+C5S1 --> C5S2
+C5S2 --> join1
+join1 --> [*]
+@enduml

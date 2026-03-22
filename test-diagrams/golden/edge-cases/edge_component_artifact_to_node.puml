@@ -1,0 +1,5 @@
+@startuml
+artifact MyA
+node MyB
+MyA --> MyB
+@enduml

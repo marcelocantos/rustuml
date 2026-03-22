@@ -1,0 +1,6 @@
+@startuml
+skinparam shadowing true
+class MyClass {
+  +void method()
+}
+@enduml

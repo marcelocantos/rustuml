@@ -1,0 +1,7 @@
+@startuml
+component "Composant Français" as CF
+component "Deutsche Komponente" as DK
+component "日本語コンポーネント" as JC
+CF --> DK
+DK --> JC
+@enduml

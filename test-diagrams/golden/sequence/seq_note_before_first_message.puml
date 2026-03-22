@@ -1,0 +1,5 @@
+@startuml
+note over Alice : pre-condition
+Alice -> Bob : hello
+Bob --> Alice : hi
+@enduml

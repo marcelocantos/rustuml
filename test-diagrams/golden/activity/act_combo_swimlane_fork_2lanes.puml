@@ -1,0 +1,11 @@
+@startuml
+|Lane1|
+start
+fork
+  :Task 1;
+|Lane2|
+fork again
+  :Task 2;
+end fork
+stop
+@enduml

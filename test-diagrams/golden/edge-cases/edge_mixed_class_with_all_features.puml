@@ -1,0 +1,44 @@
+@startuml
+title Complete Class Diagram
+
+skinparam classBackgroundColor LightBlue
+skinparam classBorderColor DarkBlue
+
+package com.example {
+  interface Printable {
+    print(): void
+  }
+
+  abstract class Document {
+    {abstract} getContent(): String
+    {static} MAX_SIZE: int = 1000
+  }
+
+  class Report extends Document implements Printable {
+    -title: String
+    -content: String
+    +print(): void
+    +getContent(): String
+    +getTitle(): String
+  }
+
+  class Invoice extends Document {
+    -amount: float
+    -dueDate: Date
+    +getTotal(): float
+  }
+
+  enum Status {
+    DRAFT
+    PENDING
+    APPROVED
+    REJECTED
+  }
+
+  Report "1" *-- "0..*" Status : has
+  Report --> Invoice : references
+}
+
+note right of Report: Reports are printable
+note bottom of Document: Base class
+@enduml

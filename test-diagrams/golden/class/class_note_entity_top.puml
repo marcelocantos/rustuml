@@ -1,0 +1,6 @@
+@startuml
+entity MyType {
+  +void method()
+}
+note top of MyType : Note on entity
+@enduml

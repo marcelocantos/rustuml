@@ -1,0 +1,7 @@
+@startuml
+package mypackage <<node>> {
+  class MyClass {
+    +void method()
+  }
+}
+@enduml

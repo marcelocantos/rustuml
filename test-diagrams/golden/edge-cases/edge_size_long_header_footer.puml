@@ -1,0 +1,9 @@
+@startuml
+header
+Header line Header line Header line Header line Header line Header line Header line Header line Header line Header line 
+endheader
+footer
+Footer line Footer line Footer line Footer line Footer line Footer line Footer line Footer line Footer line Footer line 
+endfooter
+class Foo
+@enduml

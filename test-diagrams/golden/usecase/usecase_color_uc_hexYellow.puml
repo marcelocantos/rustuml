@@ -1,0 +1,5 @@
+@startuml
+actor User
+usecase "Action" #Yellow
+User --> (Action)
+@enduml

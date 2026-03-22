@@ -1,0 +1,4 @@
+@startuml
+actor Alice
+Alice -> Alice : self actor solid
+@enduml

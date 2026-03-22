@@ -1,0 +1,12 @@
+@startuml
+skinparam linetype ortho
+class A
+class B
+class C
+class D
+A --> D
+B --> C
+A --> C
+B --> D
+
+@enduml

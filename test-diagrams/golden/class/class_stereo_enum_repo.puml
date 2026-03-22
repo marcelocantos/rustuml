@@ -1,0 +1,5 @@
+@startuml
+enum MyStereoClass <<repository>> {
+  +void operate()
+}
+@enduml

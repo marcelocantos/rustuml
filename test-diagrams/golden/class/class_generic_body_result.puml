@@ -1,0 +1,9 @@
+@startuml
+class Result<T, E> {
+  -T value
+  -E error
+  +boolean isOk()
+  +T unwrap()
+  +E getError()
+}
+@enduml

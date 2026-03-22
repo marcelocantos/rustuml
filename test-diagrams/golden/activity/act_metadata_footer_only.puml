@@ -1,0 +1,14 @@
+@startuml
+
+footer
+  Page %page%
+end footer
+start
+:Action;
+if (cond?) then (yes)
+  :Yes;
+else (no)
+  :No;
+endif
+stop
+@enduml

@@ -1,0 +1,8 @@
+@startuml
+Alice -> Bob: message
+note left: left note
+note right: right note
+note over Alice: over left
+note over Bob: over right
+note over Alice,Bob: spanning note
+@enduml

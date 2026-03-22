@@ -1,0 +1,8 @@
+@startuml
+class TreeNode {
+  +TreeNode parent
+  +List<TreeNode> children
+  +void addChild(TreeNode n)
+}
+TreeNode --> TreeNode
+@enduml

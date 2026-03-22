@@ -1,0 +1,9 @@
+@startuml
+!procedure $note_warning($msg)
+  note as N_warning
+    <back:LightYellow>**WARNING**: $msg</back>
+  end note
+!endprocedure
+
+$note_warning("This is a warning message")
+@enduml

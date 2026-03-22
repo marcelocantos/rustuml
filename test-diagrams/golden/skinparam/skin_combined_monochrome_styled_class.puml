@@ -1,0 +1,15 @@
+@startuml
+skinparam monochrome true
+skinparam shadowing false
+skinparam defaultFontName Courier
+skinparam defaultFontSize 12
+
+class Animal {
+  +name: String
+  +getName(): String
+}
+class Dog extends Animal {
+  +bark(): void
+}
+Animal <|-- Dog
+@enduml

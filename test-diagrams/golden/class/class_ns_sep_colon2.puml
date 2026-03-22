@@ -1,0 +1,10 @@
+@startuml
+set namespaceSeparator ::
+class com::example::service.ClassA {
+  +void methodA()
+}
+class com::example::service.ClassB {
+  +void methodB()
+}
+com::example::service.ClassA --> com::example::service.ClassB
+@enduml

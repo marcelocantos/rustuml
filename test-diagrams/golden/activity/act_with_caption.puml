@@ -1,0 +1,8 @@
+@startuml
+
+caption Figure 1: Sample Activity Diagram
+
+start
+:Action;
+stop
+@enduml

@@ -1,0 +1,7 @@
+@startuml
+!theme crt-green
+start
+:step one;
+:step two;
+stop
+@enduml

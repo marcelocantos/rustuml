@@ -1,0 +1,16 @@
+@startuml
+title "Component Diagram 227"
+package "System227" {
+  [Service1_227]
+  [Service2_227]
+  [Service3_227]
+  [Service4_227]
+  [Service5_227]
+  [Service6_227]
+}
+[Service1_227] --> [Service2_227]
+[Service2_227] --> [Service3_227]
+[Service3_227] --> [Service4_227]
+[Service4_227] --> [Service5_227]
+[Service5_227] --> [Service6_227]
+@enduml

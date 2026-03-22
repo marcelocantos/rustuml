@@ -1,0 +1,15 @@
+@startuml
+A -> B : start
+loop cond1
+  opt cond2
+    alt cond3
+      B -> C : deep
+      C --> B : result
+    else other3
+    end
+    B --> A : g3 done
+  end
+  B --> A : g2 done
+end
+B --> A : complete
+@enduml

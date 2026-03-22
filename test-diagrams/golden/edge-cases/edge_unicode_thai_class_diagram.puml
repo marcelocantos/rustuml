@@ -1,0 +1,10 @@
+@startuml
+class ผู้ใช้ {
+  ข้อมูล: String
+  +วิธีการ(): void
+}
+class ระบบ {
+  ข้อมูล: int
+}
+ผู้ใช้ --> ระบบ
+@enduml

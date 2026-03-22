@@ -1,0 +1,6 @@
+@startuml
+
+start
+:مرحبا بالعالم;
+stop
+@enduml

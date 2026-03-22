@@ -1,0 +1,7 @@
+@startuml
+!define CLASS(x) class x { \
+  +method(): void \
+}
+CLASS(Foo)
+CLASS(Bar)
+@enduml

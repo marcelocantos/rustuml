@@ -1,0 +1,12 @@
+@startuml
+top to bottom direction
+skinparam usecase {
+  BackgroundColor<<optional>> Pink
+}
+actor User
+usecase UC1 <<optional>>
+usecase UC2 <<optional>>
+User --> UC1
+User --> UC2
+UC1 .> UC2 : <<include>>
+@enduml

@@ -1,0 +1,32 @@
+@startnwdiag
+nwdiag {
+  network net0_14 {
+    address = "172.16.14.0/24"
+    node0_0_14 [address = "172.16.14.1"]
+    node0_1_14 [address = "172.16.14.2"]
+    node0_2_14 [address = "172.16.14.3"]
+    node0_3_14 [address = "172.16.14.4"]
+  }
+  network net1_14 {
+    address = "172.17.14.0/24"
+    node0_3_14 [address = "172.17.14.1"]
+    node1_0_14 [address = "172.17.14.2"]
+    node1_1_14 [address = "172.17.14.3"]
+    node1_2_14 [address = "172.17.14.4"]
+  }
+  network net2_14 {
+    address = "172.18.14.0/24"
+    node1_3_14 [address = "172.18.14.1"]
+    node2_0_14 [address = "172.18.14.2"]
+    node2_1_14 [address = "172.18.14.3"]
+    node2_2_14 [address = "172.18.14.4"]
+  }
+  network net3_14 {
+    address = "172.19.14.0/24"
+    node2_3_14 [address = "172.19.14.1"]
+    node3_0_14 [address = "172.19.14.2"]
+    node3_1_14 [address = "172.19.14.3"]
+    node3_2_14 [address = "172.19.14.4"]
+  }
+}
+@endnwdiag

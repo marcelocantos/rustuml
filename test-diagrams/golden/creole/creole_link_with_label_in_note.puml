@@ -1,0 +1,5 @@
+@startuml
+note as N
+  [[https://plantuml.com PlantUML]]
+end note
+@enduml

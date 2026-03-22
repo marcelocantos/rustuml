@@ -1,0 +1,8 @@
+@startuml
+[*] --> Top
+Top --> M0 : branch0
+Top --> M1 : branch1
+M0 --> Bottom : merge0
+M1 --> Bottom : merge1
+Bottom --> [*]
+@enduml

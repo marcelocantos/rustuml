@@ -1,0 +1,5 @@
+@startuml
+node MyNode <<virtual>>
+artifact app.jar
+app.jar --> MyNode : deployed on
+@enduml

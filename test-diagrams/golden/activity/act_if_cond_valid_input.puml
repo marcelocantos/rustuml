@@ -1,0 +1,12 @@
+@startuml
+
+start
+:Prepare;
+if (valid input?) then (valid input)
+  :Handle valid input;
+else (invalid input)
+  :Handle invalid input;
+endif
+:Continue;
+stop
+@enduml

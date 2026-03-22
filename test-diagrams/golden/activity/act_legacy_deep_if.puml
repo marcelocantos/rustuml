@@ -1,0 +1,17 @@
+@startuml
+
+(*) --> "Start"
+if "outer?" then
+  -->[yes] "Outer true"
+  if "inner?" then
+    -->[yes] "Both true"
+    --> (*)
+  else
+    -->[no] "Outer true inner false"
+    --> (*)
+  endif
+else
+  -->[no] "Outer false"
+  --> (*)
+endif
+@enduml

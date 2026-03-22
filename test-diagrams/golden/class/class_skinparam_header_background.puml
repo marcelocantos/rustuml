@@ -1,0 +1,6 @@
+@startuml
+skinparam ClassHeaderBackgroundColor #DDD
+class MyClass {
+  +void method()
+}
+@enduml

@@ -1,0 +1,7 @@
+@startuml
+actor User << Human >>
+actor System << System >>
+usecase "Process Data" as PD
+User --> PD
+System --> PD
+@enduml

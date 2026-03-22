@@ -1,0 +1,25 @@
+@startgantt
+Project starts 2024-01-01
+saturday are closed
+sunday are closed
+[Auth] lasts 10 days
+[Auth] is colored in Coral
+[Dashboard] lasts 13 days
+[Dashboard] is colored in LightBlue
+[Dashboard] starts at [Auth]'s end
+[Reports] lasts 16 days
+[Reports] is colored in LightGreen
+[Reports] starts at [Dashboard]'s end
+[Search] lasts 19 days
+[Search] is colored in Gold
+[Search] starts at [Reports]'s end
+[Notifications] lasts 22 days
+[Notifications] is colored in Plum
+[Notifications] starts at [Search]'s end
+[Settings] lasts 25 days
+[Settings] is colored in Coral
+[Settings] starts at [Notifications]'s end
+[API] lasts 28 days
+[API] is colored in LightBlue
+[API] starts at [Settings]'s end
+@endgantt

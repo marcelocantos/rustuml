@@ -1,0 +1,7 @@
+@startuml
+boundary A
+boundary B
+A -> B : hello
+hnote over A, B : hnote over two boundarys
+B --> A : hi
+@enduml

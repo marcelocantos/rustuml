@@ -1,0 +1,7 @@
+@startuml
+note as N
+  * **bold item**
+  * //italic item//
+  * ""mono item""
+end note
+@enduml

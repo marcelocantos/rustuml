@@ -1,0 +1,6 @@
+@startuml
+class Car
+Car ()- IStartable
+Car ()- IStoppable
+Car ()-- IDriveable
+@enduml

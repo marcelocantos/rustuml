@@ -1,0 +1,10 @@
+@startuml
+actor User [[https://example.com/user]]
+participant API [[https://example.com/api]]
+database DB [[https://example.com/db]]
+
+User -> API : request
+API -> DB : query
+DB --> API : result
+API --> User : response
+@enduml

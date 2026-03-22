@@ -1,0 +1,10 @@
+@startuml
+box "Group"
+  actor A
+  actor B
+end box
+participant C
+A -> B : inside box
+B -> C : outside box
+C --> A : return
+@enduml

@@ -1,0 +1,5 @@
+@startuml
+entity Variant {
+  -void helper()
+}
+@enduml

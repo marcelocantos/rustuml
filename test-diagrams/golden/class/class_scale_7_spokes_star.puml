@@ -1,0 +1,17 @@
+@startuml
+class Hub
+class Spoke1
+class Spoke2
+class Spoke3
+class Spoke4
+class Spoke5
+class Spoke6
+class Spoke7
+Hub --> Spoke1
+Hub --> Spoke2
+Hub --> Spoke3
+Hub --> Spoke4
+Hub --> Spoke5
+Hub --> Spoke6
+Hub --> Spoke7
+@enduml

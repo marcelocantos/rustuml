@@ -1,0 +1,5 @@
+@startuml
+class MyClass <<controller>> #lightgreen {
+  +void method()
+}
+@enduml

@@ -1,0 +1,5 @@
+@startuml
+[-> Alice: incoming from nowhere
+Alice -> Bob: normal
+Bob ->]: outgoing to nowhere
+@enduml

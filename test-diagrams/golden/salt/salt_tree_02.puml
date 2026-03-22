@@ -1,0 +1,15 @@
+@startsalt
+{T
+  + Menu
+++ File
++++ New
++++ Open
++++ Save
++++ Exit
+++ Edit
++++ Cut
++++ Copy
++++ Paste
+
+}
+@endsalt

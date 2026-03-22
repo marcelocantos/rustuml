@@ -1,0 +1,7 @@
+@startuml
+namespace myPkg #lightyellow {
+  class MyClass {
+    +void method()
+  }
+}
+@enduml

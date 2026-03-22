@@ -1,0 +1,18 @@
+@startuml
+package "Domain" {
+  object User {
+    id = 1
+    name = "Alice"
+  }
+  object Role {
+    name = "admin"
+  }
+}
+package "Infrastructure" {
+  object Database {
+    host = "localhost"
+  }
+}
+User --> Role
+User --> Database
+@enduml

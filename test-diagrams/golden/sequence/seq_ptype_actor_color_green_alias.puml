@@ -1,0 +1,6 @@
+@startuml
+actor "Named Actor" as P #green
+participant Other
+P -> Other : actor green call
+Other --> P : reply
+@enduml

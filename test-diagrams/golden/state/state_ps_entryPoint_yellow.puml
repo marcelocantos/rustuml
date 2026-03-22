@@ -1,0 +1,6 @@
+@startuml
+state ps <<entryPoint>> #yellow
+[*] --> A
+A --> ps
+ps --> [*]
+@enduml

@@ -1,0 +1,9 @@
+@startuml
+hide footbox
+A -> B : start
+loop cond
+  B -> C : action
+  C --> B : done
+end
+B --> A : done
+@enduml

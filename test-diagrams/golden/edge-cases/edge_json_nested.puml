@@ -1,0 +1,14 @@
+@startuml
+@startjson
+{
+  "user": {
+    "name": "Alice",
+    "address": {
+      "city": "NYC",
+      "country": "US"
+    }
+  },
+  "items": [1, 2, 3]
+}
+@endjson
+@enduml

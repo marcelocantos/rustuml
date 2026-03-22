@@ -1,0 +1,12 @@
+@startuml
+
+start
+fork
+  :P1;
+fork again
+  :P2;
+end fork
+note left: After fork join
+:Continue;
+stop
+@enduml

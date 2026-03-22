@@ -1,0 +1,9 @@
+@startuml
+Alice -> Bob : hello
+note over Alice, Bob #lightyellow
+  **Important**
+  This is colored
+  and multi-line
+end note
+Bob --> Alice : hi
+@enduml

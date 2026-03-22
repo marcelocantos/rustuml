@@ -1,0 +1,10 @@
+@startuml
+skinparam PackageFontSize 14
+package myPkg {
+  class A {
+    +void method()
+  }
+  class B
+  A --> B
+}
+@enduml

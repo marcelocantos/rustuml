@@ -1,0 +1,14 @@
+@startuml
+interface Shape {
+  +double area()
+}
+interface Printable {
+  +void print()
+}
+interface PrintableShape {
+  +void print()
+  +double area()
+}
+PrintableShape --|> Shape
+PrintableShape --|> Printable
+@enduml

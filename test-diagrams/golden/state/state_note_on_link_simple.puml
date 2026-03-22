@@ -1,0 +1,8 @@
+@startuml
+[*] --> A
+A --> B : simple
+note on link
+  This note is on the simple transition
+end note
+B --> [*]
+@enduml

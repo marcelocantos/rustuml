@@ -1,0 +1,9 @@
+@startuml
+
+start
+:Action;
+note left #FFE4E1
+  Colored note
+end note
+stop
+@enduml

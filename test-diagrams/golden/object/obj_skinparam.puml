@@ -1,0 +1,16 @@
+@startuml
+skinparam object {
+  BackgroundColor LightYellow
+  BorderColor DarkOrange
+  FontSize 14
+}
+object Vehicle {
+  type = "car"
+  speed = 120
+}
+object Driver {
+  name = "Bob"
+  license = "valid"
+}
+Driver --> Vehicle : drives
+@enduml

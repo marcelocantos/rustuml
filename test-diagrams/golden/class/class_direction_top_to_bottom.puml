@@ -1,0 +1,14 @@
+@startuml
+top to bottom direction
+class A {
+  +void method()
+}
+class B {
+  +void method()
+}
+class C {
+  +void method()
+}
+A --> B
+B --> C
+@enduml

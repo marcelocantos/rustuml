@@ -1,0 +1,14 @@
+@startuml
+class DataObject {
+  == Identity ==
+  +int id
+  +String name
+  == Metadata ==
+  +Date createdAt
+  +Date updatedAt
+  == Operations ==
+  +void save()
+  +void delete()
+  +DataObject clone()
+}
+@enduml

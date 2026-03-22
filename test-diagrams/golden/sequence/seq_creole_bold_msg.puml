@@ -1,0 +1,4 @@
+@startuml
+Alice -> Bob : **bold message**
+Bob --> Alice : **bold message**
+@enduml

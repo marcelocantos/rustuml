@@ -1,0 +1,6 @@
+@startuml
+class MyClass
+note right of MyClass
+  --strike--
+end note
+@enduml

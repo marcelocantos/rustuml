@@ -1,0 +1,9 @@
+@startuml
+class Cls001 { +void m1() }
+class Cls002 { +void m2() }
+class Cls003 { +void m3() }
+class Cls004 { +void m4() }
+class Cls005 { +void m5() }
+class Cls006 { +void m6() }
+class Cls007 { +void m7() }
+@enduml

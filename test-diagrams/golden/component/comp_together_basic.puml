@@ -1,0 +1,11 @@
+@startuml
+together {
+  component A
+  component B
+  component C
+}
+component D
+A --> D
+B --> D
+C --> D
+@enduml

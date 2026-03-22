@@ -1,0 +1,9 @@
+@startuml
+
+start
+:Action;
+note left #honeydew
+  Colored note
+end note
+stop
+@enduml

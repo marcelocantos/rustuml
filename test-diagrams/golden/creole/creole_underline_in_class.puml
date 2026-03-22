@@ -1,0 +1,6 @@
+@startuml
+class MyClass {
+  __underlineField__: String
+  __underlineMethod__()
+}
+@enduml

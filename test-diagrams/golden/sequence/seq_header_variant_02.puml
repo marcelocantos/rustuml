@@ -1,0 +1,5 @@
+@startuml
+header <b>Bold Header</b>
+Alice -> Bob : hello
+Bob --> Alice : hi
+@enduml

@@ -1,0 +1,26 @@
+@startuml
+!define DEBUG
+!define VERBOSE
+
+!ifdef DEBUG
+  !ifdef VERBOSE
+    note as N
+      Both DEBUG and VERBOSE active
+    end note
+  !else
+    note as N
+      Only DEBUG active
+    end note
+  !endif
+!else
+  !ifdef VERBOSE
+    note as N
+      Only VERBOSE active
+    end note
+  !else
+    note as N
+      Neither active
+    end note
+  !endif
+!endif
+@enduml

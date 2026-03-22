@@ -1,0 +1,16 @@
+@startuml
+skinparam class<<controller>> {
+  BackgroundColor LightCoral
+  BorderColor DarkRed
+  FontStyle bold
+}
+class UserEntity <<controller>> {
+  id: Long
+  name: String
+}
+class OrderEntity <<controller>> {
+  id: Long
+  total: Double
+}
+UserEntity --> OrderEntity : places
+@enduml

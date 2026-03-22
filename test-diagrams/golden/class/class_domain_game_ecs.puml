@@ -1,0 +1,50 @@
+@startuml
+class World {
+  +void addEntity(Entity e)
+  +void removeEntity(int id)
+  +void update(float delta)
+}
+class Entity {
+  +int id
+  +void addComponent(Component c)
+  +Component getComponent(Class type)
+}
+abstract class Component {
+  +int entityId
+  +boolean enabled
+}
+class PositionComponent {
+  +float x
+  +float y
+  +float z
+}
+class VelocityComponent {
+  +float vx
+  +float vy
+  +float vz
+}
+class RenderComponent {
+  +String sprite
+  +int layer
+}
+class CollisionComponent {
+  +float radius
+  +boolean isTrigger
+}
+abstract class System {
+  +{abstract} void update(World world, float delta)
+}
+class PhysicsSystem
+class RenderSystem
+class CollisionSystem
+World o-- Entity
+Entity o-- Component
+PositionComponent --|> Component
+VelocityComponent --|> Component
+RenderComponent --|> Component
+CollisionComponent --|> Component
+PhysicsSystem --|> System
+RenderSystem --|> System
+CollisionSystem --|> System
+World o-- System
+@enduml

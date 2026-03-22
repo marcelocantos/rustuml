@@ -1,0 +1,34 @@
+@startuml
+|L1|
+start
+if (cond?) then (yes)
+  :Yes;
+else (no)
+  :No;
+endif
+|L2|
+if (cond?) then (yes)
+  :Yes;
+else (no)
+  :No;
+endif
+|L3|
+if (cond?) then (yes)
+  :Yes;
+else (no)
+  :No;
+endif
+|L4|
+if (cond?) then (yes)
+  :Yes;
+else (no)
+  :No;
+endif
+|L5|
+if (cond?) then (yes)
+  :Yes;
+else (no)
+  :No;
+endif
+stop
+@enduml

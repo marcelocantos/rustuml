@@ -1,0 +1,10 @@
+@startuml
+class MyClass {
+  {static} String CONSTANT
+  {static} int instanceCount
+  {static} MyClass getInstance()
+  {static} void reset()
+  +String name
+  +void doWork()
+}
+@enduml

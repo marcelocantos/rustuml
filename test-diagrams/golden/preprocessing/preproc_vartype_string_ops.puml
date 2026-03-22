@@ -1,0 +1,11 @@
+@startuml
+!$hello = "Hello"
+!$world = "World"
+!$greeting = $hello + ", " + $world + "!"
+!$len = %strlen($greeting)
+
+note as N
+  $greeting
+  length: $len
+end note
+@enduml

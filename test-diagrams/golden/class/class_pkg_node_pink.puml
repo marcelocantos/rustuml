@@ -1,0 +1,7 @@
+@startuml
+node myPkg #pink {
+  class MyClass {
+    +void method()
+  }
+}
+@enduml

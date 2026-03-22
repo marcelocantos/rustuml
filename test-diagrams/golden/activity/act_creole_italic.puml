@@ -1,0 +1,6 @@
+@startuml
+
+start
+://Italic action//;
+stop
+@enduml

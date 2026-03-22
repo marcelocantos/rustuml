@@ -1,0 +1,14 @@
+@startuml
+left to right direction
+skinparam nodesep 30
+skinparam ranksep 50
+class A
+class B
+class C
+class D
+A --> B
+A --> C
+B --> D
+C --> D
+
+@enduml

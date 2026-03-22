@@ -1,0 +1,11 @@
+@startuml
+skinparam ClassStereotypeFontSize 14
+class A {
+  +String field
+  +void method()
+}
+class B {
+  -int count
+}
+A --> B
+@enduml

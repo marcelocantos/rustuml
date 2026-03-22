@@ -1,0 +1,4 @@
+@startuml
+class Foo
+note right of Foo: word word word word word word word word word word
+@enduml

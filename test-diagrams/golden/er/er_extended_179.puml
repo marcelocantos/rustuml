@@ -1,0 +1,66 @@
+@startuml
+entity Primary179 {
+  * id : INT <<PK>>
+  --
+  code : VARCHAR(20)
+  label : VARCHAR(100)
+  is_active : BOOLEAN
+  created_at : TIMESTAMP
+}
+entity Related179_1 {
+  * id : INT <<PK>>
+  * primary_id : INT <<FK>>
+  --
+  value : VARCHAR(200)
+  sort_order : INT
+}
+entity Related179_2 {
+  * id : INT <<PK>>
+  * primary_id : INT <<FK>>
+  --
+  value : VARCHAR(200)
+  sort_order : INT
+}
+entity Related179_3 {
+  * id : INT <<PK>>
+  * primary_id : INT <<FK>>
+  --
+  value : VARCHAR(200)
+  sort_order : INT
+}
+entity Related179_4 {
+  * id : INT <<PK>>
+  * primary_id : INT <<FK>>
+  --
+  value : VARCHAR(200)
+  sort_order : INT
+}
+entity Related179_5 {
+  * id : INT <<PK>>
+  * primary_id : INT <<FK>>
+  --
+  value : VARCHAR(200)
+  sort_order : INT
+}
+entity Related179_6 {
+  * id : INT <<PK>>
+  * primary_id : INT <<FK>>
+  --
+  value : VARCHAR(200)
+  sort_order : INT
+}
+entity Related179_7 {
+  * id : INT <<PK>>
+  * primary_id : INT <<FK>>
+  --
+  value : VARCHAR(200)
+  sort_order : INT
+}
+Primary179 ||--o{ Related179_1 : "has"
+Primary179 ||--o{ Related179_2 : "has"
+Primary179 ||--o{ Related179_3 : "has"
+Primary179 ||--o{ Related179_4 : "has"
+Primary179 ||--o{ Related179_5 : "has"
+Primary179 ||--o{ Related179_6 : "has"
+Primary179 ||--o{ Related179_7 : "has"
+@enduml

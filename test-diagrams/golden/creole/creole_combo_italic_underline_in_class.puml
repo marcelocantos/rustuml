@@ -1,0 +1,5 @@
+@startuml
+class MyClass {
+  //__italic underline__//: field
+}
+@enduml

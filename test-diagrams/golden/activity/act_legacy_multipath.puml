@@ -1,0 +1,19 @@
+@startuml
+
+(*) --> "Entry"
+"Entry" --> "Check A"
+if "A?" then
+  -->[yes] "Path A"
+else
+  -->[no] "Check B"
+  if "B?" then
+    -->[yes] "Path B"
+  else
+    -->[no] "Default Path"
+  endif
+endif
+"Path A" --> "Exit"
+"Path B" --> "Exit"
+"Default Path" --> "Exit"
+"Exit" --> (*)
+@enduml

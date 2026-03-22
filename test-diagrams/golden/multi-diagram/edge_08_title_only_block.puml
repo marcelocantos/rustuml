@@ -1,0 +1,8 @@
+@startuml
+title My Empty Diagram
+@enduml
+
+@startuml
+title Second Diagram
+Alice -> Bob : Hello
+@enduml

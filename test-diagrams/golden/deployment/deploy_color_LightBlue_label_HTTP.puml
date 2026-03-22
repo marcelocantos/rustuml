@@ -1,0 +1,5 @@
+@startuml
+node Source #LightBlue
+node Target #LightBlue
+Source --> Target : HTTP
+@enduml

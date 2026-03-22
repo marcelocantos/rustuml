@@ -1,0 +1,9 @@
+@startuml
+A -> B : trigger
+alt ok
+  A -->> B : thin_dotted ok
+  B --> A : ack
+else fail
+  A -->> B : thin_dotted fail
+end
+@enduml

@@ -1,0 +1,6 @@
+@startuml
+participant "찰리" as Charlie_KR
+participant Bob
+Charlie_KR -> Bob : hello
+Bob --> Charlie_KR : hi
+@enduml

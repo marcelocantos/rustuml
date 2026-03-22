@@ -1,0 +1,5 @@
+@startuml
+node AppNode <<container>>
+database DataStore
+AppNode --> DataStore : HTTP
+@enduml

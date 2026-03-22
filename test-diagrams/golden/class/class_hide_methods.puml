@@ -1,0 +1,12 @@
+@startuml
+hide empty methods
+class A {
+  +String publicField
+  -int privateField
+  #double protectedField
+  +void publicMethod()
+  -void privateMethod()
+  #void protectedMethod()
+}
+class B
+@enduml

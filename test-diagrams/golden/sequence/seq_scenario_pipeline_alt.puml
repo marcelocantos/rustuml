@@ -1,0 +1,11 @@
+@startuml
+A -> B : stage1
+B -> C : stage2
+C -> D : stage3
+D -> E : stage4
+alt ok
+  Alice -> Bob : confirm
+else error
+  Alice -> Bob : retry
+end
+@enduml

@@ -1,0 +1,8 @@
+@startuml
+skinparam nodesep 150
+class A
+class B
+class C
+A --> B
+B --> C
+@enduml

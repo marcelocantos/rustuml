@@ -1,0 +1,26 @@
+@startuml
+start
+partition "P1" {
+if (p1cond1?) then (yes)
+  if (p1cond2?) then (yes)
+    :P1 inner action;
+  else (no)
+    :P1 alt 2;
+  endif
+else (no)
+  :P1 alt 1;
+endif
+}
+partition "P2" {
+if (p2cond1?) then (yes)
+  if (p2cond2?) then (yes)
+    :P2 inner action;
+  else (no)
+    :P2 alt 2;
+  endif
+else (no)
+  :P2 alt 1;
+endif
+}
+stop
+@enduml

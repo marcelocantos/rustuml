@@ -1,0 +1,5 @@
+@startuml
+skinparam NoteBackgroundColor lightyellow
+Alice -> Bob : hello
+Bob --> Alice : hi
+@enduml

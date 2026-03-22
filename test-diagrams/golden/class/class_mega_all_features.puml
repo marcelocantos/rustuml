@@ -1,0 +1,65 @@
+@startuml
+title Mega Class Diagram
+left to right direction
+skinparam ClassBackgroundColor lightyellow
+skinparam ClassBorderColor orange
+skinparam ArrowColor darkblue
+
+package domain #lightblue {
+  abstract class BaseEntity {
+    +int id
+    +Date createdAt
+    +Date updatedAt
+    {abstract} +void validate()
+  }
+  class User <<entity>> {
+    +String username
+    +String email
+    +void validate()
+  }
+  class Order <<entity>> {
+    +Date orderDate
+    +double total
+    +void validate()
+  }
+  enum OrderStatus {
+    PENDING
+    CONFIRMED
+    SHIPPED
+    DELIVERED
+  }
+  User <|-- BaseEntity
+  Order <|-- BaseEntity
+  Order --> OrderStatus
+}
+
+package service #lightgreen {
+  interface UserService {
+    +User getUser(int id)
+    +void createUser(User u)
+  }
+  class UserServiceImpl <<service>> {
+    +User getUser(int id)
+    +void createUser(User u)
+  }
+  UserServiceImpl ..|> UserService
+}
+
+package repository #lavender {
+  interface UserRepo {
+    +User findById(int id)
+  }
+  class UserRepoImpl <<repository>> {
+    +User findById(int id)
+  }
+  UserRepoImpl ..|> UserRepo
+}
+
+service.UserServiceImpl ..> repository.UserRepo
+repository.UserRepoImpl ..> domain.User
+
+note right of domain.User
+  Main domain entity
+  Must have unique email
+end note
+@enduml

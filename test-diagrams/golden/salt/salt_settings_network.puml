@@ -1,0 +1,10 @@
+@startsalt
+{^Network Settings
+  Hostname: | "               "
+  DNS Server: | "               "
+  Gateway: | "               "
+  Subnet Mask: | "               "
+  ..
+  [Save] | [Reset] | [Cancel]
+}
+@endsalt

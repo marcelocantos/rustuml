@@ -1,0 +1,11 @@
+@startuml
+class MyClass {
+  field1: String
+  --
+  method1()
+  ==
+  static_method()
+  ..
+  abstract_method()
+}
+@enduml

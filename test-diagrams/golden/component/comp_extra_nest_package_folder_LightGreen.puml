@@ -1,0 +1,9 @@
+@startuml
+package Outer #LightGreen {
+  folder Inner {
+    component X
+    component Y
+    X --> Y
+  }
+}
+@enduml

@@ -1,0 +1,16 @@
+@startuml
+skinparam class<<repository>> {
+  BackgroundColor LightYellow
+  BorderColor DarkOrange
+  FontStyle bold
+}
+class UserEntity <<repository>> {
+  id: Long
+  name: String
+}
+class OrderEntity <<repository>> {
+  id: Long
+  total: Double
+}
+UserEntity --> OrderEntity : places
+@enduml

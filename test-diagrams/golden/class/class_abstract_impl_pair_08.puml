@@ -1,0 +1,10 @@
+@startuml
+abstract class AbstractService8 {
+  +{'abstract'} void process8()
+  +void common8()
+}
+class ConcreteService8 {
+  +void process8()
+}
+AbstractService8 <|-- ConcreteService8
+@enduml

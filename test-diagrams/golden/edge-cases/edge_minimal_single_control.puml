@@ -1,0 +1,3 @@
+@startuml
+control MyControl
+@enduml

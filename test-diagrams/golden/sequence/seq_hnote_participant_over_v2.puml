@@ -1,0 +1,7 @@
+@startuml
+participant X
+participant Y
+X -> Y : go
+hnote over X : hnote/participant
+Y --> X : back
+@enduml

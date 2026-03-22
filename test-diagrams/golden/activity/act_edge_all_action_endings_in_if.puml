@@ -1,0 +1,16 @@
+@startuml
+
+start
+if (type?) then (standard)
+  :standard action;
+elseif (type?) then (send)
+  :send action>
+elseif (type?) then (receive)
+  :receive action<
+elseif (type?) then (input)
+  :input action/
+else (output)
+  :output action\
+endif
+stop
+@enduml

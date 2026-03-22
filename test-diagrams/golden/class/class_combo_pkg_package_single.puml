@@ -1,0 +1,7 @@
+@startuml
+package MyPkg {
+  class MyClass {
+    +void method()
+  }
+}
+@enduml

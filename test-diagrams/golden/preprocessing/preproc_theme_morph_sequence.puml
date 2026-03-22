@@ -1,0 +1,5 @@
+@startuml
+!theme morph
+Alice -> Bob : hello
+Bob --> Alice : world
+@enduml

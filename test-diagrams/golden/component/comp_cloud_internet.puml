@@ -1,0 +1,16 @@
+@startuml
+cloud Internet {
+  component DNS
+  component CDN
+}
+rectangle Datacenter {
+  component WebServer
+  component AppServer
+  database MainDB
+}
+Internet --> WebServer : HTTP
+DNS --> CDN
+CDN --> WebServer
+WebServer --> AppServer
+AppServer --> MainDB
+@enduml

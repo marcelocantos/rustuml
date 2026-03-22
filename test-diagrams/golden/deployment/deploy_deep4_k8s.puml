@@ -1,0 +1,11 @@
+@startuml
+node "Kubernetes Cluster" {
+  node "Worker Node" {
+    node "Pod" {
+      component "Container A"
+      component "Container B"
+      "Container A" --> "Container B"
+    }
+  }
+}
+@enduml

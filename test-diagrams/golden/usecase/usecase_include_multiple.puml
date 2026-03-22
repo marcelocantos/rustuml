@@ -1,0 +1,11 @@
+@startuml
+actor User
+usecase "Submit Form" as SF
+usecase "Validate Input" as VI
+usecase "Log Activity" as LA
+usecase "Send Notification" as SN
+SF .> VI : <<include>>
+SF .> LA : <<include>>
+SF .> SN : <<include>>
+User --> SF
+@enduml

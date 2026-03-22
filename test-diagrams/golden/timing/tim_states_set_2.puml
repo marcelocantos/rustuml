@@ -1,0 +1,14 @@
+@startuml
+robust "Signal" as sig
+@0
+sig is stopped
+@100
+sig is starting
+@200
+sig is running
+@300
+sig is stopping
+@400
+sig is stopped
+
+@enduml

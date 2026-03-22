@@ -1,0 +1,8 @@
+@startuml
+!theme sunlust
+participant Alice
+participant Bob
+Alice -> Bob : hello from sunlust
+Bob --> Alice : reply
+note right : sunlust theme
+@enduml

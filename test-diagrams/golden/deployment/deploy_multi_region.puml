@@ -1,0 +1,19 @@
+@startuml
+cloud "US-East" {
+  node "Primary App Server"
+  database "Primary DB"
+  "Primary App Server" --> "Primary DB"
+}
+cloud "EU-West" {
+  node "Secondary App Server"
+  database "Replica DB"
+  "Secondary App Server" --> "Replica DB"
+}
+cloud "AP-Southeast" {
+  node "Edge App Server"
+  database "Local Cache DB"
+  "Edge App Server" --> "Local Cache DB"
+}
+"Primary DB" --> "Replica DB" : replication
+"Primary DB" --> "Local Cache DB" : replication
+@enduml

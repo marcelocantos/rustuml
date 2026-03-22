@@ -1,0 +1,11 @@
+@startuml
+node PhysicalDC {
+  node VirtualDC {
+    node K8sCluster {
+      node Pod {
+        component Container
+      }
+    }
+  }
+}
+@enduml

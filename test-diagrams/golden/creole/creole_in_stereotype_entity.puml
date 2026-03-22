@@ -1,0 +1,6 @@
+@startuml
+class "**EntityClass** <<entity>>" as C {
+  +**boldField**: String
+  +//italicMethod//(): void
+}
+@enduml

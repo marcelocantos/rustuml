@@ -1,0 +1,5 @@
+@startuml
+class MemberClass {
+  {abstract} +int fieldName
+}
+@enduml

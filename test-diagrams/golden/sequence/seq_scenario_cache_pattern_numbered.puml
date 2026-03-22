@@ -1,0 +1,21 @@
+@startuml
+autonumber
+participant Client
+participant Service
+collections Cache
+database DB
+
+Client -> Service ++ : getData(key)
+Service -> Cache ++ : get(key)
+alt cache hit
+  Cache --> Service -- : value
+  Service --> Client -- : cached value
+else cache miss
+  Cache --> Service -- : nil
+  Service -> DB ++ : SELECT WHERE key=?
+  DB --> Service -- : row
+  Service -> Cache ++ : set(key, value, ttl=3600)
+  Cache --> Service -- : ok
+  Service --> Client -- : fresh value
+end
+@enduml

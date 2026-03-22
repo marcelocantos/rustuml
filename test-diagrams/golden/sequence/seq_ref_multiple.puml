@@ -1,0 +1,7 @@
+@startuml
+Alice -> Bob : start
+ref over Alice : ref 1
+ref over Bob : ref 2
+ref over Alice, Bob : ref 3
+Bob --> Alice : done
+@enduml

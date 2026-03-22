@@ -1,0 +1,5 @@
+@startuml
+start
+#blue:colored recv<
+stop
+@enduml

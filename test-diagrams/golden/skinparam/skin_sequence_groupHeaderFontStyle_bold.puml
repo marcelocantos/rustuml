@@ -1,0 +1,13 @@
+@startuml
+skinparam sequenceGroupHeaderFontStyle bold
+participant Alice
+participant Bob
+Alice -> Bob : hello
+activate Bob
+Bob --> Alice : world
+deactivate Bob
+group my group
+  Alice -> Bob : grouped msg
+end
+note over Alice : note content
+@enduml

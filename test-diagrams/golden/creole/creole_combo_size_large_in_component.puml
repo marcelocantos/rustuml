@@ -1,0 +1,5 @@
+@startuml
+component "<size:20>large</size> comp" as C631
+interface "<size:20>large</size> iface" as I631
+C631 -- I631
+@enduml

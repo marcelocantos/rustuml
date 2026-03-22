@@ -1,0 +1,8 @@
+@startuml
+alt condition
+  Alice -> Alice ++ : self activate in alt
+  Alice --> Alice -- : self done
+else
+  Alice -> Alice : plain self
+end
+@enduml

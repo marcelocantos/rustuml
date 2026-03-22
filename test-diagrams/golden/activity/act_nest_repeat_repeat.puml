@@ -1,0 +1,10 @@
+@startuml
+start
+repeat
+  repeat
+    :inner;
+  repeatwhile (inner?)
+  :outer body;
+repeatwhile (outer?)
+stop
+@enduml

@@ -1,0 +1,9 @@
+@startuml
+!define RENDER_ACTIVITY
+
+!ifdef RENDER_ACTIVITY
+start
+:guarded action;
+stop
+!endif
+@enduml

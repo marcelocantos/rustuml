@@ -1,0 +1,5 @@
+@startuml
+[*] --> State1
+State1 --> State2 : go
+State2 --> [H] : back to history
+@enduml

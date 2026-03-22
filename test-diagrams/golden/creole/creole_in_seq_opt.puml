@@ -1,0 +1,5 @@
+@startuml
+opt __optional__
+  Alice -> Bob : maybe
+end
+@enduml

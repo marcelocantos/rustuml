@@ -1,0 +1,9 @@
+@startuml
+A -> B : init
+alt cond
+  A -> B : solid main
+  B --> A : ack
+else other
+  A -> C : solid else
+end
+@enduml

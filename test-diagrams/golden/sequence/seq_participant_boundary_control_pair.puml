@@ -1,0 +1,6 @@
+@startuml
+boundary A
+control B
+A -> B : request
+B --> A : response
+@enduml

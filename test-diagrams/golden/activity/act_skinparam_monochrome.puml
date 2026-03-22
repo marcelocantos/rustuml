@@ -1,0 +1,13 @@
+@startuml
+
+skinparam monochrome true
+start
+:Action A;
+if (condition?) then (yes)
+  :Yes;
+else (no)
+  :No;
+endif
+:Action B;
+stop
+@enduml

@@ -1,0 +1,5 @@
+@startuml
+state "Very Long State Name Here" as VS : And this is a very long description too
+[*] --> VS
+VS --> [*]
+@enduml

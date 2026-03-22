@@ -1,0 +1,7 @@
+@startuml
+cloud MyPkg {
+  class MyClass {
+    +void method()
+  }
+}
+@enduml

@@ -1,0 +1,23 @@
+@startmindmap
+* Central
+** Branch 0
+*** Leaf 0.0
+*** Leaf 0.1
+*** Leaf 0.2
+** Branch 1
+*** Leaf 1.0
+*** Leaf 1.1
+*** Leaf 1.2
+** Branch 2
+*** Leaf 2.0
+*** Leaf 2.1
+*** Leaf 2.2
+
+-- Left 0
+--- Sub 0.0
+--- Sub 0.1
+-- Left 1
+--- Sub 1.0
+--- Sub 1.1
+
+@endmindmap

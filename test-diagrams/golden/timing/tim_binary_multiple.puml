@@ -1,0 +1,25 @@
+@startuml
+binary "CLK" as clk
+binary "CS" as cs
+binary "WR" as wr
+@0
+clk is low
+cs is high
+wr is high
+@10
+clk is high
+@20
+clk is low
+cs is low
+@30
+clk is high
+wr is low
+@40
+clk is low
+@50
+clk is high
+@60
+clk is low
+cs is high
+wr is high
+@enduml

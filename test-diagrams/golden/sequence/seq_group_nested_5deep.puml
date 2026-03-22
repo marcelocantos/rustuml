@@ -1,0 +1,19 @@
+@startuml
+A -> B : start
+loop L1
+  loop L2
+    alt A1
+      opt O1
+        par
+          B -> C : c1
+        and
+          B -> D : d1
+        end
+      end
+    else A2
+      B -> B : handle
+    end
+  end
+end
+B --> A : end
+@enduml

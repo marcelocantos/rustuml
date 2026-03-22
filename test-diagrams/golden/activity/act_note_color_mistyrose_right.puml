@@ -1,0 +1,9 @@
+@startuml
+
+start
+:Action;
+note right #mistyrose
+  Colored note
+end note
+stop
+@enduml

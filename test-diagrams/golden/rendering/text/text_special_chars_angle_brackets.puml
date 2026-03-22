@@ -1,0 +1,8 @@
+@startuml
+class MyClass {
+  +List<String> items
+  +Map<String, Integer> counts
+  +Optional<List<String>> nested
+}
+
+@enduml

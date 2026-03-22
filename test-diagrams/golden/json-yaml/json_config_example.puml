@@ -1,0 +1,22 @@
+@startjson
+{
+  "app": {
+    "name": "MyApp",
+    "version": "1.2.3",
+    "debug": false,
+    "port": 8080,
+    "database": {
+      "host": "localhost",
+      "port": 5432,
+      "name": "mydb",
+      "ssl": true
+    },
+    "cache": {
+      "driver": "redis",
+      "host": "127.0.0.1",
+      "ttl": 3600
+    },
+    "features": ["auth", "api", "admin"]
+  }
+}
+@endjson

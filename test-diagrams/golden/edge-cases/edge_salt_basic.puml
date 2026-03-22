@@ -1,0 +1,10 @@
+@startsalt
+{
+  Login Form
+  .
+  "Username" | "        "
+  "Password" | "        "
+  .
+  [Login] | [Cancel]
+}
+@endsalt

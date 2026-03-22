@@ -1,0 +1,4 @@
+@startuml
+node Node1 <<vm>>
+
+@enduml

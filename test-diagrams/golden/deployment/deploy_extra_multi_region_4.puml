@@ -1,0 +1,25 @@
+@startuml
+cloud "Region 1" {
+  node "App-1"
+  database "DB-1"
+  "App-1" --> "DB-1"
+}
+cloud "Region 2" {
+  node "App-2"
+  database "DB-2"
+  "App-2" --> "DB-2"
+}
+cloud "Region 3" {
+  node "App-3"
+  database "DB-3"
+  "App-3" --> "DB-3"
+}
+cloud "Region 4" {
+  node "App-4"
+  database "DB-4"
+  "App-4" --> "DB-4"
+}
+"DB-1" --> "DB-2" : replication
+"DB-1" --> "DB-3" : replication
+"DB-1" --> "DB-4" : replication
+@enduml

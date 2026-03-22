@@ -1,0 +1,9 @@
+@startuml
+autonumber 10
+Alice -> Bob ++ : start
+loop condition
+  Bob -> Charlie ++ : action
+  Charlie --> Bob -- : done
+end
+Bob --> Alice -- : complete
+@enduml

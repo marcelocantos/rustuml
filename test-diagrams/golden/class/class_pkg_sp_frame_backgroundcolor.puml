@@ -1,0 +1,10 @@
+@startuml
+skinparam FrameBackgroundColor lightblue
+frame myPkg {
+  class A {
+    +void method()
+  }
+  class B
+  A --> B
+}
+@enduml

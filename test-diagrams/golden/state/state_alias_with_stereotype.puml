@@ -1,0 +1,5 @@
+@startuml
+state "My State" as MS <<mystereo>>
+[*] --> MS
+MS --> [*]
+@enduml

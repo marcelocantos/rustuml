@@ -1,0 +1,7 @@
+@startuml
+database myPkg #aliceblue {
+  class MyClass {
+    +void method()
+  }
+}
+@enduml

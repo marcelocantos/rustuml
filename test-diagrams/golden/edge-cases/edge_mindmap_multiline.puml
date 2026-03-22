@@ -1,0 +1,7 @@
+@startmindmap
+* Root
+**:Branch 1
+with multiple
+lines;
+** Branch 2
+@endmindmap

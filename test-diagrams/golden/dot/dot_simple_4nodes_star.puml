@@ -1,0 +1,7 @@
+@startdot
+digraph G {
+  Root -> A
+  Root -> B
+  Root -> C
+}
+@enddot

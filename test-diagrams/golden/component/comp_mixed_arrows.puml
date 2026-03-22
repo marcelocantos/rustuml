@@ -1,0 +1,11 @@
+@startuml
+component A
+component B
+component C
+component D
+component E
+A --> B : dependency
+B ..> C : usage
+C -- D : association
+D .. E : realization
+@enduml

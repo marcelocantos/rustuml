@@ -1,0 +1,10 @@
+@startsalt
+{/
+  Code | Issues | PRs | Actions | Security
+  {
+    "Content area for Code"
+    "Additional information"
+    [Action Button]
+  }
+}
+@endsalt

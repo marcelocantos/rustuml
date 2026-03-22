@@ -1,0 +1,5 @@
+@startuml
+actor "<color:red>red</color> Actor" as A15
+usecase "<color:red>red</color> Case" as UC15
+A15 --> UC15
+@enduml

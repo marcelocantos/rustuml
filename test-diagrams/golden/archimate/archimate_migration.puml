@@ -1,0 +1,19 @@
+@startuml
+!include <archimate/Archimate>
+
+Implementation_WorkPackage(wp1, "Phase 1: Foundation")
+Implementation_WorkPackage(wp2, "Phase 2: Migration")
+Implementation_WorkPackage(wp3, "Phase 3: Cutover")
+Implementation_Deliverable(del1, "Architecture Doc")
+Implementation_Deliverable(del2, "Migrated Data")
+Implementation_Gap(gap, "Legacy Gap")
+Implementation_Plateau(p1, "Current State")
+Implementation_Plateau(p2, "Target State")
+
+Rel_Association(wp1, del1, "produces")
+Rel_Association(wp2, del2, "produces")
+Rel_Triggering(wp1, wp2, "")
+Rel_Triggering(wp2, wp3, "")
+Rel_Association(p1, gap, "has")
+Rel_Association(gap, p2, "resolved by")
+@enduml

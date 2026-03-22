@@ -1,0 +1,9 @@
+@startuml
+hide footbox
+Alice -> Bob : start
+opt cond
+  Bob -> Charlie : action
+  Charlie --> Bob : done
+end
+Bob --> Alice : complete
+@enduml

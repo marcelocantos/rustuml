@@ -1,0 +1,3 @@
+@startuml
+Alice -> Bob : <size:16><color:navy>**big navy bold**</color></size>
+@enduml

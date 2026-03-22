@@ -1,0 +1,14 @@
+@startuml
+
+start
+:Action 1;
+note right
+  Note after action 1
+end note
+:Action 2;
+note left
+  Note after action 2
+end note
+:Action 3;
+stop
+@enduml

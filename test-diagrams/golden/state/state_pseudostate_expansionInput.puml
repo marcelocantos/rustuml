@@ -1,0 +1,6 @@
+@startuml
+state ps <<expansionInput>>
+[*] --> A
+A --> ps
+ps --> [*]
+@enduml

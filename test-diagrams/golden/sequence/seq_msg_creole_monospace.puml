@@ -1,0 +1,4 @@
+@startuml
+Alice -> Bob : ""monospace message""
+Bob --> Alice : ""code()"" returned
+@enduml

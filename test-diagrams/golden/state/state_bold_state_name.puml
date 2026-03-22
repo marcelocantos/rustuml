@@ -1,0 +1,5 @@
+@startuml
+state "<b>Bold State</b>" as BS
+[*] --> BS
+BS --> [*]
+@enduml

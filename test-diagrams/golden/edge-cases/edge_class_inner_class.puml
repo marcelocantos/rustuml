@@ -1,0 +1,8 @@
+@startuml
+class Outer {
+  class Inner {
+    field: String
+  }
+  +getInner(): Inner
+}
+@enduml

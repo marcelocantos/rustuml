@@ -1,0 +1,4 @@
+@startuml
+node MyServer #Pink <<vm>>
+note right of MyServer : Tagged server
+@enduml

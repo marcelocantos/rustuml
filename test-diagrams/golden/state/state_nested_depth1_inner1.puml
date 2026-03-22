@@ -1,0 +1,12 @@
+@startuml
+state Outer {
+  state Level1 {
+    [*] --> I1
+    I1 --> [*]
+  }
+  [*] --> Level{d}
+  Level{d} --> [*]
+}
+[*] --> Outer
+Outer --> [*]
+@enduml

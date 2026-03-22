@@ -1,0 +1,9 @@
+@startuml
+actor "Regular User" as RU
+actor "Admin User" as AU
+usecase "Manage Users" as MU
+usecase "View Reports" as VR
+RU --> VR
+AU --> MU
+AU --> VR
+@enduml

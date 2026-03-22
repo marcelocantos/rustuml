@@ -1,0 +1,9 @@
+@startuml
+node Server1 {
+  artifact app1.jar
+}
+node Server2 {
+  artifact app2.jar
+}
+Server1 --> Server2 : sync
+@enduml

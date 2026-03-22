@@ -1,0 +1,5 @@
+@startuml
+interface Base
+interface Extended extends Base
+interface MultiExtended extends Base, Extended
+@enduml

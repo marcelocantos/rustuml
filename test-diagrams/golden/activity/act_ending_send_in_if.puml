@@ -1,0 +1,9 @@
+@startuml
+start
+if (cond?) then (yes)
+  :action send>
+else (no)
+  :normal;
+endif
+stop
+@enduml

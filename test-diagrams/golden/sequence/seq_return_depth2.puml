@@ -1,0 +1,6 @@
+@startuml
+A -> B ++ : call level 1
+B -> C ++ : call level 2
+return result level 2
+return result level 1
+@enduml

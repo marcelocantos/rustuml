@@ -1,0 +1,12 @@
+@startuml
+[*] --> Hub
+Hub --> Spoke0 : branch0
+Spoke0 --> Hub : return0
+Hub --> Spoke1 : branch1
+Spoke1 --> Hub : return1
+Hub --> Spoke2 : branch2
+Spoke2 --> Hub : return2
+Hub --> Spoke3 : branch3
+Spoke3 --> Hub : return3
+Hub --> [*]
+@enduml

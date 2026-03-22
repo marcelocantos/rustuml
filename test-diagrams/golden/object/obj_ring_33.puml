@@ -1,0 +1,12 @@
+@startuml
+object Obj0_33 { val = 330 }
+object Obj1_33 { val = 331 }
+object Obj2_33 { val = 332 }
+object Obj3_33 { val = 333 }
+object Obj4_33 { val = 334 }
+Obj0_33 --> Obj1_33
+Obj1_33 --> Obj2_33
+Obj2_33 --> Obj3_33
+Obj3_33 --> Obj4_33
+Obj4_33 --> Obj0_33
+@enduml

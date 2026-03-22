@@ -1,0 +1,43 @@
+@startuml
+state Outer1 {
+  [*] --> IS1
+  IS1 --> IS2
+  IS2 --> IS3
+  IS3 --> IS4
+  IS4 --> [*]
+}
+state Outer2 {
+  [*] --> IS1
+  IS1 --> IS2
+  IS2 --> IS3
+  IS3 --> IS4
+  IS4 --> [*]
+}
+state Outer3 {
+  [*] --> IS1
+  IS1 --> IS2
+  IS2 --> IS3
+  IS3 --> IS4
+  IS4 --> [*]
+}
+state Outer4 {
+  [*] --> IS1
+  IS1 --> IS2
+  IS2 --> IS3
+  IS3 --> IS4
+  IS4 --> [*]
+}
+state Outer5 {
+  [*] --> IS1
+  IS1 --> IS2
+  IS2 --> IS3
+  IS3 --> IS4
+  IS4 --> [*]
+}
+[*] --> Outer1
+Outer1 --> Outer2
+Outer2 --> Outer3
+Outer3 --> Outer4
+Outer4 --> Outer5
+Outer5 --> [*]
+@enduml

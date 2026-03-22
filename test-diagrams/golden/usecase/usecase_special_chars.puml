@@ -1,0 +1,7 @@
+@startuml
+actor "User-123" as U
+usecase "Process & Validate" as PV
+usecase "Save/Export Data" as SED
+U --> PV
+U --> SED
+@enduml

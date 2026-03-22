@@ -1,0 +1,10 @@
+@startuml
+Alice -> Bob : start
+loop processing
+  Bob -> DB : fetch
+  DB --> Bob : data
+  == checkpoint ==
+  Bob -> Bob : validate
+end
+Bob --> Alice : done
+@enduml

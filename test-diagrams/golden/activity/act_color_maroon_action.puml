@@ -1,0 +1,7 @@
+@startuml
+
+start
+#maroon:Colored action;
+:Normal action;
+stop
+@enduml

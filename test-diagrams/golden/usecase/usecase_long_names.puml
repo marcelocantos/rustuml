@@ -1,0 +1,9 @@
+@startuml
+actor "External Payment Provider" as EPP
+usecase "Process Credit Card Transaction" as PCCT
+usecase "Validate Payment Information and Fraud Check" as VPIFC
+usecase "Generate Transaction Receipt and Send Confirmation Email" as GTRSCE
+EPP --> PCCT
+PCCT .> VPIFC : <<include>>
+PCCT .> GTRSCE : <<include>>
+@enduml

@@ -1,0 +1,7 @@
+@startuml
+[*] --> A
+A --> B
+newpage Second Page
+B --> C
+C --> [*]
+@enduml

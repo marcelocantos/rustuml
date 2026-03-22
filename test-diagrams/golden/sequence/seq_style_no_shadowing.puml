@@ -1,0 +1,5 @@
+@startuml
+skinparam shadowing false
+Alice -> Bob : hello
+Bob --> Alice : hi
+@enduml

@@ -1,0 +1,6 @@
+@startuml
+footer Confidential - Internal Use Only
+actor User
+usecase UC1
+User --> UC1
+@enduml

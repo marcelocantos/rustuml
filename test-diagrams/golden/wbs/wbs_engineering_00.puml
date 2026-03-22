@@ -1,0 +1,20 @@
+@startwbs
+* Software Release
+** Planning
+*** Scope
+*** Timeline
+*** Resources
+** Engineering
+*** Design
+*** Code
+*** Review
+** QA
+*** Unit
+*** Integration
+*** UAT
+** Operations
+*** Deploy
+*** Monitor
+*** Rollback
+
+@endwbs

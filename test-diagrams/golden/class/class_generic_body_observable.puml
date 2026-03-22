@@ -1,0 +1,7 @@
+@startuml
+class Observable<T> {
+  -observers: List<Observer<T>>
+  +void subscribe(Observer<T> o)
+  +void emit(T value)
+}
+@enduml

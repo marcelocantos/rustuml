@@ -1,0 +1,5 @@
+@startuml
+class MyClass {
+  [[https://plantuml.com]]: field
+}
+@enduml

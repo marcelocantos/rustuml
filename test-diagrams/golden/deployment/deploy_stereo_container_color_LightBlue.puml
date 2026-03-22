@@ -1,0 +1,4 @@
+@startuml
+node MyServer #LightBlue <<container>>
+note right of MyServer : Tagged server
+@enduml

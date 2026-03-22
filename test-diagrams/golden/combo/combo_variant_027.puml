@@ -1,0 +1,10 @@
+@startuml
+title "Combo Variant 27"
+start
+:Step 1_27;
+:Step 2_27;
+:Step 3_27;
+:Step 4_27;
+:Step 5_27;
+stop
+@enduml

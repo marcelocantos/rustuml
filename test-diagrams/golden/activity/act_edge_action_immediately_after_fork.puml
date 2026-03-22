@@ -1,0 +1,11 @@
+@startuml
+
+start
+fork
+  :Parallel A;
+fork again
+  :Parallel B;
+end fork
+:After fork action;
+stop
+@enduml

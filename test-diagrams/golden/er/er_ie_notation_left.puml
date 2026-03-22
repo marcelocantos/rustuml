@@ -1,0 +1,22 @@
+@startuml
+entity Foo {
+  * id : INT <<PK>>
+}
+entity Bar {
+  * id : INT <<PK>>
+}
+entity Baz {
+  * id : INT <<PK>>
+}
+entity Qux {
+  * id : INT <<PK>>
+}
+entity Quux {
+  * id : INT <<PK>>
+}
+
+Foo }o--|| Bar : "zero-or-many to one"
+Foo }|--|| Baz : "one-or-many to one"
+Foo o|--|| Qux : "zero-or-one to one"
+Foo ||--|| Quux : "one to one"
+@enduml

@@ -1,0 +1,8 @@
+@startgit
+commit id:"A"
+branch dev
+checkout dev
+commit id:"B"
+checkout master
+cherry-pick id:"B"
+@endgit

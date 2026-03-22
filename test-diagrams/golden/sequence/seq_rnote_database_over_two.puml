@@ -1,0 +1,7 @@
+@startuml
+database A
+database B
+A -> B : hello
+rnote over A, B : rnote over two databases
+B --> A : hi
+@enduml

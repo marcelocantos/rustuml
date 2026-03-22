@@ -1,0 +1,13 @@
+@startuml
+autonumber "(##)"
+participant P0
+participant P1
+participant P2
+participant P3
+participant P4
+P0 -> P1 : msg
+P1 -> P2 : msg
+P2 -> P3 : msg
+P3 -> P4 : msg
+P4 -> P0 : msg
+@enduml

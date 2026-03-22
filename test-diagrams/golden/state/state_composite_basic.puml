@@ -1,0 +1,8 @@
+@startuml
+[*] --> Outer
+state Outer {
+  [*] --> Inner
+  Inner --> [*]
+}
+Outer --> [*]
+@enduml

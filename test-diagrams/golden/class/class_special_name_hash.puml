@@ -1,0 +1,7 @@
+@startuml
+class "Color#Red" {
+  +void method()
+}
+class Other
+"Color#Red" --> Other
+@enduml

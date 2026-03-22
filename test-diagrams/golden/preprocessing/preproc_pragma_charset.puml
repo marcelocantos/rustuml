@@ -1,0 +1,4 @@
+@startuml
+!pragma charset UTF-8
+Alice -> Bob : charset UTF-8
+@enduml

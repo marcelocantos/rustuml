@@ -1,0 +1,18 @@
+@startuml
+class Animal {
+  +String name
+  +void speak()
+}
+class Dog {
+  +void fetch()
+}
+Animal <|-- Dog
+@enduml
+
+@startuml
+component Frontend
+component Backend
+component Database
+Frontend --> Backend : REST API
+Backend --> Database : SQL
+@enduml

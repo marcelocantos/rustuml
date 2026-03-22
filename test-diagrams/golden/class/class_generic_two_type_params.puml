@@ -1,0 +1,7 @@
+@startuml
+class Foo<K, V> {
+  +T value
+  +T get()
+  +void set(T val)
+}
+@enduml

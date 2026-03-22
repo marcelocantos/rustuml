@@ -1,0 +1,8 @@
+@startuml
+Alice -> Bob ++ : a
+Alice -> Bob ++ : b (nested)
+Alice -> Bob ++ : c (triple)
+Bob --> Alice -- : c done
+Bob --> Alice -- : b done
+Bob --> Alice -- : a done
+@enduml

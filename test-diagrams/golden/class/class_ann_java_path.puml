@@ -1,0 +1,5 @@
+@startuml
+annotation Path {
+  +String value()
+}
+@enduml

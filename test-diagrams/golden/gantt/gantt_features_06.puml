@@ -1,0 +1,16 @@
+@startgantt
+Project starts 2024-01-01
+saturday are closed
+sunday are closed
+[Auth] lasts 7 days
+[Auth] is colored in Coral
+[Dashboard] lasts 10 days
+[Dashboard] is colored in LightBlue
+[Dashboard] starts at [Auth]'s end
+[Reports] lasts 13 days
+[Reports] is colored in LightGreen
+[Reports] starts at [Dashboard]'s end
+[Search] lasts 16 days
+[Search] is colored in Gold
+[Search] starts at [Reports]'s end
+@endgantt

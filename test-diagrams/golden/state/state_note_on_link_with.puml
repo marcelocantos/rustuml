@@ -1,0 +1,8 @@
+@startuml
+[*] --> A
+A --> B : with event : event
+note on link
+  This note is on the with transition
+end note
+B --> [*]
+@enduml

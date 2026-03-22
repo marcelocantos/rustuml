@@ -1,0 +1,12 @@
+@startuml
+box "System A"
+  participant A1
+  participant A2
+end box
+box "System B"
+  participant B1
+end box
+A1 -> B1 : call
+ref over A1, A2, B1 : See interaction diagram
+B1 --> A1 : result
+@enduml

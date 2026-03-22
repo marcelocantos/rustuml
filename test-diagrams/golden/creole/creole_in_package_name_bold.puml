@@ -1,0 +1,7 @@
+@startuml
+package "**bold** Package" {
+  class Inner {
+    +field: String
+  }
+}
+@enduml

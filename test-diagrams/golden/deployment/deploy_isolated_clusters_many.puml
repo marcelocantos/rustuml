@@ -1,0 +1,7 @@
+@startuml
+node Cluster1 { component C1 }
+node Cluster2 { component C2 }
+node Cluster3 { component C3 }
+node Cluster4 { component C4 }
+node Cluster5 { component C5 }
+@enduml

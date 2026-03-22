@@ -1,0 +1,12 @@
+@startuml
+
+|Lane A|
+start
+group "My Group" {
+  :Action in group;
+  |Lane B|
+  :Another in group;
+}
+|Lane A|
+stop
+@enduml

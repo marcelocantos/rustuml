@@ -1,0 +1,4 @@
+@startuml
+[Foo] - IFoo
+IFoo - [Bar]
+@enduml

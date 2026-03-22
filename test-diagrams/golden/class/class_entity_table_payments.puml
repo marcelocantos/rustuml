@@ -1,0 +1,11 @@
+@startuml
+entity payments {
+  *payment_id : INT
+  --
+  order_id : INT
+  amount : DECIMAL(10,2)
+  method : VARCHAR(30)
+  status : VARCHAR(20)
+  paid_at : TIMESTAMP
+}
+@enduml

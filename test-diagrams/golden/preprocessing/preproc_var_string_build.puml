@@ -1,0 +1,10 @@
+@startuml
+!$prefix = "API"
+!$version = "v2"
+!$endpoint = "/users"
+!$full_path = $prefix + "_" + $version + $endpoint
+
+note as N
+  path: $full_path
+end note
+@enduml

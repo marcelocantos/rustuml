@@ -1,0 +1,6 @@
+@startuml
+queue "Named Queue" as P #green
+participant Other
+P -> Other : queue green call
+Other --> P : reply
+@enduml

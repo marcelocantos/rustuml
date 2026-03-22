@@ -1,0 +1,30 @@
+@startuml
+robust "Signal0" as s0
+robust "Signal1" as s1
+robust "Signal2" as s2
+@0
+s0 is active
+s1 is idle
+s2 is active
+@50
+s0 is idle
+s1 is active
+s2 is idle
+@100
+s0 is active
+s1 is idle
+s2 is active
+@150
+s0 is idle
+s1 is active
+s2 is idle
+@200
+s0 is active
+s1 is idle
+s2 is active
+@250
+s0 is idle
+s1 is active
+s2 is idle
+
+@enduml

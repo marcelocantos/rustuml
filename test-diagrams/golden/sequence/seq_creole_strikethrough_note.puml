@@ -1,0 +1,7 @@
+@startuml
+Alice -> Bob : hello
+note over Alice
+  --strikethrough--
+end note
+Bob --> Alice : hi
+@enduml

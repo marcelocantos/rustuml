@@ -1,0 +1,9 @@
+@startuml
+cloud GroupA {
+  component A
+}
+cloud GroupB {
+  component B
+}
+A -right-> B
+@enduml

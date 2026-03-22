@@ -1,0 +1,7 @@
+@startuml
+object Car {
+  make = "Toyota"
+  model = "Camry"
+  year = 2023
+}
+@enduml

@@ -1,0 +1,18 @@
+@startuml
+start
+partition "P1" {
+fork
+  :A;
+fork again
+  :B;
+end fork
+}
+partition "P2" {
+fork
+  :A;
+fork again
+  :B;
+end fork
+}
+stop
+@enduml

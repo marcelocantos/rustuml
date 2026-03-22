@@ -1,0 +1,12 @@
+!define SHARED shared_value
+!define FIRST_ONLY first_only_value
+
+@startuml
+note : SHARED and FIRST_ONLY
+Alice -> Bob : Uses SHARED
+@enduml
+
+@startuml
+note : Only SHARED here
+Carol -> Dave : Uses SHARED
+@enduml

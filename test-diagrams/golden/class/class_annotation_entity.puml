@@ -1,0 +1,5 @@
+@startuml
+annotation Entity {
+  +String name() default ""
+}
+@enduml

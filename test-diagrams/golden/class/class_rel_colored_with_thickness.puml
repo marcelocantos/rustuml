@@ -1,0 +1,7 @@
+@startuml
+class A
+class B
+class C
+A -[#red,bold]-> B
+B -[#blue,dashed]-> C
+@enduml

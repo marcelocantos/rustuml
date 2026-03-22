@@ -1,0 +1,12 @@
+@startuml
+
+start
+while (condition?) is (yes)
+  :Do work;
+  if (done early?) then (yes)
+    break
+  endif
+  :Continue;
+endwhile (no)
+stop
+@enduml

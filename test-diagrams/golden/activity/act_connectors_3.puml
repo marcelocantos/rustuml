@@ -1,0 +1,10 @@
+@startuml
+start
+(A)
+:Step 1;
+(B)
+:Step 2;
+(C)
+:Step 3;
+stop
+@enduml

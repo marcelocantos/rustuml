@@ -1,0 +1,10 @@
+@startuml
+!$count = 1
+!while $count <= 4
+  class Entity$count {
+    +id: long
+    +name: String
+  }
+  !$count = $count + 1
+!endwhile
+@enduml

@@ -1,0 +1,8 @@
+@startuml
+skinparam packageStyle default
+package MyPkg {
+  class Foo
+  class Bar
+  Foo --> Bar
+}
+@enduml

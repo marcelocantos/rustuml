@@ -1,0 +1,6 @@
+@startuml
+[*] --> A
+A -right---> : click
+A --> B
+B --> [*]
+@enduml

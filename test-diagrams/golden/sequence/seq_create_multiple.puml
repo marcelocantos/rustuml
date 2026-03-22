@@ -1,0 +1,11 @@
+@startuml
+participant Spawner
+loop 3 times
+  create participant Worker
+  Spawner -> Worker ++ : start task
+  Worker -> Worker : process
+  Worker --> Spawner -- : task done
+  destroy Worker
+end
+Spawner -> Spawner : all done
+@enduml

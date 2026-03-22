@@ -1,0 +1,19 @@
+@startuml
+|L1|
+start
+:Action 1;
+:Action 2;
+|L2|
+:Action 1;
+:Action 2;
+|L3|
+:Action 1;
+:Action 2;
+|L4|
+:Action 1;
+:Action 2;
+|L5|
+:Action 1;
+:Action 2;
+stop
+@enduml

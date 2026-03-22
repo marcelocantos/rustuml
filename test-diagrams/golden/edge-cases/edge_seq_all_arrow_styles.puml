@@ -1,0 +1,11 @@
+@startuml
+participant A
+participant B
+A -> B: sync
+A ->> B: async
+A --> B: dashed
+A -->> B: dashed async
+A <-> B: bidirectional
+A <- B: reverse
+A <<->> B: reverse async bidirectional
+@enduml

@@ -1,0 +1,6 @@
+@startuml
+participant "مستخدم" as U
+participant "نظام" as S
+U -> S: اختبار
+S --> U: بيانات
+@enduml

@@ -1,0 +1,7 @@
+@startuml
+class ExtraClass8 {
+  field8: String
+  +method8(): int
+}
+note right of ExtraClass8: variant 8
+@enduml

@@ -1,0 +1,7 @@
+@startuml
+
+start
+#khaki:Colored action;
+:Normal action;
+stop
+@enduml

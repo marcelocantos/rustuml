@@ -1,0 +1,65 @@
+@startuml
+skinparam linetype ortho
+
+entity Department {
+  * id : INT <<PK>>
+  --
+  name : VARCHAR(100)
+  cost_center : VARCHAR(20)
+  manager_id : INT <<FK>>
+}
+entity Employee {
+  * id : INT <<PK>>
+  * dept_id : INT <<FK>>
+  --
+  name : VARCHAR(100)
+  title : VARCHAR(100)
+  hire_date : DATE
+  salary : DECIMAL(12,2)
+  manager_id : INT <<FK>>
+}
+entity JobHistory {
+  * employee_id : INT <<FK>>
+  * start_date : DATE
+  --
+  end_date : DATE
+  job_title : VARCHAR(100)
+  dept_id : INT <<FK>>
+  salary : DECIMAL(12,2)
+}
+entity Skill {
+  * id : INT <<PK>>
+  --
+  name : VARCHAR(100)
+  category : VARCHAR(50)
+}
+entity EmployeeSkill {
+  * employee_id : INT <<FK>>
+  * skill_id : INT <<FK>>
+  --
+  proficiency : INT
+  certified : BOOLEAN
+  cert_date : DATE
+}
+entity Benefit {
+  * id : INT <<PK>>
+  --
+  name : VARCHAR(100)
+  type : VARCHAR(50)
+  annual_cost : DECIMAL(10,2)
+}
+entity EmployeeBenefit {
+  * employee_id : INT <<FK>>
+  * benefit_id : INT <<FK>>
+  --
+  enrolled_at : DATE
+}
+Department ||--o{ Employee : "employs"
+Employee ||--o{ Employee : "manages"
+Department ||--o{ Department : "sub-dept"
+Employee ||--o{ JobHistory : "has"
+Employee ||--o{ EmployeeSkill : "has"
+Skill ||--o{ EmployeeSkill : "used by"
+Employee ||--o{ EmployeeBenefit : "enrolled in"
+Benefit ||--o{ EmployeeBenefit : "includes"
+@enduml

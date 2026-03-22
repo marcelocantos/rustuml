@@ -1,0 +1,12 @@
+@startuml
+participant Src
+participant Tgt
+Src -> Tgt : start
+alt condition
+  Src -> Tgt : action
+  Tgt --> Src : ok
+else other
+  Tgt --> Src : fail
+end
+Tgt --> Src : done
+@enduml

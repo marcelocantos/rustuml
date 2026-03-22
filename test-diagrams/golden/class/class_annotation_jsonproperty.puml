@@ -1,0 +1,5 @@
+@startuml
+annotation JsonProperty {
+  +String value() default ""
+}
+@enduml

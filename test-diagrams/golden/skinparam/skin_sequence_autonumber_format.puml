@@ -1,0 +1,5 @@
+@startuml
+autonumber "<b>[000]"
+Alice -> Bob : hello
+Bob --> Alice : world
+@enduml

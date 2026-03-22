@@ -1,0 +1,7 @@
+@startuml
+class "my-class" {
+  field: String
+}
+class "another-class"
+"my-class" --> "another-class"
+@enduml

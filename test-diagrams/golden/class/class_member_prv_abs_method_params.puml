@@ -1,0 +1,5 @@
+@startuml
+class MemberClass {
+  {abstract} -void process(int x, String y)
+}
+@enduml

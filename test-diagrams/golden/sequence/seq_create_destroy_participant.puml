@@ -1,0 +1,9 @@
+@startuml
+participant Alice
+create participant NewObj
+Alice -> NewObj : initialize
+NewObj --> Alice : ready
+Alice -> NewObj : use
+NewObj --> Alice : result
+destroy NewObj
+@enduml

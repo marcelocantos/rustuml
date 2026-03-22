@@ -1,0 +1,5 @@
+@startuml
+start
+#red:colored semi;
+stop
+@enduml

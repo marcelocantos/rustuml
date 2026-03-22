@@ -1,0 +1,6 @@
+@startuml
+skinparam roundCorner 15
+[*] --> A
+A --> B
+B --> [*]
+@enduml

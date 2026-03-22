@@ -1,0 +1,9 @@
+@startwbs
+*[#lightblue] Root 8
+** Child 1
+** Child 2
+** Child 3
+** Child 4
+** Child 5
+
+@endwbs

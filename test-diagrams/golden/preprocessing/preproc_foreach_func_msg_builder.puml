@@ -1,0 +1,14 @@
+@startuml
+!function $req($src, $dst)
+  !return $src + " calls " + $dst
+!endfunction
+
+!foreach $svc in ["Auth", "Order", "Pay"]
+  participant $svc
+!endforeach
+
+Auth -> Order : $req("Auth", "Order")
+Order -> Pay : $req("Order", "Pay")
+Pay --> Order : $req("Pay", "Order") + " response"
+Order --> Auth : $req("Order", "Auth") + " response"
+@enduml

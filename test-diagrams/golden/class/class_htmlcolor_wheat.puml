@@ -1,0 +1,5 @@
+@startuml
+class ColorTest #Wheat {
+  +void method()
+}
+@enduml

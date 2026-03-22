@@ -1,0 +1,6 @@
+@startuml
+Alice -> Bob : request
+activate Bob #green
+Bob --> Alice : response
+deactivate Bob
+@enduml

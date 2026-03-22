@@ -1,0 +1,9 @@
+@startuml
+top to bottom direction
+class A
+class B
+class C
+A --> B
+B --> C
+
+@enduml

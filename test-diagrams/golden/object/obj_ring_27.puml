@@ -1,0 +1,12 @@
+@startuml
+object Obj0_27 { val = 270 }
+object Obj1_27 { val = 271 }
+object Obj2_27 { val = 272 }
+object Obj3_27 { val = 273 }
+object Obj4_27 { val = 274 }
+Obj0_27 --> Obj1_27
+Obj1_27 --> Obj2_27
+Obj2_27 --> Obj3_27
+Obj3_27 --> Obj4_27
+Obj4_27 --> Obj0_27
+@enduml

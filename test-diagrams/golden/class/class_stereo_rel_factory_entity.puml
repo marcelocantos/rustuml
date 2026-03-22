@@ -1,0 +1,9 @@
+@startuml
+class ClassA <<factory>> {
+  +void methodA()
+}
+class ClassB <<entity>> {
+  +void methodB()
+}
+ClassA ..> ClassB
+@enduml

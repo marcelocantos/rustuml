@@ -1,0 +1,6 @@
+@startuml
+object Obj0_24 { val = 240 }
+object Obj1_24 { val = 241 }
+Obj0_24 --> Obj1_24
+Obj1_24 --> Obj0_24
+@enduml

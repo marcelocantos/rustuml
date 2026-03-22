@@ -1,0 +1,9 @@
+@startuml
+!procedure $note_info($msg)
+  note as N_info
+    <back:LightBlue>**INFO**: $msg</back>
+  end note
+!endprocedure
+
+$note_info("This is a info message")
+@enduml

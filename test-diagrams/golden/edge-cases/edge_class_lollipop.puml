@@ -1,0 +1,5 @@
+@startuml
+class Foo
+Foo -() Interface1
+Foo -() Interface2
+@enduml

@@ -1,0 +1,10 @@
+@startwbs
+skinparam wbsBorderColor darkred
+skinparam wbsBackgroundColor lightyellow
+* Work Breakdown
+** Task Group A
+*** Task A1
+*** Task A2
+** Task Group B
+*** Task B1
+@endwbs

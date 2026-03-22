@@ -1,0 +1,19 @@
+@startuml
+
+|UI|
+start
+:User clicks;
+|Controller|
+:Handle event;
+|Service|
+:Business logic;
+|Database|
+:Persist data;
+|Service|
+:Return result;
+|Controller|
+:Format response;
+|UI|
+:Update display;
+stop
+@enduml

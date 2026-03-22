@@ -1,0 +1,6 @@
+@startuml
+skinparam SequenceDividerBorderColor navy
+Alice -> Bob : before
+== Divider ==
+Bob --> Alice : after
+@enduml

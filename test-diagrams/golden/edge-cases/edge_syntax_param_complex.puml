@@ -1,0 +1,7 @@
+@startuml
+class Foo {
+  process(items: List<String>): void
+  transform(input: Map<K,V>): Map<V,K>
+  merge(a: Collection<T>, b: Collection<T>): List<T>
+}
+@enduml

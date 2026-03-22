@@ -1,0 +1,10 @@
+@startuml
+object Obj0_26 { val = 260 }
+object Obj1_26 { val = 261 }
+object Obj2_26 { val = 262 }
+object Obj3_26 { val = 263 }
+Obj0_26 --> Obj1_26
+Obj1_26 --> Obj2_26
+Obj2_26 --> Obj3_26
+Obj3_26 --> Obj0_26
+@enduml

@@ -1,0 +1,7 @@
+@startuml
+node n1 as "Primary Web Server"
+node n2 as "Secondary Web Server"
+node n3 as "Load Balancer"
+n3 --> n1
+n3 --> n2
+@enduml

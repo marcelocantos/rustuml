@@ -1,0 +1,50 @@
+@startuml
+
+title CI/CD Pipeline
+
+|Developer|
+start
+:Push code;
+
+|CI System|
+fork
+  :Run unit tests;
+fork again
+  :Run linter;
+fork again
+  :Build artifacts;
+end fork
+
+if (all checks pass?) then (yes)
+  |CD System|
+  :Deploy to staging;
+  :Run integration tests;
+  if (staging ok?) then (yes)
+    if (manual approval?) then (yes)
+      :Deploy to production;
+      :Run smoke tests;
+      if (smoke ok?) then (yes)
+        :Notify success;
+        |Developer|
+        stop
+      else (no)
+        :Rollback;
+        |Developer|
+        :Notify rollback;
+        stop
+      endif
+    else (no)
+      :Queue for later;
+      stop
+    endif
+  else (no)
+    :Notify staging failure;
+    |Developer|
+    stop
+  endif
+else (no)
+  :Notify failure;
+  |Developer|
+  stop
+endif
+@enduml

@@ -1,0 +1,11 @@
+@startuml
+start
+:action;
+:fork_action|
+:receive_action<
+:send_action>
+:input_action/
+:output_action\
+:flow_final_action]
+stop
+@enduml

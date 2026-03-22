@@ -1,0 +1,11 @@
+@startuml
+
+left to right direction
+|Lane A|
+start
+:A1;
+|Lane B|
+:B1;
+|Lane A|
+stop
+@enduml

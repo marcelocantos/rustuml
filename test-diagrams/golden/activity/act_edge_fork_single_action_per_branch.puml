@@ -1,0 +1,18 @@
+@startuml
+
+start
+fork
+  :A;
+fork again
+  :B;
+fork again
+  :C;
+fork again
+  :D;
+fork again
+  :E;
+fork again
+  :F;
+end fork
+stop
+@enduml

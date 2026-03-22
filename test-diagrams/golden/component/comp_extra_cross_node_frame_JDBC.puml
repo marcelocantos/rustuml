@@ -1,0 +1,9 @@
+@startuml
+node Group1 {
+  component A
+}
+frame Group2 {
+  component B
+}
+A --> B : JDBC
+@enduml

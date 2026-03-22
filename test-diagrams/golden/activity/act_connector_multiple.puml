@@ -1,0 +1,10 @@
+@startuml
+
+start
+:Start action;
+(1)
+:Middle action;
+(2)
+:End action;
+stop
+@enduml

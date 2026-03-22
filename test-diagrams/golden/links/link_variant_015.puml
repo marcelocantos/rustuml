@@ -1,0 +1,10 @@
+@startuml
+class Resource15 [[https://example.com/resource/15{Resource 15 documentation}]] {
+  * id : int
+  + getName() : String
+  + setName(n : String) : void
+}
+note right of Resource15
+  [[https://example.com/resource/15 Click here]] for more info
+end note
+@enduml

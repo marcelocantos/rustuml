@@ -1,0 +1,26 @@
+@startuml
+
+start
+if (L1?) then (yes)
+  if (L2?) then (yes)
+    if (L3?) then (yes)
+      if (L4?) then (yes)
+        if (L5?) then (yes)
+          :All 5 levels true;
+        else (no)
+          :L1-L4 true, L5 false;
+        endif
+      else (no)
+        :L1-L3 true, L4 false;
+      endif
+    else (no)
+      :L1-L2 true, L3 false;
+    endif
+  else (no)
+    :L1 true, L2 false;
+  endif
+else (no)
+  :All false;
+endif
+stop
+@enduml

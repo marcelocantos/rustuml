@@ -1,0 +1,8 @@
+@startuml
+class Top
+class Middle
+class Bottom
+Top -[hidden]-> Middle
+Middle -[hidden]-> Bottom
+Top --> Bottom
+@enduml

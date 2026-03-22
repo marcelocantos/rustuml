@@ -1,0 +1,7 @@
+@startuml
+!theme sunlust
+[*] --> Idle
+Idle --> Active : start
+Active --> Done : finish
+Done --> [*]
+@enduml

@@ -1,0 +1,33 @@
+@startuml
+box "Layer 1" #lightblue
+  participant L0A
+  participant L0B
+end box
+box "Layer 2" #lightyellow
+  participant L1A
+  participant L1B
+end box
+box "Layer 3" #lightgreen
+  participant L2A
+  participant L2B
+end box
+box "Layer 4" #FFE4E1
+  participant L3A
+  participant L3B
+end box
+box "Layer 5" #F0E68C
+  participant L4A
+  participant L4B
+end box
+
+L0A -> L0B : internal
+L0B -> L1A : to layer 1
+L1A -> L2A : to layer 2
+L2A -> L3A : to layer 3
+L3A -> L4A : to layer 4
+L4A --> L3A : back
+L3A --> L2A : back
+L2A --> L1A : back
+L1A --> L0B : back
+L0B --> L0A : done
+@enduml

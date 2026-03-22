@@ -1,0 +1,12 @@
+@startuml
+node AppServer {
+  component WebApp
+  component Cache
+}
+node DBServer {
+  component Database
+}
+WebApp --> Cache : reads
+WebApp --> Database : persists
+
+@enduml

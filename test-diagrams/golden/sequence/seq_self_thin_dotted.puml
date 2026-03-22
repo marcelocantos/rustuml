@@ -1,0 +1,3 @@
+@startuml
+Alice -->> Alice : self thin_dotted
+@enduml

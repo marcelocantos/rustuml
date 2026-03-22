@@ -1,0 +1,9 @@
+@startuml
+participant Alice
+participant Bob
+Alice -> Bob : msg
+loop condition
+  note left of Alice : in loop
+  Bob --> Alice : done
+end
+@enduml

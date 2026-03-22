@@ -1,0 +1,5 @@
+@startuml
+Alice -> Bob : **bold message**
+Bob --> Alice : **bold reply**
+note right : **bold note**
+@enduml

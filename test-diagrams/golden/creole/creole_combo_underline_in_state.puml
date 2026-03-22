@@ -1,0 +1,5 @@
+@startuml
+state "__underline__ State" as S795
+[*] --> S795
+S795 : __underline__ description
+@enduml

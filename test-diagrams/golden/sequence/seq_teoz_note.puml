@@ -1,0 +1,9 @@
+@startuml
+!pragma teoz true
+Alice -> Bob ++ : request
+note over Alice : teoz + note
+Bob -> Charlie ++ : delegate
+note over Bob, Charlie : over two
+Charlie --> Bob -- : done
+Bob --> Alice -- : result
+@enduml

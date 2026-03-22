@@ -1,0 +1,6 @@
+@startuml
+Alice -> Bob :
+Bob --> Alice :
+Alice -> Charlie :
+Charlie --> Alice
+@enduml

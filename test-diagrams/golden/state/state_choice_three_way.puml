@@ -1,0 +1,12 @@
+@startuml
+state choice1 <<choice>>
+
+[*] --> A
+A --> choice1
+choice1 --> B : [low]
+choice1 --> C : [medium]
+choice1 --> D : [high]
+B --> [*]
+C --> [*]
+D --> [*]
+@enduml

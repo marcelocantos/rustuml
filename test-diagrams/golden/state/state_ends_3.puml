@@ -1,0 +1,12 @@
+@startuml
+state end0 <<end>>
+state end1 <<end>>
+state end2 <<end>>
+[*] --> Start
+Start --> Middle
+Middle --> end0 : terminate0
+Middle --> end1 : terminate1
+Middle --> end2 : terminate2
+Middle --> Done : complete
+Done --> [*]
+@enduml

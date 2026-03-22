@@ -1,0 +1,7 @@
+@startuml
+node Node1 <<device>>
+node Node2 <<device>>
+node Node3 <<device>>
+Node1 --> Node2
+Node2 --> Node3
+@enduml

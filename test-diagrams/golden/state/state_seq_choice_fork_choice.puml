@@ -1,0 +1,21 @@
+@startuml
+state c1 <<choice>>
+state f <<fork>>
+state c2 <<choice>>
+state j <<join>>
+
+[*] --> Start
+Start --> c1
+c1 --> f : [do parallel]
+c1 --> Serial : [do serial]
+f --> P1
+f --> P2
+P1 --> c2
+P2 --> c2
+c2 --> j : [merge]
+c2 --> Error : [error]
+j --> Done
+Serial --> Done
+Done --> [*]
+Error --> [*]
+@enduml

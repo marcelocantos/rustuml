@@ -1,0 +1,12 @@
+@startuml
+
+start
+:Prepare;
+if (data loaded?) then (data loaded)
+  :Handle data loaded;
+else (data missing)
+  :Handle data missing;
+endif
+:Continue;
+stop
+@enduml

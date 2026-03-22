@@ -1,0 +1,7 @@
+@startuml
+start
+:prev action;
+:this action>
+:next action;
+stop
+@enduml

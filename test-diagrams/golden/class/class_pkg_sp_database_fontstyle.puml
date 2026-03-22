@@ -1,0 +1,10 @@
+@startuml
+skinparam DatabaseFontStyle bold
+database myPkg {
+  class A {
+    +void method()
+  }
+  class B
+  A --> B
+}
+@enduml

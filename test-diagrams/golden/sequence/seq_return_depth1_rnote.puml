@@ -1,0 +1,5 @@
+@startuml
+P0 -> P1 ++ : call 1
+rnote over P0 : before return 1
+return result 1
+@enduml

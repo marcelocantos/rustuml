@@ -1,0 +1,11 @@
+@startuml
+state c <<choice>>
+[*] --> Start
+Start --> c
+c --> End0 : [path0]
+c --> End1 : [path1]
+c --> End2 : [path2]
+End0 --> [*]
+End1 --> [*]
+End2 --> [*]
+@enduml

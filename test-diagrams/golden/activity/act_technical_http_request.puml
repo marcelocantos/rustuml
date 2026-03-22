@@ -1,0 +1,32 @@
+@startuml
+
+title HTTP Request Lifecycle
+start
+:Client sends request;
+:DNS lookup;
+if (DNS cached?) then (yes)
+  :Use cached IP;
+else (no)
+  :Query DNS server;
+  :Cache IP;
+endif
+:TCP handshake;
+if (HTTPS?) then (yes)
+  :TLS negotiation;
+  if (cert valid?) then (yes)
+  else (no)
+    :Certificate error;
+    stop
+  endif
+endif
+:Send HTTP request;
+:Server processes request;
+:Server sends response;
+if (redirect?) then (yes)
+  :Follow redirect;
+else (no)
+  :Parse response;
+endif
+:Render content;
+stop
+@enduml

@@ -1,0 +1,4 @@
+@startuml
+Alice -> Bob : **""bold mono""**
+note right : **""bold mono""**
+@enduml

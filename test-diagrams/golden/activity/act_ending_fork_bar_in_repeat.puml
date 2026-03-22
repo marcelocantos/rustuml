@@ -1,0 +1,7 @@
+@startuml
+start
+repeat
+  :action fork_bar|
+repeatwhile (more?) is (yes)
+stop
+@enduml

@@ -1,0 +1,24 @@
+@startuml
+cloud "Internet" {
+  component Client
+}
+rectangle "DMZ" {
+  component "Load Balancer" as LB
+  component "API Gateway" as GW
+}
+node "Service Mesh" {
+  component "Order Service" as OS
+  component "Payment Service" as PS
+  component "Shipping Service" as SS
+  component "Notification Service" as NS
+}
+database "Event Bus" as EB
+Client --> LB
+LB --> GW
+GW --> OS
+GW --> PS
+OS --> EB : publishes
+EB --> SS : subscribes
+EB --> NS : subscribes
+PS --> EB : publishes
+@enduml

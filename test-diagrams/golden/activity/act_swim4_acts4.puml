@@ -1,0 +1,24 @@
+@startuml
+|Lane1|
+start
+:L1 action 1;
+:L1 action 2;
+:L1 action 3;
+:L1 action 4;
+|Lane2|
+:L2 action 1;
+:L2 action 2;
+:L2 action 3;
+:L2 action 4;
+|Lane3|
+:L3 action 1;
+:L3 action 2;
+:L3 action 3;
+:L3 action 4;
+|Lane4|
+:L4 action 1;
+:L4 action 2;
+:L4 action 3;
+:L4 action 4;
+stop
+@enduml

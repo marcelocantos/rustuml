@@ -1,0 +1,9 @@
+@startuml
+
+start
+:Action;
+note left
+  This is a note on the left
+end note
+stop
+@enduml

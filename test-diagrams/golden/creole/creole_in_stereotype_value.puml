@@ -1,0 +1,6 @@
+@startuml
+class "**ValueClass** <<value object>>" as C {
+  +**boldField**: String
+  +//italicMethod//(): void
+}
+@enduml

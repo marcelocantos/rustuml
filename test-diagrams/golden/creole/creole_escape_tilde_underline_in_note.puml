@@ -1,0 +1,5 @@
+@startuml
+note as N
+  ~__not underline~__
+end note
+@enduml

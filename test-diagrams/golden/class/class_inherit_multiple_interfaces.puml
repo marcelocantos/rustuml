@@ -1,0 +1,17 @@
+@startuml
+interface Flyable {
+  +void fly()
+}
+interface Swimmable {
+  +void swim()
+}
+interface Runnable {
+  +void run()
+}
+class Duck {
+  +void quack()
+}
+Duck ..|> Flyable
+Duck ..|> Swimmable
+Duck ..|> Runnable
+@enduml

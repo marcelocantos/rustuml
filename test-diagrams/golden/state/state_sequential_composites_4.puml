@@ -1,0 +1,23 @@
+@startuml
+[*] --> C1
+state C1 {
+  [*] --> CS1
+  CS1 --> [*]
+}
+state C2 {
+  [*] --> CS2
+  CS2 --> [*]
+}
+state C3 {
+  [*] --> CS3
+  CS3 --> [*]
+}
+state C4 {
+  [*] --> CS4
+  CS4 --> [*]
+}
+C1 --> C2
+C2 --> C3
+C3 --> C4
+C4 --> [*]
+@enduml

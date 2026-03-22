@@ -1,0 +1,7 @@
+@startuml
+participant Bob
+participant Alice
+participant Charlie
+Alice -> Bob: msg
+Bob -> Charlie: forward
+@enduml

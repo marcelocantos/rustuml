@@ -1,0 +1,11 @@
+@startuml
+class A {
+  +void method()
+}
+class B {
+  +void method()
+}
+note left of A : Note on A
+A --> B
+note right of B : Note on B
+@enduml

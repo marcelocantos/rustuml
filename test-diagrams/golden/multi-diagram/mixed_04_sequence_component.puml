@@ -1,0 +1,12 @@
+@startuml
+Alice -> Bob : Hello
+Bob --> Alice : Hi there
+@enduml
+
+@startuml
+component Frontend
+component Backend
+component Database
+Frontend --> Backend : REST API
+Backend --> Database : SQL
+@enduml

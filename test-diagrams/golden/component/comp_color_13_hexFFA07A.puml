@@ -1,0 +1,5 @@
+@startuml
+component Foo #FFA07A
+component Bar #FFA07A
+Foo --> Bar
+@enduml

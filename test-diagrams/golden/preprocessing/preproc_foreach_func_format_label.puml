@@ -1,0 +1,12 @@
+@startuml
+!function $label($name)
+  !return "[" + $name + "]"
+!endfunction
+
+participant Client
+participant Server
+
+!foreach $msg in ["login", "fetch", "logout"]
+  Client -> Server : $label($msg)
+!endforeach
+@enduml

@@ -1,0 +1,6 @@
+@startuml
+participant "Дейв" as Dave_RU
+participant Bob
+Dave_RU -> Bob : hello
+Bob --> Dave_RU : hi
+@enduml

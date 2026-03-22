@@ -1,0 +1,7 @@
+@startuml
+
+(*) --> "Action 1"
+note right: Note on action 1
+"Action 1" --> "Action 2"
+"Action 2" --> (*)
+@enduml

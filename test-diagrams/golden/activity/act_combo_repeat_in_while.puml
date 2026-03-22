@@ -1,0 +1,11 @@
+@startuml
+
+start
+while (outer?) is (yes)
+  repeat
+    :Inner;
+  repeatwhile (inner?) is (yes)
+  :After repeat;
+endwhile
+stop
+@enduml

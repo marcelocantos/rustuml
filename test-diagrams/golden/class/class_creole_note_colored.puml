@@ -1,0 +1,6 @@
+@startuml
+class MyClass
+note right of MyClass
+  <color:red>colored</color>
+end note
+@enduml

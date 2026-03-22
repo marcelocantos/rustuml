@@ -1,0 +1,9 @@
+@startuml
+node ProductionServer
+note right of ProductionServer
+  OS: Ubuntu 22.04
+  CPU: 32 cores
+  RAM: 128 GB
+  Storage: 2 TB SSD
+end note
+@enduml

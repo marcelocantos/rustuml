@@ -1,0 +1,8 @@
+@startuml
+class Outer {
+  +void outerMethod()
+  class Inner {
+    +void innerMethod()
+  }
+}
+@enduml

@@ -1,0 +1,6 @@
+@startuml
+control "Named Control" as P #blue
+participant Other
+P -> Other : control blue call
+Other --> P : reply
+@enduml

@@ -1,0 +1,6 @@
+@startuml
+interface Drawable {
+  +void draw()
+  +void resize(double factor)
+}
+@enduml

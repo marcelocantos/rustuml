@@ -1,0 +1,7 @@
+@startuml
+note as N1
+  <color:red>Red text</color>
+  <color:#0000FF>Blue hex text</color>
+  <back:yellow>Yellow background</back>
+end note
+@enduml

@@ -1,0 +1,8 @@
+@startuml
+participant A
+!if %not(%false())
+  note over A : false negated to true
+!else
+  note over A : unexpected
+!endif
+@enduml

@@ -1,0 +1,14 @@
+@startuml
+participant Alice
+Alice -> Alice : start
+alt need helper
+  create Bob
+  Alice -> Bob : init
+  Bob --> Alice : ready
+  Alice -> Bob : do work
+  Bob --> Alice : done
+  destroy Bob
+else no helper
+  Alice -> Alice : do it myself
+end
+@enduml

@@ -1,0 +1,5 @@
+@startuml
+entity E1
+queue Q2
+E1 -> Q2: message
+@enduml

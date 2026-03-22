@@ -1,0 +1,13 @@
+@startuml
+@startyaml
+user:
+  name: Alice
+  address:
+    city: NYC
+    country: US
+items:
+  - 1
+  - 2
+  - 3
+@endyaml
+@enduml

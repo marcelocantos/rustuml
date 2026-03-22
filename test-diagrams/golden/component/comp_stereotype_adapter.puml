@@ -1,0 +1,5 @@
+@startuml
+component Foo <<adapter>>
+component Bar <<adapter>>
+Foo --> Bar
+@enduml

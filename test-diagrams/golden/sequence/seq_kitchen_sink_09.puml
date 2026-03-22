@@ -1,0 +1,47 @@
+@startuml
+!pragma teoz true
+
+box "Mobile" #FFF3E0
+  actor "User" as U
+  participant "App" as App
+end box
+
+box "Cloud" #E8EAF6
+  boundary "CDN" as CDN
+  control "API" as API
+  control "Worker" as W
+  database "DB" as DB
+  queue "Queue" as Q
+end box
+
+autonumber 100 5
+hide footbox
+
+U -> App ++ : open app
+App -> CDN ++ : GET /static
+CDN --> App -- : assets
+
+App -> API ++ : GET /feed
+
+par loading
+  API -> DB ++ : fetch posts
+  DB --> API -- : 10 posts
+and background sync
+  API -> Q : enqueue analytics
+  Q -> W ++ : process
+  W -> DB ++ : update stats
+  DB --> W -- : done
+  W --> Q -- : complete
+end
+
+API --> App -- : feed data
+App --> U -- : display feed
+
+loop auto-refresh every 30s
+  App -> API ++ : GET /feed?since=last
+  API -> DB ++ : incremental fetch
+  DB --> API -- : new posts
+  API --> App -- : updates
+  App -> U : push notifications
+end
+@enduml

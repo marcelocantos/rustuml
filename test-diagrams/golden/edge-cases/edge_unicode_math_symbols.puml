@@ -1,0 +1,8 @@
+@startuml
+class Σ_Calculator {
+  compute_∫(): float
+  calc_√(x: float): float
+  PI: float = π
+  INFINITY: float = ∞
+}
+@enduml

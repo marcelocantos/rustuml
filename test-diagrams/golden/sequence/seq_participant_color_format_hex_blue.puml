@@ -1,0 +1,6 @@
+@startuml
+participant Alice #0000FF
+participant Bob
+Alice -> Bob : hello
+Bob --> Alice : hi
+@enduml

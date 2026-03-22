@@ -1,0 +1,27 @@
+@startuml
+interface Subject {
+  +void attach(Observer o)
+  +void detach(Observer o)
+  +void notify()
+}
+interface Observer {
+  +void update()
+}
+class ConcreteSubject {
+  -state: String
+  +void attach(Observer o)
+  +void detach(Observer o)
+  +void notify()
+  +String getState()
+}
+class ConcreteObserverA {
+  +void update()
+}
+class ConcreteObserverB {
+  +void update()
+}
+ConcreteSubject ..|> Subject
+ConcreteObserverA ..|> Observer
+ConcreteObserverB ..|> Observer
+Subject o-- Observer
+@enduml

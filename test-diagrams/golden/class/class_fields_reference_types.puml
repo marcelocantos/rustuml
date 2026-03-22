@@ -1,0 +1,11 @@
+@startuml
+class ReferenceTypes {
+  +String str
+  +Object obj
+  +Integer integer
+  +List<String> list
+  +Map<String, Object> map
+  +Set<Integer> set
+  +Optional<String> optional
+}
+@enduml

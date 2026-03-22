@@ -1,0 +1,6 @@
+@startuml
+class Service [[https://docs.example.com/service{API Documentation}]] {
+  + process()
+  + validate()
+}
+@enduml

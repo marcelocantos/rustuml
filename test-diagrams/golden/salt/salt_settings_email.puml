@@ -1,0 +1,10 @@
+@startsalt
+{^Email Settings
+  SMTP Host: | "               "
+  SMTP Port: | "               "
+  IMAP Host: | "               "
+  Username: | "               "
+  ..
+  [Save] | [Reset] | [Cancel]
+}
+@endsalt

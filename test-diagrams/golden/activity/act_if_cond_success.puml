@@ -1,0 +1,12 @@
+@startuml
+
+start
+:Prepare;
+if (success?) then (success)
+  :Handle success;
+else (failure)
+  :Handle failure;
+endif
+:Continue;
+stop
+@enduml

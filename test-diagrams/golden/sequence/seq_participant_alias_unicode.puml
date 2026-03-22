@@ -1,0 +1,6 @@
+@startuml
+participant "Ünïcödé Nàmé" as U
+participant "日本語" as J
+U -> J : こんにちは
+J --> U : hello
+@enduml

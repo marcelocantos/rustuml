@@ -1,0 +1,3 @@
+@startregex
+(?i)hello
+@endregex

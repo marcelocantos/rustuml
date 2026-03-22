@@ -1,0 +1,7 @@
+@startuml
+folder MyContainer {
+  component Foo
+  component Bar
+  Foo --> Bar
+}
+@enduml

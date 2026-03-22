@@ -1,0 +1,5 @@
+@startuml
+component """mono"" comp" as C155
+interface """mono"" iface" as I155
+C155 -- I155
+@enduml

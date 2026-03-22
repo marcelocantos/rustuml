@@ -1,0 +1,7 @@
+@startuml
+node "Very Long Application Server Name" as VLASN
+node "Another Extremely Long Database Server" as AELDS
+artifact "super-long-artifact-name-v1.2.3-release.tar.gz" as SLA
+VLASN --> AELDS : JDBC
+SLA --> VLASN : deployed
+@enduml

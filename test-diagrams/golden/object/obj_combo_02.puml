@@ -1,0 +1,13 @@
+@startuml
+object Obj2A <<control>> #green {
+  id = 2
+  name = "obj2a"
+  active = true
+}
+object Obj2B #yellow {
+  ref = 2
+  label = "obj2b"
+}
+Obj2A --> Obj2B : "ref_2"
+note right of Obj2A : Object variant 2
+@enduml

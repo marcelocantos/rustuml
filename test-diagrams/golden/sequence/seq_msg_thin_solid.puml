@@ -1,0 +1,4 @@
+@startuml
+Alice ->> Bob : thin_solid message
+Bob ->> Alice : return thin_solid
+@enduml

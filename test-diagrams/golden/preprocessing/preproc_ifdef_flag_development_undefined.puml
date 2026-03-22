@@ -1,0 +1,13 @@
+@startuml
+!ifdef DEVELOPMENT
+skinparam noteBackgroundColor LightGreen
+note as N
+  DEVELOPMENT mode active
+end note
+!else
+note as N
+  DEVELOPMENT mode inactive (not defined)
+end note
+!endif
+Alice -> Bob : development undefined test
+@enduml

@@ -1,0 +1,4 @@
+@startuml
+Alice -> Alice : before
+Alice ->x Alice : self ->x
+@enduml

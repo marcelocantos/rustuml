@@ -1,0 +1,11 @@
+@startgit
+commit id:"main-1"
+commit id:"main-2"
+branch short-feature
+checkout short-feature
+commit id:"feat"
+checkout master
+merge short-feature
+commit id:"main-3"
+commit id:"main-4" tag:"v2.0"
+@endgit

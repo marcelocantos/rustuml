@@ -1,0 +1,8 @@
+@startuml
+object Obj0_1 { val = 10 }
+object Obj1_1 { val = 11 }
+object Obj2_1 { val = 12 }
+Obj0_1 --> Obj1_1
+Obj1_1 --> Obj2_1
+Obj2_1 --> Obj0_1
+@enduml

@@ -1,0 +1,5 @@
+@startuml
+node Server
+note "Primary server" as N1
+N1 .. Server
+@enduml

@@ -1,0 +1,5 @@
+@startuml
+component Foo <<controller>>
+component Bar <<controller>>
+Foo --> Bar
+@enduml

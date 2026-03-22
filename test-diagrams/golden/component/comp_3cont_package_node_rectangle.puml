@@ -1,0 +1,13 @@
+@startuml
+package G1 {
+  component AA
+}
+node G2 {
+  component BB
+}
+rectangle G3 {
+  component CC
+}
+AA --> BB
+BB --> CC
+@enduml

@@ -1,0 +1,15 @@
+@startuml
+actor User
+usecase Base1
+usecase Base2
+usecase Base3
+usecase Sub1
+usecase Sub2
+usecase Sub3
+Sub1 .> Base2 : <<include>>
+Sub2 .> Base3 : <<include>>
+Sub3 .> Base1 : <<include>>
+User --> Base1
+User --> Base2
+User --> Base3
+@enduml

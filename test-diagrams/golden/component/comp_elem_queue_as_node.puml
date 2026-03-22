@@ -1,0 +1,5 @@
+@startuml
+queue Source
+component Target
+Source --> Target
+@enduml

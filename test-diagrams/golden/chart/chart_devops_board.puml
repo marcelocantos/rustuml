@@ -1,0 +1,18 @@
+@startboard
+DevOps Pipeline
+
++Code+
+* Feature branch
+
++Build+
+* CI compiling
+
++Test+
+* Unit tests passing
+
++Stage+
+* Staging deploy
+
++Prod+
+* v1.2 live
+@endboard

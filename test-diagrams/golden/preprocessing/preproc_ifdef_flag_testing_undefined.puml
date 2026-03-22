@@ -1,0 +1,13 @@
+@startuml
+!ifdef TESTING
+skinparam noteBackgroundColor LightGreen
+note as N
+  TESTING mode active
+end note
+!else
+note as N
+  TESTING mode inactive (not defined)
+end note
+!endif
+Alice -> Bob : testing undefined test
+@enduml

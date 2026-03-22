@@ -1,0 +1,5 @@
+@startuml
+actor Alice
+participant Bob
+Alice -[#red]-> Bob : actor colored dotted
+@enduml

@@ -1,0 +1,7 @@
+@startuml
+actor Actor1
+actor Actor2
+Actor2 --> (Use Case)
+usecase "Use Case"
+Actor2 --|> Actor1
+@enduml

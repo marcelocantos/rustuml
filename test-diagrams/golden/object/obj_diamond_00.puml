@@ -1,0 +1,10 @@
+@startuml
+object Base0 { id = 0 }
+object Left0 { l = 0 }
+object Right0 { r = 0 }
+object Bottom0 { b = 0 }
+Base0 --> Left0
+Base0 --> Right0
+Left0 --> Bottom0
+Right0 --> Bottom0
+@enduml

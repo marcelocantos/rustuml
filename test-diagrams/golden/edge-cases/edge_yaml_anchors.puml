@@ -1,0 +1,13 @@
+@startuml
+@startyaml
+defaults: &defaults
+  color: red
+  size: large
+item1:
+  <<: *defaults
+  name: first
+item2:
+  <<: *defaults
+  name: second
+@endyaml
+@enduml

@@ -1,0 +1,6 @@
+@startuml
+Alice -[#red]> Bob : red
+Bob -[#blue]--> Alice : blue
+Alice -[#green]>> Charlie : green thin
+Charlie -[#purple]-->> Alice : purple thin dotted
+@enduml

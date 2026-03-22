@@ -1,0 +1,7 @@
+@startuml
+
+start
+:This is a very long action text that spans quite a bit of horizontal space to test wrapping and layout behavior in the diagram renderer;
+:Another long action: Initialize the system configuration by reading all environment variables and applying defaults where necessary;
+stop
+@enduml

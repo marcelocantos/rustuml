@@ -1,0 +1,10 @@
+@startuml
+class Class797 {
+  field: ""mono""
+  method797(): void
+}
+class Class797b {
+  info: String
+}
+Class797 --> Class797b : ""mono""
+@enduml

@@ -1,0 +1,9 @@
+@startuml
+alt external trigger
+  [-> Alice : found trigger
+  Alice -> Bob : handle
+  Bob --> Alice : done
+else internal
+  Alice -> Alice : self trigger
+end
+@enduml

@@ -1,0 +1,8 @@
+@startuml
+
+start
+while (user wants more?) is (yes)
+  :Process iteration;
+endwhile (no)
+stop
+@enduml

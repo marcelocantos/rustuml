@@ -1,0 +1,15 @@
+@startuml
+autonumber
+Alice -> Bob ++ : request
+alt happy path
+  Bob -> Charlie ++ : delegate
+  loop process items
+    Charlie -> DB : fetch
+    DB --> Charlie : item
+  end
+  Charlie --> Bob -- : results
+  Bob --> Alice -- : success
+else error path
+  Bob --> Alice -- : error
+end
+@enduml

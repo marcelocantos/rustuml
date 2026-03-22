@@ -1,0 +1,9 @@
+@startuml
+Alice -> Bob : request
+note over Alice, Bob
+  | Name | Value |
+  | foo  | 42    |
+  | bar  | 99    |
+end note
+Bob --> Alice : response
+@enduml

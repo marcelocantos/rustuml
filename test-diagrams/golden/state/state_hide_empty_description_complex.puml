@@ -1,0 +1,13 @@
+@startuml
+hide empty description
+state A : has description
+state B
+state C : also has description
+state D
+
+[*] --> A
+A --> B
+B --> C
+C --> D
+D --> [*]
+@enduml

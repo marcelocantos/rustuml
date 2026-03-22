@@ -1,0 +1,7 @@
+@startuml
+Alice -> Bob: before
+group custom label
+  Alice -> Bob: inside
+end
+Alice -> Bob: after
+@enduml

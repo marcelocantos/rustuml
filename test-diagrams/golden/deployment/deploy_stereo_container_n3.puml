@@ -1,0 +1,7 @@
+@startuml
+node Node1 <<container>>
+node Node2 <<container>>
+node Node3 <<container>>
+Node1 --> Node2
+Node2 --> Node3
+@enduml

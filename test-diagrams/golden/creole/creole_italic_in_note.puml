@@ -1,0 +1,6 @@
+@startuml
+note as N
+  //italic text in note//
+  //another italic line//
+end note
+@enduml

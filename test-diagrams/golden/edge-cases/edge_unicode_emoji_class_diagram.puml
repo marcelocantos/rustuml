@@ -1,0 +1,10 @@
+@startuml
+class 👤 User {
+  💾 Data: String
+  +⚙️ Method(): void
+}
+class 🖥️ System {
+  💾 Data: int
+}
+👤 User --> 🖥️ System
+@enduml

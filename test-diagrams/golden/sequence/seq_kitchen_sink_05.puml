@@ -1,0 +1,37 @@
+@startuml
+participant A
+participant B
+participant C
+participant D
+participant E
+
+== Phase 1: Setup ==
+A -> B : init
+B -> C : configure
+C -> D : prepare
+D -> E : ready
+E --> A : all set
+
+== Phase 2: Operation ==
+loop 3 times
+  A -> B ++ : request
+  B -> C ++ : process
+  C -> D ++ : fetch
+  D -> E ++ : query
+  E --> D -- : data
+  D --> C -- : result
+  C --> B -- : processed
+  B --> A -- : response
+end
+
+... some time passes ...
+
+== Phase 3: Teardown ==
+A -> B : shutdown
+B -> C : stop
+C -> D : close
+D -> E : disconnect
+E --> A : cleaned up
+
+note over A, E : All phases complete
+@enduml

@@ -1,0 +1,5 @@
+@startuml
+[*] --> A
+A --> B : submit [count < 3] / log()
+B --> [*]
+@enduml

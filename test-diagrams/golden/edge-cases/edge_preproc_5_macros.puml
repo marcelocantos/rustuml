@@ -1,0 +1,8 @@
+@startuml
+!define MACRO0 value0
+!define MACRO1 value1
+!define MACRO2 value2
+!define MACRO3 value3
+!define MACRO4 value4
+class Foo
+@enduml

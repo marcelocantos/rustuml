@@ -1,0 +1,9 @@
+@startuml
+Alice -> Bob: before
+par
+  Alice -> Bob: parallel 1
+else
+  Alice -> Bob: parallel 2
+end
+Alice -> Bob: after
+@enduml

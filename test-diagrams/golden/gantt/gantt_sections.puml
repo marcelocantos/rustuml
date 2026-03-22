@@ -1,0 +1,22 @@
+@startgantt
+Project starts 2024-03-01
+
+[Milestone A] happens 2024-03-15
+
+section Planning
+[Requirements] lasts 7 days
+[Architecture] lasts 5 days
+[Architecture] starts at [Requirements]'s end
+
+section Development
+[Backend] lasts 14 days
+[Backend] starts at [Architecture]'s end
+[Frontend] lasts 14 days
+[Frontend] starts at [Architecture]'s end
+
+section Release
+[Integration] lasts 5 days
+[Integration] starts at [Backend]'s end
+[Deploy] lasts 2 days
+[Deploy] starts at [Integration]'s end
+@endgantt

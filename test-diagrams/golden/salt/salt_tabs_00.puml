@@ -1,0 +1,10 @@
+@startsalt
+{/
+  Home | Profile | Settings | Logout
+  {
+    "Content area for Home"
+    "Additional information"
+    [Action Button]
+  }
+}
+@endsalt

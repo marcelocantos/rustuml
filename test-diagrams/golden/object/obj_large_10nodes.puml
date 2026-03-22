@@ -1,0 +1,22 @@
+@startuml
+object O1 { v = 1 }
+object O2 { v = 2 }
+object O3 { v = 3 }
+object O4 { v = 4 }
+object O5 { v = 5 }
+object O6 { v = 6 }
+object O7 { v = 7 }
+object O8 { v = 8 }
+object O9 { v = 9 }
+object O10 { v = 10 }
+O1 --> O2
+O2 --> O3
+O3 --> O4
+O4 --> O5
+O5 --> O6
+O6 --> O7
+O7 --> O8
+O8 --> O9
+O9 --> O10
+O10 --> O1
+@enduml

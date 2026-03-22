@@ -1,0 +1,19 @@
+@startuml
+start
+partition "P1" {
+:A;
+:B;
+:C;
+}
+partition "P2" {
+:A;
+:B;
+:C;
+}
+partition "P3" {
+:A;
+:B;
+:C;
+}
+stop
+@enduml

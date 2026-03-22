@@ -1,0 +1,10 @@
+@startuml
+
+start
+if (abort?) then (yes)
+  kill
+else (no)
+  :Process;
+  stop
+endif
+@enduml

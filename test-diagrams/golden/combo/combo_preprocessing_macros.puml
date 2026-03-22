@@ -1,0 +1,23 @@
+@startuml
+!define SERVICE(name, port) rectangle "name\n:port" as name##Svc
+!define DB(name, type) database "name\n(type)" as name##DB
+!define CONNECTS(a, b, label) a --> b : label
+
+SERVICE(User, 3001)
+SERVICE(Order, 3002)
+SERVICE(Product, 3003)
+SERVICE(Payment, 3004)
+SERVICE(Notification, 3005)
+
+DB(User, PostgreSQL)
+DB(Order, PostgreSQL)
+DB(Product, MongoDB)
+
+CONNECTS(UserSvc, UserDB, read/write)
+CONNECTS(OrderSvc, OrderDB, read/write)
+CONNECTS(ProductSvc, ProductDB, read/write)
+CONNECTS(OrderSvc, UserSvc, validate user)
+CONNECTS(OrderSvc, ProductSvc, check stock)
+CONNECTS(OrderSvc, PaymentSvc, process)
+CONNECTS(PaymentSvc, NotificationSvc, receipt)
+@enduml

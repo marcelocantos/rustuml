@@ -1,0 +1,5 @@
+@startuml
+Alice -> Bob : ~~strike message~~
+Bob --> Alice : ~~strike reply~~
+note right : ~~strike note~~
+@enduml

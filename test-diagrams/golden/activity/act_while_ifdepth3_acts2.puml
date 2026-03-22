@@ -1,0 +1,20 @@
+@startuml
+start
+while (loop?) is (yes)
+if (cond1?) then (yes)
+  if (cond2?) then (yes)
+    if (cond3?) then (yes)
+  :Action 1;
+  :Action 2;
+    else (no)
+      :Alt 3;
+    endif
+  else (no)
+    :Alt 2;
+  endif
+else (no)
+  :Alt 1;
+endif
+endwhile
+stop
+@enduml

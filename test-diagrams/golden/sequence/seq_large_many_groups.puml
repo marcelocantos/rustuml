@@ -1,0 +1,65 @@
+@startuml
+participant Alice
+participant Bob
+participant Charlie
+alt condition 0
+  Alice -> Bob : action 0
+  Bob --> Alice : ok 0
+else
+  Bob --> Alice : else 0
+end
+alt condition 1
+  Alice -> Bob : action 1
+  Bob --> Alice : ok 1
+else
+  Bob --> Alice : else 1
+end
+alt condition 2
+  Alice -> Bob : action 2
+  Bob --> Alice : ok 2
+else
+  Bob --> Alice : else 2
+end
+alt condition 3
+  Alice -> Bob : action 3
+  Bob --> Alice : ok 3
+else
+  Bob --> Alice : else 3
+end
+alt condition 4
+  Alice -> Bob : action 4
+  Bob --> Alice : ok 4
+else
+  Bob --> Alice : else 4
+end
+alt condition 5
+  Alice -> Bob : action 5
+  Bob --> Alice : ok 5
+else
+  Bob --> Alice : else 5
+end
+alt condition 6
+  Alice -> Bob : action 6
+  Bob --> Alice : ok 6
+else
+  Bob --> Alice : else 6
+end
+alt condition 7
+  Alice -> Bob : action 7
+  Bob --> Alice : ok 7
+else
+  Bob --> Alice : else 7
+end
+alt condition 8
+  Alice -> Bob : action 8
+  Bob --> Alice : ok 8
+else
+  Bob --> Alice : else 8
+end
+alt condition 9
+  Alice -> Bob : action 9
+  Bob --> Alice : ok 9
+else
+  Bob --> Alice : else 9
+end
+@enduml

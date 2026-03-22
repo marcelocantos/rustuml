@@ -1,0 +1,5 @@
+@startuml
+class ReturnTypes {
+  +void method()
+}
+@enduml

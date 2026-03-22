@@ -1,0 +1,56 @@
+@startuml
+
+title Comprehensive Swimlane Example
+
+|Customer|
+start
+:Initiate request;
+note right: Customer starts here
+
+|Validator|
+:Receive request;
+if (schema valid?) then (yes)
+  if (data valid?) then (yes)
+  else (no)
+    :Return validation error;
+    |Customer|
+    :Handle error;
+    stop
+  endif
+else (no)
+  :Return schema error;
+  |Customer|
+  :Handle error;
+  stop
+endif
+
+|Processor|
+:Queue request;
+while (processing?) is (yes)
+  :Dequeue;
+  switch (request type?)
+  case (create)
+    :Handle create;
+  case (update)
+    :Handle update;
+  case (delete)
+    :Handle delete;
+  endswitch
+  :Mark complete;
+endwhile
+
+fork
+  |Notifier|
+  :Send notification;
+  fork again
+  |Auditor|
+  :Write audit log;
+  fork again
+  |Cache|
+  :Invalidate cache;
+end fork
+
+|Customer|
+:Receive result;
+stop
+@enduml

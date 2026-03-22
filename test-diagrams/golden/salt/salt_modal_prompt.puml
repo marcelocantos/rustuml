@@ -1,0 +1,7 @@
+@startsalt
+{^Prompt Dialog
+  Enter new name:
+  ..
+  [OK] | [Cancel]
+}
+@endsalt

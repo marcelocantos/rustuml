@@ -1,0 +1,7 @@
+@startuml
+skinparam noteRoundCorner 25
+
+note as N\n  rounded note\nend note
+
+
+@enduml

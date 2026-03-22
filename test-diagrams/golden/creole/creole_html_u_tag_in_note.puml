@@ -1,0 +1,5 @@
+@startuml
+note as N
+  <u>underline u tag</u>
+end note
+@enduml

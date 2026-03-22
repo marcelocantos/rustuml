@@ -1,0 +1,8 @@
+@startuml
+
+start
+while (not finished?) is (process)
+  :Process iteration;
+endwhile (stop)
+stop
+@enduml

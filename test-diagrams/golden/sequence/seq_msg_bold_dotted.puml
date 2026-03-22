@@ -1,0 +1,4 @@
+@startuml
+Alice --\ Bob : bold_dotted message
+Bob --\ Alice : return bold_dotted
+@enduml

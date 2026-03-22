@@ -1,0 +1,8 @@
+@startuml
+
+start
+partition #orange "Colored Partition" {
+  :Action inside;
+}
+stop
+@enduml

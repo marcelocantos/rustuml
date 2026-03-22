@@ -1,0 +1,11 @@
+@startwbs
+*[#red] Root 20
+** Task 0
+** Task 1
+** Task 2
+** Deep branch
+** Sublevel 0
+*** Sublevel 1
+**** Sublevel 2
+***** Sublevel 3
+@endwbs

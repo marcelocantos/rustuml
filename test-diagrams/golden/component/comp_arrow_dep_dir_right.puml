@@ -1,0 +1,5 @@
+@startuml
+component Source
+component Target
+Source -right-> Target
+@enduml

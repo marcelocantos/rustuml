@@ -1,0 +1,21 @@
+@startuml
+box "Client Side" #lightblue
+  actor User
+  participant Browser
+end box
+box "Server Side" #lightyellow
+  participant API
+  database DB
+end box
+
+User -> Browser : interact
+Browser -> API ++ : request
+alt authenticated
+  API -> DB ++ : query
+  DB --> API -- : results
+  API --> Browser -- : 200 OK
+else
+  API --> Browser -- : 401
+end
+Browser --> User : display
+@enduml

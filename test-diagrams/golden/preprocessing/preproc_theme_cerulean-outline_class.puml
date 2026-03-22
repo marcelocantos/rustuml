@@ -1,0 +1,7 @@
+@startuml
+!theme cerulean-outline
+class Animal {
+  +name: String
+}
+class Dog extends Animal {}
+@enduml

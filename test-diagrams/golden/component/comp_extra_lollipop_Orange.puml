@@ -1,0 +1,7 @@
+@startuml
+component Provider #Orange
+component Consumer #Orange
+interface IService
+Provider -( IService
+Consumer --> IService : requires
+@enduml

@@ -1,0 +1,13 @@
+@startuml
+!$x = 10
+!$y = 20
+!$sum = $x + $y
+!$product = $x * $y
+
+note as N
+  x = $x
+  y = $y
+  sum = $sum
+  product = $product
+end note
+@enduml

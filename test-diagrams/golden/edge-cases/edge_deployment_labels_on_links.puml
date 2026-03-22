@@ -1,0 +1,7 @@
+@startuml
+node A
+node B
+A --> B : TCP/IP
+A --> B : UDP
+A ..> B : HTTPS
+@enduml

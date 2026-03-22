@@ -1,0 +1,8 @@
+@startuml
+class WithDefaults {
+  +String name = "default"
+  +int count = 0
+  +boolean flag = false
+  +double rate = 1.0
+}
+@enduml

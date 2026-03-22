@@ -1,0 +1,9 @@
+@startuml
+start
+while (l?) is (yes)
+  :W;
+endwhile
+:Post 1;
+:Post 2;
+stop
+@enduml

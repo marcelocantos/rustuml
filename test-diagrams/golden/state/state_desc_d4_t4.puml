@@ -1,0 +1,6 @@
+@startuml
+state A : handling error condition
+[*] --> A
+A --> B : data received
+B --> [*]
+@enduml

@@ -1,0 +1,5 @@
+@startuml
+database Source
+queue Target
+Source --> Target : JDBC
+@enduml

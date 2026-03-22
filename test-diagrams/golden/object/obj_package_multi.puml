@@ -1,0 +1,23 @@
+@startuml
+package "Frontend" {
+  object Browser {
+    type = "Chrome"
+  }
+}
+package "Backend" {
+  object Server {
+    port = 8080
+  }
+  object Cache {
+    type = "Redis"
+  }
+}
+package "Data" {
+  object DB {
+    engine = "Postgres"
+  }
+}
+Browser --> Server : HTTP
+Server --> Cache : read/write
+Server --> DB : query
+@enduml

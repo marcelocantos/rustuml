@@ -1,0 +1,33 @@
+@startuml
+robust "Sig0" as s0
+robust "Sig1" as s1
+robust "Sig2" as s2
+robust "Sig3" as s3
+highlight 200 to 300 #lightyellow : phase 10
+@0
+s0 is idle
+s1 is active
+s2 is active
+s3 is idle
+@100
+s0 is active
+s1 is active
+s2 is idle
+s3 is active
+@200
+s0 is active
+s1 is idle
+s2 is active
+s3 is active
+@300
+s0 is idle
+s1 is active
+s2 is active
+s3 is idle
+@400
+s0 is active
+s1 is active
+s2 is idle
+s3 is active
+
+@enduml

@@ -1,0 +1,7 @@
+@startuml
+class "@Component" {
+  +void method()
+}
+class Other
+"@Component" --> Other
+@enduml

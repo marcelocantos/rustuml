@@ -1,0 +1,6 @@
+@startuml
+!$arr = ["a", "b", "c", "d"]
+!$n = %size($arr)
+participant A
+note over A : size = $n
+@enduml

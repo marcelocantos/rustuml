@@ -1,0 +1,9 @@
+@startuml
+actor User
+rectangle "System" #LightBlue {
+  usecase UC1
+  usecase UC2
+}
+User --> UC1
+User --> UC2
+@enduml

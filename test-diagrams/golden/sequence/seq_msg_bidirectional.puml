@@ -1,0 +1,6 @@
+@startuml
+Alice -> Bob : ltr
+Bob -> Alice : rtl
+Alice --> Bob : dotted ltr
+Bob --> Alice : dotted rtl
+@enduml

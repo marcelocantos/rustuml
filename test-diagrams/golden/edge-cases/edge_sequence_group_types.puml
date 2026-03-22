@@ -1,0 +1,25 @@
+@startuml
+Alice -> Bob: start
+group group_type [label]
+  Alice -> Bob: grouped
+end
+loop 3 times
+  Bob -> Alice: looping
+end
+alt condition
+  Alice -> Bob: if branch
+else
+  Alice -> Bob: else branch
+end
+opt optional
+  Alice -> Bob: optional
+end
+par
+  Alice -> Bob: parallel 1
+else
+  Alice -> Bob: parallel 2
+end
+critical
+  Alice -> Bob: critical
+end
+@enduml

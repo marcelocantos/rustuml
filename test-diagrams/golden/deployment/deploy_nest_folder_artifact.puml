@@ -1,0 +1,5 @@
+@startuml
+folder Outer {
+  artifact Inner
+}
+@enduml

@@ -1,0 +1,16 @@
+@startuml
+start
+group "Group 1" {
+  :Group 1 action;
+}
+group "Group 2" {
+  :Group 2 action;
+}
+group "Group 3" {
+  :Group 3 action;
+}
+group "Group 4" {
+  :Group 4 action;
+}
+stop
+@enduml

@@ -1,0 +1,16 @@
+@startuml
+state "Outer State" as OS {
+  state "Region A" {
+    [*] --> Idle
+    Idle --> Active : start
+    Active --> Idle : stop
+    --
+    [*] --> Monitoring
+    Monitoring --> Alert : threshold exceeded
+    Alert --> Monitoring : resolved
+  }
+  [*] --> Region A
+}
+[*] --> OS
+OS --> [*]
+@enduml

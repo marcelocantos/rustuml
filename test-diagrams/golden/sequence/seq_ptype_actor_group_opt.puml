@@ -1,0 +1,10 @@
+@startuml
+actor Src
+participant Tgt
+Src -> Tgt : start
+opt optional
+  Src -> Tgt : maybe
+  Tgt --> Src : done
+end
+Tgt --> Src : done
+@enduml

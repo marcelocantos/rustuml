@@ -1,0 +1,15 @@
+@startuml
+!$left = "Writer"
+!$right = "Reader"
+!$channel = "writer_to_reader"
+
+participant "$left" as L
+participant "$right" as R
+
+L -> R : request via $channel
+R --> L : response via $channel
+note over L, R
+  $left talks to $right
+  channel: $channel
+end note
+@enduml

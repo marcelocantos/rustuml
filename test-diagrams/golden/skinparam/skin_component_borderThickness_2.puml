@@ -1,0 +1,10 @@
+@startuml
+skinparam componentBorderThickness 2
+component WebApp
+component Database
+component Cache
+interface API
+WebApp --> Database : uses
+WebApp --> Cache : caches
+WebApp - API
+@enduml

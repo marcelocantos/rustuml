@@ -1,0 +1,5 @@
+@startuml
+title Title with Special Chars: & < >
+Alice -> Bob : hello
+Bob --> Alice : hi
+@enduml

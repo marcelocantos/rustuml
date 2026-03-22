@@ -1,0 +1,14 @@
+@startuml
+sprite $icon29 [8x8/16] {
+01101101
+11011011
+10110110
+01101101
+11011011
+10110110
+01101101
+11011011
+}
+
+rectangle "Element <$icon29>" as elem
+@enduml

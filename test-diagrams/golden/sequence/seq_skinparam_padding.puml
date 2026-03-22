@@ -1,0 +1,6 @@
+@startuml
+skinparam ParticipantPadding 20
+skinparam BoxPadding 10
+Alice -> Bob : hello
+Bob --> Alice : hi
+@enduml

@@ -1,0 +1,15 @@
+@startuml
+' comment before
+class Foo {
+' comment inside class
+  field: String
+' comment between fields
+  method(): void
+' comment after method
+}
+' comment between classes
+class Bar
+' comment before relationship
+Foo --> Bar
+' comment after relationship
+@enduml

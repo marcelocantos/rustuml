@@ -1,0 +1,14 @@
+@startuml
+package A {
+  package B {
+    class X
+  }
+}
+package C {
+  package D {
+    class Y
+  }
+}
+X --> Y
+
+@enduml

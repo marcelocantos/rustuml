@@ -1,0 +1,6 @@
+@startuml
+class Combo  #lightyellow {
+  -String name
+  -void method()
+}
+@enduml

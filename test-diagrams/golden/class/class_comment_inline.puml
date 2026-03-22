@@ -1,0 +1,5 @@
+@startuml
+class A ' This class does something
+class B ' This class does something else
+A --> B ' This is the relationship
+@enduml

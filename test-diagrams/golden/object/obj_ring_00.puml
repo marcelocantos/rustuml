@@ -1,0 +1,6 @@
+@startuml
+object Obj0_0 { val = 0 }
+object Obj1_0 { val = 1 }
+Obj0_0 --> Obj1_0
+Obj1_0 --> Obj0_0
+@enduml

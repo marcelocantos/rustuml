@@ -1,0 +1,18 @@
+@startboard
+Full Workflow
+
++Backlog+
+* Story A
+
++Analysis+
+* Story B
+
++Development+
+* Story C
+
++Testing+
+* Story D
+
++Released+
+* Story E
+@endboard

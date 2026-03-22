@@ -1,0 +1,11 @@
+@startwbs
+*[#white] Project
+**[#green] Completed Task
+***[#green] Done subtask 1
+***[#green] Done subtask 2
+**[#yellow] In Progress
+***[#green] Done part
+***[#red] Blocked part
+**[#red] Not Started
+*** Pending item
+@endwbs

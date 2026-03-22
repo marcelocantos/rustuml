@@ -1,0 +1,10 @@
+@startuml
+robust "Process" as proc
+@0
+proc is #green : running
+@100
+proc is #red : error
+@200
+proc is #lightgrey : idle
+
+@enduml

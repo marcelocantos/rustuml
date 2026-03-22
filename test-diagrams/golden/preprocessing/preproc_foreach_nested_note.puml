@@ -1,0 +1,11 @@
+@startuml
+participant Alice
+participant Bob
+
+!foreach $msg in ["ping", "pong"]
+  Alice -> Bob : $msg
+  note right
+    message: $msg
+  end note
+!endforeach
+@enduml

@@ -1,0 +1,6 @@
+@startuml
+skinparam ClassBackgroundColor lightyellow
+class MyClass {
+  +void method()
+}
+@enduml

@@ -1,0 +1,5 @@
+@startuml
+class MyClass {
+  <back:#FFEECC>hex bg</back>: field
+}
+@enduml

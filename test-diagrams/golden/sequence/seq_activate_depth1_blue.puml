@@ -1,0 +1,5 @@
+@startuml
+participant A
+A -> B ++ #blue : level 1
+B --> A -- : return 1
+@enduml

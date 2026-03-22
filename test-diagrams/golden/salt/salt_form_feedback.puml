@@ -1,0 +1,13 @@
+@startsalt
+{^Feedback Form
+  Subject: | "                    "
+  Priority: | "                    "
+  Category: | "                    "
+  Description: | "                    "
+    ..
+  [X] I agree to terms
+  [ ] Subscribe to newsletter
+  ..
+  [Submit] | [Reset] | [Cancel]
+}
+@endsalt

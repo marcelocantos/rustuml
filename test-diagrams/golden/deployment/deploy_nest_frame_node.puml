@@ -1,0 +1,5 @@
+@startuml
+frame Outer {
+  node Inner
+}
+@enduml

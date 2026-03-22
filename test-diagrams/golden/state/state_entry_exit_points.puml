@@ -1,0 +1,9 @@
+@startuml
+state S1 <<entryPoint>>
+state S2 <<exitPoint>>
+[*] --> S1
+S1 --> A
+A --> B
+B --> S2
+S2 --> [*]
+@enduml

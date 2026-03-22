@@ -1,0 +1,7 @@
+@startuml
+skinparam ClassBackgroundColor lightyellow
+skinparam ClassBorderColor orange
+class A { +void m() }
+class B
+A --> B
+@enduml

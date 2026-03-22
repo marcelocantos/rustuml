@@ -1,0 +1,5 @@
+@startuml
+namespace Pkg1 {
+      class C1 { +void m1() }
+}
+@enduml

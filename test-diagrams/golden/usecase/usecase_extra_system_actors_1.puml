@@ -1,0 +1,5 @@
+@startuml
+actor A1 <<system>>
+usecase UC1
+A1 --> UC1
+@enduml

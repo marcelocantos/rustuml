@@ -1,0 +1,8 @@
+@startuml
+
+start
+partition #maroon "Colored Partition" {
+  :Action inside;
+}
+stop
+@enduml

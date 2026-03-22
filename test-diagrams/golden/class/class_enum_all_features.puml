@@ -1,0 +1,17 @@
+@startuml
+enum FullFeaturedEnum {
+  VALUE_A
+  VALUE_B
+  VALUE_C
+  VALUE_D
+  VALUE_E
+  ==
+  +String displayName
+  +int numericValue
+  --
+  +String getDisplayName()
+  +int getNumericValue()
+  {static} +FullFeaturedEnum fromString(String s)
+  {static} +FullFeaturedEnum fromInt(int i)
+}
+@enduml

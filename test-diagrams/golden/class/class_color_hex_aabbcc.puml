@@ -1,0 +1,6 @@
+@startuml
+class MyClass #AABBCC {
+  +String field
+  +void method()
+}
+@enduml

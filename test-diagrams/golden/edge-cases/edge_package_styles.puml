@@ -1,0 +1,20 @@
+@startuml
+package RegularPackage {
+  class A
+}
+package "Node Style" <<Node>> {
+  class B
+}
+package "Rectangle Style" <<Rectangle>> {
+  class C
+}
+package "Frame Style" <<Frame>> {
+  class D
+}
+package "Cloud Style" <<Cloud>> {
+  class E
+}
+package "Database Style" <<Database>> {
+  class F
+}
+@enduml

@@ -1,0 +1,5 @@
+@startuml
+!theme quartz
+Alice -> Bob : hello
+Bob --> Alice : world
+@enduml

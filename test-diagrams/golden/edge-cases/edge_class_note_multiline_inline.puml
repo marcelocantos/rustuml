@@ -1,0 +1,10 @@
+@startuml
+class Foo {
+  field: String
+}
+note left of Foo
+  Multi
+  line
+  note
+end note
+@enduml

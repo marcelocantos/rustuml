@@ -1,0 +1,6 @@
+@startuml
+
+start
+#navy:Action with receive<
+stop
+@enduml

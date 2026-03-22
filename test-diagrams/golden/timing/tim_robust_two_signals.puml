@@ -1,0 +1,16 @@
+@startuml
+robust "Clock" as clk
+robust "Data" as dat
+@0
+clk is low
+dat is unknown
+@50
+clk is high
+dat is valid
+@100
+clk is low
+dat is valid
+@150
+clk is high
+dat is unknown
+@enduml

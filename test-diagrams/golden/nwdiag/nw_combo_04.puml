@@ -1,0 +1,19 @@
+@startnwdiag
+nwdiag {
+  network net0 {
+    address = "10.0.4.0/24"
+    srv00 [address = "10.0.0.4"]
+    srv01 [address = "10.0.1.4"]
+  }
+  network net1 {
+    address = "10.1.4.0/24"
+    srv01 [address = "10.1.0.4"]
+    srv00 [address = "10.1.1.4"]
+  }
+  network net2 {
+    address = "10.2.4.0/24"
+    srv00 [address = "10.2.0.4"]
+    srv01 [address = "10.2.1.4"]
+  }
+}
+@endnwdiag

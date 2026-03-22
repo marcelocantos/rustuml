@@ -1,0 +1,11 @@
+@startuml
+
+start
+repeat
+  :Try;
+  if (fatal?) then (yes)
+    detach
+  endif
+repeatwhile (retry?) is (yes)
+stop
+@enduml

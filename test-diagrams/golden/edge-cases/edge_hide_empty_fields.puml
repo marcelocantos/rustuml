@@ -1,0 +1,10 @@
+@startuml
+hide empty fields
+class Foo {
+  method(): void
+}
+class Bar {
+  field: String
+  method(): void
+}
+@enduml

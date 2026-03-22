@@ -1,0 +1,18 @@
+@startuml
+skinparam backgroundColor #1a1a2e
+skinparam classBackgroundColor #16213e
+skinparam classBorderColor #0f3460
+skinparam classFontColor #e94560
+skinparam arrowColor #e94560
+skinparam noteBackgroundColor #16213e
+skinparam noteFontColor #e0e0e0
+
+class Animal {
+  +name: String
+  +getName(): String
+}
+class Dog extends Animal {
+  +bark(): void
+}
+Animal <|-- Dog
+@enduml

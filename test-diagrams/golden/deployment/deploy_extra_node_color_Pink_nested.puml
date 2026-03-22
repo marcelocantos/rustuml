@@ -1,0 +1,9 @@
+@startuml
+node L1 #Pink {
+  node L2 {
+    component App
+    database DB
+    App --> DB
+  }
+}
+@enduml

@@ -1,0 +1,8 @@
+@startuml
+[*] --> A
+A --> B : complex [guard] / action
+note on link
+  This note is on the complex transition
+end note
+B --> [*]
+@enduml

@@ -1,0 +1,10 @@
+@startuml
+skinparam FolderBorderColor red
+folder myPkg {
+  class A {
+    +void method()
+  }
+  class B
+  A --> B
+}
+@enduml

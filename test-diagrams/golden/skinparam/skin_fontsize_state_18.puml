@@ -1,0 +1,6 @@
+@startuml
+skinparam defaultFontSize 18
+[*] --> State
+State : description
+State --> [*]
+@enduml

@@ -1,0 +1,5 @@
+@startuml
+Alice -> Bob : request
+... timeout period ...
+Bob --> Alice : response
+@enduml

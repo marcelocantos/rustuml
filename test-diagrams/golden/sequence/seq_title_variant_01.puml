@@ -1,0 +1,5 @@
+@startuml
+title Simple Title
+Alice -> Bob : hello
+Bob --> Alice : hi
+@enduml

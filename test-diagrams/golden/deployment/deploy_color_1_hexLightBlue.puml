@@ -1,0 +1,5 @@
+@startuml
+node AppNode #LightBlue
+node DBNode #LightBlue
+AppNode --> DBNode
+@enduml

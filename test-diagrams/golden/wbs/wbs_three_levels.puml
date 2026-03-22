@@ -1,0 +1,13 @@
+@startwbs
+* Project Alpha
+** Planning
+*** Requirements gathering
+*** Feasibility study
+** Development
+*** Frontend
+*** Backend
+*** Database
+** Testing
+*** Unit tests
+*** Integration tests
+@endwbs

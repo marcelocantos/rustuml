@@ -1,0 +1,20 @@
+@startuml
+abstract class DataProcessor {
+  +void process()
+  {abstract} #void readData()
+  {abstract} #void transformData()
+  {abstract} #void writeData()
+}
+class CsvProcessor {
+  #void readData()
+  #void transformData()
+  #void writeData()
+}
+class JsonProcessor {
+  #void readData()
+  #void transformData()
+  #void writeData()
+}
+DataProcessor <|-- CsvProcessor
+DataProcessor <|-- JsonProcessor
+@enduml

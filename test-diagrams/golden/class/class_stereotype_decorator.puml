@@ -1,0 +1,6 @@
+@startuml
+class MyClass <<decorator>> {
+  -instance: MyClass
+  +getInstance(): MyClass
+}
+@enduml

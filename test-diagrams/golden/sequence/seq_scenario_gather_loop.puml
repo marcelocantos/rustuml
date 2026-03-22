@@ -1,0 +1,7 @@
+@startuml
+loop 3 times
+Bob --> Alice : report
+Charlie --> Alice : report
+Dave --> Alice : report
+end
+@enduml

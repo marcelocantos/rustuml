@@ -1,0 +1,24 @@
+@startnwdiag
+nwdiag {
+  network internet {
+    address = "0.0.0.0/0"
+    modem [address = "1.2.3.4"]
+  }
+  network home {
+    address = "192.168.1.0/24"
+    modem    [address = "192.168.1.1"]
+    desktop  [address = "192.168.1.10"]
+    laptop   [address = "192.168.1.11"]
+    smart_tv [address = "192.168.1.20"]
+    nas      [address = "192.168.1.30"]
+  }
+  network iot {
+    address = "192.168.2.0/24"
+    modem        [address = "192.168.2.1"]
+    thermostat   [address = "192.168.2.10"]
+    light_bridge [address = "192.168.2.11"]
+    camera1      [address = "192.168.2.20"]
+    camera2      [address = "192.168.2.21"]
+  }
+}
+@endnwdiag

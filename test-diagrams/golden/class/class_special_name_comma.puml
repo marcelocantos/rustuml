@@ -1,0 +1,7 @@
+@startuml
+class "List,Pair" {
+  +void method()
+}
+class Other
+"List,Pair" --> Other
+@enduml

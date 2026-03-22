@@ -1,0 +1,6 @@
+@startuml
+Alice -> Bob ++ : call1
+Bob -> Charlie ++ : call2
+Charlie --> Bob -- : ret2
+Bob --> Alice -- : ret1
+@enduml

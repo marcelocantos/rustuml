@@ -1,0 +1,16 @@
+@startuml
+state fork1 <<fork>>
+state c1 <<choice>>
+state join1 <<join>>
+
+[*] --> fork1
+fork1 --> A
+fork1 --> B
+A --> c1
+c1 --> C : [cond]
+c1 --> D : [!cond]
+B --> join1
+C --> join1
+D --> join1
+join1 --> [*]
+@enduml

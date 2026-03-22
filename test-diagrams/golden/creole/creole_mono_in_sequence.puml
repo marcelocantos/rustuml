@@ -1,0 +1,5 @@
+@startuml
+Alice -> Bob : ""mono message""
+Bob --> Alice : ""mono reply""
+note right : ""mono note""
+@enduml

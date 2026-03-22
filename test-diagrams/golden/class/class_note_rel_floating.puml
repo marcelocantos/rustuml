@@ -1,0 +1,11 @@
+@startuml
+class A {
+  +void method()
+}
+class B {
+  +void method()
+}
+note "Floating note" as N
+A --> B
+A .. N
+@enduml

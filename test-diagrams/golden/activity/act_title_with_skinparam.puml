@@ -1,0 +1,9 @@
+@startuml
+title Styled Title
+
+skinparam titleFontSize 20
+skinparam titleFontStyle bold
+start
+:Action;
+stop
+@enduml

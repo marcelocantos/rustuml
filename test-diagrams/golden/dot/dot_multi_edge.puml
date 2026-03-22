@@ -1,0 +1,7 @@
+@startdot
+digraph G {
+  A -> B [label="call"]
+  A -> B [label="return", style=dashed, dir=back]
+  B -> C
+}
+@enddot

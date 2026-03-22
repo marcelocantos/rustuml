@@ -1,0 +1,6 @@
+@startuml
+!define P1 Participant1
+participant P1 as A
+A -> A : self message 1
+note right : P1 = Participant1
+@enduml

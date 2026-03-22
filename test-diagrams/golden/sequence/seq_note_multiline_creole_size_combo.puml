@@ -1,0 +1,8 @@
+@startuml
+Alice -> Bob : request
+note over Alice, Bob
+  <size:20>big</size> and
+  <size:10>small</size>
+end note
+Bob --> Alice : response
+@enduml

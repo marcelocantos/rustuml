@@ -1,0 +1,10 @@
+@startuml
+class A
+class B
+class C
+class D
+A -- B
+B ---- C
+C ------ D
+
+@enduml

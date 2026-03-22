@@ -1,0 +1,8 @@
+@startuml
+state Outer #LightGreen {
+  [*] --> Inner
+  Inner --> [*]
+}
+[*] --> Outer
+Outer --> [*]
+@enduml

@@ -1,0 +1,11 @@
+@startuml
+interface I1 {
+  +void method1()
+}
+interface I2 {
+  +void method2()
+}
+class Impl
+Impl ..|> I1
+Impl ..|> I2
+@enduml

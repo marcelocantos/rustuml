@@ -1,0 +1,7 @@
+@startuml
+class "Class With Spaces" {
+  +void method()
+}
+class "Another Spaced Class"
+"Class With Spaces" --> "Another Spaced Class"
+@enduml

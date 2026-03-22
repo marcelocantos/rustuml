@@ -1,0 +1,14 @@
+@startuml
+concise "Process" as proc
+@0
+proc is idle
+@100
+proc is active
+@200
+proc is waiting
+@300
+proc is processing
+@400
+proc is error
+
+@enduml

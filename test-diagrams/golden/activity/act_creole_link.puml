@@ -1,0 +1,5 @@
+@startuml
+start
+:<u>http://example.com</u>;
+stop
+@enduml

@@ -1,0 +1,5 @@
+@startuml
+actor MyActor <<external>>
+usecase MyUC <<automated>>
+MyActor --> MyUC
+@enduml

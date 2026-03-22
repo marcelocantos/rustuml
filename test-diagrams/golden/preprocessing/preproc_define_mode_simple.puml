@@ -1,0 +1,4 @@
+@startuml
+!define MODE_SIMPLE
+class Simple { +name: String }
+@enduml

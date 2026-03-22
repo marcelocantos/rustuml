@@ -1,0 +1,17 @@
+@startuml
+interface Subject {
+  +void request()
+}
+class RealSubject {
+  +void request()
+}
+class Proxy {
+  -realSubject: RealSubject
+  +void request()
+  -void preProcess()
+  -void postProcess()
+}
+RealSubject ..|> Subject
+Proxy ..|> Subject
+Proxy --> RealSubject
+@enduml

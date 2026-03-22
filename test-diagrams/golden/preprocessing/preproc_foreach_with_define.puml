@@ -1,0 +1,10 @@
+@startuml
+!define ARROW ->
+
+participant Sender
+participant Receiver
+
+!foreach $msg in ["hello", "world", "bye"]
+  Sender ARROW Receiver : $msg
+!endforeach
+@enduml

@@ -1,0 +1,6 @@
+@startuml
+class MyClass
+note right of MyClass
+  <size:18>large</size>
+end note
+@enduml

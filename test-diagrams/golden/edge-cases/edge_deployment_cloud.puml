@@ -1,0 +1,9 @@
+@startuml
+cloud AWS {
+  node EC2Instance
+  database RDS
+  EC2Instance --> RDS
+}
+actor User
+User --> AWS
+@enduml

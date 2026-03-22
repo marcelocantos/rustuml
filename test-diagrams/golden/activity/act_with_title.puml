@@ -1,0 +1,7 @@
+@startuml
+title My Activity Diagram
+
+start
+:Action;
+stop
+@enduml

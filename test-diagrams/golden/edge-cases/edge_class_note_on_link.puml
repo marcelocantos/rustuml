@@ -1,0 +1,6 @@
+@startuml
+class Foo
+class Bar
+Foo --> Bar : uses
+note on link: This is a note
+@enduml

@@ -1,0 +1,7 @@
+@startuml
+class mixedCase
+class MixedCase
+class MIXEDCASE
+mixedCase --> MixedCase
+MixedCase --> MIXEDCASE
+@enduml

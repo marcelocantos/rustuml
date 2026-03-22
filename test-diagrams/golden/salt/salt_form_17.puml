@@ -1,0 +1,8 @@
+@startsalt
+{
+  Username: | "alice"
+  Email: | "alice@example.com"
+  ..
+  [Button 1] | [Button 2] | [Button 3]
+}
+@endsalt

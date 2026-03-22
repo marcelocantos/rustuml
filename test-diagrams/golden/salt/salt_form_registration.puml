@@ -1,0 +1,13 @@
+@startsalt
+{^Registration Form
+  Username: | "                    "
+  Email: | "                    "
+  Password: | "                    "
+  Confirm Password: | "                    "
+    ..
+  [X] I agree to terms
+  [ ] Subscribe to newsletter
+  ..
+  [Submit] | [Reset] | [Cancel]
+}
+@endsalt

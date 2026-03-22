@@ -1,0 +1,6 @@
+@startuml
+participant "משתמש" as U
+participant "מערכת" as S
+U -> S: בקשת כניסה
+S --> U: הצלחה
+@enduml

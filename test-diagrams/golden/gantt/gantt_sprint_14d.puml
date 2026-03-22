@@ -1,0 +1,20 @@
+@startgantt
+Project starts 2024-01-01
+saturday are closed
+sunday are closed
+
+[Story 1] lasts 2 days
+[Story 2] lasts 2 days
+[Story 2] starts at [Story 1]'s end
+[Story 3] lasts 2 days
+[Story 3] starts at [Story 2]'s end
+[Story 4] lasts 2 days
+[Story 4] starts at [Story 3]'s end
+[Story 5] lasts 2 days
+[Story 5] starts at [Story 4]'s end
+[Story 6] lasts 2 days
+[Story 6] starts at [Story 5]'s end
+[Story 7] lasts 2 days
+[Story 7] starts at [Story 6]'s end
+
+@endgantt

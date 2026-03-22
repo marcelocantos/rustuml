@@ -1,0 +1,5 @@
+@startuml
+class Foo
+circle Bar
+Foo -- Bar
+@enduml

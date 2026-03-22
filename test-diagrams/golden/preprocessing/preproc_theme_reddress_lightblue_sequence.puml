@@ -1,0 +1,8 @@
+@startuml
+!theme reddress-lightblue
+participant Alice
+participant Bob
+Alice -> Bob : hello from reddress-lightblue
+Bob --> Alice : reply
+note right : reddress-lightblue theme
+@enduml

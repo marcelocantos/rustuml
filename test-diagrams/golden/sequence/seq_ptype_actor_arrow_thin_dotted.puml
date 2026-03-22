@@ -1,0 +1,6 @@
+@startuml
+actor Alice
+participant Bob
+Alice -->> Bob : actor sends thin_dotted
+Bob -->> Alice : actor receives thin_dotted
+@enduml

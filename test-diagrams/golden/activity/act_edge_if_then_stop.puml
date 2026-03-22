@@ -1,0 +1,11 @@
+@startuml
+
+start
+:Step 1;
+if (done?) then (yes)
+  stop
+else (no)
+  :Step 2;
+endif
+stop
+@enduml

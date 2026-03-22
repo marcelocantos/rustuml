@@ -1,0 +1,30 @@
+@startuml
+interface BaseInterface {
+  +void baseMethod()
+}
+interface ExtendedInterfaceA {
+  +void methodA()
+}
+interface ExtendedInterfaceB {
+  +void methodB()
+}
+interface CombinedInterface {
+  +void combinedMethod()
+}
+abstract class PartialImpl {
+  +void baseMethod()
+}
+class FullImpl {
+  +void baseMethod()
+  +void methodA()
+  +void methodB()
+  +void combinedMethod()
+}
+ExtendedInterfaceA --|> BaseInterface
+ExtendedInterfaceB --|> BaseInterface
+CombinedInterface --|> ExtendedInterfaceA
+CombinedInterface --|> ExtendedInterfaceB
+PartialImpl ..|> BaseInterface
+FullImpl --|> PartialImpl
+FullImpl ..|> CombinedInterface
+@enduml

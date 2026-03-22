@@ -1,0 +1,16 @@
+@startuml
+state A #LightBlue
+state B #LightGreen
+state Conc {
+  [*] --> X
+  X --> [*]
+  --
+  [*] --> Y
+  Y --> [*]
+}
+[*] --> A
+A --> B
+B --> [*]
+A --> Conc
+Conc --> B
+@enduml

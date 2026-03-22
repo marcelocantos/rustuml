@@ -1,0 +1,8 @@
+@startuml
+skinparam packageStyle cloud
+package MyPkg {
+  class Foo
+  class Bar
+  Foo --> Bar
+}
+@enduml

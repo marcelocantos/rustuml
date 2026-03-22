@@ -1,0 +1,7 @@
+@startuml
+hide circle
+class MyType {
+  +String field
+  +void method()
+}
+@enduml

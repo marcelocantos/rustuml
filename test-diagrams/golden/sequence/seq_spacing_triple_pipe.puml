@@ -1,0 +1,7 @@
+@startuml
+Alice -> Bob : before
+|||
+Bob --> Alice : after
+|||
+Alice -> Bob : again
+@enduml

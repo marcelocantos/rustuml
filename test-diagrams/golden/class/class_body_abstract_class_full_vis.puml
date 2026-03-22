@@ -1,0 +1,8 @@
+@startuml
+abstract class Variant {
+  +String pub
+  -int prv
+  #double pro
+  ~boolean pkg
+}
+@enduml

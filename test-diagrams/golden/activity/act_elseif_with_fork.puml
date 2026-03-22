@@ -1,0 +1,17 @@
+@startuml
+
+start
+if (parallel?) then (yes)
+  fork
+    :P1;
+  fork again
+    :P2;
+  end fork
+elseif (sequential?) then (yes)
+  :S1;
+  :S2;
+else (skip)
+  :Skip all;
+endif
+stop
+@enduml

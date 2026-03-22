@@ -1,0 +1,5 @@
+@startuml
+class ColorTest #Tan {
+  +void method()
+}
+@enduml

@@ -1,0 +1,6 @@
+@startuml
+skinparam monochrome true
+class A
+class B
+A --> B
+@enduml

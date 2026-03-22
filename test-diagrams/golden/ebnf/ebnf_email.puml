@@ -1,0 +1,10 @@
+@startebnf
+email = local , "@" , domain;
+local = word , { "." , word };
+domain = label , { "." , label };
+word = char , { char };
+label = char , { char };
+char = letter | digit;
+letter = "a" | "b" | "c";
+digit = "0" | "1" | "2";
+@endebnf

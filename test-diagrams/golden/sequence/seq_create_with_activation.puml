@@ -1,0 +1,9 @@
+@startuml
+participant Factory
+create participant Product
+Factory -> Product ++ : new
+Product -> Product : initialize
+Product --> Factory -- : ready
+Factory -> Product : use
+Product --> Factory : done
+@enduml

@@ -1,0 +1,17 @@
+@startuml
+
+start
+switch (day?)
+case (Monday)
+  :Start of week;
+case (Tuesday)
+  :Second day;
+case (Wednesday)
+  :Mid week;
+case (Thursday)
+  :Almost Friday;
+case (Friday)
+  :End of week;
+endswitch
+stop
+@enduml

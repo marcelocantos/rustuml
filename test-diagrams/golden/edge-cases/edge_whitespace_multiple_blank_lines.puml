@@ -1,0 +1,17 @@
+@startuml
+
+
+
+class Foo
+
+
+
+class Bar
+
+
+
+Foo --> Bar
+
+
+
+@enduml

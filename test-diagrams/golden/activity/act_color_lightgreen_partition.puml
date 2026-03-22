@@ -1,0 +1,8 @@
+@startuml
+
+start
+partition #lightgreen "Colored Partition" {
+  :Action inside;
+}
+stop
+@enduml

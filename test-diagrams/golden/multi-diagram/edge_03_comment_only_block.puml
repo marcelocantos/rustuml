@@ -1,0 +1,8 @@
+@startuml
+' This is just a comment
+' No actual diagram content
+@enduml
+
+@startuml
+Alice -> Bob : After comment-only block
+@enduml

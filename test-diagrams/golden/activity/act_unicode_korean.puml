@@ -1,0 +1,6 @@
+@startuml
+
+start
+:데이터 처리;
+stop
+@enduml

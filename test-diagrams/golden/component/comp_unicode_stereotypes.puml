@@ -1,0 +1,5 @@
+@startuml
+component "Service α" <<αservice>>
+component "Service β" <<βservice>>
+"Service α" --> "Service β"
+@enduml

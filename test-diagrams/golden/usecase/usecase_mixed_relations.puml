@@ -1,0 +1,14 @@
+@startuml
+actor BaseActor
+actor SpecialActor
+SpecialActor --|> BaseActor
+usecase BaseUC
+usecase SpecialUC
+usecase IncludedUC
+usecase OptionalUC
+SpecialUC --|> BaseUC
+BaseUC .> IncludedUC : <<include>>
+OptionalUC .> BaseUC : <<extend>>
+BaseActor --> BaseUC
+SpecialActor --> SpecialUC
+@enduml

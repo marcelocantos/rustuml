@@ -1,0 +1,9 @@
+@startuml
+state A #FF5733
+state B #33FF57
+state C #3357FF
+[*] --> A
+A --> B
+B --> C
+C --> [*]
+@enduml

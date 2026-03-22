@@ -1,0 +1,37 @@
+@startuml
+robust "R0_13" as r0_13
+robust "R1_13" as r1_13
+concise "C0_13" as c0_13
+concise "C1_13" as c1_13
+binary "B0_13" as b0_13
+binary "B1_13" as b1_13
+@0
+r0_13 is active
+r1_13 is idle
+c0_13 is free
+c1_13 is busy
+b0_13 is high
+b1_13 is low
+@100
+r0_13 is idle
+r1_13 is active
+c0_13 is busy
+c1_13 is busy
+b0_13 is low
+b1_13 is high
+@200
+r0_13 is active
+r1_13 is idle
+c0_13 is busy
+c1_13 is free
+b0_13 is high
+b1_13 is low
+@300
+r0_13 is idle
+r1_13 is active
+c0_13 is free
+c1_13 is busy
+b0_13 is low
+b1_13 is high
+
+@enduml

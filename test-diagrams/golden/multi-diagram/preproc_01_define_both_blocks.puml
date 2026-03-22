@@ -1,0 +1,12 @@
+!define ALICE Alice
+!define BOB Bob
+
+@startuml
+ALICE -> BOB : Hello
+BOB --> ALICE : Hi
+@enduml
+
+@startuml
+ALICE -> BOB : Second message
+BOB --> ALICE : Second reply
+@enduml

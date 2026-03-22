@@ -1,0 +1,5 @@
+@startuml
+collections Col1
+entity E2
+Col1 -> E2: message
+@enduml

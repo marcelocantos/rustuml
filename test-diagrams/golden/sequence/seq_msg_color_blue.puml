@@ -1,0 +1,4 @@
+@startuml
+Alice -[#blue]> Bob : colored blue
+Bob -[#blue]--> Alice : dotted blue
+@enduml

@@ -1,0 +1,11 @@
+@startuml
+package level1 {
+  package level2 {
+    package level3 {
+      class DeepClass {
+        +void deepMethod()
+      }
+    }
+  }
+}
+@enduml

@@ -1,0 +1,5 @@
+@startuml
+class "He said \"hello\"" {
+  field: String
+}
+@enduml

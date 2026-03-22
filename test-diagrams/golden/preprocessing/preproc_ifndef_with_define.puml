@@ -1,0 +1,9 @@
+@startuml
+!ifndef MAX_SIZE
+!define MAX_SIZE 100
+!endif
+
+note as N
+  MAX_SIZE = MAX_SIZE
+end note
+@enduml

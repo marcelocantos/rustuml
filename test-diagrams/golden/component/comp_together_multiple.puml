@@ -1,0 +1,12 @@
+@startuml
+together {
+  component Frontend
+  component Gateway
+}
+together {
+  component ServiceA
+  component ServiceB
+}
+Frontend --> ServiceA
+Gateway --> ServiceB
+@enduml

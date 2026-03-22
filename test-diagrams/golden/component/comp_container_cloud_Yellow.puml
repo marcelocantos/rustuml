@@ -1,0 +1,7 @@
+@startuml
+cloud MyContainer #Yellow {
+  component Foo
+  component Bar
+  Foo --> Bar
+}
+@enduml

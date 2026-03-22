@@ -1,0 +1,5 @@
+@startuml
+header //Italic Header//
+footer //Italic Footer//
+Alice -> Bob : hello
+@enduml

@@ -1,0 +1,10 @@
+@startuml
+title "State Machine 185"
+state State1_185
+state State2_185
+state State3_185
+[*] --> State1_185
+State1_185 --> State2_185 : event_1
+State2_185 --> State3_185 : event_2
+State3_185 --> [*] : done
+@enduml

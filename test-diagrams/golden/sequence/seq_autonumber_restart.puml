@@ -1,0 +1,8 @@
+@startuml
+autonumber
+Alice -> Bob : 1
+Bob --> Alice : 2
+autonumber 1
+Alice -> Bob : 1 again
+Bob --> Alice : 2 again
+@enduml

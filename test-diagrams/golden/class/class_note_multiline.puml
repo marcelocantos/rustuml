@@ -1,0 +1,10 @@
+@startuml
+class MyClass {
+  +void method()
+}
+note right of MyClass
+  This is a multi-line note
+  It can span multiple lines
+  With different content
+end note
+@enduml

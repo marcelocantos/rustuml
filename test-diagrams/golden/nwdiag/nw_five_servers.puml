@@ -1,0 +1,26 @@
+@startnwdiag
+nwdiag {
+  network frontend {
+    address = "10.0.1.0/24"
+    lb      [address = "10.0.1.1", description = "Load Balancer"]
+    web01   [address = "10.0.1.10"]
+    web02   [address = "10.0.1.11"]
+    web03   [address = "10.0.1.12"]
+  }
+  network backend {
+    address = "10.0.2.0/24"
+    web01   [address = "10.0.2.10"]
+    web02   [address = "10.0.2.11"]
+    web03   [address = "10.0.2.12"]
+    api01   [address = "10.0.2.20"]
+    api02   [address = "10.0.2.21"]
+  }
+  network data {
+    address = "10.0.3.0/24"
+    api01   [address = "10.0.3.20"]
+    api02   [address = "10.0.3.21"]
+    db01    [address = "10.0.3.30"]
+    cache01 [address = "10.0.3.40"]
+  }
+}
+@endnwdiag

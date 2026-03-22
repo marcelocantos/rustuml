@@ -1,0 +1,6 @@
+@startuml
+class Combo <<service>>  {
+  -String name
+  -void method()
+}
+@enduml

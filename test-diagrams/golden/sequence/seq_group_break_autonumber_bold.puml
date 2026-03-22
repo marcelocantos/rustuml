@@ -1,0 +1,9 @@
+@startuml
+autonumber "<b>##</b>"
+loop forever
+  A -> B : work
+  break error
+    B --> A : error
+  end
+end
+@enduml

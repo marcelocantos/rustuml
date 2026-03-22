@@ -1,0 +1,9 @@
+@startuml
+skinparam component {
+  BackgroundColor LightGreen
+  BorderColor Gray
+}
+component Foo
+component Bar
+Foo --> Bar
+@enduml

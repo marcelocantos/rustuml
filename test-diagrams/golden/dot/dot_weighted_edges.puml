@@ -1,0 +1,7 @@
+@startdot
+digraph G {
+  A -> B [weight=5, label="5"]
+  A -> C [weight=1, label="1"]
+  A -> D [weight=10, label="10"]
+}
+@enddot

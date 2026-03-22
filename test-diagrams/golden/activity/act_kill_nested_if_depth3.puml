@@ -1,0 +1,18 @@
+@startuml
+start
+if (cond1?) then (yes)
+  if (cond2?) then (yes)
+    if (cond3?) then (yes)
+      :kill trigger;
+      kill
+    else (no)
+      :Alt;
+    endif
+  else (no)
+    :Alt;
+  endif
+else (no)
+  :Alt;
+endif
+stop
+@enduml

@@ -1,0 +1,17 @@
+@startuml
+
+title Fibonacci with Memoization
+start
+if (n <= 1?) then (yes)
+  :Return n;
+  stop
+endif
+if (memo[n] exists?) then (yes)
+  :Return memo[n];
+  stop
+endif
+:result = fib(n-1) + fib(n-2);
+:Store memo[n] = result;
+:Return result;
+stop
+@enduml

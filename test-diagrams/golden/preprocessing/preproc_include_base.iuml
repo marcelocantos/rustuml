@@ -1,0 +1,10 @@
+!startsub BASE_STYLES
+skinparam classBackgroundColor LightBlue
+skinparam classBorderColor Navy
+!endsub
+!startsub BASE_CLASSES
+class BaseEntity {
+  +id: Long
+  +createdAt: Date
+}
+!endsub

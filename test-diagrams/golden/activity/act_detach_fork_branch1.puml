@@ -1,0 +1,10 @@
+@startuml
+start
+fork
+  :Branch A;
+  detach
+fork again
+  :Branch B;
+  stop
+end fork
+@enduml

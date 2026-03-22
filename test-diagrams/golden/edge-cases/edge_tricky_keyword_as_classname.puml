@@ -1,0 +1,11 @@
+@startuml
+class "class" {
+  field: String
+}
+class "interface" {
+  method(): void
+}
+class "state" {
+  status: String
+}
+@enduml

@@ -1,0 +1,14 @@
+@startuml
+title "State Machine 192"
+state State1_192
+state State2_192
+state State3_192
+state State4_192
+state State5_192
+[*] --> State1_192
+State1_192 --> State2_192 : event_1
+State2_192 --> State3_192 : event_2
+State3_192 --> State4_192 : event_3
+State4_192 --> State5_192 : event_4
+State5_192 --> [*] : done
+@enduml

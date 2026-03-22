@@ -1,0 +1,3 @@
+@startmath
+\frac{d}{dx}\left(x^n\right) = nx^{n-1}
+@endmath

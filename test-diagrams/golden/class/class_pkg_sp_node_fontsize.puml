@@ -1,0 +1,10 @@
+@startuml
+skinparam NodeFontSize 14
+node myPkg {
+  class A {
+    +void method()
+  }
+  class B
+  A --> B
+}
+@enduml

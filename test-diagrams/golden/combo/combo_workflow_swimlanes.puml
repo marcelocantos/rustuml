@@ -1,0 +1,54 @@
+@startuml
+skinparam swimlaneBackgroundColor #F5F5F5
+skinparam swimlaneBorderColor #9E9E9E
+
+title "Order Processing Workflow"
+
+|Customer|
+start
+:Place Order;
+:Provide Payment Info;
+
+|Payment Service|
+:Validate Card;
+if (Card Valid?) then (yes)
+  :Authorize Payment;
+  :Hold Funds;
+else (no)
+  :Notify Failure;
+  |Customer|
+  :Show Error;
+  stop
+endif
+
+|Order Service|
+:Create Order Record;
+:Assign Order Number;
+:Send Confirmation Email;
+
+|Inventory Service|
+:Check Stock;
+if (In Stock?) then (yes)
+  :Reserve Items;
+  :Update Inventory;
+else (no)
+  :Backorder Items;
+  :Notify Delay;
+endif
+
+|Fulfillment Service|
+:Pick Items;
+:Pack Order;
+:Print Label;
+:Hand to Carrier;
+
+|Shipping Carrier|
+:Scan Package;
+:Route Package;
+:Deliver Package;
+
+|Customer|
+:Receive Package;
+:Confirm Delivery;
+stop
+@enduml

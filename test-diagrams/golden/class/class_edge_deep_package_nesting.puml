@@ -1,0 +1,15 @@
+@startuml
+package a {
+  package b {
+    package c {
+      package d {
+        package e {
+          class DeepClass {
+            +void deepMethod()
+          }
+        }
+      }
+    }
+  }
+}
+@enduml

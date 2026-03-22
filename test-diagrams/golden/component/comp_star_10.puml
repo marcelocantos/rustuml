@@ -1,0 +1,23 @@
+@startuml
+component Hub
+component Spoke1
+component Spoke2
+component Spoke3
+component Spoke4
+component Spoke5
+component Spoke6
+component Spoke7
+component Spoke8
+component Spoke9
+component Spoke10
+Hub --> Spoke1
+Hub --> Spoke2
+Hub --> Spoke3
+Hub --> Spoke4
+Hub --> Spoke5
+Hub --> Spoke6
+Hub --> Spoke7
+Hub --> Spoke8
+Hub --> Spoke9
+Hub --> Spoke10
+@enduml

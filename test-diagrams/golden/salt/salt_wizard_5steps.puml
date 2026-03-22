@@ -1,0 +1,12 @@
+@startsalt
+{/
+  Step 1 | Step 2 | Step 3 | Step 4 | Step 5
+  {
+    Complete the current step
+    "Field 1: " | "          "
+    "Field 2: " | "          "
+    ..
+    [< Back] | [Next >] | [Cancel]
+  }
+}
+@endsalt

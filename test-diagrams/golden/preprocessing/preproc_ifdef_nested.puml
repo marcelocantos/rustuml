@@ -1,0 +1,20 @@
+@startuml
+!define LEVEL1
+!define LEVEL2
+
+!ifdef LEVEL1
+  !ifdef LEVEL2
+    class BothDefined {
+      level: int = 2
+    }
+  !else
+    class OnlyLevel1 {
+      level: int = 1
+    }
+  !endif
+!else
+  class NeitherDefined {
+    level: int = 0
+  }
+!endif
+@enduml

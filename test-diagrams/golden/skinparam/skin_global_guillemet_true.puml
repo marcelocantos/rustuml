@@ -1,0 +1,6 @@
+@startuml
+skinparam guillemet true
+Alice -> Bob : hello
+Bob --> Alice : world
+note right : note
+@enduml

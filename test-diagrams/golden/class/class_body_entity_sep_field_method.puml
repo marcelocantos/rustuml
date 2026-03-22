@@ -1,0 +1,7 @@
+@startuml
+entity Variant {
+  +String name
+  --
+  +void run()
+}
+@enduml

@@ -1,0 +1,24 @@
+@startuml
+node "Production Server" as prod {
+  component "Web App" as webapp {
+    [Frontend Module] as fe
+    [API Module] as api
+    [Auth Module] as auth
+  }
+  database "Local Cache" as cache
+}
+
+node "Database Server" as dbserver {
+  database "PostgreSQL" as pg
+  database "Redis" as redis
+}
+
+node "CDN" as cdn {
+  [Static Assets] as assets
+}
+
+webapp --> pg : JDBC
+webapp --> redis : TCP
+webapp --> cache : local
+cdn --> webapp : origin pull
+@enduml

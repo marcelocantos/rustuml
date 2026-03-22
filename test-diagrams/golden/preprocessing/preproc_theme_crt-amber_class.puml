@@ -1,0 +1,7 @@
+@startuml
+!theme crt-amber
+class Animal {
+  +name: String
+}
+class Dog extends Animal {}
+@enduml

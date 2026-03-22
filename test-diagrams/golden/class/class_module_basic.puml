@@ -1,0 +1,7 @@
+@startuml
+module MyModule {
+  class MyClass {
+    +void method()
+  }
+}
+@enduml

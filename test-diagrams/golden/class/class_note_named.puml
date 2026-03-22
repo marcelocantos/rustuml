@@ -1,0 +1,8 @@
+@startuml
+class A
+class B
+note "Note for A" as N1
+note "Note for B" as N2
+A .. N1
+B .. N2
+@enduml

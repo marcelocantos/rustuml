@@ -1,0 +1,5 @@
+@startuml
+actor "**bold** Actor" as A233
+usecase "**bold** Case" as UC233
+A233 --> UC233
+@enduml

@@ -1,0 +1,11 @@
+@startuml
+
+start
+#green:Colored action;
+if (after?) then (yes)
+  :Yes;
+else (no)
+  :No;
+endif
+stop
+@enduml

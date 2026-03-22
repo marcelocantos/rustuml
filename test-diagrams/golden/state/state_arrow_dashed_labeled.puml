@@ -1,0 +1,6 @@
+@startuml
+[*] --> A
+A --> B : label
+B ..> C : dotted label
+C --> [*]
+@enduml

@@ -1,0 +1,56 @@
+@startuml
+participant "<<actor>>
+Customer" as C
+participant "<<boundary>>
+Website" as W
+participant "<<control>>
+OrderCtrl" as OC
+participant "<<entity>>
+Order" as O
+participant "<<entity>>
+Inventory" as I
+database "<<database>>
+DB" as DB
+queue "<<queue>>
+EventBus" as EB
+collections "<<collections>>
+Warehouse" as WH
+
+title E-Commerce Order Flow
+
+== Browsing ==
+C -> W : browse products
+W -> OC : get catalog
+OC -> I ++ : check stock
+I -> DB ++ : query
+DB --> I -- : results
+I --> OC -- : catalog
+OC --> W : products
+W --> C : display
+
+== Ordering ==
+C -> W : add to cart
+C -> W : checkout
+W -> OC ++ : createOrder(items)
+
+critical payment
+  OC -> DB ++ : begin transaction
+  DB --> OC -- : tx started
+  OC -> O : create()
+  O -> DB ++ : insert order
+  DB --> O -- : order_id=99
+  OC -> DB ++ : commit
+  DB --> OC -- : committed
+end
+
+par notifications
+  OC -> EB : OrderCreated(99)
+and fulfillment
+  OC -> WH : pick(order=99)
+  WH -> DB ++ : update stock
+  DB --> WH -- : done
+end
+
+OC --> W -- : order 99 confirmed
+W --> C : Thank you! Order #99
+@enduml

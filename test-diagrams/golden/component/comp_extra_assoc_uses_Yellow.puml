@@ -1,0 +1,5 @@
+@startuml
+component Foo #Yellow
+component Bar #Yellow
+Foo -- Bar : uses
+@enduml

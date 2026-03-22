@@ -1,0 +1,5 @@
+@startuml
+node Node1 <<server>>
+node Node2 <<server>>
+Node1 --> Node2
+@enduml

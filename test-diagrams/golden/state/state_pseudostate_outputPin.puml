@@ -1,0 +1,6 @@
+@startuml
+state ps <<outputPin>>
+[*] --> A
+A --> ps
+ps --> [*]
+@enduml

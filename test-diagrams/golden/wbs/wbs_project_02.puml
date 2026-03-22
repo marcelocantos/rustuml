@@ -1,0 +1,16 @@
+@startwbs
+* Data Pipeline
+** Ingestion
+*** Sources
+*** ETL
+*** Validation
+** Processing
+*** Transform
+*** Aggregate
+*** Store
+** Output
+*** Reports
+*** APIs
+*** Exports
+
+@endwbs

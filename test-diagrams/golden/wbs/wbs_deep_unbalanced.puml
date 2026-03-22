@@ -1,0 +1,11 @@
+@startwbs
+* Root
+** A
+*** A1
+**** A1a
+***** A1a-i
+** B
+** C
+*** C1
+*** C2
+@endwbs

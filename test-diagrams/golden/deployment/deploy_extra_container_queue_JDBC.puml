@@ -1,0 +1,5 @@
+@startuml
+node AppNode <<container>>
+queue DataStore
+AppNode --> DataStore : JDBC
+@enduml

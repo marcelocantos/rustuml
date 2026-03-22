@@ -1,0 +1,6 @@
+@startebnf
+declaration = [ "const" ] , type , identifier;
+type = "int" | "float" | "string";
+identifier = letter;
+letter = "a" | "b" | "c";
+@endebnf

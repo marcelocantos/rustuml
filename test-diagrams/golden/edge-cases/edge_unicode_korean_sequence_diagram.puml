@@ -1,0 +1,6 @@
+@startuml
+participant "사용자" as U
+participant "시스템" as S
+U -> S: 한국어테스트
+S --> U: 데이터
+@enduml

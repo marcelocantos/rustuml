@@ -1,0 +1,5 @@
+@startuml
+class MyClass {
+  <size:10>small text</size>: field
+}
+@enduml

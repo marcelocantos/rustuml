@@ -1,0 +1,9 @@
+@startuml
+Alice -> Bob : ping
+...
+Bob -> Charlie : forward
+... long time ...
+Charlie --> Bob : result
+...
+Bob --> Alice : done
+@enduml

@@ -1,0 +1,26 @@
+@startuml
+abstract class GameLoop {
+  +void run()
+  +{abstract} void processInput()
+  +{abstract} void updateState()
+  +{abstract} void render()
+}
+class PlatformerGame {
+  +void processInput()
+  +void updateState()
+  +void render()
+}
+class PuzzleGame {
+  +void processInput()
+  +void updateState()
+  +void render()
+}
+class StrategyGame {
+  +void processInput()
+  +void updateState()
+  +void render()
+}
+GameLoop <|-- PlatformerGame
+GameLoop <|-- PuzzleGame
+GameLoop <|-- StrategyGame
+@enduml

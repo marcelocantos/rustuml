@@ -1,0 +1,8 @@
+@startuml
+
+start
+while (condition?)
+:Work;
+endwhile
+stop
+@enduml

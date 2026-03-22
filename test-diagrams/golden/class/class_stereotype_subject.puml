@@ -1,0 +1,6 @@
+@startuml
+class MyClass <<subject>> {
+  -instance: MyClass
+  +getInstance(): MyClass
+}
+@enduml

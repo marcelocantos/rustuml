@@ -1,0 +1,4 @@
+@startuml
+Alice -> Bob : <del>deleted text</del>
+note right : <del>deleted text</del>
+@enduml

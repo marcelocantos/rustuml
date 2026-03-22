@@ -1,0 +1,6 @@
+@startuml
+state ps <<history>>
+[*] --> A
+A --> ps
+ps --> [*]
+@enduml

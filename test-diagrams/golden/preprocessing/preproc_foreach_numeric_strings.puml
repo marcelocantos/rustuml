@@ -1,0 +1,13 @@
+@startuml
+participant Master
+
+!foreach $i in ["1", "2", "3", "4", "5"]
+  participant "Worker$i" as W$i
+!endforeach
+
+Master -> W1 : task 1
+Master -> W2 : task 2
+Master -> W3 : task 3
+Master -> W4 : task 4
+Master -> W5 : task 5
+@enduml

@@ -1,0 +1,7 @@
+@startuml
+class Transformer<F, T> {
+  +Function<F,T> fn
+  --
+  +T transform(F input)
+}
+@enduml

@@ -1,0 +1,14 @@
+@startuml
+
+start
+fork
+  while (items?) is (yes)
+    :Process;
+  endwhile
+fork again
+  repeat
+    :Poll;
+  repeatwhile (pending?)
+end fork
+stop
+@enduml

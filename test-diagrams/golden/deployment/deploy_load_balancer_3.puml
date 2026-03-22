@@ -1,0 +1,9 @@
+@startuml
+node LB <<LoadBalancer>>
+node Backend1
+node Backend2
+node Backend3
+LB --> Backend1
+LB --> Backend2
+LB --> Backend3
+@enduml

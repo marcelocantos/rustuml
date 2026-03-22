@@ -1,0 +1,11 @@
+@startuml
+start
+while (run?) is (yes)
+  if (stop?) then (yes)
+    break
+  endif
+  :Work;
+  :More work;
+endwhile
+stop
+@enduml

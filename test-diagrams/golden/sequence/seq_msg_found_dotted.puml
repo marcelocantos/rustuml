@@ -1,0 +1,6 @@
+@startuml
+[-> Alice : incoming
+[--> Alice : incoming dotted
+Alice ->] : outgoing
+Alice -->] : outgoing dotted
+@enduml

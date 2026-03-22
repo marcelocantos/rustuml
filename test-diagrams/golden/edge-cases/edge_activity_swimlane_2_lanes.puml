@@ -1,0 +1,13 @@
+@startuml
+|Lane0|
+start
+|Lane0|
+:Step 1;
+|Lane1|
+:Step 2;
+|Lane0|
+:Step 3;
+|Lane1|
+:Step 4;
+stop
+@enduml

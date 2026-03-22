@@ -1,0 +1,8 @@
+@startuml
+participant A
+!if %feature_exists("nonexistent_feature_xyz")
+  note over A : exists
+!else
+  note over A : does not exist
+!endif
+@enduml

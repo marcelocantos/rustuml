@@ -1,0 +1,11 @@
+@startuml
+actor User
+usecase "Search Products" as SP
+usecase "Filter by Category" as FC
+usecase "Filter by Price" as FP
+usecase "Sort Results" as SR
+FC .> SP : <<extend>>
+FP .> SP : <<extend>>
+SR .> SP : <<extend>>
+User --> SP
+@enduml

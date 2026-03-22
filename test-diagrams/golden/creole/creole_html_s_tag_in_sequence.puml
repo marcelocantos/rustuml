@@ -1,0 +1,4 @@
+@startuml
+Alice -> Bob : <s>strike s tag</s>
+note right : <s>strike s tag</s>
+@enduml

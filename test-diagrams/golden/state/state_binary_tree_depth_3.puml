@@ -1,0 +1,25 @@
+@startuml
+[*] --> N1
+N1 --> N2 : left
+N1 --> N3 : right
+N2 --> N4 : left
+N2 --> N5 : right
+N3 --> N6 : left
+N3 --> N7 : right
+N4 --> N8 : left
+N4 --> N9 : right
+N5 --> N10 : left
+N5 --> N11 : right
+N6 --> N12 : left
+N6 --> N13 : right
+N7 --> N14 : left
+N7 --> N15 : right
+N8 --> [*]
+N9 --> [*]
+N10 --> [*]
+N11 --> [*]
+N12 --> [*]
+N13 --> [*]
+N14 --> [*]
+N15 --> [*]
+@enduml

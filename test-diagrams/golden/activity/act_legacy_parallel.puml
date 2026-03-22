@@ -1,0 +1,11 @@
+@startuml
+
+(*) --> "Start"
+"Start" --> ===FORK===
+===FORK=== --> "Branch A"
+===FORK=== --> "Branch B"
+"Branch A" --> ===JOIN===
+"Branch B" --> ===JOIN===
+===JOIN=== --> "End"
+"End" --> (*)
+@enduml

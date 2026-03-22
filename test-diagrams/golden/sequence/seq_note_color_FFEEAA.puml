@@ -1,0 +1,6 @@
+@startuml
+Alice -> Bob : hello
+note over Alice #FFEEAA : colored note #FFEEAA
+note right of Bob #FFEEAA : right colored
+Bob --> Alice : hi
+@enduml

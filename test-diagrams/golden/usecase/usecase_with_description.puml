@@ -1,0 +1,11 @@
+@startuml
+usecase UC1 as "
+  Login
+  --
+  User enters credentials
+  System validates
+  Session is created
+"
+actor User
+User --> UC1
+@enduml

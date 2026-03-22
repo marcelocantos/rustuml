@@ -1,0 +1,5 @@
+@startuml
+object MyObject <<entity>> {
+  id = 1
+}
+@enduml

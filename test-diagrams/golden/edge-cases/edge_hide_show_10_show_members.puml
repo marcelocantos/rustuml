@@ -1,0 +1,9 @@
+@startuml
+show members
+class Foo {
+  field: String
+  method(): void
+}
+class Bar
+Foo --> Bar
+@enduml

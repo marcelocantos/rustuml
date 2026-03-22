@@ -1,0 +1,12 @@
+@startuml
+object Obj0_15 { val = 150 }
+object Obj1_15 { val = 151 }
+object Obj2_15 { val = 152 }
+object Obj3_15 { val = 153 }
+object Obj4_15 { val = 154 }
+Obj0_15 --> Obj1_15
+Obj1_15 --> Obj2_15
+Obj2_15 --> Obj3_15
+Obj3_15 --> Obj4_15
+Obj4_15 --> Obj0_15
+@enduml

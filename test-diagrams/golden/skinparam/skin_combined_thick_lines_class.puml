@@ -1,0 +1,14 @@
+@startuml
+skinparam classBorderThickness 3
+skinparam arrowThickness 3
+skinparam shadowing true
+
+class Animal {
+  +name: String
+  +getName(): String
+}
+class Dog extends Animal {
+  +bark(): void
+}
+Animal <|-- Dog
+@enduml

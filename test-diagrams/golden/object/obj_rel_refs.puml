@@ -1,0 +1,13 @@
+@startuml
+object Source #orange {
+  id = 4
+  type = "source"
+}
+object Target #violet {
+  id = 104
+  type = "target"
+}
+Source --> Target : "refs"
+note right of Source : Source note
+note left of Target : Target note
+@enduml

@@ -1,0 +1,6 @@
+@startuml
+[*] --> A
+A --> B : événement reçu
+B --> C : données traitées
+C --> [*] : terminé
+@enduml

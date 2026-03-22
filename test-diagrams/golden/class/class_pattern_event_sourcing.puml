@@ -1,0 +1,42 @@
+@startuml
+abstract class DomainEvent {
+  +UUID id
+  +Instant timestamp
+  +String aggregateId
+}
+class UserCreatedEvent {
+  +String username
+  +String email
+}
+class UserUpdatedEvent {
+  +String field
+  +String oldValue
+  +String newValue
+}
+class UserDeletedEvent
+interface EventStore {
+  +void save(DomainEvent event)
+  +List<DomainEvent> getEvents(String aggregateId)
+}
+interface EventPublisher {
+  +void publish(DomainEvent event)
+}
+abstract class Aggregate {
+  +String id
+  +{abstract} void apply(DomainEvent event)
+  +List<DomainEvent> getUncommittedEvents()
+}
+class UserAggregate {
+  +String username
+  +String email
+  +boolean deleted
+  +void apply(DomainEvent event)
+}
+UserCreatedEvent --|> DomainEvent
+UserUpdatedEvent --|> DomainEvent
+UserDeletedEvent --|> DomainEvent
+UserAggregate --|> Aggregate
+UserAggregate ..> UserCreatedEvent
+UserAggregate ..> UserUpdatedEvent
+UserAggregate ..> UserDeletedEvent
+@enduml

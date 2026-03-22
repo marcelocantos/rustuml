@@ -1,0 +1,4 @@
+@startuml
+Alice -> Bob ++ #blue : solid activate up_blue
+Bob -> Alice -- : return
+@enduml

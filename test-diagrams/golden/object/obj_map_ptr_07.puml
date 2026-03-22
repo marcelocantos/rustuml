@@ -1,0 +1,15 @@
+@startuml
+map "Source7" as src7 {
+  entry0 => data7_0
+  entry1 => data7_1
+  entry2 => data7_2
+  entry3 => data7_3
+  entry4 => data7_4
+  entry5 => data7_5
+}
+map "Target7" as tgt7 {
+  x0 => y7_0
+  x1 => y7_1
+}
+src7::entry0 --> tgt7
+@enduml

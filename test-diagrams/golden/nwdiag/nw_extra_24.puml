@@ -1,0 +1,14 @@
+@startnwdiag
+nwdiag {
+  network net0_24 {
+    address = "172.16.24.0/24"
+    node0_0_24 [address = "172.16.24.1"]
+    node0_1_24 [address = "172.16.24.2"]
+  }
+  network net1_24 {
+    address = "172.17.24.0/24"
+    node0_1_24 [address = "172.17.24.1"]
+    node1_0_24 [address = "172.17.24.2"]
+  }
+}
+@endnwdiag

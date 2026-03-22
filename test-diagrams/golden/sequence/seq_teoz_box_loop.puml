@@ -1,0 +1,16 @@
+@startuml
+!pragma teoz true
+box "A" #lightblue
+  participant Alice
+end box
+box "B" #lightyellow
+  participant Bob
+  participant Charlie
+end box
+Alice -> Bob : go
+loop cond
+  Bob -> Charlie : action
+  Charlie --> Bob : result
+end
+Bob --> Alice : done
+@enduml

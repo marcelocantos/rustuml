@@ -1,0 +1,12 @@
+@startuml
+class ManyFields8 {
+  +String field01
+  +String field02
+  +String field03
+  +String field04
+  +String field05
+  +String field06
+  +String field07
+  +String field08
+}
+@enduml

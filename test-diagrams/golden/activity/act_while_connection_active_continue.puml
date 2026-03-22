@@ -1,0 +1,8 @@
+@startuml
+
+start
+while (connection active?) is (continue)
+  :Process iteration;
+endwhile (done)
+stop
+@enduml

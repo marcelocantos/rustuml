@@ -1,0 +1,3 @@
+@startuml
+Alice -> Bob: <b>html bold</b>
+@enduml

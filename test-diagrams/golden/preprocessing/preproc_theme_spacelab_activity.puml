@@ -1,0 +1,11 @@
+@startuml
+!theme spacelab
+start
+:action one;
+if (check?) then (yes)
+  :branch a;
+else (no)
+  :branch b;
+endif
+stop
+@enduml

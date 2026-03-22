@@ -1,0 +1,9 @@
+@startuml
+start
+group "Feature Group" {
+while (loop?) is (yes)
+  :Work;
+endwhile
+}
+stop
+@enduml

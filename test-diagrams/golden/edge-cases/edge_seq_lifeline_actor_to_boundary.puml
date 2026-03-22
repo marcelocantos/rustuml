@@ -1,0 +1,5 @@
+@startuml
+actor A1
+boundary B2
+A1 -> B2: message
+@enduml

@@ -1,0 +1,4 @@
+@startuml
+node CentralNode
+note left of CentralNode : Left note
+@enduml

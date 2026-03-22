@@ -1,0 +1,11 @@
+@startuml
+Alice -> Bob : request
+note over Alice
+  <code>
+  function foo() {
+    return 42;
+  }
+  </code>
+end note
+Bob --> Alice : response
+@enduml

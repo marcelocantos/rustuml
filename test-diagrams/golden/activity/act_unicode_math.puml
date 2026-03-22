@@ -1,0 +1,6 @@
+@startuml
+
+start
+:Compute x² + y² = z²;
+stop
+@enduml

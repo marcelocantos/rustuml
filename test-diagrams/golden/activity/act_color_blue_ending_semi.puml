@@ -1,0 +1,6 @@
+@startuml
+
+start
+#blue:Action with semi;
+stop
+@enduml

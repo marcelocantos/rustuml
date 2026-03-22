@@ -1,0 +1,8 @@
+@startmindmap
+* TODO List
+** [ ] Task 1
+** [X] Task 2 (done)
+** [ ] Task 3
+*** [ ] Subtask 3.1
+*** [X] Subtask 3.2
+@endmindmap

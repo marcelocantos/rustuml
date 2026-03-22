@@ -1,0 +1,6 @@
+@startuml
+class VeryLongClassNameThatExceedsThirtyCharactersEasily {
+  +String value
+}
+
+@enduml

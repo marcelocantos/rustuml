@@ -1,0 +1,7 @@
+@startuml
+database myPkg #lightblue {
+  class MyClass {
+    +void method()
+  }
+}
+@enduml

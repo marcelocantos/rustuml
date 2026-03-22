@@ -1,0 +1,4 @@
+@startuml
+Alice -> Bob : **//~~__all styles__~~//**
+note right : **//~~__all styles__~~//**
+@enduml

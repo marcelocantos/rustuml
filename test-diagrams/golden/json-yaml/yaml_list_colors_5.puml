@@ -1,0 +1,9 @@
+@startyaml
+colors:
+  - red
+  - green
+  - blue
+  - yellow
+  - orange
+count: 5
+@endyaml

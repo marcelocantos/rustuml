@@ -1,0 +1,12 @@
+@startuml
+!function $myFunc()
+  !return "hi"
+!endfunction
+
+participant A
+!if %function_exists("myFunc")
+  note over A : function exists
+!else
+  note over A : not found
+!endif
+@enduml

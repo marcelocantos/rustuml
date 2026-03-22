@@ -1,0 +1,19 @@
+@startuml
+start
+partition "Partition 1" {
+  :Part 1 Action 1;
+}
+partition "Partition 2" {
+  :Part 2 Action 1;
+}
+partition "Partition 3" {
+  :Part 3 Action 1;
+}
+partition "Partition 4" {
+  :Part 4 Action 1;
+}
+partition "Partition 5" {
+  :Part 5 Action 1;
+}
+stop
+@enduml

@@ -1,0 +1,5 @@
+@startuml
+note as N1
+  日本語テスト: データ
+end note
+@enduml

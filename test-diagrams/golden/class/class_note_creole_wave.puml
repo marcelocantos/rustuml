@@ -1,0 +1,6 @@
+@startuml
+class MyClass
+note right of MyClass
+  ~~wave~~
+end note
+@enduml

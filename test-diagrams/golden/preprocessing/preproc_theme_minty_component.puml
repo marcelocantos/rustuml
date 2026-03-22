@@ -1,0 +1,6 @@
+@startuml
+!theme minty
+component WebApp
+component Database
+WebApp --> Database : queries
+@enduml

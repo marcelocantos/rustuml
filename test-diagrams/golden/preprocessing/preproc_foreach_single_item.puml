@@ -1,0 +1,6 @@
+@startuml
+!foreach $x in ["OnlyOne"]
+  participant $x
+!endforeach
+OnlyOne -> OnlyOne : self call
+@enduml

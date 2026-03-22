@@ -1,0 +1,5 @@
+@startuml
+start
+:**bold** //italic// __under__ <color:blue>blue</color>;
+stop
+@enduml

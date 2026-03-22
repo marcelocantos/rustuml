@@ -1,0 +1,7 @@
+@startuml
+class "Wildcard*" {
+  +void method()
+}
+class Other
+"Wildcard*" --> Other
+@enduml

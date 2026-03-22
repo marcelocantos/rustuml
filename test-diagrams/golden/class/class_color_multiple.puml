@@ -1,0 +1,13 @@
+@startuml
+class Red #red {
+  +void r()
+}
+class Blue #blue {
+  +void b()
+}
+class Green #green {
+  +void g()
+}
+Red --> Blue
+Blue --> Green
+@enduml

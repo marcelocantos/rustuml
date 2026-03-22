@@ -1,0 +1,26 @@
+@startnwdiag
+nwdiag {
+  network internet {
+    nat_gateway [address = "52.0.0.1"]
+  }
+  network public_subnet {
+    address = "10.0.1.0/24"
+    nat_gateway    [address = "10.0.1.5"]
+    bastion        [address = "10.0.1.10"]
+    alb            [address = "10.0.1.20"]
+  }
+  network private_subnet {
+    address = "10.0.2.0/24"
+    alb     [address = "10.0.2.20"]
+    app01   [address = "10.0.2.30"]
+    app02   [address = "10.0.2.31"]
+  }
+  network data_subnet {
+    address = "10.0.3.0/24"
+    app01   [address = "10.0.3.30"]
+    app02   [address = "10.0.3.31"]
+    rds     [address = "10.0.3.40"]
+    elasticache [address = "10.0.3.50"]
+  }
+}
+@endnwdiag

@@ -1,0 +1,4 @@
+@startuml
+component MyComp <<repository>> #Pink
+note top of MyComp : Tagged component
+@enduml

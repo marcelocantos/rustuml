@@ -1,0 +1,5 @@
+@startuml
+class MyClass <<service>> #blue {
+  +void method()
+}
+@enduml

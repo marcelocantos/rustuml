@@ -1,0 +1,5 @@
+@startuml
+class Person
+class Address
+Person "1" -- "1..*" Address : lives at
+@enduml

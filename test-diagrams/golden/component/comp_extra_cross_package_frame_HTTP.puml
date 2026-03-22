@@ -1,0 +1,9 @@
+@startuml
+package Group1 {
+  component A
+}
+frame Group2 {
+  component B
+}
+A --> B : HTTP
+@enduml

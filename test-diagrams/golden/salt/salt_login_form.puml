@@ -1,0 +1,13 @@
+@startsalt
+{
+  Login
+  ===
+  Username: | "          "
+  Password: | "          "
+  [X] Remember me
+  ===
+  [  Login  ] | [ Cancel ]
+  ---
+  Forgot password?
+}
+@endsalt

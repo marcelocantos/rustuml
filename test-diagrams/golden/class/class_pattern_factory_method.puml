@@ -1,0 +1,27 @@
+@startuml
+abstract class Creator {
+  +{abstract} Product createProduct()
+  +void operate()
+}
+class ConcreteCreatorA {
+  +Product createProduct()
+}
+class ConcreteCreatorB {
+  +Product createProduct()
+}
+interface Product {
+  +void use()
+}
+class ConcreteProductA {
+  +void use()
+}
+class ConcreteProductB {
+  +void use()
+}
+Creator <|-- ConcreteCreatorA
+Creator <|-- ConcreteCreatorB
+ConcreteCreatorA ..> ConcreteProductA
+ConcreteCreatorB ..> ConcreteProductB
+ConcreteProductA ..|> Product
+ConcreteProductB ..|> Product
+@enduml

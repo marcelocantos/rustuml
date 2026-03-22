@@ -1,0 +1,6 @@
+@startebnf
+term = factor , { ( "*" | "/" ) , factor };
+factor = digit | "(" , expr , ")";
+expr = term;
+digit = "0" | "1";
+@endebnf

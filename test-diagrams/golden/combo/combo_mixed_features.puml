@@ -1,0 +1,44 @@
+@startuml
+!define PRIMARY(name) class name <<Primary>>
+!define SECONDARY(name) class name <<Secondary>>
+
+skinparam class {
+  BackgroundColor<<Primary>> #DCEDC8
+  BackgroundColor<<Secondary>> #F8BBD0
+  BorderColor<<Primary>> #558B2F
+  BorderColor<<Secondary>> #AD1457
+}
+
+title "Mixed Features Demo"
+
+PRIMARY(CoreEngine) {
+  **Bold text** in javadoc
+  --
+  + {static} instance() : CoreEngine
+  + process(//italicText// : String) : Result
+}
+
+SECONDARY(PluginA) {
+  note: ""monospace""
+  --
+  + activate() : void
+}
+
+SECONDARY(PluginB) {
+  note: <color:red>red text</color>
+  --
+  + activate() : void
+}
+
+note bottom of CoreEngine
+  This engine supports:
+  * Plugins
+  * Pipelines
+  * <b>Bold</b> and <i>italic</i>
+  * <color:blue>Colored text</color>
+  * ""Code snippets""
+end note
+
+CoreEngine "1" o-- "0..*" PluginA : manages
+CoreEngine "1" o-- "0..*" PluginB : manages
+@enduml

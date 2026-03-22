@@ -1,0 +1,15 @@
+@startuml
+
+start
+switch (value?)
+case (1)
+  :One;
+case (2)
+  :Two;
+case (3)
+  :Three;
+case (other)
+  :Default case;
+endswitch
+stop
+@enduml

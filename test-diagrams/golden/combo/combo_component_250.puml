@@ -1,0 +1,14 @@
+@startuml
+title "Component Diagram 250"
+package "System250" {
+  [Service1_250]
+  [Service2_250]
+  [Service3_250]
+  [Service4_250]
+  [Service5_250]
+}
+[Service1_250] --> [Service2_250]
+[Service2_250] --> [Service3_250]
+[Service3_250] --> [Service4_250]
+[Service4_250] --> [Service5_250]
+@enduml

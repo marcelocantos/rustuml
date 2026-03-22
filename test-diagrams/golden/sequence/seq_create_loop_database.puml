@@ -1,0 +1,10 @@
+@startuml
+participant Factory
+loop 3 times
+  create database Item
+  Factory -> Item ++ : init
+  Item --> Factory -- : ready
+  Factory -> Item : use
+  destroy Item
+end
+@enduml

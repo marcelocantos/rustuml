@@ -1,0 +1,9 @@
+@startuml
+
+start
+repeat
+  :Main action;
+backward :Reset and prepare;
+repeatwhile (user wants retry?) is (yes)
+stop
+@enduml

@@ -1,0 +1,5 @@
+@startuml
+object MyObject #yellow {
+  field = "value"
+}
+@enduml

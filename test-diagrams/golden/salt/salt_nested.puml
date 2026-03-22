@@ -1,0 +1,12 @@
+@startsalt
+{
+  {
+    [Button 1]
+    [Button 2]
+  } |
+  {
+    "Text field    "
+    "Another field "
+  }
+}
+@endsalt

@@ -1,0 +1,11 @@
+@startuml
+
+start
+while (run?) is (yes)
+  if (immediate exit?) then (yes)
+    break
+  endif
+  :Long process;
+endwhile
+stop
+@enduml

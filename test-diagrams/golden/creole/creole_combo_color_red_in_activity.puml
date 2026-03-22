@@ -1,0 +1,8 @@
+@startuml
+:<color:red>red</color> start;
+if (<color:red>red</color> condition?) then (yes)
+  :<color:red>red</color> true branch;
+else (no)
+  :<color:red>red</color> false branch;
+endif
+@enduml

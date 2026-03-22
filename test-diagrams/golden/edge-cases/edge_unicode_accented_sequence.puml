@@ -1,0 +1,6 @@
+@startuml
+participant Élève
+participant Señor
+Élève -> Señor: Bonjour! Comment ça va?
+Señor --> Élève: Très bien, merci!
+@enduml

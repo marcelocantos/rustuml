@@ -1,0 +1,6 @@
+@startuml
+Alice -> Bob ++ #red : request
+Bob -> Charlie ++ #blue : delegate
+Charlie --> Bob -- : ok
+Bob --> Alice -- : done
+@enduml

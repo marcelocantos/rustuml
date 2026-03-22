@@ -1,0 +1,5 @@
+@startuml
+database Alice
+participant Bob
+Alice -[#red]->> Bob : database colored thin_dotted
+@enduml

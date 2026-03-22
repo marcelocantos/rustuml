@@ -1,0 +1,6 @@
+@startuml
+class MyClass <<builder>> {
+  -instance: MyClass
+  +getInstance(): MyClass
+}
+@enduml

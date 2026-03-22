@@ -1,0 +1,6 @@
+@startuml
+state A : handling error condition
+[*] --> A
+A --> B : timeout occurred
+B --> [*]
+@enduml

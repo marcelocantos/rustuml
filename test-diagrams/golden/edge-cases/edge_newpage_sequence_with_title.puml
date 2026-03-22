@@ -1,0 +1,7 @@
+@startuml
+Alice -> Bob: first page
+newpage Second Page Title
+Bob --> Alice: second page
+newpage Third Page Title
+Alice -> Bob: third page
+@enduml

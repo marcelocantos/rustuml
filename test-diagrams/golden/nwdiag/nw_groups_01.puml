@@ -1,0 +1,25 @@
+@startnwdiag
+nwdiag {
+  group grp0_1 {
+    color = "#FFE4E1"
+    srv0_0_1 srv0_1_1
+  }
+  group grp1_1 {
+    color = "#E1F5FE"
+    srv1_0_1 srv1_1_1
+  }
+  group grp2_1 {
+    color = "#E8F5E9"
+    srv2_0_1 srv2_1_1
+  }
+  network net_1 {
+    address = "10.1.0.0/24"
+    srv0_0_1
+    srv0_1_1
+    srv1_0_1
+    srv1_1_1
+    srv2_0_1
+    srv2_1_1
+  }
+}
+@endnwdiag

@@ -1,0 +1,10 @@
+@startuml
+class Class334 {
+  field: //italic//
+  method334(): void
+}
+class Class334b {
+  info: String
+}
+Class334 --> Class334b : //italic//
+@enduml

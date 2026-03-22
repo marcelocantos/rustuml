@@ -1,0 +1,11 @@
+@startuml
+autonumber
+A -> B : start
+alt cond
+  B -> C : ok
+  C --> B : result
+  B --> A : success
+else
+  B --> A : fail
+end
+@enduml

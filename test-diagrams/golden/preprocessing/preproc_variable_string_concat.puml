@@ -1,0 +1,9 @@
+@startuml
+!$first = "Hello"
+!$second = "World"
+!$greeting = $first + " " + $second
+
+note as N
+  $greeting
+end note
+@enduml

@@ -1,0 +1,13 @@
+@startuml
+
+start
+while (more?) is (yes)
+  :Get item;
+  if (valid?) then (yes)
+    :Process item;
+  else (no)
+    :Skip item;
+  endif
+endwhile (no)
+stop
+@enduml

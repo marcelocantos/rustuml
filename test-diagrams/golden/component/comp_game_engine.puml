@@ -1,0 +1,37 @@
+@startuml
+package "Core Engine" {
+  component "Game Loop" as GL
+  component "Event System" as ES
+  component "Resource Manager" as RM
+}
+package "Rendering" {
+  component "Renderer" as R
+  component "Shader Manager" as SM
+  component "Texture Manager" as TM
+}
+package "Physics" {
+  component "Physics Engine" as PE
+  component "Collision Detection" as CD
+}
+package "Audio" {
+  component "Audio Engine" as AE
+  component "Sound Manager" as SOM
+}
+package "Input" {
+  component "Input Handler" as IH
+  component "Controller Support" as CS
+}
+GL --> ES
+GL --> R
+GL --> PE
+ES --> IH
+IH --> CS
+R --> SM
+R --> TM
+PE --> CD
+GL --> AE
+AE --> SOM
+GL --> RM
+RM --> TM
+RM --> SOM
+@enduml

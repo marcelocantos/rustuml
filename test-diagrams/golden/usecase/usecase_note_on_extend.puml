@@ -1,0 +1,8 @@
+@startuml
+actor User
+usecase BaseUC
+usecase ChildUC
+ChildUC .> BaseUC : <<extend>>
+note on link : This is a extend relationship
+User --> BaseUC
+@enduml

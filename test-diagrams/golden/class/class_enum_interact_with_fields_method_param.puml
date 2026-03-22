@@ -1,0 +1,13 @@
+@startuml
+enum Status {
+  ACTIVE
+  INACTIVE
+  --
+  +int code
+  +String label
+}
+class Service {
+  +void process(Status s)
+}
+Service ..> Status
+@enduml

@@ -1,0 +1,13 @@
+@startuml
+cloud Group1 {
+  component A
+  component B
+}
+folder Group2 {
+  component C
+  component D
+}
+A --> C
+B --> D
+A --> D
+@enduml

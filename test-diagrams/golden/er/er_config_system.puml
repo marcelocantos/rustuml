@@ -1,0 +1,30 @@
+@startuml
+entity ConfigNamespace {
+  * id : INT <<PK>>
+  --
+  name : VARCHAR(100) UNIQUE
+  description : TEXT
+  owner : VARCHAR(100)
+}
+entity ConfigKey {
+  * id : INT <<PK>>
+  * namespace_id : INT <<FK>>
+  --
+  key : VARCHAR(200)
+  value_type : ENUM
+  description : TEXT
+  is_required : BOOLEAN
+  default_value : TEXT
+}
+entity ConfigValue {
+  * id : INT <<PK>>
+  * key_id : INT <<FK>>
+  * environment : VARCHAR(50)
+  --
+  value : TEXT
+  updated_at : TIMESTAMP
+  updated_by : INT <<FK>>
+}
+ConfigNamespace ||--o{ ConfigKey : "contains"
+ConfigKey ||--o{ ConfigValue : "has"
+@enduml

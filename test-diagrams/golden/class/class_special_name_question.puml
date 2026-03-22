@@ -1,0 +1,7 @@
+@startuml
+class "Maybe?" {
+  +void method()
+}
+class Other
+"Maybe?" --> Other
+@enduml

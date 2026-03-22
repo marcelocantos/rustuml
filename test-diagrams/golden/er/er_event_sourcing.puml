@@ -1,0 +1,38 @@
+@startuml
+entity AggregateRoot {
+  * id : UUID <<PK>>
+  --
+  type : VARCHAR(100)
+  version : INT
+  created_at : TIMESTAMP
+  last_updated : TIMESTAMP
+}
+entity DomainEvent {
+  * id : UUID <<PK>>
+  * aggregate_id : UUID <<FK>>
+  --
+  event_type : VARCHAR(100)
+  event_data : JSONB
+  metadata : JSONB
+  sequence_number : INT
+  occurred_at : TIMESTAMP
+  recorded_at : TIMESTAMP
+}
+entity Snapshot {
+  * id : UUID <<PK>>
+  * aggregate_id : UUID <<FK>>
+  --
+  state : JSONB
+  version : INT
+  taken_at : TIMESTAMP
+}
+entity EventStream {
+  * aggregate_id : UUID <<FK>>
+  --
+  current_version : INT
+  last_event_at : TIMESTAMP
+}
+AggregateRoot ||--o{ DomainEvent : "emits"
+AggregateRoot ||--o{ Snapshot : "snapshotted as"
+AggregateRoot ||--|| EventStream : "tracked by"
+@enduml

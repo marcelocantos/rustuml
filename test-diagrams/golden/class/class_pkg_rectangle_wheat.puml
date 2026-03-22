@@ -1,0 +1,7 @@
+@startuml
+rectangle myPkg #wheat {
+  class MyClass {
+    +void method()
+  }
+}
+@enduml

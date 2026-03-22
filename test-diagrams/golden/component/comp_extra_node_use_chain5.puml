@@ -1,0 +1,13 @@
+@startuml
+node Grp {
+  component X1
+  component X2
+  component X3
+  component X4
+  component X5
+}
+X1 ..> X2
+X2 ..> X3
+X3 ..> X4
+X4 ..> X5
+@enduml

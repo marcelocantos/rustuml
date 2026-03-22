@@ -1,0 +1,5 @@
+@startuml
+note as N1
+  בדיקה: נתונים
+end note
+@enduml

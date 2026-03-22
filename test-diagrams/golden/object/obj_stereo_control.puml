@@ -1,0 +1,5 @@
+@startuml
+object MyObject <<control>> {
+  id = 1
+}
+@enduml

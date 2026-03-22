@@ -1,0 +1,6 @@
+@startuml
+!$myVar = "hello"
+!$retrieved = %get_variable_value("myVar")
+participant Alice
+note over Alice : $retrieved
+@enduml

@@ -1,0 +1,26 @@
+@startuml
+participant Orchestrator
+participant ServiceA
+participant ServiceB
+participant ServiceC
+
+Orchestrator -> ServiceA ++ : step 1
+ServiceA --> Orchestrator -- : done 1
+
+Orchestrator -> ServiceB ++ : step 2
+alt success
+  ServiceB --> Orchestrator -- : done 2
+  Orchestrator -> ServiceC ++ : step 3
+  alt success
+    ServiceC --> Orchestrator -- : done 3
+    note over Orchestrator : saga complete
+  else fail C
+    ServiceC --> Orchestrator -- : error
+    Orchestrator -> ServiceB : compensate B
+    Orchestrator -> ServiceA : compensate A
+  end
+else fail B
+  ServiceB --> Orchestrator -- : error
+  Orchestrator -> ServiceA : compensate A
+end
+@enduml

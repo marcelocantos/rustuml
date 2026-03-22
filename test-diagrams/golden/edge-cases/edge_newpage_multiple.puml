@@ -1,0 +1,11 @@
+@startuml
+Alice -> Bob: msg1
+newpage
+Bob -> Charlie: msg2
+newpage
+Charlie -> Dave: msg3
+newpage
+Dave -> Eve: msg4
+newpage
+Eve --> Alice: done
+@enduml

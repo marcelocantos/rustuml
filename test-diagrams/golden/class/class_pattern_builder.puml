@@ -1,0 +1,24 @@
+@startuml
+class Director {
+  -builder: Builder
+  +void construct()
+}
+abstract class Builder {
+  +{abstract} void buildPartA()
+  +{abstract} void buildPartB()
+  +{abstract} Product getResult()
+}
+class ConcreteBuilder {
+  -product: Product
+  +void buildPartA()
+  +void buildPartB()
+  +Product getResult()
+}
+class Product {
+  +String partA
+  +String partB
+}
+Director --> Builder
+ConcreteBuilder --|> Builder
+ConcreteBuilder --> Product
+@enduml

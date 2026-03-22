@@ -1,0 +1,16 @@
+@startuml
+title "Component Diagram 223"
+package "System223" {
+  [Service1_223]
+  [Service2_223]
+  [Service3_223]
+  [Service4_223]
+  [Service5_223]
+  [Service6_223]
+}
+[Service1_223] --> [Service2_223]
+[Service2_223] --> [Service3_223]
+[Service3_223] --> [Service4_223]
+[Service4_223] --> [Service5_223]
+[Service5_223] --> [Service6_223]
+@enduml

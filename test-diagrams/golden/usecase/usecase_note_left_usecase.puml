@@ -1,0 +1,6 @@
+@startuml
+actor User
+usecase UC
+note left of UC : Left note on use case
+User --> UC
+@enduml

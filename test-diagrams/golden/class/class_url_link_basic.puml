@@ -1,0 +1,5 @@
+@startuml
+class MyClass [[http://example.com]] {
+  +void method()
+}
+@enduml

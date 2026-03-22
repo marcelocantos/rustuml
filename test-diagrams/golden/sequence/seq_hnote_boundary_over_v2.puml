@@ -1,0 +1,7 @@
+@startuml
+boundary X
+participant Y
+X -> Y : go
+hnote over X : hnote/boundary
+Y --> X : back
+@enduml

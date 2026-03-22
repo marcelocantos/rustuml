@@ -1,0 +1,7 @@
+@startuml
+database X
+participant Y
+X -> Y : message
+note over X : note over database
+Y --> X : reply
+@enduml

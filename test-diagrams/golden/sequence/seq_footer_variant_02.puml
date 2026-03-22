@@ -1,0 +1,5 @@
+@startuml
+footer Confidential
+Alice -> Bob : hello
+Bob --> Alice : hi
+@enduml

@@ -1,0 +1,5 @@
+@startuml
+class VeryLongClassNameThatExceedsNormalLengthAndMightCauseRenderingIssues {
+  +void veryLongMethodNameThatAlsoExceedsNormalLength(String veryLongParameterName)
+}
+@enduml

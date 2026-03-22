@@ -1,0 +1,7 @@
+@startuml
+hide stereotype
+enum MyType {
+  +String field
+  +void method()
+}
+@enduml

@@ -1,0 +1,7 @@
+@startuml
+!theme solar
+start
+:step one;
+:step two;
+stop
+@enduml

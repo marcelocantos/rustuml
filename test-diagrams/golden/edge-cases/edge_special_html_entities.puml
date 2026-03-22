@@ -1,0 +1,4 @@
+@startuml
+Alice -> Bob: &amp; &lt; &gt; &quot;
+Bob --> Alice: result &lt; 10 &amp;&amp; x &gt; 0
+@enduml

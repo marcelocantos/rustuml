@@ -1,0 +1,8 @@
+@startuml
+A -> B : init
+par
+  A ->> B : thin_solid branch 1
+and
+  A ->> C : thin_solid branch 2
+end
+@enduml

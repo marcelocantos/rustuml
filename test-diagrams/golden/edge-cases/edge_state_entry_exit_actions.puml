@@ -1,0 +1,8 @@
+@startuml
+[*] --> Connected
+state Connected {
+  entry / open connection
+  exit / close connection
+  Connected : do / keep alive
+}
+@enduml

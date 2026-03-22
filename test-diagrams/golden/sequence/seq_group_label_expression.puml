@@ -1,0 +1,8 @@
+@startuml
+Alice -> Bob : check
+alt x > 0 && y < 100
+  Bob --> Alice : in range
+else x <= 0 || y >= 100
+  Bob --> Alice : out of range
+end
+@enduml

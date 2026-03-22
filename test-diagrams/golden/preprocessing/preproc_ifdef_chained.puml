@@ -1,0 +1,17 @@
+@startuml
+!define MODE_B
+
+!ifdef MODE_A
+note as N
+  Mode A active
+end note
+!else ifdef MODE_B
+note as N
+  Mode B active
+end note
+!else
+note as N
+  No mode active
+end note
+!endif
+@enduml

@@ -1,0 +1,7 @@
+@startuml
+package mypackage <<folder>> {
+  class MyClass {
+    +void method()
+  }
+}
+@enduml

@@ -1,0 +1,6 @@
+@startuml
+title Title With Spaces
+start
+:Action;
+stop
+@enduml
