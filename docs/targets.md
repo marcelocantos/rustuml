@@ -27,7 +27,7 @@
   - The framework runs in CI, is fully automated, and scales to 10k+ test cases
   - New diagram types or features can be added to the generator without framework changes
 - **Context**: The existing Java test suite has only 12% coverage and is mostly smoke tests. Synthetic generation with oracle comparison gives unbounded coverage and makes every porting step immediately verifiable. This is the first thing to build — all other sub-targets depend on it.
-- **Status**: converging — 107 test cases across 12 diagram types (sequence, class, state, activity, component, use case, deployment, timing, gantt, mindmap, WBS, JSON, YAML, salt, nwdiag). 214 renders per run, all passing. Server-based runner. Remaining: CI integration, property-based random generation for 10k+ scale.
+- **Status**: converging — 1,387 test cases (107 fixed + 1,280 proptest random) across 12 diagram types. CI green (GitHub Actions). Server-based runner. Remaining: scale fixed cases further as more diagram features are ported.
 - **Discovered**: 2026-03-22
 
 ### 🎯T1.2 Hierarchical graph layout engine in Rust

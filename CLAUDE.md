@@ -6,10 +6,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 RustUML is a Rust port of PlantUML — a tool that generates UML and non-UML diagrams from plain text descriptions. The goal is a single statically-linked binary with no runtime dependencies (no JVM, no Graphviz, no external fonts).
 
-The port includes:
-- PlantUML parser, preprocessor (TIM), and rendering pipeline
-- Graphviz DOT layout algorithm (ported from C, licensed EPL-2.0)
-- KaTeX math rendering (ported from TypeScript, licensed MIT)
+This is a **semantic rewrite**, not a line-by-line transliteration of the Java code. Use idiomatic Rust (enums with data, traits, pattern matching, ownership). The Java code is the oracle for *behavior*, not a template for *architecture*.
 
 ## Reference Implementation
 
@@ -18,9 +15,17 @@ The Java PlantUML at `~/work/github.com/plantuml/plantuml` serves as the oracle 
 ## Licensing
 
 - RustUML own code: Apache 2.0
-- Graphviz-derived layout code: EPL-2.0 (must remain EPL-2.0, kept in separate modules)
-- KaTeX-derived math code: MIT
-- KaTeX fonts: MIT (upstream sources: public domain Computer Modern + SIL OFL AMS fonts)
+- Layout engine (`rustuml-layout`): Apache 2.0 (wraps layout-rs, MIT)
+- KaTeX-derived math code: MIT (when ported)
+
+## Workspace Structure
+
+```
+crates/
+  rustuml/          — binary (CLI entry point)
+  rustuml-layout/   — hierarchical graph layout (wraps layout-rs)
+  rustuml-oracle/   — oracle test framework (generator, runner, comparator)
+```
 
 ## Build and Test
 
@@ -40,10 +45,15 @@ Override with `PLANTUML_URL=http://host:port` if needed.
 ## Architecture Principles
 
 - Single binary, no runtime dependencies
-- Oracle-based testing: synthetic PlantUML inputs are generated, run through Java PlantUML for reference output, then compared against Rust output
-- Two comparison tiers: exact match (parsing, preprocessing, metadata) and structural equivalence (layout)
-- Graphviz and KaTeX ports are isolated in their own crates with their upstream licenses
+- Semantic rewrite using idiomatic Rust — not a Java transliteration
+- Oracle-based testing: synthetic PlantUML inputs run through Java PlantUML for reference output, compared against Rust output
+- Two comparison tiers: exact match (parsing, preprocessing) and structural equivalence (layout — topologically correct, not pixel-identical)
+- Layout via layout-rs (Sugiyama algorithm), not a Graphviz C port
 
 ## Code Style
 
 Standard Rust conventions. Use `cargo fmt` and `cargo clippy`.
+
+## Delivery
+
+Merged to master.
