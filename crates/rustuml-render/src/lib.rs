@@ -5,6 +5,7 @@
 
 pub mod activity;
 pub mod class;
+pub mod creole;
 pub mod metrics;
 pub mod png;
 pub mod sequence;
