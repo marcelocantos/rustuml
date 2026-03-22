@@ -8,6 +8,7 @@ pub mod class;
 pub mod metrics;
 pub mod png;
 pub mod sequence;
+pub mod skinparam;
 pub mod state;
 pub mod style;
 pub mod svg;
@@ -21,7 +22,25 @@ pub fn render_svg(diagram: &Diagram) -> String {
 }
 
 /// Render a parsed diagram to SVG with a specific theme.
+/// Skinparams from the diagram's metadata override the theme.
 pub fn render_svg_with_theme(diagram: &Diagram, theme: &Theme) -> String {
+    // Apply inline skinparam overrides.
+    let meta_params = match diagram {
+        Diagram::Sequence(s) => &s.meta.skinparams,
+        Diagram::Class(c) => &c.meta.skinparams,
+        Diagram::State(s) => &s.meta.skinparams,
+        Diagram::Activity(a) => &a.meta.skinparams,
+        _ => return render_with_theme(diagram, theme),
+    };
+    let effective_theme = if meta_params.is_empty() {
+        theme.clone()
+    } else {
+        skinparam::apply_skinparams(theme, meta_params)
+    };
+    render_with_theme(diagram, &effective_theme)
+}
+
+fn render_with_theme(diagram: &Diagram, theme: &Theme) -> String {
     match diagram {
         Diagram::Sequence(seq) => sequence::render(seq, theme),
         Diagram::Class(cls) => class::render(cls, theme),
