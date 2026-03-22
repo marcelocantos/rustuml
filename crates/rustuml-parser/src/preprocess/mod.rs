@@ -319,29 +319,29 @@ impl PreprocessContext {
             return true;
         }
 
-        if line == "!endfor" || line == "!endforeach" {
-            if let Some(foreach) = self.foreach_stack.pop() {
-                if self.is_active() {
-                    // Expand: for each value, substitute and process body lines.
-                    for val in &foreach.values {
-                        let old_val = self.defines.get(&foreach.var_name).cloned();
-                        self.defines.insert(foreach.var_name.clone(), val.clone());
+        if (line == "!endfor" || line == "!endforeach")
+            && let Some(foreach) = self.foreach_stack.pop()
+        {
+            if self.is_active() {
+                // Expand: for each value, substitute and process body lines.
+                for val in &foreach.values {
+                    let old_val = self.defines.get(&foreach.var_name).cloned();
+                    self.defines.insert(foreach.var_name.clone(), val.clone());
 
-                        for body_line in &foreach.body_lines {
-                            let expanded = self.substitute_vars(body_line);
-                            if !expanded.trim().is_empty() {
-                                output.push(expanded);
-                            }
+                    for body_line in &foreach.body_lines {
+                        let expanded = self.substitute_vars(body_line);
+                        if !expanded.trim().is_empty() {
+                            output.push(expanded);
                         }
+                    }
 
-                        // Restore previous value.
-                        match old_val {
-                            Some(v) => {
-                                self.defines.insert(foreach.var_name.clone(), v);
-                            }
-                            None => {
-                                self.defines.remove(&foreach.var_name);
-                            }
+                    // Restore previous value.
+                    match old_val {
+                        Some(v) => {
+                            self.defines.insert(foreach.var_name.clone(), v);
+                        }
+                        None => {
+                            self.defines.remove(&foreach.var_name);
                         }
                     }
                 }
