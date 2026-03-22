@@ -23,6 +23,8 @@ The Java PlantUML at `~/work/github.com/plantuml/plantuml` serves as the oracle 
 ```
 crates/
   rustuml/          — binary (CLI entry point)
+  rustuml-parser/   — PlantUML/YAML/JSON parsing, TIM preprocessor
+  rustuml-render/   — SVG/PNG rendering, themes, creole markup
   rustuml-layout/   — hierarchical graph layout (wraps layout-rs)
   rustuml-oracle/   — oracle test framework (generator, runner, comparator)
 ```
