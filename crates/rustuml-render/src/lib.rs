@@ -9,6 +9,7 @@ pub mod component;
 pub mod creole;
 pub mod deployment;
 pub mod metrics;
+pub mod pdf;
 pub mod png;
 pub mod sequence;
 pub mod skinparam;

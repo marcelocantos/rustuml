@@ -46,6 +46,7 @@ fn main() {
             "--yaml" => output_mode = OutputMode::Yaml,
             "-tsvg" => output_mode = OutputMode::Svg,
             "-tpng" => output_mode = OutputMode::Png,
+            "-tpdf" => output_mode = OutputMode::Pdf,
             "--theme=modern" => theme = rustuml_render::style::Theme::modern(),
             "--theme=default" => theme = rustuml_render::style::Theme::default(),
             s if s.starts_with("--theme-file=") => {
@@ -108,6 +109,19 @@ fn main() {
                     rustuml_render::render_svg_with_theme(&diagram, &theme)
                 );
             }
+            OutputMode::Pdf => {
+                let svg = rustuml_render::render_svg_with_theme(&diagram, &theme);
+                match rustuml_render::pdf::svg_to_pdf(&svg) {
+                    Ok(bytes) => {
+                        use std::io::Write;
+                        std::io::stdout().write_all(&bytes).expect("write failed");
+                    }
+                    Err(e) => {
+                        eprintln!("PDF error: {e}");
+                        std::process::exit(1);
+                    }
+                }
+            }
             OutputMode::Png => {
                 let svg = rustuml_render::render_svg_with_theme(&diagram, &theme);
                 match rustuml_render::png::svg_to_png(&svg) {
@@ -132,6 +146,7 @@ fn main() {
 enum OutputMode {
     Svg,
     Png,
+    Pdf,
     Ast,
     Yaml,
 }
