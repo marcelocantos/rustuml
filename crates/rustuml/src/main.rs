@@ -29,12 +29,20 @@ fn main() {
 
     let mut output_mode = OutputMode::Svg;
     let mut input_arg = None;
+    let mut theme_name = "default";
 
     for arg in &args[1..] {
         match arg.as_str() {
             "--ast" => output_mode = OutputMode::Ast,
             "--yaml" => output_mode = OutputMode::Yaml,
             "-tsvg" => output_mode = OutputMode::Svg,
+            "--theme=modern" => theme_name = "modern",
+            "--theme=default" => theme_name = "default",
+            s if s.starts_with("--theme=") => {
+                eprintln!("unknown theme: {}", &s[8..]);
+                eprintln!("available: default, modern");
+                std::process::exit(1);
+            }
             _ => input_arg = Some(arg.as_str()),
         }
     }
@@ -57,6 +65,11 @@ fn main() {
         })
     };
 
+    let theme = match theme_name {
+        "modern" => rustuml_render::style::Theme::modern(),
+        _ => rustuml_render::style::Theme::default(),
+    };
+
     match rustuml_parser::parse::parse_auto(&input) {
         Ok(diagram) => match output_mode {
             OutputMode::Ast => println!("{diagram:#?}"),
@@ -66,7 +79,12 @@ fn main() {
                     serde_yaml::to_string(&diagram).expect("YAML serialization failed")
                 );
             }
-            OutputMode::Svg => print!("{}", rustuml_render::render_svg(&diagram)),
+            OutputMode::Svg => {
+                print!(
+                    "{}",
+                    rustuml_render::render_svg_with_theme(&diagram, &theme)
+                );
+            }
         },
         Err(e) => {
             eprintln!("parse error: {e}");
