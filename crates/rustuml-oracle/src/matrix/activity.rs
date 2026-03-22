@@ -5,6 +5,99 @@
 
 use super::MatrixCase;
 
+/// Activity diagram quick combinatorial matrix.
+///
+/// Generates 18 cases: 6 control-flow variants × 3 action-count variants.
+pub fn quick_cases() -> Vec<MatrixCase> {
+    // Action sequences of length n, named "Action 1", "Action 2", etc.
+    let action_counts: &[(usize, &str)] = &[(1, "one"), (3, "three"), (5, "five")];
+
+    fn actions(n: usize) -> String {
+        (1..=n).map(|i| format!(":Action {i};\n")).collect()
+    }
+
+    fn expected_actions(n: usize) -> Vec<String> {
+        // First and last action labels
+        if n == 1 {
+            vec!["Action 1".to_string()]
+        } else {
+            vec![format!("Action 1"), format!("Action {n}")]
+        }
+    }
+
+    // Control-flow templates. Use {ACTIONS} as placeholder for the action block.
+    // (flow_name, source_template, extra_expected_texts, flow_tags)
+    let control_flows: &[(&str, &str, &[&str], &[&str])] = &[
+        (
+            "if_else",
+            "start\nif (ok?) then (yes)\n{ACTIONS}else (no)\n  :Alt;\nendif\nstop",
+            &["Alt"],
+            &["activity:if"],
+        ),
+        (
+            "while",
+            "start\nwhile (more?) is (yes)\n{ACTIONS}endwhile (no)\nstop",
+            &[],
+            &["activity:while"],
+        ),
+        (
+            "repeat",
+            "start\nrepeat\n{ACTIONS}repeat while (again?) is (yes) not (no)\nstop",
+            &[],
+            &["activity:repeat"],
+        ),
+        (
+            "fork",
+            "start\nfork\n{ACTIONS}fork again\n  :Other;\nend fork\nstop",
+            &["Other"],
+            &["activity:fork"],
+        ),
+        (
+            "split",
+            "start\nsplit\n{ACTIONS}split again\n  :Branch;\nend split\nstop",
+            &["Branch"],
+            &["activity:split"],
+        ),
+        (
+            "switch",
+            "start\nswitch (choice?)\ncase ( A )\n{ACTIONS}case ( B )\n  :Fallback;\nendswitch\nstop",
+            &["Fallback"],
+            &["activity:switch"],
+        ),
+    ];
+
+    let mut cases = Vec::new();
+
+    for (flow_name, template, extra_expected, flow_tags) in control_flows {
+        for (n, count_name) in action_counts {
+            let action_block = actions(*n);
+            let body = template.replace("{ACTIONS}", &action_block);
+            let source = format!("@startuml\n{body}\n@enduml\n");
+
+            let mut expected = expected_actions(*n);
+            expected.extend(extra_expected.iter().map(|s| (*s).to_string()));
+
+            let mut tags = vec!["activity", "quick"];
+            tags.extend_from_slice(flow_tags);
+            tags.push(match *count_name {
+                "one" => "activity:actions:1",
+                "three" => "activity:actions:3",
+                "five" => "activity:actions:5",
+                _ => "activity:actions",
+            });
+
+            cases.push(MatrixCase {
+                name: format!("activity/quick/{flow_name}/{count_name}"),
+                source,
+                tags,
+                expected_texts: expected,
+            });
+        }
+    }
+
+    cases
+}
+
 /// Activity diagram edge cases.
 pub fn edge_cases() -> Vec<MatrixCase> {
     vec![

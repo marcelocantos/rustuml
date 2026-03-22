@@ -73,6 +73,20 @@ fn class_quick_matrix() {
     assert!(failures.is_empty(), "class quick matrix: {summary}");
 }
 
+#[test]
+fn class_medium_matrix() {
+    let cases = class::medium_cases();
+    assert!(
+        cases.len() >= 75,
+        "class medium matrix should produce at least 75 cases, got {}",
+        cases.len()
+    );
+    let results = validate::validate_all(&cases);
+    let summary = validate::format_summary(&results);
+    let failures: Vec<_> = results.iter().filter(|r| !r.passed()).collect();
+    assert!(failures.is_empty(), "class medium matrix: {summary}");
+}
+
 // ---------------------------------------------------------------------------
 // State diagrams
 // ---------------------------------------------------------------------------
@@ -86,6 +100,20 @@ fn state_edge_cases() {
     assert!(failures.is_empty(), "state edge cases: {summary}");
 }
 
+#[test]
+fn state_quick_matrix() {
+    let cases = state::quick_cases();
+    assert!(
+        cases.len() >= 20,
+        "state quick matrix should produce at least 20 cases, got {}",
+        cases.len()
+    );
+    let results = validate::validate_all(&cases);
+    let summary = validate::format_summary(&results);
+    let failures: Vec<_> = results.iter().filter(|r| !r.passed()).collect();
+    assert!(failures.is_empty(), "state quick matrix: {summary}");
+}
+
 // ---------------------------------------------------------------------------
 // Activity diagrams
 // ---------------------------------------------------------------------------
@@ -97,6 +125,20 @@ fn activity_edge_cases() {
     let summary = validate::format_summary(&results);
     let failures: Vec<_> = results.iter().filter(|r| !r.passed()).collect();
     assert!(failures.is_empty(), "activity edge cases: {summary}");
+}
+
+#[test]
+fn activity_quick_matrix() {
+    let cases = activity::quick_cases();
+    assert!(
+        cases.len() >= 18,
+        "activity quick matrix should produce at least 18 cases, got {}",
+        cases.len()
+    );
+    let results = validate::validate_all(&cases);
+    let summary = validate::format_summary(&results);
+    let failures: Vec<_> = results.iter().filter(|r| !r.passed()).collect();
+    assert!(failures.is_empty(), "activity quick matrix: {summary}");
 }
 
 // ---------------------------------------------------------------------------
@@ -123,7 +165,9 @@ fn all_matrix_coverage() {
     all_cases.extend(sequence::edge_cases());
     all_cases.extend(class::quick_cases());
     all_cases.extend(class::edge_cases());
+    all_cases.extend(state::quick_cases());
     all_cases.extend(state::edge_cases());
+    all_cases.extend(activity::quick_cases());
     all_cases.extend(activity::edge_cases());
     all_cases.extend(deployment::edge_cases());
 

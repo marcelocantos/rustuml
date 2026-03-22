@@ -5,6 +5,114 @@
 
 use super::MatrixCase;
 
+/// State diagram quick combinatorial matrix.
+///
+/// Generates 20 cases: 5 state kinds × 4 transition patterns.
+pub fn quick_cases() -> Vec<MatrixCase> {
+    // (kind_name, state_decls, primary_renders_label, kind_tags)
+    //
+    // `primary_renders_label` is false for symbol stereotypes (<<choice>>,
+    // <<fork>>, <<join>>) because PlantUML renders them as graphical symbols
+    // without a visible text label for the state name.
+    let state_kinds: &[(&str, &str, bool, &[&str])] = &[
+        (
+            "normal",
+            "state Active\nstate Idle",
+            true,
+            &["state:normal"],
+        ),
+        (
+            "with_desc",
+            "state Active\nActive : entry / init\nActive : do / run\nstate Idle",
+            true,
+            &["state:desc"],
+        ),
+        (
+            "stereotype_choice",
+            "state Active <<choice>>\nstate Idle",
+            false,
+            &["state:stereotype", "state:choice"],
+        ),
+        (
+            "stereotype_fork",
+            "state Active <<fork>>\nstate Idle",
+            false,
+            &["state:stereotype", "state:fork"],
+        ),
+        (
+            "stereotype_join",
+            "state Active <<join>>\nstate Idle",
+            false,
+            &["state:stereotype", "state:join"],
+        ),
+    ];
+
+    // (pattern_name, transition_body, expected_when_label_shown, expected_always)
+    //
+    // `expected_when_label_shown` texts require the primary state to render its
+    // name (e.g. "Active"). `expected_always` texts come from transition labels
+    // and appear regardless of state kind.
+    let transition_patterns: &[(&str, &str, &[&str], &[&str])] = &[
+        (
+            "simple",
+            "[*] --> Active\nActive --> Idle\nIdle --> [*]",
+            &["Active"],
+            &["Idle"],
+        ),
+        (
+            "chain",
+            "[*] --> Active\nActive --> Idle : step1\nIdle --> Active : step2\nIdle --> [*] : done",
+            &[],
+            &["step1", "step2"],
+        ),
+        (
+            "cycle",
+            "[*] --> Active\nActive --> Idle : pause\nIdle --> Active : resume\nActive --> [*] : end",
+            &[],
+            &["pause", "resume"],
+        ),
+        (
+            "to_final",
+            "[*] --> Active\nActive --> [*] : success\nActive --> Idle : wait\nIdle --> [*] : timeout",
+            &[],
+            &["success", "timeout"],
+        ),
+    ];
+
+    let mut cases = Vec::new();
+
+    for (kind_name, state_decls, primary_renders_label, kind_tags) in state_kinds {
+        for (pattern_name, transitions, expected_labeled, expected_always) in transition_patterns {
+            let source = format!("@startuml\n{state_decls}\n{transitions}\n@enduml\n");
+
+            let mut expected: Vec<String> =
+                expected_always.iter().map(|s| (*s).to_string()).collect();
+            if *primary_renders_label {
+                expected.extend(expected_labeled.iter().map(|s| (*s).to_string()));
+            }
+
+            let mut tags = vec!["state", "quick"];
+            tags.extend_from_slice(kind_tags);
+            tags.push(match *pattern_name {
+                "simple" => "state:transition:simple",
+                "chain" => "state:transition:chain",
+                "cycle" => "state:transition:cycle",
+                "to_final" => "state:transition:to_final",
+                _ => "state:transition",
+            });
+
+            cases.push(MatrixCase {
+                name: format!("state/quick/{kind_name}/{pattern_name}"),
+                source,
+                tags,
+                expected_texts: expected,
+            });
+        }
+    }
+
+    cases
+}
+
 /// State diagram edge cases.
 pub fn edge_cases() -> Vec<MatrixCase> {
     vec![
