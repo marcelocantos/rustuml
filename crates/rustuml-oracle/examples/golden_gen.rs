@@ -29,8 +29,10 @@ fn main() {
     // Collect all matrix cases.
     let mut cases: Vec<MatrixCase> = Vec::new();
     cases.extend(sequence::quick_cases());
+    cases.extend(sequence::medium_cases());
     cases.extend(sequence::edge_cases());
     cases.extend(class::quick_cases());
+    cases.extend(class::medium_cases());
     cases.extend(class::edge_cases());
     cases.extend(state::edge_cases());
     cases.extend(activity::edge_cases());

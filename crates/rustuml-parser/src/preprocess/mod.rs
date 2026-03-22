@@ -37,6 +37,9 @@ struct PreprocessContext {
     in_block_comment: bool,
     base_dir: Option<PathBuf>,
     include_depth: usize,
+    foreach_stack: Vec<ForEachState>,
+    functions: HashMap<String, FunctionDef>,
+    collecting_function: Option<String>,
 }
 
 const MAX_INCLUDE_DEPTH: usize = 10;
@@ -44,6 +47,18 @@ const MAX_INCLUDE_DEPTH: usize = 10;
 struct CondState {
     active: bool,
     has_matched: bool,
+}
+
+struct ForEachState {
+    var_name: String,
+    values: Vec<String>,
+    body_lines: Vec<String>,
+}
+
+#[derive(Clone)]
+struct FunctionDef {
+    params: Vec<String>,
+    body: Vec<String>,
 }
 
 impl PreprocessContext {
@@ -54,6 +69,9 @@ impl PreprocessContext {
             in_block_comment: false,
             base_dir,
             include_depth: 0,
+            foreach_stack: Vec::new(),
+            functions: HashMap::new(),
+            collecting_function: None,
         }
     }
 
@@ -92,6 +110,21 @@ impl PreprocessContext {
 
             // Skip @start/@end tags.
             if trimmed.starts_with("@start") || trimmed.starts_with("@end") {
+                continue;
+            }
+
+            // Function definition collection — must be checked first.
+            if self.try_function_def(trimmed) {
+                continue;
+            }
+
+            // Foreach buffering — must be checked before other directives.
+            if self.try_foreach(trimmed, &mut output) {
+                continue;
+            }
+
+            // Function invocation.
+            if self.try_function_call(trimmed, &mut output) {
                 continue;
             }
 
@@ -149,6 +182,179 @@ impl PreprocessContext {
             }
             return true;
         }
+        false
+    }
+
+    fn try_function_def(&mut self, line: &str) -> bool {
+        // Currently collecting a function body?
+        if let Some(func_name) = &self.collecting_function.clone() {
+            if line == "!endfunction" || line == "!endprocedure" {
+                self.collecting_function = None;
+            } else if let Some(func) = self.functions.get_mut(func_name) {
+                func.body.push(line.to_string());
+            }
+            return true;
+        }
+
+        // !function $name($param1, $param2)
+        static RE: LazyLock<Regex> = LazyLock::new(|| {
+            Regex::new(r"^!(?:function|procedure)\s+\$(\w+)\s*\(([^)]*)\)$").unwrap()
+        });
+
+        if let Some(caps) = RE.captures(line) {
+            let name = caps[1].to_string();
+            let params: Vec<String> = if caps[2].trim().is_empty() {
+                Vec::new()
+            } else {
+                caps[2]
+                    .split(',')
+                    .map(|p| p.trim().trim_start_matches('$').to_string())
+                    .collect()
+            };
+
+            self.functions.insert(
+                name.clone(),
+                FunctionDef {
+                    params,
+                    body: Vec::new(),
+                },
+            );
+            self.collecting_function = Some(name);
+            return true;
+        }
+
+        false
+    }
+
+    fn try_function_call(&mut self, line: &str, output: &mut Vec<String>) -> bool {
+        // $funcName("arg1", "arg2")
+        static RE: LazyLock<Regex> =
+            LazyLock::new(|| Regex::new(r"^\$(\w+)\s*\(([^)]*)\)$").unwrap());
+
+        if let Some(caps) = RE.captures(line) {
+            let name = &caps[1];
+            let args_str = &caps[2];
+
+            let func = match self.functions.get(name) {
+                Some(f) => f.clone(),
+                None => return false,
+            };
+
+            if !self.is_active() {
+                return true;
+            }
+
+            let args: Vec<String> = if args_str.trim().is_empty() {
+                Vec::new()
+            } else {
+                args_str
+                    .split(',')
+                    .map(|a| a.trim().trim_matches('"').to_string())
+                    .collect()
+            };
+
+            // Save current values, set params.
+            let mut saved: Vec<(String, Option<String>)> = Vec::new();
+            for (i, param) in func.params.iter().enumerate() {
+                saved.push((param.clone(), self.defines.get(param).cloned()));
+                if let Some(arg) = args.get(i) {
+                    self.defines.insert(param.clone(), arg.clone());
+                }
+            }
+
+            // Expand body lines.
+            for body_line in &func.body {
+                let expanded = self.substitute_vars(body_line);
+                if !expanded.trim().is_empty() {
+                    output.push(expanded);
+                }
+            }
+
+            // Restore saved values.
+            for (param, old_val) in saved {
+                match old_val {
+                    Some(v) => {
+                        self.defines.insert(param, v);
+                    }
+                    None => {
+                        self.defines.remove(&param);
+                    }
+                }
+            }
+
+            return true;
+        }
+
+        false
+    }
+
+    fn try_foreach(&mut self, line: &str, output: &mut Vec<String>) -> bool {
+        // !foreach $var in ["a", "b", "c"]
+        static RE: LazyLock<Regex> =
+            LazyLock::new(|| Regex::new(r#"^!foreach\s+\$(\w+)\s+in\s+\[(.+)\]$"#).unwrap());
+
+        if let Some(caps) = RE.captures(line) {
+            if !self.is_active() {
+                return true;
+            }
+            let var_name = caps[1].to_string();
+            let values_str = &caps[2];
+
+            // Parse the values list (comma-separated, possibly quoted).
+            let values: Vec<String> = values_str
+                .split(',')
+                .map(|v| v.trim().trim_matches('"').trim_matches('\'').to_string())
+                .collect();
+
+            // Collect body lines until !endfor.
+            // This is a simplified implementation that doesn't support nesting.
+            // For now, we store the foreach state and handle it in process().
+            // Actually, since we process line-by-line, we need a different approach.
+            // Store the foreach and buffer lines until !endfor.
+            self.foreach_stack.push(ForEachState {
+                var_name,
+                values,
+                body_lines: Vec::new(),
+            });
+            return true;
+        }
+
+        if (line == "!endfor" || line == "!endforeach")
+            && let Some(foreach) = self.foreach_stack.pop()
+        {
+            if self.is_active() {
+                // Expand: for each value, substitute and process body lines.
+                for val in &foreach.values {
+                    let old_val = self.defines.get(&foreach.var_name).cloned();
+                    self.defines.insert(foreach.var_name.clone(), val.clone());
+
+                    for body_line in &foreach.body_lines {
+                        let expanded = self.substitute_vars(body_line);
+                        if !expanded.trim().is_empty() {
+                            output.push(expanded);
+                        }
+                    }
+
+                    // Restore previous value.
+                    match old_val {
+                        Some(v) => {
+                            self.defines.insert(foreach.var_name.clone(), v);
+                        }
+                        None => {
+                            self.defines.remove(&foreach.var_name);
+                        }
+                    }
+                }
+            }
+            return true;
+        }
+
+        // If we're inside a foreach, buffer the line.
+        if let Some(foreach) = self.foreach_stack.last_mut() {
+            foreach.body_lines.push(line.to_string());
+            return true;
+        }
+
         false
     }
 
@@ -490,5 +696,75 @@ mod tests {
         assert_eq!(lines, vec!["Alice -> Bob : hi"]);
 
         let _ = std::fs::remove_dir_all(&dir);
+    }
+
+    #[test]
+    fn foreach_basic() {
+        let input = "@startuml\n!foreach $name in [\"Alice\", \"Bob\", \"Charlie\"]\nparticipant $name\n!endfor\n@enduml";
+        let lines = preprocess(input);
+        assert_eq!(
+            lines,
+            vec![
+                "participant Alice",
+                "participant Bob",
+                "participant Charlie"
+            ]
+        );
+    }
+
+    #[test]
+    fn foreach_with_message() {
+        let input = "@startuml\n!foreach $x in [\"a\", \"b\"]\nAlice -> Bob : $x\n!endfor\n@enduml";
+        let lines = preprocess(input);
+        assert_eq!(lines, vec!["Alice -> Bob : a", "Alice -> Bob : b"]);
+    }
+
+    #[test]
+    fn foreach_preserves_other_vars() {
+        let input = "@startuml\n!define WHO Alice\n!foreach $x in [\"hello\", \"world\"]\n$WHO -> Bob : $x\n!endfor\n@enduml";
+        let lines = preprocess(input);
+        assert_eq!(lines, vec!["Alice -> Bob : hello", "Alice -> Bob : world"]);
+    }
+
+    #[test]
+    fn foreach_endforeach() {
+        let input = "@startuml\n!foreach $x in [\"a\"]\nline $x\n!endforeach\n@enduml";
+        let lines = preprocess(input);
+        assert_eq!(lines, vec!["line a"]);
+    }
+
+    #[test]
+    fn function_basic() {
+        let input = "@startuml\n!function $greet($name)\nAlice -> $name : hello\n!endfunction\n$greet(\"Bob\")\n@enduml";
+        let lines = preprocess(input);
+        assert_eq!(lines, vec!["Alice -> Bob : hello"]);
+    }
+
+    #[test]
+    fn function_multiple_params() {
+        let input = "@startuml\n!function $msg($from, $to, $text)\n$from -> $to : $text\n!endfunction\n$msg(\"Alice\", \"Bob\", \"hi\")\n@enduml";
+        let lines = preprocess(input);
+        assert_eq!(lines, vec!["Alice -> Bob : hi"]);
+    }
+
+    #[test]
+    fn function_no_params() {
+        let input = "@startuml\n!function $header()\ntitle My Diagram\n!endfunction\n$header()\nAlice -> Bob\n@enduml";
+        let lines = preprocess(input);
+        assert_eq!(lines, vec!["title My Diagram", "Alice -> Bob"]);
+    }
+
+    #[test]
+    fn function_called_multiple_times() {
+        let input = "@startuml\n!function $arrow($to)\nAlice -> $to : msg\n!endfunction\n$arrow(\"Bob\")\n$arrow(\"Charlie\")\n@enduml";
+        let lines = preprocess(input);
+        assert_eq!(lines, vec!["Alice -> Bob : msg", "Alice -> Charlie : msg"]);
+    }
+
+    #[test]
+    fn procedure_syntax() {
+        let input = "@startuml\n!procedure $setup($name)\nparticipant $name\n!endprocedure\n$setup(\"Alice\")\n@enduml";
+        let lines = preprocess(input);
+        assert_eq!(lines, vec!["participant Alice"]);
     }
 }

@@ -190,6 +190,54 @@ pub fn quick_cases() -> Vec<MatrixCase> {
     cases
 }
 
+/// Medium class matrix: entity × visibility × member + relationship × member.
+/// ~80 cases covering cross-cutting dimensions.
+pub fn medium_cases() -> Vec<MatrixCase> {
+    let entities = entity_types();
+    let vis = member_visibility();
+    let members = member_types();
+    let rels = relationship_types();
+    let default_rel = variant("association", "--", &["relationship:association"], &[]);
+    let default_vis = variant("public", "+", &["visibility:public"], &[]);
+    let default_member = variant("field", "name : String", &["member:field"], &[]);
+
+    let mut cases = Vec::new();
+
+    // Entity × visibility (5 × 5 = 25).
+    for e in entities.variants() {
+        for v in vis.variants() {
+            if let Some(case) = assemble(&[&e, &default_rel, &v, &default_member]) {
+                cases.push(case);
+            }
+        }
+    }
+
+    // Entity × member_type (5 × 5 = 25).
+    for e in entities.variants() {
+        for m in members.variants() {
+            if let Some(case) = assemble(&[&e, &default_rel, &default_vis, &m]) {
+                cases.push(case);
+            }
+        }
+    }
+
+    // Relationship × member_type (6 × 5 = 30).
+    for r in rels.variants() {
+        for m in members.variants() {
+            if let Some(case) = assemble(&[
+                &variant("class", "class", &["entity:class"], &[]),
+                &r,
+                &default_vis,
+                &m,
+            ]) {
+                cases.push(case);
+            }
+        }
+    }
+
+    cases
+}
+
 /// Class diagram edge cases.
 pub fn edge_cases() -> Vec<MatrixCase> {
     vec![

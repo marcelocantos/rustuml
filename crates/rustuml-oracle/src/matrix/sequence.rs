@@ -359,6 +359,90 @@ pub fn quick_cases() -> Vec<MatrixCase> {
     cases
 }
 
+/// Medium-sized matrix: arrow × decoration + arrow × grouping + participant × activation.
+/// Covers the important cross-cutting feature interactions without full Cartesian explosion.
+/// Produces ~200 cases.
+pub fn medium_cases() -> Vec<MatrixCase> {
+    let arrows = arrow_styles();
+    let decos = decorations();
+    let groups = groupings();
+    let ptypes = participant_types();
+    let acts = activations();
+    let default_ptype = variant("participant", "participant", &["participant:default"], &[]);
+    let default_label = variant("simple", "hello", &["label:simple"], &["hello"]);
+    let default_deco = variant("none", "", &["decoration:none"], &[]);
+    let default_group = variant("none", "", &["grouping:none"], &[]);
+    let default_act = variant("none", "", &["activation:none"], &[]);
+
+    let mut cases = Vec::new();
+
+    // Arrow × decoration (8 × 8 = 64).
+    for a in arrows.variants() {
+        for d in decos.variants() {
+            if let Some(case) = assemble(&[
+                &a,
+                &default_ptype,
+                &default_label,
+                &d,
+                &default_group,
+                &default_act,
+            ]) {
+                cases.push(case);
+            }
+        }
+    }
+
+    // Arrow × grouping (8 × 7 = 56).
+    for a in arrows.variants() {
+        for g in groups.variants() {
+            if let Some(case) = assemble(&[
+                &a,
+                &default_ptype,
+                &default_label,
+                &default_deco,
+                &g,
+                &default_act,
+            ]) {
+                cases.push(case);
+            }
+        }
+    }
+
+    // Participant type × activation (8 × 4 = 32).
+    for p in ptypes.variants() {
+        for act in acts.variants() {
+            if let Some(case) = assemble(&[
+                &variant("solid", "->", &["arrow:solid"], &[]),
+                &p,
+                &default_label,
+                &default_deco,
+                &default_group,
+                &act,
+            ]) {
+                cases.push(case);
+            }
+        }
+    }
+
+    // Decoration × grouping (8 × 7 = 56).
+    for d in decos.variants() {
+        for g in groups.variants() {
+            if let Some(case) = assemble(&[
+                &variant("solid", "->", &["arrow:solid"], &[]),
+                &default_ptype,
+                &default_label,
+                &d,
+                &g,
+                &default_act,
+            ]) {
+                cases.push(case);
+            }
+        }
+    }
+
+    cases
+}
+
 /// Targeted edge cases that don't fit the matrix pattern.
 pub fn edge_cases() -> Vec<MatrixCase> {
     vec![
