@@ -14,3 +14,4 @@ ureq = "3"
 [dev-dependencies]
 proptest = "1"
 rustuml-parser = { path = "../rustuml-parser" }
+rustuml-render = { path = "../rustuml-render" }
