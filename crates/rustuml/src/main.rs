@@ -14,12 +14,44 @@ fn main() {
         eprintln!("Format is auto-detected from content, or use file extension.");
         eprintln!();
         eprintln!("Options:");
-        eprintln!("  -tsvg       Output SVG (default)");
-        eprintln!("  --ast       Print parsed AST (Debug format)");
-        eprintln!("  --yaml      Print parsed diagram as YAML");
-        eprintln!("  --version   Print version");
-        eprintln!("  --help      Print this help");
+        eprintln!("  -tsvg            Output SVG (default)");
+        eprintln!("  -tpng            Output PNG");
+        eprintln!("  --ast            Print parsed AST (Debug format)");
+        eprintln!("  --yaml           Print parsed diagram as YAML");
+        eprintln!("  --theme=NAME     Use theme (default, modern)");
+        eprintln!("  --version        Print version");
+        eprintln!("  --help           Print this help");
+        eprintln!("  --help-agent     Print agent integration guide");
         std::process::exit(if args.len() < 2 { 1 } else { 0 });
+    }
+
+    if args[1] == "--help-agent" {
+        println!("# rustuml Agent Integration Guide");
+        println!();
+        println!("rustuml converts PlantUML, YAML, or JSON diagram descriptions to SVG or PNG.");
+        println!();
+        println!("## Input Formats");
+        println!("- **PlantUML**: Standard @startuml/@enduml text syntax");
+        println!("- **YAML**: Structured diagram model (type: Sequence/Class/State/Activity)");
+        println!("- **JSON**: Same model as YAML, JSON-encoded");
+        println!();
+        println!("YAML/JSON is recommended for AI agents — no escaping or syntax ambiguity.");
+        println!("Use `rustuml --yaml <file.puml>` to convert PlantUML to YAML for reference.");
+        println!();
+        println!("## Supported Diagram Types");
+        println!("Sequence, Class, State, Activity, Component, UseCase");
+        println!();
+        println!("## Output Formats");
+        println!("- SVG (default): `rustuml -tsvg input.puml`");
+        println!("- PNG: `rustuml -tpng input.puml > output.png`");
+        println!();
+        println!("## Themes");
+        println!("- `--theme=default`: Classic PlantUML colors");
+        println!("- `--theme=modern`: Cleaner, lighter palette");
+        println!();
+        println!("## Preprocessor");
+        println!("Supports !define, !$var, !ifdef/!ifndef/!if/!else/!endif, !include, comments.");
+        return;
     }
 
     if args[1] == "--version" {
