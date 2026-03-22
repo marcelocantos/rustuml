@@ -55,10 +55,24 @@ impl SvgBuilder {
     }
 
     pub fn text(&mut self, x: f64, y: f64, content: &str, anchor: &str, font_size: f64) {
-        let escaped = escape_xml(content);
-        self.line(&format!(
-            r#"<text x="{x}" y="{y}" text-anchor="{anchor}" font-family="sans-serif" font-size="{font_size}">{escaped}</text>"#
-        ));
+        // Check for creole markup.
+        if content.contains("**")
+            || content.contains("//")
+            || content.contains("__")
+            || content.contains("--")
+            || content.contains("<b>")
+            || content.contains("<i>")
+        {
+            let rich = crate::creole::to_svg_tspans(content);
+            self.line(&format!(
+                r#"<text x="{x}" y="{y}" text-anchor="{anchor}" font-family="sans-serif" font-size="{font_size}">{rich}</text>"#
+            ));
+        } else {
+            let escaped = escape_xml(content);
+            self.line(&format!(
+                r#"<text x="{x}" y="{y}" text-anchor="{anchor}" font-family="sans-serif" font-size="{font_size}">{escaped}</text>"#
+            ));
+        }
     }
 
     pub fn arrow_head(&mut self, x: f64, y: f64, direction: f64) {
