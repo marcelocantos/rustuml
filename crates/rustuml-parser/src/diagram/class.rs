@@ -1,0 +1,92 @@
+// Copyright 2026 Marcelo Cantos
+// SPDX-License-Identifier: Apache-2.0
+
+//! Class diagram model.
+
+use super::DiagramMeta;
+
+/// A complete class diagram.
+#[derive(Debug)]
+pub struct ClassDiagram {
+    pub meta: DiagramMeta,
+    pub entities: Vec<ClassEntity>,
+    pub relationships: Vec<Relationship>,
+    pub packages: Vec<Package>,
+}
+
+/// A class, interface, enum, or other entity.
+#[derive(Debug, Clone)]
+pub struct ClassEntity {
+    pub id: String,
+    pub label: String,
+    pub kind: EntityKind,
+    pub members: Vec<Member>,
+    pub stereotypes: Vec<String>,
+}
+
+/// The kind of entity in a class diagram.
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Default)]
+pub enum EntityKind {
+    #[default]
+    Class,
+    AbstractClass,
+    Interface,
+    Enum,
+    Annotation,
+    Entity,
+}
+
+/// A field or method in a class.
+#[derive(Debug, Clone)]
+pub struct Member {
+    pub name: String,
+    pub return_type: Option<String>,
+    pub visibility: Visibility,
+    pub is_static: bool,
+    pub is_abstract: bool,
+    pub kind: MemberKind,
+}
+
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Default)]
+pub enum Visibility {
+    #[default]
+    Default,
+    Public,
+    Private,
+    Protected,
+    Package,
+}
+
+#[derive(Debug, Clone, Copy, PartialEq, Eq)]
+pub enum MemberKind {
+    Field,
+    Method,
+}
+
+/// A relationship (association, inheritance, etc.) between entities.
+#[derive(Debug, Clone)]
+pub struct Relationship {
+    pub from: String,
+    pub to: String,
+    pub kind: RelationshipKind,
+    pub label: Option<String>,
+    pub from_multiplicity: Option<String>,
+    pub to_multiplicity: Option<String>,
+}
+
+#[derive(Debug, Clone, Copy, PartialEq, Eq)]
+pub enum RelationshipKind {
+    Inheritance,
+    Implementation,
+    Composition,
+    Aggregation,
+    Association,
+    Dependency,
+}
+
+/// A package grouping entities.
+#[derive(Debug, Clone)]
+pub struct Package {
+    pub name: String,
+    pub entities: Vec<String>,
+}

@@ -3,13 +3,15 @@
 
 //! Diagram models — the typed ASTs produced by parsing.
 
+pub mod class;
 pub mod sequence;
 
 /// A parsed diagram, ready for layout and rendering.
 #[derive(Debug)]
 pub enum Diagram {
     Sequence(sequence::SequenceDiagram),
-    // Future: Class, State, Activity, Component, UseCase, etc.
+    Class(class::ClassDiagram),
+    // Future: State, Activity, Component, UseCase, etc.
 }
 
 /// Source location for error reporting.
