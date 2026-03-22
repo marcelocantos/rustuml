@@ -11,6 +11,7 @@ pub mod class;
 pub mod component;
 pub mod deployment;
 pub mod gantt;
+pub mod math;
 pub mod mindmap;
 pub mod sequence;
 pub mod state;
@@ -35,6 +36,7 @@ pub enum Diagram {
     Gantt(gantt::GanttDiagram),
     Timing(timing::TimingDiagram),
     Wbs(wbs::WbsDiagram),
+    Math(math::MathDiagram),
 }
 
 /// Source location for error reporting.

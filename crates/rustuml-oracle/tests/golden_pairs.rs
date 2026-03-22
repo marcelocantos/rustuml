@@ -36,11 +36,18 @@ const SUPPORTED_DIRS: &[&str] = &[
     "gantt",
     "mindmap",
     "wbs",
+    "math",
 ];
 
 /// `@start` keywords for diagram types rustuml can parse.
-const SUPPORTED_START_KEYWORDS: &[&str] =
-    &["@startuml", "@startgantt", "@startmindmap", "@startwbs"];
+const SUPPORTED_START_KEYWORDS: &[&str] = &[
+    "@startuml",
+    "@startgantt",
+    "@startmindmap",
+    "@startwbs",
+    "@startmath",
+    "@startlatex",
+];
 
 /// Returns true if the `.puml` source uses a `@start` keyword that
 /// rustuml supports.

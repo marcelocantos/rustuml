@@ -8,6 +8,7 @@ pub mod class;
 pub mod component;
 pub mod deployment;
 pub mod gantt;
+pub mod math;
 pub mod mindmap;
 pub mod sequence;
 pub mod state;
@@ -259,6 +260,14 @@ pub fn parse_with_base(
         "wbs" => {
             let w = wbs::parse_wbs(&lines)?;
             Ok(Diagram::Wbs(w))
+        }
+        "math" => {
+            let m = math::parse_math(&lines, false)?;
+            Ok(Diagram::Math(m))
+        }
+        "latex" => {
+            let m = math::parse_math(&lines, true)?;
+            Ok(Diagram::Math(m))
         }
         other => Err(ParseError {
             line: 1,

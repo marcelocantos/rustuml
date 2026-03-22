@@ -1080,6 +1080,7 @@ dependencies = [
  "ab_glyph",
  "resvg 0.47.0",
  "rustuml-layout",
+ "rustuml-math",
  "rustuml-parser",
  "serde",
  "serde_yaml",
