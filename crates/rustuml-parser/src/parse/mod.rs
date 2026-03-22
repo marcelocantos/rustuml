@@ -132,12 +132,10 @@ fn detect_uml_subtype(lines: &[String]) -> UmlSubtype {
         UmlSubtype::Deployment,
     ];
 
-    let max_idx = scores
-        .iter()
-        .enumerate()
-        .max_by_key(|(_, s)| **s)
-        .map(|(i, _)| i)
-        .unwrap_or(0);
+    // Find the highest-scoring subtype. On ties, prefer earlier entries
+    // (Sequence is the default).
+    let max_score = scores.iter().copied().max().unwrap_or(0);
+    let max_idx = scores.iter().position(|&s| s == max_score).unwrap_or(0);
 
     subtypes[max_idx]
 }

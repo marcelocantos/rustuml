@@ -241,6 +241,21 @@ pub fn render(diagram: &SequenceDiagram, theme: &Theme) -> String {
                 }
                 y += MESSAGE_HEIGHT;
             }
+            Event::Ref(r) => {
+                // Reference box spanning participants.
+                let ref_w = crate::metrics::text_width(&r.text, SMALL_FONT) + 20.0;
+                let mid = total_width / 2.0;
+                svg.rect(
+                    mid - ref_w / 2.0,
+                    y - 10.0,
+                    ref_w,
+                    20.0,
+                    "#FAFAFA",
+                    &ss.lifeline_color,
+                );
+                svg.text(mid, y + 4.0, &r.text, "middle", SMALL_FONT);
+                y += MESSAGE_HEIGHT;
+            }
             Event::NoteOnLink(text) => {
                 let mid = total_width / 2.0;
                 svg.rect(
