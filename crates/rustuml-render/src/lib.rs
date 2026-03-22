@@ -7,6 +7,7 @@ pub mod activity;
 pub mod class;
 pub mod component;
 pub mod creole;
+pub mod deployment;
 pub mod metrics;
 pub mod png;
 pub mod sequence;
@@ -51,9 +52,6 @@ fn render_with_theme(diagram: &Diagram, theme: &Theme) -> String {
         Diagram::Activity(act) => activity::render(act, theme),
         Diagram::Component(comp) => component::render(comp, theme),
         Diagram::UseCase(uc) => usecase::render(uc, theme),
-        _ => format!(
-            "<!-- rendering not yet implemented for {:?} -->",
-            std::mem::discriminant(diagram)
-        ),
+        Diagram::Deployment(dep) => deployment::render(dep, theme),
     }
 }
