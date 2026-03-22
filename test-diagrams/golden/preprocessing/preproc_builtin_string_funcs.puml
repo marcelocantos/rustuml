@@ -1,0 +1,11 @@
+@startuml
+!$s = "Hello World"
+!$upper = %upper($s)
+!$lower = %lower($s)
+
+note as N
+  original: $s
+  upper: $upper
+  lower: $lower
+end note
+@enduml

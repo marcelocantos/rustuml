@@ -1,0 +1,7 @@
+@startuml
+!$dark = %darken("red", 30)
+skinparam participantBackgroundColor $dark
+participant Alice
+participant Bob
+Alice -> Bob : darkened
+@enduml

@@ -1,0 +1,9 @@
+@startuml
+!foreach $p in ["Frontend", "Backend", "Database"]
+  participant $p
+!endforeach
+Frontend -> Backend : API call
+Backend -> Database : query
+Database --> Backend : rows
+Backend --> Frontend : JSON
+@enduml

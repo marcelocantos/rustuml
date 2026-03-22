@@ -1,0 +1,6 @@
+@startuml
+!$l = %lighten("#220044", 50)
+skinparam participantBackgroundColor $l
+participant X
+X -> X : light hex
+@enduml

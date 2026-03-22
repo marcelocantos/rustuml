@@ -1,0 +1,11 @@
+@startuml
+participant A
+participant B
+
+!foreach $op in ["read", "write"]
+  group $op operation
+    A -> B : $op request
+    B --> A : $op response
+  end
+!endforeach
+@enduml

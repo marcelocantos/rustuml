@@ -1,0 +1,9 @@
+@startuml
+!foreach $cls in ["UserService", "OrderService", "PaymentService"]
+class $cls {
+  +execute()
+}
+!endforeach
+UserService --> OrderService
+OrderService --> PaymentService
+@enduml

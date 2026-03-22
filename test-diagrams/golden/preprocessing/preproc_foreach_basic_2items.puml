@@ -1,0 +1,6 @@
+@startuml
+!foreach $item in ["Alice", "Bob"]
+  participant $item
+!endforeach
+Alice -> Bob : hello
+@enduml

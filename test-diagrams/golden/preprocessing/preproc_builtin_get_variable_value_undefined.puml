@@ -1,0 +1,5 @@
+@startuml
+!$val = %get_variable_value("noSuchVar")
+participant Alice
+note over Alice : $val
+@enduml

@@ -1,0 +1,8 @@
+@startuml
+!if %file_exists("/etc/hosts")
+  note over A : file found
+!else
+  note over A : file not found
+!endif
+participant A
+@enduml

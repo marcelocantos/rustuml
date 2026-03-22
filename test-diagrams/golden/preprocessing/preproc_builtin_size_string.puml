@@ -1,0 +1,6 @@
+@startuml
+!$s = "hello"
+!$n = %size($s)
+participant A
+note over A : length = $n
+@enduml

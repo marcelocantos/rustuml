@@ -1,0 +1,10 @@
+@startuml
+!$newline = %chr(10)
+!$tab = %chr(9)
+!$space = %chr(32)
+
+note as N
+  ascii 65 = %chr(65)
+  ascii 97 = %chr(97)
+end note
+@enduml

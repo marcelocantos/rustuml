@@ -1,0 +1,7 @@
+@startuml
+!foreach $client in ["ClientA", "ClientB"]
+  !foreach $server in ["Server1", "Server2"]
+    $client -> $server : connect
+  !endforeach
+!endforeach
+@enduml

@@ -1,0 +1,8 @@
+@startuml
+participant Client
+participant Server
+
+!foreach $step in ["connect", "authenticate", "request", "respond", "disconnect"]
+  Client -> Server : $step
+!endforeach
+@enduml

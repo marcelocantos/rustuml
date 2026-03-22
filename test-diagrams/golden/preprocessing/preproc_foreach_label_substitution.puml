@@ -1,0 +1,9 @@
+@startuml
+participant Client
+participant Server
+
+!foreach $n in ["1", "2", "3"]
+  Client -> Server : request $n
+  Server --> Client : response $n
+!endforeach
+@enduml

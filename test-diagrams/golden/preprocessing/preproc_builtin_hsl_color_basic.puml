@@ -1,0 +1,6 @@
+@startuml
+!$c = %hsl_color(120, 100, 50)
+skinparam participantBackgroundColor $c
+participant Green
+Green -> Green : HSL green
+@enduml
