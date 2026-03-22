@@ -3,7 +3,11 @@
 
 //! Matrix-based oracle tests — systematic feature coverage.
 
-use rustuml_oracle::matrix::{self, sequence, validate};
+use rustuml_oracle::matrix::{self, activity, class, sequence, state, validate};
+
+// ---------------------------------------------------------------------------
+// Sequence diagrams
+// ---------------------------------------------------------------------------
 
 #[test]
 fn sequence_edge_cases() {
@@ -29,41 +33,97 @@ fn sequence_quick_matrix() {
     assert!(failures.is_empty(), "quick matrix: {summary}");
 }
 
-/// The full breadth matrix — every arrow × participant type × label ×
-/// decoration × grouping × activation combination.
-///
-/// This is expensive (~7,680 combinations × 2 renders each = ~15,360
-/// oracle calls). Run with `cargo test matrix_breadth -- --ignored`
-/// for a thorough check, or let CI handle it.
 #[test]
 #[ignore]
 fn sequence_breadth_matrix() {
     let cases = sequence::breadth_cases();
     eprintln!("Breadth matrix: {} cases", cases.len());
-
-    // Print coverage report.
     let report = matrix::coverage_report(&cases);
     eprintln!("{report}");
-
     let results = validate::validate_all(&cases);
     let summary = validate::format_summary(&results);
     let failures: Vec<_> = results.iter().filter(|r| !r.passed()).collect();
     assert!(failures.is_empty(), "breadth matrix: {summary}");
 }
 
-#[test]
-fn coverage_report_includes_all_dimensions() {
-    let cases = sequence::quick_cases();
-    let report = matrix::coverage_report(&cases);
+// ---------------------------------------------------------------------------
+// Class diagrams
+// ---------------------------------------------------------------------------
 
-    // Verify key feature dimensions have coverage.
+#[test]
+fn class_edge_cases() {
+    let cases = class::edge_cases();
+    let results = validate::validate_all(&cases);
+    let summary = validate::format_summary(&results);
+    let failures: Vec<_> = results.iter().filter(|r| !r.passed()).collect();
+    assert!(failures.is_empty(), "class edge cases: {summary}");
+}
+
+#[test]
+fn class_quick_matrix() {
+    let cases = class::quick_cases();
     assert!(
-        report.tag_counts.contains_key("arrow"),
-        "should cover arrow styles"
+        cases.len() >= 20,
+        "class quick matrix should produce at least 20 cases, got {}",
+        cases.len()
     );
+    let results = validate::validate_all(&cases);
+    let summary = validate::format_summary(&results);
+    let failures: Vec<_> = results.iter().filter(|r| !r.passed()).collect();
+    assert!(failures.is_empty(), "class quick matrix: {summary}");
+}
+
+// ---------------------------------------------------------------------------
+// State diagrams
+// ---------------------------------------------------------------------------
+
+#[test]
+fn state_edge_cases() {
+    let cases = state::edge_cases();
+    let results = validate::validate_all(&cases);
+    let summary = validate::format_summary(&results);
+    let failures: Vec<_> = results.iter().filter(|r| !r.passed()).collect();
+    assert!(failures.is_empty(), "state edge cases: {summary}");
+}
+
+// ---------------------------------------------------------------------------
+// Activity diagrams
+// ---------------------------------------------------------------------------
+
+#[test]
+fn activity_edge_cases() {
+    let cases = activity::edge_cases();
+    let results = validate::validate_all(&cases);
+    let summary = validate::format_summary(&results);
+    let failures: Vec<_> = results.iter().filter(|r| !r.passed()).collect();
+    assert!(failures.is_empty(), "activity edge cases: {summary}");
+}
+
+// ---------------------------------------------------------------------------
+// Cross-cutting
+// ---------------------------------------------------------------------------
+
+#[test]
+fn all_matrix_coverage() {
+    let mut all_cases = Vec::new();
+    all_cases.extend(sequence::quick_cases());
+    all_cases.extend(sequence::edge_cases());
+    all_cases.extend(class::quick_cases());
+    all_cases.extend(class::edge_cases());
+    all_cases.extend(state::edge_cases());
+    all_cases.extend(activity::edge_cases());
+
+    let report = matrix::coverage_report(&all_cases);
+
     assert!(
-        report.tag_counts.contains_key("label"),
-        "should cover label variants"
+        report.total_cases >= 100,
+        "should have at least 100 total matrix cases, got {}",
+        report.total_cases
     );
-    assert!(report.total_cases > 0, "should have test cases");
+    assert!(report.tag_counts.contains_key("arrow"));
+    assert!(report.tag_counts.contains_key("entity"));
+    assert!(report.tag_counts.contains_key("relationship"));
+    assert!(report.tag_counts.contains_key("state"));
+    assert!(report.tag_counts.contains_key("activity"));
+    assert!(report.tag_counts.contains_key("edge"));
 }
