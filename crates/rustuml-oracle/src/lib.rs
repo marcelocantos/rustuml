@@ -3,4 +3,5 @@
 
 pub mod compare;
 pub mod generator;
+pub mod matrix;
 pub mod runner;
