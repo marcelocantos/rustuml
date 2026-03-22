@@ -111,6 +111,9 @@ impl PreprocessContext {
                 }
                 continue;
             }
+            if self.try_theme(trimmed, &mut output) {
+                continue;
+            }
 
             // Only output lines when all conditions are active.
             if self.is_active() {
@@ -182,6 +185,18 @@ impl PreprocessContext {
                 Some(vec![])
             }
         }
+    }
+
+    fn try_theme(&self, line: &str, output: &mut Vec<String>) -> bool {
+        if let Some(rest) = line.strip_prefix("!theme ") {
+            let theme_name = rest.trim();
+            if self.is_active() && !theme_name.is_empty() {
+                // Emit as a synthetic skinparam for the renderer to pick up.
+                output.push(format!("skinparam __theme {theme_name}"));
+            }
+            return true;
+        }
+        false
     }
 
     fn try_undefine(&mut self, line: &str) -> bool {
