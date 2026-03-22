@@ -33,8 +33,15 @@ struct SeqParser {
     participants: Vec<Participant>,
     events: Vec<Event>,
     autonumber: Option<AutoNumber>,
-    /// Track participant order for auto-creation.
     participant_ids: Vec<String>,
+    /// Multiline note accumulator.
+    note_buffer: Option<NoteBuffer>,
+}
+
+struct NoteBuffer {
+    position: NotePosition,
+    participants: Vec<String>,
+    lines: Vec<String>,
 }
 
 impl SeqParser {
@@ -45,6 +52,7 @@ impl SeqParser {
             events: Vec::new(),
             autonumber: None,
             participant_ids: Vec::new(),
+            note_buffer: None,
         }
     }
 
@@ -72,7 +80,22 @@ impl SeqParser {
     }
 
     fn parse_line(&mut self, line_num: usize, line: &str) -> Result<(), ParseError> {
-        // Try each pattern in priority order.
+        // Handle multiline note buffering.
+        if self.note_buffer.is_some() {
+            if line == "endnote" || line == "end note" {
+                let buf = self.note_buffer.take().unwrap();
+                let text = buf.lines.join("\n");
+                self.events.push(Event::Note(Note {
+                    position: buf.position,
+                    participants: buf.participants,
+                    text,
+                }));
+            } else if let Some(buf) = &mut self.note_buffer {
+                buf.lines.push(line.to_string());
+            }
+            return Ok(());
+        }
+
         // Keywords that could be confused with participant names must be
         // checked before the message regex.
         if self.try_autonumber(line) {
@@ -258,13 +281,23 @@ impl SeqParser {
                     .map(|s| s.trim().to_string())
                     .collect()
             });
-            let text = caps.get(3).map_or("", |m| m.as_str()).trim().to_string();
 
-            self.events.push(Event::Note(Note {
-                position,
-                participants,
-                text,
-            }));
+            if let Some(text_match) = caps.get(3) {
+                // Inline note: note right : text
+                let text = text_match.as_str().trim().to_string();
+                self.events.push(Event::Note(Note {
+                    position,
+                    participants,
+                    text,
+                }));
+            } else {
+                // Multiline note: note right\n...\nendnote
+                self.note_buffer = Some(NoteBuffer {
+                    position,
+                    participants,
+                    lines: Vec::new(),
+                });
+            }
             true
         } else {
             false
@@ -765,5 +798,29 @@ mod tests {
         assert_eq!(d.participants[2].kind, ParticipantKind::Boundary);
         assert_eq!(d.participants[5].kind, ParticipantKind::Database);
         assert_eq!(d.participants[7].kind, ParticipantKind::Queue);
+    }
+
+    #[test]
+    fn multiline_note() {
+        let d = parse("A -> B : msg\nnote left\n  Line 1\n  Line 2\nendnote");
+        assert_eq!(d.events.len(), 2);
+        if let Event::Note(n) = &d.events[1] {
+            assert_eq!(n.position, NotePosition::Left);
+            assert!(n.text.contains("Line 1"));
+            assert!(n.text.contains("Line 2"));
+        } else {
+            panic!("expected note");
+        }
+    }
+
+    #[test]
+    fn multiline_note_end_note() {
+        let d = parse("A -> B : msg\nnote right of B\n  First\n  Second\nend note");
+        if let Event::Note(n) = &d.events[1] {
+            assert_eq!(n.position, NotePosition::Right);
+            assert!(n.text.contains("First"));
+        } else {
+            panic!("expected note");
+        }
     }
 }
