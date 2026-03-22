@@ -5,6 +5,7 @@
 
 use rustuml_parser::diagram::activity::*;
 
+use crate::style::Theme;
 use crate::svg::SvgBuilder;
 
 const ACTION_WIDTH: f64 = 140.0;
@@ -19,7 +20,8 @@ const FONT_SIZE: f64 = 12.0;
 const SMALL_FONT: f64 = 10.0;
 
 /// Render an activity diagram to SVG.
-pub fn render(diagram: &ActivityDiagram) -> String {
+pub fn render(diagram: &ActivityDiagram, theme: &Theme) -> String {
+    let as_ = &theme.activity;
     if diagram.steps.is_empty() {
         return "<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"100\" height=\"50\"></svg>\n"
             .to_string();
@@ -37,7 +39,7 @@ pub fn render(diagram: &ActivityDiagram) -> String {
     for step in &diagram.steps {
         match step {
             ActivityStep::Start => {
-                svg.circle(cx, y, CIRCLE_R, "#000", "#000");
+                svg.circle(cx, y, CIRCLE_R, &as_.start_color, &as_.start_color);
                 y += CIRCLE_R * 2.0 + V_GAP / 2.0;
                 // Connector line.
                 svg.line_segment(cx, y - V_GAP / 2.0, cx, y, "#000", false);
@@ -45,8 +47,14 @@ pub fn render(diagram: &ActivityDiagram) -> String {
             ActivityStep::Stop | ActivityStep::End => {
                 svg.line_segment(cx, y - V_GAP / 2.0, cx, y, "#000", false);
                 // Bullseye: outer circle + inner filled circle.
-                svg.circle(cx, y + CIRCLE_R, CIRCLE_R, "none", "#000");
-                svg.circle(cx, y + CIRCLE_R, CIRCLE_R * 0.6, "#000", "#000");
+                svg.circle(cx, y + CIRCLE_R, CIRCLE_R, "none", &as_.stop_color);
+                svg.circle(
+                    cx,
+                    y + CIRCLE_R,
+                    CIRCLE_R * 0.6,
+                    &as_.stop_color,
+                    &as_.stop_color,
+                );
                 y += CIRCLE_R * 2.0 + V_GAP / 2.0;
             }
             ActivityStep::Action(text) => {
@@ -59,7 +67,7 @@ pub fn render(diagram: &ActivityDiagram) -> String {
                     ACTION_WIDTH,
                     ACTION_HEIGHT,
                     10.0,
-                    "#E2E2F0",
+                    &as_.action_background,
                     "#000",
                 );
                 svg.text(cx, y + ACTION_HEIGHT / 2.0 + 4.0, text, "middle", FONT_SIZE);
@@ -69,7 +77,13 @@ pub fn render(diagram: &ActivityDiagram) -> String {
                 // Connector.
                 svg.line_segment(cx, y - V_GAP / 2.0, cx, y, "#000", false);
                 svg.open_group("decision");
-                svg.diamond(cx, y + DIAMOND_SIZE, DIAMOND_SIZE, "#FFFACD", "#000");
+                svg.diamond(
+                    cx,
+                    y + DIAMOND_SIZE,
+                    DIAMOND_SIZE,
+                    &as_.decision_background,
+                    "#000",
+                );
                 svg.text(
                     cx,
                     y + DIAMOND_SIZE + 4.0,
@@ -100,7 +114,7 @@ pub fn render(diagram: &ActivityDiagram) -> String {
                     cx,
                     y + DIAMOND_SIZE / 2.0,
                     DIAMOND_SIZE / 2.0,
-                    "#FFFACD",
+                    &as_.decision_background,
                     "#000",
                 );
                 y += DIAMOND_SIZE + V_GAP / 2.0;
@@ -181,7 +195,13 @@ pub fn render(diagram: &ActivityDiagram) -> String {
             }
             ActivityStep::While(w) => {
                 svg.line_segment(cx, y - V_GAP / 2.0, cx, y, "#000", false);
-                svg.diamond(cx, y + DIAMOND_SIZE, DIAMOND_SIZE, "#FFFACD", "#000");
+                svg.diamond(
+                    cx,
+                    y + DIAMOND_SIZE,
+                    DIAMOND_SIZE,
+                    &as_.decision_background,
+                    "#000",
+                );
                 svg.text(
                     cx,
                     y + DIAMOND_SIZE + 4.0,
@@ -199,7 +219,13 @@ pub fn render(diagram: &ActivityDiagram) -> String {
             }
             ActivityStep::Switch(expr) => {
                 svg.line_segment(cx, y - V_GAP / 2.0, cx, y, "#000", false);
-                svg.diamond(cx, y + DIAMOND_SIZE, DIAMOND_SIZE, "#FFFACD", "#000");
+                svg.diamond(
+                    cx,
+                    y + DIAMOND_SIZE,
+                    DIAMOND_SIZE,
+                    &as_.decision_background,
+                    "#000",
+                );
                 svg.text(cx, y + DIAMOND_SIZE + 4.0, expr, "middle", SMALL_FONT);
                 y += DIAMOND_SIZE * 2.0 + V_GAP / 2.0;
             }
@@ -235,7 +261,7 @@ mod tests {
                 ActivityStep::Stop,
             ],
         };
-        let svg = render(&d);
+        let svg = render(&d, &Theme::default());
         assert!(svg.starts_with("<svg"));
         assert!(svg.contains("Step 1"));
         assert!(svg.contains("Step 2"));
@@ -258,7 +284,7 @@ mod tests {
                 ActivityStep::Stop,
             ],
         };
-        let svg = render(&d);
+        let svg = render(&d, &Theme::default());
         assert!(svg.contains("x &gt; 0?") || svg.contains("x > 0?")); // XML escaped
         assert!(svg.contains("positive"));
     }

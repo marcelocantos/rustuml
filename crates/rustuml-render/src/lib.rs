@@ -23,9 +23,9 @@ pub fn render_svg(diagram: &Diagram) -> String {
 pub fn render_svg_with_theme(diagram: &Diagram, theme: &Theme) -> String {
     match diagram {
         Diagram::Sequence(seq) => sequence::render(seq, theme),
-        Diagram::Class(cls) => class::render(cls),
-        Diagram::State(st) => state::render(st),
-        Diagram::Activity(act) => activity::render(act),
+        Diagram::Class(cls) => class::render(cls, theme),
+        Diagram::State(st) => state::render(st, theme),
+        Diagram::Activity(act) => activity::render(act, theme),
         _ => format!(
             "<!-- rendering not yet implemented for {:?} -->",
             std::mem::discriminant(diagram)

@@ -10,6 +10,7 @@ use rustuml_layout::graph::{Direction, LayoutGraph};
 use rustuml_parser::diagram::class::*;
 
 use crate::metrics;
+use crate::style::Theme;
 use crate::svg::SvgBuilder;
 
 const CLASS_MIN_WIDTH: f64 = 120.0;
@@ -21,7 +22,8 @@ const PADDING: f64 = 8.0;
 const MARGIN: f64 = 30.0;
 
 /// Render a class diagram to SVG.
-pub fn render(diagram: &ClassDiagram) -> String {
+pub fn render(diagram: &ClassDiagram, theme: &Theme) -> String {
+    let cs = &theme.class;
     if diagram.entities.is_empty() {
         return "<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"100\" height=\"50\"></svg>\n"
             .to_string();
@@ -42,12 +44,16 @@ pub fn render(diagram: &ClassDiagram) -> String {
     let layout_svg = layout.to_svg();
 
     // Phase 2: Render with our own class boxes.
-    render_simple(diagram, &layout_svg)
+    render_simple(diagram, &layout_svg, cs)
 }
 
 /// Simple rendering without layout engine integration.
 /// Places classes in a grid and draws relationships.
-fn render_simple(diagram: &ClassDiagram, _layout_hint: &str) -> String {
+fn render_simple(
+    diagram: &ClassDiagram,
+    _layout_hint: &str,
+    cs: &crate::style::ClassStyle,
+) -> String {
     if diagram.entities.is_empty() {
         return "<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"100\" height=\"50\"></svg>\n"
             .to_string();
@@ -76,7 +82,7 @@ fn render_simple(diagram: &ClassDiagram, _layout_hint: &str) -> String {
         let x = MARGIN + col_widths[..col].iter().sum::<f64>() + MARGIN * col as f64;
         let y = MARGIN + row_heights[..row].iter().sum::<f64>() + MARGIN * row as f64;
 
-        render_class_box(&mut svg, entity, x, y, dim);
+        render_class_box(&mut svg, entity, x, y, dim, cs);
         positions.push((x, y, dim.width, dim.height));
     }
 
@@ -166,15 +172,22 @@ fn calc_class_dim(entity: &ClassEntity) -> ClassDim {
     }
 }
 
-fn render_class_box(svg: &mut SvgBuilder, entity: &ClassEntity, x: f64, y: f64, dim: &ClassDim) {
+fn render_class_box(
+    svg: &mut SvgBuilder,
+    entity: &ClassEntity,
+    x: f64,
+    y: f64,
+    dim: &ClassDim,
+    cs: &crate::style::ClassStyle,
+) {
     // Background.
     let fill = match entity.kind {
-        EntityKind::Interface => "#D4E6F1",
-        EntityKind::Enum => "#D5F5E3",
-        EntityKind::Annotation => "#FCF3CF",
-        _ => "#FDEBD0",
+        EntityKind::Interface => &cs.interface_background,
+        EntityKind::Enum => &cs.enum_background,
+        EntityKind::Annotation => &cs.class_background,
+        _ => &cs.class_background,
     };
-    svg.rect(x, y, dim.width, dim.height, fill, "#000");
+    svg.rect(x, y, dim.width, dim.height, fill, &cs.border_color);
 
     let mut cy = y;
 
@@ -358,7 +371,7 @@ mod tests {
 
     #[test]
     fn produces_valid_svg() {
-        let svg = render(&simple_class_diagram());
+        let svg = render(&simple_class_diagram(), &Theme::default());
         assert!(svg.starts_with("<svg"));
         assert!(svg.contains("</svg>"));
         assert!(svg.contains("Animal"));
@@ -367,7 +380,7 @@ mod tests {
 
     #[test]
     fn has_class_boxes() {
-        let svg = render(&simple_class_diagram());
+        let svg = render(&simple_class_diagram(), &Theme::default());
         let rect_count = svg.matches("<rect").count();
         assert!(
             rect_count >= 2,
@@ -377,7 +390,7 @@ mod tests {
 
     #[test]
     fn has_members() {
-        let svg = render(&simple_class_diagram());
+        let svg = render(&simple_class_diagram(), &Theme::default());
         assert!(svg.contains("+name : String"));
         assert!(svg.contains("+makeSound()"));
         assert!(svg.contains("+fetch()"));
@@ -385,7 +398,7 @@ mod tests {
 
     #[test]
     fn has_relationship_line() {
-        let svg = render(&simple_class_diagram());
+        let svg = render(&simple_class_diagram(), &Theme::default());
         assert!(svg.contains("<line"), "should have relationship line");
     }
 
@@ -410,7 +423,7 @@ mod tests {
             relationships: vec![],
             packages: vec![],
         };
-        let svg = render(&diagram);
+        let svg = render(&diagram, &Theme::default());
         assert!(svg.contains("&lt;&lt;interface&gt;&gt;"));
         assert!(svg.contains("Drawable"));
     }
@@ -433,7 +446,7 @@ mod tests {
             relationships: vec![],
             packages: vec![],
         };
-        let svg = render(&diagram);
+        let svg = render(&diagram, &Theme::default());
         assert!(svg.contains("<svg"));
     }
 }

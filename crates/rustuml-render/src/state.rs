@@ -5,6 +5,7 @@
 
 use rustuml_parser::diagram::state::*;
 
+use crate::style::Theme;
 use crate::svg::SvgBuilder;
 
 const STATE_WIDTH: f64 = 100.0;
@@ -18,7 +19,8 @@ const FONT_SIZE: f64 = 13.0;
 const SMALL_FONT: f64 = 11.0;
 
 /// Render a state diagram to SVG.
-pub fn render(diagram: &StateDiagram) -> String {
+pub fn render(diagram: &StateDiagram, theme: &Theme) -> String {
+    let sts = &theme.state;
     if diagram.states.is_empty() && diagram.transitions.is_empty() {
         return "<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"100\" height=\"50\"></svg>\n"
             .to_string();
@@ -70,7 +72,7 @@ pub fn render(diagram: &StateDiagram) -> String {
     for (id, x, y) in &state_positions {
         if id == "[*]" {
             // Initial/final state — filled circle.
-            svg.circle(*x, *y, INITIAL_R, "#000", "#000");
+            svg.circle(*x, *y, INITIAL_R, &sts.initial_color, &sts.initial_color);
         } else {
             // Find the state definition.
             let state_def = diagram.states.iter().find(|s| s.id == *id);
@@ -79,7 +81,7 @@ pub fn render(diagram: &StateDiagram) -> String {
             let fill = match state_def.map(|s| s.kind) {
                 Some(StateKind::Choice) => "#FFFACD",
                 Some(StateKind::Fork | StateKind::Join) => "#333",
-                _ => "#FEEBD0",
+                _ => &sts.state_background,
             };
 
             svg.rounded_rect(
@@ -167,7 +169,7 @@ mod tests {
                 },
             ],
         };
-        let svg = render(&d);
+        let svg = render(&d, &Theme::default());
         assert!(svg.starts_with("<svg"));
         assert!(svg.contains("Active"));
         assert!(svg.contains("Inactive"));
