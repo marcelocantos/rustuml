@@ -19,5 +19,9 @@ pub fn render_svg(diagram: &Diagram) -> String {
         Diagram::Class(cls) => class::render(cls),
         Diagram::State(st) => state::render(st),
         Diagram::Activity(act) => activity::render(act),
+        _ => format!(
+            "<!-- rendering not yet implemented for {:?} -->",
+            std::mem::discriminant(diagram)
+        ),
     }
 }
