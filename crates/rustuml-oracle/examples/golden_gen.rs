@@ -7,7 +7,9 @@
 
 use std::path::PathBuf;
 
-use rustuml_oracle::matrix::{MatrixCase, activity, class, deployment, sequence, state};
+use rustuml_oracle::matrix::{
+    MatrixCase, activity, class, component, deployment, sequence, state, usecase,
+};
 use rustuml_oracle::runner;
 
 fn main() {
@@ -30,6 +32,7 @@ fn main() {
     let mut cases: Vec<MatrixCase> = Vec::new();
     cases.extend(sequence::quick_cases());
     cases.extend(sequence::medium_cases());
+    cases.extend(sequence::large_cases());
     cases.extend(sequence::edge_cases());
     cases.extend(class::quick_cases());
     cases.extend(class::medium_cases());
@@ -37,6 +40,10 @@ fn main() {
     cases.extend(state::edge_cases());
     cases.extend(activity::edge_cases());
     cases.extend(deployment::edge_cases());
+    cases.extend(component::matrix_cases());
+    cases.extend(component::edge_cases());
+    cases.extend(usecase::matrix_cases());
+    cases.extend(usecase::edge_cases());
 
     println!("Generating {} golden files...", cases.len());
 

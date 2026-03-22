@@ -5,7 +5,9 @@
 //! Java PlantUML reference files for all matrix test cases.
 
 use rustuml_oracle::compare;
-use rustuml_oracle::matrix::{MatrixCase, activity, class, deployment, sequence, state};
+use rustuml_oracle::matrix::{
+    MatrixCase, activity, class, component, deployment, sequence, state, usecase,
+};
 use std::path::PathBuf;
 
 fn golden_dir() -> PathBuf {
@@ -78,6 +80,7 @@ fn all_matrix_golden_files() {
     let mut cases: Vec<MatrixCase> = Vec::new();
     cases.extend(sequence::quick_cases());
     cases.extend(sequence::medium_cases());
+    cases.extend(sequence::large_cases());
     cases.extend(sequence::edge_cases());
     cases.extend(class::quick_cases());
     cases.extend(class::medium_cases());
@@ -85,6 +88,10 @@ fn all_matrix_golden_files() {
     cases.extend(state::edge_cases());
     cases.extend(activity::edge_cases());
     cases.extend(deployment::edge_cases());
+    cases.extend(component::matrix_cases());
+    cases.extend(component::edge_cases());
+    cases.extend(usecase::matrix_cases());
+    cases.extend(usecase::edge_cases());
 
     let mut failures = Vec::new();
     for case in &cases {

@@ -20,10 +20,12 @@
 
 pub mod activity;
 pub mod class;
+pub mod component;
 pub mod deployment;
 pub mod features;
 pub mod sequence;
 pub mod state;
+pub mod usecase;
 pub mod validate;
 
 use std::fmt;

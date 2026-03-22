@@ -1,0 +1,11 @@
+[package]
+name = "rustuml-math"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+description = "LaTeX math rendering to SVG for RustUML"
+
+[dependencies]
+katex = { version = "0.4", default-features = true }
+
+[dev-dependencies]

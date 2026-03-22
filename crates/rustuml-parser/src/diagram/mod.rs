@@ -10,9 +10,13 @@ pub mod activity;
 pub mod class;
 pub mod component;
 pub mod deployment;
+pub mod gantt;
+pub mod mindmap;
 pub mod sequence;
 pub mod state;
+pub mod timing;
 pub mod usecase;
+pub mod wbs;
 
 use serde::{Deserialize, Serialize};
 
@@ -27,6 +31,10 @@ pub enum Diagram {
     Component(component::ComponentDiagram),
     UseCase(usecase::UseCaseDiagram),
     Deployment(deployment::DeploymentDiagram),
+    MindMap(mindmap::MindMapDiagram),
+    Gantt(gantt::GanttDiagram),
+    Timing(timing::TimingDiagram),
+    Wbs(wbs::WbsDiagram),
 }
 
 /// Source location for error reporting.

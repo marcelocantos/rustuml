@@ -16,6 +16,7 @@ fn main() {
         eprintln!("Options:");
         eprintln!("  -tsvg                 Output SVG (default)");
         eprintln!("  -tpng                 Output PNG");
+        eprintln!("  -ttxt                 Output ASCII art text (sequence diagrams)");
         eprintln!("  --ast                 Print parsed AST (Debug format)");
         eprintln!("  --yaml                Print parsed diagram as YAML");
         eprintln!("  --theme=NAME          Use built-in theme (default, modern)");
@@ -47,6 +48,7 @@ fn main() {
             "-tsvg" => output_mode = OutputMode::Svg,
             "-tpng" => output_mode = OutputMode::Png,
             "-tpdf" => output_mode = OutputMode::Pdf,
+            "-ttxt" => output_mode = OutputMode::Txt,
             "--theme=modern" => theme = rustuml_render::style::Theme::modern(),
             "--theme=default" => theme = rustuml_render::style::Theme::default(),
             s if s.starts_with("--theme-file=") => {
@@ -135,6 +137,9 @@ fn main() {
                     }
                 }
             }
+            OutputMode::Txt => {
+                print!("{}", rustuml_render::render_ascii(&diagram));
+            }
         },
         Err(e) => {
             eprintln!("parse error: {e}");
@@ -147,6 +152,7 @@ enum OutputMode {
     Svg,
     Png,
     Pdf,
+    Txt,
     Ast,
     Yaml,
 }
@@ -170,6 +176,7 @@ fn print_agent_guide() {
     println!("## Output Formats");
     println!("- SVG (default): `rustuml -tsvg input.puml`");
     println!("- PNG: `rustuml -tpng input.puml > output.png`");
+    println!("- ASCII text: `rustuml -ttxt input.puml` (sequence diagrams only)");
     println!();
     println!("## Themes");
     println!("- `--theme=default`: Classic PlantUML colors");

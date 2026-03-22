@@ -1,0 +1,28 @@
+// Copyright 2026 Marcelo Cantos
+// SPDX-License-Identifier: Apache-2.0
+
+//! Mind map diagram model.
+
+use serde::{Deserialize, Serialize};
+
+use super::DiagramMeta;
+
+/// A single node in the mind map tree.
+///
+/// The `depth` field mirrors the number of leading `*` characters (1 = root,
+/// 2 = first-level branch, etc.).  Children are stored in order of appearance.
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct MindMapNode {
+    pub label: String,
+    pub depth: usize,
+    pub children: Vec<MindMapNode>,
+}
+
+/// The complete mind map diagram.
+#[derive(Debug, Serialize, Deserialize)]
+pub struct MindMapDiagram {
+    pub meta: DiagramMeta,
+    /// Top-level roots (almost always exactly one, but the grammar permits
+    /// multiple adjacent `*` lines at depth 1).
+    pub roots: Vec<MindMapNode>,
+}

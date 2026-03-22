@@ -1,0 +1,250 @@
+@startuml
+
+top to bottom direction
+
+package "Core" {
+    class Registry
+    class EventBus
+    class ConfigStore
+    class ServiceLocator
+    class HealthCheck
+}
+
+package "Auth" {
+    package "Auth.Internal" {
+        class TokenStore
+        class SessionManager
+        class CredentialValidator
+        class PermissionCache
+        class AuditLogger
+    }
+    package "Auth.External" {
+        class OAuthProvider
+        class SAMLHandler
+        class LDAPConnector
+        class MFAService
+        class CertValidator
+    }
+}
+
+package "Users" {
+    package "Users.Management" {
+        class UserService
+        class RoleManager
+        class GroupService
+        class InvitationHandler
+        class DeactivationService
+    }
+    package "Users.Profile" {
+        class ProfileStore
+        class AvatarService
+        class PreferenceManager
+        class AddressBook
+        class ActivityLog
+    }
+}
+
+package "Orders" {
+    package "Orders.Processing" {
+        class OrderPipeline
+        class PaymentGateway
+        class PriceCalculator
+        class DiscountEngine
+        class TaxService
+    }
+    package "Orders.Fulfillment" {
+        class ShippingService
+        class InventoryCheck
+        class WarehouseRouter
+        class TrackingService
+        class ReturnHandler
+    }
+}
+
+package "Notifications" {
+    package "Notifications.Channels" {
+        class EmailSender
+        class SMSSender
+        class PushNotifier
+        class WebhookDispatcher
+        class SlackIntegration
+    }
+    package "Notifications.Templates" {
+        class TemplateEngine
+        class LocaleResolver
+        class BrandingService
+        class AttachmentBuilder
+        class DeliveryScheduler
+    }
+}
+
+package "Analytics" {
+    package "Analytics.Collection" {
+        class EventCollector
+        class MetricsAggregator
+        class SessionTracker
+        class FunnelAnalyzer
+        class ABTestRecorder
+    }
+    package "Analytics.Reporting" {
+        class ReportGenerator
+        class DashboardService
+        class ExportService
+        class AlertManager
+        class TrendDetector
+    }
+}
+
+' Core fans out massively
+Registry --> TokenStore
+Registry --> SessionManager
+Registry --> UserService
+Registry --> OrderPipeline
+Registry --> EmailSender
+Registry --> EventCollector
+Registry --> OAuthProvider
+Registry --> ProfileStore
+Registry --> ShippingService
+Registry --> TemplateEngine
+Registry --> CredentialValidator
+Registry --> GroupService
+Registry --> PriceCalculator
+Registry --> PushNotifier
+Registry --> MetricsAggregator
+
+EventBus --> SessionManager
+EventBus --> UserService
+EventBus --> RoleManager
+EventBus --> OrderPipeline
+EventBus --> PaymentGateway
+EventBus --> ShippingService
+EventBus --> InventoryCheck
+EventBus --> EmailSender
+EventBus --> SMSSender
+EventBus --> PushNotifier
+EventBus --> EventCollector
+EventBus --> MetricsAggregator
+EventBus --> ReportGenerator
+EventBus --> DashboardService
+EventBus --> WebhookDispatcher
+EventBus --> AlertManager
+EventBus --> TrendDetector
+EventBus --> DeactivationService
+EventBus --> ReturnHandler
+
+ConfigStore --> TokenStore
+ConfigStore --> TemplateEngine
+ConfigStore --> PriceCalculator
+ConfigStore --> DiscountEngine
+ConfigStore --> TaxService
+ConfigStore --> BrandingService
+ConfigStore --> LocaleResolver
+ConfigStore --> WarehouseRouter
+
+ServiceLocator --> Registry
+ServiceLocator --> OAuthProvider
+ServiceLocator --> LDAPConnector
+ServiceLocator --> PaymentGateway
+ServiceLocator --> ShippingService
+ServiceLocator --> ExportService
+
+HealthCheck --> TokenStore
+HealthCheck --> UserService
+HealthCheck --> OrderPipeline
+HealthCheck --> EmailSender
+HealthCheck --> EventCollector
+HealthCheck --> DashboardService
+
+' Cross-package dependencies
+UserService --> TokenStore
+UserService --> SessionManager
+UserService --> ProfileStore
+UserService --> AvatarService
+UserService --> PermissionCache
+RoleManager --> TokenStore
+RoleManager --> OAuthProvider
+RoleManager --> PermissionCache
+GroupService --> RoleManager
+GroupService --> UserService
+InvitationHandler --> EmailSender
+InvitationHandler --> TemplateEngine
+DeactivationService --> AuditLogger
+DeactivationService --> SessionManager
+
+OrderPipeline --> UserService
+OrderPipeline --> PaymentGateway
+OrderPipeline --> InventoryCheck
+OrderPipeline --> ShippingService
+OrderPipeline --> PriceCalculator
+OrderPipeline --> DiscountEngine
+OrderPipeline --> TaxService
+PaymentGateway --> TokenStore
+PaymentGateway --> EmailSender
+PaymentGateway --> AuditLogger
+PriceCalculator --> DiscountEngine
+PriceCalculator --> TaxService
+DiscountEngine --> UserService
+DiscountEngine --> RoleManager
+
+ShippingService --> EmailSender
+ShippingService --> SMSSender
+ShippingService --> PushNotifier
+ShippingService --> WarehouseRouter
+ShippingService --> TrackingService
+InventoryCheck --> EventCollector
+InventoryCheck --> WarehouseRouter
+WarehouseRouter --> TrackingService
+ReturnHandler --> InventoryCheck
+ReturnHandler --> PaymentGateway
+ReturnHandler --> EmailSender
+
+EmailSender --> TemplateEngine
+EmailSender --> LocaleResolver
+EmailSender --> BrandingService
+EmailSender --> AttachmentBuilder
+EmailSender --> DeliveryScheduler
+SMSSender --> TemplateEngine
+SMSSender --> LocaleResolver
+PushNotifier --> TemplateEngine
+PushNotifier --> DeliveryScheduler
+WebhookDispatcher --> TemplateEngine
+WebhookDispatcher --> DeliveryScheduler
+SlackIntegration --> TemplateEngine
+SlackIntegration --> WebhookDispatcher
+
+EventCollector --> MetricsAggregator
+EventCollector --> SessionTracker
+EventCollector --> ABTestRecorder
+MetricsAggregator --> ReportGenerator
+MetricsAggregator --> DashboardService
+MetricsAggregator --> TrendDetector
+SessionTracker --> FunnelAnalyzer
+FunnelAnalyzer --> ReportGenerator
+ABTestRecorder --> ReportGenerator
+ReportGenerator --> EmailSender
+ReportGenerator --> ExportService
+DashboardService --> UserService
+DashboardService --> RoleManager
+AlertManager --> EmailSender
+AlertManager --> SMSSender
+AlertManager --> PushNotifier
+AlertManager --> SlackIntegration
+TrendDetector --> AlertManager
+
+OAuthProvider --> SessionManager
+SAMLHandler --> SessionManager
+SAMLHandler --> TokenStore
+LDAPConnector --> CredentialValidator
+LDAPConnector --> UserService
+MFAService --> TokenStore
+MFAService --> SMSSender
+MFAService --> PushNotifier
+CertValidator --> AuditLogger
+
+ProfileStore --> AvatarService
+ProfileStore --> PreferenceManager
+PreferenceManager --> LocaleResolver
+AddressBook --> ProfileStore
+ActivityLog --> EventCollector
+
+@enduml

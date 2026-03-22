@@ -506,17 +506,103 @@ impl PreprocessContext {
     }
 
     fn substitute_vars(&self, line: &str) -> String {
-        static RE: LazyLock<Regex> = LazyLock::new(|| Regex::new(r"\$(\w+)").unwrap());
+        static VAR_RE: LazyLock<Regex> = LazyLock::new(|| Regex::new(r"\$(\w+)").unwrap());
 
-        RE.replace_all(line, |caps: &regex::Captures| {
-            let name = &caps[1];
-            self.defines
-                .get(name)
-                .cloned()
-                .unwrap_or_else(|| format!("${name}"))
+        let after_vars = VAR_RE
+            .replace_all(line, |caps: &regex::Captures| {
+                let name = &caps[1];
+                self.defines
+                    .get(name)
+                    .cloned()
+                    .unwrap_or_else(|| format!("${name}"))
+            })
+            .to_string();
+
+        // Evaluate built-in %functions.
+        eval_builtin_functions(&after_vars)
+    }
+}
+
+/// Evaluate built-in %functions in a string.
+fn eval_builtin_functions(input: &str) -> String {
+    static FUNC_RE: LazyLock<Regex> = LazyLock::new(|| Regex::new(r"%(\w+)\(([^)]*)\)").unwrap());
+
+    FUNC_RE
+        .replace_all(input, |caps: &regex::Captures| {
+            let func = &caps[1];
+            let args_raw = &caps[2];
+            let args: Vec<&str> = if args_raw.trim().is_empty() {
+                Vec::new()
+            } else {
+                args_raw
+                    .split(',')
+                    .map(|a| a.trim().trim_matches('"'))
+                    .collect()
+            };
+
+            match func {
+                "strlen" => args
+                    .first()
+                    .map_or("0".to_string(), |s| s.len().to_string()),
+                "substr" => {
+                    let s = args.first().copied().unwrap_or("");
+                    let start: usize = args.get(1).and_then(|v| v.parse().ok()).unwrap_or(0);
+                    let len: usize = args
+                        .get(2)
+                        .and_then(|v| v.parse().ok())
+                        .unwrap_or(s.len() - start);
+                    s.chars().skip(start).take(len).collect()
+                }
+                "strpos" => {
+                    let haystack = args.first().copied().unwrap_or("");
+                    let needle = args.get(1).copied().unwrap_or("");
+                    haystack
+                        .find(needle)
+                        .map_or("-1".to_string(), |p| p.to_string())
+                }
+                "upper" => args.first().map_or(String::new(), |s| s.to_uppercase()),
+                "lower" => args.first().map_or(String::new(), |s| s.to_lowercase()),
+                "newline" => "\n".to_string(),
+                "tab" => "\t".to_string(),
+                "true" => "true".to_string(),
+                "false" => "false".to_string(),
+                "date" => {
+                    // Simplified: return ISO date.
+                    "2026-03-22".to_string()
+                }
+                "size" => args
+                    .first()
+                    .map_or("0".to_string(), |s| s.len().to_string()),
+                "string" => args.first().map_or(String::new(), |s| s.to_string()),
+                "intval" => args
+                    .first()
+                    .and_then(|s| s.parse::<i64>().ok())
+                    .map_or("0".to_string(), |n| n.to_string()),
+                "not" => {
+                    let val = args.first().copied().unwrap_or("false");
+                    if val == "true" || val == "1" {
+                        "false"
+                    } else {
+                        "true"
+                    }
+                    .to_string()
+                }
+                "chr" => {
+                    let code: u32 = args.first().and_then(|s| s.parse().ok()).unwrap_or(0);
+                    char::from_u32(code).map_or(String::new(), |c| c.to_string())
+                }
+                "variable_exists" => {
+                    // This is used in !if conditions, already handled there.
+                    // In regular text, just return the string.
+                    format!("%variable_exists({})", args_raw)
+                }
+                _ => {
+                    // Unknown function — pass through.
+                    format!("%{func}({args_raw})")
+                }
+            }
         })
         .to_string()
-    }
 }
 
 fn strip_inline_comment(line: &str) -> String {

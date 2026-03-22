@@ -127,6 +127,37 @@ impl SvgBuilder {
         self.line("</g>");
     }
 
+    pub fn open_link(&mut self, url: &str) {
+        let escaped = escape_xml(url);
+        self.line(&format!(r#"<a href="{escaped}" target="_blank">"#));
+        self.indent += 1;
+    }
+
+    pub fn close_link(&mut self) {
+        self.indent -= 1;
+        self.line("</a>");
+    }
+
+    /// Emit a text element wrapped in a hyperlink.
+    pub fn linked_text(
+        &mut self,
+        x: f64,
+        y: f64,
+        content: &str,
+        anchor: &str,
+        font_size: f64,
+        url: &str,
+    ) {
+        self.open_link(url);
+        self.text(x, y, content, anchor, font_size);
+        self.close_link();
+    }
+
+    /// Emit a raw SVG string (already formatted), with the current indentation.
+    pub fn raw(&mut self, s: &str) {
+        self.line(s);
+    }
+
     pub fn finalize(mut self) -> String {
         self.buf.push_str("</svg>\n");
         self.buf
