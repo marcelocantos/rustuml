@@ -8,6 +8,7 @@ pub mod class;
 pub mod metrics;
 pub mod sequence;
 pub mod state;
+pub mod style;
 pub mod svg;
 
 use rustuml_parser::diagram::Diagram;
