@@ -1,9 +1,8 @@
 [package]
-name = "rustuml"
+name = "rustuml-render"
 version.workspace = true
 edition.workspace = true
 license.workspace = true
 
 [dependencies]
 rustuml-parser = { path = "../rustuml-parser" }
-rustuml-render = { path = "../rustuml-render" }

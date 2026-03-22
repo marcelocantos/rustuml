@@ -7,12 +7,14 @@ fn main() {
     let args: Vec<String> = std::env::args().collect();
 
     if args.len() < 2 || args[1] == "--help" || args[1] == "-h" {
-        eprintln!("Usage: rustuml <file.puml>");
-        eprintln!("       cat file.puml | rustuml -");
+        eprintln!("Usage: rustuml [options] <file.puml>");
+        eprintln!("       cat file.puml | rustuml [options] -");
         eprintln!();
-        eprintln!(
-            "Parses PlantUML input and prints the diagram model (rendering not yet implemented)."
-        );
+        eprintln!("Options:");
+        eprintln!("  -tsvg       Output SVG (default)");
+        eprintln!("  --ast       Print parsed AST instead of rendering");
+        eprintln!("  --version   Print version");
+        eprintln!("  --help      Print this help");
         std::process::exit(if args.len() < 2 { 1 } else { 0 });
     }
 
@@ -21,22 +23,42 @@ fn main() {
         return;
     }
 
-    let input = if args[1] == "-" {
+    let mut ast_mode = false;
+    let mut input_arg = None;
+
+    for arg in &args[1..] {
+        match arg.as_str() {
+            "--ast" => ast_mode = true,
+            "-tsvg" => {} // default, accepted but no-op
+            _ => input_arg = Some(arg.as_str()),
+        }
+    }
+
+    let Some(input_path) = input_arg else {
+        eprintln!("error: no input file specified");
+        std::process::exit(1);
+    };
+
+    let input = if input_path == "-" {
         let mut buf = String::new();
         std::io::stdin()
             .read_to_string(&mut buf)
             .expect("failed to read stdin");
         buf
     } else {
-        std::fs::read_to_string(&args[1]).unwrap_or_else(|e| {
-            eprintln!("error: {}: {e}", args[1]);
+        std::fs::read_to_string(input_path).unwrap_or_else(|e| {
+            eprintln!("error: {input_path}: {e}");
             std::process::exit(1);
         })
     };
 
     match rustuml_parser::parse::parse(&input) {
         Ok(diagram) => {
-            println!("{diagram:#?}");
+            if ast_mode {
+                println!("{diagram:#?}");
+            } else {
+                print!("{}", rustuml_render::render_svg(&diagram));
+            }
         }
         Err(e) => {
             eprintln!("parse error: {e}");
