@@ -12,6 +12,13 @@ pub fn apply_skinparams(theme: &Theme, params: &[SkinParam]) -> Theme {
 
     for param in params {
         match param.key.as_str() {
+            // Theme switch (from !theme directive).
+            "__theme" => match param.value.as_str() {
+                "modern" => t = Theme::modern(),
+                "default" => t = Theme::plantuml_default(),
+                _ => {} // Unknown theme — keep current.
+            },
+
             // Global
             "backgroundColor" => t.global.background_color = param.value.clone(),
             "defaultFontName" => t.global.font_family = param.value.clone(),
