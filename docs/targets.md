@@ -53,7 +53,7 @@
   - Command pattern for each diagram type parses source lines into diagram models
   - Exact match with Java version on preprocessing and parsing (verified by oracle tests)
 - **Context**: The parser is the largest component — ~40 diagram factories, ~79 command definitions, multi-pass parsing. The TIM preprocessor is a separate subsystem handling macros and includes. Parser correctness is verifiable by exact-match oracle tests (no layout involved).
-- **Status**: converging — sequence diagram parser complete (25 tests, all features). Preprocessor is pass-through stub. Binary accepts .puml files and prints parsed AST. Next: class, state, activity diagram parsers.
+- **Status**: converging — 4 diagram types parsed (sequence, class, state, activity, 54 tests). Preprocessor is pass-through stub. Binary accepts .puml files, outputs SVG. Next: TIM preprocessor, component/use-case parsers.
 - **Discovered**: 2026-03-22
 
 ### 🎯T1.4 Diagram model and rendering pipeline ported to Rust
@@ -66,7 +66,7 @@
   - Style/skin system applies themes and formatting
   - Output is structurally equivalent to Java version for all diagram types
 - **Context**: The rendering pipeline has a clean abstraction (UGraphic interface with backends). SVG output is the primary target. PNG can use resvg/tiny-skia. The style system (CSS-like) and skin parameters need porting.
-- **Status**: identified
+- **Status**: converging — SVG rendering for all 4 parsed diagram types (sequence, class, state, activity). SVG builder with rect, circle, polygon, diamond, text, line, groups. Grid-based class layout. Next: layout engine coordinate integration, PNG output, style/skin system.
 - **Discovered**: 2026-03-22
 
 ### 🎯T1.5 KaTeX math rendering ported to Rust

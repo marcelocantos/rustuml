@@ -73,6 +73,36 @@ impl SvgBuilder {
         ));
     }
 
+    pub fn circle(&mut self, cx: f64, cy: f64, r: f64, fill: &str, stroke: &str) {
+        self.line(&format!(
+            r#"<circle cx="{cx}" cy="{cy}" r="{r}" fill="{fill}" stroke="{stroke}" stroke-width="1"/>"#
+        ));
+    }
+
+    pub fn polygon(&mut self, points: &[(f64, f64)], fill: &str, stroke: &str) {
+        let pts: String = points
+            .iter()
+            .map(|(x, y)| format!("{x},{y}"))
+            .collect::<Vec<_>>()
+            .join(" ");
+        self.line(&format!(
+            r#"<polygon points="{pts}" fill="{fill}" stroke="{stroke}" stroke-width="1"/>"#
+        ));
+    }
+
+    pub fn diamond(&mut self, cx: f64, cy: f64, size: f64, fill: &str, stroke: &str) {
+        self.polygon(
+            &[
+                (cx, cy - size),
+                (cx + size, cy),
+                (cx, cy + size),
+                (cx - size, cy),
+            ],
+            fill,
+            stroke,
+        );
+    }
+
     pub fn open_group(&mut self, class: &str) {
         self.line(&format!(r#"<g class="{class}">"#));
         self.indent += 1;

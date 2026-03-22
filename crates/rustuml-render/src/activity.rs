@@ -37,26 +37,17 @@ pub fn render(diagram: &ActivityDiagram) -> String {
     for step in &diagram.steps {
         match step {
             ActivityStep::Start => {
-                // Filled circle.
-                svg.rect(
-                    cx - CIRCLE_R,
-                    y - CIRCLE_R,
-                    CIRCLE_R * 2.0,
-                    CIRCLE_R * 2.0,
-                    "#000",
-                    "#000",
-                );
+                svg.circle(cx, y, CIRCLE_R, "#000", "#000");
                 y += CIRCLE_R * 2.0 + V_GAP / 2.0;
                 // Connector line.
                 svg.line_segment(cx, y - V_GAP / 2.0, cx, y, "#000", false);
             }
             ActivityStep::Stop | ActivityStep::End => {
-                // Connector line.
                 svg.line_segment(cx, y - V_GAP / 2.0, cx, y, "#000", false);
-                // Circle with inner circle (bullseye).
-                let r = CIRCLE_R;
-                svg.rect(cx - r, y, r * 2.0, r * 2.0, "#000", "#000");
-                y += r * 2.0 + V_GAP / 2.0;
+                // Bullseye: outer circle + inner filled circle.
+                svg.circle(cx, y + CIRCLE_R, CIRCLE_R, "none", "#000");
+                svg.circle(cx, y + CIRCLE_R, CIRCLE_R * 0.6, "#000", "#000");
+                y += CIRCLE_R * 2.0 + V_GAP / 2.0;
             }
             ActivityStep::Action(text) => {
                 // Connector line from previous.
@@ -77,16 +68,8 @@ pub fn render(diagram: &ActivityDiagram) -> String {
             ActivityStep::If(block) => {
                 // Connector.
                 svg.line_segment(cx, y - V_GAP / 2.0, cx, y, "#000", false);
-                // Diamond (approximated with rect — proper SVG polygon TBD).
                 svg.open_group("decision");
-                svg.rect(
-                    cx - DIAMOND_SIZE,
-                    y,
-                    DIAMOND_SIZE * 2.0,
-                    DIAMOND_SIZE * 2.0,
-                    "#FFFACD",
-                    "#000",
-                );
+                svg.diamond(cx, y + DIAMOND_SIZE, DIAMOND_SIZE, "#FFFACD", "#000");
                 svg.text(
                     cx,
                     y + DIAMOND_SIZE + 4.0,
@@ -113,12 +96,10 @@ pub fn render(diagram: &ActivityDiagram) -> String {
                 y += V_GAP / 4.0;
             }
             ActivityStep::EndIf => {
-                // Merge point — small diamond.
-                svg.rect(
-                    cx - DIAMOND_SIZE / 2.0,
-                    y,
-                    DIAMOND_SIZE,
-                    DIAMOND_SIZE,
+                svg.diamond(
+                    cx,
+                    y + DIAMOND_SIZE / 2.0,
+                    DIAMOND_SIZE / 2.0,
                     "#FFFACD",
                     "#000",
                 );
@@ -200,14 +181,7 @@ pub fn render(diagram: &ActivityDiagram) -> String {
             }
             ActivityStep::While(w) => {
                 svg.line_segment(cx, y - V_GAP / 2.0, cx, y, "#000", false);
-                svg.rect(
-                    cx - DIAMOND_SIZE,
-                    y,
-                    DIAMOND_SIZE * 2.0,
-                    DIAMOND_SIZE * 2.0,
-                    "#FFFACD",
-                    "#000",
-                );
+                svg.diamond(cx, y + DIAMOND_SIZE, DIAMOND_SIZE, "#FFFACD", "#000");
                 svg.text(
                     cx,
                     y + DIAMOND_SIZE + 4.0,
@@ -225,14 +199,7 @@ pub fn render(diagram: &ActivityDiagram) -> String {
             }
             ActivityStep::Switch(expr) => {
                 svg.line_segment(cx, y - V_GAP / 2.0, cx, y, "#000", false);
-                svg.rect(
-                    cx - DIAMOND_SIZE,
-                    y,
-                    DIAMOND_SIZE * 2.0,
-                    DIAMOND_SIZE * 2.0,
-                    "#FFFACD",
-                    "#000",
-                );
+                svg.diamond(cx, y + DIAMOND_SIZE, DIAMOND_SIZE, "#FFFACD", "#000");
                 svg.text(cx, y + DIAMOND_SIZE + 4.0, expr, "middle", SMALL_FONT);
                 y += DIAMOND_SIZE * 2.0 + V_GAP / 2.0;
             }
