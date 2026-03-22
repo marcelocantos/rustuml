@@ -7,3 +7,5 @@ license.workspace = true
 [dependencies]
 rustuml-layout = { path = "../rustuml-layout" }
 rustuml-parser = { path = "../rustuml-parser" }
+serde = { version = "1", features = ["derive"] }
+serde_yaml = "0.9"
