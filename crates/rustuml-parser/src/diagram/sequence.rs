@@ -43,6 +43,7 @@ pub enum ParticipantKind {
 pub enum Event {
     Message(Message),
     Note(Note),
+    NoteOnLink(String),
     GroupStart(GroupStart),
     GroupElse(GroupElse),
     GroupEnd,

@@ -264,6 +264,13 @@ impl SeqParser {
     }
 
     fn try_note(&mut self, line: &str) -> bool {
+        // Note on link (attaches to previous message).
+        if let Some(rest) = line.strip_prefix("note on link") {
+            let text = rest.trim().trim_start_matches(':').trim().to_string();
+            self.events.push(Event::NoteOnLink(text));
+            return true;
+        }
+
         static RE: LazyLock<Regex> = LazyLock::new(|| {
             Regex::new(r"^(?:h|r)?note\s+(left|right|over)\s*(?:of\s+)?(\w+(?:\s*,\s*\w+)*)?\s*(?::\s*(.*))?$").unwrap()
         });
@@ -798,6 +805,17 @@ mod tests {
         assert_eq!(d.participants[2].kind, ParticipantKind::Boundary);
         assert_eq!(d.participants[5].kind, ParticipantKind::Database);
         assert_eq!(d.participants[7].kind, ParticipantKind::Queue);
+    }
+
+    #[test]
+    fn note_on_link() {
+        let d = parse("A -> B : msg\nnote on link : link note");
+        assert_eq!(d.events.len(), 2, "events: {:?}", d.events);
+        assert!(
+            matches!(&d.events[1], Event::NoteOnLink(s) if s == "link note"),
+            "event[1]: {:?}",
+            d.events[1]
+        );
     }
 
     #[test]
