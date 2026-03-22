@@ -1,0 +1,8 @@
+@startdot
+digraph G {
+  A [shape=box]
+  B [shape=ellipse]
+  C [shape=diamond]
+  A -> B -> C
+}
+@enddot

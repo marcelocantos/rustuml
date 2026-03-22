@@ -1,0 +1,21 @@
+@startboard
+Sprint 42
+
++Backlog+
+* JIRA-101 Fix login bug
+* JIRA-102 Add dark mode
+* JIRA-103 Improve performance
+
++In Progress+
+* JIRA-98 Update docs
+
++Code Review+
+* JIRA-97 New dashboard
+
++QA+
+* JIRA-96 Notifications
+
++Done+
+* JIRA-95 User profile
+* JIRA-94 API refactor
+@endboard

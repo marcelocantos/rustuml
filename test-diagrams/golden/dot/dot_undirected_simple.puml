@@ -1,0 +1,7 @@
+@startdot
+graph G {
+  A -- B
+  B -- C
+  C -- A
+}
+@enddot

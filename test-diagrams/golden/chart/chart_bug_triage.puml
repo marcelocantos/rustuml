@@ -1,0 +1,17 @@
+@startboard
+Bug Triage Board
+
++New+
+* BUG-201 Crash on login
+* BUG-202 Slow dashboard
+
++Investigating+
+* BUG-199 Memory leak
+
++Confirmed+
+* BUG-198 Wrong timezone
+
++Fixed+
+* BUG-197 Typo in footer
+* BUG-196 Bad redirect
+@endboard

@@ -1,0 +1,9 @@
+@startdot
+digraph G {
+  graph [label="My Graph", fontsize=20, bgcolor=lightyellow]
+  node  [shape=circle, style=filled, fillcolor=white]
+  edge  [color=gray]
+  A -> B -> C
+  A -> C
+}
+@enddot

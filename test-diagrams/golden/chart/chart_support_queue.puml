@@ -1,0 +1,17 @@
+@startboard
+Support Queue
+
++New+
+* TKT-101 Install help
+* TKT-102 Billing question
+
++In Progress+
+* TKT-100 API error
+
++Waiting for Customer+
+* TKT-099 Config issue
+
++Resolved+
+* TKT-098 Login problem
+* TKT-097 Export failure
+@endboard

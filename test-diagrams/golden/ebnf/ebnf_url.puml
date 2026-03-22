@@ -1,0 +1,11 @@
+@startebnf
+url = scheme , "://" , host , [ ":" , port ] , [ path ];
+scheme = "http" | "https" | "ftp";
+host = label , { "." , label };
+label = letter , { letter | digit };
+port = digit , { digit };
+path = "/" , { segment , "/" };
+segment = { letter | digit };
+letter = "a" | "b" | "c";
+digit = "0" | "1" | "2";
+@endebnf

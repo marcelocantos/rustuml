@@ -1,0 +1,10 @@
+@startgit
+commit id:"init"
+branch develop
+checkout develop
+commit id:"dev1"
+commit id:"dev2"
+checkout master
+merge develop tag:"v1.0"
+commit id:"post-release"
+@endgit

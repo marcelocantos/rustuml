@@ -1,0 +1,14 @@
+@startboard
+Sprint 1
+
++Backlog+
+* User authentication
+* Password reset
+* Email verification
+
++In Progress+
+* API design
+
++Done+
+* Project setup
+@endboard

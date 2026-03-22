@@ -1,0 +1,20 @@
+@startboard
+Project Alpha
+
++Planning+
+* Define scope
+* Identify stakeholders
+
++Design+
+* Architecture diagram
+
++Implementation+
+* Core module
+* API layer
+
++Testing+
+* Unit tests
+
++Deployment+
+* Production release
+@endboard

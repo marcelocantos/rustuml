@@ -1,0 +1,15 @@
+@startboard
+Team Weekly
+
++Alice+
+* Write ADR
+* Review PRs
+
++Bob+
+* Fix CI flakiness
+* Update dependencies
+
++Carol+
+* Demo prep
+* Customer meeting
+@endboard

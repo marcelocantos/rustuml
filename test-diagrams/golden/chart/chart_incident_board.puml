@@ -1,0 +1,16 @@
+@startboard
+Incident Board
+
++Reported+
+* INC-001 DB latency spike
+* INC-002 Login failures
+
++Investigating+
+* INC-003 API timeouts
+
++Mitigated+
+* INC-004 CDN outage
+
++Resolved+
+* INC-005 Memory OOM
+@endboard

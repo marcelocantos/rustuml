@@ -1,0 +1,11 @@
+@startebnf
+value = string | number | object | array | "true" | "false" | "null";
+object = "{" , [ member , { "," , member } ] , "}";
+member = string , ":" , value;
+array = "[" , [ value , { "," , value } ] , "]";
+string = '"' , { char } , '"';
+number = digit , { digit };
+char = letter | digit;
+letter = "a" | "b" | "c";
+digit = "0" | "1" | "2";
+@endebnf

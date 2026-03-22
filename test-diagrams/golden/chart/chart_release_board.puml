@@ -1,0 +1,17 @@
+@startboard
+Release v2.0 Checklist
+
++Not Started+
+* Update changelog
+* Tag release
+
++In Progress+
+* Run regression suite
+
++Blocked+
+* Performance sign-off
+
++Complete+
+* Feature freeze
+* Code review done
+@endboard

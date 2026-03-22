@@ -1,0 +1,6 @@
+@startdot
+digraph G {
+  A -> B [label="forward"]
+  B -> A [label="backward", style=dashed]
+}
+@enddot

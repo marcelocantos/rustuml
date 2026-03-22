@@ -1,0 +1,6 @@
+@startgit
+commit id:"normal"
+commit id:"bad" type:REVERSE
+commit id:"important" type:HIGHLIGHT
+commit id:"regular"
+@endgit

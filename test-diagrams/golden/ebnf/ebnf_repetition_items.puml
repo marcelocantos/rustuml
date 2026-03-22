@@ -1,0 +1,5 @@
+@startebnf
+list = item , { "," , item };
+item = digit;
+digit = "0" | "1" | "2" | "3" | "4";
+@endebnf

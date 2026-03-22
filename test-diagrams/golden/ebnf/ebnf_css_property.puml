@@ -1,0 +1,11 @@
+@startebnf
+declaration = property , ":" , value , [ "!" , "important" ] , ";";
+property = ident;
+value = keyword | number , [ unit ];
+keyword = "auto" | "inherit" | "none";
+unit = "px" | "em" | "rem" | "%" | "vh" | "vw";
+number = digit , { digit } , [ "." , digit , { digit } ];
+ident = letter , { letter | digit | "-" };
+letter = "a" | "b" | "c";
+digit = "0" | "1" | "2";
+@endebnf

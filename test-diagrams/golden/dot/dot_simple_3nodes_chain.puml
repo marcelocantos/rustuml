@@ -1,0 +1,5 @@
+@startdot
+digraph G {
+  A -> B -> C
+}
+@enddot
