@@ -1,8 +1,8 @@
 [package]
-name = "rustuml"
+name = "rustuml-parser"
 version.workspace = true
 edition.workspace = true
 license.workspace = true
 
 [dependencies]
-rustuml-parser = { path = "../rustuml-parser" }
+regex = "1"
