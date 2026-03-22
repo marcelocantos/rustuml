@@ -11,6 +11,7 @@ pub mod gantt;
 pub mod json_diagram;
 pub mod math;
 pub mod mindmap;
+pub mod nwdiag;
 pub mod object;
 pub mod salt;
 pub mod sequence;
@@ -293,6 +294,10 @@ pub fn parse_with_base(
         "salt" => {
             let s = salt::parse_salt(&lines)?;
             Ok(Diagram::Salt(s))
+        }
+        "nwdiag" => {
+            let nw = nwdiag::parse_nwdiag(&lines)?;
+            Ok(Diagram::Nwdiag(nw))
         }
         other => Err(ParseError {
             line: 1,

@@ -14,6 +14,7 @@ pub mod gantt;
 pub mod json_diagram;
 pub mod math;
 pub mod mindmap;
+pub mod nwdiag;
 pub mod object;
 pub mod salt;
 pub mod sequence;
@@ -36,6 +37,7 @@ pub enum Diagram {
     Component(component::ComponentDiagram),
     UseCase(usecase::UseCaseDiagram),
     Deployment(deployment::DeploymentDiagram),
+    Nwdiag(nwdiag::NwdiagDiagram),
     Json(json_diagram::JsonDiagram),
     MindMap(mindmap::MindMapDiagram),
     Gantt(gantt::GanttDiagram),
