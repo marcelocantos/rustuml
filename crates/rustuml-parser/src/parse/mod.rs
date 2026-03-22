@@ -8,6 +8,7 @@ pub mod class;
 pub mod component;
 pub mod deployment;
 pub mod gantt;
+pub mod json_diagram;
 pub mod math;
 pub mod mindmap;
 pub mod object;
@@ -260,6 +261,14 @@ pub fn parse_with_base(
                 Ok(Diagram::Timing(td))
             }
         },
+        "json" => {
+            let jd = json_diagram::parse_json_diagram(&lines)?;
+            Ok(Diagram::Json(jd))
+        }
+        "yaml" => {
+            let jd = json_diagram::parse_yaml_diagram(&lines)?;
+            Ok(Diagram::Json(jd))
+        }
         "mindmap" => {
             let mm = mindmap::parse_mindmap(&lines)?;
             Ok(Diagram::MindMap(mm))

@@ -11,6 +11,7 @@ pub mod class;
 pub mod component;
 pub mod deployment;
 pub mod gantt;
+pub mod json_diagram;
 pub mod math;
 pub mod mindmap;
 pub mod object;
@@ -34,6 +35,7 @@ pub enum Diagram {
     Component(component::ComponentDiagram),
     UseCase(usecase::UseCaseDiagram),
     Deployment(deployment::DeploymentDiagram),
+    Json(json_diagram::JsonDiagram),
     MindMap(mindmap::MindMapDiagram),
     Gantt(gantt::GanttDiagram),
     Timing(timing::TimingDiagram),

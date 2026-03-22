@@ -10,6 +10,7 @@ pub mod component;
 pub mod creole;
 pub mod deployment;
 pub mod gantt;
+pub mod json_diagram;
 pub mod math;
 pub mod metrics;
 pub mod object;
@@ -72,6 +73,7 @@ fn render_with_theme(diagram: &Diagram, theme: &Theme) -> String {
         Diagram::Component(comp) => component::render(comp, theme),
         Diagram::UseCase(uc) => usecase::render(uc, theme),
         Diagram::Deployment(dep) => deployment::render(dep, theme),
+        Diagram::Json(jd) => json_diagram::render(jd, theme),
         Diagram::MindMap(mm) => mindmap::render(mm, theme),
         Diagram::Gantt(g) => gantt::render(g, theme),
         Diagram::Timing(td) => timing::render(td, theme),
