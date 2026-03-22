@@ -81,4 +81,30 @@
 - **Status**: identified
 - **Discovered**: 2026-03-22
 
+### 🎯T1.6 YAML input format as alternative to PlantUML text syntax
+- **Weight**: 1 (value 5 / cost 5)
+- **Estimated-cost**: 5
+- **Parent**: 🎯T1
+- **Acceptance**:
+  - Diagrams can be specified in YAML as an alternative to PlantUML text syntax
+  - YAML representation maps cleanly to the diagram model (participants, messages, classes, etc.)
+  - Generators (AI, scripts) can produce YAML instead of wrestling with PlantUML string syntax
+  - Both formats produce identical diagrams
+- **Context**: PlantUML's text syntax is designed for humans writing by hand. For machine generators (AI tools, CI pipelines, code-gen), a structured YAML format is easier to produce correctly — no escaping, no ambiguous syntax, no need to understand arrow notation. YAML deserializes directly into the diagram model types.
+- **Status**: identified
+- **Discovered**: 2026-03-22
+
+### 🎯T1.7 Multi-format output (PNG, PDF, EPS)
+- **Weight**: 1 (value 10 / cost 5)
+- **Estimated-cost**: 5
+- **Parent**: 🎯T1
+- **Acceptance**:
+  - SVG is the primary/default output format (already implemented)
+  - PNG output via resvg/tiny-skia (rasterize SVG)
+  - Oracle test framework supports validating all output formats
+  - Test suite runs against all supported formats, not just SVG
+- **Context**: SVG is the development and testing format. PNG is needed for embedding in documents and wikis. The test framework should be parameterized by output format so every test case validates every format.
+- **Status**: identified
+- **Discovered**: 2026-03-22
+
 ## Achieved
