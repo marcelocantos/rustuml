@@ -100,6 +100,57 @@ impl LayoutGraph {
         self.vg.do_it(false, false, false, &mut svg);
         svg.finalize()
     }
+
+    /// Runs layout and extracts node positions from the resulting SVG.
+    ///
+    /// Returns positions in the order nodes were added, as (x, y, width, height).
+    pub fn layout_positions(&mut self) -> Vec<NodePosition> {
+        let svg = self.to_svg();
+        extract_positions(&svg)
+    }
+}
+
+/// Position of a laid-out node.
+#[derive(Debug, Clone, Copy)]
+pub struct NodePosition {
+    pub x: f64,
+    pub y: f64,
+    pub width: f64,
+    pub height: f64,
+}
+
+/// Parse rect positions from layout-rs SVG output.
+fn extract_positions(svg: &str) -> Vec<NodePosition> {
+    let mut positions = Vec::new();
+
+    for line in svg.lines() {
+        let trimmed = line.trim();
+        if !trimmed.starts_with("<rect") {
+            continue;
+        }
+
+        let x = parse_svg_attr(trimmed, "x").unwrap_or(0.0);
+        let y = parse_svg_attr(trimmed, "y").unwrap_or(0.0);
+        let w = parse_svg_attr(trimmed, "width").unwrap_or(100.0);
+        let h = parse_svg_attr(trimmed, "height").unwrap_or(40.0);
+
+        positions.push(NodePosition {
+            x,
+            y,
+            width: w,
+            height: h,
+        });
+    }
+
+    positions
+}
+
+fn parse_svg_attr(element: &str, attr: &str) -> Option<f64> {
+    let prefix = format!("{attr}=\"");
+    let start = element.find(&prefix)? + prefix.len();
+    let rest = &element[start..];
+    let end = rest.find('"')?;
+    rest[..end].parse().ok()
 }
 
 #[cfg(test)]

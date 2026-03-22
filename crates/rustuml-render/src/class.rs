@@ -39,21 +39,100 @@ pub fn render(diagram: &ClassDiagram, theme: &Theme) -> String {
         layout.add_edge(&rel.from, &rel.to, rel.label.as_deref());
     }
 
-    // Get the layout SVG — used as a reference for relative positions.
-    // Full integration (extracting coordinates) is a future improvement.
-    let layout_svg = layout.to_svg();
+    // Extract Sugiyama-positioned coordinates.
+    let positions = layout.layout_positions();
 
-    // Phase 2: Render with our own class boxes.
-    render_simple(diagram, &layout_svg, cs)
+    // Phase 2: Render with our own class boxes using layout positions.
+    render_with_positions(diagram, &positions, cs)
 }
 
-/// Simple rendering without layout engine integration.
-/// Places classes in a grid and draws relationships.
-fn render_simple(
+/// Render using Sugiyama layout positions from the layout engine.
+fn render_with_positions(
     diagram: &ClassDiagram,
-    _layout_hint: &str,
+    positions: &[rustuml_layout::graph::NodePosition],
     cs: &crate::style::ClassStyle,
 ) -> String {
+    if diagram.entities.is_empty() {
+        return "<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"100\" height=\"50\"></svg>\n"
+            .to_string();
+    }
+
+    let class_dims: Vec<ClassDim> = diagram.entities.iter().map(calc_class_dim).collect();
+
+    // Use layout positions if available, fall back to grid.
+    let use_layout = positions.len() >= diagram.entities.len();
+
+    if !use_layout {
+        return render_grid(diagram, cs);
+    }
+
+    // Calculate total SVG dimensions from layout positions.
+    let max_x = positions
+        .iter()
+        .zip(&class_dims)
+        .map(|(p, d)| p.x + d.width)
+        .fold(0.0_f64, f64::max);
+    let max_y = positions
+        .iter()
+        .zip(&class_dims)
+        .map(|(p, d)| p.y + d.height)
+        .fold(0.0_f64, f64::max);
+    let total_width = max_x + MARGIN * 2.0;
+    let total_height = max_y + MARGIN * 2.0;
+
+    let mut svg = SvgBuilder::new(total_width, total_height);
+
+    // Render each class at its layout position.
+    let mut entity_positions: Vec<(f64, f64, f64, f64)> = Vec::new();
+    for (i, (entity, dim)) in diagram.entities.iter().zip(&class_dims).enumerate() {
+        let pos = &positions[i];
+        let x = pos.x + MARGIN;
+        let y = pos.y + MARGIN;
+        render_class_box(&mut svg, entity, x, y, dim, cs);
+        entity_positions.push((x, y, dim.width, dim.height));
+    }
+
+    // Render relationships.
+    for rel in &diagram.relationships {
+        let from_idx = diagram.entities.iter().position(|e| e.id == rel.from);
+        let to_idx = diagram.entities.iter().position(|e| e.id == rel.to);
+
+        if let (Some(fi), Some(ti)) = (from_idx, to_idx) {
+            let (fx, fy, fw, fh) = entity_positions[fi];
+            let (tx, ty, tw, _th) = entity_positions[ti];
+
+            let from_cx = fx + fw / 2.0;
+            let from_bottom = fy + fh;
+            let to_cx = tx + tw / 2.0;
+            let to_top = ty;
+
+            let dashed = matches!(
+                rel.kind,
+                RelationshipKind::Dependency | RelationshipKind::Implementation
+            );
+            svg.line_segment(
+                from_cx,
+                from_bottom,
+                to_cx,
+                to_top,
+                &cs.border_color,
+                dashed,
+            );
+            render_relationship_head(&mut svg, rel.kind, to_cx, to_top);
+
+            if let Some(label) = &rel.label {
+                let mid_x = (from_cx + to_cx) / 2.0;
+                let mid_y = (from_bottom + to_top) / 2.0;
+                svg.text(mid_x, mid_y - 4.0, label, "middle", SMALL_FONT);
+            }
+        }
+    }
+
+    svg.finalize()
+}
+
+/// Grid-based rendering fallback (when layout positions aren't available).
+fn render_grid(diagram: &ClassDiagram, cs: &crate::style::ClassStyle) -> String {
     if diagram.entities.is_empty() {
         return "<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"100\" height=\"50\"></svg>\n"
             .to_string();
