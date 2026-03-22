@@ -9,13 +9,16 @@ fn main() {
     if args.len() < 2 || args[1] == "--help" || args[1] == "-h" {
         eprintln!("Usage: rustuml [options] <file>");
         eprintln!("       cat file | rustuml [options] -");
+        eprintln!("       cat file | rustuml -pipe [options]");
         eprintln!();
         eprintln!("Input formats: PlantUML (.puml), YAML (.yaml/.yml), JSON (.json)");
         eprintln!("Format is auto-detected from content, or use file extension.");
         eprintln!();
         eprintln!("Options:");
+        eprintln!("  -pipe                 Read from stdin, write to stdout (PlantUML compatible)");
         eprintln!("  -tsvg                 Output SVG (default)");
         eprintln!("  -tpng                 Output PNG");
+        eprintln!("  -tpdf                 Output PDF");
         eprintln!("  -ttxt                 Output ASCII art text (sequence diagrams)");
         eprintln!("  --ast                 Print parsed AST (Debug format)");
         eprintln!("  --yaml                Print parsed diagram as YAML");
@@ -39,10 +42,12 @@ fn main() {
 
     let mut output_mode = OutputMode::Svg;
     let mut input_arg = None;
+    let mut pipe_mode = false;
     let mut theme = rustuml_render::style::Theme::default();
 
     for arg in &args[1..] {
         match arg.as_str() {
+            "-pipe" => pipe_mode = true,
             "--ast" => output_mode = OutputMode::Ast,
             "--yaml" => output_mode = OutputMode::Yaml,
             "-tsvg" => output_mode = OutputMode::Svg,
@@ -70,6 +75,12 @@ fn main() {
             }
             _ => input_arg = Some(arg.as_str()),
         }
+    }
+
+    // -pipe flag is an alias for reading from stdin (PlantUML compatibility).
+    // It takes precedence over any positional file argument.
+    if pipe_mode {
+        input_arg = Some("-");
     }
 
     let Some(input_path) = input_arg else {
