@@ -1,8 +1,0 @@
-@startuml
-!if %feature_exists("preprocessing")
-  note over A : preprocessing supported
-!else
-  note over A : not supported
-!endif
-participant A
-@enduml

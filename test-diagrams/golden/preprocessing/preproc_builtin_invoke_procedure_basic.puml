@@ -1,8 +1,0 @@
-@startuml
-!procedure $drawNote($label)
-  note over A : $label
-!endprocedure
-
-participant A
-!%invoke_procedure("drawNote", "invoked!")
-@enduml

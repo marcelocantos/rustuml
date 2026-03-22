@@ -3,8 +3,8 @@
 
 //! Math/LaTeX diagram parser.
 //!
-//! Extracts the raw LaTeX content between `@startmath`/`@endmath` or
-//! `@startlatex`/`@endlatex` tags.
+//! The preprocessor already strips `@startmath`/`@endmath` (and the latex
+//! variants), so the `lines` slice contains only the body content.
 
 use super::ParseError;
 use crate::diagram::DiagramMeta;
@@ -15,27 +15,13 @@ use crate::diagram::math::MathDiagram;
 /// `is_latex` should be `true` when the source used `@startlatex`,
 /// `false` for `@startmath`.
 pub fn parse_math(lines: &[String], is_latex: bool) -> Result<MathDiagram, ParseError> {
-    let end_tag = if is_latex { "@endlatex" } else { "@endmath" };
-    let start_tag = if is_latex { "@startlatex" } else { "@startmath" };
-
-    let mut content_lines: Vec<&str> = Vec::new();
-    let mut inside = false;
-
-    for line in lines {
-        let trimmed = line.trim();
-        if !inside {
-            if trimmed.eq_ignore_ascii_case(start_tag) {
-                inside = true;
-            }
-            continue;
-        }
-        if trimmed.eq_ignore_ascii_case(end_tag) {
-            break;
-        }
-        content_lines.push(line.as_str());
-    }
-
-    let content = content_lines.join("\n");
+    // The preprocessor strips @start/@end tags, so all remaining lines
+    // are body content.
+    let content = lines
+        .iter()
+        .map(|l| l.as_str())
+        .collect::<Vec<_>>()
+        .join("\n");
 
     Ok(MathDiagram {
         meta: DiagramMeta::default(),

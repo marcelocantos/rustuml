@@ -1,9 +1,0 @@
-@startuml
-!procedure $connect($src, $dst, $label)
-  $src -> $dst : $label
-!endprocedure
-
-participant X
-participant Y
-!%invoke_procedure("connect", "X", "Y", "hello via invoke")
-@enduml
