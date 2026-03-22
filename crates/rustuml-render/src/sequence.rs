@@ -241,6 +241,19 @@ pub fn render(diagram: &SequenceDiagram, theme: &Theme) -> String {
                 }
                 y += MESSAGE_HEIGHT;
             }
+            Event::NoteOnLink(text) => {
+                let mid = total_width / 2.0;
+                svg.rect(
+                    mid - 50.0,
+                    y - 12.0,
+                    100.0,
+                    18.0,
+                    &ss.note_background,
+                    &ss.lifeline_color,
+                );
+                svg.text(mid, y + 2.0, text, "middle", SMALL_FONT);
+                y += MESSAGE_HEIGHT / 2.0;
+            }
             _ => {}
         }
     }
