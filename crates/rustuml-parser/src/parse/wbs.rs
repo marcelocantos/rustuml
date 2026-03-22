@@ -102,10 +102,7 @@ pub fn parse_wbs(lines: &[String]) -> Result<WbsDiagram, ParseError> {
 /// Navigate to the deepest node described by `path_depths` (ancestor-first,
 /// not including the sentinel entry) and return a mutable reference to the
 /// last child at each step.
-fn find_deepest_at<'a>(
-    roots: &'a mut [WbsNode],
-    path_depths: &[usize],
-) -> Option<&'a mut WbsNode> {
+fn find_deepest_at<'a>(roots: &'a mut [WbsNode], path_depths: &[usize]) -> Option<&'a mut WbsNode> {
     if path_depths.is_empty() {
         return None;
     }
