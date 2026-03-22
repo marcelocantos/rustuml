@@ -1,0 +1,4 @@
+@startuml
+Alice -> Bob : **bold** and //italic// and ""code""
+Bob --> Alice : <b>html bold</b> and <i>html italic</i>
+@enduml

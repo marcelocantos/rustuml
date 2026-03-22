@@ -1,0 +1,6 @@
+@startuml
+abstract class MyType {
+  +void method()
+}
+note top of MyType : * point 1\n  * point 2\n  * point 3
+@enduml

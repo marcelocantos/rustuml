@@ -1,0 +1,4 @@
+@startuml
+title <back:#FFEECC>hex bg</back>
+Alice -> Bob : hello
+@enduml

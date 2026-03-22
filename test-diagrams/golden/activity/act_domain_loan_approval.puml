@@ -1,0 +1,41 @@
+@startuml
+
+title Loan Approval Process
+
+|Applicant|
+start
+:Submit application;
+
+|Loan Officer|
+:Review application;
+if (complete?) then (yes)
+  :Credit check;
+  if (credit ok?) then (yes)
+    :Calculate terms;
+    |Applicant|
+    :Review offer;
+    if (accept?) then (yes)
+      |Loan Officer|
+      :Process loan;
+      |Applicant|
+      :Receive funds;
+      stop
+    else (no)
+      :Decline offer;
+      stop
+    endif
+  else (no)
+    :Reject application;
+    |Applicant|
+    :Receive rejection;
+    stop
+  endif
+else (no)
+  :Request more info;
+  |Applicant|
+  :Provide info;
+  |Loan Officer|
+  :Review application;
+  stop
+endif
+@enduml

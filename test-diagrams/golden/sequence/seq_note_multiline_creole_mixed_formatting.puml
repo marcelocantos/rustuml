@@ -1,0 +1,12 @@
+@startuml
+Alice -> Bob : request
+note over Alice, Bob
+  **Title**
+  ----
+  * item 1
+  * item 2
+  ----
+  //footer//
+end note
+Bob --> Alice : response
+@enduml

@@ -1,0 +1,6 @@
+@startuml
+[*] --> A
+A --> B
+note right of A : simple note
+B --> [*]
+@enduml

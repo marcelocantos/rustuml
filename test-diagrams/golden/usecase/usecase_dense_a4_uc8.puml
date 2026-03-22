@@ -1,0 +1,24 @@
+@startuml
+actor A1
+actor A2
+actor A3
+actor A4
+rectangle System {
+  usecase "UC01" as UC01
+  usecase "UC02" as UC02
+  usecase "UC03" as UC03
+  usecase "UC04" as UC04
+  usecase "UC05" as UC05
+  usecase "UC06" as UC06
+  usecase "UC07" as UC07
+  usecase "UC08" as UC08
+}
+A2 --> UC01
+A3 --> UC02
+A4 --> UC03
+A1 --> UC04
+A2 --> UC05
+A3 --> UC06
+A4 --> UC07
+A1 --> UC08
+@enduml

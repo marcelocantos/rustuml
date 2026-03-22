@@ -1,0 +1,12 @@
+@startuml
+left to right direction
+actor User
+rectangle "System" #LightGreen {
+  usecase UC1
+  usecase UC2
+  usecase UC3
+  UC1 .> UC2 : <<include>>
+}
+User --> UC1
+User --> UC3
+@enduml

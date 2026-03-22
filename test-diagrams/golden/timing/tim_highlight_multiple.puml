@@ -1,0 +1,14 @@
+@startuml
+robust "Signal" as sig
+highlight 0 to 50 #pink : startup
+highlight 100 to 200 #lightblue : operation
+highlight 250 to 300 #lightyellow : shutdown
+@0
+sig is init
+@50
+sig is running
+@200
+sig is stopping
+@300
+sig is stopped
+@enduml

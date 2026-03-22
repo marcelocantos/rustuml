@@ -1,0 +1,8 @@
+@startuml
+
+start
+partition "Single Partition" {
+  :Only action;
+}
+stop
+@enduml

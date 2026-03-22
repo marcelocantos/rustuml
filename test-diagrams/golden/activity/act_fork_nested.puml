@@ -1,0 +1,20 @@
+@startuml
+
+start
+fork
+  fork
+    :Nested 1a;
+  fork again
+    :Nested 1b;
+  end fork
+  :After inner fork 1;
+fork again
+  fork
+    :Nested 2a;
+  fork again
+    :Nested 2b;
+  end fork
+  :After inner fork 2;
+end fork
+stop
+@enduml

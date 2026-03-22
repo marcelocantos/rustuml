@@ -1,0 +1,6 @@
+@startuml
+control A
+entity B
+A -> B : request
+B --> A : response
+@enduml

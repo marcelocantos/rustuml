@@ -1,0 +1,7 @@
+@startuml
+title Title
+header Header Text
+footer Footer Text
+Alice -> Bob : hello
+Bob --> Alice : hi
+@enduml

@@ -1,0 +1,5 @@
+@startuml
+Alice -> Bob : hello
+Bob --> Alice : hi
+caption <color:blue>Figure 5: Blue Caption</color>
+@enduml

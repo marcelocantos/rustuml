@@ -1,0 +1,5 @@
+@startuml
+note as N
+  <font color='red'>font color</font>
+end note
+@enduml

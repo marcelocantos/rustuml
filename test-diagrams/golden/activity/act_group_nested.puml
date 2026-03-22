@@ -1,0 +1,13 @@
+@startuml
+
+start
+group "Outer Group" {
+  :Outer action;
+  group "Inner Group" {
+    :Inner action 1;
+    :Inner action 2;
+  }
+  :After inner;
+}
+stop
+@enduml

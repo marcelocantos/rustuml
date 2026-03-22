@@ -1,0 +1,5 @@
+@startuml
+class School
+class Student
+School "1" o-- "*" Student : enrolls >
+@enduml

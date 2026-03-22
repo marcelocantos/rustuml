@@ -1,0 +1,5 @@
+@startuml
+state "**//bi//** State" as S956
+[*] --> S956
+S956 : **//bi//** description
+@enduml

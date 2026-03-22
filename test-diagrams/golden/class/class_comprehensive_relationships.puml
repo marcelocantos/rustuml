@@ -1,0 +1,50 @@
+@startuml
+abstract class Animal {
+  +String name
+  +{abstract} void makeSound()
+}
+class Dog {
+  +String breed
+  +void makeSound()
+}
+class Cat {
+  +String color
+  +void makeSound()
+}
+interface Trainable {
+  +void train(String command)
+  +boolean knows(String command)
+}
+interface Pet {
+  +String getOwnerName()
+}
+class Owner {
+  +String name
+  +String address
+}
+class Kennel {
+  +String name
+  +int capacity
+}
+class Toy {
+  +String type
+}
+class VetVisit {
+  +Date date
+  +String reason
+  +String diagnosis
+}
+Animal <|-- Dog
+Animal <|-- Cat
+Dog ..|> Trainable
+Dog ..|> Pet
+Cat ..|> Pet
+Owner "1" o-- "*" Dog
+Owner "1" o-- "*" Cat
+Kennel o-- Dog
+Dog *-- Toy
+Dog "1" -- "*" VetVisit
+Cat "1" -- "*" VetVisit
+note right of Dog : Man's best friend
+note left of Trainable : Can be taught commands
+@enduml

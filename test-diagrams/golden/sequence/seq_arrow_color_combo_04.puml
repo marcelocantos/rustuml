@@ -1,0 +1,6 @@
+@startuml
+Alice -[#FF0000]> Bob : forward #FF0000
+Bob -[#0000FF]--> Alice : return #0000FF
+Alice -[#FF0000]>> Charlie : thin #FF0000
+Charlie -[#0000FF]-->> Alice : thin dotted #0000FF
+@enduml

@@ -1,0 +1,8 @@
+@startuml
+interface A
+interface B
+interface C
+class Foo implements A, B, C {
+  method(): void
+}
+@enduml

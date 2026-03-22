@@ -1,0 +1,6 @@
+@startuml
+state ps <<end>>
+[*] --> A
+A --> ps
+ps --> [*]
+@enduml

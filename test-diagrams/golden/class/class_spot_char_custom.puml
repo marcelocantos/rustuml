@@ -1,0 +1,6 @@
+@startuml
+class MyClass << (S,#FF7700) Singleton >> {
+  -instance: MyClass
+  +getInstance(): MyClass
+}
+@enduml

@@ -1,0 +1,6 @@
+@startuml
+Alice <- Bob : right to left
+Alice <-- Bob : dotted rtl
+Alice <<- Bob : thin rtl
+Alice <<-- Bob : thin dotted rtl
+@enduml

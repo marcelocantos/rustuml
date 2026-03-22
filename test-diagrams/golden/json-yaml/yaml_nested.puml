@@ -1,0 +1,8 @@
+@startyaml
+user:
+  id: 1
+  name: Bob
+  address:
+    street: 123 Main St
+    city: Springfield
+@endyaml

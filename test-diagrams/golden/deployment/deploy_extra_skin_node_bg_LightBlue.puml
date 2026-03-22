@@ -1,0 +1,8 @@
+@startuml
+skinparam node {
+  BackgroundColor LightBlue
+}
+node MyElem
+node AppServer
+AppServer --> MyElem
+@enduml

@@ -1,0 +1,7 @@
+@startuml
+Alice -> Bob ++ : start
+Bob -> Bob : internal
+Bob -> Charlie ++ : delegate
+return charlie done
+Bob --> Alice -- : complete
+@enduml

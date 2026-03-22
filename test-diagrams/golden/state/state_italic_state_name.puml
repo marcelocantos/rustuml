@@ -1,0 +1,5 @@
+@startuml
+state "<i>Italic State</i>" as IS
+[*] --> IS
+IS --> [*]
+@enduml

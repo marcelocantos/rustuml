@@ -1,0 +1,7 @@
+@startuml
+rectangle MyContainer #LightBlue {
+  component Foo
+  component Bar
+  Foo --> Bar
+}
+@enduml

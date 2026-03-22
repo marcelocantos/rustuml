@@ -1,0 +1,7 @@
+@startuml
+
+start
+floating note right #yellow: Yellow floating note
+:Action;
+stop
+@enduml

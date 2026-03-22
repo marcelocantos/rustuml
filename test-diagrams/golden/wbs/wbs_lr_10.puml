@@ -1,0 +1,9 @@
+@startwbs
+* Root 10
+**[#red] Right 0
+**[#blue] Right 1
+**[#green] Right 2
+**[#yellow] Right 3
+--[#pink] Left 0
+--[#cyan] Left 1
+@endwbs

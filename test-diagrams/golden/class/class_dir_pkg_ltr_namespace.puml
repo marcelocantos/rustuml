@@ -1,0 +1,10 @@
+@startuml
+left to right direction
+namespace A {
+  class ClassA { +void m() }
+}
+namespace B {
+  class ClassB { +void m() }
+}
+A.ClassA --> B.ClassB
+@enduml

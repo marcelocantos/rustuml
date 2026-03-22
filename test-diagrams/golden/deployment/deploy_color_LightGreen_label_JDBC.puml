@@ -1,0 +1,5 @@
+@startuml
+node Source #LightGreen
+node Target #LightGreen
+Source --> Target : JDBC
+@enduml

@@ -1,0 +1,12 @@
+@startuml
+object Obj0_9 { val = 90 }
+object Obj1_9 { val = 91 }
+object Obj2_9 { val = 92 }
+object Obj3_9 { val = 93 }
+object Obj4_9 { val = 94 }
+Obj0_9 --> Obj1_9
+Obj1_9 --> Obj2_9
+Obj2_9 --> Obj3_9
+Obj3_9 --> Obj4_9
+Obj4_9 --> Obj0_9
+@enduml

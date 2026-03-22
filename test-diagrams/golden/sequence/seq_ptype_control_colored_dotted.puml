@@ -1,0 +1,5 @@
+@startuml
+control Alice
+participant Bob
+Alice -[#red]-> Bob : control colored dotted
+@enduml

@@ -1,0 +1,9 @@
+@startuml
+class "My Class With Spaces" {
+  field: String
+}
+class "Another Spaced Class" {
+  field: int
+}
+"My Class With Spaces" --> "Another Spaced Class"
+@enduml

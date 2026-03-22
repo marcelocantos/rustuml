@@ -1,0 +1,5 @@
+@startuml
+note as N
+  <font face='Courier'>font face</font>
+end note
+@enduml

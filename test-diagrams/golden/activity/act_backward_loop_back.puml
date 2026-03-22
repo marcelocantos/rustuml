@@ -1,0 +1,9 @@
+@startuml
+
+start
+repeat
+  :Main action;
+backward :loop back;
+repeatwhile (failed?) is (yes)
+stop
+@enduml

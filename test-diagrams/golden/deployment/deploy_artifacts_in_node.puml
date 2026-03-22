@@ -1,0 +1,9 @@
+@startuml
+node AppServer {
+  artifact "web.war"
+  artifact "api.jar"
+  artifact "config.properties"
+  file "logback.xml"
+  folder "logs"
+}
+@enduml

@@ -1,0 +1,7 @@
+@startuml
+folder myPkg #lightgreen {
+  class MyClass {
+    +void method()
+  }
+}
+@enduml

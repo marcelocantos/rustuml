@@ -1,0 +1,33 @@
+@startuml
+
+title ETL Process
+start
+partition "Extract" {
+  :Connect to source;
+  while (more records?) is (yes)
+    :Read batch;
+    :Buffer records;
+  endwhile
+}
+partition "Transform" {
+  fork
+    :Validate records;
+  fork again
+    :Normalize fields;
+  fork again
+    :Apply business rules;
+  end fork
+}
+partition "Load" {
+  :Begin transaction;
+  repeat
+    :Write batch;
+  repeatwhile (batches remaining?) is (yes)
+  if (success?) then (yes)
+    :Commit;
+  else (no)
+    :Rollback;
+  endif
+}
+stop
+@enduml

@@ -1,0 +1,16 @@
+@startuml
+
+start
+:Begin;
+fork
+  :Branch A;
+fork again
+  :Branch B;
+end fork
+if (fatal error?) then (yes)
+  kill
+else (no)
+  :Continue;
+  stop
+endif
+@enduml

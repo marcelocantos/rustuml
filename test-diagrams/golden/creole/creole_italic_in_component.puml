@@ -1,0 +1,3 @@
+@startuml
+component "//ItalicComponent//" as C
+@enduml

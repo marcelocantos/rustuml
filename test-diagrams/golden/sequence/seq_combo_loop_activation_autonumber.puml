@@ -1,0 +1,10 @@
+@startuml
+autonumber
+Client -> Server ++ : connect
+loop 3 times
+  Server -> DB ++ : fetch
+  DB --> Server -- : record
+  Server -> Client : push record
+end
+Server --> Client -- : done
+@enduml

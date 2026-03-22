@@ -1,0 +1,13 @@
+@startnwdiag
+nwdiag {
+  network lan {
+    address = "192.168.0.0/24"
+    gateway [address = "192.168.0.1"]
+    host0 [address = "192.168.0.10"]
+    host1 [address = "192.168.0.11"]
+    host2 [address = "192.168.0.12"]
+    host3 [address = "192.168.0.13"]
+    host4 [address = "192.168.0.14"]
+  }
+}
+@endnwdiag

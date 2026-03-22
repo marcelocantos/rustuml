@@ -1,0 +1,18 @@
+@startuml
+!include <archimate/Archimate>
+
+Business_Function(f1, "Finance")
+Business_Function(f2, "HR")
+Business_Function(f3, "IT")
+Business_Process(p1, "Payroll")
+Application_Component(a1, "HR System")
+Application_Component(a2, "Finance System")
+Technology_Node(n1, "Cloud")
+
+Rel_Association(f2, p1, "owns")
+Rel_Serving(a1, f2, "supports")
+Rel_Serving(a2, f1, "supports")
+Rel_Association(a1, a2, "integrates")
+Rel_Composition(n1, a1, "hosts")
+Rel_Composition(n1, a2, "hosts")
+@enduml

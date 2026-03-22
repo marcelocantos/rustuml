@@ -1,0 +1,5 @@
+@startuml
+group **bold group**
+  Alice -> Bob : inside
+end
+@enduml

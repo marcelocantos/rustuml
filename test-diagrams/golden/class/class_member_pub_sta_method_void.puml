@@ -1,0 +1,5 @@
+@startuml
+class MemberClass {
+  {static} +void doWork()
+}
+@enduml

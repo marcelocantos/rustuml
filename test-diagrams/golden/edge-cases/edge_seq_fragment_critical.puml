@@ -1,0 +1,7 @@
+@startuml
+Alice -> Bob: before
+critical condition
+  Alice -> Bob: inside
+end
+Alice -> Bob: after
+@enduml

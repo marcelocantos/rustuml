@@ -1,0 +1,35 @@
+@startuml
+node "Developer Machine" {
+  component "IDE"
+  component "Local Git"
+}
+cloud "GitHub" {
+  component "Repository"
+  component "Actions Runner"
+}
+node "Build Server" {
+  component "Maven Build"
+  component "Unit Tests"
+  component "SonarQube"
+}
+node "Artifact Repository" {
+  storage "Nexus"
+}
+node "Staging Environment" {
+  node "App Server"
+  database "Test DB"
+}
+node "Production Environment" {
+  node "Prod App Server"
+  database "Prod DB"
+}
+"IDE" --> "Local Git" : commit
+"Local Git" --> "Repository" : push
+"Repository" --> "Actions Runner" : trigger
+"Actions Runner" --> "Maven Build"
+"Maven Build" --> "Unit Tests"
+"Unit Tests" --> "SonarQube"
+"SonarQube" --> "Nexus" : publish artifact
+"Nexus" --> "App Server" : deploy
+"App Server" --> "Prod App Server" : promote
+@enduml

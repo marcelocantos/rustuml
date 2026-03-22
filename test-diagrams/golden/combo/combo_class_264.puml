@@ -1,0 +1,20 @@
+@startuml
+title "Class Diagram 264"
+class Entity1_264 {
+  - id : Long
+  + getId() : Long
+  + process_1() : void
+}
+class Entity2_264 {
+  - id : Long
+  + getId() : Long
+  + process_2() : void
+}
+class Entity3_264 {
+  - id : Long
+  + getId() : Long
+  + process_3() : void
+}
+Entity1_264 --|> Entity2_264
+Entity2_264 --|> Entity3_264
+@enduml

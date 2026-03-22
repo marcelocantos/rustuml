@@ -1,0 +1,16 @@
+@startuml
+object Obj0_5 { val = 50 }
+object Obj1_5 { val = 51 }
+object Obj2_5 { val = 52 }
+object Obj3_5 { val = 53 }
+object Obj4_5 { val = 54 }
+object Obj5_5 { val = 55 }
+object Obj6_5 { val = 56 }
+Obj0_5 --> Obj1_5
+Obj1_5 --> Obj2_5
+Obj2_5 --> Obj3_5
+Obj3_5 --> Obj4_5
+Obj4_5 --> Obj5_5
+Obj5_5 --> Obj6_5
+Obj6_5 --> Obj0_5
+@enduml

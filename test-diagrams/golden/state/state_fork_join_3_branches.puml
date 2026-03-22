@@ -1,0 +1,12 @@
+@startuml
+state fork1 <<fork>>
+state join1 <<join>>
+[*] --> fork1
+fork1 --> Branch0
+Branch0 --> join1
+fork1 --> Branch1
+Branch1 --> join1
+fork1 --> Branch2
+Branch2 --> join1
+join1 --> [*]
+@enduml

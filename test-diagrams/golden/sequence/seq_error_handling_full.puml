@@ -1,0 +1,20 @@
+@startuml
+participant Client
+participant Server
+participant DB
+
+Client -> Server ++ : risky operation
+
+break on critical error
+  Server -> DB ++ : transaction
+  DB --> Server -- : DB error
+  note right of Server : rolling back
+  Server --> Client -- : 500 Internal Error
+end
+
+opt no break occurred
+  Server -> DB ++ : commit
+  DB --> Server -- : ok
+  Server --> Client -- : 200 OK
+end
+@enduml

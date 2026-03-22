@@ -1,0 +1,13 @@
+@startuml
+skinparam sequenceArrowColor #336699
+skinparam sequenceArrowFontColor #336699
+skinparam sequenceParticipantBackgroundColor #E8F4F8
+skinparam sequenceParticipantBorderColor #336699
+skinparam sequenceLifeLineBorderColor #336699
+skinparam noteBackgroundColor #FFFACD
+skinparam noteBorderColor #999900
+
+Alice -> Bob : request
+Bob --> Alice : response
+note right : note
+@enduml

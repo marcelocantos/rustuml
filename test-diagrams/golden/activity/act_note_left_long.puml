@@ -1,0 +1,9 @@
+@startuml
+
+start
+:Action;
+note left
+  This is a longer note\nwith three lines\nof content here
+end note
+stop
+@enduml

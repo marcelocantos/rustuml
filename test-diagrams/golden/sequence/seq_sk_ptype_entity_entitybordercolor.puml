@@ -1,0 +1,7 @@
+@startuml
+skinparam EntityBorderColor darkgreen
+entity Alice
+participant Bob
+Alice -> Bob : hello
+Bob --> Alice : hi
+@enduml

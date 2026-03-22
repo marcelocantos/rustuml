@@ -1,0 +1,9 @@
+@startuml
+
+start
+partition "Work" {
+  :Action;
+}
+note right: Note after partition
+stop
+@enduml

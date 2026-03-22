@@ -1,0 +1,6 @@
+@startuml
+database Alice
+participant Bob
+Alice --> Bob : database sends dotted
+Bob --> Alice : database receives dotted
+@enduml

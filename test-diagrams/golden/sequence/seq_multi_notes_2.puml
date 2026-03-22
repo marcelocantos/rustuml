@@ -1,0 +1,6 @@
+@startuml
+Alice -> Bob : start
+note over Alice : note 1
+note over Bob : note 2
+Bob --> Alice : done
+@enduml

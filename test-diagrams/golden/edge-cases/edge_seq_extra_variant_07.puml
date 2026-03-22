@@ -1,0 +1,6 @@
+@startuml
+participant A7
+participant B7
+A7 -> B7: variant 7
+B7 --> A7: ok 7
+@enduml

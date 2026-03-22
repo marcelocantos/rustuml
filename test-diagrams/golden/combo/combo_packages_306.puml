@@ -1,0 +1,13 @@
+@startuml
+title "Package Diagram 306"
+package "PKG1" {
+  class pkg1Model { +id : int }
+  class pkg1Service { +process() }
+}
+package "PKG2" {
+  class pkg2Model { +id : int }
+  class pkg2Service { +process() }
+}
+
+pkg1Service --> pkg2Model
+@enduml

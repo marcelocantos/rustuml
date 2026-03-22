@@ -1,0 +1,6 @@
+@startuml
+class """MonoClass""" {
+  ""monoField"": String
+  ""monoMethod""()
+}
+@enduml

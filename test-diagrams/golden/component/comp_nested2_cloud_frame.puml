@@ -1,0 +1,11 @@
+@startuml
+cloud Outer {
+  frame Inner {
+    component Alpha
+    component Beta
+    Alpha --> Beta
+  }
+  component Gamma
+  Inner --> Gamma
+}
+@enduml

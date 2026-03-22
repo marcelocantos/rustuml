@@ -1,0 +1,6 @@
+@startuml
+Alice -> Bob : hello
+legend
+  __underlined legend__
+end legend
+@enduml

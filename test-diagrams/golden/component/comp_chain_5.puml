@@ -1,0 +1,11 @@
+@startuml
+component C01
+component C02
+component C03
+component C04
+component C05
+C01 --> C02
+C02 --> C03
+C03 --> C04
+C04 --> C05
+@enduml

@@ -1,0 +1,27 @@
+@startuml
+!include <archimate/Archimate>
+
+skinparam rectangle {
+  BackgroundColor #EEEEEE
+}
+
+rectangle "Business Layer" {
+  Business_Actor(actor, "End User")
+  Business_Process(proc, "Order Fulfillment")
+}
+
+rectangle "Application Layer" {
+  Application_Component(app, "Web App")
+  Application_Service(svc, "Fulfillment Service")
+}
+
+rectangle "Technology Layer" {
+  Technology_Node(node, "Linux Server")
+  Technology_SystemSoftware(db, "PostgreSQL")
+}
+
+Rel_Serving(app, actor, "serves")
+Rel_Realization(svc, proc, "realizes")
+Rel_Serving(node, app, "hosts")
+Rel_Association(node, db, "uses")
+@enduml

@@ -1,0 +1,8 @@
+@startuml
+class Level01 {
+  +void m1()
+}
+
+
+
+@enduml

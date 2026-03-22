@@ -1,0 +1,5 @@
+@startuml
+database DB1
+entity E2
+DB1 -> E2: message
+@enduml

@@ -1,0 +1,42 @@
+@startuml
+interface Command
+interface Query
+interface CommandHandler<C extends Command> {
+  +void handle(C command)
+}
+interface QueryHandler<Q extends Query, R> {
+  +R handle(Q query)
+}
+class CommandBus {
+  +void dispatch(Command cmd)
+  +void register(CommandHandler handler)
+}
+class QueryBus {
+  +<R> R dispatch(Query query)
+  +void register(QueryHandler handler)
+}
+class CreateUserCommand {
+  +String username
+  +String email
+}
+class GetUserQuery {
+  +int userId
+}
+class UserDTO {
+  +int id
+  +String username
+  +String email
+}
+class CreateUserCommandHandler {
+  +void handle(CreateUserCommand cmd)
+}
+class GetUserQueryHandler {
+  +UserDTO handle(GetUserQuery q)
+}
+CreateUserCommand ..|> Command
+GetUserQuery ..|> Query
+CreateUserCommandHandler ..|> CommandHandler
+GetUserQueryHandler ..|> QueryHandler
+CommandBus --> CommandHandler
+QueryBus --> QueryHandler
+@enduml

@@ -1,0 +1,15 @@
+@startuml
+package animals {
+  class Animal {
+    +String name
+  }
+  class Dog {
+    +void bark()
+  }
+  class Cat {
+    +void meow()
+  }
+  Animal <|-- Dog
+  Animal <|-- Cat
+}
+@enduml

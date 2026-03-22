@@ -1,0 +1,11 @@
+@startuml
+
+start
+while (outer?) is (yes)
+  while (inner?) is (yes)
+    :Inner action;
+  endwhile (no)
+  :Outer action;
+endwhile (no)
+stop
+@enduml

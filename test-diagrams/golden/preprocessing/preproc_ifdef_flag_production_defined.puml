@@ -1,0 +1,15 @@
+@startuml
+!define PRODUCTION
+
+!ifdef PRODUCTION
+skinparam noteBackgroundColor LightGreen
+note as N
+  PRODUCTION mode is active
+end note
+!else
+note as N
+  PRODUCTION mode is inactive
+end note
+!endif
+Alice -> Bob : production mode test
+@enduml

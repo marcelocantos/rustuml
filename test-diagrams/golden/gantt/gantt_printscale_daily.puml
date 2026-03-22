@@ -1,0 +1,9 @@
+@startgantt
+printscale daily
+Project starts 2024-06-01
+[Sprint 1 Day 1] lasts 1 day
+[Sprint 1 Day 2] lasts 1 day
+[Sprint 1 Day 2] starts at [Sprint 1 Day 1]'s end
+[Sprint 1 Day 3] lasts 1 day
+[Sprint 1 Day 3] starts at [Sprint 1 Day 2]'s end
+@endgantt

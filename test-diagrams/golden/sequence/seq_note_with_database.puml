@@ -1,0 +1,8 @@
+@startuml
+database X
+participant Y
+X -> Y : hello
+note over X : note over database
+note right of X : right of database
+Y --> X : hi
+@enduml

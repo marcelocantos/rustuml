@@ -1,0 +1,6 @@
+@startuml
+class ConcreteClass
+class Interface
+
+Interface <|.. ConcreteClass
+@enduml

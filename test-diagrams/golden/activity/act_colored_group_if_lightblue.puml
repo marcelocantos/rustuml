@@ -1,0 +1,12 @@
+@startuml
+
+start
+group #lightblue "Colored Group" {
+  if (cond?) then (yes)
+    :Yes;
+  else (no)
+    :No;
+  endif
+}
+stop
+@enduml

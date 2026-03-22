@@ -1,0 +1,20 @@
+@startuml
+
+start
+if (A?) then (yes)
+  if (A1?) then (yes)
+    :A1 true;
+  else (no)
+    :A1 false;
+  endif
+elseif (B?) then (yes)
+  if (B1?) then (yes)
+    :B1 true;
+  else (no)
+    :B1 false;
+  endif
+else (neither)
+  :Default;
+endif
+stop
+@enduml

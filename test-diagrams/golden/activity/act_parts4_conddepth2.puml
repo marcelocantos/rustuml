@@ -1,0 +1,48 @@
+@startuml
+start
+partition "P1" {
+if (p1cond1?) then (yes)
+  if (p1cond2?) then (yes)
+    :P1 inner action;
+  else (no)
+    :P1 alt 2;
+  endif
+else (no)
+  :P1 alt 1;
+endif
+}
+partition "P2" {
+if (p2cond1?) then (yes)
+  if (p2cond2?) then (yes)
+    :P2 inner action;
+  else (no)
+    :P2 alt 2;
+  endif
+else (no)
+  :P2 alt 1;
+endif
+}
+partition "P3" {
+if (p3cond1?) then (yes)
+  if (p3cond2?) then (yes)
+    :P3 inner action;
+  else (no)
+    :P3 alt 2;
+  endif
+else (no)
+  :P3 alt 1;
+endif
+}
+partition "P4" {
+if (p4cond1?) then (yes)
+  if (p4cond2?) then (yes)
+    :P4 inner action;
+  else (no)
+    :P4 alt 2;
+  endif
+else (no)
+  :P4 alt 1;
+endif
+}
+stop
+@enduml

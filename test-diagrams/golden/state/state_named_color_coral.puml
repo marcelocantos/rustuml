@@ -1,0 +1,5 @@
+@startuml
+state A #Coral
+[*] --> A
+A --> [*]
+@enduml

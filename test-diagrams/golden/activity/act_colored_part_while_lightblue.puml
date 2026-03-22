@@ -1,0 +1,10 @@
+@startuml
+
+start
+partition #lightblue "Colored Partition" {
+  while (loop?) is (yes)
+    :Work;
+  endwhile
+}
+stop
+@enduml

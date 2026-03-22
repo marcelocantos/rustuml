@@ -1,0 +1,9 @@
+@startuml
+start
+repeat
+  :R;
+repeatwhile (m?)
+:Post 1;
+:Post 2;
+stop
+@enduml

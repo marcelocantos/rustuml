@@ -1,0 +1,8 @@
+@startuml
+[*] --> S1
+S1 --> S2
+S2 --> S3
+S3 --> [*]
+note right of S1 : Note on first state
+note left of S3 : Note on last state
+@enduml

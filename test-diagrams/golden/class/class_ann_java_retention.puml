@@ -1,0 +1,5 @@
+@startuml
+annotation Retention {
+  +RetentionPolicy value()
+}
+@enduml

@@ -1,0 +1,5 @@
+@startuml
+Alice -> Bob : hello
+Bob --> Alice : hi
+caption Figure 1: Basic interaction
+@enduml

@@ -1,0 +1,64 @@
+@startuml
+skinparam backgroundColor #FAFAFA
+skinparam defaultFontName "Helvetica"
+skinparam defaultFontSize 12
+
+skinparam class {
+  BackgroundColor #E8F5E9
+  BorderColor #2E7D32
+  ArrowColor #1B5E20
+  FontStyle Bold
+  HeaderBackgroundColor #A5D6A7
+}
+
+skinparam interface {
+  BackgroundColor #E3F2FD
+  BorderColor #1565C0
+}
+
+skinparam note {
+  BackgroundColor #FFF9C4
+  BorderColor #F57F17
+}
+
+skinparam package {
+  BackgroundColor #EDE7F6
+  BorderColor #4527A0
+  FontStyle Italic
+}
+
+skinparam stereotype {
+  CBackgroundColor #FCE4EC
+  CBorderColor #880E4F
+  ABackgroundColor #E3F2FD
+  ABorderColor #0D47A1
+  IBackgroundColor #E8F5E9
+  IBorderColor #1B5E20
+  EBackgroundColor #FFF8E1
+  EBorderColor #FF6F00
+}
+
+package "Geometry" {
+  interface Measurable <<interface>> {
+    + measure() : double
+  }
+  abstract class Shape <<abstract>> {
+    + {abstract} area() : double
+  }
+  class Circle <<entity>> {
+    - r : double
+    + area() : double
+  }
+  enum Orientation <<enumeration>> {
+    PORTRAIT
+    LANDSCAPE
+  }
+}
+
+Shape ..|> Measurable
+Circle --|> Shape
+
+note right of Shape : Abstract base class
+note left of Circle : Concrete implementation
+
+@enduml

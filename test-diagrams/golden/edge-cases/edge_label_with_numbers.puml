@@ -1,0 +1,4 @@
+@startuml
+Alice -> Bob: 12345
+Bob --> Alice: 99.99
+@enduml

@@ -1,0 +1,7 @@
+@startyaml
+level1:
+  level2:
+    level3:
+      level4:
+        value: leaf_4
+@endyaml

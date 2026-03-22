@@ -1,0 +1,10 @@
+@startuml
+Alice -> Bob : request
+note right of Bob
+  Steps:
+  * Step one
+  * Step two
+  * Step three
+end note
+Bob --> Alice : done
+@enduml

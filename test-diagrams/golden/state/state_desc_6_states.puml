@@ -1,0 +1,15 @@
+@startuml
+state S1 : State 1 description
+state S2 : State 2 description
+state S3 : State 3 description
+state S4 : State 4 description
+state S5 : State 5 description
+state S6 : State 6 description
+[*] --> S1
+S1 --> S2
+S2 --> S3
+S3 --> S4
+S4 --> S5
+S5 --> S6
+S6 --> [*]
+@enduml

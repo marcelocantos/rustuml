@@ -1,0 +1,6 @@
+@startuml
+caption Figure 1: Class hierarchy
+class A
+class B
+A --> B
+@enduml

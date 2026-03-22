@@ -1,0 +1,5 @@
+@startuml
+title My State Diagram
+[*] --> A
+A --> [*]
+@enduml

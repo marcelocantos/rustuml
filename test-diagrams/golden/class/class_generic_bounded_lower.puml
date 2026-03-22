@@ -1,0 +1,7 @@
+@startuml
+class Foo<T super Bar> {
+  +T value
+  +T get()
+  +void set(T val)
+}
+@enduml

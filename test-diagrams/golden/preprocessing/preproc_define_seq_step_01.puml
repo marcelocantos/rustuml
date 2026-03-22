@@ -1,0 +1,9 @@
+@startuml
+!define STEP 1
+!define LABEL "Step STEP"
+
+note over Alice
+  LABEL
+end note
+Alice -> Bob : step STEP of 10
+@enduml

@@ -1,0 +1,8 @@
+@startuml
+|#lightblue|Lane1|
+start
+:Action in Lane1;
+|#lightyellow|Lane2|
+:Action in Lane2;
+stop
+@enduml

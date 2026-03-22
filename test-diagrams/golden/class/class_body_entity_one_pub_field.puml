@@ -1,0 +1,5 @@
+@startuml
+entity Variant {
+  +String name
+}
+@enduml

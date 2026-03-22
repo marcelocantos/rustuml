@@ -1,0 +1,10 @@
+@startuml
+class Actor
+class Movie
+class Role {
+  +String characterName
+  +int screenMinutes
+  +boolean isLead
+}
+(Actor, Movie) .. Role
+@enduml

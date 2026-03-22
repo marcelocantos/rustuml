@@ -1,0 +1,26 @@
+@startuml
+abstract class DataExporter {
+  +void run()
+  +{abstract} void prepareData()
+  +{abstract} void serializeData()
+  +{abstract} void writeToOutput()
+}
+class JsonExporter {
+  +void prepareData()
+  +void serializeData()
+  +void writeToOutput()
+}
+class XmlExporter {
+  +void prepareData()
+  +void serializeData()
+  +void writeToOutput()
+}
+class CsvExporter {
+  +void prepareData()
+  +void serializeData()
+  +void writeToOutput()
+}
+DataExporter <|-- JsonExporter
+DataExporter <|-- XmlExporter
+DataExporter <|-- CsvExporter
+@enduml

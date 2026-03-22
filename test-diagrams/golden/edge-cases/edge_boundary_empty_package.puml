@@ -1,0 +1,7 @@
+@startuml
+package EmptyPkg {
+}
+package NonEmpty {
+  class Foo
+}
+@enduml

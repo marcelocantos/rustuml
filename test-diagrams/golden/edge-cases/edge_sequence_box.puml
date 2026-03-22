@@ -1,0 +1,10 @@
+@startuml
+box "System A" #lightblue
+  participant Alice
+  participant Bob
+end box
+box "System B" #lightyellow
+  participant Charlie
+end box
+Alice -> Charlie: cross-box
+@enduml

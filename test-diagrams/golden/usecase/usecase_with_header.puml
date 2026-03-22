@@ -1,0 +1,6 @@
+@startuml
+header My Application - Use Cases v1.0
+actor User
+usecase UC1
+User --> UC1
+@enduml

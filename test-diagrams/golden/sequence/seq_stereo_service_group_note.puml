@@ -1,0 +1,11 @@
+@startuml
+participant Alice <<service>>
+participant Bob <<service>>
+Alice -> Bob : call
+note over Alice : service note
+alt success
+  Bob --> Alice : ok
+else failure
+  Bob --> Alice : error
+end
+@enduml

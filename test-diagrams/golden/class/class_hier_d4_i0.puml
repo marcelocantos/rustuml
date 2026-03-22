@@ -1,0 +1,19 @@
+@startuml
+class Level01 {
+  +void m1()
+}
+class Level02 {
+  +void m2()
+}
+class Level03 {
+  +void m3()
+}
+class Level04 {
+  +void m4()
+}
+Level01 <|-- Level02
+Level02 <|-- Level03
+Level03 <|-- Level04
+
+
+@enduml

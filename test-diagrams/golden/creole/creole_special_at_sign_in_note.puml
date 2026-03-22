@@ -1,0 +1,5 @@
+@startuml
+note as N
+  @startuml nested @enduml
+end note
+@enduml

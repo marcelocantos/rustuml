@@ -1,0 +1,6 @@
+@startuml
+Alice -> Bob : hello & world
+Bob --> Alice : <html> content
+Alice -> Bob : "quoted" message
+Bob --> Alice : message with \n escape
+@enduml

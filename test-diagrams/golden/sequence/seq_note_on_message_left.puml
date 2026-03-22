@@ -1,0 +1,6 @@
+@startuml
+Alice -> Bob : hello
+note left : note on last message left
+Bob --> Alice : hi
+note right : note on last message right
+@enduml

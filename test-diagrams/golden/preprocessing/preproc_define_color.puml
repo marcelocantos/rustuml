@@ -1,0 +1,11 @@
+@startuml
+!define PRIMARY_COLOR #4472C4
+!define SECONDARY_COLOR #ED7D31
+
+skinparam classBackgroundColor PRIMARY_COLOR
+skinparam classBorderColor SECONDARY_COLOR
+
+class ColoredClass {
+  field: String
+}
+@enduml

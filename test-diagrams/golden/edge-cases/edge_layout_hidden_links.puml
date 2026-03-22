@@ -1,0 +1,9 @@
+@startuml
+class A
+class B
+class C
+class D
+A --> B
+C --> D
+B -[hidden]- C
+@enduml

@@ -1,0 +1,8 @@
+@startuml
+!pragma teoz true
+autonumber
+Alice -> Bob : 1
+Bob --> Alice : 2
+Alice -> Charlie : 3
+Charlie --> Alice : 4
+@enduml

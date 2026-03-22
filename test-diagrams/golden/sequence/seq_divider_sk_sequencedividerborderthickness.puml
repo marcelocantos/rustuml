@@ -1,0 +1,6 @@
+@startuml
+skinparam SequenceDividerBorderThickness 2
+Alice -> Bob : before
+== Divider ==
+Bob --> Alice : after
+@enduml

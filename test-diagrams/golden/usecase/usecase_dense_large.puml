@@ -1,0 +1,40 @@
+@startuml
+left to right direction
+actor Customer
+actor Employee
+actor Manager
+actor System
+rectangle "CRM System" {
+  usecase "Create Customer" as CC
+  usecase "View Customer" as VC
+  usecase "Update Customer" as UC
+  usecase "Delete Customer" as DC
+  usecase "Create Order" as CO
+  usecase "View Orders" as VO
+  usecase "Process Order" as PO
+  usecase "Cancel Order" as CAO
+  usecase "Generate Invoice" as GI
+  usecase "Send Email" as SE
+  usecase "Authenticate" as AUTH
+  usecase "Authorize" as AUTHZ
+}
+Customer --> CC
+Customer --> VC
+Customer --> CO
+Customer --> VO
+Employee --> CC
+Employee --> VC
+Employee --> UC
+Employee --> CO
+Employee --> VO
+Employee --> PO
+Manager --> DC
+Manager --> CAO
+Manager --> GI
+System --> SE
+CC .> AUTH : <<include>>
+CO .> AUTH : <<include>>
+DC .> AUTHZ : <<include>>
+GI .> SE : <<include>>
+PO .> GI : <<include>>
+@enduml

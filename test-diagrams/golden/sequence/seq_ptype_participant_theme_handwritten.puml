@@ -1,0 +1,7 @@
+@startuml
+skinparam handwritten true
+participant Alice
+participant Bob
+Alice -> Bob : hello
+Bob --> Alice : hi
+@enduml

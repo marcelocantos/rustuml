@@ -1,0 +1,18 @@
+@startuml
+!define A
+!define B
+!ifdef A
+!ifdef B
+note as N1: A and B
+!else
+note as N1: A only
+!endif
+!else
+!ifdef B
+note as N1: B only
+!else
+note as N1: neither
+!endif
+!endif
+class Foo
+@enduml

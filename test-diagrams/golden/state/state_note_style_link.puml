@@ -1,0 +1,8 @@
+@startuml
+[*] --> A
+A --> B
+note on link
+  on link
+end note
+B --> [*]
+@enduml

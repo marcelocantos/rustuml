@@ -1,0 +1,6 @@
+@startuml
+[*] --> A
+A --> B
+note "floating" as N1
+B --> [*]
+@enduml

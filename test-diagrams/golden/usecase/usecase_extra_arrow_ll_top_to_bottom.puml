@@ -1,0 +1,9 @@
+@startuml
+top to bottom direction
+actor User
+usecase UC1
+usecase UC2
+User -- UC1
+User -- UC2
+UC1 .> UC2 : <<include>>
+@enduml

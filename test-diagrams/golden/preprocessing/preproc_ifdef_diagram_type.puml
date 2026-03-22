@@ -1,0 +1,12 @@
+@startuml
+!define SEQUENCE_DIAGRAM
+
+!ifdef SEQUENCE_DIAGRAM
+Alice -> Bob : sequence mode
+Bob --> Alice : reply
+!else
+class NonSequenceClass {
+  mode: String = "class"
+}
+!endif
+@enduml

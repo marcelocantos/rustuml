@@ -1,0 +1,11 @@
+@startuml
+start
+repeat
+  :Work;
+  :More;
+  if (stop?) then (yes)
+    break
+  endif
+repeatwhile (cont?) is (yes)
+stop
+@enduml

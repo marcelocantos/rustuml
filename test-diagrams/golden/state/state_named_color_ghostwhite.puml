@@ -1,0 +1,5 @@
+@startuml
+state A #GhostWhite
+[*] --> A
+A --> [*]
+@enduml

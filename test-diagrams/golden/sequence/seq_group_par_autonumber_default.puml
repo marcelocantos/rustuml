@@ -1,0 +1,10 @@
+@startuml
+autonumber
+A -> B : start
+par
+  B -> C : p1
+and
+  B -> D : p2
+end
+B --> A : done
+@enduml

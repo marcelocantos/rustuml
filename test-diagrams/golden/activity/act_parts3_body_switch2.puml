@@ -1,0 +1,28 @@
+@startuml
+start
+partition "P1" {
+switch (v?)
+case (1)
+  :One;
+case (2)
+  :Two;
+endswitch
+}
+partition "P2" {
+switch (v?)
+case (1)
+  :One;
+case (2)
+  :Two;
+endswitch
+}
+partition "P3" {
+switch (v?)
+case (1)
+  :One;
+case (2)
+  :Two;
+endswitch
+}
+stop
+@enduml

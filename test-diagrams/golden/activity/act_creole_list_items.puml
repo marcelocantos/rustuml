@@ -1,0 +1,5 @@
+@startuml
+start
+:Items:\n* one\n* two\n* three;
+stop
+@enduml

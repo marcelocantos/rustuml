@@ -1,0 +1,6 @@
+@startmindmap
+* **Bold Root**
+** //Italic Branch//
+*** __Underlined Leaf__
+** --Strikethrough--
+@endmindmap

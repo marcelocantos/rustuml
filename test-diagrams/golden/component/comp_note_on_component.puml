@@ -1,0 +1,4 @@
+@startuml
+component Foo
+note right of Foo : This is a note
+@enduml

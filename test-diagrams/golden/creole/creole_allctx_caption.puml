@@ -1,0 +1,4 @@
+@startuml
+caption **bold** //italic// __under__
+Alice -> Bob : hello
+@enduml

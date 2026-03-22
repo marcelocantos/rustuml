@@ -1,0 +1,15 @@
+@startuml
+start
+#red:Action 1;
+#green:Action 2;
+#blue:Action 3;
+#yellow:Action 4;
+#orange:Action 5;
+#pink:Action 6;
+#lightblue:Action 7;
+#lightgreen:Action 8;
+#tomato:Action 9;
+#AABBCC:Action 10;
+#FF5500:Action 11;
+stop
+@enduml

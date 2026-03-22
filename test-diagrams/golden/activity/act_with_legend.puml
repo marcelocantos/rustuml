@@ -1,0 +1,16 @@
+@startuml
+
+legend right
+  | Symbol | Meaning |
+  | :action; | Standard action |
+  | diamond | Decision |
+end legend
+start
+:Action;
+if (condition?) then (yes)
+  :Yes;
+else (no)
+  :No;
+endif
+stop
+@enduml

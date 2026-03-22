@@ -1,0 +1,7 @@
+@startuml
+start
+repeat :start label;
+  :do work;
+repeat while (done?) is (no) not (yes)
+stop
+@enduml

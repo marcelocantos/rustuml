@@ -1,0 +1,33 @@
+@startuml
+actor Student
+actor Instructor
+actor "Platform Admin" as PA
+
+rectangle "E-Learning Platform" {
+  usecase "Enroll Course" as EC
+  usecase "Watch Lecture" as WL
+  usecase "Submit Assignment" as SA
+  usecase "Take Quiz" as TQ
+  usecase "View Grade" as VG
+  usecase "Create Course" as CC
+  usecase "Upload Content" as UC
+  usecase "Grade Submission" as GS
+  usecase "Manage Platform" as MP
+  usecase "Generate Certificate" as GCert
+  usecase "Authenticate" as AUTH
+}
+
+Student --> EC
+Student --> WL
+Student --> SA
+Student --> TQ
+Student --> VG
+Instructor --> CC
+Instructor --> UC
+Instructor --> GS
+PA --> MP
+EC .> AUTH : <<include>>
+SA .> AUTH : <<include>>
+GS .> VG : <<include>>
+GCert .> VG : <<extend>>
+@enduml

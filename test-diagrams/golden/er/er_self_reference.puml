@@ -1,0 +1,11 @@
+@startuml
+entity Employee {
+  * id : INT <<PK>>
+  --
+  name : VARCHAR(100)
+  manager_id : INT <<FK>>
+  department : VARCHAR(50)
+  salary : DECIMAL(10,2)
+}
+Employee ||--o{ Employee : "manages"
+@enduml

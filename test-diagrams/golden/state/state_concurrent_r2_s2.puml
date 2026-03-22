@@ -1,0 +1,13 @@
+@startuml
+state Concurrent {
+  [*] --> R0S1
+  R0S1 --> R0S2
+  R0S2 --> [*]
+  --
+  [*] --> R1S1
+  R1S1 --> R1S2
+  R1S2 --> [*]
+}
+[*] --> Concurrent
+Concurrent --> [*]
+@enduml

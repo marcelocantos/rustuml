@@ -1,0 +1,10 @@
+@startuml
+entity orders {
+  *order_id : INT
+  --
+  user_id : INT
+  order_date : DATE
+  total : DECIMAL(10,2)
+  status : VARCHAR(20)
+}
+@enduml

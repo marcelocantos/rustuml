@@ -1,0 +1,9 @@
+@startuml
+skinparam class {
+  BackgroundColor<<util>> lavender
+  BorderColor<<util>> purple
+}
+class MyClass <<util>> {
+  +void method()
+}
+@enduml

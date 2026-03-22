@@ -1,0 +1,4 @@
+@startuml
+Alice -> Bob ++#red: request
+Bob --> Alice --: response
+@enduml

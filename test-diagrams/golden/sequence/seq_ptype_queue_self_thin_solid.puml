@@ -1,0 +1,4 @@
+@startuml
+queue Alice
+Alice ->> Alice : self queue thin_solid
+@enduml

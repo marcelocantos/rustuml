@@ -1,0 +1,9 @@
+@startuml
+state Composite {
+  [*] --> Inner
+  Inner --> Deep
+  Deep --> [*]
+}
+[*] --> Composite
+[*] --> Composite.Inner
+@enduml

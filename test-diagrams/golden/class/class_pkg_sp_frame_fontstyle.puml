@@ -1,0 +1,10 @@
+@startuml
+skinparam FrameFontStyle bold
+frame myPkg {
+  class A {
+    +void method()
+  }
+  class B
+  A --> B
+}
+@enduml

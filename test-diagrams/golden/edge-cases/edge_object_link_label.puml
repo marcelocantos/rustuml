@@ -1,0 +1,10 @@
+@startuml
+object o1 {
+  id = 1
+}
+object o2 {
+  id = 2
+}
+o1 --> o2 : references
+o1 -- o2 : linked
+@enduml

@@ -1,0 +1,7 @@
+@startuml
+skinparam shadowing false
+Alice -> Bob ++ : request
+Bob -> Charlie ++ : delegate
+return charlie done
+return bob done
+@enduml

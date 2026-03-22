@@ -1,0 +1,12 @@
+@startuml
+Alice -> Bob: msg1
+note left: left note
+Bob --> Alice: msg2
+note right: right note
+Alice -> Bob: msg3
+note over Alice: over alice
+Bob --> Alice: msg4
+note over Bob: over bob
+Alice -> Bob: msg5
+note over Alice, Bob: spanning
+@enduml

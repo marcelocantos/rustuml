@@ -1,0 +1,13 @@
+@startuml
+component Hub
+interface IA
+interface IB
+interface IC
+interface ID
+interface IE
+Hub - IA
+Hub - IB
+Hub - IC
+Hub - ID
+Hub - IE
+@enduml

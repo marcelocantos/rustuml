@@ -1,0 +1,23 @@
+@startuml
+start
+:Initialize;
+note right: note on action
+if (ready?) then (yes)
+  :Process;
+  while (more?) is (yes)
+    :item;
+  endwhile (no)
+else (no)
+  :Wait;
+  repeat
+    :retry;
+  repeat while (success?) is (no)
+endif
+fork
+  :Parallel A;
+fork again
+  :Parallel B;
+end fork
+:Finalize;
+stop
+@enduml

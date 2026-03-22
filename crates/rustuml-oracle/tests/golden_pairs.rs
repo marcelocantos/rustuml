@@ -39,12 +39,8 @@ const SUPPORTED_DIRS: &[&str] = &[
 ];
 
 /// `@start` keywords for diagram types rustuml can parse.
-const SUPPORTED_START_KEYWORDS: &[&str] = &[
-    "@startuml",
-    "@startgantt",
-    "@startmindmap",
-    "@startwbs",
-];
+const SUPPORTED_START_KEYWORDS: &[&str] =
+    &["@startuml", "@startgantt", "@startmindmap", "@startwbs"];
 
 /// Returns true if the `.puml` source uses a `@start` keyword that
 /// rustuml supports.
@@ -161,20 +157,17 @@ fn run_one(puml_path: &Path, root: &Path) -> TestResult {
     // one golden pair doesn't abort the entire suite.
     let base_dir = puml_path.parent().map(Path::to_owned);
     let render_result = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-        let diagram = rustuml_parser::parse::parse_auto_with_base(
-            &source,
-            base_dir.as_deref(),
-        )
-        .map_err(|e| format!("parse: {e}"))?;
+        let diagram = rustuml_parser::parse::parse_auto_with_base(&source, base_dir.as_deref())
+            .map_err(|e| format!("parse: {e}"))?;
 
         let rust_svg = rustuml_render::render_svg(&diagram);
 
         // Structural comparison: extract text elements and check
         // that golden texts appear in the Rust output.
-        let golden_elems = compare::extract_elements(&golden_svg)
-            .map_err(|e| format!("golden SVG parse: {e}"))?;
-        let rust_elems = compare::extract_elements(&rust_svg)
-            .map_err(|e| format!("rust SVG parse: {e}"))?;
+        let golden_elems =
+            compare::extract_elements(&golden_svg).map_err(|e| format!("golden SVG parse: {e}"))?;
+        let rust_elems =
+            compare::extract_elements(&rust_svg).map_err(|e| format!("rust SVG parse: {e}"))?;
 
         let skip = |t: &&str| {
             t.len() < 2
@@ -286,7 +279,11 @@ fn golden_pairs() {
 
     // Show first N failures to keep output readable.
     const MAX_SHOWN: usize = 50;
-    let shown: Vec<&str> = failures.iter().map(|s| s.as_str()).take(MAX_SHOWN).collect();
+    let shown: Vec<&str> = failures
+        .iter()
+        .map(|s| s.as_str())
+        .take(MAX_SHOWN)
+        .collect();
     let truncated = if fail_count > MAX_SHOWN {
         format!("\n  ... and {} more", fail_count - MAX_SHOWN)
     } else {

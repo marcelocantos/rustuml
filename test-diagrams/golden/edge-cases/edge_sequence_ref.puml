@@ -1,0 +1,5 @@
+@startuml
+Alice -> Bob: start
+ref over Alice, Bob: Some reference
+Bob --> Alice: done
+@enduml

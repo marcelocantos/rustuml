@@ -1,0 +1,5 @@
+@startuml
+annotation TypeA
+entity TypeB
+TypeA ..> TypeB
+@enduml

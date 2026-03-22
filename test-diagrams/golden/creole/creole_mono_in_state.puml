@@ -1,0 +1,4 @@
+@startuml
+state """MonoState""" as S
+[*] --> S
+@enduml

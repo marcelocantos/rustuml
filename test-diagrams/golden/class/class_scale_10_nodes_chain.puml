@@ -1,0 +1,21 @@
+@startuml
+class Node1
+class Node2
+class Node3
+class Node4
+class Node5
+class Node6
+class Node7
+class Node8
+class Node9
+class Node10
+Node1 --> Node2
+Node2 --> Node3
+Node3 --> Node4
+Node4 --> Node5
+Node5 --> Node6
+Node6 --> Node7
+Node7 --> Node8
+Node8 --> Node9
+Node9 --> Node10
+@enduml

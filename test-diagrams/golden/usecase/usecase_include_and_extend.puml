@@ -1,0 +1,13 @@
+@startuml
+actor Customer
+rectangle "E-Commerce" {
+  usecase "Purchase Product" as PP
+  usecase "Authenticate" as AUTH
+  usecase "Apply Coupon" as AC
+  usecase "Express Checkout" as EC
+}
+PP .> AUTH : <<include>>
+AC .> PP : <<extend>>
+EC .> PP : <<extend>>
+Customer --> PP
+@enduml

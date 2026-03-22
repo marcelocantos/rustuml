@@ -1,0 +1,10 @@
+@startuml
+top to bottom direction
+actor Actor1
+actor Actor2
+usecase BaseUC
+usecase SubUC
+SubUC .> BaseUC : <<include>>
+Actor1 --> BaseUC
+Actor2 --> BaseUC
+@enduml

@@ -1,0 +1,33 @@
+@startuml
+entity EntityA {
+  * id : INT <<PK>>
+  --
+  name : VARCHAR(100)
+  code : VARCHAR(20)
+  created_at : DATETIME
+}
+entity EntityB {
+  * id : INT <<PK>>
+  --
+  name : VARCHAR(100)
+  code : VARCHAR(20)
+  created_at : DATETIME
+}
+entity EntityC {
+  * id : INT <<PK>>
+  --
+  name : VARCHAR(100)
+  code : VARCHAR(20)
+  created_at : DATETIME
+}
+entity EntityD {
+  * id : INT <<PK>>
+  --
+  name : VARCHAR(100)
+  code : VARCHAR(20)
+  created_at : DATETIME
+}
+EntityA ||--|| EntityB : "rel_1"
+EntityB ||--o{ EntityC : "rel_2"
+EntityC }|--|{ EntityD : "rel_3"
+@enduml

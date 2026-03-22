@@ -1,0 +1,6 @@
+@startuml
+state ps <<fork>>
+[*] --> A
+A --> ps
+ps --> [*]
+@enduml

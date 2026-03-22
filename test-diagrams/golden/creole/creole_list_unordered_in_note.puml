@@ -1,0 +1,7 @@
+@startuml
+note as N
+  * item one
+  * item two
+  * item three
+end note
+@enduml

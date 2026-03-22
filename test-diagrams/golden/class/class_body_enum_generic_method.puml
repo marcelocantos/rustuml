@@ -1,0 +1,5 @@
+@startuml
+enum Variant {
+  +<T> T cast(Object o)
+}
+@enduml

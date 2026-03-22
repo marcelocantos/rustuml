@@ -1,0 +1,7 @@
+@startuml
+start
+repeat
+  :action>
+repeatwhile (m?)
+stop
+@enduml

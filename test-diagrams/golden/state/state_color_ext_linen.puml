@@ -1,0 +1,5 @@
+@startuml
+state A #Linen
+[*] --> A
+A --> [*]
+@enduml

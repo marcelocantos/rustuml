@@ -1,0 +1,6 @@
+@startuml
+skinparam SequenceDividerFontSize 14
+Alice -> Bob : before
+== Divider ==
+Bob --> Alice : after
+@enduml

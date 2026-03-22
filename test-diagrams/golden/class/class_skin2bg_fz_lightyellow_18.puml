@@ -1,0 +1,7 @@
+@startuml
+skinparam ClassBackgroundColor lightyellow
+skinparam ClassFontSize 18
+class A { +void m() }
+class B
+A --> B
+@enduml

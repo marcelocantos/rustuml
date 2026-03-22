@@ -1,0 +1,5 @@
+@startuml
+node Client
+node Server
+Client --> Server : UDP
+@enduml

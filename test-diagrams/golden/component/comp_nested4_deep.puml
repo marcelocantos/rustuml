@@ -1,0 +1,17 @@
+@startuml
+package Level1 {
+  folder Level2 {
+    frame Level3 {
+      rectangle Level4 {
+        component CoreService
+      }
+      component L3Component
+      Level4 --> L3Component
+    }
+    component L2Component
+    Level3 --> L2Component
+  }
+  component L1Component
+  Level2 --> L1Component
+}
+@enduml

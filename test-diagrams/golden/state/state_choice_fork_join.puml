@@ -1,0 +1,17 @@
+@startuml
+state c1 <<choice>>
+state fork1 <<fork>>
+state join1 <<join>>
+
+[*] --> Start
+Start --> c1
+c1 --> fork1 : [parallel]
+c1 --> Sequential : [sequential]
+fork1 --> A
+fork1 --> B
+A --> join1
+B --> join1
+join1 --> End
+Sequential --> End
+End --> [*]
+@enduml

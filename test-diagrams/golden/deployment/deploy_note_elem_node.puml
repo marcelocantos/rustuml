@@ -1,0 +1,4 @@
+@startuml
+node MyElem
+note right of MyElem : Note on node
+@enduml

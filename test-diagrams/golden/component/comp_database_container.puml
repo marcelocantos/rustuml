@@ -1,0 +1,12 @@
+@startuml
+database "Main Store" {
+  component "Read Replica" as RR
+  component "Write Primary" as WP
+  component "Backup" as BK
+  WP --> RR : replicates
+  WP --> BK : backups
+}
+component Application
+Application --> WP : writes
+Application --> RR : reads
+@enduml

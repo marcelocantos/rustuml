@@ -1,0 +1,4 @@
+@startuml
+Alice -> Bob : Mix: 日本語 & English & 中文
+Bob --> Alice : Mix: 日本語 & English & 中文 reply
+@enduml

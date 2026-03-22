@@ -1,0 +1,7 @@
+@startuml
+class WithSep {
+  +String beforeSep
+  __
+  +void afterSep()
+}
+@enduml

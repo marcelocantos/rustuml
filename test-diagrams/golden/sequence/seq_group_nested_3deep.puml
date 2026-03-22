@@ -1,0 +1,15 @@
+@startuml
+Client -> Server : request
+alt authenticated
+  loop for each item
+    opt cache miss
+      Server -> DB : fetch
+      DB --> Server : data
+    end
+    Server -> Cache : store
+  end
+  Server --> Client : 200
+else
+  Server --> Client : 401
+end
+@enduml

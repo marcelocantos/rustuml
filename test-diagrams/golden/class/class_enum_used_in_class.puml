@@ -1,0 +1,13 @@
+@startuml
+enum Status {
+  ACTIVE
+  INACTIVE
+  PENDING
+}
+class User {
+  +String name
+  +Status status
+  +boolean isActive()
+}
+User --> Status
+@enduml

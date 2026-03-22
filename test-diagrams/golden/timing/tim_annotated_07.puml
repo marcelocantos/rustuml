@@ -1,0 +1,15 @@
+@startuml
+robust "TX" as tx
+robust "RX" as rx
+@0
+tx is idle
+rx is idle
+@85
+tx is active
+@135
+rx is active
+tx is idle
+@185
+rx is idle
+@85 <-> @135 : propagation 7ms
+@enduml

@@ -1,0 +1,31 @@
+@startgantt
+Project starts 2024-03-01
+
+section Phase 1
+[P0T0] lasts 8 days
+[P0T1] lasts 12 days
+[P0T1] starts at [P0T0]'s end
+[Milestone 1] happens at [P0T1]'s end
+
+section Phase 2
+[P1T0] lasts 12 days
+[P1T0] starts at [P0T1]'s end
+[P1T1] lasts 16 days
+[P1T1] starts at [P1T0]'s end
+[Milestone 2] happens at [P1T1]'s end
+
+section Phase 3
+[P2T0] lasts 16 days
+[P2T0] starts at [P1T1]'s end
+[P2T1] lasts 20 days
+[P2T1] starts at [P2T0]'s end
+[Milestone 3] happens at [P2T1]'s end
+
+section Phase 4
+[P3T0] lasts 20 days
+[P3T0] starts at [P2T1]'s end
+[P3T1] lasts 24 days
+[P3T1] starts at [P3T0]'s end
+[Milestone 4] happens at [P3T1]'s end
+
+@endgantt

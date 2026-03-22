@@ -1,0 +1,7 @@
+@startuml
+annotation MyAnnotation
+class Target {
+  <<MyAnnotation>>
+  +String field
+}
+@enduml

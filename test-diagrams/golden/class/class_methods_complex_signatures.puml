@@ -1,0 +1,13 @@
+@startuml
+class Service {
+  +void noArgs()
+  +String oneArg(int x)
+  +int twoArgs(String a, double b)
+  +List<String> genericReturn()
+  +Map<String, Integer> mapReturn()
+  +void varargs(String... args)
+  +<T> T genericMethod(T input)
+  +Optional<String> optionalReturn()
+  +void throwsException() throws IOException
+}
+@enduml

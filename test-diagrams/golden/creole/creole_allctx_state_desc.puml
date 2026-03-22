@@ -1,0 +1,5 @@
+@startuml
+state S
+S : **bold** //italic// __under__
+[*] --> S
+@enduml

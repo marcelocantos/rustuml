@@ -1,0 +1,6 @@
+@startuml
+title Mixed Case Title Example
+start
+:Action;
+stop
+@enduml

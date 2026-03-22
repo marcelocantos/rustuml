@@ -1,0 +1,10 @@
+@startuml
+class Class279 {
+  field: **bold**
+  method279(): void
+}
+class Class279b {
+  info: String
+}
+Class279 --> Class279b : **bold**
+@enduml

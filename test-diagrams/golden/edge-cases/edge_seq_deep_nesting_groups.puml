@@ -1,0 +1,13 @@
+@startuml
+Alice -> Bob: start
+group outer
+  group inner1
+    group innermost
+      Alice -> Bob: deep
+    end
+  end
+  group inner2
+    Bob -> Alice: reply
+  end
+end
+@enduml

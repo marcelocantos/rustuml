@@ -1,0 +1,5 @@
+@startuml
+annotation NotEmpty {
+  +String message() default ""
+}
+@enduml

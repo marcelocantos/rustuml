@@ -1,0 +1,7 @@
+@startuml
+note as N
+  |<#LightBlue> blue row | data |
+  |<#LightGreen> green row | data |
+  |<#LightYellow> yellow row | data |
+end note
+@enduml

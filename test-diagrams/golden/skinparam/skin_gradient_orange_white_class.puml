@@ -1,0 +1,8 @@
+@startuml
+skinparam classBackgroundColor #ED7D31/#FFFFFF
+skinparam classBorderColor #ED7D31
+class GradientClass {
+  field: String
+  method(): void
+}
+@enduml

@@ -1,0 +1,4 @@
+@startuml
+component MyComp
+note bottom of MyComp : Bottom note text
+@enduml

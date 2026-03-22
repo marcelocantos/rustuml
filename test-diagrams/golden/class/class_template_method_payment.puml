@@ -1,0 +1,26 @@
+@startuml
+abstract class PaymentProcessor {
+  +void run()
+  +{abstract} void validatePayment()
+  +{abstract} void processTransaction()
+  +{abstract} void sendConfirmation()
+}
+class CreditCardProcessor {
+  +void validatePayment()
+  +void processTransaction()
+  +void sendConfirmation()
+}
+class PayPalProcessor {
+  +void validatePayment()
+  +void processTransaction()
+  +void sendConfirmation()
+}
+class BankTransfer {
+  +void validatePayment()
+  +void processTransaction()
+  +void sendConfirmation()
+}
+PaymentProcessor <|-- CreditCardProcessor
+PaymentProcessor <|-- PayPalProcessor
+PaymentProcessor <|-- BankTransfer
+@enduml

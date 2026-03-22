@@ -1,0 +1,9 @@
+@startuml
+namespace ns1 {
+  class A
+}
+package pkg1 {
+  class B
+}
+ns1.A --> pkg1.B
+@enduml

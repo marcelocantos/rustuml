@@ -1,0 +1,8 @@
+@startwbs
+* Root 8
+**[#lightblue] Right 0
+**[#lightgreen] Right 1
+--[#yellow] Left 0
+--[#orange] Left 1
+--[#pink] Left 2
+@endwbs

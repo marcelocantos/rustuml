@@ -1,0 +1,4 @@
+@startuml
+Alice -> Bob: [Optional] message
+Bob --> Alice: response[0]
+@enduml

@@ -1,0 +1,7 @@
+@startuml
+!$i = 0
+!while $i < 5
+class Class_$i
+!$i = $i + 1
+!endwhile
+@enduml

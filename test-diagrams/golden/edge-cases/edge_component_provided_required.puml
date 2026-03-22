@@ -1,0 +1,7 @@
+@startuml
+component Comp
+interface Provided
+interface Required
+Comp -- Provided
+Required --( Comp
+@enduml

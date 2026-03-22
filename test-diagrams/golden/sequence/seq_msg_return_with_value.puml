@@ -1,0 +1,4 @@
+@startuml
+Alice -> Bob ++ : getData()
+return [1, 2, 3]
+@enduml

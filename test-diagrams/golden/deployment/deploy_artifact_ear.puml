@@ -1,0 +1,5 @@
+@startuml
+artifact "application.ear"
+node "Application Server"
+"application.ear" --> "Application Server" : deploy
+@enduml

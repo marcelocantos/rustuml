@@ -1,0 +1,46 @@
+@startuml
+entity User {
+  * id : BIGINT <<PK>>
+  --
+  handle : VARCHAR(50) UNIQUE
+  display_name : VARCHAR(100)
+  bio : VARCHAR(500)
+  created_at : TIMESTAMP
+}
+entity Follow {
+  * follower_id : BIGINT <<FK>>
+  * followed_id : BIGINT <<FK>>
+  --
+  created_at : TIMESTAMP
+}
+entity Post {
+  * id : BIGINT <<PK>>
+  * user_id : BIGINT <<FK>>
+  --
+  content : TEXT
+  media_url : VARCHAR(500)
+  created_at : TIMESTAMP
+}
+entity Like {
+  * user_id : BIGINT <<FK>>
+  * post_id : BIGINT <<FK>>
+  --
+  created_at : TIMESTAMP
+}
+entity Message {
+  * id : BIGINT <<PK>>
+  * sender_id : BIGINT <<FK>>
+  * recipient_id : BIGINT <<FK>>
+  --
+  content : TEXT
+  sent_at : TIMESTAMP
+  read_at : TIMESTAMP
+}
+User ||--o{ Follow : "following"
+User ||--o{ Follow : "followed by"
+User ||--o{ Post : "creates"
+User ||--o{ Like : "gives"
+Post ||--o{ Like : "receives"
+User ||--o{ Message : "sends"
+User ||--o{ Message : "receives"
+@enduml

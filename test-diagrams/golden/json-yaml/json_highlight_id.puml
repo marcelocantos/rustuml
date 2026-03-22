@@ -1,0 +1,10 @@
+@startjson
+#highlight "id"
+{
+  "id": 2,
+  "name": "item_1",
+  "status": "active",
+  "type": "example",
+  "version": "2.0"
+}
+@endjson

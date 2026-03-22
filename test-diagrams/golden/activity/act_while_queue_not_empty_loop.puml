@@ -1,0 +1,8 @@
+@startuml
+
+start
+while (queue not empty?) is (loop)
+  :Process iteration;
+endwhile (exit)
+stop
+@enduml

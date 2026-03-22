@@ -1,0 +1,9 @@
+@startuml
+nwdiag {
+  network net1 {
+    A [address = "10.0.0.1"]
+    B [address = "10.0.0.2"]
+  }
+  A -- B
+}
+@enduml

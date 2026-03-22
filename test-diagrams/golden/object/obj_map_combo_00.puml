@@ -1,0 +1,6 @@
+@startuml
+map "Map0" as m0 {
+  key0 => value0
+  key1 => value1
+}
+@enduml

@@ -1,0 +1,5 @@
+@startuml
+class ReturnTypes {
+  +List<? extends Number> method()
+}
+@enduml

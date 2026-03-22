@@ -1,0 +1,10 @@
+@startuml
+A -> B ++ #green : activate cgreen
+alt ok
+  B -> C ++ #green : nested
+  C --> B -- : done
+  B --> A -- : ok
+else fail
+  B --> A -- : fail
+end
+@enduml

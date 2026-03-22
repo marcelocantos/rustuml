@@ -1,0 +1,10 @@
+@startuml
+
+start
+if (condition?) then (yes)
+  :Yes 1;
+else (no)
+  :No 1;
+endif
+stop
+@enduml

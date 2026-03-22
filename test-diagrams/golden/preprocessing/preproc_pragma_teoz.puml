@@ -1,0 +1,6 @@
+@startuml
+!pragma teoz true
+Alice -> Bob : first
+Bob -> Carol : second
+Carol --> Alice : done
+@enduml

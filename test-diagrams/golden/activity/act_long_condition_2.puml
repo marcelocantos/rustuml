@@ -1,0 +1,10 @@
+@startuml
+
+start
+if (Has the user provided all required fields in the registration form?) then (yes)
+  :Positive path action;
+else (no)
+  :Negative path action;
+endif
+stop
+@enduml

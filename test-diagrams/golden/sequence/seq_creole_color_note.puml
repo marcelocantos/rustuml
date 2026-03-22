@@ -1,0 +1,7 @@
+@startuml
+Alice -> Bob : hello
+note over Alice
+  <color:red>red text</color>
+end note
+Bob --> Alice : hi
+@enduml

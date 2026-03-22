@@ -1,0 +1,7 @@
+@startuml
+skinparam classRoundCorner 10
+class RoundClass { +field: String }
+
+
+
+@enduml

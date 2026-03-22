@@ -1,0 +1,22 @@
+@startuml
+start
+partition "Partition 1" {
+  |Lane A|
+  :Action A1;
+  |Lane B|
+  :Action B1;
+}
+partition "Partition 2" {
+  |Lane A|
+  :Action A2;
+  |Lane B|
+  :Action B2;
+}
+partition "Partition 3" {
+  |Lane A|
+  :Action A3;
+  |Lane B|
+  :Action B3;
+}
+stop
+@enduml

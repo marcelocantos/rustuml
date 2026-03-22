@@ -1,0 +1,3 @@
+@startuml
+:<color:red><back:yellow>red on yellow</back></color>;
+@enduml

@@ -1,0 +1,7 @@
+@startuml
+loop 3 times
+Alice -> Bob : broadcast
+Alice -> Charlie : broadcast
+Alice -> Dave : broadcast
+end
+@enduml

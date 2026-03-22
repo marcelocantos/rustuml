@@ -1,0 +1,9 @@
+@startuml
+actor User
+usecase UC1 #Pink as "
+  Title
+  ..
+  Details here
+"
+User --> UC1
+@enduml

@@ -1,0 +1,7 @@
+@startuml
+collections X
+participant Y
+X -> Y : message
+note left of X : note left of collections
+Y --> X : reply
+@enduml

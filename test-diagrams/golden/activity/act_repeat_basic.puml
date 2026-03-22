@@ -1,0 +1,8 @@
+@startuml
+
+start
+repeat
+  :Action;
+repeatwhile (again?) is (yes)
+stop
+@enduml

@@ -1,0 +1,11 @@
+@startuml
+start
+group "Feature Group" {
+fork
+  :P1;
+fork again
+  :P2;
+end fork
+}
+stop
+@enduml

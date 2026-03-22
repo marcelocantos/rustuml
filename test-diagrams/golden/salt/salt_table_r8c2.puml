@@ -1,0 +1,13 @@
+@startsalt
+{#
+  Header 0 | Header 1
+  R0C0 | R0C1
+  R1C0 | R1C1
+  R2C0 | R2C1
+  R3C0 | R3C1
+  R4C0 | R4C1
+  R5C0 | R5C1
+  R6C0 | R6C1
+  R7C0 | R7C1
+}
+@endsalt

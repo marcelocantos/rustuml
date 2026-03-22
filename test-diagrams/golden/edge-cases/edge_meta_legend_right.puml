@@ -1,0 +1,6 @@
+@startuml
+legend right
+  Right legend
+endlegend
+class Foo
+@enduml

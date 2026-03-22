@@ -1,0 +1,5 @@
+@startuml
+class ColorTest #Crimson {
+  +void method()
+}
+@enduml

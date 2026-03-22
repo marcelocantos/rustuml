@@ -1,0 +1,9 @@
+@startuml
+frame Outer #LightBlue {
+  package Inner {
+    component X
+    component Y
+    X --> Y
+  }
+}
+@enduml

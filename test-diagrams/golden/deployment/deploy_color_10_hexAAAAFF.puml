@@ -1,0 +1,5 @@
+@startuml
+node AppNode #AAAAFF
+node DBNode #AAAAFF
+AppNode --> DBNode
+@enduml

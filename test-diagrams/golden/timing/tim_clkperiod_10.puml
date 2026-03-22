@@ -1,0 +1,10 @@
+@startuml
+clock "CLK10" as clk with period 10
+binary "DATA" as dat
+@0
+dat is low
+@20
+dat is high
+@50
+dat is low
+@enduml

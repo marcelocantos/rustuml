@@ -1,0 +1,24 @@
+@startuml
+abstract class Handler {
+  -next: Handler
+  +void setNext(Handler h)
+  +{abstract} void handle(Request r)
+}
+class ConcreteHandlerA {
+  +void handle(Request r)
+}
+class ConcreteHandlerB {
+  +void handle(Request r)
+}
+class ConcreteHandlerC {
+  +void handle(Request r)
+}
+class Request {
+  +String type
+  +Object data
+}
+ConcreteHandlerA --|> Handler
+ConcreteHandlerB --|> Handler
+ConcreteHandlerC --|> Handler
+Handler --> Handler : next
+@enduml

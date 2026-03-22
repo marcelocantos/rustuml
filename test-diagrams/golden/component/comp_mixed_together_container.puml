@@ -1,0 +1,16 @@
+@startuml
+package PkgA {
+  together {
+    component A1
+    component A2
+  }
+  component A3
+}
+package PkgB {
+  component B1
+  component B2
+}
+A1 --> B1
+A2 --> B2
+A3 --> B1
+@enduml

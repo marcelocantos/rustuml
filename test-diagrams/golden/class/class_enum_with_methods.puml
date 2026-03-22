@@ -1,0 +1,12 @@
+@startuml
+enum Planet {
+  MERCURY
+  VENUS
+  EARTH
+  MARS
+  --
+  +double mass()
+  +double radius()
+  +double surfaceGravity()
+}
+@enduml

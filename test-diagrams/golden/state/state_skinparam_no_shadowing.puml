@@ -1,0 +1,6 @@
+@startuml
+skinparam shadowing false
+[*] --> A
+A --> B
+B --> [*]
+@enduml

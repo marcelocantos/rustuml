@@ -1,0 +1,14 @@
+@startmindmap
+* Frontend Frameworks
+** React
+*** SPA
+** Vue
+*** SPA
+** Angular
+*** Full
+-- Svelte
+--- Compiler
+-- Ember
+--- MVC
+
+@endmindmap

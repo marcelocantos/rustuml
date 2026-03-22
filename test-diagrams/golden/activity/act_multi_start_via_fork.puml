@@ -1,0 +1,12 @@
+@startuml
+
+fork
+  start
+  :Flow 1 action;
+  stop
+fork again
+  start
+  :Flow 2 action;
+  stop
+end fork
+@enduml

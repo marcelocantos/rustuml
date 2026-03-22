@@ -1,0 +1,5 @@
+@startuml
+[*] --> A
+note right of A : x
+A --> [*]
+@enduml

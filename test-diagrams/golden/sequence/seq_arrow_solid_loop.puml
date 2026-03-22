@@ -1,0 +1,7 @@
+@startuml
+A -> B : start
+loop cond
+  A -> B : solid in loop
+  B --> A : ack
+end
+@enduml

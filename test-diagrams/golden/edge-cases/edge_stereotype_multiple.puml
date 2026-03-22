@@ -1,0 +1,4 @@
+@startuml
+class Foo << service >> << transactional >>
+class Bar << repository >> << cacheable >>
+@enduml

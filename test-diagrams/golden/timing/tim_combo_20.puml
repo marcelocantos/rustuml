@@ -1,0 +1,17 @@
+@startuml
+binary "Sig0" as s0
+binary "Sig1" as s1
+@0
+s0 is high
+s1 is low
+@100
+s0 is low
+s1 is high
+@200
+s0 is high
+s1 is low
+@300
+s0 is low
+s1 is high
+
+@enduml

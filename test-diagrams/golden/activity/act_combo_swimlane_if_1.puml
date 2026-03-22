@@ -1,0 +1,12 @@
+@startuml
+|User|
+start
+:Request;
+|System|
+if (user request?) then (yes)
+else (no)
+  :Process;
+endif
+|User|
+stop
+@enduml

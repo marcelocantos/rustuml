@@ -1,0 +1,10 @@
+@startuml
+A -> B ++ #red : activate cred
+alt ok
+  B -> C ++ #red : nested
+  C --> B -- : done
+  B --> A -- : ok
+else fail
+  B --> A -- : fail
+end
+@enduml

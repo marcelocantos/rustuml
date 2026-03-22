@@ -1,0 +1,7 @@
+@startuml
+alt **happy path**
+  Alice -> Bob : ok
+else //sad path//
+  Alice -> Bob : error
+end
+@enduml

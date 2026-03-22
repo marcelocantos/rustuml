@@ -1,0 +1,4 @@
+@startuml
+Alice -> Bob : <color:red>colored</color> message
+Bob --> Alice : <color:red>colored</color> message
+@enduml

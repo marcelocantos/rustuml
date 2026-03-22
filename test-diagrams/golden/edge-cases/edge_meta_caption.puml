@@ -1,0 +1,6 @@
+@startuml
+caption Figure 1: Class Diagram
+class Foo
+class Bar
+Foo --> Bar
+@enduml

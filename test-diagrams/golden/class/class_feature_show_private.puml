@@ -1,0 +1,7 @@
+@startuml
+class MyClass {
+  -privateField: String
+  -privateMethod(): void
+  +publicMethod(): void
+}
+@enduml

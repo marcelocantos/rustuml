@@ -1,0 +1,4 @@
+@startuml
+Alice -> Bob : ""code message""
+Bob --> Alice : ""code message""
+@enduml

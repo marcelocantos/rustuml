@@ -1,0 +1,6 @@
+@startuml
+participant "Χρήστης" as U
+participant "Σύστημα" as S
+U -> S: Δοκιμή
+S --> U: Δεδομένα
+@enduml

@@ -1,0 +1,13 @@
+@startuml
+package Frontend {
+  component WebUI
+  component MobileUI
+}
+package Backend {
+  component API
+  component DB
+}
+WebUI --> API
+MobileUI --> API
+API --> DB
+@enduml

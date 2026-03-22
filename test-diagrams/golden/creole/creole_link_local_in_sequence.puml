@@ -1,0 +1,4 @@
+@startuml
+Alice -> Bob : [[#anchor local link]]
+note right : [[#anchor local link]]
+@enduml

@@ -1,0 +1,5 @@
+@startuml
+state S1 : State 1 description
+[*] --> S1
+S1 --> [*]
+@enduml

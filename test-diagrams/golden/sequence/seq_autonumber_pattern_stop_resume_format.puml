@@ -1,0 +1,8 @@
+@startuml
+autonumber "<b>##</b>"
+Alice -> B : 1
+autonumber stop
+Alice -> B : no num
+autonumber resume "<i>##</i>"
+Alice -> B : 2
+@enduml

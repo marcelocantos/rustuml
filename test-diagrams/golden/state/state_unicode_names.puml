@@ -1,0 +1,10 @@
+@startuml
+state "État Initial" as EI
+state "Traitement" as TR
+state "Résultat Final" as RF
+
+[*] --> EI
+EI --> TR : démarrer
+TR --> RF : terminer
+RF --> [*]
+@enduml

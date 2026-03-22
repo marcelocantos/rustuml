@@ -1,0 +1,24 @@
+@startuml
+
+start
+if (L1?) then (yes)
+  while (L2?) is (yes)
+    fork
+      repeat
+        if (L4?) then (yes)
+          while (L5?) is (yes)
+            :Deepest action;
+          endwhile
+        else (no)
+          :L4 false;
+        endif
+      repeatwhile (L3?) is (yes)
+    fork again
+      :Parallel deep;
+    end fork
+  endwhile
+else (no)
+  :L1 false path;
+endif
+stop
+@enduml

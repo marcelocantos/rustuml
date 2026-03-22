@@ -1,0 +1,7 @@
+@startuml
+!theme reddress-lightgreen
+[*] --> Idle
+Idle --> Active : start
+Active --> Done : finish
+Done --> [*]
+@enduml

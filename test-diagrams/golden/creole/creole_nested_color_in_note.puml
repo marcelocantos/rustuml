@@ -1,0 +1,5 @@
+@startuml
+note as N
+  <color:red><back:yellow>red on yellow</back></color>
+end note
+@enduml

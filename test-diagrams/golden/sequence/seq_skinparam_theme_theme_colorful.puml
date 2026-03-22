@@ -1,0 +1,15 @@
+@startuml
+skinparam ParticipantBackgroundColor #FFD700
+skinparam ParticipantBorderColor #FF4500
+skinparam SequenceArrowColor #8B0000
+skinparam NoteBackgroundColor #98FB98
+skinparam NoteBorderColor #006400
+participant Alice
+participant Bob
+participant Charlie
+Alice -> Bob : request
+note over Alice : note
+Bob -> Charlie : delegate
+Charlie --> Bob : result
+Bob --> Alice : response
+@enduml

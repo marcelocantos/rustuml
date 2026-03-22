@@ -1,0 +1,6 @@
+@startuml
+class MyClass <<strategy>> {
+  -instance: MyClass
+  +getInstance(): MyClass
+}
+@enduml

@@ -1,0 +1,11 @@
+@startuml
+class Container {
+  class Iterator {
+    +boolean hasNext()
+    +Object next()
+  }
+  class Builder {
+    +Container build()
+  }
+}
+@enduml

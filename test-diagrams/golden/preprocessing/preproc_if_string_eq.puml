@@ -1,0 +1,11 @@
+@startuml
+!$mode = "production"
+
+!if $mode == "production"
+skinparam backgroundColor #FAFAFA
+Alice -> Bob : Production mode
+!else
+skinparam backgroundColor LightYellow
+Alice -> Bob : Other mode: $mode
+!endif
+@enduml

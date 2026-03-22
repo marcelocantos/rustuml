@@ -1,0 +1,5 @@
+@startuml
+class MyClass {
+  [[https://plantuml.com{PlantUML website} click me]]: field
+}
+@enduml

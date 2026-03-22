@@ -1,0 +1,6 @@
+@startuml
+class MyClass <<controller>> {
+  -instance: MyClass
+  +getInstance(): MyClass
+}
+@enduml

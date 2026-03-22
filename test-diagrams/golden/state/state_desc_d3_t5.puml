@@ -1,0 +1,6 @@
+@startuml
+state A : sending network request
+[*] --> A
+A --> B : error detected
+B --> [*]
+@enduml

@@ -1,0 +1,7 @@
+@startuml
+Alice -> Bob : step 1
+note over Alice, Bob : checkpoint
+Bob -> Charlie : step 2
+note right of Charlie : done
+Charlie --> Alice : complete
+@enduml

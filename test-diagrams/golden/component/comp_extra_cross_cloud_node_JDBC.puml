@@ -1,0 +1,9 @@
+@startuml
+cloud Group1 {
+  component A
+}
+node Group2 {
+  component B
+}
+A --> B : JDBC
+@enduml

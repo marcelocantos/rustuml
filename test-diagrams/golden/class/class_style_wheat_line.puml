@@ -1,0 +1,5 @@
+@startuml
+class Styled #back:wheat;line:red {
+  +void method()
+}
+@enduml

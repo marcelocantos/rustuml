@@ -1,0 +1,4 @@
+@startuml
+title 日本語テスト
+class ユーザー
+@enduml

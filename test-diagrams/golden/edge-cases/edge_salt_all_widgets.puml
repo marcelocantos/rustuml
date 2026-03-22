@@ -1,0 +1,16 @@
+@startsalt
+{
+  "Input field" | "               "
+  .
+  [] checkbox
+  [X] checked
+  .
+  () radio
+  (X) selected
+  .
+  ^dropdown^
+  .
+  [button]
+  [<back] [next>]
+}
+@endsalt

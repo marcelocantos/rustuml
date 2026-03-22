@@ -1,0 +1,15 @@
+@startuml
+
+skinparam roundcorner 20
+start
+:Action A;
+if (cond?) then (yes)
+  :Yes;
+else (no)
+  :No;
+endif
+while (loop?) is (yes)
+  :Work;
+endwhile
+stop
+@enduml

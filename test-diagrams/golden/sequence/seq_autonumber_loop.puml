@@ -1,0 +1,9 @@
+@startuml
+autonumber
+A -> B : 1
+loop condition
+  B -> C : 2
+  C --> B : 3
+end
+B --> A : last
+@enduml

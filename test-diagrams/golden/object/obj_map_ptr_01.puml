@@ -1,0 +1,13 @@
+@startuml
+map "Source1" as src1 {
+  entry0 => data1_0
+  entry1 => data1_1
+  entry2 => data1_2
+  entry3 => data1_3
+}
+map "Target1" as tgt1 {
+  x0 => y1_0
+  x1 => y1_1
+}
+src1::entry0 --> tgt1
+@enduml

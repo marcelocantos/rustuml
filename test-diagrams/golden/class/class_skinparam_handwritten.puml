@@ -1,0 +1,8 @@
+@startuml
+skinparam handwritten true
+class MyClass {
+  +void method()
+}
+class Other
+MyClass --> Other
+@enduml

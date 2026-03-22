@@ -1,0 +1,6 @@
+@startuml
+skinparam ArrowFontColor Red
+[*] --> A
+A --> B : event
+B --> [*]
+@enduml

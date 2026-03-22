@@ -1,0 +1,4 @@
+@startuml
+title اختبار
+class مستخدم
+@enduml

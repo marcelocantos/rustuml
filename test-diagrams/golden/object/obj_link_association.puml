@@ -1,0 +1,9 @@
+@startuml
+object A {
+  value = 1
+}
+object B {
+  value = 2
+}
+A --> B : "association"
+@enduml

@@ -1,0 +1,6 @@
+@startuml
+participant P0
+participant P1
+P0 -> P1 : msg 0
+P1 -> P0 : msg 1
+@enduml

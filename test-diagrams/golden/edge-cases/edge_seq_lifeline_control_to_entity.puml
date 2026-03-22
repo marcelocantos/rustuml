@@ -1,0 +1,5 @@
+@startuml
+control C1
+entity E2
+C1 -> E2: message
+@enduml

@@ -1,0 +1,20 @@
+@startuml
+actor User
+actor Admin
+rectangle "Frontend System" {
+  usecase "Browse Products" as BP
+  usecase "Add to Cart" as AC
+  usecase "Checkout" as CO
+}
+rectangle "Admin System" {
+  usecase "Manage Products" as MP
+  usecase "View Orders" as VO
+  usecase "Generate Reports" as GR
+}
+User --> BP
+User --> AC
+User --> CO
+Admin --> MP
+Admin --> VO
+Admin --> GR
+@enduml

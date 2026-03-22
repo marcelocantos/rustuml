@@ -1,0 +1,7 @@
+@startuml
+skinparam DatabaseBorderColor brown
+database Alice
+participant Bob
+Alice -> Bob : hello
+Bob --> Alice : hi
+@enduml

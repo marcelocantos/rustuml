@@ -1,0 +1,10 @@
+@startuml
+!pragma horizontalLineBetweenDifferentPackageAllowed
+package A {
+  class ClassA
+}
+package B {
+  class ClassB
+}
+ClassA --> ClassB
+@enduml

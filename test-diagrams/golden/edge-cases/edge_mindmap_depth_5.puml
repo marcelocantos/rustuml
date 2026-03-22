@@ -1,0 +1,36 @@
+@startmindmap
+* Root
+** Branch0
+*** Leaf0_0
+**** SubLeaf0_0_0
+***** Deep0_0_0
+**** SubLeaf0_0_1
+***** Deep0_0_1
+*** Leaf0_1
+**** SubLeaf0_1_0
+***** Deep0_1_0
+**** SubLeaf0_1_1
+***** Deep0_1_1
+** Branch1
+*** Leaf1_0
+**** SubLeaf1_0_0
+***** Deep1_0_0
+**** SubLeaf1_0_1
+***** Deep1_0_1
+*** Leaf1_1
+**** SubLeaf1_1_0
+***** Deep1_1_0
+**** SubLeaf1_1_1
+***** Deep1_1_1
+** Branch2
+*** Leaf2_0
+**** SubLeaf2_0_0
+***** Deep2_0_0
+**** SubLeaf2_0_1
+***** Deep2_0_1
+*** Leaf2_1
+**** SubLeaf2_1_0
+***** Deep2_1_0
+**** SubLeaf2_1_1
+***** Deep2_1_1
+@endmindmap

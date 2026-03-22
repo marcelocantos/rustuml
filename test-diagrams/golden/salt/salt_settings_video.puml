@@ -1,0 +1,10 @@
+@startsalt
+{^Video Settings
+  Resolution: | "               "
+  Brightness: | "               "
+  Contrast: | "               "
+  Saturation: | "               "
+  ..
+  [Save] | [Reset] | [Cancel]
+}
+@endsalt

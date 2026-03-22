@@ -1,0 +1,5 @@
+@startuml
+actor A1
+control C2
+A1 -> C2: message
+@enduml

@@ -1,0 +1,14 @@
+@startmindmap
+* Programming Languages
+** Python
+*** Scripting
+** Java
+*** Enterprise
+** Rust
+*** Systems
+-- Go
+--- Cloud
+-- JavaScript
+--- Web
+
+@endmindmap

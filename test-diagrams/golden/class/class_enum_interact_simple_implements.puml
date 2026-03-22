@@ -1,0 +1,11 @@
+@startuml
+enum Status {
+  ACTIVE
+  INACTIVE
+  PENDING
+}
+interface IStatus {
+  +String name()
+}
+Status ..|> IStatus
+@enduml

@@ -1,0 +1,9 @@
+@startuml
+actor "Utilisateur" as U
+rectangle "Système" {
+  usecase "Se connecter" as SC
+  usecase "Voir le tableau de bord" as VTB
+}
+U --> SC
+U --> VTB
+@enduml

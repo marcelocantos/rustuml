@@ -1,0 +1,20 @@
+@startuml
+map "Map0_13" as m0_13 {
+  field0 => val0_0
+  field1 => val0_1
+  field2 => val0_2
+}
+map "Map1_13" as m1_13 {
+  field0 => val1_0
+  field1 => val1_1
+  field2 => val1_2
+}
+map "Map2_13" as m2_13 {
+  field0 => val2_0
+  field1 => val2_1
+  field2 => val2_2
+}
+
+m0_13 --> m1_13
+m1_13 --> m2_13
+@enduml

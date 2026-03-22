@@ -1,0 +1,12 @@
+@startuml
+[*] --> Created
+Created --> Active : Activate
+Active --> Suspended : Suspend
+Suspended --> Active : Resume
+Active --> Closed : Close
+Suspended --> Closed : Close
+Closed --> [*]
+
+note right of Active : Commands are processed here
+note right of Suspended : No new commands accepted
+@enduml

@@ -1,0 +1,6 @@
+@startuml
+' Emoji using surrogate pairs
+class "😀 Emoji Class" {
+  field: String
+}
+@enduml

@@ -1,0 +1,10 @@
+@startuml
+Alice -> Bob : request
+activate Bob #red
+Bob -> Charlie : delegate
+activate Charlie #blue
+Charlie --> Bob : done
+deactivate Charlie
+Bob --> Alice : result
+deactivate Bob
+@enduml

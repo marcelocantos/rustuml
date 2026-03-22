@@ -1,0 +1,13 @@
+@startuml
+title "Workflow 90"
+skinparam activityBackgroundColor #E3F2FD
+
+start
+:Step 1;
+:Step 2;
+:Step 3;
+:Step 4;
+:Step 5;
+:Step 6;
+stop
+@enduml

@@ -1,0 +1,8 @@
+@startuml
+A -> B ++ #green : activate cgreen
+loop cond
+  B -> C ++ #green : nested
+  C --> B -- : done
+end
+B --> A -- : result
+@enduml

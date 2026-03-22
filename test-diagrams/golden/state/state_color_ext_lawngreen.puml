@@ -1,0 +1,5 @@
+@startuml
+state A #LawnGreen
+[*] --> A
+A --> [*]
+@enduml

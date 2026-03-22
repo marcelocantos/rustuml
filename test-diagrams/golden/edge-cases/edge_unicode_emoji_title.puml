@@ -1,0 +1,4 @@
+@startuml
+title 🧪 Test
+class 👤 User
+@enduml

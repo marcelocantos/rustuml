@@ -1,0 +1,10 @@
+@startuml
+title "Deployment Diagram 375"
+node "Server1_375" as s1 {
+  component "App1" as a1
+}
+node "Server2_375" as s2 {
+  component "App2" as a2
+}
+a1 --> a2
+@enduml

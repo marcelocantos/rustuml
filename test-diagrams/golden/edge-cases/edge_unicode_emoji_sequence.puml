@@ -1,0 +1,4 @@
+@startuml
+"👤 User" -> "🖥️ Server": 📨 Send request
+"🖥️ Server" --> "👤 User": ✅ Response OK
+@enduml

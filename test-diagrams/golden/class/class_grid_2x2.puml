@@ -1,0 +1,10 @@
+@startuml
+class R1C1
+class R1C2
+class R2C1
+class R2C2
+R1C1 --> R1C2
+R2C1 --> R2C2
+R1C1 --> R2C1
+R1C2 --> R2C2
+@enduml

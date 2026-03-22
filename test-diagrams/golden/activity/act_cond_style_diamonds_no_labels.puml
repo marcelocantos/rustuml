@@ -1,0 +1,9 @@
+@startuml
+start
+if (cond?) then
+  :Y;
+else
+  :N;
+endif
+stop
+@enduml

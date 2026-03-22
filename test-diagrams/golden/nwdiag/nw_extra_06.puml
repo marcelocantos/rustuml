@@ -1,0 +1,24 @@
+@startnwdiag
+nwdiag {
+  network net0_6 {
+    address = "172.16.6.0/24"
+    node0_0_6 [address = "172.16.6.1"]
+    node0_1_6 [address = "172.16.6.2"]
+  }
+  network net1_6 {
+    address = "172.17.6.0/24"
+    node0_1_6 [address = "172.17.6.1"]
+    node1_0_6 [address = "172.17.6.2"]
+  }
+  network net2_6 {
+    address = "172.18.6.0/24"
+    node1_1_6 [address = "172.18.6.1"]
+    node2_0_6 [address = "172.18.6.2"]
+  }
+  network net3_6 {
+    address = "172.19.6.0/24"
+    node2_1_6 [address = "172.19.6.1"]
+    node3_0_6 [address = "172.19.6.2"]
+  }
+}
+@endnwdiag

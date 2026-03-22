@@ -1,0 +1,6 @@
+@startuml
+enum Variant {
+  +void run()
+  -void helper()
+}
+@enduml

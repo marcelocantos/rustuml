@@ -1,0 +1,5 @@
+@startuml
+note as N
+  <em>em tag</em>
+end note
+@enduml

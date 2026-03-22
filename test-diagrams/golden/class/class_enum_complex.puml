@@ -1,0 +1,15 @@
+@startuml
+enum DayOfWeek {
+  MONDAY
+  TUESDAY
+  WEDNESDAY
+  THURSDAY
+  FRIDAY
+  SATURDAY
+  SUNDAY
+  --
+  +boolean isWeekend()
+  +DayOfWeek next()
+  {static} +DayOfWeek fromInt(int i)
+}
+@enduml

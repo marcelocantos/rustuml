@@ -1,0 +1,8 @@
+@startuml
+autoactivate on
+hide footbox
+Alice -> Bob : a
+Bob -> Charlie : b
+return c
+return b
+@enduml

@@ -1,0 +1,4 @@
+@startuml
+Alice -> Bob : first
+Bob --> Alice : second
+@enduml

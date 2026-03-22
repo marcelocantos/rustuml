@@ -1,0 +1,26 @@
+@startuml
+package "Frontend" {
+  component Browser
+  component "React App" as ReactApp
+}
+package "Backend" {
+  component "API Gateway" as APIGW
+  component "Auth Service" as Auth
+  component "User Service" as UserSvc
+  component "Product Service" as ProdSvc
+}
+package "Data Layer" {
+  database "User DB" as UserDB
+  database "Product DB" as ProdDB
+  component "Cache" as Redis
+}
+Browser --> ReactApp : renders
+ReactApp --> APIGW : HTTP
+APIGW --> Auth : validates
+APIGW --> UserSvc : routes
+APIGW --> ProdSvc : routes
+UserSvc --> UserDB : CRUD
+ProdSvc --> ProdDB : CRUD
+UserSvc --> Redis : cache
+ProdSvc --> Redis : cache
+@enduml

@@ -1,0 +1,3 @@
+@startjson
+{"a": {"b": {"c": 1}}}
+@endjson

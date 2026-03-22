@@ -1,0 +1,13 @@
+@startuml
+node L1 {
+  folder L2 {
+    rectangle L3 {
+      component DeepComp
+    }
+    component MidComp
+    L3 --> MidComp
+  }
+  component TopComp
+  L2 --> TopComp
+}
+@enduml

@@ -1,0 +1,34 @@
+@startuml
+state Idle
+state Moving {
+  [*] --> Walking
+  Walking --> Running : sprint
+  Running --> Walking : release sprint
+}
+state Jumping
+state Attacking {
+  [*] --> WindUp
+  WindUp --> Strike
+  Strike --> Recovery
+  Recovery --> [*]
+}
+state Hurt
+state Dead
+
+[*] --> Idle
+Idle --> Moving : move input
+Idle --> Jumping : jump input
+Idle --> Attacking : attack input
+Moving --> Idle : no move input
+Moving --> Jumping : jump input
+Moving --> Attacking : attack input
+Jumping --> Idle : land
+Attacking --> Idle : attack complete
+Idle --> Hurt : take damage [health > 0]
+Moving --> Hurt : take damage [health > 0]
+Jumping --> Hurt : take damage [health > 0]
+Attacking --> Hurt : take damage [health > 0]
+Hurt --> Idle : recover [health > 0]
+Hurt --> Dead : take damage [health <= 0]
+Dead --> [*]
+@enduml

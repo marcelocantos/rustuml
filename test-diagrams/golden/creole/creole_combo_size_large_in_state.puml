@@ -1,0 +1,5 @@
+@startuml
+state "<size:20>large</size> State" as S39
+[*] --> S39
+S39 : <size:20>large</size> description
+@enduml

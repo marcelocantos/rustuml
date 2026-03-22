@@ -1,0 +1,7 @@
+@startuml
+actor User
+usecase UC1
+usecase UC2
+UC1 .> UC2 : <<include>>
+User --> UC1
+@enduml

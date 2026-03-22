@@ -1,0 +1,5 @@
+@startuml
+class MyClass {
+  <color:red>**bold red**</color>: field
+}
+@enduml

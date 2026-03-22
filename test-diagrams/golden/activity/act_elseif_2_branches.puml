@@ -1,0 +1,12 @@
+@startuml
+
+start
+if (A?) then (yes)
+  :Branch A;
+elseif (B?) then (yes)
+  :Branch B;
+else (no)
+  :Default branch;
+endif
+stop
+@enduml

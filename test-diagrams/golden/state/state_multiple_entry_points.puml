@@ -1,0 +1,11 @@
+@startuml
+state Composite {
+  state ep1 <<entryPoint>>
+  state ep2 <<entryPoint>>
+  ep1 --> A
+  ep2 --> B
+  A --> [*]
+  B --> [*]
+}
+[*] --> Composite
+@enduml

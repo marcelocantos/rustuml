@@ -1,0 +1,8 @@
+@startuml
+skinparam ParticipantFontSize 16
+skinparam ParticipantFontStyle bold
+skinparam NoteFontSize 12
+skinparam NoteFontStyle italic
+Alice -> Bob : hello
+Bob --> Alice : hi
+@enduml

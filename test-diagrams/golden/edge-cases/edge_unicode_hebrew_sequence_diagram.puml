@@ -1,0 +1,6 @@
+@startuml
+participant "משתמש" as U
+participant "מערכת" as S
+U -> S: בדיקה
+S --> U: נתונים
+@enduml

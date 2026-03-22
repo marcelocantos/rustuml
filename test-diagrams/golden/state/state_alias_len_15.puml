@@ -1,0 +1,5 @@
+@startuml
+state "AAAAAAAAAAAAAAA State" as SSSSSSSSSSSSSSS
+[*] --> SSSSSSSSSSSSSSS
+SSSSSSSSSSSSSSS --> [*]
+@enduml

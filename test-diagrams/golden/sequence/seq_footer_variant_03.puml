@@ -1,0 +1,5 @@
+@startuml
+footer <b>Company Name</b>
+Alice -> Bob : hello
+Bob --> Alice : hi
+@enduml

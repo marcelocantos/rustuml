@@ -1,0 +1,7 @@
+@startuml
+rectangle MyPkg {
+  class MyClass {
+    +void method()
+  }
+}
+@enduml

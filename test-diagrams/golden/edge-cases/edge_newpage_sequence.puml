@@ -1,0 +1,7 @@
+@startuml
+Alice -> Bob: page 1 message
+newpage
+Alice -> Bob: page 2 message
+newpage
+Alice -> Bob: page 3 message
+@enduml

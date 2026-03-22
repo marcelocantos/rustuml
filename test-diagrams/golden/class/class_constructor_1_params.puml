@@ -1,0 +1,6 @@
+@startuml
+class MyClass {
+  +MyClass(String p1)
+  +void method()
+}
+@enduml

@@ -1,0 +1,7 @@
+@startuml
+actor A
+actor B
+A -> B : hello
+note over A, B : note over two actors
+B --> A : hi
+@enduml

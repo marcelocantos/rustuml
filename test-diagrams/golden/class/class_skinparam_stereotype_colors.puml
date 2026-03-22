@@ -1,0 +1,14 @@
+@startuml
+skinparam class {
+  BackgroundColor<<service>> lightblue
+  BorderColor<<service>> blue
+  BackgroundColor<<entity>> lightyellow
+  BorderColor<<entity>> orange
+}
+class UserService <<service>> {
+  +void serve()
+}
+class User <<entity>> {
+  +String name
+}
+@enduml

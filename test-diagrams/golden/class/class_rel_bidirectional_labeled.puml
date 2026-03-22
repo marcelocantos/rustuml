@@ -1,0 +1,5 @@
+@startuml
+class Husband
+class Wife
+Husband "1" <--> "1" Wife : married to
+@enduml

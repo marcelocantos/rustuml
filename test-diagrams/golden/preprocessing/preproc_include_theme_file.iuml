@@ -1,0 +1,14 @@
+!startsub DARK_THEME
+skinparam backgroundColor #1E1E2E
+skinparam classBackgroundColor #313244
+skinparam classBorderColor #89DCEB
+skinparam classFontColor #CDD6F4
+skinparam arrowColor #89DCEB
+!endsub
+!startsub LIGHT_THEME
+skinparam backgroundColor #EFF1F5
+skinparam classBackgroundColor #FFFFFF
+skinparam classBorderColor #4C4F69
+skinparam classFontColor #4C4F69
+skinparam arrowColor #4C4F69
+!endsub

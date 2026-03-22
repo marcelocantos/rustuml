@@ -1,0 +1,6 @@
+@startuml
+participant "Alice Smith" as A #blue <<ext>> order 10
+participant Bob
+A -> Bob : hello
+Bob --> A : hi
+@enduml

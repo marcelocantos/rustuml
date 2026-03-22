@@ -1,0 +1,5 @@
+@startuml
+artifact "application.jar"
+node "Application Server"
+"application.jar" --> "Application Server" : deploy
+@enduml

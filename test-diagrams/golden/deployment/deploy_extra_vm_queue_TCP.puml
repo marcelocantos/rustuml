@@ -1,0 +1,5 @@
+@startuml
+node AppNode <<vm>>
+queue DataStore
+AppNode --> DataStore : TCP
+@enduml

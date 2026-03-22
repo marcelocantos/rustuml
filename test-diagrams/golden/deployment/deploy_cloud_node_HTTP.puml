@@ -1,0 +1,5 @@
+@startuml
+cloud Source
+node Target
+Source --> Target : HTTP
+@enduml

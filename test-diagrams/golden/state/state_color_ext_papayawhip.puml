@@ -1,0 +1,5 @@
+@startuml
+state A #PapayaWhip
+[*] --> A
+A --> [*]
+@enduml

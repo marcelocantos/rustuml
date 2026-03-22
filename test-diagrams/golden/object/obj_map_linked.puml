@@ -1,0 +1,12 @@
+@startuml
+map "User" as u {
+  name => Alice
+  role => admin
+}
+map "Permissions" as p {
+  read => true
+  write => true
+  delete => false
+}
+u::role --> p
+@enduml

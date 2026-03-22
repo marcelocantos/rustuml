@@ -1,0 +1,4 @@
+@startuml
+class Foo
+note right of Foo: {key: value, other: {nested: true}}
+@enduml

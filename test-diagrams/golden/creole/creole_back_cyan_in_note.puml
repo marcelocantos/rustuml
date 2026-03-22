@@ -1,0 +1,5 @@
+@startuml
+note as N
+  <back:cyan>cyan bg</back>
+end note
+@enduml

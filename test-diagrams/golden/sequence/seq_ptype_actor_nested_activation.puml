@@ -1,0 +1,9 @@
+@startuml
+actor Alice
+participant Bob
+participant Charlie
+Alice -> Bob ++ : call with actor
+Bob -> Charlie ++ : delegate
+Charlie --> Bob -- : result
+Bob --> Alice -- : done
+@enduml

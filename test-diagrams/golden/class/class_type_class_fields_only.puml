@@ -1,0 +1,7 @@
+@startuml
+class MyType {
+  +String name
+  -int age
+  #double score
+}
+@enduml

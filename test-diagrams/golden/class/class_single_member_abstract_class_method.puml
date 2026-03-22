@@ -1,0 +1,5 @@
+@startuml
+abstract class OneMember {
+  +void single()
+}
+@enduml

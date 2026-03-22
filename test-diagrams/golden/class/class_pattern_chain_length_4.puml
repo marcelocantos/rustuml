@@ -1,0 +1,18 @@
+@startuml
+class Request
+class Handler1 {
+  +void handle(Request r)
+}
+class Handler2 {
+  +void handle(Request r)
+}
+class Handler3 {
+  +void handle(Request r)
+}
+class Handler4 {
+  +void handle(Request r)
+}
+Handler1 --> Handler2 : next
+Handler2 --> Handler3 : next
+Handler3 --> Handler4 : next
+@enduml

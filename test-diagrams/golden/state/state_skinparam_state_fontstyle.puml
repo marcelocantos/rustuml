@@ -1,0 +1,8 @@
+@startuml
+skinparam state {
+  FontStyle bold
+}
+[*] --> A
+A --> B : event
+B --> [*]
+@enduml

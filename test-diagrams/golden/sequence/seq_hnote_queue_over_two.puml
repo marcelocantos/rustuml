@@ -1,0 +1,7 @@
+@startuml
+queue A
+queue B
+A -> B : hello
+hnote over A, B : hnote over two queues
+B --> A : hi
+@enduml

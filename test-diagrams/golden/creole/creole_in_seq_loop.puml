@@ -1,0 +1,5 @@
+@startuml
+loop 3 times
+  Alice -> Bob : **looping**
+end
+@enduml

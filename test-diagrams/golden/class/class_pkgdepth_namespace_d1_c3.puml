@@ -1,0 +1,7 @@
+@startuml
+namespace Pkg1 {
+      class C1 { +void m1() }
+      class C2 { +void m2() }
+      class C3 { +void m3() }
+}
+@enduml

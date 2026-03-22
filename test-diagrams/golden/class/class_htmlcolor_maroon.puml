@@ -1,0 +1,5 @@
+@startuml
+class ColorTest #Maroon {
+  +void method()
+}
+@enduml

@@ -1,0 +1,5 @@
+@startuml
+database Source
+node Target
+Source --> Target : AMQP
+@enduml

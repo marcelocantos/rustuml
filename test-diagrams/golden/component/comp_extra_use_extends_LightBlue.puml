@@ -1,0 +1,5 @@
+@startuml
+component Foo #LightBlue
+component Bar #LightBlue
+Foo ..> Bar : extends
+@enduml

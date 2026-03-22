@@ -1,0 +1,16 @@
+@startuml
+
+start
+repeat
+  :Step 1;
+  :Step 2;
+  if (ok?) then (yes)
+    break
+  endif
+backward
+  :Cleanup;
+  :Log failure;
+  :Reset state;
+repeatwhile (attempts?) is (yes)
+stop
+@enduml

@@ -1,0 +1,9 @@
+@startuml
+boundary Alice
+participant Bob
+participant Charlie
+Alice -> Bob ++ : call with boundary
+Bob -> Charlie ++ : delegate
+Charlie --> Bob -- : result
+Bob --> Alice -- : done
+@enduml

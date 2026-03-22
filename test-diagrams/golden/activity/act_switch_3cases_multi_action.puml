@@ -1,0 +1,18 @@
+@startuml
+start
+switch (val?)
+case (1)
+  :Init case 1;
+  :Process case 1;
+  :Finalize case 1;
+case (2)
+  :Init case 2;
+  :Process case 2;
+  :Finalize case 2;
+case (3)
+  :Init case 3;
+  :Process case 3;
+  :Finalize case 3;
+endswitch
+stop
+@enduml

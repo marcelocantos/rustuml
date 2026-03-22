@@ -1,0 +1,7 @@
+@startuml
+usecase Login
+usecase "Verify Credentials" as VC
+usecase "Remember Me" as RM
+Login ..> VC : include
+Login <.. RM : extend
+@enduml

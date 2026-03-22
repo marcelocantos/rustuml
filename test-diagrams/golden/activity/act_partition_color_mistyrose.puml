@@ -1,0 +1,9 @@
+@startuml
+
+start
+partition #mistyrose "Colored mistyrose" {
+  :Action in mistyrose partition;
+  :Another action;
+}
+stop
+@enduml

@@ -1,0 +1,6 @@
+@startuml
+class "**ControllerClass** <<controller>>" as C {
+  +**boldField**: String
+  +//italicMethod//(): void
+}
+@enduml

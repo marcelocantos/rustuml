@@ -1,0 +1,21 @@
+@startuml
+start
+fork
+  partition "Part 1" {
+    :Action 1;
+  }
+fork again
+  partition "Part 2" {
+    :Action 2;
+  }
+fork again
+  partition "Part 3" {
+    :Action 3;
+  }
+fork again
+  partition "Part 4" {
+    :Action 4;
+  }
+end fork
+stop
+@enduml

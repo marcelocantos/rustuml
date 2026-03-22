@@ -1,0 +1,5 @@
+@startuml
+state A #Crimson
+[*] --> A
+A --> [*]
+@enduml

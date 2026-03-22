@@ -1,0 +1,38 @@
+@startuml
+skinparam state {
+  BackgroundColor LightYellow
+  BorderColor DarkOrange
+}
+
+state "Start Processing" as SP
+state "Error State" as ES #red
+state choice1 <<choice>>
+state fork1 <<fork>>
+state join1 <<join>>
+
+note "Complex diagram" as N1
+
+[*] --> SP
+SP --> choice1 : analyze
+choice1 --> fork1 : [complex]
+choice1 --> Simple : [simple]
+
+fork1 --> Branch1 : fork
+fork1 --> Branch2 : fork
+Branch1 --> join1
+Branch2 --> join1
+join1 --> Done
+
+Simple --> Done : simplified
+
+SP --> ES : error
+ES --> SP : retry [count < 3]
+ES --> [*] : give up [count >= 3]
+
+note right of ES
+  Error handling state
+  with multi-line note
+end note
+
+Done --> [*]
+@enduml

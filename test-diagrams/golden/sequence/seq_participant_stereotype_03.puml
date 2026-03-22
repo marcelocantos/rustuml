@@ -1,0 +1,6 @@
+@startuml
+participant Alice <<legacy>>
+participant Bob <<legacy>>
+Alice -> Bob : hello
+Bob --> Alice : hi
+@enduml

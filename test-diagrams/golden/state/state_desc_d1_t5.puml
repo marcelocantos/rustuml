@@ -1,0 +1,6 @@
+@startuml
+state A : processing data
+[*] --> A
+A --> B : error detected
+B --> [*]
+@enduml

@@ -1,0 +1,9 @@
+@startuml
+autonumber
+A -> B : 1
+opt condition
+  B -> C : 2
+  C --> B : 3
+end
+B --> A : last
+@enduml

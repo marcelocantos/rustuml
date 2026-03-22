@@ -1,0 +1,22 @@
+@startuml
+
+start
+if (L1?) then (yes)
+  if (L2?) then (yes)
+    if (L3?) then (yes)
+      if (L4?) then (yes)
+        :All true;
+      else (no)
+        :L1 L2 L3 true, L4 false;
+      endif
+    else (no)
+      :L1 L2 true, L3 false;
+    endif
+  else (no)
+    :L1 true, L2 false;
+  endif
+else (no)
+  :L1 false;
+endif
+stop
+@enduml

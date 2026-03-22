@@ -1,0 +1,5 @@
+@startuml
+state A ##green
+[*] --> A
+A --> [*]
+@enduml

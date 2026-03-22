@@ -1,0 +1,6 @@
+@startuml
+skinparam SequenceLifeLineBorderColor red
+Alice -> Bob : hello
+note over Alice : note
+Bob --> Alice : hi
+@enduml

@@ -1,0 +1,7 @@
+@startuml
+A -> B : init
+critical cond
+  A --> B : dotted in critical
+  B --> A : ack
+end
+@enduml

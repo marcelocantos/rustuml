@@ -1,0 +1,10 @@
+@startmindmap
+* Root
+** Right 1
+*** Right 1.1
+** Right 2
+--
+** Left 1
+*** Left 1.1
+** Left 2
+@endmindmap

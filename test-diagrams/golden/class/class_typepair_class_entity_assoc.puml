@@ -1,0 +1,5 @@
+@startuml
+class TypeA
+entity TypeB
+TypeA --> TypeB
+@enduml

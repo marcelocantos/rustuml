@@ -1,0 +1,11 @@
+@startuml
+
+(*) --> "Start"
+if "condition" then
+  -->[yes] "True branch"
+  --> (*)
+else
+  -->[no] "False branch"
+  --> (*)
+endif
+@enduml

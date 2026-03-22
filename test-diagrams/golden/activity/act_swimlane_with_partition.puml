@@ -1,0 +1,12 @@
+@startuml
+
+partition "System" {
+  |Frontend|
+  start
+  :Render UI;
+  |Backend|
+  :Handle request;
+  |Frontend|
+  stop
+}
+@enduml

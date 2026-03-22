@@ -1,0 +1,7 @@
+@startuml
+autoactivate on
+Alice -> Bob : request
+Bob -> Charlie : delegate
+return charlie result
+return bob result
+@enduml

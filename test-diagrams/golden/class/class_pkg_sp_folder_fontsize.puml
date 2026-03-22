@@ -1,0 +1,10 @@
+@startuml
+skinparam FolderFontSize 14
+folder myPkg {
+  class A {
+    +void method()
+  }
+  class B
+  A --> B
+}
+@enduml

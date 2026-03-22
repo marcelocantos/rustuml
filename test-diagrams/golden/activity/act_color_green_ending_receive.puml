@@ -1,0 +1,6 @@
+@startuml
+
+start
+#green:Action with receive<
+stop
+@enduml

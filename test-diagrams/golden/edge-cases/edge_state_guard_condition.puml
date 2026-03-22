@@ -1,0 +1,6 @@
+@startuml
+[*] --> State1
+State1 --> State2 [x > 0]: positive
+State1 --> State3 [x < 0]: negative
+State1 --> State4 [x == 0]: zero
+@enduml

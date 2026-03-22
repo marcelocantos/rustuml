@@ -1,0 +1,8 @@
+@startuml
+participant Alice
+create control Temp
+Alice -> Temp ++ : init
+Temp -> Temp : setup
+Temp --> Alice -- : ready
+Alice -> Temp !! : use and destroy
+@enduml

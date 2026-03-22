@@ -1,0 +1,10 @@
+@startuml
+skinparam classArrowColor teal
+skinparam classArrowThickness 3
+class A
+class B
+class C
+A --> B : assoc
+B <|-- C : extends
+A ..> C : dep
+@enduml

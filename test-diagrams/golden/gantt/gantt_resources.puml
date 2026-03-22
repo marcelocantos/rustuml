@@ -1,0 +1,8 @@
+@startgantt
+[Task 1] on {Alice} lasts 5 days
+[Task 2] on {Bob} lasts 5 days
+[Task 3] on {Alice} lasts 3 days
+[Task 3] starts at [Task 1]'s end
+[Task 4] on {Bob} lasts 4 days
+[Task 4] starts at [Task 2]'s end
+@endgantt

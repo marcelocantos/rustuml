@@ -1,0 +1,26 @@
+@startuml
+state ep <<entryPoint>>
+state xp <<exitPoint>>
+state ip <<inputPin>>
+state op <<outputPin>>
+state ei <<expansionInput>>
+state eo <<expansionOutput>>
+state f <<fork>>
+state j <<join>>
+state c <<choice>>
+state H <<history>>
+
+[*] --> ep
+ep --> f
+f --> A
+f --> B
+A --> c
+c --> H : [cond]
+c --> xp : [!cond]
+H --> B
+B --> j
+j --> op
+op --> eo
+eo --> xp
+xp --> [*]
+@enduml

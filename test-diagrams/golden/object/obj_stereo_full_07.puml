@@ -1,0 +1,8 @@
+@startuml
+object MyObj <<factory>> #violet {
+  id = 7
+  type = "factory"
+  active = true
+}
+note right : Stereotype: factory
+@enduml

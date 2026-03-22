@@ -1,0 +1,7 @@
+@startuml
+annotation Column {
+  +String name()
+  +boolean nullable() default true
+  +int length() default 255
+}
+@enduml

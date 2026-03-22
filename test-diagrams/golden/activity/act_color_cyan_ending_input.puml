@@ -1,0 +1,6 @@
+@startuml
+
+start
+#cyan:Action with input/
+stop
+@enduml

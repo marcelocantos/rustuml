@@ -1,0 +1,5 @@
+@startuml
+node AppNode <<vm>>
+storage DataStore
+AppNode --> DataStore : AMQP
+@enduml

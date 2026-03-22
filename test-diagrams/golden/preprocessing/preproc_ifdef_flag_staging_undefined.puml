@@ -1,0 +1,13 @@
+@startuml
+!ifdef STAGING
+skinparam noteBackgroundColor LightGreen
+note as N
+  STAGING mode active
+end note
+!else
+note as N
+  STAGING mode inactive (not defined)
+end note
+!endif
+Alice -> Bob : staging undefined test
+@enduml

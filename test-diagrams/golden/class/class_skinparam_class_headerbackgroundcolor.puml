@@ -1,0 +1,11 @@
+@startuml
+skinparam ClassHeaderBackgroundColor #DDD
+class A {
+  +String field
+  +void method()
+}
+class B {
+  -int count
+}
+A --> B
+@enduml

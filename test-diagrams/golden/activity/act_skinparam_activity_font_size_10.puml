@@ -1,0 +1,15 @@
+@startuml
+
+skinparam activity {
+  FontSize 10
+}
+start
+:Action A;
+if (cond?) then (yes)
+  :Yes;
+else (no)
+  :No;
+endif
+:Action B;
+stop
+@enduml

@@ -1,0 +1,10 @@
+@startuml
+class MyClass
+note right of MyClass
+  **Features:**
+  * Feature 1
+  * Feature 2
+  //Italic note//
+  <b>Bold HTML</b>
+end note
+@enduml

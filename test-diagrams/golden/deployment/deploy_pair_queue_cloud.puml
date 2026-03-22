@@ -1,0 +1,5 @@
+@startuml
+queue Source
+cloud Target
+Source --> Target
+@enduml

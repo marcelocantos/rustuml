@@ -1,0 +1,10 @@
+@startuml
+interface MyType {
+  +void method()
+}
+note right of MyType
+  Multi-line note
+  about interface
+  type
+end note
+@enduml

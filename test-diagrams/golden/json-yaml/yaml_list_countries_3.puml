@@ -1,0 +1,7 @@
+@startyaml
+countries:
+  - USA
+  - UK
+  - France
+count: 3
+@endyaml

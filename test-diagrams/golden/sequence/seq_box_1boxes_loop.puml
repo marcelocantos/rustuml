@@ -1,0 +1,12 @@
+@startuml
+box "Box 1" #lightblue
+  participant B0A
+  participant B0B
+end box
+
+B0A -> B0B : internal 0
+
+loop cond
+  B0A -> B0B : loop action
+end
+@enduml

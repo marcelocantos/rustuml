@@ -1,0 +1,11 @@
+@startuml
+enum Status {
+  ACTIVE
+  INACTIVE
+  PENDING
+}
+class Factory {
+  +Status create()
+}
+Factory ..> Status
+@enduml

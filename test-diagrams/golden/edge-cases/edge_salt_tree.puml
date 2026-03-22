@@ -1,0 +1,10 @@
+@startsalt
+{
+  {T
+    + Root
+    ++ Child 1
+    +++ Grandchild
+    ++ Child 2
+  }
+}
+@endsalt

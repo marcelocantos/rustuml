@@ -1,0 +1,5 @@
+@startuml
+note as N
+  ~""not mono~""
+end note
+@enduml

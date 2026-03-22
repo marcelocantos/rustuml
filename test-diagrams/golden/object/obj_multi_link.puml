@@ -1,0 +1,7 @@
+@startuml
+object A
+object B
+A --> B : link1
+A ..> B : link2
+A --* B : link3
+@enduml

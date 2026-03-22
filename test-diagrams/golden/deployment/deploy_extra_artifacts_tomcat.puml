@@ -1,0 +1,7 @@
+@startuml
+node Server <<tomcat>> {
+  artifact "app.war" <<tomcat>>
+  artifact "config.xml"
+  file "logback.xml"
+}
+@enduml

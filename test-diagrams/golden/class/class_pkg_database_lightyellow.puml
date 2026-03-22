@@ -1,0 +1,7 @@
+@startuml
+database myPkg #lightyellow {
+  class MyClass {
+    +void method()
+  }
+}
+@enduml

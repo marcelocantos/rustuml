@@ -1,0 +1,11 @@
+@startgantt
+[Task Alice] on {Alice} lasts 7 days
+[Task Bob] on {Bob} lasts 8 days
+[Task Bob] starts at [Task Alice]'s end
+[Task Charlie] on {Charlie} lasts 9 days
+[Task Charlie] starts at [Task Bob]'s end
+[Task Dave] on {Dave} lasts 2 days
+[Task Dave] starts at [Task Charlie]'s end
+[Task Eve] on {Eve} lasts 3 days
+[Task Eve] starts at [Task Dave]'s end
+@endgantt

@@ -1,0 +1,6 @@
+@startuml
+state exp1 <<expansionOutput>>
+A --> exp1
+exp1 --> [*]
+[*] --> A
+@enduml

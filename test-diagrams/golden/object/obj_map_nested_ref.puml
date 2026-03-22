@@ -1,0 +1,17 @@
+@startuml
+map "Order" as o {
+  id => 12345
+  customer => Alice
+  total => 99.99
+}
+map "Customer" as c {
+  name => Alice
+  email => alice@example.com
+}
+map "Payment" as p {
+  method => credit_card
+  status => approved
+}
+o::customer --> c
+o --> p
+@enduml

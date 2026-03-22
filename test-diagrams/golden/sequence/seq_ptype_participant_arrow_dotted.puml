@@ -1,0 +1,6 @@
+@startuml
+participant Alice
+participant Bob
+Alice --> Bob : participant sends dotted
+Bob --> Alice : participant receives dotted
+@enduml

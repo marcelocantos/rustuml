@@ -1,0 +1,13 @@
+@startuml
+object Controller {
+  name = "controller"
+}
+object Service {
+  name = "service"
+}
+object Repository {
+  name = "repository"
+}
+Controller --> Service
+Service --> Repository
+@enduml

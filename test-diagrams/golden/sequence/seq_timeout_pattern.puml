@@ -1,0 +1,18 @@
+@startuml
+participant Client
+participant Server
+participant External
+
+Client -> Server ++ : request
+Server -> External ++ : call external
+
+alt timeout
+  ... 30 seconds ...
+  Server -> External : cancel
+  External --> Server -- : cancelled
+  Server --> Client -- : 504 Timeout
+else success
+  External --> Server -- : result
+  Server --> Client -- : 200 OK
+end
+@enduml

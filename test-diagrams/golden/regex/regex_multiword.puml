@@ -1,0 +1,3 @@
+@startregex
+\b\w+\s+\w+\b
+@endregex

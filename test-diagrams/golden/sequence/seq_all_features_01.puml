@@ -1,0 +1,62 @@
+@startuml
+!pragma teoz true
+autonumber "<b>(##)</b>"
+hide footbox
+
+box "Frontend" #E3F2FD
+  actor "End User" as User
+  boundary Browser
+end box
+box "API" #E8F5E9
+  control APIGateway <<service>>
+  control AuthService <<service>>
+end box
+box "Data" #FFF3E0
+  entity UserService <<entity>>
+  database MainDB
+  collections Cache <<cache>>
+end box
+
+title System Interaction Diagram
+header v1.0 | Confidential
+footer Page %page%
+
+User -> Browser ++ : navigate
+Browser -> APIGateway ++ : GET /app
+APIGateway -> AuthService ++ : check auth
+AuthService -> MainDB ++ : lookup session
+MainDB --> AuthService -- : session data
+AuthService --> APIGateway -- : authenticated
+
+alt authorized
+  note over APIGateway : authorized path
+  APIGateway -> UserService ++ : get user data
+
+  opt use cache
+    UserService -> Cache ++ : lookup
+    alt cache hit
+      Cache --> UserService -- : data
+    else miss
+      Cache --> UserService -- : nil
+      UserService -> MainDB ++ : query
+      MainDB --> UserService -- : user row
+      UserService -> Cache ++ : store
+      Cache --> UserService -- : ok
+    end
+  end
+
+  loop for each permission
+    UserService -> MainDB ++ : check perm
+    MainDB --> UserService -- : perm ok
+  end
+
+  UserService --> APIGateway -- : user+perms
+  APIGateway --> Browser -- : 200 + data
+  Browser --> User -- : show dashboard
+
+else unauthorized
+  note right of APIGateway : unauthorized path
+  APIGateway --> Browser -- : 403
+  Browser --> User -- : show login
+end
+@enduml

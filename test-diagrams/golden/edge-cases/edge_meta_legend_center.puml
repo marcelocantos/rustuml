@@ -1,0 +1,6 @@
+@startuml
+legend center
+  Centered legend
+endlegend
+class Foo
+@enduml

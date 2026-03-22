@@ -1,0 +1,5 @@
+@startuml
+component A
+component B
+A -(0 B
+@enduml

@@ -1,0 +1,8 @@
+@startuml
+note as N
+  <code>
+  int x = 42;
+  printf("%d\n", x);
+  </code>
+end note
+@enduml

@@ -1,0 +1,4 @@
+@startuml
+Alice -> Bob : <font face='Courier'>font face</font>
+note right : <font face='Courier'>font face</font>
+@enduml

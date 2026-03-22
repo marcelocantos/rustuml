@@ -1,0 +1,12 @@
+@startuml
+
+start
+repeat
+  :Try action;
+  if (succeeded?) then (yes)
+    break
+  endif
+  :Handle failure;
+repeatwhile (retry?) is (yes)
+stop
+@enduml

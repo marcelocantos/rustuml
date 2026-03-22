@@ -1,0 +1,5 @@
+@startuml
+!theme sandstone
+Alice -> Bob : hello
+Bob --> Alice : world
+@enduml

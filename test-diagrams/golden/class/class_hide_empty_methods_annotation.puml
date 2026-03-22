@@ -1,0 +1,7 @@
+@startuml
+hide empty methods
+annotation MyType {
+  +String field
+  +void method()
+}
+@enduml

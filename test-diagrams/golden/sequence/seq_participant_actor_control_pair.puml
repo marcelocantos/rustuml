@@ -1,0 +1,6 @@
+@startuml
+actor A
+control B
+A -> B : request
+B --> A : response
+@enduml

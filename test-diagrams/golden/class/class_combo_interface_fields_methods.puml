@@ -1,0 +1,9 @@
+@startuml
+interface Combo {
+  +String name
+  -int count
+  --
+  +void process()
+  -String format()
+}
+@enduml

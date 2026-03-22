@@ -1,0 +1,6 @@
+@startuml
+set namespaceSeparator none
+class A.B.C
+class A.B.D
+A.B.C --> A.B.D
+@enduml

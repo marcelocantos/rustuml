@@ -1,0 +1,8 @@
+@startuml
+note as N1
+  | Col1 | Col2 | Col3 |
+  |------|------|------|
+  | A    | B    | C    |
+  | D    | E    | F    |
+end note
+@enduml

@@ -1,0 +1,13 @@
+@startuml
+object Obj15A <<entity>> #pink {
+  id = 15
+  name = "obj15a"
+  active = true
+}
+object Obj15B #cyan {
+  ref = 15
+  label = "obj15b"
+}
+Obj15A --> Obj15B : "ref_15"
+note right of Obj15A : Object variant 15
+@enduml

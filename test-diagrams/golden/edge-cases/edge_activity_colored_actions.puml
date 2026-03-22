@@ -1,0 +1,8 @@
+@startuml
+start
+:red action; #red
+:blue action; #blue
+:green action; #lightgreen
+:yellow action; #yellow
+stop
+@enduml

@@ -1,0 +1,9 @@
+@startuml
+start
+repeat
+  while (inner?) is (yes)
+    :action;
+  endwhile
+repeatwhile (outer?)
+stop
+@enduml

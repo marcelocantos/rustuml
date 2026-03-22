@@ -1,0 +1,7 @@
+@startuml
+class "com.example.Class" {
+  +void method()
+}
+class Other
+"com.example.Class" --> Other
+@enduml

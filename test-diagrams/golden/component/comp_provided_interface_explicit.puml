@@ -1,0 +1,7 @@
+@startuml
+component ServiceA
+component ServiceB
+interface IService
+ServiceA --( IService : provides
+ServiceB --> IService : requires
+@enduml

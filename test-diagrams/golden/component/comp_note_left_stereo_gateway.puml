@@ -1,0 +1,4 @@
+@startuml
+component MyComp <<gateway>> #LightBlue
+note left of MyComp : Note on gateway
+@enduml

@@ -1,0 +1,19 @@
+@startuml
+state Outer {
+  state Level1 {
+    state Level2 {
+      state H <<history>>
+      [*] --> H
+      H --> X
+      X --> Y
+      Y --> X
+    }
+    [*] --> Level2
+    Level2 --> [*]
+  }
+  [*] --> Level1
+  Level1 --> [*]
+}
+[*] --> Outer
+Outer --> [*]
+@enduml

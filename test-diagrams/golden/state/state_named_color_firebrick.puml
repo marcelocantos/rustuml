@@ -1,0 +1,5 @@
+@startuml
+state A #FireBrick
+[*] --> A
+A --> [*]
+@enduml

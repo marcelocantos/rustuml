@@ -1,0 +1,11 @@
+@startuml
+class Animal {
+  +String name
+  +void breathe()
+}
+class Dog {
+  +String breed
+  +void bark()
+}
+Animal <|-- Dog
+@enduml

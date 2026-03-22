@@ -1,0 +1,3 @@
+@startuml
+A <- B: reverse solid
+@enduml

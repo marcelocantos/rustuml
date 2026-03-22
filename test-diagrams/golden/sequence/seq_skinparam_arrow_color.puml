@@ -1,0 +1,5 @@
+@startuml
+skinparam SequenceArrowColor red
+Alice -> Bob : hello
+Bob --> Alice : hi
+@enduml

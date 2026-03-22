@@ -1,0 +1,11 @@
+@startuml
+agent MobileApp
+boundary APIGateway
+control BusinessLogic
+entity DataStore
+collections EventLog
+MobileApp --> APIGateway : HTTPS
+APIGateway --> BusinessLogic : internal
+BusinessLogic --> DataStore : persist
+BusinessLogic --> EventLog : audit
+@enduml

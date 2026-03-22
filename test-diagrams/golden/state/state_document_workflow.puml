@@ -1,0 +1,11 @@
+@startuml
+[*] --> Draft
+Draft --> Review : submit for review
+Review --> Draft : needs revision
+Review --> Approved : approve
+Review --> Rejected : reject
+Approved --> Published : publish
+Published --> Archived : archive
+Rejected --> [*]
+Archived --> [*]
+@enduml

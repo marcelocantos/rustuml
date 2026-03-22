@@ -1,0 +1,26 @@
+@startuml
+interface Iterator<T> {
+  +boolean hasNext()
+  +T next()
+  +void remove()
+}
+interface Iterable<T> {
+  +Iterator<T> iterator()
+}
+class ConcreteIterator<T> {
+  -collection: ConcreteCollection<T>
+  -index: int
+  +boolean hasNext()
+  +T next()
+  +void remove()
+}
+class ConcreteCollection<T> {
+  -items: T[]
+  +Iterator<T> iterator()
+  +void add(T item)
+  +int size()
+}
+ConcreteIterator ..|> Iterator
+ConcreteCollection ..|> Iterable
+ConcreteIterator --> ConcreteCollection
+@enduml

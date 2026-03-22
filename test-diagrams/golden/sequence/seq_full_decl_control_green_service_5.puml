@@ -1,0 +1,6 @@
+@startuml
+control "Name" as N #green <<service>> order 5
+participant Other
+N -> Other : call
+Other --> N : reply
+@enduml

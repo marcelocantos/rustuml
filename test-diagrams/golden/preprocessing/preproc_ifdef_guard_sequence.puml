@@ -1,0 +1,8 @@
+@startuml
+!define RENDER_SEQUENCE
+
+!ifdef RENDER_SEQUENCE
+Alice -> Bob : guarded
+Bob --> Alice : reply
+!endif
+@enduml

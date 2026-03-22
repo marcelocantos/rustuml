@@ -1,0 +1,5 @@
+@startuml
+note as N
+  text with some Arabic: مرحبا
+end note
+@enduml

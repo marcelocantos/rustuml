@@ -1,0 +1,11 @@
+@startuml
+database Inner {
+  class InnerClass {
+    +void method()
+  }
+}
+class OuterClass {
+  +void method()
+}
+InnerClass --> OuterClass
+@enduml

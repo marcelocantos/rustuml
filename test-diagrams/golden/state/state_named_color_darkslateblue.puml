@@ -1,0 +1,5 @@
+@startuml
+state A #DarkSlateBlue
+[*] --> A
+A --> [*]
+@enduml

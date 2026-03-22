@@ -1,0 +1,9 @@
+@startuml
+participant "Ünïcödé"
+participant "日本語テスト"
+participant "中文测试"
+participant "한국어"
+participant "العربية"
+"Ünïcödé" -> "日本語テスト" : unicode msg
+"日本語テスト" --> "Ünïcödé" : 返事
+@enduml

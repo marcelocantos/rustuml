@@ -1,0 +1,17 @@
+@startuml
+class PageClass1A
+class PageClass1B
+PageClass1A --> PageClass1B
+newpage
+class PageClass2A
+class PageClass2B
+PageClass2A --> PageClass2B
+newpage
+class PageClass3A
+class PageClass3B
+PageClass3A --> PageClass3B
+newpage
+class PageClass4A
+class PageClass4B
+PageClass4A --> PageClass4B
+@enduml

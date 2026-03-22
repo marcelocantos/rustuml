@@ -1,0 +1,8 @@
+@startuml
+component A
+component B
+component C
+A --> B : calls
+B ..> C : delegates
+A -- C : associates
+@enduml

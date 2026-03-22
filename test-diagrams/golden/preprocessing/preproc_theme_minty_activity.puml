@@ -1,0 +1,7 @@
+@startuml
+!theme minty
+start
+:step one;
+:step two;
+stop
+@enduml

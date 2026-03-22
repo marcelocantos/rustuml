@@ -1,0 +1,3 @@
+@startuml
+Alice -> Bob: 100\%
+@enduml

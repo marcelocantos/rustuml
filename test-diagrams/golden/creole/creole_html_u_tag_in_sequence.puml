@@ -1,0 +1,4 @@
+@startuml
+Alice -> Bob : <u>underline u tag</u>
+note right : <u>underline u tag</u>
+@enduml

@@ -1,0 +1,6 @@
+@startuml
+
+(*) --> #red "Red action"
+#red "Red action" --> #blue "Blue action"
+#blue "Blue action" --> (*)
+@enduml

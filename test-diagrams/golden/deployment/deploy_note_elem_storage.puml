@@ -1,0 +1,4 @@
+@startuml
+storage MyElem
+note right of MyElem : Note on storage
+@enduml

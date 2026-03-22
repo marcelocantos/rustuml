@@ -1,0 +1,11 @@
+@startmindmap
+*[#lightblue] Root 8
+**[#red] Node d2
+***[#blue] Node d3
+****[#green] Node d4
+*****[#yellow] Node d5
+** Extra right
+***_ No box
+-- Left branch
+---[#blue] Colored left
+@endmindmap

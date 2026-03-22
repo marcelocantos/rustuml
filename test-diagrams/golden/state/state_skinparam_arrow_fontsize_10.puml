@@ -1,0 +1,6 @@
+@startuml
+skinparam ArrowFontSize 10
+[*] --> A
+A --> B : event
+B --> [*]
+@enduml

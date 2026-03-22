@@ -1,0 +1,5 @@
+@startuml
+!theme slate
+Alice -> Bob : hello
+Bob --> Alice : world
+@enduml

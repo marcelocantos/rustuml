@@ -1,0 +1,10 @@
+@startuml
+class Class748 {
+  field: **//bi//**
+  method748(): void
+}
+class Class748b {
+  info: String
+}
+Class748 --> Class748b : **//bi//**
+@enduml

@@ -1,0 +1,6 @@
+@startuml
+participant "ユーザー" as U
+participant "システム" as S
+U -> S: 日本語テスト
+S --> U: データ
+@enduml

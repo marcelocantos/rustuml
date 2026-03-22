@@ -1,0 +1,26 @@
+@startuml
+!define PROD
+!define SECURE
+
+!ifdef PROD
+  !ifdef SECURE
+    note as N
+      Both PROD and SECURE active
+    end note
+  !else
+    note as N
+      Only PROD active
+    end note
+  !endif
+!else
+  !ifdef SECURE
+    note as N
+      Only SECURE active
+    end note
+  !else
+    note as N
+      Neither active
+    end note
+  !endif
+!endif
+@enduml

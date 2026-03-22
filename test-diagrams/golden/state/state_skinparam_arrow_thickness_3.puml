@@ -1,0 +1,6 @@
+@startuml
+skinparam ArrowThickness 3
+[*] --> A
+A --> B : event
+B --> [*]
+@enduml

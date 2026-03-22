@@ -1,0 +1,9 @@
+@startuml
+skinparam state<<important>> {
+  BackgroundColor OrangeRed
+  FontColor White
+}
+state A <<important>>
+[*] --> A
+A --> [*]
+@enduml

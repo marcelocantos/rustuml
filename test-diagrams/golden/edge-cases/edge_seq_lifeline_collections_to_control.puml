@@ -1,0 +1,5 @@
+@startuml
+collections Col1
+control C2
+Col1 -> C2: message
+@enduml

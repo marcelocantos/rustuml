@@ -1,0 +1,10 @@
+@startuml
+skinparam PackageBorderColor red
+package myPkg {
+  class A {
+    +void method()
+  }
+  class B
+  A --> B
+}
+@enduml

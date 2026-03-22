@@ -1,0 +1,14 @@
+@startuml
+enum Status {
+  ACTIVE
+  INACTIVE
+  PENDING
+}
+enum Status {
+  ACTIVE = 1
+  INACTIVE = 2
+  PENDING = 3
+}
+class Entity
+Entity --> Status
+@enduml

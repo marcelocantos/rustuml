@@ -1,0 +1,9 @@
+@startuml
+
+start
+repeat
+  :Attempt action;
+  :Check result;
+repeatwhile (deadline not reached?) is (yes)
+stop
+@enduml

@@ -1,0 +1,10 @@
+@startuml
+
+start
+if (Is the total amount greater than the configured threshold value?) then (yes)
+  :Positive path action;
+else (no)
+  :Negative path action;
+endif
+stop
+@enduml

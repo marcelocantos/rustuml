@@ -1,0 +1,7 @@
+@startuml
+
+start
+#lavender:Colored action;
+:Normal action;
+stop
+@enduml

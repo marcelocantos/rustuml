@@ -1,0 +1,16 @@
+@startuml
+|L1|
+start
+fork
+  :P1;
+fork again
+  :P2;
+end fork
+|L2|
+fork
+  :P1;
+fork again
+  :P2;
+end fork
+stop
+@enduml

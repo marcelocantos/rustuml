@@ -1,0 +1,11 @@
+@startuml
+actor A1 <<system>>
+actor A2 <<system>>
+actor A3 <<system>>
+usecase UC1
+usecase UC2
+usecase UC3
+A1 --> UC1
+A2 --> UC2
+A3 --> UC3
+@enduml

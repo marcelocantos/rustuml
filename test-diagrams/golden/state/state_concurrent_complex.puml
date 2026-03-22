@@ -1,0 +1,18 @@
+@startuml
+state Processing {
+  [*] --> Parsing
+  Parsing --> Validated
+  Validated --> [*]
+  --
+  [*] --> Logging
+  Logging --> LogDone
+  LogDone --> [*]
+  --
+  [*] --> Auditing
+  Auditing --> AuditDone
+  AuditDone --> [*]
+}
+[*] --> Processing
+Processing --> Done
+Done --> [*]
+@enduml

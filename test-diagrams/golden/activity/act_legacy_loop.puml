@@ -1,0 +1,12 @@
+@startuml
+
+(*) --> "Initialize"
+"Initialize" --> "Check condition"
+if "condition ok?" then
+  -->[yes] "Process"
+  --> "Check condition"
+else
+  -->[no] "Finalize"
+  --> (*)
+endif
+@enduml

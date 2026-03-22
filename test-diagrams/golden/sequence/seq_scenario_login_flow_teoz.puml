@@ -1,0 +1,20 @@
+@startuml
+!pragma teoz true
+actor User
+participant App
+participant AuthServer
+database UserDB
+
+User -> App : enter credentials
+App -> AuthServer ++ : POST /login
+AuthServer -> UserDB ++ : verify user
+UserDB --> AuthServer -- : user found
+AuthServer -> AuthServer : check password
+alt valid password
+  AuthServer --> App -- : JWT token
+  App --> User : logged in
+else invalid
+  AuthServer --> App -- : 401
+  App --> User : login failed
+end
+@enduml

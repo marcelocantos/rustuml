@@ -1,0 +1,6 @@
+@startuml
+participant "actor"
+participant "note"
+participant "group"
+"actor" -> "note": message
+@enduml

@@ -1,0 +1,7 @@
+@startuml
+node Server <<spring>> {
+  artifact "app.war" <<spring>>
+  artifact "config.xml"
+  file "logback.xml"
+}
+@enduml

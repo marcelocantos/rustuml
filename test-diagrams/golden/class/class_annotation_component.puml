@@ -1,0 +1,5 @@
+@startuml
+annotation Component {
+  +String value() default ""
+}
+@enduml

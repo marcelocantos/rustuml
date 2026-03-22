@@ -1,0 +1,11 @@
+@startuml
+state Composite {
+  state H* <<deepHistory>>
+  [*] --> H*
+  H* --> A
+  A --> B
+  B --> A
+}
+[*] --> Composite
+Composite --> [*]
+@enduml

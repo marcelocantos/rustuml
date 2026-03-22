@@ -1,0 +1,25 @@
+@startuml
+start
+fork
+  :Branch 1 Action 1;
+  :Branch 1 Action 2;
+  :Branch 1 Action 3;
+  :Branch 1 Action 4;
+fork again
+  :Branch 2 Action 1;
+  :Branch 2 Action 2;
+  :Branch 2 Action 3;
+  :Branch 2 Action 4;
+fork again
+  :Branch 3 Action 1;
+  :Branch 3 Action 2;
+  :Branch 3 Action 3;
+  :Branch 3 Action 4;
+fork again
+  :Branch 4 Action 1;
+  :Branch 4 Action 2;
+  :Branch 4 Action 3;
+  :Branch 4 Action 4;
+end fork
+stop
+@enduml

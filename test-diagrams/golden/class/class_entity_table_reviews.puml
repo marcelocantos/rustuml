@@ -1,0 +1,11 @@
+@startuml
+entity reviews {
+  *review_id : INT
+  --
+  user_id : INT
+  product_id : INT
+  rating : TINYINT
+  comment : TEXT
+  created_at : TIMESTAMP
+}
+@enduml

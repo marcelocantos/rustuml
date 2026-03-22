@@ -1,0 +1,4 @@
+@startuml
+Alice -> Bob : α β γ δ ε ζ η θ
+note right : α β γ δ ε ζ η θ
+@enduml

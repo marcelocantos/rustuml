@@ -1,0 +1,10 @@
+@startuml
+Alice -> Bob : request
+alt success
+  note over Bob : processing
+  Bob --> Alice : ok
+else failure
+  note right of Bob : error occurred
+  Bob --> Alice : error
+end
+@enduml

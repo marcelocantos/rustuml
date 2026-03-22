@@ -1,0 +1,47 @@
+@startuml
+
+title Restaurant Order Flow
+|Customer|
+start
+:View menu;
+:Place order;
+
+|Waiter|
+:Receive order;
+:Submit to kitchen;
+
+|Kitchen|
+fork
+  :Prepare starter;
+fork again
+  :Prepare main;
+fork again
+  :Prepare drinks;
+end fork
+:Notify ready;
+
+|Waiter|
+:Serve food;
+
+|Customer|
+:Eat;
+:Request bill;
+
+|Waiter|
+:Prepare bill;
+
+|Customer|
+if (pay cash?) then (yes)
+  :Pay cash;
+  |Waiter|
+  :Process cash;
+else (card)
+  :Pay by card;
+  |Waiter|
+  :Process card payment;
+endif
+
+|Customer|
+:Leave;
+stop
+@enduml

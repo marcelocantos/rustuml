@@ -1,0 +1,11 @@
+@startuml
+!define ENV_DEV
+
+!ifdef ENV_DEV
+skinparam backgroundColor LightYellow
+skinparam noteBackgroundColor LightYellow
+!endif
+
+title Environment: dev
+Alice -> Bob : deployed to dev
+@enduml

@@ -1,0 +1,16 @@
+@startuml
+box "Frontend" #lightblue
+  actor User
+  participant Browser
+end box
+box "Backend" #lightyellow
+  participant API
+  database DB
+end box
+User -> Browser : click
+Browser -> API : request
+API -> DB : query
+DB --> API : data
+API --> Browser : response
+Browser --> User : display
+@enduml

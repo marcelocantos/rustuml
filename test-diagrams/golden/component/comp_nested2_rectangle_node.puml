@@ -1,0 +1,11 @@
+@startuml
+rectangle Outer {
+  node Inner {
+    component Alpha
+    component Beta
+    Alpha --> Beta
+  }
+  component Gamma
+  Inner --> Gamma
+}
+@enduml

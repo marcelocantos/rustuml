@@ -1,0 +1,10 @@
+@startuml
+
+skinparam activityArrowColor red
+skinparam activityArrowFontColor blue
+start
+:A;
+:B;
+:C;
+stop
+@enduml

@@ -1,0 +1,26 @@
+@startuml
+map "Map0_6" as m0_6 {
+  field0 => val0_0
+  field1 => val0_1
+  field2 => val0_2
+}
+map "Map1_6" as m1_6 {
+  field0 => val1_0
+  field1 => val1_1
+  field2 => val1_2
+}
+map "Map2_6" as m2_6 {
+  field0 => val2_0
+  field1 => val2_1
+  field2 => val2_2
+}
+map "Map3_6" as m3_6 {
+  field0 => val3_0
+  field1 => val3_1
+  field2 => val3_2
+}
+
+m0_6 --> m1_6
+m1_6 --> m2_6
+m2_6 --> m3_6
+@enduml

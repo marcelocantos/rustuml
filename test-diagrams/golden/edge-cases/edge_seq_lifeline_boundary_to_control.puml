@@ -1,0 +1,5 @@
+@startuml
+boundary B1
+control C2
+B1 -> C2: message
+@enduml

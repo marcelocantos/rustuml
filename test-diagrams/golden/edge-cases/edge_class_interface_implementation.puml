@@ -1,0 +1,13 @@
+@startuml
+interface Printable {
+  print(): void
+}
+interface Serializable {
+  serialize(): String
+}
+class Document implements Printable, Serializable {
+  content: String
+  print(): void
+  serialize(): String
+}
+@enduml

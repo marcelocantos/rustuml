@@ -1,0 +1,6 @@
+@startuml
+skinparam defaultFontName Arial
+Alice -> Bob : hello
+Bob --> Alice : world
+note right : note
+@enduml

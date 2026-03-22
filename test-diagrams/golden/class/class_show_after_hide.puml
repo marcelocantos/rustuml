@@ -1,0 +1,8 @@
+@startuml
+hide empty members
+class A {
+  +void method()
+}
+class B
+show B
+@enduml

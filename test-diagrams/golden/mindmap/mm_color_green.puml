@@ -1,0 +1,6 @@
+@startmindmap
+*[#green] Root
+**[#green] Child A
+**[#white] Child B
+*** Grandchild
+@endmindmap

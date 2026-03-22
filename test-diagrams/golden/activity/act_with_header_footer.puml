@@ -1,0 +1,12 @@
+@startuml
+
+header
+  My Organization - Confidential
+end header
+footer
+  Page %page% of %lastpage%
+end footer
+start
+:Action;
+stop
+@enduml

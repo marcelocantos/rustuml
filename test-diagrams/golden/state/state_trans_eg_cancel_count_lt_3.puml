@@ -1,0 +1,5 @@
+@startuml
+[*] --> A
+A --> B : cancel [count < 3]
+B --> [*]
+@enduml

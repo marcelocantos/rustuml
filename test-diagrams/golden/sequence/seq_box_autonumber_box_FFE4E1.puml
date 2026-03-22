@@ -1,0 +1,14 @@
+@startuml
+autonumber
+box "Service A" #FFE4E1
+  participant Alice
+  participant Bob
+end box
+box "Service B"
+  participant Charlie
+end box
+Alice -> Bob : 1
+Bob -> Charlie : 2
+Charlie --> Bob : 3
+Bob --> Alice : 4
+@enduml

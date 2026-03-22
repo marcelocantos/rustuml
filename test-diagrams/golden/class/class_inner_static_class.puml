@@ -1,0 +1,10 @@
+@startuml
+class Outer {
+  {static} class StaticNested {
+    +void method()
+  }
+  class NonStaticInner {
+    +void method()
+  }
+}
+@enduml

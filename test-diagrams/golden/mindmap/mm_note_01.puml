@@ -1,0 +1,10 @@
+@startmindmap
+* Root Topic 1
+** Branch A
+*** Leaf A1
+*** Leaf A2
+** Branch B
+*** Leaf B1
+-- Left A
+--- Left A1
+@endmindmap

@@ -1,0 +1,6 @@
+@startuml
+actor User #LightGreen
+usecase "Main Action" #LightGreen
+note bottom of "Main Action" : Description
+User --> (Main Action)
+@enduml

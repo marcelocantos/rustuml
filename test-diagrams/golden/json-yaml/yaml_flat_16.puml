@@ -1,0 +1,5 @@
+@startyaml
+key0: value0
+key1: value1
+key2: value2
+@endyaml

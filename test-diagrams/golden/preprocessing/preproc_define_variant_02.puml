@@ -1,0 +1,9 @@
+@startuml
+!define VARIANT 2
+!define LABEL "Variant VARIANT"
+
+class Class2 {
+  variant: int = VARIANT
+  label: String = LABEL
+}
+@enduml

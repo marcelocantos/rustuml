@@ -1,0 +1,11 @@
+@startuml
+start
+:Pre 1;
+:Pre 2;
+while (l?) is (yes)
+  :W;
+endwhile
+:Post 1;
+:Post 2;
+stop
+@enduml

@@ -1,0 +1,5 @@
+@startuml
+autonumber "<b>Step #"
+Alice -> Bob: first
+Bob --> Alice: second
+@enduml

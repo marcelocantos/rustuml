@@ -1,0 +1,5 @@
+@startuml
+class Variant {
+  {static} +String CONST
+}
+@enduml

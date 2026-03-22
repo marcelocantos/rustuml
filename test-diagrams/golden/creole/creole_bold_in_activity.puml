@@ -1,0 +1,4 @@
+@startuml
+:**//** bold italic label//;
+:**bold activity label**;
+@enduml

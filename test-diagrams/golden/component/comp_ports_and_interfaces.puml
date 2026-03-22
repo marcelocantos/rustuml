@@ -1,0 +1,12 @@
+@startuml
+component Server {
+  portin HTTP_IN
+  portout HTTP_OUT
+  interface IAdminAPI
+}
+component Client
+component AdminTool
+Client --> Server::HTTP_IN
+Server::HTTP_OUT --> Client
+AdminTool --> Server::IAdminAPI
+@enduml

@@ -1,0 +1,8 @@
+@startuml
+skinparam queue {
+  BackgroundColor LightBlue
+}
+queue MyElem
+node AppServer
+AppServer --> MyElem
+@enduml

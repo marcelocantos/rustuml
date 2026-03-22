@@ -1,0 +1,8 @@
+@startuml
+group myGroup
+' comment inside group
+Alice -> Bob: hello
+' another comment
+Bob --> Alice: hi
+end
+@enduml

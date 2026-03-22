@@ -1,0 +1,6 @@
+@startuml
+class Parent
+class Child
+Parent <|-- Child
+note on link : Relationship note
+@enduml

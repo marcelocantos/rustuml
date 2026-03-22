@@ -1,0 +1,6 @@
+@startuml
+class my_class {
+  my_field: String
+  my_method(): void
+}
+@enduml

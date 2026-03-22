@@ -1,0 +1,11 @@
+@startuml
+
+skinparam activity {
+  BackgroundColor lightyellow
+  BorderColor darkblue
+  FontName Arial
+}
+start
+:Action;
+stop
+@enduml

@@ -1,0 +1,13 @@
+@startuml
+object Obj13A <<database>> #yellow {
+  id = 13
+  name = "obj13a"
+  active = true
+}
+object Obj13B #orange {
+  ref = 13
+  label = "obj13b"
+}
+Obj13A --> Obj13B : "ref_13"
+note right of Obj13A : Object variant 13
+@enduml

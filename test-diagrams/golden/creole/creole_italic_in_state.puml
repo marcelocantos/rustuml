@@ -1,0 +1,4 @@
+@startuml
+state "//ItalicState//" as S
+[*] --> S
+@enduml

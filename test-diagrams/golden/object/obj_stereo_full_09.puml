@@ -1,0 +1,8 @@
+@startuml
+object MyObj <<strategy>> #lightgreen {
+  id = 9
+  type = "strategy"
+  active = true
+}
+note right : Stereotype: strategy
+@enduml

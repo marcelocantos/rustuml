@@ -1,0 +1,4 @@
+@startuml
+Alice -> Bob : <b>bold b tag</b>
+note right : <b>bold b tag</b>
+@enduml

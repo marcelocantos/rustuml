@@ -1,0 +1,12 @@
+@startuml
+
+start
+while (loop?) is (yes)
+  :Action 1;
+  :Action 2;
+  :Action 3;
+  :Action 4;
+  :Action 5;
+endwhile
+stop
+@enduml

@@ -1,0 +1,18 @@
+@startuml
+enum Planet {
+  MERCURY
+  VENUS
+  EARTH
+  MARS
+  JUPITER
+  SATURN
+  URANUS
+  NEPTUNE
+  == Properties ==
+  +double mass
+  +double radius
+  -- Methods --
+  +double surfaceGravity()
+  +double surfaceWeight(double otherMass)
+}
+@enduml

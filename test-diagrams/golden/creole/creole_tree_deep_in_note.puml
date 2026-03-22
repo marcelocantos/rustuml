@@ -1,0 +1,8 @@
+@startuml
+note as N
+  |_ level1
+  |__ level2
+  |___ level3
+  |____ level4
+end note
+@enduml

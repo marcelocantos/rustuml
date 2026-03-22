@@ -1,0 +1,5 @@
+@startuml
+Alice -> Bob : hello
+ref over Bob : internal ref
+Bob --> Alice : hi
+@enduml

@@ -1,0 +1,18 @@
+@startuml
+Alice -> Alice : bootstrap
+create Bob
+Alice -> Bob : init Bob
+create Charlie
+Bob -> Charlie : init Charlie
+create Dave
+Charlie -> Dave : init Dave
+Dave --> Charlie : ready
+Charlie --> Bob : ready
+Bob --> Alice : all ready
+
+Alice -> Dave : do work
+Dave --> Alice : done
+destroy Dave
+destroy Charlie
+destroy Bob
+@enduml

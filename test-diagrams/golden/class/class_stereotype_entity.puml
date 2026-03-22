@@ -1,0 +1,6 @@
+@startuml
+class MyClass <<entity>> {
+  -instance: MyClass
+  +getInstance(): MyClass
+}
+@enduml

@@ -1,0 +1,7 @@
+@startuml
+control A
+participant B
+A -> B : hello
+note over A : note over control
+B --> A : hi
+@enduml

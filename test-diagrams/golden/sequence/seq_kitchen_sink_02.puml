@@ -1,0 +1,34 @@
+@startuml
+participant Producer as P
+participant "Message Bus" as MB <<queue>>
+participant Consumer1 as C1
+participant Consumer2 as C2
+participant "Dead Letter Queue" as DLQ <<queue>>
+
+title Async Message Processing
+
+P -> MB : publish(msg1)
+P -> MB : publish(msg2)
+P -> MB : publish(msg3)
+
+par
+  MB -> C1 ++ : deliver msg1
+  alt processed OK
+    C1 -> C1 : process
+    C1 --> MB -- : ack
+  else processing failed
+    C1 --> MB -- : nack
+    MB -> DLQ : move to DLQ
+  end
+and
+  MB -> C2 ++ : deliver msg2
+  C2 -> C2 : process
+  C2 --> MB -- : ack
+and
+  MB -> C2 ++ : deliver msg3
+  C2 --> MB -- : nack
+  MB -> DLQ : dead letter
+end
+
+note over DLQ : 1 message in DLQ
+@enduml

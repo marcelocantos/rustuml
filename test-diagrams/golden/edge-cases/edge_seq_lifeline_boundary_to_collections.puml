@@ -1,0 +1,5 @@
+@startuml
+boundary B1
+collections Col2
+B1 -> Col2: message
+@enduml

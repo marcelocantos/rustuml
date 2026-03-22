@@ -1,0 +1,6 @@
+@startuml
+skinparam defaultTextAlignment center
+[*] --> A
+A --> B : event
+B --> [*]
+@enduml

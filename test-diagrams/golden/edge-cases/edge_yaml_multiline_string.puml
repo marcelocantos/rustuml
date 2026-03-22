@@ -1,0 +1,11 @@
+@startuml
+@startyaml
+description: |
+  This is a
+  multi-line string
+  with several lines
+content: >
+  This is a folded
+  string value
+@endyaml
+@enduml

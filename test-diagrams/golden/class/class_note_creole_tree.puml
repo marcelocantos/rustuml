@@ -1,0 +1,8 @@
+@startuml
+class MyClass
+note right of MyClass
+  |_ parent
+  |_ child1
+  |_ child2
+end note
+@enduml

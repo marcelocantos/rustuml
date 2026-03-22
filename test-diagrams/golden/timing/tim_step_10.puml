@@ -1,0 +1,19 @@
+@startuml
+binary "Signal" as sig
+@0
+sig is high
+@10
+sig is low
+@20
+sig is high
+@30
+sig is low
+@40
+sig is high
+@50
+sig is low
+@60
+sig is high
+@70
+sig is low
+@enduml

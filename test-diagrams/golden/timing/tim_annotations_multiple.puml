@@ -1,0 +1,19 @@
+@startuml
+concise "CPU" as cpu
+concise "Memory" as mem
+@0
+cpu is fetch
+mem is idle
+@10
+cpu is decode
+mem is read
+@20
+cpu is execute
+@30
+cpu is writeback
+mem is write
+@40
+cpu is fetch
+mem is idle
+@0 <-> @40 : 1 pipeline stage
+@enduml

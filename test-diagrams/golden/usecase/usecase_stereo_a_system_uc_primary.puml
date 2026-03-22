@@ -1,0 +1,5 @@
+@startuml
+actor MyActor <<system>>
+usecase MyUC <<primary>>
+MyActor --> MyUC
+@enduml

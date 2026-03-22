@@ -1,0 +1,11 @@
+@startjson
+{
+  "greeting_en": "Hello",
+  "greeting_es": "Hola",
+  "greeting_fr": "Bonjour",
+  "greeting_de": "Hallo",
+  "greeting_jp": "Konnichiwa",
+  "symbol": "© 2024",
+  "emoji_text": "Stars"
+}
+@endjson

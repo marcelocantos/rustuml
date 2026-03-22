@@ -1,0 +1,7 @@
+@startuml
+!$val = 42
+!log "val = " + $val
+note as N
+  val = $val
+end note
+@enduml

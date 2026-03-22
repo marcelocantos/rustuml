@@ -1,0 +1,6 @@
+@startuml
+Alice -[#darkred]> Bob : forward #darkred
+Bob -[#darkblue]--> Alice : return #darkblue
+Alice -[#darkred]>> Charlie : thin #darkred
+Charlie -[#darkblue]-->> Alice : thin dotted #darkblue
+@enduml

@@ -1,0 +1,7 @@
+@startmindmap
+* Root with **Bold**
+** Child node
+*** **Bold** in leaf
+-- Left branch
+--- **Bold** left
+@endmindmap

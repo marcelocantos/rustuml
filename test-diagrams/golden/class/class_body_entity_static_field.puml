@@ -1,0 +1,5 @@
+@startuml
+entity Variant {
+  {static} +String CONST
+}
+@enduml

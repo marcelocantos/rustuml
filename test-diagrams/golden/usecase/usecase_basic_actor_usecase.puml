@@ -1,0 +1,5 @@
+@startuml
+actor User
+usecase "Log In" as UC1
+User --> UC1
+@enduml

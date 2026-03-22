@@ -1,0 +1,7 @@
+@startuml
+note as N
+  |= Name |= Value |
+  |<#red> error | 42 |
+  |<#green> ok | 0 |
+end note
+@enduml

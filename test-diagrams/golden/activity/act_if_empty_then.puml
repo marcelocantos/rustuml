@@ -1,0 +1,9 @@
+@startuml
+
+start
+if (condition?) then (yes)
+else (no)
+  :Action B;
+endif
+stop
+@enduml

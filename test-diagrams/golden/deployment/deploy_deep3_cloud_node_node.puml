@@ -1,0 +1,14 @@
+@startuml
+cloud Level1 {
+  node Level2 {
+    node Level3 {
+      artifact "app.jar"
+      database "LocalDB"
+    }
+    node Worker
+    Level3 --> Worker
+  }
+  node Manager
+  Level2 --> Manager
+}
+@enduml

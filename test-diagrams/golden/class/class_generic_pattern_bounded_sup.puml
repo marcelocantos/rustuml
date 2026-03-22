@@ -1,0 +1,7 @@
+@startuml
+class Adder<T super Integer> {
+  +T base
+  --
+  +T add(T other)
+}
+@enduml

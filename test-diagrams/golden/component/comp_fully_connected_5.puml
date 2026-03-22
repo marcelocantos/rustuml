@@ -1,0 +1,17 @@
+@startuml
+component A
+component B
+component C
+component D
+component E
+A --> B
+A --> C
+A --> D
+A --> E
+B --> C
+B --> D
+B --> E
+C --> D
+C --> E
+D --> E
+@enduml

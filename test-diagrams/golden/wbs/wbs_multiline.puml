@@ -1,0 +1,9 @@
+@startwbs
+* Project Root
+with description
+** Phase One
+details here
+*** Task 1.1
+*** Task 1.2
+** Phase Two
+@endwbs

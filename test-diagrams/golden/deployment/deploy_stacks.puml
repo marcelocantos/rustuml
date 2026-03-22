@@ -1,0 +1,14 @@
+@startuml
+stack "Tech Stack A" {
+  component Frontend
+  component Backend
+  database DB
+  Frontend --> Backend
+  Backend --> DB
+}
+stack "Tech Stack B" {
+  component APILayer
+  component LogicLayer
+  APILayer --> LogicLayer
+}
+@enduml

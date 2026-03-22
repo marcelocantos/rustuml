@@ -1,0 +1,8 @@
+@startuml
+:User:
+:Admin:
+(Login)
+(Manage)
+User --> (Login)
+Admin --> (Manage)
+@enduml

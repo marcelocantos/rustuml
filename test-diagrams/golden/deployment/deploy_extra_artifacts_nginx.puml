@@ -1,0 +1,7 @@
+@startuml
+node Server <<nginx>> {
+  artifact "app.war" <<nginx>>
+  artifact "config.xml"
+  file "logback.xml"
+}
+@enduml

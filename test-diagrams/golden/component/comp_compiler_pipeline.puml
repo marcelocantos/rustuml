@@ -1,0 +1,29 @@
+@startuml
+package "Frontend" {
+  component Lexer
+  component Parser
+  component "AST Builder" as ASTB
+}
+package "Middle End" {
+  component "Semantic Analyzer" as SA
+  component "Type Checker" as TC
+  component "IR Generator" as IRG
+  component "Optimizer" as OPT
+}
+package "Backend" {
+  component "Code Generator" as CG
+  component "Register Allocator" as RA
+  component "Assembler" as ASM
+  component "Linker" as LNK
+}
+Lexer --> Parser
+Parser --> ASTB
+ASTB --> SA
+SA --> TC
+TC --> IRG
+IRG --> OPT
+OPT --> CG
+CG --> RA
+RA --> ASM
+ASM --> LNK
+@enduml

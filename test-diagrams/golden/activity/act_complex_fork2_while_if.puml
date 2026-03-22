@@ -1,0 +1,21 @@
+@startuml
+start
+fork
+  while (loop 1?) is (yes)
+    if (inner 1?) then (yes)
+      :Work 1a;
+    else (no)
+      :Work 1b;
+    endif
+  endwhile
+fork again
+  while (loop 2?) is (yes)
+    if (inner 2?) then (yes)
+      :Work 2a;
+    else (no)
+      :Work 2b;
+    endif
+  endwhile
+end fork
+stop
+@enduml

@@ -1,0 +1,7 @@
+@startuml
+autonumber
+Alice -> Bob : first
+Bob --> Alice : second
+Alice -> Charlie : third
+Charlie --> Alice : fourth
+@enduml

@@ -1,0 +1,5 @@
+@startuml
+class ColorTest #AliceBlue {
+  +void method()
+}
+@enduml

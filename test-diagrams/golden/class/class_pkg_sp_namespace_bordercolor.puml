@@ -1,0 +1,10 @@
+@startuml
+skinparam NamespaceBorderColor red
+namespace myPkg {
+  class A {
+    +void method()
+  }
+  class B
+  A --> B
+}
+@enduml

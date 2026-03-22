@@ -1,0 +1,7 @@
+@startuml
+frame MyContainer {
+  component Foo
+  component Bar
+  Foo --> Bar
+}
+@enduml

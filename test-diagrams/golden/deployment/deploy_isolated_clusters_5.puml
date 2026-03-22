@@ -1,0 +1,27 @@
+@startuml
+node Cluster1 {
+  node Node1a
+  node Node1b
+  Node1a --> Node1b
+}
+node Cluster2 {
+  node Node2a
+  node Node2b
+  Node2a --> Node2b
+}
+node Cluster3 {
+  node Node3a
+  node Node3b
+  Node3a --> Node3b
+}
+node Cluster4 {
+  node Node4a
+  node Node4b
+  Node4a --> Node4b
+}
+node Cluster5 {
+  node Node5a
+  node Node5b
+  Node5a --> Node5b
+}
+@enduml

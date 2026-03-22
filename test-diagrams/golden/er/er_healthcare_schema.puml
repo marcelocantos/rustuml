@@ -1,0 +1,75 @@
+@startuml
+skinparam linetype ortho
+
+entity Patient {
+  * id : INT <<PK>>
+  --
+  mrn : VARCHAR(20) UNIQUE
+  first_name : VARCHAR(50)
+  last_name : VARCHAR(50)
+  dob : DATE
+  sex : CHAR(1)
+  blood_type : VARCHAR(3)
+  allergies : TEXT
+}
+entity Provider {
+  * id : INT <<PK>>
+  --
+  npi : CHAR(10) UNIQUE
+  name : VARCHAR(200)
+  specialty : VARCHAR(100)
+  license_state : CHAR(2)
+  license_number : VARCHAR(20)
+}
+entity Facility {
+  * id : INT <<PK>>
+  --
+  name : VARCHAR(200)
+  address : VARCHAR(300)
+  npi : CHAR(10) UNIQUE
+  type : VARCHAR(50)
+}
+entity Visit {
+  * id : INT <<PK>>
+  * patient_id : INT <<FK>>
+  * provider_id : INT <<FK>>
+  * facility_id : INT <<FK>>
+  --
+  visit_date : DATE
+  chief_complaint : VARCHAR(500)
+  diagnosis_codes : VARCHAR(200)
+  notes : TEXT
+}
+entity Prescription {
+  * id : INT <<PK>>
+  * visit_id : INT <<FK>>
+  * prescriber_id : INT <<FK>>
+  --
+  drug_ndc : VARCHAR(20)
+  drug_name : VARCHAR(200)
+  dosage : VARCHAR(100)
+  frequency : VARCHAR(100)
+  quantity : INT
+  refills : INT
+  written_at : DATETIME
+}
+entity LabResult {
+  * id : INT <<PK>>
+  * visit_id : INT <<FK>>
+  --
+  test_code : VARCHAR(20)
+  test_name : VARCHAR(200)
+  result_value : VARCHAR(100)
+  unit : VARCHAR(50)
+  reference_range : VARCHAR(100)
+  abnormal_flag : CHAR(1)
+  collected_at : DATETIME
+  resulted_at : DATETIME
+}
+Patient ||--o{ Visit : "has"
+Provider ||--o{ Visit : "conducts"
+Facility ||--o{ Visit : "hosts"
+Visit ||--o{ Prescription : "generates"
+Visit ||--o{ LabResult : "produces"
+Provider ||--o{ Prescription : "writes"
+@enduml

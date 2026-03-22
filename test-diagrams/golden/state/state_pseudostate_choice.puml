@@ -1,0 +1,6 @@
+@startuml
+state ps <<choice>>
+[*] --> A
+A --> ps
+ps --> [*]
+@enduml

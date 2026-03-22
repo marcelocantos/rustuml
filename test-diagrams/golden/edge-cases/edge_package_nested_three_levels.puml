@@ -1,0 +1,13 @@
+@startuml
+package outer {
+  class OuterClass
+  package middle {
+    class MiddleClass
+    package inner {
+      class InnerClass
+    }
+    MiddleClass --> InnerClass
+  }
+  OuterClass --> MiddleClass
+}
+@enduml

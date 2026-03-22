@@ -1,0 +1,5 @@
+@startuml
+ref over Alice, Bob
+  **reference label**
+end ref
+@enduml

@@ -1,0 +1,4 @@
+@startuml
+title ""Mono Title""
+Alice -> Bob : hello
+@enduml

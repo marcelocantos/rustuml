@@ -1,0 +1,9 @@
+@startuml
+autonumber 100
+Alice -> Bob ++ : start
+opt condition
+  Bob -> Charlie ++ : action
+  Charlie --> Bob -- : done
+end
+Bob --> Alice -- : complete
+@enduml

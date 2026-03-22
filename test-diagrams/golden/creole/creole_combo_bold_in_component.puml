@@ -1,0 +1,5 @@
+@startuml
+component "**bold** comp" as C138
+interface "**bold** iface" as I138
+C138 -- I138
+@enduml

@@ -1,0 +1,11 @@
+@startuml
+[*] --> Running
+state Running {
+  [*] --> Display
+  Display --> [*]
+  --
+  [*] --> Input
+  Input --> [*]
+}
+Running --> [*]
+@enduml

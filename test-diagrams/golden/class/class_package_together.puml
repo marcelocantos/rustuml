@@ -1,0 +1,12 @@
+@startuml
+class A
+class B
+class C
+together {
+  class D
+  class E
+}
+A --> D
+B --> E
+C --> D
+@enduml

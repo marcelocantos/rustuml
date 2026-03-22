@@ -1,0 +1,5 @@
+@startuml
+node AppNode #Orange
+node DBNode #Orange
+AppNode --> DBNode
+@enduml

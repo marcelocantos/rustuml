@@ -1,0 +1,9 @@
+@startuml
+Alice -> Bob : request
+note over Bob
+  | Column 1 | Column 2 |
+  | value A  | value B  |
+  | value C  | value D  |
+end note
+Bob --> Alice : response
+@enduml

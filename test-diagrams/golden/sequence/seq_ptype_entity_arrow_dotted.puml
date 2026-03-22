@@ -1,0 +1,6 @@
+@startuml
+entity Alice
+participant Bob
+Alice --> Bob : entity sends dotted
+Bob --> Alice : entity receives dotted
+@enduml

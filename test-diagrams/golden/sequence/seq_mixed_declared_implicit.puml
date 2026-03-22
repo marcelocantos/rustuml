@@ -1,0 +1,7 @@
+@startuml
+participant Alice
+Alice -> Bob : Bob is implicit
+Bob -> Charlie : Charlie is implicit
+Charlie --> Bob : return
+Bob --> Alice : return
+@enduml

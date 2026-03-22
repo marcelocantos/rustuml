@@ -1,0 +1,22 @@
+@startuml
+
+title Quicksort Algorithm
+start
+if (array size <= 1?) then (yes)
+  :Return array;
+  stop
+endif
+:Choose pivot;
+fork
+  :Partition left (< pivot);
+fork again
+  :Partition right (> pivot);
+end fork
+fork
+  :Recursively sort left;
+fork again
+  :Recursively sort right;
+end fork
+:Combine: left + pivot + right;
+stop
+@enduml

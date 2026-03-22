@@ -1,0 +1,5 @@
+@startuml
+class SpotE << (E,#purple) Custom >> {
+  +void method()
+}
+@enduml

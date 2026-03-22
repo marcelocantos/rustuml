@@ -1,0 +1,5 @@
+@startuml
+state "Long State Name" as LSN
+[*] --> LSN
+LSN --> [*]
+@enduml

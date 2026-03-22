@@ -1,0 +1,5 @@
+@startuml
+note as N
+  <color:#FF6600>hex color</color>
+end note
+@enduml

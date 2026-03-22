@@ -1,0 +1,7 @@
+@startuml
+' single line
+/' block
+comment
+'/
+' another single
+@enduml

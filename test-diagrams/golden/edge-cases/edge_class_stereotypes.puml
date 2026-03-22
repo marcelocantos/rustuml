@@ -1,0 +1,7 @@
+@startuml
+class Foo <<service>>
+class Bar <<repository>>
+class Baz <<entity>>
+class Qux <<controller>>
+interface IService <<interface>>
+@enduml

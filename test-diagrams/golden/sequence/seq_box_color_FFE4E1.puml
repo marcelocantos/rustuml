@@ -1,0 +1,10 @@
+@startuml
+box "Colored Box" #FFE4E1
+  participant A
+  participant B
+end box
+participant C
+A -> B : inside
+B -> C : outside
+C --> A : return
+@enduml

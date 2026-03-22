@@ -1,0 +1,15 @@
+@startuml
+Alice -> Bob : step 1
+== Phase 3 ==
+alt condition
+  note over Alice : alt note
+  Bob -> Charlie : delegate
+  Charlie --> Bob : result
+  Bob --> Alice : ok
+else
+  note right of Bob : else note
+  Bob --> Alice : error
+end
+== End Phase 3 ==
+Bob --> Alice : done 3
+@enduml

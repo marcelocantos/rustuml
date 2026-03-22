@@ -1,0 +1,3 @@
+@startuml
+A -> B: solid async
+@enduml

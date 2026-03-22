@@ -1,0 +1,19 @@
+@startuml
+autonumber
+actor User
+participant "Web Browser" as Browser
+participant "Upload Service" as US
+database "File Store" as FS
+queue "Process Queue" as PQ
+
+User -> Browser : select file
+Browser -> US ++ : POST /upload (multipart)
+loop file chunks
+  Browser -> US : chunk data
+end
+US -> FS ++ : store file
+FS --> US -- : file_id=abc
+US -> PQ : enqueue process(file_id=abc)
+US --> Browser -- : 200 {file_id: abc}
+Browser --> User : upload complete
+@enduml

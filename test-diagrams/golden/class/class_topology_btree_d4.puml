@@ -1,0 +1,31 @@
+@startuml
+class N1
+class N2
+class N3
+class N4
+class N5
+class N6
+class N7
+class N8
+class N9
+class N10
+class N11
+class N12
+class N13
+class N14
+class N15
+N1 --> N2
+N1 --> N3
+N2 --> N4
+N2 --> N5
+N3 --> N6
+N3 --> N7
+N4 --> N8
+N4 --> N9
+N5 --> N10
+N5 --> N11
+N6 --> N12
+N6 --> N13
+N7 --> N14
+N7 --> N15
+@enduml

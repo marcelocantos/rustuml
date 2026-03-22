@@ -1,0 +1,10 @@
+@startuml
+object Base3 { id = 3 }
+object Left3 { l = 3 }
+object Right3 { r = 3 }
+object Bottom3 { b = 3 }
+Base3 --> Left3
+Base3 --> Right3
+Left3 --> Bottom3
+Right3 --> Bottom3
+@enduml

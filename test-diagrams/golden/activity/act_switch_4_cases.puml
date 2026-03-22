@@ -1,0 +1,15 @@
+@startuml
+
+start
+switch (status?)
+case (pending)
+  :Process pending;
+case (active)
+  :Process active;
+case (paused)
+  :Process paused;
+case (done)
+  :Process done;
+endswitch
+stop
+@enduml

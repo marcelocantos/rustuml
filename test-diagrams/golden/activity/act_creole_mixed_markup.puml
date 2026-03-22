@@ -1,0 +1,7 @@
+@startuml
+
+start
+:**Bold** and //italic// action;
+:__underline__ and --strikethrough--;
+stop
+@enduml

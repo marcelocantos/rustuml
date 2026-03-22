@@ -1,0 +1,6 @@
+@startuml
+
+start
+#pink:Action with send>
+stop
+@enduml

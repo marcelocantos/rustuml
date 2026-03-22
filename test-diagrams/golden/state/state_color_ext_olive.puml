@@ -1,0 +1,5 @@
+@startuml
+state A #Olive
+[*] --> A
+A --> [*]
+@enduml

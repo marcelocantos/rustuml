@@ -1,0 +1,7 @@
+@startuml
+
+start
+#AABBCC:Colored action;
+:Normal action;
+stop
+@enduml

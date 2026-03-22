@@ -1,0 +1,5 @@
+@startuml
+boundary Source
+database Target
+Source --> Target
+@enduml

@@ -1,0 +1,9 @@
+@startuml
+state "Composite State" as CS {
+  [*] --> s1
+  s1 --> s2
+  s2 --> [*]
+}
+[*] --> CS
+CS --> [*]
+@enduml

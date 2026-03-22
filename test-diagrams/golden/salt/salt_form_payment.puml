@@ -1,0 +1,11 @@
+@startsalt
+{^Payment Form
+  Card Number: | "                    "
+  Expiry: | "                    "
+  CVV: | "                    "
+  Name on Card: | "                    "
+  
+  ..
+  [Submit] | [Reset] | [Cancel]
+}
+@endsalt

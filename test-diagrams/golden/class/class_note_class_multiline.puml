@@ -1,0 +1,10 @@
+@startuml
+class MyType {
+  +void method()
+}
+note right of MyType
+  Multi-line note
+  about class
+  type
+end note
+@enduml

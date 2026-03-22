@@ -1,0 +1,8 @@
+@startgantt
+[Step 1] lasts 3 days
+then [Step 2] lasts 6 days
+then [Step 3] lasts 9 days
+then [Step 4] lasts 12 days
+then [Step 5] lasts 15 days
+then [Step 6] lasts 18 days
+@endgantt

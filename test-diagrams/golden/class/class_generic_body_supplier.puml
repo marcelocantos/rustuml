@@ -1,0 +1,5 @@
+@startuml
+class Supplier<T> {
+  +T get()
+}
+@enduml

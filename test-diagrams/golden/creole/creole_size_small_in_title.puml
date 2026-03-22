@@ -1,0 +1,4 @@
+@startuml
+title <size:10>small text</size>
+Alice -> Bob : hello
+@enduml

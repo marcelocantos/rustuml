@@ -1,0 +1,6 @@
+@startuml
+entity Variant {
+  +void run()
+  -void helper()
+}
+@enduml

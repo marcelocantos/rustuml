@@ -1,0 +1,8 @@
+@startwbs
+*[#lightblue] Project 15
+**[#green] Task 0: Done
+***[#white] Subtask 0.1
+**[#yellow] Task 1: In Progress
+**[#red] Task 2: Blocked
+
+@endwbs

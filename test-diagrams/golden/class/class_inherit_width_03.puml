@@ -1,0 +1,11 @@
+@startuml
+class Parent {
+  +void parentMethod()
+}
+class Child01
+class Child02
+class Child03
+Parent <|-- Child01
+Parent <|-- Child02
+Parent <|-- Child03
+@enduml

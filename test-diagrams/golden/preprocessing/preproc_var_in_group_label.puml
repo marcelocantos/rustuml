@@ -1,0 +1,8 @@
+@startuml
+!$operation = "data sync"
+!$version = "v3"
+group $operation ($version)
+  Client -> Server : request
+  Server --> Client : response
+end
+@enduml

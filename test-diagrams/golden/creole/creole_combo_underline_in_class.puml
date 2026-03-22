@@ -1,0 +1,10 @@
+@startuml
+class Class225 {
+  field: __underline__
+  method225(): void
+}
+class Class225b {
+  info: String
+}
+Class225 --> Class225b : __underline__
+@enduml

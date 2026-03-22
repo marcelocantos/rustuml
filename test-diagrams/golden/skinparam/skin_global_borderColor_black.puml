@@ -1,0 +1,6 @@
+@startuml
+skinparam borderColor black
+Alice -> Bob : hello
+Bob --> Alice : world
+note right : note
+@enduml

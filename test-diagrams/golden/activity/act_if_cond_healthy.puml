@@ -1,0 +1,12 @@
+@startuml
+
+start
+:Prepare;
+if (healthy?) then (healthy)
+  :Handle healthy;
+else (unhealthy)
+  :Handle unhealthy;
+endif
+:Continue;
+stop
+@enduml

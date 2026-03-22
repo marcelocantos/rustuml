@@ -1,0 +1,24 @@
+@startuml
+package com.example.web {
+  class WebController
+}
+package com.example.service {
+  class BusinessService
+}
+package com.example.data {
+  class DataRepository
+}
+package com.example.security {
+  class SecurityFilter
+  class Authenticator
+}
+package com.example.logging {
+  class Logger
+}
+com.example.web.WebController ..> com.example.service.BusinessService
+com.example.service.BusinessService ..> com.example.data.DataRepository
+com.example.web.WebController ..> com.example.security.SecurityFilter
+com.example.security.SecurityFilter ..> com.example.security.Authenticator
+com.example.web.WebController ..> com.example.logging.Logger
+com.example.service.BusinessService ..> com.example.logging.Logger
+@enduml

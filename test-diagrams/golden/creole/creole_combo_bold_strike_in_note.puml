@@ -1,0 +1,5 @@
+@startuml
+note as N
+  **~~bold strike~~**
+end note
+@enduml

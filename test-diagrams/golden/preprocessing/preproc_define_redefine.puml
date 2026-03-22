@@ -1,0 +1,8 @@
+@startuml
+!define COLOR red
+skinparam classBackgroundColor COLOR
+class First {}
+!define COLOR blue
+skinparam classBackgroundColor COLOR
+class Second {}
+@enduml

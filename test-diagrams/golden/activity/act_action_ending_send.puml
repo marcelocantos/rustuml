@@ -1,0 +1,6 @@
+@startuml
+
+start
+:send_action>
+stop
+@enduml

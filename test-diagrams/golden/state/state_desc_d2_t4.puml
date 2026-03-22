@@ -1,0 +1,6 @@
+@startuml
+state A : waiting for user input
+[*] --> A
+A --> B : data received
+B --> [*]
+@enduml

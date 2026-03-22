@@ -1,0 +1,6 @@
+@startuml
+skinparam arrowColor green
+A -> B : solid
+A --> B : dashed
+A ->> B : thin
+@enduml

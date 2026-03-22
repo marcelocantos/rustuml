@@ -1,0 +1,7 @@
+@startuml
+start
+while (l?) is (yes)
+  :W;
+endwhile
+stop
+@enduml

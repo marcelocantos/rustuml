@@ -1,0 +1,4 @@
+@startuml
+Alice -> Bob : رسالة عربية
+Bob --> Alice : رسالة عربية reply
+@enduml

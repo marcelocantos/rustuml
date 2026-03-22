@@ -1,0 +1,14 @@
+@startuml
+title "Component Diagram 238"
+package "System238" {
+  [Service1_238]
+  [Service2_238]
+  [Service3_238]
+  [Service4_238]
+  [Service5_238]
+}
+[Service1_238] --> [Service2_238]
+[Service2_238] --> [Service3_238]
+[Service3_238] --> [Service4_238]
+[Service4_238] --> [Service5_238]
+@enduml

@@ -1,0 +1,8 @@
+@startuml
+Alice -> Bob : start
+loop 1..n
+  Bob -> DB : step
+  DB --> Bob : ok
+end
+Bob --> Alice : done
+@enduml

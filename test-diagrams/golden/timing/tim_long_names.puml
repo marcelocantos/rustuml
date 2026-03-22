@@ -1,0 +1,19 @@
+@startuml
+robust "HTTP Request Handler" as hrh
+concise "Database Connection Pool" as dcp
+concise "Cache Layer" as cache
+@0
+hrh is waiting
+dcp is idle
+cache is empty
+@100
+hrh is processing
+dcp is connected
+cache is warming
+@200
+hrh is responding
+dcp is idle
+cache is full
+@300
+hrh is waiting
+@enduml

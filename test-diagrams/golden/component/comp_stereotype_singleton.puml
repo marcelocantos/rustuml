@@ -1,0 +1,5 @@
+@startuml
+component Foo <<singleton>>
+component Bar <<singleton>>
+Foo --> Bar
+@enduml

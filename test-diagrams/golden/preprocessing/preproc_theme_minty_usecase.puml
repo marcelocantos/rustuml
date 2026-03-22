@@ -1,0 +1,8 @@
+@startuml
+!theme minty
+actor User
+usecase "Login" as UC1
+usecase "Browse" as UC2
+User --> UC1
+User --> UC2
+@enduml

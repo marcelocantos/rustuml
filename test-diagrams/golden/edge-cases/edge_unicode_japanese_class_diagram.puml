@@ -1,0 +1,10 @@
+@startuml
+class ユーザー {
+  データ: String
+  +メソッド(): void
+}
+class システム {
+  データ: int
+}
+ユーザー --> システム
+@enduml

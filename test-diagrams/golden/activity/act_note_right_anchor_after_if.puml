@@ -1,0 +1,11 @@
+@startuml
+
+start
+if (c?) then (yes)
+  :Y;
+else (no)
+  :N;
+endif
+note right: Note after after if
+stop
+@enduml

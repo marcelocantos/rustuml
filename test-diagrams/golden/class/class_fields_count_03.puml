@@ -1,0 +1,7 @@
+@startuml
+class ManyFields3 {
+  +String field01
+  +String field02
+  +String field03
+}
+@enduml

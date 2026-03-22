@@ -1,0 +1,4 @@
+@startuml
+Alice -> Bob: user@example.com
+Bob --> Alice: @mention
+@enduml

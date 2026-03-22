@@ -1,0 +1,4 @@
+@startuml
+boundary Alice
+Alice --> Alice : self boundary dotted
+@enduml

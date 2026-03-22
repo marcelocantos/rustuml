@@ -1,0 +1,10 @@
+@startuml
+title "Component Diagram 232"
+package "System232" {
+  [Service1_232]
+  [Service2_232]
+  [Service3_232]
+}
+[Service1_232] --> [Service2_232]
+[Service2_232] --> [Service3_232]
+@enduml

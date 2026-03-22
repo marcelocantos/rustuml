@@ -1,0 +1,25 @@
+@startuml
+package presentation {
+  class View
+  class Controller
+}
+package business {
+  class Service
+  class Validator
+}
+package persistence {
+  class Repository
+  class DAO
+}
+package database {
+  class Connection
+  class Transaction
+}
+Controller ..> Service
+Service ..> Repository
+Repository ..> DAO
+DAO ..> Connection
+Controller --> View
+Service --> Validator
+DAO --> Transaction
+@enduml

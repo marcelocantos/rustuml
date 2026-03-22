@@ -1,0 +1,7 @@
+@startuml
+start
+:A;
+-[bold]->
+:B;
+stop
+@enduml

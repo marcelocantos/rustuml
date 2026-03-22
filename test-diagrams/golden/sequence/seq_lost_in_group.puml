@@ -1,0 +1,8 @@
+@startuml
+Alice -> Bob : start
+loop retrying
+  Bob ->x External : attempt
+  ... retry delay ...
+end
+Bob --> Alice : gave up
+@enduml

@@ -1,0 +1,7 @@
+@startuml
+class Foo
+class Bar
+Foo : field1
+Foo : +method1()
+Foo --> Bar
+@enduml

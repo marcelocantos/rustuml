@@ -1,0 +1,9 @@
+@startuml
+Alice -> Bob : a
+||10||
+Bob -> Charlie : b
+... 5 min ...
+Charlie --> Bob : c
+||10||
+Bob --> Alice : d
+@enduml

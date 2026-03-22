@@ -1,0 +1,4 @@
+@startuml
+participant Alice
+Alice -->> Alice : self participant thin_dotted
+@enduml

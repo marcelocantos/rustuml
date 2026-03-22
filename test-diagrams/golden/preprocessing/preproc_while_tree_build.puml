@@ -1,0 +1,11 @@
+@startuml
+!$depth = 1
+[*] --> Node1
+!while $depth <= 4
+  !$next = $depth + 1
+  state Node$depth
+  Node$depth --> Node$next : deeper
+  !$depth = $next
+!endwhile
+Node5 --> [*]
+@enduml

@@ -1,0 +1,6 @@
+@startuml
+class MyClass {
+  +void method()
+}
+note top of MyClass : This is a top note
+@enduml

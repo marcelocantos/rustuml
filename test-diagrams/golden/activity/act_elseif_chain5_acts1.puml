@@ -1,0 +1,15 @@
+@startuml
+start
+if (cond 1?) then (b1)
+  :B1 action 1;
+elseif (cond 2?) then (b2)
+  :B2 action 1;
+elseif (cond 3?) then (b3)
+  :B3 action 1;
+elseif (cond 4?) then (b4)
+  :B4 action 1;
+else (default)
+  :Default action 1;
+endif
+stop
+@enduml

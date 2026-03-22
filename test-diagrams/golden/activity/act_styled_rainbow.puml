@@ -1,0 +1,11 @@
+@startuml
+
+start
+#red:Red action;
+#orange:Orange action;
+#yellow:Yellow action;
+#green:Green action;
+#blue:Blue action;
+#purple:Purple action;
+stop
+@enduml

@@ -1,0 +1,5 @@
+@startuml
+entity OneMember {
+  +void single()
+}
+@enduml

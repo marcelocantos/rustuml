@@ -1,0 +1,14 @@
+@startuml
+class Library {
+  +String name
+}
+class Book {
+  +String title
+}
+class Page {
+  +int number
+  +String content
+}
+Library o-- Book : contains
+Book *-- Page : consists of
+@enduml

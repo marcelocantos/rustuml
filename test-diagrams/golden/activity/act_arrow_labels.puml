@@ -1,0 +1,10 @@
+@startuml
+
+start
+:Action 1;
+-> labeled arrow;
+:Action 2;
+--> dashed arrow label;
+:Action 3;
+stop
+@enduml

@@ -1,0 +1,19 @@
+@startuml
+robust "Hardware" as hw
+concise "Software" as sw
+@0
+hw is off
+sw is stopped
+@100
+hw is on
+@200
+sw is starting
+@300
+sw is running
+hw is active
+@500
+sw is stopping
+@600
+sw is stopped
+hw is idle
+@enduml

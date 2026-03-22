@@ -1,0 +1,14 @@
+@startuml
+
+start
+while (running?) is (yes)
+  :Do work;
+  note right: Working...
+  if (done?) then (yes)
+    break
+  endif
+  :Continue working;
+endwhile
+:Post-loop;
+stop
+@enduml

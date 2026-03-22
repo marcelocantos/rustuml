@@ -1,0 +1,27 @@
+@startnwdiag
+nwdiag {
+  network ingress {
+    address = "10.0.1.0/24"
+    gateway   [address = "10.0.1.1"]
+    auth_svc  [address = "10.0.1.10"]
+  }
+  network services {
+    address = "10.0.2.0/24"
+    gateway   [address = "10.0.2.1"]
+    user_svc  [address = "10.0.2.10"]
+    order_svc [address = "10.0.2.20"]
+    product_svc [address = "10.0.2.30"]
+    notif_svc [address = "10.0.2.40"]
+  }
+  network data {
+    address = "10.0.3.0/24"
+    user_svc    [address = "10.0.3.10"]
+    order_svc   [address = "10.0.3.20"]
+    product_svc [address = "10.0.3.30"]
+    user_db     [address = "10.0.3.100"]
+    order_db    [address = "10.0.3.101"]
+    product_db  [address = "10.0.3.102"]
+    message_bus [address = "10.0.3.200"]
+  }
+}
+@endnwdiag

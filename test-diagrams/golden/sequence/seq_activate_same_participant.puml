@@ -1,0 +1,6 @@
+@startuml
+Alice -> Bob ++ : first
+Alice -> Bob ++ : second (nested)
+Bob --> Alice -- : second done
+Bob --> Alice -- : first done
+@enduml

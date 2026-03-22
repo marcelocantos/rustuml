@@ -1,0 +1,9 @@
+@startuml
+class PriceTag {
+  euro: String = "€"
+  pound: String = "£"
+  yen: String = "¥"
+  rupee: String = "₹"
+  dollar: String = "$"
+}
+@enduml

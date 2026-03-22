@@ -1,0 +1,13 @@
+@startuml
+component WebServer
+component AppServer
+database MainDB
+database CacheDB
+interface IAuth
+interface IData
+WebServer --> AppServer : HTTP
+AppServer --> MainDB : SQL
+AppServer --> CacheDB : Redis
+AppServer - IAuth
+AppServer - IData
+@enduml

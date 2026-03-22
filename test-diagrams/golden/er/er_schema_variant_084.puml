@@ -1,0 +1,42 @@
+@startuml
+skinparam linetype ortho
+
+package "Schema84" {
+  entity Table1 {
+    * id : INT <<PK>>
+    --
+    name : VARCHAR(100)
+    value : DECIMAL(10,2)
+    active : BOOLEAN
+    created_at : TIMESTAMP
+  }
+  entity Table2 {
+    * id : INT <<PK>>
+    --
+    name : VARCHAR(100)
+    value : DECIMAL(10,2)
+    active : BOOLEAN
+    created_at : TIMESTAMP
+  }
+  entity Table3 {
+    * id : INT <<PK>>
+    --
+    name : VARCHAR(100)
+    value : DECIMAL(10,2)
+    active : BOOLEAN
+    created_at : TIMESTAMP
+  }
+  entity Table4 {
+    * id : INT <<PK>>
+    --
+    name : VARCHAR(100)
+    value : DECIMAL(10,2)
+    active : BOOLEAN
+    created_at : TIMESTAMP
+  }
+}
+
+Table1 ||--o{ Table2 : "ref"
+Table2 ||--o{ Table3 : "ref"
+Table3 ||--o{ Table4 : "ref"
+@enduml

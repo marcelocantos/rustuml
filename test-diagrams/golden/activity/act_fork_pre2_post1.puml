@@ -1,0 +1,12 @@
+@startuml
+start
+:Pre 1;
+:Pre 2;
+fork
+  :A;
+fork again
+  :B;
+end fork
+:Post 1;
+stop
+@enduml

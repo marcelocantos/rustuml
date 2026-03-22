@@ -1,0 +1,5 @@
+@startuml
+!theme litera
+Alice -> Bob : hello
+Bob --> Alice : world
+@enduml

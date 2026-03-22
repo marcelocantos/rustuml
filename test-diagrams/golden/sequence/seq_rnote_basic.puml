@@ -1,0 +1,5 @@
+@startuml
+Alice -> Bob : hello
+rnote over Bob : rectangular note
+Bob --> Alice : hi
+@enduml

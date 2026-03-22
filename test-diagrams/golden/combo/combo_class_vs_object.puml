@@ -1,0 +1,24 @@
+@startuml
+class Car {
+  - make : String
+  - model : String
+  - year : int
+  + start() : void
+  + stop() : void
+}
+
+object "myCar : Car" as myCar {
+  make = "Toyota"
+  model = "Camry"
+  year = 2023
+}
+
+object "herCar : Car" as herCar {
+  make = "Honda"
+  model = "Civic"
+  year = 2022
+}
+
+myCar ..|> Car : instanceOf
+herCar ..|> Car : instanceOf
+@enduml

@@ -1,0 +1,5 @@
+@startuml
+artifact "application.tar.gz"
+node "Application Server"
+"application.tar.gz" --> "Application Server" : deploy
+@enduml

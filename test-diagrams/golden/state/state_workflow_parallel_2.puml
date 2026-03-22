@@ -1,0 +1,10 @@
+@startuml
+state f <<fork>>
+state j <<join>>
+[*] --> f
+f --> P0
+f --> P1
+P0 --> j
+P1 --> j
+j --> [*]
+@enduml

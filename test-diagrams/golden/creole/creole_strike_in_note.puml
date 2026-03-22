@@ -1,0 +1,6 @@
+@startuml
+note as N
+  ~~strikethrough text~~
+  ~~another struck line~~
+end note
+@enduml

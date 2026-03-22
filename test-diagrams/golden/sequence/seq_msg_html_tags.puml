@@ -1,0 +1,4 @@
+@startuml
+Alice -> Bob : <b>bold</b> <i>italic</i> <u>underline</u>
+Bob --> Alice : <s>strikethrough</s> <w>wave</w>
+@enduml

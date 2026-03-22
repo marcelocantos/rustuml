@@ -1,0 +1,5 @@
+@startuml
+[*] --> A
+A --> B : click [count < 3]
+B --> [*]
+@enduml

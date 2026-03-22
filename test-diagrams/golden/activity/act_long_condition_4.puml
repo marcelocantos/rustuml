@@ -1,0 +1,10 @@
+@startuml
+
+start
+if (Is the external API service responding within the timeout window?) then (yes)
+  :Positive path action;
+else (no)
+  :Negative path action;
+endif
+stop
+@enduml

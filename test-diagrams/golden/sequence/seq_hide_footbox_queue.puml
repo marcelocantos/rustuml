@@ -1,0 +1,7 @@
+@startuml
+hide footbox
+queue Alice
+participant Bob
+Alice -> Bob : hello
+Bob --> Alice : hi
+@enduml

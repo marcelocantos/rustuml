@@ -1,0 +1,6 @@
+@startuml
+scale max 768 height
+class Foo
+class Bar
+Foo --> Bar
+@enduml

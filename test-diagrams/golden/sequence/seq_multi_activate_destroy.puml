@@ -1,0 +1,11 @@
+@startuml
+Alice -> Bob ++ : use Bob
+Alice -> Charlie ++ : use Charlie
+Alice -> Dave ++ : use Dave
+Dave --> Alice -- : dave done
+destroy Dave
+Charlie --> Alice -- : charlie done
+destroy Charlie
+Bob --> Alice -- : bob done
+destroy Bob
+@enduml

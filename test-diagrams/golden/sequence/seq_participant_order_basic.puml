@@ -1,0 +1,8 @@
+@startuml
+participant Bob order 20
+participant Alice order 10
+participant Charlie order 30
+Alice -> Bob : 1st
+Bob -> Charlie : 2nd
+Charlie --> Alice : 3rd
+@enduml

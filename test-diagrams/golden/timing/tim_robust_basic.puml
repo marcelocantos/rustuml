@@ -1,0 +1,9 @@
+@startuml
+robust "Signal" as sig
+@0
+sig is idle
+@100
+sig is active
+@200
+sig is idle
+@enduml

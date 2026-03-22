@@ -1,0 +1,11 @@
+@startuml
+actor Customer
+usecase "Place Order" as PO
+usecase "Validate Cart" as VC
+usecase "Check Inventory" as CI
+usecase "Process Payment" as PP
+PO .> VC : <<include>>
+VC .> CI : <<include>>
+PO .> PP : <<include>>
+Customer --> PO
+@enduml

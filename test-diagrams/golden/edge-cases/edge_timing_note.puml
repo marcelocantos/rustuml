@@ -1,0 +1,10 @@
+@startuml
+concise "Signal" as S
+@0
+S is Idle
+@100
+note bottom of S: Low pulse
+S is Active
+@200
+S is Idle
+@enduml

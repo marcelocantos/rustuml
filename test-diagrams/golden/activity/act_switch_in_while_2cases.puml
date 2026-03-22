@@ -1,0 +1,13 @@
+@startuml
+
+start
+while (events?) is (yes)
+  switch (event type?)
+case (1)
+  :Handle 1;
+case (2)
+  :Handle 2;
+  endswitch
+endwhile
+stop
+@enduml

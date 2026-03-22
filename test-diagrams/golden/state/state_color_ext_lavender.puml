@@ -1,0 +1,5 @@
+@startuml
+state A #Lavender
+[*] --> A
+A --> [*]
+@enduml

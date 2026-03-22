@@ -1,0 +1,3 @@
+@startuml
+Alice -> Bob: <b>bold</b> and <i>italic</i>
+@enduml

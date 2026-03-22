@@ -1,0 +1,9 @@
+@startuml
+enum Enum5 {
+  VALUE_01
+  VALUE_02
+  VALUE_03
+  VALUE_04
+  VALUE_05
+}
+@enduml

@@ -1,0 +1,5 @@
+@startuml
+state A #MediumAquaMarine
+[*] --> A
+A --> [*]
+@enduml

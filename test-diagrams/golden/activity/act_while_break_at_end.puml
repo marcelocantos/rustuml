@@ -1,0 +1,12 @@
+@startuml
+
+start
+while (run?) is (yes)
+  :Process;
+  :Check;
+  if (exit?) then (yes)
+    break
+  endif
+endwhile
+stop
+@enduml

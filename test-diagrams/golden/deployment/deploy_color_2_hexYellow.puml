@@ -1,0 +1,5 @@
+@startuml
+node AppNode #Yellow
+node DBNode #Yellow
+AppNode --> DBNode
+@enduml

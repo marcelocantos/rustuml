@@ -1,0 +1,5 @@
+@startuml
+boundary Alice
+participant Bob
+Alice -[#red]-> Bob : boundary colored dotted
+@enduml

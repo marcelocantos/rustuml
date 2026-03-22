@@ -1,0 +1,6 @@
+@startuml
+state A : idle
+[*] --> A
+A --> B : error detected
+B --> [*]
+@enduml

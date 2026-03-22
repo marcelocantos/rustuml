@@ -1,0 +1,13 @@
+@startnwdiag
+nwdiag {
+  network internet {
+    web01 [description = "Primary web server"]
+    web02 [description = "Secondary web server"]
+  }
+  network internal {
+    web01
+    db01  [description = "Database master"]
+    db02  [description = "Database replica"]
+  }
+}
+@endnwdiag

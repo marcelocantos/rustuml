@@ -1,0 +1,8 @@
+@startuml
+set namespaceSeparator ::
+class com::service::UserService
+class com::repository::UserRepository
+class com::model::User
+com::service::UserService ..> com::repository::UserRepository
+com::repository::UserRepository ..> com::model::User
+@enduml

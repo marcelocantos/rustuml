@@ -1,0 +1,23 @@
+@startuml
+node "Web Tier" {
+  node Web1
+  node Web2
+  node Web3
+}
+node "App Tier" {
+  node App1
+  node App2
+  node App3
+}
+database DB
+Web1 --> App1
+Web1 --> App2
+Web1 --> App3
+Web2 --> App1
+Web2 --> App2
+Web2 --> App3
+Web3 --> App1
+Web3 --> App2
+Web3 --> App3
+App1 --> DB
+@enduml

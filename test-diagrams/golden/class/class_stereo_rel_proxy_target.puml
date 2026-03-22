@@ -1,0 +1,9 @@
+@startuml
+class ClassA <<proxy>> {
+  +void methodA()
+}
+class ClassB <<target>> {
+  +void methodB()
+}
+ClassA --> ClassB
+@enduml

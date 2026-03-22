@@ -1,0 +1,6 @@
+@startuml
+folder Pkg1 {
+      class C1 { +void m1() }
+      class C2 { +void m2() }
+}
+@enduml

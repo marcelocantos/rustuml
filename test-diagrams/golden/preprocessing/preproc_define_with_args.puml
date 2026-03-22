@@ -1,0 +1,5 @@
+@startuml
+!define ARROW(from, to, msg) from -> to : msg
+ARROW(Alice, Bob, hello)
+ARROW(Bob, Alice, world)
+@enduml

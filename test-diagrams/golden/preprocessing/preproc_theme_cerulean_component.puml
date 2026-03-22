@@ -1,0 +1,6 @@
+@startuml
+!theme cerulean
+component WebApp
+component Database
+WebApp --> Database : queries
+@enduml

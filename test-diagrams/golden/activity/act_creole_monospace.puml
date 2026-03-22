@@ -1,0 +1,5 @@
+@startuml
+start
+:<font:monospace>code here</font>;
+stop
+@enduml

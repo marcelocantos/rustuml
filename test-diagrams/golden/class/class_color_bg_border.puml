@@ -1,0 +1,5 @@
+@startuml
+class Styled #back:lightyellow;line:red;line.bold;text:blue {
+  +String name
+}
+@enduml

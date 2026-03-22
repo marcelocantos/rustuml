@@ -1,0 +1,5 @@
+@startuml
+interface MyA
+artifact MyB
+MyA --> MyB
+@enduml

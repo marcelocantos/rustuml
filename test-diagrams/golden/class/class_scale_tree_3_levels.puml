@@ -1,0 +1,21 @@
+@startuml
+class Root
+class L1A
+class L1B
+class L1C
+class L2AA
+class L2AB
+class L2BA
+class L2BB
+class L2CA
+class L2CB
+Root --> L1A
+Root --> L1B
+Root --> L1C
+L1A --> L2AA
+L1A --> L2AB
+L1B --> L2BA
+L1B --> L2BB
+L1C --> L2CA
+L1C --> L2CB
+@enduml

@@ -1,0 +1,12 @@
+@startuml
+title "Sequence 118"
+participant Svc1
+participant Svc2
+participant Svc3
+participant Svc4
+participant Svc5
+Svc1 -> Svc2 : call_1_118
+Svc2 -> Svc3 : call_2_118
+Svc3 -> Svc4 : call_3_118
+Svc4 -> Svc5 : call_4_118
+@enduml

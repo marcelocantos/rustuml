@@ -1,0 +1,24 @@
+@startnwdiag
+nwdiag {
+  group web {
+    color = "#FFD700"
+    web01
+    web02
+  }
+  group db {
+    color = "#87CEEB"
+    db01
+    db02
+  }
+  network frontend {
+    web01
+    web02
+  }
+  network backend {
+    web01
+    web02
+    db01
+    db02
+  }
+}
+@endnwdiag

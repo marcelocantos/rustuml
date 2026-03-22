@@ -1,0 +1,8 @@
+@startuml
+
+start
+:Привет мир;
+:你好世界;
+:こんにちは;
+stop
+@enduml

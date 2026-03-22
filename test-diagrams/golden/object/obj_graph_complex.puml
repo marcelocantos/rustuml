@@ -1,0 +1,21 @@
+@startuml
+object Company {
+  name = "Acme Corp"
+  founded = 1990
+}
+object Department {
+  name = "Engineering"
+  budget = 1000000
+}
+object Employee {
+  name = "Alice"
+  role = "Developer"
+}
+object Project {
+  name = "Project X"
+  deadline = "2024-12-31"
+}
+Company "1" --> "0..*" Department : has
+Department "1" --> "0..*" Employee : employs
+Employee "0..*" --> "0..*" Project : works on
+@enduml

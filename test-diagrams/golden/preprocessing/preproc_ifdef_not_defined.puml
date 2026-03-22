@@ -1,0 +1,11 @@
+@startuml
+!ifdef UNDEFINED_MACRO
+class ShouldNotAppear {
+  +field: String
+}
+!else
+class ShouldAppear {
+  +visible: boolean
+}
+!endif
+@enduml

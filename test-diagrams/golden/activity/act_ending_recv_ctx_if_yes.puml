@@ -1,0 +1,9 @@
+@startuml
+start
+if (c?) then (yes)
+  :action<
+else (no)
+  :alt;
+endif
+stop
+@enduml

@@ -1,0 +1,7 @@
+@startuml
+rectangle myPkg #lightblue {
+  class MyClass {
+    +void method()
+  }
+}
+@enduml

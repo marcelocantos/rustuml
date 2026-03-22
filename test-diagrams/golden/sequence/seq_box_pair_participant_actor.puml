@@ -1,0 +1,8 @@
+@startuml
+box "Group"
+  participant A
+  actor B
+end box
+A -> B : hello
+B --> A : hi
+@enduml

@@ -1,0 +1,6 @@
+@startuml
+class MyClass
+note right of MyClass
+  <u>html_underline</u>
+end note
+@enduml

@@ -1,0 +1,5 @@
+@startuml
+entity Alice
+participant Bob
+Alice -[#red]->> Bob : entity colored thin_dotted
+@enduml

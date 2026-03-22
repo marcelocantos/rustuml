@@ -1,0 +1,7 @@
+@startuml
+[*] --> State1
+State1 : entry / initialize
+State1 : do / process
+State1 : exit / cleanup
+State1 --> [*]
+@enduml

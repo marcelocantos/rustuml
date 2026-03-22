@@ -1,0 +1,9 @@
+@startuml
+
+start
+partition #aliceblue "Colored aliceblue" {
+  :Action in aliceblue partition;
+  :Another action;
+}
+stop
+@enduml

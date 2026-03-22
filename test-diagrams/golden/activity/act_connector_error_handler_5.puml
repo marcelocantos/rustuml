@@ -1,0 +1,40 @@
+@startuml
+start
+:Step 1;
+if (error?) then (yes)
+  (ERR1)
+endif
+:Step 2;
+if (error?) then (yes)
+  (ERR2)
+endif
+:Step 3;
+if (error?) then (yes)
+  (ERR3)
+endif
+:Step 4;
+if (error?) then (yes)
+  (ERR4)
+endif
+:Step 5;
+if (error?) then (yes)
+  (ERR5)
+endif
+:Success;
+stop
+(ERR1)
+:Handle error 1;
+stop
+(ERR2)
+:Handle error 2;
+stop
+(ERR3)
+:Handle error 3;
+stop
+(ERR4)
+:Handle error 4;
+stop
+(ERR5)
+:Handle error 5;
+stop
+@enduml

@@ -1,0 +1,10 @@
+@startuml
+!function $double($x)
+  !return $x * 2
+!endfunction
+
+!$val = $double(5)
+note as N
+  double(5) = $val
+end note
+@enduml

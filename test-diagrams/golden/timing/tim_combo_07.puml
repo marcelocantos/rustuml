@@ -1,0 +1,32 @@
+@startuml
+concise "Sig0" as s0
+concise "Sig1" as s1
+concise "Sig2" as s2
+concise "Sig3" as s3
+concise "Sig4" as s4
+@0
+s0 is idle
+s1 is active
+s2 is waiting
+s3 is error
+s4 is idle
+@100
+s0 is active
+s1 is waiting
+s2 is error
+s3 is idle
+s4 is active
+@200
+s0 is waiting
+s1 is error
+s2 is idle
+s3 is active
+s4 is waiting
+@300
+s0 is error
+s1 is idle
+s2 is active
+s3 is waiting
+s4 is error
+
+@enduml

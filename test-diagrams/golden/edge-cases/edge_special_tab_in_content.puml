@@ -1,0 +1,6 @@
+@startuml
+class	Foo	{
+	field1:	String
+	field2:	int
+}
+@enduml

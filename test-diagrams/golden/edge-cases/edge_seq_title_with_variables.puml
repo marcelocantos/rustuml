@@ -1,0 +1,4 @@
+@startuml
+title Sequence at %date()
+Alice -> Bob: hello
+@enduml

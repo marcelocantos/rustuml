@@ -1,0 +1,12 @@
+@startuml
+state Composite {
+state f <<fork>>
+  f --> A
+  f --> B
+  A --> [*]
+  B --> [*]
+  [*] --> f
+}
+[*] --> Composite
+Composite --> [*]
+@enduml

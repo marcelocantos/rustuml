@@ -1,0 +1,72 @@
+@startuml
+
+title Kubernetes Deployment Process
+
+|Developer|
+start
+:Write application code;
+:Write Dockerfile;
+:Write K8s manifests;
+
+|CI Pipeline|
+fork
+  :Build Docker image;
+fork again
+  :Run unit tests;
+fork again
+  :Security scan;
+end fork
+
+if (all checks pass?) then (yes)
+  :Push image to registry;
+else (no)
+  |Developer|
+  :Fix issues;
+  stop
+endif
+
+|CD Pipeline|
+:Update manifest with new image tag;
+
+|Kubernetes|
+:Apply manifests;
+:Create new ReplicaSet;
+
+repeat
+  :Check pod status;
+  if (pods ready?) then (yes)
+    break
+  endif
+  if (timeout?) then (yes)
+    :Rollback deployment;
+    |Developer|
+    :Investigate failure;
+    stop
+  endif
+backward :Wait 10 seconds;
+repeatwhile (not done?) is (waiting)
+
+:Update Service to new pods;
+:Delete old ReplicaSet;
+
+|Monitoring|
+fork
+  :Check application metrics;
+fork again
+  :Check error rates;
+fork again
+  :Check latency;
+end fork
+
+if (metrics healthy?) then (yes)
+  |Developer|
+  :Deployment successful;
+  stop
+else (no)
+  |CD Pipeline|
+  :Trigger rollback;
+  |Developer|
+  :Investigate;
+  stop
+endif
+@enduml

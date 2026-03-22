@@ -1,0 +1,6 @@
+@startuml
+!theme sketchy-outline
+class Foo
+class Bar
+Foo --> Bar
+@enduml

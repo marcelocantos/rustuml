@@ -1,0 +1,6 @@
+@startuml
+skinparam state { BackgroundColor AntiqueWhite }
+[*] --> A
+A --> B
+B --> [*]
+@enduml

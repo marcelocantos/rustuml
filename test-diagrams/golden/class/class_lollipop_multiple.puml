@@ -1,0 +1,6 @@
+@startuml
+class Component
+Component ()- IDoable
+Component ()-- IRunnable
+Component ()-up- IStoppable
+@enduml

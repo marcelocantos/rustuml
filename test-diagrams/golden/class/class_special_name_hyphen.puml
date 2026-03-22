@@ -1,0 +1,7 @@
+@startuml
+class "My-Class" {
+  +void method()
+}
+class Other
+"My-Class" --> Other
+@enduml

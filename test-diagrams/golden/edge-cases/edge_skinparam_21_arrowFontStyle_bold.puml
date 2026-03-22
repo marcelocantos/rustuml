@@ -1,0 +1,6 @@
+@startuml
+skinparam arrowFontStyle Bold
+class Foo
+class Bar
+Foo --> Bar
+@enduml

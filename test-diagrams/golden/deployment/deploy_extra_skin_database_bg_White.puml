@@ -1,0 +1,8 @@
+@startuml
+skinparam database {
+  BackgroundColor White
+}
+database MyElem
+node AppServer
+AppServer --> MyElem
+@enduml

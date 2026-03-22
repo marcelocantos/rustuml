@@ -1,0 +1,30 @@
+@startuml
+
+title Distributed Saga Pattern
+start
+:Start saga;
+repeat
+  switch (next step?)
+  case (step1)
+    :Execute step 1;
+    if (step1 ok?) then (no)
+      :Compensate step 1;
+    endif
+  case (step2)
+    :Execute step 2;
+    if (step2 ok?) then (no)
+      :Compensate step 2;
+      :Compensate step 1;
+    endif
+  case (step3)
+    :Execute step 3;
+    if (step3 ok?) then (no)
+      :Compensate all;
+    endif
+  case (done)
+    :Saga complete;
+    break
+  endswitch
+repeatwhile (not complete?) is (yes)
+stop
+@enduml

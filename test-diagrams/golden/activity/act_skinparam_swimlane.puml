@@ -1,0 +1,15 @@
+@startuml
+
+skinparam swimlane {
+  BorderColor darkblue
+  TitleFontColor white
+  TitleBackgroundColor darkblue
+  BackgroundColor lightyellow
+}
+|Lane A|
+start
+:A action;
+|Lane B|
+:B action;
+stop
+@enduml

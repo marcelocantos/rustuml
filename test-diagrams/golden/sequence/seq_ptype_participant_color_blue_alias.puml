@@ -1,0 +1,6 @@
+@startuml
+participant "Named Participant" as P #blue
+participant Other
+P -> Other : participant blue call
+Other --> P : reply
+@enduml

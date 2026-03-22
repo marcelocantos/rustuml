@@ -1,0 +1,5 @@
+@startuml
+cloud Source
+queue Target
+Source --> Target : JDBC
+@enduml

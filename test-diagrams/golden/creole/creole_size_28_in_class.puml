@@ -1,0 +1,5 @@
+@startuml
+class MyClass {
+  <size:28>sized field</size>: String
+}
+@enduml

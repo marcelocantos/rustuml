@@ -1,0 +1,6 @@
+@startuml
+title Production Deployment Architecture
+node AppServer
+database MainDB
+AppServer --> MainDB
+@enduml

@@ -1,0 +1,8 @@
+@startuml
+Alice -> Bob : request
+loop データ処理中
+  Bob -> DB : 取得
+  DB --> Bob : データ
+end
+Bob --> Alice : 完了
+@enduml

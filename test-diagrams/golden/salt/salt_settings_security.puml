@@ -1,0 +1,10 @@
+@startsalt
+{^Security Settings
+  Firewall: | "               "
+  VPN: | "               "
+  Proxy: | "               "
+  Certificate: | "               "
+  ..
+  [Save] | [Reset] | [Cancel]
+}
+@endsalt

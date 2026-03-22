@@ -1,0 +1,7 @@
+@startuml
+database X
+participant Y
+X -> Y : go
+hnote over X : hnote/database
+Y --> X : back
+@enduml

@@ -1,0 +1,9 @@
+@startuml
+state Composite {
+  [*] --> Inner
+  Inner --> [*]
+}
+note right of Composite : Note on composite state
+[*] --> Composite
+Composite --> [*]
+@enduml

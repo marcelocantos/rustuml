@@ -1,0 +1,30 @@
+@startuml
+class Library {
+  +String name
+  +String address
+  +void addBook(Book b)
+  +Book findBook(String isbn)
+}
+class Book {
+  +String isbn
+  +String title
+  +String author
+  +int year
+  +boolean isAvailable()
+}
+class Member {
+  +int memberId
+  +String name
+  +void borrowBook(Book b)
+  +void returnBook(Book b)
+}
+class Loan {
+  +Date borrowDate
+  +Date dueDate
+  +Date returnDate
+  +boolean isOverdue()
+}
+Library o-- Book
+Member "1" -- "*" Loan
+Book "1" -- "*" Loan
+@enduml

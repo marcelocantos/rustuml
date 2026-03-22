@@ -1,0 +1,14 @@
+@startditaa
+ /---------\      /---------\
+ | cGRE    |      | cBLU    |
+ | Service |----->| Cache   |
+ | Layer   |      |         |
+ \---------/      \---------/
+      |
+      v
+ /---------\
+ | cRED    |
+ | Data    |
+ | Store   |
+ \---------/
+@endditaa

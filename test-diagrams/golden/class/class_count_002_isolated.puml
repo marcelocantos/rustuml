@@ -1,0 +1,4 @@
+@startuml
+class Cls001 { +void m1() }
+class Cls002 { +void m2() }
+@enduml

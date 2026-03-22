@@ -1,0 +1,19 @@
+@startuml
+interface Component {
+  +void operation()
+  +void add(Component c)
+  +void remove(Component c)
+}
+class Leaf {
+  +void operation()
+}
+class Composite {
+  -children: List<Component>
+  +void operation()
+  +void add(Component c)
+  +void remove(Component c)
+}
+Leaf ..|> Component
+Composite ..|> Component
+Composite o-- Component
+@enduml

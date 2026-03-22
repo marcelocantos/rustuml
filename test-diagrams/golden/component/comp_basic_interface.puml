@@ -1,0 +1,5 @@
+@startuml
+component Foo
+interface IFoo
+Foo - IFoo
+@enduml

@@ -1,0 +1,7 @@
+@startuml
+!theme cerulean-outline
+start
+:step one;
+:step two;
+stop
+@enduml

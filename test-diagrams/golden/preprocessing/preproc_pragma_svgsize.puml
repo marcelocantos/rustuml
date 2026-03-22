@@ -1,0 +1,4 @@
+@startuml
+!pragma svgSize 800 600
+Alice -> Bob : sized SVG
+@enduml

@@ -1,0 +1,6 @@
+@startuml
+note as N
+  **bold text in note**
+  **another bold line**
+end note
+@enduml

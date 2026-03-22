@@ -1,0 +1,21 @@
+@startuml
+robust "Sig0" as s0
+robust "Sig1" as s1
+highlight 300 to 400 #lightyellow : phase 8
+@0
+s0 is idle
+s1 is active
+@100
+s0 is active
+s1 is active
+@200
+s0 is active
+s1 is idle
+@300
+s0 is idle
+s1 is active
+@400
+s0 is active
+s1 is active
+
+@enduml

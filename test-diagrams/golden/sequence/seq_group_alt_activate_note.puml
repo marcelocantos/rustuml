@@ -1,0 +1,12 @@
+@startuml
+Alice -> Bob ++ : request
+alt success
+  note over Bob : success path
+  Bob -> Charlie ++ : query
+  Charlie --> Bob -- : data
+  Bob --> Alice -- : result
+else failure
+  note right of Bob : error path
+  Bob --> Alice -- : error
+end
+@enduml

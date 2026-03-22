@@ -1,0 +1,5 @@
+@startuml
+Alice -> Bob : __underline message__
+Bob --> Alice : __underline reply__
+note right : __underline note__
+@enduml

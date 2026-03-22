@@ -1,0 +1,5 @@
+@startuml
+autonumber "<font color=red><b>##</b></font>"
+Alice -> Bob : red number
+Bob --> Alice : also red
+@enduml

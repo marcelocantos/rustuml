@@ -1,0 +1,29 @@
+@startuml
+entity Person {
+  * id : BIGINT <<PK>>
+  --
+  first_name : VARCHAR(50)
+  middle_name : VARCHAR(50)
+  last_name : VARCHAR(50)
+  preferred_name : VARCHAR(100)
+  date_of_birth : DATE
+  gender : CHAR(1)
+  nationality : CHAR(2)
+  passport_number : VARCHAR(20)
+  ssn : CHAR(11)
+  phone_mobile : VARCHAR(20)
+  phone_home : VARCHAR(20)
+  phone_work : VARCHAR(20)
+  email_primary : VARCHAR(200)
+  email_secondary : VARCHAR(200)
+  address_line1 : VARCHAR(200)
+  address_line2 : VARCHAR(200)
+  city : VARCHAR(100)
+  state : VARCHAR(50)
+  zip : VARCHAR(20)
+  country : CHAR(2)
+  created_at : TIMESTAMP
+  updated_at : TIMESTAMP
+  is_active : BOOLEAN
+}
+@enduml

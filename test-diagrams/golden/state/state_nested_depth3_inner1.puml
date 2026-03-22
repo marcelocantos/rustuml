@@ -1,0 +1,20 @@
+@startuml
+state Outer {
+  state Level3 {
+    state Level2 {
+      state Level1 {
+        [*] --> I1
+        I1 --> [*]
+      }
+      [*] --> Level{d}
+      Level{d} --> [*]
+    }
+    [*] --> Level{d}
+    Level{d} --> [*]
+  }
+  [*] --> Level{d}
+  Level{d} --> [*]
+}
+[*] --> Outer
+Outer --> [*]
+@enduml

@@ -1,0 +1,25 @@
+@startuml
+interface Mediator {
+  +void notify(Component sender, String event)
+}
+abstract class Component {
+  #mediator: Mediator
+  +void setMediator(Mediator m)
+}
+class ConcreteMediator {
+  -componentA: ComponentA
+  -componentB: ComponentB
+  +void notify(Component sender, String event)
+}
+class ComponentA {
+  +void doA()
+}
+class ComponentB {
+  +void doB()
+}
+ConcreteMediator ..|> Mediator
+ComponentA --|> Component
+ComponentB --|> Component
+ConcreteMediator --> ComponentA
+ConcreteMediator --> ComponentB
+@enduml

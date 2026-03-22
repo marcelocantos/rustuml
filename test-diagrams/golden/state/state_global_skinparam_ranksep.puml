@@ -1,0 +1,6 @@
+@startuml
+skinparam ranksep 50
+[*] --> A
+A --> B : event
+B --> [*]
+@enduml

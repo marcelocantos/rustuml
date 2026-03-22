@@ -1,0 +1,5 @@
+@startuml
+participant "Part 840" as P
+Alice -> P : ""mono""
+P --> Alice : ""mono"" reply
+@enduml

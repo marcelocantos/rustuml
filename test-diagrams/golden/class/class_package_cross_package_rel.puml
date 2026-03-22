@@ -1,0 +1,20 @@
+@startuml
+package service {
+  class UserService {
+    +User getUser(int id)
+  }
+}
+package repository {
+  class UserRepository {
+    +User findById(int id)
+  }
+}
+package model {
+  class User {
+    +int id
+    +String name
+  }
+}
+service.UserService ..> repository.UserRepository
+repository.UserRepository ..> model.User
+@enduml

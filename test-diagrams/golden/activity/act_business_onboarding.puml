@@ -1,0 +1,47 @@
+@startuml
+
+title Employee Onboarding
+
+|HR|
+start
+:Create employee record;
+:Send welcome email;
+
+fork
+  |IT|
+  :Create accounts;
+  :Setup workstation;
+  :Grant system access;
+  fork again
+  |Facilities|
+  :Assign desk;
+  :Order equipment;
+  fork again
+  |HR|
+  :Schedule orientation;
+  :Prepare paperwork;
+end fork
+
+|New Employee|
+:Day 1: Orientation;
+:Complete paperwork;
+
+fork
+  |IT|
+  :Verify access;
+  fork again
+  |Manager|
+  :Team introduction;
+  :Assign buddy;
+end fork
+
+|New Employee|
+while (onboarding tasks?) is (remaining)
+  :Complete task;
+endwhile (done)
+
+|HR|
+:30-day check-in;
+:Update employee status;
+stop
+@enduml

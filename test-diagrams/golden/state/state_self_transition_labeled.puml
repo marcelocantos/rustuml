@@ -1,0 +1,5 @@
+@startuml
+[*] --> A
+A --> A : retry [n < 3] / n++
+A --> [*]
+@enduml

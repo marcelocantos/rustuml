@@ -1,0 +1,10 @@
+@startuml
+participant P0
+participant P1
+participant P2
+participant P3
+participant P4
+P0 -> P1 : go
+note across : note spanning all
+P1 --> P0 : done
+@enduml

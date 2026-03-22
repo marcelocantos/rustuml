@@ -1,0 +1,8 @@
+@startuml
+class SHA256 {
+  +byte[] hash(byte[] data)
+}
+class MD5 {
+  +byte[] hash(byte[] data)
+}
+@enduml

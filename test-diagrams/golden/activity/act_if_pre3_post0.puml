@@ -1,0 +1,12 @@
+@startuml
+start
+:Pre 1;
+:Pre 2;
+:Pre 3;
+if (c?) then (yes)
+  :Y;
+else (no)
+  :N;
+endif
+stop
+@enduml

@@ -1,0 +1,8 @@
+@startuml
+component A #Pink
+component B #LightBlue
+component C #Yellow
+A --> B
+B --> C
+C --> A
+@enduml

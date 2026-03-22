@@ -1,0 +1,15 @@
+@startuml
+class Result<T> {
+  +T value
+  +String error
+  +boolean isSuccess()
+}
+
+enum Status {
+  OK
+  FAIL
+  PENDING
+}
+
+Result --> Status
+@enduml

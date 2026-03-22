@@ -1,0 +1,11 @@
+@startuml
+box "Internal Services"
+  participant Alice
+  participant Bob
+end box
+participant External
+Alice -> Bob : internal
+Bob -> External : external call
+External --> Bob : result
+Bob --> Alice : done
+@enduml

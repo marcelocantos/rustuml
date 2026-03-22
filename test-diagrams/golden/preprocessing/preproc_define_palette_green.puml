@@ -1,0 +1,16 @@
+@startuml
+!define PRIMARY #70AD47
+!define DARK #4F7A33
+!define LIGHT #EBF3E3
+
+skinparam classBackgroundColor LIGHT
+skinparam classBorderColor PRIMARY
+skinparam classHeaderBackgroundColor PRIMARY
+skinparam classArrowColor PRIMARY
+skinparam classFontColor DARK
+
+class "Green Themed Class" {
+  +field: String
+  +method(): void
+}
+@enduml

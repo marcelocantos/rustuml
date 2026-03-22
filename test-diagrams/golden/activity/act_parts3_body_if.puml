@@ -1,0 +1,25 @@
+@startuml
+start
+partition "P1" {
+if (c?) then (yes)
+  :Y;
+else (no)
+  :N;
+endif
+}
+partition "P2" {
+if (c?) then (yes)
+  :Y;
+else (no)
+  :N;
+endif
+}
+partition "P3" {
+if (c?) then (yes)
+  :Y;
+else (no)
+  :N;
+endif
+}
+stop
+@enduml

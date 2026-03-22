@@ -1,0 +1,5 @@
+@startuml
+Alice -> Bob : normal
+Alice ->x Bob : lost message
+Bob ->x Alice : also lost
+@enduml

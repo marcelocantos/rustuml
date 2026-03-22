@@ -1,0 +1,8 @@
+@startuml
+skinparam dpi 150
+class A {
+  +void method()
+}
+class B
+A --> B
+@enduml

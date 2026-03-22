@@ -1,0 +1,13 @@
+@startuml
+
+|Client|
+start
+:Send request;
+|Server|
+:Receive request;
+:Process;
+:Send response;
+|Client|
+:Receive response;
+stop
+@enduml

@@ -1,0 +1,21 @@
+@startuml
+state c <<choice>>
+[*] --> S
+S --> c
+c --> End0 : [branch0]
+End0 --> [*]
+c --> End1 : [branch1]
+End1 --> [*]
+c --> End2 : [branch2]
+End2 --> [*]
+c --> End3 : [branch3]
+End3 --> [*]
+c --> End4 : [branch4]
+End4 --> [*]
+c --> End5 : [branch5]
+End5 --> [*]
+c --> End6 : [branch6]
+End6 --> [*]
+c --> End7 : [branch7]
+End7 --> [*]
+@enduml

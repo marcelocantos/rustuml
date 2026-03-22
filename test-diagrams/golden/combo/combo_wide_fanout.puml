@@ -1,0 +1,30 @@
+@startuml
+class Root {
+  + dispatch()
+}
+class Handler1 { + handle() }
+class Handler2 { + handle() }
+class Handler3 { + handle() }
+class Handler4 { + handle() }
+class Handler5 { + handle() }
+class Handler6 { + handle() }
+class Handler7 { + handle() }
+class Handler8 { + handle() }
+class Handler9 { + handle() }
+class Handler10 { + handle() }
+class Handler11 { + handle() }
+class Handler12 { + handle() }
+
+Root --> Handler1
+Root --> Handler2
+Root --> Handler3
+Root --> Handler4
+Root --> Handler5
+Root --> Handler6
+Root --> Handler7
+Root --> Handler8
+Root --> Handler9
+Root --> Handler10
+Root --> Handler11
+Root --> Handler12
+@enduml

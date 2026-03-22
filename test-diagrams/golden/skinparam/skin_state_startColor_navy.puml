@@ -1,0 +1,10 @@
+@startuml
+skinparam stateStartColor navy
+[*] --> Idle
+Idle : entry / init
+Idle --> Active : start
+Active : do / process
+Active --> Paused : pause
+Paused --> Active : resume
+Active --> [*] : stop
+@enduml

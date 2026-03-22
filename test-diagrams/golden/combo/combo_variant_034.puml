@@ -1,0 +1,18 @@
+@startuml
+title "Combo Variant 34"
+state S1_34
+state S2_34
+state S3_34
+state S4_34
+state S5_34
+state S6_34
+state S7_34
+[*] --> S1_34
+S1_34 --> S2_34
+S2_34 --> S3_34
+S3_34 --> S4_34
+S4_34 --> S5_34
+S5_34 --> S6_34
+S6_34 --> S7_34
+S7_34 --> [*]
+@enduml

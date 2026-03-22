@@ -1,0 +1,6 @@
+@startuml
+class "**BoldClassName**" {
+  **boldField**: String
+  **boldMethod**()
+}
+@enduml

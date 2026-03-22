@@ -1,0 +1,6 @@
+@startuml
+
+start
+#lime:Action with send>
+stop
+@enduml

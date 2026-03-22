@@ -1,0 +1,9 @@
+@startuml
+
+start
+partition #lightyellow "Colored lightyellow" {
+  :Action in lightyellow partition;
+  :Another action;
+}
+stop
+@enduml

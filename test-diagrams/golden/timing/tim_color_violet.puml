@@ -1,0 +1,9 @@
+@startuml
+robust "Process" as proc
+@0
+proc is #lightgrey : idle
+@100
+proc is #violet : active
+@200
+proc is #lightgrey : idle
+@enduml

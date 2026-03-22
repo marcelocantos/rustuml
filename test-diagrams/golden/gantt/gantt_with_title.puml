@@ -1,0 +1,13 @@
+@startgantt
+title Project Timeline 2024
+Project starts 2024-01-15
+[Kickoff] lasts 2 days
+[Sprint 1] lasts 14 days
+[Sprint 1] starts at [Kickoff]'s end
+[Sprint 2] lasts 14 days
+[Sprint 2] starts at [Sprint 1]'s end
+[Sprint 3] lasts 14 days
+[Sprint 3] starts at [Sprint 2]'s end
+[Release] lasts 3 days
+[Release] starts at [Sprint 3]'s end
+@endgantt

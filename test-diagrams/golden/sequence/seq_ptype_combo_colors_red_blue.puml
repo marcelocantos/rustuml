@@ -1,0 +1,9 @@
+@startuml
+participant A <<svc>> #red order 10
+participant B <<ext>> #blue order 20
+participant C <<db>> #white order 30
+A -> B : call
+B -> C : query
+C --> B : data
+B --> A : result
+@enduml

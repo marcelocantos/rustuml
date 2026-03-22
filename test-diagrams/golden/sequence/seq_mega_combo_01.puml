@@ -1,0 +1,61 @@
+@startuml
+title Order Creation Flow
+skinparam SequenceArrowColor #1A237E
+skinparam ParticipantBorderColor #37474F
+skinparam NoteBackgroundColor #FFFDE7
+autonumber
+hide footbox
+
+box "UI Layer" #E3F2FD
+  actor User
+  boundary "API Gateway" as GW <<boundary>>
+end box
+
+box "Service Layer" #E8F5E9
+  control "Auth Service" as Auth <<control>>
+  control "Business Logic" as BL <<control>>
+  entity "Order Service" as OS <<entity>>
+end box
+
+box "Data Layer" #FFF3E0
+  database "User DB" as UDB
+  database "Order DB" as ODB
+  collections "Cache" as Cache <<cache>>
+  queue "Event Bus" as EB <<queue>>
+end box
+
+User -> GW ++ : POST /orders
+GW -> Auth ++ : validate token
+Auth -> UDB ++ : lookup user
+UDB --> Auth -- : user data
+Auth --> GW -- : 200 valid
+
+alt user has permission
+  GW -> BL ++ : process order
+  note over BL : validating business rules
+
+  loop for each item in order
+    BL -> Cache ++ : check inventory
+    alt cache hit
+      Cache --> BL -- : stock available
+    else cache miss
+      BL -> ODB ++ : query inventory
+      ODB --> BL -- : stock level
+      BL -> Cache ++ : populate cache
+      Cache --> BL -- : cached
+    end
+  end
+
+  BL -> OS ++ : create order
+  OS -> ODB ++ : insert order
+  ODB --> OS -- : order_id
+  OS -> EB : publish OrderCreated
+  OS --> BL -- : order created
+
+  BL --> GW -- : order summary
+  GW --> User -- : 201 Created
+
+else insufficient permission
+  GW --> User -- : 403 Forbidden
+end
+@enduml

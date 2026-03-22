@@ -1,0 +1,16 @@
+@startuml
+left to right direction
+actor User
+rectangle "Boundary1" {
+  usecase "Action1A"
+  usecase "Action1B"
+}
+rectangle "Boundary2" {
+  usecase "Action2A"
+  usecase "Action2B"
+}
+User --> (Action1A)
+User --> (Action1B)
+User --> (Action2A)
+User --> (Action2B)
+@enduml

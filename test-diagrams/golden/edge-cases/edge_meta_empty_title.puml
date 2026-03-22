@@ -1,0 +1,5 @@
+@startuml
+title
+end title
+class Foo
+@enduml

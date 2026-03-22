@@ -1,0 +1,8 @@
+@startuml
+participant Alice #red
+participant Bob #blue
+participant Charlie #green
+Alice -> Bob: hello
+Bob -> Charlie: forward
+Charlie --> Alice: done
+@enduml

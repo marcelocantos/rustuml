@@ -1,0 +1,11 @@
+@startuml
+
+start
+if (fatal?) then (yes)
+  :Log error;
+  detach
+else (no)
+  :Continue;
+endif
+stop
+@enduml

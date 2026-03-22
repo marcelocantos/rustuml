@@ -1,0 +1,11 @@
+@startuml
+
+start
+if (condition?) then (yes)
+  note right: Yes branch note
+  :Yes action;
+else (no)
+  :No action;
+endif
+stop
+@enduml

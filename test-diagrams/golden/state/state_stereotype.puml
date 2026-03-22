@@ -1,0 +1,5 @@
+@startuml
+state A <<myStereotype>>
+[*] --> A
+A --> [*]
+@enduml

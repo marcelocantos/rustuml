@@ -1,0 +1,9 @@
+@startuml
+autonumber
+A -> B : start
+critical cond
+  B -> C : action
+  C --> B : done
+end
+B --> A : result
+@enduml

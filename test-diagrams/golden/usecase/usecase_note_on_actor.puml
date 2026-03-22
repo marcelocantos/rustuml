@@ -1,0 +1,6 @@
+@startuml
+actor Customer
+note right of Customer : External user
+usecase "Buy Product" as BP
+Customer --> BP
+@enduml

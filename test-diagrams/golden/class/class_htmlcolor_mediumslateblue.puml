@@ -1,0 +1,5 @@
+@startuml
+class ColorTest #MediumSlateBlue {
+  +void method()
+}
+@enduml

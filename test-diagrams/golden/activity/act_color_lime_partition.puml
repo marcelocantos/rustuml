@@ -1,0 +1,8 @@
+@startuml
+
+start
+partition #lime "Colored Partition" {
+  :Action inside;
+}
+stop
+@enduml

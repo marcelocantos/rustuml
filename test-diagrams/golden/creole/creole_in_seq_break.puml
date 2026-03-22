@@ -1,0 +1,5 @@
+@startuml
+break **break condition**
+  Alice -> Bob : breaking
+end
+@enduml

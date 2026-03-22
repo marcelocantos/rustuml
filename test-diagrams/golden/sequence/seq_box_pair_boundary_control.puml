@@ -1,0 +1,8 @@
+@startuml
+box "Group"
+  boundary A
+  control B
+end box
+A -> B : hello
+B --> A : hi
+@enduml

@@ -1,0 +1,15 @@
+@startuml
+robust "Message Queue" as mq
+binary "Status" as st
+@0
+mq is idle
+st is low
+@140
+mq is processing
+st is high
+@190
+mq is responding
+@240
+mq is idle
+st is low
+@enduml

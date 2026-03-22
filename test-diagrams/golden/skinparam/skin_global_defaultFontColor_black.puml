@@ -1,0 +1,6 @@
+@startuml
+skinparam defaultFontColor black
+Alice -> Bob : hello
+Bob --> Alice : world
+note right : note
+@enduml

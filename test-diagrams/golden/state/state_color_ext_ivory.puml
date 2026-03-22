@@ -1,0 +1,5 @@
+@startuml
+state A #Ivory
+[*] --> A
+A --> [*]
+@enduml

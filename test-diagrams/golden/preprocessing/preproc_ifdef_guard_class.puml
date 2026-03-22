@@ -1,0 +1,7 @@
+@startuml
+!define RENDER_CLASS
+
+!ifdef RENDER_CLASS
+class GuardedClass { +field: String }
+!endif
+@enduml

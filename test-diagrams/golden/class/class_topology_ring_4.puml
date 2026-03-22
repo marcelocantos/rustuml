@@ -1,0 +1,10 @@
+@startuml
+class Ring1
+class Ring2
+class Ring3
+class Ring4
+Ring1 --> Ring2
+Ring2 --> Ring3
+Ring3 --> Ring4
+Ring4 --> Ring1
+@enduml

@@ -1,0 +1,5 @@
+@startuml
+note "This is a floating note" as FN
+[*] --> A
+A --> [*]
+@enduml

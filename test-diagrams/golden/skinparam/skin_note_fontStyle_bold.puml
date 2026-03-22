@@ -1,0 +1,10 @@
+@startuml
+skinparam noteFontStyle bold
+note as N1
+  This is a floating note
+  with multiple lines
+end note
+note as N2
+  Another note
+end note
+@enduml

@@ -1,0 +1,13 @@
+@startuml
+card "Service Card A" {
+  component ServiceA
+}
+card "Service Card B" {
+  component ServiceB
+}
+card "Service Card C" {
+  component ServiceC
+}
+ServiceA --> ServiceB
+ServiceB --> ServiceC
+@enduml

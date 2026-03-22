@@ -1,0 +1,38 @@
+@startuml
+!pragma teoz true
+autonumber "<b>(##)</b>"
+
+participant "Client A" as CA
+participant "Client B" as CB
+participant "Broker" as Br
+participant "Worker 1" as W1
+participant "Worker 2" as W2
+participant "Database" as DB
+
+title Distributed Job Processing
+
+CA -> Br : submit job A
+CB -> Br : submit job B
+
+par
+  Br -> W1 ++ : assign job A
+  W1 -> DB ++ : fetch A data
+  DB --> W1 -- : data A
+  W1 -> W1 : process A
+  W1 --> Br -- : job A done
+  Br -> CA : notify A complete
+and
+  Br -> W2 ++ : assign job B
+  W2 -> DB ++ : fetch B data
+  DB --> W2 -- : data B
+  opt B requires validation
+    W2 -> W1 : validate B with A results
+    W1 --> W2 : validation ok
+  end
+  W2 -> W2 : process B
+  W2 --> Br -- : job B done
+  Br -> CB : notify B complete
+end
+
+note over CA, CB : Both jobs complete
+@enduml

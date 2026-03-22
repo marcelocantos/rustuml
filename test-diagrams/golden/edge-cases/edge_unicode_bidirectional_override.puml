@@ -1,0 +1,3 @@
+@startuml
+Alice -> Bob: normal text with مزيج Arabic mixed in
+@enduml

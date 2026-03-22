@@ -1,0 +1,6 @@
+@startuml
+abstract class MyClass {
+  {abstract} +void publicAbstract()
+  {abstract} #void protectedAbstract()
+}
+@enduml

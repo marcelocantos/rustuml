@@ -1,0 +1,4 @@
+@startuml
+Alice -> Bob: Are you ready?
+Bob --> Alice: Yes! Are you?
+@enduml

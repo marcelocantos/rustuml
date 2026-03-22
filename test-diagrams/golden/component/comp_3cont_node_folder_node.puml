@@ -1,0 +1,13 @@
+@startuml
+node G1 {
+  component AA
+}
+folder G2 {
+  component BB
+}
+node G3 {
+  component CC
+}
+AA --> BB
+BB --> CC
+@enduml

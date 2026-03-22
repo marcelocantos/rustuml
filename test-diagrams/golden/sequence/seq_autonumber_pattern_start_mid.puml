@@ -1,0 +1,7 @@
+@startuml
+Alice -> B : no num
+autonumber 5
+Alice -> B : 5
+Bob --> A : 6
+Alice -> B : 7
+@enduml

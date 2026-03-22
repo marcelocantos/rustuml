@@ -1,0 +1,8 @@
+@startuml
+node Client
+node Server
+database DB
+Client --> Server : HTTP
+Server --> DB : SQL
+Client ..> DB : indirect
+@enduml

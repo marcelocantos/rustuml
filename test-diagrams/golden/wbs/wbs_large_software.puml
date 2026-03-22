@@ -1,0 +1,40 @@
+@startwbs
+* Software Development Project
+** Requirements
+*** Business Requirements
+**** Stakeholder Interviews
+**** Document Analysis
+*** Technical Requirements
+**** Architecture Design
+**** API Specification
+** Design
+*** UI/UX Design
+**** Wireframes
+**** Mockups
+**** Prototypes
+*** System Design
+**** Database Schema
+**** Service Architecture
+** Implementation
+*** Frontend Development
+**** Component Library
+**** Page Development
+**** Integration
+*** Backend Development
+**** API Development
+**** Business Logic
+**** Database Layer
+*** Infrastructure
+**** CI/CD Pipeline
+**** Cloud Setup
+**** Monitoring
+** Testing
+*** Unit Testing
+*** Integration Testing
+*** Performance Testing
+*** Security Testing
+** Deployment
+*** Staging Deployment
+*** Production Deployment
+*** Post-deployment Verification
+@endwbs

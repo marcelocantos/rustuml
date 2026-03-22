@@ -1,0 +1,13 @@
+@startuml
+actor Customer
+actor Admin
+actor System
+usecase Login
+usecase ViewProducts
+usecase ManageUsers
+Customer --> Login
+Customer --> ViewProducts
+Admin --> Login
+Admin --> ManageUsers
+System --> Login
+@enduml

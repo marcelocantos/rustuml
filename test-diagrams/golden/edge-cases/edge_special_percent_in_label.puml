@@ -1,0 +1,4 @@
+@startuml
+Alice -> Bob: 100% complete
+Bob --> Alice: 50.5% done
+@enduml

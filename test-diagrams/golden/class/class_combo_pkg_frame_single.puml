@@ -1,0 +1,7 @@
+@startuml
+frame MyPkg {
+  class MyClass {
+    +void method()
+  }
+}
+@enduml

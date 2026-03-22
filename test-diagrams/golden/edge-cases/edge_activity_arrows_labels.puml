@@ -1,0 +1,11 @@
+@startuml
+start
+if (check) then
+  -[#red]-> failure;
+  :handle failure;
+else
+  -[#green]-> success;
+  :continue;
+endif
+stop
+@enduml

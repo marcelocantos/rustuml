@@ -1,0 +1,18 @@
+@startuml
+header Protocol Timing v1.0
+footer Page 1
+title I2C Bus Timing Diagram
+robust "SCL" as scl
+robust "SDA" as sda
+@0
+scl is high
+sda is high
+@50
+sda is low
+@100
+scl is low
+@150
+sda is high
+@200
+scl is high
+@enduml

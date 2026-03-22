@@ -1,0 +1,5 @@
+@startuml
+start
+:<size:16>bigger text</size>;
+stop
+@enduml

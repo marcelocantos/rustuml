@@ -1,0 +1,10 @@
+@startuml
+skinparam storageBackgroundColor LightGray
+component WebApp
+component Database
+component Cache
+interface API
+WebApp --> Database : uses
+WebApp --> Cache : caches
+WebApp - API
+@enduml

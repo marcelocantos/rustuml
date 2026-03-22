@@ -1,0 +1,5 @@
+@startuml
+boundary B1
+participant P2
+B1 -> P2: message
+@enduml

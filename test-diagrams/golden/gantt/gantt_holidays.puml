@@ -1,0 +1,11 @@
+@startgantt
+Project starts 2024-12-20
+2024-12-25 is closed
+2024-12-26 is closed
+2025-01-01 is closed
+[Task 1] lasts 5 days
+[Task 2] lasts 5 days
+[Task 2] starts at [Task 1]'s end
+[Task 3] lasts 3 days
+[Task 3] starts at [Task 2]'s end
+@endgantt

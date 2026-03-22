@@ -1,0 +1,10 @@
+@startuml
+class Foo{
+field: String
+method(): void
+}
+class Bar{
+field: int
+}
+Foo-->Bar
+@enduml

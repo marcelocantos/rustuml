@@ -1,0 +1,6 @@
+@startuml
+class MyClass #pink {
+  +String field
+  +void method()
+}
+@enduml

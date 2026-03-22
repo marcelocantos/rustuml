@@ -1,0 +1,14 @@
+@startuml
+object Obj0_10 { val = 100 }
+object Obj1_10 { val = 101 }
+object Obj2_10 { val = 102 }
+object Obj3_10 { val = 103 }
+object Obj4_10 { val = 104 }
+object Obj5_10 { val = 105 }
+Obj0_10 --> Obj1_10
+Obj1_10 --> Obj2_10
+Obj2_10 --> Obj3_10
+Obj3_10 --> Obj4_10
+Obj4_10 --> Obj5_10
+Obj5_10 --> Obj0_10
+@enduml

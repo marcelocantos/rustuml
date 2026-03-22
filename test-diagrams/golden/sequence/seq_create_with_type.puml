@@ -1,0 +1,7 @@
+@startuml
+Alice -> Bob : process
+create control Controller
+Bob -> Controller : initialize
+Controller --> Bob : ready
+Bob --> Alice : initialized
+@enduml

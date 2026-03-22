@@ -1,0 +1,5 @@
+@startuml
+class Foo #DarkGoldenRod {
+  field: String
+}
+@enduml

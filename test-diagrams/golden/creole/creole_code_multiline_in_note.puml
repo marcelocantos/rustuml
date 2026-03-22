@@ -1,0 +1,10 @@
+@startuml
+note as N
+  <code>
+  def hello():
+      print("Hello, World!")
+
+  hello()
+  </code>
+end note
+@enduml

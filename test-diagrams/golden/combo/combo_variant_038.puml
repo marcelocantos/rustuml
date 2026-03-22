@@ -1,0 +1,14 @@
+@startuml
+title "Combo Variant 38"
+[Component1_38]
+[Component2_38]
+[Component3_38]
+[Component4_38]
+[Component5_38]
+[Component6_38]
+[Component1_38] --> [Component2_38]
+[Component2_38] --> [Component3_38]
+[Component3_38] --> [Component4_38]
+[Component4_38] --> [Component5_38]
+[Component5_38] --> [Component6_38]
+@enduml

@@ -1,0 +1,9 @@
+@startuml
+start
+:Pre 1;
+:Pre 2;
+while (l?) is (yes)
+  :W;
+endwhile
+stop
+@enduml

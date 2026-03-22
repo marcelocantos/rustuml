@@ -1,0 +1,16 @@
+@startuml
+class Animal
+class Dog
+class Cat
+interface Runnable
+interface Swimmable
+class Pack
+class Leash
+
+Animal <|-- Dog
+Animal <|-- Cat
+Dog ..|> Runnable
+Dog ..|> Swimmable
+Pack o-- Dog
+Dog -- Leash
+@enduml

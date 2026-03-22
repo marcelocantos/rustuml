@@ -1,0 +1,13 @@
+@startuml
+object Facade {
+  name = "facade"
+}
+object Manager {
+  name = "manager"
+}
+object Helper {
+  name = "helper"
+}
+Facade --> Manager
+Manager --> Helper
+@enduml

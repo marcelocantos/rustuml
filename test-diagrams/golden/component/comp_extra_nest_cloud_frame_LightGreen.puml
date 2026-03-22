@@ -1,0 +1,9 @@
+@startuml
+cloud Outer #LightGreen {
+  frame Inner {
+    component X
+    component Y
+    X --> Y
+  }
+}
+@enduml

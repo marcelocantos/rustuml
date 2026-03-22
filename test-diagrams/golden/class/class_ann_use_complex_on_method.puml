@@ -1,0 +1,11 @@
+@startuml
+annotation MyAnnotation {
+  +String name()
+  +int count() default 1
+  +boolean flag() default false
+}
+class Target {
+  <<MyAnnotation>>
+  +void method()
+}
+@enduml

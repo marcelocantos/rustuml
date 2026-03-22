@@ -1,0 +1,7 @@
+@startuml
+!includesub preproc_include_theme_file.iuml!DARK_THEME
+class DarkClass {
+  +field: String
+  +method(): void
+}
+@enduml

@@ -1,0 +1,19 @@
+@startuml
+
+|User|
+start
+:Submit form;
+|System|
+if (valid?) then (yes)
+  :Process;
+  |Database|
+  :Save;
+  |System|
+  :Success response;
+else (no)
+  :Error response;
+endif
+|User|
+:Show result;
+stop
+@enduml

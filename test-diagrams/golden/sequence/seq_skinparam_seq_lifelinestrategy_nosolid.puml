@@ -1,0 +1,5 @@
+@startuml
+skinparam SequenceLifeLineStrategy nosolid
+Alice -> Bob : hello
+Bob --> Alice : hi
+@enduml

@@ -1,0 +1,5 @@
+@startuml
+actor MyActor <<system>> #LightBlue
+usecase UC
+MyActor --> UC
+@enduml

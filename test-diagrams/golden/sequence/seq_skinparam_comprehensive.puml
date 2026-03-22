@@ -1,0 +1,12 @@
+@startuml
+skinparam SequenceArrowColor #336699
+skinparam SequenceLifeLineBorderColor #336699
+skinparam ParticipantBackgroundColor #E8F4FD
+skinparam ParticipantBorderColor #336699
+skinparam NoteBackgroundColor #FFFDE7
+skinparam NoteBorderColor #F57F17
+skinparam SequenceGroupBorderColor #E91E63
+Alice -> Bob : hello
+note over Alice : note
+Bob --> Alice : hi
+@enduml

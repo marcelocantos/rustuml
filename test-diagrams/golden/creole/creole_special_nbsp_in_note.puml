@@ -1,0 +1,5 @@
+@startuml
+note as N
+  word&nbsp;word
+end note
+@enduml

@@ -1,0 +1,5 @@
+@startuml
+state A #DarkGoldenRod
+[*] --> A
+A --> [*]
+@enduml

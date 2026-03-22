@@ -1,0 +1,5 @@
+@startuml
+actor A1
+queue Q2
+A1 -> Q2: message
+@enduml

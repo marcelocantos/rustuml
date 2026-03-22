@@ -1,0 +1,6 @@
+@startuml
+class MyClass #lightyellow {
+  +String field
+  +void method()
+}
+@enduml

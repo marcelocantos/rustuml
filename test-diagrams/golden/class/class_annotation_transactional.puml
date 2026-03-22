@@ -1,0 +1,6 @@
+@startuml
+annotation Transactional {
+  +boolean readOnly() default false
+  +int timeout() default -1
+}
+@enduml

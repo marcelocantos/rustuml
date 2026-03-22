@@ -1,0 +1,9 @@
+@startmindmap
+*[#lightgreen] Topic 9
+**[#red] Right 9.1
+***[#white] Sub 9.1.1
+**[#blue] Right 9.2
+--[#green] Left 9.1
+---[#white] Sub 9.L.1
+--[#yellow] Left 9.2
+@endmindmap

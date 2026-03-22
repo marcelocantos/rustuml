@@ -1,0 +1,9 @@
+@startuml
+!define DEBUG
+!ifdef DEBUG
+note as N1
+  Debug mode enabled
+end note
+!endif
+class Foo
+@enduml

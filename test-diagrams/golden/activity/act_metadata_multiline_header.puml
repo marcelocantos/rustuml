@@ -1,0 +1,15 @@
+@startuml
+
+header
+  Line 1
+  Line 2
+end header
+start
+:Action;
+if (cond?) then (yes)
+  :Yes;
+else (no)
+  :No;
+endif
+stop
+@enduml

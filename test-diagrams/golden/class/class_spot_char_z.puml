@@ -1,0 +1,5 @@
+@startuml
+class SpotZ << (Z,#00FFAA) Custom >> {
+  +void method()
+}
+@enduml

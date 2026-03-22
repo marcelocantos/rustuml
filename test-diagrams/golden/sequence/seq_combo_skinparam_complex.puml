@@ -1,0 +1,26 @@
+@startuml
+skinparam SequenceArrowColor #1565C0
+skinparam ParticipantBorderColor #1565C0
+skinparam NoteBackgroundColor #FFF9C4
+box "Frontend" #E3F2FD
+  actor User
+  participant UI
+end box
+box "Backend" #E8F5E9
+  participant API
+  database DB
+end box
+
+autонumber
+User -> UI ++ : login
+UI -> API ++ #red : POST /auth
+alt valid credentials
+  API -> DB ++ : check user
+  DB --> API -- : user found
+  API --> UI -- : 200 {token}
+  UI --> User -- : welcome!
+else invalid
+  API --> UI -- : 401
+  UI --> User -- : error
+end
+@enduml

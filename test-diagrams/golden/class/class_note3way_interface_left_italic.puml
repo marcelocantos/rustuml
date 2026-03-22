@@ -1,0 +1,6 @@
+@startuml
+interface MyType {
+  +void method()
+}
+note left of MyType : //Optional// note
+@enduml

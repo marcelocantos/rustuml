@@ -1,0 +1,6 @@
+@startuml
+scale 200*200
+class Foo
+class Bar
+Foo --> Bar
+@enduml

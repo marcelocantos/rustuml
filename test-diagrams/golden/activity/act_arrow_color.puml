@@ -1,0 +1,10 @@
+@startuml
+
+start
+:Action 1;
+-[#red]->
+:Action 2;
+-[#blue]->
+:Action 3;
+stop
+@enduml

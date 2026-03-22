@@ -1,0 +1,15 @@
+@startuml
+robust "Authentication Service" as auth
+binary "Status" as st
+@0
+auth is idle
+st is low
+@60
+auth is processing
+st is high
+@110
+auth is responding
+@160
+auth is idle
+st is low
+@enduml

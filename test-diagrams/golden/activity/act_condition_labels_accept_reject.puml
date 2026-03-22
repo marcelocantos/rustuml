@@ -1,0 +1,10 @@
+@startuml
+
+start
+if (condition?) (accept) then (accept)
+  :True branch;
+else (reject)
+  :False branch;
+endif
+stop
+@enduml

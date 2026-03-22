@@ -1,0 +1,14 @@
+@startuml
+!function $double($x)
+  !return $x * 2
+!endfunction
+
+!function $quadruple($x)
+  !return $double($double($x))
+!endfunction
+
+!$result = $quadruple(3)
+note as N
+  quadruple(3) = $result
+end note
+@enduml

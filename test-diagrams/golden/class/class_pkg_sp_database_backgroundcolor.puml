@@ -1,0 +1,10 @@
+@startuml
+skinparam DatabaseBackgroundColor lightblue
+database myPkg {
+  class A {
+    +void method()
+  }
+  class B
+  A --> B
+}
+@enduml

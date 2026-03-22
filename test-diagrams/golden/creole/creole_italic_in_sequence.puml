@@ -1,0 +1,5 @@
+@startuml
+Alice -> Bob : //italic message//
+Bob --> Alice : //italic reply//
+note right : //italic note//
+@enduml

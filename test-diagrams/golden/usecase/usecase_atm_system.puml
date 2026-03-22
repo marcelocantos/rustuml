@@ -1,0 +1,34 @@
+@startuml
+actor Customer
+actor "Bank Server" as BS
+actor "Security System" as SS
+
+rectangle "ATM System" {
+  usecase "Insert Card" as IC
+  usecase "Enter PIN" as EP
+  usecase "Withdraw Cash" as WC
+  usecase "Check Balance" as CB
+  usecase "Transfer Funds" as TF
+  usecase "Change PIN" as CP
+  usecase "Validate Card" as VC
+  usecase "Verify PIN" as VP
+  usecase "Dispense Cash" as DC
+  usecase "Print Receipt" as PR
+}
+
+Customer --> IC
+Customer --> EP
+Customer --> WC
+Customer --> CB
+Customer --> TF
+Customer --> CP
+BS --> VC
+SS --> VP
+
+IC .> VC : <<include>>
+EP .> VP : <<include>>
+WC .> DC : <<include>>
+WC .> PR : <<include>>
+CB .> PR : <<extend>>
+TF .> PR : <<include>>
+@enduml

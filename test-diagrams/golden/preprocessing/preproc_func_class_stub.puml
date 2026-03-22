@@ -1,0 +1,7 @@
+@startuml
+!function $stub_class($name)
+  !return "class " + $name + " { +id: Long }"
+!endfunction
+
+$stub_class("MyClass")
+@enduml

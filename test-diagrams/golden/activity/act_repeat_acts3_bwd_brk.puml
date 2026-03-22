@@ -1,0 +1,14 @@
+@startuml
+
+start
+repeat
+  :Action 1;
+  :Action 2;
+  :Action 3;
+  if (early exit?) then (yes)
+    break
+  endif
+backward :Retry;
+repeatwhile (more?) is (yes)
+stop
+@enduml

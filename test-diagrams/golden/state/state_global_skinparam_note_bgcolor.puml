@@ -1,0 +1,7 @@
+@startuml
+skinparam noteBorderColor DarkBlue
+skinparam noteBackgroundColor LightYellow
+[*] --> A
+A --> B : event
+B --> [*]
+@enduml

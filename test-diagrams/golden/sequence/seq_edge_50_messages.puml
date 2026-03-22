@@ -1,0 +1,54 @@
+@startuml
+participant Alice
+participant Bob
+Alice -> Bob : message 0
+Bob --> Alice : reply 0
+Alice -> Bob : message 1
+Bob --> Alice : reply 1
+Alice -> Bob : message 2
+Bob --> Alice : reply 2
+Alice -> Bob : message 3
+Bob --> Alice : reply 3
+Alice -> Bob : message 4
+Bob --> Alice : reply 4
+Alice -> Bob : message 5
+Bob --> Alice : reply 5
+Alice -> Bob : message 6
+Bob --> Alice : reply 6
+Alice -> Bob : message 7
+Bob --> Alice : reply 7
+Alice -> Bob : message 8
+Bob --> Alice : reply 8
+Alice -> Bob : message 9
+Bob --> Alice : reply 9
+Alice -> Bob : message 10
+Bob --> Alice : reply 10
+Alice -> Bob : message 11
+Bob --> Alice : reply 11
+Alice -> Bob : message 12
+Bob --> Alice : reply 12
+Alice -> Bob : message 13
+Bob --> Alice : reply 13
+Alice -> Bob : message 14
+Bob --> Alice : reply 14
+Alice -> Bob : message 15
+Bob --> Alice : reply 15
+Alice -> Bob : message 16
+Bob --> Alice : reply 16
+Alice -> Bob : message 17
+Bob --> Alice : reply 17
+Alice -> Bob : message 18
+Bob --> Alice : reply 18
+Alice -> Bob : message 19
+Bob --> Alice : reply 19
+Alice -> Bob : message 20
+Bob --> Alice : reply 20
+Alice -> Bob : message 21
+Bob --> Alice : reply 21
+Alice -> Bob : message 22
+Bob --> Alice : reply 22
+Alice -> Bob : message 23
+Bob --> Alice : reply 23
+Alice -> Bob : message 24
+Bob --> Alice : reply 24
+@enduml

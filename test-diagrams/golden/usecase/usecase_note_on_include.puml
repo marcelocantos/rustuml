@@ -1,0 +1,8 @@
+@startuml
+actor User
+usecase BaseUC
+usecase ChildUC
+ChildUC .> BaseUC : <<include>>
+note on link : This is a include relationship
+User --> BaseUC
+@enduml

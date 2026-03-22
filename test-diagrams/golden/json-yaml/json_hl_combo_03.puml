@@ -1,0 +1,9 @@
+@startjson
+#highlight "field3"
+{
+  "field0": "value_3_0"
+  "field1": "value_3_1"
+  "field2": "value_3_2"
+  "field3": "value_3_3"
+}
+@endjson

@@ -1,0 +1,13 @@
+@startuml
+object Client {
+  name = "client"
+}
+object Server {
+  name = "server"
+}
+object Database {
+  name = "database"
+}
+Client --> Server
+Server --> Database
+@enduml

@@ -1,0 +1,14 @@
+@startuml
+participant P00
+participant P01
+participant P02
+participant P03
+P00 -> P01 : msg 1
+P01 -> P02 : msg 2
+P02 -> P03 : msg 3
+P03 -> P00 : msg 4
+P00 -> P01 : msg 5
+P01 -> P02 : msg 6
+P02 -> P03 : msg 7
+P03 -> P00 : msg 8
+@enduml

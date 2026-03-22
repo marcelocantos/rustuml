@@ -1,0 +1,8 @@
+@startuml
+participant "VeryLongParticipantNameOne" as P1
+participant "VeryLongParticipantNameTwo" as P2
+participant "VeryLongParticipantNameThree" as P3
+P1 -> P2 : message with reasonable length
+P2 -> P3 : another message
+P3 --> P1 : return to first
+@enduml

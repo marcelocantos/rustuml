@@ -1,0 +1,13 @@
+@startuml
+package com {
+  package example {
+    package myapp {
+      package service {
+        class ServiceImpl {
+          +void execute()
+        }
+      }
+    }
+  }
+}
+@enduml

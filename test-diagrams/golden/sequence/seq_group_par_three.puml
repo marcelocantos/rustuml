@@ -1,0 +1,11 @@
+@startuml
+Client -> Server : process
+par
+  Server -> ServiceA : call A
+and
+  Server -> ServiceB : call B
+and
+  Server -> ServiceC : call C
+end
+Server --> Client : aggregated result
+@enduml

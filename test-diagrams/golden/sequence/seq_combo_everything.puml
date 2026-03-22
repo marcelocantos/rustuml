@@ -1,0 +1,71 @@
+@startuml
+skinparam SequenceArrowColor #1A237E
+skinparam ParticipantBorderColor #1A237E
+skinparam ParticipantBackgroundColor #FAFAFA
+autonumber
+hide footbox
+
+box "User Interface" #lightblue
+  actor "Customer" as Cust
+  participant "Web Browser" as Web
+end box
+
+box "Application" #lightyellow
+  boundary "Load Balancer" as LB
+  control "App Server" as App
+  entity "Session Manager" as SM
+end box
+
+box "Data" #lightgreen
+  database "Primary DB" as DB
+  collections "Cache Cluster" as Cache
+  queue "Event Queue" as EQ
+end box
+
+title Complete E-Commerce Checkout Flow
+header System Architecture v2.0
+footer Confidential
+
+Cust -> Web ++ : click checkout
+Web -> LB ++ : POST /checkout
+LB -> App ++ : forward request
+
+note over App : validating request
+
+alt session valid
+  App -> SM ++ : validate session
+  SM --> App -- : session OK
+
+  opt items in cart
+    App -> Cache ++ : get cart items
+    alt cache hit
+      Cache --> App -- : cart data
+    else cache miss
+      App -> DB ++ : fetch cart
+      DB --> App -- : cart data
+      App -> Cache ++ : cache cart
+      Cache --> App -- : cached
+    end
+  end
+
+  loop for each item
+    App -> DB ++ : check inventory
+    DB --> App -- : available
+  end
+
+  critical payment processing
+    App -> EQ : queue payment event
+    App -> DB ++ : create order
+    DB --> App -- : order_id=12345
+  end
+
+  App --> LB -- : 200 {order_id}
+  LB --> Web -- : 200
+  Web --> Cust -- : order confirmed
+
+else session invalid
+  App --> LB -- : 401
+  LB --> Web -- : 401
+  Web --> Cust -- : please login
+end
+@enduml

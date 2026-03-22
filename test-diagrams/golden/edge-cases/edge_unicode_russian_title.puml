@@ -1,0 +1,4 @@
+@startuml
+title Тест
+class Пользователь
+@enduml

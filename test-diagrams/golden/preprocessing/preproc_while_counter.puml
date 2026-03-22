@@ -1,0 +1,10 @@
+@startuml
+!$i = 1
+!while $i <= 3
+  participant "P$i" as P$i
+  !$i = $i + 1
+!endwhile
+
+P1 -> P2 : step 1
+P2 -> P3 : step 2
+@enduml

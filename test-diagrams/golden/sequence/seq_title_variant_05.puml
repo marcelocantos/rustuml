@@ -1,0 +1,5 @@
+@startuml
+title <font color=red>Colored Title</font>
+Alice -> Bob : hello
+Bob --> Alice : hi
+@enduml

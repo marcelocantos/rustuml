@@ -1,0 +1,9 @@
+@startuml
+skinparam class {
+  BackgroundColor<<repository>> lightgreen
+  BorderColor<<repository>> green
+}
+class MyClass <<repository>> {
+  +void method()
+}
+@enduml

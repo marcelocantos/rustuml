@@ -1,0 +1,16 @@
+@startuml
+state Root {
+  state Level1 {
+    state Level2 {
+      [*] --> Leaf
+      Leaf --> [*]
+    }
+    [*] --> Level2
+    Level2 --> [*]
+  }
+  [*] --> Level1
+  Level1 --> [*]
+}
+[*] --> Root
+Root --> [*]
+@enduml

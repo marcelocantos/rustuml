@@ -1,0 +1,5 @@
+@startuml
+autonumber 10
+Alice -> Bob : starting at 10
+Bob --> Alice : 11
+@enduml

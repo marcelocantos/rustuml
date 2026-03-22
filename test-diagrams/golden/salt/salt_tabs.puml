@@ -1,0 +1,10 @@
+@startsalt
+{/
+  General | Advanced | Security | About
+  {
+    Name: | "My App"
+    Version: | "1.0.0"
+    [Save]
+  }
+}
+@endsalt

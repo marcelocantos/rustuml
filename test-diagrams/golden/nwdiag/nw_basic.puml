@@ -1,0 +1,8 @@
+@startnwdiag
+nwdiag {
+  network internet {
+    web01
+    web02
+  }
+}
+@endnwdiag

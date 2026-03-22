@@ -1,0 +1,8 @@
+@startuml
+box
+  participant A
+  participant B
+end box
+A -> B : hello
+B --> A : hi
+@enduml

@@ -1,0 +1,10 @@
+@startsalt
+{^Audio Settings
+  Volume: | "               "
+  Balance: | "               "
+  Bass: | "               "
+  Treble: | "               "
+  ..
+  [Save] | [Reset] | [Cancel]
+}
+@endsalt

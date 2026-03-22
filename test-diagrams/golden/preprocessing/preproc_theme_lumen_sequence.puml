@@ -1,0 +1,5 @@
+@startuml
+!theme lumen
+Alice -> Bob : hello
+Bob --> Alice : world
+@enduml

@@ -1,0 +1,15 @@
+@startuml
+nwdiag {
+  network internet {
+    Web [address = "1.2.3.4"]
+  }
+  network dmz {
+    Web
+    App
+  }
+  network internal {
+    App
+    DB [address = "10.0.0.1"]
+  }
+}
+@enduml

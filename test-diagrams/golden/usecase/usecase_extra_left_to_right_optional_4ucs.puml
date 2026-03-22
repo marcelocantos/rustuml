@@ -1,0 +1,14 @@
+@startuml
+left to right direction
+actor User
+rectangle System {
+  usecase UC1 <<optional>>
+  usecase UC2 <<optional>>
+  usecase UC3 <<optional>>
+  usecase UC4 <<optional>>
+}
+User --> UC1
+User --> UC2
+User --> UC3
+User --> UC4
+@enduml

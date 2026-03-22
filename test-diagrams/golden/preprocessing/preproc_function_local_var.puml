@@ -1,0 +1,11 @@
+@startuml
+!function $compute($x)
+  !local $temp = $x * $x
+  !return $temp + $x
+!endfunction
+
+!$r = $compute(5)
+note as N
+  compute(5) = $r (= 5*5 + 5 = 30)
+end note
+@enduml

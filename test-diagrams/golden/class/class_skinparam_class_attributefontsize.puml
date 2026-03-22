@@ -1,0 +1,11 @@
+@startuml
+skinparam ClassAttributeFontSize 12
+class A {
+  +String field
+  +void method()
+}
+class B {
+  -int count
+}
+A --> B
+@enduml

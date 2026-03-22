@@ -1,0 +1,10 @@
+@startuml
+class "🚀 Rocket" {
+  🔥 fuel: int
+  +🛸 launch(): void
+}
+class "🌍 Earth" {
+  🌊 water: float
+}
+"🚀 Rocket" --> "🌍 Earth"
+@enduml

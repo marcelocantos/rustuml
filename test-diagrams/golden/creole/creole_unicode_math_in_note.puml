@@ -1,0 +1,5 @@
+@startuml
+note as N
+  ∀ ∃ ∈ ∉ ⊂ ⊃ ∩ ∪ ∑ ∏
+end note
+@enduml

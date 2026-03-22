@@ -1,0 +1,10 @@
+@startuml
+loop condition
+  Alice -> Bob : step 1
+  |||
+  Bob -> Charlie : step 2
+  ... waiting ...
+  Charlie --> Bob : done
+  Bob --> Alice : result
+end
+@enduml

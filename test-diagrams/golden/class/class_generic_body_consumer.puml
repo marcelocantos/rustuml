@@ -1,0 +1,6 @@
+@startuml
+class Consumer<T> {
+  +void accept(T value)
+  +Consumer<T> andThen(Consumer<T> after)
+}
+@enduml

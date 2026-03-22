@@ -1,0 +1,7 @@
+@startuml
+A -> B : init
+critical cond
+  A -> B : solid in critical
+  B --> A : ack
+end
+@enduml

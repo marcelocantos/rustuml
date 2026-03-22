@@ -1,0 +1,9 @@
+@startuml
+start
+group "Feature Group" {
+repeat
+  :Try;
+repeatwhile (more?) is (yes)
+}
+stop
+@enduml

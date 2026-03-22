@@ -1,0 +1,7 @@
+@startuml
+node LB #Orange
+node Backend1 #LightGreen
+node Backend2 #LightGreen
+LB --> Backend1
+LB --> Backend2
+@enduml

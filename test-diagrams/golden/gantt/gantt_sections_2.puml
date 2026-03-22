@@ -1,0 +1,19 @@
+@startgantt
+Project starts 2024-01-01
+
+section Phase 1
+[Task S1T1] lasts 6 days
+[Task S1T2] lasts 9 days
+[Task S1T2] starts at [Task S1T1]'s end
+[Task S1T3] lasts 12 days
+[Task S1T3] starts at [Task S1T2]'s end
+
+section Phase 2
+[Task S2T1] lasts 9 days
+[Task S2T1] starts at [Task S1T3]'s end
+[Task S2T2] lasts 12 days
+[Task S2T2] starts at [Task S2T1]'s end
+[Task S2T3] lasts 15 days
+[Task S2T3] starts at [Task S2T2]'s end
+
+@endgantt

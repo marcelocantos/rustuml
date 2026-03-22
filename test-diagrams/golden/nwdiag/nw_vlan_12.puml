@@ -1,0 +1,14 @@
+@startnwdiag
+nwdiag {
+  network vlan0_12 {
+    address = "10.1.2.0/24"
+    host0_0_12 [address = "10.1.2.1"]
+    host0_1_12 [address = "10.1.2.2"]
+  }
+  network vlan1_12 {
+    address = "10.2.2.0/24"
+    router0_12 [address = "10.2.2.1"]
+    host1_1_12 [address = "10.2.2.2"]
+  }
+}
+@endnwdiag

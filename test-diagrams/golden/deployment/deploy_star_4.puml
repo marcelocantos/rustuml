@@ -1,0 +1,11 @@
+@startuml
+node Hub
+node Spoke1
+node Spoke2
+node Spoke3
+node Spoke4
+Hub --> Spoke1
+Hub --> Spoke2
+Hub --> Spoke3
+Hub --> Spoke4
+@enduml

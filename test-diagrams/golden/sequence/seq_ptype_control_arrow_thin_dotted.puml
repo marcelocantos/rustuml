@@ -1,0 +1,6 @@
+@startuml
+control Alice
+participant Bob
+Alice -->> Bob : control sends thin_dotted
+Bob -->> Alice : control receives thin_dotted
+@enduml

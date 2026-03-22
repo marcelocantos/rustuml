@@ -1,0 +1,5 @@
+@startuml
+legend
+Some legend text
+endlegend
+@enduml

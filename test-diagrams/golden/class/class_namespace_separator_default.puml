@@ -1,0 +1,5 @@
+@startuml
+class com.example.MyClass {
+  +void method()
+}
+@enduml

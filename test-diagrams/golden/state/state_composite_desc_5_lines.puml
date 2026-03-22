@@ -1,0 +1,13 @@
+@startuml
+state Outer : desc line 1
+state Outer : desc line 2
+state Outer : desc line 3
+state Outer : desc line 4
+state Outer : desc line 5
+state Outer {
+  [*] --> S
+  S --> [*]
+}
+[*] --> Outer
+Outer --> [*]
+@enduml

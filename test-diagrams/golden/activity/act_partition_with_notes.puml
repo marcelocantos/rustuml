@@ -1,0 +1,10 @@
+@startuml
+
+start
+partition "Noted Partition" {
+  :Action 1;
+  note right: Note in partition
+  :Action 2;
+}
+stop
+@enduml

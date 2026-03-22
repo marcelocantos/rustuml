@@ -1,0 +1,19 @@
+@startuml
+
+start
+:IDLE state;
+switch (event?)
+case (START)
+  :RUNNING state;
+  while (processing?) is (yes)
+    :Handle event;
+  endwhile (done)
+  :FINISHED state;
+case (ABORT)
+  :ABORTED state;
+case (ERROR)
+  :ERROR state;
+  :Recover;
+endswitch
+stop
+@enduml

@@ -1,0 +1,6 @@
+@startuml
+state pin1 <<inputPin>>
+[*] --> pin1
+pin1 --> A
+A --> [*]
+@enduml

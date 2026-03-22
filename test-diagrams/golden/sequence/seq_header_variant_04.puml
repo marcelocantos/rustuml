@@ -1,0 +1,5 @@
+@startuml
+header Header with Date: 2024-01-01
+Alice -> Bob : hello
+Bob --> Alice : hi
+@enduml

@@ -1,0 +1,12 @@
+@startmindmap
+*[#orange] Root 14
+**[#cyan] Branch A
+***[#lightblue] Leaf A1
+***_ No box leaf
+**[#cyan] Branch B
+*** Leaf B1
+**_ Branch no box
+*** Sub leaf
+-- Left 14
+---[#lightblue] Left child
+@endmindmap

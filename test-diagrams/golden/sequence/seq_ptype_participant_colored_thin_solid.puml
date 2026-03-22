@@ -1,0 +1,5 @@
+@startuml
+participant Alice
+participant Bob
+Alice -[#red]>> Bob : participant colored thin_solid
+@enduml

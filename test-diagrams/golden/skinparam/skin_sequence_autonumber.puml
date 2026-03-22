@@ -1,0 +1,6 @@
+@startuml
+autonumber
+Alice -> Bob : hello
+Bob --> Alice : world
+Alice -> Bob : again
+@enduml

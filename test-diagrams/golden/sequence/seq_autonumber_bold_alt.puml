@@ -1,0 +1,9 @@
+@startuml
+autonumber "<b>##</b>"
+Alice -> Bob : a
+alt ok
+  Bob --> Alice : b
+else
+  Bob --> Alice : c
+end
+@enduml

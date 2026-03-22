@@ -1,0 +1,15 @@
+@startuml
+
+start
+while (go?) is (yes)
+  switch (event?)
+case (1)
+    :C1;
+case (2)
+    :C2;
+case (3)
+    :C3;
+  endswitch
+endwhile
+stop
+@enduml

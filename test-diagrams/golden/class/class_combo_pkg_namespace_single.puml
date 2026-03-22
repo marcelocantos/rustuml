@@ -1,0 +1,7 @@
+@startuml
+namespace MyPkg {
+  class MyClass {
+    +void method()
+  }
+}
+@enduml

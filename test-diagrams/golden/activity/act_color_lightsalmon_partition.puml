@@ -1,0 +1,8 @@
+@startuml
+
+start
+partition #lightsalmon "Colored Partition" {
+  :Action inside;
+}
+stop
+@enduml

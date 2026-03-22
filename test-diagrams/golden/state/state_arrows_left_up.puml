@@ -1,0 +1,6 @@
+@startuml
+[*] --> A
+A -left-> B
+B -up-> C
+C --> [*]
+@enduml

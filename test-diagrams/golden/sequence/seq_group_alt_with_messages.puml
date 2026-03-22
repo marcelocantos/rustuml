@@ -1,0 +1,10 @@
+@startuml
+Alice -> Bob : authenticate
+alt authenticated
+  Bob -> DB : query
+  DB --> Bob : data
+  Bob --> Alice : 200 OK
+else not authenticated
+  Bob --> Alice : 401 Unauthorized
+end
+@enduml

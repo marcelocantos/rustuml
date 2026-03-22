@@ -1,0 +1,8 @@
+@startuml
+node Service1
+node Service2
+node Service3
+Service1 --> Service2
+Service1 --> Service3
+Service2 --> Service3
+@enduml

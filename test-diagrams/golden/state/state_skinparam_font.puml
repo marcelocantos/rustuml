@@ -1,0 +1,9 @@
+@startuml
+skinparam state {
+  FontName Courier
+  FontColor Navy
+}
+[*] --> A
+A --> B
+B --> [*]
+@enduml

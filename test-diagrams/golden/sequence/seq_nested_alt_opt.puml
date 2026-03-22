@@ -1,0 +1,17 @@
+@startuml
+participant A
+participant B
+participant C
+A -> B : start
+alt condition
+  A -> B : action
+  opt inner_condition
+    B -> C : nested
+    C --> B : result
+  end
+  B --> A : ok
+else other
+  B --> A : fail
+end
+B --> A : complete
+@enduml

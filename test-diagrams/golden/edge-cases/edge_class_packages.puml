@@ -1,0 +1,12 @@
+@startuml
+package com.example {
+  class UserService
+  class OrderService
+}
+package com.example.model {
+  class User
+  class Order
+}
+com.example.UserService --> com.example.model.User
+com.example.OrderService --> com.example.model.Order
+@enduml

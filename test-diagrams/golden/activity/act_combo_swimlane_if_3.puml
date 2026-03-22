@@ -1,0 +1,14 @@
+@startuml
+|Frontend|
+start
+:Request;
+|Backend|
+if (cache hit?) then (yes)
+  |Cache|
+  :Cached response;
+else (no)
+  :Process;
+endif
+|Frontend|
+stop
+@enduml

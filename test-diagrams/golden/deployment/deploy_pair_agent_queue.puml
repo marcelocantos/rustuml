@@ -1,0 +1,5 @@
+@startuml
+agent Source
+queue Target
+Source --> Target
+@enduml

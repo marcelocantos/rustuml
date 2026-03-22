@@ -1,0 +1,5 @@
+@startuml
+node Source #Pink
+node Target #Pink
+Source --> Target : TCP
+@enduml

@@ -1,0 +1,10 @@
+@startuml
+
+start
+fork
+  #blue:Colored branch;
+fork again
+  :Normal branch;
+end fork
+stop
+@enduml

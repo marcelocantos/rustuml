@@ -1,0 +1,9 @@
+@startuml
+control Alice
+participant Bob
+participant Charlie
+Alice -> Bob ++ : call with control
+Bob -> Charlie ++ : delegate
+Charlie --> Bob -- : result
+Bob --> Alice -- : done
+@enduml

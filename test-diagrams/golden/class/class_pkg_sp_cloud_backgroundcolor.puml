@@ -1,0 +1,10 @@
+@startuml
+skinparam CloudBackgroundColor lightblue
+cloud myPkg {
+  class A {
+    +void method()
+  }
+  class B
+  A --> B
+}
+@enduml

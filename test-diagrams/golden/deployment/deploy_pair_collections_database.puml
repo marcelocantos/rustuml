@@ -1,0 +1,5 @@
+@startuml
+collections Source
+database Target
+Source --> Target
+@enduml

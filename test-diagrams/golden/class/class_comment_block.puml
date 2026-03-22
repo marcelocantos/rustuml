@@ -1,0 +1,8 @@
+@startuml
+/' This is a
+   block comment
+'/
+class A
+class B
+A --> B
+@enduml

@@ -1,0 +1,14 @@
+@startuml
+[*] --> Created
+Created --> Pending : submit
+Pending --> Approved : approve
+Pending --> Rejected : reject
+Approved --> Processing : start
+Processing --> Shipped : ship
+Shipped --> Delivered : deliver
+Delivered --> [*]
+Rejected --> [*]
+Approved --> Cancelled : cancel
+Processing --> Cancelled : cancel
+Cancelled --> [*]
+@enduml

@@ -1,0 +1,5 @@
+@startuml
+class C {
+  ""mono"" plain <color:red>red</color>: field
+}
+@enduml

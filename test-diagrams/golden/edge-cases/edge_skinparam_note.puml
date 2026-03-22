@@ -1,0 +1,9 @@
+@startuml
+skinparam note {
+  BackgroundColor LightYellow
+  BorderColor Orange
+  FontColor DarkBrown
+}
+Alice -> Bob: hello
+note right: This is styled
+@enduml

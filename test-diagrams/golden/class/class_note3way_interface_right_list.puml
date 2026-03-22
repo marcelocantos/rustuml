@@ -1,0 +1,6 @@
+@startuml
+interface MyType {
+  +void method()
+}
+note right of MyType : * point 1\n  * point 2\n  * point 3
+@enduml

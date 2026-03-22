@@ -1,0 +1,15 @@
+@startuml
+!pragma teoz true
+participant P0
+participant P1
+participant P2
+participant P3
+P0 -> P1 : start
+alt cond
+  P1 -> P2 : to 2
+  P2 -> P3 : to 3
+else
+  P0 -> P0 : self
+end
+P1 --> P0 : done
+@enduml

@@ -1,0 +1,7 @@
+@startuml
+!theme minty
+class Animal {
+  +name: String
+}
+class Dog extends Animal {}
+@enduml

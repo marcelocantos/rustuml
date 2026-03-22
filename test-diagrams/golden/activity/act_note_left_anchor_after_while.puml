@@ -1,0 +1,9 @@
+@startuml
+
+start
+while (loop?) is (yes)
+  :W;
+endwhile
+note left: Note after after while
+stop
+@enduml

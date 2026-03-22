@@ -1,0 +1,10 @@
+@startuml
+[*] --> Running
+state Running {
+  [*] --> Thread1
+  Thread1 --> [*]
+  --
+  [*] --> Thread2
+  Thread2 --> [*]
+}
+@enduml

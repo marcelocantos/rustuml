@@ -1,0 +1,7 @@
+@startuml
+class MyClass {
+  +**boldMethod**()
+  +//italicMethod//()
+  +__underlineMethod__()
+}
+@enduml

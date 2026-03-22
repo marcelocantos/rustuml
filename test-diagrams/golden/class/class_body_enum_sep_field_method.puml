@@ -1,0 +1,7 @@
+@startuml
+enum Variant {
+  +String name
+  --
+  +void run()
+}
+@enduml

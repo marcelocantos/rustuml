@@ -1,0 +1,16 @@
+@startuml
+A -> B : go
+loop outer
+  alt branch
+    loop inner
+      opt condition
+        B -> C : deep call
+        C --> B : deep return
+      end
+    end
+  else other
+    B -> B : handle
+  end
+end
+B --> A : done
+@enduml

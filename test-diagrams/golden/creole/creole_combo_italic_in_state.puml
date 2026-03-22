@@ -1,0 +1,5 @@
+@startuml
+state "//italic// State" as S543
+[*] --> S543
+S543 : //italic// description
+@enduml

@@ -1,0 +1,5 @@
+@startuml
+note as N
+  <size:24>sized text at 24pt</size>
+end note
+@enduml

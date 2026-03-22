@@ -1,0 +1,15 @@
+@startuml
+participant A
+participant B
+participant C
+A -> B : start
+par
+  A -> B : branch1
+and
+  critical inner
+    B -> C : inner action
+    C --> B : done
+  end
+end
+B --> A : complete
+@enduml

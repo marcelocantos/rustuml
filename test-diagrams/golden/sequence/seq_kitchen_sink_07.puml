@@ -1,0 +1,60 @@
+@startuml
+actor User
+boundary WebUI as "Web UI"
+control AppServer as "App Server"
+control Cache as "Redis Cache"
+entity SessionMgr as "Session Manager"
+database PrimaryDB as "Primary DB"
+database ReadReplica as "Read Replica"
+collections SearchIndex as "Elastic Search"
+queue EventBus as "Event Bus"
+
+autonumber
+
+== Search Flow ==
+
+User -> WebUI : search("plantuml")
+WebUI -> AppServer ++ : GET /search?q=plantuml
+AppServer -> Cache ++ : get("search:plantuml")
+alt cache hit
+  Cache --> AppServer -- : cached results
+else cache miss
+  Cache --> AppServer -- : nil
+  AppServer -> SearchIndex ++ : query("plantuml")
+  SearchIndex --> AppServer -- : 42 results
+  AppServer -> Cache ++ : set("search:plantuml", results, ttl=300)
+  Cache --> AppServer -- : ok
+end
+AppServer --> WebUI -- : results JSON
+WebUI --> User : show 42 results
+
+== View Detail ==
+
+User -> WebUI : click result #5
+WebUI -> AppServer ++ : GET /item/5
+AppServer -> SessionMgr ++ : get session
+SessionMgr --> AppServer -- : user context
+AppServer -> ReadReplica ++ : SELECT * WHERE id=5
+ReadReplica --> AppServer -- : item data
+AppServer -> EventBus : ItemViewed(user=x, item=5)
+AppServer --> WebUI -- : item details
+WebUI --> User : show detail page
+
+== Add to Cart ==
+
+User -> WebUI : add to cart
+WebUI -> AppServer ++ : POST /cart/add
+AppServer -> SessionMgr ++ : get session
+SessionMgr --> AppServer -- : user id
+
+critical cart update
+  AppServer -> PrimaryDB ++ : INSERT cart_item
+  PrimaryDB --> AppServer -- : inserted
+  AppServer -> Cache ++ : invalidate("cart:user_x")
+  Cache --> AppServer -- : invalidated
+end
+
+AppServer -> EventBus : CartUpdated(user=x)
+AppServer --> WebUI -- : cart updated
+WebUI --> User : cart shows 1 item
+@enduml

@@ -1,0 +1,7 @@
+@startuml
+package myPackage #orange {
+  class MyClass {
+    +void method()
+  }
+}
+@enduml

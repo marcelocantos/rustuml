@@ -1,0 +1,5 @@
+@startuml
+component "Very Long Component Name" as VLCN
+component "Another Long Name" as ALN
+VLCN --> ALN
+@enduml

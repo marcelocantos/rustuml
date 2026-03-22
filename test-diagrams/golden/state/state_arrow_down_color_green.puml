@@ -1,0 +1,5 @@
+@startuml
+[*] --> A
+A -down[#green]-> B
+B --> [*]
+@enduml

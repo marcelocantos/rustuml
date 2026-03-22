@@ -1,0 +1,13 @@
+@startuml
+entity Left {
+  * id : INT <<PK>>
+  --
+  name : VARCHAR(100)
+}
+entity Right {
+  * id : INT <<PK>>
+  --
+  name : VARCHAR(100)
+}
+Left |{--o{ Right : "relationship"
+@enduml

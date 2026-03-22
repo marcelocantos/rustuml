@@ -1,0 +1,4 @@
+@startuml
+collections Alice
+Alice -> Alice : self collections solid
+@enduml

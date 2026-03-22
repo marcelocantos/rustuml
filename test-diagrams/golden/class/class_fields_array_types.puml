@@ -1,0 +1,8 @@
+@startuml
+class ArrayTypes {
+  +int[] intArray
+  +String[] strArray
+  +byte[][] matrix
+  +Object[] objects
+}
+@enduml

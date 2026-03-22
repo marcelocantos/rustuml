@@ -1,0 +1,9 @@
+@startuml
+
+start
+repeat
+  :R;
+repeatwhile (m?)
+note right: Note after after repeat
+stop
+@enduml

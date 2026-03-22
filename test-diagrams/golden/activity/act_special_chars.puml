@@ -1,0 +1,8 @@
+@startuml
+
+start
+:Action with <brackets>;
+:Action with (parens);
+:Action with [square brackets];
+stop
+@enduml

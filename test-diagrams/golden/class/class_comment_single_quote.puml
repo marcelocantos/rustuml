@@ -1,0 +1,7 @@
+@startuml
+' This is a comment
+class A
+' Another comment
+class B
+A --> B
+@enduml

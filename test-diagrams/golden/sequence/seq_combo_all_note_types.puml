@@ -1,0 +1,11 @@
+@startuml
+Alice -> Bob : hello
+note left of Alice : left note
+note right of Bob : right note
+note over Alice : over Alice
+note over Bob : over Bob
+note over Alice, Bob : over both
+hnote over Alice : hex note
+rnote over Bob : rect note
+Bob --> Alice : hi
+@enduml

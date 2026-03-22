@@ -1,0 +1,10 @@
+@startuml
+
+start
+while (condition?) is (continue)
+:Work 1;
+:Work 2;
+:Work 3;
+endwhile (finished)
+stop
+@enduml

@@ -1,0 +1,6 @@
+@startuml
+start
+:Action;
+note right: Note on action
+stop
+@enduml

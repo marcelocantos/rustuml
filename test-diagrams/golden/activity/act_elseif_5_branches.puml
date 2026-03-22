@@ -1,0 +1,18 @@
+@startuml
+
+start
+if (color == red?) then (yes)
+  :Red path;
+elseif (color == green?) then (yes)
+  :Green path;
+elseif (color == blue?) then (yes)
+  :Blue path;
+elseif (color == yellow?) then (yes)
+  :Yellow path;
+elseif (color == purple?) then (yes)
+  :Purple path;
+else (other)
+  :Unknown color;
+endif
+stop
+@enduml

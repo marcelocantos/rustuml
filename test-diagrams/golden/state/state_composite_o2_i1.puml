@@ -1,0 +1,13 @@
+@startuml
+state Outer1 {
+  [*] --> IS1
+  IS1 --> [*]
+}
+state Outer2 {
+  [*] --> IS1
+  IS1 --> [*]
+}
+[*] --> Outer1
+Outer1 --> Outer2
+Outer2 --> [*]
+@enduml

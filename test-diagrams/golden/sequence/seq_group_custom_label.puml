@@ -1,0 +1,10 @@
+@startuml
+Alice -> Bob : start
+group My Custom Group [optional label]
+  Bob -> Charlie : step 1
+  Charlie --> Bob : result 1
+  Bob -> Dave : step 2
+  Dave --> Bob : result 2
+end
+Bob --> Alice : finished
+@enduml

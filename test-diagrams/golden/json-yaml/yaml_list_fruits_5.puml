@@ -1,0 +1,9 @@
+@startyaml
+fruits:
+  - apple
+  - banana
+  - cherry
+  - date
+  - elderberry
+count: 5
+@endyaml

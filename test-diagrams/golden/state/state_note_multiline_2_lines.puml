@@ -1,0 +1,8 @@
+@startuml
+[*] --> A
+note right of A
+  line 1
+  line 2
+end note
+A --> [*]
+@enduml

@@ -1,0 +1,12 @@
+@startuml
+
+start
+if (ready?) then (yes)
+  while (more?) is (yes)
+    :Process;
+  endwhile (done)
+else (no)
+  :Skip;
+endif
+stop
+@enduml

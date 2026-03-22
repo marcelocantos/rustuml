@@ -1,0 +1,9 @@
+@startuml
+node Outer {
+  node Inner {
+    class MyClass {
+      +void method()
+    }
+  }
+}
+@enduml

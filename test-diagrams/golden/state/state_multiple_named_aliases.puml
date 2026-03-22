@@ -1,0 +1,13 @@
+@startuml
+state "Waiting for Input" as WFI
+state "Processing Data" as PD
+state "Sending Response" as SR
+state "Error Handling" as EH
+
+[*] --> WFI
+WFI --> PD : input received
+PD --> SR : processed
+PD --> EH : error
+SR --> WFI : done
+EH --> WFI : retry
+@enduml

@@ -1,0 +1,8 @@
+@startuml
+!theme spacelab
+participant Alice
+participant Bob
+Alice -> Bob : hello from spacelab
+Bob --> Alice : reply
+note right : spacelab theme
+@enduml

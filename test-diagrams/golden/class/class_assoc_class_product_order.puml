@@ -1,0 +1,10 @@
+@startuml
+class Product
+class Order
+class LineItem {
+  +int quantity
+  +double unitPrice
+  +double discount
+}
+(Product, Order) .. LineItem
+@enduml

@@ -1,0 +1,7 @@
+@startuml
+!theme cyborg
+start
+:step one;
+:step two;
+stop
+@enduml

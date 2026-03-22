@@ -1,0 +1,16 @@
+@startuml
+skinparam usecaseArrowColor blue
+actor Customer
+actor Admin
+rectangle System {{
+  usecase "Login" as UC1
+  usecase "Logout" as UC2
+  usecase "Browse" as UC3
+  usecase "Manage Users" as UC4
+}}
+Customer --> UC1
+Customer --> UC2
+Customer --> UC3
+Admin --> UC4
+UC1 .> UC2 : includes
+@enduml

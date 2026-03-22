@@ -1,0 +1,24 @@
+@startuml
+start
+fork
+  :Fork 1 Branch A;
+fork again
+  :Fork 1 Branch B;
+end fork
+fork
+  :Fork 2 Branch A;
+fork again
+  :Fork 2 Branch B;
+end fork
+fork
+  :Fork 3 Branch A;
+fork again
+  :Fork 3 Branch B;
+end fork
+fork
+  :Fork 4 Branch A;
+fork again
+  :Fork 4 Branch B;
+end fork
+stop
+@enduml

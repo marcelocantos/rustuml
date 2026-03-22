@@ -1,0 +1,44 @@
+@startuml
+entity Author {
+  * id : INT <<PK>>
+  --
+  username : VARCHAR(50)
+  email : VARCHAR(200)
+  bio : TEXT
+}
+entity Post {
+  * id : INT <<PK>>
+  * author_id : INT <<FK>>
+  --
+  title : VARCHAR(300)
+  slug : VARCHAR(300)
+  body : TEXT
+  published_at : DATETIME
+  is_draft : BOOLEAN
+}
+entity Tag {
+  * id : INT <<PK>>
+  --
+  name : VARCHAR(50)
+  slug : VARCHAR(50)
+}
+entity PostTag {
+  * post_id : INT <<FK>>
+  * tag_id : INT <<FK>>
+}
+entity Comment {
+  * id : INT <<PK>>
+  * post_id : INT <<FK>>
+  --
+  author_name : VARCHAR(100)
+  author_email : VARCHAR(200)
+  body : TEXT
+  posted_at : DATETIME
+  parent_id : INT <<FK>>
+}
+Author ||--o{ Post : "writes"
+Post ||--o{ PostTag : "tagged with"
+Tag ||--o{ PostTag : "applied to"
+Post ||--o{ Comment : "receives"
+Comment ||--o{ Comment : "replied to"
+@enduml

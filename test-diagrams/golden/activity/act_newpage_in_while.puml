@@ -1,0 +1,12 @@
+@startuml
+
+start
+:Pre-loop setup;
+while (items?) is (yes)
+  :Process batch;
+  newpage Next Batch
+  :Continue processing;
+endwhile
+:Post-loop cleanup;
+stop
+@enduml

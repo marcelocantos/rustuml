@@ -1,0 +1,5 @@
+@startuml
+note as N
+  <size:16><color:navy>**big navy bold**</color></size>
+end note
+@enduml

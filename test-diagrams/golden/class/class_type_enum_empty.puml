@@ -1,0 +1,3 @@
+@startuml
+enum MyType
+@enduml

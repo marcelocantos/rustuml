@@ -1,0 +1,6 @@
+@startuml
+participant Alice <<entity>>
+participant Bob <<entity>>
+Alice -> Bob : hello
+Bob --> Alice : hi
+@enduml

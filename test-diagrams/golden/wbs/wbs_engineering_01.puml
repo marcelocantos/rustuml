@@ -1,0 +1,20 @@
+@startwbs
+* Hardware Design
+** Schematic
+*** Requirements
+*** Design
+*** Review
+** Layout
+*** Placement
+*** Routing
+*** DRC
+** Fabrication
+*** Gerber
+*** Order
+*** Assembly
+** Testing
+*** Continuity
+*** Functional
+*** EMC
+
+@endwbs

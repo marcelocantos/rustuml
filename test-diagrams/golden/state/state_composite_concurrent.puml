@@ -1,0 +1,13 @@
+@startuml
+state Composite {
+  [*] --> A
+  A --> B
+  B --> [*]
+  --
+  [*] --> C
+  C --> D
+  D --> [*]
+}
+[*] --> Composite
+Composite --> [*]
+@enduml

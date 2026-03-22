@@ -1,0 +1,10 @@
+@startuml
+!startsub HEADER_PART
+header Included Header
+!endsub
+!startsub BODY_PART
+Alice -> Bob : from included sub
+!endsub
+!includesub preproc_include_startsub.puml!HEADER_PART
+!includesub preproc_include_startsub.puml!BODY_PART
+@enduml

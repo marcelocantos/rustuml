@@ -1,0 +1,7 @@
+@startuml
+skinparam state { BackgroundColor LightBlue }
+hide empty description
+[*] --> A
+A --> B
+B --> [*]
+@enduml

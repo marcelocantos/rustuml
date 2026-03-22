@@ -1,0 +1,6 @@
+@startuml
+skinparam handwritten true
+node Server
+database DB
+Server --> DB : queries
+@enduml

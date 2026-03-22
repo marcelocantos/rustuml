@@ -1,0 +1,5 @@
+@startuml
+actor User
+usecase "Action" <<internal>>
+User --> (Action)
+@enduml

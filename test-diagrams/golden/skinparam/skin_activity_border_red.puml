@@ -1,0 +1,17 @@
+@startuml
+skinparam activityBorderColor red
+start
+:step one;
+if (condition?) then (yes)
+  :true branch;
+else (no)
+  :false branch;
+endif
+:step two;
+fork
+  :parallel one;
+fork again
+  :parallel two;
+end fork
+stop
+@enduml

@@ -1,0 +1,11 @@
+@startuml
+package Outer #Pink {
+  together {
+    component A
+    component B
+  }
+  component C
+  A --> C
+  B --> C
+}
+@enduml

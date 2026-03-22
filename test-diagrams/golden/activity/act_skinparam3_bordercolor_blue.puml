@@ -1,0 +1,7 @@
+@startuml
+
+skinparam activityBorderColor blue
+start
+:Test action;
+stop
+@enduml

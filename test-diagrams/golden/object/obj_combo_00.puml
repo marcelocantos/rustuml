@@ -1,0 +1,13 @@
+@startuml
+object Obj0A <<entity>> #red {
+  id = 0
+  name = "obj0a"
+  active = true
+}
+object Obj0B #blue {
+  ref = 0
+  label = "obj0b"
+}
+Obj0A --> Obj0B : "ref_0"
+note right of Obj0A : Object variant 0
+@enduml

@@ -1,0 +1,8 @@
+@startuml
+skinparam PackageBackgroundColor lightyellow
+package myPkg {
+  class MyClass {
+    +void method()
+  }
+}
+@enduml

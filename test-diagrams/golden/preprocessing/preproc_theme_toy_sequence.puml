@@ -1,0 +1,8 @@
+@startuml
+!theme toy
+participant Alice
+participant Bob
+Alice -> Bob : hello from toy
+Bob --> Alice : reply
+note right : toy theme
+@enduml

@@ -1,0 +1,10 @@
+@startuml
+
+start
+if (Is the value of the variable X greater than the threshold Y?) then (yes, it is)
+  :Handle above threshold case;
+else (no, it is not)
+  :Handle below threshold case;
+endif
+stop
+@enduml

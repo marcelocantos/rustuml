@@ -1,0 +1,14 @@
+@startuml
+[*] --> Running
+state Running {
+  [*] --> Audio
+  Audio --> [*]
+  --
+  [*] --> Video
+  Video --> [*]
+  --
+  [*] --> Control
+  Control --> [*]
+}
+Running --> [*]
+@enduml

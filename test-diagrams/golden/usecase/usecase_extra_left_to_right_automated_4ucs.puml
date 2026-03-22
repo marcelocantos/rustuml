@@ -1,0 +1,14 @@
+@startuml
+left to right direction
+actor User
+rectangle System {
+  usecase UC1 <<automated>>
+  usecase UC2 <<automated>>
+  usecase UC3 <<automated>>
+  usecase UC4 <<automated>>
+}
+User --> UC1
+User --> UC2
+User --> UC3
+User --> UC4
+@enduml

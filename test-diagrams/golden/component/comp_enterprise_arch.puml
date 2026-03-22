@@ -1,0 +1,42 @@
+@startuml
+package "Client Layer" {
+  component "Web Browser" as WB
+  component "Mobile App" as MA
+  component "Desktop App" as DA
+}
+package "API Layer" {
+  component "API Gateway" as GW
+  component "Auth Service" as AS
+  component "Rate Limiter" as RL
+}
+package "Business Logic" {
+  component "User Service" as US
+  component "Order Service" as OS
+  component "Payment Service" as PS
+  component "Product Service" as PRS
+  component "Notification Service" as NS
+}
+package "Data Layer" {
+  database "User DB" as UDB
+  database "Order DB" as ODB
+  database "Product DB" as PRDB
+  queue "Message Queue" as MQ
+  component "Cache" as CA
+}
+WB --> GW
+MA --> GW
+DA --> GW
+GW --> AS
+GW --> RL
+RL --> US
+RL --> OS
+RL --> PS
+RL --> PRS
+US --> UDB
+OS --> ODB
+PS --> MQ
+PRS --> PRDB
+MQ --> NS
+US --> CA
+PRS --> CA
+@enduml

@@ -1,0 +1,3 @@
+@startlatex
+\nabla \cdot \vec{F} = \frac{\partial F_x}{\partial x} + \frac{\partial F_y}{\partial y} + \frac{\partial F_z}{\partial z}
+@endlatex

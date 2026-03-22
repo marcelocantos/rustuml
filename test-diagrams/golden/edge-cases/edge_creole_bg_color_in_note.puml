@@ -1,0 +1,5 @@
+@startuml
+note as N1
+  <back:yellow>yellow bg</back>
+end note
+@enduml

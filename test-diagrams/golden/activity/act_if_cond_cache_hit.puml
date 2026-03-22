@@ -1,0 +1,12 @@
+@startuml
+
+start
+:Prepare;
+if (cache hit?) then (cache hit)
+  :Handle cache hit;
+else (cache miss)
+  :Handle cache miss;
+endif
+:Continue;
+stop
+@enduml

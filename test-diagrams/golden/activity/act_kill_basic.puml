@@ -1,0 +1,6 @@
+@startuml
+
+start
+:Action;
+kill
+@enduml

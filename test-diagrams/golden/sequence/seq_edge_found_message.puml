@@ -1,0 +1,5 @@
+@startuml
+[-> Bob : found incoming
+Bob -> Alice : forwarded
+Alice ->] : sent out
+@enduml

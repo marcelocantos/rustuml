@@ -1,0 +1,6 @@
+@startmindmap
+* Root
+** Normal box
+**_ No box node
+*** Child of no-box
+@endmindmap

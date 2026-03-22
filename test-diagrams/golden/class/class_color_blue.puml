@@ -1,0 +1,6 @@
+@startuml
+class MyClass #blue {
+  +String field
+  +void method()
+}
+@enduml

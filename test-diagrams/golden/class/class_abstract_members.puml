@@ -1,0 +1,11 @@
+@startuml
+abstract class Template {
+  {abstract} +void step1()
+  {abstract} +void step2()
+  {abstract} #String compute()
+  +void run() {
+    step1()
+    step2()
+  }
+}
+@enduml

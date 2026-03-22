@@ -1,0 +1,10 @@
+@startuml
+Alice -> Bob: synchronous call
+Alice ->> Bob: asynchronous call
+Alice --> Bob: return
+Alice -->> Bob: async return
+Alice <- Bob: reverse call
+Alice <<- Bob: reverse async
+Alice x-> Bob: destroy
+Alice ->x Bob: lost
+@enduml

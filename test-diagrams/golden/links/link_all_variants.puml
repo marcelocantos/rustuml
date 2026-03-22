@@ -1,0 +1,17 @@
+@startuml
+class A [[https://a.example.com]] {
+  note: basic link
+}
+class B [[https://b.example.com{Tooltip for B}]] {
+  note: with tooltip
+}
+class C [[https://c.example.com Label C]] {
+  note: with label
+}
+class D [[https://d.example.com{Tooltip D} Label D]] {
+  note: with both
+}
+A --> B
+B --> C
+C --> D
+@enduml

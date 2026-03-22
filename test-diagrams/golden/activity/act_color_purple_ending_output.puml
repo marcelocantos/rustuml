@@ -1,0 +1,6 @@
+@startuml
+
+start
+#purple:Action with output\
+stop
+@enduml

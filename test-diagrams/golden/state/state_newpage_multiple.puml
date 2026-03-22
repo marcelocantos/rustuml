@@ -1,0 +1,10 @@
+@startuml
+[*] --> A
+A --> B
+newpage
+B --> C
+C --> D
+newpage
+D --> E
+E --> [*]
+@enduml

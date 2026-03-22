@@ -1,0 +1,11 @@
+@startuml
+component EventProducer
+queue EventBus
+component ConsumerA
+component ConsumerB
+component ConsumerC
+EventProducer --> EventBus : publish
+EventBus --> ConsumerA : subscribe
+EventBus --> ConsumerB : subscribe
+EventBus --> ConsumerC : subscribe
+@enduml

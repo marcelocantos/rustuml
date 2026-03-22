@@ -1,0 +1,6 @@
+@startuml
+Alice -> Bob : go
+loop nothing
+end
+Bob --> Alice : done
+@enduml

@@ -1,0 +1,54 @@
+@startuml
+start
+:Action 1;
+:Action 2;
+:Action 3;
+:Action 4;
+:Action 5;
+:Action 6;
+:Action 7;
+:Action 8;
+:Action 9;
+:Action 10;
+:Action 11;
+:Action 12;
+:Action 13;
+:Action 14;
+:Action 15;
+:Action 16;
+:Action 17;
+:Action 18;
+:Action 19;
+:Action 20;
+:Action 21;
+:Action 22;
+:Action 23;
+:Action 24;
+:Action 25;
+:Action 26;
+:Action 27;
+:Action 28;
+:Action 29;
+:Action 30;
+:Action 31;
+:Action 32;
+:Action 33;
+:Action 34;
+:Action 35;
+:Action 36;
+:Action 37;
+:Action 38;
+:Action 39;
+:Action 40;
+:Action 41;
+:Action 42;
+:Action 43;
+:Action 44;
+:Action 45;
+:Action 46;
+:Action 47;
+:Action 48;
+:Action 49;
+:Action 50;
+stop
+@enduml

@@ -1,0 +1,10 @@
+@startuml
+object Base4 { id = 4 }
+object Left4 { l = 4 }
+object Right4 { r = 4 }
+object Bottom4 { b = 4 }
+Base4 --> Left4
+Base4 --> Right4
+Left4 --> Bottom4
+Right4 --> Bottom4
+@enduml

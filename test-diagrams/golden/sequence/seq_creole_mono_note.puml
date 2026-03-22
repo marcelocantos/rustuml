@@ -1,0 +1,7 @@
+@startuml
+Alice -> Bob : hello
+note over Alice
+  ""monospace content""
+end note
+Bob --> Alice : hi
+@enduml

@@ -1,0 +1,9 @@
+@startuml
+hide attributes
+class Foo {
+  field: String
+  method(): void
+}
+class Bar
+Foo --> Bar
+@enduml

@@ -1,0 +1,9 @@
+@startuml
+package Group1 {
+  component Svc1
+  component Svc2
+  component Svc3
+}
+Svc1 --> Svc2
+Svc2 --> Svc3
+@enduml

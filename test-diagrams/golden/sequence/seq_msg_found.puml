@@ -1,0 +1,5 @@
+@startuml
+[-> Alice : found message from outside
+Alice -> Bob : forwarded
+Bob ->] : sent to outside
+@enduml

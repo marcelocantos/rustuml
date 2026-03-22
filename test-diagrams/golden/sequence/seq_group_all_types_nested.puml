@@ -1,0 +1,19 @@
+@startuml
+A -> B : start
+alt condition
+  opt optional
+    loop 5 times
+      par
+        B -> C : parallel a
+      and
+        B -> D : parallel b
+      end
+    end
+  end
+else other
+  break error
+    B --> A : broken
+  end
+end
+B --> A : done
+@enduml

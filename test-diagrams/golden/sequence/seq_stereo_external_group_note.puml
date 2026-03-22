@@ -1,0 +1,11 @@
+@startuml
+participant Alice <<external>>
+participant Bob <<external>>
+Alice -> Bob : call
+note over Alice : external note
+alt success
+  Bob --> Alice : ok
+else failure
+  Bob --> Alice : error
+end
+@enduml

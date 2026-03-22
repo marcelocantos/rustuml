@@ -1,0 +1,5 @@
+@startuml
+note as N
+  <ins>inserted text</ins>
+end note
+@enduml

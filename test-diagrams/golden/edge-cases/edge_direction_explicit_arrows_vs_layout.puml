@@ -1,0 +1,7 @@
+@startuml
+left to right direction
+A -down-> B
+B -left-> C
+C -up-> D
+D -right-> A
+@enduml

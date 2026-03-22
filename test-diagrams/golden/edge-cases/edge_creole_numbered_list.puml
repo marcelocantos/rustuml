@@ -1,0 +1,8 @@
+@startuml
+note as N1
+  1. First
+  2. Second
+    1.1. Sub-item
+  3. Third
+end note
+@enduml

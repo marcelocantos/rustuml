@@ -1,0 +1,7 @@
+@startuml
+actor X
+participant Y
+X -> Y : message
+note left of X : note left of actor
+Y --> X : reply
+@enduml

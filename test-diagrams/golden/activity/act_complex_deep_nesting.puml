@@ -1,0 +1,20 @@
+@startuml
+
+start
+partition "Level 1" {
+  if (L1?) then (yes)
+    while (L2?) is (yes)
+      fork
+        repeat
+          :Deepest action;
+        repeatwhile (retry?) is (yes)
+      fork again
+        :Parallel deep;
+      end fork
+    endwhile
+  else (no)
+    :L1 false path;
+  endif
+}
+stop
+@enduml

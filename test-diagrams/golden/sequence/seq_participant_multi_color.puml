@@ -1,0 +1,14 @@
+@startuml
+participant P0 #red
+participant P1 #blue
+participant P2 #green
+participant P3 #red
+participant P4 #blue
+participant P5 #green
+P0 -> P1 : a
+P1 -> P2 : b
+P2 -> P3 : c
+P3 -> P4 : d
+P4 -> P5 : e
+P5 --> P0 : f
+@enduml

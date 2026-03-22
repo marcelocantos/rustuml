@@ -1,0 +1,9 @@
+@startuml
+class ClassA <<strategy>> {
+  +void methodA()
+}
+class ClassB <<context>> {
+  +void methodB()
+}
+ClassA <-- ClassB
+@enduml

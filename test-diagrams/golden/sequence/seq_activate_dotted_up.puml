@@ -1,0 +1,4 @@
+@startuml
+Alice --> Bob ++ : dotted activate up
+Bob --> Alice -- : return
+@enduml

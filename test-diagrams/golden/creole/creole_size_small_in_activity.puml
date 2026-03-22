@@ -1,0 +1,3 @@
+@startuml
+:<size:10>small text</size>;
+@enduml

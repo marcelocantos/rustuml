@@ -1,0 +1,5 @@
+@startuml
+note as N
+  **bold** //italic// __under__
+end note
+@enduml

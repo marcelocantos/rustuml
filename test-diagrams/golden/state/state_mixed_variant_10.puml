@@ -1,0 +1,15 @@
+@startuml
+state A #LightBlue
+state B #LightGreen
+state f <<fork>>
+state j <<join>>
+[*] --> A
+A --> B
+B --> [*]
+A --> f
+f --> F1
+f --> F2
+F1 --> j
+F2 --> j
+j --> B
+@enduml

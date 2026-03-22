@@ -1,0 +1,8 @@
+@startuml
+hide circle
+class MyClass {
+  +void method()
+}
+interface MyInterface
+MyClass ..|> MyInterface
+@enduml

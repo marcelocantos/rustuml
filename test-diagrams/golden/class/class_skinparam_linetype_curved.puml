@@ -1,0 +1,9 @@
+@startuml
+skinparam linetype curved
+class A
+class B
+class C
+A --> B
+B --> C
+A --> C
+@enduml

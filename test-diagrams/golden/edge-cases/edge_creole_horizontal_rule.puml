@@ -1,0 +1,9 @@
+@startuml
+note as N1
+  Above rule
+  ----
+  Below rule
+  ====
+  Another section
+end note
+@enduml

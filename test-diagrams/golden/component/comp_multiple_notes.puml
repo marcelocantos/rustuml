@@ -1,0 +1,10 @@
+@startuml
+component A
+component B
+component C
+note right of A : Note A
+note top of B : Note B
+note left of C : Note C
+A --> B
+B --> C
+@enduml

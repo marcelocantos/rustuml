@@ -1,0 +1,13 @@
+@startuml
+class Foo {
+  field1: String
+  ==
+  field2: int
+  --
+  method1(): void
+  ..
+  method2(): String
+  __
+  method3(): void
+}
+@enduml

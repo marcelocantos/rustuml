@@ -1,0 +1,5 @@
+@startuml
+note as N1
+  中文测试: 数据
+end note
+@enduml

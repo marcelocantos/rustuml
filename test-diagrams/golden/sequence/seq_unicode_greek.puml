@@ -1,0 +1,4 @@
+@startuml
+Alice -> Bob : Ελληνικό μήνυμα
+Bob --> Alice : Ελληνικό μήνυμα reply
+@enduml

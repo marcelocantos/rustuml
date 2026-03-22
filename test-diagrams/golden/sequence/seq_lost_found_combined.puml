@@ -1,0 +1,8 @@
+@startuml
+[-> Alice : incoming
+Alice -> Bob : forward
+Bob ->x Charlie : lost
+[-> Bob : another incoming
+Bob ->] : outgoing
+Alice -->] : also outgoing
+@enduml

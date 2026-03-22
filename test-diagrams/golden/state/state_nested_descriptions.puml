@@ -1,0 +1,11 @@
+@startuml
+state "Outer Level" as OL {
+  state "Middle Level" as ML : Middle description
+  state "Inner Level" as IL : Inner description
+  [*] --> ML
+  ML --> IL
+  IL --> [*]
+}
+[*] --> OL
+OL --> [*]
+@enduml

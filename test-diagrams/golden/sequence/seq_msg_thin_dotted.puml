@@ -1,0 +1,4 @@
+@startuml
+Alice -->> Bob : thin_dotted message
+Bob -->> Alice : return thin_dotted
+@enduml

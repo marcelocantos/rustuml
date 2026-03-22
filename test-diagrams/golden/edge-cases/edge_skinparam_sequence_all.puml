@@ -1,0 +1,13 @@
+@startuml
+skinparam sequence {
+  ActorBorderColor DarkBlue
+  ActorBackgroundColor LightBlue
+  ParticipantBorderColor DarkGreen
+  ParticipantBackgroundColor LightGreen
+  ArrowColor DarkRed
+  LifeLineBorderColor Gray
+}
+actor User
+participant System
+User -> System: request
+@enduml

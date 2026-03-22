@@ -1,0 +1,9 @@
+@startuml
+class Hub
+class Spoke1
+class Spoke2
+class Spoke3
+Hub --> Spoke1
+Hub --> Spoke2
+Hub --> Spoke3
+@enduml

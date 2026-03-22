@@ -1,0 +1,13 @@
+@startuml
+enum Status {
+  ACTIVE
+  INACTIVE
+  --
+  +int code
+  +String label
+}
+interface IStatus {
+  +String name()
+}
+Status ..|> IStatus
+@enduml

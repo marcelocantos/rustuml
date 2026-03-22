@@ -1,0 +1,7 @@
+@startuml
+start
+while (condition?) is (yes)
+  :do work;
+endwhile (no)
+stop
+@enduml

@@ -1,0 +1,5 @@
+@startuml
+rectangle Source
+queue Target
+Source --> Target
+@enduml

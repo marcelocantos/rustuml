@@ -1,0 +1,6 @@
+@startuml
+skinparam padding 30
+class Foo
+class Bar
+Foo --> Bar
+@enduml

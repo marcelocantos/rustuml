@@ -1,0 +1,6 @@
+@startuml
+class MyType {
+  +void method()
+}
+note top of MyType : This is a longer note with more content describing what the class does
+@enduml

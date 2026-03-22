@@ -1,0 +1,6 @@
+@startuml
+actor Alice
+participant Bob
+Alice -> Bob ++ : activate actor
+Bob --> Alice -- : deactivate actor
+@enduml

@@ -1,0 +1,10 @@
+@startuml
+!function $greet($name)
+  !return "Hello, " + $name + "!"
+!endfunction
+
+note as N
+  $greet("World")
+  $greet("PlantUML")
+end note
+@enduml

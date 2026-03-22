@@ -1,0 +1,6 @@
+@startuml
+collections Alice
+participant Bob
+Alice -> Bob : collections sends solid
+Bob -> Alice : collections receives solid
+@enduml

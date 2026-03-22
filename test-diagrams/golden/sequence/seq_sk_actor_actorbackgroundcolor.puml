@@ -1,0 +1,7 @@
+@startuml
+skinparam ActorBackgroundColor lightgreen
+actor X
+participant Y
+X -> Y : hello
+Y --> X : hi
+@enduml

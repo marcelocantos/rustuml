@@ -1,0 +1,9 @@
+@startuml
+autonumber "<b>##</b>"
+A -> B : start
+loop cond
+  B -> C : action
+  C --> B : done
+end
+B --> A : result
+@enduml

@@ -1,0 +1,4 @@
+@startuml
+Alice -> Bob : <color:red>red text</color> and normal
+Bob --> Alice : <color:#0000FF>blue text</color>
+@enduml

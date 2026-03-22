@@ -1,0 +1,8 @@
+@startuml
+!ifndef PRODUCTION
+note as N1
+  Not in production
+end note
+!endif
+class Foo
+@enduml

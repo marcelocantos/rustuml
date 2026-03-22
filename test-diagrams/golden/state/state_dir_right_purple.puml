@@ -1,0 +1,6 @@
+@startuml
+[*] --> A
+A -right[#purple]-> : right purple
+A --> B
+B --> [*]
+@enduml

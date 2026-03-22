@@ -1,0 +1,10 @@
+@startuml
+!define MACRO defined_value
+note as N1
+  MACRO is defined here
+end note
+!undef MACRO
+note as N2
+  MACRO is undefined here (shows literal)
+end note
+@enduml

@@ -1,0 +1,8 @@
+@startuml
+Alice -> Bob ++ #red : danger
+Bob -> Charlie ++ #green : safe
+Charlie -> Dave ++ #blue : info
+Dave --> Charlie -- : done
+Charlie --> Bob -- : ok
+Bob --> Alice -- : result
+@enduml

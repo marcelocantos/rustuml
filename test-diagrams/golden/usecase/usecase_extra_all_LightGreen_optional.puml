@@ -1,0 +1,7 @@
+@startuml
+actor User #Orange <<human>>
+usecase UC #LightGreen <<optional>>
+note right of UC : Tagged and colored
+note right of User : Human actor
+User --> UC
+@enduml
