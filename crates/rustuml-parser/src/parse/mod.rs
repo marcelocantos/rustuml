@@ -13,6 +13,7 @@ pub mod math;
 pub mod mindmap;
 pub mod nwdiag;
 pub mod object;
+pub mod regex_diagram;
 pub mod salt;
 pub mod sequence;
 pub mod state;
@@ -298,6 +299,10 @@ pub fn parse_with_base(
         "nwdiag" => {
             let nw = nwdiag::parse_nwdiag(&lines)?;
             Ok(Diagram::Nwdiag(nw))
+        }
+        "regex" => {
+            let r = regex_diagram::parse_regex_diagram(&lines)?;
+            Ok(Diagram::Regex(r))
         }
         other => Err(ParseError {
             line: 1,

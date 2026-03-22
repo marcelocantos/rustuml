@@ -16,6 +16,7 @@ pub mod math;
 pub mod mindmap;
 pub mod nwdiag;
 pub mod object;
+pub mod regex_diagram;
 pub mod salt;
 pub mod sequence;
 pub mod state;
@@ -45,6 +46,7 @@ pub enum Diagram {
     Wbs(wbs::WbsDiagram),
     Math(math::MathDiagram),
     Salt(salt::SaltDiagram),
+    Regex(regex_diagram::RegexDiagram),
 }
 
 /// Source location for error reporting.

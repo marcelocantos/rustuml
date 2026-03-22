@@ -18,6 +18,7 @@ pub mod mindmap;
 pub mod nwdiag;
 pub mod pdf;
 pub mod png;
+pub mod regex_diagram;
 pub mod salt;
 pub mod sequence;
 pub mod skinparam;
@@ -84,5 +85,6 @@ fn render_with_theme(diagram: &Diagram, theme: &Theme) -> String {
         Diagram::Math(m) => math::render(m, theme),
         Diagram::Salt(s) => salt::render(s, theme),
         Diagram::Nwdiag(nw) => nwdiag::render(nw, theme),
+        Diagram::Regex(r) => regex_diagram::render(r, theme),
     }
 }

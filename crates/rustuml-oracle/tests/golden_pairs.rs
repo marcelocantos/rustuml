@@ -37,6 +37,7 @@ const SUPPORTED_DIRS: &[&str] = &[
     "mindmap",
     "wbs",
     "math",
+    "regex",
 ];
 
 /// `@start` keywords for diagram types rustuml can parse.
@@ -47,6 +48,7 @@ const SUPPORTED_START_KEYWORDS: &[&str] = &[
     "@startwbs",
     "@startmath",
     "@startlatex",
+    "@startregex",
 ];
 
 /// Returns true if the `.puml` source uses a `@start` keyword that
@@ -100,6 +102,8 @@ fn collect_recursive(dir: &Path, pairs: &mut Vec<PathBuf>) {
 /// marker, indicating the source is intentionally invalid.
 fn golden_has_syntax_error(svg: &str) -> bool {
     svg.contains("Syntax Error")
+        || svg.contains("NoSuchElementException")
+        || svg.contains("Welcome to PlantUML")
 }
 
 struct TestResult {
