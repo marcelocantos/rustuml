@@ -47,4 +47,13 @@ pub struct DiagramMeta {
     pub caption: Option<String>,
     #[serde(skip_serializing_if = "Option::is_none")]
     pub legend: Option<String>,
+    #[serde(default, skip_serializing_if = "Vec::is_empty")]
+    pub skinparams: Vec<SkinParam>,
+}
+
+/// A skinparam key-value pair (e.g., `skinparam backgroundColor #FFFFFF`).
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct SkinParam {
+    pub key: String,
+    pub value: String,
 }
