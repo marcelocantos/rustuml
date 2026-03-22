@@ -36,6 +36,7 @@ fn main() {
             "--ast" => output_mode = OutputMode::Ast,
             "--yaml" => output_mode = OutputMode::Yaml,
             "-tsvg" => output_mode = OutputMode::Svg,
+            "-tpng" => output_mode = OutputMode::Png,
             "--theme=modern" => theme_name = "modern",
             "--theme=default" => theme_name = "default",
             s if s.starts_with("--theme=") => {
@@ -85,6 +86,19 @@ fn main() {
                     rustuml_render::render_svg_with_theme(&diagram, &theme)
                 );
             }
+            OutputMode::Png => {
+                let svg = rustuml_render::render_svg_with_theme(&diagram, &theme);
+                match rustuml_render::png::svg_to_png(&svg) {
+                    Ok(bytes) => {
+                        use std::io::Write;
+                        std::io::stdout().write_all(&bytes).expect("write failed");
+                    }
+                    Err(e) => {
+                        eprintln!("PNG error: {e}");
+                        std::process::exit(1);
+                    }
+                }
+            }
         },
         Err(e) => {
             eprintln!("parse error: {e}");
@@ -95,6 +109,7 @@ fn main() {
 
 enum OutputMode {
     Svg,
+    Png,
     Ast,
     Yaml,
 }
