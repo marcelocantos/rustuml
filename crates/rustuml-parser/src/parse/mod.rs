@@ -5,8 +5,10 @@
 
 pub mod activity;
 pub mod class;
+pub mod component;
 pub mod sequence;
 pub mod state;
+pub mod usecase;
 
 use crate::diagram::Diagram;
 use crate::preprocess;
@@ -62,6 +64,15 @@ fn detect_uml_subtype(lines: &[String]) -> UmlSubtype {
         {
             return UmlSubtype::Activity;
         }
+        // Component diagram indicators.
+        if trimmed.starts_with("component ") || (trimmed.starts_with('[') && trimmed.ends_with(']'))
+        {
+            return UmlSubtype::Component;
+        }
+        // Use case diagram indicators.
+        if trimmed.starts_with("usecase ") {
+            return UmlSubtype::UseCase;
+        }
         // Class diagram indicators.
         if trimmed.starts_with("class ")
             || trimmed.starts_with("abstract class ")
@@ -100,6 +111,8 @@ enum UmlSubtype {
     Class,
     State,
     Activity,
+    Component,
+    UseCase,
 }
 
 /// Parse YAML input into a diagram model.
@@ -152,6 +165,14 @@ pub fn parse(input: &str) -> Result<Diagram, ParseError> {
             UmlSubtype::Activity => {
                 let act = activity::parse_activity(&lines)?;
                 Ok(Diagram::Activity(act))
+            }
+            UmlSubtype::Component => {
+                let comp = component::parse_component(&lines)?;
+                Ok(Diagram::Component(comp))
+            }
+            UmlSubtype::UseCase => {
+                let uc = usecase::parse_usecase(&lines)?;
+                Ok(Diagram::UseCase(uc))
             }
         },
         other => Err(ParseError {

@@ -8,8 +8,10 @@
 
 pub mod activity;
 pub mod class;
+pub mod component;
 pub mod sequence;
 pub mod state;
+pub mod usecase;
 
 use serde::{Deserialize, Serialize};
 
@@ -21,6 +23,8 @@ pub enum Diagram {
     Class(class::ClassDiagram),
     State(state::StateDiagram),
     Activity(activity::ActivityDiagram),
+    Component(component::ComponentDiagram),
+    UseCase(usecase::UseCaseDiagram),
 }
 
 /// Source location for error reporting.
