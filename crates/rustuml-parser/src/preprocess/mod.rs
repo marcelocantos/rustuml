@@ -5,6 +5,7 @@
 //! includes, and comments before diagram-specific parsing.
 
 use std::collections::HashMap;
+use std::path::{Path, PathBuf};
 use std::sync::LazyLock;
 
 use regex::Regex;
@@ -16,21 +17,29 @@ use regex::Regex;
 /// - `$variable` substitution in lines
 /// - `!if`, `!else`, `!endif` — conditional blocks
 /// - `!ifdef`, `!ifndef` — existence checks
+/// - `!include <path>` — file inclusion (relative to base_dir)
 /// - `' single-line comments` and `/' ... '/` block comments
 /// - Strips `@startuml`/`@enduml` tags
 pub fn preprocess(input: &str) -> Vec<String> {
-    let mut ctx = PreprocessContext::new();
+    let mut ctx = PreprocessContext::new(None);
+    ctx.process(input)
+}
+
+/// Preprocess with a base directory for resolving `!include` paths.
+pub fn preprocess_with_base(input: &str, base_dir: &Path) -> Vec<String> {
+    let mut ctx = PreprocessContext::new(Some(base_dir.to_path_buf()));
     ctx.process(input)
 }
 
 struct PreprocessContext {
     defines: HashMap<String, String>,
-    /// Stack of conditional states. Each entry is (active, has_matched).
-    /// `active`: whether we're currently outputting lines.
-    /// `has_matched`: whether any branch of this if/elseif/else has been taken.
     cond_stack: Vec<CondState>,
     in_block_comment: bool,
+    base_dir: Option<PathBuf>,
+    include_depth: usize,
 }
+
+const MAX_INCLUDE_DEPTH: usize = 10;
 
 struct CondState {
     active: bool,
@@ -38,11 +47,13 @@ struct CondState {
 }
 
 impl PreprocessContext {
-    fn new() -> Self {
+    fn new(base_dir: Option<PathBuf>) -> Self {
         Self {
             defines: HashMap::new(),
             cond_stack: Vec::new(),
             in_block_comment: false,
+            base_dir,
+            include_depth: 0,
         }
     }
 
@@ -94,6 +105,12 @@ impl PreprocessContext {
             if self.try_undefine(trimmed) {
                 continue;
             }
+            if let Some(included_lines) = self.try_include(trimmed) {
+                if self.is_active() {
+                    output.extend(included_lines);
+                }
+                continue;
+            }
 
             // Only output lines when all conditions are active.
             if self.is_active() {
@@ -130,6 +147,41 @@ impl PreprocessContext {
             return true;
         }
         false
+    }
+
+    fn try_include(&mut self, line: &str) -> Option<Vec<String>> {
+        static RE: LazyLock<Regex> =
+            LazyLock::new(|| Regex::new(r#"^!include(?:_once)?\s+(?:"([^"]+)"|(\S+))$"#).unwrap());
+
+        let caps = RE.captures(line)?;
+        let path_str = caps.get(1).or(caps.get(2)).map(|m| m.as_str())?;
+
+        if self.include_depth >= MAX_INCLUDE_DEPTH {
+            // Prevent infinite recursion.
+            return Some(vec![format!(
+                "' WARNING: max include depth ({MAX_INCLUDE_DEPTH}) reached for {path_str}"
+            )]);
+        }
+
+        let file_path = if let Some(base) = &self.base_dir {
+            base.join(path_str)
+        } else {
+            PathBuf::from(path_str)
+        };
+
+        match std::fs::read_to_string(&file_path) {
+            Ok(content) => {
+                self.include_depth += 1;
+                let lines = self.process(&content);
+                self.include_depth -= 1;
+                Some(lines)
+            }
+            Err(_) => {
+                // Silently skip missing includes (matches PlantUML behavior
+                // for optional includes).
+                Some(vec![])
+            }
+        }
     }
 
     fn try_undefine(&mut self, line: &str) -> bool {
@@ -389,5 +441,39 @@ mod tests {
         let input = "@startuml\n!define FEATURE\n!ifdef FEATURE\nyes\n!endif\n@enduml";
         let lines = preprocess(input);
         assert_eq!(lines, vec!["yes"]);
+    }
+
+    #[test]
+    fn include_file() {
+        // Create a temp file for inclusion.
+        let dir = std::env::temp_dir().join("rustuml_test_include");
+        let _ = std::fs::create_dir_all(&dir);
+        std::fs::write(dir.join("common.puml"), "A -> B : included\n").unwrap();
+
+        let input = "@startuml\n!include common.puml\nC -> D : local\n@enduml";
+        let lines = preprocess_with_base(input, &dir);
+        assert_eq!(lines, vec!["A -> B : included", "C -> D : local"]);
+
+        let _ = std::fs::remove_dir_all(&dir);
+    }
+
+    #[test]
+    fn include_missing_file_is_silent() {
+        let input = "@startuml\n!include nonexistent.puml\nA -> B\n@enduml";
+        let lines = preprocess(input);
+        assert_eq!(lines, vec!["A -> B"]);
+    }
+
+    #[test]
+    fn include_with_defines() {
+        let dir = std::env::temp_dir().join("rustuml_test_include_defines");
+        let _ = std::fs::create_dir_all(&dir);
+        std::fs::write(dir.join("defs.puml"), "!define AUTHOR Alice\n").unwrap();
+
+        let input = "@startuml\n!include defs.puml\n$AUTHOR -> Bob : hi\n@enduml";
+        let lines = preprocess_with_base(input, &dir);
+        assert_eq!(lines, vec!["Alice -> Bob : hi"]);
+
+        let _ = std::fs::remove_dir_all(&dir);
     }
 }
