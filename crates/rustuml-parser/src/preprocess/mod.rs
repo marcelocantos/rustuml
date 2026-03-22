@@ -525,8 +525,7 @@ impl PreprocessContext {
 
 /// Evaluate built-in %functions in a string.
 fn eval_builtin_functions(input: &str) -> String {
-    static FUNC_RE: LazyLock<Regex> =
-        LazyLock::new(|| Regex::new(r"%(\w+)\(([^)]*)\)").unwrap());
+    static FUNC_RE: LazyLock<Regex> = LazyLock::new(|| Regex::new(r"%(\w+)\(([^)]*)\)").unwrap());
 
     FUNC_RE
         .replace_all(input, |caps: &regex::Captures| {
@@ -535,7 +534,10 @@ fn eval_builtin_functions(input: &str) -> String {
             let args: Vec<&str> = if args_raw.trim().is_empty() {
                 Vec::new()
             } else {
-                args_raw.split(',').map(|a| a.trim().trim_matches('"')).collect()
+                args_raw
+                    .split(',')
+                    .map(|a| a.trim().trim_matches('"'))
+                    .collect()
             };
 
             match func {
@@ -554,7 +556,9 @@ fn eval_builtin_functions(input: &str) -> String {
                 "strpos" => {
                     let haystack = args.first().copied().unwrap_or("");
                     let needle = args.get(1).copied().unwrap_or("");
-                    haystack.find(needle).map_or("-1".to_string(), |p| p.to_string())
+                    haystack
+                        .find(needle)
+                        .map_or("-1".to_string(), |p| p.to_string())
                 }
                 "upper" => args.first().map_or(String::new(), |s| s.to_uppercase()),
                 "lower" => args.first().map_or(String::new(), |s| s.to_lowercase()),
@@ -584,12 +588,8 @@ fn eval_builtin_functions(input: &str) -> String {
                     .to_string()
                 }
                 "chr" => {
-                    let code: u32 = args
-                        .first()
-                        .and_then(|s| s.parse().ok())
-                        .unwrap_or(0);
-                    char::from_u32(code)
-                        .map_or(String::new(), |c| c.to_string())
+                    let code: u32 = args.first().and_then(|s| s.parse().ok()).unwrap_or(0);
+                    char::from_u32(code).map_or(String::new(), |c| c.to_string())
                 }
                 "variable_exists" => {
                     // This is used in !if conditions, already handled there.
