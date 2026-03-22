@@ -34,8 +34,6 @@ const ALT_FORK_W: f64 = 12.0;
 const OPT_BELOW: f64 = 10.0;
 /// Extra downward offset for `*` inner element (so loop arch fits).
 const STAR_EXTRA: f64 = 12.0;
-/// Padding inside lookahead/lookbehind box.
-const LOOK_INNER_PAD: f64 = 6.0;
 /// Height of lookahead/lookbehind outer box.
 const LOOK_BOX_H: f64 = 38.4883;
 /// Bottom padding after inner content in lookahead box.
@@ -54,10 +52,6 @@ struct Layout {
 }
 
 impl Layout {
-    fn rail_y(&self) -> f64 {
-        self.above
-    }
-
     fn height(&self) -> f64 {
         self.above + self.below
     }
