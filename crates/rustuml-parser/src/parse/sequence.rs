@@ -512,7 +512,18 @@ impl SeqParser {
     }
 
     fn try_skinparam(&mut self, line: &str) -> bool {
-        line.starts_with("skinparam ")
+        if let Some(rest) = line.strip_prefix("skinparam ") {
+            let parts: Vec<&str> = rest.splitn(2, ' ').collect();
+            if parts.len() == 2 {
+                self.meta.skinparams.push(crate::diagram::SkinParam {
+                    key: parts[0].to_string(),
+                    value: parts[1].trim().to_string(),
+                });
+            }
+            true
+        } else {
+            false
+        }
     }
 
     fn try_hide(&mut self, line: &str) -> bool {
