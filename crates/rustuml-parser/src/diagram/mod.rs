@@ -13,6 +13,7 @@ pub mod deployment;
 pub mod gantt;
 pub mod math;
 pub mod mindmap;
+pub mod object;
 pub mod sequence;
 pub mod state;
 pub mod timing;
@@ -27,6 +28,7 @@ use serde::{Deserialize, Serialize};
 pub enum Diagram {
     Sequence(sequence::SequenceDiagram),
     Class(class::ClassDiagram),
+    Object(object::ObjectDiagram),
     State(state::StateDiagram),
     Activity(activity::ActivityDiagram),
     Component(component::ComponentDiagram),

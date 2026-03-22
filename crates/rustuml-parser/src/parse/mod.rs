@@ -10,6 +10,7 @@ pub mod deployment;
 pub mod gantt;
 pub mod math;
 pub mod mindmap;
+pub mod object;
 pub mod sequence;
 pub mod state;
 pub mod timing;
@@ -49,21 +50,21 @@ fn detect_type(input: &str) -> &str {
 /// For @startuml, detect the specific UML subtype by scanning ALL lines
 /// and counting indicator keywords. The type with the strongest signal wins.
 fn detect_uml_subtype(lines: &[String]) -> UmlSubtype {
-    let mut scores = [0i32; 8]; // Seq, Class, State, Activity, Component, UseCase, Deployment, Timing
+    let mut scores = [0i32; 9]; // Seq, Class, Object, State, Activity, Component, UseCase, Deployment, Timing
 
     for line in lines {
         let trimmed = line.trim();
 
         // Use case — must check before sequence (both use "actor").
         if trimmed.starts_with("usecase ") {
-            scores[5] += 10;
+            scores[6] += 10;
         }
         // State.
         if trimmed.starts_with("[*]")
             || trimmed.contains("--> [*]")
             || (trimmed.starts_with("state ") && !trimmed.contains("<<"))
         {
-            scores[2] += 5;
+            scores[3] += 5;
         }
         // Activity.
         if trimmed == "start"
@@ -75,7 +76,7 @@ fn detect_uml_subtype(lines: &[String]) -> UmlSubtype {
             || trimmed == "fork"
             || trimmed == "split"
         {
-            scores[3] += 5;
+            scores[4] += 5;
         }
         // Deployment.
         if trimmed.starts_with("node ")
@@ -85,12 +86,16 @@ fn detect_uml_subtype(lines: &[String]) -> UmlSubtype {
             || trimmed.starts_with("frame ")
             || trimmed.starts_with("folder ")
         {
-            scores[6] += 5;
+            scores[7] += 5;
         }
         // Component.
         if trimmed.starts_with("component ") || (trimmed.starts_with('[') && trimmed.ends_with(']'))
         {
-            scores[4] += 5;
+            scores[5] += 5;
+        }
+        // Object / map — strong unique keywords.
+        if trimmed.starts_with("object ") || trimmed.starts_with("map ") {
+            scores[2] += 10;
         }
         // Class.
         if trimmed.starts_with("class ")
@@ -119,7 +124,7 @@ fn detect_uml_subtype(lines: &[String]) -> UmlSubtype {
         // "actor" is ambiguous (sequence or use case) — give slight score to both.
         if trimmed.starts_with("actor ") {
             scores[0] += 2;
-            scores[5] += 2;
+            scores[6] += 2;
         }
         // Arrows are weak sequence indicators.
         if trimmed.contains("->") || trimmed.contains("-->") {
@@ -127,13 +132,14 @@ fn detect_uml_subtype(lines: &[String]) -> UmlSubtype {
         }
         // Timing — strong unique keywords.
         if trimmed.starts_with("robust ") || trimmed.starts_with("concise ") {
-            scores[7] += 10;
+            scores[8] += 10;
         }
     }
 
     let subtypes = [
         UmlSubtype::Sequence,
         UmlSubtype::Class,
+        UmlSubtype::Object,
         UmlSubtype::State,
         UmlSubtype::Activity,
         UmlSubtype::Component,
@@ -154,6 +160,7 @@ fn detect_uml_subtype(lines: &[String]) -> UmlSubtype {
 enum UmlSubtype {
     Sequence,
     Class,
+    Object,
     State,
     Activity,
     Component,
@@ -223,6 +230,10 @@ pub fn parse_with_base(
             UmlSubtype::Class => {
                 let cls = class::parse_class(&lines)?;
                 Ok(Diagram::Class(cls))
+            }
+            UmlSubtype::Object => {
+                let obj = object::parse_object(&lines)?;
+                Ok(Diagram::Object(obj))
             }
             UmlSubtype::State => {
                 let st = state::parse_state(&lines)?;
