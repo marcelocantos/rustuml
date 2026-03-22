@@ -1,58 +1,46 @@
 // Copyright 2026 Marcelo Cantos
 // SPDX-License-Identifier: Apache-2.0
 
-//! Text metrics — approximate text dimensions for layout.
-//!
-//! Uses proportional character widths based on typical sans-serif fonts
-//! (Liberation Sans / DejaVu Sans). This is an approximation; proper
-//! font metrics will be added when we embed font data.
+//! Text metrics — accurate text dimensions using embedded Liberation Sans font.
 
-/// Approximate width of a string in pixels at the given font size.
+use std::sync::LazyLock;
+
+use ab_glyph::{Font, FontRef, PxScale, ScaleFont};
+
+/// Embedded Liberation Sans Regular font (Apache 2.0 licensed).
+static FONT_DATA: &[u8] = include_bytes!("../fonts/LiberationSans-Regular.ttf");
+
+static FONT: LazyLock<FontRef<'static>> =
+    LazyLock::new(|| FontRef::try_from_slice(FONT_DATA).expect("failed to load embedded font"));
+
+/// Accurate width of a string in pixels at the given font size.
 pub fn text_width(text: &str, font_size: f64) -> f64 {
-    let scale = font_size / 14.0; // Normalize to 14pt baseline.
-    text.chars().map(|c| char_width(c) * scale).sum()
+    let font = FONT.as_scaled(PxScale::from(font_size as f32));
+    let mut width = 0.0f32;
+    let mut prev_glyph = None;
+
+    for c in text.chars() {
+        let glyph_id = font.glyph_id(c);
+        if let Some(prev) = prev_glyph {
+            width += font.kern(prev, glyph_id);
+        }
+        width += font.h_advance(glyph_id);
+        prev_glyph = Some(glyph_id);
+    }
+
+    width as f64
 }
 
 /// Approximate height of a line of text at the given font size.
 pub fn text_height(font_size: f64) -> f64 {
-    font_size * 1.2 // Line height ~120% of font size.
+    let font = FONT.as_scaled(PxScale::from(font_size as f32));
+    (font.ascent() - font.descent()) as f64
 }
 
-/// Proportional character width at 14pt (typical sans-serif).
-/// Values are approximate relative widths in pixels.
-fn char_width(c: char) -> f64 {
-    match c {
-        // Narrow characters.
-        'i' | 'l' | '!' | '|' | '.' | ',' | ':' | ';' | '\'' | '`' => 4.0,
-        'I' | 'j' | 'f' | 'r' | 't' => 5.0,
-        '1' | '(' | ')' | '[' | ']' | '{' | '}' => 5.5,
-
-        // Medium-narrow.
-        'a' | 'c' | 'e' | 's' | 'z' => 7.5,
-        'b' | 'd' | 'g' | 'h' | 'k' | 'n' | 'o' | 'p' | 'q' | 'u' | 'v' | 'x' | 'y' => 8.0,
-
-        // Medium.
-        'A' | 'B' | 'C' | 'D' | 'E' | 'F' | 'G' | 'H' | 'K' | 'L' | 'N' | 'P' | 'R' | 'S' | 'T'
-        | 'U' | 'V' | 'X' | 'Y' | 'Z' => 9.0,
-        '0' | '2'..='9' => 8.0,
-
-        // Wide characters.
-        'm' | 'w' => 10.5,
-        'M' | 'W' => 11.5,
-        'O' | 'Q' => 10.0,
-
-        // Symbols.
-        ' ' => 4.0,
-        '-' | '+' | '=' | '<' | '>' | '~' | '^' => 7.0,
-        '_' => 7.0,
-        '#' | '$' | '%' | '&' | '@' => 9.0,
-        '*' => 6.0,
-        '/' | '\\' => 5.5,
-        '"' => 6.0,
-
-        // Default for unknown/wide characters (CJK, emoji, etc.).
-        _ => 10.0,
-    }
+/// Line height (ascent + descent + line gap).
+pub fn line_height(font_size: f64) -> f64 {
+    let font = FONT.as_scaled(PxScale::from(font_size as f32));
+    (font.ascent() - font.descent() + font.line_gap()) as f64
 }
 
 #[cfg(test)]
@@ -72,16 +60,33 @@ mod tests {
     }
 
     #[test]
-    fn font_size_scales_linearly() {
+    fn font_size_scales() {
         let w14 = text_width("hello", 14.0);
         let w28 = text_width("hello", 28.0);
-        assert!((w28 - w14 * 2.0).abs() < 0.01);
+        // Should be roughly 2x, within tolerance.
+        assert!(
+            (w28 / w14 - 2.0).abs() < 0.1,
+            "28pt/14pt ratio should be ~2.0, got {}",
+            w28 / w14
+        );
     }
 
     #[test]
     fn typical_widths() {
-        // "Alice" at 13pt should be roughly 35-45px.
         let w = text_width("Alice", 13.0);
-        assert!(w > 25.0 && w < 55.0, "Alice width={w}");
+        assert!(w > 20.0 && w < 50.0, "Alice width={w}");
+    }
+
+    #[test]
+    fn text_height_positive() {
+        let h = text_height(14.0);
+        assert!(h > 10.0 && h < 25.0, "height={h}");
+    }
+
+    #[test]
+    fn line_height_greater_than_text() {
+        let th = text_height(14.0);
+        let lh = line_height(14.0);
+        assert!(lh >= th, "line height {lh} should be >= text height {th}");
     }
 }

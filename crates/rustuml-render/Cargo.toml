@@ -5,6 +5,7 @@ edition.workspace = true
 license.workspace = true
 
 [dependencies]
+ab_glyph = "0.2"
 rustuml-layout = { path = "../rustuml-layout" }
 rustuml-parser = { path = "../rustuml-parser" }
 serde = { version = "1", features = ["derive"] }
