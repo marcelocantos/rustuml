@@ -18,8 +18,11 @@
 //! As parsing/rendering coverage grows, just add new `FeatureSet`s —
 //! the matrix engine generates combinations automatically.
 
+pub mod activity;
+pub mod class;
 pub mod features;
 pub mod sequence;
+pub mod state;
 pub mod validate;
 
 use std::fmt;
