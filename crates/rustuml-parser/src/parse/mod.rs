@@ -133,20 +133,39 @@ pub fn parse_json(input: &str) -> Result<Diagram, ParseError> {
 
 /// Detect input format and parse accordingly.
 pub fn parse_auto(input: &str) -> Result<Diagram, ParseError> {
+    parse_auto_with_base(input, None)
+}
+
+/// Detect input format and parse with a base directory for !include.
+pub fn parse_auto_with_base(
+    input: &str,
+    base_dir: Option<&std::path::Path>,
+) -> Result<Diagram, ParseError> {
     let trimmed = input.trim_start();
     if trimmed.starts_with('{') {
         parse_json(input)
     } else if trimmed.starts_with("type:") || trimmed.starts_with("---") {
         parse_yaml(input)
     } else {
-        parse(input)
+        parse_with_base(input, base_dir)
     }
 }
 
 /// Parse PlantUML source into a typed diagram model.
 pub fn parse(input: &str) -> Result<Diagram, ParseError> {
+    parse_with_base(input, None)
+}
+
+/// Parse PlantUML with a base directory for !include resolution.
+pub fn parse_with_base(
+    input: &str,
+    base_dir: Option<&std::path::Path>,
+) -> Result<Diagram, ParseError> {
     let typ = detect_type(input);
-    let lines = preprocess::preprocess(input);
+    let lines = match base_dir {
+        Some(dir) => preprocess::preprocess_with_base(input, dir),
+        None => preprocess::preprocess(input),
+    };
 
     match typ {
         "uml" => match detect_uml_subtype(&lines) {
