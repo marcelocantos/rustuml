@@ -35,9 +35,12 @@ pub fn render(diagram: &MathDiagram, _theme: &Theme) -> String {
     // comparison (which looks for text content from the reference SVG) can
     // match.  Java PlantUML currently outputs the raw LaTeX source as
     // monospace text, so including it here keeps structural parity.
+    // Java PlantUML encodes spaces as non-breaking spaces (U+00A0) in the
+    // monospace text element; match that so golden-pair comparison passes.
+    let src_nbsp = xml_escape(&content.replace(' ', "\u{00A0}"));
     format!(
         r##"<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="{w}px" height="{h}px" viewBox="0 0 {w} {h}">
-{katex}  <text fill="#000000" font-family="monospace" font-size="{fs}" x="{px}" y="{ty}" visibility="hidden">{src}</text>
+{katex}  <text fill="#000000" font-family="monospace" font-size="{fs}" x="{px}" y="{ty}">{src}</text>
 </svg>"##,
         w = svg_w,
         h = svg_h,
@@ -45,7 +48,7 @@ pub fn render(diagram: &MathDiagram, _theme: &Theme) -> String {
         fs = FONT_SIZE,
         px = H_PADDING,
         ty = FONT_SIZE + V_PADDING,
-        src = xml_escape(content),
+        src = src_nbsp,
     )
 }
 
