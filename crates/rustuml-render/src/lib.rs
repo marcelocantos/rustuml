@@ -3,8 +3,10 @@
 
 //! SVG rendering for parsed PlantUML diagrams.
 
+pub mod activity;
 pub mod class;
 pub mod sequence;
+pub mod state;
 pub mod svg;
 
 use rustuml_parser::diagram::Diagram;
@@ -14,9 +16,7 @@ pub fn render_svg(diagram: &Diagram) -> String {
     match diagram {
         Diagram::Sequence(seq) => sequence::render(seq),
         Diagram::Class(cls) => class::render(cls),
-        _ => format!(
-            "<!-- unsupported diagram type: {:?} -->",
-            std::mem::discriminant(diagram)
-        ),
+        Diagram::State(st) => state::render(st),
+        Diagram::Activity(act) => activity::render(act),
     }
 }
