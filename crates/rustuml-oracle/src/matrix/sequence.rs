@@ -443,6 +443,94 @@ pub fn medium_cases() -> Vec<MatrixCase> {
     cases
 }
 
+/// Large matrix: covers all arrows × participant types, all arrows × activations × labels,
+/// all decorations × labels, and all groupings × activations.
+/// Produces ~400+ cases by combining:
+///   - All arrows × all participant types (8 × 8 = 64)
+///   - All arrows × all activations × labels (8 × 4 × 5 = 160)
+///   - All decorations × all labels (8 × 5 = 40)
+///   - All groupings × all activations (7 × 4 = 28)
+pub fn large_cases() -> Vec<MatrixCase> {
+    let arrows = arrow_styles();
+    let ptypes = participant_types();
+    let labels = message_labels();
+    let decos = decorations();
+    let groups = groupings();
+    let acts = activations();
+
+    let default_ptype = variant("participant", "participant", &["participant:default"], &[]);
+    let default_label = variant("simple", "hello", &["label:simple"], &["hello"]);
+    let default_deco = variant("none", "", &["decoration:none"], &[]);
+    let default_group = variant("none", "", &["grouping:none"], &[]);
+    let default_act = variant("none", "", &["activation:none"], &[]);
+    let default_arrow = variant("solid", "->", &["arrow:solid"], &[]);
+
+    let mut cases = Vec::new();
+
+    // All arrows × all participant types (8 × 8 = 64).
+    for a in arrows.variants() {
+        for p in ptypes.variants() {
+            if let Some(case) = assemble(&[
+                &a,
+                &p,
+                &default_label,
+                &default_deco,
+                &default_group,
+                &default_act,
+            ]) {
+                cases.push(case);
+            }
+        }
+    }
+
+    // All arrows × all activations × labels (8 × 4 × 5 = 160).
+    for a in arrows.variants() {
+        for act in acts.variants() {
+            for l in labels.variants() {
+                if let Some(case) =
+                    assemble(&[&a, &default_ptype, &l, &default_deco, &default_group, &act])
+                {
+                    cases.push(case);
+                }
+            }
+        }
+    }
+
+    // All decorations × all labels (8 × 5 = 40).
+    for d in decos.variants() {
+        for l in labels.variants() {
+            if let Some(case) = assemble(&[
+                &default_arrow,
+                &default_ptype,
+                &l,
+                &d,
+                &default_group,
+                &default_act,
+            ]) {
+                cases.push(case);
+            }
+        }
+    }
+
+    // All groupings × all activations (7 × 4 = 28).
+    for g in groups.variants() {
+        for act in acts.variants() {
+            if let Some(case) = assemble(&[
+                &default_arrow,
+                &default_ptype,
+                &default_label,
+                &default_deco,
+                &g,
+                &act,
+            ]) {
+                cases.push(case);
+            }
+        }
+    }
+
+    cases
+}
+
 /// Targeted edge cases that don't fit the matrix pattern.
 pub fn edge_cases() -> Vec<MatrixCase> {
     vec![

@@ -4,11 +4,14 @@
 //! SVG rendering for parsed PlantUML diagrams.
 
 pub mod activity;
+pub mod ascii;
 pub mod class;
 pub mod component;
 pub mod creole;
 pub mod deployment;
+pub mod gantt;
 pub mod metrics;
+pub mod mindmap;
 pub mod pdf;
 pub mod png;
 pub mod sequence;
@@ -16,10 +19,23 @@ pub mod skinparam;
 pub mod state;
 pub mod style;
 pub mod svg;
+pub mod timing;
 pub mod usecase;
+pub mod wbs;
 
 use rustuml_parser::diagram::Diagram;
 use style::Theme;
+
+/// Render a parsed diagram to ASCII art text.
+///
+/// Only sequence diagrams are fully supported; other diagram types return an
+/// explanatory placeholder string.
+pub fn render_ascii(diagram: &Diagram) -> String {
+    match diagram {
+        Diagram::Sequence(seq) => ascii::render_ascii(seq),
+        _ => String::from("# ASCII rendering is only supported for sequence diagrams.\n"),
+    }
+}
 
 /// Render a parsed diagram to SVG using the default theme.
 pub fn render_svg(diagram: &Diagram) -> String {
@@ -54,5 +70,9 @@ fn render_with_theme(diagram: &Diagram, theme: &Theme) -> String {
         Diagram::Component(comp) => component::render(comp, theme),
         Diagram::UseCase(uc) => usecase::render(uc, theme),
         Diagram::Deployment(dep) => deployment::render(dep, theme),
+        Diagram::MindMap(mm) => mindmap::render(mm, theme),
+        Diagram::Gantt(g) => gantt::render(g, theme),
+        Diagram::Timing(td) => timing::render(td, theme),
+        Diagram::Wbs(w) => wbs::render(w, theme),
     }
 }

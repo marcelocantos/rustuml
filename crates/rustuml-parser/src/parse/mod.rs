@@ -7,9 +7,13 @@ pub mod activity;
 pub mod class;
 pub mod component;
 pub mod deployment;
+pub mod gantt;
+pub mod mindmap;
 pub mod sequence;
 pub mod state;
+pub mod timing;
 pub mod usecase;
+pub mod wbs;
 
 use crate::diagram::Diagram;
 use crate::preprocess;
@@ -44,7 +48,7 @@ fn detect_type(input: &str) -> &str {
 /// For @startuml, detect the specific UML subtype by scanning ALL lines
 /// and counting indicator keywords. The type with the strongest signal wins.
 fn detect_uml_subtype(lines: &[String]) -> UmlSubtype {
-    let mut scores = [0i32; 7]; // Seq, Class, State, Activity, Component, UseCase, Deployment
+    let mut scores = [0i32; 8]; // Seq, Class, State, Activity, Component, UseCase, Deployment, Timing
 
     for line in lines {
         let trimmed = line.trim();
@@ -120,6 +124,10 @@ fn detect_uml_subtype(lines: &[String]) -> UmlSubtype {
         if trimmed.contains("->") || trimmed.contains("-->") {
             scores[0] += 1;
         }
+        // Timing — strong unique keywords.
+        if trimmed.starts_with("robust ") || trimmed.starts_with("concise ") {
+            scores[7] += 10;
+        }
     }
 
     let subtypes = [
@@ -130,6 +138,7 @@ fn detect_uml_subtype(lines: &[String]) -> UmlSubtype {
         UmlSubtype::Component,
         UmlSubtype::UseCase,
         UmlSubtype::Deployment,
+        UmlSubtype::Timing,
     ];
 
     // Find the highest-scoring subtype. On ties, prefer earlier entries
@@ -149,6 +158,7 @@ enum UmlSubtype {
     Component,
     UseCase,
     Deployment,
+    Timing,
 }
 
 /// Parse YAML input into a diagram model.
@@ -233,7 +243,23 @@ pub fn parse_with_base(
                 let dep = deployment::parse_deployment(&lines)?;
                 Ok(Diagram::Deployment(dep))
             }
+            UmlSubtype::Timing => {
+                let td = timing::parse_timing(&lines)?;
+                Ok(Diagram::Timing(td))
+            }
         },
+        "mindmap" => {
+            let mm = mindmap::parse_mindmap(&lines)?;
+            Ok(Diagram::MindMap(mm))
+        }
+        "gantt" => {
+            let g = gantt::parse_gantt(&lines)?;
+            Ok(Diagram::Gantt(g))
+        }
+        "wbs" => {
+            let w = wbs::parse_wbs(&lines)?;
+            Ok(Diagram::Wbs(w))
+        }
         other => Err(ParseError {
             line: 1,
             message: format!("unsupported diagram type: @start{other}"),
