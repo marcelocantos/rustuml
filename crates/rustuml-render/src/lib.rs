@@ -5,6 +5,7 @@
 
 pub mod activity;
 pub mod class;
+pub mod component;
 pub mod creole;
 pub mod metrics;
 pub mod png;
@@ -13,6 +14,7 @@ pub mod skinparam;
 pub mod state;
 pub mod style;
 pub mod svg;
+pub mod usecase;
 
 use rustuml_parser::diagram::Diagram;
 use style::Theme;
@@ -47,6 +49,8 @@ fn render_with_theme(diagram: &Diagram, theme: &Theme) -> String {
         Diagram::Class(cls) => class::render(cls, theme),
         Diagram::State(st) => state::render(st, theme),
         Diagram::Activity(act) => activity::render(act, theme),
+        Diagram::Component(comp) => component::render(comp, theme),
+        Diagram::UseCase(uc) => usecase::render(uc, theme),
         _ => format!(
             "<!-- rendering not yet implemented for {:?} -->",
             std::mem::discriminant(diagram)

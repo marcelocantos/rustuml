@@ -41,31 +41,38 @@ fn detect_type(input: &str) -> &str {
     "uml"
 }
 
-/// For @startuml, detect the specific UML subtype by scanning for keywords.
+/// For @startuml, detect the specific UML subtype by scanning ALL lines
+/// and counting indicator keywords. The type with the strongest signal wins.
 fn detect_uml_subtype(lines: &[String]) -> UmlSubtype {
+    let mut scores = [0i32; 7]; // Seq, Class, State, Activity, Component, UseCase, Deployment
+
     for line in lines {
         let trimmed = line.trim();
-        // State diagram indicators.
+
+        // Use case — must check before sequence (both use "actor").
+        if trimmed.starts_with("usecase ") {
+            scores[5] += 10;
+        }
+        // State.
         if trimmed.starts_with("[*]")
             || trimmed.contains("--> [*]")
             || (trimmed.starts_with("state ") && !trimmed.contains("<<"))
         {
-            return UmlSubtype::State;
+            scores[2] += 5;
         }
-        // Activity diagram indicators.
+        // Activity.
         if trimmed == "start"
             || trimmed == "stop"
-            || trimmed.starts_with(':') && trimmed.ends_with(';')
+            || (trimmed.starts_with(':') && trimmed.ends_with(';'))
             || trimmed.starts_with("if (")
             || trimmed.starts_with("while (")
             || trimmed.starts_with("switch (")
             || trimmed == "fork"
             || trimmed == "split"
-            || trimmed.starts_with('|') && trimmed.ends_with('|') && trimmed.len() > 2
         {
-            return UmlSubtype::Activity;
+            scores[3] += 5;
         }
-        // Deployment diagram indicators.
+        // Deployment.
         if trimmed.starts_with("node ")
             || trimmed.starts_with("artifact ")
             || trimmed.starts_with("cloud ")
@@ -73,50 +80,69 @@ fn detect_uml_subtype(lines: &[String]) -> UmlSubtype {
             || trimmed.starts_with("frame ")
             || trimmed.starts_with("folder ")
         {
-            return UmlSubtype::Deployment;
+            scores[6] += 5;
         }
-        // Component diagram indicators.
+        // Component.
         if trimmed.starts_with("component ") || (trimmed.starts_with('[') && trimmed.ends_with(']'))
         {
-            return UmlSubtype::Component;
+            scores[4] += 5;
         }
-        // Use case diagram indicators.
-        if trimmed.starts_with("usecase ") {
-            return UmlSubtype::UseCase;
-        }
-        // Class diagram indicators.
+        // Class.
         if trimmed.starts_with("class ")
             || trimmed.starts_with("abstract class ")
             || trimmed.starts_with("interface ")
             || trimmed.starts_with("enum ")
             || trimmed.starts_with("annotation ")
             || trimmed.starts_with("entity ")
-            || trimmed.starts_with("package ")
-            || trimmed.starts_with("together")
             || trimmed.contains("<|--")
             || trimmed.contains("..|>")
             || trimmed.contains("*--")
             || trimmed.contains("o--")
         {
-            return UmlSubtype::Class;
+            scores[1] += 5;
         }
-        // Sequence indicators.
+        // Sequence.
         if trimmed.starts_with("participant ")
-            || trimmed.starts_with("actor ")
             || trimmed.starts_with("boundary ")
             || trimmed.starts_with("control ")
             || trimmed.starts_with("database ")
             || trimmed.starts_with("collections ")
             || trimmed.starts_with("queue ")
-            || trimmed.contains("->")
-            || trimmed.contains("-->")
         {
-            return UmlSubtype::Sequence;
+            scores[0] += 5;
+        }
+        // "actor" is ambiguous (sequence or use case) — give slight score to both.
+        if trimmed.starts_with("actor ") {
+            scores[0] += 2;
+            scores[5] += 2;
+        }
+        // Arrows are weak sequence indicators.
+        if trimmed.contains("->") || trimmed.contains("-->") {
+            scores[0] += 1;
         }
     }
-    UmlSubtype::Sequence
+
+    let subtypes = [
+        UmlSubtype::Sequence,
+        UmlSubtype::Class,
+        UmlSubtype::State,
+        UmlSubtype::Activity,
+        UmlSubtype::Component,
+        UmlSubtype::UseCase,
+        UmlSubtype::Deployment,
+    ];
+
+    let max_idx = scores
+        .iter()
+        .enumerate()
+        .max_by_key(|(_, s)| **s)
+        .map(|(i, _)| i)
+        .unwrap_or(0);
+
+    subtypes[max_idx]
 }
 
+#[derive(Clone, Copy)]
 enum UmlSubtype {
     Sequence,
     Class,
