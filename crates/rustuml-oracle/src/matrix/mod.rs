@@ -20,6 +20,7 @@
 
 pub mod activity;
 pub mod class;
+pub mod deployment;
 pub mod features;
 pub mod sequence;
 pub mod state;

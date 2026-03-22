@@ -3,7 +3,7 @@
 
 //! Matrix-based oracle tests — systematic feature coverage.
 
-use rustuml_oracle::matrix::{self, activity, class, sequence, state, validate};
+use rustuml_oracle::matrix::{self, activity, class, deployment, sequence, state, validate};
 
 // ---------------------------------------------------------------------------
 // Sequence diagrams
@@ -100,6 +100,19 @@ fn activity_edge_cases() {
 }
 
 // ---------------------------------------------------------------------------
+// Deployment diagrams
+// ---------------------------------------------------------------------------
+
+#[test]
+fn deployment_edge_cases() {
+    let cases = deployment::edge_cases();
+    let results = validate::validate_all(&cases);
+    let summary = validate::format_summary(&results);
+    let failures: Vec<_> = results.iter().filter(|r| !r.passed()).collect();
+    assert!(failures.is_empty(), "deployment edge cases: {summary}");
+}
+
+// ---------------------------------------------------------------------------
 // Cross-cutting
 // ---------------------------------------------------------------------------
 
@@ -112,6 +125,7 @@ fn all_matrix_coverage() {
     all_cases.extend(class::edge_cases());
     all_cases.extend(state::edge_cases());
     all_cases.extend(activity::edge_cases());
+    all_cases.extend(deployment::edge_cases());
 
     let report = matrix::coverage_report(&all_cases);
 
@@ -125,5 +139,6 @@ fn all_matrix_coverage() {
     assert!(report.tag_counts.contains_key("relationship"));
     assert!(report.tag_counts.contains_key("state"));
     assert!(report.tag_counts.contains_key("activity"));
+    assert!(report.tag_counts.contains_key("deployment"));
     assert!(report.tag_counts.contains_key("edge"));
 }
