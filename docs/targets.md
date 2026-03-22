@@ -53,7 +53,7 @@
   - Command pattern for each diagram type parses source lines into diagram models
   - Exact match with Java version on preprocessing and parsing (verified by oracle tests)
 - **Context**: The parser is the largest component — ~40 diagram factories, ~79 command definitions, multi-pass parsing. The TIM preprocessor is a separate subsystem handling macros and includes. Parser correctness is verifiable by exact-match oracle tests (no layout involved).
-- **Status**: identified
+- **Status**: converging — sequence diagram parser complete (25 tests, all features). Preprocessor is pass-through stub. Binary accepts .puml files and prints parsed AST. Next: class, state, activity diagram parsers.
 - **Discovered**: 2026-03-22
 
 ### 🎯T1.4 Diagram model and rendering pipeline ported to Rust

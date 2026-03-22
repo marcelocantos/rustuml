@@ -3,7 +3,10 @@
 
 //! Diagram parsing — turns preprocessed lines into diagram models.
 
+pub mod activity;
+pub mod class;
 pub mod sequence;
+pub mod state;
 
 use crate::diagram::Diagram;
 use crate::preprocess;
@@ -28,12 +31,75 @@ fn detect_type(input: &str) -> &str {
     for line in input.lines() {
         let trimmed = line.trim();
         if let Some(rest) = trimmed.strip_prefix("@start") {
-            // Extract the type: @startuml, @startjson, @startgantt, etc.
             let typ = rest.split_whitespace().next().unwrap_or(rest);
             return typ;
         }
     }
     "uml"
+}
+
+/// For @startuml, detect the specific UML subtype by scanning for keywords.
+fn detect_uml_subtype(lines: &[String]) -> UmlSubtype {
+    for line in lines {
+        let trimmed = line.trim();
+        // State diagram indicators.
+        if trimmed.starts_with("[*]")
+            || trimmed.contains("--> [*]")
+            || (trimmed.starts_with("state ") && !trimmed.contains("<<"))
+        {
+            return UmlSubtype::State;
+        }
+        // Activity diagram indicators.
+        if trimmed == "start"
+            || trimmed == "stop"
+            || trimmed.starts_with(':') && trimmed.ends_with(';')
+            || trimmed.starts_with("if (")
+            || trimmed.starts_with("while (")
+            || trimmed.starts_with("switch (")
+            || trimmed == "fork"
+            || trimmed == "split"
+            || trimmed.starts_with('|') && trimmed.ends_with('|') && trimmed.len() > 2
+        {
+            return UmlSubtype::Activity;
+        }
+        // Class diagram indicators.
+        if trimmed.starts_with("class ")
+            || trimmed.starts_with("abstract class ")
+            || trimmed.starts_with("interface ")
+            || trimmed.starts_with("enum ")
+            || trimmed.starts_with("annotation ")
+            || trimmed.starts_with("entity ")
+            || trimmed.starts_with("package ")
+            || trimmed.starts_with("together")
+            || trimmed.contains("<|--")
+            || trimmed.contains("..|>")
+            || trimmed.contains("*--")
+            || trimmed.contains("o--")
+        {
+            return UmlSubtype::Class;
+        }
+        // Sequence indicators.
+        if trimmed.starts_with("participant ")
+            || trimmed.starts_with("actor ")
+            || trimmed.starts_with("boundary ")
+            || trimmed.starts_with("control ")
+            || trimmed.starts_with("database ")
+            || trimmed.starts_with("collections ")
+            || trimmed.starts_with("queue ")
+            || trimmed.contains("->")
+            || trimmed.contains("-->")
+        {
+            return UmlSubtype::Sequence;
+        }
+    }
+    UmlSubtype::Sequence
+}
+
+enum UmlSubtype {
+    Sequence,
+    Class,
+    State,
+    Activity,
 }
 
 /// Parse PlantUML source into a typed diagram model.
@@ -42,10 +108,24 @@ pub fn parse(input: &str) -> Result<Diagram, ParseError> {
     let lines = preprocess::preprocess(input);
 
     match typ {
-        "uml" => {
-            let seq = sequence::parse_sequence(&lines)?;
-            Ok(Diagram::Sequence(seq))
-        }
+        "uml" => match detect_uml_subtype(&lines) {
+            UmlSubtype::Sequence => {
+                let seq = sequence::parse_sequence(&lines)?;
+                Ok(Diagram::Sequence(seq))
+            }
+            UmlSubtype::Class => {
+                let cls = class::parse_class(&lines)?;
+                Ok(Diagram::Class(cls))
+            }
+            UmlSubtype::State => {
+                let st = state::parse_state(&lines)?;
+                Ok(Diagram::State(st))
+            }
+            UmlSubtype::Activity => {
+                let act = activity::parse_activity(&lines)?;
+                Ok(Diagram::Activity(act))
+            }
+        },
         other => Err(ParseError {
             line: 1,
             message: format!("unsupported diagram type: @start{other}"),
