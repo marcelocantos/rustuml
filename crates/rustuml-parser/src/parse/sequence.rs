@@ -335,6 +335,21 @@ impl SeqParser {
     }
 
     fn try_note(&mut self, line: &str) -> bool {
+        // `note : text` — Java PlantUML creates a participant named "note" with
+        // a note box above/beside it showing the text.  We declare the "note"
+        // participant and emit a Note event.
+        if let Some(text) = line.strip_prefix("note :").map(|s| s.trim()) {
+            if !text.is_empty() {
+                let participant_id = self.ensure_participant("note");
+                self.events.push(Event::Note(Note {
+                    position: NotePosition::Over,
+                    participants: vec![participant_id],
+                    text: text.to_string(),
+                }));
+            }
+            return true;
+        }
+
         // Note on link (attaches to previous message).
         if let Some(rest) = line.strip_prefix("note on link") {
             let text = rest.trim().trim_start_matches(':').trim().to_string();

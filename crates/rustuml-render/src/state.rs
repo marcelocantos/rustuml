@@ -110,9 +110,32 @@ pub fn render(diagram: &StateDiagram, theme: &Theme) -> String {
         }
     }
 
-    let total_width = MARGIN * 2.0 + STATE_WIDTH + H_GAP * 2.0;
-    let cx = total_width / 2.0;
     let title_h = if diagram.meta.title.is_some() { TITLE_HEIGHT } else { 0.0 };
+
+    // Compute extra horizontal space needed for notes on each side.
+    let right_note_space: f64 = diagram
+        .notes
+        .iter()
+        .filter(|n| {
+            matches!(
+                &n.kind,
+                StateNoteKind::RightOf(_) | StateNoteKind::OnLink
+            )
+        })
+        .map(|n| note_box_width(&n.text) + NOTE_H_GAP)
+        .fold(0.0_f64, f64::max);
+    let left_note_space: f64 = diagram
+        .notes
+        .iter()
+        .filter(|n| matches!(&n.kind, StateNoteKind::LeftOf(_)))
+        .map(|n| note_box_width(&n.text) + NOTE_H_GAP)
+        .fold(0.0_f64, f64::max);
+
+    let total_width = MARGIN * 2.0
+        + left_note_space.max(H_GAP)
+        + STATE_WIDTH
+        + right_note_space.max(H_GAP);
+    let cx = MARGIN + left_note_space.max(H_GAP) + STATE_WIDTH / 2.0;
 
     // Compute per-node heights and cumulative vertical positions.
     // Entry: (id, center_x, center_y, box_height)
