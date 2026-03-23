@@ -17,6 +17,19 @@ pub struct GanttDiagram {
     pub project_start: Option<String>,
     /// Days of week that are closed (0=Monday, 1=Tuesday, ..., 6=Sunday).
     pub closed_days: Vec<u8>,
+    /// Print scale (e.g. "daily", "weekly", "monthly").
+    pub printscale: Option<String>,
+    /// Resources mentioned in `on {Resource}` clauses, in order of first appearance.
+    pub resources: Vec<GanttResource>,
+    /// Notes attached to tasks.
+    pub notes: Vec<GanttNote>,
+}
+
+/// A note block attached to a task.
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct GanttNote {
+    /// Lines of note text.
+    pub lines: Vec<String>,
 }
 
 /// A row in the Gantt chart (task or separator).
@@ -49,4 +62,22 @@ pub struct GanttTask {
     pub start: TaskStart,
     /// Optional task color (CSS color name or hex).
     pub color: Option<String>,
+    /// Resource assignments for this task (may be multiple with percentages).
+    pub resources: Vec<TaskResource>,
+}
+
+/// A resource assignment for a task (e.g. "Alice" at 100% or "Alice" at 50%).
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct TaskResource {
+    /// Resource name.
+    pub name: String,
+    /// Percentage (1-100, default 100).
+    pub percent: u32,
+}
+
+/// A resource that appears in `on {Resource}` clauses.
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct GanttResource {
+    /// Resource name.
+    pub name: String,
 }
