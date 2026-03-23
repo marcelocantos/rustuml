@@ -220,11 +220,7 @@ impl Parser {
         while matches!(self.peek(), Some('0'..='9')) {
             s.push(self.advance().unwrap());
         }
-        if s.is_empty() {
-            None
-        } else {
-            s.parse().ok()
-        }
+        if s.is_empty() { None } else { s.parse().ok() }
     }
 
     fn parse_atom(&mut self) -> Option<RegexNode> {
@@ -233,15 +229,21 @@ impl Parser {
             '[' => Some(self.parse_class()),
             '.' => {
                 self.advance();
-                Some(RegexNode::Special { text: ".".to_string() })
+                Some(RegexNode::Special {
+                    text: ".".to_string(),
+                })
             }
             '^' => {
                 self.advance();
-                Some(RegexNode::Special { text: "^".to_string() })
+                Some(RegexNode::Special {
+                    text: "^".to_string(),
+                })
             }
             '$' => {
                 self.advance();
-                Some(RegexNode::Special { text: "$".to_string() })
+                Some(RegexNode::Special {
+                    text: "$".to_string(),
+                })
             }
             '\\' => Some(self.parse_escape()),
             c if c == ')' || c == '|' || c == '{' || c == '*' || c == '+' || c == '?' => None,
@@ -280,25 +282,37 @@ impl Parser {
     fn parse_escape(&mut self) -> RegexNode {
         self.advance(); // consume '\'
         match self.advance() {
-            Some(c @ ('d' | 'D' | 'w' | 'W' | 's' | 'S' | 'b' | 'B')) => {
-                RegexNode::Special { text: format!("\\{c}") }
-            }
-            Some(c @ ('1'..='9')) => {
-                RegexNode::Special { text: format!("\\{c}") }
-            }
-            Some('n') => RegexNode::Special { text: "\\n".to_string() },
-            Some('t') => RegexNode::Special { text: "\\t".to_string() },
-            Some('r') => RegexNode::Special { text: "\\r".to_string() },
+            Some(c @ ('d' | 'D' | 'w' | 'W' | 's' | 'S' | 'b' | 'B')) => RegexNode::Special {
+                text: format!("\\{c}"),
+            },
+            Some(c @ ('1'..='9')) => RegexNode::Special {
+                text: format!("\\{c}"),
+            },
+            Some('n') => RegexNode::Special {
+                text: "\\n".to_string(),
+            },
+            Some('t') => RegexNode::Special {
+                text: "\\t".to_string(),
+            },
+            Some('r') => RegexNode::Special {
+                text: "\\r".to_string(),
+            },
             Some(c) if matches!(c, '+' | '*' | '?' | '.' | '^' | '$' | '|') => {
                 // Escaped quantifier/operator: \+  \*  \.  etc. → render as Special
                 // to show the backslash and distinguish from the bare operator.
-                RegexNode::Special { text: format!("\\{c}") }
+                RegexNode::Special {
+                    text: format!("\\{c}"),
+                }
             }
             Some(c) => {
                 // Escaped structural char: \(  \)  \[  \]  etc. → render as literal
-                RegexNode::Literal { text: c.to_string() }
+                RegexNode::Literal {
+                    text: c.to_string(),
+                }
             }
-            None => RegexNode::Literal { text: "\\".to_string() },
+            None => RegexNode::Literal {
+                text: "\\".to_string(),
+            },
         }
     }
 
@@ -433,7 +447,10 @@ impl Parser {
                 Some(c) => {
                     self.advance();
                     // Check for range a-z
-                    if self.peek() == Some('-') && self.peek2() != Some(']') && self.peek2().is_some() {
+                    if self.peek() == Some('-')
+                        && self.peek2() != Some(']')
+                        && self.peek2().is_some()
+                    {
                         self.advance(); // consume '-'
                         if let Some(end) = self.advance() {
                             let range = format!("{c}-{end}");

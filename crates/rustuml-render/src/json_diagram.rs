@@ -158,9 +158,7 @@ fn build_table(rows: Vec<Row>) -> Table {
     let val_w = rows
         .iter()
         .map(|r| match &r.value {
-            RowValue::Leaf(s) => {
-                (metrics::text_width(s, FONT_SIZE) + 2.0 * PAD_X).max(MIN_VAL_W)
-            }
+            RowValue::Leaf(s) => (metrics::text_width(s, FONT_SIZE) + 2.0 * PAD_X).max(MIN_VAL_W),
             RowValue::Subtable(sub) => sub.total_w,
         })
         .fold(MIN_VAL_W, f64::max);
@@ -305,8 +303,7 @@ mod tests {
 
     #[test]
     fn renders_highlight() {
-        let input =
-            "@startjson\n#highlight \"name\"\n{\"name\": \"Alice\", \"age\": 30}\n@endjson";
+        let input = "@startjson\n#highlight \"name\"\n{\"name\": \"Alice\", \"age\": 30}\n@endjson";
         let diagram = rustuml_parser::parse::parse(input).unwrap();
         let svg = crate::render_svg(&diagram);
         // Highlighted cell should use the highlight colour.

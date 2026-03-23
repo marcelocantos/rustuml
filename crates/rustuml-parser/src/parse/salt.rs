@@ -19,17 +19,12 @@
 
 use super::ParseError;
 use crate::diagram::DiagramMeta;
-use crate::diagram::salt::{
-    BlockKind, SaltBlock, SaltDiagram, SaltRow, SaltWidget, SeparatorKind,
-};
+use crate::diagram::salt::{BlockKind, SaltBlock, SaltDiagram, SaltRow, SaltWidget, SeparatorKind};
 
 /// Parse preprocessed lines into a [`SaltDiagram`].
 pub fn parse_salt(lines: &[String]) -> Result<SaltDiagram, ParseError> {
     // Find the first non-empty line — must be the opening brace.
-    let start = lines
-        .iter()
-        .position(|l| !l.trim().is_empty())
-        .unwrap_or(0);
+    let start = lines.iter().position(|l| !l.trim().is_empty()).unwrap_or(0);
 
     if start >= lines.len() {
         return Err(ParseError {
@@ -232,7 +227,12 @@ fn parse_block_header(line: &str) -> (BlockKind, Option<String>, &str) {
     if rest.starts_with("SI") {
         return (BlockKind::ScrollInput, None, rest[2..].trim_start());
     }
-    if rest.starts_with('T') && rest[1..].chars().next().map_or(true, |c| !c.is_alphanumeric()) {
+    if rest.starts_with('T')
+        && rest[1..]
+            .chars()
+            .next()
+            .map_or(true, |c| !c.is_alphanumeric())
+    {
         return (BlockKind::Tree, None, rest[1..].trim_start());
     }
     if rest.starts_with('/') {
@@ -300,10 +300,7 @@ fn parse_row_part(part: &str) -> Vec<SaltWidget> {
 
     // Text field: `"text"`.
     if trimmed.starts_with('"') {
-        let inner = trimmed
-            .trim_matches('"')
-            .trim_end()
-            .to_string();
+        let inner = trimmed.trim_matches('"').trim_end().to_string();
         return vec![SaltWidget::TextField(inner)];
     }
 
@@ -400,10 +397,25 @@ mod tests {
 }"#,
         );
         let diag = parse_salt(&input).unwrap();
-        assert!(matches!(&diag.root.rows[0].cells[0], SaltWidget::Checkbox { checked: true, .. }));
-        assert!(matches!(&diag.root.rows[1].cells[0], SaltWidget::Checkbox { checked: false, .. }));
-        assert!(matches!(&diag.root.rows[2].cells[0], SaltWidget::Radio { selected: true, .. }));
-        assert!(matches!(&diag.root.rows[3].cells[0], SaltWidget::Radio { selected: false, .. }));
+        assert!(matches!(
+            &diag.root.rows[0].cells[0],
+            SaltWidget::Checkbox { checked: true, .. }
+        ));
+        assert!(matches!(
+            &diag.root.rows[1].cells[0],
+            SaltWidget::Checkbox { checked: false, .. }
+        ));
+        assert!(matches!(
+            &diag.root.rows[2].cells[0],
+            SaltWidget::Radio { selected: true, .. }
+        ));
+        assert!(matches!(
+            &diag.root.rows[3].cells[0],
+            SaltWidget::Radio {
+                selected: false,
+                ..
+            }
+        ));
     }
 
     #[test]
@@ -417,9 +429,18 @@ mod tests {
         );
         let diag = parse_salt(&input).unwrap();
         assert_eq!(diag.root.kind, BlockKind::Tree);
-        assert!(matches!(&diag.root.rows[0].cells[0], SaltWidget::TreeNode { depth: 1, .. }));
-        assert!(matches!(&diag.root.rows[1].cells[0], SaltWidget::TreeNode { depth: 2, .. }));
-        assert!(matches!(&diag.root.rows[2].cells[0], SaltWidget::TreeNode { depth: 3, .. }));
+        assert!(matches!(
+            &diag.root.rows[0].cells[0],
+            SaltWidget::TreeNode { depth: 1, .. }
+        ));
+        assert!(matches!(
+            &diag.root.rows[1].cells[0],
+            SaltWidget::TreeNode { depth: 2, .. }
+        ));
+        assert!(matches!(
+            &diag.root.rows[2].cells[0],
+            SaltWidget::TreeNode { depth: 3, .. }
+        ));
     }
 
     #[test]
@@ -445,9 +466,18 @@ mod tests {
 }"#,
         );
         let diag = parse_salt(&input).unwrap();
-        assert!(matches!(&diag.root.rows[0].cells[0], SaltWidget::Separator(SeparatorKind::Dots)));
-        assert!(matches!(&diag.root.rows[1].cells[0], SaltWidget::Separator(SeparatorKind::Double)));
-        assert!(matches!(&diag.root.rows[2].cells[0], SaltWidget::Separator(SeparatorKind::Single)));
+        assert!(matches!(
+            &diag.root.rows[0].cells[0],
+            SaltWidget::Separator(SeparatorKind::Dots)
+        ));
+        assert!(matches!(
+            &diag.root.rows[1].cells[0],
+            SaltWidget::Separator(SeparatorKind::Double)
+        ));
+        assert!(matches!(
+            &diag.root.rows[2].cells[0],
+            SaltWidget::Separator(SeparatorKind::Single)
+        ));
     }
 
     #[test]

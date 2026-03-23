@@ -488,10 +488,7 @@ impl PreprocessContext {
             if trimmed == "!endsub" {
                 self.collecting_sub = None;
             } else if let Some(name) = self.collecting_sub.clone() {
-                self.subs
-                    .entry(name)
-                    .or_default()
-                    .push(line.to_string());
+                self.subs.entry(name).or_default().push(line.to_string());
             }
             return;
         }
@@ -683,9 +680,8 @@ impl PreprocessContext {
     }
 
     fn try_definelong(&mut self, line: &str) -> bool {
-        static RE: LazyLock<Regex> = LazyLock::new(|| {
-            Regex::new(r"^!definelong\s+(\w+)(?:\(([^)]*)\))?\s*$").unwrap()
-        });
+        static RE: LazyLock<Regex> =
+            LazyLock::new(|| Regex::new(r"^!definelong\s+(\w+)(?:\(([^)]*)\))?\s*$").unwrap());
 
         if let Some(caps) = RE.captures(line) {
             if self.is_active() {
@@ -738,10 +734,9 @@ impl PreprocessContext {
                             if let Some(arg) = args.get(i) {
                                 // Use word-boundary regex so that a param like
                                 // "a" does not replace the "a" inside "label".
-                                if let Ok(re) = Regex::new(&format!(
-                                    r"\b{}\b",
-                                    regex::escape(param)
-                                )) {
+                                if let Ok(re) =
+                                    Regex::new(&format!(r"\b{}\b", regex::escape(param)))
+                                {
                                     expanded = re.replace_all(&expanded, arg.as_str()).to_string();
                                 }
                             }
@@ -809,11 +804,7 @@ impl PreprocessContext {
     }
 
     /// Call a function and return its return value (if any) plus any output lines.
-    fn call_function(
-        &mut self,
-        name: &str,
-        args: &[String],
-    ) -> (Option<Value>, Vec<String>) {
+    fn call_function(&mut self, name: &str, args: &[String]) -> (Option<Value>, Vec<String>) {
         let func = match self.functions.get(name) {
             Some(f) => f.clone(),
             None => return (None, Vec::new()),
@@ -921,8 +912,7 @@ impl PreprocessContext {
     /// This allows function return values to appear inline in notes and messages.
     /// Only user-defined functions (not procedures) that return a value are expanded.
     fn expand_inline_func_calls_in_line(&mut self, line: &str) -> String {
-        static INLINE_RE: LazyLock<Regex> =
-            LazyLock::new(|| Regex::new(r"\$(\w+)\(").unwrap());
+        static INLINE_RE: LazyLock<Regex> = LazyLock::new(|| Regex::new(r"\$(\w+)\(").unwrap());
 
         // Check if there are any $func( patterns at all.
         if !INLINE_RE.is_match(line) {
@@ -1019,8 +1009,7 @@ impl PreprocessContext {
     }
 
     fn try_while(&mut self, line: &str, output: &mut Vec<String>) -> bool {
-        static RE: LazyLock<Regex> =
-            LazyLock::new(|| Regex::new(r"^!while\s+(.+)$").unwrap());
+        static RE: LazyLock<Regex> = LazyLock::new(|| Regex::new(r"^!while\s+(.+)$").unwrap());
 
         if let Some(caps) = RE.captures(line) {
             if !self.is_active() {
@@ -1070,9 +1059,8 @@ impl PreprocessContext {
     }
 
     fn try_include(&mut self, line: &str) -> Option<Vec<String>> {
-        static RE: LazyLock<Regex> = LazyLock::new(|| {
-            Regex::new(r#"^!include(?:_once)?\s+(?:"([^"]+)"|(\S+))$"#).unwrap()
-        });
+        static RE: LazyLock<Regex> =
+            LazyLock::new(|| Regex::new(r#"^!include(?:_once)?\s+(?:"([^"]+)"|(\S+))$"#).unwrap());
 
         let caps = RE.captures(line)?;
         let path_str = caps.get(1).or(caps.get(2)).map(|m| m.as_str())?;
@@ -1111,9 +1099,8 @@ impl PreprocessContext {
 
     fn try_includesub(&mut self, line: &str) -> Option<Vec<String>> {
         // !includesub file.puml!SUBNAME
-        static RE: LazyLock<Regex> = LazyLock::new(|| {
-            Regex::new(r#"^!includesub\s+(?:"([^"]+)"|(\S+))!(\w+)$"#).unwrap()
-        });
+        static RE: LazyLock<Regex> =
+            LazyLock::new(|| Regex::new(r#"^!includesub\s+(?:"([^"]+)"|(\S+))!(\w+)$"#).unwrap());
 
         let caps = RE.captures(line)?;
         let path_str = caps.get(1).or(caps.get(2)).map(|m| m.as_str())?;
@@ -1172,8 +1159,7 @@ impl PreprocessContext {
     }
 
     fn try_conditional(&mut self, line: &str) -> bool {
-        static RE_IF: LazyLock<Regex> =
-            LazyLock::new(|| Regex::new(r#"^!if\s+(.+)$"#).unwrap());
+        static RE_IF: LazyLock<Regex> = LazyLock::new(|| Regex::new(r#"^!if\s+(.+)$"#).unwrap());
         static RE_ELSEIF: LazyLock<Regex> =
             LazyLock::new(|| Regex::new(r#"^!elseif\s+(.+)$"#).unwrap());
         static RE_IFDEF: LazyLock<Regex> =
@@ -1182,8 +1168,8 @@ impl PreprocessContext {
             LazyLock::new(|| Regex::new(r"^!ifndef\s+(\w+)$").unwrap());
 
         if let Some(caps) = RE_IFDEF.captures(line) {
-            let defined = self.defines.contains_key(&caps[1])
-                || self.token_defines.contains_key(&caps[1]);
+            let defined =
+                self.defines.contains_key(&caps[1]) || self.token_defines.contains_key(&caps[1]);
             self.cond_stack.push(CondState {
                 active: defined && self.is_active(),
                 has_matched: defined,
@@ -1191,8 +1177,8 @@ impl PreprocessContext {
             return true;
         }
         if let Some(caps) = RE_IFNDEF.captures(line) {
-            let not_defined = !self.defines.contains_key(&caps[1])
-                && !self.token_defines.contains_key(&caps[1]);
+            let not_defined =
+                !self.defines.contains_key(&caps[1]) && !self.token_defines.contains_key(&caps[1]);
             self.cond_stack.push(CondState {
                 active: not_defined && self.is_active(),
                 has_matched: not_defined,
@@ -1372,8 +1358,7 @@ impl PreprocessContext {
 
     fn try_eval_func_call(&mut self, expr: &str) -> Option<Value> {
         // $funcName(args)
-        static RE: LazyLock<Regex> =
-            LazyLock::new(|| Regex::new(r"^\$(\w+)\(([^)]*)\)$").unwrap());
+        static RE: LazyLock<Regex> = LazyLock::new(|| Regex::new(r"^\$(\w+)\(([^)]*)\)$").unwrap());
 
         if let Some(caps) = RE.captures(expr) {
             let name = caps[1].to_string();
@@ -1457,19 +1442,11 @@ impl PreprocessContext {
                     '*' => lval.to_number() * rval.to_number(),
                     '/' => {
                         let r = rval.to_number();
-                        if r == 0.0 {
-                            0.0
-                        } else {
-                            lval.to_number() / r
-                        }
+                        if r == 0.0 { 0.0 } else { lval.to_number() / r }
                     }
                     '%' => {
                         let r = rval.to_number();
-                        if r == 0.0 {
-                            0.0
-                        } else {
-                            lval.to_number() % r
-                        }
+                        if r == 0.0 { 0.0 } else { lval.to_number() % r }
                     }
                     _ => unreachable!(),
                 };
@@ -1542,8 +1519,7 @@ impl PreprocessContext {
             .strip_prefix("%variable_exists(\"")
             .and_then(|s| s.strip_suffix("\")"))
         {
-            return self.defines.contains_key(name)
-                || self.token_defines.contains_key(name);
+            return self.defines.contains_key(name) || self.token_defines.contains_key(name);
         }
 
         // %is_defined("name") — alias for variable_exists
@@ -1551,8 +1527,7 @@ impl PreprocessContext {
             .strip_prefix("%is_defined(\"")
             .and_then(|s| s.strip_suffix("\")"))
         {
-            return self.defines.contains_key(name)
-                || self.token_defines.contains_key(name);
+            return self.defines.contains_key(name) || self.token_defines.contains_key(name);
         }
 
         // %function_exists("name")
@@ -1642,8 +1617,7 @@ impl PreprocessContext {
         // First apply $variable substitution (also checks token_defines).
         result = self.substitute_inline_func_calls(&result);
 
-        static VAR_RE: LazyLock<Regex> =
-            LazyLock::new(|| Regex::new(r"\$(\w+)").unwrap());
+        static VAR_RE: LazyLock<Regex> = LazyLock::new(|| Regex::new(r"\$(\w+)").unwrap());
 
         result = VAR_RE
             .replace_all(&result, |caps: &regex::Captures| {
@@ -1764,8 +1738,7 @@ impl PreprocessContext {
     fn eval_builtins_once(&self, input: &str) -> String {
         // Find the innermost (last/rightmost) %func(...) call to evaluate
         // inside-out, so that nested calls like %not(%true()) work correctly.
-        static FUNC_RE: LazyLock<Regex> =
-            LazyLock::new(|| Regex::new(r"%(\w+)\(").unwrap());
+        static FUNC_RE: LazyLock<Regex> = LazyLock::new(|| Regex::new(r"%(\w+)\(").unwrap());
 
         let mut result = input.to_string();
 
@@ -1824,15 +1797,11 @@ impl PreprocessContext {
         };
 
         // Strip quotes from args.
-        let args: Vec<&str> = args
-            .iter()
-            .map(|a| a.trim().trim_matches('"'))
-            .collect();
+        let args: Vec<&str> = args.iter().map(|a| a.trim().trim_matches('"')).collect();
         self.eval_one_builtin_args(func, &args)
     }
 
     fn eval_one_builtin_args(&self, func: &str, args: &[&str]) -> String {
-
         match func {
             "strlen" => args
                 .first()
@@ -2184,7 +2153,17 @@ fn find_top_level_op_pos(expr: &str, op: char) -> Option<usize> {
                 }
                 // Don't match if preceded by another operator (unary).
                 let prev = chars[i - 1];
-                if prev == '+' || prev == '-' || prev == '*' || prev == '/' || prev == '%' || prev == '(' || prev == '=' || prev == '<' || prev == '>' || prev == '!' {
+                if prev == '+'
+                    || prev == '-'
+                    || prev == '*'
+                    || prev == '/'
+                    || prev == '%'
+                    || prev == '('
+                    || prev == '='
+                    || prev == '<'
+                    || prev == '>'
+                    || prev == '!'
+                {
                     continue;
                 }
                 last_pos = Some(i);
@@ -2270,9 +2249,7 @@ fn find_top_level_comparison(expr: &str, op: &str) -> Option<usize> {
             {
                 // For < and >, make sure it's not <= or >= or <> or <<.
                 if op == "<" {
-                    if i + 1 < bytes.len()
-                        && (bytes[i + 1] == b'=' || bytes[i + 1] == b'>')
-                    {
+                    if i + 1 < bytes.len() && (bytes[i + 1] == b'=' || bytes[i + 1] == b'>') {
                         continue;
                     }
                 }

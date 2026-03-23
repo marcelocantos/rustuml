@@ -83,13 +83,23 @@ fn render_with_positions(
         .zip(&dims)
         .map(|(p, d)| p.y + d.height)
         .fold(0.0_f64, f64::max);
-    let title_h = if diagram.meta.title.is_some() { TITLE_HEIGHT } else { 0.0 };
+    let title_h = if diagram.meta.title.is_some() {
+        TITLE_HEIGHT
+    } else {
+        0.0
+    };
     let total_width = max_x + MARGIN * 2.0;
     let total_height = max_y + MARGIN * 2.0 + title_h;
 
     let mut svg = SvgBuilder::new(total_width, total_height);
     if let Some(title) = &diagram.meta.title {
-        svg.text(total_width / 2.0, TITLE_HEIGHT - 4.0, title, "middle", TITLE_FONT_SIZE);
+        svg.text(
+            total_width / 2.0,
+            TITLE_HEIGHT - 4.0,
+            title,
+            "middle",
+            TITLE_FONT_SIZE,
+        );
     }
 
     let mut obj_positions: Vec<(f64, f64, f64, f64)> = Vec::new();
@@ -124,13 +134,24 @@ fn render_grid(diagram: &ObjectDiagram, cs: &crate::style::ClassStyle) -> String
         row_heights[row] = row_heights[row].max(dim.height);
     }
 
-    let title_h = if diagram.meta.title.is_some() { TITLE_HEIGHT } else { 0.0 };
+    let title_h = if diagram.meta.title.is_some() {
+        TITLE_HEIGHT
+    } else {
+        0.0
+    };
     let total_width = col_widths.iter().sum::<f64>() + MARGIN * (cols as f64 + 1.0);
-    let total_height = row_heights.iter().sum::<f64>() + MARGIN * (row_heights.len() as f64 + 1.0) + title_h;
+    let total_height =
+        row_heights.iter().sum::<f64>() + MARGIN * (row_heights.len() as f64 + 1.0) + title_h;
 
     let mut svg = SvgBuilder::new(total_width, total_height);
     if let Some(title) = &diagram.meta.title {
-        svg.text(total_width / 2.0, TITLE_HEIGHT - 4.0, title, "middle", TITLE_FONT_SIZE);
+        svg.text(
+            total_width / 2.0,
+            TITLE_HEIGHT - 4.0,
+            title,
+            "middle",
+            TITLE_FONT_SIZE,
+        );
     }
     let mut obj_positions: Vec<(f64, f64, f64, f64)> = Vec::new();
 
@@ -198,7 +219,13 @@ fn render_packages(
             body_h = bh - PKG_TAB_H,
         ));
         // Package label inside the tab.
-        svg.text(bx + tab_w / 2.0, by + PKG_TAB_H - 4.0, &pkg.label, "middle", PKG_FONT);
+        svg.text(
+            bx + tab_w / 2.0,
+            by + PKG_TAB_H - 4.0,
+            &pkg.label,
+            "middle",
+            PKG_FONT,
+        );
     }
 }
 
@@ -354,7 +381,11 @@ struct ObjDim {
 }
 
 fn calc_obj_dim(obj: &ObjectInstance) -> ObjDim {
-    let separator = if obj.kind == ObjectKind::Map { " => " } else { " = " };
+    let separator = if obj.kind == ObjectKind::Map {
+        " => "
+    } else {
+        " = "
+    };
 
     let name_width = metrics::text_width(&obj.label, FONT_SIZE) + PADDING * 2.0;
     let stereo_width = obj.stereotype.as_ref().map_or(0.0, |s| {
@@ -374,7 +405,11 @@ fn calc_obj_dim(obj: &ObjectInstance) -> ObjDim {
         .max(name_width)
         .max(stereo_width)
         .max(field_max_width);
-    let stereo_h = if obj.stereotype.is_some() { STEREO_HEIGHT } else { 0.0 };
+    let stereo_h = if obj.stereotype.is_some() {
+        STEREO_HEIGHT
+    } else {
+        0.0
+    };
     let fields_height = if obj.fields.is_empty() {
         0.0
     } else {
@@ -396,7 +431,11 @@ fn render_obj_box(
     let fill = obj.color.as_deref().unwrap_or(&cs.class_background);
     svg.rect(x, y, dim.width, dim.height, fill, &cs.border_color);
 
-    let stereo_h = if obj.stereotype.is_some() { STEREO_HEIGHT } else { 0.0 };
+    let stereo_h = if obj.stereotype.is_some() {
+        STEREO_HEIGHT
+    } else {
+        0.0
+    };
 
     // Stereotype line (italic, guillemets), rendered above the label.
     if let Some(stereo) = &obj.stereotype {
@@ -427,7 +466,11 @@ fn render_obj_box(
     }
 
     // Fields.
-    let separator = if obj.kind == ObjectKind::Map { " => " } else { " = " };
+    let separator = if obj.kind == ObjectKind::Map {
+        " => "
+    } else {
+        " = "
+    };
     let mut field_y = sep_y;
     for field in &obj.fields {
         field_y += FIELD_HEIGHT;
@@ -457,8 +500,14 @@ mod tests {
                     label: "Car".into(),
                     kind: ObjectKind::Object,
                     fields: vec![
-                        ObjectField { name: "make".into(), value: Some("Toyota".into()) },
-                        ObjectField { name: "year".into(), value: Some("2023".into()) },
+                        ObjectField {
+                            name: "make".into(),
+                            value: Some("Toyota".into()),
+                        },
+                        ObjectField {
+                            name: "year".into(),
+                            value: Some("2023".into()),
+                        },
                     ],
                     stereotype: None,
                     color: None,
@@ -467,7 +516,10 @@ mod tests {
                     id: "Owner".into(),
                     label: "Owner".into(),
                     kind: ObjectKind::Object,
-                    fields: vec![ObjectField { name: "name".into(), value: Some("Alice".into()) }],
+                    fields: vec![ObjectField {
+                        name: "name".into(),
+                        value: Some("Alice".into()),
+                    }],
                     stereotype: None,
                     color: None,
                 },
@@ -522,8 +574,14 @@ mod tests {
                 label: "Config".into(),
                 kind: ObjectKind::Map,
                 fields: vec![
-                    ObjectField { name: "host".into(), value: Some("localhost".into()) },
-                    ObjectField { name: "port".into(), value: Some("8080".into()) },
+                    ObjectField {
+                        name: "host".into(),
+                        value: Some("localhost".into()),
+                    },
+                    ObjectField {
+                        name: "port".into(),
+                        value: Some("8080".into()),
+                    },
                 ],
                 stereotype: None,
                 color: None,
@@ -551,7 +609,8 @@ mod tests {
 
     #[test]
     fn parsed_then_rendered() {
-        let input = "@startuml\nobject Car {\n  make = Toyota\n}\nobject Bike\nCar --> Bike\n@enduml";
+        let input =
+            "@startuml\nobject Car {\n  make = Toyota\n}\nobject Bike\nCar --> Bike\n@enduml";
         let diagram = rustuml_parser::parse::parse(input).unwrap();
         let svg = crate::render_svg(&diagram);
         assert!(svg.contains("Car"));

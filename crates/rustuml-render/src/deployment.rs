@@ -78,15 +78,33 @@ fn render_leaf_label(node: &DeploymentNode, svg: &mut SvgBuilder, x: f64, y: f64
     let total_text_h = lines.len() as f64 * line_h;
     let cx = x + w / 2.0;
     if let Some(stereo) = &node.stereotype {
-        svg.text(cx, y + NODE_H / 2.0 - 4.0, &format!("«{stereo}»"), "middle", SMALL_FONT);
+        svg.text(
+            cx,
+            y + NODE_H / 2.0 - 4.0,
+            &format!("«{stereo}»"),
+            "middle",
+            SMALL_FONT,
+        );
         let text_start_y = y + NODE_H / 2.0 + 6.0 - total_text_h / 2.0;
         for (i, line) in lines.iter().enumerate() {
-            svg.text(cx, text_start_y + i as f64 * line_h, line, "middle", FONT_SIZE);
+            svg.text(
+                cx,
+                text_start_y + i as f64 * line_h,
+                line,
+                "middle",
+                FONT_SIZE,
+            );
         }
     } else {
         let text_start_y = y + NODE_H / 2.0 + FONT_SIZE / 2.0 - total_text_h / 2.0 + 3.0;
         for (i, line) in lines.iter().enumerate() {
-            svg.text(cx, text_start_y + i as f64 * line_h, line, "middle", FONT_SIZE);
+            svg.text(
+                cx,
+                text_start_y + i as f64 * line_h,
+                line,
+                "middle",
+                FONT_SIZE,
+            );
         }
     }
 }
@@ -151,7 +169,9 @@ fn render_node(
         let children: Vec<String> = node.children.clone();
         for child_id in children {
             let (_, ch) = node_size(&child_id, nodes);
-            render_node(&child_id, nodes, inner_x, child_y, inner_w, svg, theme, positions);
+            render_node(
+                &child_id, nodes, inner_x, child_y, inner_w, svg, theme, positions,
+            );
             child_y += ch + GAP;
         }
     }
@@ -183,7 +203,11 @@ pub fn render(diagram: &DeploymentDiagram, theme: &Theme) -> String {
         .collect();
 
     let n = roots.len();
-    let cols = if n == 0 { 1 } else { (n as f64).sqrt().ceil() as usize };
+    let cols = if n == 0 {
+        1
+    } else {
+        (n as f64).sqrt().ceil() as usize
+    };
     let rows = if n == 0 { 0 } else { n.div_ceil(cols) };
 
     let col_w: Vec<f64> = {
@@ -203,21 +227,41 @@ pub fn render(diagram: &DeploymentDiagram, theme: &Theme) -> String {
         rh
     };
 
-    let title_h = if diagram.meta.title.is_some() { TITLE_HEIGHT } else { 0.0 };
-    let header_h = if diagram.meta.header.is_some() { TITLE_HEIGHT } else { 0.0 };
-    let footer_h = if diagram.meta.footer.is_some() { TITLE_HEIGHT } else { 0.0 };
+    let title_h = if diagram.meta.title.is_some() {
+        TITLE_HEIGHT
+    } else {
+        0.0
+    };
+    let header_h = if diagram.meta.header.is_some() {
+        TITLE_HEIGHT
+    } else {
+        0.0
+    };
+    let footer_h = if diagram.meta.footer.is_some() {
+        TITLE_HEIGHT
+    } else {
+        0.0
+    };
 
     // Estimate note space: each note gets one row per text line plus padding.
     let note_line_h = SMALL_FONT + 4.0;
-    let note_extra_h: f64 = diagram.notes.iter().map(|note| {
-        let nlines = note.text.lines().count().max(1);
-        PADDING * 2.0 + (nlines as f64) * note_line_h + 10.0
-    }).sum();
+    let note_extra_h: f64 = diagram
+        .notes
+        .iter()
+        .map(|note| {
+            let nlines = note.text.lines().count().max(1);
+            PADDING * 2.0 + (nlines as f64) * note_line_h + 10.0
+        })
+        .sum();
 
-    let nodes_w = if col_w.is_empty() { NODE_MIN_W } else {
+    let nodes_w = if col_w.is_empty() {
+        NODE_MIN_W
+    } else {
         col_w.iter().sum::<f64>() + GAP * cols.saturating_sub(1) as f64
     };
-    let nodes_h = if row_h.is_empty() { 0.0 } else {
+    let nodes_h = if row_h.is_empty() {
+        0.0
+    } else {
         row_h.iter().sum::<f64>() + GAP * rows.saturating_sub(1) as f64
     };
 
@@ -243,12 +287,24 @@ pub fn render(diagram: &DeploymentDiagram, theme: &Theme) -> String {
             "Please{n}use{n}'!option{n}handwritten{n}true'{n}to{n}enable{n}handwritten",
             n = nbsp
         );
-        svg.text(total_w / 2.0, header_h + title_h + MARGIN + FONT_SIZE, &msg, "middle", SMALL_FONT);
+        svg.text(
+            total_w / 2.0,
+            header_h + title_h + MARGIN + FONT_SIZE,
+            &msg,
+            "middle",
+            SMALL_FONT,
+        );
     }
 
     // Title.
     if let Some(title) = &diagram.meta.title {
-        svg.text(total_w / 2.0, header_h + TITLE_HEIGHT - 4.0, title, "middle", TITLE_FONT_SIZE);
+        svg.text(
+            total_w / 2.0,
+            header_h + TITLE_HEIGHT - 4.0,
+            title,
+            "middle",
+            TITLE_FONT_SIZE,
+        );
     }
 
     let mut positions: HashMap<String, (f64, f64, f64, f64)> = HashMap::new();
@@ -260,7 +316,16 @@ pub fn render(diagram: &DeploymentDiagram, theme: &Theme) -> String {
         let x = MARGIN + col_w[..col].iter().sum::<f64>() + GAP * col as f64;
         let y = content_top + row_h[..row].iter().sum::<f64>() + GAP * row as f64;
         let w = col_w[col];
-        render_node(&root.id, &diagram.nodes, x, y, w, &mut svg, theme, &mut positions);
+        render_node(
+            &root.id,
+            &diagram.nodes,
+            x,
+            y,
+            w,
+            &mut svg,
+            theme,
+            &mut positions,
+        );
     }
 
     let gs = &theme.global;
@@ -304,17 +369,16 @@ pub fn render(diagram: &DeploymentDiagram, theme: &Theme) -> String {
         let ny = note_y;
 
         // Determine where to place the note box.
-        let (box_x, box_y, has_target, tgt_cx, tgt_top) =
-            if let Some(target_id) = &note.target {
-                if let Some(&(tgt_x, tgt_y, tgt_w, _)) = positions.get(target_id) {
-                    let note_cx = (tgt_x + tgt_w / 2.0).min(total_w - MARGIN - nw);
-                    (note_cx, ny, true, tgt_x + tgt_w / 2.0, tgt_y)
-                } else {
-                    (nx, ny, false, 0.0, 0.0)
-                }
+        let (box_x, box_y, has_target, tgt_cx, tgt_top) = if let Some(target_id) = &note.target {
+            if let Some(&(tgt_x, tgt_y, tgt_w, _)) = positions.get(target_id) {
+                let note_cx = (tgt_x + tgt_w / 2.0).min(total_w - MARGIN - nw);
+                (note_cx, ny, true, tgt_x + tgt_w / 2.0, tgt_y)
             } else {
                 (nx, ny, false, 0.0, 0.0)
-            };
+            }
+        } else {
+            (nx, ny, false, 0.0, 0.0)
+        };
 
         // Draw the note box.
         svg.rect(box_x, box_y, nw, nh, note_fill, &gs.border_color);
@@ -346,12 +410,20 @@ pub fn render(diagram: &DeploymentDiagram, theme: &Theme) -> String {
         let mut legend_y = note_y + 10.0;
         for line in legend.lines() {
             let t = line.trim();
-            if t.is_empty() { continue; }
+            if t.is_empty() {
+                continue;
+            }
             // Strip leading/trailing `|` from table rows.
             let t = t.trim_matches('|').trim();
-            if t.is_empty() { continue; }
+            if t.is_empty() {
+                continue;
+            }
             // Split by `|` for table cells.
-            let cells: Vec<&str> = t.split('|').map(|c| c.trim()).filter(|c| !c.is_empty()).collect();
+            let cells: Vec<&str> = t
+                .split('|')
+                .map(|c| c.trim())
+                .filter(|c| !c.is_empty())
+                .collect();
             let mut cell_x = legend_x;
             for cell in cells {
                 svg.text(cell_x, legend_y, cell, "start", SMALL_FONT);

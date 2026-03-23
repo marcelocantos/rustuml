@@ -53,9 +53,7 @@ pub fn parse_activity(lines: &[String]) -> Result<ActivityDiagram, ParseError> {
 fn parse_legacy_activity(lines: &[String]) -> Result<ActivityDiagram, ParseError> {
     static RE_ARROW: LazyLock<Regex> = LazyLock::new(|| {
         // "Source" -[direction]-> "Target"  or  (*) --> "Target"  or  "Source" --> (*)
-        Regex::new(
-            r#"^(?:"([^"]+)"|\(\*\))\s+-[^>]*->\s+(?:"([^"]+)"|\(\*\))$"#
-        ).unwrap()
+        Regex::new(r#"^(?:"([^"]+)"|\(\*\))\s+-[^>]*->\s+(?:"([^"]+)"|\(\*\))$"#).unwrap()
     });
     static RE_LABELLED_ARROW: LazyLock<Regex> = LazyLock::new(|| {
         // -->[label] "Target" or -->[label] (*)
@@ -72,15 +70,11 @@ fn parse_legacy_activity(lines: &[String]) -> Result<ActivityDiagram, ParseError
     static RE_FROM_FORK: LazyLock<Regex> = LazyLock::new(|| {
         Regex::new(r#"^===([^=]+)===\s+-[^>]*->\s+(?:"([^"]+)"|\(\*\))$"#).unwrap()
     });
-    static RE_IF: LazyLock<Regex> = LazyLock::new(|| {
-        Regex::new(r#"^if\s+"([^"]+)"\s+then$"#).unwrap()
-    });
-    static RE_NOTE: LazyLock<Regex> = LazyLock::new(|| {
-        Regex::new(r"^note\s+(left|right)\s*:\s*(.+)$").unwrap()
-    });
-    static RE_FORK_BAR: LazyLock<Regex> = LazyLock::new(|| {
-        Regex::new(r"^===([^=]+)===$").unwrap()
-    });
+    static RE_IF: LazyLock<Regex> =
+        LazyLock::new(|| Regex::new(r#"^if\s+"([^"]+)"\s+then$"#).unwrap());
+    static RE_NOTE: LazyLock<Regex> =
+        LazyLock::new(|| Regex::new(r"^note\s+(left|right)\s*:\s*(.+)$").unwrap());
+    static RE_FORK_BAR: LazyLock<Regex> = LazyLock::new(|| Regex::new(r"^===([^=]+)===$").unwrap());
     static RE_PARTITION: LazyLock<Regex> = LazyLock::new(|| {
         // partition "Name" {  or  partition Name {
         Regex::new(r#"^partition\s+(?:"([^"]+)"|(\S+))\s*\{?\s*$"#).unwrap()
@@ -96,7 +90,9 @@ fn parse_legacy_activity(lines: &[String]) -> Result<ActivityDiagram, ParseError
 
     for line in lines {
         let t = line.trim();
-        if t.is_empty() { continue; }
+        if t.is_empty() {
+            continue;
+        }
 
         // Title.
         if let Some(rest) = t.strip_prefix("title ") {
@@ -111,7 +107,10 @@ fn parse_legacy_activity(lines: &[String]) -> Result<ActivityDiagram, ParseError
                 .or(caps.get(2))
                 .map(|m| m.as_str().to_string())
                 .unwrap_or_default();
-            steps.push(ActivityStep::Partition(PartitionBlock { name, color: None }));
+            steps.push(ActivityStep::Partition(PartitionBlock {
+                name,
+                color: None,
+            }));
             partition_depth += 1;
             continue;
         }
@@ -127,7 +126,11 @@ fn parse_legacy_activity(lines: &[String]) -> Result<ActivityDiagram, ParseError
 
         // Note.
         if let Some(caps) = RE_NOTE.captures(t) {
-            let position = if &caps[1] == "left" { NotePosition::Left } else { NotePosition::Right };
+            let position = if &caps[1] == "left" {
+                NotePosition::Left
+            } else {
+                NotePosition::Right
+            };
             steps.push(ActivityStep::Note(NoteBlock {
                 text: caps[2].trim().to_string(),
                 color: None,
@@ -210,7 +213,10 @@ fn parse_legacy_activity(lines: &[String]) -> Result<ActivityDiagram, ParseError
                     steps.push(ActivityStep::Action(tgt));
                 }
             } else {
-                if !steps.iter().any(|s| matches!(s, ActivityStep::End | ActivityStep::Stop)) {
+                if !steps
+                    .iter()
+                    .any(|s| matches!(s, ActivityStep::End | ActivityStep::Stop))
+                {
                     steps.push(ActivityStep::End);
                 }
             }
@@ -282,7 +288,10 @@ fn parse_legacy_activity(lines: &[String]) -> Result<ActivityDiagram, ParseError
             // Target = (*): end node.
             if target.is_none() {
                 // Only add End if not already present.
-                if !steps.iter().any(|s| matches!(s, ActivityStep::End | ActivityStep::Stop)) {
+                if !steps
+                    .iter()
+                    .any(|s| matches!(s, ActivityStep::End | ActivityStep::Stop))
+                {
                     steps.push(ActivityStep::End);
                 }
             } else if let Some(tgt) = target {
@@ -491,8 +500,7 @@ impl ActivityParser {
     }
 
     fn try_meta(&mut self, line: &str) -> bool {
-        static RE_TITLE: LazyLock<Regex> =
-            LazyLock::new(|| Regex::new(r"^title\s+(.+)$").unwrap());
+        static RE_TITLE: LazyLock<Regex> = LazyLock::new(|| Regex::new(r"^title\s+(.+)$").unwrap());
         static RE_HEADER: LazyLock<Regex> =
             LazyLock::new(|| Regex::new(r"^header\s+(.+)$").unwrap());
         static RE_FOOTER: LazyLock<Regex> =
@@ -561,9 +569,8 @@ impl ActivityParser {
     fn try_action(&mut self, line: &str) -> bool {
         // Match actions with various endings: ; | ] / > < \ (all PlantUML action terminators)
         // The ending char (except ;) is included in the display text as per PlantUML behavior.
-        static RE: LazyLock<Regex> = LazyLock::new(|| {
-            Regex::new(r"^:(.+?)([;|\]/>\\<])$").unwrap()
-        });
+        static RE: LazyLock<Regex> =
+            LazyLock::new(|| Regex::new(r"^:(.+?)([;|\]/>\\<])$").unwrap());
 
         if let Some(caps) = RE.captures(line) {
             let text = caps[1].trim().to_string();
@@ -599,9 +606,8 @@ impl ActivityParser {
     }
 
     fn try_deprecated_color_action(&mut self, line: &str) -> bool {
-        static RE: LazyLock<Regex> = LazyLock::new(|| {
-            Regex::new(r"^(#(?:[0-9A-Fa-f]{6}|[A-Za-z]+)):(.+);$").unwrap()
-        });
+        static RE: LazyLock<Regex> =
+            LazyLock::new(|| Regex::new(r"^(#(?:[0-9A-Fa-f]{6}|[A-Za-z]+)):(.+);$").unwrap());
 
         if let Some(caps) = RE.captures(line) {
             let raw_color = caps[1].trim().to_string();
@@ -629,24 +635,29 @@ impl ActivityParser {
         // Matches: ->, -->, -[#color]->, -[#color]-->, optionally followed by label;
         // Group 1: full arrow, Group 2: color (optional), Group 3: extra dash (-> vs -->),
         // Group 4: label (optional)
-        static RE: LazyLock<Regex> = LazyLock::new(|| {
-            Regex::new(r"^(-(?:\[([^\]]+)\])?(-?)>)\s*(.+)?$").unwrap()
-        });
+        static RE: LazyLock<Regex> =
+            LazyLock::new(|| Regex::new(r"^(-(?:\[([^\]]+)\])?(-?)>)\s*(.+)?$").unwrap());
 
         if let Some(caps) = RE.captures(line) {
             let dashed = &caps[3] == "-";
             let color = caps.get(2).map(|m| {
                 let s = m.as_str().trim();
-                if s.starts_with('#') && s.len() == 7 && s[1..].chars().all(|c| c.is_ascii_hexdigit()) {
+                if s.starts_with('#')
+                    && s.len() == 7
+                    && s[1..].chars().all(|c| c.is_ascii_hexdigit())
+                {
                     format!("#{}", s[1..].to_uppercase())
                 } else {
                     s.to_string()
                 }
             });
-            let label = caps.get(4).map(|m| {
-                let s = m.as_str().trim();
-                s.trim_end_matches(';').trim().to_string()
-            }).filter(|s| !s.is_empty());
+            let label = caps
+                .get(4)
+                .map(|m| {
+                    let s = m.as_str().trim();
+                    s.trim_end_matches(';').trim().to_string()
+                })
+                .filter(|s| !s.is_empty());
             self.steps.push(ActivityStep::Arrow(ArrowStep {
                 dashed,
                 color,
@@ -659,8 +670,7 @@ impl ActivityParser {
     }
 
     fn try_backward(&mut self, line: &str) -> bool {
-        static RE: LazyLock<Regex> =
-            LazyLock::new(|| Regex::new(r"^backward\s*:(.+);$").unwrap());
+        static RE: LazyLock<Regex> = LazyLock::new(|| Regex::new(r"^backward\s*:(.+);$").unwrap());
 
         if let Some(caps) = RE.captures(line) {
             self.steps
@@ -752,7 +762,8 @@ impl ActivityParser {
 
     fn try_repeat_while(&mut self, line: &str) -> bool {
         static RE: LazyLock<Regex> = LazyLock::new(|| {
-            Regex::new(r"^repeat\s*while\s*\((.+?)\)\s*(?:is\s*\((.+?)\))?\s*(?:not\s*\((.+?)\))?").unwrap()
+            Regex::new(r"^repeat\s*while\s*\((.+?)\)\s*(?:is\s*\((.+?)\))?\s*(?:not\s*\((.+?)\))?")
+                .unwrap()
         });
 
         if let Some(caps) = RE.captures(line) {
@@ -798,9 +809,8 @@ impl ActivityParser {
 
     fn try_swimlane(&mut self, line: &str) -> bool {
         // Match |Name| or |#color|Name| (colored swimlane)
-        static RE: LazyLock<Regex> = LazyLock::new(|| {
-            Regex::new(r"^\|(?:#[A-Za-z0-9]+\|)?([^|]+)\|$").unwrap()
-        });
+        static RE: LazyLock<Regex> =
+            LazyLock::new(|| Regex::new(r"^\|(?:#[A-Za-z0-9]+\|)?([^|]+)\|$").unwrap());
 
         if let Some(caps) = RE.captures(line) {
             self.steps.push(ActivityStep::Swimlane(caps[1].to_string()));
@@ -812,10 +822,8 @@ impl ActivityParser {
 
     fn try_partition(&mut self, line: &str) -> bool {
         static RE: LazyLock<Regex> = LazyLock::new(|| {
-            Regex::new(
-                r#"^partition\s+(?:(#[A-Za-z0-9]+)\s+)?(?:"([^"]+)"|([A-Za-z_]\w*))\s*\{?"#,
-            )
-            .unwrap()
+            Regex::new(r#"^partition\s+(?:(#[A-Za-z0-9]+)\s+)?(?:"([^"]+)"|([A-Za-z_]\w*))\s*\{?"#)
+                .unwrap()
         });
 
         if line == "}" {
@@ -840,10 +848,8 @@ impl ActivityParser {
     fn try_group(&mut self, line: &str) -> bool {
         // `group [#color] "Name" {` — treated as a partition.
         static RE: LazyLock<Regex> = LazyLock::new(|| {
-            Regex::new(
-                r#"^group\s+(?:(#[A-Za-z0-9]+)\s+)?(?:"([^"]+)"|([A-Za-z_]\w*))\s*\{?"#,
-            )
-            .unwrap()
+            Regex::new(r#"^group\s+(?:(#[A-Za-z0-9]+)\s+)?(?:"([^"]+)"|([A-Za-z_]\w*))\s*\{?"#)
+                .unwrap()
         });
 
         if let Some(caps) = RE.captures(line) {
@@ -879,7 +885,10 @@ impl ActivityParser {
             };
             let color = caps.get(2).map(|m| {
                 let s = m.as_str();
-                if s.starts_with('#') && s.len() == 7 && s[1..].chars().all(|c| c.is_ascii_hexdigit()) {
+                if s.starts_with('#')
+                    && s.len() == 7
+                    && s[1..].chars().all(|c| c.is_ascii_hexdigit())
+                {
                     format!("#{}", s[1..].to_uppercase())
                 } else {
                     s.to_string()
@@ -1031,7 +1040,9 @@ mod tests {
     #[test]
     fn deprecated_color_action() {
         let d = parse("start\n#blue:Do something;\nstop");
-        assert!(matches!(d.steps[1], ActivityStep::DeprecatedColorAction(ref a) if a.text == "Do something" && a.color == "#blue"));
+        assert!(
+            matches!(d.steps[1], ActivityStep::DeprecatedColorAction(ref a) if a.text == "Do something" && a.color == "#blue")
+        );
     }
 
     #[test]

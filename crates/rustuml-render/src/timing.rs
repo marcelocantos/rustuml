@@ -70,7 +70,11 @@ pub fn render(diagram: &TimingDiagram, _theme: &Theme) -> String {
 
     let n_rows = diagram.timelines.len();
     let has_annotations = !diagram.annotations.is_empty() || !diagram.highlights.is_empty();
-    let annotation_extra = if has_annotations { ANNOTATION_HEIGHT } else { 0.0 };
+    let annotation_extra = if has_annotations {
+        ANNOTATION_HEIGHT
+    } else {
+        0.0
+    };
 
     // Extra space for title/header/footer.
     let title_h = if diagram.meta.title.is_some() {
@@ -223,8 +227,8 @@ pub fn render(diagram: &TimingDiagram, _theme: &Theme) -> String {
                 time_to_x(changes[i + 1].at)
             } else {
                 // Last segment: extend to the implicit extra step.
-                let ext_x =
-                    timeline_start_x + (ch.at as f64 - time_min + extension) / time_span * TIMELINE_WIDTH;
+                let ext_x = timeline_start_x
+                    + (ch.at as f64 - time_min + extension) / time_span * TIMELINE_WIDTH;
                 ext_x
             };
             let seg_width = (x_end - x_start).max(0.0);
@@ -625,7 +629,10 @@ mod tests {
             notes: vec![],
         };
         let svg = render(&d, &Theme::default());
-        assert!(svg.contains("waiting"), "last state 'waiting' missing from SVG");
+        assert!(
+            svg.contains("waiting"),
+            "last state 'waiting' missing from SVG"
+        );
     }
 
     #[test]

@@ -25,7 +25,9 @@ use regex::Regex;
 
 use super::ParseError;
 use crate::diagram::DiagramMeta;
-use crate::diagram::gantt::{GanttDiagram, GanttNote, GanttResource, GanttRow, GanttTask, TaskResource, TaskStart};
+use crate::diagram::gantt::{
+    GanttDiagram, GanttNote, GanttResource, GanttRow, GanttTask, TaskResource, TaskStart,
+};
 
 /// Parse pre-processed lines into a [`GanttDiagram`].
 pub fn parse_gantt(lines: &[String]) -> Result<GanttDiagram, ParseError> {
@@ -229,7 +231,12 @@ impl GanttParser {
             for tr in &task_resources {
                 self.register_resource(tr.name.clone());
             }
-            self.upsert_task_with_resources(name, duration, TaskStart::AfterTask(dep), task_resources);
+            self.upsert_task_with_resources(
+                name,
+                duration,
+                TaskStart::AfterTask(dep),
+                task_resources,
+            );
             true
         } else {
             false
@@ -247,10 +254,14 @@ impl GanttParser {
             // If project_start is set, compute offset from it; otherwise compute from
             // 1970-01-01 (PlantUML Unix epoch behavior).
             let start = if let Some(ref ps) = self.project_start {
-                date_diff_days(ps, &date).map(TaskStart::Day).unwrap_or(TaskStart::Day(0))
+                date_diff_days(ps, &date)
+                    .map(TaskStart::Day)
+                    .unwrap_or(TaskStart::Day(0))
             } else {
                 // No project start: use days since 1970-01-01 as offset.
-                date_diff_days("1970-01-01", &date).map(TaskStart::Day).unwrap_or(TaskStart::Day(0))
+                date_diff_days("1970-01-01", &date)
+                    .map(TaskStart::Day)
+                    .unwrap_or(TaskStart::Day(0))
             };
             self.upsert_task(name, 0, start);
             true
@@ -261,9 +272,8 @@ impl GanttParser {
 
     /// `then [name] lasts N days` — implicit start after last_task
     fn try_then(&mut self, line: &str) -> bool {
-        static RE: LazyLock<Regex> = LazyLock::new(|| {
-            Regex::new(r"^then\s+\[([^\]]+)\]\s+lasts\s+(\d+)\s+days?$").unwrap()
-        });
+        static RE: LazyLock<Regex> =
+            LazyLock::new(|| Regex::new(r"^then\s+\[([^\]]+)\]\s+lasts\s+(\d+)\s+days?$").unwrap());
         if let Some(caps) = RE.captures(line) {
             let name = caps[1].to_string();
             let duration: u32 = caps[2].parse().unwrap_or(1);
@@ -345,9 +355,8 @@ impl GanttParser {
 
     /// `[name] is colored in <Color>`
     fn try_colored(&mut self, line: &str) -> bool {
-        static RE: LazyLock<Regex> = LazyLock::new(|| {
-            Regex::new(r"^\[([^\]]+)\]\s+is\s+colored\s+in\s+(\S+)$").unwrap()
-        });
+        static RE: LazyLock<Regex> =
+            LazyLock::new(|| Regex::new(r"^\[([^\]]+)\]\s+is\s+colored\s+in\s+(\S+)$").unwrap());
         if let Some(caps) = RE.captures(line) {
             let name = caps[1].to_string();
             let color = caps[2].to_string();
@@ -360,9 +369,8 @@ impl GanttParser {
 
     /// `[name] is N% completed` — parsed but ignored
     fn try_completed(&mut self, line: &str) -> bool {
-        static RE: LazyLock<Regex> = LazyLock::new(|| {
-            Regex::new(r"^\[([^\]]+)\]\s+is\s+\d+%\s+completed$").unwrap()
-        });
+        static RE: LazyLock<Regex> =
+            LazyLock::new(|| Regex::new(r"^\[([^\]]+)\]\s+is\s+\d+%\s+completed$").unwrap());
         RE.is_match(line)
     }
 
@@ -382,7 +390,10 @@ impl GanttParser {
     /// `<dayname> are closed` — e.g. `saturday are closed`
     fn try_closed_day(&mut self, line: &str) -> bool {
         static RE: LazyLock<Regex> = LazyLock::new(|| {
-            Regex::new(r"(?i)^(monday|tuesday|wednesday|thursday|friday|saturday|sunday)\s+are\s+closed$").unwrap()
+            Regex::new(
+                r"(?i)^(monday|tuesday|wednesday|thursday|friday|saturday|sunday)\s+are\s+closed$",
+            )
+            .unwrap()
         });
         if let Some(caps) = RE.captures(line) {
             let day_num = match caps[1].to_lowercase().as_str() {
@@ -411,7 +422,11 @@ impl GanttParser {
             task.duration = duration;
             task.start = start;
         } else {
-            if !self.rows.iter().any(|r| matches!(r, GanttRow::Task(n) if n == &name)) {
+            if !self
+                .rows
+                .iter()
+                .any(|r| matches!(r, GanttRow::Task(n) if n == &name))
+            {
                 self.rows.push(GanttRow::Task(name.clone()));
             }
             self.tasks.push(GanttTask {
@@ -430,7 +445,11 @@ impl GanttParser {
         if let Some(task) = self.tasks.iter_mut().find(|t| t.name == name) {
             task.duration = duration;
         } else {
-            if !self.rows.iter().any(|r| matches!(r, GanttRow::Task(n) if n == &name)) {
+            if !self
+                .rows
+                .iter()
+                .any(|r| matches!(r, GanttRow::Task(n) if n == &name))
+            {
                 self.rows.push(GanttRow::Task(name.clone()));
             }
             self.tasks.push(GanttTask {
@@ -448,7 +467,11 @@ impl GanttParser {
         if let Some(task) = self.tasks.iter_mut().find(|t| t.name == name) {
             task.start = start;
         } else {
-            if !self.rows.iter().any(|r| matches!(r, GanttRow::Task(n) if n == &name)) {
+            if !self
+                .rows
+                .iter()
+                .any(|r| matches!(r, GanttRow::Task(n) if n == &name))
+            {
                 self.rows.push(GanttRow::Task(name.clone()));
             }
             self.tasks.push(GanttTask {
@@ -491,7 +514,11 @@ impl GanttParser {
             task.start = start;
             task.resources = task_resources;
         } else {
-            if !self.rows.iter().any(|r| matches!(r, GanttRow::Task(n) if n == &name)) {
+            if !self
+                .rows
+                .iter()
+                .any(|r| matches!(r, GanttRow::Task(n) if n == &name))
+            {
                 self.rows.push(GanttRow::Task(name.clone()));
             }
             self.tasks.push(GanttTask {
@@ -514,13 +541,14 @@ impl GanttParser {
 
 /// Parse `{Alice}` or `{Alice:50%}{Bob:50%}` resource strings into a list of TaskResource.
 fn parse_task_resources(s: &str) -> Vec<TaskResource> {
-    static RE: LazyLock<Regex> = LazyLock::new(|| {
-        Regex::new(r"\{([^}:]+)(?::(\d+)%)?\}").unwrap()
-    });
+    static RE: LazyLock<Regex> = LazyLock::new(|| Regex::new(r"\{([^}:]+)(?::(\d+)%)?\}").unwrap());
     RE.captures_iter(s)
         .map(|caps| {
             let name = caps[1].trim().to_string();
-            let percent: u32 = caps.get(2).and_then(|m| m.as_str().parse().ok()).unwrap_or(100);
+            let percent: u32 = caps
+                .get(2)
+                .and_then(|m| m.as_str().parse().ok())
+                .unwrap_or(100);
             TaskResource { name, percent }
         })
         .collect()
@@ -528,8 +556,7 @@ fn parse_task_resources(s: &str) -> Vec<TaskResource> {
 
 /// Parse `-- Label --` separator lines. Returns `Some(label)` if matched.
 fn try_separator(line: &str) -> Option<String> {
-    static RE: LazyLock<Regex> =
-        LazyLock::new(|| Regex::new(r"^--\s*(.*?)\s*--$").unwrap());
+    static RE: LazyLock<Regex> = LazyLock::new(|| Regex::new(r"^--\s*(.*?)\s*--$").unwrap());
     RE.captures(line).map(|caps| caps[1].to_string())
 }
 
@@ -550,9 +577,7 @@ fn date_diff_days(from: &str, to: &str) -> Option<u32> {
         let a = (14 - m as i32) / 12;
         let yr = y + 4800 - a;
         let mo = m as i32 + 12 * a - 3;
-        d as i64 + (153 * mo + 2) as i64 / 5 + 365 * yr as i64
-            + yr as i64 / 4
-            - yr as i64 / 100
+        d as i64 + (153 * mo + 2) as i64 / 5 + 365 * yr as i64 + yr as i64 / 4 - yr as i64 / 100
             + yr as i64 / 400
             - 32045
     }

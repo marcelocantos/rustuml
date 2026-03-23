@@ -225,27 +225,37 @@ impl ClassParser {
                 match block {
                     MetaBlock::Header => {
                         let h = self.meta.header.get_or_insert_with(String::new);
-                        if !h.is_empty() { h.push(' '); }
+                        if !h.is_empty() {
+                            h.push(' ');
+                        }
                         h.push_str(line);
                     }
                     MetaBlock::Footer => {
                         let f = self.meta.footer.get_or_insert_with(String::new);
-                        if !f.is_empty() { f.push(' '); }
+                        if !f.is_empty() {
+                            f.push(' ');
+                        }
                         f.push_str(line);
                     }
                     MetaBlock::Legend => {
                         let l = self.meta.legend.get_or_insert_with(String::new);
-                        if !l.is_empty() { l.push(' '); }
+                        if !l.is_empty() {
+                            l.push(' ');
+                        }
                         l.push_str(line);
                     }
                     MetaBlock::Caption => {
                         let c = self.meta.caption.get_or_insert_with(String::new);
-                        if !c.is_empty() { c.push(' '); }
+                        if !c.is_empty() {
+                            c.push(' ');
+                        }
                         c.push_str(line);
                     }
                     MetaBlock::Title => {
                         let t = self.meta.title.get_or_insert_with(String::new);
-                        if !t.is_empty() { t.push(' '); }
+                        if !t.is_empty() {
+                            t.push(' ');
+                        }
                         t.push_str(line);
                     }
                 }
@@ -464,10 +474,7 @@ impl ClassParser {
         });
         // ER crow's foot notation: entity1 CROW--CROW entity2 : "label"
         static ER_RE: LazyLock<Regex> = LazyLock::new(|| {
-            Regex::new(
-                r#"^(\w+)\s+([|o}][|{o]--[|o][|{])\s+(\w+)(?:\s*:\s*(.+))?$"#,
-            )
-            .unwrap()
+            Regex::new(r#"^(\w+)\s+([|o}][|{o]--[|o][|{])\s+(\w+)(?:\s*:\s*(.+))?$"#).unwrap()
         });
 
         if let Some(caps) = RE.captures(line) {
@@ -617,7 +624,6 @@ impl ClassParser {
         }
     }
 
-
     fn try_note(&mut self, line: &str) -> bool {
         // Single-line attached note: `note <pos> of <entity> : <text>`
         // Entity may be a dotted name (e.g. `domain.User` in namespace diagrams).
@@ -629,21 +635,18 @@ impl ClassParser {
             Regex::new(r"^note\s+(top|bottom|left|right)\s+of\s+([\w.]+)\s*(?:#\S+)?\s*$").unwrap()
         });
         // Shorthand single-line note attached to last entity: `note <pos> : <text>`
-        static SHORT_RE: LazyLock<Regex> = LazyLock::new(|| {
-            Regex::new(r"^note\s+(top|bottom|left|right)\s*:\s*(.+)$").unwrap()
-        });
+        static SHORT_RE: LazyLock<Regex> =
+            LazyLock::new(|| Regex::new(r"^note\s+(top|bottom|left|right)\s*:\s*(.+)$").unwrap());
         // Shorthand multi-line note attached to last entity: `note <pos>` (optional color)
         static SHORT_ML_RE: LazyLock<Regex> = LazyLock::new(|| {
             Regex::new(r"^note\s+(top|bottom|left|right)\s*(?:#\S+)?\s*$").unwrap()
         });
         // Floating named note: `note "text" as Name`
-        static FLOATING_RE: LazyLock<Regex> = LazyLock::new(|| {
-            Regex::new(r#"^note\s+"([^"]+)"\s+as\s+(\w+)\s*$"#).unwrap()
-        });
+        static FLOATING_RE: LazyLock<Regex> =
+            LazyLock::new(|| Regex::new(r#"^note\s+"([^"]+)"\s+as\s+(\w+)\s*$"#).unwrap());
         // Multi-line floating note: `note as Name` (optional color suffix like `#yellow`).
-        static FLOATING_ML_RE: LazyLock<Regex> = LazyLock::new(|| {
-            Regex::new(r"^note\s+as\s+(\w+)\s*(?:#\S+)?\s*$").unwrap()
-        });
+        static FLOATING_ML_RE: LazyLock<Regex> =
+            LazyLock::new(|| Regex::new(r"^note\s+as\s+(\w+)\s*(?:#\S+)?\s*$").unwrap());
 
         if let Some(caps) = ATTACHED_RE.captures(line) {
             let position = parse_note_position(&caps[1]);
@@ -746,7 +749,9 @@ impl ClassParser {
             let lines = if text.is_empty() {
                 Vec::new()
             } else {
-                text.split("\\n").map(|s| s.trim_end().to_string()).collect()
+                text.split("\\n")
+                    .map(|s| s.trim_end().to_string())
+                    .collect()
             };
             self.notes.push(Note {
                 lines,
@@ -1099,8 +1104,8 @@ fn process_spot_stereotype(s: &str) -> String {
                 let color_part = spot_inner[comma + 1..].trim();
                 if color_part.starts_with('#') {
                     let color_hex = &color_part[1..]; // strip leading #
-                    let is_hex = !color_hex.is_empty()
-                        && color_hex.chars().all(|c| c.is_ascii_hexdigit());
+                    let is_hex =
+                        !color_hex.is_empty() && color_hex.chars().all(|c| c.is_ascii_hexdigit());
                     if is_hex {
                         // Hex color: strip spot prefix, return just the name.
                         return after.to_string();
@@ -1249,8 +1254,8 @@ mod tests {
     #[test]
     fn separators() {
         let d = parse("class Foo {\n  +field1\n  --\n  +method1()\n  ==\n  -internal\n}");
-        // Separators are ignored, members are parsed.
-        assert_eq!(d.entities[0].members.len(), 3);
+        // 3 real members + 2 separators (-- and ==) stored as MemberKind::Separator.
+        assert_eq!(d.entities[0].members.len(), 5);
     }
 
     #[test]

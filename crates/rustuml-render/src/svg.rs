@@ -19,7 +19,11 @@ impl SvgBuilder {
             r#"<svg xmlns="http://www.w3.org/2000/svg" width="{width}" height="{height}" viewBox="0 0 {width} {height}">"#,
         )
         .unwrap();
-        Self { buf, indent: 1, group_depth: 0 }
+        Self {
+            buf,
+            indent: 1,
+            group_depth: 0,
+        }
     }
 
     pub fn rect(&mut self, x: f64, y: f64, w: f64, h: f64, fill: &str, stroke: &str) {
@@ -77,7 +81,7 @@ impl SvgBuilder {
             || content.contains("<back:")
             || content.contains("<mono>")
             || content.contains("<img:")  // image fallback
-            || content.contains("[[");  // hyperlinks
+            || content.contains("[["); // hyperlinks
         if has_creole {
             let rich = crate::creole::to_svg_tspans(content);
             self.line(&format!(
@@ -96,7 +100,14 @@ impl SvgBuilder {
     ///
     /// This matches Java PlantUML's behaviour for class-diagram entity labels,
     /// where `**bold**` and `//italic//` are processed but `__under__` is not.
-    pub fn text_class_label(&mut self, x: f64, y: f64, content: &str, anchor: &str, font_size: f64) {
+    pub fn text_class_label(
+        &mut self,
+        x: f64,
+        y: f64,
+        content: &str,
+        anchor: &str,
+        font_size: f64,
+    ) {
         // Same has_creole check as text(), but underline markers detected solely
         // to decide whether processing is needed (not to trigger underline rendering).
         let has_creole = (content.matches("**").count() >= 2)
@@ -362,7 +373,10 @@ impl SvgBuilder {
             total_h
         } else {
             // Plain text / creole markup legend (no table).
-            let lines: Vec<&str> = legend_text.lines().filter(|l| !l.trim().is_empty()).collect();
+            let lines: Vec<&str> = legend_text
+                .lines()
+                .filter(|l| !l.trim().is_empty())
+                .collect();
             if lines.is_empty() {
                 return 0.0;
             }

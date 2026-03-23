@@ -58,8 +58,16 @@ pub fn render(diagram: &ActivityDiagram, theme: &Theme) -> String {
         .any(|sp| sp.key.to_lowercase().ends_with("fontname") && is_monospace_font(&sp.value));
 
     let n = diagram.steps.len();
-    let title_extra = if diagram.meta.title.is_some() { TITLE_HEIGHT } else { 0.0 };
-    let deprecated_count = diagram.steps.iter().filter(|s| matches!(s, ActivityStep::DeprecatedColorAction(_))).count();
+    let title_extra = if diagram.meta.title.is_some() {
+        TITLE_HEIGHT
+    } else {
+        0.0
+    };
+    let deprecated_count = diagram
+        .steps
+        .iter()
+        .filter(|s| matches!(s, ActivityStep::DeprecatedColorAction(_)))
+        .count();
     let total_height = MARGIN * 2.0
         + title_extra
         + n as f64 * (ACTION_HEIGHT + V_GAP)
@@ -138,7 +146,13 @@ pub fn render(diagram: &ActivityDiagram, theme: &Theme) -> String {
                     &as_.action_background,
                     "#000",
                 );
-                svg.text(cx, y + ACTION_HEIGHT / 2.0 + 4.0, &display, "middle", FONT_SIZE);
+                svg.text(
+                    cx,
+                    y + ACTION_HEIGHT / 2.0 + 4.0,
+                    &display,
+                    "middle",
+                    FONT_SIZE,
+                );
                 y += ACTION_HEIGHT + V_GAP / 2.0;
             }
             ActivityStep::DeprecatedColorAction(dca) => {
@@ -155,7 +169,13 @@ pub fn render(diagram: &ActivityDiagram, theme: &Theme) -> String {
                     "This\u{a0}syntax\u{a0}is\u{a0}deprecated,\u{a0}you\u{a0}must\u{a0}add\u{a0}<<{}>>\u{a0}at\u{a0}the\u{a0}end\u{a0}of\u{a0}the\u{a0}line,\u{a0}after\u{a0}the\u{a0}';'",
                     dca.color
                 );
-                svg.monospace_text(cx, y + DEPRECATED_HEIGHT / 2.0 + 4.0, &warning, "middle", SMALL_FONT);
+                svg.monospace_text(
+                    cx,
+                    y + DEPRECATED_HEIGHT / 2.0 + 4.0,
+                    &warning,
+                    "middle",
+                    SMALL_FONT,
+                );
                 y += DEPRECATED_HEIGHT;
                 svg.rounded_rect(
                     cx - ACTION_WIDTH / 2.0,
@@ -166,7 +186,13 @@ pub fn render(diagram: &ActivityDiagram, theme: &Theme) -> String {
                     &as_.action_background,
                     "#000",
                 );
-                svg.text(cx, y + ACTION_HEIGHT / 2.0 + 4.0, &dca.text, "middle", FONT_SIZE);
+                svg.text(
+                    cx,
+                    y + ACTION_HEIGHT / 2.0 + 4.0,
+                    &dca.text,
+                    "middle",
+                    FONT_SIZE,
+                );
                 y += ACTION_HEIGHT + V_GAP / 2.0;
             }
             ActivityStep::Arrow(arrow) => {
@@ -343,21 +369,8 @@ pub fn render(diagram: &ActivityDiagram, theme: &Theme) -> String {
                     NotePosition::Right => cx + ACTION_WIDTH / 2.0 + 10.0,
                     NotePosition::Left => cx - ACTION_WIDTH / 2.0 - note_width - 10.0,
                 };
-                svg.rect(
-                    note_x,
-                    y - 10.0,
-                    note_width,
-                    note_height,
-                    fill,
-                    "#000",
-                );
-                svg.text(
-                    note_x + 5.0,
-                    y + 4.0,
-                    &note.text,
-                    "start",
-                    SMALL_FONT,
-                );
+                svg.rect(note_x, y - 10.0, note_width, note_height, fill, "#000");
+                svg.text(note_x + 5.0, y + 4.0, &note.text, "start", SMALL_FONT);
             }
             ActivityStep::While(w) => {
                 svg.line_segment(cx, y - V_GAP / 2.0, cx, y, "#000", false);

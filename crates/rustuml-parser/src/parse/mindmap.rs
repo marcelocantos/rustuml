@@ -67,10 +67,23 @@ pub fn parse_mindmap(lines: &[String]) -> Result<MindMapDiagram, ParseError> {
                     buf.push_str(last);
                 }
                 let label = buf.replace('\n', " ");
-                let node = MindMapNode { label, depth, side, children: Vec::new() };
+                let node = MindMapNode {
+                    label,
+                    depth,
+                    side,
+                    children: Vec::new(),
+                };
                 let (depth, side) = (depth, side);
                 multiline_buf = None;
-                insert_node(node, depth, side, &mut roots, &mut right_stack, &mut left_stack, start_no)?;
+                insert_node(
+                    node,
+                    depth,
+                    side,
+                    &mut roots,
+                    &mut right_stack,
+                    &mut left_stack,
+                    start_no,
+                )?;
             } else {
                 if !buf.is_empty() {
                     buf.push('\n');
@@ -121,8 +134,21 @@ pub fn parse_mindmap(lines: &[String]) -> Result<MindMapDiagram, ParseError> {
                 } else {
                     label
                 };
-                let node = MindMapNode { label, depth, side, children: Vec::new() };
-                insert_node(node, depth, side, &mut roots, &mut right_stack, &mut left_stack, line_no)?;
+                let node = MindMapNode {
+                    label,
+                    depth,
+                    side,
+                    children: Vec::new(),
+                };
+                insert_node(
+                    node,
+                    depth,
+                    side,
+                    &mut roots,
+                    &mut right_stack,
+                    &mut left_stack,
+                    line_no,
+                )?;
             } else {
                 // Start of multiline block — accumulate until `;`.
                 multiline_buf = Some((line_no, depth, side, after_colon.trim().to_string()));
@@ -139,8 +165,21 @@ pub fn parse_mindmap(lines: &[String]) -> Result<MindMapDiagram, ParseError> {
         }
 
         let depth = count;
-        let node = MindMapNode { label, depth, side, children: Vec::new() };
-        insert_node(node, depth, side, &mut roots, &mut right_stack, &mut left_stack, line_no)?;
+        let node = MindMapNode {
+            label,
+            depth,
+            side,
+            children: Vec::new(),
+        };
+        insert_node(
+            node,
+            depth,
+            side,
+            &mut roots,
+            &mut right_stack,
+            &mut left_stack,
+            line_no,
+        )?;
     }
 
     Ok(MindMapDiagram { meta, roots })
@@ -176,9 +215,7 @@ fn insert_node(
             if roots.is_empty() {
                 return Err(ParseError {
                     line: line_no + 1,
-                    message: format!(
-                        "depth-{depth} node has no parent (no preceding root node)"
-                    ),
+                    message: format!("depth-{depth} node has no parent (no preceding root node)"),
                 });
             }
             // Implicitly attach to the most recent root.

@@ -13,8 +13,21 @@ use crate::diagram::component::*;
 
 /// Container keywords recognised by the component diagram parser.
 const CONTAINER_KEYWORDS: &[&str] = &[
-    "cloud", "folder", "node", "frame", "rectangle", "package", "database", "storage", "actor",
-    "component", "queue", "boundary", "control", "entity", "collections",
+    "cloud",
+    "folder",
+    "node",
+    "frame",
+    "rectangle",
+    "package",
+    "database",
+    "storage",
+    "actor",
+    "component",
+    "queue",
+    "boundary",
+    "control",
+    "entity",
+    "collections",
 ];
 
 /// Check if a trimmed line opens a container block (keyword followed by optional label and `{`).
@@ -22,7 +35,11 @@ fn container_keyword(trimmed: &str) -> Option<&'static str> {
     for &kw in CONTAINER_KEYWORDS {
         if trimmed.starts_with(kw) {
             let rest = &trimmed[kw.len()..];
-            if rest.is_empty() || rest.starts_with(' ') || rest.starts_with('\t') || rest.starts_with('"') {
+            if rest.is_empty()
+                || rest.starts_with(' ')
+                || rest.starts_with('\t')
+                || rest.starts_with('"')
+            {
                 return Some(kw);
             }
         }
@@ -33,7 +50,9 @@ fn container_keyword(trimmed: &str) -> Option<&'static str> {
 /// Extract all stereotype strings from `<<name>>` syntax in a line.
 fn parse_stereotypes(s: &str) -> Vec<String> {
     static RE: LazyLock<Regex> = LazyLock::new(|| Regex::new(r"<<(\w+)>>").unwrap());
-    RE.captures_iter(s).map(|caps| caps[1].to_string()).collect()
+    RE.captures_iter(s)
+        .map(|caps| caps[1].to_string())
+        .collect()
 }
 
 /// Parse a container label from a line like:
@@ -89,10 +108,13 @@ pub fn parse_component(lines: &[String]) -> Result<ComponentDiagram, ParseError>
     let mut in_legend: bool = false;
     let mut legend_lines: Vec<String> = Vec::new();
 
-    static RE_COMP: LazyLock<Regex> =
-        LazyLock::new(|| Regex::new(r#"^component\s+(?:"((?:[^"]|"")+)"\s+as\s+(\w+)|"((?:[^"]|"")+)"|(\w+))(?:\s+[^{]*)?"#).unwrap());
-    static RE_BRACKET: LazyLock<Regex> =
-        LazyLock::new(|| Regex::new(r"^\[([^\]]+)\]$").unwrap());
+    static RE_COMP: LazyLock<Regex> = LazyLock::new(|| {
+        Regex::new(
+            r#"^component\s+(?:"((?:[^"]|"")+)"\s+as\s+(\w+)|"((?:[^"]|"")+)"|(\w+))(?:\s+[^{]*)?"#,
+        )
+        .unwrap()
+    });
+    static RE_BRACKET: LazyLock<Regex> = LazyLock::new(|| Regex::new(r"^\[([^\]]+)\]$").unwrap());
     // Interface: `interface "Name" as ID`, `interface Name`, or `interface [Name] as ID`.
     static RE_IFACE_QUOTED_AS: LazyLock<Regex> =
         LazyLock::new(|| Regex::new(r#"^interface\s+"((?:[^"]|"")+)"\s+as\s+(\w+)"#).unwrap());
@@ -101,8 +123,10 @@ pub fn parse_component(lines: &[String]) -> Result<ComponentDiagram, ParseError>
     static RE_IFACE_BARE: LazyLock<Regex> =
         LazyLock::new(|| Regex::new(r"^interface\s+(\w+)\s*$").unwrap());
     // Note: `note right of ID : text` or `note right of ID` (multiline)
-    static RE_NOTE_OF: LazyLock<Regex> =
-        LazyLock::new(|| Regex::new(r"^note\s+(?:right|left|top|bottom)\s+of\s+(\w+|\[[\w\s]+\])(?:\s*:\s*(.+))?$").unwrap());
+    static RE_NOTE_OF: LazyLock<Regex> = LazyLock::new(|| {
+        Regex::new(r"^note\s+(?:right|left|top|bottom)\s+of\s+(\w+|\[[\w\s]+\])(?:\s*:\s*(.+))?$")
+            .unwrap()
+    });
     // Floating note: `note "text" as ID` or `note : text`
     static RE_NOTE_INLINE: LazyLock<Regex> =
         LazyLock::new(|| Regex::new(r#"^note\s+"([^"]+)"\s+as\s+\w+"#).unwrap());
@@ -263,8 +287,15 @@ pub fn parse_component(lines: &[String]) -> Result<ComponentDiagram, ParseError>
             let target = target_raw
                 .trim_matches(|c| c == '[' || c == ']')
                 .replace(' ', "_");
-            if let Some(inline_text) = caps.get(2).map(|m| m.as_str().trim().to_string()).filter(|t| !t.is_empty()) {
-                notes.push(ComponentNote { text: inline_text, target: Some(target) });
+            if let Some(inline_text) = caps
+                .get(2)
+                .map(|m| m.as_str().trim().to_string())
+                .filter(|t| !t.is_empty())
+            {
+                notes.push(ComponentNote {
+                    text: inline_text,
+                    target: Some(target),
+                });
             } else {
                 note_target = Some(target);
                 note_lines.clear();
@@ -274,7 +305,10 @@ pub fn parse_component(lines: &[String]) -> Result<ComponentDiagram, ParseError>
         }
         // Floating inline note: `note "text" as ID`
         if let Some(caps) = RE_NOTE_INLINE.captures(trimmed) {
-            notes.push(ComponentNote { text: caps[1].to_string(), target: None });
+            notes.push(ComponentNote {
+                text: caps[1].to_string(),
+                target: None,
+            });
             continue;
         }
         // `note on link : text` — inline note on the last link.
@@ -294,7 +328,10 @@ pub fn parse_component(lines: &[String]) -> Result<ComponentDiagram, ParseError>
             continue;
         }
         // `note : text` — inline floating note.
-        if let Some(rest) = trimmed.strip_prefix("note :").or_else(|| trimmed.strip_prefix("note: ")) {
+        if let Some(rest) = trimmed
+            .strip_prefix("note :")
+            .or_else(|| trimmed.strip_prefix("note: "))
+        {
             let text = rest.trim().to_string();
             if !text.is_empty() {
                 notes.push(ComponentNote { text, target: None });
@@ -379,7 +416,10 @@ pub fn parse_component(lines: &[String]) -> Result<ComponentDiagram, ParseError>
         if let Some(caps) = RE_IFACE_BARE.captures(trimmed) {
             let name = caps[1].to_string();
             if !interfaces.iter().any(|i: &Interface| i.id == name) {
-                interfaces.push(Interface { id: name.clone(), label: name });
+                interfaces.push(Interface {
+                    id: name.clone(),
+                    label: name,
+                });
             }
             continue;
         }
@@ -474,10 +514,16 @@ mod tests {
 
     #[test]
     fn cloud_container_label() {
-        let d = parse("cloud Outer #LightBlue {\n  folder Inner {\n    component X\n    component Y\n    X --> Y\n  }\n}");
+        let d = parse(
+            "cloud Outer #LightBlue {\n  folder Inner {\n    component X\n    component Y\n    X --> Y\n  }\n}",
+        );
         assert_eq!(d.packages.len(), 1, "should have 1 top-level package");
         assert_eq!(d.packages[0].label, "Outer");
-        assert_eq!(d.packages[0].packages.len(), 1, "should have 1 nested package");
+        assert_eq!(
+            d.packages[0].packages.len(),
+            1,
+            "should have 1 nested package"
+        );
         assert_eq!(d.packages[0].packages[0].label, "Inner");
         assert!(d.components.iter().any(|c| c.id == "X"));
         assert!(d.components.iter().any(|c| c.id == "Y"));
@@ -522,7 +568,10 @@ mod tests {
     #[test]
     fn multiline_title() {
         let d = parse("title\n  My Complex\n  Component Diagram\nend title\ncomponent A");
-        assert_eq!(d.meta.title.as_deref(), Some("My Complex\nComponent Diagram"));
+        assert_eq!(
+            d.meta.title.as_deref(),
+            Some("My Complex\nComponent Diagram")
+        );
     }
 
     #[test]

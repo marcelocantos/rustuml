@@ -47,12 +47,18 @@ fn preproc_parse_all() {
     for puml_path in &pairs {
         let source = match std::fs::read_to_string(puml_path) {
             Ok(s) => s,
-            Err(_) => { skip += 1; continue; }
+            Err(_) => {
+                skip += 1;
+                continue;
+            }
         };
         let svg_path = puml_path.with_extension("svg");
         let golden_svg = match std::fs::read_to_string(&svg_path) {
             Ok(s) => s,
-            Err(_) => { skip += 1; continue; }
+            Err(_) => {
+                skip += 1;
+                continue;
+            }
         };
         if golden_has_error(&golden_svg) {
             skip += 1;

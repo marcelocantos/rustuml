@@ -11,7 +11,9 @@
 //! - Task labels inside the bars (left-aligned).
 //! - An identical time axis repeated at the bottom.
 
-use rustuml_parser::diagram::gantt::{GanttDiagram, GanttNote, GanttRow, GanttTask, TaskStart, TaskResource};
+use rustuml_parser::diagram::gantt::{
+    GanttDiagram, GanttNote, GanttRow, GanttTask, TaskResource, TaskStart,
+};
 
 use crate::style::Theme;
 use crate::svg::SvgBuilder;
@@ -99,51 +101,40 @@ pub fn render(diagram: &GanttDiagram, _theme: &Theme) -> String {
 
     // If we have a project start date and closed days, convert working days to
     // calendar days.
-    let (resolved, total_days) = if !diagram.closed_days.is_empty()
-        && diagram.project_start.is_some()
-    {
-        let start_dow = diagram
-            .project_start
-            .as_deref()
-            .and_then(|s| {
-                let parts: Vec<u32> =
-                    s.split('-').filter_map(|p| p.parse().ok()).collect();
-                if parts.len() == 3 {
-                    Some(zeller_dow(parts[0] as i32, parts[1], parts[2]))
-                } else {
-                    None
-                }
-            })
-            .unwrap_or(0);
+    let (resolved, total_days) =
+        if !diagram.closed_days.is_empty() && diagram.project_start.is_some() {
+            let start_dow = diagram
+                .project_start
+                .as_deref()
+                .and_then(|s| {
+                    let parts: Vec<u32> = s.split('-').filter_map(|p| p.parse().ok()).collect();
+                    if parts.len() == 3 {
+                        Some(zeller_dow(parts[0] as i32, parts[1], parts[2]))
+                    } else {
+                        None
+                    }
+                })
+                .unwrap_or(0);
 
-        let cal_resolved: Vec<(u32, u32)> = resolved_wd
-            .iter()
-            .map(|&(wd_start, wd_dur)| {
-                let cal_start = wd_to_cal(wd_start, start_dow, &diagram.closed_days);
-                // Duration: count cal days needed to cover wd_dur working days.
-                let cal_end =
-                    wd_to_cal(wd_start + wd_dur, start_dow, &diagram.closed_days);
-                (cal_start, cal_end - cal_start)
-            })
-            .collect();
-        let has_milestone = diagram.tasks.iter().any(|t| t.duration == 0);
-        let total = cal_resolved
-            .iter()
-            .map(|&(s, d)| s + d)
-            .max()
-            .unwrap_or(1);
-        let total = if has_milestone { total + 1 } else { total };
-        (cal_resolved, total)
-    } else {
-        let has_milestone = diagram.tasks.iter().any(|t| t.duration == 0);
-        let total = resolved_wd
-            .iter()
-            .map(|&(s, d)| s + d)
-            .max()
-            .unwrap_or(1);
-        let total = if has_milestone { total + 1 } else { total };
-        (resolved_wd, total)
-    };
+            let cal_resolved: Vec<(u32, u32)> = resolved_wd
+                .iter()
+                .map(|&(wd_start, wd_dur)| {
+                    let cal_start = wd_to_cal(wd_start, start_dow, &diagram.closed_days);
+                    // Duration: count cal days needed to cover wd_dur working days.
+                    let cal_end = wd_to_cal(wd_start + wd_dur, start_dow, &diagram.closed_days);
+                    (cal_start, cal_end - cal_start)
+                })
+                .collect();
+            let has_milestone = diagram.tasks.iter().any(|t| t.duration == 0);
+            let total = cal_resolved.iter().map(|&(s, d)| s + d).max().unwrap_or(1);
+            let total = if has_milestone { total + 1 } else { total };
+            (cal_resolved, total)
+        } else {
+            let has_milestone = diagram.tasks.iter().any(|t| t.duration == 0);
+            let total = resolved_wd.iter().map(|&(s, d)| s + d).max().unwrap_or(1);
+            let total = if has_milestone { total + 1 } else { total };
+            (resolved_wd, total)
+        };
 
     // ── Calendar info ─────────────────────────────────────────────────────────
 
@@ -173,7 +164,11 @@ pub fn render(diagram: &GanttDiagram, _theme: &Theme) -> String {
     };
     // Notes below resource rows.
     let note_line_h = 14.0_f64;
-    let notes_h: f64 = diagram.notes.iter().map(|n| n.lines.len() as f64 * note_line_h + 8.0).sum();
+    let notes_h: f64 = diagram
+        .notes
+        .iter()
+        .map(|n| n.lines.len() as f64 * note_line_h + 8.0)
+        .sum();
 
     let chart_width = total_days as f64 * DAY_WIDTH;
     let total_width = MARGIN + chart_width + MARGIN;
@@ -192,7 +187,14 @@ pub fn render(diagram: &GanttDiagram, _theme: &Theme) -> String {
         for (day_idx, &dow) in c.day_of_week.iter().enumerate() {
             if diagram.closed_days.contains(&dow) {
                 let gx = chart_x + day_idx as f64 * DAY_WIDTH;
-                svg.rect(gx, chart_top, DAY_WIDTH, chart_bottom - chart_top, "#F1E5E5", "none");
+                svg.rect(
+                    gx,
+                    chart_top,
+                    DAY_WIDTH,
+                    chart_bottom - chart_top,
+                    "#F1E5E5",
+                    "none",
+                );
             }
         }
     }
@@ -214,7 +216,14 @@ pub fn render(diagram: &GanttDiagram, _theme: &Theme) -> String {
     }
 
     // Horizontal borders.
-    svg.line_segment(chart_x, chart_top, chart_x + chart_width, chart_top, "#C0C0C0", false);
+    svg.line_segment(
+        chart_x,
+        chart_top,
+        chart_x + chart_width,
+        chart_top,
+        "#C0C0C0",
+        false,
+    );
     svg.line_segment(
         chart_x,
         chart_bottom,
@@ -236,7 +245,11 @@ pub fn render(diagram: &GanttDiagram, _theme: &Theme) -> String {
     let rows_list: Vec<&GanttRow> = if !diagram.rows.is_empty() {
         diagram.rows.iter().collect()
     } else {
-        fallback_rows = diagram.tasks.iter().map(|t| GanttRow::Task(t.name.clone())).collect();
+        fallback_rows = diagram
+            .tasks
+            .iter()
+            .map(|t| GanttRow::Task(t.name.clone()))
+            .collect();
         fallback_rows.iter().collect()
     };
 
@@ -260,7 +273,14 @@ pub fn render(diagram: &GanttDiagram, _theme: &Theme) -> String {
             GanttRow::Separator(label) => {
                 // Draw a thin horizontal line with the label centered.
                 let line_y = ry + ROW_HEIGHT / 2.0;
-                svg.line_segment(chart_x, line_y, chart_x + chart_width, line_y, "#808080", false);
+                svg.line_segment(
+                    chart_x,
+                    line_y,
+                    chart_x + chart_width,
+                    line_y,
+                    "#808080",
+                    false,
+                );
                 if !label.is_empty() {
                     svg.text(
                         chart_x + chart_width / 2.0,
@@ -314,13 +334,17 @@ pub fn render(diagram: &GanttDiagram, _theme: &Theme) -> String {
                     let label = if task.resources.is_empty() {
                         task.name.clone()
                     } else {
-                        let res_part: String = task.resources.iter().map(|r| {
-                            if r.percent == 100 {
-                                format!(" {{{}}}", r.name)
-                            } else {
-                                format!(" {{{}:{}}}", r.name, format!("{}%", r.percent))
-                            }
-                        }).collect();
+                        let res_part: String = task
+                            .resources
+                            .iter()
+                            .map(|r| {
+                                if r.percent == 100 {
+                                    format!(" {{{}}}", r.name)
+                                } else {
+                                    format!(" {{{}:{}}}", r.name, format!("{}%", r.percent))
+                                }
+                            })
+                            .collect();
                         format!("{}{}", task.name, res_part)
                     };
                     let label_x = bar_x + 4.0;
@@ -351,7 +375,15 @@ pub fn render(diagram: &GanttDiagram, _theme: &Theme) -> String {
     // ── Bottom axis labels ────────────────────────────────────────────────────
 
     if let Some(ref c) = cal {
-        render_calendar_axis(&mut svg, c, chart_x, chart_bottom, false, total_days, abbreviated);
+        render_calendar_axis(
+            &mut svg,
+            c,
+            chart_x,
+            chart_bottom,
+            false,
+            total_days,
+            abbreviated,
+        );
     } else {
         render_day_numbers(&mut svg, total_days, chart_x, chart_bottom + 14.0);
     }
@@ -370,10 +402,13 @@ pub fn render(diagram: &GanttDiagram, _theme: &Theme) -> String {
             ));
             // Compute utilization per calendar day (sum of percentages from all tasks).
             let util_y = resource_y + 20.0;
-            let mut day_utilization: std::collections::HashMap<u32, u32> = std::collections::HashMap::new();
+            let mut day_utilization: std::collections::HashMap<u32, u32> =
+                std::collections::HashMap::new();
             for (task_idx, task) in diagram.tasks.iter().enumerate() {
                 // Find this resource's contribution to this task.
-                let percent: u32 = task.resources.iter()
+                let percent: u32 = task
+                    .resources
+                    .iter()
                     .filter(|tr| tr.name == res.name)
                     .map(|tr| tr.percent)
                     .sum();
@@ -398,7 +433,12 @@ pub fn render(diagram: &GanttDiagram, _theme: &Theme) -> String {
 
     // ── Notes ─────────────────────────────────────────────────────────────────
 
-    render_notes(&mut svg, &diagram.notes, chart_x, chart_bottom + ah + resources_h + MARGIN);
+    render_notes(
+        &mut svg,
+        &diagram.notes,
+        chart_x,
+        chart_bottom + ah + resources_h + MARGIN,
+    );
 
     // ── Title ─────────────────────────────────────────────────────────────────
 
@@ -447,10 +487,7 @@ struct CalendarInfo {
 
 impl CalendarInfo {
     fn parse(date_str: &str, total_days: u32) -> Option<Self> {
-        let parts: Vec<u32> = date_str
-            .split('-')
-            .filter_map(|s| s.parse().ok())
-            .collect();
+        let parts: Vec<u32> = date_str.split('-').filter_map(|s| s.parse().ok()).collect();
         if parts.len() != 3 {
             return None;
         }
@@ -753,21 +790,21 @@ mod tests {
                     duration: 5,
                     start: TaskStart::Day(0),
                     color: None,
-                resources: Vec::new(),
+                    resources: Vec::new(),
                 },
                 GanttTask {
                     name: "Task 2".into(),
                     duration: 3,
                     start: TaskStart::AfterTask("Task 1".into()),
                     color: None,
-                resources: Vec::new(),
+                    resources: Vec::new(),
                 },
                 GanttTask {
                     name: "Task 3".into(),
                     duration: 2,
                     start: TaskStart::AfterTask("Task 2".into()),
                     color: None,
-                resources: Vec::new(),
+                    resources: Vec::new(),
                 },
             ],
         }

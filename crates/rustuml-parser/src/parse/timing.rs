@@ -135,10 +135,8 @@ impl TimingParser {
 
     /// Try to parse `@N` (absolute) or `@+N` (relative) time marker.
     fn try_time_point(&mut self, line: &str) -> bool {
-        static RE_ABS: LazyLock<Regex> =
-            LazyLock::new(|| Regex::new(r"^@(-?\d+)$").unwrap());
-        static RE_REL: LazyLock<Regex> =
-            LazyLock::new(|| Regex::new(r"^@\+(\d+)$").unwrap());
+        static RE_ABS: LazyLock<Regex> = LazyLock::new(|| Regex::new(r"^@(-?\d+)$").unwrap());
+        static RE_REL: LazyLock<Regex> = LazyLock::new(|| Regex::new(r"^@\+(\d+)$").unwrap());
 
         if let Some(caps) = RE_ABS.captures(line)
             && let Ok(t) = caps[1].parse::<i64>()
@@ -159,9 +157,8 @@ impl TimingParser {
 
     /// Try `@T1 <-> @T2 : label` annotation.
     fn try_annotation(&mut self, line: &str) -> bool {
-        static RE: LazyLock<Regex> = LazyLock::new(|| {
-            Regex::new(r"^@(-?\d+)\s*<->\s*@(-?\d+)\s*:\s*(.+)$").unwrap()
-        });
+        static RE: LazyLock<Regex> =
+            LazyLock::new(|| Regex::new(r"^@(-?\d+)\s*<->\s*@(-?\d+)\s*:\s*(.+)$").unwrap());
         if let Some(caps) = RE.captures(line)
             && let Ok(t1) = caps[1].parse::<i64>()
             && let Ok(t2) = caps[2].parse::<i64>()
@@ -235,8 +232,7 @@ impl TimingParser {
     /// label rendering, we just register the timeline.
     fn try_clock_decl(&mut self, line: &str) -> bool {
         static RE: LazyLock<Regex> = LazyLock::new(|| {
-            Regex::new(r#"^clock\s+"([^"]+)"(?:\s+as\s+(\w+))?\s+with\s+period\s+(\d+)$"#)
-                .unwrap()
+            Regex::new(r#"^clock\s+"([^"]+)"(?:\s+as\s+(\w+))?\s+with\s+period\s+(\d+)$"#).unwrap()
         });
         if let Some(caps) = RE.captures(line) {
             let label = caps[1].to_string();
@@ -264,8 +260,7 @@ impl TimingParser {
 
     /// Try `Alias is State`.
     fn try_state_change(&mut self, line: &str) -> bool {
-        static RE: LazyLock<Regex> =
-            LazyLock::new(|| Regex::new(r"^(\w+)\s+is\s+(.+)$").unwrap());
+        static RE: LazyLock<Regex> = LazyLock::new(|| Regex::new(r"^(\w+)\s+is\s+(.+)$").unwrap());
 
         if let Some(caps) = RE.captures(line) {
             let id = caps[1].to_string();
@@ -296,10 +291,8 @@ impl TimingParser {
     /// Try `highlight T1 to T2 #color : label` or `highlight T1 to T2 : label`.
     fn try_highlight(&mut self, line: &str) -> bool {
         static RE: LazyLock<Regex> = LazyLock::new(|| {
-            Regex::new(
-                r"^highlight\s+(-?\d+)\s+to\s+(-?\d+)(?:\s+(#\S+))?(?:\s*:\s*(.+))?$",
-            )
-            .unwrap()
+            Regex::new(r"^highlight\s+(-?\d+)\s+to\s+(-?\d+)(?:\s+(#\S+))?(?:\s*:\s*(.+))?$")
+                .unwrap()
         });
         if let Some(caps) = RE.captures(line)
             && let Ok(t1) = caps[1].parse::<i64>()
@@ -320,9 +313,8 @@ impl TimingParser {
 
     /// Try `note top of X : text` or `note bottom of X : text`.
     fn try_note(&mut self, line: &str) -> bool {
-        static RE: LazyLock<Regex> = LazyLock::new(|| {
-            Regex::new(r"^note\s+(top|bottom)\s+of\s+(\w+)\s*:\s*(.+)$").unwrap()
-        });
+        static RE: LazyLock<Regex> =
+            LazyLock::new(|| Regex::new(r"^note\s+(top|bottom)\s+of\s+(\w+)\s*:\s*(.+)$").unwrap());
         if let Some(caps) = RE.captures(line) {
             let above = &caps[1] == "top";
             let timeline_id = caps[2].to_string();
@@ -341,9 +333,8 @@ impl TimingParser {
 
     /// Try `scale N as M pixels` or `scale N`.
     fn try_scale(&mut self, line: &str) -> bool {
-        static RE: LazyLock<Regex> = LazyLock::new(|| {
-            Regex::new(r"^scale\s+(\d+)(?:\s+as\s+(\d+)\s+pixels?)?$").unwrap()
-        });
+        static RE: LazyLock<Regex> =
+            LazyLock::new(|| Regex::new(r"^scale\s+(\d+)(?:\s+as\s+(\d+)\s+pixels?)?$").unwrap());
         if let Some(caps) = RE.captures(line)
             && let Ok(units) = caps[1].parse::<i64>()
         {

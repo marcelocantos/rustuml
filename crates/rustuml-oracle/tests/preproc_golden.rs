@@ -30,11 +30,7 @@ fn golden_has_error(svg: &str) -> bool {
 }
 
 fn run_one(puml_path: &Path) -> (String, &'static str, Option<String>) {
-    let name = puml_path
-        .file_stem()
-        .unwrap()
-        .to_string_lossy()
-        .to_string();
+    let name = puml_path.file_stem().unwrap().to_string_lossy().to_string();
 
     let source = match std::fs::read_to_string(puml_path) {
         Ok(s) => s,
@@ -52,49 +48,47 @@ fn run_one(puml_path: &Path) -> (String, &'static str, Option<String>) {
     }
 
     let base_dir = puml_path.parent().map(Path::to_owned);
-    let result =
-        std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-            let diagram =
-                rustuml_parser::parse::parse_auto_with_base(&source, base_dir.as_deref())
-                    .map_err(|e| format!("parse: {e}"))?;
+    let result = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let diagram = rustuml_parser::parse::parse_auto_with_base(&source, base_dir.as_deref())
+            .map_err(|e| format!("parse: {e}"))?;
 
-            let rust_svg = rustuml_render::render_svg(&diagram);
+        let rust_svg = rustuml_render::render_svg(&diagram);
 
-            let golden_elems = compare::extract_elements(&golden_svg)
-                .map_err(|e| format!("golden SVG parse: {e}"))?;
-            let rust_elems = compare::extract_elements(&rust_svg)
-                .map_err(|e| format!("rust SVG parse: {e}"))?;
+        let golden_elems =
+            compare::extract_elements(&golden_svg).map_err(|e| format!("golden SVG parse: {e}"))?;
+        let rust_elems =
+            compare::extract_elements(&rust_svg).map_err(|e| format!("rust SVG parse: {e}"))?;
 
-            let skip = |t: &&str| {
-                t.len() < 2
-                    || ["alt", "else", "opt", "loop", "end", "par", "ref"].contains(t)
-                    || t.starts_with('[')
-            };
+        let skip = |t: &&str| {
+            t.len() < 2
+                || ["alt", "else", "opt", "loop", "end", "par", "ref"].contains(t)
+                || t.starts_with('[')
+        };
 
-            let golden_texts: Vec<&str> = golden_elems
-                .iter()
-                .filter_map(|e| e.text.as_deref())
-                .filter(|t| !t.is_empty())
-                .collect();
-            let rust_texts: Vec<&str> = rust_elems
-                .iter()
-                .filter_map(|e| e.text.as_deref())
-                .filter(|t| !t.is_empty())
-                .collect();
+        let golden_texts: Vec<&str> = golden_elems
+            .iter()
+            .filter_map(|e| e.text.as_deref())
+            .filter(|t| !t.is_empty())
+            .collect();
+        let rust_texts: Vec<&str> = rust_elems
+            .iter()
+            .filter_map(|e| e.text.as_deref())
+            .filter(|t| !t.is_empty())
+            .collect();
 
-            let missing: Vec<String> = golden_texts
-                .iter()
-                .filter(|t| !skip(t))
-                .filter(|t| !rust_texts.iter().any(|r| r.contains(**t)))
-                .map(|t| t.to_string())
-                .collect();
+        let missing: Vec<String> = golden_texts
+            .iter()
+            .filter(|t| !skip(t))
+            .filter(|t| !rust_texts.iter().any(|r| r.contains(**t)))
+            .map(|t| t.to_string())
+            .collect();
 
-            if missing.is_empty() {
-                Ok(())
-            } else {
-                Err(format!("missing texts: {missing:?}"))
-            }
-        }));
+        if missing.is_empty() {
+            Ok(())
+        } else {
+            Err(format!("missing texts: {missing:?}"))
+        }
+    }));
 
     match result {
         Ok(Ok(())) => (name, "pass", None),
@@ -161,7 +155,8 @@ fn preproc_golden_pairs() {
 fn debug_function_expansion() {
     use rustuml_parser::preprocess::preprocess;
 
-    let out = preprocess(r#"@startuml
+    let out = preprocess(
+        r#"@startuml
 !function $greet($name)
   !return "Hello, " + $name + "!"
 !endfunction
@@ -169,10 +164,12 @@ note as N
   $greet("World")
   $greet("PlantUML")
 end note
-@enduml"#);
+@enduml"#,
+    );
     println!("function_with_string output: {:?}", out);
 
-    let out2 = preprocess(r#"@startuml
+    let out2 = preprocess(
+        r#"@startuml
 !function $greet($name = "World")
   !return "Hello, " + $name + "!"
 !endfunction
@@ -180,6 +177,7 @@ note as N
   $greet()
   $greet("Alice")
 end note
-@enduml"#);
+@enduml"#,
+    );
     println!("function_default_arg output: {:?}", out2);
 }

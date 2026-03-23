@@ -8,8 +8,8 @@
 //! for JSON diagrams.
 
 use crate::diagram::{
-    json_diagram::{DataFormat, JsonDiagram, JsonNode, JsonNodeValue},
     DiagramMeta,
+    json_diagram::{DataFormat, JsonDiagram, JsonNode, JsonNodeValue},
 };
 
 use super::ParseError;
@@ -198,8 +198,14 @@ mod tests {
         let diagram = parse_json_diagram(&input).unwrap();
         match &diagram.root.value {
             JsonNodeValue::Object { fields } => {
-                assert!(find_field(fields, "name").highlighted, "name should be highlighted");
-                assert!(!find_field(fields, "age").highlighted, "age should not be highlighted");
+                assert!(
+                    find_field(fields, "name").highlighted,
+                    "name should be highlighted"
+                );
+                assert!(
+                    !find_field(fields, "age").highlighted,
+                    "age should not be highlighted"
+                );
             }
             _ => panic!("expected Object"),
         }
@@ -215,7 +221,9 @@ mod tests {
             JsonNodeValue::Object { fields } => {
                 let addr = find_field(fields, "address");
                 match &addr.value {
-                    JsonNodeValue::Object { fields: addr_fields } => {
+                    JsonNodeValue::Object {
+                        fields: addr_fields,
+                    } => {
                         assert!(
                             find_field(addr_fields, "city").highlighted,
                             "city should be highlighted"

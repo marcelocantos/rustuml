@@ -220,7 +220,10 @@ impl SeqParser {
             };
             // Extract <<stereotype>> from within the label text (e.g. "Service 1 <<internal>>").
             let (label, label_stereotype) = extract_stereotype_from_label(&raw_label);
-            let stereotype = caps.get(8).map(|m| m.as_str().to_string()).or(label_stereotype);
+            let stereotype = caps
+                .get(8)
+                .map(|m| m.as_str().to_string())
+                .or(label_stereotype);
 
             if !self.participant_ids.contains(&id) {
                 self.participant_ids.push(id.clone());
@@ -240,8 +243,7 @@ impl SeqParser {
 
     fn try_message(&mut self, line: &str) -> bool {
         // Strip inline color annotations from arrows, e.g. -[#red]> → ->
-        static RE_COLOR: LazyLock<Regex> =
-            LazyLock::new(|| Regex::new(r"\[#[^\]]*\]").unwrap());
+        static RE_COLOR: LazyLock<Regex> = LazyLock::new(|| Regex::new(r"\[#[^\]]*\]").unwrap());
         // Allow optional #color after activation modifier (++ #blue, -- #red, etc.)
         // Supports both simple names (\w+) and quoted names ("...").
         static RE: LazyLock<Regex> = LazyLock::new(|| {
@@ -290,12 +292,13 @@ impl SeqParser {
 
     fn try_external_message(&mut self, line: &str) -> bool {
         // Strip [#color] annotations first.
-        static RE_COLOR: LazyLock<Regex> =
-            LazyLock::new(|| Regex::new(r"\[#[^\]]*\]").unwrap());
-        static RE_IN: LazyLock<Regex> =
-            LazyLock::new(|| Regex::new(r"^\[[-=><ox]+\s*(\w+)\s*(?:(?:\+\+|--|!!)\s*)?(?::\s*(.*))?$").unwrap());
-        static RE_OUT: LazyLock<Regex> =
-            LazyLock::new(|| Regex::new(r"^(\w+)\s*[-=><ox]+[\[\]]\s*(?:(?:\+\+|--|!!)\s*)?(?::\s*(.*))?$").unwrap());
+        static RE_COLOR: LazyLock<Regex> = LazyLock::new(|| Regex::new(r"\[#[^\]]*\]").unwrap());
+        static RE_IN: LazyLock<Regex> = LazyLock::new(|| {
+            Regex::new(r"^\[[-=><ox]+\s*(\w+)\s*(?:(?:\+\+|--|!!)\s*)?(?::\s*(.*))?$").unwrap()
+        });
+        static RE_OUT: LazyLock<Regex> = LazyLock::new(|| {
+            Regex::new(r"^(\w+)\s*[-=><ox]+[\[\]]\s*(?:(?:\+\+|--|!!)\s*)?(?::\s*(.*))?$").unwrap()
+        });
         let stripped = RE_COLOR.replace_all(line, "");
         let line = stripped.as_ref();
 
@@ -609,9 +612,8 @@ impl SeqParser {
             Regex::new(r"^ref\s+over\s+(\w+(?:\s*,\s*\w+)*)\s*:\s*(.+)$").unwrap()
         });
         // Multiline start: ref over A, B  (no colon)
-        static RE_START: LazyLock<Regex> = LazyLock::new(|| {
-            Regex::new(r"^ref\s+over\s+(\w+(?:\s*,\s*\w+)*)\s*$").unwrap()
-        });
+        static RE_START: LazyLock<Regex> =
+            LazyLock::new(|| Regex::new(r"^ref\s+over\s+(\w+(?:\s*,\s*\w+)*)\s*$").unwrap());
 
         if let Some(caps) = RE_INLINE.captures(line) {
             let participants: Vec<String> = caps[1]
@@ -654,9 +656,7 @@ impl SeqParser {
             return true;
         }
         // Legend block: `legend` / `legend right` / `legend left` ... `endlegend`
-        if line == "legend"
-            || line.starts_with("legend ")
-        {
+        if line == "legend" || line.starts_with("legend ") {
             self.in_legend = true;
             return true;
         }
@@ -680,9 +680,7 @@ impl SeqParser {
             self.events.push(Event::GroupEnd);
             return true;
         }
-        static RE: LazyLock<Regex> = LazyLock::new(|| {
-            Regex::new(r#"^box\s+"([^"]+)""#).unwrap()
-        });
+        static RE: LazyLock<Regex> = LazyLock::new(|| Regex::new(r#"^box\s+"([^"]+)""#).unwrap());
         if let Some(caps) = RE.captures(line) {
             let label = caps[1].to_string();
             self.events.push(Event::GroupStart(GroupStart {

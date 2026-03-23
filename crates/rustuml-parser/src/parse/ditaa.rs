@@ -97,12 +97,7 @@ fn find_shapes(grid: &[Vec<char>], used: &mut [Vec<bool>], shapes: &mut Vec<Dita
 }
 
 /// Try to trace a rectangular box starting at (r, c) where grid[r][c] == '+'.
-fn try_box(
-    grid: &[Vec<char>],
-    r: usize,
-    c: usize,
-    kind: DitaaShapeKind,
-) -> Option<DitaaShape> {
+fn try_box(grid: &[Vec<char>], r: usize, c: usize, kind: DitaaShapeKind) -> Option<DitaaShape> {
     let h = grid.len();
     let w = grid[0].len();
 
@@ -338,8 +333,7 @@ fn find_connections(
                     connections.push(conn);
                 }
             } else if ch == '.' {
-                if let Some(conn) = trace_horizontal(grid, used, shapes, &mut visited, r, c, true)
-                {
+                if let Some(conn) = trace_horizontal(grid, used, shapes, &mut visited, r, c, true) {
                     connections.push(conn);
                 }
             }
@@ -489,9 +483,7 @@ mod tests {
 
     #[test]
     fn horizontal_arrow() {
-        let d = parse(
-            "@startditaa\n+---+     +---+\n| A |---->| B |\n+---+     +---+\n@endditaa",
-        );
+        let d = parse("@startditaa\n+---+     +---+\n| A |---->| B |\n+---+     +---+\n@endditaa");
         assert_eq!(d.shapes.len(), 2);
         assert!(!d.connections.is_empty());
         assert!(d.connections[0].end_arrow);
@@ -499,18 +491,14 @@ mod tests {
 
     #[test]
     fn dashed_connection() {
-        let d = parse(
-            "@startditaa\n+---+    +---+\n| A |....| B |\n+---+    +---+\n@endditaa",
-        );
+        let d = parse("@startditaa\n+---+    +---+\n| A |....| B |\n+---+    +---+\n@endditaa");
         assert!(!d.connections.is_empty());
         assert!(d.connections[0].dashed);
     }
 
     #[test]
     fn vertical_arrow() {
-        let d = parse(
-            "@startditaa\n+---+\n| A |\n+---+\n  |\n  v\n+---+\n| B |\n+---+\n@endditaa",
-        );
+        let d = parse("@startditaa\n+---+\n| A |\n+---+\n  |\n  v\n+---+\n| B |\n+---+\n@endditaa");
         assert_eq!(d.shapes.len(), 2);
         assert!(!d.connections.is_empty());
         assert!(d.connections[0].end_arrow);

@@ -122,7 +122,10 @@ fn detect_uml_subtype(lines: &[String]) -> UmlSubtype {
         // the sequence scoring from `note left/right of` lines, but also score
         // use case so that a use case diagram with `usecase` keywords wins over
         // the state signal when both are present.
-        if trimmed == "note on link" || trimmed.starts_with("note on link ") || trimmed.starts_with("note on link:") {
+        if trimmed == "note on link"
+            || trimmed.starts_with("note on link ")
+            || trimmed.starts_with("note on link:")
+        {
             scores[3] += 15; // state
             scores[6] += 15; // use case
         }
@@ -171,9 +174,8 @@ fn detect_uml_subtype(lines: &[String]) -> UmlSubtype {
             // deployment signal.  `node`, `cloud`, `database`, `component`,
             // `frame`, `folder`, `rectangle` are shared with component diagrams,
             // so only keywords that are unique to deployment get the extra boost.
-            const DEPLOY_EXCLUSIVE: &[&str] = &[
-                "artifact", "storage", "card", "stack", "file", "agent",
-            ];
+            const DEPLOY_EXCLUSIVE: &[&str] =
+                &["artifact", "storage", "card", "stack", "file", "agent"];
             let is_deploy_exclusive_container =
                 trimmed.contains('{') && DEPLOY_EXCLUSIVE.contains(&kw);
             // A deployment keyword with a QUOTED label and a `{` brace is a

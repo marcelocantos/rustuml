@@ -152,10 +152,7 @@ fn layout_left(node: &MindMapNode, right_edge: f64, y_top: f64, branch_index: us
 
 /// Compute the leftmost X in a subtree (for left-side layout).
 fn subtree_min_x(p: &Placed) -> f64 {
-    p.children
-        .iter()
-        .map(subtree_min_x)
-        .fold(p.x, f64::min)
+    p.children.iter().map(subtree_min_x).fold(p.x, f64::min)
 }
 
 fn subtree_max_x(p: &Placed) -> f64 {
@@ -198,23 +195,35 @@ fn layout(roots: &[MindMapNode]) -> (Vec<Placed>, f64, f64) {
 
     for (bi, root) in roots.iter().enumerate() {
         // Collect right and left children separately.
-        let right_children: Vec<&MindMapNode> =
-            root.children.iter().filter(|c| c.side == Side::Right).collect();
-        let left_children: Vec<&MindMapNode> =
-            root.children.iter().filter(|c| c.side == Side::Left).collect();
+        let right_children: Vec<&MindMapNode> = root
+            .children
+            .iter()
+            .filter(|c| c.side == Side::Right)
+            .collect();
+        let left_children: Vec<&MindMapNode> = root
+            .children
+            .iter()
+            .filter(|c| c.side == Side::Left)
+            .collect();
 
         // Compute heights for right and left sides independently.
         let right_h: f64 = if right_children.is_empty() {
             NODE_H
         } else {
-            right_children.iter().map(|c| subtree_height(c, Side::Right)).sum::<f64>()
+            right_children
+                .iter()
+                .map(|c| subtree_height(c, Side::Right))
+                .sum::<f64>()
                 + SIBLING_GAP * (right_children.len() - 1) as f64
         };
 
         let left_h: f64 = if left_children.is_empty() {
             NODE_H
         } else {
-            left_children.iter().map(|c| subtree_height(c, Side::Left)).sum::<f64>()
+            left_children
+                .iter()
+                .map(|c| subtree_height(c, Side::Left))
+                .sum::<f64>()
                 + SIBLING_GAP * (left_children.len() - 1) as f64
         };
 
@@ -325,7 +334,10 @@ fn subtree_height(node: &MindMapNode, side: Side) -> f64 {
     if side_children.is_empty() {
         NODE_H
     } else {
-        side_children.iter().map(|c| subtree_height(c, side)).sum::<f64>()
+        side_children
+            .iter()
+            .map(|c| subtree_height(c, side))
+            .sum::<f64>()
             + SIBLING_GAP * (side_children.len() - 1) as f64
     }
 }
@@ -424,7 +436,11 @@ pub fn render(diagram: &MindMapDiagram, theme: &Theme) -> String {
             .to_string();
     }
 
-    let title_h = if diagram.meta.title.is_some() { FONT_SIZE + MARGIN } else { 0.0 };
+    let title_h = if diagram.meta.title.is_some() {
+        FONT_SIZE + MARGIN
+    } else {
+        0.0
+    };
 
     let (mut placed_roots, total_w, total_h) = layout(&diagram.roots);
 
@@ -439,7 +455,13 @@ pub fn render(diagram: &MindMapDiagram, theme: &Theme) -> String {
     let mut svg = SvgBuilder::new(total_w, total_h);
 
     if let Some(title) = &diagram.meta.title {
-        svg.text(total_w / 2.0, MARGIN + FONT_SIZE, title, "middle", FONT_SIZE);
+        svg.text(
+            total_w / 2.0,
+            MARGIN + FONT_SIZE,
+            title,
+            "middle",
+            FONT_SIZE,
+        );
     }
 
     for root in &placed_roots {
@@ -491,8 +513,7 @@ mod tests {
 
     #[test]
     fn renders_mixed_sides() {
-        let input =
-            "@startmindmap\n* Root\n** Right\n-- Left\n@endmindmap";
+        let input = "@startmindmap\n* Root\n** Right\n-- Left\n@endmindmap";
         let diagram = rustuml_parser::parse::parse(input).unwrap();
         let svg = crate::render_svg(&diagram);
         assert!(svg.contains("Root"));

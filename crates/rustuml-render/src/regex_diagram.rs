@@ -235,13 +235,7 @@ fn draw(node: &RegexNode, x: f64, rail_y: f64, svg: &mut SvgBuilder) {
             svg.raw(&format!(
                 r#"<rect fill="none" height="{BOX_H}" style="stroke:#181818;stroke-width:0.5;" width="{w}" x="{x}" y="{box_y}"/>"#
             ));
-            svg.text(
-                x + H_PAD,
-                rail_y + 5.29,
-                text,
-                "start",
-                FONT_SIZE,
-            );
+            svg.text(x + H_PAD, rail_y + 5.29, text, "start", FONT_SIZE);
         }
         RegexNode::Special { text } => {
             let tw = text_width(text, FONT_SIZE);
@@ -297,7 +291,10 @@ fn draw(node: &RegexNode, x: f64, rail_y: f64, svg: &mut SvgBuilder) {
             }
         }
         RegexNode::Alternation { branches } => {
-            let max_branch_w = branches.iter().map(|b| measure(b).width).fold(0.0_f64, f64::max);
+            let max_branch_w = branches
+                .iter()
+                .map(|b| measure(b).width)
+                .fold(0.0_f64, f64::max);
             let fork_x = x + ALT_FORK_W;
             let box_x = x + 2.0 * ALT_FORK_W;
             let exit_x = x + 4.0 * ALT_FORK_W + max_branch_w;
@@ -411,12 +408,23 @@ fn draw(node: &RegexNode, x: f64, rail_y: f64, svg: &mut SvgBuilder) {
                     draw_bypass_line(x, exit_x, rail_y, svg);
                     // S-curves down to inner
                     draw_s_curve(x, rail_y, elem_x, opt_rail, svg);
-                    draw_s_curve_right(x + 4.0 * ALT_FORK_W + inner_m.width - 2.0 * ALT_FORK_W, opt_rail, exit_x, rail_y, svg);
+                    draw_s_curve_right(
+                        x + 4.0 * ALT_FORK_W + inner_m.width - 2.0 * ALT_FORK_W,
+                        opt_rail,
+                        exit_x,
+                        rail_y,
+                        svg,
+                    );
                     // Inner element
                     let inner_x = elem_x;
                     draw_rail_line(inner_x - SEQ_GAP + ALT_FORK_W, inner_x, opt_rail, svg);
                     draw(inner, inner_x, opt_rail, svg);
-                    draw_rail_line(inner_x + inner_m.width, inner_x + inner_m.width + ALT_FORK_W, opt_rail, svg);
+                    draw_rail_line(
+                        inner_x + inner_m.width,
+                        inner_x + inner_m.width + ALT_FORK_W,
+                        opt_rail,
+                        svg,
+                    );
                 }
                 (0, None) => {
                     // * : bypass above + loop inner below
@@ -433,7 +441,12 @@ fn draw(node: &RegexNode, x: f64, rail_y: f64, svg: &mut SvgBuilder) {
                     // Inner element with + loop
                     draw_rail_line(elem_x - ALT_FORK_W, elem_x, opt_rail, svg);
                     draw_plus_loop(inner, inner_m.width, elem_x, opt_rail, svg, None);
-                    draw_rail_line(elem_x + inner_m.width, elem_x + inner_m.width + ALT_FORK_W, opt_rail, svg);
+                    draw_rail_line(
+                        elem_x + inner_m.width,
+                        elem_x + inner_m.width + ALT_FORK_W,
+                        opt_rail,
+                        svg,
+                    );
                 }
                 _ => {
                     // {n,m} or {n}: like + with count label

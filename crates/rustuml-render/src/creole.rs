@@ -179,7 +179,11 @@ fn to_svg_tspans_inner(text: &str, skip_underline: bool) -> String {
                     let (content, found) = collect_until(&mut chars, "__");
                     if found {
                         let inner = to_svg_tspans_inner(&content, skip_underline);
-                        write!(result, "<tspan text-decoration=\"underline\">{inner}</tspan>").unwrap();
+                        write!(
+                            result,
+                            "<tspan text-decoration=\"underline\">{inner}</tspan>"
+                        )
+                        .unwrap();
                         last_char = content.chars().last();
                     } else {
                         result.push('_');
@@ -244,7 +248,8 @@ fn to_svg_tspans_inner(text: &str, skip_underline: bool) -> String {
                     "mono" | "code" => {
                         let close = if tag == "code" { "</code>" } else { "</mono>" };
                         let content = collect_until_tag(&mut chars, close);
-                        let inner = monospace_spaces(&to_svg_tspans_inner(&content, skip_underline));
+                        let inner =
+                            monospace_spaces(&to_svg_tspans_inner(&content, skip_underline));
                         write!(result, "<tspan font-family=\"monospace\">{inner}</tspan>").unwrap();
                     }
                     "del" | "strike" => {
@@ -306,11 +311,7 @@ fn to_svg_tspans_inner(text: &str, skip_underline: bool) -> String {
                         let content = collect_until_tag(&mut chars, "</size>");
                         let inner = to_svg_tspans_inner(&content, skip_underline);
                         if let Ok(size) = size_str.parse::<u32>() {
-                            write!(
-                                result,
-                                "<tspan font-size=\"{size}\">{inner}</tspan>"
-                            )
-                            .unwrap();
+                            write!(result, "<tspan font-size=\"{size}\">{inner}</tspan>").unwrap();
                         } else {
                             result.push_str(&inner);
                         }
@@ -325,11 +326,8 @@ fn to_svg_tspans_inner(text: &str, skip_underline: bool) -> String {
                         let content = collect_until_tag(&mut chars, "</font>");
                         let inner = to_svg_tspans_inner(&content, skip_underline);
                         let inner = inner.replace(' ', "\u{00a0}");
-                        write!(
-                            result,
-                            "<tspan font-family=\"{font_name}\">{inner}</tspan>"
-                        )
-                        .unwrap();
+                        write!(result, "<tspan font-family=\"{font_name}\">{inner}</tspan>")
+                            .unwrap();
                     }
                     _ if tag.starts_with("font") => {
                         // <font ...>text</font> — strip tag, keep inner markup processed.
@@ -400,16 +398,31 @@ fn to_svg_tspans_inner(text: &str, skip_underline: bool) -> String {
                 };
                 // Parse: "URL label" or "URL|label" or "URL|label|tooltip"
                 let (url, label) = if let Some(pos) = inner.find('|') {
-                    (inner[..pos].trim().to_string(), inner[pos + 1..].split('|').next().unwrap_or("").trim().to_string())
+                    (
+                        inner[..pos].trim().to_string(),
+                        inner[pos + 1..]
+                            .split('|')
+                            .next()
+                            .unwrap_or("")
+                            .trim()
+                            .to_string(),
+                    )
                 } else if let Some(pos) = inner.find(' ') {
-                    (inner[..pos].to_string(), inner[pos + 1..].trim().to_string())
+                    (
+                        inner[..pos].to_string(),
+                        inner[pos + 1..].trim().to_string(),
+                    )
                 } else {
                     (inner.clone(), inner.clone())
                 };
                 let display = if label.is_empty() { &url } else { &label };
                 let escaped_url = escape_creole_text(&url);
                 let escaped_label = escape_creole_text(display);
-                write!(result, "<tspan fill=\"#0000FF\" text-decoration=\"underline\">{escaped_label}</tspan>").unwrap();
+                write!(
+                    result,
+                    "<tspan fill=\"#0000FF\" text-decoration=\"underline\">{escaped_label}</tspan>"
+                )
+                .unwrap();
                 let _ = escaped_url; // URL is not embedded in tspan SVG but recorded for accessibility
                 last_char = display.chars().last();
             }
@@ -509,13 +522,10 @@ impl ListCounters {
         // single leading `*` (followed by whitespace) as a bullet marker.
         // `**` and higher counts are rendered literally (or treated as bold
         // markup), so we restrict is_bullet to star_level == 1.
-        let star_level = line
-            .chars()
-            .take_while(|&c| c == '*')
-            .count();
+        let star_level = line.chars().take_while(|&c| c == '*').count();
         let next_after_stars = line[star_level..].chars().next();
-        let is_bullet = star_level == 1
-            && matches!(next_after_stars, None | Some(' ') | Some('\t'));
+        let is_bullet =
+            star_level == 1 && matches!(next_after_stars, None | Some(' ') | Some('\t'));
         if is_bullet {
             let content = line[star_level..].trim_start();
             let indent = "  ".repeat(star_level - 1);
@@ -573,10 +583,7 @@ mod tests {
     #[test]
     fn underline_skipped_in_class_label() {
         // to_svg_tspans_no_underline keeps `__` as literal characters.
-        assert_eq!(
-            to_svg_tspans_no_underline("__under__"),
-            "__under__"
-        );
+        assert_eq!(to_svg_tspans_no_underline("__under__"), "__under__");
         // Bold and italic are still processed.
         assert_eq!(
             to_svg_tspans_no_underline("**bold** __under__"),
@@ -678,7 +685,10 @@ mod tests {
         let mut lc = ListCounters::new();
         let result = lc.render_line("**bold**");
         assert!(result.contains("bold"), "Expected bold in: {result}");
-        assert!(!result.contains('\u{2022}'), "Unexpected bullet in: {result}");
+        assert!(
+            !result.contains('\u{2022}'),
+            "Unexpected bullet in: {result}"
+        );
     }
 
     #[test]
@@ -713,6 +723,9 @@ mod tests {
         // `**` with a following word is bold markup, not a nested bullet.
         // Only a single `*` followed by whitespace is treated as a bullet.
         let double_star = lc.render_line("** nested");
-        assert!(!double_star.contains('\u{2022}'), "** nested should not be a bullet");
+        assert!(
+            !double_star.contains('\u{2022}'),
+            "** nested should not be a bullet"
+        );
     }
 }

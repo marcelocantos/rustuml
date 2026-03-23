@@ -110,18 +110,17 @@ pub fn render(diagram: &StateDiagram, theme: &Theme) -> String {
         }
     }
 
-    let title_h = if diagram.meta.title.is_some() { TITLE_HEIGHT } else { 0.0 };
+    let title_h = if diagram.meta.title.is_some() {
+        TITLE_HEIGHT
+    } else {
+        0.0
+    };
 
     // Compute extra horizontal space needed for notes on each side.
     let right_note_space: f64 = diagram
         .notes
         .iter()
-        .filter(|n| {
-            matches!(
-                &n.kind,
-                StateNoteKind::RightOf(_) | StateNoteKind::OnLink
-            )
-        })
+        .filter(|n| matches!(&n.kind, StateNoteKind::RightOf(_) | StateNoteKind::OnLink))
         .map(|n| note_box_width(&n.text) + NOTE_H_GAP)
         .fold(0.0_f64, f64::max);
     let left_note_space: f64 = diagram
@@ -131,10 +130,8 @@ pub fn render(diagram: &StateDiagram, theme: &Theme) -> String {
         .map(|n| note_box_width(&n.text) + NOTE_H_GAP)
         .fold(0.0_f64, f64::max);
 
-    let total_width = MARGIN * 2.0
-        + left_note_space.max(H_GAP)
-        + STATE_WIDTH
-        + right_note_space.max(H_GAP);
+    let total_width =
+        MARGIN * 2.0 + left_note_space.max(H_GAP) + STATE_WIDTH + right_note_space.max(H_GAP);
     let cx = MARGIN + left_note_space.max(H_GAP) + STATE_WIDTH / 2.0;
 
     // Compute per-node heights and cumulative vertical positions.
@@ -153,11 +150,9 @@ pub fn render(diagram: &StateDiagram, theme: &Theme) -> String {
     let mut svg = SvgBuilder::new(total_width, total_height);
 
     // Handwritten compatibility notice.
-    let is_handwritten = diagram
-        .meta
-        .skinparams
-        .iter()
-        .any(|sp| sp.key.eq_ignore_ascii_case("handwritten") && sp.value.eq_ignore_ascii_case("true"));
+    let is_handwritten = diagram.meta.skinparams.iter().any(|sp| {
+        sp.key.eq_ignore_ascii_case("handwritten") && sp.value.eq_ignore_ascii_case("true")
+    });
     if is_handwritten {
         svg.monospace_text(
             10.0,
@@ -169,7 +164,13 @@ pub fn render(diagram: &StateDiagram, theme: &Theme) -> String {
     }
 
     if let Some(title) = &diagram.meta.title {
-        svg.text(total_width / 2.0, TITLE_HEIGHT - 4.0, title, "middle", TITLE_FONT_SIZE);
+        svg.text(
+            total_width / 2.0,
+            TITLE_HEIGHT - 4.0,
+            title,
+            "middle",
+            TITLE_FONT_SIZE,
+        );
     }
 
     let pos_of = |id: &str| -> (f64, f64, f64) {
@@ -236,7 +237,8 @@ pub fn render(diagram: &StateDiagram, theme: &Theme) -> String {
                 // Description lines inside the box, left-aligned with a small margin.
                 let text_x = *x - STATE_WIDTH / 2.0 + 5.0;
                 for (j, desc) in descriptions.iter().enumerate() {
-                    let desc_y = divider_y + DESC_PADDING + (j as f64 + 1.0) * DESC_LINE_HEIGHT - 2.0;
+                    let desc_y =
+                        divider_y + DESC_PADDING + (j as f64 + 1.0) * DESC_LINE_HEIGHT - 2.0;
                     svg.text(text_x, desc_y, desc, "start", SMALL_FONT);
                 }
             }
@@ -310,15 +312,37 @@ pub fn render(diagram: &StateDiagram, theme: &Theme) -> String {
         // Connection line from note edge to state (skip for floating/on-link).
         match &note.kind {
             StateNoteKind::RightOf(id) if !id.is_empty() => {
-                svg.line_segment(note_x, note_y + note_h / 2.0, anchor_x, anchor_y, "#000", true);
+                svg.line_segment(
+                    note_x,
+                    note_y + note_h / 2.0,
+                    anchor_x,
+                    anchor_y,
+                    "#000",
+                    true,
+                );
             }
             StateNoteKind::LeftOf(id) if !id.is_empty() => {
-                svg.line_segment(note_x + note_w, note_y + note_h / 2.0, anchor_x, anchor_y, "#000", true);
+                svg.line_segment(
+                    note_x + note_w,
+                    note_y + note_h / 2.0,
+                    anchor_x,
+                    anchor_y,
+                    "#000",
+                    true,
+                );
             }
             _ => {}
         }
 
-        svg.note_box(note_x, note_y, note_w, note_h, NOTE_EAR, note_fill, note_stroke);
+        svg.note_box(
+            note_x,
+            note_y,
+            note_w,
+            note_h,
+            NOTE_EAR,
+            note_fill,
+            note_stroke,
+        );
         let text_x = note_x + NOTE_PADDING;
         let text_start_y = note_y + NOTE_PADDING + SMALL_FONT;
         render_note_text(&mut svg, &note.text, text_x, text_start_y);
@@ -388,7 +412,10 @@ mod tests {
         let input = "@startuml\nstate A : idle\n[*] --> A\nA --> B : next\nB --> [*]\n@enduml";
         let diagram = rustuml_parser::parse::parse(input).unwrap();
         let svg = crate::render_svg(&diagram);
-        assert!(svg.contains("idle"), "description text should appear in SVG");
+        assert!(
+            svg.contains("idle"),
+            "description text should appear in SVG"
+        );
         // The divider line should be present (descriptions render inside box).
         assert!(svg.contains("<line"), "divider line should be rendered");
     }
@@ -403,12 +430,17 @@ mod tests {
 
     #[test]
     fn multiline_note_renders_all_lines() {
-        let input =
-            "@startuml\n[*] --> A\nnote right of A\n  line 1\n  line 2\nend note\nA --> [*]\n@enduml";
+        let input = "@startuml\n[*] --> A\nnote right of A\n  line 1\n  line 2\nend note\nA --> [*]\n@enduml";
         let diagram = rustuml_parser::parse::parse(input).unwrap();
         let svg = crate::render_svg(&diagram);
-        assert!(svg.contains("line 1"), "first note line should appear in SVG");
-        assert!(svg.contains("line 2"), "second note line should appear in SVG");
+        assert!(
+            svg.contains("line 1"),
+            "first note line should appear in SVG"
+        );
+        assert!(
+            svg.contains("line 2"),
+            "second note line should appear in SVG"
+        );
     }
 
     #[test]
@@ -416,6 +448,9 @@ mod tests {
         let input = "@startuml\nnote \"Floating note 1\" as FN1\n[*] --> A\nA --> [*]\n@enduml";
         let diagram = rustuml_parser::parse::parse(input).unwrap();
         let svg = crate::render_svg(&diagram);
-        assert!(svg.contains("Floating note 1"), "floating note text should appear in SVG");
+        assert!(
+            svg.contains("Floating note 1"),
+            "floating note text should appear in SVG"
+        );
     }
 }

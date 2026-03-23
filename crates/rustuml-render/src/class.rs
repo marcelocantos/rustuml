@@ -35,7 +35,13 @@ const TITLE_HEIGHT: f64 = TITLE_FONT_SIZE + 10.0;
 /// Font names that PlantUML treats as monospace. When one of these is set via
 /// `skinparam defaultFontName`, spaces in member text are rendered as non-breaking
 /// spaces (U+00A0) to match Java PlantUML's SVG output.
-const MONOSPACE_FONTS: &[&str] = &["courier", "monospaced", "monospace", "consolas", "lucida console"];
+const MONOSPACE_FONTS: &[&str] = &[
+    "courier",
+    "monospaced",
+    "monospace",
+    "consolas",
+    "lucida console",
+];
 
 /// Render a class diagram to SVG.
 pub fn render(diagram: &ClassDiagram, theme: &Theme) -> String {
@@ -119,7 +125,11 @@ fn render_with_positions(
         .map(|(i, e)| (e.id.as_str(), i))
         .collect();
 
-    let title_h = if diagram.meta.title.is_some() { TITLE_HEIGHT } else { 0.0 };
+    let title_h = if diagram.meta.title.is_some() {
+        TITLE_HEIGHT
+    } else {
+        0.0
+    };
 
     // Compute raw entity positions (before any package-driven adjustment).
     let raw_pos: Vec<(f64, f64)> = (0..diagram.entities.len())
@@ -146,8 +156,14 @@ fn render_with_positions(
                 let ph = PACKAGE_HEADER + PACKAGE_PAD;
                 return Some((px, py, pw, ph));
             }
-            let min_ex = idxs.iter().map(|&i| raw_pos[i].0).fold(f64::INFINITY, f64::min);
-            let min_ey = idxs.iter().map(|&i| raw_pos[i].1).fold(f64::INFINITY, f64::min);
+            let min_ex = idxs
+                .iter()
+                .map(|&i| raw_pos[i].0)
+                .fold(f64::INFINITY, f64::min);
+            let min_ey = idxs
+                .iter()
+                .map(|&i| raw_pos[i].1)
+                .fold(f64::INFINITY, f64::min);
             let max_ex = idxs
                 .iter()
                 .map(|&i| raw_pos[i].0 + class_dims[i].width)
@@ -269,19 +285,48 @@ fn render_with_positions(
     }
 
     if let Some(title) = &diagram.meta.title {
-        svg.text(total_width / 2.0, TITLE_HEIGHT - 4.0, title, "middle", TITLE_FONT_SIZE);
+        svg.text(
+            total_width / 2.0,
+            TITLE_HEIGHT - 4.0,
+            title,
+            "middle",
+            TITLE_FONT_SIZE,
+        );
     }
     if let Some(header) = &diagram.meta.header {
-        svg.text(total_width / 2.0, SMALL_FONT + 2.0, header, "middle", SMALL_FONT);
+        svg.text(
+            total_width / 2.0,
+            SMALL_FONT + 2.0,
+            header,
+            "middle",
+            SMALL_FONT,
+        );
     }
     if let Some(footer) = &diagram.meta.footer {
-        svg.text(total_width / 2.0, total_height - 4.0, footer, "middle", SMALL_FONT);
+        svg.text(
+            total_width / 2.0,
+            total_height - 4.0,
+            footer,
+            "middle",
+            SMALL_FONT,
+        );
     }
     if let Some(caption) = &diagram.meta.caption {
-        svg.text(total_width / 2.0, total_height - 4.0, caption, "middle", SMALL_FONT);
+        svg.text(
+            total_width / 2.0,
+            total_height - 4.0,
+            caption,
+            "middle",
+            SMALL_FONT,
+        );
     }
     if let Some(legend) = &diagram.meta.legend {
-        svg.render_legend(total_width - 200.0, total_height - 150.0, legend, SMALL_FONT);
+        svg.render_legend(
+            total_width - 200.0,
+            total_height - 150.0,
+            legend,
+            SMALL_FONT,
+        );
     }
 
     // Render package containers first (behind entities).
@@ -295,7 +340,8 @@ fn render_with_positions(
             let header_label = if pkg.stereotypes.is_empty() {
                 display.to_string()
             } else {
-                let stereos: Vec<String> = pkg.stereotypes.iter().map(|s| format!("«{s}»")).collect();
+                let stereos: Vec<String> =
+                    pkg.stereotypes.iter().map(|s| format!("«{s}»")).collect();
                 format!("{} {}", display, stereos.join(" "))
             };
             svg.text(
@@ -341,14 +387,7 @@ fn render_with_positions(
                 dashed,
             );
             render_relationship_head(&mut svg, rel.kind, to_cx, to_top);
-            render_relationship_labels(
-                &mut svg,
-                rel,
-                from_cx,
-                from_bottom,
-                to_cx,
-                to_top,
-            );
+            render_relationship_labels(&mut svg, rel, from_cx, from_bottom, to_cx, to_top);
         }
     }
 
@@ -388,25 +427,59 @@ fn render_grid(diagram: &ClassDiagram, cs: &crate::style::ClassStyle) -> String 
     let col_widths = calc_col_widths(&class_dims, cols);
     let row_heights = calc_row_heights(&class_dims, cols);
 
-    let title_h = if diagram.meta.title.is_some() { TITLE_HEIGHT } else { 0.0 };
+    let title_h = if diagram.meta.title.is_some() {
+        TITLE_HEIGHT
+    } else {
+        0.0
+    };
     let total_width = col_widths.iter().sum::<f64>() + MARGIN * (cols as f64 + 1.0);
-    let total_height = row_heights.iter().sum::<f64>() + MARGIN * (row_heights.len() as f64 + 1.0) + title_h;
+    let total_height =
+        row_heights.iter().sum::<f64>() + MARGIN * (row_heights.len() as f64 + 1.0) + title_h;
 
     let mut svg = SvgBuilder::new(total_width, total_height);
     if let Some(title) = &diagram.meta.title {
-        svg.text(total_width / 2.0, TITLE_HEIGHT - 4.0, title, "middle", TITLE_FONT_SIZE);
+        svg.text(
+            total_width / 2.0,
+            TITLE_HEIGHT - 4.0,
+            title,
+            "middle",
+            TITLE_FONT_SIZE,
+        );
     }
     if let Some(header) = &diagram.meta.header {
-        svg.text(total_width / 2.0, SMALL_FONT + 2.0, header, "middle", SMALL_FONT);
+        svg.text(
+            total_width / 2.0,
+            SMALL_FONT + 2.0,
+            header,
+            "middle",
+            SMALL_FONT,
+        );
     }
     if let Some(footer) = &diagram.meta.footer {
-        svg.text(total_width / 2.0, total_height - 4.0, footer, "middle", SMALL_FONT);
+        svg.text(
+            total_width / 2.0,
+            total_height - 4.0,
+            footer,
+            "middle",
+            SMALL_FONT,
+        );
     }
     if let Some(caption) = &diagram.meta.caption {
-        svg.text(total_width / 2.0, total_height - 4.0, caption, "middle", SMALL_FONT);
+        svg.text(
+            total_width / 2.0,
+            total_height - 4.0,
+            caption,
+            "middle",
+            SMALL_FONT,
+        );
     }
     if let Some(legend) = &diagram.meta.legend {
-        svg.render_legend(total_width - 200.0, total_height - 150.0, legend, SMALL_FONT);
+        svg.render_legend(
+            total_width - 200.0,
+            total_height - 150.0,
+            legend,
+            SMALL_FONT,
+        );
     }
 
     // Position and render each class.
@@ -445,14 +518,7 @@ fn render_grid(diagram: &ClassDiagram, cs: &crate::style::ClassStyle) -> String 
 
             // Draw relationship decoration at the target end.
             render_relationship_head(&mut svg, rel.kind, to_cx, to_top);
-            render_relationship_labels(
-                &mut svg,
-                rel,
-                from_cx,
-                from_bottom,
-                to_cx,
-                to_top,
-            );
+            render_relationship_labels(&mut svg, rel, from_cx, from_bottom, to_cx, to_top);
         }
     }
 
@@ -602,9 +668,22 @@ fn render_class_box(
         cy += MEMBER_HEIGHT;
         if member.kind == MemberKind::Separator {
             // Draw a separator line; if labeled, also render the label.
-            svg.line_segment(x, cy - MEMBER_HEIGHT / 2.0, x + dim.width, cy - MEMBER_HEIGHT / 2.0, "#000", false);
+            svg.line_segment(
+                x,
+                cy - MEMBER_HEIGHT / 2.0,
+                x + dim.width,
+                cy - MEMBER_HEIGHT / 2.0,
+                "#000",
+                false,
+            );
             if !member.display_text.is_empty() {
-                svg.text(x + dim.width / 2.0, cy - 3.0, &member.display_text, "middle", SMALL_FONT);
+                svg.text(
+                    x + dim.width / 2.0,
+                    cy - 3.0,
+                    &member.display_text,
+                    "middle",
+                    SMALL_FONT,
+                );
             }
         } else {
             let text = format_member(member);
@@ -631,10 +710,7 @@ fn format_member(member: &Member) -> String {
     };
     // Use the verbatim display_text to preserve the original colon spacing
     // from the source (e.g. "field: String" or "field : String").
-    format!(
-        "{static_prefix}{abstract_prefix}{}",
-        member.display_text
-    )
+    format!("{static_prefix}{abstract_prefix}{}", member.display_text)
 }
 
 /// Format a stereotype string for display.
@@ -673,7 +749,12 @@ fn convert_guillemets(s: &str) -> String {
     while let Some(start) = result.find("<<") {
         if let Some(end) = result[start..].find(">>") {
             let inner = result[start + 2..start + end].to_string();
-            result = format!("{}«{}»{}", &result[..start], inner, &result[start + end + 2..]);
+            result = format!(
+                "{}«{}»{}",
+                &result[..start],
+                inner,
+                &result[start + end + 2..]
+            );
         } else {
             break;
         }
@@ -718,7 +799,13 @@ fn render_relationship_labels(
 
     // from_multiplicity/role: near the FROM end (bottom of from-box).
     if let Some(mult) = &rel.from_multiplicity {
-        svg.text(from_cx - 5.0, from_bottom + SMALL_FONT, mult, "end", SMALL_FONT);
+        svg.text(
+            from_cx - 5.0,
+            from_bottom + SMALL_FONT,
+            mult,
+            "end",
+            SMALL_FONT,
+        );
     }
 
     // to_multiplicity/role: near the TO end (top of to-box).
@@ -806,7 +893,11 @@ fn replace_img_tags(s: &str) -> String {
         if let Some(end) = after.find('>') {
             let raw_src = &after["<img:".len()..end];
             // Strip {scale=...} or similar suffix from the URL.
-            let src = if let Some(brace) = raw_src.find('{') { &raw_src[..brace] } else { raw_src };
+            let src = if let Some(brace) = raw_src.find('{') {
+                &raw_src[..brace]
+            } else {
+                raw_src
+            };
             if src.starts_with("https://") || src.starts_with("http://") {
                 result.push_str(&format!("(Cannot\u{00a0}decode:\u{00a0}{src})"));
             } else {
@@ -898,7 +989,13 @@ fn render_note_box(svg: &mut SvgBuilder, note: &Note, x: f64, y: f64, w: f64, h:
             let n = list_ctrs[hash_level - 1];
             let indent = "  ".repeat(hash_level - 1);
             let content = replace_img_tags(content);
-            svg.text(x + NOTE_PAD_X, ty, &format!("{indent}{n}. {content}"), "start", FONT_SIZE);
+            svg.text(
+                x + NOTE_PAD_X,
+                ty,
+                &format!("{indent}{n}. {content}"),
+                "start",
+                FONT_SIZE,
+            );
             ty += NOTE_LINE_HEIGHT;
             continue;
         }
@@ -908,14 +1005,20 @@ fn render_note_box(svg: &mut SvgBuilder, note: &Note, x: f64, y: f64, w: f64, h:
         // restrict to star_level == 1 to avoid false positives.
         let star_level = trimmed.chars().take_while(|&c| c == '*').count();
         let next_after_stars = trimmed[star_level..].chars().next();
-        let is_bullet = star_level == 1
-            && matches!(next_after_stars, None | Some(' ') | Some('\t'));
+        let is_bullet =
+            star_level == 1 && matches!(next_after_stars, None | Some(' ') | Some('\t'));
         if is_bullet {
             let content = trimmed[star_level..].trim_start();
             let indent = "  ".repeat(star_level - 1);
             let content = replace_img_tags(content);
             list_ctrs.clear();
-            svg.text(x + NOTE_PAD_X, ty, &format!("{indent}* {content}"), "start", FONT_SIZE);
+            svg.text(
+                x + NOTE_PAD_X,
+                ty,
+                &format!("{indent}* {content}"),
+                "start",
+                FONT_SIZE,
+            );
             ty += NOTE_LINE_HEIGHT;
             continue;
         }
@@ -961,7 +1064,11 @@ fn render_meta_only(diagram: &ClassDiagram) -> String {
 /// Render a diagram that contains only floating notes (no entities).
 /// Notes are laid out horizontally with a margin between them.
 fn render_notes_only(diagram: &ClassDiagram, _cs: &crate::style::ClassStyle) -> String {
-    let title_h = if diagram.meta.title.is_some() { TITLE_HEIGHT } else { 0.0 };
+    let title_h = if diagram.meta.title.is_some() {
+        TITLE_HEIGHT
+    } else {
+        0.0
+    };
     let mut x = MARGIN;
     let mut max_h = 0.0_f64;
     let note_data: Vec<(f64, f64, f64, f64)> = diagram
@@ -981,19 +1088,49 @@ fn render_notes_only(diagram: &ClassDiagram, _cs: &crate::style::ClassStyle) -> 
 
     let mut svg = SvgBuilder::new(total_width, total_height);
     if let Some(title) = &diagram.meta.title {
-        svg.text(total_width / 2.0, TITLE_HEIGHT - 4.0, title, "middle", TITLE_FONT_SIZE);
+        svg.text(
+            total_width / 2.0,
+            TITLE_HEIGHT - 4.0,
+            title,
+            "middle",
+            TITLE_FONT_SIZE,
+        );
     }
     if let Some(header) = &diagram.meta.header {
-        svg.text(total_width / 2.0, SMALL_FONT + 2.0, header, "middle", SMALL_FONT);
+        svg.text(
+            total_width / 2.0,
+            SMALL_FONT + 2.0,
+            header,
+            "middle",
+            SMALL_FONT,
+        );
     }
     if let Some(footer) = &diagram.meta.footer {
-        svg.text(total_width / 2.0, total_height - 4.0, footer, "middle", SMALL_FONT);
+        svg.text(
+            total_width / 2.0,
+            total_height - 4.0,
+            footer,
+            "middle",
+            SMALL_FONT,
+        );
     }
     if let Some(caption) = &diagram.meta.caption {
-        svg.text(total_width / 2.0, total_height - 4.0, caption, "middle", SMALL_FONT);
+        svg.text(
+            total_width / 2.0,
+            total_height - 4.0,
+            caption,
+            "middle",
+            SMALL_FONT,
+        );
     }
     if let Some(legend) = &diagram.meta.legend {
-        svg.text(total_width / 2.0, total_height - 4.0, legend, "middle", SMALL_FONT);
+        svg.text(
+            total_width / 2.0,
+            total_height - 4.0,
+            legend,
+            "middle",
+            SMALL_FONT,
+        );
     }
     for (note, (nx, ny, nw, nh)) in diagram.notes.iter().zip(&note_data) {
         render_note_box(&mut svg, note, *nx, *ny, *nw, *nh);

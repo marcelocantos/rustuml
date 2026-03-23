@@ -288,21 +288,16 @@ pub fn parse_deployment(lines: &[String]) -> Result<DeploymentDiagram, ParseErro
 
     // [Label] [as id] [<<stereo>>] [#color]  — bracket component notation
     static RE_NODE_BRACKET: LazyLock<Regex> = LazyLock::new(|| {
-        Regex::new(
-            r#"^\[([^\]]+)\](?:\s+as\s+(\w+))?(?:\s+<<([^>]+)>>)?(?:\s+#\w+)?\s*$"#,
-        )
-        .unwrap()
+        Regex::new(r#"^\[([^\]]+)\](?:\s+as\s+(\w+))?(?:\s+<<([^>]+)>>)?(?:\s+#\w+)?\s*$"#).unwrap()
     });
 
     // note "text" as ID  — floating note
-    static RE_NOTE_FLOATING: LazyLock<Regex> = LazyLock::new(|| {
-        Regex::new(r#"^note\s+"([^"]+)"\s+as\s+(\w+)\s*$"#).unwrap()
-    });
+    static RE_NOTE_FLOATING: LazyLock<Regex> =
+        LazyLock::new(|| Regex::new(r#"^note\s+"([^"]+)"\s+as\s+(\w+)\s*$"#).unwrap());
 
     // note direction of target : text  (inline attached note)
     static RE_NOTE_ATTACHED: LazyLock<Regex> = LazyLock::new(|| {
-        Regex::new(r#"^note\s+(?:top|bottom|left|right)\s+of\s+("?[^":]+?"?)\s*:\s*(.+)$"#)
-            .unwrap()
+        Regex::new(r#"^note\s+(?:top|bottom|left|right)\s+of\s+("?[^":]+?"?)\s*:\s*(.+)$"#).unwrap()
     });
 
     // note direction of target  (multiline attached note — no colon)
@@ -311,9 +306,8 @@ pub fn parse_deployment(lines: &[String]) -> Result<DeploymentDiagram, ParseErro
     });
 
     // N1 .. N2  — note link (N1 is the note ID, N2 is the target)
-    static RE_NOTE_LINK: LazyLock<Regex> = LazyLock::new(|| {
-        Regex::new(r"^(\w+)\s+\.\.\s+(\w+)\s*$").unwrap()
-    });
+    static RE_NOTE_LINK: LazyLock<Regex> =
+        LazyLock::new(|| Regex::new(r"^(\w+)\s+\.\.\s+(\w+)\s*$").unwrap());
 
     for line in lines {
         let trimmed = line.trim();
@@ -464,17 +458,12 @@ pub fn parse_deployment(lines: &[String]) -> Result<DeploymentDiagram, ParseErro
         }
 
         // Check if the first word is a deployment keyword.
-        let first_word: &str = trimmed
-            .split_whitespace()
-            .next()
-            .unwrap_or("");
+        let first_word: &str = trimmed.split_whitespace().next().unwrap_or("");
 
         if keyword_set.contains(first_word) {
             // Check if this is a connection line (keyword "label" --> ...)
             // before treating it as a pure node declaration.
-            if let Some((raw_from, raw_to, label)) =
-                try_parse_connection(trimmed, &keyword_set)
-            {
+            if let Some((raw_from, raw_to, label)) = try_parse_connection(trimmed, &keyword_set) {
                 let from = resolve_id(&nodes, &raw_from);
                 let to = resolve_id(&nodes, &raw_to);
 
@@ -627,14 +616,17 @@ mod tests {
 
     #[test]
     fn quoted_connection_with_hyphens() {
-        let d = parse("node \"server-01.example.com\"\nnode \"db_primary\"\n\"server-01.example.com\" --> \"db_primary\" : port 5432");
+        let d = parse(
+            "node \"server-01.example.com\"\nnode \"db_primary\"\n\"server-01.example.com\" --> \"db_primary\" : port 5432",
+        );
         assert_eq!(d.connections.len(), 1);
         assert_eq!(d.connections[0].label.as_deref(), Some("port 5432"));
     }
 
     #[test]
     fn keyword_prefixed_connection() {
-        let d = parse("artifact \"app.war\"\nnode Server\nartifact \"app.war\" --> Server : deploy");
+        let d =
+            parse("artifact \"app.war\"\nnode Server\nartifact \"app.war\" --> Server : deploy");
         assert_eq!(d.connections.len(), 1);
         assert_eq!(d.connections[0].label.as_deref(), Some("deploy"));
     }

@@ -85,16 +85,12 @@ fn measure_subtree(node: &WbsNode) -> Subtree {
     let children_total_w = if children.is_empty() {
         0.0
     } else {
-        children.iter().map(|c| c.total_w).sum::<f64>()
-            + H_GAP * (children.len() - 1) as f64
+        children.iter().map(|c| c.total_w).sum::<f64>() + H_GAP * (children.len() - 1) as f64
     };
 
     let total_w = box_w.max(children_total_w);
 
-    let max_child_h = children
-        .iter()
-        .map(|c| c.total_h)
-        .fold(0.0_f64, f64::max);
+    let max_child_h = children.iter().map(|c| c.total_h).fold(0.0_f64, f64::max);
 
     let total_h = if children.is_empty() {
         box_h
@@ -102,15 +98,22 @@ fn measure_subtree(node: &WbsNode) -> Subtree {
         box_h + V_GAP + max_child_h
     };
 
-    Subtree { label: node.label.clone(), depth: node.depth, box_w, box_h, total_w, total_h, children }
+    Subtree {
+        label: node.label.clone(),
+        depth: node.depth,
+        box_w,
+        box_h,
+        total_w,
+        total_h,
+        children,
+    }
 }
 
 fn group_total_w(subtrees: &[Subtree]) -> f64 {
     if subtrees.is_empty() {
         return 0.0;
     }
-    subtrees.iter().map(|s| s.total_w).sum::<f64>()
-        + H_GAP * (subtrees.len() - 1) as f64
+    subtrees.iter().map(|s| s.total_w).sum::<f64>() + H_GAP * (subtrees.len() - 1) as f64
 }
 
 // ─── Root layout ─────────────────────────────────────────────────────────────
@@ -150,7 +153,11 @@ fn compute_root_layout(root: &WbsNode, offset_y: f64) -> RootLayout {
     let right_total_w = group_total_w(&right_subtrees);
     let left_total_w = group_total_w(&left_subtrees);
 
-    let lr_gap = if !left_subtrees.is_empty() && !right_subtrees.is_empty() { H_GAP } else { 0.0 };
+    let lr_gap = if !left_subtrees.is_empty() && !right_subtrees.is_empty() {
+        H_GAP
+    } else {
+        0.0
+    };
     let children_total_w = left_total_w + lr_gap + right_total_w;
     let total_span = children_total_w.max(root_box_w);
     let canvas_w = total_span + 2.0 * MARGIN;
@@ -233,10 +240,24 @@ fn draw_root_layout(svg: &mut SvgBuilder, rl: &RootLayout) {
         let leftmost_cx = all_cx.iter().cloned().fold(f64::INFINITY, f64::min);
         let rightmost_cx = all_cx.iter().cloned().fold(f64::NEG_INFINITY, f64::max);
 
-        svg.line_segment(leftmost_cx, rl.spine_y, rightmost_cx, rl.spine_y, STROKE, false);
+        svg.line_segment(
+            leftmost_cx,
+            rl.spine_y,
+            rightmost_cx,
+            rl.spine_y,
+            STROKE,
+            false,
+        );
 
         let root_cx = rl.root_box_x + rl.root_box_w / 2.0;
-        svg.line_segment(root_cx, rl.root_box_y + rl.root_box_h, root_cx, rl.spine_y, STROKE, false);
+        svg.line_segment(
+            root_cx,
+            rl.root_box_y + rl.root_box_h,
+            root_cx,
+            rl.spine_y,
+            STROKE,
+            false,
+        );
 
         for (x, subtree) in rl.right.iter().chain(rl.left.iter()) {
             let cx = x + subtree.total_w / 2.0;
@@ -247,8 +268,22 @@ fn draw_root_layout(svg: &mut SvgBuilder, rl: &RootLayout) {
 
     let root_cx = rl.root_box_x + rl.root_box_w / 2.0;
     let root_cy = rl.root_box_y + rl.root_box_h / 2.0;
-    svg.rounded_rect(rl.root_box_x, rl.root_box_y, rl.root_box_w, rl.root_box_h, BOX_RX, node_fill(1), STROKE);
-    svg.text(root_cx, root_cy + metrics::text_height(FONT_SIZE) / 2.0 - 1.0, &rl.root_label, "middle", FONT_SIZE);
+    svg.rounded_rect(
+        rl.root_box_x,
+        rl.root_box_y,
+        rl.root_box_w,
+        rl.root_box_h,
+        BOX_RX,
+        node_fill(1),
+        STROKE,
+    );
+    svg.text(
+        root_cx,
+        root_cy + metrics::text_height(FONT_SIZE) / 2.0 - 1.0,
+        &rl.root_label,
+        "middle",
+        FONT_SIZE,
+    );
 }
 
 fn draw_subtree(svg: &mut SvgBuilder, node: &Subtree, x: f64, y: f64) {
@@ -256,8 +291,22 @@ fn draw_subtree(svg: &mut SvgBuilder, node: &Subtree, x: f64, y: f64) {
     let box_cx = box_x + node.box_w / 2.0;
     let box_cy = y + node.box_h / 2.0;
 
-    svg.rounded_rect(box_x, y, node.box_w, node.box_h, BOX_RX, node_fill(node.depth), STROKE);
-    svg.text(box_cx, box_cy + metrics::text_height(FONT_SIZE) / 2.0 - 1.0, &node.label, "middle", FONT_SIZE);
+    svg.rounded_rect(
+        box_x,
+        y,
+        node.box_w,
+        node.box_h,
+        BOX_RX,
+        node_fill(node.depth),
+        STROKE,
+    );
+    svg.text(
+        box_cx,
+        box_cy + metrics::text_height(FONT_SIZE) / 2.0 - 1.0,
+        &node.label,
+        "middle",
+        FONT_SIZE,
+    );
 
     if node.children.is_empty() {
         return;

@@ -29,16 +29,18 @@ const NOTE_GAP: f64 = 10.0;
 const NOTE_FOLD: f64 = 10.0;
 
 pub fn render(diagram: &ComponentDiagram, theme: &Theme) -> String {
-    if diagram.components.is_empty()
-        && diagram.packages.is_empty()
-        && diagram.interfaces.is_empty()
+    if diagram.components.is_empty() && diagram.packages.is_empty() && diagram.interfaces.is_empty()
     {
         return "<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"100\" height=\"50\"></svg>\n"
             .to_string();
     }
 
     let n = diagram.components.len();
-    let cols = if n == 0 { 1 } else { (n as f64).sqrt().ceil() as usize };
+    let cols = if n == 0 {
+        1
+    } else {
+        (n as f64).sqrt().ceil() as usize
+    };
 
     let widths: Vec<f64> = diagram
         .components
@@ -75,14 +77,9 @@ pub fn render(diagram: &ComponentDiagram, theme: &Theme) -> String {
 
     // Estimate space needed for interfaces (rendered below components).
     let iface_count = diagram.interfaces.len();
-    let iface_total_h = if iface_count > 0 {
-        IFACE_H + GAP
-    } else {
-        0.0
-    };
+    let iface_total_h = if iface_count > 0 { IFACE_H + GAP } else { 0.0 };
     let iface_total_w = if iface_count > 0 {
-        MARGIN * 2.0
-            + iface_count as f64 * (IFACE_R * 2.0 + GAP)
+        MARGIN * 2.0 + iface_count as f64 * (IFACE_R * 2.0 + GAP)
     } else {
         0.0
     };
@@ -91,11 +88,12 @@ pub fn render(diagram: &ComponentDiagram, theme: &Theme) -> String {
     let pkg_total_w = estimate_packages_width(&diagram.packages);
     let pkg_total_h = estimate_packages_height(&diagram.packages);
 
-    let title_h = if diagram.meta.title.is_some() { TITLE_HEIGHT } else { 0.0 };
-    let total_w = comp_total_w
-        .max(pkg_total_w)
-        .max(iface_total_w)
-        .max(100.0);
+    let title_h = if diagram.meta.title.is_some() {
+        TITLE_HEIGHT
+    } else {
+        0.0
+    };
+    let total_w = comp_total_w.max(pkg_total_w).max(iface_total_w).max(100.0);
     let total_h = (comp_total_h + pkg_total_h + iface_total_h + title_h).max(50.0);
 
     let mut svg = SvgBuilder::new(total_w, total_h);
@@ -113,7 +111,12 @@ pub fn render(diagram: &ComponentDiagram, theme: &Theme) -> String {
     render_packages(&diagram.packages, &mut svg, MARGIN, &mut pkg_y, theme);
 
     // Render flat components below the packages.
-    let y_start = pkg_y + if !diagram.packages.is_empty() { GAP } else { 0.0 };
+    let y_start = pkg_y
+        + if !diagram.packages.is_empty() {
+            GAP
+        } else {
+            0.0
+        };
     let mut positions = Vec::new();
     for (i, comp) in diagram.components.iter().enumerate() {
         let col = i % cols;
@@ -185,7 +188,13 @@ pub fn render(diagram: &ComponentDiagram, theme: &Theme) -> String {
         // Draw circle.
         svg.circle(ix, iy, IFACE_R, &cs.class_background, &cs.border_color);
         // Label below circle.
-        svg.text(ix, iy + IFACE_R + NOTE_LINE_H, &iface.label, "middle", FONT_SIZE);
+        svg.text(
+            ix,
+            iy + IFACE_R + NOTE_LINE_H,
+            &iface.label,
+            "middle",
+            FONT_SIZE,
+        );
         iface_positions.push((ix, iy));
     }
 
@@ -217,7 +226,14 @@ pub fn render(diagram: &ComponentDiagram, theme: &Theme) -> String {
             continue;
         };
 
-        svg.line_segment(from_cx, from_cy, to_cx, to_cy, &cs.border_color, conn.dashed);
+        svg.line_segment(
+            from_cx,
+            from_cy,
+            to_cx,
+            to_cy,
+            &cs.border_color,
+            conn.dashed,
+        );
         // Only draw arrowhead if connecting to a component (not an interface circle).
         if ti.is_some() {
             svg.arrow_head(to_cx, to_cy, 90.0);
@@ -241,12 +257,25 @@ pub fn render(diagram: &ComponentDiagram, theme: &Theme) -> String {
 
     // Render notes.
     for note in &diagram.notes {
-        render_note(note, &positions, &diagram.components, &mut svg, total_w, total_h);
+        render_note(
+            note,
+            &positions,
+            &diagram.components,
+            &mut svg,
+            total_w,
+            total_h,
+        );
     }
 
     // Render header/footer/legend from diagram meta.
     if let Some(header) = &diagram.meta.header {
-        svg.text(total_w / 2.0, SMALL_FONT + 2.0, header, "middle", SMALL_FONT);
+        svg.text(
+            total_w / 2.0,
+            SMALL_FONT + 2.0,
+            header,
+            "middle",
+            SMALL_FONT,
+        );
     }
     if let Some(footer) = &diagram.meta.footer {
         svg.text(total_w / 2.0, total_h - 4.0, footer, "middle", SMALL_FONT);
@@ -390,7 +419,10 @@ fn estimate_packages_width(packages: &[ComponentPackage]) -> f64 {
 }
 
 fn estimate_packages_height(packages: &[ComponentPackage]) -> f64 {
-    packages.iter().map(|p| estimate_package_height(p)).sum::<f64>()
+    packages
+        .iter()
+        .map(|p| estimate_package_height(p))
+        .sum::<f64>()
         + MARGIN * 2.0
         + GAP * packages.len().saturating_sub(1) as f64
 }
@@ -457,13 +489,20 @@ mod tests {
         let input = "@startuml\ncomponent MyComp <<facade>> #LightBlue\nnote right of MyComp : Tagged component\n@enduml";
         let diagram = rustuml_parser::parse::parse(input).unwrap();
         let svg = crate::render_svg(&diagram);
-        assert!(svg.contains("Tagged component"), "note text missing in SVG: {svg}");
-        assert!(svg.contains("MyComp"), "component label missing in SVG: {svg}");
+        assert!(
+            svg.contains("Tagged component"),
+            "note text missing in SVG: {svg}"
+        );
+        assert!(
+            svg.contains("MyComp"),
+            "component label missing in SVG: {svg}"
+        );
     }
 
     #[test]
     fn interface_label_rendered() {
-        let input = "@startuml\ncomponent Hub\ninterface IA\ninterface IB\nHub - IA\nHub - IB\n@enduml";
+        let input =
+            "@startuml\ncomponent Hub\ninterface IA\ninterface IB\nHub - IA\nHub - IB\n@enduml";
         let diagram = rustuml_parser::parse::parse(input).unwrap();
         let svg = crate::render_svg(&diagram);
         assert!(svg.contains("Hub"), "Hub missing in SVG: {svg}");

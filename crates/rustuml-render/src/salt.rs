@@ -123,7 +123,11 @@ impl RenderCtx {
     }
 
     fn measure_tabs_width(&self, tab_row: &SaltRow) -> f64 {
-        tab_row.cells.iter().map(|c| self.measure_widget_width(c) + H_PAD * 2.0).sum()
+        tab_row
+            .cells
+            .iter()
+            .map(|c| self.measure_widget_width(c) + H_PAD * 2.0)
+            .sum()
     }
 
     fn measure_widget_width(&self, widget: &SaltWidget) -> f64 {
@@ -226,7 +230,16 @@ impl RenderCtx {
                 let text_y = cur_y + row_h / 2.0 + FONT_SIZE / 2.0 - 1.0;
                 emit_text(buf, x + H_PAD, text_y, &header_text, FONT_SIZE, "start");
             } else {
-                self.draw_row(block, row, &col_widths, x + H_PAD, cur_y, w - H_PAD * 2.0, row_h, buf);
+                self.draw_row(
+                    block,
+                    row,
+                    &col_widths,
+                    x + H_PAD,
+                    cur_y,
+                    w - H_PAD * 2.0,
+                    row_h,
+                    buf,
+                );
             }
 
             cur_y += row_h;
@@ -249,7 +262,14 @@ impl RenderCtx {
         }
     }
 
-    fn draw_tab_bar(&self, tab_row: &SaltRow, x: f64, y: f64, _total_w: f64, buf: &mut String) -> f64 {
+    fn draw_tab_bar(
+        &self,
+        tab_row: &SaltRow,
+        x: f64,
+        y: f64,
+        _total_w: f64,
+        buf: &mut String,
+    ) -> f64 {
         let mut tab_x = x;
         for (i, cell) in tab_row.cells.iter().enumerate() {
             let label = widget_label(cell);
@@ -257,7 +277,14 @@ impl RenderCtx {
             let fill = if i == 0 { "white" } else { "#D8D8D8" };
             // Tab rounded rect.
             emit_rounded_rect(buf, tab_x, y, tab_w, LINE_H, 4.0, fill, "#555555");
-            emit_text(buf, tab_x + tab_w / 2.0, y + LINE_H - V_PAD, &label, FONT_SIZE, "middle");
+            emit_text(
+                buf,
+                tab_x + tab_w / 2.0,
+                y + LINE_H - V_PAD,
+                &label,
+                FONT_SIZE,
+                "middle",
+            );
             tab_x += tab_w;
         }
         y + LINE_H
@@ -316,7 +343,15 @@ impl RenderCtx {
 
             SaltWidget::Checkbox { checked, label } => {
                 let box_y = mid_y - CHECKBOX_SIZE / 2.0;
-                emit_rect(buf, x, box_y, CHECKBOX_SIZE, CHECKBOX_SIZE, "white", "#666666");
+                emit_rect(
+                    buf,
+                    x,
+                    box_y,
+                    CHECKBOX_SIZE,
+                    CHECKBOX_SIZE,
+                    "white",
+                    "#666666",
+                );
                 if *checked {
                     // Draw a checkmark.
                     let cx = x + CHECKBOX_SIZE / 2.0;
@@ -361,7 +396,14 @@ impl RenderCtx {
                 // syntax ("^English^") depending on how the golden was
                 // generated.
                 let display = format!("^{label}^");
-                emit_text(buf, x + H_PAD / 2.0, text_y - 1.0, &display, FONT_SIZE, "start");
+                emit_text(
+                    buf,
+                    x + H_PAD / 2.0,
+                    text_y - 1.0,
+                    &display,
+                    FONT_SIZE,
+                    "start",
+                );
                 // Small triangle indicator.
                 let tx = x + w - H_PAD - 4.0;
                 let ty = mid_y;

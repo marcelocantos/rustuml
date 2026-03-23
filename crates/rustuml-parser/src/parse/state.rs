@@ -60,7 +60,10 @@ impl StateParser {
         if let Some(buf) = self.note_buffer.take() {
             let text = buf.text.trim().to_string();
             if !text.is_empty() {
-                self.notes.push(StateNote { text, kind: buf.kind });
+                self.notes.push(StateNote {
+                    text,
+                    kind: buf.kind,
+                });
             }
         }
     }
@@ -124,9 +127,7 @@ impl StateParser {
             return Ok(());
         }
         // Skip decoration lines.
-        if line.starts_with("hide ")
-            || line.starts_with("show ")
-        {
+        if line.starts_with("hide ") || line.starts_with("show ") {
             return Ok(());
         }
 
@@ -261,10 +262,17 @@ impl StateParser {
         }
 
         // `note on link` — note on the most recent transition.
-        if line == "note on link" || line.starts_with("note on link ") || line.starts_with("note on link:") {
+        if line == "note on link"
+            || line.starts_with("note on link ")
+            || line.starts_with("note on link:")
+        {
             let inline = line
                 .strip_prefix("note on link")
-                .and_then(|r| r.strip_prefix(" : ").or_else(|| r.strip_prefix(": ")).or_else(|| r.strip_prefix(':')))
+                .and_then(|r| {
+                    r.strip_prefix(" : ")
+                        .or_else(|| r.strip_prefix(": "))
+                        .or_else(|| r.strip_prefix(':'))
+                })
                 .map(|s| s.trim());
             if let Some(text) = inline.filter(|t| !t.is_empty()) {
                 self.notes.push(StateNote {
@@ -282,12 +290,14 @@ impl StateParser {
 
         // `note "floating text" as ALIAS`
         {
-            static RE: LazyLock<Regex> = LazyLock::new(|| {
-                Regex::new(r#"^note\s+"([^"]+)"\s+as\s+\w+$"#).unwrap()
-            });
+            static RE: LazyLock<Regex> =
+                LazyLock::new(|| Regex::new(r#"^note\s+"([^"]+)"\s+as\s+\w+$"#).unwrap());
             if let Some(caps) = RE.captures(line) {
                 let text = caps[1].to_string();
-                self.notes.push(StateNote { text, kind: StateNoteKind::Floating });
+                self.notes.push(StateNote {
+                    text,
+                    kind: StateNoteKind::Floating,
+                });
                 return true;
             }
         }
@@ -305,10 +315,17 @@ impl StateParser {
                 } else {
                     StateNoteKind::RightOf(state_id)
                 };
-                if let Some(text) = caps.get(3).map(|m| m.as_str().trim().to_string()).filter(|t| !t.is_empty()) {
+                if let Some(text) = caps
+                    .get(3)
+                    .map(|m| m.as_str().trim().to_string())
+                    .filter(|t| !t.is_empty())
+                {
                     self.notes.push(StateNote { text, kind });
                 } else {
-                    self.note_buffer = Some(NoteBuffer { kind, text: String::new() });
+                    self.note_buffer = Some(NoteBuffer {
+                        kind,
+                        text: String::new(),
+                    });
                 }
                 return true;
             }
@@ -316,9 +333,8 @@ impl StateParser {
 
         // `note left [: text]` / `note right [: text]` (no "of <state>")
         {
-            static RE: LazyLock<Regex> = LazyLock::new(|| {
-                Regex::new(r"^note\s+(left|right)(?:\s*:\s*(.+))?$").unwrap()
-            });
+            static RE: LazyLock<Regex> =
+                LazyLock::new(|| Regex::new(r"^note\s+(left|right)(?:\s*:\s*(.+))?$").unwrap());
             if let Some(caps) = RE.captures(line) {
                 let side = &caps[1];
                 let kind = if side == "left" {
@@ -326,10 +342,17 @@ impl StateParser {
                 } else {
                     StateNoteKind::RightOf(String::new())
                 };
-                if let Some(text) = caps.get(2).map(|m| m.as_str().trim().to_string()).filter(|t| !t.is_empty()) {
+                if let Some(text) = caps
+                    .get(2)
+                    .map(|m| m.as_str().trim().to_string())
+                    .filter(|t| !t.is_empty())
+                {
                     self.notes.push(StateNote { text, kind });
                 } else {
-                    self.note_buffer = Some(NoteBuffer { kind, text: String::new() });
+                    self.note_buffer = Some(NoteBuffer {
+                        kind,
+                        text: String::new(),
+                    });
                 }
                 return true;
             }

@@ -85,7 +85,11 @@ fn process_label(s: &str) -> String {
         if let Some(end) = after.find('>') {
             let raw_src = &after["<img:".len()..end];
             // Strip {scale=...} or similar suffix from the URL.
-            let src = if let Some(brace) = raw_src.find('{') { &raw_src[..brace] } else { raw_src };
+            let src = if let Some(brace) = raw_src.find('{') {
+                &raw_src[..brace]
+            } else {
+                raw_src
+            };
             if src.starts_with("https://") || src.starts_with("http://") {
                 result.push_str(&format!("(Cannot\u{00a0}decode:\u{00a0}{src})"));
             } else {
@@ -169,7 +173,10 @@ fn render_note_text(svg: &mut SvgBuilder, text: &str, x: f64, start_y: f64) -> f
             }
             continue;
         }
-        if let Some(rest) = trimmed.strip_prefix("# ").or_else(|| trimmed.strip_prefix('#').filter(|r| !r.is_empty())) {
+        if let Some(rest) = trimmed
+            .strip_prefix("# ")
+            .or_else(|| trimmed.strip_prefix('#').filter(|r| !r.is_empty()))
+        {
             list_counter += 1;
             svg.text(x, y, &format!("{list_counter}."), "start", SMALL_FONT);
             svg.text(x + 18.0, y, rest.trim(), "start", SMALL_FONT);
@@ -239,9 +246,7 @@ fn render_empty_welcome() -> String {
 pub fn render(diagram: &SequenceDiagram, theme: &Theme) -> String {
     // Empty diagram with no title — render the PlantUML welcome screen.
     // If there's a title, fall through to render it.
-    if diagram.participants.is_empty()
-        && diagram.events.is_empty()
-        && diagram.meta.title.is_none()
+    if diagram.participants.is_empty() && diagram.events.is_empty() && diagram.meta.title.is_none()
     {
         return render_empty_welcome();
     }
@@ -288,11 +293,8 @@ pub fn render(diagram: &SequenceDiagram, theme: &Theme) -> String {
         0.0
     };
 
-    let total_height = TOP_MARGIN * 2.0
-        + PARTICIPANT_HEIGHT * 2.0
-        + title_height
-        + event_height
-        + 20.0;
+    let total_height =
+        TOP_MARGIN * 2.0 + PARTICIPANT_HEIGHT * 2.0 + title_height + event_height + 20.0;
 
     let mut svg = SvgBuilder::new(total_width, total_height);
 
@@ -329,32 +331,67 @@ pub fn render(diagram: &SequenceDiagram, theme: &Theme) -> String {
             "Please{n}use{n}'!option{n}handwritten{n}true'{n}to{n}enable{n}handwritten",
             n = nbsp
         );
-        svg.text(total_width / 2.0, TOP_MARGIN + FONT_SIZE, &msg, "middle", SMALL_FONT);
+        svg.text(
+            total_width / 2.0,
+            TOP_MARGIN + FONT_SIZE,
+            &msg,
+            "middle",
+            SMALL_FONT,
+        );
     }
 
     // Render header if present (top of diagram).
     if let Some(header) = &diagram.meta.header {
-        svg.text(total_width / 2.0, TOP_MARGIN * 0.8, header, "middle", SMALL_FONT);
+        svg.text(
+            total_width / 2.0,
+            TOP_MARGIN * 0.8,
+            header,
+            "middle",
+            SMALL_FONT,
+        );
     }
 
     // Render footer if present (bottom of diagram).
     if let Some(footer) = &diagram.meta.footer {
-        svg.text(total_width / 2.0, total_height - 4.0, footer, "middle", SMALL_FONT);
+        svg.text(
+            total_width / 2.0,
+            total_height - 4.0,
+            footer,
+            "middle",
+            SMALL_FONT,
+        );
     }
 
     // Render caption if present (bottom, below footer).
     if let Some(caption) = &diagram.meta.caption {
-        svg.text(total_width / 2.0, total_height - 4.0, caption, "middle", SMALL_FONT);
+        svg.text(
+            total_width / 2.0,
+            total_height - 4.0,
+            caption,
+            "middle",
+            SMALL_FONT,
+        );
     }
 
     // Render legend if present.
     if let Some(legend) = &diagram.meta.legend {
-        svg.render_legend(total_width - 200.0, total_height - 150.0, legend, SMALL_FONT);
+        svg.render_legend(
+            total_width - 200.0,
+            total_height - 150.0,
+            legend,
+            SMALL_FONT,
+        );
     }
 
     // Render title if present.
     let title_offset = if let Some(title) = &diagram.meta.title {
-        svg.text(total_width / 2.0, TOP_MARGIN + FONT_SIZE, title, "middle", FONT_SIZE + 2.0);
+        svg.text(
+            total_width / 2.0,
+            TOP_MARGIN + FONT_SIZE,
+            title,
+            "middle",
+            FONT_SIZE + 2.0,
+        );
         PARTICIPANT_HEIGHT
     } else {
         0.0
@@ -370,7 +407,13 @@ pub fn render(diagram: &SequenceDiagram, theme: &Theme) -> String {
         // matching Java PlantUML's participant tooltip normalisation).
         let normalize_title = |s: &str| -> String {
             s.chars()
-                .map(|c| if c.is_ascii() && c != '/' && c != '*' { c } else { '.' })
+                .map(|c| {
+                    if c.is_ascii() && c != '/' && c != '*' {
+                        c
+                    } else {
+                        '.'
+                    }
+                })
                 .collect()
         };
         let title_text = if let Some(st) = &p.stereotype {
@@ -392,7 +435,13 @@ pub fn render(diagram: &SequenceDiagram, theme: &Theme) -> String {
         );
         let cx = x + w / 2.0;
         let display = participant_display_label(p);
-        svg.text(cx, box_y + PARTICIPANT_HEIGHT / 2.0 + 5.0, &display, "middle", FONT_SIZE);
+        svg.text(
+            cx,
+            box_y + PARTICIPANT_HEIGHT / 2.0 + 5.0,
+            &display,
+            "middle",
+            FONT_SIZE,
+        );
         svg.close_group();
     }
 
@@ -606,11 +655,21 @@ pub fn render(diagram: &SequenceDiagram, theme: &Theme) -> String {
         let w = participant_widths[i];
         svg.open_group("participant");
         let title_text = if let Some(st) = &p.stereotype {
-            let dot_st: String = format!("..{st}..").chars().map(|c| if c.is_ascii() { c } else { '.' }).collect();
-            let dot_label: String = p.label.chars().map(|c| if c.is_ascii() { c } else { '.' }).collect();
+            let dot_st: String = format!("..{st}..")
+                .chars()
+                .map(|c| if c.is_ascii() { c } else { '.' })
+                .collect();
+            let dot_label: String = p
+                .label
+                .chars()
+                .map(|c| if c.is_ascii() { c } else { '.' })
+                .collect();
             format!("{dot_label} {dot_st}")
         } else {
-            p.label.chars().map(|c| if c.is_ascii() { c } else { '.' }).collect()
+            p.label
+                .chars()
+                .map(|c| if c.is_ascii() { c } else { '.' })
+                .collect()
         };
         svg.title(&title_text);
         svg.rounded_rect(
@@ -624,7 +683,13 @@ pub fn render(diagram: &SequenceDiagram, theme: &Theme) -> String {
         );
         let cx = x + w / 2.0;
         let display = participant_display_label(p);
-        svg.text(cx, bottom_y + PARTICIPANT_HEIGHT / 2.0 + 5.0, &display, "middle", FONT_SIZE);
+        svg.text(
+            cx,
+            bottom_y + PARTICIPANT_HEIGHT / 2.0 + 5.0,
+            &display,
+            "middle",
+            FONT_SIZE,
+        );
         svg.close_group();
     }
 

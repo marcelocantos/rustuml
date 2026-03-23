@@ -57,11 +57,7 @@ fn draw_shape(svg: &mut SvgBuilder, shape: &DitaaShape) {
     let w = shape.width as f64 * CELL_W;
     let h = shape.height as f64 * CELL_H;
 
-    let fill = shape
-        .color
-        .as_ref()
-        .map(|c| c.fill())
-        .unwrap_or(BOX_FILL);
+    let fill = shape.color.as_ref().map(|c| c.fill()).unwrap_or(BOX_FILL);
 
     match shape.kind {
         DitaaShapeKind::Box | DitaaShapeKind::Storage => {

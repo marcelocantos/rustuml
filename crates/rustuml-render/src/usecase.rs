@@ -20,7 +20,11 @@ const SMALL_FONT: f64 = 10.0;
 pub fn render(diagram: &UseCaseDiagram, theme: &Theme) -> String {
     let total_actors = diagram.actors.len();
     let total_uc = diagram.use_cases.len();
-    if total_actors == 0 && total_uc == 0 && diagram.notes.is_empty() && diagram.meta.title.is_none() {
+    if total_actors == 0
+        && total_uc == 0
+        && diagram.notes.is_empty()
+        && diagram.meta.title.is_none()
+    {
         return "<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"100\" height=\"50\"></svg>\n"
             .to_string();
     }
@@ -30,9 +34,17 @@ pub fn render(diagram: &UseCaseDiagram, theme: &Theme) -> String {
     let total_w = MARGIN * 2.0 + actor_col_w + GAP + uc_col_w;
     let max_items = total_actors.max(total_uc).max(1);
     // Add space for title if present, and for notes.
-    let title_h = if diagram.meta.title.is_some() { FONT_SIZE + 10.0 } else { 0.0 };
+    let title_h = if diagram.meta.title.is_some() {
+        FONT_SIZE + 10.0
+    } else {
+        0.0
+    };
     let notes_h = if !diagram.notes.is_empty() {
-        diagram.notes.iter().map(|n| n.text.lines().count() as f64 * (FONT_SIZE + 2.0) + 12.0).sum::<f64>()
+        diagram
+            .notes
+            .iter()
+            .map(|n| n.text.lines().count() as f64 * (FONT_SIZE + 2.0) + 12.0)
+            .sum::<f64>()
     } else {
         0.0
     };
@@ -50,7 +62,13 @@ pub fn render(diagram: &UseCaseDiagram, theme: &Theme) -> String {
     let mut y_offset = 0.0;
     if let Some(title) = &diagram.meta.title {
         y_offset = title_h;
-        svg.text(total_w / 2.0, MARGIN / 2.0 + FONT_SIZE, title, "middle", FONT_SIZE + 2.0);
+        svg.text(
+            total_w / 2.0,
+            MARGIN / 2.0 + FONT_SIZE,
+            title,
+            "middle",
+            FONT_SIZE + 2.0,
+        );
     }
 
     // Position actors on the left.
@@ -123,11 +141,43 @@ pub fn render(diagram: &UseCaseDiagram, theme: &Theme) -> String {
             .iter()
             .map(|uc| (metrics::text_width(&uc.label, FONT_SIZE) / 2.0 + 20.0).max(UC_RX))
             .fold(UC_RX, f64::max);
-        let min_x = members.iter().map(|(x, _)| x).cloned().fold(f64::INFINITY, f64::min) - max_rx - PKG_PAD;
-        let max_x = members.iter().map(|(x, _)| x).cloned().fold(f64::NEG_INFINITY, f64::max) + max_rx + PKG_PAD;
-        let min_y = members.iter().map(|(_, y)| y).cloned().fold(f64::INFINITY, f64::min) - UC_RY - PKG_PAD - PKG_LABEL_H;
-        let max_y = members.iter().map(|(_, y)| y).cloned().fold(f64::NEG_INFINITY, f64::max) + UC_RY + PKG_PAD;
-        svg.rect(min_x, min_y, max_x - min_x, max_y - min_y, "none", &gs.border_color);
+        let min_x = members
+            .iter()
+            .map(|(x, _)| x)
+            .cloned()
+            .fold(f64::INFINITY, f64::min)
+            - max_rx
+            - PKG_PAD;
+        let max_x = members
+            .iter()
+            .map(|(x, _)| x)
+            .cloned()
+            .fold(f64::NEG_INFINITY, f64::max)
+            + max_rx
+            + PKG_PAD;
+        let min_y = members
+            .iter()
+            .map(|(_, y)| y)
+            .cloned()
+            .fold(f64::INFINITY, f64::min)
+            - UC_RY
+            - PKG_PAD
+            - PKG_LABEL_H;
+        let max_y = members
+            .iter()
+            .map(|(_, y)| y)
+            .cloned()
+            .fold(f64::NEG_INFINITY, f64::max)
+            + UC_RY
+            + PKG_PAD;
+        svg.rect(
+            min_x,
+            min_y,
+            max_x - min_x,
+            max_y - min_y,
+            "none",
+            &gs.border_color,
+        );
         svg.text(
             (min_x + max_x) / 2.0,
             min_y + PKG_LABEL_H - 4.0,

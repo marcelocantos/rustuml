@@ -291,7 +291,13 @@ impl ObjectParser {
             self.ensure_object(&from_base);
             self.ensure_object(&to_base);
 
-            self.links.push(ObjectLink { from: from_raw, to: to_raw, label, from_multiplicity, to_multiplicity });
+            self.links.push(ObjectLink {
+                from: from_raw,
+                to: to_raw,
+                label,
+                from_multiplicity,
+                to_multiplicity,
+            });
             true
         } else {
             false
@@ -313,9 +319,19 @@ impl ObjectParser {
             // Build a safe identifier (replace non-alphanumeric with '_').
             let id: String = label
                 .chars()
-                .map(|c| if c.is_alphanumeric() || c == '_' { c } else { '_' })
+                .map(|c| {
+                    if c.is_alphanumeric() || c == '_' {
+                        c
+                    } else {
+                        '_'
+                    }
+                })
                 .collect();
-            self.packages.push(ObjectPackage { id, label, object_ids: Vec::new() });
+            self.packages.push(ObjectPackage {
+                id,
+                label,
+                object_ids: Vec::new(),
+            });
             self.current_package = Some(self.packages.len() - 1);
             true
         } else {
@@ -325,8 +341,7 @@ impl ObjectParser {
 
     /// Handle `ObjectId : field = value` or `ObjectId : field` inline field syntax.
     fn try_inline_field(&mut self, line: &str) -> bool {
-        static RE: LazyLock<Regex> =
-            LazyLock::new(|| Regex::new(r"^(\w+)\s*:\s*(.+)$").unwrap());
+        static RE: LazyLock<Regex> = LazyLock::new(|| Regex::new(r"^(\w+)\s*:\s*(.+)$").unwrap());
 
         if let Some(caps) = RE.captures(line) {
             let obj_id = caps[1].to_string();
@@ -345,34 +360,44 @@ impl ObjectParser {
 
     fn try_note(&mut self, line: &str) -> bool {
         // note "text" as ID  — floating note
-        static RE_FLOATING: LazyLock<Regex> = LazyLock::new(|| {
-            Regex::new(r#"^note\s+"([^"]+)"\s+as\s+(\w+)\s*$"#).unwrap()
-        });
+        static RE_FLOATING: LazyLock<Regex> =
+            LazyLock::new(|| Regex::new(r#"^note\s+"([^"]+)"\s+as\s+(\w+)\s*$"#).unwrap());
         // note right/left/top/bottom of X : text
         static RE_ATTACHED: LazyLock<Regex> = LazyLock::new(|| {
             Regex::new(r"^note\s+(?:right|left|top|bottom)\s+of\s+(\w+)\s*:\s*(.+)$").unwrap()
         });
         // note right : text  (shorthand without "of X", attaches to last object)
-        static RE_SHORTHAND: LazyLock<Regex> = LazyLock::new(|| {
-            Regex::new(r"^note\s+(?:right|left|top|bottom)\s*:\s*(.+)$").unwrap()
-        });
+        static RE_SHORTHAND: LazyLock<Regex> =
+            LazyLock::new(|| Regex::new(r"^note\s+(?:right|left|top|bottom)\s*:\s*(.+)$").unwrap());
 
         if let Some(caps) = RE_FLOATING.captures(line) {
             let text = caps[1].replace("\\n", "\n");
             let id = caps[2].to_string();
-            self.notes.push(ObjectNote { id: Some(id), target: None, text });
+            self.notes.push(ObjectNote {
+                id: Some(id),
+                target: None,
+                text,
+            });
             return true;
         }
         if let Some(caps) = RE_ATTACHED.captures(line) {
             let target = caps[1].to_string();
             let text = caps[2].trim().to_string();
-            self.notes.push(ObjectNote { id: None, target: Some(target), text });
+            self.notes.push(ObjectNote {
+                id: None,
+                target: Some(target),
+                text,
+            });
             return true;
         }
         if let Some(caps) = RE_SHORTHAND.captures(line) {
             let text = caps[1].trim().to_string();
             let target = self.objects.last().map(|o| o.id.clone());
-            self.notes.push(ObjectNote { id: None, target, text });
+            self.notes.push(ObjectNote {
+                id: None,
+                target,
+                text,
+            });
             return true;
         }
         // Silently swallow other note forms we don't fully handle yet.
@@ -387,9 +412,7 @@ impl ObjectParser {
             self.meta.title = Some(super::strip_title_quotes(rest).to_string());
             return true;
         }
-        line.starts_with("skinparam ")
-            || line.starts_with("hide ")
-            || line.starts_with("show ")
+        line.starts_with("skinparam ") || line.starts_with("hide ") || line.starts_with("show ")
     }
 
     fn parse_field_line(&mut self, line: &str) {
@@ -414,7 +437,10 @@ impl ObjectParser {
                 value: if value.is_empty() { None } else { Some(value) },
             }
         } else {
-            ObjectField { name: trimmed.to_string(), value: None }
+            ObjectField {
+                name: trimmed.to_string(),
+                value: None,
+            }
         };
 
         if let Some(obj_id) = &self.current_object {
@@ -531,9 +557,7 @@ mod tests {
 
     #[test]
     fn package_groups_objects() {
-        let d = parse(
-            "package \"Domain\" {\n  object User\n  object Role\n}\nobject Other",
-        );
+        let d = parse("package \"Domain\" {\n  object User\n  object Role\n}\nobject Other");
         assert_eq!(d.packages.len(), 1);
         assert_eq!(d.packages[0].label, "Domain");
         assert_eq!(d.packages[0].object_ids, vec!["User", "Role"]);
