@@ -200,3 +200,4 @@ fn print_agent_guide() {
     println!("## Skinparams");
     println!("Inline style overrides: `skinparam participantBackgroundColor #FF0000`");
 }
+
