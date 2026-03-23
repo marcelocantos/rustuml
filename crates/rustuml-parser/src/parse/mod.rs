@@ -155,14 +155,17 @@ fn detect_uml_subtype(lines: &[String]) -> UmlSubtype {
         if trimmed.starts_with("entity ") && (trimmed.ends_with('{') || trimmed.ends_with("{{")) {
             scores[1] += 15;
         }
-        // Sequence.
-        if trimmed.starts_with("participant ")
-            || trimmed.starts_with("boundary ")
-            || trimmed.starts_with("control ")
-            || trimmed.starts_with("database ")
-            || trimmed.starts_with("collections ")
-            || trimmed.starts_with("queue ")
-            || trimmed.starts_with("entity ")  // entity is also a sequence participant type
+        // Sequence. Skip lines that end with `{` — those are container blocks
+        // (class diagram packages) not sequence participants.
+        if !trimmed.ends_with('{')
+            && (trimmed.starts_with("participant ")
+                || trimmed.starts_with("boundary ")
+                || trimmed.starts_with("control ")
+                || trimmed.starts_with("database ")
+                || trimmed.starts_with("collections ")
+                || trimmed.starts_with("queue ")
+                || trimmed.starts_with("entity "))
+        // entity is also a sequence participant type
         {
             scores[0] += 5;
         }
