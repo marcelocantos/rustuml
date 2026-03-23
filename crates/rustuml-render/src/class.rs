@@ -502,13 +502,6 @@ fn render_class_box(
 }
 
 fn format_member(member: &Member) -> String {
-    let vis = match member.visibility {
-        Visibility::Public => "+",
-        Visibility::Private => "-",
-        Visibility::Protected => "#",
-        Visibility::Package => "~",
-        Visibility::Default => "",
-    };
     let static_prefix = if member.is_static { "{static} " } else { "" };
     let abstract_prefix = if member.is_abstract {
         "{abstract} "
@@ -518,10 +511,11 @@ fn format_member(member: &Member) -> String {
     let type_suffix = member
         .return_type
         .as_ref()
-        .map_or(String::new(), |t| format!(" : {t}"));
+        .map_or(String::new(), |t| format!(": {t}"));
 
+    let sep = if type_suffix.is_empty() { "" } else { " " };
     format!(
-        "{vis}{static_prefix}{abstract_prefix}{}{type_suffix}",
+        "{static_prefix}{abstract_prefix}{}{sep}{type_suffix}",
         member.name
     )
 }
@@ -827,6 +821,15 @@ mod tests {
         let svg = crate::render_svg(&diagram);
         assert!(svg.contains("Animal"));
         assert!(svg.contains("Dog"));
+    }
+
+    #[test]
+    fn nested_package_entities_shown() {
+        let input = "@startuml\ncloud Outer {\n  cloud Inner {\n    class MyClass {\n      +void method()\n    }\n  }\n}\n@enduml";
+        let diagram = rustuml_parser::parse::parse(input).unwrap();
+        let svg = crate::render_svg(&diagram);
+        assert!(svg.contains("MyClass"), "MyClass should appear in SVG");
+        assert!(svg.contains("method"), "method should appear in SVG");
     }
 
     #[test]
