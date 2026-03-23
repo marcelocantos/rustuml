@@ -18,6 +18,19 @@ pub fn to_svg_tspans(text: &str) -> String {
 
     while let Some(c) = chars.next() {
         match c {
+            '"' if chars.peek() == Some(&'"') => {
+                chars.next();
+                // ""monospace"" — collect until closing ""
+                let content = collect_until(&mut chars, "\"\"");
+                let content = monospace_spaces(&content);
+                write!(result, "<tspan font-family=\"monospace\">{content}</tspan>").unwrap();
+            }
+            '`' => {
+                // `code` backtick monospace
+                let content = collect_until_char(&mut chars, '`');
+                let content = monospace_spaces(&content);
+                write!(result, "<tspan font-family=\"monospace\">{content}</tspan>").unwrap();
+            }
             '*' if chars.peek() == Some(&'*') => {
                 chars.next();
                 // Find closing **
@@ -75,9 +88,22 @@ pub fn to_svg_tspans(text: &str) -> String {
                         )
                         .unwrap();
                     }
+                    "mono" => {
+                        let content = collect_until_tag(&mut chars, "</mono>");
+                        let content = monospace_spaces(&content);
+                        write!(result, "<tspan font-family=\"monospace\">{content}</tspan>").unwrap();
+                    }
+                    _ if tag.starts_with("color:") || tag.starts_with("COLOR:") => {
+                        // <color:blue>text</color> — strip tag, keep content.
+                        let content = collect_until_tag(&mut chars, "</color>");
+                        result.push_str(&content);
+                    }
+                    _ if tag.starts_with('/') => {
+                        // Unknown closing tag — skip silently.
+                    }
                     _ => {
-                        // Not a recognized tag, output as-is.
-                        write!(result, "<{tag}>").unwrap();
+                        // Unknown opening tag — escape and output as literal text.
+                        write!(result, "&lt;{tag}&gt;").unwrap();
                     }
                 }
             }
@@ -86,6 +112,12 @@ pub fn to_svg_tspans(text: &str) -> String {
     }
 
     result
+}
+
+/// Convert ASCII spaces to non-breaking spaces (U+00A0) in monospace content,
+/// matching PlantUML's SVG output for monospace text.
+fn monospace_spaces(s: &str) -> String {
+    s.replace(' ', "\u{00a0}")
 }
 
 fn collect_until(chars: &mut std::iter::Peekable<std::str::Chars>, delimiter: &str) -> String {

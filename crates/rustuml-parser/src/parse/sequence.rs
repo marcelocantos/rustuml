@@ -36,10 +36,17 @@ struct SeqParser {
     participant_ids: Vec<String>,
     /// Multiline note accumulator.
     note_buffer: Option<NoteBuffer>,
+    /// Multiline ref accumulator.
+    ref_buffer: Option<RefBuffer>,
 }
 
 struct NoteBuffer {
     position: NotePosition,
+    participants: Vec<String>,
+    lines: Vec<String>,
+}
+
+struct RefBuffer {
     participants: Vec<String>,
     lines: Vec<String>,
 }
@@ -53,6 +60,7 @@ impl SeqParser {
             autonumber: None,
             participant_ids: Vec::new(),
             note_buffer: None,
+            ref_buffer: None,
         }
     }
 
@@ -74,12 +82,28 @@ impl SeqParser {
                 label: id.clone(),
                 kind: ParticipantKind::default(),
                 order: Some(self.participants.len()),
+                stereotype: None,
             });
         }
         id
     }
 
     fn parse_line(&mut self, line_num: usize, line: &str) -> Result<(), ParseError> {
+        // Handle multiline ref buffering.
+        if self.ref_buffer.is_some() {
+            if line == "end ref" {
+                let buf = self.ref_buffer.take().unwrap();
+                let text = buf.lines.join("\n");
+                self.events.push(Event::Ref(Ref {
+                    participants: buf.participants,
+                    text,
+                }));
+            } else if let Some(buf) = &mut self.ref_buffer {
+                buf.lines.push(line.trim().to_string());
+            }
+            return Ok(());
+        }
+
         // Handle multiline note buffering.
         if self.note_buffer.is_some() {
             if line == "endnote" || line == "end note" {
@@ -128,6 +152,11 @@ impl SeqParser {
         if self.try_space(line) {
             return Ok(());
         }
+        // try_box must come before try_message: "box" would otherwise be parsed
+        // as a message b -[o]-> x because 'o' and 'x' are valid arrow chars.
+        if self.try_box(line) {
+            return Ok(());
+        }
         if self.try_message(line) {
             return Ok(());
         }
@@ -135,9 +164,6 @@ impl SeqParser {
             return Ok(());
         }
         if self.try_meta(line) {
-            return Ok(());
-        }
-        if self.try_box(line) {
             return Ok(());
         }
         if self.try_newpage(line) {
@@ -159,21 +185,39 @@ impl SeqParser {
     }
 
     fn try_participant_decl(&mut self, line: &str) -> bool {
+        // Matches four forms:
+        //   1. keyword "Long Label" as alias  <<stereotype>>
+        //   2. keyword alias as "Long Label"  <<stereotype>>
+        //   3. keyword SimpleName            <<stereotype>>
+        //   4. keyword "Long Label"          <<stereotype>>  (no alias; id = label)
         static RE: LazyLock<Regex> = LazyLock::new(|| {
             Regex::new(
-                r#"^(participant|actor|boundary|control|entity|database|collections|queue)\s+(?:"([^"]+)"\s+as\s+(\w+)|(\w+))"#,
+                r#"^(participant|actor|boundary|control|entity|database|collections|queue)\s+(?:"([^"]+)"\s+as\s+(\w+)|(\w+)\s+as\s+"([^"]+)"|"([^"]+)"|(\w+))(?:\s+<<([^>]+)>>)?(?:\s+#\S+)?(?:\s+order\s+\d+)?"#,
             )
             .unwrap()
         });
 
         if let Some(caps) = RE.captures(line) {
             let kind = parse_participant_kind(&caps[1]);
-            let (label, id) = if let Some(quoted) = caps.get(2) {
+            let (raw_label, id) = if let Some(quoted) = caps.get(2) {
+                // Form 1: "Long Label" as alias
                 (quoted.as_str().to_string(), caps[3].to_string())
+            } else if let Some(alias) = caps.get(4) {
+                // Form 2: alias as "Long Label"
+                let lbl = caps.get(5).map_or("", |m| m.as_str()).to_string();
+                (lbl, alias.as_str().to_string())
+            } else if let Some(quoted) = caps.get(6) {
+                // Form 4: "Long Label" (no alias; id = label)
+                let lbl = quoted.as_str().to_string();
+                (lbl.clone(), lbl)
             } else {
-                let name = caps[4].to_string();
+                // Form 3: SimpleName
+                let name = caps[7].to_string();
                 (name.clone(), name)
             };
+            // Extract <<stereotype>> from within the label text (e.g. "Service 1 <<internal>>").
+            let (label, label_stereotype) = extract_stereotype_from_label(&raw_label);
+            let stereotype = caps.get(8).map(|m| m.as_str().to_string()).or(label_stereotype);
 
             if !self.participant_ids.contains(&id) {
                 self.participant_ids.push(id.clone());
@@ -182,6 +226,7 @@ impl SeqParser {
                     label,
                     kind,
                     order: Some(self.participants.len()),
+                    stereotype,
                 });
             }
             true
@@ -191,23 +236,41 @@ impl SeqParser {
     }
 
     fn try_message(&mut self, line: &str) -> bool {
+        // Strip inline color annotations from arrows, e.g. -[#red]> → ->
+        static RE_COLOR: LazyLock<Regex> =
+            LazyLock::new(|| Regex::new(r"\[#[^\]]*\]").unwrap());
+        // Allow optional #color after activation modifier (++ #blue, -- #red, etc.)
+        // Supports both simple names (\w+) and quoted names ("...").
         static RE: LazyLock<Regex> = LazyLock::new(|| {
-            Regex::new(r"^(\w+)\s*([-<>.\\/ox]+)\s*(\w+)\s*(?:((?:\+\+|--|!!))\s*)?(?::\s*(.*))?$")
-                .unwrap()
+            Regex::new(
+                r#"^("(?:[^"]+)"|\w+)\s*([-<>.\\/ox]+)\s*("(?:[^"]+)"|\w+)\s*(?:((?:\+\+|--|!!))\s*(?:#\S+)?\s*)?(?::\s*(.*))?$"#,
+            )
+            .unwrap()
         });
 
+        let stripped = RE_COLOR.replace_all(line, "");
+        let line = stripped.as_ref();
+
         if let Some(caps) = RE.captures(line) {
-            let from_raw = &caps[1];
+            // Strip surrounding quotes from quoted participant names.
+            let unquote = |s: &str| -> String {
+                if s.starts_with('"') && s.ends_with('"') && s.len() >= 2 {
+                    s[1..s.len() - 1].to_string()
+                } else {
+                    s.to_string()
+                }
+            };
+            let from_raw = unquote(&caps[1]);
             let arrow_str = &caps[2];
-            let to_raw = &caps[3];
+            let to_raw = unquote(&caps[3]);
             let activation_str = caps.get(4).map(|m| m.as_str());
             let label = caps.get(5).map_or("", |m| m.as_str()).trim().to_string();
 
             let arrow = parse_arrow(arrow_str);
             let activation = activation_str.map(parse_activation);
 
-            let from = self.ensure_participant(from_raw);
-            let to = self.ensure_participant(to_raw);
+            let from = self.ensure_participant(&from_raw);
+            let to = self.ensure_participant(&to_raw);
 
             self.events.push(Event::Message(Message {
                 from,
@@ -223,10 +286,15 @@ impl SeqParser {
     }
 
     fn try_external_message(&mut self, line: &str) -> bool {
+        // Strip [#color] annotations first.
+        static RE_COLOR: LazyLock<Regex> =
+            LazyLock::new(|| Regex::new(r"\[#[^\]]*\]").unwrap());
         static RE_IN: LazyLock<Regex> =
-            LazyLock::new(|| Regex::new(r"^\[[-=><]+\s*(\w+)\s*(?::\s*(.*))?$").unwrap());
+            LazyLock::new(|| Regex::new(r"^\[[-=><ox]+\s*(\w+)\s*(?:(?:\+\+|--|!!)\s*)?(?::\s*(.*))?$").unwrap());
         static RE_OUT: LazyLock<Regex> =
-            LazyLock::new(|| Regex::new(r"^(\w+)\s*[-=><]+\]\s*(?::\s*(.*))?$").unwrap());
+            LazyLock::new(|| Regex::new(r"^(\w+)\s*[-=><ox]+\]\s*(?:(?:\+\+|--|!!)\s*)?(?::\s*(.*))?$").unwrap());
+        let stripped = RE_COLOR.replace_all(line, "");
+        let line = stripped.as_ref();
 
         if let Some(caps) = RE_IN.captures(line) {
             let to = self.ensure_participant(&caps[1]);
@@ -271,8 +339,28 @@ impl SeqParser {
             return true;
         }
 
+        // Also handle "note across"
+        if let Some(rest) = line.strip_prefix("note across") {
+            let text = rest.trim().trim_start_matches(':').trim().to_string();
+            if text.is_empty() {
+                self.note_buffer = Some(NoteBuffer {
+                    position: NotePosition::Over,
+                    participants: Vec::new(),
+                    lines: Vec::new(),
+                });
+            } else {
+                self.events.push(Event::Note(Note {
+                    position: NotePosition::Over,
+                    participants: Vec::new(),
+                    text,
+                }));
+            }
+            return true;
+        }
+
+        // Allow optional color (#xxx) after participant list.
         static RE: LazyLock<Regex> = LazyLock::new(|| {
-            Regex::new(r"^(?:h|r)?note\s+(left|right|over)\s*(?:of\s+)?(\w+(?:\s*,\s*\w+)*)?\s*(?::\s*(.*))?$").unwrap()
+            Regex::new(r"^(?:h|r)?note\s+(left|right|over)\s*(?:of\s+)?(\w+(?:\s*,\s*\w+)*)?\s*(?:#\S+)?\s*(?::\s*(.*))?$").unwrap()
         });
 
         if let Some(caps) = RE.captures(line) {
@@ -498,19 +586,32 @@ impl SeqParser {
     }
 
     fn try_ref(&mut self, line: &str) -> bool {
-        static RE: LazyLock<Regex> = LazyLock::new(|| {
+        // Inline: ref over A, B : text
+        static RE_INLINE: LazyLock<Regex> = LazyLock::new(|| {
             Regex::new(r"^ref\s+over\s+(\w+(?:\s*,\s*\w+)*)\s*:\s*(.+)$").unwrap()
         });
+        // Multiline start: ref over A, B  (no colon)
+        static RE_START: LazyLock<Regex> = LazyLock::new(|| {
+            Regex::new(r"^ref\s+over\s+(\w+(?:\s*,\s*\w+)*)\s*$").unwrap()
+        });
 
-        if let Some(caps) = RE.captures(line) {
+        if let Some(caps) = RE_INLINE.captures(line) {
             let participants: Vec<String> =
                 caps[1].split(',').map(|s| s.trim().to_string()).collect();
             let text = caps[2].trim().to_string();
             self.events.push(Event::Ref(Ref { participants, text }));
-            true
-        } else {
-            false
+            return true;
         }
+        if let Some(caps) = RE_START.captures(line) {
+            let participants: Vec<String> =
+                caps[1].split(',').map(|s| s.trim().to_string()).collect();
+            self.ref_buffer = Some(RefBuffer {
+                participants,
+                lines: Vec::new(),
+            });
+            return true;
+        }
+        false
     }
 
     fn try_meta(&mut self, line: &str) -> bool {
@@ -534,8 +635,29 @@ impl SeqParser {
     }
 
     fn try_box(&mut self, line: &str) -> bool {
-        // Box declarations affect layout but for now we just skip them.
-        line.starts_with("box ") || line == "end box"
+        if line == "end box" {
+            self.events.push(Event::GroupEnd);
+            return true;
+        }
+        static RE: LazyLock<Regex> = LazyLock::new(|| {
+            Regex::new(r#"^box\s+"([^"]+)""#).unwrap()
+        });
+        if let Some(caps) = RE.captures(line) {
+            let label = caps[1].to_string();
+            self.events.push(Event::GroupStart(GroupStart {
+                kind: GroupKind::Group,
+                label: Some(label),
+            }));
+            return true;
+        }
+        if line.starts_with("box") {
+            self.events.push(Event::GroupStart(GroupStart {
+                kind: GroupKind::Group,
+                label: None,
+            }));
+            return true;
+        }
+        false
     }
 
     fn try_newpage(&mut self, line: &str) -> bool {
@@ -569,6 +691,23 @@ impl SeqParser {
     fn try_hide(&mut self, line: &str) -> bool {
         line.starts_with("hide ")
     }
+}
+
+/// Extract a `<<stereotype>>` marker from a label string.
+///
+/// Returns `(cleaned_label, Some(stereotype))` if found, or `(label, None)`.
+fn extract_stereotype_from_label(label: &str) -> (String, Option<String>) {
+    if let Some(start) = label.find("<<") {
+        if let Some(rel_end) = label[start..].find(">>") {
+            let end = start + rel_end;
+            let stereotype = label[start + 2..end].trim().to_string();
+            let cleaned = format!("{} {}", label[..start].trim(), label[end + 2..].trim())
+                .trim()
+                .to_string();
+            return (cleaned, Some(stereotype));
+        }
+    }
+    (label.to_string(), None)
 }
 
 fn parse_participant_kind(s: &str) -> ParticipantKind {

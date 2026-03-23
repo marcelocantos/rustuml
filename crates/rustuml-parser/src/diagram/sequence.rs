@@ -22,6 +22,8 @@ pub struct Participant {
     pub label: String,
     pub kind: ParticipantKind,
     pub order: Option<usize>,
+    /// Optional UML stereotype text, e.g. `<<service>>` → `"service"`.
+    pub stereotype: Option<String>,
 }
 
 /// The visual shape of a participant.

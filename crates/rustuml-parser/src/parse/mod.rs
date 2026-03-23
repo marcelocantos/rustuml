@@ -123,8 +123,13 @@ fn detect_uml_subtype(lines: &[String]) -> UmlSubtype {
             || trimmed.starts_with("database ")
             || trimmed.starts_with("collections ")
             || trimmed.starts_with("queue ")
+            || trimmed.starts_with("entity ")  // entity is also a sequence participant type
         {
             scores[0] += 5;
+        }
+        // box / end box are unambiguously sequence-diagram keywords.
+        if trimmed.starts_with("box ") || trimmed == "box" || trimmed == "end box" {
+            scores[0] += 10;
         }
         // "actor" is ambiguous (sequence or use case) — give slight score to both.
         if trimmed.starts_with("actor ") {

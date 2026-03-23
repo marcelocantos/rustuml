@@ -8,6 +8,7 @@ use std::fmt::Write;
 pub struct SvgBuilder {
     buf: String,
     indent: usize,
+    group_depth: usize,
 }
 
 impl SvgBuilder {
@@ -18,7 +19,7 @@ impl SvgBuilder {
             r#"<svg xmlns="http://www.w3.org/2000/svg" width="{width}" height="{height}" viewBox="0 0 {width} {height}">"#,
         )
         .unwrap();
-        Self { buf, indent: 1 }
+        Self { buf, indent: 1, group_depth: 0 }
     }
 
     pub fn rect(&mut self, x: f64, y: f64, w: f64, h: f64, fill: &str, stroke: &str) {
@@ -55,14 +56,19 @@ impl SvgBuilder {
     }
 
     pub fn text(&mut self, x: f64, y: f64, content: &str, anchor: &str, font_size: f64) {
-        // Check for creole markup.
-        if content.contains("**")
-            || content.contains("//")
-            || content.contains("__")
-            || content.contains("--")
+        // Check for creole markup: markers must appear at least twice (balanced pair)
+        // or HTML tags must be present, to avoid false positives in arrow labels.
+        let has_creole = (content.matches("**").count() >= 2)
+            || (content.matches("//").count() >= 2)
+            || (content.matches("__").count() >= 2)
+            || (content.matches("--").count() >= 2)
+            || (content.matches("\"\"").count() >= 2)
+            || content.contains('`')
             || content.contains("<b>")
             || content.contains("<i>")
-        {
+            || content.contains("<color:")
+            || content.contains("<mono>");
+        if has_creole {
             let rich = crate::creole::to_svg_tspans(content);
             self.line(&format!(
                 r#"<text x="{x}" y="{y}" text-anchor="{anchor}" font-family="sans-serif" font-size="{font_size}">{rich}</text>"#
@@ -85,6 +91,12 @@ impl SvgBuilder {
         self.line(&format!(
             r##"<polygon points="{x},{y} {x1},{y1} {x2},{y2}" fill="#000"/>"##
         ));
+    }
+
+    /// Emit a `<title>` element (SVG tooltip / accessibility text).
+    pub fn title(&mut self, content: &str) {
+        let escaped = escape_xml(content);
+        self.line(&format!("<title>{escaped}</title>"));
     }
 
     pub fn circle(&mut self, cx: f64, cy: f64, r: f64, fill: &str, stroke: &str) {
@@ -120,11 +132,23 @@ impl SvgBuilder {
     pub fn open_group(&mut self, class: &str) {
         self.line(&format!(r#"<g class="{class}">"#));
         self.indent += 1;
+        self.group_depth += 1;
     }
 
     pub fn close_group(&mut self) {
-        self.indent -= 1;
+        if self.group_depth == 0 {
+            return; // Ignore spurious close calls.
+        }
+        self.group_depth -= 1;
+        self.indent = self.indent.saturating_sub(1);
         self.line("</g>");
+    }
+
+    /// Close all open groups (call before rendering elements outside all groups).
+    pub fn close_all_groups(&mut self) {
+        while self.group_depth > 0 {
+            self.close_group();
+        }
     }
 
     pub fn open_link(&mut self, url: &str) {
