@@ -1479,10 +1479,31 @@ impl PreprocessContext {
             .to_string();
 
         // Then apply !define token macros (word-boundary bare-word substitution).
-        for (name, value) in &self.token_defines {
-            if let Ok(re) = Regex::new(&format!(r"\b{}\b", regex::escape(name))) {
-                result = re.replace_all(&result, value.as_str()).to_string();
+        // Avoid compiling a Regex per token per call — use manual word-boundary matching.
+        if !self.token_defines.is_empty() {
+            let mut out = String::with_capacity(result.len());
+            let chars: Vec<char> = result.chars().collect();
+            let mut i = 0;
+            while i < chars.len() {
+                // Find the start of a word (alphanumeric or underscore).
+                if chars[i].is_alphanumeric() || chars[i] == '_' {
+                    // Find end of word.
+                    let word_start = i;
+                    while i < chars.len() && (chars[i].is_alphanumeric() || chars[i] == '_') {
+                        i += 1;
+                    }
+                    let word: String = chars[word_start..i].iter().collect();
+                    if let Some(replacement) = self.token_defines.get(&word) {
+                        out.push_str(replacement);
+                    } else {
+                        out.push_str(&word);
+                    }
+                } else {
+                    out.push(chars[i]);
+                    i += 1;
+                }
             }
+            result = out;
         }
 
         let after_vars = result;
