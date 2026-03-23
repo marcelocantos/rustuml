@@ -30,7 +30,7 @@ pub enum ActivityStep {
     While(WhileBlock),
     EndWhile(Option<String>),
     Repeat,
-    RepeatWhile(String),
+    RepeatWhile(RepeatWhileBlock),
     Fork,
     ForkAgain,
     EndFork,
@@ -38,9 +38,9 @@ pub enum ActivityStep {
     SplitAgain,
     EndSplit,
     Swimlane(String),
-    Partition(String),
+    Partition(PartitionBlock),
     EndPartition,
-    Note(String),
+    Note(NoteBlock),
     Detach,
     Kill,
 }
@@ -59,6 +59,32 @@ pub struct ElseIfBranch {
 
 #[derive(Debug, Serialize, Deserialize)]
 pub struct WhileBlock {
+    pub condition: String,
+    pub is_label: Option<String>,
+}
+
+/// Note position (left or right of the action).
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub enum NotePosition {
+    Left,
+    Right,
+}
+
+#[derive(Debug, Serialize, Deserialize)]
+pub struct NoteBlock {
+    pub text: String,
+    pub color: Option<String>,
+    pub position: NotePosition,
+}
+
+#[derive(Debug, Serialize, Deserialize)]
+pub struct PartitionBlock {
+    pub name: String,
+    pub color: Option<String>,
+}
+
+#[derive(Debug, Serialize, Deserialize)]
+pub struct RepeatWhileBlock {
     pub condition: String,
     pub is_label: Option<String>,
 }

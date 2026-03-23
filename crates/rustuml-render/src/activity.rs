@@ -3,7 +3,7 @@
 
 //! Activity diagram SVG renderer.
 
-use rustuml_parser::diagram::activity::*;
+use rustuml_parser::diagram::activity::{ActivityDiagram, ActivityStep, NotePosition};
 
 use crate::style::Theme;
 use crate::svg::SvgBuilder;
@@ -169,26 +169,33 @@ pub fn render(diagram: &ActivityDiagram, theme: &Theme) -> String {
                     "none",
                     "#999",
                 );
-                svg.text(MARGIN, y + 15.0, name, "start", SMALL_FONT);
+                svg.text(MARGIN, y + 15.0, &name.name, "start", SMALL_FONT);
                 y += 20.0;
             }
             ActivityStep::EndPartition => {
                 svg.close_group();
                 y += 10.0;
             }
-            ActivityStep::Note(text) => {
+            ActivityStep::Note(note) => {
+                let fill = note.color.as_deref().unwrap_or("#FEFFDD");
+                let note_width = 100.0;
+                let note_height = 20.0;
+                let note_x = match note.position {
+                    NotePosition::Right => cx + ACTION_WIDTH / 2.0 + 10.0,
+                    NotePosition::Left => cx - ACTION_WIDTH / 2.0 - note_width - 10.0,
+                };
                 svg.rect(
-                    cx + ACTION_WIDTH / 2.0 + 10.0,
+                    note_x,
                     y - 10.0,
-                    100.0,
-                    20.0,
-                    "#FEFFDD",
+                    note_width,
+                    note_height,
+                    fill,
                     "#000",
                 );
                 svg.text(
-                    cx + ACTION_WIDTH / 2.0 + 15.0,
+                    note_x + 5.0,
                     y + 4.0,
-                    text,
+                    &note.text,
                     "start",
                     SMALL_FONT,
                 );
@@ -209,13 +216,63 @@ pub fn render(diagram: &ActivityDiagram, theme: &Theme) -> String {
                     "middle",
                     SMALL_FONT,
                 );
+                // "is (label)" appears to the right of the diamond on the loop-body path.
+                if let Some(label) = &w.is_label {
+                    svg.text(
+                        cx + DIAMOND_SIZE + 5.0,
+                        y + DIAMOND_SIZE * 2.0 + 4.0,
+                        label,
+                        "start",
+                        SMALL_FONT,
+                    );
+                }
                 y += DIAMOND_SIZE * 2.0 + V_GAP / 2.0;
             }
             ActivityStep::EndWhile(label) => {
                 if let Some(l) = label {
-                    svg.text(cx + DIAMOND_SIZE + 5.0, y, l, "start", SMALL_FONT);
+                    svg.text(cx - DIAMOND_SIZE - 5.0, y, l, "end", SMALL_FONT);
                 }
                 y += V_GAP / 4.0;
+            }
+            ActivityStep::Repeat => {
+                // Small diamond marks the start of a repeat-until loop body.
+                svg.line_segment(cx, y - V_GAP / 2.0, cx, y, "#000", false);
+                svg.diamond(
+                    cx,
+                    y + DIAMOND_SIZE / 2.0,
+                    DIAMOND_SIZE / 2.0,
+                    &as_.decision_background,
+                    "#000",
+                );
+                y += DIAMOND_SIZE + V_GAP / 2.0;
+            }
+            ActivityStep::RepeatWhile(rw) => {
+                svg.line_segment(cx, y - V_GAP / 2.0, cx, y, "#000", false);
+                svg.diamond(
+                    cx,
+                    y + DIAMOND_SIZE,
+                    DIAMOND_SIZE,
+                    &as_.decision_background,
+                    "#000",
+                );
+                svg.text(
+                    cx,
+                    y + DIAMOND_SIZE + 4.0,
+                    &rw.condition,
+                    "middle",
+                    SMALL_FONT,
+                );
+                // "is (label)" appears to the right on the loop-back path.
+                if let Some(label) = &rw.is_label {
+                    svg.text(
+                        cx + DIAMOND_SIZE + 5.0,
+                        y + DIAMOND_SIZE + 4.0,
+                        label,
+                        "start",
+                        SMALL_FONT,
+                    );
+                }
+                y += DIAMOND_SIZE * 2.0 + V_GAP / 2.0;
             }
             ActivityStep::Switch(expr) => {
                 svg.line_segment(cx, y - V_GAP / 2.0, cx, y, "#000", false);

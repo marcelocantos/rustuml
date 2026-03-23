@@ -16,6 +16,10 @@ pub fn parse_activity(lines: &[String]) -> Result<ActivityDiagram, ParseError> {
     for (i, line) in lines.iter().enumerate() {
         let trimmed = line.trim();
         if trimmed.is_empty() {
+            // Still accumulate blank lines inside a multi-line note.
+            if parser.pending_note.is_some() {
+                parser.accumulate_note_line("");
+            }
             continue;
         }
         parser.parse_line(i + 1, trimmed)?;
@@ -23,9 +27,17 @@ pub fn parse_activity(lines: &[String]) -> Result<ActivityDiagram, ParseError> {
     Ok(parser.finish())
 }
 
+/// State for a note being accumulated across multiple lines.
+struct PendingNote {
+    position: NotePosition,
+    color: Option<String>,
+    lines: Vec<String>,
+}
+
 struct ActivityParser {
     meta: DiagramMeta,
     steps: Vec<ActivityStep>,
+    pending_note: Option<PendingNote>,
 }
 
 impl ActivityParser {
@@ -33,6 +45,7 @@ impl ActivityParser {
         Self {
             meta: DiagramMeta::default(),
             steps: Vec::new(),
+            pending_note: None,
         }
     }
 
@@ -43,7 +56,37 @@ impl ActivityParser {
         }
     }
 
+    fn accumulate_note_line(&mut self, line: &str) {
+        if let Some(ref mut pn) = self.pending_note {
+            pn.lines.push(line.to_string());
+        }
+    }
+
+    fn flush_pending_note(&mut self) {
+        if let Some(pn) = self.pending_note.take() {
+            let text = pn.lines.join("\n");
+            let text = text.trim().to_string();
+            if !text.is_empty() {
+                self.steps.push(ActivityStep::Note(NoteBlock {
+                    text,
+                    color: pn.color,
+                    position: pn.position,
+                }));
+            }
+        }
+    }
+
     fn parse_line(&mut self, _line_num: usize, line: &str) -> Result<(), ParseError> {
+        // If we're inside a multi-line note, look for end note or accumulate.
+        if self.pending_note.is_some() {
+            if line == "end note" {
+                self.flush_pending_note();
+            } else {
+                self.accumulate_note_line(line);
+            }
+            return Ok(());
+        }
+
         match line {
             "start" => self.steps.push(ActivityStep::Start),
             "stop" => self.steps.push(ActivityStep::Stop),
@@ -164,12 +207,15 @@ impl ActivityParser {
     }
 
     fn try_repeat_while(&mut self, line: &str) -> bool {
-        static RE: LazyLock<Regex> =
-            LazyLock::new(|| Regex::new(r"^repeat\s+while\s*\((.+?)\)").unwrap());
+        static RE: LazyLock<Regex> = LazyLock::new(|| {
+            Regex::new(r"^repeat\s+while\s*\((.+?)\)\s*(?:is\s*\((.+?)\))?").unwrap()
+        });
 
         if let Some(caps) = RE.captures(line) {
-            self.steps
-                .push(ActivityStep::RepeatWhile(caps[1].trim().to_string()));
+            self.steps.push(ActivityStep::RepeatWhile(RepeatWhileBlock {
+                condition: caps[1].trim().to_string(),
+                is_label: caps.get(2).map(|m| m.as_str().trim().to_string()),
+            }));
             true
         } else {
             false
@@ -217,20 +263,27 @@ impl ActivityParser {
     }
 
     fn try_partition(&mut self, line: &str) -> bool {
-        static RE: LazyLock<Regex> =
-            LazyLock::new(|| Regex::new(r#"^partition\s+(?:"([^"]+)"|(\w+))\s*\{?"#).unwrap());
+        // Optional color prefix: #colorname or #RRGGBB, then quoted or unquoted name.
+        static RE: LazyLock<Regex> = LazyLock::new(|| {
+            Regex::new(
+                r#"^partition\s+(?:(#[A-Za-z0-9]+)\s+)?(?:"([^"]+)"|([A-Za-z_]\w*))\s*\{?"#,
+            )
+            .unwrap()
+        });
 
         if line == "}" {
             self.steps.push(ActivityStep::EndPartition);
             return true;
         }
         if let Some(caps) = RE.captures(line) {
+            let color = caps.get(1).map(|m| m.as_str().to_string());
             let name = caps
-                .get(1)
-                .or(caps.get(2))
+                .get(2)
+                .or(caps.get(3))
                 .map(|m| m.as_str().to_string())
                 .unwrap_or_default();
-            self.steps.push(ActivityStep::Partition(name));
+            self.steps
+                .push(ActivityStep::Partition(PartitionBlock { name, color }));
             true
         } else {
             false
@@ -238,13 +291,48 @@ impl ActivityParser {
     }
 
     fn try_note(&mut self, line: &str) -> bool {
-        if line.starts_with("note ") || line == "end note" {
-            // For now, capture simple inline notes.
-            if let Some(rest) = line.strip_prefix("note right") {
-                let text = rest.trim_start_matches(':').trim();
-                if !text.is_empty() {
-                    self.steps.push(ActivityStep::Note(text.to_string()));
+        // Match: note (left|right) [#COLOR] [: inline text]
+        static RE: LazyLock<Regex> = LazyLock::new(|| {
+            Regex::new(r"^note\s+(left|right)(?:\s+(#[0-9A-Fa-f]{6}|#\w+))?(?:\s*:\s*(.+))?$")
+                .unwrap()
+        });
+
+        if !line.starts_with("note ") {
+            return false;
+        }
+
+        if let Some(caps) = RE.captures(line) {
+            let position = if &caps[1] == "left" {
+                NotePosition::Left
+            } else {
+                NotePosition::Right
+            };
+            let color = caps.get(2).map(|m| {
+                // Normalize: ensure hex colors are uppercase with #
+                let s = m.as_str();
+                if s.starts_with('#') && s.len() == 7 && s[1..].chars().all(|c| c.is_ascii_hexdigit()) {
+                    format!("#{}", s[1..].to_uppercase())
+                } else {
+                    s.to_string()
                 }
+            });
+            if let Some(inline_text) = caps.get(3) {
+                // Inline note: emit immediately.
+                let text = inline_text.as_str().trim().to_string();
+                if !text.is_empty() {
+                    self.steps.push(ActivityStep::Note(NoteBlock {
+                        text,
+                        color,
+                        position,
+                    }));
+                }
+            } else {
+                // Multi-line note: start accumulation.
+                self.pending_note = Some(PendingNote {
+                    position,
+                    color,
+                    lines: Vec::new(),
+                });
             }
             true
         } else {
@@ -308,7 +396,7 @@ mod tests {
     fn repeat_loop() {
         let d = parse("start\nrepeat\n  :action;\nrepeat while (again?)\nstop");
         assert!(matches!(d.steps[1], ActivityStep::Repeat));
-        assert!(matches!(d.steps[3], ActivityStep::RepeatWhile(ref s) if s == "again?"));
+        assert!(matches!(d.steps[3], ActivityStep::RepeatWhile(ref b) if b.condition == "again?"));
     }
 
     #[test]
@@ -348,7 +436,7 @@ mod tests {
     #[test]
     fn partition() {
         let d = parse("start\npartition Init {\n  :step1;\n}\nstop");
-        assert!(matches!(d.steps[1], ActivityStep::Partition(ref s) if s == "Init"));
+        assert!(matches!(d.steps[1], ActivityStep::Partition(ref s) if s.name == "Init"));
         assert!(matches!(d.steps[3], ActivityStep::EndPartition));
     }
 
