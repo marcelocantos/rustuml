@@ -1,6 +1,0 @@
-@startuml
-skinparam handwritten true
-[*] --> A
-A --> B
-B --> [*]
-@enduml

@@ -1,9 +1,0 @@
-@startuml
-skinparam class {
-  BackgroundColor<<controller>> lightsalmon
-  BorderColor<<controller>> red
-}
-class MyClass <<controller>> {
-  +void method()
-}
-@enduml

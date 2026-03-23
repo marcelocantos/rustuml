@@ -1,5 +1,0 @@
-@startuml
-note as N
-  <font size='18'>font size</font>
-end note
-@enduml

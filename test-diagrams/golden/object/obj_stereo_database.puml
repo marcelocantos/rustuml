@@ -1,5 +1,0 @@
-@startuml
-object MyObject <<database>> {
-  id = 1
-}
-@enduml

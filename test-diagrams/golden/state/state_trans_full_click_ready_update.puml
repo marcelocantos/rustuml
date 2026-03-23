@@ -1,5 +1,0 @@
-@startuml
-[*] --> A
-A --> B : click [ready] / update()
-B --> [*]
-@enduml

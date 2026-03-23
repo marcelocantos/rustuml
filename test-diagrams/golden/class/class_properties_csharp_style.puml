@@ -1,8 +1,0 @@
-@startuml
-class CSharpClass {
-  +String Name { get; set; }
-  +int Age { get; }
-  +double Score { set; }
-  +bool IsValid { get; private set; }
-}
-@enduml

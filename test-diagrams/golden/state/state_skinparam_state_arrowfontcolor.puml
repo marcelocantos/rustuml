@@ -1,8 +1,0 @@
-@startuml
-skinparam state {
-  ArrowFontColor Black
-}
-[*] --> A
-A --> B : event
-B --> [*]
-@enduml

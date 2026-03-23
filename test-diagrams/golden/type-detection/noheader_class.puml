@@ -1,7 +1,0 @@
-class Foo {
-  +name : String
-}
-class Bar {
-  +value : int
-}
-Foo <|-- Bar

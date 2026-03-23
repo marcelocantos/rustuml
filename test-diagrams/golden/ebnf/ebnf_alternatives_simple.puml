@@ -1,3 +1,0 @@
-@startebnf
-boolean = "true" | "false";
-@endebnf

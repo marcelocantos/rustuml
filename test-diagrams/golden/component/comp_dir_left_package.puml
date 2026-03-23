@@ -1,9 +1,0 @@
-@startuml
-package GroupA {
-  component A
-}
-package GroupB {
-  component B
-}
-A -left-> B
-@enduml

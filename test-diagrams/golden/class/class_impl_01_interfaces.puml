@@ -1,7 +1,0 @@
-@startuml
-interface I1 {
-  +void method1()
-}
-class Impl
-Impl ..|> I1
-@enduml

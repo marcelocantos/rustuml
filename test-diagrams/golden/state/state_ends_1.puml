@@ -1,8 +1,0 @@
-@startuml
-state end0 <<end>>
-[*] --> Start
-Start --> Middle
-Middle --> end0 : terminate0
-Middle --> Done : complete
-Done --> [*]
-@enduml

@@ -1,5 +1,0 @@
-@startuml
-skinparam boundaryBackgroundColor White
-boundary Alice
-Alice -> Bob : hello
-@enduml

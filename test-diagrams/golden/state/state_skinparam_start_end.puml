@@ -1,8 +1,0 @@
-@startuml
-skinparam state {
-  StartColor Green
-  EndColor Red
-}
-[*] --> A
-A --> [*]
-@enduml

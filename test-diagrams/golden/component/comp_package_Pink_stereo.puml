@@ -1,7 +1,0 @@
-@startuml
-package "My Container" #Pink <<cloud>> {
-  component Service <<service>>
-  component Worker <<worker>>
-  Service --> Worker
-}
-@enduml

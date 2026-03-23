@@ -1,5 +1,0 @@
-@startuml
-skinparam SequenceResponseMessageBelowArrow false
-Alice -> Bob : request
-Bob --> Alice : response
-@enduml

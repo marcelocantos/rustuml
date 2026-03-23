@@ -1,8 +1,0 @@
-@startuml
-start
-:Pre 1;
-repeat
-  :R;
-repeatwhile (m?)
-stop
-@enduml

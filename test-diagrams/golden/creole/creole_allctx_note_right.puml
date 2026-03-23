@@ -1,4 +1,0 @@
-@startuml
-Alice -> Bob : hello
-note right : **bold** //italic// __under__
-@enduml

@@ -1,6 +1,0 @@
-@startuml
-skinparam arrowFontColor red
-class Foo
-class Bar
-Foo --> Bar
-@enduml

@@ -1,6 +1,0 @@
-@startuml
-[-> Alice: incoming
-Alice ->]: outgoing
-[-> Bob: from left
-Bob ->[: to right
-@enduml

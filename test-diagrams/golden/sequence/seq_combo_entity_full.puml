@@ -1,9 +1,0 @@
-@startuml
-title entity full combo
-entity "Alice Smith" as A <<user>> #lightblue order 10
-entity "Bob Jones" as B <<service>> #lightyellow order 20
-A -> B : request
-note over A : thinking
-B --> A : response
-note right of B : processed
-@enduml

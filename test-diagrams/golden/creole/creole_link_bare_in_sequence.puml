@@ -1,4 +1,0 @@
-@startuml
-Alice -> Bob : [[https://plantuml.com]]
-note right : [[https://plantuml.com]]
-@enduml

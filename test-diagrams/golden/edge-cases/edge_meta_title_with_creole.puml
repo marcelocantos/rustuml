@@ -1,4 +1,0 @@
-@startuml
-title **Bold Title** with //italic// and <color:red>color</color>
-class Foo
-@enduml

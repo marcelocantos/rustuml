@@ -1,6 +1,0 @@
-@startuml
-skinparam ranksep 50
-class Foo
-class Bar
-Foo --> Bar
-@enduml

@@ -1,5 +1,0 @@
-@startuml
-boundary B1
-queue Q2
-B1 -> Q2: message
-@enduml

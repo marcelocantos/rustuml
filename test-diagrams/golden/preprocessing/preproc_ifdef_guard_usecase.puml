@@ -1,9 +1,0 @@
-@startuml
-!define RENDER_USECASE
-
-!ifdef RENDER_USECASE
-actor A
-usecase UC
-A --> UC
-!endif
-@enduml

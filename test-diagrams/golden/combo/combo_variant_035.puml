@@ -1,8 +1,0 @@
-@startuml
-title "Combo Variant 35"
-class Class1_35 { +method1() }
-class Class2_35 { +method2() }
-class Class3_35 { +method3() }
-Class1_35 --> Class2_35
-Class2_35 --> Class3_35
-@enduml

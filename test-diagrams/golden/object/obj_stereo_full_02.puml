@@ -1,8 +1,0 @@
-@startuml
-object MyObj <<control>> #green {
-  id = 2
-  type = "control"
-  active = true
-}
-note right : Stereotype: control
-@enduml

@@ -1,5 +1,0 @@
-@startuml
-note as N
-  <s>strike s tag</s>
-end note
-@enduml

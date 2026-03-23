@@ -1,6 +1,0 @@
-@startuml
-!theme cyborg
-class Foo
-class Bar
-Foo --> Bar
-@enduml

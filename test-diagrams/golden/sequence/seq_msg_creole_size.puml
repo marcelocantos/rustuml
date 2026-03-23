@@ -1,4 +1,0 @@
-@startuml
-Alice -> Bob : <size:20>large text</size>
-Bob --> Alice : <size:8>tiny text</size>
-@enduml

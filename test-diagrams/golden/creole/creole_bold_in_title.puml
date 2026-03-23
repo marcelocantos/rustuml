@@ -1,4 +1,0 @@
-@startuml
-title **Bold Title**
-Alice -> Bob : hello
-@enduml

@@ -1,6 +1,0 @@
-@startuml
-queue Alice
-participant Bob
-Alice ->> Bob : queue sends thin_solid
-Bob ->> Alice : queue receives thin_solid
-@enduml

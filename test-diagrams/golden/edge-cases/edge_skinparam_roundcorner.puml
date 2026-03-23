@@ -1,6 +1,0 @@
-@startuml
-skinparam roundCorner 15
-class Foo {
-  field: String
-}
-@enduml

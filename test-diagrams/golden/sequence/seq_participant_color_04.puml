@@ -1,6 +1,0 @@
-@startuml
-participant Alice #yellow
-participant Bob
-Alice -> Bob : colored participant
-Bob --> Alice : reply
-@enduml

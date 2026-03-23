@@ -1,5 +1,0 @@
-@startuml
-state A #cyan
-[*] --> A
-A --> [*]
-@enduml

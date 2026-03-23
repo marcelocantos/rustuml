@@ -1,6 +1,0 @@
-@startuml
-queue Alice
-participant Bob
-Alice --> Bob : queue sends dotted
-Bob --> Alice : queue receives dotted
-@enduml

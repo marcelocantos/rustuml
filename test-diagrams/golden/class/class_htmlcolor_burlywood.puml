@@ -1,5 +1,0 @@
-@startuml
-class ColorTest #BurlyWood {
-  +void method()
-}
-@enduml

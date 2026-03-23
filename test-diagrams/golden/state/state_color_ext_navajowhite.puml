@@ -1,5 +1,0 @@
-@startuml
-state A #NavajoWhite
-[*] --> A
-A --> [*]
-@enduml

@@ -1,8 +1,0 @@
-@startuml
-state Root {
-  [*] --> Leaf
-  Leaf --> [*]
-}
-[*] --> Root
-Root --> [*]
-@enduml

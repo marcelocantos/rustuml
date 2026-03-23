@@ -1,4 +1,0 @@
-@startuml
-Alice -> Bob : ✓ ✗ ★ ☆ ♥ ♦
-note right : ✓ ✗ ★ ☆ ♥ ♦
-@enduml

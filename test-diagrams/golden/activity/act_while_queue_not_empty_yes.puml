@@ -1,8 +1,0 @@
-@startuml
-
-start
-while (queue not empty?) is (yes)
-  :Process iteration;
-endwhile (no)
-stop
-@enduml

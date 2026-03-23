@@ -1,5 +1,0 @@
-@startuml
-state A #LightSalmon
-[*] --> A
-A --> [*]
-@enduml

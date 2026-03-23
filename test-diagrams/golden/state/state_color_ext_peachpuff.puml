@@ -1,5 +1,0 @@
-@startuml
-state A #PeachPuff
-[*] --> A
-A --> [*]
-@enduml

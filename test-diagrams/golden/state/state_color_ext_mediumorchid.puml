@@ -1,5 +1,0 @@
-@startuml
-state A #MediumOrchid
-[*] --> A
-A --> [*]
-@enduml

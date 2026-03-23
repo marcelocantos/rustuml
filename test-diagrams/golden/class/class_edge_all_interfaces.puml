@@ -1,9 +1,0 @@
-@startuml
-interface A
-interface B
-interface C
-interface D
-A --|> B
-B --|> C
-C --|> D
-@enduml

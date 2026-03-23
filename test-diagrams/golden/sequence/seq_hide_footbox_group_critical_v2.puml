@@ -1,9 +1,0 @@
-@startuml
-hide footbox
-A -> B : start
-critical cond
-  B -> C : action
-  C --> B : done
-end
-B --> A : done
-@enduml

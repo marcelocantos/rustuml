@@ -1,6 +1,0 @@
-@startuml
-interface Combo <<entity>>  {
-  -String name
-  -void method()
-}
-@enduml

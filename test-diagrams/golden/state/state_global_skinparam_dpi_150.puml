@@ -1,6 +1,0 @@
-@startuml
-skinparam dpi 150
-[*] --> A
-A --> B : event
-B --> [*]
-@enduml

@@ -1,5 +1,0 @@
-@startuml
-state A #Gold
-[*] --> A
-A --> [*]
-@enduml

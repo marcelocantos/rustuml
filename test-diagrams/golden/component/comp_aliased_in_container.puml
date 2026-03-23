@@ -1,9 +1,0 @@
-@startuml
-package "My Package" {
-  component "Long Component Name A" as LCNA
-  component "Long Component Name B" as LCNB
-  component "Long Component Name C" as LCNC
-  LCNA --> LCNB
-  LCNB --> LCNC
-}
-@enduml

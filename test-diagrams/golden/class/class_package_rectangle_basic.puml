@@ -1,7 +1,0 @@
-@startuml
-package mypackage <<rectangle>> {
-  class MyClass {
-    +void method()
-  }
-}
-@enduml

@@ -1,6 +1,0 @@
-@startuml
-
-start
-#magenta:Action with receive<
-stop
-@enduml

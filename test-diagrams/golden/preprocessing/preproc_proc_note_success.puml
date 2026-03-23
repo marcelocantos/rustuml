@@ -1,9 +1,0 @@
-@startuml
-!procedure $note_success($msg)
-  note as N_success
-    <back:LightGreen>**SUCCESS**: $msg</back>
-  end note
-!endprocedure
-
-$note_success("This is a success message")
-@enduml

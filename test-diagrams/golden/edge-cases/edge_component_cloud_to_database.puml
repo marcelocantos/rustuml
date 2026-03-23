@@ -1,5 +1,0 @@
-@startuml
-cloud MyA
-database MyB
-MyA --> MyB
-@enduml

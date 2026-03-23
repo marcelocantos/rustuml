@@ -1,6 +1,0 @@
-@startuml
-abstract class Combo <<service>> #lightyellow {
-  +String name
-  +void method()
-}
-@enduml

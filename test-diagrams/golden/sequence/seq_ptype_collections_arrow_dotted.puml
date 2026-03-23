@@ -1,6 +1,0 @@
-@startuml
-collections Alice
-participant Bob
-Alice --> Bob : collections sends dotted
-Bob --> Alice : collections receives dotted
-@enduml

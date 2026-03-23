@@ -1,6 +1,0 @@
-@startuml
-Alice -> Bob : hello
-note over Alice #green : colored note #green
-note right of Bob #green : right colored
-Bob --> Alice : hi
-@enduml

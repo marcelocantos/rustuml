@@ -1,5 +1,0 @@
-@startuml
-control C1
-database DB2
-C1 -> DB2: message
-@enduml

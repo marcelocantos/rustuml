@@ -1,9 +1,0 @@
-@startuml
-actor "ユーザー" as U
-rectangle "システム" {
-  usecase "ログイン" as L
-  usecase "データ閲覧" as D
-}
-U --> L
-U --> D
-@enduml

@@ -1,8 +1,0 @@
-@startuml
-object MyObj <<entity>> #red {
-  id = 0
-  type = "entity"
-  active = true
-}
-note right : Stereotype: entity
-@enduml

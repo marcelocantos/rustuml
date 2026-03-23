@@ -1,6 +1,0 @@
-@startuml
-autonumber 1 1
-Alice -> Bob : msg
-Bob --> Alice : reply
-Alice -> Bob : msg2
-@enduml

@@ -1,6 +1,0 @@
-@startuml
-class "//ItalicClassName//" {
-  //italicField//: String
-  //italicMethod//()
-}
-@enduml

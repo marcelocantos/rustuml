@@ -1,3 +1,0 @@
-@startlatex
-f(z_0) = \frac{1}{2\pi i} \oint_C \frac{f(z)}{z - z_0}\,dz
-@endlatex

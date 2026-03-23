@@ -1,6 +1,0 @@
-@startuml
-skinparam componentStyle uml2
-component A
-component B
-A -up-> B
-@enduml

@@ -1,5 +1,0 @@
-@startuml
-note as N
-  show ~~ tilde
-end note
-@enduml

@@ -1,9 +1,0 @@
-@startuml
-skinparam class {
-  BackgroundColor<<entity>> lightyellow
-  BorderColor<<entity>> orange
-}
-class MyClass <<entity>> {
-  +void method()
-}
-@enduml

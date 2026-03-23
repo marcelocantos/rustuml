@@ -1,8 +1,0 @@
-@startuml
-!define LEVEL 5
-!define PREFIX Level_LEVEL_
-
-class PREFIX5 {
-  depth: int = LEVEL
-}
-@enduml

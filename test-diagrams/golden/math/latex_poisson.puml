@@ -1,3 +1,0 @@
-@startlatex
-P(X = k) = \frac{\lambda^k e^{-\lambda}}{k!}
-@endlatex

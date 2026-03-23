@@ -1,5 +1,0 @@
-@startuml
-note as N1
-  100\%
-end note
-@enduml

@@ -1,5 +1,0 @@
-@startuml
-!theme minty
-Alice -> Bob : hello
-Bob --> Alice : world
-@enduml

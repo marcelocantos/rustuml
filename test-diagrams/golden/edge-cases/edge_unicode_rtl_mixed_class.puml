@@ -1,7 +1,0 @@
-@startuml
-class MyClass {
-  arabicLabel: "نص عربي"
-  hebrewLabel: "טקסט עברי"
-  englishLabel: String
-}
-@enduml

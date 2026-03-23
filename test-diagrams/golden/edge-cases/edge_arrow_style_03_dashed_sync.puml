@@ -1,3 +1,0 @@
-@startuml
-A -->> B: dashed sync
-@enduml

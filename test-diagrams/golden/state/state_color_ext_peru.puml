@@ -1,5 +1,0 @@
-@startuml
-state A #Peru
-[*] --> A
-A --> [*]
-@enduml

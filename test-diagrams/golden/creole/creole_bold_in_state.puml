@@ -1,4 +1,0 @@
-@startuml
-state "**BoldState**" as S
-[*] --> S
-@enduml

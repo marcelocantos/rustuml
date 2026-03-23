@@ -1,7 +1,0 @@
-@startuml
-Alice -> Bob : before
-||10||
-Bob --> Alice : after
-||10||
-Alice -> Bob : again
-@enduml

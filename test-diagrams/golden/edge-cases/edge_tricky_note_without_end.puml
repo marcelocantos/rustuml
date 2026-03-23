@@ -1,4 +1,0 @@
-@startuml
-Alice -> Bob: hello
-note right: inline note without end
-@enduml

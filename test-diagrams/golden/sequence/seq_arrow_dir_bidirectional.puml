@@ -1,6 +1,0 @@
-@startuml
-Alice -> Bob : request
-Bob -> Alice : counter-request
-Alice --> Bob : ack counter
-Bob --> Alice : ack original
-@enduml

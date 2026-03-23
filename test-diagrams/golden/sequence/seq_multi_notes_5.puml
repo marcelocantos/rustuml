@@ -1,9 +1,0 @@
-@startuml
-Alice -> Bob : start
-note over Alice : note 1
-note over Bob : note 2
-note right of Bob : note 3
-note left of Alice : note 4
-note over Alice, Bob : note 5
-Bob --> Alice : done
-@enduml

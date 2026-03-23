@@ -1,7 +1,0 @@
-@startuml
-participant Alice
-participant Bob
-Alice -> Bob : hello
-hnote over Bob #lightblue : hnote content
-Bob --> Alice : hi
-@enduml

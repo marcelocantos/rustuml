@@ -1,5 +1,0 @@
-@startuml
-component MyA
-artifact MyB
-MyA --> MyB
-@enduml

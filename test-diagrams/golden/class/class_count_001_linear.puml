@@ -1,4 +1,0 @@
-@startuml
-class Cls001 { +void m1() }
-
-@enduml

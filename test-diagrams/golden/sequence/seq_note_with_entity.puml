@@ -1,8 +1,0 @@
-@startuml
-entity X
-participant Y
-X -> Y : hello
-note over X : note over entity
-note right of X : right of entity
-Y --> X : hi
-@enduml

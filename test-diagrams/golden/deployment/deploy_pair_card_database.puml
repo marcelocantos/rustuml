@@ -1,5 +1,0 @@
-@startuml
-card Source
-database Target
-Source --> Target
-@enduml

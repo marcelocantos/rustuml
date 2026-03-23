@@ -1,8 +1,0 @@
-@startuml
-
-start
-while (data available?) is (yes)
-  :Process iteration;
-endwhile (no)
-stop
-@enduml

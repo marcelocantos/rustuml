@@ -1,7 +1,0 @@
-@startuml
-entity X
-participant Y
-X -> Y : go
-note over X : note/entity
-Y --> X : back
-@enduml

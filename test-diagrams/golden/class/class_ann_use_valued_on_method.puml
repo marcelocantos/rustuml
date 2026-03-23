@@ -1,9 +1,0 @@
-@startuml
-annotation MyAnnotation {
-  +String value()
-}
-class Target {
-  <<MyAnnotation>>
-  +void method()
-}
-@enduml

@@ -1,7 +1,0 @@
-@startuml
-cloud myPkg #wheat {
-  class MyClass {
-    +void method()
-  }
-}
-@enduml

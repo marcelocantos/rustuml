@@ -1,5 +1,0 @@
-@startuml
-class TypeA
-enum TypeB
-TypeA -- TypeB
-@enduml

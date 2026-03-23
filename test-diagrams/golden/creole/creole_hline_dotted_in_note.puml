@@ -1,7 +1,0 @@
-@startuml
-note as N
-  before dots
-  ....
-  after dots
-end note
-@enduml

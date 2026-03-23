@@ -1,9 +1,0 @@
-@startuml
-hide footbox
-class Foo {
-  field: String
-  method(): void
-}
-class Bar
-Foo --> Bar
-@enduml

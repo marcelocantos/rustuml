@@ -1,8 +1,0 @@
-@startuml
-A -> B : init
-par
-  A --> B : dotted branch 1
-and
-  A --> C : dotted branch 2
-end
-@enduml

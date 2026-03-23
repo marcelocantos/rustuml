@@ -1,6 +1,0 @@
-@startuml
-participant Alice #00FF00
-participant Bob
-Alice -> Bob : hello
-Bob --> Alice : hi
-@enduml

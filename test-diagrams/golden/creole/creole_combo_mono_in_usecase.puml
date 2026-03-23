@@ -1,5 +1,0 @@
-@startuml
-actor """mono"" Actor" as A111
-usecase """mono"" Case" as UC111
-A111 --> UC111
-@enduml

@@ -1,4 +1,0 @@
-@startuml
-Alice -[#red]> Bob : forward (colored mixed)
-Bob -[#blue]--> Alice : backward
-@enduml

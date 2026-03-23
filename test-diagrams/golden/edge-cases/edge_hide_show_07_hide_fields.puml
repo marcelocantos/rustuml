@@ -1,9 +1,0 @@
-@startuml
-hide fields
-class Foo {
-  field: String
-  method(): void
-}
-class Bar
-Foo --> Bar
-@enduml

@@ -1,5 +1,0 @@
-@startuml
-state A <<entryPoint>> #blue
-[*] --> A
-A --> [*]
-@enduml

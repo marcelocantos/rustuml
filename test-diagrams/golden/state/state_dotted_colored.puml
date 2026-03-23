@@ -1,6 +1,0 @@
-@startuml
-[*] --> A
-A ..> B #red : dotted red
-B --> C : normal
-C ..> [*] #blue : dotted blue
-@enduml

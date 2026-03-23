@@ -1,9 +1,0 @@
-@startuml
-skinparam class {
-  BackgroundColor<<service>> lightblue
-  BorderColor<<service>> blue
-}
-class MyClass <<service>> {
-  +void method()
-}
-@enduml

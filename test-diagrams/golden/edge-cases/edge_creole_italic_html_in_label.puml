@@ -1,3 +1,0 @@
-@startuml
-Alice -> Bob: <i>html italic</i>
-@enduml

@@ -1,5 +1,0 @@
-@startuml
-class ColorTest #LightSalmon {
-  +void method()
-}
-@enduml

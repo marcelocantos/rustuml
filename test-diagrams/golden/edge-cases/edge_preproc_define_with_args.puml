@@ -1,5 +1,0 @@
-@startuml
-!define RELATIONSHIP(A, B) A --> B : uses
-RELATIONSHIP(Foo, Bar)
-RELATIONSHIP(Bar, Baz)
-@enduml

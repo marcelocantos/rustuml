@@ -1,7 +1,0 @@
-@startuml
-alt condition
-  Alice -> Alice : self in alt
-else
-  Alice -> Bob : other
-end
-@enduml

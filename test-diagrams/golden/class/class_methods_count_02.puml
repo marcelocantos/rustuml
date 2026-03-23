@@ -1,6 +1,0 @@
-@startuml
-class ManyMethods2 {
-  +void method01()
-  +void method02()
-}
-@enduml

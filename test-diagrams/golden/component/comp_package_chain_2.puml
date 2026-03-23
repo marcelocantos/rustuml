@@ -1,7 +1,0 @@
-@startuml
-package Group1 {
-  component Svc1
-  component Svc2
-}
-Svc1 --> Svc2
-@enduml

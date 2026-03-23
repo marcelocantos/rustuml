@@ -1,5 +1,0 @@
-@startuml
-skinparam databaseBackgroundColor LightYellow
-database Alice
-Alice -> Bob : hello
-@enduml

@@ -1,4 +1,0 @@
-@startuml
-Alice -> Bob:    
-Bob --> Alice: response
-@enduml

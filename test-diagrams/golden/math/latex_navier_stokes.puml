@@ -1,3 +1,0 @@
-@startlatex
-\rho\frac{D\vec{v}}{Dt} = -\nabla p + \mu \nabla^2 \vec{v} + \vec{f}
-@endlatex

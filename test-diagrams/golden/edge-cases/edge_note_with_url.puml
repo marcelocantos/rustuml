@@ -1,4 +1,0 @@
-@startuml
-class Foo
-note right of Foo: See [[https://example.com link]]
-@enduml

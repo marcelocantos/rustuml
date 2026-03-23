@@ -1,9 +1,0 @@
-@startuml
-Alice -> Bob : request
-note over Bob
-  This is a multi-line note
-  with several lines
-  of content
-end note
-Bob --> Alice : response
-@enduml

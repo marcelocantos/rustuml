@@ -1,5 +1,0 @@
-@startuml
-class Foo {
-  field: "col1\tcol2"
-}
-@enduml

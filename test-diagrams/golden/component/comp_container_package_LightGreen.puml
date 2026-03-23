@@ -1,7 +1,0 @@
-@startuml
-package MyContainer #LightGreen {
-  component Foo
-  component Bar
-  Foo --> Bar
-}
-@enduml

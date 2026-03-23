@@ -1,8 +1,0 @@
-@startuml
-!includesub preproc_include_base.iuml!BASE_STYLES
-!includesub preproc_include_base.iuml!BASE_CLASSES
-class User extends BaseEntity {
-  +name: String
-  +email: String
-}
-@enduml

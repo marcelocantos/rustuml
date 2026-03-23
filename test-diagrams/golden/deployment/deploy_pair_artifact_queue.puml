@@ -1,5 +1,0 @@
-@startuml
-artifact Source
-queue Target
-Source --> Target
-@enduml

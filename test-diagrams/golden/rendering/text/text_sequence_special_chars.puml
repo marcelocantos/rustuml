@@ -1,7 +1,0 @@
-@startuml
-participant Client
-participant API
-Client -> API : GET /api/v1/resource?filter=foo&sort=asc&limit=10
-API --> Client : 200 OK { "status": "success", "data": [...] }
-
-@enduml

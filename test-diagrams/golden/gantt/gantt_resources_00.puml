@@ -1,5 +1,0 @@
-@startgantt
-[Task Alice] on {Alice} lasts 4 days
-[Task Bob] on {Bob} lasts 5 days
-[Task Bob] starts at [Task Alice]'s end
-@endgantt

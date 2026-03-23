@@ -1,7 +1,0 @@
-@startuml
-par **parallel 1**
-  Alice -> Bob : p1
-else //parallel 2//
-  Alice -> Bob : p2
-end
-@enduml

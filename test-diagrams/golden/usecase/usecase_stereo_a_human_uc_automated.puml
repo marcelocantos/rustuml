@@ -1,5 +1,0 @@
-@startuml
-actor MyActor <<human>>
-usecase MyUC <<automated>>
-MyActor --> MyUC
-@enduml

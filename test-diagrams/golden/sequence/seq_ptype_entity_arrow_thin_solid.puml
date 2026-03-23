@@ -1,6 +1,0 @@
-@startuml
-entity Alice
-participant Bob
-Alice ->> Bob : entity sends thin_solid
-Bob ->> Alice : entity receives thin_solid
-@enduml

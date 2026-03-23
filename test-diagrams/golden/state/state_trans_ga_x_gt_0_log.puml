@@ -1,5 +1,0 @@
-@startuml
-[*] --> A
-A --> B : [x > 0] / log()
-B --> [*]
-@enduml

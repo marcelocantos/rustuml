@@ -1,9 +1,0 @@
-@startuml
-autonumber
-loop forever
-  A -> B : work
-  break error
-    B --> A : error
-  end
-end
-@enduml

@@ -1,8 +1,0 @@
-@startuml
-skinparam database {
-  BackgroundColor LightGreen
-}
-database MyElem
-node AppServer
-AppServer --> MyElem
-@enduml

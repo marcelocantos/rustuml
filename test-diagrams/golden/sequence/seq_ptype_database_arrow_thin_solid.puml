@@ -1,6 +1,0 @@
-@startuml
-database Alice
-participant Bob
-Alice ->> Bob : database sends thin_solid
-Bob ->> Alice : database receives thin_solid
-@enduml

@@ -1,5 +1,0 @@
-@startuml
-class MyClass {
-  [[#anchor local link]]: field
-}
-@enduml

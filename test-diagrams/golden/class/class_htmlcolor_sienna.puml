@@ -1,5 +1,0 @@
-@startuml
-class ColorTest #Sienna {
-  +void method()
-}
-@enduml

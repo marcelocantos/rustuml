@@ -1,6 +1,0 @@
-@startuml
-Alice -> Bob : hello
-legend
-  ~~struck legend~~
-end legend
-@enduml

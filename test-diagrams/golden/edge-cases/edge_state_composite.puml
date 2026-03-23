@@ -1,9 +1,0 @@
-@startuml
-[*] --> Active
-state Active {
-  [*] --> SubState1
-  SubState1 --> SubState2
-  SubState2 --> [*]
-}
-Active --> [*] : done
-@enduml

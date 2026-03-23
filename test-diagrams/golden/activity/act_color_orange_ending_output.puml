@@ -1,6 +1,0 @@
-@startuml
-
-start
-#orange:Action with output\
-stop
-@enduml

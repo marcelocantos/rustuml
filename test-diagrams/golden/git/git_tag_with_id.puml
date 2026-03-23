@@ -1,5 +1,0 @@
-@startgit
-commit id:"A" tag:"v0.1"
-commit id:"B"
-commit id:"C" tag:"v0.2"
-@endgit

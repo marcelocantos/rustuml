@@ -1,8 +1,0 @@
-@startuml
-skinparam state {
-  ArrowFontSize 11
-}
-[*] --> A
-A --> B : event
-B --> [*]
-@enduml

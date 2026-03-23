@@ -1,6 +1,0 @@
-@startuml
-
-(*) --> "Action"
-note right: Legacy note
-"Action" --> (*)
-@enduml

@@ -1,6 +1,0 @@
-@startuml
-Alice -> Bob : hello
-hnote over Alice : hex
-rnote over Bob : rect
-Bob --> Alice : hi
-@enduml

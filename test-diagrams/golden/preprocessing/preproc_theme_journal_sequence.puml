@@ -1,5 +1,0 @@
-@startuml
-!theme journal
-Alice -> Bob : hello
-Bob --> Alice : world
-@enduml

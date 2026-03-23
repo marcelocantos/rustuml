@@ -1,6 +1,0 @@
-@startuml
-class "**ServiceClass** <<service>>" as C {
-  +**boldField**: String
-  +//italicMethod//(): void
-}
-@enduml

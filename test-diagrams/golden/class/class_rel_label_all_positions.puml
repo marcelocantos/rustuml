@@ -1,5 +1,0 @@
-@startuml
-class A
-class B
-A "role_a" --> "role_b" B : association
-@enduml

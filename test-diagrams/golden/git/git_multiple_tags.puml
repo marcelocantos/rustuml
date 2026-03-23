@@ -1,6 +1,0 @@
-@startgit
-commit tag:"alpha"
-commit tag:"beta"
-commit tag:"rc1"
-commit tag:"v1.0"
-@endgit

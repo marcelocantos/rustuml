@@ -1,5 +1,0 @@
-@startuml
-participant "Alice Smith" as Alice
-participant "Alice Jones" as Alice
-Alice -> Alice: conflict
-@enduml

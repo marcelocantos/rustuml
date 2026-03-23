@@ -1,8 +1,0 @@
-@startuml
-namespace com.example.repo {
-  object Entity2 {
-    id = 2
-    name = "entity2"
-  }
-}
-@enduml

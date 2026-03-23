@@ -1,6 +1,0 @@
-@startuml
-database "P1" as P1 <<stereotype1>> #lightblue order 60
-database "P2" as P2 <<stereotype2>> #lightyellow order 70
-P1 -> P2 : msg
-P2 --> P1 : reply
-@enduml

@@ -1,5 +1,0 @@
-@startuml
-actor MyActor <<external>>
-usecase MyUC <<optional>>
-MyActor --> MyUC
-@enduml

@@ -1,5 +1,0 @@
-@startuml
-state A #DarkBlue
-[*] --> A
-A --> [*]
-@enduml

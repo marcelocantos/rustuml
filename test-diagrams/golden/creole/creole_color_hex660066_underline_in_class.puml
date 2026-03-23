@@ -1,5 +1,0 @@
-@startuml
-class C {
-  <color:#660066>__field__</color>: String
-}
-@enduml

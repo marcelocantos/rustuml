@@ -1,7 +1,0 @@
-@startuml
-skinparam roundcorner 15
-skinparam componentStyle uml2
-component A
-component B
-A --> B
-@enduml

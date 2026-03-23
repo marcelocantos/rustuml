@@ -1,7 +1,0 @@
-@startuml
-Alice -> Bob : hello
-rnote over Alice
-  ""code snippet""
-end note
-Bob --> Alice : hi
-@enduml

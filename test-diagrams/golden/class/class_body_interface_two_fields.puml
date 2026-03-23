@@ -1,6 +1,0 @@
-@startuml
-interface Variant {
-  +String name
-  -int count
-}
-@enduml

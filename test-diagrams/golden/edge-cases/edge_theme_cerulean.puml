@@ -1,6 +1,0 @@
-@startuml
-!theme cerulean
-class Foo
-class Bar
-Foo --> Bar
-@enduml

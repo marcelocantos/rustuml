@@ -1,5 +1,0 @@
-@startuml
-participant Alice
-participant Bob
-participant Charlie
-@enduml

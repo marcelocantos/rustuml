@@ -1,5 +1,0 @@
-@startuml
-entity E1
-participant P2
-E1 -> P2: message
-@enduml

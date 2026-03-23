@@ -1,7 +1,0 @@
-@startuml
-node Outer {
-  node Inner1
-  node Inner2
-}
-Inner1 --> Inner2
-@enduml

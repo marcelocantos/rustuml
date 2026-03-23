@@ -1,5 +1,0 @@
-@startuml
-actor MyActor <<external>> #LightGreen
-usecase UC
-MyActor --> UC
-@enduml

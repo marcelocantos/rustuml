@@ -1,6 +1,0 @@
-@startgit
-commit id:"init"
-branch main
-checkout main
-commit id:"A"
-@endgit

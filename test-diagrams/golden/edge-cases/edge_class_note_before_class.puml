@@ -1,5 +1,0 @@
-@startuml
-note "This is before" as N
-class Foo
-N .. Foo
-@enduml

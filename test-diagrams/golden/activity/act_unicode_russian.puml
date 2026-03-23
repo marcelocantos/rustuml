@@ -1,6 +1,0 @@
-@startuml
-
-start
-:Обработка данных;
-stop
-@enduml

@@ -1,7 +1,0 @@
-@startuml
-Alice -> Bob : a
-|||
-... wait ...
-||20||
-Bob --> Alice : b
-@enduml

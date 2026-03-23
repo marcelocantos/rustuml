@@ -1,5 +1,0 @@
-@startuml
-annotation Variant {
-  {static} +void create()
-}
-@enduml

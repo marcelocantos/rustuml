@@ -1,7 +1,0 @@
-@startuml
-participant A
-A -> B ++ #blue : level 1
-B -> C ++ #blue : level 2
-C --> B -- : return 2
-B --> A -- : return 1
-@enduml

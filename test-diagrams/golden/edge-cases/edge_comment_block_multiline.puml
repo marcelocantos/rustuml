@@ -1,8 +1,0 @@
-@startuml
-/'
-This is a multi-line
-block comment
-spanning several lines
-'/
-class Foo
-@enduml

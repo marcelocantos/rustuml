@@ -1,6 +1,0 @@
-@startuml
-!define P16 Participant16
-participant P16 as A
-A -> A : self message 16
-note right : P16 = Participant16
-@enduml

@@ -1,9 +1,0 @@
-@startuml
-note as N1
-  * item 1
-  * item 2
-    ** nested 1
-    ** nested 2
-  * item 3
-end note
-@enduml

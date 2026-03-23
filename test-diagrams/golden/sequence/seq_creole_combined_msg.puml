@@ -1,4 +1,0 @@
-@startuml
-Alice -> Bob : **bold** //italic// <color:blue>colored</color>
-Bob --> Alice : **bold** //italic// <color:blue>colored</color>
-@enduml

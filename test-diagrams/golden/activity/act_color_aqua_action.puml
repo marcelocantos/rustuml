@@ -1,7 +1,0 @@
-@startuml
-
-start
-#aqua:Colored action;
-:Normal action;
-stop
-@enduml

@@ -1,6 +1,0 @@
-@startuml
-participant "Name" as N #yellow <<legacy>> order 15
-participant Other
-N -> Other : call
-Other --> N : reply
-@enduml

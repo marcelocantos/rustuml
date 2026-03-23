@@ -1,7 +1,0 @@
-@startuml
-start
-:A;
--[dotted]->
-:B;
-stop
-@enduml

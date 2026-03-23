@@ -1,6 +1,0 @@
-@startuml
-entity MyType {
-  +void method()
-}
-note bottom of MyType : Note on entity
-@enduml

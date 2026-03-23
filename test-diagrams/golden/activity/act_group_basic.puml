@@ -1,9 +1,0 @@
-@startuml
-
-start
-group "My Group" {
-  :Action 1;
-  :Action 2;
-}
-stop
-@enduml

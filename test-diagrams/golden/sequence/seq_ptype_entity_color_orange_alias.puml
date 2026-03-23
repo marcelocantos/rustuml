@@ -1,6 +1,0 @@
-@startuml
-entity "Named Entity" as P #orange
-participant Other
-P -> Other : entity orange call
-Other --> P : reply
-@enduml

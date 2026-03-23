@@ -1,4 +1,0 @@
-@startuml
-Alice ->x Bob : forward (lost fwd dotted back)
-Bob --> Alice : backward
-@enduml

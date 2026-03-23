@@ -1,7 +1,0 @@
-@startuml
-
-start
-floating note right: Floating right note
-:Action;
-stop
-@enduml

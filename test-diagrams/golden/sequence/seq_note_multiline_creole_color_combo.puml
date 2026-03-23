@@ -1,8 +1,0 @@
-@startuml
-Alice -> Bob : request
-note over Alice, Bob
-  <color:red>error</color> or
-  <color:green>success</color>
-end note
-Bob --> Alice : response
-@enduml

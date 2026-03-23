@@ -1,7 +1,0 @@
-@startyaml
-colors:
-  - red
-  - green
-  - blue
-count: 3
-@endyaml

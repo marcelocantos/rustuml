@@ -1,6 +1,0 @@
-@startuml
-state ps <<exitPoint>> #green
-[*] --> A
-A --> ps
-ps --> [*]
-@enduml

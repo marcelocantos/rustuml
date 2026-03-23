@@ -1,5 +1,0 @@
-@startuml
-component A
-component B
-component C
-@enduml

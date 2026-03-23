@@ -1,8 +1,0 @@
-@startuml
-class Container<T> {
-  +T value
-}
-class Wrapper<Container<T>> {
-  +Container<T> inner
-}
-@enduml

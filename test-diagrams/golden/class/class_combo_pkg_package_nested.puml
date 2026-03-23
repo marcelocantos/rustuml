@@ -1,9 +1,0 @@
-@startuml
-package Outer {
-  package Inner {
-    class MyClass {
-      +void method()
-    }
-  }
-}
-@enduml

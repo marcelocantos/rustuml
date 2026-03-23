@@ -1,4 +1,0 @@
-@startuml
-control Alice
-Alice -> Alice : self message
-@enduml

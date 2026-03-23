@@ -1,8 +1,0 @@
-@startuml
-://italic// start;
-if (//italic// condition?) then (yes)
-  ://italic// true branch;
-else (no)
-  ://italic// false branch;
-endif
-@enduml

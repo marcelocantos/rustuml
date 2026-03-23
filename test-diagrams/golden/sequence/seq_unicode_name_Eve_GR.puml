@@ -1,6 +1,0 @@
-@startuml
-participant "Εύα" as Eve_GR
-participant Bob
-Eve_GR -> Bob : hello
-Bob --> Eve_GR : hi
-@enduml

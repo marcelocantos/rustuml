@@ -1,3 +1,0 @@
-@startuml
-Alice -> Bob: --strike text--
-@enduml

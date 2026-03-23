@@ -1,5 +1,0 @@
-@startuml
-folder Outer {
-  database Inner
-}
-@enduml

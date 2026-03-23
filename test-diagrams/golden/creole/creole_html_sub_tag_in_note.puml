@@ -1,5 +1,0 @@
-@startuml
-note as N
-  H<sub>2</sub>O
-end note
-@enduml

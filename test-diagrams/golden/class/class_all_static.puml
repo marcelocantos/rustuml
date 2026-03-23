@@ -1,9 +1,0 @@
-@startuml
-class UtilityClass {
-  {static} +String VERSION
-  {static} +int MAX_SIZE
-  {static} +void process(String input)
-  {static} +boolean validate(Object o)
-  {static} +String format(Object o)
-}
-@enduml

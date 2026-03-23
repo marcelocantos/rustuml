@@ -1,3 +1,0 @@
-@startuml
-Alice -> Bob: <u>html underline</u>
-@enduml

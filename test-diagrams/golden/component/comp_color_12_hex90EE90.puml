@@ -1,5 +1,0 @@
-@startuml
-component Foo #90EE90
-component Bar #90EE90
-Foo --> Bar
-@enduml

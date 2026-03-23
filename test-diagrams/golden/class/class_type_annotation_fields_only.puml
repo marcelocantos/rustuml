@@ -1,7 +1,0 @@
-@startuml
-annotation MyType {
-  +String name
-  -int age
-  #double score
-}
-@enduml

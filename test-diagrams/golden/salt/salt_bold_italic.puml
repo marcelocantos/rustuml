@@ -1,9 +1,0 @@
-@startsalt
-{
-  <b>Bold text</b>
-  <i>Italic text</i>
-  <u>Underlined text</u>
-  <b><i>Bold italic</i></b>
-  Regular text
-}
-@endsalt

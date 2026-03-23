@@ -1,5 +1,0 @@
-@startuml
-!theme simplex
-Alice -> Bob : hello
-Bob --> Alice : world
-@enduml

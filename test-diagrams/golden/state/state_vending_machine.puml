@@ -1,8 +1,0 @@
-@startuml
-[*] --> Idle
-Idle --> HasMoney : insert coin
-HasMoney --> HasMoney : insert coin [need more]
-HasMoney --> Dispensing : select item [enough money]
-HasMoney --> Idle : cancel / return money
-Dispensing --> Idle : item dispensed
-@enduml

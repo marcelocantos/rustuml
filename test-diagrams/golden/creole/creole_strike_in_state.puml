@@ -1,4 +1,0 @@
-@startuml
-state "~~StrikeState~~" as S
-[*] --> S
-@enduml

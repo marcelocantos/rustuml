@@ -1,6 +1,0 @@
-@startuml
-title Title with Numbers 123
-start
-:Action;
-stop
-@enduml

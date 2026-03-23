@@ -1,5 +1,0 @@
-@startuml
-state A #LightSkyBlue
-[*] --> A
-A --> [*]
-@enduml

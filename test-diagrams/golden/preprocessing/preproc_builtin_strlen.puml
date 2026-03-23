@@ -1,9 +1,0 @@
-@startuml
-!$str = "Hello, World!"
-!$len = %strlen($str)
-
-note as N
-  string = "$str"
-  length = $len
-end note
-@enduml

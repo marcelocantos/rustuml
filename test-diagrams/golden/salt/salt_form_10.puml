@@ -1,9 +1,0 @@
-@startsalt
-{
-  Username: | "alice"
-  Email: | "alice@example.com"
-  Phone: | "555-1234"
-  ..
-  [Button 1] | [Button 2]
-}
-@endsalt

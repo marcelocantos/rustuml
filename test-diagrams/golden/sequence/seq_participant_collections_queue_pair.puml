@@ -1,6 +1,0 @@
-@startuml
-collections A
-queue B
-A -> B : request
-B --> A : response
-@enduml

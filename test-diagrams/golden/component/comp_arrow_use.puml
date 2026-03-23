@@ -1,5 +1,0 @@
-@startuml
-component Alpha
-component Beta
-Alpha ..> Beta
-@enduml

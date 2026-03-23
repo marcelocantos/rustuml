@@ -1,5 +1,0 @@
-@startuml
-node Source
-artifact Target
-Source --> Target
-@enduml

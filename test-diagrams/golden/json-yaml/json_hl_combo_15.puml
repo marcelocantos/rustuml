@@ -1,9 +1,0 @@
-@startjson
-#highlight "field3"
-{
-  "field0": "value_15_0"
-  "field1": "value_15_1"
-  "field2": "value_15_2"
-  "field3": "value_15_3"
-}
-@endjson

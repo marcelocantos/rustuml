@@ -1,8 +1,0 @@
-@startuml
-object Obj0_25 { val = 250 }
-object Obj1_25 { val = 251 }
-object Obj2_25 { val = 252 }
-Obj0_25 --> Obj1_25
-Obj1_25 --> Obj2_25
-Obj2_25 --> Obj0_25
-@enduml

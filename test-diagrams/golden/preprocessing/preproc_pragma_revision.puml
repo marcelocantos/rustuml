@@ -1,4 +1,0 @@
-@startuml
-!pragma revision
-Alice -> Bob : revision test
-@enduml

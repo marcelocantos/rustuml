@@ -1,8 +1,0 @@
-@startuml
-title Diagram Title
-header Company Name | Version 1.0
-footer Page %page% of %lastpage% | Confidential
-skinparam DefaultFontName Arial
-Alice -> Bob : hello
-caption Figure 1
-@enduml

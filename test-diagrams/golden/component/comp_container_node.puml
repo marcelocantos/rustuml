@@ -1,7 +1,0 @@
-@startuml
-node MyContainer {
-  component Foo
-  component Bar
-  Foo --> Bar
-}
-@enduml

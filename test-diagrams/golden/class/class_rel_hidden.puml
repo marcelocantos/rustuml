@@ -1,7 +1,0 @@
-@startuml
-class A
-class B
-class C
-A -[hidden]-> B
-B --> C
-@enduml

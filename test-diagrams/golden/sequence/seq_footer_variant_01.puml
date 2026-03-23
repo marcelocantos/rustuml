@@ -1,5 +1,0 @@
-@startuml
-footer Page %page% of %lastpage%
-Alice -> Bob : hello
-Bob --> Alice : hi
-@enduml

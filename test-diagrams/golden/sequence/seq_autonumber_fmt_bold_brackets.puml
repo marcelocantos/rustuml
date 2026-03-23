@@ -1,7 +1,0 @@
-@startuml
-autonumber "<b>[##]</b>"
-Alice -> Bob : first
-Bob --> Alice : second
-Alice -> Charlie : third
-Charlie --> Alice : fourth
-@enduml

@@ -1,7 +1,0 @@
-@startuml
-skinparam ClassBackgroundColor mistyrose
-skinparam ClassBorderColor orange
-class A { +void m() }
-class B
-A --> B
-@enduml

@@ -1,9 +1,0 @@
-@startuml
-class Optional<T> {
-  -T value
-  +boolean isPresent()
-  +T get()
-  +T orElse(T defaultValue)
-  {static} +Optional<T> empty()
-}
-@enduml

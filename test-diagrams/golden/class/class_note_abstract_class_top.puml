@@ -1,6 +1,0 @@
-@startuml
-abstract class MyType {
-  +void method()
-}
-note top of MyType : Note on abstract_class
-@enduml

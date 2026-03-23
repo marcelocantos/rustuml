@@ -1,6 +1,0 @@
-@startuml
-skinparam ArrowThickness 1
-[*] --> A
-A --> B : event
-B --> [*]
-@enduml

@@ -1,7 +1,0 @@
-@startuml
-start
-while (more items?) is (yes)
-  :process item;
-endwhile (no)
-stop
-@enduml

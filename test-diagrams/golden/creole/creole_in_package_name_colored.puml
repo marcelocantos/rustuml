@@ -1,7 +1,0 @@
-@startuml
-package "<color:blue>blue</color> Package" {
-  class Inner {
-    +field: String
-  }
-}
-@enduml

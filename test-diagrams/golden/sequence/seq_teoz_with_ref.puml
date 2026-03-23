@@ -1,6 +1,0 @@
-@startuml
-!pragma teoz true
-Alice -> Bob : a
-ref over Alice, Bob : see diagram
-Bob --> Alice : b
-@enduml

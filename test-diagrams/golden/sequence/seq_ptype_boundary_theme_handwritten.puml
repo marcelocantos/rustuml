@@ -1,7 +1,0 @@
-@startuml
-skinparam handwritten true
-boundary Alice
-participant Bob
-Alice -> Bob : hello
-Bob --> Alice : hi
-@enduml

@@ -1,5 +1,0 @@
-@startuml
-start
-:A;
-kill
-@enduml

@@ -1,6 +1,0 @@
-@startuml
-queue "Named Queue" as P #yellow
-participant Other
-P -> Other : queue yellow call
-Other --> P : reply
-@enduml

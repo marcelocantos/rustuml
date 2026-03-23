@@ -1,9 +1,0 @@
-@startuml
-database Primary
-database Replica1
-database Replica2
-database Replica3
-Primary --> Replica1 : replication
-Primary --> Replica2 : replication
-Primary --> Replica3 : replication
-@enduml

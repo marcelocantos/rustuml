@@ -1,7 +1,0 @@
-@startuml
-interface I1
-class AbstractBase
-class ConcreteClass
-AbstractBase <|-- ConcreteClass
-ConcreteClass ..|> I1
-@enduml

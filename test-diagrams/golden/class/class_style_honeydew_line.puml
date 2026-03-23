@@ -1,5 +1,0 @@
-@startuml
-class Styled #back:honeydew;line:red {
-  +void method()
-}
-@enduml

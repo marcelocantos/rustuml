@@ -1,7 +1,0 @@
-@startuml
-database X
-participant Y
-X -> Y : go
-rnote over X : rnote/database
-Y --> X : back
-@enduml

@@ -1,5 +1,0 @@
-@startuml
-component Foo <<facade>>
-component Bar <<facade>>
-Foo --> Bar
-@enduml

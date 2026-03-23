@@ -1,5 +1,0 @@
-@startuml
-note as N1
-  <size:20>large</size>
-end note
-@enduml

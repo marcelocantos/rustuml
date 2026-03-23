@@ -1,5 +1,0 @@
-@startuml
-collections Source
-queue Target
-Source --> Target
-@enduml

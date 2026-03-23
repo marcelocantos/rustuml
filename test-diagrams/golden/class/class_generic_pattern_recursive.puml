@@ -1,8 +1,0 @@
-@startuml
-class Node<T extends Node<T>> {
-  +T next
-  +T prev
-  --
-  +T getNext()
-}
-@enduml

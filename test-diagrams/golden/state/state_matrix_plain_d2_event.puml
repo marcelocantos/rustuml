@@ -1,6 +1,0 @@
-@startuml
-[*] --> A
-A --> : click
-A --> B
-B --> [*]
-@enduml

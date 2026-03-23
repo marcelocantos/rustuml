@@ -1,5 +1,0 @@
-@startuml
-node AppNode <<embedded>>
-storage DataStore
-AppNode --> DataStore : HTTP
-@enduml

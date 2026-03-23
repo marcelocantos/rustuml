@@ -1,8 +1,0 @@
-@startuml
-title
-  First line of title
-  Second line of title
-  Third line of title
-end title
-class Foo
-@enduml

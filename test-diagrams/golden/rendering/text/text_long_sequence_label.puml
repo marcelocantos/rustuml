@@ -1,7 +1,0 @@
-@startuml
-participant Client
-participant Server
-Client -> Server : This is a very long message label that describes in detail what operation is being invoked here
-Server --> Client : Response with equally long description of what was returned by the server
-
-@enduml

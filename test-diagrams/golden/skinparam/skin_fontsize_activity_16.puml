@@ -1,6 +1,0 @@
-@startuml
-skinparam defaultFontSize 16
-start
-:action with text;
-stop
-@enduml

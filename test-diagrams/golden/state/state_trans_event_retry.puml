@@ -1,5 +1,0 @@
-@startuml
-[*] --> A
-A --> B : retry
-B --> [*]
-@enduml

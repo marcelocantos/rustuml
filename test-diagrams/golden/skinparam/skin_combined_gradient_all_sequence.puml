@@ -1,9 +1,0 @@
-@startuml
-skinparam classBackgroundColor #FFFFFF/#E0E8FF
-skinparam classHeaderBackgroundColor #4472C4/#2E4A8A
-skinparam noteBackgroundColor #FFFACD/#FFE680
-
-Alice -> Bob : request
-Bob --> Alice : response
-note right : note
-@enduml

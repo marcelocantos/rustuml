@@ -1,8 +1,0 @@
-@startuml
-object MyObj <<actor>> #orange {
-  id = 4
-  type = "actor"
-  active = true
-}
-note right : Stereotype: actor
-@enduml

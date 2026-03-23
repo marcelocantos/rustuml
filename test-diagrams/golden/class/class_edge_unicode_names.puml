@@ -1,6 +1,0 @@
-@startuml
-class Ångström {
-  +void method()
-}
-class Façade
-@enduml

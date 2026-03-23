@@ -1,5 +1,0 @@
-@startuml
-class Foo ' this is a comment after code
-class Bar ' another comment
-Foo --> Bar ' relationship comment
-@enduml

@@ -1,9 +1,0 @@
-@startuml
-entity Product {
-  *product_id : INT <<PK>>
-  --
-  name : VARCHAR(100)
-  price : DECIMAL
-  category_id : INT <<FK>>
-}
-@enduml

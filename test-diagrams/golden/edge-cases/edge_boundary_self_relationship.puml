@@ -1,4 +1,0 @@
-@startuml
-class Node
-Node --> Node : self-ref
-@enduml

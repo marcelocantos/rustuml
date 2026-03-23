@@ -1,9 +1,0 @@
-@startuml
-actor User
-usecase UC1 #LightBlue as "
-  Title
-  ..
-  Details here
-"
-User --> UC1
-@enduml

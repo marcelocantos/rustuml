@@ -1,5 +1,0 @@
-@startuml
-class C {
-  **bold** normal //italic//: field
-}
-@enduml

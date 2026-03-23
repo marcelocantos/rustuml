@@ -1,4 +1,0 @@
-@startuml
-class Foo <<service>>
-class Foo <<controller>>
-@enduml

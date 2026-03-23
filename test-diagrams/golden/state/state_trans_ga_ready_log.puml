@@ -1,5 +1,0 @@
-@startuml
-[*] --> A
-A --> B : [ready] / log()
-B --> [*]
-@enduml

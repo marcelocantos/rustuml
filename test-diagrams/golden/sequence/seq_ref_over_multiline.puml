@@ -1,8 +1,0 @@
-@startuml
-Alice -> Bob : start
-ref over Alice, Bob
-  My Reference
-  See page 42
-end ref
-Bob --> Alice : done
-@enduml

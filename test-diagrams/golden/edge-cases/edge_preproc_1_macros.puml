@@ -1,4 +1,0 @@
-@startuml
-!define MACRO0 value0
-class Foo
-@enduml

@@ -1,5 +1,0 @@
-@startuml
-node NodeA
-node NodeB
-NodeA -right.> NodeB
-@enduml

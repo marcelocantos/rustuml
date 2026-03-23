@@ -1,4 +1,0 @@
-@startuml
-component MyComp
-note left of MyComp : Left note text
-@enduml

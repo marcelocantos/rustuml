@@ -1,4 +1,0 @@
-@startuml
-Alice --> Bob : dotted message
-Bob --> Alice : return dotted
-@enduml

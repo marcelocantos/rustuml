@@ -1,9 +1,0 @@
-@startuml
-class ClassA <<facade>> {
-  +void methodA()
-}
-class ClassB <<service>> {
-  +void methodB()
-}
-ClassA --> ClassB
-@enduml

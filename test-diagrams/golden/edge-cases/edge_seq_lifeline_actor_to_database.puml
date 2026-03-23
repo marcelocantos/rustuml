@@ -1,5 +1,0 @@
-@startuml
-actor A1
-database DB2
-A1 -> DB2: message
-@enduml

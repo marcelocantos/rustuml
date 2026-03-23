@@ -1,6 +1,0 @@
-@startuml
-note "Floating note 1" as FN1
-note "Floating note 2" as FN2
-[*] --> A
-A --> [*]
-@enduml

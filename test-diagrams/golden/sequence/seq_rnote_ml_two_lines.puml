@@ -1,8 +1,0 @@
-@startuml
-Alice -> Bob : hello
-rnote over Alice
-  line one
-  line two
-end note
-Bob --> Alice : hi
-@enduml

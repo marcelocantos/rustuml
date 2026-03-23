@@ -1,4 +1,0 @@
-@startuml
-database MyElem
-note right of MyElem : Note on database
-@enduml

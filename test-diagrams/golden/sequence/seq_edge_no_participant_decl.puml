@@ -1,4 +1,0 @@
-@startuml
-Alice -> Bob : implied participants
-Bob --> Alice : reply
-@enduml

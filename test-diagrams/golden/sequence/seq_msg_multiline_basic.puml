@@ -1,4 +1,0 @@
-@startuml
-Alice -> Bob : line 1\nline 2
-Bob --> Alice : first\nsecond\nthird
-@enduml

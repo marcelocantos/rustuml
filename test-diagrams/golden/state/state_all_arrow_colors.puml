@@ -1,8 +1,0 @@
-@startuml
-[*] --> A
-A -[#red]-> B
-B -[#blue]-> C
-C -[#green]-> D
-D -[#orange]-> E
-E -[#purple]-> [*]
-@enduml

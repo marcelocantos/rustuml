@@ -1,8 +1,0 @@
-@startuml
-!foreach $comp in ["UI", "API", "DB"]
-  component [$comp]
-!endforeach
-
-[UI] --> [API]
-[API] --> [DB]
-@enduml

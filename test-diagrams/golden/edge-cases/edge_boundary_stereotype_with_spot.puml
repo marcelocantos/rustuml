@@ -1,5 +1,0 @@
-@startuml
-class Foo << (C,#red) Controller >>
-class Bar << (S,#blue) Service >>
-class Baz << (R,#green) Repository >>
-@enduml

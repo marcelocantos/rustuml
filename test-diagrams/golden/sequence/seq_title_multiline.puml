@@ -1,5 +1,0 @@
-@startuml
-title Line One\nLine Two\nLine Three
-Alice -> Bob : hello
-Bob --> Alice : hi
-@enduml

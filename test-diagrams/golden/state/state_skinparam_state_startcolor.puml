@@ -1,8 +1,0 @@
-@startuml
-skinparam state {
-  StartColor DarkGreen
-}
-[*] --> A
-A --> B : event
-B --> [*]
-@enduml

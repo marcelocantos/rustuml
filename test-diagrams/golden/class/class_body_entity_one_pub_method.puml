@@ -1,5 +1,0 @@
-@startuml
-entity Variant {
-  +void run()
-}
-@enduml

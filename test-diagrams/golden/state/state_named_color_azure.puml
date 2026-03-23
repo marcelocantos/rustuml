@@ -1,5 +1,0 @@
-@startuml
-state A #Azure
-[*] --> A
-A --> [*]
-@enduml

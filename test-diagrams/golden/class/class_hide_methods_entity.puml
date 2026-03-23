@@ -1,7 +1,0 @@
-@startuml
-hide methods
-entity MyType {
-  +String field
-  +void method()
-}
-@enduml

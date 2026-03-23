@@ -1,6 +1,0 @@
-@startuml
-[*] --> Red
-Red --> Green : timer
-Green --> Yellow : timer
-Yellow --> Red : timer
-@enduml

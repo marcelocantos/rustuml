@@ -1,7 +1,0 @@
-@startuml
-package Pkg1 {
-  package Pkg2 {
-        class C1 { +void m1() }
-}
-}
-@enduml

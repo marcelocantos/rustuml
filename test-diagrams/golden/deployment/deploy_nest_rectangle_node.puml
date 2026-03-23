@@ -1,5 +1,0 @@
-@startuml
-rectangle Outer {
-  node Inner
-}
-@enduml

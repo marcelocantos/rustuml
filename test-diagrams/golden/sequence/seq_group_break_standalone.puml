@@ -1,9 +1,0 @@
-@startuml
-A -> B : go
-loop forever
-  B -> B : work
-  break on error
-    B --> A : error
-  end
-end
-@enduml

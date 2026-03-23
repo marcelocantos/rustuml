@@ -1,5 +1,0 @@
-@startuml
-component Comp1
-component Comp2
-Comp1 --> Comp2
-@enduml

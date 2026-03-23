@@ -1,7 +1,0 @@
-@startuml
-database X
-participant Y
-X -> Y : message
-note right of X : note right of database
-Y --> X : reply
-@enduml

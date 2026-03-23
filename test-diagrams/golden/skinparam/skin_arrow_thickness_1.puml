@@ -1,4 +1,0 @@
-@startuml
-skinparam arrowThickness 1
-A -> B : arrow thickness 1
-@enduml

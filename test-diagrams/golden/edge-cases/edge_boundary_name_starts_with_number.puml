@@ -1,5 +1,0 @@
-@startuml
-class "1stClass"
-class "2ndClass"
-"1stClass" --> "2ndClass"
-@enduml

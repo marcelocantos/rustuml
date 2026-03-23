@@ -1,5 +1,0 @@
-@startuml
-state A #Indigo
-[*] --> A
-A --> [*]
-@enduml

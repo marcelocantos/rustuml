@@ -1,5 +1,0 @@
-@startuml
-!theme superhero
-Alice -> Bob : hello
-Bob --> Alice : world
-@enduml

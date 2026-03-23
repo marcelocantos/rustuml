@@ -1,5 +1,0 @@
-@startuml
-[*] --> A
-A --> A : self0
-A --> [*]
-@enduml

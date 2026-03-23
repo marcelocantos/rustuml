@@ -1,8 +1,0 @@
-@startuml
-object MyObj <<observer>> #lightblue {
-  id = 8
-  type = "observer"
-  active = true
-}
-note right : Stereotype: observer
-@enduml

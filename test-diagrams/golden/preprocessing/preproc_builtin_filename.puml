@@ -1,5 +1,0 @@
-@startuml
-note as N
-  file: %filename()
-end note
-@enduml

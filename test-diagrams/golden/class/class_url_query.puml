@@ -1,5 +1,0 @@
-@startuml
-class MyClass [[http://example.com?key=value&other=thing]] {
-  +void method()
-}
-@enduml

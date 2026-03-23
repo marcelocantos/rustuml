@@ -1,5 +1,0 @@
-@startuml
-[*] --> A
-A -up[#blue]-> B
-B --> [*]
-@enduml

@@ -1,8 +1,0 @@
-@startuml
-class Ärger
-class Übung
-class Öffnung
-Ärger --> Übung
-Übung --> Öffnung
-
-@enduml

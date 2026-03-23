@@ -1,4 +1,0 @@
-@startuml
-Alice --> Bob ++ #red : dotted activate up_red
-Bob --> Alice -- : return
-@enduml

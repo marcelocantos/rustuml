@@ -1,6 +1,0 @@
-@startuml
-skinparam arrowFontSize 14
-Alice -> Bob : hello
-Bob --> Alice : world
-note right : note
-@enduml

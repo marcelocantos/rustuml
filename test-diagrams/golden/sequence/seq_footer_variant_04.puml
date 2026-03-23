@@ -1,5 +1,0 @@
-@startuml
-footer Generated: %date%
-Alice -> Bob : hello
-Bob --> Alice : hi
-@enduml

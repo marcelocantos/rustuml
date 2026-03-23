@@ -1,7 +1,0 @@
-@startuml
-cloud myPkg #lightblue {
-  class MyClass {
-    +void method()
-  }
-}
-@enduml

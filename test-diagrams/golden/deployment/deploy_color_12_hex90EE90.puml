@@ -1,5 +1,0 @@
-@startuml
-node AppNode #90EE90
-node DBNode #90EE90
-AppNode --> DBNode
-@enduml

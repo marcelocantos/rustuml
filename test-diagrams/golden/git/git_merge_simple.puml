@@ -1,8 +1,0 @@
-@startgit
-commit
-branch develop
-checkout develop
-commit
-checkout master
-merge develop
-@endgit

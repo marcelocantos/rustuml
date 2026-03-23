@@ -1,4 +1,0 @@
-@startuml
-class Foo
-?? display is conditional
-@enduml

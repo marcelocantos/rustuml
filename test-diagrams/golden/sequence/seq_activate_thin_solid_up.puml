@@ -1,4 +1,0 @@
-@startuml
-Alice ->> Bob ++ : thin_solid activate up
-Bob ->> Alice -- : return
-@enduml

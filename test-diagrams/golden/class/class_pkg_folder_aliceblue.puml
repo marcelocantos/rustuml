@@ -1,7 +1,0 @@
-@startuml
-folder myPkg #aliceblue {
-  class MyClass {
-    +void method()
-  }
-}
-@enduml

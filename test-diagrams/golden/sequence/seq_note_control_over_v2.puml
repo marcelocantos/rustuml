@@ -1,7 +1,0 @@
-@startuml
-control X
-participant Y
-X -> Y : go
-note over X : note/control
-Y --> X : back
-@enduml

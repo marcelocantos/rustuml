@@ -1,9 +1,0 @@
-@startuml
-class Parent {
-  +void parentMethod()
-}
-class Child01
-class Child02
-Parent <|-- Child01
-Parent <|-- Child02
-@enduml

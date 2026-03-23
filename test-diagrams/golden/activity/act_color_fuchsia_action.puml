@@ -1,7 +1,0 @@
-@startuml
-
-start
-#fuchsia:Colored action;
-:Normal action;
-stop
-@enduml

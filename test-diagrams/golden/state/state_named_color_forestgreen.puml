@@ -1,5 +1,0 @@
-@startuml
-state A #ForestGreen
-[*] --> A
-A --> [*]
-@enduml

@@ -1,3 +1,0 @@
-@startregex
--?\d+\.\d+([eE][+-]?\d+)?
-@endregex

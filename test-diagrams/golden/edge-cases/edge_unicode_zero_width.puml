@@ -1,6 +1,0 @@
-@startuml
-' Zero-width space in name
-class "Foo​Bar" {
-  field: String
-}
-@enduml

@@ -1,3 +1,0 @@
-@startmath
-A \cup B = \{x \mid x \in A \lor x \in B\}
-@endmath

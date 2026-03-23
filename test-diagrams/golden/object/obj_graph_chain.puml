@@ -1,9 +1,0 @@
-@startuml
-object A { v = 1 }
-object B { v = 2 }
-object C { v = 3 }
-object D { v = 4 }
-A --> B
-B --> C
-C --> D
-@enduml

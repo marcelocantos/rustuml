@@ -1,6 +1,0 @@
-@startuml
-title UPPERCASE TITLE
-start
-:Action;
-stop
-@enduml

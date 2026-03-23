@@ -1,5 +1,0 @@
-@startuml
-node Source #Pink
-node Target #Pink
-Source --> Target : HTTP
-@enduml

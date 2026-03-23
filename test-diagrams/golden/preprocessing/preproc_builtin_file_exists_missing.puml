@@ -1,8 +1,0 @@
-@startuml
-participant A
-!if %file_exists("/no/such/file/xyz.puml")
-  note over A : exists
-!else
-  note over A : missing
-!endif
-@enduml

@@ -1,3 +1,0 @@
-@startuml
-component "**BoldComponent**" as C
-@enduml

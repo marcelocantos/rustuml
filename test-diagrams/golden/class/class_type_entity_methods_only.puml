@@ -1,7 +1,0 @@
-@startuml
-entity MyType {
-  +void doSomething()
-  -String compute(int x)
-  #boolean check()
-}
-@enduml

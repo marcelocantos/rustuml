@@ -1,9 +1,0 @@
-@startuml
-skinparam monochrome reverse
-class A <<service>> {
-  +String field
-  +void method()
-}
-class B <<entity>>
-A --> B
-@enduml

@@ -1,9 +1,0 @@
-@startuml
-node AppServer #LightBlue
-database MainDB #LightGreen
-cloud Internet #LightGray
-artifact deploy.zip #Yellow
-Internet --> AppServer : HTTP
-AppServer --> MainDB : JDBC
-artifact deploy.zip --> AppServer : deployed to
-@enduml

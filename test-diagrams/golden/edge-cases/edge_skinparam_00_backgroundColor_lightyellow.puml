@@ -1,6 +1,0 @@
-@startuml
-skinparam backgroundColor LightYellow
-class Foo
-class Bar
-Foo --> Bar
-@enduml

@@ -1,5 +1,0 @@
-@startuml
-note as N
-  image: <img:https://plantuml.com/img/logo.png>
-end note
-@enduml

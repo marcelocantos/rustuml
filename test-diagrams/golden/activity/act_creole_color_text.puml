@@ -1,5 +1,0 @@
-@startuml
-start
-:<color:red>red text</color>;
-stop
-@enduml

@@ -1,5 +1,0 @@
-@startuml
-annotation OneMember {
-  +void single()
-}
-@enduml

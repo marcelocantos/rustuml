@@ -1,5 +1,0 @@
-@startuml
-note as N
-  //""italic mono""//
-end note
-@enduml

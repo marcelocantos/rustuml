@@ -1,6 +1,0 @@
-@startuml
-skinparam monochrome true
-component Foo
-component Bar
-Foo --> Bar
-@enduml

@@ -1,9 +1,0 @@
-@startuml
-rectangle Outer #LightGreen {
-  package Inner {
-    component X
-    component Y
-    X --> Y
-  }
-}
-@enduml

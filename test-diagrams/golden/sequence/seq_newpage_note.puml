@@ -1,7 +1,0 @@
-@startuml
-note over Alice : before
-Alice -> Bob : msg
-newpage
-note over Bob : after
-Bob --> Alice : reply
-@enduml

@@ -1,7 +1,0 @@
-@startuml
-hide empty fields
-interface MyType {
-  +String field
-  +void method()
-}
-@enduml

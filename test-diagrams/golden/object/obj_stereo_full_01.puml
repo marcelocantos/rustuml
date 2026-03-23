@@ -1,8 +1,0 @@
-@startuml
-object MyObj <<boundary>> #blue {
-  id = 1
-  type = "boundary"
-  active = true
-}
-note right : Stereotype: boundary
-@enduml

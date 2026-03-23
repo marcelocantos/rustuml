@@ -1,7 +1,0 @@
-@startuml
-state A : waiting for user input
-state B : next state
-[*] --> A
-A --> B : user input
-B --> [*]
-@enduml

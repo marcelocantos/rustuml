@@ -1,7 +1,0 @@
-@startuml
-
-|Solo|
-start
-:Action;
-stop
-@enduml

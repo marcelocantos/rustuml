@@ -1,6 +1,0 @@
-@startuml
-Alice -> Bob: hello
-note left #aqua: Left note
-note right #gold: Right note
-note over Alice #pink: Over note
-@enduml

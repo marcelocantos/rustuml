@@ -1,5 +1,0 @@
-@startuml
-class MyClass {
-  //""italic mono""//: field
-}
-@enduml

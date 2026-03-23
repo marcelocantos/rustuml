@@ -1,5 +1,0 @@
-@startuml
-class MyClass {
-  **~~bold strike~~**: field
-}
-@enduml

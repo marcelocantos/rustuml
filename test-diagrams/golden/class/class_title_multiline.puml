@@ -1,9 +1,0 @@
-@startuml
-title
-  My Class Diagram
-  Version 1.0
-end title
-class A
-class B
-A --> B
-@enduml

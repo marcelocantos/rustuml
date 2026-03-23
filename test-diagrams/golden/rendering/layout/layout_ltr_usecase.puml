@@ -1,9 +1,0 @@
-@startuml
-left to right direction
-actor User
-usecase UC1 as "Login"
-usecase UC2 as "View Dashboard"
-User --> UC1
-User --> UC2
-
-@enduml

@@ -1,8 +1,0 @@
-@startuml
-participant Alice
-participant Bob
-participant Charlie
-Alice -> Bob : hello
-note across : this spans all participants
-Bob --> Alice : hi
-@enduml

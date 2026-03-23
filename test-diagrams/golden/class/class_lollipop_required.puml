@@ -1,4 +1,0 @@
-@startuml
-class Component
-Component --() Required
-@enduml

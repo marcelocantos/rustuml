@@ -1,5 +1,0 @@
-@startuml
-[*] --> A
-A --> B : submit [x > 0] / update()
-B --> [*]
-@enduml

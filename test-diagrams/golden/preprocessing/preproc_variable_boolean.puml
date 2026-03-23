@@ -1,9 +1,0 @@
-@startuml
-!$enabled = %true()
-!$disabled = %false()
-
-note as N
-  enabled = $enabled
-  disabled = $disabled
-end note
-@enduml

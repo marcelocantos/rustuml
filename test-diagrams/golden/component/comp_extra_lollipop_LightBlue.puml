@@ -1,7 +1,0 @@
-@startuml
-component Provider #LightBlue
-component Consumer #LightBlue
-interface IService
-Provider -( IService
-Consumer --> IService : requires
-@enduml

@@ -1,5 +1,0 @@
-@startuml
-node Node1 <<container>>
-node Node2 <<container>>
-Node1 --> Node2
-@enduml

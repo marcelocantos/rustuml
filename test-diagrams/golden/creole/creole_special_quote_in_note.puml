@@ -1,5 +1,0 @@
-@startuml
-note as N
-  say &quot;hello&quot;
-end note
-@enduml

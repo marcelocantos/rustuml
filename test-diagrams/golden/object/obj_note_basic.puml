@@ -1,6 +1,0 @@
-@startuml
-object Car {
-  make = "Ford"
-}
-note right of Car : This is a car
-@enduml

@@ -1,5 +1,0 @@
-@startuml
-state A #LightSlateGray
-[*] --> A
-A --> [*]
-@enduml

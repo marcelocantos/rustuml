@@ -1,4 +1,0 @@
-@startuml
-Alice ->> Bob : forward (thin fwd thin dotted back)
-Bob -->> Alice : backward
-@enduml

@@ -1,9 +1,0 @@
-@startuml
-
-start
-repeat
-  :Attempt action;
-  :Check result;
-repeatwhile (not converged?) is (yes)
-stop
-@enduml

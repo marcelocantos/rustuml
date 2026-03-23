@@ -1,5 +1,0 @@
-@startuml
-class ColorTest #Linen {
-  +void method()
-}
-@enduml

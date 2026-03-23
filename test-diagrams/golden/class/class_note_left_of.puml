@@ -1,6 +1,0 @@
-@startuml
-class MyClass {
-  +void method()
-}
-note left of MyClass : This is a left note
-@enduml

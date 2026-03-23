@@ -1,7 +1,0 @@
-@startuml
-!$x = "first"
-!%set_variable_value("x", "second")
-!$x2 = %get_variable_value("x")
-participant A
-note over A : $x2
-@enduml

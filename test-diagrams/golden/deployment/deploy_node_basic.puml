@@ -1,5 +1,0 @@
-@startuml
-node AppServer
-node DatabaseServer
-AppServer --> DatabaseServer : JDBC
-@enduml

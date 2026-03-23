@@ -1,5 +1,0 @@
-@startuml
-note as N
-  <color:#FF0066>**note text**</color>
-end note
-@enduml

@@ -1,5 +1,0 @@
-@startuml
-database DB1
-participant P2
-DB1 -> P2: message
-@enduml

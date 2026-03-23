@@ -1,6 +1,0 @@
-@startuml
-skinparam ArrowThickness 2
-class A
-class B
-A --> B
-@enduml

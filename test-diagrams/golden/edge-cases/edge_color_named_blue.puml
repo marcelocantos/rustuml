@@ -1,5 +1,0 @@
-@startuml
-class Foo #blue {
-  field: String
-}
-@enduml

@@ -1,9 +1,0 @@
-@startuml
-node Server {
-  artifact webapp.war
-}
-node Database {
-  artifact mydb
-}
-Server --> Database : JDBC
-@enduml

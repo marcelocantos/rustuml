@@ -1,4 +1,0 @@
-@startuml
-Alice -> Bob : H<sub>2</sub>O
-note right : H<sub>2</sub>O
-@enduml

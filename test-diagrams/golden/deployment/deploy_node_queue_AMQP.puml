@@ -1,5 +1,0 @@
-@startuml
-node Source
-queue Target
-Source --> Target : AMQP
-@enduml

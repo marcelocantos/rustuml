@@ -1,6 +1,0 @@
-@startuml
-Alice -> Bob : hello
-legend
-  **bold** //italic// __under__
-end legend
-@enduml

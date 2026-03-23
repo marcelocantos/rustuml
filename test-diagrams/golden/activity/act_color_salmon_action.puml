@@ -1,7 +1,0 @@
-@startuml
-
-start
-#salmon:Colored action;
-:Normal action;
-stop
-@enduml

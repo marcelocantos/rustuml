@@ -1,3 +1,0 @@
-@startlatex
-\text{Cov}(X,Y) = E[(X-\mu_X)(Y-\mu_Y)]
-@endlatex

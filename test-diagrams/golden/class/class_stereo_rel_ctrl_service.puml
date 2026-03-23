@@ -1,9 +1,0 @@
-@startuml
-class ClassA <<controller>> {
-  +void methodA()
-}
-class ClassB <<service>> {
-  +void methodB()
-}
-ClassA ..> ClassB
-@enduml

@@ -1,3 +1,0 @@
-@startlatex
-\begin{align} x &= a + b \\ y &= c + d \end{align}
-@endlatex

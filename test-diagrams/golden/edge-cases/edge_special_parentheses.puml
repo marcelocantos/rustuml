@@ -1,7 +1,0 @@
-@startuml
-class MyClass {
-  method(param1: String, param2: int): void
-  overloaded(a: int): int
-  overloaded(a: int, b: int): int
-}
-@enduml

@@ -1,7 +1,0 @@
-@startuml
-entity A
-entity B
-A -> B : hello
-rnote over A, B : rnote over two entitys
-B --> A : hi
-@enduml

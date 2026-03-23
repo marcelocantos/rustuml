@@ -1,7 +1,0 @@
-@startsalt
-{
-  Name: | "Alice       "
-  Age:  | "30          "
-  [Submit] | [Cancel]
-}
-@endsalt

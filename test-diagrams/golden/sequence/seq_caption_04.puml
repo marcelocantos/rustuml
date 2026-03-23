@@ -1,5 +1,0 @@
-@startuml
-Alice -> Bob : hello
-Bob --> Alice : hi
-caption Diagram generated on %date%
-@enduml

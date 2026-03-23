@@ -1,5 +1,0 @@
-@startuml
-actor A1
-participant P2
-A1 -> P2: message
-@enduml

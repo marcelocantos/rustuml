@@ -1,6 +1,0 @@
-@startuml
-node MyContainer {
-  component Foo
-}
-note right of MyContainer : Note on node
-@enduml

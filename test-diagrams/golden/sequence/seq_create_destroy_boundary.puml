@@ -1,9 +1,0 @@
-@startuml
-participant Alice
-create boundary NewObj
-Alice -> NewObj : initialize
-NewObj --> Alice : ready
-Alice -> NewObj : use
-NewObj --> Alice : result
-destroy NewObj
-@enduml

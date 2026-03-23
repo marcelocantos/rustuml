@@ -1,8 +1,0 @@
-@startuml
-state A #LightBlue
-state B #LightGreen
-[*] --> A
-A --> B
-B --> [*]
-note right of A : variant note
-@enduml

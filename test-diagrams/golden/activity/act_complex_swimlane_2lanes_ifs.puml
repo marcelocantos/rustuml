@@ -1,9 +1,0 @@
-@startuml
-|Frontend|
-start
-:Start action;
-|Backend|
-:Action in Backend;
-|Frontend|
-stop
-@enduml

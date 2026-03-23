@@ -1,7 +1,0 @@
-@startuml
-Alice -> Bob ++ : request
-Bob -> DB ++ : query
-return data
-note right of Bob : got data
-return result
-@enduml

@@ -1,6 +1,0 @@
-@startuml
-participant "Service 0" <<サービス>>
-participant "Client 0"
-"Service 0" -> "Client 0" : call
-"Client 0" --> "Service 0" : reply
-@enduml

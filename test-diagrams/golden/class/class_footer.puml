@@ -1,6 +1,0 @@
-@startuml
-footer My Footer
-class A
-class B
-A --> B
-@enduml

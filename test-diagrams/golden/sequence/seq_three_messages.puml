@@ -1,5 +1,0 @@
-@startuml
-Alice -> Bob : 1
-Bob -> Charlie : 2
-Charlie --> Alice : 3
-@enduml

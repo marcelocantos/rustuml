@@ -1,3 +1,0 @@
-@startjson
-{"query":"string","filters":{"category":"string","min_price":"number","max_price":"number"},"sort":"string","page":"integer","per_page":"integer"}
-@endjson

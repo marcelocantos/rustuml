@@ -1,5 +1,0 @@
-@startuml
-!theme sketchy-outline
-Alice -> Bob : hello
-Bob --> Alice : world
-@enduml

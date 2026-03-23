@@ -1,9 +1,0 @@
-@startuml login_flow
-Alice -> Bob : Hello
-Bob --> Alice : Hi there
-@enduml
-
-@startuml login_flow
-Alice -> Bob : Hello
-Bob --> Alice : Hi there
-@enduml

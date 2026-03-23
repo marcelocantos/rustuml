@@ -1,6 +1,0 @@
-@startuml
-collections "Long Name Here" as A
-participant "Another Long Name" as B
-A -> B : hello
-B --> A : hi
-@enduml

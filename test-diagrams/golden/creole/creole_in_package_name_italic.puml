@@ -1,7 +1,0 @@
-@startuml
-package "//italic// Package" {
-  class Inner {
-    +field: String
-  }
-}
-@enduml

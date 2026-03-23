@@ -1,5 +1,0 @@
-@startuml
-component Frontend
-component Backend
-Frontend --> Backend : [[http://example.com REST API]]
-@enduml

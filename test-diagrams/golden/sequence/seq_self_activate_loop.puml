@@ -1,6 +1,0 @@
-@startuml
-loop condition
-  Alice -> Alice ++ : self in loop
-  Alice --> Alice -- : done
-end
-@enduml

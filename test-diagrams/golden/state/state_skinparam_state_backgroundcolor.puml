@@ -1,8 +1,0 @@
-@startuml
-skinparam state {
-  BackgroundColor LightCyan
-}
-[*] --> A
-A --> B : event
-B --> [*]
-@enduml

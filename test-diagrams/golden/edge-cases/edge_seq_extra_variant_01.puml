@@ -1,6 +1,0 @@
-@startuml
-participant A1
-participant B1
-A1 -> B1: variant 1
-B1 --> A1: ok 1
-@enduml

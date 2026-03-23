@@ -1,5 +1,0 @@
-@startuml
-title Title 日本語
-Alice -> Bob : hello
-Bob --> Alice : hi
-@enduml

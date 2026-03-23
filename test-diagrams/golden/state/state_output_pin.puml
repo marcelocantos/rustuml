@@ -1,6 +1,0 @@
-@startuml
-state pin1 <<outputPin>>
-A --> pin1
-pin1 --> [*]
-[*] --> A
-@enduml

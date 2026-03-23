@@ -1,5 +1,0 @@
-@startuml
-object MyObject #lightblue {
-  field = "value"
-}
-@enduml

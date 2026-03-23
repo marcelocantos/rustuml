@@ -1,7 +1,0 @@
-@startuml
-!define RENDER_COMPONENT
-
-!ifdef RENDER_COMPONENT
-component GuardedComp
-!endif
-@enduml

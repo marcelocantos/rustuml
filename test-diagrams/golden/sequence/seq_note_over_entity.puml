@@ -1,7 +1,0 @@
-@startuml
-entity X
-participant Y
-X -> Y : message
-note over X : note over entity
-Y --> X : reply
-@enduml

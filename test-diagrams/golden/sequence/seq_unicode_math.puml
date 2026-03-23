@@ -1,4 +1,0 @@
-@startuml
-Alice -> Bob : E = mc² and π ≈ 3.14159
-Bob --> Alice : E = mc² and π ≈ 3.14159 reply
-@enduml

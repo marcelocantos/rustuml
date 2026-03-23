@@ -1,3 +1,0 @@
-@startuml
-usecase """Mono Use Case""" as UC
-@enduml

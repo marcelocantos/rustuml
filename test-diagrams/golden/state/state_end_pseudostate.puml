@@ -1,7 +1,0 @@
-@startuml
-state end1 <<end>>
-[*] --> A
-A --> B : normal
-A --> end1 : terminate
-B --> [*]
-@enduml

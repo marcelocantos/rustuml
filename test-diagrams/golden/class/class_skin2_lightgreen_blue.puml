@@ -1,7 +1,0 @@
-@startuml
-skinparam ClassBackgroundColor lightgreen
-skinparam ClassBorderColor blue
-class A { +void m() }
-class B
-A --> B
-@enduml

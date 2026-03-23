@@ -1,5 +1,0 @@
-@startuml
-note as N1
-  //italic text//
-end note
-@enduml

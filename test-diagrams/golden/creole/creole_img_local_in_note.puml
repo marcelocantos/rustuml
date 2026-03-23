@@ -1,5 +1,0 @@
-@startuml
-note as N
-  image: <img:sprite.png>
-end note
-@enduml

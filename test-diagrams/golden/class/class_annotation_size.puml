@@ -1,6 +1,0 @@
-@startuml
-annotation Size {
-  +int min() default 0
-  +int max() default 2147483647
-}
-@enduml

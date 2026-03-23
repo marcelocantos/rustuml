@@ -1,6 +1,0 @@
-@startuml
-[*] --> A
-A -down---> : [valid]
-A --> B
-B --> [*]
-@enduml

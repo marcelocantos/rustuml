@@ -1,5 +1,0 @@
-@startuml
-!pragma teoz true
-Alice -> Bob : hello
-Bob --> Alice : hi
-@enduml

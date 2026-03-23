@@ -1,7 +1,0 @@
-@startuml
-class "stmt;end" {
-  +void method()
-}
-class Other
-"stmt;end" --> Other
-@enduml

@@ -1,5 +1,0 @@
-@startuml
-state A : This is a very long description that goes into detail about what this state represents in the system
-[*] --> A
-A --> [*]
-@enduml

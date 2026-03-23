@@ -1,5 +1,0 @@
-@startuml
-node Source #LightGreen
-node Target #LightGreen
-Source --> Target : TCP
-@enduml

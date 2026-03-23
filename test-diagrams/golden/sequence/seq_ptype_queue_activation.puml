@@ -1,6 +1,0 @@
-@startuml
-queue Alice
-participant Bob
-Alice -> Bob ++ : activate queue
-Bob --> Alice -- : deactivate queue
-@enduml

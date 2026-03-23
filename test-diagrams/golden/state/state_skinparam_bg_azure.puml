@@ -1,6 +1,0 @@
-@startuml
-skinparam state { BackgroundColor Azure }
-[*] --> A
-A --> B
-B --> [*]
-@enduml

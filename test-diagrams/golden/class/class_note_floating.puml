@@ -1,7 +1,0 @@
-@startuml
-class MyClass {
-  +void method()
-}
-note "This is a floating note" as N1
-MyClass .. N1
-@enduml

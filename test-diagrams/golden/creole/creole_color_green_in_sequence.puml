@@ -1,4 +1,0 @@
-@startuml
-Alice -> Bob : <color:#00AA00>green text</color>
-note right : <color:#00AA00>green text</color>
-@enduml

@@ -1,7 +1,0 @@
-@startuml
-class Pair<A, B> {
-  +A first
-  +B second
-  {static} +Pair<A,B> of(A a, B b)
-}
-@enduml

@@ -1,6 +1,0 @@
-@startuml
-abstract class Variant {
-  +String name
-  +void run()
-}
-@enduml

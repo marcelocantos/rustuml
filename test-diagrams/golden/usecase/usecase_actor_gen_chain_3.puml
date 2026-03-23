@@ -1,9 +1,0 @@
-@startuml
-actor Actor1
-actor Actor2
-actor Actor3
-Actor3 --> (Use Case)
-usecase "Use Case"
-Actor2 --|> Actor1
-Actor3 --|> Actor2
-@enduml

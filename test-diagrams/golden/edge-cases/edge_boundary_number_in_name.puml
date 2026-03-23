@@ -1,7 +1,0 @@
-@startuml
-class Class1
-class Class2
-class Class3
-Class1 --> Class2
-Class2 --> Class3
-@enduml

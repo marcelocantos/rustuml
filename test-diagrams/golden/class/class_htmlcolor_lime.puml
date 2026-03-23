@@ -1,5 +1,0 @@
-@startuml
-class ColorTest #Lime {
-  +void method()
-}
-@enduml

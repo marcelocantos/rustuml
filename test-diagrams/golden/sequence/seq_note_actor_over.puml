@@ -1,7 +1,0 @@
-@startuml
-actor A
-participant B
-A -> B : hello
-note over A : note over actor
-B --> A : hi
-@enduml

@@ -1,7 +1,0 @@
-@startuml
-control A
-control B
-A -> B : hello
-hnote over A, B : hnote over two controls
-B --> A : hi
-@enduml

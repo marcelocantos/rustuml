@@ -1,6 +1,0 @@
-@startuml
-title 系统架构图 - System Architecture
-class 用户
-class 系统
-用户 --> 系统
-@enduml

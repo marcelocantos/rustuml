@@ -1,5 +1,0 @@
-@startuml
-folder Outer {
-  queue Inner
-}
-@enduml

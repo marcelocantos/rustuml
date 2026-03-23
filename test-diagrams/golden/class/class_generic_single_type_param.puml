@@ -1,7 +1,0 @@
-@startuml
-class Foo<T> {
-  +T value
-  +T get()
-  +void set(T val)
-}
-@enduml

@@ -1,7 +1,0 @@
-@startuml
-hide empty fields
-entity MyType {
-  +String field
-  +void method()
-}
-@enduml

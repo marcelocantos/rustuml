@@ -1,4 +1,0 @@
-@startuml
-node AppServer
-note right of AppServer : 16 cores, 64GB RAM
-@enduml

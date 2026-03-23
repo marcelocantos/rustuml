@@ -1,8 +1,0 @@
-@startuml
-
-start
-:Page 1 action;
-newpage
-:Page 2 action;
-stop
-@enduml

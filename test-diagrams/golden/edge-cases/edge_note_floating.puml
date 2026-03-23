@@ -1,9 +1,0 @@
-@startuml
-note as N1
-  Floating note
-  not attached to anything
-end note
-note as N2 #yellow
-  Colored floating note
-end note
-@enduml

@@ -1,5 +1,0 @@
-@startuml
-node Client
-node Server
-Client --> Server : TCP/IP
-@enduml

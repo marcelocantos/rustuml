@@ -1,8 +1,0 @@
-@startuml
-class FormattedClass {
-  +**String** boldField
-  +//int// italicField
-  +__double__ underlineField
-}
-
-@enduml

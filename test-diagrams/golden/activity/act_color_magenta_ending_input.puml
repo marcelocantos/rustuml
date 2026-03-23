@@ -1,6 +1,0 @@
-@startuml
-
-start
-#magenta:Action with input/
-stop
-@enduml

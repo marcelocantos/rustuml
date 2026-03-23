@@ -1,8 +1,0 @@
-@startuml
-A -> B ++ #red : activate cred
-loop cond
-  B -> C ++ #red : nested
-  C --> B -- : done
-end
-B --> A -- : result
-@enduml

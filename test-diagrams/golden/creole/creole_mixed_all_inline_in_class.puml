@@ -1,5 +1,0 @@
-@startuml
-class C {
-  **b** //i// __u__ ~~s~~ <color:blue>c</color>: field
-}
-@enduml

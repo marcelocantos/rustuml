@@ -1,5 +1,0 @@
-@startuml
-!theme crt-green
-Alice -> Bob : hello
-Bob --> Alice : world
-@enduml

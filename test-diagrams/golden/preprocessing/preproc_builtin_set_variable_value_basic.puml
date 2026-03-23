@@ -1,6 +1,0 @@
-@startuml
-!%set_variable_value("dynVar", "world")
-!$retrieved = %get_variable_value("dynVar")
-participant Alice
-note over Alice : $retrieved
-@enduml

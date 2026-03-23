@@ -1,5 +1,0 @@
-@startuml
-component MyA
-interface MyB
-MyA --> MyB
-@enduml

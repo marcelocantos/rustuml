@@ -1,7 +1,0 @@
-@startuml
-component Provider #Yellow
-component Consumer #Yellow
-interface IService
-Provider -( IService
-Consumer --> IService : requires
-@enduml

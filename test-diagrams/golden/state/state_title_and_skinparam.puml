@@ -1,7 +1,0 @@
-@startuml
-title Styled Diagram
-skinparam backgroundColor #FFFACD
-[*] --> A
-A --> B
-B --> [*]
-@enduml

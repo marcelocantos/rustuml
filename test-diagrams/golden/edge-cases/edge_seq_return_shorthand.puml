@@ -1,5 +1,0 @@
-@startuml
-Alice -> Bob: go
-activate Bob
-return done
-@enduml

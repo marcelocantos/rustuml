@@ -1,5 +1,0 @@
-@startuml
-state A #Cornsilk
-[*] --> A
-A --> [*]
-@enduml

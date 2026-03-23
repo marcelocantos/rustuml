@@ -1,6 +1,0 @@
-@startuml
-skinparam borderThickness 2
-Alice -> Bob : hello
-Bob --> Alice : world
-note right : note
-@enduml

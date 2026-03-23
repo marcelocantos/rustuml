@@ -1,7 +1,0 @@
-@startsalt
-{^Confirm Dialog
-  Are you sure you want to delete this item?
-  ..
-  [Yes, Delete] | [Cancel]
-}
-@endsalt

@@ -1,5 +1,0 @@
-@startuml
-class MyClass {
-  <font:Courier>courier font</font>: field
-}
-@enduml

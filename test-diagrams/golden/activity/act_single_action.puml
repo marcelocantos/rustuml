@@ -1,6 +1,0 @@
-@startuml
-
-start
-:Single action;
-stop
-@enduml

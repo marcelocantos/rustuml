@@ -1,6 +1,0 @@
-@startuml
-Alice -> Bob : hello
-note over Alice : over Alice
-note over Bob : over Bob
-Bob --> Alice : hi
-@enduml

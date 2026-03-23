@@ -1,3 +1,0 @@
-@startuml
-Alice -> Bob: **__bold underline__**
-@enduml

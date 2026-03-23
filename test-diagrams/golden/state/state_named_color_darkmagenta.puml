@@ -1,5 +1,0 @@
-@startuml
-state A #DarkMagenta
-[*] --> A
-A --> [*]
-@enduml

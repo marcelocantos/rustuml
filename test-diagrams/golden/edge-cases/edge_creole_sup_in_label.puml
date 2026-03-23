@@ -1,3 +1,0 @@
-@startuml
-Alice -> Bob: <sup>superscript</sup>
-@enduml

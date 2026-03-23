@@ -1,8 +1,0 @@
-@startuml
-
-start
-while (not done?) is (continue)
-  :Do work;
-endwhile (finished)
-stop
-@enduml

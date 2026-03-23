@@ -1,5 +1,0 @@
-@startuml
-interface MyA
-database MyB
-MyA --> MyB
-@enduml

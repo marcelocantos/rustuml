@@ -1,7 +1,0 @@
-@startuml
-boundary X
-participant Y
-X -> Y : go
-rnote over X : rnote/boundary
-Y --> X : back
-@enduml

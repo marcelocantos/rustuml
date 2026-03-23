@@ -1,8 +1,0 @@
-@startuml
-top to bottom direction
-component A
-component B
-component C
-A --> B
-B --> C
-@enduml

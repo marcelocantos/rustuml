@@ -1,5 +1,0 @@
-@startuml
-interface TypeA
-entity TypeB
-TypeA -- TypeB
-@enduml

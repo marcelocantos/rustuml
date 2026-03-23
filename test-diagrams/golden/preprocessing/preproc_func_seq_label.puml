@@ -1,7 +1,0 @@
-@startuml
-!function $method_call($obj, $method, $args)
-  !return $obj + "." + $method + "(" + $args + ")"
-!endfunction
-
-Alice -> Bob : $method_call("svc", "get", "id=1")
-@enduml

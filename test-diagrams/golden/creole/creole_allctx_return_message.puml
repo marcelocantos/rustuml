@@ -1,4 +1,0 @@
-@startuml
-Alice -> Bob : request
-Bob --> Alice : **bold** //italic// __under__
-@enduml

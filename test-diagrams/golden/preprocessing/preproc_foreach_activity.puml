@@ -1,9 +1,0 @@
-@startuml
-start
-
-!foreach $step in ["Validate", "Process", "Store", "Notify"]
-  :$step;
-!endforeach
-
-stop
-@enduml

@@ -1,5 +1,0 @@
-@startuml
-skinparam actorBackgroundColor LightYellow
-actor Alice
-Alice -> Bob : hello
-@enduml

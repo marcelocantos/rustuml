@@ -1,4 +1,0 @@
-[*] --> Active
-Active --> Paused : pause
-Paused --> Active : resume
-Active --> [*] : finish

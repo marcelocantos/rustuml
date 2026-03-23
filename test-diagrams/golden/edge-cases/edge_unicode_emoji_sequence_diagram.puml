@@ -1,6 +1,0 @@
-@startuml
-participant "👤 User" as U
-participant "🖥️ System" as S
-U -> S: 🧪 Test
-S --> U: 💾 Data
-@enduml

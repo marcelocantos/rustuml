@@ -1,9 +1,0 @@
-@startuml
-[*] --> A
-note right of A
-  This is a multi-line note
-  with several lines
-  of text content
-end note
-A --> [*]
-@enduml

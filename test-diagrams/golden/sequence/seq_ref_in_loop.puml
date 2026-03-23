@@ -1,7 +1,0 @@
-@startuml
-loop 3 times
-  Alice -> Bob : request
-  ref over Alice, Bob : See sub-flow
-  Bob --> Alice : response
-end
-@enduml

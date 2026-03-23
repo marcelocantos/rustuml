@@ -1,7 +1,0 @@
-@startuml
-!theme spacelab
-[*] --> Idle
-Idle --> Active : start
-Active --> Done : finish
-Done --> [*]
-@enduml

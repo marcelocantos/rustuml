@@ -1,7 +1,0 @@
-@startuml
-!theme litera
-start
-:step one;
-:step two;
-stop
-@enduml

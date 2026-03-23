@@ -1,7 +1,0 @@
-@startuml
-namespace com.example {
-  class Foo
-  class Bar
-  Foo --> Bar
-}
-@enduml

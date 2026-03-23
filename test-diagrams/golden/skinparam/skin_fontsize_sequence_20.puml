@@ -1,5 +1,0 @@
-@startuml
-skinparam defaultFontSize 20
-Alice -> Bob : font test
-note right : sized
-@enduml

@@ -1,8 +1,0 @@
-@startuml
-state Outer #LightGray {
-  [*] --> Inner
-  Inner --> [*]
-}
-[*] --> Outer
-Outer --> [*]
-@enduml

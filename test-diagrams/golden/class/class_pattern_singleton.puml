@@ -1,8 +1,0 @@
-@startuml
-class Singleton <<singleton>> {
-  -{static} Singleton instance
-  -Singleton()
-  +{static} Singleton getInstance()
-  +void doOperation()
-}
-@enduml

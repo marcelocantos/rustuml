@@ -1,7 +1,0 @@
-@startuml
-skinparam defaultFontSize 20
-class FontClass {
-  +field: String
-  +method(): void
-}
-@enduml

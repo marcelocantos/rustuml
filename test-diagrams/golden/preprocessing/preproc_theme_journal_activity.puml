@@ -1,7 +1,0 @@
-@startuml
-!theme journal
-start
-:step one;
-:step two;
-stop
-@enduml

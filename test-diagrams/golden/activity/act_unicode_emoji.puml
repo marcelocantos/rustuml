@@ -1,6 +1,0 @@
-@startuml
-
-start
-:Process ✓ Complete ✗;
-stop
-@enduml

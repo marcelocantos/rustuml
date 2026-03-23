@@ -1,6 +1,0 @@
-@startuml
-class ClassA
-class ClassB
-
-ClassA -- ClassB
-@enduml

@@ -1,7 +1,0 @@
-@startuml
-Alice -> Bob : hello
-note over Alice
-  ~~waved~~
-end note
-Bob --> Alice : hi
-@enduml

@@ -1,5 +1,0 @@
-@startuml
-note as N
-  **bold** normal //italic//
-end note
-@enduml

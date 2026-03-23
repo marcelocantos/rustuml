@@ -1,6 +1,0 @@
-@startuml
-
-start
-#pink:Action with receive<
-stop
-@enduml

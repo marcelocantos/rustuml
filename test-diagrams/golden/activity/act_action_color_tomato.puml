@@ -1,6 +1,0 @@
-@startuml
-
-start
-#tomato:Colored action;
-stop
-@enduml

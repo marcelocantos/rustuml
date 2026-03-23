@@ -1,7 +1,0 @@
-@startuml
-Alice -> Bob: before
-neg negative
-  Alice -> Bob: inside
-end
-Alice -> Bob: after
-@enduml

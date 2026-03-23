@@ -1,9 +1,0 @@
-@startuml
-hide empty methods
-class A {
-  +String field
-}
-class B {
-  +void method()
-}
-@enduml

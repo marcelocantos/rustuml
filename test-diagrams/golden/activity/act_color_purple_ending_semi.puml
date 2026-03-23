@@ -1,6 +1,0 @@
-@startuml
-
-start
-#purple:Action with semi;
-stop
-@enduml

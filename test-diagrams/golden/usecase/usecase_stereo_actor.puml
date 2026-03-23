@@ -1,7 +1,0 @@
-@startuml
-actor "External System" <<system>>
-actor "Human User" <<human>>
-usecase "Process Data"
-"External System" --> (Process Data)
-"Human User" --> (Process Data)
-@enduml

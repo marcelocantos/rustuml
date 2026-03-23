@@ -1,7 +1,0 @@
-@startuml
-class Foo {
-  {static} staticField: String
-  {abstract} abstractMethod(): void
-  {static} staticMethod(): void
-}
-@enduml

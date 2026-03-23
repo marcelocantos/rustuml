@@ -1,6 +1,0 @@
-@startuml
-participant Alice <<deprecated>>
-participant Bob <<deprecated>>
-Alice -> Bob : hello
-Bob --> Alice : hi
-@enduml

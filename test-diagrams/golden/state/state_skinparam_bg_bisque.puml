@@ -1,6 +1,0 @@
-@startuml
-skinparam state { BackgroundColor Bisque }
-[*] --> A
-A --> B
-B --> [*]
-@enduml

@@ -1,5 +1,0 @@
-@startuml
-note as N
-  <span style='color:blue'>span color</span>
-end note
-@enduml

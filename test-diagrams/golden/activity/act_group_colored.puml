@@ -1,9 +1,0 @@
-@startuml
-
-start
-group #lightblue "Blue Group" {
-  :Action A;
-  :Action B;
-}
-stop
-@enduml

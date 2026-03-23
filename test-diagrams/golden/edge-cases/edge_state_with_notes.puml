@@ -1,7 +1,0 @@
-@startuml
-[*] --> Active
-state Active
-note right of Active: This is active state
-note left of Active: Active and running
-Active --> [*]
-@enduml

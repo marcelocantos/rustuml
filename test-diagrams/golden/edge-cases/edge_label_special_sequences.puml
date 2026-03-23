@@ -1,4 +1,0 @@
-@startuml
-Alice -> Bob: \n \t \\
-Bob --> Alice: normal
-@enduml

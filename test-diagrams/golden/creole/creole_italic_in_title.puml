@@ -1,4 +1,0 @@
-@startuml
-title //Italic Title//
-Alice -> Bob : hello
-@enduml

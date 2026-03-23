@@ -1,5 +1,0 @@
-@startuml
-boundary B1
-database DB2
-B1 -> DB2: message
-@enduml

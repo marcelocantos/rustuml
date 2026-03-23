@@ -1,8 +1,0 @@
-@startuml
-!foreach $item in ["Alice", "Bob", "Carol"]
-  participant $item
-!endforeach
-Alice -> Bob : step 1
-Bob -> Carol : step 2
-Carol --> Alice : done
-@enduml

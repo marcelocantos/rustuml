@@ -1,8 +1,0 @@
-@startuml
-node DataCenter {
-  node ServerRack {
-    node Server1
-    node Server2
-  }
-}
-@enduml

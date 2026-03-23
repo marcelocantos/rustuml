@@ -1,8 +1,0 @@
-@startuml
-
-start
-#green:First action;
-#green:Second action;
-#green:Third action;
-stop
-@enduml

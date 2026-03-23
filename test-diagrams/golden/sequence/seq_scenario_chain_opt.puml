@@ -1,8 +1,0 @@
-@startuml
-opt cond
-Alice -> Bob : 1
-Bob -> Charlie : 2
-Charlie --> Bob : 3
-Bob --> Alice : 4
-end
-@enduml

@@ -1,5 +1,0 @@
-@startuml
-component Foo
-component Bar
-Foo "1" --> "many" Bar : contains
-@enduml

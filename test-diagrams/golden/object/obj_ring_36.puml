@@ -1,6 +1,0 @@
-@startuml
-object Obj0_36 { val = 360 }
-object Obj1_36 { val = 361 }
-Obj0_36 --> Obj1_36
-Obj1_36 --> Obj0_36
-@enduml

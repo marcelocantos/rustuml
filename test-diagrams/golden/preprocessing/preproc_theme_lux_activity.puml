@@ -1,7 +1,0 @@
-@startuml
-!theme lux
-start
-:step one;
-:step two;
-stop
-@enduml

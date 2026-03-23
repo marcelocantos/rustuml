@@ -1,6 +1,0 @@
-@startuml
-class Part
-class Whole
-
-Whole *-- Part
-@enduml

@@ -1,9 +1,0 @@
-@startuml
-namespace Outer {
-  namespace Inner {
-    class MyClass {
-      +void method()
-    }
-  }
-}
-@enduml

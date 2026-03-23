@@ -1,5 +1,0 @@
-@startuml
-participant Alice
-participant Bob
-Alice ->x Bob : explicit lost
-@enduml

@@ -1,7 +1,0 @@
-@startuml
-!$name = "Alice"
-!$role = "sender"
-
-participant "$name ($role)" as P
-P -> Bob : from $name
-@enduml

@@ -1,5 +1,0 @@
-@startuml
-note as N
-  //**<color:red>bold italic red</color>**//
-end note
-@enduml

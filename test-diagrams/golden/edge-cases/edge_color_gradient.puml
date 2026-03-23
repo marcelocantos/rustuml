@@ -1,8 +1,0 @@
-@startuml
-class Foo #red|blue {
-  field: String
-}
-class Bar #yellow|green {
-  field: String
-}
-@enduml

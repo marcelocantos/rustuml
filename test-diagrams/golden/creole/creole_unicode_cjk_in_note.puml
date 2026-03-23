@@ -1,5 +1,0 @@
-@startuml
-note as N
-  中文 日本語 한국어
-end note
-@enduml

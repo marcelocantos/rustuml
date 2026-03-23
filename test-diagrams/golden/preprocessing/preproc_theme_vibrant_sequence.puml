@@ -1,5 +1,0 @@
-@startuml
-!theme vibrant
-Alice -> Bob : hello
-Bob --> Alice : world
-@enduml

@@ -1,3 +1,0 @@
-@startuml
-usecase "//Italic Use Case//" as UC
-@enduml

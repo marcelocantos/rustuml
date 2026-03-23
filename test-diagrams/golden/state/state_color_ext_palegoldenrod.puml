@@ -1,5 +1,0 @@
-@startuml
-state A #PaleGoldenRod
-[*] --> A
-A --> [*]
-@enduml

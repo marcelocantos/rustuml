@@ -1,5 +1,0 @@
-@startuml
-folder Source
-database Target
-Source --> Target
-@enduml

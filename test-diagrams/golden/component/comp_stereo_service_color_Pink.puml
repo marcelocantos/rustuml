@@ -1,5 +1,0 @@
-@startuml
-component MyComp <<service>> #Pink
-component OtherComp <<service>> #Pink
-MyComp --> OtherComp
-@enduml

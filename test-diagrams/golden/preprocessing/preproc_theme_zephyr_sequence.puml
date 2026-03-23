@@ -1,5 +1,0 @@
-@startuml
-!theme zephyr
-Alice -> Bob : hello
-Bob --> Alice : world
-@enduml

@@ -1,4 +1,0 @@
-@startuml
-Alice ->) Bob : solid_noarrow message
-Bob ->) Alice : return solid_noarrow
-@enduml

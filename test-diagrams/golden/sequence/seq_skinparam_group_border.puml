@@ -1,5 +1,0 @@
-@startuml
-skinparam SequenceGroupBorderColor navy
-Alice -> Bob : hello
-Bob --> Alice : hi
-@enduml

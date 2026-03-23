@@ -1,4 +1,0 @@
-@startuml
-artifact "app.war"
-note bottom of "app.war" : Version 1.2.3
-@enduml

@@ -1,5 +1,0 @@
-@startuml
-title Complex Title With Multiple Words
-Alice -> Bob : hello
-Bob --> Alice : hi
-@enduml

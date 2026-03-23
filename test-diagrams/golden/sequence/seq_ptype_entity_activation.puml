@@ -1,6 +1,0 @@
-@startuml
-entity Alice
-participant Bob
-Alice -> Bob ++ : activate entity
-Bob --> Alice -- : deactivate entity
-@enduml

@@ -1,4 +1,0 @@
-@startuml
-Alice -> Bob : → ← ↑ ↓ ↔ ⇒
-Bob --> Alice : → ← ↑ ↓ ↔ ⇒ reply
-@enduml

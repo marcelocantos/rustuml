@@ -1,8 +1,0 @@
-@startuml
-
-start
-while (items pending?) is (continue)
-  :Process iteration;
-endwhile (done)
-stop
-@enduml

@@ -1,9 +1,0 @@
-@startmindmap
-*[#blue] Topic 11
-**[#green] Right 11.1
-***[#white] Sub 11.1.1
-**[#yellow] Right 11.2
---[#orange] Left 11.1
----[#white] Sub 11.L.1
---[#pink] Left 11.2
-@endmindmap

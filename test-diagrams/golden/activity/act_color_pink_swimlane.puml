@@ -1,7 +1,0 @@
-@startuml
-
-|#pink|Colored Lane|
-start
-:Action;
-stop
-@enduml

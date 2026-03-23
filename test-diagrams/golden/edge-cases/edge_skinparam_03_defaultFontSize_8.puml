@@ -1,6 +1,0 @@
-@startuml
-skinparam defaultFontSize 8
-class Foo
-class Bar
-Foo --> Bar
-@enduml

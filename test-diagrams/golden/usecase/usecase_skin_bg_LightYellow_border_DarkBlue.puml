@@ -1,9 +1,0 @@
-@startuml
-skinparam usecase {
-  BackgroundColor LightYellow
-  BorderColor DarkBlue
-}
-actor User
-usecase "Action"
-User --> (Action)
-@enduml

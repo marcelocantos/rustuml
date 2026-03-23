@@ -1,6 +1,0 @@
-@startuml
-
-start
-:Επεξεργασία δεδομένων;
-stop
-@enduml

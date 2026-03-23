@@ -1,4 +1,0 @@
-@startuml
-Alice -> Bob : message with <img:https://plantuml.com/img/logo.png{scale=0.5}>
-note right : note with <img:https://plantuml.com/img/logo.png{scale=0.5}>
-@enduml

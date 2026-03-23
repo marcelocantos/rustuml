@@ -1,9 +1,0 @@
-@startuml
-start
-fork
-  :action send>
-fork again
-  :normal;
-end fork
-stop
-@enduml

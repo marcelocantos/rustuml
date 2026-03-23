@@ -1,4 +1,0 @@
-@startuml
-Alice -> Bob : solid message
-Bob -> Alice : return solid
-@enduml

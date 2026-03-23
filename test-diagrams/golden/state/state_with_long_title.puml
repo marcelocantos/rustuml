@@ -1,5 +1,0 @@
-@startuml
-title A Very Long Title For This State Diagram
-[*] --> A
-A --> [*]
-@enduml

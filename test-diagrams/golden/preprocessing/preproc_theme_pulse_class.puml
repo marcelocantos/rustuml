@@ -1,7 +1,0 @@
-@startuml
-!theme pulse
-class Animal {
-  +name: String
-}
-class Dog extends Animal {}
-@enduml

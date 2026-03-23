@@ -1,6 +1,0 @@
-@startuml
-state Isolated1
-state Isolated2
-[*] --> Connected
-Connected --> [*]
-@enduml

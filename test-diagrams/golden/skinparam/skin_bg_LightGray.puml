@@ -1,5 +1,0 @@
-@startuml
-skinparam backgroundColor LightGray
-Alice -> Bob : background test
-note right : LightGray
-@enduml

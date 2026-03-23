@@ -1,8 +1,0 @@
-@startuml
-!theme cloudscape-design
-participant Alice
-participant Bob
-Alice -> Bob : hello from cloudscape-design
-Bob --> Alice : reply
-note right : cloudscape-design theme
-@enduml

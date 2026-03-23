@@ -1,9 +1,0 @@
-@startuml
-package Group1 {
-  component A
-}
-package Group2 {
-  component B
-}
-A --> B : JDBC
-@enduml

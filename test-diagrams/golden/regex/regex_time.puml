@@ -1,3 +1,0 @@
-@startregex
-\d{2}:\d{2}(:\d{2})?
-@endregex

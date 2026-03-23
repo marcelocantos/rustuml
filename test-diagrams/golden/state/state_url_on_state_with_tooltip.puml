@@ -1,5 +1,0 @@
-@startuml
-state A [[http://example.com{tooltip text}]]
-[*] --> A
-A --> [*]
-@enduml

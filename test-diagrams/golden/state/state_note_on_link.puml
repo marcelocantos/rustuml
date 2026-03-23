@@ -1,8 +1,0 @@
-@startuml
-[*] --> A
-A --> B
-note on link
-  This note is on the link
-end note
-B --> [*]
-@enduml

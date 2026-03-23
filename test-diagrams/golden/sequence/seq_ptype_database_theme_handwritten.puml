@@ -1,7 +1,0 @@
-@startuml
-skinparam handwritten true
-database Alice
-participant Bob
-Alice -> Bob : hello
-Bob --> Alice : hi
-@enduml

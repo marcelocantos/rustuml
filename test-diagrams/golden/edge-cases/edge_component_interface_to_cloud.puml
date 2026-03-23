@@ -1,5 +1,0 @@
-@startuml
-interface MyA
-cloud MyB
-MyA --> MyB
-@enduml

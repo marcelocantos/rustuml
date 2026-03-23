@@ -1,5 +1,0 @@
-@startuml
-note as N
-  x<sup>2</sup> + y<sup>2</sup>
-end note
-@enduml

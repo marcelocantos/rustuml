@@ -1,5 +1,0 @@
-@startuml
-class C {
-  <size:16><color:navy>**big navy bold**</color></size>: field
-}
-@enduml

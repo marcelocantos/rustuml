@@ -1,7 +1,0 @@
-@startuml
-hide empty members
-enum MyType {
-  +String field
-  +void method()
-}
-@enduml

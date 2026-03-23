@@ -1,9 +1,0 @@
-@startuml
-participant A
-A -> B ++ #blue : level 1
-B -> C ++ #blue : level 2
-C -> D ++ #blue : level 3
-D --> C -- : return 3
-C --> B -- : return 2
-B --> A -- : return 1
-@enduml

@@ -1,7 +1,0 @@
-@startuml
-skinparam stateRoundCorner 10
-
-
-[*] --> S\nstate S
-
-@enduml

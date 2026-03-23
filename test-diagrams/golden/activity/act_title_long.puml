@@ -1,6 +1,0 @@
-@startuml
-title This Is A Very Long Title For The Activity Diagram That Tests Layout
-start
-:Action;
-stop
-@enduml

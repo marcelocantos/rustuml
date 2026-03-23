@@ -1,4 +1,0 @@
-@startuml
-Alice -> Bob : This is an extremely long message text that goes on and on to test how the renderer handles very long message labels in sequence diagrams
-Bob --> Alice : Another very long response message that tests the wrapping and layout capabilities of the sequence diagram renderer
-@enduml

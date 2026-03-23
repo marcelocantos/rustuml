@@ -1,8 +1,0 @@
-@startuml
-class TreeNode {
-  +TreeNode parent
-  +List~TreeNode~ children
-}
-TreeNode --> TreeNode : contains
-
-@enduml

@@ -1,5 +1,0 @@
-@startuml
-class "élève" {
-  field: String
-}
-@enduml

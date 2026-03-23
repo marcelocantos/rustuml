@@ -1,8 +1,0 @@
-@startuml
-Alice -> Bob ++ : start
-newpage
-Bob -> Charlie : continue
-Charlie --> Bob : done
-newpage
-Bob --> Alice -- : finish
-@enduml

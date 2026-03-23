@@ -1,4 +1,0 @@
-@startuml
-Alice -\ Bob : bold message
-Bob -\ Alice : return bold
-@enduml

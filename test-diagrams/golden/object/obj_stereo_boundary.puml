@@ -1,5 +1,0 @@
-@startuml
-object MyObject <<boundary>> {
-  id = 1
-}
-@enduml

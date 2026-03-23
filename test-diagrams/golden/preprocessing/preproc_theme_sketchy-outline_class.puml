@@ -1,7 +1,0 @@
-@startuml
-!theme sketchy-outline
-class Animal {
-  +name: String
-}
-class Dog extends Animal {}
-@enduml

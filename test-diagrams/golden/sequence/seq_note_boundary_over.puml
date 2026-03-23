@@ -1,7 +1,0 @@
-@startuml
-boundary A
-participant B
-A -> B : hello
-note over A : note over boundary
-B --> A : hi
-@enduml

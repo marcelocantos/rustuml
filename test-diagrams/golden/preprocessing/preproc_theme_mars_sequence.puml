@@ -1,5 +1,0 @@
-@startuml
-!theme mars
-Alice -> Bob : hello
-Bob --> Alice : world
-@enduml

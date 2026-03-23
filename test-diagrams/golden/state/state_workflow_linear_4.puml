@@ -1,7 +1,0 @@
-@startuml
-[*] --> W1
-W1 --> W2 : step1
-W2 --> W3 : step2
-W3 --> W4 : step3
-W4 --> [*]
-@enduml

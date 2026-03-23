@@ -1,6 +1,0 @@
-@startdot
-digraph G {
-  rankdir=TB
-  A -> B -> C -> D
-}
-@enddot

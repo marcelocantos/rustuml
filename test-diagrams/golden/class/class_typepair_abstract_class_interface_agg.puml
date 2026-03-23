@@ -1,5 +1,0 @@
-@startuml
-abstract class TypeA
-interface TypeB
-TypeA o-- TypeB
-@enduml

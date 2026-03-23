@@ -1,8 +1,0 @@
-@startuml
-!pragma useVerticalIf on
-!if %true()
-  note as N1
-    vertical if true
-  end note
-!endif
-@enduml

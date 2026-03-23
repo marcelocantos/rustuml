@@ -1,7 +1,0 @@
-@startuml
-
-skinparam activityBackgroundColor darkgray
-start
-:Test action;
-stop
-@enduml

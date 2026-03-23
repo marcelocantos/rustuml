@@ -1,7 +1,0 @@
-@startyaml
-frameworks:
-  - Django
-  - FastAPI
-  - Axum
-count: 3
-@endyaml

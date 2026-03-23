@@ -1,6 +1,0 @@
-@startuml
-database "Named Database" as P #yellow
-participant Other
-P -> Other : database yellow call
-Other --> P : reply
-@enduml

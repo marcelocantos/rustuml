@@ -1,5 +1,0 @@
-@startuml
-Alice -> Bob : before
-== <font color=red>Red Divider</font> ==
-Bob --> Alice : after
-@enduml

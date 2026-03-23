@@ -1,9 +1,0 @@
-@startuml
-actor User
-actor AdminUser
-User <|-- AdminUser
-usecase Login
-usecase ManageUsers
-User --> Login
-AdminUser --> ManageUsers
-@enduml

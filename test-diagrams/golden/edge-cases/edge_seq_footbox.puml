@@ -1,5 +1,0 @@
-@startuml
-hide footbox
-Alice -> Bob: hello
-Bob --> Alice: hi
-@enduml

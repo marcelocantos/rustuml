@@ -1,8 +1,0 @@
-@startuml
-object MyObj <<service>> #pink {
-  id = 5
-  type = "service"
-  active = true
-}
-note right : Stereotype: service
-@enduml

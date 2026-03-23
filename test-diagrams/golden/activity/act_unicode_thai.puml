@@ -1,6 +1,0 @@
-@startuml
-
-start
-:การประมวลผลข้อมูล;
-stop
-@enduml

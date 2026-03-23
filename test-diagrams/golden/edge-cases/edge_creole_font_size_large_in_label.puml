@@ -1,3 +1,0 @@
-@startuml
-Alice -> Bob: <size:20>large</size>
-@enduml

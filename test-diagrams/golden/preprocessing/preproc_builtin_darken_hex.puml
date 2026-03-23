@@ -1,6 +1,0 @@
-@startuml
-!$d = %darken("#4488FF", 20)
-skinparam participantBackgroundColor $d
-participant X
-X -> X : dark hex
-@enduml

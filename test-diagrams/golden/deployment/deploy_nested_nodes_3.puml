@@ -1,9 +1,0 @@
-@startuml
-node Region {
-  node AvailabilityZone {
-    node Cluster {
-      node Instance
-    }
-  }
-}
-@enduml

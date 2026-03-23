@@ -1,7 +1,0 @@
-@startuml
-class "混合 Mixed мешаный" {
-  field1: ラベル
-  field2: متن
-  field3: テキスト
-}
-@enduml

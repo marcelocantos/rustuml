@@ -1,5 +1,0 @@
-@startuml
-state A #CadetBlue
-[*] --> A
-A --> [*]
-@enduml

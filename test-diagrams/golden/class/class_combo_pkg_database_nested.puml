@@ -1,9 +1,0 @@
-@startuml
-database Outer {
-  database Inner {
-    class MyClass {
-      +void method()
-    }
-  }
-}
-@enduml

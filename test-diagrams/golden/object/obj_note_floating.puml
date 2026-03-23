@@ -1,7 +1,0 @@
-@startuml
-object Server {
-  ip = "192.168.1.1"
-}
-note "This is a server\nwith multiple lines" as N1
-Server .. N1
-@enduml

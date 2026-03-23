@@ -1,5 +1,0 @@
-@startuml
-skinparam handwritten true
-Alice -> Bob : hello
-Bob --> Alice : hi
-@enduml

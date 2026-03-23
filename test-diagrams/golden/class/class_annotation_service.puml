@@ -1,5 +1,0 @@
-@startuml
-annotation Service {
-  +String value() default ""
-}
-@enduml

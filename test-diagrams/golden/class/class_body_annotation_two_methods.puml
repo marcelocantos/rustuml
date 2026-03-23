@@ -1,6 +1,0 @@
-@startuml
-annotation Variant {
-  +void run()
-  -void helper()
-}
-@enduml

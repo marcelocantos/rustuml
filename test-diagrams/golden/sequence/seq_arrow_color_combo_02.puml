@@ -1,6 +1,0 @@
-@startuml
-Alice -[#green]> Bob : forward #green
-Bob -[#orange]--> Alice : return #orange
-Alice -[#green]>> Charlie : thin #green
-Charlie -[#orange]-->> Alice : thin dotted #orange
-@enduml

@@ -1,5 +1,0 @@
-@startuml
-folder Source
-queue Target
-Source --> Target
-@enduml

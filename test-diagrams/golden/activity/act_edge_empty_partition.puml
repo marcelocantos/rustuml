@@ -1,8 +1,0 @@
-@startuml
-
-start
-partition "Empty" {
-}
-:After empty partition;
-stop
-@enduml

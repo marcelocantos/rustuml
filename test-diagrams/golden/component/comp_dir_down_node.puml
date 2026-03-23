@@ -1,9 +1,0 @@
-@startuml
-node GroupA {
-  component A
-}
-node GroupB {
-  component B
-}
-A -down-> B
-@enduml

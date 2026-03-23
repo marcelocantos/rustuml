@@ -1,6 +1,0 @@
-@startuml
-state ps <<end>> #blue
-[*] --> A
-A --> ps
-ps --> [*]
-@enduml

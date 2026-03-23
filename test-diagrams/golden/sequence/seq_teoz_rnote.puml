@@ -1,9 +1,0 @@
-@startuml
-!pragma teoz true
-Alice -> Bob ++ : request
-rnote over Alice : teoz + rnote
-Bob -> Charlie ++ : delegate
-rnote over Bob, Charlie : over two
-Charlie --> Bob -- : done
-Bob --> Alice -- : result
-@enduml

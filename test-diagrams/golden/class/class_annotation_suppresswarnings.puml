@@ -1,5 +1,0 @@
-@startuml
-annotation SuppressWarnings {
-  +String value()
-}
-@enduml

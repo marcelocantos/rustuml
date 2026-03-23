@@ -1,5 +1,0 @@
-@startuml
-class MemberClass {
-  {static} #String compute()
-}
-@enduml

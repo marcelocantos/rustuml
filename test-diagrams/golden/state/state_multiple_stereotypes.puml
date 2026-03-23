@@ -1,9 +1,0 @@
-@startuml
-state A <<stereo1>>
-state B <<stereo2>>
-state C <<stereo3>>
-[*] --> A
-A --> B
-B --> C
-C --> [*]
-@enduml

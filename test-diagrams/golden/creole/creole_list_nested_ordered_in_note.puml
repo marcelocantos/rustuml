@@ -1,8 +1,0 @@
-@startuml
-note as N
-  # first
-  ## sub-first
-  ## sub-second
-  # second
-end note
-@enduml

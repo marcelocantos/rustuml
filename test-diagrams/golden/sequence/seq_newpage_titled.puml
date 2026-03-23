@@ -1,7 +1,0 @@
-@startuml
-Alice -> Bob : start
-newpage Second Page
-Bob -> Charlie : middle
-newpage Third Page
-Charlie --> Alice : end
-@enduml

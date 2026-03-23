@@ -1,8 +1,0 @@
-@startuml
-title "Sequence 116"
-participant Svc1
-participant Svc2
-participant Svc3
-Svc1 -> Svc2 : call_1_116
-Svc2 -> Svc3 : call_2_116
-@enduml

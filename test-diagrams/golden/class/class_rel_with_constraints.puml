@@ -1,5 +1,0 @@
-@startuml
-class Student
-class Course
-Student "0..*" -- "0..*" Course : {ordered, unique}
-@enduml

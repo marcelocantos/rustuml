@@ -1,6 +1,0 @@
-@startuml
-class MyClass
-note right of MyClass
-  <b>html_bold</b>
-end note
-@enduml

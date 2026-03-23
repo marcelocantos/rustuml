@@ -1,7 +1,0 @@
-@startuml
-namespace myPkg #lavender {
-  class MyClass {
-    +void method()
-  }
-}
-@enduml

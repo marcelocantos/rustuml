@@ -1,9 +1,0 @@
-@startuml
-concise "User" as U
-@0
-U is Idle
-@100
-U is Active
-@200
-U is Idle
-@enduml

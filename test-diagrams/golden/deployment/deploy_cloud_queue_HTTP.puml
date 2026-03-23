@@ -1,5 +1,0 @@
-@startuml
-cloud Source
-queue Target
-Source --> Target : HTTP
-@enduml

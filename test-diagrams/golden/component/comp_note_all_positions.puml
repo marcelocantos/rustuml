@@ -1,7 +1,0 @@
-@startuml
-component Center
-note top of Center : Top note
-note bottom of Center : Bottom note
-note left of Center : Left note
-note right of Center : Right note
-@enduml

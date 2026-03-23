@@ -1,5 +1,0 @@
-@startuml
-component MyA
-node MyB
-MyA --> MyB
-@enduml

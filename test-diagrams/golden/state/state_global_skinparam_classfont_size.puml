@@ -1,6 +1,0 @@
-@startuml
-skinparam classFontSize 14
-[*] --> A
-A --> B : event
-B --> [*]
-@enduml

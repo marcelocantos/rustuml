@@ -1,5 +1,0 @@
-@startuml
-class A
-class B
-A -[#00FFFF]-> B
-@enduml

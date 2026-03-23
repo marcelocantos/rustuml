@@ -1,9 +1,0 @@
-@startuml
-[*] --> A
-A --> B : [guard1]
-A --> C : [guard2]
-A --> D : [!guard1 && !guard2]
-B --> [*]
-C --> [*]
-D --> [*]
-@enduml

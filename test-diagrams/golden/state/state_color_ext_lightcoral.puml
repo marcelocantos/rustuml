@@ -1,5 +1,0 @@
-@startuml
-state A #LightCoral
-[*] --> A
-A --> [*]
-@enduml

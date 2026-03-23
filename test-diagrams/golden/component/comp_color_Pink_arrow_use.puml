@@ -1,5 +1,0 @@
-@startuml
-component Foo #Pink
-component Bar #Pink
-Foo ..> Bar
-@enduml

@@ -1,5 +1,0 @@
-@startuml
-actor User #LightBlue
-usecase "Action" #LightBlue
-User --> (Action)
-@enduml

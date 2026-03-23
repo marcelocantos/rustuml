@@ -1,4 +1,0 @@
-@startuml
-component MyComp <<service>> #LightBlue
-note left of MyComp : Note on service
-@enduml

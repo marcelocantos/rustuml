@@ -1,7 +1,0 @@
-@startuml
-Alice -> Bob : hello
-create Charlie
-Bob -> Charlie : create
-Charlie --> Bob : created
-Bob --> Alice : done
-@enduml

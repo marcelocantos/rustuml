@@ -1,4 +1,0 @@
-@startuml
-state "**bold** //italic// __under__" as S
-[*] --> S
-@enduml

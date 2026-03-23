@@ -1,9 +1,0 @@
-@startuml
-
-start
-while (condition?)
-:Work 1;
-:Work 2;
-endwhile
-stop
-@enduml

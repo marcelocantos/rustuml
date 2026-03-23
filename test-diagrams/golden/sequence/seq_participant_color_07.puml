@@ -1,6 +1,0 @@
-@startuml
-participant Alice #FF8800
-participant Bob
-Alice -> Bob : colored participant
-Bob --> Alice : reply
-@enduml

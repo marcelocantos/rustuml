@@ -1,5 +1,0 @@
-@startuml
-state "<back:yellow>bg</back> State" as S360
-[*] --> S360
-S360 : <back:yellow>bg</back> description
-@enduml

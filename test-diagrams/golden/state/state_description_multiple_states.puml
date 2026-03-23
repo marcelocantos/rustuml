@@ -1,9 +1,0 @@
-@startuml
-state A : description of A
-state B : description of B
-state C : description of C
-[*] --> A
-A --> B
-B --> C
-C --> [*]
-@enduml

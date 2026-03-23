@@ -1,5 +1,0 @@
-@startuml
-cloud Outer {
-  node Inner
-}
-@enduml

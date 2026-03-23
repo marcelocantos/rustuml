@@ -1,6 +1,0 @@
-@startuml
-state S1 <<exitPoint>>
-A --> S1
-S1 --> [*]
-[*] --> A
-@enduml

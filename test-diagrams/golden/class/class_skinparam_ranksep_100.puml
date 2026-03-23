@@ -1,8 +1,0 @@
-@startuml
-skinparam ranksep 100
-class A
-class B
-class C
-A --> B
-B --> C
-@enduml

@@ -1,6 +1,0 @@
-@startuml
-actor Alice
-actor Bob
-Alice -> Bob : hello
-Bob --> Alice : hi
-@enduml

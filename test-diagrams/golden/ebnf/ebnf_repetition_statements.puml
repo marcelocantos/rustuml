@@ -1,6 +1,0 @@
-@startebnf
-block = "{" , { statement } , "}";
-statement = identifier , ";" ;
-identifier = letter;
-letter = "a" | "b" | "c";
-@endebnf

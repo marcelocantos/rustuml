@@ -1,5 +1,0 @@
-@startuml
-collections Alice
-participant Bob
-Alice -[#red]>> Bob : collections colored thin_solid
-@enduml

@@ -1,7 +1,0 @@
-@startuml
-class "Class[WithBrackets]" {
-  +void method()
-}
-class Other
-"Class[WithBrackets]" --> Other
-@enduml

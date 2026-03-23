@@ -1,7 +1,0 @@
-@startuml
-Alice -> Bob: msg1
-...5 minutes later...
-Bob --> Alice: delayed response
-...
-Alice -> Bob: msg2
-@enduml

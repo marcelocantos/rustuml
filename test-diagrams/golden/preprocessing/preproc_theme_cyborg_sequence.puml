@@ -1,5 +1,0 @@
-@startuml
-!theme cyborg
-Alice -> Bob : hello
-Bob --> Alice : world
-@enduml

@@ -1,6 +1,0 @@
-@startuml
-
-start
-#navy:Action with output\
-stop
-@enduml

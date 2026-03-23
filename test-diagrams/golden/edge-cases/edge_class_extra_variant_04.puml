@@ -1,7 +1,0 @@
-@startuml
-class ExtraClass4 {
-  field4: String
-  +method4(): int
-}
-note right of ExtraClass4: variant 4
-@enduml

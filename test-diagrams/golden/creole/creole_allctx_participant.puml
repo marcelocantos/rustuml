@@ -1,4 +1,0 @@
-@startuml
-participant "**bold** //italic// __under__" as P
-P -> P : self
-@enduml

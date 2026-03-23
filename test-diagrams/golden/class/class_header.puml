@@ -1,6 +1,0 @@
-@startuml
-header My Header
-class A
-class B
-A --> B
-@enduml

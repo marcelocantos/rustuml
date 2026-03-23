@@ -1,5 +1,0 @@
-@startuml
-component Foo
-component Bar
-Foo -(0- Bar : uses
-@enduml

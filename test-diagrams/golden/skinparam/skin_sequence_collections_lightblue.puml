@@ -1,5 +1,0 @@
-@startuml
-skinparam collectionsBackgroundColor LightBlue
-collections Alice
-Alice -> Bob : hello
-@enduml

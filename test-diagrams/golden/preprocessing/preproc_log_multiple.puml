@@ -1,8 +1,0 @@
-@startuml
-!$a = "first"
-!$b = "second"
-!log "Processing: " + $a
-!log "Then: " + $b
-Alice -> Bob : $a
-Bob -> Carol : $b
-@enduml

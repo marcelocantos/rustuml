@@ -1,6 +1,0 @@
-@startuml
-interface Combo {
-  +void process()
-  -String format()
-}
-@enduml

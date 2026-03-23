@@ -1,7 +1,0 @@
-@startuml
-annotation Resource {
-  +String name() default ""
-  +String lookup() default ""
-  +Class type() default Object.class
-}
-@enduml

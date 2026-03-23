@@ -1,5 +1,0 @@
-@startuml
-note as N
-  **//~~__all styles__~~//**
-end note
-@enduml

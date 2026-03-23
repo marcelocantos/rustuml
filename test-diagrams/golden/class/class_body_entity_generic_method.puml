@@ -1,5 +1,0 @@
-@startuml
-entity Variant {
-  +<T> T cast(Object o)
-}
-@enduml

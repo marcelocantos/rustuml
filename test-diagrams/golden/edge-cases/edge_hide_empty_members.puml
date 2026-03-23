@@ -1,8 +1,0 @@
-@startuml
-hide empty members
-class Foo {
-}
-class Bar {
-  field: String
-}
-@enduml

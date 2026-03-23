@@ -1,6 +1,0 @@
-@startuml
-skinparam arrowColor navy
-A -> B : solid
-A --> B : dashed
-A ->> B : thin
-@enduml

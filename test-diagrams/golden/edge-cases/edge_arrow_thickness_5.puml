@@ -1,5 +1,0 @@
-@startuml
-class A
-class B
-A -[thickness=5]-> B
-@enduml

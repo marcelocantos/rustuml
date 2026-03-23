@@ -1,7 +1,0 @@
-@startuml
-package myPackage #pink {
-  class MyClass {
-    +void method()
-  }
-}
-@enduml

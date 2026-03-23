@@ -1,7 +1,0 @@
-@startuml
-Alice -> Bob : a
-== divider ==
-Bob --> Alice : b
-newpage Third
-Alice -> Bob : c
-@enduml

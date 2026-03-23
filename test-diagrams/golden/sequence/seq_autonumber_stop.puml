@@ -1,8 +1,0 @@
-@startuml
-autonumber
-Alice -> Bob : 1
-Bob --> Alice : 2
-autonumber stop
-Alice -> Bob : no number
-Bob --> Alice : no number
-@enduml

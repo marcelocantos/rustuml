@@ -1,8 +1,0 @@
-@startuml
-participant A
-!if %is_dark("#FFFFFF")
-  note over A : is dark
-!else
-  note over A : not dark
-!endif
-@enduml

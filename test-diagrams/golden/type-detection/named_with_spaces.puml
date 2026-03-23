@@ -1,5 +1,0 @@
-@startuml "Diagram With Spaces"
-class Foo
-class Bar
-Foo <|-- Bar
-@enduml

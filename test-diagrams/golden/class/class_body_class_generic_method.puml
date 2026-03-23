@@ -1,5 +1,0 @@
-@startuml
-class Variant {
-  +<T> T cast(Object o)
-}
-@enduml

@@ -1,8 +1,0 @@
-@startuml
-start
-partition "Partition 1" {
-  :Part 1 Action 1;
-  :Part 1 Action 2;
-}
-stop
-@enduml

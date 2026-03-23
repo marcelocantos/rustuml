@@ -1,5 +1,0 @@
-@startuml
-component MyComp <<gateway>> #Pink
-component OtherComp <<gateway>> #Pink
-MyComp --> OtherComp
-@enduml

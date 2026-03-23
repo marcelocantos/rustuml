@@ -1,5 +1,0 @@
-@startuml
-!theme flatly
-Alice -> Bob : hello
-Bob --> Alice : world
-@enduml

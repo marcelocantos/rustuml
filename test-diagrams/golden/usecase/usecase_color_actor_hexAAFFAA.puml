@@ -1,5 +1,0 @@
-@startuml
-actor User #AAFFAA
-usecase "Action"
-User --> (Action)
-@enduml

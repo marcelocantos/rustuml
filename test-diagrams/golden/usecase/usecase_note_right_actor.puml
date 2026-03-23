@@ -1,6 +1,0 @@
-@startuml
-actor User
-note right of User : Right note on actor
-usecase UC
-User --> UC
-@enduml

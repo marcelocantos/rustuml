@@ -1,8 +1,0 @@
-@startuml
-actor "Source" as Src
-entity "Target" as Tgt
-Src -> Tgt : request
-Tgt --> Src : response
-note over Src : src note
-note over Tgt : tgt note
-@enduml

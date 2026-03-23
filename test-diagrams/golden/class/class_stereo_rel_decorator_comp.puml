@@ -1,9 +1,0 @@
-@startuml
-class ClassA <<decorator>> {
-  +void methodA()
-}
-class ClassB <<component>> {
-  +void methodB()
-}
-ClassA ..|> ClassB
-@enduml

@@ -1,7 +1,0 @@
-@startuml
-state A : données en cours de traitement
-state B : résultat disponible
-[*] --> A
-A --> B
-B --> [*]
-@enduml

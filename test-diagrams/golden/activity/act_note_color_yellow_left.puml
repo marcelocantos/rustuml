@@ -1,9 +1,0 @@
-@startuml
-
-start
-:Action;
-note left #yellow
-  Colored note
-end note
-stop
-@enduml

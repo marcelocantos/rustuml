@@ -1,6 +1,0 @@
-@startgantt
-[Project Start] happens at 2023-01-01
-[Task 1] lasts 10 days
-[Task 1] starts at [Project Start]'s end
-[Milestone] happens at [Task 1]'s end
-@endgantt

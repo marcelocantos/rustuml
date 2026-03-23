@@ -1,4 +1,0 @@
-@startuml
-title <color:blue>//italic blue//</color>
-Alice -> Bob : hello
-@enduml

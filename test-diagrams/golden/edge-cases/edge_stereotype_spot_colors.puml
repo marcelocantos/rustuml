@@ -1,6 +1,0 @@
-@startuml
-class ServiceA << (S,#FF0000) >>
-class RepositoryB << (R,#00FF00) >>
-class ControllerC << (C,#0000FF) >>
-class EntityD << (E,#FFFF00) >>
-@enduml

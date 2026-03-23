@@ -1,4 +1,0 @@
-@startuml
-Alice -> Bob : 日本語のメッセージ
-Bob --> Alice : 日本語のメッセージ reply
-@enduml

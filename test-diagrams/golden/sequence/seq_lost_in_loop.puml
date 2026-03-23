@@ -1,8 +1,0 @@
-@startuml
-Alice -> Bob ++ : start
-loop retry
-  Bob ->x External : attempt (lost)
-  ... wait ...
-end
-Bob --> Alice -- : give up
-@enduml

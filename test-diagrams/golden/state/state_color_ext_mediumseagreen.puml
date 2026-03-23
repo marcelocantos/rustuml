@@ -1,5 +1,0 @@
-@startuml
-state A #MediumSeaGreen
-[*] --> A
-A --> [*]
-@enduml

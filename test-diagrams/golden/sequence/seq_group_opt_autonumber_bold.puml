@@ -1,9 +1,0 @@
-@startuml
-autonumber "<b>##</b>"
-A -> B : start
-opt cond
-  B -> C : action
-  C --> B : done
-end
-B --> A : result
-@enduml

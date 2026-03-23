@@ -1,6 +1,0 @@
-@startuml
-class MyClass {
-  * field list item 1
-  * field list item 2
-}
-@enduml

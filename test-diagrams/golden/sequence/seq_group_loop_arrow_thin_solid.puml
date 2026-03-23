@@ -1,7 +1,0 @@
-@startuml
-A -> B : init
-loop cond
-  A ->> B : thin_solid in loop
-  B --> A : ack
-end
-@enduml

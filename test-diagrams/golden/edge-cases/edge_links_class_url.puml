@@ -1,4 +1,0 @@
-@startuml
-class Foo [[https://example.com]]
-class Bar [[https://example.com/bar tooltip]]
-@enduml

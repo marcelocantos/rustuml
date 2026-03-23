@@ -1,5 +1,0 @@
-component "Web" as WS
-component "API" as API
-component "DB" as DB
-WS --> API
-API --> DB

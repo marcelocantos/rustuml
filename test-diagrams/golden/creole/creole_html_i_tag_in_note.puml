@@ -1,5 +1,0 @@
-@startuml
-note as N
-  <i>italic i tag</i>
-end note
-@enduml

@@ -1,8 +1,0 @@
-@startuml
-Alice -> Bob : page 1 message
-Bob --> Alice : page 1 reply
-
-newpage Page 2
-Alice -> Bob : page 2 message
-Bob --> Alice : page 2 reply
-@enduml

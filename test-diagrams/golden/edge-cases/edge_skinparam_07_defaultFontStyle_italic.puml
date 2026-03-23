@@ -1,6 +1,0 @@
-@startuml
-skinparam defaultFontStyle Italic
-class Foo
-class Bar
-Foo --> Bar
-@enduml

@@ -1,7 +1,0 @@
-@startuml
-interface Container<T> {
-  +T get()
-  +void put(T item)
-  +boolean isEmpty()
-}
-@enduml

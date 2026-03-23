@@ -1,5 +1,0 @@
-@startuml
-state A #MediumTurquoise
-[*] --> A
-A --> [*]
-@enduml

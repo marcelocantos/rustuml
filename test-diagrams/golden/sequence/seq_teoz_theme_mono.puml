@@ -1,8 +1,0 @@
-@startuml
-!pragma teoz true
-skinparam monochrome true
-Alice -> Bob : hello
-Bob -> Charlie : forward
-Charlie --> Bob : reply
-Bob --> Alice : done
-@enduml

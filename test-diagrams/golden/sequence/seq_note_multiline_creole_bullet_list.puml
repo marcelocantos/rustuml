@@ -1,9 +1,0 @@
-@startuml
-Alice -> Bob : request
-note over Alice, Bob
-  * item one
-  * item two
-  * item three
-end note
-Bob --> Alice : response
-@enduml

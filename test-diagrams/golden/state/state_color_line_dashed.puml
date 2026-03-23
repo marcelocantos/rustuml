@@ -1,5 +1,0 @@
-@startuml
-state A ##[dashed]red
-[*] --> A
-A --> [*]
-@enduml

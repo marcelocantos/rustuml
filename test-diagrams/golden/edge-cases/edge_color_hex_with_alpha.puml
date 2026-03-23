@@ -1,5 +1,0 @@
-@startuml
-class Foo #80FF0000
-class Bar #80FF0000
-Foo --> Bar
-@enduml

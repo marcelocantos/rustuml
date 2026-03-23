@@ -1,9 +1,0 @@
-@startuml
-start
-partition "Part 1" {
-while (loop?) is (yes)
-  :Iter;
-endwhile
-}
-stop
-@enduml

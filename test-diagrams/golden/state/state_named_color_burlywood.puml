@@ -1,5 +1,0 @@
-@startuml
-state A #BurlyWood
-[*] --> A
-A --> [*]
-@enduml

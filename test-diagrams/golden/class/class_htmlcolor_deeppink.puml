@@ -1,5 +1,0 @@
-@startuml
-class ColorTest #DeepPink {
-  +void method()
-}
-@enduml

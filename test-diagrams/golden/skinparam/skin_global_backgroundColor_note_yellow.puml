@@ -1,6 +1,0 @@
-@startuml
-skinparam noteBackgroundColor yellow
-Alice -> Bob : hello
-Bob --> Alice : world
-note right : note
-@enduml

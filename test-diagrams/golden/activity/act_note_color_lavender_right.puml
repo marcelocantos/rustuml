@@ -1,9 +1,0 @@
-@startuml
-
-start
-:Action;
-note right #lavender
-  Colored note
-end note
-stop
-@enduml

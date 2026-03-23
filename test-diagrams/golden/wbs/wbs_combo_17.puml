@@ -1,8 +1,0 @@
-@startwbs
-*[#violet] Root 17
-** Child 1
-** Child 2
-** Child 3
-** Child 4
-*** Level 3
-@endwbs

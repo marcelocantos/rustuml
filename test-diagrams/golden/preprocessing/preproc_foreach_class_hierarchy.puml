@@ -1,9 +1,0 @@
-@startuml
-abstract class Animal
-
-!foreach $animal in ["Dog", "Cat", "Bird"]
-class $animal extends Animal {
-  +speak()
-}
-!endforeach
-@enduml

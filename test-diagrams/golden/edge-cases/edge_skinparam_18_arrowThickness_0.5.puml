@@ -1,6 +1,0 @@
-@startuml
-skinparam arrowThickness 0.5
-class Foo
-class Bar
-Foo --> Bar
-@enduml

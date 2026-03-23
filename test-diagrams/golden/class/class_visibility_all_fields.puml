@@ -1,8 +1,0 @@
-@startuml
-class MyClass {
-  +String publicField
-  -int privateField
-  #double protectedField
-  ~boolean packageField
-}
-@enduml

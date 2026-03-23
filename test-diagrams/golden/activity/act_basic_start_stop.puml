@@ -1,6 +1,0 @@
-@startuml
-
-start
-:Do something;
-stop
-@enduml

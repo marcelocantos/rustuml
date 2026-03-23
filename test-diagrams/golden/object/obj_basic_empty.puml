@@ -1,4 +1,0 @@
-@startuml
-object Car
-object Bike
-@enduml

@@ -1,7 +1,0 @@
-@startuml
-[*] --> Idle
-Idle --> Idle : heartbeat
-Idle --> Active : start
-Active --> Active : keepalive
-Active --> Idle : stop
-@enduml

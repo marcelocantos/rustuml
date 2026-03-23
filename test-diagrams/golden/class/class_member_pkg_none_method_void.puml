@@ -1,5 +1,0 @@
-@startuml
-class MemberClass {
-  ~void doWork()
-}
-@enduml

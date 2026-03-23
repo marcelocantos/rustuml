@@ -1,8 +1,0 @@
-@startuml
-
-(*) --> #lightblue "Init"
-#lightblue "Init" --> #lightgreen "Process"
-#lightgreen "Process" --> #lightyellow "Review"
-#lightyellow "Review" --> #lightpink "Finalize"
-#lightpink "Finalize" --> (*)
-@enduml

@@ -1,6 +1,0 @@
-@startuml
-skinparam monochrome reverse
-class Foo
-class Bar
-Foo --> Bar
-@enduml

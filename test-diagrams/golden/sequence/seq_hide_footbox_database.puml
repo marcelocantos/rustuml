@@ -1,7 +1,0 @@
-@startuml
-hide footbox
-database Alice
-participant Bob
-Alice -> Bob : hello
-Bob --> Alice : hi
-@enduml

@@ -1,9 +1,0 @@
-@startuml
-note as N1
-┌─────────────┐
-│ Box Drawing │
-├─────────────┤
-│ Content     │
-└─────────────┘
-end note
-@enduml

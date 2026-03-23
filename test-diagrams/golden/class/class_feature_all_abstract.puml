@@ -1,8 +1,0 @@
-@startuml
-abstract class FullyAbstract {
-  +{abstract} void methodA()
-  +{abstract} String methodB()
-  +{abstract} int methodC(int x)
-  +{abstract} boolean methodD()
-}
-@enduml

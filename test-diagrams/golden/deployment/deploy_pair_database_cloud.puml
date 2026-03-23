@@ -1,5 +1,0 @@
-@startuml
-database Source
-cloud Target
-Source --> Target
-@enduml

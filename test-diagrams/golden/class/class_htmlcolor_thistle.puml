@@ -1,5 +1,0 @@
-@startuml
-class ColorTest #Thistle {
-  +void method()
-}
-@enduml

@@ -1,8 +1,0 @@
-@startuml
-[-> Alice ++ : found and activate
-Alice -> Bob ++ : activate Bob
-Bob ->x Charlie : lost
-Bob --> Alice -- : done
-Alice ->] : sent out
-Alice --> Alice -- : self done
-@enduml

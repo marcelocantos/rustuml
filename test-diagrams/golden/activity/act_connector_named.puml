@@ -1,8 +1,0 @@
-@startuml
-
-start
-:Process;
-(ErrorHandler)
-:Handle error;
-stop
-@enduml

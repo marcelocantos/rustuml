@@ -1,4 +1,0 @@
-@startuml
-Alice -> Bob : הודעה בעברית
-Bob --> Alice : הודעה בעברית reply
-@enduml

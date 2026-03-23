@@ -1,7 +1,0 @@
-@startuml
-state A : handling error condition
-state B : next state
-[*] --> A
-A --> B : data received
-B --> [*]
-@enduml

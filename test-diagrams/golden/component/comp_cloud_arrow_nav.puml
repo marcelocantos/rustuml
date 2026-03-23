@@ -1,7 +1,0 @@
-@startuml
-cloud Group {
-  component A
-  component B
-  A -> B
-}
-@enduml

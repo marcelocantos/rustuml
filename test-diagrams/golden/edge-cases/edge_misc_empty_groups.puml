@@ -1,5 +1,0 @@
-@startuml
-group emptyGroup
-end
-Alice -> Bob: msg
-@enduml

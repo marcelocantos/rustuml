@@ -1,9 +1,0 @@
-@startuml
-
-start
-:Action;
-note left
-  This is a medium length note\nspanning two lines
-end note
-stop
-@enduml

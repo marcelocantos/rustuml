@@ -1,4 +1,0 @@
-@startuml
-Alice -> Bob : <color:#FF6600>hex color</color>
-note right : <color:#FF6600>hex color</color>
-@enduml

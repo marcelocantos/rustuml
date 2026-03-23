@@ -1,5 +1,0 @@
-@startuml
-class SpotClassW << (W,#blue) SpotW >> {
-  +void method()
-}
-@enduml

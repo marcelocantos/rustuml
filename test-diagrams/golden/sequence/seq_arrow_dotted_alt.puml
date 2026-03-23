@@ -1,9 +1,0 @@
-@startuml
-A -> B : trigger
-alt ok
-  A --> B : dotted ok
-  B --> A : ack
-else fail
-  A --> B : dotted fail
-end
-@enduml

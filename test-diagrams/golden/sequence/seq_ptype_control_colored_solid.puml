@@ -1,5 +1,0 @@
-@startuml
-control Alice
-participant Bob
-Alice -[#red]> Bob : control colored solid
-@enduml

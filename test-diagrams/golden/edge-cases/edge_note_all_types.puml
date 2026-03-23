@@ -1,8 +1,0 @@
-@startuml
-class Foo
-class Bar
-note left of Foo: left of
-note right of Foo: right of
-note top of Bar: top of
-note bottom of Bar: bottom of
-@enduml

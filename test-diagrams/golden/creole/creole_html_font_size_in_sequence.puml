@@ -1,4 +1,0 @@
-@startuml
-Alice -> Bob : <font size='18'>font size</font>
-note right : <font size='18'>font size</font>
-@enduml

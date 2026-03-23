@@ -1,5 +1,0 @@
-@startuml
-class Styled #back:azure;line.bold:red {
-  +void method()
-}
-@enduml

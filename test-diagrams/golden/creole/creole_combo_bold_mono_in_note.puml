@@ -1,5 +1,0 @@
-@startuml
-note as N
-  **""bold mono""**
-end note
-@enduml

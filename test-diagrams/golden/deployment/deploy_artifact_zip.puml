@@ -1,5 +1,0 @@
-@startuml
-artifact "application.zip"
-node "Application Server"
-"application.zip" --> "Application Server" : deploy
-@enduml

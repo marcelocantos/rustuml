@@ -1,8 +1,0 @@
-@startuml
-autonumber
-Alice -> Bob : 1
-Bob --> Alice : 2
-newpage
-Alice -> Bob : continues
-Bob --> Alice : counted
-@enduml

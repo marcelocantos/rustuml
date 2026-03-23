@@ -1,9 +1,0 @@
-@startuml
-!ifndef PRODUCTION
-skinparam noteBackgroundColor LightYellow
-note as Dev
-  Development mode
-end note
-!endif
-Alice -> Bob : hello
-@enduml

@@ -1,6 +1,0 @@
-@startuml
-class Combo {
-  ~ String field
-  ~ void method()
-}
-@enduml

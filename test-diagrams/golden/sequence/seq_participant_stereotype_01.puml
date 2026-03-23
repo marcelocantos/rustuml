@@ -1,6 +1,0 @@
-@startuml
-participant Alice <<service>>
-participant Bob <<service>>
-Alice -> Bob : hello
-Bob --> Alice : hi
-@enduml

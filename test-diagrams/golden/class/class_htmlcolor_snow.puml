@@ -1,5 +1,0 @@
-@startuml
-class ColorTest #Snow {
-  +void method()
-}
-@enduml

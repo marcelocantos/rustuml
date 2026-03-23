@@ -1,3 +1,0 @@
-@startuml
-Alice -> Bob : say &quot;hello&quot;
-@enduml

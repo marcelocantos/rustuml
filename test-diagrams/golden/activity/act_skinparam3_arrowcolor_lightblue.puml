@@ -1,7 +1,0 @@
-@startuml
-
-skinparam activityArrowColor lightblue
-start
-:Test action;
-stop
-@enduml

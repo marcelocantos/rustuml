@@ -1,5 +1,0 @@
-@startuml
-state A #LemonChiffon
-[*] --> A
-A --> [*]
-@enduml

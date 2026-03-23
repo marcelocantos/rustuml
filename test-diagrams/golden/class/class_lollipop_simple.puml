@@ -1,4 +1,0 @@
-@startuml
-class Component
-Component ()- IDoable
-@enduml

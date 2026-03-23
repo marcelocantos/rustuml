@@ -1,4 +1,0 @@
-@startuml
-title __Underline Title__
-Alice -> Bob : hello
-@enduml

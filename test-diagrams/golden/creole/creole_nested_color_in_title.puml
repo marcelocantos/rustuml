@@ -1,4 +1,0 @@
-@startuml
-title <color:red><back:yellow>red on yellow</back></color>
-Alice -> Bob : hello
-@enduml

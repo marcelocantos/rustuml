@@ -1,8 +1,0 @@
-@startuml
-object MyObj <<repository>> #cyan {
-  id = 6
-  type = "repository"
-  active = true
-}
-note right : Stereotype: repository
-@enduml

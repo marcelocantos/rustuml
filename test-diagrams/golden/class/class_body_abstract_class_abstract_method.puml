@@ -1,5 +1,0 @@
-@startuml
-abstract class Variant {
-  {abstract} +void doIt()
-}
-@enduml

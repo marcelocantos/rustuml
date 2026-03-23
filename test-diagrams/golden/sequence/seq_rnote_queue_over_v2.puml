@@ -1,7 +1,0 @@
-@startuml
-queue X
-participant Y
-X -> Y : go
-rnote over X : rnote/queue
-Y --> X : back
-@enduml

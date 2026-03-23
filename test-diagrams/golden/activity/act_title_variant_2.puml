@@ -1,6 +1,0 @@
-@startuml
-title Multi Word Title Example
-start
-:Action;
-stop
-@enduml

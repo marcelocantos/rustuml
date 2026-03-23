@@ -1,8 +1,0 @@
-@startuml
-participant Bob order 20
-participant Alice order 10
-Alice -> Bob : first
-Bob -> Charlie : Charlie appears at end
-Charlie --> Bob : back
-Bob --> Alice : done
-@enduml

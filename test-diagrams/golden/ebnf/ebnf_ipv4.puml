@@ -1,9 +1,0 @@
-@startebnf
-ipv4 = octet , "." , octet , "." , octet , "." , octet;
-octet = digit | ( non_zero , digit ) | ( "1" , digit , digit )
-      | ( "2" , four_to_nine , digit ) | ( "25" , zero_to_five );
-non_zero = "1" | "2" | "3" | "4" | "5" | "6" | "7" | "8" | "9";
-four_to_nine = "4" | "5" | "6" | "7" | "8" | "9";
-zero_to_five = "0" | "1" | "2" | "3" | "4" | "5";
-digit = "0" | "1" | "2" | "3" | "4" | "5" | "6" | "7" | "8" | "9";
-@endebnf

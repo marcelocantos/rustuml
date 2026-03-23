@@ -1,6 +1,0 @@
-@startuml
-start
-:action1/
-:action2|
-stop
-@enduml

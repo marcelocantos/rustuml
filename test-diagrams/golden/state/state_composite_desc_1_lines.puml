@@ -1,9 +1,0 @@
-@startuml
-state Outer : desc line 1
-state Outer {
-  [*] --> S
-  S --> [*]
-}
-[*] --> Outer
-Outer --> [*]
-@enduml

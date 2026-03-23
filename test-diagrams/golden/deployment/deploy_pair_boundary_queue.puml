@@ -1,5 +1,0 @@
-@startuml
-boundary Source
-queue Target
-Source --> Target
-@enduml

@@ -1,8 +1,0 @@
-@startuml
-box "Solo"
-  participant Alice
-end box
-participant Bob
-Alice -> Bob : call
-Bob --> Alice : reply
-@enduml

@@ -1,5 +1,0 @@
-@startuml
-class Variant {
-  -int count
-}
-@enduml

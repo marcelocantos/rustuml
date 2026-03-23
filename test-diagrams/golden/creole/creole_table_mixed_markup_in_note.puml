@@ -1,6 +1,0 @@
-@startuml
-note as N
-  |= **Bold** |= //Italic// |
-  | ""mono"" | __under__ |
-end note
-@enduml

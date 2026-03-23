@@ -1,8 +1,0 @@
-@startuml
-autonumber "(##)"
-Alice -> Bob : a
-loop 3 times
-  Bob -> Alice : b
-end
-Bob --> Alice : c
-@enduml

@@ -1,4 +1,0 @@
-@startuml
-node MyServer #LightBlue <<physical>>
-note right of MyServer : Tagged server
-@enduml

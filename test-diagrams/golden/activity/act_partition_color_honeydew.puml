@@ -1,9 +1,0 @@
-@startuml
-
-start
-partition #honeydew "Colored honeydew" {
-  :Action in honeydew partition;
-  :Another action;
-}
-stop
-@enduml

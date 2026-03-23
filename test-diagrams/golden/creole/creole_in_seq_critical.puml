@@ -1,5 +1,0 @@
-@startuml
-critical //critical section//
-  Alice -> Bob : locked
-end
-@enduml

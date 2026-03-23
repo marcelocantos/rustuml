@@ -1,7 +1,0 @@
-@startuml
-boundary E1
-control E2
-entity E3
-E1 --> E2
-E2 --> E3
-@enduml

@@ -1,5 +1,0 @@
-@startuml
-component Foo <<factory>>
-component Bar <<factory>>
-Foo --> Bar
-@enduml

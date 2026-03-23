@@ -1,3 +1,0 @@
-@startuml
-Alice -> Bob : **b** //i// __u__ ~~s~~ <color:blue>c</color>
-@enduml

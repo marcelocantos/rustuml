@@ -1,7 +1,0 @@
-@startuml
-component "Service-Alpha" as SA
-component "Service_Beta" as SB
-component "Service.Gamma" as SG
-SA --> SB : "link-1"
-SB --> SG : "link_2"
-@enduml

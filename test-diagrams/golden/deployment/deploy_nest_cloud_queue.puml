@@ -1,5 +1,0 @@
-@startuml
-cloud Outer {
-  queue Inner
-}
-@enduml

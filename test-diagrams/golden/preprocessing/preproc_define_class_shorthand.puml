@@ -1,9 +1,0 @@
-@startuml
-!define CLASS(name) class name {
-!define FIELD(type, name) name: type
-!define END_CLASS }
-CLASS(MyClass)
-  FIELD(String, name)
-  FIELD(int, age)
-END_CLASS
-@enduml

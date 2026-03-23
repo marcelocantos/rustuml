@@ -1,6 +1,0 @@
-@startuml
-[*] --> S0
-S0 --> S1 : e01
-S1 --> S0 : e10
-S1 --> [*]
-@enduml

@@ -1,9 +1,0 @@
-@startuml
-Alice -> Bob: before
-alt condition A
-else
-condition B
-  Alice -> Bob: inside
-end
-Alice -> Bob: after
-@enduml

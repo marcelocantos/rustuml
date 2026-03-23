@@ -1,4 +1,0 @@
-@startuml
-database Alice
-Alice --> Alice : self database dotted
-@enduml

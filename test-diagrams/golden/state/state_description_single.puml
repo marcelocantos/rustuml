@@ -1,5 +1,0 @@
-@startuml
-state A : single line description
-[*] --> A
-A --> [*]
-@enduml

@@ -1,9 +1,0 @@
-@startuml
-cloud Outer {
-  cloud Inner {
-    class MyClass {
-      +void method()
-    }
-  }
-}
-@enduml

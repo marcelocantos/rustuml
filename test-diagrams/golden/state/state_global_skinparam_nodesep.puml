@@ -1,6 +1,0 @@
-@startuml
-skinparam nodesep 50
-[*] --> A
-A --> B : event
-B --> [*]
-@enduml

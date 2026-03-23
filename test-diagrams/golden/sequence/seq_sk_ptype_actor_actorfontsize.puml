@@ -1,7 +1,0 @@
-@startuml
-skinparam ActorFontSize 14
-actor Alice
-participant Bob
-Alice -> Bob : hello
-Bob --> Alice : hi
-@enduml

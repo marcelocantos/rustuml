@@ -1,4 +1,0 @@
-@startuml
-component A
-A -> A : self-call
-@enduml

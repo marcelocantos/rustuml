@@ -1,9 +1,0 @@
-@startuml
-hide footbox
-loop forever
-  A -> B : work
-  break on error
-    B --> A : error
-  end
-end
-@enduml

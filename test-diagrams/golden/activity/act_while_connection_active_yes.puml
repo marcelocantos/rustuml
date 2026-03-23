@@ -1,8 +1,0 @@
-@startuml
-
-start
-while (connection active?) is (yes)
-  :Process iteration;
-endwhile (no)
-stop
-@enduml

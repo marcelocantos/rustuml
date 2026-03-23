@@ -1,5 +1,0 @@
-@startuml
-class lowercase
-class alllowercase
-lowercase --> alllowercase
-@enduml

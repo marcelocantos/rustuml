@@ -1,7 +1,0 @@
-@startuml
-
-|#lightsalmon|Colored Lane|
-start
-:Action;
-stop
-@enduml

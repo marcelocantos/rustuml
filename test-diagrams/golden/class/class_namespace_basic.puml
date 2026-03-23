@@ -1,7 +1,0 @@
-@startuml
-namespace com.example {
-  class MyClass {
-    +void method()
-  }
-}
-@enduml

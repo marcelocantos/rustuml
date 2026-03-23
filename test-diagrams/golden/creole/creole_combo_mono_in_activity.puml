@@ -1,8 +1,0 @@
-@startuml
-:""mono"" start;
-if (""mono"" condition?) then (yes)
-  :""mono"" true branch;
-else (no)
-  :""mono"" false branch;
-endif
-@enduml

@@ -1,5 +1,0 @@
-@startuml
-enum OneMember {
-  +void single()
-}
-@enduml

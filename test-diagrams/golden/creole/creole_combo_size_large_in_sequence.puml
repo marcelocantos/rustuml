@@ -1,5 +1,0 @@
-@startuml
-participant "Part 114" as P
-Alice -> P : <size:20>large</size>
-P --> Alice : <size:20>large</size> reply
-@enduml

@@ -1,9 +1,0 @@
-@startuml
-annotation MyType {
-  +String name
-  -int age
-  --
-  +void doSomething()
-  -String compute(int x)
-}
-@enduml

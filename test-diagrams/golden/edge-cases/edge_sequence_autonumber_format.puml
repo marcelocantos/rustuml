@@ -1,5 +1,0 @@
-@startuml
-autonumber "<b>[000]"
-Alice -> Bob: first
-Bob --> Alice: second
-@enduml

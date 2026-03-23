@@ -1,5 +1,0 @@
-@startuml
-Alice -> Bob : before
-== 日本語の区切り ==
-Bob --> Alice : after
-@enduml

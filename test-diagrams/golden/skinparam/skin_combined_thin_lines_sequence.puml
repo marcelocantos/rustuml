@@ -1,9 +1,0 @@
-@startuml
-skinparam classBorderThickness 1
-skinparam arrowThickness 1
-skinparam shadowing false
-
-Alice -> Bob : request
-Bob --> Alice : response
-note right : note
-@enduml

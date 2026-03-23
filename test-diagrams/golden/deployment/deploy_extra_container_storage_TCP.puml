@@ -1,5 +1,0 @@
-@startuml
-node AppNode <<container>>
-storage DataStore
-AppNode --> DataStore : TCP
-@enduml

@@ -1,4 +1,0 @@
-@startuml
-title <color:#FF6600>hex color</color>
-Alice -> Bob : hello
-@enduml

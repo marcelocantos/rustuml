@@ -1,7 +1,0 @@
-@startuml
-package MyContainer {
-  component Foo
-  component Bar
-  Foo --> Bar
-}
-@enduml

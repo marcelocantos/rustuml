@@ -1,7 +1,0 @@
-@startuml
-database A
-participant B
-A -> B : hello
-rnote over A : rnote over database
-B --> A : hi
-@enduml

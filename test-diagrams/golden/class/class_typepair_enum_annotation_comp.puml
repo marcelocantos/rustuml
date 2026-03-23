@@ -1,5 +1,0 @@
-@startuml
-enum TypeA
-annotation TypeB
-TypeA *-- TypeB
-@enduml

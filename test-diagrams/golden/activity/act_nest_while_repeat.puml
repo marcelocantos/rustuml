@@ -1,9 +1,0 @@
-@startuml
-start
-while (outer?) is (yes)
-  repeat
-    :action;
-  repeatwhile (inner?)
-endwhile
-stop
-@enduml

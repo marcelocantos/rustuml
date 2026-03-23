@@ -1,6 +1,0 @@
-@startuml
-
-start
-#green:Action with send>
-stop
-@enduml

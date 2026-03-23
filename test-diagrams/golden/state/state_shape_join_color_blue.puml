@@ -1,5 +1,0 @@
-@startuml
-state A <<join>> #blue
-[*] --> A
-A --> [*]
-@enduml

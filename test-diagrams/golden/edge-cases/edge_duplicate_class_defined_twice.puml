@@ -1,8 +1,0 @@
-@startuml
-class Foo {
-  field1: String
-}
-class Foo {
-  field2: int
-}
-@enduml

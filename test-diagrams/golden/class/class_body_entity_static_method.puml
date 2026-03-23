@@ -1,5 +1,0 @@
-@startuml
-entity Variant {
-  {static} +void create()
-}
-@enduml

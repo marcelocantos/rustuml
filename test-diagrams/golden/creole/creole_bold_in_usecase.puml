@@ -1,5 +1,0 @@
-@startuml
-usecase "**Bold Use Case**" as UC
-actor "**Bold Actor**" as A
-A --> UC
-@enduml

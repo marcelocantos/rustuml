@@ -1,5 +1,0 @@
-@startuml
-component MyComp
-() IFoo
-MyComp -- IFoo
-@enduml

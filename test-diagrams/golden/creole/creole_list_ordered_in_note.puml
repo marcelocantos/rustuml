@@ -1,7 +1,0 @@
-@startuml
-note as N
-  # first
-  # second
-  # third
-end note
-@enduml

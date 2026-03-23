@@ -1,7 +1,0 @@
-@startuml
-start
-repeat
-  :x;
-repeatwhile (y?)
-stop
-@enduml

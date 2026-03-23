@@ -1,9 +1,0 @@
-@startuml
-show methods
-class Foo {
-  field: String
-  method(): void
-}
-class Bar
-Foo --> Bar
-@enduml

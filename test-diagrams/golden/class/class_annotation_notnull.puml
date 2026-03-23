@@ -1,5 +1,0 @@
-@startuml
-annotation NotNull {
-  +String message() default "must not be null"
-}
-@enduml

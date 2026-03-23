@@ -1,6 +1,0 @@
-@startuml
-skinparam roundcorner 15
-class MyClass {
-  +void method()
-}
-@enduml

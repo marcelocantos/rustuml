@@ -1,9 +1,0 @@
-@startuml
-Alice -> Bob : start
-critical
-  Bob -> DB : transaction begin
-  Bob -> DB : update
-  Bob -> DB : commit
-end
-Bob --> Alice : done
-@enduml

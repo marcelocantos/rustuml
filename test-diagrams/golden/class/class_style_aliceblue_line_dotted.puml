@@ -1,5 +1,0 @@
-@startuml
-class Styled #back:aliceblue;line.dotted:red {
-  +void method()
-}
-@enduml

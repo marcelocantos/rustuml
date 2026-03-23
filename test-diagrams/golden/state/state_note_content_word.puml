@@ -1,5 +1,0 @@
-@startuml
-[*] --> A
-note right of A : hello
-A --> [*]
-@enduml

@@ -1,6 +1,0 @@
-@startuml
-boundary "P1" as P1 <<stereotype1>> #lightblue order 30
-boundary "P2" as P2 <<stereotype2>> #lightyellow order 40
-P1 -> P2 : msg
-P2 --> P1 : reply
-@enduml

@@ -1,6 +1,0 @@
-@startuml
-participant "ผู้ใช้" as U
-participant "ระบบ" as S
-U -> S: ทดสอบ
-S --> U: ข้อมูล
-@enduml

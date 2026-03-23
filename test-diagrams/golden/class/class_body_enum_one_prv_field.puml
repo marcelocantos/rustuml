@@ -1,5 +1,0 @@
-@startuml
-enum Variant {
-  -int count
-}
-@enduml

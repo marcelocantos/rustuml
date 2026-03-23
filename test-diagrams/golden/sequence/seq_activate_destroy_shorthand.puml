@@ -1,3 +1,0 @@
-@startuml
-Alice -> Bob !! : create and immediately destroy
-@enduml

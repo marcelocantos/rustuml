@@ -1,7 +1,0 @@
-@startuml
-node Node1 <<vm>>
-node Node2 <<vm>>
-node Node3 <<vm>>
-Node1 --> Node2
-Node2 --> Node3
-@enduml

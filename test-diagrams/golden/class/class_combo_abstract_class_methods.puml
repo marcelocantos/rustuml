@@ -1,6 +1,0 @@
-@startuml
-abstract class Combo {
-  +void process()
-  -String format()
-}
-@enduml

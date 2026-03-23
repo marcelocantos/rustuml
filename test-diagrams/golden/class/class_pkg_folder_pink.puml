@@ -1,7 +1,0 @@
-@startuml
-folder myPkg #pink {
-  class MyClass {
-    +void method()
-  }
-}
-@enduml

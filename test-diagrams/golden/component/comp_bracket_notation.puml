@@ -1,4 +1,0 @@
-@startuml
-[Foo] --> [Bar]
-[Baz] ..> [Qux]
-@enduml

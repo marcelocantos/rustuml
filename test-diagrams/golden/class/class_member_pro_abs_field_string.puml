@@ -1,5 +1,0 @@
-@startuml
-class MemberClass {
-  {abstract} #String fieldName
-}
-@enduml

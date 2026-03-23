@@ -1,5 +1,0 @@
-@startuml
-class MyService <<Service>> {
-  +void process()
-}
-@enduml

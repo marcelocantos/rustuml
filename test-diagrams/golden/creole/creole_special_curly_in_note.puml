@@ -1,5 +1,0 @@
-@startuml
-note as N
-  {field}: {value}
-end note
-@enduml

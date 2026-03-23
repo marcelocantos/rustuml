@@ -1,5 +1,0 @@
-@startuml
-Alice -> Bob ++ : call
-ref over Alice, Bob : sub-interaction
-Bob --> Alice -- : done
-@enduml

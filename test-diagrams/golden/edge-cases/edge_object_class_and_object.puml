@@ -1,8 +1,0 @@
-@startuml
-class Person {
-  name: String
-  age: int
-}
-object alice
-Person <|.. alice
-@enduml

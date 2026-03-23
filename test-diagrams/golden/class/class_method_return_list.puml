@@ -1,5 +1,0 @@
-@startuml
-class ReturnTypes {
-  +List<String> method()
-}
-@enduml

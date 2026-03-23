@@ -1,5 +1,0 @@
-@startuml
-class A
-class B
-A "roleA" <|-- "roleB" B : assoc
-@enduml

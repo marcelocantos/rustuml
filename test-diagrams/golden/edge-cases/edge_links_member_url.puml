@@ -1,6 +1,0 @@
-@startuml
-class Foo {
-  [[https://example.com]] fieldWithLink: String
-  methodWithLink() [[https://example.com/method]]
-}
-@enduml

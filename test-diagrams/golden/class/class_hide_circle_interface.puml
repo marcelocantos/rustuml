@@ -1,7 +1,0 @@
-@startuml
-hide circle
-interface MyType {
-  +String field
-  +void method()
-}
-@enduml

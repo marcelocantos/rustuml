@@ -1,5 +1,0 @@
-@startuml
-actor MyActor <<human>> #Pink
-usecase UC
-MyActor --> UC
-@enduml

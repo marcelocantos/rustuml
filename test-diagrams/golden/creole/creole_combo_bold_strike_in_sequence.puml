@@ -1,4 +1,0 @@
-@startuml
-Alice -> Bob : **~~bold strike~~**
-note right : **~~bold strike~~**
-@enduml

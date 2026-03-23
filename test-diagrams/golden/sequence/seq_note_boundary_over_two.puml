@@ -1,7 +1,0 @@
-@startuml
-boundary A
-boundary B
-A -> B : hello
-note over A, B : note over two boundarys
-B --> A : hi
-@enduml

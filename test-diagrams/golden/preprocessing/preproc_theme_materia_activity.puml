@@ -1,7 +1,0 @@
-@startuml
-!theme materia
-start
-:step one;
-:step two;
-stop
-@enduml

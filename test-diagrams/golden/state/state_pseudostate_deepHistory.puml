@@ -1,6 +1,0 @@
-@startuml
-state ps <<deepHistory>>
-[*] --> A
-A --> ps
-ps --> [*]
-@enduml

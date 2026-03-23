@@ -1,6 +1,0 @@
-@startuml
-state A : sending network request
-[*] --> A
-A --> B : next
-B --> [*]
-@enduml

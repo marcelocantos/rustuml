@@ -1,9 +1,0 @@
-@startuml
-!$title = "My Diagram"
-!$author = "John Doe"
-!$version = "1.0"
-
-title $title
-header Author: $author (v$version)
-Alice -> Bob : hello
-@enduml

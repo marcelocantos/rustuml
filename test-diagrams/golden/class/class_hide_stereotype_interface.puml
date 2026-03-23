@@ -1,7 +1,0 @@
-@startuml
-hide stereotype
-interface MyType {
-  +String field
-  +void method()
-}
-@enduml

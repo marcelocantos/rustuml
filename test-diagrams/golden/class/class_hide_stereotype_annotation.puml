@@ -1,7 +1,0 @@
-@startuml
-hide stereotype
-annotation MyType {
-  +String field
-  +void method()
-}
-@enduml

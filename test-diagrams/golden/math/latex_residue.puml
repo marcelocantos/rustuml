@@ -1,3 +1,0 @@
-@startlatex
-\oint_C f(z)\,dz = 2\pi i \sum_k \text{Res}(f, z_k)
-@endlatex

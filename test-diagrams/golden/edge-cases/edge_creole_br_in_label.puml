@@ -1,3 +1,0 @@
-@startuml
-Alice -> Bob: line1<br/>line2
-@enduml

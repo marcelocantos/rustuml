@@ -1,5 +1,0 @@
-@startuml
-title Title\nWith Newline
-Alice -> Bob : hello
-Bob --> Alice : hi
-@enduml

@@ -1,5 +1,0 @@
-@startuml
-annotation Target {
-  +ElementType[] value()
-}
-@enduml

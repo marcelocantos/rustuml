@@ -1,5 +1,0 @@
-actor User
-usecase "Login" as UC1
-usecase "Logout" as UC2
-User --> UC1
-User --> UC2

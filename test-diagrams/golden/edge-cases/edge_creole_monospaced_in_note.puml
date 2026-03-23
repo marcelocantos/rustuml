@@ -1,5 +1,0 @@
-@startuml
-note as N1
-  ""monospaced""
-end note
-@enduml

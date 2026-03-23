@@ -1,6 +1,0 @@
-@startuml
-class MyClass <<value object>> {
-  -instance: MyClass
-  +getInstance(): MyClass
-}
-@enduml

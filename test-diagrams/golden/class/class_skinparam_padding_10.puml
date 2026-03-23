@@ -1,9 +1,0 @@
-@startuml
-skinparam padding 10
-class A {
-  +void method()
-  +String field
-}
-class B
-A --> B
-@enduml

@@ -1,5 +1,0 @@
-@startuml
-note as N
-  ""mono"" plain <color:red>red</color>
-end note
-@enduml

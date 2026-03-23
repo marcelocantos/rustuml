@@ -1,5 +1,0 @@
-@startuml
-rectangle Outer {
-  queue Inner
-}
-@enduml

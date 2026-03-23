@@ -1,5 +1,0 @@
-@startuml
-class Foo #LightSkyBlue {
-  field: String
-}
-@enduml

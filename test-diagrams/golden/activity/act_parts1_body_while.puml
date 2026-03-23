@@ -1,9 +1,0 @@
-@startuml
-start
-partition "P1" {
-while (l?) is (yes)
-  :W;
-endwhile
-}
-stop
-@enduml

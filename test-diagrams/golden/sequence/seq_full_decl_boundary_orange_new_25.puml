@@ -1,6 +1,0 @@
-@startuml
-boundary "Name" as N #orange <<new>> order 25
-participant Other
-N -> Other : call
-Other --> N : reply
-@enduml

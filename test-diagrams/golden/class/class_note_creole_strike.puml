@@ -1,6 +1,0 @@
-@startuml
-class MyClass
-note right of MyClass
-  --strikethrough--
-end note
-@enduml

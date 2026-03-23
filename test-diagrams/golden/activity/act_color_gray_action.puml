@@ -1,7 +1,0 @@
-@startuml
-
-start
-#gray:Colored action;
-:Normal action;
-stop
-@enduml

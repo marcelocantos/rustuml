@@ -1,5 +1,0 @@
-@startuml
-state A #DarkSalmon
-[*] --> A
-A --> [*]
-@enduml

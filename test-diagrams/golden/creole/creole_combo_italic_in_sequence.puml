@@ -1,5 +1,0 @@
-@startuml
-participant "Part 949" as P
-Alice -> P : //italic//
-P --> Alice : //italic// reply
-@enduml

@@ -1,8 +1,0 @@
-@startuml
-[*] --> A
-A --> B
-B --> C
-C --> D
-D --> [*]
-note left of B : Note on B
-@enduml

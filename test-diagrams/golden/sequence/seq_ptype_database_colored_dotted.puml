@@ -1,5 +1,0 @@
-@startuml
-database Alice
-participant Bob
-Alice -[#red]-> Bob : database colored dotted
-@enduml

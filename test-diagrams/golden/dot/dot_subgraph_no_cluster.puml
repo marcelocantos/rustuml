@@ -1,8 +1,0 @@
-@startdot
-digraph G {
-  subgraph sub {
-    x -> y
-  }
-  y -> z
-}
-@enddot

@@ -1,7 +1,0 @@
-@startuml
-class "Alert!" {
-  +void method()
-}
-class Other
-"Alert!" --> Other
-@enduml

@@ -1,6 +1,0 @@
-@startuml
-enum Enum2 {
-  VALUE_01
-  VALUE_02
-}
-@enduml

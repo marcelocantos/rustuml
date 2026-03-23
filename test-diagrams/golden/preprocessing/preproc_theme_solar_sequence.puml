@@ -1,5 +1,0 @@
-@startuml
-!theme solar
-Alice -> Bob : hello
-Bob --> Alice : world
-@enduml

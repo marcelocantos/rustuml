@@ -1,6 +1,0 @@
-@startuml
-[*] --> S1
-S1 --> S2 --> S3
-S3 --> [*]
-note right of S1 : Note on S1
-@enduml

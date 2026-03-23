@@ -1,6 +1,0 @@
-@startuml
-[*] --> A
-A --> B
-B --> [*]
-A --> [*] : cancel
-@enduml

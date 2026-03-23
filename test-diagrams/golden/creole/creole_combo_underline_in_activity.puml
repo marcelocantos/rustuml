@@ -1,8 +1,0 @@
-@startuml
-:__underline__ start;
-if (__underline__ condition?) then (yes)
-  :__underline__ true branch;
-else (no)
-  :__underline__ false branch;
-endif
-@enduml

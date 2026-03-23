@@ -1,7 +1,0 @@
-@startuml
-cloud myPkg #pink {
-  class MyClass {
-    +void method()
-  }
-}
-@enduml

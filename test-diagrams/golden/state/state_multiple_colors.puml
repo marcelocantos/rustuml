@@ -1,9 +1,0 @@
-@startuml
-state A #red
-state B #blue
-state C #green
-[*] --> A
-A --> B
-B --> C
-C --> [*]
-@enduml

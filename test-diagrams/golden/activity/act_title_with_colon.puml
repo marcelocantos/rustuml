@@ -1,6 +1,0 @@
-@startuml
-title Section: Subsection
-start
-:Action;
-stop
-@enduml

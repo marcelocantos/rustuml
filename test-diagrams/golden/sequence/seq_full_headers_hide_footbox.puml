@@ -1,9 +1,0 @@
-@startuml
-title No Footer Box
-header Header
-footer Footer
-hide footbox
-Alice -> Bob : hello
-Bob --> Alice : hi
-caption Figure 2
-@enduml

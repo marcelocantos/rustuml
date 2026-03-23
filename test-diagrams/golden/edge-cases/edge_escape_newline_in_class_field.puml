@@ -1,5 +1,0 @@
-@startuml
-class Foo {
-  field: "line1\nline2"
-}
-@enduml

@@ -1,5 +1,0 @@
-@startuml
-participant "System" as 1
-participant "Other" as 2
-1 -> 2: message
-@enduml

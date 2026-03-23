@@ -1,6 +1,0 @@
-@startuml
-class Variant {
-  +String name
-  -int count
-}
-@enduml

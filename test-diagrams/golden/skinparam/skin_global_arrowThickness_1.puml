@@ -1,6 +1,0 @@
-@startuml
-skinparam arrowThickness 1
-Alice -> Bob : hello
-Bob --> Alice : world
-note right : note
-@enduml

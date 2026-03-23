@@ -1,8 +1,0 @@
-@startuml
-
-start
-while (user wants more?) is (loop)
-  :Process iteration;
-endwhile (exit)
-stop
-@enduml

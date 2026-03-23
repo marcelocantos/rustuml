@@ -1,9 +1,0 @@
-@startwbs
-* Central
-** Right 1
-*** R1.1
-** Right 2
--- Left 1
---- L1.1
--- Left 2
-@endwbs

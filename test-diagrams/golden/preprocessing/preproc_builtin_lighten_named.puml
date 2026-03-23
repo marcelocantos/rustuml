@@ -1,7 +1,0 @@
-@startuml
-!$light = %lighten("blue", 40)
-skinparam participantBackgroundColor $light
-participant Alice
-participant Bob
-Alice -> Bob : lightened
-@enduml

@@ -1,7 +1,0 @@
-@startuml
-state A : validating input parameters
-state B : next state
-[*] --> A
-A --> B : error detected
-B --> [*]
-@enduml

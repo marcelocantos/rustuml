@@ -1,9 +1,0 @@
-@startuml
-start
-fork
-  :a;
-fork again
-  :b;
-end fork
-stop
-@enduml

@@ -1,7 +1,0 @@
-@startuml
-control A
-participant B
-A -> B : hello
-rnote over A : rnote over control
-B --> A : hi
-@enduml

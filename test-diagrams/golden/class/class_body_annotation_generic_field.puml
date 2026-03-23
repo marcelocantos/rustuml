@@ -1,5 +1,0 @@
-@startuml
-annotation Variant {
-  +List<String> items
-}
-@enduml

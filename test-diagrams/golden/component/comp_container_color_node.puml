@@ -1,7 +1,0 @@
-@startuml
-node MyContainer #LightGreen {
-  component Foo #Pink
-  component Bar #LightBlue
-  Foo --> Bar
-}
-@enduml

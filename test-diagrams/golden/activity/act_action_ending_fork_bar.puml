@@ -1,6 +1,0 @@
-@startuml
-
-start
-:fork_action|
-stop
-@enduml

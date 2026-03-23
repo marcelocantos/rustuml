@@ -1,8 +1,0 @@
-@startuml
-class Foo
-class Bar
-class Hidden
-Foo --> Bar
-Foo --> Hidden
-hide Hidden
-@enduml

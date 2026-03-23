@@ -1,9 +1,0 @@
-@startuml
-state c <<choice>>
-[*] --> Start
-Start --> c
-c --> End0 : [path0]
-c --> End1 : [path1]
-End0 --> [*]
-End1 --> [*]
-@enduml

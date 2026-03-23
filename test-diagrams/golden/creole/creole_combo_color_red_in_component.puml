@@ -1,5 +1,0 @@
-@startuml
-component "<color:red>red</color> comp" as C901
-interface "<color:red>red</color> iface" as I901
-C901 -- I901
-@enduml

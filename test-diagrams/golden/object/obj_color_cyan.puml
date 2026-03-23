@@ -1,5 +1,0 @@
-@startuml
-object MyObject #cyan {
-  field = "value"
-}
-@enduml

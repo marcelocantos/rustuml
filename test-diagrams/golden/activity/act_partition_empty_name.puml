@@ -1,8 +1,0 @@
-@startuml
-
-start
-partition "" {
-  :Action in unnamed partition;
-}
-stop
-@enduml

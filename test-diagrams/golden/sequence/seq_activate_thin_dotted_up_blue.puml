@@ -1,4 +1,0 @@
-@startuml
-Alice -->> Bob ++ #blue : thin_dotted activate up_blue
-Bob -->> Alice -- : return
-@enduml

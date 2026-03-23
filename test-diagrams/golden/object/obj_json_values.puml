@@ -1,9 +1,0 @@
-@startuml
-object Config {
-  name = "myapp"
-  version = "1.0.0"
-  debug = false
-  port = 3000
-  tags = ["web", "api"]
-}
-@enduml

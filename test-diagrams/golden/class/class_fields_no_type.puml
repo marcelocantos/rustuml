@@ -1,8 +1,0 @@
-@startuml
-class NoTypes {
-  +name
-  -count
-  #score
-  ~flag
-}
-@enduml

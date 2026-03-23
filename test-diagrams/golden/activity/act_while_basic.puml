@@ -1,8 +1,0 @@
-@startuml
-
-start
-while (more items?) is (yes)
-  :Process item;
-endwhile (no)
-stop
-@enduml

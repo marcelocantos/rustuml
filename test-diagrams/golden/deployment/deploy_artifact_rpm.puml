@@ -1,5 +1,0 @@
-@startuml
-artifact "application.rpm"
-node "Application Server"
-"application.rpm" --> "Application Server" : deploy
-@enduml

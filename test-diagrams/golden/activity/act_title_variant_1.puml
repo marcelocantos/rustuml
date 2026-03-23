@@ -1,6 +1,0 @@
-@startuml
-title Simple Title
-start
-:Action;
-stop
-@enduml

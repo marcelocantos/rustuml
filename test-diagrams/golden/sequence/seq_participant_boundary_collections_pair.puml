@@ -1,6 +1,0 @@
-@startuml
-boundary A
-collections B
-A -> B : request
-B --> A : response
-@enduml

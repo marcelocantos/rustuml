@@ -1,8 +1,0 @@
-@startuml
-skinparam state {
-  FontName Arial
-}
-[*] --> A
-A --> B : event
-B --> [*]
-@enduml

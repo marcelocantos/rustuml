@@ -1,5 +1,0 @@
-@startuml
-header **Bold Header**
-footer **Bold Footer**
-Alice -> Bob : hello
-@enduml

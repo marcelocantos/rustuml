@@ -1,4 +1,0 @@
-@startuml
-control Alice
-Alice ->> Alice : self control thin_solid
-@enduml

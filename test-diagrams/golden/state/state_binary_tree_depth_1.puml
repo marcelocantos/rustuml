@@ -1,7 +1,0 @@
-@startuml
-[*] --> N1
-N1 --> N2 : left
-N1 --> N3 : right
-N2 --> [*]
-N3 --> [*]
-@enduml

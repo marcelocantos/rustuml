@@ -1,8 +1,0 @@
-@startuml
-class Foo {
-  getList(): List<String>
-  getMap(): Map<String, Integer>
-  getOptional(): Optional<Foo>
-  getPair(): Pair<String, Integer>
-}
-@enduml

@@ -1,8 +1,0 @@
-@startuml
-top to bottom direction
-actor Actor1
-usecase BaseUC
-usecase SubUC
-SubUC .> BaseUC : <<extend>>
-Actor1 --> BaseUC
-@enduml

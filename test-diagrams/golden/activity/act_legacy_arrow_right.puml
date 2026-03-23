@@ -1,6 +1,0 @@
-@startuml
-
-(*) --> "Start"
-"Start" -right-> "End"
-"End" --> (*)
-@enduml

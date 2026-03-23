@@ -1,5 +1,0 @@
-@startuml
-node Source
-file Target
-Source --> Target
-@enduml

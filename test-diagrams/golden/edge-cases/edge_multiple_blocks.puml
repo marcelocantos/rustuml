@@ -1,6 +1,0 @@
-@startuml
-class First
-@enduml
-@startuml
-class Second
-@enduml

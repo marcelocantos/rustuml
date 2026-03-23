@@ -1,4 +1,0 @@
-@startuml
-Alice -> Bob : <strong>strong tag</strong>
-note right : <strong>strong tag</strong>
-@enduml

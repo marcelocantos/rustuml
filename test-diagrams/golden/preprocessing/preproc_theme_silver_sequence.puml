@@ -1,8 +1,0 @@
-@startuml
-!theme silver
-participant Alice
-participant Bob
-Alice -> Bob : hello from silver
-Bob --> Alice : reply
-note right : silver theme
-@enduml

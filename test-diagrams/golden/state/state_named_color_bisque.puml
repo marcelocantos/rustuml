@@ -1,5 +1,0 @@
-@startuml
-state A #Bisque
-[*] --> A
-A --> [*]
-@enduml

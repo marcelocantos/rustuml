@@ -1,5 +1,0 @@
-@startuml
-Alice -> Bob : use
-Bob --> Alice : done
-destroy Bob
-@enduml

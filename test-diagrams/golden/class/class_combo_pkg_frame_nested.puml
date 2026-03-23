@@ -1,9 +1,0 @@
-@startuml
-frame Outer {
-  frame Inner {
-    class MyClass {
-      +void method()
-    }
-  }
-}
-@enduml

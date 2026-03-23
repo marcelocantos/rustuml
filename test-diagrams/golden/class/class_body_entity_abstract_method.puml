@@ -1,5 +1,0 @@
-@startuml
-entity Variant {
-  {abstract} +void doIt()
-}
-@enduml

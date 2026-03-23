@@ -1,5 +1,0 @@
-@startuml
-class ColorTest #LemonChiffon {
-  +void method()
-}
-@enduml

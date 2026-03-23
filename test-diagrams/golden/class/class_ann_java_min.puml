@@ -1,5 +1,0 @@
-@startuml
-annotation Min {
-  +long value()
-}
-@enduml

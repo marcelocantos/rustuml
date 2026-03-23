@@ -1,7 +1,0 @@
-@startuml
-actor X
-participant Y
-X -> Y : message
-note over X : note over actor
-Y --> X : reply
-@enduml

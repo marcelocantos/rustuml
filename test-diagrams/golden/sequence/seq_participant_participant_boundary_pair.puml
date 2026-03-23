@@ -1,6 +1,0 @@
-@startuml
-participant A
-boundary B
-A -> B : request
-B --> A : response
-@enduml

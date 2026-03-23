@@ -1,7 +1,0 @@
-@startsalt
-{#
-  Col0 | Col1 | Col2 | Col3 | Col4
-  R0C0 | R0C1 | R0C2 | R0C3 | R0C4
-  R1C0 | R1C1 | R1C2 | R1C3 | R1C4
-}
-@endsalt

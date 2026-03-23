@@ -1,4 +1,0 @@
-@startuml
-participant Alice
-Alice --> Alice : self participant dotted
-@enduml

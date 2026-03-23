@@ -1,5 +1,0 @@
-@startuml
-Alice -> Bob : before
-== Phase 1: Initialization ==
-Bob --> Alice : after
-@enduml

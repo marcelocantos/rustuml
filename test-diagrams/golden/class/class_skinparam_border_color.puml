@@ -1,6 +1,0 @@
-@startuml
-skinparam ClassBorderColor red
-class MyClass {
-  +void method()
-}
-@enduml

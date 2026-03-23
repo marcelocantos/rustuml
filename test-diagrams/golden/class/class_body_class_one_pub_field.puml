@@ -1,5 +1,0 @@
-@startuml
-class Variant {
-  +String name
-}
-@enduml

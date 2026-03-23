@@ -1,6 +1,0 @@
-@startuml
-Alice -> Bob ++ : create and use
-Bob -> Bob : do work
-Bob --> Alice -- : result
-destroy Bob
-@enduml

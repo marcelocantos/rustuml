@@ -1,5 +1,0 @@
-@startuml
-!theme darkly
-Alice -> Bob : hello
-Bob --> Alice : world
-@enduml

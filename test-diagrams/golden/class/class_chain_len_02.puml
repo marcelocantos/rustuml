@@ -1,5 +1,0 @@
-@startuml
-class N1
-class N2
-N1 --> N2
-@enduml

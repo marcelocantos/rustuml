@@ -1,7 +1,0 @@
-@startuml
-node Server {
-  component WebApp
-  component Cache
-  WebApp --> Cache
-}
-@enduml

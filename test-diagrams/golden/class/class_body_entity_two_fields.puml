@@ -1,6 +1,0 @@
-@startuml
-entity Variant {
-  +String name
-  -int count
-}
-@enduml

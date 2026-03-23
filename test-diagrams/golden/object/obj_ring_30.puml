@@ -1,6 +1,0 @@
-@startuml
-object Obj0_30 { val = 300 }
-object Obj1_30 { val = 301 }
-Obj0_30 --> Obj1_30
-Obj1_30 --> Obj0_30
-@enduml

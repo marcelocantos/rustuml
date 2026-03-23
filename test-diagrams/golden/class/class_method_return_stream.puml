@@ -1,5 +1,0 @@
-@startuml
-class ReturnTypes {
-  +Stream<String> method()
-}
-@enduml

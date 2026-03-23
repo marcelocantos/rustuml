@@ -1,6 +1,0 @@
-@startuml
-hide empty description
-[*] --> A
-A --> B
-B --> [*]
-@enduml

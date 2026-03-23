@@ -1,8 +1,0 @@
-@startuml
-!theme metal
-participant Alice
-participant Bob
-Alice -> Bob : hello from metal
-Bob --> Alice : reply
-note right : metal theme
-@enduml

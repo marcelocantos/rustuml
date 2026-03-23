@@ -1,5 +1,0 @@
-@startuml
-component Foo #LightGreen
-component Bar #LightGreen
-Foo -> Bar : calls
-@enduml

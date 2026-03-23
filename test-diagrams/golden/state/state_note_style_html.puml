@@ -1,8 +1,0 @@
-@startuml
-[*] --> A
-A --> B
-note right of A
-  <b>bold</b> <i>italic</i>
-end note
-B --> [*]
-@enduml

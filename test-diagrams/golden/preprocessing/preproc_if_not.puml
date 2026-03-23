@@ -1,9 +1,0 @@
-@startuml
-!$debug = %false()
-
-!if !$debug
-Alice -> Bob : release mode
-!else
-Alice -> Bob : debug mode
-!endif
-@enduml

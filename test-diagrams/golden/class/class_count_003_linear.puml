@@ -1,7 +1,0 @@
-@startuml
-class Cls001 { +void m1() }
-class Cls002 { +void m2() }
-class Cls003 { +void m3() }
-Cls001 --> Cls002
-Cls002 --> Cls003
-@enduml

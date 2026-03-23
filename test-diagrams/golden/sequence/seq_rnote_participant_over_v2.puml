@@ -1,7 +1,0 @@
-@startuml
-participant X
-participant Y
-X -> Y : go
-rnote over X : rnote/participant
-Y --> X : back
-@enduml

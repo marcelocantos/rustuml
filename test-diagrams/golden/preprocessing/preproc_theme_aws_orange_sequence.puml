@@ -1,8 +1,0 @@
-@startuml
-!theme aws-orange
-participant Alice
-participant Bob
-Alice -> Bob : hello from aws-orange
-Bob --> Alice : reply
-note right : aws-orange theme
-@enduml

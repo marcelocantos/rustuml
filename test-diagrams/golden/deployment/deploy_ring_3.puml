@@ -1,8 +1,0 @@
-@startuml
-node N01
-node N02
-node N03
-N01 --> N02
-N02 --> N03
-N03 --> N01
-@enduml

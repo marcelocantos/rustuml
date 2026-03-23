@@ -1,8 +1,0 @@
-@startuml
-state "Outer State" as Outer {
-  [*] --> Inner
-  Inner --> [*]
-}
-[*] --> Outer
-Outer --> [*]
-@enduml

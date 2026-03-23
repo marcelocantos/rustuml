@@ -1,7 +1,0 @@
-@startuml
-component C1
-component C2
-note right of C1 : Note 1
-note right of C2 : Note 2
-C1 --> C2
-@enduml

@@ -1,9 +1,0 @@
-@startuml
-class Pair<A, B> {
-  +A first
-  +B second
-  --
-  +A getFirst()
-  +B getSecond()
-}
-@enduml

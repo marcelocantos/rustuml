@@ -1,6 +1,0 @@
-@startuml
-title Processus de données
-start
-:Action;
-stop
-@enduml

@@ -1,9 +1,0 @@
-@startuml
-
-start
-partition #lightgreen "Colored lightgreen" {
-  :Action in lightgreen partition;
-  :Another action;
-}
-stop
-@enduml

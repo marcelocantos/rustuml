@@ -1,5 +1,0 @@
-@startuml
-component A
-component B
-A -right-> B
-@enduml

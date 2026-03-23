@@ -1,4 +1,0 @@
-@startuml
-Alice -> Bob : message with <img:sprite.png>
-note right : note with <img:sprite.png>
-@enduml

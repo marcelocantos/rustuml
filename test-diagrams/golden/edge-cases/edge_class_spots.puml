@@ -1,5 +1,0 @@
-@startuml
-class MyService << (S,#FF7700) Service >>
-class MyRepo << (R,#0077FF) Repository >>
-MyService --> MyRepo
-@enduml

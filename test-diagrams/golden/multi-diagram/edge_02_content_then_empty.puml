@@ -1,6 +1,0 @@
-@startuml
-Alice -> Bob : Before empty block
-@enduml
-
-@startuml
-@enduml

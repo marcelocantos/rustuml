@@ -1,6 +1,0 @@
-@startuml
-
-start
-:**Bold action**;
-stop
-@enduml

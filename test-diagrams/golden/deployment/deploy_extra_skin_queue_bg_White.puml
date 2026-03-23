@@ -1,8 +1,0 @@
-@startuml
-skinparam queue {
-  BackgroundColor White
-}
-queue MyElem
-node AppServer
-AppServer --> MyElem
-@enduml

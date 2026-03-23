@@ -1,5 +1,0 @@
-@startuml
-skinparam ParticipantBorderThickness 3
-Alice -> Bob : hello
-Bob --> Alice : hi
-@enduml

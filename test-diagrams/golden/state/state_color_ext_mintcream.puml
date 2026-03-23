@@ -1,5 +1,0 @@
-@startuml
-state A #MintCream
-[*] --> A
-A --> [*]
-@enduml

@@ -1,7 +1,0 @@
-@startuml
-class Node1
-class Node2
-class Node3
-Node1 --> Node2
-Node2 --> Node3
-@enduml

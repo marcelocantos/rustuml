@@ -1,5 +1,0 @@
-@startuml
-note as N
-  **b** //i// __u__ ~~s~~ <color:blue>c</color>
-end note
-@enduml

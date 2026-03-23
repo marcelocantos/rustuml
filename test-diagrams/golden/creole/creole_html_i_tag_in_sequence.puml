@@ -1,4 +1,0 @@
-@startuml
-Alice -> Bob : <i>italic i tag</i>
-note right : <i>italic i tag</i>
-@enduml

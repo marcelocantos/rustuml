@@ -1,6 +1,0 @@
-@startuml
-collections Alice
-participant Bob
-Alice ->> Bob : collections sends thin_solid
-Bob ->> Alice : collections receives thin_solid
-@enduml

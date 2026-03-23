@@ -1,8 +1,0 @@
-@startuml
-component Server
-note right of Server
-  This server handles
-  multiple requests
-  concurrently
-end note
-@enduml

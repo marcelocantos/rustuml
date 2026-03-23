@@ -1,9 +1,0 @@
-@startuml
-class Foo #lightblue
-interface IFoo #lightyellow
-abstract AbstractFoo #lightgreen
-enum MyEnum #lightsalmon
-note as N1 #wheat
-  Note text
-end note
-@enduml

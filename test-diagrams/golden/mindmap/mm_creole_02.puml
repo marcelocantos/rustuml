@@ -1,7 +1,0 @@
-@startmindmap
-* Root with __Underline__
-** Child node
-*** __Underline__ in leaf
--- Left branch
---- __Underline__ left
-@endmindmap

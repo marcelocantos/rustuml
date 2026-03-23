@@ -1,5 +1,0 @@
-@startuml
-component "//italic// comp" as C633
-interface "//italic// iface" as I633
-C633 -- I633
-@enduml

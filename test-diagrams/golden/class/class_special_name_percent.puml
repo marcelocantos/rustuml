@@ -1,7 +1,0 @@
-@startuml
-class "100%Done" {
-  +void method()
-}
-class Other
-"100%Done" --> Other
-@enduml

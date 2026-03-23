@@ -1,6 +1,0 @@
-@startuml
-control "Named Control" as P #red
-participant Other
-P -> Other : control red call
-Other --> P : reply
-@enduml

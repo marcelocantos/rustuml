@@ -1,5 +1,0 @@
-@startuml
-note as N1
-  a &lt; b &gt; c
-end note
-@enduml

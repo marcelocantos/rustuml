@@ -1,5 +1,0 @@
-@startuml
-entity Source
-node Target
-Source --> Target
-@enduml

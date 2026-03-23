@@ -1,5 +1,0 @@
-@startuml
-class Source
-class Target
-Source -left-> Target
-@enduml

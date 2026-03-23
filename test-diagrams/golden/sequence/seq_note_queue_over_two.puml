@@ -1,7 +1,0 @@
-@startuml
-queue A
-queue B
-A -> B : hello
-note over A, B : note over two queues
-B --> A : hi
-@enduml

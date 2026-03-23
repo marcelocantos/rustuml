@@ -1,7 +1,0 @@
-@startuml
-component Foo {
-  port p1
-  port p2
-}
-Foo::p1 --> Foo::p2
-@enduml

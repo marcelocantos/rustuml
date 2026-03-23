@@ -1,6 +1,0 @@
-@startuml
-skinparam state { BackgroundColor BlanchedAlmond }
-[*] --> A
-A --> B
-B --> [*]
-@enduml

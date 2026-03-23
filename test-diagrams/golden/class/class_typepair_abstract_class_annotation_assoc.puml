@@ -1,5 +1,0 @@
-@startuml
-abstract class TypeA
-annotation TypeB
-TypeA --> TypeB
-@enduml

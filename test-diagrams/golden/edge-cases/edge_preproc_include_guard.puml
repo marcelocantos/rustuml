@@ -1,9 +1,0 @@
-@startuml
-!ifndef MY_GUARD
-!define MY_GUARD
-note as N1
-  Included once
-end note
-!endif
-class Foo
-@enduml

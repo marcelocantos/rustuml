@@ -1,4 +1,0 @@
-@startuml
-Alice -> Bob : 中文消息
-Bob --> Alice : 中文消息 reply
-@enduml

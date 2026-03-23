@@ -1,8 +1,0 @@
-@startuml
-:**//bi//** start;
-if (**//bi//** condition?) then (yes)
-  :**//bi//** true branch;
-else (no)
-  :**//bi//** false branch;
-endif
-@enduml

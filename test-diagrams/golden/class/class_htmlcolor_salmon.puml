@@ -1,5 +1,0 @@
-@startuml
-class ColorTest #Salmon {
-  +void method()
-}
-@enduml

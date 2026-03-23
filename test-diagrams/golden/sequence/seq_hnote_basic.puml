@@ -1,5 +1,0 @@
-@startuml
-Alice -> Bob : hello
-hnote over Alice : hexagonal note
-Bob --> Alice : hi
-@enduml

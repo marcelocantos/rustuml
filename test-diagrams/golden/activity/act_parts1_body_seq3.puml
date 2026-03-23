@@ -1,9 +1,0 @@
-@startuml
-start
-partition "P1" {
-:A;
-:B;
-:C;
-}
-stop
-@enduml

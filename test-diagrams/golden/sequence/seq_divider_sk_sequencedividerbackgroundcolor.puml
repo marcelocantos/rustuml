@@ -1,6 +1,0 @@
-@startuml
-skinparam SequenceDividerBackgroundColor #E0E0E0
-Alice -> Bob : before
-== Divider ==
-Bob --> Alice : after
-@enduml

@@ -1,4 +1,0 @@
-@startuml
-Alice -> Bob: message with backslash \\
-Bob --> Alice: another \\ backslash
-@enduml

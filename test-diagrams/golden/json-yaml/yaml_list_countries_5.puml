@@ -1,9 +1,0 @@
-@startyaml
-countries:
-  - USA
-  - UK
-  - France
-  - Germany
-  - Japan
-count: 5
-@endyaml

@@ -1,4 +1,0 @@
-@startuml
-Alice -> Bob: This is a multi word message
-Bob --> Alice: Another multi word response with more words
-@enduml

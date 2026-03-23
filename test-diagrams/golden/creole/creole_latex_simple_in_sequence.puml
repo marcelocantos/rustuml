@@ -1,3 +1,0 @@
-@startuml
-Alice -> Bob : <latex>E = mc^2</latex>
-@enduml

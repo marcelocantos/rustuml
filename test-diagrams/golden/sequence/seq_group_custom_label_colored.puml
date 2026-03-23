@@ -1,7 +1,0 @@
-@startuml
-Alice -> Bob : start
-group#red Error Handling
-  Bob -> Bob : handle error
-  Bob --> Alice : error response
-end
-@enduml

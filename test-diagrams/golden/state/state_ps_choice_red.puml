@@ -1,6 +1,0 @@
-@startuml
-state ps <<choice>> #red
-[*] --> A
-A --> ps
-ps --> [*]
-@enduml

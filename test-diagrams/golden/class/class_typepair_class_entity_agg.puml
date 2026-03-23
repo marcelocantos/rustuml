@@ -1,5 +1,0 @@
-@startuml
-class TypeA
-entity TypeB
-TypeA o-- TypeB
-@enduml

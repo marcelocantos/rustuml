@@ -1,5 +1,0 @@
-@startuml
-!theme yeti
-Alice -> Bob : hello
-Bob --> Alice : world
-@enduml

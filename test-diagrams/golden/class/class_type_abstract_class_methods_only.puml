@@ -1,7 +1,0 @@
-@startuml
-abstract class MyType {
-  +void doSomething()
-  -String compute(int x)
-  #boolean check()
-}
-@enduml

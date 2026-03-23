@@ -1,6 +1,0 @@
-@startuml
-actor Admin
-usecase "Delete User" as DU
-Admin --> DU
-note on link : Requires confirmation
-@enduml

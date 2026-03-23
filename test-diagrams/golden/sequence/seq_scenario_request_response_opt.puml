@@ -1,6 +1,0 @@
-@startuml
-opt cond
-Alice -> Bob : request
-Bob --> Alice : response
-end
-@enduml

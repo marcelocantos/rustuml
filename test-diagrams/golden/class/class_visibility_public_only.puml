@@ -1,6 +1,0 @@
-@startuml
-class MyClass {
-  +String field
-  +void method()
-}
-@enduml

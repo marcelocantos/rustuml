@@ -1,9 +1,0 @@
-@startgantt
-[Phase 1] lasts 5 days
--- Planning --
-[Task 1.1] lasts 2 days
-[Task 1.2] lasts 3 days
--- Execution --
-[Task 2.1] lasts 4 days
-[Task 2.1] starts at [Task 1.2]'s end
-@endgantt

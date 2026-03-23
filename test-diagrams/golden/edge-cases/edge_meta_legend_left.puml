@@ -1,7 +1,0 @@
-@startuml
-legend left
-  This is on the left
-  Second line
-endlegend
-class Foo
-@enduml

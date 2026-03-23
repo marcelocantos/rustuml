@@ -1,9 +1,0 @@
-@startsalt
-{+
-  File | Edit | View | Help
-  {
-    "Document content area"
-    "More content here..."
-  }
-}
-@endsalt

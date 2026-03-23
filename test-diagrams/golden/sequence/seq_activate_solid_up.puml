@@ -1,4 +1,0 @@
-@startuml
-Alice -> Bob ++ : solid activate up
-Bob -> Alice -- : return
-@enduml

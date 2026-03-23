@@ -1,7 +1,0 @@
-@startuml
-node MyContainer <<external>> {
-  component Foo
-  component Bar
-  Foo --> Bar
-}
-@enduml

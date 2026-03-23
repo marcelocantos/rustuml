@@ -1,7 +1,0 @@
-@startuml
-skinparam ParticipantBorderColor navy
-boundary X
-participant Y
-X -> Y : hello
-Y --> X : hi
-@enduml

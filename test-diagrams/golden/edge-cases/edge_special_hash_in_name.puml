@@ -1,5 +1,0 @@
-@startuml
-class "C#Class" {
-  method(): void
-}
-@enduml

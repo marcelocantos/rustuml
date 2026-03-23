@@ -1,5 +1,0 @@
-@startuml
-state A #HotPink
-[*] --> A
-A --> [*]
-@enduml

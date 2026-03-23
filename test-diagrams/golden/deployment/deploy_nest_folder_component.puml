@@ -1,5 +1,0 @@
-@startuml
-folder Outer {
-  component Inner
-}
-@enduml

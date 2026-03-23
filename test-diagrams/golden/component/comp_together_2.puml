@@ -1,8 +1,0 @@
-@startuml
-together {
-  component G1
-  component G2
-}
-component Z
-G1 --> Z
-@enduml

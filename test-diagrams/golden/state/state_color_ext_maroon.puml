@@ -1,5 +1,0 @@
-@startuml
-state A #Maroon
-[*] --> A
-A --> [*]
-@enduml

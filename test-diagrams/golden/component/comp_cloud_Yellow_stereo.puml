@@ -1,7 +1,0 @@
-@startuml
-cloud "My Container" #Yellow <<cloud>> {
-  component Service <<service>>
-  component Worker <<worker>>
-  Service --> Worker
-}
-@enduml

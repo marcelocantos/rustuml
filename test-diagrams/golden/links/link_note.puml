@@ -1,8 +1,0 @@
-@startuml
-class Foo {
-  + bar()
-}
-note right of Foo
-  See [[https://example.com docs]] for details
-end note
-@enduml

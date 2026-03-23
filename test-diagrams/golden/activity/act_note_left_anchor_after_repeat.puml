@@ -1,9 +1,0 @@
-@startuml
-
-start
-repeat
-  :R;
-repeatwhile (m?)
-note left: Note after after repeat
-stop
-@enduml

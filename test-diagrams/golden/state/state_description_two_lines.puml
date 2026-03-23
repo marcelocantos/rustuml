@@ -1,6 +1,0 @@
-@startuml
-state A : first line
-state A : second line
-[*] --> A
-A --> [*]
-@enduml

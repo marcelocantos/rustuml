@@ -1,7 +1,0 @@
-@startdot
-digraph G {
-  A -> B [arrowhead=open]
-  B -> C [arrowhead=diamond]
-  C -> D [arrowhead=none]
-}
-@enddot

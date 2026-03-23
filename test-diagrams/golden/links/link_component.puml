@@ -1,8 +1,0 @@
-@startuml
-component Frontend [[https://example.com/frontend]]
-component Backend [[https://example.com/backend]]
-database Storage [[https://example.com/storage]]
-
-Frontend --> Backend
-Backend --> Storage
-@enduml

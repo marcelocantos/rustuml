@@ -1,9 +1,0 @@
-@startuml
-start
-if (c?) then (yes)
-  :alt;
-else (no)
-  :action;
-endif
-stop
-@enduml

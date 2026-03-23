@@ -1,5 +1,0 @@
-@startuml
-class ColorTest #Tomato {
-  +void method()
-}
-@enduml

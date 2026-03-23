@@ -1,5 +1,0 @@
-@startuml
-actor "<size:20>large</size> Actor" as A53
-usecase "<size:20>large</size> Case" as UC53
-A53 --> UC53
-@enduml

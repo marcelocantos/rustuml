@@ -1,6 +1,0 @@
-@startuml
-
-start
-:output_action\
-stop
-@enduml

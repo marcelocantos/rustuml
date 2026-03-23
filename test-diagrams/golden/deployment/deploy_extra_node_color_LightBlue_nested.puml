@@ -1,9 +1,0 @@
-@startuml
-node L1 #LightBlue {
-  node L2 {
-    component App
-    database DB
-    App --> DB
-  }
-}
-@enduml

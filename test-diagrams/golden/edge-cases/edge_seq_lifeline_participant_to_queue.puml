@@ -1,5 +1,0 @@
-@startuml
-participant P1
-queue Q2
-P1 -> Q2: message
-@enduml

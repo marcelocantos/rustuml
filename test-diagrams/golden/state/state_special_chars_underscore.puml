@@ -1,7 +1,0 @@
-@startuml
-state my_state_1
-state my_state_2
-[*] --> my_state_1
-my_state_1 --> my_state_2
-my_state_2 --> [*]
-@enduml

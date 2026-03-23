@@ -1,8 +1,0 @@
-@startuml
-:<back:yellow>bg</back> start;
-if (<back:yellow>bg</back> condition?) then (yes)
-  :<back:yellow>bg</back> true branch;
-else (no)
-  :<back:yellow>bg</back> false branch;
-endif
-@enduml

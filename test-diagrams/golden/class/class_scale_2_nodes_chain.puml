@@ -1,5 +1,0 @@
-@startuml
-class Node1
-class Node2
-Node1 --> Node2
-@enduml

@@ -1,7 +1,0 @@
-@startuml
-component Foo
-component Bar
-Foo --> Bar
-note "Floating note" as N1
-N1 .. Foo
-@enduml

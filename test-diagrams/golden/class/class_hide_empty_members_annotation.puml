@@ -1,7 +1,0 @@
-@startuml
-hide empty members
-annotation MyType {
-  +String field
-  +void method()
-}
-@enduml

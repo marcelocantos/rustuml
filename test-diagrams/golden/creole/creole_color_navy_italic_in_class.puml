@@ -1,5 +1,0 @@
-@startuml
-class C {
-  <color:navy>//field//</color>: String
-}
-@enduml

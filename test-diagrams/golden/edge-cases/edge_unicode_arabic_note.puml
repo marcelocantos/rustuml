@@ -1,5 +1,0 @@
-@startuml
-note as N1
-  اختبار: بيانات
-end note
-@enduml

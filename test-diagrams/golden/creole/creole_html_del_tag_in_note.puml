@@ -1,5 +1,0 @@
-@startuml
-note as N
-  <del>deleted text</del>
-end note
-@enduml

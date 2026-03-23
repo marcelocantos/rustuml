@@ -1,5 +1,0 @@
-@startuml
-state A #MistyRose
-[*] --> A
-A --> [*]
-@enduml

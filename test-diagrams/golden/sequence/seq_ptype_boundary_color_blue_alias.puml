@@ -1,6 +1,0 @@
-@startuml
-boundary "Named Boundary" as P #blue
-participant Other
-P -> Other : boundary blue call
-Other --> P : reply
-@enduml

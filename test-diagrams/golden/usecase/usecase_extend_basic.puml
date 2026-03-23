@@ -1,7 +1,0 @@
-@startuml
-actor User
-usecase "Login" as L
-usecase "Login with 2FA" as L2FA
-L2FA .> L : <<extend>>
-User --> L
-@enduml

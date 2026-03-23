@@ -1,5 +1,0 @@
-@startdot
-digraph G {
-  A [shape=record, label="{name|age|email}"]
-}
-@enddot

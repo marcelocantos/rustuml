@@ -1,9 +1,0 @@
-@startuml
-!$str = "Hello, World!"
-!$sub = %substr($str, 7, 5)
-
-note as N
-  original = "$str"
-  substr(7,5) = "$sub"
-end note
-@enduml

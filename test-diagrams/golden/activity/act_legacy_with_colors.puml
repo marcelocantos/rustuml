@@ -1,7 +1,0 @@
-@startuml
-
-(*) --> #lightblue "Colored Start"
-#lightblue "Colored Start" --> #lightgreen "Colored Middle"
-#lightgreen "Colored Middle" --> #lightyellow "Colored End"
-#lightyellow "Colored End" --> (*)
-@enduml

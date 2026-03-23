@@ -1,6 +1,0 @@
-@startuml
-
-start
-#FF5500:Colored action;
-stop
-@enduml

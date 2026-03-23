@@ -1,7 +1,0 @@
-@startuml
-start
-:A;
--> label;
-:B;
-stop
-@enduml

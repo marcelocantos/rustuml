@@ -1,9 +1,0 @@
-@startuml
-top to bottom direction
-component Frontend
-component Backend
-component Database
-Frontend --> Backend
-Backend --> Database
-
-@enduml

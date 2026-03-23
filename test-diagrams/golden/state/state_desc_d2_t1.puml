@@ -1,6 +1,0 @@
-@startuml
-state A : waiting for user input
-[*] --> A
-A --> B : trigger
-B --> [*]
-@enduml

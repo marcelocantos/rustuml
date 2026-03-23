@@ -1,8 +1,0 @@
-@startuml
-abstract class ComboAbstract_ClassPrivate {
-  -String field1
-  -int field2
-  -void method1()
-  -String method2(int x)
-}
-@enduml

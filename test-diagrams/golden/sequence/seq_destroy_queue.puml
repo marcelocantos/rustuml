@@ -1,7 +1,0 @@
-@startuml
-participant Alice
-create queue Target
-Alice -> Target : use
-Target --> Alice : done
-destroy Target
-@enduml

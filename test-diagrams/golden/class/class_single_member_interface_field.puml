@@ -1,5 +1,0 @@
-@startuml
-interface OneMember {
-  +String single
-}
-@enduml

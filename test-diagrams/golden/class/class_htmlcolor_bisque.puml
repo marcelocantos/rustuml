@@ -1,5 +1,0 @@
-@startuml
-class ColorTest #Bisque {
-  +void method()
-}
-@enduml

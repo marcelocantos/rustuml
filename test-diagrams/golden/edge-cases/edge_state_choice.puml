@@ -1,7 +1,0 @@
-@startuml
-[*] --> choice
-state choice <<choice>>
-choice --> A : condition1
-choice --> B : condition2
-choice --> C : else
-@enduml

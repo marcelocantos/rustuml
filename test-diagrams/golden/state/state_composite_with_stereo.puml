@@ -1,8 +1,0 @@
-@startuml
-state Outer <<mytype>> {
-  [*] --> Inner
-  Inner --> [*]
-}
-[*] --> Outer
-Outer --> [*]
-@enduml

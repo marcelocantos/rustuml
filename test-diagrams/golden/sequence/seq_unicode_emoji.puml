@@ -1,4 +1,0 @@
-@startuml
-Alice -> Bob : Hello 🌍 World 🚀
-Bob --> Alice : Hello 🌍 World 🚀 reply
-@enduml

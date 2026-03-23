@@ -1,7 +1,0 @@
-@startuml
-actor User
-usecase "Transfer Funds" as TF
-usecase "Authenticate" as AUTH
-TF .> AUTH : <<include>>
-User --> TF
-@enduml

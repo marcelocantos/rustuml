@@ -1,6 +1,0 @@
-@startuml
-title My Component Diagram
-component A
-component B
-A --> B
-@enduml

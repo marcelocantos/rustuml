@@ -1,5 +1,0 @@
-@startuml
-Alice -> Bob : start
-ref over Alice, Bob : See diagram Foo
-Bob --> Alice : done
-@enduml

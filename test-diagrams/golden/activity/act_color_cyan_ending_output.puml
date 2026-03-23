@@ -1,6 +1,0 @@
-@startuml
-
-start
-#cyan:Action with output\
-stop
-@enduml

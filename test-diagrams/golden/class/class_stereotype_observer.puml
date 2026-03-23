@@ -1,6 +1,0 @@
-@startuml
-class MyClass <<observer>> {
-  -instance: MyClass
-  +getInstance(): MyClass
-}
-@enduml

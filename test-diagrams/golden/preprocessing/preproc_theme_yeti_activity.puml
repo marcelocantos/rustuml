@@ -1,7 +1,0 @@
-@startuml
-!theme yeti
-start
-:step one;
-:step two;
-stop
-@enduml

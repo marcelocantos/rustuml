@@ -1,4 +1,0 @@
-@startuml
-Alice -> Bob: price is $99.99
-Bob --> Alice: cost: $42
-@enduml

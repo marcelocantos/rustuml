@@ -1,5 +1,0 @@
-@startuml
-note as N
-  [link] <tag>
-end note
-@enduml

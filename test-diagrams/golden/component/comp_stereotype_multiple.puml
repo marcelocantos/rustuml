@@ -1,5 +1,0 @@
-@startuml
-component AuthService <<service>> <<secured>>
-component UserRepo <<repository>> <<persistent>>
-AuthService --> UserRepo : uses
-@enduml

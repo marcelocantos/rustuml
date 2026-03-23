@@ -1,5 +1,0 @@
-@startuml
-class ColorTest #MediumOrchid {
-  +void method()
-}
-@enduml

@@ -1,5 +1,0 @@
-@startuml
-component MyA
-database MyB
-MyA --> MyB
-@enduml

@@ -1,7 +1,0 @@
-@startuml
-node "server-01.example.com"
-node "db_primary"
-artifact "app-v1.0.0.war"
-"server-01.example.com" --> "db_primary" : port 5432
-artifact "app-v1.0.0.war" --> "server-01.example.com" : deploy
-@enduml

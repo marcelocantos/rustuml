@@ -1,5 +1,0 @@
-@startuml
-database Source
-database Target
-Source --> Target : JDBC
-@enduml

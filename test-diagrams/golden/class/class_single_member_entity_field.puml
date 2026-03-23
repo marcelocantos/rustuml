@@ -1,5 +1,0 @@
-@startuml
-entity OneMember {
-  +String single
-}
-@enduml

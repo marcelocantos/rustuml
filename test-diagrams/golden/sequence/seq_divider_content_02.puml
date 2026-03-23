@@ -1,5 +1,0 @@
-@startuml
-Alice -> Bob : before
-== **Bold Divider** ==
-Bob --> Alice : after
-@enduml

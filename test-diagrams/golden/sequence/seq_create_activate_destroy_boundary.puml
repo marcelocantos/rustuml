@@ -1,8 +1,0 @@
-@startuml
-participant Alice
-create boundary Temp
-Alice -> Temp ++ : init
-Temp -> Temp : setup
-Temp --> Alice -- : ready
-Alice -> Temp !! : use and destroy
-@enduml

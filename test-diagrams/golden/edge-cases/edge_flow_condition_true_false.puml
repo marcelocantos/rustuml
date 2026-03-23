@@ -1,9 +1,0 @@
-@startuml
-start
-if (condition?) then (true)
-  :do true;
-else (false)
-  :do false;
-endif
-stop
-@enduml

@@ -1,5 +1,0 @@
-@startuml
-enum Variant {
-  -void helper()
-}
-@enduml

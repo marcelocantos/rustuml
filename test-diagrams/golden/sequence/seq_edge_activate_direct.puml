@@ -1,8 +1,0 @@
-@startuml
-participant Alice
-participant Bob
-activate Bob
-Alice -> Bob : hello
-Bob --> Alice : hi
-deactivate Bob
-@enduml

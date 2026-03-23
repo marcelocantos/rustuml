@@ -1,6 +1,0 @@
-@startuml
-skinparam ClassFontColor blue
-class MyClass {
-  +void method()
-}
-@enduml

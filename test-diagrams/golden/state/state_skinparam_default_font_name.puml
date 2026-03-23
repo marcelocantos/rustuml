@@ -1,6 +1,0 @@
-@startuml
-skinparam defaultFontName Courier
-[*] --> A
-A --> B
-B --> [*]
-@enduml

@@ -1,5 +1,0 @@
-@startuml
-state A #Navy
-[*] --> A
-A --> [*]
-@enduml

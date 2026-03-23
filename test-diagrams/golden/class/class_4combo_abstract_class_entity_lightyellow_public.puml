@@ -1,6 +1,0 @@
-@startuml
-abstract class Combo <<entity>> #lightyellow {
-  +String name
-  +void method()
-}
-@enduml

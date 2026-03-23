@@ -1,5 +1,0 @@
-@startuml
-node Outer {
-  node Inner
-}
-@enduml

@@ -1,6 +1,0 @@
-@startuml
-participant "Named Participant" as P #yellow
-participant Other
-P -> Other : participant yellow call
-Other --> P : reply
-@enduml

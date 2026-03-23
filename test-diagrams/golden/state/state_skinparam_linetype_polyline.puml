@@ -1,6 +1,0 @@
-@startuml
-skinparam linetype polyline
-[*] --> A
-A --> B
-B --> [*]
-@enduml

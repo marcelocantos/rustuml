@@ -1,5 +1,0 @@
-@startuml
-note as N
-  <size:28>sized text at 28pt</size>
-end note
-@enduml

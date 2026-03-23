@@ -1,8 +1,0 @@
-@startuml
-participant C order 1
-participant B order 2
-participant A order 3
-A -> B : right-to-left
-B -> C : continuing
-C --> A : back
-@enduml

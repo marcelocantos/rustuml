@@ -1,7 +1,0 @@
-@startuml
-skinparam BoundaryBorderColor teal
-boundary Alice
-participant Bob
-Alice -> Bob : hello
-Bob --> Alice : hi
-@enduml

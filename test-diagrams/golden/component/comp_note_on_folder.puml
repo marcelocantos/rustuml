@@ -1,6 +1,0 @@
-@startuml
-folder MyContainer {
-  component Foo
-}
-note right of MyContainer : Note on folder
-@enduml

@@ -1,9 +1,0 @@
-@startuml
-[*] --> A
-A --> B
-note right of A
-  line 1
-  line 2
-end note
-B --> [*]
-@enduml

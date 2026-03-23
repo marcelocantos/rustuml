@@ -1,9 +1,0 @@
-@startuml
-cloud GroupA {
-  component A
-}
-cloud GroupB {
-  component B
-}
-A -left-> B
-@enduml

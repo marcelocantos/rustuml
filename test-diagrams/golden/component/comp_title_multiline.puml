@@ -1,9 +1,0 @@
-@startuml
-title
-  My Complex
-  Component Diagram
-end title
-component A
-component B
-A --> B
-@enduml

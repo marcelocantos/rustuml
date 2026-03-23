@@ -1,6 +1,0 @@
-@startuml
-[*] --> A
-A -down--> : / doIt()
-A --> B
-B --> [*]
-@enduml

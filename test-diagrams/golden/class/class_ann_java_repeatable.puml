@@ -1,5 +1,0 @@
-@startuml
-annotation Repeatable {
-  +Class<? extends Annotation> value()
-}
-@enduml

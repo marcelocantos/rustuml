@@ -1,5 +1,0 @@
-@startuml
-class ColorTest #PeachPuff {
-  +void method()
-}
-@enduml

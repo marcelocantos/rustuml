@@ -1,5 +1,0 @@
-@startuml
-annotation MyAnnotation
-node MyNode
-MyAnnotation .. MyNode
-@enduml

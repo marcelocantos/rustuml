@@ -1,9 +1,0 @@
-@startuml
-!pragma teoz true
-box "A"
-  participant Alice
-end box
-participant Bob
-Alice -> Bob : hi
-Bob --> Alice : hey
-@enduml

@@ -1,6 +1,0 @@
-@startuml
-!$c = %hsl_color(30, 60, 70)
-skinparam participantBackgroundColor $c
-participant Warm
-Warm -> Warm : warm muted
-@enduml

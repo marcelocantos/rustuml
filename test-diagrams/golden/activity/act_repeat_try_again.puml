@@ -1,9 +1,0 @@
-@startuml
-
-start
-repeat
-  :Attempt action;
-  :Check result;
-repeatwhile (try again?) is (yes)
-stop
-@enduml

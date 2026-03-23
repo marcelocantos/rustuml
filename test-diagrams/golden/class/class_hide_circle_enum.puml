@@ -1,7 +1,0 @@
-@startuml
-hide circle
-enum MyType {
-  +String field
-  +void method()
-}
-@enduml

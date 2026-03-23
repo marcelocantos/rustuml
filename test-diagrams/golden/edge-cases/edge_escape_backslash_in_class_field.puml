@@ -1,5 +1,0 @@
-@startuml
-class Foo {
-  field: "a\\b"
-}
-@enduml

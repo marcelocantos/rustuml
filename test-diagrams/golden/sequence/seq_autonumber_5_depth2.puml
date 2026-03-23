@@ -1,7 +1,0 @@
-@startuml
-autonumber 5
-P0 -> P1 ++ : depth 1
-  P1 -> P2 ++ : depth 2
-  return result 2
-return result 1
-@enduml

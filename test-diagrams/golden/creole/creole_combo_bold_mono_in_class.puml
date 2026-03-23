@@ -1,5 +1,0 @@
-@startuml
-class MyClass {
-  **""bold mono""**: field
-}
-@enduml

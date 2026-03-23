@@ -1,7 +1,0 @@
-@startuml
-class "path/to/Class" {
-  +void method()
-}
-class Other
-"path/to/Class" --> Other
-@enduml

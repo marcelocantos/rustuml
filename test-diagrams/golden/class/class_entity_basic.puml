@@ -1,9 +1,0 @@
-@startuml
-entity User {
-  *id : int
-  --
-  username : String
-  email : String
-  createdAt : Date
-}
-@enduml

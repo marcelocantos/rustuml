@@ -1,4 +1,0 @@
-@startuml
-Alice -> Bob : [[https://plantuml.com{PlantUML website} click me]]
-note right : [[https://plantuml.com{PlantUML website} click me]]
-@enduml

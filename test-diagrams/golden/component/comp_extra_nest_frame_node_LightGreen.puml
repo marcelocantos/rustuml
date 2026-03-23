@@ -1,9 +1,0 @@
-@startuml
-frame Outer #LightGreen {
-  node Inner {
-    component X
-    component Y
-    X --> Y
-  }
-}
-@enduml

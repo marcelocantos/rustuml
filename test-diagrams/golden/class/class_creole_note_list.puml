@@ -1,7 +1,0 @@
-@startuml
-class MyClass
-note right of MyClass
-  * item1
-  * item2
-end note
-@enduml

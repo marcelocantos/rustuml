@@ -1,7 +1,0 @@
-@startuml
-start
-while (loop?) is (yes)
-  :action fork_bar|
-endwhile
-stop
-@enduml

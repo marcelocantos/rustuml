@@ -1,9 +1,0 @@
-@startuml
-[*] --> S1
-S1 --> S1 : retry
-S2 --> S2 : retry
-S3 --> S3 : retry
-S1 --> S2 : next
-S2 --> S3 : next
-S3 --> [*]
-@enduml

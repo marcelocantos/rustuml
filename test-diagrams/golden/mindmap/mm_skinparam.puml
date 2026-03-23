@@ -1,9 +1,0 @@
-@startmindmap
-skinparam mindmapBorderColor darkblue
-skinparam mindmapBackgroundColor lightyellow
-* Root
-** Node A
-*** Leaf 1
-** Node B
-*** Leaf 2
-@endmindmap

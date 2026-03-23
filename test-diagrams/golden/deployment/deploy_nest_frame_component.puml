@@ -1,5 +1,0 @@
-@startuml
-frame Outer {
-  component Inner
-}
-@enduml

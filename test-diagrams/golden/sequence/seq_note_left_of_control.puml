@@ -1,7 +1,0 @@
-@startuml
-control X
-participant Y
-X -> Y : message
-note left of X : note left of control
-Y --> X : reply
-@enduml

@@ -1,7 +1,0 @@
-@startuml
-package colored #lightblue {
-  class MyClass {
-    +void method()
-  }
-}
-@enduml

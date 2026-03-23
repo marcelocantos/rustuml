@@ -1,6 +1,0 @@
-@startuml
-participant "उपयोगकर्ता" as U
-participant "प्रणाली" as S
-U -> S: परीक्षण
-S --> U: डेटा
-@enduml

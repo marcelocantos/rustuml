@@ -1,6 +1,0 @@
-@startuml
-class Foo {
-  {static} {abstract} myField: String
-  {static} {abstract} myMethod(): void
-}
-@enduml

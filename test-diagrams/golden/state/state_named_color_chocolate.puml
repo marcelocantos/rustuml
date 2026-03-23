@@ -1,5 +1,0 @@
-@startuml
-state A #Chocolate
-[*] --> A
-A --> [*]
-@enduml

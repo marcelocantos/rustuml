@@ -1,5 +1,0 @@
-@startuml
-class MyClass {
-  multiLineMethod(\nparam1: String,\nparam2: Int): void
-}
-@enduml

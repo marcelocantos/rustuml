@@ -1,5 +1,0 @@
-@startuml
-[*] --> A
-A --> [*] : success
-A --> [*] : failure
-@enduml

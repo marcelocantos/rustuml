@@ -1,7 +1,0 @@
-@startuml
-class "A+B-C" {
-  +void method()
-}
-class Other
-"A+B-C" --> Other
-@enduml

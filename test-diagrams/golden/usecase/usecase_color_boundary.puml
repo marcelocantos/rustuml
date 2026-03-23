@@ -1,9 +1,0 @@
-@startuml
-actor User
-rectangle "System" #LightBlue {
-  usecase "Action A" #Pink
-  usecase "Action B" #Yellow
-}
-User --> (Action A)
-User --> (Action B)
-@enduml

@@ -1,5 +1,0 @@
-@startuml
-state """mono"" State" as S594
-[*] --> S594
-S594 : ""mono"" description
-@enduml

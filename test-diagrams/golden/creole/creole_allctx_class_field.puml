@@ -1,5 +1,0 @@
-@startuml
-class MyClass {
-  **bold** //italic// __under__: field
-}
-@enduml

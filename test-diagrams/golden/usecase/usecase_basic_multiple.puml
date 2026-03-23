@@ -1,9 +1,0 @@
-@startuml
-actor User
-usecase "Log In" as UC1
-usecase "View Dashboard" as UC2
-usecase "Log Out" as UC3
-User --> UC1
-User --> UC2
-User --> UC3
-@enduml

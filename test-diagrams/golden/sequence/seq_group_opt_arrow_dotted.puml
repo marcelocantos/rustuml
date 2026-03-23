@@ -1,7 +1,0 @@
-@startuml
-A -> B : init
-opt cond
-  A --> B : dotted in opt
-  B --> A : ack
-end
-@enduml

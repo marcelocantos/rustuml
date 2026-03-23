@@ -1,4 +1,0 @@
-@startuml
-Alice -> Bob: key: value
-Bob --> Alice: response: ok: 200
-@enduml

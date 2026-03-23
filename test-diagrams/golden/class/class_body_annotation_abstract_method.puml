@@ -1,5 +1,0 @@
-@startuml
-annotation Variant {
-  {abstract} +void doIt()
-}
-@enduml

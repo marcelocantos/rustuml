@@ -1,6 +1,0 @@
-@startuml
-component Foo
-component Bar
-Foo --> Bar : uses
-note on link : This link note
-@enduml

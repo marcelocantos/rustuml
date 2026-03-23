@@ -1,5 +1,0 @@
-@startuml
-component Foo
-component Bar
-Foo --> Bar : depends on
-@enduml

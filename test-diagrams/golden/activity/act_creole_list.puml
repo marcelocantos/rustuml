@@ -1,6 +1,0 @@
-@startuml
-
-start
-:Process items\n* item1\n* item2\n* item3;
-stop
-@enduml

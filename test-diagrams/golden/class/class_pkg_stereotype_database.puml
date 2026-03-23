@@ -1,7 +1,0 @@
-@startuml
-package myPkg <<Database>> {
-  class MyClass {
-    +void method()
-  }
-}
-@enduml

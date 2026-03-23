@@ -1,9 +1,0 @@
-@startuml
-box
-  participant Alice
-  participant Bob
-end box
-participant Charlie
-Alice -> Charlie : call
-Charlie --> Alice : reply
-@enduml

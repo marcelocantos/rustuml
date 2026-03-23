@@ -1,5 +1,0 @@
-@startuml
-control C1
-queue Q2
-C1 -> Q2: message
-@enduml

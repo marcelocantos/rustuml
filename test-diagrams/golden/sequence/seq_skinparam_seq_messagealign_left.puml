@@ -1,5 +1,0 @@
-@startuml
-skinparam SequenceMessageAlign left
-Alice -> Bob : hello
-Bob --> Alice : hi
-@enduml

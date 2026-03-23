@@ -1,5 +1,0 @@
-@startuml
-annotation Override {
-  +String value()
-}
-@enduml

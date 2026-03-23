@@ -1,9 +1,0 @@
-@startuml
-Alice -> Bob ++ : start
-loop condition
-  note over Bob : in loop
-  Bob -> Charlie ++ : action
-  Charlie --> Bob -- : result
-end
-Bob --> Alice -- : done
-@enduml

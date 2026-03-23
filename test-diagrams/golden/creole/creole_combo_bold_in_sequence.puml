@@ -1,5 +1,0 @@
-@startuml
-participant "Part 260" as P
-Alice -> P : **bold**
-P --> Alice : **bold** reply
-@enduml

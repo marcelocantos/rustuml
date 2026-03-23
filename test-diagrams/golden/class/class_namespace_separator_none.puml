@@ -1,6 +1,0 @@
-@startuml
-set namespaceSeparator none
-class com.example.MyClass {
-  +void method()
-}
-@enduml

@@ -1,5 +1,0 @@
-@startuml
-skinparam backgroundColor #FFFEF0
-skinparam defaultFontName Arial
-skinparam defaultFontSize 12
-@enduml

@@ -1,9 +1,0 @@
-@startuml
-skinparam component {
-  BackgroundColor<<cache>> LightGreen
-  BorderColor<<cache>> DarkGreen
-}
-component MyComp <<cache>>
-component OtherComp <<cache>>
-MyComp --> OtherComp
-@enduml

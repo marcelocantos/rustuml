@@ -1,7 +1,0 @@
-@startuml
-state A : sending network request
-state B : next state
-[*] --> A
-A --> B : timeout occurred
-B --> [*]
-@enduml

@@ -1,5 +1,0 @@
-@startuml
-class ColorTest #BlanchedAlmond {
-  +void method()
-}
-@enduml

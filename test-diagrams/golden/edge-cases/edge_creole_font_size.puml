@@ -1,7 +1,0 @@
-@startuml
-note as N1
-  <size:20>Large text</size>
-  Normal text
-  <size:10>Small text</size>
-end note
-@enduml

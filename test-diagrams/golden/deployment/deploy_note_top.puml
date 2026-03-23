@@ -1,4 +1,0 @@
-@startuml
-node CentralNode
-note top of CentralNode : Top note
-@enduml

@@ -1,5 +1,0 @@
-@startuml
-state "My State" as MS #yellow <<mystereo>>
-[*] --> MS
-MS --> [*]
-@enduml

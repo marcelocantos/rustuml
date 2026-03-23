@@ -1,9 +1,0 @@
-@startuml
-skinparam node {
-  BackgroundColor LightBlue
-  BorderColor DarkBlue
-}
-node AppServer
-database MainDB
-AppServer --> MainDB
-@enduml

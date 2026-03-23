@@ -1,5 +1,0 @@
-@startuml
-class ColorTest #NavajoWhite {
-  +void method()
-}
-@enduml

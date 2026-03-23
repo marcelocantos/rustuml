@@ -1,9 +1,0 @@
-@startyaml
-bind: 127.0.0.1
-port: 6379
-maxmemory: 256mb
-maxmemory-policy: allkeys-lru
-save:
-  - 900 1
-  - 300 10
-@endyaml

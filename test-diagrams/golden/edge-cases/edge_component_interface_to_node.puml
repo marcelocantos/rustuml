@@ -1,5 +1,0 @@
-@startuml
-interface MyA
-node MyB
-MyA --> MyB
-@enduml

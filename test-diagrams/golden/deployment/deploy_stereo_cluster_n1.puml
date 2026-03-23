@@ -1,4 +1,0 @@
-@startuml
-node Node1 <<cluster>>
-
-@enduml

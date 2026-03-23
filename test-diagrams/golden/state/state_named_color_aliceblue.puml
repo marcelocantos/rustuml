@@ -1,5 +1,0 @@
-@startuml
-state A #AliceBlue
-[*] --> A
-A --> [*]
-@enduml

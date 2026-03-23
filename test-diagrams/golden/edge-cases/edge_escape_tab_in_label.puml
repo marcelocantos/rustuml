@@ -1,3 +1,0 @@
-@startuml
-Alice -> Bob: col1\tcol2
-@enduml

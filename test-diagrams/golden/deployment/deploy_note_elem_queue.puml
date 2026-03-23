@@ -1,4 +1,0 @@
-@startuml
-queue MyElem
-note right of MyElem : Note on queue
-@enduml

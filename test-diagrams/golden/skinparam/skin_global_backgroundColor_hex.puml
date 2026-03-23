@@ -1,6 +1,0 @@
-@startuml
-skinparam backgroundColor #FAFAFA
-Alice -> Bob : hello
-Bob --> Alice : world
-note right : note
-@enduml

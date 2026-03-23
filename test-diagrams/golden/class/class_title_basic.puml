@@ -1,6 +1,0 @@
-@startuml
-title My Class Diagram
-class A
-class B
-A --> B
-@enduml

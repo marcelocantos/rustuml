@@ -1,8 +1,0 @@
-@startuml
-Alice -> Bob ++ : call
-Bob -> Charlie ++ : sub-call
-Bob -> Dave ++ : another sub
-Dave --> Bob -- : dave done
-Charlie --> Bob -- : charlie done
-Bob --> Alice -- : all done
-@enduml

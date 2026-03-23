@@ -1,5 +1,0 @@
-@startuml
-skinparam entityBackgroundColor White
-entity Alice
-Alice -> Bob : hello
-@enduml

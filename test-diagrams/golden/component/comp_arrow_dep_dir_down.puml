@@ -1,5 +1,0 @@
-@startuml
-component Source
-component Target
-Source -down-> Target
-@enduml

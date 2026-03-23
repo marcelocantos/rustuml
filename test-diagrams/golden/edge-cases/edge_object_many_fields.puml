@@ -1,9 +1,0 @@
-@startuml
-object myObj {
-  name = "test"
-  value = 42
-  active = true
-  ratio = 3.14
-  tag = null
-}
-@enduml

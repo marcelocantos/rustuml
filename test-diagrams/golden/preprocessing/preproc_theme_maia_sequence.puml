@@ -1,5 +1,0 @@
-@startuml
-!theme maia
-Alice -> Bob : hello
-Bob --> Alice : world
-@enduml

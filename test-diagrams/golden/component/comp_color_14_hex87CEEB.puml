@@ -1,5 +1,0 @@
-@startuml
-component Foo #87CEEB
-component Bar #87CEEB
-Foo --> Bar
-@enduml

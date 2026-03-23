@@ -1,6 +1,0 @@
-@startuml
-skinparam componentStyle rectangle
-component A
-component B
-A -right-> B
-@enduml

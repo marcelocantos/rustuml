@@ -1,7 +1,0 @@
-@startuml
-participant Alice
-create actor Target
-Alice -> Target : use
-Target --> Alice : done
-destroy Target
-@enduml

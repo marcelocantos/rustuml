@@ -1,9 +1,0 @@
-@startuml
-cloud Container {
-  component X1
-  component X2
-  component X3
-}
-X1 --> X2
-X2 --> X3
-@enduml

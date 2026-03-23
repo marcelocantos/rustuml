@@ -1,7 +1,0 @@
-@startuml
-component Frontend
-component Backend
-component Database
-Frontend --> Backend : API calls
-Backend --> Database : queries
-@enduml

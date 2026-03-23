@@ -1,8 +1,0 @@
-@startuml
-class MyClass {
-  +MyClass()
-  +MyClass(String name)
-  +MyClass(String name, int age)
-  +void method()
-}
-@enduml

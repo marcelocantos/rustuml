@@ -1,5 +1,0 @@
-@startuml
-queue Alice
-participant Bob
-Alice -[#red]->> Bob : queue colored thin_dotted
-@enduml

@@ -1,7 +1,0 @@
-@startuml
-note as N
-  * unordered item
-  # ordered item
-  * another unordered
-end note
-@enduml

@@ -1,7 +1,0 @@
-@startuml
-Alice -> Bob: before divider
-== Phase 1 Complete ==
-Bob --> Alice: after divider
-== Phase 2 Start ==
-Alice -> Bob: phase 2
-@enduml

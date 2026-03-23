@@ -1,8 +1,0 @@
-@startuml
-note as N1
-  **bold text**
-  //italic text//
-  __underline text__
-  --strikethrough--
-end note
-@enduml

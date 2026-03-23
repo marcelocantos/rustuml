@@ -1,5 +1,0 @@
-@startuml
-enum TypeA
-entity TypeB
-TypeA --> TypeB
-@enduml

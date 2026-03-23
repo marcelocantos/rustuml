@@ -1,6 +1,0 @@
-@startuml
-set namespaceSeparator /
-class com/example/MyClass {
-  +void method()
-}
-@enduml

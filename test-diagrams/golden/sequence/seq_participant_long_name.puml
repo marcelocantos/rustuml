@@ -1,6 +1,0 @@
-@startuml
-participant "This Is A Very Long Participant Name That Goes On And On" as LONG
-participant Short
-LONG -> Short : hello
-Short --> LONG : world
-@enduml

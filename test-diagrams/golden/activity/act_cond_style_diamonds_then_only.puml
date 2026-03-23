@@ -1,9 +1,0 @@
-@startuml
-start
-if (cond?) then
-  :Y;
-else (no)
-  :N;
-endif
-stop
-@enduml

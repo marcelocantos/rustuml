@@ -1,5 +1,0 @@
-@startuml
-!theme materia
-Alice -> Bob : hello
-Bob --> Alice : world
-@enduml

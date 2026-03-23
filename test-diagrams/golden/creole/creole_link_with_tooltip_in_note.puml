@@ -1,5 +1,0 @@
-@startuml
-note as N
-  [[https://plantuml.com{PlantUML website} click me]]
-end note
-@enduml

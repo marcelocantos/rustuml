@@ -1,5 +1,0 @@
-@startuml
-node Source
-node Target
-Source --> Target : HTTP
-@enduml

@@ -1,6 +1,0 @@
-@startuml
-scale 800*600
-class Foo
-class Bar
-Foo --> Bar
-@enduml

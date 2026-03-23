@@ -1,5 +1,0 @@
-@startuml
-note as N
-  line1\nline2
-end note
-@enduml

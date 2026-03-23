@@ -1,9 +1,0 @@
-@startuml
-
-start
-repeat
-  :Main action;
-backward :retry;
-repeatwhile (failed?) is (yes)
-stop
-@enduml

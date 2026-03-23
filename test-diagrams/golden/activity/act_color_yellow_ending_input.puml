@@ -1,6 +1,0 @@
-@startuml
-
-start
-#yellow:Action with input/
-stop
-@enduml

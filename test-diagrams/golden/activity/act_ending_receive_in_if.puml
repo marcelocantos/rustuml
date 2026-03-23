@@ -1,9 +1,0 @@
-@startuml
-start
-if (cond?) then (yes)
-  :action receive<
-else (no)
-  :normal;
-endif
-stop
-@enduml

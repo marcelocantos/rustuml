@@ -1,4 +1,0 @@
-@startuml
-cloud MyElem
-note right of MyElem : Note on cloud
-@enduml

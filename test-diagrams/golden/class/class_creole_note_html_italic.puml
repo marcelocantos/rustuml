@@ -1,6 +1,0 @@
-@startuml
-class MyClass
-note right of MyClass
-  <i>html_italic</i>
-end note
-@enduml

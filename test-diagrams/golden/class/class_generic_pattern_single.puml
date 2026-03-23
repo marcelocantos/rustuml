@@ -1,8 +1,0 @@
-@startuml
-class Container<T> {
-  +T item
-  --
-  +T get()
-  +void set(T val)
-}
-@enduml

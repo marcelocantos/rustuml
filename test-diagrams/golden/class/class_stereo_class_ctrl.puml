@@ -1,5 +1,0 @@
-@startuml
-class MyStereoClass <<controller>> {
-  +void operate()
-}
-@enduml

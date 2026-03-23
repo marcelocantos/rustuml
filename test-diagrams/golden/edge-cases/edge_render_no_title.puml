@@ -1,5 +1,0 @@
-@startuml
-hide title
-title This should be hidden
-class Foo
-@enduml

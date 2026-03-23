@@ -1,5 +1,0 @@
-@startuml
-Alice -> Bob ++ : before
-newpage
-Bob --> Alice -- : after
-@enduml

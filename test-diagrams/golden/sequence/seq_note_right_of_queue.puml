@@ -1,7 +1,0 @@
-@startuml
-queue X
-participant Y
-X -> Y : message
-note right of X : note right of queue
-Y --> X : reply
-@enduml

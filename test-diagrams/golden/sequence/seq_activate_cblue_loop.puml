@@ -1,8 +1,0 @@
-@startuml
-A -> B ++ #blue : activate cblue
-loop cond
-  B -> C ++ #blue : nested
-  C --> B -- : done
-end
-B --> A -- : result
-@enduml

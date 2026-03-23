@@ -1,7 +1,0 @@
-@startuml
-map "Config" as cfg {
-  host => localhost
-  port => 8080
-  debug => true
-}
-@enduml

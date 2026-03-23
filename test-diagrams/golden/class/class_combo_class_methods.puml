@@ -1,6 +1,0 @@
-@startuml
-class Combo {
-  +void process()
-  -String format()
-}
-@enduml

@@ -1,7 +1,0 @@
-@startuml
-frame myPkg #lightyellow {
-  class MyClass {
-    +void method()
-  }
-}
-@enduml

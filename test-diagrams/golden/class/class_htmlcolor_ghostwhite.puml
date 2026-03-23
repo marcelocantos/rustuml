@@ -1,5 +1,0 @@
-@startuml
-class ColorTest #GhostWhite {
-  +void method()
-}
-@enduml

@@ -1,6 +1,0 @@
-@startuml
-skinparam DefaultFontName Times
-skinparam DefaultFontSize 12
-Alice -> Bob : hello
-Bob --> Alice : hi
-@enduml

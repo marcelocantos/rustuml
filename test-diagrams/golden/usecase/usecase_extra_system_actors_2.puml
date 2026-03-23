@@ -1,8 +1,0 @@
-@startuml
-actor A1 <<system>>
-actor A2 <<system>>
-usecase UC1
-usecase UC2
-A1 --> UC1
-A2 --> UC2
-@enduml

@@ -1,5 +1,0 @@
-@startuml
-state A <<exitPoint>> #green
-[*] --> A
-A --> [*]
-@enduml

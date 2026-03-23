@@ -1,6 +1,0 @@
-@startuml
-skinparam arrowColor #444444
-Alice -> Bob : hello
-Bob --> Alice : world
-note right : note
-@enduml

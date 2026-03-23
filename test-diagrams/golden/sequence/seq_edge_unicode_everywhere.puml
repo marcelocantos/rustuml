@@ -1,7 +1,0 @@
-@startuml
-participant "Ünïcödé Üser" as U
-participant "服务器" as S
-U -> S : 请求数据
-note over U : 等待响应...
-S --> U : データを返す
-@enduml

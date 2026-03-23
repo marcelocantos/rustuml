@@ -1,5 +1,0 @@
-@startuml
-[*] --> A
-note right of A : 123 456
-A --> [*]
-@enduml

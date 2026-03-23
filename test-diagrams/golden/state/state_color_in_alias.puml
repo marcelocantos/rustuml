@@ -1,5 +1,0 @@
-@startuml
-state "My State" as MS #cyan
-[*] --> MS
-MS --> [*]
-@enduml

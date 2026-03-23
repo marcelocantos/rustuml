@@ -1,5 +1,0 @@
-@startuml
-frame Outer {
-  database Inner
-}
-@enduml

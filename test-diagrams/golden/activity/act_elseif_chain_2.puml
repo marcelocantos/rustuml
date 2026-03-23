@@ -1,9 +1,0 @@
-@startuml
-start
-if (cond 1?) then (branch 1)
-  :Action 1;
-else (default)
-  :Default action;
-endif
-stop
-@enduml

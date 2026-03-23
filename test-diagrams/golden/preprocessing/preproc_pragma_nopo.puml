@@ -1,5 +1,0 @@
-@startuml
-!pragma nopo
-Alice -> Bob : no partial output
-Bob --> Alice : ok
-@enduml

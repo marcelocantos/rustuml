@@ -1,8 +1,0 @@
-@startuml
-Alice -> Bob : create
-activate Bob
-Bob -> Bob : do work
-Alice -> Bob : kill
-deactivate Bob
-destroy Bob
-@enduml

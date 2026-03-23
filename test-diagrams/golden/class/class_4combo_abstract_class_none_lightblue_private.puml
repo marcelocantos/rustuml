@@ -1,6 +1,0 @@
-@startuml
-abstract class Combo  #lightblue {
-  -String name
-  -void method()
-}
-@enduml

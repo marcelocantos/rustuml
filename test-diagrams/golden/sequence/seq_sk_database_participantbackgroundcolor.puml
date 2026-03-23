@@ -1,7 +1,0 @@
-@startuml
-skinparam ParticipantBackgroundColor lightyellow
-database X
-participant Y
-X -> Y : hello
-Y --> X : hi
-@enduml

@@ -1,6 +1,0 @@
-@startuml
-!theme united
-component WebApp
-component Database
-WebApp --> Database : queries
-@enduml

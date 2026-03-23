@@ -1,6 +1,0 @@
-@startuml
-class "**RepositoryClass** <<repository>>" as C {
-  +**boldField**: String
-  +//italicMethod//(): void
-}
-@enduml

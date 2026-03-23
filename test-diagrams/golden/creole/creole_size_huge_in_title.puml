@@ -1,4 +1,0 @@
-@startuml
-title <size:36>huge text</size>
-Alice -> Bob : hello
-@enduml

@@ -1,5 +1,0 @@
-@startuml
-[*] --> A
-A --> B : event received / update state and notify observer
-B --> [*]
-@enduml

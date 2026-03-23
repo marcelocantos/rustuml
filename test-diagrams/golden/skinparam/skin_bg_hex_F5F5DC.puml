@@ -1,5 +1,0 @@
-@startuml
-skinparam backgroundColor #F5F5DC
-Alice -> Bob : background test
-note right : #F5F5DC
-@enduml

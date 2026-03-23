@@ -1,9 +1,0 @@
-@startuml
-
-start
-:Action;
-note right
-  Short note
-end note
-stop
-@enduml

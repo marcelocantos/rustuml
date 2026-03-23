@@ -1,5 +1,0 @@
-@startuml
-skinparam RoundCorner 15
-Alice -> Bob : hello
-Bob --> Alice : hi
-@enduml

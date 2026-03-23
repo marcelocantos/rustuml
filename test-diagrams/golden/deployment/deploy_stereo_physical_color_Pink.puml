@@ -1,4 +1,0 @@
-@startuml
-node MyServer #Pink <<physical>>
-note right of MyServer : Tagged server
-@enduml

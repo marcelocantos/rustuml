@@ -1,7 +1,0 @@
-@startuml
-
-start
-while (condition?) is (yes)
-endwhile
-stop
-@enduml

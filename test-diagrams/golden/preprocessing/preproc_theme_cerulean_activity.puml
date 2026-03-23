@@ -1,7 +1,0 @@
-@startuml
-!theme cerulean
-start
-:step one;
-:step two;
-stop
-@enduml

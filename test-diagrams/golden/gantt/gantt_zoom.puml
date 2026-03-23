@@ -1,9 +1,0 @@
-@startgantt
-printscale weekly
-Project starts 2024-01-01
-[Phase 1] lasts 14 days
-[Phase 2] lasts 21 days
-[Phase 2] starts at [Phase 1]'s end
-[Phase 3] lasts 10 days
-[Phase 3] starts at [Phase 2]'s end
-@endgantt

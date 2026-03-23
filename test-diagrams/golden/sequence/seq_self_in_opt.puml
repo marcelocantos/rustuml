@@ -1,5 +1,0 @@
-@startuml
-opt condition
-  Alice -> Alice : self in opt
-end
-@enduml

@@ -1,5 +1,0 @@
-@startuml
-class ColorTest #DarkGray {
-  +void method()
-}
-@enduml

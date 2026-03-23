@@ -1,5 +1,0 @@
-@startuml
-frame Outer {
-  artifact Inner
-}
-@enduml

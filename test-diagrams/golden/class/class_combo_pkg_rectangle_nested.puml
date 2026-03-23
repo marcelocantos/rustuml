@@ -1,9 +1,0 @@
-@startuml
-rectangle Outer {
-  rectangle Inner {
-    class MyClass {
-      +void method()
-    }
-  }
-}
-@enduml

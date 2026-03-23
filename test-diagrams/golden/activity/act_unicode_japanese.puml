@@ -1,6 +1,0 @@
-@startuml
-
-start
-:データ処理;
-stop
-@enduml

@@ -1,5 +1,0 @@
-@startuml
-component Foo <<service>> #LightBlue
-component Bar <<service>> #LightBlue
-Foo --> Bar
-@enduml

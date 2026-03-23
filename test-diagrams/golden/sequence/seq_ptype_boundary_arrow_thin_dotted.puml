@@ -1,6 +1,0 @@
-@startuml
-boundary Alice
-participant Bob
-Alice -->> Bob : boundary sends thin_dotted
-Bob -->> Alice : boundary receives thin_dotted
-@enduml

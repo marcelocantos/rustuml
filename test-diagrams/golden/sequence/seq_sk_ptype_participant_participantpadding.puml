@@ -1,7 +1,0 @@
-@startuml
-skinparam ParticipantPadding 10
-participant Alice
-participant Bob
-Alice -> Bob : hello
-Bob --> Alice : hi
-@enduml

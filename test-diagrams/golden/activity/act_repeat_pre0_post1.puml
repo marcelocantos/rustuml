@@ -1,8 +1,0 @@
-@startuml
-start
-repeat
-  :R;
-repeatwhile (m?)
-:Post 1;
-stop
-@enduml

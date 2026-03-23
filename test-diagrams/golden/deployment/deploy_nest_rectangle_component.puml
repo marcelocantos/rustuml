@@ -1,5 +1,0 @@
-@startuml
-rectangle Outer {
-  component Inner
-}
-@enduml

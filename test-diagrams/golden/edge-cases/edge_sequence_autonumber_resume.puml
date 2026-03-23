@@ -1,9 +1,0 @@
-@startuml
-autonumber 1
-Alice -> Bob: msg1
-Bob --> Alice: msg2
-autonumber stop
-Alice -> Bob: no number
-autonumber resume
-Alice -> Bob: msg3
-@enduml

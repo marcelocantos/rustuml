@@ -1,5 +1,0 @@
-@startuml
-
-:Action without explicit start;
-stop
-@enduml

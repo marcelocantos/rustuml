@@ -1,6 +1,0 @@
-@startuml
-
-start
-:receive_action<
-stop
-@enduml

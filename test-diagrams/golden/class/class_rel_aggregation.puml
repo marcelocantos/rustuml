@@ -1,6 +1,0 @@
-@startuml
-class Container
-class Element
-
-Container o-- Element
-@enduml

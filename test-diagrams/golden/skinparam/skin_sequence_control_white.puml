@@ -1,5 +1,0 @@
-@startuml
-skinparam controlBackgroundColor White
-control Alice
-Alice -> Bob : hello
-@enduml

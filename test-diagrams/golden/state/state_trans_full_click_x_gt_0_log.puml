@@ -1,5 +1,0 @@
-@startuml
-[*] --> A
-A --> B : click [x > 0] / log()
-B --> [*]
-@enduml

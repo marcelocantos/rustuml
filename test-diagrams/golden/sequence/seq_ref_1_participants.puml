@@ -1,7 +1,0 @@
-@startuml
-participant P0
-participant P1
-P0 -> P1 : action
-ref over P0 : Reference diagram 1
-P1 --> P0 : done
-@enduml

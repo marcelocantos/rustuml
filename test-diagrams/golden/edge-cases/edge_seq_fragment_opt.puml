@@ -1,7 +1,0 @@
-@startuml
-Alice -> Bob: before
-opt optional condition
-  Alice -> Bob: inside
-end
-Alice -> Bob: after
-@enduml

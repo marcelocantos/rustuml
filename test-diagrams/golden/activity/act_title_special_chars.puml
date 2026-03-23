@@ -1,6 +1,0 @@
-@startuml
-title Process: A → B
-start
-:Action;
-stop
-@enduml

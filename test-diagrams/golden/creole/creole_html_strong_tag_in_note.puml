@@ -1,5 +1,0 @@
-@startuml
-note as N
-  <strong>strong tag</strong>
-end note
-@enduml

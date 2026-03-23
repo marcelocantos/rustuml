@@ -1,5 +1,0 @@
-@startuml
-boundary B1
-entity E2
-B1 -> E2: message
-@enduml

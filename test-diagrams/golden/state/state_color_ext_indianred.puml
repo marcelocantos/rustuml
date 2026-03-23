@@ -1,5 +1,0 @@
-@startuml
-state A #IndianRed
-[*] --> A
-A --> [*]
-@enduml

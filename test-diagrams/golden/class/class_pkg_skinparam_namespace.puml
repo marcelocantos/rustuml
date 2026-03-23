@@ -1,8 +1,0 @@
-@startuml
-skinparam PackageBackgroundColor lightyellow
-namespace myPkg {
-  class MyClass {
-    +void method()
-  }
-}
-@enduml

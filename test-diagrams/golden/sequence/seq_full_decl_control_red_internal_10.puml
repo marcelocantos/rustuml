@@ -1,6 +1,0 @@
-@startuml
-control "Name" as N #red <<internal>> order 10
-participant Other
-N -> Other : call
-Other --> N : reply
-@enduml

@@ -1,7 +1,0 @@
-@startuml
-database UserDB
-database CacheDB
-participant "App Server" as APP
-APP -> UserDB : query
-APP -> CacheDB : cache get
-@enduml

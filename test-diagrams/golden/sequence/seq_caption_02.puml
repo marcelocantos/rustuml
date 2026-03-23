@@ -1,5 +1,0 @@
-@startuml
-Alice -> Bob : hello
-Bob --> Alice : hi
-caption **Figure 2**: Complex Interaction
-@enduml

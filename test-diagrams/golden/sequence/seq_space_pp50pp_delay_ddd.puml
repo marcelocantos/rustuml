@@ -1,9 +1,0 @@
-@startuml
-Alice -> Bob : a
-||50||
-Bob -> Charlie : b
-...
-Charlie --> Bob : c
-||50||
-Bob --> Alice : d
-@enduml

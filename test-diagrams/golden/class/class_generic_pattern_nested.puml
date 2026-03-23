@@ -1,7 +1,0 @@
-@startuml
-class Nested<List<T>> {
-  +List<T> inner
-  --
-  +T getFirst()
-}
-@enduml

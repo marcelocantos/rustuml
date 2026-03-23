@@ -1,6 +1,0 @@
-@startuml
-state A : idle
-[*] --> A
-A --> B : next
-B --> [*]
-@enduml

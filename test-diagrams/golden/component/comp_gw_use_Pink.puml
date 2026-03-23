@@ -1,5 +1,0 @@
-@startuml
-component Foo <<gateway>> #Pink
-component Bar <<gateway>> #Pink
-Foo ..> Bar
-@enduml

@@ -1,8 +1,0 @@
-@startuml
-scale 1.5
-class A {
-  +void method()
-}
-class B
-A --> B
-@enduml

@@ -1,7 +1,0 @@
-@startuml
-hide methods
-class MyType {
-  +String field
-  +void method()
-}
-@enduml

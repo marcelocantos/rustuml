@@ -1,8 +1,0 @@
-@startsalt
-{
-  Field0: | "               "
-  Field1: | "               "
-  ..
-  [Btn0] | [Btn1] | [Btn2]
-}
-@endsalt

@@ -1,5 +1,0 @@
-@startuml
-Alice -> Bob ++ : start
-Alice ->x Bob : lost
-Bob --> Alice -- : done
-@enduml

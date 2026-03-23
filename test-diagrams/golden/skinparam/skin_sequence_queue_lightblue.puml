@@ -1,5 +1,0 @@
-@startuml
-skinparam queueBackgroundColor LightBlue
-queue Alice
-Alice -> Bob : hello
-@enduml

@@ -1,7 +1,0 @@
-@startuml
-package mypackage <<cloud>> {
-  class MyClass {
-    +void method()
-  }
-}
-@enduml

@@ -1,6 +1,0 @@
-@startuml
-actor User
-usecase "Generate Report" as GR
-note right of GR : May take several minutes
-User --> GR
-@enduml

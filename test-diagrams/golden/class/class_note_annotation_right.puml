@@ -1,6 +1,0 @@
-@startuml
-annotation MyType {
-  +void method()
-}
-note right of MyType : Note on annotation
-@enduml

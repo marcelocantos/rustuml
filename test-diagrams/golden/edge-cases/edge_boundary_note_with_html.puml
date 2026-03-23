@@ -1,7 +1,0 @@
-@startuml
-note as N1
-  <b>Bold</b><br/>New line
-  <u>Underlined</u>
-  <i>Italic</i>
-end note
-@enduml

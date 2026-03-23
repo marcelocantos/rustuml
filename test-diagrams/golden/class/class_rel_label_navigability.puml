@@ -1,6 +1,0 @@
-@startuml
-class Customer
-class Order
-Customer "1" --> "*" Order : places >
-Order "*" ..> "1" Customer : < belongs to
-@enduml

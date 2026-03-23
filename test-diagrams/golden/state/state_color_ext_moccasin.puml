@@ -1,5 +1,0 @@
-@startuml
-state A #Moccasin
-[*] --> A
-A --> [*]
-@enduml

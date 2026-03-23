@@ -1,6 +1,0 @@
-@startuml
-database Alice
-participant Bob
-Alice -> Bob ++ : activate database
-Bob --> Alice -- : deactivate database
-@enduml

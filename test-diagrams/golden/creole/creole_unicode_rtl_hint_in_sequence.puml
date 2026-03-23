@@ -1,4 +1,0 @@
-@startuml
-Alice -> Bob : text with some Arabic: مرحبا
-note right : text with some Arabic: مرحبا
-@enduml

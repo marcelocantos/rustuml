@@ -1,7 +1,0 @@
-@startuml
-
-|#lime|Colored Lane|
-start
-:Action;
-stop
-@enduml

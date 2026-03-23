@@ -1,5 +1,0 @@
-@startuml
-note as N1
-  col1\tcol2
-end note
-@enduml

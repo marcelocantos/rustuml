@@ -1,3 +1,0 @@
-@startuml
-Alice -> Bob : ""mono"" plain <color:red>red</color>
-@enduml

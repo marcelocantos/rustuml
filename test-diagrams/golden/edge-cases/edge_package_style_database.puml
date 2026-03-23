@@ -1,8 +1,0 @@
-@startuml
-skinparam packageStyle database
-package MyPkg {
-  class Foo
-  class Bar
-  Foo --> Bar
-}
-@enduml

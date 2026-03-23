@@ -1,5 +1,0 @@
-@startuml
-Alice -> Bob : before
-== Step 1 of 3 ==
-Bob --> Alice : after
-@enduml

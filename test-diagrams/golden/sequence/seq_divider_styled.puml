@@ -1,7 +1,0 @@
-@startuml
-Alice -> Bob : start
-== <font color=red>Red Phase</font> ==
-Bob -> Charlie : middle
-== <b>Bold Phase</b> ==
-Charlie --> Alice : done
-@enduml

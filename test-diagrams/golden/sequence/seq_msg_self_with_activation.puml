@@ -1,6 +1,0 @@
-@startuml
-Alice -> Alice ++ : self activate
-Alice --> Alice -- : self deactivate
-Alice -> Alice ++ : nested self
-Alice --> Alice -- : nested return
-@enduml

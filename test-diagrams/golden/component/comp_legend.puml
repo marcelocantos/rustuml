@@ -1,9 +1,0 @@
-@startuml
-component A
-component B
-A --> B
-legend right
-  | Arrow | Meaning |
-  | --> | depends on |
-endlegend
-@enduml

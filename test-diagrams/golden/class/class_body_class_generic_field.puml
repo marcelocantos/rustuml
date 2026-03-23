@@ -1,5 +1,0 @@
-@startuml
-class Variant {
-  +List<String> items
-}
-@enduml

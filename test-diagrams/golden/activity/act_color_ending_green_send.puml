@@ -1,6 +1,0 @@
-@startuml
-
-start
-#green:Colored send>
-stop
-@enduml

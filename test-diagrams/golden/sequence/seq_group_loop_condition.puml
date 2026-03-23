@@ -1,9 +1,0 @@
-@startuml
-Alice -> Bob : start
-loop while items remain
-  Bob -> DB : get next
-  DB --> Bob : item
-  Bob -> Bob : process
-end
-Bob --> Alice : complete
-@enduml

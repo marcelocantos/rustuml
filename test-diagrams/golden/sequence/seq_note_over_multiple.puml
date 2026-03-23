@@ -1,6 +1,0 @@
-@startuml
-Alice -> Bob : hello
-note over Alice, Bob : over both
-Bob -> Charlie : forward
-note over Bob, Charlie : over Bob and Charlie
-@enduml

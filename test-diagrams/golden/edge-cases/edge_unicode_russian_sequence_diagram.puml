@@ -1,6 +1,0 @@
-@startuml
-participant "Пользователь" as U
-participant "Система" as S
-U -> S: Тест
-S --> U: Данные
-@enduml

@@ -1,3 +1,0 @@
-@startlatex
-S = -k_B \sum_i p_i \ln p_i
-@endlatex

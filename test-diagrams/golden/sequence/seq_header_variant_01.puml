@@ -1,5 +1,0 @@
-@startuml
-header Simple Header
-Alice -> Bob : hello
-Bob --> Alice : hi
-@enduml

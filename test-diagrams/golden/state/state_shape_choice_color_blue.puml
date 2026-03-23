@@ -1,5 +1,0 @@
-@startuml
-state A <<choice>> #blue
-[*] --> A
-A --> [*]
-@enduml

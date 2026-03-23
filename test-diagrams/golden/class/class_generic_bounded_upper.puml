@@ -1,7 +1,0 @@
-@startuml
-class Foo<T extends Bar> {
-  +T value
-  +T get()
-  +void set(T val)
-}
-@enduml

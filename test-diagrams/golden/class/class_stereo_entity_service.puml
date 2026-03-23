@@ -1,5 +1,0 @@
-@startuml
-entity MyStereoClass <<service>> {
-  +void operate()
-}
-@enduml

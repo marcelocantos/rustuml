@@ -1,9 +1,0 @@
-@startuml
-autoactivate on
-Alice -> Bob : step1
-Bob -> Charlie : step2
-Charlie -> Dave : step3
-return d
-return c
-return b
-@enduml

@@ -1,5 +1,0 @@
-@startuml
-note as N
-  <b>bold b tag</b>
-end note
-@enduml

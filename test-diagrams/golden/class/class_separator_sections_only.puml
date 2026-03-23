@@ -1,8 +1,0 @@
-@startuml
-class MyClass {
-  == Section A ==
-  .. Section B ..
-  -- Section C --
-  __ Section D __
-}
-@enduml

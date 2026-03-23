@@ -1,4 +1,0 @@
-@startuml
-Alice -> Bob: line1\nline2
-Bob --> Alice: response
-@enduml

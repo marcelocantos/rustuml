@@ -1,4 +1,0 @@
-@startuml
-Alice -> Bob: message
-note right: Note text here
-@enduml

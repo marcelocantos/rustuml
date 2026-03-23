@@ -1,5 +1,0 @@
-@startuml
-object MyObject <<actor>> {
-  id = 1
-}
-@enduml

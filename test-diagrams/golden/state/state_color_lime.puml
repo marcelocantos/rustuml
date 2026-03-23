@@ -1,5 +1,0 @@
-@startuml
-state A ##lime
-[*] --> A
-A --> [*]
-@enduml

@@ -1,9 +1,0 @@
-@startuml
-box "System"
-  participant Alice
-  participant Bob
-end box
-Alice -> Bob ++ : call
-ref over Alice, Bob : sub-interaction
-Bob --> Alice -- : done
-@enduml

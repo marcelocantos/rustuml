@@ -1,9 +1,0 @@
-@startgantt
-[Analysis] lasts 5 days
-[Design] lasts 7 days
-[Design] starts at [Analysis]'s end
-[Development] lasts 14 days
-[Development] starts at [Design]'s end
-[Testing] lasts 5 days
-[Testing] starts at [Development]'s end
-@endgantt

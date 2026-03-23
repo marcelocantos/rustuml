@@ -1,4 +1,0 @@
-@startuml
-component MyComp <<repository>> #LightGreen
-note top of MyComp : Tagged component
-@enduml

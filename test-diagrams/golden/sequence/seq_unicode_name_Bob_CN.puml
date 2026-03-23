@@ -1,6 +1,0 @@
-@startuml
-participant "鲍勃" as Bob_CN
-participant Bob
-Bob_CN -> Bob : hello
-Bob --> Bob_CN : hi
-@enduml

@@ -1,7 +1,0 @@
-@startwbs
-* Root 4
-**[#orange] Right 0
-**[#pink] Right 1
---[#lightgreen] Left 0
---[#red] Left 1
-@endwbs

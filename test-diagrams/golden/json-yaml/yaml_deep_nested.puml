@@ -1,9 +1,0 @@
-@startyaml
-level1:
-  level2:
-    level3:
-      level4:
-        level5:
-          value: deep
-          another: also deep
-@endyaml

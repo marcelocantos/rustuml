@@ -1,9 +1,0 @@
-@startuml
-Alice -> Bob : hello
-note over Alice
-  **Header**
-  //italic// and **bold**
-  mono
-end note
-Bob --> Alice : hi
-@enduml

@@ -1,7 +1,0 @@
-@startuml
-title Test Diagram
-hide empty description
-[*] --> A
-A --> B
-B --> [*]
-@enduml

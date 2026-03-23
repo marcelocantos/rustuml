@@ -1,9 +1,0 @@
-@startuml
-!procedure $note_error($msg)
-  note as N_error
-    <back:LightCoral>**ERROR**: $msg</back>
-  end note
-!endprocedure
-
-$note_error("This is a error message")
-@enduml

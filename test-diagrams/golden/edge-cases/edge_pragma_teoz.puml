@@ -1,6 +1,0 @@
-@startuml
-!pragma teoz true
-Alice -> Bob: hello
-Bob -> Charlie: forward
-Alice -> Charlie: direct
-@enduml

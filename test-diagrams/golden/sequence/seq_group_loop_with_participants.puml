@@ -1,9 +1,0 @@
-@startuml
-Client -> Server : request
-loop for each record
-  Server -> DB : fetch
-  DB --> Server : record
-  Server -> Cache : store
-end
-Server --> Client : all done
-@enduml

@@ -1,6 +1,0 @@
-@startuml
-note as N
-  ""monospace text""
-  ""another mono line""
-end note
-@enduml

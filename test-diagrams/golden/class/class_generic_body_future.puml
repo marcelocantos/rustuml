@@ -1,8 +1,0 @@
-@startuml
-class Future<T> {
-  +T get()
-  +boolean isDone()
-  +void cancel()
-  +Future<U> thenApply(Function<T,U> f)
-}
-@enduml

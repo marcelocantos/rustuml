@@ -1,6 +1,0 @@
-@startuml
-skinparam NoteBackgroundColor #FFF3E0
-Alice -> Bob : hello
-note over Alice : note
-Bob --> Alice : hi
-@enduml

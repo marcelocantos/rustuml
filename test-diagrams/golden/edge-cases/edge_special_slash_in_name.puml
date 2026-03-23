@@ -1,5 +1,0 @@
-@startuml
-participant "A/B Testing" as AB
-participant "Feature/Flag" as FF
-AB -> FF: check
-@enduml

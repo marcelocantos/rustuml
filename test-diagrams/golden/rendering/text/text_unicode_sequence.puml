@@ -1,7 +1,0 @@
-@startuml
-participant "Пользователь" as User
-participant "Сервер" as Server
-User -> Server : Привет, мир!
-Server --> User : Ответ
-
-@enduml

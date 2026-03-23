@@ -1,7 +1,0 @@
-@startuml
-skinparam ParticipantBorderColor darkblue
-participant Alice
-participant Bob
-Alice -> Bob : hello
-Bob --> Alice : hi
-@enduml

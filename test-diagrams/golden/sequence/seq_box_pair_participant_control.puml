@@ -1,8 +1,0 @@
-@startuml
-box "Group"
-  participant A
-  control B
-end box
-A -> B : hello
-B --> A : hi
-@enduml

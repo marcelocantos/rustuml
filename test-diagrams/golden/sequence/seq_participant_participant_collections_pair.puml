@@ -1,6 +1,0 @@
-@startuml
-participant A
-collections B
-A -> B : request
-B --> A : response
-@enduml

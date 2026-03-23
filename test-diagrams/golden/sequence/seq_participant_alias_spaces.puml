@@ -1,6 +1,0 @@
-@startuml
-participant "Alice Smith" as A
-participant "Bob Jones Jr." as B
-A -> B : How do you do?
-B --> A : Very well, thanks!
-@enduml

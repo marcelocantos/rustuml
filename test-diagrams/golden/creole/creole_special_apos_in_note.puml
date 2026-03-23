@@ -1,5 +1,0 @@
-@startuml
-note as N
-  it&apos;s fine
-end note
-@enduml

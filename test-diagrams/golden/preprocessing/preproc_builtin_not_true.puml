@@ -1,8 +1,0 @@
-@startuml
-participant A
-!if %not(%true())
-  note over A : was false
-!else
-  note over A : was true (not inverted correctly)
-!endif
-@enduml

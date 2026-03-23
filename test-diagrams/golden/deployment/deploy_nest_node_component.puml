@@ -1,5 +1,0 @@
-@startuml
-node Outer {
-  component Inner
-}
-@enduml

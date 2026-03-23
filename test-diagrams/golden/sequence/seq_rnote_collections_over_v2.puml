@@ -1,7 +1,0 @@
-@startuml
-collections X
-participant Y
-X -> Y : go
-rnote over X : rnote/collections
-Y --> X : back
-@enduml

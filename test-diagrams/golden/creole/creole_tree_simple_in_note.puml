@@ -1,9 +1,0 @@
-@startuml
-note as N
-  |_ root
-  |_ child1
-  |__ grandchild1
-  |__ grandchild2
-  |_ child2
-end note
-@enduml

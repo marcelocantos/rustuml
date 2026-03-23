@@ -1,7 +1,0 @@
-@startuml
-!pragma teoz true
-Alice -> Bob ++ : a
-Bob -> Charlie ++ : b
-Charlie --> Bob -- : c
-Bob --> Alice -- : d
-@enduml

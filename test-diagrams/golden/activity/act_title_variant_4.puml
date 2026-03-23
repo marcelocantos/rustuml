@@ -1,6 +1,0 @@
-@startuml
-title Very Long Title That Spans A Considerable Amount Of Text
-start
-:Action;
-stop
-@enduml

@@ -1,5 +1,0 @@
-@startuml
-state A #Aqua
-[*] --> A
-A --> [*]
-@enduml

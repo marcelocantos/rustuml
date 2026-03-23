@@ -1,7 +1,0 @@
-@startuml
-start
-repeat
-  :do work;
-repeat while (more?) is (yes)
-stop
-@enduml

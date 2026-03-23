@@ -1,5 +1,0 @@
-@startuml
-collections Col1
-queue Q2
-Col1 -> Q2: message
-@enduml

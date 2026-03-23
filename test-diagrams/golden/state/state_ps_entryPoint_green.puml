@@ -1,6 +1,0 @@
-@startuml
-state ps <<entryPoint>> #green
-[*] --> A
-A --> ps
-ps --> [*]
-@enduml

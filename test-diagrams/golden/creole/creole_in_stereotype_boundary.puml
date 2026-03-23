@@ -1,6 +1,0 @@
-@startuml
-class "**BoundaryClass** <<boundary>>" as C {
-  +**boldField**: String
-  +//italicMethod//(): void
-}
-@enduml

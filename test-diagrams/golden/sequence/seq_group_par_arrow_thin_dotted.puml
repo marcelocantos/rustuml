@@ -1,8 +1,0 @@
-@startuml
-A -> B : init
-par
-  A -->> B : thin_dotted branch 1
-and
-  A -->> C : thin_dotted branch 2
-end
-@enduml

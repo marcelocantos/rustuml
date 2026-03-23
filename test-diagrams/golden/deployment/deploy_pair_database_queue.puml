@@ -1,5 +1,0 @@
-@startuml
-database Source
-queue Target
-Source --> Target
-@enduml

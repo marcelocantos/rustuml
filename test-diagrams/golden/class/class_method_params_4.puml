@@ -1,5 +1,0 @@
-@startuml
-class Methods4Params {
-  +void method(int p0, String p1, double p2, boolean p3)
-}
-@enduml

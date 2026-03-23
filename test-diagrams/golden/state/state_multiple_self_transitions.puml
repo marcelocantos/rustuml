@@ -1,7 +1,0 @@
-@startuml
-[*] --> A
-A --> A : event1
-A --> A : event2
-A --> A : event3
-A --> [*]
-@enduml

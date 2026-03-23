@@ -1,8 +1,0 @@
-@startuml
-namespace com.example.model {
-  object Entity0 {
-    id = 0
-    name = "entity0"
-  }
-}
-@enduml

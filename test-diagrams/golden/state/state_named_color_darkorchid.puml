@@ -1,5 +1,0 @@
-@startuml
-state A #DarkOrchid
-[*] --> A
-A --> [*]
-@enduml

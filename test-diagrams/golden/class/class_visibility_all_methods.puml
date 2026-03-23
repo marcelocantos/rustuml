@@ -1,8 +1,0 @@
-@startuml
-class MyClass {
-  +void publicMethod()
-  -void privateMethod()
-  #void protectedMethod()
-  ~void packageMethod()
-}
-@enduml

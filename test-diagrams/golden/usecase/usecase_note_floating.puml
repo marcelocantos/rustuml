@@ -1,7 +1,0 @@
-@startuml
-actor User
-usecase "Login" as L
-note "Entry point" as N1
-N1 .. L
-User --> L
-@enduml

@@ -1,5 +1,0 @@
-@startuml
-component A #Pink
-component B #Pink
-A <--> B
-@enduml

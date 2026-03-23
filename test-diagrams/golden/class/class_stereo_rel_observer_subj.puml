@@ -1,9 +1,0 @@
-@startuml
-class ClassA <<observer>> {
-  +void methodA()
-}
-class ClassB <<subject>> {
-  +void methodB()
-}
-ClassA --> ClassB
-@enduml

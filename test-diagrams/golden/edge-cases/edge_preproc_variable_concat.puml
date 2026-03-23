@@ -1,6 +1,0 @@
-@startuml
-!$prefix = "My"
-!$suffix = "Class"
-!$name = $prefix + $suffix
-class $name
-@enduml

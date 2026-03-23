@@ -1,5 +1,0 @@
-@startuml
-class ReturnTypes {
-  +boolean method()
-}
-@enduml

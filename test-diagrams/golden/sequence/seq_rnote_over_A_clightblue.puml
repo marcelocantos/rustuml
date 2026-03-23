@@ -1,7 +1,0 @@
-@startuml
-participant Alice
-participant Bob
-Alice -> Bob : hello
-rnote over Alice #lightblue : rnote content
-Bob --> Alice : hi
-@enduml

@@ -1,7 +1,0 @@
-@startmindmap
-* Root with //Italic//
-** Child node
-*** //Italic// in leaf
--- Left branch
---- //Italic// left
-@endmindmap

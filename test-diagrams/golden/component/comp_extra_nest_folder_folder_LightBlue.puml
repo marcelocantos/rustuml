@@ -1,9 +1,0 @@
-@startuml
-folder Outer #LightBlue {
-  folder Inner {
-    component X
-    component Y
-    X --> Y
-  }
-}
-@enduml

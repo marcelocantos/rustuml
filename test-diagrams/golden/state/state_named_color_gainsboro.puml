@@ -1,5 +1,0 @@
-@startuml
-state A #Gainsboro
-[*] --> A
-A --> [*]
-@enduml

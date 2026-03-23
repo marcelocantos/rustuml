@@ -1,5 +1,0 @@
-@startuml
-state A <<fork>> #red
-[*] --> A
-A --> [*]
-@enduml

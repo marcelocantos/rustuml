@@ -1,7 +1,0 @@
-@startuml
-boundary X
-participant Y
-X -> Y : message
-note right of X : note right of boundary
-Y --> X : reply
-@enduml

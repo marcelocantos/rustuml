@@ -1,6 +1,0 @@
-@startuml
-skinparam dpi 72
-Alice -> Bob : hello
-Bob --> Alice : world
-note right : note
-@enduml

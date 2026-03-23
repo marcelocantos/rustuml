@@ -1,5 +1,0 @@
-@startuml
-control C1
-participant P2
-C1 -> P2: message
-@enduml

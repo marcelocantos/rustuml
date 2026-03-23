@@ -1,6 +1,0 @@
-@startuml
-participant Alice <<service>> #lightblue
-participant Bob <<external>> #lightyellow
-Alice -> Bob : call
-Bob --> Alice : result
-@enduml

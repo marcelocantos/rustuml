@@ -1,9 +1,0 @@
-@startgit
-commit
-branch develop
-checkout develop
-commit
-branch feature
-checkout feature
-commit
-@endgit

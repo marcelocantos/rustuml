@@ -1,9 +1,0 @@
-@startuml
-Alice -> Alice : start
-create Bob
-Alice -> Bob : init
-Bob --> Alice : ready
-Alice -> Bob : work
-Bob --> Alice : done
-destroy Bob
-@enduml

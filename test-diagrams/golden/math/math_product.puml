@@ -1,3 +1,0 @@
-@startmath
-\prod_{p \text{ prime}} \frac{1}{1-p^{-s}}
-@endmath

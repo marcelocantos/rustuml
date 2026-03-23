@@ -1,8 +1,0 @@
-@startuml
-!$x = 10
-!if $x > 5
-note as N
-  x ($x) is greater than 5
-end note
-!endif
-@enduml

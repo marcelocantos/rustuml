@@ -1,6 +1,0 @@
-@startuml
-Alice -> Bob : hello
-note left of Alice : I said hello
-Bob --> Alice : hi
-note left of Bob : Bob replied
-@enduml

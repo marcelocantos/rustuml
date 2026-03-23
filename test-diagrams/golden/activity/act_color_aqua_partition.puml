@@ -1,8 +1,0 @@
-@startuml
-
-start
-partition #aqua "Colored Partition" {
-  :Action inside;
-}
-stop
-@enduml

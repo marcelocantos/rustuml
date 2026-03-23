@@ -1,6 +1,0 @@
-@startuml
-Alice -> Bob : hello
-legend
-  **bold legend text**
-end legend
-@enduml

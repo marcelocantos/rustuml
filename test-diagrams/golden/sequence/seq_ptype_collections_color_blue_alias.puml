@@ -1,6 +1,0 @@
-@startuml
-collections "Named Collections" as P #blue
-participant Other
-P -> Other : collections blue call
-Other --> P : reply
-@enduml

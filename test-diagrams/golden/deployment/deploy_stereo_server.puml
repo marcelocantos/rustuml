@@ -1,5 +1,0 @@
-@startuml
-node MyNode <<server>>
-artifact app.jar
-app.jar --> MyNode : deployed on
-@enduml

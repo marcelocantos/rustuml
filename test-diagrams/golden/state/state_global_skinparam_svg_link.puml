@@ -1,6 +1,0 @@
-@startuml
-skinparam svgLinkTarget _blank
-[*] --> A
-A --> B : event
-B --> [*]
-@enduml

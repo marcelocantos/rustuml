@@ -1,5 +1,0 @@
-@startuml
-class ColorTest #SeaGreen {
-  +void method()
-}
-@enduml

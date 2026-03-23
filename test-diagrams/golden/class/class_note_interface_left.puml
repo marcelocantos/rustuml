@@ -1,6 +1,0 @@
-@startuml
-interface MyType {
-  +void method()
-}
-note left of MyType : Note on interface
-@enduml

@@ -1,6 +1,0 @@
-@startuml
-participant "Alice 🎉"
-participant "Bob 🚀"
-"Alice 🎉" -> "Bob 🚀" : Launch! 🚀
-"Bob 🚀" --> "Alice 🎉" : Party! 🎉
-@enduml

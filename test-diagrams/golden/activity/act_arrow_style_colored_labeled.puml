@@ -1,7 +1,0 @@
-@startuml
-start
-:A;
--[#green]-> green;
-:B;
-stop
-@enduml

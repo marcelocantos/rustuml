@@ -1,6 +1,0 @@
-@startuml
-abstract class Variant {
-  +void run()
-  -void helper()
-}
-@enduml

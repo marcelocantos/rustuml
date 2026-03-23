@@ -1,7 +1,0 @@
-@startuml
-start
-repeat
-  :action send>
-repeatwhile (more?) is (yes)
-stop
-@enduml

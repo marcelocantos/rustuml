@@ -1,7 +1,0 @@
-@startuml
-opt cond
-Bob --> Alice : report
-Charlie --> Alice : report
-Dave --> Alice : report
-end
-@enduml

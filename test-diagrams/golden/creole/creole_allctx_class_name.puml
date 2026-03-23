@@ -1,4 +1,0 @@
-@startuml
-class "MyClass\n**bold** //italic// __under__" {
-}
-@enduml

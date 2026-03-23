@@ -1,5 +1,0 @@
-@startuml
-state A #LightBlue
-[*] --> A
-A --> [*]
-@enduml

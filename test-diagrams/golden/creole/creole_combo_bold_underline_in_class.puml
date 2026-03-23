@@ -1,5 +1,0 @@
-@startuml
-class MyClass {
-  **__bold underline__**: field
-}
-@enduml

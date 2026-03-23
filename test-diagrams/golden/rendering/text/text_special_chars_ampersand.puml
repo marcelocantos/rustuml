@@ -1,8 +1,0 @@
-@startuml
-class "Fish & Chips" {
-  +String name
-}
-class "Bread & Butter"
-"Fish & Chips" --> "Bread & Butter"
-
-@enduml

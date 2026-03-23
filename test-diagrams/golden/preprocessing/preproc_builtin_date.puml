@@ -1,6 +1,0 @@
-@startuml
-!$now = %date("yyyy-MM-dd")
-
-header Generated: $now
-Alice -> Bob : dated diagram
-@enduml

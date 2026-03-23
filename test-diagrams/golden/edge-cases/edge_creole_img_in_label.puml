@@ -1,3 +1,0 @@
-@startuml
-Alice -> Bob: <img:somefile.png>
-@enduml

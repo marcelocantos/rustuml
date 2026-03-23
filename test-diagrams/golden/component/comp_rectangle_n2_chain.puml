@@ -1,7 +1,0 @@
-@startuml
-rectangle Container {
-  component X1
-  component X2
-}
-X1 --> X2
-@enduml

@@ -1,9 +1,0 @@
-@startuml
-namespace Outer {
-  folder Inner {
-    class MyClass {
-      +void method()
-    }
-  }
-}
-@enduml

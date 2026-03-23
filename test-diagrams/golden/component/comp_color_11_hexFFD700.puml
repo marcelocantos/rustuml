@@ -1,5 +1,0 @@
-@startuml
-component Foo #FFD700
-component Bar #FFD700
-Foo --> Bar
-@enduml

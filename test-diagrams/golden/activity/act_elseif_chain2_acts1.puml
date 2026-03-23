@@ -1,9 +1,0 @@
-@startuml
-start
-if (cond 1?) then (b1)
-  :B1 action 1;
-else (default)
-  :Default action 1;
-endif
-stop
-@enduml

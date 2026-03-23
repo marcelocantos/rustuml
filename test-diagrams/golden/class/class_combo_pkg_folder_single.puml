@@ -1,7 +1,0 @@
-@startuml
-folder MyPkg {
-  class MyClass {
-    +void method()
-  }
-}
-@enduml

@@ -1,5 +1,0 @@
-@startuml
-left to right direction
-Alice -> Bob: hello
-Bob --> Alice: hi
-@enduml

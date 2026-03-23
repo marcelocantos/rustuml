@@ -1,6 +1,0 @@
-@startuml
-participant A
-entity B
-A -> B : request
-B --> A : response
-@enduml

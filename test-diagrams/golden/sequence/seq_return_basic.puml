@@ -1,4 +1,0 @@
-@startuml
-Alice -> Bob ++ : call
-return value
-@enduml

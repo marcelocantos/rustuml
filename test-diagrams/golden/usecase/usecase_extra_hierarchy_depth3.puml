@@ -1,9 +1,0 @@
-@startuml
-actor L1
-actor L2
-actor L3
-usecase UC
-L3 --> UC
-L2 --|> L1
-L3 --|> L2
-@enduml

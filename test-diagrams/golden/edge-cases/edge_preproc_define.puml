@@ -1,6 +1,0 @@
-@startuml
-!define CLASSNAME MyClass
-class CLASSNAME {
-  field: String
-}
-@enduml

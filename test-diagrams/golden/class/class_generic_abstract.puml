@@ -1,8 +1,0 @@
-@startuml
-abstract class AbstractRepository<T, ID> {
-  +T findById(ID id)
-  +List<T> findAll()
-  +void save(T entity)
-  +void delete(ID id)
-}
-@enduml

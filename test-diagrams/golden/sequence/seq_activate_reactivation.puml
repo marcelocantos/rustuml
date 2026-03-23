@@ -1,8 +1,0 @@
-@startuml
-Alice -> Bob ++ : first call
-Bob --> Alice -- : first result
-Alice -> Bob ++ : second call
-Bob --> Alice -- : second result
-Alice -> Bob ++ : third call
-Bob --> Alice -- : third result
-@enduml

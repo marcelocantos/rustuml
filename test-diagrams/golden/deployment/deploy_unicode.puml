@@ -1,7 +1,0 @@
-@startuml
-node "Сервер приложений" as SA
-database "База данных" as BD
-node "Веб-сервер" as WS
-WS --> SA : HTTP
-SA --> BD : SQL
-@enduml

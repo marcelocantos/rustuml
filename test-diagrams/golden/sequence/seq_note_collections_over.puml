@@ -1,7 +1,0 @@
-@startuml
-collections A
-participant B
-A -> B : hello
-note over A : note over collections
-B --> A : hi
-@enduml

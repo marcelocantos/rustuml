@@ -1,3 +1,0 @@
-@startuml
-Alice -> Bob : a &lt; b &gt; c
-@enduml

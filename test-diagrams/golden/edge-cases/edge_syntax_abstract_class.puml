@@ -1,7 +1,0 @@
-@startuml
-abstract class AbstractBase {
-  {abstract} doWork(): void
-  {abstract} validate(): boolean
-  template(): void
-}
-@enduml

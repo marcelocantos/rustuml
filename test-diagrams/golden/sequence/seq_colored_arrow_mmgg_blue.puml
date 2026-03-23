@@ -1,4 +1,0 @@
-@startuml
-Alice -[#blue]->> Bob : colored -->>
-Bob -[#blue]->> Alice : return colored
-@enduml

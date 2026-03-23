@@ -1,6 +1,0 @@
-@startuml
-participant "用户" as U
-participant "系统" as S
-U -> S: 中文测试
-S --> U: 数据
-@enduml

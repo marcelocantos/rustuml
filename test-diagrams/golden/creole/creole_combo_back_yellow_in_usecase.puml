@@ -1,5 +1,0 @@
-@startuml
-actor "<back:yellow>bg</back> Actor" as A527
-usecase "<back:yellow>bg</back> Case" as UC527
-A527 --> UC527
-@enduml

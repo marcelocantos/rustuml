@@ -1,7 +1,0 @@
-@startuml
-[*] --> A
-A --> B
-newpage
-B --> C
-C --> [*]
-@enduml

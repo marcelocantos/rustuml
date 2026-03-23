@@ -1,8 +1,0 @@
-@startuml
-A -> B : go
-loop condition
-  B -> C : action
-  C --> B : done
-end
-B --> A : result
-@enduml

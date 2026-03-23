@@ -1,8 +1,0 @@
-@startuml
-!pragma useVerticalIf on
-if (condition) then (yes)
-  :do something;
-else (no)
-  :do other;
-endif
-@enduml

@@ -1,7 +1,0 @@
-@startuml
-note as N
-  before
-  == Section Title ==
-  after
-end note
-@enduml

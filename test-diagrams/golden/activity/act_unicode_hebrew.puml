@@ -1,6 +1,0 @@
-@startuml
-
-start
-:עיבוד נתונים;
-stop
-@enduml

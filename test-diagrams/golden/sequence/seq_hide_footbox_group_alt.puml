@@ -1,9 +1,0 @@
-@startuml
-hide footbox
-Alice -> Bob : request
-alt ok
-  Bob --> Alice : result
-else
-  Bob --> Alice : error
-end
-@enduml

@@ -1,5 +1,0 @@
-@startuml
-class ColorTest #Gainsboro {
-  +void method()
-}
-@enduml

@@ -1,6 +1,0 @@
-@startuml
-header My Header
-footer Page 1
-Alice -> Bob : hello
-Bob --> Alice : hi
-@enduml

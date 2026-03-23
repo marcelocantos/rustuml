@@ -1,7 +1,0 @@
-@startmindmap
-* Root with ~~Monospace~~
-** Child node
-*** ~~Monospace~~ in leaf
--- Left branch
---- ~~Monospace~~ left
-@endmindmap

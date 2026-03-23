@@ -1,6 +1,0 @@
-@startuml
-skinparam defaultFontName Arial
-class Foo
-class Bar
-Foo --> Bar
-@enduml

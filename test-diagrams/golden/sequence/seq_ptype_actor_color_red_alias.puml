@@ -1,6 +1,0 @@
-@startuml
-actor "Named Actor" as P #red
-participant Other
-P -> Other : actor red call
-Other --> P : reply
-@enduml

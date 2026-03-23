@@ -1,5 +1,0 @@
-@startuml
-artifact MyA
-database MyB
-MyA --> MyB
-@enduml

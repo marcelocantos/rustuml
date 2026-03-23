@@ -1,5 +1,0 @@
-@startuml
-abstract class OneMember {
-  +String single
-}
-@enduml

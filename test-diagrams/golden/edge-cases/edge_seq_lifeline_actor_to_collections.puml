@@ -1,5 +1,0 @@
-@startuml
-actor A1
-collections Col2
-A1 -> Col2: message
-@enduml

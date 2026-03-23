@@ -1,6 +1,0 @@
-@startuml
-state A : processing data
-[*] --> A
-A --> B : trigger
-B --> [*]
-@enduml

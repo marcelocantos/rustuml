@@ -1,5 +1,0 @@
-@startuml
-rectangle Outer {
-  artifact Inner
-}
-@enduml

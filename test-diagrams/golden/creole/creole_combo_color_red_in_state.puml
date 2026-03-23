@@ -1,5 +1,0 @@
-@startuml
-state "<color:red>red</color> State" as S365
-[*] --> S365
-S365 : <color:red>red</color> description
-@enduml

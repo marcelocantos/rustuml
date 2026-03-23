@@ -1,9 +1,0 @@
-@startuml
-rectangle Outer #LightBlue {
-  node Inner {
-    component X
-    component Y
-    X --> Y
-  }
-}
-@enduml

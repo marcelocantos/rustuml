@@ -1,5 +1,0 @@
-@startuml
-collections Col1
-participant P2
-Col1 -> P2: message
-@enduml

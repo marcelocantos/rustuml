@@ -1,7 +1,0 @@
-@startdot
-digraph G {
-  A -> B [style=dashed]
-  B -> C [style=dotted]
-  C -> D [style=bold]
-}
-@enddot

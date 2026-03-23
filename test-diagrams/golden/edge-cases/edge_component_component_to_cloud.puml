@@ -1,5 +1,0 @@
-@startuml
-component MyA
-cloud MyB
-MyA --> MyB
-@enduml

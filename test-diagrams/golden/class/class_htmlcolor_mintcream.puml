@@ -1,5 +1,0 @@
-@startuml
-class ColorTest #MintCream {
-  +void method()
-}
-@enduml

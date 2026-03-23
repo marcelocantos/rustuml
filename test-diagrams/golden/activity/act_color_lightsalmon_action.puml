@@ -1,7 +1,0 @@
-@startuml
-
-start
-#lightsalmon:Colored action;
-:Normal action;
-stop
-@enduml

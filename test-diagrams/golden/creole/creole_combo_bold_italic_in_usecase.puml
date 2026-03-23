@@ -1,5 +1,0 @@
-@startuml
-actor "**//bi//** Actor" as A506
-usecase "**//bi//** Case" as UC506
-A506 --> UC506
-@enduml

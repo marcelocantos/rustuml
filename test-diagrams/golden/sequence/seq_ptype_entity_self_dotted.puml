@@ -1,4 +1,0 @@
-@startuml
-entity Alice
-Alice --> Alice : self entity dotted
-@enduml

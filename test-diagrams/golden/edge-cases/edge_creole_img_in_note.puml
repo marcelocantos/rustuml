@@ -1,5 +1,0 @@
-@startuml
-note as N1
-  <img:somefile.png>
-end note
-@enduml

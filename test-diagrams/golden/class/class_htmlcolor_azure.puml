@@ -1,5 +1,0 @@
-@startuml
-class ColorTest #Azure {
-  +void method()
-}
-@enduml

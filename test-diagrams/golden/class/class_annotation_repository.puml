@@ -1,5 +1,0 @@
-@startuml
-annotation Repository {
-  +String value() default ""
-}
-@enduml

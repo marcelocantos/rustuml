@@ -1,5 +1,0 @@
-@startuml
-Alice -> Bob: before
-ref over Alice, Bob: reference
-Alice -> Bob: after
-@enduml

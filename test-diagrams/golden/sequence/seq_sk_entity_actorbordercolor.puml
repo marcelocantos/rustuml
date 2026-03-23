@@ -1,7 +1,0 @@
-@startuml
-skinparam ActorBorderColor darkgreen
-entity X
-participant Y
-X -> Y : hello
-Y --> X : hi
-@enduml

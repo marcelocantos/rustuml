@@ -1,5 +1,0 @@
-@startuml
-class TypeA
-annotation TypeB
-TypeA <|-- TypeB
-@enduml

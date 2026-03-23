@@ -1,8 +1,0 @@
-@startuml
-
-start
-partition #navy "Colored Partition" {
-  :Action inside;
-}
-stop
-@enduml

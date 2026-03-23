@@ -1,4 +1,0 @@
-@startuml
-boundary Alice
-Alice ->> Alice : self boundary thin_solid
-@enduml

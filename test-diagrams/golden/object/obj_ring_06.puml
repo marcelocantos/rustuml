@@ -1,6 +1,0 @@
-@startuml
-object Obj0_6 { val = 60 }
-object Obj1_6 { val = 61 }
-Obj0_6 --> Obj1_6
-Obj1_6 --> Obj0_6
-@enduml

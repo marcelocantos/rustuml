@@ -1,8 +1,0 @@
-@startuml
-box
-  participant Alice
-  participant Bob
-end box
-Alice -> Bob : hello
-Bob --> Alice : hi
-@enduml

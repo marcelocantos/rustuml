@@ -1,8 +1,0 @@
-@startuml
-note as N1
-  <code>
-  int x = 42;
-  String s = "hello";
-  </code>
-end note
-@enduml

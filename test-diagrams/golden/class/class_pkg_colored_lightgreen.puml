@@ -1,7 +1,0 @@
-@startuml
-package myPackage #lightgreen {
-  class MyClass {
-    +void method()
-  }
-}
-@enduml

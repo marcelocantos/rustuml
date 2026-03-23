@@ -1,5 +1,0 @@
-@startuml
-object MyObject #green {
-  field = "value"
-}
-@enduml

@@ -1,5 +1,0 @@
-@startuml
-[*] --> A
-A --> B : timeout [count < 3]
-B --> [*]
-@enduml

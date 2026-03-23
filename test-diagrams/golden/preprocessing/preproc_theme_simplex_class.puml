@@ -1,7 +1,0 @@
-@startuml
-!theme simplex
-class Animal {
-  +name: String
-}
-class Dog extends Animal {}
-@enduml

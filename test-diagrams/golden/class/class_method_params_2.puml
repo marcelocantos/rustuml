@@ -1,5 +1,0 @@
-@startuml
-class Methods2Params {
-  +void method(int p0, String p1)
-}
-@enduml

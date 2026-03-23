@@ -1,5 +1,0 @@
-@startuml
-component A <<internal>>
-component B <<public>>
-hide <<internal>>
-@enduml

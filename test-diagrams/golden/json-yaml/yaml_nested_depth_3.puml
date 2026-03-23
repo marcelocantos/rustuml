@@ -1,6 +1,0 @@
-@startyaml
-level1:
-  level2:
-    level3:
-      value: leaf_3
-@endyaml

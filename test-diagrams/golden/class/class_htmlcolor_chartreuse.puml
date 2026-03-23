@@ -1,5 +1,0 @@
-@startuml
-class ColorTest #Chartreuse {
-  +void method()
-}
-@enduml

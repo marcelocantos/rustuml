@@ -1,9 +1,0 @@
-@startuml
-state Outer1 {
-  [*] --> IS1
-  IS1 --> IS2
-  IS2 --> [*]
-}
-[*] --> Outer1
-Outer1 --> [*]
-@enduml

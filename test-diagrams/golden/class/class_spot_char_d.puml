@@ -1,5 +1,0 @@
-@startuml
-class SpotD << (D,#yellow) Custom >> {
-  +void method()
-}
-@enduml

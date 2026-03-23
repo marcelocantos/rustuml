@@ -1,4 +1,0 @@
-@startuml
-Alice -> Bob : <ins>inserted text</ins>
-note right : <ins>inserted text</ins>
-@enduml

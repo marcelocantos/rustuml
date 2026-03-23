@@ -1,6 +1,0 @@
-@startuml
-class Implementation
-class Interface
-
-Interface ..|> Implementation
-@enduml

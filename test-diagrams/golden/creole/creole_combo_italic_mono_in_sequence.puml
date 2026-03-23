@@ -1,4 +1,0 @@
-@startuml
-Alice -> Bob : //""italic mono""//
-note right : //""italic mono""//
-@enduml

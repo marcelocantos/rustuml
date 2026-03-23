@@ -1,5 +1,0 @@
-@startuml
-note as N1
-  Тест: Данные
-end note
-@enduml

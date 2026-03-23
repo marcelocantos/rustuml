@@ -1,8 +1,0 @@
-@startuml
-Alice -> Alice ++ : outer
-Alice -> Alice ++ : middle
-Alice -> Alice ++ : inner
-Alice --> Alice -- : inner done
-Alice --> Alice -- : middle done
-Alice --> Alice -- : outer done
-@enduml

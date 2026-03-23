@@ -1,7 +1,0 @@
-@startuml
-!theme sketchy-outline
-start
-:step one;
-:step two;
-stop
-@enduml

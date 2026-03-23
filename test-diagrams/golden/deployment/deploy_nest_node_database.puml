@@ -1,5 +1,0 @@
-@startuml
-node Outer {
-  database Inner
-}
-@enduml

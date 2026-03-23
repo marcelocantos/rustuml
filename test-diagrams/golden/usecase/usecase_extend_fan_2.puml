@@ -1,9 +1,0 @@
-@startuml
-actor User
-usecase BaseUC as "Base Use Case"
-usecase Extension1
-usecase Extension2
-Extension1 .> BaseUC : <<extend>>
-Extension2 .> BaseUC : <<extend>>
-User --> BaseUC
-@enduml

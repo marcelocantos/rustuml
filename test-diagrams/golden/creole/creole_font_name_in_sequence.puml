@@ -1,4 +1,0 @@
-@startuml
-Alice -> Bob : <font:Courier>courier font</font>
-note right : <font:Courier>courier font</font>
-@enduml

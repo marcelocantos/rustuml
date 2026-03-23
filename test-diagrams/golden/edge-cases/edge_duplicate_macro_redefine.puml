@@ -1,6 +1,0 @@
-@startuml
-!define VALUE 1
-!define VALUE 2
-!define VALUE 3
-class Foo
-@enduml

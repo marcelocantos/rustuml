@@ -1,5 +1,0 @@
-@startuml
-class ColorTest #Cornsilk {
-  +void method()
-}
-@enduml

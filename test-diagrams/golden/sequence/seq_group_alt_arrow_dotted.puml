@@ -1,9 +1,0 @@
-@startuml
-A -> B : init
-alt cond
-  A --> B : dotted main
-  B --> A : ack
-else other
-  A --> C : dotted else
-end
-@enduml

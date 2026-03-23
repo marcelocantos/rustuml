@@ -1,4 +1,0 @@
-@startuml
-actor Alice
-Alice -> Alice : self message
-@enduml

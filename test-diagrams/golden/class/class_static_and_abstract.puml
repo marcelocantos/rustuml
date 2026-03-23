@@ -1,8 +1,0 @@
-@startuml
-abstract class Base {
-  {static} +String VERSION
-  {static} +Base create()
-  {abstract} +void execute()
-  {abstract} #String computeResult()
-}
-@enduml

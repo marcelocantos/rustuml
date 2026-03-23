@@ -1,7 +1,0 @@
-@startuml
-Alice -> Bob : request
-note right of Bob
-  Right note\nwith newline
-end note
-Bob --> Alice : response
-@enduml

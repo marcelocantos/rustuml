@@ -1,7 +1,0 @@
-@startuml
-package myPkg <<Service>> {
-  class MyClass {
-    +void method()
-  }
-}
-@enduml

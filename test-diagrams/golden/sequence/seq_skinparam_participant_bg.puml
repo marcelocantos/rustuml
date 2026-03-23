@@ -1,5 +1,0 @@
-@startuml
-skinparam ParticipantBackgroundColor lightyellow
-Alice -> Bob : hello
-Bob --> Alice : hi
-@enduml

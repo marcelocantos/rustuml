@@ -1,7 +1,0 @@
-@startebnf
-heading = hashes , " " , text , newline;
-hashes = "#" | "##" | "###" | "####" | "#####" | "######";
-text = char , { char };
-newline = ? newline character ?;
-char = ? any character except newline ?;
-@endebnf

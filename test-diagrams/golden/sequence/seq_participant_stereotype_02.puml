@@ -1,6 +1,0 @@
-@startuml
-participant Alice <<external>>
-participant Bob <<external>>
-Alice -> Bob : hello
-Bob --> Alice : hi
-@enduml

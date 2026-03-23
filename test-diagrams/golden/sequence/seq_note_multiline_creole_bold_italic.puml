@@ -1,9 +1,0 @@
-@startuml
-Alice -> Bob : request
-note over Alice, Bob
-  **Header**
-  //description//
-  code
-end note
-Bob --> Alice : response
-@enduml

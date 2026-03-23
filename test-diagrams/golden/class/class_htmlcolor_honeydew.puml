@@ -1,5 +1,0 @@
-@startuml
-class ColorTest #HoneyDew {
-  +void method()
-}
-@enduml

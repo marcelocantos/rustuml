@@ -1,5 +1,0 @@
-@startuml
-participant "Part 87" as P
-Alice -> P : <color:red>red</color>
-P --> Alice : <color:red>red</color> reply
-@enduml

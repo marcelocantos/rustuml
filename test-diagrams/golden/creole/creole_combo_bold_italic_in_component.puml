@@ -1,5 +1,0 @@
-@startuml
-component "**//bi//** comp" as C243
-interface "**//bi//** iface" as I243
-C243 -- I243
-@enduml

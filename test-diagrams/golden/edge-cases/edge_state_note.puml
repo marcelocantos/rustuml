@@ -1,6 +1,0 @@
-@startuml
-[*] --> Active
-Active : entry / do something
-Active : do / main work
-Active : exit / cleanup
-@enduml

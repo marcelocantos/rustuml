@@ -1,6 +1,0 @@
-@startuml
-
-start
-#lime:Action with receive<
-stop
-@enduml

@@ -1,9 +1,0 @@
-@startuml
-Alice -> Bob : request
-Bob --> Alice : response
-alt ok
-  Alice -> Bob : confirm
-else error
-  Alice -> Bob : retry
-end
-@enduml

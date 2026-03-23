@@ -1,5 +1,0 @@
-@startuml
-Alice -> Bob : before
-Alice ->> Bob : arrow ->>
-Bob --> Alice : after
-@enduml

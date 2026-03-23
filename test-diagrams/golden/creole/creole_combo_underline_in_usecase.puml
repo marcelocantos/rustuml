@@ -1,5 +1,0 @@
-@startuml
-actor "__underline__ Actor" as A110
-usecase "__underline__ Case" as UC110
-A110 --> UC110
-@enduml

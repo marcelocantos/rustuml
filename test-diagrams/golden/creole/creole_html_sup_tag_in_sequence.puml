@@ -1,4 +1,0 @@
-@startuml
-Alice -> Bob : x<sup>2</sup> + y<sup>2</sup>
-note right : x<sup>2</sup> + y<sup>2</sup>
-@enduml

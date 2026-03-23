@@ -1,6 +1,0 @@
-@startuml
-Alice -> Alice : self call
-Alice --> Alice : self return
-Alice ->> Alice : thin self
-Alice -->> Alice : thin dotted self
-@enduml

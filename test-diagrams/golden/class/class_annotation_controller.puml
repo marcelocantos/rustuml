@@ -1,5 +1,0 @@
-@startuml
-annotation Controller {
-  +String value() default ""
-}
-@enduml

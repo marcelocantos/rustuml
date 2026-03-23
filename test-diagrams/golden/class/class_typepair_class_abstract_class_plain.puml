@@ -1,5 +1,0 @@
-@startuml
-class TypeA
-abstract class TypeB
-TypeA -- TypeB
-@enduml

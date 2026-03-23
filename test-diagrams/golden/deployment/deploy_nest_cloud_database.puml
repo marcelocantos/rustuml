@@ -1,5 +1,0 @@
-@startuml
-cloud Outer {
-  database Inner
-}
-@enduml

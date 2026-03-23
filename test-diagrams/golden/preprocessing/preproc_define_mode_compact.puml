@@ -1,4 +1,0 @@
-@startuml
-!define MODE_COMPACT
-class C { +x: int }
-@enduml

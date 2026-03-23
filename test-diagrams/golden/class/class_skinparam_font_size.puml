@@ -1,6 +1,0 @@
-@startuml
-skinparam ClassFontSize 18
-class MyClass {
-  +void method()
-}
-@enduml

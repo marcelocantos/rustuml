@@ -1,4 +1,0 @@
-@startuml
-Alice -> Bob : **__bold underline__**
-note right : **__bold underline__**
-@enduml

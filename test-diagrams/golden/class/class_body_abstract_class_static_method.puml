@@ -1,5 +1,0 @@
-@startuml
-abstract class Variant {
-  {static} +void create()
-}
-@enduml

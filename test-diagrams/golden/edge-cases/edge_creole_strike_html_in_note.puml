@@ -1,5 +1,0 @@
-@startuml
-note as N1
-  <s>html strike</s>
-end note
-@enduml

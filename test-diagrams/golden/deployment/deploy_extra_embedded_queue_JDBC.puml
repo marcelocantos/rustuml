@@ -1,5 +1,0 @@
-@startuml
-node AppNode <<embedded>>
-queue DataStore
-AppNode --> DataStore : JDBC
-@enduml
