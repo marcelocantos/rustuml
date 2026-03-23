@@ -277,7 +277,6 @@ struct PreprocessContext {
     in_sprite_block: bool,
     archimate_enabled: bool,
     in_diagram_block: bool,
-    first_block_done: bool,
     base_dir: Option<PathBuf>,
     include_depth: usize,
     foreach_stack: Vec<ForEachState>,
@@ -342,7 +341,6 @@ impl PreprocessContext {
             in_sprite_block: false,
             archimate_enabled: false,
             in_diagram_block: false,
-            first_block_done: false,
             base_dir,
             include_depth: 0,
             foreach_stack: Vec::new(),
@@ -442,19 +440,15 @@ impl PreprocessContext {
         let trimmed = line_no_comment.trim();
 
         // Handle @start/@end tags.
+        // Multiple @startuml...@enduml blocks in a single file are merged into
+        // one diagram (matching Java PlantUML behaviour).
         if self.include_depth == 0 {
             if trimmed.starts_with("@start") {
-                if !self.first_block_done {
-                    self.in_diagram_block = true;
-                }
+                self.in_diagram_block = true;
                 return;
             }
             if trimmed.starts_with("@end") {
                 self.in_diagram_block = false;
-                self.first_block_done = true;
-                return;
-            }
-            if self.first_block_done {
                 return;
             }
         } else if trimmed.starts_with("@start") || trimmed.starts_with("@end") {
@@ -575,8 +569,8 @@ impl PreprocessContext {
             return;
         }
 
-        // Only output lines when all conditions are active.
-        if self.is_active() {
+        // Only output lines when inside a diagram block and all conditions are active.
+        if self.in_diagram_block && self.is_active() {
             // Expand archimate macros before variable substitution.
             let line_to_process =
                 if let Some(expanded) = self.try_expand_archimate(line_no_comment.trim()) {
