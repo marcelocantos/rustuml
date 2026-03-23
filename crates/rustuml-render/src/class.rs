@@ -253,10 +253,17 @@ fn render_with_positions(
             let adj_py = py + y_shift;
             let fill = pkg_fill_color(pkg.color.as_deref());
             svg.rect(*px, adj_py, *pw, *ph, fill, "#888888");
+            // Build header label: name + stereotypes (e.g. "myPkg «Application»")
+            let header_label = if pkg.stereotypes.is_empty() {
+                pkg.name.clone()
+            } else {
+                let stereos: Vec<String> = pkg.stereotypes.iter().map(|s| format!("«{s}»")).collect();
+                format!("{} {}", pkg.name, stereos.join(" "))
+            };
             svg.text(
                 px + 6.0,
                 adj_py + PACKAGE_HEADER - 6.0,
-                &pkg.name,
+                &header_label,
                 "start",
                 FONT_SIZE,
             );

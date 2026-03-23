@@ -428,6 +428,15 @@ pub fn render(diagram: &ActivityDiagram, theme: &Theme) -> String {
                         SMALL_FONT,
                     );
                 }
+                if let Some(label) = &rw.not_label {
+                    svg.text(
+                        cx,
+                        y + DIAMOND_SIZE * 2.0 + 4.0,
+                        label,
+                        "middle",
+                        SMALL_FONT,
+                    );
+                }
                 y += DIAMOND_SIZE * 2.0 + V_GAP / 2.0;
             }
             ActivityStep::Switch(expr) => {

@@ -115,7 +115,6 @@ fn parse_legacy_activity(lines: &[String]) -> Result<ActivityDiagram, ParseError
                 condition: caps[1].to_string(),
                 then_label: None,
             }));
-            in_else = false;
             continue;
         }
 
@@ -427,6 +426,14 @@ impl ActivityParser {
             "split again" => self.steps.push(ActivityStep::SplitAgain),
             "end split" => self.steps.push(ActivityStep::EndSplit),
             "repeat" => self.steps.push(ActivityStep::Repeat),
+            _ if line.starts_with("repeat :") => {
+                // `repeat :label;` — push Repeat then parse the rest as an action.
+                self.steps.push(ActivityStep::Repeat);
+                let rest = line.strip_prefix("repeat ").unwrap_or("").trim();
+                if !rest.is_empty() {
+                    self.try_action(rest);
+                }
+            }
             "break" => self.steps.push(ActivityStep::Break),
             "detach" => self.steps.push(ActivityStep::Detach),
             "kill" => self.steps.push(ActivityStep::Kill),
@@ -718,13 +725,14 @@ impl ActivityParser {
 
     fn try_repeat_while(&mut self, line: &str) -> bool {
         static RE: LazyLock<Regex> = LazyLock::new(|| {
-            Regex::new(r"^repeat\s*while\s*\((.+?)\)\s*(?:is\s*\((.+?)\))?").unwrap()
+            Regex::new(r"^repeat\s*while\s*\((.+?)\)\s*(?:is\s*\((.+?)\))?\s*(?:not\s*\((.+?)\))?").unwrap()
         });
 
         if let Some(caps) = RE.captures(line) {
             self.steps.push(ActivityStep::RepeatWhile(RepeatWhileBlock {
                 condition: caps[1].trim().to_string(),
                 is_label: caps.get(2).map(|m| m.as_str().trim().to_string()),
+                not_label: caps.get(3).map(|m| m.as_str().trim().to_string()),
             }));
             true
         } else {

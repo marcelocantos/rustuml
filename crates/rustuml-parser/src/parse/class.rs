@@ -441,10 +441,12 @@ impl ClassParser {
     fn try_package(&mut self, line: &str) -> bool {
         static RE: LazyLock<Regex> = LazyLock::new(|| {
             Regex::new(
-                r#"^(package|namespace|cloud|database|folder|frame|rectangle|node)\s+(?:"([^"]+)"|([^#\s{]+))\s*(?:#([^\s{]+))?\s*\{?"#,
+                r#"^(package|namespace|cloud|database|folder|frame|rectangle|node)\s+(?:"([^"]+)"|([^#\s{<]+))\s*(?:#([^\s{<]+))?\s*(?:<<\s*([^>]+?)\s*>>)?\s*\{?"#,
             )
             .unwrap()
         });
+        static STEREOTYPE_RE: LazyLock<Regex> =
+            LazyLock::new(|| Regex::new(r"<<\s*([^>]+?)>>").unwrap());
 
         if let Some(caps) = RE.captures(line) {
             let kind_str = &caps[1];
@@ -453,12 +455,11 @@ impl ClassParser {
                 .or(caps.get(3))
                 .map(|m| m.as_str().to_string())
                 .unwrap_or_default();
-            let color = caps.get(4).map(|m| {
-                let s = m.as_str();
-                // Keep hex colors as-is (only hex digits → prepend nothing).
-                // Named colors: strip no prefix (already without #).
-                s.to_string()
-            });
+            let color = caps.get(4).map(|m| m.as_str().to_string());
+            let stereotypes: Vec<String> = STEREOTYPE_RE
+                .captures_iter(line)
+                .map(|c| c[1].trim().to_string())
+                .collect();
             let kind = match kind_str {
                 "namespace" => PackageKind::Namespace,
                 "cloud" => PackageKind::Cloud,
@@ -476,6 +477,7 @@ impl ClassParser {
                 kind,
                 color,
                 entities: Vec::new(),
+                stereotypes,
             });
             true
         } else {

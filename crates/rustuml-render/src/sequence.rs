@@ -70,6 +70,18 @@ fn decode_escapes(s: &str) -> String {
     s.replace("\\\\", "\\")
 }
 
+/// Process label text for SVG rendering: decode escapes and replace unsupported
+/// markup like `<img:...>` with a placeholder matching PlantUML's behavior.
+fn process_label(s: &str) -> String {
+    use std::sync::LazyLock;
+    use regex::Regex;
+    static IMG_RE: LazyLock<Regex> =
+        LazyLock::new(|| Regex::new(r"<img:[^>]*>").unwrap());
+    // PlantUML uses non-breaking space (U+00A0) in the cannot-decode message.
+    let decoded = decode_escapes(s);
+    IMG_RE.replace_all(&decoded, "(Cannot\u{00a0}decode)").into_owned()
+}
+
 /// Returns the display label for a participant box.
 ///
 /// If the participant has a stereotype, it appears inline as "Name «stereotype»",
@@ -412,7 +424,7 @@ pub fn render(diagram: &SequenceDiagram, theme: &Theme) -> String {
 
                 // Message label.
                 if !msg.label.is_empty() {
-                    let label = decode_escapes(&msg.label);
+                    let label = process_label(&msg.label);
                     svg.text(mid_x, y - 5.0, &label, "middle", SMALL_FONT);
                 }
 
