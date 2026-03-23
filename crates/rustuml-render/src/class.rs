@@ -254,11 +254,12 @@ fn render_with_positions(
             let fill = pkg_fill_color(pkg.color.as_deref());
             svg.rect(*px, adj_py, *pw, *ph, fill, "#888888");
             // Build header label: name + stereotypes (e.g. "myPkg «Application»")
+            let display = pkg.display_name.as_deref().unwrap_or(&pkg.name);
             let header_label = if pkg.stereotypes.is_empty() {
-                pkg.name.clone()
+                display.to_string()
             } else {
                 let stereos: Vec<String> = pkg.stereotypes.iter().map(|s| format!("«{s}»")).collect();
-                format!("{} {}", pkg.name, stereos.join(" "))
+                format!("{} {}", display, stereos.join(" "))
             };
             svg.text(
                 px + 6.0,
@@ -460,7 +461,7 @@ fn calc_class_dim(entity: &ClassEntity) -> ClassDim {
     let stereotype_labels: Vec<String> = entity
         .stereotypes
         .iter()
-        .map(|s| format!("«{s}»"))
+        .map(|s| format_stereotype(s))
         .collect();
 
     let name_width = metrics::text_width(&entity.label, FONT_SIZE) + PADDING * 2.0;
@@ -584,6 +585,36 @@ fn format_member(member: &Member) -> String {
         "{static_prefix}{abstract_prefix}{}",
         member.display_text
     )
+}
+
+/// Format a stereotype string for display.
+///
+/// PlantUML's rule: if the spot color is a hex color (`#RRGGBB`), the spot
+/// notation `(letter,#color)` is stripped and only the name is shown.
+/// If the color is a named color (e.g. `#red`), the full spot notation is kept.
+///
+/// - `(A,#red) SpotA`    → `«(A,#red) SpotA»`
+/// - `(F,#FF7700) SpotF` → `«SpotF»`
+fn format_stereotype(s: &str) -> String {
+    // Match spot notation: (single-char, #color) name
+    if let Some(rest) = s.strip_prefix('(') {
+        if let Some(comma_pos) = rest.find(',') {
+            let after_comma = &rest[comma_pos + 1..];
+            if let Some(color_and_rest) = after_comma.strip_prefix('#') {
+                if let Some(close_pos) = color_and_rest.find(')') {
+                    let color = &color_and_rest[..close_pos];
+                    // Hex color: all chars are hex digits (3 or 6 digits)
+                    if color.len() == 3 || color.len() == 6 {
+                        if color.chars().all(|c| c.is_ascii_hexdigit()) {
+                            let name = color_and_rest[close_pos + 1..].trim();
+                            return format!("«{name}»");
+                        }
+                    }
+                }
+            }
+        }
+    }
+    format!("«{s}»")
 }
 
 /// Convert `<<stereotype>>` notation to `«stereotype»` guillemets.
@@ -748,6 +779,11 @@ fn render_note_box(svg: &mut SvgBuilder, note: &Note, x: f64, y: f64, w: f64, h:
 
     // Render each line of text — pass the raw markup so svg.text can apply creole styling.
     // Convert Creole ordered-list items (`# text`) to numbered form (`N. text`).
+    use std::sync::LazyLock;
+    use regex::Regex;
+    static IMG_RE: LazyLock<Regex> =
+        LazyLock::new(|| Regex::new(r"<img:[^>]*>").unwrap());
+
     let mut ty = y + NOTE_PAD_Y + NOTE_LINE_HEIGHT - 3.0;
     let mut list_counter = 0usize;
     for line in &note.lines {
@@ -767,6 +803,7 @@ fn render_note_box(svg: &mut SvgBuilder, note: &Note, x: f64, y: f64, w: f64, h:
             list_counter = 0;
             trimmed.to_string()
         };
+        let display = IMG_RE.replace_all(&display, "(Cannot\u{00a0}decode)").into_owned();
         svg.text(x + NOTE_PAD_X, ty, &display, "start", FONT_SIZE);
         ty += NOTE_LINE_HEIGHT;
     }
