@@ -206,7 +206,8 @@ pub fn render(diagram: &ActivityDiagram, theme: &Theme) -> String {
             }
             ActivityStep::Else(label) => {
                 if let Some(l) = label {
-                    svg.text(cx - DIAMOND_SIZE - 5.0, y, l, "end", SMALL_FONT);
+                    let display = format!("else ({})", l);
+                    svg.text(cx - DIAMOND_SIZE - 5.0, y, &display, "end", SMALL_FONT);
                 }
                 y += V_GAP / 4.0;
             }
@@ -232,7 +233,20 @@ pub fn render(diagram: &ActivityDiagram, theme: &Theme) -> String {
                 );
                 y += BAR_HEIGHT + V_GAP / 2.0;
             }
-            ActivityStep::ForkAgain | ActivityStep::SplitAgain => {
+            ActivityStep::ForkAgain => {
+                svg.text(cx, y, "fork again", "middle", SMALL_FONT);
+                y += SMALL_FONT + 4.0;
+                svg.line_segment(
+                    cx - BAR_WIDTH / 2.0,
+                    y,
+                    cx + BAR_WIDTH / 2.0,
+                    y,
+                    "#999",
+                    true,
+                );
+                y += V_GAP / 4.0;
+            }
+            ActivityStep::SplitAgain => {
                 svg.line_segment(
                     cx - BAR_WIDTH / 2.0,
                     y,

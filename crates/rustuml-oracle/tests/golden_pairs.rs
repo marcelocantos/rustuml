@@ -10,8 +10,10 @@
 //!
 //! Run with: `cargo test --test golden_pairs`
 
+use rayon::prelude::*;
 use rustuml_oracle::compare;
 use std::path::{Path, PathBuf};
+use std::sync::atomic::{AtomicUsize, Ordering};
 
 fn golden_dir() -> PathBuf {
     PathBuf::from(env!("CARGO_MANIFEST_DIR"))
@@ -109,6 +111,9 @@ fn golden_has_syntax_error(svg: &str) -> bool {
         // reference implementation failed, so there is nothing to compare
         // against.
         || svg.contains("An error has occured")
+        // Java PlantUML semantic errors rendered as error SVGs.
+        || svg.contains("kill cannot be used here")
+        || svg.contains("swimlane must be defined at the start")
 }
 
 struct TestResult {
@@ -170,7 +175,8 @@ fn run_one(puml_path: &Path, root: &Path) -> TestResult {
     }
 
     // Wrap parse + render + compare in catch_unwind so a panic in
-    // one golden pair doesn't abort the entire suite.
+    // one golden pair doesn't abort the entire suite. Rayon's
+    // panic_handler absorbs panics at the pool level.
     let base_dir = puml_path.parent().map(Path::to_owned);
     let render_result = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
         let diagram = rustuml_parser::parse::parse_auto_with_base(&source, base_dir.as_deref())
@@ -178,8 +184,6 @@ fn run_one(puml_path: &Path, root: &Path) -> TestResult {
 
         let rust_svg = rustuml_render::render_svg(&diagram);
 
-        // Structural comparison: extract text elements and check
-        // that golden texts appear in the Rust output.
         let golden_elems =
             compare::extract_elements(&golden_svg).map_err(|e| format!("golden SVG parse: {e}"))?;
         let rust_elems =
@@ -225,8 +229,6 @@ fn run_one(puml_path: &Path, root: &Path) -> TestResult {
             outcome: Outcome::Pass,
         },
         Ok(Err(msg)) => {
-            // Parse errors are skips (unsupported features); comparison
-            // failures are real failures.
             let outcome = if msg.starts_with("parse:") {
                 Outcome::Skip(msg)
             } else {
@@ -264,23 +266,54 @@ fn golden_pairs() {
         return;
     }
 
-    let mut pass = 0usize;
-    let mut skip = 0usize;
-    let mut failures = Vec::new();
+    // Suppress panic output from layout-rs and other libraries.
+    std::panic::set_hook(Box::new(|_| {}));
 
-    for puml_path in &pairs {
-        let result = run_one(puml_path, &root);
-        match result.outcome {
-            Outcome::Pass => pass += 1,
-            Outcome::Skip(_) => skip += 1,
-            Outcome::Fail(ref msg) => {
-                failures.push(format!("{}: {msg}", result.name));
+    // Build a custom rayon pool. Layout-rs panics can poison rayon
+    // workers, so we use `panic_handler` to absorb them.
+    let pool = rayon::ThreadPoolBuilder::new()
+        .num_threads(num_cpus::get())
+        .panic_handler(|_| {}) // absorb panics instead of poisoning
+        .build()
+        .expect("failed to build rayon pool");
+
+    let pass = AtomicUsize::new(0);
+    let skip = AtomicUsize::new(0);
+
+    // Run all pairs in parallel using rayon.
+    let failures: Vec<String> = pool.install(|| pairs
+        .par_iter()
+        .filter_map(|puml_path| {
+            let result = run_one(puml_path, &root);
+            match result.outcome {
+                Outcome::Pass => {
+                    pass.fetch_add(1, Ordering::Relaxed);
+                    None
+                }
+                Outcome::Skip(_) => {
+                    skip.fetch_add(1, Ordering::Relaxed);
+                    None
+                }
+                Outcome::Fail(ref msg) => Some(format!("{}: {msg}", result.name)),
             }
-        }
-    }
+        })
+        .collect()
+    ); // close pool.install
 
     let total = pairs.len();
+    let pass = pass.load(Ordering::Relaxed);
+    let skip = skip.load(Ordering::Relaxed);
     let fail_count = failures.len();
+
+    // Per-directory failure counts.
+    let mut dir_fails: std::collections::BTreeMap<String, usize> =
+        std::collections::BTreeMap::new();
+    for f in &failures {
+        if let Some(slash) = f.find('/') {
+            let dir = &f[..slash];
+            *dir_fails.entry(dir.to_string()).or_default() += 1;
+        }
+    }
 
     // Summarise by failure category.
     let panics = failures.iter().filter(|f| f.contains("panic:")).count();
@@ -292,9 +325,32 @@ fn golden_pairs() {
 
     eprintln!("\ngolden_pairs: {total} total, {pass} passed, {fail_count} failed, {skip} skipped");
     eprintln!("  panics: {panics}, text mismatches: {text_mismatches}, other: {other}");
+    if !dir_fails.is_empty() {
+        eprintln!("  per-directory failures:");
+        let mut sorted: Vec<_> = dir_fails.iter().collect();
+        sorted.sort_by(|a, b| b.1.cmp(a.1));
+        for (dir, count) in &sorted {
+            eprintln!("    {count:5} {dir}");
+        }
+    }
 
     // Show first N failures to keep output readable.
     const MAX_SHOWN: usize = 50;
+
+    // Write all failures to a file for analysis.
+    let fail_path = root.join("..").join("golden_failures.txt");
+    if !failures.is_empty() {
+        let mut lines = Vec::new();
+        let mut dir_sorted: Vec<_> = dir_fails.iter().collect();
+        dir_sorted.sort_by(|a, b| b.1.cmp(a.1));
+        for (dir, count) in &dir_sorted {
+            lines.push(format!("{count:5} {dir}"));
+        }
+        lines.push(String::new());
+        lines.extend(failures.iter().cloned());
+        let _ = std::fs::write(&fail_path, lines.join("\n"));
+        eprintln!("  failures written to {}", fail_path.display());
+    }
     let shown: Vec<&str> = failures
         .iter()
         .map(|s| s.as_str())
