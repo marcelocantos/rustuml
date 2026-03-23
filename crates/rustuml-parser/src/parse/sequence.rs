@@ -38,6 +38,8 @@ struct SeqParser {
     note_buffer: Option<NoteBuffer>,
     /// Multiline ref accumulator.
     ref_buffer: Option<RefBuffer>,
+    /// Whether we are inside a `legend ... endlegend` block.
+    in_legend: bool,
 }
 
 struct NoteBuffer {
@@ -61,6 +63,7 @@ impl SeqParser {
             participant_ids: Vec::new(),
             note_buffer: None,
             ref_buffer: None,
+            in_legend: false,
         }
     }
 
@@ -596,15 +599,19 @@ impl SeqParser {
         });
 
         if let Some(caps) = RE_INLINE.captures(line) {
-            let participants: Vec<String> =
-                caps[1].split(',').map(|s| s.trim().to_string()).collect();
+            let participants: Vec<String> = caps[1]
+                .split(',')
+                .map(|s| self.ensure_participant(s.trim()))
+                .collect();
             let text = caps[2].trim().to_string();
             self.events.push(Event::Ref(Ref { participants, text }));
             return true;
         }
         if let Some(caps) = RE_START.captures(line) {
-            let participants: Vec<String> =
-                caps[1].split(',').map(|s| s.trim().to_string()).collect();
+            let participants: Vec<String> = caps[1]
+                .split(',')
+                .map(|s| self.ensure_participant(s.trim()))
+                .collect();
             self.ref_buffer = Some(RefBuffer {
                 participants,
                 lines: Vec::new(),
@@ -629,6 +636,25 @@ impl SeqParser {
         }
         if let Some(rest) = line.strip_prefix("caption ") {
             self.meta.caption = Some(rest.trim().to_string());
+            return true;
+        }
+        // Legend block: `legend` / `legend right` / `legend left` ... `endlegend`
+        if line == "legend"
+            || line.starts_with("legend ")
+        {
+            self.in_legend = true;
+            return true;
+        }
+        if self.in_legend {
+            if line == "endlegend" || line == "end legend" {
+                self.in_legend = false;
+            } else {
+                let l = self.meta.legend.get_or_insert_with(String::new);
+                if !l.is_empty() {
+                    l.push('\n');
+                }
+                l.push_str(line);
+            }
             return true;
         }
         false

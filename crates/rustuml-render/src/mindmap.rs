@@ -340,6 +340,14 @@ fn shift_placed(p: &mut Placed, dx: f64, dy: f64) {
     }
 }
 
+// ── Label normalisation ───────────────────────────────────────────────────────
+
+/// Convert `<<stereotype>>` notation to guillemets `«stereotype»`, matching
+/// PlantUML's SVG output.
+fn normalize_label(label: &str) -> String {
+    label.replace("<<", "«").replace(">>", "»")
+}
+
 // ── Rendering ─────────────────────────────────────────────────────────────────
 
 fn fill_for(placed: &Placed) -> (&'static str, &'static str) {
@@ -393,10 +401,11 @@ fn draw_node(svg: &mut SvgBuilder, placed: &Placed, _theme: &Theme) {
     svg.rounded_rect(placed.x, placed.y, placed.w, NODE_H, RX, fill, stroke);
 
     // Label, centred in the box.
+    let label = normalize_label(&placed.label);
     svg.text(
         placed.x + placed.w / 2.0,
         placed.y + NODE_PADDING_Y + FONT_SIZE - 2.0,
-        &placed.label,
+        &label,
         "middle",
         FONT_SIZE,
     );
@@ -415,9 +424,23 @@ pub fn render(diagram: &MindMapDiagram, theme: &Theme) -> String {
             .to_string();
     }
 
-    let (placed_roots, total_w, total_h) = layout(&diagram.roots);
+    let title_h = if diagram.meta.title.is_some() { FONT_SIZE + MARGIN } else { 0.0 };
 
+    let (mut placed_roots, total_w, total_h) = layout(&diagram.roots);
+
+    // Shift all nodes down to leave room for the title.
+    if title_h > 0.0 {
+        for root in &mut placed_roots {
+            shift_placed(root, 0.0, title_h);
+        }
+    }
+
+    let total_h = total_h + title_h;
     let mut svg = SvgBuilder::new(total_w, total_h);
+
+    if let Some(title) = &diagram.meta.title {
+        svg.text(total_w / 2.0, MARGIN + FONT_SIZE, title, "middle", FONT_SIZE);
+    }
 
     for root in &placed_roots {
         draw_node(&mut svg, root, theme);

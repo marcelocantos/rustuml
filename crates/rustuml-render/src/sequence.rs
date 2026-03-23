@@ -339,6 +339,11 @@ pub fn render(diagram: &SequenceDiagram, theme: &Theme) -> String {
         svg.text(total_width / 2.0, total_height - 4.0, caption, "middle", SMALL_FONT);
     }
 
+    // Render legend if present.
+    if let Some(legend) = &diagram.meta.legend {
+        svg.render_legend(total_width - 200.0, total_height - 150.0, legend, SMALL_FONT);
+    }
+
     // Render title if present.
     let title_offset = if let Some(title) = &diagram.meta.title {
         svg.text(total_width / 2.0, TOP_MARGIN + FONT_SIZE, title, "middle", FONT_SIZE + 2.0);

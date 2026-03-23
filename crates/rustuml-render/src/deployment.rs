@@ -23,7 +23,6 @@ const CONTAINER_PADDING: f64 = 16.0;
 const TITLE_FONT_SIZE: f64 = 14.0;
 const TITLE_HEIGHT: f64 = TITLE_FONT_SIZE + 10.0;
 const NOTE_W: f64 = 100.0;
-const NOTE_H: f64 = 25.0;
 
 fn node_fill(kind: DeploymentNodeKind) -> &'static str {
     match kind {
@@ -211,10 +210,12 @@ pub fn render(diagram: &DeploymentDiagram, theme: &Theme) -> String {
     let header_h = if diagram.meta.header.is_some() { TITLE_HEIGHT } else { 0.0 };
     let footer_h = if diagram.meta.footer.is_some() { TITLE_HEIGHT } else { 0.0 };
 
-    // Estimate note space (rough: notes below content).
-    let note_extra_h = if diagram.notes.is_empty() { 0.0 } else {
-        (diagram.notes.len() as f64) * (NOTE_H + 10.0)
-    };
+    // Estimate note space: each note gets one row per text line plus padding.
+    let note_line_h = SMALL_FONT + 4.0;
+    let note_extra_h: f64 = diagram.notes.iter().map(|note| {
+        let nlines = note.text.lines().count().max(1);
+        PADDING * 2.0 + (nlines as f64) * note_line_h + 10.0
+    }).sum();
 
     let nodes_w = if col_w.is_empty() { NODE_MIN_W } else {
         col_w.iter().sum::<f64>() + GAP * cols.saturating_sub(1) as f64
@@ -294,39 +295,52 @@ pub fn render(diagram: &DeploymentDiagram, theme: &Theme) -> String {
     let mut note_y = content_top + nodes_h + if nodes_h > 0.0 { GAP } else { 0.0 };
 
     for note in &diagram.notes {
-        let note_text = &note.text;
-        let nw = (metrics::text_width(note_text, SMALL_FONT) + PADDING * 2.0)
-            .max(NOTE_W)
+        let lines: Vec<&str> = note.text.lines().collect();
+        let nlines = lines.len().max(1);
+        let nh = PADDING * 2.0 + (nlines as f64) * note_line_h;
+        let nw = lines
+            .iter()
+            .map(|l| metrics::text_width(l, SMALL_FONT) + PADDING * 2.0)
+            .fold(NOTE_W, |a, b| a.max(b))
             .min(total_w - MARGIN * 2.0);
         let nx = MARGIN;
         let ny = note_y;
 
-        // If note has a target, draw a connection line to it.
-        if let Some(target_id) = &note.target {
-            if let Some(&(tx, ty, tw, _)) = positions.get(target_id) {
-                // Note box placed to the right of or above the target.
-                let note_cx = (tx + tw / 2.0).min(total_w - MARGIN - nw);
-                let note_cy = ny;
-                svg.rect(note_cx, note_cy, nw, NOTE_H, note_fill, &gs.border_color);
-                svg.text(note_cx + PADDING, note_cy + NOTE_H / 2.0 + 4.0, note_text, "start", SMALL_FONT);
-                // Connect note to target with a dashed line.
-                svg.line_segment(
-                    note_cx + nw / 2.0,
-                    note_cy,
-                    tx + tw / 2.0,
-                    ty,
-                    &gs.border_color,
-                    true,
-                );
-                note_y += NOTE_H + 10.0;
-                continue;
-            }
+        // Determine where to place the note box.
+        let (box_x, box_y, has_target, tgt_cx, tgt_top) =
+            if let Some(target_id) = &note.target {
+                if let Some(&(tgt_x, tgt_y, tgt_w, _)) = positions.get(target_id) {
+                    let note_cx = (tgt_x + tgt_w / 2.0).min(total_w - MARGIN - nw);
+                    (note_cx, ny, true, tgt_x + tgt_w / 2.0, tgt_y)
+                } else {
+                    (nx, ny, false, 0.0, 0.0)
+                }
+            } else {
+                (nx, ny, false, 0.0, 0.0)
+            };
+
+        // Draw the note box.
+        svg.rect(box_x, box_y, nw, nh, note_fill, &gs.border_color);
+
+        // Draw each line of text.
+        for (i, line) in lines.iter().enumerate() {
+            let ly = box_y + PADDING + (i as f64) * note_line_h + SMALL_FONT;
+            svg.text(box_x + PADDING, ly, line, "start", SMALL_FONT);
         }
 
-        // Floating note with no known target.
-        svg.rect(nx, ny, nw, NOTE_H, note_fill, &gs.border_color);
-        svg.text(nx + PADDING, ny + NOTE_H / 2.0 + 4.0, note_text, "start", SMALL_FONT);
-        note_y += NOTE_H + 10.0;
+        // If attached, draw a dashed connector to the target element.
+        if has_target {
+            svg.line_segment(
+                box_x + nw / 2.0,
+                box_y,
+                tgt_cx,
+                tgt_top,
+                &gs.border_color,
+                true,
+            );
+        }
+
+        note_y += nh + 10.0;
     }
 
     // Render legend.

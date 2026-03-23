@@ -111,6 +111,9 @@ impl ObjectParser {
         if self.try_link(line) {
             return Ok(());
         }
+        if self.try_inline_field(line) {
+            return Ok(());
+        }
         if self.try_note(line) {
             return Ok(());
         }
@@ -308,6 +311,26 @@ impl ObjectParser {
                 .collect();
             self.packages.push(ObjectPackage { id, label, object_ids: Vec::new() });
             self.current_package = Some(self.packages.len() - 1);
+            true
+        } else {
+            false
+        }
+    }
+
+    /// Handle `ObjectId : field = value` or `ObjectId : field` inline field syntax.
+    fn try_inline_field(&mut self, line: &str) -> bool {
+        static RE: LazyLock<Regex> =
+            LazyLock::new(|| Regex::new(r"^(\w+)\s*:\s*(.+)$").unwrap());
+
+        if let Some(caps) = RE.captures(line) {
+            let obj_id = caps[1].to_string();
+            let field_text = caps[2].trim().to_string();
+            self.ensure_object(&obj_id);
+            // Temporarily set current_object so parse_field_line stores the field.
+            let saved = self.current_object.take();
+            self.current_object = Some(obj_id);
+            self.parse_field_line(&field_text);
+            self.current_object = saved;
             true
         } else {
             false

@@ -123,6 +123,23 @@ pub fn render(diagram: &StateDiagram, theme: &Theme) -> String {
     let total_height = y_cursor - V_GAP + MARGIN;
 
     let mut svg = SvgBuilder::new(total_width, total_height);
+
+    // Handwritten compatibility notice.
+    let is_handwritten = diagram
+        .meta
+        .skinparams
+        .iter()
+        .any(|sp| sp.key.eq_ignore_ascii_case("handwritten") && sp.value.eq_ignore_ascii_case("true"));
+    if is_handwritten {
+        svg.monospace_text(
+            10.0,
+            SMALL_FONT + 2.0,
+            "Please use '!option handwritten true' to enable handwritten",
+            "start",
+            10.0,
+        );
+    }
+
     if let Some(title) = &diagram.meta.title {
         svg.text(total_width / 2.0, TITLE_HEIGHT - 4.0, title, "middle", TITLE_FONT_SIZE);
     }

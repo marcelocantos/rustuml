@@ -61,6 +61,8 @@ impl SvgBuilder {
         let has_creole = (content.matches("**").count() >= 2)
             || (content.matches("//").count() >= 2)
             || (content.matches("--").count() >= 2)
+            || (content.matches("__").count() >= 2)
+            || (content.matches("~~").count() >= 2)
             || (content.matches("\"\"").count() >= 2)
             || content.contains('`')
             || content.contains("<b>")
@@ -72,7 +74,8 @@ impl SvgBuilder {
             || content.contains("<size:")
             || content.contains("<font")
             || content.contains("<back:")
-            || content.contains("<mono>");
+            || content.contains("<mono>")
+            || content.contains("[[");  // hyperlinks
         if has_creole {
             let rich = crate::creole::to_svg_tspans(content);
             self.line(&format!(
@@ -227,6 +230,108 @@ impl SvgBuilder {
     /// Emit a raw SVG string (already formatted), with the current indentation.
     pub fn raw(&mut self, s: &str) {
         self.line(s);
+    }
+
+    /// Render a legend box from PlantUML formatted content.
+    ///
+    /// The `legend_text` may be:
+    ///   - A pipe-table: lines like `| Color | Meaning |`
+    ///   - Plain text (possibly with creole markup)
+    ///
+    /// Each non-empty cell / line is emitted as a separate text element so the
+    /// test comparator can find individual cell values.  Creole markup in cells
+    /// (e.g. `**bold**`) is handled by the `svg.text()` method automatically.
+    ///
+    /// Returns the height consumed (so callers can account for it in layout).
+    pub fn render_legend(&mut self, x: f64, y: f64, legend_text: &str, font_size: f64) -> f64 {
+        let line_h = font_size + 6.0;
+        let col_pad = 8.0;
+        let row_pad = 4.0;
+
+        let has_table = legend_text.lines().any(|l| l.trim().contains('|'));
+
+        if has_table {
+            // Parse rows and cells, stripping `<#color>` color annotations from cells.
+            let rows: Vec<Vec<String>> = legend_text
+                .lines()
+                .filter(|l| l.trim().contains('|'))
+                .map(|l| {
+                    l.trim()
+                        .trim_matches('|')
+                        .split('|')
+                        .map(|cell| {
+                            let cell = cell.trim();
+                            // Strip leading color annotation like `<#E3F2FD>`.
+                            if cell.starts_with('<') {
+                                if let Some(pos) = cell.find('>') {
+                                    return cell[pos + 1..].trim().to_string();
+                                }
+                            }
+                            cell.to_string()
+                        })
+                        .filter(|c| !c.is_empty())
+                        .collect()
+                })
+                .filter(|row: &Vec<String>| !row.is_empty())
+                .collect();
+
+            if rows.is_empty() {
+                return 0.0;
+            }
+
+            // Compute column widths.
+            let ncols = rows.iter().map(|r| r.len()).max().unwrap_or(0);
+            let mut col_widths = vec![0.0_f64; ncols];
+            for row in &rows {
+                for (ci, cell) in row.iter().enumerate() {
+                    let w = crate::metrics::text_width(cell, font_size) + col_pad * 2.0;
+                    col_widths[ci] = col_widths[ci].max(w);
+                }
+            }
+
+            let total_w = col_widths.iter().sum::<f64>();
+            let total_h = rows.len() as f64 * (line_h + row_pad * 2.0) + row_pad * 2.0;
+
+            // Draw legend box.
+            self.rect(x, y, total_w, total_h, "#FEFECE", "#AAAAAA");
+
+            // Render cell text.
+            let mut cy = y + row_pad + line_h;
+            for row in &rows {
+                let mut cx = x;
+                for (ci, cell) in row.iter().enumerate() {
+                    let cw = col_widths.get(ci).copied().unwrap_or(60.0);
+                    self.text(cx + col_pad, cy, cell, "start", font_size);
+                    cx += cw;
+                }
+                cy += line_h + row_pad * 2.0;
+            }
+
+            total_h
+        } else {
+            // Plain text / creole markup legend (no table).
+            let lines: Vec<&str> = legend_text.lines().filter(|l| !l.trim().is_empty()).collect();
+            if lines.is_empty() {
+                return 0.0;
+            }
+
+            let max_w = lines
+                .iter()
+                .map(|l| crate::metrics::text_width(l, font_size) + col_pad * 2.0)
+                .fold(60.0_f64, f64::max);
+            let total_h = lines.len() as f64 * (line_h + row_pad) + row_pad * 2.0;
+
+            // Draw legend box.
+            self.rect(x, y, max_w, total_h, "#FEFECE", "#AAAAAA");
+
+            let mut cy = y + row_pad + line_h;
+            for line in &lines {
+                self.text(x + col_pad, cy, line, "start", font_size);
+                cy += line_h + row_pad;
+            }
+
+            total_h
+        }
     }
 
     pub fn finalize(mut self) -> String {

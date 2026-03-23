@@ -69,6 +69,15 @@ fn detect_uml_subtype(lines: &[String]) -> UmlSubtype {
 
     for line in lines {
         let trimmed = line.trim();
+        // Normalize internal tabs to spaces so keyword detection works regardless
+        // of whether the source uses spaces or tabs as separators.
+        let tab_normalized;
+        let trimmed = if trimmed.contains('\t') {
+            tab_normalized = trimmed.replace('\t', " ");
+            tab_normalized.as_str()
+        } else {
+            trimmed
+        };
 
         // Use case — must check before sequence (both use "actor").
         if trimmed.starts_with("usecase ") {

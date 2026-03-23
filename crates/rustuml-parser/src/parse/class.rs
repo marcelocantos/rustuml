@@ -733,8 +733,11 @@ impl ClassParser {
             return true;
         }
 
-        // `note on link : text` — inline single-line note on the last relationship.
-        if let Some(text) = line.strip_prefix("note on link :") {
+        // `note on link : text` or `note on link: text` — inline single-line note on the last relationship.
+        let note_on_link_text = line
+            .strip_prefix("note on link :")
+            .or_else(|| line.strip_prefix("note on link:"));
+        if let Some(text) = note_on_link_text {
             let text = text.trim().to_string();
             let lines = if text.is_empty() {
                 Vec::new()
@@ -999,7 +1002,8 @@ fn parse_member(s: &str) -> Member {
 
     // `rest` is the text after stripping the visibility prefix. It is used
     // verbatim as the display text (preserves original colon spacing).
-    let display_text = rest.to_string();
+    // PlantUML treats `\\` as an escaped backslash (renders as single `\`).
+    let display_text = rest.replace("\\\\", "\\");
 
     if is_method {
         let (name, return_type) = if let Some(colon_pos) = rest.rfind(':') {

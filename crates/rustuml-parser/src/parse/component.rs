@@ -85,6 +85,9 @@ pub fn parse_component(lines: &[String]) -> Result<ComponentDiagram, ParseError>
     // Multiline title accumulation.
     let mut in_title: bool = false;
     let mut title_lines: Vec<String> = Vec::new();
+    // Legend block accumulation.
+    let mut in_legend: bool = false;
+    let mut legend_lines: Vec<String> = Vec::new();
 
     static RE_COMP: LazyLock<Regex> =
         LazyLock::new(|| Regex::new(r#"^component\s+(?:"([^"]+)"\s+as\s+(\w+)|"([^"]+)"|(\w+))(?:\s+[^{]*)?"#).unwrap());
@@ -134,6 +137,18 @@ pub fn parse_component(lines: &[String]) -> Result<ComponentDiagram, ParseError>
             continue;
         }
 
+        // Inside legend block.
+        if in_legend {
+            if trimmed == "endlegend" {
+                meta.legend = Some(legend_lines.join("\n"));
+                legend_lines.clear();
+                in_legend = false;
+            } else {
+                legend_lines.push(trimmed.to_string());
+            }
+            continue;
+        }
+
         // End of multi-line note.
         if in_note {
             if trimmed == "end note" {
@@ -163,14 +178,27 @@ pub fn parse_component(lines: &[String]) -> Result<ComponentDiagram, ParseError>
             title_lines.clear();
             continue;
         }
+        // Parse header directive.
+        if let Some(rest) = trimmed.strip_prefix("header ") {
+            meta.header = Some(rest.trim().to_string());
+            continue;
+        }
+        // Parse footer directive.
+        if let Some(rest) = trimmed.strip_prefix("footer ") {
+            meta.footer = Some(rest.trim().to_string());
+            continue;
+        }
+        // Parse legend block start: `legend`, `legend right`, `legend left`, etc.
+        if trimmed == "legend" || trimmed.starts_with("legend ") {
+            in_legend = true;
+            legend_lines.clear();
+            continue;
+        }
         // Skip skinparam and other decoration lines.
         if trimmed.starts_with("skinparam ")
             || trimmed.starts_with("hide ")
             || trimmed.starts_with("show ")
             || trimmed.starts_with("caption ")
-            || trimmed.starts_with("header ")
-            || trimmed.starts_with("footer ")
-            || trimmed.starts_with("legend")
             || trimmed.starts_with("left footer")
             || trimmed.starts_with("right footer")
             || trimmed.starts_with("center footer")

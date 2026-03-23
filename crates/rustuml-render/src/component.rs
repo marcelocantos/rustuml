@@ -244,6 +244,17 @@ pub fn render(diagram: &ComponentDiagram, theme: &Theme) -> String {
         render_note(note, &positions, &diagram.components, &mut svg, total_w, total_h);
     }
 
+    // Render header/footer/legend from diagram meta.
+    if let Some(header) = &diagram.meta.header {
+        svg.text(total_w / 2.0, SMALL_FONT + 2.0, header, "middle", SMALL_FONT);
+    }
+    if let Some(footer) = &diagram.meta.footer {
+        svg.text(total_w / 2.0, total_h - 4.0, footer, "middle", SMALL_FONT);
+    }
+    if let Some(legend) = &diagram.meta.legend {
+        svg.render_legend(MARGIN, total_h / 2.0, legend, SMALL_FONT);
+    }
+
     svg.finalize()
 }
 

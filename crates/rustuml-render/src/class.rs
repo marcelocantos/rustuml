@@ -40,6 +40,13 @@ pub fn render(diagram: &ClassDiagram, theme: &Theme) -> String {
         if !diagram.notes.is_empty() {
             return render_notes_only(diagram, cs);
         }
+        // Meta-only diagram (header/footer/legend with no content).
+        let has_meta = diagram.meta.header.is_some()
+            || diagram.meta.footer.is_some()
+            || diagram.meta.legend.is_some();
+        if has_meta {
+            return render_meta_only(diagram);
+        }
         return "<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"100\" height=\"50\"></svg>\n"
             .to_string();
     }
@@ -236,6 +243,15 @@ fn render_with_positions(
         .iter()
         .any(|sp| sp.key.to_lowercase() == "handwritten" && sp.value.to_lowercase() == "true");
 
+    // When a monospace font (e.g. Courier) is configured via skinparam, PlantUML
+    // renders class member text using non-breaking spaces (U+00A0) instead of
+    // regular spaces, matching the monospace_text rendering path.
+    const MONOSPACE_FONTS: &[&str] = &["courier", "monospaced", "monospace", "consolas", "lucida console"];
+    let use_monospace_members = diagram.meta.skinparams.iter().any(|sp| {
+        sp.key.to_lowercase() == "defaultfontname"
+            && MONOSPACE_FONTS.contains(&sp.value.to_lowercase().as_str())
+    });
+
     let mut svg = SvgBuilder::new(total_width, total_height);
 
     // Emit warning for `skinparam handwritten true` (not supported; use !option).
@@ -261,7 +277,7 @@ fn render_with_positions(
         svg.text(total_width / 2.0, total_height - 4.0, caption, "middle", SMALL_FONT);
     }
     if let Some(legend) = &diagram.meta.legend {
-        svg.text(total_width / 2.0, total_height - 4.0, legend, "middle", SMALL_FONT);
+        svg.render_legend(total_width - 200.0, total_height - 150.0, legend, SMALL_FONT);
     }
 
     // Render package containers first (behind entities).
@@ -291,7 +307,7 @@ fn render_with_positions(
     // Render each class at its adjusted position.
     for (i, (entity, dim)) in diagram.entities.iter().zip(&class_dims).enumerate() {
         let (x, y, _, _) = entity_positions[i];
-        render_class_box(&mut svg, entity, x, y, dim, cs);
+        render_class_box(&mut svg, entity, x, y, dim, cs, use_monospace_members);
     }
 
     // Render relationships.
@@ -358,6 +374,12 @@ fn render_grid(diagram: &ClassDiagram, cs: &crate::style::ClassStyle) -> String 
     // Calculate dimensions for each class box.
     let class_dims: Vec<ClassDim> = diagram.entities.iter().map(calc_class_dim).collect();
 
+    const MONOSPACE_FONTS: &[&str] = &["courier", "monospaced", "monospace", "consolas", "lucida console"];
+    let use_monospace_members = diagram.meta.skinparams.iter().any(|sp| {
+        sp.key.to_lowercase() == "defaultfontname"
+            && MONOSPACE_FONTS.contains(&sp.value.to_lowercase().as_str())
+    });
+
     // Simple grid layout: arrange classes in rows.
     let cols = (diagram.entities.len() as f64).sqrt().ceil() as usize;
     let col_widths = calc_col_widths(&class_dims, cols);
@@ -381,7 +403,7 @@ fn render_grid(diagram: &ClassDiagram, cs: &crate::style::ClassStyle) -> String 
         svg.text(total_width / 2.0, total_height - 4.0, caption, "middle", SMALL_FONT);
     }
     if let Some(legend) = &diagram.meta.legend {
-        svg.text(total_width / 2.0, total_height - 4.0, legend, "middle", SMALL_FONT);
+        svg.render_legend(total_width - 200.0, total_height - 150.0, legend, SMALL_FONT);
     }
 
     // Position and render each class.
@@ -394,7 +416,7 @@ fn render_grid(diagram: &ClassDiagram, cs: &crate::style::ClassStyle) -> String 
         let x = MARGIN + col_widths[..col].iter().sum::<f64>() + MARGIN * col as f64;
         let y = title_h + MARGIN + row_heights[..row].iter().sum::<f64>() + MARGIN * row as f64;
 
-        render_class_box(&mut svg, entity, x, y, dim, cs);
+        render_class_box(&mut svg, entity, x, y, dim, cs, use_monospace_members);
         positions.push((x, y, dim.width, dim.height));
     }
 
@@ -529,6 +551,7 @@ fn render_class_box(
     y: f64,
     dim: &ClassDim,
     cs: &crate::style::ClassStyle,
+    use_monospace_members: bool,
 ) {
     // Background.
     let fill = match entity.kind {
@@ -581,7 +604,11 @@ fn render_class_box(
             }
         } else {
             let text = format_member(member);
-            svg.text(x + PADDING, cy - 3.0, &text, "start", SMALL_FONT);
+            if use_monospace_members {
+                svg.monospace_text(x + PADDING, cy - 3.0, &text, "start", SMALL_FONT);
+            } else {
+                svg.text(x + PADDING, cy - 3.0, &text, "start", SMALL_FONT);
+            }
         }
     }
 }
@@ -824,6 +851,37 @@ fn render_note_box(svg: &mut SvgBuilder, note: &Note, x: f64, y: f64, w: f64, h:
         svg.text(x + NOTE_PAD_X, ty, &display, "start", FONT_SIZE);
         ty += NOTE_LINE_HEIGHT;
     }
+}
+
+/// Render a diagram that contains only meta content (header/footer/legend), no entities or notes.
+fn render_meta_only(diagram: &ClassDiagram) -> String {
+    let width = 200.0;
+    let mut y = SMALL_FONT + 2.0;
+    let mut lines: Vec<(f64, String)> = Vec::new();
+
+    if let Some(header) = &diagram.meta.header {
+        lines.push((y, header.clone()));
+        y += SMALL_FONT + 6.0;
+    }
+    if let Some(legend) = &diagram.meta.legend {
+        for line in legend.lines() {
+            if !line.trim().is_empty() {
+                lines.push((y, line.to_string()));
+                y += SMALL_FONT + 6.0;
+            }
+        }
+    }
+    if let Some(footer) = &diagram.meta.footer {
+        lines.push((y, footer.clone()));
+        y += SMALL_FONT + 6.0;
+    }
+
+    let height = (y + 4.0).max(30.0);
+    let mut svg = SvgBuilder::new(width, height);
+    for (text_y, text) in &lines {
+        svg.text(width / 2.0, *text_y, text, "middle", SMALL_FONT);
+    }
+    svg.finalize()
 }
 
 /// Render a diagram that contains only floating notes (no entities).

@@ -21,9 +21,45 @@ pub fn to_svg_tspans(text: &str) -> String {
 
     while let Some(c) = chars.next() {
         match c {
+            '~' if chars.peek() == Some(&'~') => {
+                // `~~wavy underline~~` — two tildes as delimiter.
+                chars.next(); // consume second ~
+                let (content, found) = collect_until(&mut chars, "~~");
+                if found {
+                    let inner = to_svg_tspans(&content);
+                    write!(
+                        result,
+                        "<tspan text-decoration=\"wavy underline\">{inner}</tspan>"
+                    )
+                    .unwrap();
+                    last_char = content.chars().last();
+                } else {
+                    result.push('~');
+                    result.push('~');
+                    result.push_str(&content);
+                    last_char = content.chars().last().or(Some('~'));
+                }
+            }
             '~' => {
-                // Tilde escape — next character is literal, not markup.
-                if let Some(next) = chars.next() {
+                // Tilde escape — if the next chars form a recognized multi-character
+                // delimiter, escape the whole delimiter so it is emitted literally.
+                let mut peeked = chars.clone().take(2);
+                let c1 = peeked.next();
+                let c2 = peeked.next();
+                let is_two_char_delim = matches!(
+                    (c1, c2),
+                    (Some('/'), Some('/'))
+                        | (Some('*'), Some('*'))
+                        | (Some('-'), Some('-'))
+                        | (Some('_'), Some('_'))
+                );
+                if is_two_char_delim {
+                    let ch1 = chars.next().unwrap();
+                    let ch2 = chars.next().unwrap();
+                    result.push(ch1);
+                    result.push(ch2);
+                    last_char = Some(ch2);
+                } else if let Some(next) = chars.next() {
                     last_char = Some(next);
                     result.push(next);
                 }
@@ -31,7 +67,7 @@ pub fn to_svg_tspans(text: &str) -> String {
             '"' if chars.peek() == Some(&'"') => {
                 chars.next();
                 // ""monospace"" — collect until closing ""
-                let content = collect_until(&mut chars, "\"\"");
+                let (content, _found) = collect_until(&mut chars, "\"\"");
                 let content = monospace_spaces(&content);
                 write!(result, "<tspan font-family=\"monospace\">{content}</tspan>").unwrap();
                 last_char = content.chars().last();
@@ -46,10 +82,18 @@ pub fn to_svg_tspans(text: &str) -> String {
             '*' if chars.peek() == Some(&'*') => {
                 chars.next();
                 // Find closing **; recursively process nested markup.
-                let content = collect_until(&mut chars, "**");
-                let inner = to_svg_tspans(&content);
-                write!(result, "<tspan font-weight=\"bold\">{inner}</tspan>").unwrap();
-                last_char = content.chars().last();
+                let (content, found) = collect_until(&mut chars, "**");
+                if found {
+                    let inner = to_svg_tspans(&content);
+                    write!(result, "<tspan font-weight=\"bold\">{inner}</tspan>").unwrap();
+                    last_char = content.chars().last();
+                } else {
+                    // No closing ** — emit opener literally and the collected text.
+                    result.push('*');
+                    result.push('*');
+                    result.push_str(&content);
+                    last_char = content.chars().last().or(Some('*'));
+                }
             }
             '/' if chars.peek() == Some(&'/') => {
                 // `//italic//` — but only start italic if preceded by whitespace
@@ -64,26 +108,59 @@ pub fn to_svg_tspans(text: &str) -> String {
                     last_char = Some('/');
                 } else {
                     chars.next();
-                    let content = collect_until(&mut chars, "//");
+                    let (content, found) = collect_until(&mut chars, "//");
+                    if found && !content.is_empty() {
+                        let inner = to_svg_tspans(&content);
+                        write!(result, "<tspan font-style=\"italic\">{inner}</tspan>").unwrap();
+                        last_char = content.chars().last();
+                    } else if found && content.is_empty() {
+                        // Empty italic `////` — treat as literal `////`.
+                        result.push('/');
+                        result.push('/');
+                        result.push('/');
+                        result.push('/');
+                        last_char = Some('/');
+                    } else {
+                        result.push('/');
+                        result.push('/');
+                        result.push_str(&content);
+                        last_char = content.chars().last().or(Some('/'));
+                    }
+                }
+            }
+            '_' if chars.peek() == Some(&'_') => {
+                chars.next(); // consume second underscore
+                let (content, found) = collect_until(&mut chars, "__");
+                if found {
                     let inner = to_svg_tspans(&content);
-                    write!(result, "<tspan font-style=\"italic\">{inner}</tspan>").unwrap();
+                    write!(result, "<tspan text-decoration=\"underline\">{inner}</tspan>").unwrap();
                     last_char = content.chars().last();
+                } else {
+                    result.push('_');
+                    result.push('_');
+                    result.push_str(&content);
+                    last_char = content.chars().last().or(Some('_'));
                 }
             }
             '_' => {
-                // Underscores are left as-is; PlantUML renders __text__ as literal
-                // text in most contexts (class members, notes, etc.).
                 result.push('_');
             }
             '-' if chars.peek() == Some(&'-') => {
                 chars.next();
-                let content = collect_until(&mut chars, "--");
-                let inner = to_svg_tspans(&content);
-                write!(
-                    result,
-                    "<tspan text-decoration=\"line-through\">{inner}</tspan>"
-                )
-                .unwrap();
+                let (content, found) = collect_until(&mut chars, "--");
+                if found {
+                    let inner = to_svg_tspans(&content);
+                    write!(
+                        result,
+                        "<tspan text-decoration=\"line-through\">{inner}</tspan>"
+                    )
+                    .unwrap();
+                } else {
+                    result.push('-');
+                    result.push('-');
+                    result.push_str(&content);
+                    last_char = content.chars().last().or(Some('-'));
+                }
             }
             '<' => {
                 // HTML-style tags.
@@ -117,8 +194,9 @@ pub fn to_svg_tspans(text: &str) -> String {
                         )
                         .unwrap();
                     }
-                    "mono" => {
-                        let content = collect_until_tag(&mut chars, "</mono>");
+                    "mono" | "code" => {
+                        let close = if tag == "code" { "</code>" } else { "</mono>" };
+                        let content = collect_until_tag(&mut chars, close);
                         let inner = monospace_spaces(&to_svg_tspans(&content));
                         write!(result, "<tspan font-family=\"monospace\">{inner}</tspan>").unwrap();
                     }
@@ -218,6 +296,17 @@ pub fn to_svg_tspans(text: &str) -> String {
                         let inner = to_svg_tspans(&content);
                         result.push_str(&inner);
                     }
+                    _ if tag.starts_with("img:") => {
+                        // <img:url> or <img:file> — render fallback text since we can't
+                        // embed images in SVG tspan content.
+                        let src = &tag["img:".len()..];
+                        if src.starts_with("https://") || src.starts_with("http://") {
+                            let escaped = escape_creole_text(src);
+                            write!(result, "(Cannot decode: {escaped})").unwrap();
+                        } else {
+                            result.push_str("(Cannot decode)");
+                        }
+                    }
                     _ if tag.starts_with('/') => {
                         // Unknown closing tag — emit escaped so text isn't silently dropped.
                         let escaped_tag = escape_creole_text(&tag);
@@ -229,6 +318,46 @@ pub fn to_svg_tspans(text: &str) -> String {
                         write!(result, "&lt;{escaped_tag}&gt;").unwrap();
                     }
                 }
+            }
+            '[' if chars.peek() == Some(&'[') => {
+                // [[URL]] or [[URL label]] or [[URL|label]] — hyperlink.
+                chars.next(); // consume second '['
+                // Collect until closing ']]'.
+                let mut inner = String::new();
+                loop {
+                    match chars.next() {
+                        Some(']') if chars.peek() == Some(&']') => {
+                            chars.next(); // consume second ']'
+                            break;
+                        }
+                        Some(ch) => inner.push(ch),
+                        None => break,
+                    }
+                }
+                // Strip tooltip `{...}` if present (e.g. `URL{tooltip} label`).
+                let inner = if let Some(brace) = inner.find('{') {
+                    if let Some(end) = inner.find('}') {
+                        format!("{}{}", &inner[..brace], &inner[end + 1..])
+                    } else {
+                        inner
+                    }
+                } else {
+                    inner
+                };
+                // Parse: "URL label" or "URL|label" or "URL|label|tooltip"
+                let (url, label) = if let Some(pos) = inner.find('|') {
+                    (inner[..pos].trim().to_string(), inner[pos + 1..].split('|').next().unwrap_or("").trim().to_string())
+                } else if let Some(pos) = inner.find(' ') {
+                    (inner[..pos].to_string(), inner[pos + 1..].trim().to_string())
+                } else {
+                    (inner.clone(), inner.clone())
+                };
+                let display = if label.is_empty() { &url } else { &label };
+                let escaped_url = escape_creole_text(&url);
+                let escaped_label = escape_creole_text(display);
+                write!(result, "<tspan fill=\"#0000FF\" text-decoration=\"underline\">{escaped_label}</tspan>").unwrap();
+                let _ = escaped_url; // URL is not embedded in tspan SVG but recorded for accessibility
+                last_char = display.chars().last();
             }
             _ => {
                 last_char = Some(c);
@@ -254,19 +383,27 @@ fn escape_creole_text(s: &str) -> String {
         .replace('"', "&quot;")
 }
 
-fn collect_until(chars: &mut std::iter::Peekable<std::str::Chars>, delimiter: &str) -> String {
+/// Collect characters until a two-character delimiter is found.
+///
+/// Returns `(content, found)` where `found` is true iff the closing delimiter
+/// was located.  If `found` is false, the caller should treat the opener as
+/// literal text (otherwise unmatched markup would silently swallow content).
+fn collect_until(
+    chars: &mut std::iter::Peekable<std::str::Chars>,
+    delimiter: &str,
+) -> (String, bool) {
     let mut buf = String::new();
     let delim_chars: Vec<char> = delimiter.chars().collect();
     while let Some(&c) = chars.peek() {
         if buf.ends_with(delim_chars[0]) && c == delim_chars[1] {
             chars.next();
             buf.pop(); // Remove the first char of delimiter.
-            return buf;
+            return (buf, true);
         }
         buf.push(c);
         chars.next();
     }
-    buf
+    (buf, false)
 }
 
 fn collect_until_char(chars: &mut std::iter::Peekable<std::str::Chars>, end: char) -> String {
@@ -278,6 +415,60 @@ fn collect_until_char(chars: &mut std::iter::Peekable<std::str::Chars>, end: cha
         buf.push(c);
     }
     buf
+}
+
+/// Per-level counters for numbered lists.  Reset when a non-list line is encountered.
+#[derive(Default)]
+pub struct ListCounters {
+    counters: Vec<usize>,
+}
+
+impl ListCounters {
+    pub fn new() -> Self {
+        Self::default()
+    }
+
+    /// Render a single line, handling `#` (numbered) and `*` (bullet) list prefixes.
+    ///
+    /// The counter state is updated in place so successive `#` lines on the same
+    /// nesting level produce sequential numbers.  A non-list line resets all counters.
+    pub fn render_line(&mut self, line: &str) -> String {
+        // Count leading '#' for numbered lists.
+        let hash_level = line.chars().take_while(|&c| c == '#').count();
+        if hash_level > 0 {
+            let content = line[hash_level..].trim_start();
+            // Grow counter vec to accommodate this level; deeper levels reset.
+            if self.counters.len() > hash_level {
+                self.counters.truncate(hash_level);
+            }
+            while self.counters.len() < hash_level {
+                self.counters.push(0);
+            }
+            self.counters[hash_level - 1] += 1;
+            let n = self.counters[hash_level - 1];
+            let indent = "  ".repeat(hash_level - 1);
+            let inner = to_svg_tspans(content);
+            return format!("{indent}{n}. {inner}");
+        }
+
+        // Count leading '*' for bullet lists (but not '**' which is bold markup).
+        let star_level = line
+            .chars()
+            .take_while(|&c| c == '*')
+            .count();
+        let next_after_stars = line[star_level..].chars().next();
+        if star_level > 0 && next_after_stars != Some('*') {
+            let content = line[star_level..].trim_start();
+            let indent = "  ".repeat(star_level - 1);
+            let inner = to_svg_tspans(content);
+            self.counters.clear();
+            return format!("{indent}\u{2022} {inner}");
+        }
+
+        // Not a list line — reset counters and process as inline markup.
+        self.counters.clear();
+        to_svg_tspans(line)
+    }
 }
 
 fn collect_until_tag(chars: &mut std::iter::Peekable<std::str::Chars>, tag: &str) -> String {
@@ -314,9 +505,10 @@ mod tests {
 
     #[test]
     fn underline() {
-        // Underscores are left as literal text; PlantUML renders __text__ literally
-        // in class members, notes, and other contexts.
-        assert_eq!(to_svg_tspans("__underline__"), "__underline__");
+        assert_eq!(
+            to_svg_tspans("__underline__"),
+            r#"<tspan text-decoration="underline">underline</tspan>"#
+        );
     }
 
     #[test]
@@ -346,5 +538,80 @@ mod tests {
     #[test]
     fn plain_text_unchanged() {
         assert_eq!(to_svg_tspans("hello world"), "hello world");
+    }
+
+    #[test]
+    fn tilde_escapes_double_slash() {
+        // ~/not italic/ — the `~` should escape `//` as a whole so italic is not triggered.
+        assert_eq!(to_svg_tspans("~/not italic/"), "/not italic/");
+    }
+
+    #[test]
+    fn tilde_escapes_double_star() {
+        assert_eq!(to_svg_tspans("~**not bold**"), "**not bold**");
+    }
+
+    #[test]
+    fn tilde_escapes_double_dash() {
+        assert_eq!(to_svg_tspans("~--not strike--"), "--not strike--");
+    }
+
+    #[test]
+    fn tilde_single_char() {
+        // ~ before a single non-delimiter char just escapes that char.
+        assert_eq!(to_svg_tspans("~x"), "x");
+    }
+
+    #[test]
+    fn img_url_fallback() {
+        assert_eq!(
+            to_svg_tspans("<img:https://example.com/img.png>"),
+            "(Cannot decode: https://example.com/img.png)"
+        );
+    }
+
+    #[test]
+    fn img_local_fallback() {
+        assert_eq!(to_svg_tspans("<img:localfile.png>"), "(Cannot decode)");
+    }
+
+    #[test]
+    fn monospace_double_quote() {
+        assert_eq!(
+            to_svg_tspans("\"\"mono legend text\"\""),
+            "<tspan font-family=\"monospace\">mono\u{00a0}legend\u{00a0}text</tspan>"
+        );
+    }
+
+    #[test]
+    fn numbered_list_basic() {
+        let mut lc = ListCounters::new();
+        assert_eq!(lc.render_line("# First"), "1. First");
+        assert_eq!(lc.render_line("# Second"), "2. Second");
+        assert_eq!(lc.render_line("# Third"), "3. Third");
+    }
+
+    #[test]
+    fn numbered_list_nested() {
+        let mut lc = ListCounters::new();
+        assert_eq!(lc.render_line("# Item"), "1. Item");
+        assert_eq!(lc.render_line("## Sub"), "  1. Sub");
+        assert_eq!(lc.render_line("## Sub2"), "  2. Sub2");
+        assert_eq!(lc.render_line("# Item2"), "2. Item2");
+    }
+
+    #[test]
+    fn numbered_list_resets_on_plain() {
+        let mut lc = ListCounters::new();
+        assert_eq!(lc.render_line("# First"), "1. First");
+        assert_eq!(lc.render_line("plain"), "plain");
+        assert_eq!(lc.render_line("# Restart"), "1. Restart");
+    }
+
+    #[test]
+    fn bullet_list() {
+        let mut lc = ListCounters::new();
+        assert_eq!(lc.render_line("* item"), "\u{2022} item");
+        assert_eq!(lc.render_line("** nested"), "  \u{2022} nested");
     }
 }

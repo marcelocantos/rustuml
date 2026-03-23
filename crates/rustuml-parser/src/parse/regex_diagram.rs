@@ -289,8 +289,13 @@ impl Parser {
             Some('n') => RegexNode::Special { text: "\\n".to_string() },
             Some('t') => RegexNode::Special { text: "\\t".to_string() },
             Some('r') => RegexNode::Special { text: "\\r".to_string() },
+            Some(c) if matches!(c, '+' | '*' | '?' | '.' | '^' | '$' | '|') => {
+                // Escaped quantifier/operator: \+  \*  \.  etc. → render as Special
+                // to show the backslash and distinguish from the bare operator.
+                RegexNode::Special { text: format!("\\{c}") }
+            }
             Some(c) => {
-                // Escaped literal: \.  \-  \+  etc. → render as literal
+                // Escaped structural char: \(  \)  \[  \]  etc. → render as literal
                 RegexNode::Literal { text: c.to_string() }
             }
             None => RegexNode::Literal { text: "\\".to_string() },

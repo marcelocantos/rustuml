@@ -28,7 +28,7 @@ use crate::diagram::mindmap::{MindMapDiagram, MindMapNode, Side};
 /// `@startmindmap`/`@endmindmap` delimiters and expanding any TIM
 /// directives).  Lines that are empty after trimming are skipped.
 pub fn parse_mindmap(lines: &[String]) -> Result<MindMapDiagram, ParseError> {
-    let meta = DiagramMeta::default();
+    let mut meta = DiagramMeta::default();
     let mut roots: Vec<MindMapNode> = Vec::new();
 
     // `stack` always contains a path from the conceptual "root container"
@@ -53,11 +53,22 @@ pub fn parse_mindmap(lines: &[String]) -> Result<MindMapDiagram, ParseError> {
             continue;
         }
 
+        // Handle title directive.
+        if let Some(rest) = trimmed.strip_prefix("title ") {
+            meta.title = Some(rest.trim().to_string());
+            continue;
+        }
+        if trimmed == "title" {
+            // bare `title` with no text — skip
+            continue;
+        }
+
         // Determine prefix character and side.
-        // `*` → right side; `-` → left side.
+        // `*` → right side; `#` → right side (markdown heading style); `-` → left side.
         let first = trimmed.chars().next().unwrap();
         let (bullet, side) = match first {
             '*' => ('*', Side::Right),
+            '#' => ('#', Side::Right),
             '-' => ('-', Side::Left),
             _ => continue, // Not a node line — skip (skinparam, comment, etc.)
         };
