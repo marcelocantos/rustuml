@@ -21,7 +21,7 @@ pub fn parse_deployment(lines: &[String]) -> Result<DeploymentDiagram, ParseErro
 
     static RE_NODE: LazyLock<Regex> = LazyLock::new(|| {
         Regex::new(
-            r#"^(node|artifact|cloud|database|storage|frame|folder|actor|queue|component|rectangle)\s+(?:"([^"]+)"\s+as\s+)?(\w+)(?:\s+<<([^>]+)>>)?(?:\s+#\w+)?(?:\s*\{)?"#,
+            r#"^(node|artifact|cloud|database|storage|frame|folder|actor|queue|component|rectangle|agent|boundary|card|collections|control|entity|file|package|stack)\s+(?:"([^"]+)"\s+as\s+)?(\w+)(?:\s+<<([^>]+)>>)?(?:\s+#\w+)?(?:\s*\{)?"#,
         )
         .unwrap()
     });
@@ -52,6 +52,15 @@ pub fn parse_deployment(lines: &[String]) -> Result<DeploymentDiagram, ParseErro
                 "queue" => DeploymentNodeKind::Queue,
                 "component" => DeploymentNodeKind::Component,
                 "rectangle" => DeploymentNodeKind::Rectangle,
+                "agent" => DeploymentNodeKind::Agent,
+                "boundary" => DeploymentNodeKind::Boundary,
+                "card" => DeploymentNodeKind::Card,
+                "collections" => DeploymentNodeKind::Collections,
+                "control" => DeploymentNodeKind::Control,
+                "entity" => DeploymentNodeKind::Entity,
+                "file" => DeploymentNodeKind::File,
+                "package" => DeploymentNodeKind::Package,
+                "stack" => DeploymentNodeKind::Stack,
                 _ => DeploymentNodeKind::Node,
             };
             let label = caps

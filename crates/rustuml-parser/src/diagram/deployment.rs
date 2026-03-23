@@ -37,6 +37,15 @@ pub enum DeploymentNodeKind {
     Queue,
     Component,
     Rectangle,
+    Agent,
+    Boundary,
+    Card,
+    Collections,
+    Control,
+    Entity,
+    File,
+    Package,
+    Stack,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
