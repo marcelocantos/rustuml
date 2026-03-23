@@ -329,6 +329,27 @@ pub fn render(diagram: &TimingDiagram, _theme: &Theme) -> String {
         }
     }
 
+    // ── Notes ─────────────────────────────────────────────────────────────────
+    for note in &diagram.notes {
+        // Find the row index of the target timeline.
+        let Some(row_idx) = diagram
+            .timelines
+            .iter()
+            .position(|t| t.id == note.timeline_id)
+        else {
+            continue;
+        };
+        let row_top = axis_top_y + row_idx as f64 * (ROW_HEIGHT + ROW_GAP);
+        let x = time_to_x(note.at);
+        // Place the note text just above or below the row.
+        let note_y = if note.above {
+            row_top - 4.0
+        } else {
+            row_top + ROW_HEIGHT + FONT_STATE + 2.0
+        };
+        svg.text(x, note_y, &note.text, "start", FONT_STATE);
+    }
+
     // ── Footer ────────────────────────────────────────────────────────────────
     if let Some(footer) = &diagram.meta.footer {
         let footer_y = total_height - 4.0;
@@ -390,6 +411,7 @@ mod tests {
             highlights: vec![],
             annotations: vec![],
             scale: None,
+            notes: vec![],
         }
     }
 
@@ -432,6 +454,7 @@ mod tests {
             highlights: vec![],
             annotations: vec![],
             scale: None,
+            notes: vec![],
         };
         let svg = render(&d, &Theme::default());
         assert!(svg.starts_with("<svg"));
@@ -464,6 +487,7 @@ mod tests {
             highlights: vec![],
             annotations: vec![],
             scale: None,
+            notes: vec![],
         };
         let svg = render(&d, &Theme::default());
         assert!(svg.contains("CLK"), "binary label CLK missing");
@@ -500,6 +524,7 @@ mod tests {
                 label: "propagation 0ms".into(),
             }],
             scale: None,
+            notes: vec![],
         };
         let svg = render(&d, &Theme::default());
         assert!(svg.contains("propagation 0ms"));
@@ -537,6 +562,7 @@ mod tests {
             }],
             annotations: vec![],
             scale: None,
+            notes: vec![],
         };
         let svg = render(&d, &Theme::default());
         assert!(svg.contains("critical section"));
@@ -561,6 +587,7 @@ mod tests {
             highlights: vec![],
             annotations: vec![],
             scale: None,
+            notes: vec![],
         };
         let svg = render(&d, &Theme::default());
         assert!(svg.contains("My Timing"));
@@ -595,6 +622,7 @@ mod tests {
             highlights: vec![],
             annotations: vec![],
             scale: None,
+            notes: vec![],
         };
         let svg = render(&d, &Theme::default());
         assert!(svg.contains("waiting"), "last state 'waiting' missing from SVG");

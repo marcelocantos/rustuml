@@ -47,8 +47,39 @@ pub fn parse_mindmap(lines: &[String]) -> Result<MindMapDiagram, ParseError> {
     let mut right_stack: Vec<usize> = Vec::new(); // depths of right-side ancestors
     let mut left_stack: Vec<usize> = Vec::new(); // depths of left-side ancestors
 
+    // Multiline node accumulation: `**:first line\nsecond line;`
+    // When we see `**:text` without a closing `;` on the same line, we
+    // accumulate subsequent lines until a line ending with `;` is found.
+    let mut multiline_buf: Option<(usize, usize, Side, String)> = None; // (line_no, depth, side, text)
+
     for (line_no, line) in lines.iter().enumerate() {
         let trimmed = line.trim();
+
+        // If we are accumulating a multiline node, keep collecting until `;`.
+        if let Some((start_no, depth, side, ref mut buf)) = multiline_buf {
+            if trimmed.ends_with(';') {
+                // Last line of multiline node (strip trailing `;`).
+                let last = trimmed.trim_end_matches(';').trim_end();
+                if !last.is_empty() {
+                    if !buf.is_empty() {
+                        buf.push('\n');
+                    }
+                    buf.push_str(last);
+                }
+                let label = buf.replace('\n', " ");
+                let node = MindMapNode { label, depth, side, children: Vec::new() };
+                let (depth, side) = (depth, side);
+                multiline_buf = None;
+                insert_node(node, depth, side, &mut roots, &mut right_stack, &mut left_stack, start_no)?;
+            } else {
+                if !buf.is_empty() {
+                    buf.push('\n');
+                }
+                buf.push_str(trimmed);
+            }
+            continue;
+        }
+
         if trimmed.is_empty() {
             continue;
         }
@@ -74,7 +105,32 @@ pub fn parse_mindmap(lines: &[String]) -> Result<MindMapDiagram, ParseError> {
         };
 
         let count = trimmed.chars().take_while(|&c| c == bullet).count();
-        let label = trimmed[count..].trim().to_string();
+        let rest = trimmed[count..].trim();
+
+        // Detect multiline block syntax: `**:first line` (no closing `;` yet).
+        if let Some(after_colon) = rest.strip_prefix(':') {
+            let depth = count;
+            if after_colon.ends_with(';') {
+                // Single-line block: `**:label;`
+                let label = after_colon.trim_end_matches(';').trim().to_string();
+                let label = if label.is_empty() {
+                    return Err(ParseError {
+                        line: line_no + 1,
+                        message: "mind map node has no label".to_string(),
+                    });
+                } else {
+                    label
+                };
+                let node = MindMapNode { label, depth, side, children: Vec::new() };
+                insert_node(node, depth, side, &mut roots, &mut right_stack, &mut left_stack, line_no)?;
+            } else {
+                // Start of multiline block — accumulate until `;`.
+                multiline_buf = Some((line_no, depth, side, after_colon.trim().to_string()));
+            }
+            continue;
+        }
+
+        let label = rest.to_string();
         if label.is_empty() {
             return Err(ParseError {
                 line: line_no + 1,
@@ -83,77 +139,82 @@ pub fn parse_mindmap(lines: &[String]) -> Result<MindMapDiagram, ParseError> {
         }
 
         let depth = count;
-        let node = MindMapNode {
-            label,
-            depth,
-            side,
-            children: Vec::new(),
-        };
-
-        let depth_stack = if side == Side::Right {
-            &mut right_stack
-        } else {
-            &mut left_stack
-        };
-
-        if depth == 1 {
-            // Root-level node (only `*` can be depth-1; `-` starts at depth 2).
-            roots.push(node);
-            depth_stack.clear();
-            depth_stack.push(1);
-        } else {
-            // For left-side nodes, depth-2 nodes (``--``) attach to the most
-            // recent depth-1 root just like right-side depth-2 nodes.
-            // Ensure the stack references a valid root.
-            if depth_stack.is_empty() {
-                if roots.is_empty() {
-                    return Err(ParseError {
-                        line: line_no + 1,
-                        message: format!(
-                            "depth-{depth} node has no parent (no preceding root node)"
-                        ),
-                    });
-                }
-                // Implicitly attach to the most recent root.
-                depth_stack.push(1);
-            }
-
-            // Find the deepest ancestor whose depth is < current depth.
-            // Pop the stack until we find it.
-            while depth_stack.len() > 1 && *depth_stack.last().unwrap() >= depth {
-                depth_stack.pop();
-            }
-
-            let parent_depth = *depth_stack.last().ok_or_else(|| ParseError {
-                line: line_no + 1,
-                message: format!(
-                    "depth-{depth} node has no parent (no preceding depth-{} node)",
-                    depth - 1
-                ),
-            })?;
-
-            if parent_depth != depth - 1 {
-                return Err(ParseError {
-                    line: line_no + 1,
-                    message: format!("unexpected depth jump from {} to {}", parent_depth, depth),
-                });
-            }
-
-            // Navigate to the correct parent in the tree.
-            // Left-side nodes also attach under the most recent root, but we
-            // search through `left_children` subtrees for depths > 2.
-            let parent = find_deepest_at(&mut roots, depth_stack, side).ok_or_else(|| {
-                ParseError {
-                    line: line_no + 1,
-                    message: "internal error: could not locate parent node".to_string(),
-                }
-            })?;
-            parent.children.push(node);
-            depth_stack.push(depth);
-        }
+        let node = MindMapNode { label, depth, side, children: Vec::new() };
+        insert_node(node, depth, side, &mut roots, &mut right_stack, &mut left_stack, line_no)?;
     }
 
     Ok(MindMapDiagram { meta, roots })
+}
+
+/// Insert a parsed `MindMapNode` into the tree, updating the appropriate
+/// depth stack.
+fn insert_node(
+    node: MindMapNode,
+    depth: usize,
+    side: Side,
+    roots: &mut Vec<MindMapNode>,
+    right_stack: &mut Vec<usize>,
+    left_stack: &mut Vec<usize>,
+    line_no: usize,
+) -> Result<(), ParseError> {
+    let depth_stack = if side == Side::Right {
+        right_stack
+    } else {
+        left_stack
+    };
+
+    if depth == 1 {
+        // Root-level node (only `*` can be depth-1; `-` starts at depth 2).
+        roots.push(node);
+        depth_stack.clear();
+        depth_stack.push(1);
+    } else {
+        // For left-side nodes, depth-2 nodes (`--`) attach to the most
+        // recent depth-1 root just like right-side depth-2 nodes.
+        // Ensure the stack references a valid root.
+        if depth_stack.is_empty() {
+            if roots.is_empty() {
+                return Err(ParseError {
+                    line: line_no + 1,
+                    message: format!(
+                        "depth-{depth} node has no parent (no preceding root node)"
+                    ),
+                });
+            }
+            // Implicitly attach to the most recent root.
+            depth_stack.push(1);
+        }
+
+        // Find the deepest ancestor whose depth is < current depth.
+        // Pop the stack until we find it.
+        while depth_stack.len() > 1 && *depth_stack.last().unwrap() >= depth {
+            depth_stack.pop();
+        }
+
+        let parent_depth = *depth_stack.last().ok_or_else(|| ParseError {
+            line: line_no + 1,
+            message: format!(
+                "depth-{depth} node has no parent (no preceding depth-{} node)",
+                depth - 1
+            ),
+        })?;
+
+        if parent_depth != depth - 1 {
+            return Err(ParseError {
+                line: line_no + 1,
+                message: format!("unexpected depth jump from {} to {}", parent_depth, depth),
+            });
+        }
+
+        // Navigate to the correct parent in the tree.
+        let parent = find_deepest_at(roots, depth_stack, side).ok_or_else(|| ParseError {
+            line: line_no + 1,
+            message: "internal error: could not locate parent node".to_string(),
+        })?;
+        parent.children.push(node);
+        depth_stack.push(depth);
+    }
+    Ok(())
 }
 
 /// Navigate to the parent node for the next insertion.

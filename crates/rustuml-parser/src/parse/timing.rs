@@ -44,6 +44,8 @@ struct TimingParser {
     scale: Option<Scale>,
     /// Clock timelines: (timeline_id, period). Used to auto-generate time points.
     clock_periods: Vec<(String, i64)>,
+    /// Notes attached to timelines.
+    notes: Vec<TimingNote>,
 }
 
 impl TimingParser {
@@ -57,6 +59,7 @@ impl TimingParser {
             annotations: Vec::new(),
             scale: None,
             clock_periods: Vec::new(),
+            notes: Vec::new(),
         }
     }
 
@@ -91,6 +94,7 @@ impl TimingParser {
             highlights: self.highlights,
             annotations: self.annotations,
             scale: self.scale,
+            notes: self.notes,
         }
     }
 
@@ -118,6 +122,9 @@ impl TimingParser {
             return Ok(());
         }
         if self.try_scale(line) {
+            return Ok(());
+        }
+        if self.try_note(line) {
             return Ok(());
         }
 
@@ -309,6 +316,27 @@ impl TimingParser {
             return true;
         }
         false
+    }
+
+    /// Try `note top of X : text` or `note bottom of X : text`.
+    fn try_note(&mut self, line: &str) -> bool {
+        static RE: LazyLock<Regex> = LazyLock::new(|| {
+            Regex::new(r"^note\s+(top|bottom)\s+of\s+(\w+)\s*:\s*(.+)$").unwrap()
+        });
+        if let Some(caps) = RE.captures(line) {
+            let above = &caps[1] == "top";
+            let timeline_id = caps[2].to_string();
+            let text = caps[3].trim().to_string();
+            self.notes.push(TimingNote {
+                timeline_id,
+                at: self.current_time,
+                text,
+                above,
+            });
+            return true;
+        }
+        // Consume bare `note` lines silently.
+        line.starts_with("note ")
     }
 
     /// Try `scale N as M pixels` or `scale N`.

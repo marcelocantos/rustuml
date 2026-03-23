@@ -141,6 +141,12 @@ fn parse_endpoint(s: &str) -> Option<(&str, &str)> {
     }
 }
 
+/// Process a raw label (from a quoted string) and convert `\n` escape sequences
+/// to actual newlines, as PlantUML does for quoted element labels.
+fn process_label(raw: &str) -> String {
+    raw.replace("\\n", "\n")
+}
+
 /// Try to parse a connection from a trimmed line.
 /// Handles:
 ///   - `from_id --> to_id : label`
@@ -515,7 +521,8 @@ pub fn parse_deployment(lines: &[String]) -> Result<DeploymentDiagram, ParseErro
             if let Some(caps) = RE_NODE_QUOTED.captures(trimmed) {
                 let keyword = &caps[1];
                 if keyword_set.contains(keyword) {
-                    let label = caps[2].to_string();
+                    // Process `\n` escape sequences in quoted labels.
+                    let label = process_label(&caps[2]);
                     let id = caps
                         .get(3)
                         .map(|m| m.as_str().to_string())

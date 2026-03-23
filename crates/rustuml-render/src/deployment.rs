@@ -34,7 +34,12 @@ fn node_fill(kind: DeploymentNodeKind) -> &'static str {
 }
 
 fn node_label_w(node: &DeploymentNode) -> f64 {
-    let lw = metrics::text_width(&node.label, FONT_SIZE) + PADDING * 2.0;
+    // For multi-line labels, use the longest line's width.
+    let lw = node
+        .label
+        .split('\n')
+        .map(|line| metrics::text_width(line, FONT_SIZE) + PADDING * 2.0)
+        .fold(0.0_f64, f64::max);
     let sw = node
         .stereotype
         .as_deref()
@@ -68,29 +73,21 @@ fn node_size(id: &str, nodes: &[DeploymentNode]) -> (f64, f64) {
 }
 
 fn render_leaf_label(node: &DeploymentNode, svg: &mut SvgBuilder, x: f64, y: f64, w: f64) {
+    let lines: Vec<&str> = node.label.split('\n').collect();
+    let line_h = FONT_SIZE + 2.0;
+    let total_text_h = lines.len() as f64 * line_h;
+    let cx = x + w / 2.0;
     if let Some(stereo) = &node.stereotype {
-        svg.text(
-            x + w / 2.0,
-            y + NODE_H / 2.0 - 4.0,
-            &format!("«{stereo}»"),
-            "middle",
-            SMALL_FONT,
-        );
-        svg.text(
-            x + w / 2.0,
-            y + NODE_H / 2.0 + 10.0,
-            &node.label,
-            "middle",
-            FONT_SIZE,
-        );
+        svg.text(cx, y + NODE_H / 2.0 - 4.0, &format!("«{stereo}»"), "middle", SMALL_FONT);
+        let text_start_y = y + NODE_H / 2.0 + 6.0 - total_text_h / 2.0;
+        for (i, line) in lines.iter().enumerate() {
+            svg.text(cx, text_start_y + i as f64 * line_h, line, "middle", FONT_SIZE);
+        }
     } else {
-        svg.text(
-            x + w / 2.0,
-            y + NODE_H / 2.0 + 5.0,
-            &node.label,
-            "middle",
-            FONT_SIZE,
-        );
+        let text_start_y = y + NODE_H / 2.0 + FONT_SIZE / 2.0 - total_text_h / 2.0 + 3.0;
+        for (i, line) in lines.iter().enumerate() {
+            svg.text(cx, text_start_y + i as f64 * line_h, line, "middle", FONT_SIZE);
+        }
     }
 }
 

@@ -768,6 +768,34 @@ impl ClassParser {
             return true;
         }
 
+        // `note : text` — Java PlantUML treats bare `note` as an entity named
+        // "note" with an inline member `: text`.  Create or update that entity.
+        if let Some(text) = line.strip_prefix("note :").map(|s| s.trim()) {
+            if !text.is_empty() {
+                let member = Member {
+                    name: text.to_string(),
+                    return_type: None,
+                    visibility: Visibility::Default,
+                    is_static: false,
+                    is_abstract: false,
+                    kind: MemberKind::Field,
+                    display_text: text.to_string(),
+                };
+                if let Some(ent) = self.entities.iter_mut().find(|e| e.id == "note") {
+                    ent.members.push(member);
+                } else {
+                    self.entities.push(ClassEntity {
+                        id: "note".to_string(),
+                        label: "note".to_string(),
+                        kind: EntityKind::Class,
+                        members: vec![member],
+                        stereotypes: Vec::new(),
+                    });
+                }
+            }
+            return true;
+        }
+
         // Bare `note` prefix — consume to avoid falling through to unknown.
         if line.starts_with("note ") {
             return true;

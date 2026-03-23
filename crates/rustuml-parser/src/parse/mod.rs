@@ -136,10 +136,17 @@ fn detect_uml_subtype(lines: &[String]) -> UmlSubtype {
             scores[4] += 5;
         }
         // Activity (v1 legacy syntax): `(*)`, `===NAME===`, or `if "cond" then`.
+        // Note: `===NAME===` must have non-`=` content between the delimiters.
+        // A line like `====` starts AND ends with `===` but has no name — it is
+        // a sequence-diagram divider, not a legacy activity sync-bar.
+        let is_legacy_syncbar = trimmed.starts_with("===")
+            && trimmed.ends_with("===")
+            && trimmed.len() > 6
+            && trimmed[3..trimmed.len() - 3].contains(|c: char| c != '=');
         if trimmed == "(*)"
             || trimmed.starts_with("(*) ")
             || trimmed.ends_with(" (*)")
-            || (trimmed.starts_with("===") && trimmed.ends_with("==="))
+            || is_legacy_syncbar
             || (trimmed.starts_with("if \"") && trimmed.contains("\" then"))
         {
             scores[4] += 10;
@@ -332,9 +339,14 @@ fn detect_uml_subtype(lines: &[String]) -> UmlSubtype {
         {
             scores[8] += 10;
         }
-        // Standalone floating notes (`note as X`) are a class diagram feature in
-        // Java PlantUML and produce CLASS-type SVG output.
-        if trimmed.starts_with("note as ") {
+        // Standalone floating notes (`note as X` or `note "text" as X`) are a
+        // class diagram feature in Java PlantUML and produce CLASS-type SVG output.
+        if trimmed.starts_with("note as ") || trimmed.starts_with("note \"") {
+            scores[1] += 10;
+        }
+        // `note : text` (bare `note` as entity with inline member content) is
+        // Java PlantUML class-diagram syntax — score it for class.
+        if trimmed == "note :" || trimmed.starts_with("note : ") {
             scores[1] += 10;
         }
         // `legend`, `header`/`endheader`, `footer`/`endfooter` — these are

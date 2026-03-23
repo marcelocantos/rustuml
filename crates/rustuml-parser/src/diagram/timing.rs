@@ -21,6 +21,22 @@ pub struct TimingDiagram {
     /// Scale: N time units equals M pixels (from `scale N as M pixels`).
     /// When set, the axis shows a tick every N units across the full span.
     pub scale: Option<Scale>,
+    /// Notes (`note top/bottom of X : text`).
+    #[serde(default)]
+    pub notes: Vec<TimingNote>,
+}
+
+/// A note attached to a timeline at a specific time.
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct TimingNote {
+    /// Timeline ID the note is attached to.
+    pub timeline_id: String,
+    /// Absolute time at which the note appears.
+    pub at: i64,
+    /// Note text.
+    pub text: String,
+    /// Whether the note appears above (`top`) or below (`bottom`) the timeline.
+    pub above: bool,
 }
 
 /// One named timeline (participant) in a timing diagram.
