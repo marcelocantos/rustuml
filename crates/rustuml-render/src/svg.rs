@@ -89,6 +89,16 @@ impl SvgBuilder {
         }
     }
 
+    /// Emit a plain text element without any creole/HTML markup processing.
+    /// Use this for contexts where the text must be rendered literally (e.g.
+    /// class member names, which PlantUML never applies creole markup to).
+    pub fn plain_text(&mut self, x: f64, y: f64, content: &str, anchor: &str, font_size: f64) {
+        let escaped = escape_xml(content);
+        self.line(&format!(
+            r#"<text x="{x}" y="{y}" text-anchor="{anchor}" font-family="sans-serif" font-size="{font_size}">{escaped}</text>"#
+        ));
+    }
+
     /// Emit a monospace text element. Spaces in `content` are replaced with
     /// non-breaking spaces (U+00A0) to match PlantUML's SVG output.
     pub fn monospace_text(&mut self, x: f64, y: f64, content: &str, anchor: &str, font_size: f64) {

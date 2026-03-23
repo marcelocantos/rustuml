@@ -32,6 +32,11 @@ const PACKAGE_PAD: f64 = 12.0;
 const TITLE_FONT_SIZE: f64 = 14.0;
 const TITLE_HEIGHT: f64 = TITLE_FONT_SIZE + 10.0;
 
+/// Font names that PlantUML treats as monospace. When one of these is set via
+/// `skinparam defaultFontName`, spaces in member text are rendered as non-breaking
+/// spaces (U+00A0) to match Java PlantUML's SVG output.
+const MONOSPACE_FONTS: &[&str] = &["courier", "monospaced", "monospace", "consolas", "lucida console"];
+
 /// Render a class diagram to SVG.
 pub fn render(diagram: &ClassDiagram, theme: &Theme) -> String {
     let cs = &theme.class;
@@ -246,7 +251,6 @@ fn render_with_positions(
     // When a monospace font (e.g. Courier) is configured via skinparam, PlantUML
     // renders class member text using non-breaking spaces (U+00A0) instead of
     // regular spaces, matching the monospace_text rendering path.
-    const MONOSPACE_FONTS: &[&str] = &["courier", "monospaced", "monospace", "consolas", "lucida console"];
     let use_monospace_members = diagram.meta.skinparams.iter().any(|sp| {
         sp.key.to_lowercase() == "defaultfontname"
             && MONOSPACE_FONTS.contains(&sp.value.to_lowercase().as_str())
@@ -374,7 +378,6 @@ fn render_grid(diagram: &ClassDiagram, cs: &crate::style::ClassStyle) -> String 
     // Calculate dimensions for each class box.
     let class_dims: Vec<ClassDim> = diagram.entities.iter().map(calc_class_dim).collect();
 
-    const MONOSPACE_FONTS: &[&str] = &["courier", "monospaced", "monospace", "consolas", "lucida console"];
     let use_monospace_members = diagram.meta.skinparams.iter().any(|sp| {
         sp.key.to_lowercase() == "defaultfontname"
             && MONOSPACE_FONTS.contains(&sp.value.to_lowercase().as_str())
@@ -607,7 +610,9 @@ fn render_class_box(
             if use_monospace_members {
                 svg.monospace_text(x + PADDING, cy - 3.0, &text, "start", SMALL_FONT);
             } else {
-                svg.text(x + PADDING, cy - 3.0, &text, "start", SMALL_FONT);
+                // PlantUML renders class member text literally — creole markup
+                // (e.g. __field__) is NOT interpreted; it appears as-is.
+                svg.plain_text(x + PADDING, cy - 3.0, &text, "start", SMALL_FONT);
             }
         }
     }
