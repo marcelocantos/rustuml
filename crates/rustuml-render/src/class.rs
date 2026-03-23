@@ -579,9 +579,10 @@ fn render_class_box(
         svg.text(x + dim.width / 2.0, cy - 3.0, kind, "middle", SMALL_FONT);
     }
 
-    // Class name (bold-styled via font-weight in the text).
+    // Class name — process bold/italic creole but NOT underline (`__`), matching
+    // Java PlantUML behaviour where `__` is literal in entity labels.
     cy += HEADER_HEIGHT / 2.0 + 5.0;
-    svg.text(
+    svg.text_class_label(
         x + dim.width / 2.0,
         cy,
         &dim.header_text,
@@ -901,15 +902,19 @@ fn render_note_box(svg: &mut SvgBuilder, note: &Note, x: f64, y: f64, w: f64, h:
             ty += NOTE_LINE_HEIGHT;
             continue;
         }
-        // Bullet list: * item, ** sub-item, etc. (but not ** which starts bold markup).
+        // Bullet list: * item, ** sub-item, etc.  Require whitespace after the
+        // leading stars so that `**bold**` markup is not misidentified as a
+        // level-2 bullet list item.
         let star_level = trimmed.chars().take_while(|&c| c == '*').count();
         let next_after_stars = trimmed[star_level..].chars().next();
-        if star_level > 0 && next_after_stars != Some('*') {
+        let is_bullet = star_level > 0
+            && matches!(next_after_stars, None | Some(' ') | Some('\t'));
+        if is_bullet {
             let content = trimmed[star_level..].trim_start();
             let indent = "  ".repeat(star_level - 1);
             let content = replace_img_tags(content);
             list_ctrs.clear();
-            svg.text(x + NOTE_PAD_X, ty, &format!("{indent}\u{2022} {content}"), "start", FONT_SIZE);
+            svg.text(x + NOTE_PAD_X, ty, &format!("{indent}* {content}"), "start", FONT_SIZE);
             ty += NOTE_LINE_HEIGHT;
             continue;
         }

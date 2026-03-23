@@ -91,6 +91,46 @@ impl SvgBuilder {
         }
     }
 
+    /// Emit a text element with creole markup processed, but treating `__`
+    /// markers as literal characters rather than underline markup.
+    ///
+    /// This matches Java PlantUML's behaviour for class-diagram entity labels,
+    /// where `**bold**` and `//italic//` are processed but `__under__` is not.
+    pub fn text_class_label(&mut self, x: f64, y: f64, content: &str, anchor: &str, font_size: f64) {
+        // Same has_creole check as text(), but underline markers detected solely
+        // to decide whether processing is needed (not to trigger underline rendering).
+        let has_creole = (content.matches("**").count() >= 2)
+            || (content.matches("//").count() >= 2)
+            || (content.matches("--").count() >= 2)
+            || (content.matches("~~").count() >= 2)
+            || (content.matches("\"\"").count() >= 2)
+            || content.contains('`')
+            || content.contains('~')
+            || content.contains("<b>")
+            || content.contains("<i>")
+            || content.contains("<u>")
+            || content.contains("<s>")
+            || content.contains("<del>")
+            || content.contains("<color:")
+            || content.contains("<size:")
+            || content.contains("<font")
+            || content.contains("<back:")
+            || content.contains("<mono>")
+            || content.contains("<img:")
+            || content.contains("[[");
+        if has_creole {
+            let rich = crate::creole::to_svg_tspans(content);
+            self.line(&format!(
+                r#"<text x="{x}" y="{y}" text-anchor="{anchor}" font-family="sans-serif" font-size="{font_size}">{rich}</text>"#
+            ));
+        } else {
+            let escaped = escape_xml(content);
+            self.line(&format!(
+                r#"<text x="{x}" y="{y}" text-anchor="{anchor}" font-family="sans-serif" font-size="{font_size}">{escaped}</text>"#
+            ));
+        }
+    }
+
     /// Emit a plain text element without any creole/HTML markup processing.
     /// Use this for contexts where the text must be rendered literally (e.g.
     /// class member names, which PlantUML never applies creole markup to).

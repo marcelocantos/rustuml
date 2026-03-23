@@ -366,10 +366,11 @@ pub fn render(diagram: &SequenceDiagram, theme: &Theme) -> String {
         let x = px[i];
         let w = participant_widths[i];
         svg.open_group("participant");
-        // Title element: name + stereotype (non-ASCII and `/` chars as dots, matching PlantUML).
+        // Title element: name + stereotype (non-ASCII, `/`, and `*` chars as dots,
+        // matching Java PlantUML's participant tooltip normalisation).
         let normalize_title = |s: &str| -> String {
             s.chars()
-                .map(|c| if c.is_ascii() && c != '/' { c } else { '.' })
+                .map(|c| if c.is_ascii() && c != '/' && c != '*' { c } else { '.' })
                 .collect()
         };
         let title_text = if let Some(st) = &p.stereotype {

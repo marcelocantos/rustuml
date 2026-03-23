@@ -145,6 +145,7 @@ fn golden_has_syntax_error(svg: &str) -> bool {
         // YAML inputs that the reference implementation cannot parse (anchors,
         // empty objects, multi-line scalars, etc.) produce this error banner.
         || svg.contains("Your data does not sound like YAML data")
+        || svg.contains("does&#160;not&#160;sound&#160;like&#160;YAML")
         // Lollipop notation (`()- Interface`) is unsupported; PlantUML emits
         // a semantic error SVG containing "No class <Name>".
         || svg.contains("No class ")

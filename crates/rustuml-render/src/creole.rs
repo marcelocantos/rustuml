@@ -473,13 +473,17 @@ impl ListCounters {
             return format!("{indent}{n}. {inner}");
         }
 
-        // Count leading '*' for bullet lists (but not '**' which is bold markup).
+        // Count leading '*' for bullet lists.  To avoid confusing `**bold**`
+        // markup with a level-2 bullet, require that the stars are followed by
+        // whitespace (or end-of-string) before treating them as a list prefix.
         let star_level = line
             .chars()
             .take_while(|&c| c == '*')
             .count();
         let next_after_stars = line[star_level..].chars().next();
-        if star_level > 0 && next_after_stars != Some('*') {
+        let is_bullet = star_level > 0
+            && matches!(next_after_stars, None | Some(' ') | Some('\t'));
+        if is_bullet {
             let content = line[star_level..].trim_start();
             let indent = "  ".repeat(star_level - 1);
             let inner = to_svg_tspans(content);
@@ -592,9 +596,10 @@ mod tests {
 
     #[test]
     fn img_url_fallback() {
+        // Non-breaking spaces (U+00A0) match Java PlantUML's SVG output.
         assert_eq!(
             to_svg_tspans("<img:https://example.com/img.png>"),
-            "(Cannot decode: https://example.com/img.png)"
+            "(Cannot\u{00a0}decode:\u{00a0}https://example.com/img.png)"
         );
     }
 
@@ -608,7 +613,7 @@ mod tests {
         // {scale=...} suffix stripped from URL in fallback message.
         assert_eq!(
             to_svg_tspans("<img:https://example.com/img.png{scale=0.5}>"),
-            "(Cannot decode: https://example.com/img.png)"
+            "(Cannot\u{00a0}decode:\u{00a0}https://example.com/img.png)"
         );
     }
 

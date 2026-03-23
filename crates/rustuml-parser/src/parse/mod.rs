@@ -344,11 +344,6 @@ fn detect_uml_subtype(lines: &[String]) -> UmlSubtype {
         if trimmed.starts_with("note as ") || trimmed.starts_with("note \"") {
             scores[1] += 10;
         }
-        // `note : text` (bare `note` as entity with inline member content) is
-        // Java PlantUML class-diagram syntax — score it for class.
-        if trimmed == "note :" || trimmed.starts_with("note : ") {
-            scores[1] += 10;
-        }
         // `legend`, `header`/`endheader`, `footer`/`endfooter` — these are
         // meta elements that PlantUML defaults to CLASS when no other content exists.
         // Score them weakly for class so that a diagram with only meta elements
