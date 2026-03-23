@@ -11,15 +11,6 @@ use std::sync::LazyLock;
 use regex::Regex;
 
 /// Preprocess PlantUML source, expanding TIM directives.
-///
-/// Handles:
-/// - `!define NAME VALUE` / `!$var = value` — variable definitions
-/// - `$variable` substitution in lines
-/// - `!if`, `!else`, `!endif` — conditional blocks
-/// - `!ifdef`, `!ifndef` — existence checks
-/// - `!include <path>` — file inclusion (relative to base_dir)
-/// - `' single-line comments` and `/' ... '/` block comments
-/// - Strips `@startuml`/`@enduml` tags
 pub fn preprocess(input: &str) -> Vec<String> {
     let mut ctx = PreprocessContext::new(None);
     ctx.process(input)
@@ -31,29 +22,277 @@ pub fn preprocess_with_base(input: &str, base_dir: &Path) -> Vec<String> {
     ctx.process(input)
 }
 
+// ---------------------------------------------------------------------------
+// Value type
+// ---------------------------------------------------------------------------
+
+#[derive(Clone, Debug)]
+enum Value {
+    Str(String),
+    Int(i64),
+    Float(f64),
+    Bool(bool),
+}
+
+impl Value {
+    fn to_display(&self) -> String {
+        match self {
+            Value::Str(s) => s.clone(),
+            Value::Int(n) => n.to_string(),
+            Value::Float(f) => {
+                // Avoid trailing zeros but keep at least one decimal if float
+                if *f == (*f as i64) as f64 {
+                    format!("{}", *f as i64)
+                } else {
+                    format!("{f}")
+                }
+            }
+            Value::Bool(b) => {
+                if *b {
+                    "true".to_string()
+                } else {
+                    "false".to_string()
+                }
+            }
+        }
+    }
+
+    fn to_bool(&self) -> bool {
+        match self {
+            Value::Bool(b) => *b,
+            Value::Int(n) => *n != 0,
+            Value::Float(f) => *f != 0.0,
+            Value::Str(s) => s == "true" || s == "1",
+        }
+    }
+
+    fn to_number(&self) -> f64 {
+        match self {
+            Value::Int(n) => *n as f64,
+            Value::Float(f) => *f,
+            Value::Bool(b) => {
+                if *b {
+                    1.0
+                } else {
+                    0.0
+                }
+            }
+            Value::Str(s) => s.parse::<f64>().unwrap_or(0.0),
+        }
+    }
+
+    fn to_int(&self) -> i64 {
+        match self {
+            Value::Int(n) => *n,
+            Value::Float(f) => *f as i64,
+            Value::Bool(b) => i64::from(*b),
+            Value::Str(s) => s.parse::<i64>().unwrap_or(0),
+        }
+    }
+
+    fn is_numeric(&self) -> bool {
+        match self {
+            Value::Int(_) | Value::Float(_) => true,
+            Value::Str(s) => s.parse::<f64>().is_ok(),
+            Value::Bool(_) => true,
+        }
+    }
+
+    fn from_str_auto(s: &str) -> Value {
+        let s = s.trim();
+        if s == "true" {
+            return Value::Bool(true);
+        }
+        if s == "false" {
+            return Value::Bool(false);
+        }
+        if let Ok(n) = s.parse::<i64>() {
+            return Value::Int(n);
+        }
+        if let Ok(f) = s.parse::<f64>() {
+            return Value::Float(f);
+        }
+        Value::Str(s.to_string())
+    }
+}
+
+// ---------------------------------------------------------------------------
+// Named color map
+// ---------------------------------------------------------------------------
+
+fn named_color(name: &str) -> Option<(u8, u8, u8)> {
+    let lower = name.to_lowercase();
+    Some(match lower.as_str() {
+        "red" => (255, 0, 0),
+        "green" => (0, 128, 0),
+        "blue" => (0, 0, 255),
+        "yellow" => (255, 255, 0),
+        "orange" => (255, 165, 0),
+        "purple" => (128, 0, 128),
+        "pink" => (255, 192, 203),
+        "black" => (0, 0, 0),
+        "white" => (255, 255, 255),
+        "gray" | "grey" => (128, 128, 128),
+        "cyan" => (0, 255, 255),
+        "magenta" | "fuchsia" => (255, 0, 255),
+        "lime" => (0, 255, 0),
+        "brown" => (165, 42, 42),
+        "navy" => (0, 0, 128),
+        "teal" => (0, 128, 128),
+        "silver" => (192, 192, 192),
+        "gold" => (255, 215, 0),
+        "maroon" => (128, 0, 0),
+        "olive" => (128, 128, 0),
+        "aqua" => (0, 255, 255),
+        "indigo" => (75, 0, 130),
+        "violet" => (238, 130, 238),
+        "coral" => (255, 127, 80),
+        "salmon" => (250, 128, 114),
+        "tan" => (210, 180, 140),
+        "khaki" => (240, 230, 140),
+        "lavender" => (230, 230, 250),
+        "plum" => (221, 160, 221),
+        "orchid" => (218, 112, 214),
+        "tomato" => (255, 99, 71),
+        "crimson" => (220, 20, 60),
+        "darkblue" => (0, 0, 139),
+        "darkgreen" => (0, 100, 0),
+        "darkred" => (139, 0, 0),
+        "darkgray" | "darkgrey" => (169, 169, 169),
+        "lightblue" => (173, 216, 230),
+        "lightgreen" => (144, 238, 144),
+        "lightgray" | "lightgrey" => (211, 211, 211),
+        "lightyellow" => (255, 255, 224),
+        _ => return None,
+    })
+}
+
+fn parse_color(s: &str) -> Option<(u8, u8, u8)> {
+    let s = s.trim().trim_matches('"');
+    if let Some(hex) = s.strip_prefix('#') {
+        if hex.len() == 6 {
+            let r = u8::from_str_radix(&hex[0..2], 16).ok()?;
+            let g = u8::from_str_radix(&hex[2..4], 16).ok()?;
+            let b = u8::from_str_radix(&hex[4..6], 16).ok()?;
+            return Some((r, g, b));
+        }
+    }
+    named_color(s)
+}
+
+fn rgb_to_hsl(r: u8, g: u8, b: u8) -> (f64, f64, f64) {
+    let r = r as f64 / 255.0;
+    let g = g as f64 / 255.0;
+    let b = b as f64 / 255.0;
+    let max = r.max(g).max(b);
+    let min = r.min(g).min(b);
+    let l = (max + min) / 2.0;
+
+    if (max - min).abs() < 1e-10 {
+        return (0.0, 0.0, l * 100.0);
+    }
+
+    let d = max - min;
+    let s = if l > 0.5 {
+        d / (2.0 - max - min)
+    } else {
+        d / (max + min)
+    };
+
+    let h = if (max - r).abs() < 1e-10 {
+        let mut h = (g - b) / d;
+        if g < b {
+            h += 6.0;
+        }
+        h
+    } else if (max - g).abs() < 1e-10 {
+        (b - r) / d + 2.0
+    } else {
+        (r - g) / d + 4.0
+    };
+
+    (h * 60.0, s * 100.0, l * 100.0)
+}
+
+fn hsl_to_rgb(h: f64, s: f64, l: f64) -> (u8, u8, u8) {
+    let s = s / 100.0;
+    let l = l / 100.0;
+    let h = ((h % 360.0) + 360.0) % 360.0;
+
+    if s.abs() < 1e-10 {
+        let v = (l * 255.0).round() as u8;
+        return (v, v, v);
+    }
+
+    let q = if l < 0.5 {
+        l * (1.0 + s)
+    } else {
+        l + s - l * s
+    };
+    let p = 2.0 * l - q;
+    let h = h / 360.0;
+
+    let hue_to_rgb = |t: f64| -> f64 {
+        let mut t = t;
+        if t < 0.0 {
+            t += 1.0;
+        }
+        if t > 1.0 {
+            t -= 1.0;
+        }
+        if t < 1.0 / 6.0 {
+            p + (q - p) * 6.0 * t
+        } else if t < 1.0 / 2.0 {
+            q
+        } else if t < 2.0 / 3.0 {
+            p + (q - p) * (2.0 / 3.0 - t) * 6.0
+        } else {
+            p
+        }
+    };
+
+    let r = (hue_to_rgb(h + 1.0 / 3.0) * 255.0).round() as u8;
+    let g = (hue_to_rgb(h) * 255.0).round() as u8;
+    let b = (hue_to_rgb(h - 1.0 / 3.0) * 255.0).round() as u8;
+    (r, g, b)
+}
+
+fn rgb_to_hex(r: u8, g: u8, b: u8) -> String {
+    format!("#{r:02X}{g:02X}{b:02X}")
+}
+
+// ---------------------------------------------------------------------------
+// Core context
+// ---------------------------------------------------------------------------
+
 struct PreprocessContext {
-    /// `!$var = value` style variables (substituted as `$varname`).
+    /// `!$var = value` style variables.
     defines: HashMap<String, String>,
-    /// `!define TOKEN value` style macros (substituted as whole words).
+    /// `!define TOKEN value` style macros.
     token_defines: HashMap<String, String>,
+    /// `!definelong TOKEN(params)` style multi-line macros.
+    definelong_macros: HashMap<String, DefineLongDef>,
     cond_stack: Vec<CondState>,
     in_block_comment: bool,
-    /// True while inside a `sprite $name [...] { ... }` block.
     in_sprite_block: bool,
-    /// True after `!include <archimate/Archimate>` has been seen.
     archimate_enabled: bool,
-    /// True while we are inside the first (or only) `@start...@end` block.
     in_diagram_block: bool,
-    /// True once the first `@end` tag has been seen; further blocks are skipped.
     first_block_done: bool,
     base_dir: Option<PathBuf>,
     include_depth: usize,
     foreach_stack: Vec<ForEachState>,
+    while_stack: Vec<WhileState>,
     functions: HashMap<String, FunctionDef>,
     collecting_function: Option<String>,
+    collecting_definelong: Option<String>,
+    subs: HashMap<String, Vec<String>>,
+    collecting_sub: Option<String>,
+    /// Local variable scopes for function calls (stack of saved scopes).
+    local_vars: Vec<HashMap<String, String>>,
 }
 
 const MAX_INCLUDE_DEPTH: usize = 10;
+const MAX_WHILE_ITERATIONS: usize = 10000;
 
 struct CondState {
     active: bool,
@@ -66,8 +305,25 @@ struct ForEachState {
     body_lines: Vec<String>,
 }
 
+struct WhileState {
+    condition: String,
+    body_lines: Vec<String>,
+}
+
 #[derive(Clone)]
 struct FunctionDef {
+    params: Vec<FuncParam>,
+    body: Vec<String>,
+}
+
+#[derive(Clone)]
+struct FuncParam {
+    name: String,
+    default: Option<String>,
+}
+
+#[derive(Clone)]
+struct DefineLongDef {
     params: Vec<String>,
     body: Vec<String>,
 }
@@ -77,6 +333,7 @@ impl PreprocessContext {
         Self {
             defines: HashMap::new(),
             token_defines: HashMap::new(),
+            definelong_macros: HashMap::new(),
             cond_stack: Vec::new(),
             in_block_comment: false,
             in_sprite_block: false,
@@ -86,8 +343,13 @@ impl PreprocessContext {
             base_dir,
             include_depth: 0,
             foreach_stack: Vec::new(),
+            while_stack: Vec::new(),
             functions: HashMap::new(),
             collecting_function: None,
+            collecting_definelong: None,
+            subs: HashMap::new(),
+            collecting_sub: None,
+            local_vars: Vec::new(),
         }
     }
 
@@ -95,134 +357,230 @@ impl PreprocessContext {
         self.cond_stack.iter().all(|c| c.active)
     }
 
+    fn get_var(&self, name: &str) -> Option<&String> {
+        // Check local scope first, then global.
+        for scope in self.local_vars.iter().rev() {
+            if let Some(v) = scope.get(name) {
+                return Some(v);
+            }
+        }
+        self.defines.get(name)
+    }
+
+    fn set_var(&mut self, name: &str, value: &str) {
+        self.defines.insert(name.to_string(), value.to_string());
+    }
+
+    fn set_local_var(&mut self, name: &str, value: &str) {
+        if let Some(scope) = self.local_vars.last_mut() {
+            scope.insert(name.to_string(), value.to_string());
+        } else {
+            // No local scope active, set global.
+            self.set_var(name, value);
+        }
+    }
+
     fn process(&mut self, input: &str) -> Vec<String> {
+        let lines: Vec<&str> = input.lines().collect();
+        self.process_lines(&lines)
+    }
+
+    fn process_lines(&mut self, lines: &[&str]) -> Vec<String> {
         let mut output = Vec::new();
 
-        for line in input.lines() {
-            let trimmed = line.trim();
-
-            // Skip sprite pixel-data blocks: `sprite $name [...] { ... }`.
-            if self.in_sprite_block {
-                if trimmed == "}" {
-                    self.in_sprite_block = false;
-                }
-                continue;
-            }
-
-            // Handle block comments.
-            if self.in_block_comment {
-                if trimmed.contains("'/") {
-                    self.in_block_comment = false;
-                }
-                continue;
-            }
-            if trimmed.starts_with("/'") {
-                if !trimmed.contains("'/") || trimmed.ends_with("/'") {
-                    self.in_block_comment = true;
-                }
-                continue;
-            }
-
-            // Skip single-line comments.
-            if trimmed.starts_with('\'') {
-                continue;
-            }
-
-            // Strip inline comments.
-            let line_no_comment = strip_inline_comment(line);
-            let trimmed = line_no_comment.trim();
-
-            // Handle @start/@end tags with multi-diagram awareness.
-            // When include_depth > 0 we're inside an !include — treat it as
-            // a flat stream (no block tracking needed).
-            if self.include_depth == 0 {
-                if trimmed.starts_with("@start") {
-                    if !self.first_block_done {
-                        self.in_diagram_block = true;
-                    }
-                    // Always consume the @start line itself.
-                    continue;
-                }
-                if trimmed.starts_with("@end") {
-                    self.in_diagram_block = false;
-                    self.first_block_done = true;
-                    continue;
-                }
-                // Content outside any block: allow preprocessor directives
-                // (like !define before @startuml) but skip diagram content
-                // once the first block has ended.
-                if self.first_block_done {
-                    continue;
-                }
-            } else if trimmed.starts_with("@start") || trimmed.starts_with("@end") {
-                // Inside an !include: strip @start/@end tags as before.
-                continue;
-            }
-
-            // Skip sprite definitions: `sprite $name [dimensions] { ... }`.
-            // These are pixel-art bitmaps; we don't render them but must not
-            // let the pixel rows leak into the diagram parser.
-            if trimmed.starts_with("sprite ") || trimmed.starts_with("sprite\t") {
-                // If the line opens a block, skip until `}`.
-                if trimmed.ends_with('{') {
-                    self.in_sprite_block = true;
-                }
-                // Either way, consume the sprite declaration line itself.
-                continue;
-            }
-
-            // Function definition collection — must be checked first.
-            if self.try_function_def(trimmed) {
-                continue;
-            }
-
-            // Foreach buffering — must be checked before other directives.
-            if self.try_foreach(trimmed, &mut output) {
-                continue;
-            }
-
-            // Function invocation.
-            if self.try_function_call(trimmed, &mut output) {
-                continue;
-            }
-
-            // Process TIM directives.
-            if self.try_define(trimmed) {
-                continue;
-            }
-            if self.try_conditional(trimmed) {
-                continue;
-            }
-            if self.try_undefine(trimmed) {
-                continue;
-            }
-            if let Some(included_lines) = self.try_include(trimmed) {
-                if self.is_active() {
-                    output.extend(included_lines);
-                }
-                continue;
-            }
-            if self.try_theme(trimmed, &mut output) {
-                continue;
-            }
-
-            // Only output lines when all conditions are active.
-            if self.is_active() {
-                // Expand archimate macros before variable substitution.
-                let line_to_process = if let Some(expanded) =
-                    self.try_expand_archimate(line_no_comment.trim())
-                {
-                    expanded
-                } else {
-                    self.substitute_vars(&line_no_comment)
-                };
-                if !line_to_process.trim().is_empty() {
-                    output.push(line_to_process);
-                }
-            }
+        for &line in lines {
+            self.process_one_line(line, &mut output);
         }
 
         output
+    }
+
+    fn process_one_line(&mut self, line: &str, output: &mut Vec<String>) {
+        let trimmed = line.trim();
+
+        // Skip sprite pixel-data blocks.
+        if self.in_sprite_block {
+            if trimmed == "}" {
+                self.in_sprite_block = false;
+            }
+            return;
+        }
+
+        // Handle block comments.
+        if self.in_block_comment {
+            if trimmed.contains("'/") {
+                self.in_block_comment = false;
+            }
+            return;
+        }
+        if trimmed.starts_with("/'") {
+            if !trimmed.contains("'/") || trimmed.ends_with("/'") {
+                self.in_block_comment = true;
+            }
+            return;
+        }
+
+        // Skip single-line comments.
+        if trimmed.starts_with('\'') {
+            return;
+        }
+
+        // Strip inline comments.
+        let line_no_comment = strip_inline_comment(line);
+        let trimmed = line_no_comment.trim();
+
+        // Handle @start/@end tags.
+        if self.include_depth == 0 {
+            if trimmed.starts_with("@start") {
+                if !self.first_block_done {
+                    self.in_diagram_block = true;
+                }
+                return;
+            }
+            if trimmed.starts_with("@end") {
+                self.in_diagram_block = false;
+                self.first_block_done = true;
+                return;
+            }
+            if self.first_block_done {
+                return;
+            }
+        } else if trimmed.starts_with("@start") || trimmed.starts_with("@end") {
+            return;
+        }
+
+        // Skip sprite definitions.
+        if trimmed.starts_with("sprite ") || trimmed.starts_with("sprite\t") {
+            if trimmed.ends_with('{') {
+                self.in_sprite_block = true;
+            }
+            return;
+        }
+
+        // Collecting definelong body.
+        if self.collecting_definelong.is_some() {
+            if trimmed == "!enddefinelong" {
+                self.collecting_definelong = None;
+            } else if let Some(name) = self.collecting_definelong.clone() {
+                if let Some(dl) = self.definelong_macros.get_mut(&name) {
+                    dl.body.push(line.to_string());
+                }
+            }
+            return;
+        }
+
+        // Collecting sub.
+        if self.collecting_sub.is_some() {
+            if trimmed == "!endsub" {
+                self.collecting_sub = None;
+            } else if let Some(name) = self.collecting_sub.clone() {
+                self.subs
+                    .entry(name)
+                    .or_default()
+                    .push(line.to_string());
+            }
+            return;
+        }
+
+        // Function definition collection.
+        if self.try_function_def(trimmed) {
+            return;
+        }
+
+        // While buffering.
+        if self.try_while(trimmed, output) {
+            return;
+        }
+
+        // Foreach buffering.
+        if self.try_foreach(trimmed, output) {
+            return;
+        }
+
+        // Directives that are consumed silently.
+        if self.try_silent_directive(trimmed) {
+            return;
+        }
+
+        // Startsub.
+        if let Some(name) = trimmed.strip_prefix("!startsub ") {
+            self.collecting_sub = Some(name.trim().to_string());
+            return;
+        }
+        if trimmed == "!endsub" {
+            return;
+        }
+
+        // Definelong.
+        if self.try_definelong(trimmed) {
+            return;
+        }
+
+        // Process TIM directives.
+        if self.try_define(trimmed) {
+            return;
+        }
+        if self.try_local_var(trimmed) {
+            return;
+        }
+        if self.try_conditional(trimmed) {
+            return;
+        }
+        if self.try_undefine(trimmed) {
+            return;
+        }
+        if let Some(included_lines) = self.try_include(trimmed) {
+            if self.is_active() {
+                output.extend(included_lines);
+            }
+            return;
+        }
+        if let Some(included_lines) = self.try_includesub(trimmed) {
+            if self.is_active() {
+                output.extend(included_lines);
+            }
+            return;
+        }
+        if self.try_theme(trimmed, output) {
+            return;
+        }
+
+        // Function/procedure invocation as standalone line.
+        if self.try_function_call(trimmed, output) {
+            return;
+        }
+
+        // Only output lines when all conditions are active.
+        if self.is_active() {
+            // Expand archimate macros before variable substitution.
+            let line_to_process =
+                if let Some(expanded) = self.try_expand_archimate(line_no_comment.trim()) {
+                    expanded
+                } else {
+                    // Try definelong macro expansion.
+                    let subst = self.substitute_vars(&line_no_comment);
+                    self.try_expand_definelong(&subst)
+                        .unwrap_or(subst)
+                };
+            if !line_to_process.trim().is_empty() {
+                output.push(line_to_process);
+            }
+        }
+    }
+
+    fn try_silent_directive(&self, line: &str) -> bool {
+        // !log, !pragma, !assert — consume silently.
+        if line.starts_with("!log ")
+            || line.starts_with("!log\t")
+            || line == "!log"
+            || line.starts_with("!pragma ")
+            || line.starts_with("!pragma\t")
+            || line.starts_with("!assert ")
+            || line.starts_with("!assert\t")
+        {
+            return true;
+        }
+        false
     }
 
     fn try_define(&mut self, line: &str) -> bool {
@@ -230,6 +588,31 @@ impl PreprocessContext {
             LazyLock::new(|| Regex::new(r"^!define\s+(\w+)(?:\s+(.+))?$").unwrap());
         static RE_VAR: LazyLock<Regex> =
             LazyLock::new(|| Regex::new(r"^!\$(\w+)\s*=\s*(.+)$").unwrap());
+
+        // !define with args: !define MACRO(a,b) body
+        static RE_DEFINE_ARGS: LazyLock<Regex> =
+            LazyLock::new(|| Regex::new(r"^!define\s+(\w+)\(([^)]*)\)\s+(.+)$").unwrap());
+
+        if let Some(caps) = RE_DEFINE_ARGS.captures(line) {
+            if self.is_active() {
+                let name = caps[1].to_string();
+                let params: Vec<String> = caps[2]
+                    .split(',')
+                    .map(|p| p.trim().to_string())
+                    .filter(|p| !p.is_empty())
+                    .collect();
+                let body = caps[3].to_string();
+                // Store as a definelong with a single-line body.
+                self.definelong_macros.insert(
+                    name,
+                    DefineLongDef {
+                        params,
+                        body: vec![body],
+                    },
+                );
+            }
+            return true;
+        }
 
         if let Some(caps) = RE_DEFINE.captures(line) {
             if self.is_active() {
@@ -242,12 +625,110 @@ impl PreprocessContext {
         if let Some(caps) = RE_VAR.captures(line) {
             if self.is_active() {
                 let name = caps[1].to_string();
-                let value = caps[2].trim().trim_matches('"').to_string();
-                self.defines.insert(name, value);
+                let raw_value = caps[2].trim();
+                let value = self.eval_expr_to_value(raw_value);
+                self.set_var(&name, &value.to_display());
             }
             return true;
         }
         false
+    }
+
+    fn try_local_var(&mut self, line: &str) -> bool {
+        static RE: LazyLock<Regex> =
+            LazyLock::new(|| Regex::new(r"^!local\s+\$(\w+)\s*=\s*(.+)$").unwrap());
+
+        if let Some(caps) = RE.captures(line) {
+            if self.is_active() {
+                let name = caps[1].to_string();
+                let raw_value = caps[2].trim();
+                let value = self.eval_expr_to_value(raw_value);
+                self.set_local_var(&name, &value.to_display());
+            }
+            return true;
+        }
+        false
+    }
+
+    fn try_definelong(&mut self, line: &str) -> bool {
+        static RE: LazyLock<Regex> = LazyLock::new(|| {
+            Regex::new(r"^!definelong\s+(\w+)(?:\(([^)]*)\))?\s*$").unwrap()
+        });
+
+        if let Some(caps) = RE.captures(line) {
+            if self.is_active() {
+                let name = caps[1].to_string();
+                let params: Vec<String> = if let Some(p) = caps.get(2) {
+                    p.as_str()
+                        .split(',')
+                        .map(|p| p.trim().to_string())
+                        .filter(|p| !p.is_empty())
+                        .collect()
+                } else {
+                    Vec::new()
+                };
+                self.definelong_macros.insert(
+                    name.clone(),
+                    DefineLongDef {
+                        params,
+                        body: Vec::new(),
+                    },
+                );
+                self.collecting_definelong = Some(name);
+            }
+            return true;
+        }
+        if line == "!enddefinelong" {
+            self.collecting_definelong = None;
+            return true;
+        }
+        false
+    }
+
+    fn try_expand_definelong(&self, line: &str) -> Option<String> {
+        let trimmed = line.trim();
+        // Try each definelong macro.
+        for (name, dl) in &self.definelong_macros {
+            // Check if line contains a macro call: NAME(args)
+            if let Some(idx) = trimmed.find(&format!("{name}(")) {
+                let after = &trimmed[idx + name.len()..];
+                if let Some(end) = find_matching_paren(after) {
+                    let args_str = &after[1..end];
+                    let args = split_args(args_str);
+
+                    // Expand: substitute params in body.
+                    let mut result_lines = Vec::new();
+                    for body_line in &dl.body {
+                        let mut expanded = body_line.clone();
+                        for (i, param) in dl.params.iter().enumerate() {
+                            if let Some(arg) = args.get(i) {
+                                expanded = expanded.replace(param, arg);
+                            }
+                        }
+                        result_lines.push(expanded);
+                    }
+                    // For single-line macros, replace inline.
+                    if result_lines.len() == 1 {
+                        let prefix = &trimmed[..idx];
+                        let suffix = &trimmed[idx + name.len() + end + 1..];
+                        return Some(format!("{prefix}{}{suffix}", result_lines[0]));
+                    }
+                    return Some(result_lines.join("\n"));
+                }
+            }
+            // Bare name match (no parens, no params).
+            if dl.params.is_empty() && trimmed.contains(name.as_str()) {
+                // Only substitute word-boundary matches.
+                if let Ok(re) = Regex::new(&format!(r"\b{}\b", regex::escape(name))) {
+                    if re.is_match(trimmed) {
+                        let body = dl.body.join("\n");
+                        let result = re.replace_all(trimmed, body.as_str()).to_string();
+                        return Some(result);
+                    }
+                }
+            }
+        }
+        None
     }
 
     fn try_function_def(&mut self, line: &str) -> bool {
@@ -261,21 +742,14 @@ impl PreprocessContext {
             return true;
         }
 
-        // !function $name($param1, $param2)
+        // !function $name($param1, $param2 = "default")
         static RE: LazyLock<Regex> = LazyLock::new(|| {
             Regex::new(r"^!(?:function|procedure)\s+\$(\w+)\s*\(([^)]*)\)$").unwrap()
         });
 
         if let Some(caps) = RE.captures(line) {
             let name = caps[1].to_string();
-            let params: Vec<String> = if caps[2].trim().is_empty() {
-                Vec::new()
-            } else {
-                caps[2]
-                    .split(',')
-                    .map(|p| p.trim().trim_start_matches('$').to_string())
-                    .collect()
-            };
+            let params = parse_func_params(&caps[2]);
 
             self.functions.insert(
                 name.clone(),
@@ -291,61 +765,89 @@ impl PreprocessContext {
         false
     }
 
+    /// Call a function and return its return value (if any) plus any output lines.
+    fn call_function(
+        &mut self,
+        name: &str,
+        args: &[String],
+    ) -> (Option<Value>, Vec<String>) {
+        let func = match self.functions.get(name) {
+            Some(f) => f.clone(),
+            None => return (None, Vec::new()),
+        };
+
+        // Save current values, set params.
+        let mut saved: Vec<(String, Option<String>)> = Vec::new();
+        for (i, param) in func.params.iter().enumerate() {
+            saved.push((param.name.clone(), self.get_var(&param.name).cloned()));
+            let arg_val = if let Some(arg) = args.get(i) {
+                arg.clone()
+            } else if let Some(def) = &param.default {
+                def.clone()
+            } else {
+                String::new()
+            };
+            self.set_var(&param.name, &arg_val);
+        }
+
+        // Push a local scope.
+        self.local_vars.push(HashMap::new());
+
+        let mut output_lines = Vec::new();
+        let mut return_value: Option<Value> = None;
+
+        for body_line in &func.body {
+            let trimmed = body_line.trim();
+
+            // !return expr
+            if let Some(expr) = trimmed.strip_prefix("!return ") {
+                let substituted = self.substitute_vars(expr);
+                return_value = Some(self.eval_expr_to_value(&substituted));
+                break;
+            }
+
+            // Process the body line through the preprocessor.
+            self.process_one_line(body_line, &mut output_lines);
+        }
+
+        // Pop local scope.
+        self.local_vars.pop();
+
+        // Restore saved values.
+        for (param, old_val) in saved {
+            match old_val {
+                Some(v) => {
+                    self.defines.insert(param, v);
+                }
+                None => {
+                    self.defines.remove(&param);
+                }
+            }
+        }
+
+        (return_value, output_lines)
+    }
+
     fn try_function_call(&mut self, line: &str, output: &mut Vec<String>) -> bool {
         // $funcName("arg1", "arg2")
         static RE: LazyLock<Regex> =
             LazyLock::new(|| Regex::new(r"^\$(\w+)\s*\(([^)]*)\)$").unwrap());
 
         if let Some(caps) = RE.captures(line) {
-            let name = &caps[1];
+            let name = caps[1].to_string();
             let args_str = &caps[2];
 
-            let func = match self.functions.get(name) {
-                Some(f) => f.clone(),
-                None => return false,
-            };
+            if !self.functions.contains_key(&name) {
+                return false;
+            }
 
             if !self.is_active() {
                 return true;
             }
 
-            let args: Vec<String> = if args_str.trim().is_empty() {
-                Vec::new()
-            } else {
-                args_str
-                    .split(',')
-                    .map(|a| a.trim().trim_matches('"').to_string())
-                    .collect()
-            };
-
-            // Save current values, set params.
-            let mut saved: Vec<(String, Option<String>)> = Vec::new();
-            for (i, param) in func.params.iter().enumerate() {
-                saved.push((param.clone(), self.defines.get(param).cloned()));
-                if let Some(arg) = args.get(i) {
-                    self.defines.insert(param.clone(), arg.clone());
-                }
-            }
-
-            // Expand body lines.
-            for body_line in &func.body {
-                let expanded = self.substitute_vars(body_line);
-                if !expanded.trim().is_empty() {
-                    output.push(expanded);
-                }
-            }
-
-            // Restore saved values.
-            for (param, old_val) in saved {
-                match old_val {
-                    Some(v) => {
-                        self.defines.insert(param, v);
-                    }
-                    None => {
-                        self.defines.remove(&param);
-                    }
-                }
-            }
+            let args = parse_call_args(args_str);
+            let (_ret, lines) = self.call_function(&name, &args);
+            output.extend(lines);
 
             return true;
         }
@@ -353,8 +855,14 @@ impl PreprocessContext {
         false
     }
 
+    /// Evaluate a function call in an expression context, returning the return value.
+    fn eval_function_call(&mut self, name: &str, args_str: &str) -> Value {
+        let args = parse_call_args(args_str);
+        let (ret, _lines) = self.call_function(name, &args);
+        ret.unwrap_or(Value::Str(String::new()))
+    }
+
     fn try_foreach(&mut self, line: &str, output: &mut Vec<String>) -> bool {
-        // !foreach $var in ["a", "b", "c"]
         static RE: LazyLock<Regex> =
             LazyLock::new(|| Regex::new(r#"^!foreach\s+\$(\w+)\s+in\s+\[(.+)\]$"#).unwrap());
 
@@ -365,17 +873,11 @@ impl PreprocessContext {
             let var_name = caps[1].to_string();
             let values_str = &caps[2];
 
-            // Parse the values list (comma-separated, possibly quoted).
             let values: Vec<String> = values_str
                 .split(',')
                 .map(|v| v.trim().trim_matches('"').trim_matches('\'').to_string())
                 .collect();
 
-            // Collect body lines until !endfor.
-            // This is a simplified implementation that doesn't support nesting.
-            // For now, we store the foreach state and handle it in process().
-            // Actually, since we process line-by-line, we need a different approach.
-            // Store the foreach and buffer lines until !endfor.
             self.foreach_stack.push(ForEachState {
                 var_name,
                 values,
@@ -388,22 +890,19 @@ impl PreprocessContext {
             && let Some(foreach) = self.foreach_stack.pop()
         {
             if self.is_active() {
-                // Expand: for each value, substitute and process body lines.
                 for val in &foreach.values {
-                    let old_val = self.defines.get(&foreach.var_name).cloned();
-                    self.defines.insert(foreach.var_name.clone(), val.clone());
+                    let old_val = self.get_var(&foreach.var_name).cloned();
+                    self.set_var(&foreach.var_name, val);
 
                     for body_line in &foreach.body_lines {
-                        let expanded = self.substitute_vars(body_line);
-                        if !expanded.trim().is_empty() {
-                            output.push(expanded);
-                        }
+                        let line_refs: Vec<&str> = vec![body_line.as_str()];
+                        let expanded = self.process_lines(&line_refs);
+                        output.extend(expanded);
                     }
 
-                    // Restore previous value.
                     match old_val {
                         Some(v) => {
-                            self.defines.insert(foreach.var_name.clone(), v);
+                            self.set_var(&foreach.var_name, &v);
                         }
                         None => {
                             self.defines.remove(&foreach.var_name);
@@ -423,15 +922,66 @@ impl PreprocessContext {
         false
     }
 
-    fn try_include(&mut self, line: &str) -> Option<Vec<String>> {
+    fn try_while(&mut self, line: &str, output: &mut Vec<String>) -> bool {
         static RE: LazyLock<Regex> =
-            LazyLock::new(|| Regex::new(r#"^!include(?:_once)?\s+(?:"([^"]+)"|(\S+))$"#).unwrap());
+            LazyLock::new(|| Regex::new(r"^!while\s+(.+)$").unwrap());
+
+        if let Some(caps) = RE.captures(line) {
+            if !self.is_active() {
+                return true;
+            }
+            let condition = caps[1].to_string();
+            self.while_stack.push(WhileState {
+                condition,
+                body_lines: Vec::new(),
+            });
+            return true;
+        }
+
+        if line == "!endwhile" {
+            if let Some(while_state) = self.while_stack.pop() {
+                if self.is_active() {
+                    let mut iterations = 0;
+                    loop {
+                        if iterations >= MAX_WHILE_ITERATIONS {
+                            break;
+                        }
+                        let cond_expanded = self.substitute_vars(&while_state.condition);
+                        if !self.eval_bool(&cond_expanded) {
+                            break;
+                        }
+
+                        for body_line in &while_state.body_lines {
+                            let line_refs: Vec<&str> = vec![body_line.as_str()];
+                            let expanded = self.process_lines(&line_refs);
+                            output.extend(expanded);
+                        }
+
+                        iterations += 1;
+                    }
+                }
+            }
+            return true;
+        }
+
+        // If we're inside a while, buffer the line.
+        if let Some(while_state) = self.while_stack.last_mut() {
+            while_state.body_lines.push(line.to_string());
+            return true;
+        }
+
+        false
+    }
+
+    fn try_include(&mut self, line: &str) -> Option<Vec<String>> {
+        static RE: LazyLock<Regex> = LazyLock::new(|| {
+            Regex::new(r#"^!include(?:_once)?\s+(?:"([^"]+)"|(\S+))$"#).unwrap()
+        });
 
         let caps = RE.captures(line)?;
         let path_str = caps.get(1).or(caps.get(2)).map(|m| m.as_str())?;
 
         if self.include_depth >= MAX_INCLUDE_DEPTH {
-            // Prevent infinite recursion.
             return Some(vec![format!(
                 "' WARNING: max include depth ({MAX_INCLUDE_DEPTH}) reached for {path_str}"
             )]);
@@ -442,7 +992,6 @@ impl PreprocessContext {
             self.archimate_enabled = true;
             return Some(vec![]);
         }
-        // Other angle-bracket stdlib includes are silently skipped.
         if path_str.starts_with('<') {
             return Some(vec![]);
         }
@@ -460,11 +1009,45 @@ impl PreprocessContext {
                 self.include_depth -= 1;
                 Some(lines)
             }
-            Err(_) => {
-                // Silently skip missing includes (matches PlantUML behavior
-                // for optional includes).
-                Some(vec![])
+            Err(_) => Some(vec![]),
+        }
+    }
+
+    fn try_includesub(&mut self, line: &str) -> Option<Vec<String>> {
+        // !includesub file.puml!SUBNAME
+        static RE: LazyLock<Regex> = LazyLock::new(|| {
+            Regex::new(r#"^!includesub\s+(?:"([^"]+)"|(\S+))!(\w+)$"#).unwrap()
+        });
+
+        let caps = RE.captures(line)?;
+        let path_str = caps.get(1).or(caps.get(2)).map(|m| m.as_str())?;
+        let sub_name = &caps[3];
+
+        if self.include_depth >= MAX_INCLUDE_DEPTH {
+            return Some(vec![]);
+        }
+
+        let file_path = if let Some(base) = &self.base_dir {
+            base.join(path_str)
+        } else {
+            PathBuf::from(path_str)
+        };
+
+        match std::fs::read_to_string(&file_path) {
+            Ok(content) => {
+                // Parse the file to extract subs.
+                let mut temp_ctx = PreprocessContext::new(self.base_dir.clone());
+                temp_ctx.include_depth = self.include_depth + 1;
+                let _ = temp_ctx.process(&content);
+                // Now extract the named sub.
+                if let Some(sub_lines) = temp_ctx.subs.get(sub_name) {
+                    let refs: Vec<&str> = sub_lines.iter().map(|s| s.as_str()).collect();
+                    Some(self.process_lines(&refs))
+                } else {
+                    Some(vec![])
+                }
             }
+            Err(_) => Some(vec![]),
         }
     }
 
@@ -472,7 +1055,6 @@ impl PreprocessContext {
         if let Some(rest) = line.strip_prefix("!theme ") {
             let theme_name = rest.trim();
             if self.is_active() && !theme_name.is_empty() {
-                // Emit as a synthetic skinparam for the renderer to pick up.
                 output.push(format!("skinparam __theme {theme_name}"));
             }
             return true;
@@ -494,7 +1076,10 @@ impl PreprocessContext {
     }
 
     fn try_conditional(&mut self, line: &str) -> bool {
-        static RE_IF: LazyLock<Regex> = LazyLock::new(|| Regex::new(r#"^!if\s+(.+)$"#).unwrap());
+        static RE_IF: LazyLock<Regex> =
+            LazyLock::new(|| Regex::new(r#"^!if\s+(.+)$"#).unwrap());
+        static RE_ELSEIF: LazyLock<Regex> =
+            LazyLock::new(|| Regex::new(r#"^!elseif\s+(.+)$"#).unwrap());
         static RE_IFDEF: LazyLock<Regex> =
             LazyLock::new(|| Regex::new(r"^!ifdef\s+(\w+)$").unwrap());
         static RE_IFNDEF: LazyLock<Regex> =
@@ -520,11 +1105,35 @@ impl PreprocessContext {
         }
         if let Some(caps) = RE_IF.captures(line) {
             let expr = caps[1].trim();
-            let result = self.eval_condition(expr);
+            let expanded = self.substitute_vars(expr);
+            let result = self.eval_bool(&expanded);
             self.cond_stack.push(CondState {
                 active: result && self.is_active(),
                 has_matched: result,
             });
+            return true;
+        }
+        if let Some(caps) = RE_ELSEIF.captures(line) {
+            let n = self.cond_stack.len();
+            let parent_active = n <= 1 || self.cond_stack[..n - 1].iter().all(|c| c.active);
+            let already_matched = self.cond_stack.last().map_or(false, |c| c.has_matched);
+            let result = if already_matched {
+                false
+            } else {
+                let expr = caps[1].trim();
+                let expanded = self.substitute_vars(expr);
+                self.eval_bool(&expanded)
+            };
+            if let Some(cond) = self.cond_stack.last_mut() {
+                if already_matched {
+                    cond.active = false;
+                } else {
+                    cond.active = result && parent_active;
+                    if result {
+                        cond.has_matched = true;
+                    }
+                }
+            }
             return true;
         }
         if line == "!else" {
@@ -543,25 +1152,226 @@ impl PreprocessContext {
         false
     }
 
-    fn eval_condition(&self, expr: &str) -> bool {
-        // Simple evaluation: check for variable comparisons and existence.
+    // ------------------------------------------------------------------
+    // Expression evaluation
+    // ------------------------------------------------------------------
+
+    /// Evaluate an expression string to a Value.
+    fn eval_expr_to_value(&mut self, expr: &str) -> Value {
         let expr = expr.trim();
 
-        // $var == "value"
-        static RE_EQ: LazyLock<Regex> =
-            LazyLock::new(|| Regex::new(r#"^\$(\w+)\s*==\s*"([^"]*)"$"#).unwrap());
-        static RE_NEQ: LazyLock<Regex> =
-            LazyLock::new(|| Regex::new(r#"^\$(\w+)\s*!=\s*"([^"]*)"$"#).unwrap());
-
-        if let Some(caps) = RE_EQ.captures(expr) {
-            let var = &caps[1];
-            let expected = &caps[2];
-            return self.defines.get(var).is_some_and(|v| v == expected);
+        // Strip surrounding quotes.
+        if expr.starts_with('"') && expr.ends_with('"') && expr.len() >= 2 {
+            let inner = &expr[1..expr.len() - 1];
+            // Substitute variables in the string.
+            let substituted = self.substitute_vars(inner);
+            return Value::Str(substituted);
         }
-        if let Some(caps) = RE_NEQ.captures(expr) {
-            let var = &caps[1];
-            let expected = &caps[2];
-            return self.defines.get(var).is_none_or(|v| v != expected);
+
+        // Boolean literals.
+        if expr == "true" || expr == "%true()" || expr == "%true" {
+            return Value::Bool(true);
+        }
+        if expr == "false" || expr == "%false()" || expr == "%false" {
+            return Value::Bool(false);
+        }
+
+        // Substitute variables first.
+        let substituted = self.substitute_vars(expr);
+        let substituted = substituted.trim();
+
+        // Try to parse as a pure number.
+        if let Ok(n) = substituted.parse::<i64>() {
+            return Value::Int(n);
+        }
+        if let Ok(f) = substituted.parse::<f64>() {
+            return Value::Float(f);
+        }
+
+        // Try string concatenation with +.
+        if let Some(result) = self.try_eval_string_concat(substituted) {
+            return result;
+        }
+
+        // Try arithmetic.
+        if let Some(result) = self.try_eval_arithmetic(substituted) {
+            return result;
+        }
+
+        // Function call: $funcName(args)
+        if let Some(val) = self.try_eval_func_call(substituted) {
+            return val;
+        }
+
+        // Fall back to string.
+        Value::Str(substituted.to_string())
+    }
+
+    fn try_eval_func_call(&mut self, expr: &str) -> Option<Value> {
+        // $funcName(args)
+        static RE: LazyLock<Regex> =
+            LazyLock::new(|| Regex::new(r"^\$(\w+)\(([^)]*)\)$").unwrap());
+
+        if let Some(caps) = RE.captures(expr) {
+            let name = caps[1].to_string();
+            if self.functions.contains_key(&name) {
+                let args_str = &caps[2];
+                return Some(self.eval_function_call(&name, args_str));
+            }
+        }
+        None
+    }
+
+    fn try_eval_string_concat(&mut self, expr: &str) -> Option<Value> {
+        // Find top-level + that looks like string concatenation.
+        // We check if it's NOT purely numeric.
+        let parts = split_at_top_level_op(expr, '+');
+        if parts.len() <= 1 {
+            return None;
+        }
+
+        // Check if any part is a quoted string.
+        let has_string = parts.iter().any(|p| {
+            let t = p.trim();
+            t.starts_with('"') || (t.parse::<f64>().is_err() && !t.starts_with('$'))
+        });
+
+        if has_string {
+            let mut result = String::new();
+            for part in &parts {
+                let val = self.eval_expr_to_value(part.trim());
+                result.push_str(&val.to_display());
+            }
+            return Some(Value::Str(result));
+        }
+
+        None
+    }
+
+    fn try_eval_arithmetic(&mut self, expr: &str) -> Option<Value> {
+        // Find the lowest-precedence top-level operator.
+        // Precedence (low to high): +/-, */%, unary-
+        // Scan right-to-left for + and - first (to get left-associativity).
+        let expr = expr.trim();
+
+        // Try + and - (lowest precedence).
+        for &op in &['+', '-'] {
+            if let Some(pos) = find_top_level_op_pos(expr, op) {
+                if pos == 0 {
+                    continue; // unary minus
+                }
+                let left = &expr[..pos];
+                let right = &expr[pos + 1..];
+                let lval = self.eval_expr_to_value(left);
+                let rval = self.eval_expr_to_value(right);
+
+                // If either side is a non-numeric string, do string concat for +.
+                if op == '+' && (!lval.is_numeric() || !rval.is_numeric()) {
+                    return Some(Value::Str(format!(
+                        "{}{}",
+                        lval.to_display(),
+                        rval.to_display()
+                    )));
+                }
+
+                let result = match op {
+                    '+' => lval.to_number() + rval.to_number(),
+                    '-' => lval.to_number() - rval.to_number(),
+                    _ => unreachable!(),
+                };
+                return Some(number_value(result));
+            }
+        }
+
+        // Try *, /, % (higher precedence).
+        for &op in &['*', '/', '%'] {
+            if let Some(pos) = find_top_level_op_pos(expr, op) {
+                let left = &expr[..pos];
+                let right = &expr[pos + 1..];
+                let lval = self.eval_expr_to_value(left);
+                let rval = self.eval_expr_to_value(right);
+                let result = match op {
+                    '*' => lval.to_number() * rval.to_number(),
+                    '/' => {
+                        let r = rval.to_number();
+                        if r == 0.0 {
+                            0.0
+                        } else {
+                            lval.to_number() / r
+                        }
+                    }
+                    '%' => {
+                        let r = rval.to_number();
+                        if r == 0.0 {
+                            0.0
+                        } else {
+                            lval.to_number() % r
+                        }
+                    }
+                    _ => unreachable!(),
+                };
+                return Some(number_value(result));
+            }
+        }
+
+        // Parenthesized expression.
+        if expr.starts_with('(') && expr.ends_with(')') {
+            return Some(self.eval_expr_to_value(&expr[1..expr.len() - 1]));
+        }
+
+        // Function call.
+        if let Some(val) = self.try_eval_func_call(expr) {
+            return Some(val);
+        }
+
+        None
+    }
+
+    // ------------------------------------------------------------------
+    // Boolean evaluation for !if / !while conditions
+    // ------------------------------------------------------------------
+
+    fn eval_bool(&mut self, expr: &str) -> bool {
+        let expr = expr.trim();
+
+        // Strip outer parens.
+        if expr.starts_with('(') && expr.ends_with(')') {
+            let inner = &expr[1..expr.len() - 1];
+            // Check if parens are balanced (i.e., they truly wrap the whole expression).
+            if parens_balanced(inner) {
+                return self.eval_bool(inner);
+            }
+        }
+
+        // ||
+        if let Some(pos) = find_top_level_logical_op(expr, "||") {
+            let left = &expr[..pos];
+            let right = &expr[pos + 2..];
+            return self.eval_bool(left) || self.eval_bool(right);
+        }
+
+        // &&
+        if let Some(pos) = find_top_level_logical_op(expr, "&&") {
+            let left = &expr[..pos];
+            let right = &expr[pos + 2..];
+            return self.eval_bool(left) && self.eval_bool(right);
+        }
+
+        // Negation: !expr (but not != which is comparison).
+        if let Some(rest) = expr.strip_prefix('!') {
+            let rest = rest.trim();
+            if !rest.is_empty() && !rest.starts_with('=') {
+                return !self.eval_bool(rest);
+            }
+        }
+
+        // Comparison operators: ==, !=, <=, >=, <, >
+        for &op in &["==", "!=", "<=", ">=", "<", ">"] {
+            if let Some(pos) = find_top_level_comparison(expr, op) {
+                let left = expr[..pos].trim();
+                let right = expr[pos + op.len()..].trim();
+                return self.eval_comparison(left, right, op);
+            }
         }
 
         // %variable_exists("name")
@@ -569,79 +1379,140 @@ impl PreprocessContext {
             .strip_prefix("%variable_exists(\"")
             .and_then(|s| s.strip_suffix("\")"))
         {
-            return self.defines.contains_key(name) || self.token_defines.contains_key(name);
+            return self.defines.contains_key(name)
+                || self.token_defines.contains_key(name);
         }
 
-        // Bare variable existence: %true / %false
-        if expr == "%true" {
+        // %is_defined("name") — alias for variable_exists
+        if let Some(name) = expr
+            .strip_prefix("%is_defined(\"")
+            .and_then(|s| s.strip_suffix("\")"))
+        {
+            return self.defines.contains_key(name)
+                || self.token_defines.contains_key(name);
+        }
+
+        // %function_exists("name")
+        if let Some(name) = expr
+            .strip_prefix("%function_exists(\"")
+            .and_then(|s| s.strip_suffix("\")"))
+        {
+            return self.functions.contains_key(name);
+        }
+
+        // %true / %false
+        if expr == "%true" || expr == "%true()" || expr == "true" {
             return true;
         }
-        if expr == "%false" {
+        if expr == "%false" || expr == "%false()" || expr == "false" {
             return false;
         }
 
-        // Default: treat non-empty as true.
+        // Numeric: non-zero is true.
+        if let Ok(n) = expr.parse::<f64>() {
+            return n != 0.0;
+        }
+
+        // Non-empty string is true.
         !expr.is_empty()
     }
 
+    fn eval_comparison(&mut self, left: &str, right: &str, op: &str) -> bool {
+        let lval = self.eval_expr_to_value(left);
+        let rval = self.eval_expr_to_value(right);
+
+        // If both are numeric, compare numerically.
+        if lval.is_numeric() && rval.is_numeric() {
+            let l = lval.to_number();
+            let r = rval.to_number();
+            return match op {
+                "==" => (l - r).abs() < 1e-10,
+                "!=" => (l - r).abs() >= 1e-10,
+                "<" => l < r,
+                ">" => l > r,
+                "<=" => l <= r,
+                ">=" => l >= r,
+                _ => false,
+            };
+        }
+
+        // String comparison.
+        let l = lval.to_display();
+        let r = rval.to_display();
+        match op {
+            "==" => l == r,
+            "!=" => l != r,
+            "<" => l < r,
+            ">" => l > r,
+            "<=" => l <= r,
+            ">=" => l >= r,
+            _ => false,
+        }
+    }
+
+    // ------------------------------------------------------------------
+    // Variable substitution
+    // ------------------------------------------------------------------
+
     fn substitute_vars(&self, line: &str) -> String {
-        // Strip sprite icon references `<$name>` — we don't render sprites.
+        // Strip sprite icon references `<$name>`.
         static SPRITE_REF_RE: LazyLock<Regex> =
             LazyLock::new(|| Regex::new(r"<\$\w+>\s*").unwrap());
         let line = &*SPRITE_REF_RE.replace_all(line, "");
 
-        // First apply !define token macros (word-boundary bare-word substitution).
         let mut result = line.to_string();
-        for (name, value) in &self.token_defines {
-            // Build a per-name regex with word boundaries. This is cached in a
-            // local string and compiled inline; !define macros are uncommon
-            // enough that the overhead is acceptable.
-            if let Ok(re) = Regex::new(&format!(r"\b{}\b", regex::escape(name))) {
-                result = re.replace_all(&result, value.as_str()).to_string();
-            }
-        }
 
-        // Then apply $variable substitution.
-        static VAR_RE: LazyLock<Regex> = LazyLock::new(|| Regex::new(r"\$(\w+)").unwrap());
+        // First apply $variable substitution (also checks token_defines).
+        result = self.substitute_inline_func_calls(&result);
 
-        let after_vars = VAR_RE
+        static VAR_RE: LazyLock<Regex> =
+            LazyLock::new(|| Regex::new(r"\$(\w+)").unwrap());
+
+        result = VAR_RE
             .replace_all(&result, |caps: &regex::Captures| {
                 let name = &caps[1];
-                self.defines
-                    .get(name)
+                self.get_var(name)
+                    .or_else(|| self.token_defines.get(name))
                     .cloned()
                     .unwrap_or_else(|| format!("${name}"))
             })
             .to_string();
 
+        // Then apply !define token macros (word-boundary bare-word substitution).
+        for (name, value) in &self.token_defines {
+            if let Ok(re) = Regex::new(&format!(r"\b{}\b", regex::escape(name))) {
+                result = re.replace_all(&result, value.as_str()).to_string();
+            }
+        }
+
+        let after_vars = result;
+
         // Evaluate built-in %functions.
-        eval_builtin_functions(&after_vars)
+        self.eval_builtin_functions(&after_vars)
     }
 
-    /// Expand Archimate macros when `!include <archimate/Archimate>` was seen.
-    ///
-    /// Returns `Some(expanded_line)` if the line was an archimate macro call,
-    /// `None` otherwise.
-    ///
-    /// Element macros: `Category_Element(id, "label")` → `rectangle "label" as id`
-    /// Relation macros: `Rel_Xxx(from, to, "label")` → `from --> to : label`
-    ///                  `Rel_Xxx(from, to, "")` → `from --> to`
+    fn substitute_inline_func_calls(&self, line: &str) -> String {
+        // We need &mut self to call functions, but we're in &self context here.
+        // This is a limitation — inline function calls in output lines require
+        // a different approach. For now, we handle it in eval_builtin_functions
+        // for %string() etc. and rely on the caller to handle $func() calls
+        // in assignment context.
+        line.to_string()
+    }
+
+    /// Expand Archimate macros.
     fn try_expand_archimate(&self, line: &str) -> Option<String> {
         if !self.archimate_enabled {
             return None;
         }
 
-        // Element macro: Word_Word(id, "label")  — category is anything except Rel
         static ELEM_RE: LazyLock<Regex> = LazyLock::new(|| {
             Regex::new(r#"^([A-Z][A-Za-z]+)_([A-Za-z]+)\s*\(\s*(\w+)\s*,\s*"([^"]*)"\s*\)$"#)
                 .unwrap()
         });
-        // Relation macro: Rel_Xxx[_Dir](from, to, "label")
         static REL_RE: LazyLock<Regex> = LazyLock::new(|| {
-            Regex::new(
-                r#"^Rel_([A-Za-z_]+)\s*\(\s*(\w+)\s*,\s*(\w+)\s*,\s*"([^"]*)"\s*\)$"#,
-            )
-            .unwrap()
+            Regex::new(r#"^Rel_([A-Za-z_]+)\s*\(\s*(\w+)\s*,\s*(\w+)\s*,\s*"([^"]*)"\s*\)$"#)
+                .unwrap()
         });
 
         if let Some(caps) = REL_RE.captures(line) {
@@ -663,94 +1534,513 @@ impl PreprocessContext {
 
         None
     }
+
+    // ------------------------------------------------------------------
+    // Built-in %functions
+    // ------------------------------------------------------------------
+
+    fn eval_builtin_functions(&self, input: &str) -> String {
+        // Handle nested function calls by repeatedly evaluating.
+        let mut result = input.to_string();
+        let mut iterations = 0;
+        loop {
+            let next = self.eval_builtins_once(&result);
+            if next == result || iterations > 10 {
+                break;
+            }
+            result = next;
+            iterations += 1;
+        }
+        result
+    }
+
+    fn eval_builtins_once(&self, input: &str) -> String {
+        // Find the innermost %func(...) call.
+        static FUNC_RE: LazyLock<Regex> =
+            LazyLock::new(|| Regex::new(r"%(\w+)\(").unwrap());
+
+        let mut result = input.to_string();
+
+        // Find the first %func( and then find the matching close paren.
+        if let Some(m) = FUNC_RE.find(&result) {
+            let start = m.start();
+            let after_open = m.end(); // position after '('
+            if let Some(close) = find_matching_paren_from(&result, after_open - 1) {
+                let func_name = &result[start + 1..after_open - 1];
+                let args_raw = &result[after_open..close];
+                let replacement = self.eval_one_builtin(func_name, args_raw);
+                result = format!("{}{replacement}{}", &result[..start], &result[close + 1..]);
+            }
+        }
+
+        result
+    }
+
+    fn eval_one_builtin(&self, func: &str, args_raw: &str) -> String {
+        let args: Vec<&str> = if args_raw.trim().is_empty() {
+            Vec::new()
+        } else {
+            split_builtin_args(args_raw)
+        };
+
+        // Strip quotes from args.
+        let args: Vec<&str> = args
+            .iter()
+            .map(|a| a.trim().trim_matches('"'))
+            .collect();
+
+        match func {
+            "strlen" => args
+                .first()
+                .map_or("0".to_string(), |s| s.len().to_string()),
+            "substr" => {
+                let s = args.first().copied().unwrap_or("");
+                let start: usize = args.get(1).and_then(|v| v.parse().ok()).unwrap_or(0);
+                let len: usize = args
+                    .get(2)
+                    .and_then(|v| v.parse().ok())
+                    .unwrap_or_else(|| s.len().saturating_sub(start));
+                s.chars().skip(start).take(len).collect()
+            }
+            "strpos" => {
+                let haystack = args.first().copied().unwrap_or("");
+                let needle = args.get(1).copied().unwrap_or("");
+                haystack
+                    .find(needle)
+                    .map_or("-1".to_string(), |p| p.to_string())
+            }
+            "upper" => args.first().map_or(String::new(), |s| s.to_uppercase()),
+            "lower" => args.first().map_or(String::new(), |s| s.to_lowercase()),
+            "newline" => "\n".to_string(),
+            "tab" => "\t".to_string(),
+            "true" => "true".to_string(),
+            "false" => "false".to_string(),
+            "date" => "2026-03-22".to_string(),
+            "size" => args
+                .first()
+                .map_or("0".to_string(), |s| s.len().to_string()),
+            "string" => args.first().map_or(String::new(), |s| s.to_string()),
+            "intval" => args
+                .first()
+                .and_then(|s| s.parse::<f64>().ok())
+                .map_or("0".to_string(), |n| format!("{}", n as i64)),
+            "not" => {
+                let val = args.first().copied().unwrap_or("false");
+                if val == "true" || val == "1" {
+                    "false"
+                } else {
+                    "true"
+                }
+                .to_string()
+            }
+            "chr" => {
+                let code: u32 = args.first().and_then(|s| s.parse().ok()).unwrap_or(0);
+                char::from_u32(code).map_or(String::new(), |c| c.to_string())
+            }
+            "darken" => {
+                let color_str = args.first().copied().unwrap_or("");
+                let amount: f64 = args.get(1).and_then(|s| s.parse().ok()).unwrap_or(0.0);
+                if let Some((r, g, b)) = parse_color(color_str) {
+                    let (h, s, l) = rgb_to_hsl(r, g, b);
+                    let new_l = (l - amount).max(0.0);
+                    let (r2, g2, b2) = hsl_to_rgb(h, s, new_l);
+                    rgb_to_hex(r2, g2, b2)
+                } else {
+                    color_str.to_string()
+                }
+            }
+            "lighten" => {
+                let color_str = args.first().copied().unwrap_or("");
+                let amount: f64 = args.get(1).and_then(|s| s.parse().ok()).unwrap_or(0.0);
+                if let Some((r, g, b)) = parse_color(color_str) {
+                    let (h, s, l) = rgb_to_hsl(r, g, b);
+                    let new_l = (l + amount).min(100.0);
+                    let (r2, g2, b2) = hsl_to_rgb(h, s, new_l);
+                    rgb_to_hex(r2, g2, b2)
+                } else {
+                    color_str.to_string()
+                }
+            }
+            "hsl_color" => {
+                let h: f64 = args.first().and_then(|s| s.parse().ok()).unwrap_or(0.0);
+                let s: f64 = args.get(1).and_then(|s| s.parse().ok()).unwrap_or(100.0);
+                let l: f64 = args.get(2).and_then(|s| s.parse().ok()).unwrap_or(50.0);
+                let (r, g, b) = hsl_to_rgb(h, s, l);
+                rgb_to_hex(r, g, b)
+            }
+            "is_dark" => {
+                let color_str = args.first().copied().unwrap_or("");
+                if let Some((r, g, b)) = parse_color(color_str) {
+                    let (_, _, l) = rgb_to_hsl(r, g, b);
+                    if l < 50.0 { "true" } else { "false" }.to_string()
+                } else {
+                    "false".to_string()
+                }
+            }
+            "is_light" => {
+                let color_str = args.first().copied().unwrap_or("");
+                if let Some((r, g, b)) = parse_color(color_str) {
+                    let (_, _, l) = rgb_to_hsl(r, g, b);
+                    if l >= 50.0 { "true" } else { "false" }.to_string()
+                } else {
+                    "false".to_string()
+                }
+            }
+            "variable_exists" => {
+                let name = args.first().copied().unwrap_or("");
+                if self.defines.contains_key(name) || self.token_defines.contains_key(name) {
+                    "true"
+                } else {
+                    "false"
+                }
+                .to_string()
+            }
+            "is_defined" => {
+                let name = args.first().copied().unwrap_or("");
+                if self.defines.contains_key(name) || self.token_defines.contains_key(name) {
+                    "true"
+                } else {
+                    "false"
+                }
+                .to_string()
+            }
+            "function_exists" => {
+                let name = args.first().copied().unwrap_or("");
+                if self.functions.contains_key(name) {
+                    "true"
+                } else {
+                    "false"
+                }
+                .to_string()
+            }
+            "get_variable_value" => {
+                let name = args.first().copied().unwrap_or("");
+                self.get_var(name)
+                    .cloned()
+                    .or_else(|| self.token_defines.get(name).cloned())
+                    .unwrap_or_default()
+            }
+            "set_variable_value" => {
+                // In expression context we can't mutate; handled specially.
+                // Return empty.
+                String::new()
+            }
+            "filename" => self
+                .base_dir
+                .as_ref()
+                .map(|p| p.display().to_string())
+                .unwrap_or_default(),
+            _ => {
+                // Unknown function — pass through.
+                format!("%{func}({args_raw})")
+            }
+        }
+    }
 }
 
-/// Evaluate built-in %functions in a string.
-fn eval_builtin_functions(input: &str) -> String {
-    static FUNC_RE: LazyLock<Regex> = LazyLock::new(|| Regex::new(r"%(\w+)\(([^)]*)\)").unwrap());
+// ---------------------------------------------------------------------------
+// Helper functions
+// ---------------------------------------------------------------------------
 
-    FUNC_RE
-        .replace_all(input, |caps: &regex::Captures| {
-            let func = &caps[1];
-            let args_raw = &caps[2];
-            let args: Vec<&str> = if args_raw.trim().is_empty() {
-                Vec::new()
+fn number_value(f: f64) -> Value {
+    if f == (f as i64) as f64 && f.abs() < i64::MAX as f64 {
+        Value::Int(f as i64)
+    } else {
+        Value::Float(f)
+    }
+}
+
+fn parse_func_params(params_str: &str) -> Vec<FuncParam> {
+    if params_str.trim().is_empty() {
+        return Vec::new();
+    }
+    params_str
+        .split(',')
+        .map(|p| {
+            let p = p.trim();
+            // Check for default: $name = "value" or $name = value
+            if let Some(eq_pos) = p.find('=') {
+                let name = p[..eq_pos].trim().trim_start_matches('$').to_string();
+                let default = p[eq_pos + 1..].trim().trim_matches('"').to_string();
+                FuncParam {
+                    name,
+                    default: Some(default),
+                }
             } else {
-                args_raw
-                    .split(',')
-                    .map(|a| a.trim().trim_matches('"'))
-                    .collect()
-            };
-
-            match func {
-                "strlen" => args
-                    .first()
-                    .map_or("0".to_string(), |s| s.len().to_string()),
-                "substr" => {
-                    let s = args.first().copied().unwrap_or("");
-                    let start: usize = args.get(1).and_then(|v| v.parse().ok()).unwrap_or(0);
-                    let len: usize = args
-                        .get(2)
-                        .and_then(|v| v.parse().ok())
-                        .unwrap_or_else(|| s.len().saturating_sub(start));
-                    s.chars().skip(start).take(len).collect()
-                }
-                "strpos" => {
-                    let haystack = args.first().copied().unwrap_or("");
-                    let needle = args.get(1).copied().unwrap_or("");
-                    haystack
-                        .find(needle)
-                        .map_or("-1".to_string(), |p| p.to_string())
-                }
-                "upper" => args.first().map_or(String::new(), |s| s.to_uppercase()),
-                "lower" => args.first().map_or(String::new(), |s| s.to_lowercase()),
-                "newline" => "\n".to_string(),
-                "tab" => "\t".to_string(),
-                "true" => "true".to_string(),
-                "false" => "false".to_string(),
-                "date" => {
-                    // Simplified: return ISO date.
-                    "2026-03-22".to_string()
-                }
-                "size" => args
-                    .first()
-                    .map_or("0".to_string(), |s| s.len().to_string()),
-                "string" => args.first().map_or(String::new(), |s| s.to_string()),
-                "intval" => args
-                    .first()
-                    .and_then(|s| s.parse::<i64>().ok())
-                    .map_or("0".to_string(), |n| n.to_string()),
-                "not" => {
-                    let val = args.first().copied().unwrap_or("false");
-                    if val == "true" || val == "1" {
-                        "false"
-                    } else {
-                        "true"
-                    }
-                    .to_string()
-                }
-                "chr" => {
-                    let code: u32 = args.first().and_then(|s| s.parse().ok()).unwrap_or(0);
-                    char::from_u32(code).map_or(String::new(), |c| c.to_string())
-                }
-                "variable_exists" => {
-                    // This is used in !if conditions, already handled there.
-                    // In regular text, just return the string.
-                    format!("%variable_exists({})", args_raw)
-                }
-                _ => {
-                    // Unknown function — pass through.
-                    format!("%{func}({args_raw})")
+                FuncParam {
+                    name: p.trim_start_matches('$').to_string(),
+                    default: None,
                 }
             }
         })
-        .to_string()
+        .collect()
+}
+
+fn parse_call_args(args_str: &str) -> Vec<String> {
+    if args_str.trim().is_empty() {
+        return Vec::new();
+    }
+    let args = split_args(args_str);
+    args.into_iter()
+        .map(|a| a.trim().trim_matches('"').to_string())
+        .collect()
+}
+
+fn split_args(s: &str) -> Vec<String> {
+    let mut args = Vec::new();
+    let mut current = String::new();
+    let mut depth = 0;
+    let mut in_quotes = false;
+
+    for c in s.chars() {
+        if c == '"' {
+            in_quotes = !in_quotes;
+            current.push(c);
+        } else if in_quotes {
+            current.push(c);
+        } else if c == '(' {
+            depth += 1;
+            current.push(c);
+        } else if c == ')' {
+            depth -= 1;
+            current.push(c);
+        } else if c == ',' && depth == 0 {
+            args.push(current.trim().to_string());
+            current = String::new();
+        } else {
+            current.push(c);
+        }
+    }
+    if !current.trim().is_empty() {
+        args.push(current.trim().to_string());
+    }
+    args
+}
+
+fn split_builtin_args(s: &str) -> Vec<&str> {
+    // Simple comma split respecting quotes and parens.
+    let mut args = Vec::new();
+    let mut start = 0;
+    let mut depth = 0;
+    let mut in_quotes = false;
+    let bytes = s.as_bytes();
+
+    for (i, &b) in bytes.iter().enumerate() {
+        if b == b'"' {
+            in_quotes = !in_quotes;
+        } else if !in_quotes {
+            if b == b'(' {
+                depth += 1;
+            } else if b == b')' {
+                depth -= 1;
+            } else if b == b',' && depth == 0 {
+                args.push(&s[start..i]);
+                start = i + 1;
+            }
+        }
+    }
+    args.push(&s[start..]);
+    args
+}
+
+fn find_matching_paren(s: &str) -> Option<usize> {
+    // s starts with '('
+    if !s.starts_with('(') {
+        return None;
+    }
+    let mut depth = 0;
+    let mut in_quotes = false;
+    for (i, c) in s.chars().enumerate() {
+        if c == '"' {
+            in_quotes = !in_quotes;
+        } else if !in_quotes {
+            if c == '(' {
+                depth += 1;
+            } else if c == ')' {
+                depth -= 1;
+                if depth == 0 {
+                    return Some(i);
+                }
+            }
+        }
+    }
+    None
+}
+
+fn find_matching_paren_from(s: &str, open_pos: usize) -> Option<usize> {
+    let mut depth = 0;
+    let mut in_quotes = false;
+    for (i, c) in s[open_pos..].chars().enumerate() {
+        if c == '"' {
+            in_quotes = !in_quotes;
+        } else if !in_quotes {
+            if c == '(' {
+                depth += 1;
+            } else if c == ')' {
+                depth -= 1;
+                if depth == 0 {
+                    return Some(open_pos + i);
+                }
+            }
+        }
+    }
+    None
+}
+
+/// Find the rightmost top-level position of an operator (not inside parens or quotes).
+fn find_top_level_op_pos(expr: &str, op: char) -> Option<usize> {
+    let mut depth = 0;
+    let mut in_quotes = false;
+    let mut last_pos = None;
+    let chars: Vec<char> = expr.chars().collect();
+
+    for (i, &c) in chars.iter().enumerate() {
+        if c == '"' {
+            in_quotes = !in_quotes;
+        } else if !in_quotes {
+            if c == '(' {
+                depth += 1;
+            } else if c == ')' {
+                depth -= 1;
+            } else if c == op && depth == 0 {
+                // For -, don't match if it's part of ->
+                if op == '-' && i + 1 < chars.len() && chars[i + 1] == '>' {
+                    continue;
+                }
+                // Don't match if preceded by another operator (unary).
+                if i > 0 {
+                    let prev = chars[i - 1];
+                    if prev == '+' || prev == '-' || prev == '*' || prev == '/' || prev == '%' || prev == '(' || prev == '=' || prev == '<' || prev == '>' || prev == '!' {
+                        continue;
+                    }
+                }
+                last_pos = Some(i);
+            }
+        }
+    }
+    last_pos
+}
+
+fn split_at_top_level_op(expr: &str, op: char) -> Vec<String> {
+    let mut parts = Vec::new();
+    let mut depth = 0;
+    let mut in_quotes = false;
+    let mut current = String::new();
+
+    for c in expr.chars() {
+        if c == '"' {
+            in_quotes = !in_quotes;
+            current.push(c);
+        } else if in_quotes {
+            current.push(c);
+        } else if c == '(' {
+            depth += 1;
+            current.push(c);
+        } else if c == ')' {
+            depth -= 1;
+            current.push(c);
+        } else if c == op && depth == 0 {
+            parts.push(current);
+            current = String::new();
+        } else {
+            current.push(c);
+        }
+    }
+    parts.push(current);
+    parts
+}
+
+fn find_top_level_logical_op(expr: &str, op: &str) -> Option<usize> {
+    let mut depth = 0;
+    let mut in_quotes = false;
+    let bytes = expr.as_bytes();
+    let op_bytes = op.as_bytes();
+    let mut last_pos = None;
+
+    for i in 0..bytes.len() {
+        if bytes[i] == b'"' {
+            in_quotes = !in_quotes;
+        } else if !in_quotes {
+            if bytes[i] == b'(' {
+                depth += 1;
+            } else if bytes[i] == b')' {
+                depth -= 1;
+            } else if depth == 0
+                && i + op_bytes.len() <= bytes.len()
+                && &bytes[i..i + op_bytes.len()] == op_bytes
+            {
+                last_pos = Some(i);
+            }
+        }
+    }
+    last_pos
+}
+
+fn find_top_level_comparison(expr: &str, op: &str) -> Option<usize> {
+    let mut depth = 0;
+    let mut in_quotes = false;
+    let bytes = expr.as_bytes();
+    let op_bytes = op.as_bytes();
+
+    // For == and !=, scan from left; for others, also from left.
+    for i in 0..bytes.len() {
+        if bytes[i] == b'"' {
+            in_quotes = !in_quotes;
+        } else if !in_quotes {
+            if bytes[i] == b'(' {
+                depth += 1;
+            } else if bytes[i] == b')' {
+                depth -= 1;
+            } else if depth == 0
+                && i + op_bytes.len() <= bytes.len()
+                && &bytes[i..i + op_bytes.len()] == op_bytes
+            {
+                // For < and >, make sure it's not <= or >= or <> or <<.
+                if op == "<" {
+                    if i + 1 < bytes.len()
+                        && (bytes[i + 1] == b'=' || bytes[i + 1] == b'>')
+                    {
+                        continue;
+                    }
+                }
+                if op == ">" {
+                    if i + 1 < bytes.len() && bytes[i + 1] == b'=' {
+                        continue;
+                    }
+                    // Also skip -> (arrow).
+                    if i > 0 && bytes[i - 1] == b'-' {
+                        continue;
+                    }
+                }
+                // For == make sure it's not part of !== or ===.
+                return Some(i);
+            }
+        }
+    }
+    None
+}
+
+fn parens_balanced(s: &str) -> bool {
+    let mut depth = 0;
+    let mut in_quotes = false;
+    for c in s.chars() {
+        if c == '"' {
+            in_quotes = !in_quotes;
+        } else if !in_quotes {
+            if c == '(' {
+                depth += 1;
+            } else if c == ')' {
+                depth -= 1;
+                if depth < 0 {
+                    return false;
+                }
+            }
+        }
+    }
+    depth == 0
 }
 
 fn strip_inline_comment(line: &str) -> String {
-    // PlantUML inline comments start with ' but not inside strings.
-    // ' starts a comment only when at position 0 (after trim) or preceded by
-    // whitespace. This avoids stripping possessives like [Task 1]'s end.
     let mut in_quotes = false;
     let chars: Vec<char> = line.chars().collect();
     let bytes: Vec<usize> = line
@@ -763,7 +2053,6 @@ fn strip_inline_comment(line: &str) -> String {
         if c == '"' {
             in_quotes = !in_quotes;
         } else if c == '\'' && !in_quotes {
-            // Only treat as comment start if at position 0 or preceded by whitespace.
             let preceded_by_space = idx == 0 || chars[idx - 1].is_whitespace();
             if preceded_by_space {
                 return line[..byte_pos].to_string();
@@ -906,7 +2195,6 @@ mod tests {
 
     #[test]
     fn include_file() {
-        // Create a temp file for inclusion.
         let dir = std::env::temp_dir().join("rustuml_test_include");
         let _ = std::fs::create_dir_all(&dir);
         std::fs::write(dir.join("common.puml"), "A -> B : included\n").unwrap();
@@ -1006,5 +2294,49 @@ mod tests {
         let input = "@startuml\n!procedure $setup($name)\nparticipant $name\n!endprocedure\n$setup(\"Alice\")\n@enduml";
         let lines = preprocess(input);
         assert_eq!(lines, vec!["participant Alice"]);
+    }
+
+    // New tests for added features.
+
+    #[test]
+    fn variable_arithmetic() {
+        let input = "@startuml\n!$x = 10\n!$y = 20\n!$sum = $x + $y\nnote : $sum\n@enduml";
+        let lines = preprocess(input);
+        assert_eq!(lines, vec!["note : 30"]);
+    }
+
+    #[test]
+    fn while_loop() {
+        let input = "@startuml\n!$i = 1\n!while $i <= 3\nline $i\n!$i = $i + 1\n!endwhile\n@enduml";
+        let lines = preprocess(input);
+        assert_eq!(lines, vec!["line 1", "line 2", "line 3"]);
+    }
+
+    #[test]
+    fn elseif_branch() {
+        let input = "@startuml\n!$x = 2\n!if $x == 1\nfirst\n!elseif $x == 2\nsecond\n!else\nother\n!endif\n@enduml";
+        let lines = preprocess(input);
+        assert_eq!(lines, vec!["second"]);
+    }
+
+    #[test]
+    fn pragma_consumed() {
+        let input = "@startuml\n!pragma teoz true\nA -> B\n@enduml";
+        let lines = preprocess(input);
+        assert_eq!(lines, vec!["A -> B"]);
+    }
+
+    #[test]
+    fn function_return_value() {
+        let input = "@startuml\n!function $double($n)\n!return $n * 2\n!endfunction\n!$x = $double(5)\nnote : $x\n@enduml";
+        let lines = preprocess(input);
+        assert_eq!(lines, vec!["note : 10"]);
+    }
+
+    #[test]
+    fn numeric_comparison() {
+        let input = "@startuml\n!$x = 5\n!if $x > 3\nyes\n!endif\n@enduml";
+        let lines = preprocess(input);
+        assert_eq!(lines, vec!["yes"]);
     }
 }
