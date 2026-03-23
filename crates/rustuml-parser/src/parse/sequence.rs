@@ -295,7 +295,7 @@ impl SeqParser {
         static RE_IN: LazyLock<Regex> =
             LazyLock::new(|| Regex::new(r"^\[[-=><ox]+\s*(\w+)\s*(?:(?:\+\+|--|!!)\s*)?(?::\s*(.*))?$").unwrap());
         static RE_OUT: LazyLock<Regex> =
-            LazyLock::new(|| Regex::new(r"^(\w+)\s*[-=><ox]+\]\s*(?:(?:\+\+|--|!!)\s*)?(?::\s*(.*))?$").unwrap());
+            LazyLock::new(|| Regex::new(r"^(\w+)\s*[-=><ox]+[\[\]]\s*(?:(?:\+\+|--|!!)\s*)?(?::\s*(.*))?$").unwrap());
         let stripped = RE_COLOR.replace_all(line, "");
         let line = stripped.as_ref();
 

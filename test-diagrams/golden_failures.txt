@@ -1,12 +1,8 @@
-    3 edge-cases
-    2 combo
-    1 object
+    2 edge-cases
+    1 combo
     1 usecase
 
-combo/combo_class_vs_object: golden texts not found in Rust output: ["myCar : Car", "make = \"Toyota\"", "model = \"Camry\"", "year = 2023", "herCar : Car", "make = \"Honda\"", "model = \"Civic\"", "year = 2022"]
 combo/combo_preprocessing_macros: golden texts not found in Rust output: ["(PostgreSQL)", "(PostgreSQL)", "(MongoDB)", "read/write", "read/write", "read/write", "validate user", "check stock", "process", "receipt"]
 edge-cases/edge_multiple_blocks: golden texts not found in Rust output: ["Second"]
 edge-cases/edge_seq_title_with_variables: golden texts not found in Rust output: ["Sequence at Mon Mar 23 07:13:46 AEDT 2026"]
-edge-cases/edge_sequence_incoming_outgoing: golden texts not found in Rust output: ["to right"]
-object/obj_note_floating: golden texts not found in Rust output: ["ip = \"192.168.1.1\""]
 usecase/usecase_note_on_link: golden texts not found in Rust output: ["Delete User"]

@@ -316,21 +316,21 @@ impl ClassParser {
             //   keyword "label"        — group 4 (quoted-only, no `as`)
             // `abstract` without `class` is also a valid class keyword.
             Regex::new(
-                r#"^(class|abstract\s+class|abstract|interface|enum|annotation|entity)\s+(?:(?:"([^"]+)"\s+as\s+)?(\w+(?:<[^>]+>)?)|"([^"]+)")"#,
+                r#"^(class|abstract\s+class|abstract|interface|enum|annotation|entity|object)\s+(?:(?:"([^"]+)"\s+as\s+)?(\w+(?:<[^>]+>)?)|"([^"]+)")"#,
             )
             .unwrap()
         });
         // Same as RE but allows dots in the identifier (for `set namespaceSeparator none`).
         static RE_DOTTED: LazyLock<Regex> = LazyLock::new(|| {
             Regex::new(
-                r#"^(class|abstract\s+class|abstract|interface|enum|annotation|entity)\s+(?:(?:"([^"]+)"\s+as\s+)?(\w[\w.]*(?:<[^>]+>)?)|"([^"]+)")"#,
+                r#"^(class|abstract\s+class|abstract|interface|enum|annotation|entity|object)\s+(?:(?:"([^"]+)"\s+as\s+)?(\w[\w.]*(?:<[^>]+>)?)|"([^"]+)")"#,
             )
             .unwrap()
         });
         // Permissive regex: accepts any non-whitespace name (for custom namespace separators).
         static RE_PERMISSIVE: LazyLock<Regex> = LazyLock::new(|| {
             Regex::new(
-                r#"^(class|abstract\s+class|abstract|interface|enum|annotation|entity)\s+(?:(?:"([^"]+)"\s+as\s+)?([^\s{<>]+(?:<[^>]+>)?)|"([^"]+)")"#,
+                r#"^(class|abstract\s+class|abstract|interface|enum|annotation|entity|object)\s+(?:(?:"([^"]+)"\s+as\s+)?([^\s{<>]+(?:<[^>]+>)?)|"([^"]+)")"#,
             )
             .unwrap()
         });
@@ -889,7 +889,6 @@ impl ClassParser {
             || line.starts_with("together")
             || line.starts_with("allowmixing")
             || line.starts_with("map ")
-            || line.starts_with("object ")
             || line.starts_with("set ")
     }
 
