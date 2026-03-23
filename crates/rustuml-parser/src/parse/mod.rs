@@ -102,12 +102,16 @@ fn detect_uml_subtype(lines: &[String]) -> UmlSubtype {
             scores[4] += 5;
         }
         // Deployment — check against the full keyword set.
+        // "package" is excluded because it is also heavily used in class diagrams.
         {
             let kw_end = trimmed
                 .find(|c: char| !c.is_ascii_alphanumeric() && c != '_')
                 .unwrap_or(trimmed.len());
             let kw = &trimmed[..kw_end];
-            if deployment::DEPLOYMENT_KEYWORDS.contains(&kw) && kw_end < trimmed.len() {
+            if kw != "package"
+                && deployment::DEPLOYMENT_KEYWORDS.contains(&kw)
+                && kw_end < trimmed.len()
+            {
                 scores[7] += 5;
             }
         }

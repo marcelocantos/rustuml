@@ -150,11 +150,12 @@ impl ClassParser {
             //   keyword id             — group 3 (id only)
             //   keyword "label"        — group 4 (quoted-only, no `as`)
             Regex::new(
-                r#"^(class|abstract\s+class|interface|enum|annotation|entity)\s+(?:(?:"([^"]+)"\s+as\s+)?(\w+)|"([^"]+)")"#,
+                r#"^(class|abstract\s+class|interface|enum|annotation|entity)\s+(?:(?:"([^"]+)"\s+as\s+)?(\w+(?:<[^>]+>)?)|"([^"]+)")"#,
             )
             .unwrap()
         });
-        static STEREOTYPE_RE: LazyLock<Regex> = LazyLock::new(|| Regex::new(r"<<(\w+)>>").unwrap());
+        static STEREOTYPE_RE: LazyLock<Regex> =
+            LazyLock::new(|| Regex::new(r"<<\s*([^>]+?)>>").unwrap());
 
         if let Some(caps) = RE.captures(line) {
             let kind = parse_entity_kind(caps[1].trim());
@@ -173,7 +174,7 @@ impl ClassParser {
 
             let stereotypes: Vec<String> = STEREOTYPE_RE
                 .captures_iter(line)
-                .map(|c| c[1].to_string())
+                .map(|c| c[1].trim().to_string())
                 .collect();
 
             if let Some(entity) = self.find_entity_mut(&id) {
@@ -233,10 +234,10 @@ impl ClassParser {
     fn try_relationship(&mut self, line: &str) -> bool {
         // Relationship format: EntityA ["mult"] ARROW ["mult"] EntityB [: label]
         // Supported arrows: <|--, --|>, ..|>, <|.., *--, --*, o--, --o,
-        //                   --, -->, <--, <-, .., ..>, <..
+        //                   <-->, <..>, --, -->, <--, <-, .., ..>, <..
         static RE: LazyLock<Regex> = LazyLock::new(|| {
             Regex::new(
-                r#"^(\w+)\s*(?:"([^"]+)")?\s*((?:<\|--|--\|>|\.\.\|>|<\|\.\.|<\.\.|\*--|--\*|o--|--o|<--|-->|<-|--|\.\.|\.\.>))\s*(?:"([^"]+)")?\s*(\w+)(?:\s*:\s*(.+))?$"#,
+                r#"^(\w+)\s*(?:"([^"]+)")?\s*((?:<\|--|--\|>|\.\.\|>|<\|\.\.|<\.\.>|<\.\.|\*--|--\*|o--|--o|<-->|<--|-->|<-|--|\.\.|\.\.>))\s*(?:"([^"]+)")?\s*(\w+)(?:\s*:\s*(.+))?$"#,
             )
             .unwrap()
         });
@@ -465,9 +466,17 @@ impl ClassParser {
     }
 
     fn parse_member_line(&mut self, line: &str) {
+        static SEPARATOR_RE: LazyLock<Regex> = LazyLock::new(|| {
+            // Matches labeled separators: -- label --, == label ==, __ label __, .. label ..
+            // Bare separators (-- == __ ..) are handled by the equality checks below.
+            Regex::new(r"^(--|==|__|\.\.)\s+.+\s+(--|==|__|\.\.)\s*$").unwrap()
+        });
+
         let trimmed = line.trim();
-        // Separator lines.
-        if trimmed == "--" || trimmed == ".." || trimmed == "==" {
+        // Separator lines — bare or labeled.
+        if trimmed == "--" || trimmed == ".." || trimmed == "==" || trimmed == "__"
+            || SEPARATOR_RE.is_match(trimmed)
+        {
             return;
         }
         // Empty or brace-only.
@@ -733,8 +742,8 @@ mod tests {
     fn generics() {
         let d = parse("class Container<T>\nclass Map<K, V>");
         assert_eq!(d.entities.len(), 2);
-        assert_eq!(d.entities[0].id, "Container");
-        assert_eq!(d.entities[1].id, "Map");
+        assert_eq!(d.entities[0].id, "Container<T>");
+        assert_eq!(d.entities[1].id, "Map<K, V>");
     }
 
     #[test]
