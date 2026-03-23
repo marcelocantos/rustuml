@@ -31,10 +31,13 @@ struct ClassParser {
     entities: Vec<ClassEntity>,
     relationships: Vec<Relationship>,
     packages: Vec<Package>,
+    notes: Vec<Note>,
     /// Entity currently being parsed (inside { ... } block).
     current_entity: Option<String>,
     /// Index of the innermost active package scope (None = top-level).
     current_package: Option<usize>,
+    /// Note currently being accumulated (multi-line `note ... end note`).
+    current_note: Option<Note>,
 }
 
 impl ClassParser {
@@ -44,8 +47,10 @@ impl ClassParser {
             entities: Vec::new(),
             relationships: Vec::new(),
             packages: Vec::new(),
+            notes: Vec::new(),
             current_entity: None,
             current_package: None,
+            current_note: None,
         }
     }
 
@@ -55,6 +60,7 @@ impl ClassParser {
             entities: self.entities,
             relationships: self.relationships,
             packages: self.packages,
+            notes: self.notes,
         }
     }
 
@@ -77,6 +83,19 @@ impl ClassParser {
     }
 
     fn parse_line(&mut self, _line_num: usize, line: &str) -> Result<(), ParseError> {
+        // Inside a multi-line note?
+        if self.current_note.is_some() {
+            if line == "end note" {
+                let note = self.current_note.take().unwrap();
+                self.notes.push(note);
+            } else {
+                if let Some(note) = self.current_note.as_mut() {
+                    note.lines.push(line.to_string());
+                }
+            }
+            return Ok(());
+        }
+
         // Inside a class body?
         if self.current_entity.is_some() {
             if line == "}" || line == "}}" {
@@ -299,7 +318,91 @@ impl ClassParser {
     }
 
     fn try_note(&mut self, line: &str) -> bool {
-        line.starts_with("note ") || line == "end note"
+        // Single-line attached note: `note <pos> of <entity> : <text>`
+        static ATTACHED_RE: LazyLock<Regex> = LazyLock::new(|| {
+            Regex::new(r"^note\s+(top|bottom|left|right)\s+of\s+(\w+)\s*:\s*(.+)$").unwrap()
+        });
+        // Multi-line attached note start: `note <pos> of <entity>`
+        static ATTACHED_ML_RE: LazyLock<Regex> = LazyLock::new(|| {
+            Regex::new(r"^note\s+(top|bottom|left|right)\s+of\s+(\w+)\s*$").unwrap()
+        });
+        // Floating named note: `note "text" as Name`
+        static FLOATING_RE: LazyLock<Regex> = LazyLock::new(|| {
+            Regex::new(r#"^note\s+"([^"]+)"\s+as\s+(\w+)\s*$"#).unwrap()
+        });
+        // Multi-line floating note: `note as Name`
+        static FLOATING_ML_RE: LazyLock<Regex> = LazyLock::new(|| {
+            Regex::new(r"^note\s+as\s+(\w+)\s*$").unwrap()
+        });
+
+        if let Some(caps) = ATTACHED_RE.captures(line) {
+            let position = parse_note_position(&caps[1]);
+            let target = caps[2].to_string();
+            let text = caps[3].trim().to_string();
+            // Expand `\n` escape sequences into actual newlines.
+            let lines = text
+                .split("\\n")
+                .map(|s| s.trim().to_string())
+                .collect();
+            self.notes.push(Note {
+                lines,
+                target: Some(target),
+                position: Some(position),
+                alias: None,
+            });
+            return true;
+        }
+
+        if let Some(caps) = ATTACHED_ML_RE.captures(line) {
+            let position = parse_note_position(&caps[1]);
+            let target = caps[2].to_string();
+            self.current_note = Some(Note {
+                lines: Vec::new(),
+                target: Some(target),
+                position: Some(position),
+                alias: None,
+            });
+            return true;
+        }
+
+        if let Some(caps) = FLOATING_RE.captures(line) {
+            let text = caps[1].trim().to_string();
+            let alias = caps[2].to_string();
+            let lines = text
+                .split("\\n")
+                .map(|s| s.trim().to_string())
+                .collect();
+            self.notes.push(Note {
+                lines,
+                target: None,
+                position: None,
+                alias: Some(alias),
+            });
+            return true;
+        }
+
+        if let Some(caps) = FLOATING_ML_RE.captures(line) {
+            let alias = caps[1].to_string();
+            self.current_note = Some(Note {
+                lines: Vec::new(),
+                target: None,
+                position: None,
+                alias: Some(alias),
+            });
+            return true;
+        }
+
+        // `end note` is handled in parse_line; skip it here if encountered standalone.
+        if line == "end note" {
+            return true;
+        }
+
+        // Bare `note` prefix — consume to avoid falling through to unknown.
+        if line.starts_with("note ") {
+            return true;
+        }
+
+        false
     }
 
     fn try_meta(&mut self, line: &str) -> bool {
@@ -335,6 +438,16 @@ impl ClassParser {
         {
             entity.members.push(member);
         }
+    }
+}
+
+fn parse_note_position(s: &str) -> NotePosition {
+    match s {
+        "top" => NotePosition::Top,
+        "bottom" => NotePosition::Bottom,
+        "left" => NotePosition::Left,
+        "right" => NotePosition::Right,
+        _ => NotePosition::Right,
     }
 }
 

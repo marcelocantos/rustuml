@@ -6,6 +6,28 @@
 use super::DiagramMeta;
 use serde::{Deserialize, Serialize};
 
+/// Position of a note relative to its target entity.
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Serialize, Deserialize)]
+pub enum NotePosition {
+    Top,
+    Bottom,
+    Left,
+    Right,
+}
+
+/// A note attached to an entity or floating.
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct Note {
+    /// Note content lines (may contain Creole/HTML markup).
+    pub lines: Vec<String>,
+    /// Entity this note is attached to, if any.
+    pub target: Option<String>,
+    /// Position relative to target entity.
+    pub position: Option<NotePosition>,
+    /// Named note alias (for `note "..." as N`).
+    pub alias: Option<String>,
+}
+
 /// A complete class diagram.
 #[derive(Debug, Serialize, Deserialize)]
 pub struct ClassDiagram {
@@ -13,6 +35,7 @@ pub struct ClassDiagram {
     pub entities: Vec<ClassEntity>,
     pub relationships: Vec<Relationship>,
     pub packages: Vec<Package>,
+    pub notes: Vec<Note>,
 }
 
 /// A class, interface, enum, or other entity.

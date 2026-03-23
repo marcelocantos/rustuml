@@ -13,6 +13,13 @@ use crate::metrics;
 use crate::style::Theme;
 use crate::svg::SvgBuilder;
 
+const NOTE_FILL: &str = "#FEFFDD";
+const NOTE_BORDER: &str = "#888888";
+const NOTE_FOLD: f64 = 10.0; // size of the folded corner
+const NOTE_PAD_X: f64 = 6.0;
+const NOTE_PAD_Y: f64 = 4.0;
+const NOTE_LINE_HEIGHT: f64 = 16.0;
+
 const CLASS_MIN_WIDTH: f64 = 120.0;
 const HEADER_HEIGHT: f64 = 30.0;
 const MEMBER_HEIGHT: f64 = 18.0;
@@ -129,7 +136,37 @@ fn render_with_positions(
         })
         .collect();
 
-    // Compute SVG canvas size (entity extents + package extents + margin).
+    // Compute note positions relative to their target entities.
+    let note_positions: Vec<Option<(f64, f64, f64, f64)>> = diagram
+        .notes
+        .iter()
+        .map(|note| {
+            let (nw, nh) = note_box_dims(note);
+            if let Some(target) = &note.target {
+                if let Some(ti) = diagram.entities.iter().position(|e| &e.id == target) {
+                    let (ex, ey, ew, eh) = entity_positions[ti];
+                    let pos = note.position.unwrap_or(NotePosition::Right);
+                    let (nx, ny) = match pos {
+                        NotePosition::Right => (ex + ew + MARGIN / 2.0, ey),
+                        NotePosition::Left => (ex - nw - MARGIN / 2.0, ey),
+                        NotePosition::Top => (ex, ey - nh - MARGIN / 2.0),
+                        NotePosition::Bottom => (ex, ey + eh + MARGIN / 2.0),
+                    };
+                    return Some((nx, ny, nw, nh));
+                }
+            }
+            // Floating note: place to the right of all entities.
+            let float_x = entity_positions
+                .iter()
+                .map(|(x, _, w, _)| x + w)
+                .fold(0.0_f64, f64::max)
+                + MARGIN / 2.0;
+            let float_y = MARGIN;
+            Some((float_x, float_y, nw, nh))
+        })
+        .collect();
+
+    // Compute SVG canvas size (entity extents + package extents + note extents + margin).
     let ent_max_x = entity_positions
         .iter()
         .map(|(x, _, w, _)| x + w)
@@ -148,8 +185,18 @@ fn render_with_positions(
         .filter_map(|b| *b)
         .map(|(_, py, _, ph)| py + y_shift + ph)
         .fold(0.0_f64, f64::max);
-    let total_width = ent_max_x.max(pkg_max_x) + MARGIN;
-    let total_height = ent_max_y.max(pkg_max_y) + MARGIN;
+    let note_max_x = note_positions
+        .iter()
+        .filter_map(|b| *b)
+        .map(|(nx, _, nw, _)| nx + nw)
+        .fold(0.0_f64, f64::max);
+    let note_max_y = note_positions
+        .iter()
+        .filter_map(|b| *b)
+        .map(|(_, ny, _, nh)| ny + nh)
+        .fold(0.0_f64, f64::max);
+    let total_width = ent_max_x.max(pkg_max_x).max(note_max_x) + MARGIN;
+    let total_height = ent_max_y.max(pkg_max_y).max(note_max_y) + MARGIN;
 
     let mut svg = SvgBuilder::new(total_width, total_height);
 
@@ -210,6 +257,13 @@ fn render_with_positions(
                 to_cx,
                 to_top,
             );
+        }
+    }
+
+    // Render notes.
+    for (note, maybe_pos) in diagram.notes.iter().zip(&note_positions) {
+        if let Some((nx, ny, nw, nh)) = maybe_pos {
+            render_note_box(&mut svg, note, *nx, *ny, *nw, *nh);
         }
     }
 
@@ -287,6 +341,28 @@ fn render_grid(diagram: &ClassDiagram, cs: &crate::style::ClassStyle) -> String 
                 to_top,
             );
         }
+    }
+
+    // Render notes.
+    for note in &diagram.notes {
+        let (nw, nh) = note_box_dims(note);
+        let (nx, ny) = if let Some(target) = &note.target {
+            if let Some(ti) = diagram.entities.iter().position(|e| &e.id == target) {
+                let (ex, ey, ew, eh) = positions[ti];
+                let pos = note.position.unwrap_or(NotePosition::Right);
+                match pos {
+                    NotePosition::Right => (ex + ew + MARGIN / 2.0, ey),
+                    NotePosition::Left => (ex - nw - MARGIN / 2.0, ey),
+                    NotePosition::Top => (ex, ey - nh - MARGIN / 2.0),
+                    NotePosition::Bottom => (ex, ey + eh + MARGIN / 2.0),
+                }
+            } else {
+                (total_width - MARGIN, MARGIN)
+            }
+        } else {
+            (total_width - MARGIN, MARGIN)
+        };
+        render_note_box(&mut svg, note, nx, ny, nw, nh);
     }
 
     svg.finalize()
@@ -525,6 +601,73 @@ fn render_relationship_head(svg: &mut SvgBuilder, kind: RelationshipKind, x: f64
     }
 }
 
+/// Strip basic Creole/HTML markup from a note line to get plain text for rendering.
+/// This is a minimal strip: enough to get readable text in SVG without implementing
+/// a full Creole renderer.
+fn strip_note_markup(s: &str) -> String {
+    let mut out = s.trim().to_string();
+    // Remove Creole delimiters: **, //, __
+    out = out.replace("**", "");
+    out = out.replace("//", "");
+    out = out.replace("__", "");
+    // Strip HTML tags: <b>, </b>, <i>, <u>, <color:#...>, etc.
+    let mut result = String::new();
+    let mut in_tag = false;
+    for ch in out.chars() {
+        if ch == '<' {
+            in_tag = true;
+        } else if ch == '>' {
+            in_tag = false;
+        } else if !in_tag {
+            result.push(ch);
+        }
+    }
+    result.trim().to_string()
+}
+
+/// Compute the dimensions of a note box.
+fn note_box_dims(note: &Note) -> (f64, f64) {
+    let max_width = note
+        .lines
+        .iter()
+        .map(|l| metrics::text_width(&strip_note_markup(l), FONT_SIZE) + NOTE_PAD_X * 2.0)
+        .fold(80.0_f64, f64::max);
+    let height = NOTE_PAD_Y * 2.0 + note.lines.len() as f64 * NOTE_LINE_HEIGHT;
+    (max_width.max(NOTE_FOLD * 3.0), height.max(NOTE_FOLD * 2.0))
+}
+
+/// Render a note box at (x, y) with given dimensions.
+fn render_note_box(svg: &mut SvgBuilder, note: &Note, x: f64, y: f64, w: f64, h: f64) {
+    // Draw the note shape: rectangle with folded top-right corner.
+    // Using polygon for the main shape.
+    let fold = NOTE_FOLD;
+    let points = &[
+        (x, y),
+        (x, y + h),
+        (x + w, y + h),
+        (x + w, y + fold),
+        (x + w - fold, y),
+    ];
+    svg.polygon(points, NOTE_FILL, NOTE_BORDER);
+    // The fold triangle.
+    let fold_pts = &[
+        (x + w - fold, y),
+        (x + w - fold, y + fold),
+        (x + w, y + fold),
+    ];
+    svg.polygon(fold_pts, NOTE_FILL, NOTE_BORDER);
+
+    // Render each line of text.
+    let mut ty = y + NOTE_PAD_Y + NOTE_LINE_HEIGHT - 3.0;
+    for line in &note.lines {
+        let plain = strip_note_markup(line);
+        if !plain.is_empty() {
+            svg.text(x + NOTE_PAD_X, ty, &plain, "start", FONT_SIZE);
+        }
+        ty += NOTE_LINE_HEIGHT;
+    }
+}
+
 fn calc_col_widths(dims: &[ClassDim], cols: usize) -> Vec<f64> {
     let mut widths = vec![0.0_f64; cols];
     for (i, dim) in dims.iter().enumerate() {
@@ -601,6 +744,7 @@ mod tests {
                 to_multiplicity: None,
             }],
             packages: vec![],
+            notes: vec![],
         }
     }
 
@@ -657,6 +801,7 @@ mod tests {
             }],
             relationships: vec![],
             packages: vec![],
+            notes: vec![],
         };
         let svg = render(&diagram, &Theme::default());
         assert!(svg.contains("&lt;&lt;interface&gt;&gt;"));
@@ -680,6 +825,7 @@ mod tests {
             entities: vec![],
             relationships: vec![],
             packages: vec![],
+            notes: vec![],
         };
         let svg = render(&diagram, &Theme::default());
         assert!(svg.contains("<svg"));
