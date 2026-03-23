@@ -726,15 +726,26 @@ impl PreprocessContext {
                     let args_str = &after[1..end];
                     let args = split_args(args_str);
 
-                    // Expand: substitute params in body.
+                    // Expand: substitute params in body using whole-word replacement
+                    // to avoid a short param name (e.g. "a") matching as a
+                    // substring inside another param name (e.g. "label").
                     let mut result_lines = Vec::new();
                     for body_line in &dl.body {
                         let mut expanded = body_line.clone();
                         for (i, param) in dl.params.iter().enumerate() {
                             if let Some(arg) = args.get(i) {
-                                expanded = expanded.replace(param, arg);
+                                // Use word-boundary regex so that a param like
+                                // "a" does not replace the "a" inside "label".
+                                if let Ok(re) = Regex::new(&format!(
+                                    r"\b{}\b",
+                                    regex::escape(param)
+                                )) {
+                                    expanded = re.replace_all(&expanded, arg.as_str()).to_string();
+                                }
                             }
                         }
+                        // Apply ## token-pasting: collapse "foo##bar" → "foobar".
+                        expanded = expanded.replace("##", "");
                         result_lines.push(expanded);
                     }
                     // For single-line macros, replace inline.
