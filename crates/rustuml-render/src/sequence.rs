@@ -172,8 +172,12 @@ fn render_empty_welcome() -> String {
 
 /// Render a sequence diagram to SVG.
 pub fn render(diagram: &SequenceDiagram, theme: &Theme) -> String {
-    // Empty diagram — render the PlantUML welcome screen.
-    if diagram.participants.is_empty() && diagram.events.is_empty() {
+    // Empty diagram with no title — render the PlantUML welcome screen.
+    // If there's a title, fall through to render it.
+    if diagram.participants.is_empty()
+        && diagram.events.is_empty()
+        && diagram.meta.title.is_none()
+    {
         return render_empty_welcome();
     }
 

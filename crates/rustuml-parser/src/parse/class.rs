@@ -38,6 +38,8 @@ struct ClassParser {
     package_stack: Vec<usize>,
     /// Note currently being accumulated (multi-line `note ... end note`).
     current_note: Option<Note>,
+    /// ID of the last declared entity (for shorthand `note right : text`).
+    last_entity_id: Option<String>,
 }
 
 impl ClassParser {
@@ -51,6 +53,7 @@ impl ClassParser {
             current_entity: None,
             package_stack: Vec::new(),
             current_note: None,
+            last_entity_id: None,
         }
     }
 
@@ -200,8 +203,9 @@ impl ClassParser {
             }
 
             if line.ends_with('{') || line.ends_with("{{") {
-                self.current_entity = Some(id);
+                self.current_entity = Some(id.clone());
             }
+            self.last_entity_id = Some(id);
             true
         } else {
             false
@@ -223,8 +227,9 @@ impl ClassParser {
                 });
             }
             if line.ends_with('{') {
-                self.current_entity = Some(id);
+                self.current_entity = Some(id.clone());
             }
+            self.last_entity_id = Some(id);
             true
         } else {
             false
@@ -235,9 +240,10 @@ impl ClassParser {
         // Relationship format: EntityA ["mult"] ARROW ["mult"] EntityB [: label]
         // Supported arrows: <|--, --|>, ..|>, <|.., *--, --*, o--, --o,
         //                   <-->, <..>, --, -->, <--, <-, .., ..>, <..
+        // Multiple dashes (e.g. ---- or ------) are treated as plain association.
         static RE: LazyLock<Regex> = LazyLock::new(|| {
             Regex::new(
-                r#"^(\w+)\s*(?:"([^"]+)")?\s*((?:<\|--|--\|>|\.\.\|>|<\|\.\.|<\.\.>|<\.\.|\*--|--\*|o--|--o|<-->|<--|-->|<-|--|\.\.|\.\.>))\s*(?:"([^"]+)")?\s*(\w+)(?:\s*:\s*(.+))?$"#,
+                r#"^(\w+)\s*(?:"([^"]+)")?\s*((?:<\|--|--\|>|\.\.\|>|<\|\.\.|<\.\.>|<\.\.|\*--|--\*|o--|--o|<-->|<--|-->|<-|-{2,}|\.\.|\.\.>))\s*(?:"([^"]+)")?\s*(\w+)(?:\s*:\s*(.+))?$"#,
             )
             .unwrap()
         });
@@ -370,6 +376,14 @@ impl ClassParser {
         static ATTACHED_ML_RE: LazyLock<Regex> = LazyLock::new(|| {
             Regex::new(r"^note\s+(top|bottom|left|right)\s+of\s+(\w+)\s*$").unwrap()
         });
+        // Shorthand single-line note attached to last entity: `note <pos> : <text>`
+        static SHORT_RE: LazyLock<Regex> = LazyLock::new(|| {
+            Regex::new(r"^note\s+(top|bottom|left|right)\s*:\s*(.+)$").unwrap()
+        });
+        // Shorthand multi-line note attached to last entity: `note <pos>`
+        static SHORT_ML_RE: LazyLock<Regex> = LazyLock::new(|| {
+            Regex::new(r"^note\s+(top|bottom|left|right)\s*$").unwrap()
+        });
         // Floating named note: `note "text" as Name`
         static FLOATING_RE: LazyLock<Regex> = LazyLock::new(|| {
             Regex::new(r#"^note\s+"([^"]+)"\s+as\s+(\w+)\s*$"#).unwrap()
@@ -409,6 +423,37 @@ impl ClassParser {
             return true;
         }
 
+        // Shorthand: `note right : text` — attaches to the last declared entity.
+        if let Some(caps) = SHORT_RE.captures(line) {
+            let position = parse_note_position(&caps[1]);
+            let text = caps[2].trim().to_string();
+            let lines = text
+                .split("\\n")
+                .map(|s| s.trim().to_string())
+                .collect();
+            let target = self.last_entity_id.clone();
+            self.notes.push(Note {
+                lines,
+                target,
+                position: Some(position),
+                alias: None,
+            });
+            return true;
+        }
+
+        // Shorthand multi-line: `note right` — attaches to the last declared entity.
+        if let Some(caps) = SHORT_ML_RE.captures(line) {
+            let position = parse_note_position(&caps[1]);
+            let target = self.last_entity_id.clone();
+            self.current_note = Some(Note {
+                lines: Vec::new(),
+                target,
+                position: Some(position),
+                alias: None,
+            });
+            return true;
+        }
+
         if let Some(caps) = FLOATING_RE.captures(line) {
             let text = caps[1].trim().to_string();
             let alias = caps[2].to_string();
@@ -432,6 +477,17 @@ impl ClassParser {
                 target: None,
                 position: None,
                 alias: Some(alias),
+            });
+            return true;
+        }
+
+        // `note on link` — multi-line note attached to the last relationship as a floating note.
+        if line == "note on link" || line.starts_with("note on link") {
+            self.current_note = Some(Note {
+                lines: Vec::new(),
+                target: None,
+                position: None,
+                alias: None,
             });
             return true;
         }
