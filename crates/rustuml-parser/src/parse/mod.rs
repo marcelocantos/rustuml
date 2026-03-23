@@ -120,7 +120,9 @@ fn detect_uml_subtype(lines: &[String]) -> UmlSubtype {
         if trimmed.starts_with("object ") || trimmed.starts_with("map ") {
             scores[2] += 10;
         }
-        // Class.
+        // Class — use weight 10 so that class-specific keywords dominate
+        // container keywords (cloud, folder, node, etc.) that are shared with
+        // deployment diagrams.
         if trimmed.starts_with("class ")
             || trimmed.starts_with("abstract class ")
             || trimmed.starts_with("interface ")
@@ -132,7 +134,7 @@ fn detect_uml_subtype(lines: &[String]) -> UmlSubtype {
             || trimmed.contains("*--")
             || trimmed.contains("o--")
         {
-            scores[1] += 5;
+            scores[1] += 10;
         }
         // ER crow's foot notation is an unambiguous class/ER diagram signal.
         if trimmed.contains("||--")
