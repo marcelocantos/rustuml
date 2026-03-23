@@ -181,6 +181,11 @@ fn detect_uml_subtype(lines: &[String]) -> UmlSubtype {
         {
             scores[8] += 10;
         }
+        // Standalone floating notes (`note as X`) are a class diagram feature in
+        // Java PlantUML and produce CLASS-type SVG output.
+        if trimmed.starts_with("note as ") {
+            scores[1] += 10;
+        }
     }
 
     let subtypes = [

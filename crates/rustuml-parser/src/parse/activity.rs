@@ -36,6 +36,8 @@ struct ActivityParser {
     meta: DiagramMeta,
     steps: Vec<ActivityStep>,
     pending_note: Option<PendingNote>,
+    pending_meta: Option<&'static str>, // "header", "footer", "legend", "caption"
+    pending_meta_lines: Vec<String>,
 }
 
 impl ActivityParser {
@@ -44,6 +46,8 @@ impl ActivityParser {
             meta: DiagramMeta::default(),
             steps: Vec::new(),
             pending_note: None,
+            pending_meta: None,
+            pending_meta_lines: Vec::new(),
         }
     }
 
@@ -57,6 +61,22 @@ impl ActivityParser {
     fn accumulate_note_line(&mut self, line: &str) {
         if let Some(ref mut pn) = self.pending_note {
             pn.lines.push(line.to_string());
+        }
+    }
+
+    fn flush_pending_meta(&mut self) {
+        if let Some(kind) = self.pending_meta.take() {
+            let text = self.pending_meta_lines.join("\n").trim().to_string();
+            self.pending_meta_lines.clear();
+            if !text.is_empty() {
+                match kind {
+                    "header" => self.meta.header = Some(text),
+                    "footer" => self.meta.footer = Some(text),
+                    "legend" => self.meta.legend = Some(text),
+                    "caption" => self.meta.caption = Some(text),
+                    _ => {}
+                }
+            }
         }
     }
 
@@ -75,6 +95,17 @@ impl ActivityParser {
     }
 
     fn parse_line(&mut self, _line_num: usize, line: &str) -> Result<(), ParseError> {
+        // Handle multi-line meta blocks (header/footer/legend/caption).
+        if self.pending_meta.is_some() {
+            let end_kw = format!("end {}", self.pending_meta.unwrap());
+            if line == end_kw {
+                self.flush_pending_meta();
+            } else {
+                self.pending_meta_lines.push(line.to_string());
+            }
+            return Ok(());
+        }
+
         if self.pending_note.is_some() {
             if line == "end note" {
                 self.flush_pending_note();
@@ -151,6 +182,25 @@ impl ActivityParser {
         if let Some(caps) = RE_CAPTION.captures(line) {
             self.meta.caption = Some(caps[1].trim().to_string());
             return true;
+        }
+        // Block-start keywords (header/footer/legend/caption on their own line).
+        match line {
+            "header" => {
+                self.pending_meta = Some("header");
+                self.pending_meta_lines.clear();
+                return true;
+            }
+            "footer" => {
+                self.pending_meta = Some("footer");
+                self.pending_meta_lines.clear();
+                return true;
+            }
+            "legend" | "legend right" | "legend left" => {
+                self.pending_meta = Some("legend");
+                self.pending_meta_lines.clear();
+                return true;
+            }
+            _ => {}
         }
         false
     }
@@ -375,7 +425,10 @@ impl ActivityParser {
     }
 
     fn try_swimlane(&mut self, line: &str) -> bool {
-        static RE: LazyLock<Regex> = LazyLock::new(|| Regex::new(r"^\|([^|]+)\|$").unwrap());
+        // Match |Name| or |#color|Name| (colored swimlane)
+        static RE: LazyLock<Regex> = LazyLock::new(|| {
+            Regex::new(r"^\|(?:#[A-Za-z0-9]+\|)?([^|]+)\|$").unwrap()
+        });
 
         if let Some(caps) = RE.captures(line) {
             self.steps.push(ActivityStep::Swimlane(caps[1].to_string()));

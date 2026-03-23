@@ -43,9 +43,25 @@ pub fn render(diagram: &ActivityDiagram, theme: &Theme) -> String {
     let mut svg = SvgBuilder::new(total_width, total_height);
     let mut y = MARGIN;
 
+    if let Some(ref header) = diagram.meta.header {
+        for line in header.lines() {
+            let line = line.trim();
+            if !line.is_empty() {
+                svg.text(cx, y + SMALL_FONT, line, "middle", SMALL_FONT);
+                y += SMALL_FONT + 2.0;
+            }
+        }
+        y += 4.0;
+    }
+
     if let Some(ref title) = diagram.meta.title {
         svg.text(cx, y + TITLE_FONT_SIZE, title, "middle", TITLE_FONT_SIZE);
         y += TITLE_HEIGHT;
+    }
+
+    if let Some(ref caption) = diagram.meta.caption {
+        svg.text(cx, y + SMALL_FONT, caption, "middle", SMALL_FONT);
+        y += SMALL_FONT + 4.0;
     }
 
     for step in &diagram.steps {
@@ -377,6 +393,16 @@ pub fn render(diagram: &ActivityDiagram, theme: &Theme) -> String {
             }
             _ => {
                 y += V_GAP / 4.0;
+            }
+        }
+    }
+
+    if let Some(ref footer) = diagram.meta.footer {
+        for line in footer.lines() {
+            let line = line.trim();
+            if !line.is_empty() {
+                svg.text(cx, y + SMALL_FONT, line, "middle", SMALL_FONT);
+                y += SMALL_FONT + 2.0;
             }
         }
     }

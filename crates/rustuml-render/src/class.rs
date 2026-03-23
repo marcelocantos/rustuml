@@ -36,6 +36,10 @@ const TITLE_HEIGHT: f64 = TITLE_FONT_SIZE + 10.0;
 pub fn render(diagram: &ClassDiagram, theme: &Theme) -> String {
     let cs = &theme.class;
     if diagram.entities.is_empty() {
+        // Notes-only diagram (no entities): render directly without layout.
+        if !diagram.notes.is_empty() {
+            return render_notes_only(diagram, cs);
+        }
         return "<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"100\" height=\"50\"></svg>\n"
             .to_string();
     }
@@ -64,6 +68,10 @@ fn render_with_positions(
     cs: &crate::style::ClassStyle,
 ) -> String {
     if diagram.entities.is_empty() {
+        // If there are notes but no entities, render just the notes.
+        if !diagram.notes.is_empty() {
+            return render_notes_only(diagram, cs);
+        }
         return "<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"100\" height=\"50\"></svg>\n"
             .to_string();
     }
@@ -508,15 +516,16 @@ fn format_member(member: &Member) -> String {
     } else {
         ""
     };
+    // Java PlantUML renders members as "name: Type" (no visibility prefix in text;
+    // visibility is shown as icons). The colon is appended directly to the name.
     let type_suffix = member
         .return_type
         .as_ref()
         .map_or(String::new(), |t| format!(": {t}"));
 
-    let sep = if type_suffix.is_empty() { "" } else { " " };
     format!(
-        "{static_prefix}{abstract_prefix}{}{sep}{type_suffix}",
-        member.name
+        "{static_prefix}{abstract_prefix}{}{}",
+        member.name, type_suffix
     )
 }
 
@@ -673,6 +682,37 @@ fn render_note_box(svg: &mut SvgBuilder, note: &Note, x: f64, y: f64, w: f64, h:
     }
 }
 
+/// Render a diagram that contains only floating notes (no entities).
+/// Notes are laid out horizontally with a margin between them.
+fn render_notes_only(diagram: &ClassDiagram, _cs: &crate::style::ClassStyle) -> String {
+    let title_h = if diagram.meta.title.is_some() { TITLE_HEIGHT } else { 0.0 };
+    let mut x = MARGIN;
+    let mut max_h = 0.0_f64;
+    let note_data: Vec<(f64, f64, f64, f64)> = diagram
+        .notes
+        .iter()
+        .map(|note| {
+            let (nw, nh) = note_box_dims(note);
+            let nx = x;
+            let ny = MARGIN + title_h;
+            x += nw + MARGIN;
+            max_h = max_h.max(nh);
+            (nx, ny, nw, nh)
+        })
+        .collect();
+    let total_width = x.max(MARGIN * 2.0);
+    let total_height = MARGIN + title_h + max_h + MARGIN;
+
+    let mut svg = SvgBuilder::new(total_width, total_height);
+    if let Some(title) = &diagram.meta.title {
+        svg.text(total_width / 2.0, TITLE_HEIGHT - 4.0, title, "middle", TITLE_FONT_SIZE);
+    }
+    for (note, (nx, ny, nw, nh)) in diagram.notes.iter().zip(&note_data) {
+        render_note_box(&mut svg, note, *nx, *ny, *nw, *nh);
+    }
+    svg.finalize()
+}
+
 fn calc_col_widths(dims: &[ClassDim], cols: usize) -> Vec<f64> {
     let mut widths = vec![0.0_f64; cols];
     for (i, dim) in dims.iter().enumerate() {
@@ -776,8 +816,8 @@ mod tests {
     fn has_members() {
         let svg = render(&simple_class_diagram(), &Theme::default());
         assert!(svg.contains("name: String"));
-        assert!(svg.contains("+makeSound()"));
-        assert!(svg.contains("+fetch()"));
+        assert!(svg.contains("makeSound(): void"));
+        assert!(svg.contains("fetch(): void"));
     }
 
     #[test]
