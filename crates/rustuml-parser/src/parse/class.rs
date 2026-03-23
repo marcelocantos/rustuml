@@ -194,8 +194,10 @@ impl ClassParser {
                 });
             }
 
-            // Register entity in the innermost active package.
-            if let Some(pkg_idx) = self.current_package() {
+            // Register entity in ALL active packages (innermost to outermost),
+            // so that outer container bounding boxes include entities from inner
+            // nested packages.
+            for &pkg_idx in &self.package_stack {
                 let pkg = &mut self.packages[pkg_idx];
                 if !pkg.entities.contains(&id) {
                     pkg.entities.push(id.clone());
