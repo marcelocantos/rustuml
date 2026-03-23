@@ -277,7 +277,7 @@ struct PreprocessContext {
     in_sprite_block: bool,
     archimate_enabled: bool,
     in_diagram_block: bool,
-    first_block_done: bool,
+    seen_start_tag: bool,
     base_dir: Option<PathBuf>,
     include_depth: usize,
     foreach_stack: Vec<ForEachState>,
@@ -342,7 +342,7 @@ impl PreprocessContext {
             in_sprite_block: false,
             archimate_enabled: false,
             in_diagram_block: false,
-            first_block_done: false,
+            seen_start_tag: false,
             base_dir,
             include_depth: 0,
             foreach_stack: Vec::new(),
@@ -442,19 +442,21 @@ impl PreprocessContext {
         let trimmed = line_no_comment.trim();
 
         // Handle @start/@end tags.
+        // PlantUML renders only the first block. Files without any
+        // @start tag pass through entirely.
         if self.include_depth == 0 {
             if trimmed.starts_with("@start") {
-                if !self.first_block_done {
+                if !self.seen_start_tag {
+                    self.seen_start_tag = true;
                     self.in_diagram_block = true;
                 }
                 return;
             }
             if trimmed.starts_with("@end") {
                 self.in_diagram_block = false;
-                self.first_block_done = true;
                 return;
             }
-            if self.first_block_done {
+            if self.seen_start_tag && !self.in_diagram_block {
                 return;
             }
         } else if trimmed.starts_with("@start") || trimmed.starts_with("@end") {

@@ -1,8 +1,3 @@
-    2 edge-cases
-    1 combo
-    1 usecase
+    1 edge-cases
 
-combo/combo_preprocessing_macros: golden texts not found in Rust output: ["(PostgreSQL)", "(PostgreSQL)", "(MongoDB)", "read/write", "read/write", "read/write", "validate user", "check stock", "process", "receipt"]
 edge-cases/edge_multiple_blocks: golden texts not found in Rust output: ["Second"]
-edge-cases/edge_seq_title_with_variables: golden texts not found in Rust output: ["Sequence at Mon Mar 23 07:13:46 AEDT 2026"]
-usecase/usecase_note_on_link: golden texts not found in Rust output: ["Delete User"]
