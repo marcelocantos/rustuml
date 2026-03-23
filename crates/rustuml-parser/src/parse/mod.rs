@@ -117,11 +117,14 @@ fn detect_uml_subtype(lines: &[String]) -> UmlSubtype {
         {
             scores[3] += 5;
         }
-        // `note on link` is a state-diagram-exclusive keyword (used to annotate
-        // transitions). Score it strongly so that state diagrams with notes on
-        // transitions beat the sequence scoring from `note left/right of` lines.
+        // `note on link` annotates transitions (state diagrams) and connections
+        // (use case diagrams). Score it for state so that state diagrams beat
+        // the sequence scoring from `note left/right of` lines, but also score
+        // use case so that a use case diagram with `usecase` keywords wins over
+        // the state signal when both are present.
         if trimmed == "note on link" || trimmed.starts_with("note on link ") || trimmed.starts_with("note on link:") {
-            scores[3] += 15;
+            scores[3] += 15; // state
+            scores[6] += 15; // use case
         }
         // Activity (v3 new syntax).
         if trimmed == "start"
