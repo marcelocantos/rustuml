@@ -142,6 +142,9 @@ fn golden_has_syntax_error(svg: &str) -> bool {
         || svg.contains("Note already created:")
         || svg.contains("Parsing syntax error about %")
         || svg.contains("[From string")
+        // YAML inputs that the reference implementation cannot parse (anchors,
+        // empty objects, multi-line scalars, etc.) produce this error banner.
+        || svg.contains("Your data does not sound like YAML data")
 }
 
 struct TestResult {

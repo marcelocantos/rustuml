@@ -51,15 +51,34 @@ pub fn strip_title_quotes(s: &str) -> &str {
 }
 
 /// Detect the diagram type from the @start tag.
+///
+/// If the input has an outer `@startuml` wrapper with an inner `@startXxx`
+/// (e.g. `@startjson` nested inside `@startuml`), the inner type wins because
+/// PlantUML allows embedding any `@start*` block inside `@startuml`.
 fn detect_type(input: &str) -> &str {
+    let mut first_type: Option<&str> = None;
     for line in input.lines() {
         let trimmed = line.trim();
         if let Some(rest) = trimmed.strip_prefix("@start") {
             let typ = rest.split_whitespace().next().unwrap_or(rest);
-            return typ;
+            match first_type {
+                None => {
+                    first_type = Some(typ);
+                }
+                Some("uml") => {
+                    // An inner @start inside @startuml overrides the outer uml type.
+                    if typ != "uml" {
+                        return typ;
+                    }
+                }
+                _ => {
+                    // Already have a specific (non-uml) type; stop scanning.
+                    break;
+                }
+            }
         }
     }
-    "uml"
+    first_type.unwrap_or("uml")
 }
 
 /// For @startuml, detect the specific UML subtype by scanning ALL lines
@@ -145,11 +164,15 @@ fn detect_uml_subtype(lines: &[String]) -> UmlSubtype {
             // strong deployment signal: component diagrams consistently use bare
             // identifiers for their containers; quoted names only appear in
             // deployment diagrams (e.g. `node "App Server" {`).
+            // Exception: `rectangle` is shared between use case diagrams (system
+            // boundary) and deployment diagrams; do not apply the quoted-container
+            // boost to it so that `usecase` keywords can tip the balance.
             let after_kw = trimmed[kw_end..].trim_start();
             let is_quoted_container = trimmed.contains('{')
                 && after_kw.starts_with('"')
                 && kw != "package"
                 && kw != "actor"
+                && kw != "rectangle"
                 && deployment::DEPLOYMENT_KEYWORDS.contains(&kw);
             if !package_with_brace
                 && kw != "actor"
