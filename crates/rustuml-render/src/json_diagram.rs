@@ -184,8 +184,14 @@ fn build_table(rows: Vec<Row>) -> Table {
 /// The display text for a leaf value.
 fn leaf_text(v: &JsonNodeValue) -> String {
     match v {
-        JsonNodeValue::Null => String::from("null"),
-        JsonNodeValue::Bool { val } => val.to_string(),
+        JsonNodeValue::Null => String::from("␀"),
+        JsonNodeValue::Bool { val } => {
+            if *val {
+                String::from("☑ true")
+            } else {
+                String::from("☐ false")
+            }
+        }
         JsonNodeValue::Number { val } => val.clone(),
         JsonNodeValue::Str { val } => val.clone(),
         JsonNodeValue::Array { items } if items.is_empty() => String::from("[ ]"),
