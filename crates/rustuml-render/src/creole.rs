@@ -18,6 +18,12 @@ pub fn to_svg_tspans(text: &str) -> String {
 
     while let Some(c) = chars.next() {
         match c {
+            '~' => {
+                // Tilde escape — next character is literal, not markup.
+                if let Some(next) = chars.next() {
+                    result.push(next);
+                }
+            }
             '"' if chars.peek() == Some(&'"') => {
                 chars.next();
                 // ""monospace"" — collect until closing ""
@@ -93,13 +99,79 @@ pub fn to_svg_tspans(text: &str) -> String {
                         let content = monospace_spaces(&content);
                         write!(result, "<tspan font-family=\"monospace\">{content}</tspan>").unwrap();
                     }
+                    "del" | "strike" => {
+                        let close = if tag == "del" { "</del>" } else { "</strike>" };
+                        let content = collect_until_tag(&mut chars, close);
+                        write!(
+                            result,
+                            "<tspan text-decoration=\"line-through\">{content}</tspan>"
+                        )
+                        .unwrap();
+                    }
+                    "strong" => {
+                        let content = collect_until_tag(&mut chars, "</strong>");
+                        write!(result, "<tspan font-weight=\"bold\">{content}</tspan>").unwrap();
+                    }
+                    "em" => {
+                        let content = collect_until_tag(&mut chars, "</em>");
+                        write!(result, "<tspan font-style=\"italic\">{content}</tspan>").unwrap();
+                    }
+                    "ins" => {
+                        let content = collect_until_tag(&mut chars, "</ins>");
+                        write!(
+                            result,
+                            "<tspan text-decoration=\"underline\">{content}</tspan>"
+                        )
+                        .unwrap();
+                    }
+                    "sub" => {
+                        let content = collect_until_tag(&mut chars, "</sub>");
+                        write!(
+                            result,
+                            "<tspan baseline-shift=\"sub\" font-size=\"0.7em\">{content}</tspan>"
+                        )
+                        .unwrap();
+                    }
+                    "sup" => {
+                        let content = collect_until_tag(&mut chars, "</sup>");
+                        write!(
+                            result,
+                            "<tspan baseline-shift=\"super\" font-size=\"0.7em\">{content}</tspan>"
+                        )
+                        .unwrap();
+                    }
                     _ if tag.starts_with("color:") || tag.starts_with("COLOR:") => {
                         // <color:blue>text</color> — strip tag, keep content.
                         let content = collect_until_tag(&mut chars, "</color>");
                         result.push_str(&content);
                     }
+                    _ if tag.starts_with("size:") => {
+                        // <size:N>text</size> — apply font-size.
+                        let size_str = &tag["size:".len()..];
+                        let content = collect_until_tag(&mut chars, "</size>");
+                        if let Ok(size) = size_str.parse::<u32>() {
+                            write!(
+                                result,
+                                "<tspan font-size=\"{size}\">{content}</tspan>"
+                            )
+                            .unwrap();
+                        } else {
+                            result.push_str(&content);
+                        }
+                    }
+                    _ if tag.starts_with("font") => {
+                        // <font ...>text</font> — strip tag, keep content.
+                        let content = collect_until_tag(&mut chars, "</font>");
+                        result.push_str(&content);
+                    }
+                    _ if tag.starts_with("back:") || tag.starts_with("BACK:") => {
+                        // <back:color>text</back> — strip tag, keep content.
+                        let content = collect_until_tag(&mut chars, "</back>");
+                        result.push_str(&content);
+                    }
                     _ if tag.starts_with('/') => {
-                        // Unknown closing tag — skip silently.
+                        // Unknown closing tag — emit escaped so text isn't silently dropped.
+                        write!(result, "&lt;{tag}&gt;").unwrap();
                     }
                     _ => {
                         // Unknown opening tag — escape and output as literal text.

@@ -34,8 +34,8 @@ struct ClassParser {
     notes: Vec<Note>,
     /// Entity currently being parsed (inside { ... } block).
     current_entity: Option<String>,
-    /// Index of the innermost active package scope (None = top-level).
-    current_package: Option<usize>,
+    /// Stack of active package indices (innermost last), supporting nested packages.
+    package_stack: Vec<usize>,
     /// Note currently being accumulated (multi-line `note ... end note`).
     current_note: Option<Note>,
 }
@@ -49,7 +49,7 @@ impl ClassParser {
             packages: Vec::new(),
             notes: Vec::new(),
             current_entity: None,
-            current_package: None,
+            package_stack: Vec::new(),
             current_note: None,
         }
     }
@@ -82,6 +82,11 @@ impl ClassParser {
         self.entities.iter_mut().find(|e| e.id == id)
     }
 
+    /// The index of the innermost active package scope (top of the stack).
+    fn current_package(&self) -> Option<usize> {
+        self.package_stack.last().copied()
+    }
+
     fn parse_line(&mut self, _line_num: usize, line: &str) -> Result<(), ParseError> {
         // Inside a multi-line note?
         if self.current_note.is_some() {
@@ -106,6 +111,12 @@ impl ClassParser {
             return Ok(());
         }
 
+        // Closing brace: pop the innermost package scope.
+        if line == "}" {
+            self.package_stack.pop();
+            return Ok(());
+        }
+
         if self.try_entity_decl(line) {
             return Ok(());
         }
@@ -116,9 +127,6 @@ impl ClassParser {
             return Ok(());
         }
         if self.try_package(line) {
-            return Ok(());
-        }
-        if self.try_package_end(line) {
             return Ok(());
         }
         if self.try_enum_decl(line) {
@@ -137,8 +145,12 @@ impl ClassParser {
 
     fn try_entity_decl(&mut self, line: &str) -> bool {
         static RE: LazyLock<Regex> = LazyLock::new(|| {
+            // Matches either:
+            //   keyword "label" as id  — groups 2 (label) and 3 (id)
+            //   keyword id             — group 3 (id only)
+            //   keyword "label"        — group 4 (quoted-only, no `as`)
             Regex::new(
-                r#"^(class|abstract\s+class|interface|enum|annotation|entity)\s+(?:"([^"]+)"\s+as\s+)?(\w+)"#,
+                r#"^(class|abstract\s+class|interface|enum|annotation|entity)\s+(?:(?:"([^"]+)"\s+as\s+)?(\w+)|"([^"]+)")"#,
             )
             .unwrap()
         });
@@ -146,10 +158,18 @@ impl ClassParser {
 
         if let Some(caps) = RE.captures(line) {
             let kind = parse_entity_kind(caps[1].trim());
-            let label = caps
-                .get(2)
-                .map_or_else(|| caps[3].to_string(), |m| m.as_str().to_string());
-            let id = caps[3].to_string();
+            // Group 4: quoted-only form — class "**Name**" with no `as` keyword.
+            let (label, id) = if let Some(m) = caps.get(4) {
+                let label_raw = m.as_str().to_string();
+                let id = strip_creole_for_id(&label_raw);
+                (label_raw, id)
+            } else {
+                let label = caps
+                    .get(2)
+                    .map_or_else(|| caps[3].to_string(), |m| m.as_str().to_string());
+                let id = caps[3].to_string();
+                (label, id)
+            };
 
             let stereotypes: Vec<String> = STEREOTYPE_RE
                 .captures_iter(line)
@@ -170,8 +190,8 @@ impl ClassParser {
                 });
             }
 
-            // Register entity in the active package.
-            if let Some(pkg_idx) = self.current_package {
+            // Register entity in the innermost active package.
+            if let Some(pkg_idx) = self.current_package() {
                 let pkg = &mut self.packages[pkg_idx];
                 if !pkg.entities.contains(&id) {
                     pkg.entities.push(id.clone());
@@ -326,7 +346,7 @@ impl ClassParser {
                 _ => PackageKind::Package,
             };
             let pkg_idx = self.packages.len();
-            self.current_package = Some(pkg_idx);
+            self.package_stack.push(pkg_idx);
             self.packages.push(Package {
                 name,
                 kind,
@@ -339,14 +359,6 @@ impl ClassParser {
         }
     }
 
-    fn try_package_end(&mut self, line: &str) -> bool {
-        if line == "}" && self.current_package.is_some() {
-            self.current_package = None;
-            true
-        } else {
-            false
-        }
-    }
 
     fn try_note(&mut self, line: &str) -> bool {
         // Single-line attached note: `note <pos> of <entity> : <text>`
@@ -588,6 +600,27 @@ fn parse_member(s: &str) -> Member {
             kind: MemberKind::Field,
         }
     }
+}
+
+/// Strip Creole/HTML markup from a display name to produce a plain identifier.
+/// Used when a class is declared with a quoted markup name but no `as` alias.
+fn strip_creole_for_id(s: &str) -> String {
+    let mut out = s.to_string();
+    for marker in &["**", "//", "__", "--"] {
+        out = out.replace(marker, "");
+    }
+    let mut result = String::new();
+    let mut in_tag = false;
+    for ch in out.chars() {
+        if ch == '<' {
+            in_tag = true;
+        } else if ch == '>' {
+            in_tag = false;
+        } else if !in_tag {
+            result.push(ch);
+        }
+    }
+    result.split_whitespace().collect::<Vec<_>>().join("_")
 }
 
 #[cfg(test)]

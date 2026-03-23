@@ -29,6 +29,8 @@ const PADDING: f64 = 8.0;
 const MARGIN: f64 = 30.0;
 const PACKAGE_HEADER: f64 = 24.0;
 const PACKAGE_PAD: f64 = 12.0;
+const TITLE_FONT_SIZE: f64 = 14.0;
+const TITLE_HEIGHT: f64 = TITLE_FONT_SIZE + 10.0;
 
 /// Render a class diagram to SVG.
 pub fn render(diagram: &ClassDiagram, theme: &Theme) -> String {
@@ -83,9 +85,11 @@ fn render_with_positions(
         .map(|(i, e)| (e.id.as_str(), i))
         .collect();
 
+    let title_h = if diagram.meta.title.is_some() { TITLE_HEIGHT } else { 0.0 };
+
     // Compute raw entity positions (before any package-driven adjustment).
     let raw_pos: Vec<(f64, f64)> = (0..diagram.entities.len())
-        .map(|i| (positions[i].x + MARGIN, positions[i].y + MARGIN))
+        .map(|i| (positions[i].x + MARGIN, positions[i].y + MARGIN + title_h))
         .collect();
 
     // Compute each package's bounding box and the y-shift needed so package
@@ -199,6 +203,9 @@ fn render_with_positions(
     let total_height = ent_max_y.max(pkg_max_y).max(note_max_y) + MARGIN;
 
     let mut svg = SvgBuilder::new(total_width, total_height);
+    if let Some(title) = &diagram.meta.title {
+        svg.text(total_width / 2.0, TITLE_HEIGHT - 4.0, title, "middle", TITLE_FONT_SIZE);
+    }
 
     // Render package containers first (behind entities).
     for (pkg, maybe_box) in diagram.packages.iter().zip(&pkg_boxes) {
@@ -291,10 +298,14 @@ fn render_grid(diagram: &ClassDiagram, cs: &crate::style::ClassStyle) -> String 
     let col_widths = calc_col_widths(&class_dims, cols);
     let row_heights = calc_row_heights(&class_dims, cols);
 
+    let title_h = if diagram.meta.title.is_some() { TITLE_HEIGHT } else { 0.0 };
     let total_width = col_widths.iter().sum::<f64>() + MARGIN * (cols as f64 + 1.0);
-    let total_height = row_heights.iter().sum::<f64>() + MARGIN * (row_heights.len() as f64 + 1.0);
+    let total_height = row_heights.iter().sum::<f64>() + MARGIN * (row_heights.len() as f64 + 1.0) + title_h;
 
     let mut svg = SvgBuilder::new(total_width, total_height);
+    if let Some(title) = &diagram.meta.title {
+        svg.text(total_width / 2.0, TITLE_HEIGHT - 4.0, title, "middle", TITLE_FONT_SIZE);
+    }
 
     // Position and render each class.
     let mut positions: Vec<(f64, f64, f64, f64)> = Vec::new(); // (x, y, w, h)
@@ -304,7 +315,7 @@ fn render_grid(diagram: &ClassDiagram, cs: &crate::style::ClassStyle) -> String 
         let row = i / cols;
 
         let x = MARGIN + col_widths[..col].iter().sum::<f64>() + MARGIN * col as f64;
-        let y = MARGIN + row_heights[..row].iter().sum::<f64>() + MARGIN * row as f64;
+        let y = title_h + MARGIN + row_heights[..row].iter().sum::<f64>() + MARGIN * row as f64;
 
         render_class_box(&mut svg, entity, x, y, dim, cs);
         positions.push((x, y, dim.width, dim.height));
@@ -657,12 +668,12 @@ fn render_note_box(svg: &mut SvgBuilder, note: &Note, x: f64, y: f64, w: f64, h:
     ];
     svg.polygon(fold_pts, NOTE_FILL, NOTE_BORDER);
 
-    // Render each line of text.
+    // Render each line of text — pass the raw markup so svg.text can apply creole styling.
     let mut ty = y + NOTE_PAD_Y + NOTE_LINE_HEIGHT - 3.0;
     for line in &note.lines {
-        let plain = strip_note_markup(line);
-        if !plain.is_empty() {
-            svg.text(x + NOTE_PAD_X, ty, &plain, "start", FONT_SIZE);
+        let trimmed = line.trim();
+        if !trimmed.is_empty() {
+            svg.text(x + NOTE_PAD_X, ty, trimmed, "start", FONT_SIZE);
         }
         ty += NOTE_LINE_HEIGHT;
     }

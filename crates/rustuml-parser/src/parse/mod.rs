@@ -101,15 +101,15 @@ fn detect_uml_subtype(lines: &[String]) -> UmlSubtype {
         {
             scores[4] += 5;
         }
-        // Deployment.
-        if trimmed.starts_with("node ")
-            || trimmed.starts_with("artifact ")
-            || trimmed.starts_with("cloud ")
-            || trimmed.starts_with("storage ")
-            || trimmed.starts_with("frame ")
-            || trimmed.starts_with("folder ")
+        // Deployment — check against the full keyword set.
         {
-            scores[7] += 5;
+            let kw_end = trimmed
+                .find(|c: char| !c.is_ascii_alphanumeric() && c != '_')
+                .unwrap_or(trimmed.len());
+            let kw = &trimmed[..kw_end];
+            if deployment::DEPLOYMENT_KEYWORDS.contains(&kw) && kw_end < trimmed.len() {
+                scores[7] += 5;
+            }
         }
         // Component.
         if trimmed.starts_with("component ") || (trimmed.starts_with('[') && trimmed.ends_with(']'))

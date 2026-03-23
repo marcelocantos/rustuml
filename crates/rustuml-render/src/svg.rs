@@ -66,7 +66,13 @@ impl SvgBuilder {
             || content.contains('`')
             || content.contains("<b>")
             || content.contains("<i>")
+            || content.contains("<u>")
+            || content.contains("<s>")
+            || content.contains("<del>")
             || content.contains("<color:")
+            || content.contains("<size:")
+            || content.contains("<font")
+            || content.contains("<back:")
             || content.contains("<mono>");
         if has_creole {
             let rich = crate::creole::to_svg_tspans(content);
@@ -224,4 +230,7 @@ fn escape_xml(s: &str) -> String {
         .replace('<', "&lt;")
         .replace('>', "&gt;")
         .replace('"', "&quot;")
+        // Encode guillemets as numeric entities to match PlantUML SVG output.
+        .replace('\u{00ab}', "&#171;")
+        .replace('\u{00bb}', "&#187;")
 }
