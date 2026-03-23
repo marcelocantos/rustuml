@@ -297,6 +297,8 @@ struct ClassDim {
     height: f64,
     header_text: String,
     kind_label: Option<&'static str>,
+    /// User-defined stereotypes rendered as «text» above the class name.
+    stereotype_labels: Vec<String>,
 }
 
 fn calc_class_dim(entity: &ClassEntity) -> ClassDim {
@@ -309,8 +311,18 @@ fn calc_class_dim(entity: &ClassEntity) -> ClassDim {
         EntityKind::Class => None,
     };
 
+    let stereotype_labels: Vec<String> = entity
+        .stereotypes
+        .iter()
+        .map(|s| format!("«{s}»"))
+        .collect();
+
     let name_width = metrics::text_width(&entity.label, FONT_SIZE) + PADDING * 2.0;
     let kind_width = kind_label.map_or(0.0, |k| metrics::text_width(k, SMALL_FONT) + PADDING * 2.0);
+    let stereo_max_width = stereotype_labels
+        .iter()
+        .map(|s| metrics::text_width(s, SMALL_FONT) + PADDING * 2.0)
+        .fold(0.0_f64, f64::max);
     let member_max_width = entity
         .members
         .iter()
@@ -320,6 +332,7 @@ fn calc_class_dim(entity: &ClassEntity) -> ClassDim {
     let width = CLASS_MIN_WIDTH
         .max(name_width)
         .max(kind_width)
+        .max(stereo_max_width)
         .max(member_max_width);
 
     let kind_height = if kind_label.is_some() {
@@ -327,19 +340,21 @@ fn calc_class_dim(entity: &ClassEntity) -> ClassDim {
     } else {
         0.0
     };
+    let stereo_height = stereotype_labels.len() as f64 * MEMBER_HEIGHT;
     let members_height = if entity.members.is_empty() {
         0.0
     } else {
         entity.members.len() as f64 * MEMBER_HEIGHT + PADDING
     };
 
-    let height = HEADER_HEIGHT + kind_height + members_height;
+    let height = HEADER_HEIGHT + kind_height + stereo_height + members_height;
 
     ClassDim {
         width,
         height,
         header_text: entity.label.clone(),
         kind_label,
+        stereotype_labels,
     }
 }
 
@@ -362,6 +377,12 @@ fn render_class_box(
 
     let mut cy = y;
 
+    // User-defined stereotypes (e.g. «service», «singleton»).
+    for stereo in &dim.stereotype_labels {
+        cy += MEMBER_HEIGHT;
+        svg.text(x + dim.width / 2.0, cy - 3.0, stereo, "middle", SMALL_FONT);
+    }
+
     // Kind label (<<interface>>, etc.).
     if let Some(kind) = dim.kind_label {
         cy += MEMBER_HEIGHT;
@@ -377,7 +398,8 @@ fn render_class_box(
         "middle",
         FONT_SIZE,
     );
-    cy = y + HEADER_HEIGHT + dim.kind_label.map_or(0.0, |_| MEMBER_HEIGHT);
+    let stereo_height = dim.stereotype_labels.len() as f64 * MEMBER_HEIGHT;
+    cy = y + HEADER_HEIGHT + stereo_height + dim.kind_label.map_or(0.0, |_| MEMBER_HEIGHT);
 
     // Separator line.
     if !entity.members.is_empty() {
