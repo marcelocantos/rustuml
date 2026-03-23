@@ -62,13 +62,30 @@ pub fn render(diagram: &DeploymentDiagram, theme: &Theme) -> String {
         };
 
         svg.rounded_rect(x, y, w, NODE_H, 5.0, fill, &gs.border_color);
-        svg.text(
-            x + w / 2.0,
-            y + NODE_H / 2.0 + 5.0,
-            &node.label,
-            "middle",
-            FONT_SIZE,
-        );
+        if let Some(stereo) = &node.stereotype {
+            svg.text(
+                x + w / 2.0,
+                y + NODE_H / 2.0 - 4.0,
+                &format!("«{stereo}»"),
+                "middle",
+                SMALL_FONT,
+            );
+            svg.text(
+                x + w / 2.0,
+                y + NODE_H / 2.0 + 10.0,
+                &node.label,
+                "middle",
+                FONT_SIZE,
+            );
+        } else {
+            svg.text(
+                x + w / 2.0,
+                y + NODE_H / 2.0 + 5.0,
+                &node.label,
+                "middle",
+                FONT_SIZE,
+            );
+        }
         positions.push((x, y, w));
     }
 

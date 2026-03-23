@@ -19,6 +19,7 @@ pub struct DeploymentNode {
     pub id: String,
     pub label: String,
     pub kind: DeploymentNodeKind,
+    pub stereotype: Option<String>,
     pub children: Vec<String>,
 }
 

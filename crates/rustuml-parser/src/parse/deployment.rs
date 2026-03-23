@@ -24,7 +24,7 @@ pub fn parse_deployment(lines: &[String]) -> Result<DeploymentDiagram, ParseErro
 
         static RE_NODE: LazyLock<Regex> = LazyLock::new(|| {
             Regex::new(
-                r#"^(node|artifact|cloud|database|storage|frame|folder|actor)\s+(?:"([^"]+)"\s+as\s+)?(\w+)(?:\s*\{)?"#,
+                r#"^(node|artifact|cloud|database|storage|frame|folder|actor)\s+(?:"([^"]+)"\s+as\s+)?(\w+)(?:\s+<<([^>]+)>>)?(?:\s*\{)?"#,
             )
             .unwrap()
         });
@@ -46,12 +46,14 @@ pub fn parse_deployment(lines: &[String]) -> Result<DeploymentDiagram, ParseErro
                 .get(2)
                 .map_or_else(|| caps[3].to_string(), |m| m.as_str().to_string());
             let id = caps[3].to_string();
+            let stereotype = caps.get(4).map(|m| m.as_str().trim().to_string());
 
             if !nodes.iter().any(|n: &DeploymentNode| n.id == id) {
                 nodes.push(DeploymentNode {
                     id,
                     label,
                     kind,
+                    stereotype,
                     children: Vec::new(),
                 });
             }
@@ -67,6 +69,7 @@ pub fn parse_deployment(lines: &[String]) -> Result<DeploymentDiagram, ParseErro
                         id: id.clone(),
                         label: id.clone(),
                         kind: DeploymentNodeKind::Node,
+                        stereotype: None,
                         children: Vec::new(),
                     });
                 }
