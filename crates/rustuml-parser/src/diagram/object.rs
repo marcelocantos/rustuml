@@ -12,6 +12,7 @@ pub struct ObjectDiagram {
     pub meta: DiagramMeta,
     pub objects: Vec<ObjectInstance>,
     pub links: Vec<ObjectLink>,
+    pub notes: Vec<ObjectNote>,
 }
 
 /// The kind of object node.
@@ -29,9 +30,25 @@ pub struct ObjectInstance {
     pub label: String,
     pub kind: ObjectKind,
     pub fields: Vec<ObjectField>,
+    /// Optional stereotype (e.g., "entity", "boundary").
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub stereotype: Option<String>,
     /// Optional color override (e.g., "#blue", "#FF0000").
     #[serde(skip_serializing_if = "Option::is_none")]
     pub color: Option<String>,
+}
+
+/// A note in an object diagram.
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct ObjectNote {
+    /// The note's own identifier (for floating notes declared with `as ID`).
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub id: Option<String>,
+    /// The object this note is attached to, if any.
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub target: Option<String>,
+    /// Note text content (may contain `\n` for multi-line).
+    pub text: String,
 }
 
 /// A single field/entry within an object or map instance.

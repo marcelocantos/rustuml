@@ -30,6 +30,7 @@ struct ObjectParser {
     meta: DiagramMeta,
     objects: Vec<ObjectInstance>,
     links: Vec<ObjectLink>,
+    notes: Vec<ObjectNote>,
     /// Object currently being parsed (inside { ... } block).
     current_object: Option<String>,
 }
@@ -40,6 +41,7 @@ impl ObjectParser {
             meta: DiagramMeta::default(),
             objects: Vec::new(),
             links: Vec::new(),
+            notes: Vec::new(),
             current_object: None,
         }
     }
@@ -49,6 +51,7 @@ impl ObjectParser {
             meta: self.meta,
             objects: self.objects,
             links: self.links,
+            notes: self.notes,
         }
     }
 
@@ -60,6 +63,7 @@ impl ObjectParser {
                 label: id.clone(),
                 kind: ObjectKind::Object,
                 fields: Vec::new(),
+                stereotype: None,
                 color: None,
             });
         }
@@ -86,6 +90,9 @@ impl ObjectParser {
         if self.try_link(line) {
             return Ok(());
         }
+        if self.try_note(line) {
+            return Ok(());
+        }
         if self.try_meta(line) {
             return Ok(());
         }
@@ -95,10 +102,10 @@ impl ObjectParser {
     }
 
     fn try_object_decl(&mut self, line: &str) -> bool {
-        // object "Label" as id #color { ... } or object id #color {
+        // object "Label" as id <<stereotype>> #color { ... } or object id <<stereotype>> #color {
         static RE: LazyLock<Regex> = LazyLock::new(|| {
             Regex::new(
-                r#"^object\s+(?:"([^"]+)"\s+as\s+(\w+)|(\w+))(?:\s+#(\S+))?\s*(\{.*)?$"#,
+                r#"^object\s+(?:"([^"]+)"\s+as\s+(\w+)|(\w+))(?:\s+<<([^>]+)>>)?(?:\s+#(\S+))?\s*(\{.*)?$"#,
             )
             .unwrap()
         });
@@ -110,12 +117,16 @@ impl ObjectParser {
                 let id = caps[3].to_string();
                 (id.clone(), id)
             };
-            let color = caps.get(4).map(|m| m.as_str().to_string());
-            let body_part = caps.get(5).map(|m| m.as_str());
+            let stereotype = caps.get(4).map(|m| m.as_str().trim().to_string());
+            let color = caps.get(5).map(|m| m.as_str().to_string());
+            let body_part = caps.get(6).map(|m| m.as_str());
 
             if let Some(obj) = self.objects.iter_mut().find(|o| o.id == id) {
                 obj.label = label;
                 obj.kind = ObjectKind::Object;
+                if stereotype.is_some() {
+                    obj.stereotype = stereotype;
+                }
                 if color.is_some() {
                     obj.color = color;
                 }
@@ -125,6 +136,7 @@ impl ObjectParser {
                     label,
                     kind: ObjectKind::Object,
                     fields: Vec::new(),
+                    stereotype,
                     color,
                 });
             }
@@ -177,6 +189,7 @@ impl ObjectParser {
                     label,
                     kind: ObjectKind::Map,
                     fields: Vec::new(),
+                    stereotype: None,
                     color,
                 });
             }
@@ -229,6 +242,59 @@ impl ObjectParser {
         } else {
             false
         }
+    }
+
+    fn try_note(&mut self, line: &str) -> bool {
+        // note "text" as ID  — floating note
+        static RE_FLOATING: LazyLock<Regex> = LazyLock::new(|| {
+            Regex::new(r#"^note\s+"([^"]+)"\s+as\s+(\w+)\s*$"#).unwrap()
+        });
+        // note right/left/top/bottom of X : text
+        // note right of X : text
+        static RE_ATTACHED: LazyLock<Regex> = LazyLock::new(|| {
+            Regex::new(r"^note\s+(?:right|left|top|bottom)\s+of\s+(\w+)\s*:\s*(.+)$").unwrap()
+        });
+        // note right : text  (shorthand without "of X", attaches to last object)
+        static RE_SHORTHAND: LazyLock<Regex> = LazyLock::new(|| {
+            Regex::new(r"^note\s+(?:right|left|top|bottom)\s*:\s*(.+)$").unwrap()
+        });
+
+        if let Some(caps) = RE_FLOATING.captures(line) {
+            let text = caps[1].replace("\\n", "\n");
+            let id = caps[2].to_string();
+            self.notes.push(ObjectNote {
+                id: Some(id),
+                target: None,
+                text,
+            });
+            return true;
+        }
+        if let Some(caps) = RE_ATTACHED.captures(line) {
+            let target = caps[1].to_string();
+            let text = caps[2].trim().to_string();
+            self.notes.push(ObjectNote {
+                id: None,
+                target: Some(target),
+                text,
+            });
+            return true;
+        }
+        if let Some(caps) = RE_SHORTHAND.captures(line) {
+            let text = caps[1].trim().to_string();
+            // Attach to the most recently declared object.
+            let target = self.objects.last().map(|o| o.id.clone());
+            self.notes.push(ObjectNote {
+                id: None,
+                target,
+                text,
+            });
+            return true;
+        }
+        // Silently swallow other note forms we don't fully handle yet.
+        if line.starts_with("note ") {
+            return true;
+        }
+        false
     }
 
     fn try_meta(&mut self, line: &str) -> bool {
