@@ -202,12 +202,14 @@ fn render_with_positions(
                 dashed,
             );
             render_relationship_head(&mut svg, rel.kind, to_cx, to_top);
-
-            if let Some(label) = &rel.label {
-                let mid_x = (from_cx + to_cx) / 2.0;
-                let mid_y = (from_bottom + to_top) / 2.0;
-                svg.text(mid_x, mid_y - 4.0, label, "middle", SMALL_FONT);
-            }
+            render_relationship_labels(
+                &mut svg,
+                rel,
+                from_cx,
+                from_bottom,
+                to_cx,
+                to_top,
+            );
         }
     }
 
@@ -276,13 +278,14 @@ fn render_grid(diagram: &ClassDiagram, cs: &crate::style::ClassStyle) -> String 
 
             // Draw relationship decoration at the target end.
             render_relationship_head(&mut svg, rel.kind, to_cx, to_top);
-
-            // Label.
-            if let Some(label) = &rel.label {
-                let mid_x = (from_cx + to_cx) / 2.0;
-                let mid_y = (from_bottom + to_top) / 2.0;
-                svg.text(mid_x, mid_y - 4.0, label, "middle", SMALL_FONT);
-            }
+            render_relationship_labels(
+                &mut svg,
+                rel,
+                from_cx,
+                from_bottom,
+                to_cx,
+                to_top,
+            );
         }
     }
 
@@ -412,6 +415,48 @@ fn format_member(member: &Member) -> String {
         "{vis}{static_prefix}{abstract_prefix}{}{type_suffix}",
         member.name
     )
+}
+
+/// Strip PlantUML label direction markers (`< ` prefix or ` >` suffix).
+fn strip_label_direction(label: &str) -> &str {
+    let s = label.trim();
+    if let Some(rest) = s.strip_prefix('<') {
+        rest.trim_start()
+    } else if let Some(rest) = s.strip_suffix('>') {
+        rest.trim_end()
+    } else {
+        s
+    }
+}
+
+/// Render the label, from_multiplicity, and to_multiplicity for a relationship.
+fn render_relationship_labels(
+    svg: &mut SvgBuilder,
+    rel: &Relationship,
+    from_cx: f64,
+    from_bottom: f64,
+    to_cx: f64,
+    to_top: f64,
+) {
+    let mid_x = (from_cx + to_cx) / 2.0;
+    let mid_y = (from_bottom + to_top) / 2.0;
+
+    if let Some(label) = &rel.label {
+        let display = strip_label_direction(label);
+        if !display.is_empty() {
+            svg.text(mid_x + 5.0, mid_y - 4.0, display, "start", SMALL_FONT);
+        }
+    }
+
+    // from_multiplicity/role: near the FROM end (bottom of from-box).
+    if let Some(mult) = &rel.from_multiplicity {
+        svg.text(from_cx - 5.0, from_bottom + SMALL_FONT, mult, "end", SMALL_FONT);
+    }
+
+    // to_multiplicity/role: near the TO end (top of to-box).
+    if let Some(mult) = &rel.to_multiplicity {
+        svg.text(to_cx - 5.0, to_top - 4.0, mult, "end", SMALL_FONT);
+    }
 }
 
 fn render_relationship_head(svg: &mut SvgBuilder, kind: RelationshipKind, x: f64, y: f64) {
