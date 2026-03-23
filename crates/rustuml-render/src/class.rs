@@ -915,7 +915,7 @@ fn render_note_box(svg: &mut SvgBuilder, note: &Note, x: f64, y: f64, w: f64, h:
             let indent = "  ".repeat(star_level - 1);
             let content = replace_img_tags(content);
             list_ctrs.clear();
-            svg.text(x + NOTE_PAD_X, ty, &format!("{indent}\u{2022} {content}"), "start", FONT_SIZE);
+            svg.text(x + NOTE_PAD_X, ty, &format!("{indent}* {content}"), "start", FONT_SIZE);
             ty += NOTE_LINE_HEIGHT;
             continue;
         }

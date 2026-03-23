@@ -649,10 +649,14 @@ impl ClassParser {
             let position = parse_note_position(&caps[1]);
             let target = caps[2].to_string();
             let text = caps[3].trim().to_string();
-            // Expand `\n` escape sequences into actual newlines.
+            // Expand `\n` escape sequences into actual newlines.  Preserve
+            // leading whitespace on each segment so that indented `* items`
+            // (e.g. `  * point 2`) are distinguishable from top-level bullet
+            // items (`* point 1`) in the renderer.  Only strip trailing
+            // whitespace from each segment.
             let lines = text
                 .split("\\n")
-                .map(|s| s.trim().to_string())
+                .map(|s| s.trim_end().to_string())
                 .collect();
             self.notes.push(Note {
                 lines,
@@ -681,7 +685,7 @@ impl ClassParser {
             let text = caps[2].trim().to_string();
             let lines = text
                 .split("\\n")
-                .map(|s| s.trim().to_string())
+                .map(|s| s.trim_end().to_string())
                 .collect();
             let target = self.last_entity_id.clone();
             self.notes.push(Note {
@@ -711,7 +715,7 @@ impl ClassParser {
             let alias = caps[2].to_string();
             let lines = text
                 .split("\\n")
-                .map(|s| s.trim().to_string())
+                .map(|s| s.trim_end().to_string())
                 .collect();
             self.notes.push(Note {
                 lines,
@@ -742,7 +746,7 @@ impl ClassParser {
             let lines = if text.is_empty() {
                 Vec::new()
             } else {
-                text.split("\\n").map(|s| s.trim().to_string()).collect()
+                text.split("\\n").map(|s| s.trim_end().to_string()).collect()
             };
             self.notes.push(Note {
                 lines,

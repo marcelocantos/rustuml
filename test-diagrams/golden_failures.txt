@@ -1,13 +1,10 @@
-    4 edge-cases
+    3 edge-cases
     2 combo
-    1 creole
     1 object
     1 usecase
 
 combo/combo_class_vs_object: golden texts not found in Rust output: ["myCar : Car", "make = \"Toyota\"", "model = \"Camry\"", "year = 2023", "herCar : Car", "make = \"Honda\"", "model = \"Civic\"", "year = 2022"]
 combo/combo_preprocessing_macros: golden texts not found in Rust output: ["(PostgreSQL)", "(PostgreSQL)", "(MongoDB)", "read/write", "read/write", "read/write", "validate user", "check stock", "process", "receipt"]
-creole/creole_allctx_class_name: golden texts not found in Rust output: ["__under__"]
-edge-cases/edge_creole_list: golden texts not found in Rust output: ["** nested 1", "** nested 2"]
 edge-cases/edge_multiple_blocks: golden texts not found in Rust output: ["Second"]
 edge-cases/edge_seq_title_with_variables: golden texts not found in Rust output: ["Sequence at Mon Mar 23 07:13:46 AEDT 2026"]
 edge-cases/edge_sequence_incoming_outgoing: golden texts not found in Rust output: ["to right"]
