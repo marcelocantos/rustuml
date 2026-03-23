@@ -207,8 +207,10 @@ impl ActivityParser {
     }
 
     fn try_repeat_while(&mut self, line: &str) -> bool {
+        // PlantUML uses "repeatwhile" (one word) as the primary keyword.
+        // Also accept "repeat while" (two words) as an alias.
         static RE: LazyLock<Regex> = LazyLock::new(|| {
-            Regex::new(r"^repeat\s+while\s*\((.+?)\)\s*(?:is\s*\((.+?)\))?").unwrap()
+            Regex::new(r"^repeat\s*while\s*\((.+?)\)\s*(?:is\s*\((.+?)\))?").unwrap()
         });
 
         if let Some(caps) = RE.captures(line) {

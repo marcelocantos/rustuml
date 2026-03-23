@@ -607,13 +607,25 @@ fn eval_builtin_functions(input: &str) -> String {
 
 fn strip_inline_comment(line: &str) -> String {
     // PlantUML inline comments start with ' but not inside strings.
-    // Simple heuristic: strip from first ' that's not inside quotes.
+    // ' starts a comment only when at position 0 (after trim) or preceded by
+    // whitespace. This avoids stripping possessives like [Task 1]'s end.
     let mut in_quotes = false;
-    for (i, c) in line.char_indices() {
+    let chars: Vec<char> = line.chars().collect();
+    let bytes: Vec<usize> = line
+        .char_indices()
+        .map(|(i, _)| i)
+        .chain(std::iter::once(line.len()))
+        .collect();
+    for (idx, &c) in chars.iter().enumerate() {
+        let byte_pos = bytes[idx];
         if c == '"' {
             in_quotes = !in_quotes;
         } else if c == '\'' && !in_quotes {
-            return line[..i].to_string();
+            // Only treat as comment start if at position 0 or preceded by whitespace.
+            let preceded_by_space = idx == 0 || chars[idx - 1].is_whitespace();
+            if preceded_by_space {
+                return line[..byte_pos].to_string();
+            }
         }
     }
     line.to_string()

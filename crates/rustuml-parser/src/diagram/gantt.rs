@@ -11,6 +11,10 @@ use serde::{Deserialize, Serialize};
 pub struct GanttDiagram {
     pub meta: DiagramMeta,
     pub tasks: Vec<GanttTask>,
+    /// Project start date (YYYY-MM-DD), if specified with `Project starts`.
+    pub project_start: Option<String>,
+    /// Days of week that are closed (0=Monday, 1=Tuesday, ..., 6=Sunday).
+    pub closed_days: Vec<u8>,
 }
 
 /// How a task's start is specified.
@@ -32,4 +36,6 @@ pub struct GanttTask {
     pub duration: u32,
     /// How the start date is determined.
     pub start: TaskStart,
+    /// Optional task color (CSS color name or hex).
+    pub color: Option<String>,
 }

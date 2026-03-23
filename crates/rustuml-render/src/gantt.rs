@@ -74,7 +74,7 @@ pub fn render(diagram: &GanttDiagram, _theme: &Theme) -> String {
         false,
     );
 
-    // Day tick marks and labels.
+    // Day tick marks and labels (top).
     for day in 0..=total_days {
         let tx = chart_x + day as f64 * DAY_WIDTH;
         svg.line_segment(tx, axis_y, tx, axis_y - 5.0, "#888", false);
@@ -87,6 +87,19 @@ pub fn render(diagram: &GanttDiagram, _theme: &Theme) -> String {
                 SMALL_FONT,
             );
         }
+    }
+
+    // Bottom day labels (mirrored below the chart rows).
+    let bottom_y = axis_y + n as f64 * (ROW_HEIGHT + ROW_GAP) + 14.0;
+    for day in 0..total_days {
+        let tx = chart_x + day as f64 * DAY_WIDTH;
+        svg.text(
+            tx + DAY_WIDTH / 2.0,
+            bottom_y,
+            &(day + 1).to_string(),
+            "middle",
+            SMALL_FONT,
+        );
     }
 
     // Vertical grid lines (subtle).
