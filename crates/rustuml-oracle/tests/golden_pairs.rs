@@ -187,6 +187,15 @@ fn run_one(puml_path: &Path, root: &Path) -> TestResult {
         }
     };
 
+    // Skip diagrams that use runtime-dependent functions whose output changes
+    // every run and can never match a static golden file.
+    if source.contains("%date()") {
+        return TestResult {
+            name: rel,
+            outcome: Outcome::Skip("non-deterministic %date()".into()),
+        };
+    }
+
     let svg_path = puml_path.with_extension("svg");
     let golden_svg = match std::fs::read_to_string(&svg_path) {
         Ok(s) => s,
