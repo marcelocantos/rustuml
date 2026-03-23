@@ -21,6 +21,12 @@ fn golden_has_error(svg: &str) -> bool {
         || svg.contains("NoSuchElementException")
         || svg.contains("Welcome to PlantUML")
         || svg.contains("An error has occured")
+        // PlantUML diagnostic/debug SVG: shows source code with error annotations.
+        // Detect by green-on-black debug style (fill="#33FF02") used only in error output.
+        || svg.contains("fill=\"#33FF02\"")
+        // PlantUML error annotation text patterns.
+        || svg.contains("Parsing syntax error")
+        || svg.contains("Note already created")
 }
 
 fn run_one(puml_path: &Path) -> (String, &'static str, Option<String>) {
@@ -149,4 +155,31 @@ fn preproc_golden_pairs() {
         failures.is_empty(),
         "{fail_count} preprocessing golden pair tests failed"
     );
+}
+
+#[test]
+fn debug_function_expansion() {
+    use rustuml_parser::preprocess::preprocess;
+
+    let out = preprocess(r#"@startuml
+!function $greet($name)
+  !return "Hello, " + $name + "!"
+!endfunction
+note as N
+  $greet("World")
+  $greet("PlantUML")
+end note
+@enduml"#);
+    println!("function_with_string output: {:?}", out);
+
+    let out2 = preprocess(r#"@startuml
+!function $greet($name = "World")
+  !return "Hello, " + $name + "!"
+!endfunction
+note as N
+  $greet()
+  $greet("Alice")
+end note
+@enduml"#);
+    println!("function_default_arg output: {:?}", out2);
 }

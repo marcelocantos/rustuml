@@ -39,30 +39,29 @@ pub fn to_svg_tspans(text: &str) -> String {
             }
             '*' if chars.peek() == Some(&'*') => {
                 chars.next();
-                // Find closing **
+                // Find closing **; recursively process nested markup.
                 let content = collect_until(&mut chars, "**");
-                write!(result, "<tspan font-weight=\"bold\">{content}</tspan>").unwrap();
+                let inner = to_svg_tspans(&content);
+                write!(result, "<tspan font-weight=\"bold\">{inner}</tspan>").unwrap();
             }
             '/' if chars.peek() == Some(&'/') => {
                 chars.next();
                 let content = collect_until(&mut chars, "//");
-                write!(result, "<tspan font-style=\"italic\">{content}</tspan>").unwrap();
+                let inner = to_svg_tspans(&content);
+                write!(result, "<tspan font-style=\"italic\">{inner}</tspan>").unwrap();
             }
-            '_' if chars.peek() == Some(&'_') => {
-                chars.next();
-                let content = collect_until(&mut chars, "__");
-                write!(
-                    result,
-                    "<tspan text-decoration=\"underline\">{content}</tspan>"
-                )
-                .unwrap();
+            '_' => {
+                // Underscores are left as-is; PlantUML renders __text__ as literal
+                // text in most contexts (class members, notes, etc.).
+                result.push('_');
             }
             '-' if chars.peek() == Some(&'-') => {
                 chars.next();
                 let content = collect_until(&mut chars, "--");
+                let inner = to_svg_tspans(&content);
                 write!(
                     result,
-                    "<tspan text-decoration=\"line-through\">{content}</tspan>"
+                    "<tspan text-decoration=\"line-through\">{inner}</tspan>"
                 )
                 .unwrap();
             }
@@ -72,110 +71,142 @@ pub fn to_svg_tspans(text: &str) -> String {
                 match tag.as_str() {
                     "b" => {
                         let content = collect_until_tag(&mut chars, "</b>");
-                        write!(result, "<tspan font-weight=\"bold\">{content}</tspan>").unwrap();
+                        let inner = to_svg_tspans(&content);
+                        write!(result, "<tspan font-weight=\"bold\">{inner}</tspan>").unwrap();
                     }
                     "i" => {
                         let content = collect_until_tag(&mut chars, "</i>");
-                        write!(result, "<tspan font-style=\"italic\">{content}</tspan>").unwrap();
+                        let inner = to_svg_tspans(&content);
+                        write!(result, "<tspan font-style=\"italic\">{inner}</tspan>").unwrap();
                     }
                     "u" => {
                         let content = collect_until_tag(&mut chars, "</u>");
+                        let inner = to_svg_tspans(&content);
                         write!(
                             result,
-                            "<tspan text-decoration=\"underline\">{content}</tspan>"
+                            "<tspan text-decoration=\"underline\">{inner}</tspan>"
                         )
                         .unwrap();
                     }
                     "s" => {
                         let content = collect_until_tag(&mut chars, "</s>");
+                        let inner = to_svg_tspans(&content);
                         write!(
                             result,
-                            "<tspan text-decoration=\"line-through\">{content}</tspan>"
+                            "<tspan text-decoration=\"line-through\">{inner}</tspan>"
                         )
                         .unwrap();
                     }
                     "mono" => {
                         let content = collect_until_tag(&mut chars, "</mono>");
-                        let content = monospace_spaces(&content);
-                        write!(result, "<tspan font-family=\"monospace\">{content}</tspan>").unwrap();
+                        let inner = monospace_spaces(&to_svg_tspans(&content));
+                        write!(result, "<tspan font-family=\"monospace\">{inner}</tspan>").unwrap();
                     }
                     "del" | "strike" => {
                         let close = if tag == "del" { "</del>" } else { "</strike>" };
                         let content = collect_until_tag(&mut chars, close);
+                        let inner = to_svg_tspans(&content);
                         write!(
                             result,
-                            "<tspan text-decoration=\"line-through\">{content}</tspan>"
+                            "<tspan text-decoration=\"line-through\">{inner}</tspan>"
                         )
                         .unwrap();
                     }
                     "strong" => {
                         let content = collect_until_tag(&mut chars, "</strong>");
-                        write!(result, "<tspan font-weight=\"bold\">{content}</tspan>").unwrap();
+                        let inner = to_svg_tspans(&content);
+                        write!(result, "<tspan font-weight=\"bold\">{inner}</tspan>").unwrap();
                     }
                     "em" => {
                         let content = collect_until_tag(&mut chars, "</em>");
-                        write!(result, "<tspan font-style=\"italic\">{content}</tspan>").unwrap();
+                        let inner = to_svg_tspans(&content);
+                        write!(result, "<tspan font-style=\"italic\">{inner}</tspan>").unwrap();
                     }
                     "ins" => {
                         let content = collect_until_tag(&mut chars, "</ins>");
+                        let inner = to_svg_tspans(&content);
                         write!(
                             result,
-                            "<tspan text-decoration=\"underline\">{content}</tspan>"
+                            "<tspan text-decoration=\"underline\">{inner}</tspan>"
                         )
                         .unwrap();
                     }
                     "sub" => {
                         let content = collect_until_tag(&mut chars, "</sub>");
+                        let inner = to_svg_tspans(&content);
                         write!(
                             result,
-                            "<tspan baseline-shift=\"sub\" font-size=\"0.7em\">{content}</tspan>"
+                            "<tspan baseline-shift=\"sub\" font-size=\"0.7em\">{inner}</tspan>"
                         )
                         .unwrap();
                     }
                     "sup" => {
                         let content = collect_until_tag(&mut chars, "</sup>");
+                        let inner = to_svg_tspans(&content);
                         write!(
                             result,
-                            "<tspan baseline-shift=\"super\" font-size=\"0.7em\">{content}</tspan>"
+                            "<tspan baseline-shift=\"super\" font-size=\"0.7em\">{inner}</tspan>"
                         )
                         .unwrap();
                     }
                     _ if tag.starts_with("color:") || tag.starts_with("COLOR:") => {
-                        // <color:blue>text</color> — strip tag, keep content.
+                        // <color:blue>text</color> — strip tag, keep inner markup processed.
                         let content = collect_until_tag(&mut chars, "</color>");
-                        result.push_str(&content);
+                        let inner = to_svg_tspans(&content);
+                        result.push_str(&inner);
                     }
                     _ if tag.starts_with("size:") => {
                         // <size:N>text</size> — apply font-size.
                         let size_str = &tag["size:".len()..];
                         let content = collect_until_tag(&mut chars, "</size>");
+                        let inner = to_svg_tspans(&content);
                         if let Ok(size) = size_str.parse::<u32>() {
                             write!(
                                 result,
-                                "<tspan font-size=\"{size}\">{content}</tspan>"
+                                "<tspan font-size=\"{size}\">{inner}</tspan>"
                             )
                             .unwrap();
                         } else {
-                            result.push_str(&content);
+                            result.push_str(&inner);
                         }
                     }
-                    _ if tag.starts_with("font") => {
-                        // <font ...>text</font> — strip tag, keep content.
+                    _ if tag.starts_with("font:") || tag.starts_with("FONT:") => {
+                        // <font:Name>text</font> — apply font-family as tspan, NBSP for spaces.
+                        let font_name = if tag.starts_with("font:") {
+                            &tag["font:".len()..]
+                        } else {
+                            &tag["FONT:".len()..]
+                        };
                         let content = collect_until_tag(&mut chars, "</font>");
-                        result.push_str(&content);
+                        let inner = to_svg_tspans(&content);
+                        let inner = inner.replace(' ', "\u{00a0}");
+                        write!(
+                            result,
+                            "<tspan font-family=\"{font_name}\">{inner}</tspan>"
+                        )
+                        .unwrap();
+                    }
+                    _ if tag.starts_with("font") => {
+                        // <font ...>text</font> — strip tag, keep inner markup processed.
+                        let content = collect_until_tag(&mut chars, "</font>");
+                        let inner = to_svg_tspans(&content);
+                        result.push_str(&inner);
                     }
                     _ if tag.starts_with("back:") || tag.starts_with("BACK:") => {
-                        // <back:color>text</back> — strip tag, keep content.
+                        // <back:color>text</back> — strip tag, keep inner markup processed.
                         let content = collect_until_tag(&mut chars, "</back>");
-                        result.push_str(&content);
+                        let inner = to_svg_tspans(&content);
+                        result.push_str(&inner);
                     }
                     _ if tag.starts_with('/') => {
                         // Unknown closing tag — emit escaped so text isn't silently dropped.
-                        write!(result, "&lt;{tag}&gt;").unwrap();
+                        let escaped_tag = escape_creole_text(&tag);
+                        write!(result, "&lt;{escaped_tag}&gt;").unwrap();
                     }
                     _ => {
                         // Unknown opening tag — escape and output as literal text.
-                        write!(result, "&lt;{tag}&gt;").unwrap();
+                        let escaped_tag = escape_creole_text(&tag);
+                        write!(result, "&lt;{escaped_tag}&gt;").unwrap();
                     }
                 }
             }
@@ -190,6 +221,14 @@ pub fn to_svg_tspans(text: &str) -> String {
 /// matching PlantUML's SVG output for monospace text.
 fn monospace_spaces(s: &str) -> String {
     s.replace(' ', "\u{00a0}")
+}
+
+/// Escape special XML characters in a string for safe embedding in SVG text content.
+fn escape_creole_text(s: &str) -> String {
+    s.replace('&', "&amp;")
+        .replace('<', "&lt;")
+        .replace('>', "&gt;")
+        .replace('"', "&quot;")
 }
 
 fn collect_until(chars: &mut std::iter::Peekable<std::str::Chars>, delimiter: &str) -> String {
@@ -252,10 +291,9 @@ mod tests {
 
     #[test]
     fn underline() {
-        assert_eq!(
-            to_svg_tspans("__underline__"),
-            r#"<tspan text-decoration="underline">underline</tspan>"#
-        );
+        // Underscores are left as literal text; PlantUML renders __text__ literally
+        // in class members, notes, and other contexts.
+        assert_eq!(to_svg_tspans("__underline__"), "__underline__");
     }
 
     #[test]

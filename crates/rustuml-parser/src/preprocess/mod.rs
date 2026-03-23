@@ -289,6 +289,9 @@ struct PreprocessContext {
     collecting_sub: Option<String>,
     /// Local variable scopes for function calls (stack of saved scopes).
     local_vars: Vec<HashMap<String, String>>,
+    /// Pending return value from a `!return` inside a function body.
+    /// Set by process_one_line when `!return` is encountered while active.
+    return_signal: Option<Value>,
 }
 
 const MAX_INCLUDE_DEPTH: usize = 10;
@@ -350,6 +353,7 @@ impl PreprocessContext {
             subs: HashMap::new(),
             collecting_sub: None,
             local_vars: Vec::new(),
+            return_signal: None,
         }
     }
 
@@ -368,6 +372,14 @@ impl PreprocessContext {
     }
 
     fn set_var(&mut self, name: &str, value: &str) {
+        // Update the innermost local scope that already holds this variable,
+        // so that !local variables are updated in-place by plain !$var = ...
+        for scope in self.local_vars.iter_mut().rev() {
+            if scope.contains_key(name) {
+                scope.insert(name.to_string(), value.to_string());
+                return;
+            }
+        }
         self.defines.insert(name.to_string(), value.to_string());
     }
 
@@ -526,6 +538,16 @@ impl PreprocessContext {
         if self.try_conditional(trimmed) {
             return;
         }
+
+        // !return expr — set the return signal if we're inside an active block.
+        if let Some(expr) = trimmed.strip_prefix("!return ") {
+            if self.is_active() {
+                let substituted = self.substitute_vars(expr);
+                self.return_signal = Some(self.eval_expr_to_value(&substituted));
+            }
+            return;
+        }
+
         if self.try_undefine(trimmed) {
             return;
         }
@@ -798,22 +820,23 @@ impl PreprocessContext {
         // Push a local scope.
         self.local_vars.push(HashMap::new());
 
+        // Save and clear any pending return signal from an outer context.
+        let outer_return = self.return_signal.take();
+
         let mut output_lines = Vec::new();
-        let mut return_value: Option<Value> = None;
 
         for body_line in &func.body {
-            let trimmed = body_line.trim();
-
-            // !return expr
-            if let Some(expr) = trimmed.strip_prefix("!return ") {
-                let substituted = self.substitute_vars(expr);
-                return_value = Some(self.eval_expr_to_value(&substituted));
+            // Process through the preprocessor (handles !if/!while/!return etc.)
+            self.process_one_line(body_line, &mut output_lines);
+            // Check if process_one_line set a return signal.
+            if self.return_signal.is_some() {
                 break;
             }
-
-            // Process the body line through the preprocessor.
-            self.process_one_line(body_line, &mut output_lines);
         }
+
+        let return_value = self.return_signal.take();
+        // Restore outer return signal.
+        self.return_signal = outer_return;
 
         // Pop local scope.
         self.local_vars.pop();
@@ -851,8 +874,19 @@ impl PreprocessContext {
             }
 
             let args = parse_call_args(args_str);
-            let (_ret, lines) = self.call_function(&name, &args);
-            output.extend(lines);
+            let (ret, lines) = self.call_function(&name, &args);
+            if lines.is_empty() {
+                // If the function produced no output lines but returned a value,
+                // emit the return value as an output line (e.g. note body calls).
+                if let Some(val) = ret {
+                    let s = val.to_display();
+                    if !s.is_empty() {
+                        output.push(s);
+                    }
+                }
+            } else {
+                output.extend(lines);
+            }
 
             return true;
         }
@@ -1207,19 +1241,48 @@ impl PreprocessContext {
         let expr = expr.trim();
 
         // Strip surrounding quotes.
+        // Strip surrounding quotes only when the WHOLE expression is a single
+        // quoted string (i.e. the closing `"` at position len-1 is genuinely
+        // the end of the string that started at position 0, not part of a
+        // later token in a compound expression like `"Hello, " + World + "!"`).
         if expr.starts_with('"') && expr.ends_with('"') && expr.len() >= 2 {
-            let inner = &expr[1..expr.len() - 1];
-            // Substitute variables in the string.
-            let substituted = self.substitute_vars(inner);
-            return Value::Str(substituted);
+            // Walk the interior to find where the opening quote closes.  If the
+            // first closing quote is at the very end, we have a single string.
+            let inner_candidate = &expr[1..expr.len() - 1];
+            // Check for an unescaped quote inside the inner part.  If there is
+            // none, the last `"` is the matching close of the opening `"`.
+            if !inner_candidate.contains('"') {
+                let substituted = self.substitute_vars(inner_candidate);
+                return Value::Str(substituted);
+            }
+            // The interior contains quotes — the expression is something like
+            // `"Hello, " + x + "!"`.  Fall through to the general path.
         }
 
-        // Boolean literals.
-        if expr == "true" || expr == "%true()" || expr == "%true" {
+        // Boolean literals (plain "true"/"false" without % prefix).
+        if expr == "true" {
             return Value::Bool(true);
         }
-        if expr == "false" || expr == "%false()" || expr == "%false" {
+        if expr == "false" {
             return Value::Bool(false);
+        }
+        // %true() and %false() are builtin functions that return 1 and 0 (numeric).
+        // Fall through to the BUILTIN_CALL_RE path which dispatches to
+        // eval_one_builtin_args("true"/"false", ...) returning "1"/"0".
+
+        // If the expression is a bare builtin call (%func(...)), evaluate it
+        // directly and return the result as a string.  This avoids the problem
+        // where substitute_vars eagerly evaluates builtins (e.g. %date()) into
+        // a plain string like "2026-03-23" which is then re-evaluated as
+        // arithmetic by the code below.
+        static BUILTIN_CALL_RE: LazyLock<Regex> =
+            LazyLock::new(|| Regex::new(r"^%(\w+)\(([^)]*)\)$").unwrap());
+        if let Some(caps) = BUILTIN_CALL_RE.captures(expr) {
+            let func_name = caps[1].to_string();
+            let args_raw = caps[2].to_string();
+            // Evaluate argument expressions so variables are resolved first.
+            let evaluated = self.eval_builtin_with_expr_args(&func_name, &args_raw);
+            return Value::from_str_auto(&evaluated);
         }
 
         // Substitute variables first.
@@ -1669,6 +1732,36 @@ impl PreprocessContext {
         result
     }
 
+    /// Evaluate a builtin function call where each argument is itself an
+    /// expression (possibly containing `$variables`).  This avoids the
+    /// common problem where pre-substituted variable values contain commas
+    /// (e.g. `%strlen($str)` with `$str = "Hello, World!"` should pass the
+    /// full 13-character string, not split on the comma).
+    fn eval_builtin_with_expr_args(&mut self, func: &str, args_raw: &str) -> String {
+        if args_raw.trim().is_empty() {
+            return self.eval_one_builtin_from_values(func, &[]);
+        }
+
+        // Split on top-level commas in the raw arg string (before substitution).
+        let raw_parts = split_builtin_args(args_raw);
+        // Evaluate each argument as an expression.
+        let evaluated: Vec<String> = raw_parts
+            .iter()
+            .map(|a| {
+                let a = a.trim();
+                let val = self.eval_expr_to_value(a);
+                val.to_display()
+            })
+            .collect();
+        let refs: Vec<&str> = evaluated.iter().map(|s| s.as_str()).collect();
+        self.eval_one_builtin_from_values(func, &refs)
+    }
+
+    /// Core builtin dispatcher taking pre-evaluated string arguments.
+    fn eval_one_builtin_from_values(&self, func: &str, args: &[&str]) -> String {
+        self.eval_one_builtin_args(func, args)
+    }
+
     fn eval_one_builtin(&self, func: &str, args_raw: &str) -> String {
         let args: Vec<&str> = if args_raw.trim().is_empty() {
             Vec::new()
@@ -1681,6 +1774,10 @@ impl PreprocessContext {
             .iter()
             .map(|a| a.trim().trim_matches('"'))
             .collect();
+        self.eval_one_builtin_args(func, &args)
+    }
+
+    fn eval_one_builtin_args(&self, func: &str, args: &[&str]) -> String {
 
         match func {
             "strlen" => args
@@ -1706,8 +1803,11 @@ impl PreprocessContext {
             "lower" => args.first().map_or(String::new(), |s| s.to_lowercase()),
             "newline" => "\n".to_string(),
             "tab" => "\t".to_string(),
-            "true" => "true".to_string(),
-            "false" => "false".to_string(),
+            // PlantUML's %true() and %false() return numeric 1 and 0, not
+            // the strings "true"/"false". This matches the behaviour when
+            // these values are used in arithmetic or display contexts.
+            "true" => "1".to_string(),
+            "false" => "0".to_string(),
             "date" => "2026-03-23".to_string(),
             "size" => {
                 // Count array elements if the argument looks like a JSON array [a, b, c].
@@ -1839,9 +1939,16 @@ impl PreprocessContext {
                 .as_ref()
                 .map(|p| p.display().to_string())
                 .unwrap_or_default(),
+            "file_exists" => {
+                // Always return false — file system access is not permitted in the
+                // preprocessor (matches PlantUML sandboxed/server behaviour).
+                "false".to_string()
+            }
             _ => {
-                // Unknown function — pass through.
-                format!("%{func}({args_raw})")
+                // Unknown function — return empty string.  A non-empty passthrough
+                // like "%func(args)" confuses eval_bool (it would be truthy) and
+                // loops incorrectly.  Returning "" is falsy and safe.
+                String::new()
             }
         }
     }
@@ -2016,12 +2123,15 @@ fn find_top_level_op_pos(expr: &str, op: char) -> Option<usize> {
                 if op == '-' && i + 1 < chars.len() && chars[i + 1] == '>' {
                     continue;
                 }
+                // Skip position 0: a leading operator character is a prefix
+                // (e.g., leading '/' in '/users' is not division), not binary op.
+                if i == 0 {
+                    continue;
+                }
                 // Don't match if preceded by another operator (unary).
-                if i > 0 {
-                    let prev = chars[i - 1];
-                    if prev == '+' || prev == '-' || prev == '*' || prev == '/' || prev == '%' || prev == '(' || prev == '=' || prev == '<' || prev == '>' || prev == '!' {
-                        continue;
-                    }
+                let prev = chars[i - 1];
+                if prev == '+' || prev == '-' || prev == '*' || prev == '/' || prev == '%' || prev == '(' || prev == '=' || prev == '<' || prev == '>' || prev == '!' {
+                    continue;
                 }
                 last_pos = Some(i);
             }

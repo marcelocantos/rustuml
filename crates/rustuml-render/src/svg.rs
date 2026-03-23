@@ -60,7 +60,6 @@ impl SvgBuilder {
         // or HTML tags must be present, to avoid false positives in arrow labels.
         let has_creole = (content.matches("**").count() >= 2)
             || (content.matches("//").count() >= 2)
-            || (content.matches("__").count() >= 2)
             || (content.matches("--").count() >= 2)
             || (content.matches("\"\"").count() >= 2)
             || content.contains('`')
