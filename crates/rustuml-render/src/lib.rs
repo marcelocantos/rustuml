@@ -9,6 +9,7 @@ pub mod class;
 pub mod component;
 pub mod creole;
 pub mod deployment;
+pub mod ditaa;
 pub mod gantt;
 pub mod json_diagram;
 pub mod math;
@@ -86,5 +87,6 @@ fn render_with_theme(diagram: &Diagram, theme: &Theme) -> String {
         Diagram::Salt(s) => salt::render(s, theme),
         Diagram::Nwdiag(nw) => nwdiag::render(nw, theme),
         Diagram::Regex(r) => regex_diagram::render(r, theme),
+        Diagram::Ditaa(d) => ditaa::render(d, theme),
     }
 }

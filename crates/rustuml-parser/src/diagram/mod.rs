@@ -10,6 +10,7 @@ pub mod activity;
 pub mod class;
 pub mod component;
 pub mod deployment;
+pub mod ditaa;
 pub mod gantt;
 pub mod json_diagram;
 pub mod math;
@@ -47,6 +48,7 @@ pub enum Diagram {
     Math(math::MathDiagram),
     Salt(salt::SaltDiagram),
     Regex(regex_diagram::RegexDiagram),
+    Ditaa(ditaa::DitaaDiagram),
 }
 
 /// Source location for error reporting.

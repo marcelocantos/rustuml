@@ -7,6 +7,7 @@ pub mod activity;
 pub mod class;
 pub mod component;
 pub mod deployment;
+pub mod ditaa;
 pub mod gantt;
 pub mod json_diagram;
 pub mod math;
@@ -303,6 +304,10 @@ pub fn parse_with_base(
         "regex" => {
             let r = regex_diagram::parse_regex_diagram(&lines)?;
             Ok(Diagram::Regex(r))
+        }
+        "ditaa" => {
+            let d = ditaa::parse_ditaa(&lines)?;
+            Ok(Diagram::Ditaa(d))
         }
         other => Err(ParseError {
             line: 1,
