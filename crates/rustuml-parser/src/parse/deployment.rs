@@ -280,6 +280,14 @@ pub fn parse_deployment(lines: &[String]) -> Result<DeploymentDiagram, ParseErro
         .unwrap()
     });
 
+    // [Label] [as id] [<<stereo>>] [#color]  — bracket component notation
+    static RE_NODE_BRACKET: LazyLock<Regex> = LazyLock::new(|| {
+        Regex::new(
+            r#"^\[([^\]]+)\](?:\s+as\s+(\w+))?(?:\s+<<([^>]+)>>)?(?:\s+#\w+)?\s*$"#,
+        )
+        .unwrap()
+    });
+
     // note "text" as ID  — floating note
     static RE_NOTE_FLOATING: LazyLock<Regex> = LazyLock::new(|| {
         Regex::new(r#"^note\s+"([^"]+)"\s+as\s+(\w+)\s*$"#).unwrap()
@@ -376,6 +384,29 @@ pub fn parse_deployment(lines: &[String]) -> Result<DeploymentDiagram, ParseErro
         if trimmed == "}" {
             stack.pop();
             continue;
+        }
+
+        // Bracket notation: [Label] [as id] [<<stereo>>]  — component shorthand.
+        if trimmed.starts_with('[') {
+            if let Some(caps) = RE_NODE_BRACKET.captures(trimmed) {
+                let label = caps[1].trim().to_string();
+                let id = caps
+                    .get(2)
+                    .map(|m| m.as_str().to_string())
+                    .unwrap_or_else(|| label_to_id(&label));
+                let stereotype = caps.get(3).map(|m| m.as_str().trim().to_string());
+                push_node(
+                    &mut nodes,
+                    id.clone(),
+                    label,
+                    DeploymentNodeKind::Component,
+                    stereotype,
+                );
+                if let Some(parent_id) = stack.last().cloned() {
+                    add_child(&mut nodes, &parent_id, &id);
+                }
+                continue;
+            }
         }
 
         // Floating note: note "text" as ID
@@ -622,5 +653,25 @@ mod tests {
         let d = parse("header My Header\nfooter My Footer\nnode Server");
         assert_eq!(d.meta.header.as_deref(), Some("My Header"));
         assert_eq!(d.meta.footer.as_deref(), Some("My Footer"));
+    }
+
+    #[test]
+    fn bracket_component_with_alias() {
+        let d = parse("node Container {\n  [Frontend Module] as fe\n  [API Module] as api\n}");
+        let fe = d.nodes.iter().find(|n| n.id == "fe").unwrap();
+        assert_eq!(fe.label, "Frontend Module");
+        assert_eq!(fe.kind, DeploymentNodeKind::Component);
+        let container = d.nodes.iter().find(|n| n.id == "Container").unwrap();
+        assert!(container.children.contains(&"fe".to_string()));
+        assert!(container.children.contains(&"api".to_string()));
+    }
+
+    #[test]
+    fn bracket_component_no_alias() {
+        let d = parse("[MyComponent]");
+        assert_eq!(d.nodes.len(), 1);
+        assert_eq!(d.nodes[0].label, "MyComponent");
+        assert_eq!(d.nodes[0].id, "MyComponent");
+        assert_eq!(d.nodes[0].kind, DeploymentNodeKind::Component);
     }
 }
