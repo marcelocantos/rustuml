@@ -542,8 +542,11 @@ impl PreprocessContext {
         // !return expr — set the return signal if we're inside an active block.
         if let Some(expr) = trimmed.strip_prefix("!return ") {
             if self.is_active() {
-                let substituted = self.substitute_vars(expr);
-                self.return_signal = Some(self.eval_expr_to_value(&substituted));
+                // Do NOT pre-substitute here: eval_expr_to_value handles
+                // substitution internally, and pre-substituting first would
+                // cause token_defines with quoted values (e.g. !define VERSION
+                // "2.0") to have their quotes stripped during concatenation.
+                self.return_signal = Some(self.eval_expr_to_value(expr));
             }
             return;
         }
@@ -1259,6 +1262,19 @@ impl PreprocessContext {
             // `"Hello, " + x + "!"`.  Fall through to the general path.
         }
 
+        // If the expression is a bare word that is a token_define, return its
+        // raw value as a string (without further evaluation).  This preserves
+        // quoted token values like `!define VERSION "2.0"` — when VERSION
+        // appears in a string concatenation `"v" + VERSION`, the result is
+        // `v"2.0"` (with quotes), matching PlantUML's text-substitution model.
+        static BARE_WORD_RE: LazyLock<Regex> =
+            LazyLock::new(|| Regex::new(r"^[A-Za-z_]\w*$").unwrap());
+        if BARE_WORD_RE.is_match(expr) {
+            if let Some(raw) = self.token_defines.get(expr).cloned() {
+                return Value::Str(raw);
+            }
+        }
+
         // Boolean literals (plain "true"/"false" without % prefix).
         if expr == "true" {
             return Value::Bool(true);
@@ -1283,6 +1299,31 @@ impl PreprocessContext {
             // Evaluate argument expressions so variables are resolved first.
             let evaluated = self.eval_builtin_with_expr_args(&func_name, &args_raw);
             return Value::from_str_auto(&evaluated);
+        }
+
+        // Before substituting variables, try to split at `+` on the original
+        // expression.  This matters when one of the parts is a bare token_define
+        // whose value contains quotes (e.g. `!define VERSION "2.0"`).  If we
+        // substituted first we'd get `"v" + "2.0"` and the `"2.0"` would be
+        // stripped of quotes; instead we want `"v" + VERSION` → `v` + `"2.0"`
+        // → `v"2.0"` (PlantUML's text-substitution model).
+        {
+            let pre_parts = split_at_top_level_op(expr, '+');
+            if pre_parts.len() > 1 {
+                // Check whether any part is a bare token_define.
+                let has_token_define = pre_parts.iter().any(|p| {
+                    let t = p.trim();
+                    BARE_WORD_RE.is_match(t) && self.token_defines.contains_key(t)
+                });
+                if has_token_define {
+                    let mut result = String::new();
+                    for part in &pre_parts {
+                        let val = self.eval_expr_to_value(part.trim());
+                        result.push_str(&val.to_display());
+                    }
+                    return Value::Str(result);
+                }
+            }
         }
 
         // Substitute variables first.
