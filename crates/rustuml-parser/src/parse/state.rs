@@ -107,6 +107,10 @@ impl StateParser {
             Regex::new(r#"^state\s+(?:"([^"]+)"\s+as\s+)?(\w+)(?:\s*<<(\w+\*?)>>)?(?:\s*(#\w+))?(?:\s*\{)?$"#)
                 .unwrap()
         });
+        // Also handles: state ID : description
+        static RE_DESC: LazyLock<Regex> = LazyLock::new(|| {
+            Regex::new(r#"^state\s+(?:"([^"]+)"\s+as\s+)?(\w+)\s*:\s*(.+)$"#).unwrap()
+        });
 
         if let Some(caps) = RE.captures(line) {
             let label = caps
@@ -135,6 +139,25 @@ impl StateParser {
                     label,
                     kind,
                     descriptions: Vec::new(),
+                    substates: Vec::new(),
+                });
+            }
+            true
+        } else if let Some(caps) = RE_DESC.captures(line) {
+            let label = caps
+                .get(1)
+                .map_or_else(|| caps[2].to_string(), |m| m.as_str().to_string());
+            let id = caps[2].to_string();
+            let desc = caps[3].trim().to_string();
+            if let Some(state) = self.states.iter_mut().find(|s| s.id == id) {
+                state.label = label;
+                state.descriptions.push(desc);
+            } else {
+                self.states.push(State {
+                    id: id.clone(),
+                    label,
+                    kind: StateKind::Normal,
+                    descriptions: vec![desc],
                     substates: Vec::new(),
                 });
             }

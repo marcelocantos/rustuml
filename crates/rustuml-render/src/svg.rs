@@ -187,6 +187,20 @@ impl SvgBuilder {
         self.buf
     }
 
+    /// Return the inner SVG content (elements only, without `<svg>` wrapper or
+    /// `</svg>` closing tag).  Used when embedding this builder's output into a
+    /// larger SVG document.
+    pub fn finalize_inner(self) -> String {
+        // The buffer starts with the `<svg ...>\n` header line.
+        // Skip everything up to and including the first newline.
+        let inner = self
+            .buf
+            .find('\n')
+            .map(|pos| &self.buf[pos + 1..])
+            .unwrap_or("");
+        inner.to_string()
+    }
+
     fn line(&mut self, s: &str) {
         for _ in 0..self.indent {
             self.buf.push_str("  ");
