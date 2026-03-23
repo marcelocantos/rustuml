@@ -22,6 +22,8 @@ const LABEL_H: f64 = 22.0;
 const CONTAINER_PADDING: f64 = 16.0;
 const TITLE_FONT_SIZE: f64 = 14.0;
 const TITLE_HEIGHT: f64 = TITLE_FONT_SIZE + 10.0;
+const NOTE_W: f64 = 100.0;
+const NOTE_H: f64 = 25.0;
 
 fn node_fill(kind: DeploymentNodeKind) -> &'static str {
     match kind {
@@ -160,10 +162,17 @@ fn render_node(
 }
 
 pub fn render(diagram: &DeploymentDiagram, theme: &Theme) -> String {
-    if diagram.nodes.is_empty() {
+    if diagram.nodes.is_empty() && diagram.notes.is_empty() {
         return "<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"100\" height=\"50\"></svg>\n"
             .to_string();
     }
+
+    // Check skinparams.
+    let is_handwritten = diagram
+        .meta
+        .skinparams
+        .iter()
+        .any(|sp| sp.key.to_lowercase() == "handwritten" && sp.value.to_lowercase() == "true");
 
     // Find root nodes (not listed as children of any other node).
     let all_children: HashSet<&str> = diagram
@@ -178,8 +187,8 @@ pub fn render(diagram: &DeploymentDiagram, theme: &Theme) -> String {
         .collect();
 
     let n = roots.len();
-    let cols = (n as f64).sqrt().ceil() as usize;
-    let rows = n.div_ceil(cols);
+    let cols = if n == 0 { 1 } else { (n as f64).sqrt().ceil() as usize };
+    let rows = if n == 0 { 0 } else { n.div_ceil(cols) };
 
     let col_w: Vec<f64> = {
         let mut cw = vec![0.0_f64; cols];
@@ -199,27 +208,66 @@ pub fn render(diagram: &DeploymentDiagram, theme: &Theme) -> String {
     };
 
     let title_h = if diagram.meta.title.is_some() { TITLE_HEIGHT } else { 0.0 };
-    let total_w =
-        MARGIN * 2.0 + col_w.iter().sum::<f64>() + GAP * cols.saturating_sub(1) as f64;
-    let total_h =
-        MARGIN * 2.0 + row_h.iter().sum::<f64>() + GAP * rows.saturating_sub(1) as f64 + title_h;
+    let header_h = if diagram.meta.header.is_some() { TITLE_HEIGHT } else { 0.0 };
+    let footer_h = if diagram.meta.footer.is_some() { TITLE_HEIGHT } else { 0.0 };
+
+    // Estimate note space (rough: notes below content).
+    let note_extra_h = if diagram.notes.is_empty() { 0.0 } else {
+        (diagram.notes.len() as f64) * (NOTE_H + 10.0)
+    };
+
+    let nodes_w = if col_w.is_empty() { NODE_MIN_W } else {
+        col_w.iter().sum::<f64>() + GAP * cols.saturating_sub(1) as f64
+    };
+    let nodes_h = if row_h.is_empty() { 0.0 } else {
+        row_h.iter().sum::<f64>() + GAP * rows.saturating_sub(1) as f64
+    };
+
+    let total_w = MARGIN * 2.0 + nodes_w.max(NOTE_W + 20.0);
+    let total_h = MARGIN * 2.0 + nodes_h + title_h + header_h + footer_h + note_extra_h;
 
     let mut svg = SvgBuilder::new(total_w, total_h);
-    if let Some(title) = &diagram.meta.title {
-        svg.text(total_w / 2.0, TITLE_HEIGHT - 4.0, title, "middle", TITLE_FONT_SIZE);
+
+    // Header.
+    if let Some(header) = &diagram.meta.header {
+        svg.text(total_w / 2.0, header_h - 4.0, header, "middle", SMALL_FONT);
     }
+
+    // Footer.
+    if let Some(footer) = &diagram.meta.footer {
+        svg.text(total_w / 2.0, total_h - 4.0, footer, "middle", SMALL_FONT);
+    }
+
+    // Handwritten warning.
+    if is_handwritten {
+        let nbsp = '\u{00a0}';
+        let msg = format!(
+            "Please{n}use{n}'!option{n}handwritten{n}true'{n}to{n}enable{n}handwritten",
+            n = nbsp
+        );
+        svg.text(total_w / 2.0, header_h + title_h + MARGIN + FONT_SIZE, &msg, "middle", SMALL_FONT);
+    }
+
+    // Title.
+    if let Some(title) = &diagram.meta.title {
+        svg.text(total_w / 2.0, header_h + TITLE_HEIGHT - 4.0, title, "middle", TITLE_FONT_SIZE);
+    }
+
     let mut positions: HashMap<String, (f64, f64, f64, f64)> = HashMap::new();
+    let content_top = header_h + title_h + MARGIN;
 
     for (i, root) in roots.iter().enumerate() {
         let col = i % cols;
         let row = i / cols;
         let x = MARGIN + col_w[..col].iter().sum::<f64>() + GAP * col as f64;
-        let y = title_h + MARGIN + row_h[..row].iter().sum::<f64>() + GAP * row as f64;
+        let y = content_top + row_h[..row].iter().sum::<f64>() + GAP * row as f64;
         let w = col_w[col];
         render_node(&root.id, &diagram.nodes, x, y, w, &mut svg, theme, &mut positions);
     }
 
     let gs = &theme.global;
+
+    // Render connections.
     for conn in &diagram.connections {
         if let (Some(&(fx, fy, fw, fh)), Some(&(tx, ty, tw, _))) =
             (positions.get(&conn.from), positions.get(&conn.to))
@@ -238,6 +286,68 @@ pub fn render(diagram: &DeploymentDiagram, theme: &Theme) -> String {
                 let my = (fy + fh + ty) / 2.0;
                 svg.text(mx, my - 4.0, label, "middle", SMALL_FONT);
             }
+        }
+    }
+
+    // Render notes.
+    let note_fill = "#FEFECE";
+    let mut note_y = content_top + nodes_h + if nodes_h > 0.0 { GAP } else { 0.0 };
+
+    for note in &diagram.notes {
+        let note_text = &note.text;
+        let nw = (metrics::text_width(note_text, SMALL_FONT) + PADDING * 2.0)
+            .max(NOTE_W)
+            .min(total_w - MARGIN * 2.0);
+        let nx = MARGIN;
+        let ny = note_y;
+
+        // If note has a target, draw a connection line to it.
+        if let Some(target_id) = &note.target {
+            if let Some(&(tx, ty, tw, _)) = positions.get(target_id) {
+                // Note box placed to the right of or above the target.
+                let note_cx = (tx + tw / 2.0).min(total_w - MARGIN - nw);
+                let note_cy = ny;
+                svg.rect(note_cx, note_cy, nw, NOTE_H, note_fill, &gs.border_color);
+                svg.text(note_cx + PADDING, note_cy + NOTE_H / 2.0 + 4.0, note_text, "start", SMALL_FONT);
+                // Connect note to target with a dashed line.
+                svg.line_segment(
+                    note_cx + nw / 2.0,
+                    note_cy,
+                    tx + tw / 2.0,
+                    ty,
+                    &gs.border_color,
+                    true,
+                );
+                note_y += NOTE_H + 10.0;
+                continue;
+            }
+        }
+
+        // Floating note with no known target.
+        svg.rect(nx, ny, nw, NOTE_H, note_fill, &gs.border_color);
+        svg.text(nx + PADDING, ny + NOTE_H / 2.0 + 4.0, note_text, "start", SMALL_FONT);
+        note_y += NOTE_H + 10.0;
+    }
+
+    // Render legend.
+    if let Some(legend) = &diagram.meta.legend {
+        let legend_x = MARGIN;
+        let mut legend_y = note_y + 10.0;
+        for line in legend.lines() {
+            let t = line.trim();
+            if t.is_empty() { continue; }
+            // Strip leading/trailing `|` from table rows.
+            let t = t.trim_matches('|').trim();
+            if t.is_empty() { continue; }
+            // Split by `|` for table cells.
+            let cells: Vec<&str> = t.split('|').map(|c| c.trim()).filter(|c| !c.is_empty()).collect();
+            let mut cell_x = legend_x;
+            for cell in cells {
+                svg.text(cell_x, legend_y, cell, "start", SMALL_FONT);
+                let cell_w = metrics::text_width(cell, SMALL_FONT) + 20.0;
+                cell_x += cell_w;
+            }
+            legend_y += 14.0;
         }
     }
 
