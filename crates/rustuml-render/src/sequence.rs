@@ -64,6 +64,12 @@ fn format_autonumber(n: u32, format: &Option<String>) -> String {
     }
 }
 
+/// Decode PlantUML backslash escapes in label text.
+/// `\\` → `\`, `\n` → newline (for display purposes we keep `\n` as space).
+fn decode_escapes(s: &str) -> String {
+    s.replace("\\\\", "\\")
+}
+
 /// Returns the display label for a participant box.
 ///
 /// If the participant has a stereotype, it appears inline as "Name «stereotype»",
@@ -324,13 +330,18 @@ pub fn render(diagram: &SequenceDiagram, theme: &Theme) -> String {
         let x = px[i];
         let w = participant_widths[i];
         svg.open_group("participant");
-        // Title element: name + stereotype (with non-ASCII chars as dots, matching PlantUML).
+        // Title element: name + stereotype (non-ASCII and `/` chars as dots, matching PlantUML).
+        let normalize_title = |s: &str| -> String {
+            s.chars()
+                .map(|c| if c.is_ascii() && c != '/' { c } else { '.' })
+                .collect()
+        };
         let title_text = if let Some(st) = &p.stereotype {
-            let dot_st: String = format!("..{st}..").chars().map(|c| if c.is_ascii() { c } else { '.' }).collect();
-            let dot_label: String = p.label.chars().map(|c| if c.is_ascii() { c } else { '.' }).collect();
+            let dot_st: String = normalize_title(&format!("..{st}.."));
+            let dot_label: String = normalize_title(&p.label);
             format!("{dot_label} {dot_st}")
         } else {
-            p.label.chars().map(|c| if c.is_ascii() { c } else { '.' }).collect()
+            normalize_title(&p.label)
         };
         svg.title(&title_text);
         svg.rounded_rect(
@@ -401,7 +412,8 @@ pub fn render(diagram: &SequenceDiagram, theme: &Theme) -> String {
 
                 // Message label.
                 if !msg.label.is_empty() {
-                    svg.text(mid_x, y - 5.0, &msg.label, "middle", SMALL_FONT);
+                    let label = decode_escapes(&msg.label);
+                    svg.text(mid_x, y - 5.0, &label, "middle", SMALL_FONT);
                 }
 
                 y += MESSAGE_HEIGHT;
@@ -510,7 +522,8 @@ pub fn render(diagram: &SequenceDiagram, theme: &Theme) -> String {
                     *n = n.saturating_add(an.step);
                 }
                 if !ret.label.is_empty() {
-                    svg.text(mid, y - 5.0, &ret.label, "middle", SMALL_FONT);
+                    let label = decode_escapes(&ret.label);
+                    svg.text(mid, y - 5.0, &label, "middle", SMALL_FONT);
                 }
                 y += MESSAGE_HEIGHT;
             }

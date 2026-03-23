@@ -126,7 +126,13 @@ fn render_with_positions(
                 .filter_map(|eid| entity_idx.get(eid.as_str()).copied())
                 .collect();
             if idxs.is_empty() {
-                return None;
+                // Empty package: render as a small labelled box at the bottom-right.
+                // Use a fixed placeholder position offset from the last entity or a default.
+                let px = MARGIN;
+                let py = MARGIN;
+                let pw = CLASS_MIN_WIDTH;
+                let ph = PACKAGE_HEADER + PACKAGE_PAD;
+                return Some((px, py, pw, ph));
             }
             let min_ex = idxs.iter().map(|&i| raw_pos[i].0).fold(f64::INFINITY, f64::min);
             let min_ey = idxs.iter().map(|&i| raw_pos[i].1).fold(f64::INFINITY, f64::min);
@@ -234,6 +240,12 @@ fn render_with_positions(
     if let Some(footer) = &diagram.meta.footer {
         svg.text(total_width / 2.0, total_height - 4.0, footer, "middle", SMALL_FONT);
     }
+    if let Some(caption) = &diagram.meta.caption {
+        svg.text(total_width / 2.0, total_height - 4.0, caption, "middle", SMALL_FONT);
+    }
+    if let Some(legend) = &diagram.meta.legend {
+        svg.text(total_width / 2.0, total_height - 4.0, legend, "middle", SMALL_FONT);
+    }
 
     // Render package containers first (behind entities).
     for (pkg, maybe_box) in diagram.packages.iter().zip(&pkg_boxes) {
@@ -339,6 +351,12 @@ fn render_grid(diagram: &ClassDiagram, cs: &crate::style::ClassStyle) -> String 
     }
     if let Some(footer) = &diagram.meta.footer {
         svg.text(total_width / 2.0, total_height - 4.0, footer, "middle", SMALL_FONT);
+    }
+    if let Some(caption) = &diagram.meta.caption {
+        svg.text(total_width / 2.0, total_height - 4.0, caption, "middle", SMALL_FONT);
+    }
+    if let Some(legend) = &diagram.meta.legend {
+        svg.text(total_width / 2.0, total_height - 4.0, legend, "middle", SMALL_FONT);
     }
 
     // Position and render each class.
@@ -530,12 +548,23 @@ fn render_class_box(
     // Members.
     for member in &entity.members {
         cy += MEMBER_HEIGHT;
-        let text = format_member(member);
-        svg.text(x + PADDING, cy - 3.0, &text, "start", SMALL_FONT);
+        if member.kind == MemberKind::Separator {
+            // Draw a separator line; if labeled, also render the label.
+            svg.line_segment(x, cy - MEMBER_HEIGHT / 2.0, x + dim.width, cy - MEMBER_HEIGHT / 2.0, "#000", false);
+            if !member.display_text.is_empty() {
+                svg.text(x + dim.width / 2.0, cy - 3.0, &member.display_text, "middle", SMALL_FONT);
+            }
+        } else {
+            let text = format_member(member);
+            svg.text(x + PADDING, cy - 3.0, &text, "start", SMALL_FONT);
+        }
     }
 }
 
 fn format_member(member: &Member) -> String {
+    if member.kind == MemberKind::Separator {
+        return member.display_text.clone();
+    }
     let static_prefix = if member.is_static { "{static} " } else { "" };
     let abstract_prefix = if member.is_abstract {
         "{abstract} "
@@ -550,16 +579,34 @@ fn format_member(member: &Member) -> String {
     )
 }
 
-/// Strip PlantUML label direction markers (`< ` prefix or ` >` suffix).
-fn strip_label_direction(label: &str) -> &str {
+/// Convert `<<stereotype>>` notation to `«stereotype»` guillemets.
+fn convert_guillemets(s: &str) -> String {
+    let mut result = s.to_string();
+    while let Some(start) = result.find("<<") {
+        if let Some(end) = result[start..].find(">>") {
+            let inner = result[start + 2..start + end].to_string();
+            result = format!("{}«{}»{}", &result[..start], inner, &result[start + end + 2..]);
+        } else {
+            break;
+        }
+    }
+    result
+}
+
+/// Strip PlantUML label direction markers (`< label` or `label >`) then
+/// convert `<<stereotype>>` notation to `«stereotype»`.
+fn normalize_label(label: &str) -> String {
     let s = label.trim();
-    if let Some(rest) = s.strip_prefix('<') {
-        rest.trim_start()
-    } else if let Some(rest) = s.strip_suffix('>') {
-        rest.trim_end()
+    // Only strip a leading `<` if it's a direction marker (followed by space),
+    // not a `<<stereotype>>` notation.
+    let stripped = if s.starts_with("< ") {
+        s[1..].trim_start()
+    } else if s.ends_with(" >") {
+        s[..s.len() - 1].trim_end()
     } else {
         s
-    }
+    };
+    convert_guillemets(stripped)
 }
 
 /// Render the label, from_multiplicity, and to_multiplicity for a relationship.
@@ -575,9 +622,9 @@ fn render_relationship_labels(
     let mid_y = (from_bottom + to_top) / 2.0;
 
     if let Some(label) = &rel.label {
-        let display = strip_label_direction(label);
+        let display = normalize_label(label);
         if !display.is_empty() {
-            svg.text(mid_x + 5.0, mid_y - 4.0, display, "start", SMALL_FONT);
+            svg.text(mid_x + 5.0, mid_y - 4.0, &display, "start", SMALL_FONT);
         }
     }
 
@@ -693,12 +740,27 @@ fn render_note_box(svg: &mut SvgBuilder, note: &Note, x: f64, y: f64, w: f64, h:
     svg.polygon(fold_pts, NOTE_FILL, NOTE_BORDER);
 
     // Render each line of text — pass the raw markup so svg.text can apply creole styling.
+    // Convert Creole ordered-list items (`# text`) to numbered form (`N. text`).
     let mut ty = y + NOTE_PAD_Y + NOTE_LINE_HEIGHT - 3.0;
+    let mut list_counter = 0usize;
     for line in &note.lines {
         let trimmed = line.trim();
-        if !trimmed.is_empty() {
-            svg.text(x + NOTE_PAD_X, ty, trimmed, "start", FONT_SIZE);
+        if trimmed.is_empty() {
+            ty += NOTE_LINE_HEIGHT;
+            continue;
         }
+        let display = if let Some(rest) = trimmed.strip_prefix("# ") {
+            list_counter += 1;
+            format!("{list_counter}. {rest}")
+        } else if trimmed == "#" {
+            list_counter += 1;
+            format!("{list_counter}.")
+        } else {
+            // Reset list counter on non-list lines.
+            list_counter = 0;
+            trimmed.to_string()
+        };
+        svg.text(x + NOTE_PAD_X, ty, &display, "start", FONT_SIZE);
         ty += NOTE_LINE_HEIGHT;
     }
 }
@@ -733,6 +795,12 @@ fn render_notes_only(diagram: &ClassDiagram, _cs: &crate::style::ClassStyle) -> 
     }
     if let Some(footer) = &diagram.meta.footer {
         svg.text(total_width / 2.0, total_height - 4.0, footer, "middle", SMALL_FONT);
+    }
+    if let Some(caption) = &diagram.meta.caption {
+        svg.text(total_width / 2.0, total_height - 4.0, caption, "middle", SMALL_FONT);
+    }
+    if let Some(legend) = &diagram.meta.legend {
+        svg.text(total_width / 2.0, total_height - 4.0, legend, "middle", SMALL_FONT);
     }
     for (note, (nx, ny, nw, nh)) in diagram.notes.iter().zip(&note_data) {
         render_note_box(&mut svg, note, *nx, *ny, *nw, *nh);

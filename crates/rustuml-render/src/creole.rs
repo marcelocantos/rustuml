@@ -15,12 +15,16 @@ use std::fmt::Write;
 pub fn to_svg_tspans(text: &str) -> String {
     let mut result = String::new();
     let mut chars = text.chars().peekable();
+    // Track the last non-markup character emitted so we can decide whether
+    // `//` starts italic (only when preceded by whitespace or start of string).
+    let mut last_char: Option<char> = None;
 
     while let Some(c) = chars.next() {
         match c {
             '~' => {
                 // Tilde escape — next character is literal, not markup.
                 if let Some(next) = chars.next() {
+                    last_char = Some(next);
                     result.push(next);
                 }
             }
@@ -30,12 +34,14 @@ pub fn to_svg_tspans(text: &str) -> String {
                 let content = collect_until(&mut chars, "\"\"");
                 let content = monospace_spaces(&content);
                 write!(result, "<tspan font-family=\"monospace\">{content}</tspan>").unwrap();
+                last_char = content.chars().last();
             }
             '`' => {
                 // `code` backtick monospace
                 let content = collect_until_char(&mut chars, '`');
                 let content = monospace_spaces(&content);
                 write!(result, "<tspan font-family=\"monospace\">{content}</tspan>").unwrap();
+                last_char = content.chars().last();
             }
             '*' if chars.peek() == Some(&'*') => {
                 chars.next();
@@ -43,12 +49,26 @@ pub fn to_svg_tspans(text: &str) -> String {
                 let content = collect_until(&mut chars, "**");
                 let inner = to_svg_tspans(&content);
                 write!(result, "<tspan font-weight=\"bold\">{inner}</tspan>").unwrap();
+                last_char = content.chars().last();
             }
             '/' if chars.peek() == Some(&'/') => {
-                chars.next();
-                let content = collect_until(&mut chars, "//");
-                let inner = to_svg_tspans(&content);
-                write!(result, "<tspan font-style=\"italic\">{inner}</tspan>").unwrap();
+                // `//italic//` — but only start italic if preceded by whitespace
+                // or at the start of the string. This prevents `http://url`
+                // from being treated as italic markup.
+                let preceded_by_word = last_char.map(|c| !c.is_whitespace()).unwrap_or(false);
+                if preceded_by_word {
+                    // Treat as two literal `/` characters.
+                    result.push('/');
+                    result.push('/');
+                    chars.next(); // consume the second `/`
+                    last_char = Some('/');
+                } else {
+                    chars.next();
+                    let content = collect_until(&mut chars, "//");
+                    let inner = to_svg_tspans(&content);
+                    write!(result, "<tspan font-style=\"italic\">{inner}</tspan>").unwrap();
+                    last_char = content.chars().last();
+                }
             }
             '_' => {
                 // Underscores are left as-is; PlantUML renders __text__ as literal
@@ -210,7 +230,10 @@ pub fn to_svg_tspans(text: &str) -> String {
                     }
                 }
             }
-            _ => result.push(c),
+            _ => {
+                last_char = Some(c);
+                result.push(c);
+            }
         }
     }
 

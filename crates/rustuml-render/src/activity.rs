@@ -5,6 +5,7 @@
 
 use rustuml_parser::diagram::activity::{ActivityDiagram, ActivityStep, NotePosition};
 
+use crate::metrics;
 use crate::style::Theme;
 use crate::svg::SvgBuilder;
 
@@ -22,6 +23,25 @@ const TITLE_FONT_SIZE: f64 = 14.0;
 const TITLE_HEIGHT: f64 = 30.0;
 const DEPRECATED_HEIGHT: f64 = 20.0;
 
+/// Determine whether activity text should use monospace style (spaces → NBSP).
+/// This happens when `skinparam activity { FontName <monospace-font> }` is set.
+const MONOSPACE_FONTS: &[&str] = &["courier", "monospace", "inconsolata", "consolas"];
+
+fn is_monospace_font(name: &str) -> bool {
+    let lower = name.to_lowercase();
+    MONOSPACE_FONTS.iter().any(|m| lower.contains(m))
+}
+
+/// Apply activity font-name skinparam: if the font is monospace, replace
+/// spaces with NBSP to match PlantUML's SVG output.
+fn activity_text(text: &str, use_monospace: bool) -> String {
+    if use_monospace {
+        text.replace(' ', "\u{00a0}")
+    } else {
+        text.to_string()
+    }
+}
+
 /// Render an activity diagram to SVG.
 pub fn render(diagram: &ActivityDiagram, theme: &Theme) -> String {
     let as_ = &theme.activity;
@@ -29,6 +49,13 @@ pub fn render(diagram: &ActivityDiagram, theme: &Theme) -> String {
         return "<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"100\" height=\"50\"></svg>\n"
             .to_string();
     }
+
+    // Detect monospace font skinparam (e.g. `skinparam activity { FontName Courier }`).
+    let use_monospace = diagram
+        .meta
+        .skinparams
+        .iter()
+        .any(|sp| sp.key.to_lowercase().ends_with("fontname") && is_monospace_font(&sp.value));
 
     let n = diagram.steps.len();
     let title_extra = if diagram.meta.title.is_some() { TITLE_HEIGHT } else { 0.0 };
@@ -64,6 +91,22 @@ pub fn render(diagram: &ActivityDiagram, theme: &Theme) -> String {
         y += SMALL_FONT + 4.0;
     }
 
+    // Emit warning for `skinparam handwritten true` (not supported; use !option).
+    let is_handwritten = diagram
+        .meta
+        .skinparams
+        .iter()
+        .any(|sp| sp.key.to_lowercase() == "handwritten" && sp.value.to_lowercase() == "true");
+    if is_handwritten {
+        let nbsp = '\u{00a0}';
+        let msg = format!(
+            "Please{n}use{n}'!option{n}handwritten{n}true'{n}to{n}enable{n}handwritten",
+            n = nbsp
+        );
+        svg.text(cx, y + SMALL_FONT, &msg, "middle", SMALL_FONT);
+        y += SMALL_FONT + 4.0;
+    }
+
     for step in &diagram.steps {
         match step {
             ActivityStep::Start => {
@@ -84,6 +127,7 @@ pub fn render(diagram: &ActivityDiagram, theme: &Theme) -> String {
                 y += CIRCLE_R * 2.0 + V_GAP / 2.0;
             }
             ActivityStep::Action(text) => {
+                let display = activity_text(text, use_monospace);
                 svg.line_segment(cx, y - V_GAP / 2.0, cx, y, "#000", false);
                 svg.rounded_rect(
                     cx - ACTION_WIDTH / 2.0,
@@ -94,7 +138,7 @@ pub fn render(diagram: &ActivityDiagram, theme: &Theme) -> String {
                     &as_.action_background,
                     "#000",
                 );
-                svg.text(cx, y + ACTION_HEIGHT / 2.0 + 4.0, text, "middle", FONT_SIZE);
+                svg.text(cx, y + ACTION_HEIGHT / 2.0 + 4.0, &display, "middle", FONT_SIZE);
                 y += ACTION_HEIGHT + V_GAP / 2.0;
             }
             ActivityStep::DeprecatedColorAction(dca) => {
@@ -418,6 +462,35 @@ pub fn render(diagram: &ActivityDiagram, theme: &Theme) -> String {
                 svg.text(cx, y + SMALL_FONT, line, "middle", SMALL_FONT);
                 y += SMALL_FONT + 2.0;
             }
+        }
+    }
+
+    // Render legend (table format: `| col1 | col2 |`).
+    if let Some(ref legend) = diagram.meta.legend {
+        let legend_x = MARGIN;
+        let mut legend_y = y + 10.0;
+        for line in legend.lines() {
+            let t = line.trim();
+            if t.is_empty() {
+                continue;
+            }
+            // Strip leading/trailing `|` and split by `|` for table cells.
+            let t = t.trim_matches('|').trim();
+            if t.is_empty() {
+                continue;
+            }
+            let cells: Vec<&str> = t
+                .split('|')
+                .map(|c| c.trim())
+                .filter(|c| !c.is_empty())
+                .collect();
+            let mut cell_x = legend_x;
+            for cell in cells {
+                svg.text(cell_x, legend_y, cell, "start", SMALL_FONT);
+                let cell_w = metrics::text_width(cell, SMALL_FONT) + 20.0;
+                cell_x += cell_w;
+            }
+            legend_y += 14.0;
         }
     }
 

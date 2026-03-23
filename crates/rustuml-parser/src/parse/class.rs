@@ -11,6 +11,16 @@ use super::ParseError;
 use crate::diagram::DiagramMeta;
 use crate::diagram::class::*;
 
+/// Which multi-line meta block we are currently accumulating.
+#[derive(Debug, Clone, Copy, PartialEq, Eq)]
+enum MetaBlock {
+    Header,
+    Footer,
+    Legend,
+    Caption,
+    Title,
+}
+
 /// Parse preprocessed lines into a class diagram.
 pub fn parse_class(lines: &[String]) -> Result<ClassDiagram, ParseError> {
     let mut parser = ClassParser::new();
@@ -40,6 +50,10 @@ struct ClassParser {
     current_note: Option<Note>,
     /// ID of the last declared entity (for shorthand `note right : text`).
     last_entity_id: Option<String>,
+    /// Whether `set namespaceSeparator none` was seen (dots allowed in class names).
+    namespace_sep_none: bool,
+    /// Whether we are inside a multi-line header/footer/legend block.
+    meta_block: Option<MetaBlock>,
 }
 
 impl ClassParser {
@@ -54,6 +68,8 @@ impl ClassParser {
             package_stack: Vec::new(),
             current_note: None,
             last_entity_id: None,
+            namespace_sep_none: false,
+            meta_block: None,
         }
     }
 
@@ -91,6 +107,56 @@ impl ClassParser {
     }
 
     fn parse_line(&mut self, _line_num: usize, line: &str) -> Result<(), ParseError> {
+        // Inside a multi-line meta block (header/footer/legend/caption/title)?
+        if let Some(block) = self.meta_block {
+            let end1 = match block {
+                MetaBlock::Header => "endheader",
+                MetaBlock::Footer => "endfooter",
+                MetaBlock::Legend => "endlegend",
+                MetaBlock::Caption => "endcaption",
+                MetaBlock::Title => "end title",
+            };
+            let end2 = match block {
+                MetaBlock::Header => "end header",
+                MetaBlock::Footer => "end footer",
+                MetaBlock::Legend => "end legend",
+                MetaBlock::Caption => "end caption",
+                MetaBlock::Title => "end title",
+            };
+            if line == end1 || line == end2 {
+                self.meta_block = None;
+            } else {
+                match block {
+                    MetaBlock::Header => {
+                        let h = self.meta.header.get_or_insert_with(String::new);
+                        if !h.is_empty() { h.push(' '); }
+                        h.push_str(line);
+                    }
+                    MetaBlock::Footer => {
+                        let f = self.meta.footer.get_or_insert_with(String::new);
+                        if !f.is_empty() { f.push(' '); }
+                        f.push_str(line);
+                    }
+                    MetaBlock::Legend => {
+                        let l = self.meta.legend.get_or_insert_with(String::new);
+                        if !l.is_empty() { l.push(' '); }
+                        l.push_str(line);
+                    }
+                    MetaBlock::Caption => {
+                        let c = self.meta.caption.get_or_insert_with(String::new);
+                        if !c.is_empty() { c.push(' '); }
+                        c.push_str(line);
+                    }
+                    MetaBlock::Title => {
+                        let t = self.meta.title.get_or_insert_with(String::new);
+                        if !t.is_empty() { t.push(' '); }
+                        t.push_str(line);
+                    }
+                }
+            }
+            return Ok(());
+        }
+
         // Inside a multi-line note?
         if self.current_note.is_some() {
             if line == "end note" {
@@ -150,17 +216,29 @@ impl ClassParser {
         static RE: LazyLock<Regex> = LazyLock::new(|| {
             // Matches either:
             //   keyword "label" as id  — groups 2 (label) and 3 (id)
-            //   keyword id             — group 3 (id only)
+            //   keyword id             — group 3 (id only, word chars only)
             //   keyword "label"        — group 4 (quoted-only, no `as`)
+            // `abstract` without `class` is also a valid class keyword.
             Regex::new(
-                r#"^(class|abstract\s+class|interface|enum|annotation|entity)\s+(?:(?:"([^"]+)"\s+as\s+)?(\w+(?:<[^>]+>)?)|"([^"]+)")"#,
+                r#"^(class|abstract\s+class|abstract|interface|enum|annotation|entity)\s+(?:(?:"([^"]+)"\s+as\s+)?(\w+(?:<[^>]+>)?)|"([^"]+)")"#,
             )
             .unwrap()
         });
+        // Same as RE but allows dots in the identifier (for `set namespaceSeparator none`).
+        static RE_DOTTED: LazyLock<Regex> = LazyLock::new(|| {
+            Regex::new(
+                r#"^(class|abstract\s+class|abstract|interface|enum|annotation|entity)\s+(?:(?:"([^"]+)"\s+as\s+)?(\w[\w.]*(?:<[^>]+>)?)|"([^"]+)")"#,
+            )
+            .unwrap()
+        });
+        // Strip spot notation from stereotype: `<< (S,#color) Name >>` → `Name`.
+        static SPOT_RE: LazyLock<Regex> =
+            LazyLock::new(|| Regex::new(r"\([A-Za-z],[^)]*\)\s*").unwrap());
         static STEREOTYPE_RE: LazyLock<Regex> =
             LazyLock::new(|| Regex::new(r"<<\s*([^>]+?)>>").unwrap());
 
-        if let Some(caps) = RE.captures(line) {
+        let re = if self.namespace_sep_none { &*RE_DOTTED } else { &*RE };
+        if let Some(caps) = re.captures(line) {
             let kind = parse_entity_kind(caps[1].trim());
             // Group 4: quoted-only form — class "**Name**" with no `as` keyword.
             let (label, id) = if let Some(m) = caps.get(4) {
@@ -177,7 +255,11 @@ impl ClassParser {
 
             let stereotypes: Vec<String> = STEREOTYPE_RE
                 .captures_iter(line)
-                .map(|c| c[1].trim().to_string())
+                .map(|c| {
+                    // Strip spot notation like `(S,#FF7700) ` before the name.
+                    SPOT_RE.replace(&c[1], "").trim().to_string()
+                })
+                .filter(|s| !s.is_empty())
                 .collect();
 
             if let Some(entity) = self.find_entity_mut(&id) {
@@ -242,10 +324,11 @@ impl ClassParser {
         // Relationship format: EntityA ["mult"] ARROW ["mult"] EntityB [: label]
         // Supported arrows: <|--, --|>, ..|>, <|.., *--, --*, o--, --o,
         //                   <-->, <..>, --, -->, <--, <-, ->, .., ..>, <..
+        //                   <|--|> (bidirectional inheritance), <..|.> etc.
         // Multiple dashes (e.g. ---- or ------) are treated as plain association.
         static RE: LazyLock<Regex> = LazyLock::new(|| {
             Regex::new(
-                r#"^(\w+)\s*(?:"([^"]+)")?\s*((?:<\|--|--\|>|\.\.\|>|<\|\.\.|<\.\.>|<\.\.|\*--|--\*|o--|--o|<-->|<--|-->|->|<-|-{2,}|\.\.|\.\.>))\s*(?:"([^"]+)")?\s*(\w+)(?:\s*:\s*(.+))?$"#,
+                r#"^([\w.]+)\s*(?:"([^"]+)")?\s*((?:<\|--\|>|<\.\.>|<\|--|--\|>|\.\.\|>|<\|\.\.|<\.\.|\*--|--\*|o--|--o|<-->|<--|-->|->|<-|-{2,}|\.\.|\.\.>))\s*(?:"([^"]+)")?\s*([\w.]+)(?:\s*:\s*(.+))?$"#,
             )
             .unwrap()
         });
@@ -295,6 +378,38 @@ impl ClassParser {
                 to,
                 kind: RelationshipKind::Association,
                 label,
+                from_multiplicity: None,
+                to_multiplicity: None,
+            });
+            return true;
+        }
+
+        // Lollipop notation: `Foo -() Interface` (provided) or `Foo ()- Interface` (required).
+        static LOLLIPOP_RE: LazyLock<Regex> = LazyLock::new(|| {
+            Regex::new(r"^(\w+)\s*-\(\)\s*(\w+)$|^(\w+)\s*\(\)-\s*(\w+)$").unwrap()
+        });
+        if let Some(caps) = LOLLIPOP_RE.captures(line) {
+            let (from_raw, to_raw) = if caps.get(1).is_some() {
+                (caps[1].to_string(), caps[2].to_string())
+            } else {
+                (caps[3].to_string(), caps[4].to_string())
+            };
+            // Ensure the interface entity exists.
+            if !self.entities.iter().any(|e| e.id == to_raw) {
+                self.entities.push(ClassEntity {
+                    id: to_raw.clone(),
+                    label: to_raw.clone(),
+                    kind: EntityKind::Interface,
+                    members: Vec::new(),
+                    stereotypes: Vec::new(),
+                });
+            }
+            let from = self.ensure_entity(&from_raw);
+            self.relationships.push(Relationship {
+                from,
+                to: to_raw,
+                kind: RelationshipKind::Association,
+                label: None,
                 from_multiplicity: None,
                 to_multiplicity: None,
             });
@@ -371,28 +486,29 @@ impl ClassParser {
 
     fn try_note(&mut self, line: &str) -> bool {
         // Single-line attached note: `note <pos> of <entity> : <text>`
+        // Entity may be a dotted name (e.g. `domain.User` in namespace diagrams).
         static ATTACHED_RE: LazyLock<Regex> = LazyLock::new(|| {
-            Regex::new(r"^note\s+(top|bottom|left|right)\s+of\s+(\w+)\s*:\s*(.+)$").unwrap()
+            Regex::new(r"^note\s+(top|bottom|left|right)\s+of\s+([\w.]+)\s*:\s*(.+)$").unwrap()
         });
-        // Multi-line attached note start: `note <pos> of <entity>`
+        // Multi-line attached note start: `note <pos> of <entity>` (optional color: `#color`)
         static ATTACHED_ML_RE: LazyLock<Regex> = LazyLock::new(|| {
-            Regex::new(r"^note\s+(top|bottom|left|right)\s+of\s+(\w+)\s*$").unwrap()
+            Regex::new(r"^note\s+(top|bottom|left|right)\s+of\s+([\w.]+)\s*(?:#\S+)?\s*$").unwrap()
         });
         // Shorthand single-line note attached to last entity: `note <pos> : <text>`
         static SHORT_RE: LazyLock<Regex> = LazyLock::new(|| {
             Regex::new(r"^note\s+(top|bottom|left|right)\s*:\s*(.+)$").unwrap()
         });
-        // Shorthand multi-line note attached to last entity: `note <pos>`
+        // Shorthand multi-line note attached to last entity: `note <pos>` (optional color)
         static SHORT_ML_RE: LazyLock<Regex> = LazyLock::new(|| {
-            Regex::new(r"^note\s+(top|bottom|left|right)\s*$").unwrap()
+            Regex::new(r"^note\s+(top|bottom|left|right)\s*(?:#\S+)?\s*$").unwrap()
         });
         // Floating named note: `note "text" as Name`
         static FLOATING_RE: LazyLock<Regex> = LazyLock::new(|| {
             Regex::new(r#"^note\s+"([^"]+)"\s+as\s+(\w+)\s*$"#).unwrap()
         });
-        // Multi-line floating note: `note as Name`
+        // Multi-line floating note: `note as Name` (optional color suffix like `#yellow`).
         static FLOATING_ML_RE: LazyLock<Regex> = LazyLock::new(|| {
-            Regex::new(r"^note\s+as\s+(\w+)\s*$").unwrap()
+            Regex::new(r"^note\s+as\s+(\w+)\s*(?:#\S+)?\s*$").unwrap()
         });
 
         if let Some(caps) = ATTACHED_RE.captures(line) {
@@ -483,8 +599,24 @@ impl ClassParser {
             return true;
         }
 
-        // `note on link` — multi-line note attached to the last relationship as a floating note.
-        if line == "note on link" || line.starts_with("note on link") {
+        // `note on link : text` — inline single-line note on the last relationship.
+        if let Some(text) = line.strip_prefix("note on link :") {
+            let text = text.trim().to_string();
+            let lines = if text.is_empty() {
+                Vec::new()
+            } else {
+                text.split("\\n").map(|s| s.trim().to_string()).collect()
+            };
+            self.notes.push(Note {
+                lines,
+                target: None,
+                position: None,
+                alias: None,
+            });
+            return true;
+        }
+        // `note on link` — multi-line note attached to the last relationship.
+        if line == "note on link" {
             self.current_note = Some(Note {
                 lines: Vec::new(),
                 target: None,
@@ -512,16 +644,54 @@ impl ClassParser {
             self.meta.title = Some(super::strip_title_quotes(rest).to_string());
             return true;
         }
+        if line == "title" {
+            self.meta_block = Some(MetaBlock::Title);
+            return true;
+        }
         if let Some(rest) = line.strip_prefix("header ") {
             self.meta.header = Some(rest.trim().to_string());
+            return true;
+        }
+        if line == "header"
+            || line.starts_with("left header")
+            || line.starts_with("right header")
+            || line.starts_with("center header")
+        {
+            self.meta_block = Some(MetaBlock::Header);
             return true;
         }
         if let Some(rest) = line.strip_prefix("footer ") {
             self.meta.footer = Some(rest.trim().to_string());
             return true;
         }
+        if line == "footer"
+            || line.starts_with("left footer")
+            || line.starts_with("right footer")
+            || line.starts_with("center footer")
+        {
+            self.meta_block = Some(MetaBlock::Footer);
+            return true;
+        }
         if let Some(rest) = line.strip_prefix("caption ") {
             self.meta.caption = Some(rest.trim().to_string());
+            return true;
+        }
+        if line == "caption" {
+            self.meta_block = Some(MetaBlock::Caption);
+            return true;
+        }
+        if line == "legend"
+            || line == "legend left"
+            || line == "legend right"
+            || line == "legend center"
+            || line == "legend top"
+            || line == "legend bottom"
+        {
+            self.meta_block = Some(MetaBlock::Legend);
+            return true;
+        }
+        if line == "set namespaceSeparator none" {
+            self.namespace_sep_none = true;
             return true;
         }
         // Skip skinparam, hide, show, together, etc.
@@ -530,27 +700,60 @@ impl ClassParser {
             || line.starts_with("show ")
             || line.starts_with("together")
             || line.starts_with("allowmixing")
-            || line.starts_with("note on link")
             || line.starts_with("map ")
             || line.starts_with("object ")
+            || line.starts_with("set ")
     }
 
     fn parse_member_line(&mut self, line: &str) {
-        static SEPARATOR_RE: LazyLock<Regex> = LazyLock::new(|| {
+        static SEPARATOR_LABELED_RE: LazyLock<Regex> = LazyLock::new(|| {
             // Matches labeled separators: -- label --, == label ==, __ label __, .. label ..
-            // Bare separators (-- == __ ..) are handled by the equality checks below.
-            Regex::new(r"^(--|==|__|\.\.)\s+.+\s+(--|==|__|\.\.)\s*$").unwrap()
+            // Captures the label text (trimmed) in group 2.
+            Regex::new(r"^(--|==|__|\.\.)\s+(.+?)\s+(--|==|__|\.\.)\s*$").unwrap()
         });
 
         let trimmed = line.trim();
-        // Separator lines — bare or labeled.
-        if trimmed == "--" || trimmed == ".." || trimmed == "==" || trimmed == "__"
-            || SEPARATOR_RE.is_match(trimmed)
-        {
-            return;
-        }
         // Empty or brace-only.
         if trimmed.is_empty() || trimmed == "{" || trimmed == "}" {
+            return;
+        }
+
+        // Labeled separator — store as Separator member so the label can be rendered.
+        if let Some(caps) = SEPARATOR_LABELED_RE.captures(trimmed) {
+            let label = caps[2].to_string();
+            let member = Member {
+                name: label.clone(),
+                return_type: None,
+                visibility: Visibility::Default,
+                is_static: false,
+                is_abstract: false,
+                kind: MemberKind::Separator,
+                display_text: label,
+            };
+            if let Some(entity_id) = &self.current_entity
+                && let Some(entity) = self.entities.iter_mut().find(|e| e.id == *entity_id)
+            {
+                entity.members.push(member);
+            }
+            return;
+        }
+
+        // Bare separator lines — render as unlabeled separator.
+        if trimmed == "--" || trimmed == ".." || trimmed == "==" || trimmed == "__" {
+            let member = Member {
+                name: String::new(),
+                return_type: None,
+                visibility: Visibility::Default,
+                is_static: false,
+                is_abstract: false,
+                kind: MemberKind::Separator,
+                display_text: String::new(),
+            };
+            if let Some(entity_id) = &self.current_entity
+                && let Some(entity) = self.entities.iter_mut().find(|e| e.id == *entity_id)
+            {
+                entity.members.push(member);
+            }
             return;
         }
 
@@ -575,7 +778,7 @@ fn parse_note_position(s: &str) -> NotePosition {
 
 fn parse_entity_kind(s: &str) -> EntityKind {
     match s {
-        "abstract class" => EntityKind::AbstractClass,
+        "abstract class" | "abstract" => EntityKind::AbstractClass,
         "interface" => EntityKind::Interface,
         "enum" => EntityKind::Enum,
         "annotation" => EntityKind::Annotation,

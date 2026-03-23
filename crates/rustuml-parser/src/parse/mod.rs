@@ -89,7 +89,7 @@ fn detect_uml_subtype(lines: &[String]) -> UmlSubtype {
         {
             scores[3] += 5;
         }
-        // Activity.
+        // Activity (v3 new syntax).
         if trimmed == "start"
             || trimmed == "stop"
             || (trimmed.starts_with(':') && trimmed.ends_with(';'))
@@ -100,6 +100,15 @@ fn detect_uml_subtype(lines: &[String]) -> UmlSubtype {
             || trimmed == "split"
         {
             scores[4] += 5;
+        }
+        // Activity (v1 legacy syntax): `(*)`, `===NAME===`, or `if "cond" then`.
+        if trimmed == "(*)"
+            || trimmed.starts_with("(*) ")
+            || trimmed.ends_with(" (*)")
+            || (trimmed.starts_with("===") && trimmed.ends_with("==="))
+            || (trimmed.starts_with("if \"") && trimmed.contains("\" then"))
+        {
+            scores[4] += 10;
         }
         // Deployment — check against the full keyword set.
         // "package" with a brace is excluded because it is heavily used in class
@@ -127,13 +136,31 @@ fn detect_uml_subtype(lines: &[String]) -> UmlSubtype {
             scores[5] += 15;
         }
         // Standalone `[Bracket]` syntax marks a component (leaf on its own line).
-        if trimmed.starts_with('[') && trimmed.ends_with(']') && !trimmed.starts_with("[*]") {
+        // Exclude `[[url]]` PlantUML hyperlink syntax (double brackets).
+        if trimmed.starts_with('[')
+            && trimmed.ends_with(']')
+            && !trimmed.starts_with("[*]")
+            && !trimmed.starts_with("[[")
+        {
             scores[5] += 10;
         }
         // `[Bracket]` appearing anywhere in a line (connection or standalone component
         // reference), e.g. `[Foo] - IFoo` or `IFoo - [Bar]`.
-        // Exclude `[*]` (state diagram pseudo-states).
-        if trimmed.contains('[') && trimmed.contains(']') && !trimmed.contains("[*]") {
+        // Exclude `[*]` (state diagram pseudo-states) and `[[url]]` hyperlinks.
+        // Exclude member lines (starting with visibility prefix +/-/#/~) to avoid
+        // false positive on array-typed fields like `+int[] intArray`.
+        // Exclude `[#color]` notation used in sequence diagram colored arrows
+        // (e.g. `Alice -[#red]> Bob`).
+        // Exclude `return [...]` lines which are sequence diagram syntax.
+        let looks_like_member = matches!(trimmed.chars().next(), Some('+' | '-' | '#' | '~'));
+        if !looks_like_member
+            && trimmed.contains('[')
+            && trimmed.contains(']')
+            && !trimmed.contains("[*]")
+            && !trimmed.contains("[[")
+            && !trimmed.contains("[#")
+            && !trimmed.starts_with("return ")
+        {
             scores[5] += 5;
         }
         // `interface` in a component context: score for both class and component.
@@ -143,14 +170,17 @@ fn detect_uml_subtype(lines: &[String]) -> UmlSubtype {
         if trimmed.starts_with("interface ") {
             scores[5] += 10; // component
         }
-        // `note right/left/top/bottom of <id>` — unambiguous component/deployment note.
+        // `note right/left/top/bottom of <id>` — valid in sequence, class, and component diagrams.
+        // Score all three equally so that other keywords determine the winner.
         if trimmed.starts_with("note ")
             && (trimmed.contains(" right of ")
                 || trimmed.contains(" left of ")
                 || trimmed.contains(" top of ")
                 || trimmed.contains(" bottom of "))
         {
-            scores[5] += 5;
+            scores[0] += 5; // sequence
+            scores[1] += 5; // class
+            scores[5] += 5; // component
         }
         // Object / map — strong unique keywords.
         if trimmed.starts_with("object ") || trimmed.starts_with("map ") {
@@ -163,6 +193,8 @@ fn detect_uml_subtype(lines: &[String]) -> UmlSubtype {
         // type; entity-with-body ({) is handled separately below.
         if trimmed.starts_with("class ")
             || trimmed.starts_with("abstract class ")
+            || trimmed.starts_with("abstract ")
+            || trimmed == "abstract"
             || trimmed.starts_with("interface ")
             || trimmed.starts_with("enum ")
             || trimmed.starts_with("annotation ")
@@ -214,6 +246,10 @@ fn detect_uml_subtype(lines: &[String]) -> UmlSubtype {
         if trimmed.contains("->") || trimmed.contains("-->") {
             scores[0] += 1;
         }
+        // `return` statement is sequence-diagram-specific syntax.
+        if trimmed == "return" || trimmed.starts_with("return ") {
+            scores[0] += 5;
+        }
         // Timing — strong unique keywords.
         if trimmed.starts_with("robust ")
             || trimmed.starts_with("concise ")
@@ -226,6 +262,28 @@ fn detect_uml_subtype(lines: &[String]) -> UmlSubtype {
         // Java PlantUML and produce CLASS-type SVG output.
         if trimmed.starts_with("note as ") {
             scores[1] += 10;
+        }
+        // `legend`, `header`/`endheader`, `footer`/`endfooter` — these are
+        // meta elements that PlantUML defaults to CLASS when no other content exists.
+        // Score them weakly for class so that a diagram with only meta elements
+        // produces a CLASS diagram (not a sequence diagram by default).
+        if trimmed == "legend"
+            || trimmed.starts_with("legend ")
+            || trimmed == "endlegend"
+            || trimmed == "header"
+            || trimmed.starts_with("header ")
+            || trimmed.starts_with("left header")
+            || trimmed.starts_with("right header")
+            || trimmed.starts_with("center header")
+            || trimmed == "endheader"
+            || trimmed == "footer"
+            || trimmed.starts_with("footer ")
+            || trimmed.starts_with("left footer")
+            || trimmed.starts_with("right footer")
+            || trimmed.starts_with("center footer")
+            || trimmed == "endfooter"
+        {
+            scores[1] += 1; // weak class signal
         }
     }
 

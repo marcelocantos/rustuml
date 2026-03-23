@@ -105,5 +105,9 @@ pub struct PartitionBlock {
 #[derive(Debug, Serialize, Deserialize)]
 pub struct RepeatWhileBlock {
     pub condition: String,
+    /// Label for the loop-back branch (e.g. `is (yes)` in `repeat while (c) is (yes)`).
     pub is_label: Option<String>,
+    /// Label for the exit branch (e.g. `not (no)` in `repeat while (c) is (y) not (no)`).
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub not_label: Option<String>,
 }

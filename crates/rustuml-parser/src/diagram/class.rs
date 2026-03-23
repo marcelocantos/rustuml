@@ -88,6 +88,8 @@ pub enum Visibility {
 pub enum MemberKind {
     Field,
     Method,
+    /// A labeled separator line within a class body (e.g. `-- Section --`, `== Title ==`).
+    Separator,
 }
 
 /// A relationship (association, inheritance, etc.) between entities.
@@ -133,4 +135,7 @@ pub struct Package {
     /// Optional background color (CSS name or hex without leading `#`).
     pub color: Option<String>,
     pub entities: Vec<String>,
+    /// Stereotypes applied to this package (e.g. `<<Application>>`).
+    #[serde(default)]
+    pub stereotypes: Vec<String>,
 }

@@ -13,6 +13,7 @@ pub struct ObjectDiagram {
     pub objects: Vec<ObjectInstance>,
     pub links: Vec<ObjectLink>,
     pub notes: Vec<ObjectNote>,
+    pub packages: Vec<ObjectPackage>,
 }
 
 /// The kind of object node.
@@ -58,6 +59,14 @@ pub struct ObjectField {
     /// The field's value, if present.
     #[serde(skip_serializing_if = "Option::is_none")]
     pub value: Option<String>,
+}
+
+/// A package or namespace that groups object instances.
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct ObjectPackage {
+    pub id: String,
+    pub label: String,
+    pub object_ids: Vec<String>,
 }
 
 /// A directed link between object instances (or object fields).

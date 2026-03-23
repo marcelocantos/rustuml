@@ -12,6 +12,19 @@ use crate::diagram::DiagramMeta;
 use crate::diagram::activity::*;
 
 pub fn parse_activity(lines: &[String]) -> Result<ActivityDiagram, ParseError> {
+    // Detect legacy v1 syntax by looking for `(*)` or `===NAME===` markers.
+    let is_legacy = lines.iter().any(|l| {
+        let t = l.trim();
+        t == "(*)"
+            || t.starts_with("(*) ")
+            || t.ends_with(" (*)")
+            || (t.starts_with("===") && t.ends_with("==="))
+    });
+
+    if is_legacy {
+        return parse_legacy_activity(lines);
+    }
+
     let mut parser = ActivityParser::new();
     for (i, line) in lines.iter().enumerate() {
         let trimmed = line.trim();
@@ -26,6 +39,244 @@ pub fn parse_activity(lines: &[String]) -> Result<ActivityDiagram, ParseError> {
     Ok(parser.finish())
 }
 
+/// Parse legacy (v1) activity syntax.
+///
+/// Legacy syntax uses:
+/// - `(*) --> "Node"` for the start arrow
+/// - `"Node" --> (*)`  for the end arrow
+/// - `"Node" --> "Other"` for transitions
+/// - `"Node" -direction-> "Other"` for directed arrows
+/// - `if "condition" then` / `else` / `endif` for decisions
+/// - `-->[label] "Node"` for labelled arrows
+/// - `===NAME===` for fork/join bars
+/// - `note left/right: text` for notes
+fn parse_legacy_activity(lines: &[String]) -> Result<ActivityDiagram, ParseError> {
+    static RE_ARROW: LazyLock<Regex> = LazyLock::new(|| {
+        // "Source" -[direction]-> "Target"  or  (*) --> "Target"  or  "Source" --> (*)
+        Regex::new(
+            r#"^(?:"([^"]+)"|\(\*\))\s+-[^>]*->\s+(?:"([^"]+)"|\(\*\))$"#
+        ).unwrap()
+    });
+    static RE_LABELLED_ARROW: LazyLock<Regex> = LazyLock::new(|| {
+        // -->[label] "Target" or -->[label] (*)
+        Regex::new(r#"^-+>\[([^\]]*)\]\s+(?:"([^"]+)"|\(\*\))$"#).unwrap()
+    });
+    static RE_BARE_ARROW: LazyLock<Regex> = LazyLock::new(|| {
+        // --> "Target" or --> (*)  (no label, used inside if/else blocks)
+        Regex::new(r#"^-+>\s+(?:"([^"]+)"|\(\*\))$"#).unwrap()
+    });
+    // "Source" --> ===FORKBAR=== or ===FORKBAR=== --> "Target"
+    static RE_TO_FORK: LazyLock<Regex> = LazyLock::new(|| {
+        Regex::new(r#"^(?:"([^"]+)"|\(\*\))\s+-[^>]*->\s+===([^=]+)===$"#).unwrap()
+    });
+    static RE_FROM_FORK: LazyLock<Regex> = LazyLock::new(|| {
+        Regex::new(r#"^===([^=]+)===\s+-[^>]*->\s+(?:"([^"]+)"|\(\*\))$"#).unwrap()
+    });
+    static RE_IF: LazyLock<Regex> = LazyLock::new(|| {
+        Regex::new(r#"^if\s+"([^"]+)"\s+then$"#).unwrap()
+    });
+    static RE_NOTE: LazyLock<Regex> = LazyLock::new(|| {
+        Regex::new(r"^note\s+(left|right)\s*:\s*(.+)$").unwrap()
+    });
+    static RE_FORK_BAR: LazyLock<Regex> = LazyLock::new(|| {
+        Regex::new(r"^===([^=]+)===$").unwrap()
+    });
+
+    let mut meta = DiagramMeta::default();
+    let mut steps: Vec<ActivityStep> = Vec::new();
+    let mut seen_nodes: std::collections::HashSet<String> = std::collections::HashSet::new();
+    // Track fork bars by name: false = not yet seen (will be Fork), true = already seen.
+    let mut fork_bars: std::collections::HashMap<String, bool> = std::collections::HashMap::new();
+
+    for line in lines {
+        let t = line.trim();
+        if t.is_empty() { continue; }
+
+        // Title.
+        if let Some(rest) = t.strip_prefix("title ") {
+            meta.title = Some(rest.trim().to_string());
+            continue;
+        }
+
+        // Note.
+        if let Some(caps) = RE_NOTE.captures(t) {
+            let position = if &caps[1] == "left" { NotePosition::Left } else { NotePosition::Right };
+            steps.push(ActivityStep::Note(NoteBlock {
+                text: caps[2].trim().to_string(),
+                color: None,
+                position,
+            }));
+            continue;
+        }
+
+        // if "condition" then
+        if let Some(caps) = RE_IF.captures(t) {
+            steps.push(ActivityStep::If(IfBlock {
+                condition: caps[1].to_string(),
+                then_label: None,
+            }));
+            in_else = false;
+            continue;
+        }
+
+        if t == "else" {
+            steps.push(ActivityStep::Else(None));
+            continue;
+        }
+
+        if t == "endif" {
+            steps.push(ActivityStep::EndIf);
+            continue;
+        }
+
+        // Fork bar ===NAME===
+        if let Some(caps) = RE_FORK_BAR.captures(t) {
+            let name = caps[1].trim().to_string();
+            let already_seen = fork_bars.contains_key(&name);
+            fork_bars.insert(name, true);
+            if already_seen {
+                steps.push(ActivityStep::EndFork);
+            } else {
+                steps.push(ActivityStep::Fork);
+            }
+            continue;
+        }
+
+        // "Node" --> ===FORKBAR===  (arrow into a fork bar)
+        if let Some(caps) = RE_TO_FORK.captures(t) {
+            // Source is a named node or (*).
+            if let Some(src) = caps.get(1) {
+                let src = src.as_str().to_string();
+                if !seen_nodes.contains(&src) {
+                    seen_nodes.insert(src.clone());
+                    steps.push(ActivityStep::Action(src));
+                }
+            } else if !steps.iter().any(|s| matches!(s, ActivityStep::Start)) {
+                steps.push(ActivityStep::Start);
+            }
+            // Emit Fork/EndFork for the bar.
+            let bar_name = caps[2].trim().to_string();
+            let already_seen = fork_bars.contains_key(&bar_name);
+            fork_bars.insert(bar_name, true);
+            if already_seen {
+                steps.push(ActivityStep::EndFork);
+            } else {
+                steps.push(ActivityStep::Fork);
+            }
+            continue;
+        }
+
+        // ===FORKBAR=== --> "Node"  (arrow out of a fork bar)
+        if let Some(caps) = RE_FROM_FORK.captures(t) {
+            let bar_name = caps[1].trim().to_string();
+            let already_seen = fork_bars.contains_key(&bar_name);
+            fork_bars.insert(bar_name, true);
+            if already_seen {
+                steps.push(ActivityStep::EndFork);
+            } else {
+                steps.push(ActivityStep::Fork);
+            }
+            // Emit target node.
+            if let Some(tgt) = caps.get(2) {
+                let tgt = tgt.as_str().to_string();
+                if !seen_nodes.contains(&tgt) {
+                    seen_nodes.insert(tgt.clone());
+                    steps.push(ActivityStep::Action(tgt));
+                }
+            } else {
+                if !steps.iter().any(|s| matches!(s, ActivityStep::End | ActivityStep::Stop)) {
+                    steps.push(ActivityStep::End);
+                }
+            }
+            continue;
+        }
+
+        // (*) --> (*) (self-contained start-end)
+        if t == "(*) --> (*)" {
+            steps.push(ActivityStep::Start);
+            steps.push(ActivityStep::End);
+            continue;
+        }
+
+        // Labelled arrow: -->[label] "Target"
+        if let Some(caps) = RE_LABELLED_ARROW.captures(t) {
+            let label = caps[1].trim();
+            if !label.is_empty() {
+                steps.push(ActivityStep::Arrow(ArrowStep {
+                    dashed: false,
+                    color: None,
+                    label: Some(label.to_string()),
+                }));
+            }
+            // Emit the target node if it's a named node (not (*)).
+            if let Some(target) = caps.get(2) {
+                let node = target.as_str().to_string();
+                if !seen_nodes.contains(&node) {
+                    seen_nodes.insert(node.clone());
+                    steps.push(ActivityStep::Action(node));
+                }
+            } else {
+                // --> (*): end node.
+                steps.push(ActivityStep::End);
+            }
+            continue;
+        }
+
+        // Bare arrow inside if/else: --> "Target"
+        if let Some(caps) = RE_BARE_ARROW.captures(t) {
+            if let Some(target) = caps.get(1) {
+                let node = target.as_str().to_string();
+                if !seen_nodes.contains(&node) {
+                    seen_nodes.insert(node.clone());
+                    steps.push(ActivityStep::Action(node));
+                }
+            } else {
+                steps.push(ActivityStep::End);
+            }
+            continue;
+        }
+
+        // "Source" --> "Target" / (*) --> "Target" / "Source" --> (*)
+        if let Some(caps) = RE_ARROW.captures(t) {
+            let source = caps.get(1).map(|m| m.as_str());
+            let target = caps.get(2).map(|m| m.as_str());
+
+            // Source = (*): start node.
+            if source.is_none() && !steps.iter().any(|s| matches!(s, ActivityStep::Start)) {
+                steps.push(ActivityStep::Start);
+            }
+            // Emit source node action if not yet seen.
+            if let Some(src) = source {
+                let src = src.to_string();
+                if !seen_nodes.contains(&src) {
+                    seen_nodes.insert(src.clone());
+                    steps.push(ActivityStep::Action(src));
+                }
+            }
+            // Target = (*): end node.
+            if target.is_none() {
+                // Only add End if not already present.
+                if !steps.iter().any(|s| matches!(s, ActivityStep::End | ActivityStep::Stop)) {
+                    steps.push(ActivityStep::End);
+                }
+            } else if let Some(tgt) = target {
+                let tgt = tgt.to_string();
+                if !seen_nodes.contains(&tgt) {
+                    seen_nodes.insert(tgt.clone());
+                    steps.push(ActivityStep::Action(tgt));
+                }
+            }
+            continue;
+        }
+
+        // Fork again (parallel branch): node --> === and === --> node both handled above.
+        // Additional arrow from fork bar to node.
+        // (already handled by RE_ARROW)
+    }
+
+    Ok(ActivityDiagram { meta, steps })
+}
+
 struct PendingNote {
     position: NotePosition,
     color: Option<String>,
@@ -38,6 +289,14 @@ struct ActivityParser {
     pending_note: Option<PendingNote>,
     pending_meta: Option<&'static str>, // "header", "footer", "legend", "caption"
     pending_meta_lines: Vec<String>,
+    /// When an action ends with `\` (output connector), this holds the partial
+    /// text so the next line can be appended to it.
+    continuation_text: Option<String>,
+    /// When an action ends with a non-`;`/non-`\` connector (`|`, `]`, `/`,
+    /// `>`, `<`), the immediately following action should keep its `:` prefix.
+    next_action_keep_colon: bool,
+    /// True when we are inside a `skinparam <type> {` block.
+    in_skinparam_block: bool,
 }
 
 impl ActivityParser {
@@ -48,6 +307,9 @@ impl ActivityParser {
             pending_note: None,
             pending_meta: None,
             pending_meta_lines: Vec::new(),
+            continuation_text: None,
+            next_action_keep_colon: false,
+            in_skinparam_block: false,
         }
     }
 
@@ -95,6 +357,29 @@ impl ActivityParser {
     }
 
     fn parse_line(&mut self, _line_num: usize, line: &str) -> Result<(), ParseError> {
+        // Inside a skinparam block: collect nested `Key Value` entries until `}`.
+        if self.in_skinparam_block {
+            if line == "}" {
+                self.in_skinparam_block = false;
+            } else {
+                // `Key Value` inside block — prefix is stored in pending_meta_lines[0].
+                let parts: Vec<&str> = line.splitn(2, ' ').collect();
+                if parts.len() == 2 {
+                    let prefix = self.pending_meta_lines.first().cloned().unwrap_or_default();
+                    let key = if prefix.is_empty() {
+                        parts[0].to_string()
+                    } else {
+                        format!("{}{}", prefix, parts[0])
+                    };
+                    self.meta.skinparams.push(crate::diagram::SkinParam {
+                        key,
+                        value: parts[1].trim().to_string(),
+                    });
+                }
+            }
+            return Ok(());
+        }
+
         // Handle multi-line meta blocks (header/footer/legend/caption).
         if self.pending_meta.is_some() {
             let end_kw = format!("end {}", self.pending_meta.unwrap());
@@ -112,6 +397,20 @@ impl ActivityParser {
             } else {
                 self.accumulate_note_line(line);
             }
+            return Ok(());
+        }
+
+        // Handle output-connector continuation: the previous action ended with
+        // `\`, so this entire line (stripped of its trailing terminator) is
+        // appended to the pending text and emitted as one action.
+        if let Some(partial) = self.continuation_text.take() {
+            // Strip trailing action terminator only (keep leading `:` intact
+            // so `:next action;` becomes `:next action` when appended).
+            let appended = line.trim_end_matches(|c: char| ";|]/><\\".contains(c));
+            let combined = format!("{}{}", partial, appended);
+            self.steps.push(ActivityStep::Action(combined));
+            // After a continuation, the next action preserves its `:` prefix.
+            self.next_action_keep_colon = true;
             return Ok(());
         }
 
@@ -166,6 +465,9 @@ impl ActivityParser {
             LazyLock::new(|| Regex::new(r"^footer\s+(.+)$").unwrap());
         static RE_CAPTION: LazyLock<Regex> =
             LazyLock::new(|| Regex::new(r"^caption\s+(.+)$").unwrap());
+        // `skinparam key value`  or  `skinparam key {` (block start, ignored)
+        static RE_SKINPARAM: LazyLock<Regex> =
+            LazyLock::new(|| Regex::new(r"^skinparam\s+(\S+)\s+(.+)$").unwrap());
 
         if let Some(caps) = RE_TITLE.captures(line) {
             self.meta.title = Some(super::strip_title_quotes(&caps[1]).to_string());
@@ -181,6 +483,23 @@ impl ActivityParser {
         }
         if let Some(caps) = RE_CAPTION.captures(line) {
             self.meta.caption = Some(caps[1].trim().to_string());
+            return true;
+        }
+        if let Some(caps) = RE_SKINPARAM.captures(line) {
+            let key = caps[1].trim().to_string();
+            let value_raw = caps[2].trim();
+            if value_raw.ends_with('{') {
+                // Block form: `skinparam activity {` — enter skinparam block mode.
+                // Store the prefix (key) so nested entries can be keyed correctly.
+                self.in_skinparam_block = true;
+                self.pending_meta_lines.clear();
+                self.pending_meta_lines.push(key);
+            } else {
+                self.meta.skinparams.push(crate::diagram::SkinParam {
+                    key,
+                    value: value_raw.to_string(),
+                });
+            }
             return true;
         }
         // Block-start keywords (header/footer/legend/caption on their own line).
@@ -215,9 +534,27 @@ impl ActivityParser {
         if let Some(caps) = RE.captures(line) {
             let text = caps[1].trim().to_string();
             let ending = &caps[2];
+
+            if ending == "\\" {
+                // Output connector: start a continuation. The partial text
+                // (without `:` prefix) is held until the next line is seen.
+                self.next_action_keep_colon = false;
+                self.continuation_text = Some(text);
+                return true;
+            }
+
             let display = if ending == ";" {
-                text
+                if self.next_action_keep_colon {
+                    // Preserve the `:` prefix on this action.
+                    self.next_action_keep_colon = false;
+                    format!(":{}", text)
+                } else {
+                    text
+                }
             } else {
+                // Non-`;`/non-`\` ending: include the ending char, and signal
+                // that the next action should keep its `:` prefix.
+                self.next_action_keep_colon = true;
                 format!("{}{}", text, ending)
             };
             self.steps.push(ActivityStep::Action(display));

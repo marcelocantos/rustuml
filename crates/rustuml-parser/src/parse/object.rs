@@ -52,6 +52,7 @@ impl ObjectParser {
             objects: self.objects,
             links: self.links,
             notes: self.notes,
+            packages: Vec::new(),
         }
     }
 
@@ -96,9 +97,40 @@ impl ObjectParser {
         if self.try_meta(line) {
             return Ok(());
         }
+        if self.try_inline_field(line) {
+            return Ok(());
+        }
 
         // Silently ignore unknown lines.
         Ok(())
+    }
+
+    /// Handle `ObjectId : field = value` inline field assignment outside an object body.
+    fn try_inline_field(&mut self, line: &str) -> bool {
+        static RE: LazyLock<Regex> = LazyLock::new(|| {
+            Regex::new(r"^(\w+)\s*:\s*(.+)$").unwrap()
+        });
+
+        if let Some(caps) = RE.captures(line) {
+            let obj_id = caps[1].to_string();
+            let field_text = caps[2].trim().to_string();
+            // Parse `name = value` or treat the whole text as the name.
+            let (name, value) = if let Some(eq_pos) = field_text.find('=') {
+                let n = field_text[..eq_pos].trim().to_string();
+                let v = field_text[eq_pos + 1..].trim().to_string();
+                (n, Some(v))
+            } else {
+                (field_text, None)
+            };
+            // Only apply if the object already exists.
+            if self.objects.iter().any(|o| o.id == obj_id) {
+                if let Some(obj) = self.objects.iter_mut().find(|o| o.id == obj_id) {
+                    obj.fields.push(crate::diagram::object::ObjectField { name, value });
+                }
+                return true;
+            }
+        }
+        false
     }
 
     fn try_object_decl(&mut self, line: &str) -> bool {
@@ -217,15 +249,16 @@ impl ObjectParser {
     }
 
     fn try_link(&mut self, line: &str) -> bool {
-        // A --> B : label  or  A::field --> B
+        // A --> B : label  or  A -- B : label  or  A::field --> B
         static RE: LazyLock<Regex> = LazyLock::new(|| {
-            Regex::new(r"^(\w+(?:::\w+)?)\s*--[>|]\s*(\w+(?:::\w+)?)(?:\s*:\s*(.+))?$").unwrap()
+            Regex::new(r"^(\w+(?:::\w+)?)\s*(-{2,}[>|]?|-?[>|]{1,2}-{2,})\s*(\w+(?:::\w+)?)(?:\s*:\s*(.+))?$").unwrap()
         });
 
         if let Some(caps) = RE.captures(line) {
             let from_raw = caps[1].to_string();
-            let to_raw = caps[2].to_string();
-            let label = caps.get(3).map(|m| m.as_str().trim().to_string());
+            // caps[2] is the arrow token — skip it.
+            let to_raw = caps[3].to_string();
+            let label = caps.get(4).map(|m| m.as_str().trim().to_string());
 
             // Ensure the base objects exist.
             let from_base = from_raw.split("::").next().unwrap_or(&from_raw).to_string();
