@@ -11,12 +11,78 @@ use super::ParseError;
 use crate::diagram::DiagramMeta;
 use crate::diagram::component::*;
 
+/// Container keywords recognised by the component diagram parser.
+const CONTAINER_KEYWORDS: &[&str] = &[
+    "cloud", "folder", "node", "frame", "rectangle", "package", "database", "storage", "actor",
+    "component",
+];
+
+/// Check if a trimmed line opens a container block (keyword followed by optional label and `{`).
+fn container_keyword(trimmed: &str) -> Option<&'static str> {
+    for &kw in CONTAINER_KEYWORDS {
+        if trimmed.starts_with(kw) {
+            let rest = &trimmed[kw.len()..];
+            if rest.is_empty() || rest.starts_with(' ') || rest.starts_with('\t') || rest.starts_with('"') {
+                return Some(kw);
+            }
+        }
+    }
+    None
+}
+
+/// Parse a container label from a line like:
+///   `cloud Outer #LightBlue {`
+///   `folder Inner {`
+///   `package "My Package" {`
+///   `node Server`
+///
+/// Returns `(id, label)`.
+fn parse_container_label(kw: &str, rest: &str) -> (String, String) {
+    static RE_QUOTED: LazyLock<Regex> =
+        LazyLock::new(|| Regex::new(r#"^\s*"([^"]+)"(?:\s+as\s+(\w+))?(?:\s+[^{]*)?\{?"#).unwrap());
+    static RE_WORD: LazyLock<Regex> =
+        LazyLock::new(|| Regex::new(r#"^\s*(\w+)(?:\s+[^{]*)?\{?"#).unwrap());
+
+    if let Some(caps) = RE_QUOTED.captures(rest) {
+        let label = caps[1].to_string();
+        let id = caps
+            .get(2)
+            .map(|m| m.as_str().to_string())
+            .unwrap_or_else(|| label.clone());
+        return (id, label);
+    }
+    if let Some(caps) = RE_WORD.captures(rest) {
+        let name = caps[1].to_string();
+        return (name.clone(), name);
+    }
+    // Fallback: use keyword as both id and label.
+    (kw.to_string(), kw.to_string())
+}
+
 pub fn parse_component(lines: &[String]) -> Result<ComponentDiagram, ParseError> {
     let mut components = Vec::new();
     let mut interfaces = Vec::new();
     let mut connections = Vec::new();
-    let mut packages = Vec::new();
     let meta = DiagramMeta::default();
+
+    // Parse into a nested structure via a stack.
+    // Each stack frame is a mutable ComponentPackage under construction.
+    let mut package_stack: Vec<ComponentPackage> = Vec::new();
+    // Top-level packages collected.
+    let mut top_packages: Vec<ComponentPackage> = Vec::new();
+
+    static RE_COMP: LazyLock<Regex> =
+        LazyLock::new(|| Regex::new(r#"^component\s+(?:"([^"]+)"\s+as\s+(\w+)|"([^"]+)"|(\w+))(?:\s+[^{]*)?"#).unwrap());
+    static RE_BRACKET: LazyLock<Regex> =
+        LazyLock::new(|| Regex::new(r"^\[([^\]]+)\]$").unwrap());
+    static RE_IFACE: LazyLock<Regex> =
+        LazyLock::new(|| Regex::new(r#"^interface\s+"([^"]+)"\s+as\s+(\w+)"#).unwrap());
+    static RE_CONN: LazyLock<Regex> = LazyLock::new(|| {
+        Regex::new(
+            r#"^(?:\[([^\]]+)\]|(\w+))\s*([-.\|<>~]+)\s*(?:\[([^\]]+)\]|(\w+))(?:\s*:\s*(.+))?$"#,
+        )
+        .unwrap()
+    });
 
     for line in lines {
         let trimmed = line.trim();
@@ -24,57 +90,109 @@ pub fn parse_component(lines: &[String]) -> Result<ComponentDiagram, ParseError>
             continue;
         }
 
-        // Component declaration: component "Label" as ID  or  [Label]
-        static RE_COMP: LazyLock<Regex> =
-            LazyLock::new(|| Regex::new(r#"^component\s+"([^"]+)"\s+as\s+(\w+)"#).unwrap());
-        static RE_BRACKET: LazyLock<Regex> = LazyLock::new(|| Regex::new(r"^\[(\w+)\]$").unwrap());
-        static RE_IFACE: LazyLock<Regex> =
-            LazyLock::new(|| Regex::new(r#"^interface\s+"([^"]+)"\s+as\s+(\w+)"#).unwrap());
-        static RE_CONN: LazyLock<Regex> = LazyLock::new(|| {
-            Regex::new(
-                r#"^(?:\[(\w+)\]|(\w+))\s*([-.\|>]+)\s*(?:\[(\w+)\]|(\w+))(?:\s*:\s*(.+))?$"#,
-            )
-            .unwrap()
-        });
-        static RE_PKG: LazyLock<Regex> =
-            LazyLock::new(|| Regex::new(r#"^package\s+"([^"]+)"\s*\{"#).unwrap());
+        // Closing brace — pop the stack.
+        if trimmed == "}" {
+            if let Some(finished) = package_stack.pop() {
+                if let Some(parent) = package_stack.last_mut() {
+                    parent.packages.push(finished);
+                } else {
+                    top_packages.push(finished);
+                }
+            }
+            continue;
+        }
 
+        // Opening container block?
+        if let Some(kw) = container_keyword(trimmed) {
+            // Only open a block if the line contains '{'.
+            if trimmed.contains('{') {
+                let rest = &trimmed[kw.len()..];
+                let (id, label) = parse_container_label(kw, rest);
+                package_stack.push(ComponentPackage {
+                    name: id,
+                    label,
+                    components: Vec::new(),
+                    packages: Vec::new(),
+                });
+                continue;
+            }
+        }
+
+        // Component declaration.
         if let Some(caps) = RE_COMP.captures(trimmed) {
-            components.push(Component {
-                id: caps[2].to_string(),
-                label: caps[1].to_string(),
-            });
-        } else if let Some(caps) = RE_BRACKET.captures(trimmed) {
-            let name = caps[1].to_string();
-            if !components.iter().any(|c: &Component| c.id == name) {
+            // Variants:
+            //   component "Label" as ID → caps[1]=Label, caps[2]=ID
+            //   component "Label"       → caps[3]=Label, id=Label
+            //   component ID            → caps[4]=ID
+            let (id, label) = if caps.get(1).is_some() {
+                (caps[2].to_string(), caps[1].to_string())
+            } else if caps.get(3).is_some() {
+                let l = caps[3].to_string();
+                (l.clone(), l)
+            } else {
+                let id = caps[4].to_string();
+                (id.clone(), id)
+            };
+
+            if !components.iter().any(|c: &Component| c.id == id) {
                 components.push(Component {
-                    id: name.clone(),
+                    id: id.clone(),
+                    label,
+                });
+            }
+            if let Some(pkg) = package_stack.last_mut() {
+                if !pkg.components.contains(&id) {
+                    pkg.components.push(id);
+                }
+            }
+            continue;
+        }
+
+        if let Some(caps) = RE_BRACKET.captures(trimmed) {
+            let name = caps[1].to_string();
+            // Use the bracket label as both id and display label.
+            let id = name.replace(' ', "_");
+            if !components.iter().any(|c: &Component| c.id == id) {
+                components.push(Component {
+                    id: id.clone(),
                     label: name,
                 });
             }
-        } else if let Some(caps) = RE_IFACE.captures(trimmed) {
+            if let Some(pkg) = package_stack.last_mut() {
+                if !pkg.components.contains(&id) {
+                    pkg.components.push(id);
+                }
+            }
+            continue;
+        }
+
+        if let Some(caps) = RE_IFACE.captures(trimmed) {
             interfaces.push(Interface {
                 id: caps[2].to_string(),
                 label: caps[1].to_string(),
             });
-        } else if let Some(caps) = RE_CONN.captures(trimmed) {
+            continue;
+        }
+
+        if let Some(caps) = RE_CONN.captures(trimmed) {
             let from = caps
                 .get(1)
                 .or(caps.get(2))
-                .map(|m| m.as_str().to_string())
+                .map(|m| m.as_str().replace(' ', "_"))
                 .unwrap_or_default();
             let arrow = &caps[3];
             let to = caps
                 .get(4)
                 .or(caps.get(5))
-                .map(|m| m.as_str().to_string())
+                .map(|m| m.as_str().replace(' ', "_"))
                 .unwrap_or_default();
             let label = caps.get(6).map(|m| m.as_str().trim().to_string());
             let dashed = arrow.contains("..");
 
-            // Auto-create components.
+            // Auto-create components from connection endpoints.
             for id in [&from, &to] {
-                if !components.iter().any(|c| c.id == *id)
+                if !id.is_empty()
+                    && !components.iter().any(|c| c.id == *id)
                     && !interfaces.iter().any(|i| i.id == *id)
                 {
                     components.push(Component {
@@ -84,17 +202,23 @@ pub fn parse_component(lines: &[String]) -> Result<ComponentDiagram, ParseError>
                 }
             }
 
-            connections.push(Connection {
-                from,
-                to,
-                label,
-                dashed,
-            });
-        } else if let Some(caps) = RE_PKG.captures(trimmed) {
-            packages.push(ComponentPackage {
-                name: caps[1].to_string(),
-                components: Vec::new(),
-            });
+            if !from.is_empty() && !to.is_empty() {
+                connections.push(Connection {
+                    from,
+                    to,
+                    label,
+                    dashed,
+                });
+            }
+        }
+    }
+
+    // Close any unclosed blocks (defensive).
+    while let Some(finished) = package_stack.pop() {
+        if let Some(parent) = package_stack.last_mut() {
+            parent.packages.push(finished);
+        } else {
+            top_packages.push(finished);
         }
     }
 
@@ -103,7 +227,7 @@ pub fn parse_component(lines: &[String]) -> Result<ComponentDiagram, ParseError>
         components,
         interfaces,
         connections,
-        packages,
+        packages: top_packages,
     })
 }
 
@@ -129,5 +253,28 @@ mod tests {
         let d = parse("[UI]\n[API]\n[UI] --> [API]");
         assert_eq!(d.components.len(), 2);
         assert_eq!(d.connections.len(), 1);
+    }
+
+    #[test]
+    fn cloud_container_label() {
+        let d = parse("cloud Outer #LightBlue {\n  folder Inner {\n    component X\n    component Y\n    X --> Y\n  }\n}");
+        assert_eq!(d.packages.len(), 1, "should have 1 top-level package");
+        assert_eq!(d.packages[0].label, "Outer");
+        assert_eq!(d.packages[0].packages.len(), 1, "should have 1 nested package");
+        assert_eq!(d.packages[0].packages[0].label, "Inner");
+        assert!(d.components.iter().any(|c| c.id == "X"));
+        assert!(d.components.iter().any(|c| c.id == "Y"));
+        assert_eq!(d.connections.len(), 1);
+    }
+
+    #[test]
+    fn parallel_containers() {
+        let d = parse(
+            "cloud G1 {\n  component AA\n}\nfolder G2 {\n  component BB\n}\nnode G3 {\n  component CC\n}\nAA --> BB\nBB --> CC",
+        );
+        assert_eq!(d.packages.len(), 3);
+        assert_eq!(d.packages[0].label, "G1");
+        assert_eq!(d.packages[1].label, "G2");
+        assert_eq!(d.packages[2].label, "G3");
     }
 }

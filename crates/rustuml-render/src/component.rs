@@ -16,15 +16,17 @@ const GAP: f64 = 40.0;
 const FONT_SIZE: f64 = 13.0;
 const SMALL_FONT: f64 = 11.0;
 const PADDING: f64 = 12.0;
+const CONTAINER_PADDING: f64 = 16.0;
+const LABEL_H: f64 = 22.0;
 
 pub fn render(diagram: &ComponentDiagram, theme: &Theme) -> String {
-    if diagram.components.is_empty() {
+    if diagram.components.is_empty() && diagram.packages.is_empty() {
         return "<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"100\" height=\"50\"></svg>\n"
             .to_string();
     }
 
     let n = diagram.components.len();
-    let cols = (n as f64).sqrt().ceil() as usize;
+    let cols = if n == 0 { 1 } else { (n as f64).sqrt().ceil() as usize };
 
     let widths: Vec<f64> = diagram
         .components
@@ -39,19 +41,40 @@ pub fn render(diagram: &ComponentDiagram, theme: &Theme) -> String {
         }
         cw
     };
-    let rows = n.div_ceil(cols);
-    let total_w = MARGIN * 2.0 + col_w.iter().sum::<f64>() + GAP * (cols.max(1) - 1) as f64;
-    let total_h = MARGIN * 2.0 + rows as f64 * (COMPONENT_H + GAP);
+    let rows = if n == 0 { 0 } else { n.div_ceil(cols) };
+    let comp_total_w = if n > 0 {
+        MARGIN * 2.0 + col_w.iter().sum::<f64>() + GAP * (cols.max(1) - 1) as f64
+    } else {
+        0.0
+    };
+    let comp_total_h = if n > 0 {
+        MARGIN * 2.0 + rows as f64 * (COMPONENT_H + GAP)
+    } else {
+        0.0
+    };
+
+    // Compute a bounding box that also covers all packages.
+    let pkg_total_w = estimate_packages_width(&diagram.packages);
+    let pkg_total_h = estimate_packages_height(&diagram.packages);
+
+    let total_w = comp_total_w.max(pkg_total_w).max(100.0);
+    let total_h = (comp_total_h + pkg_total_h).max(50.0);
 
     let mut svg = SvgBuilder::new(total_w, total_h);
     let cs = &theme.class;
 
+    // Render packages (containers) starting at y_offset=0.
+    let mut pkg_y = MARGIN;
+    render_packages(&diagram.packages, &mut svg, MARGIN, &mut pkg_y, theme);
+
+    // Render flat components below the packages.
+    let y_start = pkg_y + if pkg_y > MARGIN { GAP } else { 0.0 };
     let mut positions = Vec::new();
     for (i, comp) in diagram.components.iter().enumerate() {
         let col = i % cols;
         let row = i / cols;
         let x = MARGIN + col_w[..col].iter().sum::<f64>() + GAP * col as f64;
-        let y = MARGIN + row as f64 * (COMPONENT_H + GAP);
+        let y = y_start + row as f64 * (COMPONENT_H + GAP);
         let w = col_w[col];
 
         svg.rect(x, y, w, COMPONENT_H, &cs.class_background, &cs.border_color);
@@ -107,6 +130,110 @@ pub fn render(diagram: &ComponentDiagram, theme: &Theme) -> String {
     svg.finalize()
 }
 
+/// Render a list of packages starting at (x, *y). Updates *y to point past
+/// the last package rendered.
+fn render_packages(
+    packages: &[ComponentPackage],
+    svg: &mut SvgBuilder,
+    x: f64,
+    y: &mut f64,
+    theme: &Theme,
+) {
+    let cs = &theme.class;
+    for pkg in packages {
+        let pkg_label_w =
+            (metrics::text_width(&pkg.label, FONT_SIZE) + PADDING * 2.0).max(COMPONENT_MIN_W);
+        let inner_w = estimate_package_inner_width(pkg).max(pkg_label_w);
+        let pkg_w = inner_w + CONTAINER_PADDING * 2.0;
+
+        let pkg_y_start = *y;
+        // Draw label at the top.
+        let label_y = pkg_y_start + LABEL_H;
+        *y = label_y + CONTAINER_PADDING;
+
+        // Render nested packages.
+        if !pkg.packages.is_empty() {
+            render_packages(&pkg.packages, svg, x + CONTAINER_PADDING, y, theme);
+        }
+
+        // Advance y for any leaf components in this package.
+        let leaf_count = pkg.components.len();
+        if leaf_count > 0 {
+            *y += leaf_count as f64 * (COMPONENT_H + GAP);
+        }
+
+        // Clamp inner height to at least one component height.
+        let pkg_inner_h = (*y - label_y - CONTAINER_PADDING).max(COMPONENT_H);
+        let pkg_h = pkg_inner_h + CONTAINER_PADDING * 2.0 + LABEL_H;
+
+        // Draw container box.
+        svg.rect(
+            x,
+            pkg_y_start,
+            pkg_w,
+            pkg_h,
+            &cs.class_background,
+            &cs.border_color,
+        );
+        // Draw label.
+        svg.text(
+            x + CONTAINER_PADDING,
+            pkg_y_start + LABEL_H - 4.0,
+            &pkg.label,
+            "start",
+            FONT_SIZE,
+        );
+
+        *y = pkg_y_start + pkg_h + GAP;
+    }
+}
+
+/// Estimate total width needed for a list of packages side-by-side (simplified: stacked).
+fn estimate_packages_width(packages: &[ComponentPackage]) -> f64 {
+    packages
+        .iter()
+        .map(|p| estimate_package_width(p))
+        .fold(0.0_f64, f64::max)
+        + MARGIN * 2.0
+}
+
+fn estimate_packages_height(packages: &[ComponentPackage]) -> f64 {
+    packages.iter().map(|p| estimate_package_height(p)).sum::<f64>()
+        + MARGIN * 2.0
+        + GAP * packages.len().saturating_sub(1) as f64
+}
+
+fn estimate_package_width(pkg: &ComponentPackage) -> f64 {
+    let label_w =
+        (metrics::text_width(&pkg.label, FONT_SIZE) + PADDING * 2.0).max(COMPONENT_MIN_W);
+    let inner_w = estimate_package_inner_width(pkg);
+    (label_w.max(inner_w) + CONTAINER_PADDING * 2.0).max(COMPONENT_MIN_W)
+}
+
+fn estimate_package_inner_width(pkg: &ComponentPackage) -> f64 {
+    let nested_w = pkg
+        .packages
+        .iter()
+        .map(|p| estimate_package_width(p))
+        .fold(0.0_f64, f64::max);
+    let leaf_w = if pkg.components.is_empty() {
+        0.0
+    } else {
+        COMPONENT_MIN_W
+    };
+    nested_w.max(leaf_w)
+}
+
+fn estimate_package_height(pkg: &ComponentPackage) -> f64 {
+    let nested_h: f64 = pkg
+        .packages
+        .iter()
+        .map(|p| estimate_package_height(p))
+        .sum();
+    let leaf_h = pkg.components.len() as f64 * (COMPONENT_H + GAP);
+    LABEL_H + CONTAINER_PADDING * 2.0 + nested_h + leaf_h
+}
+
 #[cfg(test)]
 mod tests {
     #[test]
@@ -117,5 +244,14 @@ mod tests {
         assert!(svg.contains("Web"));
         assert!(svg.contains("DB"));
         assert!(svg.contains("query"));
+    }
+
+    #[test]
+    fn nested_container_labels_rendered() {
+        let input = "@startuml\ncloud Outer #LightBlue {\n  folder Inner {\n    component X\n    component Y\n    X --> Y\n  }\n}\n@enduml";
+        let diagram = rustuml_parser::parse::parse(input).unwrap();
+        let svg = crate::render_svg(&diagram);
+        assert!(svg.contains("Outer"), "expected 'Outer' in SVG, got: {svg}");
+        assert!(svg.contains("Inner"), "expected 'Inner' in SVG, got: {svg}");
     }
 }

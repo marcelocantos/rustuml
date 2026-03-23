@@ -39,5 +39,7 @@ pub struct Connection {
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct ComponentPackage {
     pub name: String,
+    pub label: String,
     pub components: Vec<String>,
+    pub packages: Vec<ComponentPackage>,
 }
