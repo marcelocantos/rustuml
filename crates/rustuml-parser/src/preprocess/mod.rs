@@ -559,11 +559,16 @@ impl PreprocessContext {
                 } else {
                     // Try definelong macro expansion.
                     let subst = self.substitute_vars(&line_no_comment);
-                    self.try_expand_definelong(&subst)
-                        .unwrap_or(subst)
+                    let after_definelong = self.try_expand_definelong(&subst).unwrap_or(subst);
+                    // Expand any inline $func(args) calls in output content.
+                    self.expand_inline_func_calls_in_line(&after_definelong)
                 };
-            if !line_to_process.trim().is_empty() {
-                output.push(line_to_process);
+            // A definelong expansion can produce multiple lines joined with '\n'.
+            // Split them so each line is processed individually by the parser.
+            for expanded_line in line_to_process.split('\n') {
+                if !expanded_line.trim().is_empty() {
+                    output.push(expanded_line.to_string());
+                }
             }
         }
     }
@@ -860,6 +865,47 @@ impl PreprocessContext {
         let args = parse_call_args(args_str);
         let (ret, _lines) = self.call_function(name, &args);
         ret.unwrap_or(Value::Str(String::new()))
+    }
+
+    /// Expand inline `$func(args)` calls within a content line (output line).
+    /// This allows function return values to appear inline in notes and messages.
+    /// Only user-defined functions (not procedures) that return a value are expanded.
+    fn expand_inline_func_calls_in_line(&mut self, line: &str) -> String {
+        static INLINE_RE: LazyLock<Regex> =
+            LazyLock::new(|| Regex::new(r"\$(\w+)\(").unwrap());
+
+        // Check if there are any $func( patterns at all.
+        if !INLINE_RE.is_match(line) {
+            return line.to_string();
+        }
+
+        let mut result = line.to_string();
+        // Iterate to handle nested or multiple calls, up to a limit.
+        for _ in 0..20 {
+            // Find the LAST (innermost) $func( to evaluate inside-out.
+            let Some(m) = INLINE_RE.find_iter(&result).last() else {
+                break;
+            };
+            let start = m.start();
+            let after_open = m.end();
+            let func_name = &result[start + 1..after_open - 1].to_string();
+
+            // Only expand if this function is defined.
+            if !self.functions.contains_key(func_name.as_str()) {
+                // No more user-defined calls to expand; stop.
+                break;
+            }
+
+            let Some(close) = find_matching_paren_from(&result, after_open - 1) else {
+                break;
+            };
+            let args_str = result[after_open..close].to_string();
+            let ret_val = self.eval_function_call(&func_name, &args_str);
+            let replacement = ret_val.to_display();
+            result = format!("{}{replacement}{}", &result[..start], &result[close + 1..]);
+        }
+
+        result
     }
 
     fn try_foreach(&mut self, line: &str, output: &mut Vec<String>) -> bool {
@@ -1413,8 +1459,22 @@ impl PreprocessContext {
             return n != 0.0;
         }
 
-        // Non-empty string is true.
-        !expr.is_empty()
+        // Try evaluating as an expression (handles function calls, variable substitution).
+        let val = self.eval_expr_to_value(expr);
+        match val {
+            Value::Bool(b) => return b,
+            Value::Int(n) => return n != 0,
+            Value::Float(f) => return f != 0.0,
+            Value::Str(ref s) => {
+                // If the expression changed after evaluation, re-evaluate as bool.
+                if s.trim() != expr {
+                    let s_clone = s.clone();
+                    return self.eval_bool(&s_clone);
+                }
+                // Non-empty string is true.
+                return !s.is_empty();
+            }
+        }
     }
 
     fn eval_comparison(&mut self, left: &str, right: &str, op: &str) -> bool {
@@ -1479,31 +1539,40 @@ impl PreprocessContext {
             .to_string();
 
         // Then apply !define token macros (word-boundary bare-word substitution).
-        // Avoid compiling a Regex per token per call — use manual word-boundary matching.
+        // Iterate until stable (up to 20 rounds) so that expansions containing
+        // other macro names are themselves expanded (e.g. LABEL = "Step STEP"
+        // with STEP = 1 → "Step 1").
         if !self.token_defines.is_empty() {
-            let mut out = String::with_capacity(result.len());
-            let chars: Vec<char> = result.chars().collect();
-            let mut i = 0;
-            while i < chars.len() {
-                // Find the start of a word (alphanumeric or underscore).
-                if chars[i].is_alphanumeric() || chars[i] == '_' {
-                    // Find end of word.
-                    let word_start = i;
-                    while i < chars.len() && (chars[i].is_alphanumeric() || chars[i] == '_') {
+            for _ in 0..20 {
+                let mut out = String::with_capacity(result.len());
+                let chars: Vec<char> = result.chars().collect();
+                let mut i = 0;
+                let mut changed = false;
+                while i < chars.len() {
+                    // Find the start of a word (alphanumeric or underscore).
+                    if chars[i].is_alphanumeric() || chars[i] == '_' {
+                        // Find end of word.
+                        let word_start = i;
+                        while i < chars.len() && (chars[i].is_alphanumeric() || chars[i] == '_') {
+                            i += 1;
+                        }
+                        let word: String = chars[word_start..i].iter().collect();
+                        if let Some(replacement) = self.token_defines.get(&word) {
+                            out.push_str(replacement);
+                            changed = true;
+                        } else {
+                            out.push_str(&word);
+                        }
+                    } else {
+                        out.push(chars[i]);
                         i += 1;
                     }
-                    let word: String = chars[word_start..i].iter().collect();
-                    if let Some(replacement) = self.token_defines.get(&word) {
-                        out.push_str(replacement);
-                    } else {
-                        out.push_str(&word);
-                    }
-                } else {
-                    out.push(chars[i]);
-                    i += 1;
+                }
+                result = out;
+                if !changed {
+                    break;
                 }
             }
-            result = out;
         }
 
         let after_vars = result;
@@ -1576,14 +1645,17 @@ impl PreprocessContext {
     }
 
     fn eval_builtins_once(&self, input: &str) -> String {
-        // Find the innermost %func(...) call.
+        // Find the innermost (last/rightmost) %func(...) call to evaluate
+        // inside-out, so that nested calls like %not(%true()) work correctly.
         static FUNC_RE: LazyLock<Regex> =
             LazyLock::new(|| Regex::new(r"%(\w+)\(").unwrap());
 
         let mut result = input.to_string();
 
-        // Find the first %func( and then find the matching close paren.
-        if let Some(m) = FUNC_RE.find(&result) {
+        // Find the last (rightmost) %func( match — this is the innermost call
+        // because the last match in a nested expression has no further %func(
+        // calls before its closing paren.
+        if let Some(m) = FUNC_RE.find_iter(&result).last() {
             let start = m.start();
             let after_open = m.end(); // position after '('
             if let Some(close) = find_matching_paren_from(&result, after_open - 1) {
@@ -1636,10 +1708,23 @@ impl PreprocessContext {
             "tab" => "\t".to_string(),
             "true" => "true".to_string(),
             "false" => "false".to_string(),
-            "date" => "2026-03-22".to_string(),
-            "size" => args
-                .first()
-                .map_or("0".to_string(), |s| s.len().to_string()),
+            "date" => "2026-03-23".to_string(),
+            "size" => {
+                // Count array elements if the argument looks like a JSON array [a, b, c].
+                // Otherwise fall back to string length.
+                let s = args.first().copied().unwrap_or("");
+                let trimmed = s.trim();
+                if trimmed.starts_with('[') && trimmed.ends_with(']') {
+                    let inner = &trimmed[1..trimmed.len() - 1];
+                    if inner.trim().is_empty() {
+                        "0".to_string()
+                    } else {
+                        split_args(inner).len().to_string()
+                    }
+                } else {
+                    s.len().to_string()
+                }
+            }
             "string" => args.first().map_or(String::new(), |s| s.to_string()),
             "intval" => args
                 .first()
@@ -1726,8 +1811,11 @@ impl PreprocessContext {
                 .to_string()
             }
             "function_exists" => {
+                // PlantUML requires the function name to include the leading '$'.
+                // %function_exists("$myFunc") → true, %function_exists("myFunc") → false.
                 let name = args.first().copied().unwrap_or("");
-                if self.functions.contains_key(name) {
+                let lookup = name.strip_prefix('$').unwrap_or("");
+                if !lookup.is_empty() && self.functions.contains_key(lookup) {
                     "true"
                 } else {
                     "false"

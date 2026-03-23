@@ -12,6 +12,21 @@ pub struct DeploymentDiagram {
     pub meta: DiagramMeta,
     pub nodes: Vec<DeploymentNode>,
     pub connections: Vec<DeploymentConnection>,
+    #[serde(default, skip_serializing_if = "Vec::is_empty")]
+    pub notes: Vec<DeploymentNote>,
+}
+
+/// A note attached to or near a node, or a floating note.
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct DeploymentNote {
+    /// Optional ID (for floating notes declared with `as ID`).
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub id: Option<String>,
+    /// Node this note is attached to (for `note direction of target`).
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub target: Option<String>,
+    /// The note text.
+    pub text: String,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]

@@ -102,21 +102,53 @@ fn detect_uml_subtype(lines: &[String]) -> UmlSubtype {
             scores[4] += 5;
         }
         // Deployment — check against the full keyword set.
-        // "package" is excluded because it is also heavily used in class diagrams.
+        // "package" with a brace is excluded because it is heavily used in class
+        // diagrams (package blocks); without a brace it is a deployment element.
+        // "actor" is excluded because it is also a sequence/use-case participant
+        // type; when only actor lines appear alongside arrows, the diagram is
+        // almost certainly a sequence diagram, not a deployment diagram.
         {
             let kw_end = trimmed
                 .find(|c: char| !c.is_ascii_alphanumeric() && c != '_')
                 .unwrap_or(trimmed.len());
             let kw = &trimmed[..kw_end];
-            if kw != "package"
+            let package_with_brace = kw == "package" && trimmed.contains('{');
+            if !package_with_brace
+                && kw != "actor"
                 && deployment::DEPLOYMENT_KEYWORDS.contains(&kw)
                 && kw_end < trimmed.len()
             {
                 scores[7] += 5;
             }
         }
-        // Component.
-        if trimmed.starts_with("component ") || (trimmed.starts_with('[') && trimmed.ends_with(']'))
+        // Component — weighted strongly so that a single `component` keyword
+        // beats multiple `interface` lines that would otherwise score for class.
+        if trimmed.starts_with("component ") {
+            scores[5] += 15;
+        }
+        // Standalone `[Bracket]` syntax marks a component (leaf on its own line).
+        if trimmed.starts_with('[') && trimmed.ends_with(']') && !trimmed.starts_with("[*]") {
+            scores[5] += 10;
+        }
+        // `[Bracket]` appearing anywhere in a line (connection or standalone component
+        // reference), e.g. `[Foo] - IFoo` or `IFoo - [Bar]`.
+        // Exclude `[*]` (state diagram pseudo-states).
+        if trimmed.contains('[') && trimmed.contains(']') && !trimmed.contains("[*]") {
+            scores[5] += 5;
+        }
+        // `interface` in a component context: score for both class and component.
+        // `interface` alone still tips to class (class score ≥ component score in
+        // the absence of `component` lines); combined with `component` keywords the
+        // higher component-per-line weight causes component to win.
+        if trimmed.starts_with("interface ") {
+            scores[5] += 10; // component
+        }
+        // `note right/left/top/bottom of <id>` — unambiguous component/deployment note.
+        if trimmed.starts_with("note ")
+            && (trimmed.contains(" right of ")
+                || trimmed.contains(" left of ")
+                || trimmed.contains(" top of ")
+                || trimmed.contains(" bottom of "))
         {
             scores[5] += 5;
         }

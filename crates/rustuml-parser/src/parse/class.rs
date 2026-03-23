@@ -241,11 +241,11 @@ impl ClassParser {
     fn try_relationship(&mut self, line: &str) -> bool {
         // Relationship format: EntityA ["mult"] ARROW ["mult"] EntityB [: label]
         // Supported arrows: <|--, --|>, ..|>, <|.., *--, --*, o--, --o,
-        //                   <-->, <..>, --, -->, <--, <-, .., ..>, <..
+        //                   <-->, <..>, --, -->, <--, <-, ->, .., ..>, <..
         // Multiple dashes (e.g. ---- or ------) are treated as plain association.
         static RE: LazyLock<Regex> = LazyLock::new(|| {
             Regex::new(
-                r#"^(\w+)\s*(?:"([^"]+)")?\s*((?:<\|--|--\|>|\.\.\|>|<\|\.\.|<\.\.>|<\.\.|\*--|--\*|o--|--o|<-->|<--|-->|<-|-{2,}|\.\.|\.\.>))\s*(?:"([^"]+)")?\s*(\w+)(?:\s*:\s*(.+))?$"#,
+                r#"^(\w+)\s*(?:"([^"]+)")?\s*((?:<\|--|--\|>|\.\.\|>|<\|\.\.|<\.\.>|<\.\.|\*--|--\*|o--|--o|<-->|<--|-->|->|<-|-{2,}|\.\.|\.\.>))\s*(?:"([^"]+)")?\s*(\w+)(?:\s*:\s*(.+))?$"#,
             )
             .unwrap()
         });
@@ -581,7 +581,7 @@ fn parse_relationship_kind(s: &str) -> RelationshipKind {
         RelationshipKind::Composition
     } else if s.contains("o--") {
         RelationshipKind::Aggregation
-    } else if s.contains("..>") {
+    } else if s.contains("..>") || s == "->" || s == "<-" {
         RelationshipKind::Dependency
     } else {
         RelationshipKind::Association

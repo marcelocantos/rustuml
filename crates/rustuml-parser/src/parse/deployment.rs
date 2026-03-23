@@ -261,6 +261,7 @@ pub fn parse_deployment(lines: &[String]) -> Result<DeploymentDiagram, ParseErro
         meta,
         nodes,
         connections,
+        notes: Vec::new(),
     })
 }
 

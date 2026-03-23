@@ -20,9 +20,19 @@ const CONTAINER_PADDING: f64 = 16.0;
 const LABEL_H: f64 = 22.0;
 const TITLE_FONT_SIZE: f64 = 14.0;
 const TITLE_HEIGHT: f64 = TITLE_FONT_SIZE + 10.0;
+const IFACE_R: f64 = 8.0;
+const IFACE_H: f64 = IFACE_R * 2.0 + 20.0; // circle + label below
+const NOTE_FONT: f64 = 13.0;
+const NOTE_PAD: f64 = 8.0;
+const NOTE_LINE_H: f64 = 18.0;
+const NOTE_GAP: f64 = 10.0;
+const NOTE_FOLD: f64 = 10.0;
 
 pub fn render(diagram: &ComponentDiagram, theme: &Theme) -> String {
-    if diagram.components.is_empty() && diagram.packages.is_empty() {
+    if diagram.components.is_empty()
+        && diagram.packages.is_empty()
+        && diagram.interfaces.is_empty()
+    {
         return "<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"100\" height=\"50\"></svg>\n"
             .to_string();
     }
@@ -36,8 +46,8 @@ pub fn render(diagram: &ComponentDiagram, theme: &Theme) -> String {
         .map(|c| {
             let label_w = metrics::text_width(&c.label, FONT_SIZE) + PADDING * 2.0;
             let stereo_w = c
-                .stereotype
-                .as_deref()
+                .stereotypes
+                .first()
                 .map(|s| metrics::text_width(&format!("«{s}»"), SMALL_FONT) + PADDING * 2.0)
                 .unwrap_or(0.0);
             label_w.max(stereo_w).max(COMPONENT_MIN_W)
@@ -63,17 +73,38 @@ pub fn render(diagram: &ComponentDiagram, theme: &Theme) -> String {
         0.0
     };
 
+    // Estimate space needed for interfaces (rendered below components).
+    let iface_count = diagram.interfaces.len();
+    let iface_total_h = if iface_count > 0 {
+        IFACE_H + GAP
+    } else {
+        0.0
+    };
+    let iface_total_w = if iface_count > 0 {
+        MARGIN * 2.0
+            + iface_count as f64 * (IFACE_R * 2.0 + GAP)
+    } else {
+        0.0
+    };
+
     // Compute a bounding box that also covers all packages.
     let pkg_total_w = estimate_packages_width(&diagram.packages);
     let pkg_total_h = estimate_packages_height(&diagram.packages);
 
     let title_h = if diagram.meta.title.is_some() { TITLE_HEIGHT } else { 0.0 };
-    let total_w = comp_total_w.max(pkg_total_w).max(100.0);
-    let total_h = (comp_total_h + pkg_total_h + title_h).max(50.0);
+    let total_w = comp_total_w
+        .max(pkg_total_w)
+        .max(iface_total_w)
+        .max(100.0);
+    let total_h = (comp_total_h + pkg_total_h + iface_total_h + title_h).max(50.0);
 
     let mut svg = SvgBuilder::new(total_w, total_h);
     if let Some(title) = &diagram.meta.title {
-        svg.text(total_w / 2.0, TITLE_HEIGHT - 4.0, title, "middle", TITLE_FONT_SIZE);
+        // Multi-line title: render each line.
+        for (i, tline) in title.lines().enumerate() {
+            let ty = TITLE_HEIGHT - 4.0 + i as f64 * (TITLE_FONT_SIZE + 2.0);
+            svg.text(total_w / 2.0, ty, tline, "middle", TITLE_FONT_SIZE);
+        }
     }
     let cs = &theme.class;
 
@@ -108,17 +139,23 @@ pub fn render(diagram: &ComponentDiagram, theme: &Theme) -> String {
             &cs.class_background,
             &cs.border_color,
         );
-        if let Some(stereo) = &comp.stereotype {
+        // Render stereotypes (all of them, stacked).
+        let stereo_lines: Vec<&str> = comp.stereotypes.iter().map(|s| s.as_str()).collect();
+        if !stereo_lines.is_empty() {
+            let total_stereo_h = stereo_lines.len() as f64 * (SMALL_FONT + 2.0);
+            let label_offset = total_stereo_h + 4.0;
+            for (si, stereo) in stereo_lines.iter().enumerate() {
+                svg.text(
+                    x + w / 2.0,
+                    y + COMPONENT_H / 2.0 - label_offset / 2.0 + si as f64 * (SMALL_FONT + 2.0),
+                    &format!("«{stereo}»"),
+                    "middle",
+                    SMALL_FONT,
+                );
+            }
             svg.text(
                 x + w / 2.0,
-                y + COMPONENT_H / 2.0 - 4.0,
-                &format!("«{stereo}»"),
-                "middle",
-                SMALL_FONT,
-            );
-            svg.text(
-                x + w / 2.0,
-                y + COMPONENT_H / 2.0 + 10.0,
+                y + COMPONENT_H / 2.0 + label_offset / 2.0 + 4.0,
                 &comp.label,
                 "middle",
                 FONT_SIZE,
@@ -135,42 +172,128 @@ pub fn render(diagram: &ComponentDiagram, theme: &Theme) -> String {
         positions.push((x, y, w));
     }
 
+    // Render interfaces below components.
+    let iface_y_start = if n > 0 {
+        y_start + rows as f64 * (COMPONENT_H + GAP)
+    } else {
+        y_start
+    };
+    let mut iface_positions: Vec<(f64, f64)> = Vec::new();
+    for (ii, iface) in diagram.interfaces.iter().enumerate() {
+        let ix = MARGIN + ii as f64 * (IFACE_R * 2.0 + GAP) + IFACE_R;
+        let iy = iface_y_start + IFACE_R;
+        // Draw circle.
+        svg.circle(ix, iy, IFACE_R, &cs.class_background, &cs.border_color);
+        // Label below circle.
+        svg.text(ix, iy + IFACE_R + NOTE_LINE_H, &iface.label, "middle", FONT_SIZE);
+        iface_positions.push((ix, iy));
+    }
+
+    // Render connections.
     for conn in &diagram.connections {
         let fi = diagram.components.iter().position(|c| c.id == conn.from);
         let ti = diagram.components.iter().position(|c| c.id == conn.to);
-        if let (Some(fi), Some(ti)) = (fi, ti) {
+        // Also check interfaces as source/target.
+        let fi_iface = diagram.interfaces.iter().position(|i| i.id == conn.from);
+        let ti_iface = diagram.interfaces.iter().position(|i| i.id == conn.to);
+
+        let (from_cx, from_cy) = if let Some(fi) = fi {
             let (fx, fy, fw) = positions[fi];
+            (fx + fw / 2.0, fy + COMPONENT_H)
+        } else if let Some(fi) = fi_iface {
+            let (ix, iy) = iface_positions[fi];
+            (ix, iy)
+        } else {
+            continue;
+        };
+
+        let (to_cx, to_cy) = if let Some(ti) = ti {
             let (tx, ty, tw) = positions[ti];
-            svg.line_segment(
-                fx + fw / 2.0,
-                fy + COMPONENT_H,
-                tx + tw / 2.0,
-                ty,
-                &cs.border_color,
-                conn.dashed,
-            );
-            svg.arrow_head(tx + tw / 2.0, ty, 90.0);
-            if let Some(label) = &conn.label {
-                let mx = (fx + fw / 2.0 + tx + tw / 2.0) / 2.0;
-                let my = (fy + COMPONENT_H + ty) / 2.0;
-                svg.text(mx, my - 4.0, label, "middle", SMALL_FONT);
-            }
-            // Render from_mult near the source endpoint (slightly offset).
-            if let Some(from_mult) = &conn.from_mult {
-                let mx = fx + fw / 2.0 + 6.0;
-                let my = fy + COMPONENT_H + 14.0;
-                svg.text(mx, my, from_mult, "start", SMALL_FONT);
-            }
-            // Render to_mult near the target endpoint (slightly offset).
-            if let Some(to_mult) = &conn.to_mult {
-                let mx = tx + tw / 2.0 + 6.0;
-                let my = ty - 4.0;
-                svg.text(mx, my, to_mult, "start", SMALL_FONT);
-            }
+            (tx + tw / 2.0, ty)
+        } else if let Some(ti) = ti_iface {
+            let (ix, iy) = iface_positions[ti];
+            (ix, iy)
+        } else {
+            continue;
+        };
+
+        svg.line_segment(from_cx, from_cy, to_cx, to_cy, &cs.border_color, conn.dashed);
+        // Only draw arrowhead if connecting to a component (not an interface circle).
+        if ti.is_some() {
+            svg.arrow_head(to_cx, to_cy, 90.0);
+        }
+        if let Some(label) = &conn.label {
+            let mx = (from_cx + to_cx) / 2.0;
+            let my = (from_cy + to_cy) / 2.0;
+            svg.text(mx + 6.0, my - 4.0, label, "start", SMALL_FONT);
+        }
+        if let Some(from_mult) = &conn.from_mult {
+            let mx = from_cx + 6.0;
+            let my = from_cy + 14.0;
+            svg.text(mx, my, from_mult, "start", SMALL_FONT);
+        }
+        if let Some(to_mult) = &conn.to_mult {
+            let mx = to_cx + 6.0;
+            let my = to_cy - 4.0;
+            svg.text(mx, my, to_mult, "start", SMALL_FONT);
         }
     }
 
+    // Render notes.
+    for note in &diagram.notes {
+        render_note(note, &positions, &diagram.components, &mut svg, total_w, total_h);
+    }
+
     svg.finalize()
+}
+
+/// Render a single note as a sticky shape.
+fn render_note(
+    note: &ComponentNote,
+    positions: &[(f64, f64, f64)],
+    components: &[Component],
+    svg: &mut SvgBuilder,
+    canvas_w: f64,
+    canvas_h: f64,
+) {
+    let lines: Vec<&str> = note.text.lines().collect();
+    let note_w = lines
+        .iter()
+        .map(|l| metrics::text_width(l, NOTE_FONT) + NOTE_PAD * 2.0)
+        .fold(60.0_f64, f64::max);
+    let note_h = (lines.len() as f64).max(1.0) * NOTE_LINE_H + NOTE_PAD * 2.0;
+
+    // Determine placement based on target.
+    let (nx, ny) = if let Some(target) = &note.target {
+        if let Some(idx) = components.iter().position(|c| c.id == *target) {
+            let (ox, oy, ow) = positions[idx];
+            // Place to the right of the component.
+            let nx = ox + ow + NOTE_GAP;
+            let ny = oy + COMPONENT_H / 2.0 - note_h / 2.0;
+            (nx, ny)
+        } else {
+            // Target not found — place at right edge.
+            let nx = canvas_w - note_w - NOTE_GAP * 2.0;
+            let ny = canvas_h / 2.0 - note_h / 2.0;
+            (nx, ny)
+        }
+    } else {
+        // Floating note.
+        let nx = NOTE_GAP;
+        let ny = canvas_h - note_h - NOTE_GAP;
+        (nx, ny)
+    };
+
+    let nx = nx.max(NOTE_GAP);
+    let ny = ny.max(NOTE_GAP);
+
+    // Note body (rectangle with dog-ear).
+    svg.note_box(nx, ny, note_w, note_h, NOTE_FOLD, "#FEFFDD", "#181818");
+
+    for (i, line) in lines.iter().enumerate() {
+        let ty = ny + NOTE_PAD + (i as f64 + 1.0) * NOTE_LINE_H - 2.0;
+        svg.text(nx + NOTE_PAD, ty, line, "start", NOTE_FONT);
+    }
 }
 
 /// Render a list of packages starting at (x, *y). Updates *y to point past
@@ -316,5 +439,33 @@ mod tests {
         let svg = crate::render_svg(&diagram);
         assert!(svg.contains("Outer"), "expected 'Outer' in SVG, got: {svg}");
         assert!(svg.contains("Inner"), "expected 'Inner' in SVG, got: {svg}");
+    }
+
+    #[test]
+    fn note_text_rendered() {
+        let input = "@startuml\ncomponent MyComp <<facade>> #LightBlue\nnote right of MyComp : Tagged component\n@enduml";
+        let diagram = rustuml_parser::parse::parse(input).unwrap();
+        let svg = crate::render_svg(&diagram);
+        assert!(svg.contains("Tagged component"), "note text missing in SVG: {svg}");
+        assert!(svg.contains("MyComp"), "component label missing in SVG: {svg}");
+    }
+
+    #[test]
+    fn interface_label_rendered() {
+        let input = "@startuml\ncomponent Hub\ninterface IA\ninterface IB\nHub - IA\nHub - IB\n@enduml";
+        let diagram = rustuml_parser::parse::parse(input).unwrap();
+        let svg = crate::render_svg(&diagram);
+        assert!(svg.contains("Hub"), "Hub missing in SVG: {svg}");
+        assert!(svg.contains("IA"), "IA missing in SVG: {svg}");
+        assert!(svg.contains("IB"), "IB missing in SVG: {svg}");
+    }
+
+    #[test]
+    fn multiple_stereotypes_rendered() {
+        let input = "@startuml\ncomponent Auth <<service>> <<secured>>\nAuth --> Backend\n@enduml";
+        let diagram = rustuml_parser::parse::parse(input).unwrap();
+        let svg = crate::render_svg(&diagram);
+        assert!(svg.contains("service"), "first stereotype missing: {svg}");
+        assert!(svg.contains("secured"), "second stereotype missing: {svg}");
     }
 }

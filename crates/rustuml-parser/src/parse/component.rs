@@ -14,7 +14,7 @@ use crate::diagram::component::*;
 /// Container keywords recognised by the component diagram parser.
 const CONTAINER_KEYWORDS: &[&str] = &[
     "cloud", "folder", "node", "frame", "rectangle", "package", "database", "storage", "actor",
-    "component",
+    "component", "queue", "boundary", "control", "entity", "collections",
 ];
 
 /// Check if a trimmed line opens a container block (keyword followed by optional label and `{`).
@@ -30,10 +30,10 @@ fn container_keyword(trimmed: &str) -> Option<&'static str> {
     None
 }
 
-/// Extract a stereotype string from `<<name>>` syntax in a line.
-fn parse_stereotype(s: &str) -> Option<String> {
+/// Extract all stereotype strings from `<<name>>` syntax in a line.
+fn parse_stereotypes(s: &str) -> Vec<String> {
     static RE: LazyLock<Regex> = LazyLock::new(|| Regex::new(r"<<(\w+)>>").unwrap());
-    RE.captures(s).map(|caps| caps[1].to_string())
+    RE.captures_iter(s).map(|caps| caps[1].to_string()).collect()
 }
 
 /// Parse a container label from a line like:
@@ -69,6 +69,7 @@ pub fn parse_component(lines: &[String]) -> Result<ComponentDiagram, ParseError>
     let mut components = Vec::new();
     let mut interfaces = Vec::new();
     let mut connections = Vec::new();
+    let mut notes: Vec<ComponentNote> = Vec::new();
     let mut meta = DiagramMeta::default();
 
     // Parse into a nested structure via a stack.
@@ -77,18 +78,37 @@ pub fn parse_component(lines: &[String]) -> Result<ComponentDiagram, ParseError>
     // Top-level packages collected.
     let mut top_packages: Vec<ComponentPackage> = Vec::new();
 
+    // Note buffer for multi-line notes.
+    let mut note_target: Option<String> = None;
+    let mut note_lines: Vec<String> = Vec::new();
+    let mut in_note: bool = false;
+    // Multiline title accumulation.
+    let mut in_title: bool = false;
+    let mut title_lines: Vec<String> = Vec::new();
+
     static RE_COMP: LazyLock<Regex> =
         LazyLock::new(|| Regex::new(r#"^component\s+(?:"([^"]+)"\s+as\s+(\w+)|"([^"]+)"|(\w+))(?:\s+[^{]*)?"#).unwrap());
     static RE_BRACKET: LazyLock<Regex> =
         LazyLock::new(|| Regex::new(r"^\[([^\]]+)\]$").unwrap());
-    static RE_IFACE: LazyLock<Regex> =
+    // Interface: `interface "Name" as ID`, `interface Name`, or `interface [Name] as ID`.
+    static RE_IFACE_QUOTED_AS: LazyLock<Regex> =
         LazyLock::new(|| Regex::new(r#"^interface\s+"([^"]+)"\s+as\s+(\w+)"#).unwrap());
+    static RE_IFACE_BRACKET_AS: LazyLock<Regex> =
+        LazyLock::new(|| Regex::new(r"^interface\s+\[([^\]]+)\]\s+as\s+(\w+)").unwrap());
+    static RE_IFACE_BARE: LazyLock<Regex> =
+        LazyLock::new(|| Regex::new(r"^interface\s+(\w+)\s*$").unwrap());
+    // Note: `note right of ID : text` or `note right of ID` (multiline)
+    static RE_NOTE_OF: LazyLock<Regex> =
+        LazyLock::new(|| Regex::new(r"^note\s+(?:right|left|top|bottom)\s+of\s+(\w+|\[[\w\s]+\])(?:\s*:\s*(.+))?$").unwrap());
+    // Floating note: `note "text" as ID` or `note : text`
+    static RE_NOTE_INLINE: LazyLock<Regex> =
+        LazyLock::new(|| Regex::new(r#"^note\s+"([^"]+)"\s+as\s+\w+"#).unwrap());
     // Matches: FROM ["from_mult"] ARROW ["to_mult"] TO [: label]
     // FROM and TO can be [bracket] or \w+ identifiers.
-    // Optional quoted multiplicities immediately adjoin the arrow on either side.
+    // Arrow chars broadened to include lollipop notation: `-(`, `-(0-`, `--(`  etc.
     static RE_CONN: LazyLock<Regex> = LazyLock::new(|| {
         Regex::new(
-            r#"^(?:\[([^\]]+)\]|(\w+))\s*(?:"([^"]*)")?\s*([-.\|<>~]+)\s*(?:"([^"]*)")?\s*(?:\[([^\]]+)\]|(\w+))(?:\s*:\s*(.+))?$"#,
+            r#"^(?:\[([^\]]+)\]|(\w+))\s*(?:"([^"]*)")?\s*([-.<>()|~0#*o]+)\s*(?:"([^"]*)")?\s*(?:\[([^\]]+)\]|(\w+))(?:\s*:\s*(.+))?$"#,
         )
         .unwrap()
     });
@@ -96,20 +116,67 @@ pub fn parse_component(lines: &[String]) -> Result<ComponentDiagram, ParseError>
     for line in lines {
         let trimmed = line.trim();
         if trimmed.is_empty() {
+            if in_note {
+                note_lines.push(String::new());
+            }
             continue;
         }
 
-        // Parse title directive.
+        // End of multiline title.
+        if in_title {
+            if trimmed == "end title" {
+                meta.title = Some(title_lines.join("\n"));
+                in_title = false;
+                title_lines.clear();
+            } else {
+                title_lines.push(trimmed.to_string());
+            }
+            continue;
+        }
+
+        // End of multi-line note.
+        if in_note {
+            if trimmed == "end note" {
+                let text = note_lines.join("\n").trim().to_string();
+                if !text.is_empty() {
+                    notes.push(ComponentNote {
+                        text,
+                        target: note_target.take(),
+                    });
+                }
+                note_lines.clear();
+                in_note = false;
+            } else {
+                note_lines.push(trimmed.to_string());
+            }
+            continue;
+        }
+
+        // Parse title directive — single-line form.
         if let Some(rest) = trimmed.strip_prefix("title ") {
             meta.title = Some(super::strip_title_quotes(rest).to_string());
+            continue;
+        }
+        // Multiline title: bare `title` on its own line.
+        if trimmed == "title" {
+            in_title = true;
+            title_lines.clear();
             continue;
         }
         // Skip skinparam and other decoration lines.
         if trimmed.starts_with("skinparam ")
             || trimmed.starts_with("hide ")
             || trimmed.starts_with("show ")
-            || trimmed.starts_with("legend")
             || trimmed.starts_with("caption ")
+            || trimmed.starts_with("header ")
+            || trimmed.starts_with("footer ")
+            || trimmed.starts_with("legend")
+            || trimmed.starts_with("left footer")
+            || trimmed.starts_with("right footer")
+            || trimmed.starts_with("center footer")
+            || trimmed.starts_with("left header")
+            || trimmed.starts_with("right header")
+            || trimmed.starts_with("center header")
         {
             continue;
         }
@@ -128,19 +195,90 @@ pub fn parse_component(lines: &[String]) -> Result<ComponentDiagram, ParseError>
 
         // Opening container block?
         if let Some(kw) = container_keyword(trimmed) {
-            // Only open a block if the line contains '{'.
             if trimmed.contains('{') {
+                // Block container — push onto the stack.
                 let rest = &trimmed[kw.len()..];
                 let (id, label) = parse_container_label(kw, rest);
                 package_stack.push(ComponentPackage {
                     name: id,
                     label,
-                    stereotype: parse_stereotype(trimmed),
+                    stereotype: parse_stereotypes(trimmed).into_iter().next(),
                     components: Vec::new(),
                     packages: Vec::new(),
                 });
                 continue;
+            } else {
+                // Leaf container declaration (no braces) — treat as a component.
+                // e.g. `cloud "Production" as PROD`, `database "User DB" as UDB`
+                let rest = &trimmed[kw.len()..];
+                let (id, label) = parse_container_label(kw, rest);
+                if !components.iter().any(|c: &Component| c.id == id) {
+                    components.push(Component {
+                        id: id.clone(),
+                        label,
+                        stereotypes: parse_stereotypes(trimmed),
+                    });
+                }
+                if let Some(pkg) = package_stack.last_mut() {
+                    if !pkg.components.contains(&id) {
+                        pkg.components.push(id);
+                    }
+                }
+                continue;
             }
+        }
+
+        // Note attached to an element: `note right of ID : text`
+        if let Some(caps) = RE_NOTE_OF.captures(trimmed) {
+            let target_raw = caps[1].to_string();
+            // Strip brackets if present: `[ID]` → `ID`.
+            let target = target_raw
+                .trim_matches(|c| c == '[' || c == ']')
+                .replace(' ', "_");
+            if let Some(inline_text) = caps.get(2).map(|m| m.as_str().trim().to_string()).filter(|t| !t.is_empty()) {
+                notes.push(ComponentNote { text: inline_text, target: Some(target) });
+            } else {
+                note_target = Some(target);
+                note_lines.clear();
+                in_note = true;
+            }
+            continue;
+        }
+        // Floating inline note: `note "text" as ID`
+        if let Some(caps) = RE_NOTE_INLINE.captures(trimmed) {
+            notes.push(ComponentNote { text: caps[1].to_string(), target: None });
+            continue;
+        }
+        // `note on link : text` — inline note on the last link.
+        if let Some(rest) = trimmed.strip_prefix("note on link") {
+            let text = rest
+                .trim_start_matches(|c| c == ' ' || c == ':')
+                .trim()
+                .to_string();
+            if !text.is_empty() {
+                notes.push(ComponentNote { text, target: None });
+            } else {
+                // Multi-line note on link.
+                note_target = None;
+                note_lines.clear();
+                in_note = true;
+            }
+            continue;
+        }
+        // `note : text` — inline floating note.
+        if let Some(rest) = trimmed.strip_prefix("note :").or_else(|| trimmed.strip_prefix("note: ")) {
+            let text = rest.trim().to_string();
+            if !text.is_empty() {
+                notes.push(ComponentNote { text, target: None });
+                continue;
+            }
+        }
+        // Multi-line floating note: `note as ID` or plain `note`
+        if trimmed.starts_with("note ") || trimmed == "note" {
+            note_target = None;
+            note_lines.clear();
+            in_note = true;
+            continue;
         }
 
         // Component declaration.
@@ -163,7 +301,7 @@ pub fn parse_component(lines: &[String]) -> Result<ComponentDiagram, ParseError>
                 components.push(Component {
                     id: id.clone(),
                     label,
-                    stereotype: parse_stereotype(trimmed),
+                    stereotypes: parse_stereotypes(trimmed),
                 });
             }
             if let Some(pkg) = package_stack.last_mut() {
@@ -182,7 +320,7 @@ pub fn parse_component(lines: &[String]) -> Result<ComponentDiagram, ParseError>
                 components.push(Component {
                     id: id.clone(),
                     label: name,
-                    stereotype: parse_stereotype(trimmed),
+                    stereotypes: parse_stereotypes(trimmed),
                 });
             }
             if let Some(pkg) = package_stack.last_mut() {
@@ -193,11 +331,28 @@ pub fn parse_component(lines: &[String]) -> Result<ComponentDiagram, ParseError>
             continue;
         }
 
-        if let Some(caps) = RE_IFACE.captures(trimmed) {
-            interfaces.push(Interface {
-                id: caps[2].to_string(),
-                label: caps[1].to_string(),
-            });
+        // Interface declarations.
+        if let Some(caps) = RE_IFACE_QUOTED_AS.captures(trimmed) {
+            let label = caps[1].to_string();
+            let id = caps[2].to_string();
+            if !interfaces.iter().any(|i: &Interface| i.id == id) {
+                interfaces.push(Interface { id, label });
+            }
+            continue;
+        }
+        if let Some(caps) = RE_IFACE_BRACKET_AS.captures(trimmed) {
+            let label = caps[1].to_string();
+            let id = caps[2].to_string();
+            if !interfaces.iter().any(|i: &Interface| i.id == id) {
+                interfaces.push(Interface { id, label });
+            }
+            continue;
+        }
+        if let Some(caps) = RE_IFACE_BARE.captures(trimmed) {
+            let name = caps[1].to_string();
+            if !interfaces.iter().any(|i: &Interface| i.id == name) {
+                interfaces.push(Interface { id: name.clone(), label: name });
+            }
             continue;
         }
 
@@ -216,9 +371,10 @@ pub fn parse_component(lines: &[String]) -> Result<ComponentDiagram, ParseError>
                 .map(|m| m.as_str().replace(' ', "_"))
                 .unwrap_or_default();
             let label = caps.get(8).map(|m| m.as_str().trim().to_string());
-            let dashed = arrow.contains("..");
+            let dashed = arrow.contains("..") || arrow.contains('.');
 
-            // Auto-create components from connection endpoints.
+            // Auto-create components from connection endpoints if not already
+            // declared as a component or interface.
             for id in [&from, &to] {
                 if !id.is_empty()
                     && !components.iter().any(|c| c.id == *id)
@@ -227,7 +383,7 @@ pub fn parse_component(lines: &[String]) -> Result<ComponentDiagram, ParseError>
                     components.push(Component {
                         id: id.clone(),
                         label: id.clone(),
-                        stereotype: None,
+                        stereotypes: Vec::new(),
                     });
                 }
             }
@@ -260,6 +416,7 @@ pub fn parse_component(lines: &[String]) -> Result<ComponentDiagram, ParseError>
         interfaces,
         connections,
         packages: top_packages,
+        notes,
     })
 }
 
@@ -308,5 +465,42 @@ mod tests {
         assert_eq!(d.packages[0].label, "G1");
         assert_eq!(d.packages[1].label, "G2");
         assert_eq!(d.packages[2].label, "G3");
+    }
+
+    #[test]
+    fn bare_interface_parsed() {
+        let d = parse("component Hub\ninterface IA\ninterface IB\nHub - IA\nHub - IB");
+        assert_eq!(d.interfaces.len(), 2, "should have 2 interfaces");
+        assert!(d.interfaces.iter().any(|i| i.id == "IA"));
+        assert!(d.interfaces.iter().any(|i| i.id == "IB"));
+    }
+
+    #[test]
+    fn multiple_stereotypes() {
+        let d = parse("component Auth <<service>> <<secured>>");
+        assert_eq!(d.components.len(), 1);
+        assert!(d.components[0].stereotypes.contains(&"service".to_string()));
+        assert!(d.components[0].stereotypes.contains(&"secured".to_string()));
+    }
+
+    #[test]
+    fn note_right_of() {
+        let d = parse("component MyComp <<facade>>\nnote right of MyComp : Tagged component");
+        assert_eq!(d.notes.len(), 1);
+        assert_eq!(d.notes[0].text, "Tagged component");
+        assert_eq!(d.notes[0].target.as_deref(), Some("MyComp"));
+    }
+
+    #[test]
+    fn multiline_title() {
+        let d = parse("title\n  My Complex\n  Component Diagram\nend title\ncomponent A");
+        assert_eq!(d.meta.title.as_deref(), Some("My Complex\nComponent Diagram"));
+    }
+
+    #[test]
+    fn lollipop_arrow() {
+        let d = parse("component Foo\ncomponent Bar\nFoo -(0- Bar : uses");
+        assert_eq!(d.connections.len(), 1);
+        assert_eq!(d.connections[0].label.as_deref(), Some("uses"));
     }
 }
