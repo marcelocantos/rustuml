@@ -12,24 +12,33 @@ use crate::diagram::DiagramMeta;
 use crate::diagram::deployment::*;
 
 pub fn parse_deployment(lines: &[String]) -> Result<DeploymentDiagram, ParseError> {
-    let mut nodes = Vec::new();
+    let mut nodes: Vec<DeploymentNode> = Vec::new();
     let mut connections = Vec::new();
     let meta = DiagramMeta::default();
 
+    // Stack of node IDs for tracking nesting depth.
+    let mut stack: Vec<String> = Vec::new();
+
+    static RE_NODE: LazyLock<Regex> = LazyLock::new(|| {
+        Regex::new(
+            r#"^(node|artifact|cloud|database|storage|frame|folder|actor|queue|component|rectangle)\s+(?:"([^"]+)"\s+as\s+)?(\w+)(?:\s+<<([^>]+)>>)?(?:\s+#\w+)?(?:\s*\{)?"#,
+        )
+        .unwrap()
+    });
+    static RE_CONN: LazyLock<Regex> =
+        LazyLock::new(|| Regex::new(r"^(\w+)\s*([-.\|>]+)\s*(\w+)(?:\s*:\s*(.+))?$").unwrap());
+
     for line in lines {
         let trimmed = line.trim();
-        if trimmed.is_empty() || trimmed == "{" || trimmed == "}" {
+        if trimmed.is_empty() {
             continue;
         }
 
-        static RE_NODE: LazyLock<Regex> = LazyLock::new(|| {
-            Regex::new(
-                r#"^(node|artifact|cloud|database|storage|frame|folder|actor)\s+(?:"([^"]+)"\s+as\s+)?(\w+)(?:\s+<<([^>]+)>>)?(?:\s*\{)?"#,
-            )
-            .unwrap()
-        });
-        static RE_CONN: LazyLock<Regex> =
-            LazyLock::new(|| Regex::new(r"^(\w+)\s*([-.\|>]+)\s*(\w+)(?:\s*:\s*(.+))?$").unwrap());
+        // Handle closing brace — pop the current container from the stack.
+        if trimmed == "}" {
+            stack.pop();
+            continue;
+        }
 
         if let Some(caps) = RE_NODE.captures(trimmed) {
             let kind = match &caps[1] {
@@ -40,6 +49,9 @@ pub fn parse_deployment(lines: &[String]) -> Result<DeploymentDiagram, ParseErro
                 "frame" => DeploymentNodeKind::Frame,
                 "folder" => DeploymentNodeKind::Folder,
                 "actor" => DeploymentNodeKind::Actor,
+                "queue" => DeploymentNodeKind::Queue,
+                "component" => DeploymentNodeKind::Component,
+                "rectangle" => DeploymentNodeKind::Rectangle,
                 _ => DeploymentNodeKind::Node,
             };
             let label = caps
@@ -48,21 +60,36 @@ pub fn parse_deployment(lines: &[String]) -> Result<DeploymentDiagram, ParseErro
             let id = caps[3].to_string();
             let stereotype = caps.get(4).map(|m| m.as_str().trim().to_string());
 
+            // Push node to the flat list if not already present.
             if !nodes.iter().any(|n: &DeploymentNode| n.id == id) {
                 nodes.push(DeploymentNode {
-                    id,
+                    id: id.clone(),
                     label,
                     kind,
                     stereotype,
                     children: Vec::new(),
                 });
             }
+
+            // Add as child of current container (if inside one).
+            if let Some(parent_id) = stack.last().cloned() {
+                if let Some(parent) = nodes.iter_mut().find(|n| n.id == parent_id) {
+                    if !parent.children.contains(&id) {
+                        parent.children.push(id.clone());
+                    }
+                }
+            }
+
+            // If this line opens a block, push onto the stack.
+            if trimmed.contains('{') {
+                stack.push(id);
+            }
         } else if let Some(caps) = RE_CONN.captures(trimmed) {
             let from = caps[1].to_string();
             let to = caps[3].to_string();
             let label = caps.get(4).map(|m| m.as_str().trim().to_string());
 
-            // Auto-create nodes.
+            // Auto-create nodes for any unknown IDs in connections.
             for id in [&from, &to] {
                 if !nodes.iter().any(|n| n.id == *id) {
                     nodes.push(DeploymentNode {

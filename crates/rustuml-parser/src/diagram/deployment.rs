@@ -34,6 +34,9 @@ pub enum DeploymentNodeKind {
     Frame,
     Folder,
     Actor,
+    Queue,
+    Component,
+    Rectangle,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
