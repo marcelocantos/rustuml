@@ -151,7 +151,7 @@ fn detect_uml_subtype(lines: &[String]) -> UmlSubtype {
             }
             if is_deploy_exclusive_container || is_quoted_container {
                 // Extra boost: deployment-exclusive container overrides component score.
-                scores[7] += 15;
+                scores[7] += 20;
             }
         }
         // Component — weighted strongly so that a single `component` keyword
