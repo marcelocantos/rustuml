@@ -64,6 +64,14 @@ fn detect_uml_subtype(lines: &[String]) -> UmlSubtype {
         if trimmed.starts_with("usecase ") {
             scores[6] += 10;
         }
+        // :Actor: shorthand (but not activity :action; lines).
+        if trimmed.starts_with(':') && trimmed.ends_with(':') && !trimmed.ends_with(';') {
+            scores[6] += 5;
+        }
+        // (UseCase) shorthand on its own line.
+        if trimmed.starts_with('(') && trimmed.ends_with(')') {
+            scores[6] += 5;
+        }
         // State.
         if trimmed.starts_with("[*]")
             || trimmed.contains("--> [*]")

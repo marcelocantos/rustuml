@@ -505,6 +505,7 @@ mod tests {
                     label: name.to_string(),
                     kind: ParticipantKind::Participant,
                     order: Some(i),
+                    stereotype: None,
                 })
                 .collect(),
             events,
