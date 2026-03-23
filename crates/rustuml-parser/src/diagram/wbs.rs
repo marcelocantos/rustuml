@@ -16,6 +16,17 @@ pub struct WbsDiagram {
     pub nodes: Vec<WbsNode>,
 }
 
+/// Which side of the root a WBS branch grows from.
+///
+/// In PlantUML WBS, `*` / `**` / `***` prefix nodes are on the **right** side
+/// and `--` / `---` etc. prefix nodes are on the **left** side.  The root
+/// (depth 1) itself has no side — it belongs to both halves.
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Serialize, Deserialize)]
+pub enum WbsSide {
+    Right,
+    Left,
+}
+
 /// A single node in the WBS tree.
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct WbsNode {
@@ -23,6 +34,10 @@ pub struct WbsNode {
     pub label: String,
     /// Nesting depth (1 = root, 2 = first level child, …).
     pub depth: usize,
+    /// Which side of the root this node grows from.
+    /// For the root node (depth = 1) this is always `Right` (ignored by the
+    /// renderer; the root is centred between both subtrees).
+    pub side: WbsSide,
     /// Direct children of this node.
     pub children: Vec<WbsNode>,
 }

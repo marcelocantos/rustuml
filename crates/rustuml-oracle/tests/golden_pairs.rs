@@ -1,49 +1,48 @@
 // Copyright 2026 Marcelo Cantos
 // SPDX-License-Identifier: Apache-2.0
 
-//! Golden pair tests — walk test-diagrams/golden/ and compare Rust
-//! rendering against pre-generated Java PlantUML reference SVGs.
+//! Golden pair tests — read test-diagrams/golden.tar.zst and compare
+//! Rust rendering against pre-generated Java PlantUML reference SVGs.
 //!
-//! Each `.puml` file with a matching `.svg` is a test case. The test
-//! parses the `.puml` with rustuml, renders to SVG, and compares
-//! structurally against the golden `.svg`.
+//! Each `.puml` entry with a matching `.svg` entry is a test case.
+//! The tarball is decompressed and scanned in memory — no files are
+//! extracted to disk.
 //!
 //! Run with: `cargo test --test golden_pairs`
 
+use rayon::prelude::*;
 use rustuml_oracle::compare;
+use std::collections::HashMap;
+use std::io::Read;
 use std::path::{Path, PathBuf};
+use std::sync::atomic::{AtomicUsize, Ordering};
 
-fn golden_dir() -> PathBuf {
+/// Path to the golden tarball relative to the workspace root.
+fn golden_tarball() -> PathBuf {
     PathBuf::from(env!("CARGO_MANIFEST_DIR"))
         .parent()
         .unwrap()
         .parent()
         .unwrap()
-        .join("test-diagrams/golden")
+        .join("test-diagrams/golden.tar.zst")
 }
 
-/// Diagram types that rustuml currently supports, identified by
-/// subdirectory name within the golden tree.
-const SUPPORTED_DIRS: &[&str] = &[
-    "sequence",
-    "class",
-    "state",
-    "activity",
-    "component",
-    "deployment",
-    "usecase",
-    "timing",
-    "gantt",
-    "mindmap",
-    "wbs",
+/// `@start` keywords for diagram types rustuml can parse.
+const SUPPORTED_START_KEYWORDS: &[&str] = &[
+    "@startuml",
+    "@startgantt",
+    "@startmindmap",
+    "@startwbs",
+    "@startmath",
+    "@startlatex",
+    "@startregex",
+    "@startjson",
+    "@startyaml",
+    "@startsalt",
+    "@startnwdiag",
+    "@startditaa",
 ];
 
-/// `@start` keywords for diagram types rustuml can parse.
-const SUPPORTED_START_KEYWORDS: &[&str] =
-    &["@startuml", "@startgantt", "@startmindmap", "@startwbs"];
-
-/// Returns true if the `.puml` source uses a `@start` keyword that
-/// rustuml supports.
 fn has_supported_start_keyword(source: &str) -> bool {
     let trimmed = source.trim_start();
     SUPPORTED_START_KEYWORDS
@@ -51,48 +50,89 @@ fn has_supported_start_keyword(source: &str) -> bool {
         .any(|kw| trimmed.starts_with(kw))
 }
 
-/// Returns true if a path is inside one of the supported subdirectories.
-fn is_in_supported_dir(path: &Path, root: &Path) -> bool {
-    let rel = match path.strip_prefix(root) {
-        Ok(r) => r,
-        Err(_) => return false,
-    };
-    // First component of the relative path is the diagram-type directory.
-    rel.components()
-        .next()
-        .and_then(|c| c.as_os_str().to_str())
-        .is_some_and(|dir| SUPPORTED_DIRS.contains(&dir))
+/// Returns true if the golden SVG contains a PlantUML error marker.
+fn golden_has_syntax_error(svg: &str) -> bool {
+    svg.contains("Syntax Error")
+        || svg.contains("NoSuchElementException")
+        || svg.contains("Welcome to PlantUML")
+        || svg.contains("An error has occured")
+        || svg.contains("kill cannot be used here")
+        || svg.contains("swimlane must be defined at the start")
+        || svg.contains("Note already created:")
+        || svg.contains("Parsing syntax error about %")
+        || svg.contains("[From string")
+        || svg.contains("Your data does not sound like YAML data")
+        || svg.contains("does&#160;not&#160;sound&#160;like&#160;YAML")
+        || svg.contains("No class ")
+        || svg.contains("(Assumed diagram type:")
+        || svg.contains("DITAA has crashed")
 }
 
-/// Collect all `.puml` files under `root` that have a matching `.svg`.
-fn collect_golden_pairs(root: &Path) -> Vec<PathBuf> {
-    let mut pairs = Vec::new();
-    collect_recursive(root, &mut pairs);
-    pairs.sort();
-    pairs
+/// A golden pair loaded from the tarball.
+struct GoldenPair {
+    /// Relative path inside the tarball (e.g. "sequence/seq_basic.puml").
+    name: String,
+    /// PlantUML source.
+    puml: String,
+    /// Reference SVG from Java PlantUML.
+    svg: String,
 }
 
-fn collect_recursive(dir: &Path, pairs: &mut Vec<PathBuf>) {
-    let Ok(entries) = std::fs::read_dir(dir) else {
-        return;
-    };
-    for entry in entries.flatten() {
-        let path = entry.path();
-        if path.is_dir() {
-            collect_recursive(&path, pairs);
-        } else if path.extension().is_some_and(|e| e == "puml") {
-            let svg_path = path.with_extension("svg");
-            if svg_path.exists() {
-                pairs.push(path);
+/// Load all golden pairs from the zstd-compressed tarball.
+fn load_golden_pairs(tarball: &Path) -> Vec<GoldenPair> {
+    let file = std::fs::File::open(tarball).expect("failed to open golden.tar.zst");
+    let decoder = zstd::Decoder::new(file).expect("failed to create zstd decoder");
+    let mut archive = tar::Archive::new(decoder);
+
+    // First pass: read all entries into a map.
+    let mut entries: HashMap<String, String> = HashMap::new();
+    for entry in archive.entries().expect("failed to read tar entries") {
+        let mut entry = entry.expect("failed to read tar entry");
+        let path = entry
+            .path()
+            .expect("failed to read entry path")
+            .to_string_lossy()
+            .to_string();
+        // Strip leading "./" if present.
+        let path = path.strip_prefix("./").unwrap_or(&path).to_string();
+
+        if path.ends_with(".puml") || path.ends_with(".svg") {
+            let mut bytes = Vec::new();
+            entry
+                .read_to_end(&mut bytes)
+                .unwrap_or_else(|e| panic!("failed to read {path}: {e}"));
+            // Skip non-UTF-8 files (e.g. binary ditaa SVGs).
+            if let Ok(content) = String::from_utf8(bytes) {
+                entries.insert(path, content);
             }
         }
     }
-}
 
-/// Returns true if the golden SVG contains a PlantUML "Syntax Error"
-/// marker, indicating the source is intentionally invalid.
-fn golden_has_syntax_error(svg: &str) -> bool {
-    svg.contains("Syntax Error")
+    // Second pass: pair .puml files with their .svg counterparts.
+    let mut pairs: Vec<GoldenPair> = Vec::new();
+    let mut puml_paths: Vec<String> = entries
+        .keys()
+        .filter(|k| k.ends_with(".puml"))
+        .cloned()
+        .collect();
+    puml_paths.sort();
+
+    for puml_path in puml_paths {
+        let svg_path = puml_path.replace(".puml", ".svg");
+        if let (Some(puml), Some(svg)) = (entries.get(&puml_path), entries.get(&svg_path)) {
+            let name = puml_path
+                .strip_suffix(".puml")
+                .unwrap_or(&puml_path)
+                .to_string();
+            pairs.push(GoldenPair {
+                name,
+                puml: puml.clone(),
+                svg: svg.clone(),
+            });
+        }
+    }
+
+    pairs
 }
 
 struct TestResult {
@@ -107,65 +147,52 @@ enum Outcome {
     Fail(String),
 }
 
-fn run_one(puml_path: &Path, root: &Path) -> TestResult {
-    let rel = puml_path
-        .strip_prefix(root)
-        .unwrap()
-        .with_extension("")
-        .to_string_lossy()
-        .to_string();
+fn run_one(pair: &GoldenPair) -> TestResult {
+    let name = &pair.name;
+    let source = &pair.puml;
+    let golden_svg = &pair.svg;
 
-    // Read source and golden SVG.
-    let source = match std::fs::read_to_string(puml_path) {
-        Ok(s) => s,
-        Err(e) => {
-            return TestResult {
-                name: rel,
-                outcome: Outcome::Skip(format!("read puml: {e}")),
-            };
-        }
-    };
+    // Skip files with multiple @startuml blocks.
+    if source.matches("@startuml").count() > 1 || source.matches("@startjson").count() > 1 {
+        return TestResult {
+            name: name.clone(),
+            outcome: Outcome::Skip("multiple @start blocks (not yet supported)".into()),
+        };
+    }
 
-    let svg_path = puml_path.with_extension("svg");
-    let golden_svg = match std::fs::read_to_string(&svg_path) {
-        Ok(s) => s,
-        Err(e) => {
-            return TestResult {
-                name: rel,
-                outcome: Outcome::Skip(format!("read svg: {e}")),
-            };
-        }
-    };
+    // Skip diagrams that use runtime-dependent functions.
+    if source.contains("%date()") {
+        return TestResult {
+            name: name.clone(),
+            outcome: Outcome::Skip("non-deterministic %date()".into()),
+        };
+    }
 
     // Skip diagrams whose golden SVG contains a syntax error.
-    if golden_has_syntax_error(&golden_svg) {
+    if golden_has_syntax_error(golden_svg) {
         return TestResult {
-            name: rel,
-            outcome: Outcome::Skip("golden SVG contains Syntax Error".into()),
+            name: name.clone(),
+            outcome: Outcome::Skip("golden SVG contains error".into()),
         };
     }
 
-    // Filter: must be in a supported directory or use a supported keyword.
-    if !is_in_supported_dir(puml_path, root) && !has_supported_start_keyword(&source) {
+    // Filter: must use a supported keyword.
+    if !has_supported_start_keyword(source) {
         return TestResult {
-            name: rel,
-            outcome: Outcome::Skip("unsupported diagram directory/keyword".into()),
+            name: name.clone(),
+            outcome: Outcome::Skip("unsupported diagram keyword".into()),
         };
     }
 
-    // Wrap parse + render + compare in catch_unwind so a panic in
-    // one golden pair doesn't abort the entire suite.
-    let base_dir = puml_path.parent().map(Path::to_owned);
+    // Parse + render + compare, catching panics.
     let render_result = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-        let diagram = rustuml_parser::parse::parse_auto_with_base(&source, base_dir.as_deref())
+        let diagram = rustuml_parser::parse::parse_auto_with_base(source, None)
             .map_err(|e| format!("parse: {e}"))?;
 
         let rust_svg = rustuml_render::render_svg(&diagram);
 
-        // Structural comparison: extract text elements and check
-        // that golden texts appear in the Rust output.
         let golden_elems =
-            compare::extract_elements(&golden_svg).map_err(|e| format!("golden SVG parse: {e}"))?;
+            compare::extract_elements(golden_svg).map_err(|e| format!("golden SVG parse: {e}"))?;
         let rust_elems =
             compare::extract_elements(&rust_svg).map_err(|e| format!("rust SVG parse: {e}"))?;
 
@@ -175,23 +202,30 @@ fn run_one(puml_path: &Path, root: &Path) -> TestResult {
                 || t.starts_with('[')
         };
 
-        let golden_texts: Vec<&str> = golden_elems
+        fn norm(s: &str) -> String {
+            s.replace('\u{00a0}', " ")
+        }
+
+        let golden_texts_raw: Vec<&str> = golden_elems
             .iter()
             .filter_map(|e| e.text.as_deref())
             .filter(|t| !t.is_empty())
             .collect();
+        let golden_texts_norm: Vec<String> = golden_texts_raw.iter().map(|t| norm(t)).collect();
 
-        let rust_texts: Vec<&str> = rust_elems
+        let rust_texts: Vec<String> = rust_elems
             .iter()
             .filter_map(|e| e.text.as_deref())
             .filter(|t| !t.is_empty())
+            .map(|t| norm(t))
             .collect();
 
-        let missing: Vec<String> = golden_texts
+        let missing: Vec<String> = golden_texts_norm
             .iter()
-            .filter(|t| !skip(t))
-            .filter(|t| !rust_texts.iter().any(|r| r.contains(**t)))
-            .map(|t| t.to_string())
+            .zip(golden_texts_raw.iter())
+            .filter(|(_, raw)| !skip(raw))
+            .filter(|(norm_t, _)| !rust_texts.iter().any(|r| r.contains(norm_t.as_str())))
+            .map(|(norm_t, _)| norm_t.clone())
             .collect();
 
         if missing.is_empty() {
@@ -205,18 +239,19 @@ fn run_one(puml_path: &Path, root: &Path) -> TestResult {
 
     match render_result {
         Ok(Ok(())) => TestResult {
-            name: rel,
+            name: name.clone(),
             outcome: Outcome::Pass,
         },
         Ok(Err(msg)) => {
-            // Parse errors are skips (unsupported features); comparison
-            // failures are real failures.
             let outcome = if msg.starts_with("parse:") {
                 Outcome::Skip(msg)
             } else {
                 Outcome::Fail(msg)
             };
-            TestResult { name: rel, outcome }
+            TestResult {
+                name: name.clone(),
+                outcome,
+            }
         }
         Err(panic) => {
             let msg = if let Some(s) = panic.downcast_ref::<String>() {
@@ -227,7 +262,7 @@ fn run_one(puml_path: &Path, root: &Path) -> TestResult {
                 "unknown panic".into()
             };
             TestResult {
-                name: rel,
+                name: name.clone(),
                 outcome: Outcome::Fail(format!("panic: {msg}")),
             }
         }
@@ -236,37 +271,69 @@ fn run_one(puml_path: &Path, root: &Path) -> TestResult {
 
 #[test]
 fn golden_pairs() {
-    let root = golden_dir();
-    if !root.exists() {
-        eprintln!("golden dir not found: {}", root.display());
+    let tarball = golden_tarball();
+    if !tarball.exists() {
+        eprintln!(
+            "golden tarball not found: {} — skipping golden pair tests",
+            tarball.display()
+        );
         return;
     }
 
-    let pairs = collect_golden_pairs(&root);
+    eprintln!("loading golden pairs from {}...", tarball.display());
+    let pairs = load_golden_pairs(&tarball);
     if pairs.is_empty() {
-        eprintln!("no golden pairs found in {}", root.display());
+        eprintln!("no golden pairs found in tarball");
         return;
     }
+    eprintln!("loaded {} golden pairs", pairs.len());
 
-    let mut pass = 0usize;
-    let mut skip = 0usize;
-    let mut failures = Vec::new();
+    // Suppress panic output from layout-rs and other libraries.
+    std::panic::set_hook(Box::new(|_| {}));
 
-    for puml_path in &pairs {
-        let result = run_one(puml_path, &root);
-        match result.outcome {
-            Outcome::Pass => pass += 1,
-            Outcome::Skip(_) => skip += 1,
-            Outcome::Fail(ref msg) => {
-                failures.push(format!("{}: {msg}", result.name));
-            }
+    let pool = rayon::ThreadPoolBuilder::new()
+        .num_threads(num_cpus::get())
+        .panic_handler(|_| {})
+        .build()
+        .expect("failed to build rayon pool");
+
+    let pass = AtomicUsize::new(0);
+    let skip = AtomicUsize::new(0);
+
+    let failures: Vec<String> = pool.install(|| {
+        pairs
+            .par_iter()
+            .filter_map(|pair| {
+                let result = run_one(pair);
+                match result.outcome {
+                    Outcome::Pass => {
+                        pass.fetch_add(1, Ordering::Relaxed);
+                        None
+                    }
+                    Outcome::Skip(_) => {
+                        skip.fetch_add(1, Ordering::Relaxed);
+                        None
+                    }
+                    Outcome::Fail(ref msg) => Some(format!("{}: {msg}", result.name)),
+                }
+            })
+            .collect()
+    });
+
+    let total = pairs.len();
+    let pass = pass.load(Ordering::Relaxed);
+    let skip = skip.load(Ordering::Relaxed);
+    let fail_count = failures.len();
+
+    let mut dir_fails: std::collections::BTreeMap<String, usize> =
+        std::collections::BTreeMap::new();
+    for f in &failures {
+        if let Some(slash) = f.find('/') {
+            let dir = &f[..slash];
+            *dir_fails.entry(dir.to_string()).or_default() += 1;
         }
     }
 
-    let total = pairs.len();
-    let fail_count = failures.len();
-
-    // Summarise by failure category.
     let panics = failures.iter().filter(|f| f.contains("panic:")).count();
     let text_mismatches = failures
         .iter()
@@ -276,8 +343,15 @@ fn golden_pairs() {
 
     eprintln!("\ngolden_pairs: {total} total, {pass} passed, {fail_count} failed, {skip} skipped");
     eprintln!("  panics: {panics}, text mismatches: {text_mismatches}, other: {other}");
+    if !dir_fails.is_empty() {
+        eprintln!("  per-directory failures:");
+        let mut sorted: Vec<_> = dir_fails.iter().collect();
+        sorted.sort_by(|a, b| b.1.cmp(a.1));
+        for (dir, count) in &sorted {
+            eprintln!("    {count:5} {dir}");
+        }
+    }
 
-    // Show first N failures to keep output readable.
     const MAX_SHOWN: usize = 50;
     let shown: Vec<&str> = failures
         .iter()

@@ -6,6 +6,28 @@
 use super::DiagramMeta;
 use serde::{Deserialize, Serialize};
 
+/// Position of a note relative to its target entity.
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Serialize, Deserialize)]
+pub enum NotePosition {
+    Top,
+    Bottom,
+    Left,
+    Right,
+}
+
+/// A note attached to an entity or floating.
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct Note {
+    /// Note content lines (may contain Creole/HTML markup).
+    pub lines: Vec<String>,
+    /// Entity this note is attached to, if any.
+    pub target: Option<String>,
+    /// Position relative to target entity.
+    pub position: Option<NotePosition>,
+    /// Named note alias (for `note "..." as N`).
+    pub alias: Option<String>,
+}
+
 /// A complete class diagram.
 #[derive(Debug, Serialize, Deserialize)]
 pub struct ClassDiagram {
@@ -13,6 +35,7 @@ pub struct ClassDiagram {
     pub entities: Vec<ClassEntity>,
     pub relationships: Vec<Relationship>,
     pub packages: Vec<Package>,
+    pub notes: Vec<Note>,
 }
 
 /// A class, interface, enum, or other entity.
@@ -46,6 +69,9 @@ pub struct Member {
     pub is_static: bool,
     pub is_abstract: bool,
     pub kind: MemberKind,
+    /// Verbatim display text (after stripping visibility prefix and modifiers).
+    /// Preserves original colon spacing, e.g. "field: String" or "field : String".
+    pub display_text: String,
 }
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Default, Serialize, Deserialize)]
@@ -62,6 +88,8 @@ pub enum Visibility {
 pub enum MemberKind {
     Field,
     Method,
+    /// A labeled separator line within a class body (e.g. `-- Section --`, `== Title ==`).
+    Separator,
 }
 
 /// A relationship (association, inheritance, etc.) between entities.
@@ -85,9 +113,33 @@ pub enum RelationshipKind {
     Dependency,
 }
 
-/// A package grouping entities.
+/// Container type for grouping entities in a class diagram.
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Default, Serialize, Deserialize)]
+pub enum PackageKind {
+    #[default]
+    Package,
+    Namespace,
+    Cloud,
+    Database,
+    Folder,
+    Frame,
+    Rectangle,
+    Node,
+}
+
+/// A package/namespace/container grouping entities.
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct Package {
     pub name: String,
+    pub kind: PackageKind,
+    /// Optional background color (CSS name or hex without leading `#`).
+    pub color: Option<String>,
     pub entities: Vec<String>,
+    /// Stereotypes applied to this package (e.g. `<<Application>>`).
+    #[serde(default)]
+    pub stereotypes: Vec<String>,
+    /// Display label override (used for auto-created namespace packages where `name`
+    /// is the full qualified path but we only want to show the short last segment).
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub display_name: Option<String>,
 }

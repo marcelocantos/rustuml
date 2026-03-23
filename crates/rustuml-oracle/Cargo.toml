@@ -13,5 +13,9 @@ ureq = "3"
 
 [dev-dependencies]
 proptest = "1"
+rayon = "1"
+num_cpus = "1"
+tar = "0.4"
+zstd = "0.13"
 rustuml-parser = { path = "../rustuml-parser" }
 rustuml-render = { path = "../rustuml-render" }
