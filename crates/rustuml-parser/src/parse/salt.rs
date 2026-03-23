@@ -147,6 +147,42 @@ fn parse_block(lines: &[String], pos: usize) -> Result<(SaltBlock, usize), Parse
             continue;
         }
 
+        // Regular widget line — check for an inline block opener of the form
+        // `cell | {BlockType`.  This handles patterns like:
+        //   Description: | {SI
+        //     content line
+        //   }
+        // where the block is embedded as a cell value rather than on its own
+        // line.
+        if let Some((prefix, block_header)) = find_inline_block(line) {
+            // Parse cells that appear before the `|` that introduces the block.
+            let before_cells: Vec<SaltWidget> = prefix
+                .split('|')
+                .flat_map(|p| parse_row_part(p.trim()))
+                .collect();
+
+            // Build a synthetic slice: `block_header` + the remaining original
+            // lines starting at pos + 1, so that parse_block can consume the
+            // block body and its closing `}` normally.
+            let synthetic: Vec<String> = std::iter::once(block_header.to_string())
+                .chain(lines[pos + 1..].iter().cloned())
+                .collect();
+            let (sub_block, sub_consumed) = parse_block(&synthetic, 0)?;
+
+            // `synthetic[0]` corresponds to `lines[pos]` (same line, just
+            // the block-header portion), and `synthetic[k]` corresponds to
+            // `lines[pos + k]` for k > 0.  So consuming `sub_consumed` lines
+            // from the synthetic slice advances `pos` by `sub_consumed`.
+            pos = pos + sub_consumed;
+
+            let mut cells = current_cells.drain(..).collect::<Vec<_>>();
+            cells.extend(before_cells);
+            cells.push(SaltWidget::Block(Box::new(sub_block)));
+            rows.push(SaltRow { cells });
+            row_in_progress = false;
+            continue;
+        }
+
         // Regular widget line.
         if row_in_progress {
             // A sub-block was the first cell; now regular widgets follow.
@@ -279,6 +315,31 @@ fn parse_row_part(part: &str) -> Vec<SaltWidget> {
 
     // Default: plain label.
     vec![SaltWidget::Label(trimmed.to_string())]
+}
+
+/// Check whether a trimmed line contains an inline block opener of the form
+/// `... | {Modifier`.  If so, returns `(prefix, block_header)` where
+/// `prefix` is everything before the `|` that starts the block, and
+/// `block_header` is the `{Modifier` token (possibly followed by content).
+///
+/// Only the *last* `| {` occurrence is considered, so that a row like
+/// `A | B | {SI` is handled as `prefix = "A | B"`, `block_header = "{SI"`.
+fn find_inline_block(line: &str) -> Option<(&str, &str)> {
+    // Find the last '|' after which the trimmed remainder starts with '{'.
+    let bytes = line.as_bytes();
+    let mut last_pipe = None;
+    for (i, &b) in bytes.iter().enumerate() {
+        if b == b'|' {
+            let after = line[i + 1..].trim_start();
+            if after.starts_with('{') {
+                last_pipe = Some(i);
+            }
+        }
+    }
+    let pipe_pos = last_pipe?;
+    let prefix = line[..pipe_pos].trim_end();
+    let block_header = line[pipe_pos + 1..].trim_start();
+    Some((prefix, block_header))
 }
 
 /// Detect if a trimmed line is a separator; return the kind if so.

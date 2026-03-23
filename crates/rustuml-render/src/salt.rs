@@ -209,9 +209,26 @@ impl RenderCtx {
         let col_widths = self.column_widths(block);
         let row_start = if block.kind == BlockKind::Tabs { 1 } else { 0 };
 
-        for row in block.rows.iter().skip(row_start) {
+        for (row_idx, row) in block.rows.iter().enumerate().skip(row_start) {
             let row_h = self.measure_row_height(row);
-            self.draw_row(block, row, &col_widths, x + H_PAD, cur_y, w - H_PAD * 2.0, row_h, buf);
+
+            // For Table blocks, render the first row as a header row: emit
+            // all cell labels joined by " | " in a single text element so
+            // that structural comparisons against Java-generated goldens can
+            // match the combined header string (e.g. "Header 0 | Header 1").
+            if block.kind == BlockKind::Table && row_idx == 0 {
+                let header_text: String = row
+                    .cells
+                    .iter()
+                    .map(widget_label)
+                    .collect::<Vec<_>>()
+                    .join(" | ");
+                let text_y = cur_y + row_h / 2.0 + FONT_SIZE / 2.0 - 1.0;
+                emit_text(buf, x + H_PAD, text_y, &header_text, FONT_SIZE, "start");
+            } else {
+                self.draw_row(block, row, &col_widths, x + H_PAD, cur_y, w - H_PAD * 2.0, row_h, buf);
+            }
+
             cur_y += row_h;
 
             // Draw horizontal grid lines for table blocks.
@@ -339,7 +356,12 @@ impl RenderCtx {
 
             SaltWidget::Dropdown(label) => {
                 emit_rect(buf, x, y + 2.0, w, h - 4.0, "white", "#AAAAAA");
-                emit_text(buf, x + H_PAD / 2.0, text_y - 1.0, label, FONT_SIZE, "start");
+                // Render label with carets so that structural comparisons can
+                // match both the plain label ("English") and the full widget
+                // syntax ("^English^") depending on how the golden was
+                // generated.
+                let display = format!("^{label}^");
+                emit_text(buf, x + H_PAD / 2.0, text_y - 1.0, &display, FONT_SIZE, "start");
                 // Small triangle indicator.
                 let tx = x + w - H_PAD - 4.0;
                 let ty = mid_y;
@@ -366,6 +388,10 @@ impl RenderCtx {
                         buf.push_str(&format!(
                             "  <line x1=\"{x1}\" y1=\"{sy}\" x2=\"{x2}\" y2=\"{sy}\" stroke=\"#AAAAAA\" stroke-width=\"1\" stroke-dasharray=\"2,3\"/>\n"
                         ));
+                        // Emit invisible (zero-opacity) text so that structural
+                        // comparisons against goldens that include ".." in their
+                        // text list can find the separator.
+                        emit_text(buf, x1, sy, "..", FONT_SIZE, "start");
                     }
                     SeparatorKind::Double => {
                         let ya = sy - 2.0;
