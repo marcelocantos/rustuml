@@ -21,6 +21,8 @@ const FONT_SIZE: f64 = 13.0;
 const SMALL_FONT: f64 = 11.0;
 const PADDING: f64 = 8.0;
 const MARGIN: f64 = 30.0;
+const TITLE_FONT_SIZE: f64 = 14.0;
+const TITLE_HEIGHT: f64 = TITLE_FONT_SIZE + 10.0;
 
 /// Render an object diagram to SVG.
 pub fn render(diagram: &ObjectDiagram, theme: &Theme) -> String {
@@ -71,16 +73,20 @@ fn render_with_positions(
         .zip(&dims)
         .map(|(p, d)| p.y + d.height)
         .fold(0.0_f64, f64::max);
+    let title_h = if diagram.meta.title.is_some() { TITLE_HEIGHT } else { 0.0 };
     let total_width = max_x + MARGIN * 2.0;
-    let total_height = max_y + MARGIN * 2.0;
+    let total_height = max_y + MARGIN * 2.0 + title_h;
 
     let mut svg = SvgBuilder::new(total_width, total_height);
+    if let Some(title) = &diagram.meta.title {
+        svg.text(total_width / 2.0, TITLE_HEIGHT - 4.0, title, "middle", TITLE_FONT_SIZE);
+    }
 
     let mut obj_positions: Vec<(f64, f64, f64, f64)> = Vec::new();
     for (i, (obj, dim)) in diagram.objects.iter().zip(&dims).enumerate() {
         let pos = &positions[i];
         let x = pos.x + MARGIN;
-        let y = pos.y + MARGIN;
+        let y = pos.y + MARGIN + title_h;
         render_obj_box(&mut svg, obj, x, y, dim, cs);
         obj_positions.push((x, y, dim.width, dim.height));
     }
@@ -106,17 +112,21 @@ fn render_grid(diagram: &ObjectDiagram, cs: &crate::style::ClassStyle) -> String
         row_heights[row] = row_heights[row].max(dim.height);
     }
 
+    let title_h = if diagram.meta.title.is_some() { TITLE_HEIGHT } else { 0.0 };
     let total_width = col_widths.iter().sum::<f64>() + MARGIN * (cols as f64 + 1.0);
-    let total_height = row_heights.iter().sum::<f64>() + MARGIN * (row_heights.len() as f64 + 1.0);
+    let total_height = row_heights.iter().sum::<f64>() + MARGIN * (row_heights.len() as f64 + 1.0) + title_h;
 
     let mut svg = SvgBuilder::new(total_width, total_height);
+    if let Some(title) = &diagram.meta.title {
+        svg.text(total_width / 2.0, TITLE_HEIGHT - 4.0, title, "middle", TITLE_FONT_SIZE);
+    }
     let mut obj_positions: Vec<(f64, f64, f64, f64)> = Vec::new();
 
     for (i, (obj, dim)) in diagram.objects.iter().zip(&dims).enumerate() {
         let col = i % cols;
         let row = i / cols;
         let x = MARGIN + col_widths[..col].iter().sum::<f64>() + MARGIN * col as f64;
-        let y = MARGIN + row_heights[..row].iter().sum::<f64>() + MARGIN * row as f64;
+        let y = title_h + MARGIN + row_heights[..row].iter().sum::<f64>() + MARGIN * row as f64;
         render_obj_box(&mut svg, obj, x, y, dim, cs);
         obj_positions.push((x, y, dim.width, dim.height));
     }

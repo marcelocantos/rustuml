@@ -41,8 +41,27 @@ pub enum ActivityStep {
     Partition(PartitionBlock),
     EndPartition,
     Note(NoteBlock),
+    DeprecatedColorAction(DeprecatedColorAction),
+    Arrow(ArrowStep),
+    Backward(String),
+    Break,
     Detach,
     Kill,
+}
+
+/// Deprecated `#color:text;` syntax -- renders a warning banner.
+#[derive(Debug, Serialize, Deserialize)]
+pub struct DeprecatedColorAction {
+    pub color: String,
+    pub text: String,
+}
+
+/// An explicit arrow step (`->`, `-->`, `-[#color]->`).
+#[derive(Debug, Serialize, Deserialize)]
+pub struct ArrowStep {
+    pub dashed: bool,
+    pub color: Option<String>,
+    pub label: Option<String>,
 }
 
 #[derive(Debug, Serialize, Deserialize)]

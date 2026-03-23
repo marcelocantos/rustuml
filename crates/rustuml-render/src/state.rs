@@ -22,6 +22,8 @@ const V_GAP: f64 = 60.0;
 const H_GAP: f64 = 40.0;
 const FONT_SIZE: f64 = 13.0;
 const SMALL_FONT: f64 = 11.0;
+const TITLE_FONT_SIZE: f64 = 14.0;
+const TITLE_HEIGHT: f64 = TITLE_FONT_SIZE + 10.0;
 
 /// Compute the total height of a state box given its description line count.
 fn state_box_height(desc_count: usize) -> f64 {
@@ -68,11 +70,12 @@ pub fn render(diagram: &StateDiagram, theme: &Theme) -> String {
 
     let total_width = MARGIN * 2.0 + STATE_WIDTH + H_GAP * 2.0;
     let cx = total_width / 2.0;
+    let title_h = if diagram.meta.title.is_some() { TITLE_HEIGHT } else { 0.0 };
 
     // Compute per-node heights and cumulative vertical positions.
     // Entry: (id, center_x, center_y, box_height)
     let mut state_positions: Vec<(String, f64, f64, f64)> = Vec::new();
-    let mut y_cursor = MARGIN;
+    let mut y_cursor = title_h + MARGIN;
     for id in &state_ids {
         let state_def = diagram.states.iter().find(|s| s.id == *id);
         let h = node_height(id, state_def);
@@ -83,6 +86,9 @@ pub fn render(diagram: &StateDiagram, theme: &Theme) -> String {
     let total_height = y_cursor - V_GAP + MARGIN;
 
     let mut svg = SvgBuilder::new(total_width, total_height);
+    if let Some(title) = &diagram.meta.title {
+        svg.text(total_width / 2.0, TITLE_HEIGHT - 4.0, title, "middle", TITLE_FONT_SIZE);
+    }
 
     let pos_of = |id: &str| -> (f64, f64, f64) {
         state_positions

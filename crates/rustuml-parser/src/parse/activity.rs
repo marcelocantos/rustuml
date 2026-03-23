@@ -116,6 +116,7 @@ impl ActivityParser {
                     && !self.try_case(line)
                     && !self.try_swimlane(line)
                     && !self.try_partition(line)
+                    && !self.try_group(line)
                     && !self.try_note(line)
                 {
                     // Silently ignore unknown lines.
@@ -155,11 +156,21 @@ impl ActivityParser {
     }
 
     fn try_action(&mut self, line: &str) -> bool {
-        static RE: LazyLock<Regex> = LazyLock::new(|| Regex::new(r"^:(.+);$").unwrap());
+        // Match actions with various endings: ; | ] / > < \ (all PlantUML action terminators)
+        // The ending char (except ;) is included in the display text as per PlantUML behavior.
+        static RE: LazyLock<Regex> = LazyLock::new(|| {
+            Regex::new(r"^:(.+?)([;|\]/>\\<])$").unwrap()
+        });
 
         if let Some(caps) = RE.captures(line) {
-            self.steps
-                .push(ActivityStep::Action(caps[1].trim().to_string()));
+            let text = caps[1].trim().to_string();
+            let ending = &caps[2];
+            let display = if ending == ";" {
+                text
+            } else {
+                format!("{}{}", text, ending)
+            };
+            self.steps.push(ActivityStep::Action(display));
             true
         } else {
             false
@@ -194,13 +205,15 @@ impl ActivityParser {
     }
 
     fn try_arrow(&mut self, line: &str) -> bool {
+        // Matches: ->, -->, -[#color]->, -[#color]-->, optionally followed by label;
+        // Group 1: full arrow, Group 2: color (optional), Group 3: extra dash (-> vs -->),
+        // Group 4: label (optional)
         static RE: LazyLock<Regex> = LazyLock::new(|| {
-            Regex::new(r"^(-(?:\[([^\]]+)\])?-?->)\s*(.+)?$").unwrap()
+            Regex::new(r"^(-(?:\[([^\]]+)\])?(-?)>)\s*(.+)?$").unwrap()
         });
 
         if let Some(caps) = RE.captures(line) {
-            let arrow_str = &caps[1];
-            let dashed = arrow_str.contains("-->");
+            let dashed = &caps[3] == "-";
             let color = caps.get(2).map(|m| {
                 let s = m.as_str().trim();
                 if s.starts_with('#') && s.len() == 7 && s[1..].chars().all(|c| c.is_ascii_hexdigit()) {
@@ -209,7 +222,7 @@ impl ActivityParser {
                     s.to_string()
                 }
             });
-            let label = caps.get(3).map(|m| {
+            let label = caps.get(4).map(|m| {
                 let s = m.as_str().trim();
                 s.trim_end_matches(';').trim().to_string()
             }).filter(|s| !s.is_empty());
@@ -399,13 +412,37 @@ impl ActivityParser {
         }
     }
 
+    fn try_group(&mut self, line: &str) -> bool {
+        // `group [#color] "Name" {` — treated as a partition.
+        static RE: LazyLock<Regex> = LazyLock::new(|| {
+            Regex::new(
+                r#"^group\s+(?:(#[A-Za-z0-9]+)\s+)?(?:"([^"]+)"|([A-Za-z_]\w*))\s*\{?"#,
+            )
+            .unwrap()
+        });
+
+        if let Some(caps) = RE.captures(line) {
+            let color = caps.get(1).map(|m| m.as_str().to_string());
+            let name = caps
+                .get(2)
+                .or(caps.get(3))
+                .map(|m| m.as_str().to_string())
+                .unwrap_or_default();
+            self.steps
+                .push(ActivityStep::Partition(PartitionBlock { name, color }));
+            true
+        } else {
+            false
+        }
+    }
+
     fn try_note(&mut self, line: &str) -> bool {
         static RE: LazyLock<Regex> = LazyLock::new(|| {
-            Regex::new(r"^note\s+(left|right)(?:\s+(#[0-9A-Fa-f]{6}|#\w+))?(?:\s*:\s*(.+))?$")
+            Regex::new(r"^(?:floating\s+)?note\s+(left|right)(?:\s+(#[0-9A-Fa-f]{6}|#\w+))?(?:\s*:\s*(.+))?$")
                 .unwrap()
         });
 
-        if !line.starts_with("note ") {
+        if !line.starts_with("note ") && !line.starts_with("floating note ") {
             return false;
         }
 

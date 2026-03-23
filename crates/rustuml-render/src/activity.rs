@@ -3,7 +3,7 @@
 
 //! Activity diagram SVG renderer.
 
-use rustuml_parser::diagram::activity::{ActivityDiagram, ActivityStep, IfBlock, NotePosition};
+use rustuml_parser::diagram::activity::{ActivityDiagram, ActivityStep, NotePosition};
 
 use crate::style::Theme;
 use crate::svg::SvgBuilder;
@@ -18,6 +18,9 @@ const V_GAP: f64 = 40.0;
 const MARGIN: f64 = 30.0;
 const FONT_SIZE: f64 = 12.0;
 const SMALL_FONT: f64 = 10.0;
+const TITLE_FONT_SIZE: f64 = 14.0;
+const TITLE_HEIGHT: f64 = 30.0;
+const DEPRECATED_HEIGHT: f64 = 20.0;
 
 /// Render an activity diagram to SVG.
 pub fn render(diagram: &ActivityDiagram, theme: &Theme) -> String {
@@ -27,26 +30,33 @@ pub fn render(diagram: &ActivityDiagram, theme: &Theme) -> String {
             .to_string();
     }
 
-    // Calculate dimensions.
     let n = diagram.steps.len();
-    let total_height = MARGIN * 2.0 + n as f64 * (ACTION_HEIGHT + V_GAP);
+    let title_extra = if diagram.meta.title.is_some() { TITLE_HEIGHT } else { 0.0 };
+    let deprecated_count = diagram.steps.iter().filter(|s| matches!(s, ActivityStep::DeprecatedColorAction(_))).count();
+    let total_height = MARGIN * 2.0
+        + title_extra
+        + n as f64 * (ACTION_HEIGHT + V_GAP)
+        + deprecated_count as f64 * DEPRECATED_HEIGHT;
     let total_width = MARGIN * 2.0 + ACTION_WIDTH + 100.0;
     let cx = total_width / 2.0;
 
     let mut svg = SvgBuilder::new(total_width, total_height);
     let mut y = MARGIN;
 
+    if let Some(ref title) = diagram.meta.title {
+        svg.text(cx, y + TITLE_FONT_SIZE, title, "middle", TITLE_FONT_SIZE);
+        y += TITLE_HEIGHT;
+    }
+
     for step in &diagram.steps {
         match step {
             ActivityStep::Start => {
                 svg.circle(cx, y, CIRCLE_R, &as_.start_color, &as_.start_color);
                 y += CIRCLE_R * 2.0 + V_GAP / 2.0;
-                // Connector line.
                 svg.line_segment(cx, y - V_GAP / 2.0, cx, y, "#000", false);
             }
             ActivityStep::Stop | ActivityStep::End => {
                 svg.line_segment(cx, y - V_GAP / 2.0, cx, y, "#000", false);
-                // Bullseye: outer circle + inner filled circle.
                 svg.circle(cx, y + CIRCLE_R, CIRCLE_R, "none", &as_.stop_color);
                 svg.circle(
                     cx,
@@ -58,9 +68,7 @@ pub fn render(diagram: &ActivityDiagram, theme: &Theme) -> String {
                 y += CIRCLE_R * 2.0 + V_GAP / 2.0;
             }
             ActivityStep::Action(text) => {
-                // Connector line from previous.
                 svg.line_segment(cx, y - V_GAP / 2.0, cx, y, "#000", false);
-                // Rounded action box.
                 svg.rounded_rect(
                     cx - ACTION_WIDTH / 2.0,
                     y,
@@ -73,8 +81,85 @@ pub fn render(diagram: &ActivityDiagram, theme: &Theme) -> String {
                 svg.text(cx, y + ACTION_HEIGHT / 2.0 + 4.0, text, "middle", FONT_SIZE);
                 y += ACTION_HEIGHT + V_GAP / 2.0;
             }
+            ActivityStep::DeprecatedColorAction(dca) => {
+                svg.line_segment(cx, y - V_GAP / 2.0, cx, y, "#000", false);
+                svg.rect(
+                    cx - ACTION_WIDTH / 2.0,
+                    y,
+                    ACTION_WIDTH,
+                    DEPRECATED_HEIGHT,
+                    "#FFFF88",
+                    "#888",
+                );
+                let warning = format!(
+                    "This\u{a0}syntax\u{a0}is\u{a0}deprecated,\u{a0}you\u{a0}must\u{a0}add\u{a0}<<{}>>\u{a0}at\u{a0}the\u{a0}end\u{a0}of\u{a0}the\u{a0}line,\u{a0}after\u{a0}the\u{a0}';'",
+                    dca.color
+                );
+                svg.monospace_text(cx, y + DEPRECATED_HEIGHT / 2.0 + 4.0, &warning, "middle", SMALL_FONT);
+                y += DEPRECATED_HEIGHT;
+                svg.rounded_rect(
+                    cx - ACTION_WIDTH / 2.0,
+                    y,
+                    ACTION_WIDTH,
+                    ACTION_HEIGHT,
+                    10.0,
+                    &as_.action_background,
+                    "#000",
+                );
+                svg.text(cx, y + ACTION_HEIGHT / 2.0 + 4.0, &dca.text, "middle", FONT_SIZE);
+                y += ACTION_HEIGHT + V_GAP / 2.0;
+            }
+            ActivityStep::Arrow(arrow) => {
+                svg.line_segment(cx, y - V_GAP / 2.0, cx, y, "#000", arrow.dashed);
+                if let Some(ref label) = arrow.label {
+                    if arrow.dashed {
+                        let display = format!("-> {};", label);
+                        svg.text(cx + 5.0, y - V_GAP / 4.0, &display, "start", SMALL_FONT);
+                    } else {
+                        svg.text(cx + 5.0, y - V_GAP / 4.0, label, "start", SMALL_FONT);
+                    }
+                } else if arrow.dashed {
+                    svg.text(cx + 5.0, y - V_GAP / 4.0, "->", "start", SMALL_FONT);
+                }
+                y += V_GAP / 4.0;
+            }
+            ActivityStep::Backward(label) => {
+                svg.text(cx - DIAMOND_SIZE - 5.0, y, label, "end", SMALL_FONT);
+                y += V_GAP / 4.0;
+            }
+            ActivityStep::Break => {
+                y += V_GAP / 4.0;
+            }
             ActivityStep::If(block) => {
-                // Connector.
+                svg.line_segment(cx, y - V_GAP / 2.0, cx, y, "#000", false);
+                svg.open_group("decision");
+                svg.diamond(
+                    cx,
+                    y + DIAMOND_SIZE,
+                    DIAMOND_SIZE,
+                    &as_.decision_background,
+                    "#000",
+                );
+                svg.text(
+                    cx,
+                    y + DIAMOND_SIZE + 4.0,
+                    &block.condition,
+                    "middle",
+                    SMALL_FONT,
+                );
+                svg.close_group();
+                if let Some(label) = &block.then_label {
+                    svg.text(
+                        cx + DIAMOND_SIZE + 5.0,
+                        y + 10.0,
+                        label,
+                        "start",
+                        SMALL_FONT,
+                    );
+                }
+                y += DIAMOND_SIZE * 2.0 + V_GAP / 2.0;
+            }
+            ActivityStep::ElseIf(block) => {
                 svg.line_segment(cx, y - V_GAP / 2.0, cx, y, "#000", false);
                 svg.open_group("decision");
                 svg.diamond(
@@ -132,7 +217,6 @@ pub fn render(diagram: &ActivityDiagram, theme: &Theme) -> String {
                 y += BAR_HEIGHT + V_GAP / 2.0;
             }
             ActivityStep::ForkAgain | ActivityStep::SplitAgain => {
-                // Visual separator for parallel branches.
                 svg.line_segment(
                     cx - BAR_WIDTH / 2.0,
                     y,
@@ -217,7 +301,6 @@ pub fn render(diagram: &ActivityDiagram, theme: &Theme) -> String {
                     "middle",
                     SMALL_FONT,
                 );
-                // "is (label)" appears to the right of the diamond on the loop-body path.
                 if let Some(label) = &w.is_label {
                     svg.text(
                         cx + DIAMOND_SIZE + 5.0,
@@ -236,7 +319,6 @@ pub fn render(diagram: &ActivityDiagram, theme: &Theme) -> String {
                 y += V_GAP / 4.0;
             }
             ActivityStep::Repeat => {
-                // Small diamond marks the start of a repeat-until loop body.
                 svg.line_segment(cx, y - V_GAP / 2.0, cx, y, "#000", false);
                 svg.diamond(
                     cx,
@@ -263,7 +345,6 @@ pub fn render(diagram: &ActivityDiagram, theme: &Theme) -> String {
                     "middle",
                     SMALL_FONT,
                 );
-                // "is (label)" appears to the right on the loop-back path.
                 if let Some(label) = &rw.is_label {
                     svg.text(
                         cx + DIAMOND_SIZE + 5.0,
@@ -327,6 +408,7 @@ mod tests {
 
     #[test]
     fn with_condition() {
+        use rustuml_parser::diagram::activity::IfBlock;
         let d = ActivityDiagram {
             meta: DiagramMeta::default(),
             steps: vec![

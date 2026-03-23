@@ -32,9 +32,20 @@ pub fn preprocess_with_base(input: &str, base_dir: &Path) -> Vec<String> {
 }
 
 struct PreprocessContext {
+    /// `!$var = value` style variables (substituted as `$varname`).
     defines: HashMap<String, String>,
+    /// `!define TOKEN value` style macros (substituted as whole words).
+    token_defines: HashMap<String, String>,
     cond_stack: Vec<CondState>,
     in_block_comment: bool,
+    /// True while inside a `sprite $name [...] { ... }` block.
+    in_sprite_block: bool,
+    /// True after `!include <archimate/Archimate>` has been seen.
+    archimate_enabled: bool,
+    /// True while we are inside the first (or only) `@start...@end` block.
+    in_diagram_block: bool,
+    /// True once the first `@end` tag has been seen; further blocks are skipped.
+    first_block_done: bool,
     base_dir: Option<PathBuf>,
     include_depth: usize,
     foreach_stack: Vec<ForEachState>,
@@ -65,8 +76,13 @@ impl PreprocessContext {
     fn new(base_dir: Option<PathBuf>) -> Self {
         Self {
             defines: HashMap::new(),
+            token_defines: HashMap::new(),
             cond_stack: Vec::new(),
             in_block_comment: false,
+            in_sprite_block: false,
+            archimate_enabled: false,
+            in_diagram_block: false,
+            first_block_done: false,
             base_dir,
             include_depth: 0,
             foreach_stack: Vec::new(),
@@ -84,6 +100,14 @@ impl PreprocessContext {
 
         for line in input.lines() {
             let trimmed = line.trim();
+
+            // Skip sprite pixel-data blocks: `sprite $name [...] { ... }`.
+            if self.in_sprite_block {
+                if trimmed == "}" {
+                    self.in_sprite_block = false;
+                }
+                continue;
+            }
 
             // Handle block comments.
             if self.in_block_comment {
@@ -108,8 +132,42 @@ impl PreprocessContext {
             let line_no_comment = strip_inline_comment(line);
             let trimmed = line_no_comment.trim();
 
-            // Skip @start/@end tags.
-            if trimmed.starts_with("@start") || trimmed.starts_with("@end") {
+            // Handle @start/@end tags with multi-diagram awareness.
+            // When include_depth > 0 we're inside an !include — treat it as
+            // a flat stream (no block tracking needed).
+            if self.include_depth == 0 {
+                if trimmed.starts_with("@start") {
+                    if !self.first_block_done {
+                        self.in_diagram_block = true;
+                    }
+                    // Always consume the @start line itself.
+                    continue;
+                }
+                if trimmed.starts_with("@end") {
+                    self.in_diagram_block = false;
+                    self.first_block_done = true;
+                    continue;
+                }
+                // Content outside any block: allow preprocessor directives
+                // (like !define before @startuml) but skip diagram content
+                // once the first block has ended.
+                if self.first_block_done {
+                    continue;
+                }
+            } else if trimmed.starts_with("@start") || trimmed.starts_with("@end") {
+                // Inside an !include: strip @start/@end tags as before.
+                continue;
+            }
+
+            // Skip sprite definitions: `sprite $name [dimensions] { ... }`.
+            // These are pixel-art bitmaps; we don't render them but must not
+            // let the pixel rows leak into the diagram parser.
+            if trimmed.starts_with("sprite ") || trimmed.starts_with("sprite\t") {
+                // If the line opens a block, skip until `}`.
+                if trimmed.ends_with('{') {
+                    self.in_sprite_block = true;
+                }
+                // Either way, consume the sprite declaration line itself.
                 continue;
             }
 
@@ -150,9 +208,16 @@ impl PreprocessContext {
 
             // Only output lines when all conditions are active.
             if self.is_active() {
-                let expanded = self.substitute_vars(&line_no_comment);
-                if !expanded.trim().is_empty() {
-                    output.push(expanded);
+                // Expand archimate macros before variable substitution.
+                let line_to_process = if let Some(expanded) =
+                    self.try_expand_archimate(line_no_comment.trim())
+                {
+                    expanded
+                } else {
+                    self.substitute_vars(&line_no_comment)
+                };
+                if !line_to_process.trim().is_empty() {
+                    output.push(line_to_process);
                 }
             }
         }
@@ -170,7 +235,7 @@ impl PreprocessContext {
             if self.is_active() {
                 let name = caps[1].to_string();
                 let value = caps.get(2).map_or("", |m| m.as_str()).trim().to_string();
-                self.defines.insert(name, value);
+                self.token_defines.insert(name, value);
             }
             return true;
         }
@@ -372,6 +437,16 @@ impl PreprocessContext {
             )]);
         }
 
+        // Handle known stdlib includes.
+        if path_str == "<archimate/Archimate>" || path_str == "archimate/Archimate" {
+            self.archimate_enabled = true;
+            return Some(vec![]);
+        }
+        // Other angle-bracket stdlib includes are silently skipped.
+        if path_str.starts_with('<') {
+            return Some(vec![]);
+        }
+
         let file_path = if let Some(base) = &self.base_dir {
             base.join(path_str)
         } else {
@@ -410,7 +485,9 @@ impl PreprocessContext {
             LazyLock::new(|| Regex::new(r"^!undef(?:ine)?\s+(\w+)$").unwrap());
 
         if let Some(caps) = RE.captures(line) {
-            self.defines.remove(&caps[1]);
+            let name = &caps[1];
+            self.defines.remove(name);
+            self.token_defines.remove(name);
             return true;
         }
         false
@@ -424,7 +501,8 @@ impl PreprocessContext {
             LazyLock::new(|| Regex::new(r"^!ifndef\s+(\w+)$").unwrap());
 
         if let Some(caps) = RE_IFDEF.captures(line) {
-            let defined = self.defines.contains_key(&caps[1]);
+            let defined = self.defines.contains_key(&caps[1])
+                || self.token_defines.contains_key(&caps[1]);
             self.cond_stack.push(CondState {
                 active: defined && self.is_active(),
                 has_matched: defined,
@@ -432,7 +510,8 @@ impl PreprocessContext {
             return true;
         }
         if let Some(caps) = RE_IFNDEF.captures(line) {
-            let not_defined = !self.defines.contains_key(&caps[1]);
+            let not_defined = !self.defines.contains_key(&caps[1])
+                && !self.token_defines.contains_key(&caps[1]);
             self.cond_stack.push(CondState {
                 active: not_defined && self.is_active(),
                 has_matched: not_defined,
@@ -490,7 +569,7 @@ impl PreprocessContext {
             .strip_prefix("%variable_exists(\"")
             .and_then(|s| s.strip_suffix("\")"))
         {
-            return self.defines.contains_key(name);
+            return self.defines.contains_key(name) || self.token_defines.contains_key(name);
         }
 
         // Bare variable existence: %true / %false
@@ -506,10 +585,27 @@ impl PreprocessContext {
     }
 
     fn substitute_vars(&self, line: &str) -> String {
+        // Strip sprite icon references `<$name>` — we don't render sprites.
+        static SPRITE_REF_RE: LazyLock<Regex> =
+            LazyLock::new(|| Regex::new(r"<\$\w+>\s*").unwrap());
+        let line = &*SPRITE_REF_RE.replace_all(line, "");
+
+        // First apply !define token macros (word-boundary bare-word substitution).
+        let mut result = line.to_string();
+        for (name, value) in &self.token_defines {
+            // Build a per-name regex with word boundaries. This is cached in a
+            // local string and compiled inline; !define macros are uncommon
+            // enough that the overhead is acceptable.
+            if let Ok(re) = Regex::new(&format!(r"\b{}\b", regex::escape(name))) {
+                result = re.replace_all(&result, value.as_str()).to_string();
+            }
+        }
+
+        // Then apply $variable substitution.
         static VAR_RE: LazyLock<Regex> = LazyLock::new(|| Regex::new(r"\$(\w+)").unwrap());
 
         let after_vars = VAR_RE
-            .replace_all(line, |caps: &regex::Captures| {
+            .replace_all(&result, |caps: &regex::Captures| {
                 let name = &caps[1];
                 self.defines
                     .get(name)
@@ -520,6 +616,52 @@ impl PreprocessContext {
 
         // Evaluate built-in %functions.
         eval_builtin_functions(&after_vars)
+    }
+
+    /// Expand Archimate macros when `!include <archimate/Archimate>` was seen.
+    ///
+    /// Returns `Some(expanded_line)` if the line was an archimate macro call,
+    /// `None` otherwise.
+    ///
+    /// Element macros: `Category_Element(id, "label")` → `rectangle "label" as id`
+    /// Relation macros: `Rel_Xxx(from, to, "label")` → `from --> to : label`
+    ///                  `Rel_Xxx(from, to, "")` → `from --> to`
+    fn try_expand_archimate(&self, line: &str) -> Option<String> {
+        if !self.archimate_enabled {
+            return None;
+        }
+
+        // Element macro: Word_Word(id, "label")  — category is anything except Rel
+        static ELEM_RE: LazyLock<Regex> = LazyLock::new(|| {
+            Regex::new(r#"^([A-Z][A-Za-z]+)_([A-Za-z]+)\s*\(\s*(\w+)\s*,\s*"([^"]*)"\s*\)$"#)
+                .unwrap()
+        });
+        // Relation macro: Rel_Xxx[_Dir](from, to, "label")
+        static REL_RE: LazyLock<Regex> = LazyLock::new(|| {
+            Regex::new(
+                r#"^Rel_([A-Za-z_]+)\s*\(\s*(\w+)\s*,\s*(\w+)\s*,\s*"([^"]*)"\s*\)$"#,
+            )
+            .unwrap()
+        });
+
+        if let Some(caps) = REL_RE.captures(line) {
+            let from = &caps[2];
+            let to = &caps[3];
+            let label = caps[4].trim();
+            if label.is_empty() {
+                return Some(format!("{from} --> {to}"));
+            } else {
+                return Some(format!("{from} --> {to} : {label}"));
+            }
+        }
+
+        if let Some(caps) = ELEM_RE.captures(line) {
+            let id = &caps[3];
+            let label = &caps[4];
+            return Some(format!("rectangle \"{label}\" as {id}"));
+        }
+
+        None
     }
 }
 

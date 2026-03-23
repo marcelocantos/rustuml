@@ -20,6 +20,8 @@ const SMALL_FONT: f64 = 11.0;
 const PADDING: f64 = 12.0;
 const LABEL_H: f64 = 22.0;
 const CONTAINER_PADDING: f64 = 16.0;
+const TITLE_FONT_SIZE: f64 = 14.0;
+const TITLE_HEIGHT: f64 = TITLE_FONT_SIZE + 10.0;
 
 fn node_fill(kind: DeploymentNodeKind) -> &'static str {
     match kind {
@@ -196,19 +198,23 @@ pub fn render(diagram: &DeploymentDiagram, theme: &Theme) -> String {
         rh
     };
 
+    let title_h = if diagram.meta.title.is_some() { TITLE_HEIGHT } else { 0.0 };
     let total_w =
         MARGIN * 2.0 + col_w.iter().sum::<f64>() + GAP * cols.saturating_sub(1) as f64;
     let total_h =
-        MARGIN * 2.0 + row_h.iter().sum::<f64>() + GAP * rows.saturating_sub(1) as f64;
+        MARGIN * 2.0 + row_h.iter().sum::<f64>() + GAP * rows.saturating_sub(1) as f64 + title_h;
 
     let mut svg = SvgBuilder::new(total_w, total_h);
+    if let Some(title) = &diagram.meta.title {
+        svg.text(total_w / 2.0, TITLE_HEIGHT - 4.0, title, "middle", TITLE_FONT_SIZE);
+    }
     let mut positions: HashMap<String, (f64, f64, f64, f64)> = HashMap::new();
 
     for (i, root) in roots.iter().enumerate() {
         let col = i % cols;
         let row = i / cols;
         let x = MARGIN + col_w[..col].iter().sum::<f64>() + GAP * col as f64;
-        let y = MARGIN + row_h[..row].iter().sum::<f64>() + GAP * row as f64;
+        let y = title_h + MARGIN + row_h[..row].iter().sum::<f64>() + GAP * row as f64;
         let w = col_w[col];
         render_node(&root.id, &diagram.nodes, x, y, w, &mut svg, theme, &mut positions);
     }

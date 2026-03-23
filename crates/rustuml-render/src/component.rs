@@ -18,6 +18,8 @@ const SMALL_FONT: f64 = 11.0;
 const PADDING: f64 = 12.0;
 const CONTAINER_PADDING: f64 = 16.0;
 const LABEL_H: f64 = 22.0;
+const TITLE_FONT_SIZE: f64 = 14.0;
+const TITLE_HEIGHT: f64 = TITLE_FONT_SIZE + 10.0;
 
 pub fn render(diagram: &ComponentDiagram, theme: &Theme) -> String {
     if diagram.components.is_empty() && diagram.packages.is_empty() {
@@ -65,18 +67,22 @@ pub fn render(diagram: &ComponentDiagram, theme: &Theme) -> String {
     let pkg_total_w = estimate_packages_width(&diagram.packages);
     let pkg_total_h = estimate_packages_height(&diagram.packages);
 
+    let title_h = if diagram.meta.title.is_some() { TITLE_HEIGHT } else { 0.0 };
     let total_w = comp_total_w.max(pkg_total_w).max(100.0);
-    let total_h = (comp_total_h + pkg_total_h).max(50.0);
+    let total_h = (comp_total_h + pkg_total_h + title_h).max(50.0);
 
     let mut svg = SvgBuilder::new(total_w, total_h);
+    if let Some(title) = &diagram.meta.title {
+        svg.text(total_w / 2.0, TITLE_HEIGHT - 4.0, title, "middle", TITLE_FONT_SIZE);
+    }
     let cs = &theme.class;
 
-    // Render packages (containers) starting at y_offset=0.
-    let mut pkg_y = MARGIN;
+    // Render packages (containers) starting after title.
+    let mut pkg_y = title_h + MARGIN;
     render_packages(&diagram.packages, &mut svg, MARGIN, &mut pkg_y, theme);
 
     // Render flat components below the packages.
-    let y_start = pkg_y + if pkg_y > MARGIN { GAP } else { 0.0 };
+    let y_start = pkg_y + if !diagram.packages.is_empty() { GAP } else { 0.0 };
     let mut positions = Vec::new();
     for (i, comp) in diagram.components.iter().enumerate() {
         let col = i % cols;
