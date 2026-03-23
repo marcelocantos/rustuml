@@ -98,12 +98,17 @@ fn collect_recursive(dir: &Path, pairs: &mut Vec<PathBuf>) {
     }
 }
 
-/// Returns true if the golden SVG contains a PlantUML "Syntax Error"
-/// marker, indicating the source is intentionally invalid.
+/// Returns true if the golden SVG contains a PlantUML error marker,
+/// indicating the diagram could not be rendered by the reference
+/// implementation (syntax error, crash, or version-specific failure).
 fn golden_has_syntax_error(svg: &str) -> bool {
     svg.contains("Syntax Error")
         || svg.contains("NoSuchElementException")
         || svg.contains("Welcome to PlantUML")
+        // Java PlantUML crash SVGs (e.g. UnparsableGraphvizException) — the
+        // reference implementation failed, so there is nothing to compare
+        // against.
+        || svg.contains("An error has occured")
 }
 
 struct TestResult {

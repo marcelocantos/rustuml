@@ -85,8 +85,9 @@ impl StateParser {
 
     fn try_transition(&mut self, line: &str) -> bool {
         static RE: LazyLock<Regex> = LazyLock::new(|| {
+            // State IDs may include dots for substate references (e.g. `S.H`).
             Regex::new(
-                r"^(\[?\*?\]?|\w+)\s*-+(?:left|right|up|down|le|ri|do)?-*>\s*(\[?\*?\]?|\w+)(?:\s*:\s*(.+))?$",
+                r"^(\[?\*?\]?|[\w.]+)\s*-+(?:left|right|up|down|le|ri|do)?-*>\s*(\[?\*?\]?|[\w.]+)(?:\s*:\s*(.+))?$",
             )
             .unwrap()
         });
