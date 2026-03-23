@@ -175,6 +175,11 @@ pub fn render(diagram: &TimingDiagram, _theme: &Theme) -> String {
                         false,
                     );
                 }
+                TimelineKind::Binary => {
+                    // Binary timeline: draw a thin band.
+                    let band_top = row_mid - 6.0;
+                    svg.rect(x_start, band_top, seg_width, 12.0, color, "#555555");
+                }
             }
         }
     }
@@ -191,6 +196,9 @@ mod tests {
         TimingDiagram {
             meta: DiagramMeta::default(),
             time_points: vec![0, 100, 300],
+            highlights: vec![],
+            annotations: vec![],
+            scale: None,
             timelines: vec![
                 Timeline {
                     id: "W".into(),
@@ -270,6 +278,9 @@ mod tests {
             meta: DiagramMeta::default(),
             timelines: vec![],
             time_points: vec![],
+            highlights: vec![],
+            annotations: vec![],
+            scale: None,
         };
         let svg = render(&d, &Theme::default());
         assert!(svg.starts_with("<svg"));

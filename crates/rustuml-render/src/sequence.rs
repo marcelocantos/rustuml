@@ -123,12 +123,15 @@ fn render_note_text(svg: &mut SvgBuilder, text: &str, x: f64, start_y: f64) -> f
 /// Count the number of visible text lines in a note (for height pre-computation).
 fn count_note_lines(text: &str) -> usize {
     let mut count = 0;
-    let mut in_code = false;
     for line in text.lines() {
         let trimmed = line.trim();
-        if trimmed == "<code>" { in_code = true; continue; }
-        if trimmed == "</code>" { in_code = false; continue; }
-        if !trimmed.is_empty() { count += 1; }
+        // Skip the <code>/<code> delimiter lines themselves; code body lines count.
+        if trimmed == "<code>" || trimmed == "</code>" {
+            continue;
+        }
+        if !trimmed.is_empty() {
+            count += 1;
+        }
     }
     count.max(1)
 }

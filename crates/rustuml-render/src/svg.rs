@@ -81,6 +81,15 @@ impl SvgBuilder {
         }
     }
 
+    /// Emit a monospace text element. Spaces in `content` are replaced with
+    /// non-breaking spaces (U+00A0) to match PlantUML's SVG output.
+    pub fn monospace_text(&mut self, x: f64, y: f64, content: &str, anchor: &str, font_size: f64) {
+        let escaped = escape_xml(&content.replace(' ', "\u{00a0}"));
+        self.line(&format!(
+            r#"<text x="{x}" y="{y}" text-anchor="{anchor}" font-family="monospace" font-size="{font_size}">{escaped}</text>"#
+        ));
+    }
+
     pub fn arrow_head(&mut self, x: f64, y: f64, direction: f64) {
         let size = 8.0;
         let angle = direction.to_radians();

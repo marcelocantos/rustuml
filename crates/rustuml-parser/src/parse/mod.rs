@@ -149,7 +149,10 @@ fn detect_uml_subtype(lines: &[String]) -> UmlSubtype {
             scores[0] += 1;
         }
         // Timing — strong unique keywords.
-        if trimmed.starts_with("robust ") || trimmed.starts_with("concise ") {
+        if trimmed.starts_with("robust ")
+            || trimmed.starts_with("concise ")
+            || trimmed.starts_with("binary ")
+        {
             scores[8] += 10;
         }
     }

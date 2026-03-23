@@ -10,6 +10,10 @@
 //! [Task name] starts at [Other task]'s end
 //! [Task name] lasts N days and starts at [Other task]'s end
 //! [Task name] lasts N day
+//! [Task name] is colored in <Color>
+//! Project starts YYYY-MM-DD
+//! saturday are closed
+//! sunday are closed
 //! ```
 //!
 //! Lines beginning with `'` (comment), blank lines, and unrecognised lines
@@ -39,6 +43,8 @@ pub fn parse_gantt(lines: &[String]) -> Result<GanttDiagram, ParseError> {
 struct GanttParser {
     meta: DiagramMeta,
     tasks: Vec<GanttTask>,
+    project_start: Option<String>,
+    closed_days: Vec<u8>,
 }
 
 impl GanttParser {
@@ -46,6 +52,8 @@ impl GanttParser {
         Self {
             meta: DiagramMeta::default(),
             tasks: Vec::new(),
+            project_start: None,
+            closed_days: Vec::new(),
         }
     }
 
@@ -53,6 +61,8 @@ impl GanttParser {
         GanttDiagram {
             meta: self.meta,
             tasks: self.tasks,
+            project_start: self.project_start,
+            closed_days: self.closed_days,
         }
     }
 
@@ -69,8 +79,24 @@ impl GanttParser {
         if self.try_starts_after(line, line_num)? {
             return Ok(());
         }
-        // project starts [date] — skip silently
-        if line.starts_with("project ") {
+        // [name] is colored in <Color>
+        if self.try_colored(line) {
+            return Ok(());
+        }
+        // [name] is N% completed — ignore completion percentage
+        if self.try_completed(line) {
+            return Ok(());
+        }
+        // Project starts YYYY-MM-DD
+        if self.try_project_starts(line) {
+            return Ok(());
+        }
+        // <day> are closed
+        if self.try_closed_day(line) {
+            return Ok(());
+        }
+        // project starts [date] — fallback skip
+        if line.to_lowercase().starts_with("project ") {
             return Ok(());
         }
         // title
@@ -140,6 +166,67 @@ impl GanttParser {
         }
     }
 
+    /// `[name] is colored in <Color>`
+    fn try_colored(&mut self, line: &str) -> bool {
+        static RE: LazyLock<Regex> = LazyLock::new(|| {
+            Regex::new(r"^\[([^\]]+)\]\s+is\s+colored\s+in\s+(\S+)$").unwrap()
+        });
+        if let Some(caps) = RE.captures(line) {
+            let name = caps[1].to_string();
+            let color = caps[2].to_string();
+            self.upsert_color(name, color);
+            true
+        } else {
+            false
+        }
+    }
+
+    /// `[name] is N% completed` — parsed but ignored
+    fn try_completed(&mut self, line: &str) -> bool {
+        static RE: LazyLock<Regex> = LazyLock::new(|| {
+            Regex::new(r"^\[([^\]]+)\]\s+is\s+\d+%\s+completed$").unwrap()
+        });
+        RE.is_match(line)
+    }
+
+    /// `Project starts YYYY-MM-DD`
+    fn try_project_starts(&mut self, line: &str) -> bool {
+        static RE: LazyLock<Regex> = LazyLock::new(|| {
+            Regex::new(r"(?i)^[Pp]roject\s+starts\s+(\d{4}-\d{2}-\d{2})$").unwrap()
+        });
+        if let Some(caps) = RE.captures(line) {
+            self.project_start = Some(caps[1].to_string());
+            true
+        } else {
+            false
+        }
+    }
+
+    /// `<dayname> are closed` — e.g. `saturday are closed`
+    fn try_closed_day(&mut self, line: &str) -> bool {
+        static RE: LazyLock<Regex> = LazyLock::new(|| {
+            Regex::new(r"(?i)^(monday|tuesday|wednesday|thursday|friday|saturday|sunday)\s+are\s+closed$").unwrap()
+        });
+        if let Some(caps) = RE.captures(line) {
+            let day_num = match caps[1].to_lowercase().as_str() {
+                "monday" => 0u8,
+                "tuesday" => 1,
+                "wednesday" => 2,
+                "thursday" => 3,
+                "friday" => 4,
+                "saturday" => 5,
+                "sunday" => 6,
+                _ => return false,
+            };
+            if !self.closed_days.contains(&day_num) {
+                self.closed_days.push(day_num);
+            }
+            true
+        } else {
+            false
+        }
+    }
+
     /// Fully insert or update a task with both duration and start.
     fn upsert_task(&mut self, name: String, duration: u32, start: TaskStart) {
         if let Some(task) = self.tasks.iter_mut().find(|t| t.name == name) {
@@ -150,6 +237,7 @@ impl GanttParser {
                 name,
                 duration,
                 start,
+                color: None,
             });
         }
     }
@@ -163,6 +251,7 @@ impl GanttParser {
                 name,
                 duration,
                 start: TaskStart::Day(0),
+                color: None,
             });
         }
     }
@@ -176,6 +265,22 @@ impl GanttParser {
                 name,
                 duration: 1,
                 start,
+                color: None,
+            });
+        }
+    }
+
+    /// Insert or update color only; preserve existing task.
+    fn upsert_color(&mut self, name: String, color: String) {
+        if let Some(task) = self.tasks.iter_mut().find(|t| t.name == name) {
+            task.color = Some(color);
+        } else {
+            // Task not seen yet — insert placeholder; duration/start will be filled later.
+            self.tasks.push(GanttTask {
+                name,
+                duration: 1,
+                start: TaskStart::Day(0),
+                color: Some(color),
             });
         }
     }
@@ -244,5 +349,24 @@ mod tests {
     fn unknown_lines_ignored() {
         let d = parse("scale 1.5\n[Task 1] lasts 3 days\nprintscale daily");
         assert_eq!(d.tasks.len(), 1);
+    }
+
+    #[test]
+    fn project_start_parsed() {
+        let d = parse("Project starts 2024-01-01\n[T1] lasts 3 days");
+        assert_eq!(d.project_start.as_deref(), Some("2024-01-01"));
+    }
+
+    #[test]
+    fn closed_days_parsed() {
+        let d = parse("saturday are closed\nsunday are closed\n[T1] lasts 3 days");
+        assert!(d.closed_days.contains(&5));
+        assert!(d.closed_days.contains(&6));
+    }
+
+    #[test]
+    fn colored_task_parsed() {
+        let d = parse("[T1] lasts 3 days\n[T1] is colored in Coral");
+        assert_eq!(d.tasks[0].color.as_deref(), Some("Coral"));
     }
 }
