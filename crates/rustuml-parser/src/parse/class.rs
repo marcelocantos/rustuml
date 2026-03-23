@@ -211,9 +211,18 @@ impl ClassParser {
     }
 
     fn try_relationship(&mut self, line: &str) -> bool {
+        // Standard UML relationship syntax.
         static RE: LazyLock<Regex> = LazyLock::new(|| {
             Regex::new(
                 r#"^(?:"([^"]+)"\s+)?(\w+)\s+((?:<\|--|\.\.\|>|\*--|o--|--|\.\.>|<\.\.))\s+(?:"([^"]+)"\s+)?(\w+)(?:\s*:\s*(.+))?$"#,
+            )
+            .unwrap()
+        });
+        // ER crow's foot notation: EntityA ||--o{ EntityB : "label"
+        // Each end is one of: || |{ o| o{ }| }{ (also reversed: {| {o |o etc.)
+        static ER_RE: LazyLock<Regex> = LazyLock::new(|| {
+            Regex::new(
+                r#"^(\w+)\s+([|o}][|{o]--[|o][|{])\s+(\w+)(?:\s*:\s*"?([^"]*)"?)?$"#,
             )
             .unwrap()
         });
@@ -237,6 +246,26 @@ impl ClassParser {
                 label,
                 from_multiplicity: from_mult,
                 to_multiplicity: to_mult,
+            });
+            true
+        } else if let Some(caps) = ER_RE.captures(line) {
+            let from_raw = &caps[1];
+            let to_raw = &caps[3];
+            let label = caps.get(4).map(|m| {
+                let s = m.as_str().trim();
+                s.trim_matches('"').to_string()
+            }).filter(|s| !s.is_empty());
+
+            let from = self.ensure_entity(from_raw);
+            let to = self.ensure_entity(to_raw);
+
+            self.relationships.push(Relationship {
+                from,
+                to,
+                kind: RelationshipKind::Association,
+                label,
+                from_multiplicity: None,
+                to_multiplicity: None,
             });
             true
         } else {
@@ -407,7 +436,7 @@ impl ClassParser {
 
     fn try_meta(&mut self, line: &str) -> bool {
         if let Some(rest) = line.strip_prefix("title ") {
-            self.meta.title = Some(rest.trim().to_string());
+            self.meta.title = Some(super::strip_title_quotes(rest).to_string());
             return true;
         }
         // Skip skinparam, hide, show, together, etc.
@@ -493,12 +522,24 @@ fn parse_member(s: &str) -> Member {
         text = text.replace("{abstract}", "").trim().to_string();
     }
 
+    // Convert <<stereotype>> notation to «stereotype» guillemets.
+    while let Some(start) = text.find("<<") {
+        if let Some(end) = text[start..].find(">>") {
+            let inner = text[start + 2..start + end].to_string();
+            text = format!("{}«{}»{}", &text[..start], inner, &text[start + end + 2..]);
+        } else {
+            break;
+        }
+    }
+
     // Parse visibility prefix.
     let (visibility, rest) = match text.chars().next() {
         Some('+') => (Visibility::Public, &text[1..]),
         Some('-') => (Visibility::Private, &text[1..]),
         Some('#') => (Visibility::Protected, &text[1..]),
         Some('~') => (Visibility::Package, &text[1..]),
+        // ER diagrams use '*' to mark required/primary-key fields.
+        Some('*') => (Visibility::Default, &text[1..]),
         _ => (Visibility::Default, text.as_str()),
     };
 
@@ -666,5 +707,33 @@ mod tests {
         let d = parse("class Foo {\n  +field1\n  --\n  +method1()\n  ==\n  -internal\n}");
         // Separators are ignored, members are parsed.
         assert_eq!(d.entities[0].members.len(), 3);
+    }
+
+    #[test]
+    fn directed_association() {
+        let d = parse("A --> B : uses");
+        assert_eq!(d.relationships.len(), 1);
+        assert_eq!(d.relationships[0].kind, RelationshipKind::Association);
+        assert_eq!(d.relationships[0].label.as_deref(), Some("uses"));
+    }
+
+    #[test]
+    fn relationship_multiplicity() {
+        let d = parse(r#"Company "1" o-- "1..*" Department"#);
+        assert_eq!(d.relationships.len(), 1);
+        assert_eq!(d.relationships[0].from_multiplicity.as_deref(), Some("1"));
+        assert_eq!(d.relationships[0].to_multiplicity.as_deref(), Some("1..*"));
+    }
+
+    #[test]
+    fn nested_package() {
+        let d = parse(
+            "cloud Outer {\n  cloud Inner {\n    class MyClass {\n      +void method()\n    }\n  }\n}",
+        );
+        assert_eq!(d.packages.len(), 2);
+        assert_eq!(d.packages[0].name, "Outer");
+        assert_eq!(d.packages[1].name, "Inner");
+        assert_eq!(d.entities.len(), 1);
+        assert_eq!(d.entities[0].id, "MyClass");
     }
 }

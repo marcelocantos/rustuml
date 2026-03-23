@@ -40,6 +40,16 @@ impl std::fmt::Display for ParseError {
 
 impl std::error::Error for ParseError {}
 
+/// Strip surrounding double-quotes from a title string, then trim whitespace.
+pub fn strip_title_quotes(s: &str) -> &str {
+    let s = s.trim();
+    if s.starts_with('"') && s.ends_with('"') && s.len() >= 2 {
+        &s[1..s.len() - 1]
+    } else {
+        s
+    }
+}
+
 /// Detect the diagram type from the @start tag.
 fn detect_type(input: &str) -> &str {
     for line in input.lines() {
@@ -122,6 +132,19 @@ fn detect_uml_subtype(lines: &[String]) -> UmlSubtype {
             || trimmed.contains("*--")
             || trimmed.contains("o--")
         {
+            scores[1] += 5;
+        }
+        // ER crow's foot notation is an unambiguous class/ER diagram signal.
+        if trimmed.contains("||--")
+            || trimmed.contains("}|--")
+            || trimmed.contains("o|--")
+            || trimmed.contains("|{--")
+            || trimmed.contains("o{--")
+        {
+            scores[1] += 10;
+        }
+        // entity with a body block ({) is a class/ER entity, not a sequence participant.
+        if trimmed.starts_with("entity ") && (trimmed.ends_with('{') || trimmed.ends_with("{{")) {
             scores[1] += 5;
         }
         // Sequence.
