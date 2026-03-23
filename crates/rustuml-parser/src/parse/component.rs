@@ -30,6 +30,12 @@ fn container_keyword(trimmed: &str) -> Option<&'static str> {
     None
 }
 
+/// Extract a stereotype string from `<<name>>` syntax in a line.
+fn parse_stereotype(s: &str) -> Option<String> {
+    static RE: LazyLock<Regex> = LazyLock::new(|| Regex::new(r"<<(\w+)>>").unwrap());
+    RE.captures(s).map(|caps| caps[1].to_string())
+}
+
 /// Parse a container label from a line like:
 ///   `cloud Outer #LightBlue {`
 ///   `folder Inner {`
@@ -111,6 +117,7 @@ pub fn parse_component(lines: &[String]) -> Result<ComponentDiagram, ParseError>
                 package_stack.push(ComponentPackage {
                     name: id,
                     label,
+                    stereotype: parse_stereotype(trimmed),
                     components: Vec::new(),
                     packages: Vec::new(),
                 });
@@ -138,6 +145,7 @@ pub fn parse_component(lines: &[String]) -> Result<ComponentDiagram, ParseError>
                 components.push(Component {
                     id: id.clone(),
                     label,
+                    stereotype: parse_stereotype(trimmed),
                 });
             }
             if let Some(pkg) = package_stack.last_mut() {
@@ -156,6 +164,7 @@ pub fn parse_component(lines: &[String]) -> Result<ComponentDiagram, ParseError>
                 components.push(Component {
                     id: id.clone(),
                     label: name,
+                    stereotype: parse_stereotype(trimmed),
                 });
             }
             if let Some(pkg) = package_stack.last_mut() {
@@ -198,6 +207,7 @@ pub fn parse_component(lines: &[String]) -> Result<ComponentDiagram, ParseError>
                     components.push(Component {
                         id: id.clone(),
                         label: id.clone(),
+                        stereotype: None,
                     });
                 }
             }

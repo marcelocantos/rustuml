@@ -20,6 +20,7 @@ pub struct ComponentDiagram {
 pub struct Component {
     pub id: String,
     pub label: String,
+    pub stereotype: Option<String>,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
@@ -40,6 +41,7 @@ pub struct Connection {
 pub struct ComponentPackage {
     pub name: String,
     pub label: String,
+    pub stereotype: Option<String>,
     pub components: Vec<String>,
     pub packages: Vec<ComponentPackage>,
 }

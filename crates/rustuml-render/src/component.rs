@@ -31,7 +31,15 @@ pub fn render(diagram: &ComponentDiagram, theme: &Theme) -> String {
     let widths: Vec<f64> = diagram
         .components
         .iter()
-        .map(|c| (metrics::text_width(&c.label, FONT_SIZE) + PADDING * 2.0).max(COMPONENT_MIN_W))
+        .map(|c| {
+            let label_w = metrics::text_width(&c.label, FONT_SIZE) + PADDING * 2.0;
+            let stereo_w = c
+                .stereotype
+                .as_deref()
+                .map(|s| metrics::text_width(&format!("«{s}»"), SMALL_FONT) + PADDING * 2.0)
+                .unwrap_or(0.0);
+            label_w.max(stereo_w).max(COMPONENT_MIN_W)
+        })
         .collect();
 
     let col_w: Vec<f64> = {
@@ -94,13 +102,30 @@ pub fn render(diagram: &ComponentDiagram, theme: &Theme) -> String {
             &cs.class_background,
             &cs.border_color,
         );
-        svg.text(
-            x + w / 2.0,
-            y + COMPONENT_H / 2.0 + 5.0,
-            &comp.label,
-            "middle",
-            FONT_SIZE,
-        );
+        if let Some(stereo) = &comp.stereotype {
+            svg.text(
+                x + w / 2.0,
+                y + COMPONENT_H / 2.0 - 4.0,
+                &format!("«{stereo}»"),
+                "middle",
+                SMALL_FONT,
+            );
+            svg.text(
+                x + w / 2.0,
+                y + COMPONENT_H / 2.0 + 10.0,
+                &comp.label,
+                "middle",
+                FONT_SIZE,
+            );
+        } else {
+            svg.text(
+                x + w / 2.0,
+                y + COMPONENT_H / 2.0 + 5.0,
+                &comp.label,
+                "middle",
+                FONT_SIZE,
+            );
+        }
         positions.push((x, y, w));
     }
 
@@ -141,8 +166,13 @@ fn render_packages(
 ) {
     let cs = &theme.class;
     for pkg in packages {
-        let pkg_label_w =
-            (metrics::text_width(&pkg.label, FONT_SIZE) + PADDING * 2.0).max(COMPONENT_MIN_W);
+        let name_w = metrics::text_width(&pkg.label, FONT_SIZE) + PADDING * 2.0;
+        let stereo_w = pkg
+            .stereotype
+            .as_deref()
+            .map(|s| metrics::text_width(&format!("«{s}»"), SMALL_FONT) + PADDING * 2.0)
+            .unwrap_or(0.0);
+        let pkg_label_w = name_w.max(stereo_w).max(COMPONENT_MIN_W);
         let inner_w = estimate_package_inner_width(pkg).max(pkg_label_w);
         let pkg_w = inner_w + CONTAINER_PADDING * 2.0;
 
@@ -183,6 +213,16 @@ fn render_packages(
             "start",
             FONT_SIZE,
         );
+        // Draw stereotype below label if present.
+        if let Some(stereo) = &pkg.stereotype {
+            svg.text(
+                x + CONTAINER_PADDING,
+                pkg_y_start + LABEL_H + 9.0,
+                &format!("«{stereo}»"),
+                "start",
+                SMALL_FONT,
+            );
+        }
 
         *y = pkg_y_start + pkg_h + GAP;
     }
@@ -204,8 +244,13 @@ fn estimate_packages_height(packages: &[ComponentPackage]) -> f64 {
 }
 
 fn estimate_package_width(pkg: &ComponentPackage) -> f64 {
-    let label_w =
-        (metrics::text_width(&pkg.label, FONT_SIZE) + PADDING * 2.0).max(COMPONENT_MIN_W);
+    let name_w = metrics::text_width(&pkg.label, FONT_SIZE) + PADDING * 2.0;
+    let stereo_w = pkg
+        .stereotype
+        .as_deref()
+        .map(|s| metrics::text_width(&format!("«{s}»"), SMALL_FONT) + PADDING * 2.0)
+        .unwrap_or(0.0);
+    let label_w = name_w.max(stereo_w).max(COMPONENT_MIN_W);
     let inner_w = estimate_package_inner_width(pkg);
     (label_w.max(inner_w) + CONTAINER_PADDING * 2.0).max(COMPONENT_MIN_W)
 }
