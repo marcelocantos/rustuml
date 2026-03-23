@@ -40,6 +40,24 @@ const SUPPORTED_DIRS: &[&str] = &[
     "wbs",
     "math",
     "regex",
+    "json-yaml",
+    "object",
+    "er",
+    "salt",
+    "nwdiag",
+    "ditaa",
+    "edge-cases",
+    "combo",
+    "creole",
+    "skinparam",
+    "preprocessing",
+    "links",
+    "sprites",
+    "archimate",
+    "wire",
+    "multi-diagram",
+    "rendering",
+    "type-detection",
 ];
 
 /// `@start` keywords for diagram types rustuml can parse.
@@ -51,6 +69,11 @@ const SUPPORTED_START_KEYWORDS: &[&str] = &[
     "@startmath",
     "@startlatex",
     "@startregex",
+    "@startjson",
+    "@startyaml",
+    "@startsalt",
+    "@startnwdiag",
+    "@startditaa",
 ];
 
 /// Returns true if the `.puml` source uses a `@start` keyword that
@@ -114,6 +137,11 @@ fn golden_has_syntax_error(svg: &str) -> bool {
         // Java PlantUML semantic errors rendered as error SVGs.
         || svg.contains("kill cannot be used here")
         || svg.contains("swimlane must be defined at the start")
+        // Preprocessing / semantic errors that produce error-diagnostic SVGs.
+        // These render the raw source + error message — not comparable.
+        || svg.contains("Note already created:")
+        || svg.contains("Parsing syntax error about %")
+        || svg.contains("[From string")
 }
 
 struct TestResult {
@@ -195,23 +223,36 @@ fn run_one(puml_path: &Path, root: &Path) -> TestResult {
                 || t.starts_with('[')
         };
 
-        let golden_texts: Vec<&str> = golden_elems
+        // Normalise non-breaking spaces (U+00A0 / &#160;) to regular spaces before
+        // comparison.  PlantUML emits NBSP inside textLength spans; our renderer
+        // uses regular spaces.  The semantic content is the same, so treat them
+        // as equivalent.
+        fn norm(s: &str) -> String {
+            s.replace('\u{00a0}', " ")
+        }
+
+        let golden_texts_raw: Vec<&str> = golden_elems
             .iter()
             .filter_map(|e| e.text.as_deref())
             .filter(|t| !t.is_empty())
             .collect();
+        let golden_texts_norm: Vec<String> = golden_texts_raw.iter().map(|t| norm(t)).collect();
 
-        let rust_texts: Vec<&str> = rust_elems
+        let rust_texts: Vec<String> = rust_elems
             .iter()
             .filter_map(|e| e.text.as_deref())
             .filter(|t| !t.is_empty())
+            .map(|t| norm(t))
             .collect();
 
-        let missing: Vec<String> = golden_texts
+        // For the skip check we still use the raw golden text (length check on
+        // original).
+        let missing: Vec<String> = golden_texts_norm
             .iter()
-            .filter(|t| !skip(t))
-            .filter(|t| !rust_texts.iter().any(|r| r.contains(**t)))
-            .map(|t| t.to_string())
+            .zip(golden_texts_raw.iter())
+            .filter(|(_, raw)| !skip(raw))
+            .filter(|(norm_t, _)| !rust_texts.iter().any(|r| r.contains(norm_t.as_str())))
+            .map(|(norm_t, _)| norm_t.clone())
             .collect();
 
         if missing.is_empty() {
