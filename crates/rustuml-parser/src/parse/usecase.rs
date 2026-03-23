@@ -15,8 +15,9 @@ pub fn parse_usecase(lines: &[String]) -> Result<UseCaseDiagram, ParseError> {
     let mut actors = Vec::new();
     let mut use_cases = Vec::new();
     let mut connections = Vec::new();
-    let mut packages = Vec::new();
+    let mut packages: Vec<UseCasePackage> = Vec::new();
     let meta = DiagramMeta::default();
+    let mut current_package: Option<usize> = None;
 
     for line in lines {
         let trimmed = line.trim();
@@ -34,6 +35,11 @@ pub fn parse_usecase(lines: &[String]) -> Result<UseCaseDiagram, ParseError> {
             Regex::new(r#"^(?:rectangle|package)\s+(?:"([^"]+)"|(\w+))\s*\{"#).unwrap()
         });
 
+        if trimmed == "}" {
+            current_package = None;
+            continue;
+        }
+
         if let Some(caps) = RE_ACTOR.captures(trimmed) {
             let id = caps[1].to_string();
             if !actors.iter().any(|a: &Actor| a.id == id) {
@@ -43,10 +49,12 @@ pub fn parse_usecase(lines: &[String]) -> Result<UseCaseDiagram, ParseError> {
                 });
             }
         } else if let Some(caps) = RE_UC.captures(trimmed) {
-            use_cases.push(UseCase {
-                id: caps[2].to_string(),
-                label: caps[1].to_string(),
-            });
+            let id = caps[2].to_string();
+            let label = caps[1].to_string();
+            if let Some(idx) = current_package {
+                packages[idx].elements.push(id.clone());
+            }
+            use_cases.push(UseCase { id, label });
         } else if let Some(caps) = RE_CONN.captures(trimmed) {
             let from = caps[1].to_string();
             let to = caps[3].to_string();
@@ -67,6 +75,7 @@ pub fn parse_usecase(lines: &[String]) -> Result<UseCaseDiagram, ParseError> {
                 .or(caps.get(2))
                 .map(|m| m.as_str().to_string())
                 .unwrap_or_default();
+            current_package = Some(packages.len());
             packages.push(UseCasePackage {
                 name,
                 elements: Vec::new(),

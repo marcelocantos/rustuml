@@ -70,16 +70,56 @@ pub fn render(diagram: &UseCaseDiagram, theme: &Theme) -> String {
         actor_positions.push((actor.id.clone(), actor_x, y));
     }
 
-    // Position use cases on the right.
+    // Pre-compute use case positions (needed for package bounding boxes).
     let uc_x = MARGIN + actor_col_w + GAP + uc_col_w / 2.0;
-    let mut uc_positions = Vec::new();
+    let uc_positions: Vec<(String, f64, f64)> = diagram
+        .use_cases
+        .iter()
+        .enumerate()
+        .map(|(i, uc)| {
+            let y = MARGIN + i as f64 * (UC_RY * 2.0 + GAP) + UC_RY;
+            (uc.id.clone(), uc_x, y)
+        })
+        .collect();
+
+    // Draw system boundary rectangles before use cases so they appear behind.
+    const PKG_LABEL_H: f64 = 20.0;
+    const PKG_PAD: f64 = 10.0;
+    for pkg in &diagram.packages {
+        let members: Vec<(f64, f64)> = pkg
+            .elements
+            .iter()
+            .filter_map(|id| uc_positions.iter().find(|(uid, _, _)| uid == id))
+            .map(|(_, x, y)| (*x, *y))
+            .collect();
+        if members.is_empty() {
+            continue;
+        }
+        let max_rx = diagram
+            .use_cases
+            .iter()
+            .map(|uc| (metrics::text_width(&uc.label, FONT_SIZE) / 2.0 + 20.0).max(UC_RX))
+            .fold(UC_RX, f64::max);
+        let min_x = members.iter().map(|(x, _)| x).cloned().fold(f64::INFINITY, f64::min) - max_rx - PKG_PAD;
+        let max_x = members.iter().map(|(x, _)| x).cloned().fold(f64::NEG_INFINITY, f64::max) + max_rx + PKG_PAD;
+        let min_y = members.iter().map(|(_, y)| y).cloned().fold(f64::INFINITY, f64::min) - UC_RY - PKG_PAD - PKG_LABEL_H;
+        let max_y = members.iter().map(|(_, y)| y).cloned().fold(f64::NEG_INFINITY, f64::max) + UC_RY + PKG_PAD;
+        svg.rect(min_x, min_y, max_x - min_x, max_y - min_y, "none", &gs.border_color);
+        svg.text(
+            (min_x + max_x) / 2.0,
+            min_y + PKG_LABEL_H - 4.0,
+            &pkg.name,
+            "middle",
+            FONT_SIZE,
+        );
+    }
+
+    // Draw use cases.
     for (i, uc) in diagram.use_cases.iter().enumerate() {
         let y = MARGIN + i as f64 * (UC_RY * 2.0 + GAP) + UC_RY;
-        // Ellipse for use case.
         let text_w = metrics::text_width(&uc.label, FONT_SIZE);
         let rx = (text_w / 2.0 + 20.0).max(UC_RX);
         svg.open_group("usecase");
-        // Approximate ellipse with a rounded rect.
         svg.rounded_rect(
             uc_x - rx,
             y - UC_RY,
@@ -91,7 +131,6 @@ pub fn render(diagram: &UseCaseDiagram, theme: &Theme) -> String {
         );
         svg.text(uc_x, y + 4.0, &uc.label, "middle", FONT_SIZE);
         svg.close_group();
-        uc_positions.push((uc.id.clone(), uc_x, y));
     }
 
     // Draw connections.
