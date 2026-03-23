@@ -902,19 +902,20 @@ fn render_note_box(svg: &mut SvgBuilder, note: &Note, x: f64, y: f64, w: f64, h:
             ty += NOTE_LINE_HEIGHT;
             continue;
         }
-        // Bullet list: * item, ** sub-item, etc.  Require whitespace after the
-        // leading stars so that `**bold**` markup is not misidentified as a
-        // level-2 bullet list item.
+        // Bullet list: `* item` only.  Only a single leading `*` followed by
+        // whitespace is treated as a bullet, matching Java PlantUML behaviour.
+        // Multi-star patterns (`** text`) could be bold markup (`**text**`) so
+        // restrict to star_level == 1 to avoid false positives.
         let star_level = trimmed.chars().take_while(|&c| c == '*').count();
         let next_after_stars = trimmed[star_level..].chars().next();
-        let is_bullet = star_level > 0
+        let is_bullet = star_level == 1
             && matches!(next_after_stars, None | Some(' ') | Some('\t'));
         if is_bullet {
             let content = trimmed[star_level..].trim_start();
             let indent = "  ".repeat(star_level - 1);
             let content = replace_img_tags(content);
             list_ctrs.clear();
-            svg.text(x + NOTE_PAD_X, ty, &format!("{indent}* {content}"), "start", FONT_SIZE);
+            svg.text(x + NOTE_PAD_X, ty, &format!("{indent}\u{2022} {content}"), "start", FONT_SIZE);
             ty += NOTE_LINE_HEIGHT;
             continue;
         }

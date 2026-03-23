@@ -119,7 +119,7 @@ impl SvgBuilder {
             || content.contains("<img:")
             || content.contains("[[");
         if has_creole {
-            let rich = crate::creole::to_svg_tspans(content);
+            let rich = crate::creole::to_svg_tspans_no_underline(content);
             self.line(&format!(
                 r#"<text x="{x}" y="{y}" text-anchor="{anchor}" font-family="sans-serif" font-size="{font_size}">{rich}</text>"#
             ));
