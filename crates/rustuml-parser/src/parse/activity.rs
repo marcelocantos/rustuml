@@ -81,12 +81,18 @@ fn parse_legacy_activity(lines: &[String]) -> Result<ActivityDiagram, ParseError
     static RE_FORK_BAR: LazyLock<Regex> = LazyLock::new(|| {
         Regex::new(r"^===([^=]+)===$").unwrap()
     });
+    static RE_PARTITION: LazyLock<Regex> = LazyLock::new(|| {
+        // partition "Name" {  or  partition Name {
+        Regex::new(r#"^partition\s+(?:"([^"]+)"|(\S+))\s*\{?\s*$"#).unwrap()
+    });
 
     let mut meta = DiagramMeta::default();
     let mut steps: Vec<ActivityStep> = Vec::new();
     let mut seen_nodes: std::collections::HashSet<String> = std::collections::HashSet::new();
     // Track fork bars by name: false = not yet seen (will be Fork), true = already seen.
     let mut fork_bars: std::collections::HashMap<String, bool> = std::collections::HashMap::new();
+    // Nesting depth of partition/group blocks (for legacy `}` handling).
+    let mut partition_depth: usize = 0;
 
     for line in lines {
         let t = line.trim();
@@ -95,6 +101,27 @@ fn parse_legacy_activity(lines: &[String]) -> Result<ActivityDiagram, ParseError
         // Title.
         if let Some(rest) = t.strip_prefix("title ") {
             meta.title = Some(rest.trim().to_string());
+            continue;
+        }
+
+        // Partition block: `partition "Name" {` or `partition Name {`
+        if let Some(caps) = RE_PARTITION.captures(t) {
+            let name = caps
+                .get(1)
+                .or(caps.get(2))
+                .map(|m| m.as_str().to_string())
+                .unwrap_or_default();
+            steps.push(ActivityStep::Partition(PartitionBlock { name, color: None }));
+            partition_depth += 1;
+            continue;
+        }
+
+        // Closing brace: ends the innermost partition block.
+        if t == "}" {
+            if partition_depth > 0 {
+                steps.push(ActivityStep::EndPartition);
+                partition_depth -= 1;
+            }
             continue;
         }
 
