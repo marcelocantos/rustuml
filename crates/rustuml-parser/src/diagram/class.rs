@@ -69,6 +69,9 @@ pub struct Member {
     pub is_static: bool,
     pub is_abstract: bool,
     pub kind: MemberKind,
+    /// Verbatim display text (after stripping visibility prefix and modifiers).
+    /// Preserves original colon spacing, e.g. "field: String" or "field : String".
+    pub display_text: String,
 }
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Default, Serialize, Deserialize)]

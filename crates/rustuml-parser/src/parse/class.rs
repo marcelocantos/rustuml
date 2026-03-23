@@ -629,6 +629,10 @@ fn parse_member(s: &str) -> Member {
     // Determine if method (contains parens) or field.
     let is_method = rest.contains('(');
 
+    // `rest` is the text after stripping the visibility prefix. It is used
+    // verbatim as the display text (preserves original colon spacing).
+    let display_text = rest.to_string();
+
     if is_method {
         let (name, return_type) = if let Some(colon_pos) = rest.rfind(':') {
             let before = rest[..colon_pos].trim();
@@ -644,6 +648,7 @@ fn parse_member(s: &str) -> Member {
             is_static,
             is_abstract,
             kind: MemberKind::Method,
+            display_text,
         }
     } else if let Some(colon_pos) = rest.find(':') {
         let name = rest[..colon_pos].trim().to_string();
@@ -655,6 +660,7 @@ fn parse_member(s: &str) -> Member {
             is_static,
             is_abstract,
             kind: MemberKind::Field,
+            display_text,
         }
     } else {
         // Bare name (e.g., enum value).
@@ -665,6 +671,7 @@ fn parse_member(s: &str) -> Member {
             is_static,
             is_abstract,
             kind: MemberKind::Field,
+            display_text,
         }
     }
 }

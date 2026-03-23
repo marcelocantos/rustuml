@@ -55,7 +55,21 @@ pub fn render(diagram: &ClassDiagram, theme: &Theme) -> String {
     }
 
     // Extract Sugiyama-positioned coordinates.
-    let positions = layout.layout_positions();
+    // Run layout in a dedicated thread with a timeout — layout-rs can
+    // enter infinite loops on degenerate graphs (e.g. bidirectional edges).
+    let positions = {
+        let (tx, rx) = std::sync::mpsc::channel();
+        std::thread::spawn(move || {
+            let _ = tx.send(layout.layout_positions());
+        });
+        match rx.recv_timeout(std::time::Duration::from_secs(5)) {
+            Ok(pos) => pos,
+            Err(_) => {
+                // Layout timed out — fall back to grid layout.
+                return render_grid(diagram, cs);
+            }
+        }
+    };
 
     // Phase 2: Render with our own class boxes using layout positions.
     render_with_positions(diagram, &positions, cs)
@@ -516,16 +530,11 @@ fn format_member(member: &Member) -> String {
     } else {
         ""
     };
-    // Java PlantUML renders members as "name: Type" (no visibility prefix in text;
-    // visibility is shown as icons). The colon is appended directly to the name.
-    let type_suffix = member
-        .return_type
-        .as_ref()
-        .map_or(String::new(), |t| format!(": {t}"));
-
+    // Use the verbatim display_text to preserve the original colon spacing
+    // from the source (e.g. "field: String" or "field : String").
     format!(
-        "{static_prefix}{abstract_prefix}{}{}",
-        member.name, type_suffix
+        "{static_prefix}{abstract_prefix}{}",
+        member.display_text
     )
 }
 
@@ -753,6 +762,7 @@ mod tests {
                             is_static: false,
                             is_abstract: false,
                             kind: MemberKind::Field,
+                            display_text: "name: String".into(),
                         },
                         Member {
                             name: "makeSound()".into(),
@@ -761,6 +771,7 @@ mod tests {
                             is_static: false,
                             is_abstract: false,
                             kind: MemberKind::Method,
+                            display_text: "makeSound(): void".into(),
                         },
                     ],
                     stereotypes: vec![],
@@ -776,6 +787,7 @@ mod tests {
                         is_static: false,
                         is_abstract: false,
                         kind: MemberKind::Method,
+                        display_text: "fetch(): void".into(),
                     }],
                     stereotypes: vec![],
                 },
@@ -841,6 +853,7 @@ mod tests {
                     is_static: false,
                     is_abstract: true,
                     kind: MemberKind::Method,
+                    display_text: "draw(): void".into(),
                 }],
                 stereotypes: vec![],
             }],
