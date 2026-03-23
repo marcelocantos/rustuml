@@ -1,0 +1,3 @@
+note "This is a standalone note" as N1
+note "Another note" as N2
+N1 .. N2

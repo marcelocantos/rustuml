@@ -1,0 +1,11 @@
+@startuml
+object Order {
+  id = 1
+  total = 100.00
+}
+object LineItem {
+  product = "Widget"
+  qty = 2
+}
+Order *-- LineItem
+@enduml

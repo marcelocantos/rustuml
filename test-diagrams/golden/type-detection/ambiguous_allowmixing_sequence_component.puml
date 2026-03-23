@@ -1,0 +1,6 @@
+@startuml
+allowmixing
+participant Client
+component "Server" as SRV
+Client -> SRV : request
+@enduml

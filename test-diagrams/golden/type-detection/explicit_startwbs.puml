@@ -1,0 +1,10 @@
+@startwbs
+* CEO
+** CTO
+*** Dev Team
+**** Alice
+**** Bob
+*** QA Team
+** CFO
+*** Finance
+@endwbs

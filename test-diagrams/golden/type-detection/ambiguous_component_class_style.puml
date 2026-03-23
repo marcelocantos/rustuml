@@ -1,0 +1,12 @@
+@startuml
+component Frontend {
+  [LoginForm]
+  [Dashboard]
+}
+component Backend {
+  [AuthService]
+  [DataService]
+}
+[LoginForm] --> [AuthService] : calls
+[Dashboard] --> [DataService] : fetches
+@enduml

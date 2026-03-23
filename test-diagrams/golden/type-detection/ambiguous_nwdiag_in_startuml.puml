@@ -1,0 +1,13 @@
+@startuml
+nwdiag {
+  network internet {
+    web;
+    mobile;
+  }
+  network internal {
+    web;
+    app;
+    db;
+  }
+}
+@enduml

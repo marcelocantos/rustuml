@@ -1,0 +1,3 @@
+node Server
+database DB
+Server --> DB : connects

@@ -1,0 +1,4 @@
+@startuml diagram_123
+[*] --> Active
+Active --> [*]
+@enduml

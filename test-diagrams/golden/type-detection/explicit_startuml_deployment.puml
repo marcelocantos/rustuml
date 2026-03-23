@@ -1,0 +1,11 @@
+@startuml
+node WebServer {
+  component Nginx
+}
+node AppServer {
+  component AppService
+}
+database PostgreSQL
+WebServer --> AppServer : HTTP
+AppServer --> PostgreSQL : JDBC
+@enduml

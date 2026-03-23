@@ -1,0 +1,8 @@
+@startuml named_states
+[*] --> Pending
+Pending --> Processing : submit
+Processing --> Approved : approve
+Processing --> Rejected : reject
+Approved --> [*]
+Rejected --> [*]
+@enduml

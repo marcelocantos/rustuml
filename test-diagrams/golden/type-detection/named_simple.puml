@@ -1,0 +1,4 @@
+@startuml my_diagram
+Alice -> Bob : hello
+Bob --> Alice : hi
+@enduml
