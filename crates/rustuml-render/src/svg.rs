@@ -131,6 +131,39 @@ impl SvgBuilder {
         ));
     }
 
+    /// Emit a note box (rectangle with dog-ear in the top-right corner).
+    ///
+    /// `x`, `y` are the top-left corner. `ear` is the size of the corner fold.
+    #[allow(clippy::too_many_arguments)]
+    pub fn note_box(&mut self, x: f64, y: f64, w: f64, h: f64, ear: f64, fill: &str, stroke: &str) {
+        // Main polygon: rectangle with the top-right corner cut to a dog-ear.
+        let pts = [
+            (x, y),
+            (x + w - ear, y),
+            (x + w, y + ear),
+            (x + w, y + h),
+            (x, y + h),
+        ];
+        let pts_str: String = pts
+            .iter()
+            .map(|(px, py)| format!("{px},{py}"))
+            .collect::<Vec<_>>()
+            .join(" ");
+        self.line(&format!(
+            r#"<polygon points="{pts_str}" fill="{fill}" stroke="{stroke}" stroke-width="1"/>"#
+        ));
+        // Dog-ear fold triangle.
+        let ear_pts = [(x + w - ear, y), (x + w, y + ear), (x + w - ear, y + ear)];
+        let ear_str: String = ear_pts
+            .iter()
+            .map(|(px, py)| format!("{px},{py}"))
+            .collect::<Vec<_>>()
+            .join(" ");
+        self.line(&format!(
+            r#"<polygon points="{ear_str}" fill="{fill}" stroke="{stroke}" stroke-width="1"/>"#
+        ));
+    }
+
     pub fn diamond(&mut self, cx: f64, cy: f64, size: f64, fill: &str, stroke: &str) {
         self.polygon(
             &[

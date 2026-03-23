@@ -12,6 +12,29 @@ pub struct StateDiagram {
     pub meta: DiagramMeta,
     pub states: Vec<State>,
     pub transitions: Vec<Transition>,
+    pub notes: Vec<StateNote>,
+}
+
+/// A note attached to a state or floating freely.
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct StateNote {
+    /// The text content of the note (may be multi-line).
+    pub text: String,
+    /// Where the note is positioned relative to its anchor.
+    pub kind: StateNoteKind,
+}
+
+/// Where the note is anchored.
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub enum StateNoteKind {
+    /// `note left of <state> : text`
+    LeftOf(String),
+    /// `note right of <state> : text`
+    RightOf(String),
+    /// `note "..." as <alias>` — free-floating note
+    Floating,
+    /// `note on link` — attached to the most recent transition
+    OnLink,
 }
 
 /// A state in a state diagram.
