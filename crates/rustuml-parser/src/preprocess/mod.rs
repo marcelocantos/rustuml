@@ -550,7 +550,7 @@ fn eval_builtin_functions(input: &str) -> String {
                     let len: usize = args
                         .get(2)
                         .and_then(|v| v.parse().ok())
-                        .unwrap_or(s.len() - start);
+                        .unwrap_or_else(|| s.len().saturating_sub(start));
                     s.chars().skip(start).take(len).collect()
                 }
                 "strpos" => {

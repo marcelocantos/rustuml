@@ -525,10 +525,16 @@ mod tests {
     use rustuml_parser::diagram::DiagramMeta;
 
     fn simple_diagram() -> GanttDiagram {
+        use rustuml_parser::diagram::gantt::GanttRow;
         GanttDiagram {
             meta: DiagramMeta::default(),
             project_start: None,
             closed_days: Vec::new(),
+            rows: vec![
+                GanttRow::Task("Task 1".into()),
+                GanttRow::Task("Task 2".into()),
+                GanttRow::Task("Task 3".into()),
+            ],
             tasks: vec![
                 GanttTask {
                     name: "Task 1".into(),
@@ -568,6 +574,7 @@ mod tests {
             meta: DiagramMeta::default(),
             project_start: None,
             closed_days: Vec::new(),
+            rows: vec![],
             tasks: vec![],
         };
         let svg = render(&d, &Theme::default());

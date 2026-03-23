@@ -43,8 +43,12 @@ pub fn parse_gantt(lines: &[String]) -> Result<GanttDiagram, ParseError> {
 struct GanttParser {
     meta: DiagramMeta,
     tasks: Vec<GanttTask>,
+    /// Ordered rows (task names and separators) for rendering.
+    rows: Vec<GanttRow>,
     project_start: Option<String>,
     closed_days: Vec<u8>,
+    /// Name of the last task that was explicitly defined (for `then` syntax).
+    last_task: Option<String>,
 }
 
 impl GanttParser {
@@ -52,8 +56,10 @@ impl GanttParser {
         Self {
             meta: DiagramMeta::default(),
             tasks: Vec::new(),
+            rows: Vec::new(),
             project_start: None,
             closed_days: Vec::new(),
+            last_task: None,
         }
     }
 
@@ -61,12 +67,17 @@ impl GanttParser {
         GanttDiagram {
             meta: self.meta,
             tasks: self.tasks,
+            rows: self.rows,
             project_start: self.project_start,
             closed_days: self.closed_days,
         }
     }
 
     fn parse_line(&mut self, line_num: usize, line: &str) -> Result<(), ParseError> {
+        // `then [name] lasts N days` — implicit AfterTask(last_task)
+        if self.try_then(line) {
+            return Ok(());
+        }
         // Combined: [name] lasts N days and starts at [other]'s end
         if self.try_combined(line) {
             return Ok(());
@@ -77,6 +88,10 @@ impl GanttParser {
         }
         // [name] starts at [other]'s end
         if self.try_starts_after(line, line_num)? {
+            return Ok(());
+        }
+        // [name] happens at [other]'s end — milestone (zero-duration task)
+        if self.try_happens_at(line) {
             return Ok(());
         }
         // [name] is colored in <Color>
@@ -115,6 +130,41 @@ impl GanttParser {
         }
         // Silently ignore unknown directives (scale, printscale, etc.)
         Ok(())
+    }
+
+    /// `then [name] lasts N days` — implicit start after last_task
+    fn try_then(&mut self, line: &str) -> bool {
+        static RE: LazyLock<Regex> = LazyLock::new(|| {
+            Regex::new(r"^then\s+\[([^\]]+)\]\s+lasts\s+(\d+)\s+days?$").unwrap()
+        });
+        if let Some(caps) = RE.captures(line) {
+            let name = caps[1].to_string();
+            let duration: u32 = caps[2].parse().unwrap_or(1);
+            let start = if let Some(prev) = &self.last_task {
+                TaskStart::AfterTask(prev.clone())
+            } else {
+                TaskStart::Day(0)
+            };
+            self.upsert_task(name, duration, start);
+            true
+        } else {
+            false
+        }
+    }
+
+    /// `[name] happens at [other]'s end` — zero-duration milestone
+    fn try_happens_at(&mut self, line: &str) -> bool {
+        static RE: LazyLock<Regex> = LazyLock::new(|| {
+            Regex::new(r"^\[([^\]]+)\]\s+happens\s+at\s+\[([^\]]+)\]'s\s+end$").unwrap()
+        });
+        if let Some(caps) = RE.captures(line) {
+            let name = caps[1].to_string();
+            let dep = caps[2].to_string();
+            self.upsert_task(name, 0, TaskStart::AfterTask(dep));
+            true
+        } else {
+            false
+        }
     }
 
     /// `[name] lasts N days and starts at [other]'s end`
@@ -229,10 +279,14 @@ impl GanttParser {
 
     /// Fully insert or update a task with both duration and start.
     fn upsert_task(&mut self, name: String, duration: u32, start: TaskStart) {
+        self.last_task = Some(name.clone());
         if let Some(task) = self.tasks.iter_mut().find(|t| t.name == name) {
             task.duration = duration;
             task.start = start;
         } else {
+            if !self.rows.iter().any(|r| matches!(r, GanttRow::Task(n) if n == &name)) {
+                self.rows.push(GanttRow::Task(name.clone()));
+            }
             self.tasks.push(GanttTask {
                 name,
                 duration,
@@ -244,9 +298,13 @@ impl GanttParser {
 
     /// Insert or update duration only; preserve existing start if present.
     fn upsert_task_lasts_only(&mut self, name: String, duration: u32) {
+        self.last_task = Some(name.clone());
         if let Some(task) = self.tasks.iter_mut().find(|t| t.name == name) {
             task.duration = duration;
         } else {
+            if !self.rows.iter().any(|r| matches!(r, GanttRow::Task(n) if n == &name)) {
+                self.rows.push(GanttRow::Task(name.clone()));
+            }
             self.tasks.push(GanttTask {
                 name,
                 duration,

@@ -11,10 +11,21 @@ use serde::{Deserialize, Serialize};
 pub struct GanttDiagram {
     pub meta: DiagramMeta,
     pub tasks: Vec<GanttTask>,
+    /// Rows (tasks and separators) in order, for rendering.
+    pub rows: Vec<GanttRow>,
     /// Project start date (YYYY-MM-DD), if specified with `Project starts`.
     pub project_start: Option<String>,
     /// Days of week that are closed (0=Monday, 1=Tuesday, ..., 6=Sunday).
     pub closed_days: Vec<u8>,
+}
+
+/// A row in the Gantt chart (task or separator).
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub enum GanttRow {
+    /// A task row.
+    Task(String),
+    /// A separator row with an optional label (from `-- Label --`).
+    Separator(String),
 }
 
 /// How a task's start is specified.
@@ -32,7 +43,7 @@ pub enum TaskStart {
 pub struct GanttTask {
     /// Display name (without brackets).
     pub name: String,
-    /// Duration in days.
+    /// Duration in days (0 = milestone).
     pub duration: u32,
     /// How the start date is determined.
     pub start: TaskStart,

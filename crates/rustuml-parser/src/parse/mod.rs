@@ -152,6 +152,7 @@ fn detect_uml_subtype(lines: &[String]) -> UmlSubtype {
         if trimmed.starts_with("robust ")
             || trimmed.starts_with("concise ")
             || trimmed.starts_with("binary ")
+            || trimmed.starts_with("clock ")
         {
             scores[8] += 10;
         }

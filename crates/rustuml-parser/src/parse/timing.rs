@@ -42,6 +42,8 @@ struct TimingParser {
     annotations: Vec<Annotation>,
     /// Optional scale.
     scale: Option<Scale>,
+    /// Clock timelines: (timeline_id, period). Used to auto-generate time points.
+    clock_periods: Vec<(String, i64)>,
 }
 
 impl TimingParser {
@@ -54,11 +56,34 @@ impl TimingParser {
             highlights: Vec::new(),
             annotations: Vec::new(),
             scale: None,
+            clock_periods: Vec::new(),
         }
     }
 
     fn finish(self) -> TimingDiagram {
-        let time_points = self.time_points.into_iter().collect();
+        let mut time_points = self.time_points;
+        // Generate clock-related time points: for each clock with period N,
+        // add t_min + N/2, t_min + N, t_min + 3N/2, ... up to t_max + N.
+        if !self.clock_periods.is_empty() {
+            let t_min = time_points.iter().next().copied().unwrap_or(0);
+            let t_max = time_points.iter().next_back().copied().unwrap_or(0);
+            for (_, period) in &self.clock_periods {
+                if *period <= 0 {
+                    continue;
+                }
+                // Add half-period boundaries as time points.
+                let half = period / 2;
+                if half <= 0 {
+                    continue;
+                }
+                let mut t = t_min + half;
+                while t <= t_max + period {
+                    time_points.insert(t);
+                    t += half;
+                }
+            }
+        }
+        let time_points = time_points.into_iter().collect();
         TimingDiagram {
             meta: self.meta,
             timelines: self.timelines,
@@ -81,6 +106,9 @@ impl TimingParser {
             return Ok(());
         }
         if self.try_timeline_decl(line) {
+            return Ok(());
+        }
+        if self.try_clock_decl(line) {
             return Ok(());
         }
         if self.try_state_change(line) {
@@ -184,6 +212,40 @@ impl TimingParser {
                     id,
                     label,
                     kind,
+                    changes: Vec::new(),
+                });
+            }
+            true
+        } else {
+            false
+        }
+    }
+
+    /// Try `clock "Label" as Alias with period N`.
+    /// Creates a Binary timeline. The clock auto-toggles each half-period,
+    /// but we store it as a plain binary timeline; the actual waveform is
+    /// generated from state changes in the diagram. For the purposes of
+    /// label rendering, we just register the timeline.
+    fn try_clock_decl(&mut self, line: &str) -> bool {
+        static RE: LazyLock<Regex> = LazyLock::new(|| {
+            Regex::new(r#"^clock\s+"([^"]+)"(?:\s+as\s+(\w+))?\s+with\s+period\s+(\d+)$"#)
+                .unwrap()
+        });
+        if let Some(caps) = RE.captures(line) {
+            let label = caps[1].to_string();
+            let id = caps
+                .get(2)
+                .map(|m| m.as_str().to_string())
+                .unwrap_or_else(|| label.clone());
+            let period: i64 = caps[3].parse().unwrap_or(10);
+            // Store period for time-point generation in finish().
+            self.clock_periods.push((id.clone(), period));
+            // Register as Binary timeline.
+            if !self.timelines.iter().any(|t| t.id == id) {
+                self.timelines.push(Timeline {
+                    id,
+                    label,
+                    kind: TimelineKind::Binary,
                     changes: Vec::new(),
                 });
             }
