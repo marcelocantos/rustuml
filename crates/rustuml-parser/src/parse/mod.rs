@@ -123,12 +123,13 @@ fn detect_uml_subtype(lines: &[String]) -> UmlSubtype {
         // Class — use weight 10 so that class-specific keywords dominate
         // container keywords (cloud, folder, node, etc.) that are shared with
         // deployment diagrams.
+        // Note: `entity` is excluded here because it is also a sequence participant
+        // type; entity-with-body ({) is handled separately below.
         if trimmed.starts_with("class ")
             || trimmed.starts_with("abstract class ")
             || trimmed.starts_with("interface ")
             || trimmed.starts_with("enum ")
             || trimmed.starts_with("annotation ")
-            || trimmed.starts_with("entity ")
             || trimmed.contains("<|--")
             || trimmed.contains("..|>")
             || trimmed.contains("*--")
@@ -145,9 +146,10 @@ fn detect_uml_subtype(lines: &[String]) -> UmlSubtype {
         {
             scores[1] += 10;
         }
-        // entity with a body block ({) is a class/ER entity, not a sequence participant.
+        // entity with a body block ({) is an unambiguous class/ER entity,
+        // not a sequence participant.
         if trimmed.starts_with("entity ") && (trimmed.ends_with('{') || trimmed.ends_with("{{")) {
-            scores[1] += 5;
+            scores[1] += 15;
         }
         // Sequence.
         if trimmed.starts_with("participant ")
