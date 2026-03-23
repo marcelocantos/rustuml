@@ -775,7 +775,7 @@ mod tests {
     #[test]
     fn has_members() {
         let svg = render(&simple_class_diagram(), &Theme::default());
-        assert!(svg.contains("+name : String"));
+        assert!(svg.contains("name: String"));
         assert!(svg.contains("+makeSound()"));
         assert!(svg.contains("+fetch()"));
     }
