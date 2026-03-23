@@ -85,9 +85,26 @@ pub enum RelationshipKind {
     Dependency,
 }
 
-/// A package grouping entities.
+/// Container type for grouping entities in a class diagram.
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Default, Serialize, Deserialize)]
+pub enum PackageKind {
+    #[default]
+    Package,
+    Namespace,
+    Cloud,
+    Database,
+    Folder,
+    Frame,
+    Rectangle,
+    Node,
+}
+
+/// A package/namespace/container grouping entities.
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct Package {
     pub name: String,
+    pub kind: PackageKind,
+    /// Optional background color (CSS name or hex without leading `#`).
+    pub color: Option<String>,
     pub entities: Vec<String>,
 }

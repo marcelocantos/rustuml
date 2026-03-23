@@ -33,8 +33,8 @@ struct ClassParser {
     packages: Vec<Package>,
     /// Entity currently being parsed (inside { ... } block).
     current_entity: Option<String>,
-    /// Current package scope.
-    current_package: Option<String>,
+    /// Index of the innermost active package scope (None = top-level).
+    current_package: Option<usize>,
 }
 
 impl ClassParser {
@@ -151,6 +151,14 @@ impl ClassParser {
                 });
             }
 
+            // Register entity in the active package.
+            if let Some(pkg_idx) = self.current_package {
+                let pkg = &mut self.packages[pkg_idx];
+                if !pkg.entities.contains(&id) {
+                    pkg.entities.push(id.clone());
+                }
+            }
+
             if line.ends_with('{') || line.ends_with("{{") {
                 self.current_entity = Some(id);
             }
@@ -237,18 +245,42 @@ impl ClassParser {
     }
 
     fn try_package(&mut self, line: &str) -> bool {
-        static RE: LazyLock<Regex> =
-            LazyLock::new(|| Regex::new(r#"^package\s+(?:"([^"]+)"|(\S+))\s*\{?"#).unwrap());
+        static RE: LazyLock<Regex> = LazyLock::new(|| {
+            Regex::new(
+                r#"^(package|namespace|cloud|database|folder|frame|rectangle|node)\s+(?:"([^"]+)"|([^#\s{]+))\s*(?:#([^\s{]+))?\s*\{?"#,
+            )
+            .unwrap()
+        });
 
         if let Some(caps) = RE.captures(line) {
+            let kind_str = &caps[1];
             let name = caps
-                .get(1)
-                .or(caps.get(2))
+                .get(2)
+                .or(caps.get(3))
                 .map(|m| m.as_str().to_string())
                 .unwrap_or_default();
-            self.current_package = Some(name.clone());
+            let color = caps.get(4).map(|m| {
+                let s = m.as_str();
+                // Keep hex colors as-is (only hex digits → prepend nothing).
+                // Named colors: strip no prefix (already without #).
+                s.to_string()
+            });
+            let kind = match kind_str {
+                "namespace" => PackageKind::Namespace,
+                "cloud" => PackageKind::Cloud,
+                "database" => PackageKind::Database,
+                "folder" => PackageKind::Folder,
+                "frame" => PackageKind::Frame,
+                "rectangle" => PackageKind::Rectangle,
+                "node" => PackageKind::Node,
+                _ => PackageKind::Package,
+            };
+            let pkg_idx = self.packages.len();
+            self.current_package = Some(pkg_idx);
             self.packages.push(Package {
                 name,
+                kind,
+                color,
                 entities: Vec::new(),
             });
             true
