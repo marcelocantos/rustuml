@@ -16,7 +16,6 @@ pub fn parse_activity(lines: &[String]) -> Result<ActivityDiagram, ParseError> {
     for (i, line) in lines.iter().enumerate() {
         let trimmed = line.trim();
         if trimmed.is_empty() {
-            // Still accumulate blank lines inside a multi-line note.
             if parser.pending_note.is_some() {
                 parser.accumulate_note_line("");
             }
@@ -27,7 +26,6 @@ pub fn parse_activity(lines: &[String]) -> Result<ActivityDiagram, ParseError> {
     Ok(parser.finish())
 }
 
-/// State for a note being accumulated across multiple lines.
 struct PendingNote {
     position: NotePosition,
     color: Option<String>,
@@ -77,7 +75,6 @@ impl ActivityParser {
     }
 
     fn parse_line(&mut self, _line_num: usize, line: &str) -> Result<(), ParseError> {
-        // If we're inside a multi-line note, look for end note or accumulate.
         if self.pending_note.is_some() {
             if line == "end note" {
                 self.flush_pending_note();
@@ -100,10 +97,15 @@ impl ActivityParser {
             "split again" => self.steps.push(ActivityStep::SplitAgain),
             "end split" => self.steps.push(ActivityStep::EndSplit),
             "repeat" => self.steps.push(ActivityStep::Repeat),
+            "break" => self.steps.push(ActivityStep::Break),
             "detach" => self.steps.push(ActivityStep::Detach),
             "kill" => self.steps.push(ActivityStep::Kill),
             _ => {
-                if !self.try_action(line)
+                if !self.try_meta(line)
+                    && !self.try_action(line)
+                    && !self.try_deprecated_color_action(line)
+                    && !self.try_arrow(line)
+                    && !self.try_backward(line)
                     && !self.try_if(line)
                     && !self.try_elseif(line)
                     && !self.try_else(line)
@@ -123,6 +125,35 @@ impl ActivityParser {
         Ok(())
     }
 
+    fn try_meta(&mut self, line: &str) -> bool {
+        static RE_TITLE: LazyLock<Regex> =
+            LazyLock::new(|| Regex::new(r"^title\s+(.+)$").unwrap());
+        static RE_HEADER: LazyLock<Regex> =
+            LazyLock::new(|| Regex::new(r"^header\s+(.+)$").unwrap());
+        static RE_FOOTER: LazyLock<Regex> =
+            LazyLock::new(|| Regex::new(r"^footer\s+(.+)$").unwrap());
+        static RE_CAPTION: LazyLock<Regex> =
+            LazyLock::new(|| Regex::new(r"^caption\s+(.+)$").unwrap());
+
+        if let Some(caps) = RE_TITLE.captures(line) {
+            self.meta.title = Some(super::strip_title_quotes(&caps[1]).to_string());
+            return true;
+        }
+        if let Some(caps) = RE_HEADER.captures(line) {
+            self.meta.header = Some(caps[1].trim().to_string());
+            return true;
+        }
+        if let Some(caps) = RE_FOOTER.captures(line) {
+            self.meta.footer = Some(caps[1].trim().to_string());
+            return true;
+        }
+        if let Some(caps) = RE_CAPTION.captures(line) {
+            self.meta.caption = Some(caps[1].trim().to_string());
+            return true;
+        }
+        false
+    }
+
     fn try_action(&mut self, line: &str) -> bool {
         static RE: LazyLock<Regex> = LazyLock::new(|| Regex::new(r"^:(.+);$").unwrap());
 
@@ -135,14 +166,93 @@ impl ActivityParser {
         }
     }
 
+    fn try_deprecated_color_action(&mut self, line: &str) -> bool {
+        static RE: LazyLock<Regex> = LazyLock::new(|| {
+            Regex::new(r"^(#(?:[0-9A-Fa-f]{6}|[A-Za-z]+)):(.+);$").unwrap()
+        });
+
+        if let Some(caps) = RE.captures(line) {
+            let raw_color = caps[1].trim().to_string();
+            let color = if raw_color.len() == 7
+                && raw_color.starts_with('#')
+                && raw_color[1..].chars().all(|c| c.is_ascii_hexdigit())
+            {
+                format!("#{}", raw_color[1..].to_uppercase())
+            } else {
+                raw_color
+            };
+            let text = caps[2].trim().to_string();
+            self.steps
+                .push(ActivityStep::DeprecatedColorAction(DeprecatedColorAction {
+                    color,
+                    text,
+                }));
+            true
+        } else {
+            false
+        }
+    }
+
+    fn try_arrow(&mut self, line: &str) -> bool {
+        static RE: LazyLock<Regex> = LazyLock::new(|| {
+            Regex::new(r"^(-(?:\[([^\]]+)\])?-?->)\s*(.+)?$").unwrap()
+        });
+
+        if let Some(caps) = RE.captures(line) {
+            let arrow_str = &caps[1];
+            let dashed = arrow_str.contains("-->");
+            let color = caps.get(2).map(|m| {
+                let s = m.as_str().trim();
+                if s.starts_with('#') && s.len() == 7 && s[1..].chars().all(|c| c.is_ascii_hexdigit()) {
+                    format!("#{}", s[1..].to_uppercase())
+                } else {
+                    s.to_string()
+                }
+            });
+            let label = caps.get(3).map(|m| {
+                let s = m.as_str().trim();
+                s.trim_end_matches(';').trim().to_string()
+            }).filter(|s| !s.is_empty());
+            self.steps.push(ActivityStep::Arrow(ArrowStep {
+                dashed,
+                color,
+                label,
+            }));
+            true
+        } else {
+            false
+        }
+    }
+
+    fn try_backward(&mut self, line: &str) -> bool {
+        static RE: LazyLock<Regex> =
+            LazyLock::new(|| Regex::new(r"^backward\s*:(.+);$").unwrap());
+
+        if let Some(caps) = RE.captures(line) {
+            self.steps
+                .push(ActivityStep::Backward(caps[1].trim().to_string()));
+            true
+        } else {
+            false
+        }
+    }
+
     fn try_if(&mut self, line: &str) -> bool {
         static RE: LazyLock<Regex> =
             LazyLock::new(|| Regex::new(r"^if\s*\((.+?)\)\s*then\s*(?:\((.+?)\))?$").unwrap());
+        static RE_BARE: LazyLock<Regex> =
+            LazyLock::new(|| Regex::new(r"^if\s*\((.+?)\)\s*$").unwrap());
 
         if let Some(caps) = RE.captures(line) {
             self.steps.push(ActivityStep::If(IfBlock {
                 condition: caps[1].trim().to_string(),
                 then_label: caps.get(2).map(|m| m.as_str().trim().to_string()),
+            }));
+            true
+        } else if let Some(caps) = RE_BARE.captures(line) {
+            self.steps.push(ActivityStep::If(IfBlock {
+                condition: caps[1].trim().to_string(),
+                then_label: None,
             }));
             true
         } else {
@@ -207,8 +317,6 @@ impl ActivityParser {
     }
 
     fn try_repeat_while(&mut self, line: &str) -> bool {
-        // PlantUML uses "repeatwhile" (one word) as the primary keyword.
-        // Also accept "repeat while" (two words) as an alias.
         static RE: LazyLock<Regex> = LazyLock::new(|| {
             Regex::new(r"^repeat\s*while\s*\((.+?)\)\s*(?:is\s*\((.+?)\))?").unwrap()
         });
@@ -254,7 +362,7 @@ impl ActivityParser {
     }
 
     fn try_swimlane(&mut self, line: &str) -> bool {
-        static RE: LazyLock<Regex> = LazyLock::new(|| Regex::new(r"^\|(\w+)\|$").unwrap());
+        static RE: LazyLock<Regex> = LazyLock::new(|| Regex::new(r"^\|([^|]+)\|$").unwrap());
 
         if let Some(caps) = RE.captures(line) {
             self.steps.push(ActivityStep::Swimlane(caps[1].to_string()));
@@ -265,7 +373,6 @@ impl ActivityParser {
     }
 
     fn try_partition(&mut self, line: &str) -> bool {
-        // Optional color prefix: #colorname or #RRGGBB, then quoted or unquoted name.
         static RE: LazyLock<Regex> = LazyLock::new(|| {
             Regex::new(
                 r#"^partition\s+(?:(#[A-Za-z0-9]+)\s+)?(?:"([^"]+)"|([A-Za-z_]\w*))\s*\{?"#,
@@ -293,7 +400,6 @@ impl ActivityParser {
     }
 
     fn try_note(&mut self, line: &str) -> bool {
-        // Match: note (left|right) [#COLOR] [: inline text]
         static RE: LazyLock<Regex> = LazyLock::new(|| {
             Regex::new(r"^note\s+(left|right)(?:\s+(#[0-9A-Fa-f]{6}|#\w+))?(?:\s*:\s*(.+))?$")
                 .unwrap()
@@ -310,7 +416,6 @@ impl ActivityParser {
                 NotePosition::Right
             };
             let color = caps.get(2).map(|m| {
-                // Normalize: ensure hex colors are uppercase with #
                 let s = m.as_str();
                 if s.starts_with('#') && s.len() == 7 && s[1..].chars().all(|c| c.is_ascii_hexdigit()) {
                     format!("#{}", s[1..].to_uppercase())
@@ -319,7 +424,6 @@ impl ActivityParser {
                 }
             });
             if let Some(inline_text) = caps.get(3) {
-                // Inline note: emit immediately.
                 let text = inline_text.as_str().trim().to_string();
                 if !text.is_empty() {
                     self.steps.push(ActivityStep::Note(NoteBlock {
@@ -329,7 +433,6 @@ impl ActivityParser {
                     }));
                 }
             } else {
-                // Multi-line note: start accumulation.
                 self.pending_note = Some(PendingNote {
                     position,
                     color,
@@ -436,6 +539,12 @@ mod tests {
     }
 
     #[test]
+    fn swimlane_with_spaces() {
+        let d = parse("|New Employee|\nstart\n:task;\nstop");
+        assert!(matches!(d.steps[0], ActivityStep::Swimlane(ref s) if s == "New Employee"));
+    }
+
+    #[test]
     fn partition() {
         let d = parse("start\npartition Init {\n  :step1;\n}\nstop");
         assert!(matches!(d.steps[1], ActivityStep::Partition(ref s) if s.name == "Init"));
@@ -449,5 +558,41 @@ mod tests {
 
         let d2 = parse("start\nkill");
         assert!(matches!(d2.steps[1], ActivityStep::Kill));
+    }
+
+    #[test]
+    fn title_parsed() {
+        let d = parse("title My Diagram\nstart\nstop");
+        assert_eq!(d.meta.title.as_deref(), Some("My Diagram"));
+    }
+
+    #[test]
+    fn deprecated_color_action() {
+        let d = parse("start\n#blue:Do something;\nstop");
+        assert!(matches!(d.steps[1], ActivityStep::DeprecatedColorAction(ref a) if a.text == "Do something" && a.color == "#blue"));
+    }
+
+    #[test]
+    fn arrow_steps() {
+        let d = parse("start\n:A;\n->\n:B;\n-->\n:C;\nstop");
+        assert!(matches!(d.steps[2], ActivityStep::Arrow(ref a) if !a.dashed && a.label.is_none()));
+        assert!(matches!(d.steps[4], ActivityStep::Arrow(ref a) if a.dashed && a.label.is_none()));
+    }
+
+    #[test]
+    fn arrow_with_label() {
+        let d = parse("start\n:A;\n--> label;\n:B;\nstop");
+        if let ActivityStep::Arrow(ref a) = d.steps[2] {
+            assert!(a.dashed);
+            assert_eq!(a.label.as_deref(), Some("label"));
+        } else {
+            panic!("expected Arrow");
+        }
+    }
+
+    #[test]
+    fn backward_step() {
+        let d = parse("start\nrepeat\n:action;\nbackward :retry;\nrepeat while (again?)\nstop");
+        assert!(matches!(d.steps[3], ActivityStep::Backward(ref s) if s == "retry"));
     }
 }

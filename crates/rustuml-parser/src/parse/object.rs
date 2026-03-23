@@ -233,7 +233,7 @@ impl ObjectParser {
 
     fn try_meta(&mut self, line: &str) -> bool {
         if let Some(rest) = line.strip_prefix("title ") {
-            self.meta.title = Some(rest.trim().to_string());
+            self.meta.title = Some(super::strip_title_quotes(rest).to_string());
             return true;
         }
         line.starts_with("skinparam ")

@@ -211,25 +211,26 @@ impl ClassParser {
     }
 
     fn try_relationship(&mut self, line: &str) -> bool {
-        // Standard UML relationship syntax.
+        // Relationship format: EntityA ["mult"] ARROW ["mult"] EntityB [: label]
+        // Supported arrows: <|--, --|>, ..|>, <|.., *--, --*, o--, --o,
+        //                   --, -->, <--, <-, .., ..>, <..
         static RE: LazyLock<Regex> = LazyLock::new(|| {
             Regex::new(
-                r#"^(?:"([^"]+)"\s+)?(\w+)\s+((?:<\|--|\.\.\|>|\*--|o--|--|\.\.>|<\.\.))\s+(?:"([^"]+)"\s+)?(\w+)(?:\s*:\s*(.+))?$"#,
+                r#"^(\w+)\s*(?:"([^"]+)")?\s*((?:<\|--|--\|>|\.\.\|>|<\|\.\.|<\.\.|\*--|--\*|o--|--o|<--|-->|<-|--|\.\.|\.\.>))\s*(?:"([^"]+)")?\s*(\w+)(?:\s*:\s*(.+))?$"#,
             )
             .unwrap()
         });
-        // ER crow's foot notation: EntityA ||--o{ EntityB : "label"
-        // Each end is one of: || |{ o| o{ }| }{ (also reversed: {| {o |o etc.)
+        // ER crow's foot notation: entity1 CROW--CROW entity2 : "label"
         static ER_RE: LazyLock<Regex> = LazyLock::new(|| {
             Regex::new(
-                r#"^(\w+)\s+([|o}][|{o]--[|o][|{])\s+(\w+)(?:\s*:\s*"?([^"]*)"?)?$"#,
+                r#"^(\w+)\s+([|o}][|{o]--[|o][|{])\s+(\w+)(?:\s*:\s*(.+))?$"#,
             )
             .unwrap()
         });
 
         if let Some(caps) = RE.captures(line) {
-            let from_mult = caps.get(1).map(|m| m.as_str().to_string());
-            let from_raw = &caps[2];
+            let from_raw = &caps[1];
+            let from_mult = caps.get(2).map(|m| m.as_str().to_string());
             let rel_str = &caps[3];
             let to_mult = caps.get(4).map(|m| m.as_str().to_string());
             let to_raw = &caps[5];
@@ -247,14 +248,15 @@ impl ClassParser {
                 from_multiplicity: from_mult,
                 to_multiplicity: to_mult,
             });
-            true
-        } else if let Some(caps) = ER_RE.captures(line) {
+            return true;
+        }
+
+        if let Some(caps) = ER_RE.captures(line) {
             let from_raw = &caps[1];
             let to_raw = &caps[3];
-            let label = caps.get(4).map(|m| {
-                let s = m.as_str().trim();
-                s.trim_matches('"').to_string()
-            }).filter(|s| !s.is_empty());
+            let label = caps
+                .get(4)
+                .map(|m| m.as_str().trim().trim_matches('"').to_string());
 
             let from = self.ensure_entity(from_raw);
             let to = self.ensure_entity(to_raw);
@@ -267,10 +269,10 @@ impl ClassParser {
                 from_multiplicity: None,
                 to_multiplicity: None,
             });
-            true
-        } else {
-            false
+            return true;
         }
+
+        false
     }
 
     fn try_inline_member(&mut self, line: &str) -> bool {

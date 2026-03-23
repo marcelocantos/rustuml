@@ -69,7 +69,7 @@ pub fn parse_component(lines: &[String]) -> Result<ComponentDiagram, ParseError>
     let mut components = Vec::new();
     let mut interfaces = Vec::new();
     let mut connections = Vec::new();
-    let meta = DiagramMeta::default();
+    let mut meta = DiagramMeta::default();
 
     // Parse into a nested structure via a stack.
     // Each stack frame is a mutable ComponentPackage under construction.
@@ -96,6 +96,21 @@ pub fn parse_component(lines: &[String]) -> Result<ComponentDiagram, ParseError>
     for line in lines {
         let trimmed = line.trim();
         if trimmed.is_empty() {
+            continue;
+        }
+
+        // Parse title directive.
+        if let Some(rest) = trimmed.strip_prefix("title ") {
+            meta.title = Some(super::strip_title_quotes(rest).to_string());
+            continue;
+        }
+        // Skip skinparam and other decoration lines.
+        if trimmed.starts_with("skinparam ")
+            || trimmed.starts_with("hide ")
+            || trimmed.starts_with("show ")
+            || trimmed.starts_with("legend")
+            || trimmed.starts_with("caption ")
+        {
             continue;
         }
 

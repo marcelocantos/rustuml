@@ -14,7 +14,7 @@ use crate::diagram::deployment::*;
 pub fn parse_deployment(lines: &[String]) -> Result<DeploymentDiagram, ParseError> {
     let mut nodes: Vec<DeploymentNode> = Vec::new();
     let mut connections = Vec::new();
-    let meta = DiagramMeta::default();
+    let mut meta = DiagramMeta::default();
 
     // Stack of node IDs for tracking nesting depth.
     let mut stack: Vec<String> = Vec::new();
@@ -31,6 +31,19 @@ pub fn parse_deployment(lines: &[String]) -> Result<DeploymentDiagram, ParseErro
     for line in lines {
         let trimmed = line.trim();
         if trimmed.is_empty() {
+            continue;
+        }
+
+        // Title directive.
+        if let Some(rest) = trimmed.strip_prefix("title ") {
+            meta.title = Some(super::strip_title_quotes(rest).to_string());
+            continue;
+        }
+        // Skip skinparam and decoration lines.
+        if trimmed.starts_with("skinparam ")
+            || trimmed.starts_with("hide ")
+            || trimmed.starts_with("show ")
+        {
             continue;
         }
 

@@ -189,7 +189,7 @@ pub fn parse_usecase(lines: &[String]) -> Result<UseCaseDiagram, ParseError> {
 
         // title directive.
         if let Some(t) = trimmed.strip_prefix("title") {
-            let title = t.trim().to_string();
+            let title = super::strip_title_quotes(t).to_string();
             if !title.is_empty() {
                 meta.title = Some(title);
             }

@@ -64,6 +64,19 @@ impl StateParser {
     }
 
     fn parse_line(&mut self, _line_num: usize, line: &str) -> Result<(), ParseError> {
+        // Title directive.
+        if let Some(rest) = line.strip_prefix("title ") {
+            self.meta.title = Some(super::strip_title_quotes(rest).to_string());
+            return Ok(());
+        }
+        // Skip skinparam and decoration lines.
+        if line.starts_with("skinparam ")
+            || line.starts_with("hide ")
+            || line.starts_with("show ")
+        {
+            return Ok(());
+        }
+
         if self.try_transition(line) {
             return Ok(());
         }
