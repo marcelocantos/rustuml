@@ -34,6 +34,8 @@ pub struct Connection {
     pub from: String,
     pub to: String,
     pub label: Option<String>,
+    pub from_mult: Option<String>,
+    pub to_mult: Option<String>,
     pub dashed: bool,
 }
 

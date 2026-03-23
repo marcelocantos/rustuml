@@ -83,9 +83,12 @@ pub fn parse_component(lines: &[String]) -> Result<ComponentDiagram, ParseError>
         LazyLock::new(|| Regex::new(r"^\[([^\]]+)\]$").unwrap());
     static RE_IFACE: LazyLock<Regex> =
         LazyLock::new(|| Regex::new(r#"^interface\s+"([^"]+)"\s+as\s+(\w+)"#).unwrap());
+    // Matches: FROM ["from_mult"] ARROW ["to_mult"] TO [: label]
+    // FROM and TO can be [bracket] or \w+ identifiers.
+    // Optional quoted multiplicities immediately adjoin the arrow on either side.
     static RE_CONN: LazyLock<Regex> = LazyLock::new(|| {
         Regex::new(
-            r#"^(?:\[([^\]]+)\]|(\w+))\s*([-.\|<>~]+)\s*(?:\[([^\]]+)\]|(\w+))(?:\s*:\s*(.+))?$"#,
+            r#"^(?:\[([^\]]+)\]|(\w+))\s*(?:"([^"]*)")?\s*([-.\|<>~]+)\s*(?:"([^"]*)")?\s*(?:\[([^\]]+)\]|(\w+))(?:\s*:\s*(.+))?$"#,
         )
         .unwrap()
     });
@@ -189,13 +192,15 @@ pub fn parse_component(lines: &[String]) -> Result<ComponentDiagram, ParseError>
                 .or(caps.get(2))
                 .map(|m| m.as_str().replace(' ', "_"))
                 .unwrap_or_default();
-            let arrow = &caps[3];
+            let from_mult = caps.get(3).map(|m| m.as_str().to_string());
+            let arrow = &caps[4];
+            let to_mult = caps.get(5).map(|m| m.as_str().to_string());
             let to = caps
-                .get(4)
-                .or(caps.get(5))
+                .get(6)
+                .or(caps.get(7))
                 .map(|m| m.as_str().replace(' ', "_"))
                 .unwrap_or_default();
-            let label = caps.get(6).map(|m| m.as_str().trim().to_string());
+            let label = caps.get(8).map(|m| m.as_str().trim().to_string());
             let dashed = arrow.contains("..");
 
             // Auto-create components from connection endpoints.
@@ -217,6 +222,8 @@ pub fn parse_component(lines: &[String]) -> Result<ComponentDiagram, ParseError>
                     from,
                     to,
                     label,
+                    from_mult,
+                    to_mult,
                     dashed,
                 });
             }

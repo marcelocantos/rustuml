@@ -149,6 +149,18 @@ pub fn render(diagram: &ComponentDiagram, theme: &Theme) -> String {
                 let my = (fy + COMPONENT_H + ty) / 2.0;
                 svg.text(mx, my - 4.0, label, "middle", SMALL_FONT);
             }
+            // Render from_mult near the source endpoint (slightly offset).
+            if let Some(from_mult) = &conn.from_mult {
+                let mx = fx + fw / 2.0 + 6.0;
+                let my = fy + COMPONENT_H + 14.0;
+                svg.text(mx, my, from_mult, "start", SMALL_FONT);
+            }
+            // Render to_mult near the target endpoint (slightly offset).
+            if let Some(to_mult) = &conn.to_mult {
+                let mx = tx + tw / 2.0 + 6.0;
+                let my = ty - 4.0;
+                svg.text(mx, my, to_mult, "start", SMALL_FONT);
+            }
         }
     }
 
