@@ -29,6 +29,10 @@ const NOTE_FOLD: f64 = 10.0;
 const NOTE_PAD: f64 = 6.0;
 const NOTE_LINE_H: f64 = 15.0;
 const NOTE_GAP: f64 = 20.0;
+const PKG_PAD: f64 = 12.0;
+const PKG_TAB_H: f64 = 18.0;
+const PKG_TAB_W: f64 = 60.0;
+const PKG_FONT: f64 = 11.0;
 
 /// Render an object diagram to SVG.
 pub fn render(diagram: &ObjectDiagram, theme: &Theme) -> String {
@@ -97,6 +101,7 @@ fn render_with_positions(
         obj_positions.push((x, y, dim.width, dim.height));
     }
 
+    render_packages(diagram, &obj_positions, &mut svg);
     render_links(diagram, &obj_positions, &dims, &mut svg, cs);
     render_notes(diagram, &obj_positions, total_width, total_height, &mut svg);
 
@@ -138,10 +143,63 @@ fn render_grid(diagram: &ObjectDiagram, cs: &crate::style::ClassStyle) -> String
         obj_positions.push((x, y, dim.width, dim.height));
     }
 
+    render_packages(diagram, &obj_positions, &mut svg);
     render_links(diagram, &obj_positions, &dims, &mut svg, cs);
     render_notes(diagram, &obj_positions, total_width, total_height, &mut svg);
 
     svg.finalize()
+}
+
+/// Render package/namespace boxes as labeled outlines that encompass their member objects.
+fn render_packages(
+    diagram: &ObjectDiagram,
+    obj_positions: &[(f64, f64, f64, f64)],
+    svg: &mut SvgBuilder,
+) {
+    for pkg in &diagram.packages {
+        // Compute bounding box over all member objects that have known positions.
+        let mut min_x = f64::MAX;
+        let mut min_y = f64::MAX;
+        let mut max_x = f64::MIN;
+        let mut max_y = f64::MIN;
+        let mut any = false;
+
+        for obj_id in &pkg.object_ids {
+            if let Some(idx) = diagram.objects.iter().position(|o| &o.id == obj_id) {
+                if idx < obj_positions.len() {
+                    let (x, y, w, h) = obj_positions[idx];
+                    min_x = min_x.min(x);
+                    min_y = min_y.min(y);
+                    max_x = max_x.max(x + w);
+                    max_y = max_y.max(y + h);
+                    any = true;
+                }
+            }
+        }
+
+        if !any {
+            continue;
+        }
+
+        let bx = min_x - PKG_PAD;
+        let by = min_y - PKG_PAD - PKG_TAB_H;
+        let bw = (max_x - min_x) + PKG_PAD * 2.0;
+        let bh = (max_y - min_y) + PKG_PAD * 2.0 + PKG_TAB_H;
+        let tab_w = PKG_TAB_W.min(bw * 0.6);
+
+        // Package tab (top-left rectangle).
+        svg.raw(&format!(
+            "  <rect x=\"{bx}\" y=\"{by}\" width=\"{tab_w}\" height=\"{PKG_TAB_H}\" fill=\"none\" stroke=\"#666\" stroke-width=\"1\"/>"
+        ));
+        // Package body outline.
+        svg.raw(&format!(
+            "  <rect x=\"{bx}\" y=\"{tab_y}\" width=\"{bw}\" height=\"{body_h}\" fill=\"none\" stroke=\"#666\" stroke-width=\"1\"/>",
+            tab_y = by + PKG_TAB_H,
+            body_h = bh - PKG_TAB_H,
+        ));
+        // Package label inside the tab.
+        svg.text(bx + tab_w / 2.0, by + PKG_TAB_H - 4.0, &pkg.label, "middle", PKG_FONT);
+    }
 }
 
 /// Render notes as sticky-note shapes.
@@ -400,6 +458,7 @@ mod tests {
                 label: Some("drives".into()),
             }],
             notes: vec![],
+            packages: vec![],
         }
     }
 
@@ -449,6 +508,7 @@ mod tests {
             }],
             links: vec![],
             notes: vec![],
+            packages: vec![],
         };
         let svg = render(&diagram, &Theme::default());
         assert!(svg.contains("host =&gt; localhost") || svg.contains("host => localhost"));
@@ -461,6 +521,7 @@ mod tests {
             objects: vec![],
             links: vec![],
             notes: vec![],
+            packages: vec![],
         };
         let svg = render(&diagram, &Theme::default());
         assert!(svg.contains("<svg"));

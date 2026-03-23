@@ -31,8 +31,11 @@ struct ObjectParser {
     objects: Vec<ObjectInstance>,
     links: Vec<ObjectLink>,
     notes: Vec<ObjectNote>,
+    packages: Vec<ObjectPackage>,
     /// Object currently being parsed (inside { ... } block).
     current_object: Option<String>,
+    /// Index into `packages` of the package block currently being parsed.
+    current_package: Option<usize>,
 }
 
 impl ObjectParser {
@@ -42,7 +45,9 @@ impl ObjectParser {
             objects: Vec::new(),
             links: Vec::new(),
             notes: Vec::new(),
+            packages: Vec::new(),
             current_object: None,
+            current_package: None,
         }
     }
 
@@ -52,7 +57,7 @@ impl ObjectParser {
             objects: self.objects,
             links: self.links,
             notes: self.notes,
-            packages: Vec::new(),
+            packages: self.packages,
         }
     }
 
@@ -82,10 +87,25 @@ impl ObjectParser {
             return Ok(());
         }
 
-        if self.try_object_decl(line) {
+        // Closing a package/namespace block?
+        if line == "}" {
+            if self.current_package.is_some() {
+                self.current_package = None;
+            }
             return Ok(());
         }
+
+        if self.try_package(line) {
+            return Ok(());
+        }
+        let before = self.objects.len();
+        if self.try_object_decl(line) {
+            self.register_package_objects(before);
+            return Ok(());
+        }
+        let before = self.objects.len();
         if self.try_map_decl(line) {
+            self.register_package_objects(before);
             return Ok(());
         }
         if self.try_link(line) {
@@ -97,40 +117,19 @@ impl ObjectParser {
         if self.try_meta(line) {
             return Ok(());
         }
-        if self.try_inline_field(line) {
-            return Ok(());
-        }
 
         // Silently ignore unknown lines.
         Ok(())
     }
 
-    /// Handle `ObjectId : field = value` inline field assignment outside an object body.
-    fn try_inline_field(&mut self, line: &str) -> bool {
-        static RE: LazyLock<Regex> = LazyLock::new(|| {
-            Regex::new(r"^(\w+)\s*:\s*(.+)$").unwrap()
-        });
-
-        if let Some(caps) = RE.captures(line) {
-            let obj_id = caps[1].to_string();
-            let field_text = caps[2].trim().to_string();
-            // Parse `name = value` or treat the whole text as the name.
-            let (name, value) = if let Some(eq_pos) = field_text.find('=') {
-                let n = field_text[..eq_pos].trim().to_string();
-                let v = field_text[eq_pos + 1..].trim().to_string();
-                (n, Some(v))
-            } else {
-                (field_text, None)
-            };
-            // Only apply if the object already exists.
-            if self.objects.iter().any(|o| o.id == obj_id) {
-                if let Some(obj) = self.objects.iter_mut().find(|o| o.id == obj_id) {
-                    obj.fields.push(crate::diagram::object::ObjectField { name, value });
-                }
-                return true;
+    /// Record any newly added objects as members of the current package (if any).
+    fn register_package_objects(&mut self, before: usize) {
+        if let Some(pkg_idx) = self.current_package {
+            for i in before..self.objects.len() {
+                let id = self.objects[i].id.clone();
+                self.packages[pkg_idx].object_ids.push(id);
             }
         }
-        false
     }
 
     fn try_object_decl(&mut self, line: &str) -> bool {
@@ -249,28 +248,66 @@ impl ObjectParser {
     }
 
     fn try_link(&mut self, line: &str) -> bool {
-        // A --> B : label  or  A -- B : label  or  A::field --> B
+        // Handles all PlantUML object link styles:
+        //   A --> B : label          basic directed
+        //   A -- B                   undirected
+        //   A o--> B                 aggregation
+        //   A *--> B                 composition
+        //   A ..> B                  dotted
+        //   A --|> B                 inheritance
+        //   A "1" --> "0..*" B : has with cardinality
+        // Groups: (from)(from-card?)(connector)(to-card?)(to)(label?)
         static RE: LazyLock<Regex> = LazyLock::new(|| {
-            Regex::new(r"^(\w+(?:::\w+)?)\s*(-{2,}[>|]?|-?[>|]{1,2}-{2,})\s*(\w+(?:::\w+)?)(?:\s*:\s*(.+))?$").unwrap()
+            Regex::new(
+                r#"^(\w+(?:::\w+)?)\s*(?:"([^"]*)"\s*)?([o*<>][-.o*<>|]*|[-.][-.o*<>|]*)\s*(?:"([^"]*)"\s*)?(\w+(?:::\w+)?)(?:\s*:\s*(.+))?$"#,
+            )
+            .unwrap()
         });
 
         if let Some(caps) = RE.captures(line) {
             let from_raw = caps[1].to_string();
-            // caps[2] is the arrow token — skip it.
-            let to_raw = caps[3].to_string();
-            let label = caps.get(4).map(|m| m.as_str().trim().to_string());
+            let to_raw = caps[5].to_string();
+            let raw_label = caps.get(6).map(|m| m.as_str().trim().to_string());
+            // Strip surrounding quotes from label if present.
+            let label = raw_label.map(|s| {
+                if s.len() >= 2 && s.starts_with('"') && s.ends_with('"') {
+                    s[1..s.len() - 1].to_string()
+                } else {
+                    s
+                }
+            });
 
-            // Ensure the base objects exist.
             let from_base = from_raw.split("::").next().unwrap_or(&from_raw).to_string();
             let to_base = to_raw.split("::").next().unwrap_or(&to_raw).to_string();
             self.ensure_object(&from_base);
             self.ensure_object(&to_base);
 
-            self.links.push(ObjectLink {
-                from: from_raw,
-                to: to_raw,
-                label,
-            });
+            self.links.push(ObjectLink { from: from_raw, to: to_raw, label });
+            true
+        } else {
+            false
+        }
+    }
+
+    fn try_package(&mut self, line: &str) -> bool {
+        // package "Label" {  or  namespace com.example {  or  package Name
+        static RE: LazyLock<Regex> = LazyLock::new(|| {
+            Regex::new(r#"^(?:package|namespace)\s+(?:"([^"]+)"|([^\s{]+))\s*\{?\s*$"#).unwrap()
+        });
+
+        if let Some(caps) = RE.captures(line) {
+            let label = caps
+                .get(1)
+                .or(caps.get(2))
+                .map(|m| m.as_str().to_string())
+                .unwrap_or_default();
+            // Build a safe identifier (replace non-alphanumeric with '_').
+            let id: String = label
+                .chars()
+                .map(|c| if c.is_alphanumeric() || c == '_' { c } else { '_' })
+                .collect();
+            self.packages.push(ObjectPackage { id, label, object_ids: Vec::new() });
+            self.current_package = Some(self.packages.len() - 1);
             true
         } else {
             false
@@ -283,7 +320,6 @@ impl ObjectParser {
             Regex::new(r#"^note\s+"([^"]+)"\s+as\s+(\w+)\s*$"#).unwrap()
         });
         // note right/left/top/bottom of X : text
-        // note right of X : text
         static RE_ATTACHED: LazyLock<Regex> = LazyLock::new(|| {
             Regex::new(r"^note\s+(?:right|left|top|bottom)\s+of\s+(\w+)\s*:\s*(.+)$").unwrap()
         });
@@ -295,32 +331,19 @@ impl ObjectParser {
         if let Some(caps) = RE_FLOATING.captures(line) {
             let text = caps[1].replace("\\n", "\n");
             let id = caps[2].to_string();
-            self.notes.push(ObjectNote {
-                id: Some(id),
-                target: None,
-                text,
-            });
+            self.notes.push(ObjectNote { id: Some(id), target: None, text });
             return true;
         }
         if let Some(caps) = RE_ATTACHED.captures(line) {
             let target = caps[1].to_string();
             let text = caps[2].trim().to_string();
-            self.notes.push(ObjectNote {
-                id: None,
-                target: Some(target),
-                text,
-            });
+            self.notes.push(ObjectNote { id: None, target: Some(target), text });
             return true;
         }
         if let Some(caps) = RE_SHORTHAND.captures(line) {
             let text = caps[1].trim().to_string();
-            // Attach to the most recently declared object.
             let target = self.objects.last().map(|o| o.id.clone());
-            self.notes.push(ObjectNote {
-                id: None,
-                target,
-                text,
-            });
+            self.notes.push(ObjectNote { id: None, target, text });
             return true;
         }
         // Silently swallow other note forms we don't fully handle yet.
@@ -362,10 +385,7 @@ impl ObjectParser {
                 value: if value.is_empty() { None } else { Some(value) },
             }
         } else {
-            ObjectField {
-                name: trimmed.to_string(),
-                value: None,
-            }
+            ObjectField { name: trimmed.to_string(), value: None }
         };
 
         if let Some(obj_id) = &self.current_object {
@@ -431,6 +451,31 @@ mod tests {
     }
 
     #[test]
+    fn link_with_quoted_label() {
+        let d = parse("object A\nobject B\nA --> B : \"owns\"");
+        assert_eq!(d.links[0].label.as_deref(), Some("owns"));
+    }
+
+    #[test]
+    fn link_various_arrow_types() {
+        let d = parse(
+            "object A\nobject B\nobject C\nobject D\nobject E\nobject F\nobject G\nA o--> B\nA *--> C\nA ..> D\nA --|> E\nA -- F\nA --* G",
+        );
+        assert_eq!(d.links.len(), 6);
+        assert_eq!(d.links[0].from, "A");
+        assert_eq!(d.links[0].to, "B");
+    }
+
+    #[test]
+    fn link_with_cardinality() {
+        let d = parse("object Parent\nobject Child\nParent \"1\" --> \"0..*\" Child : has");
+        assert_eq!(d.links.len(), 1);
+        assert_eq!(d.links[0].from, "Parent");
+        assert_eq!(d.links[0].to, "Child");
+        assert_eq!(d.links[0].label.as_deref(), Some("has"));
+    }
+
+    #[test]
     fn field_level_link() {
         let d = parse("map \"U\" as u {\n  role => admin\n}\nmap \"P\" as p {}\nu::role --> p");
         assert_eq!(d.links[0].from, "u::role");
@@ -451,5 +496,24 @@ mod tests {
         assert_eq!(d.objects[0].fields.len(), 1);
         assert_eq!(d.objects[0].fields[0].name, "v");
         assert_eq!(d.objects[0].fields[0].value.as_deref(), Some("0"));
+    }
+
+    #[test]
+    fn package_groups_objects() {
+        let d = parse(
+            "package \"Domain\" {\n  object User\n  object Role\n}\nobject Other",
+        );
+        assert_eq!(d.packages.len(), 1);
+        assert_eq!(d.packages[0].label, "Domain");
+        assert_eq!(d.packages[0].object_ids, vec!["User", "Role"]);
+        assert_eq!(d.objects.len(), 3);
+    }
+
+    #[test]
+    fn namespace_groups_objects() {
+        let d = parse("namespace com.example {\n  object Entity\n}");
+        assert_eq!(d.packages.len(), 1);
+        assert_eq!(d.packages[0].label, "com.example");
+        assert_eq!(d.packages[0].object_ids, vec!["Entity"]);
     }
 }

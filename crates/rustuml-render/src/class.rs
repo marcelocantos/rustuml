@@ -230,7 +230,24 @@ fn render_with_positions(
     let total_width = ent_max_x.max(pkg_max_x).max(note_max_x) + MARGIN;
     let total_height = ent_max_y.max(pkg_max_y).max(note_max_y) + MARGIN;
 
+    let is_handwritten = diagram
+        .meta
+        .skinparams
+        .iter()
+        .any(|sp| sp.key.to_lowercase() == "handwritten" && sp.value.to_lowercase() == "true");
+
     let mut svg = SvgBuilder::new(total_width, total_height);
+
+    // Emit warning for `skinparam handwritten true` (not supported; use !option).
+    if is_handwritten {
+        let nbsp = '\u{00a0}';
+        let msg = format!(
+            "Please{n}use{n}'!option{n}handwritten{n}true'{n}to{n}enable{n}handwritten",
+            n = nbsp
+        );
+        svg.monospace_text(10.0, SMALL_FONT + 4.0, &msg, "start", SMALL_FONT);
+    }
+
     if let Some(title) = &diagram.meta.title {
         svg.text(total_width / 2.0, TITLE_HEIGHT - 4.0, title, "middle", TITLE_FONT_SIZE);
     }

@@ -177,7 +177,9 @@ fn try_parse_connection(
                             .unwrap_or(after_label.len());
                         if arrow_end >= 2 {
                             let arrow = &after_label[..arrow_end];
-                            if arrow.chars().any(|c| matches!(c, '-' | '<' | '>')) {
+                            // A valid arrow must have a shaft character (`-` or `.`).
+                            // Pure `<<` is a stereotype opener, not an arrow.
+                            if arrow.chars().any(|c| matches!(c, '-' | '.')) {
                                 // keyword "label" ARROW target — use keyword as FROM.
                                 let after_arrow = after_label[arrow_end..].trim_start();
                                 let (raw_to, after_to) = parse_endpoint(after_arrow)?;
@@ -212,9 +214,9 @@ fn try_parse_connection(
         return None;
     }
     let arrow = &after_from[..arrow_end];
-    // Must contain at least one actual arrow char (not just dots, which could be `..`
-    // in a note link — but `..` alone is not a connection arrow in this context).
-    if !arrow.chars().any(|c| matches!(c, '-' | '<' | '>')) {
+    // Must contain at least one shaft character (`-` or `.`).
+    // Pure `<<...>>` is a stereotype, not an arrow.
+    if !arrow.chars().any(|c| matches!(c, '-' | '.')) {
         return None;
     }
     let after_arrow = after_from[arrow_end..].trim_start();

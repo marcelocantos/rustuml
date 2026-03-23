@@ -73,13 +73,24 @@ fn decode_escapes(s: &str) -> String {
 /// Process label text for SVG rendering: decode escapes and replace unsupported
 /// markup like `<img:...>` with a placeholder matching PlantUML's behavior.
 fn process_label(s: &str) -> String {
-    use std::sync::LazyLock;
-    use regex::Regex;
-    static IMG_RE: LazyLock<Regex> =
-        LazyLock::new(|| Regex::new(r"<img:[^>]*>").unwrap());
     // PlantUML uses non-breaking space (U+00A0) in the cannot-decode message.
     let decoded = decode_escapes(s);
-    IMG_RE.replace_all(&decoded, "(Cannot\u{00a0}decode)").into_owned()
+    // Replace <img:...> tags with PlantUML's placeholder.
+    let mut result = String::with_capacity(decoded.len());
+    let mut rest = decoded.as_str();
+    while let Some(start) = rest.find("<img:") {
+        result.push_str(&rest[..start]);
+        let after = &rest[start..];
+        if let Some(end) = after.find('>') {
+            result.push_str("(Cannot\u{00a0}decode)");
+            rest = &after[end + 1..];
+        } else {
+            result.push_str(after);
+            return result;
+        }
+    }
+    result.push_str(rest);
+    result
 }
 
 /// Returns the display label for a participant box.

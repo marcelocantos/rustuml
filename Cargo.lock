@@ -1141,6 +1141,7 @@ name = "rustuml-render"
 version = "0.1.0"
 dependencies = [
  "ab_glyph",
+ "regex",
  "resvg 0.47.0",
  "rustuml-layout",
  "rustuml-math",

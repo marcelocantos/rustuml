@@ -138,4 +138,8 @@ pub struct Package {
     /// Stereotypes applied to this package (e.g. `<<Application>>`).
     #[serde(default)]
     pub stereotypes: Vec<String>,
+    /// Display label override (used for auto-created namespace packages where `name`
+    /// is the full qualified path but we only want to show the short last segment).
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub display_name: Option<String>,
 }

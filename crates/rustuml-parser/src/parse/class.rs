@@ -52,6 +52,8 @@ struct ClassParser {
     last_entity_id: Option<String>,
     /// Whether `set namespaceSeparator none` was seen (dots allowed in class names).
     namespace_sep_none: bool,
+    /// Namespace separator string (default "."; `None` when `set namespaceSeparator none`).
+    namespace_sep: Option<String>,
     /// Whether we are inside a multi-line header/footer/legend block.
     meta_block: Option<MetaBlock>,
 }
@@ -69,6 +71,7 @@ impl ClassParser {
             current_note: None,
             last_entity_id: None,
             namespace_sep_none: false,
+            namespace_sep: Some(".".to_string()),
             meta_block: None,
         }
     }
@@ -99,6 +102,99 @@ impl ClassParser {
 
     fn find_entity_mut(&mut self, id: &str) -> Option<&mut ClassEntity> {
         self.entities.iter_mut().find(|e| e.id == id)
+    }
+
+    /// Given a fully-qualified class name like `com.example.MyClass`, ensure
+    /// intermediate namespace packages exist and register the entity in them.
+    /// Returns `(entity_id, entity_label)` where `entity_id` is the full qualified
+    /// name and `entity_label` is just the last segment (short name).
+    ///
+    /// If no separator is active or the name contains no separator, returns
+    /// `(qualified, qualified)` unchanged.
+    fn ensure_namespace_packages(&mut self, qualified: &str) -> (String, String) {
+        let sep = match self.namespace_sep.clone() {
+            Some(s) if !s.is_empty() => s,
+            _ => return (qualified.to_string(), qualified.to_string()),
+        };
+        let parts: Vec<&str> = qualified.split(sep.as_str()).collect();
+        if parts.len() < 2 {
+            return (qualified.to_string(), qualified.to_string());
+        }
+
+        // Build the namespace package hierarchy for all segments except the last.
+        let mut prefix = String::new();
+        let mut parent_pkg_idx: Option<usize> = self.package_stack.last().copied();
+        for part in &parts[..parts.len() - 1] {
+            if !prefix.is_empty() {
+                prefix.push_str(&sep);
+            }
+            prefix.push_str(part);
+            let pkg_id = prefix.clone();
+            let pkg_label = part.to_string();
+
+            let pkg_idx = if let Some(idx) = self.packages.iter().position(|p| p.name == pkg_id) {
+                idx
+            } else {
+                let new_idx = self.packages.len();
+                self.packages.push(Package {
+                    name: pkg_id.clone(),
+                    kind: PackageKind::Package,
+                    color: None,
+                    entities: Vec::new(),
+                    stereotypes: Vec::new(),
+                    display_name: Some(pkg_label),
+                });
+                // Register this pkg in its parent package's entity list.
+                if let Some(p_idx) = parent_pkg_idx {
+                    let parent = &mut self.packages[p_idx];
+                    if !parent.entities.contains(&pkg_id) {
+                        parent.entities.push(pkg_id.clone());
+                    }
+                }
+                new_idx
+            };
+            parent_pkg_idx = Some(pkg_idx);
+        }
+
+        // Register the entity in all namespace packages (innermost = last namespace segment).
+        let entity_id = qualified.to_string();
+        if let Some(innermost_idx) = parent_pkg_idx {
+            // Register entity in innermost namespace package.
+            let pkg = &mut self.packages[innermost_idx];
+            if !pkg.entities.contains(&entity_id) {
+                pkg.entities.push(entity_id.clone());
+            }
+            // Also register in outer namespace packages and any active user packages.
+            // Build list of all ancestor namespace pkg indices.
+            let mut prefix2 = String::new();
+            let mut ancestor_indices = Vec::new();
+            for part in &parts[..parts.len() - 1] {
+                if !prefix2.is_empty() {
+                    prefix2.push_str(&sep);
+                }
+                prefix2.push_str(part);
+                if let Some(idx) = self.packages.iter().position(|p| p.name == prefix2) {
+                    ancestor_indices.push(idx);
+                }
+            }
+            // Register in all ancestors (except innermost already done).
+            for &idx in ancestor_indices.iter().rev().skip(1) {
+                let pkg = &mut self.packages[idx];
+                if !pkg.entities.contains(&entity_id) {
+                    pkg.entities.push(entity_id.clone());
+                }
+            }
+        }
+        // Also register in any active user-defined package scopes.
+        for &pkg_idx in &self.package_stack {
+            let pkg = &mut self.packages[pkg_idx];
+            if !pkg.entities.contains(&entity_id) {
+                pkg.entities.push(entity_id.clone());
+            }
+        }
+
+        let entity_label = parts[parts.len() - 1].to_string();
+        (entity_id, entity_label)
     }
 
     /// The index of the innermost active package scope (top of the stack).
@@ -231,13 +327,26 @@ impl ClassParser {
             )
             .unwrap()
         });
-        // Strip spot notation from stereotype: `<< (S,#color) Name >>` → `Name`.
-        static SPOT_RE: LazyLock<Regex> =
-            LazyLock::new(|| Regex::new(r"\([A-Za-z],[^)]*\)\s*").unwrap());
+        // Permissive regex: accepts any non-whitespace name (for custom namespace separators).
+        static RE_PERMISSIVE: LazyLock<Regex> = LazyLock::new(|| {
+            Regex::new(
+                r#"^(class|abstract\s+class|abstract|interface|enum|annotation|entity)\s+(?:(?:"([^"]+)"\s+as\s+)?([^\s{<>]+(?:<[^>]+>)?)|"([^"]+)")"#,
+            )
+            .unwrap()
+        });
         static STEREOTYPE_RE: LazyLock<Regex> =
             LazyLock::new(|| Regex::new(r"<<\s*([^>]+?)>>").unwrap());
 
-        let re = if self.namespace_sep_none { &*RE_DOTTED } else { &*RE };
+        let re = if self.namespace_sep_none {
+            // `namespaceSeparator none` — dots are part of the name, no splitting.
+            &*RE_DOTTED
+        } else if self.namespace_sep.as_deref() == Some(".") {
+            // Default "." separator: use dotted regex so `com.example.MyClass` is captured fully.
+            &*RE_DOTTED
+        } else {
+            // Custom separator (e.g. "::" or "/") or no separator: use permissive regex.
+            &*RE_PERMISSIVE
+        };
         if let Some(caps) = re.captures(line) {
             let kind = parse_entity_kind(caps[1].trim());
             // Group 4: quoted-only form — class "**Name**" with no `as` keyword.
@@ -255,21 +364,41 @@ impl ClassParser {
 
             let stereotypes: Vec<String> = STEREOTYPE_RE
                 .captures_iter(line)
-                .map(|c| {
-                    // Strip spot notation like `(S,#FF7700) ` before the name.
-                    SPOT_RE.replace(&c[1], "").trim().to_string()
-                })
+                .map(|c| process_spot_stereotype(c[1].trim()))
                 .filter(|s| !s.is_empty())
                 .collect();
 
-            if let Some(entity) = self.find_entity_mut(&id) {
+            // Handle namespace separation: split `com.example.MyClass` or `com::example::MyClass`
+            // into package hierarchy + short entity name.  For default separator ".", we must
+            // use RE_DOTTED (which already matches dotted names) — but for the default RE above
+            // (`\w+`), dots aren't matched so id won't contain them.  In the permissive case
+            // (custom separator), `id` may contain the separator.
+            //
+            // Additionally, even when using the default "." separator but the user declared
+            // `class com.example.MyClass`, the permissive re wasn't used — we use a second
+            // pass to split names that contain the default separator even when using RE.
+            let (final_id, final_label) = if caps.get(2).is_none() {
+                // Only apply namespace splitting to unquoted, non-aliased names.
+                self.ensure_namespace_packages(&id)
+            } else {
+                (id.clone(), label.clone())
+            };
+
+            // Use the namespace-derived label if available (not aliased).
+            let display_label = if caps.get(2).is_none() && final_label != final_id {
+                final_label.clone()
+            } else {
+                label
+            };
+
+            if let Some(entity) = self.find_entity_mut(&final_id) {
                 entity.kind = kind;
-                entity.label = label;
+                entity.label = display_label;
                 entity.stereotypes.extend(stereotypes);
             } else {
                 self.entities.push(ClassEntity {
-                    id: id.clone(),
-                    label,
+                    id: final_id.clone(),
+                    label: display_label,
                     kind,
                     members: Vec::new(),
                     stereotypes,
@@ -279,17 +408,18 @@ impl ClassParser {
             // Register entity in ALL active packages (innermost to outermost),
             // so that outer container bounding boxes include entities from inner
             // nested packages.
+            // (Note: namespace package registration was already done in ensure_namespace_packages)
             for &pkg_idx in &self.package_stack {
                 let pkg = &mut self.packages[pkg_idx];
-                if !pkg.entities.contains(&id) {
-                    pkg.entities.push(id.clone());
+                if !pkg.entities.contains(&final_id) {
+                    pkg.entities.push(final_id.clone());
                 }
             }
 
             if line.ends_with('{') || line.ends_with("{{") {
-                self.current_entity = Some(id.clone());
+                self.current_entity = Some(final_id.clone());
             }
-            self.last_entity_id = Some(id);
+            self.last_entity_id = Some(final_id);
             true
         } else {
             false
@@ -384,9 +514,10 @@ impl ClassParser {
             return true;
         }
 
-        // Lollipop notation: `Foo -() Interface` (provided) or `Foo ()- Interface` (required).
+        // Lollipop notation: `Foo -() Interface` or `Foo --() Interface` (provided interface)
+        // or `Foo ()- Interface` or `Foo ()-- Interface` (required interface).
         static LOLLIPOP_RE: LazyLock<Regex> = LazyLock::new(|| {
-            Regex::new(r"^(\w+)\s*-\(\)\s*(\w+)$|^(\w+)\s*\(\)-\s*(\w+)$").unwrap()
+            Regex::new(r"^(\w+)\s*-{1,2}\(\)\s*(\w+)$|^(\w+)\s*\(\)-{1,2}\s*(\w+)$").unwrap()
         });
         if let Some(caps) = LOLLIPOP_RE.captures(line) {
             let (from_raw, to_raw) = if caps.get(1).is_some() {
@@ -478,6 +609,7 @@ impl ClassParser {
                 color,
                 entities: Vec::new(),
                 stereotypes,
+                display_name: None,
             });
             true
         } else {
@@ -694,11 +826,30 @@ impl ClassParser {
         }
         if line == "set namespaceSeparator none" {
             self.namespace_sep_none = true;
+            self.namespace_sep = None;
             return true;
         }
-        // Skip skinparam, hide, show, together, etc.
-        line.starts_with("skinparam ")
-            || line.starts_with("hide ")
+        if let Some(sep) = line.strip_prefix("set namespaceSeparator ") {
+            let sep = sep.trim();
+            if sep.is_empty() || sep == "." {
+                self.namespace_sep = Some(".".to_string());
+            } else {
+                self.namespace_sep = Some(sep.to_string());
+            }
+            return true;
+        }
+        // Parse skinparam key value (store for renderer use).
+        if let Some(rest) = line.strip_prefix("skinparam ") {
+            if let Some((key, value)) = rest.split_once(' ') {
+                self.meta.skinparams.push(crate::diagram::SkinParam {
+                    key: key.trim().to_string(),
+                    value: value.trim().to_string(),
+                });
+            }
+            return true;
+        }
+        // Skip hide, show, together, etc.
+        line.starts_with("hide ")
             || line.starts_with("show ")
             || line.starts_with("together")
             || line.starts_with("allowmixing")
@@ -895,6 +1046,38 @@ fn parse_member(s: &str) -> Member {
 
 /// Strip Creole/HTML markup from a display name to produce a plain identifier.
 /// Used when a class is declared with a quoted markup name but no `as` alias.
+/// Process a stereotype string that may contain spot notation `(S,#color) Name`.
+///
+/// PlantUML's behavior:
+/// - If the color is a named color (e.g. `#red`, `#blue`), keep the full `(S,#color) Name` prefix.
+/// - If the color is a hex code (e.g. `#FF7700`, `#00AAFF`), strip the `(S,#color)` prefix
+///   and return just the name.
+fn process_spot_stereotype(s: &str) -> String {
+    let s = s.trim();
+    // Look for spot notation: `(X,#color) Name`
+    if let Some(rest) = s.strip_prefix('(') {
+        if let Some(close) = rest.find(')') {
+            let spot_inner = &rest[..close];
+            let after = rest[close + 1..].trim();
+            // spot_inner should be like `A,#red` or `F,#FF7700`
+            if let Some(comma) = spot_inner.find(',') {
+                let color_part = spot_inner[comma + 1..].trim();
+                if color_part.starts_with('#') {
+                    let color_hex = &color_part[1..]; // strip leading #
+                    let is_hex = !color_hex.is_empty()
+                        && color_hex.chars().all(|c| c.is_ascii_hexdigit());
+                    if is_hex {
+                        // Hex color: strip spot prefix, return just the name.
+                        return after.to_string();
+                    }
+                }
+            }
+        }
+    }
+    // Named color or no spot notation: return as-is.
+    s.to_string()
+}
+
 fn strip_creole_for_id(s: &str) -> String {
     let mut out = s.to_string();
     for marker in &["**", "//", "__", "--"] {

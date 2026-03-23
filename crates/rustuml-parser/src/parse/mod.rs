@@ -122,12 +122,36 @@ fn detect_uml_subtype(lines: &[String]) -> UmlSubtype {
                 .unwrap_or(trimmed.len());
             let kw = &trimmed[..kw_end];
             let package_with_brace = kw == "package" && trimmed.contains('{');
+            // Truly deployment-exclusive container keywords (not shared with
+            // component diagrams) used as containers (with `{`) are a strong
+            // deployment signal.  `node`, `cloud`, `database`, `component`,
+            // `frame`, `folder`, `rectangle` are shared with component diagrams,
+            // so only keywords that are unique to deployment get the extra boost.
+            const DEPLOY_EXCLUSIVE: &[&str] = &[
+                "artifact", "storage", "card", "stack", "file", "agent",
+            ];
+            let is_deploy_exclusive_container =
+                trimmed.contains('{') && DEPLOY_EXCLUSIVE.contains(&kw);
+            // A deployment keyword with a QUOTED label and a `{` brace is a
+            // strong deployment signal: component diagrams consistently use bare
+            // identifiers for their containers; quoted names only appear in
+            // deployment diagrams (e.g. `node "App Server" {`).
+            let after_kw = trimmed[kw_end..].trim_start();
+            let is_quoted_container = trimmed.contains('{')
+                && after_kw.starts_with('"')
+                && kw != "package"
+                && kw != "actor"
+                && deployment::DEPLOYMENT_KEYWORDS.contains(&kw);
             if !package_with_brace
                 && kw != "actor"
                 && deployment::DEPLOYMENT_KEYWORDS.contains(&kw)
                 && kw_end < trimmed.len()
             {
                 scores[7] += 5;
+            }
+            if is_deploy_exclusive_container || is_quoted_container {
+                // Extra boost: deployment-exclusive container overrides component score.
+                scores[7] += 15;
             }
         }
         // Component — weighted strongly so that a single `component` keyword
@@ -170,8 +194,9 @@ fn detect_uml_subtype(lines: &[String]) -> UmlSubtype {
         if trimmed.starts_with("interface ") {
             scores[5] += 10; // component
         }
-        // `note right/left/top/bottom of <id>` — valid in sequence, class, and component diagrams.
-        // Score all three equally so that other keywords determine the winner.
+        // `note right/left/top/bottom of <id>` — valid in sequence, class, component,
+        // and deployment diagrams. Score all four equally so that other keywords
+        // determine the winner.
         if trimmed.starts_with("note ")
             && (trimmed.contains(" right of ")
                 || trimmed.contains(" left of ")
@@ -181,6 +206,7 @@ fn detect_uml_subtype(lines: &[String]) -> UmlSubtype {
             scores[0] += 5; // sequence
             scores[1] += 5; // class
             scores[5] += 5; // component
+            scores[7] += 5; // deployment
         }
         // Object / map — strong unique keywords.
         if trimmed.starts_with("object ") || trimmed.starts_with("map ") {
