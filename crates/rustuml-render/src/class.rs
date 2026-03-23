@@ -794,6 +794,33 @@ fn strip_note_markup(s: &str) -> String {
     result.trim().to_string()
 }
 
+/// Replace `<img:...>` tags with PlantUML's fallback text.
+/// For HTTP/HTTPS URLs the URL is included in the message.
+fn replace_img_tags(s: &str) -> String {
+    let mut result = String::with_capacity(s.len());
+    let mut rest = s;
+    while let Some(start) = rest.find("<img:") {
+        result.push_str(&rest[..start]);
+        let after = &rest[start..];
+        if let Some(end) = after.find('>') {
+            let raw_src = &after["<img:".len()..end];
+            // Strip {scale=...} or similar suffix from the URL.
+            let src = if let Some(brace) = raw_src.find('{') { &raw_src[..brace] } else { raw_src };
+            if src.starts_with("https://") || src.starts_with("http://") {
+                result.push_str(&format!("(Cannot\u{00a0}decode:\u{00a0}{src})"));
+            } else {
+                result.push_str("(Cannot\u{00a0}decode)");
+            }
+            rest = &after[end + 1..];
+        } else {
+            result.push_str(after);
+            return result;
+        }
+    }
+    result.push_str(rest);
+    result
+}
+
 /// Compute the dimensions of a note box.
 fn note_box_dims(note: &Note) -> (f64, f64) {
     let max_width = note
@@ -827,32 +854,68 @@ fn render_note_box(svg: &mut SvgBuilder, note: &Note, x: f64, y: f64, w: f64, h:
     svg.polygon(fold_pts, NOTE_FILL, NOTE_BORDER);
 
     // Render each line of text — pass the raw markup so svg.text can apply creole styling.
-    // Convert Creole ordered-list items (`# text`) to numbered form (`N. text`).
-    use std::sync::LazyLock;
-    use regex::Regex;
-    static IMG_RE: LazyLock<Regex> =
-        LazyLock::new(|| Regex::new(r"<img:[^>]*>").unwrap());
-
+    // Handle ordered/nested lists (#, ##, ...), bullet lists (*, **, ...),
+    // tree syntax (|_, |__, ...), and inline creole markup.
     let mut ty = y + NOTE_PAD_Y + NOTE_LINE_HEIGHT - 3.0;
-    let mut list_counter = 0usize;
+    // Per-level ordered-list counters: counters[0] = level-1 count, etc.
+    let mut list_ctrs: Vec<usize> = Vec::new();
     for line in &note.lines {
         let trimmed = line.trim();
         if trimmed.is_empty() {
             ty += NOTE_LINE_HEIGHT;
             continue;
         }
-        let display = if let Some(rest) = trimmed.strip_prefix("# ") {
-            list_counter += 1;
-            format!("{list_counter}. {rest}")
-        } else if trimmed == "#" {
-            list_counter += 1;
-            format!("{list_counter}.")
-        } else {
-            // Reset list counter on non-list lines.
-            list_counter = 0;
-            trimmed.to_string()
-        };
-        let display = IMG_RE.replace_all(&display, "(Cannot\u{00a0}decode)").into_owned();
+        // Tree syntax: |_ level1, |__ level2, etc.
+        // The `|` is the tree edge; each additional `_` adds one level of indent.
+        if let Some(rest) = trimmed.strip_prefix('|') {
+            let underscore_count = rest.chars().take_while(|&c| c == '_').count();
+            if underscore_count > 0 {
+                let content = replace_img_tags(rest[underscore_count..].trim());
+                let indent = "_".repeat(underscore_count - 1);
+                let display = if indent.is_empty() {
+                    content
+                } else {
+                    format!("{indent} {content}")
+                };
+                list_ctrs.clear();
+                svg.text(x + NOTE_PAD_X, ty, &display, "start", FONT_SIZE);
+                ty += NOTE_LINE_HEIGHT;
+                continue;
+            }
+        }
+        // Ordered list: # item, ## sub-item, etc.
+        let hash_level = trimmed.chars().take_while(|&c| c == '#').count();
+        if hash_level > 0 {
+            let content = trimmed[hash_level..].trim_start();
+            if list_ctrs.len() > hash_level {
+                list_ctrs.truncate(hash_level);
+            }
+            while list_ctrs.len() < hash_level {
+                list_ctrs.push(0);
+            }
+            list_ctrs[hash_level - 1] += 1;
+            let n = list_ctrs[hash_level - 1];
+            let indent = "  ".repeat(hash_level - 1);
+            let content = replace_img_tags(content);
+            svg.text(x + NOTE_PAD_X, ty, &format!("{indent}{n}. {content}"), "start", FONT_SIZE);
+            ty += NOTE_LINE_HEIGHT;
+            continue;
+        }
+        // Bullet list: * item, ** sub-item, etc. (but not ** which starts bold markup).
+        let star_level = trimmed.chars().take_while(|&c| c == '*').count();
+        let next_after_stars = trimmed[star_level..].chars().next();
+        if star_level > 0 && next_after_stars != Some('*') {
+            let content = trimmed[star_level..].trim_start();
+            let indent = "  ".repeat(star_level - 1);
+            let content = replace_img_tags(content);
+            list_ctrs.clear();
+            svg.text(x + NOTE_PAD_X, ty, &format!("{indent}\u{2022} {content}"), "start", FONT_SIZE);
+            ty += NOTE_LINE_HEIGHT;
+            continue;
+        }
+        // Regular line — reset list counters, pass through creole processing via svg.text.
+        list_ctrs.clear();
+        let display = replace_img_tags(trimmed);
         svg.text(x + NOTE_PAD_X, ty, &display, "start", FONT_SIZE);
         ty += NOTE_LINE_HEIGHT;
     }

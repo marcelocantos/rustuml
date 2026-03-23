@@ -43,6 +43,9 @@ pub fn to_svg_tspans(text: &str) -> String {
             '~' => {
                 // Tilde escape — if the next chars form a recognized multi-character
                 // delimiter, escape the whole delimiter so it is emitted literally.
+                // If the next char is a single markup-start char (e.g. `/`, `*`,
+                // `-`, `_`, `~`, `"`, `` ` ``), consume the `~` and emit the char.
+                // Otherwise emit `~` literally and leave the next char for the main loop.
                 let mut peeked = chars.clone().take(2);
                 let c1 = peeked.next();
                 let c2 = peeked.next();
@@ -52,6 +55,7 @@ pub fn to_svg_tspans(text: &str) -> String {
                         | (Some('*'), Some('*'))
                         | (Some('-'), Some('-'))
                         | (Some('_'), Some('_'))
+                        | (Some('"'), Some('"'))
                 );
                 if is_two_char_delim {
                     let ch1 = chars.next().unwrap();
@@ -59,10 +63,22 @@ pub fn to_svg_tspans(text: &str) -> String {
                     result.push(ch1);
                     result.push(ch2);
                     last_char = Some(ch2);
-                } else if let Some(next) = chars.next() {
-                    last_char = Some(next);
-                    result.push(next);
+                } else if let Some(next_ch) = c1 {
+                    // Single markup-start chars: consume `~` and emit the char.
+                    // For non-markup chars: emit `~` literally, leave the char for the loop.
+                    let is_markup_char = matches!(next_ch, '/' | '*' | '-' | '_' | '~' | '"' | '`');
+                    if is_markup_char {
+                        chars.next(); // consume the markup char
+                        result.push(next_ch);
+                        last_char = Some(next_ch);
+                    } else {
+                        // Non-markup char: tilde is literal.
+                        result.push('~');
+                        last_char = Some('~');
+                        // Leave next_ch for the main loop to process.
+                    }
                 }
+                // If c1 is None (~ at end of string), nothing to emit.
             }
             '"' if chars.peek() == Some(&'"') => {
                 chars.next();
@@ -299,7 +315,13 @@ pub fn to_svg_tspans(text: &str) -> String {
                     _ if tag.starts_with("img:") => {
                         // <img:url> or <img:file> — render fallback text since we can't
                         // embed images in SVG tspan content.
-                        let src = &tag["img:".len()..];
+                        // Strip any {scale=...} or similar suffix from the URL.
+                        let raw_src = &tag["img:".len()..];
+                        let src = if let Some(brace) = raw_src.find('{') {
+                            &raw_src[..brace]
+                        } else {
+                            raw_src
+                        };
                         if src.starts_with("https://") || src.starts_with("http://") {
                             let escaped = escape_creole_text(src);
                             write!(result, "(Cannot decode: {escaped})").unwrap();
@@ -558,8 +580,14 @@ mod tests {
 
     #[test]
     fn tilde_single_char() {
-        // ~ before a single non-delimiter char just escapes that char.
-        assert_eq!(to_svg_tspans("~x"), "x");
+        // ~ before a non-markup char is emitted literally; the next char is also emitted.
+        assert_eq!(to_svg_tspans("~x"), "~x");
+    }
+
+    #[test]
+    fn tilde_single_markup_char() {
+        // ~ before a single markup char (not a two-char delim) escapes that char.
+        assert_eq!(to_svg_tspans("~/not italic/"), "/not italic/");
     }
 
     #[test]
@@ -573,6 +601,15 @@ mod tests {
     #[test]
     fn img_local_fallback() {
         assert_eq!(to_svg_tspans("<img:localfile.png>"), "(Cannot decode)");
+    }
+
+    #[test]
+    fn img_url_scaled_fallback() {
+        // {scale=...} suffix stripped from URL in fallback message.
+        assert_eq!(
+            to_svg_tspans("<img:https://example.com/img.png{scale=0.5}>"),
+            "(Cannot decode: https://example.com/img.png)"
+        );
     }
 
     #[test]

@@ -76,13 +76,21 @@ fn process_label(s: &str) -> String {
     // PlantUML uses non-breaking space (U+00A0) in the cannot-decode message.
     let decoded = decode_escapes(s);
     // Replace <img:...> tags with PlantUML's placeholder.
+    // For HTTP/HTTPS URLs, include the URL in the fallback message.
     let mut result = String::with_capacity(decoded.len());
     let mut rest = decoded.as_str();
     while let Some(start) = rest.find("<img:") {
         result.push_str(&rest[..start]);
         let after = &rest[start..];
         if let Some(end) = after.find('>') {
-            result.push_str("(Cannot\u{00a0}decode)");
+            let raw_src = &after["<img:".len()..end];
+            // Strip {scale=...} or similar suffix from the URL.
+            let src = if let Some(brace) = raw_src.find('{') { &raw_src[..brace] } else { raw_src };
+            if src.starts_with("https://") || src.starts_with("http://") {
+                result.push_str(&format!("(Cannot\u{00a0}decode:\u{00a0}{src})"));
+            } else {
+                result.push_str("(Cannot\u{00a0}decode)");
+            }
             rest = &after[end + 1..];
         } else {
             result.push_str(after);

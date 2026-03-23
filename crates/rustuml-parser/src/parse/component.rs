@@ -90,12 +90,12 @@ pub fn parse_component(lines: &[String]) -> Result<ComponentDiagram, ParseError>
     let mut legend_lines: Vec<String> = Vec::new();
 
     static RE_COMP: LazyLock<Regex> =
-        LazyLock::new(|| Regex::new(r#"^component\s+(?:"([^"]+)"\s+as\s+(\w+)|"([^"]+)"|(\w+))(?:\s+[^{]*)?"#).unwrap());
+        LazyLock::new(|| Regex::new(r#"^component\s+(?:"((?:[^"]|"")+)"\s+as\s+(\w+)|"((?:[^"]|"")+)"|(\w+))(?:\s+[^{]*)?"#).unwrap());
     static RE_BRACKET: LazyLock<Regex> =
         LazyLock::new(|| Regex::new(r"^\[([^\]]+)\]$").unwrap());
     // Interface: `interface "Name" as ID`, `interface Name`, or `interface [Name] as ID`.
     static RE_IFACE_QUOTED_AS: LazyLock<Regex> =
-        LazyLock::new(|| Regex::new(r#"^interface\s+"([^"]+)"\s+as\s+(\w+)"#).unwrap());
+        LazyLock::new(|| Regex::new(r#"^interface\s+"((?:[^"]|"")+)"\s+as\s+(\w+)"#).unwrap());
     static RE_IFACE_BRACKET_AS: LazyLock<Regex> =
         LazyLock::new(|| Regex::new(r"^interface\s+\[([^\]]+)\]\s+as\s+(\w+)").unwrap());
     static RE_IFACE_BARE: LazyLock<Regex> =

@@ -52,7 +52,7 @@ pub fn parse_usecase(lines: &[String]) -> Result<UseCaseDiagram, ParseError> {
 
     // actor "Label" as ID <<stereotype>>  (all optional parts, color modifier ignored)
     static RE_ACTOR_QUOTED: LazyLock<Regex> = LazyLock::new(|| {
-        Regex::new(r#"^actor\s+"([^"]+)"(?:\s+as\s+(\w+))?(?:\s+(<<\s*[^>]+\s*>>))?(?:\s+#\w+)?"#).unwrap()
+        Regex::new(r#"^actor\s+"((?:[^"]|"")+)"(?:\s+as\s+(\w+))?(?:\s+(<<\s*[^>]+\s*>>))?(?:\s+#\w+)?"#).unwrap()
     });
     // actor Word <<stereotype>>  (bare single-word name, optional color modifier)
     static RE_ACTOR_BARE: LazyLock<Regex> = LazyLock::new(|| {
@@ -64,13 +64,13 @@ pub fn parse_usecase(lines: &[String]) -> Result<UseCaseDiagram, ParseError> {
 
     // usecase "Label" as ID <<stereotype>>
     static RE_UC_QUOTED_AS: LazyLock<Regex> =
-        LazyLock::new(|| Regex::new(r#"^usecase\s+"([^"]+)"\s+as\s+(\w+)(?:\s+(<<\s*[^>]+\s*>>))?"#).unwrap());
+        LazyLock::new(|| Regex::new(r#"^usecase\s+"((?:[^"]|"")+)"\s+as\s+(\w+)(?:\s+(<<\s*[^>]+\s*>>))?"#).unwrap());
     // usecase "Label" <<stereotype>>  (no alias)
     static RE_UC_QUOTED: LazyLock<Regex> =
-        LazyLock::new(|| Regex::new(r#"^usecase\s+"([^"]+)"(?:\s+(<<\s*[^>]+\s*>>))?(?:\s+#\w+)?"#).unwrap());
+        LazyLock::new(|| Regex::new(r#"^usecase\s+"((?:[^"]|"")+)"(?:\s+(<<\s*[^>]+\s*>>))?(?:\s+#\w+)?"#).unwrap());
     // usecase ID as "Label" <<stereotype>>  (reversed alias, closing quote required)
     static RE_UC_ID_AS_LABEL: LazyLock<Regex> =
-        LazyLock::new(|| Regex::new(r##"^usecase\s+(\w+)(?:\s+#\w+)?\s+as\s+"([^"]+)""##).unwrap());
+        LazyLock::new(|| Regex::new(r##"^usecase\s+(\w+)(?:\s+#\w+)?\s+as\s+"((?:[^"]|"")+)""##).unwrap());
     // usecase (Label) as ID  (paren-based use case with alias)
     static RE_UC_PAREN_AS: LazyLock<Regex> =
         LazyLock::new(|| Regex::new(r"^usecase\s+\(([^)]+)\)\s+as\s+(\w+)").unwrap());

@@ -65,6 +65,7 @@ impl SvgBuilder {
             || (content.matches("~~").count() >= 2)
             || (content.matches("\"\"").count() >= 2)
             || content.contains('`')
+            || content.contains('~')   // tilde escape sequences
             || content.contains("<b>")
             || content.contains("<i>")
             || content.contains("<u>")
@@ -75,6 +76,7 @@ impl SvgBuilder {
             || content.contains("<font")
             || content.contains("<back:")
             || content.contains("<mono>")
+            || content.contains("<img:")  // image fallback
             || content.contains("[[");  // hyperlinks
         if has_creole {
             let rich = crate::creole::to_svg_tspans(content);
