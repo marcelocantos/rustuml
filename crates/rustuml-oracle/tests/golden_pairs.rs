@@ -145,6 +145,14 @@ fn golden_has_syntax_error(svg: &str) -> bool {
         // YAML inputs that the reference implementation cannot parse (anchors,
         // empty objects, multi-line scalars, etc.) produce this error banner.
         || svg.contains("Your data does not sound like YAML data")
+        // Lollipop notation (`()- Interface`) is unsupported; PlantUML emits
+        // a semantic error SVG containing "No class <Name>".
+        || svg.contains("No class ")
+        // Generic "(Assumed diagram type: ...)" marker that appears in
+        // PlantUML error SVGs when the diagram cannot be parsed/rendered.
+        || svg.contains("(Assumed diagram type:")
+        // Java PlantUML DITAA renderer crash — no valid diagram to compare.
+        || svg.contains("DITAA has crashed")
 }
 
 struct TestResult {

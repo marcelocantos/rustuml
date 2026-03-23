@@ -48,6 +48,8 @@ pub fn parse_nwdiag(lines: &[String]) -> Result<NwdiagDiagram, ParseError> {
         LazyLock::new(|| Regex::new(r"^\s*(\w+)\s*(?:\[([^\]]*)\])?\s*;?\s*$").unwrap());
     static RE_HOST_ATTR: LazyLock<Regex> =
         LazyLock::new(|| Regex::new(r#"address\s*=\s*"?([^",\]]+)"?"#).unwrap());
+    static RE_HOST_DESC: LazyLock<Regex> =
+        LazyLock::new(|| Regex::new(r#"description\s*=\s*"([^"]+)""#).unwrap());
 
     for (line_no, line) in lines.iter().enumerate() {
         let trimmed = line.trim();
@@ -135,14 +137,17 @@ pub fn parse_nwdiag(lines: &[String]) -> Result<NwdiagDiagram, ParseError> {
                     if matches!(host_name.as_str(), "network" | "group" | "nwdiag") {
                         continue;
                     }
-                    let address = caps.get(2).and_then(|attrs| {
-                        RE_HOST_ATTR
-                            .captures(attrs.as_str())
-                            .map(|c| c[1].trim().to_string())
-                    });
+                    let attrs_str = caps.get(2).map(|m| m.as_str()).unwrap_or("");
+                    let address = RE_HOST_ATTR
+                        .captures(attrs_str)
+                        .map(|c| c[1].trim().to_string());
+                    let description = RE_HOST_DESC
+                        .captures(attrs_str)
+                        .map(|c| c[1].trim().to_string());
                     networks[idx].hosts.push(NetworkHost {
                         name: host_name,
                         address,
+                        description,
                     });
                     continue;
                 }

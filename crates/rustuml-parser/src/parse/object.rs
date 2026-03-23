@@ -138,8 +138,10 @@ impl ObjectParser {
     fn try_object_decl(&mut self, line: &str) -> bool {
         // object "Label" as id <<stereotype>> #color { ... } or object id <<stereotype>> #color {
         static RE: LazyLock<Regex> = LazyLock::new(|| {
+            // Note: color capture uses [^\s{;]+ to avoid greedily consuming the
+            // opening brace when writing e.g. `object Foo #yellow {`.
             Regex::new(
-                r#"^object\s+(?:"([^"]+)"\s+as\s+(\w+)|(\w+))(?:\s+<<([^>]+)>>)?(?:\s+#(\S+))?\s*(\{.*)?$"#,
+                r#"^object\s+(?:"([^"]+)"\s+as\s+(\w+)|(\w+))(?:\s+<<([^>]+)>>)?(?:\s+#([^\s{;]+))?\s*(\{.*)?$"#,
             )
             .unwrap()
         });
@@ -202,7 +204,9 @@ impl ObjectParser {
     fn try_map_decl(&mut self, line: &str) -> bool {
         // map "Label" as id #color { ... } or map "Label" as id {
         static RE: LazyLock<Regex> = LazyLock::new(|| {
-            Regex::new(r#"^map\s+"([^"]+)"\s+as\s+(\w+)(?:\s+#(\S+))?\s*(\{.*)?$"#).unwrap()
+            // Note: color capture uses [^\s{;]+ to avoid greedily consuming the
+            // opening brace when writing e.g. `map "Foo" as foo #yellow {`.
+            Regex::new(r#"^map\s+"([^"]+)"\s+as\s+(\w+)(?:\s+#([^\s{;]+))?\s*(\{.*)?$"#).unwrap()
         });
 
         if let Some(caps) = RE.captures(line) {
@@ -269,6 +273,8 @@ impl ObjectParser {
 
         if let Some(caps) = RE.captures(line) {
             let from_raw = caps[1].to_string();
+            let from_multiplicity = caps.get(2).map(|m| m.as_str().to_string());
+            let to_multiplicity = caps.get(4).map(|m| m.as_str().to_string());
             let to_raw = caps[5].to_string();
             let raw_label = caps.get(6).map(|m| m.as_str().trim().to_string());
             // Strip surrounding quotes from label if present.
@@ -285,7 +291,7 @@ impl ObjectParser {
             self.ensure_object(&from_base);
             self.ensure_object(&to_base);
 
-            self.links.push(ObjectLink { from: from_raw, to: to_raw, label });
+            self.links.push(ObjectLink { from: from_raw, to: to_raw, label, from_multiplicity, to_multiplicity });
             true
         } else {
             false
@@ -496,6 +502,8 @@ mod tests {
         assert_eq!(d.links[0].from, "Parent");
         assert_eq!(d.links[0].to, "Child");
         assert_eq!(d.links[0].label.as_deref(), Some("has"));
+        assert_eq!(d.links[0].from_multiplicity.as_deref(), Some("1"));
+        assert_eq!(d.links[0].to_multiplicity.as_deref(), Some("0..*"));
     }
 
     #[test]

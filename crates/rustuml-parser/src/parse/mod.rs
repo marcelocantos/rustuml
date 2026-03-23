@@ -117,6 +117,12 @@ fn detect_uml_subtype(lines: &[String]) -> UmlSubtype {
         {
             scores[3] += 5;
         }
+        // `note on link` is a state-diagram-exclusive keyword (used to annotate
+        // transitions). Score it strongly so that state diagrams with notes on
+        // transitions beat the sequence scoring from `note left/right of` lines.
+        if trimmed == "note on link" || trimmed.starts_with("note on link ") || trimmed.starts_with("note on link:") {
+            scores[3] += 15;
+        }
         // Activity (v3 new syntax).
         if trimmed == "start"
             || trimmed == "stop"
@@ -249,6 +255,8 @@ fn detect_uml_subtype(lines: &[String]) -> UmlSubtype {
         // deployment diagrams.
         // Note: `entity` is excluded here because it is also a sequence participant
         // type; entity-with-body ({) is handled separately below.
+        // Note: `*--` and `o--` are NOT scored for class here because they are
+        // also used in object diagrams; `object` keyword presence disambiguates.
         if trimmed.starts_with("class ")
             || trimmed.starts_with("abstract class ")
             || trimmed.starts_with("abstract ")
@@ -258,10 +266,18 @@ fn detect_uml_subtype(lines: &[String]) -> UmlSubtype {
             || trimmed.starts_with("annotation ")
             || trimmed.contains("<|--")
             || trimmed.contains("..|>")
-            || trimmed.contains("*--")
-            || trimmed.contains("o--")
         {
             scores[1] += 10;
+        }
+        // `*--` and `o--` score for class only when no `object` keyword is present.
+        // In object diagrams they denote composition/aggregation links.
+        // We defer the disambiguation: score both, but object gets a tiebreak boost
+        // from `object` keyword lines, which score object at +10 each.
+        if trimmed.contains("*--") || trimmed.contains("o--") {
+            scores[1] += 10;
+            // Also score object so that a diagram with `object` declarations plus
+            // *-- / o-- links stays an object diagram rather than tipping to class.
+            scores[2] += 5;
         }
         // ER crow's foot notation is an unambiguous class/ER diagram signal.
         if trimmed.contains("||--")

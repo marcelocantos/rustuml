@@ -324,6 +324,26 @@ fn render_links(
                 let mid_y = (from_y + to_top) / 2.0;
                 svg.text(mid_x, mid_y - 4.0, label, "middle", SMALL_FONT);
             }
+
+            // Render multiplicity labels near the source and target ends.
+            if let Some(mult) = &link.from_multiplicity {
+                // Place near the from-end (slightly offset from the line start).
+                let dx = to_cx - from_cx;
+                let dy = to_top - from_y;
+                let len = (dx * dx + dy * dy).sqrt().max(1.0);
+                let nx = from_cx + dx / len * 18.0;
+                let ny = from_y + dy / len * 18.0;
+                svg.text(nx + 6.0, ny, mult, "start", SMALL_FONT);
+            }
+            if let Some(mult) = &link.to_multiplicity {
+                // Place near the to-end.
+                let dx = from_cx - to_cx;
+                let dy = from_y - to_top;
+                let len = (dx * dx + dy * dy).sqrt().max(1.0);
+                let nx = to_cx + dx / len * 18.0;
+                let ny = to_top + dy / len * 18.0;
+                svg.text(nx + 6.0, ny, mult, "start", SMALL_FONT);
+            }
         }
     }
 }
@@ -456,6 +476,8 @@ mod tests {
                 from: "Owner".into(),
                 to: "Car".into(),
                 label: Some("drives".into()),
+                from_multiplicity: None,
+                to_multiplicity: None,
             }],
             notes: vec![],
             packages: vec![],

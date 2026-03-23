@@ -71,9 +71,14 @@ fn state_box_height(desc_count: usize) -> f64 {
     }
 }
 
+/// Returns true if the state ID is a pseudo-state (rendered as a circle, not a box).
+fn is_pseudo_state(id: &str) -> bool {
+    id == "[*]" || id == "[H]" || id == "[H*]"
+}
+
 /// Height of any node (pseudo or normal) for layout purposes.
 fn node_height(id: &str, state_def: Option<&State>) -> f64 {
-    if id == "[*]" {
+    if is_pseudo_state(id) {
         INITIAL_R * 2.0
     } else {
         let desc_count = state_def.map_or(0, |s| s.descriptions.len());
@@ -157,6 +162,11 @@ pub fn render(diagram: &StateDiagram, theme: &Theme) -> String {
         if id == "[*]" {
             // Initial/final state — filled circle.
             svg.circle(*x, *y, INITIAL_R, &sts.initial_color, &sts.initial_color);
+        } else if id == "[H]" || id == "[H*]" {
+            // Shallow/deep history pseudo-state — open circle with "H" (or "H*") inside.
+            let label = if id == "[H*]" { "H*" } else { "H" };
+            svg.circle(*x, *y, INITIAL_R, "white", "#000");
+            svg.text(*x, *y + SMALL_FONT / 3.0, label, "middle", SMALL_FONT);
         } else {
             // Find the state definition.
             let state_def = diagram.states.iter().find(|s| s.id == *id);

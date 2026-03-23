@@ -26,6 +26,8 @@ pub struct Network {
 pub struct NetworkHost {
     pub name: String,
     pub address: Option<String>,
+    /// Display label overridden by `description = "..."` attribute.
+    pub description: Option<String>,
 }
 
 #[derive(Debug, Serialize, Deserialize)]

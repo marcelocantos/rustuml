@@ -133,17 +133,20 @@ pub fn render(diagram: &NwdiagDiagram, theme: &Theme) -> String {
             let connector_y2 = hy;
             svg.line_segment(cx, connector_y1, cx, connector_y2, &gs.border_color, false);
 
+            // Host label: use description if present, otherwise the host name.
+            let host_label = host.description.as_deref().unwrap_or(&host.name);
+
             // Host box.
-            let label_w = metrics::text_width(&host.name, FONT_SIZE) + 16.0;
+            let label_w = metrics::text_width(host_label, FONT_SIZE) + 16.0;
             let box_w = label_w.max(HOST_W);
             let actual_hx = cx - box_w / 2.0;
             svg.rounded_rect(actual_hx, hy, box_w, HOST_H, 4.0, HOST_FILL, &gs.border_color);
 
-            // Host name.
+            // Host display label.
             svg.text(
                 cx,
                 hy + HOST_H / 2.0 - 3.0,
-                &host.name,
+                host_label,
                 "middle",
                 FONT_SIZE,
             );

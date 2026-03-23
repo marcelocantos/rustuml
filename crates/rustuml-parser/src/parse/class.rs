@@ -818,11 +818,11 @@ impl ClassParser {
             return true;
         }
         if line == "legend"
-            || line == "legend left"
-            || line == "legend right"
-            || line == "legend center"
-            || line == "legend top"
-            || line == "legend bottom"
+            || line.starts_with("legend left")
+            || line.starts_with("legend right")
+            || line.starts_with("legend center")
+            || line.starts_with("legend top")
+            || line.starts_with("legend bottom")
         {
             self.meta_block = Some(MetaBlock::Legend);
             return true;

@@ -78,4 +78,10 @@ pub struct ObjectLink {
     pub to: String,
     #[serde(skip_serializing_if = "Option::is_none")]
     pub label: Option<String>,
+    /// Multiplicity label on the source end (e.g. `"1"`, `"0..*"`).
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub from_multiplicity: Option<String>,
+    /// Multiplicity label on the target end (e.g. `"1"`, `"0..*"`).
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub to_multiplicity: Option<String>,
 }

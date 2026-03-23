@@ -76,7 +76,9 @@ impl StateParser {
 
     fn ensure_state(&mut self, id: &str) -> String {
         let id = id.trim().to_string();
-        if id == "[*]" {
+        // Pseudo-states ([*], [H], [H*]) are handled by the renderer directly
+        // and do not need a corresponding State entry in the states list.
+        if id.starts_with('[') && id.ends_with(']') {
             return id;
         }
         if !self.states.iter().any(|s| s.id == id) {
@@ -150,8 +152,9 @@ impl StateParser {
     fn try_transition(&mut self, line: &str) -> bool {
         static RE: LazyLock<Regex> = LazyLock::new(|| {
             // State IDs may include dots for substate references (e.g. `S.H`).
+            // Pseudo-states: [*] (initial/final), [H] (shallow history), [H*] (deep history).
             Regex::new(
-                r"^(\[?\*?\]?|[\w.]+)\s*-+(?:left|right|up|down|le|ri|do)?-*>\s*(\[?\*?\]?|[\w.]+)(?:\s*:\s*(.+))?$",
+                r"^(\[[\w*]*\]|[\w.]+)\s*-+(?:left|right|up|down|le|ri|do)?-*>\s*(\[[\w*]*\]|[\w.]+)(?:\s*:\s*(.+))?$",
             )
             .unwrap()
         });
