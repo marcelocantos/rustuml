@@ -3,7 +3,7 @@
 
 //! Activity diagram SVG renderer.
 
-use rustuml_parser::diagram::activity::{ActivityDiagram, ActivityStep, NotePosition};
+use rustuml_parser::diagram::activity::{ActivityDiagram, ActivityStep, IfBlock, NotePosition};
 
 use crate::style::Theme;
 use crate::svg::SvgBuilder;
@@ -159,17 +159,18 @@ pub fn render(diagram: &ActivityDiagram, theme: &Theme) -> String {
                 svg.text(5.0, y + 14.0, name, "start", SMALL_FONT);
                 y += 20.0;
             }
-            ActivityStep::Partition(name) => {
+            ActivityStep::Partition(partition) => {
+                let fill = partition.color.as_deref().unwrap_or("none");
                 svg.open_group("partition");
                 svg.rect(
                     MARGIN / 2.0,
                     y,
                     total_width - MARGIN,
                     ACTION_HEIGHT,
-                    "none",
+                    fill,
                     "#999",
                 );
-                svg.text(MARGIN, y + 15.0, &name.name, "start", SMALL_FONT);
+                svg.text(MARGIN, y + 15.0, &partition.name, "start", SMALL_FONT);
                 y += 20.0;
             }
             ActivityStep::EndPartition => {
