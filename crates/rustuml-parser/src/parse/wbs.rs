@@ -21,7 +21,7 @@
 
 use super::ParseError;
 use crate::diagram::DiagramMeta;
-use crate::diagram::wbs::{WbsDiagram, WbsNode};
+use crate::diagram::wbs::{WbsDiagram, WbsNode, WbsSide};
 
 /// Parse preprocessed lines from a `@startwbs` block into a [`WbsDiagram`].
 pub fn parse_wbs(lines: &[String]) -> Result<WbsDiagram, ParseError> {
@@ -38,14 +38,24 @@ pub fn parse_wbs(lines: &[String]) -> Result<WbsDiagram, ParseError> {
             continue;
         }
 
-        // Count leading `*` characters.
+        // Detect node prefix: `*` chars for right-side, `-` chars for left-side.
         let stars = trimmed.chars().take_while(|&c| c == '*').count();
-        if stars == 0 {
+        let dashes = if stars == 0 {
+            trimmed.chars().take_while(|&c| c == '-').count()
+        } else {
+            0
+        };
+
+        let (prefix_len, side) = if stars > 0 {
+            (stars, WbsSide::Right)
+        } else if dashes > 0 {
+            (dashes, WbsSide::Left)
+        } else {
             // Not a node line — skip (could be @startwbs, @endwbs, comment, etc.).
             continue;
-        }
+        };
 
-        let label = trimmed[stars..].trim().to_string();
+        let label = trimmed[prefix_len..].trim().to_string();
         if label.is_empty() {
             return Err(ParseError {
                 line: line_no + 1,
@@ -53,10 +63,11 @@ pub fn parse_wbs(lines: &[String]) -> Result<WbsDiagram, ParseError> {
             });
         }
 
-        let depth = stars;
+        let depth = prefix_len;
         let node = WbsNode {
             label,
             depth,
+            side,
             children: Vec::new(),
         };
 

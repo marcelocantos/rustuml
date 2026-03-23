@@ -9,11 +9,18 @@ pub mod class;
 pub mod component;
 pub mod creole;
 pub mod deployment;
+pub mod ditaa;
 pub mod gantt;
+pub mod json_diagram;
+pub mod math;
 pub mod metrics;
+pub mod object;
 pub mod mindmap;
+pub mod nwdiag;
 pub mod pdf;
 pub mod png;
+pub mod regex_diagram;
+pub mod salt;
 pub mod sequence;
 pub mod skinparam;
 pub mod state;
@@ -70,9 +77,16 @@ fn render_with_theme(diagram: &Diagram, theme: &Theme) -> String {
         Diagram::Component(comp) => component::render(comp, theme),
         Diagram::UseCase(uc) => usecase::render(uc, theme),
         Diagram::Deployment(dep) => deployment::render(dep, theme),
+        Diagram::Json(jd) => json_diagram::render(jd, theme),
         Diagram::MindMap(mm) => mindmap::render(mm, theme),
         Diagram::Gantt(g) => gantt::render(g, theme),
         Diagram::Timing(td) => timing::render(td, theme),
+        Diagram::Object(obj) => object::render(obj, theme),
         Diagram::Wbs(w) => wbs::render(w, theme),
+        Diagram::Math(m) => math::render(m, theme),
+        Diagram::Salt(s) => salt::render(s, theme),
+        Diagram::Nwdiag(nw) => nwdiag::render(nw, theme),
+        Diagram::Regex(r) => regex_diagram::render(r, theme),
+        Diagram::Ditaa(d) => ditaa::render(d, theme),
     }
 }

@@ -30,7 +30,7 @@ pub enum ActivityStep {
     While(WhileBlock),
     EndWhile(Option<String>),
     Repeat,
-    RepeatWhile(String),
+    RepeatWhile(RepeatWhileBlock),
     Fork,
     ForkAgain,
     EndFork,
@@ -38,11 +38,30 @@ pub enum ActivityStep {
     SplitAgain,
     EndSplit,
     Swimlane(String),
-    Partition(String),
+    Partition(PartitionBlock),
     EndPartition,
-    Note(String),
+    Note(NoteBlock),
+    DeprecatedColorAction(DeprecatedColorAction),
+    Arrow(ArrowStep),
+    Backward(String),
+    Break,
     Detach,
     Kill,
+}
+
+/// Deprecated `#color:text;` syntax -- renders a warning banner.
+#[derive(Debug, Serialize, Deserialize)]
+pub struct DeprecatedColorAction {
+    pub color: String,
+    pub text: String,
+}
+
+/// An explicit arrow step (`->`, `-->`, `-[#color]->`).
+#[derive(Debug, Serialize, Deserialize)]
+pub struct ArrowStep {
+    pub dashed: bool,
+    pub color: Option<String>,
+    pub label: Option<String>,
 }
 
 #[derive(Debug, Serialize, Deserialize)]
@@ -61,4 +80,34 @@ pub struct ElseIfBranch {
 pub struct WhileBlock {
     pub condition: String,
     pub is_label: Option<String>,
+}
+
+/// Note position (left or right of the action).
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub enum NotePosition {
+    Left,
+    Right,
+}
+
+#[derive(Debug, Serialize, Deserialize)]
+pub struct NoteBlock {
+    pub text: String,
+    pub color: Option<String>,
+    pub position: NotePosition,
+}
+
+#[derive(Debug, Serialize, Deserialize)]
+pub struct PartitionBlock {
+    pub name: String,
+    pub color: Option<String>,
+}
+
+#[derive(Debug, Serialize, Deserialize)]
+pub struct RepeatWhileBlock {
+    pub condition: String,
+    /// Label for the loop-back branch (e.g. `is (yes)` in `repeat while (c) is (yes)`).
+    pub is_label: Option<String>,
+    /// Label for the exit branch (e.g. `not (no)` in `repeat while (c) is (y) not (no)`).
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub not_label: Option<String>,
 }
