@@ -228,6 +228,12 @@ fn render_with_positions(
     if let Some(title) = &diagram.meta.title {
         svg.text(total_width / 2.0, TITLE_HEIGHT - 4.0, title, "middle", TITLE_FONT_SIZE);
     }
+    if let Some(header) = &diagram.meta.header {
+        svg.text(total_width / 2.0, SMALL_FONT + 2.0, header, "middle", SMALL_FONT);
+    }
+    if let Some(footer) = &diagram.meta.footer {
+        svg.text(total_width / 2.0, total_height - 4.0, footer, "middle", SMALL_FONT);
+    }
 
     // Render package containers first (behind entities).
     for (pkg, maybe_box) in diagram.packages.iter().zip(&pkg_boxes) {
@@ -327,6 +333,12 @@ fn render_grid(diagram: &ClassDiagram, cs: &crate::style::ClassStyle) -> String 
     let mut svg = SvgBuilder::new(total_width, total_height);
     if let Some(title) = &diagram.meta.title {
         svg.text(total_width / 2.0, TITLE_HEIGHT - 4.0, title, "middle", TITLE_FONT_SIZE);
+    }
+    if let Some(header) = &diagram.meta.header {
+        svg.text(total_width / 2.0, SMALL_FONT + 2.0, header, "middle", SMALL_FONT);
+    }
+    if let Some(footer) = &diagram.meta.footer {
+        svg.text(total_width / 2.0, total_height - 4.0, footer, "middle", SMALL_FONT);
     }
 
     // Position and render each class.
@@ -715,6 +727,12 @@ fn render_notes_only(diagram: &ClassDiagram, _cs: &crate::style::ClassStyle) -> 
     let mut svg = SvgBuilder::new(total_width, total_height);
     if let Some(title) = &diagram.meta.title {
         svg.text(total_width / 2.0, TITLE_HEIGHT - 4.0, title, "middle", TITLE_FONT_SIZE);
+    }
+    if let Some(header) = &diagram.meta.header {
+        svg.text(total_width / 2.0, SMALL_FONT + 2.0, header, "middle", SMALL_FONT);
+    }
+    if let Some(footer) = &diagram.meta.footer {
+        svg.text(total_width / 2.0, total_height - 4.0, footer, "middle", SMALL_FONT);
     }
     for (note, (nx, ny, nw, nh)) in diagram.notes.iter().zip(&note_data) {
         render_note_box(&mut svg, note, *nx, *ny, *nw, *nh);

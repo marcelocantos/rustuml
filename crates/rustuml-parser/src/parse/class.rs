@@ -512,6 +512,18 @@ impl ClassParser {
             self.meta.title = Some(super::strip_title_quotes(rest).to_string());
             return true;
         }
+        if let Some(rest) = line.strip_prefix("header ") {
+            self.meta.header = Some(rest.trim().to_string());
+            return true;
+        }
+        if let Some(rest) = line.strip_prefix("footer ") {
+            self.meta.footer = Some(rest.trim().to_string());
+            return true;
+        }
+        if let Some(rest) = line.strip_prefix("caption ") {
+            self.meta.caption = Some(rest.trim().to_string());
+            return true;
+        }
         // Skip skinparam, hide, show, together, etc.
         line.starts_with("skinparam ")
             || line.starts_with("hide ")

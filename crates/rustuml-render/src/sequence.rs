@@ -72,8 +72,36 @@ fn participant_display_label(p: &Participant) -> String {
     if let Some(st) = &p.stereotype {
         format!("{} \u{ab}{st}\u{bb}", p.label)
     } else {
-        p.label.clone()
+        // PlantUML renders `(text)` in participant labels as `.text.` (period-delimited
+        // stereotype notation).  Convert all `(...)` groups to `.....` form so that
+        // our text output matches the PlantUML golden SVG text elements.
+        let label = parentheses_to_dots(&p.label);
+        label
     }
+}
+
+/// Convert `(text)` patterns inside a string to `.text.` — PlantUML's participant
+/// stereotype dot notation.
+fn parentheses_to_dots(s: &str) -> String {
+    let mut result = String::new();
+    let chars: Vec<char> = s.chars().collect();
+    let mut i = 0;
+    while i < chars.len() {
+        if chars[i] == '(' {
+            // Find the matching closing paren.
+            if let Some(close) = chars[i + 1..].iter().position(|&c| c == ')') {
+                let inner: String = chars[i + 1..i + 1 + close].iter().collect();
+                result.push('.');
+                result.push_str(&inner);
+                result.push('.');
+                i += 1 + close + 1; // skip past ')'
+                continue;
+            }
+        }
+        result.push(chars[i]);
+        i += 1;
+    }
+    result
 }
 
 /// Render multi-line note text as individual SVG text elements.
