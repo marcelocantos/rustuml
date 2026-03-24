@@ -6,7 +6,9 @@ license.workspace = true
 
 [dependencies]
 ab_glyph = "0.2"
+regex = "1"
 rustuml-layout = { path = "../rustuml-layout" }
+rustuml-math = { path = "../rustuml-math" }
 rustuml-parser = { path = "../rustuml-parser" }
 serde = { version = "1", features = ["derive"] }
 serde_yaml = "0.9"

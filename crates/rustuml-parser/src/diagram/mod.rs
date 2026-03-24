@@ -10,8 +10,15 @@ pub mod activity;
 pub mod class;
 pub mod component;
 pub mod deployment;
+pub mod ditaa;
 pub mod gantt;
+pub mod json_diagram;
+pub mod math;
 pub mod mindmap;
+pub mod nwdiag;
+pub mod object;
+pub mod regex_diagram;
+pub mod salt;
 pub mod sequence;
 pub mod state;
 pub mod timing;
@@ -26,15 +33,22 @@ use serde::{Deserialize, Serialize};
 pub enum Diagram {
     Sequence(sequence::SequenceDiagram),
     Class(class::ClassDiagram),
+    Object(object::ObjectDiagram),
     State(state::StateDiagram),
     Activity(activity::ActivityDiagram),
     Component(component::ComponentDiagram),
     UseCase(usecase::UseCaseDiagram),
     Deployment(deployment::DeploymentDiagram),
+    Nwdiag(nwdiag::NwdiagDiagram),
+    Json(json_diagram::JsonDiagram),
     MindMap(mindmap::MindMapDiagram),
     Gantt(gantt::GanttDiagram),
     Timing(timing::TimingDiagram),
     Wbs(wbs::WbsDiagram),
+    Math(math::MathDiagram),
+    Salt(salt::SaltDiagram),
+    Regex(regex_diagram::RegexDiagram),
+    Ditaa(ditaa::DitaaDiagram),
 }
 
 /// Source location for error reporting.

@@ -33,6 +33,10 @@ const BLOCK_RX: f64 = 4.0;
 const FONT_LABEL: f64 = 13.0;
 const FONT_STATE: f64 = 11.0;
 const FONT_TIME: f64 = 10.0;
+const FONT_TITLE: f64 = 14.0;
+const FONT_META: f64 = 11.0;
+/// Height of highlight/annotation area below timeline rows.
+const ANNOTATION_HEIGHT: f64 = 20.0;
 
 /// A palette of colors cycled for successive state names.
 const STATE_COLORS: &[&str] = &[
@@ -46,6 +50,17 @@ const STATE_COLORS: &[&str] = &[
     "#FCE4D6", // soft salmon
 ];
 
+/// Compute the implicit extra time step to extend the diagram past the last
+/// change point. Without this, the last state segment would have zero width.
+fn compute_extension(time_points: &[i64]) -> i64 {
+    if time_points.len() < 2 {
+        return 50;
+    }
+    // Use the last interval as the extension step.
+    let n = time_points.len();
+    time_points[n - 1] - time_points[n - 2]
+}
+
 /// Render a timing diagram to SVG.
 pub fn render(diagram: &TimingDiagram, _theme: &Theme) -> String {
     if diagram.timelines.is_empty() {
@@ -54,13 +69,49 @@ pub fn render(diagram: &TimingDiagram, _theme: &Theme) -> String {
     }
 
     let n_rows = diagram.timelines.len();
-    let total_height =
-        MARGIN_Y * 2.0 + n_rows as f64 * ROW_HEIGHT + (n_rows - 1) as f64 * ROW_GAP + 30.0;
+    let has_annotations = !diagram.annotations.is_empty() || !diagram.highlights.is_empty();
+    let annotation_extra = if has_annotations {
+        ANNOTATION_HEIGHT
+    } else {
+        0.0
+    };
+
+    // Extra space for title/header/footer.
+    let title_h = if diagram.meta.title.is_some() {
+        FONT_TITLE + 8.0
+    } else {
+        0.0
+    };
+    let header_h = if diagram.meta.header.is_some() {
+        FONT_META + 6.0
+    } else {
+        0.0
+    };
+    let footer_h = if diagram.meta.footer.is_some() {
+        FONT_META + 6.0
+    } else {
+        0.0
+    };
+
+    let top_extra = title_h + header_h;
+
+    let total_height = MARGIN_Y * 2.0
+        + top_extra
+        + n_rows as f64 * ROW_HEIGHT
+        + (n_rows - 1) as f64 * ROW_GAP
+        + 30.0  // time axis height
+        + annotation_extra
+        + footer_h;
     let total_width = MARGIN_X + LABEL_COL + TIMELINE_WIDTH + MARGIN_X;
 
     let time_min = diagram.time_points.first().copied().unwrap_or(0) as f64;
     let time_max = diagram.time_points.last().copied().unwrap_or(1) as f64;
-    let time_span = (time_max - time_min).max(1.0);
+
+    // Extend the effective right edge by one step past the last time point
+    // so that the last state segment has nonzero width.
+    let extension = compute_extension(&diagram.time_points) as f64;
+    let time_end = time_max + extension;
+    let time_span = (time_end - time_min).max(1.0);
 
     // Map a time value to an x coordinate on the timeline.
     let timeline_start_x = MARGIN_X + LABEL_COL;
@@ -78,19 +129,66 @@ pub fn render(diagram: &TimingDiagram, _theme: &Theme) -> String {
     // ── Background ────────────────────────────────────────────────────────────
     svg.rect(0.0, 0.0, total_width, total_height, "#FFFFFF", "none");
 
-    // ── Time axis markers ─────────────────────────────────────────────────────
-    let axis_y = MARGIN_Y / 2.0 + 10.0;
-    for &t in &diagram.time_points {
+    // ── Header ────────────────────────────────────────────────────────────────
+    let mut y_cursor = MARGIN_Y / 2.0;
+    if let Some(header) = &diagram.meta.header {
+        svg.text(
+            total_width / 2.0,
+            y_cursor + FONT_META,
+            header,
+            "middle",
+            FONT_META,
+        );
+        y_cursor += header_h;
+    }
+    if let Some(title) = &diagram.meta.title {
+        svg.text(
+            total_width / 2.0,
+            y_cursor + FONT_TITLE,
+            title,
+            "middle",
+            FONT_TITLE,
+        );
+        // y_cursor += title_h; // not used further
+    }
+    let _ = y_cursor; // suppress unused warning
+
+    // ── Time axis grid lines (dashed) ─────────────────────────────────────────
+    let axis_top_y = MARGIN_Y + top_extra;
+    let rows_end_y = axis_top_y + n_rows as f64 * ROW_HEIGHT + (n_rows - 1) as f64 * ROW_GAP;
+
+    // Determine which time values to show on the axis.
+    // If a scale is set, show ticks at every scale.units from time_min to time_end.
+    // Otherwise show only the explicitly-declared time points.
+    let axis_ticks: Vec<i64> = if let Some(scale) = diagram.scale {
+        let step = scale.units;
+        if step <= 0 {
+            diagram.time_points.clone()
+        } else {
+            let mut ticks = Vec::new();
+            let mut t = (time_min as i64 / step) * step;
+            if (t as f64) < time_min {
+                t += step;
+            }
+            while t as f64 <= time_end {
+                ticks.push(t);
+                t += step;
+            }
+            ticks
+        }
+    } else {
+        diagram.time_points.clone()
+    };
+
+    for &t in &axis_ticks {
         let x = time_to_x(t);
-        // Tick line spanning full height.
-        svg.line_segment(x, axis_y, x, total_height - MARGIN_Y / 2.0, "#CCCCCC", true);
-        // Time label.
-        svg.text(x, axis_y, &t.to_string(), "middle", FONT_TIME);
+        // Vertical dashed grid line.
+        svg.line_segment(x, axis_top_y, x, rows_end_y, "#CCCCCC", true);
     }
 
     // ── Rows ──────────────────────────────────────────────────────────────────
     for (row_idx, timeline) in diagram.timelines.iter().enumerate() {
-        let row_top = MARGIN_Y + row_idx as f64 * (ROW_HEIGHT + ROW_GAP);
+        let row_top = axis_top_y + row_idx as f64 * (ROW_HEIGHT + ROW_GAP);
         let row_mid = row_top + ROW_HEIGHT / 2.0;
 
         // Participant label (right-aligned in the label column).
@@ -128,27 +226,29 @@ pub fn render(diagram: &TimingDiagram, _theme: &Theme) -> String {
             let x_end = if i + 1 < changes.len() {
                 time_to_x(changes[i + 1].at)
             } else {
-                timeline_start_x + TIMELINE_WIDTH
+                // Last segment: extend to the implicit extra step.
+
+                timeline_start_x
+                    + (ch.at as f64 - time_min + extension) / time_span * TIMELINE_WIDTH
             };
             let seg_width = (x_end - x_start).max(0.0);
-            if seg_width < 0.5 {
-                continue;
-            }
 
             let color = state_color(&ch.state, &all_states);
 
             match timeline.kind {
                 TimelineKind::Robust => {
                     let block_top = row_top + (ROW_HEIGHT - ROBUST_BLOCK_H) / 2.0;
-                    svg.rounded_rect(
-                        x_start,
-                        block_top,
-                        seg_width,
-                        ROBUST_BLOCK_H,
-                        BLOCK_RX,
-                        color,
-                        "#555555",
-                    );
+                    if seg_width >= 0.5 {
+                        svg.rounded_rect(
+                            x_start,
+                            block_top,
+                            seg_width,
+                            ROBUST_BLOCK_H,
+                            BLOCK_RX,
+                            color,
+                            "#555555",
+                        );
+                    }
                     // State label centred inside block (clip long names).
                     if seg_width > 20.0 {
                         let label_x = x_start + seg_width / 2.0;
@@ -159,24 +259,105 @@ pub fn render(diagram: &TimingDiagram, _theme: &Theme) -> String {
                 TimelineKind::Concise => {
                     // For concise, draw a thin colored band and state label above the line.
                     let band_top = row_mid - 6.0;
-                    svg.rect(x_start, band_top, seg_width, 12.0, color, "#555555");
-                    // State label above the band.
-                    if seg_width > 20.0 {
+                    if seg_width >= 0.5 {
+                        svg.rect(x_start, band_top, seg_width, 12.0, color, "#555555");
+                    }
+                    // State label above the band — show for any nonzero segment.
+                    if seg_width > 2.0 {
                         let label_x = x_start + seg_width / 2.0;
                         svg.text(label_x, band_top - 3.0, &ch.state, "middle", FONT_STATE);
                     }
-                    // Vertical transition marker at the state change.
-                    svg.line_segment(
-                        x_start,
-                        row_top + 5.0,
-                        x_start,
-                        row_top + ROW_HEIGHT - 5.0,
-                        "#555555",
-                        false,
-                    );
+                    // Vertical transition marker at the state change (not at start).
+                    if i > 0 {
+                        svg.line_segment(
+                            x_start,
+                            row_top + 5.0,
+                            x_start,
+                            row_top + ROW_HEIGHT - 5.0,
+                            "#555555",
+                            false,
+                        );
+                    }
+                }
+                TimelineKind::Binary => {
+                    // Binary signals: render as a thin colored band.
+                    // State labels are NOT shown for binary.
+                    let band_top = row_mid - 4.0;
+                    if seg_width >= 0.5 {
+                        let band_color = if ch.state == "high" || ch.state == "1" {
+                            "#D5E8D4"
+                        } else {
+                            "#DAE8FC"
+                        };
+                        svg.rect(x_start, band_top, seg_width, 8.0, band_color, "#555555");
+                    }
+                    // Vertical transition at change point (not at start).
+                    if i > 0 {
+                        svg.line_segment(
+                            x_start,
+                            row_top + 5.0,
+                            x_start,
+                            row_top + ROW_HEIGHT - 5.0,
+                            "#555555",
+                            false,
+                        );
+                    }
                 }
             }
         }
+    }
+
+    // ── Time axis labels ──────────────────────────────────────────────────────
+    let axis_y = rows_end_y + 15.0;
+    for &t in &axis_ticks {
+        let x = time_to_x(t);
+        svg.text(x, axis_y, &t.to_string(), "middle", FONT_TIME);
+    }
+
+    // ── Annotation / highlight labels ─────────────────────────────────────────
+    if has_annotations {
+        let ann_y = rows_end_y + 30.0;
+        for ann in &diagram.annotations {
+            let x1 = time_to_x(ann.from);
+            let x2 = time_to_x(ann.to);
+            let mid_x = (x1 + x2) / 2.0;
+            svg.text(mid_x, ann_y, &ann.label, "middle", FONT_STATE);
+        }
+        for hl in &diagram.highlights {
+            if let Some(label) = &hl.label {
+                let x1 = time_to_x(hl.from);
+                let x2 = time_to_x(hl.to);
+                let mid_x = (x1 + x2) / 2.0;
+                svg.text(mid_x, ann_y, label, "middle", FONT_STATE);
+            }
+        }
+    }
+
+    // ── Notes ─────────────────────────────────────────────────────────────────
+    for note in &diagram.notes {
+        // Find the row index of the target timeline.
+        let Some(row_idx) = diagram
+            .timelines
+            .iter()
+            .position(|t| t.id == note.timeline_id)
+        else {
+            continue;
+        };
+        let row_top = axis_top_y + row_idx as f64 * (ROW_HEIGHT + ROW_GAP);
+        let x = time_to_x(note.at);
+        // Place the note text just above or below the row.
+        let note_y = if note.above {
+            row_top - 4.0
+        } else {
+            row_top + ROW_HEIGHT + FONT_STATE + 2.0
+        };
+        svg.text(x, note_y, &note.text, "start", FONT_STATE);
+    }
+
+    // ── Footer ────────────────────────────────────────────────────────────────
+    if let Some(footer) = &diagram.meta.footer {
+        let footer_y = total_height - 4.0;
+        svg.text(total_width / 2.0, footer_y, footer, "middle", FONT_META);
     }
 
     svg.finalize()
@@ -231,6 +412,10 @@ mod tests {
                     ],
                 },
             ],
+            highlights: vec![],
+            annotations: vec![],
+            scale: None,
+            notes: vec![],
         }
     }
 
@@ -270,9 +455,184 @@ mod tests {
             meta: DiagramMeta::default(),
             timelines: vec![],
             time_points: vec![],
+            highlights: vec![],
+            annotations: vec![],
+            scale: None,
+            notes: vec![],
         };
         let svg = render(&d, &Theme::default());
         assert!(svg.starts_with("<svg"));
+    }
+
+    #[test]
+    fn binary_timeline_label() {
+        let d = TimingDiagram {
+            meta: DiagramMeta::default(),
+            time_points: vec![0, 50, 100],
+            timelines: vec![Timeline {
+                id: "clk".into(),
+                label: "CLK".into(),
+                kind: TimelineKind::Binary,
+                changes: vec![
+                    StateChange {
+                        at: 0,
+                        state: "low".into(),
+                    },
+                    StateChange {
+                        at: 50,
+                        state: "high".into(),
+                    },
+                    StateChange {
+                        at: 100,
+                        state: "low".into(),
+                    },
+                ],
+            }],
+            highlights: vec![],
+            annotations: vec![],
+            scale: None,
+            notes: vec![],
+        };
+        let svg = render(&d, &Theme::default());
+        assert!(svg.contains("CLK"), "binary label CLK missing");
+    }
+
+    #[test]
+    fn annotation_label_in_svg() {
+        let d = TimingDiagram {
+            meta: DiagramMeta::default(),
+            time_points: vec![0, 50, 100],
+            timelines: vec![Timeline {
+                id: "tx".into(),
+                label: "TX".into(),
+                kind: TimelineKind::Robust,
+                changes: vec![
+                    StateChange {
+                        at: 0,
+                        state: "idle".into(),
+                    },
+                    StateChange {
+                        at: 50,
+                        state: "active".into(),
+                    },
+                    StateChange {
+                        at: 100,
+                        state: "idle".into(),
+                    },
+                ],
+            }],
+            highlights: vec![],
+            annotations: vec![Annotation {
+                from: 50,
+                to: 100,
+                label: "propagation 0ms".into(),
+            }],
+            scale: None,
+            notes: vec![],
+        };
+        let svg = render(&d, &Theme::default());
+        assert!(svg.contains("propagation 0ms"));
+    }
+
+    #[test]
+    fn highlight_label_in_svg() {
+        let d = TimingDiagram {
+            meta: DiagramMeta::default(),
+            time_points: vec![0, 100, 200],
+            timelines: vec![Timeline {
+                id: "s".into(),
+                label: "Sig".into(),
+                kind: TimelineKind::Robust,
+                changes: vec![
+                    StateChange {
+                        at: 0,
+                        state: "low".into(),
+                    },
+                    StateChange {
+                        at: 100,
+                        state: "high".into(),
+                    },
+                    StateChange {
+                        at: 200,
+                        state: "low".into(),
+                    },
+                ],
+            }],
+            highlights: vec![Highlight {
+                from: 100,
+                to: 200,
+                color: Some("#lightyellow".into()),
+                label: Some("critical section".into()),
+            }],
+            annotations: vec![],
+            scale: None,
+            notes: vec![],
+        };
+        let svg = render(&d, &Theme::default());
+        assert!(svg.contains("critical section"));
+    }
+
+    #[test]
+    fn title_in_svg() {
+        let mut meta = DiagramMeta::default();
+        meta.title = Some("My Timing".into());
+        let d = TimingDiagram {
+            meta,
+            time_points: vec![0, 100],
+            timelines: vec![Timeline {
+                id: "s".into(),
+                label: "Sig".into(),
+                kind: TimelineKind::Robust,
+                changes: vec![StateChange {
+                    at: 0,
+                    state: "low".into(),
+                }],
+            }],
+            highlights: vec![],
+            annotations: vec![],
+            scale: None,
+            notes: vec![],
+        };
+        let svg = render(&d, &Theme::default());
+        assert!(svg.contains("My Timing"));
+    }
+
+    #[test]
+    fn last_state_has_label() {
+        // When the last state change is at time_max, the last segment should
+        // still have nonzero width and show its label.
+        let d = TimingDiagram {
+            meta: DiagramMeta::default(),
+            time_points: vec![0, 100, 200],
+            timelines: vec![Timeline {
+                id: "p".into(),
+                label: "Proc".into(),
+                kind: TimelineKind::Concise,
+                changes: vec![
+                    StateChange {
+                        at: 0,
+                        state: "idle".into(),
+                    },
+                    StateChange {
+                        at: 100,
+                        state: "active".into(),
+                    },
+                    StateChange {
+                        at: 200,
+                        state: "waiting".into(),
+                    },
+                ],
+            }],
+            highlights: vec![],
+            annotations: vec![],
+            scale: None,
+            notes: vec![],
+        };
+        let svg = render(&d, &Theme::default());
+        assert!(
+            svg.contains("waiting"),
+            "last state 'waiting' missing from SVG"
+        );
     }
 
     #[test]
