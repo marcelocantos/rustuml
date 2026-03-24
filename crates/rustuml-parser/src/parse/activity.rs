@@ -212,13 +212,11 @@ fn parse_legacy_activity(lines: &[String]) -> Result<ActivityDiagram, ParseError
                     seen_nodes.insert(tgt.clone());
                     steps.push(ActivityStep::Action(tgt));
                 }
-            } else {
-                if !steps
-                    .iter()
-                    .any(|s| matches!(s, ActivityStep::End | ActivityStep::Stop))
-                {
-                    steps.push(ActivityStep::End);
-                }
+            } else if !steps
+                .iter()
+                .any(|s| matches!(s, ActivityStep::End | ActivityStep::Stop))
+            {
+                steps.push(ActivityStep::End);
             }
             continue;
         }

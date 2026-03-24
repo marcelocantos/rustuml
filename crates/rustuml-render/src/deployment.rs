@@ -136,6 +136,7 @@ fn render_container_label(node: &DeploymentNode, svg: &mut SvgBuilder, x: f64, y
     }
 }
 
+#[allow(clippy::too_many_arguments)]
 fn render_node(
     id: &str,
     nodes: &[DeploymentNode],

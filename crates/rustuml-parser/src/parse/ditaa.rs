@@ -86,12 +86,11 @@ fn find_shapes(grid: &[Vec<char>], used: &mut [Vec<bool>], shapes: &mut Vec<Dita
                 }
             }
             // Rounded box starts with '/'
-            else if ch == '/' && c + 1 < w && grid[r][c + 1] == '-' {
-                if let Some(shape) = try_rounded_box(grid, r, c) {
+            else if ch == '/' && c + 1 < w && grid[r][c + 1] == '-'
+                && let Some(shape) = try_rounded_box(grid, r, c) {
                     mark_used(used, &shape);
                     shapes.push(shape);
                 }
-            }
         }
     }
 }
@@ -134,8 +133,7 @@ fn try_box(grid: &[Vec<char>], r: usize, c: usize, kind: DitaaShapeKind) -> Opti
     }
 
     // Verify bottom edge.
-    for cc in (c + 1)..right {
-        let ch = grid[bottom][cc];
+    for &ch in &grid[bottom][(c + 1)..right] {
         if ch != '-' && ch != '+' && ch != '/' {
             return None;
         }
@@ -145,8 +143,8 @@ fn try_box(grid: &[Vec<char>], r: usize, c: usize, kind: DitaaShapeKind) -> Opti
     }
 
     // Verify right edge.
-    for rr in (r + 1)..bottom {
-        if grid[rr][right] != '|' {
+    for row in &grid[(r + 1)..bottom] {
+        if row[right] != '|' {
             return None;
         }
     }
@@ -212,8 +210,8 @@ fn try_rounded_box(grid: &[Vec<char>], r: usize, c: usize) -> Option<DitaaShape>
     }
 
     // Verify bottom edge.
-    for cc in (c + 1)..right {
-        if grid[bottom][cc] != '-' {
+    for &ch in &grid[bottom][(c + 1)..right] {
+        if ch != '-' {
             return None;
         }
     }
@@ -222,8 +220,8 @@ fn try_rounded_box(grid: &[Vec<char>], r: usize, c: usize) -> Option<DitaaShape>
     }
 
     // Verify right edge.
-    for rr in (r + 1)..bottom {
-        if grid[rr][right] != '|' {
+    for row in &grid[(r + 1)..bottom] {
+        if row[right] != '|' {
             return None;
         }
     }
@@ -252,8 +250,8 @@ fn extract_text_and_color(
     let mut color = None;
     let mut text_lines: Vec<String> = Vec::new();
 
-    for rr in top..bottom {
-        let line: String = grid[rr][left..right].iter().collect();
+    for row in &grid[top..bottom] {
+        let line: String = row[left..right].iter().collect();
         let trimmed = line.trim();
 
         // Check for colour tag.
@@ -342,11 +340,10 @@ fn find_connections(
                 if let Some(conn) = trace_vertical(grid, used, shapes, &mut visited, r, c, false) {
                     connections.push(conn);
                 }
-            } else if ch == ':' {
-                if let Some(conn) = trace_vertical(grid, used, shapes, &mut visited, r, c, true) {
+            } else if ch == ':'
+                && let Some(conn) = trace_vertical(grid, used, shapes, &mut visited, r, c, true) {
                     connections.push(conn);
                 }
-            }
         }
     }
 }

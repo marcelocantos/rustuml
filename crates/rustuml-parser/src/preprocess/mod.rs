@@ -57,15 +57,6 @@ impl Value {
         }
     }
 
-    fn to_bool(&self) -> bool {
-        match self {
-            Value::Bool(b) => *b,
-            Value::Int(n) => *n != 0,
-            Value::Float(f) => *f != 0.0,
-            Value::Str(s) => s == "true" || s == "1",
-        }
-    }
-
     fn to_number(&self) -> f64 {
         match self {
             Value::Int(n) => *n as f64,
@@ -78,15 +69,6 @@ impl Value {
                 }
             }
             Value::Str(s) => s.parse::<f64>().unwrap_or(0.0),
-        }
-    }
-
-    fn to_int(&self) -> i64 {
-        match self {
-            Value::Int(n) => *n,
-            Value::Float(f) => *f as i64,
-            Value::Bool(b) => i64::from(*b),
-            Value::Str(s) => s.parse::<i64>().unwrap_or(0),
         }
     }
 
@@ -169,14 +151,13 @@ fn named_color(name: &str) -> Option<(u8, u8, u8)> {
 
 fn parse_color(s: &str) -> Option<(u8, u8, u8)> {
     let s = s.trim().trim_matches('"');
-    if let Some(hex) = s.strip_prefix('#') {
-        if hex.len() == 6 {
+    if let Some(hex) = s.strip_prefix('#')
+        && hex.len() == 6 {
             let r = u8::from_str_radix(&hex[0..2], 16).ok()?;
             let g = u8::from_str_radix(&hex[2..4], 16).ok()?;
             let b = u8::from_str_radix(&hex[4..6], 16).ok()?;
             return Some((r, g, b));
         }
-    }
     named_color(s)
 }
 
@@ -475,11 +456,10 @@ impl PreprocessContext {
         if self.collecting_definelong.is_some() {
             if trimmed == "!enddefinelong" {
                 self.collecting_definelong = None;
-            } else if let Some(name) = self.collecting_definelong.clone() {
-                if let Some(dl) = self.definelong_macros.get_mut(&name) {
+            } else if let Some(name) = self.collecting_definelong.clone()
+                && let Some(dl) = self.definelong_macros.get_mut(&name) {
                     dl.body.push(line.to_string());
                 }
-            }
             return;
         }
 
@@ -757,13 +737,12 @@ impl PreprocessContext {
             // Bare name match (no parens, no params).
             if dl.params.is_empty() && trimmed.contains(name.as_str()) {
                 // Only substitute word-boundary matches.
-                if let Ok(re) = Regex::new(&format!(r"\b{}\b", regex::escape(name))) {
-                    if re.is_match(trimmed) {
+                if let Ok(re) = Regex::new(&format!(r"\b{}\b", regex::escape(name)))
+                    && re.is_match(trimmed) {
                         let body = dl.body.join("\n");
                         let result = re.replace_all(trimmed, body.as_str()).to_string();
                         return Some(result);
                     }
-                }
             }
         }
         None
@@ -940,7 +919,7 @@ impl PreprocessContext {
                 break;
             };
             let args_str = result[after_open..close].to_string();
-            let ret_val = self.eval_function_call(&func_name, &args_str);
+            let ret_val = self.eval_function_call(func_name, &args_str);
             let replacement = ret_val.to_display();
             result = format!("{}{replacement}{}", &result[..start], &result[close + 1..]);
         }
@@ -1024,8 +1003,8 @@ impl PreprocessContext {
         }
 
         if line == "!endwhile" {
-            if let Some(while_state) = self.while_stack.pop() {
-                if self.is_active() {
+            if let Some(while_state) = self.while_stack.pop()
+                && self.is_active() {
                     let mut iterations = 0;
                     loop {
                         if iterations >= MAX_WHILE_ITERATIONS {
@@ -1045,7 +1024,6 @@ impl PreprocessContext {
                         iterations += 1;
                     }
                 }
-            }
             return true;
         }
 
@@ -1198,7 +1176,7 @@ impl PreprocessContext {
         if let Some(caps) = RE_ELSEIF.captures(line) {
             let n = self.cond_stack.len();
             let parent_active = n <= 1 || self.cond_stack[..n - 1].iter().all(|c| c.active);
-            let already_matched = self.cond_stack.last().map_or(false, |c| c.has_matched);
+            let already_matched = self.cond_stack.last().is_some_and(|c| c.has_matched);
             let result = if already_matched {
                 false
             } else {
@@ -1268,11 +1246,10 @@ impl PreprocessContext {
         // `v"2.0"` (with quotes), matching PlantUML's text-substitution model.
         static BARE_WORD_RE: LazyLock<Regex> =
             LazyLock::new(|| Regex::new(r"^[A-Za-z_]\w*$").unwrap());
-        if BARE_WORD_RE.is_match(expr) {
-            if let Some(raw) = self.token_defines.get(expr).cloned() {
+        if BARE_WORD_RE.is_match(expr)
+            && let Some(raw) = self.token_defines.get(expr).cloned() {
                 return Value::Str(raw);
             }
-        }
 
         // Boolean literals (plain "true"/"false" without % prefix).
         if expr == "true" {
@@ -1554,9 +1531,9 @@ impl PreprocessContext {
         // Try evaluating as an expression (handles function calls, variable substitution).
         let val = self.eval_expr_to_value(expr);
         match val {
-            Value::Bool(b) => return b,
-            Value::Int(n) => return n != 0,
-            Value::Float(f) => return f != 0.0,
+            Value::Bool(b) => b,
+            Value::Int(n) => n != 0,
+            Value::Float(f) => f != 0.0,
             Value::Str(ref s) => {
                 // If the expression changed after evaluation, re-evaluate as bool.
                 if s.trim() != expr {
@@ -1564,7 +1541,7 @@ impl PreprocessContext {
                     return self.eval_bool(&s_clone);
                 }
                 // Non-empty string is true.
-                return !s.is_empty();
+                !s.is_empty()
             }
         }
     }
@@ -2248,11 +2225,10 @@ fn find_top_level_comparison(expr: &str, op: &str) -> Option<usize> {
                 && &bytes[i..i + op_bytes.len()] == op_bytes
             {
                 // For < and >, make sure it's not <= or >= or <> or <<.
-                if op == "<" {
-                    if i + 1 < bytes.len() && (bytes[i + 1] == b'=' || bytes[i + 1] == b'>') {
+                if op == "<"
+                    && i + 1 < bytes.len() && (bytes[i + 1] == b'=' || bytes[i + 1] == b'>') {
                         continue;
                     }
-                }
                 if op == ">" {
                     if i + 1 < bytes.len() && bytes[i + 1] == b'=' {
                         continue;

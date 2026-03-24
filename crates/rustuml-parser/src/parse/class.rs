@@ -197,11 +197,6 @@ impl ClassParser {
         (entity_id, entity_label)
     }
 
-    /// The index of the innermost active package scope (top of the stack).
-    fn current_package(&self) -> Option<usize> {
-        self.package_stack.last().copied()
-    }
-
     fn parse_line(&mut self, _line_num: usize, line: &str) -> Result<(), ParseError> {
         // Inside a multi-line meta block (header/footer/legend/caption/title)?
         if let Some(block) = self.meta_block {
@@ -268,10 +263,8 @@ impl ClassParser {
             if line == "end note" {
                 let note = self.current_note.take().unwrap();
                 self.notes.push(note);
-            } else {
-                if let Some(note) = self.current_note.as_mut() {
-                    note.lines.push(line.to_string());
-                }
+            } else if let Some(note) = self.current_note.as_mut() {
+                note.lines.push(line.to_string());
             }
             return Ok(());
         }
@@ -319,18 +312,7 @@ impl ClassParser {
     }
 
     fn try_entity_decl(&mut self, line: &str) -> bool {
-        static RE: LazyLock<Regex> = LazyLock::new(|| {
-            // Matches either:
-            //   keyword "label" as id  — groups 2 (label) and 3 (id)
-            //   keyword id             — group 3 (id only, word chars only)
-            //   keyword "label"        — group 4 (quoted-only, no `as`)
-            // `abstract` without `class` is also a valid class keyword.
-            Regex::new(
-                r#"^(class|abstract\s+class|abstract|interface|enum|annotation|entity|object)\s+(?:(?:"([^"]+)"\s+as\s+)?(\w+(?:<[^>]+>)?)|"([^"]+)")"#,
-            )
-            .unwrap()
-        });
-        // Same as RE but allows dots in the identifier (for `set namespaceSeparator none`).
+        // Allows dots in the identifier (for `set namespaceSeparator none`).
         static RE_DOTTED: LazyLock<Regex> = LazyLock::new(|| {
             Regex::new(
                 r#"^(class|abstract\s+class|abstract|interface|enum|annotation|entity|object)\s+(?:(?:"([^"]+)"\s+as\s+)?(\w[\w.]*(?:<[^>]+>)?)|"([^"]+)")"#,
@@ -1095,15 +1077,15 @@ fn parse_member(s: &str) -> Member {
 fn process_spot_stereotype(s: &str) -> String {
     let s = s.trim();
     // Look for spot notation: `(X,#color) Name`
-    if let Some(rest) = s.strip_prefix('(') {
-        if let Some(close) = rest.find(')') {
+    if let Some(rest) = s.strip_prefix('(')
+        && let Some(close) = rest.find(')') {
             let spot_inner = &rest[..close];
             let after = rest[close + 1..].trim();
             // spot_inner should be like `A,#red` or `F,#FF7700`
             if let Some(comma) = spot_inner.find(',') {
                 let color_part = spot_inner[comma + 1..].trim();
-                if color_part.starts_with('#') {
-                    let color_hex = &color_part[1..]; // strip leading #
+                if let Some(color_hex) = color_part.strip_prefix('#') {
+                    // strip leading #
                     let is_hex =
                         !color_hex.is_empty() && color_hex.chars().all(|c| c.is_ascii_hexdigit());
                     if is_hex {
@@ -1113,7 +1095,6 @@ fn process_spot_stereotype(s: &str) -> String {
                 }
             }
         }
-    }
     // Named color or no spot notation: return as-is.
     s.to_string()
 }

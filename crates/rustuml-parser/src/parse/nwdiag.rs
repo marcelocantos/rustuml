@@ -158,10 +158,7 @@ pub fn parse_nwdiag(lines: &[String]) -> Result<NwdiagDiagram, ParseError> {
                 if let Some(caps) = RE_ATTR.captures(trimmed) {
                     let key = caps[1].to_string();
                     let val = parse_attr_value(&caps[2]);
-                    match key.as_str() {
-                        "color" => groups[idx].color = Some(val),
-                        _ => {}
-                    }
+                    if key.as_str() == "color" { groups[idx].color = Some(val) }
                     continue;
                 }
                 // Host reference (bare name) in a group block.

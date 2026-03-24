@@ -12,7 +12,7 @@
 //! - An identical time axis repeated at the bottom.
 
 use rustuml_parser::diagram::gantt::{
-    GanttDiagram, GanttNote, GanttRow, GanttTask, TaskResource, TaskStart,
+    GanttDiagram, GanttNote, GanttRow, GanttTask, TaskStart,
 };
 
 use crate::style::Theme;
@@ -302,7 +302,7 @@ pub fn render(diagram: &GanttDiagram, _theme: &Theme) -> String {
                     let fill = task
                         .color
                         .as_deref()
-                        .map(|c| css_color(c))
+                        .map(css_color)
                         .unwrap_or_else(|| DEFAULT_BAR_COLOR.to_string());
                     let stroke = task
                         .color
@@ -341,7 +341,7 @@ pub fn render(diagram: &GanttDiagram, _theme: &Theme) -> String {
                                 if r.percent == 100 {
                                     format!(" {{{}}}", r.name)
                                 } else {
-                                    format!(" {{{}:{}}}", r.name, format!("{}%", r.percent))
+                                    format!(" {{{}:{}%}}", r.name, r.percent)
                                 }
                             })
                             .collect();
@@ -491,7 +491,7 @@ impl CalendarInfo {
         if parts.len() != 3 {
             return None;
         }
-        let (year, month, day) = (parts[0] as i32, parts[1] as u32, parts[2] as u32);
+        let (year, month, day) = (parts[0] as i32, parts[1], parts[2]);
 
         let start_dow = zeller_dow(year, month, day);
 
@@ -623,25 +623,6 @@ fn days_in_month(year: i32, month: u32) -> u32 {
             }
         }
         _ => 30,
-    }
-}
-
-/// Abbreviated English month names (3 letters).
-fn month_abbr(month: u32) -> &'static str {
-    match month {
-        1 => "Jan",
-        2 => "Feb",
-        3 => "Mar",
-        4 => "Apr",
-        5 => "May",
-        6 => "Jun",
-        7 => "Jul",
-        8 => "Aug",
-        9 => "Sep",
-        10 => "Oct",
-        11 => "Nov",
-        12 => "Dec",
-        _ => "?",
     }
 }
 

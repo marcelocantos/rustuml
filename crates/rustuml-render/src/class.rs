@@ -202,8 +202,8 @@ fn render_with_positions(
         .iter()
         .map(|note| {
             let (nw, nh) = note_box_dims(note);
-            if let Some(target) = &note.target {
-                if let Some(ti) = diagram.entities.iter().position(|e| &e.id == target) {
+            if let Some(target) = &note.target
+                && let Some(ti) = diagram.entities.iter().position(|e| &e.id == target) {
                     let (ex, ey, ew, eh) = entity_positions[ti];
                     let pos = note.position.unwrap_or(NotePosition::Right);
                     let (nx, ny) = match pos {
@@ -214,7 +214,6 @@ fn render_with_positions(
                     };
                     return Some((nx, ny, nw, nh));
                 }
-            }
             // Floating note: place to the right of all entities.
             let float_x = entity_positions
                 .iter()
@@ -723,23 +722,20 @@ fn format_member(member: &Member) -> String {
 /// - `(F,#FF7700) SpotF` → `«SpotF»`
 fn format_stereotype(s: &str) -> String {
     // Match spot notation: (single-char, #color) name
-    if let Some(rest) = s.strip_prefix('(') {
-        if let Some(comma_pos) = rest.find(',') {
+    if let Some(rest) = s.strip_prefix('(')
+        && let Some(comma_pos) = rest.find(',') {
             let after_comma = &rest[comma_pos + 1..];
-            if let Some(color_and_rest) = after_comma.strip_prefix('#') {
-                if let Some(close_pos) = color_and_rest.find(')') {
+            if let Some(color_and_rest) = after_comma.strip_prefix('#')
+                && let Some(close_pos) = color_and_rest.find(')') {
                     let color = &color_and_rest[..close_pos];
                     // Hex color: all chars are hex digits (3 or 6 digits)
-                    if color.len() == 3 || color.len() == 6 {
-                        if color.chars().all(|c| c.is_ascii_hexdigit()) {
+                    if (color.len() == 3 || color.len() == 6)
+                        && color.chars().all(|c| c.is_ascii_hexdigit()) {
                             let name = color_and_rest[close_pos + 1..].trim();
                             return format!("«{name}»");
                         }
-                    }
                 }
-            }
         }
-    }
     format!("«{s}»")
 }
 

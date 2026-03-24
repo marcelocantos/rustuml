@@ -186,8 +186,8 @@ fn render_packages(
         let mut any = false;
 
         for obj_id in &pkg.object_ids {
-            if let Some(idx) = diagram.objects.iter().position(|o| &o.id == obj_id) {
-                if idx < obj_positions.len() {
+            if let Some(idx) = diagram.objects.iter().position(|o| &o.id == obj_id)
+                && idx < obj_positions.len() {
                     let (x, y, w, h) = obj_positions[idx];
                     min_x = min_x.min(x);
                     min_y = min_y.min(y);
@@ -195,7 +195,6 @@ fn render_packages(
                     max_y = max_y.max(y + h);
                     any = true;
                 }
-            }
         }
 
         if !any {

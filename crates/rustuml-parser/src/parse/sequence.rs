@@ -736,8 +736,8 @@ impl SeqParser {
 ///
 /// Returns `(cleaned_label, Some(stereotype))` if found, or `(label, None)`.
 fn extract_stereotype_from_label(label: &str) -> (String, Option<String>) {
-    if let Some(start) = label.find("<<") {
-        if let Some(rel_end) = label[start..].find(">>") {
+    if let Some(start) = label.find("<<")
+        && let Some(rel_end) = label[start..].find(">>") {
             let end = start + rel_end;
             let stereotype = label[start + 2..end].trim().to_string();
             let cleaned = format!("{} {}", label[..start].trim(), label[end + 2..].trim())
@@ -745,7 +745,6 @@ fn extract_stereotype_from_label(label: &str) -> (String, Option<String>) {
                 .to_string();
             return (cleaned, Some(stereotype));
         }
-    }
     (label.to_string(), None)
 }
 

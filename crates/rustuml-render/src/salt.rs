@@ -107,8 +107,8 @@ impl RenderCtx {
             }
         }
         // Also account for tab bar widths.
-        if block.kind == BlockKind::Tabs {
-            if let Some(tab_row) = block.rows.first() {
+        if block.kind == BlockKind::Tabs
+            && let Some(tab_row) = block.rows.first() {
                 let tab_w = self.measure_tabs_width(tab_row);
                 if tab_w > col_w.iter().sum::<f64>() {
                     // Distribute extra width evenly.
@@ -118,7 +118,6 @@ impl RenderCtx {
                     }
                 }
             }
-        }
         col_w
     }
 
@@ -204,11 +203,10 @@ impl RenderCtx {
         }
 
         // Tab bar for {/ blocks.
-        if block.kind == BlockKind::Tabs {
-            if let Some(tab_row) = block.rows.first() {
+        if block.kind == BlockKind::Tabs
+            && let Some(tab_row) = block.rows.first() {
                 cur_y = self.draw_tab_bar(tab_row, x, cur_y, w, buf);
             }
-        }
 
         let col_widths = self.column_widths(block);
         let row_start = if block.kind == BlockKind::Tabs { 1 } else { 0 };
@@ -290,6 +288,7 @@ impl RenderCtx {
         y + LINE_H
     }
 
+    #[allow(clippy::too_many_arguments)]
     fn draw_row(
         &self,
         block: &SaltBlock,
@@ -309,6 +308,7 @@ impl RenderCtx {
         }
     }
 
+    #[allow(clippy::too_many_arguments)]
     fn draw_widget(
         &self,
         _block: &SaltBlock,
@@ -473,6 +473,7 @@ fn emit_rect(buf: &mut String, x: f64, y: f64, w: f64, h: f64, fill: &str, strok
     ));
 }
 
+#[allow(clippy::too_many_arguments)]
 fn emit_rounded_rect(
     buf: &mut String,
     x: f64,

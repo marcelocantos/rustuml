@@ -318,10 +318,10 @@ fn to_svg_tspans_inner(text: &str, skip_underline: bool) -> String {
                     }
                     _ if tag.starts_with("font:") || tag.starts_with("FONT:") => {
                         // <font:Name>text</font> — apply font-family as tspan, NBSP for spaces.
-                        let font_name = if tag.starts_with("font:") {
-                            &tag["font:".len()..]
+                        let font_name = if let Some(s) = tag.strip_prefix("font:") {
+                            s
                         } else {
-                            &tag["FONT:".len()..]
+                            tag.strip_prefix("FONT:").unwrap_or("")
                         };
                         let content = collect_until_tag(&mut chars, "</font>");
                         let inner = to_svg_tspans_inner(&content, skip_underline);

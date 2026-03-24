@@ -33,15 +33,13 @@ const CONTAINER_KEYWORDS: &[&str] = &[
 /// Check if a trimmed line opens a container block (keyword followed by optional label and `{`).
 fn container_keyword(trimmed: &str) -> Option<&'static str> {
     for &kw in CONTAINER_KEYWORDS {
-        if trimmed.starts_with(kw) {
-            let rest = &trimmed[kw.len()..];
-            if rest.is_empty()
+        if let Some(rest) = trimmed.strip_prefix(kw)
+            && (rest.is_empty()
                 || rest.starts_with(' ')
                 || rest.starts_with('\t')
-                || rest.starts_with('"')
-            {
-                return Some(kw);
-            }
+                || rest.starts_with('"'))
+        {
+            return Some(kw);
         }
     }
     None
@@ -271,11 +269,10 @@ pub fn parse_component(lines: &[String]) -> Result<ComponentDiagram, ParseError>
                         stereotypes: parse_stereotypes(trimmed),
                     });
                 }
-                if let Some(pkg) = package_stack.last_mut() {
-                    if !pkg.components.contains(&id) {
+                if let Some(pkg) = package_stack.last_mut()
+                    && !pkg.components.contains(&id) {
                         pkg.components.push(id);
                     }
-                }
                 continue;
             }
         }
@@ -314,7 +311,7 @@ pub fn parse_component(lines: &[String]) -> Result<ComponentDiagram, ParseError>
         // `note on link : text` — inline note on the last link.
         if let Some(rest) = trimmed.strip_prefix("note on link") {
             let text = rest
-                .trim_start_matches(|c| c == ' ' || c == ':')
+                .trim_start_matches([' ', ':'])
                 .trim()
                 .to_string();
             if !text.is_empty() {
@@ -369,11 +366,10 @@ pub fn parse_component(lines: &[String]) -> Result<ComponentDiagram, ParseError>
                     stereotypes: parse_stereotypes(trimmed),
                 });
             }
-            if let Some(pkg) = package_stack.last_mut() {
-                if !pkg.components.contains(&id) {
+            if let Some(pkg) = package_stack.last_mut()
+                && !pkg.components.contains(&id) {
                     pkg.components.push(id);
                 }
-            }
             continue;
         }
 
@@ -388,11 +384,10 @@ pub fn parse_component(lines: &[String]) -> Result<ComponentDiagram, ParseError>
                     stereotypes: parse_stereotypes(trimmed),
                 });
             }
-            if let Some(pkg) = package_stack.last_mut() {
-                if !pkg.components.contains(&id) {
+            if let Some(pkg) = package_stack.last_mut()
+                && !pkg.components.contains(&id) {
                     pkg.components.push(id);
                 }
-            }
             continue;
         }
 

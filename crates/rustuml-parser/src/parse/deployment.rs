@@ -111,7 +111,7 @@ fn push_node(
     }
 }
 
-fn add_child(nodes: &mut Vec<DeploymentNode>, parent_id: &str, child_id: &str) {
+fn add_child(nodes: &mut [DeploymentNode], parent_id: &str, child_id: &str) {
     if let Some(parent) = nodes.iter_mut().find(|n| n.id == parent_id) {
         let child_str = child_id.to_string();
         if !parent.children.contains(&child_str) {
@@ -124,9 +124,8 @@ fn add_child(nodes: &mut Vec<DeploymentNode>, parent_id: &str, child_id: &str) {
 /// Returns `(raw_label, rest)` where `raw_label` is the unquoted text.
 fn parse_endpoint(s: &str) -> Option<(&str, &str)> {
     let s = s.trim_start();
-    if s.starts_with('"') {
+    if let Some(inner) = s.strip_prefix('"') {
         // Quoted: find closing quote.
-        let inner = &s[1..];
         let close = inner.find('"')?;
         let label = &inner[..close];
         let rest = &inner[close + 1..];
@@ -173,10 +172,10 @@ fn try_parse_connection(
             let kw = &rest[..kw_end];
             if keyword_set.contains(kw) {
                 let after_kw = rest[kw_end..].trim_start();
-                if after_kw.starts_with('"') {
+                if let Some(after_open_quote) = after_kw.strip_prefix('"') {
                     // keyword "label" ... — skip the quoted label, then look for arrow.
-                    if let Some(close_quote) = after_kw[1..].find('"') {
-                        let after_label = after_kw[close_quote + 2..].trim_start();
+                    if let Some(close_quote) = after_open_quote.find('"') {
+                        let after_label = after_open_quote[close_quote + 1..].trim_start();
                         // Check if what follows is an arrow.
                         let arrow_end = after_label
                             .find(|c: char| !matches!(c, '-' | '.' | '<' | '>' | '|'))
@@ -387,8 +386,8 @@ pub fn parse_deployment(lines: &[String]) -> Result<DeploymentDiagram, ParseErro
         }
 
         // Bracket notation: [Label] [as id] [<<stereo>>]  — component shorthand.
-        if trimmed.starts_with('[') {
-            if let Some(caps) = RE_NODE_BRACKET.captures(trimmed) {
+        if trimmed.starts_with('[')
+            && let Some(caps) = RE_NODE_BRACKET.captures(trimmed) {
                 let label = caps[1].trim().to_string();
                 let id = caps
                     .get(2)
@@ -407,7 +406,6 @@ pub fn parse_deployment(lines: &[String]) -> Result<DeploymentDiagram, ParseErro
                 }
                 continue;
             }
-        }
 
         // Floating note: note "text" as ID
         if let Some(caps) = RE_NOTE_FLOATING.captures(trimmed) {

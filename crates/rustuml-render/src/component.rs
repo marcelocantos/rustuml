@@ -413,7 +413,7 @@ fn render_packages(
 fn estimate_packages_width(packages: &[ComponentPackage]) -> f64 {
     packages
         .iter()
-        .map(|p| estimate_package_width(p))
+        .map(estimate_package_width)
         .fold(0.0_f64, f64::max)
         + MARGIN * 2.0
 }
@@ -421,7 +421,7 @@ fn estimate_packages_width(packages: &[ComponentPackage]) -> f64 {
 fn estimate_packages_height(packages: &[ComponentPackage]) -> f64 {
     packages
         .iter()
-        .map(|p| estimate_package_height(p))
+        .map(estimate_package_height)
         .sum::<f64>()
         + MARGIN * 2.0
         + GAP * packages.len().saturating_sub(1) as f64
@@ -443,7 +443,7 @@ fn estimate_package_inner_width(pkg: &ComponentPackage) -> f64 {
     let nested_w = pkg
         .packages
         .iter()
-        .map(|p| estimate_package_width(p))
+        .map(estimate_package_width)
         .fold(0.0_f64, f64::max);
     let leaf_w = if pkg.components.is_empty() {
         0.0
@@ -457,7 +457,7 @@ fn estimate_package_height(pkg: &ComponentPackage) -> f64 {
     let nested_h: f64 = pkg
         .packages
         .iter()
-        .map(|p| estimate_package_height(p))
+        .map(estimate_package_height)
         .sum();
     let leaf_h = pkg.components.len() as f64 * (COMPONENT_H + GAP);
     LABEL_H + CONTAINER_PADDING * 2.0 + nested_h + leaf_h

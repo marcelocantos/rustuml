@@ -325,11 +325,10 @@ impl SvgBuilder {
                         .map(|cell| {
                             let cell = cell.trim();
                             // Strip leading color annotation like `<#E3F2FD>`.
-                            if cell.starts_with('<') {
-                                if let Some(pos) = cell.find('>') {
+                            if cell.starts_with('<')
+                                && let Some(pos) = cell.find('>') {
                                     return cell[pos + 1..].trim().to_string();
                                 }
-                            }
                             cell.to_string()
                         })
                         .filter(|c| !c.is_empty())

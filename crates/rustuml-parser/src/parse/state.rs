@@ -18,8 +18,8 @@ pub fn parse_state(lines: &[String]) -> Result<StateDiagram, ParseError> {
         if trimmed.is_empty() {
             // Empty lines may terminate a multi-line note with content already
             // accumulated — keep buffering (blank lines are part of note body).
-            if parser.note_buffer.is_some() {
-                parser.note_buffer.as_mut().unwrap().text.push('\n');
+            if let Some(buf) = &mut parser.note_buffer {
+                buf.text.push('\n');
             }
             continue;
         }

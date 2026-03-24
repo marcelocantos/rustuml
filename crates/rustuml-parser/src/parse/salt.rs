@@ -168,9 +168,9 @@ fn parse_block(lines: &[String], pos: usize) -> Result<(SaltBlock, usize), Parse
             // the block-header portion), and `synthetic[k]` corresponds to
             // `lines[pos + k]` for k > 0.  So consuming `sub_consumed` lines
             // from the synthetic slice advances `pos` by `sub_consumed`.
-            pos = pos + sub_consumed;
+            pos += sub_consumed;
 
-            let mut cells = current_cells.drain(..).collect::<Vec<_>>();
+            let mut cells = std::mem::take(&mut current_cells);
             cells.extend(before_cells);
             cells.push(SaltWidget::Block(Box::new(sub_block)));
             rows.push(SaltRow { cells });
@@ -221,22 +221,22 @@ fn parse_block_header(line: &str) -> (BlockKind, Option<String>, &str) {
     if let Some(title) = rest.strip_prefix('^') {
         return (BlockKind::Plain, Some(title.trim().to_string()), "");
     }
-    if rest.starts_with('#') {
-        return (BlockKind::Table, None, rest[1..].trim_start());
+    if let Some(stripped) = rest.strip_prefix('#') {
+        return (BlockKind::Table, None, stripped.trim_start());
     }
-    if rest.starts_with("SI") {
-        return (BlockKind::ScrollInput, None, rest[2..].trim_start());
+    if let Some(stripped) = rest.strip_prefix("SI") {
+        return (BlockKind::ScrollInput, None, stripped.trim_start());
     }
     if rest.starts_with('T')
         && rest[1..]
             .chars()
             .next()
-            .map_or(true, |c| !c.is_alphanumeric())
+            .is_none_or(|c| !c.is_alphanumeric())
     {
         return (BlockKind::Tree, None, rest[1..].trim_start());
     }
-    if rest.starts_with('/') {
-        return (BlockKind::Tabs, None, rest[1..].trim_start());
+    if let Some(stripped) = rest.strip_prefix('/') {
+        return (BlockKind::Tabs, None, stripped.trim_start());
     }
     // Plain block — any trailing content after `{` is inline content.
     (BlockKind::Plain, None, rest.trim_start())
