@@ -187,14 +187,15 @@ fn render_packages(
 
         for obj_id in &pkg.object_ids {
             if let Some(idx) = diagram.objects.iter().position(|o| &o.id == obj_id)
-                && idx < obj_positions.len() {
-                    let (x, y, w, h) = obj_positions[idx];
-                    min_x = min_x.min(x);
-                    min_y = min_y.min(y);
-                    max_x = max_x.max(x + w);
-                    max_y = max_y.max(y + h);
-                    any = true;
-                }
+                && idx < obj_positions.len()
+            {
+                let (x, y, w, h) = obj_positions[idx];
+                min_x = min_x.min(x);
+                min_y = min_y.min(y);
+                max_x = max_x.max(x + w);
+                max_y = max_y.max(y + h);
+                any = true;
+            }
         }
 
         if !any {

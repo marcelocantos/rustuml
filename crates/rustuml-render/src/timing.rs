@@ -227,7 +227,7 @@ pub fn render(diagram: &TimingDiagram, _theme: &Theme) -> String {
                 time_to_x(changes[i + 1].at)
             } else {
                 // Last segment: extend to the implicit extra step.
-                
+
                 timeline_start_x
                     + (ch.at as f64 - time_min + extension) / time_span * TIMELINE_WIDTH
             };

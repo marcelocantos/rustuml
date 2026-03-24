@@ -116,7 +116,7 @@ fn participant_display_label(p: &Participant) -> String {
         // PlantUML renders `(text)` in participant labels as `.text.` (period-delimited
         // stereotype notation).  Convert all `(...)` groups to `.....` form so that
         // our text output matches the PlantUML golden SVG text elements.
-        
+
         parentheses_to_dots(&p.label)
     }
 }

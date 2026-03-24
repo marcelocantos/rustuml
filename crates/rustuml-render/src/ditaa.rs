@@ -110,36 +110,38 @@ fn draw_connection(svg: &mut SvgBuilder, conn: &DitaaConnection) {
 
     // Draw arrow heads.
     if let Some(last_seg) = conn.segments.last()
-        && conn.end_arrow {
-            let x = grid_x(last_seg.end_col) + CELL_W / 2.0;
-            let y = grid_y(last_seg.end_row) + CELL_H / 2.0;
-            let direction = if last_seg.end_col > last_seg.start_col {
-                0.0 // right
-            } else if last_seg.end_col < last_seg.start_col {
-                180.0
-            } else if last_seg.end_row > last_seg.start_row {
-                90.0 // down
-            } else {
-                270.0
-            };
-            draw_arrowhead(svg, x, y, direction);
-        }
+        && conn.end_arrow
+    {
+        let x = grid_x(last_seg.end_col) + CELL_W / 2.0;
+        let y = grid_y(last_seg.end_row) + CELL_H / 2.0;
+        let direction = if last_seg.end_col > last_seg.start_col {
+            0.0 // right
+        } else if last_seg.end_col < last_seg.start_col {
+            180.0
+        } else if last_seg.end_row > last_seg.start_row {
+            90.0 // down
+        } else {
+            270.0
+        };
+        draw_arrowhead(svg, x, y, direction);
+    }
 
     if let Some(first_seg) = conn.segments.first()
-        && conn.start_arrow {
-            let x = grid_x(first_seg.start_col) + CELL_W / 2.0;
-            let y = grid_y(first_seg.start_row) + CELL_H / 2.0;
-            let direction = if first_seg.start_col < first_seg.end_col {
-                180.0 // pointing left (away from end)
-            } else if first_seg.start_col > first_seg.end_col {
-                0.0
-            } else if first_seg.start_row < first_seg.end_row {
-                270.0 // pointing up
-            } else {
-                90.0
-            };
-            draw_arrowhead(svg, x, y, direction);
-        }
+        && conn.start_arrow
+    {
+        let x = grid_x(first_seg.start_col) + CELL_W / 2.0;
+        let y = grid_y(first_seg.start_row) + CELL_H / 2.0;
+        let direction = if first_seg.start_col < first_seg.end_col {
+            180.0 // pointing left (away from end)
+        } else if first_seg.start_col > first_seg.end_col {
+            0.0
+        } else if first_seg.start_row < first_seg.end_row {
+            270.0 // pointing up
+        } else {
+            90.0
+        };
+        draw_arrowhead(svg, x, y, direction);
+    }
 }
 
 fn draw_arrowhead(svg: &mut SvgBuilder, x: f64, y: f64, direction_deg: f64) {

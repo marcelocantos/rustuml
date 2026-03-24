@@ -86,11 +86,14 @@ fn find_shapes(grid: &[Vec<char>], used: &mut [Vec<bool>], shapes: &mut Vec<Dita
                 }
             }
             // Rounded box starts with '/'
-            else if ch == '/' && c + 1 < w && grid[r][c + 1] == '-'
-                && let Some(shape) = try_rounded_box(grid, r, c) {
-                    mark_used(used, &shape);
-                    shapes.push(shape);
-                }
+            else if ch == '/'
+                && c + 1 < w
+                && grid[r][c + 1] == '-'
+                && let Some(shape) = try_rounded_box(grid, r, c)
+            {
+                mark_used(used, &shape);
+                shapes.push(shape);
+            }
         }
     }
 }
@@ -341,9 +344,10 @@ fn find_connections(
                     connections.push(conn);
                 }
             } else if ch == ':'
-                && let Some(conn) = trace_vertical(grid, used, shapes, &mut visited, r, c, true) {
-                    connections.push(conn);
-                }
+                && let Some(conn) = trace_vertical(grid, used, shapes, &mut visited, r, c, true)
+            {
+                connections.push(conn);
+            }
         }
     }
 }

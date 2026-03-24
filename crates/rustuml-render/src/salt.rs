@@ -108,16 +108,17 @@ impl RenderCtx {
         }
         // Also account for tab bar widths.
         if block.kind == BlockKind::Tabs
-            && let Some(tab_row) = block.rows.first() {
-                let tab_w = self.measure_tabs_width(tab_row);
-                if tab_w > col_w.iter().sum::<f64>() {
-                    // Distribute extra width evenly.
-                    let extra = (tab_w - col_w.iter().sum::<f64>()) / col_w.len().max(1) as f64;
-                    for w in &mut col_w {
-                        *w += extra;
-                    }
+            && let Some(tab_row) = block.rows.first()
+        {
+            let tab_w = self.measure_tabs_width(tab_row);
+            if tab_w > col_w.iter().sum::<f64>() {
+                // Distribute extra width evenly.
+                let extra = (tab_w - col_w.iter().sum::<f64>()) / col_w.len().max(1) as f64;
+                for w in &mut col_w {
+                    *w += extra;
                 }
             }
+        }
         col_w
     }
 
@@ -204,9 +205,10 @@ impl RenderCtx {
 
         // Tab bar for {/ blocks.
         if block.kind == BlockKind::Tabs
-            && let Some(tab_row) = block.rows.first() {
-                cur_y = self.draw_tab_bar(tab_row, x, cur_y, w, buf);
-            }
+            && let Some(tab_row) = block.rows.first()
+        {
+            cur_y = self.draw_tab_bar(tab_row, x, cur_y, w, buf);
+        }
 
         let col_widths = self.column_widths(block);
         let row_start = if block.kind == BlockKind::Tabs { 1 } else { 0 };

@@ -387,25 +387,26 @@ pub fn parse_deployment(lines: &[String]) -> Result<DeploymentDiagram, ParseErro
 
         // Bracket notation: [Label] [as id] [<<stereo>>]  — component shorthand.
         if trimmed.starts_with('[')
-            && let Some(caps) = RE_NODE_BRACKET.captures(trimmed) {
-                let label = caps[1].trim().to_string();
-                let id = caps
-                    .get(2)
-                    .map(|m| m.as_str().to_string())
-                    .unwrap_or_else(|| label_to_id(&label));
-                let stereotype = caps.get(3).map(|m| m.as_str().trim().to_string());
-                push_node(
-                    &mut nodes,
-                    id.clone(),
-                    label,
-                    DeploymentNodeKind::Component,
-                    stereotype,
-                );
-                if let Some(parent_id) = stack.last().cloned() {
-                    add_child(&mut nodes, &parent_id, &id);
-                }
-                continue;
+            && let Some(caps) = RE_NODE_BRACKET.captures(trimmed)
+        {
+            let label = caps[1].trim().to_string();
+            let id = caps
+                .get(2)
+                .map(|m| m.as_str().to_string())
+                .unwrap_or_else(|| label_to_id(&label));
+            let stereotype = caps.get(3).map(|m| m.as_str().trim().to_string());
+            push_node(
+                &mut nodes,
+                id.clone(),
+                label,
+                DeploymentNodeKind::Component,
+                stereotype,
+            );
+            if let Some(parent_id) = stack.last().cloned() {
+                add_child(&mut nodes, &parent_id, &id);
             }
+            continue;
+        }
 
         // Floating note: note "text" as ID
         if let Some(caps) = RE_NOTE_FLOATING.captures(trimmed) {

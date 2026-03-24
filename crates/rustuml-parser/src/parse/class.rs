@@ -1078,23 +1078,24 @@ fn process_spot_stereotype(s: &str) -> String {
     let s = s.trim();
     // Look for spot notation: `(X,#color) Name`
     if let Some(rest) = s.strip_prefix('(')
-        && let Some(close) = rest.find(')') {
-            let spot_inner = &rest[..close];
-            let after = rest[close + 1..].trim();
-            // spot_inner should be like `A,#red` or `F,#FF7700`
-            if let Some(comma) = spot_inner.find(',') {
-                let color_part = spot_inner[comma + 1..].trim();
-                if let Some(color_hex) = color_part.strip_prefix('#') {
-                    // strip leading #
-                    let is_hex =
-                        !color_hex.is_empty() && color_hex.chars().all(|c| c.is_ascii_hexdigit());
-                    if is_hex {
-                        // Hex color: strip spot prefix, return just the name.
-                        return after.to_string();
-                    }
+        && let Some(close) = rest.find(')')
+    {
+        let spot_inner = &rest[..close];
+        let after = rest[close + 1..].trim();
+        // spot_inner should be like `A,#red` or `F,#FF7700`
+        if let Some(comma) = spot_inner.find(',') {
+            let color_part = spot_inner[comma + 1..].trim();
+            if let Some(color_hex) = color_part.strip_prefix('#') {
+                // strip leading #
+                let is_hex =
+                    !color_hex.is_empty() && color_hex.chars().all(|c| c.is_ascii_hexdigit());
+                if is_hex {
+                    // Hex color: strip spot prefix, return just the name.
+                    return after.to_string();
                 }
             }
         }
+    }
     // Named color or no spot notation: return as-is.
     s.to_string()
 }

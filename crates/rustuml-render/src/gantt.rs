@@ -11,9 +11,7 @@
 //! - Task labels inside the bars (left-aligned).
 //! - An identical time axis repeated at the bottom.
 
-use rustuml_parser::diagram::gantt::{
-    GanttDiagram, GanttNote, GanttRow, GanttTask, TaskStart,
-};
+use rustuml_parser::diagram::gantt::{GanttDiagram, GanttNote, GanttRow, GanttTask, TaskStart};
 
 use crate::style::Theme;
 use crate::svg::SvgBuilder;

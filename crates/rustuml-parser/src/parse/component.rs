@@ -270,9 +270,10 @@ pub fn parse_component(lines: &[String]) -> Result<ComponentDiagram, ParseError>
                     });
                 }
                 if let Some(pkg) = package_stack.last_mut()
-                    && !pkg.components.contains(&id) {
-                        pkg.components.push(id);
-                    }
+                    && !pkg.components.contains(&id)
+                {
+                    pkg.components.push(id);
+                }
                 continue;
             }
         }
@@ -310,10 +311,7 @@ pub fn parse_component(lines: &[String]) -> Result<ComponentDiagram, ParseError>
         }
         // `note on link : text` — inline note on the last link.
         if let Some(rest) = trimmed.strip_prefix("note on link") {
-            let text = rest
-                .trim_start_matches([' ', ':'])
-                .trim()
-                .to_string();
+            let text = rest.trim_start_matches([' ', ':']).trim().to_string();
             if !text.is_empty() {
                 notes.push(ComponentNote { text, target: None });
             } else {
@@ -367,9 +365,10 @@ pub fn parse_component(lines: &[String]) -> Result<ComponentDiagram, ParseError>
                 });
             }
             if let Some(pkg) = package_stack.last_mut()
-                && !pkg.components.contains(&id) {
-                    pkg.components.push(id);
-                }
+                && !pkg.components.contains(&id)
+            {
+                pkg.components.push(id);
+            }
             continue;
         }
 
@@ -385,9 +384,10 @@ pub fn parse_component(lines: &[String]) -> Result<ComponentDiagram, ParseError>
                 });
             }
             if let Some(pkg) = package_stack.last_mut()
-                && !pkg.components.contains(&id) {
-                    pkg.components.push(id);
-                }
+                && !pkg.components.contains(&id)
+            {
+                pkg.components.push(id);
+            }
             continue;
         }
 

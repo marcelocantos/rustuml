@@ -152,12 +152,13 @@ fn named_color(name: &str) -> Option<(u8, u8, u8)> {
 fn parse_color(s: &str) -> Option<(u8, u8, u8)> {
     let s = s.trim().trim_matches('"');
     if let Some(hex) = s.strip_prefix('#')
-        && hex.len() == 6 {
-            let r = u8::from_str_radix(&hex[0..2], 16).ok()?;
-            let g = u8::from_str_radix(&hex[2..4], 16).ok()?;
-            let b = u8::from_str_radix(&hex[4..6], 16).ok()?;
-            return Some((r, g, b));
-        }
+        && hex.len() == 6
+    {
+        let r = u8::from_str_radix(&hex[0..2], 16).ok()?;
+        let g = u8::from_str_radix(&hex[2..4], 16).ok()?;
+        let b = u8::from_str_radix(&hex[4..6], 16).ok()?;
+        return Some((r, g, b));
+    }
     named_color(s)
 }
 
@@ -457,9 +458,10 @@ impl PreprocessContext {
             if trimmed == "!enddefinelong" {
                 self.collecting_definelong = None;
             } else if let Some(name) = self.collecting_definelong.clone()
-                && let Some(dl) = self.definelong_macros.get_mut(&name) {
-                    dl.body.push(line.to_string());
-                }
+                && let Some(dl) = self.definelong_macros.get_mut(&name)
+            {
+                dl.body.push(line.to_string());
+            }
             return;
         }
 
@@ -738,11 +740,12 @@ impl PreprocessContext {
             if dl.params.is_empty() && trimmed.contains(name.as_str()) {
                 // Only substitute word-boundary matches.
                 if let Ok(re) = Regex::new(&format!(r"\b{}\b", regex::escape(name)))
-                    && re.is_match(trimmed) {
-                        let body = dl.body.join("\n");
-                        let result = re.replace_all(trimmed, body.as_str()).to_string();
-                        return Some(result);
-                    }
+                    && re.is_match(trimmed)
+                {
+                    let body = dl.body.join("\n");
+                    let result = re.replace_all(trimmed, body.as_str()).to_string();
+                    return Some(result);
+                }
             }
         }
         None
@@ -1004,26 +1007,27 @@ impl PreprocessContext {
 
         if line == "!endwhile" {
             if let Some(while_state) = self.while_stack.pop()
-                && self.is_active() {
-                    let mut iterations = 0;
-                    loop {
-                        if iterations >= MAX_WHILE_ITERATIONS {
-                            break;
-                        }
-                        let cond_expanded = self.substitute_vars(&while_state.condition);
-                        if !self.eval_bool(&cond_expanded) {
-                            break;
-                        }
-
-                        for body_line in &while_state.body_lines {
-                            let line_refs: Vec<&str> = vec![body_line.as_str()];
-                            let expanded = self.process_lines(&line_refs);
-                            output.extend(expanded);
-                        }
-
-                        iterations += 1;
+                && self.is_active()
+            {
+                let mut iterations = 0;
+                loop {
+                    if iterations >= MAX_WHILE_ITERATIONS {
+                        break;
                     }
+                    let cond_expanded = self.substitute_vars(&while_state.condition);
+                    if !self.eval_bool(&cond_expanded) {
+                        break;
+                    }
+
+                    for body_line in &while_state.body_lines {
+                        let line_refs: Vec<&str> = vec![body_line.as_str()];
+                        let expanded = self.process_lines(&line_refs);
+                        output.extend(expanded);
+                    }
+
+                    iterations += 1;
                 }
+            }
             return true;
         }
 
@@ -1247,9 +1251,10 @@ impl PreprocessContext {
         static BARE_WORD_RE: LazyLock<Regex> =
             LazyLock::new(|| Regex::new(r"^[A-Za-z_]\w*$").unwrap());
         if BARE_WORD_RE.is_match(expr)
-            && let Some(raw) = self.token_defines.get(expr).cloned() {
-                return Value::Str(raw);
-            }
+            && let Some(raw) = self.token_defines.get(expr).cloned()
+        {
+            return Value::Str(raw);
+        }
 
         // Boolean literals (plain "true"/"false" without % prefix).
         if expr == "true" {
@@ -2226,9 +2231,11 @@ fn find_top_level_comparison(expr: &str, op: &str) -> Option<usize> {
             {
                 // For < and >, make sure it's not <= or >= or <> or <<.
                 if op == "<"
-                    && i + 1 < bytes.len() && (bytes[i + 1] == b'=' || bytes[i + 1] == b'>') {
-                        continue;
-                    }
+                    && i + 1 < bytes.len()
+                    && (bytes[i + 1] == b'=' || bytes[i + 1] == b'>')
+                {
+                    continue;
+                }
                 if op == ">" {
                     if i + 1 < bytes.len() && bytes[i + 1] == b'=' {
                         continue;

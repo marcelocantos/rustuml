@@ -203,17 +203,18 @@ fn render_with_positions(
         .map(|note| {
             let (nw, nh) = note_box_dims(note);
             if let Some(target) = &note.target
-                && let Some(ti) = diagram.entities.iter().position(|e| &e.id == target) {
-                    let (ex, ey, ew, eh) = entity_positions[ti];
-                    let pos = note.position.unwrap_or(NotePosition::Right);
-                    let (nx, ny) = match pos {
-                        NotePosition::Right => (ex + ew + MARGIN / 2.0, ey),
-                        NotePosition::Left => (ex - nw - MARGIN / 2.0, ey),
-                        NotePosition::Top => (ex, ey - nh - MARGIN / 2.0),
-                        NotePosition::Bottom => (ex, ey + eh + MARGIN / 2.0),
-                    };
-                    return Some((nx, ny, nw, nh));
-                }
+                && let Some(ti) = diagram.entities.iter().position(|e| &e.id == target)
+            {
+                let (ex, ey, ew, eh) = entity_positions[ti];
+                let pos = note.position.unwrap_or(NotePosition::Right);
+                let (nx, ny) = match pos {
+                    NotePosition::Right => (ex + ew + MARGIN / 2.0, ey),
+                    NotePosition::Left => (ex - nw - MARGIN / 2.0, ey),
+                    NotePosition::Top => (ex, ey - nh - MARGIN / 2.0),
+                    NotePosition::Bottom => (ex, ey + eh + MARGIN / 2.0),
+                };
+                return Some((nx, ny, nw, nh));
+            }
             // Floating note: place to the right of all entities.
             let float_x = entity_positions
                 .iter()
@@ -723,19 +724,22 @@ fn format_member(member: &Member) -> String {
 fn format_stereotype(s: &str) -> String {
     // Match spot notation: (single-char, #color) name
     if let Some(rest) = s.strip_prefix('(')
-        && let Some(comma_pos) = rest.find(',') {
-            let after_comma = &rest[comma_pos + 1..];
-            if let Some(color_and_rest) = after_comma.strip_prefix('#')
-                && let Some(close_pos) = color_and_rest.find(')') {
-                    let color = &color_and_rest[..close_pos];
-                    // Hex color: all chars are hex digits (3 or 6 digits)
-                    if (color.len() == 3 || color.len() == 6)
-                        && color.chars().all(|c| c.is_ascii_hexdigit()) {
-                            let name = color_and_rest[close_pos + 1..].trim();
-                            return format!("«{name}»");
-                        }
-                }
+        && let Some(comma_pos) = rest.find(',')
+    {
+        let after_comma = &rest[comma_pos + 1..];
+        if let Some(color_and_rest) = after_comma.strip_prefix('#')
+            && let Some(close_pos) = color_and_rest.find(')')
+        {
+            let color = &color_and_rest[..close_pos];
+            // Hex color: all chars are hex digits (3 or 6 digits)
+            if (color.len() == 3 || color.len() == 6)
+                && color.chars().all(|c| c.is_ascii_hexdigit())
+            {
+                let name = color_and_rest[close_pos + 1..].trim();
+                return format!("«{name}»");
+            }
         }
+    }
     format!("«{s}»")
 }
 
