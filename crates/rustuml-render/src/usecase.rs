@@ -52,6 +52,23 @@ pub fn render(diagram: &UseCaseDiagram, theme: &Theme) -> String {
 
     let mut svg = SvgBuilder::new(total_w, total_h);
     let gs = &theme.global;
+    let ucs = &theme.usecase;
+    let acs = &theme.actor;
+    let usecase_border = if ucs.border.is_empty() {
+        &gs.border_color
+    } else {
+        &ucs.border
+    };
+    let actor_border = if acs.border.is_empty() {
+        &gs.border_color
+    } else {
+        &acs.border
+    };
+    let actor_font_size = if acs.font_size > 0.0 {
+        acs.font_size
+    } else {
+        FONT_SIZE
+    };
 
     // Render header.
     if let Some(header) = &diagram.meta.header {
@@ -77,22 +94,15 @@ pub fn render(diagram: &UseCaseDiagram, theme: &Theme) -> String {
     for (i, actor) in diagram.actors.iter().enumerate() {
         let y = MARGIN + y_offset + i as f64 * (ACTOR_H + GAP) + ACTOR_H / 2.0;
         // Stick figure: head circle + body line + arms + legs.
-        svg.circle(actor_x, y - 15.0, 8.0, "none", &gs.border_color);
-        svg.line_segment(actor_x, y - 7.0, actor_x, y + 10.0, &gs.border_color, false);
-        svg.line_segment(
-            actor_x - 12.0,
-            y,
-            actor_x + 12.0,
-            y,
-            &gs.border_color,
-            false,
-        );
+        svg.circle(actor_x, y - 15.0, 8.0, "none", actor_border);
+        svg.line_segment(actor_x, y - 7.0, actor_x, y + 10.0, actor_border, false);
+        svg.line_segment(actor_x - 12.0, y, actor_x + 12.0, y, actor_border, false);
         svg.line_segment(
             actor_x,
             y + 10.0,
             actor_x - 10.0,
             y + 22.0,
-            &gs.border_color,
+            actor_border,
             false,
         );
         svg.line_segment(
@@ -100,10 +110,10 @@ pub fn render(diagram: &UseCaseDiagram, theme: &Theme) -> String {
             y + 10.0,
             actor_x + 10.0,
             y + 22.0,
-            &gs.border_color,
+            actor_border,
             false,
         );
-        svg.text(actor_x, y + 35.0, &actor.label, "middle", FONT_SIZE);
+        svg.text(actor_x, y + 35.0, &actor.label, "middle", actor_font_size);
         if let Some(stereo) = &actor.stereotype {
             let stereo_text = format!("«{stereo}»");
             svg.text(actor_x, y - 28.0, &stereo_text, "middle", SMALL_FONT);
@@ -176,7 +186,7 @@ pub fn render(diagram: &UseCaseDiagram, theme: &Theme) -> String {
             max_x - min_x,
             max_y - min_y,
             "none",
-            &gs.border_color,
+            usecase_border,
         );
         svg.text(
             (min_x + max_x) / 2.0,
@@ -193,14 +203,19 @@ pub fn render(diagram: &UseCaseDiagram, theme: &Theme) -> String {
         let text_w = metrics::text_width(&uc.label, FONT_SIZE);
         let rx = (text_w / 2.0 + 20.0).max(UC_RX);
         svg.open_group("usecase");
+        let uc_bg = if ucs.background.is_empty() {
+            "#F8F9FA"
+        } else {
+            &ucs.background
+        };
         svg.rounded_rect(
             uc_x - rx,
             y - UC_RY,
             rx * 2.0,
             UC_RY * 2.0,
             UC_RY,
-            "#F8F9FA",
-            &gs.border_color,
+            uc_bg,
+            usecase_border,
         );
         let desc_lines = &uc.description;
         // Determine starting y for text within the ellipse.
@@ -244,8 +259,13 @@ pub fn render(diagram: &UseCaseDiagram, theme: &Theme) -> String {
             .chain(uc_positions.iter())
             .find(|(id, _, _)| *id == conn.to);
 
+        let arrow_color = if ucs.arrow_color.is_empty() {
+            &gs.border_color
+        } else {
+            &ucs.arrow_color
+        };
         if let (Some((_, fx, fy)), Some((_, tx, ty))) = (from, to) {
-            svg.line_segment(*fx, *fy, *tx, *ty, &gs.border_color, false);
+            svg.line_segment(*fx, *fy, *tx, *ty, arrow_color, false);
             if let Some(label) = &conn.label {
                 let mx = (fx + tx) / 2.0;
                 let my = (fy + ty) / 2.0;
