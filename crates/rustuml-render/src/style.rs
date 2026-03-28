@@ -32,6 +32,16 @@ pub struct GlobalStyle {
     pub default_font_color: String,
     pub arrow_color: String,
     pub border_color: String,
+    pub default_font_size: f64,
+    pub monochrome: bool,
+    pub shadowing: bool,
+    pub handwritten: bool,
+    pub dpi: f64,
+    pub arrow_thickness: f64,
+    pub linetype: String,
+    pub nodesep: f64,
+    pub ranksep: f64,
+    pub padding: f64,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
@@ -54,6 +64,12 @@ pub struct ClassStyle {
     pub enum_background: String,
     pub border_color: String,
     pub stereotype_color: String,
+    pub arrow_color: String,
+    pub arrow_thickness: f64,
+    pub font_size: f64,
+    pub font_color: String,
+    pub header_background: String,
+    pub attribute_font_size: f64,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
@@ -72,6 +88,7 @@ pub struct ActivityStyle {
     pub bar_color: String,
     pub start_color: String,
     pub stop_color: String,
+    pub arrow_color: String,
 }
 
 impl Default for Theme {
@@ -102,6 +119,12 @@ impl Theme {
                 enum_background: "#D5F5E3".into(),
                 border_color: "#000000".into(),
                 stereotype_color: "#666666".into(),
+                arrow_color: "#181818".into(),
+                arrow_thickness: 1.0,
+                font_size: 13.0,
+                font_color: "#000000".into(),
+                header_background: "".into(),
+                attribute_font_size: 11.0,
             },
             state: StateStyle {
                 state_background: "#FEEBD0".into(),
@@ -116,6 +139,7 @@ impl Theme {
                 bar_color: "#000000".into(),
                 start_color: "#000000".into(),
                 stop_color: "#000000".into(),
+                arrow_color: "#181818".into(),
             },
             global: GlobalStyle {
                 font_family: "sans-serif".into(),
@@ -124,6 +148,16 @@ impl Theme {
                 default_font_color: "#000000".into(),
                 arrow_color: "#181818".into(),
                 border_color: "#181818".into(),
+                default_font_size: 13.0,
+                monochrome: false,
+                shadowing: true,
+                handwritten: false,
+                dpi: 96.0,
+                arrow_thickness: 1.0,
+                linetype: "".into(),
+                nodesep: 25.0,
+                ranksep: 40.0,
+                padding: 8.0,
             },
         }
     }
@@ -149,6 +183,12 @@ impl Theme {
                 enum_background: "#D1E7DD".into(),
                 border_color: "#495057".into(),
                 stereotype_color: "#6C757D".into(),
+                arrow_color: "#495057".into(),
+                arrow_thickness: 1.0,
+                font_size: 14.0,
+                font_color: "#212529".into(),
+                header_background: "".into(),
+                attribute_font_size: 11.0,
             },
             state: StateStyle {
                 state_background: "#F8F9FA".into(),
@@ -163,6 +203,7 @@ impl Theme {
                 bar_color: "#212529".into(),
                 start_color: "#212529".into(),
                 stop_color: "#212529".into(),
+                arrow_color: "#495057".into(),
             },
             global: GlobalStyle {
                 font_family: "system-ui, -apple-system, sans-serif".into(),
@@ -171,6 +212,16 @@ impl Theme {
                 default_font_color: "#212529".into(),
                 arrow_color: "#495057".into(),
                 border_color: "#495057".into(),
+                default_font_size: 14.0,
+                monochrome: false,
+                shadowing: false,
+                handwritten: false,
+                dpi: 96.0,
+                arrow_thickness: 1.0,
+                linetype: "".into(),
+                nodesep: 25.0,
+                ranksep: 40.0,
+                padding: 8.0,
             },
         }
     }

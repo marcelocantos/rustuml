@@ -23,6 +23,46 @@ pub fn apply_skinparams(theme: &Theme, params: &[SkinParam]) -> Theme {
             "backgroundColor" => t.global.background_color = param.value.clone(),
             "defaultFontName" => t.global.font_family = param.value.clone(),
             "defaultFontColor" => t.global.default_font_color = param.value.clone(),
+            "defaultFontSize" => {
+                if let Ok(v) = param.value.parse::<f64>() {
+                    t.global.default_font_size = v;
+                }
+            }
+            "monochrome" => {
+                t.global.monochrome = param.value.to_lowercase() == "true";
+            }
+            "shadowing" => {
+                t.global.shadowing = param.value.to_lowercase() != "false";
+            }
+            "handwritten" => {
+                t.global.handwritten = param.value.to_lowercase() == "true";
+            }
+            "dpi" => {
+                if let Ok(v) = param.value.parse::<f64>() {
+                    t.global.dpi = v;
+                }
+            }
+            "arrowThickness" => {
+                if let Ok(v) = param.value.parse::<f64>() {
+                    t.global.arrow_thickness = v;
+                }
+            }
+            "linetype" => t.global.linetype = param.value.clone(),
+            "nodesep" => {
+                if let Ok(v) = param.value.parse::<f64>() {
+                    t.global.nodesep = v;
+                }
+            }
+            "ranksep" => {
+                if let Ok(v) = param.value.parse::<f64>() {
+                    t.global.ranksep = v;
+                }
+            }
+            "padding" => {
+                if let Ok(v) = param.value.parse::<f64>() {
+                    t.global.padding = v;
+                }
+            }
 
             // Sequence
             "sequenceArrowColor" | "ArrowColor" => {
@@ -47,6 +87,28 @@ pub fn apply_skinparams(theme: &Theme, params: &[SkinParam]) -> Theme {
             "interfaceBackgroundColor" => {
                 t.class.interface_background = param.value.clone();
             }
+            "classArrowColor" => t.class.arrow_color = param.value.clone(),
+            "classArrowThickness" => {
+                if let Ok(v) = param.value.parse::<f64>() {
+                    t.class.arrow_thickness = v;
+                }
+            }
+            "ClassFontSize" | "classFontSize" => {
+                if let Ok(v) = param.value.parse::<f64>() {
+                    t.class.font_size = v;
+                }
+            }
+            "classFontColor" | "ClassFontColor" => {
+                t.class.font_color = param.value.clone();
+            }
+            "classHeaderBackgroundColor" | "ClassHeaderBackgroundColor" => {
+                t.class.header_background = param.value.clone();
+            }
+            "classAttributeFontSize" | "ClassAttributeFontSize" => {
+                if let Ok(v) = param.value.parse::<f64>() {
+                    t.class.attribute_font_size = v;
+                }
+            }
 
             // State
             "stateBackgroundColor" => t.state.state_background = param.value.clone(),
@@ -57,6 +119,7 @@ pub fn apply_skinparams(theme: &Theme, params: &[SkinParam]) -> Theme {
                 t.activity.action_background = param.value.clone();
             }
             "activityBorderColor" => t.activity.action_border = param.value.clone(),
+            "activityArrowColor" => t.activity.arrow_color = param.value.clone(),
 
             _ => {} // Unknown skinparams silently ignored.
         }
