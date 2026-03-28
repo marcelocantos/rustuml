@@ -77,6 +77,36 @@ pub enum Diagram {
     Ebnf(ebnf::EbnfDiagram),
 }
 
+impl Diagram {
+    /// Return a mutable reference to the diagram's metadata.
+    pub fn meta_mut(&mut self) -> &mut DiagramMeta {
+        match self {
+            Diagram::Sequence(d) => &mut d.meta,
+            Diagram::Class(d) => &mut d.meta,
+            Diagram::Object(d) => &mut d.meta,
+            Diagram::State(d) => &mut d.meta,
+            Diagram::Activity(d) => &mut d.meta,
+            Diagram::Component(d) => &mut d.meta,
+            Diagram::UseCase(d) => &mut d.meta,
+            Diagram::Deployment(d) => &mut d.meta,
+            Diagram::Nwdiag(d) => &mut d.meta,
+            Diagram::Json(d) => &mut d.meta,
+            Diagram::MindMap(d) => &mut d.meta,
+            Diagram::Gantt(d) => &mut d.meta,
+            Diagram::Git(d) => &mut d.meta,
+            Diagram::Timing(d) => &mut d.meta,
+            Diagram::Wbs(d) => &mut d.meta,
+            Diagram::Math(d) => &mut d.meta,
+            Diagram::Salt(d) => &mut d.meta,
+            Diagram::Regex(d) => &mut d.meta,
+            Diagram::Ditaa(d) => &mut d.meta,
+            Diagram::Dot(d) => &mut d.meta,
+            Diagram::Board(d) => &mut d.meta,
+            Diagram::Ebnf(d) => &mut d.meta,
+        }
+    }
+}
+
 /// Source location for error reporting.
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Serialize, Deserialize)]
 pub struct Span {

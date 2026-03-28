@@ -433,44 +433,47 @@ pub struct DiagramBlock {
 pub fn split_blocks(input: &str) -> Vec<DiagramBlock> {
     let mut blocks = Vec::new();
     let mut preamble_lines: Vec<&str> = Vec::new();
-    let mut current_start: Option<(String, Option<String>, Vec<&str>)> = None;
+    // (outer-type, name, lines, nesting-depth)
+    // nesting_depth counts how many @start tags are open; the block closes
+    // when depth drops back to 0 on an @end.
+    let mut current_start: Option<(String, Option<String>, Vec<&str>, usize)> = None;
     let mut index = 0usize;
 
     for line in input.lines() {
         let trimmed = line.trim();
 
         if let Some(rest) = trimmed.strip_prefix("@start") {
-            // Entering a new block. Close any open block first (shouldn't
-            // happen in well-formed input, but be defensive).
-            if let Some((typ, name, block_lines)) = current_start.take() {
-                let source = build_source(&preamble_lines, &block_lines);
-                blocks.push(DiagramBlock {
-                    name,
-                    typ,
-                    source,
-                    index,
-                });
-                index += 1;
-            }
-            // Parse type and optional name: `startjson myname` → typ="json", name=Some("myname")
-            let mut parts = rest.split_whitespace();
-            let typ = parts.next().unwrap_or("uml").to_string();
-            let name = parts.next().map(|s| s.to_string());
-            current_start = Some((typ, name, vec![line]));
-        } else if trimmed.starts_with("@end") {
-            if let Some((typ, name, mut block_lines)) = current_start.take() {
+            if current_start.is_none() {
+                // Starting a new top-level block.
+                let mut parts = rest.split_whitespace();
+                let typ = parts.next().unwrap_or("uml").to_string();
+                let name = parts.next().map(|s| s.to_string());
+                current_start = Some((typ, name, vec![line], 1));
+            } else if let Some((_, _, ref mut block_lines, ref mut depth)) = current_start {
+                // Nested @start inside an open block — treat as content.
+                // PlantUML allows @startjson embedded inside @startuml etc.
                 block_lines.push(line);
-                let source = build_source(&preamble_lines, &block_lines);
-                blocks.push(DiagramBlock {
-                    name,
-                    typ,
-                    source,
-                    index,
-                });
-                index += 1;
+                *depth += 1;
+            }
+        } else if trimmed.starts_with("@end") {
+            if let Some((_, _, ref mut block_lines, ref mut depth)) = current_start {
+                block_lines.push(line);
+                *depth -= 1;
+                if *depth == 0 {
+                    // Outer block is closed — emit it.
+                    let (typ, name, block_lines, _) = current_start.take().unwrap();
+                    let source = build_source(&preamble_lines, &block_lines);
+                    blocks.push(DiagramBlock {
+                        name,
+                        typ,
+                        source,
+                        index,
+                    });
+                    index += 1;
+                }
             }
             // If there's no open block, this is a stray @end — ignore it.
-        } else if let Some((_, _, ref mut block_lines)) = current_start {
+        } else if let Some((_, _, ref mut block_lines, _)) = current_start {
             block_lines.push(line);
         } else {
             // Before the first block: accumulate as preamble.
@@ -479,7 +482,7 @@ pub fn split_blocks(input: &str) -> Vec<DiagramBlock> {
     }
 
     // If a block was started but never closed, emit it anyway.
-    if let Some((typ, name, block_lines)) = current_start.take() {
+    if let Some((typ, name, block_lines, _)) = current_start.take() {
         let source = build_source(&preamble_lines, &block_lines);
         blocks.push(DiagramBlock {
             name,
@@ -600,12 +603,14 @@ pub fn parse_with_base(
     base_dir: Option<&std::path::Path>,
 ) -> Result<Diagram, ParseError> {
     let typ = detect_type(input);
-    let lines = match base_dir {
-        Some(dir) => preprocess::preprocess_with_base(input, dir),
-        None => preprocess::preprocess(input),
+    let preprocess_out = match base_dir {
+        Some(dir) => preprocess::preprocess_full_with_base(input, dir),
+        None => preprocess::preprocess_full(input, None),
     };
+    let lines = preprocess_out.lines;
+    let sprites = preprocess_out.sprites;
 
-    match typ {
+    let mut diagram = match typ {
         "uml" => match detect_uml_subtype(&lines) {
             UmlSubtype::Sequence => {
                 let seq = sequence::parse_sequence(&lines)?;
@@ -708,7 +713,15 @@ pub fn parse_with_base(
             line: 1,
             message: format!("unsupported diagram type: @start{other}"),
         }),
+    }?;
+
+    // Inject sprite definitions from the preprocessor into the diagram's meta.
+    if !sprites.is_empty() {
+        let meta = diagram.meta_mut();
+        meta.sprites = sprites;
     }
+
+    Ok(diagram)
 }
 
 #[cfg(test)]

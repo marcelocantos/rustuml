@@ -279,6 +279,10 @@ struct PreprocessContext {
     cond_stack: Vec<CondState>,
     in_block_comment: bool,
     in_sprite_block: bool,
+    /// The name of the sprite currently being collected (if any).
+    current_sprite_name: Option<String>,
+    /// Sprite definitions parsed from `sprite $name { ... }` blocks.
+    sprites: HashMap<String, SpriteData>,
     archimate_enabled: bool,
     in_diagram_block: bool,
     seen_start_tag: bool,
@@ -344,6 +348,8 @@ impl PreprocessContext {
             cond_stack: Vec::new(),
             in_block_comment: false,
             in_sprite_block: false,
+            current_sprite_name: None,
+            sprites: HashMap::new(),
             archimate_enabled: false,
             in_diagram_block: false,
             seen_start_tag: false,
@@ -414,10 +420,20 @@ impl PreprocessContext {
     fn process_one_line(&mut self, line: &str, output: &mut Vec<String>) {
         let trimmed = line.trim();
 
-        // Skip sprite pixel-data blocks.
+        // Collect sprite pixel-data blocks.
         if self.in_sprite_block {
             if trimmed == "}" {
                 self.in_sprite_block = false;
+                self.current_sprite_name = None;
+            } else if let Some(name) = self.current_sprite_name.clone() {
+                // Accumulate pixel row into the sprite definition.
+                if let Some(sprite) = self.sprites.get_mut(&name) {
+                    // Only accept lines that look like hex pixel data.
+                    if !trimmed.is_empty() && trimmed.chars().all(|c| c.is_ascii_hexdigit()) {
+                        sprite.rows.push(trimmed.to_string());
+                        sprite.height = sprite.rows.len() as u32;
+                    }
+                }
             }
             return;
         }
@@ -467,9 +483,31 @@ impl PreprocessContext {
             return;
         }
 
-        // Skip sprite definitions.
+        // Parse sprite definitions: `sprite $name [WxH/Z] {`
         if trimmed.starts_with("sprite ") || trimmed.starts_with("sprite\t") {
             if trimmed.ends_with('{') {
+                // Parse: sprite $name [WxH/Z] {
+                let rest = trimmed["sprite ".len()..].trim_start();
+                // Strip leading $ if present.
+                let rest = rest.strip_prefix('$').unwrap_or(rest);
+                // Name is the first word (up to whitespace, '[', or '{').
+                let name: String = rest
+                    .chars()
+                    .take_while(|c| c.is_alphanumeric() || *c == '_')
+                    .collect();
+                // Try to parse [WxH/Z] dimensions if present.
+                let (width, height) = parse_sprite_dimensions(rest);
+                if !name.is_empty() {
+                    self.sprites.insert(
+                        name.clone(),
+                        SpriteData {
+                            width,
+                            height,
+                            rows: Vec::new(),
+                        },
+                    );
+                    self.current_sprite_name = Some(name);
+                }
                 self.in_sprite_block = true;
             }
             return;
@@ -1639,12 +1677,26 @@ impl PreprocessContext {
     // ------------------------------------------------------------------
 
     fn substitute_vars(&self, line: &str) -> String {
-        // Strip sprite icon references `<$name>`.
-        static SPRITE_REF_RE: LazyLock<Regex> =
-            LazyLock::new(|| Regex::new(r"<\$\w+>\s*").unwrap());
-        let line = &*SPRITE_REF_RE.replace_all(line, "");
+        // Preserve sprite icon references `<$name>` — they are rendered as
+        // inline images and must not be stripped or variable-substituted here.
+        // Temporarily replace them with null-byte placeholders, process variable
+        // substitution on the rest, then restore the sprite references.
+        static SPRITE_REF_RE: LazyLock<Regex> = LazyLock::new(|| Regex::new(r"<\$(\w+)>").unwrap());
 
-        let mut result = line.to_string();
+        // Collect sprite ref names in order.
+        let sprite_names: Vec<String> = SPRITE_REF_RE
+            .captures_iter(line)
+            .map(|c| c[1].to_string())
+            .collect();
+
+        // Replace each `<$name>` with a null-byte placeholder `\x00N\x00`.
+        let mut counter = 0usize;
+        let line_protected = SPRITE_REF_RE.replace_all(line, |_: &regex::Captures| {
+            let ph = format!("\x00{counter}\x00");
+            counter += 1;
+            ph
+        });
+        let mut result = line_protected.into_owned();
 
         // First apply $variable substitution (also checks token_defines).
         result = self.substitute_inline_func_calls(&result);
@@ -1701,7 +1753,16 @@ impl PreprocessContext {
         let after_vars = result;
 
         // Evaluate built-in %functions.
-        self.eval_builtin_functions(&after_vars)
+        let mut processed = self.eval_builtin_functions(&after_vars);
+
+        // Restore sprite references (replaced with placeholders above).
+        for (i, name) in sprite_names.iter().enumerate() {
+            let ph = format!("\x00{i}\x00");
+            let sprite_tag = format!("<${name}>");
+            processed = processed.replace(&ph, &sprite_tag);
+        }
+
+        processed
     }
 
     fn substitute_inline_func_calls(&self, line: &str) -> String {
@@ -2353,6 +2414,32 @@ fn parens_balanced(s: &str) -> bool {
     depth == 0
 }
 
+/// Parse optional `[WxH/Z]` dimension spec from a sprite header line.
+///
+/// The `rest` parameter is the text after `sprite $` (name included).
+/// Returns `(width, height)` where 0 means "infer from pixel data".
+fn parse_sprite_dimensions(rest: &str) -> (u32, u32) {
+    // Look for `[WxH/Z]` or `[WxH]` pattern anywhere in the rest string.
+    if let Some(start) = rest.find('[') {
+        if let Some(end) = rest[start..].find(']') {
+            let spec = &rest[start + 1..start + end];
+            // Format: WxH/Z  or WxH
+            let wh = spec.split('/').next().unwrap_or(spec);
+            let mut parts = wh.splitn(2, 'x');
+            let w: u32 = parts
+                .next()
+                .and_then(|s| s.trim().parse().ok())
+                .unwrap_or(0);
+            let h: u32 = parts
+                .next()
+                .and_then(|s| s.trim().parse().ok())
+                .unwrap_or(0);
+            return (w, h);
+        }
+    }
+    (0, 0)
+}
+
 fn strip_inline_comment(line: &str) -> String {
     let mut in_quotes = false;
     let chars: Vec<char> = line.chars().collect();
@@ -2779,5 +2866,50 @@ mod tests {
         let input = "@startuml\n!if %feature(\"dark-mode\") == \"true\"\ndark\n!else\nlight\n!endif\n@enduml";
         let lines = preprocess(input);
         assert_eq!(lines, vec!["light"]);
+    }
+
+    #[test]
+    fn sprite_block_is_collected() {
+        let input =
+            "@startuml\nsprite $disk [8x8/16] {\nFF00FF00\n00FF00FF\n}\nnote : hello\n@enduml";
+        let out = preprocess_full(input, None);
+        // The sprite block should NOT appear in the preprocessed lines.
+        assert!(
+            !out.lines.iter().any(|l| l.contains("FF00FF00")),
+            "sprite pixel rows should not appear in output lines"
+        );
+        assert_eq!(out.lines, vec!["note : hello"]);
+        // The sprite should be collected.
+        assert!(
+            out.sprites.contains_key("disk"),
+            "sprite 'disk' should be parsed"
+        );
+        let s = &out.sprites["disk"];
+        assert_eq!(s.rows, vec!["FF00FF00", "00FF00FF"]);
+        assert_eq!(s.width, 8);
+        assert_eq!(s.height, 2);
+    }
+
+    #[test]
+    fn sprite_ref_preserved_in_output() {
+        // <$name> references in diagram lines should be preserved.
+        let input =
+            "@startuml\nsprite $icon [4x4/16] {\nFFFF\nFFFF\n}\nnote : <$icon> hello\n@enduml";
+        let out = preprocess_full(input, None);
+        assert_eq!(out.lines, vec!["note : <$icon> hello"]);
+        assert!(out.sprites.contains_key("icon"));
+    }
+
+    #[test]
+    fn sprite_without_dimensions() {
+        // Sprite blocks without [WxH/Z] annotation should still be parsed.
+        let input = "@startuml\nsprite $dot {\nFF\n00\n}\nnote : test\n@enduml";
+        let out = preprocess_full(input, None);
+        assert!(
+            out.sprites.contains_key("dot"),
+            "sprite 'dot' should be parsed"
+        );
+        let s = &out.sprites["dot"];
+        assert_eq!(s.rows, vec!["FF", "00"]);
     }
 }
