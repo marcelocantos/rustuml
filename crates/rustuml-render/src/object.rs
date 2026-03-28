@@ -42,9 +42,10 @@ pub fn render(diagram: &ObjectDiagram, theme: &Theme) -> String {
             .to_string();
     }
 
+    let dims: Vec<ObjDim> = diagram.objects.iter().map(calc_obj_dim).collect();
     let mut layout = LayoutGraph::new(Direction::TopToBottom);
-    for obj in &diagram.objects {
-        layout.add_node(&obj.id, &obj.label);
+    for (obj, dim) in diagram.objects.iter().zip(&dims) {
+        layout.add_node(&obj.id, &obj.label, dim.width, dim.height);
     }
     for link in &diagram.links {
         let from_base = link.from.split("::").next().unwrap_or(&link.from);
@@ -52,7 +53,11 @@ pub fn render(diagram: &ObjectDiagram, theme: &Theme) -> String {
         layout.add_edge(from_base, to_base, link.label.as_deref());
     }
 
-    let positions = layout.layout_positions();
+    // Use timeout — layout-rs can loop infinitely on degenerate graphs.
+    let positions = match layout.layout_positions(std::time::Duration::from_secs(5)) {
+        Some(pos) => pos,
+        None => return render_grid(diagram, cs),
+    };
     render_with_positions(diagram, &positions, cs)
 }
 
