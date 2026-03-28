@@ -1,0 +1,52 @@
+Third-Party Notices
+===================
+
+RustUML includes or depends on the following third-party components:
+
+Liberation Sans Font
+--------------------
+Copyright 2012 Red Hat, Inc.
+Licensed under the SIL Open Font License, Version 1.1.
+Embedded in the binary for text metrics (crates/rustuml-render/fonts/).
+Full licence: crates/rustuml-render/fonts/LIBERATION-LICENSE
+
+layout-rs
+---------
+Copyright Nadav Rotem and contributors.
+Licensed under the MIT License.
+Used for hierarchical graph layout (Sugiyama algorithm).
+https://github.com/nadavrot/layout
+
+katex (Rust crate)
+------------------
+Licensed under the MIT License.
+Wraps KaTeX (MIT) via QuickJS for LaTeX math rendering.
+https://crates.io/crates/katex
+
+resvg
+-----
+Copyright Yevhenii Reizner and contributors.
+Licensed under the MPL-2.0 License.
+Used for SVG to PNG rasterization.
+https://github.com/nickel-org/resvg
+
+svg2pdf
+-------
+Copyright Typst GmbH and contributors.
+Licensed under the MIT/Apache-2.0 License.
+Used for SVG to PDF conversion.
+https://github.com/typst/svg2pdf
+
+ab_glyph
+---------
+Copyright Alex Butler and contributors.
+Licensed under the Apache-2.0 License.
+Used for font glyph metrics.
+https://github.com/alexheretic/ab-glyph
+
+roxmltree
+---------
+Copyright Yevhenii Reizner.
+Licensed under the MIT/Apache-2.0 License.
+Used for SVG/XML parsing in the oracle test framework.
+https://github.com/RazrFalcon/roxmltree
