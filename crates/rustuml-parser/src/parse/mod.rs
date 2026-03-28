@@ -4,11 +4,15 @@
 //! Diagram parsing — turns preprocessed lines into diagram models.
 
 pub mod activity;
+pub mod board;
 pub mod class;
 pub mod component;
 pub mod deployment;
 pub mod ditaa;
+pub mod dot;
+pub mod ebnf;
 pub mod gantt;
+pub mod git_diagram;
 pub mod json_diagram;
 pub mod math;
 pub mod mindmap;
@@ -434,7 +438,12 @@ pub fn parse_auto_with_base(
 ) -> Result<Diagram, ParseError> {
     let trimmed = input.trim_start();
     if trimmed.starts_with('{') {
-        parse_json(input)
+        // Try model JSON first; fall back to @startjson-style data visualization.
+        parse_json(input).or_else(|_| {
+            let lines: Vec<String> = input.lines().map(|l| l.to_string()).collect();
+            let diagram = json_diagram::parse_json_diagram(&lines)?;
+            Ok(Diagram::Json(diagram))
+        })
     } else if trimmed.starts_with("type:") || trimmed.starts_with("---") {
         parse_yaml(input)
     } else {
@@ -513,6 +522,10 @@ pub fn parse_with_base(
             let g = gantt::parse_gantt(&lines)?;
             Ok(Diagram::Gantt(g))
         }
+        "git" => {
+            let g = git_diagram::parse_git(&lines)?;
+            Ok(Diagram::Git(g))
+        }
         "wbs" => {
             let w = wbs::parse_wbs(&lines)?;
             Ok(Diagram::Wbs(w))
@@ -540,6 +553,18 @@ pub fn parse_with_base(
         "ditaa" => {
             let d = ditaa::parse_ditaa(&lines)?;
             Ok(Diagram::Ditaa(d))
+        }
+        "dot" => {
+            let d = dot::parse_dot(&lines)?;
+            Ok(Diagram::Dot(d))
+        }
+        "board" => {
+            let b = board::parse_board(&lines)?;
+            Ok(Diagram::Board(b))
+        }
+        "ebnf" => {
+            let e = ebnf::parse_ebnf(&lines)?;
+            Ok(Diagram::Ebnf(e))
         }
         other => Err(ParseError {
             line: 1,

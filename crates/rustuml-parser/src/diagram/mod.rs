@@ -7,11 +7,15 @@
 //! specified in YAML or JSON as an alternative to PlantUML text syntax.
 
 pub mod activity;
+pub mod board;
 pub mod class;
 pub mod component;
 pub mod deployment;
 pub mod ditaa;
+pub mod dot;
+pub mod ebnf;
 pub mod gantt;
+pub mod git_diagram;
 pub mod json_diagram;
 pub mod math;
 pub mod mindmap;
@@ -43,12 +47,16 @@ pub enum Diagram {
     Json(json_diagram::JsonDiagram),
     MindMap(mindmap::MindMapDiagram),
     Gantt(gantt::GanttDiagram),
+    Git(git_diagram::GitDiagram),
     Timing(timing::TimingDiagram),
     Wbs(wbs::WbsDiagram),
     Math(math::MathDiagram),
     Salt(salt::SaltDiagram),
     Regex(regex_diagram::RegexDiagram),
     Ditaa(ditaa::DitaaDiagram),
+    Dot(dot::DotDiagram),
+    Board(board::BoardDiagram),
+    Ebnf(ebnf::EbnfDiagram),
 }
 
 /// Source location for error reporting.

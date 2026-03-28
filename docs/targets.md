@@ -1,6 +1,6 @@
 # Targets
 
-<!-- last-evaluated: d2256cd2 -->
+<!-- last-evaluated: 73c3a19d -->
 
 ## Active
 
@@ -26,7 +26,7 @@
   - Code is in its own crate (`rustuml-layout`), licensed Apache-2.0
   - No external Graphviz binary required
 - **Context**: PlantUML uses Graphviz DOT for entity diagrams (class, component, object, deployment). We use layout-rs (MIT, Sugiyama) as the foundation. Known issues: layout-rs panics on degenerate graphs (bidirectional edges, 100+ arrows) causing infinite loops — currently mitigated with a 5-second thread timeout that falls back to grid layout. Edge routing quality on dense graphs is poor (see PlantUML GitHub issues #417, #523, #1005 for examples of the problem class).
-- **Status**: converging — layout engine called from class renderer with timeout wrapper. Grid fallback for timeout/panic cases. Remaining: fix layout-rs infinite loops properly, improve edge routing quality, extend layout to component/deployment/object diagrams.
+- **Status**: converging — layout crate with content-aware node sizing and built-in timeout/panic guard (5s, returns None). Used by class and object renderers. Grid fallback for timeout cases. Remaining: improve edge routing quality on dense graphs, extend layout to component/deployment renderers (currently grid-only).
 - **Discovered**: 2026-03-22
 
 ### 🎯T1.3 PlantUML parser and TIM preprocessor ported to Rust
@@ -39,7 +39,7 @@
   - Command pattern for each diagram type parses source lines into diagram models
   - Exact match with Java version on preprocessing and parsing (verified by oracle tests)
 - **Context**: The parser is the largest component. The TIM preprocessor is a separate subsystem handling macros and includes. Parser correctness is verifiable by exact-match oracle tests.
-- **Status**: near-achieved — 18 diagram types parsed (sequence, class, state, activity, component, use case, deployment, timing, gantt, mindmap, WBS, object, JSON/YAML, salt, nwdiag, regex, ditaa, math/LaTeX). Full TIM preprocessor rewrite: `!while` loops, arithmetic, `!elseif`, `&&`/`||`/`!`, color builtins, `!return`, `!local`, default args, `%filename()`, `!definelong`, `!startsub`/`!includesub`, `##` token-paste. Score-based diagram type detection. Remaining: stdlib includes, `!import`, complex nested macro edge cases, archimate diagram support.
+- **Status**: near-achieved — 18 diagram types parsed. Full TIM preprocessor. Lenient JSON parser (comma-less fields). Only 1 parse error in golden tests (mindmap edge case). Remaining: stdlib includes, `!import`, archimate support.
 - **Discovered**: 2026-03-22
 
 ### 🎯T1.4 Diagram model and rendering pipeline ported to Rust
@@ -52,7 +52,7 @@
   - Style/skin system applies themes and formatting
   - Output is structurally equivalent to Java version for all diagram types
 - **Context**: The rendering pipeline has a clean abstraction. SVG output is the primary target. PNG via resvg/tiny-skia. The style system and skin parameters need full porting.
-- **Status**: near-achieved — All 18 diagram types render to SVG. Theme system with skinparam overrides. Creole markup (bold, italic, underline, strike, color, size, font, image fallback, tilde escape, nested lists, tree syntax). Embedded Liberation Sans font. Notes, stereotypes, legends, headers/footers across all types. 11,104 golden pairs pass. Remaining: ~40% of skinparam keys not applied, sprite rendering, deeper creole edge cases.
+- **Status**: near-achieved — All 18 diagram types render to SVG. Theme system with 30+ skinparam keys wired (17 newly added: font sizes, arrow colors/thickness, monochrome, shadowing, handwritten, linetype, nodesep/ranksep, padding, dpi, class header/attribute styles). Class and activity renderers use theme arrow colors. 11,104 golden pairs pass. Remaining: ~30% of skinparam keys not applied, sprite rendering, deeper creole edge cases.
 - **Discovered**: 2026-03-22
 
 ### 🎯T1.7 Multi-format output (PNG, PDF, EPS)

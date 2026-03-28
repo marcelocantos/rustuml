@@ -63,29 +63,24 @@ pub fn render(diagram: &ClassDiagram, theme: &Theme) -> String {
     }
 
     // Phase 1: Use layout engine to determine relative ordering.
+    let class_dims_for_layout: Vec<ClassDim> =
+        diagram.entities.iter().map(calc_class_dim).collect();
     let mut layout = LayoutGraph::new(Direction::TopToBottom);
 
-    for entity in &diagram.entities {
-        layout.add_node(&entity.id, &entity.label);
+    for (entity, dim) in diagram.entities.iter().zip(&class_dims_for_layout) {
+        layout.add_node(&entity.id, &entity.label, dim.width, dim.height);
     }
     for rel in &diagram.relationships {
         layout.add_edge(&rel.from, &rel.to, rel.label.as_deref());
     }
 
-    // Extract Sugiyama-positioned coordinates.
-    // Run layout in a dedicated thread with a timeout — layout-rs can
-    // enter infinite loops on degenerate graphs (e.g. bidirectional edges).
-    let positions = {
-        let (tx, rx) = std::sync::mpsc::channel();
-        std::thread::spawn(move || {
-            let _ = tx.send(layout.layout_positions());
-        });
-        match rx.recv_timeout(std::time::Duration::from_secs(5)) {
-            Ok(pos) => pos,
-            Err(_) => {
-                // Layout timed out — fall back to grid layout.
-                return render_grid(diagram, cs);
-            }
+    // Extract Sugiyama-positioned coordinates (with timeout — layout-rs can
+    // enter infinite loops on degenerate graphs).
+    let positions = match layout.layout_positions(std::time::Duration::from_secs(5)) {
+        Some(pos) => pos,
+        None => {
+            // Layout timed out or panicked — fall back to grid layout.
+            return render_grid(diagram, cs);
         }
     };
 
@@ -378,14 +373,7 @@ fn render_with_positions(
                 rel.kind,
                 RelationshipKind::Dependency | RelationshipKind::Implementation
             );
-            svg.line_segment(
-                from_cx,
-                from_bottom,
-                to_cx,
-                to_top,
-                &cs.border_color,
-                dashed,
-            );
+            svg.line_segment(from_cx, from_bottom, to_cx, to_top, &cs.arrow_color, dashed);
             render_relationship_head(&mut svg, rel.kind, to_cx, to_top);
             render_relationship_labels(&mut svg, rel, from_cx, from_bottom, to_cx, to_top);
         }

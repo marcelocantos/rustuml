@@ -15,12 +15,18 @@ use crate::diagram::{
 use super::ParseError;
 
 /// Parse a `@startjson` / `@endjson` block.
+///
+/// PlantUML's JSON parser is lenient — it accepts JSON without commas
+/// between object fields or array elements.  We first try strict parsing
+/// and, on failure, fall back to a lenient pass that inserts missing commas.
 pub fn parse_json_diagram(lines: &[String]) -> Result<JsonDiagram, ParseError> {
     let (highlights, content) = extract_body(lines);
-    let value: serde_json::Value = serde_json::from_str(&content).map_err(|e| ParseError {
-        line: e.line(),
-        message: format!("JSON parse error: {e}"),
-    })?;
+    let value: serde_json::Value = serde_json::from_str(&content)
+        .or_else(|_| serde_json::from_str(&insert_missing_commas(&content)))
+        .map_err(|e| ParseError {
+            line: e.line(),
+            message: format!("JSON parse error: {e}"),
+        })?;
     let root = json_value_to_node(None, &value, &highlights, &[]);
     Ok(JsonDiagram {
         meta: DiagramMeta::default(),
@@ -42,6 +48,55 @@ pub fn parse_yaml_diagram(lines: &[String]) -> Result<JsonDiagram, ParseError> {
         format: DataFormat::Yaml,
         root,
     })
+}
+
+/// Insert commas where PlantUML's lenient parser allows them to be omitted.
+///
+/// Handles the common case: adjacent object fields or array elements on
+/// separate lines without trailing commas.
+fn insert_missing_commas(content: &str) -> String {
+    let mut result = String::with_capacity(content.len() + 64);
+    let mut prev_needs_comma = false;
+
+    for line in content.lines() {
+        let trimmed = line.trim();
+
+        // A new value/key starting means we may need a comma after the
+        // previous line.
+        let starts_value = trimmed.starts_with('"')
+            || trimmed.starts_with('{')
+            || trimmed.starts_with('[')
+            || trimmed.starts_with("true")
+            || trimmed.starts_with("false")
+            || trimmed.starts_with("null")
+            || trimmed
+                .bytes()
+                .next()
+                .is_some_and(|b| b.is_ascii_digit() || b == b'-');
+
+        if prev_needs_comma && starts_value {
+            result.push(',');
+        }
+        result.push_str(line);
+        result.push('\n');
+
+        // After this line, should the next line get a comma?
+        // Yes if this line ends with a value (not with { [ , or :).
+        let ends = trimmed.trim_end_matches(',');
+        prev_needs_comma = ends.ends_with('"')
+            || ends.ends_with('}')
+            || ends.ends_with(']')
+            || ends.ends_with("true")
+            || ends.ends_with("false")
+            || ends.ends_with("null")
+            || ends.bytes().last().is_some_and(|b| b.is_ascii_digit());
+        // Don't insert comma after lines that already have one.
+        if trimmed.ends_with(',') || trimmed.ends_with(':') {
+            prev_needs_comma = false;
+        }
+    }
+
+    result
 }
 
 /// Extract `#highlight` directives and the body content from preprocessed lines.
