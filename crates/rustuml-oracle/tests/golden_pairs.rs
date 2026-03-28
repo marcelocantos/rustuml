@@ -41,10 +41,19 @@ const SUPPORTED_START_KEYWORDS: &[&str] = &[
 ];
 
 fn has_supported_start_keyword(source: &str) -> bool {
-    let trimmed = source.trim_start();
+    let first_line = source
+        .lines()
+        .find(|l| !l.trim().is_empty())
+        .unwrap_or("")
+        .trim();
+    // Accept files that start with a supported @start keyword, OR headerless
+    // files (no @start prefix at all — the parser auto-detects the type).
+    if !first_line.starts_with("@start") {
+        return true;
+    }
     SUPPORTED_START_KEYWORDS
         .iter()
-        .any(|kw| trimmed.starts_with(kw))
+        .any(|kw| first_line.starts_with(kw))
 }
 
 fn golden_has_syntax_error(svg: &str) -> bool {
