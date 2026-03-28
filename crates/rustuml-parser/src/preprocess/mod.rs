@@ -10,16 +10,38 @@ use std::sync::LazyLock;
 
 use regex::Regex;
 
+use crate::diagram::SpriteData;
+
+/// Output from the preprocessor: expanded lines plus any sprite definitions.
+pub struct PreprocessOutput {
+    pub lines: Vec<String>,
+    pub sprites: HashMap<String, SpriteData>,
+}
+
 /// Preprocess PlantUML source, expanding TIM directives.
 pub fn preprocess(input: &str) -> Vec<String> {
-    let mut ctx = PreprocessContext::new(None);
-    ctx.process(input)
+    preprocess_full(input, None).lines
 }
 
 /// Preprocess with a base directory for resolving `!include` paths.
 pub fn preprocess_with_base(input: &str, base_dir: &Path) -> Vec<String> {
-    let mut ctx = PreprocessContext::new(Some(base_dir.to_path_buf()));
-    ctx.process(input)
+    preprocess_full(input, Some(base_dir.to_path_buf())).lines
+}
+
+/// Preprocess PlantUML source and return both expanded lines and sprite
+/// definitions collected from `sprite $name { ... }` blocks.
+pub fn preprocess_full(input: &str, base_dir: Option<PathBuf>) -> PreprocessOutput {
+    let mut ctx = PreprocessContext::new(base_dir);
+    let lines = ctx.process(input);
+    PreprocessOutput {
+        lines,
+        sprites: ctx.sprites,
+    }
+}
+
+/// Preprocess with a base directory, returning full output including sprites.
+pub fn preprocess_full_with_base(input: &str, base_dir: &Path) -> PreprocessOutput {
+    preprocess_full(input, Some(base_dir.to_path_buf()))
 }
 
 // ---------------------------------------------------------------------------
@@ -257,6 +279,10 @@ struct PreprocessContext {
     cond_stack: Vec<CondState>,
     in_block_comment: bool,
     in_sprite_block: bool,
+    /// The name of the sprite currently being collected (if any).
+    current_sprite_name: Option<String>,
+    /// Sprite definitions parsed from `sprite $name { ... }` blocks.
+    sprites: HashMap<String, SpriteData>,
     archimate_enabled: bool,
     in_diagram_block: bool,
     seen_start_tag: bool,
@@ -322,6 +348,8 @@ impl PreprocessContext {
             cond_stack: Vec::new(),
             in_block_comment: false,
             in_sprite_block: false,
+            current_sprite_name: None,
+            sprites: HashMap::new(),
             archimate_enabled: false,
             in_diagram_block: false,
             seen_start_tag: false,
@@ -392,10 +420,20 @@ impl PreprocessContext {
     fn process_one_line(&mut self, line: &str, output: &mut Vec<String>) {
         let trimmed = line.trim();
 
-        // Skip sprite pixel-data blocks.
+        // Collect sprite pixel-data blocks.
         if self.in_sprite_block {
             if trimmed == "}" {
                 self.in_sprite_block = false;
+                self.current_sprite_name = None;
+            } else if let Some(name) = self.current_sprite_name.clone() {
+                // Accumulate pixel row into the sprite definition.
+                if let Some(sprite) = self.sprites.get_mut(&name) {
+                    // Only accept lines that look like hex pixel data.
+                    if !trimmed.is_empty() && trimmed.chars().all(|c| c.is_ascii_hexdigit()) {
+                        sprite.rows.push(trimmed.to_string());
+                        sprite.height = sprite.rows.len() as u32;
+                    }
+                }
             }
             return;
         }
@@ -445,9 +483,31 @@ impl PreprocessContext {
             return;
         }
 
-        // Skip sprite definitions.
+        // Parse sprite definitions: `sprite $name [WxH/Z] {`
         if trimmed.starts_with("sprite ") || trimmed.starts_with("sprite\t") {
             if trimmed.ends_with('{') {
+                // Parse: sprite $name [WxH/Z] {
+                let rest = trimmed["sprite ".len()..].trim_start();
+                // Strip leading $ if present.
+                let rest = rest.strip_prefix('$').unwrap_or(rest);
+                // Name is the first word (up to whitespace, '[', or '{').
+                let name: String = rest
+                    .chars()
+                    .take_while(|c| c.is_alphanumeric() || *c == '_')
+                    .collect();
+                // Try to parse [WxH/Z] dimensions if present.
+                let (width, height) = parse_sprite_dimensions(rest);
+                if !name.is_empty() {
+                    self.sprites.insert(
+                        name.clone(),
+                        SpriteData {
+                            width,
+                            height,
+                            rows: Vec::new(),
+                        },
+                    );
+                    self.current_sprite_name = Some(name);
+                }
                 self.in_sprite_block = true;
             }
             return;
@@ -551,6 +611,29 @@ impl PreprocessContext {
             return;
         }
 
+        // !dump_memory — emit a comment line with all current defines (debugging aid).
+        if trimmed == "!dump_memory" {
+            if self.is_active() {
+                let mut pairs: Vec<String> = self
+                    .defines
+                    .iter()
+                    .map(|(k, v)| format!("{k}={v}"))
+                    .collect();
+                pairs.sort();
+                let token_pairs: Vec<String> = self
+                    .token_defines
+                    .iter()
+                    .map(|(k, v)| format!("{k}={v}"))
+                    .collect();
+                let mut all = pairs;
+                let mut sorted_tokens = token_pairs;
+                sorted_tokens.sort();
+                all.extend(sorted_tokens);
+                output.push(format!("' [dump] {}", all.join(", ")));
+            }
+            return;
+        }
+
         // Function/procedure invocation as standalone line.
         if self.try_function_call(trimmed, output) {
             return;
@@ -581,6 +664,7 @@ impl PreprocessContext {
 
     fn try_silent_directive(&self, line: &str) -> bool {
         // !log, !pragma, !assert — consume silently.
+        // !includeurl / !import — URL fetching deferred; strip the line silently.
         if line.starts_with("!log ")
             || line.starts_with("!log\t")
             || line == "!log"
@@ -588,6 +672,10 @@ impl PreprocessContext {
             || line.starts_with("!pragma\t")
             || line.starts_with("!assert ")
             || line.starts_with("!assert\t")
+            || line.starts_with("!includeurl ")
+            || line.starts_with("!includeurl\t")
+            || line.starts_with("!import ")
+            || line.starts_with("!import\t")
         {
             return true;
         }
@@ -1589,12 +1677,26 @@ impl PreprocessContext {
     // ------------------------------------------------------------------
 
     fn substitute_vars(&self, line: &str) -> String {
-        // Strip sprite icon references `<$name>`.
-        static SPRITE_REF_RE: LazyLock<Regex> =
-            LazyLock::new(|| Regex::new(r"<\$\w+>\s*").unwrap());
-        let line = &*SPRITE_REF_RE.replace_all(line, "");
+        // Preserve sprite icon references `<$name>` — they are rendered as
+        // inline images and must not be stripped or variable-substituted here.
+        // Temporarily replace them with null-byte placeholders, process variable
+        // substitution on the rest, then restore the sprite references.
+        static SPRITE_REF_RE: LazyLock<Regex> = LazyLock::new(|| Regex::new(r"<\$(\w+)>").unwrap());
 
-        let mut result = line.to_string();
+        // Collect sprite ref names in order.
+        let sprite_names: Vec<String> = SPRITE_REF_RE
+            .captures_iter(line)
+            .map(|c| c[1].to_string())
+            .collect();
+
+        // Replace each `<$name>` with a null-byte placeholder `\x00N\x00`.
+        let mut counter = 0usize;
+        let line_protected = SPRITE_REF_RE.replace_all(line, |_: &regex::Captures| {
+            let ph = format!("\x00{counter}\x00");
+            counter += 1;
+            ph
+        });
+        let mut result = line_protected.into_owned();
 
         // First apply $variable substitution (also checks token_defines).
         result = self.substitute_inline_func_calls(&result);
@@ -1651,7 +1753,16 @@ impl PreprocessContext {
         let after_vars = result;
 
         // Evaluate built-in %functions.
-        self.eval_builtin_functions(&after_vars)
+        let mut processed = self.eval_builtin_functions(&after_vars);
+
+        // Restore sprite references (replaced with placeholders above).
+        for (i, name) in sprite_names.iter().enumerate() {
+            let ph = format!("\x00{i}\x00");
+            let sprite_tag = format!("<${name}>");
+            processed = processed.replace(&ph, &sprite_tag);
+        }
+
+        processed
     }
 
     fn substitute_inline_func_calls(&self, line: &str) -> String {
@@ -1947,6 +2058,36 @@ impl PreprocessContext {
             "file_exists" => {
                 // Always return false — file system access is not permitted in the
                 // preprocessor (matches PlantUML sandboxed/server behaviour).
+                "false".to_string()
+            }
+            "float" => {
+                // %float("3.14") — parse string to float, return as string.
+                let s = args.first().copied().unwrap_or("0");
+                s.parse::<f64>()
+                    .map_or_else(|_| "0".to_string(), |f| format!("{f}"))
+            }
+            "dec2hex" => {
+                // %dec2hex(255) → "ff"
+                let n: i64 = args.first().and_then(|s| s.parse().ok()).unwrap_or(0);
+                format!("{n:x}")
+            }
+            "hex2dec" => {
+                // %hex2dec("ff") → "255"
+                let s = args.first().copied().unwrap_or("0");
+                i64::from_str_radix(s.trim_start_matches("0x"), 16)
+                    .map_or_else(|_| "0".to_string(), |n| n.to_string())
+            }
+            "dirpath" => {
+                // %dirpath() — return the directory of the current file.
+                // Without file context we return "." as a placeholder.
+                self.base_dir
+                    .as_ref()
+                    .map(|p| p.display().to_string())
+                    .unwrap_or_else(|| ".".to_string())
+            }
+            "feature" => {
+                // %feature("key") — query a PlantUML feature flag.
+                // We don't support feature flags; always return "false".
                 "false".to_string()
             }
             _ => {
@@ -2273,6 +2414,32 @@ fn parens_balanced(s: &str) -> bool {
     depth == 0
 }
 
+/// Parse optional `[WxH/Z]` dimension spec from a sprite header line.
+///
+/// The `rest` parameter is the text after `sprite $` (name included).
+/// Returns `(width, height)` where 0 means "infer from pixel data".
+fn parse_sprite_dimensions(rest: &str) -> (u32, u32) {
+    // Look for `[WxH/Z]` or `[WxH]` pattern anywhere in the rest string.
+    if let Some(start) = rest.find('[')
+        && let Some(end) = rest[start..].find(']')
+    {
+        let spec = &rest[start + 1..start + end];
+        // Format: WxH/Z  or WxH
+        let wh = spec.split('/').next().unwrap_or(spec);
+        let mut parts = wh.splitn(2, 'x');
+        let w: u32 = parts
+            .next()
+            .and_then(|s| s.trim().parse().ok())
+            .unwrap_or(0);
+        let h: u32 = parts
+            .next()
+            .and_then(|s| s.trim().parse().ok())
+            .unwrap_or(0);
+        return (w, h);
+    }
+    (0, 0)
+}
+
 fn strip_inline_comment(line: &str) -> String {
     let mut in_quotes = false;
     let chars: Vec<char> = line.chars().collect();
@@ -2571,5 +2738,178 @@ mod tests {
         let input = "@startuml\n!$x = 5\n!if $x > 3\nyes\n!endif\n@enduml";
         let lines = preprocess(input);
         assert_eq!(lines, vec!["yes"]);
+    }
+
+    // ---------------------------------------------------------------------------
+    // Tests for !includeurl, !import, !dump_memory (new directives)
+    // ---------------------------------------------------------------------------
+
+    #[test]
+    fn includeurl_is_stripped_silently() {
+        // !includeurl should consume the line without producing output or error.
+        let input = "@startuml\n!includeurl https://example.com/common.puml\nA -> B\n@enduml";
+        let lines = preprocess(input);
+        assert_eq!(lines, vec!["A -> B"]);
+    }
+
+    #[test]
+    fn import_is_stripped_silently() {
+        // !import is an alias for !includeurl — also silently consumed.
+        let input = "@startuml\n!import https://example.com/lib.puml\nA -> B\n@enduml";
+        let lines = preprocess(input);
+        assert_eq!(lines, vec!["A -> B"]);
+    }
+
+    #[test]
+    fn dump_memory_no_vars() {
+        // With no defines, !dump_memory emits an empty dump comment.
+        let input = "@startuml\n!dump_memory\nA -> B\n@enduml";
+        let lines = preprocess(input);
+        assert_eq!(lines, vec!["' [dump] ", "A -> B"]);
+    }
+
+    #[test]
+    fn dump_memory_with_vars() {
+        let input = "@startuml\n!$foo = \"bar\"\n!$baz = \"qux\"\n!dump_memory\n@enduml";
+        let lines = preprocess(input);
+        // Output must contain the dump comment. Variable order is sorted.
+        assert_eq!(lines.len(), 1);
+        let dump = &lines[0];
+        assert!(dump.starts_with("' [dump] "), "got: {dump}");
+        assert!(dump.contains("baz=qux"), "got: {dump}");
+        assert!(dump.contains("foo=bar"), "got: {dump}");
+    }
+
+    #[test]
+    fn dump_memory_inactive_branch() {
+        // !dump_memory inside an inactive branch should produce no output.
+        let input = "@startuml\n!ifdef MISSING\n!dump_memory\n!endif\nA -> B\n@enduml";
+        let lines = preprocess(input);
+        assert_eq!(lines, vec!["A -> B"]);
+    }
+
+    // ---------------------------------------------------------------------------
+    // Tests for new built-in functions
+    // ---------------------------------------------------------------------------
+
+    #[test]
+    fn builtin_float() {
+        let input = "@startuml\n!$v = %float(\"3.14\")\nnote : $v\n@enduml";
+        let lines = preprocess(input);
+        assert_eq!(lines, vec!["note : 3.14"]);
+    }
+
+    #[test]
+    fn builtin_float_integer_string() {
+        let input = "@startuml\n!$v = %float(\"42\")\nnote : $v\n@enduml";
+        let lines = preprocess(input);
+        assert_eq!(lines, vec!["note : 42"]);
+    }
+
+    #[test]
+    fn builtin_dec2hex() {
+        let input = "@startuml\n!$h = %dec2hex(255)\nnote : $h\n@enduml";
+        let lines = preprocess(input);
+        assert_eq!(lines, vec!["note : ff"]);
+    }
+
+    #[test]
+    fn builtin_dec2hex_zero() {
+        let input = "@startuml\n!$h = %dec2hex(0)\nnote : $h\n@enduml";
+        let lines = preprocess(input);
+        assert_eq!(lines, vec!["note : 0"]);
+    }
+
+    #[test]
+    fn builtin_hex2dec() {
+        let input = "@startuml\n!$d = %hex2dec(\"ff\")\nnote : $d\n@enduml";
+        let lines = preprocess(input);
+        assert_eq!(lines, vec!["note : 255"]);
+    }
+
+    #[test]
+    fn builtin_hex2dec_zero() {
+        let input = "@startuml\n!$d = %hex2dec(\"0\")\nnote : $d\n@enduml";
+        let lines = preprocess(input);
+        assert_eq!(lines, vec!["note : 0"]);
+    }
+
+    #[test]
+    fn builtin_dirpath_no_base() {
+        // Without a base dir, %dirpath() returns ".".
+        let input = "@startuml\n!$p = %dirpath()\nnote : $p\n@enduml";
+        let lines = preprocess(input);
+        assert_eq!(lines, vec!["note : ."]);
+    }
+
+    #[test]
+    fn builtin_dirpath_with_base() {
+        let dir = std::env::temp_dir().join("rustuml_test_dirpath");
+        let _ = std::fs::create_dir_all(&dir);
+        let input = "@startuml\n!$p = %dirpath()\nnote : $p\n@enduml";
+        let lines = preprocess_with_base(input, &dir);
+        assert_eq!(lines, vec![format!("note : {}", dir.display())]);
+        let _ = std::fs::remove_dir_all(&dir);
+    }
+
+    #[test]
+    fn builtin_feature_returns_false() {
+        // All features are unsupported; always returns "false".
+        let input = "@startuml\n!$f = %feature(\"dark-mode\")\nnote : $f\n@enduml";
+        let lines = preprocess(input);
+        assert_eq!(lines, vec!["note : false"]);
+    }
+
+    #[test]
+    fn builtin_feature_in_conditional() {
+        // %feature() returning "false" means the ifdef branch is inactive.
+        let input = "@startuml\n!if %feature(\"dark-mode\") == \"true\"\ndark\n!else\nlight\n!endif\n@enduml";
+        let lines = preprocess(input);
+        assert_eq!(lines, vec!["light"]);
+    }
+
+    #[test]
+    fn sprite_block_is_collected() {
+        let input =
+            "@startuml\nsprite $disk [8x8/16] {\nFF00FF00\n00FF00FF\n}\nnote : hello\n@enduml";
+        let out = preprocess_full(input, None);
+        // The sprite block should NOT appear in the preprocessed lines.
+        assert!(
+            !out.lines.iter().any(|l| l.contains("FF00FF00")),
+            "sprite pixel rows should not appear in output lines"
+        );
+        assert_eq!(out.lines, vec!["note : hello"]);
+        // The sprite should be collected.
+        assert!(
+            out.sprites.contains_key("disk"),
+            "sprite 'disk' should be parsed"
+        );
+        let s = &out.sprites["disk"];
+        assert_eq!(s.rows, vec!["FF00FF00", "00FF00FF"]);
+        assert_eq!(s.width, 8);
+        assert_eq!(s.height, 2);
+    }
+
+    #[test]
+    fn sprite_ref_preserved_in_output() {
+        // <$name> references in diagram lines should be preserved.
+        let input =
+            "@startuml\nsprite $icon [4x4/16] {\nFFFF\nFFFF\n}\nnote : <$icon> hello\n@enduml";
+        let out = preprocess_full(input, None);
+        assert_eq!(out.lines, vec!["note : <$icon> hello"]);
+        assert!(out.sprites.contains_key("icon"));
+    }
+
+    #[test]
+    fn sprite_without_dimensions() {
+        // Sprite blocks without [WxH/Z] annotation should still be parsed.
+        let input = "@startuml\nsprite $dot {\nFF\n00\n}\nnote : test\n@enduml";
+        let out = preprocess_full(input, None);
+        assert!(
+            out.sprites.contains_key("dot"),
+            "sprite 'dot' should be parsed"
+        );
+        let s = &out.sprites["dot"];
+        assert_eq!(s.rows, vec!["FF", "00"]);
     }
 }

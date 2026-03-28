@@ -5,9 +5,11 @@
 
 use std::collections::{HashMap, HashSet};
 
+use rustuml_parser::diagram::SpriteData;
 use rustuml_parser::diagram::deployment::*;
 
 use crate::metrics;
+use crate::sprite::SpriteCache;
 use crate::style::Theme;
 use crate::svg::SvgBuilder;
 
@@ -33,12 +35,14 @@ fn node_fill(kind: DeploymentNodeKind) -> &'static str {
     }
 }
 
-fn node_label_w(node: &DeploymentNode) -> f64 {
+fn node_label_w(node: &DeploymentNode, sprites: &HashMap<String, SpriteData>) -> f64 {
     // For multi-line labels, use the longest line's width.
     let lw = node
         .label
         .split('\n')
-        .map(|line| metrics::text_width(line, FONT_SIZE) + PADDING * 2.0)
+        .map(|line| {
+            crate::sprite::text_width_with_sprites(line, FONT_SIZE, sprites) + PADDING * 2.0
+        })
         .fold(0.0_f64, f64::max);
     let sw = node
         .stereotype
@@ -49,30 +53,42 @@ fn node_label_w(node: &DeploymentNode) -> f64 {
 }
 
 /// Returns (width, height) for this node including all children.
-fn node_size(id: &str, nodes: &[DeploymentNode]) -> (f64, f64) {
+fn node_size(
+    id: &str,
+    nodes: &[DeploymentNode],
+    sprites: &HashMap<String, SpriteData>,
+) -> (f64, f64) {
     let node = match nodes.iter().find(|n| n.id == id) {
         Some(n) => n,
         None => return (NODE_MIN_W, NODE_H),
     };
     if node.children.is_empty() {
-        return (node_label_w(node), NODE_H);
+        return (node_label_w(node, sprites), NODE_H);
     }
     let mut inner_h = 0.0_f64;
     let mut max_child_w = 0.0_f64;
     for (i, child_id) in node.children.iter().enumerate() {
-        let (cw, ch) = node_size(child_id, nodes);
+        let (cw, ch) = node_size(child_id, nodes, sprites);
         if i > 0 {
             inner_h += GAP;
         }
         inner_h += ch;
         max_child_w = max_child_w.max(cw);
     }
-    let w = node_label_w(node).max(max_child_w + CONTAINER_PADDING * 2.0);
+    let w = node_label_w(node, sprites).max(max_child_w + CONTAINER_PADDING * 2.0);
     let h = LABEL_H + CONTAINER_PADDING + inner_h + CONTAINER_PADDING;
     (w, h)
 }
 
-fn render_leaf_label(node: &DeploymentNode, svg: &mut SvgBuilder, x: f64, y: f64, w: f64) {
+fn render_leaf_label(
+    node: &DeploymentNode,
+    svg: &mut SvgBuilder,
+    x: f64,
+    y: f64,
+    w: f64,
+    sprite_cache: &SpriteCache,
+    sprites: &HashMap<String, SpriteData>,
+) {
     let lines: Vec<&str> = node.label.split('\n').collect();
     let line_h = FONT_SIZE + 2.0;
     let total_text_h = lines.len() as f64 * line_h;
@@ -87,29 +103,40 @@ fn render_leaf_label(node: &DeploymentNode, svg: &mut SvgBuilder, x: f64, y: f64
         );
         let text_start_y = y + NODE_H / 2.0 + 6.0 - total_text_h / 2.0;
         for (i, line) in lines.iter().enumerate() {
-            svg.text(
+            svg.text_with_sprites(
                 cx,
                 text_start_y + i as f64 * line_h,
                 line,
                 "middle",
                 FONT_SIZE,
+                sprite_cache,
+                sprites,
             );
         }
     } else {
         let text_start_y = y + NODE_H / 2.0 + FONT_SIZE / 2.0 - total_text_h / 2.0 + 3.0;
         for (i, line) in lines.iter().enumerate() {
-            svg.text(
+            svg.text_with_sprites(
                 cx,
                 text_start_y + i as f64 * line_h,
                 line,
                 "middle",
                 FONT_SIZE,
+                sprite_cache,
+                sprites,
             );
         }
     }
 }
 
-fn render_container_label(node: &DeploymentNode, svg: &mut SvgBuilder, x: f64, y: f64) {
+fn render_container_label(
+    node: &DeploymentNode,
+    svg: &mut SvgBuilder,
+    x: f64,
+    y: f64,
+    sprite_cache: &SpriteCache,
+    sprites: &HashMap<String, SpriteData>,
+) {
     if let Some(stereo) = &node.stereotype {
         svg.text(
             x + CONTAINER_PADDING,
@@ -118,20 +145,24 @@ fn render_container_label(node: &DeploymentNode, svg: &mut SvgBuilder, x: f64, y
             "start",
             SMALL_FONT,
         );
-        svg.text(
+        svg.text_with_sprites(
             x + CONTAINER_PADDING,
             y + LABEL_H + 9.0,
             &node.label,
             "start",
             FONT_SIZE,
+            sprite_cache,
+            sprites,
         );
     } else {
-        svg.text(
+        svg.text_with_sprites(
             x + CONTAINER_PADDING,
             y + LABEL_H - 4.0,
             &node.label,
             "start",
             FONT_SIZE,
+            sprite_cache,
+            sprites,
         );
     }
 }
@@ -146,12 +177,14 @@ fn render_node(
     svg: &mut SvgBuilder,
     theme: &Theme,
     positions: &mut HashMap<String, (f64, f64, f64, f64)>,
+    sprite_cache: &SpriteCache,
+    sprites: &HashMap<String, SpriteData>,
 ) {
     let node = match nodes.iter().find(|n| n.id == id) {
         Some(n) => n,
         None => return,
     };
-    let (natural_w, h) = node_size(id, nodes);
+    let (natural_w, h) = node_size(id, nodes, sprites);
     let w = w.max(natural_w);
     let fill = node_fill(node.kind);
     let gs = &theme.global;
@@ -159,19 +192,28 @@ fn render_node(
 
     if node.children.is_empty() {
         svg.rounded_rect(x, y, w, NODE_H, 5.0, fill, &gs.border_color);
-        render_leaf_label(node, svg, x, y, w);
+        render_leaf_label(node, svg, x, y, w, sprite_cache, sprites);
     } else {
         svg.rounded_rect(x, y, w, h, 5.0, fill, &gs.border_color);
-        render_container_label(node, svg, x, y);
+        render_container_label(node, svg, x, y, sprite_cache, sprites);
         let inner_x = x + CONTAINER_PADDING;
         let inner_w = w - CONTAINER_PADDING * 2.0;
         let mut child_y = y + LABEL_H + CONTAINER_PADDING;
         // Clone children to avoid borrow conflict while mutating positions.
         let children: Vec<String> = node.children.clone();
         for child_id in children {
-            let (_, ch) = node_size(&child_id, nodes);
+            let (_, ch) = node_size(&child_id, nodes, sprites);
             render_node(
-                &child_id, nodes, inner_x, child_y, inner_w, svg, theme, positions,
+                &child_id,
+                nodes,
+                inner_x,
+                child_y,
+                inner_w,
+                svg,
+                theme,
+                positions,
+                sprite_cache,
+                sprites,
             );
             child_y += ch + GAP;
         }
@@ -183,6 +225,10 @@ pub fn render(diagram: &DeploymentDiagram, theme: &Theme) -> String {
         return "<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"100\" height=\"50\"></svg>\n"
             .to_string();
     }
+
+    // Build sprite cache from diagram metadata.
+    let sprites = &diagram.meta.sprites;
+    let sprite_cache = SpriteCache::from_sprites(sprites);
 
     // Check skinparams.
     let is_handwritten = diagram
@@ -214,7 +260,7 @@ pub fn render(diagram: &DeploymentDiagram, theme: &Theme) -> String {
     let col_w: Vec<f64> = {
         let mut cw = vec![0.0_f64; cols];
         for (i, root) in roots.iter().enumerate() {
-            let (w, _) = node_size(&root.id, &diagram.nodes);
+            let (w, _) = node_size(&root.id, &diagram.nodes, sprites);
             cw[i % cols] = cw[i % cols].max(w);
         }
         cw
@@ -222,7 +268,7 @@ pub fn render(diagram: &DeploymentDiagram, theme: &Theme) -> String {
     let row_h: Vec<f64> = {
         let mut rh = vec![0.0_f64; rows];
         for (i, root) in roots.iter().enumerate() {
-            let (_, h) = node_size(&root.id, &diagram.nodes);
+            let (_, h) = node_size(&root.id, &diagram.nodes, sprites);
             rh[i / cols] = rh[i / cols].max(h);
         }
         rh
@@ -326,6 +372,8 @@ pub fn render(diagram: &DeploymentDiagram, theme: &Theme) -> String {
             &mut svg,
             theme,
             &mut positions,
+            &sprite_cache,
+            sprites,
         );
     }
 

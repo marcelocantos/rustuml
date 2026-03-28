@@ -19,11 +19,14 @@ fn main() {
         eprintln!("  -tsvg                 Output SVG (default)");
         eprintln!("  -tpng                 Output PNG");
         eprintln!("  -tpdf                 Output PDF");
+        eprintln!("  -teps                 Output EPS");
         eprintln!("  -ttxt                 Output ASCII art text (sequence diagrams)");
         eprintln!("  --ast                 Print parsed AST (Debug format)");
         eprintln!("  --yaml                Print parsed diagram as YAML");
         eprintln!("  --theme=NAME          Use built-in theme (default, modern)");
         eprintln!("  --theme-file=PATH     Load theme from YAML file");
+        eprintln!("  --block=N             Select block by 0-based index (default: 0)");
+        eprintln!("  --block-name=NAME     Select block by name (@startXXX name)");
         eprintln!("  --version             Print version");
         eprintln!("  --help                Print this help");
         eprintln!("  --help-agent          Print agent integration guide");
@@ -44,6 +47,8 @@ fn main() {
     let mut input_arg = None;
     let mut pipe_mode = false;
     let mut theme = rustuml_render::style::Theme::default();
+    let mut block_index: Option<usize> = None;
+    let mut block_name: Option<String> = None;
 
     for arg in &args[1..] {
         match arg.as_str() {
@@ -53,6 +58,7 @@ fn main() {
             "-tsvg" => output_mode = OutputMode::Svg,
             "-tpng" => output_mode = OutputMode::Png,
             "-tpdf" => output_mode = OutputMode::Pdf,
+            "-teps" => output_mode = OutputMode::Eps,
             "-ttxt" => output_mode = OutputMode::Txt,
             "--theme=modern" => theme = rustuml_render::style::Theme::modern(),
             "--theme=default" => theme = rustuml_render::style::Theme::default(),
@@ -72,6 +78,16 @@ fn main() {
                 eprintln!("available: default, modern");
                 eprintln!("or use --theme-file=path/to/theme.yaml");
                 std::process::exit(1);
+            }
+            s if s.starts_with("--block=") => {
+                let n = &s[8..];
+                block_index = Some(n.parse::<usize>().unwrap_or_else(|_| {
+                    eprintln!("error: --block requires a non-negative integer, got {n:?}");
+                    std::process::exit(1);
+                }));
+            }
+            s if s.starts_with("--block-name=") => {
+                block_name = Some(s[13..].to_string());
             }
             _ => input_arg = Some(arg.as_str()),
         }
@@ -107,7 +123,25 @@ fn main() {
         None
     };
 
-    match rustuml_parser::parse::parse_auto_with_base(&input, base_dir) {
+    // Determine which diagram to render.
+    // --block-name takes priority over --block; both override the default (block 0).
+    let diagram_result = if let Some(name) = &block_name {
+        rustuml_parser::parse::parse_named(&input, name)
+    } else if let Some(idx) = block_index {
+        rustuml_parser::parse::parse_block(&input, idx)
+    } else {
+        // Default: parse as single diagram (auto-detect format).
+        // Falls back to parse_block(0) for multi-block PlantUML files.
+        let blocks = rustuml_parser::parse::split_blocks(&input);
+        if blocks.is_empty() {
+            // Not a multi-block PlantUML file — use auto-detect (YAML/JSON/etc.)
+            rustuml_parser::parse::parse_auto_with_base(&input, base_dir)
+        } else {
+            rustuml_parser::parse::parse_block(&input, 0)
+        }
+    };
+
+    match diagram_result {
         Ok(diagram) => match output_mode {
             OutputMode::Ast => println!("{diagram:#?}"),
             OutputMode::Yaml => {
@@ -148,6 +182,19 @@ fn main() {
                     }
                 }
             }
+            OutputMode::Eps => {
+                let svg = rustuml_render::render_svg_with_theme(&diagram, &theme);
+                match rustuml_render::eps::svg_to_eps(&svg) {
+                    Ok(bytes) => {
+                        use std::io::Write;
+                        std::io::stdout().write_all(&bytes).expect("write failed");
+                    }
+                    Err(e) => {
+                        eprintln!("EPS error: {e}");
+                        std::process::exit(1);
+                    }
+                }
+            }
             OutputMode::Txt => {
                 print!("{}", rustuml_render::render_ascii(&diagram));
             }
@@ -163,6 +210,7 @@ enum OutputMode {
     Svg,
     Png,
     Pdf,
+    Eps,
     Txt,
     Ast,
     Yaml,
@@ -187,7 +235,15 @@ fn print_agent_guide() {
     println!("## Output Formats");
     println!("- SVG (default): `rustuml -tsvg input.puml`");
     println!("- PNG: `rustuml -tpng input.puml > output.png`");
+    println!("- PDF: `rustuml -tpdf input.puml > output.pdf`");
+    println!("- EPS: `rustuml -teps input.puml > output.eps`");
     println!("- ASCII text: `rustuml -ttxt input.puml` (sequence diagrams only)");
+    println!();
+    println!("## Multi-Block Files");
+    println!("PlantUML files may contain multiple @start/@end blocks.");
+    println!("- `rustuml --block=1 file.puml` — render 2nd block (0-indexed)");
+    println!("- `rustuml --block-name=mydiagram file.puml` — render block named 'mydiagram'");
+    println!("- Default: block 0 (first block)");
     println!();
     println!("## Themes");
     println!("- `--theme=default`: Classic PlantUML colors");

@@ -133,26 +133,9 @@ fn run_one(puml_path: &Path, root: &Path) -> TestResult {
         }
     };
 
-    // Skip files with multiple blocks of the SAME @start type — Java PlantUML
-    // renders all blocks into one SVG, but we only render the first.  Files
-    // with different @start types (e.g. @startuml wrapping @startjson) are
-    // handled correctly by inner-type override.
-    {
-        let start_types: Vec<&str> = source
-            .lines()
-            .filter_map(|l| l.trim().strip_prefix("@start"))
-            .map(|r| r.split_whitespace().next().unwrap_or(r))
-            .collect();
-        let mut seen = std::collections::HashSet::new();
-        for t in &start_types {
-            if !seen.insert(*t) {
-                return TestResult {
-                    name: rel,
-                    outcome: Outcome::Skip(format!("multiple @start{t} blocks")),
-                };
-            }
-        }
-    }
+    // Count @start blocks. If there are multiple blocks, the golden SVG
+    // contains only the first block's output, so we compare block 0.
+    // Record whether this is a multi-block file for the renderer selection below.
     if source.contains("%date()") {
         return TestResult {
             name: rel,
@@ -183,9 +166,16 @@ fn run_one(puml_path: &Path, root: &Path) -> TestResult {
         };
     }
 
+    let is_multi_block = rustuml_parser::parse::split_blocks(&source).len() > 1;
+
     let render_result = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-        let diagram = rustuml_parser::parse::parse_auto_with_base(&source, None)
-            .map_err(|e| format!("parse: {e}"))?;
+        let diagram = if is_multi_block {
+            // Golden SVG contains block 0 only — compare against that.
+            rustuml_parser::parse::parse_block(&source, 0).map_err(|e| format!("parse: {e}"))?
+        } else {
+            rustuml_parser::parse::parse_auto_with_base(&source, None)
+                .map_err(|e| format!("parse: {e}"))?
+        };
         let rust_svg = rustuml_render::render_svg(&diagram);
 
         let golden_elems =

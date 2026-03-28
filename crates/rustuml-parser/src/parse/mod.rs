@@ -410,6 +410,147 @@ enum UmlSubtype {
     Timing,
 }
 
+/// A single extracted block from a multi-block PlantUML file.
+#[derive(Debug, Clone)]
+pub struct DiagramBlock {
+    /// Optional name from `@startXXX name` (the word after the type keyword).
+    pub name: Option<String>,
+    /// The diagram type (e.g. "uml", "json", "gantt").
+    pub typ: String,
+    /// Full block text including @start/@end lines, plus any leading preamble.
+    pub source: String,
+    /// 0-based index of this block in the file.
+    pub index: usize,
+}
+
+/// Split a PlantUML file into individual blocks.
+///
+/// Lines before the first `@startXXX` are treated as a "preamble" (shared
+/// `!define`, `!function`, etc.) and prepended to every block's source so
+/// that preprocessing sees the definitions.
+///
+/// Content between blocks (whitespace, comments) is silently skipped.
+pub fn split_blocks(input: &str) -> Vec<DiagramBlock> {
+    let mut blocks = Vec::new();
+    let mut preamble_lines: Vec<&str> = Vec::new();
+    // (outer-type, name, lines, nesting-depth)
+    // nesting_depth counts how many @start tags are open; the block closes
+    // when depth drops back to 0 on an @end.
+    let mut current_start: Option<(String, Option<String>, Vec<&str>, usize)> = None;
+    let mut index = 0usize;
+
+    for line in input.lines() {
+        let trimmed = line.trim();
+
+        if let Some(rest) = trimmed.strip_prefix("@start") {
+            if current_start.is_none() {
+                // Starting a new top-level block.
+                let mut parts = rest.split_whitespace();
+                let typ = parts.next().unwrap_or("uml").to_string();
+                let name = parts.next().map(|s| s.to_string());
+                current_start = Some((typ, name, vec![line], 1));
+            } else if let Some((_, _, ref mut block_lines, ref mut depth)) = current_start {
+                // Nested @start inside an open block — treat as content.
+                // PlantUML allows @startjson embedded inside @startuml etc.
+                block_lines.push(line);
+                *depth += 1;
+            }
+        } else if trimmed.starts_with("@end") {
+            if let Some((_, _, ref mut block_lines, ref mut depth)) = current_start {
+                block_lines.push(line);
+                *depth -= 1;
+                if *depth == 0 {
+                    // Outer block is closed — emit it.
+                    let (typ, name, block_lines, _) = current_start.take().unwrap();
+                    let source = build_source(&preamble_lines, &block_lines);
+                    blocks.push(DiagramBlock {
+                        name,
+                        typ,
+                        source,
+                        index,
+                    });
+                    index += 1;
+                }
+            }
+            // If there's no open block, this is a stray @end — ignore it.
+        } else if let Some((_, _, ref mut block_lines, _)) = current_start {
+            block_lines.push(line);
+        } else {
+            // Before the first block: accumulate as preamble.
+            preamble_lines.push(line);
+        }
+    }
+
+    // If a block was started but never closed, emit it anyway.
+    if let Some((typ, name, block_lines, _)) = current_start.take() {
+        let source = build_source(&preamble_lines, &block_lines);
+        blocks.push(DiagramBlock {
+            name,
+            typ,
+            source,
+            index,
+        });
+    }
+
+    blocks
+}
+
+fn build_source(preamble: &[&str], block_lines: &[&str]) -> String {
+    if preamble.is_empty() {
+        block_lines.join("\n")
+    } else {
+        let mut s = preamble.join("\n");
+        s.push('\n');
+        s.push_str(&block_lines.join("\n"));
+        s
+    }
+}
+
+/// Parse all `@start`/`@end` blocks in a file, returning one result per block.
+///
+/// Lines before the first `@start` are treated as a shared preamble and
+/// prepended to each block before parsing.
+pub fn parse_all(input: &str) -> Vec<Result<Diagram, ParseError>> {
+    split_blocks(input)
+        .into_iter()
+        .map(|block| parse_with_base(&block.source, None))
+        .collect()
+}
+
+/// Parse only the block at the given 0-based index.
+///
+/// Returns `Err` with a descriptive message if the index is out of range.
+pub fn parse_block(input: &str, index: usize) -> Result<Diagram, ParseError> {
+    let blocks = split_blocks(input);
+    if blocks.is_empty() {
+        return parse_with_base(input, None);
+    }
+    let block = blocks.into_iter().nth(index).ok_or_else(|| ParseError {
+        line: 1,
+        message: format!(
+            "block index {index} out of range (file has {} block(s))",
+            split_blocks(input).len()
+        ),
+    })?;
+    parse_with_base(&block.source, None)
+}
+
+/// Parse only the block with the given name (from `@startXXX name`).
+///
+/// If multiple blocks share the same name, the first one is returned.
+/// Returns `Err` if no block with that name exists.
+pub fn parse_named(input: &str, name: &str) -> Result<Diagram, ParseError> {
+    let blocks = split_blocks(input);
+    let block = blocks
+        .into_iter()
+        .find(|b| b.name.as_deref() == Some(name))
+        .ok_or_else(|| ParseError {
+            line: 1,
+            message: format!("no block named {name:?} found in input"),
+        })?;
+    parse_with_base(&block.source, None)
+}
+
 /// Parse YAML input into a diagram model.
 pub fn parse_yaml(input: &str) -> Result<Diagram, ParseError> {
     serde_yaml::from_str(input).map_err(|e| ParseError {
@@ -462,12 +603,14 @@ pub fn parse_with_base(
     base_dir: Option<&std::path::Path>,
 ) -> Result<Diagram, ParseError> {
     let typ = detect_type(input);
-    let lines = match base_dir {
-        Some(dir) => preprocess::preprocess_with_base(input, dir),
-        None => preprocess::preprocess(input),
+    let preprocess_out = match base_dir {
+        Some(dir) => preprocess::preprocess_full_with_base(input, dir),
+        None => preprocess::preprocess_full(input, None),
     };
+    let lines = preprocess_out.lines;
+    let sprites = preprocess_out.sprites;
 
-    match typ {
+    let mut diagram = match typ {
         "uml" => match detect_uml_subtype(&lines) {
             UmlSubtype::Sequence => {
                 let seq = sequence::parse_sequence(&lines)?;
@@ -570,7 +713,15 @@ pub fn parse_with_base(
             line: 1,
             message: format!("unsupported diagram type: @start{other}"),
         }),
+    }?;
+
+    // Inject sprite definitions from the preprocessor into the diagram's meta.
+    if !sprites.is_empty() {
+        let meta = diagram.meta_mut();
+        meta.sprites = sprites;
     }
+
+    Ok(diagram)
 }
 
 #[cfg(test)]
@@ -649,5 +800,126 @@ mod tests {
         let reparsed = parse_yaml(&yaml).unwrap();
         let yaml2 = serde_yaml::to_string(&reparsed).unwrap();
         assert_eq!(yaml, yaml2);
+    }
+
+    // ── multi-block splitting ─────────────────────────────────────────────────
+
+    #[test]
+    fn split_two_blocks_same_type() {
+        let input =
+            "@startuml\nAlice -> Bob : Hello\n@enduml\n\n@startuml\nBob -> Alice : Hi\n@enduml";
+        let blocks = split_blocks(input);
+        assert_eq!(blocks.len(), 2);
+        assert_eq!(blocks[0].typ, "uml");
+        assert_eq!(blocks[0].index, 0);
+        assert_eq!(blocks[1].typ, "uml");
+        assert_eq!(blocks[1].index, 1);
+    }
+
+    #[test]
+    fn split_three_blocks_mixed_types() {
+        let input = concat!(
+            "@startuml\nAlice -> Bob\n@enduml\n",
+            "@startjson\n{\"key\": \"value\"}\n@endjson\n",
+            "@startgantt\n[Task] lasts 3 days\n@endgantt"
+        );
+        let blocks = split_blocks(input);
+        assert_eq!(blocks.len(), 3);
+        assert_eq!(blocks[0].typ, "uml");
+        assert_eq!(blocks[1].typ, "json");
+        assert_eq!(blocks[2].typ, "gantt");
+    }
+
+    #[test]
+    fn split_named_blocks() {
+        let input =
+            "@startuml first\nAlice -> Bob\n@enduml\n@startuml second\nBob -> Alice\n@enduml";
+        let blocks = split_blocks(input);
+        assert_eq!(blocks.len(), 2);
+        assert_eq!(blocks[0].name.as_deref(), Some("first"));
+        assert_eq!(blocks[1].name.as_deref(), Some("second"));
+    }
+
+    #[test]
+    fn split_unnamed_blocks_have_no_name() {
+        let input = "@startuml\nAlice -> Bob\n@enduml\n@startuml\nBob -> Alice\n@enduml";
+        let blocks = split_blocks(input);
+        assert_eq!(blocks.len(), 2);
+        assert!(blocks[0].name.is_none());
+        assert!(blocks[1].name.is_none());
+    }
+
+    #[test]
+    fn split_preserves_preamble() {
+        let input = "!define ALICE Alice\n@startuml\nALICE -> Bob\n@enduml\n@startuml\nALICE -> Carol\n@enduml";
+        let blocks = split_blocks(input);
+        assert_eq!(blocks.len(), 2);
+        // Preamble should be prepended to each block's source.
+        assert!(blocks[0].source.contains("!define ALICE Alice"));
+        assert!(blocks[1].source.contains("!define ALICE Alice"));
+    }
+
+    #[test]
+    fn parse_all_two_blocks() {
+        let input =
+            "@startuml\nAlice -> Bob : Hello\n@enduml\n@startuml\nBob -> Alice : Hi\n@enduml";
+        let results = parse_all(input);
+        assert_eq!(results.len(), 2);
+        assert!(results[0].is_ok());
+        assert!(results[1].is_ok());
+        assert!(matches!(results[0].as_ref().unwrap(), Diagram::Sequence(_)));
+        assert!(matches!(results[1].as_ref().unwrap(), Diagram::Sequence(_)));
+    }
+
+    #[test]
+    fn parse_all_mixed_types() {
+        let input = concat!(
+            "@startuml\nAlice -> Bob : Hello\n@enduml\n",
+            "@startjson\n{\"key\": \"val\"}\n@endjson"
+        );
+        let results = parse_all(input);
+        assert_eq!(results.len(), 2);
+        assert!(matches!(results[0].as_ref().unwrap(), Diagram::Sequence(_)));
+        assert!(matches!(results[1].as_ref().unwrap(), Diagram::Json(_)));
+    }
+
+    #[test]
+    fn parse_named_finds_correct_block() {
+        let input = "@startuml first\nAlice -> Bob : Hello\n@enduml\n@startuml second\nclass Foo {}\n@enduml";
+        let diagram = parse_named(input, "first").unwrap();
+        assert!(matches!(diagram, Diagram::Sequence(_)));
+        let diagram = parse_named(input, "second").unwrap();
+        assert!(matches!(diagram, Diagram::Class(_)));
+    }
+
+    #[test]
+    fn parse_named_missing_returns_error() {
+        let input = "@startuml first\nAlice -> Bob\n@enduml";
+        let result = parse_named(input, "nonexistent");
+        assert!(result.is_err());
+        assert!(result.unwrap_err().message.contains("nonexistent"));
+    }
+
+    #[test]
+    fn parse_block_index_selects_correct_block() {
+        let input = "@startuml\nAlice -> Bob : First\n@enduml\n@startuml\nclass Foo {}\n@enduml";
+        let d0 = parse_block(input, 0).unwrap();
+        assert!(matches!(d0, Diagram::Sequence(_)));
+        let d1 = parse_block(input, 1).unwrap();
+        assert!(matches!(d1, Diagram::Class(_)));
+    }
+
+    #[test]
+    fn parse_block_out_of_range_returns_error() {
+        let input = "@startuml\nAlice -> Bob\n@enduml";
+        let result = parse_block(input, 5);
+        assert!(result.is_err());
+    }
+
+    #[test]
+    fn split_single_block_still_works() {
+        let input = "@startuml\nAlice -> Bob\n@enduml";
+        let blocks = split_blocks(input);
+        assert_eq!(blocks.len(), 1);
     }
 }

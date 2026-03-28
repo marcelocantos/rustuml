@@ -617,20 +617,48 @@ fn render_class_box(
         EntityKind::Annotation => &cs.class_background,
         _ => &cs.class_background,
     };
-    svg.rect(x, y, dim.width, dim.height, fill, &cs.border_color);
+    if cs.round_corner > 0.0 {
+        svg.rounded_rect(
+            x,
+            y,
+            dim.width,
+            dim.height,
+            cs.round_corner,
+            fill,
+            &cs.border_color,
+        );
+    } else {
+        svg.rect(x, y, dim.width, dim.height, fill, &cs.border_color);
+    }
 
     let mut cy = y;
+
+    let stereo_font = if cs.stereotype_font_size > 0.0 {
+        cs.stereotype_font_size
+    } else {
+        SMALL_FONT
+    };
+    let attr_font = if cs.attribute_font_size > 0.0 {
+        cs.attribute_font_size
+    } else {
+        SMALL_FONT
+    };
+    let header_font = if cs.font_size > 0.0 {
+        cs.font_size
+    } else {
+        FONT_SIZE
+    };
 
     // User-defined stereotypes (e.g. «service», «singleton»).
     for stereo in &dim.stereotype_labels {
         cy += MEMBER_HEIGHT;
-        svg.text(x + dim.width / 2.0, cy - 3.0, stereo, "middle", SMALL_FONT);
+        svg.text(x + dim.width / 2.0, cy - 3.0, stereo, "middle", stereo_font);
     }
 
     // Kind label (<<interface>>, etc.).
     if let Some(kind) = dim.kind_label {
         cy += MEMBER_HEIGHT;
-        svg.text(x + dim.width / 2.0, cy - 3.0, kind, "middle", SMALL_FONT);
+        svg.text(x + dim.width / 2.0, cy - 3.0, kind, "middle", stereo_font);
     }
 
     // Class name — process bold/italic creole but NOT underline (`__`), matching
@@ -641,14 +669,14 @@ fn render_class_box(
         cy,
         &dim.header_text,
         "middle",
-        FONT_SIZE,
+        header_font,
     );
     let stereo_height = dim.stereotype_labels.len() as f64 * MEMBER_HEIGHT;
     cy = y + HEADER_HEIGHT + stereo_height + dim.kind_label.map_or(0.0, |_| MEMBER_HEIGHT);
 
     // Separator line.
     if !entity.members.is_empty() {
-        svg.line_segment(x, cy, x + dim.width, cy, "#000", false);
+        svg.line_segment(x, cy, x + dim.width, cy, &cs.border_color, false);
     }
 
     // Members.
@@ -661,7 +689,7 @@ fn render_class_box(
                 cy - MEMBER_HEIGHT / 2.0,
                 x + dim.width,
                 cy - MEMBER_HEIGHT / 2.0,
-                "#000",
+                &cs.border_color,
                 false,
             );
             if !member.display_text.is_empty() {
@@ -670,17 +698,17 @@ fn render_class_box(
                     cy - 3.0,
                     &member.display_text,
                     "middle",
-                    SMALL_FONT,
+                    attr_font,
                 );
             }
         } else {
             let text = format_member(member);
             if use_monospace_members {
-                svg.monospace_text(x + PADDING, cy - 3.0, &text, "start", SMALL_FONT);
+                svg.monospace_text(x + PADDING, cy - 3.0, &text, "start", attr_font);
             } else {
                 // PlantUML renders class member text literally — creole markup
                 // (e.g. __field__) is NOT interpreted; it appears as-is.
-                svg.plain_text(x + PADDING, cy - 3.0, &text, "start", SMALL_FONT);
+                svg.plain_text(x + PADDING, cy - 3.0, &text, "start", attr_font);
             }
         }
     }

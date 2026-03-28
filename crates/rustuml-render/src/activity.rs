@@ -45,6 +45,33 @@ fn activity_text(text: &str, use_monospace: bool) -> String {
 /// Render an activity diagram to SVG.
 pub fn render(diagram: &ActivityDiagram, theme: &Theme) -> String {
     let as_ = &theme.activity;
+    // Resolve effective values — fall back to module constants when the theme
+    // field is zero/empty (new fields default to zero in existing themes).
+    let action_font_size = if as_.font_size > 0.0 {
+        as_.font_size
+    } else {
+        FONT_SIZE
+    };
+    let diamond_font_size = if as_.diamond_font_size > 0.0 {
+        as_.diamond_font_size
+    } else {
+        SMALL_FONT
+    };
+    let action_round_corner = if as_.round_corner > 0.0 {
+        as_.round_corner
+    } else {
+        10.0
+    };
+    let swimlane_font_size = if as_.swimlane_font_size > 0.0 {
+        as_.swimlane_font_size
+    } else {
+        SMALL_FONT
+    };
+    let swimlane_border = if as_.swimlane_border.is_empty() {
+        "#999"
+    } else {
+        &as_.swimlane_border
+    };
     if diagram.steps.is_empty() {
         return "<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"100\" height=\"50\"></svg>\n"
             .to_string();
@@ -142,16 +169,16 @@ pub fn render(diagram: &ActivityDiagram, theme: &Theme) -> String {
                     y,
                     ACTION_WIDTH,
                     ACTION_HEIGHT,
-                    10.0,
+                    action_round_corner,
                     &as_.action_background,
-                    "#000",
+                    &as_.action_border,
                 );
                 svg.text(
                     cx,
                     y + ACTION_HEIGHT / 2.0 + 4.0,
                     &display,
                     "middle",
-                    FONT_SIZE,
+                    action_font_size,
                 );
                 y += ACTION_HEIGHT + V_GAP / 2.0;
             }
@@ -182,9 +209,9 @@ pub fn render(diagram: &ActivityDiagram, theme: &Theme) -> String {
                     y,
                     ACTION_WIDTH,
                     ACTION_HEIGHT,
-                    10.0,
+                    action_round_corner,
                     &as_.action_background,
-                    "#000",
+                    &as_.action_border,
                 );
                 svg.text(
                     cx,
@@ -224,14 +251,14 @@ pub fn render(diagram: &ActivityDiagram, theme: &Theme) -> String {
                     y + DIAMOND_SIZE,
                     DIAMOND_SIZE,
                     &as_.decision_background,
-                    "#000",
+                    &as_.action_border,
                 );
                 svg.text(
                     cx,
                     y + DIAMOND_SIZE + 4.0,
                     &block.condition,
                     "middle",
-                    SMALL_FONT,
+                    diamond_font_size,
                 );
                 svg.close_group();
                 if let Some(label) = &block.then_label {
@@ -240,7 +267,7 @@ pub fn render(diagram: &ActivityDiagram, theme: &Theme) -> String {
                         y + 10.0,
                         label,
                         "start",
-                        SMALL_FONT,
+                        diamond_font_size,
                     );
                 }
                 y += DIAMOND_SIZE * 2.0 + V_GAP / 2.0;
@@ -253,14 +280,14 @@ pub fn render(diagram: &ActivityDiagram, theme: &Theme) -> String {
                     y + DIAMOND_SIZE,
                     DIAMOND_SIZE,
                     &as_.decision_background,
-                    "#000",
+                    &as_.action_border,
                 );
                 svg.text(
                     cx,
                     y + DIAMOND_SIZE + 4.0,
                     &block.condition,
                     "middle",
-                    SMALL_FONT,
+                    diamond_font_size,
                 );
                 svg.close_group();
                 if let Some(label) = &block.then_label {
@@ -269,7 +296,7 @@ pub fn render(diagram: &ActivityDiagram, theme: &Theme) -> String {
                         y + 10.0,
                         label,
                         "start",
-                        SMALL_FONT,
+                        diamond_font_size,
                     );
                 }
                 y += DIAMOND_SIZE * 2.0 + V_GAP / 2.0;
@@ -277,7 +304,13 @@ pub fn render(diagram: &ActivityDiagram, theme: &Theme) -> String {
             ActivityStep::Else(label) => {
                 if let Some(l) = label {
                     let display = format!("else ({})", l);
-                    svg.text(cx - DIAMOND_SIZE - 5.0, y, &display, "end", SMALL_FONT);
+                    svg.text(
+                        cx - DIAMOND_SIZE - 5.0,
+                        y,
+                        &display,
+                        "end",
+                        diamond_font_size,
+                    );
                 }
                 y += V_GAP / 4.0;
             }
@@ -287,7 +320,7 @@ pub fn render(diagram: &ActivityDiagram, theme: &Theme) -> String {
                     y + DIAMOND_SIZE / 2.0,
                     DIAMOND_SIZE / 2.0,
                     &as_.decision_background,
-                    "#000",
+                    &as_.action_border,
                 );
                 y += DIAMOND_SIZE + V_GAP / 2.0;
             }
@@ -298,8 +331,8 @@ pub fn render(diagram: &ActivityDiagram, theme: &Theme) -> String {
                     y,
                     BAR_WIDTH,
                     BAR_HEIGHT,
-                    "#000",
-                    "#000",
+                    &as_.bar_color,
+                    &as_.bar_color,
                 );
                 y += BAR_HEIGHT + V_GAP / 2.0;
             }
@@ -333,14 +366,14 @@ pub fn render(diagram: &ActivityDiagram, theme: &Theme) -> String {
                     y,
                     BAR_WIDTH,
                     BAR_HEIGHT,
-                    "#000",
-                    "#000",
+                    &as_.bar_color,
+                    &as_.bar_color,
                 );
                 y += BAR_HEIGHT + V_GAP / 2.0;
             }
             ActivityStep::Swimlane(name) => {
-                svg.line_segment(0.0, y, total_width, y, "#999", true);
-                svg.text(5.0, y + 14.0, name, "start", SMALL_FONT);
+                svg.line_segment(0.0, y, total_width, y, swimlane_border, true);
+                svg.text(5.0, y + 14.0, name, "start", swimlane_font_size);
                 y += 20.0;
             }
             ActivityStep::Partition(partition) => {
@@ -379,14 +412,14 @@ pub fn render(diagram: &ActivityDiagram, theme: &Theme) -> String {
                     y + DIAMOND_SIZE,
                     DIAMOND_SIZE,
                     &as_.decision_background,
-                    "#000",
+                    &as_.action_border,
                 );
                 svg.text(
                     cx,
                     y + DIAMOND_SIZE + 4.0,
                     &w.condition,
                     "middle",
-                    SMALL_FONT,
+                    diamond_font_size,
                 );
                 if let Some(label) = &w.is_label {
                     svg.text(
@@ -394,14 +427,14 @@ pub fn render(diagram: &ActivityDiagram, theme: &Theme) -> String {
                         y + DIAMOND_SIZE * 2.0 + 4.0,
                         label,
                         "start",
-                        SMALL_FONT,
+                        diamond_font_size,
                     );
                 }
                 y += DIAMOND_SIZE * 2.0 + V_GAP / 2.0;
             }
             ActivityStep::EndWhile(label) => {
                 if let Some(l) = label {
-                    svg.text(cx - DIAMOND_SIZE - 5.0, y, l, "end", SMALL_FONT);
+                    svg.text(cx - DIAMOND_SIZE - 5.0, y, l, "end", diamond_font_size);
                 }
                 y += V_GAP / 4.0;
             }
@@ -412,7 +445,7 @@ pub fn render(diagram: &ActivityDiagram, theme: &Theme) -> String {
                     y + DIAMOND_SIZE / 2.0,
                     DIAMOND_SIZE / 2.0,
                     &as_.decision_background,
-                    "#000",
+                    &as_.action_border,
                 );
                 y += DIAMOND_SIZE + V_GAP / 2.0;
             }
@@ -423,14 +456,14 @@ pub fn render(diagram: &ActivityDiagram, theme: &Theme) -> String {
                     y + DIAMOND_SIZE,
                     DIAMOND_SIZE,
                     &as_.decision_background,
-                    "#000",
+                    &as_.action_border,
                 );
                 svg.text(
                     cx,
                     y + DIAMOND_SIZE + 4.0,
                     &rw.condition,
                     "middle",
-                    SMALL_FONT,
+                    diamond_font_size,
                 );
                 if let Some(label) = &rw.is_label {
                     svg.text(
@@ -438,7 +471,7 @@ pub fn render(diagram: &ActivityDiagram, theme: &Theme) -> String {
                         y + DIAMOND_SIZE + 4.0,
                         label,
                         "start",
-                        SMALL_FONT,
+                        diamond_font_size,
                     );
                 }
                 if let Some(label) = &rw.not_label {
@@ -447,7 +480,7 @@ pub fn render(diagram: &ActivityDiagram, theme: &Theme) -> String {
                         y + DIAMOND_SIZE * 2.0 + 4.0,
                         label,
                         "middle",
-                        SMALL_FONT,
+                        diamond_font_size,
                     );
                 }
                 y += DIAMOND_SIZE * 2.0 + V_GAP / 2.0;
@@ -459,9 +492,15 @@ pub fn render(diagram: &ActivityDiagram, theme: &Theme) -> String {
                     y + DIAMOND_SIZE,
                     DIAMOND_SIZE,
                     &as_.decision_background,
-                    "#000",
+                    &as_.action_border,
                 );
-                svg.text(cx, y + DIAMOND_SIZE + 4.0, expr, "middle", SMALL_FONT);
+                svg.text(
+                    cx,
+                    y + DIAMOND_SIZE + 4.0,
+                    expr,
+                    "middle",
+                    as_.diamond_font_size,
+                );
                 y += DIAMOND_SIZE * 2.0 + V_GAP / 2.0;
             }
             ActivityStep::Case(label) => {
