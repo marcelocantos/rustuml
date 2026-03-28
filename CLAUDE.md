@@ -16,7 +16,8 @@ The Java PlantUML at `~/work/github.com/plantuml/plantuml` serves as the oracle 
 
 - RustUML own code: Apache 2.0
 - Layout engine (`rustuml-layout`): Apache 2.0 (wraps layout-rs, MIT)
-- KaTeX-derived math code: MIT (when ported)
+- KaTeX math (`rustuml-math`): MIT (wraps katex crate via QuickJS)
+- Embedded font (Liberation Sans): SIL OFL
 
 ## Workspace Structure
 
@@ -24,8 +25,9 @@ The Java PlantUML at `~/work/github.com/plantuml/plantuml` serves as the oracle 
 crates/
   rustuml/          — binary (CLI entry point)
   rustuml-parser/   — PlantUML/YAML/JSON parsing, TIM preprocessor
-  rustuml-render/   — SVG/PNG rendering, themes, creole markup
+  rustuml-render/   — SVG/PNG/PDF/EPS rendering, themes, creole markup
   rustuml-layout/   — hierarchical graph layout (wraps layout-rs)
+  rustuml-math/     — LaTeX math rendering (wraps katex)
   rustuml-oracle/   — oracle test framework (generator, runner, comparator)
 ```
 
@@ -33,28 +35,39 @@ crates/
 
 ```bash
 cargo build
+cargo test --lib          # unit tests only (fast, no server needed)
 ```
 
-Integration tests require the PlantUML picoweb server running on port 8787:
+Golden pair tests require the PlantUML picoweb server running on port 8787:
 
 ```bash
 scripts/plantuml-server.sh &   # starts on :8787
-cargo test
+cargo test                     # includes golden pair validation
 ```
 
 Override with `PLANTUML_URL=http://host:port` if needed.
+
+Golden pairs live in `test-diagrams/golden/` (12,500+ .puml + .svg pairs).
+Generate new ones with `scripts/generate-golden.sh` or `gen_*.py` scripts.
 
 ## Architecture Principles
 
 - Single binary, no runtime dependencies
 - Semantic rewrite using idiomatic Rust — not a Java transliteration
-- Oracle-based testing: synthetic PlantUML inputs run through Java PlantUML for reference output, compared against Rust output
+- Oracle-based testing: 12,500+ golden .puml/.svg pairs from Java PlantUML
 - Two comparison tiers: exact match (parsing, preprocessing) and structural equivalence (layout — topologically correct, not pixel-identical)
-- Layout via layout-rs (Sugiyama algorithm), not a Graphviz C port
+- Layout via layout-rs (Sugiyama algorithm) with timeout guard for degenerate graphs
+- 22 diagram types, 16 @start dispatch types, 6 output formats
+
+## Agent Guidance
+
+- **Use opus for all team agents** on this project. Sonnet is too inefficient on this codebase — cross-cutting features touch multiple crates and sonnet gets stuck in compile-error loops.
+- The preprocessor (`preprocess/mod.rs`) is ~2900 lines — read it before editing.
+- Test with `cargo test --lib` for fast iteration; golden tests (`cargo test --test golden_pairs`) for full validation.
 
 ## Code Style
 
-Standard Rust conventions. Use `cargo fmt` and `cargo clippy`.
+Standard Rust conventions. Use `cargo fmt` and `cargo clippy -- -D warnings`.
 
 ## Delivery
 
