@@ -117,11 +117,25 @@ fn run_one(puml_path: &Path, root: &Path) -> TestResult {
         }
     };
 
-    if source.matches("@startuml").count() > 1 || source.matches("@startjson").count() > 1 {
-        return TestResult {
-            name: rel,
-            outcome: Outcome::Skip("multiple @start blocks".into()),
-        };
+    // Skip files with multiple blocks of the SAME @start type — Java PlantUML
+    // renders all blocks into one SVG, but we only render the first.  Files
+    // with different @start types (e.g. @startuml wrapping @startjson) are
+    // handled correctly by inner-type override.
+    {
+        let start_types: Vec<&str> = source
+            .lines()
+            .filter_map(|l| l.trim().strip_prefix("@start"))
+            .map(|r| r.split_whitespace().next().unwrap_or(r))
+            .collect();
+        let mut seen = std::collections::HashSet::new();
+        for t in &start_types {
+            if !seen.insert(*t) {
+                return TestResult {
+                    name: rel,
+                    outcome: Outcome::Skip(format!("multiple @start{t} blocks")),
+                };
+            }
+        }
     }
     if source.contains("%date()") {
         return TestResult {
