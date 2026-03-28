@@ -11,6 +11,8 @@ pub mod component;
 pub mod creole;
 pub mod deployment;
 pub mod ditaa;
+pub mod dot_diagram;
+pub mod ebnf;
 pub mod gantt;
 pub mod git_diagram;
 pub mod json_diagram;
@@ -91,6 +93,8 @@ fn render_with_theme(diagram: &Diagram, theme: &Theme) -> String {
         Diagram::Nwdiag(nw) => nwdiag::render(nw, theme),
         Diagram::Regex(r) => regex_diagram::render(r, theme),
         Diagram::Ditaa(d) => ditaa::render(d, theme),
+        Diagram::Dot(d) => dot_diagram::render(d, theme),
         Diagram::Board(b) => board::render(b, theme),
+        Diagram::Ebnf(e) => ebnf::render(e, theme),
     }
 }

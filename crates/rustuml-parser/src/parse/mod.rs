@@ -9,6 +9,7 @@ pub mod class;
 pub mod component;
 pub mod deployment;
 pub mod ditaa;
+pub mod dot;
 pub mod ebnf;
 pub mod gantt;
 pub mod git_diagram;
@@ -547,6 +548,10 @@ pub fn parse_with_base(
         "ditaa" => {
             let d = ditaa::parse_ditaa(&lines)?;
             Ok(Diagram::Ditaa(d))
+        }
+        "dot" => {
+            let d = dot::parse_dot(&lines)?;
+            Ok(Diagram::Dot(d))
         }
         "board" => {
             let b = board::parse_board(&lines)?;

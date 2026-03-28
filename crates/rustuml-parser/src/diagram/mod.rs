@@ -12,6 +12,7 @@ pub mod class;
 pub mod component;
 pub mod deployment;
 pub mod ditaa;
+pub mod dot;
 pub mod ebnf;
 pub mod gantt;
 pub mod git_diagram;
@@ -53,6 +54,7 @@ pub enum Diagram {
     Salt(salt::SaltDiagram),
     Regex(regex_diagram::RegexDiagram),
     Ditaa(ditaa::DitaaDiagram),
+    Dot(dot::DotDiagram),
     Board(board::BoardDiagram),
     Ebnf(ebnf::EbnfDiagram),
 }
