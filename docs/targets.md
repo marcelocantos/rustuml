@@ -1,6 +1,6 @@
 # Targets
 
-<!-- last-evaluated: d2256cd2 -->
+<!-- last-evaluated: 73da727e -->
 
 ## Active
 
@@ -26,7 +26,7 @@
   - Code is in its own crate (`rustuml-layout`), licensed Apache-2.0
   - No external Graphviz binary required
 - **Context**: PlantUML uses Graphviz DOT for entity diagrams (class, component, object, deployment). We use layout-rs (MIT, Sugiyama) as the foundation. Known issues: layout-rs panics on degenerate graphs (bidirectional edges, 100+ arrows) causing infinite loops — currently mitigated with a 5-second thread timeout that falls back to grid layout. Edge routing quality on dense graphs is poor (see PlantUML GitHub issues #417, #523, #1005 for examples of the problem class).
-- **Status**: converging — layout engine called from class renderer with timeout wrapper. Grid fallback for timeout/panic cases. Remaining: fix layout-rs infinite loops properly, improve edge routing quality, extend layout to component/deployment/object diagrams.
+- **Status**: converging — layout crate with content-aware node sizing and built-in timeout/panic guard (5s, returns None). Used by class and object renderers. Grid fallback for timeout cases. Remaining: improve edge routing quality on dense graphs, extend layout to component/deployment renderers (currently grid-only).
 - **Discovered**: 2026-03-22
 
 ### 🎯T1.3 PlantUML parser and TIM preprocessor ported to Rust
