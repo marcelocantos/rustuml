@@ -28,6 +28,7 @@ pub mod regex_diagram;
 pub mod salt;
 pub mod sequence;
 pub mod skinparam;
+pub mod sprite;
 pub mod state;
 pub mod style;
 pub mod svg;

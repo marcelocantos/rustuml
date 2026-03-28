@@ -295,6 +295,89 @@ impl SvgBuilder {
         self.line(s);
     }
 
+    /// Emit an `<image>` element with the given data URI.
+    pub fn image(&mut self, x: f64, y: f64, w: f64, h: f64, href: &str) {
+        self.line(&format!(
+            r#"<image x="{x}" y="{y}" width="{w}" height="{h}" xlink:href="{href}"/>"#
+        ));
+    }
+
+    /// Render text that may contain `<$spritename>` inline sprite references.
+    ///
+    /// Splits the text at sprite references and emits alternating `<text>` and
+    /// `<image>` elements left to right.  The `y` coordinate is the text
+    /// baseline; sprites are centred vertically on the baseline.
+    ///
+    /// The `sprite_cache` provides pre-computed PNG data URIs keyed by sprite
+    /// name.  Unknown sprite names are skipped silently.
+    ///
+    /// Returns the total width of the rendered content.
+    #[allow(clippy::too_many_arguments)]
+    pub fn text_with_sprites(
+        &mut self,
+        x: f64,
+        y: f64,
+        content: &str,
+        anchor: &str,
+        font_size: f64,
+        sprite_cache: &crate::sprite::SpriteCache,
+        sprites: &std::collections::HashMap<String, rustuml_parser::diagram::SpriteData>,
+    ) -> f64 {
+        use crate::metrics;
+
+        // If no sprite references, fall through to the ordinary text renderer.
+        if !content.contains("<$") {
+            self.text(x, y, content, anchor, font_size);
+            return metrics::text_width(content, font_size);
+        }
+
+        // Parse segments: alternate text and sprite references.
+        // Each sprite ref is `<$name>` optionally followed by spaces.
+        let segments = crate::sprite::parse_sprite_segments(content);
+
+        // Measure total width.
+        let total_w = crate::sprite::measure_segments(&segments, font_size, sprites);
+
+        // Adjust start x based on anchor.
+        let start_x = match anchor {
+            "middle" => x - total_w / 2.0,
+            "end" => x - total_w,
+            _ => x, // "start"
+        };
+
+        let mut cx = start_x;
+        let baseline_y = y;
+
+        for seg in &segments {
+            match seg {
+                crate::sprite::TextSegment::Text(t) if !t.is_empty() => {
+                    let w = metrics::text_width(t, font_size);
+                    let escaped = escape_xml(t);
+                    self.line(&format!(
+                        r#"<text x="{cx}" y="{baseline_y}" text-anchor="start" font-family="sans-serif" font-size="{font_size}">{escaped}</text>"#
+                    ));
+                    cx += w;
+                }
+                crate::sprite::TextSegment::Sprite(name) => {
+                    if let Some(uri) = sprite_cache.get(name) {
+                        if let Some(sd) = sprites.get(name) {
+                            let (sw, sh) = crate::sprite::sprite_dimensions(sd);
+                            let iw = sw as f64;
+                            let ih = sh as f64;
+                            // Centre the sprite on the text baseline.
+                            let iy = baseline_y - ih * 0.75;
+                            self.image(cx, iy, iw, ih, uri);
+                            cx += iw + 1.0; // 1px gap after sprite
+                        }
+                    }
+                }
+                _ => {}
+            }
+        }
+
+        total_w
+    }
+
     /// Render a legend box from PlantUML formatted content.
     ///
     /// The `legend_text` may be:
