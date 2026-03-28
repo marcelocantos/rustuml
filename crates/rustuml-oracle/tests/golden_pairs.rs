@@ -59,6 +59,8 @@ fn golden_has_syntax_error(svg: &str) -> bool {
         || svg.contains("[From string")
         || svg.contains("Your data does not sound like YAML data")
         || svg.contains("does&#160;not&#160;sound&#160;like&#160;YAML")
+        || svg.contains("Your data does not sound like JSON data")
+        || svg.contains("does&#160;not&#160;sound&#160;like&#160;JSON")
         || svg.contains("No class ")
         || svg.contains("(Assumed diagram type:")
         || svg.contains("DITAA has crashed")
@@ -270,6 +272,11 @@ fn golden_pairs() {
 
     let pass = AtomicUsize::new(0);
     let skip = AtomicUsize::new(0);
+    let skip_parse = AtomicUsize::new(0);
+    let skip_error = AtomicUsize::new(0);
+    let skip_keyword = AtomicUsize::new(0);
+    let skip_multi = AtomicUsize::new(0);
+    let skip_other = AtomicUsize::new(0);
 
     let failures: Vec<String> = pool.install(|| {
         pairs
@@ -281,8 +288,19 @@ fn golden_pairs() {
                         pass.fetch_add(1, Ordering::Relaxed);
                         None
                     }
-                    Outcome::Skip(_) => {
+                    Outcome::Skip(ref reason) => {
                         skip.fetch_add(1, Ordering::Relaxed);
+                        if reason.starts_with("parse:") {
+                            skip_parse.fetch_add(1, Ordering::Relaxed);
+                        } else if reason.contains("error") || reason.contains("Error") {
+                            skip_error.fetch_add(1, Ordering::Relaxed);
+                        } else if reason.contains("unsupported keyword") {
+                            skip_keyword.fetch_add(1, Ordering::Relaxed);
+                        } else if reason.contains("multiple @start") {
+                            skip_multi.fetch_add(1, Ordering::Relaxed);
+                        } else {
+                            skip_other.fetch_add(1, Ordering::Relaxed);
+                        }
                         None
                     }
                     Outcome::Fail(ref msg) => Some(format!("{}: {msg}", r.name)),
@@ -311,8 +329,16 @@ fn golden_pairs() {
         .count();
     let other = fail_count - panics - text_mm;
 
+    let sp = skip_parse.load(Ordering::Relaxed);
+    let se = skip_error.load(Ordering::Relaxed);
+    let sk = skip_keyword.load(Ordering::Relaxed);
+    let sm = skip_multi.load(Ordering::Relaxed);
+    let so = skip_other.load(Ordering::Relaxed);
     eprintln!("\ngolden_pairs: {total} total, {pass} passed, {fail_count} failed, {skip} skipped");
     eprintln!("  panics: {panics}, text mismatches: {text_mm}, other: {other}");
+    eprintln!(
+        "  skip breakdown: parse={sp}, golden_error={se}, unsupported_kw={sk}, multi_start={sm}, other={so}"
+    );
     if !dir_fails.is_empty() {
         eprintln!("  per-directory failures:");
         let mut sorted: Vec<_> = dir_fails.iter().collect();
