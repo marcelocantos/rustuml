@@ -113,13 +113,11 @@ fn parse_command(line: &str, _line_num: usize) -> Result<Option<GitCommand>, Par
 
 /// Extract a quoted parameter value, e.g. `id:"foo"` -> Some("foo").
 fn extract_quoted_param(text: &str, prefix: &str) -> Option<String> {
-    let idx = text.find(prefix)?;
-    let after = &text[idx + prefix.len()..];
-    if after.starts_with('"') {
-        let end = after[1..].find('"')?;
-        Some(after[1..1 + end].to_string())
+    let after = text.split_once(prefix)?.1;
+    if let Some(rest) = after.strip_prefix('"') {
+        let end = rest.find('"')?;
+        Some(rest[..end].to_string())
     } else {
-        // Unquoted: take until whitespace.
         let end = after.find(char::is_whitespace).unwrap_or(after.len());
         Some(after[..end].to_string())
     }

@@ -45,12 +45,12 @@ pub fn render(diagram: &GitDiagram, _theme: &Theme) -> String {
 
     // First pass: discover all branches and assign colours.
     for cmd in &diagram.commands {
-        if let GitCommand::Branch(name) = cmd {
-            if !branches.contains(name) {
-                let idx = branches.len() % BRANCH_COLORS.len();
-                branch_color_map.insert(name.clone(), BRANCH_COLORS[idx]);
-                branches.push(name.clone());
-            }
+        if let GitCommand::Branch(name) = cmd
+            && !branches.contains(name)
+        {
+            let idx = branches.len() % BRANCH_COLORS.len();
+            branch_color_map.insert(name.clone(), BRANCH_COLORS[idx]);
+            branches.push(name.clone());
         }
     }
 

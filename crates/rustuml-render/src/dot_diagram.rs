@@ -25,7 +25,6 @@ const GAP: f64 = 50.0;
 const PADDING: f64 = 12.0;
 const CLUSTER_PAD: f64 = 16.0;
 const CLUSTER_LABEL_H: f64 = 20.0;
-const ARROW_SIZE: f64 = 8.0;
 const DEFAULT_FILL: &str = "#FEFECE";
 const DEFAULT_STROKE: &str = "#A80036";
 const CLUSTER_FILL: &str = "#F8F8F8";

@@ -231,28 +231,20 @@ impl<'a> DotParser<'a> {
     }
 
     fn parse(&mut self) -> Result<DotDiagram, ParseError> {
-        let mut directed = true;
-        let mut strict = false;
-
-        // Optional `strict` keyword.
+        // Optional `strict` keyword — parsed but not yet used.
         let tok = self.lexer.next_token();
         let tok = if tok == Token::Ident("strict".to_string()) {
-            strict = true;
-            let _ = strict; // suppress unused warning
             self.lexer.next_token()
         } else {
             tok
         };
 
         // `digraph` or `graph`.
-        match &tok {
-            Token::Ident(kw) if kw == "digraph" => directed = true,
-            Token::Ident(kw) if kw == "graph" => directed = false,
-            _ => {
-                // Default to digraph if no keyword.
-                directed = true;
-            }
-        }
+        let directed = match &tok {
+            Token::Ident(kw) if kw == "digraph" => true,
+            Token::Ident(kw) if kw == "graph" => false,
+            _ => true, // Default to digraph.
+        };
 
         // Optional graph name.
         let name = match self.lexer.peek_token() {

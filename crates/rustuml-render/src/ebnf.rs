@@ -413,8 +413,8 @@ fn render_rule(rule: &EbnfRule, y_offset: f64, svg: &mut SvgBuilder) -> f64 {
     ));
 
     // Return total height consumed by this rule.
-    let total_h = LABEL_FONT_SIZE + LABEL_GAP + m.height();
-    total_h
+
+    LABEL_FONT_SIZE + LABEL_GAP + m.height()
 }
 
 // ── Public entry point ────────────────────────────────────────────────────────

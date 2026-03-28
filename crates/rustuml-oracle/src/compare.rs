@@ -162,16 +162,16 @@ pub fn extract_elements(svg: &str) -> Result<Vec<SvgElement>, String> {
 fn strip_xml_preamble(svg: &str) -> String {
     let mut result = svg.to_string();
     // Remove <?xml ... ?>
-    if let Some(start) = result.find("<?xml") {
-        if let Some(end) = result[start..].find("?>") {
-            result = format!("{}{}", &result[..start], &result[start + end + 2..]);
-        }
+    if let Some(start) = result.find("<?xml")
+        && let Some(end) = result[start..].find("?>")
+    {
+        result = format!("{}{}", &result[..start], &result[start + end + 2..]);
     }
     // Remove <!DOCTYPE ... >  (may span multiple lines)
-    if let Some(start) = result.find("<!DOCTYPE") {
-        if let Some(end) = result[start..].find('>') {
-            result = format!("{}{}", &result[..start], &result[start + end + 1..]);
-        }
+    if let Some(start) = result.find("<!DOCTYPE")
+        && let Some(end) = result[start..].find('>')
+    {
+        result = format!("{}{}", &result[..start], &result[start + end + 1..]);
     }
     result.trim_start().to_string()
 }
