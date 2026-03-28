@@ -16,7 +16,7 @@ impl SvgBuilder {
         let mut buf = String::new();
         writeln!(
             buf,
-            r#"<svg xmlns="http://www.w3.org/2000/svg" width="{width}" height="{height}" viewBox="0 0 {width} {height}">"#,
+            r#"<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="{width}" height="{height}" viewBox="0 0 {width} {height}">"#,
         )
         .unwrap();
         Self {
