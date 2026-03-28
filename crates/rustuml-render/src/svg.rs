@@ -359,16 +359,16 @@ impl SvgBuilder {
                     cx += w;
                 }
                 crate::sprite::TextSegment::Sprite(name) => {
-                    if let Some(uri) = sprite_cache.get(name) {
-                        if let Some(sd) = sprites.get(name) {
-                            let (sw, sh) = crate::sprite::sprite_dimensions(sd);
-                            let iw = sw as f64;
-                            let ih = sh as f64;
-                            // Centre the sprite on the text baseline.
-                            let iy = baseline_y - ih * 0.75;
-                            self.image(cx, iy, iw, ih, uri);
-                            cx += iw + 1.0; // 1px gap after sprite
-                        }
+                    if let Some(uri) = sprite_cache.get(name)
+                        && let Some(sd) = sprites.get(name)
+                    {
+                        let (sw, sh) = crate::sprite::sprite_dimensions(sd);
+                        let iw = sw as f64;
+                        let ih = sh as f64;
+                        // Centre the sprite on the text baseline.
+                        let iy = baseline_y - ih * 0.75;
+                        self.image(cx, iy, iw, ih, uri);
+                        cx += iw + 1.0; // 1px gap after sprite
                     }
                 }
                 _ => {}

@@ -120,8 +120,8 @@ fn encode_ascii85(data: &[u8]) -> String {
             // Only write bytes that correspond to input bytes (handle short chunks).
             let out_len = if chunk.len() == 4 { 5 } else { chunk.len() + 1 };
 
-            for i in 0..out_len {
-                result.push(encoded[i] as char);
+            for &byte in &encoded[..out_len] {
+                result.push(byte as char);
                 col += 1;
 
                 // Wrap lines at 76 columns for readability.

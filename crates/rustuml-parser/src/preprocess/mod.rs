@@ -2420,22 +2420,22 @@ fn parens_balanced(s: &str) -> bool {
 /// Returns `(width, height)` where 0 means "infer from pixel data".
 fn parse_sprite_dimensions(rest: &str) -> (u32, u32) {
     // Look for `[WxH/Z]` or `[WxH]` pattern anywhere in the rest string.
-    if let Some(start) = rest.find('[') {
-        if let Some(end) = rest[start..].find(']') {
-            let spec = &rest[start + 1..start + end];
-            // Format: WxH/Z  or WxH
-            let wh = spec.split('/').next().unwrap_or(spec);
-            let mut parts = wh.splitn(2, 'x');
-            let w: u32 = parts
-                .next()
-                .and_then(|s| s.trim().parse().ok())
-                .unwrap_or(0);
-            let h: u32 = parts
-                .next()
-                .and_then(|s| s.trim().parse().ok())
-                .unwrap_or(0);
-            return (w, h);
-        }
+    if let Some(start) = rest.find('[')
+        && let Some(end) = rest[start..].find(']')
+    {
+        let spec = &rest[start + 1..start + end];
+        // Format: WxH/Z  or WxH
+        let wh = spec.split('/').next().unwrap_or(spec);
+        let mut parts = wh.splitn(2, 'x');
+        let w: u32 = parts
+            .next()
+            .and_then(|s| s.trim().parse().ok())
+            .unwrap_or(0);
+        let h: u32 = parts
+            .next()
+            .and_then(|s| s.trim().parse().ok())
+            .unwrap_or(0);
+        return (w, h);
     }
     (0, 0)
 }
