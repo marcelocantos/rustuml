@@ -77,6 +77,7 @@ fn golden_has_syntax_error(svg: &str) -> bool {
         || svg.contains("No class ")
         || svg.contains("(Assumed diagram type:")
         || svg.contains("DITAA has crashed")
+        || svg.contains("This feature has been suppressed")
 }
 
 fn collect_golden_pairs(root: &Path) -> Vec<PathBuf> {

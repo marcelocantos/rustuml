@@ -147,16 +147,45 @@ fn is_svg_root_attr(name: &str) -> bool {
 
 /// Extracts a flat list of structural elements from an SVG string.
 pub fn extract_elements(svg: &str) -> Result<Vec<SvgElement>, String> {
-    let doc = roxmltree::Document::parse(svg).map_err(|e| format!("failed to parse SVG: {e}"))?;
+    // Strip XML declaration and DOCTYPE if present — roxmltree 0.20+ rejects DTDs.
+    // Graphviz-generated SVGs (used by @startdot) include these.
+    let cleaned = strip_xml_preamble(svg);
+    let doc =
+        roxmltree::Document::parse(&cleaned).map_err(|e| format!("failed to parse SVG: {e}"))?;
 
     let mut elements = Vec::new();
     collect_elements(doc.root(), 0, &mut elements);
     Ok(elements)
 }
 
+/// Strip `<?xml ...?>` declaration and `<!DOCTYPE ...>` from SVG content.
+fn strip_xml_preamble(svg: &str) -> String {
+    let mut result = svg.to_string();
+    // Remove <?xml ... ?>
+    if let Some(start) = result.find("<?xml") {
+        if let Some(end) = result[start..].find("?>") {
+            result = format!("{}{}", &result[..start], &result[start + end + 2..]);
+        }
+    }
+    // Remove <!DOCTYPE ... >  (may span multiple lines)
+    if let Some(start) = result.find("<!DOCTYPE") {
+        if let Some(end) = result[start..].find('>') {
+            result = format!("{}{}", &result[..start], &result[start + end + 1..]);
+        }
+    }
+    result.trim_start().to_string()
+}
+
 fn collect_elements(node: roxmltree::Node, depth: usize, elements: &mut Vec<SvgElement>) {
     if node.is_element() {
         let tag = node.tag_name().name().to_string();
+
+        // Skip <title> elements — these are metadata (Graphviz SVGs emit them
+        // for nodes and edges) and are not visible content.
+        if tag == "title" {
+            return;
+        }
+
         let is_root_svg = tag == "svg" && depth <= 1;
 
         // Collect non-geometry attributes, sorted for stable comparison.
