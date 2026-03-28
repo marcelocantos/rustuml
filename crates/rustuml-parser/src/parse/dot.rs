@@ -372,23 +372,33 @@ impl<'a> DotParser<'a> {
     ) -> Result<(), ParseError> {
         let next = self.lexer.peek_token();
         match next {
-            // Edge: `A -> B` or `A -- B`.
+            // Edge chain: `A -> B -> C` creates edges A->B and B->C.
             Token::Arrow | Token::DashDash => {
-                self.lexer.next_token(); // consume arrow/dash
-                let to = self.read_id()?;
-                let attrs = if self.lexer.peek_token() == Token::LBracket {
-                    self.parse_attr_list()?
-                } else {
-                    HashMap::new()
-                };
-                // Ensure both endpoints exist as nodes.
-                ensure_node(diagram, &id);
-                ensure_node(diagram, &to);
-                diagram.edges.push(DotEdge {
-                    from: id,
-                    to,
-                    attrs,
-                });
+                let mut from = id;
+                loop {
+                    self.lexer.next_token(); // consume arrow/dash
+                    let to = self.read_id()?;
+                    ensure_node(diagram, &from);
+                    ensure_node(diagram, &to);
+                    // Attributes only apply after the final node in the chain.
+                    let next = self.lexer.peek_token();
+                    if matches!(next, Token::Arrow | Token::DashDash) {
+                        diagram.edges.push(DotEdge {
+                            from,
+                            to: to.clone(),
+                            attrs: HashMap::new(),
+                        });
+                        from = to;
+                    } else {
+                        let attrs = if next == Token::LBracket {
+                            self.parse_attr_list()?
+                        } else {
+                            HashMap::new()
+                        };
+                        diagram.edges.push(DotEdge { from, to, attrs });
+                        break;
+                    }
+                }
                 self.skip_semi();
                 Ok(())
             }
