@@ -13,6 +13,7 @@ pub mod deployment;
 pub mod ditaa;
 pub mod dot_diagram;
 pub mod ebnf;
+pub mod eps;
 pub mod gantt;
 pub mod git_diagram;
 pub mod json_diagram;
