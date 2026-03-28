@@ -7,6 +7,7 @@
 //! specified in YAML or JSON as an alternative to PlantUML text syntax.
 
 pub mod activity;
+pub mod board;
 pub mod class;
 pub mod component;
 pub mod deployment;
@@ -49,6 +50,7 @@ pub enum Diagram {
     Salt(salt::SaltDiagram),
     Regex(regex_diagram::RegexDiagram),
     Ditaa(ditaa::DitaaDiagram),
+    Board(board::BoardDiagram),
 }
 
 /// Source location for error reporting.

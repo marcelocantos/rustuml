@@ -5,6 +5,7 @@
 
 pub mod activity;
 pub mod ascii;
+pub mod board;
 pub mod class;
 pub mod component;
 pub mod creole;
@@ -88,5 +89,6 @@ fn render_with_theme(diagram: &Diagram, theme: &Theme) -> String {
         Diagram::Nwdiag(nw) => nwdiag::render(nw, theme),
         Diagram::Regex(r) => regex_diagram::render(r, theme),
         Diagram::Ditaa(d) => ditaa::render(d, theme),
+        Diagram::Board(b) => board::render(b, theme),
     }
 }

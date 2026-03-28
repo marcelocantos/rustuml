@@ -4,6 +4,7 @@
 //! Diagram parsing — turns preprocessed lines into diagram models.
 
 pub mod activity;
+pub mod board;
 pub mod class;
 pub mod component;
 pub mod deployment;
@@ -540,6 +541,10 @@ pub fn parse_with_base(
         "ditaa" => {
             let d = ditaa::parse_ditaa(&lines)?;
             Ok(Diagram::Ditaa(d))
+        }
+        "board" => {
+            let b = board::parse_board(&lines)?;
+            Ok(Diagram::Board(b))
         }
         other => Err(ParseError {
             line: 1,
