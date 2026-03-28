@@ -551,6 +551,29 @@ impl PreprocessContext {
             return;
         }
 
+        // !dump_memory — emit a comment line with all current defines (debugging aid).
+        if trimmed == "!dump_memory" {
+            if self.is_active() {
+                let mut pairs: Vec<String> = self
+                    .defines
+                    .iter()
+                    .map(|(k, v)| format!("{k}={v}"))
+                    .collect();
+                pairs.sort();
+                let token_pairs: Vec<String> = self
+                    .token_defines
+                    .iter()
+                    .map(|(k, v)| format!("{k}={v}"))
+                    .collect();
+                let mut all = pairs;
+                let mut sorted_tokens = token_pairs;
+                sorted_tokens.sort();
+                all.extend(sorted_tokens);
+                output.push(format!("' [dump] {}", all.join(", ")));
+            }
+            return;
+        }
+
         // Function/procedure invocation as standalone line.
         if self.try_function_call(trimmed, output) {
             return;
@@ -581,6 +604,7 @@ impl PreprocessContext {
 
     fn try_silent_directive(&self, line: &str) -> bool {
         // !log, !pragma, !assert — consume silently.
+        // !includeurl / !import — URL fetching deferred; strip the line silently.
         if line.starts_with("!log ")
             || line.starts_with("!log\t")
             || line == "!log"
@@ -588,6 +612,10 @@ impl PreprocessContext {
             || line.starts_with("!pragma\t")
             || line.starts_with("!assert ")
             || line.starts_with("!assert\t")
+            || line.starts_with("!includeurl ")
+            || line.starts_with("!includeurl\t")
+            || line.starts_with("!import ")
+            || line.starts_with("!import\t")
         {
             return true;
         }
@@ -1949,6 +1977,36 @@ impl PreprocessContext {
                 // preprocessor (matches PlantUML sandboxed/server behaviour).
                 "false".to_string()
             }
+            "float" => {
+                // %float("3.14") — parse string to float, return as string.
+                let s = args.first().copied().unwrap_or("0");
+                s.parse::<f64>()
+                    .map_or_else(|_| "0".to_string(), |f| format!("{f}"))
+            }
+            "dec2hex" => {
+                // %dec2hex(255) → "ff"
+                let n: i64 = args.first().and_then(|s| s.parse().ok()).unwrap_or(0);
+                format!("{n:x}")
+            }
+            "hex2dec" => {
+                // %hex2dec("ff") → "255"
+                let s = args.first().copied().unwrap_or("0");
+                i64::from_str_radix(s.trim_start_matches("0x"), 16)
+                    .map_or_else(|_| "0".to_string(), |n| n.to_string())
+            }
+            "dirpath" => {
+                // %dirpath() — return the directory of the current file.
+                // Without file context we return "." as a placeholder.
+                self.base_dir
+                    .as_ref()
+                    .map(|p| p.display().to_string())
+                    .unwrap_or_else(|| ".".to_string())
+            }
+            "feature" => {
+                // %feature("key") — query a PlantUML feature flag.
+                // We don't support feature flags; always return "false".
+                "false".to_string()
+            }
             _ => {
                 // Unknown function — return empty string.  A non-empty passthrough
                 // like "%func(args)" confuses eval_bool (it would be truthy) and
@@ -2571,5 +2629,133 @@ mod tests {
         let input = "@startuml\n!$x = 5\n!if $x > 3\nyes\n!endif\n@enduml";
         let lines = preprocess(input);
         assert_eq!(lines, vec!["yes"]);
+    }
+
+    // ---------------------------------------------------------------------------
+    // Tests for !includeurl, !import, !dump_memory (new directives)
+    // ---------------------------------------------------------------------------
+
+    #[test]
+    fn includeurl_is_stripped_silently() {
+        // !includeurl should consume the line without producing output or error.
+        let input = "@startuml\n!includeurl https://example.com/common.puml\nA -> B\n@enduml";
+        let lines = preprocess(input);
+        assert_eq!(lines, vec!["A -> B"]);
+    }
+
+    #[test]
+    fn import_is_stripped_silently() {
+        // !import is an alias for !includeurl — also silently consumed.
+        let input = "@startuml\n!import https://example.com/lib.puml\nA -> B\n@enduml";
+        let lines = preprocess(input);
+        assert_eq!(lines, vec!["A -> B"]);
+    }
+
+    #[test]
+    fn dump_memory_no_vars() {
+        // With no defines, !dump_memory emits an empty dump comment.
+        let input = "@startuml\n!dump_memory\nA -> B\n@enduml";
+        let lines = preprocess(input);
+        assert_eq!(lines, vec!["' [dump] ", "A -> B"]);
+    }
+
+    #[test]
+    fn dump_memory_with_vars() {
+        let input = "@startuml\n!$foo = \"bar\"\n!$baz = \"qux\"\n!dump_memory\n@enduml";
+        let lines = preprocess(input);
+        // Output must contain the dump comment. Variable order is sorted.
+        assert_eq!(lines.len(), 1);
+        let dump = &lines[0];
+        assert!(dump.starts_with("' [dump] "), "got: {dump}");
+        assert!(dump.contains("baz=qux"), "got: {dump}");
+        assert!(dump.contains("foo=bar"), "got: {dump}");
+    }
+
+    #[test]
+    fn dump_memory_inactive_branch() {
+        // !dump_memory inside an inactive branch should produce no output.
+        let input = "@startuml\n!ifdef MISSING\n!dump_memory\n!endif\nA -> B\n@enduml";
+        let lines = preprocess(input);
+        assert_eq!(lines, vec!["A -> B"]);
+    }
+
+    // ---------------------------------------------------------------------------
+    // Tests for new built-in functions
+    // ---------------------------------------------------------------------------
+
+    #[test]
+    fn builtin_float() {
+        let input = "@startuml\n!$v = %float(\"3.14\")\nnote : $v\n@enduml";
+        let lines = preprocess(input);
+        assert_eq!(lines, vec!["note : 3.14"]);
+    }
+
+    #[test]
+    fn builtin_float_integer_string() {
+        let input = "@startuml\n!$v = %float(\"42\")\nnote : $v\n@enduml";
+        let lines = preprocess(input);
+        assert_eq!(lines, vec!["note : 42"]);
+    }
+
+    #[test]
+    fn builtin_dec2hex() {
+        let input = "@startuml\n!$h = %dec2hex(255)\nnote : $h\n@enduml";
+        let lines = preprocess(input);
+        assert_eq!(lines, vec!["note : ff"]);
+    }
+
+    #[test]
+    fn builtin_dec2hex_zero() {
+        let input = "@startuml\n!$h = %dec2hex(0)\nnote : $h\n@enduml";
+        let lines = preprocess(input);
+        assert_eq!(lines, vec!["note : 0"]);
+    }
+
+    #[test]
+    fn builtin_hex2dec() {
+        let input = "@startuml\n!$d = %hex2dec(\"ff\")\nnote : $d\n@enduml";
+        let lines = preprocess(input);
+        assert_eq!(lines, vec!["note : 255"]);
+    }
+
+    #[test]
+    fn builtin_hex2dec_zero() {
+        let input = "@startuml\n!$d = %hex2dec(\"0\")\nnote : $d\n@enduml";
+        let lines = preprocess(input);
+        assert_eq!(lines, vec!["note : 0"]);
+    }
+
+    #[test]
+    fn builtin_dirpath_no_base() {
+        // Without a base dir, %dirpath() returns ".".
+        let input = "@startuml\n!$p = %dirpath()\nnote : $p\n@enduml";
+        let lines = preprocess(input);
+        assert_eq!(lines, vec!["note : ."]);
+    }
+
+    #[test]
+    fn builtin_dirpath_with_base() {
+        let dir = std::env::temp_dir().join("rustuml_test_dirpath");
+        let _ = std::fs::create_dir_all(&dir);
+        let input = "@startuml\n!$p = %dirpath()\nnote : $p\n@enduml";
+        let lines = preprocess_with_base(input, &dir);
+        assert_eq!(lines, vec![format!("note : {}", dir.display())]);
+        let _ = std::fs::remove_dir_all(&dir);
+    }
+
+    #[test]
+    fn builtin_feature_returns_false() {
+        // All features are unsupported; always returns "false".
+        let input = "@startuml\n!$f = %feature(\"dark-mode\")\nnote : $f\n@enduml";
+        let lines = preprocess(input);
+        assert_eq!(lines, vec!["note : false"]);
+    }
+
+    #[test]
+    fn builtin_feature_in_conditional() {
+        // %feature() returning "false" means the ifdef branch is inactive.
+        let input = "@startuml\n!if %feature(\"dark-mode\") == \"true\"\ndark\n!else\nlight\n!endif\n@enduml";
+        let lines = preprocess(input);
+        assert_eq!(lines, vec!["light"]);
     }
 }
