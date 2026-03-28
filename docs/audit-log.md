@@ -11,3 +11,8 @@ maintenance activities. Append-only — newest entries at the bottom.
   - NOTICES/THIRD_PARTY file (all deps are standard permissive crates — low risk)
   - Full skinparam coverage (~60% applied)
   - WASM compilation target
+
+## 2026-03-29 — /release v0.3.0
+
+- **Commit**: `dfc2ec31`
+- **Outcome**: Released v0.3.0 (darwin-arm64, linux-amd64, linux-arm64). Added DOT/EBNF/Git/Board diagram types, EPS output, multi-diagram files, sprite rendering, 149 skinparam keys, preprocessor builtins. NOTICES file added.
