@@ -312,9 +312,12 @@ fn draw(expr: &EbnfExpr, x: f64, rail_y: f64, svg: &mut SvgBuilder) {
             let mid_x = (x + box_right) / 2.0;
             svg.raw(&format!(
                 r##"<path d="M{} {} L{} {} L{} {} Z" fill="{RAIL_STROKE}"/>"##,
-                mid_x + 3.0, top_y,
-                mid_x - 3.0, top_y - 3.0,
-                mid_x - 3.0, top_y + 3.0
+                mid_x + 3.0,
+                top_y,
+                mid_x - 3.0,
+                top_y - 3.0,
+                mid_x - 3.0,
+                top_y + 3.0
             ));
             // Right curve from top.
             svg.raw(&format!(
@@ -431,7 +434,8 @@ pub fn render(diagram: &EbnfDiagram, _theme: &Theme) -> String {
         let m = measure(&rule.body);
         let label_h = LABEL_FONT_SIZE + LABEL_GAP;
         let rule_h = label_h + m.height();
-        let rule_w = MARGIN + START_END_R + RAIL_EXTEND + m.width + RAIL_EXTEND + START_END_R + MARGIN;
+        let rule_w =
+            MARGIN + START_END_R + RAIL_EXTEND + m.width + RAIL_EXTEND + START_END_R + MARGIN;
         max_w = max_w.max(rule_w);
         rule_heights.push(rule_h);
         total_h += rule_h + RULE_GAP;

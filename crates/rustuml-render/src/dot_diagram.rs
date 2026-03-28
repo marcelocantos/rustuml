@@ -131,7 +131,13 @@ fn render_with_positions(
 
     // Render edges.
     for edge in all_edges {
-        render_edge(&mut svg, edge, diagram.directed, &diagram.edge_defaults, &pos_map);
+        render_edge(
+            &mut svg,
+            edge,
+            diagram.directed,
+            &diagram.edge_defaults,
+            &pos_map,
+        );
     }
 
     // Render nodes.
@@ -191,7 +197,13 @@ fn render_grid(
     }
 
     for edge in all_edges {
-        render_edge(&mut svg, edge, diagram.directed, &diagram.edge_defaults, &pos_map);
+        render_edge(
+            &mut svg,
+            edge,
+            diagram.directed,
+            &diagram.edge_defaults,
+            &pos_map,
+        );
     }
 
     svg.finalize()
@@ -373,7 +385,7 @@ fn clip_to_box(cx: f64, cy: f64, tx: f64, ty: f64, w: f64, h: f64) -> (f64, f64)
 
     // Parametric: point = (cx + t*dx, cy + t*dy).
     // Find smallest positive t where the point exits the box.
-    let mut t = 1.0;
+    let mut t: f64 = 1.0;
     if dx.abs() > 0.001 {
         let tx_edge = if dx > 0.0 { hw / dx } else { -hw / dx };
         t = t.min(tx_edge);
@@ -426,10 +438,7 @@ fn render_cluster(
     svg.rounded_rect(min_x, min_y, w, h, 4.0, CLUSTER_FILL, CLUSTER_STROKE);
 
     // Cluster label.
-    let label = cluster
-        .label
-        .as_deref()
-        .unwrap_or(&cluster.name);
+    let label = cluster.label.as_deref().unwrap_or(&cluster.name);
     if !label.is_empty() {
         svg.text(
             min_x + w / 2.0,
@@ -466,10 +475,7 @@ fn collect_all_edges(diagram: &DotDiagram) -> Vec<&DotEdge> {
     edges
 }
 
-fn compute_node_dims(
-    nodes: &[&DotNode],
-    defaults: &HashMap<String, String>,
-) -> Vec<(f64, f64)> {
+fn compute_node_dims(nodes: &[&DotNode], defaults: &HashMap<String, String>) -> Vec<(f64, f64)> {
     nodes
         .iter()
         .map(|node| {

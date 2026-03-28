@@ -190,13 +190,7 @@ pub fn render(diagram: &GitDiagram, _theme: &Theme) -> String {
 
         // Tag label (above).
         if let Some(tag) = &c.tag {
-            svg.text(
-                c.x,
-                c.y - COMMIT_RADIUS - 6.0,
-                tag,
-                "middle",
-                FONT_SIZE,
-            );
+            svg.text(c.x, c.y - COMMIT_RADIUS - 6.0, tag, "middle", FONT_SIZE);
         }
     }
 

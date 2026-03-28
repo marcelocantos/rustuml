@@ -438,7 +438,12 @@ pub fn parse_auto_with_base(
 ) -> Result<Diagram, ParseError> {
     let trimmed = input.trim_start();
     if trimmed.starts_with('{') {
-        parse_json(input)
+        // Try model JSON first; fall back to @startjson-style data visualization.
+        parse_json(input).or_else(|_| {
+            let lines: Vec<String> = input.lines().map(|l| l.to_string()).collect();
+            let diagram = json_diagram::parse_json_diagram(&lines)?;
+            Ok(Diagram::Json(diagram))
+        })
     } else if trimmed.starts_with("type:") || trimmed.starts_with("---") {
         parse_yaml(input)
     } else {

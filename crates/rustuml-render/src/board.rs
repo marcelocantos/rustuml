@@ -16,10 +16,9 @@ use crate::svg::SvgBuilder;
 
 const FONT_SIZE: f64 = 13.0;
 const TITLE_FONT_SIZE: f64 = 16.0;
-const CARD_W: f64 = 150.0;
+const CARD_MIN_W: f64 = 150.0;
 const CARD_H: f64 = 30.0;
 const CARD_GAP: f64 = 8.0;
-const COL_W: f64 = 170.0;
 const COL_HEADER_H: f64 = 30.0;
 const COL_PAD: f64 = 10.0;
 const MARGIN: f64 = 20.0;
@@ -45,6 +44,18 @@ const TITLE_SEP_STROKE: &str = "#888888";
 pub fn render(diagram: &BoardDiagram, _theme: &Theme) -> String {
     let num_cols = diagram.columns.len().max(1);
 
+    // Compute the column width from the widest label or card text.
+    let max_text_w = diagram
+        .columns
+        .iter()
+        .flat_map(|c| {
+            std::iter::once(metrics::text_width(&c.label, FONT_SIZE))
+                .chain(c.cards.iter().map(|t| metrics::text_width(t, FONT_SIZE)))
+        })
+        .fold(0.0_f64, f64::max);
+    let card_w = (max_text_w + BULLET_OFFSET_X + BULLET_R + 24.0).max(CARD_MIN_W);
+    let col_w = card_w + 20.0;
+
     // Compute the maximum number of cards in any column to determine height.
     let max_cards = diagram
         .columns
@@ -60,7 +71,7 @@ pub fn render(diagram: &BoardDiagram, _theme: &Theme) -> String {
     };
 
     let col_total_h = COL_HEADER_H + col_body_h;
-    let total_w = MARGIN * 2.0 + COL_W * num_cols as f64;
+    let total_w = MARGIN * 2.0 + col_w * num_cols as f64;
     let total_h = MARGIN + TITLE_H + SEP_GAP + col_total_h + MARGIN;
 
     let mut svg = SvgBuilder::new(total_w, total_h);
@@ -78,18 +89,25 @@ pub fn render(diagram: &BoardDiagram, _theme: &Theme) -> String {
 
     // Separator line below title.
     let sep_y = MARGIN + TITLE_H;
-    svg.line_segment(MARGIN, sep_y, total_w - MARGIN, sep_y, TITLE_SEP_STROKE, false);
+    svg.line_segment(
+        MARGIN,
+        sep_y,
+        total_w - MARGIN,
+        sep_y,
+        TITLE_SEP_STROKE,
+        false,
+    );
 
     let col_top = sep_y + SEP_GAP;
 
     for (ci, col) in diagram.columns.iter().enumerate() {
-        let col_x = MARGIN + COL_W * ci as f64;
+        let col_x = MARGIN + col_w * ci as f64;
 
         // Column background.
         svg.rect(
             col_x,
             col_top,
-            COL_W,
+            col_w,
             col_total_h,
             COL_BG_FILL,
             COL_BG_STROKE,
@@ -99,13 +117,13 @@ pub fn render(diagram: &BoardDiagram, _theme: &Theme) -> String {
         svg.rect(
             col_x,
             col_top,
-            COL_W,
+            col_w,
             COL_HEADER_H,
             COL_HEADER_FILL,
             COL_HEADER_STROKE,
         );
         svg.text(
-            col_x + COL_W / 2.0,
+            col_x + col_w / 2.0,
             col_top + COL_HEADER_H / 2.0 + FONT_SIZE / 2.0 - 2.0,
             &col.label,
             "middle",
@@ -114,12 +132,12 @@ pub fn render(diagram: &BoardDiagram, _theme: &Theme) -> String {
 
         // Cards.
         let cards_top = col_top + COL_HEADER_H + COL_PAD;
-        let card_x = col_x + (COL_W - CARD_W) / 2.0;
+        let card_x = col_x + (col_w - card_w) / 2.0;
         for (ki, card) in col.cards.iter().enumerate() {
             let card_y = cards_top + (CARD_H + CARD_GAP) * ki as f64;
 
             // Card rectangle.
-            svg.rounded_rect(card_x, card_y, CARD_W, CARD_H, RX, CARD_FILL, CARD_STROKE);
+            svg.rounded_rect(card_x, card_y, card_w, CARD_H, RX, CARD_FILL, CARD_STROKE);
 
             // Bullet circle.
             let bx = card_x + BULLET_OFFSET_X;
@@ -128,35 +146,12 @@ pub fn render(diagram: &BoardDiagram, _theme: &Theme) -> String {
                 r#"  <circle cx="{bx}" cy="{by}" r="{BULLET_R}" fill="{BULLET_FILL}"/>"#
             ));
 
-            // Card text.
+            // Card text (no truncation — card width sized to content).
             let tx = card_x + BULLET_OFFSET_X + BULLET_R + 8.0;
             let ty = card_y + CARD_H / 2.0 + FONT_SIZE / 2.0 - 2.0;
-            // Truncate text if too wide.
-            let max_text_w = CARD_W - BULLET_OFFSET_X - BULLET_R - 16.0;
-            let label = truncate_to_width(card, FONT_SIZE, max_text_w);
-            svg.text(tx, ty, &label, "start", FONT_SIZE);
+            svg.text(tx, ty, card, "start", FONT_SIZE);
         }
     }
 
     svg.finalize()
-}
-
-/// Truncate a label to fit within `max_w` pixels, appending "..." if needed.
-fn truncate_to_width(text: &str, font_size: f64, max_w: f64) -> String {
-    let w = metrics::text_width(text, font_size);
-    if w <= max_w {
-        return text.to_string();
-    }
-    // Binary search for the longest prefix that fits with ellipsis.
-    let ellipsis_w = metrics::text_width("...", font_size);
-    let target = max_w - ellipsis_w;
-    let mut end = text.len();
-    for (i, _) in text.char_indices().rev() {
-        end = i;
-        let sub = &text[..end];
-        if metrics::text_width(sub, font_size) <= target {
-            break;
-        }
-    }
-    format!("{}...", &text[..end])
 }

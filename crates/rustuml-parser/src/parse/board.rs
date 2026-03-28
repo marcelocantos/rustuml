@@ -22,8 +22,8 @@
 //! columns; lines starting with `*` define cards in the current column.
 
 use super::ParseError;
-use crate::diagram::board::{BoardColumn, BoardDiagram};
 use crate::diagram::DiagramMeta;
+use crate::diagram::board::{BoardColumn, BoardDiagram};
 
 /// Parse preprocessed lines from a `@startboard` block.
 pub fn parse_board(lines: &[String]) -> Result<BoardDiagram, ParseError> {
@@ -38,7 +38,8 @@ pub fn parse_board(lines: &[String]) -> Result<BoardDiagram, ParseError> {
         }
 
         if let Some(rest) = trimmed.strip_prefix('+') {
-            // Column definition.
+            // Column definition.  Syntax: `+Column Name+`.
+            // Java PlantUML keeps the trailing `+` in the rendered label.
             let label = rest.trim().to_string();
             if label.is_empty() {
                 return Err(ParseError {

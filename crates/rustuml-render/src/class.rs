@@ -373,14 +373,7 @@ fn render_with_positions(
                 rel.kind,
                 RelationshipKind::Dependency | RelationshipKind::Implementation
             );
-            svg.line_segment(
-                from_cx,
-                from_bottom,
-                to_cx,
-                to_top,
-                &cs.arrow_color,
-                dashed,
-            );
+            svg.line_segment(from_cx, from_bottom, to_cx, to_top, &cs.arrow_color, dashed);
             render_relationship_head(&mut svg, rel.kind, to_cx, to_top);
             render_relationship_labels(&mut svg, rel, from_cx, from_bottom, to_cx, to_top);
         }

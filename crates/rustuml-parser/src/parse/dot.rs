@@ -45,8 +45,8 @@ enum Token {
     Semi,
     Comma,
     Eq,
-    Arrow,      // ->
-    DashDash,   // --
+    Arrow,    // ->
+    DashDash, // --
     Eof,
 }
 
@@ -67,9 +67,7 @@ impl<'a> Lexer<'a> {
     fn skip_ws_and_comments(&mut self) {
         loop {
             // Skip whitespace.
-            while self.pos < self.src.len()
-                && self.src.as_bytes()[self.pos].is_ascii_whitespace()
-            {
+            while self.pos < self.src.len() && self.src.as_bytes()[self.pos].is_ascii_whitespace() {
                 self.pos += 1;
             }
             // Skip C-style line comments.
@@ -110,13 +108,34 @@ impl<'a> Lexer<'a> {
         }
         let b = self.src.as_bytes()[self.pos];
         match b {
-            b'{' => { self.pos += 1; Token::LBrace }
-            b'}' => { self.pos += 1; Token::RBrace }
-            b'[' => { self.pos += 1; Token::LBracket }
-            b']' => { self.pos += 1; Token::RBracket }
-            b';' => { self.pos += 1; Token::Semi }
-            b',' => { self.pos += 1; Token::Comma }
-            b'=' => { self.pos += 1; Token::Eq }
+            b'{' => {
+                self.pos += 1;
+                Token::LBrace
+            }
+            b'}' => {
+                self.pos += 1;
+                Token::RBrace
+            }
+            b'[' => {
+                self.pos += 1;
+                Token::LBracket
+            }
+            b']' => {
+                self.pos += 1;
+                Token::RBracket
+            }
+            b';' => {
+                self.pos += 1;
+                Token::Semi
+            }
+            b',' => {
+                self.pos += 1;
+                Token::Comma
+            }
+            b'=' => {
+                self.pos += 1;
+                Token::Eq
+            }
             b'-' => {
                 if self.rest().starts_with("->") {
                     self.pos += 2;

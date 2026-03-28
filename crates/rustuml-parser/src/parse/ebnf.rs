@@ -253,7 +253,12 @@ fn parse_atom(tokens: &[Token], pos: &mut usize) -> Result<EbnfExpr, ParseError>
     }
 }
 
-fn expect(tokens: &[Token], pos: &mut usize, expected: &Token, label: &str) -> Result<(), ParseError> {
+fn expect(
+    tokens: &[Token],
+    pos: &mut usize,
+    expected: &Token,
+    label: &str,
+) -> Result<(), ParseError> {
     if *pos >= tokens.len() || tokens[*pos] != *expected {
         return Err(ParseError {
             line: 1,
@@ -311,7 +316,9 @@ mod tests {
 
     #[test]
     fn multiple_rules() {
-        let d = parse("@startebnf\nop = add_op | mul_op;\nadd_op = \"+\" | \"-\";\nmul_op = \"*\" | \"/\";\n@endebnf");
+        let d = parse(
+            "@startebnf\nop = add_op | mul_op;\nadd_op = \"+\" | \"-\";\nmul_op = \"*\" | \"/\";\n@endebnf",
+        );
         assert_eq!(d.rules.len(), 3);
     }
 
