@@ -10,16 +10,38 @@ use std::sync::LazyLock;
 
 use regex::Regex;
 
+use crate::diagram::SpriteData;
+
+/// Output from the preprocessor: expanded lines plus any sprite definitions.
+pub struct PreprocessOutput {
+    pub lines: Vec<String>,
+    pub sprites: HashMap<String, SpriteData>,
+}
+
 /// Preprocess PlantUML source, expanding TIM directives.
 pub fn preprocess(input: &str) -> Vec<String> {
-    let mut ctx = PreprocessContext::new(None);
-    ctx.process(input)
+    preprocess_full(input, None).lines
 }
 
 /// Preprocess with a base directory for resolving `!include` paths.
 pub fn preprocess_with_base(input: &str, base_dir: &Path) -> Vec<String> {
-    let mut ctx = PreprocessContext::new(Some(base_dir.to_path_buf()));
-    ctx.process(input)
+    preprocess_full(input, Some(base_dir.to_path_buf())).lines
+}
+
+/// Preprocess PlantUML source and return both expanded lines and sprite
+/// definitions collected from `sprite $name { ... }` blocks.
+pub fn preprocess_full(input: &str, base_dir: Option<PathBuf>) -> PreprocessOutput {
+    let mut ctx = PreprocessContext::new(base_dir);
+    let lines = ctx.process(input);
+    PreprocessOutput {
+        lines,
+        sprites: ctx.sprites,
+    }
+}
+
+/// Preprocess with a base directory, returning full output including sprites.
+pub fn preprocess_full_with_base(input: &str, base_dir: &Path) -> PreprocessOutput {
+    preprocess_full(input, Some(base_dir.to_path_buf()))
 }
 
 // ---------------------------------------------------------------------------

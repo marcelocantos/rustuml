@@ -29,7 +29,25 @@ pub mod timing;
 pub mod usecase;
 pub mod wbs;
 
+use std::collections::HashMap;
+
 use serde::{Deserialize, Serialize};
+
+/// Pixel data for a single sprite definition.
+///
+/// Each row is a sequence of hex-digit characters (0–F) where 0 is fully
+/// transparent and F is fully opaque white.  The `[WxH/Z]` header is
+/// optional in the source; when absent the dimensions are inferred from
+/// the pixel rows themselves.
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct SpriteData {
+    /// Width in pixels (inferred from the first row if not explicit).
+    pub width: u32,
+    /// Height in pixels (number of rows).
+    pub height: u32,
+    /// Raw pixel rows as written in the source (hex digits 0–F).
+    pub rows: Vec<String>,
+}
 
 /// A parsed diagram, ready for layout and rendering.
 #[derive(Debug, Serialize, Deserialize)]
@@ -81,6 +99,9 @@ pub struct DiagramMeta {
     pub legend: Option<String>,
     #[serde(default, skip_serializing_if = "Vec::is_empty")]
     pub skinparams: Vec<SkinParam>,
+    /// Sprite definitions collected from the source (`sprite $name { ... }`).
+    #[serde(default, skip_serializing_if = "HashMap::is_empty")]
+    pub sprites: HashMap<String, SpriteData>,
 }
 
 /// A skinparam key-value pair (e.g., `skinparam backgroundColor #FFFFFF`).
