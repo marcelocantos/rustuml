@@ -26,14 +26,25 @@ fn golden_dir() -> PathBuf {
 }
 
 const SUPPORTED_START_KEYWORDS: &[&str] = &[
-    "@startuml", "@startgantt", "@startmindmap", "@startwbs",
-    "@startmath", "@startlatex", "@startregex", "@startjson",
-    "@startyaml", "@startsalt", "@startnwdiag", "@startditaa",
+    "@startuml",
+    "@startgantt",
+    "@startmindmap",
+    "@startwbs",
+    "@startmath",
+    "@startlatex",
+    "@startregex",
+    "@startjson",
+    "@startyaml",
+    "@startsalt",
+    "@startnwdiag",
+    "@startditaa",
 ];
 
 fn has_supported_start_keyword(source: &str) -> bool {
     let trimmed = source.trim_start();
-    SUPPORTED_START_KEYWORDS.iter().any(|kw| trimmed.starts_with(kw))
+    SUPPORTED_START_KEYWORDS
+        .iter()
+        .any(|kw| trimmed.starts_with(kw))
 }
 
 fn golden_has_syntax_error(svg: &str) -> bool {
@@ -61,7 +72,9 @@ fn collect_golden_pairs(root: &Path) -> Vec<PathBuf> {
 }
 
 fn collect_recursive(dir: &Path, pairs: &mut Vec<PathBuf>) {
-    let Ok(entries) = std::fs::read_dir(dir) else { return };
+    let Ok(entries) = std::fs::read_dir(dir) else {
+        return;
+    };
     for entry in entries.flatten() {
         let path = entry.path();
         if path.is_dir() {
@@ -74,37 +87,70 @@ fn collect_recursive(dir: &Path, pairs: &mut Vec<PathBuf>) {
     }
 }
 
-struct TestResult { name: String, outcome: Outcome }
+struct TestResult {
+    name: String,
+    outcome: Outcome,
+}
 
 #[allow(dead_code)]
-enum Outcome { Pass, Skip(String), Fail(String) }
+enum Outcome {
+    Pass,
+    Skip(String),
+    Fail(String),
+}
 
 fn run_one(puml_path: &Path, root: &Path) -> TestResult {
-    let rel = puml_path.strip_prefix(root).unwrap()
-        .with_extension("").to_string_lossy().to_string();
+    let rel = puml_path
+        .strip_prefix(root)
+        .unwrap()
+        .with_extension("")
+        .to_string_lossy()
+        .to_string();
 
     let source = match std::fs::read_to_string(puml_path) {
         Ok(s) => s,
-        Err(e) => return TestResult { name: rel, outcome: Outcome::Skip(format!("read puml: {e}")) },
+        Err(e) => {
+            return TestResult {
+                name: rel,
+                outcome: Outcome::Skip(format!("read puml: {e}")),
+            };
+        }
     };
 
     if source.matches("@startuml").count() > 1 || source.matches("@startjson").count() > 1 {
-        return TestResult { name: rel, outcome: Outcome::Skip("multiple @start blocks".into()) };
+        return TestResult {
+            name: rel,
+            outcome: Outcome::Skip("multiple @start blocks".into()),
+        };
     }
     if source.contains("%date()") {
-        return TestResult { name: rel, outcome: Outcome::Skip("non-deterministic %date()".into()) };
+        return TestResult {
+            name: rel,
+            outcome: Outcome::Skip("non-deterministic %date()".into()),
+        };
     }
 
     let golden_svg = match std::fs::read_to_string(puml_path.with_extension("svg")) {
         Ok(s) => s,
-        Err(e) => return TestResult { name: rel, outcome: Outcome::Skip(format!("read svg: {e}")) },
+        Err(e) => {
+            return TestResult {
+                name: rel,
+                outcome: Outcome::Skip(format!("read svg: {e}")),
+            };
+        }
     };
 
     if golden_has_syntax_error(&golden_svg) {
-        return TestResult { name: rel, outcome: Outcome::Skip("golden SVG contains error".into()) };
+        return TestResult {
+            name: rel,
+            outcome: Outcome::Skip("golden SVG contains error".into()),
+        };
     }
     if !has_supported_start_keyword(&source) {
-        return TestResult { name: rel, outcome: Outcome::Skip("unsupported keyword".into()) };
+        return TestResult {
+            name: rel,
+            outcome: Outcome::Skip("unsupported keyword".into()),
+        };
     }
 
     let render_result = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
@@ -112,45 +158,75 @@ fn run_one(puml_path: &Path, root: &Path) -> TestResult {
             .map_err(|e| format!("parse: {e}"))?;
         let rust_svg = rustuml_render::render_svg(&diagram);
 
-        let golden_elems = compare::extract_elements(&golden_svg)
-            .map_err(|e| format!("golden SVG parse: {e}"))?;
-        let rust_elems = compare::extract_elements(&rust_svg)
-            .map_err(|e| format!("rust SVG parse: {e}"))?;
+        let golden_elems =
+            compare::extract_elements(&golden_svg).map_err(|e| format!("golden SVG parse: {e}"))?;
+        let rust_elems =
+            compare::extract_elements(&rust_svg).map_err(|e| format!("rust SVG parse: {e}"))?;
 
         let skip = |t: &&str| {
             t.len() < 2
                 || ["alt", "else", "opt", "loop", "end", "par", "ref"].contains(t)
                 || t.starts_with('[')
         };
-        fn norm(s: &str) -> String { s.replace('\u{00a0}', " ") }
+        fn norm(s: &str) -> String {
+            s.replace('\u{00a0}', " ")
+        }
 
-        let golden_raw: Vec<&str> = golden_elems.iter()
-            .filter_map(|e| e.text.as_deref()).filter(|t| !t.is_empty()).collect();
+        let golden_raw: Vec<&str> = golden_elems
+            .iter()
+            .filter_map(|e| e.text.as_deref())
+            .filter(|t| !t.is_empty())
+            .collect();
         let golden_norm: Vec<String> = golden_raw.iter().map(|t| norm(t)).collect();
-        let rust_texts: Vec<String> = rust_elems.iter()
-            .filter_map(|e| e.text.as_deref()).filter(|t| !t.is_empty())
-            .map(|t| norm(t)).collect();
+        let rust_texts: Vec<String> = rust_elems
+            .iter()
+            .filter_map(|e| e.text.as_deref())
+            .filter(|t| !t.is_empty())
+            .map(|t| norm(t))
+            .collect();
 
-        let missing: Vec<String> = golden_norm.iter().zip(golden_raw.iter())
+        let missing: Vec<String> = golden_norm
+            .iter()
+            .zip(golden_raw.iter())
             .filter(|(_, raw)| !skip(raw))
             .filter(|(n, _)| !rust_texts.iter().any(|r| r.contains(n.as_str())))
-            .map(|(n, _)| n.clone()).collect();
+            .map(|(n, _)| n.clone())
+            .collect();
 
-        if missing.is_empty() { Ok(()) }
-        else { Err(format!("golden texts not found in Rust output: {missing:?}")) }
+        if missing.is_empty() {
+            Ok(())
+        } else {
+            Err(format!(
+                "golden texts not found in Rust output: {missing:?}"
+            ))
+        }
     }));
 
     match render_result {
-        Ok(Ok(())) => TestResult { name: rel, outcome: Outcome::Pass },
+        Ok(Ok(())) => TestResult {
+            name: rel,
+            outcome: Outcome::Pass,
+        },
         Ok(Err(msg)) => {
-            let outcome = if msg.starts_with("parse:") { Outcome::Skip(msg) } else { Outcome::Fail(msg) };
+            let outcome = if msg.starts_with("parse:") {
+                Outcome::Skip(msg)
+            } else {
+                Outcome::Fail(msg)
+            };
             TestResult { name: rel, outcome }
         }
         Err(panic) => {
-            let msg = if let Some(s) = panic.downcast_ref::<String>() { s.clone() }
-                else if let Some(s) = panic.downcast_ref::<&str>() { s.to_string() }
-                else { "unknown panic".into() };
-            TestResult { name: rel, outcome: Outcome::Fail(format!("panic: {msg}")) }
+            let msg = if let Some(s) = panic.downcast_ref::<String>() {
+                s.clone()
+            } else if let Some(s) = panic.downcast_ref::<&str>() {
+                s.to_string()
+            } else {
+                "unknown panic".into()
+            };
+            TestResult {
+                name: rel,
+                outcome: Outcome::Fail(format!("panic: {msg}")),
+            }
         }
     }
 }
@@ -164,7 +240,10 @@ fn golden_pairs() {
     }
 
     let pairs = collect_golden_pairs(&root);
-    if pairs.is_empty() { eprintln!("no golden pairs found"); return; }
+    if pairs.is_empty() {
+        eprintln!("no golden pairs found");
+        return;
+    }
     eprintln!("running {} golden pairs...", pairs.len());
 
     std::panic::set_hook(Box::new(|_| {}));
@@ -179,14 +258,23 @@ fn golden_pairs() {
     let skip = AtomicUsize::new(0);
 
     let failures: Vec<String> = pool.install(|| {
-        pairs.par_iter().filter_map(|p| {
-            let r = run_one(p, &root);
-            match r.outcome {
-                Outcome::Pass => { pass.fetch_add(1, Ordering::Relaxed); None }
-                Outcome::Skip(_) => { skip.fetch_add(1, Ordering::Relaxed); None }
-                Outcome::Fail(ref msg) => Some(format!("{}: {msg}", r.name)),
-            }
-        }).collect()
+        pairs
+            .par_iter()
+            .filter_map(|p| {
+                let r = run_one(p, &root);
+                match r.outcome {
+                    Outcome::Pass => {
+                        pass.fetch_add(1, Ordering::Relaxed);
+                        None
+                    }
+                    Outcome::Skip(_) => {
+                        skip.fetch_add(1, Ordering::Relaxed);
+                        None
+                    }
+                    Outcome::Fail(ref msg) => Some(format!("{}: {msg}", r.name)),
+                }
+            })
+            .collect()
     });
 
     let total = pairs.len();
@@ -194,7 +282,8 @@ fn golden_pairs() {
     let skip = skip.load(Ordering::Relaxed);
     let fail_count = failures.len();
 
-    let mut dir_fails: std::collections::BTreeMap<String, usize> = std::collections::BTreeMap::new();
+    let mut dir_fails: std::collections::BTreeMap<String, usize> =
+        std::collections::BTreeMap::new();
     for f in &failures {
         if let Some(slash) = f.find('/') {
             *dir_fails.entry(f[..slash].to_string()).or_default() += 1;
@@ -202,7 +291,10 @@ fn golden_pairs() {
     }
 
     let panics = failures.iter().filter(|f| f.contains("panic:")).count();
-    let text_mm = failures.iter().filter(|f| f.contains("golden texts not found")).count();
+    let text_mm = failures
+        .iter()
+        .filter(|f| f.contains("golden texts not found"))
+        .count();
     let other = fail_count - panics - text_mm;
 
     eprintln!("\ngolden_pairs: {total} total, {pass} passed, {fail_count} failed, {skip} skipped");
@@ -211,17 +303,27 @@ fn golden_pairs() {
         eprintln!("  per-directory failures:");
         let mut sorted: Vec<_> = dir_fails.iter().collect();
         sorted.sort_by(|a, b| b.1.cmp(a.1));
-        for (dir, count) in &sorted { eprintln!("    {count:5} {dir}"); }
+        for (dir, count) in &sorted {
+            eprintln!("    {count:5} {dir}");
+        }
     }
 
     const MAX_SHOWN: usize = 50;
-    let shown: Vec<&str> = failures.iter().map(|s| s.as_str()).take(MAX_SHOWN).collect();
+    let shown: Vec<&str> = failures
+        .iter()
+        .map(|s| s.as_str())
+        .take(MAX_SHOWN)
+        .collect();
     let truncated = if fail_count > MAX_SHOWN {
         format!("\n  ... and {} more", fail_count - MAX_SHOWN)
-    } else { String::new() };
+    } else {
+        String::new()
+    };
 
-    assert!(failures.is_empty(),
+    assert!(
+        failures.is_empty(),
         "{fail_count} of {total} golden pair tests failed \
          (panics: {panics}, text: {text_mm}, other: {other}):\n{}{truncated}",
-        shown.join("\n"));
+        shown.join("\n")
+    );
 }
