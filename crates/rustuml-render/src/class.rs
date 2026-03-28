@@ -378,7 +378,7 @@ fn render_with_positions(
                 from_bottom,
                 to_cx,
                 to_top,
-                &cs.border_color,
+                &cs.arrow_color,
                 dashed,
             );
             render_relationship_head(&mut svg, rel.kind, to_cx, to_top);

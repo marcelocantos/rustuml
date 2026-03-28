@@ -120,10 +120,10 @@ pub fn render(diagram: &ActivityDiagram, theme: &Theme) -> String {
             ActivityStep::Start => {
                 svg.circle(cx, y, CIRCLE_R, &as_.start_color, &as_.start_color);
                 y += CIRCLE_R * 2.0 + V_GAP / 2.0;
-                svg.line_segment(cx, y - V_GAP / 2.0, cx, y, "#000", false);
+                svg.line_segment(cx, y - V_GAP / 2.0, cx, y, &as_.arrow_color, false);
             }
             ActivityStep::Stop | ActivityStep::End => {
-                svg.line_segment(cx, y - V_GAP / 2.0, cx, y, "#000", false);
+                svg.line_segment(cx, y - V_GAP / 2.0, cx, y, &as_.arrow_color, false);
                 svg.circle(cx, y + CIRCLE_R, CIRCLE_R, "none", &as_.stop_color);
                 svg.circle(
                     cx,
@@ -136,7 +136,7 @@ pub fn render(diagram: &ActivityDiagram, theme: &Theme) -> String {
             }
             ActivityStep::Action(text) => {
                 let display = activity_text(text, use_monospace);
-                svg.line_segment(cx, y - V_GAP / 2.0, cx, y, "#000", false);
+                svg.line_segment(cx, y - V_GAP / 2.0, cx, y, &as_.arrow_color, false);
                 svg.rounded_rect(
                     cx - ACTION_WIDTH / 2.0,
                     y,
@@ -156,7 +156,7 @@ pub fn render(diagram: &ActivityDiagram, theme: &Theme) -> String {
                 y += ACTION_HEIGHT + V_GAP / 2.0;
             }
             ActivityStep::DeprecatedColorAction(dca) => {
-                svg.line_segment(cx, y - V_GAP / 2.0, cx, y, "#000", false);
+                svg.line_segment(cx, y - V_GAP / 2.0, cx, y, &as_.arrow_color, false);
                 svg.rect(
                     cx - ACTION_WIDTH / 2.0,
                     y,
@@ -196,7 +196,7 @@ pub fn render(diagram: &ActivityDiagram, theme: &Theme) -> String {
                 y += ACTION_HEIGHT + V_GAP / 2.0;
             }
             ActivityStep::Arrow(arrow) => {
-                svg.line_segment(cx, y - V_GAP / 2.0, cx, y, "#000", arrow.dashed);
+                svg.line_segment(cx, y - V_GAP / 2.0, cx, y, &as_.arrow_color, arrow.dashed);
                 if let Some(ref label) = arrow.label {
                     if arrow.dashed {
                         let display = format!("-> {};", label);
@@ -217,7 +217,7 @@ pub fn render(diagram: &ActivityDiagram, theme: &Theme) -> String {
                 y += V_GAP / 4.0;
             }
             ActivityStep::If(block) => {
-                svg.line_segment(cx, y - V_GAP / 2.0, cx, y, "#000", false);
+                svg.line_segment(cx, y - V_GAP / 2.0, cx, y, &as_.arrow_color, false);
                 svg.open_group("decision");
                 svg.diamond(
                     cx,
@@ -246,7 +246,7 @@ pub fn render(diagram: &ActivityDiagram, theme: &Theme) -> String {
                 y += DIAMOND_SIZE * 2.0 + V_GAP / 2.0;
             }
             ActivityStep::ElseIf(block) => {
-                svg.line_segment(cx, y - V_GAP / 2.0, cx, y, "#000", false);
+                svg.line_segment(cx, y - V_GAP / 2.0, cx, y, &as_.arrow_color, false);
                 svg.open_group("decision");
                 svg.diamond(
                     cx,
@@ -292,7 +292,7 @@ pub fn render(diagram: &ActivityDiagram, theme: &Theme) -> String {
                 y += DIAMOND_SIZE + V_GAP / 2.0;
             }
             ActivityStep::Fork | ActivityStep::Split => {
-                svg.line_segment(cx, y - V_GAP / 2.0, cx, y, "#000", false);
+                svg.line_segment(cx, y - V_GAP / 2.0, cx, y, &as_.arrow_color, false);
                 svg.rect(
                     cx - BAR_WIDTH / 2.0,
                     y,
@@ -373,7 +373,7 @@ pub fn render(diagram: &ActivityDiagram, theme: &Theme) -> String {
                 svg.text(note_x + 5.0, y + 4.0, &note.text, "start", SMALL_FONT);
             }
             ActivityStep::While(w) => {
-                svg.line_segment(cx, y - V_GAP / 2.0, cx, y, "#000", false);
+                svg.line_segment(cx, y - V_GAP / 2.0, cx, y, &as_.arrow_color, false);
                 svg.diamond(
                     cx,
                     y + DIAMOND_SIZE,
@@ -406,7 +406,7 @@ pub fn render(diagram: &ActivityDiagram, theme: &Theme) -> String {
                 y += V_GAP / 4.0;
             }
             ActivityStep::Repeat => {
-                svg.line_segment(cx, y - V_GAP / 2.0, cx, y, "#000", false);
+                svg.line_segment(cx, y - V_GAP / 2.0, cx, y, &as_.arrow_color, false);
                 svg.diamond(
                     cx,
                     y + DIAMOND_SIZE / 2.0,
@@ -417,7 +417,7 @@ pub fn render(diagram: &ActivityDiagram, theme: &Theme) -> String {
                 y += DIAMOND_SIZE + V_GAP / 2.0;
             }
             ActivityStep::RepeatWhile(rw) => {
-                svg.line_segment(cx, y - V_GAP / 2.0, cx, y, "#000", false);
+                svg.line_segment(cx, y - V_GAP / 2.0, cx, y, &as_.arrow_color, false);
                 svg.diamond(
                     cx,
                     y + DIAMOND_SIZE,
@@ -453,7 +453,7 @@ pub fn render(diagram: &ActivityDiagram, theme: &Theme) -> String {
                 y += DIAMOND_SIZE * 2.0 + V_GAP / 2.0;
             }
             ActivityStep::Switch(expr) => {
-                svg.line_segment(cx, y - V_GAP / 2.0, cx, y, "#000", false);
+                svg.line_segment(cx, y - V_GAP / 2.0, cx, y, &as_.arrow_color, false);
                 svg.diamond(
                     cx,
                     y + DIAMOND_SIZE,
