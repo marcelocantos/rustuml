@@ -12,7 +12,9 @@ pub mod class;
 pub mod component;
 pub mod deployment;
 pub mod ditaa;
+pub mod ebnf;
 pub mod gantt;
+pub mod git_diagram;
 pub mod json_diagram;
 pub mod math;
 pub mod mindmap;
@@ -44,6 +46,7 @@ pub enum Diagram {
     Json(json_diagram::JsonDiagram),
     MindMap(mindmap::MindMapDiagram),
     Gantt(gantt::GanttDiagram),
+    Git(git_diagram::GitDiagram),
     Timing(timing::TimingDiagram),
     Wbs(wbs::WbsDiagram),
     Math(math::MathDiagram),
@@ -51,6 +54,7 @@ pub enum Diagram {
     Regex(regex_diagram::RegexDiagram),
     Ditaa(ditaa::DitaaDiagram),
     Board(board::BoardDiagram),
+    Ebnf(ebnf::EbnfDiagram),
 }
 
 /// Source location for error reporting.

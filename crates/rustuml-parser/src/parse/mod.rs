@@ -9,7 +9,9 @@ pub mod class;
 pub mod component;
 pub mod deployment;
 pub mod ditaa;
+pub mod ebnf;
 pub mod gantt;
+pub mod git_diagram;
 pub mod json_diagram;
 pub mod math;
 pub mod mindmap;
@@ -514,6 +516,10 @@ pub fn parse_with_base(
             let g = gantt::parse_gantt(&lines)?;
             Ok(Diagram::Gantt(g))
         }
+        "git" => {
+            let g = git_diagram::parse_git(&lines)?;
+            Ok(Diagram::Git(g))
+        }
         "wbs" => {
             let w = wbs::parse_wbs(&lines)?;
             Ok(Diagram::Wbs(w))
@@ -545,6 +551,10 @@ pub fn parse_with_base(
         "board" => {
             let b = board::parse_board(&lines)?;
             Ok(Diagram::Board(b))
+        }
+        "ebnf" => {
+            let e = ebnf::parse_ebnf(&lines)?;
+            Ok(Diagram::Ebnf(e))
         }
         other => Err(ParseError {
             line: 1,

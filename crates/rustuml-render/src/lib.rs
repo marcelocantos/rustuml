@@ -12,6 +12,7 @@ pub mod creole;
 pub mod deployment;
 pub mod ditaa;
 pub mod gantt;
+pub mod git_diagram;
 pub mod json_diagram;
 pub mod math;
 pub mod metrics;
@@ -81,6 +82,7 @@ fn render_with_theme(diagram: &Diagram, theme: &Theme) -> String {
         Diagram::Json(jd) => json_diagram::render(jd, theme),
         Diagram::MindMap(mm) => mindmap::render(mm, theme),
         Diagram::Gantt(g) => gantt::render(g, theme),
+        Diagram::Git(g) => git_diagram::render(g, theme),
         Diagram::Timing(td) => timing::render(td, theme),
         Diagram::Object(obj) => object::render(obj, theme),
         Diagram::Wbs(w) => wbs::render(w, theme),

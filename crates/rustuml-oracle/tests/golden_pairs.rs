@@ -39,6 +39,7 @@ const SUPPORTED_START_KEYWORDS: &[&str] = &[
     "@startnwdiag",
     "@startditaa",
     "@startboard",
+    "@startgit",
 ];
 
 fn has_supported_start_keyword(source: &str) -> bool {
