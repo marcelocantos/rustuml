@@ -570,6 +570,7 @@ impl PlantUmlSvg {
         text_y: f64,
         text_content: &str,
         text_len: f64,
+        color: &str,
     ) {
         write!(
             self.buf,
@@ -581,13 +582,13 @@ impl PlantUmlSvg {
 
         write!(
             self.buf,
-            r##"<polygon fill="#181818" points="{arrow_points}" style="stroke:#181818;stroke-width:1;"/>"##,
+            r##"<polygon fill="{color}" points="{arrow_points}" style="stroke:{color};stroke-width:1;"/>"##,
         )
         .unwrap();
 
         write!(
             self.buf,
-            r##"<line style="stroke:#181818;stroke-width:1;{line_style}" x1="{}" x2="{}" y1="{}" y2="{}"/>"##,
+            r##"<line style="stroke:{color};stroke-width:1;{line_style}" x1="{}" x2="{}" y1="{}" y2="{}"/>"##,
             fmt_coord(line_x1),
             fmt_coord(line_x2),
             fmt_coord(line_y),
@@ -629,6 +630,7 @@ impl PlantUmlSvg {
         text_y: f64,
         text_content: &str,
         text_len: f64,
+        color: &str,
     ) {
         write!(
             self.buf,
@@ -655,7 +657,7 @@ impl PlantUmlSvg {
 
         write!(
             self.buf,
-            r##"<line style="stroke:#181818;stroke-width:1;" x1="{}" x2="{}" y1="{}" y2="{}"/>"##,
+            r##"<line style="stroke:{color};stroke-width:1;" x1="{}" x2="{}" y1="{}" y2="{}"/>"##,
             fmt_coord(tip_x),
             fmt_coord(back_x),
             fmt_coord(tip_y),
@@ -665,7 +667,7 @@ impl PlantUmlSvg {
 
         write!(
             self.buf,
-            r##"<line style="stroke:#181818;stroke-width:1;" x1="{}" x2="{}" y1="{}" y2="{}"/>"##,
+            r##"<line style="stroke:{color};stroke-width:1;" x1="{}" x2="{}" y1="{}" y2="{}"/>"##,
             fmt_coord(tip_x),
             fmt_coord(back_x),
             fmt_coord(tip_y),
@@ -675,7 +677,7 @@ impl PlantUmlSvg {
 
         write!(
             self.buf,
-            r##"<line style="stroke:#181818;stroke-width:1;{line_style}" x1="{}" x2="{}" y1="{}" y2="{}"/>"##,
+            r##"<line style="stroke:{color};stroke-width:1;{line_style}" x1="{}" x2="{}" y1="{}" y2="{}"/>"##,
             fmt_coord(line_x1),
             fmt_coord(line_x2),
             fmt_coord(line_y),
@@ -1434,6 +1436,14 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme) -> String {
                 let label = process_label(&msg.label);
                 let label_w = text_width(&label, MSG_FONT_SIZE);
 
+                // Arrow color (default #181818)
+                let arrow_color = msg
+                    .arrow
+                    .color
+                    .as_ref()
+                    .map(|c| resolve_color(c))
+                    .unwrap_or_else(|| "#181818".to_string());
+
                 // Source participant uid
                 let from_uid = id_to_idx
                     .get(msg.from.as_str())
@@ -1510,6 +1520,7 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme) -> String {
                             text_y_pos,
                             &label,
                             label_w,
+                            &arrow_color,
                         );
                     } else {
                         // Filled arrow polygon
@@ -1538,6 +1549,7 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme) -> String {
                             text_y_pos,
                             &label,
                             label_w,
+                            &arrow_color,
                         );
                     }
                 } else {
@@ -1569,6 +1581,7 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme) -> String {
                             text_y_pos,
                             &label,
                             label_w,
+                            &arrow_color,
                         );
                     } else {
                         let arrow_pts = format!(
@@ -1596,6 +1609,7 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme) -> String {
                             text_y_pos,
                             &label,
                             label_w,
+                            &arrow_color,
                         );
                     }
                 }

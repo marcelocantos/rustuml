@@ -256,8 +256,8 @@ impl SeqParser {
     }
 
     fn try_message(&mut self, line: &str) -> bool {
-        // Strip inline color annotations from arrows, e.g. -[#red]> → ->
-        static RE_COLOR: LazyLock<Regex> = LazyLock::new(|| Regex::new(r"\[#[^\]]*\]").unwrap());
+        // Capture and strip inline color annotations from arrows, e.g. -[#red]> → ->
+        static RE_COLOR: LazyLock<Regex> = LazyLock::new(|| Regex::new(r"\[(#[^\]]*)\]").unwrap());
         // Allow optional #color after activation modifier (++ #blue, -- #red, etc.)
         // Supports both simple names (\w+) and quoted names ("...").
         static RE: LazyLock<Regex> = LazyLock::new(|| {
@@ -267,6 +267,8 @@ impl SeqParser {
             .unwrap()
         });
 
+        // Extract arrow color before stripping
+        let arrow_color = RE_COLOR.captures(line).map(|c| c[1].to_string());
         let stripped = RE_COLOR.replace_all(line, "");
         let line = stripped.as_ref();
 
@@ -286,7 +288,8 @@ impl SeqParser {
             let activation_color = caps.get(5).map(|m| m.as_str().to_string());
             let label = caps.get(6).map_or("", |m| m.as_str()).trim().to_string();
 
-            let arrow = parse_arrow(arrow_str);
+            let mut arrow = parse_arrow(arrow_str);
+            arrow.color = arrow_color;
             let activation = activation_str.map(parse_activation);
 
             // Ensure participants in textual order (left-to-right as written)
@@ -340,6 +343,7 @@ impl SeqParser {
                     line: LineStyle::Solid,
                     head: ArrowHead::Filled,
                     direction: ArrowDirection::LeftToRight,
+                    color: None,
                 },
                 activation: None,
                 activation_color: None,
@@ -357,6 +361,7 @@ impl SeqParser {
                     line: LineStyle::Solid,
                     head: ArrowHead::Filled,
                     direction: ArrowDirection::LeftToRight,
+                    color: None,
                 },
                 activation: None,
                 activation_color: None,
@@ -844,6 +849,7 @@ fn parse_arrow(s: &str) -> Arrow {
         line,
         head,
         direction,
+        color: None,
     }
 }
 
