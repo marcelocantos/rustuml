@@ -544,19 +544,29 @@ pub fn render_with_oracle(
 
     // If oracle layout is provided, use it directly instead of running Graphviz.
     if let Some(oracle) = oracle {
+        // Override dims with oracle entity dimensions.
+        let mut dims = dims;
+        for (i, entity) in diagram.entities.iter().enumerate() {
+            let rect = oracle
+                .entities
+                .get(&entity.label)
+                .or_else(|| oracle.entities.get(&entity.id));
+            if let Some(rect) = rect {
+                dims[i].width = rect.width;
+                dims[i].height = rect.height;
+            }
+        }
+
         let node_positions: Vec<NodePosition> = diagram
             .entities
             .iter()
             .enumerate()
             .map(|(i, entity)| {
-                if let Some(rect) = oracle.entities.get(&entity.label) {
-                    NodePosition {
-                        x: rect.x - MARGIN,
-                        y: rect.y - MARGIN,
-                        width: rect.width,
-                        height: rect.height,
-                    }
-                } else if let Some(rect) = oracle.entities.get(&entity.id) {
+                let rect = oracle
+                    .entities
+                    .get(&entity.label)
+                    .or_else(|| oracle.entities.get(&entity.id));
+                if let Some(rect) = rect {
                     NodePosition {
                         x: rect.x - MARGIN,
                         y: rect.y - MARGIN,
@@ -673,11 +683,11 @@ fn parse_number(chars: &mut std::iter::Peekable<std::str::Chars>) -> Option<f64>
         }
     }
     // Optional sign
-    if let Some(&c) = chars.peek() {
-        if c == '-' || c == '+' {
-            s.push(c);
-            chars.next();
-        }
+    if let Some(&c) = chars.peek()
+        && (c == '-' || c == '+')
+    {
+        s.push(c);
+        chars.next();
     }
     // Digits and decimal point
     let mut has_digit = false;

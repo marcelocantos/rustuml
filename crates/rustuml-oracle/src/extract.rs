@@ -64,23 +64,23 @@ pub fn extract_oracle_layout(svg: &str) -> Option<OracleLayout> {
             }
         } else if class_attr == "link" {
             // Find <path> child with id and d attributes.
-            if let Some(path) = find_first_child(&node, "path") {
-                if let (Some(id), Some(d)) = (path.attribute("id"), path.attribute("d")) {
-                    let mut oracle_edge = OracleEdgePath {
-                        id: id.to_string(),
-                        d: d.to_string(),
-                        arrow_points: None,
-                    };
+            if let Some(path) = find_first_child(&node, "path")
+                && let (Some(id), Some(d)) = (path.attribute("id"), path.attribute("d"))
+            {
+                let mut oracle_edge = OracleEdgePath {
+                    id: id.to_string(),
+                    d: d.to_string(),
+                    arrow_points: None,
+                };
 
-                    // Find <polygon> child for arrowhead.
-                    if let Some(polygon) = find_first_child(&node, "polygon") {
-                        if let Some(points) = polygon.attribute("points") {
-                            oracle_edge.arrow_points = Some(points.to_string());
-                        }
-                    }
-
-                    layout.edges.push(oracle_edge);
+                // Find <polygon> child for arrowhead.
+                if let Some(polygon) = find_first_child(&node, "polygon")
+                    && let Some(points) = polygon.attribute("points")
+                {
+                    oracle_edge.arrow_points = Some(points.to_string());
                 }
+
+                layout.edges.push(oracle_edge);
             }
         }
     }
@@ -118,6 +118,57 @@ mod tests {
         assert!((foo.y - 10.0).abs() < 0.001);
         assert!((foo.width - 80.0).abs() < 0.001);
         assert!((foo.height - 48.0).abs() < 0.001);
+    }
+
+    #[test]
+    fn extract_real_golden() {
+        // Try to load a real golden SVG if available.
+        let golden_path = concat!(
+            env!("CARGO_MANIFEST_DIR"),
+            "/../../test-diagrams/golden/class/class_arrow_type_0_short.svg"
+        );
+        let Ok(svg) = std::fs::read_to_string(golden_path) else {
+            eprintln!("skipping: golden file not found");
+            return;
+        };
+        let layout = extract_oracle_layout(&svg).unwrap();
+        eprintln!("entities: {:?}", layout.entities);
+        eprintln!("edges: {:?}", layout.edges);
+        eprintln!(
+            "canvas: {}x{}",
+            layout.canvas_width, layout.canvas_height
+        );
+        assert_eq!(layout.entities.len(), 2, "expected 2 entities (A, B)");
+        assert!(layout.entities.contains_key("A"));
+        assert!(layout.entities.contains_key("B"));
+        assert_eq!(layout.edges.len(), 1);
+    }
+
+    #[test]
+    fn render_with_oracle_matches_golden() {
+        let golden_dir = concat!(
+            env!("CARGO_MANIFEST_DIR"),
+            "/../../test-diagrams/golden/class/"
+        );
+        let puml_path = format!("{golden_dir}class_arrow_type_0_short.puml");
+        let svg_path = format!("{golden_dir}class_arrow_type_0_short.svg");
+        let Ok(source) = std::fs::read_to_string(&puml_path) else {
+            eprintln!("skipping: golden file not found");
+            return;
+        };
+        let golden_svg = std::fs::read_to_string(&svg_path).unwrap();
+
+        let oracle = extract_oracle_layout(&golden_svg).unwrap();
+        eprintln!("Oracle entities: {:?}", oracle.entities);
+
+        let diagram =
+            rustuml_parser::parse::parse_auto_with_base(&source, None).unwrap();
+        let rust_svg =
+            rustuml_render::render_svg_with_oracle(&diagram, Some(&oracle));
+
+        // Show first 300 chars of each for comparison
+        eprintln!("\n=== GOLDEN (first 300) ===\n{}", &golden_svg[..300.min(golden_svg.len())]);
+        eprintln!("\n=== RUST (first 300) ===\n{}", &rust_svg[..300.min(rust_svg.len())]);
     }
 
     #[test]
