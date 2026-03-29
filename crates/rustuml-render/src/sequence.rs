@@ -13,119 +13,33 @@ use rustuml_parser::diagram::sequence::*;
 
 use crate::style::Theme;
 
-// ---------------------------------------------------------------------------
-// PlantUML Java SansSerif font metrics at font-size 14.
-// Character advance widths extracted from PlantUML golden SVGs.
-// For other font sizes, scale linearly: width_at_N = width_14 * N / 14.0
-// ---------------------------------------------------------------------------
-
-fn char_width_14(c: char) -> f64 {
-    match c {
-        'A' => 9.6592,
-        'B' => 8.0527,
-        'C' => 9.6865,
-        'D' => 10.4863,
-        'E' => 7.5879,
-        'F' => 7.5059,
-        'G' => 10.1172,
-        'H' => 10.2881,
-        'I' => 4.0332,
-        'J' => 4.3545,
-        'K' => 9.1396,
-        'L' => 7.4648,
-        'M' => 12.0586,
-        'N' => 10.3428,
-        'O' => 10.876,
-        'P' => 7.7383,
-        'Q' => 10.876,
-        'R' => 8.8525,
-        'S' => 7.54,
-        'T' => 8.8525,
-        'U' => 9.7002,
-        'V' => 9.1533,
-        'W' => 11.9766,
-        'X' => 8.7637,
-        'Y' => 8.7227,
-        'Z' => 8.4629,
-        'a' => 7.7314,
-        'b' => 8.8115,
-        'c' => 7.1709,
-        'd' => 8.8115,
-        'e' => 7.7998,
-        'f' => 5.1475,
-        'g' => 8.7295,
-        'h' => 8.6885,
-        'i' => 4.0469,
-        'j' => 4.2588,
-        'k' => 8.1826,
-        'l' => 4.0469,
-        'm' => 13.0703,
-        'n' => 8.6885,
-        'o' => 8.5996,
-        'p' => 8.8115,
-        'q' => 8.8115,
-        'r' => 5.7285,
-        's' => 7.1367,
-        't' => 5.2363,
-        'u' => 8.6885,
-        'v' => 7.2461,
-        'w' => 10.7871,
-        'x' => 8.5859,
-        'y' => 7.3145,
-        'z' => 8.0254,
-        '0' | '1' | '2' | '3' | '4' | '5' | '6' | '7' | '8' | '9' => 8.8525,
-        ' ' | '\u{00a0}' => 4.4297,
-        '(' | ')' | '{' | '}' | '[' | ']' => 4.5527,
-        ',' | '.' | ':' | ';' | '!' => 4.4297,
-        '?' => 5.9063,
-        '-' => 8.1006,
-        '_' => 7.0,
-        '+' | '=' | '<' | '>' => 11.1289,
-        '/' | '\\' => 7.3418,
-        '@' => 12.0176,
-        '#' | '$' | '^' | '~' => 8.8525,
-        '%' => 9.3584,
-        '&' => 9.7617,
-        '*' => 6.7471,
-        '|' => 5.2295,
-        '\'' => 3.2061,
-        '"' => 5.2295,
-        '`' => 8.5996,
-        '\u{00ab}' | '\u{00bb}' => 7.0, // guillemets, approximate
-        _ => 8.8525,                    // default width for unknown chars
-    }
-}
-
-/// Compute text width at a given font size using PlantUML-compatible metrics.
+/// Compute text width at a given font size using exact PlantUML Java AWT metrics.
 fn text_width(text: &str, font_size: f64) -> f64 {
-    let scale = font_size / 14.0;
-    text.chars().map(char_width_14).sum::<f64>() * scale
+    crate::metrics::plantuml_text_width(text, font_size)
 }
 
 /// Format an f64 as a PlantUML-compatible coordinate string.
-/// PlantUML uses up to 4 decimal places, trimming trailing zeros.
+/// PlantUML uses `String.format(Locale.US, "%.4f", x)` then trims trailing zeros.
+/// We must NOT pre-round via multiply/round/divide — that introduces precision errors
+/// at boundary values (e.g., 76.023449... * 10000 = 760234.5 exactly, which rounds
+/// to 760235 via round-half-away-from-zero, but Java formats the original double to
+/// 76.0234 because the 5th decimal of the ACTUAL value is 4).
 fn fmt_coord(v: f64) -> String {
-    // PlantUML Java uses default double formatting which gives varying precision.
-    // We need to match the exact output. Java's Double.toString() gives
-    // the shortest representation that uniquely identifies the double.
-    // In practice, for coordinates derived from font metrics, this means
-    // typically 1-4 decimal places.
+    // Format to 4 decimal places (Rust uses round-half-to-even, matching Java's
+    // behavior for non-midpoint values, which is the vast majority of cases).
+    let s = format!("{v:.4}");
 
-    // Round to 4 decimal places first (to match PlantUML's internal precision).
-    let rounded = (v * 10000.0).round() / 10000.0;
-
-    if rounded == rounded.floor() {
-        // Integer value: render without decimal point
-        format!("{}", rounded as i64)
-    } else {
-        // Format with enough precision
-        let s = format!("{rounded:.4}");
-        // Trim trailing zeros after decimal point
-        let s = s.trim_end_matches('0');
-        // Don't leave a trailing decimal point
-        let s = s.trim_end_matches('.');
-        s.to_string()
+    // Check if the result is an integer (all zeros after decimal point)
+    if s.ends_with(".0000") {
+        // Return just the integer part
+        return s[..s.len() - 5].to_string();
     }
+
+    // Trim trailing zeros after decimal point
+    let s = s.trim_end_matches('0');
+    // Don't leave a trailing decimal point
+    let s = s.trim_end_matches('.');
+    s.to_string()
 }
 
 // ---------------------------------------------------------------------------
@@ -136,10 +50,10 @@ const HEAD_BOX_Y: f64 = 5.0;
 const HEAD_BOX_H: f64 = 30.4883;
 const HEAD_BOX_RX: f64 = 2.5;
 const BOX_TEXT_X_PAD: f64 = 7.0;
-const BOX_TEXT_Y_OFFSET: f64 = 20.5352; // baseline from box top
+const BOX_TEXT_Y_OFFSET: f64 = 20.53515; // baseline from box top (tuned to match PlantUML's Java double arithmetic at various y positions)
 const PARTICIPANT_FONT_SIZE: f64 = 14.0;
 const MSG_FONT_SIZE: f64 = 13.0;
-const MSG_STEP: f64 = 29.3105; // vertical spacing between messages
+const MSG_STEP: f64 = 29.31055; // vertical spacing between messages (tuned to match PlantUML's accumulated y values)
 const FIRST_MSG_OFFSET: f64 = 31.3105; // first msg y from lifeline top
 const TAIL_GAP: f64 = 17.0; // gap from last msg y to tail box y
 const LIFELINE_Y_OFFSET: f64 = 1.0; // lifeline starts 1px below head box
@@ -153,6 +67,7 @@ const LEFT_ARROW_TEXT_PAD: f64 = 16.0; // text offset from arrow tip (left arrow
 const ACTIVATION_WIDTH: f64 = 10.0;
 const ACTIVATION_HALF_W: f64 = 5.0;
 const LIFELINE_RECT_WIDTH: f64 = 8.0;
+const MIN_LIFELINE_HEIGHT: f64 = 20.0;
 // Arrow tip is 2px before the target lifeline center (non-activated)
 const ARROW_TIP_GAP: f64 = 2.0;
 
@@ -378,8 +293,10 @@ struct ParticipantLayout {
     box_height: f64,
     /// Left x of participant box
     box_x: f64,
-    /// Center x (lifeline position)
+    /// Center x (exact box center, used for messages and lifeline rect)
     center_x: f64,
+    /// Lifeline dashed line x (= box_x + floor(box_width / 2), matching PlantUML's int arithmetic)
+    lifeline_line_x: f64,
 }
 
 /// State of activation bars per participant.
@@ -816,6 +733,7 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme) -> String {
                 box_height: bh,
                 box_x: 0.0,
                 center_x: 0.0,
+                lifeline_line_x: 0.0,
             }
         })
         .collect();
@@ -828,36 +746,90 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme) -> String {
     // Phase 2: Compute required gap between adjacent participant pairs
     // -----------------------------------------------------------------------
 
-    // For each adjacent pair (i, i+1), find the widest message label between them.
+    // PlantUML's spacing is constraint-based: for each message, the distance
+    // between the source and target participant centers must accommodate:
+    //   arrow_only_width + source_lifeline_shift + target_lifeline_shift
+    // where lifeline shifts account for activation bars.
+    //
+    // arrow_only_width = text_width + MSG_TEXT_LEFT_PAD + MSG_TEXT_LEFT_PAD + ARROW_SIZE
+    //                  = text_width + 24 (the constant overhead for arrow + text padding)
+
     let n = participants.len();
     let mut pair_max_label_width = vec![0.0_f64; n.saturating_sub(1)];
 
-    // Scan all messages to find the widest label between each pair.
+    // Track activation state as we scan events to compute per-message shifts.
+    let mut activation_depth: HashMap<String, usize> = HashMap::new();
+
     for event in &diagram.events {
-        if let Event::Message(msg) = event {
-            let from_idx = id_to_idx.get(msg.from.as_str()).copied();
-            let to_idx = id_to_idx.get(msg.to.as_str()).copied();
-            if let (Some(fi), Some(ti)) = (from_idx, to_idx) {
-                let (left, right) = if fi < ti { (fi, ti) } else { (ti, fi) };
-                let label = process_label(&msg.label);
-                let label_w = text_width(&label, MSG_FONT_SIZE);
-                // The label needs to span from left to right participant.
-                // For now, attribute the full label width to the pair that directly
-                // connects the participants (ignoring multi-hop for simplicity).
-                // The gap needed = label_width + padding + arrow
-                let needed = label_w + MSG_TEXT_LEFT_PAD + MSG_TEXT_LEFT_PAD + ARROW_SIZE;
-                // Distribute this needed gap across spanning pairs
-                if right - left == 1 {
-                    pair_max_label_width[left] = pair_max_label_width[left].max(needed);
-                } else {
-                    // Multi-hop: the gap is split across multiple pairs.
-                    // For now, use a minimum per-pair allocation.
-                    let per_pair = needed / (right - left) as f64;
-                    for slot in &mut pair_max_label_width[left..right] {
-                        *slot = slot.max(per_pair);
+        match event {
+            Event::Message(msg) => {
+                let from_idx = id_to_idx.get(msg.from.as_str()).copied();
+                let to_idx = id_to_idx.get(msg.to.as_str()).copied();
+                if let (Some(fi), Some(ti)) = (from_idx, to_idx) {
+                    let label = process_label(&msg.label);
+                    let label_w = text_width(&label, MSG_FONT_SIZE);
+
+                    // Base arrow width (text + padding + arrow)
+                    let arrow_only_w = label_w + MSG_TEXT_LEFT_PAD + MSG_TEXT_LEFT_PAD + ARROW_SIZE;
+
+                    // Lifeline shifts from activation bars at the current message level.
+                    // The source's "right shift" and target's "left shift" come from
+                    // activation bars extending from the lifeline center.
+                    let from_depth = activation_depth
+                        .get(msg.from.as_str())
+                        .copied()
+                        .unwrap_or(0);
+                    let to_depth = activation_depth.get(msg.to.as_str()).copied().unwrap_or(0);
+
+                    // Each active lifeline extends ACTIVATION_HALF_W from center.
+                    let source_shift = if from_depth > 0 {
+                        ACTIVATION_HALF_W
+                    } else {
+                        0.0
+                    };
+                    let target_shift = if to_depth > 0 { ACTIVATION_HALF_W } else { 0.0 };
+
+                    let needed = arrow_only_w + source_shift + target_shift;
+
+                    let (left, right) = if fi < ti { (fi, ti) } else { (ti, fi) };
+                    if right - left == 1 {
+                        pair_max_label_width[left] = pair_max_label_width[left].max(needed);
+                    } else {
+                        let per_pair = needed / (right - left) as f64;
+                        for slot in &mut pair_max_label_width[left..right] {
+                            *slot = slot.max(per_pair);
+                        }
+                    }
+                }
+
+                // Update activation state from message's activation change
+                if let Some(act) = &msg.activation {
+                    match act {
+                        ActivationChange::Activate => {
+                            *activation_depth.entry(msg.to.clone()).or_default() += 1;
+                        }
+                        ActivationChange::Deactivate => {
+                            if let Some(d) = activation_depth.get_mut(&msg.from) {
+                                *d = d.saturating_sub(1);
+                            }
+                        }
+                        ActivationChange::Destroy => {
+                            if let Some(d) = activation_depth.get_mut(&msg.to) {
+                                *d = d.saturating_sub(1);
+                            }
+                        }
                     }
                 }
             }
+            Event::Activate(id) => {
+                *activation_depth.entry(id.clone()).or_default() += 1;
+            }
+            Event::Deactivate(id) => {
+                if let Some(d) = activation_depth.get_mut(id) {
+                    *d = d.saturating_sub(1);
+                }
+            }
+            _ => {}
         }
     }
 
@@ -870,6 +842,9 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme) -> String {
         // First participant starts at x=5 (PlantUML's left margin)
         participants[0].box_x = HEAD_BOX_Y; // 5.0
         participants[0].center_x = HEAD_BOX_Y + participants[0].box_width / 2.0;
+        // PlantUML computes lifeline line x as box_x + (int)(box_width / 2)
+        participants[0].lifeline_line_x =
+            participants[0].box_x + (participants[0].box_width / 2.0).floor();
 
         for i in 1..n {
             // Minimum gap between centers: ensure boxes don't overlap
@@ -882,6 +857,8 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme) -> String {
             let gap = min_gap_boxes.max(gap_from_labels);
             participants[i].center_x = participants[i - 1].center_x + gap;
             participants[i].box_x = participants[i].center_x - participants[i].box_width / 2.0;
+            participants[i].lifeline_line_x =
+                participants[i].box_x + (participants[i].box_width / 2.0).floor();
         }
     }
 
@@ -910,12 +887,17 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme) -> String {
         .map(|p| p.box_height)
         .fold(HEAD_BOX_H, f64::max);
     let lifeline_top = HEAD_BOX_Y + max_box_h + LIFELINE_Y_OFFSET;
-    let last_msg_y = if msg_count > 0 {
-        lifeline_top + FIRST_MSG_OFFSET + (msg_count as f64 - 1.0) * MSG_STEP
+
+    // Compute tail box y based on message count.
+    // With 0 messages, PlantUML uses a minimum lifeline height of 20px.
+    // With messages, the tail starts TAIL_GAP below the last message.
+    let tail_box_y = if msg_count > 0 {
+        let last_msg_y = lifeline_top + FIRST_MSG_OFFSET + (msg_count as f64 - 1.0) * MSG_STEP;
+        last_msg_y + TAIL_GAP
     } else {
-        lifeline_top + FIRST_MSG_OFFSET
+        // Minimum lifeline: 20px, tail overlaps by LIFELINE_Y_OFFSET
+        lifeline_top + MIN_LIFELINE_HEIGHT - LIFELINE_Y_OFFSET
     };
-    let tail_box_y = last_msg_y + TAIL_GAP;
     let lifeline_bottom = tail_box_y + LIFELINE_Y_OFFSET;
     let lifeline_height = lifeline_bottom - lifeline_top;
 
@@ -927,50 +909,51 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme) -> String {
         last.box_x + last.box_width
     };
     let svg_width = (last_box_right + RIGHT_MARGIN).ceil() as u32;
-    let svg_height = (tail_box_y + HEAD_BOX_H + BOTTOM_MARGIN).ceil() as u32;
+    let svg_height = (tail_box_y + max_box_h + BOTTOM_MARGIN).ceil() as u32;
 
     // -----------------------------------------------------------------------
     // Phase 5: Pre-compute activation bars
     // -----------------------------------------------------------------------
 
-    // Scan events to determine activation bar positions (y ranges).
+    // Scan events to determine activation bar positions.
+    // We store message step indices and compute y/height from them to avoid
+    // floating-point accumulation errors in the height calculation.
     struct ActivationBar {
         participant_id: String,
-        start_y: f64,
-        end_y: f64,
+        start_msg_idx: u32, // message step index where activation starts
+        n_steps: u32,       // number of message steps the activation spans
     }
 
     let mut activation_bars: Vec<ActivationBar> = Vec::new();
     {
         let mut tracker = ActivationTracker::new();
-        // Track open activations: (participant_id, start_y)
-        let mut open_activations: Vec<(String, f64)> = Vec::new();
-        let mut y = lifeline_top + FIRST_MSG_OFFSET;
+        // Track open activations: (participant_id, start_msg_idx)
+        let mut open_activations: Vec<(String, u32)> = Vec::new();
         let mut msg_idx: u32 = 0;
+        let mut last_msg_idx: u32 = 0;
 
         for event in &diagram.events {
             match event {
                 Event::Message(msg) => {
-                    let msg_y = y;
+                    last_msg_idx = msg_idx;
 
                     // Process activation changes from ++ / -- on message
                     if let Some(act) = &msg.activation {
                         match act {
                             ActivationChange::Activate => {
                                 tracker.activate(&msg.to);
-                                open_activations.push((msg.to.clone(), msg_y));
+                                open_activations.push((msg.to.clone(), msg_idx));
                             }
                             ActivationChange::Deactivate => {
                                 tracker.deactivate(&msg.from);
-                                // Close the most recent activation for this participant
                                 if let Some(pos) =
                                     open_activations.iter().rposition(|(id, _)| id == &msg.from)
                                 {
-                                    let (pid, start) = open_activations.remove(pos);
+                                    let (pid, start_idx) = open_activations.remove(pos);
                                     activation_bars.push(ActivationBar {
                                         participant_id: pid,
-                                        start_y: start,
-                                        end_y: msg_y,
+                                        start_msg_idx: start_idx,
+                                        n_steps: msg_idx - start_idx,
                                     });
                                 }
                             }
@@ -981,41 +964,44 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme) -> String {
                     }
 
                     msg_idx += 1;
-                    y = lifeline_top + FIRST_MSG_OFFSET + msg_idx as f64 * MSG_STEP;
                 }
                 Event::Activate(id) => {
+                    // Activation starts at the most recent message's step index
                     tracker.activate(id);
-                    let msg_y = y;
-                    open_activations.push((id.clone(), msg_y));
+                    open_activations.push((id.clone(), last_msg_idx));
                 }
                 Event::Deactivate(id) => {
+                    // Deactivation ends at the most recent message's step index
                     tracker.deactivate(id);
                     if let Some(pos) = open_activations.iter().rposition(|(pid, _)| pid == id) {
-                        let (pid, start) = open_activations.remove(pos);
+                        let (pid, start_idx) = open_activations.remove(pos);
                         activation_bars.push(ActivationBar {
                             participant_id: pid,
-                            start_y: start,
-                            end_y: y,
+                            start_msg_idx: start_idx,
+                            n_steps: last_msg_idx - start_idx,
                         });
                     }
                 }
                 Event::Return(_) => {
+                    last_msg_idx = msg_idx;
                     msg_idx += 1;
-                    y = lifeline_top + FIRST_MSG_OFFSET + msg_idx as f64 * MSG_STEP;
                 }
                 _ => {}
             }
         }
 
         // Close any remaining open activations
-        for (pid, start) in open_activations {
+        for (pid, start_idx) in open_activations {
             activation_bars.push(ActivationBar {
                 participant_id: pid,
-                start_y: start,
-                end_y: last_msg_y + MSG_STEP,
+                start_msg_idx: start_idx,
+                n_steps: msg_idx - start_idx + 1,
             });
         }
     }
+
+    // Helper to compute y from message step index
+    let msg_y_at = |idx: u32| -> f64 { lifeline_top + FIRST_MSG_OFFSET + idx as f64 * MSG_STEP };
 
     // -----------------------------------------------------------------------
     // Phase 6: Generate SVG
@@ -1163,12 +1149,15 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme) -> String {
     for bar in &activation_bars {
         let cx = center_of(&bar.participant_id);
         let bar_x = cx - ACTIVATION_HALF_W;
+        let bar_y = msg_y_at(bar.start_msg_idx);
+        // Compute height directly from step count to avoid floating-point drift
+        let bar_h = bar.n_steps as f64 * MSG_STEP;
         let title = &participants
             .iter()
             .find(|p| p.id == bar.participant_id)
             .map(|p| p.label.clone())
             .unwrap_or_default();
-        svg.activation_bar(title, bar_x, bar.start_y, bar.end_y - bar.start_y);
+        svg.activation_bar(title, bar_x, bar_y, bar_h);
     }
 
     // Lifelines
@@ -1189,17 +1178,19 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme) -> String {
             ll_rect_x,
             lifeline_top,
             lifeline_height,
-            p.center_x,
+            p.lifeline_line_x, // PlantUML uses box_x + floor(box_width/2) for the dashed line
             lifeline_top,
             lifeline_bottom,
         );
     }
 
-    // Participant head boxes
+    // Participant head and tail boxes (interleaved per participant, matching PlantUML order)
     for (i, p) in participants.iter().enumerate() {
         let part_uid = format!("part{}", p.idx + 1);
         let text_x = p.box_x + BOX_TEXT_X_PAD;
-        let text_y =
+
+        // Head box
+        let head_text_y =
             HEAD_BOX_Y + BOX_TEXT_Y_OFFSET + if p.stereotype.is_some() { 7.5 } else { 0.0 };
         let stereo_arg = p.stereotype.as_ref().map(|s| {
             let display = format!("\u{ab}{s}\u{bb}");
@@ -1216,18 +1207,14 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme) -> String {
             p.box_width,
             p.box_height,
             text_x,
-            text_y,
+            head_text_y,
             &p.label,
             p.text_width,
             stereo_ref,
         );
-    }
 
-    // Participant tail boxes
-    for (i, p) in participants.iter().enumerate() {
-        let part_uid = format!("part{}", p.idx + 1);
-        let text_x = p.box_x + BOX_TEXT_X_PAD;
-        let text_y =
+        // Tail box
+        let tail_text_y =
             tail_box_y + BOX_TEXT_Y_OFFSET + if p.stereotype.is_some() { 7.5 } else { 0.0 };
         let stereo_arg = p.stereotype.as_ref().map(|s| {
             let display = format!("\u{ab}{s}\u{bb}");
@@ -1244,7 +1231,7 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme) -> String {
             p.box_width,
             p.box_height,
             text_x,
-            text_y,
+            tail_text_y,
             &p.label,
             p.text_width,
             stereo_ref,
@@ -1255,20 +1242,25 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme) -> String {
     for bar in &activation_bars {
         let cx = center_of(&bar.participant_id);
         let bar_x = cx - ACTIVATION_HALF_W;
+        let bar_y = msg_y_at(bar.start_msg_idx);
+        let bar_h = bar.n_steps as f64 * MSG_STEP;
         let title = &participants
             .iter()
             .find(|p| p.id == bar.participant_id)
             .map(|p| p.label.clone())
             .unwrap_or_default();
-        svg.activation_bar(title, bar_x, bar.start_y, bar.end_y - bar.start_y);
+        svg.activation_bar(title, bar_x, bar_y, bar_h);
     }
 
     // Messages
     let mut msg_y = lifeline_top + FIRST_MSG_OFFSET;
     let mut msg_id: u32 = 0;
     let mut auto_num: Option<u32> = diagram.autonumber.as_ref().map(|an| an.start);
+    // Track activation depth during message rendering to adjust arrow positions.
+    let mut render_activation: HashMap<String, usize> = HashMap::new();
 
-    for event in &diagram.events {
+    let events = &diagram.events;
+    for (ev_idx, event) in events.iter().enumerate() {
         match event {
             Event::Message(msg) => {
                 msg_id += 1;
@@ -1278,6 +1270,28 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme) -> String {
                 let is_right = to_x > from_x;
                 let is_dotted = msg.arrow.line == LineStyle::Dotted;
                 let is_open = msg.arrow.head == ArrowHead::Open;
+
+                // Check if source/target are activated.
+                // Also look ahead: if the next event activates the target, treat it as
+                // activated (PlantUML's activation conceptually starts at the message).
+                let _from_active = render_activation
+                    .get(msg.from.as_str())
+                    .copied()
+                    .unwrap_or(0)
+                    > 0;
+                let mut to_active =
+                    render_activation.get(msg.to.as_str()).copied().unwrap_or(0) > 0;
+                // Check message's own activation flag
+                if let Some(ActivationChange::Activate) = &msg.activation {
+                    to_active = true;
+                }
+                // Look ahead for standalone Activate events targeting the message's 'to'
+                if !to_active
+                    && let Some(Event::Activate(id)) = events.get(ev_idx + 1)
+                    && id == &msg.to
+                {
+                    to_active = true;
+                }
 
                 let line_style = if is_dotted {
                     "stroke-dasharray:2,2;"
@@ -1328,8 +1342,9 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme) -> String {
                 };
 
                 if is_right {
-                    let tip_x = to_x - ARROW_TIP_GAP;
-                    let _line_x1 = from_x; // message line start at from_center
+                    // Arrow tip: if target is activated, tip is at activation bar edge
+                    let target_shift = if to_active { ACTIVATION_HALF_W } else { 0.0 };
+                    let tip_x = to_x - target_shift - ARROW_TIP_GAP;
                     let line_x2 = if is_open {
                         tip_x
                     } else {
@@ -1364,7 +1379,7 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme) -> String {
                             fmt_coord(msg_y),
                             fmt_coord(tip_x - ARROW_SIZE),
                             fmt_coord(msg_y + ARROW_HALF_H),
-                            fmt_coord(tip_x - ARROW_SIZE + FILLED_ARROW_NOTCH + 2.0),
+                            fmt_coord(tip_x - ARROW_SIZE + FILLED_ARROW_NOTCH),
                             fmt_coord(msg_y),
                         );
                         svg.message_filled_arrow(
@@ -1380,6 +1395,8 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme) -> String {
                     } else {
                         tip_x + FILLED_ARROW_NOTCH
                     };
+                    // PlantUML draws the left-going line to from_center - 1
+                    let line_x2_end = from_x - 1.0;
 
                     if is_open {
                         svg.message_open_arrow(
@@ -1391,7 +1408,7 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme) -> String {
                             msg_y,
                             false,
                             tip_x - 1.0,
-                            from_x,
+                            line_x2_end,
                             msg_y,
                             line_style,
                             text_x,
@@ -1408,13 +1425,43 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme) -> String {
                             fmt_coord(msg_y),
                             fmt_coord(tip_x + ARROW_SIZE),
                             fmt_coord(msg_y + ARROW_HALF_H),
-                            fmt_coord(tip_x + ARROW_SIZE - FILLED_ARROW_NOTCH - 2.0),
+                            fmt_coord(tip_x + ARROW_SIZE - FILLED_ARROW_NOTCH),
                             fmt_coord(msg_y),
                         );
                         svg.message_filled_arrow(
-                            &from_uid, &to_uid, src_line, msg_id, &arrow_pts, line_x1, from_x,
-                            msg_y, line_style, text_x, text_y_pos, &label, label_w,
+                            &from_uid,
+                            &to_uid,
+                            src_line,
+                            msg_id,
+                            &arrow_pts,
+                            line_x1,
+                            line_x2_end,
+                            msg_y,
+                            line_style,
+                            text_x,
+                            text_y_pos,
+                            &label,
+                            label_w,
                         );
+                    }
+                }
+
+                // Update activation state after this message
+                if let Some(act) = &msg.activation {
+                    match act {
+                        ActivationChange::Activate => {
+                            *render_activation.entry(msg.to.clone()).or_default() += 1;
+                        }
+                        ActivationChange::Deactivate => {
+                            if let Some(d) = render_activation.get_mut(&msg.from) {
+                                *d = d.saturating_sub(1);
+                            }
+                        }
+                        ActivationChange::Destroy => {
+                            if let Some(d) = render_activation.get_mut(&msg.to) {
+                                *d = d.saturating_sub(1);
+                            }
+                        }
                     }
                 }
 
@@ -1656,9 +1703,18 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme) -> String {
                 .unwrap();
                 msg_y += MSG_STEP;
             }
+            Event::Activate(id) => {
+                // Track activation state for message rendering
+                *render_activation.entry(id.clone()).or_default() += 1;
+            }
+            Event::Deactivate(id) => {
+                if let Some(d) = render_activation.get_mut(id) {
+                    *d = d.saturating_sub(1);
+                }
+            }
             _ => {
-                // Remaining events (Activate, Deactivate, Destroy, Create, NewPage)
-                // don't emit visible text labels.
+                // Remaining events (Destroy, Create, NewPage)
+                // don't emit visible text labels or change activation state.
             }
         }
     }

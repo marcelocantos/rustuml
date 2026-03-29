@@ -60,6 +60,7 @@ pub fn line_height(font_size: f64) -> f64 {
 /// These are exact binary fractions from `FontMetrics.getStringBounds()` with
 /// `FRACTIONALMETRICS_ON`. They sum without floating-point error, producing
 /// textLength values that match PlantUML's golden SVGs exactly.
+#[allow(clippy::excessive_precision)]
 const JAVA_AWT_WIDTHS_14: &[(char, f64)] = &[
     (' ', 4.429687500000000),
     ('!', 4.429687500000000),

@@ -107,11 +107,7 @@ pub fn render(diagram: &ComponentDiagram, theme: &Theme) -> String {
     }
 
     // Compute dimensions for each component.
-    let comp_dims: Vec<CompDim> = diagram
-        .components
-        .iter()
-        .map(calc_component_dim)
-        .collect();
+    let comp_dims: Vec<CompDim> = diagram.components.iter().map(calc_component_dim).collect();
 
     let title_h = if diagram.meta.title.is_some() {
         TITLE_HEIGHT
