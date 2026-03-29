@@ -170,10 +170,7 @@ fn run_one(puml_path: &Path, root: &Path) -> TestResult {
         };
     }
     // Skip ditaa diagrams — these produce raster images, not SVG elements.
-    if source
-        .lines()
-        .any(|l| l.trim().starts_with("@startditaa"))
-    {
+    if source.lines().any(|l| l.trim().starts_with("@startditaa")) {
         return TestResult {
             name: rel,
             outcome: Outcome::Skip("ditaa diagram".into()),
@@ -326,9 +323,7 @@ fn golden_pairs() {
     let so = skip_other.load(Ordering::Relaxed);
     eprintln!("\ngolden_pairs: {total} total, {pass} passed, {fail_count} failed, {skip} skipped");
     eprintln!("  panics: {panics}, xml diff: {xml_diff}, other: {other}");
-    eprintln!(
-        "  skip breakdown: parse={sp}, golden_error={se}, unsupported_kw={sk}, other={so}"
-    );
+    eprintln!("  skip breakdown: parse={sp}, golden_error={se}, unsupported_kw={sk}, other={so}");
     if !dir_fails.is_empty() {
         eprintln!("  per-directory failures:");
         let mut sorted: Vec<_> = dir_fails.iter().collect();
