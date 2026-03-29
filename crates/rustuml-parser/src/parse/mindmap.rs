@@ -111,6 +111,17 @@ pub fn parse_mindmap(lines: &[String]) -> Result<MindMapDiagram, ParseError> {
             continue;
         }
 
+        // Collect skinparam directives into metadata.
+        if let Some(rest) = trimmed.strip_prefix("skinparam ") {
+            if let Some((key, value)) = rest.split_once(' ') {
+                meta.skinparams.push(crate::diagram::SkinParam {
+                    key: key.trim().to_string(),
+                    value: value.trim().to_string(),
+                });
+            }
+            continue;
+        }
+
         // Determine prefix character and side.
         // `*` → right side; `#` → right side (markdown heading style); `-` → left side.
         // After a bare `--` separator, `*` nodes switch to the left side.

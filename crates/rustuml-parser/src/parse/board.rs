@@ -27,7 +27,7 @@ use crate::diagram::board::{BoardColumn, BoardDiagram};
 
 /// Parse preprocessed lines from a `@startboard` block.
 pub fn parse_board(lines: &[String]) -> Result<BoardDiagram, ParseError> {
-    let meta = DiagramMeta::default();
+    let mut meta = DiagramMeta::default();
     let mut title: Option<String> = None;
     let mut columns: Vec<BoardColumn> = Vec::new();
 
@@ -68,11 +68,18 @@ pub fn parse_board(lines: &[String]) -> Result<BoardDiagram, ParseError> {
                     message: "card without a preceding column".to_string(),
                 });
             }
+        } else if let Some(rest) = trimmed.strip_prefix("skinparam ") {
+            if let Some((key, value)) = rest.split_once(' ') {
+                meta.skinparams.push(crate::diagram::SkinParam {
+                    key: key.trim().to_string(),
+                    value: value.trim().to_string(),
+                });
+            }
         } else if title.is_none() {
             // First non-empty, non-marker line is the title.
             title = Some(trimmed.to_string());
         }
-        // Other lines are ignored (skinparam, comments, etc.)
+        // Other lines are ignored (comments, etc.)
     }
 
     let title = title.unwrap_or_default();

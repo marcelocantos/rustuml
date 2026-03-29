@@ -25,7 +25,7 @@ use crate::diagram::wbs::{WbsDiagram, WbsNode, WbsSide};
 
 /// Parse preprocessed lines from a `@startwbs` block into a [`WbsDiagram`].
 pub fn parse_wbs(lines: &[String]) -> Result<WbsDiagram, ParseError> {
-    let meta = DiagramMeta::default();
+    let mut meta = DiagramMeta::default();
     let mut roots: Vec<WbsNode> = Vec::new();
 
     // `depth_stack` tracks the path of depths from the top-level sentinel
@@ -51,6 +51,15 @@ pub fn parse_wbs(lines: &[String]) -> Result<WbsDiagram, ParseError> {
         } else if dashes > 0 {
             (dashes, WbsSide::Left)
         } else {
+            // Collect skinparam directives into metadata.
+            if let Some(rest) = trimmed.strip_prefix("skinparam ")
+                && let Some((key, value)) = rest.split_once(' ')
+            {
+                meta.skinparams.push(crate::diagram::SkinParam {
+                    key: key.trim().to_string(),
+                    value: value.trim().to_string(),
+                });
+            }
             // Not a node line — skip (could be @startwbs, @endwbs, comment, etc.).
             continue;
         };

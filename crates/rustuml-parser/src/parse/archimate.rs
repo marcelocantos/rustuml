@@ -50,13 +50,18 @@ pub fn parse_archimate(lines: &[String]) -> Result<ArchimateDiagram, ParseError>
             }
             continue;
         }
-        if trimmed.starts_with("skinparam ")
-            || trimmed.starts_with("hide ")
-            || trimmed.starts_with("show ")
-        {
+        if let Some(rest) = trimmed.strip_prefix("skinparam ") {
             if trimmed.ends_with('{') {
                 skinparam_depth += 1;
+            } else if let Some((key, value)) = rest.split_once(' ') {
+                meta.skinparams.push(crate::diagram::SkinParam {
+                    key: key.trim().to_string(),
+                    value: value.trim().to_string(),
+                });
             }
+            continue;
+        }
+        if trimmed.starts_with("hide ") || trimmed.starts_with("show ") {
             continue;
         }
         if trimmed == "}" {

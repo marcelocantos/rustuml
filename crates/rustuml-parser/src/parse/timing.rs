@@ -128,7 +128,18 @@ impl TimingParser {
             return Ok(());
         }
 
-        // Silently ignore unrecognised lines (skinparam, etc.).
+        // Collect skinparam directives into metadata.
+        if let Some(rest) = line.strip_prefix("skinparam ") {
+            if let Some((key, value)) = rest.split_once(' ') {
+                self.meta.skinparams.push(crate::diagram::SkinParam {
+                    key: key.trim().to_string(),
+                    value: value.trim().to_string(),
+                });
+            }
+            return Ok(());
+        }
+
+        // Silently ignore unrecognised lines.
         let _ = line_num;
         Ok(())
     }

@@ -412,7 +412,16 @@ impl ObjectParser {
             self.meta.title = Some(super::strip_title_quotes(rest).to_string());
             return true;
         }
-        line.starts_with("skinparam ") || line.starts_with("hide ") || line.starts_with("show ")
+        if let Some(rest) = line.strip_prefix("skinparam ") {
+            if let Some((key, value)) = rest.split_once(' ') {
+                self.meta.skinparams.push(crate::diagram::SkinParam {
+                    key: key.trim().to_string(),
+                    value: value.trim().to_string(),
+                });
+            }
+            return true;
+        }
+        line.starts_with("hide ") || line.starts_with("show ")
     }
 
     fn parse_field_line(&mut self, line: &str) {

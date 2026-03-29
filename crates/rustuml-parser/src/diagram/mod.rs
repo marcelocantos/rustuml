@@ -80,6 +80,35 @@ pub enum Diagram {
 }
 
 impl Diagram {
+    /// Return a reference to the diagram's metadata.
+    pub fn meta(&self) -> &DiagramMeta {
+        match self {
+            Diagram::Sequence(d) => &d.meta,
+            Diagram::Class(d) => &d.meta,
+            Diagram::Archimate(d) => &d.meta,
+            Diagram::Object(d) => &d.meta,
+            Diagram::State(d) => &d.meta,
+            Diagram::Activity(d) => &d.meta,
+            Diagram::Component(d) => &d.meta,
+            Diagram::UseCase(d) => &d.meta,
+            Diagram::Deployment(d) => &d.meta,
+            Diagram::Nwdiag(d) => &d.meta,
+            Diagram::Json(d) => &d.meta,
+            Diagram::MindMap(d) => &d.meta,
+            Diagram::Gantt(d) => &d.meta,
+            Diagram::Git(d) => &d.meta,
+            Diagram::Timing(d) => &d.meta,
+            Diagram::Wbs(d) => &d.meta,
+            Diagram::Math(d) => &d.meta,
+            Diagram::Salt(d) => &d.meta,
+            Diagram::Regex(d) => &d.meta,
+            Diagram::Ditaa(d) => &d.meta,
+            Diagram::Dot(d) => &d.meta,
+            Diagram::Board(d) => &d.meta,
+            Diagram::Ebnf(d) => &d.meta,
+        }
+    }
+
     /// Return a mutable reference to the diagram's metadata.
     pub fn meta_mut(&mut self) -> &mut DiagramMeta {
         match self {
