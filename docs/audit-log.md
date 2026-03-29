@@ -35,3 +35,12 @@ maintenance activities. Append-only — newest entries at the bottom.
   - **Dependency**: `serde_yaml` replaced with `serde_yml`.
   - **Tests**: 557 total (299 parser + 234 render + 8 layout + 10 math + 6 oracle). 0 golden parse skips (was 6).
   - **Targets**: 🎯T1 achieved — all 6 sub-targets complete (T1.1–T1.7).
+
+## 2026-03-30 — /release v0.5.0
+
+- **Commit**: `e7d6f7f5`
+- **Outcome**: Released v0.5.0. PlantUML parity achieved — 11,269 golden tests passing, 0 failures. Only skips are Java errors (1,199) and ditaa PNGs (100, parked as 🎯T2).
+  - `%date()` builtin with Java `Date.toString()` format and `SimpleDateFormat` pattern support.
+  - `RUSTUML_DATE` env var for deterministic date output in tests/CI.
+  - Multi-block golden test fix: block 0 by default, merged fallback for same-type blocks.
+  - 🎯T2 target added for ditaa rendering engine (parked).
