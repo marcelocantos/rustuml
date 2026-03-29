@@ -30,6 +30,7 @@ pub mod object;
 pub mod openiconic;
 pub mod pdf;
 pub mod png;
+pub mod plantuml_metrics;
 pub mod regex_diagram;
 pub mod salt;
 pub mod sequence;
