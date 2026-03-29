@@ -499,6 +499,115 @@ impl SvgBuilder {
         }
     }
 
+    /// Draw a cubic bezier curve path from a series of control points.
+    ///
+    /// For a single segment, `points` has 4 elements: start, control1, control2, end.
+    /// For connected splines, each subsequent segment shares its start with the
+    /// previous segment's end, so N segments use 3*N + 1 points.
+    pub fn bezier_path(&mut self, points: &[(f64, f64)], color: &str, dashed: bool) {
+        if points.len() < 4 {
+            return;
+        }
+        let dash = if dashed {
+            r#" stroke-dasharray="6,3""#
+        } else {
+            ""
+        };
+        let mut d = format!("M {},{}", points[0].0, points[0].1);
+        let mut i = 1;
+        while i + 2 < points.len() {
+            write!(
+                d,
+                " C {},{} {},{} {},{}",
+                points[i].0,
+                points[i].1,
+                points[i + 1].0,
+                points[i + 1].1,
+                points[i + 2].0,
+                points[i + 2].1,
+            )
+            .unwrap();
+            i += 3;
+        }
+        self.line(&format!(
+            r#"<path d="{d}" fill="none" stroke="{color}" stroke-width="1"{dash}/>"#
+        ));
+    }
+
+    /// Draw a cubic bezier curve path with an arrowhead at the end.
+    ///
+    /// The arrowhead is a filled triangle rotated to match the tangent at the
+    /// curve's endpoint (derived from the last control point and endpoint).
+    pub fn bezier_path_with_arrow(
+        &mut self,
+        points: &[(f64, f64)],
+        color: &str,
+        dashed: bool,
+        arrow_size: f64,
+    ) {
+        if points.len() < 4 {
+            return;
+        }
+        self.bezier_path(points, color, dashed);
+
+        let endpoint = points[points.len() - 1];
+        let control = points[points.len() - 2];
+        let angle = Self::arrow_angle(control, endpoint);
+
+        let x = endpoint.0;
+        let y = endpoint.1;
+        let x1 = x - arrow_size * (angle - 0.4).cos();
+        let y1 = y - arrow_size * (angle - 0.4).sin();
+        let x2 = x - arrow_size * (angle + 0.4).cos();
+        let y2 = y - arrow_size * (angle + 0.4).sin();
+        self.line(&format!(
+            r#"<polygon points="{x},{y} {x1},{y1} {x2},{y2}" fill="{color}"/>"#
+        ));
+    }
+
+    /// Draw a quadratic bezier curve path.
+    ///
+    /// For a single segment, `points` has 3 elements: start, control, end.
+    /// For connected splines, each subsequent segment shares its start with the
+    /// previous segment's end, so N segments use 2*N + 1 points.
+    pub fn quadratic_path(&mut self, points: &[(f64, f64)], color: &str, dashed: bool) {
+        if points.len() < 3 {
+            return;
+        }
+        let dash = if dashed {
+            r#" stroke-dasharray="6,3""#
+        } else {
+            ""
+        };
+        let mut d = format!("M {},{}", points[0].0, points[0].1);
+        let mut i = 1;
+        while i + 1 < points.len() {
+            write!(
+                d,
+                " Q {},{} {},{}",
+                points[i].0,
+                points[i].1,
+                points[i + 1].0,
+                points[i + 1].1,
+            )
+            .unwrap();
+            i += 2;
+        }
+        self.line(&format!(
+            r#"<path d="{d}" fill="none" stroke="{color}" stroke-width="1"{dash}/>"#
+        ));
+    }
+
+    /// Compute the angle (in radians) of the tangent at a bezier endpoint.
+    ///
+    /// The tangent at the endpoint is approximated by the vector from the last
+    /// control point to the endpoint.
+    fn arrow_angle(control_point: (f64, f64), endpoint: (f64, f64)) -> f64 {
+        let dx = endpoint.0 - control_point.0;
+        let dy = endpoint.1 - control_point.1;
+        dy.atan2(dx)
+    }
+
     pub fn finalize(mut self) -> String {
         self.buf.push_str("</svg>\n");
         self.buf
@@ -524,6 +633,142 @@ impl SvgBuilder {
         }
         self.buf.push_str(s);
         self.buf.push('\n');
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn single_cubic_bezier_segment() {
+        let mut svg = SvgBuilder::new(200.0, 200.0);
+        svg.bezier_path(
+            &[(10.0, 10.0), (30.0, 50.0), (70.0, 50.0), (90.0, 10.0)],
+            "#000",
+            false,
+        );
+        let output = svg.finalize();
+        assert!(output.contains(r#"<path d="M 10,10 C 30,50 70,50 90,10""#));
+        assert!(output.contains(r#"fill="none""#));
+        assert!(output.contains(r##"stroke="#000""##));
+        assert!(!output.contains("stroke-dasharray"));
+    }
+
+    #[test]
+    fn single_cubic_bezier_dashed() {
+        let mut svg = SvgBuilder::new(200.0, 200.0);
+        svg.bezier_path(
+            &[(10.0, 10.0), (30.0, 50.0), (70.0, 50.0), (90.0, 10.0)],
+            "#000",
+            true,
+        );
+        let output = svg.finalize();
+        assert!(output.contains(r#"stroke-dasharray="6,3""#));
+    }
+
+    #[test]
+    fn multi_segment_cubic_bezier() {
+        // 2 segments = 7 points: start + 3*2
+        let mut svg = SvgBuilder::new(300.0, 200.0);
+        svg.bezier_path(
+            &[
+                (0.0, 0.0),
+                (10.0, 40.0),
+                (40.0, 40.0),
+                (50.0, 0.0),
+                (60.0, -40.0),
+                (90.0, -40.0),
+                (100.0, 0.0),
+            ],
+            "red",
+            false,
+        );
+        let output = svg.finalize();
+        assert!(output.contains("M 0,0 C 10,40 40,40 50,0 C 60,-40 90,-40 100,0"));
+    }
+
+    #[test]
+    fn bezier_with_arrowhead() {
+        let mut svg = SvgBuilder::new(200.0, 200.0);
+        svg.bezier_path_with_arrow(
+            &[(0.0, 50.0), (30.0, 0.0), (70.0, 0.0), (100.0, 50.0)],
+            "#333",
+            false,
+            8.0,
+        );
+        let output = svg.finalize();
+        // Path element present
+        assert!(output.contains("<path d=\"M 0,50 C 30,0 70,0 100,50\""));
+        // Arrowhead polygon present
+        assert!(output.contains("<polygon points=\"100,50"));
+        assert!(output.contains(r##"fill="#333""##));
+    }
+
+    #[test]
+    fn arrow_angle_right() {
+        // Pointing right: control=(0,0), end=(10,0) -> angle = 0
+        let angle = SvgBuilder::arrow_angle((0.0, 0.0), (10.0, 0.0));
+        assert!((angle - 0.0).abs() < 1e-10);
+    }
+
+    #[test]
+    fn arrow_angle_down() {
+        // Pointing down: control=(0,0), end=(0,10) -> angle = pi/2
+        let angle = SvgBuilder::arrow_angle((0.0, 0.0), (0.0, 10.0));
+        assert!((angle - std::f64::consts::FRAC_PI_2).abs() < 1e-10);
+    }
+
+    #[test]
+    fn arrow_angle_diagonal() {
+        // Pointing 45 degrees: control=(0,0), end=(10,10) -> angle = pi/4
+        let angle = SvgBuilder::arrow_angle((0.0, 0.0), (10.0, 10.0));
+        assert!((angle - std::f64::consts::FRAC_PI_4).abs() < 1e-10);
+    }
+
+    #[test]
+    fn quadratic_single_segment() {
+        let mut svg = SvgBuilder::new(200.0, 200.0);
+        svg.quadratic_path(&[(10.0, 10.0), (50.0, 80.0), (90.0, 10.0)], "blue", false);
+        let output = svg.finalize();
+        assert!(output.contains(r#"<path d="M 10,10 Q 50,80 90,10""#));
+        assert!(output.contains(r#"stroke="blue""#));
+    }
+
+    #[test]
+    fn quadratic_multi_segment() {
+        // 2 segments = 5 points
+        let mut svg = SvgBuilder::new(300.0, 200.0);
+        svg.quadratic_path(
+            &[
+                (0.0, 0.0),
+                (25.0, 50.0),
+                (50.0, 0.0),
+                (75.0, -50.0),
+                (100.0, 0.0),
+            ],
+            "green",
+            true,
+        );
+        let output = svg.finalize();
+        assert!(output.contains("M 0,0 Q 25,50 50,0 Q 75,-50 100,0"));
+        assert!(output.contains("stroke-dasharray"));
+    }
+
+    #[test]
+    fn bezier_too_few_points_is_noop() {
+        let mut svg = SvgBuilder::new(100.0, 100.0);
+        svg.bezier_path(&[(0.0, 0.0), (10.0, 10.0)], "#000", false);
+        let output = svg.finalize();
+        assert!(!output.contains("<path"));
+    }
+
+    #[test]
+    fn quadratic_too_few_points_is_noop() {
+        let mut svg = SvgBuilder::new(100.0, 100.0);
+        svg.quadratic_path(&[(0.0, 0.0)], "#000", false);
+        let output = svg.finalize();
+        assert!(!output.contains("<path"));
     }
 }
 
