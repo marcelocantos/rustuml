@@ -38,7 +38,7 @@ pub fn parse_json_diagram(lines: &[String]) -> Result<JsonDiagram, ParseError> {
 /// Parse a `@startyaml` / `@endyaml` block.
 pub fn parse_yaml_diagram(lines: &[String]) -> Result<JsonDiagram, ParseError> {
     let (_highlights, content) = extract_body(lines);
-    let value: serde_yaml::Value = serde_yaml::from_str(&content).map_err(|e| ParseError {
+    let value: serde_yml::Value = serde_yml::from_str(&content).map_err(|e| ParseError {
         line: e.location().map_or(0, |l| l.line()),
         message: format!("YAML parse error: {e}"),
     })?;
@@ -176,24 +176,24 @@ fn json_value_to_node(
     }
 }
 
-fn yaml_value_to_node(key: Option<String>, value: &serde_yaml::Value) -> JsonNode {
+fn yaml_value_to_node(key: Option<String>, value: &serde_yml::Value) -> JsonNode {
     let node_value = match value {
-        serde_yaml::Value::Null => JsonNodeValue::Null,
-        serde_yaml::Value::Bool(b) => JsonNodeValue::Bool { val: *b },
-        serde_yaml::Value::Number(n) => JsonNodeValue::Number { val: n.to_string() },
-        serde_yaml::Value::String(s) => JsonNodeValue::Str { val: s.clone() },
-        serde_yaml::Value::Sequence(arr) => {
+        serde_yml::Value::Null => JsonNodeValue::Null,
+        serde_yml::Value::Bool(b) => JsonNodeValue::Bool { val: *b },
+        serde_yml::Value::Number(n) => JsonNodeValue::Number { val: n.to_string() },
+        serde_yml::Value::String(s) => JsonNodeValue::Str { val: s.clone() },
+        serde_yml::Value::Sequence(arr) => {
             let items = arr.iter().map(|v| yaml_value_to_node(None, v)).collect();
             JsonNodeValue::Array { items }
         }
-        serde_yaml::Value::Mapping(map) => {
+        serde_yml::Value::Mapping(map) => {
             let fields = map
                 .iter()
                 .map(|(k, v)| {
                     let key_str = match k {
-                        serde_yaml::Value::String(s) => s.clone(),
-                        serde_yaml::Value::Number(n) => n.to_string(),
-                        serde_yaml::Value::Bool(b) => b.to_string(),
+                        serde_yml::Value::String(s) => s.clone(),
+                        serde_yml::Value::Number(n) => n.to_string(),
+                        serde_yml::Value::Bool(b) => b.to_string(),
                         _ => format!("{k:?}"),
                     };
                     yaml_value_to_node(Some(key_str), v)
@@ -201,7 +201,7 @@ fn yaml_value_to_node(key: Option<String>, value: &serde_yaml::Value) -> JsonNod
                 .collect();
             JsonNodeValue::Object { fields }
         }
-        serde_yaml::Value::Tagged(tagged) => {
+        serde_yml::Value::Tagged(tagged) => {
             return yaml_value_to_node(key, &tagged.value);
         }
     };

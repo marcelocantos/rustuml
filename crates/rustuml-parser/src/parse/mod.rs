@@ -579,7 +579,7 @@ pub fn parse_named(input: &str, name: &str) -> Result<Diagram, ParseError> {
 
 /// Parse YAML input into a diagram model.
 pub fn parse_yaml(input: &str) -> Result<Diagram, ParseError> {
-    serde_yaml::from_str(input).map_err(|e| ParseError {
+    serde_yml::from_str(input).map_err(|e| ParseError {
         line: e.location().map_or(0, |l| l.line()),
         message: format!("YAML parse error: {e}"),
     })
@@ -784,10 +784,10 @@ mod tests {
     fn yaml_round_trip() {
         let input = "@startuml\nAlice -> Bob : hello\n@enduml";
         let diagram = parse(input).unwrap();
-        let yaml = serde_yaml::to_string(&diagram).unwrap();
+        let yaml = serde_yml::to_string(&diagram).unwrap();
         let reparsed = parse_yaml(&yaml).unwrap();
         // Verify structure matches by re-serializing.
-        let yaml2 = serde_yaml::to_string(&reparsed).unwrap();
+        let yaml2 = serde_yml::to_string(&reparsed).unwrap();
         assert_eq!(yaml, yaml2);
     }
 
@@ -826,9 +826,9 @@ mod tests {
     fn class_diagram_yaml_round_trip() {
         let input = "@startuml\nclass Foo {\n  +name : String\n}\nclass Bar\nFoo <|-- Bar\n@enduml";
         let diagram = parse(input).unwrap();
-        let yaml = serde_yaml::to_string(&diagram).unwrap();
+        let yaml = serde_yml::to_string(&diagram).unwrap();
         let reparsed = parse_yaml(&yaml).unwrap();
-        let yaml2 = serde_yaml::to_string(&reparsed).unwrap();
+        let yaml2 = serde_yml::to_string(&reparsed).unwrap();
         assert_eq!(yaml, yaml2);
     }
 

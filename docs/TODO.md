@@ -11,7 +11,7 @@
 - [ ] Hyperlinks in SVG output (SVG builder has `open_link`/`close_link` but not wired into renderers)
 - [ ] Creole edge cases: tables, complex nesting, tree lists
 - [ ] Activity diagram legacy v1 syntax
-- [ ] `serde_yaml` deprecation — migrate to maintained alternative
+- [x] `serde_yaml` deprecation — migrated to `serde_yml`
 - [ ] Format-parameterized golden test framework (validate PNG/PDF output)
 
 ## Low Priority

@@ -68,7 +68,7 @@ fn main() {
                     eprintln!("error reading theme file {path}: {e}");
                     std::process::exit(1);
                 });
-                theme = serde_yaml::from_str(&yaml).unwrap_or_else(|e| {
+                theme = serde_yml::from_str(&yaml).unwrap_or_else(|e| {
                     eprintln!("error parsing theme file: {e}");
                     std::process::exit(1);
                 });
@@ -147,7 +147,7 @@ fn main() {
             OutputMode::Yaml => {
                 print!(
                     "{}",
-                    serde_yaml::to_string(&diagram).expect("YAML serialization failed")
+                    serde_yml::to_string(&diagram).expect("YAML serialization failed")
                 );
             }
             OutputMode::Svg => {
