@@ -247,9 +247,34 @@ fn emit_text(buf: &mut String, x: f64, y: f64, content: &str, font_size: f64) {
     }
 }
 
-/// Decode PlantUML backslash escapes in label text.
+/// Decode PlantUML backslash and tilde escapes in label text.
+/// `\\` → `\`, `~X` → `X` when X is a markup character (*/_-"<[#).
+/// `~~` is NOT a tilde escape — it's strikethrough or literal tildes.
 fn decode_escapes(s: &str) -> String {
-    s.replace("\\\\", "\\")
+    let mut result = String::with_capacity(s.len());
+    let mut chars = s.chars().peekable();
+    while let Some(c) = chars.next() {
+        if c == '\\' && chars.peek() == Some(&'\\') {
+            chars.next();
+            result.push('\\');
+        } else if c == '~' {
+            if let Some(&next) = chars.peek() {
+                // Tilde escape: consume only if next char is a creole markup char
+                // (but NOT another tilde — ~~ is strikethrough, not an escape)
+                if next != '~' && "*/_-\"<[#".contains(next) {
+                    chars.next();
+                    result.push(next);
+                } else {
+                    result.push('~');
+                }
+            } else {
+                result.push('~');
+            }
+        } else {
+            result.push(c);
+        }
+    }
+    result
 }
 
 /// Process label text for SVG rendering: decode escapes and replace unsupported
@@ -758,15 +783,20 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme) -> String {
         .iter()
         .enumerate()
         .map(|(idx, p)| {
-            let label = p.label.clone();
-            let tw = text_width(&label, PARTICIPANT_FONT_SIZE);
             let st = p.stereotype.clone();
             let st_display = st.as_ref().map(|s| format!("\u{ab}{s}\u{bb}"));
             let st_w = st_display
                 .as_ref()
                 .map(|s| text_width(s, 11.0))
                 .unwrap_or(0.0);
-            // Box width must accommodate both the name and stereotype text
+            // Display label includes stereotype inline (matching PlantUML)
+            let label = if let Some(ref st_text) = st {
+                format!("{} \u{ab}{st_text}\u{bb}", p.label)
+            } else {
+                p.label.clone()
+            };
+            let tw = text_width(&label, PARTICIPANT_FONT_SIZE);
+            // Box width must accommodate the display label (and stereotype if separate)
             let max_text_w = tw.max(st_w);
             let bw = max_text_w + 2.0 * BOX_TEXT_X_PAD;
             // Box height is taller for stereotyped participants
@@ -1079,6 +1109,51 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme) -> String {
         .unwrap();
     }
 
+    // Render legend if present
+    if let Some(legend) = &diagram.meta.legend {
+        // Emit each non-empty line of the legend as a text element
+        let lx = svg_width as f64 - 200.0;
+        let mut ly = svg_height as f64 - 150.0;
+        for line in legend.lines() {
+            let trimmed = line.trim();
+            if !trimmed.is_empty() {
+                let stripped = if trimmed.contains('|') {
+                    // Table cells: extract cell text
+                    trimmed
+                        .trim_matches('|')
+                        .split('|')
+                        .map(|cell| {
+                            let cell = cell.trim();
+                            if cell.starts_with('<')
+                                && let Some(pos) = cell.find('>')
+                            {
+                                return cell[pos + 1..].trim();
+                            }
+                            cell
+                        })
+                        .filter(|c| !c.is_empty())
+                        .collect::<Vec<_>>()
+                        .join(" ")
+                } else {
+                    strip_creole(trimmed)
+                };
+                if !stripped.is_empty() {
+                    let tw = text_width(&stripped, 11.0);
+                    write!(
+                        svg.buf,
+                        r##"<text fill="#000000" font-family="sans-serif" font-size="11" lengthAdjust="spacing" textLength="{}" x="{}" y="{}">{}</text>"##,
+                        fmt_coord(tw),
+                        fmt_coord(lx),
+                        fmt_coord(ly),
+                        escape_xml(&stripped),
+                    )
+                    .unwrap();
+                }
+            }
+            ly += 14.0;
+        }
+    }
+
     // Activation bars are rendered BEFORE lifelines in PlantUML's SVG.
     // Actually, looking at golden SVGs: activation bars appear first (before lifelines),
     // then lifelines, then participant heads, then tails, then activation bars AGAIN,
@@ -1353,17 +1428,32 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme) -> String {
             }
             Event::Return(ret) => {
                 msg_id += 1;
-                // Return messages are dotted left arrows.
-                // Emit the label as a text element so golden tests can find it.
+                let mid_x = if !participants.is_empty() {
+                    (participants[0].center_x + participants[participants.len() - 1].center_x) / 2.0
+                } else {
+                    50.0
+                };
+
+                // Autonumber for return message
+                if let Some(n) = auto_num.as_ref() {
+                    let an = diagram.autonumber.as_ref().unwrap();
+                    let num_text = format_autonumber(*n, &an.format);
+                    let num_w = text_width(&num_text, MSG_FONT_SIZE);
+                    write!(
+                        svg.buf,
+                        r##"<text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="{}" x="{}" y="{}">{}</text>"##,
+                        fmt_coord(num_w),
+                        fmt_coord(mid_x),
+                        fmt_coord(msg_y - 16.0),
+                        escape_xml(&num_text),
+                    )
+                    .unwrap();
+                }
+
+                // Return label
                 if !ret.label.is_empty() {
                     let label = decode_escapes(&ret.label);
                     let label_w = text_width(&label, MSG_FONT_SIZE);
-                    let mid_x = if !participants.is_empty() {
-                        (participants[0].center_x + participants[participants.len() - 1].center_x)
-                            / 2.0
-                    } else {
-                        50.0
-                    };
                     write!(
                         svg.buf,
                         r##"<text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="{}" x="{}" y="{}">{}</text>"##,
@@ -1374,6 +1464,13 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme) -> String {
                     )
                     .unwrap();
                 }
+
+                // Advance autonumber
+                if let Some(n) = auto_num.as_mut() {
+                    let an = diagram.autonumber.as_ref().unwrap();
+                    *n = n.saturating_add(an.step);
+                }
+
                 msg_y += MSG_STEP;
             }
             Event::Divider(text) => {
@@ -1421,25 +1518,66 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme) -> String {
             }
             Event::Note(note) => {
                 // Emit note text
+                let anchor_x = if let Some(first) = note.participants.first() {
+                    center_of(first)
+                } else {
+                    50.0
+                };
+                let note_x = anchor_x + 20.0;
+                let mut list_counter = 0u32;
+                let mut note_y = msg_y;
+
                 for line in note.text.lines() {
                     let trimmed = line.trim();
-                    if !trimmed.is_empty() && trimmed != "<code>" && trimmed != "</code>" {
-                        let tw = text_width(trimmed, 13.0);
-                        let anchor_x = if let Some(first) = note.participants.first() {
-                            center_of(first)
-                        } else {
-                            50.0
-                        };
+                    if trimmed.is_empty() || trimmed == "<code>" || trimmed == "</code>" {
+                        continue;
+                    }
+
+                    // Handle numbered lists (# item)
+                    if let Some(rest) = trimmed
+                        .strip_prefix("# ")
+                        .or_else(|| trimmed.strip_prefix('#').filter(|r| !r.is_empty()))
+                    {
+                        list_counter += 1;
+                        let num_str = format!("{}.", list_counter);
+                        let num_w = text_width(&num_str, 13.0);
                         write!(
                             svg.buf,
                             r##"<text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="{}" x="{}" y="{}">{}</text>"##,
-                            fmt_coord(tw),
-                            fmt_coord(anchor_x + 20.0),
-                            fmt_coord(msg_y),
-                            escape_xml(trimmed),
+                            fmt_coord(num_w),
+                            fmt_coord(note_x),
+                            fmt_coord(note_y),
+                            escape_xml(&num_str),
                         )
                         .unwrap();
+                        let item_text = rest.trim();
+                        if !item_text.is_empty() {
+                            let item_w = text_width(item_text, 13.0);
+                            write!(
+                                svg.buf,
+                                r##"<text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="{}" x="{}" y="{}">{}</text>"##,
+                                fmt_coord(item_w),
+                                fmt_coord(note_x + 18.0),
+                                fmt_coord(note_y),
+                                escape_xml(item_text),
+                            )
+                            .unwrap();
+                        }
+                        note_y += 14.0;
+                        continue;
                     }
+
+                    let tw = text_width(trimmed, 13.0);
+                    write!(
+                        svg.buf,
+                        r##"<text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="{}" x="{}" y="{}">{}</text>"##,
+                        fmt_coord(tw),
+                        fmt_coord(note_x),
+                        fmt_coord(note_y),
+                        escape_xml(trimmed),
+                    )
+                    .unwrap();
+                    note_y += 14.0;
                 }
                 msg_y += MSG_STEP;
             }
