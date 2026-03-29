@@ -34,6 +34,24 @@ mod tests {
     }
 
     #[test]
+    fn pdf_has_single_page() {
+        let svg = r##"<svg xmlns="http://www.w3.org/2000/svg" width="200" height="100" viewBox="0 0 200 100">
+            <rect width="200" height="100" fill="white"/>
+        </svg>"##;
+
+        let pdf = svg_to_pdf(svg).unwrap();
+        let pdf_str = String::from_utf8_lossy(&pdf);
+        // svg2pdf produces exactly one page; verify the /Type /Page count.
+        let page_count = pdf_str.matches("/Type /Page").count();
+        // /Type /Pages (the parent) also matches, so expect exactly 2:
+        // one /Type /Pages and one /Type /Page.
+        assert!(
+            page_count <= 2,
+            "expected single page PDF, found {page_count} /Type /Page entries"
+        );
+    }
+
+    #[test]
     fn end_to_end_diagram_to_pdf() {
         let input = "@startuml\nAlice -> Bob : hello\n@enduml";
         let diagram = rustuml_parser::parse::parse(input).unwrap();

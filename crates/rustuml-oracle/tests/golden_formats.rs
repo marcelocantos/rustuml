@@ -187,6 +187,12 @@ fn run_one(puml_path: &Path, root: &Path, eps_sample: bool) -> FormatResult {
             Ok(png) => {
                 if png.len() < 8 || &png[..4] != &[137, 80, 78, 71] {
                     errors.push("PNG: missing magic bytes".to_string());
+                } else if let Some((w, h)) = rustuml_render::png::png_dimensions(&png) {
+                    if w == 0 || h == 0 {
+                        errors.push(format!("PNG: zero dimensions ({w}x{h})"));
+                    }
+                } else {
+                    errors.push("PNG: could not read IHDR dimensions".to_string());
                 }
             }
             Err(e) => errors.push(format!("PNG: {e}")),
@@ -208,6 +214,11 @@ fn run_one(puml_path: &Path, root: &Path, eps_sample: bool) -> FormatResult {
                 Ok(eps) => {
                     if eps.len() < 9 || &eps[..9] != b"%!PS-Adob" {
                         errors.push("EPS: missing magic bytes".to_string());
+                    } else {
+                        let eps_str = String::from_utf8_lossy(&eps);
+                        if !eps_str.contains("%%BoundingBox:") {
+                            errors.push("EPS: missing %%BoundingBox".to_string());
+                        }
                     }
                 }
                 Err(e) => errors.push(format!("EPS: {e}")),
