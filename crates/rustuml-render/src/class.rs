@@ -50,12 +50,12 @@ const MEMBER_LINE_HEIGHT: f64 = 16.4883;
 const FIRST_MEMBER_OFFSET: f64 = 17.5352;
 /// Subsequent member baseline spacing.
 const MEMBER_SPACING: f64 = 16.4883;
-/// Left padding for member text.
-const MEMBER_TEXT_X: f64 = 27.0;
-/// Left padding for enum constant text (no visibility icon).
-const ENUM_TEXT_X: f64 = 13.0;
-/// Visibility icon center x.
-const VIS_ICON_CX: f64 = 18.0;
+/// Offset from entity x to member text start.
+const MEMBER_TEXT_OFFSET: f64 = 20.0;
+/// Offset from entity x to enum constant text start.
+const ENUM_TEXT_OFFSET: f64 = 6.0;
+/// Offset from entity x to visibility icon center.
+const VIS_ICON_OFFSET: f64 = 11.0;
 /// Visibility icon radius (small circle for method visibility).
 const VIS_ICON_R: f64 = 3.0;
 /// Right padding from widest content to entity right edge.
@@ -207,11 +207,11 @@ fn calc_entity_dims(entity: &ClassEntity, entity_index: usize) -> EntityDims {
             let text = format_member_display(m);
             let text_w = metrics::plantuml_text_width_14(&text);
             if is_enum || m.visibility == Visibility::Default {
-                // Enum constants / default visibility: no icon, text at ENUM_TEXT_X.
-                ENUM_TEXT_X + text_w + RIGHT_PAD
+                // Enum constants / default visibility: no icon, text at ENUM_TEXT_OFFSET.
+                ENUM_TEXT_OFFSET + text_w + RIGHT_PAD
             } else {
                 // Members with visibility icon.
-                MEMBER_TEXT_X + text_w + RIGHT_PAD
+                MEMBER_TEXT_OFFSET + text_w + RIGHT_PAD
             }
         })
         .collect();
@@ -299,26 +299,29 @@ fn escape_xml(s: &str) -> String {
         .replace('\u{00bb}', "&#187;")
 }
 
+/// Format a coordinate/dimension value matching PlantUML's `SvgGraphics.format()`.
 fn fmt4(v: f64) -> String {
-    // PlantUML formats coordinates with varying precision.
-    // Integers are emitted without decimal point; non-integers use up to 4dp.
-    if (v - v.round()).abs() < 1e-9 {
-        format!("{}", v as i64)
-    } else {
-        // Trim trailing zeros but keep at least one decimal place.
-        let s = format!("{v:.4}");
+    fmt_tl(v)
+}
+
+/// Format a numeric value matching PlantUML's `SvgGraphics.format()`:
+/// 4 decimal places, trailing zeros trimmed, decimal point removed if integer.
+fn fmt_tl(v: f64) -> String {
+    if v == 0.0 {
+        return "0".to_string();
+    }
+    let s = format!("{v:.4}");
+    if let Some(dot) = s.find('.') {
         let trimmed = s.trim_end_matches('0');
-        if trimmed.ends_with('.') {
-            format!("{trimmed}0")
+        if trimmed.len() == dot + 1 {
+            // All decimals were zero — remove the dot too.
+            trimmed[..dot].to_string()
         } else {
             trimmed.to_string()
         }
+    } else {
+        s
     }
-}
-
-/// Format a width/textLength value to 4 decimal places (PlantUML standard).
-fn fmt_tl(v: f64) -> String {
-    format!("{v:.4}")
 }
 
 // ---------------------------------------------------------------------------
@@ -797,7 +800,7 @@ fn render_entity_content(svg: &mut String, entity: &ClassEntity, x: f64, y: f64,
                 svg,
                 r##"<text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="{}" x="{}" y="{}">{}</text>"##,
                 fmt_tl(text_w),
-                fmt4(x + ENUM_TEXT_X - 1.0),
+                fmt4(x + ENUM_TEXT_OFFSET),
                 fmt4(member_y),
                 escape_xml(&text),
             )
@@ -947,7 +950,7 @@ fn render_member_line(svg: &mut String, member: &Member, entity_x: f64, baseline
 
         write!(svg, r#"<g data-visibility-modifier="{}">"#, vis_mod,).unwrap();
 
-        let vis_cx = entity_x + VIS_ICON_CX - 1.0 + 1.0;
+        let vis_cx = entity_x + VIS_ICON_OFFSET;
         match member.visibility {
             Visibility::Public => {
                 let fill = if member.kind == MemberKind::Method {
@@ -1040,11 +1043,10 @@ fn render_member_line(svg: &mut String, member: &Member, entity_x: f64, baseline
 
     let text_x = entity_x
         + if visibility_modifier(member).is_some() {
-            MEMBER_TEXT_X
+            MEMBER_TEXT_OFFSET
         } else {
-            ENUM_TEXT_X
-        }
-        - 1.0;
+            ENUM_TEXT_OFFSET
+        };
 
     write!(
         svg,
