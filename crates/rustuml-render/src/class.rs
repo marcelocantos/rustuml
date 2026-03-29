@@ -59,7 +59,7 @@ const VIS_ICON_CX: f64 = 18.0;
 /// Visibility icon radius (small circle for method visibility).
 const VIS_ICON_R: f64 = 3.0;
 /// Right padding from widest content to entity right edge.
-const RIGHT_PAD: f64 = 6.0;
+const RIGHT_PAD: f64 = 3.0;
 /// Distance between entities in layout (vertical gap for top-to-bottom).
 #[allow(dead_code)]
 const ENTITY_GAP: f64 = 60.0;
@@ -198,7 +198,7 @@ fn calc_entity_dims(entity: &ClassEntity, entity_index: usize) -> EntityDims {
 
     // Compute width from icon area + name + member text widths.
     let icon_area = ICON_CX_OFFSET + ICON_RX + ICON_TEXT_GAP; // 29
-    let name_total = icon_area + name_width + RIGHT_PAD - 1.0;
+    let name_total = icon_area + name_width + RIGHT_PAD;
 
     let member_widths: Vec<f64> = entity
         .members
@@ -208,10 +208,10 @@ fn calc_entity_dims(entity: &ClassEntity, entity_index: usize) -> EntityDims {
             let text_w = metrics::plantuml_text_width_14(&text);
             if is_enum || m.visibility == Visibility::Default {
                 // Enum constants / default visibility: no icon, text at ENUM_TEXT_X.
-                ENUM_TEXT_X + text_w + RIGHT_PAD - 1.0
+                ENUM_TEXT_X + text_w + RIGHT_PAD
             } else {
                 // Members with visibility icon.
-                MEMBER_TEXT_X + text_w + RIGHT_PAD - 1.0
+                MEMBER_TEXT_X + text_w + RIGHT_PAD
             }
         })
         .collect();
@@ -661,7 +661,7 @@ fn render_entity_content(svg: &mut String, entity: &ClassEntity, x: f64, y: f64,
         svg,
         r#"<rect fill="{}" height="{}" rx="2.5" ry="2.5" style="stroke:{};stroke-width:{};" width="{}" x="{}" y="{}"/>"#,
         ENTITY_FILL,
-        fmt_tl(dim.height),
+        fmt4(dim.height),
         BORDER_COLOR,
         BORDER_WIDTH,
         fmt_tl(dim.width),
@@ -745,7 +745,7 @@ fn render_entity_content(svg: &mut String, entity: &ClassEntity, x: f64, y: f64,
 
     // Separator lines and members.
     let sep_x1 = x + 1.0;
-    let sep_x2 = x + dim.width;
+    let sep_x2 = x + dim.width - 1.0;
 
     if entity.members.is_empty() {
         // Two separator lines (fields/methods compartments both empty).
