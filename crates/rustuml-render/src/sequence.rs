@@ -1391,6 +1391,9 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme) -> String {
     // Track activation depth during message rendering to adjust arrow positions.
     let mut render_activation: HashMap<String, usize> = HashMap::new();
 
+    // Return stack: tracks (activated_participant, activating_sender) for `return` keyword.
+    let mut return_stack: Vec<(String, String)> = Vec::new();
+
     let events = &diagram.events;
     for (ev_idx, event) in events.iter().enumerate() {
         let msg_y = event_y_positions[ev_idx];
@@ -1614,15 +1617,23 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme) -> String {
                     }
                 }
 
-                // Update activation state after this message
+                // Update activation state and return stack after this message
                 if let Some(act) = &msg.activation {
                     match act {
                         ActivationChange::Activate => {
                             *render_activation.entry(msg.to.clone()).or_default() += 1;
+                            return_stack.push((msg.to.clone(), msg.from.clone()));
                         }
                         ActivationChange::Deactivate => {
                             if let Some(d) = render_activation.get_mut(&msg.from) {
                                 *d = d.saturating_sub(1);
+                            }
+                            // Pop the return stack for the deactivated participant
+                            if let Some(pos) = return_stack
+                                .iter()
+                                .rposition(|(act_p, _)| act_p == &msg.from)
+                            {
+                                return_stack.remove(pos);
                             }
                         }
                         ActivationChange::Destroy => {
@@ -1641,41 +1652,109 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme) -> String {
             }
             Event::Return(ret) => {
                 msg_id += 1;
-                let mid_x = if !participants.is_empty() {
-                    (participants[0].center_x + participants[participants.len() - 1].center_x) / 2.0
+
+                // Pop the return stack to find from/to participants
+                let (ret_from, ret_to) = if let Some(entry) = return_stack.pop() {
+                    // Deactivate the returned-from participant
+                    if let Some(d) = render_activation.get_mut(&entry.0) {
+                        *d = d.saturating_sub(1);
+                    }
+                    entry
                 } else {
-                    50.0
+                    // Fallback if no activation context
+                    let p0 = participants
+                        .first()
+                        .map(|p| p.id.clone())
+                        .unwrap_or_default();
+                    let p1 = participants
+                        .get(1)
+                        .map(|p| p.id.clone())
+                        .unwrap_or_default();
+                    (p0, p1)
                 };
 
-                // Autonumber for return message
-                if let Some(n) = auto_num.as_ref() {
-                    let an = diagram.autonumber.as_ref().unwrap();
-                    let num_text = format_autonumber(*n, &an.format);
-                    let num_w = text_width(&num_text, MSG_FONT_SIZE);
-                    write!(
-                        svg.buf,
-                        r##"<text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="{}" x="{}" y="{}">{}</text>"##,
-                        fmt_coord(num_w),
-                        fmt_coord(mid_x),
-                        fmt_coord(msg_y - 16.0),
-                        escape_xml(&num_text),
-                    )
-                    .unwrap();
-                }
+                let from_x = center_of(&ret_from);
+                let to_x = center_of(&ret_to);
+                let is_right = to_x > from_x;
 
-                // Return label
-                if !ret.label.is_empty() {
-                    let label = decode_escapes(&ret.label);
-                    let label_w = text_width(&label, MSG_FONT_SIZE);
-                    write!(
-                        svg.buf,
-                        r##"<text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="{}" x="{}" y="{}">{}</text>"##,
-                        fmt_coord(label_w),
-                        fmt_coord(mid_x),
-                        fmt_coord(msg_y - 4.7422),
-                        escape_xml(&label),
-                    )
-                    .unwrap();
+                let from_uid = id_to_idx
+                    .get(ret_from.as_str())
+                    .map(|i| format!("part{}", i + 1))
+                    .unwrap_or_default();
+                let to_uid = id_to_idx
+                    .get(ret_to.as_str())
+                    .map(|i| format!("part{}", i + 1))
+                    .unwrap_or_default();
+
+                let label = if ret.label.is_empty() {
+                    String::new()
+                } else {
+                    decode_escapes(&ret.label)
+                };
+                let label_w = text_width(&label, MSG_FONT_SIZE);
+
+                let src_line = ret.source_line as u32;
+                let text_y_pos = msg_y - 4.7422;
+
+                // Return messages are always dotted filled arrows
+                let line_style = "stroke-dasharray:2,2;";
+
+                if is_right {
+                    // Right-pointing return (unusual but possible)
+                    let tip_x = to_x - ARROW_TIP_GAP;
+                    let line_x2 = tip_x - FILLED_ARROW_NOTCH;
+                    let text_x = from_x + MSG_TEXT_LEFT_PAD;
+                    let arrow_pts = format!(
+                        "{},{},{},{},{},{},{},{}",
+                        fmt_coord(tip_x - ARROW_SIZE),
+                        fmt_coord(msg_y - ARROW_HALF_H),
+                        fmt_coord(tip_x),
+                        fmt_coord(msg_y),
+                        fmt_coord(tip_x - ARROW_SIZE),
+                        fmt_coord(msg_y + ARROW_HALF_H),
+                        fmt_coord(tip_x - ARROW_SIZE + FILLED_ARROW_NOTCH),
+                        fmt_coord(msg_y),
+                    );
+                    svg.message_filled_arrow(
+                        &from_uid, &to_uid, src_line, msg_id, &arrow_pts, from_x, line_x2, msg_y,
+                        line_style, text_x, text_y_pos, &label, label_w, "#181818",
+                    );
+                } else {
+                    // Left-pointing return (normal case)
+                    let to_active =
+                        render_activation.get(ret_to.as_str()).copied().unwrap_or(0) > 0;
+                    let target_shift = if to_active { ACTIVATION_HALF_W } else { 0.0 };
+                    let tip_x = to_x + target_shift + 1.0;
+                    let line_x1 = tip_x + FILLED_ARROW_NOTCH;
+                    let line_x2_end = from_x - 1.0;
+                    let text_x = to_x + target_shift + LEFT_ARROW_TEXT_PAD + 1.0;
+                    let arrow_pts = format!(
+                        "{},{},{},{},{},{},{},{}",
+                        fmt_coord(tip_x + ARROW_SIZE),
+                        fmt_coord(msg_y - ARROW_HALF_H),
+                        fmt_coord(tip_x),
+                        fmt_coord(msg_y),
+                        fmt_coord(tip_x + ARROW_SIZE),
+                        fmt_coord(msg_y + ARROW_HALF_H),
+                        fmt_coord(tip_x + ARROW_SIZE - FILLED_ARROW_NOTCH),
+                        fmt_coord(msg_y),
+                    );
+                    svg.message_filled_arrow(
+                        &from_uid,
+                        &to_uid,
+                        src_line,
+                        msg_id,
+                        &arrow_pts,
+                        line_x1,
+                        line_x2_end,
+                        msg_y,
+                        line_style,
+                        text_x,
+                        text_y_pos,
+                        &label,
+                        label_w,
+                        "#181818",
+                    );
                 }
 
                 // Advance autonumber
