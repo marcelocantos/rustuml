@@ -1,6 +1,6 @@
 # Targets
 
-<!-- last-evaluated: 73c3a19d -->
+<!-- last-evaluated: d7d3facb -->
 
 ## Active
 
@@ -12,7 +12,7 @@
   - No JVM, no Graphviz binary, no external font files required at runtime
   - Output is structurally equivalent to Java PlantUML for the same inputs
 - **Context**: PlantUML's JVM dependency makes deployment painful. The current Java codebase has weak test coverage (~12%) and a tangled architecture. A Rust port solves deployment (single binary, cross-platform, WASM-ready) while enabling clean architecture. External dependencies (Graphviz layout, KaTeX math rendering) are ported into the binary. The current Java version serves as the oracle for synthetic test generation.
-- **Status**: converging — 18 diagram types parsed and rendered, 12,568 golden test pairs (0 failures), full TIM preprocessor, SVG+PNG+PDF output. 46 PRs merged, all CI green.
+- **Status**: converging — 22 diagram types parsed and rendered, 12,568 golden test pairs (0 failures), full TIM preprocessor, SVG+PNG+PDF+EPS output. 49 PRs merged, all CI green. Graphviz layout engine with bezier edge routing. Stdlib includes, archimate, hyperlinks, creole tables, ASCII renderers added.
 - **Discovered**: 2026-03-22
 
 ### 🎯T1.2 Hierarchical graph layout engine in Rust
@@ -25,8 +25,8 @@
   - Edge routing avoids the converge/diverge line problem (lines that merge into a corridor and fan out, making connections untraceable — see `test-diagrams/wide-shallow-dense.puml`)
   - Code is in its own crate (`rustuml-layout`), licensed Apache-2.0
   - No external Graphviz binary required
-- **Context**: PlantUML uses Graphviz DOT for entity diagrams (class, component, object, deployment). We use layout-rs (MIT, Sugiyama) as the foundation. Known issues: layout-rs panics on degenerate graphs (bidirectional edges, 100+ arrows) causing infinite loops — currently mitigated with a 5-second thread timeout that falls back to grid layout. Edge routing quality on dense graphs is poor (see PlantUML GitHub issues #417, #523, #1005 for examples of the problem class).
-- **Status**: converging — layout crate with content-aware node sizing and built-in timeout/panic guard (5s, returns None). Used by class and object renderers. Grid fallback for timeout cases. Remaining: improve edge routing quality on dense graphs, extend layout to component/deployment renderers (currently grid-only).
+- **Context**: PlantUML uses Graphviz DOT for entity diagrams (class, component, object, deployment). Vendored Graphviz C libraries (dot algorithm) are statically linked for layout, replacing the old layout-rs dependency. Edge routing uses cubic bezier splines extracted from Graphviz.
+- **Status**: near-achieved — layout-rs replaced with vendored Graphviz (dot algorithm). Cubic bezier edge routing with proper spline extraction. Used by 8 renderers: class, object, component, deployment, usecase, state, activity, dot. Timeout guard (5s) with grid fallback. Remaining: edge routing quality tuning on dense graphs.
 - **Discovered**: 2026-03-22
 
 ### 🎯T1.3 PlantUML parser and TIM preprocessor ported to Rust
@@ -39,7 +39,7 @@
   - Command pattern for each diagram type parses source lines into diagram models
   - Exact match with Java version on preprocessing and parsing (verified by oracle tests)
 - **Context**: The parser is the largest component. The TIM preprocessor is a separate subsystem handling macros and includes. Parser correctness is verifiable by exact-match oracle tests.
-- **Status**: near-achieved — 18 diagram types parsed. Full TIM preprocessor. Lenient JSON parser (comma-less fields). Only 1 parse error in golden tests (mindmap edge case). Remaining: stdlib includes, `!import`, archimate support.
+- **Status**: near-achieved — 22 diagram types parsed. Full TIM preprocessor. Stdlib includes (`!include <C4/...>`, `!include <awslib/...>`) bundled and resolved. Archimate parsing. `!import` directive. Lenient JSON parser. Only 1 parse error in golden tests (mindmap edge case). Remaining: complex nested TIM macro edge cases.
 - **Discovered**: 2026-03-22
 
 ### 🎯T1.4 Diagram model and rendering pipeline ported to Rust
@@ -52,7 +52,7 @@
   - Style/skin system applies themes and formatting
   - Output is structurally equivalent to Java version for all diagram types
 - **Context**: The rendering pipeline has a clean abstraction. SVG output is the primary target. PNG via resvg/tiny-skia. The style system and skin parameters need full porting.
-- **Status**: near-achieved — All 18 diagram types render to SVG. Theme system with 30+ skinparam keys wired (17 newly added: font sizes, arrow colors/thickness, monochrome, shadowing, handwritten, linetype, nodesep/ranksep, padding, dpi, class header/attribute styles). Class and activity renderers use theme arrow colors. 11,104 golden pairs pass. Remaining: ~30% of skinparam keys not applied, sprite rendering, deeper creole edge cases.
+- **Status**: near-achieved — 22 diagram types render to SVG including archimate. Hyperlinks (`[[url]]`) wired into SVG output for class, sequence, component diagrams. Creole tables, tree lists, nested lists, horizontal rules. 183 skinparam keys wired. Sprite rendering. ASCII renderers for class, state, activity. Remaining: ~15% of skinparam keys not applied, deeper creole edge cases.
 - **Discovered**: 2026-03-22
 
 ### 🎯T1.7 Multi-format output (PNG, PDF, EPS)
@@ -65,7 +65,7 @@
   - Oracle test framework supports validating all output formats
   - Test suite runs against all supported formats, not just SVG
 - **Context**: SVG is the development and testing format. PNG is needed for embedding in documents and wikis.
-- **Status**: converging — SVG and PNG output working (-tsvg, -tpng). PDF via svg2pdf. Golden files are SVG-only. Remaining: format-parameterized test framework.
+- **Status**: near-achieved — SVG, PNG (-tpng), PDF (svg2pdf), and EPS (-teps) output all working. Format-parameterized golden smoke tests added (`golden_formats.rs`) — validates PNG/PDF/EPS conversion does not crash and produces correct file headers. Remaining: golden comparison for non-SVG formats (currently smoke-only).
 - **Discovered**: 2026-03-22
 
 ## Achieved
