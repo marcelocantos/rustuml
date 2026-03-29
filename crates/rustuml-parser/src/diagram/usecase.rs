@@ -32,6 +32,9 @@ pub struct Actor {
     pub label: String,
     /// Optional UML stereotype text, e.g. `<<system>>` → `"system"`.
     pub stereotype: Option<String>,
+    /// 1-based line number within the `@startuml` block.
+    #[serde(default)]
+    pub source_line: usize,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
@@ -43,6 +46,9 @@ pub struct UseCase {
     /// Optional additional description lines (from multiline `as "Title\n--\n..."` syntax).
     #[serde(default, skip_serializing_if = "Vec::is_empty")]
     pub description: Vec<String>,
+    /// 1-based line number within the `@startuml` block.
+    #[serde(default)]
+    pub source_line: usize,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
@@ -51,6 +57,9 @@ pub struct UseCaseConnection {
     pub to: String,
     pub label: Option<String>,
     pub stereotype: Option<String>,
+    /// 1-based line number within the `@startuml` block.
+    #[serde(default)]
+    pub source_line: usize,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]

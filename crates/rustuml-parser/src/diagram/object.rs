@@ -37,6 +37,9 @@ pub struct ObjectInstance {
     /// Optional color override (e.g., "#blue", "#FF0000").
     #[serde(skip_serializing_if = "Option::is_none")]
     pub color: Option<String>,
+    /// 1-based line number within the `@startuml` block.
+    #[serde(default)]
+    pub source_line: usize,
 }
 
 /// A note in an object diagram.
@@ -84,4 +87,7 @@ pub struct ObjectLink {
     /// Multiplicity label on the target end (e.g. `"1"`, `"0..*"`).
     #[serde(skip_serializing_if = "Option::is_none")]
     pub to_multiplicity: Option<String>,
+    /// 1-based line number within the `@startuml` block.
+    #[serde(default)]
+    pub source_line: usize,
 }

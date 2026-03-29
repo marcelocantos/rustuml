@@ -43,6 +43,8 @@ struct StateParser {
     notes: Vec<StateNote>,
     /// Active multi-line note being accumulated.
     note_buffer: Option<NoteBuffer>,
+    /// Current 1-based source line number (set before each parse_line call).
+    current_line: usize,
 }
 
 impl StateParser {
@@ -53,6 +55,7 @@ impl StateParser {
             transitions: Vec::new(),
             notes: Vec::new(),
             note_buffer: None,
+            current_line: 0,
         }
     }
 
@@ -91,12 +94,14 @@ impl StateParser {
                 kind: StateKind::Normal,
                 descriptions: Vec::new(),
                 substates: Vec::new(),
+                source_line: self.current_line,
             });
         }
         id
     }
 
-    fn parse_line(&mut self, _line_num: usize, line: &str) -> Result<(), ParseError> {
+    fn parse_line(&mut self, line_num: usize, line: &str) -> Result<(), ParseError> {
+        self.current_line = line_num;
         // Handle multi-line note body accumulation.
         if self.note_buffer.is_some() {
             if line == "end note" || line == "endnote" {
@@ -164,7 +169,7 @@ impl StateParser {
             let from = self.ensure_state(&caps[1]);
             let to = self.ensure_state(&caps[2]);
             let label = caps.get(3).map(|m| m.as_str().trim().to_string());
-            self.transitions.push(Transition { from, to, label });
+            self.transitions.push(Transition { from, to, label, source_line: self.current_line });
             true
         } else {
             false
@@ -202,6 +207,9 @@ impl StateParser {
             if let Some(state) = self.states.iter_mut().find(|s| s.id == id) {
                 state.label = label;
                 state.kind = kind;
+                if state.source_line == 0 {
+                    state.source_line = self.current_line;
+                }
             } else {
                 self.states.push(State {
                     id: id.clone(),
@@ -209,6 +217,7 @@ impl StateParser {
                     kind,
                     descriptions: Vec::new(),
                     substates: Vec::new(),
+                    source_line: self.current_line,
                 });
             }
             true
@@ -228,6 +237,7 @@ impl StateParser {
                     kind: StateKind::Normal,
                     descriptions: vec![desc],
                     substates: Vec::new(),
+                    source_line: self.current_line,
                 });
             }
             true

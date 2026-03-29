@@ -278,6 +278,7 @@ pub fn parse_component(lines: &[String]) -> Result<ComponentDiagram, ParseError>
                         label,
                         stereotypes: parse_stereotypes(trimmed),
                         url: container_url,
+                        source_line: 0,
                     });
                 }
                 if let Some(pkg) = package_stack.last_mut()
@@ -375,6 +376,7 @@ pub fn parse_component(lines: &[String]) -> Result<ComponentDiagram, ParseError>
                     label,
                     stereotypes: parse_stereotypes(trimmed),
                     url: comp_url,
+                    source_line: 0,
                 });
             }
             if let Some(pkg) = package_stack.last_mut()
@@ -395,6 +397,7 @@ pub fn parse_component(lines: &[String]) -> Result<ComponentDiagram, ParseError>
                     label: name,
                     stereotypes: parse_stereotypes(trimmed),
                     url: None,
+                    source_line: 0,
                 });
             }
             if let Some(pkg) = package_stack.last_mut()
@@ -462,6 +465,7 @@ pub fn parse_component(lines: &[String]) -> Result<ComponentDiagram, ParseError>
                         label: id.clone(),
                         stereotypes: Vec::new(),
                         url: None,
+                        source_line: 0,
                     });
                 }
             }
@@ -474,6 +478,7 @@ pub fn parse_component(lines: &[String]) -> Result<ComponentDiagram, ParseError>
                     from_mult,
                     to_mult,
                     dashed,
+                    source_line: 0,
                 });
             }
         }

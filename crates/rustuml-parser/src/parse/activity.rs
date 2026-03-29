@@ -110,6 +110,7 @@ fn parse_legacy_activity(lines: &[String]) -> Result<ActivityDiagram, ParseError
             steps.push(ActivityStep::Partition(PartitionBlock {
                 name,
                 color: None,
+                source_line: 0,
             }));
             partition_depth += 1;
             continue;
@@ -144,6 +145,7 @@ fn parse_legacy_activity(lines: &[String]) -> Result<ActivityDiagram, ParseError
             steps.push(ActivityStep::If(IfBlock {
                 condition: caps[1].to_string(),
                 then_label: None,
+                source_line: 0,
             }));
             continue;
         }
@@ -330,6 +332,8 @@ struct ActivityParser {
     next_action_keep_colon: bool,
     /// True when we are inside a `skinparam <type> {` block.
     in_skinparam_block: bool,
+    /// Current 1-based source line number (set before each parse_line call).
+    current_line: usize,
 }
 
 impl ActivityParser {
@@ -343,6 +347,7 @@ impl ActivityParser {
             continuation_text: None,
             next_action_keep_colon: false,
             in_skinparam_block: false,
+            current_line: 0,
         }
     }
 
@@ -389,7 +394,8 @@ impl ActivityParser {
         }
     }
 
-    fn parse_line(&mut self, _line_num: usize, line: &str) -> Result<(), ParseError> {
+    fn parse_line(&mut self, line_num: usize, line: &str) -> Result<(), ParseError> {
+        self.current_line = line_num;
         // Inside a skinparam block: collect nested `Key Value` entries until `}`.
         if self.in_skinparam_block {
             if line == "}" {
@@ -689,12 +695,14 @@ impl ActivityParser {
             self.steps.push(ActivityStep::If(IfBlock {
                 condition: caps[1].trim().to_string(),
                 then_label: caps.get(2).map(|m| m.as_str().trim().to_string()),
+                source_line: self.current_line,
             }));
             true
         } else if let Some(caps) = RE_BARE.captures(line) {
             self.steps.push(ActivityStep::If(IfBlock {
                 condition: caps[1].trim().to_string(),
                 then_label: None,
+                source_line: self.current_line,
             }));
             true
         } else {
@@ -710,6 +718,7 @@ impl ActivityParser {
             self.steps.push(ActivityStep::ElseIf(ElseIfBranch {
                 condition: caps[1].trim().to_string(),
                 then_label: caps.get(2).map(|m| m.as_str().trim().to_string()),
+                source_line: self.current_line,
             }));
             true
         } else {
@@ -738,6 +747,7 @@ impl ActivityParser {
             self.steps.push(ActivityStep::While(WhileBlock {
                 condition: caps[1].trim().to_string(),
                 is_label: caps.get(2).map(|m| m.as_str().trim().to_string()),
+                source_line: self.current_line,
             }));
             true
         } else {
@@ -769,6 +779,7 @@ impl ActivityParser {
                 condition: caps[1].trim().to_string(),
                 is_label: caps.get(2).map(|m| m.as_str().trim().to_string()),
                 not_label: caps.get(3).map(|m| m.as_str().trim().to_string()),
+                source_line: self.current_line,
             }));
             true
         } else {
@@ -836,7 +847,7 @@ impl ActivityParser {
                 .map(|m| m.as_str().to_string())
                 .unwrap_or_default();
             self.steps
-                .push(ActivityStep::Partition(PartitionBlock { name, color }));
+                .push(ActivityStep::Partition(PartitionBlock { name, color, source_line: self.current_line }));
             true
         } else {
             false
@@ -858,7 +869,7 @@ impl ActivityParser {
                 .map(|m| m.as_str().to_string())
                 .unwrap_or_default();
             self.steps
-                .push(ActivityStep::Partition(PartitionBlock { name, color }));
+                .push(ActivityStep::Partition(PartitionBlock { name, color, source_line: self.current_line }));
             true
         } else {
             false

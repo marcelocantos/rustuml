@@ -160,6 +160,7 @@ pub fn parse_usecase(lines: &[String]) -> Result<UseCaseDiagram, ParseError> {
                         label,
                         stereotype: None,
                         description,
+                        source_line: 0,
                     });
                 }
                 multiline_uc_id = None;
@@ -292,6 +293,7 @@ pub fn parse_usecase(lines: &[String]) -> Result<UseCaseDiagram, ParseError> {
                     id,
                     label,
                     stereotype,
+                    source_line: 0,
                 });
             }
         } else if let Some(caps) = RE_ACTOR_COLON.captures(trimmed) {
@@ -302,6 +304,7 @@ pub fn parse_usecase(lines: &[String]) -> Result<UseCaseDiagram, ParseError> {
                     id,
                     label,
                     stereotype: None,
+                    source_line: 0,
                 });
             }
         } else if let Some(caps) = RE_ACTOR_BARE.captures(trimmed) {
@@ -315,6 +318,7 @@ pub fn parse_usecase(lines: &[String]) -> Result<UseCaseDiagram, ParseError> {
                     id,
                     label,
                     stereotype,
+                    source_line: 0,
                 });
             }
         } else if let Some(caps) = RE_UC_ID_AS_LABEL.captures(trimmed) {
@@ -330,6 +334,7 @@ pub fn parse_usecase(lines: &[String]) -> Result<UseCaseDiagram, ParseError> {
                     label,
                     stereotype: None,
                     description: Vec::new(),
+                    source_line: 0,
                 });
             }
         } else if RE_UC_ID_AS_MULTI.is_match(trimmed) {
@@ -354,6 +359,7 @@ pub fn parse_usecase(lines: &[String]) -> Result<UseCaseDiagram, ParseError> {
                     label,
                     stereotype: None,
                     description: Vec::new(),
+                    source_line: 0,
                 });
             }
         } else if let Some(caps) = RE_UC_QUOTED_AS.captures(trimmed) {
@@ -371,6 +377,7 @@ pub fn parse_usecase(lines: &[String]) -> Result<UseCaseDiagram, ParseError> {
                     label,
                     stereotype,
                     description: Vec::new(),
+                    source_line: 0,
                 });
             }
         } else if let Some(caps) = RE_UC_QUOTED.captures(trimmed) {
@@ -388,6 +395,7 @@ pub fn parse_usecase(lines: &[String]) -> Result<UseCaseDiagram, ParseError> {
                     label,
                     stereotype,
                     description: Vec::new(),
+                    source_line: 0,
                 });
             }
         } else if let Some(caps) = RE_UC_BARE.captures(trimmed) {
@@ -405,6 +413,7 @@ pub fn parse_usecase(lines: &[String]) -> Result<UseCaseDiagram, ParseError> {
                     label,
                     stereotype,
                     description: Vec::new(),
+                    source_line: 0,
                 });
             }
         } else if let Some(caps) = RE_UC_PAREN.captures(trimmed) {
@@ -419,6 +428,7 @@ pub fn parse_usecase(lines: &[String]) -> Result<UseCaseDiagram, ParseError> {
                     label,
                     stereotype: None,
                     description: Vec::new(),
+                    source_line: 0,
                 });
             }
         } else if let Some(caps) = RE_CONN.captures(trimmed) {
@@ -441,6 +451,7 @@ pub fn parse_usecase(lines: &[String]) -> Result<UseCaseDiagram, ParseError> {
                             label: inner,
                             stereotype: None,
                             description: Vec::new(),
+                            source_line: 0,
                         });
                     }
                 }
@@ -458,6 +469,7 @@ pub fn parse_usecase(lines: &[String]) -> Result<UseCaseDiagram, ParseError> {
                             id,
                             label: inner,
                             stereotype: None,
+                            source_line: 0,
                         });
                     }
                 }
@@ -468,6 +480,7 @@ pub fn parse_usecase(lines: &[String]) -> Result<UseCaseDiagram, ParseError> {
                 to,
                 label,
                 stereotype,
+                source_line: 0,
             });
         } else if let Some(caps) = RE_PKG.captures(trimmed) {
             let name = caps

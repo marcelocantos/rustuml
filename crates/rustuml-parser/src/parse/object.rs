@@ -71,6 +71,7 @@ impl ObjectParser {
                 fields: Vec::new(),
                 stereotype: None,
                 color: None,
+                source_line: 0,
             });
         }
         id
@@ -174,6 +175,7 @@ impl ObjectParser {
                     fields: Vec::new(),
                     stereotype,
                     color,
+                    source_line: 0,
                 });
             }
 
@@ -229,6 +231,7 @@ impl ObjectParser {
                     fields: Vec::new(),
                     stereotype: None,
                     color,
+                    source_line: 0,
                 });
             }
 
@@ -297,6 +300,7 @@ impl ObjectParser {
                 label,
                 from_multiplicity,
                 to_multiplicity,
+                source_line: 0,
             });
             true
         } else {

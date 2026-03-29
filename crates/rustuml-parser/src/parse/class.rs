@@ -56,6 +56,8 @@ struct ClassParser {
     namespace_sep: Option<String>,
     /// Whether we are inside a multi-line header/footer/legend block.
     meta_block: Option<MetaBlock>,
+    /// Current 1-based source line number (set before each parse_line call).
+    current_line: usize,
 }
 
 impl ClassParser {
@@ -73,6 +75,7 @@ impl ClassParser {
             namespace_sep_none: false,
             namespace_sep: Some(".".to_string()),
             meta_block: None,
+            current_line: 0,
         }
     }
 
@@ -96,6 +99,7 @@ impl ClassParser {
                 members: Vec::new(),
                 stereotypes: Vec::new(),
                 url: None,
+                source_line: 0,
             });
         }
         id
@@ -198,7 +202,8 @@ impl ClassParser {
         (entity_id, entity_label)
     }
 
-    fn parse_line(&mut self, _line_num: usize, line: &str) -> Result<(), ParseError> {
+    fn parse_line(&mut self, line_num: usize, line: &str) -> Result<(), ParseError> {
+        self.current_line = line_num;
         // Inside a multi-line meta block (header/footer/legend/caption/title)?
         if let Some(block) = self.meta_block {
             let end1 = match block {
@@ -401,6 +406,7 @@ impl ClassParser {
                     members: Vec::new(),
                     stereotypes,
                     url: url.clone(),
+                    source_line: 0,
                 });
             }
 
@@ -438,6 +444,7 @@ impl ClassParser {
                     members: Vec::new(),
                     stereotypes: Vec::new(),
                     url: None,
+                    source_line: 0,
                 });
             }
             if line.ends_with('{') {
@@ -486,6 +493,7 @@ impl ClassParser {
                 label,
                 from_multiplicity: from_mult,
                 to_multiplicity: to_mult,
+                source_line: 0,
             });
             return true;
         }
@@ -507,6 +515,7 @@ impl ClassParser {
                 label,
                 from_multiplicity: None,
                 to_multiplicity: None,
+                source_line: 0,
             });
             return true;
         }
@@ -531,6 +540,7 @@ impl ClassParser {
                     members: Vec::new(),
                     stereotypes: Vec::new(),
                     url: None,
+                    source_line: 0,
                 });
             }
             let from = self.ensure_entity(&from_raw);
@@ -541,6 +551,7 @@ impl ClassParser {
                 label: None,
                 from_multiplicity: None,
                 to_multiplicity: None,
+                source_line: 0,
             });
             return true;
         }
@@ -791,6 +802,7 @@ impl ClassParser {
                         members: vec![member],
                         stereotypes: Vec::new(),
                         url: None,
+                        source_line: 0,
                     });
                 }
             }

@@ -107,6 +107,7 @@ fn push_node(
             kind,
             stereotype,
             children: Vec::new(),
+            source_line: 0,
         });
     }
 }
@@ -474,10 +475,11 @@ pub fn parse_deployment(lines: &[String]) -> Result<DeploymentDiagram, ParseErro
                             kind: DeploymentNodeKind::Node,
                             stereotype: None,
                             children: Vec::new(),
+                            source_line: 0,
                         });
                     }
                 }
-                connections.push(DeploymentConnection { from, to, label });
+                connections.push(DeploymentConnection { from, to, label, source_line: 0 });
                 continue;
             }
 
@@ -544,11 +546,12 @@ pub fn parse_deployment(lines: &[String]) -> Result<DeploymentDiagram, ParseErro
                         kind: DeploymentNodeKind::Node,
                         stereotype: None,
                         children: Vec::new(),
+                        source_line: 0,
                     });
                 }
             }
 
-            connections.push(DeploymentConnection { from, to, label });
+            connections.push(DeploymentConnection { from, to, label, source_line: 0 });
         }
     }
 

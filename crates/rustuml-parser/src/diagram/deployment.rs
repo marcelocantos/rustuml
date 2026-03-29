@@ -36,6 +36,9 @@ pub struct DeploymentNode {
     pub kind: DeploymentNodeKind,
     pub stereotype: Option<String>,
     pub children: Vec<String>,
+    /// 1-based line number within the `@startuml` block.
+    #[serde(default)]
+    pub source_line: usize,
 }
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Default, Serialize, Deserialize)]
@@ -68,4 +71,7 @@ pub struct DeploymentConnection {
     pub from: String,
     pub to: String,
     pub label: Option<String>,
+    /// 1-based line number within the `@startuml` block.
+    #[serde(default)]
+    pub source_line: usize,
 }
