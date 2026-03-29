@@ -12,7 +12,7 @@
   - No JVM, no Graphviz binary, no external font files required at runtime
   - Output is structurally equivalent to Java PlantUML for the same inputs
 - **Context**: PlantUML's JVM dependency makes deployment painful. The current Java codebase has weak test coverage (~12%) and a tangled architecture. A Rust port solves deployment (single binary, cross-platform, WASM-ready) while enabling clean architecture. External dependencies (Graphviz layout, KaTeX math rendering) are ported into the binary. The current Java version serves as the oracle for synthetic test generation.
-- **Status**: converging (4/7 sub-targets achieved, 3 close) — 22 diagram types parsed and rendered, 12,568 golden test pairs (0 failures), full TIM preprocessor, SVG+PNG+PDF+EPS output. Graphviz layout engine with bezier edge routing. Stdlib includes, archimate, hyperlinks, creole tables, ASCII renderers.
+- **Status**: converging (5/7 sub-targets achieved, 2 close) — 22 diagram types parsed and rendered, 12,568 golden test pairs (11,267 passing, 0 parse skips), full TIM preprocessor, SVG+PNG+PDF+EPS output. Graphviz layout engine with bezier edge routing. Stdlib includes, archimate, hyperlinks, creole tables, ASCII renderers.
 - **Discovered**: 2026-03-22
 
 ### 🎯T1.3 PlantUML parser and TIM preprocessor ported to Rust
@@ -25,7 +25,7 @@
   - Command pattern for each diagram type parses source lines into diagram models
   - Exact match with Java version on preprocessing and parsing (verified by oracle tests)
 - **Context**: The parser is the largest component. The TIM preprocessor is a separate subsystem handling macros and includes. Parser correctness is verifiable by exact-match oracle tests.
-- **Status**: near-achieved — 22 diagram types parsed. Full TIM preprocessor. Stdlib includes (`!include <C4/...>`, `!include <awslib/...>`) bundled and resolved. Archimate parsing. `!import` directive. Lenient JSON parser. Only 1 parse error in golden tests (mindmap edge case). Remaining: complex nested TIM macro edge cases.
+- **Status**: achieved — 22 diagram types parsed. Full TIM preprocessor. Stdlib includes bundled and resolved. Archimate parsing with skinparam block tracking. EBNF: single-quoted terminals, special sequences, quote-aware semicolon splitting. Mindmap: bare `--` side separator. Preprocessor: single-quote comment stripping disabled in @startebnf blocks. 0 parse skips in golden tests (was 6). No remaining parse gaps.
 - **Discovered**: 2026-03-22
 
 ### 🎯T1.4 Diagram model and rendering pipeline ported to Rust
