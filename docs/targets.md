@@ -12,20 +12,7 @@
   - No JVM, no Graphviz binary, no external font files required at runtime
   - Output is structurally equivalent to Java PlantUML for the same inputs
 - **Context**: PlantUML's JVM dependency makes deployment painful. The current Java codebase has weak test coverage (~12%) and a tangled architecture. A Rust port solves deployment (single binary, cross-platform, WASM-ready) while enabling clean architecture. External dependencies (Graphviz layout, KaTeX math rendering) are ported into the binary. The current Java version serves as the oracle for synthetic test generation.
-- **Status**: converging (5/7 sub-targets achieved, 2 close) — 22 diagram types parsed and rendered, 12,568 golden test pairs (11,267 passing, 0 parse skips), full TIM preprocessor, SVG+PNG+PDF+EPS output. Graphviz layout engine with bezier edge routing. Stdlib includes, archimate, hyperlinks, creole tables, ASCII renderers.
-- **Discovered**: 2026-03-22
-
-### 🎯T1.3 PlantUML parser and TIM preprocessor ported to Rust
-- **Weight**: 2 (value 20 / cost 8)
-- **Estimated-cost**: 8
-- **Parent**: 🎯T1
-- **Acceptance**:
-  - TIM preprocessor handles variables, functions, control flow, includes, themes, JSON
-  - Parser recognizes all diagram types and produces equivalent ASTs to Java version
-  - Command pattern for each diagram type parses source lines into diagram models
-  - Exact match with Java version on preprocessing and parsing (verified by oracle tests)
-- **Context**: The parser is the largest component. The TIM preprocessor is a separate subsystem handling macros and includes. Parser correctness is verifiable by exact-match oracle tests.
-- **Status**: achieved — 22 diagram types parsed. Full TIM preprocessor. Stdlib includes bundled and resolved. Archimate parsing with skinparam block tracking. EBNF: single-quoted terminals, special sequences, quote-aware semicolon splitting. Mindmap: bare `--` side separator. Preprocessor: single-quote comment stripping disabled in @startebnf blocks. 0 parse skips in golden tests (was 6). No remaining parse gaps.
+- **Status**: converging (4/6 sub-targets achieved, 2 close) — 22 diagram types parsed and rendered, 12,568 golden test pairs (11,267 passing, 0 parse skips), full TIM preprocessor, SVG+PNG+PDF+EPS output. Graphviz layout engine with bezier edge routing. Stdlib includes, archimate, hyperlinks, creole tables, ASCII renderers.
 - **Discovered**: 2026-03-22
 
 ### 🎯T1.4 Diagram model and rendering pipeline ported to Rust
@@ -38,7 +25,7 @@
   - Style/skin system applies themes and formatting
   - Output is structurally equivalent to Java version for all diagram types
 - **Context**: The rendering pipeline has a clean abstraction. SVG output is the primary target. PNG via resvg/tiny-skia. The style system and skin parameters need full porting.
-- **Status**: near-achieved — 22 diagram types render to SVG including archimate. Hyperlinks (`[[url]]`) wired into SVG output for class, sequence, component diagrams. Creole tables, tree lists, nested lists, horizontal rules. 183 skinparam keys wired. Sprite rendering. ASCII renderers for class, state, activity. Remaining: ~15% of skinparam keys not applied, deeper creole edge cases.
+- **Status**: near-achieved — 22 diagram types render to SVG including archimate. Hyperlinks, creole tables/trees/lists, sprite rendering, ASCII renderers. Skinparam case-normalization fix covers ~200 PascalCase patterns. Object skinparam keys, componentStyle, roundcorner, sequenceResponseMessageBelowArrow added. Creole `<color:X>` tags emit proper tspan fills. 207 render tests. Remaining: minor skinparam completeness, structural SVG equivalence tuning.
 - **Discovered**: 2026-03-22
 
 ### 🎯T1.7 Multi-format output (PNG, PDF, EPS)
@@ -55,6 +42,9 @@
 - **Discovered**: 2026-03-22
 
 ## Achieved
+
+### 🎯T1.3 PlantUML parser and TIM preprocessor ported to Rust ✓
+Achieved 2026-03-29. 22 diagram types parsed. Full TIM preprocessor with variables, functions, control flow, includes, themes, JSON. Stdlib includes bundled and resolved. EBNF: single-quoted terminals, special sequences, quote-aware semicolon splitting. Mindmap: bare `--` side separator. Preprocessor: single-quote comment stripping disabled in @startebnf blocks. 0 parse skips in golden tests (was 6). 299 parser tests.
 
 ### 🎯T1.2 Hierarchical graph layout engine in Rust ✓
 Achieved 2026-03-29. Layout-rs replaced with vendored Graphviz C libraries (dot algorithm), statically linked via cc build script. Cubic bezier spline edge routing extracted from Graphviz's libpathplan — same engine PlantUML uses. Used by 8 renderers: class, object, component, deployment, usecase, state, activity, dot. 138 bezier paths on the 50-class dense test graph (zero straight lines). Timeout guard (5s) with grid fallback. Thread-safe via mutex.
