@@ -15,6 +15,19 @@
 - **Status**: achieved (6/6 sub-targets) — 22 diagram types parsed and rendered, 12,568 golden test pairs (11,267 passing, 0 parse skips), full TIM preprocessor, SVG+PNG+PDF+EPS output. Graphviz layout engine with bezier edge routing. Universal skinparam support across all diagram types. Stdlib includes, archimate, hyperlinks, creole tables, ASCII renderers.
 - **Discovered**: 2026-03-22
 
+### 🎯T2 Ditaa rendering engine ported to Rust
+- **Weight**: 0.5 (value 5 / cost 10)
+- **Estimated-cost**: 10
+- **Acceptance**:
+  - `@startditaa` blocks render to PNG (embedded as base64 in SVG, matching PlantUML behavior)
+  - ASCII box-drawing characters converted to anti-aliased shapes with optional rounded corners and shadows
+  - Arrows, text labels, and color annotations rendered correctly
+  - Golden test comparator uses perceptual image diff (not pixel-exact) since Java Graphics2D and tiny-skia have different anti-aliasing
+  - 100 ditaa golden tests pass within perceptual tolerance
+- **Context**: Ditaa is a niche feature (~100 golden tests out of 12,568). PlantUML bundles the ditaa Java library (28 files, ~8K lines by Stathis Sideris). The algorithm is mechanical: parse ASCII grid → detect boxes/lines/arrows → rasterize. A Rust port would be ~2-3K lines using tiny-skia. The hard part is not the port but the test comparison — pixel-exact matching is impossible across rendering engines, so a perceptual diff comparator is needed.
+- **Status**: not started
+- **Discovered**: 2026-03-29
+
 ## Achieved
 
 ### 🎯T1.4 Diagram model and rendering pipeline ported to Rust ✓
