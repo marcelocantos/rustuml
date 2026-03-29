@@ -6,3 +6,4 @@
 //! Wraps layout-rs (Sugiyama algorithm) with a PlantUML-oriented API.
 
 pub mod graph;
+pub mod graphviz_ffi;

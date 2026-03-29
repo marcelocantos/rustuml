@@ -6,3 +6,6 @@ license.workspace = true
 
 [dependencies]
 layout-rs = "0.1"
+
+[build-dependencies]
+cc = "1"

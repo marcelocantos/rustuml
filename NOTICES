@@ -50,3 +50,11 @@ Copyright Yevhenii Reizner.
 Licensed under the MIT/Apache-2.0 License.
 Used for SVG/XML parsing in the oracle test framework.
 https://github.com/RazrFalcon/roxmltree
+
+Graphviz
+--------
+Copyright AT&T, John Ellson, and contributors.
+Licensed under the Eclipse Public License v2.0.
+Vendored C source (layout libraries only) for graph layout via the dot algorithm.
+Full licence: vendor/graphviz/LICENSE
+https://graphviz.org
