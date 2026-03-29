@@ -58,8 +58,10 @@ const ENUM_TEXT_OFFSET: f64 = 6.0;
 const VIS_ICON_OFFSET: f64 = 11.0;
 /// Visibility icon radius (small circle for method visibility).
 const VIS_ICON_R: f64 = 3.0;
-/// Right padding from widest content to entity right edge.
-const RIGHT_PAD: f64 = 3.0;
+/// Right padding for header (icon + name) area.
+const HEADER_RIGHT_PAD: f64 = 3.0;
+/// Right padding for member text area.
+const MEMBER_RIGHT_PAD: f64 = 6.0;
 /// Distance between entities in layout (vertical gap for top-to-bottom).
 #[allow(dead_code)]
 const ENTITY_GAP: f64 = 60.0;
@@ -198,7 +200,7 @@ fn calc_entity_dims(entity: &ClassEntity, entity_index: usize) -> EntityDims {
 
     // Compute width from icon area + name + member text widths.
     let icon_area = ICON_CX_OFFSET + ICON_RX + ICON_TEXT_GAP; // 29
-    let name_total = icon_area + name_width + RIGHT_PAD;
+    let name_total = icon_area + name_width + HEADER_RIGHT_PAD;
 
     let member_widths: Vec<f64> = entity
         .members
@@ -208,10 +210,10 @@ fn calc_entity_dims(entity: &ClassEntity, entity_index: usize) -> EntityDims {
             let text_w = metrics::plantuml_text_width_14(&text);
             if is_enum || m.visibility == Visibility::Default {
                 // Enum constants / default visibility: no icon, text at ENUM_TEXT_OFFSET.
-                ENUM_TEXT_OFFSET + text_w + RIGHT_PAD
+                ENUM_TEXT_OFFSET + text_w + MEMBER_RIGHT_PAD
             } else {
                 // Members with visibility icon.
-                MEMBER_TEXT_OFFSET + text_w + RIGHT_PAD
+                MEMBER_TEXT_OFFSET + text_w + MEMBER_RIGHT_PAD
             }
         })
         .collect();
@@ -220,55 +222,31 @@ fn calc_entity_dims(entity: &ClassEntity, entity_index: usize) -> EntityDims {
     let width = name_total.max(max_member_width);
 
     // Height calculation.
-    let header_h = HEADER_SEP_Y - MARGIN; // 32
-    let fields_h = if field_count > 0 {
-        field_count as f64 * MEMBER_LINE_HEIGHT
-    } else {
-        0.0
-    };
-    let methods_h = if method_count > 0 {
-        method_count as f64 * MEMBER_LINE_HEIGHT
-    } else {
-        0.0
-    };
+    // PlantUML layout formula (derived from golden SVGs):
+    //   header = 32px (icon + name)
+    //   each compartment = 8px padding + n * 16.4883px per member
+    //   empty compartment = 8px
+    //
+    // Empty class:  32 + 8 + 8 = 48
+    // Fields only:  32 + (8 + nf*16.4883) + 8 = 48 + nf*16.4883
+    // Methods only: 32 + 8 + (8 + nm*16.4883) = 48 + nm*16.4883
+    // Both:         32 + (8 + nf*16.4883) + (8 + nm*16.4883)
+    // Enum:         32 + (8 + n*16.4883) + 8
 
-    // Separator lines: one between header and fields, one between fields and methods.
-    // For an entity with no members: header + 2 separator lines (8px total below header).
-    let seps_h = if entity.members.is_empty() {
-        // Two separator lines at 39 and 47 (8px gap).
-        METHODS_SEP_Y - HEADER_SEP_Y
-    } else if is_enum {
-        // Enum: fields + bottom separator.
-        0.0
-    } else if field_count > 0 && method_count > 0 {
-        // Both compartments.
-        0.0
-    } else {
-        // Only one compartment (fields or methods).
-        0.0
-    };
+    const HEADER_H: f64 = 32.0;
+    const COMPARTMENT_PAD: f64 = 8.0;
 
-    // Total height = header_h + seps_h + fields_h + methods_h + bottom_padding.
     let height = if entity.members.is_empty() {
-        // No members: height = 48 (from golden: rect height=48 at y=7, total entity = 55).
-        48.0
+        // No members: header + empty fields + empty methods = 32+8+8 = 48.
+        HEADER_H + COMPARTMENT_PAD + COMPARTMENT_PAD
     } else if is_enum {
-        // Enum: header(32) + fields + bottom separator line.
-        header_h + fields_h + MEMBER_LINE_HEIGHT // extra for bottom separator
+        // Enum: header + values + bottom separator.
+        HEADER_H + (COMPARTMENT_PAD + field_count as f64 * MEMBER_LINE_HEIGHT) + COMPARTMENT_PAD
     } else {
-        // Class/interface/etc with members.
-        let fields_section = if field_count > 0 { fields_h } else { 0.0 };
-        let methods_section = if method_count > 0 { methods_h } else { 0.0 };
-        // Separator lines: always one between header and members.
-        // If both fields and methods, two separators (one for each boundary).
-        header_h
-            + fields_section
-            + methods_section
-            + if fields_section == 0.0 && methods_section == 0.0 {
-                seps_h
-            } else {
-                0.0
-            }
+        // Class/interface/abstract/annotation.
+        let fields_section = COMPARTMENT_PAD + field_count as f64 * MEMBER_LINE_HEIGHT;
+        let methods_section = COMPARTMENT_PAD + method_count as f64 * MEMBER_LINE_HEIGHT;
+        HEADER_H + fields_section + methods_section
     };
 
     // Source line: entity_index + 1 (PlantUML uses 1-based line numbers).
