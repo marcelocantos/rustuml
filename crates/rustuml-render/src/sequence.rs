@@ -1406,7 +1406,8 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme) -> String {
     let mut render_activation: HashMap<String, usize> = HashMap::new();
 
     // Return stack: tracks (activated_participant, activating_sender) for `return` keyword.
-    let mut return_stack: Vec<(String, String)> = Vec::new();
+    // Return stack: (activated_participant, sender, is_open_arrow)
+    let mut return_stack: Vec<(String, String, bool)> = Vec::new();
 
     let events = &diagram.events;
     for (ev_idx, event) in events.iter().enumerate() {
@@ -1636,7 +1637,11 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme) -> String {
                     match act {
                         ActivationChange::Activate => {
                             *render_activation.entry(msg.to.clone()).or_default() += 1;
-                            return_stack.push((msg.to.clone(), msg.from.clone()));
+                            return_stack.push((
+                                msg.to.clone(),
+                                msg.from.clone(),
+                                msg.arrow.head == ArrowHead::Open,
+                            ));
                         }
                         ActivationChange::Deactivate => {
                             if let Some(d) = render_activation.get_mut(&msg.from) {
@@ -1645,7 +1650,7 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme) -> String {
                             // Pop the return stack for the deactivated participant
                             if let Some(pos) = return_stack
                                 .iter()
-                                .rposition(|(act_p, _)| act_p == &msg.from)
+                                .rposition(|(act_p, _, _)| act_p == &msg.from)
                             {
                                 return_stack.remove(pos);
                             }
@@ -1667,8 +1672,8 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme) -> String {
             Event::Return(ret) => {
                 msg_id += 1;
 
-                // Pop the return stack to find from/to participants
-                let (ret_from, ret_to) = if let Some(entry) = return_stack.pop() {
+                // Pop the return stack to find from/to participants and arrow style
+                let (ret_from, ret_to, ret_open) = if let Some(entry) = return_stack.pop() {
                     // Deactivate the returned-from participant
                     if let Some(d) = render_activation.get_mut(&entry.0) {
                         *d = d.saturating_sub(1);
@@ -1684,7 +1689,7 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme) -> String {
                         .get(1)
                         .map(|p| p.id.clone())
                         .unwrap_or_default();
-                    (p0, p1)
+                    (p0, p1, false)
                 };
 
                 let from_x = center_of(&ret_from);
@@ -1710,65 +1715,108 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme) -> String {
                 let src_line = ret.source_line as u32;
                 let text_y_pos = msg_y - 4.7422;
 
-                // Return messages are always dotted filled arrows
+                // Return messages are always dotted; arrow style matches the original
                 let line_style = "stroke-dasharray:2,2;";
 
                 if is_right {
                     // Right-pointing return (unusual but possible)
                     let tip_x = to_x - ARROW_TIP_GAP;
-                    let line_x2 = tip_x - FILLED_ARROW_NOTCH;
                     let text_x = from_x + MSG_TEXT_LEFT_PAD;
-                    let arrow_pts = format!(
-                        "{},{},{},{},{},{},{},{}",
-                        fmt_coord(tip_x - ARROW_SIZE),
-                        fmt_coord(msg_y - ARROW_HALF_H),
-                        fmt_coord(tip_x),
-                        fmt_coord(msg_y),
-                        fmt_coord(tip_x - ARROW_SIZE),
-                        fmt_coord(msg_y + ARROW_HALF_H),
-                        fmt_coord(tip_x - ARROW_SIZE + FILLED_ARROW_NOTCH),
-                        fmt_coord(msg_y),
-                    );
-                    svg.message_filled_arrow(
-                        &from_uid, &to_uid, src_line, msg_id, &arrow_pts, from_x, line_x2, msg_y,
-                        line_style, text_x, text_y_pos, &label, label_w, "#181818",
-                    );
+                    if ret_open {
+                        svg.message_open_arrow(
+                            &from_uid,
+                            &to_uid,
+                            src_line,
+                            msg_id,
+                            tip_x,
+                            msg_y,
+                            true,
+                            from_x,
+                            tip_x + 1.0,
+                            msg_y,
+                            line_style,
+                            text_x,
+                            text_y_pos,
+                            &label,
+                            label_w,
+                            "#181818",
+                        );
+                    } else {
+                        let line_x2 = tip_x - FILLED_ARROW_NOTCH;
+                        let arrow_pts = format!(
+                            "{},{},{},{},{},{},{},{}",
+                            fmt_coord(tip_x - ARROW_SIZE),
+                            fmt_coord(msg_y - ARROW_HALF_H),
+                            fmt_coord(tip_x),
+                            fmt_coord(msg_y),
+                            fmt_coord(tip_x - ARROW_SIZE),
+                            fmt_coord(msg_y + ARROW_HALF_H),
+                            fmt_coord(tip_x - ARROW_SIZE + FILLED_ARROW_NOTCH),
+                            fmt_coord(msg_y),
+                        );
+                        svg.message_filled_arrow(
+                            &from_uid, &to_uid, src_line, msg_id, &arrow_pts, from_x, line_x2,
+                            msg_y, line_style, text_x, text_y_pos, &label, label_w, "#181818",
+                        );
+                    }
                 } else {
                     // Left-pointing return (normal case)
                     let to_active =
                         render_activation.get(ret_to.as_str()).copied().unwrap_or(0) > 0;
                     let target_shift = if to_active { ACTIVATION_HALF_W } else { 0.0 };
                     let tip_x = to_x + target_shift + 1.0;
-                    let line_x1 = tip_x + FILLED_ARROW_NOTCH;
                     let line_x2_end = from_x - 1.0;
                     let text_x = to_x + target_shift + LEFT_ARROW_TEXT_PAD + 1.0;
-                    let arrow_pts = format!(
-                        "{},{},{},{},{},{},{},{}",
-                        fmt_coord(tip_x + ARROW_SIZE),
-                        fmt_coord(msg_y - ARROW_HALF_H),
-                        fmt_coord(tip_x),
-                        fmt_coord(msg_y),
-                        fmt_coord(tip_x + ARROW_SIZE),
-                        fmt_coord(msg_y + ARROW_HALF_H),
-                        fmt_coord(tip_x + ARROW_SIZE - FILLED_ARROW_NOTCH),
-                        fmt_coord(msg_y),
-                    );
-                    svg.message_filled_arrow(
-                        &from_uid,
-                        &to_uid,
-                        src_line,
-                        msg_id,
-                        &arrow_pts,
-                        line_x1,
-                        line_x2_end,
-                        msg_y,
-                        line_style,
-                        text_x,
-                        text_y_pos,
-                        &label,
-                        label_w,
-                        "#181818",
-                    );
+
+                    if ret_open {
+                        svg.message_open_arrow(
+                            &from_uid,
+                            &to_uid,
+                            src_line,
+                            msg_id,
+                            tip_x,
+                            msg_y,
+                            false,
+                            tip_x - 1.0,
+                            line_x2_end,
+                            msg_y,
+                            line_style,
+                            text_x,
+                            text_y_pos,
+                            &label,
+                            label_w,
+                            "#181818",
+                        );
+                    } else {
+                        let line_x1 = tip_x + FILLED_ARROW_NOTCH;
+                        let arrow_pts = format!(
+                            "{},{},{},{},{},{},{},{}",
+                            fmt_coord(tip_x + ARROW_SIZE),
+                            fmt_coord(msg_y - ARROW_HALF_H),
+                            fmt_coord(tip_x),
+                            fmt_coord(msg_y),
+                            fmt_coord(tip_x + ARROW_SIZE),
+                            fmt_coord(msg_y + ARROW_HALF_H),
+                            fmt_coord(tip_x + ARROW_SIZE - FILLED_ARROW_NOTCH),
+                            fmt_coord(msg_y),
+                        );
+                        svg.message_filled_arrow(
+                            &from_uid,
+                            &to_uid,
+                            src_line,
+                            msg_id,
+                            &arrow_pts,
+                            line_x1,
+                            line_x2_end,
+                            msg_y,
+                            line_style,
+                            text_x,
+                            text_y_pos,
+                            &label,
+                            label_w,
+                            "#181818",
+                        );
+                    }
                 }
 
                 // Advance autonumber
