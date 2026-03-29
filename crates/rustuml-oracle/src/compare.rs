@@ -4,7 +4,7 @@
 use std::fmt;
 
 /// Attributes that carry coordinate/dimension data and should be ignored
-/// in structural comparison.
+/// in structural comparison (used by the legacy `compare_svg` function).
 const GEOMETRY_ATTRS: &[&str] = &[
     "x",
     "x1",
@@ -23,7 +23,7 @@ const GEOMETRY_ATTRS: &[&str] = &[
 ];
 
 /// Attributes on the root <svg> element that vary per render and should
-/// be ignored in structural comparison.
+/// be ignored in structural comparison (used by the legacy `compare_svg` function).
 const SVG_ROOT_ATTRS: &[&str] = &["style", "height", "width", "viewBox"];
 
 /// A flattened representation of an SVG element for structural comparison.
@@ -145,16 +145,27 @@ fn is_svg_root_attr(name: &str) -> bool {
     SVG_ROOT_ATTRS.contains(&name)
 }
 
-/// Extracts a flat list of structural elements from an SVG string.
+/// Extracts a flat list of structural elements from an SVG string,
+/// filtering out geometry attributes (legacy mode).
 pub fn extract_elements(svg: &str) -> Result<Vec<SvgElement>, String> {
-    // Strip XML declaration and DOCTYPE if present — roxmltree 0.20+ rejects DTDs.
-    // Graphviz-generated SVGs (used by @startdot) include these.
     let cleaned = strip_xml_preamble(svg);
     let doc =
         roxmltree::Document::parse(&cleaned).map_err(|e| format!("failed to parse SVG: {e}"))?;
 
     let mut elements = Vec::new();
     collect_elements(doc.root(), 0, &mut elements);
+    Ok(elements)
+}
+
+/// Extracts a flat list of ALL elements from an SVG string,
+/// preserving all attributes (strict mode).
+pub fn extract_elements_strict(svg: &str) -> Result<Vec<SvgElement>, String> {
+    let cleaned = strip_xml_preamble(svg);
+    let doc =
+        roxmltree::Document::parse(&cleaned).map_err(|e| format!("failed to parse SVG: {e}"))?;
+
+    let mut elements = Vec::new();
+    collect_elements_strict(doc.root(), 0, &mut elements);
     Ok(elements)
 }
 
@@ -176,6 +187,7 @@ fn strip_xml_preamble(svg: &str) -> String {
     result.trim_start().to_string()
 }
 
+/// Legacy element collector — filters out geometry and root SVG attributes.
 fn collect_elements(node: roxmltree::Node, depth: usize, elements: &mut Vec<SvgElement>) {
     if node.is_element() {
         let tag = node.tag_name().name().to_string();
@@ -231,7 +243,124 @@ fn collect_elements(node: roxmltree::Node, depth: usize, elements: &mut Vec<SvgE
     }
 }
 
-/// Compares two SVGs structurally, ignoring coordinates and dimensions.
+/// Strict element collector — preserves ALL attributes (except xmlns).
+/// Ignores processing instructions, comments, and whitespace-only text nodes.
+fn collect_elements_strict(node: roxmltree::Node, depth: usize, elements: &mut Vec<SvgElement>) {
+    // Skip processing instructions and comments at the node level.
+    if node.is_pi() || node.is_comment() {
+        return;
+    }
+
+    if node.is_element() {
+        let tag = node.tag_name().name().to_string();
+
+        // Skip <title> elements — metadata, not visible content.
+        if tag == "title" {
+            return;
+        }
+
+        // Collect ALL attributes except xmlns (namespace declarations vary).
+        // Exact string comparison — no numeric tolerance.
+        let mut attrs: Vec<(String, String)> = node
+            .attributes()
+            .filter(|a| !a.name().starts_with("xmlns"))
+            .map(|a| (a.name().to_string(), a.value().to_string()))
+            .collect();
+        attrs.sort_by(|a, b| a.0.cmp(&b.0));
+
+        // Collect direct text content (not from children).
+        // Whitespace-only text nodes are ignored.
+        let text: Option<String> = {
+            let t: String = node
+                .children()
+                .filter(|c| c.is_text())
+                .map(|c| c.text().unwrap_or(""))
+                .collect::<String>()
+                .trim()
+                .to_string();
+            if t.is_empty() { None } else { Some(t) }
+        };
+
+        elements.push(SvgElement {
+            tag,
+            attrs,
+            text,
+            depth,
+        });
+    }
+
+    for child in node.children() {
+        // Skip processing instructions and comments in children.
+        if child.is_pi() || child.is_comment() {
+            continue;
+        }
+        if child.is_element() {
+            collect_elements_strict(child, depth + 1, elements);
+        }
+    }
+}
+
+/// Compares two SVGs strictly — all attributes must match exactly (string equality).
+/// Processing instructions, comments, and whitespace-only text nodes are ignored.
+pub fn compare_svg_strict(expected: &str, actual: &str) -> Result<CompareResult, String> {
+    let expected_elems = extract_elements_strict(expected)?;
+    let actual_elems = extract_elements_strict(actual)?;
+
+    let mut differences = Vec::new();
+
+    if expected_elems.len() != actual_elems.len() {
+        differences.push(Difference::ElementCount {
+            expected: expected_elems.len(),
+            actual: actual_elems.len(),
+        });
+    }
+
+    let compare_len = expected_elems.len().min(actual_elems.len());
+    for i in 0..compare_len {
+        let exp = &expected_elems[i];
+        let act = &actual_elems[i];
+
+        if exp.tag != act.tag {
+            differences.push(Difference::TagMismatch {
+                index: i,
+                expected: exp.tag.clone(),
+                actual: act.tag.clone(),
+            });
+            continue;
+        }
+
+        if exp.depth != act.depth {
+            differences.push(Difference::DepthMismatch {
+                index: i,
+                tag: exp.tag.clone(),
+                expected: exp.depth,
+                actual: act.depth,
+            });
+        }
+
+        if exp.attrs != act.attrs {
+            differences.push(Difference::AttrMismatch {
+                index: i,
+                tag: exp.tag.clone(),
+                expected_attrs: exp.attrs.clone(),
+                actual_attrs: act.attrs.clone(),
+            });
+        }
+
+        if exp.text != act.text {
+            differences.push(Difference::TextMismatch {
+                index: i,
+                tag: exp.tag.clone(),
+                expected: exp.text.clone(),
+                actual: act.text.clone(),
+            });
+        }
+    }
+
+    Ok(CompareResult { differences })
+}
+
+/// Compares two SVGs structurally, ignoring coordinates and dimensions (legacy).
 pub fn compare_svg(expected: &str, actual: &str) -> Result<CompareResult, String> {
     let expected_elems = extract_elements(expected)?;
     let actual_elems = extract_elements(actual)?;
@@ -387,5 +516,121 @@ mod tests {
         let b = "@startuml\nAlice -> Bob : goodbye\n@enduml\n";
         let result = compare_preproc(a, b).unwrap();
         assert!(!result.is_match());
+    }
+
+    // --- Strict comparison tests ---
+
+    #[test]
+    fn strict_identical_svgs_match() {
+        let svg = r##"<svg xmlns="http://www.w3.org/2000/svg" width="100" height="200">
+            <rect x="10" y="20" width="30" height="40" fill="#E2E2F0"/>
+            <text x="15" y="35" fill="#000">Alice</text>
+        </svg>"##;
+
+        let result = compare_svg_strict(svg, svg).unwrap();
+        assert!(result.is_match(), "identical SVGs should match: {result}");
+    }
+
+    #[test]
+    fn strict_different_coordinates_do_not_match() {
+        let svg1 = r##"<svg xmlns="http://www.w3.org/2000/svg" width="100" height="200">
+            <rect x="10" y="20" width="30" height="40" fill="#E2E2F0"/>
+        </svg>"##;
+
+        let svg2 = r##"<svg xmlns="http://www.w3.org/2000/svg" width="200" height="400">
+            <rect x="50" y="60" width="70" height="80" fill="#E2E2F0"/>
+        </svg>"##;
+
+        let result = compare_svg_strict(svg1, svg2).unwrap();
+        assert!(
+            !result.is_match(),
+            "strict mode should detect coordinate differences"
+        );
+    }
+
+    #[test]
+    fn strict_exact_string_match_on_numeric_values() {
+        let svg1 = r##"<svg xmlns="http://www.w3.org/2000/svg" width="100" height="200">
+            <rect x="10" y="20" width="30.2" height="40" fill="#E2E2F0"/>
+        </svg>"##;
+
+        let svg2 = r##"<svg xmlns="http://www.w3.org/2000/svg" width="100" height="200">
+            <rect x="10" y="20" width="30.5" height="40" fill="#E2E2F0"/>
+        </svg>"##;
+
+        let result = compare_svg_strict(svg1, svg2).unwrap();
+        assert!(
+            !result.is_match(),
+            "strict mode uses exact string comparison — 30.2 != 30.5"
+        );
+    }
+
+    #[test]
+    fn strict_ignores_comments() {
+        let svg1 = r##"<svg xmlns="http://www.w3.org/2000/svg">
+            <text>Alice</text>
+        </svg>"##;
+
+        let svg2 = r##"<svg xmlns="http://www.w3.org/2000/svg">
+            <!-- This is a comment -->
+            <text>Alice</text>
+        </svg>"##;
+
+        let result = compare_svg_strict(svg1, svg2).unwrap();
+        assert!(
+            result.is_match(),
+            "should match ignoring comments: {result}"
+        );
+    }
+
+    #[test]
+    fn strict_all_attributes_checked() {
+        let svg1 = r##"<svg xmlns="http://www.w3.org/2000/svg" style="background:#fff">
+            <text>Alice</text>
+        </svg>"##;
+
+        let svg2 = r##"<svg xmlns="http://www.w3.org/2000/svg" style="background:#000">
+            <text>Alice</text>
+        </svg>"##;
+
+        let result = compare_svg_strict(svg1, svg2).unwrap();
+        assert!(
+            !result.is_match(),
+            "strict mode should detect style differences on root svg"
+        );
+    }
+
+    #[test]
+    fn strict_attribute_order_independent() {
+        let svg1 = r##"<svg xmlns="http://www.w3.org/2000/svg">
+            <rect fill="#E2E2F0" x="10" y="20"/>
+        </svg>"##;
+
+        let svg2 = r##"<svg xmlns="http://www.w3.org/2000/svg">
+            <rect x="10" y="20" fill="#E2E2F0"/>
+        </svg>"##;
+
+        let result = compare_svg_strict(svg1, svg2).unwrap();
+        assert!(
+            result.is_match(),
+            "attribute order should not matter: {result}"
+        );
+    }
+
+    #[test]
+    fn strict_xmlns_ignored() {
+        let svg1 = r##"<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+            <text>Alice</text>
+        </svg>"##;
+
+        let svg2 = r##"<svg xmlns="http://www.w3.org/2000/svg">
+            <text>Alice</text>
+        </svg>"##;
+
+        let result = compare_svg_strict(svg1, svg2).unwrap();
+        assert!(
+            result.is_match(),
+            "xmlns attributes should be ignored: {result}"
+        );
     }
 }

@@ -9,6 +9,10 @@
 //! `git submodule update --init` to populate them. If the submodule
 //! is not present, the test is silently skipped.
 //!
+//! Comparison is strict XML equivalence: same elements, same attributes
+//! (exact string match), same text content, same nesting depth. Processing
+//! instructions, comments, and whitespace-only text nodes are ignored.
+//!
 //! Run with: `cargo test --test golden_pairs`
 
 use rayon::prelude::*;
@@ -133,9 +137,6 @@ fn run_one(puml_path: &Path, root: &Path) -> TestResult {
         }
     };
 
-    // Count @start blocks. If there are multiple blocks, the golden SVG
-    // contains only the first block's output, so we compare block 0.
-    // Record whether this is a multi-block file for the renderer selection below.
     let has_date = source.contains("%date(");
 
     let golden_svg = match std::fs::read_to_string(puml_path.with_extension("svg")) {
@@ -160,101 +161,54 @@ fn run_one(puml_path: &Path, root: &Path) -> TestResult {
             outcome: Outcome::Skip("unsupported keyword".into()),
         };
     }
-
-    let blocks = rustuml_parser::parse::split_blocks(&source);
-    let is_multi_block = blocks.len() > 1;
+    // Skip %date() tests — the golden has a baked-in timestamp that
+    // can never match our runtime output.
+    if has_date {
+        return TestResult {
+            name: rel,
+            outcome: Outcome::Skip("contains %date()".into()),
+        };
+    }
+    // Skip ditaa diagrams — these produce raster images, not SVG elements.
+    if source
+        .lines()
+        .any(|l| l.trim().starts_with("@startditaa"))
+    {
+        return TestResult {
+            name: rel,
+            outcome: Outcome::Skip("ditaa diagram".into()),
+        };
+    }
 
     let render_result = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-        // For multi-block files, try block 0 first. Some goldens were
-        // generated with all blocks merged (picoweb mode), so also try
-        // merged and pick whichever matches the golden better.
+        let blocks = rustuml_parser::parse::split_blocks(&source);
+        let is_multi_block = blocks.len() > 1;
+
         let rust_svg = if is_multi_block {
             let block0 = rustuml_parser::parse::parse_block(&source, 0)
                 .map_err(|e| format!("parse: {e}"))?;
-            let block0_svg = rustuml_render::render_svg(&block0);
-
-            let merged_svg = {
-                let merged = merge_blocks(&source);
-                rustuml_parser::parse::parse_auto_with_base(&merged, None)
-                    .ok()
-                    .map(|d| rustuml_render::render_svg(&d))
-            };
-
-            if let Some(ref ms) = merged_svg {
-                // Pick the SVG that matches more golden text labels.
-                let golden_texts: Vec<&str> = golden_svg
-                    .split("textLength=")
-                    .skip(1)
-                    .filter_map(|s| {
-                        let start = s.find('>')? + 1;
-                        let end = s[start..].find('<')?;
-                        Some(&s[start..start + end])
-                    })
-                    .collect();
-                let b0_hits = golden_texts
-                    .iter()
-                    .filter(|t| block0_svg.contains(*t))
-                    .count();
-                let mg_hits = golden_texts.iter().filter(|t| ms.contains(*t)).count();
-                if mg_hits > b0_hits {
-                    ms.clone()
-                } else {
-                    block0_svg
-                }
-            } else {
-                block0_svg
-            }
+            rustuml_render::render_svg(&block0)
         } else {
             let diagram = rustuml_parser::parse::parse_auto_with_base(&source, None)
                 .map_err(|e| format!("parse: {e}"))?;
             rustuml_render::render_svg(&diagram)
         };
 
-        let golden_elems =
-            compare::extract_elements(&golden_svg).map_err(|e| format!("golden SVG parse: {e}"))?;
-        let rust_elems =
-            compare::extract_elements(&rust_svg).map_err(|e| format!("rust SVG parse: {e}"))?;
+        let cmp = compare::compare_svg_strict(&golden_svg, &rust_svg)
+            .map_err(|e| format!("compare: {e}"))?;
 
-        let skip = |t: &&str| {
-            t.len() < 2
-                || ["alt", "else", "opt", "loop", "end", "par", "ref"].contains(t)
-                || t.starts_with('[')
-                // When the source uses %date(), skip any golden text
-                // containing a date — the golden has a baked-in timestamp
-                // that can never match our runtime output.
-                || (has_date && t.contains("2026"))
-        };
-        fn norm(s: &str) -> String {
-            s.replace('\u{00a0}', " ")
-        }
-
-        let golden_raw: Vec<&str> = golden_elems
-            .iter()
-            .filter_map(|e| e.text.as_deref())
-            .filter(|t| !t.is_empty())
-            .collect();
-        let golden_norm: Vec<String> = golden_raw.iter().map(|t| norm(t)).collect();
-        let rust_texts: Vec<String> = rust_elems
-            .iter()
-            .filter_map(|e| e.text.as_deref())
-            .filter(|t| !t.is_empty())
-            .map(|t| norm(t))
-            .collect();
-
-        let missing: Vec<String> = golden_norm
-            .iter()
-            .zip(golden_raw.iter())
-            .filter(|(_, raw)| !skip(raw))
-            .filter(|(n, _)| !rust_texts.iter().any(|r| r.contains(n.as_str())))
-            .map(|(n, _)| n.clone())
-            .collect();
-
-        if missing.is_empty() {
+        if cmp.is_match() {
             Ok(())
         } else {
-            Err(format!(
-                "golden texts not found in Rust output: {missing:?}"
-            ))
+            // Truncate the report to keep failure output manageable.
+            let report = format!("{cmp}");
+            let truncated: String = report.lines().take(20).collect::<Vec<_>>().join("\n");
+            let suffix = if report.lines().count() > 20 {
+                format!("\n  ... ({} total differences)", cmp.differences.len())
+            } else {
+                String::new()
+            };
+            Err(format!("{truncated}{suffix}"))
         }
     }));
 
@@ -287,32 +241,6 @@ fn run_one(puml_path: &Path, root: &Path) -> TestResult {
     }
 }
 
-/// Merge multiple `@start`/`@end` blocks into a single block.
-///
-/// PlantUML renders unnamed same-type blocks as one combined diagram.
-/// This strips the intermediate `@end`/`@start` markers and wraps
-/// everything in a single `@startuml`/`@enduml`.
-fn merge_blocks(source: &str) -> String {
-    let mut lines = Vec::new();
-    let mut started = false;
-    for line in source.lines() {
-        let trimmed = line.trim();
-        if trimmed.starts_with("@start") {
-            if !started {
-                lines.push(line.to_string());
-                started = true;
-            }
-            // Skip subsequent @start markers.
-        } else if trimmed.starts_with("@end") {
-            // Skip — we'll add one at the end.
-        } else {
-            lines.push(line.to_string());
-        }
-    }
-    lines.push("@enduml".to_string());
-    lines.join("\n")
-}
-
 #[test]
 fn golden_pairs() {
     let root = golden_dir();
@@ -341,7 +269,6 @@ fn golden_pairs() {
     let skip_parse = AtomicUsize::new(0);
     let skip_error = AtomicUsize::new(0);
     let skip_keyword = AtomicUsize::new(0);
-    let skip_multi = AtomicUsize::new(0);
     let skip_other = AtomicUsize::new(0);
 
     let failures: Vec<String> = pool.install(|| {
@@ -362,8 +289,6 @@ fn golden_pairs() {
                             skip_error.fetch_add(1, Ordering::Relaxed);
                         } else if reason.contains("unsupported keyword") {
                             skip_keyword.fetch_add(1, Ordering::Relaxed);
-                        } else if reason.contains("multiple @start") {
-                            skip_multi.fetch_add(1, Ordering::Relaxed);
                         } else {
                             skip_other.fetch_add(1, Ordering::Relaxed);
                         }
@@ -389,21 +314,20 @@ fn golden_pairs() {
     }
 
     let panics = failures.iter().filter(|f| f.contains("panic:")).count();
-    let text_mm = failures
+    let xml_diff = failures
         .iter()
-        .filter(|f| f.contains("golden texts not found"))
+        .filter(|f| f.contains("SVG structural differences"))
         .count();
-    let other = fail_count - panics - text_mm;
+    let other = fail_count - panics - xml_diff;
 
     let sp = skip_parse.load(Ordering::Relaxed);
     let se = skip_error.load(Ordering::Relaxed);
     let sk = skip_keyword.load(Ordering::Relaxed);
-    let sm = skip_multi.load(Ordering::Relaxed);
     let so = skip_other.load(Ordering::Relaxed);
     eprintln!("\ngolden_pairs: {total} total, {pass} passed, {fail_count} failed, {skip} skipped");
-    eprintln!("  panics: {panics}, text mismatches: {text_mm}, other: {other}");
+    eprintln!("  panics: {panics}, xml diff: {xml_diff}, other: {other}");
     eprintln!(
-        "  skip breakdown: parse={sp}, golden_error={se}, unsupported_kw={sk}, multi_start={sm}, other={so}"
+        "  skip breakdown: parse={sp}, golden_error={se}, unsupported_kw={sk}, other={so}"
     );
     if !dir_fails.is_empty() {
         eprintln!("  per-directory failures:");
@@ -429,7 +353,7 @@ fn golden_pairs() {
     assert!(
         failures.is_empty(),
         "{fail_count} of {total} golden pair tests failed \
-         (panics: {panics}, text: {text_mm}, other: {other}):\n{}{truncated}",
+         (panics: {panics}, xml_diff: {xml_diff}, other: {other}):\n{}{truncated}",
         shown.join("\n")
     );
 }
