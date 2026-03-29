@@ -46,6 +46,8 @@ pub struct ClassEntity {
     pub kind: EntityKind,
     pub members: Vec<Member>,
     pub stereotypes: Vec<String>,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub url: Option<String>,
 }
 
 /// The kind of entity in a class diagram.

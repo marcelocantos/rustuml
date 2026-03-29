@@ -7,6 +7,7 @@
 //! specified in YAML or JSON as an alternative to PlantUML text syntax.
 
 pub mod activity;
+pub mod archimate;
 pub mod board;
 pub mod class;
 pub mod component;
@@ -55,6 +56,7 @@ pub struct SpriteData {
 pub enum Diagram {
     Sequence(sequence::SequenceDiagram),
     Class(class::ClassDiagram),
+    Archimate(archimate::ArchimateDiagram),
     Object(object::ObjectDiagram),
     State(state::StateDiagram),
     Activity(activity::ActivityDiagram),
@@ -83,6 +85,7 @@ impl Diagram {
         match self {
             Diagram::Sequence(d) => &mut d.meta,
             Diagram::Class(d) => &mut d.meta,
+            Diagram::Archimate(d) => &mut d.meta,
             Diagram::Object(d) => &mut d.meta,
             Diagram::State(d) => &mut d.meta,
             Diagram::Activity(d) => &mut d.meta,

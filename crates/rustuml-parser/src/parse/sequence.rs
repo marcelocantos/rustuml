@@ -86,6 +86,7 @@ impl SeqParser {
                 kind: ParticipantKind::default(),
                 order: Some(self.participants.len()),
                 stereotype: None,
+                url: None,
             });
         }
         id
@@ -188,6 +189,8 @@ impl SeqParser {
     }
 
     fn try_participant_decl(&mut self, line: &str) -> bool {
+        let (url, clean_line) = super::extract_link_url(line);
+        let line = clean_line.as_str();
         // Matches four forms:
         //   1. keyword "Long Label" as alias  <<stereotype>>
         //   2. keyword alias as "Long Label"  <<stereotype>>
@@ -233,6 +236,7 @@ impl SeqParser {
                     kind,
                     order: Some(self.participants.len()),
                     stereotype,
+                    url,
                 });
             }
             true
@@ -1018,5 +1022,28 @@ mod tests {
         } else {
             panic!("expected note");
         }
+    }
+
+    #[test]
+    fn participant_with_url() {
+        let d = parse(
+            "actor User [[https://example.com/user]]\nparticipant API [[https://example.com/api]]\nUser -> API : hello",
+        );
+        assert_eq!(d.participants.len(), 2);
+        assert_eq!(
+            d.participants[0].url.as_deref(),
+            Some("https://example.com/user")
+        );
+        assert_eq!(
+            d.participants[1].url.as_deref(),
+            Some("https://example.com/api")
+        );
+    }
+
+    #[test]
+    fn participant_no_url() {
+        let d = parse("participant Alice\nparticipant Bob\nAlice -> Bob : hi");
+        assert_eq!(d.participants[0].url, None);
+        assert_eq!(d.participants[1].url, None);
     }
 }

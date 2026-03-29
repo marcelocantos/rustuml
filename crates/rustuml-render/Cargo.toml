@@ -11,6 +11,6 @@ rustuml-layout = { path = "../rustuml-layout" }
 rustuml-math = { path = "../rustuml-math" }
 rustuml-parser = { path = "../rustuml-parser" }
 serde = { version = "1", features = ["derive"] }
-serde_yaml = "0.9"
+serde_yml = "0.0.12"
 resvg = "0.47"
 svg2pdf = "0.13"

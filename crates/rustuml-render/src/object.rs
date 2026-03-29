@@ -7,7 +7,7 @@
 //! and directed links between them.  Layout uses the same Sugiyama engine as
 //! the class renderer.
 
-use rustuml_layout::graph::{Direction, LayoutGraph};
+use rustuml_layout::graph::{Direction, EdgePath, LayoutGraph};
 use rustuml_parser::diagram::object::*;
 
 use crate::metrics;
@@ -54,16 +54,17 @@ pub fn render(diagram: &ObjectDiagram, theme: &Theme) -> String {
     }
 
     // Use timeout — layout-rs can loop infinitely on degenerate graphs.
-    let positions = match layout.layout_positions(std::time::Duration::from_secs(5)) {
-        Some(pos) => pos,
+    let result = match layout.layout_full(std::time::Duration::from_secs(5)) {
+        Some(r) => r,
         None => return render_grid(diagram, cs),
     };
-    render_with_positions(diagram, &positions, cs)
+    render_with_positions(diagram, &result.node_positions, &result.edge_paths, cs)
 }
 
 fn render_with_positions(
     diagram: &ObjectDiagram,
     positions: &[rustuml_layout::graph::NodePosition],
+    edge_paths: &[EdgePath],
     cs: &crate::style::ClassStyle,
 ) -> String {
     if diagram.objects.is_empty() {
@@ -117,7 +118,7 @@ fn render_with_positions(
     }
 
     render_packages(diagram, &obj_positions, &mut svg);
-    render_links(diagram, &obj_positions, &dims, &mut svg, cs);
+    render_links(diagram, &obj_positions, &dims, &mut svg, cs, edge_paths);
     render_notes(diagram, &obj_positions, total_width, total_height, &mut svg);
 
     svg.finalize()
@@ -170,7 +171,7 @@ fn render_grid(diagram: &ObjectDiagram, cs: &crate::style::ClassStyle) -> String
     }
 
     render_packages(diagram, &obj_positions, &mut svg);
-    render_links(diagram, &obj_positions, &dims, &mut svg, cs);
+    render_links(diagram, &obj_positions, &dims, &mut svg, cs, &[]);
     render_notes(diagram, &obj_positions, total_width, total_height, &mut svg);
 
     svg.finalize()
@@ -319,12 +320,39 @@ fn render_links(
     dims: &[ObjDim],
     svg: &mut SvgBuilder,
     cs: &crate::style::ClassStyle,
+    edge_paths: &[EdgePath],
 ) {
     for link in &diagram.links {
         let from_base = link.from.split("::").next().unwrap_or(&link.from);
         let to_base = link.to.split("::").next().unwrap_or(&link.to);
         let from_field = link.from.split("::").nth(1);
 
+        // Try bezier path from layout engine first.
+        let edge_path = edge_paths
+            .iter()
+            .find(|ep| ep.from == from_base && ep.to == to_base);
+
+        if let Some(ep) = edge_path
+            && !ep.points.is_empty()
+        {
+            svg.bezier_path_with_arrow(&ep.points, &cs.border_color, false, 8.0);
+            let first = ep.points.first().unwrap();
+            let last = ep.points.last().unwrap();
+            if let Some(label) = &link.label {
+                let mid_x = (first.0 + last.0) / 2.0;
+                let mid_y = (first.1 + last.1) / 2.0;
+                svg.text(mid_x, mid_y - 4.0, label, "middle", SMALL_FONT);
+            }
+            if let Some(mult) = &link.from_multiplicity {
+                svg.text(first.0 + 6.0, first.1 + 14.0, mult, "start", SMALL_FONT);
+            }
+            if let Some(mult) = &link.to_multiplicity {
+                svg.text(last.0 + 6.0, last.1 - 4.0, mult, "start", SMALL_FONT);
+            }
+            continue;
+        }
+
+        // Fallback to straight lines.
         let fi = diagram.objects.iter().position(|o| o.id == from_base);
         let ti = diagram.objects.iter().position(|o| o.id == to_base);
 
@@ -359,7 +387,6 @@ fn render_links(
 
             // Render multiplicity labels near the source and target ends.
             if let Some(mult) = &link.from_multiplicity {
-                // Place near the from-end (slightly offset from the line start).
                 let dx = to_cx - from_cx;
                 let dy = to_top - from_y;
                 let len = (dx * dx + dy * dy).sqrt().max(1.0);
@@ -368,7 +395,6 @@ fn render_links(
                 svg.text(nx + 6.0, ny, mult, "start", SMALL_FONT);
             }
             if let Some(mult) = &link.to_multiplicity {
-                // Place near the to-end.
                 let dx = from_cx - to_cx;
                 let dy = from_y - to_top;
                 let len = (dx * dx + dy * dy).sqrt().max(1.0);

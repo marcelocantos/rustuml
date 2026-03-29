@@ -4,6 +4,7 @@
 //! Diagram parsing — turns preprocessed lines into diagram models.
 
 pub mod activity;
+pub mod archimate;
 pub mod board;
 pub mod class;
 pub mod component;
@@ -43,6 +44,25 @@ impl std::fmt::Display for ParseError {
 }
 
 impl std::error::Error for ParseError {}
+
+pub fn extract_link_url(line: &str) -> (Option<String>, String) {
+    if let Some(start) = line.find("[[")
+        && let Some(rel_end) = line[start..].find("]]")
+    {
+        let inner = &line[start + 2..start + rel_end];
+        let url = inner.split(['{', ' ']).next().unwrap_or("").to_string();
+        let remaining = format!(
+            "{}{}",
+            &line[..start],
+            line[start + rel_end + 2..].trim_start()
+        );
+        if url.is_empty() {
+            return (None, remaining.trim().to_string());
+        }
+        return (Some(url), remaining.trim().to_string());
+    }
+    (None, line.to_string())
+}
 
 /// Strip surrounding double-quotes from a title string, then trim whitespace.
 pub fn strip_title_quotes(s: &str) -> &str {
@@ -88,7 +108,7 @@ fn detect_type(input: &str) -> &str {
 /// For @startuml, detect the specific UML subtype by scanning ALL lines
 /// and counting indicator keywords. The type with the strongest signal wins.
 fn detect_uml_subtype(lines: &[String]) -> UmlSubtype {
-    let mut scores = [0i32; 9]; // Seq, Class, Object, State, Activity, Component, UseCase, Deployment, Timing
+    let mut scores = [0i32; 10]; // Seq, Class, Object, State, Activity, Component, UseCase, Deployment, Timing
 
     for line in lines {
         let trimmed = line.trim();
@@ -375,6 +395,10 @@ fn detect_uml_subtype(lines: &[String]) -> UmlSubtype {
         {
             scores[1] += 1; // weak class signal
         }
+        // Archimate -- preprocessor-expanded lines are unambiguous.
+        if trimmed.starts_with("archimate_element ") || trimmed.starts_with("archimate_rel ") {
+            scores[9] += 20;
+        }
     }
 
     let subtypes = [
@@ -387,6 +411,7 @@ fn detect_uml_subtype(lines: &[String]) -> UmlSubtype {
         UmlSubtype::UseCase,
         UmlSubtype::Deployment,
         UmlSubtype::Timing,
+        UmlSubtype::Archimate,
     ];
 
     // Find the highest-scoring subtype. On ties, prefer earlier entries
@@ -408,6 +433,7 @@ enum UmlSubtype {
     UseCase,
     Deployment,
     Timing,
+    Archimate,
 }
 
 /// A single extracted block from a multi-block PlantUML file.
@@ -553,7 +579,7 @@ pub fn parse_named(input: &str, name: &str) -> Result<Diagram, ParseError> {
 
 /// Parse YAML input into a diagram model.
 pub fn parse_yaml(input: &str) -> Result<Diagram, ParseError> {
-    serde_yaml::from_str(input).map_err(|e| ParseError {
+    serde_yml::from_str(input).map_err(|e| ParseError {
         line: e.location().map_or(0, |l| l.line()),
         message: format!("YAML parse error: {e}"),
     })
@@ -647,6 +673,10 @@ pub fn parse_with_base(
             UmlSubtype::Timing => {
                 let td = timing::parse_timing(&lines)?;
                 Ok(Diagram::Timing(td))
+            }
+            UmlSubtype::Archimate => {
+                let arch = archimate::parse_archimate(&lines)?;
+                Ok(Diagram::Archimate(arch))
             }
         },
         "json" => {
@@ -754,10 +784,10 @@ mod tests {
     fn yaml_round_trip() {
         let input = "@startuml\nAlice -> Bob : hello\n@enduml";
         let diagram = parse(input).unwrap();
-        let yaml = serde_yaml::to_string(&diagram).unwrap();
+        let yaml = serde_yml::to_string(&diagram).unwrap();
         let reparsed = parse_yaml(&yaml).unwrap();
         // Verify structure matches by re-serializing.
-        let yaml2 = serde_yaml::to_string(&reparsed).unwrap();
+        let yaml2 = serde_yml::to_string(&reparsed).unwrap();
         assert_eq!(yaml, yaml2);
     }
 
@@ -796,9 +826,9 @@ mod tests {
     fn class_diagram_yaml_round_trip() {
         let input = "@startuml\nclass Foo {\n  +name : String\n}\nclass Bar\nFoo <|-- Bar\n@enduml";
         let diagram = parse(input).unwrap();
-        let yaml = serde_yaml::to_string(&diagram).unwrap();
+        let yaml = serde_yml::to_string(&diagram).unwrap();
         let reparsed = parse_yaml(&yaml).unwrap();
-        let yaml2 = serde_yaml::to_string(&reparsed).unwrap();
+        let yaml2 = serde_yml::to_string(&reparsed).unwrap();
         assert_eq!(yaml, yaml2);
     }
 
@@ -921,5 +951,52 @@ mod tests {
         let input = "@startuml\nAlice -> Bob\n@enduml";
         let blocks = split_blocks(input);
         assert_eq!(blocks.len(), 1);
+    }
+}
+
+#[cfg(test)]
+mod link_url_tests {
+    use super::extract_link_url;
+
+    #[test]
+    fn basic_url() {
+        let (url, rest) = extract_link_url("class Foo [[https://example.com]] {");
+        assert_eq!(url.as_deref(), Some("https://example.com"));
+        assert_eq!(rest, "class Foo {");
+    }
+
+    #[test]
+    fn url_with_tooltip() {
+        let (url, rest) = extract_link_url("class Foo [[https://example.com{tooltip}]]");
+        assert_eq!(url.as_deref(), Some("https://example.com"));
+        assert_eq!(rest, "class Foo");
+    }
+
+    #[test]
+    fn url_with_label() {
+        let (url, rest) = extract_link_url("class Foo [[https://example.com Label]]");
+        assert_eq!(url.as_deref(), Some("https://example.com"));
+        assert_eq!(rest, "class Foo");
+    }
+
+    #[test]
+    fn url_with_tooltip_and_label() {
+        let (url, rest) = extract_link_url("class Foo [[https://example.com{tip} Label]]");
+        assert_eq!(url.as_deref(), Some("https://example.com"));
+        assert_eq!(rest, "class Foo");
+    }
+
+    #[test]
+    fn no_url() {
+        let (url, rest) = extract_link_url("class Foo {");
+        assert_eq!(url, None);
+        assert_eq!(rest, "class Foo {");
+    }
+
+    #[test]
+    fn empty_brackets() {
+        let (url, rest) = extract_link_url("class Foo [[]]");
+        assert_eq!(url, None);
+        assert_eq!(rest, "class Foo");
     }
 }

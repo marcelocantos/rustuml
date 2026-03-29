@@ -592,10 +592,10 @@ mod tests {
     #[test]
     fn theme_serializes_to_yaml() {
         let t = Theme::modern();
-        let yaml = serde_yaml::to_string(&t).unwrap();
+        let yaml = serde_yml::to_string(&t).unwrap();
         assert!(yaml.contains("modern"));
         // Round-trip.
-        let reparsed: Theme = serde_yaml::from_str(&yaml).unwrap();
+        let reparsed: Theme = serde_yml::from_str(&yaml).unwrap();
         assert_eq!(reparsed.name, "modern");
     }
 }

@@ -85,7 +85,7 @@ bump. The pre-1.0 period exists to get these right.
 - [ ] Performance benchmarks
 
 ### Dependencies
-- [ ] `serde_yaml` deprecation — migrate to maintained alternative
+- [x] `serde_yaml` deprecation — migrated to `serde_yml`
 - [ ] `layout-rs` stability — infinite loop and panic issues (mitigated with timeout)
 
 ## Out of scope for 1.0

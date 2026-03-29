@@ -24,6 +24,8 @@ pub struct Participant {
     pub order: Option<usize>,
     /// Optional UML stereotype text, e.g. `<<service>>` → `"service"`.
     pub stereotype: Option<String>,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub url: Option<String>,
 }
 
 /// The visual shape of a participant.

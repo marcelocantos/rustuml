@@ -3,8 +3,10 @@
 
 //! Creole markup — converts PlantUML text markup to SVG tspan elements.
 //!
-//! Supports: **bold**, //italic//, __underline__, --strikethrough--,
-//! and `<b>`, `<i>`, `<u>`, `<s>` HTML-style tags.
+//! Supports inline markup (**bold**, //italic//, __underline__, --strikethrough--,
+//! `<b>`, `<i>`, `<u>`, `<s>` HTML-style tags) and line-level constructs:
+//! tables (`|= Header | data |`), tree structures (`|_ node`),
+//! horizontal rules (`----`, `====`, `....`), and nested lists (`*`, `**`, `#`).
 
 use std::fmt::Write;
 
@@ -443,7 +445,7 @@ fn monospace_spaces(s: &str) -> String {
 }
 
 /// Escape special XML characters in a string for safe embedding in SVG text content.
-fn escape_creole_text(s: &str) -> String {
+pub fn escape_creole_text(s: &str) -> String {
     s.replace('&', "&amp;")
         .replace('<', "&lt;")
         .replace('>', "&gt;")
@@ -484,62 +486,6 @@ fn collect_until_char(chars: &mut std::iter::Peekable<std::str::Chars>, end: cha
     buf
 }
 
-/// Per-level counters for numbered lists.  Reset when a non-list line is encountered.
-#[derive(Default)]
-pub struct ListCounters {
-    counters: Vec<usize>,
-}
-
-impl ListCounters {
-    pub fn new() -> Self {
-        Self::default()
-    }
-
-    /// Render a single line, handling `#` (numbered) and `*` (bullet) list prefixes.
-    ///
-    /// The counter state is updated in place so successive `#` lines on the same
-    /// nesting level produce sequential numbers.  A non-list line resets all counters.
-    pub fn render_line(&mut self, line: &str) -> String {
-        // Count leading '#' for numbered lists.
-        let hash_level = line.chars().take_while(|&c| c == '#').count();
-        if hash_level > 0 {
-            let content = line[hash_level..].trim_start();
-            // Grow counter vec to accommodate this level; deeper levels reset.
-            if self.counters.len() > hash_level {
-                self.counters.truncate(hash_level);
-            }
-            while self.counters.len() < hash_level {
-                self.counters.push(0);
-            }
-            self.counters[hash_level - 1] += 1;
-            let n = self.counters[hash_level - 1];
-            let indent = "  ".repeat(hash_level - 1);
-            let inner = to_svg_tspans(content);
-            return format!("{indent}{n}. {inner}");
-        }
-
-        // Count leading '*' for bullet lists.  Java PlantUML only treats a
-        // single leading `*` (followed by whitespace) as a bullet marker.
-        // `**` and higher counts are rendered literally (or treated as bold
-        // markup), so we restrict is_bullet to star_level == 1.
-        let star_level = line.chars().take_while(|&c| c == '*').count();
-        let next_after_stars = line[star_level..].chars().next();
-        let is_bullet =
-            star_level == 1 && matches!(next_after_stars, None | Some(' ') | Some('\t'));
-        if is_bullet {
-            let content = line[star_level..].trim_start();
-            let indent = "  ".repeat(star_level - 1);
-            let inner = to_svg_tspans(content);
-            self.counters.clear();
-            return format!("{indent}\u{2022} {inner}");
-        }
-
-        // Not a list line — reset counters and process as inline markup.
-        self.counters.clear();
-        to_svg_tspans(line)
-    }
-}
-
 fn collect_until_tag(chars: &mut std::iter::Peekable<std::str::Chars>, tag: &str) -> String {
     let mut buf = String::new();
     while chars.peek().is_some() {
@@ -552,9 +498,272 @@ fn collect_until_tag(chars: &mut std::iter::Peekable<std::str::Chars>, tag: &str
     buf
 }
 
+// ---------------------------------------------------------------------------
+// Line-level constructs: lists, tables, trees, horizontal rules
+// ---------------------------------------------------------------------------
+
+/// A single cell in a creole table row.
+#[derive(Debug, Clone, PartialEq, Eq)]
+pub struct TableCell {
+    /// The text content of the cell (before inline markup processing).
+    pub text: String,
+    /// Whether this cell is a header cell (`|=`).
+    pub is_header: bool,
+    /// Optional background colour from `<#color>` prefix.
+    pub bg_color: Option<String>,
+}
+
+/// A parsed creole table row.
+#[derive(Debug, Clone, PartialEq, Eq)]
+pub struct TableRow {
+    pub cells: Vec<TableCell>,
+}
+
+/// The style of a horizontal rule.
+#[derive(Debug, Clone, Copy, PartialEq, Eq)]
+pub enum HorizontalRuleStyle {
+    /// `----` (single line)
+    Single,
+    /// `====` (double line)
+    Double,
+    /// `....` (dotted line)
+    Dotted,
+}
+
+/// A parsed tree node from `|_` syntax.
+#[derive(Debug, Clone, PartialEq, Eq)]
+pub struct TreeNode {
+    /// Nesting depth (1 for `|_`, 2 for `|__`, etc.).
+    pub depth: usize,
+    /// The text content of the node.
+    pub text: String,
+}
+
+/// Classification of a creole line after parsing.
+#[derive(Debug, Clone, PartialEq, Eq)]
+pub enum CreoleLine {
+    /// A plain text line (may contain inline markup).
+    Text(String),
+    /// A bullet list item with nesting level (1 = `*`, 2 = `**`, etc.).
+    Bullet { level: usize, content: String },
+    /// A numbered list item with nesting level (1 = `#`, 2 = `##`, etc.).
+    Numbered { level: usize, content: String },
+    /// A table row.
+    Table(TableRow),
+    /// A tree node.
+    Tree(TreeNode),
+    /// A horizontal rule.
+    HorizontalRule(HorizontalRuleStyle),
+}
+
+/// Parse a single line into its creole line-level construct.
+///
+/// This does NOT process inline markup — call `to_svg_tspans()` on the text
+/// content of the returned variant for inline processing.
+pub fn parse_line(line: &str) -> CreoleLine {
+    let trimmed = line.trim();
+
+    // Horizontal rules: 4+ repeated chars of the same kind.
+    if trimmed.len() >= 4 {
+        if trimmed.chars().all(|c| c == '-') {
+            return CreoleLine::HorizontalRule(HorizontalRuleStyle::Single);
+        }
+        if trimmed.chars().all(|c| c == '=') {
+            return CreoleLine::HorizontalRule(HorizontalRuleStyle::Double);
+        }
+        if trimmed.chars().all(|c| c == '.') {
+            return CreoleLine::HorizontalRule(HorizontalRuleStyle::Dotted);
+        }
+    }
+
+    // Tree syntax: `|_`, `|__`, `|___`, etc.
+    if let Some(rest) = trimmed.strip_prefix('|') {
+        let underscore_count = rest.chars().take_while(|&c| c == '_').count();
+        if underscore_count > 0 {
+            let text = rest[underscore_count..].trim().to_string();
+            return CreoleLine::Tree(TreeNode {
+                depth: underscore_count,
+                text,
+            });
+        }
+        // Could be a table row — check below.
+    }
+
+    // Table row: starts with `|` and has at least one more `|`.
+    if trimmed.starts_with('|')
+        && trimmed.len() > 1
+        && let Some(row) = parse_table_row(trimmed)
+    {
+        return CreoleLine::Table(row);
+    }
+
+    // Numbered list: `#`, `##`, etc.
+    let hash_level = trimmed.chars().take_while(|&c| c == '#').count();
+    if hash_level > 0 {
+        let content = trimmed[hash_level..].trim_start().to_string();
+        return CreoleLine::Numbered {
+            level: hash_level,
+            content,
+        };
+    }
+
+    // Bullet list: `*`, `**`, `***`, etc. followed by whitespace or end of line.
+    // Distinguish from bold markup: `**text**` is bold, `** text` is a level-2 bullet.
+    let star_level = trimmed.chars().take_while(|&c| c == '*').count();
+    if star_level > 0 {
+        let after_stars = &trimmed[star_level..];
+        let next_ch = after_stars.chars().next();
+        let is_bullet = matches!(next_ch, None | Some(' ') | Some('\t'));
+        if is_bullet {
+            let content = after_stars.trim_start().to_string();
+            return CreoleLine::Bullet {
+                level: star_level,
+                content,
+            };
+        }
+    }
+
+    CreoleLine::Text(trimmed.to_string())
+}
+
+/// Parse a table row string like `|= Header1 |= Header2 |` or `| cell1 | cell2 |`.
+///
+/// Returns `None` if the line doesn't look like a valid table row.
+pub fn parse_table_row(line: &str) -> Option<TableRow> {
+    let trimmed = line.trim();
+    if !trimmed.starts_with('|') {
+        return None;
+    }
+
+    // Split on `|` and process each segment.
+    let segments: Vec<&str> = trimmed.split('|').collect();
+    // First segment is always empty (before first `|`).
+    if segments.len() < 3 {
+        return None;
+    }
+
+    let mut cells = Vec::new();
+    // Skip first empty segment; the last segment may be empty (trailing `|`).
+    for &seg in &segments[1..] {
+        let seg = seg.trim();
+        if seg.is_empty() {
+            // Trailing `|` produces empty last segment — skip it.
+            continue;
+        }
+
+        let is_header = seg.starts_with('=');
+        let text_part = if is_header { seg[1..].trim() } else { seg };
+
+        // Check for background colour: `<#color>` prefix.
+        let (bg_color, text) = if text_part.starts_with("<#") {
+            if let Some(end) = text_part.find('>') {
+                let color = text_part[2..end].to_string();
+                let rest = text_part[end + 1..].trim().to_string();
+                (Some(color), rest)
+            } else {
+                (None, text_part.to_string())
+            }
+        } else {
+            (None, text_part.to_string())
+        };
+
+        cells.push(TableCell {
+            text,
+            is_header,
+            bg_color,
+        });
+    }
+
+    if cells.is_empty() {
+        return None;
+    }
+
+    Some(TableRow { cells })
+}
+
+/// Per-level counters for numbered lists.  Reset when a non-list line is encountered.
+#[derive(Default)]
+pub struct ListCounters {
+    counters: Vec<usize>,
+}
+
+impl ListCounters {
+    pub fn new() -> Self {
+        Self::default()
+    }
+
+    /// Render a single line, handling `#` (numbered), `*`/`**`/`***` (bullet) list
+    /// prefixes, tree nodes (`|_`), horizontal rules, and table rows.
+    ///
+    /// The counter state is updated in place so successive `#` lines on the same
+    /// nesting level produce sequential numbers.  A non-list line resets all counters.
+    pub fn render_line(&mut self, line: &str) -> String {
+        match parse_line(line) {
+            CreoleLine::Numbered { level, content } => {
+                // Grow counter vec to accommodate this level; deeper levels reset.
+                if self.counters.len() > level {
+                    self.counters.truncate(level);
+                }
+                while self.counters.len() < level {
+                    self.counters.push(0);
+                }
+                self.counters[level - 1] += 1;
+                let n = self.counters[level - 1];
+                let indent = "  ".repeat(level - 1);
+                let inner = to_svg_tspans(&content);
+                format!("{indent}{n}. {inner}")
+            }
+            CreoleLine::Bullet { level, content } => {
+                self.counters.clear();
+                let indent = "  ".repeat(level - 1);
+                let inner = to_svg_tspans(&content);
+                format!("{indent}\u{2022} {inner}")
+            }
+            CreoleLine::Tree(node) => {
+                self.counters.clear();
+                let indent = "  ".repeat(node.depth.saturating_sub(1));
+                let inner = to_svg_tspans(&node.text);
+                if indent.is_empty() {
+                    inner
+                } else {
+                    format!("{indent}{inner}")
+                }
+            }
+            CreoleLine::HorizontalRule(style) => {
+                self.counters.clear();
+                match style {
+                    HorizontalRuleStyle::Single => "\u{2500}".repeat(20),
+                    HorizontalRuleStyle::Double => "\u{2550}".repeat(20),
+                    HorizontalRuleStyle::Dotted => "\u{2508}".repeat(20),
+                }
+            }
+            CreoleLine::Table(row) => {
+                self.counters.clear();
+                // Render table row as pipe-delimited text with inline markup processed.
+                let mut parts = Vec::new();
+                for cell in &row.cells {
+                    let inner = to_svg_tspans(&cell.text);
+                    if cell.is_header {
+                        parts.push(format!("<tspan font-weight=\"bold\">{inner}</tspan>"));
+                    } else {
+                        parts.push(inner);
+                    }
+                }
+                parts.join(" | ")
+            }
+            CreoleLine::Text(text) => {
+                self.counters.clear();
+                to_svg_tspans(&text)
+            }
+        }
+    }
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;
+
+    // --- Inline markup tests ---
 
     #[test]
     fn bold() {
@@ -679,6 +888,45 @@ mod tests {
         );
     }
 
+    // --- Nested inline markup tests ---
+
+    #[test]
+    fn nested_bold_in_italic() {
+        assert_eq!(
+            to_svg_tspans("**//bold italic//**"),
+            "<tspan font-weight=\"bold\"><tspan font-style=\"italic\">bold italic</tspan></tspan>"
+        );
+    }
+
+    #[test]
+    fn nested_italic_in_bold() {
+        // **//text//** — bold wrapping italic.
+        let result = to_svg_tspans("**//nested//**");
+        assert!(result.contains("font-weight=\"bold\""));
+        assert!(result.contains("font-style=\"italic\""));
+        assert!(result.contains("nested"));
+    }
+
+    #[test]
+    fn nested_underline_bold() {
+        assert_eq!(
+            to_svg_tspans("__**underline bold**__"),
+            "<tspan text-decoration=\"underline\"><tspan font-weight=\"bold\">underline bold</tspan></tspan>"
+        );
+    }
+
+    #[test]
+    fn nested_three_levels() {
+        // Bold wrapping italic wrapping underline.
+        let result = to_svg_tspans("**//__ deep __//**");
+        assert!(result.contains("font-weight=\"bold\""));
+        assert!(result.contains("font-style=\"italic\""));
+        assert!(result.contains("text-decoration=\"underline\""));
+        assert!(result.contains(" deep "));
+    }
+
+    // --- List tests ---
+
     #[test]
     fn bold_not_mistaken_for_bullet() {
         // `**bold**` must not be treated as a level-2 bullet list item.
@@ -720,12 +968,263 @@ mod tests {
     fn bullet_list() {
         let mut lc = ListCounters::new();
         assert_eq!(lc.render_line("* item"), "\u{2022} item");
-        // `**` with a following word is bold markup, not a nested bullet.
-        // Only a single `*` followed by whitespace is treated as a bullet.
-        let double_star = lc.render_line("** nested");
-        assert!(
-            !double_star.contains('\u{2022}'),
-            "** nested should not be a bullet"
+    }
+
+    #[test]
+    fn nested_bullet_list() {
+        // `** text` (space after stars) is a nested bullet, not bold markup.
+        let mut lc = ListCounters::new();
+        assert_eq!(lc.render_line("* level 1"), "\u{2022} level 1");
+        assert_eq!(lc.render_line("** level 2"), "  \u{2022} level 2");
+        assert_eq!(lc.render_line("*** level 3"), "    \u{2022} level 3");
+        assert_eq!(lc.render_line("** back to 2"), "  \u{2022} back to 2");
+        assert_eq!(lc.render_line("* back to 1"), "\u{2022} back to 1");
+    }
+
+    #[test]
+    fn bold_vs_nested_bullet() {
+        // `**bold**` (no space, closing **) = bold markup.
+        // `** text` (space after **) = level-2 bullet.
+        let mut lc = ListCounters::new();
+        let bold_result = lc.render_line("**bold**");
+        assert!(bold_result.contains("font-weight=\"bold\""));
+        assert!(!bold_result.contains('\u{2022}'));
+
+        let bullet_result = lc.render_line("** nested item");
+        assert!(bullet_result.contains('\u{2022}'));
+        assert!(bullet_result.contains("nested item"));
+    }
+
+    // --- Table tests ---
+
+    #[test]
+    fn parse_simple_table() {
+        let row = parse_table_row("|= Header1 |= Header2 |").unwrap();
+        assert_eq!(row.cells.len(), 2);
+        assert!(row.cells[0].is_header);
+        assert_eq!(row.cells[0].text, "Header1");
+        assert!(row.cells[1].is_header);
+        assert_eq!(row.cells[1].text, "Header2");
+    }
+
+    #[test]
+    fn parse_data_table() {
+        let row = parse_table_row("| cell1 | cell2 |").unwrap();
+        assert_eq!(row.cells.len(), 2);
+        assert!(!row.cells[0].is_header);
+        assert_eq!(row.cells[0].text, "cell1");
+        assert!(!row.cells[1].is_header);
+        assert_eq!(row.cells[1].text, "cell2");
+    }
+
+    #[test]
+    fn parse_table_with_bg_color() {
+        let row = parse_table_row("|<#red> error | 42 |").unwrap();
+        assert_eq!(row.cells.len(), 2);
+        assert_eq!(row.cells[0].bg_color.as_deref(), Some("red"));
+        assert_eq!(row.cells[0].text, "error");
+        assert_eq!(row.cells[1].text, "42");
+    }
+
+    #[test]
+    fn parse_three_column_table() {
+        let row = parse_table_row("|= Col1 |= Col2 |= Col3 |").unwrap();
+        assert_eq!(row.cells.len(), 3);
+        for cell in &row.cells {
+            assert!(cell.is_header);
+        }
+    }
+
+    #[test]
+    fn table_render_header_bold() {
+        let mut lc = ListCounters::new();
+        let result = lc.render_line("|= Name |= Type |");
+        assert!(result.contains("font-weight=\"bold\""));
+        assert!(result.contains("Name"));
+        assert!(result.contains("Type"));
+    }
+
+    #[test]
+    fn table_render_data_cells() {
+        let mut lc = ListCounters::new();
+        let result = lc.render_line("| Alice | User |");
+        assert!(result.contains("Alice"));
+        assert!(result.contains("User"));
+        assert!(!result.contains("font-weight=\"bold\""));
+    }
+
+    #[test]
+    fn table_render_markup_in_cells() {
+        let mut lc = ListCounters::new();
+        let result = lc.render_line("|= **Bold** |= //Italic// |");
+        assert!(result.contains("font-weight=\"bold\""));
+        assert!(result.contains("font-style=\"italic\""));
+    }
+
+    // --- Tree tests ---
+
+    #[test]
+    fn parse_tree_simple() {
+        match parse_line("|_ root") {
+            CreoleLine::Tree(node) => {
+                assert_eq!(node.depth, 1);
+                assert_eq!(node.text, "root");
+            }
+            other => panic!("Expected Tree, got {other:?}"),
+        }
+    }
+
+    #[test]
+    fn parse_tree_nested() {
+        match parse_line("|__ child") {
+            CreoleLine::Tree(node) => {
+                assert_eq!(node.depth, 2);
+                assert_eq!(node.text, "child");
+            }
+            other => panic!("Expected Tree, got {other:?}"),
+        }
+        match parse_line("|___ grandchild") {
+            CreoleLine::Tree(node) => {
+                assert_eq!(node.depth, 3);
+                assert_eq!(node.text, "grandchild");
+            }
+            other => panic!("Expected Tree, got {other:?}"),
+        }
+    }
+
+    #[test]
+    fn tree_render() {
+        let mut lc = ListCounters::new();
+        assert_eq!(lc.render_line("|_ root"), "root");
+        assert_eq!(lc.render_line("|__ child"), "  child");
+        assert_eq!(lc.render_line("|___ grandchild"), "    grandchild");
+    }
+
+    // --- Horizontal rule tests ---
+
+    #[test]
+    fn parse_hline_single() {
+        assert_eq!(
+            parse_line("----"),
+            CreoleLine::HorizontalRule(HorizontalRuleStyle::Single)
         );
+        // Longer runs also match.
+        assert_eq!(
+            parse_line("--------"),
+            CreoleLine::HorizontalRule(HorizontalRuleStyle::Single)
+        );
+    }
+
+    #[test]
+    fn parse_hline_double() {
+        assert_eq!(
+            parse_line("===="),
+            CreoleLine::HorizontalRule(HorizontalRuleStyle::Double)
+        );
+    }
+
+    #[test]
+    fn parse_hline_dotted() {
+        assert_eq!(
+            parse_line("...."),
+            CreoleLine::HorizontalRule(HorizontalRuleStyle::Dotted)
+        );
+    }
+
+    #[test]
+    fn hline_render() {
+        let mut lc = ListCounters::new();
+        let single = lc.render_line("----");
+        assert_eq!(single.chars().count(), 20);
+        assert!(single.contains('\u{2500}'));
+
+        let double = lc.render_line("====");
+        assert!(double.contains('\u{2550}'));
+
+        let dotted = lc.render_line("....");
+        assert!(dotted.contains('\u{2508}'));
+    }
+
+    #[test]
+    fn short_dashes_not_hline() {
+        // `---` (only 3 dashes) should not be a horizontal rule.
+        assert!(matches!(parse_line("---"), CreoleLine::Text(_)));
+    }
+
+    // --- parse_line classification tests ---
+
+    #[test]
+    fn parse_line_plain_text() {
+        assert_eq!(
+            parse_line("hello world"),
+            CreoleLine::Text("hello world".to_string())
+        );
+    }
+
+    #[test]
+    fn parse_line_numbered() {
+        assert_eq!(
+            parse_line("# item"),
+            CreoleLine::Numbered {
+                level: 1,
+                content: "item".to_string()
+            }
+        );
+        assert_eq!(
+            parse_line("## sub"),
+            CreoleLine::Numbered {
+                level: 2,
+                content: "sub".to_string()
+            }
+        );
+    }
+
+    #[test]
+    fn parse_line_bullet() {
+        assert_eq!(
+            parse_line("* item"),
+            CreoleLine::Bullet {
+                level: 1,
+                content: "item".to_string()
+            }
+        );
+        assert_eq!(
+            parse_line("** nested"),
+            CreoleLine::Bullet {
+                level: 2,
+                content: "nested".to_string()
+            }
+        );
+    }
+
+    #[test]
+    fn parse_line_bold_not_bullet() {
+        // `**bold**` has no space after stars — treated as text (bold markup).
+        assert_eq!(
+            parse_line("**bold**"),
+            CreoleLine::Text("**bold**".to_string())
+        );
+    }
+
+    #[test]
+    fn mixed_list_resets_counters() {
+        let mut lc = ListCounters::new();
+        assert_eq!(
+            lc.render_line("* unordered item"),
+            "\u{2022} unordered item"
+        );
+        assert_eq!(lc.render_line("# ordered item"), "1. ordered item");
+        assert_eq!(
+            lc.render_line("* another unordered"),
+            "\u{2022} another unordered"
+        );
+    }
+
+    #[test]
+    fn list_with_markup() {
+        let mut lc = ListCounters::new();
+        let result = lc.render_line("* **bold item**");
+        assert!(result.contains('\u{2022}'));
+        assert!(result.contains("font-weight=\"bold\""));
     }
 }

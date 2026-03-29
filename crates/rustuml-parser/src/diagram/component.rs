@@ -23,6 +23,8 @@ pub struct Component {
     pub label: String,
     /// All stereotypes (e.g. `["facade", "service"]`).
     pub stereotypes: Vec<String>,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub url: Option<String>,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]

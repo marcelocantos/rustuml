@@ -3,6 +3,7 @@
 
 //! Activity diagram SVG renderer.
 
+use rustuml_layout::graph::{Direction, LayoutGraph};
 use rustuml_parser::diagram::activity::{ActivityDiagram, ActivityStep, NotePosition};
 
 use crate::metrics;
@@ -76,6 +77,45 @@ pub fn render(diagram: &ActivityDiagram, theme: &Theme) -> String {
         return "<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"100\" height=\"50\"></svg>\n"
             .to_string();
     }
+
+    // Activity diagrams are inherently sequential (flat step list without
+    // explicit node IDs or graph edges). Sugiyama layout requires a graph
+    // with discrete nodes and edges, which doesn't map naturally to the
+    // current step model. When the diagram has branches/merges (fork/if),
+    // we synthesise a simple graph to let Sugiyama order the action nodes.
+    let has_branches = diagram.steps.iter().any(|s| {
+        matches!(
+            s,
+            ActivityStep::Fork
+                | ActivityStep::ForkAgain
+                | ActivityStep::If(_)
+                | ActivityStep::ElseIf(_)
+        )
+    });
+    let _layout_positions = if has_branches {
+        // Build a linear graph from Action steps to get relative ordering.
+        let mut layout = LayoutGraph::new(Direction::TopToBottom);
+        let mut node_ids: Vec<String> = Vec::new();
+        for (i, step) in diagram.steps.iter().enumerate() {
+            if let ActivityStep::Action(text) = step {
+                let id = format!("act_{i}");
+                layout.add_node(&id, text, ACTION_WIDTH, ACTION_HEIGHT);
+                node_ids.push(id);
+            }
+        }
+        // Chain consecutive action nodes.
+        for pair in node_ids.windows(2) {
+            layout.add_edge(&pair[0], &pair[1], None);
+        }
+        layout.layout_positions(std::time::Duration::from_secs(5))
+    } else {
+        None
+    };
+    // For now, activity diagrams always use vertical stacking because the
+    // sequential step model doesn't carry enough graph structure for
+    // Sugiyama to improve on the linear layout. The layout_positions
+    // result is available for future use when the activity model gains
+    // explicit node IDs and edges.
 
     // Detect monospace font skinparam (e.g. `skinparam activity { FontName Courier }`).
     let use_monospace = diagram
