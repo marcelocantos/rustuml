@@ -376,7 +376,7 @@ fn to_svg_tspans_inner(text: &str, skip_underline: bool) -> String {
             '[' if chars.peek() == Some(&'[') => {
                 // [[URL]] or [[URL label]] or [[URL|label]] — hyperlink.
                 chars.next(); // consume second '['
-                              // Collect until closing ']]'.
+                // Collect until closing ']]'.
                 let mut inner = String::new();
                 loop {
                     match chars.next() {
