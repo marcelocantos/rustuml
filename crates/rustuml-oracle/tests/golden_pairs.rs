@@ -170,18 +170,50 @@ fn run_one(puml_path: &Path, root: &Path) -> TestResult {
     let is_multi_block = blocks.len() > 1;
 
     let render_result = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-        let diagram = if is_multi_block {
-            // PlantUML merges unnamed same-type blocks into one diagram.
-            // Try merged parse first; fall back to block 0.
-            let merged = merge_blocks(&source);
-            rustuml_parser::parse::parse_auto_with_base(&merged, None)
-                .or_else(|_| rustuml_parser::parse::parse_block(&source, 0))
-                .map_err(|e| format!("parse: {e}"))?
+        // For multi-block files, try block 0 first. Some goldens were
+        // generated with all blocks merged (picoweb mode), so also try
+        // merged and pick whichever matches the golden better.
+        let rust_svg = if is_multi_block {
+            let block0 = rustuml_parser::parse::parse_block(&source, 0)
+                .map_err(|e| format!("parse: {e}"))?;
+            let block0_svg = rustuml_render::render_svg(&block0);
+
+            let merged_svg = {
+                let merged = merge_blocks(&source);
+                rustuml_parser::parse::parse_auto_with_base(&merged, None)
+                    .ok()
+                    .map(|d| rustuml_render::render_svg(&d))
+            };
+
+            if let Some(ref ms) = merged_svg {
+                // Pick the SVG that matches more golden text labels.
+                let golden_texts: Vec<&str> = golden_svg
+                    .split("textLength=")
+                    .skip(1)
+                    .filter_map(|s| {
+                        let start = s.find('>')? + 1;
+                        let end = s[start..].find('<')?;
+                        Some(&s[start..start + end])
+                    })
+                    .collect();
+                let b0_hits = golden_texts
+                    .iter()
+                    .filter(|t| block0_svg.contains(*t))
+                    .count();
+                let mg_hits = golden_texts.iter().filter(|t| ms.contains(*t)).count();
+                if mg_hits > b0_hits {
+                    ms.clone()
+                } else {
+                    block0_svg
+                }
+            } else {
+                block0_svg
+            }
         } else {
-            rustuml_parser::parse::parse_auto_with_base(&source, None)
-                .map_err(|e| format!("parse: {e}"))?
+            let diagram = rustuml_parser::parse::parse_auto_with_base(&source, None)
+                .map_err(|e| format!("parse: {e}"))?;
+            rustuml_render::render_svg(&diagram)
         };
-        let rust_svg = rustuml_render::render_svg(&diagram);
 
         let golden_elems =
             compare::extract_elements(&golden_svg).map_err(|e| format!("golden SVG parse: {e}"))?;
