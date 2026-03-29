@@ -1101,6 +1101,17 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme) -> String {
                 }
                 Event::Return(_) => {
                     last_event_idx = ev_idx;
+                    // Return deactivates the most recently activated participant
+                    if let Some(pos) = open_activations.len().checked_sub(1) {
+                        let (pid, start_idx, color) = open_activations.remove(pos);
+                        tracker.deactivate(&pid);
+                        activation_bars.push(ActivationBar {
+                            participant_id: pid,
+                            start_event_idx: start_idx,
+                            end_event_idx: ev_idx,
+                            color,
+                        });
+                    }
                 }
                 _ => {}
             }
@@ -1116,6 +1127,9 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme) -> String {
                 color,
             });
         }
+
+        // Sort by start event index to match PlantUML's rendering order
+        activation_bars.sort_by_key(|b| b.start_event_idx);
     }
 
     // Helper to look up y position for an event
