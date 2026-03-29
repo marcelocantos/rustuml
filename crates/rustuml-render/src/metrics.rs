@@ -89,4 +89,27 @@ mod tests {
         let lh = line_height(14.0);
         assert!(lh >= th, "line height {lh} should be >= text height {th}");
     }
+
+    #[test]
+    fn check_plantuml_metrics() {
+        // Compare Liberation Sans metrics against PlantUML Java SansSerif golden values
+        let cases_14 = [
+            ("Alice", 32.7236),
+            ("Bob", 25.4639),
+            ("A", 9.6592),
+            ("B", 8.0527),
+            ("C", 9.6865),
+            ("D", 10.4863),
+            ("E", 7.5879),
+        ];
+        for (text, expected) in cases_14 {
+            let actual = text_width(text, 14.0);
+            println!("{text}@14: actual={actual:.4}, expected={expected:.4}");
+        }
+        let cases_13 = [("request", 47.5439), ("response", 57.2939), ("1", 8.2202)];
+        for (text, expected) in cases_13 {
+            let actual = text_width(text, 13.0);
+            println!("{text}@13: actual={actual:.4}, expected={expected:.4}");
+        }
+    }
 }
