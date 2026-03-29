@@ -71,6 +71,15 @@ pub fn extract_oracle_layout(svg: &str) -> Option<OracleLayout> {
                     id: id.to_string(),
                     d: d.to_string(),
                     arrow_points: None,
+                    arrow_fill: None,
+                    link_type: node.attribute("data-link-type").map(String::from),
+                    entity_1: node.attribute("data-entity-1").map(String::from),
+                    entity_2: node.attribute("data-entity-2").map(String::from),
+                    source_line: node.attribute("data-source-line").map(String::from),
+                    link_id: node.attribute("id").map(String::from),
+                    path_style: path.attribute("style").map(String::from),
+                    code_line: path.attribute("codeLine").map(String::from),
+                    polygon_style: None,
                 };
 
                 // Find <polygon> child for arrowhead.
@@ -78,6 +87,10 @@ pub fn extract_oracle_layout(svg: &str) -> Option<OracleLayout> {
                     && let Some(points) = polygon.attribute("points")
                 {
                     oracle_edge.arrow_points = Some(points.to_string());
+                    oracle_edge.arrow_fill =
+                        polygon.attribute("fill").map(String::from);
+                    oracle_edge.polygon_style =
+                        polygon.attribute("style").map(String::from);
                 }
 
                 layout.edges.push(oracle_edge);
@@ -134,10 +147,7 @@ mod tests {
         let layout = extract_oracle_layout(&svg).unwrap();
         eprintln!("entities: {:?}", layout.entities);
         eprintln!("edges: {:?}", layout.edges);
-        eprintln!(
-            "canvas: {}x{}",
-            layout.canvas_width, layout.canvas_height
-        );
+        eprintln!("canvas: {}x{}", layout.canvas_width, layout.canvas_height);
         assert_eq!(layout.entities.len(), 2, "expected 2 entities (A, B)");
         assert!(layout.entities.contains_key("A"));
         assert!(layout.entities.contains_key("B"));
@@ -161,14 +171,25 @@ mod tests {
         let oracle = extract_oracle_layout(&golden_svg).unwrap();
         eprintln!("Oracle entities: {:?}", oracle.entities);
 
-        let diagram =
-            rustuml_parser::parse::parse_auto_with_base(&source, None).unwrap();
-        let rust_svg =
-            rustuml_render::render_svg_with_oracle(&diagram, Some(&oracle));
+        let diagram = rustuml_parser::parse::parse_auto_with_base(&source, None).unwrap();
+        let rust_svg = rustuml_render::render_svg_with_oracle(&diagram, Some(&oracle));
 
-        // Show first 300 chars of each for comparison
-        eprintln!("\n=== GOLDEN (first 300) ===\n{}", &golden_svg[..300.min(golden_svg.len())]);
-        eprintln!("\n=== RUST (first 300) ===\n{}", &rust_svg[..300.min(rust_svg.len())]);
+        // Compare using the oracle's comparator
+        let cmp = crate::compare::compare_svg_strict(&golden_svg, &rust_svg);
+        match cmp {
+            Ok(cmp) => {
+                if cmp.is_match() {
+                    eprintln!("MATCH!");
+                } else {
+                    let report = format!("{cmp}");
+                    for line in report.lines().take(30) {
+                        eprintln!("{line}");
+                    }
+                    eprintln!("({} total differences)", cmp.differences.len());
+                }
+            }
+            Err(e) => eprintln!("Compare error: {e}"),
+        }
     }
 
     #[test]

@@ -591,7 +591,20 @@ pub fn render_with_oracle(
             .filter_map(|rel| oracle_edge_to_layout_edge(rel, oracle))
             .collect();
 
-        return render_plantuml_svg(diagram, &dims, &node_positions, &edge_paths);
+        let canvas_dims = if oracle.canvas_width > 0.0 && oracle.canvas_height > 0.0 {
+            Some((oracle.canvas_width, oracle.canvas_height))
+        } else {
+            None
+        };
+
+        return render_plantuml_svg(
+            diagram,
+            &dims,
+            &node_positions,
+            &edge_paths,
+            canvas_dims,
+            Some(oracle),
+        );
     }
 
     // Phase 2: Use layout engine to determine positions.
@@ -611,7 +624,14 @@ pub fn render_with_oracle(
     };
 
     // Phase 3: Render with PlantUML-compatible SVG structure.
-    render_plantuml_svg(diagram, &dims, &result.node_positions, &result.edge_paths)
+    render_plantuml_svg(
+        diagram,
+        &dims,
+        &result.node_positions,
+        &result.edge_paths,
+        None,
+        None,
+    )
 }
 
 /// Convert an oracle edge path into a LayoutGraph EdgePath by parsing the SVG path `d` attribute.
@@ -714,11 +734,20 @@ fn skip_sep(chars: &mut std::iter::Peekable<std::str::Chars>) {
 }
 
 /// Render the full SVG with PlantUML-compatible structure.
+///
+/// When `canvas_override` is `Some((w, h))`, use those dimensions for the SVG
+/// canvas instead of computing from entity extents. This is used with oracle
+/// layout to match PlantUML's exact canvas size.
+///
+/// When `oracle` is `Some`, edge rendering uses the oracle's raw SVG path data
+/// and arrowhead polygons directly, wrapped in `<g class="link">` groups.
 fn render_plantuml_svg(
     diagram: &ClassDiagram,
     dims: &[EntityDims],
     positions: &[rustuml_layout::graph::NodePosition],
     edge_paths: &[EdgePath],
+    canvas_override: Option<(f64, f64)>,
+    oracle: Option<&OracleLayout>,
 ) -> String {
     if positions.len() < diagram.entities.len() {
         return render_grid_fallback(diagram, &Theme::default().class);
@@ -730,14 +759,20 @@ fn render_plantuml_svg(
         .collect();
 
     // Compute canvas dimensions.
-    let mut max_x = 0.0_f64;
-    let mut max_y = 0.0_f64;
-    for (i, (x, y)) in entity_positions.iter().enumerate() {
-        max_x = max_x.max(x + dims[i].width);
-        max_y = max_y.max(y + dims[i].height);
-    }
-    let canvas_w = (max_x + MARGIN).ceil() as i64;
-    let canvas_h = (max_y + MARGIN).ceil() as i64;
+    let (canvas_w, canvas_h) = if let Some((w, h)) = canvas_override {
+        (w as i64, h as i64)
+    } else {
+        let mut max_x = 0.0_f64;
+        let mut max_y = 0.0_f64;
+        for (i, (x, y)) in entity_positions.iter().enumerate() {
+            max_x = max_x.max(x + dims[i].width);
+            max_y = max_y.max(y + dims[i].height);
+        }
+        (
+            (max_x + MARGIN).ceil() as i64,
+            (max_y + MARGIN).ceil() as i64,
+        )
+    };
 
     let mut svg = String::new();
 
@@ -784,13 +819,19 @@ fn render_plantuml_svg(
     }
 
     // Render relationships.
-    for rel in &diagram.relationships {
-        let edge_path = edge_paths
-            .iter()
-            .find(|ep| ep.from == rel.from && ep.to == rel.to);
-        if let Some(ep) = edge_path {
-            render_relationship_svg(&mut svg, rel, ep, diagram, ent_id);
-            ent_id += 1;
+    if let Some(_oracle) = oracle {
+        // Oracle mode: TODO — use oracle layout for relationship rendering.
+        // Fall through to standard rendering for now.
+    }
+    {
+        for rel in &diagram.relationships {
+            let edge_path = edge_paths
+                .iter()
+                .find(|ep| ep.from == rel.from && ep.to == rel.to);
+            if let Some(ep) = edge_path {
+                render_relationship_svg(&mut svg, rel, ep, diagram, ent_id);
+                ent_id += 1;
+            }
         }
     }
 
@@ -1211,6 +1252,105 @@ fn render_member_line(svg: &mut String, member: &Member, entity_x: f64, baseline
 // ---------------------------------------------------------------------------
 // Relationship rendering
 // ---------------------------------------------------------------------------
+
+/// Render relationships using oracle data — emits the exact path and polygon
+/// from the golden SVG, wrapped in PlantUML's `<g class="link">` structure.
+#[allow(dead_code)]
+fn render_oracle_relationships(
+    svg: &mut String,
+    diagram: &ClassDiagram,
+    oracle: &OracleLayout,
+    mut ent_id: usize,
+) {
+    for rel in &diagram.relationships {
+        let is_reverse = matches!(
+            rel.kind,
+            RelationshipKind::Inheritance | RelationshipKind::Implementation
+        );
+        let expected_id = if is_reverse {
+            format!("{}-backto-{}", rel.from, rel.to)
+        } else {
+            format!("{}-to-{}", rel.from, rel.to)
+        };
+
+        let oracle_edge = match oracle.edges.iter().find(|e| e.id == expected_id) {
+            Some(e) => e,
+            None => continue,
+        };
+
+        let link_type = match rel.kind {
+            RelationshipKind::Dependency => "dependency",
+            RelationshipKind::Implementation => "extension",
+            RelationshipKind::Inheritance => "extension",
+            RelationshipKind::Composition => "composition",
+            RelationshipKind::Aggregation => "aggregation",
+            RelationshipKind::Association => "association",
+        };
+
+        // Find entity IDs for data-entity-1 and data-entity-2.
+        let from_ent_id = format!("ent{:04}", find_entity_index(diagram, &rel.from) + 2);
+        let to_ent_id = format!("ent{:04}", find_entity_index(diagram, &rel.to) + 2);
+        let link_id = format!("lnk{}", ent_id);
+
+        // HTML comment
+        if is_reverse {
+            write!(svg, "<!--reverse link {} to {}-->", rel.from, rel.to).unwrap();
+        } else {
+            write!(svg, "<!--link {} to {}-->", rel.from, rel.to).unwrap();
+        }
+
+        // Link group wrapper.
+        write!(
+            svg,
+            r#"<g class="link" data-entity-1="{}" data-entity-2="{}" data-link-type="{}" data-source-line="{}" id="{}">"#,
+            from_ent_id, to_ent_id, link_type, rel.source_line, link_id,
+        )
+        .unwrap();
+
+        // Determine dash style.
+        let dashed = matches!(
+            rel.kind,
+            RelationshipKind::Dependency | RelationshipKind::Implementation
+        );
+        let dash_style = if dashed { "stroke-dasharray:7,7;" } else { "" };
+
+        // Path element with codeLine and exact d from oracle.
+        write!(
+            svg,
+            r#"<path codeLine="{}" d="{}" fill="none" id="{}" style="stroke:{};stroke-width:1;{}"/>"#,
+            rel.source_line, oracle_edge.d, expected_id, BORDER_COLOR, dash_style,
+        )
+        .unwrap();
+
+        // Arrowhead polygon (if present in oracle).
+        if let Some(ref points) = oracle_edge.arrow_points {
+            // Determine fill based on relationship type.
+            let fill = match rel.kind {
+                RelationshipKind::Inheritance | RelationshipKind::Implementation => "none",
+                _ => BORDER_COLOR,
+            };
+            write!(
+                svg,
+                r#"<polygon fill="{}" points="{}" style="stroke:{};stroke-width:1;"/>"#,
+                fill, points, BORDER_COLOR,
+            )
+            .unwrap();
+        }
+
+        svg.push_str("</g>");
+        ent_id += 1;
+    }
+}
+
+/// Find the index of an entity in the diagram by id or label.
+#[allow(dead_code)]
+fn find_entity_index(diagram: &ClassDiagram, name: &str) -> usize {
+    diagram
+        .entities
+        .iter()
+        .position(|e| e.id == name || e.label == name)
+        .unwrap_or(0)
+}
 
 fn render_relationship_svg(
     svg: &mut String,

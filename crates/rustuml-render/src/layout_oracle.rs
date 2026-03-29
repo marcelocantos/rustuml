@@ -41,4 +41,22 @@ pub struct OracleEdgePath {
     pub d: String,
     /// Arrowhead polygon points (if present).
     pub arrow_points: Option<String>,
+    /// Fill for the arrowhead polygon (e.g. "#181818" or "none").
+    pub arrow_fill: Option<String>,
+    /// The link type from `data-link-type` (e.g. "dependency", "association").
+    pub link_type: Option<String>,
+    /// The entity-1 id from `data-entity-1`.
+    pub entity_1: Option<String>,
+    /// The entity-2 id from `data-entity-2`.
+    pub entity_2: Option<String>,
+    /// The source line from `data-source-line`.
+    pub source_line: Option<String>,
+    /// The link group id from `id` attribute.
+    pub link_id: Option<String>,
+    /// The path's `style` attribute.
+    pub path_style: Option<String>,
+    /// The `codeLine` attribute on the path element.
+    pub code_line: Option<String>,
+    /// The polygon's `style` attribute.
+    pub polygon_style: Option<String>,
 }
