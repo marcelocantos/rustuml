@@ -1352,12 +1352,13 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme) -> String {
                     };
 
                     if is_open {
+                        // Open arrow: V-shape tip at tip_x, main line extends 1px past
                         svg.message_open_arrow(
                             &from_uid,
                             &to_uid,
                             src_line,
                             msg_id,
-                            tip_x + 1.0, // open arrow extends 1px further
+                            tip_x,
                             msg_y,
                             true,
                             from_x,
@@ -1399,12 +1400,13 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme) -> String {
                     let line_x2_end = from_x - 1.0;
 
                     if is_open {
+                        // Open arrow: V-shape tip at tip_x, main line starts 1px before
                         svg.message_open_arrow(
                             &from_uid,
                             &to_uid,
                             src_line,
                             msg_id,
-                            tip_x - 1.0,
+                            tip_x,
                             msg_y,
                             false,
                             tip_x - 1.0,
