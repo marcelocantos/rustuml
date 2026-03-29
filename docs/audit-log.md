@@ -16,3 +16,8 @@ maintenance activities. Append-only — newest entries at the bottom.
 
 - **Commit**: `dfc2ec31`
 - **Outcome**: Released v0.3.0 (darwin-arm64, linux-amd64, linux-arm64). Added DOT/EBNF/Git/Board diagram types, EPS output, multi-diagram files, sprite rendering, 149 skinparam keys, preprocessor builtins. NOTICES file added.
+
+## 2026-03-29 — /release v0.4.0
+
+- **Commit**: `a49af910`
+- **Outcome**: Released v0.4.0 (darwin-arm64, linux-amd64, linux-arm64). Homebrew formula updated.
