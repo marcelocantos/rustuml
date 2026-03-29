@@ -113,36 +113,11 @@ fn participant_display_label(p: &Participant) -> String {
     if let Some(st) = &p.stereotype {
         format!("{} \u{ab}{st}\u{bb}", p.label)
     } else {
-        // PlantUML renders `(text)` in participant labels as `.text.` (period-delimited
-        // stereotype notation).  Convert all `(...)` groups to `.....` form so that
-        // our text output matches the PlantUML golden SVG text elements.
-
-        parentheses_to_dots(&p.label)
+        // PlantUML preserves parentheses in displayed participant text labels.
+        // The dot-form conversion only applies to <title> tooltip elements
+        // (handled by normalize_title).
+        p.label.clone()
     }
-}
-
-/// Convert `(text)` patterns inside a string to `.text.` — PlantUML's participant
-/// stereotype dot notation.
-fn parentheses_to_dots(s: &str) -> String {
-    let mut result = String::new();
-    let chars: Vec<char> = s.chars().collect();
-    let mut i = 0;
-    while i < chars.len() {
-        if chars[i] == '(' {
-            // Find the matching closing paren.
-            if let Some(close) = chars[i + 1..].iter().position(|&c| c == ')') {
-                let inner: String = chars[i + 1..i + 1 + close].iter().collect();
-                result.push('.');
-                result.push_str(&inner);
-                result.push('.');
-                i += 1 + close + 1; // skip past ')'
-                continue;
-            }
-        }
-        result.push(chars[i]);
-        i += 1;
-    }
-    result
 }
 
 /// Render multi-line note text as individual SVG text elements.
@@ -411,7 +386,7 @@ pub fn render(diagram: &SequenceDiagram, theme: &Theme) -> String {
         let normalize_title = |s: &str| -> String {
             s.chars()
                 .map(|c| {
-                    if c.is_ascii() && c != '/' && c != '*' {
+                    if c.is_ascii() && c != '/' && c != '*' && c != '(' && c != ')' {
                         c
                     } else {
                         '.'
@@ -666,18 +641,36 @@ pub fn render(diagram: &SequenceDiagram, theme: &Theme) -> String {
         let title_text = if let Some(st) = &p.stereotype {
             let dot_st: String = format!("..{st}..")
                 .chars()
-                .map(|c| if c.is_ascii() { c } else { '.' })
+                .map(|c| {
+                    if c.is_ascii() && c != '(' && c != ')' {
+                        c
+                    } else {
+                        '.'
+                    }
+                })
                 .collect();
             let dot_label: String = p
                 .label
                 .chars()
-                .map(|c| if c.is_ascii() { c } else { '.' })
+                .map(|c| {
+                    if c.is_ascii() && c != '(' && c != ')' {
+                        c
+                    } else {
+                        '.'
+                    }
+                })
                 .collect();
             format!("{dot_label} {dot_st}")
         } else {
             p.label
                 .chars()
-                .map(|c| if c.is_ascii() { c } else { '.' })
+                .map(|c| {
+                    if c.is_ascii() && c != '(' && c != ')' {
+                        c
+                    } else {
+                        '.'
+                    }
+                })
                 .collect()
         };
         svg.title(&title_text);

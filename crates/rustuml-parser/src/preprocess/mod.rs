@@ -287,6 +287,9 @@ struct PreprocessContext {
     sprites: HashMap<String, SpriteData>,
     archimate_enabled: bool,
     in_diagram_block: bool,
+    /// True when inside an @startebnf block — disables single-quote comment
+    /// stripping since EBNF uses `'` as a terminal delimiter.
+    in_ebnf_block: bool,
     seen_start_tag: bool,
     base_dir: Option<PathBuf>,
     include_depth: usize,
@@ -354,6 +357,7 @@ impl PreprocessContext {
             sprites: HashMap::new(),
             archimate_enabled: false,
             in_diagram_block: false,
+            in_ebnf_block: false,
             seen_start_tag: false,
             base_dir,
             include_depth: 0,
@@ -454,13 +458,19 @@ impl PreprocessContext {
             return;
         }
 
-        // Skip single-line comments.
-        if trimmed.starts_with('\'') {
+        // Skip single-line comments — but NOT inside EBNF blocks where
+        // single quotes delimit terminals.
+        if !self.in_ebnf_block && trimmed.starts_with('\'') {
             return;
         }
 
-        // Strip inline comments.
-        let line_no_comment = strip_inline_comment(line);
+        // Strip inline comments (single-quote comment syntax) — but NOT
+        // inside EBNF blocks.
+        let line_no_comment = if self.in_ebnf_block {
+            line.to_string()
+        } else {
+            strip_inline_comment(line)
+        };
         let trimmed = line_no_comment.trim();
 
         // Handle @start/@end tags.
@@ -471,11 +481,13 @@ impl PreprocessContext {
                 if !self.seen_start_tag {
                     self.seen_start_tag = true;
                     self.in_diagram_block = true;
+                    self.in_ebnf_block = trimmed.starts_with("@startebnf");
                 }
                 return;
             }
             if trimmed.starts_with("@end") {
                 self.in_diagram_block = false;
+                self.in_ebnf_block = false;
                 return;
             }
             if self.seen_start_tag && !self.in_diagram_block {

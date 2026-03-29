@@ -32,8 +32,8 @@ pub fn parse_ebnf(lines: &[String]) -> Result<EbnfDiagram, ParseError> {
 
     let mut rules = Vec::new();
 
-    // Split on `;` to get individual productions.
-    for chunk in body.split(';') {
+    // Split on `;` respecting quoted strings (both `"` and `'`).
+    for chunk in split_on_semicolons(&body) {
         let chunk = chunk.trim();
         if chunk.is_empty() {
             continue;
@@ -63,6 +63,40 @@ pub fn parse_ebnf(lines: &[String]) -> Result<EbnfDiagram, ParseError> {
     })
 }
 
+/// Split a string on unquoted `;` characters, respecting `"` and `'` delimiters.
+fn split_on_semicolons(input: &str) -> Vec<&str> {
+    let mut parts = Vec::new();
+    let bytes = input.as_bytes();
+    let mut start = 0;
+    let mut i = 0;
+    while i < bytes.len() {
+        match bytes[i] {
+            b'"' | b'\'' => {
+                let quote = bytes[i];
+                i += 1;
+                while i < bytes.len() && bytes[i] != quote {
+                    i += 1;
+                }
+                if i < bytes.len() {
+                    i += 1; // skip closing quote
+                }
+            }
+            b';' => {
+                parts.push(&input[start..i]);
+                i += 1;
+                start = i;
+            }
+            _ => {
+                i += 1;
+            }
+        }
+    }
+    if start < input.len() {
+        parts.push(&input[start..]);
+    }
+    parts
+}
+
 // ── Recursive-descent expression parser ──────────────────────────────────────
 
 /// Tokeniser output.
@@ -89,12 +123,13 @@ fn tokenize(input: &str) -> Result<Vec<Token>, ParseError> {
             ' ' | '\t' | '\n' | '\r' => {
                 chars.next();
             }
-            '"' => {
+            '"' | '\'' => {
+                let quote = ch;
                 chars.next(); // consume opening quote
                 let mut s = String::new();
                 loop {
                     match chars.next() {
-                        Some('"') => break,
+                        Some(c) if c == quote => break,
                         Some(c) => s.push(c),
                         None => {
                             return Err(ParseError {
@@ -105,6 +140,25 @@ fn tokenize(input: &str) -> Result<Vec<Token>, ParseError> {
                     }
                 }
                 tokens.push(Token::Terminal(s));
+            }
+            '?' => {
+                // Special sequence: `? description ?`
+                chars.next(); // consume opening `?`
+                let mut s = String::new();
+                loop {
+                    match chars.next() {
+                        Some('?') => break,
+                        Some(c) => s.push(c),
+                        None => {
+                            return Err(ParseError {
+                                line: 1,
+                                message: "unterminated special sequence (missing closing '?')"
+                                    .to_string(),
+                            });
+                        }
+                    }
+                }
+                tokens.push(Token::Terminal(s.trim().to_string()));
             }
             '|' => {
                 chars.next();
@@ -338,5 +392,48 @@ mod tests {
         } else {
             panic!("expected Sequence");
         }
+    }
+
+    #[test]
+    fn single_quoted_terminal() {
+        let d = parse("@startebnf\nstring = '\"' , { char } , '\"';\n@endebnf");
+        assert_eq!(d.rules.len(), 1);
+    }
+
+    #[test]
+    fn json_value_ebnf() {
+        let input = "@startebnf
+value = string | number | object | array | \"true\" | \"false\" | \"null\";
+object = \"{\" , [ member , { \",\" , member } ] , \"}\";
+member = string , \":\" , value;
+array = \"[\" , [ value , { \",\" , value } ] , \"]\";
+string = '\"' , { char } , '\"';
+number = digit , { digit };
+char = letter | digit;
+letter = \"a\" | \"b\" | \"c\";
+digit = \"0\" | \"1\" | \"2\";
+@endebnf";
+        let d = parse(input);
+        assert_eq!(d.rules.len(), 9);
+    }
+
+    #[test]
+    fn xml_element_ebnf() {
+        let input = "@startebnf
+element = start_tag , content , end_tag | empty_element;
+start_tag = \"<\" , name , { attribute } , \">\";
+end_tag = \"</\" , name , \">\";
+empty_element = \"<\" , name , { attribute } , \"/>\";
+content = { element | char_data };
+attribute = name , \"=\" , quoted_string;
+quoted_string = '\"' , { char } , '\"';
+name = letter , { letter | digit | \"-\" | \"_\" };
+char_data = { char };
+char = letter | digit;
+letter = \"a\" | \"b\" | \"c\";
+digit = \"0\" | \"1\" | \"2\";
+@endebnf";
+        let d = parse(input);
+        assert_eq!(d.rules.len(), 12);
     }
 }

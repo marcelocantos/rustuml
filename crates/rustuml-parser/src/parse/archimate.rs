@@ -17,6 +17,7 @@ pub fn parse_archimate(lines: &[String]) -> Result<ArchimateDiagram, ParseError>
     let mut groups: Vec<ArchimateGroup> = Vec::new();
     let mut meta = DiagramMeta::default();
     let mut group_stack: Vec<(String, Vec<String>)> = Vec::new();
+    let mut skinparam_depth: usize = 0;
 
     static RE_ELEM: LazyLock<Regex> = LazyLock::new(|| {
         Regex::new(r#"^archimate_element\s+(\w+)\s+(\w+)\s+(\w+)\s+"([^"]*)""#).unwrap()
@@ -39,10 +40,23 @@ pub fn parse_archimate(lines: &[String]) -> Result<ArchimateDiagram, ParseError>
             meta.title = Some(super::strip_title_quotes(rest).to_string());
             continue;
         }
+        // Track multi-line skinparam blocks: `skinparam ... {` opens a block
+        // whose `}` should NOT be treated as a group close.
+        if skinparam_depth > 0 {
+            if trimmed == "}" {
+                skinparam_depth -= 1;
+            } else if trimmed.ends_with('{') {
+                skinparam_depth += 1;
+            }
+            continue;
+        }
         if trimmed.starts_with("skinparam ")
             || trimmed.starts_with("hide ")
             || trimmed.starts_with("show ")
         {
+            if trimmed.ends_with('{') {
+                skinparam_depth += 1;
+            }
             continue;
         }
         if trimmed == "}" {
