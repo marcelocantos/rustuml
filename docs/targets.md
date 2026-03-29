@@ -1,6 +1,6 @@
 # Targets
 
-<!-- last-evaluated: d7d3facb -->
+<!-- last-evaluated: dd3b9530 -->
 
 ## Active
 
@@ -12,7 +12,7 @@
   - No JVM, no Graphviz binary, no external font files required at runtime
   - Output is structurally equivalent to Java PlantUML for the same inputs
 - **Context**: PlantUML's JVM dependency makes deployment painful. The current Java codebase has weak test coverage (~12%) and a tangled architecture. A Rust port solves deployment (single binary, cross-platform, WASM-ready) while enabling clean architecture. External dependencies (Graphviz layout, KaTeX math rendering) are ported into the binary. The current Java version serves as the oracle for synthetic test generation.
-- **Status**: converging (3/5 sub-targets achieved, 2 close) — 22 diagram types parsed and rendered, 12,568 golden test pairs (0 failures), full TIM preprocessor, SVG+PNG+PDF+EPS output. Graphviz layout engine with bezier edge routing. Stdlib includes, archimate, hyperlinks, creole tables, ASCII renderers.
+- **Status**: converging (4/7 sub-targets achieved, 3 close) — 22 diagram types parsed and rendered, 12,568 golden test pairs (0 failures), full TIM preprocessor, SVG+PNG+PDF+EPS output. Graphviz layout engine with bezier edge routing. Stdlib includes, archimate, hyperlinks, creole tables, ASCII renderers.
 - **Discovered**: 2026-03-22
 
 ### 🎯T1.3 PlantUML parser and TIM preprocessor ported to Rust
