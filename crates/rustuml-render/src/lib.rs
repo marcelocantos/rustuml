@@ -28,6 +28,7 @@ pub mod nwdiag;
 pub mod object;
 pub mod openiconic;
 pub mod pdf;
+pub mod plantuml_metrics;
 pub mod png;
 pub mod regex_diagram;
 pub mod salt;
