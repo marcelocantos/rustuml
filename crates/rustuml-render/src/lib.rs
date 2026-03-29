@@ -22,6 +22,7 @@ pub mod font_metrics;
 pub mod gantt;
 pub mod git_diagram;
 pub mod json_diagram;
+pub mod layout_oracle;
 pub mod math;
 pub mod metrics;
 pub mod mindmap;
@@ -43,6 +44,7 @@ pub mod timing;
 pub mod usecase;
 pub mod wbs;
 
+use layout_oracle::OracleLayout;
 use rustuml_parser::diagram::Diagram;
 use style::Theme;
 
@@ -76,6 +78,32 @@ pub fn render_svg_with_theme(diagram: &Diagram, theme: &Theme) -> String {
         skinparam::apply_skinparams(theme, meta_params)
     };
     render_with_theme(diagram, &effective_theme)
+}
+
+/// Render a parsed diagram to SVG with optional oracle layout data.
+///
+/// When `oracle` is `Some`, layout coordinates are taken from the oracle
+/// instead of running the Graphviz layout engine. Currently supported for
+/// class diagrams; other types ignore the oracle.
+pub fn render_svg_with_oracle(diagram: &Diagram, oracle: Option<&OracleLayout>) -> String {
+    let meta_params = &diagram.meta().skinparams;
+    let theme = if meta_params.is_empty() {
+        Theme::default()
+    } else {
+        skinparam::apply_skinparams(&Theme::default(), meta_params)
+    };
+    render_with_theme_and_oracle(diagram, &theme, oracle)
+}
+
+fn render_with_theme_and_oracle(
+    diagram: &Diagram,
+    theme: &Theme,
+    oracle: Option<&OracleLayout>,
+) -> String {
+    match diagram {
+        Diagram::Class(cls) => class::render_with_oracle(cls, theme, oracle),
+        _ => render_with_theme(diagram, theme),
+    }
 }
 
 fn render_with_theme(diagram: &Diagram, theme: &Theme) -> String {

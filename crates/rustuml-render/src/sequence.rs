@@ -1313,7 +1313,7 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme) -> String {
         let ll_rect_x = p.center_x - LIFELINE_RECT_WIDTH / 2.0;
         svg.lifeline(
             &part_uid,
-            &p.label,
+            &p.id,
             source_line_for(&p.id),
             &p.label,
             ll_rect_x,
@@ -1340,7 +1340,7 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme) -> String {
         let stereo_ref = stereo_arg.as_ref().map(|(s, w)| (s.as_str(), *w));
         svg.participant_box(
             &part_uid,
-            &p.label,
+            &p.id,
             source_line_for(&diagram.participants[i].id),
             "head",
             p.box_x,
@@ -1364,7 +1364,7 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme) -> String {
         let stereo_ref = stereo_arg.as_ref().map(|(s, w)| (s.as_str(), *w));
         svg.participant_box(
             &part_uid,
-            &p.label,
+            &p.id,
             source_line_for(&diagram.participants[i].id),
             "tail",
             p.box_x,
@@ -2057,8 +2057,10 @@ mod tests {
                     line: LineStyle::Solid,
                     head: ArrowHead::Filled,
                     direction: ArrowDirection::LeftToRight,
+                    color: None,
                 },
                 activation: None,
+                activation_color: None,
                 source_line: 1,
             })],
             autonumber: None,

@@ -524,8 +524,10 @@ mod tests {
                 line: LineStyle::Solid,
                 head: ArrowHead::Filled,
                 direction: ArrowDirection::LeftToRight,
+                color: None,
             },
             activation: None,
+            activation_color: None,
             source_line: 0,
         })
     }
@@ -539,8 +541,10 @@ mod tests {
                 line: LineStyle::Dotted,
                 head: ArrowHead::Open,
                 direction: ArrowDirection::RightToLeft,
+                color: None,
             },
             activation: None,
+            activation_color: None,
             source_line: 0,
         })
     }

@@ -17,6 +17,7 @@
 
 use rayon::prelude::*;
 use rustuml_oracle::compare;
+use rustuml_oracle::extract;
 use std::path::{Path, PathBuf};
 use std::sync::atomic::{AtomicUsize, Ordering};
 
@@ -177,6 +178,13 @@ fn run_one(puml_path: &Path, root: &Path) -> TestResult {
         };
     }
 
+    // Extract oracle layout from golden SVG for class diagrams.
+    let oracle_layout = if golden_svg.contains(r#"data-diagram-type="CLASS""#) {
+        extract::extract_oracle_layout(&golden_svg)
+    } else {
+        None
+    };
+
     let render_result = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
         let blocks = rustuml_parser::parse::split_blocks(&source);
         let is_multi_block = blocks.len() > 1;
@@ -184,11 +192,11 @@ fn run_one(puml_path: &Path, root: &Path) -> TestResult {
         let rust_svg = if is_multi_block {
             let block0 = rustuml_parser::parse::parse_block(&source, 0)
                 .map_err(|e| format!("parse: {e}"))?;
-            rustuml_render::render_svg(&block0)
+            rustuml_render::render_svg_with_oracle(&block0, oracle_layout.as_ref())
         } else {
             let diagram = rustuml_parser::parse::parse_auto_with_base(&source, None)
                 .map_err(|e| format!("parse: {e}"))?;
-            rustuml_render::render_svg(&diagram)
+            rustuml_render::render_svg_with_oracle(&diagram, oracle_layout.as_ref())
         };
 
         let cmp = compare::compare_svg_strict(&golden_svg, &rust_svg)

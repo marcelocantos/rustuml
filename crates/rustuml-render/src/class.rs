@@ -14,9 +14,10 @@
 
 use std::fmt::Write;
 
-use rustuml_layout::graph::{Direction, EdgePath, LayoutGraph};
+use rustuml_layout::graph::{Direction, EdgePath, LayoutGraph, NodePosition};
 use rustuml_parser::diagram::class::*;
 
+use crate::layout_oracle::OracleLayout;
 use crate::metrics;
 use crate::style::Theme;
 use crate::svg::SvgBuilder;
@@ -505,6 +506,19 @@ fn offset_path(path: &str, dx: f64, dy: f64) -> String {
 
 /// Render a class diagram to SVG.
 pub fn render(diagram: &ClassDiagram, theme: &Theme) -> String {
+    render_with_oracle(diagram, theme, None)
+}
+
+/// Render a class diagram to SVG, optionally using pre-computed layout from an oracle.
+///
+/// When `oracle` is `Some`, entity positions and edge paths are taken from the
+/// oracle data instead of running the Graphviz layout engine. This is used in
+/// golden tests to decouple layout correctness from rendering correctness.
+pub fn render_with_oracle(
+    diagram: &ClassDiagram,
+    theme: &Theme,
+    oracle: Option<&OracleLayout>,
+) -> String {
     let cs = &theme.class;
     if diagram.entities.is_empty() {
         if !diagram.notes.is_empty() {
@@ -528,6 +542,48 @@ pub fn render(diagram: &ClassDiagram, theme: &Theme) -> String {
         .map(|(i, e)| calc_entity_dims(e, i))
         .collect();
 
+    // If oracle layout is provided, use it directly instead of running Graphviz.
+    if let Some(oracle) = oracle {
+        let node_positions: Vec<NodePosition> = diagram
+            .entities
+            .iter()
+            .enumerate()
+            .map(|(i, entity)| {
+                if let Some(rect) = oracle.entities.get(&entity.label) {
+                    NodePosition {
+                        x: rect.x - MARGIN,
+                        y: rect.y - MARGIN,
+                        width: rect.width,
+                        height: rect.height,
+                    }
+                } else if let Some(rect) = oracle.entities.get(&entity.id) {
+                    NodePosition {
+                        x: rect.x - MARGIN,
+                        y: rect.y - MARGIN,
+                        width: rect.width,
+                        height: rect.height,
+                    }
+                } else {
+                    // Fallback: stack entities vertically
+                    NodePosition {
+                        x: 0.0,
+                        y: i as f64 * 100.0,
+                        width: dims[i].width,
+                        height: dims[i].height,
+                    }
+                }
+            })
+            .collect();
+
+        let edge_paths: Vec<EdgePath> = diagram
+            .relationships
+            .iter()
+            .filter_map(|rel| oracle_edge_to_layout_edge(rel, oracle))
+            .collect();
+
+        return render_plantuml_svg(diagram, &dims, &node_positions, &edge_paths);
+    }
+
     // Phase 2: Use layout engine to determine positions.
     let mut layout = LayoutGraph::new(Direction::TopToBottom);
     for (entity, dim) in diagram.entities.iter().zip(&dims) {
@@ -546,6 +602,105 @@ pub fn render(diagram: &ClassDiagram, theme: &Theme) -> String {
 
     // Phase 3: Render with PlantUML-compatible SVG structure.
     render_plantuml_svg(diagram, &dims, &result.node_positions, &result.edge_paths)
+}
+
+/// Convert an oracle edge path into a LayoutGraph EdgePath by parsing the SVG path `d` attribute.
+fn oracle_edge_to_layout_edge(rel: &Relationship, oracle: &OracleLayout) -> Option<EdgePath> {
+    let is_reverse = matches!(
+        rel.kind,
+        RelationshipKind::Inheritance | RelationshipKind::Implementation
+    );
+    let expected_id = if is_reverse {
+        format!("{}-backto-{}", rel.from, rel.to)
+    } else {
+        format!("{}-to-{}", rel.from, rel.to)
+    };
+
+    let oracle_edge = oracle.edges.iter().find(|e| e.id == expected_id)?;
+    let points = parse_svg_path_to_points(&oracle_edge.d)?;
+
+    Some(EdgePath {
+        from: rel.from.clone(),
+        to: rel.to.clone(),
+        points,
+        has_start_arrow: false,
+        start_point: None,
+        has_end_arrow: false,
+        end_point: None,
+    })
+}
+
+/// Parse an SVG path `d` attribute into a list of (x, y) points.
+/// Handles M (moveto) and C (cubic bezier) commands.
+fn parse_svg_path_to_points(d: &str) -> Option<Vec<(f64, f64)>> {
+    let mut points = Vec::new();
+    let mut chars = d.chars().peekable();
+
+    while let Some(&c) = chars.peek() {
+        if c.is_whitespace() || c == ',' {
+            chars.next();
+            continue;
+        }
+        if c == 'M' || c == 'L' || c == 'C' {
+            chars.next();
+            continue;
+        }
+        if c == 'Z' || c == 'z' {
+            break;
+        }
+        // Try to parse a number pair
+        let x = parse_number(&mut chars)?;
+        skip_sep(&mut chars);
+        let y = parse_number(&mut chars)?;
+        points.push((x, y));
+    }
+
+    if points.is_empty() {
+        None
+    } else {
+        Some(points)
+    }
+}
+
+fn parse_number(chars: &mut std::iter::Peekable<std::str::Chars>) -> Option<f64> {
+    let mut s = String::new();
+    // Skip whitespace and commas
+    while let Some(&c) = chars.peek() {
+        if c.is_whitespace() || c == ',' {
+            chars.next();
+        } else {
+            break;
+        }
+    }
+    // Optional sign
+    if let Some(&c) = chars.peek() {
+        if c == '-' || c == '+' {
+            s.push(c);
+            chars.next();
+        }
+    }
+    // Digits and decimal point
+    let mut has_digit = false;
+    while let Some(&c) = chars.peek() {
+        if c.is_ascii_digit() || c == '.' {
+            s.push(c);
+            chars.next();
+            has_digit = true;
+        } else {
+            break;
+        }
+    }
+    if has_digit { s.parse().ok() } else { None }
+}
+
+fn skip_sep(chars: &mut std::iter::Peekable<std::str::Chars>) {
+    while let Some(&c) = chars.peek() {
+        if c.is_whitespace() || c == ',' {
+            chars.next();
+        } else {
+            break;
+        }
+    }
 }
 
 /// Render the full SVG with PlantUML-compatible structure.
