@@ -76,6 +76,7 @@ pub fn apply_skinparams(theme: &Theme, params: &[SkinParam]) -> Theme {
                     t.global.arrow_font_size = v;
                 }
             }
+            "arrowFontStyle" => t.global.arrow_font_style = param.value.clone(),
             "borderColor" => t.global.border_color = param.value.clone(),
             "borderThickness" => {
                 if let Ok(v) = param.value.parse::<f64>() {
@@ -113,6 +114,13 @@ pub fn apply_skinparams(theme: &Theme, params: &[SkinParam]) -> Theme {
                     t.global.max_message_size = v;
                 }
             }
+            "titleFontSize" => {
+                if let Ok(v) = param.value.parse::<f64>() {
+                    t.global.title_font_size = v;
+                }
+            }
+            "titleFontStyle" => t.global.title_font_style = param.value.clone(),
+            "svgLinkTarget" => t.global.svg_link_target = param.value.clone(),
             "style" => {}      // Diagram style variant — ignored at theme level.
             "guillemet" => {}  // Stereotype angle bracket style — ignored.
             "autonumber" => {} // Sequence autonumber — handled by parser.
@@ -153,7 +161,7 @@ pub fn apply_skinparams(theme: &Theme, params: &[SkinParam]) -> Theme {
             "sequenceParticipantFontStyle" => {
                 t.sequence.participant_font_style = param.value.clone();
             }
-            "sequenceParticipantPadding" => {
+            "sequenceParticipantPadding" | "participantPadding" => {
                 if let Ok(v) = param.value.parse::<f64>() {
                     t.sequence.participant_padding = v;
                 }
@@ -166,6 +174,9 @@ pub fn apply_skinparams(theme: &Theme, params: &[SkinParam]) -> Theme {
                 if let Ok(v) = param.value.parse::<f64>() {
                     t.sequence.lifeline_border_thickness = v;
                 }
+            }
+            "sequenceLifeLineStrategy" => {
+                t.sequence.lifeline_strategy = param.value.clone();
             }
             "noteBackgroundColor" => {
                 t.sequence.note_background = param.value.clone();
@@ -201,6 +212,9 @@ pub fn apply_skinparams(theme: &Theme, params: &[SkinParam]) -> Theme {
             "noteTextAlignment" => t.note.text_alignment = param.value.clone(),
             "sequenceGroupBackgroundColor" => t.sequence.group_background = param.value.clone(),
             "sequenceGroupBorderColor" => t.sequence.group_border = param.value.clone(),
+            "sequenceGroupBodyBackgroundColor" => {
+                t.sequence.group_body_background = param.value.clone();
+            }
             "sequenceGroupFontColor" => t.sequence.group_font_color = param.value.clone(),
             "sequenceGroupFontSize" => {
                 if let Ok(v) = param.value.parse::<f64>() {
@@ -223,6 +237,11 @@ pub fn apply_skinparams(theme: &Theme, params: &[SkinParam]) -> Theme {
                 t.sequence.divider_background = param.value.clone();
             }
             "sequenceDividerBorderColor" => t.sequence.divider_border = param.value.clone(),
+            "sequenceDividerBorderThickness" => {
+                if let Ok(v) = param.value.parse::<f64>() {
+                    t.sequence.divider_border_thickness = v;
+                }
+            }
             "sequenceDividerFontColor" => t.sequence.divider_font_color = param.value.clone(),
             "sequenceDividerFontSize" => {
                 if let Ok(v) = param.value.parse::<f64>() {
@@ -248,6 +267,11 @@ pub fn apply_skinparams(theme: &Theme, params: &[SkinParam]) -> Theme {
             }
             "sequenceActorFontStyle" => t.sequence.actor_font_style = param.value.clone(),
             "sequenceMessageAlign" => t.sequence.message_align = param.value.clone(),
+            "boxPadding" => {
+                if let Ok(v) = param.value.parse::<f64>() {
+                    t.sequence.box_padding = v;
+                }
+            }
 
             // ── Class ─────────────────────────────────────────────────────────
             "classBackgroundColor" => t.class.class_background = param.value.clone(),
@@ -307,19 +331,20 @@ pub fn apply_skinparams(theme: &Theme, params: &[SkinParam]) -> Theme {
                     t.class.round_corner = v;
                 }
             }
-            "stereotypeFontColor" => {
+            "stereotypeFontColor" | "classStereotypeFontColor" => {
                 t.class.stereotype_font_color = param.value.clone();
             }
-            "stereotypeFontSize" => {
+            "stereotypeFontSize" | "classStereotypeFontSize" => {
                 if let Ok(v) = param.value.parse::<f64>() {
                     t.class.stereotype_font_size = v;
                 }
             }
-            "stereotypeFontStyle" => {
+            "stereotypeFontStyle" | "classStereotypeFontStyle" => {
                 t.class.stereotype_font_style = param.value.clone();
             }
-            // `skinparam class` — block-level class skinparams (handled elsewhere).
-            "class" => {}
+            "stereotypeCBackgroundColor" => {
+                t.class.stereotype_c_background = param.value.clone();
+            }
 
             // ── State ─────────────────────────────────────────────────────────
             "stateBackgroundColor" => t.state.state_background = param.value.clone(),
@@ -378,6 +403,9 @@ pub fn apply_skinparams(theme: &Theme, params: &[SkinParam]) -> Theme {
             }
             "activityDiamondBackgroundColor" => {
                 t.activity.decision_background = param.value.clone();
+            }
+            "activityDiamondBorderColor" => {
+                t.activity.diamond_border_color = param.value.clone();
             }
             "activityDiamondFontColor" => t.activity.diamond_font_color = param.value.clone(),
             "activityDiamondFontSize" => {
@@ -510,23 +538,83 @@ pub fn apply_skinparams(theme: &Theme, params: &[SkinParam]) -> Theme {
             // ── Deployment node types ─────────────────────────────────────────
             "nodeBackgroundColor" => t.deployment.node_background = param.value.clone(),
             "nodeBorderColor" => t.deployment.node_border = param.value.clone(),
+            "nodeFontColor" => t.deployment.node_font_color = param.value.clone(),
+            "nodeFontSize" => {
+                if let Ok(v) = param.value.parse::<f64>() {
+                    t.deployment.node_font_size = v;
+                }
+            }
+            "nodeFontStyle" => t.deployment.node_font_style = param.value.clone(),
             "databaseBackgroundColor" => t.deployment.database_background = param.value.clone(),
             "databaseBorderColor" => t.deployment.database_border = param.value.clone(),
+            "databaseFontColor" => t.deployment.database_font_color = param.value.clone(),
+            "databaseFontSize" => {
+                if let Ok(v) = param.value.parse::<f64>() {
+                    t.deployment.database_font_size = v;
+                }
+            }
+            "databaseFontStyle" => t.deployment.database_font_style = param.value.clone(),
             "cloudBackgroundColor" => t.deployment.cloud_background = param.value.clone(),
             "cloudBorderColor" => t.deployment.cloud_border = param.value.clone(),
+            "cloudFontColor" => t.deployment.cloud_font_color = param.value.clone(),
+            "cloudFontSize" => {
+                if let Ok(v) = param.value.parse::<f64>() {
+                    t.deployment.cloud_font_size = v;
+                }
+            }
+            "cloudFontStyle" => t.deployment.cloud_font_style = param.value.clone(),
             "storageBackgroundColor" => t.deployment.storage_background = param.value.clone(),
             "storageBorderColor" => t.deployment.storage_border = param.value.clone(),
             "queueBackgroundColor" => t.deployment.queue_background = param.value.clone(),
+            "queueBorderColor" => t.deployment.queue_border = param.value.clone(),
             "boundaryBackgroundColor" => t.deployment.boundary_background = param.value.clone(),
+            "boundaryBorderColor" => t.deployment.boundary_border = param.value.clone(),
             "controlBackgroundColor" => t.deployment.control_background = param.value.clone(),
+            "controlBorderColor" => t.deployment.control_border = param.value.clone(),
             "entityBackgroundColor" => t.deployment.entity_background = param.value.clone(),
+            "entityBorderColor" => t.deployment.entity_border = param.value.clone(),
             "collectionsBackgroundColor" => {
                 t.deployment.collections_background = param.value.clone();
             }
+            "collectionsBorderColor" => t.deployment.collections_border = param.value.clone(),
             "frameBackgroundColor" => t.deployment.frame_background = param.value.clone(),
             "frameBorderColor" => t.deployment.frame_border = param.value.clone(),
+            "frameFontColor" => t.deployment.frame_font_color = param.value.clone(),
+            "frameFontSize" => {
+                if let Ok(v) = param.value.parse::<f64>() {
+                    t.deployment.frame_font_size = v;
+                }
+            }
+            "frameFontStyle" => t.deployment.frame_font_style = param.value.clone(),
             "rectangleBackgroundColor" => t.deployment.rectangle_background = param.value.clone(),
             "rectangleBorderColor" => t.deployment.rectangle_border = param.value.clone(),
+            "rectangleFontColor" => t.deployment.rectangle_font_color = param.value.clone(),
+            "rectangleFontSize" => {
+                if let Ok(v) = param.value.parse::<f64>() {
+                    t.deployment.rectangle_font_size = v;
+                }
+            }
+            "rectangleFontStyle" => t.deployment.rectangle_font_style = param.value.clone(),
+            "folderBackgroundColor" => t.deployment.folder_background = param.value.clone(),
+            "folderBorderColor" => t.deployment.folder_border = param.value.clone(),
+            "folderFontColor" => t.deployment.folder_font_color = param.value.clone(),
+            "folderFontSize" => {
+                if let Ok(v) = param.value.parse::<f64>() {
+                    t.deployment.folder_font_size = v;
+                }
+            }
+            "folderFontStyle" => t.deployment.folder_font_style = param.value.clone(),
+
+            // ── Namespace (maps to package-like styling) ─────────────────────
+            "namespaceBackgroundColor" => t.namespace.background = param.value.clone(),
+            "namespaceBorderColor" => t.namespace.border = param.value.clone(),
+            "namespaceFontColor" => t.namespace.font_color = param.value.clone(),
+            "namespaceFontSize" => {
+                if let Ok(v) = param.value.parse::<f64>() {
+                    t.namespace.font_size = v;
+                }
+            }
+            "namespaceFontStyle" => t.namespace.font_style = param.value.clone(),
 
             // ── Object (maps to class style) ─────────────────────────────────
             "objectBackgroundColor" => t.class.class_background = param.value.clone(),
@@ -546,6 +634,14 @@ pub fn apply_skinparams(theme: &Theme, params: &[SkinParam]) -> Theme {
             }
             "objectArrowColor" => t.class.arrow_color = param.value.clone(),
 
+            // ── WBS ──────────────────────────────────────────────────────────
+            "wbsBackgroundColor" => t.wbs.background = param.value.clone(),
+            "wbsBorderColor" => t.wbs.border = param.value.clone(),
+
+            // ── Mindmap ──────────────────────────────────────────────────────
+            "mindmapBackgroundColor" => t.mindmap.background = param.value.clone(),
+            "mindmapBorderColor" => t.mindmap.border = param.value.clone(),
+
             // ── Sequence aliases (PascalCase handled by normalize_key) ───────
             "sequenceResponseMessageBelowArrow" => {
                 t.sequence.response_message_below_arrow = param.value.to_lowercase() == "true";
@@ -557,6 +653,15 @@ pub fn apply_skinparams(theme: &Theme, params: &[SkinParam]) -> Theme {
                     t.global.round_corner = v;
                 }
             }
+
+            // ── Block-level skinparam prefixes (parsed as key when followed
+            //    by `{`). These are no-ops at the match level; the parser
+            //    handles block expansion. ──────────────────────────────────────
+            "class" | "state" | "usecase" | "component" | "activity" | "sequence" | "node"
+            | "database" | "cloud" | "rectangle" | "queue" | "note" | "stereotype"
+            | "interface" | "participant" | "actor" | "package" | "object" | "swimlane"
+            | "storage" | "boundary" | "control" | "entity" | "collections" | "frame"
+            | "folder" | "namespace" | "wbs" | "mindmap" => {}
 
             _ => {} // Unknown skinparams silently ignored.
         }
@@ -799,5 +904,220 @@ mod tests {
         let t = apply_skinparams(&theme, &params);
         assert_eq!(t.class.class_background, "#CCDDEE");
         assert_eq!(t.class.border_color, "#112233");
+    }
+
+    #[test]
+    fn deployment_font_and_border_params() {
+        let theme = Theme::default();
+        let params = vec![
+            SkinParam {
+                key: "nodeFontColor".into(),
+                value: "#111111".into(),
+            },
+            SkinParam {
+                key: "databaseFontSize".into(),
+                value: "16".into(),
+            },
+            SkinParam {
+                key: "cloudFontStyle".into(),
+                value: "bold".into(),
+            },
+            SkinParam {
+                key: "frameFontColor".into(),
+                value: "#222222".into(),
+            },
+            SkinParam {
+                key: "folderBackgroundColor".into(),
+                value: "#AABBCC".into(),
+            },
+            SkinParam {
+                key: "rectangleFontSize".into(),
+                value: "12".into(),
+            },
+            SkinParam {
+                key: "boundaryBorderColor".into(),
+                value: "#333333".into(),
+            },
+            SkinParam {
+                key: "controlBorderColor".into(),
+                value: "#444444".into(),
+            },
+            SkinParam {
+                key: "entityBorderColor".into(),
+                value: "#555555".into(),
+            },
+            SkinParam {
+                key: "collectionsBorderColor".into(),
+                value: "#666666".into(),
+            },
+            SkinParam {
+                key: "queueBorderColor".into(),
+                value: "#777777".into(),
+            },
+        ];
+        let t = apply_skinparams(&theme, &params);
+        assert_eq!(t.deployment.node_font_color, "#111111");
+        assert_eq!(t.deployment.database_font_size, 16.0);
+        assert_eq!(t.deployment.cloud_font_style, "bold");
+        assert_eq!(t.deployment.frame_font_color, "#222222");
+        assert_eq!(t.deployment.folder_background, "#AABBCC");
+        assert_eq!(t.deployment.rectangle_font_size, 12.0);
+        assert_eq!(t.deployment.boundary_border, "#333333");
+        assert_eq!(t.deployment.control_border, "#444444");
+        assert_eq!(t.deployment.entity_border, "#555555");
+        assert_eq!(t.deployment.collections_border, "#666666");
+        assert_eq!(t.deployment.queue_border, "#777777");
+    }
+
+    #[test]
+    fn namespace_skinparams() {
+        let theme = Theme::default();
+        let params = vec![
+            SkinParam {
+                key: "NamespaceBackgroundColor".into(),
+                value: "#DDEEFF".into(),
+            },
+            SkinParam {
+                key: "namespaceFontSize".into(),
+                value: "14".into(),
+            },
+        ];
+        let t = apply_skinparams(&theme, &params);
+        assert_eq!(t.namespace.background, "#DDEEFF");
+        assert_eq!(t.namespace.font_size, 14.0);
+    }
+
+    #[test]
+    fn wbs_and_mindmap_skinparams() {
+        let theme = Theme::default();
+        let params = vec![
+            SkinParam {
+                key: "wbsBackgroundColor".into(),
+                value: "#AABB11".into(),
+            },
+            SkinParam {
+                key: "wbsBorderColor".into(),
+                value: "#CC2233".into(),
+            },
+            SkinParam {
+                key: "mindmapBackgroundColor".into(),
+                value: "#44EEFF".into(),
+            },
+            SkinParam {
+                key: "mindmapBorderColor".into(),
+                value: "#556677".into(),
+            },
+        ];
+        let t = apply_skinparams(&theme, &params);
+        assert_eq!(t.wbs.background, "#AABB11");
+        assert_eq!(t.wbs.border, "#CC2233");
+        assert_eq!(t.mindmap.background, "#44EEFF");
+        assert_eq!(t.mindmap.border, "#556677");
+    }
+
+    #[test]
+    fn title_and_arrow_font_style_params() {
+        let theme = Theme::default();
+        let params = vec![
+            SkinParam {
+                key: "titleFontSize".into(),
+                value: "20".into(),
+            },
+            SkinParam {
+                key: "titleFontStyle".into(),
+                value: "bold".into(),
+            },
+            SkinParam {
+                key: "arrowFontStyle".into(),
+                value: "italic".into(),
+            },
+            SkinParam {
+                key: "svgLinkTarget".into(),
+                value: "_blank".into(),
+            },
+        ];
+        let t = apply_skinparams(&theme, &params);
+        assert_eq!(t.global.title_font_size, 20.0);
+        assert_eq!(t.global.title_font_style, "bold");
+        assert_eq!(t.global.arrow_font_style, "italic");
+        assert_eq!(t.global.svg_link_target, "_blank");
+    }
+
+    #[test]
+    fn sequence_extra_params() {
+        let theme = Theme::default();
+        let params = vec![
+            SkinParam {
+                key: "BoxPadding".into(),
+                value: "10".into(),
+            },
+            SkinParam {
+                key: "SequenceGroupBodyBackgroundColor".into(),
+                value: "#EEEEFF".into(),
+            },
+            SkinParam {
+                key: "SequenceLifeLineStrategy".into(),
+                value: "solid".into(),
+            },
+            SkinParam {
+                key: "SequenceDividerBorderThickness".into(),
+                value: "2".into(),
+            },
+            SkinParam {
+                key: "ParticipantPadding".into(),
+                value: "15".into(),
+            },
+        ];
+        let t = apply_skinparams(&theme, &params);
+        assert_eq!(t.sequence.box_padding, 10.0);
+        assert_eq!(t.sequence.group_body_background, "#EEEEFF");
+        assert_eq!(t.sequence.lifeline_strategy, "solid");
+        assert_eq!(t.sequence.divider_border_thickness, 2.0);
+        assert_eq!(t.sequence.participant_padding, 15.0);
+    }
+
+    #[test]
+    fn activity_diamond_border_color() {
+        let theme = Theme::default();
+        let params = vec![SkinParam {
+            key: "activityDiamondBorderColor".into(),
+            value: "#AABBCC".into(),
+        }];
+        let t = apply_skinparams(&theme, &params);
+        assert_eq!(t.activity.diamond_border_color, "#AABBCC");
+    }
+
+    #[test]
+    fn stereotype_c_background_color() {
+        let theme = Theme::default();
+        let params = vec![SkinParam {
+            key: "stereotypeCBackgroundColor".into(),
+            value: "#DD8800".into(),
+        }];
+        let t = apply_skinparams(&theme, &params);
+        assert_eq!(t.class.stereotype_c_background, "#DD8800");
+    }
+
+    #[test]
+    fn class_stereotype_pascal_case_aliases() {
+        let theme = Theme::default();
+        let params = vec![
+            SkinParam {
+                key: "ClassStereotypeFontColor".into(),
+                value: "#AA1122".into(),
+            },
+            SkinParam {
+                key: "ClassStereotypeFontSize".into(),
+                value: "18".into(),
+            },
+            SkinParam {
+                key: "ClassStereotypeFontStyle".into(),
+                value: "italic".into(),
+            },
+        ];
+        let t = apply_skinparams(&theme, &params);
+        assert_eq!(t.class.stereotype_font_color, "#AA1122");
+        assert_eq!(t.class.stereotype_font_size, 18.0);
+        assert_eq!(t.class.stereotype_font_style, "italic");
     }
 }

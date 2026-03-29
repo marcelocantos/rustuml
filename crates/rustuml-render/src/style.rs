@@ -28,6 +28,12 @@ pub struct Theme {
     pub component: ComponentStyle,
     pub usecase: UseCaseStyle,
     pub deployment: DeploymentStyle,
+    #[serde(default)]
+    pub namespace: NamespaceStyle,
+    #[serde(default)]
+    pub wbs: WbsStyle,
+    #[serde(default)]
+    pub mindmap: MindmapStyle,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
@@ -56,6 +62,14 @@ pub struct GlobalStyle {
     pub round_corner: f64,
     pub wrap_width: f64,
     pub max_message_size: f64,
+    #[serde(default)]
+    pub arrow_font_style: String,
+    #[serde(default)]
+    pub title_font_size: f64,
+    #[serde(default)]
+    pub title_font_style: String,
+    #[serde(default)]
+    pub svg_link_target: String,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
@@ -101,6 +115,14 @@ pub struct SequenceStyle {
     pub reference_font_color: String,
     /// When true, response messages are rendered below the arrow line.
     pub response_message_below_arrow: bool,
+    #[serde(default)]
+    pub box_padding: f64,
+    #[serde(default)]
+    pub group_body_background: String,
+    #[serde(default)]
+    pub lifeline_strategy: String,
+    #[serde(default)]
+    pub divider_border_thickness: f64,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
@@ -130,6 +152,8 @@ pub struct ClassStyle {
     pub stereotype_font_color: String,
     pub stereotype_font_size: f64,
     pub stereotype_font_style: String,
+    #[serde(default)]
+    pub stereotype_c_background: String,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
@@ -177,6 +201,8 @@ pub struct ActivityStyle {
     pub swimlane_font_color: String,
     pub swimlane_font_size: f64,
     pub swimlane_title_font_style: String,
+    #[serde(default)]
+    pub diamond_border_color: String,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize, Default)]
@@ -246,22 +272,68 @@ pub struct UseCaseStyle {
 #[derive(Debug, Clone, Serialize, Deserialize, Default)]
 pub struct DeploymentStyle {
     pub boundary_background: String,
+    pub boundary_border: String,
     pub cloud_background: String,
     pub cloud_border: String,
+    pub cloud_font_color: String,
+    pub cloud_font_size: f64,
+    pub cloud_font_style: String,
     pub collections_background: String,
+    pub collections_border: String,
     pub control_background: String,
+    pub control_border: String,
     pub database_background: String,
     pub database_border: String,
+    pub database_font_color: String,
+    pub database_font_size: f64,
+    pub database_font_style: String,
     pub entity_background: String,
+    pub entity_border: String,
+    pub folder_background: String,
+    pub folder_border: String,
+    pub folder_font_color: String,
+    pub folder_font_size: f64,
+    pub folder_font_style: String,
     pub frame_background: String,
     pub frame_border: String,
+    pub frame_font_color: String,
+    pub frame_font_size: f64,
+    pub frame_font_style: String,
     pub node_background: String,
     pub node_border: String,
+    pub node_font_color: String,
+    pub node_font_size: f64,
+    pub node_font_style: String,
     pub queue_background: String,
+    pub queue_border: String,
     pub rectangle_background: String,
     pub rectangle_border: String,
+    pub rectangle_font_color: String,
+    pub rectangle_font_size: f64,
+    pub rectangle_font_style: String,
     pub storage_background: String,
     pub storage_border: String,
+}
+
+#[derive(Debug, Clone, Serialize, Deserialize, Default)]
+pub struct NamespaceStyle {
+    pub background: String,
+    pub border: String,
+    pub font_color: String,
+    pub font_size: f64,
+    pub font_style: String,
+}
+
+#[derive(Debug, Clone, Serialize, Deserialize, Default)]
+pub struct WbsStyle {
+    pub background: String,
+    pub border: String,
+}
+
+#[derive(Debug, Clone, Serialize, Deserialize, Default)]
+pub struct MindmapStyle {
+    pub background: String,
+    pub border: String,
 }
 
 impl Default for Theme {
@@ -316,6 +388,10 @@ impl Theme {
                 reference_border: "#181818".into(),
                 reference_font_color: "".into(),
                 response_message_below_arrow: false,
+                box_padding: 0.0,
+                group_body_background: "".into(),
+                lifeline_strategy: "".into(),
+                divider_border_thickness: 0.0,
             },
             class: ClassStyle {
                 class_background: "#FDEBD0".into(),
@@ -343,6 +419,7 @@ impl Theme {
                 stereotype_font_color: "".into(),
                 stereotype_font_size: 0.0,
                 stereotype_font_style: "".into(),
+                stereotype_c_background: "".into(),
             },
             state: StateStyle {
                 state_background: "#FEEBD0".into(),
@@ -386,6 +463,7 @@ impl Theme {
                 swimlane_font_color: "".into(),
                 swimlane_font_size: 0.0,
                 swimlane_title_font_style: "".into(),
+                diamond_border_color: "".into(),
             },
             global: GlobalStyle {
                 font_family: "sans-serif".into(),
@@ -412,6 +490,10 @@ impl Theme {
                 round_corner: 0.0,
                 wrap_width: 0.0,
                 max_message_size: 0.0,
+                arrow_font_style: "".into(),
+                title_font_size: 0.0,
+                title_font_style: "".into(),
+                svg_link_target: "".into(),
             },
             note: NoteStyle::default(),
             actor: ActorStyle::default(),
@@ -419,6 +501,9 @@ impl Theme {
             component: ComponentStyle::default(),
             usecase: UseCaseStyle::default(),
             deployment: DeploymentStyle::default(),
+            namespace: NamespaceStyle::default(),
+            wbs: WbsStyle::default(),
+            mindmap: MindmapStyle::default(),
         }
     }
 
@@ -467,6 +552,10 @@ impl Theme {
                 reference_border: "#FFC107".into(),
                 reference_font_color: "".into(),
                 response_message_below_arrow: false,
+                box_padding: 0.0,
+                group_body_background: "".into(),
+                lifeline_strategy: "".into(),
+                divider_border_thickness: 0.0,
             },
             class: ClassStyle {
                 class_background: "#F8F9FA".into(),
@@ -494,6 +583,7 @@ impl Theme {
                 stereotype_font_color: "".into(),
                 stereotype_font_size: 0.0,
                 stereotype_font_style: "".into(),
+                stereotype_c_background: "".into(),
             },
             state: StateStyle {
                 state_background: "#F8F9FA".into(),
@@ -537,6 +627,7 @@ impl Theme {
                 swimlane_font_color: "".into(),
                 swimlane_font_size: 0.0,
                 swimlane_title_font_style: "".into(),
+                diamond_border_color: "".into(),
             },
             global: GlobalStyle {
                 font_family: "system-ui, -apple-system, sans-serif".into(),
@@ -563,6 +654,10 @@ impl Theme {
                 round_corner: 0.0,
                 wrap_width: 0.0,
                 max_message_size: 0.0,
+                arrow_font_style: "".into(),
+                title_font_size: 0.0,
+                title_font_style: "".into(),
+                svg_link_target: "".into(),
             },
             note: NoteStyle::default(),
             actor: ActorStyle::default(),
@@ -570,6 +665,9 @@ impl Theme {
             component: ComponentStyle::default(),
             usecase: UseCaseStyle::default(),
             deployment: DeploymentStyle::default(),
+            namespace: NamespaceStyle::default(),
+            wbs: WbsStyle::default(),
+            mindmap: MindmapStyle::default(),
         }
     }
 }
