@@ -26,6 +26,38 @@ impl SvgBuilder {
         }
     }
 
+    /// Create a builder with a PlantUML-compatible SVG envelope.
+    ///
+    /// `diagram_type` is the PlantUML diagram type string (e.g. "DESCRIPTION",
+    /// "CLASS", "SEQUENCE"). The envelope includes all attributes that PlantUML
+    /// emits: `contentStyleType`, `data-diagram-type`, `preserveAspectRatio`,
+    /// inline `style`, `version`, and `zoomAndPan`.
+    pub fn new_plantuml(width: f64, height: f64, diagram_type: &str) -> Self {
+        let w = width.ceil() as i64;
+        let h = height.ceil() as i64;
+        let mut buf = String::new();
+        write!(
+            buf,
+            r#"<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" contentStyleType="text/css" data-diagram-type="{diagram_type}" height="{h}px" preserveAspectRatio="none" style="width:{w}px;height:{h}px;background:#FFFFFF;" version="1.1" viewBox="0 0 {w} {h}" width="{w}px" zoomAndPan="magnify"><defs/><g>"#,
+        )
+        .unwrap();
+        Self {
+            buf,
+            indent: 0,
+            group_depth: 0,
+        }
+    }
+
+    /// Finalize the builder for a PlantUML-compatible SVG.
+    ///
+    /// Closes the outer `<g>` wrapper and the `</svg>` tag without a trailing
+    /// newline, matching PlantUML's output format.
+    pub fn finalize_plantuml(self) -> String {
+        let mut buf = self.buf;
+        buf.push_str("</g></svg>");
+        buf
+    }
+
     pub fn rect(&mut self, x: f64, y: f64, w: f64, h: f64, fill: &str, stroke: &str) {
         self.line(&format!(
             r#"<rect x="{x}" y="{y}" width="{w}" height="{h}" fill="{fill}" stroke="{stroke}" stroke-width="1"/>"#
