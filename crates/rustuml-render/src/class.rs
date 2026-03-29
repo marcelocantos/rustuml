@@ -352,7 +352,13 @@ fn render_with_positions(
     // Render each class at its adjusted position.
     for (i, (entity, dim)) in diagram.entities.iter().zip(&class_dims).enumerate() {
         let (x, y, _, _) = entity_positions[i];
+        if let Some(ref url) = entity.url {
+            svg.open_link(url);
+        }
         render_class_box(&mut svg, entity, x, y, dim, cs, use_monospace_members);
+        if entity.url.is_some() {
+            svg.close_link();
+        }
     }
 
     // Render relationships.
@@ -480,7 +486,13 @@ fn render_grid(diagram: &ClassDiagram, cs: &crate::style::ClassStyle) -> String 
         let x = MARGIN + col_widths[..col].iter().sum::<f64>() + MARGIN * col as f64;
         let y = title_h + MARGIN + row_heights[..row].iter().sum::<f64>() + MARGIN * row as f64;
 
+        if let Some(ref url) = entity.url {
+            svg.open_link(url);
+        }
         render_class_box(&mut svg, entity, x, y, dim, cs, use_monospace_members);
+        if entity.url.is_some() {
+            svg.close_link();
+        }
         positions.push((x, y, dim.width, dim.height));
     }
 
@@ -1207,6 +1219,7 @@ mod tests {
                         },
                     ],
                     stereotypes: vec![],
+                    url: None,
                 },
                 ClassEntity {
                     id: "Dog".into(),
@@ -1222,6 +1235,7 @@ mod tests {
                         display_text: "fetch(): void".into(),
                     }],
                     stereotypes: vec![],
+                    url: None,
                 },
             ],
             relationships: vec![Relationship {
@@ -1288,6 +1302,7 @@ mod tests {
                     display_text: "draw(): void".into(),
                 }],
                 stereotypes: vec![],
+                url: None,
             }],
             relationships: vec![],
             packages: vec![],
@@ -1328,5 +1343,30 @@ mod tests {
         };
         let svg = render(&diagram, &Theme::default());
         assert!(svg.contains("<svg"));
+    }
+
+    #[test]
+    fn class_with_link() {
+        let diagram = ClassDiagram {
+            meta: DiagramMeta::default(),
+            entities: vec![ClassEntity {
+                id: "Linked".into(),
+                label: "Linked".into(),
+                kind: EntityKind::Class,
+                members: vec![],
+                stereotypes: vec![],
+                url: Some("https://example.com".into()),
+            }],
+            relationships: vec![],
+            packages: vec![],
+            notes: vec![],
+        };
+        let theme = Theme::default();
+        let svg = render(&diagram, &theme);
+        assert!(
+            svg.contains(r#"<a href="https://example.com""#),
+            "SVG should contain link"
+        );
+        assert!(svg.contains("</a>"), "SVG should close the link");
     }
 }

@@ -44,6 +44,25 @@ impl std::fmt::Display for ParseError {
 
 impl std::error::Error for ParseError {}
 
+pub fn extract_link_url(line: &str) -> (Option<String>, String) {
+    if let Some(start) = line.find("[[")
+        && let Some(rel_end) = line[start..].find("]]")
+    {
+        let inner = &line[start + 2..start + rel_end];
+        let url = inner.split(['{', ' ']).next().unwrap_or("").to_string();
+        let remaining = format!(
+            "{}{}",
+            &line[..start],
+            line[start + rel_end + 2..].trim_start()
+        );
+        if url.is_empty() {
+            return (None, remaining.trim().to_string());
+        }
+        return (Some(url), remaining.trim().to_string());
+    }
+    (None, line.to_string())
+}
+
 /// Strip surrounding double-quotes from a title string, then trim whitespace.
 pub fn strip_title_quotes(s: &str) -> &str {
     let s = s.trim();
@@ -921,5 +940,52 @@ mod tests {
         let input = "@startuml\nAlice -> Bob\n@enduml";
         let blocks = split_blocks(input);
         assert_eq!(blocks.len(), 1);
+    }
+}
+
+#[cfg(test)]
+mod link_url_tests {
+    use super::extract_link_url;
+
+    #[test]
+    fn basic_url() {
+        let (url, rest) = extract_link_url("class Foo [[https://example.com]] {");
+        assert_eq!(url.as_deref(), Some("https://example.com"));
+        assert_eq!(rest, "class Foo {");
+    }
+
+    #[test]
+    fn url_with_tooltip() {
+        let (url, rest) = extract_link_url("class Foo [[https://example.com{tooltip}]]");
+        assert_eq!(url.as_deref(), Some("https://example.com"));
+        assert_eq!(rest, "class Foo");
+    }
+
+    #[test]
+    fn url_with_label() {
+        let (url, rest) = extract_link_url("class Foo [[https://example.com Label]]");
+        assert_eq!(url.as_deref(), Some("https://example.com"));
+        assert_eq!(rest, "class Foo");
+    }
+
+    #[test]
+    fn url_with_tooltip_and_label() {
+        let (url, rest) = extract_link_url("class Foo [[https://example.com{tip} Label]]");
+        assert_eq!(url.as_deref(), Some("https://example.com"));
+        assert_eq!(rest, "class Foo");
+    }
+
+    #[test]
+    fn no_url() {
+        let (url, rest) = extract_link_url("class Foo {");
+        assert_eq!(url, None);
+        assert_eq!(rest, "class Foo {");
+    }
+
+    #[test]
+    fn empty_brackets() {
+        let (url, rest) = extract_link_url("class Foo [[]]");
+        assert_eq!(url, None);
+        assert_eq!(rest, "class Foo");
     }
 }

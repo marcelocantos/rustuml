@@ -95,6 +95,7 @@ impl ClassParser {
                 kind: EntityKind::Class,
                 members: Vec::new(),
                 stereotypes: Vec::new(),
+                url: None,
             });
         }
         id
@@ -312,6 +313,8 @@ impl ClassParser {
     }
 
     fn try_entity_decl(&mut self, line: &str) -> bool {
+        let (url, clean_line) = super::extract_link_url(line);
+        let line = clean_line.as_str();
         // Allows dots in the identifier (for `set namespaceSeparator none`).
         static RE_DOTTED: LazyLock<Regex> = LazyLock::new(|| {
             Regex::new(
@@ -387,6 +390,9 @@ impl ClassParser {
                 entity.kind = kind;
                 entity.label = display_label;
                 entity.stereotypes.extend(stereotypes);
+                if url.is_some() {
+                    entity.url = url.clone();
+                }
             } else {
                 self.entities.push(ClassEntity {
                     id: final_id.clone(),
@@ -394,6 +400,7 @@ impl ClassParser {
                     kind,
                     members: Vec::new(),
                     stereotypes,
+                    url: url.clone(),
                 });
             }
 
@@ -430,6 +437,7 @@ impl ClassParser {
                     kind: EntityKind::Enum,
                     members: Vec::new(),
                     stereotypes: Vec::new(),
+                    url: None,
                 });
             }
             if line.ends_with('{') {
@@ -522,6 +530,7 @@ impl ClassParser {
                     kind: EntityKind::Interface,
                     members: Vec::new(),
                     stereotypes: Vec::new(),
+                    url: None,
                 });
             }
             let from = self.ensure_entity(&from_raw);
@@ -781,6 +790,7 @@ impl ClassParser {
                         kind: EntityKind::Class,
                         members: vec![member],
                         stereotypes: Vec::new(),
+                        url: None,
                     });
                 }
             }
@@ -1266,5 +1276,28 @@ mod tests {
         assert_eq!(d.packages[1].name, "Inner");
         assert_eq!(d.entities.len(), 1);
         assert_eq!(d.entities[0].id, "MyClass");
+    }
+
+    #[test]
+    fn class_with_url() {
+        let d = parse("class MyClass [[https://example.com]] {\n  + method()\n}");
+        assert_eq!(d.entities.len(), 1);
+        assert_eq!(d.entities[0].url.as_deref(), Some("https://example.com"));
+        assert_eq!(d.entities[0].id, "MyClass");
+    }
+
+    #[test]
+    fn class_url_with_tooltip() {
+        let d = parse("class Svc [[https://docs.example.com{API Documentation}]]");
+        assert_eq!(
+            d.entities[0].url.as_deref(),
+            Some("https://docs.example.com")
+        );
+    }
+
+    #[test]
+    fn class_no_url() {
+        let d = parse("class Plain");
+        assert_eq!(d.entities[0].url, None);
     }
 }
