@@ -55,32 +55,78 @@ fn main() {
 
     // ── cdt ──
     for f in &[
-        "dtclose", "dtdisc", "dtextract", "dtflatten", "dthash", "dtmethod",
-        "dtopen", "dtrenew", "dtrestore", "dtsize", "dtstat", "dtstrhash",
-        "dttree", "dtview", "dtwalk",
+        "dtclose",
+        "dtdisc",
+        "dtextract",
+        "dtflatten",
+        "dthash",
+        "dtmethod",
+        "dtopen",
+        "dtrenew",
+        "dtrestore",
+        "dtsize",
+        "dtstat",
+        "dtstrhash",
+        "dttree",
+        "dtview",
+        "dtwalk",
     ] {
         build.file(lib.join(format!("cdt/{f}.c")));
     }
 
     // ── cgraph ──
     for f in &[
-        "acyclic", "agerror", "apply", "attr", "edge", "grammar", "graph",
-        "id", "imap", "ingraphs", "io", "node", "node_induce", "obj", "rec",
-        "refstr", "scan", "subg", "tred", "unflatten", "utils", "write",
+        "acyclic",
+        "agerror",
+        "apply",
+        "attr",
+        "edge",
+        "grammar",
+        "graph",
+        "id",
+        "imap",
+        "ingraphs",
+        "io",
+        "node",
+        "node_induce",
+        "obj",
+        "rec",
+        "refstr",
+        "scan",
+        "subg",
+        "tred",
+        "unflatten",
+        "utils",
+        "write",
     ] {
         build.file(lib.join(format!("cgraph/{f}.c")));
     }
 
     // ── pathplan ──
     for f in &[
-        "cvt", "inpoly", "route", "shortest", "shortestpth", "solvers",
-        "triang", "util", "visibility",
+        "cvt",
+        "inpoly",
+        "route",
+        "shortest",
+        "shortestpth",
+        "solvers",
+        "triang",
+        "util",
+        "visibility",
     ] {
         build.file(lib.join(format!("pathplan/{f}.c")));
     }
 
     // ── util ──
-    for f in &["arena", "base64", "gv_find_me", "gv_fopen", "list", "random", "xml"] {
+    for f in &[
+        "arena",
+        "base64",
+        "gv_find_me",
+        "gv_fopen",
+        "list",
+        "random",
+        "xml",
+    ] {
         build.file(lib.join(format!("util/{f}.c")));
     }
 
@@ -94,10 +140,30 @@ fn main() {
 
     // ── common ──
     for f in &[
-        "args", "arrows", "colxlate", "ellipse", "emit", "geom", "globals",
-        "htmllex", "htmlparse", "htmltable", "input", "labels", "ns",
-        "output", "pointset", "postproc", "psusershape", "routespl",
-        "shapes", "splines", "taper", "textspan", "textspan_lut", "timing",
+        "args",
+        "arrows",
+        "colxlate",
+        "ellipse",
+        "emit",
+        "geom",
+        "globals",
+        "htmllex",
+        "htmlparse",
+        "htmltable",
+        "input",
+        "labels",
+        "ns",
+        "output",
+        "pointset",
+        "postproc",
+        "psusershape",
+        "routespl",
+        "shapes",
+        "splines",
+        "taper",
+        "textspan",
+        "textspan_lut",
+        "timing",
         "utils",
     ] {
         build.file(lib.join(format!("common/{f}.c")));
@@ -110,28 +176,63 @@ fn main() {
 
     // ── ortho ──
     for f in &[
-        "fPQ", "maze", "ortho", "partition", "rawgraph", "sgraph", "trapezoid",
+        "fPQ",
+        "maze",
+        "ortho",
+        "partition",
+        "rawgraph",
+        "sgraph",
+        "trapezoid",
     ] {
         build.file(lib.join(format!("ortho/{f}.c")));
     }
 
     // ── dotgen ──
     for f in &[
-        "acyclic", "aspect", "class1", "class2", "cluster", "compound",
-        "conc", "decomp", "dotinit", "dotsplines", "fastgr", "flat",
-        "mincross", "position", "rank", "sameport",
+        "acyclic",
+        "aspect",
+        "class1",
+        "class2",
+        "cluster",
+        "compound",
+        "conc",
+        "decomp",
+        "dotinit",
+        "dotsplines",
+        "fastgr",
+        "flat",
+        "mincross",
+        "position",
+        "rank",
+        "sameport",
     ] {
         build.file(lib.join(format!("dotgen/{f}.c")));
     }
 
     // ── gvc ──
     for f in &[
-        "gvc", "gvconfig", "gvcontext", "gvdevice", "gvevent", "gvjobs",
-        "gvlayout", "gvloadimage", "gvplugin", "gvrender", "gvtextlayout",
-        "gvtool_tred", "gvusershape",
+        "gvc",
+        "gvconfig",
+        "gvcontext",
+        "gvdevice",
+        "gvevent",
+        "gvjobs",
+        "gvlayout",
+        "gvloadimage",
+        "gvplugin",
+        "gvrender",
+        "gvtextlayout",
+        "gvtool_tred",
+        "gvusershape",
     ] {
         build.file(lib.join(format!("gvc/{f}.c")));
     }
+
+    // ── dot_layout plugin (registers "dot" layout engine with GVC) ──
+    let plugin = vendor.join("plugin/dot_layout");
+    build.include(&plugin);
+    build.file(plugin.join("gvplugin_dot_layout.c"));
+    build.file(plugin.join("gvlayout_dot_layout.c"));
 
     // ── RustUML helper functions (C wrappers around Graphviz macros) ──
     build.file(lib.join("rustuml_helpers.c"));

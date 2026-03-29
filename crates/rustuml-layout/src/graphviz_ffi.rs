@@ -9,7 +9,7 @@
 //! Coordinate access (ND_coord, ED_spl) uses C helper functions
 //! (`rustuml_helpers.c`) rather than replicating fragile struct layouts.
 
-#![allow(non_camel_case_types)]
+#![allow(non_camel_case_types, dead_code)]
 
 use std::os::raw::{c_char, c_int, c_void};
 
@@ -30,6 +30,12 @@ pub enum Agedge_t {}
 /// Discipline handle (opaque).
 pub enum Agdisc_t {}
 
+/// Plugin library — used to register layout engines with GVC.
+#[repr(C)]
+pub struct gvplugin_library_t {
+    _data: [u8; 0],
+}
+
 /// Graph descriptor — controls directed/strict/etc. properties.
 /// Must match the C `struct Agdesc_s` bitfield layout.
 #[repr(C)]
@@ -48,6 +54,10 @@ unsafe extern "C" {
     // ── GVC context ──
     pub fn gvContext() -> *mut GVC_t;
     pub fn gvFreeContext(gvc: *mut GVC_t) -> c_int;
+    pub fn gvAddLibrary(gvc: *mut GVC_t, lib: *mut gvplugin_library_t);
+
+    // ── Dot layout plugin library (statically linked) ──
+    pub static mut gvplugin_dot_layout_LTX_library: gvplugin_library_t;
 
     // ── Graph construction ──
     pub fn agopen(name: *const c_char, kind: Agdesc_t, disc: *mut Agdisc_t) -> *mut Agraph_t;
