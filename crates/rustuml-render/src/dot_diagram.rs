@@ -9,7 +9,7 @@
 
 use std::collections::HashMap;
 
-use rustuml_layout::graph::{Direction, LayoutGraph};
+use rustuml_layout::graph::{Direction, EdgePath, LayoutGraph};
 use rustuml_parser::diagram::dot::*;
 
 use crate::metrics;
@@ -69,12 +69,19 @@ pub fn render(diagram: &DotDiagram, _theme: &Theme) -> String {
     }
 
     // Run layout with timeout.
-    let positions = match layout.layout_positions(std::time::Duration::from_secs(5)) {
-        Some(pos) => pos,
+    let result = match layout.layout_full(std::time::Duration::from_secs(5)) {
+        Some(r) => r,
         None => return render_grid(diagram, &all_nodes, &node_dims, &all_edges),
     };
 
-    render_with_positions(diagram, &all_nodes, &node_dims, &all_edges, &positions)
+    render_with_positions(
+        diagram,
+        &all_nodes,
+        &node_dims,
+        &all_edges,
+        &result.node_positions,
+        &result.edge_paths,
+    )
 }
 
 // ---------------------------------------------------------------------------
@@ -87,6 +94,7 @@ fn render_with_positions(
     node_dims: &[(f64, f64)],
     all_edges: &[&DotEdge],
     positions: &[rustuml_layout::graph::NodePosition],
+    edge_paths: &[EdgePath],
 ) -> String {
     if positions.is_empty() {
         return "<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"100\" height=\"50\"></svg>\n"
@@ -136,6 +144,7 @@ fn render_with_positions(
             diagram.directed,
             &diagram.edge_defaults,
             &pos_map,
+            edge_paths,
         );
     }
 
@@ -202,6 +211,7 @@ fn render_grid(
             diagram.directed,
             &diagram.edge_defaults,
             &pos_map,
+            &[],
         );
     }
 
@@ -313,7 +323,44 @@ fn render_edge(
     directed: bool,
     defaults: &HashMap<String, String>,
     pos_map: &HashMap<&str, (f64, f64, f64, f64)>,
+    edge_paths: &[EdgePath],
 ) {
+    let color = edge
+        .attrs
+        .get("color")
+        .or_else(|| defaults.get("color"))
+        .map(|s| s.as_str())
+        .unwrap_or(EDGE_STROKE);
+
+    let style = edge
+        .attrs
+        .get("style")
+        .or_else(|| defaults.get("style"))
+        .map(|s| s.as_str())
+        .unwrap_or("");
+
+    let dashed = style == "dashed" || style == "dotted";
+
+    // Try bezier path from layout engine first.
+    let edge_path = edge_paths
+        .iter()
+        .find(|ep| ep.from == edge.from && ep.to == edge.to);
+
+    if let Some(ep) = edge_path
+        && !ep.points.is_empty()
+    {
+        svg.bezier_path_with_arrow(&ep.points, color, dashed, 8.0);
+        if let Some(label) = edge.attrs.get("label") {
+            let first = ep.points.first().unwrap();
+            let last = ep.points.last().unwrap();
+            let mid_x = (first.0 + last.0) / 2.0;
+            let mid_y = (first.1 + last.1) / 2.0 - 6.0;
+            svg.text(mid_x, mid_y, label, "middle", SMALL_FONT);
+        }
+        return;
+    }
+
+    // Fallback to straight lines.
     let Some(&(fx, fy, fw, fh)) = pos_map.get(edge.from.as_str()) else {
         return;
     };
@@ -331,22 +378,6 @@ fn render_edge(
     let (x1, y1) = clip_to_box(from_cx, from_cy, to_cx, to_cy, fw, fh);
     let (x2, y2) = clip_to_box(to_cx, to_cy, from_cx, from_cy, tw, th);
 
-    let color = edge
-        .attrs
-        .get("color")
-        .or_else(|| defaults.get("color"))
-        .map(|s| s.as_str())
-        .unwrap_or(EDGE_STROKE);
-
-    let style = edge
-        .attrs
-        .get("style")
-        .or_else(|| defaults.get("style"))
-        .map(|s| s.as_str())
-        .unwrap_or("");
-
-    let dashed = style == "dashed" || style == "dotted";
-
     svg.line_segment(x1, y1, x2, y2, color, dashed);
 
     // Arrowhead for directed graphs (unless arrowhead=none).
@@ -358,7 +389,6 @@ fn render_edge(
     if directed && arrowhead != "none" {
         let angle = (y2 - y1).atan2(x2 - x1);
         let deg = angle.to_degrees();
-        // Use the svg arrow_head which expects degrees.
         svg.arrow_head(x2, y2, deg);
     }
 

@@ -3,7 +3,7 @@
 
 //! Component diagram SVG renderer.
 
-use rustuml_layout::graph::{Direction, LayoutGraph};
+use rustuml_layout::graph::{Direction, EdgePath, LayoutGraph};
 use rustuml_parser::diagram::component::*;
 
 use crate::metrics;
@@ -37,7 +37,7 @@ pub fn render(diagram: &ComponentDiagram, theme: &Theme) -> String {
     }
 
     // Try Sugiyama layout for flat components + interfaces.
-    let layout_positions = if !diagram.components.is_empty() || !diagram.interfaces.is_empty() {
+    let layout_result = if !diagram.components.is_empty() || !diagram.interfaces.is_empty() {
         let mut layout = LayoutGraph::new(Direction::TopToBottom);
         // Add components as nodes.
         for comp in &diagram.components {
@@ -58,10 +58,16 @@ pub fn render(diagram: &ComponentDiagram, theme: &Theme) -> String {
         for conn in &diagram.connections {
             layout.add_edge(&conn.from, &conn.to, conn.label.as_deref());
         }
-        layout.layout_positions(std::time::Duration::from_secs(5))
+        layout.layout_full(std::time::Duration::from_secs(5))
     } else {
         None
     };
+
+    let layout_positions = layout_result.as_ref().map(|r| &r.node_positions[..]);
+    let edge_paths: &[EdgePath] = layout_result
+        .as_ref()
+        .map(|r| r.edge_paths.as_slice())
+        .unwrap_or(&[]);
 
     // Use Sugiyama positions if available, otherwise fall back to grid.
     let n = diagram.components.len();
@@ -97,7 +103,7 @@ pub fn render(diagram: &ComponentDiagram, theme: &Theme) -> String {
 
     // Compute node positions (Sugiyama or grid fallback).
     let (comp_positions, iface_xy, content_w, content_h) = if use_sugiyama {
-        let lp = layout_positions.as_ref().unwrap();
+        let lp = layout_positions.unwrap();
         let mut cpos = Vec::new();
         for (i, _comp) in diagram.components.iter().enumerate() {
             let p = &lp[i];
@@ -291,6 +297,39 @@ pub fn render(diagram: &ComponentDiagram, theme: &Theme) -> String {
 
     // Render connections.
     for conn in &diagram.connections {
+        // Try bezier path from layout engine first.
+        let edge_path = edge_paths
+            .iter()
+            .find(|ep| ep.from == conn.from && ep.to == conn.to);
+
+        if let Some(ep) = edge_path
+            && !ep.points.is_empty()
+        {
+            svg.bezier_path_with_arrow(&ep.points, &cs.border_color, conn.dashed, 8.0);
+            // Labels along the bezier path.
+            let first = ep.points.first().unwrap();
+            let last = ep.points.last().unwrap();
+            if let Some(label) = &conn.label {
+                let mx = (first.0 + last.0) / 2.0;
+                let my = (first.1 + last.1) / 2.0;
+                svg.text(mx + 6.0, my - 4.0, label, "start", SMALL_FONT);
+            }
+            if let Some(from_mult) = &conn.from_mult {
+                svg.text(
+                    first.0 + 6.0,
+                    first.1 + 14.0,
+                    from_mult,
+                    "start",
+                    SMALL_FONT,
+                );
+            }
+            if let Some(to_mult) = &conn.to_mult {
+                svg.text(last.0 + 6.0, last.1 - 4.0, to_mult, "start", SMALL_FONT);
+            }
+            continue;
+        }
+
+        // Fallback to straight lines.
         let fi = diagram.components.iter().position(|c| c.id == conn.from);
         let ti = diagram.components.iter().position(|c| c.id == conn.to);
         // Also check interfaces as source/target.

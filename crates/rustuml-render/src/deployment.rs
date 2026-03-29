@@ -5,7 +5,7 @@
 
 use std::collections::{HashMap, HashSet};
 
-use rustuml_layout::graph::{Direction, LayoutGraph};
+use rustuml_layout::graph::{Direction, EdgePath, LayoutGraph};
 use rustuml_parser::diagram::SpriteData;
 use rustuml_parser::diagram::deployment::*;
 
@@ -280,7 +280,7 @@ pub fn render(diagram: &DeploymentDiagram, theme: &Theme) -> String {
         .sum();
 
     // Try Sugiyama layout for root nodes.
-    let layout_positions = if n > 0 {
+    let layout_result = if n > 0 {
         let mut layout = LayoutGraph::new(Direction::TopToBottom);
         for root in &roots {
             let (w, h) = node_size(&root.id, &diagram.nodes, sprites);
@@ -294,16 +294,22 @@ pub fn render(diagram: &DeploymentDiagram, theme: &Theme) -> String {
                 layout.add_edge(&conn.from, &conn.to, conn.label.as_deref());
             }
         }
-        layout.layout_positions(std::time::Duration::from_secs(5))
+        layout.layout_full(std::time::Duration::from_secs(5))
     } else {
         None
     };
 
-    let use_sugiyama = layout_positions.as_ref().is_some_and(|p| p.len() >= n);
+    let layout_positions = layout_result.as_ref().map(|r| &r.node_positions[..]);
+    let edge_paths: &[EdgePath] = layout_result
+        .as_ref()
+        .map(|r| r.edge_paths.as_slice())
+        .unwrap_or(&[]);
+
+    let use_sugiyama = layout_positions.is_some_and(|p| p.len() >= n);
 
     // Compute root node positions (Sugiyama or grid fallback).
     let (root_xy, nodes_w, nodes_h) = if use_sugiyama {
-        let lp = layout_positions.as_ref().unwrap();
+        let lp = layout_positions.unwrap();
         let mut rxy = Vec::new();
         let mut max_x = 0.0_f64;
         let mut max_y = 0.0_f64;
@@ -426,6 +432,26 @@ pub fn render(diagram: &DeploymentDiagram, theme: &Theme) -> String {
 
     // Render connections.
     for conn in &diagram.connections {
+        // Try bezier path from layout engine first.
+        let edge_path = edge_paths
+            .iter()
+            .find(|ep| ep.from == conn.from && ep.to == conn.to);
+
+        if let Some(ep) = edge_path
+            && !ep.points.is_empty()
+        {
+            svg.bezier_path_with_arrow(&ep.points, &gs.border_color, false, 8.0);
+            if let Some(label) = &conn.label {
+                let first = ep.points.first().unwrap();
+                let last = ep.points.last().unwrap();
+                let mx = (first.0 + last.0) / 2.0;
+                let my = (first.1 + last.1) / 2.0;
+                svg.text(mx, my - 4.0, label, "middle", SMALL_FONT);
+            }
+            continue;
+        }
+
+        // Fallback to straight lines.
         if let (Some(&(fx, fy, fw, fh)), Some(&(tx, ty, tw, _))) =
             (positions.get(&conn.from), positions.get(&conn.to))
         {

@@ -106,7 +106,6 @@ impl LayoutGraph {
 
     #[allow(unsafe_op_in_unsafe_fn)]
     unsafe fn run_graphviz_layout_inner(&self) -> LayoutResult {
-
         let gvc = graphviz_ffi::gvContext();
 
         // Register the statically-linked dot layout plugin.

@@ -3,7 +3,7 @@
 
 //! State diagram SVG renderer.
 
-use rustuml_layout::graph::{Direction, LayoutGraph};
+use rustuml_layout::graph::{Direction, EdgePath, LayoutGraph};
 use rustuml_parser::diagram::state::*;
 
 use crate::metrics;
@@ -133,7 +133,7 @@ pub fn render(diagram: &StateDiagram, theme: &Theme) -> String {
         .fold(0.0_f64, f64::max);
 
     // Try Sugiyama layout.
-    let layout_positions = {
+    let layout_result = {
         let mut layout = LayoutGraph::new(Direction::TopToBottom);
         for id in &state_ids {
             let state_def = diagram.states.iter().find(|s| s.id == *id);
@@ -149,17 +149,21 @@ pub fn render(diagram: &StateDiagram, theme: &Theme) -> String {
         for t in &diagram.transitions {
             layout.add_edge(&t.from, &t.to, t.label.as_deref());
         }
-        layout.layout_positions(std::time::Duration::from_secs(5))
+        layout.layout_full(std::time::Duration::from_secs(5))
     };
 
-    let use_sugiyama = layout_positions
+    let layout_positions = layout_result.as_ref().map(|r| &r.node_positions[..]);
+    let edge_paths: &[EdgePath] = layout_result
         .as_ref()
-        .is_some_and(|p| p.len() >= state_ids.len());
+        .map(|r| r.edge_paths.as_slice())
+        .unwrap_or(&[]);
+
+    let use_sugiyama = layout_positions.is_some_and(|p| p.len() >= state_ids.len());
 
     // Compute per-node heights and cumulative vertical positions.
     // Entry: (id, center_x, center_y, box_height)
     let (state_positions, total_width, total_height) = if use_sugiyama {
-        let lp = layout_positions.as_ref().unwrap();
+        let lp = layout_positions.unwrap();
         let mut positions: Vec<(String, f64, f64, f64)> = Vec::new();
         let mut max_x = 0.0_f64;
         let mut max_y = 0.0_f64;
@@ -305,6 +309,26 @@ pub fn render(diagram: &StateDiagram, theme: &Theme) -> String {
 
     // Draw transitions.
     for t in &diagram.transitions {
+        // Try bezier path from layout engine first.
+        let edge_path = edge_paths
+            .iter()
+            .find(|ep| ep.from == t.from && ep.to == t.to);
+
+        if let Some(ep) = edge_path
+            && !ep.points.is_empty()
+        {
+            svg.bezier_path_with_arrow(&ep.points, "#000", false, 8.0);
+            if let Some(label) = &t.label {
+                let first = ep.points.first().unwrap();
+                let last = ep.points.last().unwrap();
+                let mid_x = (first.0 + last.0) / 2.0 + 10.0;
+                let mid_y = (first.1 + last.1) / 2.0;
+                svg.text(mid_x, mid_y, label, "start", SMALL_FONT);
+            }
+            continue;
+        }
+
+        // Fallback to straight lines.
         let (fx, fy, fh) = pos_of(&t.from);
         let (tx, ty, th) = pos_of(&t.to);
 

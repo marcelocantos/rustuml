@@ -6,7 +6,7 @@
 //! Uses rustuml-layout (Sugiyama algorithm) for node positioning,
 //! then renders classes with fields/methods and relationships.
 
-use rustuml_layout::graph::{Direction, LayoutGraph};
+use rustuml_layout::graph::{Direction, EdgePath, LayoutGraph};
 use rustuml_parser::diagram::class::*;
 
 use crate::metrics;
@@ -74,24 +74,23 @@ pub fn render(diagram: &ClassDiagram, theme: &Theme) -> String {
         layout.add_edge(&rel.from, &rel.to, rel.label.as_deref());
     }
 
-    // Extract Sugiyama-positioned coordinates (with timeout — layout-rs can
-    // enter infinite loops on degenerate graphs).
-    let positions = match layout.layout_positions(std::time::Duration::from_secs(5)) {
-        Some(pos) => pos,
+    // Extract layout (with timeout — degenerate graphs can hang).
+    let result = match layout.layout_full(std::time::Duration::from_secs(5)) {
+        Some(r) => r,
         None => {
-            // Layout timed out or panicked — fall back to grid layout.
             return render_grid(diagram, cs);
         }
     };
 
     // Phase 2: Render with our own class boxes using layout positions.
-    render_with_positions(diagram, &positions, cs)
+    render_with_positions(diagram, &result.node_positions, &result.edge_paths, cs)
 }
 
 /// Render using Sugiyama layout positions from the layout engine.
 fn render_with_positions(
     diagram: &ClassDiagram,
     positions: &[rustuml_layout::graph::NodePosition],
+    edge_paths: &[EdgePath],
     cs: &crate::style::ClassStyle,
 ) -> String {
     if diagram.entities.is_empty() {
@@ -361,8 +360,35 @@ fn render_with_positions(
         }
     }
 
-    // Render relationships.
+    // Render relationships using bezier edge paths from Graphviz.
     for rel in &diagram.relationships {
+        let dashed = matches!(
+            rel.kind,
+            RelationshipKind::Dependency | RelationshipKind::Implementation
+        );
+
+        // Find the matching edge path from Graphviz layout.
+        let edge_path = edge_paths
+            .iter()
+            .find(|ep| ep.from == rel.from && ep.to == rel.to);
+
+        if let Some(ep) = edge_path
+            && !ep.points.is_empty()
+        {
+            // Render the bezier curve.
+            svg.bezier_path_with_arrow(&ep.points, &cs.arrow_color, dashed, 8.0);
+
+            // Render relationship decorations at the endpoint.
+            let last = ep.points.last().unwrap();
+            render_relationship_head(&mut svg, rel.kind, last.0, last.1);
+
+            // Labels: use first and last points for positioning.
+            let first = ep.points.first().unwrap();
+            render_relationship_labels(&mut svg, rel, first.0, first.1, last.0, last.1);
+            continue;
+        }
+
+        // Fallback to straight lines if no edge path available.
         let from_idx = diagram.entities.iter().position(|e| e.id == rel.from);
         let to_idx = diagram.entities.iter().position(|e| e.id == rel.to);
 
@@ -375,10 +401,6 @@ fn render_with_positions(
             let to_cx = tx + tw / 2.0;
             let to_top = ty;
 
-            let dashed = matches!(
-                rel.kind,
-                RelationshipKind::Dependency | RelationshipKind::Implementation
-            );
             svg.line_segment(from_cx, from_bottom, to_cx, to_top, &cs.arrow_color, dashed);
             render_relationship_head(&mut svg, rel.kind, to_cx, to_top);
             render_relationship_labels(&mut svg, rel, from_cx, from_bottom, to_cx, to_top);

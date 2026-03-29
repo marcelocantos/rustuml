@@ -3,7 +3,7 @@
 
 //! Use case diagram SVG renderer.
 
-use rustuml_layout::graph::{Direction, LayoutGraph};
+use rustuml_layout::graph::{Direction, EdgePath, LayoutGraph};
 use rustuml_parser::diagram::usecase::*;
 
 use crate::metrics;
@@ -49,7 +49,7 @@ pub fn render(diagram: &UseCaseDiagram, theme: &Theme) -> String {
     };
 
     // Try Sugiyama layout for actors + use cases.
-    let layout_positions = if total_actors > 0 || total_uc > 0 {
+    let layout_result = if total_actors > 0 || total_uc > 0 {
         let mut layout = LayoutGraph::new(Direction::LeftToRight);
         for actor in &diagram.actors {
             layout.add_node(&actor.id, &actor.label, actor_col_w, ACTOR_H);
@@ -62,20 +62,24 @@ pub fn render(diagram: &UseCaseDiagram, theme: &Theme) -> String {
         for conn in &diagram.connections {
             layout.add_edge(&conn.from, &conn.to, conn.label.as_deref());
         }
-        layout.layout_positions(std::time::Duration::from_secs(5))
+        layout.layout_full(std::time::Duration::from_secs(5))
     } else {
         None
     };
 
-    let total_nodes = total_actors + total_uc;
-    let use_sugiyama = layout_positions
+    let layout_positions = layout_result.as_ref().map(|r| &r.node_positions[..]);
+    let edge_paths: &[EdgePath] = layout_result
         .as_ref()
-        .is_some_and(|p| p.len() >= total_nodes);
+        .map(|r| r.edge_paths.as_slice())
+        .unwrap_or(&[]);
+
+    let total_nodes = total_actors + total_uc;
+    let use_sugiyama = layout_positions.is_some_and(|p| p.len() >= total_nodes);
 
     // Compute positions for actors and use cases.
     let max_items = total_actors.max(total_uc).max(1);
     let (total_w, total_h, actor_xy, uc_xy) = if use_sugiyama {
-        let lp = layout_positions.as_ref().unwrap();
+        let lp = layout_positions.unwrap();
         let axy: Vec<(f64, f64)> = lp
             .iter()
             .take(total_actors)
@@ -335,6 +339,32 @@ pub fn render(diagram: &UseCaseDiagram, theme: &Theme) -> String {
 
     // Draw connections.
     for conn in &diagram.connections {
+        let arrow_color = if ucs.arrow_color.is_empty() {
+            &gs.border_color
+        } else {
+            &ucs.arrow_color
+        };
+
+        // Try bezier path from layout engine first.
+        let edge_path = edge_paths
+            .iter()
+            .find(|ep| ep.from == conn.from && ep.to == conn.to);
+
+        if let Some(ep) = edge_path
+            && !ep.points.is_empty()
+        {
+            svg.bezier_path_with_arrow(&ep.points, arrow_color, false, 8.0);
+            if let Some(label) = &conn.label {
+                let first = ep.points.first().unwrap();
+                let last = ep.points.last().unwrap();
+                let mx = (first.0 + last.0) / 2.0;
+                let my = (first.1 + last.1) / 2.0;
+                svg.text(mx, my - 4.0, label, "middle", SMALL_FONT);
+            }
+            continue;
+        }
+
+        // Fallback to straight lines.
         let from = actor_positions
             .iter()
             .chain(uc_positions.iter())
@@ -344,11 +374,6 @@ pub fn render(diagram: &UseCaseDiagram, theme: &Theme) -> String {
             .chain(uc_positions.iter())
             .find(|(id, _, _)| *id == conn.to);
 
-        let arrow_color = if ucs.arrow_color.is_empty() {
-            &gs.border_color
-        } else {
-            &ucs.arrow_color
-        };
         if let (Some((_, fx, fy)), Some((_, tx, ty))) = (from, to) {
             svg.line_segment(*fx, *fy, *tx, *ty, arrow_color, false);
             if let Some(label) = &conn.label {
