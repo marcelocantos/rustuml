@@ -3,6 +3,7 @@
 
 //! Component diagram SVG renderer.
 
+use rustuml_layout::graph::{Direction, LayoutGraph};
 use rustuml_parser::diagram::component::*;
 
 use crate::metrics;
@@ -35,12 +36,40 @@ pub fn render(diagram: &ComponentDiagram, theme: &Theme) -> String {
             .to_string();
     }
 
-    let n = diagram.components.len();
-    let cols = if n == 0 {
-        1
+    // Try Sugiyama layout for flat components + interfaces.
+    let layout_positions = if !diagram.components.is_empty() || !diagram.interfaces.is_empty() {
+        let mut layout = LayoutGraph::new(Direction::TopToBottom);
+        // Add components as nodes.
+        for comp in &diagram.components {
+            let label_w = metrics::text_width(&comp.label, FONT_SIZE) + PADDING * 2.0;
+            let stereo_w = comp
+                .stereotypes
+                .first()
+                .map(|s| metrics::text_width(&format!("«{s}»"), SMALL_FONT) + PADDING * 2.0)
+                .unwrap_or(0.0);
+            let w = label_w.max(stereo_w).max(COMPONENT_MIN_W);
+            layout.add_node(&comp.id, &comp.label, w, COMPONENT_H);
+        }
+        // Add interfaces as nodes.
+        for iface in &diagram.interfaces {
+            layout.add_node(&iface.id, &iface.label, IFACE_R * 2.0 + 20.0, IFACE_H);
+        }
+        // Add connections as edges.
+        for conn in &diagram.connections {
+            layout.add_edge(&conn.from, &conn.to, conn.label.as_deref());
+        }
+        layout.layout_positions(std::time::Duration::from_secs(5))
     } else {
-        (n as f64).sqrt().ceil() as usize
+        None
     };
+
+    // Use Sugiyama positions if available, otherwise fall back to grid.
+    let n = diagram.components.len();
+    let n_ifaces = diagram.interfaces.len();
+    let total_nodes = n + n_ifaces;
+    let use_sugiyama = layout_positions
+        .as_ref()
+        .is_some_and(|p| p.len() >= total_nodes);
 
     let widths: Vec<f64> = diagram
         .components
@@ -56,30 +85,8 @@ pub fn render(diagram: &ComponentDiagram, theme: &Theme) -> String {
         })
         .collect();
 
-    let col_w: Vec<f64> = {
-        let mut cw = vec![0.0_f64; cols];
-        for (i, w) in widths.iter().enumerate() {
-            cw[i % cols] = cw[i % cols].max(*w);
-        }
-        cw
-    };
-    let rows = if n == 0 { 0 } else { n.div_ceil(cols) };
-    let comp_total_w = if n > 0 {
-        MARGIN * 2.0 + col_w.iter().sum::<f64>() + GAP * (cols.max(1) - 1) as f64
-    } else {
-        0.0
-    };
-    let comp_total_h = if n > 0 {
-        MARGIN * 2.0 + rows as f64 * (COMPONENT_H + GAP)
-    } else {
-        0.0
-    };
-
-    // Estimate space needed for interfaces (rendered below components).
-    let iface_count = diagram.interfaces.len();
-    let iface_total_h = if iface_count > 0 { IFACE_H + GAP } else { 0.0 };
-    let iface_total_w = if iface_count > 0 {
-        MARGIN * 2.0 + iface_count as f64 * (IFACE_R * 2.0 + GAP)
+    let title_h = if diagram.meta.title.is_some() {
+        TITLE_HEIGHT
     } else {
         0.0
     };
@@ -88,17 +95,111 @@ pub fn render(diagram: &ComponentDiagram, theme: &Theme) -> String {
     let pkg_total_w = estimate_packages_width(&diagram.packages);
     let pkg_total_h = estimate_packages_height(&diagram.packages);
 
-    let title_h = if diagram.meta.title.is_some() {
-        TITLE_HEIGHT
+    // Compute node positions (Sugiyama or grid fallback).
+    let (comp_positions, iface_xy, content_w, content_h) = if use_sugiyama {
+        let lp = layout_positions.as_ref().unwrap();
+        let mut cpos = Vec::new();
+        for (i, _comp) in diagram.components.iter().enumerate() {
+            let p = &lp[i];
+            cpos.push((p.x + MARGIN, p.y + MARGIN + title_h, widths[i]));
+        }
+        let mut ipos = Vec::new();
+        for (i, _iface) in diagram.interfaces.iter().enumerate() {
+            let p = &lp[n + i];
+            ipos.push((p.x + MARGIN + IFACE_R, p.y + MARGIN + title_h + IFACE_R));
+        }
+        let max_x = lp
+            .iter()
+            .enumerate()
+            .map(|(i, p)| {
+                p.x + if i < n {
+                    widths[i]
+                } else {
+                    IFACE_R * 2.0 + 20.0
+                }
+            })
+            .fold(0.0_f64, f64::max);
+        let max_y = lp
+            .iter()
+            .enumerate()
+            .map(|(i, p)| p.y + if i < n { COMPONENT_H } else { IFACE_H })
+            .fold(0.0_f64, f64::max);
+        (
+            cpos,
+            ipos,
+            max_x + MARGIN * 2.0,
+            max_y + MARGIN * 2.0 + title_h,
+        )
     } else {
-        0.0
+        // Grid fallback.
+        let cols = if n == 0 {
+            1
+        } else {
+            (n as f64).sqrt().ceil() as usize
+        };
+        let col_w: Vec<f64> = {
+            let mut cw = vec![0.0_f64; cols];
+            for (i, w) in widths.iter().enumerate() {
+                cw[i % cols] = cw[i % cols].max(*w);
+            }
+            cw
+        };
+        let rows = if n == 0 { 0 } else { n.div_ceil(cols) };
+        let comp_total_w = if n > 0 {
+            MARGIN * 2.0 + col_w.iter().sum::<f64>() + GAP * (cols.max(1) - 1) as f64
+        } else {
+            0.0
+        };
+        let comp_total_h = if n > 0 {
+            MARGIN * 2.0 + rows as f64 * (COMPONENT_H + GAP)
+        } else {
+            0.0
+        };
+
+        let y_start = title_h
+            + pkg_total_h
+            + if !diagram.packages.is_empty() {
+                GAP
+            } else {
+                0.0
+            };
+        let mut cpos = Vec::new();
+        for (i, _comp) in diagram.components.iter().enumerate() {
+            let col = i % cols;
+            let row = i / cols;
+            let x = MARGIN + col_w[..col].iter().sum::<f64>() + GAP * col as f64;
+            let y = y_start + row as f64 * (COMPONENT_H + GAP);
+            cpos.push((x, y, col_w[col]));
+        }
+
+        let iface_y_start = if n > 0 {
+            y_start + rows as f64 * (COMPONENT_H + GAP)
+        } else {
+            y_start
+        };
+        let mut ipos = Vec::new();
+        for (ii, _iface) in diagram.interfaces.iter().enumerate() {
+            let ix = MARGIN + ii as f64 * (IFACE_R * 2.0 + GAP) + IFACE_R;
+            let iy = iface_y_start + IFACE_R;
+            ipos.push((ix, iy));
+        }
+
+        let iface_total_h = if n_ifaces > 0 { IFACE_H + GAP } else { 0.0 };
+        let iface_total_w = if n_ifaces > 0 {
+            MARGIN * 2.0 + n_ifaces as f64 * (IFACE_R * 2.0 + GAP)
+        } else {
+            0.0
+        };
+        let cw = comp_total_w.max(iface_total_w);
+        let ch = comp_total_h + iface_total_h + title_h;
+        (cpos, ipos, cw, ch)
     };
-    let total_w = comp_total_w.max(pkg_total_w).max(iface_total_w).max(100.0);
-    let total_h = (comp_total_h + pkg_total_h + iface_total_h + title_h).max(50.0);
+
+    let total_w = content_w.max(pkg_total_w).max(100.0);
+    let total_h = (content_h + pkg_total_h).max(50.0);
 
     let mut svg = SvgBuilder::new(total_w, total_h);
     if let Some(title) = &diagram.meta.title {
-        // Multi-line title: render each line.
         for (i, tline) in title.lines().enumerate() {
             let ty = TITLE_HEIGHT - 4.0 + i as f64 * (TITLE_FONT_SIZE + 2.0);
             svg.text(total_w / 2.0, ty, tline, "middle", TITLE_FONT_SIZE);
@@ -110,20 +211,10 @@ pub fn render(diagram: &ComponentDiagram, theme: &Theme) -> String {
     let mut pkg_y = title_h + MARGIN;
     render_packages(&diagram.packages, &mut svg, MARGIN, &mut pkg_y, theme);
 
-    // Render flat components below the packages.
-    let y_start = pkg_y
-        + if !diagram.packages.is_empty() {
-            GAP
-        } else {
-            0.0
-        };
+    // Render flat components using computed positions.
     let mut positions = Vec::new();
     for (i, comp) in diagram.components.iter().enumerate() {
-        let col = i % cols;
-        let row = i / cols;
-        let x = MARGIN + col_w[..col].iter().sum::<f64>() + GAP * col as f64;
-        let y = y_start + row as f64 * (COMPONENT_H + GAP);
-        let w = col_w[col];
+        let (x, y, w) = comp_positions[i];
 
         if let Some(ref url) = comp.url {
             svg.open_link(url);
@@ -181,16 +272,10 @@ pub fn render(diagram: &ComponentDiagram, theme: &Theme) -> String {
         positions.push((x, y, w));
     }
 
-    // Render interfaces below components.
-    let iface_y_start = if n > 0 {
-        y_start + rows as f64 * (COMPONENT_H + GAP)
-    } else {
-        y_start
-    };
+    // Render interfaces using computed positions.
     let mut iface_positions: Vec<(f64, f64)> = Vec::new();
     for (ii, iface) in diagram.interfaces.iter().enumerate() {
-        let ix = MARGIN + ii as f64 * (IFACE_R * 2.0 + GAP) + IFACE_R;
-        let iy = iface_y_start + IFACE_R;
+        let (ix, iy) = iface_xy[ii];
         // Draw circle.
         svg.circle(ix, iy, IFACE_R, &cs.class_background, &cs.border_color);
         // Label below circle.

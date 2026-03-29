@@ -3,6 +3,7 @@
 
 //! Use case diagram SVG renderer.
 
+use rustuml_layout::graph::{Direction, LayoutGraph};
 use rustuml_parser::diagram::usecase::*;
 
 use crate::metrics;
@@ -31,8 +32,6 @@ pub fn render(diagram: &UseCaseDiagram, theme: &Theme) -> String {
 
     let actor_col_w = 80.0;
     let uc_col_w = UC_RX * 2.0 + 40.0;
-    let total_w = MARGIN * 2.0 + actor_col_w + GAP + uc_col_w;
-    let max_items = total_actors.max(total_uc).max(1);
     // Add space for title if present, and for notes.
     let title_h = if diagram.meta.title.is_some() {
         FONT_SIZE + 10.0
@@ -48,7 +47,97 @@ pub fn render(diagram: &UseCaseDiagram, theme: &Theme) -> String {
     } else {
         0.0
     };
-    let total_h = MARGIN * 2.0 + title_h + max_items as f64 * (ACTOR_H + GAP) + notes_h;
+
+    // Try Sugiyama layout for actors + use cases.
+    let layout_positions = if total_actors > 0 || total_uc > 0 {
+        let mut layout = LayoutGraph::new(Direction::LeftToRight);
+        for actor in &diagram.actors {
+            layout.add_node(&actor.id, &actor.label, actor_col_w, ACTOR_H);
+        }
+        for uc in &diagram.use_cases {
+            let text_w = metrics::text_width(&uc.label, FONT_SIZE);
+            let rx = (text_w / 2.0 + 20.0).max(UC_RX);
+            layout.add_node(&uc.id, &uc.label, rx * 2.0, UC_RY * 2.0);
+        }
+        for conn in &diagram.connections {
+            layout.add_edge(&conn.from, &conn.to, conn.label.as_deref());
+        }
+        layout.layout_positions(std::time::Duration::from_secs(5))
+    } else {
+        None
+    };
+
+    let total_nodes = total_actors + total_uc;
+    let use_sugiyama = layout_positions
+        .as_ref()
+        .is_some_and(|p| p.len() >= total_nodes);
+
+    // Compute positions for actors and use cases.
+    let max_items = total_actors.max(total_uc).max(1);
+    let (total_w, total_h, actor_xy, uc_xy) = if use_sugiyama {
+        let lp = layout_positions.as_ref().unwrap();
+        let axy: Vec<(f64, f64)> = lp
+            .iter()
+            .take(total_actors)
+            .map(|p| (p.x + MARGIN, p.y + MARGIN + title_h + ACTOR_H / 2.0))
+            .collect();
+        let uxy: Vec<(f64, f64)> = lp
+            .iter()
+            .skip(total_actors)
+            .take(total_uc)
+            .map(|p| (p.x + MARGIN, p.y + MARGIN + title_h + UC_RY))
+            .collect();
+        let max_x = lp
+            .iter()
+            .enumerate()
+            .map(|(i, p)| {
+                p.x + if i < total_actors {
+                    actor_col_w
+                } else {
+                    let uc = &diagram.use_cases[i - total_actors];
+                    let text_w = metrics::text_width(&uc.label, FONT_SIZE);
+                    (text_w / 2.0 + 20.0).max(UC_RX) * 2.0
+                }
+            })
+            .fold(0.0_f64, f64::max);
+        let max_y = lp
+            .iter()
+            .enumerate()
+            .map(|(i, p)| {
+                p.y + if i < total_actors {
+                    ACTOR_H
+                } else {
+                    UC_RY * 2.0
+                }
+            })
+            .fold(0.0_f64, f64::max);
+        let tw = max_x + MARGIN * 2.0;
+        let th = max_y + MARGIN * 2.0 + title_h + notes_h;
+        (tw, th, axy, uxy)
+    } else {
+        // Grid fallback: actors on left, use cases on right.
+        let tw = MARGIN * 2.0 + actor_col_w + GAP + uc_col_w;
+        let th = MARGIN * 2.0 + title_h + max_items as f64 * (ACTOR_H + GAP) + notes_h;
+        let actor_x = MARGIN + actor_col_w / 2.0;
+        let axy: Vec<(f64, f64)> = (0..total_actors)
+            .map(|i| {
+                (
+                    actor_x,
+                    MARGIN + title_h + i as f64 * (ACTOR_H + GAP) + ACTOR_H / 2.0,
+                )
+            })
+            .collect();
+        let uc_x = MARGIN + actor_col_w + GAP + uc_col_w / 2.0;
+        let uxy: Vec<(f64, f64)> = (0..total_uc)
+            .map(|i| {
+                (
+                    uc_x,
+                    MARGIN + title_h + i as f64 * (UC_RY * 2.0 + GAP) + UC_RY,
+                )
+            })
+            .collect();
+        (tw, th, axy, uxy)
+    };
 
     let mut svg = SvgBuilder::new(total_w, total_h);
     let gs = &theme.global;
@@ -76,9 +165,7 @@ pub fn render(diagram: &UseCaseDiagram, theme: &Theme) -> String {
     }
 
     // Render title.
-    let mut y_offset = 0.0;
     if let Some(title) = &diagram.meta.title {
-        y_offset = title_h;
         svg.text(
             total_w / 2.0,
             MARGIN / 2.0 + FONT_SIZE,
@@ -88,11 +175,10 @@ pub fn render(diagram: &UseCaseDiagram, theme: &Theme) -> String {
         );
     }
 
-    // Position actors on the left.
-    let actor_x = MARGIN + actor_col_w / 2.0;
+    // Position actors using computed positions.
     let mut actor_positions = Vec::new();
     for (i, actor) in diagram.actors.iter().enumerate() {
-        let y = MARGIN + y_offset + i as f64 * (ACTOR_H + GAP) + ACTOR_H / 2.0;
+        let (actor_x, y) = actor_xy[i];
         // Stick figure: head circle + body line + arms + legs.
         svg.circle(actor_x, y - 15.0, 8.0, "none", actor_border);
         svg.line_segment(actor_x, y - 7.0, actor_x, y + 10.0, actor_border, false);
@@ -122,14 +208,13 @@ pub fn render(diagram: &UseCaseDiagram, theme: &Theme) -> String {
     }
 
     // Pre-compute use case positions (needed for package bounding boxes).
-    let uc_x = MARGIN + actor_col_w + GAP + uc_col_w / 2.0;
     let uc_positions: Vec<(String, f64, f64)> = diagram
         .use_cases
         .iter()
         .enumerate()
         .map(|(i, uc)| {
-            let y = MARGIN + y_offset + i as f64 * (UC_RY * 2.0 + GAP) + UC_RY;
-            (uc.id.clone(), uc_x, y)
+            let (x, y) = uc_xy[i];
+            (uc.id.clone(), x, y)
         })
         .collect();
 
@@ -199,7 +284,7 @@ pub fn render(diagram: &UseCaseDiagram, theme: &Theme) -> String {
 
     // Draw use cases.
     for (i, uc) in diagram.use_cases.iter().enumerate() {
-        let y = MARGIN + y_offset + i as f64 * (UC_RY * 2.0 + GAP) + UC_RY;
+        let (uc_x, y) = uc_xy[i];
         let text_w = metrics::text_width(&uc.label, FONT_SIZE);
         let rx = (text_w / 2.0 + 20.0).max(UC_RX);
         svg.open_group("usecase");
@@ -276,7 +361,7 @@ pub fn render(diagram: &UseCaseDiagram, theme: &Theme) -> String {
 
     // Draw notes below the main diagram area.
     if !diagram.notes.is_empty() {
-        let diagram_h = MARGIN * 2.0 + title_h + max_items as f64 * (ACTOR_H + GAP);
+        let diagram_h = total_h - notes_h;
         let mut note_y = diagram_h + 10.0;
         for note in &diagram.notes {
             let note_x = MARGIN;

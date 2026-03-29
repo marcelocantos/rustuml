@@ -5,6 +5,7 @@
 
 use std::collections::{HashMap, HashSet};
 
+use rustuml_layout::graph::{Direction, LayoutGraph};
 use rustuml_parser::diagram::SpriteData;
 use rustuml_parser::diagram::deployment::*;
 
@@ -250,29 +251,6 @@ pub fn render(diagram: &DeploymentDiagram, theme: &Theme) -> String {
         .collect();
 
     let n = roots.len();
-    let cols = if n == 0 {
-        1
-    } else {
-        (n as f64).sqrt().ceil() as usize
-    };
-    let rows = if n == 0 { 0 } else { n.div_ceil(cols) };
-
-    let col_w: Vec<f64> = {
-        let mut cw = vec![0.0_f64; cols];
-        for (i, root) in roots.iter().enumerate() {
-            let (w, _) = node_size(&root.id, &diagram.nodes, sprites);
-            cw[i % cols] = cw[i % cols].max(w);
-        }
-        cw
-    };
-    let row_h: Vec<f64> = {
-        let mut rh = vec![0.0_f64; rows];
-        for (i, root) in roots.iter().enumerate() {
-            let (_, h) = node_size(&root.id, &diagram.nodes, sprites);
-            rh[i / cols] = rh[i / cols].max(h);
-        }
-        rh
-    };
 
     let title_h = if diagram.meta.title.is_some() {
         TITLE_HEIGHT
@@ -301,15 +279,85 @@ pub fn render(diagram: &DeploymentDiagram, theme: &Theme) -> String {
         })
         .sum();
 
-    let nodes_w = if col_w.is_empty() {
-        NODE_MIN_W
+    // Try Sugiyama layout for root nodes.
+    let layout_positions = if n > 0 {
+        let mut layout = LayoutGraph::new(Direction::TopToBottom);
+        for root in &roots {
+            let (w, h) = node_size(&root.id, &diagram.nodes, sprites);
+            layout.add_node(&root.id, &root.label, w, h);
+        }
+        for conn in &diagram.connections {
+            // Only add edges between root nodes (layout handles top-level positioning).
+            let from_is_root = roots.iter().any(|r| r.id == conn.from);
+            let to_is_root = roots.iter().any(|r| r.id == conn.to);
+            if from_is_root && to_is_root {
+                layout.add_edge(&conn.from, &conn.to, conn.label.as_deref());
+            }
+        }
+        layout.layout_positions(std::time::Duration::from_secs(5))
     } else {
-        col_w.iter().sum::<f64>() + GAP * cols.saturating_sub(1) as f64
+        None
     };
-    let nodes_h = if row_h.is_empty() {
-        0.0
+
+    let use_sugiyama = layout_positions.as_ref().is_some_and(|p| p.len() >= n);
+
+    // Compute root node positions (Sugiyama or grid fallback).
+    let (root_xy, nodes_w, nodes_h) = if use_sugiyama {
+        let lp = layout_positions.as_ref().unwrap();
+        let mut rxy = Vec::new();
+        let mut max_x = 0.0_f64;
+        let mut max_y = 0.0_f64;
+        for (i, root) in roots.iter().enumerate() {
+            let (w, h) = node_size(&root.id, &diagram.nodes, sprites);
+            rxy.push((lp[i].x + MARGIN, lp[i].y + MARGIN, w));
+            max_x = max_x.max(lp[i].x + w);
+            max_y = max_y.max(lp[i].y + h);
+        }
+        (rxy, max_x, max_y)
     } else {
-        row_h.iter().sum::<f64>() + GAP * rows.saturating_sub(1) as f64
+        // Grid fallback.
+        let cols = if n == 0 {
+            1
+        } else {
+            (n as f64).sqrt().ceil() as usize
+        };
+        let rows = if n == 0 { 0 } else { n.div_ceil(cols) };
+        let col_w: Vec<f64> = {
+            let mut cw = vec![0.0_f64; cols];
+            for (i, root) in roots.iter().enumerate() {
+                let (w, _) = node_size(&root.id, &diagram.nodes, sprites);
+                cw[i % cols] = cw[i % cols].max(w);
+            }
+            cw
+        };
+        let row_h: Vec<f64> = {
+            let mut rh = vec![0.0_f64; rows];
+            for (i, root) in roots.iter().enumerate() {
+                let (_, h) = node_size(&root.id, &diagram.nodes, sprites);
+                rh[i / cols] = rh[i / cols].max(h);
+            }
+            rh
+        };
+        let mut rxy = Vec::new();
+        for (i, _root) in roots.iter().enumerate() {
+            let col = i % cols;
+            let row = i / cols;
+            let x = MARGIN + col_w[..col].iter().sum::<f64>() + GAP * col as f64;
+            let y = MARGIN + row_h[..row].iter().sum::<f64>() + GAP * row as f64;
+            let w = col_w[col];
+            rxy.push((x, y, w));
+        }
+        let nw = if col_w.is_empty() {
+            NODE_MIN_W
+        } else {
+            col_w.iter().sum::<f64>() + GAP * cols.saturating_sub(1) as f64
+        };
+        let nh = if row_h.is_empty() {
+            0.0
+        } else {
+            row_h.iter().sum::<f64>() + GAP * rows.saturating_sub(1) as f64
+        };
+        (rxy, nw, nh)
     };
 
     let total_w = MARGIN * 2.0 + nodes_w.max(NOTE_W + 20.0);
@@ -358,11 +406,8 @@ pub fn render(diagram: &DeploymentDiagram, theme: &Theme) -> String {
     let content_top = header_h + title_h + MARGIN;
 
     for (i, root) in roots.iter().enumerate() {
-        let col = i % cols;
-        let row = i / cols;
-        let x = MARGIN + col_w[..col].iter().sum::<f64>() + GAP * col as f64;
-        let y = content_top + row_h[..row].iter().sum::<f64>() + GAP * row as f64;
-        let w = col_w[col];
+        let (x, y_off, w) = root_xy[i];
+        let y = content_top + y_off - MARGIN; // adjust since root_xy already includes MARGIN
         render_node(
             &root.id,
             &diagram.nodes,

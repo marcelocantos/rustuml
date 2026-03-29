@@ -3,8 +3,10 @@
 
 //! State diagram SVG renderer.
 
+use rustuml_layout::graph::{Direction, LayoutGraph};
 use rustuml_parser::diagram::state::*;
 
+use crate::metrics;
 use crate::style::Theme;
 use crate::svg::SvgBuilder;
 
@@ -130,22 +132,78 @@ pub fn render(diagram: &StateDiagram, theme: &Theme) -> String {
         .map(|n| note_box_width(&n.text) + NOTE_H_GAP)
         .fold(0.0_f64, f64::max);
 
-    let total_width =
-        MARGIN * 2.0 + left_note_space.max(H_GAP) + STATE_WIDTH + right_note_space.max(H_GAP);
-    let cx = MARGIN + left_note_space.max(H_GAP) + STATE_WIDTH / 2.0;
+    // Try Sugiyama layout.
+    let layout_positions = {
+        let mut layout = LayoutGraph::new(Direction::TopToBottom);
+        for id in &state_ids {
+            let state_def = diagram.states.iter().find(|s| s.id == *id);
+            let h = node_height(id, state_def);
+            let w = if is_pseudo_state(id) {
+                INITIAL_R * 2.0
+            } else {
+                let label = state_def.map_or(id.as_str(), |s| s.label.as_str());
+                metrics::text_width(label, FONT_SIZE).max(STATE_WIDTH)
+            };
+            layout.add_node(id, id, w, h);
+        }
+        for t in &diagram.transitions {
+            layout.add_edge(&t.from, &t.to, t.label.as_deref());
+        }
+        layout.layout_positions(std::time::Duration::from_secs(5))
+    };
+
+    let use_sugiyama = layout_positions
+        .as_ref()
+        .is_some_and(|p| p.len() >= state_ids.len());
 
     // Compute per-node heights and cumulative vertical positions.
     // Entry: (id, center_x, center_y, box_height)
-    let mut state_positions: Vec<(String, f64, f64, f64)> = Vec::new();
-    let mut y_cursor = title_h + MARGIN;
-    for id in &state_ids {
-        let state_def = diagram.states.iter().find(|s| s.id == *id);
-        let h = node_height(id, state_def);
-        let cy = y_cursor + h / 2.0;
-        state_positions.push((id.clone(), cx, cy, h));
-        y_cursor += h + V_GAP;
-    }
-    let total_height = y_cursor - V_GAP + MARGIN;
+    let (state_positions, total_width, total_height) = if use_sugiyama {
+        let lp = layout_positions.as_ref().unwrap();
+        let mut positions: Vec<(String, f64, f64, f64)> = Vec::new();
+        let mut max_x = 0.0_f64;
+        let mut max_y = 0.0_f64;
+        for (i, id) in state_ids.iter().enumerate() {
+            let state_def = diagram.states.iter().find(|s| s.id == *id);
+            let h = node_height(id, state_def);
+            let w = if is_pseudo_state(id) {
+                INITIAL_R * 2.0
+            } else {
+                let label = state_def.map_or(id.as_str(), |s| s.label.as_str());
+                metrics::text_width(label, FONT_SIZE).max(STATE_WIDTH)
+            };
+            let x = lp[i].x + MARGIN + left_note_space.max(H_GAP) + w / 2.0;
+            let y = lp[i].y + MARGIN + title_h + h / 2.0;
+            positions.push((id.clone(), x, y, h));
+            max_x = max_x.max(lp[i].x + w);
+            max_y = max_y.max(lp[i].y + h);
+        }
+        let tw = MARGIN * 2.0 + left_note_space.max(H_GAP) + max_x + right_note_space.max(H_GAP);
+        let th = max_y + MARGIN * 2.0 + title_h;
+        (positions, tw, th)
+    } else {
+        // Vertical stacking fallback.
+        let tw =
+            MARGIN * 2.0 + left_note_space.max(H_GAP) + STATE_WIDTH + right_note_space.max(H_GAP);
+        let cx = MARGIN + left_note_space.max(H_GAP) + STATE_WIDTH / 2.0;
+        let mut positions: Vec<(String, f64, f64, f64)> = Vec::new();
+        let mut y_cursor = title_h + MARGIN;
+        for id in &state_ids {
+            let state_def = diagram.states.iter().find(|s| s.id == *id);
+            let h = node_height(id, state_def);
+            let cy = y_cursor + h / 2.0;
+            positions.push((id.clone(), cx, cy, h));
+            y_cursor += h + V_GAP;
+        }
+        let th = y_cursor - V_GAP + MARGIN;
+        (positions, tw, th)
+    };
+
+    // Compute a representative center x for note placement.
+    let cx = state_positions
+        .first()
+        .map(|(_, x, _, _)| *x)
+        .unwrap_or(MARGIN + left_note_space.max(H_GAP) + STATE_WIDTH / 2.0);
 
     let mut svg = SvgBuilder::new(total_width, total_height);
 
