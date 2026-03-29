@@ -95,6 +95,22 @@ impl SvgBuilder {
         }
     }
 
+    /// Emit a text element with a specific fill colour.
+    pub fn text_colored(
+        &mut self,
+        x: f64,
+        y: f64,
+        content: &str,
+        anchor: &str,
+        font_size: f64,
+        color: &str,
+    ) {
+        let escaped = escape_xml(content);
+        self.line(&format!(
+            r#"<text x="{x}" y="{y}" text-anchor="{anchor}" font-family="sans-serif" font-size="{font_size}" fill="{color}">{escaped}</text>"#
+        ));
+    }
+
     /// Emit a text element with creole markup processed, but treating `__`
     /// markers as literal characters rather than underline markup.
     ///

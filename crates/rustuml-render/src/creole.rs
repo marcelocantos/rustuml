@@ -376,7 +376,7 @@ fn to_svg_tspans_inner(text: &str, skip_underline: bool) -> String {
             '[' if chars.peek() == Some(&'[') => {
                 // [[URL]] or [[URL label]] or [[URL|label]] — hyperlink.
                 chars.next(); // consume second '['
-                              // Collect until closing ']]'.
+                // Collect until closing ']]'.
                 let mut inner = String::new();
                 loop {
                     match chars.next() {
@@ -590,10 +590,11 @@ pub fn parse_line(line: &str) -> CreoleLine {
     }
 
     // Table row: starts with `|` and has at least one more `|`.
-    if trimmed.starts_with('|') && trimmed.len() > 1 {
-        if let Some(row) = parse_table_row(trimmed) {
-            return CreoleLine::Table(row);
-        }
+    if trimmed.starts_with('|')
+        && trimmed.len() > 1
+        && let Some(row) = parse_table_row(trimmed)
+    {
+        return CreoleLine::Table(row);
     }
 
     // Numbered list: `#`, `##`, etc.

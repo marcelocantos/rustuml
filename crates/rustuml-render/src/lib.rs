@@ -4,7 +4,11 @@
 //! SVG rendering for parsed PlantUML diagrams.
 
 pub mod activity;
+pub mod archimate;
 pub mod ascii;
+pub mod ascii_activity;
+pub mod ascii_class;
+pub mod ascii_state;
 pub mod board;
 pub mod class;
 pub mod component;
@@ -46,7 +50,10 @@ use style::Theme;
 pub fn render_ascii(diagram: &Diagram) -> String {
     match diagram {
         Diagram::Sequence(seq) => ascii::render_ascii(seq),
-        _ => String::from("# ASCII rendering is only supported for sequence diagrams.\n"),
+        Diagram::Class(cls) => ascii_class::render_ascii(cls),
+        Diagram::State(st) => ascii_state::render_ascii(st),
+        Diagram::Activity(act) => ascii_activity::render_ascii(act),
+        _ => String::from("# ASCII rendering is not yet supported for this diagram type.\n"),
     }
 }
 
@@ -98,5 +105,6 @@ fn render_with_theme(diagram: &Diagram, theme: &Theme) -> String {
         Diagram::Dot(d) => dot_diagram::render(d, theme),
         Diagram::Board(b) => board::render(b, theme),
         Diagram::Ebnf(e) => ebnf::render(e, theme),
+        Diagram::Archimate(a) => archimate::render(a, theme),
     }
 }

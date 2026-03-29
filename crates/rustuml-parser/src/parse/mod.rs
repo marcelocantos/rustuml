@@ -4,6 +4,7 @@
 //! Diagram parsing — turns preprocessed lines into diagram models.
 
 pub mod activity;
+pub mod archimate;
 pub mod board;
 pub mod class;
 pub mod component;
@@ -107,7 +108,7 @@ fn detect_type(input: &str) -> &str {
 /// For @startuml, detect the specific UML subtype by scanning ALL lines
 /// and counting indicator keywords. The type with the strongest signal wins.
 fn detect_uml_subtype(lines: &[String]) -> UmlSubtype {
-    let mut scores = [0i32; 9]; // Seq, Class, Object, State, Activity, Component, UseCase, Deployment, Timing
+    let mut scores = [0i32; 10]; // Seq, Class, Object, State, Activity, Component, UseCase, Deployment, Timing
 
     for line in lines {
         let trimmed = line.trim();
@@ -394,6 +395,10 @@ fn detect_uml_subtype(lines: &[String]) -> UmlSubtype {
         {
             scores[1] += 1; // weak class signal
         }
+        // Archimate -- preprocessor-expanded lines are unambiguous.
+        if trimmed.starts_with("archimate_element ") || trimmed.starts_with("archimate_rel ") {
+            scores[9] += 20;
+        }
     }
 
     let subtypes = [
@@ -406,6 +411,7 @@ fn detect_uml_subtype(lines: &[String]) -> UmlSubtype {
         UmlSubtype::UseCase,
         UmlSubtype::Deployment,
         UmlSubtype::Timing,
+        UmlSubtype::Archimate,
     ];
 
     // Find the highest-scoring subtype. On ties, prefer earlier entries
@@ -427,6 +433,7 @@ enum UmlSubtype {
     UseCase,
     Deployment,
     Timing,
+    Archimate,
 }
 
 /// A single extracted block from a multi-block PlantUML file.
@@ -666,6 +673,10 @@ pub fn parse_with_base(
             UmlSubtype::Timing => {
                 let td = timing::parse_timing(&lines)?;
                 Ok(Diagram::Timing(td))
+            }
+            UmlSubtype::Archimate => {
+                let arch = archimate::parse_archimate(&lines)?;
+                Ok(Diagram::Archimate(arch))
             }
         },
         "json" => {
