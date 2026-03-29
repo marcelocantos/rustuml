@@ -288,12 +288,22 @@ impl SeqParser {
             let arrow = parse_arrow(arrow_str);
             let activation = activation_str.map(parse_activation);
 
-            let from = self.ensure_participant(&from_raw);
-            let to = self.ensure_participant(&to_raw);
+            // Ensure participants in textual order (left-to-right as written)
+            // so the participant list preserves declaration order.
+            let left_id = self.ensure_participant(&from_raw);
+            let right_id = self.ensure_participant(&to_raw);
+
+            // For left-pointing arrows (Alice <- Bob), swap from/to so that
+            // from=sender(Bob), to=receiver(Alice), matching PlantUML semantics.
+            let (from_id, to_id) = if arrow.direction == ArrowDirection::RightToLeft {
+                (right_id, left_id)
+            } else {
+                (left_id, right_id)
+            };
 
             self.events.push(Event::Message(Message {
-                from,
-                to,
+                from: from_id,
+                to: to_id,
                 label,
                 arrow,
                 activation,
