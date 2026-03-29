@@ -4,6 +4,7 @@
 //! SVG rendering for parsed PlantUML diagrams.
 
 pub mod activity;
+pub mod archimate;
 pub mod ascii;
 pub mod board;
 pub mod class;
@@ -98,5 +99,6 @@ fn render_with_theme(diagram: &Diagram, theme: &Theme) -> String {
         Diagram::Dot(d) => dot_diagram::render(d, theme),
         Diagram::Board(b) => board::render(b, theme),
         Diagram::Ebnf(e) => ebnf::render(e, theme),
+        Diagram::Archimate(a) => archimate::render(a, theme),
     }
 }

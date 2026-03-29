@@ -1790,20 +1790,19 @@ impl PreprocessContext {
         });
 
         if let Some(caps) = REL_RE.captures(line) {
+            let rel_kind = &caps[1];
             let from = &caps[2];
             let to = &caps[3];
-            let label = caps[4].trim();
-            if label.is_empty() {
-                return Some(format!("{from} --> {to}"));
-            } else {
-                return Some(format!("{from} --> {to} : {label}"));
-            }
+            let label = &caps[4];
+            return Some(format!("archimate_rel {rel_kind} {from} {to} \"{label}\""));
         }
 
         if let Some(caps) = ELEM_RE.captures(line) {
+            let layer = &caps[1];
+            let kind = &caps[2];
             let id = &caps[3];
             let label = &caps[4];
-            return Some(format!("rectangle \"{label}\" as {id}"));
+            return Some(format!("archimate_element {layer} {kind} {id} \"{label}\""));
         }
 
         None
