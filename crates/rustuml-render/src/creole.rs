@@ -373,6 +373,11 @@ fn to_svg_tspans_inner(text: &str, skip_underline: bool) -> String {
                         )
                         .unwrap();
                     }
+                    _ if tag.starts_with("&amp;") || tag.starts_with('&') => {
+                        // OpenIconic icon reference `<&name>` — strip silently.
+                        // Actual rendering is handled at the SVG builder level via
+                        // segment-based text rendering (text_with_icons).
+                    }
                     _ if tag.starts_with('/') => {
                         // Unknown closing tag — emit escaped so text isn't silently dropped.
                         let escaped_tag = escape_creole_text(&tag);
@@ -1287,5 +1292,21 @@ mod tests {
     fn color_tag_uppercase() {
         let result = to_svg_tspans("<COLOR:blue>text</color>");
         assert_eq!(result, "<tspan fill=\"blue\">text</tspan>");
+    }
+
+    #[test]
+    fn openiconic_stripped_in_creole() {
+        // OpenIconic references are silently stripped in creole processing.
+        // Actual rendering happens at the SVG builder level.
+        let result = to_svg_tspans("before <&heart> after");
+        assert_eq!(result, "before  after");
+    }
+
+    #[test]
+    fn openiconic_with_markup() {
+        let result = to_svg_tspans("**bold** <&check>");
+        assert!(result.contains("font-weight=\"bold\""));
+        // Icon reference should be stripped, not rendered as escaped text.
+        assert!(!result.contains("&amp;check"));
     }
 }

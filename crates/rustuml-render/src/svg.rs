@@ -60,6 +60,14 @@ impl SvgBuilder {
     }
 
     pub fn text(&mut self, x: f64, y: f64, content: &str, anchor: &str, font_size: f64) {
+        // OpenIconic `<&name>` icons require segment-based rendering since SVG
+        // `<path>` elements cannot appear inside `<text>`.  Route through the
+        // segment renderer when any icon reference is present.
+        if content.contains("<&") {
+            self.text_with_icons(x, y, content, anchor, font_size);
+            return;
+        }
+
         // Check for creole markup: markers must appear at least twice (balanced pair)
         // or HTML tags must be present, to avoid false positives in arrow labels.
         let has_creole = (content.matches("**").count() >= 2)
@@ -124,6 +132,12 @@ impl SvgBuilder {
         anchor: &str,
         font_size: f64,
     ) {
+        // Route OpenIconic references through segment-based rendering.
+        if content.contains("<&") {
+            self.text_with_icons(x, y, content, anchor, font_size);
+            return;
+        }
+
         // Same has_creole check as text(), but underline markers detected solely
         // to decide whether processing is needed (not to trigger underline rendering).
         let has_creole = (content.matches("**").count() >= 2)
@@ -341,14 +355,13 @@ impl SvgBuilder {
     ) -> f64 {
         use crate::metrics;
 
-        // If no sprite references, fall through to the ordinary text renderer.
-        if !content.contains("<$") {
+        // If no sprite or icon references, fall through to the ordinary text renderer.
+        if !content.contains("<$") && !content.contains("<&") {
             self.text(x, y, content, anchor, font_size);
             return metrics::text_width(content, font_size);
         }
 
-        // Parse segments: alternate text and sprite references.
-        // Each sprite ref is `<$name>` optionally followed by spaces.
+        // Parse segments: alternate text, sprite, and OpenIconic references.
         let segments = crate::sprite::parse_sprite_segments(content);
 
         // Measure total width.
@@ -387,11 +400,126 @@ impl SvgBuilder {
                         cx += iw + 1.0; // 1px gap after sprite
                     }
                 }
+                crate::sprite::TextSegment::OpenIcon(name) => {
+                    cx += self.emit_openiconic_icon(cx, baseline_y, name, font_size);
+                }
                 _ => {}
             }
         }
 
         total_w
+    }
+
+    /// Render text that contains `<&icon>` OpenIconic references but no sprites.
+    ///
+    /// Splits at `<&name>` boundaries and emits alternating `<text>` and
+    /// `<path>` elements.  Text segments are processed through the creole parser
+    /// for inline markup support.
+    fn text_with_icons(&mut self, x: f64, y: f64, content: &str, anchor: &str, font_size: f64) {
+        use crate::metrics;
+
+        let segments = crate::sprite::parse_sprite_segments(content);
+        let empty_sprites = std::collections::HashMap::new();
+        let total_w = crate::sprite::measure_segments(&segments, font_size, &empty_sprites);
+
+        let start_x = match anchor {
+            "middle" => x - total_w / 2.0,
+            "end" => x - total_w,
+            _ => x,
+        };
+
+        let mut cx = start_x;
+        let baseline_y = y;
+
+        for seg in &segments {
+            match seg {
+                crate::sprite::TextSegment::Text(t) if !t.is_empty() => {
+                    let w = metrics::text_width(t, font_size);
+                    // Process creole markup in text segments.
+                    let has_creole = Self::has_creole_markup(t);
+                    if has_creole {
+                        let rich = crate::creole::to_svg_tspans(t);
+                        self.line(&format!(
+                            r#"<text x="{cx}" y="{baseline_y}" text-anchor="start" font-family="sans-serif" font-size="{font_size}">{rich}</text>"#
+                        ));
+                    } else {
+                        let escaped = escape_xml(t);
+                        self.line(&format!(
+                            r#"<text x="{cx}" y="{baseline_y}" text-anchor="start" font-family="sans-serif" font-size="{font_size}">{escaped}</text>"#
+                        ));
+                    }
+                    cx += w;
+                }
+                crate::sprite::TextSegment::OpenIcon(name) => {
+                    cx += self.emit_openiconic_icon(cx, baseline_y, name, font_size);
+                }
+                _ => {}
+            }
+        }
+    }
+
+    /// Check whether text contains creole markup that needs processing.
+    fn has_creole_markup(content: &str) -> bool {
+        (content.matches("**").count() >= 2)
+            || (content.matches("//").count() >= 2)
+            || (content.matches("--").count() >= 2)
+            || (content.matches("__").count() >= 2)
+            || (content.matches("~~").count() >= 2)
+            || (content.matches("\"\"").count() >= 2)
+            || content.contains('`')
+            || content.contains('~')
+            || content.contains("<b>")
+            || content.contains("<i>")
+            || content.contains("<u>")
+            || content.contains("<s>")
+            || content.contains("<del>")
+            || content.contains("<color:")
+            || content.contains("<size:")
+            || content.contains("<font")
+            || content.contains("<back:")
+            || content.contains("<mono>")
+            || content.contains("<img:")
+            || content.contains("[[")
+    }
+
+    /// Emit an OpenIconic icon as an SVG `<path>` element.
+    ///
+    /// The icon is scaled to match `font_size` and positioned at `(x, baseline_y)`
+    /// with vertical centring on the text baseline.
+    ///
+    /// Returns the horizontal advance (icon width + gap) so the caller can
+    /// advance the cursor.
+    fn emit_openiconic_icon(&mut self, x: f64, baseline_y: f64, name: &str, font_size: f64) -> f64 {
+        if let Some(icon) = crate::openiconic::lookup(name) {
+            let scale = font_size / icon.height;
+            let iw = icon.width * scale;
+            let ih = icon.height * scale;
+            // Position: top-left of the icon area, vertically centred on the baseline.
+            let ix = x;
+            let iy = baseline_y - ih * 0.75;
+            // SVG transforms apply right-to-left:
+            // 1. translate by icon's internal offset (in icon coordinate space)
+            // 2. scale from icon space (8x8) to pixel space
+            // 3. translate to final position on the canvas
+            let has_icon_translate =
+                icon.translate_x.abs() > f64::EPSILON || icon.translate_y.abs() > f64::EPSILON;
+            if has_icon_translate {
+                self.line(&format!(
+                    r##"<path d="{path}" transform="translate({ix},{iy}) scale({scale}) translate({itx},{ity})" fill="#000"/>"##,
+                    path = icon.path_d,
+                    itx = icon.translate_x,
+                    ity = icon.translate_y,
+                ));
+            } else {
+                self.line(&format!(
+                    r##"<path d="{path}" transform="translate({ix},{iy}) scale({scale})" fill="#000"/>"##,
+                    path = icon.path_d,
+                ));
+            }
+            iw + 1.0 // 1px gap
+        } else {
+            0.0
+        }
     }
 
     /// Render a legend box from PlantUML formatted content.
@@ -769,6 +897,44 @@ mod tests {
         svg.quadratic_path(&[(0.0, 0.0)], "#000", false);
         let output = svg.finalize();
         assert!(!output.contains("<path"));
+    }
+
+    #[test]
+    fn text_with_openiconic_emits_path() {
+        let mut svg = SvgBuilder::new(200.0, 50.0);
+        svg.text(50.0, 25.0, "<&heart> Love", "start", 13.0);
+        let output = svg.finalize();
+        // Should emit a <path> element for the heart icon.
+        assert!(
+            output.contains("<path d="),
+            "expected icon path in: {output}"
+        );
+        assert!(
+            output.contains("fill=\"#000\""),
+            "expected fill in: {output}"
+        );
+        // Should also emit the text "Love".
+        assert!(output.contains("Love"), "expected text in: {output}");
+    }
+
+    #[test]
+    fn text_without_icon_no_path() {
+        let mut svg = SvgBuilder::new(200.0, 50.0);
+        svg.text(50.0, 25.0, "Hello world", "start", 13.0);
+        let output = svg.finalize();
+        assert!(
+            !output.contains("<path d="),
+            "no icon path expected in: {output}"
+        );
+    }
+
+    #[test]
+    fn text_with_unknown_icon_renders_text() {
+        let mut svg = SvgBuilder::new(200.0, 50.0);
+        svg.text(50.0, 25.0, "<&nonexistent> Text", "start", 13.0);
+        let output = svg.finalize();
+        // Unknown icon produces no path, but text still renders.
+        assert!(output.contains("Text"), "expected text in: {output}");
     }
 }
 

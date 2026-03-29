@@ -158,45 +158,62 @@ pub fn sprite_dimensions(sprite: &SpriteData) -> (u32, u32) {
     (width, height)
 }
 
-/// A segment of text that may contain sprite references.
+/// A segment of text that may contain sprite or OpenIconic references.
 #[derive(Debug, Clone, PartialEq)]
 pub enum TextSegment {
-    /// Plain text (no sprite reference).
+    /// Plain text (no sprite/icon reference).
     Text(String),
     /// A sprite reference `<$name>`.
     Sprite(String),
+    /// An OpenIconic icon reference `<&name>`.
+    OpenIcon(String),
 }
 
-/// Parse a string into alternating text and sprite segments.
+/// Parse a string into alternating text, sprite, and OpenIconic segments.
 ///
 /// `<$name>` references are split out as `TextSegment::Sprite(name)`.
+/// `<&name>` references are split out as `TextSegment::OpenIcon(name)`.
 /// Everything else (including leading/trailing spaces) is `TextSegment::Text`.
 pub fn parse_sprite_segments(text: &str) -> Vec<TextSegment> {
     let mut segments = Vec::new();
     let mut rest = text;
 
     while !rest.is_empty() {
-        if let Some(start) = rest.find("<$") {
-            // Text before the sprite ref.
-            if start > 0 {
-                segments.push(TextSegment::Text(rest[..start].to_string()));
-            }
-            let after = &rest[start + 2..]; // skip "<$"
-            if let Some(end) = after.find('>') {
-                let name = &after[..end];
-                segments.push(TextSegment::Sprite(name.to_string()));
-                rest = &after[end + 1..];
-                // Skip a single trailing space after sprite ref (matches PlantUML behaviour).
-                if rest.starts_with(' ') {
-                    rest = &rest[1..];
-                }
-            } else {
-                // No closing '>'; treat the rest as text.
+        // Find the earliest sprite `<$` or OpenIconic `<&` reference.
+        let sprite_pos = rest.find("<$");
+        let icon_pos = rest.find("<&");
+
+        // Pick whichever comes first, or None if neither exists.
+        let (start, prefix_len, is_icon) = match (sprite_pos, icon_pos) {
+            (Some(s), Some(i)) if i < s => (i, 2, true),
+            (Some(s), _) => (s, 2, false),
+            (None, Some(i)) => (i, 2, true),
+            (None, None) => {
                 segments.push(TextSegment::Text(rest.to_string()));
                 break;
             }
+        };
+
+        // Text before the reference.
+        if start > 0 {
+            segments.push(TextSegment::Text(rest[..start].to_string()));
+        }
+        let after = &rest[start + prefix_len..]; // skip "<$" or "<&"
+        if let Some(end) = after.find('>') {
+            let name = &after[..end];
+            if is_icon {
+                segments.push(TextSegment::OpenIcon(name.to_string()));
+            } else {
+                segments.push(TextSegment::Sprite(name.to_string()));
+            }
+            rest = &after[end + 1..];
+            // Skip a single trailing space after the reference (matches PlantUML behaviour).
+            if rest.starts_with(' ') {
+                rest = &rest[1..];
+            }
         } else {
-            segments.push(TextSegment::Text(rest.to_string()));
+            // No closing '>'; treat from the marker onwards as text.
+            segments.push(TextSegment::Text(rest[start..].to_string()));
             break;
         }
     }
@@ -225,6 +242,14 @@ pub fn measure_segments(
                     total += w as f64 + 1.0; // 1px gap
                 }
             }
+            TextSegment::OpenIcon(name) => {
+                if let Some(icon) = crate::openiconic::lookup(name) {
+                    // Scale icon to match text size.  The icon viewBox is 8x8;
+                    // PlantUML scales it proportionally to the font size.
+                    let scale = font_size / icon.height;
+                    total += icon.width * scale + 1.0; // 1px gap
+                }
+            }
         }
     }
     total
@@ -239,7 +264,7 @@ pub fn text_width_with_sprites(
     font_size: f64,
     sprites: &HashMap<String, SpriteData>,
 ) -> f64 {
-    if !text.contains("<$") {
+    if !text.contains("<$") && !text.contains("<&") {
         return crate::metrics::text_width(text, font_size);
     }
     let segments = parse_sprite_segments(text);
@@ -321,5 +346,62 @@ mod tests {
         let cache = SpriteCache::from_sprites(&map);
         assert!(cache.get("test").is_some());
         assert!(cache.get("missing").is_none());
+    }
+
+    #[test]
+    fn parse_openiconic_segment() {
+        let segs = parse_sprite_segments("Hello <&heart> world");
+        assert_eq!(
+            segs,
+            vec![
+                TextSegment::Text("Hello ".to_string()),
+                TextSegment::OpenIcon("heart".to_string()),
+                TextSegment::Text("world".to_string()),
+            ]
+        );
+    }
+
+    #[test]
+    fn parse_mixed_sprite_and_icon() {
+        let segs = parse_sprite_segments("<$disk> <&check> done");
+        assert_eq!(
+            segs,
+            vec![
+                TextSegment::Sprite("disk".to_string()),
+                TextSegment::OpenIcon("check".to_string()),
+                TextSegment::Text("done".to_string()),
+            ]
+        );
+    }
+
+    #[test]
+    fn parse_icon_only() {
+        let segs = parse_sprite_segments("<&folder>");
+        assert_eq!(segs, vec![TextSegment::OpenIcon("folder".to_string()),]);
+    }
+
+    #[test]
+    fn parse_icon_no_closing_bracket() {
+        let segs = parse_sprite_segments("text <&broken");
+        assert_eq!(
+            segs,
+            vec![
+                TextSegment::Text("text ".to_string()),
+                TextSegment::Text("<&broken".to_string()),
+            ]
+        );
+    }
+
+    #[test]
+    fn measure_includes_icon_width() {
+        let segs = vec![
+            TextSegment::Text("Hi ".to_string()),
+            TextSegment::OpenIcon("heart".to_string()),
+        ];
+        let empty = HashMap::new();
+        let w = measure_segments(&segs, 13.0, &empty);
+        let text_w = crate::metrics::text_width("Hi ", 13.0);
+        // Icon should add positive width beyond just the text.
+        assert!(w > text_w, "width {w} should exceed text-only {text_w}");
     }
 }

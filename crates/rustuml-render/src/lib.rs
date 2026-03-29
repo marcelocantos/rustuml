@@ -26,6 +26,7 @@ pub mod metrics;
 pub mod mindmap;
 pub mod nwdiag;
 pub mod object;
+pub mod openiconic;
 pub mod pdf;
 pub mod png;
 pub mod regex_diagram;
