@@ -99,7 +99,7 @@ impl ClassParser {
                 members: Vec::new(),
                 stereotypes: Vec::new(),
                 url: None,
-                source_line: 0,
+                source_line: self.current_line,
             });
         }
         id
@@ -406,7 +406,7 @@ impl ClassParser {
                     members: Vec::new(),
                     stereotypes,
                     url: url.clone(),
-                    source_line: 0,
+                    source_line: self.current_line,
                 });
             }
 
@@ -444,7 +444,7 @@ impl ClassParser {
                     members: Vec::new(),
                     stereotypes: Vec::new(),
                     url: None,
-                    source_line: 0,
+                    source_line: self.current_line,
                 });
             }
             if line.ends_with('{') {
@@ -493,7 +493,7 @@ impl ClassParser {
                 label,
                 from_multiplicity: from_mult,
                 to_multiplicity: to_mult,
-                source_line: 0,
+                source_line: self.current_line,
             });
             return true;
         }
@@ -515,7 +515,7 @@ impl ClassParser {
                 label,
                 from_multiplicity: None,
                 to_multiplicity: None,
-                source_line: 0,
+                source_line: self.current_line,
             });
             return true;
         }
@@ -540,7 +540,7 @@ impl ClassParser {
                     members: Vec::new(),
                     stereotypes: Vec::new(),
                     url: None,
-                    source_line: 0,
+                    source_line: self.current_line,
                 });
             }
             let from = self.ensure_entity(&from_raw);
@@ -551,7 +551,7 @@ impl ClassParser {
                 label: None,
                 from_multiplicity: None,
                 to_multiplicity: None,
-                source_line: 0,
+                source_line: self.current_line,
             });
             return true;
         }
@@ -802,7 +802,7 @@ impl ClassParser {
                         members: vec![member],
                         stereotypes: Vec::new(),
                         url: None,
-                        source_line: 0,
+                        source_line: self.current_line,
                     });
                 }
             }

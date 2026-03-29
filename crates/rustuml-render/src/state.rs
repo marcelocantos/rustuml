@@ -519,12 +519,13 @@ pub fn render(diagram: &StateDiagram, theme: &Theme) -> String {
     // Render entities.
     for (id, cx, cy, bw, bh) in &positions {
         if id == "__start__" {
-            // Start pseudo-state.
+            // Start pseudo-state — use the source_line from the first transition
+            // originating from [*].
             let source_line = diagram
                 .transitions
                 .iter()
-                .position(|t| t.from == "[*]")
-                .map(|i| i + 1)
+                .find(|t| t.from == "[*]")
+                .map(|t| t.source_line)
                 .unwrap_or(1);
             write!(
                 svg,
@@ -541,12 +542,14 @@ pub fn render(diagram: &StateDiagram, theme: &Theme) -> String {
             .unwrap();
             svg.push_str("</g>");
         } else if id == "__end__" {
-            // End pseudo-state.
+            // End pseudo-state — use the source_line from the last transition
+            // targeting [*].
             let source_line = diagram
                 .transitions
                 .iter()
-                .rposition(|t| t.to == "[*]")
-                .map(|i| i + 1)
+                .rev()
+                .find(|t| t.to == "[*]")
+                .map(|t| t.source_line)
                 .unwrap_or(1);
             write!(
                 svg,
@@ -904,13 +907,8 @@ pub fn render(diagram: &StateDiagram, theme: &Theme) -> String {
         let from_ent = ent_id_of(&from_layout);
         let to_ent = ent_id_of(&to_layout);
 
-        // Determine source line (1-indexed position in transitions list).
-        let source_line = diagram
-            .transitions
-            .iter()
-            .position(|tr| std::ptr::eq(tr, t))
-            .map(|i| i + 1)
-            .unwrap_or(1);
+        // Use the parser-provided source line from the transition model.
+        let source_line = t.source_line;
 
         write!(
             svg,
@@ -1084,6 +1082,7 @@ mod tests {
                     kind: StateKind::Normal,
                     descriptions: vec![],
                     substates: vec![],
+                    source_line: 0,
                 },
                 State {
                     id: "Inactive".into(),
@@ -1091,6 +1090,7 @@ mod tests {
                     kind: StateKind::Normal,
                     descriptions: vec![],
                     substates: vec![],
+                    source_line: 0,
                 },
             ],
             transitions: vec![
@@ -1098,11 +1098,13 @@ mod tests {
                     from: "[*]".into(),
                     to: "Active".into(),
                     label: None,
+                    source_line: 0,
                 },
                 Transition {
                     from: "Active".into(),
                     to: "Inactive".into(),
                     label: Some("disable".into()),
+                    source_line: 0,
                 },
             ],
             notes: vec![],

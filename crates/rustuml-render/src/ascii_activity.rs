@@ -347,6 +347,7 @@ mod tests {
             ActivityStep::If(IfBlock {
                 condition: "x > 0".to_string(),
                 then_label: Some("yes".to_string()),
+                source_line: 0,
             }),
             ActivityStep::Action("Positive".to_string()),
             ActivityStep::Else(Some("no".to_string())),

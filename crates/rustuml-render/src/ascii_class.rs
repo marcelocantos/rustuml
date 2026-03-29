@@ -268,6 +268,7 @@ mod tests {
             members,
             stereotypes: vec![],
             url: None,
+            source_line: 0,
         }
     }
 
@@ -328,6 +329,7 @@ mod tests {
                 label: None,
                 from_multiplicity: None,
                 to_multiplicity: None,
+                source_line: 0,
             }],
         );
         let out = render_ascii(&diagram);

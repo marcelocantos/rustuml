@@ -169,7 +169,12 @@ impl StateParser {
             let from = self.ensure_state(&caps[1]);
             let to = self.ensure_state(&caps[2]);
             let label = caps.get(3).map(|m| m.as_str().trim().to_string());
-            self.transitions.push(Transition { from, to, label, source_line: self.current_line });
+            self.transitions.push(Transition {
+                from,
+                to,
+                label,
+                source_line: self.current_line,
+            });
             true
         } else {
             false

@@ -53,9 +53,24 @@ const BOX_TEXT_X_PAD: f64 = 7.0;
 const BOX_TEXT_Y_OFFSET: f64 = 20.53515; // baseline from box top (tuned to match PlantUML's Java double arithmetic at various y positions)
 const PARTICIPANT_FONT_SIZE: f64 = 14.0;
 const MSG_FONT_SIZE: f64 = 13.0;
-const MSG_STEP: f64 = 29.31055; // vertical spacing between messages (tuned to match PlantUML's accumulated y values)
-const FIRST_MSG_OFFSET: f64 = 31.3105; // first msg y from lifeline top
+/// Text height at message font size (ascent + descent from Java AWT LineMetrics).
+const MSG_TEXT_HEIGHT: f64 = 15.310546875; // plantuml_metrics::text_height(13.0)
+/// Base vertical step between messages (no label text).
+const MSG_BASE_STEP: f64 = 14.0;
+/// Base first-message offset from lifeline top (no label text).
+const MSG_BASE_FIRST_OFFSET: f64 = 16.0;
 const TAIL_GAP: f64 = 17.0; // gap from last msg y to tail box y
+
+/// Compute the vertical step for a message event.
+/// Messages with label text get extra height for the text line.
+fn msg_step(has_text: bool) -> f64 {
+    MSG_BASE_STEP + if has_text { MSG_TEXT_HEIGHT } else { 0.0 }
+}
+
+/// Compute the first-message offset from lifeline top.
+fn first_msg_offset(has_text: bool) -> f64 {
+    MSG_BASE_FIRST_OFFSET + if has_text { MSG_TEXT_HEIGHT } else { 0.0 }
+}
 const LIFELINE_Y_OFFSET: f64 = 1.0; // lifeline starts 1px below head box
 const RIGHT_MARGIN: f64 = 10.0; // right margin beyond last box
 const BOTTOM_MARGIN: f64 = 7.0; // bottom margin below tail box
@@ -870,16 +885,8 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme) -> String {
     };
 
     // -----------------------------------------------------------------------
-    // Phase 4: Count messages and compute vertical dimensions
+    // Phase 4: Pre-compute y positions for each event and vertical dimensions
     // -----------------------------------------------------------------------
-
-    let mut msg_count: u32 = 0;
-    for event in &diagram.events {
-        match event {
-            Event::Message(_) | Event::Return(_) => msg_count += 1,
-            _ => {}
-        }
-    }
 
     // Use the maximum box height across all participants
     let max_box_h = participants
@@ -888,11 +895,65 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme) -> String {
         .fold(HEAD_BOX_H, f64::max);
     let lifeline_top = HEAD_BOX_Y + max_box_h + LIFELINE_Y_OFFSET;
 
+    // Pre-compute message y positions. PlantUML sizes each message step
+    // dynamically: messages with label text get extra height for the text line.
+    let mut event_y_positions: Vec<f64> = Vec::new();
+    let mut msg_count: u32 = 0;
+    {
+        let mut y = lifeline_top;
+        for event in &diagram.events {
+            let has_text = match event {
+                Event::Message(msg) => {
+                    let label = process_label(&msg.label);
+                    !label.is_empty()
+                }
+                Event::Return(ret) => !ret.label.is_empty(),
+                Event::Divider(_) => true,
+                Event::Delay(t) => t.is_some(),
+                _ => false,
+            };
+            match event {
+                Event::Message(_) | Event::Return(_) => {
+                    if msg_count == 0 {
+                        y += first_msg_offset(has_text);
+                    } else {
+                        y += msg_step(has_text);
+                    }
+                    event_y_positions.push(y);
+                    msg_count += 1;
+                }
+                Event::Divider(_) | Event::Delay(_) => {
+                    if msg_count == 0 {
+                        y += first_msg_offset(has_text);
+                    } else {
+                        y += msg_step(has_text);
+                    }
+                    event_y_positions.push(y);
+                    msg_count += 1;
+                }
+                Event::Space(px_opt) => {
+                    y += px_opt.map(|p| p as f64).unwrap_or(20.0);
+                    event_y_positions.push(y);
+                }
+                Event::Activate(_) | Event::Deactivate(_) => {
+                    event_y_positions.push(y);
+                }
+                _ => {
+                    event_y_positions.push(y);
+                }
+            }
+        }
+    }
+
     // Compute tail box y based on message count.
     // With 0 messages, PlantUML uses a minimum lifeline height of 20px.
     // With messages, the tail starts TAIL_GAP below the last message.
+    let last_msg_y = event_y_positions
+        .iter()
+        .copied()
+        .last()
+        .unwrap_or(lifeline_top);
     let tail_box_y = if msg_count > 0 {
-        let last_msg_y = lifeline_top + FIRST_MSG_OFFSET + (msg_count as f64 - 1.0) * MSG_STEP;
         last_msg_y + TAIL_GAP
     } else {
         // Minimum lifeline: 20px, tail overlaps by LIFELINE_Y_OFFSET
@@ -915,34 +976,32 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme) -> String {
     // Phase 5: Pre-compute activation bars
     // -----------------------------------------------------------------------
 
-    // Scan events to determine activation bar positions.
-    // We store message step indices and compute y/height from them to avoid
-    // floating-point accumulation errors in the height calculation.
+    // Scan events to determine activation bar positions using event indices
+    // into event_y_positions for correct y lookup.
     struct ActivationBar {
         participant_id: String,
-        start_msg_idx: u32, // message step index where activation starts
-        n_steps: u32,       // number of message steps the activation spans
+        start_event_idx: usize, // event index where activation starts
+        end_event_idx: usize,   // event index where activation ends
     }
 
     let mut activation_bars: Vec<ActivationBar> = Vec::new();
     {
         let mut tracker = ActivationTracker::new();
-        // Track open activations: (participant_id, start_msg_idx)
-        let mut open_activations: Vec<(String, u32)> = Vec::new();
-        let mut msg_idx: u32 = 0;
-        let mut last_msg_idx: u32 = 0;
+        // Track open activations: (participant_id, event_idx)
+        let mut open_activations: Vec<(String, usize)> = Vec::new();
+        let mut last_event_idx: usize = 0;
 
-        for event in &diagram.events {
+        for (ev_idx, event) in diagram.events.iter().enumerate() {
             match event {
                 Event::Message(msg) => {
-                    last_msg_idx = msg_idx;
+                    last_event_idx = ev_idx;
 
                     // Process activation changes from ++ / -- on message
                     if let Some(act) = &msg.activation {
                         match act {
                             ActivationChange::Activate => {
                                 tracker.activate(&msg.to);
-                                open_activations.push((msg.to.clone(), msg_idx));
+                                open_activations.push((msg.to.clone(), ev_idx));
                             }
                             ActivationChange::Deactivate => {
                                 tracker.deactivate(&msg.from);
@@ -952,8 +1011,8 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme) -> String {
                                     let (pid, start_idx) = open_activations.remove(pos);
                                     activation_bars.push(ActivationBar {
                                         participant_id: pid,
-                                        start_msg_idx: start_idx,
-                                        n_steps: msg_idx - start_idx,
+                                        start_event_idx: start_idx,
+                                        end_event_idx: ev_idx,
                                     });
                                 }
                             }
@@ -962,46 +1021,43 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme) -> String {
                             }
                         }
                     }
-
-                    msg_idx += 1;
                 }
                 Event::Activate(id) => {
-                    // Activation starts at the most recent message's step index
                     tracker.activate(id);
-                    open_activations.push((id.clone(), last_msg_idx));
+                    open_activations.push((id.clone(), last_event_idx));
                 }
                 Event::Deactivate(id) => {
-                    // Deactivation ends at the most recent message's step index
                     tracker.deactivate(id);
                     if let Some(pos) = open_activations.iter().rposition(|(pid, _)| pid == id) {
                         let (pid, start_idx) = open_activations.remove(pos);
                         activation_bars.push(ActivationBar {
                             participant_id: pid,
-                            start_msg_idx: start_idx,
-                            n_steps: last_msg_idx - start_idx,
+                            start_event_idx: start_idx,
+                            end_event_idx: last_event_idx,
                         });
                     }
                 }
                 Event::Return(_) => {
-                    last_msg_idx = msg_idx;
-                    msg_idx += 1;
+                    last_event_idx = ev_idx;
                 }
                 _ => {}
             }
         }
 
-        // Close any remaining open activations
+        // Close any remaining open activations — extend to the last event
+        let final_idx = diagram.events.len().saturating_sub(1);
         for (pid, start_idx) in open_activations {
             activation_bars.push(ActivationBar {
                 participant_id: pid,
-                start_msg_idx: start_idx,
-                n_steps: msg_idx - start_idx + 1,
+                start_event_idx: start_idx,
+                end_event_idx: final_idx,
             });
         }
     }
 
-    // Helper to compute y from message step index
-    let msg_y_at = |idx: u32| -> f64 { lifeline_top + FIRST_MSG_OFFSET + idx as f64 * MSG_STEP };
+    // Helper to look up y position for an event
+    let event_y =
+        |idx: usize| -> f64 { event_y_positions.get(idx).copied().unwrap_or(lifeline_top) };
 
     // -----------------------------------------------------------------------
     // Phase 6: Generate SVG
@@ -1149,9 +1205,9 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme) -> String {
     for bar in &activation_bars {
         let cx = center_of(&bar.participant_id);
         let bar_x = cx - ACTIVATION_HALF_W;
-        let bar_y = msg_y_at(bar.start_msg_idx);
-        // Compute height directly from step count to avoid floating-point drift
-        let bar_h = bar.n_steps as f64 * MSG_STEP;
+        let bar_y = event_y(bar.start_event_idx);
+        let bar_end_y = event_y(bar.end_event_idx);
+        let bar_h = bar_end_y - bar_y;
         let title = &participants
             .iter()
             .find(|p| p.id == bar.participant_id)
@@ -1245,8 +1301,9 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme) -> String {
     for bar in &activation_bars {
         let cx = center_of(&bar.participant_id);
         let bar_x = cx - ACTIVATION_HALF_W;
-        let bar_y = msg_y_at(bar.start_msg_idx);
-        let bar_h = bar.n_steps as f64 * MSG_STEP;
+        let bar_y = event_y(bar.start_event_idx);
+        let bar_end_y = event_y(bar.end_event_idx);
+        let bar_h = bar_end_y - bar_y;
         let title = &participants
             .iter()
             .find(|p| p.id == bar.participant_id)
@@ -1255,8 +1312,7 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme) -> String {
         svg.activation_bar(title, bar_x, bar_y, bar_h);
     }
 
-    // Messages
-    let mut msg_y = lifeline_top + FIRST_MSG_OFFSET;
+    // Messages — use pre-computed y positions from event_y_positions
     let mut msg_id: u32 = 0;
     let mut auto_num: Option<u32> = diagram.autonumber.as_ref().map(|an| an.start);
     // Track activation depth during message rendering to adjust arrow positions.
@@ -1264,6 +1320,7 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme) -> String {
 
     let events = &diagram.events;
     for (ev_idx, event) in events.iter().enumerate() {
+        let msg_y = event_y_positions[ev_idx];
         match event {
             Event::Message(msg) => {
                 msg_id += 1;
@@ -1474,8 +1531,6 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme) -> String {
                     let an = diagram.autonumber.as_ref().unwrap();
                     *n = n.saturating_add(an.step);
                 }
-
-                msg_y += MSG_STEP;
             }
             Event::Return(ret) => {
                 msg_id += 1;
@@ -1521,8 +1576,6 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme) -> String {
                     let an = diagram.autonumber.as_ref().unwrap();
                     *n = n.saturating_add(an.step);
                 }
-
-                msg_y += MSG_STEP;
             }
             Event::Divider(text) => {
                 // Emit divider text
@@ -1541,31 +1594,27 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme) -> String {
                     escape_xml(text),
                 )
                 .unwrap();
-                msg_y += MSG_STEP;
             }
-            Event::Delay(text) => {
-                if let Some(t) = text {
-                    let tw = text_width(t, MSG_FONT_SIZE);
-                    let mid_x = if !participants.is_empty() {
-                        (participants[0].center_x + participants[participants.len() - 1].center_x)
-                            / 2.0
-                    } else {
-                        50.0
-                    };
-                    write!(
-                        svg.buf,
-                        r##"<text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="{}" x="{}" y="{}">{}</text>"##,
-                        fmt_coord(tw),
-                        fmt_coord(mid_x),
-                        fmt_coord(msg_y + 5.0),
-                        escape_xml(t),
-                    )
-                    .unwrap();
-                }
-                msg_y += MSG_STEP;
+            Event::Delay(Some(t)) => {
+                let tw = text_width(t, MSG_FONT_SIZE);
+                let mid_x = if !participants.is_empty() {
+                    (participants[0].center_x + participants[participants.len() - 1].center_x) / 2.0
+                } else {
+                    50.0
+                };
+                write!(
+                    svg.buf,
+                    r##"<text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="{}" x="{}" y="{}">{}</text>"##,
+                    fmt_coord(tw),
+                    fmt_coord(mid_x),
+                    fmt_coord(msg_y + 5.0),
+                    escape_xml(t),
+                )
+                .unwrap();
             }
-            Event::Space(px_opt) => {
-                msg_y += px_opt.map(|p| p as f64).unwrap_or(20.0);
+            Event::Delay(None) => {}
+            Event::Space(_px_opt) => {
+                // y position already accounted for in event_y_positions
             }
             Event::Note(note) => {
                 // Emit note text
@@ -1630,7 +1679,6 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme) -> String {
                     .unwrap();
                     note_y += 14.0;
                 }
-                msg_y += MSG_STEP;
             }
             Event::GroupStart(g) => {
                 let kind_str = match g.kind {
@@ -1687,7 +1735,6 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme) -> String {
                     escape_xml(text),
                 )
                 .unwrap();
-                msg_y += MSG_STEP / 2.0;
             }
             Event::Ref(r) => {
                 let tw = text_width(&r.text, 13.0);
@@ -1705,7 +1752,6 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme) -> String {
                     escape_xml(&r.text),
                 )
                 .unwrap();
-                msg_y += MSG_STEP;
             }
             Event::Activate(id) => {
                 // Track activation state for message rendering

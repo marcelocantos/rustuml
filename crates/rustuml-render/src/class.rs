@@ -249,9 +249,13 @@ fn calc_entity_dims(entity: &ClassEntity, entity_index: usize) -> EntityDims {
         HEADER_H + fields_section + methods_section
     };
 
-    // Source line: entity_index + 1 (PlantUML uses 1-based line numbers).
-    // In practice, this should come from the parser, but we approximate.
-    let source_line = entity_index + 1;
+    // Use the parser-provided source line; fall back to index-based approximation
+    // for models created before source_line tracking was added.
+    let source_line = if entity.source_line > 0 {
+        entity.source_line
+    } else {
+        entity_index + 1
+    };
 
     EntityDims {
         width,
@@ -1397,6 +1401,7 @@ mod tests {
                     ],
                     stereotypes: vec![],
                     url: None,
+                    source_line: 0,
                 },
                 ClassEntity {
                     id: "Dog".into(),
@@ -1413,6 +1418,7 @@ mod tests {
                     }],
                     stereotypes: vec![],
                     url: None,
+                    source_line: 0,
                 },
             ],
             relationships: vec![Relationship {
@@ -1422,6 +1428,7 @@ mod tests {
                 label: None,
                 from_multiplicity: None,
                 to_multiplicity: None,
+                source_line: 0,
             }],
             packages: vec![],
             notes: vec![],
@@ -1546,6 +1553,7 @@ mod tests {
                 }],
                 stereotypes: vec![],
                 url: None,
+                source_line: 0,
             }],
             relationships: vec![],
             packages: vec![],

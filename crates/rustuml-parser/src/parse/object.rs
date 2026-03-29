@@ -36,6 +36,8 @@ struct ObjectParser {
     current_object: Option<String>,
     /// Index into `packages` of the package block currently being parsed.
     current_package: Option<usize>,
+    /// Current 1-based source line number (set before each parse_line call).
+    current_line: usize,
 }
 
 impl ObjectParser {
@@ -48,6 +50,7 @@ impl ObjectParser {
             packages: Vec::new(),
             current_object: None,
             current_package: None,
+            current_line: 0,
         }
     }
 
@@ -71,13 +74,14 @@ impl ObjectParser {
                 fields: Vec::new(),
                 stereotype: None,
                 color: None,
-                source_line: 0,
+                source_line: self.current_line,
             });
         }
         id
     }
 
-    fn parse_line(&mut self, _line_num: usize, line: &str) -> Result<(), ParseError> {
+    fn parse_line(&mut self, line_num: usize, line: &str) -> Result<(), ParseError> {
+        self.current_line = line_num;
         // Inside an object/map body?
         if self.current_object.is_some() {
             if line == "}" {
@@ -175,7 +179,7 @@ impl ObjectParser {
                     fields: Vec::new(),
                     stereotype,
                     color,
-                    source_line: 0,
+                    source_line: self.current_line,
                 });
             }
 
@@ -231,7 +235,7 @@ impl ObjectParser {
                     fields: Vec::new(),
                     stereotype: None,
                     color,
-                    source_line: 0,
+                    source_line: self.current_line,
                 });
             }
 
@@ -300,7 +304,7 @@ impl ObjectParser {
                 label,
                 from_multiplicity,
                 to_multiplicity,
-                source_line: 0,
+                source_line: self.current_line,
             });
             true
         } else {

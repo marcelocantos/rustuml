@@ -1482,6 +1482,7 @@ mod tests {
                 ActivityStep::If(IfBlock {
                     condition: "x > 0?".into(),
                     then_label: Some("yes".into()),
+                    source_line: 0,
                 }),
                 ActivityStep::Action("positive".into()),
                 ActivityStep::Else(Some("no".into())),

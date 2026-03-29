@@ -846,8 +846,11 @@ impl ActivityParser {
                 .or(caps.get(3))
                 .map(|m| m.as_str().to_string())
                 .unwrap_or_default();
-            self.steps
-                .push(ActivityStep::Partition(PartitionBlock { name, color, source_line: self.current_line }));
+            self.steps.push(ActivityStep::Partition(PartitionBlock {
+                name,
+                color,
+                source_line: self.current_line,
+            }));
             true
         } else {
             false
@@ -868,8 +871,11 @@ impl ActivityParser {
                 .or(caps.get(3))
                 .map(|m| m.as_str().to_string())
                 .unwrap_or_default();
-            self.steps
-                .push(ActivityStep::Partition(PartitionBlock { name, color, source_line: self.current_line }));
+            self.steps.push(ActivityStep::Partition(PartitionBlock {
+                name,
+                color,
+                source_line: self.current_line,
+            }));
             true
         } else {
             false
