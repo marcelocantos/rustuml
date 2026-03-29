@@ -166,12 +166,17 @@ fn run_one(puml_path: &Path, root: &Path) -> TestResult {
         };
     }
 
-    let is_multi_block = rustuml_parser::parse::split_blocks(&source).len() > 1;
+    let blocks = rustuml_parser::parse::split_blocks(&source);
+    let is_multi_block = blocks.len() > 1;
 
     let render_result = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
         let diagram = if is_multi_block {
-            // Golden SVG contains block 0 only — compare against that.
-            rustuml_parser::parse::parse_block(&source, 0).map_err(|e| format!("parse: {e}"))?
+            // PlantUML merges unnamed same-type blocks into one diagram.
+            // Try merged parse first; fall back to block 0.
+            let merged = merge_blocks(&source);
+            rustuml_parser::parse::parse_auto_with_base(&merged, None)
+                .or_else(|_| rustuml_parser::parse::parse_block(&source, 0))
+                .map_err(|e| format!("parse: {e}"))?
         } else {
             rustuml_parser::parse::parse_auto_with_base(&source, None)
                 .map_err(|e| format!("parse: {e}"))?
@@ -249,6 +254,32 @@ fn run_one(puml_path: &Path, root: &Path) -> TestResult {
             }
         }
     }
+}
+
+/// Merge multiple `@start`/`@end` blocks into a single block.
+///
+/// PlantUML renders unnamed same-type blocks as one combined diagram.
+/// This strips the intermediate `@end`/`@start` markers and wraps
+/// everything in a single `@startuml`/`@enduml`.
+fn merge_blocks(source: &str) -> String {
+    let mut lines = Vec::new();
+    let mut started = false;
+    for line in source.lines() {
+        let trimmed = line.trim();
+        if trimmed.starts_with("@start") {
+            if !started {
+                lines.push(line.to_string());
+                started = true;
+            }
+            // Skip subsequent @start markers.
+        } else if trimmed.starts_with("@end") {
+            // Skip — we'll add one at the end.
+        } else {
+            lines.push(line.to_string());
+        }
+    }
+    lines.push("@enduml".to_string());
+    lines.join("\n")
 }
 
 #[test]
