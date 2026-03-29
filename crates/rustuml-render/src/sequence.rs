@@ -13,6 +13,57 @@ use rustuml_parser::diagram::sequence::*;
 
 use crate::style::Theme;
 
+/// Resolve a PlantUML color string (e.g., "#blue", "#FF0000") to a CSS hex color.
+fn resolve_color(color: &str) -> String {
+    let name = color.strip_prefix('#').unwrap_or(color);
+    // If it's already a hex color (starts with digit or uppercase hex)
+    if name.len() == 6 && name.chars().all(|c| c.is_ascii_hexdigit()) {
+        return format!("#{}", name.to_uppercase());
+    }
+    match name.to_lowercase().as_str() {
+        "white" => "#FFFFFF".to_string(),
+        "black" => "#000000".to_string(),
+        "red" => "#FF0000".to_string(),
+        "green" => "#008000".to_string(),
+        "blue" => "#0000FF".to_string(),
+        "yellow" => "#FFFF00".to_string(),
+        "orange" => "#FFA500".to_string(),
+        "purple" => "#800080".to_string(),
+        "pink" => "#FFC0CB".to_string(),
+        "cyan" => "#00FFFF".to_string(),
+        "magenta" => "#FF00FF".to_string(),
+        "gray" | "grey" => "#808080".to_string(),
+        "lightblue" => "#ADD8E6".to_string(),
+        "lightgreen" => "#90EE90".to_string(),
+        "darkblue" => "#00008B".to_string(),
+        "darkgreen" => "#006400".to_string(),
+        "darkred" => "#8B0000".to_string(),
+        "coral" => "#FF7F50".to_string(),
+        "gold" => "#FFD700".to_string(),
+        "salmon" => "#FA8072".to_string(),
+        "lightsalmon" => "#FFA07A".to_string(),
+        "plum" => "#DDA0DD".to_string(),
+        "lime" => "#00FF00".to_string(),
+        "navy" => "#000080".to_string(),
+        "olive" => "#808000".to_string(),
+        "teal" => "#008080".to_string(),
+        "aqua" => "#00FFFF".to_string(),
+        "fuchsia" => "#FF00FF".to_string(),
+        "maroon" => "#800000".to_string(),
+        "silver" => "#C0C0C0".to_string(),
+        "lightgray" | "lightgrey" => "#D3D3D3".to_string(),
+        "darkgray" | "darkgrey" => "#A9A9A9".to_string(),
+        _ => {
+            // Try as-is if it looks like a hex value
+            if name.chars().all(|c| c.is_ascii_hexdigit()) {
+                format!("#{name}")
+            } else {
+                "#FFFFFF".to_string()
+            }
+        }
+    }
+}
+
 /// Compute text width at a given font size using exact PlantUML Java AWT metrics.
 fn text_width(text: &str, font_size: f64) -> f64 {
     crate::metrics::plantuml_text_width(text, font_size)
@@ -485,13 +536,14 @@ impl PlantUmlSvg {
         self.buf.push_str("</g>");
     }
 
-    /// Write an activation bar.
-    fn activation_bar(&mut self, title: &str, x: f64, y: f64, h: f64) {
+    /// Write an activation bar with optional fill color.
+    fn activation_bar(&mut self, title: &str, x: f64, y: f64, h: f64, color: &str) {
         self.buf.push_str("<g>");
         write!(self.buf, "<title>{}</title>", escape_xml(title)).unwrap();
         write!(
             self.buf,
-            r##"<rect fill="#FFFFFF" height="{}" style="stroke:#181818;stroke-width:1;" width="{}" x="{}" y="{}"/>"##,
+            r##"<rect fill="{}" height="{}" style="stroke:#181818;stroke-width:1;" width="{}" x="{}" y="{}"/>"##,
+            color,
             fmt_coord(h),
             ACTIVATION_WIDTH as u32,
             fmt_coord(x),
@@ -836,7 +888,7 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme) -> String {
                     }
                 }
             }
-            Event::Activate(id) => {
+            Event::Activate(id, _) => {
                 *activation_depth.entry(id.clone()).or_default() += 1;
             }
             Event::Deactivate(id) => {
@@ -935,7 +987,7 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme) -> String {
                     y += px_opt.map(|p| p as f64).unwrap_or(20.0);
                     event_y_positions.push(y);
                 }
-                Event::Activate(_) | Event::Deactivate(_) => {
+                Event::Activate(_, _) | Event::Deactivate(_) => {
                     event_y_positions.push(y);
                 }
                 _ => {
@@ -982,13 +1034,14 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme) -> String {
         participant_id: String,
         start_event_idx: usize, // event index where activation starts
         end_event_idx: usize,   // event index where activation ends
+        color: Option<String>,  // fill color (e.g., "#0000FF")
     }
 
     let mut activation_bars: Vec<ActivationBar> = Vec::new();
     {
         let mut tracker = ActivationTracker::new();
-        // Track open activations: (participant_id, event_idx)
-        let mut open_activations: Vec<(String, usize)> = Vec::new();
+        // Track open activations: (participant_id, event_idx, color)
+        let mut open_activations: Vec<(String, usize, Option<String>)> = Vec::new();
         let mut last_event_idx: usize = 0;
 
         for (ev_idx, event) in diagram.events.iter().enumerate() {
@@ -1001,18 +1054,24 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme) -> String {
                         match act {
                             ActivationChange::Activate => {
                                 tracker.activate(&msg.to);
-                                open_activations.push((msg.to.clone(), ev_idx));
+                                open_activations.push((
+                                    msg.to.clone(),
+                                    ev_idx,
+                                    msg.activation_color.clone(),
+                                ));
                             }
                             ActivationChange::Deactivate => {
                                 tracker.deactivate(&msg.from);
-                                if let Some(pos) =
-                                    open_activations.iter().rposition(|(id, _)| id == &msg.from)
+                                if let Some(pos) = open_activations
+                                    .iter()
+                                    .rposition(|(id, _, _)| id == &msg.from)
                                 {
-                                    let (pid, start_idx) = open_activations.remove(pos);
+                                    let (pid, start_idx, color) = open_activations.remove(pos);
                                     activation_bars.push(ActivationBar {
                                         participant_id: pid,
                                         start_event_idx: start_idx,
                                         end_event_idx: ev_idx,
+                                        color,
                                     });
                                 }
                             }
@@ -1022,18 +1081,19 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme) -> String {
                         }
                     }
                 }
-                Event::Activate(id) => {
+                Event::Activate(id, color) => {
                     tracker.activate(id);
-                    open_activations.push((id.clone(), last_event_idx));
+                    open_activations.push((id.clone(), last_event_idx, color.clone()));
                 }
                 Event::Deactivate(id) => {
                     tracker.deactivate(id);
-                    if let Some(pos) = open_activations.iter().rposition(|(pid, _)| pid == id) {
-                        let (pid, start_idx) = open_activations.remove(pos);
+                    if let Some(pos) = open_activations.iter().rposition(|(pid, _, _)| pid == id) {
+                        let (pid, start_idx, color) = open_activations.remove(pos);
                         activation_bars.push(ActivationBar {
                             participant_id: pid,
                             start_event_idx: start_idx,
                             end_event_idx: last_event_idx,
+                            color,
                         });
                     }
                 }
@@ -1046,11 +1106,12 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme) -> String {
 
         // Close any remaining open activations — extend to the last event
         let final_idx = diagram.events.len().saturating_sub(1);
-        for (pid, start_idx) in open_activations {
+        for (pid, start_idx, color) in open_activations {
             activation_bars.push(ActivationBar {
                 participant_id: pid,
                 start_event_idx: start_idx,
                 end_event_idx: final_idx,
+                color,
             });
         }
     }
@@ -1213,7 +1274,12 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme) -> String {
             .find(|p| p.id == bar.participant_id)
             .map(|p| p.label.clone())
             .unwrap_or_default();
-        svg.activation_bar(title, bar_x, bar_y, bar_h);
+        let fill_color = bar
+            .color
+            .as_ref()
+            .map(|c| resolve_color(c))
+            .unwrap_or_else(|| "#FFFFFF".to_string());
+        svg.activation_bar(title, bar_x, bar_y, bar_h, &fill_color);
     }
 
     // Lifelines
@@ -1309,7 +1375,12 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme) -> String {
             .find(|p| p.id == bar.participant_id)
             .map(|p| p.label.clone())
             .unwrap_or_default();
-        svg.activation_bar(title, bar_x, bar_y, bar_h);
+        let fill_color = bar
+            .color
+            .as_ref()
+            .map(|c| resolve_color(c))
+            .unwrap_or_else(|| "#FFFFFF".to_string());
+        svg.activation_bar(title, bar_x, bar_y, bar_h, &fill_color);
     }
 
     // Messages — use pre-computed y positions from event_y_positions
@@ -1334,7 +1405,7 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme) -> String {
                 // Check if source/target are activated.
                 // Also look ahead: if the next event activates the target, treat it as
                 // activated (PlantUML's activation conceptually starts at the message).
-                let _from_active = render_activation
+                let from_active = render_activation
                     .get(msg.from.as_str())
                     .copied()
                     .unwrap_or(0)
@@ -1347,7 +1418,7 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme) -> String {
                 }
                 // Look ahead for standalone Activate events targeting the message's 'to'
                 if !to_active
-                    && let Some(Event::Activate(id)) = events.get(ev_idx + 1)
+                    && let Some(Event::Activate(id, _)) = events.get(ev_idx + 1)
                     && id == &msg.to
                 {
                     to_active = true;
@@ -1392,17 +1463,28 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme) -> String {
                     .unwrap();
                 }
 
+                // Source shift: when the source is activated and sending right,
+                // the message line starts from the activation bar's right edge.
+                // For left-pointing messages, PlantUML does NOT shift the source endpoint.
+                let from_x_shifted = if is_right && from_active {
+                    from_x + ACTIVATION_HALF_W
+                } else {
+                    from_x
+                };
+
+                // Target shift: when the target is activated, the arrow tip
+                // stops at the activation bar edge.
+                let target_shift = if to_active { ACTIVATION_HALF_W } else { 0.0 };
+
                 // Text position
                 let text_y_pos = msg_y - 4.7422;
                 let text_x = if is_right {
-                    from_x + MSG_TEXT_LEFT_PAD
+                    from_x_shifted + MSG_TEXT_LEFT_PAD
                 } else {
-                    to_x + LEFT_ARROW_TEXT_PAD + 1.0
+                    to_x + target_shift + LEFT_ARROW_TEXT_PAD + 1.0
                 };
 
                 if is_right {
-                    // Arrow tip: if target is activated, tip is at activation bar edge
-                    let target_shift = if to_active { ACTIVATION_HALF_W } else { 0.0 };
                     let tip_x = to_x - target_shift - ARROW_TIP_GAP;
                     let line_x2 = if is_open {
                         tip_x
@@ -1420,7 +1502,7 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme) -> String {
                             tip_x,
                             msg_y,
                             true,
-                            from_x,
+                            from_x_shifted,
                             tip_x + 1.0,
                             msg_y,
                             line_style,
@@ -1443,20 +1525,31 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme) -> String {
                             fmt_coord(msg_y),
                         );
                         svg.message_filled_arrow(
-                            &from_uid, &to_uid, src_line, msg_id, &arrow_pts, from_x, line_x2,
-                            msg_y, line_style, text_x, text_y_pos, &label, label_w,
+                            &from_uid,
+                            &to_uid,
+                            src_line,
+                            msg_id,
+                            &arrow_pts,
+                            from_x_shifted,
+                            line_x2,
+                            msg_y,
+                            line_style,
+                            text_x,
+                            text_y_pos,
+                            &label,
+                            label_w,
                         );
                     }
                 } else {
-                    // Left-pointing arrow
-                    let tip_x = to_x + 1.0; // left arrow tip offset
+                    // Left-pointing arrow: tip offset accounts for target activation
+                    let tip_x = to_x + target_shift + 1.0;
                     let line_x1 = if is_open {
                         tip_x
                     } else {
                         tip_x + FILLED_ARROW_NOTCH
                     };
-                    // PlantUML draws the left-going line to from_center - 1
-                    let line_x2_end = from_x - 1.0;
+                    // PlantUML draws the left-going line to from edge - 1
+                    let line_x2_end = from_x_shifted - 1.0;
 
                     if is_open {
                         // Open arrow: V-shape tip at tip_x, main line starts 1px before
@@ -1753,7 +1846,7 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme) -> String {
                 )
                 .unwrap();
             }
-            Event::Activate(id) => {
+            Event::Activate(id, _) => {
                 // Track activation state for message rendering
                 *render_activation.entry(id.clone()).or_default() += 1;
             }

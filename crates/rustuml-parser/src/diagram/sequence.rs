@@ -58,7 +58,7 @@ pub enum Event {
     Delay(Option<String>),
     Space(Option<u32>),
     Ref(Ref),
-    Activate(String),
+    Activate(String, Option<String>),
     Deactivate(String),
     Destroy(String),
     Create(String),
@@ -74,6 +74,9 @@ pub struct Message {
     pub label: String,
     pub arrow: Arrow,
     pub activation: Option<ActivationChange>,
+    /// Optional color for activation bar (e.g., "#blue", "#FF0000").
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub activation_color: Option<String>,
     /// 1-based line number within the `@startuml` block.
     #[serde(default)]
     pub source_line: usize,

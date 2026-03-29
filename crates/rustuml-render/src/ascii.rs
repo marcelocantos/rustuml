@@ -454,7 +454,7 @@ pub fn render_ascii(diagram: &SequenceDiagram) -> String {
             }
 
             // Events that don't consume vertical space in ASCII mode.
-            Event::Activate(_)
+            Event::Activate(_, _)
             | Event::Deactivate(_)
             | Event::Destroy(_)
             | Event::Create(_)
@@ -480,7 +480,7 @@ fn count_event_rows(diagram: &SequenceDiagram) -> Vec<usize> {
             Event::Return(_) => 2,
             Event::NoteOnLink(_) => 1,
             Event::Space(px_opt) => px_opt.map(|p| ((p as usize) / 8).max(1)).unwrap_or(1),
-            Event::Activate(_)
+            Event::Activate(_, _)
             | Event::Deactivate(_)
             | Event::Destroy(_)
             | Event::Create(_)

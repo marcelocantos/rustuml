@@ -262,7 +262,7 @@ impl SeqParser {
         // Supports both simple names (\w+) and quoted names ("...").
         static RE: LazyLock<Regex> = LazyLock::new(|| {
             Regex::new(
-                r#"^("(?:[^"]+)"|\w+)\s*([-<>.\\/ox]+)\s*("(?:[^"]+)"|\w+)\s*(?:((?:\+\+|--|!!))\s*(?:#\S+)?\s*)?(?::\s*(.*))?$"#,
+                r#"^("(?:[^"]+)"|\w+)\s*([-<>.\\/ox]+)\s*("(?:[^"]+)"|\w+)\s*(?:((?:\+\+|--|!!))\s*(#\S+)?\s*)?(?::\s*(.*))?$"#,
             )
             .unwrap()
         });
@@ -283,7 +283,8 @@ impl SeqParser {
             let arrow_str = &caps[2];
             let to_raw = unquote(&caps[3]);
             let activation_str = caps.get(4).map(|m| m.as_str());
-            let label = caps.get(5).map_or("", |m| m.as_str()).trim().to_string();
+            let activation_color = caps.get(5).map(|m| m.as_str().to_string());
+            let label = caps.get(6).map_or("", |m| m.as_str()).trim().to_string();
 
             let arrow = parse_arrow(arrow_str);
             let activation = activation_str.map(parse_activation);
@@ -307,6 +308,7 @@ impl SeqParser {
                 label,
                 arrow,
                 activation,
+                activation_color,
                 source_line: self.current_line,
             }));
             true
@@ -340,6 +342,7 @@ impl SeqParser {
                     direction: ArrowDirection::LeftToRight,
                 },
                 activation: None,
+                activation_color: None,
                 source_line: self.current_line,
             }));
             true
@@ -356,6 +359,7 @@ impl SeqParser {
                     direction: ArrowDirection::LeftToRight,
                 },
                 activation: None,
+                activation_color: None,
                 source_line: self.current_line,
             }));
             true
@@ -599,12 +603,13 @@ impl SeqParser {
 
     fn try_activate_deactivate(&mut self, line: &str) -> bool {
         static RE: LazyLock<Regex> =
-            LazyLock::new(|| Regex::new(r"^(activate|deactivate)\s+(\w+)").unwrap());
+            LazyLock::new(|| Regex::new(r"^(activate|deactivate)\s+(\w+)(?:\s+(#\S+))?").unwrap());
 
         if let Some(caps) = RE.captures(line) {
             let id = self.ensure_participant(&caps[2]);
+            let color = caps.get(3).map(|m| m.as_str().to_string());
             match &caps[1] {
-                "activate" => self.events.push(Event::Activate(id)),
+                "activate" => self.events.push(Event::Activate(id, color)),
                 "deactivate" => self.events.push(Event::Deactivate(id)),
                 _ => {}
             }
