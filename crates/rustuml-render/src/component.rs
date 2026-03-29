@@ -125,6 +125,9 @@ pub fn render(diagram: &ComponentDiagram, theme: &Theme) -> String {
         let y = y_start + row as f64 * (COMPONENT_H + GAP);
         let w = col_w[col];
 
+        if let Some(ref url) = comp.url {
+            svg.open_link(url);
+        }
         svg.rect(x, y, w, COMPONENT_H, &cs.class_background, &cs.border_color);
         svg.rect(
             x - 5.0,
@@ -171,6 +174,9 @@ pub fn render(diagram: &ComponentDiagram, theme: &Theme) -> String {
                 "middle",
                 FONT_SIZE,
             );
+        }
+        if comp.url.is_some() {
+            svg.close_link();
         }
         positions.push((x, y, w));
     }

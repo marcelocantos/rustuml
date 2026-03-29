@@ -245,9 +245,10 @@ pub fn parse_component(lines: &[String]) -> Result<ComponentDiagram, ParseError>
 
         // Opening container block?
         if let Some(kw) = container_keyword(trimmed) {
+            let (container_url, container_clean) = super::extract_link_url(trimmed);
             if trimmed.contains('{') {
                 // Block container — push onto the stack.
-                let rest = &trimmed[kw.len()..];
+                let rest = &container_clean[kw.len()..];
                 let (id, label) = parse_container_label(kw, rest);
                 package_stack.push(ComponentPackage {
                     name: id,
@@ -260,13 +261,14 @@ pub fn parse_component(lines: &[String]) -> Result<ComponentDiagram, ParseError>
             } else {
                 // Leaf container declaration (no braces) — treat as a component.
                 // e.g. `cloud "Production" as PROD`, `database "User DB" as UDB`
-                let rest = &trimmed[kw.len()..];
+                let rest = &container_clean[kw.len()..];
                 let (id, label) = parse_container_label(kw, rest);
                 if !components.iter().any(|c: &Component| c.id == id) {
                     components.push(Component {
                         id: id.clone(),
                         label,
                         stereotypes: parse_stereotypes(trimmed),
+                        url: container_url,
                     });
                 }
                 if let Some(pkg) = package_stack.last_mut()
@@ -342,7 +344,8 @@ pub fn parse_component(lines: &[String]) -> Result<ComponentDiagram, ParseError>
         }
 
         // Component declaration.
-        if let Some(caps) = RE_COMP.captures(trimmed) {
+        let (comp_url, comp_clean) = super::extract_link_url(trimmed);
+        if let Some(caps) = RE_COMP.captures(&comp_clean) {
             // Variants:
             //   component "Label" as ID → caps[1]=Label, caps[2]=ID
             //   component "Label"       → caps[3]=Label, id=Label
@@ -362,6 +365,7 @@ pub fn parse_component(lines: &[String]) -> Result<ComponentDiagram, ParseError>
                     id: id.clone(),
                     label,
                     stereotypes: parse_stereotypes(trimmed),
+                    url: comp_url,
                 });
             }
             if let Some(pkg) = package_stack.last_mut()
@@ -381,6 +385,7 @@ pub fn parse_component(lines: &[String]) -> Result<ComponentDiagram, ParseError>
                     id: id.clone(),
                     label: name,
                     stereotypes: parse_stereotypes(trimmed),
+                    url: None,
                 });
             }
             if let Some(pkg) = package_stack.last_mut()
@@ -447,6 +452,7 @@ pub fn parse_component(lines: &[String]) -> Result<ComponentDiagram, ParseError>
                         id: id.clone(),
                         label: id.clone(),
                         stereotypes: Vec::new(),
+                        url: None,
                     });
                 }
             }
@@ -574,5 +580,31 @@ mod tests {
         let d = parse("component Foo\ncomponent Bar\nFoo -(0- Bar : uses");
         assert_eq!(d.connections.len(), 1);
         assert_eq!(d.connections[0].label.as_deref(), Some("uses"));
+    }
+
+    #[test]
+    fn component_with_url() {
+        let d = parse(
+            "component Frontend [[https://example.com/frontend]]\ncomponent Backend [[https://example.com/backend]]\nFrontend --> Backend",
+        );
+        assert_eq!(d.components.len(), 2);
+        assert_eq!(
+            d.components[0].url.as_deref(),
+            Some("https://example.com/frontend")
+        );
+        assert_eq!(
+            d.components[1].url.as_deref(),
+            Some("https://example.com/backend")
+        );
+    }
+
+    #[test]
+    fn database_with_url() {
+        let d = parse("database Storage [[https://example.com/storage]]");
+        assert_eq!(d.components.len(), 1);
+        assert_eq!(
+            d.components[0].url.as_deref(),
+            Some("https://example.com/storage")
+        );
     }
 }

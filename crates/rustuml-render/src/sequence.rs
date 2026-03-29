@@ -402,6 +402,9 @@ pub fn render(diagram: &SequenceDiagram, theme: &Theme) -> String {
     for (i, p) in diagram.participants.iter().enumerate() {
         let x = px[i];
         let w = participant_widths[i];
+        if let Some(ref url) = p.url {
+            svg.open_link(url);
+        }
         svg.open_group("participant");
         // Title element: name + stereotype (non-ASCII, `/`, and `*` chars as dots,
         // matching Java PlantUML's participant tooltip normalisation).
@@ -443,6 +446,9 @@ pub fn render(diagram: &SequenceDiagram, theme: &Theme) -> String {
             FONT_SIZE,
         );
         svg.close_group();
+        if p.url.is_some() {
+            svg.close_link();
+        }
     }
 
     // Draw lifelines.
@@ -653,6 +659,9 @@ pub fn render(diagram: &SequenceDiagram, theme: &Theme) -> String {
     for (i, p) in diagram.participants.iter().enumerate() {
         let x = px[i];
         let w = participant_widths[i];
+        if let Some(ref url) = p.url {
+            svg.open_link(url);
+        }
         svg.open_group("participant");
         let title_text = if let Some(st) = &p.stereotype {
             let dot_st: String = format!("..{st}..")
@@ -691,6 +700,9 @@ pub fn render(diagram: &SequenceDiagram, theme: &Theme) -> String {
             FONT_SIZE,
         );
         svg.close_group();
+        if p.url.is_some() {
+            svg.close_link();
+        }
     }
 
     svg.finalize()
@@ -711,6 +723,7 @@ mod tests {
                     kind: ParticipantKind::Participant,
                     order: Some(0),
                     stereotype: None,
+                    url: None,
                 },
                 Participant {
                     id: "Bob".into(),
@@ -718,6 +731,7 @@ mod tests {
                     kind: ParticipantKind::Participant,
                     order: Some(1),
                     stereotype: None,
+                    url: None,
                 },
             ],
             events: vec![Event::Message(Message {

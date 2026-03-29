@@ -506,6 +506,7 @@ mod tests {
                     kind: ParticipantKind::Participant,
                     order: Some(i),
                     stereotype: None,
+                    url: None,
                 })
                 .collect(),
             events,
