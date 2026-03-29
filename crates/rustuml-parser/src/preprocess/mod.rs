@@ -12,6 +12,8 @@ use regex::Regex;
 
 use crate::diagram::SpriteData;
 
+mod stdlib;
+
 /// Output from the preprocessor: expanded lines plus any sprite definitions.
 pub struct PreprocessOutput {
     pub lines: Vec<String>,
@@ -1129,27 +1131,38 @@ impl PreprocessContext {
     }
 
     fn try_include(&mut self, line: &str) -> Option<Vec<String>> {
-        static RE: LazyLock<Regex> =
-            LazyLock::new(|| Regex::new(r#"^!include(?:_once)?\s+(?:"([^"]+)"|(\S+))$"#).unwrap());
+        static RE: LazyLock<Regex> = LazyLock::new(|| {
+            Regex::new(r#"^!include(?:_once)?\s+(?:"([^"]+)"|<([^>]+)>|(\S+))$"#).unwrap()
+        });
 
         let caps = RE.captures(line)?;
-        let path_str = caps.get(1).or(caps.get(2)).map(|m| m.as_str())?;
+        // Group 1: quoted, Group 2: angle-bracket, Group 3: bare path.
+        let quoted_path = caps.get(1).map(|m| m.as_str());
+        let angle_path = caps.get(2).map(|m| m.as_str());
+        let bare_path = caps.get(3).map(|m| m.as_str());
+        let display_path = quoted_path
+            .or(angle_path)
+            .or(bare_path)
+            .unwrap_or("<unknown>");
 
         if self.include_depth >= MAX_INCLUDE_DEPTH {
             return Some(vec![format!(
-                "' WARNING: max include depth ({MAX_INCLUDE_DEPTH}) reached for {path_str}"
+                "' WARNING: max include depth ({MAX_INCLUDE_DEPTH}) reached for {display_path}"
             )]);
         }
 
         // Handle known stdlib includes.
-        if path_str == "<archimate/Archimate>" || path_str == "archimate/Archimate" {
+        if angle_path == Some("archimate/Archimate") || bare_path == Some("archimate/Archimate") {
             self.archimate_enabled = true;
             return Some(vec![]);
         }
-        if path_str.starts_with('<') {
-            return Some(vec![]);
+
+        // Angle-bracket includes resolve via stdlib.
+        if let Some(stdlib_path) = angle_path {
+            return self.try_include_stdlib(stdlib_path);
         }
 
+        let path_str = quoted_path.or(bare_path)?;
         let file_path = if let Some(base) = &self.base_dir {
             base.join(path_str)
         } else {
@@ -1157,6 +1170,27 @@ impl PreprocessContext {
         };
 
         match std::fs::read_to_string(&file_path) {
+            Ok(content) => {
+                self.include_depth += 1;
+                let lines = self.process(&content);
+                self.include_depth -= 1;
+                Some(lines)
+            }
+            Err(_) => Some(vec![]),
+        }
+    }
+
+    /// Resolve and include a stdlib path (from angle-bracket includes).
+    /// Returns `Some(lines)` always — the include directive is consumed even
+    /// if the stdlib root or file is not found (silently ignored).
+    fn try_include_stdlib(&mut self, include_path: &str) -> Option<Vec<String>> {
+        let Some(stdlib_root) = stdlib::get_stdlib_root() else {
+            return Some(vec![]);
+        };
+        let Some(resolved) = stdlib::resolve_stdlib_path(&stdlib_root, include_path) else {
+            return Some(vec![]);
+        };
+        match std::fs::read_to_string(&resolved) {
             Ok(content) => {
                 self.include_depth += 1;
                 let lines = self.process(&content);
@@ -2910,5 +2944,79 @@ mod tests {
         );
         let s = &out.sprites["dot"];
         assert_eq!(s.rows, vec!["FF", "00"]);
+    }
+
+    #[test]
+    fn include_angle_bracket_resolves_stdlib() {
+        // Set up a fake stdlib directory with a .puml file.
+        let dir = std::env::temp_dir().join("rustuml_test_stdlib_include");
+        let _ = std::fs::remove_dir_all(&dir);
+        std::fs::create_dir_all(dir.join("C4")).unwrap();
+        std::fs::write(
+            dir.join("C4/C4_Context.puml"),
+            "!define C4_CONTEXT_LOADED\n",
+        )
+        .unwrap();
+
+        // Use the thread-local override so the preprocessor finds our fake stdlib.
+        stdlib::set_stdlib_override(Some(dir.clone()));
+
+        let input = "@startuml\n!include <C4/C4_Context>\n!ifdef C4_CONTEXT_LOADED\nloaded\n!endif\n@enduml";
+        let lines = preprocess(input);
+        assert_eq!(lines, vec!["loaded"]);
+
+        stdlib::set_stdlib_override(None);
+        let _ = std::fs::remove_dir_all(&dir);
+    }
+
+    #[test]
+    fn include_angle_bracket_missing_is_silent() {
+        // When the stdlib override points to a directory that exists but
+        // doesn't contain the requested file, the include is silently ignored.
+        let dir = std::env::temp_dir().join("rustuml_test_stdlib_missing_file");
+        let _ = std::fs::remove_dir_all(&dir);
+        std::fs::create_dir_all(&dir).unwrap();
+
+        stdlib::set_stdlib_override(Some(dir.clone()));
+
+        let input = "@startuml\n!include <nonexistent/Lib>\nA -> B\n@enduml";
+        let lines = preprocess(input);
+        assert_eq!(lines, vec!["A -> B"]);
+
+        stdlib::set_stdlib_override(None);
+        let _ = std::fs::remove_dir_all(&dir);
+    }
+
+    #[test]
+    fn include_quoted_still_resolves_relative() {
+        // Quoted includes should still resolve relative to base_dir, not stdlib.
+        let dir = std::env::temp_dir().join("rustuml_test_quoted_include");
+        let _ = std::fs::remove_dir_all(&dir);
+        std::fs::create_dir_all(&dir).unwrap();
+        std::fs::write(dir.join("local.puml"), "participant Local\n").unwrap();
+
+        let input = "@startuml\n!include \"local.puml\"\n@enduml";
+        let lines = preprocess_with_base(input, &dir);
+        assert_eq!(lines, vec!["participant Local"]);
+
+        let _ = std::fs::remove_dir_all(&dir);
+    }
+
+    #[test]
+    fn include_angle_bracket_with_extension() {
+        // Angle-bracket includes with explicit extension should also work.
+        let dir = std::env::temp_dir().join("rustuml_test_stdlib_explicit_ext");
+        let _ = std::fs::remove_dir_all(&dir);
+        std::fs::create_dir_all(dir.join("lib")).unwrap();
+        std::fs::write(dir.join("lib/common.iuml"), "participant StdLib\n").unwrap();
+
+        stdlib::set_stdlib_override(Some(dir.clone()));
+
+        let input = "@startuml\n!include <lib/common.iuml>\n@enduml";
+        let lines = preprocess(input);
+        assert_eq!(lines, vec!["participant StdLib"]);
+
+        stdlib::set_stdlib_override(None);
+        let _ = std::fs::remove_dir_all(&dir);
     }
 }

@@ -17,13 +17,12 @@
 use std::cell::RefCell;
 use std::path::{Path, PathBuf};
 
-/// Thread-local override for the stdlib root, used by `preprocess_with_stdlib`
-/// and tests to inject a specific stdlib directory without modifying env vars.
 thread_local! {
     static STDLIB_OVERRIDE: RefCell<Option<PathBuf>> = const { RefCell::new(None) };
 }
 
 /// Set the thread-local stdlib override. Call with `None` to clear.
+#[cfg(test)]
 pub(super) fn set_stdlib_override(root: Option<PathBuf>) {
     STDLIB_OVERRIDE.with(|cell| {
         cell.replace(root);
