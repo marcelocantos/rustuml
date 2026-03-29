@@ -1969,7 +1969,23 @@ impl PreprocessContext {
             // these values are used in arithmetic or display contexts.
             "true" => "1".to_string(),
             "false" => "0".to_string(),
-            "date" => "2026-03-23".to_string(),
+            "date" => {
+                if let Ok(forced) = std::env::var("RUSTUML_DATE") {
+                    forced
+                } else {
+                    let now = std::time::SystemTime::now();
+                    let secs = now
+                        .duration_since(std::time::UNIX_EPOCH)
+                        .unwrap_or_default()
+                        .as_secs();
+                    let fmt = args.first().copied().unwrap_or("");
+                    if fmt.is_empty() {
+                        format_java_date(secs)
+                    } else {
+                        format_java_date_pattern(secs, fmt)
+                    }
+                }
+            }
             "size" => {
                 // Count array elements if the argument looks like a JSON array [a, b, c].
                 // Otherwise fall back to string length.
@@ -2148,6 +2164,204 @@ impl PreprocessContext {
 // ---------------------------------------------------------------------------
 // Helper functions
 // ---------------------------------------------------------------------------
+
+/// Format epoch seconds as Java's `Date.toString()`: `"dow mon dd hh:mm:ss tz yyyy"`.
+///
+/// Uses UTC. When `RUSTUML_DATE` is set, that value is returned instead
+/// (useful for deterministic golden tests).
+fn format_java_date(epoch_secs: u64) -> String {
+    const DAYS: [&str; 7] = ["Thu", "Fri", "Sat", "Sun", "Mon", "Tue", "Wed"];
+    const MONTHS: [&str; 12] = [
+        "Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec",
+    ];
+
+    let s = epoch_secs as i64;
+    let secs = ((s % 86400) + 86400) % 86400;
+    let hh = secs / 3600;
+    let mm = (secs % 3600) / 60;
+    let ss = secs % 60;
+    let dow = DAYS[(((s / 86400) % 7 + 7) % 7) as usize];
+
+    // Days since epoch → year/month/day (civil calendar).
+    let mut days = s.div_euclid(86400);
+    let mut year = 1970i64;
+    loop {
+        let ylen = if year % 4 == 0 && (year % 100 != 0 || year % 400 == 0) {
+            366
+        } else {
+            365
+        };
+        if days < ylen {
+            break;
+        }
+        days -= ylen;
+        year += 1;
+    }
+    let leap = year % 4 == 0 && (year % 100 != 0 || year % 400 == 0);
+    let mdays = [
+        31,
+        if leap { 29 } else { 28 },
+        31,
+        30,
+        31,
+        30,
+        31,
+        31,
+        30,
+        31,
+        30,
+        31,
+    ];
+    let mut month = 0usize;
+    for (i, &ml) in mdays.iter().enumerate() {
+        if days < ml {
+            month = i;
+            break;
+        }
+        days -= ml;
+    }
+    let day = days + 1;
+
+    format!(
+        "{dow} {mon} {day:02} {hh:02}:{mm:02}:{ss:02} UTC {year}",
+        mon = MONTHS[month],
+    )
+}
+
+/// Format epoch seconds using a Java `SimpleDateFormat` pattern.
+///
+/// Supports the most common tokens: `yyyy`, `yy`, `MM`, `dd`, `HH`, `mm`, `ss`,
+/// `EEE` (day-of-week), `MMM` (month abbreviation). Literal text passes through.
+fn format_java_date_pattern(epoch_secs: u64, pattern: &str) -> String {
+    const DAYS: [&str; 7] = ["Thu", "Fri", "Sat", "Sun", "Mon", "Tue", "Wed"];
+    const MONTHS: [&str; 12] = [
+        "Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec",
+    ];
+
+    let s = epoch_secs as i64;
+    let secs = ((s % 86400) + 86400) % 86400;
+    let hh = secs / 3600;
+    let mm_time = (secs % 3600) / 60;
+    let ss = secs % 60;
+    let dow_idx = (((s / 86400) % 7 + 7) % 7) as usize;
+
+    let mut days = s.div_euclid(86400);
+    let mut year = 1970i64;
+    loop {
+        let ylen = if year % 4 == 0 && (year % 100 != 0 || year % 400 == 0) {
+            366
+        } else {
+            365
+        };
+        if days < ylen {
+            break;
+        }
+        days -= ylen;
+        year += 1;
+    }
+    let leap = year % 4 == 0 && (year % 100 != 0 || year % 400 == 0);
+    let mdays = [
+        31,
+        if leap { 29 } else { 28 },
+        31,
+        30,
+        31,
+        30,
+        31,
+        31,
+        30,
+        31,
+        30,
+        31,
+    ];
+    let mut month = 0usize;
+    for (i, &ml) in mdays.iter().enumerate() {
+        if days < ml {
+            month = i;
+            break;
+        }
+        days -= ml;
+    }
+    let day = days + 1;
+
+    let mut result = String::new();
+    let chars: Vec<char> = pattern.chars().collect();
+    let mut i = 0;
+    while i < chars.len() {
+        match chars[i] {
+            'y' => {
+                let start = i;
+                while i < chars.len() && chars[i] == 'y' {
+                    i += 1;
+                }
+                let len = i - start;
+                if len <= 2 {
+                    result.push_str(&format!("{:02}", year % 100));
+                } else {
+                    result.push_str(&format!("{year:04}"));
+                }
+            }
+            'M' => {
+                let start = i;
+                while i < chars.len() && chars[i] == 'M' {
+                    i += 1;
+                }
+                let len = i - start;
+                if len >= 3 {
+                    result.push_str(MONTHS[month]);
+                } else {
+                    result.push_str(&format!("{:02}", month + 1));
+                }
+            }
+            'd' => {
+                while i < chars.len() && chars[i] == 'd' {
+                    i += 1;
+                }
+                result.push_str(&format!("{day:02}"));
+            }
+            'H' => {
+                while i < chars.len() && chars[i] == 'H' {
+                    i += 1;
+                }
+                result.push_str(&format!("{hh:02}"));
+            }
+            'm' => {
+                while i < chars.len() && chars[i] == 'm' {
+                    i += 1;
+                }
+                result.push_str(&format!("{mm_time:02}"));
+            }
+            's' => {
+                while i < chars.len() && chars[i] == 's' {
+                    i += 1;
+                }
+                result.push_str(&format!("{ss:02}"));
+            }
+            'E' => {
+                while i < chars.len() && chars[i] == 'E' {
+                    i += 1;
+                }
+                result.push_str(DAYS[dow_idx]);
+            }
+            '\'' => {
+                // Quoted literal text.
+                i += 1;
+                while i < chars.len() && chars[i] != '\'' {
+                    result.push(chars[i]);
+                    i += 1;
+                }
+                if i < chars.len() {
+                    i += 1;
+                } // skip closing quote
+            }
+            c => {
+                result.push(c);
+                i += 1;
+            }
+        }
+    }
+    result
+}
 
 fn number_value(f: f64) -> Value {
     if f == (f as i64) as f64 && f.abs() < i64::MAX as f64 {
