@@ -87,10 +87,8 @@ pub fn extract_oracle_layout(svg: &str) -> Option<OracleLayout> {
                     && let Some(points) = polygon.attribute("points")
                 {
                     oracle_edge.arrow_points = Some(points.to_string());
-                    oracle_edge.arrow_fill =
-                        polygon.attribute("fill").map(String::from);
-                    oracle_edge.polygon_style =
-                        polygon.attribute("style").map(String::from);
+                    oracle_edge.arrow_fill = polygon.attribute("fill").map(String::from);
+                    oracle_edge.polygon_style = polygon.attribute("style").map(String::from);
                 }
 
                 layout.edges.push(oracle_edge);
@@ -135,7 +133,6 @@ mod tests {
 
     #[test]
     fn extract_real_golden() {
-        // Try to load a real golden SVG if available.
         let golden_path = concat!(
             env!("CARGO_MANIFEST_DIR"),
             "/../../test-diagrams/golden/class/class_arrow_type_0_short.svg"
@@ -145,15 +142,15 @@ mod tests {
             return;
         };
         let layout = extract_oracle_layout(&svg).unwrap();
-        eprintln!("entities: {:?}", layout.entities);
-        eprintln!("edges: {:?}", layout.edges);
-        eprintln!("canvas: {}x{}", layout.canvas_width, layout.canvas_height);
         assert_eq!(layout.entities.len(), 2, "expected 2 entities (A, B)");
         assert!(layout.entities.contains_key("A"));
         assert!(layout.entities.contains_key("B"));
         assert_eq!(layout.edges.len(), 1);
+        assert_eq!(layout.edges[0].id, "A-to-B");
+        assert!(layout.edges[0].link_type.as_deref() == Some("dependency"));
     }
 
+    /// Verify that oracle-based rendering produces output identical to the golden SVG.
     #[test]
     fn render_with_oracle_matches_golden() {
         let golden_dir = concat!(
@@ -169,27 +166,14 @@ mod tests {
         let golden_svg = std::fs::read_to_string(&svg_path).unwrap();
 
         let oracle = extract_oracle_layout(&golden_svg).unwrap();
-        eprintln!("Oracle entities: {:?}", oracle.entities);
-
         let diagram = rustuml_parser::parse::parse_auto_with_base(&source, None).unwrap();
         let rust_svg = rustuml_render::render_svg_with_oracle(&diagram, Some(&oracle));
 
-        // Compare using the oracle's comparator
-        let cmp = crate::compare::compare_svg_strict(&golden_svg, &rust_svg);
-        match cmp {
-            Ok(cmp) => {
-                if cmp.is_match() {
-                    eprintln!("MATCH!");
-                } else {
-                    let report = format!("{cmp}");
-                    for line in report.lines().take(30) {
-                        eprintln!("{line}");
-                    }
-                    eprintln!("({} total differences)", cmp.differences.len());
-                }
-            }
-            Err(e) => eprintln!("Compare error: {e}"),
-        }
+        let cmp = crate::compare::compare_svg_strict(&golden_svg, &rust_svg).unwrap();
+        assert!(
+            cmp.is_match(),
+            "Oracle rendering should match golden:\n{cmp}"
+        );
     }
 
     #[test]
