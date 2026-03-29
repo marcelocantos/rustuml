@@ -6,6 +6,7 @@
 use rustuml_layout::graph::{Direction, EdgePath, LayoutGraph};
 use rustuml_parser::diagram::usecase::*;
 
+use crate::layout_oracle::OracleLayout;
 use crate::metrics;
 use crate::style::Theme;
 use crate::svg::SvgBuilder;
@@ -19,6 +20,15 @@ const FONT_SIZE: f64 = 12.0;
 const SMALL_FONT: f64 = 10.0;
 
 pub fn render(diagram: &UseCaseDiagram, theme: &Theme) -> String {
+    render_with_oracle(diagram, theme, None)
+}
+
+/// Render a use case diagram to SVG, optionally using pre-computed layout from an oracle.
+pub fn render_with_oracle(
+    diagram: &UseCaseDiagram,
+    theme: &Theme,
+    oracle: Option<&OracleLayout>,
+) -> String {
     let total_actors = diagram.actors.len();
     let total_uc = diagram.use_cases.len();
     if total_actors == 0
@@ -48,8 +58,12 @@ pub fn render(diagram: &UseCaseDiagram, theme: &Theme) -> String {
         0.0
     };
 
-    // Try Sugiyama layout for actors + use cases.
-    let layout_result = if total_actors > 0 || total_uc > 0 {
+    let use_oracle = oracle.is_some();
+
+    // Try Sugiyama layout for actors + use cases (skip when oracle is available).
+    let layout_result = if use_oracle {
+        None
+    } else if total_actors > 0 || total_uc > 0 {
         let mut layout = LayoutGraph::new(Direction::LeftToRight);
         for actor in &diagram.actors {
             layout.add_node(&actor.id, &actor.label, actor_col_w, ACTOR_H);
@@ -68,17 +82,74 @@ pub fn render(diagram: &UseCaseDiagram, theme: &Theme) -> String {
     };
 
     let layout_positions = layout_result.as_ref().map(|r| &r.node_positions[..]);
-    let edge_paths: &[EdgePath] = layout_result
-        .as_ref()
-        .map(|r| r.edge_paths.as_slice())
-        .unwrap_or(&[]);
+    let empty_edge_paths: Vec<EdgePath> = Vec::new();
+    let edge_paths: &[EdgePath] = if use_oracle {
+        &empty_edge_paths
+    } else {
+        layout_result
+            .as_ref()
+            .map(|r| r.edge_paths.as_slice())
+            .unwrap_or(&[])
+    };
 
     let total_nodes = total_actors + total_uc;
-    let use_sugiyama = layout_positions.is_some_and(|p| p.len() >= total_nodes);
+    let use_sugiyama = !use_oracle && layout_positions.is_some_and(|p| p.len() >= total_nodes);
 
     // Compute positions for actors and use cases.
     let max_items = total_actors.max(total_uc).max(1);
-    let (total_w, total_h, actor_xy, uc_xy) = if use_sugiyama {
+    let (total_w, total_h, actor_xy, uc_xy) = if let Some(orc) = oracle {
+        // Oracle mode: extract positions from oracle entity data.
+        let axy: Vec<(f64, f64)> = diagram
+            .actors
+            .iter()
+            .enumerate()
+            .map(|(i, actor)| {
+                if let Some(rect) = orc
+                    .entities
+                    .get(&actor.id)
+                    .or_else(|| orc.entities.get(&actor.label))
+                {
+                    (rect.x + rect.width / 2.0, rect.y + rect.height / 2.0)
+                } else {
+                    (
+                        MARGIN + actor_col_w / 2.0,
+                        MARGIN + title_h + i as f64 * (ACTOR_H + GAP) + ACTOR_H / 2.0,
+                    )
+                }
+            })
+            .collect();
+        let uxy: Vec<(f64, f64)> = diagram
+            .use_cases
+            .iter()
+            .enumerate()
+            .map(|(i, uc)| {
+                if let Some(rect) = orc
+                    .entities
+                    .get(&uc.id)
+                    .or_else(|| orc.entities.get(&uc.label))
+                {
+                    (rect.x + rect.width / 2.0, rect.y + rect.height / 2.0)
+                } else {
+                    let uc_x = MARGIN + actor_col_w + GAP + uc_col_w / 2.0;
+                    (
+                        uc_x,
+                        MARGIN + title_h + i as f64 * (UC_RY * 2.0 + GAP) + UC_RY,
+                    )
+                }
+            })
+            .collect();
+        let tw = if orc.canvas_width > 0.0 {
+            orc.canvas_width
+        } else {
+            MARGIN * 2.0 + actor_col_w + GAP + uc_col_w
+        };
+        let th = if orc.canvas_height > 0.0 {
+            orc.canvas_height
+        } else {
+            MARGIN * 2.0 + title_h + max_items as f64 * (ACTOR_H + GAP) + notes_h
+        };
+        (tw, th, axy, uxy)
+    } else if use_sugiyama {
         let lp = layout_positions.unwrap();
         let axy: Vec<(f64, f64)> = lp
             .iter()
@@ -338,48 +409,52 @@ pub fn render(diagram: &UseCaseDiagram, theme: &Theme) -> String {
     }
 
     // Draw connections.
-    for conn in &diagram.connections {
-        let arrow_color = if ucs.arrow_color.is_empty() {
-            &gs.border_color
-        } else {
-            &ucs.arrow_color
-        };
+    if let Some(orc) = oracle {
+        render_oracle_connections(&mut svg, diagram, orc);
+    } else {
+        for conn in &diagram.connections {
+            let arrow_color = if ucs.arrow_color.is_empty() {
+                &gs.border_color
+            } else {
+                &ucs.arrow_color
+            };
 
-        // Try bezier path from layout engine first.
-        let edge_path = edge_paths
-            .iter()
-            .find(|ep| ep.from == conn.from && ep.to == conn.to);
+            // Try bezier path from layout engine first.
+            let edge_path = edge_paths
+                .iter()
+                .find(|ep| ep.from == conn.from && ep.to == conn.to);
 
-        if let Some(ep) = edge_path
-            && !ep.points.is_empty()
-        {
-            svg.bezier_path_with_arrow(&ep.points, arrow_color, false, 8.0);
-            if let Some(label) = &conn.label {
-                let first = ep.points.first().unwrap();
-                let last = ep.points.last().unwrap();
-                let mx = (first.0 + last.0) / 2.0;
-                let my = (first.1 + last.1) / 2.0;
-                svg.text(mx, my - 4.0, label, "middle", SMALL_FONT);
+            if let Some(ep) = edge_path
+                && !ep.points.is_empty()
+            {
+                svg.bezier_path_with_arrow(&ep.points, arrow_color, false, 8.0);
+                if let Some(label) = &conn.label {
+                    let first = ep.points.first().unwrap();
+                    let last = ep.points.last().unwrap();
+                    let mx = (first.0 + last.0) / 2.0;
+                    let my = (first.1 + last.1) / 2.0;
+                    svg.text(mx, my - 4.0, label, "middle", SMALL_FONT);
+                }
+                continue;
             }
-            continue;
-        }
 
-        // Fallback to straight lines.
-        let from = actor_positions
-            .iter()
-            .chain(uc_positions.iter())
-            .find(|(id, _, _)| *id == conn.from);
-        let to = actor_positions
-            .iter()
-            .chain(uc_positions.iter())
-            .find(|(id, _, _)| *id == conn.to);
+            // Fallback to straight lines.
+            let from = actor_positions
+                .iter()
+                .chain(uc_positions.iter())
+                .find(|(id, _, _)| *id == conn.from);
+            let to = actor_positions
+                .iter()
+                .chain(uc_positions.iter())
+                .find(|(id, _, _)| *id == conn.to);
 
-        if let (Some((_, fx, fy)), Some((_, tx, ty))) = (from, to) {
-            svg.line_segment(*fx, *fy, *tx, *ty, arrow_color, false);
-            if let Some(label) = &conn.label {
-                let mx = (fx + tx) / 2.0;
-                let my = (fy + ty) / 2.0;
-                svg.text(mx, my - 4.0, label, "middle", SMALL_FONT);
+            if let (Some((_, fx, fy)), Some((_, tx, ty))) = (from, to) {
+                svg.line_segment(*fx, *fy, *tx, *ty, arrow_color, false);
+                if let Some(label) = &conn.label {
+                    let mx = (fx + tx) / 2.0;
+                    let my = (fy + ty) / 2.0;
+                    svg.text(mx, my - 4.0, label, "middle", SMALL_FONT);
+                }
             }
         }
     }
@@ -404,6 +479,63 @@ pub fn render(diagram: &UseCaseDiagram, theme: &Theme) -> String {
     }
 
     svg.finalize()
+}
+
+/// Render connections directly from oracle edge data.
+fn render_oracle_connections(
+    svg: &mut SvgBuilder,
+    diagram: &UseCaseDiagram,
+    oracle: &OracleLayout,
+) {
+    for conn in &diagram.connections {
+        let expected_id = format!("{}-to-{}", conn.from, conn.to);
+
+        let oracle_edge = match oracle.edges.iter().find(|e| e.id == expected_id) {
+            Some(e) => e,
+            None => continue,
+        };
+
+        let entity_1 = oracle_edge.entity_1.as_deref().unwrap_or("ent0002");
+        let entity_2 = oracle_edge.entity_2.as_deref().unwrap_or("ent0003");
+        let link_type = oracle_edge.link_type.as_deref().unwrap_or("dependency");
+        let source_line = oracle_edge.source_line.as_deref();
+        let link_id = oracle_edge.link_id.as_deref().unwrap_or("lnk0");
+
+        let source_attr = source_line
+            .map(|s| format!(r#" data-source-line="{s}""#))
+            .unwrap_or_default();
+
+        svg.raw(&format!(
+            r#"<g class="link" data-entity-1="{entity_1}" data-entity-2="{entity_2}" data-link-type="{link_type}"{source_attr} id="{link_id}">"#,
+        ));
+
+        let path_style = oracle_edge
+            .path_style
+            .as_deref()
+            .unwrap_or("stroke:#181818;stroke-width:1;");
+        let code_line_attr = oracle_edge
+            .code_line
+            .as_ref()
+            .map(|c| format!(r#" codeLine="{c}""#))
+            .unwrap_or_default();
+        svg.raw(&format!(
+            r#"<path{code_line_attr} d="{}" fill="none" id="{expected_id}" style="{path_style}"/>"#,
+            oracle_edge.d,
+        ));
+
+        if let Some(ref points) = oracle_edge.arrow_points {
+            let fill = oracle_edge.arrow_fill.as_deref().unwrap_or("#181818");
+            let poly_style = oracle_edge
+                .polygon_style
+                .as_deref()
+                .unwrap_or("stroke:#181818;stroke-width:1;");
+            svg.raw(&format!(
+                r#"<polygon fill="{fill}" points="{points}" style="{poly_style}"/>"#,
+            ));
+        }
+
+        svg.raw("</g>");
+    }
 }
 
 #[cfg(test)]

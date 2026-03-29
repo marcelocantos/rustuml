@@ -11,6 +11,7 @@ use std::fmt::Write;
 use rustuml_layout::graph::{Direction, EdgePath, LayoutGraph};
 use rustuml_parser::diagram::state::*;
 
+use crate::layout_oracle::OracleLayout;
 use crate::metrics;
 use crate::style::Theme;
 
@@ -246,6 +247,15 @@ fn classify_star_nodes(transitions: &[Transition]) -> (bool, bool) {
 /// The output uses inline formatting (no extra whitespace) to match PlantUML's
 /// single-line SVG output as closely as possible.
 pub fn render(diagram: &StateDiagram, theme: &Theme) -> String {
+    render_with_oracle(diagram, theme, None)
+}
+
+/// Render a state diagram to SVG, optionally using pre-computed layout from an oracle.
+pub fn render_with_oracle(
+    diagram: &StateDiagram,
+    theme: &Theme,
+    oracle: Option<&OracleLayout>,
+) -> String {
     let _ = theme; // We use PlantUML's exact colors, not theme colors.
 
     if diagram.states.is_empty() && diagram.transitions.is_empty() {
@@ -329,8 +339,13 @@ pub fn render(diagram: &StateDiagram, theme: &Theme) -> String {
         }
     };
 
-    // Attempt Sugiyama layout.
-    let layout_result = {
+    // Use oracle layout when available; otherwise attempt Sugiyama layout.
+    let use_oracle = oracle.is_some();
+    let empty_edge_paths: Vec<EdgePath> = Vec::new();
+
+    let layout_result = if use_oracle {
+        None
+    } else {
         let mut layout = LayoutGraph::new(Direction::TopToBottom);
         for id in &state_ids {
             let state_def = find_state(id);
@@ -355,15 +370,69 @@ pub fn render(diagram: &StateDiagram, theme: &Theme) -> String {
     };
 
     let layout_positions = layout_result.as_ref().map(|r| &r.node_positions[..]);
-    let edge_paths: &[EdgePath] = layout_result
-        .as_ref()
-        .map(|r| r.edge_paths.as_slice())
-        .unwrap_or(&[]);
+    let edge_paths: &[EdgePath] = if use_oracle {
+        &empty_edge_paths
+    } else {
+        layout_result
+            .as_ref()
+            .map(|r| r.edge_paths.as_slice())
+            .unwrap_or(&[])
+    };
 
-    let use_sugiyama = layout_positions.is_some_and(|p| p.len() >= state_ids.len());
+    let use_sugiyama = !use_oracle && layout_positions.is_some_and(|p| p.len() >= state_ids.len());
 
     // Compute positions: (id, center_x, center_y, box_width, box_height).
-    let (positions, total_width, total_height) = if use_sugiyama {
+    let (positions, total_width, total_height) = if let Some(orc) = oracle {
+        // Oracle mode: extract positions from oracle entity data.
+        let mut positions: Vec<(String, f64, f64, f64, f64)> = Vec::new();
+        for id in &state_ids {
+            // Map layout IDs to oracle qualified names.
+            let oracle_name = if id == "__start__" {
+                ".start."
+            } else if id == "__end__" {
+                ".end."
+            } else {
+                id.as_str()
+            };
+            if let Some(rect) = orc.entities.get(oracle_name) {
+                let cx = rect.x + rect.width / 2.0;
+                let cy = rect.y + rect.height / 2.0;
+                positions.push((id.clone(), cx, cy, rect.width, rect.height));
+            } else {
+                // Fallback: use computed dimensions and stack.
+                let state_def = find_state(id);
+                let h = if id == "__start__" || id == "__end__" {
+                    START_RADIUS * 2.0
+                } else {
+                    node_height(id, state_def)
+                };
+                let w = if id == "__start__" || id == "__end__" {
+                    START_RADIUS * 2.0
+                } else {
+                    node_width(id, state_def)
+                };
+                let cy = MARGIN + positions.len() as f64 * 80.0 + h / 2.0;
+                positions.push((id.clone(), MARGIN + w / 2.0, cy, w, h));
+            }
+        }
+        let tw = if orc.canvas_width > 0.0 {
+            orc.canvas_width
+        } else {
+            positions
+                .iter()
+                .map(|(_, cx, _, w, _)| cx + w / 2.0 + MARGIN)
+                .fold(0.0_f64, f64::max)
+        };
+        let th = if orc.canvas_height > 0.0 {
+            orc.canvas_height
+        } else {
+            positions
+                .iter()
+                .map(|(_, _, cy, _, h)| cy + h / 2.0 + MARGIN)
+                .fold(0.0_f64, f64::max)
+        };
+        (positions, tw, th)
+    } else if use_sugiyama {
         let lp = layout_positions.unwrap();
         let mut positions: Vec<(String, f64, f64, f64, f64)> = Vec::new();
         let mut max_x = 0.0_f64;
@@ -894,129 +963,133 @@ pub fn render(diagram: &StateDiagram, theme: &Theme) -> String {
     }
 
     // Render links (transitions).
-    for t in &diagram.transitions {
-        let from_layout = map_id(&t.from, true);
-        let to_layout = map_id(&t.to, false);
-        let from_name = if t.from == "[*]" { "*start*" } else { &t.from };
-        let to_name = if t.to == "[*]" { "*end*" } else { &t.to };
+    if let Some(orc) = oracle {
+        render_oracle_transitions(&mut svg, diagram, orc);
+    } else {
+        for t in &diagram.transitions {
+            let from_layout = map_id(&t.from, true);
+            let to_layout = map_id(&t.to, false);
+            let from_name = if t.from == "[*]" { "*start*" } else { &t.from };
+            let to_name = if t.to == "[*]" { "*end*" } else { &t.to };
 
-        // HTML comment.
-        write!(svg, "<!--link {} to {}-->", from_name, to_name).unwrap();
+            // HTML comment.
+            write!(svg, "<!--link {} to {}-->", from_name, to_name).unwrap();
 
-        let link_id = ids.next_link();
-        let from_ent = ent_id_of(&from_layout);
-        let to_ent = ent_id_of(&to_layout);
+            let link_id = ids.next_link();
+            let from_ent = ent_id_of(&from_layout);
+            let to_ent = ent_id_of(&to_layout);
 
-        // Use the parser-provided source line from the transition model.
-        let source_line = t.source_line;
+            // Use the parser-provided source line from the transition model.
+            let source_line = t.source_line;
 
-        write!(
-            svg,
-            r#"<g class="link" data-entity-1="{from_ent}" data-entity-2="{to_ent}" data-link-type="dependency" data-source-line="{source_line}" id="{link_id}">"#,
-        )
-        .unwrap();
-
-        // Try bezier path from layout engine.
-        let edge_path = edge_paths
-            .iter()
-            .find(|ep| ep.from == from_layout && ep.to == to_layout);
-
-        let (from_cx, from_cy, _from_w, from_h) = pos_of(&from_layout);
-        let (to_cx, to_cy, _to_w, to_h) = pos_of(&to_layout);
-
-        if let Some(ep) = edge_path
-            && !ep.points.is_empty()
-        {
-            // Render bezier path.
-            let points = &ep.points;
-            let mut d = format!("M{},{}", fmt_f(points[0].0), fmt_f(points[0].1));
-            let mut i = 1;
-            while i + 2 < points.len() {
-                write!(
-                    d,
-                    " C{},{} {},{} {},{}",
-                    fmt_f(points[i].0),
-                    fmt_f(points[i].1),
-                    fmt_f(points[i + 1].0),
-                    fmt_f(points[i + 1].1),
-                    fmt_f(points[i + 2].0),
-                    fmt_f(points[i + 2].1),
-                )
-                .unwrap();
-                i += 3;
-            }
             write!(
                 svg,
-                r#"<path d="{d}" fill="none" id="{from_name}-to-{to_name}" style="stroke:{STROKE_COLOR};stroke-width:1;"/>"#,
+                r#"<g class="link" data-entity-1="{from_ent}" data-entity-2="{to_ent}" data-link-type="dependency" data-source-line="{source_line}" id="{link_id}">"#,
             )
             .unwrap();
 
-            // Arrowhead polygon.
-            let endpoint = points[points.len() - 1];
-            let control = if points.len() >= 2 {
-                points[points.len() - 2]
+            // Try bezier path from layout engine.
+            let edge_path = edge_paths
+                .iter()
+                .find(|ep| ep.from == from_layout && ep.to == to_layout);
+
+            let (from_cx, from_cy, _from_w, from_h) = pos_of(&from_layout);
+            let (to_cx, to_cy, _to_w, to_h) = pos_of(&to_layout);
+
+            if let Some(ep) = edge_path
+                && !ep.points.is_empty()
+            {
+                // Render bezier path.
+                let points = &ep.points;
+                let mut d = format!("M{},{}", fmt_f(points[0].0), fmt_f(points[0].1));
+                let mut i = 1;
+                while i + 2 < points.len() {
+                    write!(
+                        d,
+                        " C{},{} {},{} {},{}",
+                        fmt_f(points[i].0),
+                        fmt_f(points[i].1),
+                        fmt_f(points[i + 1].0),
+                        fmt_f(points[i + 1].1),
+                        fmt_f(points[i + 2].0),
+                        fmt_f(points[i + 2].1),
+                    )
+                    .unwrap();
+                    i += 3;
+                }
+                write!(
+                    svg,
+                    r#"<path d="{d}" fill="none" id="{from_name}-to-{to_name}" style="stroke:{STROKE_COLOR};stroke-width:1;"/>"#,
+                )
+                .unwrap();
+
+                // Arrowhead polygon.
+                let endpoint = points[points.len() - 1];
+                let control = if points.len() >= 2 {
+                    points[points.len() - 2]
+                } else {
+                    (from_cx, from_cy)
+                };
+                render_arrowhead(&mut svg, control, endpoint);
+
+                // Label.
+                if let Some(label) = &t.label {
+                    let first = points.first().unwrap();
+                    let last = points.last().unwrap();
+                    let mid_x = (first.0 + last.0) / 2.0;
+                    let mid_y = (first.1 + last.1) / 2.0;
+                    let tw = metrics::text_width(label, LINK_FONT_SIZE);
+                    let label_escaped = escape_xml(label);
+                    write!(
+                        svg,
+                        r#"<text fill="{TEXT_COLOR}" font-family="sans-serif" font-size="{LINK_FONT_SIZE}" lengthAdjust="spacing" textLength="{}" x="{}" y="{}">{label_escaped}</text>"#,
+                        fmt_f(tw),
+                        fmt_f(mid_x + 1.0),
+                        fmt_f(mid_y),
+                    )
+                    .unwrap();
+                }
             } else {
-                (from_cx, from_cy)
-            };
-            render_arrowhead(&mut svg, control, endpoint);
+                // Straight line fallback.
+                let start_y = from_cy + from_h / 2.0;
+                let end_y = to_cy - to_h / 2.0;
 
-            // Label.
-            if let Some(label) = &t.label {
-                let first = points.first().unwrap();
-                let last = points.last().unwrap();
-                let mid_x = (first.0 + last.0) / 2.0;
-                let mid_y = (first.1 + last.1) / 2.0;
-                let tw = metrics::text_width(label, LINK_FONT_SIZE);
-                let label_escaped = escape_xml(label);
+                // Path as cubic bezier.
+                let mid_y = (start_y + end_y) / 2.0;
                 write!(
                     svg,
-                    r#"<text fill="{TEXT_COLOR}" font-family="sans-serif" font-size="{LINK_FONT_SIZE}" lengthAdjust="spacing" textLength="{}" x="{}" y="{}">{label_escaped}</text>"#,
-                    fmt_f(tw),
-                    fmt_f(mid_x + 1.0),
-                    fmt_f(mid_y),
+                    r#"<path d="M{},{} C{},{} {},{} {},{}" fill="none" id="{from_name}-to-{to_name}" style="stroke:{STROKE_COLOR};stroke-width:1;"/>"#,
+                    fmt_f(from_cx), fmt_f(start_y),
+                    fmt_f(from_cx), fmt_f(mid_y),
+                    fmt_f(to_cx), fmt_f(mid_y),
+                    fmt_f(to_cx), fmt_f(end_y),
                 )
                 .unwrap();
+
+                // Arrowhead.
+                let control = (to_cx, end_y - ARROW_LEN);
+                let endpoint = (to_cx, end_y);
+                render_arrowhead(&mut svg, control, endpoint);
+
+                // Label.
+                if let Some(label) = &t.label {
+                    let label_x = from_cx.max(to_cx) + 1.0;
+                    let label_y = (start_y + end_y) / 2.0;
+                    let tw = metrics::text_width(label, LINK_FONT_SIZE);
+                    let label_escaped = escape_xml(label);
+                    write!(
+                        svg,
+                        r#"<text fill="{TEXT_COLOR}" font-family="sans-serif" font-size="{LINK_FONT_SIZE}" lengthAdjust="spacing" textLength="{}" x="{}" y="{}">{label_escaped}</text>"#,
+                        fmt_f(tw),
+                        fmt_f(label_x),
+                        fmt_f(label_y),
+                    )
+                    .unwrap();
+                }
             }
-        } else {
-            // Straight line fallback.
-            let start_y = from_cy + from_h / 2.0;
-            let end_y = to_cy - to_h / 2.0;
 
-            // Path as cubic bezier.
-            let mid_y = (start_y + end_y) / 2.0;
-            write!(
-                svg,
-                r#"<path d="M{},{} C{},{} {},{} {},{}" fill="none" id="{from_name}-to-{to_name}" style="stroke:{STROKE_COLOR};stroke-width:1;"/>"#,
-                fmt_f(from_cx), fmt_f(start_y),
-                fmt_f(from_cx), fmt_f(mid_y),
-                fmt_f(to_cx), fmt_f(mid_y),
-                fmt_f(to_cx), fmt_f(end_y),
-            )
-            .unwrap();
-
-            // Arrowhead.
-            let control = (to_cx, end_y - ARROW_LEN);
-            let endpoint = (to_cx, end_y);
-            render_arrowhead(&mut svg, control, endpoint);
-
-            // Label.
-            if let Some(label) = &t.label {
-                let label_x = from_cx.max(to_cx) + 1.0;
-                let label_y = (start_y + end_y) / 2.0;
-                let tw = metrics::text_width(label, LINK_FONT_SIZE);
-                let label_escaped = escape_xml(label);
-                write!(
-                    svg,
-                    r#"<text fill="{TEXT_COLOR}" font-family="sans-serif" font-size="{LINK_FONT_SIZE}" lengthAdjust="spacing" textLength="{}" x="{}" y="{}">{label_escaped}</text>"#,
-                    fmt_f(tw),
-                    fmt_f(label_x),
-                    fmt_f(label_y),
-                )
-                .unwrap();
-            }
+            svg.push_str("</g>");
         }
-
-        svg.push_str("</g>");
     }
 
     svg.push_str("</g></svg>");
@@ -1055,6 +1128,64 @@ fn render_arrowhead(svg: &mut String, control: (f64, f64), endpoint: (f64, f64))
         fmt_f(right_x), fmt_f(right_y),
     )
     .unwrap();
+}
+
+/// Render transitions directly from oracle edge data.
+fn render_oracle_transitions(svg: &mut String, diagram: &StateDiagram, oracle: &OracleLayout) {
+    for t in &diagram.transitions {
+        let from_name = if t.from == "[*]" { "*start*" } else { &t.from };
+        let to_name = if t.to == "[*]" { "*end*" } else { &t.to };
+        let expected_id = format!("{from_name}-to-{to_name}");
+
+        let oracle_edge = match oracle.edges.iter().find(|e| e.id == expected_id) {
+            Some(e) => e,
+            None => continue,
+        };
+
+        // HTML comment.
+        write!(svg, "<!--link {from_name} to {to_name}-->").unwrap();
+
+        // Link group wrapper using oracle attributes.
+        let entity_1 = oracle_edge.entity_1.as_deref().unwrap_or("ent0002");
+        let entity_2 = oracle_edge.entity_2.as_deref().unwrap_or("ent0003");
+        let link_type = oracle_edge.link_type.as_deref().unwrap_or("dependency");
+        let source_line = oracle_edge.source_line.as_deref().unwrap_or("0");
+        let link_id = oracle_edge.link_id.as_deref().unwrap_or("lnk0");
+
+        write!(
+            svg,
+            r#"<g class="link" data-entity-1="{entity_1}" data-entity-2="{entity_2}" data-link-type="{link_type}" data-source-line="{source_line}" id="{link_id}">"#,
+        )
+        .unwrap();
+
+        // Path element with oracle data.
+        let path_style = oracle_edge
+            .path_style
+            .as_deref()
+            .unwrap_or("stroke:#181818;stroke-width:1;");
+        write!(
+            svg,
+            r#"<path d="{}" fill="none" id="{expected_id}" style="{path_style}"/>"#,
+            oracle_edge.d,
+        )
+        .unwrap();
+
+        // Arrowhead polygon from oracle.
+        if let Some(ref points) = oracle_edge.arrow_points {
+            let fill = oracle_edge.arrow_fill.as_deref().unwrap_or("#181818");
+            let poly_style = oracle_edge
+                .polygon_style
+                .as_deref()
+                .unwrap_or("stroke:#181818;stroke-width:1;");
+            write!(
+                svg,
+                r#"<polygon fill="{fill}" points="{points}" style="{poly_style}"/>"#,
+            )
+            .unwrap();
+        }
+
+        svg.push_str("</g>");
+    }
 }
 
 /// Escape XML special characters.

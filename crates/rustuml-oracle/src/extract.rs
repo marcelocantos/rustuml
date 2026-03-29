@@ -43,7 +43,7 @@ pub fn extract_oracle_layout(svg: &str) -> Option<OracleLayout> {
 
         let class_attr = node.attribute("class").unwrap_or("");
 
-        if class_attr == "entity" {
+        if class_attr == "entity" || class_attr == "cluster" {
             if let Some(name) = node.attribute("data-qualified-name") {
                 // Find the first <rect> child for position data.
                 if let Some(rect) = find_first_child(&node, "rect") {
@@ -58,6 +58,72 @@ pub fn extract_oracle_layout(svg: &str) -> Option<OracleLayout> {
                             y,
                             width,
                             height,
+                        },
+                    );
+                } else if let Some(ellipse) = find_first_child(&node, "ellipse") {
+                    // Start/end pseudo-states and other circular entities use <ellipse>.
+                    let cx = parse_attr(&ellipse, "cx")?;
+                    let cy = parse_attr(&ellipse, "cy")?;
+                    let rx = parse_attr(&ellipse, "rx")?;
+                    let ry = parse_attr(&ellipse, "ry")?;
+                    layout.entities.insert(
+                        name.to_string(),
+                        EntityRect {
+                            x: cx - rx,
+                            y: cy - ry,
+                            width: rx * 2.0,
+                            height: ry * 2.0,
+                        },
+                    );
+                } else if let Some(polygon) = find_first_child(&node, "polygon") {
+                    // Choice pseudo-states use <polygon> (diamond).
+                    if let Some(points) = polygon.attribute("points") {
+                        let coords: Vec<f64> = points
+                            .split(|c: char| c == ',' || c.is_whitespace())
+                            .filter_map(|s| s.parse().ok())
+                            .collect();
+                        if coords.len() >= 8 {
+                            let xs: Vec<f64> = coords.iter().step_by(2).copied().collect();
+                            let ys: Vec<f64> = coords.iter().skip(1).step_by(2).copied().collect();
+                            let min_x = xs.iter().copied().fold(f64::INFINITY, f64::min);
+                            let max_x = xs.iter().copied().fold(f64::NEG_INFINITY, f64::max);
+                            let min_y = ys.iter().copied().fold(f64::INFINITY, f64::min);
+                            let max_y = ys.iter().copied().fold(f64::NEG_INFINITY, f64::max);
+                            layout.entities.insert(
+                                name.to_string(),
+                                EntityRect {
+                                    x: min_x,
+                                    y: min_y,
+                                    width: max_x - min_x,
+                                    height: max_y - min_y,
+                                },
+                            );
+                        }
+                    }
+                } else if let Some(path) = find_first_child(&node, "path") {
+                    // Some entities (notes, clouds) use <path>. Extract bounding box.
+                    if let Some(d) = path.attribute("d") {
+                        if let Some(bbox) = path_bounding_box(d) {
+                            layout.entities.insert(name.to_string(), bbox);
+                        }
+                    }
+                }
+            }
+        } else if class_attr == "start_entity" || class_attr == "end_entity" {
+            if let Some(name) = node.attribute("data-qualified-name") {
+                // Start/end pseudo-states use <ellipse>.
+                if let Some(ellipse) = find_first_child(&node, "ellipse") {
+                    let cx = parse_attr(&ellipse, "cx")?;
+                    let cy = parse_attr(&ellipse, "cy")?;
+                    let rx = parse_attr(&ellipse, "rx")?;
+                    let ry = parse_attr(&ellipse, "ry")?;
+                    layout.entities.insert(
+                        name.to_string(),
+                        EntityRect {
+                            x: cx - rx,
+                            y: cy - ry,
+                            width: rx * 2.0,
+                            height: ry * 2.0,
                         },
                     );
                 }
@@ -108,6 +174,47 @@ fn find_first_child<'a>(
 
 fn parse_attr(node: &roxmltree::Node, attr: &str) -> Option<f64> {
     node.attribute(attr)?.parse().ok()
+}
+
+/// Extract a rough bounding box from an SVG path `d` attribute.
+///
+/// Only considers M/L/C coordinates (ignores arcs and relative commands).
+/// Returns `None` if no coordinates could be parsed.
+fn path_bounding_box(d: &str) -> Option<EntityRect> {
+    let mut min_x = f64::INFINITY;
+    let mut min_y = f64::INFINITY;
+    let mut max_x = f64::NEG_INFINITY;
+    let mut max_y = f64::NEG_INFINITY;
+    let mut found = false;
+
+    // Simple tokenizer: split on command letters and commas/spaces.
+    let nums: Vec<f64> = d
+        .replace(|c: char| c.is_ascii_alphabetic(), " ")
+        .split(|c: char| c == ',' || c.is_whitespace())
+        .filter_map(|s| s.parse::<f64>().ok())
+        .collect();
+
+    // Take pairs as (x, y).
+    for pair in nums.chunks(2) {
+        if pair.len() == 2 {
+            min_x = min_x.min(pair[0]);
+            max_x = max_x.max(pair[0]);
+            min_y = min_y.min(pair[1]);
+            max_y = max_y.max(pair[1]);
+            found = true;
+        }
+    }
+
+    if found {
+        Some(EntityRect {
+            x: min_x,
+            y: min_y,
+            width: max_x - min_x,
+            height: max_y - min_y,
+        })
+    } else {
+        None
+    }
 }
 
 #[cfg(test)]

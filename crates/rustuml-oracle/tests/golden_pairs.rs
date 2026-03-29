@@ -178,8 +178,11 @@ fn run_one(puml_path: &Path, root: &Path) -> TestResult {
         };
     }
 
-    // Extract oracle layout from golden SVG for class diagrams.
-    let oracle_layout = if golden_svg.contains(r#"data-diagram-type="CLASS""#) {
+    // Extract oracle layout from golden SVG for supported diagram types.
+    let oracle_layout = if golden_svg.contains(r#"data-diagram-type="CLASS""#)
+        || golden_svg.contains(r#"data-diagram-type="STATE""#)
+        || golden_svg.contains(r#"data-diagram-type="DESCRIPTION""#)
+    {
         extract::extract_oracle_layout(&golden_svg)
     } else {
         None

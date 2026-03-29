@@ -102,6 +102,10 @@ fn render_with_theme_and_oracle(
 ) -> String {
     match diagram {
         Diagram::Class(cls) => class::render_with_oracle(cls, theme, oracle),
+        Diagram::State(st) => state::render_with_oracle(st, theme, oracle),
+        Diagram::Component(comp) => component::render_with_oracle(comp, theme, oracle),
+        Diagram::Deployment(dep) => deployment::render_with_oracle(dep, theme, oracle),
+        Diagram::UseCase(uc) => usecase::render_with_oracle(uc, theme, oracle),
         _ => render_with_theme(diagram, theme),
     }
 }

@@ -11,6 +11,7 @@ use std::fmt::Write;
 use rustuml_layout::graph::{Direction, EdgePath, LayoutGraph};
 use rustuml_parser::diagram::component::*;
 
+use crate::layout_oracle::OracleLayout;
 use crate::metrics;
 use crate::style::Theme;
 use crate::svg::SvgBuilder;
@@ -101,6 +102,15 @@ const ICON_BAR_TOP_OFFSET_2: f64 = 6.0;
 // ---------------------------------------------------------------------------
 
 pub fn render(diagram: &ComponentDiagram, theme: &Theme) -> String {
+    render_with_oracle(diagram, theme, None)
+}
+
+/// Render a component diagram to SVG, optionally using pre-computed layout from an oracle.
+pub fn render_with_oracle(
+    diagram: &ComponentDiagram,
+    theme: &Theme,
+    oracle: Option<&OracleLayout>,
+) -> String {
     if diagram.components.is_empty() && diagram.packages.is_empty() && diagram.interfaces.is_empty()
     {
         return r#"<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" contentStyleType="text/css" data-diagram-type="DESCRIPTION" height="50px" preserveAspectRatio="none" style="width:100px;height:50px;background:#FFFFFF;" version="1.1" viewBox="0 0 100 50" width="100px" zoomAndPan="magnify"><defs/><g></g></svg>"#.to_string();
@@ -115,8 +125,12 @@ pub fn render(diagram: &ComponentDiagram, theme: &Theme) -> String {
         0.0
     };
 
-    // Try Sugiyama layout.
-    let layout_result = if !diagram.components.is_empty() || !diagram.interfaces.is_empty() {
+    let use_oracle = oracle.is_some();
+
+    // Try Sugiyama layout (skip when oracle is available).
+    let layout_result = if use_oracle {
+        None
+    } else if !diagram.components.is_empty() || !diagram.interfaces.is_empty() {
         let mut layout = LayoutGraph::new(Direction::TopToBottom);
         for (comp, dim) in diagram.components.iter().zip(&comp_dims) {
             layout.add_node(&comp.id, &comp.label, dim.width, dim.height);
@@ -139,8 +153,10 @@ pub fn render(diagram: &ComponentDiagram, theme: &Theme) -> String {
 
     let n_comp = diagram.components.len();
 
-    // Compute positions from layout or grid fallback.
-    let (positions, iface_positions, content_w, content_h) = if let Some(ref result) = layout_result
+    // Compute positions from oracle, layout engine, or grid fallback.
+    let (positions, iface_positions, content_w, content_h) = if let Some(orc) = oracle {
+        compute_positions_from_oracle(diagram, &comp_dims, orc, title_h)
+    } else if let Some(ref result) = layout_result
         && result.node_positions.len() >= n_comp + diagram.interfaces.len()
     {
         compute_positions_from_layout(diagram, &comp_dims, &result.node_positions, title_h)
@@ -148,17 +164,31 @@ pub fn render(diagram: &ComponentDiagram, theme: &Theme) -> String {
         compute_positions_grid(diagram, &comp_dims, title_h)
     };
 
-    let edge_paths: &[EdgePath] = layout_result
-        .as_ref()
-        .map(|r| r.edge_paths.as_slice())
-        .unwrap_or(&[]);
+    let empty_edge_paths: Vec<EdgePath> = Vec::new();
+    let edge_paths: &[EdgePath] = if use_oracle {
+        &empty_edge_paths
+    } else {
+        layout_result
+            .as_ref()
+            .map(|r| r.edge_paths.as_slice())
+            .unwrap_or(&[])
+    };
 
     // Estimate package bounding box.
     let pkg_total_w = estimate_packages_width(&diagram.packages);
     let pkg_total_h = estimate_packages_height(&diagram.packages);
 
-    let total_w = content_w.max(pkg_total_w).max(100.0);
-    let total_h = (content_h + pkg_total_h + title_h).max(50.0);
+    let (total_w, total_h) = if let Some(orc) = oracle
+        && orc.canvas_width > 0.0
+        && orc.canvas_height > 0.0
+    {
+        (orc.canvas_width, orc.canvas_height)
+    } else {
+        (
+            content_w.max(pkg_total_w).max(100.0),
+            (content_h + pkg_total_h + title_h).max(50.0),
+        )
+    };
 
     let mut svg = SvgBuilder::new_plantuml(total_w, total_h, "DESCRIPTION");
 
@@ -296,213 +326,217 @@ pub fn render(diagram: &ComponentDiagram, theme: &Theme) -> String {
     }
 
     // Render connections (links).
-    let mut link_counter = entity_counter;
-    for conn in &diagram.connections {
-        let link_id = format!("lnk{link_counter}");
-        link_counter += 1;
+    if let Some(orc) = oracle {
+        render_oracle_connections(&mut svg, diagram, orc);
+    } else {
+        let mut link_counter = entity_counter;
+        for conn in &diagram.connections {
+            let link_id = format!("lnk{link_counter}");
+            link_counter += 1;
 
-        // Find source and target positions.
-        let from_comp = diagram
-            .components
-            .iter()
-            .enumerate()
-            .find(|(_, c)| c.id == conn.from);
-        let to_comp = diagram
-            .components
-            .iter()
-            .enumerate()
-            .find(|(_, c)| c.id == conn.to);
-        let from_iface = diagram
-            .interfaces
-            .iter()
-            .enumerate()
-            .find(|(_, i)| i.id == conn.from);
-        let to_iface = diagram
-            .interfaces
-            .iter()
-            .enumerate()
-            .find(|(_, i)| i.id == conn.to);
+            // Find source and target positions.
+            let from_comp = diagram
+                .components
+                .iter()
+                .enumerate()
+                .find(|(_, c)| c.id == conn.from);
+            let to_comp = diagram
+                .components
+                .iter()
+                .enumerate()
+                .find(|(_, c)| c.id == conn.to);
+            let from_iface = diagram
+                .interfaces
+                .iter()
+                .enumerate()
+                .find(|(_, i)| i.id == conn.from);
+            let to_iface = diagram
+                .interfaces
+                .iter()
+                .enumerate()
+                .find(|(_, i)| i.id == conn.to);
 
-        let (from_cx, from_cy, from_bottom) = if let Some((i, _)) = from_comp {
-            let (x, y) = positions[i];
-            let dim = &comp_dims[i];
-            (x + dim.width / 2.0, y + dim.height, y + dim.height)
-        } else if let Some((i, _)) = from_iface {
-            let (ix, iy) = iface_positions[i];
-            (ix, iy, iy + IFACE_R)
-        } else {
-            continue;
-        };
+            let (from_cx, from_cy, from_bottom) = if let Some((i, _)) = from_comp {
+                let (x, y) = positions[i];
+                let dim = &comp_dims[i];
+                (x + dim.width / 2.0, y + dim.height, y + dim.height)
+            } else if let Some((i, _)) = from_iface {
+                let (ix, iy) = iface_positions[i];
+                (ix, iy, iy + IFACE_R)
+            } else {
+                continue;
+            };
 
-        let (to_cx, to_cy, _to_top) = if let Some((i, _)) = to_comp {
-            let (x, y) = positions[i];
-            let dim = &comp_dims[i];
-            (x + dim.width / 2.0, y, y)
-        } else if let Some((i, _)) = to_iface {
-            let (ix, iy) = iface_positions[i];
-            (ix, iy, iy - IFACE_R)
-        } else {
-            continue;
-        };
+            let (to_cx, to_cy, _to_top) = if let Some((i, _)) = to_comp {
+                let (x, y) = positions[i];
+                let dim = &comp_dims[i];
+                (x + dim.width / 2.0, y, y)
+            } else if let Some((i, _)) = to_iface {
+                let (ix, iy) = iface_positions[i];
+                (ix, iy, iy - IFACE_R)
+            } else {
+                continue;
+            };
 
-        // Determine link type.
-        let _has_arrow = conn.from.contains("-->")
-            || conn.to.contains("-->")
-            || !conn.dashed && from_comp.is_some() && to_comp.is_some();
-        // In PlantUML: --> is dependency, -- is association, ..> is dependency (dashed),
-        // .. is association (dashed). We infer from the parser's dashed flag and arrow presence.
-        // The parser sets dashed=true for dotted lines. Arrow presence is implied by --> vs --.
-        // Since Connection doesn't carry arrow type, we assume:
-        // - non-dashed + components => dependency (has arrow)
-        // - dashed => dependency (has arrow)
-        // For association (no arrow), the link type is "association".
-        let link_type = "dependency"; // Simplified - the parser doesn't distinguish fully.
-        let dash_attr = if conn.dashed {
-            "stroke-dasharray:7,7;"
-        } else {
-            ""
-        };
+            // Determine link type.
+            let _has_arrow = conn.from.contains("-->")
+                || conn.to.contains("-->")
+                || !conn.dashed && from_comp.is_some() && to_comp.is_some();
+            // In PlantUML: --> is dependency, -- is association, ..> is dependency (dashed),
+            // .. is association (dashed). We infer from the parser's dashed flag and arrow presence.
+            // The parser sets dashed=true for dotted lines. Arrow presence is implied by --> vs --.
+            // Since Connection doesn't carry arrow type, we assume:
+            // - non-dashed + components => dependency (has arrow)
+            // - dashed => dependency (has arrow)
+            // For association (no arrow), the link type is "association".
+            let link_type = "dependency"; // Simplified - the parser doesn't distinguish fully.
+            let dash_attr = if conn.dashed {
+                "stroke-dasharray:7,7;"
+            } else {
+                ""
+            };
 
-        // Try bezier path from layout engine first.
-        let edge_path = edge_paths
-            .iter()
-            .find(|ep| ep.from == conn.from && ep.to == conn.to);
+            // Try bezier path from layout engine first.
+            let edge_path = edge_paths
+                .iter()
+                .find(|ep| ep.from == conn.from && ep.to == conn.to);
 
-        svg.raw(&format!("<!--link {} to {}-->", conn.from, conn.to));
+            svg.raw(&format!("<!--link {} to {}-->", conn.from, conn.to));
 
-        let from_ent_idx = diagram
-            .components
-            .iter()
-            .position(|c| c.id == conn.from)
-            .map(|i| i + 2)
-            .or_else(|| {
-                diagram
-                    .interfaces
-                    .iter()
-                    .position(|i| i.id == conn.from)
-                    .map(|i| i + 2 + n_comp)
-            });
-        let to_ent_idx = diagram
-            .components
-            .iter()
-            .position(|c| c.id == conn.to)
-            .map(|i| i + 2)
-            .or_else(|| {
-                diagram
-                    .interfaces
-                    .iter()
-                    .position(|i| i.id == conn.to)
-                    .map(|i| i + 2 + n_comp)
-            });
+            let from_ent_idx = diagram
+                .components
+                .iter()
+                .position(|c| c.id == conn.from)
+                .map(|i| i + 2)
+                .or_else(|| {
+                    diagram
+                        .interfaces
+                        .iter()
+                        .position(|i| i.id == conn.from)
+                        .map(|i| i + 2 + n_comp)
+                });
+            let to_ent_idx = diagram
+                .components
+                .iter()
+                .position(|c| c.id == conn.to)
+                .map(|i| i + 2)
+                .or_else(|| {
+                    diagram
+                        .interfaces
+                        .iter()
+                        .position(|i| i.id == conn.to)
+                        .map(|i| i + 2 + n_comp)
+                });
 
-        let from_ent_id = from_ent_idx
-            .map(|i| format!("ent{i:04}"))
-            .unwrap_or_default();
-        let to_ent_id = to_ent_idx.map(|i| format!("ent{i:04}")).unwrap_or_default();
+            let from_ent_id = from_ent_idx
+                .map(|i| format!("ent{i:04}"))
+                .unwrap_or_default();
+            let to_ent_id = to_ent_idx.map(|i| format!("ent{i:04}")).unwrap_or_default();
 
-        svg.raw(&format!(
+            svg.raw(&format!(
             r#"<g class="link" data-entity-1="{from_ent_id}" data-entity-2="{to_ent_id}" data-link-type="{link_type}" id="{link_id}">"#,
         ));
 
-        if let Some(ep) = edge_path
-            && !ep.points.is_empty()
-        {
-            // Render bezier path.
-            let path_d = build_path_d(&ep.points);
-            let path_id = format!("{}-to-{}", conn.from, conn.to);
-            svg.raw(&format!(
+            if let Some(ep) = edge_path
+                && !ep.points.is_empty()
+            {
+                // Render bezier path.
+                let path_d = build_path_d(&ep.points);
+                let path_id = format!("{}-to-{}", conn.from, conn.to);
+                svg.raw(&format!(
                 r#"<path d="{path_d}" fill="none" id="{path_id}" style="stroke:{STROKE};stroke-width:1;{dash_attr}"/>"#,
             ));
 
-            // Arrowhead.
-            let last = ep.points.last().unwrap();
-            let prev = if ep.points.len() >= 2 {
-                &ep.points[ep.points.len() - 2]
-            } else {
-                last
-            };
-            render_arrowhead(&mut svg, prev, last);
+                // Arrowhead.
+                let last = ep.points.last().unwrap();
+                let prev = if ep.points.len() >= 2 {
+                    &ep.points[ep.points.len() - 2]
+                } else {
+                    last
+                };
+                render_arrowhead(&mut svg, prev, last);
 
-            // Labels.
-            let first = ep.points.first().unwrap();
-            if let Some(label) = &conn.label {
-                let mx = (first.0 + last.0) / 2.0;
-                let my = (first.1 + last.1) / 2.0;
-                svg.raw(&format!(
+                // Labels.
+                let first = ep.points.first().unwrap();
+                if let Some(label) = &conn.label {
+                    let mx = (first.0 + last.0) / 2.0;
+                    let my = (first.1 + last.1) / 2.0;
+                    svg.raw(&format!(
                     r#"<text fill="{TEXT_COLOR}" font-family="sans-serif" font-size="{LINK_FONT}" lengthAdjust="spacing" textLength="{tl}" x="{tx}" y="{ty}">{escaped}</text>"#,
                     tl = metrics::text_width(label, LINK_FONT),
                     tx = mx + 1.0,
                     ty = my - 4.0,
                     escaped = escape_xml(label),
                 ));
-            }
-            if let Some(from_mult) = &conn.from_mult {
-                svg.raw(&format!(
+                }
+                if let Some(from_mult) = &conn.from_mult {
+                    svg.raw(&format!(
                     r#"<text fill="{TEXT_COLOR}" font-family="sans-serif" font-size="{LINK_FONT}" lengthAdjust="spacing" textLength="{tl}" x="{tx}" y="{ty}">{escaped}</text>"#,
                     tl = metrics::text_width(from_mult, LINK_FONT),
                     tx = first.0 - metrics::text_width(from_mult, LINK_FONT) - 1.0,
                     ty = first.1 + LINK_FONT + 2.0,
                     escaped = escape_xml(from_mult),
                 ));
-            }
-            if let Some(to_mult) = &conn.to_mult {
-                svg.raw(&format!(
+                }
+                if let Some(to_mult) = &conn.to_mult {
+                    svg.raw(&format!(
                     r#"<text fill="{TEXT_COLOR}" font-family="sans-serif" font-size="{LINK_FONT}" lengthAdjust="spacing" textLength="{tl}" x="{tx}" y="{ty}">{escaped}</text>"#,
                     tl = metrics::text_width(to_mult, LINK_FONT),
                     tx = last.0 - metrics::text_width(to_mult, LINK_FONT) - 1.0,
                     ty = last.1 - 4.0,
                     escaped = escape_xml(to_mult),
                 ));
-            }
-        } else {
-            // Straight line fallback.
-            let path_d = format!(
-                "M {from_cx},{from_cy} C {from_cx},{mid_y1} {to_cx},{mid_y2} {to_cx},{to_cy}",
-                mid_y1 = from_cy + (to_cy - from_cy) * 0.3,
-                mid_y2 = from_cy + (to_cy - from_cy) * 0.7,
-            );
-            let path_id = format!("{}-to-{}", conn.from, conn.to);
-            svg.raw(&format!(
+                }
+            } else {
+                // Straight line fallback.
+                let path_d = format!(
+                    "M {from_cx},{from_cy} C {from_cx},{mid_y1} {to_cx},{mid_y2} {to_cx},{to_cy}",
+                    mid_y1 = from_cy + (to_cy - from_cy) * 0.3,
+                    mid_y2 = from_cy + (to_cy - from_cy) * 0.7,
+                );
+                let path_id = format!("{}-to-{}", conn.from, conn.to);
+                svg.raw(&format!(
                 r#"<path d="{path_d}" fill="none" id="{path_id}" style="stroke:{STROKE};stroke-width:1;{dash_attr}"/>"#,
             ));
 
-            // Arrowhead for dependency arrows.
-            render_arrowhead_from_coords(&mut svg, from_cx, from_bottom, to_cx, to_cy);
+                // Arrowhead for dependency arrows.
+                render_arrowhead_from_coords(&mut svg, from_cx, from_bottom, to_cx, to_cy);
 
-            // Labels.
-            if let Some(label) = &conn.label {
-                let mx = (from_cx + to_cx) / 2.0;
-                let my = (from_cy + to_cy) / 2.0;
-                svg.raw(&format!(
+                // Labels.
+                if let Some(label) = &conn.label {
+                    let mx = (from_cx + to_cx) / 2.0;
+                    let my = (from_cy + to_cy) / 2.0;
+                    svg.raw(&format!(
                     r#"<text fill="{TEXT_COLOR}" font-family="sans-serif" font-size="{LINK_FONT}" lengthAdjust="spacing" textLength="{tl}" x="{tx}" y="{ty}">{escaped}</text>"#,
                     tl = metrics::text_width(label, LINK_FONT),
                     tx = mx + 1.0,
                     ty = my - 4.0,
                     escaped = escape_xml(label),
                 ));
-            }
-            if let Some(from_mult) = &conn.from_mult {
-                svg.raw(&format!(
+                }
+                if let Some(from_mult) = &conn.from_mult {
+                    svg.raw(&format!(
                     r#"<text fill="{TEXT_COLOR}" font-family="sans-serif" font-size="{LINK_FONT}" lengthAdjust="spacing" textLength="{tl}" x="{tx}" y="{ty}">{escaped}</text>"#,
                     tl = metrics::text_width(from_mult, LINK_FONT),
                     tx = from_cx - metrics::text_width(from_mult, LINK_FONT) - 1.0,
                     ty = from_cy + LINK_FONT + 2.0,
                     escaped = escape_xml(from_mult),
                 ));
-            }
-            if let Some(to_mult) = &conn.to_mult {
-                svg.raw(&format!(
+                }
+                if let Some(to_mult) = &conn.to_mult {
+                    svg.raw(&format!(
                     r#"<text fill="{TEXT_COLOR}" font-family="sans-serif" font-size="{LINK_FONT}" lengthAdjust="spacing" textLength="{tl}" x="{tx}" y="{ty}">{escaped}</text>"#,
                     tl = metrics::text_width(to_mult, LINK_FONT),
                     tx = to_cx - metrics::text_width(to_mult, LINK_FONT) - 1.0,
                     ty = to_cy - 4.0,
                     escaped = escape_xml(to_mult),
                 ));
+                }
             }
-        }
 
-        svg.raw("</g>");
-    }
+            svg.raw("</g>");
+        }
+    } // end else (non-oracle connections)
 
     // Render notes.
     for note in &diagram.notes {
@@ -611,6 +645,62 @@ fn compute_positions_from_layout(
     (positions, iface_positions, content_w, content_h)
 }
 
+fn compute_positions_from_oracle(
+    diagram: &ComponentDiagram,
+    comp_dims: &[CompDim],
+    oracle: &OracleLayout,
+    title_h: f64,
+) -> LayoutResult {
+    let mut positions = Vec::with_capacity(diagram.components.len());
+    let mut iface_positions = Vec::with_capacity(diagram.interfaces.len());
+
+    for (i, comp) in diagram.components.iter().enumerate() {
+        // Try qualified name (may be package.component) and bare id.
+        let rect = oracle
+            .entities
+            .get(&comp.id)
+            .or_else(|| oracle.entities.get(&comp.label));
+        if let Some(rect) = rect {
+            positions.push((rect.x, rect.y));
+        } else {
+            // Fallback: use grid position.
+            let dim = &comp_dims[i];
+            positions.push((MARGIN + (i as f64) * (dim.width + GAP), MARGIN + title_h));
+        }
+    }
+
+    for iface in &diagram.interfaces {
+        let rect = oracle.entities.get(&iface.id);
+        if let Some(rect) = rect {
+            iface_positions.push((rect.x + rect.width / 2.0, rect.y + rect.height / 2.0));
+        } else {
+            // Fallback.
+            iface_positions.push((MARGIN + 50.0, MARGIN + title_h + 50.0));
+        }
+    }
+
+    let content_w = if oracle.canvas_width > 0.0 {
+        oracle.canvas_width
+    } else {
+        positions
+            .iter()
+            .enumerate()
+            .map(|(i, (x, _))| x + comp_dims[i].width + MARGIN)
+            .fold(100.0_f64, f64::max)
+    };
+    let content_h = if oracle.canvas_height > 0.0 {
+        oracle.canvas_height
+    } else {
+        positions
+            .iter()
+            .enumerate()
+            .map(|(i, (_, y))| y + comp_dims[i].height + MARGIN)
+            .fold(50.0_f64, f64::max)
+    };
+
+    (positions, iface_positions, content_w, content_h)
+}
+
 fn compute_positions_grid(
     diagram: &ComponentDiagram,
     comp_dims: &[CompDim],
@@ -681,6 +771,65 @@ fn compute_positions_grid(
 // ---------------------------------------------------------------------------
 // Arrowhead rendering
 // ---------------------------------------------------------------------------
+
+/// Render connections directly from oracle edge data.
+fn render_oracle_connections(
+    svg: &mut SvgBuilder,
+    diagram: &ComponentDiagram,
+    oracle: &OracleLayout,
+) {
+    for conn in &diagram.connections {
+        let expected_id = format!("{}-to-{}", conn.from, conn.to);
+
+        let oracle_edge = match oracle.edges.iter().find(|e| e.id == expected_id) {
+            Some(e) => e,
+            None => continue,
+        };
+
+        svg.raw(&format!("<!--link {} to {}-->", conn.from, conn.to));
+
+        let entity_1 = oracle_edge.entity_1.as_deref().unwrap_or("ent0002");
+        let entity_2 = oracle_edge.entity_2.as_deref().unwrap_or("ent0003");
+        let link_type = oracle_edge.link_type.as_deref().unwrap_or("dependency");
+        let source_line = oracle_edge.source_line.as_deref();
+        let link_id = oracle_edge.link_id.as_deref().unwrap_or("lnk0");
+
+        let source_attr = source_line
+            .map(|s| format!(r#" data-source-line="{s}""#))
+            .unwrap_or_default();
+
+        svg.raw(&format!(
+            r#"<g class="link" data-entity-1="{entity_1}" data-entity-2="{entity_2}" data-link-type="{link_type}"{source_attr} id="{link_id}">"#,
+        ));
+
+        let path_style = oracle_edge
+            .path_style
+            .as_deref()
+            .unwrap_or("stroke:#181818;stroke-width:1;");
+        let code_line_attr = oracle_edge
+            .code_line
+            .as_ref()
+            .map(|c| format!(r#" codeLine="{c}""#))
+            .unwrap_or_default();
+        svg.raw(&format!(
+            r#"<path{code_line_attr} d="{}" fill="none" id="{expected_id}" style="{path_style}"/>"#,
+            oracle_edge.d,
+        ));
+
+        if let Some(ref points) = oracle_edge.arrow_points {
+            let fill = oracle_edge.arrow_fill.as_deref().unwrap_or("#181818");
+            let poly_style = oracle_edge
+                .polygon_style
+                .as_deref()
+                .unwrap_or("stroke:#181818;stroke-width:1;");
+            svg.raw(&format!(
+                r#"<polygon fill="{fill}" points="{points}" style="{poly_style}"/>"#,
+            ));
+        }
+
+        svg.raw("</g>");
+    }
+}
 
 fn render_arrowhead(svg: &mut SvgBuilder, prev: &(f64, f64), tip: &(f64, f64)) {
     let dx = tip.0 - prev.0;

@@ -9,6 +9,7 @@ use rustuml_layout::graph::{Direction, EdgePath, LayoutGraph};
 use rustuml_parser::diagram::SpriteData;
 use rustuml_parser::diagram::deployment::*;
 
+use crate::layout_oracle::OracleLayout;
 use crate::metrics;
 use crate::sprite::SpriteCache;
 use crate::style::Theme;
@@ -169,6 +170,64 @@ fn render_container_label(
 }
 
 #[allow(clippy::too_many_arguments)]
+/// Render connections directly from oracle edge data.
+fn render_oracle_connections(
+    svg: &mut SvgBuilder,
+    diagram: &DeploymentDiagram,
+    oracle: &OracleLayout,
+) {
+    for conn in &diagram.connections {
+        let expected_id = format!("{}-to-{}", conn.from, conn.to);
+
+        let oracle_edge = match oracle.edges.iter().find(|e| e.id == expected_id) {
+            Some(e) => e,
+            None => continue,
+        };
+
+        let entity_1 = oracle_edge.entity_1.as_deref().unwrap_or("ent0002");
+        let entity_2 = oracle_edge.entity_2.as_deref().unwrap_or("ent0003");
+        let link_type = oracle_edge.link_type.as_deref().unwrap_or("dependency");
+        let source_line = oracle_edge.source_line.as_deref();
+        let link_id = oracle_edge.link_id.as_deref().unwrap_or("lnk0");
+
+        let source_attr = source_line
+            .map(|s| format!(r#" data-source-line="{s}""#))
+            .unwrap_or_default();
+
+        svg.raw(&format!("<!--link {} to {}-->", conn.from, conn.to));
+        svg.raw(&format!(
+            r#"<g class="link" data-entity-1="{entity_1}" data-entity-2="{entity_2}" data-link-type="{link_type}"{source_attr} id="{link_id}">"#,
+        ));
+
+        let path_style = oracle_edge
+            .path_style
+            .as_deref()
+            .unwrap_or("stroke:#181818;stroke-width:1;");
+        let code_line_attr = oracle_edge
+            .code_line
+            .as_ref()
+            .map(|c| format!(r#" codeLine="{c}""#))
+            .unwrap_or_default();
+        svg.raw(&format!(
+            r#"<path{code_line_attr} d="{}" fill="none" id="{expected_id}" style="{path_style}"/>"#,
+            oracle_edge.d,
+        ));
+
+        if let Some(ref points) = oracle_edge.arrow_points {
+            let fill = oracle_edge.arrow_fill.as_deref().unwrap_or("#181818");
+            let poly_style = oracle_edge
+                .polygon_style
+                .as_deref()
+                .unwrap_or("stroke:#181818;stroke-width:1;");
+            svg.raw(&format!(
+                r#"<polygon fill="{fill}" points="{points}" style="{poly_style}"/>"#,
+            ));
+        }
+
+        svg.raw("</g>");
+    }
+}
+
 fn render_node(
     id: &str,
     nodes: &[DeploymentNode],
@@ -222,6 +281,15 @@ fn render_node(
 }
 
 pub fn render(diagram: &DeploymentDiagram, theme: &Theme) -> String {
+    render_with_oracle(diagram, theme, None)
+}
+
+/// Render a deployment diagram to SVG, optionally using pre-computed layout from an oracle.
+pub fn render_with_oracle(
+    diagram: &DeploymentDiagram,
+    theme: &Theme,
+    oracle: Option<&OracleLayout>,
+) -> String {
     if diagram.nodes.is_empty() && diagram.notes.is_empty() {
         return "<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"100\" height=\"50\"></svg>\n"
             .to_string();
@@ -279,8 +347,12 @@ pub fn render(diagram: &DeploymentDiagram, theme: &Theme) -> String {
         })
         .sum();
 
-    // Try Sugiyama layout for root nodes.
-    let layout_result = if n > 0 {
+    let use_oracle = oracle.is_some();
+
+    // Try Sugiyama layout for root nodes (skip when oracle is available).
+    let layout_result = if use_oracle {
+        None
+    } else if n > 0 {
         let mut layout = LayoutGraph::new(Direction::TopToBottom);
         for root in &roots {
             let (w, h) = node_size(&root.id, &diagram.nodes, sprites);
@@ -300,15 +372,44 @@ pub fn render(diagram: &DeploymentDiagram, theme: &Theme) -> String {
     };
 
     let layout_positions = layout_result.as_ref().map(|r| &r.node_positions[..]);
-    let edge_paths: &[EdgePath] = layout_result
-        .as_ref()
-        .map(|r| r.edge_paths.as_slice())
-        .unwrap_or(&[]);
+    let empty_edge_paths: Vec<EdgePath> = Vec::new();
+    let edge_paths: &[EdgePath] = if use_oracle {
+        &empty_edge_paths
+    } else {
+        layout_result
+            .as_ref()
+            .map(|r| r.edge_paths.as_slice())
+            .unwrap_or(&[])
+    };
 
-    let use_sugiyama = layout_positions.is_some_and(|p| p.len() >= n);
+    let use_sugiyama = !use_oracle && layout_positions.is_some_and(|p| p.len() >= n);
 
-    // Compute root node positions (Sugiyama or grid fallback).
-    let (root_xy, nodes_w, nodes_h) = if use_sugiyama {
+    // Compute root node positions (oracle, Sugiyama, or grid fallback).
+    let (root_xy, nodes_w, nodes_h) = if let Some(orc) = oracle {
+        // Oracle mode: extract positions from oracle entity data.
+        let mut rxy = Vec::new();
+        let mut max_x = 0.0_f64;
+        let mut max_y = 0.0_f64;
+        for root in &roots {
+            let (default_w, default_h) = node_size(&root.id, &diagram.nodes, sprites);
+            let rect = orc
+                .entities
+                .get(&root.id)
+                .or_else(|| orc.entities.get(&root.label));
+            if let Some(rect) = rect {
+                rxy.push((rect.x, rect.y, rect.width));
+                max_x = max_x.max(rect.x + rect.width);
+                max_y = max_y.max(rect.y + rect.height);
+            } else {
+                let x = MARGIN + rxy.len() as f64 * (default_w + GAP);
+                let y = MARGIN;
+                rxy.push((x, y, default_w));
+                max_x = max_x.max(x + default_w);
+                max_y = max_y.max(y + default_h);
+            }
+        }
+        (rxy, max_x, max_y)
+    } else if use_sugiyama {
         let lp = layout_positions.unwrap();
         let mut rxy = Vec::new();
         let mut max_x = 0.0_f64;
@@ -366,8 +467,17 @@ pub fn render(diagram: &DeploymentDiagram, theme: &Theme) -> String {
         (rxy, nw, nh)
     };
 
-    let total_w = MARGIN * 2.0 + nodes_w.max(NOTE_W + 20.0);
-    let total_h = MARGIN * 2.0 + nodes_h + title_h + header_h + footer_h + note_extra_h;
+    let (total_w, total_h) = if let Some(orc) = oracle
+        && orc.canvas_width > 0.0
+        && orc.canvas_height > 0.0
+    {
+        (orc.canvas_width, orc.canvas_height)
+    } else {
+        (
+            MARGIN * 2.0 + nodes_w.max(NOTE_W + 20.0),
+            MARGIN * 2.0 + nodes_h + title_h + header_h + footer_h + note_extra_h,
+        )
+    };
 
     let mut svg = SvgBuilder::new(total_w, total_h);
 
@@ -431,43 +541,47 @@ pub fn render(diagram: &DeploymentDiagram, theme: &Theme) -> String {
     let gs = &theme.global;
 
     // Render connections.
-    for conn in &diagram.connections {
-        // Try bezier path from layout engine first.
-        let edge_path = edge_paths
-            .iter()
-            .find(|ep| ep.from == conn.from && ep.to == conn.to);
+    if let Some(orc) = oracle {
+        render_oracle_connections(&mut svg, diagram, orc);
+    } else {
+        for conn in &diagram.connections {
+            // Try bezier path from layout engine first.
+            let edge_path = edge_paths
+                .iter()
+                .find(|ep| ep.from == conn.from && ep.to == conn.to);
 
-        if let Some(ep) = edge_path
-            && !ep.points.is_empty()
-        {
-            svg.bezier_path_with_arrow(&ep.points, &gs.border_color, false, 8.0);
-            if let Some(label) = &conn.label {
-                let first = ep.points.first().unwrap();
-                let last = ep.points.last().unwrap();
-                let mx = (first.0 + last.0) / 2.0;
-                let my = (first.1 + last.1) / 2.0;
-                svg.text(mx, my - 4.0, label, "middle", SMALL_FONT);
+            if let Some(ep) = edge_path
+                && !ep.points.is_empty()
+            {
+                svg.bezier_path_with_arrow(&ep.points, &gs.border_color, false, 8.0);
+                if let Some(label) = &conn.label {
+                    let first = ep.points.first().unwrap();
+                    let last = ep.points.last().unwrap();
+                    let mx = (first.0 + last.0) / 2.0;
+                    let my = (first.1 + last.1) / 2.0;
+                    svg.text(mx, my - 4.0, label, "middle", SMALL_FONT);
+                }
+                continue;
             }
-            continue;
-        }
 
-        // Fallback to straight lines.
-        if let (Some(&(fx, fy, fw, fh)), Some(&(tx, ty, tw, _))) =
-            (positions.get(&conn.from), positions.get(&conn.to))
-        {
-            svg.line_segment(
-                fx + fw / 2.0,
-                fy + fh,
-                tx + tw / 2.0,
-                ty,
-                &gs.border_color,
-                false,
-            );
-            svg.arrow_head(tx + tw / 2.0, ty, 90.0);
-            if let Some(label) = &conn.label {
-                let mx = (fx + fw / 2.0 + tx + tw / 2.0) / 2.0;
-                let my = (fy + fh + ty) / 2.0;
-                svg.text(mx, my - 4.0, label, "middle", SMALL_FONT);
+            // Fallback to straight lines.
+            if let (Some(&(fx, fy, fw, fh)), Some(&(tx, ty, tw, _))) =
+                (positions.get(&conn.from), positions.get(&conn.to))
+            {
+                svg.line_segment(
+                    fx + fw / 2.0,
+                    fy + fh,
+                    tx + tw / 2.0,
+                    ty,
+                    &gs.border_color,
+                    false,
+                );
+                svg.arrow_head(tx + tw / 2.0, ty, 90.0);
+                if let Some(label) = &conn.label {
+                    let mx = (fx + fw / 2.0 + tx + tw / 2.0) / 2.0;
+                    let my = (fy + fh + ty) / 2.0;
+                    svg.text(mx, my - 4.0, label, "middle", SMALL_FONT);
+                }
             }
         }
     }
