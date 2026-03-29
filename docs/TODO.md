@@ -1,18 +1,13 @@
 # TODO
 
 ## High Priority
-- [ ] stdlib includes — `!include <C4/...>`, `!include <awslib/...>` not resolved (need to bundle or fetch PlantUML stdlib)
-- [ ] Archimate diagram support (`@startuml` with archimate keywords)
-- [ ] Layout engine: extend Sugiyama to component/deployment/usecase/state renderers (currently grid)
-- [ ] Layout engine: improve edge routing quality on dense graphs
+- [ ] Layout engine: improve edge routing quality on dense graphs (bezier routing via Graphviz works, but dense graph quality needs tuning)
+- [ ] Complex nested TIM macro edge cases (1 remaining mindmap parse failure)
+- [ ] Remaining ~15% of skinparam keys not applied to renderers
 
 ## Medium Priority
-- [ ] ASCII art output for non-sequence diagram types
-- [ ] Hyperlinks in SVG output (SVG builder has `open_link`/`close_link` but not wired into renderers)
-- [ ] Creole edge cases: tables, complex nesting, tree lists
-- [ ] Activity diagram legacy v1 syntax
-- [x] `serde_yaml` deprecation — migrated to `serde_yml`
-- [ ] Format-parameterized golden test framework (validate PNG/PDF output)
+- [ ] Golden comparison for non-SVG formats (currently smoke-only — validates no crash + correct headers)
+- [ ] Deeper creole edge cases beyond tables/trees/nested lists
 
 ## Low Priority
 - [ ] SCXML output for state diagrams
@@ -22,6 +17,19 @@
 - [ ] Windows native binaries
 - [ ] Performance benchmarks
 - [ ] Complex nested TIM macro edge cases
+
+## Done (PR #49 — v0.4.0-dev)
+- [x] Replace layout-rs with vendored Graphviz (dot algorithm, statically linked)
+- [x] Bezier edge routing via cubic spline extraction from Graphviz
+- [x] Layout extended to 8 renderers: class, object, component, deployment, usecase, state, activity, dot
+- [x] Archimate diagram support (parser + renderer)
+- [x] Stdlib includes (`!include <C4/...>`, `!include <awslib/...>`) bundled and resolved
+- [x] Hyperlinks (`[[url]]`) wired into SVG for class, sequence, component diagrams
+- [x] ASCII renderers for class, state, activity diagrams
+- [x] Creole tables, tree lists, nested lists, horizontal rules
+- [x] Activity diagram legacy v1 syntax
+- [x] `serde_yaml` deprecation — migrated to `serde_yml`
+- [x] Format-parameterized golden smoke tests (PNG/PDF/EPS no-crash validation)
 
 ## Done (v0.3.0)
 - [x] 183 skinparam keys wired (was 34)

@@ -1,104 +1,87 @@
 # Convergence Report
 
-*Evaluated: 2026-03-27*
+*Evaluated: 2026-03-29*
 
 ## Standing invariants
 
-- **Tests**: PASSING (unit tests + oracle tests green)
-- **CI**: FAILING — `cargo fmt --check` in Check & Lint job (`golden_pairs.rs` formatting)
-- **Release workflow**: FAILING (v0.2.0 release asset upload issues)
+- **Tests**: PASSING (517 total: 8 + 10 + 6 + 296 + 197 across 5 crates)
+- **CI**: PASSING (last run on master: success)
+- **Release**: v0.3.0 released successfully
+
+Standing invariants: all green.
 
 ## Movement
 
-- 🎯T1: not started → converging (2/5 sub-targets achieved, 2 near-achieved)
-- 🎯T1.1: not started → **achieved** (12,568 golden pairs, 0 failures)
-- 🎯T1.2: not started → converging (layout engine with timeout wrapper)
-- 🎯T1.3: not started → near-achieved (18 diagram types, full TIM preprocessor)
-- 🎯T1.4: not started → near-achieved (18 types render to SVG, theme system)
-- 🎯T1.5: not started → **achieved** (rustuml-math crate, 50 golden math tests)
-- 🎯T1.7: (new) converging (SVG+PNG+PDF output working)
+- 🎯T1.2: close → **achieved** — marked achieved after PR #49 merge
+- 🎯T1.3: (unchanged) — close, no code changes
+- 🎯T1.4: (unchanged) — close, no code changes
+- 🎯T1.7: (unchanged) — close, no code changes
+- 🎯T1: converging (2/5 achieved) → converging (4/7 achieved, 3 close)
 
 ## Gap Report
 
-### 🎯T1.2 Hierarchical graph layout engine in Rust  [weight: 4]
-Gap: **significant**
-Layout engine exists in `rustuml-layout` crate (2 source files). Timeout/fallback logic lives in the render crate (`class.rs`, `sequence.rs`, `gantt.rs`), not the layout crate itself. Infinite loop mitigation is a timeout wrapper, not a proper fix. Edge routing quality on dense graphs remains poor. Layout not yet extended to component/deployment/object diagrams.
-
 ### 🎯T1.3 PlantUML parser and TIM preprocessor ported to Rust  [weight: 2.5]
 Gap: **close**
-18 diagram types parsed with full TIM preprocessor (variables, functions, control flow, includes, themes, JSON). 9 references to stdlib/import/archimate in parser source — these are the main remaining gaps. Complex nested macro edge cases outstanding.
+22 diagram types parsed. Full TIM preprocessor with variables, functions, control flow, includes, themes, JSON. Stdlib includes bundled and resolved. Archimate parsing. `!import` directive. Lenient JSON parser. Only 1 parse error in golden tests (mindmap edge case). Remaining gap: complex nested TIM macro edge cases.
 
 ### 🎯T1.4 Diagram model and rendering pipeline ported to Rust  [weight: 2.5]
 Gap: **close**
-All 18 diagram types render to SVG. Theme system with 38 skinparam references across 8 files. ~40% of skinparam keys not yet applied. Zero sprite rendering code. Creole markup comprehensive but edge cases remain. 11,104 of 12,568 golden pairs pass.
+22 diagram types render to SVG including archimate. Hyperlinks (`[[url]]`) wired into SVG output for class, sequence, component diagrams. Creole tables, tree lists, nested lists, horizontal rules. 183 skinparam keys wired. Sprite rendering. ASCII renderers for class, state, activity. Remaining gap: ~15% of skinparam keys not applied, deeper creole edge cases.
 
 ### 🎯T1.7 Multi-format output (PNG, PDF, EPS)  [weight: 2]
-Gap: **significant**
-SVG, PNG (-tpng), and PDF (svg2pdf) output working. No format-parameterized test framework — golden files are SVG-only. EPS not implemented.
+Gap: **close**
+All 4 output formats working: SVG, PNG (-tpng), PDF (svg2pdf), EPS (-teps). Format-parameterized golden smoke tests validate PNG/PDF/EPS conversion produces correct file headers. Remaining gap: golden comparison for non-SVG formats (currently smoke-only).
 
 ### 🎯T1 PlantUML exists as a single Rust binary with no runtime dependencies  [weight: 1]
-Gap: **converging** (2/5 sub-targets achieved)
+Gap: **converging** (4/7 sub-targets achieved, 3 close)
 
   - [x] 🎯T1.1 Oracle-based test framework — achieved
-  - [ ] 🎯T1.2 Layout engine — significant
-  - [ ] 🎯T1.3 Parser/TIM — close
-  - [ ] 🎯T1.4 Rendering pipeline — close
+  - [x] 🎯T1.2 Layout engine — achieved
+  - [ ] 🎯T1.3 Parser/TIM — close: 1 mindmap parse error, nested macro edge cases
+  - [ ] 🎯T1.4 Rendering pipeline — close: ~15% skinparams, creole edge cases
   - [x] 🎯T1.5 KaTeX math rendering — achieved
-  - [ ] 🎯T1.7 Multi-format output — significant
+  - [x] 🎯T1.6 YAML input format — achieved
+  - [ ] 🎯T1.7 Multi-format output — close: all formats working, golden comparison remaining
 
 ## Recommendation
 
-Work on: **Fix CI first** (standing invariant violation)
+Work on: **🎯T1.3 PlantUML parser and TIM preprocessor ported to Rust** or **🎯T1.4 Diagram model and rendering pipeline ported to Rust**
 
-`cargo fmt --check` is failing on `crates/rustuml-oracle/tests/golden_pairs.rs`. This blocks all convergence — fix it before target work.
-
-After CI is green, work on: **🎯T1.2 Hierarchical graph layout engine in Rust**
-
-Reason: Highest effective weight (4) among unblocked targets. Layout quality is the biggest gap between RustUML and usable output. The layout crate is minimal (2 files) while the timeout/fallback logic is scattered across render modules. Consolidating layout concerns and extending to more diagram types has the highest leverage.
+Reason: Both share the highest effective weight (2.5) and both are close. They are largely independent — parser work (fixing the mindmap parse error, nested TIM macros) is orthogonal to rendering work (wiring remaining skinparams, creole edge cases). Either is high-leverage. Between the two, 🎯T1.3 has a more concrete remaining gap (1 known parse failure, specific macro edge cases) making it slightly more actionable. 🎯T1.4's remaining ~15% skinparams require identifying which keys are missing and wiring them — also actionable but broader in scope.
 
 ## Suggested action
 
-1. Run `cargo fmt` to fix the formatting in `golden_pairs.rs` and commit
-2. Investigate the release workflow failure (contents:write permission was just added — may need further CI fixes)
-3. Then assess layout-rs usage: read `crates/rustuml-layout/src/lib.rs` and `crates/rustuml-render/src/class.rs` to understand the current timeout wrapper and plan improvements
+For 🎯T1.3: Investigate the 1 remaining golden test parse failure (mindmap edge case). Run the golden tests with a filter for mindmap to identify the specific failing input, then examine the parser to understand what construct it doesn't handle. Fixing this single failure would bring golden parse errors to zero.
+
+For 🎯T1.4: Run `cargo test --lib` with a focus on skinparam coverage — grep for skinparam keys referenced in golden test files that aren't yet in `skinparam.rs` to identify the gap. Alternatively, pick a specific creole edge case from the golden tests and implement support.
+
+Both targets can be parallelised with team agents if desired.
 
 <!-- convergence-deps
-evaluated: 2026-03-27T11:00:00Z
-sha: 4447e7e6
+evaluated: 2026-03-29T08:00:00Z
+sha: dd3b9530
 
 🎯T1:
   gap: converging
-  assessment: "2/5 sub-targets achieved (T1.1, T1.5). T1.3 and T1.4 near-achieved. T1.2 and T1.7 significant."
+  assessment: "4/7 sub-targets achieved (T1.1, T1.2, T1.5, T1.6). T1.3, T1.4, T1.7 all close. No code changes since last eval — movement was T1.2 achievement."
   read:
     - docs/targets.md
 
-🎯T1.2:
-  gap: significant
-  assessment: "Layout crate minimal (2 files). Timeout wrapper in render crate. No infinite loop fix. Edge routing poor. Not extended to component/deployment/object."
-  read:
-    - crates/rustuml-layout/src/lib.rs
-    - crates/rustuml-layout/src/graph.rs
-    - crates/rustuml-render/src/class.rs
-    - crates/rustuml-render/src/sequence.rs
-    - crates/rustuml-render/src/gantt.rs
-
 🎯T1.3:
   gap: close
-  assessment: "18 diagram types parsed, full TIM preprocessor. Missing: stdlib includes, !import, archimate, nested macro edge cases."
+  assessment: "22 diagram types parsed. Full TIM preprocessor. Stdlib includes. 1 mindmap parse failure. Nested macro edge cases remaining."
   read:
-    - crates/rustuml-parser/src/preprocess/mod.rs
+    - docs/targets.md
 
 🎯T1.4:
   gap: close
-  assessment: "18 types render to SVG. 38 skinparam refs across 8 files. ~40% skinparams not applied. No sprite rendering. 11,104/12,568 golden pairs pass."
+  assessment: "22 types render to SVG. Hyperlinks wired. Creole tables/trees. 183 skinparams. ~15% skinparams remaining, creole edge cases."
   read:
-    - crates/rustuml-render/src/skinparam.rs
-    - crates/rustuml-render/src/class.rs
-    - crates/rustuml-render/src/lib.rs
+    - docs/targets.md
 
 🎯T1.7:
-  gap: significant
-  assessment: "SVG+PNG+PDF working. No format-parameterized tests. EPS not implemented."
+  gap: close
+  assessment: "SVG+PNG+PDF+EPS all working. Format smoke tests. Remaining: golden comparison for non-SVG."
   read:
     - docs/targets.md
 -->

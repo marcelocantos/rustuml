@@ -302,10 +302,16 @@ fn to_svg_tspans_inner(text: &str, skip_underline: bool) -> String {
                         .unwrap();
                     }
                     _ if tag.starts_with("color:") || tag.starts_with("COLOR:") => {
-                        // <color:blue>text</color> — strip tag, keep inner markup processed.
+                        // <color:blue>text</color> — apply fill color via tspan.
+                        let color = if let Some(s) = tag.strip_prefix("color:") {
+                            s
+                        } else {
+                            tag.strip_prefix("COLOR:").unwrap_or("")
+                        };
                         let content = collect_until_tag(&mut chars, "</color>");
                         let inner = to_svg_tspans_inner(&content, skip_underline);
-                        result.push_str(&inner);
+                        let escaped_color = escape_creole_text(color);
+                        write!(result, "<tspan fill=\"{escaped_color}\">{inner}</tspan>").unwrap();
                     }
                     _ if tag.starts_with("size:") => {
                         // <size:N>text</size> — apply font-size.
@@ -1226,5 +1232,32 @@ mod tests {
         let result = lc.render_line("* **bold item**");
         assert!(result.contains('\u{2022}'));
         assert!(result.contains("font-weight=\"bold\""));
+    }
+
+    #[test]
+    fn color_tag_emits_fill() {
+        let result = to_svg_tspans("<color:red>red text</color>");
+        assert_eq!(result, "<tspan fill=\"red\">red text</tspan>");
+    }
+
+    #[test]
+    fn color_tag_hex() {
+        let result = to_svg_tspans("<color:#0000FF>blue text</color>");
+        assert_eq!(result, "<tspan fill=\"#0000FF\">blue text</tspan>");
+    }
+
+    #[test]
+    fn color_tag_with_nested_bold() {
+        let result = to_svg_tspans("<color:red>**Bold red**</color>");
+        assert_eq!(
+            result,
+            "<tspan fill=\"red\"><tspan font-weight=\"bold\">Bold red</tspan></tspan>"
+        );
+    }
+
+    #[test]
+    fn color_tag_uppercase() {
+        let result = to_svg_tspans("<COLOR:blue>text</color>");
+        assert_eq!(result, "<tspan fill=\"blue\">text</tspan>");
     }
 }

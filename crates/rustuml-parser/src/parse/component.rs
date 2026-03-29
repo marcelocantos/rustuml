@@ -216,9 +216,18 @@ pub fn parse_component(lines: &[String]) -> Result<ComponentDiagram, ParseError>
             legend_lines.clear();
             continue;
         }
-        // Skip skinparam and other decoration lines.
-        if trimmed.starts_with("skinparam ")
-            || trimmed.starts_with("hide ")
+        // Collect skinparam directives into metadata.
+        if let Some(rest) = trimmed.strip_prefix("skinparam ") {
+            if let Some((key, value)) = rest.split_once(' ') {
+                meta.skinparams.push(crate::diagram::SkinParam {
+                    key: key.trim().to_string(),
+                    value: value.trim().to_string(),
+                });
+            }
+            continue;
+        }
+        // Skip other decoration lines.
+        if trimmed.starts_with("hide ")
             || trimmed.starts_with("show ")
             || trimmed.starts_with("caption ")
             || trimmed.starts_with("left footer")

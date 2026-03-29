@@ -19,6 +19,8 @@ const PADDING: f64 = 12.0;
 const CORNER_R: f64 = 8.0;
 const TITLE_FONT_SIZE: f64 = 14.0;
 const TITLE_HEIGHT: f64 = TITLE_FONT_SIZE + 10.0;
+const GROUP_PAD: f64 = 15.0;
+const GROUP_HEADER: f64 = 20.0;
 
 pub fn render(diagram: &ArchimateDiagram, theme: &Theme) -> String {
     if diagram.elements.is_empty() {
@@ -72,16 +74,55 @@ pub fn render(diagram: &ArchimateDiagram, theme: &Theme) -> String {
 
     let cs = &theme.class;
 
+    // Compute element positions first (for group bounding boxes).
     let y_start = title_h + MARGIN;
     let mut positions = Vec::new();
-
-    for (i, elem) in diagram.elements.iter().enumerate() {
+    for (i, _elem) in diagram.elements.iter().enumerate() {
         let col = i % cols;
         let row = i / cols;
         let x = MARGIN + col_w[..col].iter().sum::<f64>() + GAP * col as f64;
         let y = y_start + row as f64 * (ELEM_H + GAP);
         let w = col_w[col];
+        positions.push((x, y, w));
+    }
 
+    // Render groups (labelled rectangles) behind elements.
+    for group in &diagram.groups {
+        if group.element_ids.is_empty() {
+            continue;
+        }
+        let mut min_x = f64::MAX;
+        let mut min_y = f64::MAX;
+        let mut max_x = f64::MIN;
+        let mut max_y = f64::MIN;
+        for eid in &group.element_ids {
+            if let Some(idx) = diagram.elements.iter().position(|e| e.id == *eid) {
+                let (ex, ey, ew) = positions[idx];
+                min_x = min_x.min(ex);
+                min_y = min_y.min(ey);
+                max_x = max_x.max(ex + ew);
+                max_y = max_y.max(ey + ELEM_H);
+            }
+        }
+        if min_x < f64::MAX {
+            let gx = min_x - GROUP_PAD;
+            let gy = min_y - GROUP_PAD - GROUP_HEADER;
+            let gw = max_x - min_x + GROUP_PAD * 2.0;
+            let gh = max_y - min_y + GROUP_PAD * 2.0 + GROUP_HEADER;
+            svg.rect(gx, gy, gw, gh, "#EEEEEE", "#888888");
+            svg.text(
+                gx + 6.0,
+                gy + GROUP_HEADER - 4.0,
+                &group.label,
+                "start",
+                FONT_SIZE,
+            );
+        }
+    }
+
+    // Render elements.
+    for (i, elem) in diagram.elements.iter().enumerate() {
+        let (x, y, w) = positions[i];
         let fill = elem.layer.default_color();
 
         svg.rounded_rect(x, y, w, ELEM_H, CORNER_R, fill, &cs.border_color);
@@ -102,8 +143,6 @@ pub fn render(diagram: &ArchimateDiagram, theme: &Theme) -> String {
             "middle",
             FONT_SIZE,
         );
-
-        positions.push((x, y, w));
     }
 
     for rel in &diagram.relations {

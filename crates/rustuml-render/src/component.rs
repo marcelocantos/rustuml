@@ -641,4 +641,17 @@ mod tests {
         assert!(svg.contains("service"), "first stereotype missing: {svg}");
         assert!(svg.contains("secured"), "second stereotype missing: {svg}");
     }
+
+    #[test]
+    fn skinparams_applied_to_component_diagram() {
+        let input = "@startuml\nskinparam classBackgroundColor #AABBCC\ncomponent A\ncomponent B\nA --> B\n@enduml";
+        let diagram = rustuml_parser::parse::parse(input).unwrap();
+        let theme = crate::style::Theme::default();
+        let svg = crate::render_svg_with_theme(&diagram, &theme);
+        // The classBackgroundColor skinparam should be applied (component renderer uses theme.class).
+        assert!(
+            svg.contains("#AABBCC"),
+            "skinparam classBackgroundColor not applied to component diagram: {svg}"
+        );
+    }
 }

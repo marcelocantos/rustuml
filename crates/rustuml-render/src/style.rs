@@ -99,6 +99,8 @@ pub struct SequenceStyle {
     pub reference_background: String,
     pub reference_border: String,
     pub reference_font_color: String,
+    /// When true, response messages are rendered below the arrow line.
+    pub response_message_below_arrow: bool,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
@@ -224,6 +226,8 @@ pub struct ComponentStyle {
     pub font_size: f64,
     pub font_style: String,
     pub round_corner: f64,
+    /// Component rendering style: "rectangle" or "uml2" (default UML2 icon).
+    pub style: String,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize, Default)]
@@ -311,6 +315,7 @@ impl Theme {
                 reference_background: "#FEFFDD".into(),
                 reference_border: "#181818".into(),
                 reference_font_color: "".into(),
+                response_message_below_arrow: false,
             },
             class: ClassStyle {
                 class_background: "#FDEBD0".into(),
@@ -461,6 +466,7 @@ impl Theme {
                 reference_background: "#FFF3CD".into(),
                 reference_border: "#FFC107".into(),
                 reference_font_color: "".into(),
+                response_message_below_arrow: false,
             },
             class: ClassStyle {
                 class_background: "#F8F9FA".into(),

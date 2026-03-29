@@ -193,10 +193,19 @@ pub fn parse_usecase(lines: &[String]) -> Result<UseCaseDiagram, ParseError> {
             continue;
         }
 
+        // Collect skinparam directives into metadata.
+        if let Some(rest) = trimmed.strip_prefix("skinparam ") {
+            if let Some((key, value)) = rest.split_once(' ') {
+                meta.skinparams.push(crate::diagram::SkinParam {
+                    key: key.trim().to_string(),
+                    value: value.trim().to_string(),
+                });
+            }
+            continue;
+        }
         // Skip top-level directives.
         if trimmed.starts_with("left to right")
             || trimmed.starts_with("top to bottom")
-            || trimmed.starts_with("skinparam")
             || trimmed.starts_with("end note")
             || trimmed.starts_with("hide")
             || trimmed.starts_with("show")

@@ -47,6 +47,10 @@ pub fn parse_mindmap(lines: &[String]) -> Result<MindMapDiagram, ParseError> {
     let mut right_stack: Vec<usize> = Vec::new(); // depths of right-side ancestors
     let mut left_stack: Vec<usize> = Vec::new(); // depths of left-side ancestors
 
+    // When a bare `--` separator line is encountered, subsequent `*` nodes
+    // switch to the left side until another separator or end of input.
+    let mut side_flipped = false;
+
     // Multiline node accumulation: `**:first line\nsecond line;`
     // When we see `**:text` without a closing `;` on the same line, we
     // accumulate subsequent lines until a line ending with `;` is found.
@@ -107,12 +111,38 @@ pub fn parse_mindmap(lines: &[String]) -> Result<MindMapDiagram, ParseError> {
             continue;
         }
 
+        // Collect skinparam directives into metadata.
+        if let Some(rest) = trimmed.strip_prefix("skinparam ") {
+            if let Some((key, value)) = rest.split_once(' ') {
+                meta.skinparams.push(crate::diagram::SkinParam {
+                    key: key.trim().to_string(),
+                    value: value.trim().to_string(),
+                });
+            }
+            continue;
+        }
+
         // Determine prefix character and side.
         // `*` → right side; `#` → right side (markdown heading style); `-` → left side.
+        // After a bare `--` separator, `*` nodes switch to the left side.
         let first = trimmed.chars().next().unwrap();
         let (bullet, side) = match first {
-            '*' => ('*', Side::Right),
-            '#' => ('#', Side::Right),
+            '*' => (
+                '*',
+                if side_flipped {
+                    Side::Left
+                } else {
+                    Side::Right
+                },
+            ),
+            '#' => (
+                '#',
+                if side_flipped {
+                    Side::Left
+                } else {
+                    Side::Right
+                },
+            ),
             '-' => ('-', Side::Left),
             _ => continue, // Not a node line — skip (skinparam, comment, etc.)
         };
@@ -158,6 +188,13 @@ pub fn parse_mindmap(lines: &[String]) -> Result<MindMapDiagram, ParseError> {
 
         let label = rest.to_string();
         if label.is_empty() {
+            // A bare `--` (or `---`, etc.) with no label text acts as a
+            // side separator in PlantUML mindmaps — subsequent `*` nodes
+            // switch to the left side.
+            if bullet == '-' {
+                side_flipped = true;
+                continue;
+            }
             return Err(ParseError {
                 line: line_no + 1,
                 message: "mind map node has no label".to_string(),
