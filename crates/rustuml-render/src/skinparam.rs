@@ -6,13 +6,32 @@
 use crate::style::Theme;
 use rustuml_parser::diagram::SkinParam;
 
+/// Normalize a skinparam key to canonical camelCase form.
+///
+/// PlantUML treats skinparam keys case-insensitively for the first character
+/// (e.g., `ClassBackgroundColor` == `classBackgroundColor`). We normalize by
+/// lowercasing the first character, which covers the vast majority of
+/// case-variant keys found in real-world diagrams.
+fn normalize_key(key: &str) -> String {
+    let mut chars = key.chars();
+    match chars.next() {
+        Some(c) => {
+            let mut s = c.to_lowercase().to_string();
+            s.extend(chars);
+            s
+        }
+        None => String::new(),
+    }
+}
+
 /// Apply a list of skinparams to a theme, returning a modified copy.
 #[allow(clippy::too_many_lines)]
 pub fn apply_skinparams(theme: &Theme, params: &[SkinParam]) -> Theme {
     let mut t = theme.clone();
 
     for param in params {
-        match param.key.as_str() {
+        let key = normalize_key(&param.key);
+        match key.as_str() {
             // Theme switch (from !theme directive).
             "__theme" => match param.value.as_str() {
                 "modern" => t = Theme::modern(),
@@ -256,47 +275,47 @@ pub fn apply_skinparams(theme: &Theme, params: &[SkinParam]) -> Theme {
                 }
             }
             "classArrowFontStyle" => t.class.arrow_font_style = param.value.clone(),
-            "ClassFontSize" | "classFontSize" => {
+            "classFontSize" => {
                 if let Ok(v) = param.value.parse::<f64>() {
                     t.class.font_size = v;
                 }
             }
-            "classFontColor" | "ClassFontColor" => t.class.font_color = param.value.clone(),
-            "classFontName" | "ClassFontName" => t.class.font_name = param.value.clone(),
-            "classFontStyle" | "ClassFontStyle" => t.class.font_style = param.value.clone(),
-            "classHeaderBackgroundColor" | "ClassHeaderBackgroundColor" => {
+            "classFontColor" => t.class.font_color = param.value.clone(),
+            "classFontName" => t.class.font_name = param.value.clone(),
+            "classFontStyle" => t.class.font_style = param.value.clone(),
+            "classHeaderBackgroundColor" => {
                 t.class.header_background = param.value.clone();
             }
-            "classAttributeFontSize" | "ClassAttributeFontSize" => {
+            "classAttributeFontSize" => {
                 if let Ok(v) = param.value.parse::<f64>() {
                     t.class.attribute_font_size = v;
                 }
             }
-            "classAttributeFontColor" | "ClassAttributeFontColor" => {
+            "classAttributeFontColor" => {
                 t.class.attribute_font_color = param.value.clone();
             }
-            "classAttributeFontStyle" | "ClassAttributeFontStyle" => {
+            "classAttributeFontStyle" => {
                 t.class.attribute_font_style = param.value.clone();
             }
-            "classAttributeIconSize" | "ClassAttributeIconSize" => {
+            "classAttributeIconSize" => {
                 if let Ok(v) = param.value.parse::<f64>() {
                     t.class.attribute_icon_size = v;
                 }
             }
-            "classRoundCorner" | "ClassRoundCorner" => {
+            "classRoundCorner" => {
                 if let Ok(v) = param.value.parse::<f64>() {
                     t.class.round_corner = v;
                 }
             }
-            "stereotypeFontColor" | "StereotypeFontColor" => {
+            "stereotypeFontColor" => {
                 t.class.stereotype_font_color = param.value.clone();
             }
-            "stereotypeFontSize" | "StereotypeFontSize" => {
+            "stereotypeFontSize" => {
                 if let Ok(v) = param.value.parse::<f64>() {
                     t.class.stereotype_font_size = v;
                 }
             }
-            "stereotypeFontStyle" | "StereotypeFontStyle" => {
+            "stereotypeFontStyle" => {
                 t.class.stereotype_font_style = param.value.clone();
             }
             // `skinparam class` — block-level class skinparams (handled elsewhere).
@@ -421,6 +440,7 @@ pub fn apply_skinparams(theme: &Theme, params: &[SkinParam]) -> Theme {
                     t.component.round_corner = v;
                 }
             }
+            "componentStyle" => t.component.style = param.value.clone(),
 
             // ── Use case ──────────────────────────────────────────────────────
             "usecaseBackgroundColor" => t.usecase.background = param.value.clone(),
@@ -507,6 +527,36 @@ pub fn apply_skinparams(theme: &Theme, params: &[SkinParam]) -> Theme {
             "frameBorderColor" => t.deployment.frame_border = param.value.clone(),
             "rectangleBackgroundColor" => t.deployment.rectangle_background = param.value.clone(),
             "rectangleBorderColor" => t.deployment.rectangle_border = param.value.clone(),
+
+            // ── Object (maps to class style) ─────────────────────────────────
+            "objectBackgroundColor" => t.class.class_background = param.value.clone(),
+            "objectBorderColor" => t.class.border_color = param.value.clone(),
+            "objectFontColor" => t.class.font_color = param.value.clone(),
+            "objectFontSize" => {
+                if let Ok(v) = param.value.parse::<f64>() {
+                    t.class.font_size = v;
+                }
+            }
+            "objectFontStyle" => t.class.font_style = param.value.clone(),
+            "objectFontName" => t.class.font_name = param.value.clone(),
+            "objectBorderThickness" => {
+                if let Ok(v) = param.value.parse::<f64>() {
+                    t.class.border_thickness = v;
+                }
+            }
+            "objectArrowColor" => t.class.arrow_color = param.value.clone(),
+
+            // ── Sequence aliases (PascalCase handled by normalize_key) ───────
+            "sequenceResponseMessageBelowArrow" => {
+                t.sequence.response_message_below_arrow = param.value.to_lowercase() == "true";
+            }
+
+            // ── Global alias: `roundcorner` (all lowercase) ──────────────────
+            "roundcorner" => {
+                if let Ok(v) = param.value.parse::<f64>() {
+                    t.global.round_corner = v;
+                }
+            }
 
             _ => {} // Unknown skinparams silently ignored.
         }
@@ -675,5 +725,79 @@ mod tests {
         }];
         let t = apply_skinparams(&theme, &params);
         assert_eq!(t.global.arrow_color, "red");
+    }
+
+    #[test]
+    fn case_insensitive_first_char() {
+        let theme = Theme::default();
+        // PascalCase variant: ClassBackgroundColor -> classBackgroundColor
+        let params = vec![SkinParam {
+            key: "ClassBackgroundColor".into(),
+            value: "#AABBCC".into(),
+        }];
+        let t = apply_skinparams(&theme, &params);
+        assert_eq!(t.class.class_background, "#AABBCC");
+    }
+
+    #[test]
+    fn pascal_case_arrow_color() {
+        let theme = Theme::default();
+        let params = vec![SkinParam {
+            key: "ArrowColor".into(),
+            value: "green".into(),
+        }];
+        let t = apply_skinparams(&theme, &params);
+        assert_eq!(t.global.arrow_color, "green");
+    }
+
+    #[test]
+    fn component_style_param() {
+        let theme = Theme::default();
+        let params = vec![SkinParam {
+            key: "componentStyle".into(),
+            value: "rectangle".into(),
+        }];
+        let t = apply_skinparams(&theme, &params);
+        assert_eq!(t.component.style, "rectangle");
+    }
+
+    #[test]
+    fn roundcorner_all_lowercase() {
+        let theme = Theme::default();
+        let params = vec![SkinParam {
+            key: "roundcorner".into(),
+            value: "20".into(),
+        }];
+        let t = apply_skinparams(&theme, &params);
+        assert_eq!(t.global.round_corner, 20.0);
+    }
+
+    #[test]
+    fn sequence_response_message_below_arrow() {
+        let theme = Theme::default();
+        let params = vec![SkinParam {
+            key: "SequenceResponseMessageBelowArrow".into(),
+            value: "true".into(),
+        }];
+        let t = apply_skinparams(&theme, &params);
+        assert!(t.sequence.response_message_below_arrow);
+    }
+
+    #[test]
+    fn object_skinparams_map_to_class() {
+        let theme = Theme::default();
+        let params = vec![
+            SkinParam {
+                key: "objectBackgroundColor".into(),
+                value: "#CCDDEE".into(),
+            },
+            SkinParam {
+                key: "objectBorderColor".into(),
+                value: "#112233".into(),
+            },
+        ];
+        let t = apply_skinparams(&theme, &params);
+        assert_eq!(t.class.class_background, "#CCDDEE");
+        assert_eq!(t.class.border_color, "#112233");
     }
 }
