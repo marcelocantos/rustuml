@@ -1161,10 +1161,13 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme) -> String {
     }
 
     // Lifelines
-    let source_line_for = |_id: &str| -> u32 {
-        // PlantUML assigns source lines based on first appearance.
-        // For now, use 1 as a placeholder.
-        1
+    let source_line_for = |id: &str| -> u32 {
+        diagram
+            .participants
+            .iter()
+            .find(|p| p.id == id)
+            .map(|p| p.source_line as u32)
+            .unwrap_or(1)
     };
 
     for p in &participants {
@@ -1313,8 +1316,7 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme) -> String {
                     .map(|i| format!("part{}", i + 1))
                     .unwrap_or_default();
 
-                // Determine source line (approximate)
-                let src_line = msg_id; // Simplified; PlantUML tracks actual source lines
+                let src_line = msg.source_line as u32;
 
                 // Autonumber label (rendered before the message group)
                 if let Some(n) = auto_num.as_ref() {
@@ -1741,6 +1743,7 @@ mod tests {
                     order: Some(0),
                     stereotype: None,
                     url: None,
+                    source_line: 1,
                 },
                 Participant {
                     id: "Bob".into(),
@@ -1749,6 +1752,7 @@ mod tests {
                     order: Some(1),
                     stereotype: None,
                     url: None,
+                    source_line: 1,
                 },
             ],
             events: vec![Event::Message(Message {
@@ -1761,6 +1765,7 @@ mod tests {
                     direction: ArrowDirection::LeftToRight,
                 },
                 activation: None,
+                source_line: 1,
             })],
             autonumber: None,
         }

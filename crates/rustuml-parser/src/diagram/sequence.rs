@@ -26,6 +26,9 @@ pub struct Participant {
     pub stereotype: Option<String>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub url: Option<String>,
+    /// 1-based line number within the `@startuml` block.
+    #[serde(default)]
+    pub source_line: usize,
 }
 
 /// The visual shape of a participant.
@@ -71,6 +74,9 @@ pub struct Message {
     pub label: String,
     pub arrow: Arrow,
     pub activation: Option<ActivationChange>,
+    /// 1-based line number within the `@startuml` block.
+    #[serde(default)]
+    pub source_line: usize,
 }
 
 /// Arrow style for a message.
@@ -120,6 +126,9 @@ pub struct Note {
     pub position: NotePosition,
     pub participants: Vec<String>,
     pub text: String,
+    /// 1-based line number within the `@startuml` block.
+    #[serde(default)]
+    pub source_line: usize,
 }
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Serialize, Deserialize)]
@@ -134,6 +143,9 @@ pub enum NotePosition {
 pub struct GroupStart {
     pub kind: GroupKind,
     pub label: Option<String>,
+    /// 1-based line number within the `@startuml` block.
+    #[serde(default)]
+    pub source_line: usize,
 }
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Serialize, Deserialize)]
@@ -151,6 +163,9 @@ pub enum GroupKind {
 #[derive(Debug, Serialize, Deserialize)]
 pub struct GroupElse {
     pub label: Option<String>,
+    /// 1-based line number within the `@startuml` block.
+    #[serde(default)]
+    pub source_line: usize,
 }
 
 /// A reference to another diagram.
@@ -158,12 +173,18 @@ pub struct GroupElse {
 pub struct Ref {
     pub participants: Vec<String>,
     pub text: String,
+    /// 1-based line number within the `@startuml` block.
+    #[serde(default)]
+    pub source_line: usize,
 }
 
 /// A return message (shorthand for dotted reply).
 #[derive(Debug, Serialize, Deserialize)]
 pub struct ReturnMessage {
     pub label: String,
+    /// 1-based line number within the `@startuml` block.
+    #[serde(default)]
+    pub source_line: usize,
 }
 
 /// Auto-numbering configuration.

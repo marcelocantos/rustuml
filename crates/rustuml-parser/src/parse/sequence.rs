@@ -40,17 +40,21 @@ struct SeqParser {
     ref_buffer: Option<RefBuffer>,
     /// Whether we are inside a `legend ... endlegend` block.
     in_legend: bool,
+    /// Current 1-based source line number (set before each parse_line call).
+    current_line: usize,
 }
 
 struct NoteBuffer {
     position: NotePosition,
     participants: Vec<String>,
     lines: Vec<String>,
+    source_line: usize,
 }
 
 struct RefBuffer {
     participants: Vec<String>,
     lines: Vec<String>,
+    source_line: usize,
 }
 
 impl SeqParser {
@@ -64,6 +68,7 @@ impl SeqParser {
             note_buffer: None,
             ref_buffer: None,
             in_legend: false,
+            current_line: 0,
         }
     }
 
@@ -87,12 +92,15 @@ impl SeqParser {
                 order: Some(self.participants.len()),
                 stereotype: None,
                 url: None,
+                source_line: self.current_line,
             });
         }
         id
     }
 
     fn parse_line(&mut self, line_num: usize, line: &str) -> Result<(), ParseError> {
+        self.current_line = line_num;
+
         // Handle multiline ref buffering.
         if self.ref_buffer.is_some() {
             if line == "end ref" {
@@ -101,6 +109,7 @@ impl SeqParser {
                 self.events.push(Event::Ref(Ref {
                     participants: buf.participants,
                     text,
+                    source_line: buf.source_line,
                 }));
             } else if let Some(buf) = &mut self.ref_buffer {
                 buf.lines.push(line.trim().to_string());
@@ -117,6 +126,7 @@ impl SeqParser {
                     position: buf.position,
                     participants: buf.participants,
                     text,
+                    source_line: buf.source_line,
                 }));
             } else if let Some(buf) = &mut self.note_buffer {
                 buf.lines.push(line.to_string());
@@ -184,7 +194,6 @@ impl SeqParser {
         }
 
         // Unknown lines are silently ignored (matches PlantUML behavior).
-        let _ = line_num;
         Ok(())
     }
 
@@ -237,6 +246,7 @@ impl SeqParser {
                     order: Some(self.participants.len()),
                     stereotype,
                     url,
+                    source_line: self.current_line,
                 });
             }
             true
@@ -287,6 +297,7 @@ impl SeqParser {
                 label,
                 arrow,
                 activation,
+                source_line: self.current_line,
             }));
             true
         } else {
@@ -319,6 +330,7 @@ impl SeqParser {
                     direction: ArrowDirection::LeftToRight,
                 },
                 activation: None,
+                source_line: self.current_line,
             }));
             true
         } else if let Some(caps) = RE_OUT.captures(line) {
@@ -334,6 +346,7 @@ impl SeqParser {
                     direction: ArrowDirection::LeftToRight,
                 },
                 activation: None,
+                source_line: self.current_line,
             }));
             true
         } else {
@@ -352,6 +365,7 @@ impl SeqParser {
                     position: NotePosition::Over,
                     participants: vec![participant_id],
                     text: text.to_string(),
+                    source_line: self.current_line,
                 }));
             }
             return true;
@@ -372,12 +386,14 @@ impl SeqParser {
                     position: NotePosition::Over,
                     participants: Vec::new(),
                     lines: Vec::new(),
+                    source_line: self.current_line,
                 });
             } else {
                 self.events.push(Event::Note(Note {
                     position: NotePosition::Over,
                     participants: Vec::new(),
                     text,
+                    source_line: self.current_line,
                 }));
             }
             return true;
@@ -409,6 +425,7 @@ impl SeqParser {
                     position,
                     participants,
                     text,
+                    source_line: self.current_line,
                 }));
             } else {
                 // Multiline note: note right\n...\nendnote
@@ -416,6 +433,7 @@ impl SeqParser {
                     position,
                     participants,
                     lines: Vec::new(),
+                    source_line: self.current_line,
                 });
             }
             true
@@ -454,8 +472,11 @@ impl SeqParser {
                     Some(l.to_string())
                 }
             };
-            self.events
-                .push(Event::GroupStart(GroupStart { kind, label }));
+            self.events.push(Event::GroupStart(GroupStart {
+                kind,
+                label,
+                source_line: self.current_line,
+            }));
             return true;
         }
 
@@ -468,7 +489,10 @@ impl SeqParser {
                     Some(l.to_string())
                 }
             };
-            self.events.push(Event::GroupElse(GroupElse { label }));
+            self.events.push(Event::GroupElse(GroupElse {
+                label,
+                source_line: self.current_line,
+            }));
             return true;
         }
 
@@ -603,7 +627,10 @@ impl SeqParser {
     fn try_return(&mut self, line: &str) -> bool {
         if let Some(rest) = line.strip_prefix("return") {
             let label = rest.trim().to_string();
-            self.events.push(Event::Return(ReturnMessage { label }));
+            self.events.push(Event::Return(ReturnMessage {
+                label,
+                source_line: self.current_line,
+            }));
             true
         } else {
             false
@@ -625,7 +652,11 @@ impl SeqParser {
                 .map(|s| self.ensure_participant(s.trim()))
                 .collect();
             let text = caps[2].trim().to_string();
-            self.events.push(Event::Ref(Ref { participants, text }));
+            self.events.push(Event::Ref(Ref {
+                participants,
+                text,
+                source_line: self.current_line,
+            }));
             return true;
         }
         if let Some(caps) = RE_START.captures(line) {
@@ -636,6 +667,7 @@ impl SeqParser {
             self.ref_buffer = Some(RefBuffer {
                 participants,
                 lines: Vec::new(),
+                source_line: self.current_line,
             });
             return true;
         }
@@ -690,6 +722,7 @@ impl SeqParser {
             self.events.push(Event::GroupStart(GroupStart {
                 kind: GroupKind::Group,
                 label: Some(label),
+                source_line: self.current_line,
             }));
             return true;
         }
@@ -697,6 +730,7 @@ impl SeqParser {
             self.events.push(Event::GroupStart(GroupStart {
                 kind: GroupKind::Group,
                 label: None,
+                source_line: self.current_line,
             }));
             return true;
         }

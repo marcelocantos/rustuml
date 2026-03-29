@@ -507,6 +507,7 @@ mod tests {
                     order: Some(i),
                     stereotype: None,
                     url: None,
+                    source_line: i + 1,
                 })
                 .collect(),
             events,
@@ -525,6 +526,7 @@ mod tests {
                 direction: ArrowDirection::LeftToRight,
             },
             activation: None,
+            source_line: 0,
         })
     }
 
@@ -539,6 +541,7 @@ mod tests {
                 direction: ArrowDirection::RightToLeft,
             },
             activation: None,
+            source_line: 0,
         })
     }
 
@@ -620,6 +623,7 @@ mod tests {
                     position: NotePosition::Right,
                     participants: vec!["Bob".to_string()],
                     text: "a note".to_string(),
+                    source_line: 0,
                 }),
             ],
         );
