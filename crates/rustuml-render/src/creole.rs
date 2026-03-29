@@ -350,22 +350,28 @@ fn to_svg_tspans_inner(text: &str, skip_underline: bool) -> String {
                         result.push_str(&inner);
                     }
                     _ if tag.starts_with("img:") => {
-                        // <img:url> or <img:file> — render fallback text since we can't
-                        // embed images in SVG tspan content.
-                        // Strip any {scale=...} or similar suffix from the URL.
+                        // <img:url> or <img:file> — render fallback text in monospace,
+                        // matching Java PlantUML's SVG output. Non-breaking spaces
+                        // (U+00A0) are used throughout, consistent with monospace text
+                        // handling elsewhere.
                         let raw_src = &tag["img:".len()..];
                         let src = if let Some(brace) = raw_src.find('{') {
                             &raw_src[..brace]
                         } else {
                             raw_src
                         };
-                        if src.starts_with("https://") || src.starts_with("http://") {
+                        let fallback = if src.starts_with("https://") || src.starts_with("http://")
+                        {
                             let escaped = escape_creole_text(src);
-                            // Non-breaking spaces match Java PlantUML's SVG output.
-                            write!(result, "(Cannot\u{00a0}decode:\u{00a0}{escaped})").unwrap();
+                            format!("(Cannot\u{00a0}decode:\u{00a0}{escaped})")
                         } else {
-                            result.push_str("(Cannot decode)");
-                        }
+                            "(Cannot\u{00a0}decode)".to_string()
+                        };
+                        write!(
+                            result,
+                            "<tspan font-family=\"monospace\">{fallback}</tspan>"
+                        )
+                        .unwrap();
                     }
                     _ if tag.starts_with('/') => {
                         // Unknown closing tag — emit escaped so text isn't silently dropped.
@@ -865,16 +871,20 @@ mod tests {
 
     #[test]
     fn img_url_fallback() {
-        // Non-breaking spaces (U+00A0) match Java PlantUML's SVG output.
+        // Monospace tspan with non-breaking spaces matches Java PlantUML's SVG output.
         assert_eq!(
             to_svg_tspans("<img:https://example.com/img.png>"),
-            "(Cannot\u{00a0}decode:\u{00a0}https://example.com/img.png)"
+            "<tspan font-family=\"monospace\">(Cannot\u{00a0}decode:\u{00a0}https://example.com/img.png)</tspan>"
         );
     }
 
     #[test]
     fn img_local_fallback() {
-        assert_eq!(to_svg_tspans("<img:localfile.png>"), "(Cannot decode)");
+        // Local file: monospace "(Cannot decode)" with non-breaking space.
+        assert_eq!(
+            to_svg_tspans("<img:localfile.png>"),
+            "<tspan font-family=\"monospace\">(Cannot\u{00a0}decode)</tspan>"
+        );
     }
 
     #[test]
@@ -882,7 +892,25 @@ mod tests {
         // {scale=...} suffix stripped from URL in fallback message.
         assert_eq!(
             to_svg_tspans("<img:https://example.com/img.png{scale=0.5}>"),
-            "(Cannot\u{00a0}decode:\u{00a0}https://example.com/img.png)"
+            "<tspan font-family=\"monospace\">(Cannot\u{00a0}decode:\u{00a0}https://example.com/img.png)</tspan>"
+        );
+    }
+
+    #[test]
+    fn img_url_width_fallback() {
+        // {width=...} suffix stripped from URL in fallback message.
+        assert_eq!(
+            to_svg_tspans("<img:https://example.com/img.png{width=100}>"),
+            "<tspan font-family=\"monospace\">(Cannot\u{00a0}decode:\u{00a0}https://example.com/img.png)</tspan>"
+        );
+    }
+
+    #[test]
+    fn img_inline_with_text() {
+        // Image tag embedded in surrounding text.
+        assert_eq!(
+            to_svg_tspans("before <img:https://example.com/x.png> after"),
+            "before <tspan font-family=\"monospace\">(Cannot\u{00a0}decode:\u{00a0}https://example.com/x.png)</tspan> after"
         );
     }
 
