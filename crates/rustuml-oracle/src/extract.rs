@@ -300,4 +300,56 @@ mod tests {
         assert!(layout.edges[0].d.contains("M50,50"));
         assert!(layout.edges[0].arrow_points.is_some());
     }
+
+    #[test]
+    fn extract_state_golden() {
+        let golden_path = concat!(
+            env!("CARGO_MANIFEST_DIR"),
+            "/../../test-diagrams/golden/state/state_alias_len_1.svg"
+        );
+        let Ok(svg) = std::fs::read_to_string(golden_path) else {
+            eprintln!("skipping: golden file not found");
+            return;
+        };
+        let layout = extract_oracle_layout(&svg).unwrap();
+        // Should extract: entity "S", start_entity ".start.", end_entity ".end."
+        assert!(
+            layout.entities.contains_key("S"),
+            "should extract state entity S, got: {:?}",
+            layout.entities.keys().collect::<Vec<_>>()
+        );
+        assert!(
+            layout.entities.contains_key(".start."),
+            "should extract start entity, got: {:?}",
+            layout.entities.keys().collect::<Vec<_>>()
+        );
+        assert!(
+            layout.entities.contains_key(".end."),
+            "should extract end entity, got: {:?}",
+            layout.entities.keys().collect::<Vec<_>>()
+        );
+        // Should have 2 edges.
+        assert_eq!(layout.edges.len(), 2, "expected 2 transition edges");
+        assert!(layout.canvas_width > 0.0);
+        assert!(layout.canvas_height > 0.0);
+    }
+
+    #[test]
+    fn extract_component_golden() {
+        let golden_path = concat!(
+            env!("CARGO_MANIFEST_DIR"),
+            "/../../test-diagrams/golden/component/comp_3cont_cloud_folder_node.svg"
+        );
+        let Ok(svg) = std::fs::read_to_string(golden_path) else {
+            eprintln!("skipping: golden file not found");
+            return;
+        };
+        let layout = extract_oracle_layout(&svg).unwrap();
+        // Should have cluster and entity groups.
+        assert!(
+            !layout.entities.is_empty(),
+            "should extract entities from component diagram"
+        );
+        assert!(layout.canvas_width > 0.0);
+    }
 }
