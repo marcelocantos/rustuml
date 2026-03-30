@@ -3472,7 +3472,11 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme) -> String {
                             let left = (ll_x - half_w).max(HEAD_BOX_Y).floor();
                             (left, left + note_content_w)
                         } else {
-                            // Spanning multiple participants
+                            // Spanning multiple participants.
+                            // When the note text fits within the participant span + margins,
+                            // position at first_ll - 19 .. last_ll + 19.
+                            // When the text is wider, center the note around the midpoint
+                            // and round the left edge.
                             let first_ll = note
                                 .participants
                                 .first()
@@ -3486,10 +3490,17 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme) -> String {
                                 .map(|&i| participants[i].lifeline_line_x)
                                 .unwrap_or(80.0);
                             let span = last_ll - first_ll;
-                            let note_w = note_content_w.max(span + 38.0);
-                            let mid = (first_ll + last_ll) / 2.0;
-                            let left = (mid - note_w / 2.0).max(HEAD_BOX_Y);
-                            (left, left + note_w)
+                            if note_content_w <= span + 38.0 {
+                                // Text fits: use fixed margins
+                                let left = first_ll - 19.0;
+                                let right = last_ll + 19.0;
+                                (left.max(HEAD_BOX_Y), right)
+                            } else {
+                                // Text wider than span: center and round
+                                let mid = (first_ll + last_ll) / 2.0;
+                                let left = (mid - note_content_w / 2.0).max(HEAD_BOX_Y).round();
+                                (left, left + note_content_w)
+                            }
                         }
                     }
                 };
