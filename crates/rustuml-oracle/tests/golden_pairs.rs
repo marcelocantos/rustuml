@@ -321,24 +321,6 @@ fn golden_pairs() {
         }
     }
 
-    // Dump sequence failures to file for analysis
-    {
-        let seq_failures: Vec<&str> = failures
-            .iter()
-            .filter(|f| f.starts_with("sequence/"))
-            .map(|s| s.as_str())
-            .collect();
-        let _ = std::fs::write("/tmp/golden_seq_failures.txt", seq_failures.join("\n"));
-        let all_short: Vec<String> = failures
-            .iter()
-            .map(|f| {
-                let name_end = f.find(':').unwrap_or(f.len());
-                f[..name_end].to_string()
-            })
-            .collect();
-        let _ = std::fs::write("/tmp/golden_all_failure_names.txt", all_short.join("\n"));
-    }
-
     let panics = failures.iter().filter(|f| f.contains("panic:")).count();
     let xml_diff = failures
         .iter()
