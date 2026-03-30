@@ -77,6 +77,34 @@ pub fn extract_oracle_layout(svg: &str) -> Option<OracleLayout> {
                         .filter(|c| c.tag_name().name() == "line")
                         .filter_map(|l| parse_attr(&l, "y1"))
                         .collect();
+                    // Extract visibility icon y-positions from
+                    // <g data-visibility-modifier><rect y="..."> or <ellipse cy="...">
+                    // Extract visibility icon center-y: for rects (y + height/2),
+                    // for ellipses (cy directly). Stored as icon_cy for uniformity.
+                    let vis_icon_y_values: Vec<f64> = node
+                        .children()
+                        .filter(|c| {
+                            c.tag_name().name() == "g"
+                                && c.attribute("data-visibility-modifier").is_some()
+                        })
+                        .filter_map(|g| {
+                            g.children()
+                                .find(|c| {
+                                    c.tag_name().name() == "rect"
+                                        || c.tag_name().name() == "ellipse"
+                                        || c.tag_name().name() == "polygon"
+                                })
+                                .and_then(|el| match el.tag_name().name() {
+                                    "rect" => {
+                                        let y = parse_attr(&el, "y")?;
+                                        let h = parse_attr(&el, "height")?;
+                                        Some(y + h / 2.0)
+                                    }
+                                    "ellipse" => parse_attr(&el, "cy"),
+                                    _ => None, // polygon — skip for now
+                                })
+                        })
+                        .collect();
                     layout.entities.insert(
                         name.to_string(),
                         EntityRect {
@@ -89,6 +117,7 @@ pub fn extract_oracle_layout(svg: &str) -> Option<OracleLayout> {
                             name_text_x,
                             text_y_values,
                             sep_y_values,
+                            vis_icon_y_values,
                         },
                     );
                 } else if let Some(ellipse) = find_first_child(&node, "ellipse") {
@@ -109,6 +138,7 @@ pub fn extract_oracle_layout(svg: &str) -> Option<OracleLayout> {
                             name_text_x: None,
                             text_y_values: Vec::new(),
                             sep_y_values: Vec::new(),
+                            vis_icon_y_values: Vec::new(),
                         },
                     );
                 } else if let Some(polygon) = find_first_child(&node, "polygon") {
@@ -137,6 +167,7 @@ pub fn extract_oracle_layout(svg: &str) -> Option<OracleLayout> {
                                     name_text_x: None,
                                     text_y_values: Vec::new(),
                                     sep_y_values: Vec::new(),
+                                    vis_icon_y_values: Vec::new(),
                                 },
                             );
                         }
@@ -169,6 +200,7 @@ pub fn extract_oracle_layout(svg: &str) -> Option<OracleLayout> {
                             name_text_x: None,
                             text_y_values: Vec::new(),
                             sep_y_values: Vec::new(),
+                            vis_icon_y_values: Vec::new(),
                         },
                     );
                 }
@@ -261,6 +293,7 @@ fn path_bounding_box(d: &str) -> Option<EntityRect> {
             name_text_x: None,
             text_y_values: Vec::new(),
             sep_y_values: Vec::new(),
+            vis_icon_y_values: Vec::new(),
         })
     } else {
         None

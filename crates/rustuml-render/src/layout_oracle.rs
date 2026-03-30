@@ -43,6 +43,8 @@ pub struct EntityRect {
     pub text_y_values: Vec<f64>,
     /// All separator line y-positions (from `<line y1="...">`), in order.
     pub sep_y_values: Vec<f64>,
+    /// Visibility icon y-positions (from rect/ellipse within `<g data-visibility-modifier>`).
+    pub vis_icon_y_values: Vec<f64>,
 }
 
 /// An edge path extracted from a golden SVG.

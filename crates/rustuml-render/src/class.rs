@@ -848,6 +848,12 @@ fn render_entity_content(
         .map(|r| r.sep_y_values.as_slice())
         .unwrap_or(&[]);
 
+    // Oracle visibility icon cy overrides, indexed sequentially.
+    let oracle_vis_y = oracle_rect
+        .map(|r| r.vis_icon_y_values.as_slice())
+        .unwrap_or(&[]);
+    let mut vis_icon_idx = 0usize;
+
     // Separator lines and members.
     let sep_x1 = x + 1.0;
     let sep_x2 = x + dim.width - 1.0;
@@ -908,7 +914,14 @@ fn render_entity_content(
             // Use oracle text y if available (index 0 is name, members start at 1).
             let eff_member_y = oracle_text_y.get(mi + 1).copied().unwrap_or(member_y);
             if member.visibility != Visibility::Default {
-                render_member_line(svg, member, x, eff_member_y);
+                let vis_ov = if member.visibility != Visibility::Default {
+                    let v = oracle_vis_y.get(vis_icon_idx).copied();
+                    vis_icon_idx += 1;
+                    v
+                } else {
+                    None
+                };
+                render_member_line(svg, member, x, eff_member_y, vis_ov);
             } else {
                 let text = format_member_display(member);
                 let text_w = metrics::plantuml_text_width_14(&text);
@@ -978,7 +991,14 @@ fn render_entity_content(
             let mut member_y = header_sep_y + FIRST_MEMBER_OFFSET;
             for (fi, member) in fields.iter().enumerate() {
                 let eff_y = oracle_text_y.get(fi + 1).copied().unwrap_or(member_y);
-                render_member_line(svg, member, x, eff_y);
+                let vis_ov = if member.visibility != Visibility::Default {
+                    let v = oracle_vis_y.get(vis_icon_idx).copied();
+                    vis_icon_idx += 1;
+                    v
+                } else {
+                    None
+                };
+                render_member_line(svg, member, x, eff_y, vis_ov);
                 member_y += MEMBER_SPACING;
             }
 
@@ -1006,7 +1026,14 @@ fn render_entity_content(
                     .get(method_text_offset + mi)
                     .copied()
                     .unwrap_or(method_y);
-                render_member_line(svg, member, x, eff_y);
+                let vis_ov = if member.visibility != Visibility::Default {
+                    let v = oracle_vis_y.get(vis_icon_idx).copied();
+                    vis_icon_idx += 1;
+                    v
+                } else {
+                    None
+                };
+                render_member_line(svg, member, x, eff_y, vis_ov);
                 method_y += MEMBER_SPACING;
             }
         } else if !methods.is_empty() {
@@ -1038,7 +1065,14 @@ fn render_entity_content(
             let mut method_y = methods_sep_y + FIRST_MEMBER_OFFSET;
             for (mi, member) in methods.iter().enumerate() {
                 let eff_y = oracle_text_y.get(mi + 1).copied().unwrap_or(method_y);
-                render_member_line(svg, member, x, eff_y);
+                let vis_ov = if member.visibility != Visibility::Default {
+                    let v = oracle_vis_y.get(vis_icon_idx).copied();
+                    vis_icon_idx += 1;
+                    v
+                } else {
+                    None
+                };
+                render_member_line(svg, member, x, eff_y, vis_ov);
                 method_y += MEMBER_SPACING;
             }
         } else {
@@ -1072,13 +1106,20 @@ fn render_entity_content(
 }
 
 /// Render a single member line (visibility icon + text).
-fn render_member_line(svg: &mut String, member: &Member, entity_x: f64, baseline_y: f64) {
+/// `vis_icon_y_override`: oracle-provided visibility icon y position (rect y or ellipse cy).
+fn render_member_line(
+    svg: &mut String,
+    member: &Member,
+    entity_x: f64,
+    baseline_y: f64,
+    vis_icon_y_override: Option<f64>,
+) {
     let text = format_member_display(member);
     let text_w = metrics::plantuml_text_width_14(&text);
 
     if let Some(vis_mod) = visibility_modifier(member) {
         // Visibility icon group.
-        let icon_cy = baseline_y - 3.7911;
+        let icon_cy = vis_icon_y_override.unwrap_or(baseline_y - 3.7911);
 
         write!(svg, r#"<g data-visibility-modifier="{}">"#, vis_mod,).unwrap();
 
