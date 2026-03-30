@@ -29,6 +29,9 @@ pub struct Participant {
     pub stereotype: Option<String>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub url: Option<String>,
+    /// Optional background color (e.g., "#red", "#FF0000").
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub color: Option<String>,
     /// 1-based line number within the `@startuml` block.
     #[serde(default)]
     pub source_line: usize,

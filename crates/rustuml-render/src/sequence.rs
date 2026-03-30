@@ -617,6 +617,7 @@ impl PlantUmlSvg {
 
     /// Write a participant box (head or tail).
     #[allow(clippy::too_many_arguments)]
+    #[allow(clippy::too_many_arguments)]
     fn participant_box(
         &mut self,
         part_uid: &str,
@@ -632,6 +633,7 @@ impl PlantUmlSvg {
         text_content: &str,
         text_len: f64,
         stereotype: Option<(&str, f64)>, // (stereotype text, text width)
+        fill_color: &str,
     ) {
         write!(
             self.buf,
@@ -643,7 +645,8 @@ impl PlantUmlSvg {
 
         write!(
             self.buf,
-            r##"<rect fill="#E2E2F0" height="{}" rx="{}" ry="{}" style="stroke:#181818;stroke-width:0.5;" width="{}" x="{}" y="{}"/>"##,
+            r##"<rect fill="{}" height="{}" rx="{}" ry="{}" style="stroke:#181818;stroke-width:0.5;" width="{}" x="{}" y="{}"/>"##,
+            fill_color,
             fmt_coord(rect_h),
             fmt_coord(HEAD_BOX_RX),
             fmt_coord(HEAD_BOX_RX),
@@ -1415,6 +1418,7 @@ fn render_participant_shape(
     p: &ParticipantLayout,
     base_y: f64,
     _max_box_h: f64,
+    fill_color: &str,
 ) {
     match p.kind {
         ParticipantKind::Actor
@@ -1550,6 +1554,7 @@ fn render_participant_shape(
                 &p.label,
                 p.text_width,
                 stereo_ref,
+                fill_color,
             );
         }
     }
@@ -2783,6 +2788,13 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme) -> String {
         let part_uid = format!("part{}", p.idx + 1);
         let sl = source_line_for(&diagram.participants[i].id);
 
+        // Resolve participant fill color (default #E2E2F0).
+        let fill_color = diagram.participants[i]
+            .color
+            .as_ref()
+            .map(|c| resolve_color(c))
+            .unwrap_or_else(|| "#E2E2F0".to_string());
+
         // Head: base_y is where this participant's shape starts (bottom-aligned).
         let head_base_y = HEAD_BOX_Y + (max_box_h - p.box_height);
 
@@ -2795,13 +2807,22 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme) -> String {
             p,
             head_base_y,
             max_box_h,
+            &fill_color,
         );
 
         // Tail (skip if hide footbox) — all participants start at tail_box_y
         // (no bottom-alignment offset; the SVG height accounts for max_box_h).
         if !diagram.hide_footbox {
             render_participant_shape(
-                &mut svg, &part_uid, &p.id, sl, "tail", p, tail_box_y, max_box_h,
+                &mut svg,
+                &part_uid,
+                &p.id,
+                sl,
+                "tail",
+                p,
+                tail_box_y,
+                max_box_h,
+                &fill_color,
             );
         }
     }
@@ -3839,6 +3860,7 @@ mod tests {
                     order: Some(0),
                     stereotype: None,
                     url: None,
+                    color: None,
                     source_line: 1,
                 },
                 Participant {
@@ -3848,6 +3870,7 @@ mod tests {
                     order: Some(1),
                     stereotype: None,
                     url: None,
+                    color: None,
                     source_line: 1,
                 },
             ],

@@ -507,6 +507,7 @@ mod tests {
                     order: Some(i),
                     stereotype: None,
                     url: None,
+                    color: None,
                     source_line: i + 1,
                 })
                 .collect(),

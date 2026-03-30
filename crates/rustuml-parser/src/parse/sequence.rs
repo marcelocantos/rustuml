@@ -101,6 +101,7 @@ impl SeqParser {
                 order: Some(self.participants.len()),
                 stereotype: None,
                 url: None,
+                color: None,
                 source_line: self.current_line,
             });
         }
@@ -218,7 +219,7 @@ impl SeqParser {
         //   4. keyword "Long Label"          <<stereotype>>  (no alias; id = label)
         static RE: LazyLock<Regex> = LazyLock::new(|| {
             Regex::new(
-                r#"^(participant|actor|boundary|control|entity|database|collections|queue)\s+(?:"([^"]+)"\s+as\s+(\w+)|(\w+)\s+as\s+"([^"]+)"|"([^"]+)"|(\w+))(?:\s+<<([^>]+)>>)?(?:\s+#\S+)?(?:\s+order\s+\d+)?"#,
+                r#"^(participant|actor|boundary|control|entity|database|collections|queue)\s+(?:"([^"]+)"\s+as\s+(\w+)|(\w+)\s+as\s+"([^"]+)"|"([^"]+)"|(\w+))(?:\s+<<([^>]+)>>)?(?:\s+(#\S+))?(?:\s+order\s+\d+)?"#,
             )
             .unwrap()
         });
@@ -248,6 +249,8 @@ impl SeqParser {
                 .map(|m| m.as_str().to_string())
                 .or(label_stereotype);
 
+            let color = caps.get(9).map(|m| m.as_str().to_string());
+
             if !self.participant_ids.contains(&id) {
                 self.participant_ids.push(id.clone());
                 self.participants.push(Participant {
@@ -257,6 +260,7 @@ impl SeqParser {
                     order: Some(self.participants.len()),
                     stereotype,
                     url,
+                    color,
                     source_line: self.current_line,
                 });
             }
