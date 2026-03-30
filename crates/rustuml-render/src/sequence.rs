@@ -2331,14 +2331,20 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme) -> String {
         start_event_idx: usize, // event index where activation starts
         end_event_idx: usize,   // event index where activation ends
         color: Option<String>,  // fill color (e.g., "#0000FF")
+        depth: usize,           // nesting depth (0 = outermost)
     }
 
     let mut activation_bars: Vec<ActivationBar> = Vec::new();
     {
         let mut tracker = ActivationTracker::new();
-        // Track open activations: (participant_id, event_idx, color)
-        let mut open_activations: Vec<(String, usize, Option<String>)> = Vec::new();
+        // Track open activations: (participant_id, event_idx, color, depth)
+        let mut open_activations: Vec<(String, usize, Option<String>, usize)> = Vec::new();
         let mut last_event_idx: usize = 0;
+
+        // Count currently open activations for a given participant.
+        let open_depth = |open: &[(String, usize, Option<String>, usize)], pid: &str| -> usize {
+            open.iter().filter(|(id, _, _, _)| id == pid).count()
+        };
 
         for (ev_idx, event) in diagram.events.iter().enumerate() {
             match event {
@@ -2349,25 +2355,29 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme) -> String {
                     if let Some(act) = &msg.activation {
                         match act {
                             ActivationChange::Activate => {
+                                let depth = open_depth(&open_activations, &msg.to);
                                 tracker.activate(&msg.to);
                                 open_activations.push((
                                     msg.to.clone(),
                                     ev_idx,
                                     msg.activation_color.clone(),
+                                    depth,
                                 ));
                             }
                             ActivationChange::Deactivate => {
                                 tracker.deactivate(&msg.from);
                                 if let Some(pos) = open_activations
                                     .iter()
-                                    .rposition(|(id, _, _)| id == &msg.from)
+                                    .rposition(|(id, _, _, _)| id == &msg.from)
                                 {
-                                    let (pid, start_idx, color) = open_activations.remove(pos);
+                                    let (pid, start_idx, color, depth) =
+                                        open_activations.remove(pos);
                                     activation_bars.push(ActivationBar {
                                         participant_id: pid,
                                         start_event_idx: start_idx,
                                         end_event_idx: ev_idx,
                                         color,
+                                        depth,
                                     });
                                 }
                             }
@@ -2378,18 +2388,23 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme) -> String {
                     }
                 }
                 Event::Activate(id, color) => {
+                    let depth = open_depth(&open_activations, id);
                     tracker.activate(id);
-                    open_activations.push((id.clone(), last_event_idx, color.clone()));
+                    open_activations.push((id.clone(), last_event_idx, color.clone(), depth));
                 }
                 Event::Deactivate(id) => {
                     tracker.deactivate(id);
-                    if let Some(pos) = open_activations.iter().rposition(|(pid, _, _)| pid == id) {
-                        let (pid, start_idx, color) = open_activations.remove(pos);
+                    if let Some(pos) = open_activations
+                        .iter()
+                        .rposition(|(pid, _, _, _)| pid == id)
+                    {
+                        let (pid, start_idx, color, depth) = open_activations.remove(pos);
                         activation_bars.push(ActivationBar {
                             participant_id: pid,
                             start_event_idx: start_idx,
                             end_event_idx: last_event_idx,
                             color,
+                            depth,
                         });
                     }
                 }
@@ -2397,13 +2412,14 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme) -> String {
                     last_event_idx = ev_idx;
                     // Return deactivates the most recently activated participant
                     if let Some(pos) = open_activations.len().checked_sub(1) {
-                        let (pid, start_idx, color) = open_activations.remove(pos);
+                        let (pid, start_idx, color, depth) = open_activations.remove(pos);
                         tracker.deactivate(&pid);
                         activation_bars.push(ActivationBar {
                             participant_id: pid,
                             start_event_idx: start_idx,
                             end_event_idx: ev_idx,
                             color,
+                            depth,
                         });
                     }
                 }
@@ -2413,12 +2429,13 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme) -> String {
 
         // Close any remaining open activations — extend to the last event
         let final_idx = diagram.events.len().saturating_sub(1);
-        for (pid, start_idx, color) in open_activations {
+        for (pid, start_idx, color, depth) in open_activations {
             activation_bars.push(ActivationBar {
                 participant_id: pid,
                 start_event_idx: start_idx,
                 end_event_idx: final_idx,
                 color,
+                depth,
             });
         }
 
@@ -2461,51 +2478,56 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme) -> String {
                         let frame_top = event_y_positions[start_idx];
                         let frame_bottom = event_y_positions[ev_idx];
 
+                        // Compute the header text right edge (group kind label + guard).
+                        let header_right = if let Event::GroupStart(g) = &diagram.events[start_idx]
+                        {
+                            let kind_str = match g.kind {
+                                GroupKind::Alt => "alt",
+                                GroupKind::Opt => "opt",
+                                GroupKind::Loop => "loop",
+                                GroupKind::Par => "par",
+                                GroupKind::Break => "break",
+                                GroupKind::Critical => "critical",
+                                GroupKind::Group => "group",
+                            };
+                            let fl = if min_idx <= max_idx && !participants.is_empty() {
+                                participants[min_idx].box_x - GROUP_FRAME_MARGIN
+                            } else if !participants.is_empty() {
+                                participants[0].box_x + GROUP_FRAME_MARGIN
+                            } else {
+                                HEAD_BOX_Y
+                            };
+                            let kw = bold_text_width(kind_str, MSG_FONT_SIZE);
+                            let tab_right = fl + kw + 45.0;
+                            if let Some(label) = &g.label {
+                                let guard = format!("[{label}]");
+                                let gw = bold_text_width(&guard, 11.0);
+                                tab_right + 15.0 + gw + 5.0
+                            } else {
+                                tab_right + 5.0
+                            }
+                        } else {
+                            0.0
+                        };
+
                         // Compute frame left/right based on which participants are inside.
                         let (frame_left, frame_right) =
                             if min_idx <= max_idx && !participants.is_empty() {
                                 // Group has messages — frame encompasses those participants
                                 let fl = participants[min_idx].box_x - GROUP_FRAME_MARGIN;
-                                let fr = participants[max_idx].box_x
+                                let fr = (participants[max_idx].box_x
                                     + participants[max_idx].box_width
-                                    + GROUP_FRAME_MARGIN;
+                                    + GROUP_FRAME_MARGIN)
+                                    .max(header_right);
                                 (fl, fr)
                             } else if !participants.is_empty() {
                                 // Empty group — frame left at first box + margin
                                 let fl = participants[0].box_x + GROUP_FRAME_MARGIN;
 
-                                // Frame right must cover the header text extent.
-                                // Compute header text right from the group kind and label.
-                                let (kind_w, guard_right) =
-                                    if let Event::GroupStart(g) = &diagram.events[start_idx] {
-                                        let kind_str = match g.kind {
-                                            GroupKind::Alt => "alt",
-                                            GroupKind::Opt => "opt",
-                                            GroupKind::Loop => "loop",
-                                            GroupKind::Par => "par",
-                                            GroupKind::Break => "break",
-                                            GroupKind::Critical => "critical",
-                                            GroupKind::Group => "group",
-                                        };
-                                        let kw = bold_text_width(kind_str, MSG_FONT_SIZE);
-                                        let tab_right = fl + kw + 45.0;
-                                        let gr = if let Some(label) = &g.label {
-                                            let guard = format!("[{label}]");
-                                            let gw = bold_text_width(&guard, 11.0);
-                                            tab_right + 15.0 + gw + 5.0
-                                        } else {
-                                            tab_right + 5.0
-                                        };
-                                        (kw, gr)
-                                    } else {
-                                        (0.0, fl + 50.0)
-                                    };
-                                let _ = kind_w;
-
                                 let last = &participants[n - 1];
                                 let participant_right =
                                     last.box_x + last.box_width + GROUP_FRAME_MARGIN;
-                                let fr = participant_right.max(guard_right);
+                                let fr = participant_right.max(header_right);
                                 (fl, fr)
                             } else {
                                 (HEAD_BOX_Y, 100.0)
@@ -2538,6 +2560,18 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme) -> String {
             }
         }
     }
+
+    // Recalculate svg_width after group frames are computed, since the frame
+    // right edges may exceed the initial estimate (e.g., when group labels extend
+    // beyond participant boxes).
+    let svg_width = if !group_frames.is_empty() {
+        let max_frame_right = group_frames.iter().map(|f| f.right).fold(0.0f64, f64::max);
+        let from_frames = max_frame_right + RIGHT_MARGIN + 5.0;
+        let from_participants = effective_right + RIGHT_MARGIN + GROUP_FRAME_MARGIN + 5.0;
+        from_participants.max(from_frames).ceil() as u32
+    } else {
+        svg_width
+    };
 
     // -----------------------------------------------------------------------
     // Phase 6: Generate SVG
@@ -2676,29 +2710,14 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme) -> String {
         }
     }
 
-    // Group frame rects (first instance) — rendered before lifelines in PlantUML.
-    for frame in &group_frames {
-        let frame_height = frame.bottom - frame.top;
-        write!(
-            svg.buf,
-            r##"<rect fill="none" height="{}" style="stroke:#000000;stroke-width:1.5;" width="{}" x="{}" y="{}"/>"##,
-            fmt_coord(frame_height),
-            fmt_coord(frame.right - frame.left),
-            fmt_coord(frame.left),
-            fmt_coord(frame.top),
-        )
-        .unwrap();
-    }
-
-    // Activation bars are rendered BEFORE lifelines in PlantUML's SVG.
-    // Actually, looking at golden SVGs: activation bars appear first (before lifelines),
-    // then lifelines, then participant heads, then tails, then activation bars AGAIN,
-    // then messages.
+    // Activation bars are rendered BEFORE group frames and lifelines in PlantUML's SVG.
+    // Order: activation bars, group frame rects, lifelines, participants, activation bars
+    // again, then messages.
 
     // First pass: activation bars (rendered twice in PlantUML's SVG)
     for bar in &activation_bars {
         let cx = center_of(&bar.participant_id);
-        let bar_x = cx - ACTIVATION_HALF_W;
+        let bar_x = cx - ACTIVATION_HALF_W + (bar.depth as f64 * ACTIVATION_HALF_W);
         let bar_y = event_y(bar.start_event_idx);
         let bar_end_y = event_y(bar.end_event_idx);
         let bar_h = bar_end_y - bar_y;
@@ -2713,6 +2732,20 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme) -> String {
             .map(|c| resolve_color(c))
             .unwrap_or_else(|| "#FFFFFF".to_string());
         svg.activation_bar(title, bar_x, bar_y, bar_h, &fill_color);
+    }
+
+    // Group frame rects (first instance) — rendered after first activation bars pass.
+    for frame in &group_frames {
+        let frame_height = frame.bottom - frame.top;
+        write!(
+            svg.buf,
+            r##"<rect fill="none" height="{}" style="stroke:#000000;stroke-width:1.5;" width="{}" x="{}" y="{}"/>"##,
+            fmt_coord(frame_height),
+            fmt_coord(frame.right - frame.left),
+            fmt_coord(frame.left),
+            fmt_coord(frame.top),
+        )
+        .unwrap();
     }
 
     // Lifelines
@@ -2776,7 +2809,7 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme) -> String {
     // Second pass: activation bars again (PlantUML renders them twice)
     for bar in &activation_bars {
         let cx = center_of(&bar.participant_id);
-        let bar_x = cx - ACTIVATION_HALF_W;
+        let bar_x = cx - ACTIVATION_HALF_W + (bar.depth as f64 * ACTIVATION_HALF_W);
         let bar_y = event_y(bar.start_event_idx);
         let bar_end_y = event_y(bar.end_event_idx);
         let bar_h = bar_end_y - bar_y;
