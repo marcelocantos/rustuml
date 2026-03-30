@@ -46,11 +46,11 @@ const METHODS_SEP_Y: f64 = 47.0;
 #[allow(dead_code)]
 const HEADER_HEIGHT: f64 = 32.0;
 /// Height of a member line.
-const MEMBER_LINE_HEIGHT: f64 = 16.4883;
+const MEMBER_LINE_HEIGHT: f64 = 16.48828125;
 /// Vertical offset from compartment top to first member baseline.
-const FIRST_MEMBER_OFFSET: f64 = 17.5352;
+const FIRST_MEMBER_OFFSET: f64 = 17.53515625;
 /// Subsequent member baseline spacing.
-const MEMBER_SPACING: f64 = 16.4883;
+const MEMBER_SPACING: f64 = 16.48828125;
 /// Offset from entity x to member text start.
 const MEMBER_TEXT_OFFSET: f64 = 20.0;
 /// Offset from entity x to enum constant text start.
@@ -1218,7 +1218,7 @@ fn render_member_line(
 
     if let Some(vis_mod) = visibility_modifier(member) {
         // Visibility icon group.
-        let icon_cy = vis_icon_y_override.unwrap_or(baseline_y - 3.7911);
+        let icon_cy = vis_icon_y_override.unwrap_or(baseline_y - 3.791015625);
 
         write!(svg, r#"<g data-visibility-modifier="{}">"#, vis_mod,).unwrap();
 
