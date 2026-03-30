@@ -268,6 +268,7 @@ mod tests {
             members,
             stereotypes: vec![],
             url: None,
+            color: None,
             source_line: 0,
         }
     }

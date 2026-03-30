@@ -99,6 +99,7 @@ impl ClassParser {
                 members: Vec::new(),
                 stereotypes: Vec::new(),
                 url: None,
+                color: None,
                 source_line: self.current_line,
             });
         }
@@ -368,6 +369,11 @@ impl ClassParser {
                 .filter(|s| !s.is_empty())
                 .collect();
 
+            // Extract entity-level color (e.g., `#lightblue`, `#FF0000`)
+            static COLOR_RE: LazyLock<Regex> =
+                LazyLock::new(|| Regex::new(r"(#[a-zA-Z0-9]+)(?:\s|\{|$)").unwrap());
+            let entity_color = COLOR_RE.captures(line).map(|c| c[1].to_string());
+
             // Handle namespace separation: split `com.example.MyClass` or `com::example::MyClass`
             // into package hierarchy + short entity name.  For default separator ".", we must
             // use RE_DOTTED (which already matches dotted names) — but for the default RE above
@@ -398,6 +404,9 @@ impl ClassParser {
                 if url.is_some() {
                     entity.url = url.clone();
                 }
+                if entity_color.is_some() {
+                    entity.color = entity_color.clone();
+                }
             } else {
                 self.entities.push(ClassEntity {
                     id: final_id.clone(),
@@ -406,6 +415,7 @@ impl ClassParser {
                     members: Vec::new(),
                     stereotypes,
                     url: url.clone(),
+                    color: entity_color.clone(),
                     source_line: self.current_line,
                 });
             }
@@ -444,6 +454,7 @@ impl ClassParser {
                     members: Vec::new(),
                     stereotypes: Vec::new(),
                     url: None,
+                    color: None,
                     source_line: self.current_line,
                 });
             }
@@ -540,6 +551,7 @@ impl ClassParser {
                     members: Vec::new(),
                     stereotypes: Vec::new(),
                     url: None,
+                    color: None,
                     source_line: self.current_line,
                 });
             }
@@ -802,6 +814,7 @@ impl ClassParser {
                         members: vec![member],
                         stereotypes: Vec::new(),
                         url: None,
+                        color: None,
                         source_line: self.current_line,
                     });
                 }

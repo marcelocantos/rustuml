@@ -650,9 +650,10 @@ fn render_plantuml_svg(
             max_x = max_x.max(x + dims[i].width);
             max_y = max_y.max(y + dims[i].height);
         }
+        // PlantUML adds 5px extra padding beyond entity bounds + margin.
         (
-            (max_x + MARGIN).ceil() as i64,
-            (max_y + MARGIN).ceil() as i64,
+            (max_x + MARGIN + 5.0).ceil() as i64,
+            (max_y + MARGIN + 5.0).ceil() as i64,
         )
     };
 
@@ -748,11 +749,16 @@ fn render_entity_content(
     let _is_enum = entity.kind == EntityKind::Enum;
     let _is_annotation = entity.kind == EntityKind::Annotation;
 
-    // Background rectangle.
+    // Background rectangle — use entity color if specified, otherwise default.
+    let fill = entity
+        .color
+        .as_ref()
+        .map(|c| crate::sequence::resolve_color(c))
+        .unwrap_or_else(|| ENTITY_FILL.to_string());
     write!(
         svg,
         r#"<rect fill="{}" height="{}" rx="2.5" ry="2.5" style="stroke:{};stroke-width:{};" width="{}" x="{}" y="{}"/>"#,
-        ENTITY_FILL,
+        fill,
         fmt4(dim.height),
         BORDER_COLOR,
         BORDER_WIDTH,
@@ -1671,6 +1677,7 @@ mod tests {
                     ],
                     stereotypes: vec![],
                     url: None,
+                    color: None,
                     source_line: 0,
                 },
                 ClassEntity {
@@ -1688,6 +1695,7 @@ mod tests {
                     }],
                     stereotypes: vec![],
                     url: None,
+                    color: None,
                     source_line: 0,
                 },
             ],
@@ -1823,6 +1831,7 @@ mod tests {
                 }],
                 stereotypes: vec![],
                 url: None,
+                color: None,
                 source_line: 0,
             }],
             relationships: vec![],
