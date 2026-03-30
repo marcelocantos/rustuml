@@ -2163,12 +2163,20 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme) -> String {
                     y += GROUP_INNER_TOP_PAD;
                     // Don't increment msg_count — the group header itself isn't a message
                 }
-                Event::GroupElse(_) => {
+                Event::GroupElse(g) => {
                     // Else divider adds vertical space.
                     y += GROUP_ELSE_HEIGHT;
                     event_y_positions.push(y);
-                    // Advance y past the else label for next inner message.
-                    y += GROUP_ELSE_INNER_PAD;
+                    if g.label.is_some() {
+                        // With a label: advance past the label text.
+                        y += GROUP_ELSE_INNER_PAD;
+                    } else {
+                        // Without a label: PlantUML uses a tighter layout.
+                        // The next message step (msg_step) overshoots by 7px
+                        // because the else divider already contributed vertical
+                        // space that partially overlaps the message base step.
+                        y -= MSG_BASE_STEP - (MSG_BASE_FIRST_OFFSET - GROUP_ELSE_HEIGHT);
+                    }
                 }
                 Event::GroupEnd => {
                     // Group end: event_y marks the frame bottom,
@@ -3770,22 +3778,21 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme) -> String {
                 )
                 .unwrap();
 
-                // Emit else label (in brackets if present)
-                let label_text = if let Some(label) = &g.label {
-                    format!("[{label}]")
-                } else {
-                    "[else]".to_string()
-                };
-                let tw = bold_text_width(&label_text, 11.0);
-                write!(
-                    svg.buf,
-                    r##"<text fill="#000000" font-family="sans-serif" font-size="11" font-weight="700" lengthAdjust="spacing" textLength="{}" x="{}" y="{}">{}</text>"##,
-                    fmt_coord(tw),
-                    fmt_coord(frame_left + 5.0),
-                    fmt_coord(msg_y + 10.6348),
-                    escape_xml(&label_text),
-                )
-                .unwrap();
+                // Emit else label only when explicitly provided (PlantUML
+                // does NOT show "[else]" text when the else clause has no label).
+                if let Some(label) = &g.label {
+                    let label_text = format!("[{label}]");
+                    let tw = bold_text_width(&label_text, 11.0);
+                    write!(
+                        svg.buf,
+                        r##"<text fill="#000000" font-family="sans-serif" font-size="11" font-weight="700" lengthAdjust="spacing" textLength="{}" x="{}" y="{}">{}</text>"##,
+                        fmt_coord(tw),
+                        fmt_coord(frame_left + 5.0),
+                        fmt_coord(msg_y + 10.6348),
+                        escape_xml(&label_text),
+                    )
+                    .unwrap();
+                }
             }
             Event::GroupEnd => {
                 // Group end is handled by the frame rect emitted at GroupStart
