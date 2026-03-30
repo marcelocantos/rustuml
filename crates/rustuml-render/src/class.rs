@@ -71,6 +71,17 @@ const ENTITY_GAP: f64 = 60.0;
 
 /// Font size for entity names and member text.
 const FONT_SIZE: f64 = 14.0;
+/// Font size for stereotype text.
+#[allow(dead_code)]
+const STEREOTYPE_FONT_SIZE: f64 = 12.0;
+/// Extra header height when stereotypes are present.
+const STEREOTYPE_EXTRA_HEIGHT: f64 = 8.6211;
+/// Stereotype text baseline y relative to entity rect top.
+const STEREOTYPE_Y_OFFSET: f64 = 16.6016;
+/// Name text baseline y relative to entity rect top when stereotypes are present.
+const NAME_Y_WITH_STEREO: f64 = 32.668;
+/// Icon center y relative to entity rect top when stereotypes are present.
+const ICON_CY_WITH_STEREO: f64 = 20.3105;
 
 const NOTE_FILL: &str = "#FEFFDD";
 const NOTE_BORDER: &str = "#888888";
@@ -171,6 +182,8 @@ struct EntityDims {
     /// Name text width.
     #[allow(dead_code)]
     name_width: f64,
+    /// Whether the entity has stereotypes (affects header height and layout).
+    has_stereotypes: bool,
     /// Source line number from the parser (1-based).
     source_line: usize,
 }
@@ -178,6 +191,7 @@ struct EntityDims {
 fn calc_entity_dims(entity: &ClassEntity, entity_index: usize) -> EntityDims {
     let is_enum = entity.kind == EntityKind::Enum;
     let name_width = metrics::plantuml_text_width_14(&entity.label);
+    let has_stereotypes = !entity.stereotypes.is_empty();
 
     // Split members into fields and methods (enums have all members as "fields").
     let (field_count, method_count) = if is_enum {
@@ -203,6 +217,16 @@ fn calc_entity_dims(entity: &ClassEntity, entity_index: usize) -> EntityDims {
     let icon_area = ICON_CX_OFFSET + ICON_RX + ICON_TEXT_GAP; // 29
     let name_total = icon_area + name_width + HEADER_RIGHT_PAD;
 
+    // Stereotype text may also affect width.
+    let stereo_width = if has_stereotypes {
+        let stereo_text = format_stereotype_text(&entity.stereotypes);
+        let stereo_tw = metrics::plantuml_text_width_12(&stereo_text);
+        // Stereotype text is centered in the header area alongside the icon.
+        icon_area + stereo_tw + HEADER_RIGHT_PAD
+    } else {
+        0.0
+    };
+
     let member_widths: Vec<f64> = entity
         .members
         .iter()
@@ -220,33 +244,32 @@ fn calc_entity_dims(entity: &ClassEntity, entity_index: usize) -> EntityDims {
         .collect();
 
     let max_member_width = member_widths.iter().cloned().fold(0.0_f64, f64::max);
-    let width = name_total.max(max_member_width);
+    let width = name_total.max(stereo_width).max(max_member_width);
 
     // Height calculation.
     // PlantUML layout formula (derived from golden SVGs):
-    //   header = 32px (icon + name)
+    //   header = 32px (icon + name), or 40.6211px with stereotypes
     //   each compartment = 8px padding + n * 16.4883px per member
     //   empty compartment = 8px
-    //
-    // Empty class:  32 + 8 + 8 = 48
-    // Fields only:  32 + (8 + nf*16.4883) + 8 = 48 + nf*16.4883
-    // Methods only: 32 + 8 + (8 + nm*16.4883) = 48 + nm*16.4883
-    // Both:         32 + (8 + nf*16.4883) + (8 + nm*16.4883)
-    // Enum:         32 + (8 + n*16.4883) + 8
 
     const HEADER_H: f64 = 32.0;
+    let header_h = if has_stereotypes {
+        HEADER_H + STEREOTYPE_EXTRA_HEIGHT
+    } else {
+        HEADER_H
+    };
 
     let height = if entity.members.is_empty() {
-        // No members: header + empty fields + empty methods = 32+8+8 = 48.
-        HEADER_H + COMPARTMENT_PAD + COMPARTMENT_PAD
+        // No members: header + empty fields + empty methods.
+        header_h + COMPARTMENT_PAD + COMPARTMENT_PAD
     } else if is_enum {
         // Enum: header + values + bottom separator.
-        HEADER_H + (COMPARTMENT_PAD + field_count as f64 * MEMBER_LINE_HEIGHT) + COMPARTMENT_PAD
+        header_h + (COMPARTMENT_PAD + field_count as f64 * MEMBER_LINE_HEIGHT) + COMPARTMENT_PAD
     } else {
         // Class/interface/abstract/annotation.
         let fields_section = COMPARTMENT_PAD + field_count as f64 * MEMBER_LINE_HEIGHT;
         let methods_section = COMPARTMENT_PAD + method_count as f64 * MEMBER_LINE_HEIGHT;
-        HEADER_H + fields_section + methods_section
+        header_h + fields_section + methods_section
     };
 
     // Use the parser-provided source line; fall back to index-based approximation
@@ -264,8 +287,27 @@ fn calc_entity_dims(entity: &ClassEntity, entity_index: usize) -> EntityDims {
         method_count,
         is_enum,
         name_width,
+        has_stereotypes,
         source_line,
     }
+}
+
+/// Format stereotype text with guillemets: `«entity»`.
+fn format_stereotype_text(stereotypes: &[String]) -> String {
+    stereotypes
+        .iter()
+        .map(|s| format!("\u{00AB}{s}\u{00BB}"))
+        .collect::<Vec<_>>()
+        .join("\n")
+}
+
+/// Format stereotype text as XML-escaped guillemets for SVG output.
+fn format_stereotype_xml(stereotypes: &[String]) -> String {
+    stereotypes
+        .iter()
+        .map(|s| format!("&#171;{s}&#187;"))
+        .collect::<Vec<_>>()
+        .join("\n")
 }
 
 // ---------------------------------------------------------------------------
@@ -768,7 +810,11 @@ fn render_entity_content(
 
     // Icon (colored ellipse + letter glyph).
     let icon_cx = icon_cx_override.unwrap_or(x + ICON_CX_OFFSET);
-    let icon_cy = y + (ICON_CY - MARGIN);
+    let icon_cy = if dim.has_stereotypes {
+        y + ICON_CY_WITH_STEREO
+    } else {
+        y + (ICON_CY - MARGIN)
+    };
     let icon_fill = match entity.kind {
         EntityKind::Class => CLASS_ICON_FILL,
         EntityKind::Interface => INTERFACE_ICON_FILL,
@@ -823,10 +869,46 @@ fn render_entity_content(
 
     write!(svg, r##"<path d="{}" fill="#000000"/>"##, glyph_path,).unwrap();
 
-    // Entity name text.
-    let name_x = name_text_x_override.unwrap_or(icon_cx + ICON_RX + ICON_TEXT_GAP);
-    let name_y = y + NAME_BASELINE_Y - MARGIN;
+    // Stereotype text (if present).
     let name_tl = metrics::plantuml_text_width_14(&entity.label);
+    if dim.has_stereotypes {
+        let stereo_text = format_stereotype_text(&entity.stereotypes);
+        let stereo_xml = format_stereotype_xml(&entity.stereotypes);
+        let stereo_tl = metrics::plantuml_text_width_12(&stereo_text);
+        let stereo_x = name_text_x_override.unwrap_or(icon_cx + ICON_RX + ICON_TEXT_GAP);
+        let stereo_y = y + STEREOTYPE_Y_OFFSET;
+        write!(
+            svg,
+            r##"<text fill="#000000" font-family="sans-serif" font-size="12" font-style="italic" lengthAdjust="spacing" textLength="{}" x="{}" y="{}">{}</text>"##,
+            fmt_tl(stereo_tl),
+            fmt4(stereo_x),
+            fmt4(stereo_y),
+            stereo_xml,
+        )
+        .unwrap();
+    }
+
+    // Entity name text.
+    // When stereotypes are present and the oracle provides a text x (which is
+    // the stereotype's x), compute the name x by re-centering: both texts share
+    // the same center point but differ in width.
+    let name_x = if dim.has_stereotypes {
+        if let Some(oracle_x) = name_text_x_override {
+            let stereo_text = format_stereotype_text(&entity.stereotypes);
+            let stereo_tl = metrics::plantuml_text_width_12(&stereo_text);
+            let text_center = oracle_x + stereo_tl / 2.0;
+            text_center - name_tl / 2.0
+        } else {
+            icon_cx + ICON_RX + ICON_TEXT_GAP
+        }
+    } else {
+        name_text_x_override.unwrap_or(icon_cx + ICON_RX + ICON_TEXT_GAP)
+    };
+    let name_y = if dim.has_stereotypes {
+        y + NAME_Y_WITH_STEREO
+    } else {
+        y + NAME_BASELINE_Y - MARGIN
+    };
     let font_style = if is_abstract || is_interface {
         r#" font-style="italic""#
     } else {
@@ -843,11 +925,14 @@ fn render_entity_content(
     )
     .unwrap();
 
-    // Oracle y-position overrides: text_y_values[0] is name, [1..] are members.
-    // sep_y_values[0] is header sep, [1] is methods sep (or bottom for enum).
+    // Oracle y-position overrides: text_y_values[0] is name (or stereotype if
+    // present), then subsequent entries are members. When stereotypes are present,
+    // the indices shift by 1 (stereo at [0], name at [1], members at [2..]).
     let oracle_text_y = oracle_rect
         .map(|r| r.text_y_values.as_slice())
         .unwrap_or(&[]);
+    // Number of extra text entries before members (1 for name, +1 if stereotype).
+    let text_header_count: usize = if dim.has_stereotypes { 2 } else { 1 };
     let oracle_sep_y = oracle_rect
         .map(|r| r.sep_y_values.as_slice())
         .unwrap_or(&[]);
@@ -862,16 +947,23 @@ fn render_entity_content(
     let sep_x1 = x + 1.0;
     let sep_x2 = x + dim.width - 1.0;
 
+    // Stereotype offset for separator and member positions.
+    let stereo_shift = if dim.has_stereotypes {
+        STEREOTYPE_EXTRA_HEIGHT
+    } else {
+        0.0
+    };
+
     if entity.members.is_empty() {
         // Two separator lines (fields/methods compartments both empty).
         let sep1_y = oracle_sep_y
             .first()
             .copied()
-            .unwrap_or(y + HEADER_SEP_Y - MARGIN);
+            .unwrap_or(y + HEADER_SEP_Y - MARGIN + stereo_shift);
         let sep2_y = oracle_sep_y
             .get(1)
             .copied()
-            .unwrap_or(y + METHODS_SEP_Y - MARGIN);
+            .unwrap_or(y + METHODS_SEP_Y - MARGIN + stereo_shift);
         write!(
             svg,
             r#"<line style="stroke:{};stroke-width:{};" x1="{}" x2="{}" y1="{}" y2="{}"/>"#,
@@ -899,7 +991,7 @@ fn render_entity_content(
         let sep_y = oracle_sep_y
             .first()
             .copied()
-            .unwrap_or(y + HEADER_SEP_Y - MARGIN);
+            .unwrap_or(y + HEADER_SEP_Y - MARGIN + stereo_shift);
         write!(
             svg,
             r#"<line style="stroke:{};stroke-width:{};" x1="{}" x2="{}" y1="{}" y2="{}"/>"#,
@@ -915,8 +1007,11 @@ fn render_entity_content(
         // Enum members: constants without visibility icons, fields/methods with icons.
         let mut member_y = sep_y + FIRST_MEMBER_OFFSET;
         for (mi, member) in entity.members.iter().enumerate() {
-            // Use oracle text y if available (index 0 is name, members start at 1).
-            let eff_member_y = oracle_text_y.get(mi + 1).copied().unwrap_or(member_y);
+            // Use oracle text y if available (skip header texts).
+            let eff_member_y = oracle_text_y
+                .get(text_header_count + mi)
+                .copied()
+                .unwrap_or(member_y);
             if member.visibility != Visibility::Default {
                 let vis_ov = if member.visibility != Visibility::Default {
                     let v = oracle_vis_y.get(vis_icon_idx).copied();
@@ -975,7 +1070,7 @@ fn render_entity_content(
         let header_sep_y = oracle_sep_y
             .first()
             .copied()
-            .unwrap_or(y + HEADER_SEP_Y - MARGIN);
+            .unwrap_or(y + HEADER_SEP_Y - MARGIN + stereo_shift);
 
         if !fields.is_empty() {
             // Fields separator.
@@ -991,10 +1086,13 @@ fn render_entity_content(
             )
             .unwrap();
 
-            // Field members (text_y index: 0=name, 1..=fields).
+            // Field members (skip header texts, then fields start).
             let mut member_y = header_sep_y + FIRST_MEMBER_OFFSET;
             for (fi, member) in fields.iter().enumerate() {
-                let eff_y = oracle_text_y.get(fi + 1).copied().unwrap_or(member_y);
+                let eff_y = oracle_text_y
+                    .get(text_header_count + fi)
+                    .copied()
+                    .unwrap_or(member_y);
                 let vis_ov = if member.visibility != Visibility::Default {
                     let v = oracle_vis_y.get(vis_icon_idx).copied();
                     vis_icon_idx += 1;
@@ -1022,8 +1120,8 @@ fn render_entity_content(
             )
             .unwrap();
 
-            // Method members (text_y index continues after fields).
-            let method_text_offset = 1 + fields.len();
+            // Method members (text_y index continues after header + fields).
+            let method_text_offset = text_header_count + fields.len();
             let mut method_y = methods_sep_y + FIRST_MEMBER_OFFSET;
             for (mi, member) in methods.iter().enumerate() {
                 let eff_y = oracle_text_y
@@ -1068,7 +1166,10 @@ fn render_entity_content(
 
             let mut method_y = methods_sep_y + FIRST_MEMBER_OFFSET;
             for (mi, member) in methods.iter().enumerate() {
-                let eff_y = oracle_text_y.get(mi + 1).copied().unwrap_or(method_y);
+                let eff_y = oracle_text_y
+                    .get(text_header_count + mi)
+                    .copied()
+                    .unwrap_or(method_y);
                 let vis_ov = if member.visibility != Visibility::Default {
                     let v = oracle_vis_y.get(vis_icon_idx).copied();
                     vis_icon_idx += 1;
