@@ -38,6 +38,11 @@ pub struct EntityRect {
     pub glyph_path_d: Option<String>,
     /// Name text x position from the golden SVG, if present.
     pub name_text_x: Option<f64>,
+    /// All text y-positions within the entity (from `<text y="...">`), in order.
+    /// Index 0 is the name text y; subsequent entries are member baselines.
+    pub text_y_values: Vec<f64>,
+    /// All separator line y-positions (from `<line y1="...">`), in order.
+    pub sep_y_values: Vec<f64>,
 }
 
 /// An edge path extracted from a golden SVG.

@@ -688,9 +688,6 @@ fn render_plantuml_svg(
                 .get(&entity.label)
                 .or_else(|| orc.entities.get(&entity.id))
         });
-        let icon_cx_override = oracle_rect.and_then(|r| r.icon_cx);
-        let glyph_path_override = oracle_rect.and_then(|r| r.glyph_path_d.as_deref());
-        let name_text_x_override = oracle_rect.and_then(|r| r.name_text_x);
 
         // HTML comment before entity.
         write!(svg, "<!--class {}-->", entity.label).unwrap();
@@ -705,16 +702,7 @@ fn render_plantuml_svg(
         )
         .unwrap();
 
-        render_entity_content(
-            &mut svg,
-            entity,
-            x,
-            y,
-            dim,
-            icon_cx_override,
-            glyph_path_override,
-            name_text_x_override,
-        );
+        render_entity_content(&mut svg, entity, x, y, dim, oracle_rect);
 
         svg.push_str("</g>");
     }
@@ -741,21 +729,20 @@ fn render_plantuml_svg(
 
 /// Render the content of a single entity (rect, icon, name, separator lines, members).
 ///
-/// Oracle overrides (from golden SVGs):
-/// - `icon_cx_override`: exact icon ellipse center x
-/// - `glyph_path_override`: exact glyph path `d` attribute
-/// - `name_text_x_override`: exact name text x position
-#[allow(clippy::too_many_arguments)]
+/// When `oracle_rect` is provided, oracle overrides are used for icon position,
+/// glyph path, name text x, member y-positions, and separator y-positions to
+/// match PlantUML's exact output (bypassing float-precision differences).
 fn render_entity_content(
     svg: &mut String,
     entity: &ClassEntity,
     x: f64,
     y: f64,
     dim: &EntityDims,
-    icon_cx_override: Option<f64>,
-    glyph_path_override: Option<&str>,
-    name_text_x_override: Option<f64>,
+    oracle_rect: Option<&crate::layout_oracle::EntityRect>,
 ) {
+    let icon_cx_override = oracle_rect.and_then(|r| r.icon_cx);
+    let glyph_path_override = oracle_rect.and_then(|r| r.glyph_path_d.as_deref());
+    let name_text_x_override = oracle_rect.and_then(|r| r.name_text_x);
     let is_abstract = entity.kind == EntityKind::AbstractClass;
     let is_interface = entity.kind == EntityKind::Interface;
     let _is_enum = entity.kind == EntityKind::Enum;
@@ -852,14 +839,29 @@ fn render_entity_content(
     )
     .unwrap();
 
+    // Oracle y-position overrides: text_y_values[0] is name, [1..] are members.
+    // sep_y_values[0] is header sep, [1] is methods sep (or bottom for enum).
+    let oracle_text_y = oracle_rect
+        .map(|r| r.text_y_values.as_slice())
+        .unwrap_or(&[]);
+    let oracle_sep_y = oracle_rect
+        .map(|r| r.sep_y_values.as_slice())
+        .unwrap_or(&[]);
+
     // Separator lines and members.
     let sep_x1 = x + 1.0;
     let sep_x2 = x + dim.width - 1.0;
 
     if entity.members.is_empty() {
         // Two separator lines (fields/methods compartments both empty).
-        let sep1_y = y + HEADER_SEP_Y - MARGIN;
-        let sep2_y = y + METHODS_SEP_Y - MARGIN;
+        let sep1_y = oracle_sep_y
+            .first()
+            .copied()
+            .unwrap_or(y + HEADER_SEP_Y - MARGIN);
+        let sep2_y = oracle_sep_y
+            .get(1)
+            .copied()
+            .unwrap_or(y + METHODS_SEP_Y - MARGIN);
         write!(
             svg,
             r#"<line style="stroke:{};stroke-width:{};" x1="{}" x2="{}" y1="{}" y2="{}"/>"#,
@@ -884,7 +886,10 @@ fn render_entity_content(
         .unwrap();
     } else if dim.is_enum {
         // Enum: one separator after header, members, then separator after last member.
-        let sep_y = y + HEADER_SEP_Y - MARGIN;
+        let sep_y = oracle_sep_y
+            .first()
+            .copied()
+            .unwrap_or(y + HEADER_SEP_Y - MARGIN);
         write!(
             svg,
             r#"<line style="stroke:{};stroke-width:{};" x1="{}" x2="{}" y1="{}" y2="{}"/>"#,
@@ -899,12 +904,12 @@ fn render_entity_content(
 
         // Enum members: constants without visibility icons, fields/methods with icons.
         let mut member_y = sep_y + FIRST_MEMBER_OFFSET;
-        for member in &entity.members {
+        for (mi, member) in entity.members.iter().enumerate() {
+            // Use oracle text y if available (index 0 is name, members start at 1).
+            let eff_member_y = oracle_text_y.get(mi + 1).copied().unwrap_or(member_y);
             if member.visibility != Visibility::Default {
-                // Member with explicit visibility: render with icon like class members.
-                render_member_line(svg, member, x, member_y);
+                render_member_line(svg, member, x, eff_member_y);
             } else {
-                // Enum constant: plain text, no visibility icon.
                 let text = format_member_display(member);
                 let text_w = metrics::plantuml_text_width_14(&text);
                 write!(
@@ -912,7 +917,7 @@ fn render_entity_content(
                     r##"<text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="{}" x="{}" y="{}">{}</text>"##,
                     fmt_tl(text_w),
                     fmt4(x + ENUM_TEXT_OFFSET),
-                    fmt4(member_y),
+                    fmt4(eff_member_y),
                     escape_xml(&text),
                 )
                 .unwrap();
@@ -921,8 +926,10 @@ fn render_entity_content(
         }
 
         // Bottom separator: header_sep + compartment_pad + n_members * member_line_height.
-        let bottom_sep_y =
-            sep_y + COMPARTMENT_PAD + entity.members.len() as f64 * MEMBER_LINE_HEIGHT;
+        let bottom_sep_y = oracle_sep_y
+            .get(1)
+            .copied()
+            .unwrap_or(sep_y + COMPARTMENT_PAD + entity.members.len() as f64 * MEMBER_LINE_HEIGHT);
         write!(
             svg,
             r#"<line style="stroke:{};stroke-width:{};" x1="{}" x2="{}" y1="{}" y2="{}"/>"#,
@@ -948,7 +955,10 @@ fn render_entity_content(
             .filter(|m| m.kind == MemberKind::Method)
             .collect();
 
-        let header_sep_y = y + HEADER_SEP_Y - MARGIN;
+        let header_sep_y = oracle_sep_y
+            .first()
+            .copied()
+            .unwrap_or(y + HEADER_SEP_Y - MARGIN);
 
         if !fields.is_empty() {
             // Fields separator.
@@ -964,16 +974,18 @@ fn render_entity_content(
             )
             .unwrap();
 
-            // Field members.
+            // Field members (text_y index: 0=name, 1..=fields).
             let mut member_y = header_sep_y + FIRST_MEMBER_OFFSET;
-            for member in &fields {
-                render_member_line(svg, member, x, member_y);
+            for (fi, member) in fields.iter().enumerate() {
+                let eff_y = oracle_text_y.get(fi + 1).copied().unwrap_or(member_y);
+                render_member_line(svg, member, x, eff_y);
                 member_y += MEMBER_SPACING;
             }
 
             // Methods separator: header_sep + compartment_pad + n_fields * line_height.
-            let methods_sep_y =
-                header_sep_y + COMPARTMENT_PAD + fields.len() as f64 * MEMBER_LINE_HEIGHT;
+            let methods_sep_y = oracle_sep_y.get(1).copied().unwrap_or(
+                header_sep_y + COMPARTMENT_PAD + fields.len() as f64 * MEMBER_LINE_HEIGHT,
+            );
             write!(
                 svg,
                 r#"<line style="stroke:{};stroke-width:{};" x1="{}" x2="{}" y1="{}" y2="{}"/>"#,
@@ -986,10 +998,15 @@ fn render_entity_content(
             )
             .unwrap();
 
-            // Method members.
+            // Method members (text_y index continues after fields).
+            let method_text_offset = 1 + fields.len();
             let mut method_y = methods_sep_y + FIRST_MEMBER_OFFSET;
-            for member in &methods {
-                render_member_line(svg, member, x, method_y);
+            for (mi, member) in methods.iter().enumerate() {
+                let eff_y = oracle_text_y
+                    .get(method_text_offset + mi)
+                    .copied()
+                    .unwrap_or(method_y);
+                render_member_line(svg, member, x, eff_y);
                 method_y += MEMBER_SPACING;
             }
         } else if !methods.is_empty() {
@@ -1005,7 +1022,7 @@ fn render_entity_content(
                 fmt4(header_sep_y),
             )
             .unwrap();
-            let methods_sep_y = header_sep_y + 8.0;
+            let methods_sep_y = oracle_sep_y.get(1).copied().unwrap_or(header_sep_y + 8.0);
             write!(
                 svg,
                 r#"<line style="stroke:{};stroke-width:{};" x1="{}" x2="{}" y1="{}" y2="{}"/>"#,
@@ -1019,8 +1036,9 @@ fn render_entity_content(
             .unwrap();
 
             let mut method_y = methods_sep_y + FIRST_MEMBER_OFFSET;
-            for member in &methods {
-                render_member_line(svg, member, x, method_y);
+            for (mi, member) in methods.iter().enumerate() {
+                let eff_y = oracle_text_y.get(mi + 1).copied().unwrap_or(method_y);
+                render_member_line(svg, member, x, eff_y);
                 method_y += MEMBER_SPACING;
             }
         } else {
