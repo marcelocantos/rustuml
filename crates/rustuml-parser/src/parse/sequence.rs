@@ -38,6 +38,8 @@ struct SeqParser {
     note_buffer: Option<NoteBuffer>,
     /// Multiline ref accumulator.
     ref_buffer: Option<RefBuffer>,
+    /// Last message source and target (for bare "note left"/"note right").
+    last_message: Option<(String, String)>,
     /// Whether we are inside a `legend ... endlegend` block.
     in_legend: bool,
     /// Whether `hide footbox` was specified.
@@ -71,6 +73,7 @@ impl SeqParser {
             participant_ids: Vec::new(),
             note_buffer: None,
             ref_buffer: None,
+            last_message: None,
             in_legend: false,
             hide_footbox: false,
             current_line: 0,
@@ -313,6 +316,7 @@ impl SeqParser {
                 (left_id, right_id)
             };
 
+            self.last_message = Some((from_id.clone(), to_id.clone()));
             self.events.push(Event::Message(Message {
                 from: from_id,
                 to: to_id,
@@ -460,12 +464,24 @@ impl SeqParser {
                 "over" => NotePosition::Over,
                 _ => NotePosition::Right,
             };
-            let participants: Vec<String> = caps.get(3).map_or(Vec::new(), |m| {
+            let mut participants: Vec<String> = caps.get(3).map_or(Vec::new(), |m| {
                 m.as_str()
                     .split(',')
                     .map(|s| self.ensure_participant(s.trim()))
                     .collect()
             });
+            // Bare "note left" / "note right" (no participant) attaches to the last message:
+            // "note left" → source participant of the last message
+            // "note right" → target participant of the last message
+            if participants.is_empty() && position != NotePosition::Over {
+                if let Some((from, to)) = &self.last_message {
+                    participants = match position {
+                        NotePosition::Left => vec![from.clone()],
+                        NotePosition::Right => vec![to.clone()],
+                        _ => Vec::new(),
+                    };
+                }
+            }
             let color = caps.get(4).map(|m| m.as_str().to_string());
 
             if let Some(text_match) = caps.get(5) {
