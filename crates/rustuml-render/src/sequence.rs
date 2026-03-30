@@ -149,6 +149,65 @@ const MIN_LIFELINE_HEIGHT: f64 = 20.0;
 const ARROW_TIP_GAP: f64 = 2.0;
 
 // ---------------------------------------------------------------------------
+// Participant-type shape constants (reverse-engineered from golden SVGs)
+// ---------------------------------------------------------------------------
+
+/// Actor stick-figure: head circle radius = 8, arm half-span = 13.
+/// All offsets are relative to the region base_y (= HEAD_BOX_Y for head).
+const ACTOR_HEAD_CY_OFFSET: f64 = 8.5; // ellipse cy relative to base_y
+const ACTOR_SPINE_TOP_OFFSET: f64 = 16.5;
+const ACTOR_SPINE_BOTTOM_OFFSET: f64 = 43.5;
+const ACTOR_ARM_Y_OFFSET: f64 = 24.5;
+const ACTOR_ARM_HALF: f64 = 13.0;
+const ACTOR_LEG_BOTTOM_OFFSET: f64 = 58.5;
+/// Extra height for actor beyond HEAD_BOX_H.
+const ACTOR_EXTRA_H: f64 = 45.0;
+/// Padding around actor text (3px each side).
+const ACTOR_TEXT_PAD: f64 = 3.0;
+/// Arm span of stick figure.
+const ACTOR_ARM_SPAN: f64 = 26.0;
+/// Actor head text: text baseline offset from base_y (figure first, then text).
+const ACTOR_HEAD_TEXT_Y_OFFSET: f64 = 73.535156250;
+/// Actor tail text: text baseline offset from base_y (text first, then figure).
+const ACTOR_TAIL_TEXT_Y_OFFSET: f64 = 13.535156250;
+/// Actor tail figure start offset (from base_y) — figure starts below text.
+const ACTOR_TAIL_FIGURE_Y_OFFSET: f64 = 16.488281250;
+
+/// Boundary/Control/Entity: circle radius = 12.
+const STEREOTYPE_CIRCLE_R: f64 = 12.0;
+/// Circle center Y (from HEAD_BOX_Y).
+const STEREOTYPE_CIRCLE_CY: f64 = 16.0; // 21 - 5 = 16 from HEAD_BOX_Y
+/// Extra height for boundary/control/entity beyond HEAD_BOX_H.
+const CIRCLE_SHAPE_EXTRA_H: f64 = 17.0;
+/// Text baseline Y offset for circle-type shapes.
+const CIRCLE_SHAPE_TEXT_Y_OFFSET: f64 = 45.535156250;
+
+/// Boundary shape: vertical line extends from y_top to y_bottom, horizontal at center.
+const BOUNDARY_LINE_TOP_OFFSET: f64 = 4.0; // relative to HEAD_BOX_Y
+const BOUNDARY_LINE_BOTTOM_OFFSET: f64 = 28.0;
+const BOUNDARY_LINE_TO_CIRCLE_GAP: f64 = 17.0; // horizontal gap from line to circle left
+/// Extra width padding for boundary shape.
+const BOUNDARY_EXTRA_WIDTH: f64 = 8.0;
+
+/// Database: cylinder dimensions.
+const DB_CYLINDER_WIDTH: f64 = 36.0;
+const DB_CYLINDER_HALF_W: f64 = 18.0;
+const DB_CYLINDER_HEIGHT: f64 = 46.0; // body from top of shape to bottom
+const DB_ELLIPSE_RY: f64 = 10.0; // top ellipse vertical radius (half of 20px visible curve)
+/// Extra height for database beyond HEAD_BOX_H.
+const DB_EXTRA_H: f64 = 31.0;
+/// Text baseline Y offset for database shapes.
+const DB_TEXT_Y_OFFSET: f64 = 59.535156250;
+
+/// Collections: two stacked rectangles, no rounded corners.
+/// The back rectangle is offset 4px right and 4px down from front.
+const COLLECTIONS_OFFSET: f64 = 4.0;
+/// Extra height for collections beyond HEAD_BOX_H.
+const COLLECTIONS_EXTRA_H: f64 = 4.0;
+
+// Queue: pill shape with same height as regular participant.
+
+// ---------------------------------------------------------------------------
 // Note layout constants (reverse-engineered from golden SVGs)
 // ---------------------------------------------------------------------------
 
@@ -394,19 +453,21 @@ struct ParticipantLayout {
     id: String,
     /// Display label
     label: String,
+    /// The visual shape of this participant.
+    kind: ParticipantKind,
     /// Optional stereotype text
     stereotype: Option<String>,
     /// Text width at font-size 14
     text_width: f64,
     /// Stereotype display text width at font-size 11 (if any)
     stereotype_width: f64,
-    /// Box width = text_width + 2 * BOX_TEXT_X_PAD
+    /// Box width (used for spacing and centering — meaning varies by kind)
     box_width: f64,
-    /// Box height (taller for stereotyped participants)
+    /// Box height (varies by participant kind)
     box_height: f64,
-    /// Left x of participant box
+    /// Left x of participant box/shape
     box_x: f64,
-    /// Center x (exact box center, used for messages and lifeline rect)
+    /// Center x (exact center, used for messages and lifeline rect)
     center_x: f64,
     /// Lifeline dashed line x (= box_x + floor(box_width / 2), matching PlantUML's int arithmetic)
     lifeline_line_x: f64,
@@ -579,6 +640,479 @@ impl PlantUmlSvg {
             escape_xml(text_content),
         )
         .unwrap();
+
+        self.buf.push_str("</g>");
+    }
+
+    /// Open a participant group element (head or tail).
+    fn participant_group_open(
+        &mut self,
+        part_uid: &str,
+        qualified_name: &str,
+        source_line: u32,
+        position: &str,
+    ) {
+        write!(
+            self.buf,
+            r##"<g class="participant participant-{position}" data-entity-uid="{part_uid}" data-qualified-name="{qualified_name}" data-source-line="{source_line}" id="{part_uid}-{position}">"##,
+            part_uid = escape_xml(part_uid),
+            qualified_name = escape_xml(qualified_name),
+        )
+        .unwrap();
+    }
+
+    /// Write participant text label.
+    fn participant_text(&mut self, text_x: f64, text_y: f64, text_content: &str, text_len: f64) {
+        write!(
+            self.buf,
+            r##"<text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="{}" x="{}" y="{}">{}</text>"##,
+            fmt_coord(text_len),
+            fmt_coord(text_x),
+            fmt_coord(text_y),
+            escape_xml(text_content),
+        )
+        .unwrap();
+    }
+
+    /// Write an actor stick figure (head or tail).
+    /// For head: figure first, then text below.
+    /// For tail: text first, then figure below.
+    /// `base_y` is the top of the region (HEAD_BOX_Y for head, tail_box_y for tail).
+    #[allow(clippy::too_many_arguments)]
+    fn actor_shape(
+        &mut self,
+        part_uid: &str,
+        qualified_name: &str,
+        source_line: u32,
+        position: &str,
+        cx: f64,
+        base_y: f64,
+        text_x: f64,
+        text_content: &str,
+        text_len: f64,
+    ) {
+        self.participant_group_open(part_uid, qualified_name, source_line, position);
+
+        // Compute text and figure positions based on head vs tail.
+        let is_tail = position == "tail";
+        let text_y;
+        let figure_base;
+        if is_tail {
+            // Tail: text first, figure below.
+            text_y = base_y + ACTOR_TAIL_TEXT_Y_OFFSET;
+            figure_base = base_y + ACTOR_TAIL_FIGURE_Y_OFFSET;
+        } else {
+            // Head: figure first, text below.
+            text_y = base_y + ACTOR_HEAD_TEXT_Y_OFFSET;
+            figure_base = base_y;
+        }
+
+        // Text label
+        self.participant_text(text_x, text_y, text_content, text_len);
+
+        // Head circle
+        let head_cy = figure_base + ACTOR_HEAD_CY_OFFSET;
+        write!(
+            self.buf,
+            r##"<ellipse cx="{}" cy="{}" fill="#E2E2F0" rx="8" ry="8" style="stroke:#181818;stroke-width:0.5;"/>"##,
+            fmt_coord(cx),
+            fmt_coord(head_cy),
+        )
+        .unwrap();
+
+        // Body path: spine, arms, legs
+        let spine_top = figure_base + ACTOR_SPINE_TOP_OFFSET;
+        let spine_bottom = figure_base + ACTOR_SPINE_BOTTOM_OFFSET;
+        let arm_y = figure_base + ACTOR_ARM_Y_OFFSET;
+        let arm_left = cx - ACTOR_ARM_HALF;
+        let arm_right = cx + ACTOR_ARM_HALF;
+        let leg_bottom = figure_base + ACTOR_LEG_BOTTOM_OFFSET;
+        write!(
+            self.buf,
+            r##"<path d="M{cx},{st} L{cx},{sb} M{al},{ay} L{ar},{ay} M{cx},{sb} L{al},{lb} M{cx},{sb} L{ar},{lb}" fill="none" style="stroke:#181818;stroke-width:0.5;"/>"##,
+            cx = fmt_coord(cx),
+            st = fmt_coord(spine_top),
+            sb = fmt_coord(spine_bottom),
+            al = fmt_coord(arm_left),
+            ar = fmt_coord(arm_right),
+            ay = fmt_coord(arm_y),
+            lb = fmt_coord(leg_bottom),
+        )
+        .unwrap();
+
+        self.buf.push_str("</g>");
+    }
+
+    /// Write a boundary shape (vertical line + horizontal line + circle).
+    #[allow(clippy::too_many_arguments)]
+    fn boundary_shape(
+        &mut self,
+        part_uid: &str,
+        qualified_name: &str,
+        source_line: u32,
+        position: &str,
+        cx: f64,
+        base_y: f64,
+        text_x: f64,
+        text_content: &str,
+        text_len: f64,
+    ) {
+        self.participant_group_open(part_uid, qualified_name, source_line, position);
+
+        let is_tail = position == "tail";
+        let (text_y, figure_base) = if is_tail {
+            (
+                base_y + ACTOR_TAIL_TEXT_Y_OFFSET,
+                base_y + ACTOR_TAIL_FIGURE_Y_OFFSET,
+            )
+        } else {
+            (base_y + CIRCLE_SHAPE_TEXT_Y_OFFSET, base_y)
+        };
+
+        // Text label
+        self.participant_text(text_x, text_y, text_content, text_len);
+
+        // Boundary shape: vertical line + horizontal line + circle, centered on cx.
+        // shape_w = BOUNDARY_LINE_TO_CIRCLE_GAP + 2 * STEREOTYPE_CIRCLE_R = 17 + 24 = 41
+        let shape_w = BOUNDARY_LINE_TO_CIRCLE_GAP + 2.0 * STEREOTYPE_CIRCLE_R;
+        let shape_left = cx - shape_w / 2.0;
+        let line_x = shape_left;
+        let circle_cx = shape_left + BOUNDARY_LINE_TO_CIRCLE_GAP + STEREOTYPE_CIRCLE_R;
+        let circle_cy = figure_base + STEREOTYPE_CIRCLE_CY;
+        let line_top = figure_base + BOUNDARY_LINE_TOP_OFFSET;
+        let line_bottom = figure_base + BOUNDARY_LINE_BOTTOM_OFFSET;
+        let horiz_to = circle_cx - STEREOTYPE_CIRCLE_R;
+
+        write!(
+            self.buf,
+            r##"<path d="M{lx},{lt} L{lx},{lb} M{lx},{cy} L{ht},{cy}" fill="none" style="stroke:#181818;stroke-width:0.5;"/>"##,
+            lx = fmt_coord(line_x),
+            lt = fmt_coord(line_top),
+            lb = fmt_coord(line_bottom),
+            cy = fmt_coord(circle_cy),
+            ht = fmt_coord(horiz_to),
+        )
+        .unwrap();
+
+        write!(
+            self.buf,
+            r##"<ellipse cx="{}" cy="{}" fill="#E2E2F0" rx="{}" ry="{}" style="stroke:#181818;stroke-width:0.5;"/>"##,
+            fmt_coord(circle_cx),
+            fmt_coord(circle_cy),
+            fmt_coord(STEREOTYPE_CIRCLE_R),
+            fmt_coord(STEREOTYPE_CIRCLE_R),
+        )
+        .unwrap();
+
+        self.buf.push_str("</g>");
+    }
+
+    /// Write a control shape (circle + arrow on top).
+    #[allow(clippy::too_many_arguments)]
+    fn control_shape(
+        &mut self,
+        part_uid: &str,
+        qualified_name: &str,
+        source_line: u32,
+        position: &str,
+        cx: f64,
+        base_y: f64,
+        text_x: f64,
+        text_content: &str,
+        text_len: f64,
+    ) {
+        self.participant_group_open(part_uid, qualified_name, source_line, position);
+
+        let is_tail = position == "tail";
+        let (text_y, figure_base) = if is_tail {
+            (
+                base_y + ACTOR_TAIL_TEXT_Y_OFFSET,
+                base_y + ACTOR_TAIL_FIGURE_Y_OFFSET,
+            )
+        } else {
+            (base_y + CIRCLE_SHAPE_TEXT_Y_OFFSET, base_y)
+        };
+
+        // Text label
+        self.participant_text(text_x, text_y, text_content, text_len);
+
+        // Circle
+        let circle_cy = figure_base + STEREOTYPE_CIRCLE_CY;
+        write!(
+            self.buf,
+            r##"<ellipse cx="{}" cy="{}" fill="#E2E2F0" rx="{}" ry="{}" style="stroke:#181818;stroke-width:0.5;"/>"##,
+            fmt_coord(cx),
+            fmt_coord(circle_cy),
+            fmt_coord(STEREOTYPE_CIRCLE_R),
+            fmt_coord(STEREOTYPE_CIRCLE_R),
+        )
+        .unwrap();
+
+        // Arrow/chevron on top of circle
+        // From golden: polygon points="20.3618,9,26.3618,4,24.3618,9,26.3618,14,20.3618,9"
+        // Points relative to cx and circle top:
+        let arrow_cy = circle_cy - STEREOTYPE_CIRCLE_R;
+        let p1x = cx - 4.0;
+        let p1y = arrow_cy;
+        let p2x = cx + 2.0;
+        let p2y = arrow_cy - 5.0;
+        let p3x = cx;
+        let p3y = arrow_cy;
+        let p4x = cx + 2.0;
+        let p4y = arrow_cy + 5.0;
+        write!(
+            self.buf,
+            r##"<polygon fill="#181818" points="{},{},{},{},{},{},{},{},{},{}" style="stroke:#181818;stroke-width:1;"/>"##,
+            fmt_coord(p1x), fmt_coord(p1y),
+            fmt_coord(p2x), fmt_coord(p2y),
+            fmt_coord(p3x), fmt_coord(p3y),
+            fmt_coord(p4x), fmt_coord(p4y),
+            fmt_coord(p1x), fmt_coord(p1y),
+        )
+        .unwrap();
+
+        self.buf.push_str("</g>");
+    }
+
+    /// Write an entity shape (circle + underline).
+    #[allow(clippy::too_many_arguments)]
+    fn entity_shape(
+        &mut self,
+        part_uid: &str,
+        qualified_name: &str,
+        source_line: u32,
+        position: &str,
+        cx: f64,
+        base_y: f64,
+        text_x: f64,
+        text_content: &str,
+        text_len: f64,
+    ) {
+        self.participant_group_open(part_uid, qualified_name, source_line, position);
+
+        let is_tail = position == "tail";
+        let (text_y, figure_base) = if is_tail {
+            (
+                base_y + ACTOR_TAIL_TEXT_Y_OFFSET,
+                base_y + ACTOR_TAIL_FIGURE_Y_OFFSET,
+            )
+        } else {
+            (base_y + CIRCLE_SHAPE_TEXT_Y_OFFSET, base_y)
+        };
+
+        // Text label
+        self.participant_text(text_x, text_y, text_content, text_len);
+
+        // Circle
+        let circle_cy = figure_base + STEREOTYPE_CIRCLE_CY;
+        write!(
+            self.buf,
+            r##"<ellipse cx="{}" cy="{}" fill="#E2E2F0" rx="{}" ry="{}" style="stroke:#181818;stroke-width:0.5;"/>"##,
+            fmt_coord(cx),
+            fmt_coord(circle_cy),
+            fmt_coord(STEREOTYPE_CIRCLE_R),
+            fmt_coord(STEREOTYPE_CIRCLE_R),
+        )
+        .unwrap();
+
+        // Underline below the circle
+        let line_y = circle_cy + STEREOTYPE_CIRCLE_R + 2.0;
+        let line_x1 = cx - STEREOTYPE_CIRCLE_R;
+        let line_x2 = cx + STEREOTYPE_CIRCLE_R;
+        write!(
+            self.buf,
+            r##"<line style="stroke:#181818;stroke-width:0.5;" x1="{}" x2="{}" y1="{}" y2="{}"/>"##,
+            fmt_coord(line_x1),
+            fmt_coord(line_x2),
+            fmt_coord(line_y),
+            fmt_coord(line_y),
+        )
+        .unwrap();
+
+        self.buf.push_str("</g>");
+    }
+
+    /// Write a database cylinder shape.
+    #[allow(clippy::too_many_arguments)]
+    fn database_shape(
+        &mut self,
+        part_uid: &str,
+        qualified_name: &str,
+        source_line: u32,
+        position: &str,
+        cx: f64,
+        base_y: f64,
+        text_x: f64,
+        text_content: &str,
+        text_len: f64,
+    ) {
+        self.participant_group_open(part_uid, qualified_name, source_line, position);
+
+        let is_tail = position == "tail";
+        let (text_y, figure_base) = if is_tail {
+            (
+                base_y + ACTOR_TAIL_TEXT_Y_OFFSET,
+                base_y + ACTOR_TAIL_FIGURE_Y_OFFSET,
+            )
+        } else {
+            (base_y + DB_TEXT_Y_OFFSET, base_y)
+        };
+
+        // Text label
+        self.participant_text(text_x, text_y, text_content, text_len);
+
+        // Cylinder body
+        let left = cx - DB_CYLINDER_HALF_W;
+        let right = cx + DB_CYLINDER_HALF_W;
+        let top = figure_base + DB_ELLIPSE_RY;
+        let top_curve = figure_base;
+        let bottom = figure_base + DB_CYLINDER_HEIGHT - DB_ELLIPSE_RY;
+        let bottom_curve = figure_base + DB_CYLINDER_HEIGHT;
+
+        write!(
+            self.buf,
+            r##"<path d="M{l},{t} C{l},{tc} {cx},{tc} {cx},{tc} C{cx},{tc} {r},{tc} {r},{t} L{r},{b} C{r},{bc} {cx},{bc} {cx},{bc} C{cx},{bc} {l},{bc} {l},{b} L{l},{t}" fill="#E2E2F0" style="stroke:#181818;stroke-width:0.5;"/>"##,
+            l = fmt_coord(left),
+            r = fmt_coord(right),
+            t = fmt_coord(top),
+            tc = fmt_coord(top_curve),
+            b = fmt_coord(bottom),
+            bc = fmt_coord(bottom_curve),
+            cx = fmt_coord(cx),
+        )
+        .unwrap();
+
+        // Top ellipse (visible arc)
+        let top_arc_bottom = figure_base + 2.0 * DB_ELLIPSE_RY;
+        write!(
+            self.buf,
+            r##"<path d="M{l},{t} C{l},{tab} {cx},{tab} {cx},{tab} C{cx},{tab} {r},{tab} {r},{t}" fill="none" style="stroke:#181818;stroke-width:0.5;"/>"##,
+            l = fmt_coord(left),
+            r = fmt_coord(right),
+            t = fmt_coord(top),
+            tab = fmt_coord(top_arc_bottom),
+            cx = fmt_coord(cx),
+        )
+        .unwrap();
+
+        self.buf.push_str("</g>");
+    }
+
+    /// Write a collections shape (two stacked rectangles).
+    #[allow(clippy::too_many_arguments)]
+    fn collections_shape(
+        &mut self,
+        part_uid: &str,
+        qualified_name: &str,
+        source_line: u32,
+        position: &str,
+        box_x: f64,
+        base_y: f64,
+        box_w: f64,
+        text_x: f64,
+        text_y: f64,
+        text_content: &str,
+        text_len: f64,
+    ) {
+        self.participant_group_open(part_uid, qualified_name, source_line, position);
+
+        // Back rectangle (offset right and up)
+        let back_x = box_x + COLLECTIONS_OFFSET;
+        let back_y = base_y;
+        write!(
+            self.buf,
+            r##"<rect fill="#E2E2F0" height="{}" style="stroke:#181818;stroke-width:0.5;" width="{}" x="{}" y="{}"/>"##,
+            fmt_coord(HEAD_BOX_H),
+            fmt_coord(box_w),
+            fmt_coord(back_x),
+            fmt_coord(back_y),
+        )
+        .unwrap();
+
+        // Front rectangle (at box_x, offset down)
+        let front_y = base_y + COLLECTIONS_OFFSET;
+        write!(
+            self.buf,
+            r##"<rect fill="#E2E2F0" height="{}" style="stroke:#181818;stroke-width:0.5;" width="{}" x="{}" y="{}"/>"##,
+            fmt_coord(HEAD_BOX_H),
+            fmt_coord(box_w),
+            fmt_coord(box_x),
+            fmt_coord(front_y),
+        )
+        .unwrap();
+
+        // Text (on front rectangle)
+        self.participant_text(text_x, text_y, text_content, text_len);
+
+        self.buf.push_str("</g>");
+    }
+
+    /// Write a queue shape (pill/capsule).
+    #[allow(clippy::too_many_arguments)]
+    fn queue_shape(
+        &mut self,
+        part_uid: &str,
+        qualified_name: &str,
+        source_line: u32,
+        position: &str,
+        box_x: f64,
+        base_y: f64,
+        box_w: f64,
+        text_x: f64,
+        text_y: f64,
+        text_content: &str,
+        text_len: f64,
+    ) {
+        self.participant_group_open(part_uid, qualified_name, source_line, position);
+
+        // Pill shape: rounded left side, right side with inner curve
+        // From golden SVG for queue "Alice":
+        // Main body: M10,10 L52.7236,10 C57.7236,10 57.7236,23.2441 57.7236,23.2441
+        //            C57.7236,23.2441 57.7236,36.4883 52.7236,36.4883
+        //            L10,36.4883 C5,36.4883 5,23.2441 5,23.2441 C5,23.2441 5,10 10,10
+        // Inner curve: M52.7236,10 C47.7236,10 47.7236,23.2441 47.7236,23.2441
+        //              C47.7236,36.4883 52.7236,36.4883 52.7236,36.4883
+        //
+        // The pill shape: left edge = box_x, right text edge = box_x + text_width + 2*padding
+        // Radius of caps = 5px, half height = HEAD_BOX_H/2
+        let left = box_x;
+        let right = box_x + box_w;
+        let cap_r = 5.0;
+        let inner_left = left + cap_r;
+        let inner_right = right - cap_r;
+        let top = base_y;
+        let mid = base_y + HEAD_BOX_H / 2.0;
+        let bottom = base_y + HEAD_BOX_H;
+        let inner_right_inner = inner_right - cap_r;
+
+        // Outer body
+        write!(
+            self.buf,
+            r##"<path d="M{il},{t} L{ir},{t} C{r},{t} {r},{m} {r},{m} C{r},{m} {r},{b} {ir},{b} L{il},{b} C{l},{b} {l},{m} {l},{m} C{l},{m} {l},{t} {il},{t}" fill="#E2E2F0" style="stroke:#181818;stroke-width:0.5;"/>"##,
+            il = fmt_coord(inner_left),
+            ir = fmt_coord(inner_right),
+            l = fmt_coord(left),
+            r = fmt_coord(right),
+            t = fmt_coord(top),
+            m = fmt_coord(mid),
+            b = fmt_coord(bottom),
+        )
+        .unwrap();
+
+        // Inner right curve (the divider inside the pill)
+        write!(
+            self.buf,
+            r##"<path d="M{ir},{t} C{iri},{t} {iri},{m} {iri},{m} C{iri},{b} {ir},{b} {ir},{b}" fill="none" style="stroke:#181818;stroke-width:0.5;"/>"##,
+            ir = fmt_coord(inner_right),
+            iri = fmt_coord(inner_right_inner),
+            t = fmt_coord(top),
+            m = fmt_coord(mid),
+            b = fmt_coord(bottom),
+        )
+        .unwrap();
+
+        // Text
+        self.participant_text(text_x, text_y, text_content, text_len);
 
         self.buf.push_str("</g>");
     }
@@ -833,6 +1367,157 @@ fn render_empty_welcome() -> String {
     svg.finalize()
 }
 
+/// Dispatch participant shape rendering based on kind.
+#[allow(clippy::too_many_arguments)]
+fn render_participant_shape(
+    svg: &mut PlantUmlSvg,
+    part_uid: &str,
+    qualified_name: &str,
+    source_line: u32,
+    position: &str,
+    p: &ParticipantLayout,
+    base_y: f64,
+    _max_box_h: f64,
+) {
+    match p.kind {
+        ParticipantKind::Actor
+        | ParticipantKind::Boundary
+        | ParticipantKind::Control
+        | ParticipantKind::Entity
+        | ParticipantKind::Database => {
+            // All non-box shapes: text centered at center_x - (text_width + 2*pad)/2.
+            let text_x = p.center_x - (p.text_width + 2.0 * ACTOR_TEXT_PAD) / 2.0;
+            match p.kind {
+                ParticipantKind::Actor => {
+                    svg.actor_shape(
+                        part_uid,
+                        qualified_name,
+                        source_line,
+                        position,
+                        p.center_x,
+                        base_y,
+                        text_x,
+                        &p.label,
+                        p.text_width,
+                    );
+                }
+                ParticipantKind::Boundary => {
+                    svg.boundary_shape(
+                        part_uid,
+                        qualified_name,
+                        source_line,
+                        position,
+                        p.center_x,
+                        base_y,
+                        text_x,
+                        &p.label,
+                        p.text_width,
+                    );
+                }
+                ParticipantKind::Control => {
+                    svg.control_shape(
+                        part_uid,
+                        qualified_name,
+                        source_line,
+                        position,
+                        p.center_x,
+                        base_y,
+                        text_x,
+                        &p.label,
+                        p.text_width,
+                    );
+                }
+                ParticipantKind::Entity => {
+                    svg.entity_shape(
+                        part_uid,
+                        qualified_name,
+                        source_line,
+                        position,
+                        p.center_x,
+                        base_y,
+                        text_x,
+                        &p.label,
+                        p.text_width,
+                    );
+                }
+                ParticipantKind::Database => {
+                    svg.database_shape(
+                        part_uid,
+                        qualified_name,
+                        source_line,
+                        position,
+                        p.center_x,
+                        base_y,
+                        text_x,
+                        &p.label,
+                        p.text_width,
+                    );
+                }
+                _ => unreachable!(),
+            }
+        }
+        ParticipantKind::Collections => {
+            let text_x = p.box_x + BOX_TEXT_X_PAD;
+            let text_y = base_y + COLLECTIONS_OFFSET + BOX_TEXT_Y_OFFSET;
+            svg.collections_shape(
+                part_uid,
+                qualified_name,
+                source_line,
+                position,
+                p.box_x,
+                base_y,
+                p.box_width,
+                text_x,
+                text_y,
+                &p.label,
+                p.text_width,
+            );
+        }
+        ParticipantKind::Queue => {
+            let text_x = p.box_x + BOX_TEXT_X_PAD;
+            let text_y = base_y + BOX_TEXT_Y_OFFSET;
+            svg.queue_shape(
+                part_uid,
+                qualified_name,
+                source_line,
+                position,
+                p.box_x,
+                base_y,
+                p.box_width,
+                text_x,
+                text_y,
+                &p.label,
+                p.text_width,
+            );
+        }
+        ParticipantKind::Participant => {
+            let text_x = p.box_x + BOX_TEXT_X_PAD;
+            let text_y =
+                base_y + BOX_TEXT_Y_OFFSET + if p.stereotype.is_some() { 7.5 } else { 0.0 };
+            let stereo_arg = p.stereotype.as_ref().map(|s| {
+                let display = format!("\u{ab}{s}\u{bb}");
+                (display, p.stereotype_width)
+            });
+            let stereo_ref = stereo_arg.as_ref().map(|(s, w)| (s.as_str(), *w));
+            svg.participant_box(
+                part_uid,
+                qualified_name,
+                source_line,
+                position,
+                p.box_x,
+                base_y,
+                p.box_width,
+                p.box_height,
+                text_x,
+                text_y,
+                &p.label,
+                p.text_width,
+                stereo_ref,
+            );
+        }
+    }
+}
+
 /// Render a sequence diagram to SVG matching PlantUML's exact output.
 pub fn render(diagram: &SequenceDiagram, _theme: &Theme) -> String {
     // Empty diagram with no title — render the PlantUML welcome screen.
@@ -865,17 +1550,66 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme) -> String {
             let tw = text_width(&label, PARTICIPANT_FONT_SIZE);
             // Box width must accommodate the display label (and stereotype if separate)
             let max_text_w = tw.max(st_w);
-            let bw = max_text_w + 2.0 * BOX_TEXT_X_PAD;
-            // Box height is taller for stereotyped participants
-            let bh = if st.is_some() {
-                HEAD_BOX_H + 15.0 // extra space for stereotype line
-            } else {
-                HEAD_BOX_H
+
+            // Compute kind-specific box width and height.
+            let (bw, bh) = match p.kind {
+                ParticipantKind::Actor => {
+                    // Actor: width = max(arm_span, text_width) + 2*padding
+                    let w = max_text_w.max(ACTOR_ARM_SPAN) + 2.0 * ACTOR_TEXT_PAD;
+                    let h = HEAD_BOX_H + ACTOR_EXTRA_H;
+                    (w, h)
+                }
+                ParticipantKind::Boundary => {
+                    // Boundary: line + circle, wider than regular
+                    // The shape is: vertical line at left, horizontal line to circle, circle r=12.
+                    // Width = text_width + extra padding for the boundary adornments.
+                    let shape_w = BOUNDARY_LINE_TO_CIRCLE_GAP + 2.0 * STEREOTYPE_CIRCLE_R;
+                    let w = max_text_w.max(shape_w) + BOUNDARY_EXTRA_WIDTH;
+                    let h = HEAD_BOX_H + CIRCLE_SHAPE_EXTRA_H;
+                    (w, h)
+                }
+                ParticipantKind::Control | ParticipantKind::Entity => {
+                    // Control/Entity: circle r=12, text below.
+                    let shape_w = 2.0 * STEREOTYPE_CIRCLE_R;
+                    let w = max_text_w.max(shape_w) + 2.0 * ACTOR_TEXT_PAD;
+                    let h = HEAD_BOX_H + CIRCLE_SHAPE_EXTRA_H;
+                    (w, h)
+                }
+                ParticipantKind::Database => {
+                    // Database: cylinder, text below.
+                    let w = max_text_w.max(DB_CYLINDER_WIDTH) + 2.0 * ACTOR_TEXT_PAD;
+                    let h = HEAD_BOX_H + DB_EXTRA_H;
+                    (w, h)
+                }
+                ParticipantKind::Collections => {
+                    // Collections: two stacked rectangles.
+                    let w = max_text_w + 2.0 * BOX_TEXT_X_PAD;
+                    let h = HEAD_BOX_H + COLLECTIONS_EXTRA_H;
+                    (w, h)
+                }
+                ParticipantKind::Queue => {
+                    // Queue: pill shape, same dimensions as participant.
+                    let w = max_text_w + 2.0 * BOX_TEXT_X_PAD;
+                    let h = HEAD_BOX_H;
+                    (w, h)
+                }
+                ParticipantKind::Participant => {
+                    let w = max_text_w + 2.0 * BOX_TEXT_X_PAD;
+                    // Box height is taller for stereotyped participants.
+                    let h = if st.is_some() {
+                        HEAD_BOX_H + 15.0
+                    } else {
+                        HEAD_BOX_H
+                    };
+                    (w, h)
+                }
             };
+
             ParticipantLayout {
                 idx,
                 id: p.id.clone(),
                 label,
+                kind: p.kind,
                 stereotype: st,
                 text_width: tw,
                 stereotype_width: st_w,
@@ -1689,58 +2423,33 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme) -> String {
         );
     }
 
-    // Participant head and tail boxes (interleaved per participant, matching PlantUML order)
+    // Participant head and tail boxes (interleaved per participant, matching PlantUML order).
+    // Non-rectangle shapes (actor, boundary, etc.) are bottom-aligned: their box_y is
+    // adjusted so that box_y + box_height == HEAD_BOX_Y + max_box_h (matching the tallest).
+    // For tail boxes, the same alignment applies relative to tail_box_y.
     for (i, p) in participants.iter().enumerate() {
         let part_uid = format!("part{}", p.idx + 1);
-        let text_x = p.box_x + BOX_TEXT_X_PAD;
+        let sl = source_line_for(&diagram.participants[i].id);
 
-        // Head box
-        let head_text_y =
-            HEAD_BOX_Y + BOX_TEXT_Y_OFFSET + if p.stereotype.is_some() { 7.5 } else { 0.0 };
-        let stereo_arg = p.stereotype.as_ref().map(|s| {
-            let display = format!("\u{ab}{s}\u{bb}");
-            (display, p.stereotype_width)
-        });
-        let stereo_ref = stereo_arg.as_ref().map(|(s, w)| (s.as_str(), *w));
-        svg.participant_box(
+        // Head: base_y is where this participant's shape starts (bottom-aligned).
+        let head_base_y = HEAD_BOX_Y + (max_box_h - p.box_height);
+
+        render_participant_shape(
+            &mut svg,
             &part_uid,
             &p.id,
-            source_line_for(&diagram.participants[i].id),
+            sl,
             "head",
-            p.box_x,
-            HEAD_BOX_Y,
-            p.box_width,
-            p.box_height,
-            text_x,
-            head_text_y,
-            &p.label,
-            p.text_width,
-            stereo_ref,
+            p,
+            head_base_y,
+            max_box_h,
         );
 
-        // Tail box (skip if hide footbox)
+        // Tail (skip if hide footbox) — all participants start at tail_box_y
+        // (no bottom-alignment offset; the SVG height accounts for max_box_h).
         if !diagram.hide_footbox {
-            let tail_text_y =
-                tail_box_y + BOX_TEXT_Y_OFFSET + if p.stereotype.is_some() { 7.5 } else { 0.0 };
-            let stereo_arg = p.stereotype.as_ref().map(|s| {
-                let display = format!("\u{ab}{s}\u{bb}");
-                (display, p.stereotype_width)
-            });
-            let stereo_ref = stereo_arg.as_ref().map(|(s, w)| (s.as_str(), *w));
-            svg.participant_box(
-                &part_uid,
-                &p.id,
-                source_line_for(&diagram.participants[i].id),
-                "tail",
-                p.box_x,
-                tail_box_y,
-                p.box_width,
-                p.box_height,
-                text_x,
-                tail_text_y,
-                &p.label,
-                p.text_width,
-                stereo_ref,
+            render_participant_shape(
+                &mut svg, &part_uid, &p.id, sl, "tail", p, tail_box_y, max_box_h,
             );
         }
     }
