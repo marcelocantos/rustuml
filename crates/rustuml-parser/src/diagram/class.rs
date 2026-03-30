@@ -109,6 +109,9 @@ pub struct Relationship {
     pub label: Option<String>,
     pub from_multiplicity: Option<String>,
     pub to_multiplicity: Option<String>,
+    /// Whether the line is dashed (e.g. `..>` vs `-->`).
+    #[serde(default)]
+    pub dashed: bool,
     /// 1-based line number within the `@startuml` block.
     #[serde(default)]
     pub source_line: usize,

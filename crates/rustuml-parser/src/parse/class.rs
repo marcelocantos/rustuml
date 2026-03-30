@@ -493,7 +493,7 @@ impl ClassParser {
             let to_raw = &caps[5];
             let label = caps.get(6).map(|m| m.as_str().trim().to_string());
 
-            let kind = parse_relationship_kind(rel_str);
+            let (kind, dashed) = parse_relationship_kind(rel_str);
             let from = self.ensure_entity(from_raw);
             let to = self.ensure_entity(to_raw);
 
@@ -504,6 +504,7 @@ impl ClassParser {
                 label,
                 from_multiplicity: from_mult,
                 to_multiplicity: to_mult,
+                dashed,
                 source_line: self.current_line,
             });
             return true;
@@ -526,6 +527,7 @@ impl ClassParser {
                 label,
                 from_multiplicity: None,
                 to_multiplicity: None,
+                dashed: false,
                 source_line: self.current_line,
             });
             return true;
@@ -563,6 +565,7 @@ impl ClassParser {
                 label: None,
                 from_multiplicity: None,
                 to_multiplicity: None,
+                dashed: false,
                 source_line: self.current_line,
             });
             return true;
@@ -996,19 +999,28 @@ fn parse_entity_kind(s: &str) -> EntityKind {
     }
 }
 
-fn parse_relationship_kind(s: &str) -> RelationshipKind {
-    if s.contains("<|--") {
-        RelationshipKind::Inheritance
-    } else if s.contains("..|>") || s.contains("<..") {
-        RelationshipKind::Implementation
-    } else if s.contains("*--") {
-        RelationshipKind::Composition
-    } else if s.contains("o--") {
-        RelationshipKind::Aggregation
-    } else if s.contains("..>") || s == "->" || s == "<-" {
-        RelationshipKind::Dependency
+/// Parse the relationship kind and whether the line style is dashed.
+fn parse_relationship_kind(s: &str) -> (RelationshipKind, bool) {
+    if s.contains("<|--") || s.contains("--|>") || s.contains("<|--|>") {
+        (RelationshipKind::Inheritance, false)
+    } else if s.contains("..|>") || s.contains("<|..") {
+        (RelationshipKind::Implementation, true)
+    } else if s.contains("*--") || s.contains("--*") {
+        (RelationshipKind::Composition, false)
+    } else if s.contains("o--") || s.contains("--o") {
+        (RelationshipKind::Aggregation, false)
+    } else if s.contains("..>") || s.contains("<..") {
+        // Dashed dependency (..>)
+        (RelationshipKind::Dependency, true)
+    } else if s.contains("-->") || s.contains("<--") || s == "->" || s == "<-" || s == "<-->" {
+        // Solid dependency (-->)
+        (RelationshipKind::Dependency, false)
+    } else if s.contains("..") {
+        // Dashed association (..)
+        (RelationshipKind::Association, true)
     } else {
-        RelationshipKind::Association
+        // Plain association (-- or ---- etc.)
+        (RelationshipKind::Association, false)
     }
 }
 
@@ -1279,7 +1291,9 @@ mod tests {
     fn directed_association() {
         let d = parse("A --> B : uses");
         assert_eq!(d.relationships.len(), 1);
-        assert_eq!(d.relationships[0].kind, RelationshipKind::Association);
+        // PlantUML treats --> as a dependency (solid line with arrowhead).
+        assert_eq!(d.relationships[0].kind, RelationshipKind::Dependency);
+        assert!(!d.relationships[0].dashed);
         assert_eq!(d.relationships[0].label.as_deref(), Some("uses"));
     }
 

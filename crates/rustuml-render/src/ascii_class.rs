@@ -330,6 +330,7 @@ mod tests {
                 label: None,
                 from_multiplicity: None,
                 to_multiplicity: None,
+                dashed: false,
                 source_line: 0,
             }],
         );

@@ -650,11 +650,9 @@ fn render_plantuml_svg(
             max_x = max_x.max(x + dims[i].width);
             max_y = max_y.max(y + dims[i].height);
         }
-        // PlantUML adds 5px extra padding beyond entity bounds + margin.
-        (
-            (max_x + MARGIN + 5.0).ceil() as i64,
-            (max_y + MARGIN + 5.0).ceil() as i64,
-        )
+        // PlantUML formula: floor(max_extent) + 13 (= MARGIN + 6).
+        // Verified against 100+ golden single-entity SVGs.
+        (max_x as i64 + 13, max_y as i64 + 13)
     };
 
     let mut svg = String::new();
@@ -1254,20 +1252,22 @@ fn render_oracle_relationships(
     _ent_id: usize,
 ) {
     for rel in &diagram.relationships {
-        let is_reverse = matches!(
-            rel.kind,
-            RelationshipKind::Inheritance | RelationshipKind::Implementation
-        );
-        let expected_id = if is_reverse {
-            format!("{}-backto-{}", rel.from, rel.to)
-        } else {
-            format!("{}-to-{}", rel.from, rel.to)
-        };
+        // Try both -to- and -backto- IDs to find the oracle edge,
+        // since the oracle's ID format depends on how PlantUML
+        // internally categorises the relationship direction.
+        let to_id = format!("{}-to-{}", rel.from, rel.to);
+        let backto_id = format!("{}-backto-{}", rel.from, rel.to);
 
-        let oracle_edge = match oracle.edges.iter().find(|e| e.id == expected_id) {
-            Some(e) => e,
-            None => continue,
-        };
+        let (oracle_edge, is_reverse) =
+            if let Some(e) = oracle.edges.iter().find(|e| e.id == backto_id) {
+                (e, true)
+            } else if let Some(e) = oracle.edges.iter().find(|e| e.id == to_id) {
+                (e, false)
+            } else {
+                continue;
+            };
+
+        let expected_id = if is_reverse { &backto_id } else { &to_id };
 
         // HTML comment
         if is_reverse {
@@ -1357,11 +1357,11 @@ fn render_relationship_svg(
     }
 
     // Build path data from edge points.
-    let dashed = matches!(
-        rel.kind,
-        RelationshipKind::Dependency | RelationshipKind::Implementation
-    );
-    let dash_style = if dashed { "stroke-dasharray:7,7;" } else { "" };
+    let dash_style = if rel.dashed {
+        "stroke-dasharray:7,7;"
+    } else {
+        ""
+    };
 
     // Build cubic bezier path.
     let points = &edge_path.points;
@@ -1706,6 +1706,7 @@ mod tests {
                 label: None,
                 from_multiplicity: None,
                 to_multiplicity: None,
+                dashed: false,
                 source_line: 0,
             }],
             packages: vec![],
