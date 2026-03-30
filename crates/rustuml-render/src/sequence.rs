@@ -2231,18 +2231,55 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme) -> String {
             0.0
         })
         .max(max_self_msg_right);
-    // If groups are present, the group frame extends GROUP_FRAME_MARGIN beyond
-    // the last participant box on the right.
-    let has_groups = diagram
-        .events
-        .iter()
-        .any(|e| matches!(e, Event::GroupStart(_)));
-    let group_frame_right_pad = if has_groups {
-        GROUP_FRAME_MARGIN + 5.0
+    // If groups are present, the group frame may extend beyond participant boxes.
+    // Compute the maximum right extent of any group frame (header text + guard).
+    let mut max_group_right: f64 = 0.0;
+    if !participants.is_empty() {
+        let default_fl = participants[0].box_x - GROUP_FRAME_MARGIN;
+        let alt_fl = participants[0].box_x + GROUP_FRAME_MARGIN;
+        for event in &diagram.events {
+            if let Event::GroupStart(g) = event {
+                let kind_str = match g.kind {
+                    GroupKind::Alt => "alt",
+                    GroupKind::Opt => "opt",
+                    GroupKind::Loop => "loop",
+                    GroupKind::Par => "par",
+                    GroupKind::Break => "break",
+                    GroupKind::Critical => "critical",
+                    GroupKind::Group => "group",
+                };
+                // Use the larger frame_left (alt_fl) for guard text calculation
+                // since empty groups use alt_fl while non-empty use default_fl.
+                let fl = if group_needs_left_shift {
+                    default_fl
+                } else {
+                    alt_fl
+                };
+                let kw = bold_text_width(kind_str, MSG_FONT_SIZE);
+                let tab_right = fl + kw + 45.0;
+                let guard_right = if let Some(label) = &g.label {
+                    let guard = format!("[{label}]");
+                    let gw = bold_text_width(&guard, 11.0);
+                    tab_right + 15.0 + gw + 5.0
+                } else {
+                    tab_right + 5.0
+                };
+                let last = &participants[n - 1];
+                let participant_right = last.box_x + last.box_width + GROUP_FRAME_MARGIN;
+                max_group_right = max_group_right.max(guard_right.max(participant_right));
+            }
+        }
+    }
+    let has_groups = max_group_right > 0.0;
+    // The SVG width must accommodate both participant boxes and group frames.
+    // Group frames already include their margin; just add RIGHT_MARGIN + 5.
+    let svg_width = if has_groups {
+        let from_participants = effective_right + RIGHT_MARGIN + GROUP_FRAME_MARGIN + 5.0;
+        let from_groups = max_group_right + RIGHT_MARGIN + 5.0;
+        from_participants.max(from_groups).ceil() as u32
     } else {
-        0.0
+        (effective_right + RIGHT_MARGIN).ceil() as u32
     };
-    let svg_width = (effective_right + RIGHT_MARGIN + group_frame_right_pad).ceil() as u32;
     let svg_height = if diagram.hide_footbox {
         lifeline_bottom.ceil() as u32
     } else {
@@ -2376,32 +2413,70 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme) -> String {
 
     let mut group_frames: Vec<GroupFrame> = Vec::new();
     {
-        let first_box_left = if participants.is_empty() {
-            HEAD_BOX_Y
-        } else {
-            participants[0].box_x
-        };
-        let last_box_right_val = if participants.is_empty() {
-            100.0
-        } else {
-            let last = &participants[n - 1];
-            last.box_x + last.box_width
-        };
-
         // Scan events to find group start/end pairs and compute their frames.
-        // For now, all groups span full participant width.
-        let mut group_start_stack: Vec<usize> = Vec::new(); // event indices of GroupStart
+        // Track which participant indices are referenced inside each group.
+        // (min_idx, max_idx, start_event_idx)
+        let mut group_start_stack: Vec<(usize, usize, usize)> = Vec::new();
         for (ev_idx, event) in diagram.events.iter().enumerate() {
             match event {
                 Event::GroupStart(_) => {
-                    group_start_stack.push(ev_idx);
+                    group_start_stack.push((usize::MAX, 0, ev_idx));
                 }
                 Event::GroupEnd => {
-                    if let Some(start_idx) = group_start_stack.pop() {
+                    if let Some((min_idx, max_idx, start_idx)) = group_start_stack.pop() {
                         let frame_top = event_y_positions[start_idx];
                         let frame_bottom = event_y_positions[ev_idx];
-                        let frame_left = first_box_left - GROUP_FRAME_MARGIN;
-                        let frame_right = last_box_right_val + GROUP_FRAME_MARGIN;
+
+                        // Compute frame left/right based on which participants are inside.
+                        let (frame_left, frame_right) =
+                            if min_idx <= max_idx && !participants.is_empty() {
+                                // Group has messages — frame encompasses those participants
+                                let fl = participants[min_idx].box_x - GROUP_FRAME_MARGIN;
+                                let fr = participants[max_idx].box_x
+                                    + participants[max_idx].box_width
+                                    + GROUP_FRAME_MARGIN;
+                                (fl, fr)
+                            } else if !participants.is_empty() {
+                                // Empty group — frame left at first box + margin
+                                let fl = participants[0].box_x + GROUP_FRAME_MARGIN;
+
+                                // Frame right must cover the header text extent.
+                                // Compute header text right from the group kind and label.
+                                let (kind_w, guard_right) =
+                                    if let Event::GroupStart(g) = &diagram.events[start_idx] {
+                                        let kind_str = match g.kind {
+                                            GroupKind::Alt => "alt",
+                                            GroupKind::Opt => "opt",
+                                            GroupKind::Loop => "loop",
+                                            GroupKind::Par => "par",
+                                            GroupKind::Break => "break",
+                                            GroupKind::Critical => "critical",
+                                            GroupKind::Group => "group",
+                                        };
+                                        let kw = bold_text_width(kind_str, MSG_FONT_SIZE);
+                                        let tab_right = fl + kw + 45.0;
+                                        let gr = if let Some(label) = &g.label {
+                                            let guard = format!("[{label}]");
+                                            let gw = bold_text_width(&guard, 11.0);
+                                            tab_right + 15.0 + gw + 5.0
+                                        } else {
+                                            tab_right + 5.0
+                                        };
+                                        (kw, gr)
+                                    } else {
+                                        (0.0, fl + 50.0)
+                                    };
+                                let _ = kind_w;
+
+                                let last = &participants[n - 1];
+                                let participant_right =
+                                    last.box_x + last.box_width + GROUP_FRAME_MARGIN;
+                                let fr = participant_right.max(guard_right);
+                                (fl, fr)
+                            } else {
+                                (HEAD_BOX_Y, 100.0)
+                            };
+
                         group_frames.push(GroupFrame {
                             top: frame_top,
                             bottom: frame_bottom,
@@ -2409,6 +2484,20 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme) -> String {
                             right: frame_right,
                             event_idx: start_idx,
                         });
+                    }
+                }
+                Event::Message(msg) if !group_start_stack.is_empty() => {
+                    let fi = id_to_idx.get(msg.from.as_str()).copied();
+                    let ti = id_to_idx.get(msg.to.as_str()).copied();
+                    if let Some(top) = group_start_stack.last_mut() {
+                        if let Some(fi) = fi {
+                            top.0 = top.0.min(fi);
+                            top.1 = top.1.max(fi);
+                        }
+                        if let Some(ti) = ti {
+                            top.0 = top.0.min(ti);
+                            top.1 = top.1.max(ti);
+                        }
                     }
                 }
                 _ => {}
