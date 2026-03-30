@@ -228,6 +228,7 @@ fn render_oracle_connections(
     }
 }
 
+#[allow(clippy::too_many_arguments)]
 fn render_node(
     id: &str,
     nodes: &[DeploymentNode],

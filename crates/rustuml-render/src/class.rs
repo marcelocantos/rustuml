@@ -745,6 +745,7 @@ fn render_plantuml_svg(
 /// - `icon_cx_override`: exact icon ellipse center x
 /// - `glyph_path_override`: exact glyph path `d` attribute
 /// - `name_text_x_override`: exact name text x position
+#[allow(clippy::too_many_arguments)]
 fn render_entity_content(
     svg: &mut String,
     entity: &ClassEntity,

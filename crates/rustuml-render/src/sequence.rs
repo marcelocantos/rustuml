@@ -1682,10 +1682,10 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme) -> String {
                     group_stack.push((usize::MAX, 0));
                 }
                 Event::GroupEnd => {
-                    if let Some((min_idx, _max_idx)) = group_stack.pop() {
-                        if min_idx == 0 {
-                            group_needs_left_shift = true;
-                        }
+                    if let Some((min_idx, _max_idx)) = group_stack.pop()
+                        && min_idx == 0
+                    {
+                        group_needs_left_shift = true;
                     }
                 }
                 Event::Message(msg) if !group_stack.is_empty() => {

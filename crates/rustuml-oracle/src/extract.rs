@@ -124,13 +124,12 @@ pub fn extract_oracle_layout(svg: &str) -> Option<OracleLayout> {
                             );
                         }
                     }
-                } else if let Some(path) = find_first_child(&node, "path") {
+                } else if let Some(path) = find_first_child(&node, "path")
+                    && let Some(d) = path.attribute("d")
+                    && let Some(bbox) = path_bounding_box(d)
+                {
                     // Some entities (notes, clouds) use <path>. Extract bounding box.
-                    if let Some(d) = path.attribute("d") {
-                        if let Some(bbox) = path_bounding_box(d) {
-                            layout.entities.insert(name.to_string(), bbox);
-                        }
-                    }
+                    layout.entities.insert(name.to_string(), bbox);
                 }
             }
         } else if class_attr == "start_entity" || class_attr == "end_entity" {
