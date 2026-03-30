@@ -628,6 +628,8 @@ mod tests {
                     position: NotePosition::Right,
                     participants: vec!["Bob".to_string()],
                     text: "a note".to_string(),
+                    shape: NoteShape::Note,
+                    color: None,
                     source_line: 0,
                 }),
             ],
