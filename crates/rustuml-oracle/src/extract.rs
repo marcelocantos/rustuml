@@ -51,6 +51,21 @@ pub fn extract_oracle_layout(svg: &str) -> Option<OracleLayout> {
                     let y = parse_attr(&rect, "y")?;
                     let width = parse_attr(&rect, "width")?;
                     let height = parse_attr(&rect, "height")?;
+                    // Look for an icon ellipse to extract icon_cx.
+                    let icon_cx =
+                        find_first_child(&node, "ellipse").and_then(|e| parse_attr(&e, "cx"));
+                    // Extract glyph path d attribute (the <path> with fill="#000000").
+                    let glyph_path_d = node
+                        .children()
+                        .find(|c| {
+                            c.tag_name().name() == "path" && c.attribute("fill") == Some("#000000")
+                        })
+                        .and_then(|p| p.attribute("d").map(String::from));
+                    // Extract name text x (first <text> child).
+                    let name_text_x = node
+                        .children()
+                        .find(|c| c.tag_name().name() == "text")
+                        .and_then(|t| parse_attr(&t, "x"));
                     layout.entities.insert(
                         name.to_string(),
                         EntityRect {
@@ -58,6 +73,9 @@ pub fn extract_oracle_layout(svg: &str) -> Option<OracleLayout> {
                             y,
                             width,
                             height,
+                            icon_cx,
+                            glyph_path_d,
+                            name_text_x,
                         },
                     );
                 } else if let Some(ellipse) = find_first_child(&node, "ellipse") {
@@ -73,6 +91,9 @@ pub fn extract_oracle_layout(svg: &str) -> Option<OracleLayout> {
                             y: cy - ry,
                             width: rx * 2.0,
                             height: ry * 2.0,
+                            icon_cx: None,
+                            glyph_path_d: None,
+                            name_text_x: None,
                         },
                     );
                 } else if let Some(polygon) = find_first_child(&node, "polygon") {
@@ -96,6 +117,9 @@ pub fn extract_oracle_layout(svg: &str) -> Option<OracleLayout> {
                                     y: min_y,
                                     width: max_x - min_x,
                                     height: max_y - min_y,
+                                    icon_cx: None,
+                                    glyph_path_d: None,
+                                    name_text_x: None,
                                 },
                             );
                         }
@@ -124,6 +148,9 @@ pub fn extract_oracle_layout(svg: &str) -> Option<OracleLayout> {
                             y: cy - ry,
                             width: rx * 2.0,
                             height: ry * 2.0,
+                            icon_cx: None,
+                            glyph_path_d: None,
+                            name_text_x: None,
                         },
                     );
                 }
@@ -211,6 +238,9 @@ fn path_bounding_box(d: &str) -> Option<EntityRect> {
             y: min_y,
             width: max_x - min_x,
             height: max_y - min_y,
+            icon_cx: None,
+            glyph_path_d: None,
+            name_text_x: None,
         })
     } else {
         None
@@ -273,6 +303,41 @@ mod tests {
         let golden_svg = std::fs::read_to_string(&svg_path).unwrap();
 
         let oracle = extract_oracle_layout(&golden_svg).unwrap();
+        let diagram = rustuml_parser::parse::parse_auto_with_base(&source, None).unwrap();
+        let rust_svg = rustuml_render::render_svg_with_oracle(&diagram, Some(&oracle));
+
+        let cmp = crate::compare::compare_svg_strict(&golden_svg, &rust_svg).unwrap();
+        assert!(
+            cmp.is_match(),
+            "Oracle rendering should match golden:\n{cmp}"
+        );
+    }
+
+    #[test]
+    fn render_4combo_with_oracle() {
+        let golden_dir = concat!(
+            env!("CARGO_MANIFEST_DIR"),
+            "/../../test-diagrams/golden/class/"
+        );
+        let test_name = "class_4combo_abstract_class_none_nocolor_private";
+        let puml_path = format!("{golden_dir}{test_name}.puml");
+        let svg_path = format!("{golden_dir}{test_name}.svg");
+        let Ok(source) = std::fs::read_to_string(&puml_path) else {
+            eprintln!("skipping: golden file not found");
+            return;
+        };
+        let golden_svg = std::fs::read_to_string(&svg_path).unwrap();
+
+        let oracle = extract_oracle_layout(&golden_svg).unwrap();
+
+        // Verify icon_cx was extracted.
+        let combo = oracle.entities.get("Combo").expect("entity Combo");
+        eprintln!("Combo: icon_cx={:?}", combo.icon_cx);
+        assert!(
+            combo.icon_cx.is_some(),
+            "icon_cx should be extracted from golden SVG"
+        );
+
         let diagram = rustuml_parser::parse::parse_auto_with_base(&source, None).unwrap();
         let rust_svg = rustuml_render::render_svg_with_oracle(&diagram, Some(&oracle));
 

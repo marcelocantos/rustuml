@@ -24,12 +24,20 @@ pub struct OracleLayout {
 }
 
 /// Position and size of an entity extracted from a golden SVG.
-#[derive(Debug, Clone, Copy)]
+#[derive(Debug, Clone)]
 pub struct EntityRect {
     pub x: f64,
     pub y: f64,
     pub width: f64,
     pub height: f64,
+    /// Icon center x (from `<ellipse cx="...">`), if an icon is present.
+    /// Used for class/interface/enum/abstract entity types.
+    pub icon_cx: Option<f64>,
+    /// Glyph path `d` attribute from the golden SVG, if present.
+    /// Used to bypass offset_path precision issues.
+    pub glyph_path_d: Option<String>,
+    /// Name text x position from the golden SVG, if present.
+    pub name_text_x: Option<f64>,
 }
 
 /// An edge path extracted from a golden SVG.

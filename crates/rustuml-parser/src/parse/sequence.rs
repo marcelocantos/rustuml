@@ -473,14 +473,15 @@ impl SeqParser {
             // Bare "note left" / "note right" (no participant) attaches to the last message:
             // "note left" → source participant of the last message
             // "note right" → target participant of the last message
-            if participants.is_empty() && position != NotePosition::Over {
-                if let Some((from, to)) = &self.last_message {
-                    participants = match position {
-                        NotePosition::Left => vec![from.clone()],
-                        NotePosition::Right => vec![to.clone()],
-                        _ => Vec::new(),
-                    };
-                }
+            if participants.is_empty()
+                && position != NotePosition::Over
+                && let Some((from, to)) = &self.last_message
+            {
+                participants = match position {
+                    NotePosition::Left => vec![from.clone()],
+                    NotePosition::Right => vec![to.clone()],
+                    _ => Vec::new(),
+                };
             }
             let color = caps.get(4).map(|m| m.as_str().to_string());
 

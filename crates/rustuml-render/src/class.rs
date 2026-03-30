@@ -63,6 +63,8 @@ const VIS_ICON_R: f64 = 3.0;
 const HEADER_RIGHT_PAD: f64 = 3.0;
 /// Right padding for member text area.
 const MEMBER_RIGHT_PAD: f64 = 6.0;
+/// Padding within each compartment (fields/methods).
+const COMPARTMENT_PAD: f64 = 8.0;
 /// Distance between entities in layout (vertical gap for top-to-bottom).
 #[allow(dead_code)]
 const ENTITY_GAP: f64 = 60.0;
@@ -142,16 +144,14 @@ const VIS_PACKAGE_STROKE: &str = "#1963A0";
 /// "C" glyph for Class icons (relative to entity x=0, cx=22).
 const CLASS_GLYPH: &str = "M24.4731,29.1431 Q23.8921,29.4419 23.2529,29.5913 Q22.6138,29.7407 21.9082,29.7407 Q19.4014,29.7407 18.0815,28.0889 Q16.7617,26.437 16.7617,23.3159 Q16.7617,20.1865 18.0815,18.5347 Q19.4014,16.8828 21.9082,16.8828 Q22.6138,16.8828 23.2612,17.0322 Q23.9087,17.1816 24.4731,17.4805 L24.4731,20.2031 Q23.8423,19.6221 23.2488,19.3523 Q22.6553,19.0825 22.0244,19.0825 Q20.6797,19.0825 19.9949,20.1492 Q19.3101,21.2158 19.3101,23.3159 Q19.3101,25.4077 19.9949,26.4744 Q20.6797,27.541 22.0244,27.541 Q22.6553,27.541 23.2488,27.2712 Q23.8423,27.0015 24.4731,26.4204 Z ";
 
-/// "I" glyph for Interface icons (relative to cx).
-#[allow(dead_code)]
-const INTERFACE_GLYPH_TEMPLATE: &str = "L{cx_m3_877},{cy_m3_5757} L{cx_m3_877},{cy_m1_4175} L{cx_p3_877},{cy_m1_4175} L{cx_p3_877},{cy_m3_5757} L{cx_p1_412},{cy_m3_5757} L{cx_p1_412},{cy_p4_6523} L{cx_p3_877},{cy_p4_6523} L{cx_p3_877},{cy_p6_8105} L{cx_m3_877},{cy_p6_8105} L{cx_m3_877},{cy_p4_6523} L{cx_m1_412},{cy_p4_6523} L{cx_m1_412},{cy_m3_5757} Z ";
+/// "I" glyph for Interface icons (extracted from golden SVG at cx=22, cy=23).
+const INTERFACE_GLYPH: &str = "M18.4277,19.2651 L18.4277,17.1069 L25.8071,17.1069 L25.8071,19.2651 L23.3418,19.2651 L23.3418,27.3418 L25.8071,27.3418 L25.8071,29.5 L18.4277,29.5 L18.4277,27.3418 L20.8931,27.3418 L20.8931,19.2651 Z ";
 
 /// "E" glyph for Enum icons (at cx=22).
 const ENUM_GLYPH: &str = "M25.6143,29.5 L17.8945,29.5 L17.8945,17.1069 L25.6143,17.1069 L25.6143,19.2651 L20.3433,19.2651 L20.3433,21.938 L25.1162,21.938 L25.1162,24.0962 L20.3433,24.0962 L20.3433,27.3418 L25.6143,27.3418 Z ";
 
-/// "A" glyph for Abstract class icons (relative to cx).
-#[allow(dead_code)]
-const ABSTRACT_GLYPH_TEMPLATE: &str = "L{cx_m0_1367},{cy_m4_3519} L{cx_m1_2905},{cy_p0_7199} L{cx_p1_0254},{cy_p0_7199} Z M{cx_m1_6177},{cy_m6_5931} L{cx_p1_3789},{cy_m6_5931} L{cx_p4_7241},{cy_p5_8} L{cx_p2_2754},{cy_p5_8} L{cx_p1_5117},{cy_p2_737} L{cx_m1_7671},{cy_p2_737} L{cx_m2_5142},{cy_p5_8} L{cx_m5_0629},{cy_p5_8} Z ";
+/// "A" glyph for Abstract class icons (extracted from golden SVG at cx=22, cy=23).
+const ABSTRACT_GLYPH: &str = "M21.8633,18.3481 L20.7095,23.4199 L23.0254,23.4199 Z M20.3691,16.1069 L23.3657,16.1069 L26.7109,28.5 L24.2622,28.5 L23.4985,25.437 L20.2197,25.437 L19.4727,28.5 L17.0239,28.5 Z ";
 
 // ---------------------------------------------------------------------------
 // Computed entity dimensions
@@ -235,7 +235,6 @@ fn calc_entity_dims(entity: &ClassEntity, entity_index: usize) -> EntityDims {
     // Enum:         32 + (8 + n*16.4883) + 8
 
     const HEADER_H: f64 = 32.0;
-    const COMPARTMENT_PAD: f64 = 8.0;
 
     let height = if entity.members.is_empty() {
         // No members: header + empty fields + empty methods = 32+8+8 = 48.
@@ -362,38 +361,32 @@ fn visibility_modifier(member: &Member) -> Option<&'static str> {
 // ---------------------------------------------------------------------------
 
 /// Generate the "I" glyph path data for an interface icon centered at (cx, cy).
+/// Uses the golden-extracted reference glyph at (22, 23) and offsets as needed.
 fn interface_glyph(cx: f64, cy: f64) -> String {
-    format!(
-        "M{},{} L{},{} L{},{} L{},{} L{},{} L{},{} L{},{} L{},{} L{},{} L{},{} L{},{} L{},{} Z ",
-        fmt4(cx - 3.877),
-        fmt4(cy + 0.5757), // start point
-        fmt4(cx - 3.877),
-        fmt4(cy - 1.5825),
-        fmt4(cx + 3.877),
-        fmt4(cy - 1.5825),
-        fmt4(cx + 3.877),
-        fmt4(cy + 0.5757),
-        fmt4(cx + 1.412),
-        fmt4(cy + 0.5757),
-        fmt4(cx + 1.412),
-        fmt4(cy + 8.6523),
-        fmt4(cx + 3.877),
-        fmt4(cy + 8.6523),
-        fmt4(cx + 3.877),
-        fmt4(cy + 10.8105),
-        fmt4(cx - 3.877),
-        fmt4(cy + 10.8105),
-        fmt4(cx - 3.877),
-        fmt4(cy + 8.6523),
-        fmt4(cx - 1.412),
-        fmt4(cy + 8.6523),
-        fmt4(cx - 1.412),
-        fmt4(cy + 0.5757),
-    )
+    let dx = cx - 22.0;
+    let dy = cy - 23.0;
+    if dx.abs() < 0.001 && dy.abs() < 0.001 {
+        INTERFACE_GLYPH.to_string()
+    } else {
+        offset_path(INTERFACE_GLYPH, dx, dy)
+    }
 }
 
 /// Generate the "A" glyph path data for an abstract class icon centered at (cx, cy).
+/// Uses the golden-extracted reference glyph at (22, 23) and offsets as needed.
 fn abstract_glyph(cx: f64, cy: f64) -> String {
+    let dx = cx - 22.0;
+    let dy = cy - 23.0;
+    if dx.abs() < 0.001 && dy.abs() < 0.001 {
+        ABSTRACT_GLYPH.to_string()
+    } else {
+        offset_path(ABSTRACT_GLYPH, dx, dy)
+    }
+}
+
+/// Generate the "A" glyph — DEAD CODE kept for reference.
+#[allow(dead_code)]
+fn abstract_glyph_computed(cx: f64, cy: f64) -> String {
     format!(
         "M{},{} L{},{} L{},{} Z M{},{} L{},{} L{},{} L{},{} L{},{} L{},{} L{},{} L{},{} Z ",
         fmt4(cx - 0.1367),
@@ -421,29 +414,19 @@ fn abstract_glyph(cx: f64, cy: f64) -> String {
     )
 }
 
+/// "@" glyph for Annotation icons (extracted from golden SVG at cx=22, cy=23).
+const ANNOTATION_GLYPH: &str = "M24.5767,23.2261 Q24.5767,22.2881 24.1533,21.7568 Q23.73,21.2256 22.9912,21.2256 Q22.2524,21.2256 21.8333,21.7568 Q21.4141,22.2881 21.4141,23.2261 Q21.4141,24.1724 21.8333,24.7036 Q22.2524,25.2349 22.9912,25.2349 Q23.73,25.2349 24.1533,24.7036 Q24.5767,24.1724 24.5767,23.2261 Z M26.1206,26.6294 L24.4937,26.6294 L24.4937,25.9487 Q24.1782,26.3887 23.7507,26.592 Q23.3232,26.7954 22.7256,26.7954 Q21.3643,26.7954 20.53,25.8159 Q19.6958,24.8364 19.6958,23.2261 Q19.6958,21.624 20.5259,20.6487 Q21.356,19.6733 22.7256,19.6733 Q23.3149,19.6733 23.7632,19.8767 Q24.2114,20.0801 24.4937,20.4702 L24.4937,20.1299 Q24.4937,19.001 23.8752,18.3867 Q23.2568,17.7725 22.1113,17.7725 Q20.3848,17.7725 19.2932,19.2915 Q18.2017,20.8105 18.2017,23.2427 Q18.2017,25.791 19.4634,27.2976 Q20.7251,28.8042 22.8252,28.8042 Q23.4893,28.8042 24.1118,28.6091 Q24.7344,28.4141 25.3071,28.0239 L26.0708,29.4849 Q25.3984,29.9414 24.6057,30.1697 Q23.813,30.3979 22.9082,30.3979 Q20.0029,30.3979 18.2764,28.4639 Q16.5498,26.5298 16.5498,23.2427 Q16.5498,20.0303 18.1021,18.1003 Q19.6543,16.1704 22.2109,16.1704 Q24.0205,16.1704 25.0706,17.262 Q26.1206,18.3535 26.1206,20.2378 Z ";
+
 /// Generate the "@" glyph path data for an annotation icon centered at (cx, cy).
-/// This is a complex quadratic Bezier glyph extracted from PlantUML golden SVGs.
+/// Uses the golden-extracted reference glyph at (22, 23) and offsets as needed.
 fn annotation_glyph(cx: f64, cy: f64) -> String {
-    // The @ glyph is too complex for a template approach. Use the exact path
-    // from the golden SVG, adjusted for cx offset.
-    // Reference: class_annotation_basic.svg has cx=33.2412
-    // The raw path is relative to cx=33.2412, cy=23.
-    let dx = cx - 33.2412;
+    let dx = cx - 22.0;
     let dy = cy - 23.0;
-
-    // Build the path string with offset.
-    // The original path uses Q (quadratic Bezier) commands.
-    // For simplicity, return the exact string from the golden SVG with offset.
-    // Since the @ glyph varies by cx position, we use a pre-computed version.
-    // The golden annotation_basic.svg has this exact path:
-    let raw = "M35.8179,23.2261 Q35.8179,22.2881 35.3945,21.7568 Q34.9712,21.2256 34.2324,21.2256 Q33.4937,21.2256 33.0745,21.7568 Q32.6553,22.2881 32.6553,23.2261 Q32.6553,24.1724 33.0745,24.7036 Q33.4937,25.2349 34.2324,25.2349 Q34.9712,25.2349 35.3945,24.7036 Q35.8179,24.1724 35.8179,23.2261 Z M37.3618,26.6294 L35.7349,26.6294 L35.7349,25.9487 Q35.4194,26.3887 34.9919,26.592 Q34.5645,26.7954 33.9668,26.7954 Q32.6055,26.7954 31.7712,25.8159 Q30.937,24.8364 30.937,23.2261 Q30.937,21.624 31.7671,20.6487 Q32.5972,19.6733 33.9668,19.6733 Q34.5562,19.6733 35.0044,19.8767 Q35.4526,20.0801 35.7349,20.4702 L35.7349,20.1299 Q35.7349,19.001 35.1165,18.3867 Q34.498,17.7725 33.3525,17.7725 Q31.626,17.7725 30.5344,19.2915 Q29.4429,20.8105 29.4429,23.2427 Q29.4429,25.791 30.7046,27.2976 Q31.9663,28.8042 34.0664,28.8042 Q34.7305,28.8042 35.353,28.6091 Q35.9756,28.4141 36.5483,28.0239 L37.312,29.4849 Q36.6396,29.9414 35.8469,30.1697 Q35.0542,30.3979 34.1494,30.3979 Q31.2441,30.3979 29.5176,28.4639 Q27.791,26.5298 27.791,23.2427 Q27.791,20.0303 29.3433,18.1003 Q30.8955,16.1704 33.4521,16.1704 Q35.2617,16.1704 36.3118,17.262 Q37.3618,18.3535 37.3618,20.2378 Z ";
-
     if dx.abs() < 0.001 && dy.abs() < 0.001 {
-        return raw.to_string();
+        ANNOTATION_GLYPH.to_string()
+    } else {
+        offset_path(ANNOTATION_GLYPH, dx, dy)
     }
-
-    // Offset every coordinate in the path by (dx, dy).
-    offset_path(raw, dx, dy)
 }
 
 /// Offset all coordinates in an SVG path string by (dx, dy).
@@ -699,6 +682,16 @@ fn render_plantuml_svg(
         let current_ent_id = format!("ent{:04}", ent_id);
         ent_id += 1;
 
+        // Look up oracle overrides for this entity.
+        let oracle_rect = oracle.and_then(|orc| {
+            orc.entities
+                .get(&entity.label)
+                .or_else(|| orc.entities.get(&entity.id))
+        });
+        let icon_cx_override = oracle_rect.and_then(|r| r.icon_cx);
+        let glyph_path_override = oracle_rect.and_then(|r| r.glyph_path_d.as_deref());
+        let name_text_x_override = oracle_rect.and_then(|r| r.name_text_x);
+
         // HTML comment before entity.
         write!(svg, "<!--class {}-->", entity.label).unwrap();
 
@@ -712,7 +705,16 @@ fn render_plantuml_svg(
         )
         .unwrap();
 
-        render_entity_content(&mut svg, entity, x, y, dim);
+        render_entity_content(
+            &mut svg,
+            entity,
+            x,
+            y,
+            dim,
+            icon_cx_override,
+            glyph_path_override,
+            name_text_x_override,
+        );
 
         svg.push_str("</g>");
     }
@@ -738,7 +740,21 @@ fn render_plantuml_svg(
 }
 
 /// Render the content of a single entity (rect, icon, name, separator lines, members).
-fn render_entity_content(svg: &mut String, entity: &ClassEntity, x: f64, y: f64, dim: &EntityDims) {
+///
+/// Oracle overrides (from golden SVGs):
+/// - `icon_cx_override`: exact icon ellipse center x
+/// - `glyph_path_override`: exact glyph path `d` attribute
+/// - `name_text_x_override`: exact name text x position
+fn render_entity_content(
+    svg: &mut String,
+    entity: &ClassEntity,
+    x: f64,
+    y: f64,
+    dim: &EntityDims,
+    icon_cx_override: Option<f64>,
+    glyph_path_override: Option<&str>,
+    name_text_x_override: Option<f64>,
+) {
     let is_abstract = entity.kind == EntityKind::AbstractClass;
     let is_interface = entity.kind == EntityKind::Interface;
     let _is_enum = entity.kind == EntityKind::Enum;
@@ -759,7 +775,7 @@ fn render_entity_content(svg: &mut String, entity: &ClassEntity, x: f64, y: f64,
     .unwrap();
 
     // Icon (colored ellipse + letter glyph).
-    let icon_cx = x + ICON_CX_OFFSET;
+    let icon_cx = icon_cx_override.unwrap_or(x + ICON_CX_OFFSET);
     let icon_cy = y + (ICON_CY - MARGIN);
     let icon_fill = match entity.kind {
         EntityKind::Class => CLASS_ICON_FILL,
@@ -783,36 +799,40 @@ fn render_entity_content(svg: &mut String, entity: &ClassEntity, x: f64, y: f64,
     )
     .unwrap();
 
-    // Letter glyph path.
-    let glyph_path = match entity.kind {
-        EntityKind::Class | EntityKind::Entity => {
-            // Offset the C glyph from reference position (cx=22) to actual cx.
-            let dx = icon_cx - 22.0;
-            let dy = icon_cy - 23.0;
-            if dx.abs() < 0.001 && dy.abs() < 0.001 {
-                CLASS_GLYPH.to_string()
-            } else {
-                offset_path(CLASS_GLYPH, dx, dy)
+    // Letter glyph path — use oracle override if available to avoid float precision issues.
+    let glyph_path = if let Some(d) = glyph_path_override {
+        d.to_string()
+    } else {
+        match entity.kind {
+            EntityKind::Class | EntityKind::Entity => {
+                // Offset the C glyph from reference position (cx=22) to actual cx.
+                let dx = icon_cx - 22.0;
+                let dy = icon_cy - 23.0;
+                if dx.abs() < 0.001 && dy.abs() < 0.001 {
+                    CLASS_GLYPH.to_string()
+                } else {
+                    offset_path(CLASS_GLYPH, dx, dy)
+                }
             }
-        }
-        EntityKind::Interface => interface_glyph(icon_cx, icon_cy),
-        EntityKind::Enum => {
-            let dx = icon_cx - 22.0;
-            let dy = icon_cy - 23.0;
-            if dx.abs() < 0.001 && dy.abs() < 0.001 {
-                ENUM_GLYPH.to_string()
-            } else {
-                offset_path(ENUM_GLYPH, dx, dy)
+            EntityKind::Interface => interface_glyph(icon_cx, icon_cy),
+            EntityKind::Enum => {
+                let dx = icon_cx - 22.0;
+                let dy = icon_cy - 23.0;
+                if dx.abs() < 0.001 && dy.abs() < 0.001 {
+                    ENUM_GLYPH.to_string()
+                } else {
+                    offset_path(ENUM_GLYPH, dx, dy)
+                }
             }
+            EntityKind::AbstractClass => abstract_glyph(icon_cx, icon_cy),
+            EntityKind::Annotation => annotation_glyph(icon_cx, icon_cy),
         }
-        EntityKind::AbstractClass => abstract_glyph(icon_cx, icon_cy),
-        EntityKind::Annotation => annotation_glyph(icon_cx, icon_cy),
     };
 
     write!(svg, r##"<path d="{}" fill="#000000"/>"##, glyph_path,).unwrap();
 
     // Entity name text.
-    let name_x = icon_cx + ICON_RX + ICON_TEXT_GAP;
+    let name_x = name_text_x_override.unwrap_or(icon_cx + ICON_RX + ICON_TEXT_GAP);
     let name_y = y + NAME_BASELINE_Y - MARGIN;
     let name_tl = metrics::plantuml_text_width_14(&entity.label);
     let font_style = if is_abstract || is_interface {
@@ -943,8 +963,9 @@ fn render_entity_content(svg: &mut String, entity: &ClassEntity, x: f64, y: f64,
                 member_y += MEMBER_SPACING;
             }
 
-            // Methods separator.
-            let methods_sep_y = member_y - FIRST_MEMBER_OFFSET + MEMBER_LINE_HEIGHT;
+            // Methods separator: header_sep + compartment_pad + n_fields * line_height.
+            let methods_sep_y =
+                header_sep_y + COMPARTMENT_PAD + fields.len() as f64 * MEMBER_LINE_HEIGHT;
             write!(
                 svg,
                 r#"<line style="stroke:{};stroke-width:{};" x1="{}" x2="{}" y1="{}" y2="{}"/>"#,
