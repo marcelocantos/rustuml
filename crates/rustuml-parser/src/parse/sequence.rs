@@ -736,26 +736,13 @@ impl SeqParser {
     }
 
     fn try_box(&mut self, line: &str) -> bool {
+        // Boxes are decorative containers — they don't affect message flow or
+        // vertical layout. We parse and silently skip them for now.
+        // TODO: Implement box rendering (colored background + title).
         if line == "end box" {
-            self.events.push(Event::GroupEnd);
-            return true;
-        }
-        static RE: LazyLock<Regex> = LazyLock::new(|| Regex::new(r#"^box\s+"([^"]+)""#).unwrap());
-        if let Some(caps) = RE.captures(line) {
-            let label = caps[1].to_string();
-            self.events.push(Event::GroupStart(GroupStart {
-                kind: GroupKind::Group,
-                label: Some(label),
-                source_line: self.current_line,
-            }));
             return true;
         }
         if line.starts_with("box") {
-            self.events.push(Event::GroupStart(GroupStart {
-                kind: GroupKind::Group,
-                label: None,
-                source_line: self.current_line,
-            }));
             return true;
         }
         false

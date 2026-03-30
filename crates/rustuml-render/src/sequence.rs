@@ -2850,7 +2850,7 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme) -> String {
                     let loop_right = cx + SELF_MSG_EXTEND;
                     let loop_bottom = msg_y + SELF_MSG_DROP;
                     let text_x = cx + SELF_MSG_TEXT_X_PAD;
-                    let text_y_pos = msg_y - 4.7422;
+                    let text_y_pos = msg_y - 4.742187500;
 
                     // Open the message group
                     write!(
@@ -2987,7 +2987,7 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme) -> String {
                     let target_shift = if to_active { ACTIVATION_HALF_W } else { 0.0 };
 
                     // Text position
-                    let text_y_pos = msg_y - 4.7422;
+                    let text_y_pos = msg_y - 4.742187500;
                     let text_x = if is_right {
                         from_x_shifted + MSG_TEXT_LEFT_PAD
                     } else {
@@ -3210,7 +3210,7 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme) -> String {
                 let label_w = text_width(&label, MSG_FONT_SIZE);
 
                 let src_line = ret.source_line as u32;
-                let text_y_pos = msg_y - 4.7422;
+                let text_y_pos = msg_y - 4.742187500;
 
                 // Return messages are always dotted; arrow style matches the original
                 let line_style = "stroke-dasharray:2,2;";
