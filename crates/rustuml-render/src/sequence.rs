@@ -250,10 +250,18 @@ const NOTE_LIFELINE_GAP: f64 = 5.0;
 // ---------------------------------------------------------------------------
 
 /// Vertical space consumed by a group start header.
-const GROUP_HEADER_HEIGHT: f64 = 17.3106;
+const GROUP_HEADER_HEIGHT: f64 = 17.310546875;
+/// Gap from preceding message y to group frame top.
+const GROUP_GAP_AFTER_MSG: f64 = 15.0;
+/// Extra y advance after GroupStart event_y (before first inner message).
+const GROUP_INNER_TOP_PAD: f64 = 9.310546875;
 /// Vertical space consumed by a group else divider.
 const GROUP_ELSE_HEIGHT: f64 = 9.0;
-/// Left margin for group frame.
+/// Extra y advance after GroupElse event_y (before next inner message).
+const GROUP_ELSE_INNER_PAD: f64 = 5.955078125;
+/// Vertical advance for GroupEnd.
+const GROUP_END_HEIGHT: f64 = 7.0;
+/// Left/right margin for group frame beyond participant boxes.
 const GROUP_FRAME_MARGIN: f64 = 10.0;
 
 /// Check if text contains creole or HTML markup that needs processing.
@@ -1640,6 +1648,60 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme) -> String {
         participants.iter().map(|p| (p.id.clone(), p.idx)).collect();
 
     // -----------------------------------------------------------------------
+    // Phase 1.5: Pre-scan groups to determine participant shifts
+    // -----------------------------------------------------------------------
+
+    // For each group, identify which participant indices are referenced by
+    // messages within the group. The group frame must encompass those participants.
+    // If a group includes the leftmost participant, all participants must shift
+    // right to make room for the group frame margin.
+
+    let mut group_needs_left_shift = false;
+    {
+        // Scan for groups and collect the participant index range for each group
+        let mut group_stack: Vec<(usize, usize)> = Vec::new(); // (min_idx, max_idx)
+        for event in &diagram.events {
+            match event {
+                Event::GroupStart(_) => {
+                    group_stack.push((usize::MAX, 0));
+                }
+                Event::GroupEnd => {
+                    if let Some((min_idx, _max_idx)) = group_stack.pop() {
+                        if min_idx == 0 {
+                            group_needs_left_shift = true;
+                        }
+                    }
+                }
+                Event::Message(msg) if !group_stack.is_empty() => {
+                    let fi = id_to_idx.get(msg.from.as_str()).copied();
+                    let ti = id_to_idx.get(msg.to.as_str()).copied();
+                    if let Some(top) = group_stack.last_mut() {
+                        if let Some(fi) = fi {
+                            top.0 = top.0.min(fi);
+                            top.1 = top.1.max(fi);
+                        }
+                        if let Some(ti) = ti {
+                            top.0 = top.0.min(ti);
+                            top.1 = top.1.max(ti);
+                        }
+                    }
+                }
+                Event::Return(_) if !group_stack.is_empty() => {
+                    // Returns also affect the group extent — but we don't know
+                    // which participants they involve without tracking the return
+                    // stack. For simplicity, assume they're between the same
+                    // participants as their activation context.
+                }
+                _ => {}
+            }
+        }
+    }
+
+    /// Extra left margin added to participant positions when groups encompass
+    /// the leftmost participant. This makes room for the group frame.
+    const GROUP_LEFT_SHIFT: f64 = 15.0;
+
+    // -----------------------------------------------------------------------
     // Phase 2: Compute required gap between adjacent participant pairs
     // -----------------------------------------------------------------------
 
@@ -1909,7 +1971,13 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme) -> String {
     if !participants.is_empty() {
         // First participant center must be at least min_first_center_x (for notes)
         // and at least HEAD_BOX_Y + box_width/2 (to fit the box).
-        let default_center = HEAD_BOX_Y + participants[0].box_width / 2.0;
+        // When groups encompass the leftmost participant, shift right for the frame margin.
+        let group_shift = if group_needs_left_shift {
+            GROUP_LEFT_SHIFT
+        } else {
+            0.0
+        };
+        let default_center = HEAD_BOX_Y + group_shift + participants[0].box_width / 2.0;
         participants[0].center_x = default_center.max(min_first_center_x);
         participants[0].box_x = participants[0].center_x - participants[0].box_width / 2.0;
         // PlantUML computes lifeline line x as box_x + (int)(box_width / 2)
@@ -2049,24 +2117,30 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme) -> String {
                     msg_count += 1; // note counts as an event for spacing
                 }
                 Event::GroupStart(_) => {
-                    // Group start adds vertical space for the header.
+                    // Group frame top is offset from the preceding message.
                     if msg_count == 0 {
                         y += NOTE_GAP_FIRST;
                     } else {
-                        y += GROUP_HEADER_HEIGHT;
+                        y += GROUP_GAP_AFTER_MSG;
                     }
                     event_y_positions.push(y);
+                    // Advance y past the header so subsequent messages are positioned correctly.
+                    y += GROUP_INNER_TOP_PAD;
                     // Don't increment msg_count — the group header itself isn't a message
                 }
                 Event::GroupElse(_) => {
                     // Else divider adds vertical space.
                     y += GROUP_ELSE_HEIGHT;
                     event_y_positions.push(y);
+                    // Advance y past the else label for next inner message.
+                    y += GROUP_ELSE_INNER_PAD;
                 }
                 Event::GroupEnd => {
-                    // Group end adds a small gap.
-                    y += 5.0;
-                    event_y_positions.push(y);
+                    // Group end: event_y marks the frame bottom,
+                    // but the y cursor advances less (for tail gap calculation).
+                    let group_end_y = y + GROUP_END_HEIGHT + 1.0;
+                    event_y_positions.push(group_end_y);
+                    y += GROUP_END_HEIGHT;
                 }
                 Event::Space(px_opt) => {
                     y += px_opt.map(|p| p as f64).unwrap_or(20.0);
@@ -2157,18 +2231,18 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme) -> String {
             0.0
         })
         .max(max_self_msg_right);
-    // If groups are present, the group frame extends beyond the last participant.
-    // Add extra margin for the group frame (margin + activation bars + padding).
+    // If groups are present, the group frame extends GROUP_FRAME_MARGIN beyond
+    // the last participant box on the right.
     let has_groups = diagram
         .events
         .iter()
         .any(|e| matches!(e, Event::GroupStart(_)));
-    let group_frame_margin = if has_groups {
-        GROUP_FRAME_MARGIN + ACTIVATION_WIDTH + 4.0 // frame margin + activation bar + padding
+    let group_frame_right_pad = if has_groups {
+        GROUP_FRAME_MARGIN + 5.0
     } else {
         0.0
     };
-    let svg_width = (effective_right + RIGHT_MARGIN + group_frame_margin).ceil() as u32;
+    let svg_width = (effective_right + RIGHT_MARGIN + group_frame_right_pad).ceil() as u32;
     let svg_height = if diagram.hide_footbox {
         lifeline_bottom.ceil() as u32
     } else {
@@ -2284,6 +2358,63 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme) -> String {
     // Helper to look up y position for an event
     let event_y =
         |idx: usize| -> f64 { event_y_positions.get(idx).copied().unwrap_or(lifeline_top) };
+
+    // -----------------------------------------------------------------------
+    // Phase 5.5: Pre-compute group frames
+    // -----------------------------------------------------------------------
+
+    // Each group frame has: top y, bottom y, left x, right x.
+    // The frame spans from GROUP_FRAME_MARGIN to last_box_right + GROUP_FRAME_MARGIN
+    // for groups that encompass all participants.
+    struct GroupFrame {
+        top: f64,
+        bottom: f64,
+        left: f64,
+        right: f64,
+        event_idx: usize,
+    }
+
+    let mut group_frames: Vec<GroupFrame> = Vec::new();
+    {
+        let first_box_left = if participants.is_empty() {
+            HEAD_BOX_Y
+        } else {
+            participants[0].box_x
+        };
+        let last_box_right_val = if participants.is_empty() {
+            100.0
+        } else {
+            let last = &participants[n - 1];
+            last.box_x + last.box_width
+        };
+
+        // Scan events to find group start/end pairs and compute their frames.
+        // For now, all groups span full participant width.
+        let mut group_start_stack: Vec<usize> = Vec::new(); // event indices of GroupStart
+        for (ev_idx, event) in diagram.events.iter().enumerate() {
+            match event {
+                Event::GroupStart(_) => {
+                    group_start_stack.push(ev_idx);
+                }
+                Event::GroupEnd => {
+                    if let Some(start_idx) = group_start_stack.pop() {
+                        let frame_top = event_y_positions[start_idx];
+                        let frame_bottom = event_y_positions[ev_idx];
+                        let frame_left = first_box_left - GROUP_FRAME_MARGIN;
+                        let frame_right = last_box_right_val + GROUP_FRAME_MARGIN;
+                        group_frames.push(GroupFrame {
+                            top: frame_top,
+                            bottom: frame_bottom,
+                            left: frame_left,
+                            right: frame_right,
+                            event_idx: start_idx,
+                        });
+                    }
+                }
+                _ => {}
+            }
+        }
+    }
 
     // -----------------------------------------------------------------------
     // Phase 6: Generate SVG
@@ -2420,6 +2551,20 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme) -> String {
             }
             ly += 14.0;
         }
+    }
+
+    // Group frame rects (first instance) — rendered before lifelines in PlantUML.
+    for frame in &group_frames {
+        let frame_height = frame.bottom - frame.top;
+        write!(
+            svg.buf,
+            r##"<rect fill="none" height="{}" style="stroke:#000000;stroke-width:1.5;" width="{}" x="{}" y="{}"/>"##,
+            fmt_coord(frame_height),
+            fmt_coord(frame.right - frame.left),
+            fmt_coord(frame.left),
+            fmt_coord(frame.top),
+        )
+        .unwrap();
     }
 
     // Activation bars are rendered BEFORE lifelines in PlantUML's SVG.
@@ -3280,48 +3425,30 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme) -> String {
                     GroupKind::Group => "group",
                 };
 
-                // Compute the group frame extent. We need to find the matching
-                // GroupEnd to know the full height. For now, emit the header
-                // elements and the frame will be approximate.
-                let frame_left = GROUP_FRAME_MARGIN;
-                let frame_right = svg_width as f64 - GROUP_FRAME_MARGIN;
+                // Look up the pre-computed group frame for this event.
+                let frame = group_frames.iter().find(|f| f.event_idx == ev_idx);
+                let (frame_left, frame_right, frame_top, frame_height) = if let Some(f) = frame {
+                    (f.left, f.right, f.top, f.bottom - f.top)
+                } else {
+                    // Fallback: use participant extent
+                    let fl = if participants.is_empty() {
+                        GROUP_FRAME_MARGIN
+                    } else {
+                        participants[0].box_x - GROUP_FRAME_MARGIN
+                    };
+                    let fr = if participants.is_empty() {
+                        100.0
+                    } else {
+                        let last = &participants[n - 1];
+                        last.box_x + last.box_width + GROUP_FRAME_MARGIN
+                    };
+                    (fl, fr, msg_y, 50.0)
+                };
 
-                // Find matching group end to compute frame height
-                let mut depth = 1u32;
-                let mut frame_bottom = msg_y + 50.0; // fallback
-                for future_idx in (ev_idx + 1)..events.len() {
-                    match &events[future_idx] {
-                        Event::GroupStart(_) => depth += 1,
-                        Event::GroupEnd => {
-                            depth -= 1;
-                            if depth == 0 {
-                                frame_bottom = event_y_positions[future_idx];
-                                break;
-                            }
-                        }
-                        _ => {}
-                    }
-                }
-
-                let frame_top = msg_y;
-                let frame_height = frame_bottom - frame_top;
-
-                // Emit group frame rect (rendered twice in PlantUML)
-                for _ in 0..2 {
-                    write!(
-                        svg.buf,
-                        r##"<rect fill="none" height="{}" style="stroke:#000000;stroke-width:1.5;" width="{}" x="{}" y="{}"/>"##,
-                        fmt_coord(frame_height),
-                        fmt_coord(frame_right - frame_left),
-                        fmt_coord(frame_left),
-                        fmt_coord(frame_top),
-                    )
-                    .unwrap();
-                }
-
-                // Emit header tab (pentagon shape)
-                let kind_w = text_width(kind_str, MSG_FONT_SIZE);
-                let tab_right = frame_left + kind_w + 30.0;
+                // Emit header tab FIRST (pentagon shape), then frame rect, then text.
+                // This matches PlantUML's SVG element order.
+                let kind_w = bold_text_width(kind_str, MSG_FONT_SIZE);
+                let tab_right = frame_left + kind_w + 45.0;
                 let tab_bottom_left = frame_top + 17.3106;
                 let tab_bottom_right = frame_top + 7.3106;
                 write!(
@@ -3336,8 +3463,19 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme) -> String {
                 )
                 .unwrap();
 
+                // Emit second frame rect (the inline instance)
+                write!(
+                    svg.buf,
+                    r##"<rect fill="none" height="{}" style="stroke:#000000;stroke-width:1.5;" width="{}" x="{}" y="{}"/>"##,
+                    fmt_coord(frame_height),
+                    fmt_coord(frame_right - frame_left),
+                    fmt_coord(frame_left),
+                    fmt_coord(frame_top),
+                )
+                .unwrap();
+
                 // Emit kind text (bold)
-                let kind_tw = text_width(kind_str, MSG_FONT_SIZE);
+                let kind_tw = bold_text_width(kind_str, MSG_FONT_SIZE);
                 write!(
                     svg.buf,
                     r##"<text fill="#000000" font-family="sans-serif" font-size="13" font-weight="700" lengthAdjust="spacing" textLength="{}" x="{}" y="{}">{}</text>"##,
@@ -3351,7 +3489,7 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme) -> String {
                 // Emit guard label if present (in brackets)
                 if let Some(label) = &g.label {
                     let guard = format!("[{label}]");
-                    let guard_w = text_width(&guard, 11.0);
+                    let guard_w = bold_text_width(&guard, 11.0);
                     write!(
                         svg.buf,
                         r##"<text fill="#000000" font-family="sans-serif" font-size="11" font-weight="700" lengthAdjust="spacing" textLength="{}" x="{}" y="{}">{}</text>"##,
@@ -3365,8 +3503,18 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme) -> String {
             }
             Event::GroupElse(g) => {
                 // Emit else dashed divider line
-                let frame_left = GROUP_FRAME_MARGIN;
-                let frame_right = svg_width as f64 - GROUP_FRAME_MARGIN;
+                // Find the enclosing group frame
+                let frame_left = if participants.is_empty() {
+                    GROUP_FRAME_MARGIN
+                } else {
+                    participants[0].box_x - GROUP_FRAME_MARGIN
+                };
+                let frame_right = if participants.is_empty() {
+                    100.0
+                } else {
+                    let last = &participants[n - 1];
+                    last.box_x + last.box_width + GROUP_FRAME_MARGIN
+                };
                 write!(
                     svg.buf,
                     r##"<line style="stroke:#000000;stroke-width:1;stroke-dasharray:2,2;" x1="{}" x2="{}" y1="{}" y2="{}"/>"##,
@@ -3383,7 +3531,7 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme) -> String {
                 } else {
                     "[else]".to_string()
                 };
-                let tw = text_width(&label_text, 11.0);
+                let tw = bold_text_width(&label_text, 11.0);
                 write!(
                     svg.buf,
                     r##"<text fill="#000000" font-family="sans-serif" font-size="11" font-weight="700" lengthAdjust="spacing" textLength="{}" x="{}" y="{}">{}</text>"##,
