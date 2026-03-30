@@ -200,7 +200,7 @@ fn calc_entity_dims(entity: &ClassEntity, entity_index: usize) -> EntityDims {
         let fields = entity
             .members
             .iter()
-            .filter(|m| m.kind == MemberKind::Field || m.kind == MemberKind::Separator)
+            .filter(|m| m.kind == MemberKind::Field)
             .count();
         let methods = entity
             .members
@@ -230,6 +230,7 @@ fn calc_entity_dims(entity: &ClassEntity, entity_index: usize) -> EntityDims {
     let member_widths: Vec<f64> = entity
         .members
         .iter()
+        .filter(|m| m.kind != MemberKind::Separator)
         .map(|m| {
             let text = format_member_display(m);
             let text_w = metrics::plantuml_text_width_14(&text);
@@ -353,16 +354,9 @@ fn fmt_tl(v: f64) -> String {
 // ---------------------------------------------------------------------------
 
 fn format_member_display(member: &Member) -> String {
-    if member.kind == MemberKind::Separator {
-        return member.display_text.clone();
-    }
-    let static_prefix = if member.is_static { "{static} " } else { "" };
-    let abstract_prefix = if member.is_abstract {
-        "{abstract} "
-    } else {
-        ""
-    };
-    format!("{static_prefix}{abstract_prefix}{}", member.display_text)
+    // PlantUML strips {static} and {abstract} modifiers from displayed text.
+    // Static members are shown with underline decoration; abstract members in italics.
+    member.display_text.clone()
 }
 
 /// Determine the visibility modifier string for a member, matching PlantUML's
@@ -1059,7 +1053,7 @@ fn render_entity_content(
         let fields: Vec<&Member> = entity
             .members
             .iter()
-            .filter(|m| m.kind == MemberKind::Field || m.kind == MemberKind::Separator)
+            .filter(|m| m.kind == MemberKind::Field)
             .collect();
         let methods: Vec<&Member> = entity
             .members
@@ -1328,7 +1322,7 @@ fn render_member_line(
 
     write!(
         svg,
-        r##"<text fill="#000000" font-family="sans-serif" font-size="14"{}{} lengthAdjust="spacing" textLength="{}" x="{}" y="{}">{}</text>"##,
+        r##"<text fill="#000000" font-family="sans-serif" font-size="14"{} lengthAdjust="spacing"{} textLength="{}" x="{}" y="{}">{}</text>"##,
         font_style,
         text_decoration,
         fmt_tl(text_w),
