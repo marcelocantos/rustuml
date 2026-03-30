@@ -14,7 +14,7 @@ use rustuml_parser::diagram::sequence::*;
 use crate::style::Theme;
 
 /// Resolve a PlantUML color string (e.g., "#blue", "#FF0000") to a CSS hex color.
-fn resolve_color(color: &str) -> String {
+pub(crate) fn resolve_color(color: &str) -> String {
     let name = color.strip_prefix('#').unwrap_or(color);
     // If it's already a hex color (starts with digit or uppercase hex)
     if name.len() == 6 && name.chars().all(|c| c.is_ascii_hexdigit()) {
@@ -35,6 +35,10 @@ fn resolve_color(color: &str) -> String {
         "gray" | "grey" => "#808080".to_string(),
         "lightblue" => "#ADD8E6".to_string(),
         "lightgreen" => "#90EE90".to_string(),
+        "lightyellow" => "#FFFFE0".to_string(),
+        "lightcoral" => "#F08080".to_string(),
+        "lightcyan" => "#E0FFFF".to_string(),
+        "lightpink" => "#FFB6C1".to_string(),
         "darkblue" => "#00008B".to_string(),
         "darkgreen" => "#006400".to_string(),
         "darkred" => "#8B0000".to_string(),
@@ -103,10 +107,10 @@ fn fmt_coord(v: f64) -> String {
 // ---------------------------------------------------------------------------
 
 const HEAD_BOX_Y: f64 = 5.0;
-const HEAD_BOX_H: f64 = 30.4883;
+const HEAD_BOX_H: f64 = 30.488281250; // exact Java double
 const HEAD_BOX_RX: f64 = 2.5;
 const BOX_TEXT_X_PAD: f64 = 7.0;
-const BOX_TEXT_Y_OFFSET: f64 = 20.53515; // baseline from box top (tuned to match PlantUML's Java double arithmetic at various y positions)
+const BOX_TEXT_Y_OFFSET: f64 = 20.535156250; // exact Java double: baseline from box top
 const PARTICIPANT_FONT_SIZE: f64 = 14.0;
 const MSG_FONT_SIZE: f64 = 13.0;
 /// Text height at message font size (ascent + descent from Java AWT LineMetrics).
@@ -143,6 +147,42 @@ const LIFELINE_RECT_WIDTH: f64 = 8.0;
 const MIN_LIFELINE_HEIGHT: f64 = 20.0;
 // Arrow tip is 2px before the target lifeline center (non-activated)
 const ARROW_TIP_GAP: f64 = 2.0;
+
+// ---------------------------------------------------------------------------
+// Note layout constants (reverse-engineered from golden SVGs)
+// ---------------------------------------------------------------------------
+
+/// Base height of a single-line note box.
+const NOTE_BASE_HEIGHT: f64 = 25.0;
+/// Additional height per extra line in a multi-line note.
+const NOTE_LINE_HEIGHT: f64 = 15.0;
+/// Size of the folded corner (both x and y).
+const NOTE_FOLD_SIZE: f64 = 10.0;
+/// Text left padding inside the note box.
+const NOTE_TEXT_X_PAD: f64 = 6.0;
+/// Vertical offset from note top to the text baseline of the first line.
+const NOTE_TEXT_Y_OFFSET: f64 = 17.568359375; // exact Java double
+/// Line spacing between text lines in a multi-line note (= MSG_TEXT_HEIGHT).
+const NOTE_TEXT_LINE_SPACING: f64 = MSG_TEXT_HEIGHT; // 15.310546875
+/// Gap between previous event y and note top (non-first event).
+const NOTE_GAP_AFTER_MSG: f64 = 13.0;
+/// Gap between lifeline top and note top (first event).
+const NOTE_GAP_FIRST: f64 = 15.0;
+/// Note fill color.
+const NOTE_FILL: &str = "#FEFFDD";
+/// Gap from participant lifeline to note edge for left/right notes.
+const NOTE_LIFELINE_GAP: f64 = 5.0;
+
+// ---------------------------------------------------------------------------
+// Group layout constants (reverse-engineered from golden SVGs)
+// ---------------------------------------------------------------------------
+
+/// Vertical space consumed by a group start header.
+const GROUP_HEADER_HEIGHT: f64 = 17.3106;
+/// Vertical space consumed by a group else divider.
+const GROUP_ELSE_HEIGHT: f64 = 9.0;
+/// Left margin for group frame.
+const GROUP_FRAME_MARGIN: f64 = 10.0;
 
 /// Check if text contains creole or HTML markup that needs processing.
 #[allow(dead_code)]
@@ -870,6 +910,10 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme) -> String {
     // Track activation state as we scan events to compute per-message shifts.
     let mut activation_depth: HashMap<String, usize> = HashMap::new();
 
+    // Track return stack during spacing phase to infer return from/to.
+    // Each entry: (activated_participant, sender)
+    let mut spacing_return_stack: Vec<(String, String)> = Vec::new();
+
     // Track autonumber counter during spacing phase to compute bold label widths.
     let mut spacing_auto_num: Option<u32> = diagram.autonumber.as_ref().map(|an| an.start);
 
@@ -933,6 +977,7 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme) -> String {
                     match act {
                         ActivationChange::Activate => {
                             *activation_depth.entry(msg.to.clone()).or_default() += 1;
+                            spacing_return_stack.push((msg.to.clone(), msg.from.clone()));
                         }
                         ActivationChange::Deactivate => {
                             if let Some(d) = activation_depth.get_mut(&msg.from) {
@@ -953,13 +998,100 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme) -> String {
                     *num = num.saturating_add(an.step);
                 }
             }
-            Event::Return(_) => {
-                // Return messages also advance autonumber and need spacing
-                // (Return spacing is handled by the return target participant pair,
-                // which is already covered by the activation-based return flow.)
+            Event::Return(ret) => {
+                // Return messages need spacing computation like regular messages.
+                // Pop the return stack to find from/to.
+                // NOTE: compute spacing BEFORE deactivating — the return sender
+                // is still activated at the point the message arrow is drawn.
+                if let Some((ret_from, ret_to)) = spacing_return_stack.pop() {
+                    let fi_opt = id_to_idx.get(ret_from.as_str()).copied();
+                    let ti_opt = id_to_idx.get(ret_to.as_str()).copied();
+                    if let (Some(fi), Some(ti)) = (fi_opt, ti_opt) {
+                        let label = if ret.label.is_empty() {
+                            String::new()
+                        } else {
+                            decode_escapes(&ret.label)
+                        };
+                        let label_w = text_width(&label, MSG_FONT_SIZE);
+
+                        // Autonumber adds bold text + gap before the label
+                        let autonumber_extra = if let Some(num) = spacing_auto_num.as_ref() {
+                            let an = diagram.autonumber.as_ref().unwrap();
+                            let num_text = format_autonumber(*num, &an.format);
+                            bold_text_width(&num_text, MSG_FONT_SIZE) + AUTONUMBER_LABEL_GAP
+                        } else {
+                            0.0
+                        };
+
+                        // Same spacing formula as forward messages
+                        let arrow_only_w = autonumber_extra
+                            + label_w
+                            + MSG_TEXT_LEFT_PAD
+                            + MSG_TEXT_LEFT_PAD
+                            + ARROW_SIZE;
+
+                        let from_depth = activation_depth
+                            .get(ret_from.as_str())
+                            .copied()
+                            .unwrap_or(0);
+                        let to_depth = activation_depth.get(ret_to.as_str()).copied().unwrap_or(0);
+                        let source_shift = if from_depth > 0 {
+                            ACTIVATION_HALF_W
+                        } else {
+                            0.0
+                        };
+                        let target_shift = if to_depth > 0 { ACTIVATION_HALF_W } else { 0.0 };
+
+                        let needed = arrow_only_w + source_shift + target_shift;
+
+                        let (left, right) = if fi < ti { (fi, ti) } else { (ti, fi) };
+                        if right - left == 1 {
+                            pair_max_label_width[left] = pair_max_label_width[left].max(needed);
+                        } else {
+                            let per_pair = needed / (right - left) as f64;
+                            for slot in &mut pair_max_label_width[left..right] {
+                                *slot = slot.max(per_pair);
+                            }
+                        }
+                    }
+
+                    // Deactivate AFTER spacing computation
+                    if let Some(d) = activation_depth.get_mut(&ret_from) {
+                        *d = d.saturating_sub(1);
+                    }
+                }
+
+                // Advance autonumber
                 if let Some(num) = spacing_auto_num.as_mut() {
                     let an = diagram.autonumber.as_ref().unwrap();
                     *num = num.saturating_add(an.step);
+                }
+            }
+            Event::Note(note) => {
+                // Notes spanning multiple participants need gap between them.
+                if note.position == NotePosition::Over && note.participants.len() >= 2 {
+                    let first_idx = id_to_idx
+                        .get(note.participants.first().unwrap().as_str())
+                        .copied();
+                    let last_idx = id_to_idx
+                        .get(note.participants.last().unwrap().as_str())
+                        .copied();
+                    if let (Some(fi), Some(li)) = (first_idx, last_idx) {
+                        let max_tw = note
+                            .text
+                            .lines()
+                            .map(|l| text_width(l.trim(), MSG_FONT_SIZE))
+                            .fold(0.0_f64, f64::max);
+                        // Note needs: text_width + 20 (padding + fold) + 38 (margins around lifelines)
+                        // But this is the total span across all pairs, so divide evenly.
+                        let note_w = max_tw.ceil() + 20.0;
+                        let span_pairs = (li - fi) as f64;
+                        let per_pair = (note_w + 38.0) / span_pairs;
+                        let (left, right) = if fi < li { (fi, li) } else { (li, fi) };
+                        for slot in &mut pair_max_label_width[left..right] {
+                            *slot = slot.max(per_pair);
+                        }
+                    }
                 }
             }
             Event::Activate(id, _) => {
@@ -974,15 +1106,57 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme) -> String {
         }
     }
 
+    // Compute minimum first-participant x offset due to notes that extend left.
+    // A 'note over' on the first participant starts at x=5 (HEAD_BOX_Y) and extends
+    // rightward. The participant center must be far enough right that the note
+    // width, centered on the participant, doesn't extend past the left margin.
+    // PlantUML uses: center_x = max(default, note_right_edge - box_width/2)
+    // where note_right_edge = HEAD_BOX_Y + note_w.
+    let mut min_first_center_x: f64 = 0.0;
+    for event in &diagram.events {
+        if let Event::Note(note) = event
+            && note.position == NotePosition::Over
+            && note.participants.len() == 1
+            && let Some(&idx) = id_to_idx.get(note.participants[0].as_str())
+            && idx == 0
+        {
+            let max_tw = note
+                .text
+                .lines()
+                .map(|l| text_width(l.trim(), MSG_FONT_SIZE))
+                .fold(0.0_f64, f64::max);
+            let note_w = max_tw.ceil() + 20.0;
+            // The note is positioned centered on the participant. For the left edge
+            // to be at HEAD_BOX_Y, the center must be at HEAD_BOX_Y + note_w/2.
+            // But PlantUML uses a different formula — looking at golden data:
+            // Alice center = 58.3618, note goes from 5 to 113 (width 108).
+            // 58.3618 - 5 = 53.3618 (left extent from center)
+            // 113 - 58.3618 = 54.6382 (right extent from center)
+            // note_w/2 = 54. So it's almost centered but not exactly.
+            // The center is at box_x + box_width/2 where box_x = center_x - box_width/2.
+            // Alice box_width = 46.7236. center = 5 + 46.7236/2 = 28.3618.
+            // But golden center is 58.3618 = 28.3618 + 30.
+            // 30 = (note_w - box_width) / 2 = (108 - 46.7236) / 2 = 30.6382. Not exactly 30.
+            // Actually: golden box_x = 35. So shift from default (5) = 30.
+            // (note_w - box_width) / 2 = (108 - 46.7236) / 2 = 30.6382.
+            // Round down: floor(30.6382) = 30. So box_x = 5 + 30 = 35. center = 35 + 23.3618 = 58.3618.
+            let shift = ((note_w - participants[0].box_width) / 2.0).floor();
+            let min_cx = HEAD_BOX_Y + shift.max(0.0) + participants[0].box_width / 2.0;
+            min_first_center_x = min_first_center_x.max(min_cx);
+        }
+    }
+
     // -----------------------------------------------------------------------
     // Phase 3: Assign x positions
     // -----------------------------------------------------------------------
 
     let mut participants = participants;
     if !participants.is_empty() {
-        // First participant starts at x=5 (PlantUML's left margin)
-        participants[0].box_x = HEAD_BOX_Y; // 5.0
-        participants[0].center_x = HEAD_BOX_Y + participants[0].box_width / 2.0;
+        // First participant center must be at least min_first_center_x (for notes)
+        // and at least HEAD_BOX_Y + box_width/2 (to fit the box).
+        let default_center = HEAD_BOX_Y + participants[0].box_width / 2.0;
+        participants[0].center_x = default_center.max(min_first_center_x);
+        participants[0].box_x = participants[0].center_x - participants[0].box_width / 2.0;
         // PlantUML computes lifeline line x as box_x + (int)(box_width / 2)
         participants[0].lifeline_line_x =
             participants[0].box_x + (participants[0].box_width / 2.0).floor();
@@ -1023,6 +1197,9 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme) -> String {
 
     // Pre-compute message y positions. PlantUML sizes each message step
     // dynamically: messages with label text get extra height for the text line.
+    // Notes consume vertical space (note height + gap) and count as events
+    // for msg_count (so subsequent messages use msg_step, not first_msg_offset).
+    // Groups add header/else/end vertical space.
     let mut event_y_positions: Vec<f64> = Vec::new();
     let mut msg_count: u32 = 0;
     {
@@ -1048,7 +1225,18 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme) -> String {
                     event_y_positions.push(y);
                     msg_count += 1;
                 }
-                Event::Divider(_) | Event::Delay(_) => {
+                Event::Divider(_) => {
+                    // Dividers take extra vertical space for the double-line separator.
+                    // PlantUML adds msg_step(true) + MSG_BASE_STEP for the visual.
+                    if msg_count == 0 {
+                        y += first_msg_offset(has_text) + MSG_BASE_STEP;
+                    } else {
+                        y += msg_step(has_text) + MSG_BASE_STEP;
+                    }
+                    event_y_positions.push(y);
+                    msg_count += 1;
+                }
+                Event::Delay(_) => {
                     if msg_count == 0 {
                         y += first_msg_offset(has_text);
                     } else {
@@ -1056,6 +1244,43 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme) -> String {
                     }
                     event_y_positions.push(y);
                     msg_count += 1;
+                }
+                Event::Note(note) => {
+                    // Notes consume vertical space. The note top is positioned
+                    // relative to the current y cursor. After the note, subsequent
+                    // events use msg_step (note counts as an event).
+                    let note_top = if msg_count == 0 {
+                        y + NOTE_GAP_FIRST
+                    } else {
+                        y + NOTE_GAP_AFTER_MSG
+                    };
+                    let num_lines = note.text.lines().count().max(1);
+                    // The event y for a note is: note_top + 7.0 + num_lines * MSG_TEXT_HEIGHT
+                    // This ensures the next message at y + msg_step lands correctly.
+                    let note_event_y = note_top + 7.0 + num_lines as f64 * MSG_TEXT_HEIGHT;
+                    y = note_event_y;
+                    event_y_positions.push(y);
+                    msg_count += 1; // note counts as an event for spacing
+                }
+                Event::GroupStart(_) => {
+                    // Group start adds vertical space for the header.
+                    if msg_count == 0 {
+                        y += NOTE_GAP_FIRST;
+                    } else {
+                        y += GROUP_HEADER_HEIGHT;
+                    }
+                    event_y_positions.push(y);
+                    // Don't increment msg_count — the group header itself isn't a message
+                }
+                Event::GroupElse(_) => {
+                    // Else divider adds vertical space.
+                    y += GROUP_ELSE_HEIGHT;
+                    event_y_positions.push(y);
+                }
+                Event::GroupEnd => {
+                    // Group end adds a small gap.
+                    y += 5.0;
+                    event_y_positions.push(y);
                 }
                 Event::Space(px_opt) => {
                     y += px_opt.map(|p| p as f64).unwrap_or(20.0);
@@ -1088,15 +1313,82 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme) -> String {
     let lifeline_bottom = tail_box_y + LIFELINE_Y_OFFSET;
     let lifeline_height = lifeline_bottom - lifeline_top;
 
-    // SVG dimensions
+    // SVG dimensions — account for notes that extend beyond participant boxes.
     let last_box_right = if participants.is_empty() {
         100.0
     } else {
         let last = &participants[n - 1];
         last.box_x + last.box_width
     };
-    let svg_width = (last_box_right + RIGHT_MARGIN).ceil() as u32;
-    let svg_height = (tail_box_y + max_box_h + BOTTOM_MARGIN).ceil() as u32;
+    // Check if any note extends beyond the last participant box.
+    let mut max_note_right: f64 = 0.0;
+    for event in &diagram.events {
+        if let Event::Note(note) = event {
+            let max_line_width = note
+                .text
+                .lines()
+                .map(|l| text_width(l.trim(), MSG_FONT_SIZE))
+                .fold(0.0_f64, f64::max);
+            let note_content_w = max_line_width.ceil() + 20.0; // 6 + text + 4 + 10(fold)
+            match note.position {
+                NotePosition::Right => {
+                    if let Some(first) = note.participants.first()
+                        && let Some(&idx) = id_to_idx.get(first.as_str())
+                    {
+                        let ll_x = participants[idx].lifeline_line_x;
+                        let note_right = ll_x.ceil() + NOTE_LIFELINE_GAP + note_content_w;
+                        max_note_right = max_note_right.max(note_right);
+                    }
+                }
+                NotePosition::Over => {
+                    if note.participants.is_empty() {
+                        // "across" note — spans full width, handled separately
+                    } else if note.participants.len() == 1 {
+                        if let Some(&idx) = id_to_idx.get(note.participants[0].as_str()) {
+                            let cx = participants[idx].center_x;
+                            let note_right = cx + note_content_w / 2.0;
+                            max_note_right = max_note_right.max(note_right);
+                        }
+                    } else if let (Some(&first_idx), Some(&last_idx)) = (
+                        id_to_idx.get(note.participants.first().unwrap().as_str()),
+                        id_to_idx.get(note.participants.last().unwrap().as_str()),
+                    ) {
+                        let first_ll = participants[first_idx].lifeline_line_x;
+                        let last_ll = participants[last_idx].lifeline_line_x;
+                        let span = last_ll - first_ll;
+                        let note_w = note_content_w.max(span + 38.0);
+                        let mid = (first_ll + last_ll) / 2.0;
+                        let note_right = mid + note_w / 2.0;
+                        max_note_right = max_note_right.max(note_right);
+                    }
+                }
+                NotePosition::Left => {} // left notes don't extend right
+            }
+        }
+    }
+    // Add 1.0 for note stroke width when notes extend the right edge.
+    let effective_right = last_box_right.max(if max_note_right > 0.0 {
+        max_note_right + 1.0
+    } else {
+        0.0
+    });
+    // If groups are present, the group frame extends beyond the last participant.
+    // Add extra margin for the group frame (margin + activation bars + padding).
+    let has_groups = diagram
+        .events
+        .iter()
+        .any(|e| matches!(e, Event::GroupStart(_)));
+    let group_frame_margin = if has_groups {
+        GROUP_FRAME_MARGIN + ACTIVATION_WIDTH + 4.0 // frame margin + activation bar + padding
+    } else {
+        0.0
+    };
+    let svg_width = (effective_right + RIGHT_MARGIN + group_frame_margin).ceil() as u32;
+    let svg_height = if diagram.hide_footbox {
+        lifeline_bottom.ceil() as u32
+    } else {
+        (tail_box_y + max_box_h + BOTTOM_MARGIN).ceil() as u32
+    };
 
     // -----------------------------------------------------------------------
     // Phase 5: Pre-compute activation bars
@@ -1426,29 +1718,31 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme) -> String {
             stereo_ref,
         );
 
-        // Tail box
-        let tail_text_y =
-            tail_box_y + BOX_TEXT_Y_OFFSET + if p.stereotype.is_some() { 7.5 } else { 0.0 };
-        let stereo_arg = p.stereotype.as_ref().map(|s| {
-            let display = format!("\u{ab}{s}\u{bb}");
-            (display, p.stereotype_width)
-        });
-        let stereo_ref = stereo_arg.as_ref().map(|(s, w)| (s.as_str(), *w));
-        svg.participant_box(
-            &part_uid,
-            &p.id,
-            source_line_for(&diagram.participants[i].id),
-            "tail",
-            p.box_x,
-            tail_box_y,
-            p.box_width,
-            p.box_height,
-            text_x,
-            tail_text_y,
-            &p.label,
-            p.text_width,
-            stereo_ref,
-        );
+        // Tail box (skip if hide footbox)
+        if !diagram.hide_footbox {
+            let tail_text_y =
+                tail_box_y + BOX_TEXT_Y_OFFSET + if p.stereotype.is_some() { 7.5 } else { 0.0 };
+            let stereo_arg = p.stereotype.as_ref().map(|s| {
+                let display = format!("\u{ab}{s}\u{bb}");
+                (display, p.stereotype_width)
+            });
+            let stereo_ref = stereo_arg.as_ref().map(|(s, w)| (s.as_str(), *w));
+            svg.participant_box(
+                &part_uid,
+                &p.id,
+                source_line_for(&diagram.participants[i].id),
+                "tail",
+                p.box_x,
+                tail_box_y,
+                p.box_width,
+                p.box_height,
+                text_x,
+                tail_text_y,
+                &p.label,
+                p.text_width,
+                stereo_ref,
+            );
+        }
     }
 
     // Second pass: activation bars again (PlantUML renders them twice)
@@ -1959,67 +2253,129 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme) -> String {
                 // y position already accounted for in event_y_positions
             }
             Event::Note(note) => {
-                // Emit note text
-                let anchor_x = if let Some(first) = note.participants.first() {
-                    center_of(first)
-                } else {
-                    50.0
-                };
-                let note_x = anchor_x + 20.0;
-                let mut list_counter = 0u32;
-                let mut note_y = msg_y;
+                // Compute note dimensions and position.
+                let lines: Vec<&str> = note.text.lines().collect();
+                let num_lines = lines.len().max(1);
+                let note_height = NOTE_BASE_HEIGHT + (num_lines as f64 - 1.0) * NOTE_LINE_HEIGHT;
 
-                for line in note.text.lines() {
-                    let trimmed = line.trim();
-                    if trimmed.is_empty() || trimmed == "<code>" || trimmed == "</code>" {
-                        continue;
+                // Derive note_top from the event y:
+                // event_y = note_top + 7.0 + num_lines * MSG_TEXT_HEIGHT
+                let note_top = msg_y - 7.0 - num_lines as f64 * MSG_TEXT_HEIGHT;
+                let note_bottom = note_top + note_height;
+
+                // Compute max text width across all lines.
+                let max_text_w = lines
+                    .iter()
+                    .map(|l| text_width(l.trim(), MSG_FONT_SIZE))
+                    .fold(0.0_f64, f64::max);
+                let note_content_w = max_text_w.ceil() + 20.0; // 6(pad) + text + 4(pad) + 10(fold)
+
+                // Compute note left/right based on position.
+                let (note_left, note_right) = match note.position {
+                    NotePosition::Right => {
+                        let ll_x = note
+                            .participants
+                            .first()
+                            .and_then(|id| id_to_idx.get(id.as_str()))
+                            .map(|&i| participants[i].lifeline_line_x)
+                            .unwrap_or(50.0);
+                        let left = ll_x.ceil() + NOTE_LIFELINE_GAP;
+                        (left, left + note_content_w)
                     }
-
-                    // Handle numbered lists (# item)
-                    if let Some(rest) = trimmed
-                        .strip_prefix("# ")
-                        .or_else(|| trimmed.strip_prefix('#').filter(|r| !r.is_empty()))
-                    {
-                        list_counter += 1;
-                        let num_str = format!("{}.", list_counter);
-                        let num_w = text_width(&num_str, 13.0);
-                        write!(
-                            svg.buf,
-                            r##"<text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="{}" x="{}" y="{}">{}</text>"##,
-                            fmt_coord(num_w),
-                            fmt_coord(note_x),
-                            fmt_coord(note_y),
-                            escape_xml(&num_str),
-                        )
-                        .unwrap();
-                        let item_text = rest.trim();
-                        if !item_text.is_empty() {
-                            let item_w = text_width(item_text, 13.0);
-                            write!(
-                                svg.buf,
-                                r##"<text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="{}" x="{}" y="{}">{}</text>"##,
-                                fmt_coord(item_w),
-                                fmt_coord(note_x + 18.0),
-                                fmt_coord(note_y),
-                                escape_xml(item_text),
-                            )
-                            .unwrap();
+                    NotePosition::Left => {
+                        let ll_x = note
+                            .participants
+                            .first()
+                            .and_then(|id| id_to_idx.get(id.as_str()))
+                            .map(|&i| participants[i].lifeline_line_x)
+                            .unwrap_or(50.0);
+                        let right = ll_x.floor() - NOTE_LIFELINE_GAP;
+                        (right - note_content_w, right)
+                    }
+                    NotePosition::Over => {
+                        if note.participants.is_empty() {
+                            // "across" note — spans full diagram width
+                            (HEAD_BOX_Y, svg_width as f64 - RIGHT_MARGIN - 1.0)
+                        } else if note.participants.len() == 1 {
+                            // Centered on single participant
+                            let cx = note
+                                .participants
+                                .first()
+                                .and_then(|id| id_to_idx.get(id.as_str()))
+                                .map(|&i| participants[i].center_x)
+                                .unwrap_or(50.0);
+                            let half_w = note_content_w / 2.0;
+                            let left = (cx - half_w).max(HEAD_BOX_Y);
+                            (left, left + note_content_w)
+                        } else {
+                            // Spanning multiple participants
+                            let first_ll = note
+                                .participants
+                                .first()
+                                .and_then(|id| id_to_idx.get(id.as_str()))
+                                .map(|&i| participants[i].lifeline_line_x)
+                                .unwrap_or(20.0);
+                            let last_ll = note
+                                .participants
+                                .last()
+                                .and_then(|id| id_to_idx.get(id.as_str()))
+                                .map(|&i| participants[i].lifeline_line_x)
+                                .unwrap_or(80.0);
+                            let span = last_ll - first_ll;
+                            let note_w = note_content_w.max(span + 38.0);
+                            let mid = (first_ll + last_ll) / 2.0;
+                            let left = (mid - note_w / 2.0).max(HEAD_BOX_Y);
+                            (left, left + note_w)
                         }
-                        note_y += 14.0;
+                    }
+                };
+
+                // Emit the note polygon (body with folded corner).
+                let fold_x = note_right - NOTE_FOLD_SIZE;
+                let fold_y = note_top + NOTE_FOLD_SIZE;
+                write!(
+                    svg.buf,
+                    r##"<path d="M{left},{top} L{left},{bottom} L{right},{bottom} L{right},{fold_y} L{fold_x},{top} L{left},{top}" fill="{NOTE_FILL}" style="stroke:#181818;stroke-width:0.5;"/>"##,
+                    left = fmt_coord(note_left),
+                    top = fmt_coord(note_top),
+                    bottom = fmt_coord(note_bottom),
+                    right = fmt_coord(note_right),
+                    fold_y = fmt_coord(fold_y),
+                    fold_x = fmt_coord(fold_x),
+                )
+                .unwrap();
+
+                // Emit the fold triangle.
+                write!(
+                    svg.buf,
+                    r##"<path d="M{fold_x},{top} L{fold_x},{fold_y} L{right},{fold_y} L{fold_x},{top}" fill="{NOTE_FILL}" style="stroke:#181818;stroke-width:0.5;"/>"##,
+                    fold_x = fmt_coord(fold_x),
+                    top = fmt_coord(note_top),
+                    fold_y = fmt_coord(fold_y),
+                    right = fmt_coord(note_right),
+                )
+                .unwrap();
+
+                // Emit note text lines.
+                let text_x = note_left + NOTE_TEXT_X_PAD;
+                let mut text_y = note_top + NOTE_TEXT_Y_OFFSET;
+                for line in &lines {
+                    let trimmed = line.trim();
+                    if trimmed.is_empty() {
+                        text_y += NOTE_TEXT_LINE_SPACING;
                         continue;
                     }
-
-                    let tw = text_width(trimmed, 13.0);
+                    let tw = text_width(trimmed, MSG_FONT_SIZE);
                     write!(
                         svg.buf,
                         r##"<text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="{}" x="{}" y="{}">{}</text>"##,
                         fmt_coord(tw),
-                        fmt_coord(note_x),
-                        fmt_coord(note_y),
+                        fmt_coord(text_x),
+                        fmt_coord(text_y),
                         escape_xml(trimmed),
                     )
                     .unwrap();
-                    note_y += 14.0;
+                    text_y += NOTE_TEXT_LINE_SPACING;
                 }
             }
             Event::GroupStart(g) => {
@@ -2032,35 +2388,124 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme) -> String {
                     GroupKind::Critical => "critical",
                     GroupKind::Group => "group",
                 };
-                let label_text = match &g.label {
-                    Some(l) => format!("{kind_str} {l}"),
-                    None => kind_str.to_string(),
-                };
-                let tw = text_width(&label_text, 13.0);
+
+                // Compute the group frame extent. We need to find the matching
+                // GroupEnd to know the full height. For now, emit the header
+                // elements and the frame will be approximate.
+                let frame_left = GROUP_FRAME_MARGIN;
+                let frame_right = svg_width as f64 - GROUP_FRAME_MARGIN;
+
+                // Find matching group end to compute frame height
+                let mut depth = 1u32;
+                let mut frame_bottom = msg_y + 50.0; // fallback
+                for future_idx in (ev_idx + 1)..events.len() {
+                    match &events[future_idx] {
+                        Event::GroupStart(_) => depth += 1,
+                        Event::GroupEnd => {
+                            depth -= 1;
+                            if depth == 0 {
+                                frame_bottom = event_y_positions[future_idx];
+                                break;
+                            }
+                        }
+                        _ => {}
+                    }
+                }
+
+                let frame_top = msg_y;
+                let frame_height = frame_bottom - frame_top;
+
+                // Emit group frame rect (rendered twice in PlantUML)
+                for _ in 0..2 {
+                    write!(
+                        svg.buf,
+                        r##"<rect fill="none" height="{}" style="stroke:#000000;stroke-width:1.5;" width="{}" x="{}" y="{}"/>"##,
+                        fmt_coord(frame_height),
+                        fmt_coord(frame_right - frame_left),
+                        fmt_coord(frame_left),
+                        fmt_coord(frame_top),
+                    )
+                    .unwrap();
+                }
+
+                // Emit header tab (pentagon shape)
+                let kind_w = text_width(kind_str, MSG_FONT_SIZE);
+                let tab_right = frame_left + kind_w + 30.0;
+                let tab_bottom_left = frame_top + 17.3106;
+                let tab_bottom_right = frame_top + 7.3106;
                 write!(
                     svg.buf,
-                    r##"<text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="{}" x="{}" y="{}">{}</text>"##,
+                    r##"<path d="M{left},{top} L{right},{top} L{right},{br} L{diag},{bl} L{left},{bl} L{left},{top}" fill="#EEEEEE" style="stroke:#000000;stroke-width:1.5;"/>"##,
+                    left = fmt_coord(frame_left),
+                    top = fmt_coord(frame_top),
+                    right = fmt_coord(tab_right),
+                    br = fmt_coord(tab_bottom_right),
+                    diag = fmt_coord(tab_right - 10.0),
+                    bl = fmt_coord(tab_bottom_left),
+                )
+                .unwrap();
+
+                // Emit kind text (bold)
+                let kind_tw = text_width(kind_str, MSG_FONT_SIZE);
+                write!(
+                    svg.buf,
+                    r##"<text fill="#000000" font-family="sans-serif" font-size="13" font-weight="700" lengthAdjust="spacing" textLength="{}" x="{}" y="{}">{}</text>"##,
+                    fmt_coord(kind_tw),
+                    fmt_coord(frame_left + 15.0),
+                    fmt_coord(frame_top + 13.5684),
+                    escape_xml(kind_str),
+                )
+                .unwrap();
+
+                // Emit guard label if present (in brackets)
+                if let Some(label) = &g.label {
+                    let guard = format!("[{label}]");
+                    let guard_w = text_width(&guard, 11.0);
+                    write!(
+                        svg.buf,
+                        r##"<text fill="#000000" font-family="sans-serif" font-size="11" font-weight="700" lengthAdjust="spacing" textLength="{}" x="{}" y="{}">{}</text>"##,
+                        fmt_coord(guard_w),
+                        fmt_coord(tab_right + 15.0),
+                        fmt_coord(frame_top + 12.6348),
+                        escape_xml(&guard),
+                    )
+                    .unwrap();
+                }
+            }
+            Event::GroupElse(g) => {
+                // Emit else dashed divider line
+                let frame_left = GROUP_FRAME_MARGIN;
+                let frame_right = svg_width as f64 - GROUP_FRAME_MARGIN;
+                write!(
+                    svg.buf,
+                    r##"<line style="stroke:#000000;stroke-width:1;stroke-dasharray:2,2;" x1="{}" x2="{}" y1="{}" y2="{}"/>"##,
+                    fmt_coord(frame_left),
+                    fmt_coord(frame_right),
+                    fmt_coord(msg_y),
+                    fmt_coord(msg_y),
+                )
+                .unwrap();
+
+                // Emit else label (in brackets if present)
+                let label_text = if let Some(label) = &g.label {
+                    format!("[{label}]")
+                } else {
+                    "[else]".to_string()
+                };
+                let tw = text_width(&label_text, 11.0);
+                write!(
+                    svg.buf,
+                    r##"<text fill="#000000" font-family="sans-serif" font-size="11" font-weight="700" lengthAdjust="spacing" textLength="{}" x="{}" y="{}">{}</text>"##,
                     fmt_coord(tw),
-                    fmt_coord(20.0),
-                    fmt_coord(msg_y + 10.0),
+                    fmt_coord(frame_left + 5.0),
+                    fmt_coord(msg_y + 10.6348),
                     escape_xml(&label_text),
                 )
                 .unwrap();
             }
-            Event::GroupElse(g) => {
-                let label = g.label.as_deref().unwrap_or("else");
-                let tw = text_width(label, 13.0);
-                write!(
-                    svg.buf,
-                    r##"<text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="{}" x="{}" y="{}">{}</text>"##,
-                    fmt_coord(tw),
-                    fmt_coord(20.0),
-                    fmt_coord(msg_y + 12.0),
-                    escape_xml(label),
-                )
-                .unwrap();
+            Event::GroupEnd => {
+                // Group end is handled by the frame rect emitted at GroupStart
             }
-            Event::GroupEnd => {}
             Event::NoteOnLink(text) => {
                 let tw = text_width(text, 13.0);
                 let mid_x = if !participants.is_empty() {
@@ -2158,6 +2603,7 @@ mod tests {
                 source_line: 1,
             })],
             autonumber: None,
+            hide_footbox: false,
         }
     }
 

@@ -13,6 +13,9 @@ pub struct SequenceDiagram {
     pub participants: Vec<Participant>,
     pub events: Vec<Event>,
     pub autonumber: Option<AutoNumber>,
+    /// Whether `hide footbox` was specified — suppresses tail participant boxes.
+    #[serde(default)]
+    pub hide_footbox: bool,
 }
 
 /// A participant (lifeline) in a sequence diagram.

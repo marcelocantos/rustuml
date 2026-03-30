@@ -40,6 +40,8 @@ struct SeqParser {
     ref_buffer: Option<RefBuffer>,
     /// Whether we are inside a `legend ... endlegend` block.
     in_legend: bool,
+    /// Whether `hide footbox` was specified.
+    hide_footbox: bool,
     /// Current 1-based source line number (set before each parse_line call).
     current_line: usize,
 }
@@ -68,6 +70,7 @@ impl SeqParser {
             note_buffer: None,
             ref_buffer: None,
             in_legend: false,
+            hide_footbox: false,
             current_line: 0,
         }
     }
@@ -78,6 +81,7 @@ impl SeqParser {
             participants: self.participants,
             events: self.events,
             autonumber: self.autonumber,
+            hide_footbox: self.hide_footbox,
         }
     }
 
@@ -433,7 +437,7 @@ impl SeqParser {
             let participants: Vec<String> = caps.get(2).map_or(Vec::new(), |m| {
                 m.as_str()
                     .split(',')
-                    .map(|s| s.trim().to_string())
+                    .map(|s| self.ensure_participant(s.trim()))
                     .collect()
             });
 
@@ -786,6 +790,10 @@ impl SeqParser {
     }
 
     fn try_hide(&mut self, line: &str) -> bool {
+        if line == "hide footbox" {
+            self.hide_footbox = true;
+            return true;
+        }
         line.starts_with("hide ")
     }
 }

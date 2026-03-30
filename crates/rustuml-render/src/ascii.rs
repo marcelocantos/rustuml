@@ -512,6 +512,7 @@ mod tests {
                 .collect(),
             events,
             autonumber: None,
+            hide_footbox: false,
         }
     }
 
@@ -666,6 +667,7 @@ mod tests {
             participants: vec![],
             events: vec![],
             autonumber: None,
+            hide_footbox: false,
         };
         assert_eq!(render_ascii(&diagram), "");
     }
