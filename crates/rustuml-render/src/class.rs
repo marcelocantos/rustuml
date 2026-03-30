@@ -234,11 +234,11 @@ fn calc_entity_dims(entity: &ClassEntity, entity_index: usize) -> EntityDims {
         .map(|m| {
             let text = format_member_display(m);
             let text_w = metrics::plantuml_text_width_14(&text);
-            if is_enum || m.visibility == Visibility::Default {
-                // Enum constants / default visibility: no icon, text at ENUM_TEXT_OFFSET.
+            if m.visibility == Visibility::Default {
+                // Default visibility (including enum constants): no icon.
                 ENUM_TEXT_OFFSET + text_w + MEMBER_RIGHT_PAD
             } else {
-                // Members with visibility icon.
+                // Members with visibility icon (including enum members with explicit visibility).
                 MEMBER_TEXT_OFFSET + text_w + MEMBER_RIGHT_PAD
             }
         })
