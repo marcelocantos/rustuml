@@ -135,6 +135,12 @@ pub struct Note {
     pub position: NotePosition,
     pub participants: Vec<String>,
     pub text: String,
+    /// Visual shape of the note (default folded-corner, hnote hexagonal, rnote rectangular).
+    #[serde(default)]
+    pub shape: NoteShape,
+    /// Optional background color (e.g., "#blue", "#FEFFDD").
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub color: Option<String>,
     /// 1-based line number within the `@startuml` block.
     #[serde(default)]
     pub source_line: usize,
@@ -145,6 +151,18 @@ pub enum NotePosition {
     Left,
     Right,
     Over,
+}
+
+/// Visual shape of a note.
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Default, Serialize, Deserialize)]
+pub enum NoteShape {
+    /// Standard note with folded corner.
+    #[default]
+    Note,
+    /// Hexagonal note (hnote).
+    Hexagonal,
+    /// Rectangular note without fold (rnote).
+    Rectangular,
 }
 
 /// Start of a grouping construct (alt, opt, loop, etc.).

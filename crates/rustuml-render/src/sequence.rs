@@ -250,6 +250,7 @@ const NOTE_LIFELINE_GAP: f64 = 5.0;
 // ---------------------------------------------------------------------------
 
 /// Vertical space consumed by a group start header.
+#[allow(dead_code)]
 const GROUP_HEADER_HEIGHT: f64 = 17.310546875;
 /// Gap from preceding message y to group frame top.
 const GROUP_GAP_AFTER_MSG: f64 = 15.0;
@@ -1899,11 +1900,12 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme) -> String {
                             .lines()
                             .map(|l| text_width(l.trim(), MSG_FONT_SIZE))
                             .fold(0.0_f64, f64::max);
-                        // Note needs: text_width + 20 (padding + fold) + 38 (margins around lifelines)
-                        // But this is the total span across all pairs, so divide evenly.
-                        let note_w = max_tw.ceil() + 20.0;
+                        // The rendered note width = max(note_content_w, span + 38).
+                        // The note fits if span >= note_content_w - 38. So the minimum
+                        // total span is (note_content_w - 38), divided evenly across pairs.
+                        let note_content_w = max_tw.ceil() + 20.0;
                         let span_pairs = (li - fi) as f64;
-                        let per_pair = (note_w + 38.0) / span_pairs;
+                        let per_pair = ((note_content_w - 38.0) / span_pairs).max(0.0);
                         let (left, right) = if fi < li { (fi, li) } else { (li, fi) };
                         for slot in &mut pair_max_label_width[left..right] {
                             *slot = slot.max(per_pair);
@@ -1924,42 +1926,51 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme) -> String {
     }
 
     // Compute minimum first-participant x offset due to notes that extend left.
-    // A 'note over' on the first participant starts at x=5 (HEAD_BOX_Y) and extends
-    // rightward. The participant center must be far enough right that the note
-    // width, centered on the participant, doesn't extend past the left margin.
-    // PlantUML uses: center_x = max(default, note_right_edge - box_width/2)
-    // where note_right_edge = HEAD_BOX_Y + note_w.
+    // "note over" on the first participant: centered on the lifeline, must not
+    // extend past the left margin (x = HEAD_BOX_Y).
+    // "note left of" on the first participant: positioned entirely to the left
+    // of the lifeline, so the lifeline must be far enough right to fit the note.
     let mut min_first_center_x: f64 = 0.0;
     for event in &diagram.events {
-        if let Event::Note(note) = event
-            && note.position == NotePosition::Over
-            && note.participants.len() == 1
-            && let Some(&idx) = id_to_idx.get(note.participants[0].as_str())
-            && idx == 0
-        {
-            let max_tw = note
-                .text
-                .lines()
-                .map(|l| text_width(l.trim(), MSG_FONT_SIZE))
-                .fold(0.0_f64, f64::max);
-            let note_w = max_tw.ceil() + 20.0;
-            // The note is positioned centered on the participant. For the left edge
-            // to be at HEAD_BOX_Y, the center must be at HEAD_BOX_Y + note_w/2.
-            // But PlantUML uses a different formula — looking at golden data:
-            // Alice center = 58.3618, note goes from 5 to 113 (width 108).
-            // 58.3618 - 5 = 53.3618 (left extent from center)
-            // 113 - 58.3618 = 54.6382 (right extent from center)
-            // note_w/2 = 54. So it's almost centered but not exactly.
-            // The center is at box_x + box_width/2 where box_x = center_x - box_width/2.
-            // Alice box_width = 46.7236. center = 5 + 46.7236/2 = 28.3618.
-            // But golden center is 58.3618 = 28.3618 + 30.
-            // 30 = (note_w - box_width) / 2 = (108 - 46.7236) / 2 = 30.6382. Not exactly 30.
-            // Actually: golden box_x = 35. So shift from default (5) = 30.
-            // (note_w - box_width) / 2 = (108 - 46.7236) / 2 = 30.6382.
-            // Round down: floor(30.6382) = 30. So box_x = 5 + 30 = 35. center = 35 + 23.3618 = 58.3618.
-            let shift = ((note_w - participants[0].box_width) / 2.0).floor();
-            let min_cx = HEAD_BOX_Y + shift.max(0.0) + participants[0].box_width / 2.0;
-            min_first_center_x = min_first_center_x.max(min_cx);
+        if let Event::Note(note) = event {
+            let first_part = note
+                .participants
+                .first()
+                .and_then(|id| id_to_idx.get(id.as_str()))
+                .copied();
+            match note.position {
+                NotePosition::Over if note.participants.len() == 1 && first_part == Some(0) => {
+                    let max_tw = note
+                        .text
+                        .lines()
+                        .map(|l| text_width(l.trim(), MSG_FONT_SIZE))
+                        .fold(0.0_f64, f64::max);
+                    let note_w = max_tw.ceil() + 20.0;
+                    let shift = ((note_w - participants[0].box_width) / 2.0).floor();
+                    let min_cx = HEAD_BOX_Y + shift.max(0.0) + participants[0].box_width / 2.0;
+                    min_first_center_x = min_first_center_x.max(min_cx);
+                }
+                NotePosition::Left if first_part == Some(0) => {
+                    // "note left of" on participant 0: the note extends left from the
+                    // lifeline. The note right edge = floor(lifeline_line_x) - NOTE_LIFELINE_GAP.
+                    // The note left edge = note_right - note_content_w, which must be >= HEAD_BOX_Y.
+                    // So: lifeline_line_x >= HEAD_BOX_Y + note_content_w + NOTE_LIFELINE_GAP
+                    // And: lifeline_line_x = center_x - box_width/2 + floor(box_width/2)
+                    // Therefore: center_x >= HEAD_BOX_Y + note_content_w + NOTE_LIFELINE_GAP
+                    //                        + box_width/2 - floor(box_width/2)
+                    let max_tw = note
+                        .text
+                        .lines()
+                        .map(|l| text_width(l.trim(), MSG_FONT_SIZE))
+                        .fold(0.0_f64, f64::max);
+                    let note_content_w = max_tw.ceil() + 20.0;
+                    let bw = participants[0].box_width;
+                    let min_cx = HEAD_BOX_Y + note_content_w + NOTE_LIFELINE_GAP + bw / 2.0
+                        - (bw / 2.0).floor();
+                    min_first_center_x = min_first_center_x.max(min_cx);
+                }
+                _ => {}
+            }
         }
     }
 
@@ -2199,11 +2210,15 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme) -> String {
                 }
                 NotePosition::Over => {
                     if note.participants.is_empty() {
-                        // "across" note — spans full width, handled separately
+                        // "across" note — starts at HEAD_BOX_Y (5) and extends rightward
+                        // by note_content_w. The SVG must be wide enough to contain it.
+                        let across_right = HEAD_BOX_Y + note_content_w;
+                        max_note_right = max_note_right.max(across_right);
                     } else if note.participants.len() == 1 {
                         if let Some(&idx) = id_to_idx.get(note.participants[0].as_str()) {
-                            let cx = participants[idx].center_x;
-                            let note_right = cx + note_content_w / 2.0;
+                            let ll_x = participants[idx].lifeline_line_x;
+                            let note_left = (ll_x - note_content_w / 2.0).max(HEAD_BOX_Y).floor();
+                            let note_right = note_left + note_content_w;
                             max_note_right = max_note_right.max(note_right);
                         }
                     } else if let (Some(&first_idx), Some(&last_idx)) = (
@@ -3419,18 +3434,19 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme) -> String {
                     }
                     NotePosition::Over => {
                         if note.participants.is_empty() {
-                            // "across" note — spans full diagram width
-                            (HEAD_BOX_Y, svg_width as f64 - RIGHT_MARGIN - 1.0)
+                            // "across" note — starts at HEAD_BOX_Y and extends by note_content_w
+                            (HEAD_BOX_Y, HEAD_BOX_Y + note_content_w)
                         } else if note.participants.len() == 1 {
-                            // Centered on single participant
-                            let cx = note
+                            // Centered on participant's lifeline_line_x (integer-based).
+                            // PlantUML floors the left position.
+                            let ll_x = note
                                 .participants
                                 .first()
                                 .and_then(|id| id_to_idx.get(id.as_str()))
-                                .map(|&i| participants[i].center_x)
+                                .map(|&i| participants[i].lifeline_line_x)
                                 .unwrap_or(50.0);
                             let half_w = note_content_w / 2.0;
-                            let left = (cx - half_w).max(HEAD_BOX_Y);
+                            let left = (ll_x - half_w).max(HEAD_BOX_Y).floor();
                             (left, left + note_content_w)
                         } else {
                             // Spanning multiple participants
@@ -3455,31 +3471,75 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme) -> String {
                     }
                 };
 
-                // Emit the note polygon (body with folded corner).
-                let fold_x = note_right - NOTE_FOLD_SIZE;
-                let fold_y = note_top + NOTE_FOLD_SIZE;
-                write!(
-                    svg.buf,
-                    r##"<path d="M{left},{top} L{left},{bottom} L{right},{bottom} L{right},{fold_y} L{fold_x},{top} L{left},{top}" fill="{NOTE_FILL}" style="stroke:#181818;stroke-width:0.5;"/>"##,
-                    left = fmt_coord(note_left),
-                    top = fmt_coord(note_top),
-                    bottom = fmt_coord(note_bottom),
-                    right = fmt_coord(note_right),
-                    fold_y = fmt_coord(fold_y),
-                    fold_x = fmt_coord(fold_x),
-                )
-                .unwrap();
+                // Resolve note fill color.
+                let note_fill = note
+                    .color
+                    .as_ref()
+                    .map(|c| resolve_color(c))
+                    .unwrap_or_else(|| NOTE_FILL.to_string());
 
-                // Emit the fold triangle.
-                write!(
-                    svg.buf,
-                    r##"<path d="M{fold_x},{top} L{fold_x},{fold_y} L{right},{fold_y} L{fold_x},{top}" fill="{NOTE_FILL}" style="stroke:#181818;stroke-width:0.5;"/>"##,
-                    fold_x = fmt_coord(fold_x),
-                    top = fmt_coord(note_top),
-                    fold_y = fmt_coord(fold_y),
-                    right = fmt_coord(note_right),
-                )
-                .unwrap();
+                match note.shape {
+                    NoteShape::Hexagonal => {
+                        // Hexagonal note (hnote): a hexagon shape.
+                        let mid_y = (note_top + note_bottom) / 2.0;
+                        let hex_indent = (note_bottom - note_top) / 2.0;
+                        write!(
+                            svg.buf,
+                            r##"<polygon fill="{fill}" points="{x1},{mid} {x2},{top} {x3},{top} {x4},{mid} {x3},{bot} {x2},{bot}" style="stroke:#181818;stroke-width:0.5;"/>"##,
+                            fill = note_fill,
+                            x1 = fmt_coord(note_left),
+                            mid = fmt_coord(mid_y),
+                            x2 = fmt_coord(note_left + hex_indent),
+                            top = fmt_coord(note_top),
+                            x3 = fmt_coord(note_right - hex_indent),
+                            x4 = fmt_coord(note_right),
+                            bot = fmt_coord(note_bottom),
+                        )
+                        .unwrap();
+                    }
+                    NoteShape::Rectangular => {
+                        // Rectangular note (rnote): a simple rectangle.
+                        write!(
+                            svg.buf,
+                            r##"<rect fill="{fill}" height="{h}" style="stroke:#181818;stroke-width:0.5;" width="{w}" x="{x}" y="{y}"/>"##,
+                            fill = note_fill,
+                            h = fmt_coord(note_bottom - note_top),
+                            w = fmt_coord(note_right - note_left),
+                            x = fmt_coord(note_left),
+                            y = fmt_coord(note_top),
+                        )
+                        .unwrap();
+                    }
+                    NoteShape::Note => {
+                        // Standard note with folded corner.
+                        let fold_x = note_right - NOTE_FOLD_SIZE;
+                        let fold_y = note_top + NOTE_FOLD_SIZE;
+                        write!(
+                            svg.buf,
+                            r##"<path d="M{left},{top} L{left},{bottom} L{right},{bottom} L{right},{fold_y} L{fold_x},{top} L{left},{top}" fill="{fill}" style="stroke:#181818;stroke-width:0.5;"/>"##,
+                            left = fmt_coord(note_left),
+                            top = fmt_coord(note_top),
+                            bottom = fmt_coord(note_bottom),
+                            right = fmt_coord(note_right),
+                            fold_y = fmt_coord(fold_y),
+                            fold_x = fmt_coord(fold_x),
+                            fill = note_fill,
+                        )
+                        .unwrap();
+
+                        // Emit the fold triangle.
+                        write!(
+                            svg.buf,
+                            r##"<path d="M{fold_x},{top} L{fold_x},{fold_y} L{right},{fold_y} L{fold_x},{top}" fill="{fill}" style="stroke:#181818;stroke-width:0.5;"/>"##,
+                            fold_x = fmt_coord(fold_x),
+                            top = fmt_coord(note_top),
+                            fold_y = fmt_coord(fold_y),
+                            right = fmt_coord(note_right),
+                            fill = note_fill,
+                        )
+                        .unwrap();
+                    }
+                }
 
                 // Emit note text lines.
                 let text_x = note_left + NOTE_TEXT_X_PAD;

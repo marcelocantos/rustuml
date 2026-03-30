@@ -50,6 +50,8 @@ struct NoteBuffer {
     position: NotePosition,
     participants: Vec<String>,
     lines: Vec<String>,
+    shape: NoteShape,
+    color: Option<String>,
     source_line: usize,
 }
 
@@ -130,6 +132,8 @@ impl SeqParser {
                     position: buf.position,
                     participants: buf.participants,
                     text,
+                    shape: buf.shape,
+                    color: buf.color,
                     source_line: buf.source_line,
                 }));
             } else if let Some(buf) = &mut self.note_buffer {
@@ -388,6 +392,8 @@ impl SeqParser {
                     position: NotePosition::Over,
                     participants: vec![participant_id],
                     text: text.to_string(),
+                    shape: NoteShape::Note,
+                    color: None,
                     source_line: self.current_line,
                 }));
             }
@@ -401,14 +407,26 @@ impl SeqParser {
             return true;
         }
 
-        // Also handle "note across"
+        // Also handle "note across" (with optional color)
         if let Some(rest) = line.strip_prefix("note across") {
-            let text = rest.trim().trim_start_matches(':').trim().to_string();
+            // Parse optional color: "note across #color : text" or "note across #color"
+            let rest = rest.trim();
+            let (color, rest) = if rest.starts_with('#') {
+                let end = rest
+                    .find(|c: char| c.is_whitespace() || c == ':')
+                    .unwrap_or(rest.len());
+                (Some(rest[..end].to_string()), rest[end..].trim())
+            } else {
+                (None, rest)
+            };
+            let text = rest.trim_start_matches(':').trim().to_string();
             if text.is_empty() {
                 self.note_buffer = Some(NoteBuffer {
                     position: NotePosition::Over,
                     participants: Vec::new(),
                     lines: Vec::new(),
+                    shape: NoteShape::Note,
+                    color,
                     source_line: self.current_line,
                 });
             } else {
@@ -416,6 +434,8 @@ impl SeqParser {
                     position: NotePosition::Over,
                     participants: Vec::new(),
                     text,
+                    shape: NoteShape::Note,
+                    color,
                     source_line: self.current_line,
                 }));
             }
@@ -423,31 +443,40 @@ impl SeqParser {
         }
 
         // Allow optional color (#xxx) after participant list.
+        // Capture shape prefix (h/r/note), position, participants, color, inline text.
         static RE: LazyLock<Regex> = LazyLock::new(|| {
-            Regex::new(r"^(?:h|r)?note\s+(left|right|over)\s*(?:of\s+)?(\w+(?:\s*,\s*\w+)*)?\s*(?:#\S+)?\s*(?::\s*(.*))?$").unwrap()
+            Regex::new(r"^(h|r)?note\s+(left|right|over)\s*(?:of\s+)?(\w+(?:\s*,\s*\w+)*)?\s*(#\S+)?\s*(?::\s*(.*))?$").unwrap()
         });
 
         if let Some(caps) = RE.captures(line) {
-            let position = match &caps[1] {
+            let shape = match caps.get(1).map(|m| m.as_str()) {
+                Some("h") => NoteShape::Hexagonal,
+                Some("r") => NoteShape::Rectangular,
+                _ => NoteShape::Note,
+            };
+            let position = match &caps[2] {
                 "left" => NotePosition::Left,
                 "right" => NotePosition::Right,
                 "over" => NotePosition::Over,
                 _ => NotePosition::Right,
             };
-            let participants: Vec<String> = caps.get(2).map_or(Vec::new(), |m| {
+            let participants: Vec<String> = caps.get(3).map_or(Vec::new(), |m| {
                 m.as_str()
                     .split(',')
                     .map(|s| self.ensure_participant(s.trim()))
                     .collect()
             });
+            let color = caps.get(4).map(|m| m.as_str().to_string());
 
-            if let Some(text_match) = caps.get(3) {
+            if let Some(text_match) = caps.get(5) {
                 // Inline note: note right : text
                 let text = text_match.as_str().trim().to_string();
                 self.events.push(Event::Note(Note {
                     position,
                     participants,
                     text,
+                    shape,
+                    color,
                     source_line: self.current_line,
                 }));
             } else {
@@ -456,6 +485,8 @@ impl SeqParser {
                     position,
                     participants,
                     lines: Vec::new(),
+                    shape,
+                    color,
                     source_line: self.current_line,
                 });
             }
