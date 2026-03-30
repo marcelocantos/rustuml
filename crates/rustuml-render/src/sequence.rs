@@ -69,6 +69,11 @@ fn text_width(text: &str, font_size: f64) -> f64 {
     crate::metrics::plantuml_text_width(text, font_size)
 }
 
+/// Compute bold text width at a given font size using exact PlantUML Java AWT Bold metrics.
+fn bold_text_width(text: &str, font_size: f64) -> f64 {
+    crate::metrics::plantuml_bold_text_width(text, font_size)
+}
+
 /// Format an f64 as a PlantUML-compatible coordinate string.
 /// PlantUML uses `String.format(Locale.US, "%.4f", x)` then trims trailing zeros.
 /// We must NOT pre-round via multiply/round/divide — that introduces precision errors
@@ -132,6 +137,8 @@ const MSG_TEXT_LEFT_PAD: f64 = 7.0; // text offset from source lifeline
 const LEFT_ARROW_TEXT_PAD: f64 = 16.0; // text offset from arrow tip (left arrows)
 const ACTIVATION_WIDTH: f64 = 10.0;
 const ACTIVATION_HALF_W: f64 = 5.0;
+/// Gap between autonumber bold text and message label text.
+const AUTONUMBER_LABEL_GAP: f64 = 4.0;
 const LIFELINE_RECT_WIDTH: f64 = 8.0;
 const MIN_LIFELINE_HEIGHT: f64 = 20.0;
 // Arrow tip is 2px before the target lifeline center (non-activated)
@@ -571,6 +578,7 @@ impl PlantUmlSvg {
         text_content: &str,
         text_len: f64,
         color: &str,
+        autonumber: Option<(&str, f64)>, // (number_text, number_width)
     ) {
         write!(
             self.buf,
@@ -596,12 +604,28 @@ impl PlantUmlSvg {
         )
         .unwrap();
 
+        let label_x = if let Some((num_text, num_w)) = autonumber {
+            // Bold autonumber text
+            write!(
+                self.buf,
+                r##"<text fill="#000000" font-family="sans-serif" font-size="13" font-weight="700" lengthAdjust="spacing" textLength="{}" x="{}" y="{}">{}</text>"##,
+                fmt_coord(num_w),
+                fmt_coord(text_x),
+                fmt_coord(text_y),
+                escape_xml(num_text),
+            )
+            .unwrap();
+            text_x + num_w + AUTONUMBER_LABEL_GAP
+        } else {
+            text_x
+        };
+
         if !text_content.is_empty() {
             write!(
                 self.buf,
                 r##"<text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="{}" x="{}" y="{}">{}</text>"##,
                 fmt_coord(text_len),
-                fmt_coord(text_x),
+                fmt_coord(label_x),
                 fmt_coord(text_y),
                 escape_xml(text_content),
             )
@@ -631,6 +655,7 @@ impl PlantUmlSvg {
         text_content: &str,
         text_len: f64,
         color: &str,
+        autonumber: Option<(&str, f64)>, // (number_text, number_width)
     ) {
         write!(
             self.buf,
@@ -685,12 +710,28 @@ impl PlantUmlSvg {
         )
         .unwrap();
 
+        let label_x = if let Some((num_text, num_w)) = autonumber {
+            // Bold autonumber text
+            write!(
+                self.buf,
+                r##"<text fill="#000000" font-family="sans-serif" font-size="13" font-weight="700" lengthAdjust="spacing" textLength="{}" x="{}" y="{}">{}</text>"##,
+                fmt_coord(num_w),
+                fmt_coord(text_x),
+                fmt_coord(text_y),
+                escape_xml(num_text),
+            )
+            .unwrap();
+            text_x + num_w + AUTONUMBER_LABEL_GAP
+        } else {
+            text_x
+        };
+
         if !text_content.is_empty() {
             write!(
                 self.buf,
                 r##"<text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="{}" x="{}" y="{}">{}</text>"##,
                 fmt_coord(text_len),
-                fmt_coord(text_x),
+                fmt_coord(label_x),
                 fmt_coord(text_y),
                 escape_xml(text_content),
             )
@@ -829,6 +870,9 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme) -> String {
     // Track activation state as we scan events to compute per-message shifts.
     let mut activation_depth: HashMap<String, usize> = HashMap::new();
 
+    // Track autonumber counter during spacing phase to compute bold label widths.
+    let mut spacing_auto_num: Option<u32> = diagram.autonumber.as_ref().map(|an| an.start);
+
     for event in &diagram.events {
         match event {
             Event::Message(msg) => {
@@ -838,8 +882,21 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme) -> String {
                     let label = process_label(&msg.label);
                     let label_w = text_width(&label, MSG_FONT_SIZE);
 
+                    // Autonumber adds bold text + gap before the label
+                    let autonumber_extra = if let Some(num) = spacing_auto_num.as_ref() {
+                        let an = diagram.autonumber.as_ref().unwrap();
+                        let num_text = format_autonumber(*num, &an.format);
+                        bold_text_width(&num_text, MSG_FONT_SIZE) + AUTONUMBER_LABEL_GAP
+                    } else {
+                        0.0
+                    };
+
                     // Base arrow width (text + padding + arrow)
-                    let arrow_only_w = label_w + MSG_TEXT_LEFT_PAD + MSG_TEXT_LEFT_PAD + ARROW_SIZE;
+                    let arrow_only_w = autonumber_extra
+                        + label_w
+                        + MSG_TEXT_LEFT_PAD
+                        + MSG_TEXT_LEFT_PAD
+                        + ARROW_SIZE;
 
                     // Lifeline shifts from activation bars at the current message level.
                     // The source's "right shift" and target's "left shift" come from
@@ -888,6 +945,21 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme) -> String {
                             }
                         }
                     }
+                }
+
+                // Advance autonumber during spacing phase
+                if let Some(num) = spacing_auto_num.as_mut() {
+                    let an = diagram.autonumber.as_ref().unwrap();
+                    *num = num.saturating_add(an.step);
+                }
+            }
+            Event::Return(_) => {
+                // Return messages also advance autonumber and need spacing
+                // (Return spacing is handled by the return target participant pair,
+                // which is already covered by the activation-based return flow.)
+                if let Some(num) = spacing_auto_num.as_mut() {
+                    let an = diagram.autonumber.as_ref().unwrap();
+                    *num = num.saturating_add(an.step);
                 }
             }
             Event::Activate(id, _) => {
@@ -1474,22 +1546,14 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme) -> String {
 
                 let src_line = msg.source_line as u32;
 
-                // Autonumber label (rendered before the message group)
-                if let Some(n) = auto_num.as_ref() {
+                // Compute autonumber info for passing into the message group
+                let autonumber_info: Option<(String, f64)> = auto_num.as_ref().map(|n| {
                     let an = diagram.autonumber.as_ref().unwrap();
                     let num_text = format_autonumber(*n, &an.format);
-                    let num_w = text_width(&num_text, MSG_FONT_SIZE);
-                    let mid_x = (from_x + to_x) / 2.0;
-                    write!(
-                        svg.buf,
-                        r##"<text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="{}" x="{}" y="{}">{}</text>"##,
-                        fmt_coord(num_w),
-                        fmt_coord(mid_x),
-                        fmt_coord(msg_y - 16.0),
-                        escape_xml(&num_text),
-                    )
-                    .unwrap();
-                }
+                    let num_w = bold_text_width(&num_text, MSG_FONT_SIZE);
+                    (num_text, num_w)
+                });
+                let autonumber_ref = autonumber_info.as_ref().map(|(t, w)| (t.as_str(), *w));
 
                 // Source shift: when the source is activated and sending right,
                 // the message line starts from the activation bar's right edge.
@@ -1539,6 +1603,7 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme) -> String {
                             &label,
                             label_w,
                             &arrow_color,
+                            autonumber_ref,
                         );
                     } else {
                         // Filled arrow polygon
@@ -1568,6 +1633,7 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme) -> String {
                             &label,
                             label_w,
                             &arrow_color,
+                            autonumber_ref,
                         );
                     }
                 } else {
@@ -1600,6 +1666,7 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme) -> String {
                             &label,
                             label_w,
                             &arrow_color,
+                            autonumber_ref,
                         );
                     } else {
                         let arrow_pts = format!(
@@ -1628,6 +1695,7 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme) -> String {
                             &label,
                             label_w,
                             &arrow_color,
+                            autonumber_ref,
                         );
                     }
                 }
@@ -1671,6 +1739,16 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme) -> String {
             }
             Event::Return(ret) => {
                 msg_id += 1;
+
+                // Compute autonumber info for return messages
+                let ret_autonumber_info: Option<(String, f64)> = auto_num.as_ref().map(|n| {
+                    let an = diagram.autonumber.as_ref().unwrap();
+                    let num_text = format_autonumber(*n, &an.format);
+                    let num_w = bold_text_width(&num_text, MSG_FONT_SIZE);
+                    (num_text, num_w)
+                });
+                let ret_autonumber_ref =
+                    ret_autonumber_info.as_ref().map(|(t, w)| (t.as_str(), *w));
 
                 // Pop the return stack to find from/to participants and arrow style
                 let (ret_from, ret_to, ret_open) = if let Some(entry) = return_stack.pop() {
@@ -1740,6 +1818,7 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme) -> String {
                             &label,
                             label_w,
                             "#181818",
+                            ret_autonumber_ref,
                         );
                     } else {
                         let line_x2 = tip_x - FILLED_ARROW_NOTCH;
@@ -1755,8 +1834,21 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme) -> String {
                             fmt_coord(msg_y),
                         );
                         svg.message_filled_arrow(
-                            &from_uid, &to_uid, src_line, msg_id, &arrow_pts, from_x, line_x2,
-                            msg_y, line_style, text_x, text_y_pos, &label, label_w, "#181818",
+                            &from_uid,
+                            &to_uid,
+                            src_line,
+                            msg_id,
+                            &arrow_pts,
+                            from_x,
+                            line_x2,
+                            msg_y,
+                            line_style,
+                            text_x,
+                            text_y_pos,
+                            &label,
+                            label_w,
+                            "#181818",
+                            ret_autonumber_ref,
                         );
                     }
                 } else {
@@ -1786,6 +1878,7 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme) -> String {
                             &label,
                             label_w,
                             "#181818",
+                            ret_autonumber_ref,
                         );
                     } else {
                         let line_x1 = tip_x + FILLED_ARROW_NOTCH;
@@ -1815,6 +1908,7 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme) -> String {
                             &label,
                             label_w,
                             "#181818",
+                            ret_autonumber_ref,
                         );
                     }
                 }
