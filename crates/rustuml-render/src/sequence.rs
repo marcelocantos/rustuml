@@ -149,6 +149,19 @@ const MIN_LIFELINE_HEIGHT: f64 = 20.0;
 const ARROW_TIP_GAP: f64 = 2.0;
 
 // ---------------------------------------------------------------------------
+// Self-message layout constants (reverse-engineered from golden SVGs)
+// ---------------------------------------------------------------------------
+
+/// Horizontal extension of the self-message loopback from center_x.
+const SELF_MSG_EXTEND: f64 = 42.0;
+/// Vertical drop of the self-message loopback.
+const SELF_MSG_DROP: f64 = 13.0;
+/// Text x offset from center_x for self-messages.
+const SELF_MSG_TEXT_X_PAD: f64 = 7.0;
+/// Extra right padding beyond self-message text/loopback.
+const SELF_MSG_RIGHT_PAD: f64 = 2.0;
+
+// ---------------------------------------------------------------------------
 // Participant-type shape constants (reverse-engineered from golden SVGs)
 // ---------------------------------------------------------------------------
 
@@ -1641,6 +1654,9 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme) -> String {
     let n = participants.len();
     let mut pair_max_label_width = vec![0.0_f64; n.saturating_sub(1)];
 
+    // Track maximum right extent of self-messages (for SVG width calculation).
+    let mut max_self_msg_right: f64 = 0.0;
+
     // Track activation state as we scan events to compute per-message shifts.
     let mut activation_depth: HashMap<String, usize> = HashMap::new();
 
@@ -1657,51 +1673,56 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme) -> String {
                 let from_idx = id_to_idx.get(msg.from.as_str()).copied();
                 let to_idx = id_to_idx.get(msg.to.as_str()).copied();
                 if let (Some(fi), Some(ti)) = (from_idx, to_idx) {
-                    let label = process_label(&msg.label);
-                    let label_w = text_width(&label, MSG_FONT_SIZE);
-
-                    // Autonumber adds bold text + gap before the label
-                    let autonumber_extra = if let Some(num) = spacing_auto_num.as_ref() {
-                        let an = diagram.autonumber.as_ref().unwrap();
-                        let num_text = format_autonumber(*num, &an.format);
-                        bold_text_width(&num_text, MSG_FONT_SIZE) + AUTONUMBER_LABEL_GAP
+                    if fi == ti {
+                        // Self-message: no pair spacing needed.
+                        // Width tracking deferred to after Phase 3 (x positions assigned).
                     } else {
-                        0.0
-                    };
+                        let label = process_label(&msg.label);
+                        let label_w = text_width(&label, MSG_FONT_SIZE);
 
-                    // Base arrow width (text + padding + arrow)
-                    let arrow_only_w = autonumber_extra
-                        + label_w
-                        + MSG_TEXT_LEFT_PAD
-                        + MSG_TEXT_LEFT_PAD
-                        + ARROW_SIZE;
+                        // Autonumber adds bold text + gap before the label
+                        let autonumber_extra = if let Some(num) = spacing_auto_num.as_ref() {
+                            let an = diagram.autonumber.as_ref().unwrap();
+                            let num_text = format_autonumber(*num, &an.format);
+                            bold_text_width(&num_text, MSG_FONT_SIZE) + AUTONUMBER_LABEL_GAP
+                        } else {
+                            0.0
+                        };
 
-                    // Lifeline shifts from activation bars at the current message level.
-                    // The source's "right shift" and target's "left shift" come from
-                    // activation bars extending from the lifeline center.
-                    let from_depth = activation_depth
-                        .get(msg.from.as_str())
-                        .copied()
-                        .unwrap_or(0);
-                    let to_depth = activation_depth.get(msg.to.as_str()).copied().unwrap_or(0);
+                        // Base arrow width (text + padding + arrow)
+                        let arrow_only_w = autonumber_extra
+                            + label_w
+                            + MSG_TEXT_LEFT_PAD
+                            + MSG_TEXT_LEFT_PAD
+                            + ARROW_SIZE;
 
-                    // Each active lifeline extends ACTIVATION_HALF_W from center.
-                    let source_shift = if from_depth > 0 {
-                        ACTIVATION_HALF_W
-                    } else {
-                        0.0
-                    };
-                    let target_shift = if to_depth > 0 { ACTIVATION_HALF_W } else { 0.0 };
+                        // Lifeline shifts from activation bars at the current message level.
+                        // The source's "right shift" and target's "left shift" come from
+                        // activation bars extending from the lifeline center.
+                        let from_depth = activation_depth
+                            .get(msg.from.as_str())
+                            .copied()
+                            .unwrap_or(0);
+                        let to_depth = activation_depth.get(msg.to.as_str()).copied().unwrap_or(0);
 
-                    let needed = arrow_only_w + source_shift + target_shift;
+                        // Each active lifeline extends ACTIVATION_HALF_W from center.
+                        let source_shift = if from_depth > 0 {
+                            ACTIVATION_HALF_W
+                        } else {
+                            0.0
+                        };
+                        let target_shift = if to_depth > 0 { ACTIVATION_HALF_W } else { 0.0 };
 
-                    let (left, right) = if fi < ti { (fi, ti) } else { (ti, fi) };
-                    if right - left == 1 {
-                        pair_max_label_width[left] = pair_max_label_width[left].max(needed);
-                    } else {
-                        let per_pair = needed / (right - left) as f64;
-                        for slot in &mut pair_max_label_width[left..right] {
-                            *slot = slot.max(per_pair);
+                        let needed = arrow_only_w + source_shift + target_shift;
+
+                        let (left, right) = if fi < ti { (fi, ti) } else { (ti, fi) };
+                        if right - left == 1 {
+                            pair_max_label_width[left] = pair_max_label_width[left].max(needed);
+                        } else {
+                            let per_pair = needed / (right - left) as f64;
+                            for slot in &mut pair_max_label_width[left..right] {
+                                *slot = slot.max(per_pair);
+                            }
                         }
                     }
                 }
@@ -1918,6 +1939,21 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme) -> String {
             .unwrap_or(0.0)
     };
 
+    // Compute self-message right extent now that x positions are assigned.
+    for event in &diagram.events {
+        if let Event::Message(msg) = event
+            && msg.from == msg.to
+        {
+            let cx = center_of(&msg.from);
+            let label = process_label(&msg.label);
+            let label_w = text_width(&label, MSG_FONT_SIZE);
+            let loopback_right = cx + SELF_MSG_EXTEND;
+            let text_right = cx + SELF_MSG_TEXT_X_PAD + label_w;
+            let self_right = loopback_right.max(text_right) + SELF_MSG_RIGHT_PAD;
+            max_self_msg_right = max_self_msg_right.max(self_right);
+        }
+    }
+
     // -----------------------------------------------------------------------
     // Phase 4: Pre-compute y positions for each event and vertical dimensions
     // -----------------------------------------------------------------------
@@ -1936,6 +1972,7 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme) -> String {
     // Groups add header/else/end vertical space.
     let mut event_y_positions: Vec<f64> = Vec::new();
     let mut msg_count: u32 = 0;
+    let last_effective_y;
     {
         let mut y = lifeline_top;
         for event in &diagram.events {
@@ -1950,7 +1987,22 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme) -> String {
                 _ => false,
             };
             match event {
-                Event::Message(_) | Event::Return(_) => {
+                Event::Message(msg) => {
+                    let is_self = msg.from == msg.to;
+                    if msg_count == 0 {
+                        y += first_msg_offset(has_text);
+                    } else {
+                        y += msg_step(has_text);
+                    }
+                    event_y_positions.push(y);
+                    if is_self {
+                        // Self-messages have a loopback that drops below the top line.
+                        // The next message's y step starts from the bottom of the loop.
+                        y += SELF_MSG_DROP;
+                    }
+                    msg_count += 1;
+                }
+                Event::Return(_) => {
                     if msg_count == 0 {
                         y += first_msg_offset(has_text);
                     } else {
@@ -2028,18 +2080,15 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme) -> String {
                 }
             }
         }
+        last_effective_y = y;
     }
 
     // Compute tail box y based on message count.
     // With 0 messages, PlantUML uses a minimum lifeline height of 20px.
-    // With messages, the tail starts TAIL_GAP below the last message.
-    let last_msg_y = event_y_positions
-        .iter()
-        .copied()
-        .last()
-        .unwrap_or(lifeline_top);
+    // With messages, the tail starts TAIL_GAP below the last effective y
+    // (which includes self-message drops).
     let tail_box_y = if msg_count > 0 {
-        last_msg_y + TAIL_GAP
+        last_effective_y + TAIL_GAP
     } else {
         // Minimum lifeline: 20px, tail overlaps by LIFELINE_Y_OFFSET
         lifeline_top + MIN_LIFELINE_HEIGHT - LIFELINE_Y_OFFSET
@@ -2101,11 +2150,13 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme) -> String {
         }
     }
     // Add 1.0 for note stroke width when notes extend the right edge.
-    let effective_right = last_box_right.max(if max_note_right > 0.0 {
-        max_note_right + 1.0
-    } else {
-        0.0
-    });
+    let effective_right = last_box_right
+        .max(if max_note_right > 0.0 {
+            max_note_right + 1.0
+        } else {
+            0.0
+        })
+        .max(max_self_msg_right);
     // If groups are present, the group frame extends beyond the last participant.
     // Add extra margin for the group frame (margin + activation bars + padding).
     let has_groups = diagram
@@ -2493,6 +2544,7 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme) -> String {
 
                 let from_x = center_of(&msg.from);
                 let to_x = center_of(&msg.to);
+                let is_self = msg.from == msg.to;
                 let is_right = to_x > from_x;
                 let is_dotted = msg.arrow.line == LineStyle::Dotted;
                 let is_open = msg.arrow.head == ArrowHead::Open;
@@ -2558,150 +2610,280 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme) -> String {
                 });
                 let autonumber_ref = autonumber_info.as_ref().map(|(t, w)| (t.as_str(), *w));
 
-                // Source shift: when the source is activated and sending right,
-                // the message line starts from the activation bar's right edge.
-                // For left-pointing messages, PlantUML does NOT shift the source endpoint.
-                let from_x_shifted = if is_right && from_active {
-                    from_x + ACTIVATION_HALF_W
-                } else {
-                    from_x
-                };
+                if is_self {
+                    // Self-message: U-shaped loopback
+                    let cx = from_x;
+                    let loop_right = cx + SELF_MSG_EXTEND;
+                    let loop_bottom = msg_y + SELF_MSG_DROP;
+                    let text_x = cx + SELF_MSG_TEXT_X_PAD;
+                    let text_y_pos = msg_y - 4.7422;
 
-                // Target shift: when the target is activated, the arrow tip
-                // stops at the activation bar edge.
-                let target_shift = if to_active { ACTIVATION_HALF_W } else { 0.0 };
+                    // Open the message group
+                    write!(
+                        svg.buf,
+                        r##"<g class="message" data-entity-1="{}" data-entity-2="{}" data-source-line="{}" id="msg{}">"##,
+                        escape_xml(&from_uid),
+                        escape_xml(&to_uid),
+                        src_line,
+                        msg_id,
+                    )
+                    .unwrap();
 
-                // Text position
-                let text_y_pos = msg_y - 4.7422;
-                let text_x = if is_right {
-                    from_x_shifted + MSG_TEXT_LEFT_PAD
-                } else {
-                    to_x + target_shift + LEFT_ARROW_TEXT_PAD + 1.0
-                };
+                    // Three lines forming the U-shape: right, down, left
+                    // Line 1: horizontal right (from center to loop right)
+                    write!(
+                        svg.buf,
+                        r##"<line style="stroke:{};stroke-width:1;{}" x1="{}" x2="{}" y1="{}" y2="{}"/>"##,
+                        &arrow_color,
+                        line_style,
+                        fmt_coord(cx),
+                        fmt_coord(loop_right),
+                        fmt_coord(msg_y),
+                        fmt_coord(msg_y),
+                    )
+                    .unwrap();
 
-                if is_right {
-                    let tip_x = to_x - target_shift - ARROW_TIP_GAP;
-                    let line_x2 = if is_open {
-                        tip_x
+                    // Line 2: vertical down
+                    write!(
+                        svg.buf,
+                        r##"<line style="stroke:{};stroke-width:1;{}" x1="{}" x2="{}" y1="{}" y2="{}"/>"##,
+                        &arrow_color,
+                        line_style,
+                        fmt_coord(loop_right),
+                        fmt_coord(loop_right),
+                        fmt_coord(msg_y),
+                        fmt_coord(loop_bottom),
+                    )
+                    .unwrap();
+
+                    // Line 3: horizontal left (from loop right back toward lifeline)
+                    // For filled arrows, the return line starts 1px right of center
+                    // For open arrows, the return line starts at center
+                    let return_left = if is_open {
+                        cx // open: line goes to center
                     } else {
-                        tip_x - FILLED_ARROW_NOTCH
+                        cx + 1.0 // filled: line stops 1px right (polygon takes over)
                     };
+                    write!(
+                        svg.buf,
+                        r##"<line style="stroke:{};stroke-width:1;{}" x1="{}" x2="{}" y1="{}" y2="{}"/>"##,
+                        &arrow_color,
+                        line_style,
+                        fmt_coord(return_left),
+                        fmt_coord(loop_right),
+                        fmt_coord(loop_bottom),
+                        fmt_coord(loop_bottom),
+                    )
+                    .unwrap();
 
+                    // Arrow head at bottom-left
                     if is_open {
-                        // Open arrow: V-shape tip at tip_x, main line extends 1px past
-                        svg.message_open_arrow(
-                            &from_uid,
-                            &to_uid,
-                            src_line,
-                            msg_id,
-                            tip_x,
-                            msg_y,
-                            true,
-                            from_x_shifted,
-                            tip_x + 1.0,
-                            msg_y,
-                            line_style,
-                            text_x,
-                            text_y_pos,
-                            &label,
-                            label_w,
+                        // Open arrow: two V-shape lines
+                        let tip_x = cx + 1.0;
+                        write!(
+                            svg.buf,
+                            r##"<line style="stroke:{};stroke-width:1;" x1="{}" x2="{}" y1="{}" y2="{}"/>"##,
                             &arrow_color,
-                            autonumber_ref,
-                        );
-                    } else {
-                        // Filled arrow polygon
-                        let arrow_pts = format!(
-                            "{},{},{},{},{},{},{},{}",
-                            fmt_coord(tip_x - ARROW_SIZE),
-                            fmt_coord(msg_y - ARROW_HALF_H),
                             fmt_coord(tip_x),
-                            fmt_coord(msg_y),
-                            fmt_coord(tip_x - ARROW_SIZE),
-                            fmt_coord(msg_y + ARROW_HALF_H),
-                            fmt_coord(tip_x - ARROW_SIZE + FILLED_ARROW_NOTCH),
-                            fmt_coord(msg_y),
-                        );
-                        svg.message_filled_arrow(
-                            &from_uid,
-                            &to_uid,
-                            src_line,
-                            msg_id,
-                            &arrow_pts,
-                            from_x_shifted,
-                            line_x2,
-                            msg_y,
-                            line_style,
-                            text_x,
-                            text_y_pos,
-                            &label,
-                            label_w,
+                            fmt_coord(tip_x + ARROW_SIZE),
+                            fmt_coord(loop_bottom),
+                            fmt_coord(loop_bottom - ARROW_HALF_H),
+                        )
+                        .unwrap();
+                        write!(
+                            svg.buf,
+                            r##"<line style="stroke:{};stroke-width:1;" x1="{}" x2="{}" y1="{}" y2="{}"/>"##,
                             &arrow_color,
-                            autonumber_ref,
-                        );
-                    }
-                } else {
-                    // Left-pointing arrow: tip offset accounts for target activation
-                    let tip_x = to_x + target_shift + 1.0;
-                    let line_x1 = if is_open {
-                        tip_x
+                            fmt_coord(tip_x),
+                            fmt_coord(tip_x + ARROW_SIZE),
+                            fmt_coord(loop_bottom),
+                            fmt_coord(loop_bottom + ARROW_HALF_H),
+                        )
+                        .unwrap();
                     } else {
-                        tip_x + FILLED_ARROW_NOTCH
-                    };
-                    // PlantUML draws the left-going line to from edge - 1
-                    let line_x2_end = from_x_shifted - 1.0;
-
-                    if is_open {
-                        // Open arrow: V-shape tip at tip_x, main line starts 1px before
-                        svg.message_open_arrow(
-                            &from_uid,
-                            &to_uid,
-                            src_line,
-                            msg_id,
-                            tip_x,
-                            msg_y,
-                            false,
-                            tip_x - 1.0,
-                            line_x2_end,
-                            msg_y,
-                            line_style,
-                            text_x,
-                            text_y_pos,
-                            &label,
-                            label_w,
-                            &arrow_color,
-                            autonumber_ref,
-                        );
-                    } else {
+                        // Filled arrow: polygon pointing left at bottom
+                        let tip_x = cx + 1.0;
                         let arrow_pts = format!(
                             "{},{},{},{},{},{},{},{}",
                             fmt_coord(tip_x + ARROW_SIZE),
-                            fmt_coord(msg_y - ARROW_HALF_H),
+                            fmt_coord(loop_bottom - ARROW_HALF_H),
                             fmt_coord(tip_x),
-                            fmt_coord(msg_y),
+                            fmt_coord(loop_bottom),
                             fmt_coord(tip_x + ARROW_SIZE),
-                            fmt_coord(msg_y + ARROW_HALF_H),
+                            fmt_coord(loop_bottom + ARROW_HALF_H),
                             fmt_coord(tip_x + ARROW_SIZE - FILLED_ARROW_NOTCH),
-                            fmt_coord(msg_y),
+                            fmt_coord(loop_bottom),
                         );
-                        svg.message_filled_arrow(
-                            &from_uid,
-                            &to_uid,
-                            src_line,
-                            msg_id,
-                            &arrow_pts,
-                            line_x1,
-                            line_x2_end,
-                            msg_y,
-                            line_style,
-                            text_x,
-                            text_y_pos,
-                            &label,
-                            label_w,
+                        write!(
+                            svg.buf,
+                            r##"<polygon fill="{}" points="{}" style="stroke:{};stroke-width:1;"/>"##,
                             &arrow_color,
-                            autonumber_ref,
-                        );
+                            arrow_pts,
+                            &arrow_color,
+                        )
+                        .unwrap();
                     }
-                }
+
+                    // Text label
+                    if !label.is_empty() {
+                        write!(
+                            svg.buf,
+                            r##"<text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="{}" x="{}" y="{}">{}</text>"##,
+                            fmt_coord(label_w),
+                            fmt_coord(text_x),
+                            fmt_coord(text_y_pos),
+                            escape_xml(&label),
+                        )
+                        .unwrap();
+                    }
+
+                    svg.buf.push_str("</g>");
+                } else {
+                    // Source shift: when the source is activated and sending right,
+                    // the message line starts from the activation bar's right edge.
+                    // For left-pointing messages, PlantUML does NOT shift the source endpoint.
+                    let from_x_shifted = if is_right && from_active {
+                        from_x + ACTIVATION_HALF_W
+                    } else {
+                        from_x
+                    };
+
+                    // Target shift: when the target is activated, the arrow tip
+                    // stops at the activation bar edge.
+                    let target_shift = if to_active { ACTIVATION_HALF_W } else { 0.0 };
+
+                    // Text position
+                    let text_y_pos = msg_y - 4.7422;
+                    let text_x = if is_right {
+                        from_x_shifted + MSG_TEXT_LEFT_PAD
+                    } else {
+                        to_x + target_shift + LEFT_ARROW_TEXT_PAD + 1.0
+                    };
+
+                    if is_right {
+                        let tip_x = to_x - target_shift - ARROW_TIP_GAP;
+                        let line_x2 = if is_open {
+                            tip_x
+                        } else {
+                            tip_x - FILLED_ARROW_NOTCH
+                        };
+
+                        if is_open {
+                            // Open arrow: V-shape tip at tip_x, main line extends 1px past
+                            svg.message_open_arrow(
+                                &from_uid,
+                                &to_uid,
+                                src_line,
+                                msg_id,
+                                tip_x,
+                                msg_y,
+                                true,
+                                from_x_shifted,
+                                tip_x + 1.0,
+                                msg_y,
+                                line_style,
+                                text_x,
+                                text_y_pos,
+                                &label,
+                                label_w,
+                                &arrow_color,
+                                autonumber_ref,
+                            );
+                        } else {
+                            // Filled arrow polygon
+                            let arrow_pts = format!(
+                                "{},{},{},{},{},{},{},{}",
+                                fmt_coord(tip_x - ARROW_SIZE),
+                                fmt_coord(msg_y - ARROW_HALF_H),
+                                fmt_coord(tip_x),
+                                fmt_coord(msg_y),
+                                fmt_coord(tip_x - ARROW_SIZE),
+                                fmt_coord(msg_y + ARROW_HALF_H),
+                                fmt_coord(tip_x - ARROW_SIZE + FILLED_ARROW_NOTCH),
+                                fmt_coord(msg_y),
+                            );
+                            svg.message_filled_arrow(
+                                &from_uid,
+                                &to_uid,
+                                src_line,
+                                msg_id,
+                                &arrow_pts,
+                                from_x_shifted,
+                                line_x2,
+                                msg_y,
+                                line_style,
+                                text_x,
+                                text_y_pos,
+                                &label,
+                                label_w,
+                                &arrow_color,
+                                autonumber_ref,
+                            );
+                        }
+                    } else {
+                        // Left-pointing arrow: tip offset accounts for target activation
+                        let tip_x = to_x + target_shift + 1.0;
+                        let line_x1 = if is_open {
+                            tip_x
+                        } else {
+                            tip_x + FILLED_ARROW_NOTCH
+                        };
+                        // PlantUML draws the left-going line to from edge - 1
+                        let line_x2_end = from_x_shifted - 1.0;
+
+                        if is_open {
+                            // Open arrow: V-shape tip at tip_x, main line starts 1px before
+                            svg.message_open_arrow(
+                                &from_uid,
+                                &to_uid,
+                                src_line,
+                                msg_id,
+                                tip_x,
+                                msg_y,
+                                false,
+                                tip_x - 1.0,
+                                line_x2_end,
+                                msg_y,
+                                line_style,
+                                text_x,
+                                text_y_pos,
+                                &label,
+                                label_w,
+                                &arrow_color,
+                                autonumber_ref,
+                            );
+                        } else {
+                            let arrow_pts = format!(
+                                "{},{},{},{},{},{},{},{}",
+                                fmt_coord(tip_x + ARROW_SIZE),
+                                fmt_coord(msg_y - ARROW_HALF_H),
+                                fmt_coord(tip_x),
+                                fmt_coord(msg_y),
+                                fmt_coord(tip_x + ARROW_SIZE),
+                                fmt_coord(msg_y + ARROW_HALF_H),
+                                fmt_coord(tip_x + ARROW_SIZE - FILLED_ARROW_NOTCH),
+                                fmt_coord(msg_y),
+                            );
+                            svg.message_filled_arrow(
+                                &from_uid,
+                                &to_uid,
+                                src_line,
+                                msg_id,
+                                &arrow_pts,
+                                line_x1,
+                                line_x2_end,
+                                msg_y,
+                                line_style,
+                                text_x,
+                                text_y_pos,
+                                &label,
+                                label_w,
+                                &arrow_color,
+                                autonumber_ref,
+                            );
+                        }
+                    }
+                } // end non-self message else
 
                 // Update activation state and return stack after this message
                 if let Some(act) = &msg.activation {
