@@ -102,6 +102,15 @@ fn fmt_coord(v: f64) -> String {
     s.to_string()
 }
 
+/// Compute note content width based on text width and note shape.
+fn note_content_width(max_text_w: f64, shape: NoteShape) -> f64 {
+    match shape {
+        NoteShape::Note => max_text_w.ceil() + 20.0, // 6 pad + text + 4 pad + 10 fold
+        NoteShape::Hexagonal => max_text_w.ceil() + 23.0, // 10 indent + 2 pad + text + 1 pad + 10 indent
+        NoteShape::Rectangular => max_text_w.ceil() + 7.0, // 6 pad + text + 1 pad
+    }
+}
+
 // ---------------------------------------------------------------------------
 // PlantUML layout constants (reverse-engineered from golden SVGs)
 // ---------------------------------------------------------------------------
@@ -244,6 +253,12 @@ const NOTE_GAP_FIRST: f64 = 15.0;
 const NOTE_FILL: &str = "#FEFFDD";
 /// Gap from participant lifeline to note edge for left/right notes.
 const NOTE_LIFELINE_GAP: f64 = 5.0;
+/// Base height for hexagonal (hnote) and rectangular (rnote) notes.
+const HNOTE_BASE_HEIGHT: f64 = 23.0;
+/// Horizontal indent of hexagonal note vertices from note edges.
+const HNOTE_INDENT: f64 = 10.0;
+/// Text y offset for hnote/rnote (1px less than standard note).
+const HNOTE_TEXT_Y_OFFSET: f64 = NOTE_TEXT_Y_OFFSET - 1.0;
 
 // ---------------------------------------------------------------------------
 // Group layout constants (reverse-engineered from golden SVGs)
@@ -1903,7 +1918,7 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme) -> String {
                         // The rendered note width = max(note_content_w, span + 38).
                         // The note fits if span >= note_content_w - 38. So the minimum
                         // total span is (note_content_w - 38), divided evenly across pairs.
-                        let note_content_w = max_tw.ceil() + 20.0;
+                        let note_content_w = note_content_width(max_tw, note.shape);
                         let span_pairs = (li - fi) as f64;
                         let per_pair = ((note_content_w - 38.0) / span_pairs).max(0.0);
                         let (left, right) = if fi < li { (fi, li) } else { (li, fi) };
@@ -1945,7 +1960,7 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme) -> String {
                         .lines()
                         .map(|l| text_width(l.trim(), MSG_FONT_SIZE))
                         .fold(0.0_f64, f64::max);
-                    let note_w = max_tw.ceil() + 20.0;
+                    let note_w = note_content_width(max_tw, note.shape);
                     let shift = ((note_w - participants[0].box_width) / 2.0).floor();
                     let min_cx = HEAD_BOX_Y + shift.max(0.0) + participants[0].box_width / 2.0;
                     min_first_center_x = min_first_center_x.max(min_cx);
@@ -1963,7 +1978,7 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme) -> String {
                         .lines()
                         .map(|l| text_width(l.trim(), MSG_FONT_SIZE))
                         .fold(0.0_f64, f64::max);
-                    let note_content_w = max_tw.ceil() + 20.0;
+                    let note_content_w = note_content_width(max_tw, note.shape);
                     let bw = participants[0].box_width;
                     let min_cx = HEAD_BOX_Y + note_content_w + NOTE_LIFELINE_GAP + bw / 2.0
                         - (bw / 2.0).floor();
@@ -2120,9 +2135,13 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme) -> String {
                         y + NOTE_GAP_AFTER_MSG
                     };
                     let num_lines = note.text.lines().count().max(1);
-                    // The event y for a note is: note_top + 7.0 + num_lines * MSG_TEXT_HEIGHT
-                    // This ensures the next message at y + msg_step lands correctly.
-                    let note_event_y = note_top + 7.0 + num_lines as f64 * MSG_TEXT_HEIGHT;
+                    // hnote/rnote have a smaller base height (23 vs 25), reducing
+                    // the vertical space consumed by 2px.
+                    let note_y_extra = match note.shape {
+                        NoteShape::Note => 7.0,
+                        NoteShape::Hexagonal | NoteShape::Rectangular => 5.0,
+                    };
+                    let note_event_y = note_top + note_y_extra + num_lines as f64 * MSG_TEXT_HEIGHT;
                     y = note_event_y;
                     event_y_positions.push(y);
                     msg_count += 1; // note counts as an event for spacing
@@ -2197,7 +2216,7 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme) -> String {
                 .lines()
                 .map(|l| text_width(l.trim(), MSG_FONT_SIZE))
                 .fold(0.0_f64, f64::max);
-            let note_content_w = max_line_width.ceil() + 20.0; // 6 + text + 4 + 10(fold)
+            let note_content_w = note_content_width(max_line_width, note.shape);
             match note.position {
                 NotePosition::Right => {
                     if let Some(first) = note.participants.first()
@@ -3396,11 +3415,15 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme) -> String {
                 // Compute note dimensions and position.
                 let lines: Vec<&str> = note.text.lines().collect();
                 let num_lines = lines.len().max(1);
-                let note_height = NOTE_BASE_HEIGHT + (num_lines as f64 - 1.0) * NOTE_LINE_HEIGHT;
+                let (base_h, note_y_extra) = match note.shape {
+                    NoteShape::Note => (NOTE_BASE_HEIGHT, 7.0),
+                    NoteShape::Hexagonal | NoteShape::Rectangular => (HNOTE_BASE_HEIGHT, 5.0),
+                };
+                let note_height = base_h + (num_lines as f64 - 1.0) * NOTE_LINE_HEIGHT;
 
                 // Derive note_top from the event y:
-                // event_y = note_top + 7.0 + num_lines * MSG_TEXT_HEIGHT
-                let note_top = msg_y - 7.0 - num_lines as f64 * MSG_TEXT_HEIGHT;
+                // event_y = note_top + note_y_extra + num_lines * MSG_TEXT_HEIGHT
+                let note_top = msg_y - note_y_extra - num_lines as f64 * MSG_TEXT_HEIGHT;
                 let note_bottom = note_top + note_height;
 
                 // Compute max text width across all lines.
@@ -3408,7 +3431,7 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme) -> String {
                     .iter()
                     .map(|l| text_width(l.trim(), MSG_FONT_SIZE))
                     .fold(0.0_f64, f64::max);
-                let note_content_w = max_text_w.ceil() + 20.0; // 6(pad) + text + 4(pad) + 10(fold)
+                let note_content_w = note_content_width(max_text_w, note.shape);
 
                 // Compute note left/right based on position.
                 let (note_left, note_right) = match note.position {
@@ -3480,20 +3503,24 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme) -> String {
 
                 match note.shape {
                     NoteShape::Hexagonal => {
-                        // Hexagonal note (hnote): a hexagon shape.
-                        let mid_y = (note_top + note_bottom) / 2.0;
-                        let hex_indent = (note_bottom - note_top) / 2.0;
+                        // Hexagonal note (hnote): 7-point polygon.
+                        // Points: TL, TR, R, BR, BL, L, TL (closed polygon)
+                        // PlantUML uses floor(height/2) for the y indent, making
+                        // the hexagon slightly asymmetric when height is odd.
+                        let mid_y = note_top + (note_height / 2.0).floor();
+                        let li = note_left + HNOTE_INDENT; // left indent x
+                        let ri = note_right - HNOTE_INDENT; // right indent x
                         write!(
                             svg.buf,
-                            r##"<polygon fill="{fill}" points="{x1},{mid} {x2},{top} {x3},{top} {x4},{mid} {x3},{bot} {x2},{bot}" style="stroke:#181818;stroke-width:0.5;"/>"##,
+                            r##"<polygon fill="{fill}" points="{li},{top},{ri},{top},{nr},{mid},{ri},{bot},{li},{bot},{nl},{mid},{li},{top}" style="stroke:#181818;stroke-width:0.5;"/>"##,
                             fill = note_fill,
-                            x1 = fmt_coord(note_left),
-                            mid = fmt_coord(mid_y),
-                            x2 = fmt_coord(note_left + hex_indent),
+                            li = fmt_coord(li),
                             top = fmt_coord(note_top),
-                            x3 = fmt_coord(note_right - hex_indent),
-                            x4 = fmt_coord(note_right),
+                            ri = fmt_coord(ri),
+                            nr = fmt_coord(note_right),
+                            mid = fmt_coord(mid_y),
                             bot = fmt_coord(note_bottom),
+                            nl = fmt_coord(note_left),
                         )
                         .unwrap();
                     }
@@ -3542,8 +3569,12 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme) -> String {
                 }
 
                 // Emit note text lines.
-                let text_x = note_left + NOTE_TEXT_X_PAD;
-                let mut text_y = note_top + NOTE_TEXT_Y_OFFSET;
+                let (text_x, text_y_offset) = match note.shape {
+                    NoteShape::Note => (note_left + NOTE_TEXT_X_PAD, NOTE_TEXT_Y_OFFSET),
+                    NoteShape::Hexagonal => (note_left + HNOTE_INDENT + 2.0, HNOTE_TEXT_Y_OFFSET),
+                    NoteShape::Rectangular => (note_left + NOTE_TEXT_X_PAD, HNOTE_TEXT_Y_OFFSET),
+                };
+                let mut text_y = note_top + text_y_offset;
                 for line in &lines {
                     let trimmed = line.trim();
                     if trimmed.is_empty() {
