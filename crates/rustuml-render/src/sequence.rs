@@ -2111,14 +2111,22 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme) -> String {
                     msg_count += 1;
                 }
                 Event::Divider(_) => {
-                    // Dividers take extra vertical space for the double-line separator.
-                    // PlantUML adds msg_step(true) + MSG_BASE_STEP for the visual.
+                    // Dividers take a total of msg_step + MSG_BASE_STEP vertical space.
+                    // The event_y is positioned at the divider text baseline, which is
+                    // at msg_step + 5.258 from the previous event. The remaining
+                    // MSG_BASE_STEP - 5.258 = 8.742 adds to the gap before the next message.
+                    const DIVIDER_TEXT_OFFSET: f64 = 5.258;
+                    const DIVIDER_TAIL_PAD: f64 = MSG_BASE_STEP - DIVIDER_TEXT_OFFSET;
                     if msg_count == 0 {
-                        y += first_msg_offset(has_text) + MSG_BASE_STEP;
+                        y += first_msg_offset(has_text) + DIVIDER_TEXT_OFFSET;
                     } else {
-                        y += msg_step(has_text) + MSG_BASE_STEP;
+                        y += msg_step(has_text) + DIVIDER_TEXT_OFFSET;
                     }
                     event_y_positions.push(y);
+                    // The divider's tail padding accounts for the space below the
+                    // text baseline (the double lines extend above, but PlantUML
+                    // also reserves space below for visual balance).
+                    y += DIVIDER_TAIL_PAD;
                     msg_count += 1;
                 }
                 Event::Delay(_) => {
@@ -3435,19 +3443,82 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme) -> String {
                 }
             }
             Event::Divider(text) => {
-                // Emit divider text
-                let tw = text_width(text, MSG_FONT_SIZE);
-                let mid_x = if !participants.is_empty() {
-                    (participants[0].center_x + participants[participants.len() - 1].center_x) / 2.0
+                // PlantUML renders dividers as:
+                // 1. A background strip rect (EEEEEE, 3px high)
+                // 2. Two horizontal lines (3px apart)
+                // 3. A label box rect (EEEEEE, bordered)
+                // 4. Bold text inside the label box
+                let tw = bold_text_width(text, MSG_FONT_SIZE);
+                let (line_left, line_right) = if !participants.is_empty() {
+                    let last = &participants[participants.len() - 1];
+                    (0.0, last.box_x + last.box_width + 5.0)
                 } else {
-                    50.0
+                    (0.0, 200.0)
                 };
+                let mid_x = (line_left + line_right) / 2.0;
+
+                // Event_y is the text baseline position.
+                let text_y = msg_y;
+                let line2_y = text_y - 2.9131;
+                let line1_y = line2_y - 3.0;
+
+                // Label box dimensions: 6px padding on each side, centered on divider
+                let label_box_w = tw + 2.0 * 6.0 + 6.2847; // PlantUML adds extra padding
+                let label_box_h = 23.3105;
+                let label_box_x = mid_x - label_box_w / 2.0;
+                let label_box_y = line1_y - 10.6553; // Box extends above the lines
+                let text_x = label_box_x + 6.0;
+
+                // 1. Background strip rect
                 write!(
                     svg.buf,
-                    r##"<text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="{}" x="{}" y="{}">{}</text>"##,
+                    r##"<rect fill="#EEEEEE" height="3" style="stroke:#EEEEEE;stroke-width:1;" width="{}" x="{}" y="{}"/>"##,
+                    fmt_coord(line_right - line_left),
+                    fmt_coord(line_left),
+                    fmt_coord(line1_y),
+                )
+                .unwrap();
+
+                // 2. First horizontal line
+                write!(
+                    svg.buf,
+                    r##"<line style="stroke:#000000;stroke-width:1;" x1="{}" x2="{}" y1="{}" y2="{}"/>"##,
+                    fmt_coord(line_left),
+                    fmt_coord(line_right),
+                    fmt_coord(line1_y),
+                    fmt_coord(line1_y),
+                )
+                .unwrap();
+
+                // 3. Second horizontal line
+                write!(
+                    svg.buf,
+                    r##"<line style="stroke:#000000;stroke-width:1;" x1="{}" x2="{}" y1="{}" y2="{}"/>"##,
+                    fmt_coord(line_left),
+                    fmt_coord(line_right),
+                    fmt_coord(line2_y),
+                    fmt_coord(line2_y),
+                )
+                .unwrap();
+
+                // 4. Label box rect
+                write!(
+                    svg.buf,
+                    r##"<rect fill="#EEEEEE" height="{}" style="stroke:#000000;stroke-width:2;" width="{}" x="{}" y="{}"/>"##,
+                    fmt_coord(label_box_h),
+                    fmt_coord(label_box_w),
+                    fmt_coord(label_box_x),
+                    fmt_coord(label_box_y),
+                )
+                .unwrap();
+
+                // 5. Bold text
+                write!(
+                    svg.buf,
+                    r##"<text fill="#000000" font-family="sans-serif" font-size="13" font-weight="700" lengthAdjust="spacing" textLength="{}" x="{}" y="{}">{}</text>"##,
                     fmt_coord(tw),
-                    fmt_coord(mid_x),
-                    fmt_coord(msg_y - 3.0),
+                    fmt_coord(text_x),
+                    fmt_coord(text_y),
                     escape_xml(text),
                 )
                 .unwrap();
