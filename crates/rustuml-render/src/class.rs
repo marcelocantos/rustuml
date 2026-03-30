@@ -897,25 +897,32 @@ fn render_entity_content(
         )
         .unwrap();
 
-        // Enum members (no visibility icon).
+        // Enum members: constants without visibility icons, fields/methods with icons.
         let mut member_y = sep_y + FIRST_MEMBER_OFFSET;
         for member in &entity.members {
-            let text = format_member_display(member);
-            let text_w = metrics::plantuml_text_width_14(&text);
-            write!(
-                svg,
-                r##"<text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="{}" x="{}" y="{}">{}</text>"##,
-                fmt_tl(text_w),
-                fmt4(x + ENUM_TEXT_OFFSET),
-                fmt4(member_y),
-                escape_xml(&text),
-            )
-            .unwrap();
+            if member.visibility != Visibility::Default {
+                // Member with explicit visibility: render with icon like class members.
+                render_member_line(svg, member, x, member_y);
+            } else {
+                // Enum constant: plain text, no visibility icon.
+                let text = format_member_display(member);
+                let text_w = metrics::plantuml_text_width_14(&text);
+                write!(
+                    svg,
+                    r##"<text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="{}" x="{}" y="{}">{}</text>"##,
+                    fmt_tl(text_w),
+                    fmt4(x + ENUM_TEXT_OFFSET),
+                    fmt4(member_y),
+                    escape_xml(&text),
+                )
+                .unwrap();
+            }
             member_y += MEMBER_SPACING;
         }
 
-        // Bottom separator.
-        let bottom_sep_y = member_y - FIRST_MEMBER_OFFSET + MEMBER_LINE_HEIGHT;
+        // Bottom separator: header_sep + compartment_pad + n_members * member_line_height.
+        let bottom_sep_y =
+            sep_y + COMPARTMENT_PAD + entity.members.len() as f64 * MEMBER_LINE_HEIGHT;
         write!(
             svg,
             r#"<line style="stroke:{};stroke-width:{};" x1="{}" x2="{}" y1="{}" y2="{}"/>"#,
