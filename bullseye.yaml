@@ -1,0 +1,98 @@
+last_evaluated: dd3b9530
+targets:
+  T1:
+    name: PlantUML exists as a single Rust binary with no runtime dependencies
+    status: identified
+    value: 20.0
+    cost: 20.0
+    acceptance:
+    - A single statically-linked Rust binary accepts PlantUML text input and produces SVG/PNG output for all diagram types
+    - No JVM, no Graphviz binary, no external font files required at runtime
+    - Output is structurally equivalent to Java PlantUML for the same inputs
+    context: PlantUML's JVM dependency makes deployment painful. The current Java codebase has weak test coverage (~12%) and a tangled architecture. A Rust port solves deployment (single binary, cross-platform, WASM-ready) while enabling clean architecture. External dependencies (Graphviz layout, KaTeX math rendering) are ported into the binary. The current Java version serves as the oracle for synthetic test generation.
+    origin: manual
+    discovered: 2026-03-22
+  T1.1:
+    name: Oracle-based test framework ✓
+    status: identified
+    value: 1.0
+    cost: 1.0
+    acceptance:
+    - TODO
+    context: Achieved 2026-03-26. 12,568 golden pairs across 30 categories and 18 diagram types. 11,104 pass, 0 fail, 1,464 skip (Java errors/unsupported). Parallel via rayon (~8s on 16 cores). Golden files in separate repo (rustuml-golden) as git submodule. Per-directory failure reporting. Layout timeout wrapper for infinite loops.
+    origin: manual
+    discovered: 2026-04-09
+  T1.2:
+    name: Hierarchical graph layout engine in Rust ✓
+    status: identified
+    value: 1.0
+    cost: 1.0
+    acceptance:
+    - TODO
+    context: 'Achieved 2026-03-29. Layout-rs replaced with vendored Graphviz C libraries (dot algorithm), statically linked via cc build script. Cubic bezier spline edge routing extracted from Graphviz''s libpathplan — same engine PlantUML uses. Used by 8 renderers: class, object, component, deployment, usecase, state, activity, dot. 138 bezier paths on the 50-class dense test graph (zero straight lines). Timeout guard (5s) with grid fallback. Thread-safe via mutex.'
+    origin: manual
+    discovered: 2026-04-09
+  T1.3:
+    name: PlantUML parser and TIM preprocessor ported to Rust ✓
+    status: identified
+    value: 1.0
+    cost: 1.0
+    acceptance:
+    - TODO
+    context: 'Achieved 2026-03-29. 22 diagram types parsed. Full TIM preprocessor with variables, functions, control flow, includes, themes, JSON. Stdlib includes bundled and resolved. EBNF: single-quoted terminals, special sequences, quote-aware semicolon splitting. Mindmap: bare `--` side separator. Preprocessor: single-quote comment stripping disabled in @startebnf blocks. 0 parse skips in golden tests (was 6). 299 parser tests.'
+    origin: manual
+    discovered: 2026-04-09
+  T1.4:
+    name: Diagram model and rendering pipeline ported to Rust ✓
+    status: identified
+    value: 1.0
+    cost: 1.0
+    acceptance:
+    - TODO
+    context: Achieved 2026-03-29. 22 diagram types render to SVG with full skinparam support. Skinparams collected and applied universally across all diagram types (was 4, now 22). All skinparam keys appearing in 5+ golden tests are handled. 211 render tests. Hyperlinks, creole tables/trees/lists, sprite rendering, ASCII renderers. No todo!() or unimplemented!() in render crate.
+    origin: manual
+    discovered: 2026-04-09
+  T1.5:
+    name: KaTeX math rendering ✓
+    status: identified
+    value: 1.0
+    cost: 1.0
+    acceptance:
+    - TODO
+    context: Achieved 2026-03-26. `rustuml-math` crate wired into parser/renderer. `@startmath`/`@endmath` and `@startlatex`/`@endlatex` dispatch to math renderer. 50 golden math tests pass.
+    origin: manual
+    discovered: 2026-04-09
+  T1.6:
+    name: YAML input format ✓
+    status: identified
+    value: 1.0
+    cost: 1.0
+    acceptance:
+    - TODO
+    context: Achieved 2026-03-22. All diagram model types serialize/deserialize via serde. Three input formats auto-detected.
+    origin: manual
+    discovered: 2026-04-09
+  T1.7:
+    name: Multi-format output (PNG, PDF, EPS) ✓
+    status: identified
+    value: 1.0
+    cost: 1.0
+    acceptance:
+    - TODO
+    context: Achieved 2026-03-29. SVG (default), PNG (resvg/tiny-skia at 96 DPI with configurable scale), PDF (svg2pdf), and EPS (raster-embedded PostScript) all working from a single binary. PlantUML-compatible CLI flags (-tsvg/-svg, -tpng/-png, -tpdf/-pdf, -teps/-eps, -ttxt/-txt). Format-parameterized golden smoke tests validate all 12,500+ diagrams across PNG/PDF/EPS with magic byte, dimension, BoundingBox, and page count checks. Unit tests cover dimension extraction, 2x scaling, and structural validation.
+    origin: manual
+    discovered: 2026-04-09
+  T2:
+    name: Ditaa rendering engine ported to Rust
+    status: identified
+    value: 5.0
+    cost: 10.0
+    acceptance:
+    - '`@startditaa` blocks render to PNG (embedded as base64 in SVG, matching PlantUML behavior)'
+    - ASCII box-drawing characters converted to anti-aliased shapes with optional rounded corners and shadows
+    - Arrows, text labels, and color annotations rendered correctly
+    - Golden test comparator uses perceptual image diff (not pixel-exact) since Java Graphics2D and tiny-skia have different anti-aliasing
+    - 100 ditaa golden tests pass within perceptual tolerance
+    context: 'Ditaa is a niche feature (~100 golden tests out of 12,568). PlantUML bundles the ditaa Java library (28 files, ~8K lines by Stathis Sideris). The algorithm is mechanical: parse ASCII grid → detect boxes/lines/arrows → rasterize. A Rust port would be ~2-3K lines using tiny-skia. The hard part is not the port but the test comparison — pixel-exact matching is impossible across rendering engines, so a perceptual diff comparator is needed.'
+    origin: manual
+    discovered: 2026-03-29
