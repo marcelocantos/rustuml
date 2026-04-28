@@ -7,7 +7,7 @@ bump. The pre-1.0 period exists to get these right.
 
 ## Interaction surface catalogue
 
-*Snapshot as of v0.3.0*
+*Snapshot as of v0.6.0*
 
 ### CLI interface
 

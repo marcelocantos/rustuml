@@ -1,3 +1,4 @@
+schema_version: 3
 last_evaluated: dd3b9530
 targets:
   T1:
@@ -96,3 +97,28 @@ targets:
     context: 'Ditaa is a niche feature (~100 golden tests out of 12,568). PlantUML bundles the ditaa Java library (28 files, ~8K lines by Stathis Sideris). The algorithm is mechanical: parse ASCII grid → detect boxes/lines/arrows → rasterize. A Rust port would be ~2-3K lines using tiny-skia. The hard part is not the port but the test comparison — pixel-exact matching is impossible across rendering engines, so a perceptual diff comparator is needed.'
     origin: manual
     discovered: 2026-03-29
+  T3:
+    name: Formula remains accurate as rustuml-oracle stays a dev/test-only crate; if oracle is ever shipped, openjdk is declared as a runtime dep
+    status: identified
+    value: 0.0
+    cost: 0.0
+    acceptance:
+    - 'Formula installs only the `rustuml` binary, NOT `rustuml-oracle` (verified 2026-04-27: install line is `system bin/"rustuml", "--version"` with no oracle binary copied to bin)'
+    - If shipping policy ever changes to include `rustuml-oracle` in the formula, `depends_on "openjdk"` is added at the same time — because the oracle invokes `java` to run PlantUML for cross-validation
+    - No further action required as long as oracle stays test-only
+    context: |-
+      Background: this target captures a documented audit conclusion so the question doesn't keep resurfacing in future homebrew-tap audits. The work is mostly preventive.
+
+      Audit findings for rustuml (from ~/think investigation 2026-04-27):
+      - `crates/rustuml-oracle/src/runner.rs:105` — calls `java` to invoke PlantUML for cross-validation against the original Java implementation. The oracle is part of the workspace but is a dev/test crate.
+      - Formula at `~/work/github.com/marcelocantos/homebrew-tap/Formula/rustuml.rb` installs only the `rustuml` binary (`system bin/\"rustuml\", \"--version\"` is the only post-install verification). rustuml-oracle is NOT shipped — verified by formula inspection 2026-04-27.
+
+      Conclusion: ✅ no action needed today. The formula is correctly excluding the oracle.
+
+      Trigger for action: if a future change adds `rustuml-oracle` to the bin install list (e.g., `bin.install \"target/release/rustuml-oracle\"`), then `depends_on \"openjdk\"` MUST be added in the same change — otherwise the shipped oracle will fail at runtime on `java` not found, both in terminal and (especially) in any launchd-spawned context.
+
+      This target stays in the `identified` state indefinitely — it's a guard rail. Retire it only if rustuml-oracle is removed from the workspace entirely (no longer shippable in any future).
+
+      Sibling targets exist on mnemo (🎯T47), sawmill (🎯T33), vellum (🎯T8), pageflip (🎯T32), jevons (🎯T19), ytt (🎯T2) covering the broader homebrew-tap dependency-audit initiative.
+    origin: forked-from spyder PATH-bug investigation in ~/think on 2026-04-27 (homebrew-tap-wide audit)
+    discovered: 2026-04-27
