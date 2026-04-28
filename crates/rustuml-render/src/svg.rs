@@ -26,6 +26,41 @@ impl SvgBuilder {
         }
     }
 
+    /// Construct a PlantUML-compatible SVG root with all the standard attributes.
+    ///
+    /// `diagram_type` is the `data-diagram-type` value (e.g. "STATE", "CLASS").
+    pub fn new_plantuml(width: f64, height: f64, diagram_type: &str) -> Self {
+        let w = width as i64;
+        let h = height as i64;
+        let mut buf = String::new();
+        write!(
+            buf,
+            r#"<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" contentStyleType="text/css" data-diagram-type="{diagram_type}" height="{h}px" preserveAspectRatio="none" style="width:{w}px;height:{h}px;background:#FFFFFF;" version="1.1" viewBox="0 0 {w} {h}" width="{w}px" zoomAndPan="magnify">"#,
+        )
+        .unwrap();
+        // PlantUML processing instruction and defs.
+        buf.push_str("<?plantuml ?>");
+        buf.push_str("<defs/>");
+        // Open the single wrapping <g>.
+        buf.push_str("<g>");
+        Self {
+            buf,
+            indent: 0,
+            group_depth: 1,
+        }
+    }
+
+    /// Finalize a PlantUML-compatible SVG (closes the wrapping `<g>` and `</svg>`).
+    pub fn finalize_plantuml(mut self) -> String {
+        self.buf.push_str("</g></svg>");
+        self.buf
+    }
+
+    /// Emit a raw string directly into the buffer, with no indentation or newline.
+    pub fn raw_inline(&mut self, s: &str) {
+        self.buf.push_str(s);
+    }
+
     pub fn rect(&mut self, x: f64, y: f64, w: f64, h: f64, fill: &str, stroke: &str) {
         self.line(&format!(
             r#"<rect x="{x}" y="{y}" width="{w}" height="{h}" fill="{fill}" stroke="{stroke}" stroke-width="1"/>"#
@@ -274,6 +309,13 @@ impl SvgBuilder {
 
     pub fn open_group(&mut self, class: &str) {
         self.line(&format!(r#"<g class="{class}">"#));
+        self.indent += 1;
+        self.group_depth += 1;
+    }
+
+    /// Open a `<g>` group with arbitrary attributes (pre-formatted attribute string).
+    pub fn open_group_attrs(&mut self, attrs: &str) {
+        self.line(&format!("<g {attrs}>"));
         self.indent += 1;
         self.group_depth += 1;
     }
@@ -764,6 +806,16 @@ impl SvgBuilder {
     }
 }
 
+fn escape_xml(s: &str) -> String {
+    s.replace('&', "&amp;")
+        .replace('<', "&lt;")
+        .replace('>', "&gt;")
+        .replace('"', "&quot;")
+        // Encode guillemets as numeric entities to match PlantUML SVG output.
+        .replace('\u{00ab}', "&#171;")
+        .replace('\u{00bb}', "&#187;")
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;
@@ -936,14 +988,4 @@ mod tests {
         // Unknown icon produces no path, but text still renders.
         assert!(output.contains("Text"), "expected text in: {output}");
     }
-}
-
-fn escape_xml(s: &str) -> String {
-    s.replace('&', "&amp;")
-        .replace('<', "&lt;")
-        .replace('>', "&gt;")
-        .replace('"', "&quot;")
-        // Encode guillemets as numeric entities to match PlantUML SVG output.
-        .replace('\u{00ab}', "&#171;")
-        .replace('\u{00bb}', "&#187;")
 }

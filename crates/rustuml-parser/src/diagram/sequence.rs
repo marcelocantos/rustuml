@@ -13,6 +13,9 @@ pub struct SequenceDiagram {
     pub participants: Vec<Participant>,
     pub events: Vec<Event>,
     pub autonumber: Option<AutoNumber>,
+    /// Whether `hide footbox` was specified — suppresses tail participant boxes.
+    #[serde(default)]
+    pub hide_footbox: bool,
 }
 
 /// A participant (lifeline) in a sequence diagram.
@@ -26,6 +29,12 @@ pub struct Participant {
     pub stereotype: Option<String>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub url: Option<String>,
+    /// Optional background color (e.g., "#red", "#FF0000").
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub color: Option<String>,
+    /// 1-based line number within the `@startuml` block.
+    #[serde(default)]
+    pub source_line: usize,
 }
 
 /// The visual shape of a participant.
@@ -55,7 +64,7 @@ pub enum Event {
     Delay(Option<String>),
     Space(Option<u32>),
     Ref(Ref),
-    Activate(String),
+    Activate(String, Option<String>),
     Deactivate(String),
     Destroy(String),
     Create(String),
@@ -71,6 +80,12 @@ pub struct Message {
     pub label: String,
     pub arrow: Arrow,
     pub activation: Option<ActivationChange>,
+    /// Optional color for activation bar (e.g., "#blue", "#FF0000").
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub activation_color: Option<String>,
+    /// 1-based line number within the `@startuml` block.
+    #[serde(default)]
+    pub source_line: usize,
 }
 
 /// Arrow style for a message.
@@ -79,6 +94,9 @@ pub struct Arrow {
     pub line: LineStyle,
     pub head: ArrowHead,
     pub direction: ArrowDirection,
+    /// Optional arrow color (e.g., "#red", "#FF0000").
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub color: Option<String>,
 }
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Default, Serialize, Deserialize)]
@@ -120,6 +138,15 @@ pub struct Note {
     pub position: NotePosition,
     pub participants: Vec<String>,
     pub text: String,
+    /// Visual shape of the note (default folded-corner, hnote hexagonal, rnote rectangular).
+    #[serde(default)]
+    pub shape: NoteShape,
+    /// Optional background color (e.g., "#blue", "#FEFFDD").
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub color: Option<String>,
+    /// 1-based line number within the `@startuml` block.
+    #[serde(default)]
+    pub source_line: usize,
 }
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Serialize, Deserialize)]
@@ -129,11 +156,26 @@ pub enum NotePosition {
     Over,
 }
 
+/// Visual shape of a note.
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Default, Serialize, Deserialize)]
+pub enum NoteShape {
+    /// Standard note with folded corner.
+    #[default]
+    Note,
+    /// Hexagonal note (hnote).
+    Hexagonal,
+    /// Rectangular note without fold (rnote).
+    Rectangular,
+}
+
 /// Start of a grouping construct (alt, opt, loop, etc.).
 #[derive(Debug, Serialize, Deserialize)]
 pub struct GroupStart {
     pub kind: GroupKind,
     pub label: Option<String>,
+    /// 1-based line number within the `@startuml` block.
+    #[serde(default)]
+    pub source_line: usize,
 }
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Serialize, Deserialize)]
@@ -151,6 +193,9 @@ pub enum GroupKind {
 #[derive(Debug, Serialize, Deserialize)]
 pub struct GroupElse {
     pub label: Option<String>,
+    /// 1-based line number within the `@startuml` block.
+    #[serde(default)]
+    pub source_line: usize,
 }
 
 /// A reference to another diagram.
@@ -158,12 +203,18 @@ pub struct GroupElse {
 pub struct Ref {
     pub participants: Vec<String>,
     pub text: String,
+    /// 1-based line number within the `@startuml` block.
+    #[serde(default)]
+    pub source_line: usize,
 }
 
 /// A return message (shorthand for dotted reply).
 #[derive(Debug, Serialize, Deserialize)]
 pub struct ReturnMessage {
     pub label: String,
+    /// 1-based line number within the `@startuml` block.
+    #[serde(default)]
+    pub source_line: usize,
 }
 
 /// Auto-numbering configuration.

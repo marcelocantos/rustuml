@@ -68,18 +68,27 @@ pub struct ArrowStep {
 pub struct IfBlock {
     pub condition: String,
     pub then_label: Option<String>,
+    /// 1-based line number within the `@startuml` block.
+    #[serde(default)]
+    pub source_line: usize,
 }
 
 #[derive(Debug, Serialize, Deserialize)]
 pub struct ElseIfBranch {
     pub condition: String,
     pub then_label: Option<String>,
+    /// 1-based line number within the `@startuml` block.
+    #[serde(default)]
+    pub source_line: usize,
 }
 
 #[derive(Debug, Serialize, Deserialize)]
 pub struct WhileBlock {
     pub condition: String,
     pub is_label: Option<String>,
+    /// 1-based line number within the `@startuml` block.
+    #[serde(default)]
+    pub source_line: usize,
 }
 
 /// Note position (left or right of the action).
@@ -100,6 +109,9 @@ pub struct NoteBlock {
 pub struct PartitionBlock {
     pub name: String,
     pub color: Option<String>,
+    /// 1-based line number within the `@startuml` block.
+    #[serde(default)]
+    pub source_line: usize,
 }
 
 #[derive(Debug, Serialize, Deserialize)]
@@ -110,4 +122,7 @@ pub struct RepeatWhileBlock {
     /// Label for the exit branch (e.g. `not (no)` in `repeat while (c) is (y) not (no)`).
     #[serde(skip_serializing_if = "Option::is_none")]
     pub not_label: Option<String>,
+    /// 1-based line number within the `@startuml` block.
+    #[serde(default)]
+    pub source_line: usize,
 }

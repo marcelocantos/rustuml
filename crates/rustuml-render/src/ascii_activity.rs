@@ -283,7 +283,7 @@ pub fn render_ascii(diagram: &ActivityDiagram) -> String {
                     NotePosition::Right => "right",
                 };
                 let text = format!("[{pos_str}: {}]", note.text);
-                grid.write_str(note_col, row.saturating_sub(1).max(0), &text);
+                grid.write_str(note_col, row.saturating_sub(1), &text);
             }
 
             ActivityStep::Swimlane(name) => {
@@ -347,6 +347,7 @@ mod tests {
             ActivityStep::If(IfBlock {
                 condition: "x > 0".to_string(),
                 then_label: Some("yes".to_string()),
+                source_line: 0,
             }),
             ActivityStep::Action("Positive".to_string()),
             ActivityStep::Else(Some("no".to_string())),

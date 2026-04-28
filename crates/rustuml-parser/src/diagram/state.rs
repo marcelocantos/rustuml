@@ -45,6 +45,9 @@ pub struct State {
     pub kind: StateKind,
     pub descriptions: Vec<String>,
     pub substates: Vec<String>,
+    /// 1-based line number within the `@startuml` block.
+    #[serde(default)]
+    pub source_line: usize,
 }
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Default, Serialize, Deserialize)]
@@ -66,4 +69,7 @@ pub struct Transition {
     pub from: String,
     pub to: String,
     pub label: Option<String>,
+    /// 1-based line number within the `@startuml` block.
+    #[serde(default)]
+    pub source_line: usize,
 }

@@ -99,6 +99,7 @@ fn push_node(
     label: String,
     kind: DeploymentNodeKind,
     stereotype: Option<String>,
+    source_line: usize,
 ) {
     if !nodes.iter().any(|n| n.id == id) {
         nodes.push(DeploymentNode {
@@ -107,6 +108,7 @@ fn push_node(
             kind,
             stereotype,
             children: Vec::new(),
+            source_line,
         });
     }
 }
@@ -308,7 +310,8 @@ pub fn parse_deployment(lines: &[String]) -> Result<DeploymentDiagram, ParseErro
     static RE_NOTE_LINK: LazyLock<Regex> =
         LazyLock::new(|| Regex::new(r"^(\w+)\s+\.\.\s+(\w+)\s*$").unwrap());
 
-    for line in lines {
+    for (line_idx, line) in lines.iter().enumerate() {
+        let current_line = line_idx + 1;
         let trimmed = line.trim();
         if trimmed.is_empty() {
             continue;
@@ -401,6 +404,7 @@ pub fn parse_deployment(lines: &[String]) -> Result<DeploymentDiagram, ParseErro
                 label,
                 DeploymentNodeKind::Component,
                 stereotype,
+                current_line,
             );
             if let Some(parent_id) = stack.last().cloned() {
                 add_child(&mut nodes, &parent_id, &id);
@@ -474,10 +478,16 @@ pub fn parse_deployment(lines: &[String]) -> Result<DeploymentDiagram, ParseErro
                             kind: DeploymentNodeKind::Node,
                             stereotype: None,
                             children: Vec::new(),
+                            source_line: current_line,
                         });
                     }
                 }
-                connections.push(DeploymentConnection { from, to, label });
+                connections.push(DeploymentConnection {
+                    from,
+                    to,
+                    label,
+                    source_line: current_line,
+                });
                 continue;
             }
 
@@ -494,7 +504,14 @@ pub fn parse_deployment(lines: &[String]) -> Result<DeploymentDiagram, ParseErro
                     let stereotype = caps.get(4).map(|m| m.as_str().trim().to_string());
                     let kind = kind_from_keyword(keyword);
 
-                    push_node(&mut nodes, id.clone(), label, kind, stereotype);
+                    push_node(
+                        &mut nodes,
+                        id.clone(),
+                        label,
+                        kind,
+                        stereotype,
+                        current_line,
+                    );
                     if let Some(parent_id) = stack.last().cloned() {
                         add_child(&mut nodes, &parent_id, &id);
                     }
@@ -518,7 +535,14 @@ pub fn parse_deployment(lines: &[String]) -> Result<DeploymentDiagram, ParseErro
                     let stereotype = caps.get(4).map(|m| m.as_str().trim().to_string());
                     let kind = kind_from_keyword(keyword);
 
-                    push_node(&mut nodes, id.clone(), label, kind, stereotype);
+                    push_node(
+                        &mut nodes,
+                        id.clone(),
+                        label,
+                        kind,
+                        stereotype,
+                        current_line,
+                    );
                     if let Some(parent_id) = stack.last().cloned() {
                         add_child(&mut nodes, &parent_id, &id);
                     }
@@ -544,11 +568,17 @@ pub fn parse_deployment(lines: &[String]) -> Result<DeploymentDiagram, ParseErro
                         kind: DeploymentNodeKind::Node,
                         stereotype: None,
                         children: Vec::new(),
+                        source_line: current_line,
                     });
                 }
             }
 
-            connections.push(DeploymentConnection { from, to, label });
+            connections.push(DeploymentConnection {
+                from,
+                to,
+                label,
+                source_line: current_line,
+            });
         }
     }
 

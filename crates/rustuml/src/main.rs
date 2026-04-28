@@ -60,7 +60,9 @@ fn main() {
             "-tpdf" | "-pdf" => output_mode = OutputMode::Pdf,
             "-teps" | "-eps" => output_mode = OutputMode::Eps,
             "-ttxt" | "-txt" => output_mode = OutputMode::Txt,
+            "--theme=slate" => theme = rustuml_render::style::Theme::slate(),
             "--theme=modern" => theme = rustuml_render::style::Theme::modern(),
+            "--theme=classic" => theme = rustuml_render::style::Theme::plantuml_default(),
             "--theme=default" => theme = rustuml_render::style::Theme::default(),
             s if s.starts_with("--theme-file=") => {
                 let path = &s[13..];

@@ -454,7 +454,7 @@ pub fn render_ascii(diagram: &SequenceDiagram) -> String {
             }
 
             // Events that don't consume vertical space in ASCII mode.
-            Event::Activate(_)
+            Event::Activate(_, _)
             | Event::Deactivate(_)
             | Event::Destroy(_)
             | Event::Create(_)
@@ -480,7 +480,7 @@ fn count_event_rows(diagram: &SequenceDiagram) -> Vec<usize> {
             Event::Return(_) => 2,
             Event::NoteOnLink(_) => 1,
             Event::Space(px_opt) => px_opt.map(|p| ((p as usize) / 8).max(1)).unwrap_or(1),
-            Event::Activate(_)
+            Event::Activate(_, _)
             | Event::Deactivate(_)
             | Event::Destroy(_)
             | Event::Create(_)
@@ -507,10 +507,13 @@ mod tests {
                     order: Some(i),
                     stereotype: None,
                     url: None,
+                    color: None,
+                    source_line: i + 1,
                 })
                 .collect(),
             events,
             autonumber: None,
+            hide_footbox: false,
         }
     }
 
@@ -523,8 +526,11 @@ mod tests {
                 line: LineStyle::Solid,
                 head: ArrowHead::Filled,
                 direction: ArrowDirection::LeftToRight,
+                color: None,
             },
             activation: None,
+            activation_color: None,
+            source_line: 0,
         })
     }
 
@@ -537,8 +543,11 @@ mod tests {
                 line: LineStyle::Dotted,
                 head: ArrowHead::Open,
                 direction: ArrowDirection::RightToLeft,
+                color: None,
             },
             activation: None,
+            activation_color: None,
+            source_line: 0,
         })
     }
 
@@ -620,6 +629,9 @@ mod tests {
                     position: NotePosition::Right,
                     participants: vec!["Bob".to_string()],
                     text: "a note".to_string(),
+                    shape: NoteShape::Note,
+                    color: None,
+                    source_line: 0,
                 }),
             ],
         );
@@ -658,6 +670,7 @@ mod tests {
             participants: vec![],
             events: vec![],
             autonumber: None,
+            hide_footbox: false,
         };
         assert_eq!(render_ascii(&diagram), "");
     }

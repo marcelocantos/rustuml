@@ -173,6 +173,7 @@ mod tests {
             kind,
             descriptions: vec![],
             substates: vec![],
+            source_line: 0,
         }
     }
 
@@ -181,6 +182,7 @@ mod tests {
             from: from.to_string(),
             to: to.to_string(),
             label: label.map(|s| s.to_string()),
+            source_line: 0,
         }
     }
 

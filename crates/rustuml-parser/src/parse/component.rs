@@ -138,7 +138,8 @@ pub fn parse_component(lines: &[String]) -> Result<ComponentDiagram, ParseError>
         .unwrap()
     });
 
-    for line in lines {
+    for (line_idx, line) in lines.iter().enumerate() {
+        let current_line = line_idx + 1;
         let trimmed = line.trim();
         if trimmed.is_empty() {
             if in_note {
@@ -278,6 +279,7 @@ pub fn parse_component(lines: &[String]) -> Result<ComponentDiagram, ParseError>
                         label,
                         stereotypes: parse_stereotypes(trimmed),
                         url: container_url,
+                        source_line: current_line,
                     });
                 }
                 if let Some(pkg) = package_stack.last_mut()
@@ -375,6 +377,7 @@ pub fn parse_component(lines: &[String]) -> Result<ComponentDiagram, ParseError>
                     label,
                     stereotypes: parse_stereotypes(trimmed),
                     url: comp_url,
+                    source_line: current_line,
                 });
             }
             if let Some(pkg) = package_stack.last_mut()
@@ -395,6 +398,7 @@ pub fn parse_component(lines: &[String]) -> Result<ComponentDiagram, ParseError>
                     label: name,
                     stereotypes: parse_stereotypes(trimmed),
                     url: None,
+                    source_line: current_line,
                 });
             }
             if let Some(pkg) = package_stack.last_mut()
@@ -462,6 +466,7 @@ pub fn parse_component(lines: &[String]) -> Result<ComponentDiagram, ParseError>
                         label: id.clone(),
                         stereotypes: Vec::new(),
                         url: None,
+                        source_line: current_line,
                     });
                 }
             }
@@ -474,6 +479,7 @@ pub fn parse_component(lines: &[String]) -> Result<ComponentDiagram, ParseError>
                     from_mult,
                     to_mult,
                     dashed,
+                    source_line: current_line,
                 });
             }
         }

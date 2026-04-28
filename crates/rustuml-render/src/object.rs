@@ -542,6 +542,7 @@ mod tests {
                     ],
                     stereotype: None,
                     color: None,
+                    source_line: 0,
                 },
                 ObjectInstance {
                     id: "Owner".into(),
@@ -553,6 +554,7 @@ mod tests {
                     }],
                     stereotype: None,
                     color: None,
+                    source_line: 0,
                 },
             ],
             links: vec![ObjectLink {
@@ -561,6 +563,7 @@ mod tests {
                 label: Some("drives".into()),
                 from_multiplicity: None,
                 to_multiplicity: None,
+                source_line: 0,
             }],
             notes: vec![],
             packages: vec![],
@@ -616,6 +619,7 @@ mod tests {
                 ],
                 stereotype: None,
                 color: None,
+                source_line: 0,
             }],
             links: vec![],
             notes: vec![],
