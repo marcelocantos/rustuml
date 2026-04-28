@@ -3,7 +3,7 @@ last_evaluated: dd3b9530
 targets:
   T1:
     name: PlantUML exists as a single Rust binary with no runtime dependencies
-    status: identified
+    status: achieved
     value: 20.0
     cost: 20.0
     acceptance:
@@ -13,9 +13,10 @@ targets:
     context: PlantUML's JVM dependency makes deployment painful. The current Java codebase has weak test coverage (~12%) and a tangled architecture. A Rust port solves deployment (single binary, cross-platform, WASM-ready) while enabling clean architecture. External dependencies (Graphviz layout, KaTeX math rendering) are ported into the binary. The current Java version serves as the oracle for synthetic test generation.
     origin: manual
     discovered: 2026-03-22
+    achieved: 2026-04-28
   T1.1:
     name: Oracle-based test framework ✓
-    status: identified
+    status: achieved
     value: 1.0
     cost: 1.0
     acceptance:
@@ -23,9 +24,10 @@ targets:
     context: Achieved 2026-03-26. 12,568 golden pairs across 30 categories and 18 diagram types. 11,104 pass, 0 fail, 1,464 skip (Java errors/unsupported). Parallel via rayon (~8s on 16 cores). Golden files in separate repo (rustuml-golden) as git submodule. Per-directory failure reporting. Layout timeout wrapper for infinite loops.
     origin: manual
     discovered: 2026-04-09
+    achieved: 2026-04-28
   T1.2:
     name: Hierarchical graph layout engine in Rust ✓
-    status: identified
+    status: achieved
     value: 1.0
     cost: 1.0
     acceptance:
@@ -33,9 +35,10 @@ targets:
     context: 'Achieved 2026-03-29. Layout-rs replaced with vendored Graphviz C libraries (dot algorithm), statically linked via cc build script. Cubic bezier spline edge routing extracted from Graphviz''s libpathplan — same engine PlantUML uses. Used by 8 renderers: class, object, component, deployment, usecase, state, activity, dot. 138 bezier paths on the 50-class dense test graph (zero straight lines). Timeout guard (5s) with grid fallback. Thread-safe via mutex.'
     origin: manual
     discovered: 2026-04-09
+    achieved: 2026-04-28
   T1.3:
     name: PlantUML parser and TIM preprocessor ported to Rust ✓
-    status: identified
+    status: achieved
     value: 1.0
     cost: 1.0
     acceptance:
@@ -43,9 +46,10 @@ targets:
     context: 'Achieved 2026-03-29. 22 diagram types parsed. Full TIM preprocessor with variables, functions, control flow, includes, themes, JSON. Stdlib includes bundled and resolved. EBNF: single-quoted terminals, special sequences, quote-aware semicolon splitting. Mindmap: bare `--` side separator. Preprocessor: single-quote comment stripping disabled in @startebnf blocks. 0 parse skips in golden tests (was 6). 299 parser tests.'
     origin: manual
     discovered: 2026-04-09
+    achieved: 2026-04-28
   T1.4:
     name: Diagram model and rendering pipeline ported to Rust ✓
-    status: identified
+    status: achieved
     value: 1.0
     cost: 1.0
     acceptance:
@@ -53,9 +57,10 @@ targets:
     context: Achieved 2026-03-29. 22 diagram types render to SVG with full skinparam support. Skinparams collected and applied universally across all diagram types (was 4, now 22). All skinparam keys appearing in 5+ golden tests are handled. 211 render tests. Hyperlinks, creole tables/trees/lists, sprite rendering, ASCII renderers. No todo!() or unimplemented!() in render crate.
     origin: manual
     discovered: 2026-04-09
+    achieved: 2026-04-28
   T1.5:
     name: KaTeX math rendering ✓
-    status: identified
+    status: achieved
     value: 1.0
     cost: 1.0
     acceptance:
@@ -63,9 +68,10 @@ targets:
     context: Achieved 2026-03-26. `rustuml-math` crate wired into parser/renderer. `@startmath`/`@endmath` and `@startlatex`/`@endlatex` dispatch to math renderer. 50 golden math tests pass.
     origin: manual
     discovered: 2026-04-09
+    achieved: 2026-04-28
   T1.6:
     name: YAML input format ✓
-    status: identified
+    status: achieved
     value: 1.0
     cost: 1.0
     acceptance:
@@ -73,9 +79,10 @@ targets:
     context: Achieved 2026-03-22. All diagram model types serialize/deserialize via serde. Three input formats auto-detected.
     origin: manual
     discovered: 2026-04-09
+    achieved: 2026-04-28
   T1.7:
     name: Multi-format output (PNG, PDF, EPS) ✓
-    status: identified
+    status: achieved
     value: 1.0
     cost: 1.0
     acceptance:
@@ -83,11 +90,14 @@ targets:
     context: Achieved 2026-03-29. SVG (default), PNG (resvg/tiny-skia at 96 DPI with configurable scale), PDF (svg2pdf), and EPS (raster-embedded PostScript) all working from a single binary. PlantUML-compatible CLI flags (-tsvg/-svg, -tpng/-png, -tpdf/-pdf, -teps/-eps, -ttxt/-txt). Format-parameterized golden smoke tests validate all 12,500+ diagrams across PNG/PDF/EPS with magic byte, dimension, BoundingBox, and page count checks. Unit tests cover dimension extraction, 2x scaling, and structural validation.
     origin: manual
     discovered: 2026-04-09
+    achieved: 2026-04-28
   T2:
     name: Ditaa rendering engine ported to Rust
-    status: identified
+    status: set_aside
     value: 5.0
     cost: 10.0
+    showcase: true
+    set_aside_reason: Parked. Ditaa is the only remaining parity gap (~100 of 12,568 golden tests). The Java port is mechanical (~2-3K lines of Rust over tiny-skia) but the test comparator needs perceptual image diff because Java Graphics2D and tiny-skia don't produce pixel-identical output. Not blocking single-binary delivery; revisit when there's appetite for the comparator work.
     acceptance:
     - '`@startditaa` blocks render to PNG (embedded as base64 in SVG, matching PlantUML behavior)'
     - ASCII box-drawing characters converted to anti-aliased shapes with optional rounded corners and shadows
@@ -102,6 +112,7 @@ targets:
     status: identified
     value: 0.0
     cost: 0.0
+    showcase: true
     acceptance:
     - 'Formula installs only the `rustuml` binary, NOT `rustuml-oracle` (verified 2026-04-27: install line is `system bin/"rustuml", "--version"` with no oracle binary copied to bin)'
     - If shipping policy ever changes to include `rustuml-oracle` in the formula, `depends_on "openjdk"` is added at the same time — because the oracle invokes `java` to run PlantUML for cross-validation
