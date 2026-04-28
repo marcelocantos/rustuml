@@ -283,7 +283,7 @@ pub fn render_ascii(diagram: &ActivityDiagram) -> String {
                     NotePosition::Right => "right",
                 };
                 let text = format!("[{pos_str}: {}]", note.text);
-                grid.write_str(note_col, row.saturating_sub(1).max(0), &text);
+                grid.write_str(note_col, row.saturating_sub(1), &text);
             }
 
             ActivityStep::Swimlane(name) => {

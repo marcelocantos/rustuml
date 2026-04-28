@@ -329,10 +329,8 @@ pub fn render_with_oracle(
     if let Some(orc) = oracle {
         render_oracle_connections(&mut svg, diagram, orc);
     } else {
-        let mut link_counter = entity_counter;
-        for conn in &diagram.connections {
+        for (link_counter, conn) in (entity_counter..).zip(diagram.connections.iter()) {
             let link_id = format!("lnk{link_counter}");
-            link_counter += 1;
 
             // Find source and target positions.
             let from_comp = diagram

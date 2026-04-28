@@ -2011,31 +2011,31 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme) -> String {
                     *num = num.saturating_add(an.step);
                 }
             }
-            Event::Note(note) => {
-                // Notes spanning multiple participants need gap between them.
-                if note.position == NotePosition::Over && note.participants.len() >= 2 {
-                    let first_idx = id_to_idx
-                        .get(note.participants.first().unwrap().as_str())
-                        .copied();
-                    let last_idx = id_to_idx
-                        .get(note.participants.last().unwrap().as_str())
-                        .copied();
-                    if let (Some(fi), Some(li)) = (first_idx, last_idx) {
-                        let max_tw = note
-                            .text
-                            .lines()
-                            .map(|l| text_width(l.trim(), MSG_FONT_SIZE))
-                            .fold(0.0_f64, f64::max);
-                        // The rendered note width = max(note_content_w, span + 38).
-                        // The note fits if span >= note_content_w - 38. So the minimum
-                        // total span is (note_content_w - 38), divided evenly across pairs.
-                        let note_content_w = note_content_width(max_tw, note.shape);
-                        let span_pairs = (li - fi) as f64;
-                        let per_pair = ((note_content_w - 38.0) / span_pairs).max(0.0);
-                        let (left, right) = if fi < li { (fi, li) } else { (li, fi) };
-                        for slot in &mut pair_max_label_width[left..right] {
-                            *slot = slot.max(per_pair);
-                        }
+            // Notes spanning multiple participants need gap between them.
+            Event::Note(note)
+                if note.position == NotePosition::Over && note.participants.len() >= 2 =>
+            {
+                let first_idx = id_to_idx
+                    .get(note.participants.first().unwrap().as_str())
+                    .copied();
+                let last_idx = id_to_idx
+                    .get(note.participants.last().unwrap().as_str())
+                    .copied();
+                if let (Some(fi), Some(li)) = (first_idx, last_idx) {
+                    let max_tw = note
+                        .text
+                        .lines()
+                        .map(|l| text_width(l.trim(), MSG_FONT_SIZE))
+                        .fold(0.0_f64, f64::max);
+                    // The rendered note width = max(note_content_w, span + 38).
+                    // The note fits if span >= note_content_w - 38. So the minimum
+                    // total span is (note_content_w - 38), divided evenly across pairs.
+                    let note_content_w = note_content_width(max_tw, note.shape);
+                    let span_pairs = (li - fi) as f64;
+                    let per_pair = ((note_content_w - 38.0) / span_pairs).max(0.0);
+                    let (left, right) = if fi < li { (fi, li) } else { (li, fi) };
+                    for slot in &mut pair_max_label_width[left..right] {
+                        *slot = slot.max(per_pair);
                     }
                 }
             }
