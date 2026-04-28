@@ -47,7 +47,7 @@ maintenance activities. Append-only — newest entries at the bottom.
 
 ## 2026-04-28 — /release v0.6.0
 
-- **Commit**: `pending`
+- **Commit**: `0cc4b014`
 - **Outcome**: Released v0.6.0 (darwin-arm64, linux-amd64, linux-arm64). Strict-XML golden parity pass — sequence, class, state, component, and activity renderers rewritten for exact PlantUML SVG equivalence.
   - **Golden comparator**: rewritten for strict XML equivalence. Replaces tolerance-based comparison with structural match.
   - **Font metrics**: PlantUML-compatible metrics extracted from golden SVGs; truncated values replaced with exact Java AWT binary fractions.
