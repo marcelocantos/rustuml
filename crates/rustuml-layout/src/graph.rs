@@ -407,7 +407,7 @@ mod tests {
         );
         // Cubic bezier: should be 3N+1 points (1 start + N segments of 3).
         assert!(
-            (path.points.len() - 1) % 3 == 0,
+            (path.points.len() - 1).is_multiple_of(3),
             "expected 3N+1 points, got {}",
             path.points.len()
         );

@@ -198,7 +198,11 @@ mod tests {
         // All characters should be in ASCII85 range [33..117] (! through u)
         for c in result.chars() {
             let b = c as u8;
-            assert!(b >= 33 && b <= 117, "Character {} outside ASCII85 range", c);
+            assert!(
+                (33..=117).contains(&b),
+                "Character {} outside ASCII85 range",
+                c
+            );
         }
     }
 }

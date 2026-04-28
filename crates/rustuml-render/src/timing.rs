@@ -574,8 +574,10 @@ mod tests {
 
     #[test]
     fn title_in_svg() {
-        let mut meta = DiagramMeta::default();
-        meta.title = Some("My Timing".into());
+        let meta = DiagramMeta {
+            title: Some("My Timing".into()),
+            ..Default::default()
+        };
         let d = TimingDiagram {
             meta,
             time_points: vec![0, 100],

@@ -806,6 +806,16 @@ impl SvgBuilder {
     }
 }
 
+fn escape_xml(s: &str) -> String {
+    s.replace('&', "&amp;")
+        .replace('<', "&lt;")
+        .replace('>', "&gt;")
+        .replace('"', "&quot;")
+        // Encode guillemets as numeric entities to match PlantUML SVG output.
+        .replace('\u{00ab}', "&#171;")
+        .replace('\u{00bb}', "&#187;")
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;
@@ -978,14 +988,4 @@ mod tests {
         // Unknown icon produces no path, but text still renders.
         assert!(output.contains("Text"), "expected text in: {output}");
     }
-}
-
-fn escape_xml(s: &str) -> String {
-    s.replace('&', "&amp;")
-        .replace('<', "&lt;")
-        .replace('>', "&gt;")
-        .replace('"', "&quot;")
-        // Encode guillemets as numeric entities to match PlantUML SVG output.
-        .replace('\u{00ab}', "&#171;")
-        .replace('\u{00bb}', "&#187;")
 }
