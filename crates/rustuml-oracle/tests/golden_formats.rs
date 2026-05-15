@@ -135,13 +135,6 @@ fn run_one(puml_path: &Path, root: &Path, eps_sample: bool) -> FormatResult {
         }
     };
 
-    if source.contains("%date()") {
-        return FormatResult {
-            name: rel,
-            outcome: FormatOutcome::Skip("non-deterministic %date()".into()),
-        };
-    }
-
     // Check golden SVG for known errors.
     let golden_svg = match std::fs::read_to_string(puml_path.with_extension("svg")) {
         Ok(s) => s,
@@ -263,6 +256,10 @@ fn run_one(puml_path: &Path, root: &Path, eps_sample: bool) -> FormatResult {
 
 #[test]
 fn golden_format_smoke() {
+    // SAFETY: set before any worker threads are spawned below.
+    // Pin to the AEDT instant captured in `edge_seq_title_with_variables`.
+    unsafe { std::env::set_var("RUSTUML_DEBUG", "date=1774210426000,tz=AEDT+1100") };
+
     let root = golden_dir();
     if !root.exists() || !root.join("sequence").exists() {
         eprintln!("golden submodule not populated — run: git submodule update --init");

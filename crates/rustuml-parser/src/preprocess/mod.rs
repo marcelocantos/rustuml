@@ -12,7 +12,10 @@ use regex::Regex;
 
 use crate::diagram::SpriteData;
 
+mod debug;
 mod stdlib;
+
+use debug::{RenderClock, TzSpec};
 
 /// Output from the preprocessor: expanded lines plus any sprite definitions.
 pub struct PreprocessOutput {
@@ -305,6 +308,11 @@ struct PreprocessContext {
     /// Pending return value from a `!return` inside a function body.
     /// Set by process_one_line when `!return` is encountered while active.
     return_signal: Option<Value>,
+    /// Wall-clock snapshot captured once at render start. Drives `%date()`
+    /// so all calls within a single render see the same instant and zone.
+    /// Defaults to system time + local timezone; both overridable via
+    /// `RUSTUML_DEBUG` (see [`debug`]) for deterministic golden tests.
+    render_clock: RenderClock,
 }
 
 const MAX_INCLUDE_DEPTH: usize = 10;
@@ -370,6 +378,7 @@ impl PreprocessContext {
             collecting_sub: None,
             local_vars: Vec::new(),
             return_signal: None,
+            render_clock: RenderClock::from_env(),
         }
     }
 
@@ -1970,20 +1979,12 @@ impl PreprocessContext {
             "true" => "1".to_string(),
             "false" => "0".to_string(),
             "date" => {
-                if let Ok(forced) = std::env::var("RUSTUML_DATE") {
-                    forced
+                let fmt = args.first().copied().unwrap_or("");
+                let clock = &self.render_clock;
+                if fmt.is_empty() {
+                    format_java_date(clock.epoch_ms, &clock.tz)
                 } else {
-                    let now = std::time::SystemTime::now();
-                    let secs = now
-                        .duration_since(std::time::UNIX_EPOCH)
-                        .unwrap_or_default()
-                        .as_secs();
-                    let fmt = args.first().copied().unwrap_or("");
-                    if fmt.is_empty() {
-                        format_java_date(secs)
-                    } else {
-                        format_java_date_pattern(secs, fmt)
-                    }
+                    format_java_date_pattern(clock.epoch_ms, &clock.tz, fmt)
                 }
             }
             "size" => {
@@ -2165,17 +2166,17 @@ impl PreprocessContext {
 // Helper functions
 // ---------------------------------------------------------------------------
 
-/// Format epoch seconds as Java's `Date.toString()`: `"dow mon dd hh:mm:ss tz yyyy"`.
+/// Format epoch milliseconds as Java's `Date.toString()`: `"dow mon dd hh:mm:ss tz yyyy"`.
 ///
-/// Uses UTC. When `RUSTUML_DATE` is set, that value is returned instead
-/// (useful for deterministic golden tests).
-fn format_java_date(epoch_secs: u64) -> String {
+/// Renders wall clock in the supplied timezone. Java's `Date.toString()`
+/// has no sub-second precision, so the millisecond remainder is discarded.
+fn format_java_date(epoch_ms: u64, tz: &TzSpec) -> String {
     const DAYS: [&str; 7] = ["Thu", "Fri", "Sat", "Sun", "Mon", "Tue", "Wed"];
     const MONTHS: [&str; 12] = [
         "Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec",
     ];
 
-    let s = epoch_secs as i64;
+    let s = (epoch_ms / 1000) as i64 + tz.offset_secs as i64;
     let secs = ((s % 86400) + 86400) % 86400;
     let hh = secs / 3600;
     let mm = (secs % 3600) / 60;
@@ -2223,22 +2224,25 @@ fn format_java_date(epoch_secs: u64) -> String {
     let day = days + 1;
 
     format!(
-        "{dow} {mon} {day:02} {hh:02}:{mm:02}:{ss:02} UTC {year}",
+        "{dow} {mon} {day:02} {hh:02}:{mm:02}:{ss:02} {tz} {year}",
         mon = MONTHS[month],
+        tz = tz.name,
     )
 }
 
-/// Format epoch seconds using a Java `SimpleDateFormat` pattern.
+/// Format epoch milliseconds using a Java `SimpleDateFormat` pattern.
 ///
-/// Supports the most common tokens: `yyyy`, `yy`, `MM`, `dd`, `HH`, `mm`, `ss`,
-/// `EEE` (day-of-week), `MMM` (month abbreviation). Literal text passes through.
-fn format_java_date_pattern(epoch_secs: u64, pattern: &str) -> String {
+/// Renders wall clock in the supplied timezone. Supports the most common
+/// tokens: `yyyy`, `yy`, `MM`, `dd`, `HH`, `mm`, `ss`, `EEE` (day-of-week),
+/// `MMM` (month abbreviation). Literal text passes through.
+fn format_java_date_pattern(epoch_ms: u64, tz: &TzSpec, pattern: &str) -> String {
     const DAYS: [&str; 7] = ["Thu", "Fri", "Sat", "Sun", "Mon", "Tue", "Wed"];
     const MONTHS: [&str; 12] = [
         "Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec",
     ];
 
-    let s = epoch_secs as i64;
+    let _millis = (epoch_ms % 1000) as u32;
+    let s = (epoch_ms / 1000) as i64 + tz.offset_secs as i64;
     let secs = ((s % 86400) + 86400) % 86400;
     let hh = secs / 3600;
     let mm_time = (secs % 3600) / 60;

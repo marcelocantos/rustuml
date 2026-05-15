@@ -138,8 +138,6 @@ fn run_one(puml_path: &Path, root: &Path) -> TestResult {
         }
     };
 
-    let has_date = source.contains("%date(");
-
     let golden_svg = match std::fs::read_to_string(puml_path.with_extension("svg")) {
         Ok(s) => s,
         Err(e) => {
@@ -160,14 +158,6 @@ fn run_one(puml_path: &Path, root: &Path) -> TestResult {
         return TestResult {
             name: rel,
             outcome: Outcome::Skip("unsupported keyword".into()),
-        };
-    }
-    // Skip %date() tests — the golden has a baked-in timestamp that
-    // can never match our runtime output.
-    if has_date {
-        return TestResult {
-            name: rel,
-            outcome: Outcome::Skip("contains %date()".into()),
         };
     }
     // Skip ditaa diagrams — these produce raster images, not SVG elements.
@@ -249,8 +239,18 @@ fn run_one(puml_path: &Path, root: &Path) -> TestResult {
     }
 }
 
+/// `%date(...)` goldens in the corpus were all generated on 2026-03-23
+/// AEDT (UTC+11). The `edge_seq_title_with_variables` golden captures a
+/// specific second within that day (`Mon Mar 23 07:13:46 AEDT 2026`,
+/// epoch 1774210426s); the others (`yyyy-MM-dd` form) only depend on the
+/// day, so this pin works for all three.
+const GOLDEN_DEBUG: &str = "date=1774210426000,tz=AEDT+1100";
+
 #[test]
 fn golden_pairs() {
+    // SAFETY: set before any threads are spawned by rayon below.
+    unsafe { std::env::set_var("RUSTUML_DEBUG", GOLDEN_DEBUG) };
+
     let root = golden_dir();
     if !root.exists() || !root.join("sequence").exists() {
         eprintln!("golden submodule not populated — run: git submodule update --init");
