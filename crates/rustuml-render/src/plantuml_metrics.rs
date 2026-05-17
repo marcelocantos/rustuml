@@ -60,6 +60,43 @@ pub fn descent(font_size: f64) -> f64 {
     }
 }
 
+// ─── Monospaced metrics ─────────────────────────────────────────────
+// Java AWT's `Monospaced` logical font on macOS gives identical advance
+// widths for every printable ASCII character at a given size, and the
+// `BOLD` style produces the same width as `PLAIN`. The ascent / descent
+// / height are likewise size-proportional, so the whole set collapses
+// to four ratios.
+//
+// Extracted via tools/MonoMetricsExtract.java on the same JVM that
+// generates the golden SVGs.
+
+const MONO_WIDTH_PER_SIZE: f64 = 0.60205078125;
+const MONO_ASCENT_PER_SIZE: f64 = 0.92822265625;
+const MONO_DESCENT_PER_SIZE: f64 = 0.23583984375;
+const MONO_HEIGHT_PER_SIZE: f64 = 1.1640625;
+
+/// Width of `text` rendered in PlantUML's `Monospaced` font at the given
+/// size. Every character contributes the same advance, so the result is
+/// `char_count * size * ratio`. Bold doesn't change the width.
+pub fn mono_text_width(text: &str, font_size: f64) -> f64 {
+    text.chars().count() as f64 * font_size * MONO_WIDTH_PER_SIZE
+}
+
+/// Monospaced ascent (size * ratio).
+pub fn mono_ascent(font_size: f64) -> f64 {
+    font_size * MONO_ASCENT_PER_SIZE
+}
+
+/// Monospaced descent (size * ratio).
+pub fn mono_descent(font_size: f64) -> f64 {
+    font_size * MONO_DESCENT_PER_SIZE
+}
+
+/// Monospaced text height (ascent + descent).
+pub fn mono_text_height(font_size: f64) -> f64 {
+    font_size * MONO_HEIGHT_PER_SIZE
+}
+
 fn char_width_table(font_size: f64, bold: bool) -> &'static [f64; 95] {
     if bold {
         match font_size as u32 {
@@ -765,6 +802,30 @@ mod tests {
         let box_h = text_height(12.0) + 20.0;
         let offset = (box_h - text_height(12.0)) / 2.0 + ascent(12.0);
         assert_eq!(fmt_coord(offset), "21.6016");
+    }
+
+    #[test]
+    fn mono_widths_match_goldens() {
+        // From test-diagrams/golden/creole/creole_mono_in_activity.svg:
+        //   `mono activity` (13 chars with NBSP) at size 12 → textLength="93.9199"
+        assert_eq!(
+            fmt_coord(mono_text_width("mono\u{00a0}activity", 12.0)),
+            "93.9199"
+        );
+        // From creole_combo_bold_mono_in_activity.svg:
+        //   `bold mono` (9 chars with NBSP) at size 12 → textLength="65.0215"
+        assert_eq!(
+            fmt_coord(mono_text_width("bold\u{00a0}mono", 12.0)),
+            "65.0215"
+        );
+    }
+
+    #[test]
+    fn mono_height_constant() {
+        // size=12 → height=13.96875, ascent=11.138671875, descent=2.830078125
+        assert_eq!(mono_text_height(12.0), 13.96875);
+        assert_eq!(mono_ascent(12.0), 11.138671875);
+        assert_eq!(mono_descent(12.0), 2.830078125);
     }
 
     #[test]

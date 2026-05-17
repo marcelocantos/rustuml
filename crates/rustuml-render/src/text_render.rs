@@ -50,11 +50,21 @@ pub fn emit_text(buf: &mut String, content: &str, base: &TextBase<'_>) -> f64 {
     emit_segments(buf, &segments, base)
 }
 
-/// Sans-serif width of `content` with creole markers stripped. The standard
-/// measurement helper for renderer layout: matches what PlantUML measures
-/// when sizing boxes around creole-marked labels.
+/// Width of `content` after creole resolution — the value a renderer needs
+/// to size boxes around a label. Per-segment styling (monospace vs sans-
+/// serif, bold, custom size) is honoured by routing through `total_width`.
 pub fn measure(content: &str, font_size: f64, bold: bool) -> f64 {
-    pm::text_width(&creole::stripped_text(content), font_size, bold)
+    let base = TextBase {
+        x: 0.0,
+        y: 0.0,
+        font_size: font_size as u32,
+        font_family: "sans-serif",
+        fill: "#000000",
+        bold,
+        italic: false,
+        skip_underline: false,
+    };
+    total_width(content, &base)
 }
 
 /// Pre-computed widths for the segments. Useful when the caller needs the
@@ -93,9 +103,9 @@ fn emit_segments(buf: &mut String, segments: &[Segment], base: &TextBase<'_>) ->
     total
 }
 
-/// Width of one segment under the effective styling. Uses sans-serif
-/// metrics; monospace and custom font sizes will need a richer metric
-/// surface to be byte-for-byte accurate.
+/// Width of one segment under the effective styling. Routes to the
+/// monospace metric path when the segment is monospaced; otherwise uses
+/// sans-serif.
 fn segment_width(seg: &Segment, base: &TextBase<'_>) -> f64 {
     let raw = unescape_for_metrics(&seg.text);
     let bold = base.bold || seg.style.bold;
@@ -104,7 +114,11 @@ fn segment_width(seg: &Segment, base: &TextBase<'_>) -> f64 {
         .size
         .map(|s| s as f64)
         .unwrap_or(base.font_size as f64);
-    pm::text_width(&raw, font_size, bold)
+    if seg.style.monospace {
+        pm::mono_text_width(&raw, font_size)
+    } else {
+        pm::text_width(&raw, font_size, bold)
+    }
 }
 
 /// Reverse XML escaping for metric calculation — PlantUML measures text
