@@ -210,7 +210,24 @@ targets:
     cost: 0.0
     acceptance:
     - The `creole/` directory under `test-diagrams/golden` produces 0 strict-XML failures when `cargo test --test golden_pairs` runs.
-    context: '624 strict-XML diffs as of 2026-05-17. Creole is the cross-cutting markup language used in note bodies, labels, headers/footers across all diagram types. Lives in crates/rustuml-render/src/creole.rs. Likely gaps: nested lists, table layout, tree syntax, image fallback rendering, monospace tspans, escape rules. Fixes here often cascade into improvements across multiple diagram-type buckets.'
+    context: |-
+      624 strict-XML diffs as of 2026-05-17. Cross-cutting markup language for note bodies, labels, headers/footers across all diagram types. Lives in crates/rustuml-render/src/creole.rs.
+
+      **Structural finding (2026-05-17):** PlantUML's golden corpus contains ZERO `<tspan>` elements — it emits styled text as separate `<text>` elements at calculated x offsets, one per uniform style run, with styles lifted to attributes on the text element itself. The existing creole::to_svg_tspans path always wraps in `<tspan>` and is structurally incompatible with the goldens; that is why no renderer called it before.
+
+      **Foundation laid in commit 0677d5c3:**
+      - creole::parse_segments / parse_segments_no_underline / stripped_text — segment-based parser mirroring the markup grammar.
+      - text_render module — TextBase, emit_text, measure, total_width, CSS color normalisation.
+      - activity renderer wired through emit_text + text_render::measure (all 17 measurement sites and the text_element body).
+
+      **Why the pass counter has not moved yet:** structural creole output is now correct (verified by xmllint diff: byte-for-byte text content and lifted style attributes). But strict-XML failure persists on activity tests because of (a) pre-existing activity-renderer baseline issues — 1px y-offsets, bold sans-serif metric off by ~2px on 6-char strings, attribute ordering quirks — and (b) missing monospace font metrics, so any `""..""` content has wrong textLength. The renderer is structurally honest; the underlying geometry still needs work.
+
+      **Remaining work:**
+      1. Propagate emit_text wiring to class.rs (4 sites), state.rs (10), component.rs (12), sequence.rs (24). Each follows the activity pattern — replace text_element body, swap pm::text_width to text_render::measure at upstream sizing sites.
+      2. Reverse-engineer monospace font metrics from goldens that use `""..""` (delegate-friendly — mechanical extraction across ~100 goldens).
+      3. Fix per-renderer baseline geometry (handled under each diagram's own T4.x target; this isn't pure creole work).
+
+      After those land, creole tests should cascade-pass across multiple buckets, because most creole failures in non-creole buckets come from the same renderers leaking literal `**` markers.
     origin: manual
     discovered: 2026-05-17
   T4.7:
