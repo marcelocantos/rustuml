@@ -12,9 +12,9 @@ use rustuml_layout::graph::{Direction, EdgePath, LayoutGraph};
 use rustuml_parser::diagram::component::*;
 
 use crate::layout_oracle::OracleLayout;
-use crate::metrics;
 use crate::style::Theme;
 use crate::svg::SvgBuilder;
+use crate::text_render::{self, TextBase};
 
 // ---------------------------------------------------------------------------
 // PlantUML constants (extracted from golden SVGs)
@@ -274,20 +274,42 @@ pub fn render_with_oracle(
         for (si, stereo) in comp.stereotypes.iter().enumerate() {
             let ty = first_text_y + si as f64 * LINE_HEIGHT;
             let label = format!("\u{00AB}{stereo}\u{00BB}"); // «stereo»
-            svg.raw(&format!(
-                r#"<text fill="{TEXT_COLOR}" font-family="sans-serif" font-size="{FONT_SIZE}" font-style="italic" lengthAdjust="spacing" textLength="{tl}" x="{text_x}" y="{ty}">{escaped}</text>"#,
-                tl = metrics::text_width(&label, FONT_SIZE),
-                escaped = escape_xml(&label),
-            ));
+            let mut text_buf = String::new();
+            text_render::emit_text(
+                &mut text_buf,
+                &label,
+                &TextBase {
+                    x: text_x,
+                    y: ty,
+                    font_size: FONT_SIZE as u32,
+                    font_family: "sans-serif",
+                    fill: TEXT_COLOR,
+                    bold: false,
+                    italic: true,
+                    skip_underline: false,
+                },
+            );
+            svg.raw(&text_buf);
         }
 
         // Label (last line).
         let label_y = first_text_y + comp.stereotypes.len() as f64 * LINE_HEIGHT;
-        svg.raw(&format!(
-            r#"<text fill="{TEXT_COLOR}" font-family="sans-serif" font-size="{FONT_SIZE}" lengthAdjust="spacing" textLength="{tl}" x="{text_x}" y="{label_y}">{escaped}</text>"#,
-            tl = metrics::text_width(&comp.label, FONT_SIZE),
-            escaped = escape_xml(&comp.label),
-        ));
+        let mut text_buf = String::new();
+        text_render::emit_text(
+            &mut text_buf,
+            &comp.label,
+            &TextBase {
+                x: text_x,
+                y: label_y,
+                font_size: FONT_SIZE as u32,
+                font_family: "sans-serif",
+                fill: TEXT_COLOR,
+                bold: false,
+                italic: false,
+                skip_underline: false,
+            },
+        );
+        svg.raw(&text_buf);
 
         if comp.url.is_some() {
             svg.close_link();
@@ -315,12 +337,24 @@ pub fn render_with_oracle(
 
         // Label below.
         let label_y = iy + IFACE_R + LINE_HEIGHT + 4.0;
-        svg.raw(&format!(
-            r#"<text fill="{TEXT_COLOR}" font-family="sans-serif" font-size="{FONT_SIZE}" lengthAdjust="spacing" textLength="{tl}" x="{lx}" y="{label_y}">{escaped}</text>"#,
-            tl = metrics::text_width(&iface.label, FONT_SIZE),
-            lx = ix - metrics::text_width(&iface.label, FONT_SIZE) / 2.0,
-            escaped = escape_xml(&iface.label),
-        ));
+        let lw = text_render::measure(&iface.label, FONT_SIZE, false);
+        let lx = ix - lw / 2.0;
+        let mut text_buf = String::new();
+        text_render::emit_text(
+            &mut text_buf,
+            &iface.label,
+            &TextBase {
+                x: lx,
+                y: label_y,
+                font_size: FONT_SIZE as u32,
+                font_family: "sans-serif",
+                fill: TEXT_COLOR,
+                bold: false,
+                italic: false,
+                skip_underline: false,
+            },
+        );
+        svg.raw(&text_buf);
 
         svg.raw("</g>");
     }
@@ -459,31 +493,60 @@ pub fn render_with_oracle(
                 if let Some(label) = &conn.label {
                     let mx = (first.0 + last.0) / 2.0;
                     let my = (first.1 + last.1) / 2.0;
-                    svg.raw(&format!(
-                    r#"<text fill="{TEXT_COLOR}" font-family="sans-serif" font-size="{LINK_FONT}" lengthAdjust="spacing" textLength="{tl}" x="{tx}" y="{ty}">{escaped}</text>"#,
-                    tl = metrics::text_width(label, LINK_FONT),
-                    tx = mx + 1.0,
-                    ty = my - 4.0,
-                    escaped = escape_xml(label),
-                ));
+                    let mut text_buf = String::new();
+                    text_render::emit_text(
+                        &mut text_buf,
+                        label,
+                        &TextBase {
+                            x: mx + 1.0,
+                            y: my - 4.0,
+                            font_size: LINK_FONT as u32,
+                            font_family: "sans-serif",
+                            fill: TEXT_COLOR,
+                            bold: false,
+                            italic: false,
+                            skip_underline: false,
+                        },
+                    );
+                    svg.raw(&text_buf);
                 }
                 if let Some(from_mult) = &conn.from_mult {
-                    svg.raw(&format!(
-                    r#"<text fill="{TEXT_COLOR}" font-family="sans-serif" font-size="{LINK_FONT}" lengthAdjust="spacing" textLength="{tl}" x="{tx}" y="{ty}">{escaped}</text>"#,
-                    tl = metrics::text_width(from_mult, LINK_FONT),
-                    tx = first.0 - metrics::text_width(from_mult, LINK_FONT) - 1.0,
-                    ty = first.1 + LINK_FONT + 2.0,
-                    escaped = escape_xml(from_mult),
-                ));
+                    let mw = text_render::measure(from_mult, LINK_FONT, false);
+                    let mut text_buf = String::new();
+                    text_render::emit_text(
+                        &mut text_buf,
+                        from_mult,
+                        &TextBase {
+                            x: first.0 - mw - 1.0,
+                            y: first.1 + LINK_FONT + 2.0,
+                            font_size: LINK_FONT as u32,
+                            font_family: "sans-serif",
+                            fill: TEXT_COLOR,
+                            bold: false,
+                            italic: false,
+                            skip_underline: false,
+                        },
+                    );
+                    svg.raw(&text_buf);
                 }
                 if let Some(to_mult) = &conn.to_mult {
-                    svg.raw(&format!(
-                    r#"<text fill="{TEXT_COLOR}" font-family="sans-serif" font-size="{LINK_FONT}" lengthAdjust="spacing" textLength="{tl}" x="{tx}" y="{ty}">{escaped}</text>"#,
-                    tl = metrics::text_width(to_mult, LINK_FONT),
-                    tx = last.0 - metrics::text_width(to_mult, LINK_FONT) - 1.0,
-                    ty = last.1 - 4.0,
-                    escaped = escape_xml(to_mult),
-                ));
+                    let mw = text_render::measure(to_mult, LINK_FONT, false);
+                    let mut text_buf = String::new();
+                    text_render::emit_text(
+                        &mut text_buf,
+                        to_mult,
+                        &TextBase {
+                            x: last.0 - mw - 1.0,
+                            y: last.1 - 4.0,
+                            font_size: LINK_FONT as u32,
+                            font_family: "sans-serif",
+                            fill: TEXT_COLOR,
+                            bold: false,
+                            italic: false,
+                            skip_underline: false,
+                        },
+                    );
+                    svg.raw(&text_buf);
                 }
             } else {
                 // Straight line fallback.
@@ -504,31 +567,60 @@ pub fn render_with_oracle(
                 if let Some(label) = &conn.label {
                     let mx = (from_cx + to_cx) / 2.0;
                     let my = (from_cy + to_cy) / 2.0;
-                    svg.raw(&format!(
-                    r#"<text fill="{TEXT_COLOR}" font-family="sans-serif" font-size="{LINK_FONT}" lengthAdjust="spacing" textLength="{tl}" x="{tx}" y="{ty}">{escaped}</text>"#,
-                    tl = metrics::text_width(label, LINK_FONT),
-                    tx = mx + 1.0,
-                    ty = my - 4.0,
-                    escaped = escape_xml(label),
-                ));
+                    let mut text_buf = String::new();
+                    text_render::emit_text(
+                        &mut text_buf,
+                        label,
+                        &TextBase {
+                            x: mx + 1.0,
+                            y: my - 4.0,
+                            font_size: LINK_FONT as u32,
+                            font_family: "sans-serif",
+                            fill: TEXT_COLOR,
+                            bold: false,
+                            italic: false,
+                            skip_underline: false,
+                        },
+                    );
+                    svg.raw(&text_buf);
                 }
                 if let Some(from_mult) = &conn.from_mult {
-                    svg.raw(&format!(
-                    r#"<text fill="{TEXT_COLOR}" font-family="sans-serif" font-size="{LINK_FONT}" lengthAdjust="spacing" textLength="{tl}" x="{tx}" y="{ty}">{escaped}</text>"#,
-                    tl = metrics::text_width(from_mult, LINK_FONT),
-                    tx = from_cx - metrics::text_width(from_mult, LINK_FONT) - 1.0,
-                    ty = from_cy + LINK_FONT + 2.0,
-                    escaped = escape_xml(from_mult),
-                ));
+                    let mw = text_render::measure(from_mult, LINK_FONT, false);
+                    let mut text_buf = String::new();
+                    text_render::emit_text(
+                        &mut text_buf,
+                        from_mult,
+                        &TextBase {
+                            x: from_cx - mw - 1.0,
+                            y: from_cy + LINK_FONT + 2.0,
+                            font_size: LINK_FONT as u32,
+                            font_family: "sans-serif",
+                            fill: TEXT_COLOR,
+                            bold: false,
+                            italic: false,
+                            skip_underline: false,
+                        },
+                    );
+                    svg.raw(&text_buf);
                 }
                 if let Some(to_mult) = &conn.to_mult {
-                    svg.raw(&format!(
-                    r#"<text fill="{TEXT_COLOR}" font-family="sans-serif" font-size="{LINK_FONT}" lengthAdjust="spacing" textLength="{tl}" x="{tx}" y="{ty}">{escaped}</text>"#,
-                    tl = metrics::text_width(to_mult, LINK_FONT),
-                    tx = to_cx - metrics::text_width(to_mult, LINK_FONT) - 1.0,
-                    ty = to_cy - 4.0,
-                    escaped = escape_xml(to_mult),
-                ));
+                    let mw = text_render::measure(to_mult, LINK_FONT, false);
+                    let mut text_buf = String::new();
+                    text_render::emit_text(
+                        &mut text_buf,
+                        to_mult,
+                        &TextBase {
+                            x: to_cx - mw - 1.0,
+                            y: to_cy - 4.0,
+                            font_size: LINK_FONT as u32,
+                            font_family: "sans-serif",
+                            fill: TEXT_COLOR,
+                            bold: false,
+                            italic: false,
+                            skip_underline: false,
+                        },
+                    );
+                    svg.raw(&text_buf);
                 }
             }
 
@@ -575,11 +667,11 @@ fn calc_component_dim(comp: &Component) -> CompDim {
     let height = COMPONENT_BASE_H + n_lines as f64 * LINE_HEIGHT;
 
     // Width: max of label width and stereotype widths, plus padding.
-    let label_w = metrics::text_width(&comp.label, FONT_SIZE);
+    let label_w = text_render::measure(&comp.label, FONT_SIZE, false);
     let max_stereo_w = comp
         .stereotypes
         .iter()
-        .map(|s| metrics::text_width(&format!("\u{00AB}{s}\u{00BB}"), FONT_SIZE))
+        .map(|s| text_render::measure(&format!("\u{00AB}{s}\u{00BB}"), FONT_SIZE, false))
         .fold(0.0_f64, f64::max);
     let text_w = label_w.max(max_stereo_w);
     let width = (text_w + TEXT_PAD_LEFT + TEXT_PAD_RIGHT).max(COMPONENT_MIN_W);
@@ -914,7 +1006,7 @@ fn render_note(
     let lines: Vec<&str> = note.text.lines().collect();
     let note_w = lines
         .iter()
-        .map(|l| metrics::text_width(l, LINK_FONT) + NOTE_PAD * 2.0)
+        .map(|l| text_render::measure(l, LINK_FONT, false) + NOTE_PAD * 2.0)
         .fold(60.0_f64, f64::max);
     let note_h = (lines.len() as f64).max(1.0) * NOTE_LINE_H + NOTE_PAD * 2.0;
 
@@ -943,12 +1035,22 @@ fn render_note(
 
     for (i, line) in lines.iter().enumerate() {
         let ty = ny + NOTE_PAD + (i as f64 + 1.0) * NOTE_LINE_H - 2.0;
-        svg.raw(&format!(
-            r#"<text fill="{TEXT_COLOR}" font-family="sans-serif" font-size="{LINK_FONT}" lengthAdjust="spacing" textLength="{tl}" x="{tx}" y="{ty}">{escaped}</text>"#,
-            tl = metrics::text_width(line, LINK_FONT),
-            tx = nx + NOTE_PAD,
-            escaped = escape_xml(line),
-        ));
+        let mut text_buf = String::new();
+        text_render::emit_text(
+            &mut text_buf,
+            line,
+            &TextBase {
+                x: nx + NOTE_PAD,
+                y: ty,
+                font_size: LINK_FONT as u32,
+                font_family: "sans-serif",
+                fill: TEXT_COLOR,
+                bold: false,
+                italic: false,
+                skip_underline: false,
+            },
+        );
+        svg.raw(&text_buf);
     }
 }
 
@@ -965,11 +1067,11 @@ fn render_packages(
     theme: &Theme,
 ) {
     for pkg in packages {
-        let name_w = metrics::text_width(&pkg.label, FONT_SIZE) + 20.0;
+        let name_w = text_render::measure(&pkg.label, FONT_SIZE, true) + 20.0;
         let stereo_w = pkg
             .stereotype
             .as_deref()
-            .map(|s| metrics::text_width(&format!("\u{00AB}{s}\u{00BB}"), FONT_SIZE) + 20.0)
+            .map(|s| text_render::measure(&format!("\u{00AB}{s}\u{00BB}"), FONT_SIZE, false) + 20.0)
             .unwrap_or(0.0);
         let pkg_label_w = name_w.max(stereo_w).max(COMPONENT_MIN_W);
         let inner_w = estimate_package_inner_width(pkg).max(pkg_label_w);
@@ -997,24 +1099,42 @@ fn render_packages(
         ));
 
         // Label.
-        svg.raw(&format!(
-            r#"<text fill="{TEXT_COLOR}" font-family="sans-serif" font-size="{FONT_SIZE}" font-weight="700" lengthAdjust="spacing" textLength="{tl}" x="{tx}" y="{ty}">{escaped}</text>"#,
-            tl = metrics::text_width(&pkg.label, FONT_SIZE),
-            tx = x + CONTAINER_PAD,
-            ty = pkg_y_start + CONTAINER_LABEL_H - 4.0,
-            escaped = escape_xml(&pkg.label),
-        ));
+        let mut text_buf = String::new();
+        text_render::emit_text(
+            &mut text_buf,
+            &pkg.label,
+            &TextBase {
+                x: x + CONTAINER_PAD,
+                y: pkg_y_start + CONTAINER_LABEL_H - 4.0,
+                font_size: FONT_SIZE as u32,
+                font_family: "sans-serif",
+                fill: TEXT_COLOR,
+                bold: true,
+                italic: false,
+                skip_underline: false,
+            },
+        );
+        svg.raw(&text_buf);
 
         // Stereotype.
         if let Some(stereo) = &pkg.stereotype {
             let label = format!("\u{00AB}{stereo}\u{00BB}");
-            svg.raw(&format!(
-                r#"<text fill="{TEXT_COLOR}" font-family="sans-serif" font-size="{FONT_SIZE}" font-style="italic" lengthAdjust="spacing" textLength="{tl}" x="{tx}" y="{ty}">{escaped}</text>"#,
-                tl = metrics::text_width(&label, FONT_SIZE),
-                tx = x + CONTAINER_PAD,
-                ty = pkg_y_start + CONTAINER_LABEL_H + 12.0,
-                escaped = escape_xml(&label),
-            ));
+            let mut text_buf = String::new();
+            text_render::emit_text(
+                &mut text_buf,
+                &label,
+                &TextBase {
+                    x: x + CONTAINER_PAD,
+                    y: pkg_y_start + CONTAINER_LABEL_H + 12.0,
+                    font_size: FONT_SIZE as u32,
+                    font_family: "sans-serif",
+                    fill: TEXT_COLOR,
+                    bold: false,
+                    italic: true,
+                    skip_underline: false,
+                },
+            );
+            svg.raw(&text_buf);
         }
 
         *y = pkg_y_start + pkg_h + GAP;
@@ -1042,11 +1162,11 @@ fn estimate_packages_height(packages: &[ComponentPackage]) -> f64 {
 }
 
 fn estimate_package_width(pkg: &ComponentPackage) -> f64 {
-    let name_w = metrics::text_width(&pkg.label, FONT_SIZE) + 20.0;
+    let name_w = text_render::measure(&pkg.label, FONT_SIZE, true) + 20.0;
     let stereo_w = pkg
         .stereotype
         .as_deref()
-        .map(|s| metrics::text_width(&format!("\u{00AB}{s}\u{00BB}"), FONT_SIZE) + 20.0)
+        .map(|s| text_render::measure(&format!("\u{00AB}{s}\u{00BB}"), FONT_SIZE, false) + 20.0)
         .unwrap_or(0.0);
     let label_w = name_w.max(stereo_w).max(COMPONENT_MIN_W);
     let inner_w = estimate_package_inner_width(pkg);
@@ -1076,16 +1196,6 @@ fn estimate_package_height(pkg: &ComponentPackage) -> f64 {
 // ---------------------------------------------------------------------------
 // Utilities
 // ---------------------------------------------------------------------------
-
-fn escape_xml(s: &str) -> String {
-    s.replace('&', "&amp;")
-        .replace('<', "&lt;")
-        .replace('>', "&gt;")
-        .replace('"', "&quot;")
-        .replace('\'', "&#39;")
-        .replace('\u{00AB}', "&#171;")
-        .replace('\u{00BB}', "&#187;")
-}
 
 #[cfg(test)]
 mod tests {
