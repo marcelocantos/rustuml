@@ -57,6 +57,17 @@ pub fn emit_text(buf: &mut String, content: &str, base: &TextBase<'_>) -> f64 {
 /// to size boxes around a label. Per-segment styling (monospace vs sans-
 /// serif, bold, custom size) is honoured by routing through `total_width`.
 pub fn measure(content: &str, font_size: f64, bold: bool) -> f64 {
+    measure_inner(content, font_size, bold, false)
+}
+
+/// Measure variant for class-entity labels where `__` is a literal pair of
+/// underscores (not underline markup). The literal `__` therefore counts
+/// toward textLength.
+pub fn measure_no_underline(content: &str, font_size: f64, bold: bool) -> f64 {
+    measure_inner(content, font_size, bold, true)
+}
+
+fn measure_inner(content: &str, font_size: f64, bold: bool, skip_underline: bool) -> f64 {
     let base = TextBase {
         x: 0.0,
         y: 0.0,
@@ -66,7 +77,7 @@ pub fn measure(content: &str, font_size: f64, bold: bool) -> f64 {
         bold,
         italic: false,
         underline: false,
-        skip_underline: false,
+        skip_underline,
     };
     total_width(content, &base)
 }

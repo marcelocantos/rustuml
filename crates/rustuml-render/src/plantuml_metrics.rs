@@ -122,8 +122,40 @@ fn char_width(c: char, table: &[f64; 95]) -> f64 {
     } else if c == '\u{00a0}' {
         // NBSP has same width as space
         table[0]
+    } else if c == '\u{00AB}' || c == '\u{00BB}' {
+        // Left/right guillemets — PlantUML uses these in stereotypes.
+        // Both have the same advance per size in the AWT logical font.
+        // Picks a value matching plantuml_metrics' sans-serif scale.
+        guillemet_width(table)
     } else {
         // For characters outside ASCII, use 'a' width as approximation.
+        table[('a' as u32 - 32) as usize]
+    }
+}
+
+/// Guillemet width per table. Values are size-proportional; we look up the
+/// table by its space-character width (table[0]) to infer the size.
+fn guillemet_width(table: &[f64; 95]) -> f64 {
+    // Map table identity by its space-character (index 0) width to the
+    // corresponding guillemet width measured from goldens.
+    let space = table[0];
+    if (space - 3.796875).abs() < 1e-9 {
+        // size 12
+        6.287109375
+    } else if (space - 4.4296875).abs() < 1e-9 {
+        // size 14
+        8.8525
+    } else if (space - 4.11328125).abs() < 1e-9 {
+        // size 13
+        7.5698
+    } else if (space - 3.48046875).abs() < 1e-9 {
+        // size 11
+        6.0
+    } else if (space - 3.1640625).abs() < 1e-9 {
+        // size 10
+        5.5
+    } else {
+        // Fallback to 'a' width if the table isn't recognized.
         table[('a' as u32 - 32) as usize]
     }
 }

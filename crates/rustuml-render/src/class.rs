@@ -21,6 +21,7 @@ use crate::layout_oracle::OracleLayout;
 use crate::metrics;
 use crate::style::Theme;
 use crate::svg::SvgBuilder;
+use crate::text_render::{self, TextBase};
 
 // ---------------------------------------------------------------------------
 // PlantUML layout constants (extracted from golden SVGs)
@@ -190,7 +191,9 @@ struct EntityDims {
 
 fn calc_entity_dims(entity: &ClassEntity, entity_index: usize) -> EntityDims {
     let is_enum = entity.kind == EntityKind::Enum;
-    let name_width = metrics::plantuml_text_width_14(&entity.label);
+    // Entity labels treat `__` as literal underscores, not underline markup,
+    // so width must include those characters.
+    let name_width = text_render::measure_no_underline(&entity.label, 14.0, false);
     let has_stereotypes = !entity.stereotypes.is_empty();
 
     // Split members into fields and methods (enums have all members as "fields").
@@ -220,7 +223,7 @@ fn calc_entity_dims(entity: &ClassEntity, entity_index: usize) -> EntityDims {
     // Stereotype text may also affect width.
     let stereo_width = if has_stereotypes {
         let stereo_text = format_stereotype_text(&entity.stereotypes);
-        let stereo_tw = metrics::plantuml_text_width_12(&stereo_text);
+        let stereo_tw = text_render::measure(&stereo_text, 12.0, false);
         // Stereotype text is centered in the header area alongside the icon.
         icon_area + stereo_tw + HEADER_RIGHT_PAD
     } else {
@@ -233,7 +236,7 @@ fn calc_entity_dims(entity: &ClassEntity, entity_index: usize) -> EntityDims {
         .filter(|m| m.kind != MemberKind::Separator)
         .map(|m| {
             let text = format_member_display(m);
-            let text_w = metrics::plantuml_text_width_14(&text);
+            let text_w = text_render::measure_no_underline(&text, 14.0, false);
             if m.visibility == Visibility::Default {
                 // Default visibility (including enum constants): no icon.
                 ENUM_TEXT_OFFSET + text_w + MEMBER_RIGHT_PAD
@@ -298,15 +301,6 @@ fn format_stereotype_text(stereotypes: &[String]) -> String {
     stereotypes
         .iter()
         .map(|s| format!("\u{00AB}{s}\u{00BB}"))
-        .collect::<Vec<_>>()
-        .join("\n")
-}
-
-/// Format stereotype text as XML-escaped guillemets for SVG output.
-fn format_stereotype_xml(stereotypes: &[String]) -> String {
-    stereotypes
-        .iter()
-        .map(|s| format!("&#171;{s}&#187;"))
         .collect::<Vec<_>>()
         .join("\n")
 }
@@ -864,22 +858,28 @@ fn render_entity_content(
     write!(svg, r##"<path d="{}" fill="#000000"/>"##, glyph_path,).unwrap();
 
     // Stereotype text (if present).
-    let name_tl = metrics::plantuml_text_width_14(&entity.label);
+    let name_tl = text_render::measure_no_underline(&entity.label, 14.0, false);
     if dim.has_stereotypes {
         let stereo_text = format_stereotype_text(&entity.stereotypes);
-        let stereo_xml = format_stereotype_xml(&entity.stereotypes);
-        let stereo_tl = metrics::plantuml_text_width_12(&stereo_text);
         let stereo_x = name_text_x_override.unwrap_or(icon_cx + ICON_RX + ICON_TEXT_GAP);
         let stereo_y = y + STEREOTYPE_Y_OFFSET;
-        write!(
-            svg,
-            r##"<text fill="#000000" font-family="sans-serif" font-size="12" font-style="italic" lengthAdjust="spacing" textLength="{}" x="{}" y="{}">{}</text>"##,
-            fmt_tl(stereo_tl),
-            fmt4(stereo_x),
-            fmt4(stereo_y),
-            stereo_xml,
-        )
-        .unwrap();
+        let mut text_buf = String::new();
+        text_render::emit_text(
+            &mut text_buf,
+            &stereo_text,
+            &TextBase {
+                x: stereo_x,
+                y: stereo_y,
+                font_size: 12,
+                font_family: "sans-serif",
+                fill: "#000000",
+                bold: false,
+                italic: true,
+                underline: false,
+                skip_underline: false,
+            },
+        );
+        svg.push_str(&text_buf);
     }
 
     // Entity name text.
@@ -889,7 +889,7 @@ fn render_entity_content(
     let name_x = if dim.has_stereotypes {
         if let Some(oracle_x) = name_text_x_override {
             let stereo_text = format_stereotype_text(&entity.stereotypes);
-            let stereo_tl = metrics::plantuml_text_width_12(&stereo_text);
+            let stereo_tl = text_render::measure(&stereo_text, 12.0, false);
             let text_center = oracle_x + stereo_tl / 2.0;
             text_center - name_tl / 2.0
         } else {
@@ -903,21 +903,23 @@ fn render_entity_content(
     } else {
         y + NAME_BASELINE_Y - MARGIN
     };
-    let font_style = if is_abstract || is_interface {
-        r#" font-style="italic""#
-    } else {
-        ""
-    };
-    write!(
-        svg,
-        r##"<text fill="#000000" font-family="sans-serif" font-size="14"{} lengthAdjust="spacing" textLength="{}" x="{}" y="{}">{}</text>"##,
-        font_style,
-        fmt_tl(name_tl),
-        fmt4(name_x),
-        fmt4(name_y),
-        escape_xml(&entity.label),
-    )
-    .unwrap();
+    let mut text_buf = String::new();
+    text_render::emit_text(
+        &mut text_buf,
+        &entity.label,
+        &TextBase {
+            x: name_x,
+            y: name_y,
+            font_size: 14,
+            font_family: "sans-serif",
+            fill: "#000000",
+            bold: false,
+            italic: is_abstract || is_interface,
+            underline: false,
+            skip_underline: true,
+        },
+    );
+    svg.push_str(&text_buf);
 
     // Oracle y-position overrides: text_y_values[0] is name (or stereotype if
     // present), then subsequent entries are members. When stereotypes are present,
@@ -1017,16 +1019,23 @@ fn render_entity_content(
                 render_member_line(svg, member, x, eff_member_y, vis_ov);
             } else {
                 let text = format_member_display(member);
-                let text_w = metrics::plantuml_text_width_14(&text);
-                write!(
-                    svg,
-                    r##"<text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="{}" x="{}" y="{}">{}</text>"##,
-                    fmt_tl(text_w),
-                    fmt4(x + ENUM_TEXT_OFFSET),
-                    fmt4(eff_member_y),
-                    escape_xml(&text),
-                )
-                .unwrap();
+                let mut text_buf = String::new();
+                text_render::emit_text(
+                    &mut text_buf,
+                    &text,
+                    &TextBase {
+                        x: x + ENUM_TEXT_OFFSET,
+                        y: eff_member_y,
+                        font_size: 14,
+                        font_family: "sans-serif",
+                        fill: "#000000",
+                        bold: false,
+                        italic: false,
+                        underline: false,
+                        skip_underline: true,
+                    },
+                );
+                svg.push_str(&text_buf);
             }
             member_y += MEMBER_SPACING;
         }
@@ -1214,7 +1223,6 @@ fn render_member_line(
     vis_icon_y_override: Option<f64>,
 ) {
     let text = format_member_display(member);
-    let text_w = metrics::plantuml_text_width_14(&text);
 
     if let Some(vis_mod) = visibility_modifier(member) {
         // Visibility icon group.
@@ -1299,20 +1307,6 @@ fn render_member_line(
         svg.push_str("</g>");
     }
 
-    // Text decoration for static members.
-    let text_decoration = if member.is_static {
-        r#" text-decoration="underline""#
-    } else {
-        ""
-    };
-
-    // Font style for abstract members.
-    let font_style = if member.is_abstract {
-        r#" font-style="italic""#
-    } else {
-        ""
-    };
-
     let text_x = entity_x
         + if visibility_modifier(member).is_some() {
             MEMBER_TEXT_OFFSET
@@ -1320,17 +1314,23 @@ fn render_member_line(
             ENUM_TEXT_OFFSET
         };
 
-    write!(
-        svg,
-        r##"<text fill="#000000" font-family="sans-serif" font-size="14"{} lengthAdjust="spacing"{} textLength="{}" x="{}" y="{}">{}</text>"##,
-        font_style,
-        text_decoration,
-        fmt_tl(text_w),
-        fmt4(text_x),
-        fmt_tl(baseline_y),
-        escape_xml(&text),
-    )
-    .unwrap();
+    let mut text_buf = String::new();
+    text_render::emit_text(
+        &mut text_buf,
+        &text,
+        &TextBase {
+            x: text_x,
+            y: baseline_y,
+            font_size: 14,
+            font_family: "sans-serif",
+            fill: "#000000",
+            bold: false,
+            italic: member.is_abstract,
+            underline: member.is_static,
+            skip_underline: true,
+        },
+    );
+    svg.push_str(&text_buf);
 }
 
 // ---------------------------------------------------------------------------
