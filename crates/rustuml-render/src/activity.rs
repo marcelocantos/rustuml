@@ -372,15 +372,17 @@ fn node_width(node: &LayoutNode) -> f64 {
         LayoutNode::Start => START_R * 2.0 + ACTION_MIN_X * 2.0,
         LayoutNode::Stop | LayoutNode::End => STOP_OUTER_R * 2.0 + ACTION_MIN_X * 2.0,
         LayoutNode::Action { text_width, .. } => {
-            *text_width + ACTION_H_PADDING * 2.0 + ACTION_MIN_X * 2.0
+            // Box content width only. The outer ACTION_MIN_X margin is added
+            // once at the SVG level (margin_x in render_diagram).
+            *text_width + ACTION_H_PADDING * 2.0
         }
         LayoutNode::DeprecatedAction {
             text_width,
             warning_width,
             ..
         } => {
-            let action_w = *text_width + ACTION_H_PADDING * 2.0 + ACTION_MIN_X * 2.0;
-            let warn_w = *warning_width + 7.0 * 2.0 + ACTION_MIN_X * 2.0; // 7px padding in warning box
+            let action_w = *text_width + ACTION_H_PADDING * 2.0;
+            let warn_w = *warning_width + 7.0 * 2.0; // 7px padding in warning box
             action_w.max(warn_w)
         }
         LayoutNode::If {
@@ -446,18 +448,20 @@ fn sequence_height(nodes: &[LayoutNode]) -> f64 {
     h
 }
 
-fn action_height() -> f64 {
-    pm::text_height(FONT_SIZE) + ACTION_PADDING
+fn action_height(text: &str) -> f64 {
+    // Pick the box height to match the label's actual font — monospace
+    // labels render shorter than sans-serif at the same nominal size.
+    text_render::label_height(text, FONT_SIZE) + ACTION_PADDING
 }
 
 fn node_height(node: &LayoutNode) -> f64 {
     match node {
         LayoutNode::Start => START_R * 2.0,
         LayoutNode::Stop | LayoutNode::End => STOP_OUTER_R * 2.0,
-        LayoutNode::Action { .. } => action_height(),
-        LayoutNode::DeprecatedAction { .. } => {
+        LayoutNode::Action { text, .. } => action_height(text),
+        LayoutNode::DeprecatedAction { text, .. } => {
             let warn_h = pm::text_height(10.0) + 4.5313; // warning box height from golden
-            action_height() + warn_h + ARROW_LEN
+            action_height(text) + warn_h + ARROW_LEN
         }
         LayoutNode::If {
             then_branch,
@@ -740,16 +744,19 @@ fn emit_sequence(svg: &mut SvgEmitter, nodes: &[LayoutNode], cx: f64, mut y: f64
 fn emit_node(svg: &mut SvgEmitter, node: &LayoutNode, cx: f64, y: f64) -> f64 {
     match node {
         LayoutNode::Start => {
+            // PlantUML places the start ellipse at cy=START_CY=25 regardless
+            // of the surrounding layout. With margin_top=16 (matching the
+            // bare-action case), the circle sits 1px above the cursor.
             svg.ellipse(
                 cx,
-                y + START_R,
+                START_CY,
                 START_R,
                 START_R,
                 START_FILL,
                 START_STROKE,
                 "1",
             );
-            y + START_R * 2.0
+            START_CY + START_R
         }
         LayoutNode::Stop => {
             let cy = y + STOP_OUTER_R;
@@ -781,7 +788,7 @@ fn emit_node(svg: &mut SvgEmitter, node: &LayoutNode, cx: f64, y: f64) -> f64 {
             y + STOP_OUTER_R * 2.0
         }
         LayoutNode::Action { text, text_width } => {
-            let ah = action_height();
+            let ah = action_height(text);
             let rect_w = *text_width + ACTION_H_PADDING * 2.0;
             let rect_x = cx - rect_w / 2.0;
             svg.rect_styled(
@@ -795,9 +802,11 @@ fn emit_node(svg: &mut SvgEmitter, node: &LayoutNode, cx: f64, y: f64) -> f64 {
                 rect_x,
                 y,
             );
-            // Text baseline: padding_top + ascent
-            let padding_top = (ah - pm::text_height(FONT_SIZE)) / 2.0;
-            let text_y = y + padding_top + pm::ascent(FONT_SIZE);
+            // Text baseline: padding_top + ascent, both derived from the
+            // label's actual font so monospace labels position correctly.
+            let lh = text_render::label_height(text, FONT_SIZE);
+            let padding_top = (ah - lh) / 2.0;
+            let text_y = y + padding_top + text_render::label_ascent(text, FONT_SIZE);
             svg.text_element(
                 TEXT_COLOR,
                 "sans-serif",
@@ -818,7 +827,7 @@ fn emit_node(svg: &mut SvgEmitter, node: &LayoutNode, cx: f64, y: f64) -> f64 {
         } => {
             // The deprecated action renders just like a normal action.
             // The warning banner is emitted separately at the top of the diagram.
-            let ah = action_height();
+            let ah = action_height(text);
             let rect_w = *text_width + ACTION_H_PADDING * 2.0;
             let rect_x = cx - rect_w / 2.0;
             svg.rect_styled(
@@ -832,8 +841,9 @@ fn emit_node(svg: &mut SvgEmitter, node: &LayoutNode, cx: f64, y: f64) -> f64 {
                 rect_x,
                 y,
             );
-            let padding_top = (ah - pm::text_height(FONT_SIZE)) / 2.0;
-            let text_y = y + padding_top + pm::ascent(FONT_SIZE);
+            let lh = text_render::label_height(text, FONT_SIZE);
+            let padding_top = (ah - lh) / 2.0;
+            let text_y = y + padding_top + text_render::label_ascent(text, FONT_SIZE);
             svg.text_element(
                 TEXT_COLOR,
                 "sans-serif",
@@ -1385,10 +1395,12 @@ pub fn render(diagram: &ActivityDiagram, _theme: &Theme) -> String {
     let content_w = sequence_width(&tree);
     let content_h = sequence_height(&tree);
 
-    // Total SVG dimensions (with margins).
-    let margin_x = ACTION_MIN_X;
-    let margin_top = START_CY - START_R; // 15px top margin
-    let margin_bottom = margin_top;
+    // Total SVG dimensions: PlantUML uses asymmetric margins on both axes —
+    // 16px left/top (the ACTION_MIN_X start position) and 19px right/bottom.
+    // Verified against single-action goldens of varying widths.
+    const MARGIN_LEAD: f64 = 16.0; // left and top
+    const MARGIN_TRAIL: f64 = 19.0; // right and bottom
+    let margin_top = MARGIN_LEAD;
 
     // For deprecated actions, the warning banner needs special handling
     let extra_h = if has_deprecated {
@@ -1403,9 +1415,12 @@ pub fn render(diagram: &ActivityDiagram, _theme: &Theme) -> String {
         0.0
     };
 
-    let svg_w = (content_w + margin_x * 2.0).ceil() as u32;
-    let svg_h = (margin_top + content_h + extra_h + margin_bottom + 20.0).ceil() as u32;
-    let cx = svg_w as f64 / 2.0;
+    let svg_w = (content_w + MARGIN_LEAD + MARGIN_TRAIL).ceil() as u32;
+    let svg_h = (MARGIN_LEAD + content_h + extra_h + MARGIN_TRAIL).ceil() as u32;
+    // cx is the centre of the content area (left-aligned at MARGIN_LEAD,
+    // width = content_w), NOT the geometric centre of the SVG. PlantUML's
+    // asymmetric margins make these differ.
+    let cx = MARGIN_LEAD + content_w / 2.0;
 
     let mut svg = SvgEmitter::new();
 

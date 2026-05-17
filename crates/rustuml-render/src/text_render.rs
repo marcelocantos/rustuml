@@ -67,6 +67,48 @@ pub fn measure(content: &str, font_size: f64, bold: bool) -> f64 {
     total_width(content, &base)
 }
 
+/// Height of `content` after creole resolution — the value a renderer
+/// needs to size boxes around a label vertically. Returns the max of
+/// per-segment heights (mono vs sans-serif) at the resolved font size.
+pub fn label_height(content: &str, font_size: f64) -> f64 {
+    let segments = creole::parse_segments(content);
+    if segments.is_empty() {
+        return pm::text_height(font_size);
+    }
+    segments
+        .iter()
+        .map(|seg| {
+            let size = seg.style.size.map(|s| s as f64).unwrap_or(font_size);
+            if seg.style.monospace {
+                pm::mono_text_height(size)
+            } else {
+                pm::text_height(size)
+            }
+        })
+        .fold(0.0f64, f64::max)
+}
+
+/// Ascent for vertical positioning of the text baseline within a label box.
+/// Picks the max of per-segment ascents (matches PlantUML's behaviour for
+/// mixed-font lines).
+pub fn label_ascent(content: &str, font_size: f64) -> f64 {
+    let segments = creole::parse_segments(content);
+    if segments.is_empty() {
+        return pm::ascent(font_size);
+    }
+    segments
+        .iter()
+        .map(|seg| {
+            let size = seg.style.size.map(|s| s as f64).unwrap_or(font_size);
+            if seg.style.monospace {
+                pm::mono_ascent(size)
+            } else {
+                pm::ascent(size)
+            }
+        })
+        .fold(0.0f64, f64::max)
+}
+
 /// Pre-computed widths for the segments. Useful when the caller needs the
 /// total advance for layout before deciding `x`.
 pub fn total_width(content: &str, base: &TextBase<'_>) -> f64 {
