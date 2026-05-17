@@ -40,6 +40,7 @@ pub mod sprite;
 pub mod state;
 pub mod style;
 pub mod svg;
+pub mod text_render;
 pub mod timing;
 pub mod usecase;
 pub mod wbs;
