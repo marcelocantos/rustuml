@@ -12,6 +12,7 @@ use std::fmt::Write;
 use rustuml_parser::diagram::sequence::*;
 
 use crate::style::Theme;
+use crate::text_render::{self, TextBase};
 
 /// Resolve a PlantUML color string (e.g., "#blue", "#FF0000") to a CSS hex color.
 pub(crate) fn resolve_color(color: &str) -> String {
@@ -174,14 +175,18 @@ pub(crate) fn resolve_color(color: &str) -> String {
     }
 }
 
-/// Compute text width at a given font size using exact PlantUML Java AWT metrics.
+/// Compute text width at a given font size, routing through the creole-aware
+/// segment helper so layout measurements match what `text_render::emit_text`
+/// will actually emit.
 fn text_width(text: &str, font_size: f64) -> f64 {
-    crate::metrics::plantuml_text_width(text, font_size)
+    text_render::measure(text, font_size, false)
 }
 
-/// Compute bold text width at a given font size using exact PlantUML Java AWT Bold metrics.
+/// Compute bold text width at a given font size, routing through the creole-aware
+/// segment helper so layout measurements match what `text_render::emit_text`
+/// will actually emit.
 fn bold_text_width(text: &str, font_size: f64) -> f64 {
-    crate::metrics::plantuml_bold_text_width(text, font_size)
+    text_render::measure(text, font_size, true)
 }
 
 /// Format an f64 as a PlantUML-compatible coordinate string.
@@ -432,49 +437,6 @@ fn strip_creole(s: &str) -> String {
         }
     }
     out
-}
-
-/// Emit text content to the SVG, handling creole markup by splitting into
-/// separate text elements for each styled segment.
-#[allow(dead_code)]
-fn emit_text(buf: &mut String, x: f64, y: f64, content: &str, font_size: f64) {
-    if has_creole_markup(content) {
-        // For creole text, emit the plain text content (stripped of markup).
-        // This ensures golden test text-label matching works.
-        // The full creole styling (bold, italic, etc.) will be added later.
-        let plain = strip_creole(content);
-        if !plain.is_empty() {
-            let tw = text_width(&plain, font_size);
-            let size_str = if font_size == 13.0 { "13" } else { "14" };
-            write!(
-                buf,
-                r##"<text fill="#000000" font-family="sans-serif" font-size="{size_str}" lengthAdjust="spacing" textLength="{}" x="{}" y="{}">{}</text>"##,
-                fmt_coord(tw),
-                fmt_coord(x),
-                fmt_coord(y),
-                escape_xml(&plain),
-            )
-            .unwrap();
-        }
-    } else {
-        let tw = text_width(content, font_size);
-        let size_str = if font_size == 13.0 {
-            "13"
-        } else if font_size == 11.0 {
-            "11"
-        } else {
-            "14"
-        };
-        write!(
-            buf,
-            r##"<text fill="#000000" font-family="sans-serif" font-size="{size_str}" lengthAdjust="spacing" textLength="{}" x="{}" y="{}">{}</text>"##,
-            fmt_coord(tw),
-            fmt_coord(x),
-            fmt_coord(y),
-            escape_xml(content),
-        )
-        .unwrap();
-    }
 }
 
 /// Decode PlantUML backslash and tilde escapes in label text.
@@ -763,29 +725,42 @@ impl PlantUmlSvg {
         .unwrap();
 
         // Stereotype text (above participant name, smaller font)
-        if let Some((st_text, st_width)) = stereotype {
+        if let Some((st_text, _st_width)) = stereotype {
             let st_display = format!("\u{ab}{st_text}\u{bb}");
             let st_y = text_y - 13.0; // stereotype is above the name
-            write!(
-                self.buf,
-                r##"<text fill="#000000" font-family="sans-serif" font-size="11" font-style="italic" lengthAdjust="spacing" textLength="{}" x="{}" y="{}">{}</text>"##,
-                fmt_coord(st_width),
-                fmt_coord(text_x),
-                fmt_coord(st_y),
-                escape_xml(&st_display),
-            )
-            .unwrap();
+            text_render::emit_text(
+                &mut self.buf,
+                &st_display,
+                &TextBase {
+                    x: text_x,
+                    y: st_y,
+                    font_size: 11,
+                    font_family: "sans-serif",
+                    fill: "#000000",
+                    bold: false,
+                    italic: true,
+                    underline: false,
+                    skip_underline: false,
+                },
+            );
         }
 
-        write!(
-            self.buf,
-            r##"<text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="{}" x="{}" y="{}">{}</text>"##,
-            fmt_coord(text_len),
-            fmt_coord(text_x),
-            fmt_coord(text_y),
-            escape_xml(text_content),
-        )
-        .unwrap();
+        let _ = text_len;
+        text_render::emit_text(
+            &mut self.buf,
+            text_content,
+            &TextBase {
+                x: text_x,
+                y: text_y,
+                font_size: 14,
+                font_family: "sans-serif",
+                fill: "#000000",
+                bold: false,
+                italic: false,
+                underline: false,
+                skip_underline: false,
+            },
+        );
 
         self.buf.push_str("</g>");
     }
@@ -809,15 +784,22 @@ impl PlantUmlSvg {
 
     /// Write participant text label.
     fn participant_text(&mut self, text_x: f64, text_y: f64, text_content: &str, text_len: f64) {
-        write!(
-            self.buf,
-            r##"<text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="{}" x="{}" y="{}">{}</text>"##,
-            fmt_coord(text_len),
-            fmt_coord(text_x),
-            fmt_coord(text_y),
-            escape_xml(text_content),
-        )
-        .unwrap();
+        let _ = text_len;
+        text_render::emit_text(
+            &mut self.buf,
+            text_content,
+            &TextBase {
+                x: text_x,
+                y: text_y,
+                font_size: 14,
+                font_family: "sans-serif",
+                fill: "#000000",
+                bold: false,
+                italic: false,
+                underline: false,
+                skip_underline: false,
+            },
+        );
     }
 
     /// Write an actor stick figure (head or tail).
@@ -1326,30 +1308,43 @@ impl PlantUmlSvg {
 
         let label_x = if let Some((num_text, num_w)) = autonumber {
             // Bold autonumber text
-            write!(
-                self.buf,
-                r##"<text fill="#000000" font-family="sans-serif" font-size="13" font-weight="700" lengthAdjust="spacing" textLength="{}" x="{}" y="{}">{}</text>"##,
-                fmt_coord(num_w),
-                fmt_coord(text_x),
-                fmt_coord(text_y),
-                escape_xml(num_text),
-            )
-            .unwrap();
+            text_render::emit_text(
+                &mut self.buf,
+                num_text,
+                &TextBase {
+                    x: text_x,
+                    y: text_y,
+                    font_size: 13,
+                    font_family: "sans-serif",
+                    fill: "#000000",
+                    bold: true,
+                    italic: false,
+                    underline: false,
+                    skip_underline: false,
+                },
+            );
             text_x + num_w + AUTONUMBER_LABEL_GAP
         } else {
             text_x
         };
 
         if !text_content.is_empty() {
-            write!(
-                self.buf,
-                r##"<text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="{}" x="{}" y="{}">{}</text>"##,
-                fmt_coord(text_len),
-                fmt_coord(label_x),
-                fmt_coord(text_y),
-                escape_xml(text_content),
-            )
-            .unwrap();
+            let _ = text_len;
+            text_render::emit_text(
+                &mut self.buf,
+                text_content,
+                &TextBase {
+                    x: label_x,
+                    y: text_y,
+                    font_size: 13,
+                    font_family: "sans-serif",
+                    fill: "#000000",
+                    bold: false,
+                    italic: false,
+                    underline: false,
+                    skip_underline: false,
+                },
+            );
         }
 
         self.buf.push_str("</g>");
@@ -1432,30 +1427,43 @@ impl PlantUmlSvg {
 
         let label_x = if let Some((num_text, num_w)) = autonumber {
             // Bold autonumber text
-            write!(
-                self.buf,
-                r##"<text fill="#000000" font-family="sans-serif" font-size="13" font-weight="700" lengthAdjust="spacing" textLength="{}" x="{}" y="{}">{}</text>"##,
-                fmt_coord(num_w),
-                fmt_coord(text_x),
-                fmt_coord(text_y),
-                escape_xml(num_text),
-            )
-            .unwrap();
+            text_render::emit_text(
+                &mut self.buf,
+                num_text,
+                &TextBase {
+                    x: text_x,
+                    y: text_y,
+                    font_size: 13,
+                    font_family: "sans-serif",
+                    fill: "#000000",
+                    bold: true,
+                    italic: false,
+                    underline: false,
+                    skip_underline: false,
+                },
+            );
             text_x + num_w + AUTONUMBER_LABEL_GAP
         } else {
             text_x
         };
 
         if !text_content.is_empty() {
-            write!(
-                self.buf,
-                r##"<text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="{}" x="{}" y="{}">{}</text>"##,
-                fmt_coord(text_len),
-                fmt_coord(label_x),
-                fmt_coord(text_y),
-                escape_xml(text_content),
-            )
-            .unwrap();
+            let _ = text_len;
+            text_render::emit_text(
+                &mut self.buf,
+                text_content,
+                &TextBase {
+                    x: label_x,
+                    y: text_y,
+                    font_size: 13,
+                    font_family: "sans-serif",
+                    fill: "#000000",
+                    bold: false,
+                    italic: false,
+                    underline: false,
+                    skip_underline: false,
+                },
+            );
         }
 
         self.buf.push_str("</g>");
@@ -2719,77 +2727,102 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme) -> String {
             "Please{n}use{n}'!option{n}handwritten{n}true'{n}to{n}enable{n}handwritten",
             n = nbsp
         );
-        let tw = text_width(&msg, 11.0);
         let mid_x = svg_width as f64 / 2.0;
-        write!(
-            svg.buf,
-            r##"<text fill="#000000" font-family="sans-serif" font-size="11" lengthAdjust="spacing" textLength="{}" x="{}" y="{}">{}</text>"##,
-            fmt_coord(tw),
-            fmt_coord(mid_x),
-            fmt_coord(HEAD_BOX_Y + 13.0),
-            escape_xml(&msg),
-        )
-        .unwrap();
+        text_render::emit_text(
+            &mut svg.buf,
+            &msg,
+            &TextBase {
+                x: mid_x,
+                y: HEAD_BOX_Y + 13.0,
+                font_size: 11,
+                font_family: "sans-serif",
+                fill: "#000000",
+                bold: false,
+                italic: false,
+                underline: false,
+                skip_underline: false,
+            },
+        );
     }
 
     // Render title if present
     if let Some(title) = &diagram.meta.title {
-        let tw = text_width(title, 15.0);
         let mid_x = svg_width as f64 / 2.0;
-        write!(
-            svg.buf,
-            r##"<text fill="#000000" font-family="sans-serif" font-size="15" lengthAdjust="spacing" textLength="{}" x="{}" y="{}">{}</text>"##,
-            fmt_coord(tw),
-            fmt_coord(mid_x),
-            fmt_coord(HEAD_BOX_Y + 13.0),
-            escape_xml(title),
-        )
-        .unwrap();
+        text_render::emit_text(
+            &mut svg.buf,
+            title,
+            &TextBase {
+                x: mid_x,
+                y: HEAD_BOX_Y + 13.0,
+                font_size: 15,
+                font_family: "sans-serif",
+                fill: "#000000",
+                bold: false,
+                italic: false,
+                underline: false,
+                skip_underline: false,
+            },
+        );
     }
 
     // Render header if present
     if let Some(header) = &diagram.meta.header {
-        let tw = text_width(header, 11.0);
         let mid_x = svg_width as f64 / 2.0;
-        write!(
-            svg.buf,
-            r##"<text fill="#000000" font-family="sans-serif" font-size="11" lengthAdjust="spacing" textLength="{}" x="{}" y="{}">{}</text>"##,
-            fmt_coord(tw),
-            fmt_coord(mid_x),
-            fmt_coord(HEAD_BOX_Y * 0.8),
-            escape_xml(header),
-        )
-        .unwrap();
+        text_render::emit_text(
+            &mut svg.buf,
+            header,
+            &TextBase {
+                x: mid_x,
+                y: HEAD_BOX_Y * 0.8,
+                font_size: 11,
+                font_family: "sans-serif",
+                fill: "#000000",
+                bold: false,
+                italic: false,
+                underline: false,
+                skip_underline: false,
+            },
+        );
     }
 
     // Render footer if present
     if let Some(footer) = &diagram.meta.footer {
-        let tw = text_width(footer, 11.0);
         let mid_x = svg_width as f64 / 2.0;
-        write!(
-            svg.buf,
-            r##"<text fill="#000000" font-family="sans-serif" font-size="11" lengthAdjust="spacing" textLength="{}" x="{}" y="{}">{}</text>"##,
-            fmt_coord(tw),
-            fmt_coord(mid_x),
-            fmt_coord(svg_height as f64 - 4.0),
-            escape_xml(footer),
-        )
-        .unwrap();
+        text_render::emit_text(
+            &mut svg.buf,
+            footer,
+            &TextBase {
+                x: mid_x,
+                y: svg_height as f64 - 4.0,
+                font_size: 11,
+                font_family: "sans-serif",
+                fill: "#000000",
+                bold: false,
+                italic: false,
+                underline: false,
+                skip_underline: false,
+            },
+        );
     }
 
     // Render caption if present
     if let Some(caption) = &diagram.meta.caption {
-        let tw = text_width(caption, 11.0);
         let mid_x = svg_width as f64 / 2.0;
-        write!(
-            svg.buf,
-            r##"<text fill="#000000" font-family="sans-serif" font-size="11" lengthAdjust="spacing" textLength="{}" x="{}" y="{}">{}</text>"##,
-            fmt_coord(tw),
-            fmt_coord(mid_x),
-            fmt_coord(svg_height as f64 - 4.0),
-            escape_xml(caption),
-        )
-        .unwrap();
+        text_render::emit_text(
+            &mut svg.buf,
+            caption,
+            &TextBase {
+                x: mid_x,
+                y: svg_height as f64 - 4.0,
+                font_size: 11,
+                font_family: "sans-serif",
+                fill: "#000000",
+                bold: false,
+                italic: false,
+                underline: false,
+                skip_underline: false,
+            },
+        );
     }
 
     // Render legend if present
@@ -2821,16 +2854,21 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme) -> String {
                     strip_creole(trimmed)
                 };
                 if !stripped.is_empty() {
-                    let tw = text_width(&stripped, 11.0);
-                    write!(
-                        svg.buf,
-                        r##"<text fill="#000000" font-family="sans-serif" font-size="11" lengthAdjust="spacing" textLength="{}" x="{}" y="{}">{}</text>"##,
-                        fmt_coord(tw),
-                        fmt_coord(lx),
-                        fmt_coord(ly),
-                        escape_xml(&stripped),
-                    )
-                    .unwrap();
+                    text_render::emit_text(
+                        &mut svg.buf,
+                        &stripped,
+                        &TextBase {
+                            x: lx,
+                            y: ly,
+                            font_size: 11,
+                            font_family: "sans-serif",
+                            fill: "#000000",
+                            bold: false,
+                            italic: false,
+                            underline: false,
+                            skip_underline: false,
+                        },
+                    );
                 }
             }
             ly += 14.0;
@@ -3170,15 +3208,21 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme) -> String {
 
                     // Text label
                     if !label.is_empty() {
-                        write!(
-                            svg.buf,
-                            r##"<text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="{}" x="{}" y="{}">{}</text>"##,
-                            fmt_coord(label_w),
-                            fmt_coord(text_x),
-                            fmt_coord(text_y_pos),
-                            escape_xml(&label),
-                        )
-                        .unwrap();
+                        text_render::emit_text(
+                            &mut svg.buf,
+                            &label,
+                            &TextBase {
+                                x: text_x,
+                                y: text_y_pos,
+                                font_size: 13,
+                                font_family: "sans-serif",
+                                fill: "#000000",
+                                bold: false,
+                                italic: false,
+                                underline: false,
+                                skip_underline: false,
+                            },
+                        );
                     }
 
                     svg.buf.push_str("</g>");
@@ -3619,32 +3663,43 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme) -> String {
                 .unwrap();
 
                 // 5. Bold text
-                write!(
-                    svg.buf,
-                    r##"<text fill="#000000" font-family="sans-serif" font-size="13" font-weight="700" lengthAdjust="spacing" textLength="{}" x="{}" y="{}">{}</text>"##,
-                    fmt_coord(tw),
-                    fmt_coord(text_x),
-                    fmt_coord(text_y),
-                    escape_xml(text),
-                )
-                .unwrap();
+                text_render::emit_text(
+                    &mut svg.buf,
+                    text,
+                    &TextBase {
+                        x: text_x,
+                        y: text_y,
+                        font_size: 13,
+                        font_family: "sans-serif",
+                        fill: "#000000",
+                        bold: true,
+                        italic: false,
+                        underline: false,
+                        skip_underline: false,
+                    },
+                );
             }
             Event::Delay(Some(t)) => {
-                let tw = text_width(t, MSG_FONT_SIZE);
                 let mid_x = if !participants.is_empty() {
                     (participants[0].center_x + participants[participants.len() - 1].center_x) / 2.0
                 } else {
                     50.0
                 };
-                write!(
-                    svg.buf,
-                    r##"<text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="{}" x="{}" y="{}">{}</text>"##,
-                    fmt_coord(tw),
-                    fmt_coord(mid_x),
-                    fmt_coord(msg_y + 5.0),
-                    escape_xml(t),
-                )
-                .unwrap();
+                text_render::emit_text(
+                    &mut svg.buf,
+                    t,
+                    &TextBase {
+                        x: mid_x,
+                        y: msg_y + 5.0,
+                        font_size: 13,
+                        font_family: "sans-serif",
+                        fill: "#000000",
+                        bold: false,
+                        italic: false,
+                        underline: false,
+                        skip_underline: false,
+                    },
+                );
             }
             Event::Delay(None) => {}
             Event::Space(_px_opt) => {
@@ -3831,16 +3886,21 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme) -> String {
                         text_y += NOTE_TEXT_LINE_SPACING;
                         continue;
                     }
-                    let tw = text_width(trimmed, MSG_FONT_SIZE);
-                    write!(
-                        svg.buf,
-                        r##"<text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="{}" x="{}" y="{}">{}</text>"##,
-                        fmt_coord(tw),
-                        fmt_coord(text_x),
-                        fmt_coord(text_y),
-                        escape_xml(trimmed),
-                    )
-                    .unwrap();
+                    text_render::emit_text(
+                        &mut svg.buf,
+                        trimmed,
+                        &TextBase {
+                            x: text_x,
+                            y: text_y,
+                            font_size: 13,
+                            font_family: "sans-serif",
+                            fill: "#000000",
+                            bold: false,
+                            italic: false,
+                            underline: false,
+                            skip_underline: false,
+                        },
+                    );
                     text_y += NOTE_TEXT_LINE_SPACING;
                 }
             }
@@ -3905,30 +3965,40 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme) -> String {
                 .unwrap();
 
                 // Emit kind text (bold)
-                let kind_tw = bold_text_width(kind_str, MSG_FONT_SIZE);
-                write!(
-                    svg.buf,
-                    r##"<text fill="#000000" font-family="sans-serif" font-size="13" font-weight="700" lengthAdjust="spacing" textLength="{}" x="{}" y="{}">{}</text>"##,
-                    fmt_coord(kind_tw),
-                    fmt_coord(frame_left + 15.0),
-                    fmt_coord(frame_top + 13.5684),
-                    escape_xml(kind_str),
-                )
-                .unwrap();
+                text_render::emit_text(
+                    &mut svg.buf,
+                    kind_str,
+                    &TextBase {
+                        x: frame_left + 15.0,
+                        y: frame_top + 13.5684,
+                        font_size: 13,
+                        font_family: "sans-serif",
+                        fill: "#000000",
+                        bold: true,
+                        italic: false,
+                        underline: false,
+                        skip_underline: false,
+                    },
+                );
 
                 // Emit guard label if present (in brackets)
                 if let Some(label) = &g.label {
                     let guard = format!("[{label}]");
-                    let guard_w = bold_text_width(&guard, 11.0);
-                    write!(
-                        svg.buf,
-                        r##"<text fill="#000000" font-family="sans-serif" font-size="11" font-weight="700" lengthAdjust="spacing" textLength="{}" x="{}" y="{}">{}</text>"##,
-                        fmt_coord(guard_w),
-                        fmt_coord(tab_right + 15.0),
-                        fmt_coord(frame_top + 12.6348),
-                        escape_xml(&guard),
-                    )
-                    .unwrap();
+                    text_render::emit_text(
+                        &mut svg.buf,
+                        &guard,
+                        &TextBase {
+                            x: tab_right + 15.0,
+                            y: frame_top + 12.6348,
+                            font_size: 11,
+                            font_family: "sans-serif",
+                            fill: "#000000",
+                            bold: true,
+                            italic: false,
+                            underline: false,
+                            skip_underline: false,
+                        },
+                    );
                 }
             }
             Event::GroupElse(g) => {
@@ -3959,54 +4029,69 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme) -> String {
                 // does NOT show "[else]" text when the else clause has no label).
                 if let Some(label) = &g.label {
                     let label_text = format!("[{label}]");
-                    let tw = bold_text_width(&label_text, 11.0);
-                    write!(
-                        svg.buf,
-                        r##"<text fill="#000000" font-family="sans-serif" font-size="11" font-weight="700" lengthAdjust="spacing" textLength="{}" x="{}" y="{}">{}</text>"##,
-                        fmt_coord(tw),
-                        fmt_coord(frame_left + 5.0),
-                        fmt_coord(msg_y + 10.6348),
-                        escape_xml(&label_text),
-                    )
-                    .unwrap();
+                    text_render::emit_text(
+                        &mut svg.buf,
+                        &label_text,
+                        &TextBase {
+                            x: frame_left + 5.0,
+                            y: msg_y + 10.6348,
+                            font_size: 11,
+                            font_family: "sans-serif",
+                            fill: "#000000",
+                            bold: true,
+                            italic: false,
+                            underline: false,
+                            skip_underline: false,
+                        },
+                    );
                 }
             }
             Event::GroupEnd => {
                 // Group end is handled by the frame rect emitted at GroupStart
             }
             Event::NoteOnLink(text) => {
-                let tw = text_width(text, 13.0);
                 let mid_x = if !participants.is_empty() {
                     (participants[0].center_x + participants[participants.len() - 1].center_x) / 2.0
                 } else {
                     50.0
                 };
-                write!(
-                    svg.buf,
-                    r##"<text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="{}" x="{}" y="{}">{}</text>"##,
-                    fmt_coord(tw),
-                    fmt_coord(mid_x),
-                    fmt_coord(msg_y + 2.0),
-                    escape_xml(text),
-                )
-                .unwrap();
+                text_render::emit_text(
+                    &mut svg.buf,
+                    text,
+                    &TextBase {
+                        x: mid_x,
+                        y: msg_y + 2.0,
+                        font_size: 13,
+                        font_family: "sans-serif",
+                        fill: "#000000",
+                        bold: false,
+                        italic: false,
+                        underline: false,
+                        skip_underline: false,
+                    },
+                );
             }
             Event::Ref(r) => {
-                let tw = text_width(&r.text, 13.0);
                 let mid_x = if !participants.is_empty() {
                     (participants[0].center_x + participants[participants.len() - 1].center_x) / 2.0
                 } else {
                     50.0
                 };
-                write!(
-                    svg.buf,
-                    r##"<text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="{}" x="{}" y="{}">{}</text>"##,
-                    fmt_coord(tw),
-                    fmt_coord(mid_x),
-                    fmt_coord(msg_y + 4.0),
-                    escape_xml(&r.text),
-                )
-                .unwrap();
+                text_render::emit_text(
+                    &mut svg.buf,
+                    &r.text,
+                    &TextBase {
+                        x: mid_x,
+                        y: msg_y + 4.0,
+                        font_size: 13,
+                        font_family: "sans-serif",
+                        fill: "#000000",
+                        bold: false,
+                        italic: false,
+                        underline: false,
+                        skip_underline: false,
+                    },
+                );
             }
             Event::Activate(id, _) => {
                 // Track activation state for message rendering
