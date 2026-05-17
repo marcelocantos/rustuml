@@ -6,3 +6,4 @@
 sqlite_mcp_server.db
 .claude/
 golden_stats.txt
+/test-diagrams/golden_failure_names.txt

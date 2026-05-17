@@ -1119,19 +1119,121 @@ fn handle_tag(
     out: &mut Vec<Segment>,
 ) {
     match tag {
-        "b" | "strong" => walk_with(chars, "</b>".replace("b", tag), tag, "strong", style, |s| s.bold = true, skip_underline, out),
-        "i" | "em" => walk_with(chars, format!("</{tag}>"), tag, "em", style, |s| s.italic = true, skip_underline, out),
-        "u" => walk_with(chars, "</u>".into(), tag, "", style, |s| s.underline = true, skip_underline, out),
-        "ins" => walk_with(chars, "</ins>".into(), tag, "", style, |s| s.underline = true, skip_underline, out),
-        "s" => walk_with(chars, "</s>".into(), tag, "", style, |s| s.line_through = true, skip_underline, out),
-        "del" => walk_with(chars, "</del>".into(), tag, "", style, |s| s.line_through = true, skip_underline, out),
-        "strike" => walk_with(chars, "</strike>".into(), tag, "", style, |s| s.line_through = true, skip_underline, out),
-        "mono" => walk_with(chars, "</mono>".into(), tag, "", style, |s| s.monospace = true, skip_underline, out),
-        "code" => walk_with(chars, "</code>".into(), tag, "", style, |s| s.monospace = true, skip_underline, out),
-        "sub" => walk_with(chars, "</sub>".into(), tag, "", style, |s| s.baseline_shift = Some("sub"), skip_underline, out),
-        "sup" => walk_with(chars, "</sup>".into(), tag, "", style, |s| s.baseline_shift = Some("super"), skip_underline, out),
+        "b" | "strong" => walk_with(
+            chars,
+            "</b>".replace("b", tag),
+            tag,
+            "strong",
+            style,
+            |s| s.bold = true,
+            skip_underline,
+            out,
+        ),
+        "i" | "em" => walk_with(
+            chars,
+            format!("</{tag}>"),
+            tag,
+            "em",
+            style,
+            |s| s.italic = true,
+            skip_underline,
+            out,
+        ),
+        "u" => walk_with(
+            chars,
+            "</u>".into(),
+            tag,
+            "",
+            style,
+            |s| s.underline = true,
+            skip_underline,
+            out,
+        ),
+        "ins" => walk_with(
+            chars,
+            "</ins>".into(),
+            tag,
+            "",
+            style,
+            |s| s.underline = true,
+            skip_underline,
+            out,
+        ),
+        "s" => walk_with(
+            chars,
+            "</s>".into(),
+            tag,
+            "",
+            style,
+            |s| s.line_through = true,
+            skip_underline,
+            out,
+        ),
+        "del" => walk_with(
+            chars,
+            "</del>".into(),
+            tag,
+            "",
+            style,
+            |s| s.line_through = true,
+            skip_underline,
+            out,
+        ),
+        "strike" => walk_with(
+            chars,
+            "</strike>".into(),
+            tag,
+            "",
+            style,
+            |s| s.line_through = true,
+            skip_underline,
+            out,
+        ),
+        "mono" => walk_with(
+            chars,
+            "</mono>".into(),
+            tag,
+            "",
+            style,
+            |s| s.monospace = true,
+            skip_underline,
+            out,
+        ),
+        "code" => walk_with(
+            chars,
+            "</code>".into(),
+            tag,
+            "",
+            style,
+            |s| s.monospace = true,
+            skip_underline,
+            out,
+        ),
+        "sub" => walk_with(
+            chars,
+            "</sub>".into(),
+            tag,
+            "",
+            style,
+            |s| s.baseline_shift = Some("sub"),
+            skip_underline,
+            out,
+        ),
+        "sup" => walk_with(
+            chars,
+            "</sup>".into(),
+            tag,
+            "",
+            style,
+            |s| s.baseline_shift = Some("super"),
+            skip_underline,
+            out,
+        ),
         _ if tag.starts_with("color:") || tag.starts_with("COLOR:") => {
-            let color = tag.split_once(':').map(|(_, c)| c.to_string()).unwrap_or_default();
+            let color = tag
+                .split_once(':')
+                .map(|(_, c)| c.to_string())
+                .unwrap_or_default();
             let content = collect_until_tag(chars, "</color>");
             let mut nested = style.clone();
             nested.fill = Some(color);
@@ -1147,7 +1249,10 @@ fn handle_tag(
             walk_segments(&content, &nested, skip_underline, out);
         }
         _ if tag.starts_with("font:") || tag.starts_with("FONT:") => {
-            let font_name = tag.split_once(':').map(|(_, n)| n.to_string()).unwrap_or_default();
+            let font_name = tag
+                .split_once(':')
+                .map(|(_, n)| n.to_string())
+                .unwrap_or_default();
             let content = collect_until_tag(chars, "</font>");
             let mut nested = style.clone();
             nested.font_family = Some(font_name);
@@ -1268,10 +1373,7 @@ mod tests {
     #[test]
     fn segments_bold_only() {
         // PlantUML's uniform-style case: one segment, bold lifted to text attrs.
-        assert_eq!(
-            parse_segments("**bold**"),
-            vec![seg("bold", bold_style())]
-        );
+        assert_eq!(parse_segments("**bold**"), vec![seg("bold", bold_style())]);
     }
 
     #[test]
@@ -1280,7 +1382,10 @@ mod tests {
         let mut s = Style::default();
         s.bold = true;
         s.italic = true;
-        assert_eq!(parse_segments("**//bold italic//**"), vec![seg("bold italic", s)]);
+        assert_eq!(
+            parse_segments("**//bold italic//**"),
+            vec![seg("bold italic", s)]
+        );
     }
 
     #[test]
@@ -1332,7 +1437,10 @@ mod tests {
         let segs = parse_segments("[[https://example.com label]]");
         assert_eq!(segs.len(), 1);
         assert_eq!(segs[0].text, "label");
-        assert_eq!(segs[0].style.link_url.as_deref(), Some("https://example.com"));
+        assert_eq!(
+            segs[0].style.link_url.as_deref(),
+            Some("https://example.com")
+        );
         assert_eq!(segs[0].style.fill.as_deref(), Some("#0000FF"));
         assert!(segs[0].style.underline);
     }

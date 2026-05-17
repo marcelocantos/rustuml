@@ -321,6 +321,27 @@ fn golden_pairs() {
         }
     }
 
+    // Write per-test failure names to a file for diff-based debugging.
+    // The file is gitignored; cleared on every run so it always reflects
+    // the most recent state.
+    let names_path = PathBuf::from(env!("CARGO_MANIFEST_DIR"))
+        .parent()
+        .unwrap()
+        .parent()
+        .unwrap()
+        .join("test-diagrams/golden_failure_names.txt");
+    if let Ok(mut f) = std::fs::File::create(&names_path) {
+        use std::io::Write;
+        let mut names: Vec<&str> = failures
+            .iter()
+            .map(|s| s.split(':').next().unwrap_or(s))
+            .collect();
+        names.sort();
+        for n in &names {
+            writeln!(f, "{n}").ok();
+        }
+    }
+
     let panics = failures.iter().filter(|f| f.contains("panic:")).count();
     let xml_diff = failures
         .iter()

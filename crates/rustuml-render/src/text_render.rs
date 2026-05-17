@@ -50,6 +50,13 @@ pub fn emit_text(buf: &mut String, content: &str, base: &TextBase<'_>) -> f64 {
     emit_segments(buf, &segments, base)
 }
 
+/// Sans-serif width of `content` with creole markers stripped. The standard
+/// measurement helper for renderer layout: matches what PlantUML measures
+/// when sizing boxes around creole-marked labels.
+pub fn measure(content: &str, font_size: f64, bold: bool) -> f64 {
+    pm::text_width(&creole::stripped_text(content), font_size, bold)
+}
+
 /// Pre-computed widths for the segments. Useful when the caller needs the
 /// total advance for layout before deciding `x`.
 pub fn total_width(content: &str, base: &TextBase<'_>) -> f64 {
@@ -92,7 +99,11 @@ fn emit_segments(buf: &mut String, segments: &[Segment], base: &TextBase<'_>) ->
 fn segment_width(seg: &Segment, base: &TextBase<'_>) -> f64 {
     let raw = unescape_for_metrics(&seg.text);
     let bold = base.bold || seg.style.bold;
-    let font_size = seg.style.size.map(|s| s as f64).unwrap_or(base.font_size as f64);
+    let font_size = seg
+        .style
+        .size
+        .map(|s| s as f64)
+        .unwrap_or(base.font_size as f64);
     pm::text_width(&raw, font_size, bold)
 }
 
@@ -103,6 +114,171 @@ fn unescape_for_metrics(s: &str) -> String {
         .replace("&lt;", "<")
         .replace("&gt;", ">")
         .replace("&quot;", "\"")
+}
+
+/// Normalise a colour spec to PlantUML's preferred form: lower-case hex
+/// (`#RRGGBB`) for known named colours, pass-through otherwise.
+///
+/// PlantUML emits resolved hex colours in SVG output even when the source
+/// uses HTML colour names — `<color:blue>` becomes `fill="#0000FF"`.
+fn normalize_color(s: &str) -> String {
+    if s.starts_with('#') {
+        return s.to_string();
+    }
+    let lower = s.to_ascii_lowercase();
+    match css_color_hex(&lower) {
+        Some(hex) => hex.to_string(),
+        None => s.to_string(),
+    }
+}
+
+/// CSS3 named colours, lowercased keys. PlantUML accepts the same names
+/// (Java AWT's `Color.decode` plus extended palette).
+fn css_color_hex(name: &str) -> Option<&'static str> {
+    // Listed in case-insensitive lookup order; values are uppercase
+    // `#RRGGBB` to match PlantUML's golden SVG output.
+    match name {
+        "aliceblue" => Some("#F0F8FF"),
+        "antiquewhite" => Some("#FAEBD7"),
+        "aqua" | "cyan" => Some("#00FFFF"),
+        "aquamarine" => Some("#7FFFD4"),
+        "azure" => Some("#F0FFFF"),
+        "beige" => Some("#F5F5DC"),
+        "bisque" => Some("#FFE4C4"),
+        "black" => Some("#000000"),
+        "blanchedalmond" => Some("#FFEBCD"),
+        "blue" => Some("#0000FF"),
+        "blueviolet" => Some("#8A2BE2"),
+        "brown" => Some("#A52A2A"),
+        "burlywood" => Some("#DEB887"),
+        "cadetblue" => Some("#5F9EA0"),
+        "chartreuse" => Some("#7FFF00"),
+        "chocolate" => Some("#D2691E"),
+        "coral" => Some("#FF7F50"),
+        "cornflowerblue" => Some("#6495ED"),
+        "cornsilk" => Some("#FFF8DC"),
+        "crimson" => Some("#DC143C"),
+        "darkblue" => Some("#00008B"),
+        "darkcyan" => Some("#008B8B"),
+        "darkgoldenrod" => Some("#B8860B"),
+        "darkgray" | "darkgrey" => Some("#A9A9A9"),
+        "darkgreen" => Some("#006400"),
+        "darkkhaki" => Some("#BDB76B"),
+        "darkmagenta" => Some("#8B008B"),
+        "darkolivegreen" => Some("#556B2F"),
+        "darkorange" => Some("#FF8C00"),
+        "darkorchid" => Some("#9932CC"),
+        "darkred" => Some("#8B0000"),
+        "darksalmon" => Some("#E9967A"),
+        "darkseagreen" => Some("#8FBC8F"),
+        "darkslateblue" => Some("#483D8B"),
+        "darkslategray" | "darkslategrey" => Some("#2F4F4F"),
+        "darkturquoise" => Some("#00CED1"),
+        "darkviolet" => Some("#9400D3"),
+        "deeppink" => Some("#FF1493"),
+        "deepskyblue" => Some("#00BFFF"),
+        "dimgray" | "dimgrey" => Some("#696969"),
+        "dodgerblue" => Some("#1E90FF"),
+        "firebrick" => Some("#B22222"),
+        "floralwhite" => Some("#FFFAF0"),
+        "forestgreen" => Some("#228B22"),
+        "fuchsia" | "magenta" => Some("#FF00FF"),
+        "gainsboro" => Some("#DCDCDC"),
+        "ghostwhite" => Some("#F8F8FF"),
+        "gold" => Some("#FFD700"),
+        "goldenrod" => Some("#DAA520"),
+        "gray" | "grey" => Some("#808080"),
+        "green" => Some("#008000"),
+        "greenyellow" => Some("#ADFF2F"),
+        "honeydew" => Some("#F0FFF0"),
+        "hotpink" => Some("#FF69B4"),
+        "indianred" => Some("#CD5C5C"),
+        "indigo" => Some("#4B0082"),
+        "ivory" => Some("#FFFFF0"),
+        "khaki" => Some("#F0E68C"),
+        "lavender" => Some("#E6E6FA"),
+        "lavenderblush" => Some("#FFF0F5"),
+        "lawngreen" => Some("#7CFC00"),
+        "lemonchiffon" => Some("#FFFACD"),
+        "lightblue" => Some("#ADD8E6"),
+        "lightcoral" => Some("#F08080"),
+        "lightcyan" => Some("#E0FFFF"),
+        "lightgoldenrodyellow" => Some("#FAFAD2"),
+        "lightgray" | "lightgrey" => Some("#D3D3D3"),
+        "lightgreen" => Some("#90EE90"),
+        "lightpink" => Some("#FFB6C1"),
+        "lightsalmon" => Some("#FFA07A"),
+        "lightseagreen" => Some("#20B2AA"),
+        "lightskyblue" => Some("#87CEFA"),
+        "lightslategray" | "lightslategrey" => Some("#778899"),
+        "lightsteelblue" => Some("#B0C4DE"),
+        "lightyellow" => Some("#FFFFE0"),
+        "lime" => Some("#00FF00"),
+        "limegreen" => Some("#32CD32"),
+        "linen" => Some("#FAF0E6"),
+        "maroon" => Some("#800000"),
+        "mediumaquamarine" => Some("#66CDAA"),
+        "mediumblue" => Some("#0000CD"),
+        "mediumorchid" => Some("#BA55D3"),
+        "mediumpurple" => Some("#9370DB"),
+        "mediumseagreen" => Some("#3CB371"),
+        "mediumslateblue" => Some("#7B68EE"),
+        "mediumspringgreen" => Some("#00FA9A"),
+        "mediumturquoise" => Some("#48D1CC"),
+        "mediumvioletred" => Some("#C71585"),
+        "midnightblue" => Some("#191970"),
+        "mintcream" => Some("#F5FFFA"),
+        "mistyrose" => Some("#FFE4E1"),
+        "moccasin" => Some("#FFE4B5"),
+        "navajowhite" => Some("#FFDEAD"),
+        "navy" => Some("#000080"),
+        "oldlace" => Some("#FDF5E6"),
+        "olive" => Some("#808000"),
+        "olivedrab" => Some("#6B8E23"),
+        "orange" => Some("#FFA500"),
+        "orangered" => Some("#FF4500"),
+        "orchid" => Some("#DA70D6"),
+        "palegoldenrod" => Some("#EEE8AA"),
+        "palegreen" => Some("#98FB98"),
+        "paleturquoise" => Some("#AFEEEE"),
+        "palevioletred" => Some("#DB7093"),
+        "papayawhip" => Some("#FFEFD5"),
+        "peachpuff" => Some("#FFDAB9"),
+        "peru" => Some("#CD853F"),
+        "pink" => Some("#FFC0CB"),
+        "plum" => Some("#DDA0DD"),
+        "powderblue" => Some("#B0E0E6"),
+        "purple" => Some("#800080"),
+        "rebeccapurple" => Some("#663399"),
+        "red" => Some("#FF0000"),
+        "rosybrown" => Some("#BC8F8F"),
+        "royalblue" => Some("#4169E1"),
+        "saddlebrown" => Some("#8B4513"),
+        "salmon" => Some("#FA8072"),
+        "sandybrown" => Some("#F4A460"),
+        "seagreen" => Some("#2E8B57"),
+        "seashell" => Some("#FFF5EE"),
+        "sienna" => Some("#A0522D"),
+        "silver" => Some("#C0C0C0"),
+        "skyblue" => Some("#87CEEB"),
+        "slateblue" => Some("#6A5ACD"),
+        "slategray" | "slategrey" => Some("#708090"),
+        "snow" => Some("#FFFAFA"),
+        "springgreen" => Some("#00FF7F"),
+        "steelblue" => Some("#4682B4"),
+        "tan" => Some("#D2B48C"),
+        "teal" => Some("#008080"),
+        "thistle" => Some("#D8BFD8"),
+        "tomato" => Some("#FF6347"),
+        "turquoise" => Some("#40E0D0"),
+        "violet" => Some("#EE82EE"),
+        "wheat" => Some("#F5DEB3"),
+        "white" => Some("#FFFFFF"),
+        "whitesmoke" => Some("#F5F5F5"),
+        "yellow" => Some("#FFFF00"),
+        "yellowgreen" => Some("#9ACD32"),
+        _ => None,
+    }
 }
 
 fn write_text_element(
@@ -123,7 +299,8 @@ fn write_text_element(
         base.font_family
     };
     let font_size = style.size.unwrap_or(base.font_size);
-    let fill = style.fill.as_deref().unwrap_or(base.fill);
+    let raw_fill = style.fill.as_deref().unwrap_or(base.fill);
+    let fill = normalize_color(raw_fill);
 
     let mut decorations: Vec<&str> = Vec::new();
     if style.underline {
@@ -142,7 +319,11 @@ fn write_text_element(
     };
 
     let weight_attr = if bold { r#" font-weight="700""# } else { "" };
-    let style_attr = if italic { r#" font-style="italic""# } else { "" };
+    let style_attr = if italic {
+        r#" font-style="italic""#
+    } else {
+        ""
+    };
     let baseline_attr = match style.baseline_shift {
         Some(shift) => format!(r#" baseline-shift="{shift}" font-size="0.7em""#),
         None => String::new(),
@@ -182,7 +363,9 @@ mod tests {
     fn plain_text_emits_one_element() {
         let mut buf = String::new();
         emit_text(&mut buf, "hello", &base(10.0, 20.0));
-        assert!(buf.starts_with(r##"<text fill="#000000" font-family="sans-serif" font-size="12""##));
+        assert!(
+            buf.starts_with(r##"<text fill="#000000" font-family="sans-serif" font-size="12""##)
+        );
         assert!(buf.contains(">hello</text>"));
         assert_eq!(buf.matches("<text").count(), 1);
     }
@@ -200,7 +383,11 @@ mod tests {
     #[test]
     fn mixed_styles_split_into_multiple_elements() {
         let mut buf = String::new();
-        emit_text(&mut buf, "<color:blue>**field**</color>: String", &base(0.0, 0.0));
+        emit_text(
+            &mut buf,
+            "<color:blue>**field**</color>: String",
+            &base(0.0, 0.0),
+        );
         assert_eq!(buf.matches("<text").count(), 2);
         // First element: blue + bold + "field"
         assert!(buf.contains(r#"fill="blue""#));
@@ -227,7 +414,10 @@ mod tests {
         for input in inputs {
             let mut buf = String::new();
             emit_text(&mut buf, input, &base(0.0, 0.0));
-            assert!(!buf.contains("<tspan"), "tspan in output for {input:?}: {buf}");
+            assert!(
+                !buf.contains("<tspan"),
+                "tspan in output for {input:?}: {buf}"
+            );
         }
     }
 }

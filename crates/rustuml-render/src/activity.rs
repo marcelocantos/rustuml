@@ -12,6 +12,7 @@ use rustuml_parser::diagram::activity::{ActivityDiagram, ActivityStep, NotePosit
 
 use crate::plantuml_metrics as pm;
 use crate::style::Theme;
+use crate::text_render::{self, TextBase};
 
 // PlantUML activity diagram constants (reverse-engineered from golden SVGs).
 const START_R: f64 = 10.0;
@@ -134,7 +135,7 @@ fn build_tree(steps: &[ActivityStep]) -> Vec<LayoutNode> {
                 i += 1;
             }
             ActivityStep::Action(text) => {
-                let tw = pm::text_width(text, FONT_SIZE, false);
+                let tw = text_render::measure(text, FONT_SIZE, false);
                 nodes.push(LayoutNode::Action {
                     text: text.clone(),
                     text_width: tw,
@@ -142,7 +143,7 @@ fn build_tree(steps: &[ActivityStep]) -> Vec<LayoutNode> {
                 i += 1;
             }
             ActivityStep::DeprecatedColorAction(dca) => {
-                let tw = pm::text_width(&dca.text, FONT_SIZE, false);
+                let tw = text_render::measure(&dca.text, FONT_SIZE, false);
                 let warning = deprecated_warning(&dca.color);
                 let ww = pm::text_width(&warning, 10.0, false);
                 nodes.push(LayoutNode::DeprecatedAction {
@@ -389,7 +390,7 @@ fn node_width(node: &LayoutNode) -> f64 {
             then_label,
             ..
         } => {
-            let cond_w = pm::text_width(condition, SMALL_FONT, false);
+            let cond_w = text_render::measure(condition, SMALL_FONT, false);
             let diamond_w = cond_w + DIAMOND_HALF * 2.0;
             let then_w = sequence_width(then_branch).max(60.0);
             let else_w: f64 = else_branches
@@ -398,14 +399,14 @@ fn node_width(node: &LayoutNode) -> f64 {
                 .sum();
             let label_w = then_label
                 .as_ref()
-                .map(|l| pm::text_width(l, SMALL_FONT, false))
+                .map(|l| text_render::measure(l, SMALL_FONT, false))
                 .unwrap_or(0.0);
             let else_label_w: f64 = else_branches
                 .iter()
                 .map(|b| {
                     b.label
                         .as_ref()
-                        .map(|l| pm::text_width(l, SMALL_FONT, false))
+                        .map(|l| text_render::measure(l, SMALL_FONT, false))
                         .unwrap_or(0.0)
                 })
                 .sum();
@@ -419,14 +420,14 @@ fn node_width(node: &LayoutNode) -> f64 {
             body, condition, ..
         } => {
             let body_w = sequence_width(body);
-            let cond_w = pm::text_width(condition, SMALL_FONT, false) + DIAMOND_HALF * 2.0;
+            let cond_w = text_render::measure(condition, SMALL_FONT, false) + DIAMOND_HALF * 2.0;
             body_w.max(cond_w + 40.0) // extra space for loop-back arrow
         }
         LayoutNode::Repeat {
             body, condition, ..
         } => {
             let body_w = sequence_width(body);
-            let cond_w = pm::text_width(condition, SMALL_FONT, false) + DIAMOND_HALF * 2.0;
+            let cond_w = text_render::measure(condition, SMALL_FONT, false) + DIAMOND_HALF * 2.0;
             body_w.max(cond_w + 40.0)
         }
         _ => 60.0,
@@ -562,19 +563,26 @@ impl SvgEmitter {
         fill: &str,
         font_family: &str,
         font_size: f64,
-        text_length: f64,
+        _text_length: f64,
         x: f64,
         y: f64,
         content: &str,
         bold: bool,
     ) {
-        let weight = if bold { r#" font-weight="700""# } else { "" };
-        write!(
-            self.buf,
-            r#"<text fill="{}" font-family="{}" font-size="{}"{} lengthAdjust="spacing" textLength="{}" x="{}" y="{}">{}</text>"#,
-            fill, font_family, font_size as u32, weight, f(text_length), f(x), f(y), xml_escape(content)
-        )
-        .unwrap();
+        // text_length is ignored: emit_text computes widths from segments
+        // (after creole stripping). Upstream geometry that sized boxes
+        // around this text should already have measured the stripped text.
+        let base = TextBase {
+            x,
+            y,
+            font_size: font_size as u32,
+            font_family,
+            fill,
+            bold,
+            italic: false,
+            skip_underline: false,
+        };
+        text_render::emit_text(&mut self.buf, content, &base);
     }
 
     fn monospace_text_element(
@@ -868,7 +876,7 @@ fn emit_node(svg: &mut SvgEmitter, node: &LayoutNode, cx: f64, y: f64) -> f64 {
         LayoutNode::Arrow { .. } | LayoutNode::Note { .. } => y,
         LayoutNode::Detach | LayoutNode::Kill | LayoutNode::Break => y,
         LayoutNode::Title(text) => {
-            let tw = pm::text_width(text, TITLE_FONT_SIZE, true);
+            let tw = text_render::measure(text, TITLE_FONT_SIZE, true);
             let text_y = y + pm::ascent(TITLE_FONT_SIZE) + 5.0;
             svg.text_element(
                 TEXT_COLOR,
@@ -894,7 +902,7 @@ fn emit_if(
     then_branch: &[LayoutNode],
     else_branches: &[ElseBranch],
 ) -> f64 {
-    let cond_w = pm::text_width(condition, SMALL_FONT, false);
+    let cond_w = text_render::measure(condition, SMALL_FONT, false);
 
     // Diamond: centered at (cx, y + DIAMOND_HALF)
     let diamond_cy = y + DIAMOND_HALF;
@@ -929,7 +937,7 @@ fn emit_if(
 
     // Then label (to the left of diamond)
     if let Some(label) = then_label {
-        let lw = pm::text_width(label, SMALL_FONT, false);
+        let lw = text_render::measure(label, SMALL_FONT, false);
         svg.text_element(
             TEXT_COLOR,
             "sans-serif",
@@ -991,7 +999,7 @@ fn emit_if(
     };
 
     if let Some(label) = else_branches.first().and_then(|b| b.label.as_ref()) {
-        let lw = pm::text_width(label, SMALL_FONT, false);
+        let lw = text_render::measure(label, SMALL_FONT, false);
         svg.text_element(
             TEXT_COLOR,
             "sans-serif",
@@ -1192,7 +1200,7 @@ fn emit_while(
 ) -> f64 {
     // TODO: proper while layout matching PlantUML
     // For now, simplified linear layout
-    let cond_w = pm::text_width(condition, SMALL_FONT, false);
+    let cond_w = text_render::measure(condition, SMALL_FONT, false);
     let diamond_cy = y + DIAMOND_HALF;
 
     // Diamond
@@ -1219,7 +1227,7 @@ fn emit_while(
     );
 
     if let Some(label) = is_label {
-        let lw = pm::text_width(label, SMALL_FONT, false);
+        let lw = text_render::measure(label, SMALL_FONT, false);
         svg.text_element(
             TEXT_COLOR,
             "sans-serif",
@@ -1272,7 +1280,7 @@ fn emit_repeat(
     let cond_y = body_bottom + ARROW_LEN;
 
     // Condition diamond
-    let cond_w = pm::text_width(condition, SMALL_FONT, false);
+    let cond_w = text_render::measure(condition, SMALL_FONT, false);
     let cond_diamond_cy = cond_y + DIAMOND_HALF;
     let pts = vec![
         (cx - cond_w / 2.0, cond_y),
@@ -1298,7 +1306,7 @@ fn emit_repeat(
 
     // "is" label
     if let Some(label) = is_label {
-        let lw = pm::text_width(label, SMALL_FONT, false);
+        let lw = text_render::measure(label, SMALL_FONT, false);
         let diamond_right = cx + cond_w / 2.0 + DIAMOND_HALF;
         svg.text_element(
             TEXT_COLOR,
