@@ -584,6 +584,7 @@ impl SvgEmitter {
             fill,
             bold,
             italic: false,
+            underline: false,
             skip_underline: false,
         };
         text_render::emit_text(&mut self.buf, content, &base);

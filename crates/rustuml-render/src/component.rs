@@ -286,6 +286,7 @@ pub fn render_with_oracle(
                     fill: TEXT_COLOR,
                     bold: false,
                     italic: true,
+                    underline: false,
                     skip_underline: false,
                 },
             );
@@ -306,6 +307,7 @@ pub fn render_with_oracle(
                 fill: TEXT_COLOR,
                 bold: false,
                 italic: false,
+                underline: false,
                 skip_underline: false,
             },
         );
@@ -351,6 +353,7 @@ pub fn render_with_oracle(
                 fill: TEXT_COLOR,
                 bold: false,
                 italic: false,
+                underline: false,
                 skip_underline: false,
             },
         );
@@ -505,6 +508,7 @@ pub fn render_with_oracle(
                             fill: TEXT_COLOR,
                             bold: false,
                             italic: false,
+                            underline: false,
                             skip_underline: false,
                         },
                     );
@@ -524,6 +528,7 @@ pub fn render_with_oracle(
                             fill: TEXT_COLOR,
                             bold: false,
                             italic: false,
+                            underline: false,
                             skip_underline: false,
                         },
                     );
@@ -543,6 +548,7 @@ pub fn render_with_oracle(
                             fill: TEXT_COLOR,
                             bold: false,
                             italic: false,
+                            underline: false,
                             skip_underline: false,
                         },
                     );
@@ -579,6 +585,7 @@ pub fn render_with_oracle(
                             fill: TEXT_COLOR,
                             bold: false,
                             italic: false,
+                            underline: false,
                             skip_underline: false,
                         },
                     );
@@ -598,6 +605,7 @@ pub fn render_with_oracle(
                             fill: TEXT_COLOR,
                             bold: false,
                             italic: false,
+                            underline: false,
                             skip_underline: false,
                         },
                     );
@@ -617,6 +625,7 @@ pub fn render_with_oracle(
                             fill: TEXT_COLOR,
                             bold: false,
                             italic: false,
+                            underline: false,
                             skip_underline: false,
                         },
                     );
@@ -1047,6 +1056,7 @@ fn render_note(
                 fill: TEXT_COLOR,
                 bold: false,
                 italic: false,
+                underline: false,
                 skip_underline: false,
             },
         );
@@ -1111,6 +1121,7 @@ fn render_packages(
                 fill: TEXT_COLOR,
                 bold: true,
                 italic: false,
+                underline: false,
                 skip_underline: false,
             },
         );
@@ -1131,6 +1142,7 @@ fn render_packages(
                     fill: TEXT_COLOR,
                     bold: false,
                     italic: true,
+                    underline: false,
                     skip_underline: false,
                 },
             );

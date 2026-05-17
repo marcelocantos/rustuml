@@ -35,6 +35,9 @@ pub struct TextBase<'a> {
     pub bold: bool,
     /// Whether the base text is italic.
     pub italic: bool,
+    /// Whether the base text is underlined (e.g. static class members).
+    /// OR-merged with any creole-driven underline on the segment style.
+    pub underline: bool,
     /// When true, treat `__` as literal (class-entity labels).
     pub skip_underline: bool,
 }
@@ -62,6 +65,7 @@ pub fn measure(content: &str, font_size: f64, bold: bool) -> f64 {
         fill: "#000000",
         bold,
         italic: false,
+        underline: false,
         skip_underline: false,
     };
     total_width(content, &base)
@@ -359,7 +363,7 @@ fn write_text_element(
     let fill = normalize_color(raw_fill);
 
     let mut decorations: Vec<&str> = Vec::new();
-    if style.underline {
+    if style.underline || base.underline {
         decorations.push("underline");
     }
     if style.line_through {
@@ -411,6 +415,7 @@ mod tests {
             fill: "#000000",
             bold: false,
             italic: false,
+            underline: false,
             skip_underline: false,
         }
     }
@@ -446,7 +451,7 @@ mod tests {
         );
         assert_eq!(buf.matches("<text").count(), 2);
         // First element: blue + bold + "field"
-        assert!(buf.contains(r#"fill="blue""#));
+        assert!(buf.contains(r##"fill="#0000FF""##));
         assert!(buf.contains(r#"font-weight="700""#));
         assert!(buf.contains(">field</text>"));
         // Second element: plain + ": String"
