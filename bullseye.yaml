@@ -1,4 +1,4 @@
-schema_version: 3
+schema_version: 4
 last_evaluated: dd3b9530
 targets:
   T1:
@@ -96,15 +96,14 @@ targets:
     status: set_aside
     value: 5.0
     cost: 10.0
-    showcase: true
-    set_aside_reason: Parked. Ditaa is the only remaining parity gap (~100 of 12,568 golden tests). The Java port is mechanical (~2-3K lines of Rust over tiny-skia) but the test comparator needs perceptual image diff because Java Graphics2D and tiny-skia don't produce pixel-identical output. Not blocking single-binary delivery; revisit when there's appetite for the comparator work.
+    set_aside_reason: Parked pending perceptual image-diff comparator. Ditaa is one of many strict-XML gaps under 🎯T4 (~100 of 9,630 strict-XML diffs as of 2026-05-17, not "the only remaining parity gap" as the previous wording claimed). The Java→Rust port is mechanical, but the test path needs perceptual diff because Java Graphics2D and tiny-skia don't produce pixel-identical raster output. The strict-XML comparator skips @startditaa entries by design (golden_pairs.rs:163). Revisit when there is appetite for the perceptual-diff infrastructure.
     acceptance:
     - '`@startditaa` blocks render to PNG (embedded as base64 in SVG, matching PlantUML behavior)'
     - ASCII box-drawing characters converted to anti-aliased shapes with optional rounded corners and shadows
     - Arrows, text labels, and color annotations rendered correctly
     - Golden test comparator uses perceptual image diff (not pixel-exact) since Java Graphics2D and tiny-skia have different anti-aliasing
     - 100 ditaa golden tests pass within perceptual tolerance
-    context: 'Ditaa is a niche feature (~100 golden tests out of 12,568). PlantUML bundles the ditaa Java library (28 files, ~8K lines by Stathis Sideris). The algorithm is mechanical: parse ASCII grid → detect boxes/lines/arrows → rasterize. A Rust port would be ~2-3K lines using tiny-skia. The hard part is not the port but the test comparison — pixel-exact matching is impossible across rendering engines, so a perceptual diff comparator is needed.'
+    context: 'Ditaa is one of many strict-XML gaps under T4 (~100 of 9,630 strict-XML diffs as of 2026-05-17). It is set aside not because the gap is small but because closing it specifically requires perceptual image-diff infrastructure: the Java port itself is mechanical (~2-3K lines of Rust over tiny-skia, parsing the ASCII grid into boxes/lines/arrows then rasterising) but Java Graphics2D and tiny-skia do not produce pixel-identical output, so the test comparator needs a perceptual diff path that does not exist yet. The strict-XML comparator used by T4 will continue to skip ditaa entries (it is the @startditaa skip in golden_pairs.rs:163). Revisit when there is appetite for the perceptual-diff comparator work.'
     origin: manual
     discovered: 2026-03-29
   T3:
@@ -112,7 +111,6 @@ targets:
     status: identified
     value: 0.0
     cost: 0.0
-    showcase: true
     acceptance:
     - 'Formula installs only the `rustuml` binary, NOT `rustuml-oracle` (verified 2026-04-27: install line is `system bin/"rustuml", "--version"` with no oracle binary copied to bin)'
     - If shipping policy ever changes to include `rustuml-oracle` in the formula, `depends_on "openjdk"` is added at the same time — because the oracle invokes `java` to run PlantUML for cross-validation
@@ -133,3 +131,115 @@ targets:
       Sibling targets exist on mnemo (🎯T47), sawmill (🎯T33), vellum (🎯T8), pageflip (🎯T32), jevons (🎯T19), ytt (🎯T2) covering the broader homebrew-tap dependency-audit initiative.
     origin: forked-from spyder PATH-bug investigation in ~/think on 2026-04-27 (homebrew-tap-wide audit)
     discovered: 2026-04-27
+  T4:
+    name: Strict-XML golden-pair parity with Java PlantUML
+    kind: verify
+    status: identified
+    value: 0.0
+    cost: 0.0
+    acceptance:
+    - '`cargo test --test golden_pairs` reports 0 failures across all 12,568 golden pairs.'
+    - 'Skips remain bounded to the legitimate categories: Java reference is itself a syntax-error page (~1,199), ditaa raster diagrams (parked under T2), and I/O errors. No skips for `%date(...)`, no skips for unsupported keywords, no skips for parse failures.'
+    context: 'The v0.5.0 "PlantUML parity achieved" milestone (2026-03-29) was measured against a loose XML comparator that ignored geometry and structure, only checking text-content presence. The 2026-03-29 strict-comparator pivot (session 66994830) revealed ~9,600 honest mismatches: the rendered diagrams did not actually resemble PlantUML''s output. The session went 0→967 passing in one day of structural fixes. As of 2026-05-17 the count is 1,639 / 12,568 strict-pass. This target tracks the real parity work, decomposed into T4.1..T4.9 by failure bucket. The strategy is byte-for-byte SVG matching against the Java goldens, with ULP-level tolerances allowed only if a specific case justifies it. Each fix typically takes out a category of failures, not just one.'
+    verifies:
+    - T4.1
+    - T4.2
+    - T4.3
+    - T4.4
+    - T4.5
+    - T4.6
+    - T4.7
+    - T4.8
+    - T4.9
+    origin: manual
+    discovered: 2026-05-17
+  T4.1:
+    name: Activity diagrams strict-XML pass
+    status: identified
+    value: 0.0
+    cost: 0.0
+    acceptance:
+    - The `activity/` directory under `test-diagrams/golden` produces 0 strict-XML failures when `cargo test --test golden_pairs` runs.
+    context: 'Highest-volume failure bucket as of 2026-05-17 (1,295 strict-XML diffs of 9,630). Primary renderer: crates/rustuml-render/src/activity.rs. Likely root causes include legacy activity syntax (partition, start/stop/end markers, swimlanes), arrow/connector rendering, and the structural shape of the wrapping g elements that PlantUML emits per node. Expect each fix to unblock a category of tests rather than one.'
+    origin: manual
+    discovered: 2026-05-17
+  T4.2:
+    name: Class diagrams strict-XML pass
+    status: identified
+    value: 0.0
+    cost: 0.0
+    acceptance:
+    - The `class/` directory under `test-diagrams/golden` produces 0 strict-XML failures when `cargo test --test golden_pairs` runs.
+    context: 'Second-largest failure bucket as of 2026-05-17 (1,113 strict-XML diffs of 9,630). Primary renderer: crates/rustuml-render/src/class.rs. Class is the most-developed renderer (has oracle-layout extraction from PlantUML''s data-diagram-type=CLASS attribute, see golden_pairs.rs:171). Likely remaining gaps: stereotype rendering, spot-letter chars, relationship label placement, package/namespace nesting, abstract class/note positioning.'
+    origin: manual
+    discovered: 2026-05-17
+  T4.3:
+    name: Sequence diagrams strict-XML pass
+    status: identified
+    value: 0.0
+    cost: 0.0
+    acceptance:
+    - The `sequence/` directory under `test-diagrams/golden` produces 0 strict-XML failures when `cargo test --test golden_pairs` runs.
+    context: '943 strict-XML diffs as of 2026-05-17. Primary renderer: crates/rustuml-render/src/sequence.rs. Sequence diagrams have rich PlantUML-specific structure (participant lifelines, activation rects, message arrows with slants, lifeline overlap detection, notes attached to messages or participants, teoz mode). The lifeline geometry is highly specific to PlantUML''s algorithm; expect to match its participant-shape SVG closely.'
+    origin: manual
+    discovered: 2026-05-17
+  T4.4:
+    name: State diagrams strict-XML pass
+    status: identified
+    value: 0.0
+    cost: 0.0
+    acceptance:
+    - The `state/` directory under `test-diagrams/golden` produces 0 strict-XML failures when `cargo test --test golden_pairs` runs.
+    context: '900 strict-XML diffs as of 2026-05-17. Primary renderer: crates/rustuml-render/src/state.rs. Uses oracle-layout extraction (data-diagram-type=STATE) like class. Likely gaps: nested/composite state rendering (204 puml files use nesting per March-22 audit), entry/exit/choice/fork/join pseudostates, note-on-link, history states.'
+    origin: manual
+    discovered: 2026-05-17
+  T4.5:
+    name: Component diagrams strict-XML pass
+    status: identified
+    value: 0.0
+    cost: 0.0
+    acceptance:
+    - The `component/` directory under `test-diagrams/golden` produces 0 strict-XML failures when `cargo test --test golden_pairs` runs.
+    context: '663 strict-XML diffs as of 2026-05-17. Primary renderer: crates/rustuml-render/src/component.rs. Uses data-diagram-type=DESCRIPTION oracle layout (shared with usecase, deployment). Likely gaps: nested container labels, stereotypes on components/containers, relationship label placement, cloud/folder/node container types.'
+    origin: manual
+    discovered: 2026-05-17
+  T4.6:
+    name: Creole markup strict-XML pass
+    status: converging
+    value: 0.0
+    cost: 0.0
+    acceptance:
+    - The `creole/` directory under `test-diagrams/golden` produces 0 strict-XML failures when `cargo test --test golden_pairs` runs.
+    context: '624 strict-XML diffs as of 2026-05-17. Creole is the cross-cutting markup language used in note bodies, labels, headers/footers across all diagram types. Lives in crates/rustuml-render/src/creole.rs. Likely gaps: nested lists, table layout, tree syntax, image fallback rendering, monospace tspans, escape rules. Fixes here often cascade into improvements across multiple diagram-type buckets.'
+    origin: manual
+    discovered: 2026-05-17
+  T4.7:
+    name: Edge-case diagrams strict-XML pass
+    status: identified
+    value: 0.0
+    cost: 0.0
+    acceptance:
+    - The `edge-cases/` directory under `test-diagrams/golden` produces 0 strict-XML failures when `cargo test --test golden_pairs` runs.
+    context: 581 strict-XML diffs as of 2026-05-17. Edge-cases cover diagrams that exercise unusual feature combinations across renderers — multi-block files, headerless input, escape characters, mixed creole/text, unusual whitespace. Many edge cases will resolve as a side effect of fixing the primary diagram-type buckets; some are genuinely cross-cutting.
+    origin: manual
+    discovered: 2026-05-17
+  T4.8:
+    name: Deployment diagrams strict-XML pass
+    status: identified
+    value: 0.0
+    cost: 0.0
+    acceptance:
+    - The `deployment/` directory under `test-diagrams/golden` produces 0 strict-XML failures when `cargo test --test golden_pairs` runs.
+    context: '483 strict-XML diffs as of 2026-05-17. Primary renderer: crates/rustuml-render/src/deployment.rs. Likely gaps: nested container labels, stereotypes on elements, side-of-element note placement, container types beyond node/cloud (agent, card, artifact, database, queue).'
+    origin: manual
+    discovered: 2026-05-17
+  T4.9:
+    name: Smaller diagram-type buckets strict-XML pass
+    status: identified
+    value: 0.0
+    cost: 0.0
+    acceptance:
+    - All test-diagrams/golden directories not covered by T4.1–T4.8 (skinparam, combo, preprocessing, usecase, er, mindmap, object, json-yaml, timing, wbs, gantt, salt, nwdiag, rendering, links, math, sprites, archimate, regex, type-detection, chart, dot, ebnf, git, multi-diagram) collectively produce 0 strict-XML failures.
+    context: Catch-all for the long tail of smaller failure buckets — combined ~3,028 strict-XML diffs as of 2026-05-17 across 25 directories (each under 410 failures, most under 200). Many will resolve as side effects of T4.6 (creole) and T4.2 (class) work because they share rendering paths. Worth keeping as a single target until the top-8 are mostly cleared, then split into per-bucket sub-targets only if remaining work warrants it.
+    origin: manual
+    discovered: 2026-05-17
