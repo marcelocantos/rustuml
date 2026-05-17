@@ -12,8 +12,8 @@ use rustuml_layout::graph::{Direction, EdgePath, LayoutGraph};
 use rustuml_parser::diagram::state::*;
 
 use crate::layout_oracle::OracleLayout;
-use crate::metrics;
 use crate::style::Theme;
+use crate::text_render::{self, TextBase};
 
 // --- PlantUML state diagram constants ---
 
@@ -143,10 +143,10 @@ fn is_pseudo_state(id: &str) -> bool {
 
 /// Compute the width of a state box based on its label and descriptions.
 fn state_box_width(label: &str, descriptions: &[String]) -> f64 {
-    let label_w = metrics::text_width(label, STATE_FONT_SIZE) + STATE_H_PADDING;
+    let label_w = text_render::measure(label, STATE_FONT_SIZE, false) + STATE_H_PADDING;
     let desc_w = descriptions
         .iter()
-        .map(|d| metrics::text_width(d, DESC_FONT_SIZE) + 10.0)
+        .map(|d| text_render::measure(d, DESC_FONT_SIZE, false) + 10.0)
         .fold(0.0_f64, f64::max);
     label_w.max(desc_w).max(STATE_MIN_WIDTH)
 }
@@ -539,16 +539,24 @@ pub fn render_with_oracle(
 
     if let Some(title) = &diagram.meta.title {
         let title_x = total_width / 2.0;
-        let title_escaped = escape_xml(title);
-        let title_tw = metrics::text_width(title, TITLE_FONT_SIZE);
-        write!(
-            svg,
-            r#"<text fill="{TEXT_COLOR}" font-family="sans-serif" font-size="{TITLE_FONT_SIZE}" font-weight="bold" lengthAdjust="spacing" textLength="{}" x="{}" y="{}">{title_escaped}</text>"#,
-            fmt_f(title_tw),
-            fmt_f(title_x - title_tw / 2.0),
-            fmt_f(TITLE_HEIGHT - 4.0),
-        )
-        .unwrap();
+        let title_tw = text_render::measure(title, TITLE_FONT_SIZE, true);
+        let mut text_buf = String::new();
+        text_render::emit_text(
+            &mut text_buf,
+            title,
+            &TextBase {
+                x: title_x - title_tw / 2.0,
+                y: TITLE_HEIGHT - 4.0,
+                font_size: TITLE_FONT_SIZE as u32,
+                font_family: "sans-serif",
+                fill: TEXT_COLOR,
+                bold: true,
+                italic: false,
+                underline: false,
+                skip_underline: false,
+            },
+        );
+        svg.push_str(&text_buf);
     }
 
     // Assign entity IDs for all nodes.
@@ -684,7 +692,7 @@ pub fn render_with_oracle(
                         fmt_f(*cx), fmt_f(*cy),
                     )
                     .unwrap();
-                    let tw = metrics::text_width("H", STATE_FONT_SIZE);
+                    let tw = text_render::measure("H", STATE_FONT_SIZE, false);
                     write!(
                         svg,
                         r#"<text fill="{TEXT_COLOR}" font-family="sans-serif" font-size="{STATE_FONT_SIZE}" lengthAdjust="spacing" textLength="{}" x="{}" y="{}">H</text>"#,
@@ -709,7 +717,7 @@ pub fn render_with_oracle(
                         fmt_f(*cx), fmt_f(*cy),
                     )
                     .unwrap();
-                    let tw = metrics::text_width("H*", STATE_FONT_SIZE);
+                    let tw = text_render::measure("H*", STATE_FONT_SIZE, false);
                     write!(
                         svg,
                         r#"<text fill="{TEXT_COLOR}" font-family="sans-serif" font-size="{STATE_FONT_SIZE}" lengthAdjust="spacing" textLength="{}" x="{}" y="{}">H*</text>"#,
@@ -749,18 +757,26 @@ pub fn render_with_oracle(
                     if hide_empty_desc && descriptions.is_empty() {
                         // With `hide empty description`, no divider line — just
                         // centered text.
-                        let text_w = metrics::text_width(label, STATE_FONT_SIZE);
+                        let text_w = text_render::measure(label, STATE_FONT_SIZE, false);
                         let text_x = cx - text_w / 2.0;
                         let text_y = box_y + bh / 2.0 + STATE_FONT_SIZE / 3.0;
-                        let escaped = escape_xml(label);
-                        write!(
-                            svg,
-                            r#"<text fill="{TEXT_COLOR}" font-family="sans-serif" font-size="{STATE_FONT_SIZE}" lengthAdjust="spacing" textLength="{}" x="{}" y="{}">{escaped}</text>"#,
-                            fmt_f(text_w),
-                            fmt_f(text_x),
-                            fmt_f(text_y),
-                        )
-                        .unwrap();
+                        let mut text_buf = String::new();
+                        text_render::emit_text(
+                            &mut text_buf,
+                            label,
+                            &TextBase {
+                                x: text_x,
+                                y: text_y,
+                                font_size: STATE_FONT_SIZE as u32,
+                                font_family: "sans-serif",
+                                fill: TEXT_COLOR,
+                                bold: false,
+                                italic: false,
+                                underline: false,
+                                skip_underline: false,
+                            },
+                        );
+                        svg.push_str(&text_buf);
                     } else {
                         // Divider line (always present in PlantUML default mode).
                         let div_y = box_y + DIVIDER_OFFSET;
@@ -775,33 +791,48 @@ pub fn render_with_oracle(
                         .unwrap();
 
                         // State name label.
-                        let text_w = metrics::text_width(label, STATE_FONT_SIZE);
+                        let text_w = text_render::measure(label, STATE_FONT_SIZE, false);
                         let text_x = cx - text_w / 2.0;
                         let text_y = box_y + NAME_BASELINE_OFFSET;
-                        let escaped = escape_xml(label);
-                        write!(
-                            svg,
-                            r#"<text fill="{TEXT_COLOR}" font-family="sans-serif" font-size="{STATE_FONT_SIZE}" lengthAdjust="spacing" textLength="{}" x="{}" y="{}">{escaped}</text>"#,
-                            fmt_f(text_w),
-                            fmt_f(text_x),
-                            fmt_f(text_y),
-                        )
-                        .unwrap();
+                        let mut text_buf = String::new();
+                        text_render::emit_text(
+                            &mut text_buf,
+                            label,
+                            &TextBase {
+                                x: text_x,
+                                y: text_y,
+                                font_size: STATE_FONT_SIZE as u32,
+                                font_family: "sans-serif",
+                                fill: TEXT_COLOR,
+                                bold: false,
+                                italic: false,
+                                underline: false,
+                                skip_underline: false,
+                            },
+                        );
+                        svg.push_str(&text_buf);
 
                         // Description lines.
                         for (j, desc) in descriptions.iter().enumerate() {
-                            let desc_w = metrics::text_width(desc, DESC_FONT_SIZE);
                             let desc_x = box_x + 5.0;
                             let desc_y = div_y + FIRST_DESC_OFFSET + j as f64 * DESC_LINE_SPACING;
-                            let desc_escaped = escape_xml(desc);
-                            write!(
-                                svg,
-                                r#"<text fill="{TEXT_COLOR}" font-family="sans-serif" font-size="{DESC_FONT_SIZE}" lengthAdjust="spacing" textLength="{}" x="{}" y="{}">{desc_escaped}</text>"#,
-                                fmt_f(desc_w),
-                                fmt_f(desc_x),
-                                fmt_f(desc_y),
-                            )
-                            .unwrap();
+                            let mut text_buf = String::new();
+                            text_render::emit_text(
+                                &mut text_buf,
+                                desc,
+                                &TextBase {
+                                    x: desc_x,
+                                    y: desc_y,
+                                    font_size: DESC_FONT_SIZE as u32,
+                                    font_family: "sans-serif",
+                                    fill: TEXT_COLOR,
+                                    bold: false,
+                                    italic: false,
+                                    underline: false,
+                                    skip_underline: false,
+                                },
+                            );
+                            svg.push_str(&text_buf);
                         }
                     }
 
@@ -945,16 +976,23 @@ pub fn render_with_oracle(
         for line in note.text.lines() {
             let trimmed = line.trim();
             if !trimmed.is_empty() {
-                let tw = metrics::text_width(trimmed, LINK_FONT_SIZE);
-                let escaped = escape_xml(trimmed);
-                write!(
-                    svg,
-                    r#"<text fill="{TEXT_COLOR}" font-family="sans-serif" font-size="{LINK_FONT_SIZE}" lengthAdjust="spacing" textLength="{}" x="{}" y="{}">{escaped}</text>"#,
-                    fmt_f(tw),
-                    fmt_f(text_x),
-                    fmt_f(text_y),
-                )
-                .unwrap();
+                let mut text_buf = String::new();
+                text_render::emit_text(
+                    &mut text_buf,
+                    trimmed,
+                    &TextBase {
+                        x: text_x,
+                        y: text_y,
+                        font_size: LINK_FONT_SIZE as u32,
+                        font_family: "sans-serif",
+                        fill: TEXT_COLOR,
+                        bold: false,
+                        italic: false,
+                        underline: false,
+                        skip_underline: false,
+                    },
+                );
+                svg.push_str(&text_buf);
                 text_y += NOTE_LINE_HEIGHT;
             }
         }
@@ -1038,16 +1076,23 @@ pub fn render_with_oracle(
                     let last = points.last().unwrap();
                     let mid_x = (first.0 + last.0) / 2.0;
                     let mid_y = (first.1 + last.1) / 2.0;
-                    let tw = metrics::text_width(label, LINK_FONT_SIZE);
-                    let label_escaped = escape_xml(label);
-                    write!(
-                        svg,
-                        r#"<text fill="{TEXT_COLOR}" font-family="sans-serif" font-size="{LINK_FONT_SIZE}" lengthAdjust="spacing" textLength="{}" x="{}" y="{}">{label_escaped}</text>"#,
-                        fmt_f(tw),
-                        fmt_f(mid_x + 1.0),
-                        fmt_f(mid_y),
-                    )
-                    .unwrap();
+                    let mut text_buf = String::new();
+                    text_render::emit_text(
+                        &mut text_buf,
+                        label,
+                        &TextBase {
+                            x: mid_x + 1.0,
+                            y: mid_y,
+                            font_size: LINK_FONT_SIZE as u32,
+                            font_family: "sans-serif",
+                            fill: TEXT_COLOR,
+                            bold: false,
+                            italic: false,
+                            underline: false,
+                            skip_underline: false,
+                        },
+                    );
+                    svg.push_str(&text_buf);
                 }
             } else {
                 // Straight line fallback.
@@ -1075,16 +1120,23 @@ pub fn render_with_oracle(
                 if let Some(label) = &t.label {
                     let label_x = from_cx.max(to_cx) + 1.0;
                     let label_y = (start_y + end_y) / 2.0;
-                    let tw = metrics::text_width(label, LINK_FONT_SIZE);
-                    let label_escaped = escape_xml(label);
-                    write!(
-                        svg,
-                        r#"<text fill="{TEXT_COLOR}" font-family="sans-serif" font-size="{LINK_FONT_SIZE}" lengthAdjust="spacing" textLength="{}" x="{}" y="{}">{label_escaped}</text>"#,
-                        fmt_f(tw),
-                        fmt_f(label_x),
-                        fmt_f(label_y),
-                    )
-                    .unwrap();
+                    let mut text_buf = String::new();
+                    text_render::emit_text(
+                        &mut text_buf,
+                        label,
+                        &TextBase {
+                            x: label_x,
+                            y: label_y,
+                            font_size: LINK_FONT_SIZE as u32,
+                            font_family: "sans-serif",
+                            fill: TEXT_COLOR,
+                            bold: false,
+                            italic: false,
+                            underline: false,
+                            skip_underline: false,
+                        },
+                    );
+                    svg.push_str(&text_buf);
                 }
             }
 
