@@ -110,18 +110,51 @@ const GUILLEMET_W_14: f64 = 7.33496_09375;
 /// PlantUML text width at 14pt (the most common size for component labels).
 /// Overrides guillemet handling because `metrics::plantuml_text_width_14`
 /// uses a fallback width of 8.0 for non-ASCII chars; PlantUML actually
-/// uses the font size (14) as the fallback for CJK characters.
+/// uses the font size (14) as the fallback for CJK characters and the
+/// AWT-measured width for Latin-1 chars (with cedillas etc. mapping
+/// onto their unaccented ASCII equivalents).
 fn tw14(s: &str) -> f64 {
     let mut total = 0.0_f64;
     for c in s.chars() {
         total += match c {
             '\u{00AB}' | '\u{00BB}' => GUILLEMET_W_14,
             c if (c as u32) < 128 => metrics::plantuml_text_width_14(&c.to_string()),
-            // CJK and other non-ASCII fall back to font-size width per PlantUML.
+            // Latin-1 supplement: approximate via unaccented ASCII char.
+            c if (c as u32) < 256 => {
+                let ascii = latin1_to_ascii(c);
+                metrics::plantuml_text_width_14(&ascii.to_string())
+            }
+            // CJK and beyond: font-size fallback (matches PlantUML's
+            // hard-coded width for missing glyphs).
             _ => 14.0,
         };
     }
     total
+}
+
+/// Map a Latin-1 character to its unaccented ASCII equivalent for width
+/// estimation.  Covers the most common European-language accents.
+fn latin1_to_ascii(c: char) -> char {
+    match c {
+        '\u{00C0}'..='\u{00C5}' => 'A',
+        '\u{00C7}' => 'C',
+        '\u{00C8}'..='\u{00CB}' => 'E',
+        '\u{00CC}'..='\u{00CF}' => 'I',
+        '\u{00D1}' => 'N',
+        '\u{00D2}'..='\u{00D6}' | '\u{00D8}' => 'O',
+        '\u{00D9}'..='\u{00DC}' => 'U',
+        '\u{00DD}' => 'Y',
+        '\u{00DF}' => 's',
+        '\u{00E0}'..='\u{00E5}' => 'a',
+        '\u{00E7}' => 'c',
+        '\u{00E8}'..='\u{00EB}' => 'e',
+        '\u{00EC}'..='\u{00EF}' => 'i',
+        '\u{00F1}' => 'n',
+        '\u{00F2}'..='\u{00F6}' | '\u{00F8}' => 'o',
+        '\u{00F9}'..='\u{00FC}' => 'u',
+        '\u{00FD}' | '\u{00FF}' => 'y',
+        _ => 'a',
+    }
 }
 
 /// PlantUML text width at arbitrary font size (scaled from 14pt baseline).
@@ -1066,8 +1099,9 @@ fn render_oracle_connections(
         }
 
         // Render the connection label, if any.  Position it at the midpoint
-        // of the path's first and last endpoints, biased slightly to match
-        // PlantUML output (+1 px right of midpoint, +4 px above midpoint).
+        // of the path's first and last endpoints, plus PlantUML's empirical
+        // offset of 8 (covers vertical paths; for nontrivial paths the
+        // offset varies by ~0.005 so labels remain pixel-imperfect).
         if let Some(label) = &conn.label
             && let Some((first, last)) = path_endpoints(&oracle_edge.d)
         {
@@ -1078,7 +1112,7 @@ fn render_oracle_connections(
                 r#"<text fill="{TEXT_COLOR}" font-family="sans-serif" font-size="{LINK_FONT}" lengthAdjust="spacing" textLength="{}" x="{}" y="{}">{}</text>"#,
                 n(tl),
                 n(mx + 1.0),
-                n(my + 5.0),
+                n(my + 8.0),
                 escape_xml(label),
             ));
         }
@@ -1391,13 +1425,23 @@ fn estimate_package_height(pkg: &ComponentPackage) -> f64 {
 // ---------------------------------------------------------------------------
 
 fn escape_xml(s: &str) -> String {
-    s.replace('&', "&amp;")
-        .replace('<', "&lt;")
-        .replace('>', "&gt;")
-        .replace('"', "&quot;")
-        .replace('\'', "&#39;")
-        .replace('\u{00AB}', "&#171;")
-        .replace('\u{00BB}', "&#187;")
+    let mut out = String::with_capacity(s.len());
+    for c in s.chars() {
+        match c {
+            '&' => out.push_str("&amp;"),
+            '<' => out.push_str("&lt;"),
+            '>' => out.push_str("&gt;"),
+            '"' => out.push_str("&quot;"),
+            '\'' => out.push_str("&#39;"),
+            // PlantUML emits all non-ASCII characters as numeric entities.
+            c if (c as u32) >= 0x80 => {
+                use std::fmt::Write;
+                let _ = write!(out, "&#{};", c as u32);
+            }
+            c => out.push(c),
+        }
+    }
+    out
 }
 
 #[cfg(test)]
@@ -1548,7 +1592,7 @@ mod tests {
                 pass += 1;
             } else {
                 fail += 1;
-                if report.len() < 50_000 {
+                if report.len() < 500_000 {
                     let name = path.file_stem().unwrap().to_string_lossy();
                     report.push_str(&format!("=== {name} ===\n"));
                     report.push_str(&cmp);
