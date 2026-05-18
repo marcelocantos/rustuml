@@ -442,7 +442,8 @@ fn node_width(node: &LayoutNode) -> f64 {
         // `+ ACTION_MIN_X * 2.0` previously here forced ~52px of empty
         // space whenever the longest action was narrower than the circle.
         LayoutNode::Start => START_R * 2.0,
-        LayoutNode::Stop | LayoutNode::End => STOP_OUTER_R * 2.0,
+        LayoutNode::Stop => STOP_OUTER_R * 2.0,
+        LayoutNode::End => 20.0, // `end` uses rx=10 outer circle
         LayoutNode::Action { text_width, .. } => {
             // Box content width only. The outer ACTION_MIN_X margin is added
             // once at the SVG level (margin_x in render_diagram).
@@ -584,7 +585,9 @@ fn node_height(node: &LayoutNode) -> f64 {
         // Start ellipse cy is fixed at START_CY (25), so from the y=MARGIN_LEAD
         // cursor (16) the ellipse bottom is 25+10-16 = 19, not the full diameter.
         LayoutNode::Start => START_CY + START_R - 16.0,
-        LayoutNode::Stop | LayoutNode::End => STOP_OUTER_R * 2.0,
+        LayoutNode::Stop => STOP_OUTER_R * 2.0,
+        // `end` uses smaller geometry: rx=10 outer circle, no extra ring.
+        LayoutNode::End => 20.0,
         LayoutNode::Action { text, .. } => action_height(text),
         LayoutNode::DeprecatedAction { text, .. } => {
             // Warning banner is accounted for separately by warning_band_h
@@ -801,6 +804,22 @@ impl SvgEmitter {
             self.shapes,
             r#"<text fill="{}" font-family="monospace" font-size="{}" lengthAdjust="spacing" textLength="{}" x="{}" y="{}">{}</text>"#,
             fill, font_size as u32, f(text_length), f(x), f(y), escaped
+        )
+        .unwrap();
+    }
+
+    /// A line that belongs with the SHAPE group (e.g. the X inside an
+    /// `end` node — visually part of the node, not a connector).
+    fn shape_line(&mut self, stroke: &str, stroke_width: &str, x1: f64, x2: f64, y1: f64, y2: f64) {
+        write!(
+            self.shapes,
+            r#"<line style="stroke:{};stroke-width:{};" x1="{}" x2="{}" y1="{}" y2="{}"/>"#,
+            stroke,
+            stroke_width,
+            f(x1),
+            f(x2),
+            f(y1),
+            f(y2)
         )
         .unwrap();
     }
@@ -1159,19 +1178,34 @@ fn emit_node(svg: &mut SvgEmitter, node: &LayoutNode, cx: f64, y: f64) -> f64 {
             y + STOP_OUTER_R * 2.0
         }
         LayoutNode::End => {
-            // End node is same visual as stop in PlantUML
-            let cy = y + STOP_OUTER_R;
-            svg.ellipse(cx, cy, STOP_OUTER_R, STOP_OUTER_R, "none", STOP_STROKE, "1");
-            svg.ellipse(
-                cx,
-                cy,
-                STOP_INNER_R,
-                STOP_INNER_R,
-                STOP_FILL,
-                STOP_FILL,
-                "1",
+            // PlantUML's `end` node is a circle with an X inside (not the
+            // filled-bullseye that `stop` uses).
+            //  - Outer circle: rx=10, fill=none, stroke-width=1.5
+            //  - Two diagonal lines forming an X, stroke-width=2.5
+            // The X spans from (cx-6.1872, cy-6.1872) to (cx+6.1872, cy+6.1872).
+            const END_R: f64 = 10.0;
+            const X_HALF: f64 = 6.1872; // empirical from goldens
+            let cy = y + END_R;
+            svg.ellipse(cx, cy, END_R, END_R, "none", STOP_STROKE, "1.5");
+            // X lines belong with shapes (between ellipse and any following
+            // text) — they are the visual content of the end node.
+            svg.shape_line(
+                STOP_STROKE,
+                "2.5",
+                cx - X_HALF,
+                cx + X_HALF,
+                cy - X_HALF,
+                cy + X_HALF,
             );
-            y + STOP_OUTER_R * 2.0
+            svg.shape_line(
+                STOP_STROKE,
+                "2.5",
+                cx + X_HALF,
+                cx - X_HALF,
+                cy - X_HALF,
+                cy + X_HALF,
+            );
+            y + END_R * 2.0
         }
         LayoutNode::Action { text, text_width } => {
             let ah = action_height(text);
