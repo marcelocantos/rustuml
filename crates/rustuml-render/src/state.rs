@@ -37,7 +37,7 @@ const DIVIDER_OFFSET: f64 = 26.4883;
 /// Vertical position of the state name text baseline relative to box top.
 const NAME_BASELINE_OFFSET: f64 = 18.5352;
 /// Vertical position of first description line baseline relative to divider.
-const FIRST_DESC_OFFSET: f64 = 16.6016;
+const FIRST_DESC_OFFSET: f64 = 16.6015;
 /// Vertical spacing between description lines.
 const DESC_LINE_SPACING: f64 = 14.1328;
 /// Additional height per description line.
@@ -152,11 +152,16 @@ fn state_box_width(label: &str, descriptions: &[String]) -> f64 {
 }
 
 /// Compute the height of a state box given its number of description lines.
+///
+/// PlantUML's height pattern is `50 + DESC_BASE_HEIGHT + (n-1) * DESC_LINE_HEIGHT`
+/// for `n >= 1` description lines. A single description bumps height to 50.6211,
+/// not 50 + line_height — the divider sits at a fixed offset within the 50-unit
+/// header and the description text shares the lower padding.
 fn state_box_height(desc_count: usize) -> f64 {
     if desc_count == 0 {
         STATE_BOX_HEIGHT
     } else {
-        STATE_BOX_HEIGHT + DESC_BASE_HEIGHT + desc_count as f64 * DESC_LINE_HEIGHT
+        STATE_BOX_HEIGHT + DESC_BASE_HEIGHT + (desc_count as f64 - 1.0) * DESC_LINE_HEIGHT
     }
 }
 
@@ -342,19 +347,21 @@ fn allocate_ids_inner_back(
         let from_existing_before = lookup(&entity_ids, &from_layout);
         let to_existing_before = lookup(&entity_ids, &to_layout);
 
-        // PlantUML quirk: when `[*] --> X` is the first reference to a
-        // pseudo-start AND X is an explicitly declared state, the start
-        // entity shares X's id. (The end entity does NOT exhibit this
-        // sharing behaviour — `X --> [*]` always allocates a fresh id.)
-        if let ("__start__", _) = (from_layout.as_str(), to_layout.as_str())
+        // PlantUML quirk: when ANY explicitly-declared state exists, the
+        // start_entity (whenever first allocated) shares the id of the
+        // FIRST explicitly-declared state. The end_entity does not exhibit
+        // this sharing — it always gets a fresh id.
+        if from_layout == "__start__"
             && from_existing_before.is_none()
-            && to_existing_before.is_some()
-            && explicit_ids.contains(&to_layout)
+            && let Some(first_explicit_id) = entity_ids
+                .iter()
+                .find(|(sid, _)| explicit_ids.contains(sid))
+                .map(|(_, eid)| eid.clone())
         {
-            entity_ids.push(("__start__".to_string(), to_existing_before.unwrap()));
+            entity_ids.push(("__start__".to_string(), first_explicit_id));
         }
         // Silence unused-binding warning when only one branch is exercised.
-        let _ = from_existing_before;
+        let _ = to_existing_before;
 
         alloc_entity(&mut entity_ids, &mut counter, &from_layout);
         alloc_entity(&mut entity_ids, &mut counter, &to_layout);
@@ -924,13 +931,16 @@ pub fn render_with_oracle(
                     let right = cx + CHOICE_SIZE;
                     let bottom = cy + CHOICE_SIZE;
                     let left = cx - CHOICE_SIZE;
+                    // PlantUML closes the choice polygon with a 5th point
+                    // duplicating the first vertex.
                     write!(
                         svg,
-                        r#"<polygon fill="{STATE_FILL}" points="{},{},{},{},{},{},{},{}" style="stroke:{STROKE_COLOR};stroke-width:0.5;"/>"#,
+                        r#"<polygon fill="{STATE_FILL}" points="{},{},{},{},{},{},{},{},{},{}" style="stroke:{STROKE_COLOR};stroke-width:0.5;"/>"#,
                         fmt_f(*cx), fmt_f(top),
                         fmt_f(right), fmt_f(*cy),
                         fmt_f(*cx), fmt_f(bottom),
                         fmt_f(left), fmt_f(*cy),
+                        fmt_f(*cx), fmt_f(top),
                     )
                     .unwrap();
                     svg.push_str("</g>");
