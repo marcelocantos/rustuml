@@ -11,8 +11,9 @@ use std::fmt::Write;
 use rustuml_layout::graph::{Direction, EdgePath, LayoutGraph};
 use rustuml_parser::diagram::component::*;
 
-use crate::layout_oracle::OracleLayout;
+use crate::layout_oracle::{EntityRect, OracleLayout};
 use crate::metrics;
+use crate::plantuml_metrics::{ascent, fmt_coord};
 use crate::style::Theme;
 use crate::svg::SvgBuilder;
 
@@ -26,12 +27,12 @@ const FONT_SIZE: f64 = 14.0;
 const SMALL_FONT: f64 = 14.0;
 /// Font size for arrow/link labels.
 const LINK_FONT: f64 = 13.0;
-/// Line height per text line in a component box.
+/// Line height per text line in a component box (= text_height at 14pt).
 const LINE_HEIGHT: f64 = 16.4883;
-/// Base component box height (padding around one line of text).
-const COMPONENT_BASE_H: f64 = 30.0;
-/// Single-line component height.
-const COMPONENT_H: f64 = COMPONENT_BASE_H + LINE_HEIGHT;
+/// Vertical padding above the first text line inside a component.
+const COMPONENT_PAD_TOP: f64 = 20.0;
+/// Vertical padding below the last text line inside a component.
+const COMPONENT_PAD_BOTTOM: f64 = 10.0;
 /// Left padding for text inside a component (accounts for icon space on right).
 const TEXT_PAD_LEFT: f64 = 15.0;
 /// Right padding inside component (icon area).
@@ -98,6 +99,25 @@ const ICON_BAR_TOP_OFFSET_1: f64 = 2.0;
 const ICON_BAR_TOP_OFFSET_2: f64 = 6.0;
 
 // ---------------------------------------------------------------------------
+// Text-width helpers (PlantUML-exact Java AWT metrics)
+// ---------------------------------------------------------------------------
+
+/// PlantUML text width at 14pt (the most common size for component labels).
+fn tw14(s: &str) -> f64 {
+    metrics::plantuml_text_width_14(s)
+}
+
+/// PlantUML text width at arbitrary font size (scaled from 14pt baseline).
+fn tw(s: &str, font_size: f64) -> f64 {
+    metrics::plantuml_text_width(s, font_size)
+}
+
+/// Format a numeric SVG coordinate value (4 decimals, trailing zeros stripped).
+fn n(v: f64) -> String {
+    fmt_coord(v)
+}
+
+// ---------------------------------------------------------------------------
 // Public entry point
 // ---------------------------------------------------------------------------
 
@@ -116,7 +136,11 @@ pub fn render_with_oracle(
         return r#"<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" contentStyleType="text/css" data-diagram-type="DESCRIPTION" height="50px" preserveAspectRatio="none" style="width:100px;height:50px;background:#FFFFFF;" version="1.1" viewBox="0 0 100 50" width="100px" zoomAndPan="magnify"><defs/><g></g></svg>"#.to_string();
     }
 
-    // Compute dimensions for each component.
+    // Build a lookup mapping component id → qualified name (e.g. "G1.AA")
+    // by walking the package tree.
+    let qualified_names = build_qualified_names(diagram);
+
+    // Compute dimensions for each component (used as fallback when oracle has no rect).
     let comp_dims: Vec<CompDim> = diagram.components.iter().map(calc_component_dim).collect();
 
     let title_h = if diagram.meta.title.is_some() {
@@ -155,7 +179,7 @@ pub fn render_with_oracle(
 
     // Compute positions from oracle, layout engine, or grid fallback.
     let (positions, iface_positions, content_w, content_h) = if let Some(orc) = oracle {
-        compute_positions_from_oracle(diagram, &comp_dims, orc, title_h)
+        compute_positions_from_oracle(diagram, &comp_dims, &qualified_names, orc, title_h)
     } else if let Some(ref result) = layout_result
         && result.node_positions.len() >= n_comp + diagram.interfaces.len()
     {
@@ -215,85 +239,49 @@ pub fn render_with_oracle(
     let mut pkg_y = title_h + MARGIN;
     render_packages(&diagram.packages, &mut svg, MARGIN, &mut pkg_y, theme);
 
+    // Determine starting entity counter.  PlantUML's entity IDs start at
+    // ent0002.  When clusters are present, they consume ent IDs ahead of
+    // their contained components — but our parser doesn't track cluster
+    // declaration order vs component declaration order well enough to
+    // reproduce this perfectly.  When the oracle is available, we prefer
+    // its qualified-name → rect mapping for positions; for now, components
+    // get sequential IDs starting at 2.
+    let mut entity_counter: usize = 2;
+
     // Render each component entity.
-    let mut entity_counter = 2; // PlantUML entity IDs start at ent0002
     for (i, comp) in diagram.components.iter().enumerate() {
         let (x, y) = positions[i];
+
+        // Prefer the oracle's exact rect width/height if available.
+        let qual = qualified_names
+            .get(&comp.id)
+            .cloned()
+            .unwrap_or_else(|| comp.id.clone());
+        let oracle_rect = oracle.and_then(|orc| {
+            orc.entities
+                .get(&qual)
+                .or_else(|| orc.entities.get(&comp.id))
+                .or_else(|| orc.entities.get(&comp.label))
+        });
+
         let dim = &comp_dims[i];
+        let comp_w = oracle_rect.map(|r| r.width).unwrap_or(dim.width);
+        let comp_h = oracle_rect.map(|r| r.height).unwrap_or(dim.height);
+
         let ent_id = format!("ent{entity_counter:04}");
         entity_counter += 1;
 
-        // HTML comment.
-        svg.raw(&format!("<!--entity {}-->", comp.id));
-
-        // Open entity group.
-        let qualified = &comp.id;
-        svg.raw(&format!(
-            r#"<g class="entity" data-qualified-name="{qualified}" id="{ent_id}">"#
-        ));
-
-        // URL link wrapper.
-        if let Some(ref url) = comp.url {
-            svg.open_link(url);
-        }
-
-        // Determine fill: use custom color from theme if set, otherwise default.
-        let fill = COMP_FILL;
-
-        // Main body rectangle.
-        svg.raw(&format!(
-            r#"<rect fill="{fill}" height="{h}" rx="{ROUND_R}" ry="{ROUND_R}" style="stroke:{STROKE};stroke-width:0.5;" width="{w}" x="{x}" y="{y}"/>"#,
-            h = dim.height,
-            w = dim.width,
-        ));
-
-        // Component icon (tab + bars) at top-right.
-        let tab_x = x + dim.width - ICON_TAB_RIGHT_OFFSET;
-        let tab_y = y + ICON_TAB_TOP_OFFSET;
-        svg.raw(&format!(
-            r#"<rect fill="{fill}" height="{ICON_TAB_H}" style="stroke:{STROKE};stroke-width:0.5;" width="{ICON_TAB_W}" x="{tab_x}" y="{tab_y}"/>"#,
-        ));
-
-        let bar_x = tab_x - ICON_BAR_LEFT_OFFSET;
-        let bar_y1 = tab_y + ICON_BAR_TOP_OFFSET_1;
-        let bar_y2 = tab_y + ICON_BAR_TOP_OFFSET_2;
-        svg.raw(&format!(
-            r#"<rect fill="{fill}" height="{ICON_BAR_H}" style="stroke:{STROKE};stroke-width:0.5;" width="{ICON_BAR_W}" x="{bar_x}" y="{bar_y1}"/>"#,
-        ));
-        svg.raw(&format!(
-            r#"<rect fill="{fill}" height="{ICON_BAR_H}" style="stroke:{STROKE};stroke-width:0.5;" width="{ICON_BAR_W}" x="{bar_x}" y="{bar_y2}"/>"#,
-        ));
-
-        // Render text lines.
-        let text_x = x + TEXT_PAD_LEFT;
-        let n_lines = 1 + comp.stereotypes.len();
-        let first_text_y = y + dim.height - LINE_HEIGHT * n_lines as f64 + LINE_HEIGHT
-            - (COMPONENT_BASE_H - LINE_HEIGHT) / 2.0;
-
-        // Stereotypes first (italic in PlantUML).
-        for (si, stereo) in comp.stereotypes.iter().enumerate() {
-            let ty = first_text_y + si as f64 * LINE_HEIGHT;
-            let label = format!("\u{00AB}{stereo}\u{00BB}"); // «stereo»
-            svg.raw(&format!(
-                r#"<text fill="{TEXT_COLOR}" font-family="sans-serif" font-size="{FONT_SIZE}" font-style="italic" lengthAdjust="spacing" textLength="{tl}" x="{text_x}" y="{ty}">{escaped}</text>"#,
-                tl = metrics::text_width(&label, FONT_SIZE),
-                escaped = escape_xml(&label),
-            ));
-        }
-
-        // Label (last line).
-        let label_y = first_text_y + comp.stereotypes.len() as f64 * LINE_HEIGHT;
-        svg.raw(&format!(
-            r#"<text fill="{TEXT_COLOR}" font-family="sans-serif" font-size="{FONT_SIZE}" lengthAdjust="spacing" textLength="{tl}" x="{text_x}" y="{label_y}">{escaped}</text>"#,
-            tl = metrics::text_width(&comp.label, FONT_SIZE),
-            escaped = escape_xml(&comp.label),
-        ));
-
-        if comp.url.is_some() {
-            svg.close_link();
-        }
-
-        svg.raw("</g>");
+        emit_component(
+            &mut svg,
+            comp,
+            &qual,
+            &ent_id,
+            x,
+            y,
+            comp_w,
+            comp_h,
+            oracle_rect,
+        );
     }
 
     // Render interfaces.
@@ -310,16 +298,20 @@ pub fn render_with_oracle(
 
         // Circle.
         svg.raw(&format!(
-            r#"<ellipse cx="{ix}" cy="{iy}" fill="{COMP_FILL}" rx="{IFACE_R}" ry="{IFACE_R}" style="stroke:{STROKE};stroke-width:0.5;"/>"#,
+            r#"<ellipse cx="{}" cy="{}" fill="{COMP_FILL}" rx="{IFACE_R}" ry="{IFACE_R}" style="stroke:{STROKE};stroke-width:0.5;"/>"#,
+            n(ix),
+            n(iy),
         ));
 
         // Label below.
         let label_y = iy + IFACE_R + LINE_HEIGHT + 4.0;
+        let tl = tw14(&iface.label);
         svg.raw(&format!(
-            r#"<text fill="{TEXT_COLOR}" font-family="sans-serif" font-size="{FONT_SIZE}" lengthAdjust="spacing" textLength="{tl}" x="{lx}" y="{label_y}">{escaped}</text>"#,
-            tl = metrics::text_width(&iface.label, FONT_SIZE),
-            lx = ix - metrics::text_width(&iface.label, FONT_SIZE) / 2.0,
-            escaped = escape_xml(&iface.label),
+            r#"<text fill="{TEXT_COLOR}" font-family="sans-serif" font-size="{FONT_SIZE}" lengthAdjust="spacing" textLength="{}" x="{}" y="{}">{}</text>"#,
+            n(tl),
+            n(ix - tl / 2.0),
+            n(label_y),
+            escape_xml(&iface.label),
         ));
 
         svg.raw("</g>");
@@ -331,210 +323,19 @@ pub fn render_with_oracle(
     } else {
         for (link_counter, conn) in (entity_counter..).zip(diagram.connections.iter()) {
             let link_id = format!("lnk{link_counter}");
-
-            // Find source and target positions.
-            let from_comp = diagram
-                .components
-                .iter()
-                .enumerate()
-                .find(|(_, c)| c.id == conn.from);
-            let to_comp = diagram
-                .components
-                .iter()
-                .enumerate()
-                .find(|(_, c)| c.id == conn.to);
-            let from_iface = diagram
-                .interfaces
-                .iter()
-                .enumerate()
-                .find(|(_, i)| i.id == conn.from);
-            let to_iface = diagram
-                .interfaces
-                .iter()
-                .enumerate()
-                .find(|(_, i)| i.id == conn.to);
-
-            let (from_cx, from_cy, from_bottom) = if let Some((i, _)) = from_comp {
-                let (x, y) = positions[i];
-                let dim = &comp_dims[i];
-                (x + dim.width / 2.0, y + dim.height, y + dim.height)
-            } else if let Some((i, _)) = from_iface {
-                let (ix, iy) = iface_positions[i];
-                (ix, iy, iy + IFACE_R)
-            } else {
-                continue;
-            };
-
-            let (to_cx, to_cy, _to_top) = if let Some((i, _)) = to_comp {
-                let (x, y) = positions[i];
-                let dim = &comp_dims[i];
-                (x + dim.width / 2.0, y, y)
-            } else if let Some((i, _)) = to_iface {
-                let (ix, iy) = iface_positions[i];
-                (ix, iy, iy - IFACE_R)
-            } else {
-                continue;
-            };
-
-            // Determine link type.
-            let _has_arrow = conn.from.contains("-->")
-                || conn.to.contains("-->")
-                || !conn.dashed && from_comp.is_some() && to_comp.is_some();
-            // In PlantUML: --> is dependency, -- is association, ..> is dependency (dashed),
-            // .. is association (dashed). We infer from the parser's dashed flag and arrow presence.
-            // The parser sets dashed=true for dotted lines. Arrow presence is implied by --> vs --.
-            // Since Connection doesn't carry arrow type, we assume:
-            // - non-dashed + components => dependency (has arrow)
-            // - dashed => dependency (has arrow)
-            // For association (no arrow), the link type is "association".
-            let link_type = "dependency"; // Simplified - the parser doesn't distinguish fully.
-            let dash_attr = if conn.dashed {
-                "stroke-dasharray:7,7;"
-            } else {
-                ""
-            };
-
-            // Try bezier path from layout engine first.
-            let edge_path = edge_paths
-                .iter()
-                .find(|ep| ep.from == conn.from && ep.to == conn.to);
-
-            svg.raw(&format!("<!--link {} to {}-->", conn.from, conn.to));
-
-            let from_ent_idx = diagram
-                .components
-                .iter()
-                .position(|c| c.id == conn.from)
-                .map(|i| i + 2)
-                .or_else(|| {
-                    diagram
-                        .interfaces
-                        .iter()
-                        .position(|i| i.id == conn.from)
-                        .map(|i| i + 2 + n_comp)
-                });
-            let to_ent_idx = diagram
-                .components
-                .iter()
-                .position(|c| c.id == conn.to)
-                .map(|i| i + 2)
-                .or_else(|| {
-                    diagram
-                        .interfaces
-                        .iter()
-                        .position(|i| i.id == conn.to)
-                        .map(|i| i + 2 + n_comp)
-                });
-
-            let from_ent_id = from_ent_idx
-                .map(|i| format!("ent{i:04}"))
-                .unwrap_or_default();
-            let to_ent_id = to_ent_idx.map(|i| format!("ent{i:04}")).unwrap_or_default();
-
-            svg.raw(&format!(
-            r#"<g class="link" data-entity-1="{from_ent_id}" data-entity-2="{to_ent_id}" data-link-type="{link_type}" id="{link_id}">"#,
-        ));
-
-            if let Some(ep) = edge_path
-                && !ep.points.is_empty()
-            {
-                // Render bezier path.
-                let path_d = build_path_d(&ep.points);
-                let path_id = format!("{}-to-{}", conn.from, conn.to);
-                svg.raw(&format!(
-                r#"<path d="{path_d}" fill="none" id="{path_id}" style="stroke:{STROKE};stroke-width:1;{dash_attr}"/>"#,
-            ));
-
-                // Arrowhead.
-                let last = ep.points.last().unwrap();
-                let prev = if ep.points.len() >= 2 {
-                    &ep.points[ep.points.len() - 2]
-                } else {
-                    last
-                };
-                render_arrowhead(&mut svg, prev, last);
-
-                // Labels.
-                let first = ep.points.first().unwrap();
-                if let Some(label) = &conn.label {
-                    let mx = (first.0 + last.0) / 2.0;
-                    let my = (first.1 + last.1) / 2.0;
-                    svg.raw(&format!(
-                    r#"<text fill="{TEXT_COLOR}" font-family="sans-serif" font-size="{LINK_FONT}" lengthAdjust="spacing" textLength="{tl}" x="{tx}" y="{ty}">{escaped}</text>"#,
-                    tl = metrics::text_width(label, LINK_FONT),
-                    tx = mx + 1.0,
-                    ty = my - 4.0,
-                    escaped = escape_xml(label),
-                ));
-                }
-                if let Some(from_mult) = &conn.from_mult {
-                    svg.raw(&format!(
-                    r#"<text fill="{TEXT_COLOR}" font-family="sans-serif" font-size="{LINK_FONT}" lengthAdjust="spacing" textLength="{tl}" x="{tx}" y="{ty}">{escaped}</text>"#,
-                    tl = metrics::text_width(from_mult, LINK_FONT),
-                    tx = first.0 - metrics::text_width(from_mult, LINK_FONT) - 1.0,
-                    ty = first.1 + LINK_FONT + 2.0,
-                    escaped = escape_xml(from_mult),
-                ));
-                }
-                if let Some(to_mult) = &conn.to_mult {
-                    svg.raw(&format!(
-                    r#"<text fill="{TEXT_COLOR}" font-family="sans-serif" font-size="{LINK_FONT}" lengthAdjust="spacing" textLength="{tl}" x="{tx}" y="{ty}">{escaped}</text>"#,
-                    tl = metrics::text_width(to_mult, LINK_FONT),
-                    tx = last.0 - metrics::text_width(to_mult, LINK_FONT) - 1.0,
-                    ty = last.1 - 4.0,
-                    escaped = escape_xml(to_mult),
-                ));
-                }
-            } else {
-                // Straight line fallback.
-                let path_d = format!(
-                    "M {from_cx},{from_cy} C {from_cx},{mid_y1} {to_cx},{mid_y2} {to_cx},{to_cy}",
-                    mid_y1 = from_cy + (to_cy - from_cy) * 0.3,
-                    mid_y2 = from_cy + (to_cy - from_cy) * 0.7,
-                );
-                let path_id = format!("{}-to-{}", conn.from, conn.to);
-                svg.raw(&format!(
-                r#"<path d="{path_d}" fill="none" id="{path_id}" style="stroke:{STROKE};stroke-width:1;{dash_attr}"/>"#,
-            ));
-
-                // Arrowhead for dependency arrows.
-                render_arrowhead_from_coords(&mut svg, from_cx, from_bottom, to_cx, to_cy);
-
-                // Labels.
-                if let Some(label) = &conn.label {
-                    let mx = (from_cx + to_cx) / 2.0;
-                    let my = (from_cy + to_cy) / 2.0;
-                    svg.raw(&format!(
-                    r#"<text fill="{TEXT_COLOR}" font-family="sans-serif" font-size="{LINK_FONT}" lengthAdjust="spacing" textLength="{tl}" x="{tx}" y="{ty}">{escaped}</text>"#,
-                    tl = metrics::text_width(label, LINK_FONT),
-                    tx = mx + 1.0,
-                    ty = my - 4.0,
-                    escaped = escape_xml(label),
-                ));
-                }
-                if let Some(from_mult) = &conn.from_mult {
-                    svg.raw(&format!(
-                    r#"<text fill="{TEXT_COLOR}" font-family="sans-serif" font-size="{LINK_FONT}" lengthAdjust="spacing" textLength="{tl}" x="{tx}" y="{ty}">{escaped}</text>"#,
-                    tl = metrics::text_width(from_mult, LINK_FONT),
-                    tx = from_cx - metrics::text_width(from_mult, LINK_FONT) - 1.0,
-                    ty = from_cy + LINK_FONT + 2.0,
-                    escaped = escape_xml(from_mult),
-                ));
-                }
-                if let Some(to_mult) = &conn.to_mult {
-                    svg.raw(&format!(
-                    r#"<text fill="{TEXT_COLOR}" font-family="sans-serif" font-size="{LINK_FONT}" lengthAdjust="spacing" textLength="{tl}" x="{tx}" y="{ty}">{escaped}</text>"#,
-                    tl = metrics::text_width(to_mult, LINK_FONT),
-                    tx = to_cx - metrics::text_width(to_mult, LINK_FONT) - 1.0,
-                    ty = to_cy - 4.0,
-                    escaped = escape_xml(to_mult),
-                ));
-                }
-            }
-
-            svg.raw("</g>");
+            render_connection_fallback(
+                &mut svg,
+                conn,
+                diagram,
+                &positions,
+                &iface_positions,
+                &comp_dims,
+                edge_paths,
+                n_comp,
+                &link_id,
+            );
         }
-    } // end else (non-oracle connections)
+    }
 
     // Render notes.
     for note in &diagram.notes {
@@ -562,7 +363,371 @@ pub fn render_with_oracle(
 }
 
 // ---------------------------------------------------------------------------
-// Component dimension calculation
+// Qualified-name resolution (component id → "Package.id" or "id")
+// ---------------------------------------------------------------------------
+
+fn build_qualified_names(diagram: &ComponentDiagram) -> std::collections::HashMap<String, String> {
+    let mut map = std::collections::HashMap::new();
+    for comp in &diagram.components {
+        // Default: bare id (top-level component).
+        map.insert(comp.id.clone(), comp.id.clone());
+    }
+    for pkg in &diagram.packages {
+        walk_pkg(pkg, "", &mut map);
+    }
+    map
+}
+
+fn walk_pkg(
+    pkg: &ComponentPackage,
+    parent_prefix: &str,
+    map: &mut std::collections::HashMap<String, String>,
+) {
+    let prefix = if parent_prefix.is_empty() {
+        pkg.name.clone()
+    } else {
+        format!("{parent_prefix}.{}", pkg.name)
+    };
+    for comp_id in &pkg.components {
+        map.insert(comp_id.clone(), format!("{prefix}.{comp_id}"));
+    }
+    for sub in &pkg.packages {
+        walk_pkg(sub, &prefix, map);
+    }
+}
+
+// ---------------------------------------------------------------------------
+// Component rendering
+// ---------------------------------------------------------------------------
+
+#[allow(clippy::too_many_arguments)]
+fn emit_component(
+    svg: &mut SvgBuilder,
+    comp: &Component,
+    qualified: &str,
+    ent_id: &str,
+    x: f64,
+    y: f64,
+    width: f64,
+    height: f64,
+    oracle_rect: Option<&EntityRect>,
+) {
+    let fill = COMP_FILL;
+
+    // HTML comment.
+    svg.raw(&format!("<!--entity {}-->", comp.id));
+
+    // Open entity group with data-source-line.
+    let source_attr = if comp.source_line > 0 {
+        format!(r#" data-source-line="{}""#, comp.source_line)
+    } else {
+        String::new()
+    };
+    svg.raw(&format!(
+        r#"<g class="entity" data-qualified-name="{qualified}"{source_attr} id="{ent_id}">"#
+    ));
+
+    if let Some(ref url) = comp.url {
+        svg.open_link(url);
+    }
+
+    // Main body rectangle.
+    svg.raw(&format!(
+        r#"<rect fill="{fill}" height="{h}" rx="{ROUND_R}" ry="{ROUND_R}" style="stroke:{STROKE};stroke-width:0.5;" width="{w}" x="{xs}" y="{ys}"/>"#,
+        h = n(height),
+        w = n(width),
+        xs = n(x),
+        ys = n(y),
+    ));
+
+    // Component icon (tab + 2 bars) at top-right.
+    let tab_x = x + width - ICON_TAB_RIGHT_OFFSET;
+    let tab_y = y + ICON_TAB_TOP_OFFSET;
+    svg.raw(&format!(
+        r#"<rect fill="{fill}" height="{ICON_TAB_H}" style="stroke:{STROKE};stroke-width:0.5;" width="{ICON_TAB_W}" x="{}" y="{}"/>"#,
+        n(tab_x), n(tab_y),
+    ));
+
+    let bar_x = tab_x - ICON_BAR_LEFT_OFFSET;
+    let bar_y1 = tab_y + ICON_BAR_TOP_OFFSET_1;
+    let bar_y2 = tab_y + ICON_BAR_TOP_OFFSET_2;
+    svg.raw(&format!(
+        r#"<rect fill="{fill}" height="{ICON_BAR_H}" style="stroke:{STROKE};stroke-width:0.5;" width="{ICON_BAR_W}" x="{}" y="{}"/>"#,
+        n(bar_x), n(bar_y1),
+    ));
+    svg.raw(&format!(
+        r#"<rect fill="{fill}" height="{ICON_BAR_H}" style="stroke:{STROKE};stroke-width:0.5;" width="{ICON_BAR_W}" x="{}" y="{}"/>"#,
+        n(bar_x), n(bar_y2),
+    ));
+
+    // Text lines: stereotypes (italic) above the label.
+    // Each text line is centered horizontally in the available text area.
+    let available_w = width - TEXT_PAD_LEFT - TEXT_PAD_RIGHT;
+    let text_area_left = x + TEXT_PAD_LEFT;
+
+    // First text baseline: pad_top above + ascent of font.
+    // For 14pt: 20 + 13.5352 = 33.5352 → y_first = comp_y + 33.5352.
+    let first_text_y = y + COMPONENT_PAD_TOP + ascent(FONT_SIZE);
+
+    // Oracle override: if oracle has text_y_values, prefer those.
+    let oracle_text_ys: Option<&[f64]> = oracle_rect.map(|r| r.text_y_values.as_slice());
+
+    // Emit stereotypes (each italic with «...» guillemets).
+    for (si, stereo) in comp.stereotypes.iter().enumerate() {
+        let ty = oracle_text_ys
+            .and_then(|ys| ys.get(si).copied())
+            .unwrap_or(first_text_y + si as f64 * LINE_HEIGHT);
+        let label = format!("\u{00AB}{stereo}\u{00BB}");
+        let tl = tw14(&label);
+        let tx = text_area_left + (available_w - tl) / 2.0;
+        svg.raw(&format!(
+            r#"<text fill="{TEXT_COLOR}" font-family="sans-serif" font-size="{FONT_SIZE}" font-style="italic" lengthAdjust="spacing" textLength="{}" x="{}" y="{}">{}</text>"#,
+            n(tl),
+            n(tx),
+            n(ty),
+            escape_xml(&label),
+        ));
+    }
+
+    // Label (last line).
+    let label_idx = comp.stereotypes.len();
+    let label_y = oracle_text_ys
+        .and_then(|ys| ys.get(label_idx).copied())
+        .unwrap_or(first_text_y + label_idx as f64 * LINE_HEIGHT);
+    let label_tl = tw14(&comp.label);
+    let label_tx = text_area_left + (available_w - label_tl) / 2.0;
+    svg.raw(&format!(
+        r#"<text fill="{TEXT_COLOR}" font-family="sans-serif" font-size="{FONT_SIZE}" lengthAdjust="spacing" textLength="{}" x="{}" y="{}">{}</text>"#,
+        n(label_tl),
+        n(label_tx),
+        n(label_y),
+        escape_xml(&comp.label),
+    ));
+
+    if comp.url.is_some() {
+        svg.close_link();
+    }
+
+    svg.raw("</g>");
+}
+
+// ---------------------------------------------------------------------------
+// Fallback connection rendering (no-oracle path)
+// ---------------------------------------------------------------------------
+
+#[allow(clippy::too_many_arguments)]
+fn render_connection_fallback(
+    svg: &mut SvgBuilder,
+    conn: &Connection,
+    diagram: &ComponentDiagram,
+    positions: &[(f64, f64)],
+    iface_positions: &[(f64, f64)],
+    comp_dims: &[CompDim],
+    edge_paths: &[EdgePath],
+    n_comp: usize,
+    link_id: &str,
+) {
+    // Find source and target positions.
+    let from_comp = diagram
+        .components
+        .iter()
+        .enumerate()
+        .find(|(_, c)| c.id == conn.from);
+    let to_comp = diagram
+        .components
+        .iter()
+        .enumerate()
+        .find(|(_, c)| c.id == conn.to);
+    let from_iface = diagram
+        .interfaces
+        .iter()
+        .enumerate()
+        .find(|(_, i)| i.id == conn.from);
+    let to_iface = diagram
+        .interfaces
+        .iter()
+        .enumerate()
+        .find(|(_, i)| i.id == conn.to);
+
+    let (from_cx, from_cy, from_bottom) = if let Some((i, _)) = from_comp {
+        let (x, y) = positions[i];
+        let dim = &comp_dims[i];
+        (x + dim.width / 2.0, y + dim.height, y + dim.height)
+    } else if let Some((i, _)) = from_iface {
+        let (ix, iy) = iface_positions[i];
+        (ix, iy, iy + IFACE_R)
+    } else {
+        return;
+    };
+
+    let (to_cx, to_cy, _to_top) = if let Some((i, _)) = to_comp {
+        let (x, y) = positions[i];
+        let dim = &comp_dims[i];
+        (x + dim.width / 2.0, y, y)
+    } else if let Some((i, _)) = to_iface {
+        let (ix, iy) = iface_positions[i];
+        (ix, iy, iy - IFACE_R)
+    } else {
+        return;
+    };
+
+    let link_type = "dependency";
+    let dash_attr = if conn.dashed {
+        "stroke-dasharray:7,7;"
+    } else {
+        ""
+    };
+
+    // Try bezier path from layout engine first.
+    let edge_path = edge_paths
+        .iter()
+        .find(|ep| ep.from == conn.from && ep.to == conn.to);
+
+    svg.raw(&format!("<!--link {} to {}-->", conn.from, conn.to));
+
+    let from_ent_idx = diagram
+        .components
+        .iter()
+        .position(|c| c.id == conn.from)
+        .map(|i| i + 2)
+        .or_else(|| {
+            diagram
+                .interfaces
+                .iter()
+                .position(|i| i.id == conn.from)
+                .map(|i| i + 2 + n_comp)
+        });
+    let to_ent_idx = diagram
+        .components
+        .iter()
+        .position(|c| c.id == conn.to)
+        .map(|i| i + 2)
+        .or_else(|| {
+            diagram
+                .interfaces
+                .iter()
+                .position(|i| i.id == conn.to)
+                .map(|i| i + 2 + n_comp)
+        });
+
+    let from_ent_id = from_ent_idx
+        .map(|i| format!("ent{i:04}"))
+        .unwrap_or_default();
+    let to_ent_id = to_ent_idx.map(|i| format!("ent{i:04}")).unwrap_or_default();
+
+    svg.raw(&format!(
+        r#"<g class="link" data-entity-1="{from_ent_id}" data-entity-2="{to_ent_id}" data-link-type="{link_type}" id="{link_id}">"#,
+    ));
+
+    if let Some(ep) = edge_path
+        && !ep.points.is_empty()
+    {
+        let path_d = build_path_d(&ep.points);
+        let path_id = format!("{}-to-{}", conn.from, conn.to);
+        svg.raw(&format!(
+            r#"<path d="{path_d}" fill="none" id="{path_id}" style="stroke:{STROKE};stroke-width:1;{dash_attr}"/>"#,
+        ));
+
+        let last = ep.points.last().unwrap();
+        let prev = if ep.points.len() >= 2 {
+            &ep.points[ep.points.len() - 2]
+        } else {
+            last
+        };
+        render_arrowhead(svg, prev, last);
+
+        let first = ep.points.first().unwrap();
+        if let Some(label) = &conn.label {
+            let mx = (first.0 + last.0) / 2.0;
+            let my = (first.1 + last.1) / 2.0;
+            let tl = tw(label, LINK_FONT);
+            svg.raw(&format!(
+                r#"<text fill="{TEXT_COLOR}" font-family="sans-serif" font-size="{LINK_FONT}" lengthAdjust="spacing" textLength="{}" x="{}" y="{}">{}</text>"#,
+                n(tl),
+                n(mx + 1.0),
+                n(my - 4.0),
+                escape_xml(label),
+            ));
+        }
+        if let Some(from_mult) = &conn.from_mult {
+            let tl = tw(from_mult, LINK_FONT);
+            svg.raw(&format!(
+                r#"<text fill="{TEXT_COLOR}" font-family="sans-serif" font-size="{LINK_FONT}" lengthAdjust="spacing" textLength="{}" x="{}" y="{}">{}</text>"#,
+                n(tl),
+                n(first.0 - tl - 1.0),
+                n(first.1 + LINK_FONT + 2.0),
+                escape_xml(from_mult),
+            ));
+        }
+        if let Some(to_mult) = &conn.to_mult {
+            let tl = tw(to_mult, LINK_FONT);
+            svg.raw(&format!(
+                r#"<text fill="{TEXT_COLOR}" font-family="sans-serif" font-size="{LINK_FONT}" lengthAdjust="spacing" textLength="{}" x="{}" y="{}">{}</text>"#,
+                n(tl),
+                n(last.0 - tl - 1.0),
+                n(last.1 - 4.0),
+                escape_xml(to_mult),
+            ));
+        }
+    } else {
+        // Straight line fallback.
+        let path_d = format!(
+            "M {},{} C {},{} {},{} {},{}",
+            n(from_cx),
+            n(from_cy),
+            n(from_cx),
+            n(from_cy + (to_cy - from_cy) * 0.3),
+            n(to_cx),
+            n(from_cy + (to_cy - from_cy) * 0.7),
+            n(to_cx),
+            n(to_cy),
+        );
+        let path_id = format!("{}-to-{}", conn.from, conn.to);
+        svg.raw(&format!(
+            r#"<path d="{path_d}" fill="none" id="{path_id}" style="stroke:{STROKE};stroke-width:1;{dash_attr}"/>"#,
+        ));
+
+        render_arrowhead_from_coords(svg, from_cx, from_bottom, to_cx, to_cy);
+
+        if let Some(label) = &conn.label {
+            let mx = (from_cx + to_cx) / 2.0;
+            let my = (from_cy + to_cy) / 2.0;
+            let tl = tw(label, LINK_FONT);
+            svg.raw(&format!(
+                r#"<text fill="{TEXT_COLOR}" font-family="sans-serif" font-size="{LINK_FONT}" lengthAdjust="spacing" textLength="{}" x="{}" y="{}">{}</text>"#,
+                n(tl),
+                n(mx + 1.0),
+                n(my - 4.0),
+                escape_xml(label),
+            ));
+        }
+        if let Some(from_mult) = &conn.from_mult {
+            let tl = tw(from_mult, LINK_FONT);
+            svg.raw(&format!(
+                r#"<text fill="{TEXT_COLOR}" font-family="sans-serif" font-size="{LINK_FONT}" lengthAdjust="spacing" textLength="{}" x="{}" y="{}">{}</text>"#,
+                n(tl),
+                n(from_cx - tl - 1.0),
+                n(from_cy + LINK_FONT + 2.0),
+                escape_xml(from_mult),
+            ));
+        }
+        if let Some(to_mult) = &conn.to_mult {
+            let tl = tw(to_mult, LINK_FONT);
+            svg.raw(&format!(
+                r#"<text fill="{TEXT_COLOR}" font-family="sans-serif" font-size="{LINK_FONT}" lengthAdjust="spacing" textLength="{}" x="{}" y="{}">{}</text>"#,
+                n(tl),
+                n(to_cx - tl - 1.0),
+                n(to_cy - 4.0),
+                escape_xml(to_mult),
+            ));
+        }
+    }
+
+    svg.raw("</g>");
+}
+
+// ---------------------------------------------------------------------------
+// Component dimension calculation (fallback when no oracle)
 // ---------------------------------------------------------------------------
 
 struct CompDim {
@@ -572,14 +737,13 @@ struct CompDim {
 
 fn calc_component_dim(comp: &Component) -> CompDim {
     let n_lines = 1 + comp.stereotypes.len();
-    let height = COMPONENT_BASE_H + n_lines as f64 * LINE_HEIGHT;
+    let height = COMPONENT_PAD_TOP + COMPONENT_PAD_BOTTOM + n_lines as f64 * LINE_HEIGHT;
 
-    // Width: max of label width and stereotype widths, plus padding.
-    let label_w = metrics::text_width(&comp.label, FONT_SIZE);
+    let label_w = tw14(&comp.label);
     let max_stereo_w = comp
         .stereotypes
         .iter()
-        .map(|s| metrics::text_width(&format!("\u{00AB}{s}\u{00BB}"), FONT_SIZE))
+        .map(|s| tw14(&format!("\u{00AB}{s}\u{00BB}")))
         .fold(0.0_f64, f64::max);
     let text_w = label_w.max(max_stereo_w);
     let width = (text_w + TEXT_PAD_LEFT + TEXT_PAD_RIGHT).max(COMPONENT_MIN_W);
@@ -646,6 +810,7 @@ fn compute_positions_from_layout(
 fn compute_positions_from_oracle(
     diagram: &ComponentDiagram,
     comp_dims: &[CompDim],
+    qualified_names: &std::collections::HashMap<String, String>,
     oracle: &OracleLayout,
     title_h: f64,
 ) -> LayoutResult {
@@ -653,15 +818,18 @@ fn compute_positions_from_oracle(
     let mut iface_positions = Vec::with_capacity(diagram.interfaces.len());
 
     for (i, comp) in diagram.components.iter().enumerate() {
-        // Try qualified name (may be package.component) and bare id.
+        let qual = qualified_names
+            .get(&comp.id)
+            .cloned()
+            .unwrap_or_else(|| comp.id.clone());
         let rect = oracle
             .entities
-            .get(&comp.id)
+            .get(&qual)
+            .or_else(|| oracle.entities.get(&comp.id))
             .or_else(|| oracle.entities.get(&comp.label));
         if let Some(rect) = rect {
             positions.push((rect.x, rect.y));
         } else {
-            // Fallback: use grid position.
             let dim = &comp_dims[i];
             positions.push((MARGIN + (i as f64) * (dim.width + GAP), MARGIN + title_h));
         }
@@ -672,7 +840,6 @@ fn compute_positions_from_oracle(
         if let Some(rect) = rect {
             iface_positions.push((rect.x + rect.width / 2.0, rect.y + rect.height / 2.0));
         } else {
-            // Fallback.
             iface_positions.push((MARGIN + 50.0, MARGIN + title_h + 50.0));
         }
     }
@@ -720,13 +887,15 @@ fn compute_positions_grid(
     };
     let rows = if n == 0 { 0 } else { n.div_ceil(cols) };
 
+    let single_h = COMPONENT_PAD_TOP + COMPONENT_PAD_BOTTOM + LINE_HEIGHT;
+
     let mut positions = Vec::with_capacity(n);
     let y_start = title_h + MARGIN;
     for (i, _comp) in diagram.components.iter().enumerate() {
         let col = i % cols;
         let row = i / cols;
         let x = MARGIN + col_w[..col].iter().sum::<f64>() + GAP * col as f64;
-        let y = y_start + row as f64 * (COMPONENT_H + GAP);
+        let y = y_start + row as f64 * (single_h + GAP);
         positions.push((x, y));
     }
 
@@ -736,7 +905,7 @@ fn compute_positions_grid(
         0.0
     };
     let comp_total_h = if n > 0 {
-        rows as f64 * (COMPONENT_H + GAP)
+        rows as f64 * (single_h + GAP)
     } else {
         0.0
     };
@@ -767,20 +936,31 @@ fn compute_positions_grid(
 }
 
 // ---------------------------------------------------------------------------
-// Arrowhead rendering
+// Connection rendering (oracle path)
 // ---------------------------------------------------------------------------
 
-/// Render connections directly from oracle edge data.
 fn render_oracle_connections(
     svg: &mut SvgBuilder,
     diagram: &ComponentDiagram,
     oracle: &OracleLayout,
 ) {
     for conn in &diagram.connections {
-        let expected_id = format!("{}-to-{}", conn.from, conn.to);
-
-        let oracle_edge = match oracle.edges.iter().find(|e| e.id == expected_id) {
-            Some(e) => e,
+        // PlantUML uses different edge id patterns depending on direction
+        // and arrow style:
+        //   - `A-to-B`     : dependency arrow A→B (down/right direction)
+        //   - `B-backto-A` : dependency arrow A→B reversed for up/left
+        //   - `A-B` / `B-A`: association (no arrow) — direction varies
+        let candidates = [
+            format!("{}-to-{}", conn.from, conn.to),
+            format!("{}-backto-{}", conn.to, conn.from),
+            format!("{}-{}", conn.from, conn.to),
+            format!("{}-{}", conn.to, conn.from),
+        ];
+        let (matched_id, oracle_edge) = match candidates
+            .iter()
+            .find_map(|id| oracle.edges.iter().find(|e| &e.id == id).map(|e| (id, e)))
+        {
+            Some((id, e)) => (id.clone(), e),
             None => continue,
         };
 
@@ -810,7 +990,7 @@ fn render_oracle_connections(
             .map(|c| format!(r#" codeLine="{c}""#))
             .unwrap_or_default();
         svg.raw(&format!(
-            r#"<path{code_line_attr} d="{}" fill="none" id="{expected_id}" style="{path_style}"/>"#,
+            r#"<path{code_line_attr} d="{}" fill="none" id="{matched_id}" style="{path_style}"/>"#,
             oracle_edge.d,
         ));
 
@@ -825,9 +1005,54 @@ fn render_oracle_connections(
             ));
         }
 
+        // Render the connection label, if any.  Position it at the midpoint
+        // of the path's first and last endpoints, biased slightly to match
+        // PlantUML output (+1 px right of midpoint, +4 px above midpoint).
+        if let Some(label) = &conn.label
+            && let Some((first, last)) = path_endpoints(&oracle_edge.d)
+        {
+            let mx = (first.0 + last.0) / 2.0;
+            let my = (first.1 + last.1) / 2.0;
+            let tl = tw(label, LINK_FONT);
+            svg.raw(&format!(
+                r#"<text fill="{TEXT_COLOR}" font-family="sans-serif" font-size="{LINK_FONT}" lengthAdjust="spacing" textLength="{}" x="{}" y="{}">{}</text>"#,
+                n(tl),
+                n(mx + 1.0),
+                n(my + 5.0),
+                escape_xml(label),
+            ));
+        }
+
         svg.raw("</g>");
     }
 }
+
+/// Extract first and last (x, y) points from an SVG path `d` attribute.
+/// Supports the simple "M x,y ... x,y" patterns PlantUML emits.
+fn path_endpoints(d: &str) -> Option<((f64, f64), (f64, f64))> {
+    // Replace command letters with spaces and collect numeric tokens.
+    let cleaned: String = d
+        .chars()
+        .map(|c| if c.is_ascii_alphabetic() { ' ' } else { c })
+        .collect();
+    let nums: Vec<f64> = cleaned
+        .split(|c: char| c == ',' || c.is_whitespace())
+        .filter(|s| !s.is_empty())
+        .filter_map(|s| s.parse().ok())
+        .collect();
+    if nums.len() >= 4 {
+        Some((
+            (nums[0], nums[1]),
+            (nums[nums.len() - 2], nums[nums.len() - 1]),
+        ))
+    } else {
+        None
+    }
+}
+
+// ---------------------------------------------------------------------------
+// Arrowhead rendering (non-oracle path)
+// ---------------------------------------------------------------------------
 
 fn render_arrowhead(svg: &mut SvgBuilder, prev: &(f64, f64), tip: &(f64, f64)) {
     let dx = tip.0 - prev.0;
@@ -837,16 +1062,19 @@ fn render_arrowhead(svg: &mut SvgBuilder, prev: &(f64, f64), tip: &(f64, f64)) {
 }
 
 fn render_arrowhead_from_coords(svg: &mut SvgBuilder, _fx: f64, _fy: f64, tx: f64, ty: f64) {
-    // Downward arrow (most common in top-to-bottom layout).
     let size = 5.0;
     let pts = format!(
-        "{tx},{ty},{x1},{y1},{tx2},{ty2},{x3},{y3},{tx},{ty}",
-        x1 = tx + size,
-        y1 = ty - size * 2.0,
-        tx2 = tx,
-        ty2 = ty - size * 1.5,
-        x3 = tx - size,
-        y3 = ty - size * 2.0,
+        "{},{},{},{},{},{},{},{},{},{}",
+        n(tx),
+        n(ty),
+        n(tx + size),
+        n(ty - size * 2.0),
+        n(tx),
+        n(ty - size * 1.5),
+        n(tx - size),
+        n(ty - size * 2.0),
+        n(tx),
+        n(ty),
     );
     svg.raw(&format!(
         r#"<polygon fill="{STROKE}" points="{pts}" style="stroke:{STROKE};stroke-width:1;"/>"#,
@@ -862,7 +1090,19 @@ fn render_arrow_at(svg: &mut SvgBuilder, x: f64, y: f64, angle: f64) {
     let y2 = y - size * 1.5 * angle.sin();
     let x3 = x - size * 2.0 * (angle + spread).cos();
     let y3 = y - size * 2.0 * (angle + spread).sin();
-    let pts = format!("{x},{y},{x1},{y1},{x2},{y2},{x3},{y3},{x},{y}");
+    let pts = format!(
+        "{},{},{},{},{},{},{},{},{},{}",
+        n(x),
+        n(y),
+        n(x1),
+        n(y1),
+        n(x2),
+        n(y2),
+        n(x3),
+        n(y3),
+        n(x),
+        n(y),
+    );
     svg.raw(&format!(
         r#"<polygon fill="{STROKE}" points="{pts}" style="stroke:{STROKE};stroke-width:1;"/>"#,
     ));
@@ -878,21 +1118,29 @@ fn build_path_d(points: &[(f64, f64)]) -> String {
     }
     let mut d = String::new();
     let (x0, y0) = points[0];
-    write!(d, "M {x0},{y0}").unwrap();
+    write!(d, "M {},{}", n(x0), n(y0)).unwrap();
     if points.len() >= 4 {
-        // Cubic bezier.
         let mut i = 1;
         while i + 2 < points.len() {
             let (x1, y1) = points[i];
             let (x2, y2) = points[i + 1];
             let (x3, y3) = points[i + 2];
-            write!(d, " C {x1},{y1} {x2},{y2} {x3},{y3}").unwrap();
+            write!(
+                d,
+                " C {},{} {},{} {},{}",
+                n(x1),
+                n(y1),
+                n(x2),
+                n(y2),
+                n(x3),
+                n(y3)
+            )
+            .unwrap();
             i += 3;
         }
     } else {
-        // Line segments.
         for &(x, y) in &points[1..] {
-            write!(d, " L {x},{y}").unwrap();
+            write!(d, " L {},{}", n(x), n(y)).unwrap();
         }
     }
     d
@@ -914,7 +1162,7 @@ fn render_note(
     let lines: Vec<&str> = note.text.lines().collect();
     let note_w = lines
         .iter()
-        .map(|l| metrics::text_width(l, LINK_FONT) + NOTE_PAD * 2.0)
+        .map(|l| tw(l, LINK_FONT) + NOTE_PAD * 2.0)
         .fold(60.0_f64, f64::max);
     let note_h = (lines.len() as f64).max(1.0) * NOTE_LINE_H + NOTE_PAD * 2.0;
 
@@ -937,17 +1185,17 @@ fn render_note(
     let nx = nx.max(NOTE_GAP);
     let ny = ny.max(NOTE_GAP);
 
-    // Note box with dog-ear, matching PlantUML's path-based rendering.
-    // PlantUML uses a path for the note shape including a connector line.
     svg.note_box(nx, ny, note_w, note_h, NOTE_FOLD, NOTE_FILL, STROKE);
 
     for (i, line) in lines.iter().enumerate() {
         let ty = ny + NOTE_PAD + (i as f64 + 1.0) * NOTE_LINE_H - 2.0;
+        let tl = tw(line, LINK_FONT);
         svg.raw(&format!(
-            r#"<text fill="{TEXT_COLOR}" font-family="sans-serif" font-size="{LINK_FONT}" lengthAdjust="spacing" textLength="{tl}" x="{tx}" y="{ty}">{escaped}</text>"#,
-            tl = metrics::text_width(line, LINK_FONT),
-            tx = nx + NOTE_PAD,
-            escaped = escape_xml(line),
+            r#"<text fill="{TEXT_COLOR}" font-family="sans-serif" font-size="{LINK_FONT}" lengthAdjust="spacing" textLength="{}" x="{}" y="{}">{}</text>"#,
+            n(tl),
+            n(nx + NOTE_PAD),
+            n(ty),
+            escape_xml(line),
         ));
     }
 }
@@ -964,12 +1212,14 @@ fn render_packages(
     y: &mut f64,
     theme: &Theme,
 ) {
+    let single_h = COMPONENT_PAD_TOP + COMPONENT_PAD_BOTTOM + LINE_HEIGHT;
+
     for pkg in packages {
-        let name_w = metrics::text_width(&pkg.label, FONT_SIZE) + 20.0;
+        let name_w = tw14(&pkg.label) + 20.0;
         let stereo_w = pkg
             .stereotype
             .as_deref()
-            .map(|s| metrics::text_width(&format!("\u{00AB}{s}\u{00BB}"), FONT_SIZE) + 20.0)
+            .map(|s| tw14(&format!("\u{00AB}{s}\u{00BB}")) + 20.0)
             .unwrap_or(0.0);
         let pkg_label_w = name_w.max(stereo_w).max(COMPONENT_MIN_W);
         let inner_w = estimate_package_inner_width(pkg).max(pkg_label_w);
@@ -985,35 +1235,37 @@ fn render_packages(
 
         let leaf_count = pkg.components.len();
         if leaf_count > 0 {
-            *y += leaf_count as f64 * (COMPONENT_H + GAP);
+            *y += leaf_count as f64 * (single_h + GAP);
         }
 
-        let pkg_inner_h = (*y - label_y - CONTAINER_PAD).max(COMPONENT_H);
+        let pkg_inner_h = (*y - label_y - CONTAINER_PAD).max(single_h);
         let pkg_h = pkg_inner_h + CONTAINER_PAD * 2.0 + CONTAINER_LABEL_H;
 
         // Package container rectangle.
         svg.raw(&format!(
-            r#"<rect fill="none" height="{pkg_h}" style="stroke:{STROKE};stroke-width:1.5;" width="{pkg_w}" x="{x}" y="{pkg_y_start}"/>"#,
+            r#"<rect fill="none" height="{}" style="stroke:{STROKE};stroke-width:1.5;" width="{}" x="{}" y="{}"/>"#,
+            n(pkg_h), n(pkg_w), n(x), n(pkg_y_start),
         ));
 
         // Label.
+        let label_tl = tw14(&pkg.label);
         svg.raw(&format!(
-            r#"<text fill="{TEXT_COLOR}" font-family="sans-serif" font-size="{FONT_SIZE}" font-weight="700" lengthAdjust="spacing" textLength="{tl}" x="{tx}" y="{ty}">{escaped}</text>"#,
-            tl = metrics::text_width(&pkg.label, FONT_SIZE),
-            tx = x + CONTAINER_PAD,
-            ty = pkg_y_start + CONTAINER_LABEL_H - 4.0,
-            escaped = escape_xml(&pkg.label),
+            r#"<text fill="{TEXT_COLOR}" font-family="sans-serif" font-size="{FONT_SIZE}" font-weight="700" lengthAdjust="spacing" textLength="{}" x="{}" y="{}">{}</text>"#,
+            n(label_tl),
+            n(x + CONTAINER_PAD),
+            n(pkg_y_start + CONTAINER_LABEL_H - 4.0),
+            escape_xml(&pkg.label),
         ));
 
-        // Stereotype.
         if let Some(stereo) = &pkg.stereotype {
             let label = format!("\u{00AB}{stereo}\u{00BB}");
+            let stereo_tl = tw14(&label);
             svg.raw(&format!(
-                r#"<text fill="{TEXT_COLOR}" font-family="sans-serif" font-size="{FONT_SIZE}" font-style="italic" lengthAdjust="spacing" textLength="{tl}" x="{tx}" y="{ty}">{escaped}</text>"#,
-                tl = metrics::text_width(&label, FONT_SIZE),
-                tx = x + CONTAINER_PAD,
-                ty = pkg_y_start + CONTAINER_LABEL_H + 12.0,
-                escaped = escape_xml(&label),
+                r#"<text fill="{TEXT_COLOR}" font-family="sans-serif" font-size="{FONT_SIZE}" font-style="italic" lengthAdjust="spacing" textLength="{}" x="{}" y="{}">{}</text>"#,
+                n(stereo_tl),
+                n(x + CONTAINER_PAD),
+                n(pkg_y_start + CONTAINER_LABEL_H + 12.0),
+                escape_xml(&label),
             ));
         }
 
@@ -1042,11 +1294,11 @@ fn estimate_packages_height(packages: &[ComponentPackage]) -> f64 {
 }
 
 fn estimate_package_width(pkg: &ComponentPackage) -> f64 {
-    let name_w = metrics::text_width(&pkg.label, FONT_SIZE) + 20.0;
+    let name_w = tw14(&pkg.label) + 20.0;
     let stereo_w = pkg
         .stereotype
         .as_deref()
-        .map(|s| metrics::text_width(&format!("\u{00AB}{s}\u{00BB}"), FONT_SIZE) + 20.0)
+        .map(|s| tw14(&format!("\u{00AB}{s}\u{00BB}")) + 20.0)
         .unwrap_or(0.0);
     let label_w = name_w.max(stereo_w).max(COMPONENT_MIN_W);
     let inner_w = estimate_package_inner_width(pkg);
@@ -1068,8 +1320,9 @@ fn estimate_package_inner_width(pkg: &ComponentPackage) -> f64 {
 }
 
 fn estimate_package_height(pkg: &ComponentPackage) -> f64 {
+    let single_h = COMPONENT_PAD_TOP + COMPONENT_PAD_BOTTOM + LINE_HEIGHT;
     let nested_h: f64 = pkg.packages.iter().map(estimate_package_height).sum();
-    let leaf_h = pkg.components.len() as f64 * (COMPONENT_H + GAP);
+    let leaf_h = pkg.components.len() as f64 * (single_h + GAP);
     CONTAINER_LABEL_H + CONTAINER_PAD * 2.0 + nested_h + leaf_h
 }
 
@@ -1163,13 +1416,11 @@ mod tests {
         let input = "@startuml\ncomponent Foo\n@enduml";
         let diagram = rustuml_parser::parse::parse(input).unwrap();
         let svg = crate::render_svg(&diagram);
-        // Should have 4 rects: main body + tab + 2 bars.
         let rect_count = svg.matches("<rect ").count();
         assert!(
             rect_count >= 4,
             "expected at least 4 rects for component icon, got {rect_count}: {svg}"
         );
-        // Fill should be PlantUML default.
         assert!(
             svg.contains(r##"fill="#F1F1F1""##),
             "missing #F1F1F1 fill: {svg}"
