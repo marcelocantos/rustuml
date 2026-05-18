@@ -1850,6 +1850,12 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme) -> String {
 
     let n = participants.len();
     let mut pair_max_label_width = vec![0.0_f64; n.saturating_sub(1)];
+    // Multi-span constraints: (left_idx, right_idx, total_width_needed).
+    // PlantUML enforces multi-span message widths as a constraint on the total
+    // span (left center to right center), not by dividing the width across
+    // intermediate pairs. The deficit, if any, is absorbed by expanding the
+    // final pair when positions are assigned.
+    let mut multi_span_constraints: Vec<(usize, usize, f64)> = Vec::new();
 
     // Track maximum right extent of self-messages (for SVG width calculation).
     let mut max_self_msg_right: f64 = 0.0;
@@ -1916,10 +1922,7 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme) -> String {
                         if right - left == 1 {
                             pair_max_label_width[left] = pair_max_label_width[left].max(needed);
                         } else {
-                            let per_pair = needed / (right - left) as f64;
-                            for slot in &mut pair_max_label_width[left..right] {
-                                *slot = slot.max(per_pair);
-                            }
+                            multi_span_constraints.push((left, right, needed));
                         }
                     }
                 }
@@ -2000,10 +2003,7 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme) -> String {
                         if right - left == 1 {
                             pair_max_label_width[left] = pair_max_label_width[left].max(needed);
                         } else {
-                            let per_pair = needed / (right - left) as f64;
-                            for slot in &mut pair_max_label_width[left..right] {
-                                *slot = slot.max(per_pair);
-                            }
+                            multi_span_constraints.push((left, right, needed));
                         }
                     }
 
@@ -2134,10 +2134,26 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme) -> String {
             let min_gap_boxes =
                 participants[i - 1].box_width / 2.0 + participants[i].box_width / 2.0 + 10.0; // minimum 10px between box edges
 
-            // Gap from message labels
+            // Gap from single-pair message labels
             let gap_from_labels = pair_max_label_width[i - 1];
 
-            let gap = min_gap_boxes.max(gap_from_labels);
+            let mut gap = min_gap_boxes.max(gap_from_labels);
+
+            // Multi-span constraints ending at i: enforce that center_x[i] -
+            // center_x[left] >= needed.  When the current pair already
+            // satisfies the constraint via earlier expansion, no extra width
+            // is added.  Matches PlantUML's behaviour of absorbing multi-span
+            // deficit into the LAST pair of the span.
+            for &(left, right, needed) in &multi_span_constraints {
+                if right == i {
+                    let already = participants[i - 1].center_x - participants[left].center_x;
+                    let deficit = needed - already;
+                    if deficit > gap {
+                        gap = deficit;
+                    }
+                }
+            }
+
             participants[i].center_x = participants[i - 1].center_x + gap;
             participants[i].box_x = participants[i].center_x - participants[i].box_width / 2.0;
             participants[i].lifeline_line_x =
