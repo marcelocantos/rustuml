@@ -323,12 +323,25 @@ fn allocate_ids_inner_back(
         }
     };
     let mut explicit_ids: std::collections::HashSet<String> = std::collections::HashSet::new();
+    let mut explicit_index: usize = 0;
     for s in states {
         if s.id == "[*]" || !is_explicit(s) {
             continue;
         }
         explicit_ids.insert(s.id.clone());
-        alloc_entity(&mut entity_ids, &mut counter, &s.id);
+        // Pre-assign declared-state slots sequentially: declared[i] = ent00(2+i).
+        // Only the FIRST declared state advances the main counter; later
+        // declared states get their slot reserved but the counter continues
+        // from the slot AFTER the first declared. The transition processor
+        // then uses the counter for links and pseudo-states, which can land
+        // on the same numeric slot as later declared states (the prefix
+        // differs: `ent` vs `lnk`, so they coexist).
+        let slot = 2 + explicit_index;
+        entity_ids.push((s.id.clone(), format!("ent{:04}", slot)));
+        if explicit_index == 0 {
+            counter = slot + 1;
+        }
+        explicit_index += 1;
     }
 
     // Process each transition: allocate source, target, then link.
