@@ -109,14 +109,16 @@ const GUILLEMET_W_14: f64 = 7.33496_09375;
 
 /// PlantUML text width at 14pt (the most common size for component labels).
 /// Overrides guillemet handling because `metrics::plantuml_text_width_14`
-/// uses a fallback width of 8.0 for non-ASCII chars.
+/// uses a fallback width of 8.0 for non-ASCII chars; PlantUML actually
+/// uses the font size (14) as the fallback for CJK characters.
 fn tw14(s: &str) -> f64 {
     let mut total = 0.0_f64;
     for c in s.chars() {
         total += match c {
             '\u{00AB}' | '\u{00BB}' => GUILLEMET_W_14,
             c if (c as u32) < 128 => metrics::plantuml_text_width_14(&c.to_string()),
-            _ => metrics::plantuml_text_width_14(&c.to_string()),
+            // CJK and other non-ASCII fall back to font-size width per PlantUML.
+            _ => 14.0,
         };
     }
     total
@@ -284,7 +286,17 @@ pub fn render_with_oracle(
         });
 
         let dim = &comp_dims[i];
-        let comp_w = oracle_rect.map(|r| r.width).unwrap_or(dim.width);
+        // Use our own (full-precision) computed width for text-positioning
+        // math; oracle width is rounded to 4 decimals so per-character
+        // centring math goes off-by-1 in the 4th decimal when oracle width
+        // is used.  Only fall back to oracle width when our calculated
+        // width is unavailable (interface, etc.).
+        let comp_w = if (dim.width - oracle_rect.map(|r| r.width).unwrap_or(dim.width)).abs() < 0.001
+        {
+            dim.width
+        } else {
+            oracle_rect.map(|r| r.width).unwrap_or(dim.width)
+        };
         let comp_h = oracle_rect.map(|r| r.height).unwrap_or(dim.height);
 
         let ent_id = format!("ent{entity_counter:04}");
@@ -779,14 +791,22 @@ fn calc_component_dim(comp: &Component) -> CompDim {
     let n_lines = 1 + comp.stereotypes.len();
     let height = COMPONENT_PAD_TOP + COMPONENT_PAD_BOTTOM + n_lines as f64 * LINE_HEIGHT;
 
+    // PlantUML uses different padding when the label vs the stereotype
+    // dominates the width: label_w + 40 vs stereo_w + 42.  The extra 2px
+    // for stereotypes accommodates italic glyph bearing.
     let label_w = tw14(&comp.label);
     let max_stereo_w = comp
         .stereotypes
         .iter()
         .map(|s| tw14(&format!("\u{00AB}{s}\u{00BB}")))
         .fold(0.0_f64, f64::max);
-    let text_w = label_w.max(max_stereo_w);
-    let width = (text_w + TEXT_PAD_LEFT + TEXT_PAD_RIGHT).max(COMPONENT_MIN_W);
+    let from_label = label_w + TEXT_PAD_LEFT + TEXT_PAD_RIGHT;
+    let from_stereo = if max_stereo_w > 0.0 {
+        max_stereo_w + TEXT_PAD_LEFT + TEXT_PAD_RIGHT + 2.0
+    } else {
+        0.0
+    };
+    let width = from_label.max(from_stereo).max(COMPONENT_MIN_W);
 
     CompDim { width, height }
 }
