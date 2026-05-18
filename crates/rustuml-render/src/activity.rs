@@ -516,9 +516,27 @@ fn node_width(node: &LayoutNode) -> f64 {
 fn sequence_height(nodes: &[LayoutNode]) -> f64 {
     let mut h = 0.0;
     let mut prior_flow = false;
+    // Pending hidden arrow style — when an explicit `-[hidden]->` precedes
+    // the next flow node, the gap before it is only 10 px instead of 20.
+    let mut pending_hidden = false;
     for node in nodes {
-        // Non-flow nodes (Arrow, Note) contribute nothing themselves.
-        if matches!(node, LayoutNode::Arrow { .. } | LayoutNode::Note { .. }) {
+        // Notes contribute nothing themselves.
+        if matches!(node, LayoutNode::Note { .. }) {
+            continue;
+        }
+        // Track explicit arrow style for the next flow connector.
+        if let LayoutNode::Arrow {
+            color: Some(c),
+            dashed,
+            ..
+        } = node
+        {
+            if arrow_style_from_brackets(c, *dashed).hidden {
+                pending_hidden = true;
+            }
+            continue;
+        }
+        if let LayoutNode::Arrow { .. } = node {
             continue;
         }
         // Detach/Kill/Break terminate the flow but produce no visual height.
@@ -528,11 +546,13 @@ fn sequence_height(nodes: &[LayoutNode]) -> f64 {
             LayoutNode::Detach | LayoutNode::Kill | LayoutNode::Break
         ) {
             prior_flow = false;
+            pending_hidden = false;
             continue;
         }
         if prior_flow {
-            h += ARROW_LEN; // arrow between flow nodes
+            h += if pending_hidden { 10.0 } else { ARROW_LEN };
         }
+        pending_hidden = false;
         h += node_height(node);
         prior_flow = true;
     }
@@ -947,10 +967,14 @@ fn emit_sequence(svg: &mut SvgEmitter, nodes: &[LayoutNode], cx: f64, mut y: f64
                     },
                     _ => ArrowStyle::default(),
                 };
+                // Hidden arrows still consume vertical space, but only
+                // half the normal arrow length (PlantUML reserves 10 px
+                // between the source and target boxes).
+                let gap = if style.hidden { 10.0 } else { ARROW_LEN };
                 if !style.hidden {
-                    svg.down_arrow_full(cx, y, y + ARROW_LEN, &style);
+                    svg.down_arrow_full(cx, y, y + gap, &style);
                 }
-                y += ARROW_LEN;
+                y += gap;
             }
         }
         y = emit_node(svg, node, cx, y);
@@ -1659,7 +1683,14 @@ pub fn render(diagram: &ActivityDiagram, _theme: &Theme) -> String {
     };
 
     let action_total_w = content_w + MARGIN_LEAD + MARGIN_TRAIL + title_w_pad;
-    let svg_w = action_total_w.max(warning_total_w).ceil() as u32;
+    // PlantUML enforces a minimum SVG width of 65 px (= 30 px content
+    // breathing room + 35 px margins), so very narrow diagrams (single
+    // letter actions) don't collapse to bare lines.
+    let min_action_w = if has_deprecated { 0.0 } else { 65.0 };
+    let svg_w = action_total_w
+        .ceil()
+        .max(min_action_w)
+        .max(warning_total_w.ceil()) as u32;
 
     // content_h was computed by sequence_height assuming Start contributes
     // 19 px (cy=25 - MARGIN_LEAD=16 + START_R=10). When start_y > START_CY
