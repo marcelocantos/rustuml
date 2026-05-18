@@ -888,10 +888,15 @@ fn render_entity_content(
     // the same center point but differ in width.
     let name_x = if dim.has_stereotypes {
         if let Some(oracle_x) = name_text_x_override {
+            // Java uses the 4-decimal-rounded textLength values when computing
+            // the shared center, so we must round-trip both widths through the
+            // same formatter before computing the offset.
             let stereo_text = format_stereotype_text(&entity.stereotypes);
-            let stereo_tl = metrics::plantuml_text_width_12(&stereo_text);
+            let stereo_tl_raw = metrics::plantuml_text_width_12(&stereo_text);
+            let stereo_tl: f64 = fmt_tl(stereo_tl_raw).parse().unwrap_or(stereo_tl_raw);
+            let name_tl_rounded: f64 = fmt_tl(name_tl).parse().unwrap_or(name_tl);
             let text_center = oracle_x + stereo_tl / 2.0;
-            text_center - name_tl / 2.0
+            text_center - name_tl_rounded / 2.0
         } else {
             icon_cx + ICON_RX + ICON_TEXT_GAP
         }
@@ -1218,7 +1223,16 @@ fn render_member_line(
 
     if let Some(vis_mod) = visibility_modifier(member) {
         // Visibility icon group.
-        let icon_cy = vis_icon_y_override.unwrap_or(baseline_y - 3.791015625);
+        // PlantUML uses different vertical offsets depending on the icon shape:
+        // - Ellipse (public) / square (private): center sits 3.791 above text baseline
+        // - Diamond (protected) / triangle (package): center sits 4.791 above baseline
+        // The oracle extractor only captures rect/ellipse y values, so polygons
+        // (protected, package) always hit this fallback and must use 4.791.
+        let default_offset = match member.visibility {
+            Visibility::Protected | Visibility::Package => 4.791015625,
+            _ => 3.791015625,
+        };
+        let icon_cy = vis_icon_y_override.unwrap_or(baseline_y - default_offset);
 
         write!(svg, r#"<g data-visibility-modifier="{}">"#, vis_mod,).unwrap();
 
@@ -1281,14 +1295,15 @@ fn render_member_line(
                 } else {
                     VIS_PACKAGE_FILL_FIELD
                 };
-                // Triangle icon (3 points, pointing up).
+                // Triangle icon (3 points, pointing up). PlantUML centers the
+                // triangle vertically on `icon_cy`: apex 3 above, base 3 below.
                 write!(
                     svg,
                     r#"<polygon fill="{}" points="{},{},{},{},{},{}" style="stroke:{};stroke-width:{};"/>"#,
                     fill,
-                    fmt4(vis_cx), fmt_tl(icon_cy - 6.0),
-                    fmt4(vis_cx - 4.0), fmt_tl(icon_cy),
-                    fmt4(vis_cx + 4.0), fmt_tl(icon_cy),
+                    fmt4(vis_cx), fmt_tl(icon_cy - 3.0),
+                    fmt4(vis_cx - 4.0), fmt_tl(icon_cy + 3.0),
+                    fmt4(vis_cx + 4.0), fmt_tl(icon_cy + 3.0),
                     VIS_PACKAGE_STROKE, ICON_STROKE_WIDTH,
                 )
                 .unwrap();
