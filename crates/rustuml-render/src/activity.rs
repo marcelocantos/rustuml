@@ -20,6 +20,10 @@ const STOP_OUTER_R: f64 = 11.0;
 const STOP_INNER_R: f64 = 6.0;
 const START_CY: f64 = 25.0;
 const ARROW_LEN: f64 = 20.0;
+/// Vertical extent of a connector that carries a label (sans-serif 11).
+/// Reverse-engineered from PlantUML goldens: 20 (normal) + 21.275 extra to
+/// fit the label beside the line.
+const LABELED_ARROW_LEN: f64 = 41.2754;
 const ACTION_PADDING: f64 = 20.0; // total vertical padding in action box
 const ACTION_H_PADDING: f64 = 10.0; // horizontal padding each side
 const ACTION_RX: f64 = 12.5;
@@ -63,6 +67,7 @@ fn deprecated_warning(color: &str) -> String {
 struct ArrowStyle {
     color: String,
     dashed: bool,
+    dotted: bool,
     bold: bool,
     hidden: bool,
 }
@@ -72,6 +77,7 @@ impl Default for ArrowStyle {
         ArrowStyle {
             color: ARROW_COLOR.to_string(),
             dashed: false,
+            dotted: false,
             bold: false,
             hidden: false,
         }
@@ -102,12 +108,7 @@ fn arrow_style_from_brackets(payload: &str, _parser_dashed: bool) -> ArrowStyle 
         match t.to_ascii_lowercase().as_str() {
             "bold" => style.bold = true,
             "dashed" => style.dashed = true,
-            "dotted" => {
-                // PlantUML renders dotted as a shorter dasharray. For now we
-                // treat dotted same as dashed at the SVG level (matches the
-                // `stroke-dasharray:2,2` pattern many goldens use).
-                style.dashed = true;
-            }
+            "dotted" => style.dotted = true,
             "hidden" => style.hidden = true,
             "plain" | "solid" | "normal" => {}
             other => {
@@ -516,9 +517,10 @@ fn node_width(node: &LayoutNode) -> f64 {
 fn sequence_height(nodes: &[LayoutNode]) -> f64 {
     let mut h = 0.0;
     let mut prior_flow = false;
-    // Pending hidden arrow style — when an explicit `-[hidden]->` precedes
-    // the next flow node, the gap before it is only 10 px instead of 20.
-    let mut pending_hidden = false;
+    // Pending arrow style — modifiers from an explicit `-[…]->` preceding the
+    // next flow node change the gap length (10 for hidden, 41.275 for
+    // labelled, default 20).
+    let mut pending_gap: Option<f64> = None;
     for node in nodes {
         // Notes contribute nothing themselves.
         if matches!(node, LayoutNode::Note { .. }) {
@@ -526,17 +528,29 @@ fn sequence_height(nodes: &[LayoutNode]) -> f64 {
         }
         // Track explicit arrow style for the next flow connector.
         if let LayoutNode::Arrow {
-            color: Some(c),
+            color,
             dashed,
-            ..
+            label,
         } = node
         {
-            if arrow_style_from_brackets(c, *dashed).hidden {
-                pending_hidden = true;
-            }
-            continue;
-        }
-        if let LayoutNode::Arrow { .. } = node {
+            let style = match color {
+                Some(c) => arrow_style_from_brackets(c, *dashed),
+                None => ArrowStyle {
+                    color: ARROW_COLOR.to_string(),
+                    dashed: *dashed,
+                    dotted: false,
+                    bold: false,
+                    hidden: false,
+                },
+            };
+            let gap = if style.hidden {
+                10.0
+            } else if label.is_some() {
+                LABELED_ARROW_LEN
+            } else {
+                ARROW_LEN
+            };
+            pending_gap = Some(gap);
             continue;
         }
         // Detach/Kill/Break terminate the flow but produce no visual height.
@@ -546,13 +560,13 @@ fn sequence_height(nodes: &[LayoutNode]) -> f64 {
             LayoutNode::Detach | LayoutNode::Kill | LayoutNode::Break
         ) {
             prior_flow = false;
-            pending_hidden = false;
+            pending_gap = None;
             continue;
         }
         if prior_flow {
-            h += if pending_hidden { 10.0 } else { ARROW_LEN };
+            h += pending_gap.unwrap_or(ARROW_LEN);
         }
-        pending_hidden = false;
+        pending_gap = None;
         h += node_height(node);
         prior_flow = true;
     }
@@ -639,6 +653,37 @@ fn svg_text_escape(s: &str) -> String {
 
 fn f(v: f64) -> String {
     pm::fmt_coord(v)
+}
+
+/// Walk a layout tree and collect every connector label so they can be
+/// used to size the SVG.
+fn collect_arrow_labels(nodes: &[LayoutNode]) -> Vec<String> {
+    let mut out = Vec::new();
+    for n in nodes {
+        match n {
+            LayoutNode::Arrow { label: Some(l), .. } => out.push(l.clone()),
+            LayoutNode::If {
+                then_branch,
+                else_branches,
+                ..
+            } => {
+                out.extend(collect_arrow_labels(then_branch));
+                for b in else_branches {
+                    out.extend(collect_arrow_labels(&b.body));
+                }
+            }
+            LayoutNode::While { body, .. } | LayoutNode::Repeat { body, .. } => {
+                out.extend(collect_arrow_labels(body));
+            }
+            LayoutNode::Fork { branches } => {
+                for b in branches {
+                    out.extend(collect_arrow_labels(b));
+                }
+            }
+            _ => {}
+        }
+    }
+    out
 }
 
 fn polygon_points(points: &[(f64, f64)]) -> String {
@@ -837,10 +882,23 @@ impl SvgEmitter {
         );
     }
 
-    /// Emit a styled downward arrow (handles colour, dashed, bold).
+    /// Emit a styled downward arrow (handles colour, dashed/dotted, bold).
     fn down_arrow_full(&mut self, cx: f64, y1: f64, y2: f64, style: &ArrowStyle) {
-        let sw = if style.bold { "2" } else { "1" };
-        self.line_styled(&style.color, sw, cx, cx, y1, y2, style.dashed);
+        let sw = if style.bold {
+            "2"
+        } else if style.dotted {
+            "1.5"
+        } else {
+            "1"
+        };
+        let dash = if style.dotted {
+            Some("1,3")
+        } else if style.dashed {
+            Some("2,2")
+        } else {
+            None
+        };
+        self.line_with_dash(&style.color, sw, cx, cx, y1, y2, dash);
         // Bold arrows in PlantUML keep the same arrowhead size; only the
         // line stroke changes. The polygon stays 1px.
         self.polygon_connector(
@@ -854,6 +912,62 @@ impl SvgEmitter {
             &style.color,
             "1",
         );
+    }
+
+    /// Emit a text element into the connectors buffer (used for arrow labels
+    /// which PlantUML interleaves with the connector group rather than the
+    /// shape group).
+    fn connector_text(
+        &mut self,
+        fill: &str,
+        font_family: &str,
+        font_size: f64,
+        _text_length: f64,
+        x: f64,
+        y: f64,
+        content: &str,
+    ) {
+        let base = TextBase {
+            x,
+            y,
+            font_size: font_size as u32,
+            font_family,
+            fill,
+            bold: false,
+            italic: false,
+            underline: false,
+            skip_underline: false,
+        };
+        text_render::emit_text(&mut self.connectors, content, &base);
+    }
+
+    /// Emit a line with an explicit dasharray pattern (or none).
+    fn line_with_dash(
+        &mut self,
+        stroke: &str,
+        stroke_width: &str,
+        x1: f64,
+        x2: f64,
+        y1: f64,
+        y2: f64,
+        dash: Option<&str>,
+    ) {
+        let dash_str = match dash {
+            Some(d) => format!("stroke-dasharray:{d};"),
+            None => String::new(),
+        };
+        write!(
+            self.connectors,
+            r#"<line style="stroke:{};stroke-width:{};{}" x1="{}" x2="{}" y1="{}" y2="{}"/>"#,
+            stroke,
+            stroke_width,
+            dash_str,
+            f(x1),
+            f(x2),
+            f(y1),
+            f(y2)
+        )
+        .unwrap();
     }
 
     /// Emit an upward arrow (arrowhead pointing up).
@@ -962,17 +1076,44 @@ fn emit_sequence(svg: &mut SvgEmitter, nodes: &[LayoutNode], cx: f64, mut y: f64
                     Some(LayoutNode::Arrow { dashed, .. }) => ArrowStyle {
                         color: ARROW_COLOR.to_string(),
                         dashed: *dashed,
+                        dotted: false,
                         bold: false,
                         hidden: false,
                     },
                     _ => ArrowStyle::default(),
                 };
-                // Hidden arrows still consume vertical space, but only
-                // half the normal arrow length (PlantUML reserves 10 px
-                // between the source and target boxes).
-                let gap = if style.hidden { 10.0 } else { ARROW_LEN };
+                let label = match explicit_arrow {
+                    Some(LayoutNode::Arrow { label: Some(l), .. }) => Some(l.as_str()),
+                    _ => None,
+                };
+                // Hidden arrows consume 10 px (half the normal arrow gap).
+                // Labelled arrows extend to 41.275 px to fit the label text
+                // beside the line.
+                let gap = if style.hidden {
+                    10.0
+                } else if label.is_some() {
+                    LABELED_ARROW_LEN
+                } else {
+                    ARROW_LEN
+                };
                 if !style.hidden {
                     svg.down_arrow_full(cx, y, y + gap, &style);
+                    if let Some(l) = label {
+                        let lw = text_render::measure(l, SMALL_FONT, false);
+                        // Label sits to the right of the arrow line, baseline
+                        // at arrow_top + 21.4551 (= ascent(11) + 10.8203,
+                        // empirical from goldens).  Part of the connector
+                        // group in PlantUML's emission order.
+                        svg.connector_text(
+                            TEXT_COLOR,
+                            "sans-serif",
+                            SMALL_FONT,
+                            lw,
+                            cx + 4.0,
+                            y + 21.455078125,
+                            l,
+                        );
+                    }
                 }
                 y += gap;
             }
@@ -1687,10 +1828,26 @@ pub fn render(diagram: &ActivityDiagram, _theme: &Theme) -> String {
     // breathing room + 35 px margins), so very narrow diagrams (single
     // letter actions) don't collapse to bare lines.
     let min_action_w = if has_deprecated { 0.0 } else { 65.0 };
+
+    // Labelled arrows extend the diagram to the right of cx — for each
+    // labelled arrow, the text sits at x = cx + 4 with width label_w and
+    // requires ~20 px right margin.
+    let label_extent = collect_arrow_labels(&tree)
+        .iter()
+        .map(|label| text_render::measure(label, SMALL_FONT, false))
+        .fold(0.0f64, f64::max);
+    let cx_preview = MARGIN_LEAD + content_w / 2.0;
+    let label_total_w = if label_extent > 0.0 {
+        cx_preview + 4.0 + label_extent + 20.0
+    } else {
+        0.0
+    };
+
     let svg_w = action_total_w
         .ceil()
         .max(min_action_w)
-        .max(warning_total_w.ceil()) as u32;
+        .max(warning_total_w.ceil())
+        .max(label_total_w.ceil()) as u32;
 
     // content_h was computed by sequence_height assuming Start contributes
     // 19 px (cy=25 - MARGIN_LEAD=16 + START_R=10). When start_y > START_CY
