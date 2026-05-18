@@ -1372,7 +1372,9 @@ fn emit_if(
 
     let diamond_bottom = y + DIAMOND_HALF * 2.0;
 
-    // Then label (to the left of diamond)
+    // Then label (to the left of diamond). PlantUML places the label
+    // flush against the diamond's left vertex (no horizontal gap), with
+    // the baseline at `diamond_cy - descent(11)` (= 64.68 for cy=67).
     if let Some(label) = then_label {
         let lw = text_render::measure(label, SMALL_FONT, false);
         svg.text_element(
@@ -1380,10 +1382,8 @@ fn emit_if(
             "sans-serif",
             SMALL_FONT,
             lw,
-            diamond_left - lw - 5.0,
-            diamond_cy + pm::text_height(SMALL_FONT) / 2.0
-                - pm::descent(SMALL_FONT)
-                - DIAMOND_HALF / 2.0,
+            diamond_left - lw,
+            diamond_cy - pm::descent(SMALL_FONT),
             label,
             false,
         );
@@ -1442,10 +1442,8 @@ fn emit_if(
             "sans-serif",
             SMALL_FONT,
             lw,
-            diamond_right + 5.0,
-            diamond_cy + pm::text_height(SMALL_FONT) / 2.0
-                - pm::descent(SMALL_FONT)
-                - DIAMOND_HALF / 2.0,
+            diamond_right,
+            diamond_cy - pm::descent(SMALL_FONT),
             label,
             false,
         );
