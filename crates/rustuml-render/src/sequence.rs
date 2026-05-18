@@ -2169,17 +2169,57 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme) -> String {
     };
 
     // Compute self-message right extent now that x positions are assigned.
-    for event in &diagram.events {
-        if let Event::Message(msg) = event
-            && msg.from == msg.to
-        {
-            let cx = center_of(&msg.from);
-            let label = process_label(&msg.label);
-            let label_w = text_width(&label, MSG_FONT_SIZE);
-            let loopback_right = cx + SELF_MSG_EXTEND;
-            let text_right = cx + SELF_MSG_TEXT_X_PAD + label_w;
-            let self_right = loopback_right.max(text_right) + SELF_MSG_RIGHT_PAD;
-            max_self_msg_right = max_self_msg_right.max(self_right);
+    // The loop emerges from the activation rect's right edge when the
+    // participant is activated, so we mirror that shift here.
+    {
+        let mut sizing_activation: HashMap<String, usize> = HashMap::new();
+        for event in &diagram.events {
+            match event {
+                Event::Message(msg) => {
+                    if msg.from == msg.to {
+                        let cx = center_of(&msg.from);
+                        let from_active = sizing_activation
+                            .get(msg.from.as_str())
+                            .copied()
+                            .unwrap_or(0)
+                            > 0;
+                        let shift = if from_active { ACTIVATION_HALF_W } else { 0.0 };
+                        let base = cx + shift;
+                        let label = process_label(&msg.label);
+                        let label_w = text_width(&label, MSG_FONT_SIZE);
+                        let loopback_right = base + SELF_MSG_EXTEND;
+                        let text_right = base + SELF_MSG_TEXT_X_PAD + label_w;
+                        let self_right = loopback_right.max(text_right) + SELF_MSG_RIGHT_PAD;
+                        max_self_msg_right = max_self_msg_right.max(self_right);
+                    }
+                    if let Some(act) = &msg.activation {
+                        match act {
+                            ActivationChange::Activate => {
+                                *sizing_activation.entry(msg.to.clone()).or_default() += 1;
+                            }
+                            ActivationChange::Deactivate => {
+                                if let Some(d) = sizing_activation.get_mut(&msg.from) {
+                                    *d = d.saturating_sub(1);
+                                }
+                            }
+                            ActivationChange::Destroy => {
+                                if let Some(d) = sizing_activation.get_mut(&msg.to) {
+                                    *d = d.saturating_sub(1);
+                                }
+                            }
+                        }
+                    }
+                }
+                Event::Activate(id, _) => {
+                    *sizing_activation.entry(id.clone()).or_default() += 1;
+                }
+                Event::Deactivate(id) => {
+                    if let Some(d) = sizing_activation.get_mut(id) {
+                        *d = d.saturating_sub(1);
+                    }
+                }
+                _ => {}
+            }
         }
     }
 
@@ -2245,7 +2285,7 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme) -> String {
                     // The event_y is positioned at the divider text baseline, which is
                     // at msg_step + 5.258 from the previous event. The remaining
                     // MSG_BASE_STEP - 5.258 = 8.742 adds to the gap before the next message.
-                    const DIVIDER_TEXT_OFFSET: f64 = 5.258;
+                    const DIVIDER_TEXT_OFFSET: f64 = 5.2578;
                     const DIVIDER_TAIL_PAD: f64 = MSG_BASE_STEP - DIVIDER_TEXT_OFFSET;
                     if msg_count == 0 {
                         y += first_msg_offset(has_text) + DIVIDER_TEXT_OFFSET;
@@ -3033,12 +3073,19 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme) -> String {
     // Return stack: (activated_participant, sender, is_open_arrow)
     let mut return_stack: Vec<(String, String, bool)> = Vec::new();
 
+    // Tracks the y-position of the most recent message line involving each
+    // participant. Used by standalone `destroy` events (which have no y of
+    // their own) to position the red destroy X on the participant's lifeline.
+    let mut last_msg_y_for: HashMap<String, f64> = HashMap::new();
+
     let events = &diagram.events;
     for (ev_idx, event) in events.iter().enumerate() {
         let msg_y = event_y_positions[ev_idx];
         match event {
             Event::Message(msg) => {
                 msg_id += 1;
+                last_msg_y_for.insert(msg.from.clone(), msg_y);
+                last_msg_y_for.insert(msg.to.clone(), msg_y);
 
                 let from_x = center_of(&msg.from);
                 let to_x = center_of(&msg.to);
@@ -3055,19 +3102,14 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme) -> String {
                     .copied()
                     .unwrap_or(0)
                     > 0;
-                let mut to_active =
+                // Target was already activated before this message.
+                let to_active_pre =
                     render_activation.get(msg.to.as_str()).copied().unwrap_or(0) > 0;
-                // Check message's own activation flag
-                if let Some(ActivationChange::Activate) = &msg.activation {
-                    to_active = true;
-                }
-                // Look ahead for standalone Activate events targeting the message's 'to'
-                if !to_active
-                    && let Some(Event::Activate(id, _)) = events.get(ev_idx + 1)
-                    && id == &msg.to
-                {
-                    to_active = true;
-                }
+                // Target activation begins at this message (own activation
+                // flag, or a following standalone activate).
+                let to_activates_now = matches!(msg.activation, Some(ActivationChange::Activate))
+                    || matches!(events.get(ev_idx + 1), Some(Event::Activate(id, _)) if id == &msg.to);
+                let to_active = to_active_pre || to_activates_now;
 
                 let line_style = if is_dotted {
                     "stroke-dasharray:2,2;"
@@ -3109,11 +3151,15 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme) -> String {
                 let autonumber_ref = autonumber_info.as_ref().map(|(t, w)| (t.as_str(), *w));
 
                 if is_self {
-                    // Self-message: U-shaped loopback
+                    // Self-message: U-shaped loopback. When the participant
+                    // is activated, the loop emerges from the activation
+                    // rect's right edge, not the lifeline centre.
                     let cx = from_x;
-                    let loop_right = cx + SELF_MSG_EXTEND;
+                    let self_shift = if from_active { ACTIVATION_HALF_W } else { 0.0 };
+                    let loop_base = cx + self_shift;
+                    let loop_right = loop_base + SELF_MSG_EXTEND;
                     let loop_bottom = msg_y + SELF_MSG_DROP;
-                    let text_x = cx + SELF_MSG_TEXT_X_PAD;
+                    let text_x = loop_base + SELF_MSG_TEXT_X_PAD;
                     let text_y_pos = msg_y - 4.742187500;
 
                     // Open the message group
@@ -3128,13 +3174,13 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme) -> String {
                     .unwrap();
 
                     // Three lines forming the U-shape: right, down, left
-                    // Line 1: horizontal right (from center to loop right)
+                    // Line 1: horizontal right (from loop base to loop right)
                     write!(
                         svg.buf,
                         r##"<line style="stroke:{};stroke-width:1;{}" x1="{}" x2="{}" y1="{}" y2="{}"/>"##,
                         &arrow_color,
                         line_style,
-                        fmt_coord(cx),
+                        fmt_coord(loop_base),
                         fmt_coord(loop_right),
                         fmt_coord(msg_y),
                         fmt_coord(msg_y),
@@ -3155,13 +3201,9 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme) -> String {
                     .unwrap();
 
                     // Line 3: horizontal left (from loop right back toward lifeline)
-                    // For filled arrows, the return line starts 1px right of center
-                    // For open arrows, the return line starts at center
-                    let return_left = if is_open {
-                        cx // open: line goes to center
-                    } else {
-                        cx + 1.0 // filled: line stops 1px right (polygon takes over)
-                    };
+                    // For filled arrows, the return line starts 1px right of base
+                    // For open arrows, the return line starts at base
+                    let return_left = if is_open { loop_base } else { loop_base + 1.0 };
                     write!(
                         svg.buf,
                         r##"<line style="stroke:{};stroke-width:1;{}" x1="{}" x2="{}" y1="{}" y2="{}"/>"##,
@@ -3177,7 +3219,7 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme) -> String {
                     // Arrow head at bottom-left
                     if is_open {
                         // Open arrow: two V-shape lines
-                        let tip_x = cx + 1.0;
+                        let tip_x = loop_base + 1.0;
                         write!(
                             svg.buf,
                             r##"<line style="stroke:{};stroke-width:1;" x1="{}" x2="{}" y1="{}" y2="{}"/>"##,
@@ -3200,7 +3242,7 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme) -> String {
                         .unwrap();
                     } else {
                         // Filled arrow: polygon pointing left at bottom
-                        let tip_x = cx + 1.0;
+                        let tip_x = loop_base + 1.0;
                         let arrow_pts = format!(
                             "{},{},{},{},{},{},{},{}",
                             fmt_coord(tip_x + ARROW_SIZE),
@@ -3252,20 +3294,34 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme) -> String {
                         from_x
                     };
 
-                    // Target shift: when the target is activated, the arrow tip
-                    // stops at the activation bar edge.
-                    let target_shift = if to_active { ACTIVATION_HALF_W } else { 0.0 };
+                    // Right-arrow tip shift: pre-activated targets are
+                    // overlapped (tip at real_center - 2, shift = 0); arrows
+                    // that themselves trigger activation land on the rect's
+                    // left edge (tip = real_center - 7, shift = HALF_W).
+                    let tip_target_shift_right = if to_active_pre {
+                        0.0
+                    } else if to_activates_now {
+                        ACTIVATION_HALF_W
+                    } else {
+                        0.0
+                    };
+                    // Left-arrow tip shift: ANY active state pushes the tip
+                    // past the activation rect's right edge (tip = real_center
+                    // + HALF_W + 1).
+                    let tip_target_shift_left = if to_active { ACTIVATION_HALF_W } else { 0.0 };
+                    // Text position on left arrows mirrors the tip shift.
+                    let text_target_shift = if to_active { ACTIVATION_HALF_W } else { 0.0 };
 
                     // Text position
                     let text_y_pos = msg_y - 4.742187500;
                     let text_x = if is_right {
                         from_x_shifted + MSG_TEXT_LEFT_PAD
                     } else {
-                        to_x + target_shift + LEFT_ARROW_TEXT_PAD + 1.0
+                        to_x + text_target_shift + LEFT_ARROW_TEXT_PAD + 1.0
                     };
 
                     if is_right {
-                        let tip_x = to_x - target_shift - ARROW_TIP_GAP;
+                        let tip_x = to_x - tip_target_shift_right - ARROW_TIP_GAP;
                         let line_x2 = if is_open {
                             tip_x
                         } else {
@@ -3326,7 +3382,7 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme) -> String {
                         }
                     } else {
                         // Left-pointing arrow: tip offset accounts for target activation
-                        let tip_x = to_x + target_shift + 1.0;
+                        let tip_x = to_x + tip_target_shift_left + 1.0;
                         let line_x1 = if is_open {
                             tip_x
                         } else {
@@ -3388,6 +3444,36 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme) -> String {
                         }
                     }
                 } // end non-self message else
+
+                // Destroy marker: 18x18 red X centred on the destroyed
+                // participant's real (non-floored) box centre, at the
+                // message y. Self-message destroys land at the loop-back y.
+                if matches!(msg.activation, Some(ActivationChange::Destroy)) {
+                    let x_center = center_of(&msg.to);
+                    let y_center = if msg.from == msg.to {
+                        msg_y + SELF_MSG_DROP
+                    } else {
+                        msg_y
+                    };
+                    write!(
+                        svg.buf,
+                        r##"<line style="stroke:#A80036;stroke-width:2;" x1="{}" x2="{}" y1="{}" y2="{}"/>"##,
+                        fmt_coord(x_center - 9.0),
+                        fmt_coord(x_center + 9.0),
+                        fmt_coord(y_center - 9.0),
+                        fmt_coord(y_center + 9.0),
+                    )
+                    .unwrap();
+                    write!(
+                        svg.buf,
+                        r##"<line style="stroke:#A80036;stroke-width:2;" x1="{}" x2="{}" y1="{}" y2="{}"/>"##,
+                        fmt_coord(x_center - 9.0),
+                        fmt_coord(x_center + 9.0),
+                        fmt_coord(y_center + 9.0),
+                        fmt_coord(y_center - 9.0),
+                    )
+                    .unwrap();
+                }
 
                 // Update activation state and return stack after this message
                 if let Some(act) = &msg.activation {
@@ -3632,7 +3718,9 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme) -> String {
                 let label_box_w = tw + 2.0 * 6.0 + 6.2847; // PlantUML adds extra padding
                 let label_box_h = 23.3105;
                 let label_box_x = mid_x - label_box_w / 2.0;
-                let label_box_y = line1_y - 10.6553; // Box extends above the lines
+                // Box top derives from raw text_y minus ascent(13) + 4 rather
+                // than from printed line1_y, to avoid accumulated rounding drift.
+                let label_box_y = text_y - 16.568359375;
                 let text_x = label_box_x + 6.0;
 
                 // 1. Background strip rect
@@ -4050,7 +4138,7 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme) -> String {
                         &label_text,
                         &TextBase {
                             x: frame_left + 5.0,
-                            y: msg_y + 10.6348,
+                            y: msg_y + 10.6347,
                             font_size: 11,
                             font_family: "sans-serif",
                             fill: "#000000",
@@ -4118,8 +4206,40 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme) -> String {
                     *d = d.saturating_sub(1);
                 }
             }
+            Event::Destroy(id) => {
+                // Standalone destroy: emit the red X on the participant's
+                // lifeline at the y of its most recent message involvement.
+                // Tip-x mirrors the inline-destroy formula (arrow tip + 2),
+                // but here the previous arrow already accounts for its own
+                // shift, so we anchor on participant center.
+                if let Some(&y) = last_msg_y_for.get(id) {
+                    let cx = center_of(id);
+                    // After deactivate the participant is no longer active;
+                    // X is centred on the real (non-floored) box centre, which
+                    // is what center_of returns.
+                    let x_center = cx;
+                    write!(
+                        svg.buf,
+                        r##"<line style="stroke:#A80036;stroke-width:2;" x1="{}" x2="{}" y1="{}" y2="{}"/>"##,
+                        fmt_coord(x_center - 9.0),
+                        fmt_coord(x_center + 9.0),
+                        fmt_coord(y - 9.0),
+                        fmt_coord(y + 9.0),
+                    )
+                    .unwrap();
+                    write!(
+                        svg.buf,
+                        r##"<line style="stroke:#A80036;stroke-width:2;" x1="{}" x2="{}" y1="{}" y2="{}"/>"##,
+                        fmt_coord(x_center - 9.0),
+                        fmt_coord(x_center + 9.0),
+                        fmt_coord(y + 9.0),
+                        fmt_coord(y - 9.0),
+                    )
+                    .unwrap();
+                }
+            }
             _ => {
-                // Remaining events (Destroy, Create, NewPage)
+                // Remaining events (Create, NewPage)
                 // don't emit visible text labels or change activation state.
             }
         }
