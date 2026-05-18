@@ -558,7 +558,37 @@ fn emit_frame(svg: &mut SvgBuilder, x: f64, y: f64, w: f64, h: f64) {
 // ---- Frame cluster --------------------------------------------------------
 
 fn emit_frame_cluster(svg: &mut SvgBuilder, x: f64, y: f64, w: f64, h: f64) {
-    emit_card_cluster(svg, x, y, w, h);
+    // Frame cluster: bare rect with stroke-width=1. The tab is emitted
+    // by emit_cluster_label since it depends on label width.
+    svg.raw(&format!(
+        r#"<rect fill="none" height="{h}" rx="{RX_RY}" ry="{RX_RY}" style="stroke:{STROKE};stroke-width:1;" width="{w}" x="{x}" y="{y}"/>"#,
+        h = fc(h),
+        w = fc(w),
+        x = fc(x),
+        y = fc(y),
+    ));
+}
+
+/// Emit the small tab path used by frame clusters in the top-left corner.
+/// The tab right-edge sits at `x + label_w + 10`.
+fn emit_frame_tab(svg: &mut SvgBuilder, x: f64, y: f64, label_w: f64) {
+    let right_x = x + label_w + 10.0;
+    // Tab geometry derived from goldens: tab is text_height tall, the
+    // diagonal cut starts at y + (text_height - 7) and ends at y + text_height + 3.
+    let y_mid = y + 9.48828125;
+    let y_bot = y + 19.48828125;
+    let d = format!(
+        "M{rx},{y_s} L{rx},{ym} L{rx_in},{yb} L{x_s},{yb}",
+        rx = fc(right_x),
+        rx_in = fc(right_x - 10.0),
+        y_s = fc(y),
+        ym = fc(y_mid),
+        yb = fc(y_bot),
+        x_s = fc(x),
+    );
+    svg.raw(&format!(
+        r#"<path d="{d}" fill="none" style="stroke:{STROKE};stroke-width:1;"/>"#
+    ));
 }
 
 // ---- Folder ---------------------------------------------------------------
@@ -749,16 +779,26 @@ fn emit_cluster_label(
     y: f64,
     w: f64,
 ) {
-    // Cluster labels are centered horizontally above the children area. The
-    // title is bold. The stereotype (if any) sits above the title in italic.
+    // Cluster labels are centered horizontally above the children area
+    // for most shapes; frame is left-aligned (with a tab decoration).
     let label_w = text_render::measure(&node.label, FONT_SIZE, true);
+
+    if matches!(kind, DeploymentNodeKind::Frame) {
+        // Frame cluster: tab path comes before the text label, then a
+        // left-aligned label at (x+3, y+ascent+1).
+        emit_frame_tab(svg, x, y, label_w);
+        let label_x = x + 3.0;
+        let label_y = y + ASCENT_14 + 1.0;
+        emit_text(svg, &node.label, label_x, label_y, FONT_SIZE, true, false);
+        return;
+    }
+
     let center_x = cluster_text_center(kind, x, w);
 
     if let Some(stereo) = &node.stereotype {
         let stereo_label = format!("\u{00AB}{stereo}\u{00BB}");
         let stereo_w = text_render::measure(&stereo_label, FONT_SIZE, false);
         let stereo_x = center_x - stereo_w / 2.0;
-        // Stereotype sits at the same baseline as a non-stereotype title.
         let stereo_y = y + cluster_top_pad(kind);
         emit_text(
             svg,
@@ -906,6 +946,11 @@ fn render_connection(
     let candidates = [
         format!("{from_qname}-to-{to_qname}"),
         format!("{}-to-{}", conn.from, conn.to),
+        // Associations (`A -- B`) use just `-`, not `-to-`.
+        format!("{from_qname}-{to_qname}"),
+        format!("{}-{}", conn.from, conn.to),
+        // Bidirectional / back arrows (`A <-- B`) use `-backto-`.
+        format!("{from_qname}-backto-{to_qname}"),
     ];
     let oracle_edge = candidates
         .iter()
