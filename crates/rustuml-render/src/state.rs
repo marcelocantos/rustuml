@@ -303,6 +303,12 @@ fn allocate_ids_inner_back(
             .min()
     };
     let is_explicit = |s: &State| -> bool {
+        // Fork/Join bars don't get their own entity group in PlantUML — they
+        // emit as bare `<rect>` elements before any entity group, so they
+        // are not counted in the ID allocator.
+        if matches!(s.kind, StateKind::Fork | StateKind::Join) {
+            return false;
+        }
         if s.kind != StateKind::Normal
             || s.label != s.id
             || !s.descriptions.is_empty()
@@ -331,6 +337,15 @@ fn allocate_ids_inner_back(
     // the other endpoint was allocated BEFORE this transition began
     // processing, the pseudo-state takes that endpoint's ID. This typically
     // happens when a state is pre-declared and later linked from `[*]`.
+    // Identify Fork/Join state IDs — these never receive an entity ID and
+    // their transitions skip the link allocation too (PlantUML renders the
+    // bar as a bare <rect> and doesn't wrap it in a link group).
+    let bar_ids: std::collections::HashSet<String> = states
+        .iter()
+        .filter(|s| matches!(s.kind, StateKind::Fork | StateKind::Join))
+        .map(|s| s.id.clone())
+        .collect();
+
     for (i, t) in transitions.iter().enumerate() {
         let from_layout = if t.from == "[*]" {
             "__start__".to_string()
@@ -363,8 +378,17 @@ fn allocate_ids_inner_back(
         // Silence unused-binding warning when only one branch is exercised.
         let _ = to_existing_before;
 
-        alloc_entity(&mut entity_ids, &mut counter, &from_layout);
-        alloc_entity(&mut entity_ids, &mut counter, &to_layout);
+        // Fork/Join endpoints: skip entity allocation. The transition
+        // produces a regular link only when NEITHER endpoint is a bar.
+        let from_is_bar = bar_ids.contains(&from_layout);
+        let to_is_bar = bar_ids.contains(&to_layout);
+
+        if !from_is_bar {
+            alloc_entity(&mut entity_ids, &mut counter, &from_layout);
+        }
+        if !to_is_bar {
+            alloc_entity(&mut entity_ids, &mut counter, &to_layout);
+        }
 
         // Back-edges (-up-> / -left-> directions, encoded as `*-backto-*`
         // edge IDs by PlantUML) consume an extra counter slot before their
@@ -374,6 +398,8 @@ fn allocate_ids_inner_back(
             counter += 1;
         }
 
+        // Even fork/join transitions consume a link slot — PlantUML emits
+        // a link group for them; we just need to advance the counter.
         let lid = format!("lnk{counter}");
         counter += 1;
         link_ids.push(lid);
@@ -948,6 +974,52 @@ pub fn render_with_oracle(
                 Some(StateKind::Fork | StateKind::Join) => {
                     // Already rendered as bare rect above.
                 }
+                Some(StateKind::Initial) => {
+                    // Initial-state stereotype (`state X <<start>>`) renders
+                    // as a single filled circle, like the `[*]` start
+                    // pseudo-state — but emitted within an `start_entity`
+                    // group keyed by the user-supplied name.
+                    let source_line = state_def.map_or(1, |s| s.source_line);
+                    write!(
+                        svg,
+                        r#"<g class="start_entity" data-qualified-name="{id}" data-source-line="{source_line}" id="{}">"#,
+                        ent_id_of(id),
+                    )
+                    .unwrap();
+                    write!(
+                        svg,
+                        r#"<ellipse cx="{}" cy="{}" fill="{PSEUDO_COLOR}" rx="{START_RADIUS}" ry="{START_RADIUS}" style="stroke:{PSEUDO_COLOR};stroke-width:1;"/>"#,
+                        fmt_f(*cx), fmt_f(*cy),
+                    )
+                    .unwrap();
+                    svg.push_str("</g>");
+                }
+                Some(StateKind::Final) => {
+                    // Final-state stereotype (`state X <<end>>`) renders as
+                    // a double circle, like the `[*]` end pseudo-state, but
+                    // emitted within an `end_entity` group keyed by the
+                    // user-supplied name.
+                    let source_line = state_def.map_or(1, |s| s.source_line);
+                    write!(
+                        svg,
+                        r#"<g class="end_entity" data-qualified-name="{id}" data-source-line="{source_line}" id="{}">"#,
+                        ent_id_of(id),
+                    )
+                    .unwrap();
+                    write!(
+                        svg,
+                        r#"<ellipse cx="{}" cy="{}" fill="none" rx="{END_OUTER_RADIUS}" ry="{END_OUTER_RADIUS}" style="stroke:{PSEUDO_COLOR};stroke-width:1;"/>"#,
+                        fmt_f(*cx), fmt_f(*cy),
+                    )
+                    .unwrap();
+                    write!(
+                        svg,
+                        r#"<ellipse cx="{}" cy="{}" fill="{PSEUDO_COLOR}" rx="{END_INNER_RADIUS}" ry="{END_INNER_RADIUS}" style="stroke:{PSEUDO_COLOR};stroke-width:1;"/>"#,
+                        fmt_f(*cx), fmt_f(*cy),
+                    )
+                    .unwrap();
+                    svg.push_str("</g>");
+                }
                 Some(StateKind::History) => {
                     // History pseudo-state.
                     write!(
@@ -1419,7 +1491,7 @@ fn render_arrowhead(svg: &mut String, control: (f64, f64), endpoint: (f64, f64))
 /// arrowheads the golden expects.
 fn render_oracle_transitions(
     svg: &mut String,
-    _diagram: &StateDiagram,
+    diagram: &StateDiagram,
     oracle: &OracleLayout,
     _entity_ids: &[(String, String)],
     _link_ids: &[String],
@@ -1482,6 +1554,15 @@ fn render_oracle_transitions(
             )
             .unwrap();
         }
+
+        // NOTE: edge labels are intentionally NOT emitted here. Their
+        // golden positions are computed by PlantUML's layout engine
+        // (not reproducible from path coordinates alone), and emitting
+        // a label at a guessed position still fails strict-XML
+        // comparison. Once the oracle starts capturing the label x/y,
+        // re-enable emission here. See `diagram.transitions[i].label`
+        // for the text content.
+        let _ = diagram;
 
         svg.push_str("</g>");
     }
