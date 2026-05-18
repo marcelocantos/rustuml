@@ -293,6 +293,220 @@ fn calc_entity_dims(entity: &ClassEntity, entity_index: usize) -> EntityDims {
     }
 }
 
+/// Build a map from `entity.id` to the dotted package prefix
+/// (e.g. `"Outer.Inner."`) used to construct the entity's `data-qualified-name`.
+/// Returns an empty string for entities not inside any package.
+fn build_package_paths(diagram: &ClassDiagram) -> std::collections::HashMap<String, String> {
+    let mut map: std::collections::HashMap<String, String> = std::collections::HashMap::new();
+    // For each entity, walk up the package hierarchy by finding which package
+    // contains it. A package may contain other packages by name, so we resolve
+    // recursively. Build a parent index from package.entities entries.
+    let pkg_index: std::collections::HashMap<String, usize> = diagram
+        .packages
+        .iter()
+        .enumerate()
+        .map(|(i, p)| (p.name.clone(), i))
+        .collect();
+    // Walk each package and its children, accumulating the qualified path.
+    fn walk(
+        pkg_idx: usize,
+        prefix: &str,
+        packages: &[Package],
+        entity_ids: &std::collections::HashSet<String>,
+        pkg_index: &std::collections::HashMap<String, usize>,
+        map: &mut std::collections::HashMap<String, String>,
+    ) {
+        let pkg = &packages[pkg_idx];
+        let new_prefix = format!("{prefix}{}.", pkg.name);
+        for child_name in &pkg.entities {
+            if let Some(&child_pkg_idx) = pkg_index.get(child_name) {
+                walk(
+                    child_pkg_idx,
+                    &new_prefix,
+                    packages,
+                    entity_ids,
+                    pkg_index,
+                    map,
+                );
+            } else if entity_ids.contains(child_name) {
+                map.insert(child_name.clone(), new_prefix.clone());
+            }
+        }
+    }
+    let entity_ids: std::collections::HashSet<String> =
+        diagram.entities.iter().map(|e| e.id.clone()).collect();
+    // Find top-level packages: those not contained by any other package.
+    let mut contained: std::collections::HashSet<String> = std::collections::HashSet::new();
+    for pkg in &diagram.packages {
+        for e in &pkg.entities {
+            if pkg_index.contains_key(e) {
+                contained.insert(e.clone());
+            }
+        }
+    }
+    for (i, pkg) in diagram.packages.iter().enumerate() {
+        if !contained.contains(&pkg.name) {
+            walk(i, "", &diagram.packages, &entity_ids, &pkg_index, &mut map);
+        }
+    }
+    map
+}
+
+/// Render `<g class="cluster">` wrappers for every package, in source-declaration
+/// order. Uses oracle layout data to determine cluster position and dimensions.
+fn render_clusters(
+    svg: &mut String,
+    diagram: &ClassDiagram,
+    oracle: Option<&OracleLayout>,
+    ent_id: &mut usize,
+) {
+    let Some(orc) = oracle else { return };
+    // PlantUML emits clusters in source-declaration order. Build a list of
+    // (package_idx, source_line_estimate) and render. Package source lines aren't
+    // tracked in our model — fall back to the declaration index plus 1.
+    // We additionally need a per-package qualified name for the cluster's
+    // `data-qualified-name`, which mirrors the entity prefix logic.
+    let pkg_index: std::collections::HashMap<String, usize> = diagram
+        .packages
+        .iter()
+        .enumerate()
+        .map(|(i, p)| (p.name.clone(), i))
+        .collect();
+    // Compute qualified cluster names by walking the hierarchy.
+    let mut qualified_names: Vec<String> = vec![String::new(); diagram.packages.len()];
+    let mut contained: std::collections::HashSet<usize> = std::collections::HashSet::new();
+    for pkg in &diagram.packages {
+        for child in &pkg.entities {
+            if let Some(&idx) = pkg_index.get(child) {
+                contained.insert(idx);
+            }
+        }
+    }
+    fn walk_names(
+        idx: usize,
+        prefix: &str,
+        packages: &[Package],
+        pkg_index: &std::collections::HashMap<String, usize>,
+        out: &mut [String],
+    ) {
+        let pkg = &packages[idx];
+        let full = if prefix.is_empty() {
+            pkg.name.clone()
+        } else {
+            format!("{prefix}.{}", pkg.name)
+        };
+        out[idx] = full.clone();
+        for child_name in &pkg.entities {
+            if let Some(&child_idx) = pkg_index.get(child_name) {
+                walk_names(child_idx, &full, packages, pkg_index, out);
+            }
+        }
+    }
+    for (i, _) in diagram.packages.iter().enumerate() {
+        if !contained.contains(&i) {
+            walk_names(i, "", &diagram.packages, &pkg_index, &mut qualified_names);
+        }
+    }
+
+    // Render every package as a cluster, in declaration order.
+    for (i, pkg) in diagram.packages.iter().enumerate() {
+        let qname = &qualified_names[i];
+        // Look up oracle data for this cluster (keyed by qualified name).
+        let Some(rect) = orc
+            .entities
+            .get(qname)
+            .or_else(|| orc.entities.get(&pkg.name))
+        else {
+            continue;
+        };
+        let current_id = format!("ent{:04}", *ent_id);
+        *ent_id += 1;
+        let source_line = i + 1; // best-effort fallback
+        write!(svg, "<!--cluster {}-->", pkg.name).unwrap();
+        write!(
+            svg,
+            r#"<g class="cluster" data-qualified-name="{}" data-source-line="{}" id="{}">"#,
+            escape_xml(qname),
+            source_line,
+            current_id,
+        )
+        .unwrap();
+        render_cluster_shape(svg, pkg, rect);
+        svg.push_str("</g>");
+    }
+}
+
+/// Render the geometric shape of a package (rect, path, etc.) and its title.
+fn render_cluster_shape(svg: &mut String, pkg: &Package, rect: &crate::layout_oracle::EntityRect) {
+    let fill = pkg
+        .color
+        .as_deref()
+        .map(crate::sequence::resolve_color)
+        .unwrap_or_else(|| ENTITY_FILL.to_string());
+    let label = pkg.display_name.as_deref().unwrap_or(pkg.name.as_str());
+    let title_tl = metrics::plantuml_bold_text_width_14(label);
+    let x = rect.x;
+    let y = rect.y;
+    let w = rect.width;
+    let h = rect.height;
+
+    match pkg.kind {
+        PackageKind::Rectangle => {
+            // Simple rounded rect with bold centered title near the top.
+            write!(
+                svg,
+                r#"<rect fill="{}" height="{}" rx="2.5" ry="2.5" style="stroke:#181818;stroke-width:1;" width="{}" x="{}" y="{}"/>"#,
+                fill,
+                fmt_tl(h),
+                fmt_tl(w),
+                fmt4(x),
+                fmt4(y),
+            )
+            .unwrap();
+            // Title is centered horizontally, baseline ~15.5px below the rect top.
+            let title_x = x + (w - title_tl) / 2.0;
+            let title_y = y + 15.5352;
+            write!(
+                svg,
+                r##"<text fill="#000000" font-family="sans-serif" font-size="14" font-weight="700" lengthAdjust="spacing" textLength="{}" x="{}" y="{}">{}</text>"##,
+                fmt_tl(title_tl),
+                fmt4(title_x),
+                fmt4(title_y),
+                escape_xml(label),
+            )
+            .unwrap();
+        }
+        _ => {
+            // Other package kinds (Package, Namespace, Cloud, Database, Folder,
+            // Frame, Node) need shape-specific path data. Emit a plain rect
+            // wrapper as a fallback so the cluster element exists with the right
+            // qualified-name; the rendering won't match perfectly but the
+            // overall structure improves.
+            write!(
+                svg,
+                r#"<rect fill="{}" height="{}" rx="2.5" ry="2.5" style="stroke:#181818;stroke-width:1;" width="{}" x="{}" y="{}"/>"#,
+                fill,
+                fmt_tl(h),
+                fmt_tl(w),
+                fmt4(x),
+                fmt4(y),
+            )
+            .unwrap();
+            let title_x = x + (w - title_tl) / 2.0;
+            let title_y = y + 15.5352;
+            write!(
+                svg,
+                r##"<text fill="#000000" font-family="sans-serif" font-size="14" font-weight="700" lengthAdjust="spacing" textLength="{}" x="{}" y="{}">{}</text>"##,
+                fmt_tl(title_tl),
+                fmt4(title_x),
+                fmt4(title_y),
+                escape_xml(label),
+            )
+            .unwrap();
+        }
+    }
+}
+
 /// Format stereotype text with guillemets: `«entity»`.
 fn format_stereotype_text(stereotypes: &[String]) -> String {
     stereotypes
@@ -710,6 +924,18 @@ fn render_plantuml_svg(
     // Entity ID counter (PlantUML starts at ent0002).
     let mut ent_id = 2;
 
+    // Build the qualified-name prefix and parent-package name for each entity.
+    // The prefix is the dotted ancestor chain (e.g. "Outer.Inner.") used in
+    // `data-qualified-name`; ancestor_pkg_paths[entity_id] returns it.
+    let pkg_paths = build_package_paths(diagram);
+
+    // Render clusters in source-order interleaved with their leading entities
+    // when oracle data is available. For simplicity we render clusters before
+    // their entities (matching PlantUML's output order verified on golden SVGs).
+    if oracle.is_some() && !diagram.packages.is_empty() {
+        render_clusters(&mut svg, diagram, oracle, &mut ent_id);
+    }
+
     // Render each entity.
     for (i, entity) in diagram.entities.iter().enumerate() {
         let (x, y) = entity_positions[i];
@@ -717,10 +943,18 @@ fn render_plantuml_svg(
         let current_ent_id = format!("ent{:04}", ent_id);
         ent_id += 1;
 
-        // Look up oracle overrides for this entity.
+        // Determine the qualified name for this entity (with package prefix).
+        let qualified = match pkg_paths.get(&entity.id) {
+            Some(prefix) if !prefix.is_empty() => format!("{prefix}{}", entity.label),
+            _ => entity.label.clone(),
+        };
+
+        // Look up oracle overrides for this entity. Try the qualified name first
+        // (since clusters store entities under their qualified path).
         let oracle_rect = oracle.and_then(|orc| {
             orc.entities
-                .get(&entity.label)
+                .get(&qualified)
+                .or_else(|| orc.entities.get(&entity.label))
                 .or_else(|| orc.entities.get(&entity.id))
         });
 
@@ -731,13 +965,21 @@ fn render_plantuml_svg(
         write!(
             svg,
             r#"<g class="entity" data-qualified-name="{}" data-source-line="{}" id="{}">"#,
-            escape_xml(&entity.label),
+            escape_xml(&qualified),
             dim.source_line,
             current_ent_id,
         )
         .unwrap();
 
-        render_entity_content(&mut svg, entity, x, y, dim, oracle_rect);
+        // For packaged entities, the oracle's stored entity rect already has the
+        // shifted x/y inside the cluster. Use it.
+        let (entity_x, entity_y) = if let Some(rect) = oracle_rect {
+            (rect.x, rect.y)
+        } else {
+            (x, y)
+        };
+
+        render_entity_content(&mut svg, entity, entity_x, entity_y, dim, oracle_rect);
 
         svg.push_str("</g>");
     }
