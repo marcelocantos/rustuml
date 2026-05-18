@@ -19,6 +19,23 @@ use crate::style::Theme;
 use crate::svg::SvgBuilder;
 use crate::text_render::{self, TextBase};
 
+/// Format a coordinate matching PlantUML's `{:.4}` output.
+///
+/// This is intentionally *not* `fc`: the shared helper rounds
+/// half-away-from-zero (via `(v * 10000).round() / 10000`), while Rust's
+/// built-in `{:.4}` (and Java's BigDecimal HALF_EVEN) rounds half-to-even.
+/// For midline computations like cy = (y1 + y2) / 2 the two differ by 1
+/// ULP, which fails strict-XML comparison.
+fn fc(v: f64) -> String {
+    if v == v.floor() && v.abs() < 1e15 {
+        return format!("{}", v as i64);
+    }
+    let s = format!("{:.4}", v);
+    let s = s.trim_end_matches('0');
+    let s = s.trim_end_matches('.');
+    s.to_string()
+}
+
 // ---------------------------------------------------------------------------
 // PlantUML constants (extracted from golden SVGs)
 // ---------------------------------------------------------------------------
@@ -363,10 +380,10 @@ fn emit_cluster_shape(
 fn emit_plain_rect_cluster(svg: &mut SvgBuilder, x: f64, y: f64, w: f64, h: f64) {
     svg.raw(&format!(
         r#"<rect fill="none" height="{h}" rx="{RX_RY}" ry="{RX_RY}" style="stroke:{STROKE};stroke-width:1;" width="{w}" x="{x}" y="{y}"/>"#,
-        h = pm::fmt_coord(h),
-        w = pm::fmt_coord(w),
-        x = pm::fmt_coord(x),
-        y = pm::fmt_coord(y),
+        h = fc(h),
+        w = fc(w),
+        x = fc(x),
+        y = fc(y),
     ));
 }
 
@@ -374,31 +391,31 @@ fn emit_plain_rect_cluster(svg: &mut SvgBuilder, x: f64, y: f64, w: f64, h: f64)
 
 fn emit_tag_polygon(svg: &mut SvgBuilder, x: f64, y: f64, w: f64, h: f64, fill: &str, sw: f64) {
     let off = 10.0;
-    let x1 = pm::fmt_coord(x);
-    let y1 = pm::fmt_coord(y + off);
-    let x2 = pm::fmt_coord(x + off);
-    let y2 = pm::fmt_coord(y);
-    let x3 = pm::fmt_coord(x + w);
-    let y3 = pm::fmt_coord(y + h - off);
-    let x4 = pm::fmt_coord(x + w - off);
-    let y4 = pm::fmt_coord(y + h);
+    let x1 = fc(x);
+    let y1 = fc(y + off);
+    let x2 = fc(x + off);
+    let y2 = fc(y);
+    let x3 = fc(x + w);
+    let y3 = fc(y + h - off);
+    let x4 = fc(x + w - off);
+    let y4 = fc(y + h);
     let points = format!("{x1},{y1},{x2},{y2},{x3},{y2},{x3},{y3},{x4},{y4},{x1},{y4},{x1},{y1}");
     svg.raw(&format!(
         r#"<polygon fill="{fill}" points="{points}" style="stroke:{STROKE};stroke-width:{sw};"/>"#,
     ));
     // 3 lines for the 3D effect: top-right diagonal, top inner, right inner.
-    let xa = pm::fmt_coord(x + w - off);
-    let xb = pm::fmt_coord(x + w);
-    let ya = pm::fmt_coord(y + off);
-    let yb = pm::fmt_coord(y);
+    let xa = fc(x + w - off);
+    let xb = fc(x + w);
+    let ya = fc(y + off);
+    let yb = fc(y);
     svg.raw(&format!(
         r#"<line style="stroke:{STROKE};stroke-width:{sw};" x1="{xa}" x2="{xb}" y1="{ya}" y2="{yb}"/>"#,
     ));
-    let xc = pm::fmt_coord(x);
+    let xc = fc(x);
     svg.raw(&format!(
         r#"<line style="stroke:{STROKE};stroke-width:{sw};" x1="{xc}" x2="{xa}" y1="{ya}" y2="{ya}"/>"#,
     ));
-    let yc = pm::fmt_coord(y + h);
+    let yc = fc(y + h);
     svg.raw(&format!(
         r#"<line style="stroke:{STROKE};stroke-width:{sw};" x1="{xa}" x2="{xa}" y1="{ya}" y2="{yc}"/>"#,
     ));
@@ -407,10 +424,10 @@ fn emit_tag_polygon(svg: &mut SvgBuilder, x: f64, y: f64, w: f64, h: f64, fill: 
 // ---- Artifact (rect + folded corner) --------------------------------------
 
 fn emit_artifact(svg: &mut SvgBuilder, x: f64, y: f64, w: f64, h: f64) {
-    let x_s = pm::fmt_coord(x);
-    let y_s = pm::fmt_coord(y);
-    let w_s = pm::fmt_coord(w);
-    let h_s = pm::fmt_coord(h);
+    let x_s = fc(x);
+    let y_s = fc(y);
+    let w_s = fc(w);
+    let h_s = fc(h);
     svg.raw(&format!(
         r#"<rect fill="{FILL}" height="{h_s}" rx="{RX_RY}" ry="{RX_RY}" style="stroke:{STROKE};stroke-width:0.5;" width="{w_s}" x="{x_s}" y="{y_s}"/>"#,
     ));
@@ -424,18 +441,18 @@ fn emit_artifact(svg: &mut SvgBuilder, x: f64, y: f64, w: f64, h: f64) {
     let p5 = (fx + 6.0, fy);
     let pts = format!(
         "{},{},{},{},{},{},{},{},{},{},{},{}",
-        pm::fmt_coord(p1.0),
-        pm::fmt_coord(p1.1),
-        pm::fmt_coord(p2.0),
-        pm::fmt_coord(p2.1),
-        pm::fmt_coord(p3.0),
-        pm::fmt_coord(p3.1),
-        pm::fmt_coord(p4.0),
-        pm::fmt_coord(p4.1),
-        pm::fmt_coord(p5.0),
-        pm::fmt_coord(p5.1),
-        pm::fmt_coord(p1.0),
-        pm::fmt_coord(p1.1),
+        fc(p1.0),
+        fc(p1.1),
+        fc(p2.0),
+        fc(p2.1),
+        fc(p3.0),
+        fc(p3.1),
+        fc(p4.0),
+        fc(p4.1),
+        fc(p5.0),
+        fc(p5.1),
+        fc(p1.0),
+        fc(p1.1),
     );
     svg.raw(&format!(
         r#"<polygon fill="{FILL}" points="{pts}" style="stroke:{STROKE};stroke-width:0.5;"/>"#,
@@ -443,15 +460,15 @@ fn emit_artifact(svg: &mut SvgBuilder, x: f64, y: f64, w: f64, h: f64) {
     // Two lines for the fold detail.
     svg.raw(&format!(
         r#"<line style="stroke:{STROKE};stroke-width:0.5;" x1="{a}" x2="{a}" y1="{y1}" y2="{y2}"/>"#,
-        a = pm::fmt_coord(fx + 6.0),
-        y1 = pm::fmt_coord(fy),
-        y2 = pm::fmt_coord(fy + 6.0),
+        a = fc(fx + 6.0),
+        y1 = fc(fy),
+        y2 = fc(fy + 6.0),
     ));
     svg.raw(&format!(
         r#"<line style="stroke:{STROKE};stroke-width:0.5;" x1="{x1}" x2="{x2}" y1="{y}" y2="{y}"/>"#,
-        x1 = pm::fmt_coord(fx + 12.0),
-        x2 = pm::fmt_coord(fx + 6.0),
-        y = pm::fmt_coord(fy + 6.0),
+        x1 = fc(fx + 12.0),
+        x2 = fc(fx + 6.0),
+        y = fc(fy + 6.0),
     ));
 }
 
@@ -460,10 +477,10 @@ fn emit_artifact(svg: &mut SvgBuilder, x: f64, y: f64, w: f64, h: f64) {
 fn emit_rounded_rect(svg: &mut SvgBuilder, x: f64, y: f64, w: f64, h: f64) {
     svg.raw(&format!(
         r#"<rect fill="{FILL}" height="{h}" rx="{RX_RY}" ry="{RX_RY}" style="stroke:{STROKE};stroke-width:0.5;" width="{w}" x="{x}" y="{y}"/>"#,
-        h = pm::fmt_coord(h),
-        w = pm::fmt_coord(w),
-        x = pm::fmt_coord(x),
-        y = pm::fmt_coord(y),
+        h = fc(h),
+        w = fc(w),
+        x = fc(x),
+        y = fc(y),
     ));
 }
 
@@ -472,18 +489,18 @@ fn emit_rounded_rect(svg: &mut SvgBuilder, x: f64, y: f64, w: f64, h: f64) {
 fn emit_card_cluster(svg: &mut SvgBuilder, x: f64, y: f64, w: f64, h: f64) {
     svg.raw(&format!(
         r#"<rect fill="none" height="{h}" rx="{RX_RY}" ry="{RX_RY}" style="stroke:{STROKE};stroke-width:1;" width="{w}" x="{x}" y="{y}"/>"#,
-        h = pm::fmt_coord(h),
-        w = pm::fmt_coord(w),
-        x = pm::fmt_coord(x),
-        y = pm::fmt_coord(y),
+        h = fc(h),
+        w = fc(w),
+        x = fc(x),
+        y = fc(y),
     ));
     // Horizontal line under the title row (at y + 20.4883).
     let ly = y + 20.4883;
     svg.raw(&format!(
         r#"<line style="stroke:{STROKE};stroke-width:1;" x1="{x1}" x2="{x2}" y1="{ly_s}" y2="{ly_s}"/>"#,
-        x1 = pm::fmt_coord(x),
-        x2 = pm::fmt_coord(x + w),
-        ly_s = pm::fmt_coord(ly),
+        x1 = fc(x),
+        x2 = fc(x + w),
+        ly_s = fc(ly),
     ));
 }
 
@@ -492,30 +509,30 @@ fn emit_card_cluster(svg: &mut SvgBuilder, x: f64, y: f64, w: f64, h: f64) {
 fn emit_component(svg: &mut SvgBuilder, x: f64, y: f64, w: f64, h: f64) {
     svg.raw(&format!(
         r#"<rect fill="{FILL}" height="{h}" rx="{RX_RY}" ry="{RX_RY}" style="stroke:{STROKE};stroke-width:0.5;" width="{w}" x="{x}" y="{y}"/>"#,
-        h = pm::fmt_coord(h),
-        w = pm::fmt_coord(w),
-        x = pm::fmt_coord(x),
-        y = pm::fmt_coord(y),
+        h = fc(h),
+        w = fc(w),
+        x = fc(x),
+        y = fc(y),
     ));
     // Tab at top-right: 15w x 10h, x = x+w-20, y = y+5.
     let tab_x = x + w - 20.0;
     let tab_y = y + 5.0;
     svg.raw(&format!(
         r#"<rect fill="{FILL}" height="10" style="stroke:{STROKE};stroke-width:0.5;" width="15" x="{x}" y="{y}"/>"#,
-        x = pm::fmt_coord(tab_x),
-        y = pm::fmt_coord(tab_y),
+        x = fc(tab_x),
+        y = fc(tab_y),
     ));
     // Two small bars left of tab (4w x 2h each).
     let bar_x = tab_x - 2.0;
     svg.raw(&format!(
         r#"<rect fill="{FILL}" height="2" style="stroke:{STROKE};stroke-width:0.5;" width="4" x="{x}" y="{y}"/>"#,
-        x = pm::fmt_coord(bar_x),
-        y = pm::fmt_coord(tab_y + 2.0),
+        x = fc(bar_x),
+        y = fc(tab_y + 2.0),
     ));
     svg.raw(&format!(
         r#"<rect fill="{FILL}" height="2" style="stroke:{STROKE};stroke-width:0.5;" width="4" x="{x}" y="{y}"/>"#,
-        x = pm::fmt_coord(bar_x),
-        y = pm::fmt_coord(tab_y + 6.0),
+        x = fc(bar_x),
+        y = fc(tab_y + 6.0),
     ));
 }
 
@@ -524,10 +541,10 @@ fn emit_component(svg: &mut SvgBuilder, x: f64, y: f64, w: f64, h: f64) {
 fn emit_frame(svg: &mut SvgBuilder, x: f64, y: f64, w: f64, h: f64) {
     svg.raw(&format!(
         r#"<rect fill="{FILL}" height="{h}" rx="{RX_RY}" ry="{RX_RY}" style="stroke:{STROKE};stroke-width:0.5;" width="{w}" x="{x}" y="{y}"/>"#,
-        h = pm::fmt_coord(h),
-        w = pm::fmt_coord(w),
-        x = pm::fmt_coord(x),
-        y = pm::fmt_coord(y),
+        h = fc(h),
+        w = fc(w),
+        x = fc(x),
+        y = fc(y),
     ));
     // Tab path: from a point partway across the top, draw down then bend to the left edge.
     // For a 1-line label of width 73.6025, the tab path went to x=44.8675 (=7+37.8675),
@@ -581,10 +598,10 @@ fn emit_stack(_svg: &mut SvgBuilder, _x: f64, _y: f64, _w: f64, _h: f64) {
 fn emit_storage(svg: &mut SvgBuilder, x: f64, y: f64, w: f64, h: f64) {
     svg.raw(&format!(
         r#"<rect fill="{FILL}" height="{h}" rx="35" ry="35" style="stroke:{STROKE};stroke-width:0.5;" width="{w}" x="{x}" y="{y}"/>"#,
-        h = pm::fmt_coord(h),
-        w = pm::fmt_coord(w),
-        x = pm::fmt_coord(x),
-        y = pm::fmt_coord(y),
+        h = fc(h),
+        w = fc(w),
+        x = fc(x),
+        y = fc(y),
     ));
 }
 
@@ -604,13 +621,13 @@ fn emit_database(svg: &mut SvgBuilder, x: f64, y: f64, w: f64, h: f64) {
     let bot_low = y + h_full - 10.0;
     let d = format!(
         "M{x_s},{tl} C{x_s},{y_s} {cx_s},{y_s} {cx_s},{y_s} C{cx_s},{y_s} {xw_s},{y_s} {xw_s},{tl} L{xw_s},{bl} C{xw_s},{by_s} {cx_s},{by_s} {cx_s},{by_s} C{cx_s},{by_s} {x_s},{by_s} {x_s},{bl} L{x_s},{tl}",
-        x_s = pm::fmt_coord(x),
-        y_s = pm::fmt_coord(y),
-        cx_s = pm::fmt_coord(cx),
-        xw_s = pm::fmt_coord(x + w),
-        by_s = pm::fmt_coord(bot_y),
-        tl = pm::fmt_coord(top_low),
-        bl = pm::fmt_coord(bot_low),
+        x_s = fc(x),
+        y_s = fc(y),
+        cx_s = fc(cx),
+        xw_s = fc(x + w),
+        by_s = fc(bot_y),
+        tl = fc(top_low),
+        bl = fc(bot_low),
     );
     svg.raw(&format!(
         r#"<path d="{d}" fill="{FILL}" style="stroke:{STROKE};stroke-width:0.5;"/>"#
@@ -618,11 +635,11 @@ fn emit_database(svg: &mut SvgBuilder, x: f64, y: f64, w: f64, h: f64) {
     // The "top wall" of the cylinder (inner curve under the lip).
     let d2 = format!(
         "M{x_s},{tl} C{x_s},{ml} {cx_s},{ml} {cx_s},{ml} C{cx_s},{ml} {xw_s},{ml} {xw_s},{tl}",
-        x_s = pm::fmt_coord(x),
-        cx_s = pm::fmt_coord(cx),
-        xw_s = pm::fmt_coord(x + w),
-        tl = pm::fmt_coord(top_low),
-        ml = pm::fmt_coord(y + 20.0),
+        x_s = fc(x),
+        cx_s = fc(cx),
+        xw_s = fc(x + w),
+        tl = fc(top_low),
+        ml = fc(y + 20.0),
     );
     svg.raw(&format!(
         r#"<path d="{d2}" fill="none" style="stroke:{STROKE};stroke-width:0.5;"/>"#
@@ -645,13 +662,13 @@ fn emit_queue(svg: &mut SvgBuilder, x: f64, y: f64, w: f64, h: f64) {
     let _ = h;
     let d = format!(
         "M{li},{y_s} L{ri},{y_s} C{xw_s},{y_s} {xw_s},{cy_s} {xw_s},{cy_s} C{xw_s},{cy_s} {xw_s},{yh_s} {ri},{yh_s} L{li},{yh_s} C{x_s},{yh_s} {x_s},{cy_s} {x_s},{cy_s} C{x_s},{cy_s} {x_s},{y_s} {li},{y_s}",
-        li = pm::fmt_coord(left_in),
-        ri = pm::fmt_coord(right_in),
-        x_s = pm::fmt_coord(x),
-        y_s = pm::fmt_coord(y),
-        cy_s = pm::fmt_coord(cy),
-        xw_s = pm::fmt_coord(x + w),
-        yh_s = pm::fmt_coord(y + h_full),
+        li = fc(left_in),
+        ri = fc(right_in),
+        x_s = fc(x),
+        y_s = fc(y),
+        cy_s = fc(cy),
+        xw_s = fc(x + w),
+        yh_s = fc(y + h_full),
     );
     svg.raw(&format!(
         r#"<path d="{d}" fill="{FILL}" style="stroke:{STROKE};stroke-width:0.5;"/>"#
@@ -660,11 +677,11 @@ fn emit_queue(svg: &mut SvgBuilder, x: f64, y: f64, w: f64, h: f64) {
     let inner_x = x + w - 10.0;
     let d2 = format!(
         "M{ri},{y_s} C{ix},{y_s} {ix},{cy_s} {ix},{cy_s} C{ix},{yh_s} {ri},{yh_s} {ri},{yh_s}",
-        ri = pm::fmt_coord(right_in),
-        ix = pm::fmt_coord(inner_x),
-        y_s = pm::fmt_coord(y),
-        cy_s = pm::fmt_coord(cy),
-        yh_s = pm::fmt_coord(y + h_full),
+        ri = fc(right_in),
+        ix = fc(inner_x),
+        y_s = fc(y),
+        cy_s = fc(cy),
+        yh_s = fc(y + h_full),
     );
     svg.raw(&format!(
         r#"<path d="{d2}" fill="none" style="stroke:{STROKE};stroke-width:0.5;"/>"#
