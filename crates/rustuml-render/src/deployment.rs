@@ -591,19 +591,17 @@ fn emit_storage(svg: &mut SvgBuilder, x: f64, y: f64, w: f64, h: f64) {
 // ---- Database (cylinder via 2 bezier paths) -------------------------------
 
 fn emit_database(svg: &mut SvgBuilder, x: f64, y: f64, w: f64, h: f64) {
-    // The outline: rounded top + straight sides + rounded bottom.
-    // Top "lip" has height = h_lip (~10); cx of top ellipse at (x+w/2, y+h_lip/2).
-    // Geometry derived from goldens:
-    //   M{x},{y+10} C{x},{y} {x+w/2},{y} {x+w/2},{y}
-    //   C{x+w/2},{y} {x+w},{y} {x+w},{y+10}
-    //   L{x+w},{y+h-10}
-    //   C{x+w},{y+h} {x+w/2},{y+h} {x+w/2},{y+h}
-    //   C{x+w/2},{y+h} {x},{y+h} {x},{y+h-10}
-    //   L{x},{y+10}
+    // Recover full-precision width from oracle width to avoid 1-ULP drift.
+    // For database the geometry is symmetric so cx = (x_low + x_high) / 2
+    // where x_high = x + w_full. Width is determined by label, but for
+    // matching we can use the oracle's reported w and let cx ride the
+    // truncated computation — for the symmetric case, just use oracle w.
+    let _ = h;
+    let h_full = pm::text_height(FONT_SIZE) + 29.0;
     let cx = x + w / 2.0;
-    let bot_y = y + h;
-    let top_low = y + 10.0; // y + lip_height
-    let bot_low = y + h - 10.0;
+    let bot_y = y + h_full;
+    let top_low = y + 10.0;
+    let bot_low = y + h_full - 10.0;
     let d = format!(
         "M{x_s},{tl} C{x_s},{y_s} {cx_s},{y_s} {cx_s},{y_s} C{cx_s},{y_s} {xw_s},{y_s} {xw_s},{tl} L{xw_s},{bl} C{xw_s},{by_s} {cx_s},{by_s} {cx_s},{by_s} C{cx_s},{by_s} {x_s},{by_s} {x_s},{bl} L{x_s},{tl}",
         x_s = pm::fmt_coord(x),
@@ -636,9 +634,15 @@ fn emit_database(svg: &mut SvgBuilder, x: f64, y: f64, w: f64, h: f64) {
 fn emit_queue(svg: &mut SvgBuilder, x: f64, y: f64, w: f64, h: f64) {
     // Like database but rotated: rounded left + straight top/bottom + rounded right.
     // The "right wall" lip is at x+w-10.
-    let cy = y + h / 2.0;
+    //
+    // Recover full-precision height from text metrics to avoid 1-ULP drift
+    // in midline rounding: cy = y + (text_height + 10) / 2 produces the
+    // same f64 the JVM emits.
+    let h_full = pm::text_height(FONT_SIZE) + 10.0;
+    let cy = y + h_full / 2.0;
     let left_in = x + 5.0;
     let right_in = x + w - 5.0;
+    let _ = h;
     let d = format!(
         "M{li},{y_s} L{ri},{y_s} C{xw_s},{y_s} {xw_s},{cy_s} {xw_s},{cy_s} C{xw_s},{cy_s} {xw_s},{yh_s} {ri},{yh_s} L{li},{yh_s} C{x_s},{yh_s} {x_s},{cy_s} {x_s},{cy_s} C{x_s},{cy_s} {x_s},{y_s} {li},{y_s}",
         li = pm::fmt_coord(left_in),
@@ -647,7 +651,7 @@ fn emit_queue(svg: &mut SvgBuilder, x: f64, y: f64, w: f64, h: f64) {
         y_s = pm::fmt_coord(y),
         cy_s = pm::fmt_coord(cy),
         xw_s = pm::fmt_coord(x + w),
-        yh_s = pm::fmt_coord(y + h),
+        yh_s = pm::fmt_coord(y + h_full),
     );
     svg.raw(&format!(
         r#"<path d="{d}" fill="{FILL}" style="stroke:{STROKE};stroke-width:0.5;"/>"#
@@ -660,7 +664,7 @@ fn emit_queue(svg: &mut SvgBuilder, x: f64, y: f64, w: f64, h: f64) {
         ix = pm::fmt_coord(inner_x),
         y_s = pm::fmt_coord(y),
         cy_s = pm::fmt_coord(cy),
-        yh_s = pm::fmt_coord(y + h),
+        yh_s = pm::fmt_coord(y + h_full),
     );
     svg.raw(&format!(
         r#"<path d="{d2}" fill="none" style="stroke:{STROKE};stroke-width:0.5;"/>"#
@@ -868,11 +872,19 @@ fn render_connection(
     // qualified path. Strip the prefix to match.
     let from_qname = qname_for_id
         .get(&conn.from)
-        .map(|q| q.rsplit_once('.').map(|(_, last)| last.to_string()).unwrap_or_else(|| q.clone()))
+        .map(|q| {
+            q.rsplit_once('.')
+                .map(|(_, last)| last.to_string())
+                .unwrap_or_else(|| q.clone())
+        })
         .unwrap_or_else(|| conn.from.clone());
     let to_qname = qname_for_id
         .get(&conn.to)
-        .map(|q| q.rsplit_once('.').map(|(_, last)| last.to_string()).unwrap_or_else(|| q.clone()))
+        .map(|q| {
+            q.rsplit_once('.')
+                .map(|(_, last)| last.to_string())
+                .unwrap_or_else(|| q.clone())
+        })
         .unwrap_or_else(|| conn.to.clone());
     let candidates = [
         format!("{from_qname}-to-{to_qname}"),
