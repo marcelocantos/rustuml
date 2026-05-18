@@ -87,13 +87,13 @@ fn render_oracle(diagram: &DeploymentDiagram, _theme: &Theme, oracle: &OracleLay
 
     let mut svg = SvgBuilder::new_plantuml(canvas_w, canvas_h, "DESCRIPTION");
 
-    // Walk nodes in declaration order, assigning entity IDs sequentially.
     // PlantUML's id counter starts at ent0002 and is shared between
     // entities/clusters and links.
     let mut counter = 2usize;
     let mut id_for_node: HashMap<String, String> = HashMap::new();
+    let mut qname_for_id: HashMap<String, String> = HashMap::new();
 
-    // Render top-level roots and their descendants depth-first.
+    // Identify roots (nodes not listed as children of any other node).
     let all_children: std::collections::HashSet<&str> = diagram
         .nodes
         .iter()
@@ -105,26 +105,29 @@ fn render_oracle(diagram: &DeploymentDiagram, _theme: &Theme, oracle: &OracleLay
         .filter(|n| !all_children.contains(n.id.as_str()))
         .collect();
 
-    // Map each node's id → its qualified-name (the display key used in
-    // oracle edges).
-    let mut qname_for_id: HashMap<String, String> = HashMap::new();
+    // Pass 1: walk depth-first, assign ent IDs and compute qualified names.
     for root in &roots {
-        collect_qnames(root, &diagram.nodes, None, &mut qname_for_id);
-    }
-
-    for root in &roots {
-        render_node_recursive(
-            &mut svg,
-            &diagram.nodes,
+        assign_ids_dfs(
             root,
+            &diagram.nodes,
             None,
-            oracle,
             &mut counter,
             &mut id_for_node,
+            &mut qname_for_id,
         );
     }
 
-    // Connections.
+    // Pass 2: emit clusters first (depth-first), then leaf entities
+    // (depth-first). This matches PlantUML's emission ordering: cluster
+    // titles appear before their children's leaf shapes.
+    for root in &roots {
+        emit_clusters_dfs(&mut svg, root, &diagram.nodes, None, oracle, &id_for_node);
+    }
+    for root in &roots {
+        emit_entities_dfs(&mut svg, root, &diagram.nodes, None, oracle, &id_for_node);
+    }
+
+    // Pass 3: connections.
     for conn in &diagram.connections {
         let link_id = format!("lnk{counter}");
         counter += 1;
@@ -139,6 +142,97 @@ fn render_oracle(diagram: &DeploymentDiagram, _theme: &Theme, oracle: &OracleLay
     }
 
     svg.finalize_plantuml()
+}
+
+fn assign_ids_dfs(
+    node: &DeploymentNode,
+    all: &[DeploymentNode],
+    parent_qname: Option<&str>,
+    counter: &mut usize,
+    id_for_node: &mut HashMap<String, String>,
+    qname_for_id: &mut HashMap<String, String>,
+) {
+    let q = qualified_name(node, parent_qname);
+    let ent_id = format!("ent{c:04}", c = *counter);
+    *counter += 1;
+    id_for_node.insert(node.id.clone(), ent_id);
+    qname_for_id.insert(node.id.clone(), q.clone());
+    for child_id in &node.children {
+        if let Some(child) = all.iter().find(|n| n.id == *child_id) {
+            assign_ids_dfs(child, all, Some(&q), counter, id_for_node, qname_for_id);
+        }
+    }
+}
+
+fn emit_clusters_dfs(
+    svg: &mut SvgBuilder,
+    node: &DeploymentNode,
+    all: &[DeploymentNode],
+    parent_qname: Option<&str>,
+    oracle: &OracleLayout,
+    id_for_node: &HashMap<String, String>,
+) {
+    let qname = qualified_name(node, parent_qname);
+    let is_cluster = !node.children.is_empty();
+    if is_cluster {
+        let ent_id = id_for_node.get(&node.id).cloned().unwrap_or_default();
+        let rect = oracle
+            .entities
+            .get(&qname)
+            .or_else(|| oracle.entities.get(&node.id))
+            .or_else(|| oracle.entities.get(&node.label));
+        if let Some(rect) = rect {
+            svg.raw(&format!("<!--cluster {}-->", node.label));
+            svg.raw(&format!(
+                r#"<g class="cluster" data-qualified-name="{qname}" data-source-line="{sl}" id="{ent_id}">"#,
+                sl = node.source_line,
+            ));
+            emit_cluster_shape(svg, node.kind, rect.x, rect.y, rect.width, rect.height);
+            emit_cluster_label(svg, node.kind, node, rect.x, rect.y, rect.width);
+            svg.raw("</g>");
+        }
+        for child_id in &node.children {
+            if let Some(child) = all.iter().find(|n| n.id == *child_id) {
+                emit_clusters_dfs(svg, child, all, Some(&qname), oracle, id_for_node);
+            }
+        }
+    }
+}
+
+fn emit_entities_dfs(
+    svg: &mut SvgBuilder,
+    node: &DeploymentNode,
+    all: &[DeploymentNode],
+    parent_qname: Option<&str>,
+    oracle: &OracleLayout,
+    id_for_node: &HashMap<String, String>,
+) {
+    let qname = qualified_name(node, parent_qname);
+    let is_cluster = !node.children.is_empty();
+    if !is_cluster {
+        let ent_id = id_for_node.get(&node.id).cloned().unwrap_or_default();
+        let rect = oracle
+            .entities
+            .get(&qname)
+            .or_else(|| oracle.entities.get(&node.id))
+            .or_else(|| oracle.entities.get(&node.label));
+        if let Some(rect) = rect {
+            svg.raw(&format!("<!--entity {}-->", node.label));
+            svg.raw(&format!(
+                r#"<g class="entity" data-qualified-name="{qname}" data-source-line="{sl}" id="{ent_id}">"#,
+                sl = node.source_line,
+            ));
+            emit_entity_shape(svg, node.kind, rect.x, rect.y, rect.width, rect.height);
+            emit_entity_label(svg, node.kind, node, rect.x, rect.y, rect.width);
+            svg.raw("</g>");
+        }
+    } else {
+        for child_id in &node.children {
+            if let Some(child) = all.iter().find(|n| n.id == *child_id) {
+                emit_entities_dfs(svg, child, all, Some(&qname), oracle, id_for_node);
+            }
+        }
+    }
 }
 
 fn qualified_name(node: &DeploymentNode, parent_qname: Option<&str>) -> String {
@@ -178,86 +272,6 @@ fn label_to_id(label: &str) -> String {
     }
 }
 
-fn render_node_recursive(
-    svg: &mut SvgBuilder,
-    all_nodes: &[DeploymentNode],
-    node: &DeploymentNode,
-    parent_qname: Option<&str>,
-    oracle: &OracleLayout,
-    counter: &mut usize,
-    id_for_node: &mut HashMap<String, String>,
-) {
-    let qname = qualified_name(node, parent_qname);
-    let ent_id = format!("ent{c:04}", c = *counter);
-    *counter += 1;
-    id_for_node.insert(node.id.clone(), ent_id.clone());
-
-    let is_cluster = !node.children.is_empty();
-    let kind = node.kind;
-
-    // Resolve bbox from oracle. Try qualified name, fall back to bare id/label.
-    let rect = oracle
-        .entities
-        .get(&qname)
-        .or_else(|| oracle.entities.get(&node.id))
-        .or_else(|| oracle.entities.get(&node.label));
-
-    let Some(rect) = rect else {
-        // Skip emission for entities we can't position; still process
-        // children since the oracle may have positioned them independently.
-        for child_id in &node.children {
-            if let Some(child) = all_nodes.iter().find(|n| n.id == *child_id) {
-                render_node_recursive(
-                    svg,
-                    all_nodes,
-                    child,
-                    Some(&qname),
-                    oracle,
-                    counter,
-                    id_for_node,
-                );
-            }
-        }
-        return;
-    };
-
-    // Open the group.
-    if is_cluster {
-        svg.raw(&format!("<!--cluster {}-->", node.label));
-        svg.raw(&format!(
-            r#"<g class="cluster" data-qualified-name="{qname}" data-source-line="{sl}" id="{ent_id}">"#,
-            sl = node.source_line,
-        ));
-        emit_cluster_shape(svg, kind, rect.x, rect.y, rect.width, rect.height);
-        emit_cluster_label(svg, kind, node, rect.x, rect.y, rect.width);
-    } else {
-        svg.raw(&format!("<!--entity {}-->", node.label));
-        svg.raw(&format!(
-            r#"<g class="entity" data-qualified-name="{qname}" data-source-line="{sl}" id="{ent_id}">"#,
-            sl = node.source_line,
-        ));
-        emit_entity_shape(svg, kind, rect.x, rect.y, rect.width, rect.height);
-        emit_entity_label(svg, kind, node, rect.x, rect.y, rect.width);
-    }
-
-    svg.raw("</g>");
-
-    // Recurse into children. Each child gets the next sequential ent id.
-    for child_id in &node.children {
-        if let Some(child) = all_nodes.iter().find(|n| n.id == *child_id) {
-            render_node_recursive(
-                svg,
-                all_nodes,
-                child,
-                Some(&qname),
-                oracle,
-                counter,
-                id_for_node,
-            );
-        }
-    }
-}
-
 // ---------------------------------------------------------------------------
 // Shape emission — leaf entities
 // ---------------------------------------------------------------------------
@@ -281,6 +295,9 @@ fn emit_entity_shape(
         File => emit_file(svg, x, y, w, h),
         Package => emit_package(svg, x, y, w, h),
         Stack => emit_stack(svg, x, y, w, h),
+        Storage => emit_storage(svg, x, y, w, h),
+        Database => emit_database(svg, x, y, w, h),
+        Queue => emit_queue(svg, x, y, w, h),
         _ => emit_rounded_rect(svg, x, y, w, h),
     }
 }
@@ -432,8 +449,8 @@ fn emit_component(svg: &mut SvgBuilder, x: f64, y: f64, w: f64, h: f64) {
         x = pm::fmt_coord(x),
         y = pm::fmt_coord(y),
     ));
-    // Tab at top-right: 15w x 10h, x = x+w-13, y = y+5.
-    let tab_x = x + w - 13.0;
+    // Tab at top-right: 15w x 10h, x = x+w-20, y = y+5.
+    let tab_x = x + w - 20.0;
     let tab_y = y + 5.0;
     svg.raw(&format!(
         r#"<rect fill="{FILL}" height="10" style="stroke:{STROKE};stroke-width:0.5;" width="15" x="{x}" y="{y}"/>"#,
@@ -509,6 +526,97 @@ fn emit_package_cluster(_svg: &mut SvgBuilder, _x: f64, _y: f64, _w: f64, _h: f6
 
 fn emit_stack(_svg: &mut SvgBuilder, _x: f64, _y: f64, _w: f64, _h: f64) {
     // TODO: rect (no stroke) + complex outline path.
+}
+
+// ---- Storage (rounded rect with rx=35, ry=35) -----------------------------
+
+fn emit_storage(svg: &mut SvgBuilder, x: f64, y: f64, w: f64, h: f64) {
+    svg.raw(&format!(
+        r#"<rect fill="{FILL}" height="{h}" rx="35" ry="35" style="stroke:{STROKE};stroke-width:0.5;" width="{w}" x="{x}" y="{y}"/>"#,
+        h = pm::fmt_coord(h),
+        w = pm::fmt_coord(w),
+        x = pm::fmt_coord(x),
+        y = pm::fmt_coord(y),
+    ));
+}
+
+// ---- Database (cylinder via 2 bezier paths) -------------------------------
+
+fn emit_database(svg: &mut SvgBuilder, x: f64, y: f64, w: f64, h: f64) {
+    // The outline: rounded top + straight sides + rounded bottom.
+    // Top "lip" has height = h_lip (~10); cx of top ellipse at (x+w/2, y+h_lip/2).
+    // Geometry derived from goldens:
+    //   M{x},{y+10} C{x},{y} {x+w/2},{y} {x+w/2},{y}
+    //   C{x+w/2},{y} {x+w},{y} {x+w},{y+10}
+    //   L{x+w},{y+h-10}
+    //   C{x+w},{y+h} {x+w/2},{y+h} {x+w/2},{y+h}
+    //   C{x+w/2},{y+h} {x},{y+h} {x},{y+h-10}
+    //   L{x},{y+10}
+    let cx = x + w / 2.0;
+    let bot_y = y + h;
+    let top_low = y + 10.0; // y + lip_height
+    let bot_low = y + h - 10.0;
+    let d = format!(
+        "M{x_s},{tl} C{x_s},{y_s} {cx_s},{y_s} {cx_s},{y_s} C{cx_s},{y_s} {xw_s},{y_s} {xw_s},{tl} L{xw_s},{bl} C{xw_s},{by_s} {cx_s},{by_s} {cx_s},{by_s} C{cx_s},{by_s} {x_s},{by_s} {x_s},{bl} L{x_s},{tl}",
+        x_s = pm::fmt_coord(x),
+        y_s = pm::fmt_coord(y),
+        cx_s = pm::fmt_coord(cx),
+        xw_s = pm::fmt_coord(x + w),
+        by_s = pm::fmt_coord(bot_y),
+        tl = pm::fmt_coord(top_low),
+        bl = pm::fmt_coord(bot_low),
+    );
+    svg.raw(&format!(
+        r#"<path d="{d}" fill="{FILL}" style="stroke:{STROKE};stroke-width:0.5;"/>"#
+    ));
+    // The "top wall" of the cylinder (inner curve under the lip).
+    let d2 = format!(
+        "M{x_s},{tl} C{x_s},{ml} {cx_s},{ml} {cx_s},{ml} C{cx_s},{ml} {xw_s},{ml} {xw_s},{tl}",
+        x_s = pm::fmt_coord(x),
+        cx_s = pm::fmt_coord(cx),
+        xw_s = pm::fmt_coord(x + w),
+        tl = pm::fmt_coord(top_low),
+        ml = pm::fmt_coord(y + 20.0),
+    );
+    svg.raw(&format!(
+        r#"<path d="{d2}" fill="none" style="stroke:{STROKE};stroke-width:0.5;"/>"#
+    ));
+}
+
+// ---- Queue (cylinder rotated 90 degrees) ---------------------------------
+
+fn emit_queue(svg: &mut SvgBuilder, x: f64, y: f64, w: f64, h: f64) {
+    // Like database but rotated: rounded left + straight top/bottom + rounded right.
+    // The "right wall" lip is at x+w-10.
+    let cy = y + h / 2.0;
+    let left_in = x + 5.0;
+    let right_in = x + w - 5.0;
+    let d = format!(
+        "M{li},{y_s} L{ri},{y_s} C{xw_s},{y_s} {xw_s},{cy_s} {xw_s},{cy_s} C{xw_s},{cy_s} {xw_s},{yh_s} {ri},{yh_s} L{li},{yh_s} C{x_s},{yh_s} {x_s},{cy_s} {x_s},{cy_s} C{x_s},{cy_s} {x_s},{y_s} {li},{y_s}",
+        li = pm::fmt_coord(left_in),
+        ri = pm::fmt_coord(right_in),
+        x_s = pm::fmt_coord(x),
+        y_s = pm::fmt_coord(y),
+        cy_s = pm::fmt_coord(cy),
+        xw_s = pm::fmt_coord(x + w),
+        yh_s = pm::fmt_coord(y + h),
+    );
+    svg.raw(&format!(
+        r#"<path d="{d}" fill="{FILL}" style="stroke:{STROKE};stroke-width:0.5;"/>"#
+    ));
+    // The inner left wall (right-side of the lip).
+    let inner_x = x + w - 10.0;
+    let d2 = format!(
+        "M{ri},{y_s} C{ix},{y_s} {ix},{cy_s} {ix},{cy_s} C{ix},{yh_s} {ri},{yh_s} {ri},{yh_s}",
+        ri = pm::fmt_coord(right_in),
+        ix = pm::fmt_coord(inner_x),
+        y_s = pm::fmt_coord(y),
+        cy_s = pm::fmt_coord(cy),
+        yh_s = pm::fmt_coord(y + h),
+    );
+    svg.raw(&format!(
+        r#"<path d="{d2}" fill="none" style="stroke:{STROKE};stroke-width:0.5;"/>"#
+    ));
 }
 
 // ---------------------------------------------------------------------------
@@ -614,7 +722,8 @@ fn cluster_top_pad(kind: DeploymentNodeKind) -> f64 {
     match kind {
         // Node cluster title sits in a small header band: 26.5352 from bbox top.
         Node => 26.5352,
-        Card | Rectangle | Agent | Frame => 16.5352,
+        // Card-like clusters: title 15.5352 from top (in 20-tall header band).
+        Card | Rectangle | Agent | Frame => 15.5352,
         _ => 26.5352,
     }
 }
@@ -651,7 +760,11 @@ fn entity_text_geom(kind: DeploymentNodeKind, _w: f64, _label: &str) -> (f64, f6
         Node | Component | Frame => (15.0, TEXT_PAD_NODE, false),
         Artifact => (10.0, TEXT_PAD_ARTIFACT, false),
         Card => (10.0, TEXT_PAD_CARD, false),
-        Rectangle | Agent | File | Folder => (10.0, TEXT_PAD_RECTLIKE, false),
+        Rectangle | Agent | File | Folder | Storage | Queue => {
+            (10.0, TEXT_PAD_RECTLIKE, false)
+        }
+        // Database label sits below the lip: pad = 37.5352.
+        Database => (10.0, 37.5352, false),
         Package => (10.0, TEXT_PAD_PACKAGE_LABEL, true),
         _ => (10.0, TEXT_PAD_RECTLIKE, false),
     }
@@ -692,21 +805,6 @@ fn emit_text(
 // ---------------------------------------------------------------------------
 // Connections (oracle-driven)
 // ---------------------------------------------------------------------------
-
-fn collect_qnames(
-    node: &DeploymentNode,
-    all: &[DeploymentNode],
-    parent_qname: Option<&str>,
-    out: &mut HashMap<String, String>,
-) {
-    let q = qualified_name(node, parent_qname);
-    out.insert(node.id.clone(), q.clone());
-    for child_id in &node.children {
-        if let Some(child) = all.iter().find(|n| n.id == *child_id) {
-            collect_qnames(child, all, Some(&q), out);
-        }
-    }
-}
 
 fn render_connection(
     svg: &mut SvgBuilder,
