@@ -240,12 +240,20 @@ fn allocate_ids(
     has_start: bool,
     has_end: bool,
 ) -> (Vec<(String, String)>, Vec<String>) {
-    allocate_ids_inner(&diagram.states, &diagram.transitions, has_start, has_end)
+    let back_flags = vec![false; diagram.transitions.len()];
+    allocate_ids_inner_back(
+        &diagram.states,
+        &diagram.transitions,
+        &back_flags,
+        has_start,
+        has_end,
+    )
 }
 
-fn allocate_ids_inner(
+fn allocate_ids_inner_back(
     states: &[State],
     transitions: &[Transition],
+    back_flags: &[bool],
     has_start: bool,
     has_end: bool,
 ) -> (Vec<(String, String)>, Vec<String>) {
@@ -274,11 +282,34 @@ fn allocate_ids_inner(
     // Explicitly-declared states get their IDs first, in declaration order.
     // Track which IDs were declared so the pseudo-state-sharing quirk only
     // fires for them (not for states synthesized from transitions).
+    //
+    // Heuristics for "explicitly declared":
+    // - A non-Normal kind (initial/final/choice/etc.).
+    // - A label that differs from the id (`state "..." as X`).
+    // - Descriptions or substates.
+    // - The state's source_line precedes the earliest transition that
+    //   references it (e.g. `state A #blue` on line 1, then `[*] --> A`
+    //   on line 2). Synthesized states inherit the transition's line.
+    let earliest_tx_for = |id: &str| -> Option<usize> {
+        transitions
+            .iter()
+            .filter(|t| t.from == id || t.to == id)
+            .map(|t| t.source_line)
+            .min()
+    };
     let is_explicit = |s: &State| -> bool {
-        s.kind != StateKind::Normal
+        if s.kind != StateKind::Normal
             || s.label != s.id
             || !s.descriptions.is_empty()
             || !s.substates.is_empty()
+        {
+            return true;
+        }
+        match earliest_tx_for(&s.id) {
+            Some(tx_line) if s.source_line > 0 && s.source_line < tx_line => true,
+            None => true, // state only declared, never used in a transition
+            _ => false,
+        }
     };
     let mut explicit_ids: std::collections::HashSet<String> = std::collections::HashSet::new();
     for s in states {
@@ -295,7 +326,7 @@ fn allocate_ids_inner(
     // the other endpoint was allocated BEFORE this transition began
     // processing, the pseudo-state takes that endpoint's ID. This typically
     // happens when a state is pre-declared and later linked from `[*]`.
-    for t in transitions {
+    for (i, t) in transitions.iter().enumerate() {
         let from_layout = if t.from == "[*]" {
             "__start__".to_string()
         } else {
@@ -328,6 +359,14 @@ fn allocate_ids_inner(
         alloc_entity(&mut entity_ids, &mut counter, &from_layout);
         alloc_entity(&mut entity_ids, &mut counter, &to_layout);
 
+        // Back-edges (-up-> / -left-> directions, encoded as `*-backto-*`
+        // edge IDs by PlantUML) consume an extra counter slot before their
+        // link id, leaving a 1-slot gap between the target entity id and
+        // the link id.
+        if back_flags.get(i).copied().unwrap_or(false) {
+            counter += 1;
+        }
+
         let lid = format!("lnk{counter}");
         counter += 1;
         link_ids.push(lid);
@@ -349,21 +388,24 @@ fn allocate_ids_inner(
 /// transition order and endpoint names. Each oracle edge consumes one link
 /// slot — even those our parser dropped — so the resulting entity IDs stay
 /// aligned with what the golden expects.
+///
+/// PlantUML's `-backto-` edges (produced by `-up->` / `-left->` direction
+/// modifiers) consume an extra counter slot before their link id, leaving
+/// a 1-slot gap in the entity/link sequence.
 fn allocate_ids_from_oracle(
     diagram: &StateDiagram,
     oracle: &OracleLayout,
     _has_start: bool,
     _has_end: bool,
 ) -> (Vec<(String, String)>, Vec<String>) {
-    // Synthesize a transition list from oracle.edges. The id field is
-    // "from-to-target" or "from-backto-target"; both produce the same
-    // allocation pattern (just different render direction).
-    let mut synth: Vec<Transition> = Vec::new();
+    // Synthesize a transition list from oracle.edges, recording which ones
+    // are back-edges so the inner allocator can leave a gap.
+    let mut synth: Vec<(Transition, bool)> = Vec::new();
     for e in &oracle.edges {
-        let (a, b) = if let Some(pair) = e.id.split_once("-backto-") {
-            pair
+        let (a, b, is_back) = if let Some(pair) = e.id.split_once("-backto-") {
+            (pair.0, pair.1, true)
         } else if let Some(pair) = e.id.split_once("-to-") {
-            pair
+            (pair.0, pair.1, false)
         } else {
             continue;
         };
@@ -377,17 +419,30 @@ fn allocate_ids_from_oracle(
         } else {
             b.to_string()
         };
-        synth.push(Transition {
-            from,
-            to,
-            label: None,
-            source_line: 0,
-        });
+        // Reuse the source_line from the real transition with matching
+        // endpoints, so the is_explicit heuristic (which compares state
+        // source_line against transition source_line) still works.
+        let source_line = diagram
+            .transitions
+            .iter()
+            .find(|t| t.from == from && t.to == to)
+            .map(|t| t.source_line)
+            .unwrap_or(0);
+        synth.push((
+            Transition {
+                from,
+                to,
+                label: None,
+                source_line,
+            },
+            is_back,
+        ));
     }
 
-    // Reuse the regular allocator with the synthetic transition list.
-    let (has_start, has_end) = classify_star_nodes(&synth);
-    allocate_ids_inner(&diagram.states, &synth, has_start, has_end)
+    let plain: Vec<Transition> = synth.iter().map(|(t, _)| t.clone()).collect();
+    let back_flags: Vec<bool> = synth.iter().map(|(_, b)| *b).collect();
+    let (has_start, has_end) = classify_star_nodes(&plain);
+    allocate_ids_inner_back(&diagram.states, &plain, &back_flags, has_start, has_end)
 }
 
 /// Determine if a [*] reference is a start or end node based on context.
@@ -450,11 +505,27 @@ pub fn render_with_oracle(
     // label==id, no descriptions, Normal kind. The distinguishing trait is
     // that PlantUML's render order places these in transition order, not
     // declaration order.
+    let earliest_tx_for = |id: &str| -> Option<usize> {
+        diagram
+            .transitions
+            .iter()
+            .filter(|t| t.from == id || t.to == id)
+            .map(|t| t.source_line)
+            .min()
+    };
     let is_explicit = |s: &State| -> bool {
-        s.kind != StateKind::Normal
+        if s.kind != StateKind::Normal
             || s.label != s.id
             || !s.descriptions.is_empty()
             || !s.substates.is_empty()
+        {
+            return true;
+        }
+        match earliest_tx_for(&s.id) {
+            Some(tx_line) if s.source_line > 0 && s.source_line < tx_line => true,
+            None => true,
+            _ => false,
+        }
     };
     let mut state_ids: Vec<String> = Vec::new();
     for s in &diagram.states {
@@ -809,12 +880,11 @@ pub fn render_with_oracle(
             .unwrap();
             svg.push_str("</g>");
         } else if id == "__end__" {
-            // End pseudo-state — use the source_line from the last transition
-            // targeting [*].
+            // End pseudo-state — use the source_line from the first
+            // transition targeting [*] (matching PlantUML's behaviour).
             let source_line = diagram
                 .transitions
                 .iter()
-                .rev()
                 .find(|t| t.to == "[*]")
                 .map(|t| t.source_line)
                 .unwrap_or(1);
