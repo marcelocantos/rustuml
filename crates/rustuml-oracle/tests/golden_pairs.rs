@@ -257,10 +257,27 @@ fn golden_pairs() {
         return;
     }
 
-    let pairs = collect_golden_pairs(&root);
+    let mut pairs = collect_golden_pairs(&root);
     if pairs.is_empty() {
         eprintln!("no golden pairs found");
         return;
+    }
+    if let Ok(filter) = std::env::var("GOLDEN_FILTER")
+        && !filter.is_empty()
+    {
+        pairs.retain(|p| {
+            p.strip_prefix(&root)
+                .unwrap_or(p)
+                .to_string_lossy()
+                .contains(&filter)
+        });
+        eprintln!(
+            "GOLDEN_FILTER={filter:?} → {} pairs match",
+            pairs.len()
+        );
+        if pairs.is_empty() {
+            return;
+        }
     }
     eprintln!("running {} golden pairs...", pairs.len());
 
