@@ -315,11 +315,15 @@ fn build_package_paths(diagram: &ClassDiagram) -> std::collections::HashMap<Stri
         entity_ids: &std::collections::HashSet<String>,
         pkg_index: &std::collections::HashMap<String, usize>,
         map: &mut std::collections::HashMap<String, String>,
+        visiting: &mut std::collections::HashSet<usize>,
     ) {
         let pkg = &packages[pkg_idx];
         let new_prefix = format!("{prefix}{}.", pkg.name);
         for child_name in &pkg.entities {
             if let Some(&child_pkg_idx) = pkg_index.get(child_name) {
+                if !visiting.insert(child_pkg_idx) {
+                    continue;
+                }
                 walk(
                     child_pkg_idx,
                     &new_prefix,
@@ -327,7 +331,9 @@ fn build_package_paths(diagram: &ClassDiagram) -> std::collections::HashMap<Stri
                     entity_ids,
                     pkg_index,
                     map,
+                    visiting,
                 );
+                visiting.remove(&child_pkg_idx);
             } else if entity_ids.contains(child_name) {
                 map.insert(child_name.clone(), new_prefix.clone());
             }
@@ -346,7 +352,17 @@ fn build_package_paths(diagram: &ClassDiagram) -> std::collections::HashMap<Stri
     }
     for (i, pkg) in diagram.packages.iter().enumerate() {
         if !contained.contains(&pkg.name) {
-            walk(i, "", &diagram.packages, &entity_ids, &pkg_index, &mut map);
+            let mut visiting = std::collections::HashSet::new();
+            visiting.insert(i);
+            walk(
+                i,
+                "",
+                &diagram.packages,
+                &entity_ids,
+                &pkg_index,
+                &mut map,
+                &mut visiting,
+            );
         }
     }
     map
@@ -388,6 +404,7 @@ fn render_clusters(
         packages: &[Package],
         pkg_index: &std::collections::HashMap<String, usize>,
         out: &mut [String],
+        visiting: &mut std::collections::HashSet<usize>,
     ) {
         let pkg = &packages[idx];
         let full = if prefix.is_empty() {
@@ -398,13 +415,26 @@ fn render_clusters(
         out[idx] = full.clone();
         for child_name in &pkg.entities {
             if let Some(&child_idx) = pkg_index.get(child_name) {
-                walk_names(child_idx, &full, packages, pkg_index, out);
+                if !visiting.insert(child_idx) {
+                    continue;
+                }
+                walk_names(child_idx, &full, packages, pkg_index, out, visiting);
+                visiting.remove(&child_idx);
             }
         }
     }
     for (i, _) in diagram.packages.iter().enumerate() {
         if !contained.contains(&i) {
-            walk_names(i, "", &diagram.packages, &pkg_index, &mut qualified_names);
+            let mut visiting = std::collections::HashSet::new();
+            visiting.insert(i);
+            walk_names(
+                i,
+                "",
+                &diagram.packages,
+                &pkg_index,
+                &mut qualified_names,
+                &mut visiting,
+            );
         }
     }
 
@@ -415,7 +445,16 @@ fn render_clusters(
         // entities (transitively) — this is reliable because each entity's
         // oracle rect was extracted from its own well-formed <rect> element.
         // Fall back to the cluster's own oracle entry only if nothing is found.
-        let derived = derive_cluster_bbox(pkg, &diagram.packages, &pkg_index, orc, qname);
+        let mut visiting = std::collections::HashSet::new();
+        visiting.insert(i);
+        let derived = derive_cluster_bbox(
+            pkg,
+            &diagram.packages,
+            &pkg_index,
+            orc,
+            qname,
+            &mut visiting,
+        );
         let rect = match derived {
             Some(r) => r,
             None => match orc
@@ -448,12 +487,16 @@ fn render_clusters(
 /// contains, recursively. PlantUML pads each cluster ~15.78px on the sides,
 /// ~35px on top (for the tab/title), and ~16px on the bottom. Returns `None`
 /// if no contained item can be located in the oracle.
+///
+/// `visiting` carries the in-progress package indices to break any cycles
+/// the parser might produce (e.g. a package listing itself in `entities`).
 fn derive_cluster_bbox(
     pkg: &Package,
     packages: &[Package],
     pkg_index: &std::collections::HashMap<String, usize>,
     orc: &OracleLayout,
     qualified_self: &str,
+    visiting: &mut std::collections::HashSet<usize>,
 ) -> Option<crate::layout_oracle::EntityRect> {
     // Padding constants — derived from comparing entity bboxes against cluster
     // bboxes in golden SVGs:
@@ -486,14 +529,21 @@ fn derive_cluster_bbox(
     };
     for child in &pkg.entities {
         if let Some(&child_pkg_idx) = pkg_index.get(child) {
+            // Cycle guard — skip packages already on the recursion stack.
+            if !visiting.insert(child_pkg_idx) {
+                continue;
+            }
             let child_qname = format!("{qualified_prefix}{}", packages[child_pkg_idx].name);
-            if let Some(child_rect) = derive_cluster_bbox(
+            let result = derive_cluster_bbox(
                 &packages[child_pkg_idx],
                 packages,
                 pkg_index,
                 orc,
                 &child_qname,
-            ) {
+                visiting,
+            );
+            visiting.remove(&child_pkg_idx);
+            if let Some(child_rect) = result {
                 // Use the child cluster's full extent (already padded).
                 min_x = min_x.min(child_rect.x);
                 min_y = min_y.min(child_rect.y);
