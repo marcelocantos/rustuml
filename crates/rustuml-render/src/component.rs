@@ -324,12 +324,12 @@ pub fn render_with_oracle(
         // centring math goes off-by-1 in the 4th decimal when oracle width
         // is used.  Only fall back to oracle width when our calculated
         // width is unavailable (interface, etc.).
-        let comp_w = if (dim.width - oracle_rect.map(|r| r.width).unwrap_or(dim.width)).abs() < 0.001
-        {
-            dim.width
-        } else {
-            oracle_rect.map(|r| r.width).unwrap_or(dim.width)
-        };
+        let comp_w =
+            if (dim.width - oracle_rect.map(|r| r.width).unwrap_or(dim.width)).abs() < 0.001 {
+                dim.width
+            } else {
+                oracle_rect.map(|r| r.width).unwrap_or(dim.width)
+            };
         let comp_h = oracle_rect.map(|r| r.height).unwrap_or(dim.height);
 
         let ent_id = format!("ent{entity_counter:04}");
@@ -1516,15 +1516,6 @@ mod tests {
     }
 
     #[test]
-    fn debug_stereo_width() {
-        let s = "\u{00AB}service\u{00BB}";
-        let w = crate::metrics::plantuml_text_width_14(s);
-        eprintln!("«service» width = {w}");
-        let w2 = crate::metrics::plantuml_text_width_14("service");
-        eprintln!("service width = {w2}");
-    }
-
-    #[test]
     fn component_icon_rects() {
         let input = "@startuml\ncomponent Foo\n@enduml";
         let diagram = rustuml_parser::parse::parse(input).unwrap();
@@ -1718,8 +1709,7 @@ mod tests {
         }
 
         // Extract link groups.
-        let link_re =
-            regex::Regex::new(r#"<g class="link"([^>]*)>(.*?)</g>"#).unwrap();
+        let link_re = regex::Regex::new(r#"<g class="link"([^>]*)>(.*?)</g>"#).unwrap();
         for caps in link_re.captures_iter(svg) {
             let header = caps.get(1).unwrap().as_str();
             let body = caps.get(2).unwrap().as_str();
@@ -1801,10 +1791,7 @@ mod tests {
         for i in 0..n {
             if exp[i] != act[i] {
                 if shown < 6 {
-                    diffs.push_str(&format!(
-                        "@{i}: exp={:?}\n      act={:?}\n",
-                        exp[i], act[i]
-                    ));
+                    diffs.push_str(&format!("@{i}: exp={:?}\n      act={:?}\n", exp[i], act[i]));
                     shown += 1;
                 }
             }
