@@ -143,10 +143,10 @@ fn is_pseudo_state(id: &str) -> bool {
 
 /// Compute the width of a state box based on its label and descriptions.
 fn state_box_width(label: &str, descriptions: &[String]) -> f64 {
-    let label_w = metrics::text_width(label, STATE_FONT_SIZE) + STATE_H_PADDING;
+    let label_w = metrics::plantuml_text_width_14(label) + STATE_H_PADDING;
     let desc_w = descriptions
         .iter()
-        .map(|d| metrics::text_width(d, DESC_FONT_SIZE) + 10.0)
+        .map(|d| metrics::plantuml_text_width_12(d) + 10.0)
         .fold(0.0_f64, f64::max);
     label_w.max(desc_w).max(STATE_MIN_WIDTH)
 }
@@ -205,16 +205,16 @@ fn note_box_width(text: &str) -> f64 {
     (max_chars as f64 * NOTE_CHAR_WIDTH + NOTE_PADDING * 2.0 + NOTE_EAR).max(NOTE_MIN_WIDTH)
 }
 
-/// Format a float with PlantUML-style precision (remove trailing zeros but keep
-/// at least one decimal).
+/// Format a float with PlantUML-style precision.
+///
+/// PlantUML emits up to 4 decimal places, stripping trailing zeros and dropping
+/// the decimal point for integer values. Examples: 40.82, 112.4883, 7, 47.6328.
 fn fmt_f(v: f64) -> String {
-    // PlantUML uses 2 decimal places for most coordinates.
-    let s = format!("{:.2}", v);
-    // Strip trailing zeros after decimal point, but keep at least one digit.
+    let s = format!("{:.4}", v);
+    // Strip trailing zeros after decimal point.
     if s.contains('.') {
         let trimmed = s.trim_end_matches('0');
         if let Some(without_dot) = trimmed.strip_suffix('.') {
-            // Integer value — drop the dot entirely for PlantUML compatibility.
             without_dot.to_string()
         } else {
             trimmed.to_string()
@@ -540,7 +540,7 @@ pub fn render_with_oracle(
     if let Some(title) = &diagram.meta.title {
         let title_x = total_width / 2.0;
         let title_escaped = escape_xml(title);
-        let title_tw = metrics::text_width(title, TITLE_FONT_SIZE);
+        let title_tw = metrics::plantuml_bold_text_width_14(title);
         write!(
             svg,
             r#"<text fill="{TEXT_COLOR}" font-family="sans-serif" font-size="{TITLE_FONT_SIZE}" font-weight="bold" lengthAdjust="spacing" textLength="{}" x="{}" y="{}">{title_escaped}</text>"#,
@@ -684,7 +684,7 @@ pub fn render_with_oracle(
                         fmt_f(*cx), fmt_f(*cy),
                     )
                     .unwrap();
-                    let tw = metrics::text_width("H", STATE_FONT_SIZE);
+                    let tw = metrics::plantuml_text_width_14("H");
                     write!(
                         svg,
                         r#"<text fill="{TEXT_COLOR}" font-family="sans-serif" font-size="{STATE_FONT_SIZE}" lengthAdjust="spacing" textLength="{}" x="{}" y="{}">H</text>"#,
@@ -709,7 +709,7 @@ pub fn render_with_oracle(
                         fmt_f(*cx), fmt_f(*cy),
                     )
                     .unwrap();
-                    let tw = metrics::text_width("H*", STATE_FONT_SIZE);
+                    let tw = metrics::plantuml_text_width_14("H*");
                     write!(
                         svg,
                         r#"<text fill="{TEXT_COLOR}" font-family="sans-serif" font-size="{STATE_FONT_SIZE}" lengthAdjust="spacing" textLength="{}" x="{}" y="{}">H*</text>"#,
@@ -749,7 +749,7 @@ pub fn render_with_oracle(
                     if hide_empty_desc && descriptions.is_empty() {
                         // With `hide empty description`, no divider line — just
                         // centered text.
-                        let text_w = metrics::text_width(label, STATE_FONT_SIZE);
+                        let text_w = metrics::plantuml_text_width_14(label);
                         let text_x = cx - text_w / 2.0;
                         let text_y = box_y + bh / 2.0 + STATE_FONT_SIZE / 3.0;
                         let escaped = escape_xml(label);
@@ -775,7 +775,7 @@ pub fn render_with_oracle(
                         .unwrap();
 
                         // State name label.
-                        let text_w = metrics::text_width(label, STATE_FONT_SIZE);
+                        let text_w = metrics::plantuml_text_width_14(label);
                         let text_x = cx - text_w / 2.0;
                         let text_y = box_y + NAME_BASELINE_OFFSET;
                         let escaped = escape_xml(label);
@@ -790,7 +790,7 @@ pub fn render_with_oracle(
 
                         // Description lines.
                         for (j, desc) in descriptions.iter().enumerate() {
-                            let desc_w = metrics::text_width(desc, DESC_FONT_SIZE);
+                            let desc_w = metrics::plantuml_text_width_12(desc);
                             let desc_x = box_x + 5.0;
                             let desc_y = div_y + FIRST_DESC_OFFSET + j as f64 * DESC_LINE_SPACING;
                             let desc_escaped = escape_xml(desc);
@@ -945,7 +945,7 @@ pub fn render_with_oracle(
         for line in note.text.lines() {
             let trimmed = line.trim();
             if !trimmed.is_empty() {
-                let tw = metrics::text_width(trimmed, LINK_FONT_SIZE);
+                let tw = metrics::plantuml_text_width(trimmed, LINK_FONT_SIZE);
                 let escaped = escape_xml(trimmed);
                 write!(
                     svg,
@@ -1038,7 +1038,7 @@ pub fn render_with_oracle(
                     let last = points.last().unwrap();
                     let mid_x = (first.0 + last.0) / 2.0;
                     let mid_y = (first.1 + last.1) / 2.0;
-                    let tw = metrics::text_width(label, LINK_FONT_SIZE);
+                    let tw = metrics::plantuml_text_width(label, LINK_FONT_SIZE);
                     let label_escaped = escape_xml(label);
                     write!(
                         svg,
@@ -1075,7 +1075,7 @@ pub fn render_with_oracle(
                 if let Some(label) = &t.label {
                     let label_x = from_cx.max(to_cx) + 1.0;
                     let label_y = (start_y + end_y) / 2.0;
-                    let tw = metrics::text_width(label, LINK_FONT_SIZE);
+                    let tw = metrics::plantuml_text_width(label, LINK_FONT_SIZE);
                     let label_escaped = escape_xml(label);
                     write!(
                         svg,

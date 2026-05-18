@@ -257,10 +257,27 @@ fn golden_pairs() {
         return;
     }
 
-    let pairs = collect_golden_pairs(&root);
+    let mut pairs = collect_golden_pairs(&root);
     if pairs.is_empty() {
         eprintln!("no golden pairs found");
         return;
+    }
+
+    // Optional filter for faster iteration. Substring match against the
+    // golden-relative path.
+    if let Ok(filter) = std::env::var("GOLDEN_FILTER") {
+        let before = pairs.len();
+        pairs.retain(|p| {
+            p.strip_prefix(&root)
+                .map(|r| r.to_string_lossy().contains(&filter))
+                .unwrap_or(false)
+        });
+        eprintln!(
+            "GOLDEN_FILTER='{}' selected {}/{} pairs",
+            filter,
+            pairs.len(),
+            before
+        );
     }
     eprintln!("running {} golden pairs...", pairs.len());
 
@@ -320,6 +337,15 @@ fn golden_pairs() {
             *dir_fails.entry(f[..slash].to_string()).or_default() += 1;
         }
     }
+
+    // Dump failure names so iteration scripts can grep them.
+    let names_path = root.parent().unwrap().join("golden_failure_names.txt");
+    let mut names: Vec<&str> = failures
+        .iter()
+        .filter_map(|f| f.split(':').next())
+        .collect();
+    names.sort();
+    let _ = std::fs::write(&names_path, names.join("\n"));
 
     let panics = failures.iter().filter(|f| f.contains("panic:")).count();
     let xml_diff = failures
