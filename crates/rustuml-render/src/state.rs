@@ -224,6 +224,118 @@ fn fmt_f(v: f64) -> String {
     }
 }
 
+/// Allocate entity and link IDs matching PlantUML's counter-based scheme.
+///
+/// Returns (entity_ids, link_ids):
+/// - `entity_ids`: list of (layout_id, "entXXXX") in render order
+/// - `link_ids`:   one "lnkN" per transition in source order
+///
+/// The single counter starts at 2 and increments by 1 for each allocation.
+/// Pre-declared states are allocated first. Each transition then allocates
+/// its source/target (if not yet allocated) followed by its link. The
+/// PlantUML quirk: when a `[*]` pseudo-state appears alongside an
+/// already-allocated linked state, the pseudo-state SHARES that state's ID.
+fn allocate_ids(
+    diagram: &StateDiagram,
+    has_start: bool,
+    has_end: bool,
+) -> (Vec<(String, String)>, Vec<String>) {
+    let mut counter: usize = 2;
+    let mut entity_ids: Vec<(String, String)> = Vec::new();
+    let mut link_ids: Vec<String> = Vec::new();
+
+    let lookup = |entity_ids: &[(String, String)], id: &str| -> Option<String> {
+        entity_ids
+            .iter()
+            .find(|(sid, _)| sid == id)
+            .map(|(_, eid)| eid.clone())
+    };
+
+    let alloc_entity =
+        |entity_ids: &mut Vec<(String, String)>, counter: &mut usize, id: &str| -> String {
+            if let Some(existing) = lookup(entity_ids, id) {
+                return existing;
+            }
+            let eid = format!("ent{:04}", *counter);
+            *counter += 1;
+            entity_ids.push((id.to_string(), eid.clone()));
+            eid
+        };
+
+    // Explicitly-declared states get their IDs first, in declaration order.
+    // Track which IDs were declared so the pseudo-state-sharing quirk only
+    // fires for them (not for states synthesized from transitions).
+    let is_explicit = |s: &State| -> bool {
+        s.kind != StateKind::Normal
+            || s.label != s.id
+            || !s.descriptions.is_empty()
+            || !s.substates.is_empty()
+    };
+    let mut explicit_ids: std::collections::HashSet<String> = std::collections::HashSet::new();
+    for s in &diagram.states {
+        if s.id == "[*]" || !is_explicit(s) {
+            continue;
+        }
+        explicit_ids.insert(s.id.clone());
+        alloc_entity(&mut entity_ids, &mut counter, &s.id);
+    }
+
+    // Process each transition: allocate source, target, then link.
+    //
+    // PlantUML pseudo-state quirk: when a `[*]` endpoint is unallocated and
+    // the other endpoint was allocated BEFORE this transition began
+    // processing, the pseudo-state takes that endpoint's ID. This typically
+    // happens when a state is pre-declared and later linked from `[*]`.
+    for t in &diagram.transitions {
+        let from_layout = if t.from == "[*]" {
+            "__start__".to_string()
+        } else {
+            t.from.clone()
+        };
+        let to_layout = if t.to == "[*]" {
+            "__end__".to_string()
+        } else {
+            t.to.clone()
+        };
+
+        // Snapshot allocation state at the start of this transition.
+        let from_existing_before = lookup(&entity_ids, &from_layout);
+        let to_existing_before = lookup(&entity_ids, &to_layout);
+
+        // PlantUML quirk: when `[*] --> X` is the first reference to a
+        // pseudo-start AND X is an explicitly declared state, the start
+        // entity shares X's id. (The end entity does NOT exhibit this
+        // sharing behaviour — `X --> [*]` always allocates a fresh id.)
+        if let ("__start__", _) = (from_layout.as_str(), to_layout.as_str())
+            && from_existing_before.is_none()
+            && to_existing_before.is_some()
+            && explicit_ids.contains(&to_layout)
+        {
+            entity_ids.push(("__start__".to_string(), to_existing_before.unwrap()));
+        }
+        // Silence unused-binding warning when only one branch is exercised.
+        let _ = from_existing_before;
+
+        alloc_entity(&mut entity_ids, &mut counter, &from_layout);
+        alloc_entity(&mut entity_ids, &mut counter, &to_layout);
+
+        let lid = format!("lnk{counter}");
+        counter += 1;
+        link_ids.push(lid);
+    }
+
+    // Pseudo-states referenced by has_start/has_end but never as a transition
+    // source/target somehow: allocate fresh IDs to avoid "ent0002" fallback.
+    if has_start && lookup(&entity_ids, "__start__").is_none() {
+        alloc_entity(&mut entity_ids, &mut counter, "__start__");
+    }
+    if has_end && lookup(&entity_ids, "__end__").is_none() {
+        alloc_entity(&mut entity_ids, &mut counter, "__end__");
+    }
+
+    (entity_ids, link_ids)
+}
+
 /// Determine if a [*] reference is a start or end node based on context.
 /// In PlantUML, [*] as a source is the start node, and [*] as a target is the end node.
 fn classify_star_nodes(transitions: &[Transition]) -> (bool, bool) {
@@ -271,28 +383,47 @@ pub fn render_with_oracle(
                 && sp.value.eq_ignore_ascii_case("empty description"))
     });
 
-    // Collect ordered unique state IDs.
-    // Start [*] first, then declared states, then undeclared transition targets.
+    // Collect ordered unique state IDs to match PlantUML's render order.
+    //
+    // Render order:
+    //   1. Explicitly declared states (those with a label or descriptions or
+    //      a non-Normal kind), in declaration order.
+    //   2. Transition-derived endpoints (pseudo-states and synthesized
+    //      states), in transition-appearance order.
+    //
+    // A state synthesized solely by a transition reference looks the same as
+    // a declared state in the model — the parser adds an entry with
+    // label==id, no descriptions, Normal kind. The distinguishing trait is
+    // that PlantUML's render order places these in transition order, not
+    // declaration order.
+    let is_explicit = |s: &State| -> bool {
+        s.kind != StateKind::Normal
+            || s.label != s.id
+            || !s.descriptions.is_empty()
+            || !s.substates.is_empty()
+    };
     let mut state_ids: Vec<String> = Vec::new();
-    if has_start {
-        state_ids.push("__start__".to_string());
-    }
     for s in &diagram.states {
-        if !state_ids.contains(&s.id) && s.id != "[*]" {
+        if s.id != "[*]" && is_explicit(s) && !state_ids.contains(&s.id) {
             state_ids.push(s.id.clone());
         }
     }
     for t in &diagram.transitions {
-        for id in [&t.from, &t.to] {
-            if id == "[*]" {
-                continue; // Handled separately as start/end.
-            }
-            if !state_ids.contains(id) {
-                state_ids.push(id.clone());
+        for (raw, is_source) in [(&t.from, true), (&t.to, false)] {
+            let id = if raw == "[*]" {
+                if is_source { "__start__" } else { "__end__" }.to_string()
+            } else {
+                raw.clone()
+            };
+            if !state_ids.contains(&id) {
+                state_ids.push(id);
             }
         }
     }
-    if has_end {
+    if has_start && !state_ids.contains(&"__start__".to_string()) {
+        state_ids.push("__start__".to_string());
+    }
+    if has_end && !state_ids.contains(&"__end__".to_string()) {
         state_ids.push("__end__".to_string());
     }
 
@@ -525,6 +656,18 @@ pub fn render_with_oracle(
 
     let mut ids = IdCounter::new();
 
+    // Compute PlantUML's entity and link ID allocation order.
+    //
+    // PlantUML assigns IDs from a single counter starting at 2:
+    //   1. Pre-declared states allocate an entity ID on declaration.
+    //   2. Each transition processed in order:
+    //      a. Source: if it's a pseudo-state [*] and the target already has
+    //         an ID, share it. Else allocate a fresh ID.
+    //      b. Target: same logic.
+    //      c. Allocate a link ID.
+    // Allocation is "id = counter; counter += 1".
+    let (entity_ids, link_ids) = allocate_ids(diagram, has_start, has_end);
+
     // Handwritten compatibility notice.
     let is_handwritten = diagram.meta.skinparams.iter().any(|sp| {
         sp.key.eq_ignore_ascii_case("handwritten") && sp.value.eq_ignore_ascii_case("true")
@@ -551,13 +694,7 @@ pub fn render_with_oracle(
         .unwrap();
     }
 
-    // Assign entity IDs for all nodes.
-    let mut entity_ids: Vec<(String, String)> = Vec::new();
-    for (id, _, _, _, _) in &positions {
-        let ent_id = ids.next_entity();
-        entity_ids.push((id.clone(), ent_id));
-    }
-
+    let _ = &mut ids; // unused after refactor — kept for legacy fallback below
     let ent_id_of = |id: &str| -> &str {
         entity_ids
             .iter()
@@ -964,9 +1101,9 @@ pub fn render_with_oracle(
 
     // Render links (transitions).
     if let Some(orc) = oracle {
-        render_oracle_transitions(&mut svg, diagram, orc);
+        render_oracle_transitions(&mut svg, diagram, orc, &entity_ids, &link_ids);
     } else {
-        for t in &diagram.transitions {
+        for (link_idx, t) in diagram.transitions.iter().enumerate() {
             let from_layout = map_id(&t.from, true);
             let to_layout = map_id(&t.to, false);
             let from_name = if t.from == "[*]" { "*start*" } else { &t.from };
@@ -975,7 +1112,10 @@ pub fn render_with_oracle(
             // HTML comment.
             write!(svg, "<!--link {} to {}-->", from_name, to_name).unwrap();
 
-            let link_id = ids.next_link();
+            let link_id = link_ids
+                .get(link_idx)
+                .cloned()
+                .unwrap_or_else(|| ids.next_link());
             let from_ent = ent_id_of(&from_layout);
             let to_ent = ent_id_of(&to_layout);
 
@@ -1131,7 +1271,13 @@ fn render_arrowhead(svg: &mut String, control: (f64, f64), endpoint: (f64, f64))
 }
 
 /// Render transitions directly from oracle edge data.
-fn render_oracle_transitions(svg: &mut String, diagram: &StateDiagram, oracle: &OracleLayout) {
+fn render_oracle_transitions(
+    svg: &mut String,
+    diagram: &StateDiagram,
+    oracle: &OracleLayout,
+    _entity_ids: &[(String, String)],
+    _link_ids: &[String],
+) {
     for t in &diagram.transitions {
         let from_name = if t.from == "[*]" { "*start*" } else { &t.from };
         let to_name = if t.to == "[*]" { "*end*" } else { &t.to };
