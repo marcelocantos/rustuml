@@ -1456,7 +1456,8 @@ fn render_entity_content(
                 } else {
                     None
                 };
-                render_member_line(svg, member, x, eff_member_y, vis_ov);
+                let poly_cy = polygon_icon_cy_for(sep_y, mi);
+                render_member_line(svg, member, x, eff_member_y, vis_ov, Some(poly_cy));
             } else {
                 let text = format_member_display(member);
                 let text_w = metrics::plantuml_text_width_14(&text);
@@ -1536,7 +1537,8 @@ fn render_entity_content(
                 } else {
                     None
                 };
-                render_member_line(svg, member, x, eff_y, vis_ov);
+                let poly_cy = polygon_icon_cy_for(header_sep_y, fi);
+                render_member_line(svg, member, x, eff_y, vis_ov, Some(poly_cy));
                 member_y += MEMBER_SPACING;
             }
 
@@ -1571,7 +1573,8 @@ fn render_entity_content(
                 } else {
                     None
                 };
-                render_member_line(svg, member, x, eff_y, vis_ov);
+                let poly_cy = polygon_icon_cy_for(methods_sep_y, mi);
+                render_member_line(svg, member, x, eff_y, vis_ov, Some(poly_cy));
                 method_y += MEMBER_SPACING;
             }
         } else if !methods.is_empty() {
@@ -1613,7 +1616,8 @@ fn render_entity_content(
                 } else {
                     None
                 };
-                render_member_line(svg, member, x, eff_y, vis_ov);
+                let poly_cy = polygon_icon_cy_for(methods_sep_y, mi);
+                render_member_line(svg, member, x, eff_y, vis_ov, Some(poly_cy));
                 method_y += MEMBER_SPACING;
             }
         } else {
@@ -1646,14 +1650,32 @@ fn render_entity_content(
     }
 }
 
+/// Compute the visibility-icon center Y for a polygon-shaped icon
+/// (protected diamond, package triangle) directly from the compartment
+/// separator and the member's index within the compartment.
+///
+/// Java PlantUML emits polygon centers as `sep_y + 12.7441 + N * 16.4883`.
+/// Deriving from `sep_y` rather than from the text baseline avoids the
+/// 0.0001 precision drift that occurs when subtracting a fractional
+/// offset from a baseline that was itself rounded to 4 decimals.
+fn polygon_icon_cy_for(compartment_sep_y: f64, member_index_in_compartment: usize) -> f64 {
+    const POLYGON_FIRST_OFFSET: f64 = 12.7441;
+    const MEMBER_STEP: f64 = 16.4883;
+    compartment_sep_y + POLYGON_FIRST_OFFSET + member_index_in_compartment as f64 * MEMBER_STEP
+}
+
 /// Render a single member line (visibility icon + text).
 /// `vis_icon_y_override`: oracle-provided visibility icon y position (rect y or ellipse cy).
+/// `polygon_icon_cy_override`: caller-computed icon center for polygon-based
+/// visibility icons (protected diamond, package triangle). Used instead of the
+/// text-baseline fallback because the oracle skips polygon coordinates.
 fn render_member_line(
     svg: &mut String,
     member: &Member,
     entity_x: f64,
     baseline_y: f64,
     vis_icon_y_override: Option<f64>,
+    polygon_icon_cy_override: Option<f64>,
 ) {
     let text = format_member_display(member);
     let text_w = metrics::plantuml_text_width_14(&text);
@@ -1664,12 +1686,22 @@ fn render_member_line(
         // - Ellipse (public) / square (private): center sits 3.791 above text baseline
         // - Diamond (protected) / triangle (package): center sits 4.791 above baseline
         // The oracle extractor only captures rect/ellipse y values, so polygons
-        // (protected, package) always hit this fallback and must use 4.791.
+        // (protected, package) take a separate caller-computed override when
+        // available; otherwise we fall back to a text-baseline derivation.
         let default_offset = match member.visibility {
             Visibility::Protected | Visibility::Package => 4.791015625,
             _ => 3.791015625,
         };
-        let icon_cy = vis_icon_y_override.unwrap_or(baseline_y - default_offset);
+        let polygon_kind = matches!(
+            member.visibility,
+            Visibility::Protected | Visibility::Package
+        );
+        let icon_cy = if polygon_kind {
+            polygon_icon_cy_override
+                .unwrap_or_else(|| vis_icon_y_override.unwrap_or(baseline_y - default_offset))
+        } else {
+            vis_icon_y_override.unwrap_or(baseline_y - default_offset)
+        };
 
         write!(svg, r#"<g data-visibility-modifier="{}">"#, vis_mod,).unwrap();
 
