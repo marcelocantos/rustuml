@@ -48,11 +48,78 @@ const DEPRECATED_FILL: &str = "#FFFFCC";
 const DEPRECATED_STROKE: &str = "#FFDD88";
 
 /// Detect deprecated `#color:text;` actions and prepend a warning banner.
+/// Returns the raw (un-escaped) banner string; XML/entity escaping happens
+/// in the emitter via [`svg_text_escape`].
 fn deprecated_warning(color: &str) -> String {
     format!(
-        "This\u{a0}syntax\u{a0}is\u{a0}deprecated,\u{a0}you\u{a0}must\u{a0}add\u{a0}<<{}>>\u{a0}at\u{a0}the\u{a0}end\u{a0}of\u{a0}the\u{a0}line,\u{a0}after\u{a0}the\u{a0}';'",
-        xml_escape(color)
+        "This\u{a0}syntax\u{a0}is\u{a0}deprecated,\u{a0}you\u{a0}must\u{a0}add\u{a0}<<{color}>>\u{a0}at\u{a0}the\u{a0}end\u{a0}of\u{a0}the\u{a0}line,\u{a0}after\u{a0}the\u{a0}';'"
     )
+}
+
+/// Per-arrow visual style. Derived from the parser's `Arrow.color` field,
+/// which actually carries the comma-separated bracket payload of
+/// `-[...]->` (e.g. `bold`, `dashed`, `#red`, `#red,bold`).
+#[derive(Debug, Clone)]
+struct ArrowStyle {
+    color: String,
+    dashed: bool,
+    bold: bool,
+    hidden: bool,
+}
+
+impl Default for ArrowStyle {
+    fn default() -> Self {
+        ArrowStyle {
+            color: ARROW_COLOR.to_string(),
+            dashed: false,
+            bold: false,
+            hidden: false,
+        }
+    }
+}
+
+/// Parse the bracketed payload from `-[...]->` into an `ArrowStyle`.
+/// Accepts tokens separated by `,` or `;`; tokens may be a colour (`#fff`,
+/// `#FFFFFF`, or a CSS name) or a style keyword (`bold`, `dashed`,
+/// `dotted`, `hidden`, `plain`).
+///
+/// `parser_dashed` is intentionally ignored when this function is called:
+/// the parser's dashed flag is set whenever a `-` appears after `]`, which
+/// is true for all `-[…]->` forms regardless of the actual style.  Dash-ness
+/// must come from a `dashed`/`dotted` token inside the brackets.
+fn arrow_style_from_brackets(payload: &str, _parser_dashed: bool) -> ArrowStyle {
+    let mut style = ArrowStyle::default();
+    for tok in payload.split([',', ';']) {
+        let t = tok.trim();
+        if t.is_empty() {
+            continue;
+        }
+        if let Some(rest) = t.strip_prefix('#') {
+            // Hex colour or CSS name (resolve_color handles both forms).
+            style.color = crate::sequence::resolve_color(rest);
+            continue;
+        }
+        match t.to_ascii_lowercase().as_str() {
+            "bold" => style.bold = true,
+            "dashed" => style.dashed = true,
+            "dotted" => {
+                // PlantUML renders dotted as a shorter dasharray. For now we
+                // treat dotted same as dashed at the SVG level (matches the
+                // `stroke-dasharray:2,2` pattern many goldens use).
+                style.dashed = true;
+            }
+            "hidden" => style.hidden = true,
+            "plain" | "solid" | "normal" => {}
+            other => {
+                // Bare CSS colour name without `#` prefix.
+                let resolved = crate::sequence::resolve_color(other);
+                if resolved != "#FFFFFF" || other.eq_ignore_ascii_case("white") {
+                    style.color = resolved;
+                }
+            }
+        }
+    }
+    style
 }
 
 /// A layout node in the activity tree. We convert the flat step list into
@@ -145,7 +212,7 @@ fn build_tree(steps: &[ActivityStep]) -> Vec<LayoutNode> {
             ActivityStep::DeprecatedColorAction(dca) => {
                 let tw = text_render::measure(&dca.text, FONT_SIZE, false);
                 let warning = deprecated_warning(&dca.color);
-                let ww = pm::text_width(&warning, 10.0, false);
+                let ww = pm::mono_text_width(&warning, 10.0);
                 nodes.push(LayoutNode::DeprecatedAction {
                     color: dca.color.clone(),
                     text: dca.text.clone(),
@@ -369,8 +436,12 @@ fn sequence_width(nodes: &[LayoutNode]) -> f64 {
 
 fn node_width(node: &LayoutNode) -> f64 {
     match node {
-        LayoutNode::Start => START_R * 2.0 + ACTION_MIN_X * 2.0,
-        LayoutNode::Stop | LayoutNode::End => STOP_OUTER_R * 2.0 + ACTION_MIN_X * 2.0,
+        // Bare start/stop circles: PlantUML lays them out at minimum width
+        // without padding (margins are added once at the SVG level). The
+        // `+ ACTION_MIN_X * 2.0` previously here forced ~52px of empty
+        // space whenever the longest action was narrower than the circle.
+        LayoutNode::Start => START_R * 2.0,
+        LayoutNode::Stop | LayoutNode::End => STOP_OUTER_R * 2.0,
         LayoutNode::Action { text_width, .. } => {
             // Box content width only. The outer ACTION_MIN_X margin is added
             // once at the SVG level (margin_x in render_diagram).
@@ -432,7 +503,15 @@ fn node_width(node: &LayoutNode) -> f64 {
             let cond_w = text_render::measure(condition, SMALL_FONT, false) + DIAMOND_HALF * 2.0;
             body_w.max(cond_w + 40.0)
         }
-        _ => 60.0,
+        // Arrows, notes, detach/kill/break, and bare titles contribute no
+        // horizontal extent of their own. (Notes will need width once they're
+        // laid out alongside the flow; for now they fall back to 0.)
+        LayoutNode::Arrow { .. }
+        | LayoutNode::Note { .. }
+        | LayoutNode::Detach
+        | LayoutNode::Kill
+        | LayoutNode::Break => 0.0,
+        LayoutNode::Title(t) => text_render::measure(t, TITLE_FONT_SIZE, true),
     }
 }
 
@@ -520,11 +599,22 @@ fn node_height(node: &LayoutNode) -> f64 {
 
 // ─── SVG emission ───────────────────────────────────────────────────
 
-fn xml_escape(s: &str) -> String {
-    s.replace('&', "&amp;")
-        .replace('<', "&lt;")
-        .replace('>', "&gt;")
-        .replace('"', "&quot;")
+/// Escape a string for SVG text content the way PlantUML does:
+/// XML-escape `<`, `>`, `&`, and emit U+00A0 (non-breaking space) as the
+/// numeric entity `&#xA0;`.
+fn svg_text_escape(s: &str) -> String {
+    let mut out = String::with_capacity(s.len());
+    for ch in s.chars() {
+        match ch {
+            '&' => out.push_str("&amp;"),
+            '<' => out.push_str("&lt;"),
+            '>' => out.push_str("&gt;"),
+            '"' => out.push_str("&quot;"),
+            '\u{a0}' => out.push_str("&#xA0;"),
+            _ => out.push(ch),
+        }
+    }
+    out
 }
 
 fn f(v: f64) -> String {
@@ -639,10 +729,13 @@ impl SvgEmitter {
         y: f64,
         content: &str,
     ) {
+        // PlantUML emits `<`/`>` as `&lt;`/`&gt;` and U+00A0 as the numeric
+        // entity `&#xA0;` (rather than the raw UTF-8 byte sequence).
+        let escaped = svg_text_escape(content);
         write!(
             self.shapes,
             r#"<text fill="{}" font-family="monospace" font-size="{}" lengthAdjust="spacing" textLength="{}" x="{}" y="{}">{}</text>"#,
-            fill, font_size as u32, f(text_length), f(x), f(y), content
+            fill, font_size as u32, f(text_length), f(x), f(y), escaped
         )
         .unwrap();
     }
@@ -724,18 +817,21 @@ impl SvgEmitter {
         );
     }
 
-    /// Emit a dashed downward arrow.
-    fn down_arrow_styled(&mut self, cx: f64, y1: f64, y2: f64, color: &str, dashed: bool) {
-        self.line_styled(color, "1", cx, cx, y1, y2, dashed);
+    /// Emit a styled downward arrow (handles colour, dashed, bold).
+    fn down_arrow_full(&mut self, cx: f64, y1: f64, y2: f64, style: &ArrowStyle) {
+        let sw = if style.bold { "2" } else { "1" };
+        self.line_styled(&style.color, sw, cx, cx, y1, y2, style.dashed);
+        // Bold arrows in PlantUML keep the same arrowhead size; only the
+        // line stroke changes. The polygon stays 1px.
         self.polygon_connector(
-            color,
+            &style.color,
             &[
                 (cx - 4.0, y2 - 10.0),
                 (cx, y2),
                 (cx + 4.0, y2 - 10.0),
                 (cx, y2 - 6.0),
             ],
-            color,
+            &style.color,
             "1",
         );
     }
@@ -830,22 +926,23 @@ fn emit_sequence(svg: &mut SvgEmitter, nodes: &[LayoutNode], cx: f64, mut y: f64
                 }
             }
             if prev_idx.is_some() {
-                let (color, dashed) = match explicit_arrow {
-                    Some(LayoutNode::Arrow { color: Some(c), .. }) => {
-                        // When a colour is given explicitly the parser's
-                        // `dashed` flag is unreliable for the `-[#c]->`
-                        // form (regex artefact in rustuml-parser captures
-                        // the trailing `-` from `->` as the dashed
-                        // marker). The vast majority of coloured arrows
-                        // in the corpus are solid; force solid here. A
-                        // genuine `-[#c]-->` (dashed coloured) will need
-                        // a parser fix to round-trip correctly.
-                        (crate::sequence::resolve_color(c), false)
-                    }
-                    Some(LayoutNode::Arrow { dashed, .. }) => (ARROW_COLOR.to_string(), *dashed),
-                    _ => (ARROW_COLOR.to_string(), false),
+                let style = match explicit_arrow {
+                    Some(LayoutNode::Arrow {
+                        color: Some(c),
+                        dashed,
+                        ..
+                    }) => arrow_style_from_brackets(c, *dashed),
+                    Some(LayoutNode::Arrow { dashed, .. }) => ArrowStyle {
+                        color: ARROW_COLOR.to_string(),
+                        dashed: *dashed,
+                        bold: false,
+                        hidden: false,
+                    },
+                    _ => ArrowStyle::default(),
                 };
-                svg.down_arrow_styled(cx, y, y + ARROW_LEN, &color, dashed);
+                if !style.hidden {
+                    svg.down_arrow_full(cx, y, y + ARROW_LEN, &style);
+                }
                 y += ARROW_LEN;
             }
         }
@@ -1497,7 +1594,7 @@ pub fn render(diagram: &ActivityDiagram, _theme: &Theme) -> String {
         .filter_map(|s| {
             if let ActivityStep::DeprecatedColorAction(dca) = s {
                 let warning = deprecated_warning(&dca.color);
-                let ww = pm::text_width(&warning, 10.0, false);
+                let ww = pm::mono_text_width(&warning, 10.0);
                 Some((warning, ww))
             } else {
                 None
