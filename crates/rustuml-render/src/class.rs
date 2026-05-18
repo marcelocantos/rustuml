@@ -549,17 +549,12 @@ fn derive_cluster_bbox(
 
 /// Render the geometric shape of a package (rect, path, etc.) and its title.
 fn render_cluster_shape(svg: &mut String, pkg: &Package, rect: &crate::layout_oracle::EntityRect) {
-    // Default fill differs by package kind: Rectangle uses #F1F1F1, the
-    // tabbed-folder shapes (Package/Namespace/Folder/Frame/...) use "none".
-    let default_fill = match pkg.kind {
-        PackageKind::Rectangle => ENTITY_FILL.to_string(),
-        _ => "none".to_string(),
-    };
+    // Default fill is "none" for every cluster kind; explicit colors override.
     let fill = pkg
         .color
         .as_deref()
         .map(crate::sequence::resolve_color)
-        .unwrap_or(default_fill);
+        .unwrap_or_else(|| "none".to_string());
     let label = pkg.display_name.as_deref().unwrap_or(pkg.name.as_str());
     let title_tl = metrics::plantuml_bold_text_width_14(label);
     let x = rect.x;
@@ -1273,7 +1268,7 @@ fn render_entity_content(
         d.to_string()
     } else {
         match entity.kind {
-            EntityKind::Class | EntityKind::Entity => {
+            EntityKind::Class => {
                 // Offset the C glyph from reference position (cx=22) to actual cx.
                 let dx = icon_cx - 22.0;
                 let dy = icon_cy - 23.0;
@@ -1284,7 +1279,8 @@ fn render_entity_content(
                 }
             }
             EntityKind::Interface => interface_glyph(icon_cx, icon_cy),
-            EntityKind::Enum => {
+            EntityKind::Enum | EntityKind::Entity => {
+                // PlantUML uses the same "E" glyph for both enums and entities.
                 let dx = icon_cx - 22.0;
                 let dy = icon_cy - 23.0;
                 if dx.abs() < 0.001 && dy.abs() < 0.001 {
@@ -1831,22 +1827,27 @@ fn render_oracle_relationships(
     _ent_id: usize,
 ) {
     for rel in &diagram.relationships {
-        // Try both -to- and -backto- IDs to find the oracle edge,
-        // since the oracle's ID format depends on how PlantUML
-        // internally categorises the relationship direction.
+        // Try the PlantUML edge id forms in order:
+        //   - "from-to-to" (directional arrow)
+        //   - "from-backto-to" (reverse direction)
+        //   - "from-to" (undirected / non-arrow association like `A -- B`)
         let to_id = format!("{}-to-{}", rel.from, rel.to);
         let backto_id = format!("{}-backto-{}", rel.from, rel.to);
+        let plain_id = format!("{}-{}", rel.from, rel.to);
 
-        let (oracle_edge, is_reverse) =
+        let (oracle_edge, found_id) =
             if let Some(e) = oracle.edges.iter().find(|e| e.id == backto_id) {
-                (e, true)
+                (e, backto_id.clone())
             } else if let Some(e) = oracle.edges.iter().find(|e| e.id == to_id) {
-                (e, false)
+                (e, to_id.clone())
+            } else if let Some(e) = oracle.edges.iter().find(|e| e.id == plain_id) {
+                (e, plain_id.clone())
             } else {
                 continue;
             };
 
-        let expected_id = if is_reverse { &backto_id } else { &to_id };
+        let is_reverse = found_id == backto_id;
+        let expected_id = &found_id;
 
         // HTML comment
         if is_reverse {
