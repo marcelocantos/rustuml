@@ -619,8 +619,41 @@ fn emit_package_cluster(_svg: &mut SvgBuilder, _x: f64, _y: f64, _w: f64, _h: f6
 
 // ---- Stack ----------------------------------------------------------------
 
-fn emit_stack(_svg: &mut SvgBuilder, _x: f64, _y: f64, _w: f64, _h: f64) {
-    // TODO: rect (no stroke) + complex outline path.
+fn emit_stack(svg: &mut SvgBuilder, x: f64, y: f64, w: f64, h: f64) {
+    // Stack: an inner rect with no stroke (just fill), plus an outline path
+    // that extends 15px on either side. Geometry from goldens:
+    //   rect at (x, y, w, h) — the inner fill
+    //   path: M{x-15},{y} L{x-2.5},{y} A2.5,2.5 0 0 1 {x},{y+2.5}
+    //         L{x},{y+h-2.5} A2.5,2.5 0 0 0 {x+2.5},{y+h}
+    //         L{x+w-2.5},{y+h} A2.5,2.5 0 0 0 {x+w},{y+h-2.5}
+    //         L{x+w},{y+2.5} A2.5,2.5 0 0 1 {x+w+2.5},{y} L{x+w+15},{y}
+    svg.raw(&format!(
+        r#"<rect fill="{FILL}" height="{h}" rx="{RX_RY}" ry="{RX_RY}" style="stroke:none;stroke-width:0.5;" width="{w}" x="{x}" y="{y}"/>"#,
+        h = fc(h),
+        w = fc(w),
+        x = fc(x),
+        y = fc(y),
+    ));
+    let xl = x - 15.0;
+    let xr = x + w + 15.0;
+    let d = format!(
+        "M{xl},{y_s} L{x_lp1},{y_s} A2.5,2.5 0 0 1 {x_s},{y_p1} L{x_s},{y_pm1} A2.5,2.5 0 0 0 {x_lp2},{yh_s} L{x_rm2},{yh_s} A2.5,2.5 0 0 0 {xw_s},{y_pm1} L{xw_s},{y_p1} A2.5,2.5 0 0 1 {x_rp2},{y_s} L{xr},{y_s}",
+        xl = fc(xl),
+        xr = fc(xr),
+        x_s = fc(x),
+        xw_s = fc(x + w),
+        y_s = fc(y),
+        yh_s = fc(y + h),
+        x_lp1 = fc(x - 2.5),
+        x_lp2 = fc(x + 2.5),
+        x_rm2 = fc(x + w - 2.5),
+        x_rp2 = fc(x + w + 2.5),
+        y_p1 = fc(y + 2.5),
+        y_pm1 = fc(y + h - 2.5),
+    );
+    svg.raw(&format!(
+        r#"<path d="{d}" fill="none" style="stroke:{STROKE};stroke-width:0.5;"/>"#
+    ));
 }
 
 // ---- Storage (rounded rect with rx=35, ry=35) -----------------------------
