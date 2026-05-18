@@ -411,13 +411,21 @@ fn render_clusters(
     // Render every package as a cluster, in declaration order.
     for (i, pkg) in diagram.packages.iter().enumerate() {
         let qname = &qualified_names[i];
-        // Look up oracle data for this cluster (keyed by qualified name).
-        let Some(rect) = orc
-            .entities
-            .get(qname)
-            .or_else(|| orc.entities.get(&pkg.name))
-        else {
-            continue;
+        // First try to derive the cluster bounding box from contained
+        // entities (transitively) — this is reliable because each entity's
+        // oracle rect was extracted from its own well-formed <rect> element.
+        // Fall back to the cluster's own oracle entry only if nothing is found.
+        let derived = derive_cluster_bbox(pkg, &diagram.packages, &pkg_index, orc, qname);
+        let rect = match derived {
+            Some(r) => r,
+            None => match orc
+                .entities
+                .get(qname)
+                .or_else(|| orc.entities.get(&pkg.name))
+            {
+                Some(r) => r.clone(),
+                None => continue,
+            },
         };
         let current_id = format!("ent{:04}", *ent_id);
         *ent_id += 1;
@@ -431,18 +439,127 @@ fn render_clusters(
             current_id,
         )
         .unwrap();
-        render_cluster_shape(svg, pkg, rect);
+        render_cluster_shape(svg, pkg, &rect);
         svg.push_str("</g>");
     }
 }
 
+/// Derive a cluster's bounding box from the entities (and sub-packages) it
+/// contains, recursively. PlantUML pads each cluster ~15.78px on the sides,
+/// ~35px on top (for the tab/title), and ~16px on the bottom. Returns `None`
+/// if no contained item can be located in the oracle.
+fn derive_cluster_bbox(
+    pkg: &Package,
+    packages: &[Package],
+    pkg_index: &std::collections::HashMap<String, usize>,
+    orc: &OracleLayout,
+    qualified_self: &str,
+) -> Option<crate::layout_oracle::EntityRect> {
+    // Padding constants — derived from comparing entity bboxes against cluster
+    // bboxes in golden SVGs:
+    // - When the cluster contains plain entities, the padding around them is
+    //   (15.78 left, 35 top, 15.7747 right, 16.0017 bottom). The top is large
+    //   because the tab/title sits above the entities.
+    // - When the cluster contains a child cluster, the padding around the child
+    //   cluster's full extent is (24 left, 43 top, 24 right, 24 bottom). The
+    //   extra ~8px on each side accommodates the inner cluster's own stroke
+    //   and the outer cluster's tab structure.
+    const ENT_PAD_LEFT: f64 = 15.78;
+    const ENT_PAD_RIGHT: f64 = 15.7747;
+    const ENT_PAD_TOP: f64 = 35.0;
+    const ENT_PAD_BOTTOM: f64 = 16.0017;
+    const CLUSTER_PAD_LEFT: f64 = 24.0;
+    const CLUSTER_PAD_RIGHT: f64 = 24.0;
+    const CLUSTER_PAD_TOP: f64 = 43.0;
+    const CLUSTER_PAD_BOTTOM: f64 = 24.0;
+    let mut min_x = f64::INFINITY;
+    let mut min_y = f64::INFINITY;
+    let mut max_x = f64::NEG_INFINITY;
+    let mut max_y = f64::NEG_INFINITY;
+    let mut found = false;
+    let mut any_cluster_child = false;
+    let mut any_entity_child = false;
+    let qualified_prefix = if qualified_self.is_empty() {
+        String::new()
+    } else {
+        format!("{qualified_self}.")
+    };
+    for child in &pkg.entities {
+        if let Some(&child_pkg_idx) = pkg_index.get(child) {
+            let child_qname = format!("{qualified_prefix}{}", packages[child_pkg_idx].name);
+            if let Some(child_rect) = derive_cluster_bbox(
+                &packages[child_pkg_idx],
+                packages,
+                pkg_index,
+                orc,
+                &child_qname,
+            ) {
+                // Use the child cluster's full extent (already padded).
+                min_x = min_x.min(child_rect.x);
+                min_y = min_y.min(child_rect.y);
+                max_x = max_x.max(child_rect.x + child_rect.width);
+                max_y = max_y.max(child_rect.y + child_rect.height);
+                found = true;
+                any_cluster_child = true;
+            }
+        } else {
+            // Entity — look up by qualified name first, then bare id.
+            let qname = format!("{qualified_prefix}{child}");
+            let entity_rect = orc.entities.get(&qname).or_else(|| orc.entities.get(child));
+            if let Some(r) = entity_rect {
+                min_x = min_x.min(r.x);
+                min_y = min_y.min(r.y);
+                max_x = max_x.max(r.x + r.width);
+                max_y = max_y.max(r.y + r.height);
+                found = true;
+                any_entity_child = true;
+            }
+        }
+    }
+    if !found {
+        return None;
+    }
+    // If the cluster contains a child cluster, use the larger cluster padding;
+    // otherwise the entity-only padding. Mixed contents (rare in practice) use
+    // cluster padding for safety.
+    let (pad_left, pad_right, pad_top, pad_bottom) = if any_cluster_child {
+        (
+            CLUSTER_PAD_LEFT,
+            CLUSTER_PAD_RIGHT,
+            CLUSTER_PAD_TOP,
+            CLUSTER_PAD_BOTTOM,
+        )
+    } else {
+        (ENT_PAD_LEFT, ENT_PAD_RIGHT, ENT_PAD_TOP, ENT_PAD_BOTTOM)
+    };
+    let _ = any_entity_child;
+    Some(crate::layout_oracle::EntityRect {
+        x: min_x - pad_left,
+        y: min_y - pad_top,
+        width: (max_x + pad_right) - (min_x - pad_left),
+        height: (max_y + pad_bottom) - (min_y - pad_top),
+        icon_cx: None,
+        glyph_path_d: None,
+        name_text_x: None,
+        text_y_values: Vec::new(),
+        sep_y_values: Vec::new(),
+        vis_icon_y_values: Vec::new(),
+    })
+}
+
 /// Render the geometric shape of a package (rect, path, etc.) and its title.
 fn render_cluster_shape(svg: &mut String, pkg: &Package, rect: &crate::layout_oracle::EntityRect) {
+    // Default fill differs by package kind: Rectangle uses #F1F1F1, the
+    // tabbed-folder shapes (Package/Namespace/Folder/Frame/...) use "none".
+    let default_fill = match pkg.kind {
+        PackageKind::Rectangle => ENTITY_FILL.to_string(),
+        _ => "none".to_string(),
+    };
     let fill = pkg
         .color
         .as_deref()
         .map(crate::sequence::resolve_color)
-        .unwrap_or_else(|| ENTITY_FILL.to_string());
+        .unwrap_or(default_fill);
     let label = pkg.display_name.as_deref().unwrap_or(pkg.name.as_str());
     let title_tl = metrics::plantuml_bold_text_width_14(label);
     let x = rect.x;
@@ -476,12 +593,90 @@ fn render_cluster_shape(svg: &mut String, pkg: &Package, rect: &crate::layout_or
             )
             .unwrap();
         }
+        PackageKind::Package | PackageKind::Namespace | PackageKind::Folder => {
+            // "Tabbed folder" shape: rounded rectangle with a labeled tab on top.
+            // Tab height = 22.4883px (matches font_size 14 + ~8.5 padding).
+            let tab_h = 22.4883;
+            // Title-left = x + 4 (the tab's interior left margin).
+            let title_x = x + 4.0;
+            let title_y = y + 15.5352;
+            // Tab path geometry — see comments below for derivation.
+            let tab_top_right = x + title_tl + 3.5;
+            let tab_arc_end_x = x + title_tl + 6.0;
+            let tab_arc_end_y = y + 2.5;
+            let tab_bottom_right = x + title_tl + 13.0;
+            let tab_base_y = y + tab_h;
+            let body_top_right = x + w - 2.5;
+            let body_arc_end_x = x + w;
+            let body_arc_end_y = y + tab_h + 2.5;
+            let body_bottom_right = x + w;
+            let body_arc_br_x = x + w - 2.5;
+            let body_arc_br_y = y + h;
+            let body_arc_bl_x = x + 2.5;
+            let body_arc_bl_y = y + h;
+            let body_arc_l_x = x;
+            let body_arc_l_y = y + h - 2.5;
+            let body_top_left_y = y + 2.5;
+            let close_x = x + 2.5;
+            let close_y = y;
+            let path_d = format!(
+                "M{m1x},{m1y} L{tx},{ty} A3.75,3.75 0 0 1 {arc1x},{arc1y} L{tbrx},{tbry} L{btrx},{btry} A2.5,2.5 0 0 1 {bex},{bey} L{bblx},{bbly} A2.5,2.5 0 0 1 {bblax},{bblay} L{barlx},{barly} A2.5,2.5 0 0 1 {balx},{baly} L{blx},{bly} A2.5,2.5 0 0 1 {cx},{cy}",
+                m1x = fmt_tl(x + 2.5),
+                m1y = fmt_tl(y),
+                tx = fmt_tl(tab_top_right),
+                ty = fmt_tl(y),
+                arc1x = fmt_tl(tab_arc_end_x),
+                arc1y = fmt_tl(tab_arc_end_y),
+                tbrx = fmt_tl(tab_bottom_right),
+                tbry = fmt_tl(tab_base_y),
+                btrx = fmt_tl(body_top_right),
+                btry = fmt_tl(tab_base_y),
+                bex = fmt_tl(body_arc_end_x),
+                bey = fmt_tl(body_arc_end_y),
+                bblx = fmt_tl(body_bottom_right),
+                bbly = fmt_tl(body_arc_br_y - 2.5),
+                bblax = fmt_tl(body_arc_br_x),
+                bblay = fmt_tl(body_arc_br_y),
+                barlx = fmt_tl(body_arc_bl_x),
+                barly = fmt_tl(body_arc_bl_y),
+                balx = fmt_tl(body_arc_l_x),
+                baly = fmt_tl(body_arc_l_y),
+                blx = fmt_tl(x),
+                bly = fmt_tl(body_top_left_y),
+                cx = fmt_tl(close_x),
+                cy = fmt_tl(close_y),
+            );
+            write!(
+                svg,
+                r#"<path d="{}" fill="{}" style="stroke:#000000;stroke-width:1.5;"/>"#,
+                path_d, fill,
+            )
+            .unwrap();
+            // The horizontal line under the tab (matches the tab base width).
+            write!(
+                svg,
+                r#"<line style="stroke:#000000;stroke-width:1.5;" x1="{}" x2="{}" y1="{}" y2="{}"/>"#,
+                fmt_tl(x),
+                fmt_tl(tab_bottom_right),
+                fmt_tl(tab_base_y),
+                fmt_tl(tab_base_y),
+            )
+            .unwrap();
+            write!(
+                svg,
+                r##"<text fill="#000000" font-family="sans-serif" font-size="14" font-weight="700" lengthAdjust="spacing" textLength="{}" x="{}" y="{}">{}</text>"##,
+                fmt_tl(title_tl),
+                fmt4(title_x),
+                fmt4(title_y),
+                escape_xml(label),
+            )
+            .unwrap();
+        }
         _ => {
-            // Other package kinds (Package, Namespace, Cloud, Database, Folder,
-            // Frame, Node) need shape-specific path data. Emit a plain rect
-            // wrapper as a fallback so the cluster element exists with the right
-            // qualified-name; the rendering won't match perfectly but the
-            // overall structure improves.
+            // Other package kinds (Cloud, Database, Frame, Node) still need
+            // their own shapes. Emit a plain rect placeholder so the cluster
+            // element exists with the correct qualified-name; geometry won't
+            // match perfectly but downstream entities still line up.
             write!(
                 svg,
                 r#"<rect fill="{}" height="{}" rx="2.5" ry="2.5" style="stroke:#181818;stroke-width:1;" width="{}" x="{}" y="{}"/>"#,
