@@ -1176,21 +1176,57 @@ fn render_plantuml_svg(
         render_clusters(&mut svg, diagram, oracle, &mut ent_id);
     }
 
-    // Render each entity.
+    // PlantUML renders all entities first, then all links — but the ent/lnk
+    // counter is shared and advances in source-declaration order. So when
+    // an entity at source line N is preceded (in source order) by some
+    // relationships, those relationships have already consumed counter
+    // slots before that entity, even though the SVG emits the entity earlier.
+    //
+    // Compute the entity's id by counting how many relationships were
+    // declared *before* it in source-line order. Relationships use the
+    // oracle-supplied `link_id`, so their ids are independent of our
+    // counter; we still need it for the ent ids to line up.
+    let entity_ids_assigned: Vec<usize> = {
+        // Sorted list of (source_line, original_index, is_entity)
+        let mut items: Vec<(usize, usize, bool)> = Vec::new();
+        for (i, e) in diagram.entities.iter().enumerate() {
+            items.push((e.source_line.max(1), i, true));
+        }
+        if oracle.is_some() {
+            for (i, r) in diagram.relationships.iter().enumerate() {
+                let line = if r.source_line == 0 {
+                    usize::MAX / 2
+                } else {
+                    r.source_line
+                };
+                items.push((line, diagram.entities.len() + i, false));
+            }
+        }
+        items.sort_by_key(|&(line, ord, _)| (line, ord));
+        let mut assigned = vec![0usize; diagram.entities.len()];
+        let mut counter = ent_id;
+        for (_, ord, is_entity) in &items {
+            if *is_entity {
+                assigned[*ord] = counter;
+            }
+            counter += 1;
+        }
+        // Advance the outer counter past everything.
+        ent_id = counter;
+        assigned
+    };
+
+    // Render each entity using its pre-computed id.
     for (i, entity) in diagram.entities.iter().enumerate() {
         let (x, y) = entity_positions[i];
         let dim = &dims[i];
-        let current_ent_id = format!("ent{:04}", ent_id);
-        ent_id += 1;
+        let current_ent_id = format!("ent{:04}", entity_ids_assigned[i]);
 
-        // Determine the qualified name for this entity (with package prefix).
         let qualified = match pkg_paths.get(&entity.id) {
             Some(prefix) if !prefix.is_empty() => format!("{prefix}{}", entity.label),
             _ => entity.label.clone(),
         };
 
-        // Look up oracle overrides for this entity. Try the qualified name first
-        // (since clusters store entities under their qualified path).
         let oracle_rect = oracle.and_then(|orc| {
             orc.entities
                 .get(&qualified)
@@ -1198,10 +1234,7 @@ fn render_plantuml_svg(
                 .or_else(|| orc.entities.get(&entity.id))
         });
 
-        // HTML comment before entity.
         write!(svg, "<!--class {}-->", entity.label).unwrap();
-
-        // Entity group wrapper.
         write!(
             svg,
             r#"<g class="entity" data-qualified-name="{}" data-source-line="{}" id="{}">"#,
@@ -1211,8 +1244,6 @@ fn render_plantuml_svg(
         )
         .unwrap();
 
-        // For packaged entities, the oracle's stored entity rect already has the
-        // shifted x/y inside the cluster. Use it.
         let (entity_x, entity_y) = if let Some(rect) = oracle_rect {
             (rect.x, rect.y)
         } else {
@@ -1220,11 +1251,10 @@ fn render_plantuml_svg(
         };
 
         render_entity_content(&mut svg, entity, entity_x, entity_y, dim, oracle_rect);
-
         svg.push_str("</g>");
     }
 
-    // Render relationships.
+    // Render relationships after all entities.
     if let Some(orc) = oracle {
         render_oracle_relationships(&mut svg, diagram, orc, ent_id);
     } else {
@@ -1874,83 +1904,93 @@ fn render_oracle_relationships(
     svg: &mut String,
     diagram: &ClassDiagram,
     oracle: &OracleLayout,
-    _ent_id: usize,
+    ent_id: usize,
 ) {
+    let mut counter = ent_id;
     for rel in &diagram.relationships {
-        // Try the PlantUML edge id forms in order:
-        //   - "from-to-to" (directional arrow)
-        //   - "from-backto-to" (reverse direction)
-        //   - "from-to" (undirected / non-arrow association like `A -- B`)
-        let to_id = format!("{}-to-{}", rel.from, rel.to);
-        let backto_id = format!("{}-backto-{}", rel.from, rel.to);
-        let plain_id = format!("{}-{}", rel.from, rel.to);
+        render_single_oracle_relationship(svg, rel, oracle, &mut counter);
+    }
+}
 
-        let (oracle_edge, found_id) =
-            if let Some(e) = oracle.edges.iter().find(|e| e.id == backto_id) {
-                (e, backto_id.clone())
-            } else if let Some(e) = oracle.edges.iter().find(|e| e.id == to_id) {
-                (e, to_id.clone())
-            } else if let Some(e) = oracle.edges.iter().find(|e| e.id == plain_id) {
-                (e, plain_id.clone())
-            } else {
-                continue;
-            };
+/// Render a single relationship by looking it up in the oracle's edge list.
+/// Increments `*counter` if the relationship is emitted; leaves it unchanged
+/// if no matching oracle edge is found (so the shared ent/lnk counter only
+/// advances for elements that actually make it into the SVG).
+fn render_single_oracle_relationship(
+    svg: &mut String,
+    rel: &Relationship,
+    oracle: &OracleLayout,
+    counter: &mut usize,
+) {
+    // Try the PlantUML edge id forms in order:
+    //   - "from-to-to" (directional arrow)
+    //   - "from-backto-to" (reverse direction)
+    //   - "from-to" (undirected / non-arrow association like `A -- B`)
+    let to_id = format!("{}-to-{}", rel.from, rel.to);
+    let backto_id = format!("{}-backto-{}", rel.from, rel.to);
+    let plain_id = format!("{}-{}", rel.from, rel.to);
 
-        let is_reverse = found_id == backto_id;
-        let expected_id = &found_id;
+    let (oracle_edge, found_id) = if let Some(e) = oracle.edges.iter().find(|e| e.id == backto_id) {
+        (e, backto_id.clone())
+    } else if let Some(e) = oracle.edges.iter().find(|e| e.id == to_id) {
+        (e, to_id.clone())
+    } else if let Some(e) = oracle.edges.iter().find(|e| e.id == plain_id) {
+        (e, plain_id.clone())
+    } else {
+        return;
+    };
 
-        // HTML comment
-        if is_reverse {
-            write!(svg, "<!--reverse link {} to {}-->", rel.from, rel.to).unwrap();
-        } else {
-            write!(svg, "<!--link {} to {}-->", rel.from, rel.to).unwrap();
-        }
+    let is_reverse = found_id == backto_id;
+    let expected_id = &found_id;
 
-        // Link group wrapper — use oracle attributes directly.
-        let entity_1 = oracle_edge.entity_1.as_deref().unwrap_or("ent0002");
-        let entity_2 = oracle_edge.entity_2.as_deref().unwrap_or("ent0003");
-        let link_type = oracle_edge.link_type.as_deref().unwrap_or("association");
-        let source_line = oracle_edge.source_line.as_deref().unwrap_or("0");
-        let link_id = oracle_edge.link_id.as_deref().unwrap_or("lnk0");
+    if is_reverse {
+        write!(svg, "<!--reverse link {} to {}-->", rel.from, rel.to).unwrap();
+    } else {
+        write!(svg, "<!--link {} to {}-->", rel.from, rel.to).unwrap();
+    }
 
-        write!(
-            svg,
-            r#"<g class="link" data-entity-1="{}" data-entity-2="{}" data-link-type="{}" data-source-line="{}" id="{}">"#,
-            entity_1, entity_2, link_type, source_line, link_id,
-        )
-        .unwrap();
+    let entity_1 = oracle_edge.entity_1.as_deref().unwrap_or("ent0002");
+    let entity_2 = oracle_edge.entity_2.as_deref().unwrap_or("ent0003");
+    let link_type = oracle_edge.link_type.as_deref().unwrap_or("association");
+    let source_line = oracle_edge.source_line.as_deref().unwrap_or("0");
+    let link_id = oracle_edge.link_id.as_deref().unwrap_or("lnk0");
 
-        // Path element — use oracle's exact d and style.
-        let code_line = oracle_edge.code_line.as_deref().unwrap_or("0");
-        let path_style = oracle_edge
-            .path_style
+    write!(
+        svg,
+        r#"<g class="link" data-entity-1="{}" data-entity-2="{}" data-link-type="{}" data-source-line="{}" id="{}">"#,
+        entity_1, entity_2, link_type, source_line, link_id,
+    )
+    .unwrap();
+
+    let code_line = oracle_edge.code_line.as_deref().unwrap_or("0");
+    let path_style = oracle_edge
+        .path_style
+        .as_deref()
+        .unwrap_or("stroke:#181818;stroke-width:1;");
+
+    write!(
+        svg,
+        r#"<path codeLine="{}" d="{}" fill="none" id="{}" style="{}"/>"#,
+        code_line, oracle_edge.d, expected_id, path_style,
+    )
+    .unwrap();
+
+    if let Some(ref points) = oracle_edge.arrow_points {
+        let fill = oracle_edge.arrow_fill.as_deref().unwrap_or("#181818");
+        let poly_style = oracle_edge
+            .polygon_style
             .as_deref()
             .unwrap_or("stroke:#181818;stroke-width:1;");
-
         write!(
             svg,
-            r#"<path codeLine="{}" d="{}" fill="none" id="{}" style="{}"/>"#,
-            code_line, oracle_edge.d, expected_id, path_style,
+            r#"<polygon fill="{}" points="{}" style="{}"/>"#,
+            fill, points, poly_style,
         )
         .unwrap();
-
-        // Arrowhead polygon — use oracle's exact points, fill, and style.
-        if let Some(ref points) = oracle_edge.arrow_points {
-            let fill = oracle_edge.arrow_fill.as_deref().unwrap_or("#181818");
-            let poly_style = oracle_edge
-                .polygon_style
-                .as_deref()
-                .unwrap_or("stroke:#181818;stroke-width:1;");
-            write!(
-                svg,
-                r#"<polygon fill="{}" points="{}" style="{}"/>"#,
-                fill, points, poly_style,
-            )
-            .unwrap();
-        }
-
-        svg.push_str("</g>");
     }
+
+    svg.push_str("</g>");
+    *counter += 1;
 }
 
 fn render_relationship_svg(
