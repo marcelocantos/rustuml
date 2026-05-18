@@ -447,14 +447,11 @@ fn node_width(node: &LayoutNode) -> f64 {
             // once at the SVG level (margin_x in render_diagram).
             *text_width + ACTION_H_PADDING * 2.0
         }
-        LayoutNode::DeprecatedAction {
-            text_width,
-            warning_width,
-            ..
-        } => {
-            let action_w = *text_width + ACTION_H_PADDING * 2.0;
-            let warn_w = *warning_width + 7.0 * 2.0; // 7px padding in warning box
-            action_w.max(warn_w)
+        LayoutNode::DeprecatedAction { text_width, .. } => {
+            // The deprecated-action box is itself just a normal action box.
+            // The warning banner lives in its own horizontal band above the
+            // diagram and is sized independently in `render`.
+            *text_width + ACTION_H_PADDING * 2.0
         }
         LayoutNode::If {
             condition,
@@ -556,8 +553,9 @@ fn node_height(node: &LayoutNode) -> f64 {
         LayoutNode::Stop | LayoutNode::End => STOP_OUTER_R * 2.0,
         LayoutNode::Action { text, .. } => action_height(text),
         LayoutNode::DeprecatedAction { text, .. } => {
-            let warn_h = pm::text_height(10.0) + 4.5313; // warning box height from golden
-            action_height(text) + warn_h + ARROW_LEN
+            // Warning banner is accounted for separately by warning_band_h
+            // in render; this node's own height is just the action box.
+            action_height(text)
         }
         LayoutNode::If {
             then_branch,
@@ -593,7 +591,9 @@ fn node_height(node: &LayoutNode) -> f64 {
         LayoutNode::Arrow { .. } => 0.0, // arrows don't add height (they're between nodes)
         LayoutNode::Note { .. } => 0.0,
         LayoutNode::Detach | LayoutNode::Kill | LayoutNode::Break => 0.0,
-        LayoutNode::Title(_) => pm::text_height(TITLE_FONT_SIZE) + 10.0,
+        // Title region: text_height + 19.78 of vertical padding before the
+        // next node. Reverse-engineered from golden SVGs.
+        LayoutNode::Title(_) => pm::text_height(TITLE_FONT_SIZE) + 19.78125,
     }
 }
 
@@ -901,6 +901,11 @@ fn emit_sequence(svg: &mut SvgEmitter, nodes: &[LayoutNode], cx: f64, mut y: f64
         ) {
             continue;
         }
+        // Title is a free-standing label; never gets an inbound connector.
+        if let LayoutNode::Title(_) = node {
+            y = emit_node(svg, node, cx, y);
+            continue;
+        }
         if i > 0 {
             // Find the most recent flow-producing previous node and the
             // optional explicit Arrow between it and us.
@@ -914,6 +919,8 @@ fn emit_sequence(svg: &mut SvgEmitter, nodes: &[LayoutNode], cx: f64, mut y: f64
                         }
                     }
                     LayoutNode::Note { .. } => {}
+                    // Title is a free-standing label; not part of the flow.
+                    LayoutNode::Title(_) => {}
                     LayoutNode::Detach | LayoutNode::Kill | LayoutNode::Break => {
                         // Previous flow terminated; no connector to draw.
                         prev_idx = None;
@@ -956,19 +963,21 @@ fn emit_sequence(svg: &mut SvgEmitter, nodes: &[LayoutNode], cx: f64, mut y: f64
 fn emit_node(svg: &mut SvgEmitter, node: &LayoutNode, cx: f64, y: f64) -> f64 {
     match node {
         LayoutNode::Start => {
-            // PlantUML places the start ellipse at cy=START_CY=25 regardless
-            // of the surrounding layout. With margin_top=16 (matching the
-            // bare-action case), the circle sits 1px above the cursor.
-            svg.ellipse(
-                cx,
-                START_CY,
-                START_R,
-                START_R,
-                START_FILL,
-                START_STROKE,
-                "1",
-            );
-            START_CY + START_R
+            // When start is the first element in the diagram (cursor at
+            // MARGIN_LEAD=16) PlantUML places the ellipse with cy=25 — the
+            // top edge sits one pixel above the cursor.  When the cursor
+            // has been advanced past START_CY (deprecation banner) the
+            // ellipse's centre sits AT the cursor.  Otherwise (after a
+            // title) the ellipse sits flush below the cursor.
+            let cy = if (y - 16.0).abs() < 0.001 {
+                START_CY
+            } else if y >= START_CY {
+                y
+            } else {
+                y + START_R
+            };
+            svg.ellipse(cx, cy, START_R, START_R, START_FILL, START_STROKE, "1");
+            cy + START_R
         }
         LayoutNode::Stop => {
             let cy = y + STOP_OUTER_R;
@@ -1098,19 +1107,26 @@ fn emit_node(svg: &mut SvgEmitter, node: &LayoutNode, cx: f64, y: f64) -> f64 {
         LayoutNode::Arrow { .. } | LayoutNode::Note { .. } => y,
         LayoutNode::Detach | LayoutNode::Kill | LayoutNode::Break => y,
         LayoutNode::Title(text) => {
+            // PlantUML wraps the title in `<g class="title" data-source-line="1">`.
+            // Title text is centred within an x-extent padded by 4px on the
+            // left compared to the action content cx. Baseline is at
+            // y + ascent + 4.
             let tw = text_render::measure(text, TITLE_FONT_SIZE, true);
-            let text_y = y + pm::ascent(TITLE_FONT_SIZE) + 5.0;
+            let text_y = y + pm::ascent(TITLE_FONT_SIZE) + 4.0;
+            svg.shapes
+                .push_str(r#"<g class="title" data-source-line="1">"#);
             svg.text_element(
                 TEXT_COLOR,
                 "sans-serif",
                 TITLE_FONT_SIZE,
                 tw,
-                cx - tw / 2.0,
+                cx - tw / 2.0 + 4.0,
                 text_y,
                 text,
                 true,
             );
-            y + pm::text_height(TITLE_FONT_SIZE) + 10.0
+            svg.shapes.push_str("</g>");
+            y + pm::text_height(TITLE_FONT_SIZE) + 19.78125
         }
     }
 }
@@ -1614,53 +1630,75 @@ pub fn render(diagram: &ActivityDiagram, _theme: &Theme) -> String {
     const MARGIN_TRAIL: f64 = 19.0; // right and bottom
     let margin_top = MARGIN_LEAD;
 
-    // For deprecated actions, the warning banner needs special handling
-    let extra_h = if has_deprecated {
-        // Approximate extra height for deprecated warnings
-        diagram
-            .steps
-            .iter()
-            .filter(|s| matches!(s, ActivityStep::DeprecatedColorAction(_)))
-            .count() as f64
-            * (pm::text_height(10.0) + 4.5313 + START_R * 2.0 + ARROW_LEN)
+    // Title pads the SVG width by ~7 px (4 left + 3 right beyond the
+    // standard 16/19 margins).
+    let has_title = diagram.meta.title.is_some();
+    let title_w_pad = if has_title { 7.0 } else { 0.0 };
+
+    // Warnings live in their own horizontal band at x=13 — independent of
+    // the action layout. SVG width must cover the wider of the action band
+    // and the warning band.
+    let warn_h_each = pm::mono_text_height(10.0) + 5.0; // = 16.6406
+    let max_warning_w = deprecated_warnings
+        .iter()
+        .map(|(_, w)| *w + 10.0) // warning rect = text + 7 left + 3 right
+        .fold(0.0f64, f64::max);
+    let warning_total_w = if has_deprecated {
+        13.0 + max_warning_w + 17.0
     } else {
         0.0
     };
 
-    let svg_w = (content_w + MARGIN_LEAD + MARGIN_TRAIL).ceil() as u32;
-    let svg_h = (MARGIN_LEAD + content_h + extra_h + MARGIN_TRAIL).ceil() as u32;
-    // cx is the centre of the content area (left-aligned at MARGIN_LEAD,
-    // width = content_w), NOT the geometric centre of the SVG. PlantUML's
-    // asymmetric margins make these differ.
+    // Vertical extent of the warning band: starts at y=13, one banner per
+    // deprecated action, then 17 px gap before the first flow node.
+    let num_warnings = deprecated_warnings.len() as f64;
+    let start_y = if has_deprecated {
+        13.0 + num_warnings * warn_h_each + 17.0
+    } else {
+        margin_top
+    };
+
+    let action_total_w = content_w + MARGIN_LEAD + MARGIN_TRAIL + title_w_pad;
+    let svg_w = action_total_w.max(warning_total_w).ceil() as u32;
+
+    // content_h was computed by sequence_height assuming Start contributes
+    // 19 px (cy=25 - MARGIN_LEAD=16 + START_R=10). When start_y > START_CY
+    // the actual Start contribution is only START_R (cy = start_y).
+    // Subtract the 9 px discrepancy in that case.
+    let start_h_delta = if start_y > START_CY && matches!(tree.first(), Some(LayoutNode::Start)) {
+        START_CY + START_R - MARGIN_LEAD - START_R
+    } else {
+        0.0
+    };
+    let svg_h = (start_y + content_h - start_h_delta + MARGIN_TRAIL).ceil() as u32;
+    // cx is the centre of the action content area (left-aligned at
+    // MARGIN_LEAD, width = content_w), NOT the geometric centre of the SVG.
     let cx = MARGIN_LEAD + content_w / 2.0;
 
     let mut svg = SvgEmitter::new();
 
-    // Emit deprecated warning banners at the top.
-    let mut start_y = 13.0; // PlantUML warning banner starts at y=13
+    // Emit deprecated warning banners at the top. Warnings live at fixed
+    // x=13, y=13, independent of the action layout.
     if has_deprecated {
+        let mut warn_y = 13.0;
         for (warning, ww) in &deprecated_warnings {
-            let warn_h = pm::text_height(10.0) + 4.53125; // from golden SVGs: 16.6406
-            let warn_w = *ww + 7.0 * 2.0;
-            let warn_x = cx - warn_w / 2.0;
+            let warn_w = *ww + 10.0;
             svg.rect_styled(
                 DEPRECATED_FILL,
-                warn_h,
+                warn_h_each,
                 2.5,
                 2.5,
                 DEPRECATED_STROKE,
                 "3",
                 warn_w,
-                warn_x,
-                start_y,
+                13.0,
+                warn_y,
             );
-            let warn_text_y = start_y + pm::ascent(10.0) + (warn_h - pm::text_height(10.0)) / 2.0;
-            svg.monospace_text_element(TEXT_COLOR, 10.0, *ww, warn_x + 7.0, warn_text_y, warning);
-            start_y += warn_h;
+            // Text baseline sits at warn_y + warn_h - 6 (= warn_y + mono_text_height - 1).
+            let warn_text_y = warn_y + warn_h_each - 6.0;
+            svg.monospace_text_element(TEXT_COLOR, 10.0, *ww, 13.0 + 7.0, warn_text_y, warning);
+            warn_y += warn_h_each;
         }
-        start_y += margin_top; // margin between warning and content
-    } else {
-        start_y = margin_top;
     }
 
     // Emit all nodes.
