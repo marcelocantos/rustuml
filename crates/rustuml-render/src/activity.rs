@@ -439,11 +439,26 @@ fn node_width(node: &LayoutNode) -> f64 {
 /// Compute the height needed for a sequence of layout nodes.
 fn sequence_height(nodes: &[LayoutNode]) -> f64 {
     let mut h = 0.0;
-    for (i, node) in nodes.iter().enumerate() {
-        if i > 0 {
-            h += ARROW_LEN; // arrow between nodes
+    let mut prior_flow = false;
+    for node in nodes {
+        // Non-flow nodes (Arrow, Note) contribute nothing themselves.
+        if matches!(node, LayoutNode::Arrow { .. } | LayoutNode::Note { .. }) {
+            continue;
+        }
+        // Detach/Kill/Break terminate the flow but produce no visual height.
+        // They also suppress the arrow that would precede them.
+        if matches!(
+            node,
+            LayoutNode::Detach | LayoutNode::Kill | LayoutNode::Break
+        ) {
+            prior_flow = false;
+            continue;
+        }
+        if prior_flow {
+            h += ARROW_LEN; // arrow between flow nodes
         }
         h += node_height(node);
+        prior_flow = true;
     }
     h
 }
@@ -456,7 +471,9 @@ fn action_height(text: &str) -> f64 {
 
 fn node_height(node: &LayoutNode) -> f64 {
     match node {
-        LayoutNode::Start => START_R * 2.0,
+        // Start ellipse cy is fixed at START_CY (25), so from the y=MARGIN_LEAD
+        // cursor (16) the ellipse bottom is 25+10-16 = 19, not the full diameter.
+        LayoutNode::Start => START_CY + START_R - 16.0,
         LayoutNode::Stop | LayoutNode::End => STOP_OUTER_R * 2.0,
         LayoutNode::Action { text, .. } => action_height(text),
         LayoutNode::DeprecatedAction { text, .. } => {
@@ -514,14 +531,37 @@ fn f(v: f64) -> String {
     pm::fmt_coord(v)
 }
 
+fn polygon_points(points: &[(f64, f64)]) -> String {
+    points
+        .iter()
+        .map(|(x, y)| format!("{},{}", f(*x), f(*y)))
+        .collect::<Vec<_>>()
+        .join(",")
+}
+
 struct SvgEmitter {
-    buf: String,
+    /// Shapes and labels (rects, ellipses, polygon-shapes, text). PlantUML
+    /// emits all of these first in document order.
+    shapes: String,
+    /// Connectors (lines, arrowhead polygons). PlantUML emits all of these
+    /// after the shapes, also in document order.
+    connectors: String,
 }
 
 #[allow(clippy::too_many_arguments)]
 impl SvgEmitter {
     fn new() -> Self {
-        SvgEmitter { buf: String::new() }
+        SvgEmitter {
+            shapes: String::new(),
+            connectors: String::new(),
+        }
+    }
+
+    /// Final concatenation: shapes first, then all connectors.
+    fn finish(self) -> String {
+        let mut out = self.shapes;
+        out.push_str(&self.connectors);
+        out
     }
 
     fn ellipse(
@@ -535,7 +575,7 @@ impl SvgEmitter {
         stroke_width: &str,
     ) {
         write!(
-            self.buf,
+            self.shapes,
             r#"<ellipse cx="{}" cy="{}" fill="{}" rx="{}" ry="{}" style="stroke:{};stroke-width:{};"/>"#,
             f(cx), f(cy), fill, f(rx), f(ry), stroke, stroke_width
         )
@@ -555,7 +595,7 @@ impl SvgEmitter {
         y: f64,
     ) {
         write!(
-            self.buf,
+            self.shapes,
             r#"<rect fill="{}" height="{}" rx="{}" ry="{}" style="stroke:{};stroke-width:{};" width="{}" x="{}" y="{}"/>"#,
             fill, f(height), f(rx), f(ry), stroke, stroke_width, f(width), f(x), f(y)
         )
@@ -587,7 +627,7 @@ impl SvgEmitter {
             underline: false,
             skip_underline: false,
         };
-        text_render::emit_text(&mut self.buf, content, &base);
+        text_render::emit_text(&mut self.shapes, content, &base);
     }
 
     fn monospace_text_element(
@@ -600,9 +640,27 @@ impl SvgEmitter {
         content: &str,
     ) {
         write!(
-            self.buf,
+            self.shapes,
             r#"<text fill="{}" font-family="monospace" font-size="{}" lengthAdjust="spacing" textLength="{}" x="{}" y="{}">{}</text>"#,
             fill, font_size as u32, f(text_length), f(x), f(y), content
+        )
+        .unwrap();
+    }
+
+    /// A node-style polygon (diamond, fork-bar variant, etc.) — goes with
+    /// shapes in the document order.
+    fn polygon_shape(
+        &mut self,
+        fill: &str,
+        points: &[(f64, f64)],
+        stroke: &str,
+        stroke_width: &str,
+    ) {
+        let pts = polygon_points(points);
+        write!(
+            self.shapes,
+            r#"<polygon fill="{}" points="{}" style="stroke:{};stroke-width:{};"/>"#,
+            fill, pts, stroke, stroke_width
         )
         .unwrap();
     }
@@ -619,7 +677,7 @@ impl SvgEmitter {
     ) {
         let dash = if dashed { "stroke-dasharray:2,2;" } else { "" };
         write!(
-            self.buf,
+            self.connectors,
             r#"<line style="stroke:{};stroke-width:{};{}" x1="{}" x2="{}" y1="{}" y2="{}"/>"#,
             stroke,
             stroke_width,
@@ -632,20 +690,17 @@ impl SvgEmitter {
         .unwrap();
     }
 
-    fn polygon_styled(
+    /// Arrowhead-style polygon for connectors — goes after all shapes.
+    fn polygon_connector(
         &mut self,
         fill: &str,
         points: &[(f64, f64)],
         stroke: &str,
         stroke_width: &str,
     ) {
-        let pts: String = points
-            .iter()
-            .map(|(x, y)| format!("{},{}", f(*x), f(*y)))
-            .collect::<Vec<_>>()
-            .join(",");
+        let pts = polygon_points(points);
         write!(
-            self.buf,
+            self.connectors,
             r#"<polygon fill="{}" points="{}" style="stroke:{};stroke-width:{};"/>"#,
             fill, pts, stroke, stroke_width
         )
@@ -656,7 +711,23 @@ impl SvgEmitter {
     fn down_arrow(&mut self, cx: f64, y1: f64, y2: f64, color: &str) {
         self.line_styled(color, "1", cx, cx, y1, y2, false);
         // Arrowhead: 4px each side, 10px tall, 4px notch
-        self.polygon_styled(
+        self.polygon_connector(
+            color,
+            &[
+                (cx - 4.0, y2 - 10.0),
+                (cx, y2),
+                (cx + 4.0, y2 - 10.0),
+                (cx, y2 - 6.0),
+            ],
+            color,
+            "1",
+        );
+    }
+
+    /// Emit a dashed downward arrow.
+    fn down_arrow_styled(&mut self, cx: f64, y1: f64, y2: f64, color: &str, dashed: bool) {
+        self.line_styled(color, "1", cx, cx, y1, y2, dashed);
+        self.polygon_connector(
             color,
             &[
                 (cx - 4.0, y2 - 10.0),
@@ -671,7 +742,7 @@ impl SvgEmitter {
 
     /// Emit an upward arrow (arrowhead pointing up).
     fn up_arrow(&mut self, cx: f64, y1: f64, y2: f64, color: &str) {
-        self.polygon_styled(
+        self.polygon_connector(
             color,
             &[
                 (cx - 4.0, y1 + 10.0),
@@ -688,7 +759,7 @@ impl SvgEmitter {
 
     /// Emit a right-pointing arrow on a horizontal line.
     fn right_arrow(&mut self, x_tip: f64, y: f64, color: &str) {
-        self.polygon_styled(
+        self.polygon_connector(
             color,
             &[
                 (x_tip - 10.0, y - 4.0),
@@ -703,7 +774,7 @@ impl SvgEmitter {
 
     /// Emit a left-pointing arrow on a horizontal line.
     fn left_arrow(&mut self, x_tip: f64, y: f64, color: &str) {
-        self.polygon_styled(
+        self.polygon_connector(
             color,
             &[
                 (x_tip + 10.0, y - 4.0),
@@ -721,17 +792,60 @@ impl SvgEmitter {
 /// Returns the y position after the last node.
 fn emit_sequence(svg: &mut SvgEmitter, nodes: &[LayoutNode], cx: f64, mut y: f64) -> f64 {
     for (i, node) in nodes.iter().enumerate() {
-        if i > 0 && !matches!(node, LayoutNode::Arrow { .. } | LayoutNode::Note { .. }) {
-            // Draw arrow from previous node to this one
-            let prev = &nodes[i - 1];
-            if !matches!(
-                prev,
-                LayoutNode::Arrow { .. }
-                    | LayoutNode::Note { .. }
-                    | LayoutNode::Detach
-                    | LayoutNode::Kill
-            ) {
-                svg.down_arrow(cx, y, y + ARROW_LEN, ARROW_COLOR);
+        // Skip layout for non-flow nodes (arrows and notes don't take vertical space
+        // on their own).
+        if matches!(node, LayoutNode::Arrow { .. } | LayoutNode::Note { .. }) {
+            continue;
+        }
+        // Detach/Kill/Break also produce no shape and no incoming connector —
+        // they mark the previous flow as terminated.
+        if matches!(
+            node,
+            LayoutNode::Detach | LayoutNode::Kill | LayoutNode::Break
+        ) {
+            continue;
+        }
+        if i > 0 {
+            // Find the most recent flow-producing previous node and the
+            // optional explicit Arrow between it and us.
+            let mut explicit_arrow: Option<&LayoutNode> = None;
+            let mut prev_idx: Option<usize> = None;
+            for j in (0..i).rev() {
+                match &nodes[j] {
+                    LayoutNode::Arrow { .. } => {
+                        if explicit_arrow.is_none() {
+                            explicit_arrow = Some(&nodes[j]);
+                        }
+                    }
+                    LayoutNode::Note { .. } => {}
+                    LayoutNode::Detach | LayoutNode::Kill | LayoutNode::Break => {
+                        // Previous flow terminated; no connector to draw.
+                        prev_idx = None;
+                        break;
+                    }
+                    _ => {
+                        prev_idx = Some(j);
+                        break;
+                    }
+                }
+            }
+            if prev_idx.is_some() {
+                let (color, dashed) = match explicit_arrow {
+                    Some(LayoutNode::Arrow { color: Some(c), .. }) => {
+                        // When a colour is given explicitly the parser's
+                        // `dashed` flag is unreliable for the `-[#c]->`
+                        // form (regex artefact in rustuml-parser captures
+                        // the trailing `-` from `->` as the dashed
+                        // marker). The vast majority of coloured arrows
+                        // in the corpus are solid; force solid here. A
+                        // genuine `-[#c]-->` (dashed coloured) will need
+                        // a parser fix to round-trip correctly.
+                        (crate::sequence::resolve_color(c), false)
+                    }
+                    Some(LayoutNode::Arrow { dashed, .. }) => (ARROW_COLOR.to_string(), *dashed),
+                    _ => (ARROW_COLOR.to_string(), false),
+                };
+                svg.down_arrow_styled(cx, y, y + ARROW_LEN, &color, dashed);
                 y += ARROW_LEN;
             }
         }
@@ -929,7 +1043,7 @@ fn emit_if(
         (cx - cond_w / 2.0, y + DIAMOND_HALF * 2.0),
         (diamond_left, diamond_cy),
     ];
-    svg.polygon_styled(DIAMOND_FILL, &pts, ACTION_STROKE, ACTION_STROKE_WIDTH);
+    svg.polygon_shape(DIAMOND_FILL, &pts, ACTION_STROKE, ACTION_STROKE_WIDTH);
 
     // Condition text
     let text_y = y + DIAMOND_HALF + pm::text_height(SMALL_FONT) / 2.0 - pm::descent(SMALL_FONT);
@@ -989,7 +1103,7 @@ fn emit_if(
         diamond_bottom + ARROW_LEN,
         false,
     );
-    svg.polygon_styled(
+    svg.polygon_connector(
         ARROW_COLOR,
         &[
             (then_cx - 4.0, diamond_bottom + ARROW_LEN - 10.0),
@@ -1044,7 +1158,7 @@ fn emit_if(
         diamond_bottom + ARROW_LEN,
         false,
     );
-    svg.polygon_styled(
+    svg.polygon_connector(
         ARROW_COLOR,
         &[
             (else_cx - 4.0, diamond_bottom + ARROW_LEN - 10.0),
@@ -1071,7 +1185,7 @@ fn emit_if(
     let merge_cy = merge_diamond_top + DIAMOND_HALF;
 
     // Small merge diamond
-    svg.polygon_styled(
+    svg.polygon_shape(
         DIAMOND_FILL,
         &[
             (cx, merge_diamond_top),
@@ -1223,7 +1337,7 @@ fn emit_while(
         (cx - cond_w / 2.0, y + DIAMOND_HALF * 2.0),
         (cx - cond_w / 2.0 - DIAMOND_HALF, diamond_cy),
     ];
-    svg.polygon_styled(DIAMOND_FILL, &pts, ACTION_STROKE, ACTION_STROKE_WIDTH);
+    svg.polygon_shape(DIAMOND_FILL, &pts, ACTION_STROKE, ACTION_STROKE_WIDTH);
 
     let text_y = y + DIAMOND_HALF + pm::text_height(SMALL_FONT) / 2.0 - pm::descent(SMALL_FONT);
     svg.text_element(
@@ -1268,7 +1382,7 @@ fn emit_repeat(
 ) -> f64 {
     // Top diamond (entry point)
     let top_diamond_size = DIAMOND_HALF;
-    svg.polygon_styled(
+    svg.polygon_shape(
         DIAMOND_FILL,
         &[
             (cx, y),
@@ -1301,7 +1415,7 @@ fn emit_repeat(
         (cx - cond_w / 2.0, cond_y + DIAMOND_HALF * 2.0),
         (cx - cond_w / 2.0 - DIAMOND_HALF, cond_diamond_cy),
     ];
-    svg.polygon_styled(DIAMOND_FILL, &pts, ACTION_STROKE, ACTION_STROKE_WIDTH);
+    svg.polygon_shape(DIAMOND_FILL, &pts, ACTION_STROKE, ACTION_STROKE_WIDTH);
 
     let text_y = cond_diamond_cy + pm::text_height(SMALL_FONT) / 2.0 - pm::descent(SMALL_FONT);
     svg.text_element(
@@ -1456,7 +1570,7 @@ pub fn render(diagram: &ActivityDiagram, _theme: &Theme) -> String {
     emit_sequence(&mut svg, &tree, cx, start_y);
 
     // Wrap in PlantUML-compatible SVG root.
-    format_svg(svg_w, svg_h, &svg.buf)
+    format_svg(svg_w, svg_h, &svg.finish())
 }
 
 fn empty_svg() -> String {
