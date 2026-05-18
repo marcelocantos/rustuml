@@ -102,14 +102,29 @@ const ICON_BAR_TOP_OFFSET_2: f64 = 6.0;
 // Text-width helpers (PlantUML-exact Java AWT metrics)
 // ---------------------------------------------------------------------------
 
+/// PlantUML guillemet width at 14pt (scaled from the 12pt value, matching
+/// PlantUML's JVM output exactly; metrics.rs `GUILLEMET_LEFT_WIDTH_14`
+/// constant is incorrect at the time of writing).
+const GUILLEMET_W_14: f64 = 7.33496_09375;
+
 /// PlantUML text width at 14pt (the most common size for component labels).
+/// Overrides guillemet handling because `metrics::plantuml_text_width_14`
+/// uses a fallback width of 8.0 for non-ASCII chars.
 fn tw14(s: &str) -> f64 {
-    metrics::plantuml_text_width_14(s)
+    let mut total = 0.0_f64;
+    for c in s.chars() {
+        total += match c {
+            '\u{00AB}' | '\u{00BB}' => GUILLEMET_W_14,
+            c if (c as u32) < 128 => metrics::plantuml_text_width_14(&c.to_string()),
+            _ => metrics::plantuml_text_width_14(&c.to_string()),
+        };
+    }
+    total
 }
 
 /// PlantUML text width at arbitrary font size (scaled from 14pt baseline).
 fn tw(s: &str, font_size: f64) -> f64 {
-    metrics::plantuml_text_width(s, font_size)
+    tw14(s) * font_size / 14.0
 }
 
 /// Format a numeric SVG coordinate value (4 decimals, trailing zeros stripped).
@@ -248,6 +263,10 @@ pub fn render_with_oracle(
     // get sequential IDs starting at 2.
     let mut entity_counter: usize = 2;
 
+    // PlantUML's `componentStyle rectangle` skinparam suppresses the UML2
+    // tab+bars icon and uses a smaller text padding (10 instead of 15/25).
+    let rectangle_style = theme.component.style.eq_ignore_ascii_case("rectangle");
+
     // Render each component entity.
     for (i, comp) in diagram.components.iter().enumerate() {
         let (x, y) = positions[i];
@@ -281,6 +300,7 @@ pub fn render_with_oracle(
             comp_w,
             comp_h,
             oracle_rect,
+            rectangle_style,
         );
     }
 
@@ -411,6 +431,7 @@ fn emit_component(
     width: f64,
     height: f64,
     oracle_rect: Option<&EntityRect>,
+    rectangle_style: bool,
 ) {
     let fill = COMP_FILL;
 
@@ -440,34 +461,53 @@ fn emit_component(
         ys = n(y),
     ));
 
-    // Component icon (tab + 2 bars) at top-right.
-    let tab_x = x + width - ICON_TAB_RIGHT_OFFSET;
-    let tab_y = y + ICON_TAB_TOP_OFFSET;
-    svg.raw(&format!(
-        r#"<rect fill="{fill}" height="{ICON_TAB_H}" style="stroke:{STROKE};stroke-width:0.5;" width="{ICON_TAB_W}" x="{}" y="{}"/>"#,
-        n(tab_x), n(tab_y),
-    ));
+    // Component UML2 icon (tab + 2 bars) at top-right.  Suppressed under
+    // `skinparam componentStyle rectangle`.
+    if !rectangle_style {
+        let tab_x = x + width - ICON_TAB_RIGHT_OFFSET;
+        let tab_y = y + ICON_TAB_TOP_OFFSET;
+        svg.raw(&format!(
+            r#"<rect fill="{fill}" height="{ICON_TAB_H}" style="stroke:{STROKE};stroke-width:0.5;" width="{ICON_TAB_W}" x="{}" y="{}"/>"#,
+            n(tab_x),
+            n(tab_y),
+        ));
 
-    let bar_x = tab_x - ICON_BAR_LEFT_OFFSET;
-    let bar_y1 = tab_y + ICON_BAR_TOP_OFFSET_1;
-    let bar_y2 = tab_y + ICON_BAR_TOP_OFFSET_2;
-    svg.raw(&format!(
-        r#"<rect fill="{fill}" height="{ICON_BAR_H}" style="stroke:{STROKE};stroke-width:0.5;" width="{ICON_BAR_W}" x="{}" y="{}"/>"#,
-        n(bar_x), n(bar_y1),
-    ));
-    svg.raw(&format!(
-        r#"<rect fill="{fill}" height="{ICON_BAR_H}" style="stroke:{STROKE};stroke-width:0.5;" width="{ICON_BAR_W}" x="{}" y="{}"/>"#,
-        n(bar_x), n(bar_y2),
-    ));
+        let bar_x = tab_x - ICON_BAR_LEFT_OFFSET;
+        let bar_y1 = tab_y + ICON_BAR_TOP_OFFSET_1;
+        let bar_y2 = tab_y + ICON_BAR_TOP_OFFSET_2;
+        svg.raw(&format!(
+            r#"<rect fill="{fill}" height="{ICON_BAR_H}" style="stroke:{STROKE};stroke-width:0.5;" width="{ICON_BAR_W}" x="{}" y="{}"/>"#,
+            n(bar_x),
+            n(bar_y1),
+        ));
+        svg.raw(&format!(
+            r#"<rect fill="{fill}" height="{ICON_BAR_H}" style="stroke:{STROKE};stroke-width:0.5;" width="{ICON_BAR_W}" x="{}" y="{}"/>"#,
+            n(bar_x),
+            n(bar_y2),
+        ));
+    }
 
     // Text lines: stereotypes (italic) above the label.
     // Each text line is centered horizontally in the available text area.
-    let available_w = width - TEXT_PAD_LEFT - TEXT_PAD_RIGHT;
-    let text_area_left = x + TEXT_PAD_LEFT;
+    // In rectangle style the padding is symmetric (10 each side); with the
+    // UML2 icon the right padding includes the icon (15 left + 25 right).
+    let (text_pad_left, text_pad_right) = if rectangle_style {
+        (10.0, 10.0)
+    } else {
+        (TEXT_PAD_LEFT, TEXT_PAD_RIGHT)
+    };
+    let available_w = width - text_pad_left - text_pad_right;
+    let text_area_left = x + text_pad_left;
 
     // First text baseline: pad_top above + ascent of font.
     // For 14pt: 20 + 13.5352 = 33.5352 → y_first = comp_y + 33.5352.
-    let first_text_y = y + COMPONENT_PAD_TOP + ascent(FONT_SIZE);
+    // Rectangle style has smaller padding: pad_top = 10 → y = comp_y + 23.5352.
+    let pad_top = if rectangle_style {
+        10.0
+    } else {
+        COMPONENT_PAD_TOP
+    };
+    let first_text_y = y + pad_top + ascent(FONT_SIZE);
 
     // Oracle override: if oracle has text_y_values, prefer those.
     let oracle_text_ys: Option<&[f64]> = oracle_rect.map(|r| r.text_y_values.as_slice());
@@ -1412,6 +1452,15 @@ mod tests {
     }
 
     #[test]
+    fn debug_stereo_width() {
+        let s = "\u{00AB}service\u{00BB}";
+        let w = crate::metrics::plantuml_text_width_14(s);
+        eprintln!("«service» width = {w}");
+        let w2 = crate::metrics::plantuml_text_width_14("service");
+        eprintln!("service width = {w2}");
+    }
+
+    #[test]
     fn component_icon_rects() {
         let input = "@startuml\ncomponent Foo\n@enduml";
         let diagram = rustuml_parser::parse::parse(input).unwrap();
@@ -1425,5 +1474,335 @@ mod tests {
             svg.contains(r##"fill="#F1F1F1""##),
             "missing #F1F1F1 fill: {svg}"
         );
+    }
+
+    // ─── Debug helper for golden-pair iteration ─────────────────────────
+    // Set RUSTUML_DEBUG_COMPONENT=1 to dump oracle-driven render output for
+    // every flat (no-package) test in the component bucket; failures are
+    // written to /tmp/component_diffs.txt for fast iteration during fixes.
+    #[test]
+    fn dump_component_oracle_diffs() {
+        if std::env::var("RUSTUML_DEBUG_COMPONENT").is_err() {
+            return;
+        }
+        let root = std::path::PathBuf::from(env!("CARGO_MANIFEST_DIR"))
+            .parent()
+            .unwrap()
+            .parent()
+            .unwrap()
+            .join("test-diagrams/golden/component");
+        if !root.exists() {
+            eprintln!("no golden dir: {}", root.display());
+            return;
+        }
+        let mut report = String::new();
+        let mut pass = 0;
+        let mut fail = 0;
+        for entry in std::fs::read_dir(&root).unwrap().flatten() {
+            let path = entry.path();
+            if path.extension().is_none_or(|e| e != "puml") {
+                continue;
+            }
+            let svg_path = path.with_extension("svg");
+            if !svg_path.exists() {
+                continue;
+            }
+            let source = std::fs::read_to_string(&path).unwrap();
+            // Skip clustered (with `{`) for now.
+            if source.contains('{') {
+                continue;
+            }
+            // Skip error goldens.
+            let golden = std::fs::read_to_string(&svg_path).unwrap();
+            if golden.contains("Syntax Error") {
+                continue;
+            }
+            let oracle = test_extract_oracle(&golden);
+            let diagram = match rustuml_parser::parse::parse(&source) {
+                Ok(d) => d,
+                Err(_) => continue,
+            };
+            let rust_svg = crate::render_svg_with_oracle(&diagram, Some(&oracle));
+            let cmp = test_structural_compare(&golden, &rust_svg);
+            if cmp.is_empty() {
+                pass += 1;
+            } else {
+                fail += 1;
+                if report.len() < 50_000 {
+                    let name = path.file_stem().unwrap().to_string_lossy();
+                    report.push_str(&format!("=== {name} ===\n"));
+                    report.push_str(&cmp);
+                    report.push('\n');
+                }
+            }
+        }
+        std::fs::write(
+            "/tmp/component_diffs.txt",
+            format!("pass={pass} fail={fail}\n\n{report}"),
+        )
+        .unwrap();
+        eprintln!("flat: pass={pass} fail={fail}");
+    }
+
+    fn test_extract_oracle(svg: &str) -> crate::layout_oracle::OracleLayout {
+        use crate::layout_oracle::{EntityRect, OracleEdgePath, OracleLayout};
+        let mut layout = OracleLayout::default();
+
+        // Canvas via viewBox.
+        if let Some(vb_start) = svg.find("viewBox=\"") {
+            let after = &svg[vb_start + 9..];
+            if let Some(end) = after.find('"') {
+                let parts: Vec<f64> = after[..end]
+                    .split_whitespace()
+                    .filter_map(|s| s.parse().ok())
+                    .collect();
+                if parts.len() == 4 {
+                    layout.canvas_width = parts[2];
+                    layout.canvas_height = parts[3];
+                }
+            }
+        }
+
+        // Extract entity groups: <g class="entity" data-qualified-name="X" ...>
+        // followed by their first <rect> attributes.
+        let entity_re = regex::Regex::new(
+            r#"<g class="(?:entity|cluster)" data-qualified-name="([^"]+)"[^>]*>"#,
+        )
+        .unwrap();
+        let attr_re = regex::Regex::new(r#"([A-Za-z_:][A-Za-z0-9_:\-]*)="([^"]*)""#).unwrap();
+        for m in entity_re.find_iter(svg) {
+            let caps = entity_re.captures(m.as_str()).unwrap();
+            let name = caps.get(1).unwrap().as_str().to_string();
+            let after_open = &svg[m.end()..];
+            // Find the close </g> at this level.  Track nesting.
+            let mut close_idx = None;
+            let mut depth = 1;
+            let mut pos = 0;
+            while pos < after_open.len() {
+                let next_open = after_open[pos..]
+                    .find("<g")
+                    .map(|i| pos + i)
+                    .unwrap_or(usize::MAX);
+                let next_close = after_open[pos..]
+                    .find("</g>")
+                    .map(|i| pos + i)
+                    .unwrap_or(usize::MAX);
+                if next_close == usize::MAX {
+                    break;
+                }
+                if next_open < next_close {
+                    depth += 1;
+                    pos = next_open + 2;
+                } else {
+                    depth -= 1;
+                    if depth == 0 {
+                        close_idx = Some(next_close);
+                        break;
+                    }
+                    pos = next_close + 4;
+                }
+            }
+            let inner = &after_open[..close_idx.unwrap_or(after_open.len())];
+            // Find first <rect ... />.
+            let mut rect = None;
+            if let Some(rect_pos) = inner.find("<rect ") {
+                let rect_end = inner[rect_pos..]
+                    .find("/>")
+                    .map(|i| rect_pos + i)
+                    .unwrap_or(inner.len());
+                let mut ax = 0.0_f64;
+                let mut ay = 0.0_f64;
+                let mut aw = 0.0_f64;
+                let mut ah = 0.0_f64;
+                for attr_m in attr_re.captures_iter(&inner[rect_pos..rect_end]) {
+                    let k = attr_m.get(1).unwrap().as_str();
+                    let v = attr_m.get(2).unwrap().as_str();
+                    let f = v.parse::<f64>().unwrap_or(0.0);
+                    match k {
+                        "x" => ax = f,
+                        "y" => ay = f,
+                        "width" => aw = f,
+                        "height" => ah = f,
+                        _ => {}
+                    }
+                }
+                rect = Some((ax, ay, aw, ah));
+            }
+            if let Some((x, y, w, h)) = rect {
+                // Collect all text y-values inside.
+                let text_y_re = regex::Regex::new(r#"<text[^>]* y="([0-9.\-]+)""#).unwrap();
+                let text_ys: Vec<f64> = text_y_re
+                    .captures_iter(inner)
+                    .filter_map(|c| c.get(1).and_then(|m| m.as_str().parse().ok()))
+                    .collect();
+                layout.entities.insert(
+                    name,
+                    EntityRect {
+                        x,
+                        y,
+                        width: w,
+                        height: h,
+                        icon_cx: None,
+                        glyph_path_d: None,
+                        name_text_x: None,
+                        text_y_values: text_ys,
+                        sep_y_values: Vec::new(),
+                        vis_icon_y_values: Vec::new(),
+                    },
+                );
+            }
+        }
+
+        // Extract link groups.
+        let link_re =
+            regex::Regex::new(r#"<g class="link"([^>]*)>(.*?)</g>"#).unwrap();
+        for caps in link_re.captures_iter(svg) {
+            let header = caps.get(1).unwrap().as_str();
+            let body = caps.get(2).unwrap().as_str();
+            let attrs: std::collections::HashMap<String, String> = attr_re
+                .captures_iter(header)
+                .map(|c| {
+                    (
+                        c.get(1).unwrap().as_str().to_string(),
+                        c.get(2).unwrap().as_str().to_string(),
+                    )
+                })
+                .collect();
+            // Parse <path>
+            let path_re = regex::Regex::new(r#"<path([^>]*)/>"#).unwrap();
+            let Some(path_caps) = path_re.captures(body) else {
+                continue;
+            };
+            let path_attrs: std::collections::HashMap<String, String> = attr_re
+                .captures_iter(path_caps.get(1).unwrap().as_str())
+                .map(|c| {
+                    (
+                        c.get(1).unwrap().as_str().to_string(),
+                        c.get(2).unwrap().as_str().to_string(),
+                    )
+                })
+                .collect();
+            let id = path_attrs.get("id").cloned().unwrap_or_default();
+            let d = path_attrs.get("d").cloned().unwrap_or_default();
+            // Polygon if present.
+            let poly_re = regex::Regex::new(r#"<polygon([^>]*)/>"#).unwrap();
+            let mut arrow_points = None;
+            let mut arrow_fill = None;
+            let mut polygon_style = None;
+            if let Some(p) = poly_re.captures(body) {
+                let pa: std::collections::HashMap<String, String> = attr_re
+                    .captures_iter(p.get(1).unwrap().as_str())
+                    .map(|c| {
+                        (
+                            c.get(1).unwrap().as_str().to_string(),
+                            c.get(2).unwrap().as_str().to_string(),
+                        )
+                    })
+                    .collect();
+                arrow_points = pa.get("points").cloned();
+                arrow_fill = pa.get("fill").cloned();
+                polygon_style = pa.get("style").cloned();
+            }
+            layout.edges.push(OracleEdgePath {
+                id,
+                d,
+                arrow_points,
+                arrow_fill,
+                link_type: attrs.get("data-link-type").cloned(),
+                entity_1: attrs.get("data-entity-1").cloned(),
+                entity_2: attrs.get("data-entity-2").cloned(),
+                source_line: attrs.get("data-source-line").cloned(),
+                link_id: attrs.get("id").cloned(),
+                path_style: path_attrs.get("style").cloned(),
+                code_line: path_attrs.get("codeLine").cloned(),
+                polygon_style,
+            });
+        }
+
+        layout
+    }
+
+    fn test_structural_compare(expected: &str, actual: &str) -> String {
+        // Mirror the strict-XML comparator's contract using a tiny regex-based
+        // tokenizer: collect (tag, depth, sorted_attrs, text) tuples,
+        // ignoring processing instructions, comments, and whitespace-only text.
+        let exp = test_collect_elements(expected);
+        let act = test_collect_elements(actual);
+        let mut diffs = String::new();
+        if exp.len() != act.len() {
+            diffs.push_str(&format!("len(exp)={} len(act)={}\n", exp.len(), act.len()));
+        }
+        let n = exp.len().min(act.len());
+        let mut shown = 0;
+        for i in 0..n {
+            if exp[i] != act[i] {
+                if shown < 6 {
+                    diffs.push_str(&format!(
+                        "@{i}: exp={:?}\n      act={:?}\n",
+                        exp[i], act[i]
+                    ));
+                    shown += 1;
+                }
+            }
+        }
+        diffs
+    }
+
+    fn test_collect_elements(svg: &str) -> Vec<(String, usize, Vec<(String, String)>, String)> {
+        // Strip PIs and comments.
+        let re_pi = regex::Regex::new(r"<\?[^?]*\?>").unwrap();
+        let re_cm = regex::Regex::new(r"<!--[^>]*-->").unwrap();
+        let s = re_pi.replace_all(svg, "");
+        let s = re_cm.replace_all(&s, "");
+        let mut out = Vec::new();
+        let mut depth = 0_usize;
+        // Tag tokenizer.
+        let tag_re = regex::Regex::new(r"<(/?)([A-Za-z][A-Za-z0-9_-]*)([^>]*)(/?)>").unwrap();
+        let attr_re = regex::Regex::new(r#"([A-Za-z_:][A-Za-z0-9_:\-]*)="([^"]*)""#).unwrap();
+        let mut last_end = 0;
+        for m in tag_re.find_iter(&s) {
+            let caps = tag_re.captures(m.as_str()).unwrap();
+            let closing = !caps.get(1).unwrap().as_str().is_empty();
+            let tag = caps.get(2).unwrap().as_str().to_string();
+            let attr_part = caps.get(3).unwrap().as_str();
+            let self_closing = !caps.get(4).unwrap().as_str().is_empty();
+            // Text between last_end and m.start() (only for opening tags).
+            let text_between = s[last_end..m.start()].trim().to_string();
+            if closing {
+                if depth > 0 {
+                    depth -= 1;
+                }
+            } else if tag == "title" {
+                // skip title and its content
+            } else {
+                let mut attrs: Vec<(String, String)> = attr_re
+                    .captures_iter(attr_part)
+                    .filter(|c| !c.get(1).unwrap().as_str().starts_with("xmlns"))
+                    .map(|c| {
+                        (
+                            c.get(1).unwrap().as_str().to_string(),
+                            c.get(2).unwrap().as_str().to_string(),
+                        )
+                    })
+                    .collect();
+                attrs.sort();
+                let _ = text_between;
+                // Text is associated with the *most recent* opened element;
+                // we approximate by reading until the next tag start.
+                // For our purposes element-only comparison is enough; gather text
+                // from immediately after this opening tag until next '<'.
+                let after = &s[m.end()..];
+                let text = after
+                    .split_once('<')
+                    .map(|(t, _)| t.trim().to_string())
+                    .unwrap_or_default();
+                out.push((tag, depth, attrs, text));
+                if !self_closing {
+                    depth += 1;
+                }
+            }
+            last_end = m.end();
+        }
+        out
     }
 }
