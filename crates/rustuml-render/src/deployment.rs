@@ -33,15 +33,20 @@ const RX_RY: f64 = 2.5;
 ///
 /// Each shape kind has a different top padding above the first text
 /// baseline. These constants encode `text_y - bbox_y` for the canonical
-/// 1-line label, matching what PlantUML emits.
-const TEXT_PAD_CARD: f64 = 16.5352;
-const TEXT_PAD_RECTLIKE: f64 = 23.5352;
-const TEXT_PAD_ARTIFACT: f64 = 26.5352;
-const TEXT_PAD_NODE: f64 = 33.5352;
-const TEXT_PAD_PACKAGE_LABEL: f64 = 16.5352;
+/// 1-line label, at full IEEE 754 precision so multi-line offsets round
+/// to the same 4-decimal output PlantUML emits.
+///
+/// Common term: `ASCENT_14 = 13.53515625` (= 14 * 0.96679...).
+const ASCENT_14: f64 = 13.53515625;
+const TEXT_PAD_CARD: f64 = ASCENT_14 + 3.0; // 16.53515625
+const TEXT_PAD_RECTLIKE: f64 = ASCENT_14 + 10.0; // 23.53515625
+const TEXT_PAD_ARTIFACT: f64 = ASCENT_14 + 13.0; // 26.53515625
+const TEXT_PAD_NODE: f64 = ASCENT_14 + 20.0; // 33.53515625
+const TEXT_PAD_PACKAGE_LABEL: f64 = ASCENT_14 + 3.0;
 
 /// Vertical gap between two stacked text lines (used for stereotype + label).
-const TEXT_LINE_H: f64 = 16.4883;
+/// Equals `text_height(14)` = 14 * 1.17773...
+const TEXT_LINE_H: f64 = 16.48828125;
 
 // ---------------------------------------------------------------------------
 // Public entry points
@@ -88,10 +93,12 @@ fn render_oracle(diagram: &DeploymentDiagram, _theme: &Theme, oracle: &OracleLay
     let mut svg = SvgBuilder::new_plantuml(canvas_w, canvas_h, "DESCRIPTION");
 
     // PlantUML's id counter starts at ent0002 and is shared between
-    // entities/clusters and links.
+    // entities/clusters and links. IDs are assigned in source-line order
+    // (nodes and connections interleaved as they appear in the .puml).
     let mut counter = 2usize;
     let mut id_for_node: HashMap<String, String> = HashMap::new();
     let mut qname_for_id: HashMap<String, String> = HashMap::new();
+    let mut link_id_for_conn: HashMap<usize, String> = HashMap::new();
 
     // Identify roots (nodes not listed as children of any other node).
     let all_children: std::collections::HashSet<&str> = diagram
@@ -105,21 +112,57 @@ fn render_oracle(diagram: &DeploymentDiagram, _theme: &Theme, oracle: &OracleLay
         .filter(|n| !all_children.contains(n.id.as_str()))
         .collect();
 
-    // Pass 1: walk depth-first, assign ent IDs and compute qualified names.
-    for root in &roots {
-        assign_ids_dfs(
-            root,
-            &diagram.nodes,
-            None,
-            &mut counter,
-            &mut id_for_node,
-            &mut qname_for_id,
-        );
+    // Pre-compute qualified names via DFS (so we know each node's full path).
+    let parent_of: HashMap<String, String> = {
+        let mut m = HashMap::new();
+        for n in &diagram.nodes {
+            for c in &n.children {
+                m.insert(c.clone(), n.id.clone());
+            }
+        }
+        m
+    };
+    for n in &diagram.nodes {
+        let mut q = own_qname(n);
+        let mut cur_id = n.id.clone();
+        while let Some(pid) = parent_of.get(&cur_id) {
+            if let Some(p) = diagram.nodes.iter().find(|x| x.id == *pid) {
+                q = format!("{}.{q}", own_qname(p));
+            }
+            cur_id = pid.clone();
+        }
+        qname_for_id.insert(n.id.clone(), q);
     }
 
-    // Pass 2: emit clusters first (depth-first), then leaf entities
-    // (depth-first). This matches PlantUML's emission ordering: cluster
-    // titles appear before their children's leaf shapes.
+    // Merge nodes and connections by source_line; assign IDs sequentially.
+    // Both kinds use the same counter, so a connection at line 6 gets the
+    // next id after the node at line 5.
+    #[derive(Copy, Clone)]
+    enum Item<'a> {
+        Node(&'a DeploymentNode),
+        Conn(usize),
+    }
+    let mut items: Vec<(usize, Item<'_>)> = Vec::new();
+    for n in &diagram.nodes {
+        items.push((n.source_line, Item::Node(n)));
+    }
+    for (i, c) in diagram.connections.iter().enumerate() {
+        items.push((c.source_line, Item::Conn(i)));
+    }
+    items.sort_by_key(|(sl, _)| *sl);
+    for (_, item) in &items {
+        match item {
+            Item::Node(n) => {
+                id_for_node.insert(n.id.clone(), format!("ent{counter:04}"));
+            }
+            Item::Conn(i) => {
+                link_id_for_conn.insert(*i, format!("lnk{counter}"));
+            }
+        }
+        counter += 1;
+    }
+
+    // Emit clusters first (depth-first), then leaf entities (depth-first).
     for root in &roots {
         emit_clusters_dfs(&mut svg, root, &diagram.nodes, None, oracle, &id_for_node);
     }
@@ -127,10 +170,12 @@ fn render_oracle(diagram: &DeploymentDiagram, _theme: &Theme, oracle: &OracleLay
         emit_entities_dfs(&mut svg, root, &diagram.nodes, None, oracle, &id_for_node);
     }
 
-    // Pass 3: connections.
-    for conn in &diagram.connections {
-        let link_id = format!("lnk{counter}");
-        counter += 1;
+    // Emit connections in source order.
+    for (i, conn) in diagram.connections.iter().enumerate() {
+        let link_id = link_id_for_conn
+            .get(&i)
+            .cloned()
+            .unwrap_or_else(|| format!("lnk{}", i));
         render_connection(
             &mut svg,
             conn,
@@ -144,23 +189,13 @@ fn render_oracle(diagram: &DeploymentDiagram, _theme: &Theme, oracle: &OracleLay
     svg.finalize_plantuml()
 }
 
-fn assign_ids_dfs(
-    node: &DeploymentNode,
-    all: &[DeploymentNode],
-    parent_qname: Option<&str>,
-    counter: &mut usize,
-    id_for_node: &mut HashMap<String, String>,
-    qname_for_id: &mut HashMap<String, String>,
-) {
-    let q = qualified_name(node, parent_qname);
-    let ent_id = format!("ent{c:04}", c = *counter);
-    *counter += 1;
-    id_for_node.insert(node.id.clone(), ent_id);
-    qname_for_id.insert(node.id.clone(), q.clone());
-    for child_id in &node.children {
-        if let Some(child) = all.iter().find(|n| n.id == *child_id) {
-            assign_ids_dfs(child, all, Some(&q), counter, id_for_node, qname_for_id);
-        }
+/// Compute the "own" qualified-name (last segment) for a node.
+fn own_qname(node: &DeploymentNode) -> String {
+    let derived = label_to_id(&node.label);
+    if derived == node.id && node.id != node.label {
+        node.label.clone()
+    } else {
+        node.id.clone()
     }
 }
 
@@ -314,12 +349,25 @@ fn emit_cluster_shape(
     match kind {
         // Clusters use no fill and stroke-width=1 (per goldens).
         Node => emit_tag_polygon(svg, x, y, w, h, "none", 1.0),
-        Card | Rectangle | Agent => emit_card_cluster(svg, x, y, w, h),
+        // Card cluster has rect + horizontal line under title.
+        Card => emit_card_cluster(svg, x, y, w, h),
+        // Rectangle / Agent cluster: bare rect, no line.
+        Rectangle | Agent => emit_plain_rect_cluster(svg, x, y, w, h),
         Frame => emit_frame_cluster(svg, x, y, w, h),
         Folder => emit_folder_cluster(svg, x, y, w, h),
         Package => emit_package_cluster(svg, x, y, w, h),
         _ => emit_tag_polygon(svg, x, y, w, h, "none", 1.0),
     }
+}
+
+fn emit_plain_rect_cluster(svg: &mut SvgBuilder, x: f64, y: f64, w: f64, h: f64) {
+    svg.raw(&format!(
+        r#"<rect fill="none" height="{h}" rx="{RX_RY}" ry="{RX_RY}" style="stroke:{STROKE};stroke-width:1;" width="{w}" x="{x}" y="{y}"/>"#,
+        h = pm::fmt_coord(h),
+        w = pm::fmt_coord(w),
+        x = pm::fmt_coord(x),
+        y = pm::fmt_coord(y),
+    ));
 }
 
 // ---- Node ("tag" polygon) -------------------------------------------------
@@ -720,11 +768,11 @@ fn emit_cluster_label(
 fn cluster_top_pad(kind: DeploymentNodeKind) -> f64 {
     use DeploymentNodeKind::*;
     match kind {
-        // Node cluster title sits in a small header band: 26.5352 from bbox top.
-        Node => 26.5352,
-        // Card-like clusters: title 15.5352 from top (in 20-tall header band).
-        Card | Rectangle | Agent | Frame => 15.5352,
-        _ => 26.5352,
+        // Node cluster title sits in a small header band: ascent+13 from bbox top.
+        Node => ASCENT_14 + 13.0,
+        // Card-like clusters: ascent+2.
+        Card | Rectangle | Agent | Frame => ASCENT_14 + 2.0,
+        _ => ASCENT_14 + 13.0,
     }
 }
 
@@ -749,7 +797,9 @@ fn entity_text_center(kind: DeploymentNodeKind, x: f64, w: f64) -> f64 {
         Node | Component | Frame => x + (w - 10.0) / 2.0,
         // Artifact: centered between [x, x+w-10] (the corner fold reduces text-safe width).
         Artifact => x + (w - 10.0) / 2.0,
-        // Card / rectangle / agent: centered in full width.
+        // Queue: centered between [x+5, x+w-15] = x + (w-10)/2.
+        Queue => x + (w - 10.0) / 2.0,
+        // Card / rectangle / agent / storage / database: centered in full width.
         _ => x + w / 2.0,
     }
 }
@@ -760,11 +810,11 @@ fn entity_text_geom(kind: DeploymentNodeKind, _w: f64, _label: &str) -> (f64, f6
         Node | Component | Frame => (15.0, TEXT_PAD_NODE, false),
         Artifact => (10.0, TEXT_PAD_ARTIFACT, false),
         Card => (10.0, TEXT_PAD_CARD, false),
-        Rectangle | Agent | File | Folder | Storage | Queue => {
-            (10.0, TEXT_PAD_RECTLIKE, false)
-        }
-        // Database label sits below the lip: pad = 37.5352.
-        Database => (10.0, 37.5352, false),
+        Rectangle | Agent | File | Folder | Storage => (10.0, TEXT_PAD_RECTLIKE, false),
+        // Queue is shorter vertically: ascent + 5.
+        Queue => (5.0, ASCENT_14 + 5.0, false),
+        // Database label sits below the lip: ascent + 24.
+        Database => (10.0, ASCENT_14 + 24.0, false),
         Package => (10.0, TEXT_PAD_PACKAGE_LABEL, true),
         _ => (10.0, TEXT_PAD_RECTLIKE, false),
     }
@@ -814,14 +864,15 @@ fn render_connection(
     qname_for_id: &HashMap<String, String>,
     link_id: &str,
 ) {
-    // Try several keys: id-based, qname-based, label-based.
+    // Edge IDs in goldens use the OWN name (last segment), not the full
+    // qualified path. Strip the prefix to match.
     let from_qname = qname_for_id
         .get(&conn.from)
-        .cloned()
+        .map(|q| q.rsplit_once('.').map(|(_, last)| last.to_string()).unwrap_or_else(|| q.clone()))
         .unwrap_or_else(|| conn.from.clone());
     let to_qname = qname_for_id
         .get(&conn.to)
-        .cloned()
+        .map(|q| q.rsplit_once('.').map(|(_, last)| last.to_string()).unwrap_or_else(|| q.clone()))
         .unwrap_or_else(|| conn.to.clone());
     let candidates = [
         format!("{from_qname}-to-{to_qname}"),
@@ -834,7 +885,7 @@ fn render_connection(
         .map(|e| e.id.clone())
         .unwrap_or_else(|| candidates[0].clone());
 
-    svg.raw(&format!("<!--link {} to {}-->", conn.from, conn.to));
+    svg.raw(&format!("<!--link {from_qname} to {to_qname}-->"));
 
     let entity_1 = oracle_edge
         .and_then(|e| e.entity_1.as_deref())
