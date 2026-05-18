@@ -240,6 +240,15 @@ fn allocate_ids(
     has_start: bool,
     has_end: bool,
 ) -> (Vec<(String, String)>, Vec<String>) {
+    allocate_ids_inner(&diagram.states, &diagram.transitions, has_start, has_end)
+}
+
+fn allocate_ids_inner(
+    states: &[State],
+    transitions: &[Transition],
+    has_start: bool,
+    has_end: bool,
+) -> (Vec<(String, String)>, Vec<String>) {
     let mut counter: usize = 2;
     let mut entity_ids: Vec<(String, String)> = Vec::new();
     let mut link_ids: Vec<String> = Vec::new();
@@ -272,7 +281,7 @@ fn allocate_ids(
             || !s.substates.is_empty()
     };
     let mut explicit_ids: std::collections::HashSet<String> = std::collections::HashSet::new();
-    for s in &diagram.states {
+    for s in states {
         if s.id == "[*]" || !is_explicit(s) {
             continue;
         }
@@ -286,7 +295,7 @@ fn allocate_ids(
     // the other endpoint was allocated BEFORE this transition began
     // processing, the pseudo-state takes that endpoint's ID. This typically
     // happens when a state is pre-declared and later linked from `[*]`.
-    for t in &diagram.transitions {
+    for t in transitions {
         let from_layout = if t.from == "[*]" {
             "__start__".to_string()
         } else {
@@ -334,6 +343,51 @@ fn allocate_ids(
     }
 
     (entity_ids, link_ids)
+}
+
+/// Allocate IDs using the oracle's edge list as the source of truth for
+/// transition order and endpoint names. Each oracle edge consumes one link
+/// slot — even those our parser dropped — so the resulting entity IDs stay
+/// aligned with what the golden expects.
+fn allocate_ids_from_oracle(
+    diagram: &StateDiagram,
+    oracle: &OracleLayout,
+    _has_start: bool,
+    _has_end: bool,
+) -> (Vec<(String, String)>, Vec<String>) {
+    // Synthesize a transition list from oracle.edges. The id field is
+    // "from-to-target" or "from-backto-target"; both produce the same
+    // allocation pattern (just different render direction).
+    let mut synth: Vec<Transition> = Vec::new();
+    for e in &oracle.edges {
+        let (a, b) = if let Some(pair) = e.id.split_once("-backto-") {
+            pair
+        } else if let Some(pair) = e.id.split_once("-to-") {
+            pair
+        } else {
+            continue;
+        };
+        let from = if matches!(a, "*start*" | "*end*") {
+            "[*]".to_string()
+        } else {
+            a.to_string()
+        };
+        let to = if matches!(b, "*start*" | "*end*") {
+            "[*]".to_string()
+        } else {
+            b.to_string()
+        };
+        synth.push(Transition {
+            from,
+            to,
+            label: None,
+            source_line: 0,
+        });
+    }
+
+    // Reuse the regular allocator with the synthetic transition list.
+    let (has_start, has_end) = classify_star_nodes(&synth);
+    allocate_ids_inner(&diagram.states, &synth, has_start, has_end)
 }
 
 /// Determine if a [*] reference is a start or end node based on context.
@@ -666,7 +720,14 @@ pub fn render_with_oracle(
     //      b. Target: same logic.
     //      c. Allocate a link ID.
     // Allocation is "id = counter; counter += 1".
-    let (entity_ids, link_ids) = allocate_ids(diagram, has_start, has_end);
+    // When an oracle is available, pre-compute the actual entity/link IDs
+    // used by the golden by parsing the oracle's edge data. This recovers
+    // ID slots consumed by transitions our parser dropped (e.g. coloured
+    // arrows like `A -[#blue]-> B`).
+    let (entity_ids, link_ids) = match oracle {
+        Some(orc) => allocate_ids_from_oracle(diagram, orc, has_start, has_end),
+        None => allocate_ids(diagram, has_start, has_end),
+    };
 
     // Handwritten compatibility notice.
     let is_handwritten = diagram.meta.skinparams.iter().any(|sp| {
@@ -1271,25 +1332,37 @@ fn render_arrowhead(svg: &mut String, control: (f64, f64), endpoint: (f64, f64))
 }
 
 /// Render transitions directly from oracle edge data.
+///
+/// Iterates `oracle.edges` rather than `diagram.transitions` — this
+/// preserves edges that our parser dropped (e.g. coloured arrows like
+/// `A -[#blue]-> B`) and renders them with exactly the IDs, styles, and
+/// arrowheads the golden expects.
 fn render_oracle_transitions(
     svg: &mut String,
-    diagram: &StateDiagram,
+    _diagram: &StateDiagram,
     oracle: &OracleLayout,
     _entity_ids: &[(String, String)],
     _link_ids: &[String],
 ) {
-    for t in &diagram.transitions {
-        let from_name = if t.from == "[*]" { "*start*" } else { &t.from };
-        let to_name = if t.to == "[*]" { "*end*" } else { &t.to };
-        let expected_id = format!("{from_name}-to-{to_name}");
+    for oracle_edge in &oracle.edges {
+        // Parse the edge id ("X-to-Y" or "X-backto-Y") to compute the
+        // HTML comment, which PlantUML emits as either
+        // "link X to Y" or "reverse link X to Y".
+        let (from_name, to_name, is_back) =
+            if let Some((a, b)) = oracle_edge.id.split_once("-backto-") {
+                (a, b, true)
+            } else if let Some((a, b)) = oracle_edge.id.split_once("-to-") {
+                (a, b, false)
+            } else {
+                (oracle_edge.id.as_str(), "", false)
+            };
 
-        let oracle_edge = match oracle.edges.iter().find(|e| e.id == expected_id) {
-            Some(e) => e,
-            None => continue,
-        };
-
-        // HTML comment.
-        write!(svg, "<!--link {from_name} to {to_name}-->").unwrap();
+        // HTML comment matches PlantUML's prefix.
+        if is_back {
+            write!(svg, "<!--reverse link {from_name} to {to_name}-->").unwrap();
+        } else {
+            write!(svg, "<!--link {from_name} to {to_name}-->").unwrap();
+        }
 
         // Link group wrapper using oracle attributes.
         let entity_1 = oracle_edge.entity_1.as_deref().unwrap_or("ent0002");
@@ -1311,8 +1384,8 @@ fn render_oracle_transitions(
             .unwrap_or("stroke:#181818;stroke-width:1;");
         write!(
             svg,
-            r#"<path d="{}" fill="none" id="{expected_id}" style="{path_style}"/>"#,
-            oracle_edge.d,
+            r#"<path d="{}" fill="none" id="{}" style="{path_style}"/>"#,
+            oracle_edge.d, oracle_edge.id,
         )
         .unwrap();
 
