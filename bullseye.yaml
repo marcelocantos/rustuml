@@ -1,4 +1,4 @@
-schema_version: 4
+schema_version: 5
 last_evaluated: dd3b9530
 targets:
   T1:
@@ -133,7 +133,6 @@ targets:
     discovered: 2026-04-27
   T4:
     name: Strict-XML golden-pair parity with Java PlantUML
-    kind: verify
     status: identified
     value: 0.0
     cost: 0.0
@@ -141,16 +140,6 @@ targets:
     - '`cargo test --test golden_pairs` reports 0 failures across all 12,568 golden pairs.'
     - 'Skips remain bounded to the legitimate categories: Java reference is itself a syntax-error page (~1,199), ditaa raster diagrams (parked under T2), and I/O errors. No skips for `%date(...)`, no skips for unsupported keywords, no skips for parse failures.'
     context: 'The v0.5.0 "PlantUML parity achieved" milestone (2026-03-29) was measured against a loose XML comparator that ignored geometry and structure, only checking text-content presence. The 2026-03-29 strict-comparator pivot (session 66994830) revealed ~9,600 honest mismatches: the rendered diagrams did not actually resemble PlantUML''s output. The session went 0→967 passing in one day of structural fixes. As of 2026-05-17 the count is 1,639 / 12,568 strict-pass. This target tracks the real parity work, decomposed into T4.1..T4.9 by failure bucket. The strategy is byte-for-byte SVG matching against the Java goldens, with ULP-level tolerances allowed only if a specific case justifies it. Each fix typically takes out a category of failures, not just one.'
-    verifies:
-    - T4.1
-    - T4.2
-    - T4.3
-    - T4.4
-    - T4.5
-    - T4.6
-    - T4.7
-    - T4.8
-    - T4.9
     origin: manual
     discovered: 2026-05-17
   T4.1:
@@ -163,6 +152,34 @@ targets:
     context: 'Highest-volume failure bucket as of 2026-05-17 (1,295 strict-XML diffs of 9,630). Primary renderer: crates/rustuml-render/src/activity.rs. Likely root causes include legacy activity syntax (partition, start/stop/end markers, swimlanes), arrow/connector rendering, and the structural shape of the wrapping g elements that PlantUML emits per node. Expect each fix to unblock a category of tests rather than one.'
     origin: manual
     discovered: 2026-05-17
+  T4.10:
+    name: Shared-file infrastructure gaps blocking multiple strict-XML buckets are closed
+    status: identified
+    value: 0.0
+    cost: 0.0
+    acceptance:
+    - '`plantuml_metrics::GUILLEMET_LEFT_WIDTH_14` is `7.33496` (was `8.8525`); the guillemet width value matches PlantUML''s JVM output across all sizes.'
+    - '`plantuml_metrics::plantuml_text_width_14` (and sibling sized variants) returns the width of the unaccented ASCII equivalent for Latin-1 supplement chars (e.g., `ç` → width of `c`) and `font_size` for CJK chars, rather than the 8.0 fallback.'
+    - '`plantuml_metrics::fmt_coord` uses HALF_EVEN rounding (Rust''s `{:.4}` formatter), matching PlantUML''s JVM rounding mode; the manual `(v * 10000.0).round() / 10000.0` HALF_AWAY_FROM_ZERO path is gone.'
+    - '`layout_oracle::EntityRect` carries a `fill: Option<String>` populated from the first `<rect fill="…">` child during golden extraction; state renderer recovers declared colours from the oracle without parser plumbing.'
+    - '`layout_oracle::OracleEdgePath` carries an optional label-position field (`label: Option<(f64, f64, String)>`) populated from `<text>` children of `<g class="link">`; renderers can place edge labels using oracle data.'
+    - '`layout_oracle::OracleEdgePath` carries an optional `second_arrow_points` so bidirectional relationships (`<-->`, `<..>`) round-trip both arrowheads in the SVG.'
+    - '`extract::path_bounding_box` parses SVG path commands grammatically rather than tokenising all numerics; arc-flag tokens (`A 2.5,2.5 0 0,1 …`) are no longer misread as coordinates, and bboxes for cloud/folder/database/note clusters are correct.'
+    - '`extract::extract_oracle_layout` captures `<polygon>` children of `<g data-visibility-modifier>` (currently only `<rect>`/`<ellipse>`); class renderer can drop its compartment-derived workaround for protected/package icons.'
+    context: |-
+      Multiple T4.x renderer agents (state, class, component, deployment) on the 2026-05-18 fan-out independently surfaced the **same set of shared-file bugs** blocking further progress in their respective buckets. Each fix is small in diff size but unblocks tens-to-hundreds of failures across multiple buckets, so collecting them under one sub-target is high-leverage and prevents redundant rediscovery.
+
+      The fixes deliberately do NOT belong inside any single T4.x renderer target because they cascade across buckets; keeping them as a peer sub-target lets the renderer targets stay focused on per-renderer geometry.
+
+      Sources (agent reports, 2026-05-18 fan-out):
+      - Component agent — `GUILLEMET_LEFT_WIDTH_14`, `plantuml_text_width_14` non-ASCII fallback, `path_bounding_box` arc-flag handling, `OracleEdgePath` label position.
+      - Deployment agent — same three above plus `fmt_coord` HALF_EVEN rounding (independent rediscovery).
+      - State agent — `EntityRect.fill` field, `OracleEdgePath` label position.
+      - Class agent — `OracleEdgePath` bidirectional arrow polygons, `data-visibility-modifier` polygon extraction.
+
+      Rough cascade estimate when all eight acceptance items land: ~200 guillemet-related, ~140 state colour fills, ~400+ edge labels across class/state/deployment, ~200+ cluster bbox failures, plus 1-ULP cleanup across every renderer using `fmt_coord`. Total order: 1,000–1,500 strict-XML failures resolved across many T4.x targets simultaneously.
+    origin: manual
+    discovered: 2026-05-19
   T4.2:
     name: Class diagrams strict-XML pass
     status: identified
@@ -260,3 +277,35 @@ targets:
     context: Catch-all for the long tail of smaller failure buckets — combined ~3,028 strict-XML diffs as of 2026-05-17 across 25 directories (each under 410 failures, most under 200). Many will resolve as side effects of T4.6 (creole) and T4.2 (class) work because they share rendering paths. Worth keeping as a single target until the top-8 are mostly cleared, then split into per-bucket sub-targets only if remaining work warrants it.
     origin: manual
     discovered: 2026-05-17
+  T5:
+    name: Tier-1 quick-win strict-XML fixes are landed in master
+    status: identified
+    value: 0.0
+    cost: 0.0
+    acceptance:
+    - Activity `if/else` layout width matches PlantUML (formula changes from `then_w + else_w + label_w + else_label_w + 20.0` to `then_w + else_w + (cond_w - 5)` family); ~62 `cond_*` activity failures resolved.
+    - Activity `Title.emit_node` returns the cursor at the next-node centreline; warnings band and `Start` ellipse share one coordinate convention; the three-case `Start` branch collapses to one.
+    - Activity parser regex for arrow brackets (`-[#red]->`) no longer reports `dashed=true` when only colour/style brackets are present.
+    - State title rendering wraps in `<g class="title" data-source-line="1">` with `font-weight="700"` (was bare `<text>` with `"bold"`); 7 state failures resolved.
+    - State `hide empty description` skinparam path emits bare `<rect>` + `<text>` with no entity wrapper, no divider, and height=40; 6 state failures resolved.
+    - State renderer wires `text_render::emit_text` for state names and descriptions (creole-aware emission for `<b>`, italics, monospace); ~12 state failures resolved.
+    - State recognises `<<start>>` / `<<end>>` stereotypes and excludes fork/join bars from the entity-id counter (no entity group in PlantUML for those).
+    - Class source-line numbering does not drift after blank lines; 4 `class_hier_d1_i*` failures resolved.
+    - Deployment parser tokenises `-down->`, `-up->`, `-left->`, `-right->` directional arrows.
+    context: |-
+      Curated list of small, well-scoped strict-XML fixes pulled from the 2026-05-18 agent fan-out reports across the activity, class, state, component, and deployment renderers. Each item is ≤1 session of work in a single file (or a one-line parser change) with a known acceptance signal — explicitly the "low-hanging fruit" subset of the larger T4.x work.
+
+      Bundled into a single peer target (not a sub-target of T4) so the cluster can be picked off as one piece of work without diluting per-bucket T4.x targets, and so the cumulative pass-count delta is visible at a glance. Closing T5 knocks roughly 150–200 strict-XML failures (~1.5% of remaining ≈9,000), but more importantly is a quick momentum boost that demonstrates the per-bucket fix patterns to whoever picks up the harder T4.x work next.
+
+      Explicitly **out of scope** for T5 (kept under their respective T4.x renderer targets):
+      - Composite/concurrent states (T4.4)
+      - `while`/`repeat` loop layout (T4.1)
+      - Container-kind parsing (cloud/folder/node/database/queue) (T4.5, T4.8)
+      - Note rendering with dog-ear paths (cross-bucket)
+      - Class separator-style preservation (T4.2)
+      - Component inline-colour parsing (T4.5)
+      - All shared-file infrastructure gaps (T4.10)
+
+      Sources: agent reports from worktree-agent-* branches on 2026-05-18. See also [[bullseye/T4.10]] for the higher-leverage shared-file unblocks that should land first or in parallel.
+    origin: manual
+    discovered: 2026-05-19
