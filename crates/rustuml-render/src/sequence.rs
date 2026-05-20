@@ -820,6 +820,7 @@ impl PlantUmlSvg {
         text_x: f64,
         text_content: &str,
         text_len: f64,
+        fill_color: &str,
     ) {
         self.participant_group_open(part_uid, qualified_name, source_line, position);
 
@@ -844,9 +845,10 @@ impl PlantUmlSvg {
         let head_cy = figure_base + ACTOR_HEAD_CY_OFFSET;
         write!(
             self.buf,
-            r##"<ellipse cx="{}" cy="{}" fill="#E2E2F0" rx="8" ry="8" style="stroke:#181818;stroke-width:0.5;"/>"##,
+            r##"<ellipse cx="{}" cy="{}" fill="{}" rx="8" ry="8" style="stroke:#181818;stroke-width:0.5;"/>"##,
             fmt_coord(cx),
             fmt_coord(head_cy),
+            fill_color,
         )
         .unwrap();
 
@@ -886,6 +888,7 @@ impl PlantUmlSvg {
         text_x: f64,
         text_content: &str,
         text_len: f64,
+        fill_color: &str,
     ) {
         self.participant_group_open(part_uid, qualified_name, source_line, position);
 
@@ -926,9 +929,10 @@ impl PlantUmlSvg {
 
         write!(
             self.buf,
-            r##"<ellipse cx="{}" cy="{}" fill="#E2E2F0" rx="{}" ry="{}" style="stroke:#181818;stroke-width:0.5;"/>"##,
+            r##"<ellipse cx="{}" cy="{}" fill="{}" rx="{}" ry="{}" style="stroke:#181818;stroke-width:0.5;"/>"##,
             fmt_coord(circle_cx),
             fmt_coord(circle_cy),
+            fill_color,
             fmt_coord(STEREOTYPE_CIRCLE_R),
             fmt_coord(STEREOTYPE_CIRCLE_R),
         )
@@ -950,6 +954,7 @@ impl PlantUmlSvg {
         text_x: f64,
         text_content: &str,
         text_len: f64,
+        fill_color: &str,
     ) {
         self.participant_group_open(part_uid, qualified_name, source_line, position);
 
@@ -970,9 +975,10 @@ impl PlantUmlSvg {
         let circle_cy = figure_base + STEREOTYPE_CIRCLE_CY;
         write!(
             self.buf,
-            r##"<ellipse cx="{}" cy="{}" fill="#E2E2F0" rx="{}" ry="{}" style="stroke:#181818;stroke-width:0.5;"/>"##,
+            r##"<ellipse cx="{}" cy="{}" fill="{}" rx="{}" ry="{}" style="stroke:#181818;stroke-width:0.5;"/>"##,
             fmt_coord(cx),
             fmt_coord(circle_cy),
+            fill_color,
             fmt_coord(STEREOTYPE_CIRCLE_R),
             fmt_coord(STEREOTYPE_CIRCLE_R),
         )
@@ -1017,6 +1023,7 @@ impl PlantUmlSvg {
         text_x: f64,
         text_content: &str,
         text_len: f64,
+        fill_color: &str,
     ) {
         self.participant_group_open(part_uid, qualified_name, source_line, position);
 
@@ -1037,9 +1044,10 @@ impl PlantUmlSvg {
         let circle_cy = figure_base + STEREOTYPE_CIRCLE_CY;
         write!(
             self.buf,
-            r##"<ellipse cx="{}" cy="{}" fill="#E2E2F0" rx="{}" ry="{}" style="stroke:#181818;stroke-width:0.5;"/>"##,
+            r##"<ellipse cx="{}" cy="{}" fill="{}" rx="{}" ry="{}" style="stroke:#181818;stroke-width:0.5;"/>"##,
             fmt_coord(cx),
             fmt_coord(circle_cy),
+            fill_color,
             fmt_coord(STEREOTYPE_CIRCLE_R),
             fmt_coord(STEREOTYPE_CIRCLE_R),
         )
@@ -1075,6 +1083,7 @@ impl PlantUmlSvg {
         text_x: f64,
         text_content: &str,
         text_len: f64,
+        fill_color: &str,
     ) {
         self.participant_group_open(part_uid, qualified_name, source_line, position);
 
@@ -1101,7 +1110,7 @@ impl PlantUmlSvg {
 
         write!(
             self.buf,
-            r##"<path d="M{l},{t} C{l},{tc} {cx},{tc} {cx},{tc} C{cx},{tc} {r},{tc} {r},{t} L{r},{b} C{r},{bc} {cx},{bc} {cx},{bc} C{cx},{bc} {l},{bc} {l},{b} L{l},{t}" fill="#E2E2F0" style="stroke:#181818;stroke-width:0.5;"/>"##,
+            r##"<path d="M{l},{t} C{l},{tc} {cx},{tc} {cx},{tc} C{cx},{tc} {r},{tc} {r},{t} L{r},{b} C{r},{bc} {cx},{bc} {cx},{bc} C{cx},{bc} {l},{bc} {l},{b} L{l},{t}" fill="{fc}" style="stroke:#181818;stroke-width:0.5;"/>"##,
             l = fmt_coord(left),
             r = fmt_coord(right),
             t = fmt_coord(top),
@@ -1109,6 +1118,7 @@ impl PlantUmlSvg {
             b = fmt_coord(bottom),
             bc = fmt_coord(bottom_curve),
             cx = fmt_coord(cx),
+            fc = fill_color,
         )
         .unwrap();
 
@@ -1143,6 +1153,7 @@ impl PlantUmlSvg {
         text_y: f64,
         text_content: &str,
         text_len: f64,
+        fill_color: &str,
     ) {
         self.participant_group_open(part_uid, qualified_name, source_line, position);
 
@@ -1151,7 +1162,8 @@ impl PlantUmlSvg {
         let back_y = base_y;
         write!(
             self.buf,
-            r##"<rect fill="#E2E2F0" height="{}" style="stroke:#181818;stroke-width:0.5;" width="{}" x="{}" y="{}"/>"##,
+            r##"<rect fill="{}" height="{}" style="stroke:#181818;stroke-width:0.5;" width="{}" x="{}" y="{}"/>"##,
+            fill_color,
             fmt_coord(HEAD_BOX_H),
             fmt_coord(box_w),
             fmt_coord(back_x),
@@ -1163,7 +1175,8 @@ impl PlantUmlSvg {
         let front_y = base_y + COLLECTIONS_OFFSET;
         write!(
             self.buf,
-            r##"<rect fill="#E2E2F0" height="{}" style="stroke:#181818;stroke-width:0.5;" width="{}" x="{}" y="{}"/>"##,
+            r##"<rect fill="{}" height="{}" style="stroke:#181818;stroke-width:0.5;" width="{}" x="{}" y="{}"/>"##,
+            fill_color,
             fmt_coord(HEAD_BOX_H),
             fmt_coord(box_w),
             fmt_coord(box_x),
@@ -1192,6 +1205,7 @@ impl PlantUmlSvg {
         text_y: f64,
         text_content: &str,
         text_len: f64,
+        fill_color: &str,
     ) {
         self.participant_group_open(part_uid, qualified_name, source_line, position);
 
@@ -1218,7 +1232,7 @@ impl PlantUmlSvg {
         // Outer body
         write!(
             self.buf,
-            r##"<path d="M{il},{t} L{ir},{t} C{r},{t} {r},{m} {r},{m} C{r},{m} {r},{b} {ir},{b} L{il},{b} C{l},{b} {l},{m} {l},{m} C{l},{m} {l},{t} {il},{t}" fill="#E2E2F0" style="stroke:#181818;stroke-width:0.5;"/>"##,
+            r##"<path d="M{il},{t} L{ir},{t} C{r},{t} {r},{m} {r},{m} C{r},{m} {r},{b} {ir},{b} L{il},{b} C{l},{b} {l},{m} {l},{m} C{l},{m} {l},{t} {il},{t}" fill="{fc}" style="stroke:#181818;stroke-width:0.5;"/>"##,
             il = fmt_coord(inner_left),
             ir = fmt_coord(inner_right),
             l = fmt_coord(left),
@@ -1226,6 +1240,7 @@ impl PlantUmlSvg {
             t = fmt_coord(top),
             m = fmt_coord(mid),
             b = fmt_coord(bottom),
+            fc = fill_color,
         )
         .unwrap();
 
@@ -1556,6 +1571,7 @@ fn render_participant_shape(
                         text_x,
                         &p.label,
                         p.text_width,
+                        fill_color,
                     );
                 }
                 ParticipantKind::Boundary => {
@@ -1569,6 +1585,7 @@ fn render_participant_shape(
                         text_x,
                         &p.label,
                         p.text_width,
+                        fill_color,
                     );
                 }
                 ParticipantKind::Control => {
@@ -1582,6 +1599,7 @@ fn render_participant_shape(
                         text_x,
                         &p.label,
                         p.text_width,
+                        fill_color,
                     );
                 }
                 ParticipantKind::Entity => {
@@ -1595,6 +1613,7 @@ fn render_participant_shape(
                         text_x,
                         &p.label,
                         p.text_width,
+                        fill_color,
                     );
                 }
                 ParticipantKind::Database => {
@@ -1608,6 +1627,7 @@ fn render_participant_shape(
                         text_x,
                         &p.label,
                         p.text_width,
+                        fill_color,
                     );
                 }
                 _ => unreachable!(),
@@ -1628,6 +1648,7 @@ fn render_participant_shape(
                 text_y,
                 &p.label,
                 p.text_width,
+                        fill_color,
             );
         }
         ParticipantKind::Queue => {
@@ -1645,6 +1666,7 @@ fn render_participant_shape(
                 text_y,
                 &p.label,
                 p.text_width,
+                        fill_color,
             );
         }
         ParticipantKind::Participant => {
