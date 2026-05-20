@@ -115,6 +115,7 @@ fn render_oracle(diagram: &DeploymentDiagram, _theme: &Theme, oracle: &OracleLay
     let mut counter = 2usize;
     let mut id_for_node: HashMap<String, String> = HashMap::new();
     let mut qname_for_id: HashMap<String, String> = HashMap::new();
+    let mut own_qname_for_id: HashMap<String, String> = HashMap::new();
     let mut link_id_for_conn: HashMap<usize, String> = HashMap::new();
 
     // Identify roots (nodes not listed as children of any other node).
@@ -140,7 +141,9 @@ fn render_oracle(diagram: &DeploymentDiagram, _theme: &Theme, oracle: &OracleLay
         m
     };
     for n in &diagram.nodes {
-        let mut q = own_qname(n);
+        let own = own_qname(n);
+        own_qname_for_id.insert(n.id.clone(), own.clone());
+        let mut q = own;
         let mut cur_id = n.id.clone();
         while let Some(pid) = parent_of.get(&cur_id) {
             if let Some(p) = diagram.nodes.iter().find(|x| x.id == *pid) {
@@ -198,7 +201,7 @@ fn render_oracle(diagram: &DeploymentDiagram, _theme: &Theme, oracle: &OracleLay
             conn,
             oracle,
             &id_for_node,
-            &qname_for_id,
+            &own_qname_for_id,
             &link_id,
         );
     }
@@ -955,44 +958,60 @@ fn render_connection(
     conn: &DeploymentConnection,
     oracle: &OracleLayout,
     id_for_node: &HashMap<String, String>,
-    qname_for_id: &HashMap<String, String>,
+    own_qname_for_id: &HashMap<String, String>,
     link_id: &str,
 ) {
-    // Edge IDs in goldens use the OWN name (last segment), not the full
-    // qualified path. Strip the prefix to match.
-    let from_qname = qname_for_id
+    // Edge IDs in goldens use the OWN name of each endpoint. own_qname may
+    // itself contain '.' (label-derived), so we can't recover it by splitting
+    // the full qualified path on '.'.
+    let from_qname = own_qname_for_id
         .get(&conn.from)
-        .map(|q| {
-            q.rsplit_once('.')
-                .map(|(_, last)| last.to_string())
-                .unwrap_or_else(|| q.clone())
-        })
+        .cloned()
         .unwrap_or_else(|| conn.from.clone());
-    let to_qname = qname_for_id
+    let to_qname = own_qname_for_id
         .get(&conn.to)
-        .map(|q| {
-            q.rsplit_once('.')
-                .map(|(_, last)| last.to_string())
-                .unwrap_or_else(|| q.clone())
-        })
+        .cloned()
         .unwrap_or_else(|| conn.to.clone());
+    // PlantUML emits the path id as `{leftQname}-{kind}-{rightQname}` where
+    // {kind} is `to`, `backto`, or empty (associations). Layout direction
+    // can reverse the wire order (e.g. `A -left-> B` ⇒ `B-backto-A`), so we
+    // probe both orderings.
     let candidates = [
         format!("{from_qname}-to-{to_qname}"),
         format!("{}-to-{}", conn.from, conn.to),
-        // Associations (`A -- B`) use just `-`, not `-to-`.
+        format!("{to_qname}-backto-{from_qname}"),
+        format!("{}-backto-{}", conn.to, conn.from),
         format!("{from_qname}-{to_qname}"),
         format!("{}-{}", conn.from, conn.to),
-        // Bidirectional / back arrows (`A <-- B`) use `-backto-`.
         format!("{from_qname}-backto-{to_qname}"),
     ];
     let oracle_edge = candidates
         .iter()
         .find_map(|cand| oracle.edges.iter().find(|e| e.id == *cand));
+    let oracle_edge = oracle_edge.or_else(|| {
+        let f_id = id_for_node.get(&conn.from).cloned();
+        let t_id = id_for_node.get(&conn.to).cloned();
+        oracle.edges.iter().find(|e| {
+            let e1 = e.entity_1.as_deref();
+            let e2 = e.entity_2.as_deref();
+            (e1 == f_id.as_deref() && e2 == t_id.as_deref())
+                || (e1 == t_id.as_deref() && e2 == f_id.as_deref())
+        })
+    });
     let expected_id = oracle_edge
         .map(|e| e.id.clone())
         .unwrap_or_else(|| candidates[0].clone());
 
-    svg.raw(&format!("<!--link {from_qname} to {to_qname}-->"));
+    let is_reverse = oracle_edge
+        .map(|e| e.id.contains("-backto-"))
+        .unwrap_or(false);
+    let (comment_from, comment_to) = if is_reverse {
+        (&to_qname, &from_qname)
+    } else {
+        (&from_qname, &to_qname)
+    };
+    let prefix = if is_reverse { "reverse link" } else { "link" };
+    svg.raw(&format!("<!--{prefix} {comment_from} to {comment_to}-->"));
 
     let entity_1 = oracle_edge
         .and_then(|e| e.entity_1.as_deref())
@@ -1042,15 +1061,24 @@ fn render_connection(
                 r#"<polygon fill="{fill}" points="{points}" style="{poly_style}"/>"#,
             ));
         }
-        // Connection label.
-        if let Some(label) = &conn.label {
-            // The text element matches PlantUML's <text> for link labels.
-            // Position from oracle: pick midpoint of path endpoints; +1 on x.
-            // Without precise oracle data, we approximate.
-            // For now, leave label emission to the future — many links don't
-            // have labels.
-            let _ = label;
+        if let Some(points) = &oe.second_arrow_points {
+            let fill = oe.arrow_fill.as_deref().unwrap_or("#181818");
+            let poly_style = oe
+                .polygon_style
+                .as_deref()
+                .unwrap_or("stroke:#181818;stroke-width:1;");
+            svg.raw(&format!(
+                r#"<polygon fill="{fill}" points="{points}" style="{poly_style}"/>"#,
+            ));
         }
+        // Connection label — position taken from oracle.
+        if let Some((lx, ly, text)) = &oe.label {
+            for (i, line) in text.split('\n').enumerate() {
+                let y = *ly + (i as f64) * pm::text_height(13.0);
+                emit_text(svg, line, *lx, y, 13.0, false, false);
+            }
+        }
+        let _ = conn.label.as_ref();
     }
 
     svg.raw("</g>");
