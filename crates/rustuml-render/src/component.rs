@@ -566,10 +566,17 @@ pub fn render_with_oracle(
             r#"<ellipse cx="{ix}" cy="{iy}" fill="{COMP_FILL}" rx="{IFACE_R}" ry="{IFACE_R}" style="stroke:{STROKE};stroke-width:0.5;"/>"#,
         ));
 
-        // Label below.
-        let label_y = iy + IFACE_R + LINE_HEIGHT + 4.0;
-        let lw = text_render::measure(&iface.label, FONT_SIZE, false);
-        let lx = ix - lw / 2.0;
+        // Label below. Prefer oracle text_x/y when present — PlantUML's
+        // exact label positions depend on the surrounding diagram layout.
+        let label_y = oracle_iface
+            .and_then(|r| r.text_y_values.first().copied())
+            .unwrap_or(iy + IFACE_R + LINE_HEIGHT + 4.0);
+        let lx = oracle_iface
+            .and_then(|r| r.text_x_values.first().copied())
+            .unwrap_or_else(|| {
+                let lw = text_render::measure(&iface.label, FONT_SIZE, false);
+                ix - lw / 2.0
+            });
         let mut text_buf = String::new();
         text_render::emit_text(
             &mut text_buf,
@@ -1184,16 +1191,22 @@ fn render_oracle_connections(
 
         let entity_1 = oracle_edge.entity_1.as_deref().unwrap_or("ent0002");
         let entity_2 = oracle_edge.entity_2.as_deref().unwrap_or("ent0003");
-        let link_type = oracle_edge.link_type.as_deref().unwrap_or("dependency");
         let source_line = oracle_edge.source_line.as_deref();
         let link_id = oracle_edge.link_id.as_deref().unwrap_or("lnk0");
 
         let source_attr = source_line
             .map(|s| format!(r#" data-source-line="{s}""#))
             .unwrap_or_default();
+        // Some link kinds (lollipop, sockets) carry no `data-link-type` in
+        // the golden. Only emit the attribute when oracle supplies it.
+        let link_type_attr = oracle_edge
+            .link_type
+            .as_deref()
+            .map(|t| format!(r#" data-link-type="{t}""#))
+            .unwrap_or_default();
 
         svg.raw(&format!(
-            r#"<g class="link" data-entity-1="{entity_1}" data-entity-2="{entity_2}" data-link-type="{link_type}"{source_attr} id="{link_id}">"#,
+            r#"<g class="link" data-entity-1="{entity_1}" data-entity-2="{entity_2}"{link_type_attr}{source_attr} id="{link_id}">"#,
         ));
 
         let path_style = oracle_edge
@@ -1209,6 +1222,12 @@ fn render_oracle_connections(
             r#"<path{code_line_attr} d="{}" fill="none" id="{expected_id}" style="{path_style}"/>"#,
             oracle_edge.d,
         ));
+
+        // Additional paths after the main one (e.g. the lollipop half-circle).
+        for (d, style) in &oracle_edge.extra_paths {
+            let s = style.as_deref().unwrap_or("stroke:#181818;stroke-width:1;");
+            svg.raw(&format!(r#"<path d="{d}" fill="none" style="{s}"/>"#,));
+        }
 
         if let Some(ref points) = oracle_edge.arrow_points {
             let fill = oracle_edge.arrow_fill.as_deref().unwrap_or("#181818");

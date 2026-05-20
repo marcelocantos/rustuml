@@ -249,6 +249,16 @@ pub fn extract_oracle_layout(svg: &str) -> Option<OracleLayout> {
                     let rx = parse_attr(&ellipse, "rx")?;
                     let ry = parse_attr(&ellipse, "ry")?;
                     let entity_id = node.attribute("id").map(String::from);
+                    let text_y_values: Vec<f64> = node
+                        .children()
+                        .filter(|c| c.tag_name().name() == "text")
+                        .filter_map(|t| parse_attr(&t, "y"))
+                        .collect();
+                    let text_x_values: Vec<f64> = node
+                        .children()
+                        .filter(|c| c.tag_name().name() == "text")
+                        .filter_map(|t| parse_attr(&t, "x"))
+                        .collect();
                     layout.entities.insert(
                         name.to_string(),
                         EntityRect {
@@ -259,8 +269,8 @@ pub fn extract_oracle_layout(svg: &str) -> Option<OracleLayout> {
                             icon_cx: None,
                             glyph_path_d: None,
                             name_text_x: None,
-                            text_y_values: Vec::new(),
-                            text_x_values: Vec::new(),
+                            text_y_values,
+                            text_x_values,
                             sep_y_values: Vec::new(),
                             vis_icon_y_values: Vec::new(),
                             fill: None,
@@ -424,6 +434,17 @@ pub fn extract_oracle_layout(svg: &str) -> Option<OracleLayout> {
                     polygon_style: None,
                     label: None,
                     labels: Vec::new(),
+                    extra_paths: node
+                        .children()
+                        .filter(|c| c.tag_name().name() == "path")
+                        .skip(1)
+                        .filter_map(|p| {
+                            Some((
+                                p.attribute("d")?.to_string(),
+                                p.attribute("style").map(String::from),
+                            ))
+                        })
+                        .collect(),
                 };
 
                 // Find <polygon> children for arrowheads (first = primary, second = bidirectional).
