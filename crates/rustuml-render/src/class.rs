@@ -1416,6 +1416,37 @@ fn render_oracle_relationships(
             .unwrap();
         }
 
+        // Second arrowhead for bidirectional relationships (<-->, <..>).
+        if let Some(ref points) = oracle_edge.second_arrow_points {
+            let fill = oracle_edge.arrow_fill.as_deref().unwrap_or("#181818");
+            let poly_style = oracle_edge
+                .polygon_style
+                .as_deref()
+                .unwrap_or("stroke:#181818;stroke-width:1;");
+            write!(
+                svg,
+                r#"<polygon fill="{}" points="{}" style="{}"/>"#,
+                fill, points, poly_style,
+            )
+            .unwrap();
+        }
+
+        // Edge label (text on relationship), if present in the oracle. Emitted
+        // as one <text> per line at the recorded x/y with font-size 13.
+        if let Some((lx, ly, ref text)) = oracle_edge.label {
+            let first_line = text.lines().next().unwrap_or("");
+            let tl = text_render::measure(first_line, 13.0, false);
+            write!(
+                svg,
+                r##"<text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="{}" x="{}" y="{}">{}</text>"##,
+                fmt4(tl),
+                fmt4(lx),
+                fmt4(ly),
+                escape_xml(first_line),
+            )
+            .unwrap();
+        }
+
         svg.push_str("</g>");
     }
 }
