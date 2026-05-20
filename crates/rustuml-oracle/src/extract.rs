@@ -45,25 +45,45 @@ pub fn extract_oracle_layout(svg: &str) -> Option<OracleLayout> {
 
         let class_attr = node.attribute("class").unwrap_or("");
 
-        // For cluster groups, capture the inner XML verbatim so the renderer
-        // can replay PlantUML's hand-tuned container shapes (cloud, folder,
-        // node, package, frame, rectangle …) without re-implementing every
-        // shape geometry from scratch.
-        if class_attr == "cluster"
+        // Capture cluster groups AND path-shaped "GMN" note entities so
+        // renderers can emit the exact path-based shapes verbatim. Java
+        // emits attached notes as `<g class="entity" id="ent000N">` with
+        // `data-qualified-name="GMN*"` and a path-based shape (no rect).
+        let qname = node.attribute("data-qualified-name").unwrap_or("");
+        let looks_like_note_entity = class_attr == "entity"
+            && qname.starts_with("GMN")
+            && find_first_child(&node, "rect").is_none();
+        if (class_attr == "cluster" || looks_like_note_entity)
             && let Some(name) = node.attribute("data-qualified-name")
         {
-            let range = node.range();
-            // Slice the source SVG to recover the verbatim `<g class="cluster" …>…</g>`
-            // element, then extract just the inner XML.
-            if let Some(slice) = svg.get(range.clone()) {
-                let inner = extract_inner_xml(slice);
-                layout.clusters.push(OracleCluster {
-                    qualified_name: name.to_string(),
-                    source_line: node.attribute("data-source-line").map(String::from),
-                    entity_id: node.attribute("id").map(String::from),
-                    inner_xml: inner,
-                });
+            let mut inner_xml = String::new();
+            for c in node.children() {
+                if c.is_element() {
+                    let tag = c.tag_name().name();
+                    if matches!(
+                        tag,
+                        "path" | "rect" | "ellipse" | "polygon" | "text" | "line"
+                    ) {
+                        let range = c.range();
+                        if range.end <= svg.len() && range.start < range.end {
+                            inner_xml.push_str(&svg[range.start..range.end]);
+                        }
+                    }
+                }
             }
+            let group_class = if class_attr == "cluster" {
+                "cluster".to_string()
+            } else {
+                "entity".to_string()
+            };
+            layout.clusters.push(OracleCluster {
+                qualified_name: name.to_string(),
+                source_line: node.attribute("data-source-line").map(String::from),
+                entity_id: node.attribute("id").map(String::from),
+                inner_xml,
+                group_class,
+                comment: None,
+            });
         }
 
         if class_attr == "entity" || class_attr == "cluster" {
