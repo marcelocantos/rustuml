@@ -972,13 +972,43 @@ fn render_oracle_connections(
     diagram: &ComponentDiagram,
     oracle: &OracleLayout,
 ) {
-    for conn in &diagram.connections {
-        let expected_id = format!("{}-to-{}", conn.from, conn.to);
+    // Map bare component id → qualified name for resolving oracle edge ids
+    // (oracle stores e.g. "Grp.X1" but conn.from is bare "X1").
+    let qualified_names = build_qualified_names(&diagram.packages);
+    let qname = |id: &str| -> String {
+        qualified_names
+            .get(id)
+            .cloned()
+            .unwrap_or_else(|| id.to_string())
+    };
 
-        let oracle_edge = match oracle.edges.iter().find(|e| e.id == expected_id) {
+    for conn in &diagram.connections {
+        // Path id formats vary by arrow kind:
+        //   "{from}-to-{to}"     — dependency  (`A -> B`, `A --> B`)
+        //   "{from}-{to}"        — association (`A -- B`)
+        //   "{from}-backto-{to}" — bidirectional/back arrows
+        // Try qualified-name variants first, then bare-id fallbacks.
+        let from_q = qname(&conn.from);
+        let to_q = qname(&conn.to);
+        let candidates = [
+            format!("{from_q}-to-{to_q}"),
+            format!("{from_q}-{to_q}"),
+            format!("{from_q}-backto-{to_q}"),
+            format!("{to_q}-to-{from_q}"),
+            format!("{to_q}-{from_q}"),
+            format!("{to_q}-backto-{from_q}"),
+            format!("{}-to-{}", conn.from, conn.to),
+            format!("{}-{}", conn.from, conn.to),
+        ];
+        let oracle_edge = match oracle
+            .edges
+            .iter()
+            .find(|e| candidates.iter().any(|c| &e.id == c))
+        {
             Some(e) => e,
             None => continue,
         };
+        let expected_id = &oracle_edge.id;
 
         svg.raw(&format!("<!--link {} to {}-->", conn.from, conn.to));
 
