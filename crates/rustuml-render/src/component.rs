@@ -11,10 +11,49 @@ use std::fmt::Write;
 use rustuml_layout::graph::{Direction, EdgePath, LayoutGraph};
 use rustuml_parser::diagram::component::*;
 
-use crate::layout_oracle::OracleLayout;
+use crate::layout_oracle::{EntityRect, OracleLayout};
+use crate::plantuml_metrics as pm;
 use crate::style::Theme;
 use crate::svg::SvgBuilder;
 use crate::text_render::{self, TextBase};
+
+fn fc(v: f64) -> String {
+    pm::fmt_coord(v)
+}
+
+/// Build a map from bare component id to qualified name (e.g. "G1.AA").
+/// Walks the package tree and concatenates package names.
+fn build_qualified_names(
+    packages: &[ComponentPackage],
+) -> std::collections::HashMap<String, String> {
+    let mut map = std::collections::HashMap::new();
+    for pkg in packages {
+        walk_pkg(pkg, "", &mut map);
+    }
+    map
+}
+
+fn walk_pkg(
+    pkg: &ComponentPackage,
+    parent_path: &str,
+    map: &mut std::collections::HashMap<String, String>,
+) {
+    let path = if parent_path.is_empty() {
+        pkg.name.clone()
+    } else {
+        format!("{parent_path}.{}", pkg.name)
+    };
+    for cid in &pkg.components {
+        map.insert(cid.clone(), format!("{path}.{cid}"));
+    }
+    for child in &pkg.packages {
+        walk_pkg(child, &path, map);
+    }
+}
+
+/// Y-baseline offset from rect top to the bottom-most text line (label),
+/// derived from PlantUML output: rect h=46.4883, baseline y=33.5352 from top.
+const LABEL_BASELINE_FROM_BOTTOM: f64 = 12.9531;
 
 // ---------------------------------------------------------------------------
 // PlantUML constants (extracted from golden SVGs)
@@ -215,6 +254,20 @@ pub fn render_with_oracle(
     let mut pkg_y = title_h + MARGIN;
     render_packages(&diagram.packages, &mut svg, MARGIN, &mut pkg_y, theme);
 
+    // Build qualified-name map (e.g. "AA" → "G1.AA") for oracle lookup.
+    let qualified_names = build_qualified_names(&diagram.packages);
+
+    // Helper: look up oracle entity rect for a component (by qualified name or bare id).
+    let oracle_comp_rect = |comp: &Component| -> Option<&EntityRect> {
+        oracle.and_then(|o| {
+            qualified_names
+                .get(&comp.id)
+                .and_then(|q| o.entities.get(q))
+                .or_else(|| o.entities.get(&comp.id))
+                .or_else(|| o.entities.get(&comp.label))
+        })
+    };
+
     // Render each component entity.
     let mut entity_counter = 2; // PlantUML entity IDs start at ent0002
     for (i, comp) in diagram.components.iter().enumerate() {
@@ -226,10 +279,18 @@ pub fn render_with_oracle(
         // HTML comment.
         svg.raw(&format!("<!--entity {}-->", comp.id));
 
-        // Open entity group.
-        let qualified = &comp.id;
+        // Open entity group. Use qualified name when component lives inside a package.
+        let qualified = qualified_names
+            .get(&comp.id)
+            .cloned()
+            .unwrap_or_else(|| comp.id.clone());
+        let source_line_attr = if comp.source_line > 0 {
+            format!(r#" data-source-line="{}""#, comp.source_line)
+        } else {
+            String::new()
+        };
         svg.raw(&format!(
-            r#"<g class="entity" data-qualified-name="{qualified}" id="{ent_id}">"#
+            r#"<g class="entity" data-qualified-name="{qualified}"{source_line_attr} id="{ent_id}">"#
         ));
 
         // URL link wrapper.
@@ -237,42 +298,74 @@ pub fn render_with_oracle(
             svg.open_link(url);
         }
 
-        // Determine fill: use custom color from theme if set, otherwise default.
-        let fill = COMP_FILL;
+        // Determine fill: use oracle fill if available, otherwise default.
+        let oracle_rect = oracle_comp_rect(comp);
+        let fill_owned = oracle_rect.and_then(|r| r.fill.clone());
+        let fill = fill_owned.as_deref().unwrap_or(COMP_FILL);
+
+        // Use oracle width/height when available — they're authoritative.
+        let (w, h) = oracle_rect
+            .map(|r| (r.width, r.height))
+            .unwrap_or((dim.width, dim.height));
 
         // Main body rectangle.
         svg.raw(&format!(
-            r#"<rect fill="{fill}" height="{h}" rx="{ROUND_R}" ry="{ROUND_R}" style="stroke:{STROKE};stroke-width:0.5;" width="{w}" x="{x}" y="{y}"/>"#,
-            h = dim.height,
-            w = dim.width,
+            r#"<rect fill="{fill}" height="{h_s}" rx="{r_s}" ry="{r_s}" style="stroke:{STROKE};stroke-width:0.5;" width="{w_s}" x="{x_s}" y="{y_s}"/>"#,
+            h_s = fc(h),
+            r_s = fc(ROUND_R),
+            w_s = fc(w),
+            x_s = fc(x),
+            y_s = fc(y),
         ));
 
         // Component icon (tab + bars) at top-right.
-        let tab_x = x + dim.width - ICON_TAB_RIGHT_OFFSET;
+        let tab_x = x + w - ICON_TAB_RIGHT_OFFSET;
         let tab_y = y + ICON_TAB_TOP_OFFSET;
         svg.raw(&format!(
-            r#"<rect fill="{fill}" height="{ICON_TAB_H}" style="stroke:{STROKE};stroke-width:0.5;" width="{ICON_TAB_W}" x="{tab_x}" y="{tab_y}"/>"#,
+            r#"<rect fill="{fill}" height="{h_s}" style="stroke:{STROKE};stroke-width:0.5;" width="{w_s}" x="{x_s}" y="{y_s}"/>"#,
+            h_s = fc(ICON_TAB_H),
+            w_s = fc(ICON_TAB_W),
+            x_s = fc(tab_x),
+            y_s = fc(tab_y),
         ));
 
         let bar_x = tab_x - ICON_BAR_LEFT_OFFSET;
         let bar_y1 = tab_y + ICON_BAR_TOP_OFFSET_1;
         let bar_y2 = tab_y + ICON_BAR_TOP_OFFSET_2;
         svg.raw(&format!(
-            r#"<rect fill="{fill}" height="{ICON_BAR_H}" style="stroke:{STROKE};stroke-width:0.5;" width="{ICON_BAR_W}" x="{bar_x}" y="{bar_y1}"/>"#,
+            r#"<rect fill="{fill}" height="{h_s}" style="stroke:{STROKE};stroke-width:0.5;" width="{w_s}" x="{x_s}" y="{y_s}"/>"#,
+            h_s = fc(ICON_BAR_H),
+            w_s = fc(ICON_BAR_W),
+            x_s = fc(bar_x),
+            y_s = fc(bar_y1),
         ));
         svg.raw(&format!(
-            r#"<rect fill="{fill}" height="{ICON_BAR_H}" style="stroke:{STROKE};stroke-width:0.5;" width="{ICON_BAR_W}" x="{bar_x}" y="{bar_y2}"/>"#,
+            r#"<rect fill="{fill}" height="{h_s}" style="stroke:{STROKE};stroke-width:0.5;" width="{w_s}" x="{x_s}" y="{y_s}"/>"#,
+            h_s = fc(ICON_BAR_H),
+            w_s = fc(ICON_BAR_W),
+            x_s = fc(bar_x),
+            y_s = fc(bar_y2),
         ));
 
         // Render text lines.
-        let text_x = x + TEXT_PAD_LEFT;
-        let n_lines = 1 + comp.stereotypes.len();
-        let first_text_y = y + dim.height - LINE_HEIGHT * n_lines as f64 + LINE_HEIGHT
-            - (COMPONENT_BASE_H - LINE_HEIGHT) / 2.0;
+        // PlantUML positions text such that the last (label) baseline sits at
+        // `y + h - LABEL_BASELINE_FROM_BOTTOM`. Use oracle text_y_values when available.
+        let oracle_text_y = oracle_rect.map(|r| r.text_y_values.as_slice());
+        let text_x = oracle_rect
+            .and_then(|r| r.name_text_x)
+            .unwrap_or(x + TEXT_PAD_LEFT);
+        let n_stereo = comp.stereotypes.len();
+
+        let label_y = oracle_text_y
+            .and_then(|v| v.get(n_stereo).copied())
+            .unwrap_or(y + h - LABEL_BASELINE_FROM_BOTTOM);
+        let stereo_first_y = label_y - LINE_HEIGHT * n_stereo as f64;
 
         // Stereotypes first (italic in PlantUML).
         for (si, stereo) in comp.stereotypes.iter().enumerate() {
-            let ty = first_text_y + si as f64 * LINE_HEIGHT;
+            let ty = oracle_text_y
+                .and_then(|v| v.get(si).copied())
+                .unwrap_or(stereo_first_y + si as f64 * LINE_HEIGHT);
             let label = format!("\u{00AB}{stereo}\u{00BB}"); // «stereo»
             let mut text_buf = String::new();
             text_render::emit_text(
@@ -294,7 +387,6 @@ pub fn render_with_oracle(
         }
 
         // Label (last line).
-        let label_y = first_text_y + comp.stereotypes.len() as f64 * LINE_HEIGHT;
         let mut text_buf = String::new();
         text_render::emit_text(
             &mut text_buf,
@@ -924,6 +1016,42 @@ fn render_oracle_connections(
             svg.raw(&format!(
                 r#"<polygon fill="{fill}" points="{points}" style="{poly_style}"/>"#,
             ));
+        }
+
+        // Second arrowhead (bidirectional edges).
+        if let Some(ref points) = oracle_edge.second_arrow_points {
+            let fill = oracle_edge.arrow_fill.as_deref().unwrap_or("#181818");
+            let poly_style = oracle_edge
+                .polygon_style
+                .as_deref()
+                .unwrap_or("stroke:#181818;stroke-width:1;");
+            svg.raw(&format!(
+                r#"<polygon fill="{fill}" points="{points}" style="{poly_style}"/>"#,
+            ));
+        }
+
+        // Edge label from oracle.
+        if let Some((lx, ly, ref text)) = oracle_edge.label {
+            for (i, line) in text.lines().enumerate() {
+                let ty = ly + i as f64 * LINK_FONT;
+                let mut text_buf = String::new();
+                text_render::emit_text(
+                    &mut text_buf,
+                    line,
+                    &TextBase {
+                        x: lx,
+                        y: ty,
+                        font_size: LINK_FONT as u32,
+                        font_family: "sans-serif",
+                        fill: TEXT_COLOR,
+                        bold: false,
+                        italic: false,
+                        underline: false,
+                        skip_underline: false,
+                    },
+                );
+                svg.raw(&text_buf);
+            }
         }
 
         svg.raw("</g>");
