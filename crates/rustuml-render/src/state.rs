@@ -19,6 +19,10 @@ use crate::text_render::{self, TextBase};
 
 /// Fixed height for a state box without descriptions.
 const STATE_BOX_HEIGHT: f64 = 50.0;
+/// Fixed height for a state box rendered under `hide empty description`
+/// when there are no descriptions — PlantUML drops the divider line and
+/// shrinks the box to 40px.
+const STATE_EMPTY_BOX_HEIGHT: f64 = 40.0;
 /// Corner radius for state boxes.
 const STATE_RX: f64 = 12.5;
 /// Minimum state box width.
@@ -161,16 +165,22 @@ fn state_box_height(desc_count: usize) -> f64 {
 }
 
 /// Node height for layout purposes.
-fn node_height(id: &str, state_def: Option<&State>) -> f64 {
+fn node_height(id: &str, state_def: Option<&State>, hide_empty_desc: bool) -> f64 {
     if is_pseudo_state(id) {
         START_RADIUS * 2.0
     } else {
         match state_def.map(|s| s.kind) {
             Some(StateKind::Fork | StateKind::Join) => BAR_HEIGHT,
             Some(StateKind::Choice) => CHOICE_SIZE * 2.0,
+            Some(StateKind::Initial) => START_RADIUS * 2.0,
+            Some(StateKind::Final) => END_OUTER_RADIUS * 2.0,
             _ => {
                 let desc_count = state_def.map_or(0, |s| s.descriptions.len());
-                state_box_height(desc_count)
+                if hide_empty_desc && desc_count == 0 {
+                    STATE_EMPTY_BOX_HEIGHT
+                } else {
+                    state_box_height(desc_count)
+                }
             }
         }
     }
@@ -184,6 +194,8 @@ fn node_width(id: &str, state_def: Option<&State>) -> f64 {
         match state_def.map(|s| s.kind) {
             Some(StateKind::Fork | StateKind::Join) => BAR_WIDTH,
             Some(StateKind::Choice) => CHOICE_SIZE * 2.0,
+            Some(StateKind::Initial) => START_RADIUS * 2.0,
+            Some(StateKind::Final) => END_OUTER_RADIUS * 2.0,
             _ => {
                 let label = state_def.map_or(id, |s| s.label.as_str());
                 let descs = state_def.map_or(&[][..], |s| s.descriptions.as_slice());
@@ -352,7 +364,7 @@ pub fn render_with_oracle(
             let h = if id == "__start__" || id == "__end__" {
                 START_RADIUS * 2.0
             } else {
-                node_height(id, state_def)
+                node_height(id, state_def, hide_empty_desc)
             };
             let w = if id == "__start__" || id == "__end__" {
                 START_RADIUS * 2.0
@@ -404,7 +416,7 @@ pub fn render_with_oracle(
                 let h = if id == "__start__" || id == "__end__" {
                     START_RADIUS * 2.0
                 } else {
-                    node_height(id, state_def)
+                    node_height(id, state_def, hide_empty_desc)
                 };
                 let w = if id == "__start__" || id == "__end__" {
                     START_RADIUS * 2.0
@@ -442,7 +454,7 @@ pub fn render_with_oracle(
             let h = if id == "__start__" || id == "__end__" {
                 START_RADIUS * 2.0
             } else {
-                node_height(id, state_def)
+                node_height(id, state_def, hide_empty_desc)
             };
             let w = if id == "__start__" || id == "__end__" {
                 START_RADIUS * 2.0
@@ -485,7 +497,7 @@ pub fn render_with_oracle(
             let h = if id == "__start__" || id == "__end__" {
                 START_RADIUS * 2.0
             } else {
-                node_height(id, state_def)
+                node_height(id, state_def, hide_empty_desc)
             };
             let w = if id == "__start__" || id == "__end__" {
                 START_RADIUS * 2.0
@@ -538,15 +550,18 @@ pub fn render_with_oracle(
     }
 
     if let Some(title) = &diagram.meta.title {
-        let title_x = total_width / 2.0;
-        let title_tw = text_render::measure(title, TITLE_FONT_SIZE, true);
+        // PlantUML wraps the title in `<g class="title" data-source-line="N">`
+        // and positions the text at a fixed `x="10"`, `y="23.5352"`. The
+        // `font-weight="700"` (numeric) form is what `text_render::emit_text`
+        // already produces for bold text.
+        svg.push_str(r#"<g class="title" data-source-line="1">"#);
         let mut text_buf = String::new();
         text_render::emit_text(
             &mut text_buf,
             title,
             &TextBase {
-                x: title_x - title_tw / 2.0,
-                y: TITLE_HEIGHT - 4.0,
+                x: 10.0,
+                y: 23.5352,
                 font_size: TITLE_FONT_SIZE as u32,
                 font_family: "sans-serif",
                 fill: TEXT_COLOR,
@@ -557,9 +572,14 @@ pub fn render_with_oracle(
             },
         );
         svg.push_str(&text_buf);
+        svg.push_str("</g>");
     }
 
-    // Assign entity IDs for all nodes.
+    // Assign entity IDs for all nodes. Fork/join bars do not emit a
+    // `<g class="entity">` wrapper; PlantUML still tracks them in its
+    // counter (they are referenced via `data-entity-1`/`data-entity-2` on
+    // surrounding `<g class="link">` wrappers) so we keep their allocation
+    // here.
     let mut entity_ids: Vec<(String, String)> = Vec::new();
     for (id, _, _, _, _) in &positions {
         let ent_id = ids.next_entity();
@@ -652,6 +672,51 @@ pub fn render_with_oracle(
         } else {
             let state_def = find_state(id);
             match state_def.map(|s| s.kind) {
+                Some(StateKind::Initial) => {
+                    // `<<start>>` stereotype — render as a filled start
+                    // pseudostate but tagged with the user-given name.
+                    let source_line = state_def.map_or(1, |s| s.source_line);
+                    write!(
+                        svg,
+                        r#"<g class="start_entity" data-qualified-name="{id}" data-source-line="{source_line}" id="{}">"#,
+                        ent_id_of(id),
+                    )
+                    .unwrap();
+                    write!(
+                        svg,
+                        r#"<ellipse cx="{}" cy="{}" fill="{PSEUDO_COLOR}" rx="{START_RADIUS}" ry="{START_RADIUS}" style="stroke:{PSEUDO_COLOR};stroke-width:1;"/>"#,
+                        fmt_f(*cx),
+                        fmt_f(*cy),
+                    )
+                    .unwrap();
+                    svg.push_str("</g>");
+                }
+                Some(StateKind::Final) => {
+                    // `<<end>>` stereotype — render as the bullseye end
+                    // pseudostate but tagged with the user-given name.
+                    let source_line = state_def.map_or(1, |s| s.source_line);
+                    write!(
+                        svg,
+                        r#"<g class="end_entity" data-qualified-name="{id}" data-source-line="{source_line}" id="{}">"#,
+                        ent_id_of(id),
+                    )
+                    .unwrap();
+                    write!(
+                        svg,
+                        r#"<ellipse cx="{}" cy="{}" fill="none" rx="{END_OUTER_RADIUS}" ry="{END_OUTER_RADIUS}" style="stroke:{PSEUDO_COLOR};stroke-width:1;"/>"#,
+                        fmt_f(*cx),
+                        fmt_f(*cy),
+                    )
+                    .unwrap();
+                    write!(
+                        svg,
+                        r#"<ellipse cx="{}" cy="{}" fill="{PSEUDO_COLOR}" rx="{END_INNER_RADIUS}" ry="{END_INNER_RADIUS}" style="stroke:{PSEUDO_COLOR};stroke-width:1;"/>"#,
+                        fmt_f(*cx),
+                        fmt_f(*cy),
+                    )
+                    .unwrap();
+                    svg.push_str("</g>");
+                }
                 Some(StateKind::Choice) => {
                     // Choice pseudo-state (diamond).
                     write!(
@@ -733,33 +798,29 @@ pub fn render_with_oracle(
                     let label = state_def.map_or(id.as_str(), |s| s.label.as_str());
                     let descriptions = state_def.map_or(&[][..], |s| s.descriptions.as_slice());
 
-                    write!(
-                        svg,
-                        r#"<g class="entity" data-qualified-name="{id}" id="{}">"#,
-                        ent_id_of(id),
-                    )
-                    .unwrap();
-
                     let box_x = cx - bw / 2.0;
                     let box_y = cy - bh / 2.0;
 
-                    // State rectangle.
-                    write!(
-                        svg,
-                        r#"<rect fill="{STATE_FILL}" height="{}" rx="{STATE_RX}" ry="{STATE_RX}" style="stroke:{STROKE_COLOR};stroke-width:0.5;" width="{}" x="{}" y="{}"/>"#,
-                        fmt_f(*bh),
-                        fmt_f(*bw),
-                        fmt_f(box_x),
-                        fmt_f(box_y),
-                    )
-                    .unwrap();
-
                     if hide_empty_desc && descriptions.is_empty() {
-                        // With `hide empty description`, no divider line — just
-                        // centered text.
+                        // PlantUML drops the `<g class="entity">` wrapper and
+                        // emits bare `<rect>` + `<text>` here. No divider
+                        // line; the text is vertically centred.
+                        write!(
+                            svg,
+                            r#"<rect fill="{STATE_FILL}" height="{}" rx="{STATE_RX}" ry="{STATE_RX}" style="stroke:{STROKE_COLOR};stroke-width:0.5;" width="{}" x="{}" y="{}"/>"#,
+                            fmt_f(*bh),
+                            fmt_f(*bw),
+                            fmt_f(box_x),
+                            fmt_f(box_y),
+                        )
+                        .unwrap();
+
                         let text_w = text_render::measure(label, STATE_FONT_SIZE, false);
                         let text_x = cx - text_w / 2.0;
-                        let text_y = box_y + bh / 2.0 + STATE_FONT_SIZE / 3.0;
+                        // Centred baseline: (bh - text_height) / 2 + ascent.
+                        let text_y = box_y
+                            + (*bh - crate::plantuml_metrics::text_height(STATE_FONT_SIZE)) / 2.0
+                            + crate::plantuml_metrics::ascent(STATE_FONT_SIZE);
                         let mut text_buf = String::new();
                         text_render::emit_text(
                             &mut text_buf,
@@ -778,6 +839,24 @@ pub fn render_with_oracle(
                         );
                         svg.push_str(&text_buf);
                     } else {
+                        write!(
+                            svg,
+                            r#"<g class="entity" data-qualified-name="{id}" id="{}">"#,
+                            ent_id_of(id),
+                        )
+                        .unwrap();
+
+                        // State rectangle.
+                        write!(
+                            svg,
+                            r#"<rect fill="{STATE_FILL}" height="{}" rx="{STATE_RX}" ry="{STATE_RX}" style="stroke:{STROKE_COLOR};stroke-width:0.5;" width="{}" x="{}" y="{}"/>"#,
+                            fmt_f(*bh),
+                            fmt_f(*bw),
+                            fmt_f(box_x),
+                            fmt_f(box_y),
+                        )
+                        .unwrap();
+
                         // Divider line (always present in PlantUML default mode).
                         let div_y = box_y + DIVIDER_OFFSET;
                         write!(
@@ -834,9 +913,9 @@ pub fn render_with_oracle(
                             );
                             svg.push_str(&text_buf);
                         }
-                    }
 
-                    svg.push_str("</g>");
+                        svg.push_str("</g>");
+                    }
                 }
             }
         }
