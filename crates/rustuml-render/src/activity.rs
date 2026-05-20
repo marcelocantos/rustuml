@@ -28,6 +28,14 @@ const ACTION_PADDING: f64 = 20.0; // total vertical padding in action box
 const ACTION_H_PADDING: f64 = 10.0; // horizontal padding each side
 const ACTION_RX: f64 = 12.5;
 const DIAMOND_HALF: f64 = 12.0; // half-size of decision diamond
+
+/// Vertical gap between an if/else condition diamond's bottom point and
+/// the top of each branch's first action box. PlantUML uses 10 px here,
+/// not the generic 20 px `ARROW_LEN` used for sequential arrows.
+const IF_BRANCH_DOWN: f64 = 10.0;
+/// Vertical gap between the last action of an if/else branch and the
+/// top of the merge diamond below. PlantUML uses 6 px here.
+const IF_BRANCH_UP: f64 = 6.0;
 const FORK_BAR_HEIGHT: f64 = 6.0;
 const FORK_BAR_RX: f64 = 2.5;
 const FORK_BAR_MARGIN: f64 = 14.0; // margin on each side of fork bar
@@ -599,7 +607,8 @@ fn node_height(node: &LayoutNode) -> f64 {
                 .map(|b| sequence_height(&b.body))
                 .fold(0.0f64, f64::max);
             let branch_h = then_h.max(max_else_h);
-            diamond_h + ARROW_LEN + branch_h + ARROW_LEN + DIAMOND_HALF * 2.0
+            // diamond + IF_BRANCH_DOWN + branch_h + IF_BRANCH_UP + merge_diamond
+            diamond_h + IF_BRANCH_DOWN + branch_h + IF_BRANCH_UP + DIAMOND_HALF * 2.0
         }
         LayoutNode::Fork { branches } => {
             let max_h: f64 = branches
@@ -1400,16 +1409,16 @@ fn emit_if(
         then_cx,
         then_cx,
         diamond_cy,
-        diamond_bottom + ARROW_LEN,
+        diamond_bottom + IF_BRANCH_DOWN,
         false,
     );
     svg.polygon_connector(
         ARROW_COLOR,
         &[
-            (then_cx - 4.0, diamond_bottom + ARROW_LEN - 10.0),
-            (then_cx, diamond_bottom + ARROW_LEN),
-            (then_cx + 4.0, diamond_bottom + ARROW_LEN - 10.0),
-            (then_cx, diamond_bottom + ARROW_LEN - 6.0),
+            (then_cx - 4.0, diamond_bottom + IF_BRANCH_DOWN - 10.0),
+            (then_cx, diamond_bottom + IF_BRANCH_DOWN),
+            (then_cx + 4.0, diamond_bottom + IF_BRANCH_DOWN - 10.0),
+            (then_cx, diamond_bottom + IF_BRANCH_DOWN - 6.0),
         ],
         ARROW_COLOR,
         "1",
@@ -1448,23 +1457,23 @@ fn emit_if(
         else_cx,
         else_cx,
         diamond_cy,
-        diamond_bottom + ARROW_LEN,
+        diamond_bottom + IF_BRANCH_DOWN,
         false,
     );
     svg.polygon_connector(
         ARROW_COLOR,
         &[
-            (else_cx - 4.0, diamond_bottom + ARROW_LEN - 10.0),
-            (else_cx, diamond_bottom + ARROW_LEN),
-            (else_cx + 4.0, diamond_bottom + ARROW_LEN - 10.0),
-            (else_cx, diamond_bottom + ARROW_LEN - 6.0),
+            (else_cx - 4.0, diamond_bottom + IF_BRANCH_DOWN - 10.0),
+            (else_cx, diamond_bottom + IF_BRANCH_DOWN),
+            (else_cx + 4.0, diamond_bottom + IF_BRANCH_DOWN - 10.0),
+            (else_cx, diamond_bottom + IF_BRANCH_DOWN - 6.0),
         ],
         ARROW_COLOR,
         "1",
     );
 
     // Render branches
-    let branch_y = diamond_bottom + ARROW_LEN;
+    let branch_y = diamond_bottom + IF_BRANCH_DOWN;
     let then_bottom = emit_sequence(svg, then_branch, then_cx, branch_y);
     let else_bottom = if !else_branches.is_empty() {
         emit_sequence(svg, &else_branches[0].body, else_cx, branch_y)
@@ -1472,8 +1481,8 @@ fn emit_if(
         branch_y
     };
 
-    // Merge diamond at bottom
-    let merge_y = then_bottom.max(else_bottom) + ARROW_LEN;
+    // Merge diamond at bottom — sits IF_BRANCH_UP px below the deepest branch.
+    let merge_y = then_bottom.max(else_bottom) + IF_BRANCH_UP;
     let merge_diamond_top = merge_y;
     let merge_cy = merge_diamond_top + DIAMOND_HALF;
 
@@ -1661,8 +1670,8 @@ fn emit_while(
     let diamond_bottom = y + DIAMOND_HALF * 2.0;
 
     // Body below diamond
-    svg.down_arrow(cx, diamond_bottom, diamond_bottom + ARROW_LEN, ARROW_COLOR);
-    emit_sequence(svg, body, cx, diamond_bottom + ARROW_LEN)
+    svg.down_arrow(cx, diamond_bottom, diamond_bottom + IF_BRANCH_DOWN, ARROW_COLOR);
+    emit_sequence(svg, body, cx, diamond_bottom + IF_BRANCH_DOWN)
 }
 
 fn emit_repeat(
