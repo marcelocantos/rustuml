@@ -911,7 +911,9 @@ fn walk_segments(text: &str, style: &Style, skip_underline: bool, out: &mut Vec<
                 if found {
                     let mut nested = style.clone();
                     nested.wavy_underline = true;
-                    push_literal(out, &content, &nested);
+                    // Recursively walk so inner markup (e.g. `__under__`,
+                    // `**bold**`) inside the wavy-underline span is honoured.
+                    walk_segments(&content, &nested, skip_underline, out);
                     last_char = content.chars().last();
                 } else {
                     push_literal(out, "~~", style);
