@@ -14,7 +14,7 @@ use crate::style::Theme;
 const FONT_SIZE: f64 = 14.0;
 const PAD_X: f64 = 10.0;
 const BOX_H: f64 = 36.4883;
-const LEAF_STRIDE: f64 = 56.4883;
+const SIBLING_GAP: f64 = 20.0;
 const LEVEL_DX: f64 = 50.0;
 const X_MARGIN: f64 = 10.0;
 const Y_MARGIN: f64 = 20.0;
@@ -42,6 +42,14 @@ fn node_w(label: &str) -> f64 {
     node_text_width(label) + 2.0 * PAD_X
 }
 
+fn sum_with_gaps(kids: &[Placed]) -> f64 {
+    let n = kids.len();
+    if n == 0 {
+        return 0.0;
+    }
+    kids.iter().map(|k| k.height).sum::<f64>() + (n - 1) as f64 * SIBLING_GAP
+}
+
 fn measure(node: &MindMapNode, side: Side) -> Placed {
     let text_w = node_text_width(&node.label);
     let w = text_w + 2.0 * PAD_X;
@@ -54,12 +62,12 @@ fn measure(node: &MindMapNode, side: Side) -> Placed {
             text_w,
             label: node.label.clone(),
             side,
-            height: LEAF_STRIDE,
+            height: BOX_H,
             children: Vec::new(),
         };
     }
     let kids: Vec<Placed> = kid_refs.iter().map(|c| measure(c, side)).collect();
-    let h: f64 = kids.iter().map(|k| k.height).sum();
+    let h = sum_with_gaps(&kids);
     Placed {
         x: 0.0,
         cy: 0.0,
@@ -76,9 +84,10 @@ fn position(parent: &mut Placed) {
     if parent.children.is_empty() {
         return;
     }
-    let total_h: f64 = parent.children.iter().map(|c| c.height).sum();
+    let n = parent.children.len();
+    let total_h = sum_with_gaps(&parent.children);
     let mut y_top = parent.cy - total_h / 2.0;
-    for child in &mut parent.children {
+    for (i, child) in parent.children.iter_mut().enumerate() {
         let h = child.height;
         child.cy = y_top + h / 2.0;
         child.x = if parent.side == Side::Left {
@@ -88,6 +97,9 @@ fn position(parent: &mut Placed) {
         };
         position(child);
         y_top += h;
+        if i + 1 < n {
+            y_top += SIBLING_GAP;
+        }
     }
 }
 
@@ -183,12 +195,13 @@ pub fn render(diagram: &MindMapDiagram, _theme: &Theme) -> String {
     for root in &diagram.roots {
         let right_subtree = measure(root, Side::Right);
         let left_subtree = measure(root, Side::Left);
-        let right_h: f64 = right_subtree.children.iter().map(|k| k.height).sum();
-        let left_h: f64 = left_subtree.children.iter().map(|k| k.height).sum();
+        let right_h = sum_with_gaps(&right_subtree.children);
+        let left_h = sum_with_gaps(&left_subtree.children);
         let kids_h = right_h.max(left_h);
         let total_h = if kids_h > 0.0 { kids_h } else { BOX_H };
 
         let root_w = node_w(&root.label);
+        // Top of root's allocated band = cursor_y. Root centred vertically.
         let root_cy = cursor_y + total_h / 2.0;
 
         let mut root_placed = Placed {
@@ -204,26 +217,34 @@ pub fn render(diagram: &MindMapDiagram, _theme: &Theme) -> String {
 
         let mut right_children: Vec<Placed> = right_subtree.children;
         if !right_children.is_empty() {
+            let n = right_children.len();
             let mut y_top = root_cy - right_h / 2.0;
-            for child in &mut right_children {
+            for (i, child) in right_children.iter_mut().enumerate() {
                 let h = child.height;
                 child.cy = y_top + h / 2.0;
                 child.x = root_w + LEVEL_DX;
                 position(child);
                 y_top += h;
+                if i + 1 < n {
+                    y_top += SIBLING_GAP;
+                }
             }
             root_placed.children.extend(right_children);
         }
 
         let mut left_children: Vec<Placed> = left_subtree.children;
         if !left_children.is_empty() {
+            let n = left_children.len();
             let mut y_top = root_cy - left_h / 2.0;
-            for child in &mut left_children {
+            for (i, child) in left_children.iter_mut().enumerate() {
                 let h = child.height;
                 child.cy = y_top + h / 2.0;
                 child.x = -LEVEL_DX - child.w;
                 position(child);
                 y_top += h;
+                if i + 1 < n {
+                    y_top += SIBLING_GAP;
+                }
             }
             root_placed.children.extend(left_children);
         }
@@ -241,8 +262,8 @@ pub fn render(diagram: &MindMapDiagram, _theme: &Theme) -> String {
         shift_x(p, dx);
     }
 
-    // Match PlantUML's canvas sizing. For childless roots the canvas reserves
-    // an extra level slot of space to the right of the box.
+    // PlantUML reserves a level slot for a phantom child when there are no
+    // children at all.
     let any_children = placed.iter().any(|p| !p.children.is_empty());
     let right_pad = if any_children {
         X_MARGIN
