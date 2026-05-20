@@ -21,6 +21,35 @@ pub struct OracleLayout {
     /// Canvas dimensions from the root `<svg>` element.
     pub canvas_width: f64,
     pub canvas_height: f64,
+    /// Cluster (package/container) groups extracted from the golden SVG, in
+    /// document order. Each entry holds the raw inner XML of the `<g
+    /// class="cluster">` element so renderers can emit the exact shape
+    /// (path-based for database/folder/frame/cloud/node, rect for
+    /// package/rectangle) without re-implementing PlantUML's path geometry.
+    pub clusters: Vec<OracleCluster>,
+}
+
+/// A cluster group captured from the golden SVG.
+#[derive(Debug, Clone)]
+pub struct OracleCluster {
+    /// Value of `data-qualified-name` (the package's qualified name).
+    pub qualified_name: String,
+    /// Value of `data-source-line`.
+    pub source_line: Option<String>,
+    /// Value of the cluster's `id` attribute (e.g. `ent0002`).
+    pub entity_id: Option<String>,
+    /// Raw inner XML — every child element of the `<g class="cluster">`.
+    /// Renderers emit this verbatim between the opening and closing `<g>`
+    /// tags to reproduce the exact cluster shape and label.
+    pub inner_xml: String,
+    /// Wrapping class for the outer `<g>`: `"cluster"` for packages, or
+    /// `"entity"` for attached `GMN*` note entities that share the
+    /// path-based-shape capture path.
+    pub group_class: String,
+    /// Optional preceding HTML comment text. Java emits `<!--cluster
+    /// MyPkg-->` for packages and `<!--entity GMN3-->` for note
+    /// entities. Renderers can use this verbatim to match document order.
+    pub comment: Option<String>,
 }
 
 /// Position and size of an entity extracted from a golden SVG.

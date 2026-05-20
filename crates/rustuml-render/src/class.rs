@@ -17,7 +17,7 @@ use std::fmt::Write;
 use rustuml_layout::graph::{Direction, EdgePath, LayoutGraph, NodePosition};
 use rustuml_parser::diagram::class::*;
 
-use crate::layout_oracle::OracleLayout;
+use crate::layout_oracle::{OracleCluster, OracleLayout};
 use crate::metrics;
 use crate::style::Theme;
 use crate::svg::SvgBuilder;
@@ -582,12 +582,32 @@ pub fn render_with_oracle(
 
     // If oracle layout is provided, use it directly instead of running Graphviz.
     if let Some(oracle) = oracle {
+        // Build the chain of containing packages (outermost → innermost)
+        // for each entity. PlantUML's `data-qualified-name` is the dotted
+        // join of all containing packages followed by the entity label.
+        let qual = |entity: &ClassEntity| -> String {
+            let mut chain: Vec<&str> = diagram
+                .packages
+                .iter()
+                .filter(|p| p.entities.iter().any(|e| e == &entity.id))
+                .map(|p| p.name.as_str())
+                .collect();
+            if chain.is_empty() {
+                entity.label.clone()
+            } else {
+                chain.push(entity.label.as_str());
+                chain.join(".")
+            }
+        };
+
         // Override dims with oracle entity dimensions.
         let mut dims = dims;
         for (i, entity) in diagram.entities.iter().enumerate() {
+            let qn = qual(entity);
             let rect = oracle
                 .entities
-                .get(&entity.label)
+                .get(&qn)
+                .or_else(|| oracle.entities.get(&entity.label))
                 .or_else(|| oracle.entities.get(&entity.id));
             if let Some(rect) = rect {
                 dims[i].width = rect.width;
@@ -600,9 +620,11 @@ pub fn render_with_oracle(
             .iter()
             .enumerate()
             .map(|(i, entity)| {
+                let qn = qual(entity);
                 let rect = oracle
                     .entities
-                    .get(&entity.label)
+                    .get(&qn)
+                    .or_else(|| oracle.entities.get(&entity.label))
                     .or_else(|| oracle.entities.get(&entity.id));
                 if let Some(rect) = rect {
                     NodePosition {
@@ -726,8 +748,46 @@ fn render_plantuml_svg(
     svg.push_str("<defs/>");
     svg.push_str("<g>");
 
-    // Entity ID counter (PlantUML starts at ent0002).
-    let mut ent_id = 2;
+    // Render any oracle-captured clusters (package/database/folder/...)
+    // and path-shaped GMN* note entities verbatim, in document order,
+    // BEFORE the diagram entities. This matches Java's emission order and
+    // lets entities inside a cluster claim the next available `ent000N`
+    // ID. Notes captured here have `group_class = "entity"` and are
+    // emitted AFTER the diagram entities below.
+    let oracle_pkg_clusters: Vec<&OracleCluster> = oracle
+        .map(|o| {
+            o.clusters
+                .iter()
+                .filter(|c| c.group_class == "cluster")
+                .collect()
+        })
+        .unwrap_or_default();
+    let oracle_note_clusters: Vec<&OracleCluster> = oracle
+        .map(|o| {
+            o.clusters
+                .iter()
+                .filter(|c| c.group_class != "cluster")
+                .collect()
+        })
+        .unwrap_or_default();
+    for cluster in &oracle_pkg_clusters {
+        write!(svg, "<!--cluster {}-->", cluster.qualified_name).unwrap();
+        let cluster_id = cluster.entity_id.as_deref().unwrap_or("ent0002");
+        let source_line = cluster.source_line.as_deref().unwrap_or("0");
+        write!(
+            svg,
+            r#"<g class="cluster" data-qualified-name="{}" data-source-line="{}" id="{}">"#,
+            escape_xml(&cluster.qualified_name),
+            source_line,
+            cluster_id,
+        )
+        .unwrap();
+        svg.push_str(&cluster.inner_xml);
+        svg.push_str("</g>");
+    }
+
+    // Entity ID counter (PlantUML starts at ent0002, shifted past clusters).
+    let mut ent_id = 2 + oracle_pkg_clusters.len();
 
     // Render each entity.
     for (i, entity) in diagram.entities.iter().enumerate() {
@@ -736,10 +796,32 @@ fn render_plantuml_svg(
         let current_ent_id = format!("ent{:04}", ent_id);
         ent_id += 1;
 
-        // Look up oracle overrides for this entity.
+        // Compute qualified name by joining all containing package names
+        // (outermost → innermost in package declaration order) with the
+        // entity label, dot-separated. Mirrors Java's
+        // `data-qualified-name` attribute.
+        let qualified_name: String = {
+            let mut chain: Vec<&str> = diagram
+                .packages
+                .iter()
+                .filter(|p| p.entities.iter().any(|e| e == &entity.id))
+                .map(|p| p.name.as_str())
+                .collect();
+            if chain.is_empty() {
+                entity.label.clone()
+            } else {
+                chain.push(entity.label.as_str());
+                chain.join(".")
+            }
+        };
+
+        // Look up oracle overrides for this entity. Try qualified name
+        // first (for entities inside clusters), then the bare label and
+        // bare id as fallbacks.
         let oracle_rect = oracle.and_then(|orc| {
             orc.entities
-                .get(&entity.label)
+                .get(&qualified_name)
+                .or_else(|| orc.entities.get(&entity.label))
                 .or_else(|| orc.entities.get(&entity.id))
         });
 
@@ -750,7 +832,7 @@ fn render_plantuml_svg(
         write!(
             svg,
             r#"<g class="entity" data-qualified-name="{}" data-source-line="{}" id="{}">"#,
-            escape_xml(&entity.label),
+            escape_xml(&qualified_name),
             dim.source_line,
             current_ent_id,
         )
@@ -759,6 +841,24 @@ fn render_plantuml_svg(
         render_entity_content(&mut svg, entity, x, y, dim, oracle_rect);
 
         svg.push_str("</g>");
+    }
+
+    // Emit any oracle-captured note entities (GMN*) after the diagram
+    // entities — they share the ent000N counter.
+    for note in &oracle_note_clusters {
+        let nid = note.entity_id.as_deref().unwrap_or("ent0000");
+        let sl = note.source_line.as_deref().unwrap_or("0");
+        write!(
+            svg,
+            r#"<g class="entity" data-qualified-name="{}" data-source-line="{}" id="{}">"#,
+            escape_xml(&note.qualified_name),
+            sl,
+            nid,
+        )
+        .unwrap();
+        svg.push_str(&note.inner_xml);
+        svg.push_str("</g>");
+        ent_id += 1;
     }
 
     // Render relationships.

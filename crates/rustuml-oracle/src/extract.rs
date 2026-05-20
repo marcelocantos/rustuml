@@ -6,7 +6,7 @@
 //! Parses a golden SVG to extract entity positions and edge paths,
 //! producing an `OracleLayout` that can be fed to renderers.
 
-use rustuml_render::layout_oracle::{EntityRect, OracleEdgePath, OracleLayout};
+use rustuml_render::layout_oracle::{EntityRect, OracleCluster, OracleEdgePath, OracleLayout};
 
 /// Extract layout data from a golden SVG string.
 ///
@@ -42,6 +42,54 @@ pub fn extract_oracle_layout(svg: &str) -> Option<OracleLayout> {
         }
 
         let class_attr = node.attribute("class").unwrap_or("");
+
+        // Capture cluster groups AND path-shaped "GMN" note entities so
+        // renderers can emit the exact path-based shapes verbatim without
+        // re-implementing the path geometry. Concatenate only the direct
+        // shape children (`path`, `rect`, `ellipse`, `polygon`, `text`,
+        // `line`) — skip nested `<g>` since those are inner entities or
+        // child clusters rendered through their own paths.
+        //
+        // Java emits attached notes as `<g class="entity" id="ent000N">`
+        // with a `data-qualified-name` like `GMN3` and a path-based shape
+        // (no rect). Treating them as clusters keeps the raw shape and
+        // text but lets the renderer assign the ent000N counter.
+        let qname = node.attribute("data-qualified-name").unwrap_or("");
+        let looks_like_note_entity = class_attr == "entity"
+            && qname.starts_with("GMN")
+            && find_first_child(&node, "rect").is_none();
+        if (class_attr == "cluster" || looks_like_note_entity)
+            && let Some(name) = node.attribute("data-qualified-name")
+        {
+            let mut inner_xml = String::new();
+            for c in node.children() {
+                if c.is_element() {
+                    let tag = c.tag_name().name();
+                    if matches!(
+                        tag,
+                        "path" | "rect" | "ellipse" | "polygon" | "text" | "line"
+                    ) {
+                        let range = c.range();
+                        if range.end <= svg.len() && range.start < range.end {
+                            inner_xml.push_str(&svg[range.start..range.end]);
+                        }
+                    }
+                }
+            }
+            let group_class = if class_attr == "cluster" {
+                "cluster".to_string()
+            } else {
+                "entity".to_string()
+            };
+            layout.clusters.push(OracleCluster {
+                qualified_name: name.to_string(),
+                source_line: node.attribute("data-source-line").map(String::from),
+                entity_id: node.attribute("id").map(String::from),
+                inner_xml,
+                group_class,
+                comment: None,
+            });
+        }
 
         if class_attr == "entity" || class_attr == "cluster" {
             if let Some(name) = node.attribute("data-qualified-name") {

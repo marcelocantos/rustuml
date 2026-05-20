@@ -474,6 +474,16 @@ impl ClassParser {
         //                   <-->, <..>, --, -->, <--, <-, ->, .., ..>, <..
         //                   <|--|> (bidirectional inheritance), <..|.> etc.
         // Multiple dashes (e.g. ---- or ------) are treated as plain association.
+        //
+        // Colour / direction / bold / thickness modifiers attach to the arrow
+        // and are stripped before kind detection (e.g. `A -[#blue]- B`,
+        // `A -down-> B`, `A -[bold]-> B`). The modifier is matched but
+        // discarded — the kind comes from the surrounding arrow shape.
+        // Strip arrow modifiers like `[#color,bold]`, `down`, `[dashed]` etc.
+        // from the line before matching; replace with a single dash so the
+        // arrow shape continues to match cleanly.
+        let stripped_line = strip_arrow_modifiers(line);
+        let line = stripped_line.as_str();
         static RE: LazyLock<Regex> = LazyLock::new(|| {
             Regex::new(
                 r#"^([\w.]+)\s*(?:"([^"]+)")?\s*((?:<\|--\|>|<\.\.>|<\|--|--\|>|\.\.\|>|<\|\.\.|<\.\.|\*--|--\*|o--|--o|<-->|<--|-->|->|<-|-{2,}|\.\.|\.\.>))\s*(?:"([^"]+)")?\s*([\w.]+)(?:\s*:\s*(.+))?$"#,
@@ -996,6 +1006,32 @@ fn parse_entity_kind(s: &str) -> EntityKind {
         "annotation" => EntityKind::Annotation,
         "entity" => EntityKind::Entity,
         _ => EntityKind::Class,
+    }
+}
+
+/// Strip arrow modifiers from a relationship line so the shape regex can
+/// match cleanly. PlantUML allows colour, thickness, direction and style
+/// adornments inside square brackets on the arrow body
+/// (e.g. `A -[#blue]- B`, `A -[#red,dashed]-> B`), plus bare direction
+/// words between dashes (`A -down-> B`, `A .left.> B`).
+///
+/// The replacement collapses bracketed modifiers to nothing and bare
+/// direction keywords to the empty string so the resulting arrow shape
+/// (`--`, `-->`, `..`, etc.) survives untouched.
+fn strip_arrow_modifiers(line: &str) -> String {
+    static BRACKETED: LazyLock<Regex> = LazyLock::new(|| Regex::new(r"\[[^\]]*\]").unwrap());
+    // Direction keywords appearing between dash/dot runs on the arrow body.
+    static DIRECTION: LazyLock<Regex> =
+        LazyLock::new(|| Regex::new(r"([-.])(left|right|up|down|l|r|u|d)([-.])").unwrap());
+    let s = BRACKETED.replace_all(line, "");
+    let s = DIRECTION.replace_all(&s, "$1$3");
+    // Re-promote isolated single-dash arrows (which result from bracketed
+    // modifiers next to a single dash, e.g. `A -[#blue] B`) into standard
+    // two-dash association arrows so the shape regex matches.
+    if s.contains(" - ") {
+        s.replace(" - ", " -- ")
+    } else {
+        s.into_owned()
     }
 }
 
