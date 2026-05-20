@@ -28,6 +28,12 @@ const ACTION_PADDING: f64 = 20.0; // total vertical padding in action box
 const ACTION_H_PADDING: f64 = 10.0; // horizontal padding each side
 const ACTION_RX: f64 = 12.5;
 const DIAMOND_HALF: f64 = 12.0; // half-size of decision diamond
+/// PlantUML enforces a minimum width on the inner (top/bottom) edge of
+/// decision diamonds: 24 px regardless of how short the condition text is.
+/// Reverse-engineered from goldens with one- and two-character conditions
+/// ("A?", "B?", "c?") which all produce a 24-px inner span while their text
+/// `textLength` stays at the measured value.
+const DIAMOND_MIN_INNER_W: f64 = 24.0;
 
 /// Vertical gap between an if/else condition diamond's bottom point and
 /// the top of each branch's first action box. PlantUML uses 10 px here,
@@ -45,8 +51,6 @@ const SMALL_FONT: f64 = 11.0;
 const TITLE_FONT_SIZE: f64 = 14.0;
 
 const START_FILL: &str = "#222222";
-const START_STROKE: &str = "#222222";
-const STOP_STROKE: &str = "#222222";
 const STOP_FILL: &str = "#222222";
 const ACTION_FILL: &str = "#F1F1F1";
 const ACTION_STROKE: &str = "#181818";
@@ -257,6 +261,27 @@ enum LayoutNode {
 struct ElseBranch {
     label: Option<String>,
     body: Vec<LayoutNode>,
+}
+
+/// Returns true if a branch ends with a control-flow terminator (Stop, End,
+/// Detach, or Kill). PlantUML omits the merge diamond and post-merge
+/// connectors entirely when every branch of an if/else terminates this way.
+fn branch_terminates(body: &[LayoutNode]) -> bool {
+    matches!(
+        body.last(),
+        Some(LayoutNode::Stop)
+            | Some(LayoutNode::End)
+            | Some(LayoutNode::Detach)
+            | Some(LayoutNode::Kill)
+    )
+}
+
+/// Width of an if/while/repeat condition diamond's inner (top/bottom) edge.
+/// PlantUML clamps this to a minimum of 24 px so very short conditions still
+/// produce a diamond wider than their text. The text inside stays at its
+/// measured length — the polygon and the text are sized independently.
+fn diamond_inner_w(condition: &str) -> f64 {
+    text_render::measure(condition, SMALL_FONT, false).max(DIAMOND_MIN_INNER_W)
 }
 
 /// Build a layout tree from the flat step list.
@@ -523,8 +548,7 @@ fn node_extents(node: &LayoutNode) -> (f64, f64) {
             else_branches,
             ..
         } => {
-            let cond_w = text_render::measure(condition, SMALL_FONT, false);
-            let diamond_w = cond_w + DIAMOND_HALF * 2.0;
+            let diamond_w = diamond_inner_w(condition) + DIAMOND_HALF * 2.0;
             let then_w = sequence_width(then_branch);
             let else_w: f64 = else_branches.iter().map(|b| sequence_width(&b.body)).sum();
             // Branch centrelines are at least `diamond_w + 20` apart, but
@@ -579,8 +603,7 @@ fn node_width(node: &LayoutNode) -> f64 {
             else_branches,
             ..
         } => {
-            let cond_w = text_render::measure(condition, SMALL_FONT, false);
-            let diamond_w = cond_w + DIAMOND_HALF * 2.0;
+            let diamond_w = diamond_inner_w(condition) + DIAMOND_HALF * 2.0;
             let then_w = sequence_width(then_branch);
             let else_w: f64 = else_branches.iter().map(|b| sequence_width(&b.body)).sum();
             // Branch centrelines are at least `diamond_w + 20` apart, but
@@ -598,14 +621,14 @@ fn node_width(node: &LayoutNode) -> f64 {
             body, condition, ..
         } => {
             let body_w = sequence_width(body);
-            let cond_w = text_render::measure(condition, SMALL_FONT, false) + DIAMOND_HALF * 2.0;
+            let cond_w = diamond_inner_w(condition) + DIAMOND_HALF * 2.0;
             body_w.max(cond_w + 40.0) // extra space for loop-back arrow
         }
         LayoutNode::Repeat {
             body, condition, ..
         } => {
             let body_w = sequence_width(body);
-            let cond_w = text_render::measure(condition, SMALL_FONT, false) + DIAMOND_HALF * 2.0;
+            let cond_w = diamond_inner_w(condition) + DIAMOND_HALF * 2.0;
             body_w.max(cond_w + 40.0)
         }
         // Arrows, notes, detach/kill/break, and bare titles contribute no
@@ -712,8 +735,18 @@ fn node_height(node: &LayoutNode) -> f64 {
                 .map(|b| sequence_height(&b.body))
                 .fold(0.0f64, f64::max);
             let branch_h = then_h.max(max_else_h);
-            // diamond + IF_BRANCH_DOWN + branch_h + IF_BRANCH_UP + merge_diamond
-            diamond_h + IF_BRANCH_DOWN + branch_h + IF_BRANCH_UP + DIAMOND_HALF * 2.0
+            // diamond + IF_BRANCH_DOWN + branch_h + IF_BRANCH_UP + merge_diamond.
+            // When every branch terminates, the merge diamond and its leading
+            // IF_BRANCH_UP gap are skipped (see emit_if).
+            let then_terminates = branch_terminates(then_branch);
+            let else_terminates = !else_branches.is_empty()
+                && else_branches.iter().all(|b| branch_terminates(&b.body));
+            let all_terminate = then_terminates && else_terminates;
+            if all_terminate {
+                diamond_h + IF_BRANCH_DOWN + branch_h
+            } else {
+                diamond_h + IF_BRANCH_DOWN + branch_h + IF_BRANCH_UP + DIAMOND_HALF * 2.0
+            }
         }
         LayoutNode::Fork { branches } => {
             let max_h: f64 = branches
@@ -1215,13 +1248,16 @@ fn emit_sequence(svg: &mut SvgEmitter, nodes: &[LayoutNode], cx: f64, mut y: f64
                         ..
                     }) => arrow_style_from_brackets(c, *dashed),
                     Some(LayoutNode::Arrow { dashed, .. }) => ArrowStyle {
-                        color: ARROW_COLOR.to_string(),
+                        color: svg.palette.arrow_color.clone(),
                         dashed: *dashed,
                         dotted: false,
                         bold: false,
                         hidden: false,
                     },
-                    _ => ArrowStyle::default(),
+                    _ => ArrowStyle {
+                        color: svg.palette.arrow_color.clone(),
+                        ..ArrowStyle::default()
+                    },
                 };
                 let label = match explicit_arrow {
                     Some(LayoutNode::Arrow { label: Some(l), .. }) => Some(l.clone()),
@@ -1282,21 +1318,15 @@ fn emit_node(svg: &mut SvgEmitter, node: &LayoutNode, cx: f64, y: f64) -> f64 {
             // and gets clamped up. After a warnings band or title the
             // cursor is already past START_CY and is used as-is.
             let cy = y.max(START_CY);
-            svg.ellipse(cx, cy, START_R, START_R, START_FILL, START_STROKE, "1");
+            let fill = svg.palette.start_fill.clone();
+            svg.ellipse(cx, cy, START_R, START_R, &fill, &fill, "1");
             cy + START_R
         }
         LayoutNode::Stop => {
             let cy = y + STOP_OUTER_R;
-            svg.ellipse(cx, cy, STOP_OUTER_R, STOP_OUTER_R, "none", STOP_STROKE, "1");
-            svg.ellipse(
-                cx,
-                cy,
-                STOP_INNER_R,
-                STOP_INNER_R,
-                STOP_FILL,
-                STOP_FILL,
-                "1",
-            );
+            let fill = svg.palette.stop_fill.clone();
+            svg.ellipse(cx, cy, STOP_OUTER_R, STOP_OUTER_R, "none", &fill, "1");
+            svg.ellipse(cx, cy, STOP_INNER_R, STOP_INNER_R, &fill, &fill, "1");
             y + STOP_OUTER_R * 2.0
         }
         LayoutNode::End => {
@@ -1308,11 +1338,12 @@ fn emit_node(svg: &mut SvgEmitter, node: &LayoutNode, cx: f64, y: f64) -> f64 {
             const END_R: f64 = 10.0;
             const X_HALF: f64 = 6.1872; // empirical from goldens
             let cy = y + END_R;
-            svg.ellipse(cx, cy, END_R, END_R, "none", STOP_STROKE, "1.5");
+            let stroke = svg.palette.stop_fill.clone();
+            svg.ellipse(cx, cy, END_R, END_R, "none", &stroke, "1.5");
             // X lines belong with shapes (between ellipse and any following
             // text) — they are the visual content of the end node.
             svg.shape_line(
-                STOP_STROKE,
+                &stroke,
                 "2.5",
                 cx - X_HALF,
                 cx + X_HALF,
@@ -1320,7 +1351,7 @@ fn emit_node(svg: &mut SvgEmitter, node: &LayoutNode, cx: f64, y: f64) -> f64 {
                 cy + X_HALF,
             );
             svg.shape_line(
-                STOP_STROKE,
+                &stroke,
                 "2.5",
                 cx + X_HALF,
                 cx - X_HALF,
@@ -1453,32 +1484,42 @@ fn emit_if(
     then_branch: &[LayoutNode],
     else_branches: &[ElseBranch],
 ) -> f64 {
-    let cond_w = text_render::measure(condition, SMALL_FONT, false);
+    // Cache the per-diagram colours up front so the many line/polygon emit
+    // calls below can borrow them as &str without re-borrowing svg.palette.
+    let arrow_color = svg.palette.arrow_color.clone();
+    let diamond_stroke = svg.palette.diamond_stroke.clone();
+    let diamond_fill = svg.palette.diamond_fill.clone();
+
+    // The diamond's inner edge is clamped to DIAMOND_MIN_INNER_W; the
+    // condition's `textLength` is the measured width (no clamp). Track both
+    // separately so the polygon and the text are sized independently.
+    let cond_inner_w = diamond_inner_w(condition);
+    let cond_text_w = text_render::measure(condition, SMALL_FONT, false);
 
     // Diamond: centered at (cx, y + DIAMOND_HALF)
     let diamond_cy = y + DIAMOND_HALF;
-    let diamond_left = cx - cond_w / 2.0 - DIAMOND_HALF;
-    let diamond_right = cx + cond_w / 2.0 + DIAMOND_HALF;
+    let diamond_left = cx - cond_inner_w / 2.0 - DIAMOND_HALF;
+    let diamond_right = cx + cond_inner_w / 2.0 + DIAMOND_HALF;
 
     // Diamond polygon (hexagonal for conditions with text)
     let pts = vec![
-        (cx - cond_w / 2.0, y),
-        (cx + cond_w / 2.0, y),
+        (cx - cond_inner_w / 2.0, y),
+        (cx + cond_inner_w / 2.0, y),
         (diamond_right, diamond_cy),
-        (cx + cond_w / 2.0, y + DIAMOND_HALF * 2.0),
-        (cx - cond_w / 2.0, y + DIAMOND_HALF * 2.0),
+        (cx + cond_inner_w / 2.0, y + DIAMOND_HALF * 2.0),
+        (cx - cond_inner_w / 2.0, y + DIAMOND_HALF * 2.0),
         (diamond_left, diamond_cy),
     ];
-    svg.polygon_shape(DIAMOND_FILL, &pts, ACTION_STROKE, ACTION_STROKE_WIDTH);
+    svg.polygon_shape(&diamond_fill, &pts, &diamond_stroke, ACTION_STROKE_WIDTH);
 
-    // Condition text
+    // Condition text (textLength = measured, centred under cx).
     let text_y = y + DIAMOND_HALF + pm::text_height(SMALL_FONT) / 2.0 - pm::descent(SMALL_FONT);
     svg.text_element(
         TEXT_COLOR,
         "sans-serif",
         SMALL_FONT,
-        cond_w,
-        cx - cond_w / 2.0,
+        cond_text_w,
+        cx - cond_text_w / 2.0,
         text_y,
         condition,
         false,
@@ -1507,7 +1548,7 @@ fn emit_if(
     // with their centrelines `branch_dist` apart, where
     // `branch_dist = max(diamond_w + 20, (then_w + else_w)/2 + 20)` so
     // wider branches don't crowd each other.
-    let diamond_w = cond_w + DIAMOND_HALF * 2.0;
+    let diamond_w = cond_inner_w + DIAMOND_HALF * 2.0;
     let then_w = sequence_width(then_branch);
     let else_w: f64 = else_branches.iter().map(|b| sequence_width(&b.body)).sum();
     let branch_dist = (diamond_w + 20.0).max((then_w + else_w) / 2.0 + 20.0);
@@ -1543,23 +1584,33 @@ fn emit_if(
         branch_y
     };
 
+    // If every branch ends with a terminator (Stop/End/Detach/Kill), PlantUML
+    // skips the merge diamond and post-merge connectors entirely. The two
+    // branches stand on their own; the if-block's bottom is the deeper one.
+    let then_terminates = branch_terminates(then_branch);
+    let else_terminates =
+        !else_branches.is_empty() && else_branches.iter().all(|b| branch_terminates(&b.body));
+    let all_terminate = then_terminates && else_terminates;
+
     // Merge diamond at bottom — sits IF_BRANCH_UP px below the deepest branch.
     let merge_y = then_bottom.max(else_bottom) + IF_BRANCH_UP;
     let merge_diamond_top = merge_y;
     let merge_cy = merge_diamond_top + DIAMOND_HALF;
 
-    // Small merge diamond shape (lands in shapes buffer after branch shapes).
-    svg.polygon_shape(
-        DIAMOND_FILL,
-        &[
-            (cx, merge_diamond_top),
-            (cx + DIAMOND_HALF, merge_cy),
-            (cx, merge_diamond_top + DIAMOND_HALF * 2.0),
-            (cx - DIAMOND_HALF, merge_cy),
-        ],
-        ACTION_STROKE,
-        ACTION_STROKE_WIDTH,
-    );
+    if !all_terminate {
+        // Small merge diamond shape (lands in shapes buffer after branch shapes).
+        svg.polygon_shape(
+            &diamond_fill,
+            &[
+                (cx, merge_diamond_top),
+                (cx + DIAMOND_HALF, merge_cy),
+                (cx, merge_diamond_top + DIAMOND_HALF * 2.0),
+                (cx - DIAMOND_HALF, merge_cy),
+            ],
+            &diamond_stroke,
+            ACTION_STROKE_WIDTH,
+        );
+    }
 
     // Now emit the if/else-frame connectors AFTER the branch-internal ones.
     // Order: diamond→then, diamond→else, then→merge, else→merge.
@@ -1567,7 +1618,7 @@ fn emit_if(
     // Diamond → then: horizontal from diamond left to then_cx, then down to
     // branch top, with an arrowhead overlay.
     svg.line_styled(
-        ARROW_COLOR,
+        &arrow_color,
         "1",
         diamond_left,
         then_cx,
@@ -1576,7 +1627,7 @@ fn emit_if(
         false,
     );
     svg.line_styled(
-        ARROW_COLOR,
+        &arrow_color,
         "1",
         then_cx,
         then_cx,
@@ -1585,20 +1636,20 @@ fn emit_if(
         false,
     );
     svg.polygon_connector(
-        ARROW_COLOR,
+        &arrow_color,
         &[
             (then_cx - 4.0, diamond_bottom + IF_BRANCH_DOWN - 10.0),
             (then_cx, diamond_bottom + IF_BRANCH_DOWN),
             (then_cx + 4.0, diamond_bottom + IF_BRANCH_DOWN - 10.0),
             (then_cx, diamond_bottom + IF_BRANCH_DOWN - 6.0),
         ],
-        ARROW_COLOR,
+        &arrow_color,
         "1",
     );
 
     // Diamond → else: mirror of the then side.
     svg.line_styled(
-        ARROW_COLOR,
+        &arrow_color,
         "1",
         diamond_right,
         else_cx,
@@ -1607,7 +1658,7 @@ fn emit_if(
         false,
     );
     svg.line_styled(
-        ARROW_COLOR,
+        &arrow_color,
         "1",
         else_cx,
         else_cx,
@@ -1616,60 +1667,69 @@ fn emit_if(
         false,
     );
     svg.polygon_connector(
-        ARROW_COLOR,
+        &arrow_color,
         &[
             (else_cx - 4.0, diamond_bottom + IF_BRANCH_DOWN - 10.0),
             (else_cx, diamond_bottom + IF_BRANCH_DOWN),
             (else_cx + 4.0, diamond_bottom + IF_BRANCH_DOWN - 10.0),
             (else_cx, diamond_bottom + IF_BRANCH_DOWN - 6.0),
         ],
-        ARROW_COLOR,
+        &arrow_color,
         "1",
     );
 
-    // Then branch → merge.
-    svg.line_styled(
-        ARROW_COLOR,
-        "1",
-        then_cx,
-        then_cx,
-        then_bottom,
-        merge_cy,
-        false,
-    );
-    svg.line_styled(
-        ARROW_COLOR,
-        "1",
-        then_cx,
-        cx - DIAMOND_HALF,
-        merge_cy,
-        merge_cy,
-        false,
-    );
-    svg.right_arrow(cx - DIAMOND_HALF, merge_cy, ARROW_COLOR);
+    // Then branch → merge — skipped if the branch terminates.
+    if !then_terminates {
+        svg.line_styled(
+            &arrow_color,
+            "1",
+            then_cx,
+            then_cx,
+            then_bottom,
+            merge_cy,
+            false,
+        );
+        svg.line_styled(
+            &arrow_color,
+            "1",
+            then_cx,
+            cx - DIAMOND_HALF,
+            merge_cy,
+            merge_cy,
+            false,
+        );
+        svg.right_arrow(cx - DIAMOND_HALF, merge_cy, &arrow_color);
+    }
 
-    // Else branch → merge.
-    svg.line_styled(
-        ARROW_COLOR,
-        "1",
-        else_cx,
-        else_cx,
-        else_bottom,
-        merge_cy,
-        false,
-    );
-    svg.line_styled(
-        ARROW_COLOR,
-        "1",
-        else_cx,
-        cx + DIAMOND_HALF,
-        merge_cy,
-        merge_cy,
-        false,
-    );
-    svg.left_arrow(cx + DIAMOND_HALF, merge_cy, ARROW_COLOR);
+    // Else branch → merge — skipped if every else branch terminates.
+    if !else_terminates {
+        svg.line_styled(
+            &arrow_color,
+            "1",
+            else_cx,
+            else_cx,
+            else_bottom,
+            merge_cy,
+            false,
+        );
+        svg.line_styled(
+            &arrow_color,
+            "1",
+            else_cx,
+            cx + DIAMOND_HALF,
+            merge_cy,
+            merge_cy,
+            false,
+        );
+        svg.left_arrow(cx + DIAMOND_HALF, merge_cy, &arrow_color);
+    }
 
-    merge_diamond_top + DIAMOND_HALF * 2.0
+    if all_terminate {
+        // No merge diamond was emitted — block height ends at the deeper branch.
+        then_bottom.max(else_bottom)
+    } else {
+        merge_diamond_top + DIAMOND_HALF * 2.0
+    }
 }
 
 fn emit_fork(svg: &mut SvgEmitter, cx: f64, y: f64, branches: &[Vec<LayoutNode>]) -> f64 {
@@ -1702,12 +1762,14 @@ fn emit_fork(svg: &mut SvgEmitter, cx: f64, y: f64, branches: &[Vec<LayoutNode>]
 
     // Top bar
     let bar_x = cx - bar_w / 2.0;
+    let bar_color = svg.palette.bar_color.clone();
+    let arrow_color = svg.palette.arrow_color.clone();
     svg.rect_styled(
-        FORK_BAR_COLOR,
+        &bar_color,
         FORK_BAR_HEIGHT,
         FORK_BAR_RX,
         FORK_BAR_RX,
-        FORK_BAR_COLOR,
+        &bar_color,
         "1",
         bar_w,
         bar_x,
@@ -1748,7 +1810,7 @@ fn emit_fork(svg: &mut SvgEmitter, cx: f64, y: f64, branches: &[Vec<LayoutNode>]
     let mut branch_bottoms = Vec::new();
     for (i, branch) in branches.iter().enumerate() {
         let bcx = branch_centers[i];
-        svg.down_arrow(bcx, bar_bottom, bar_bottom + ARROW_LEN, ARROW_COLOR);
+        svg.down_arrow(bcx, bar_bottom, bar_bottom + ARROW_LEN, &arrow_color);
         let bottom = emit_sequence(svg, branch, bcx, bar_bottom + ARROW_LEN);
         branch_bottoms.push(bottom);
     }
@@ -1759,17 +1821,17 @@ fn emit_fork(svg: &mut SvgEmitter, cx: f64, y: f64, branches: &[Vec<LayoutNode>]
     // Arrows from each branch to bottom bar
     for (i, bottom) in branch_bottoms.iter().enumerate() {
         let bcx = branch_centers[i];
-        svg.down_arrow(bcx, *bottom, max_bottom + ARROW_LEN, ARROW_COLOR);
+        svg.down_arrow(bcx, *bottom, max_bottom + ARROW_LEN, &arrow_color);
     }
 
     // Bottom bar
     let bottom_bar_y = max_bottom + ARROW_LEN;
     svg.rect_styled(
-        FORK_BAR_COLOR,
+        &bar_color,
         FORK_BAR_HEIGHT,
         FORK_BAR_RX,
         FORK_BAR_RX,
-        FORK_BAR_COLOR,
+        &bar_color,
         "1",
         bar_w,
         bar_x,
@@ -1789,27 +1851,32 @@ fn emit_while(
 ) -> f64 {
     // TODO: proper while layout matching PlantUML
     // For now, simplified linear layout
-    let cond_w = text_render::measure(condition, SMALL_FONT, false);
+    let arrow_color = svg.palette.arrow_color.clone();
+    let diamond_stroke = svg.palette.diamond_stroke.clone();
+    let diamond_fill = svg.palette.diamond_fill.clone();
+    let text_color = svg.palette.text_color.clone();
+    let cond_inner_w = diamond_inner_w(condition);
+    let cond_text_w = text_render::measure(condition, SMALL_FONT, false);
     let diamond_cy = y + DIAMOND_HALF;
 
     // Diamond
     let pts = vec![
-        (cx - cond_w / 2.0, y),
-        (cx + cond_w / 2.0, y),
-        (cx + cond_w / 2.0 + DIAMOND_HALF, diamond_cy),
-        (cx + cond_w / 2.0, y + DIAMOND_HALF * 2.0),
-        (cx - cond_w / 2.0, y + DIAMOND_HALF * 2.0),
-        (cx - cond_w / 2.0 - DIAMOND_HALF, diamond_cy),
+        (cx - cond_inner_w / 2.0, y),
+        (cx + cond_inner_w / 2.0, y),
+        (cx + cond_inner_w / 2.0 + DIAMOND_HALF, diamond_cy),
+        (cx + cond_inner_w / 2.0, y + DIAMOND_HALF * 2.0),
+        (cx - cond_inner_w / 2.0, y + DIAMOND_HALF * 2.0),
+        (cx - cond_inner_w / 2.0 - DIAMOND_HALF, diamond_cy),
     ];
-    svg.polygon_shape(DIAMOND_FILL, &pts, ACTION_STROKE, ACTION_STROKE_WIDTH);
+    svg.polygon_shape(&diamond_fill, &pts, &diamond_stroke, ACTION_STROKE_WIDTH);
 
     let text_y = y + DIAMOND_HALF + pm::text_height(SMALL_FONT) / 2.0 - pm::descent(SMALL_FONT);
     svg.text_element(
-        TEXT_COLOR,
+        &text_color,
         "sans-serif",
         SMALL_FONT,
-        cond_w,
-        cx - cond_w / 2.0,
+        cond_text_w,
+        cx - cond_text_w / 2.0,
         text_y,
         condition,
         false,
@@ -1818,11 +1885,11 @@ fn emit_while(
     if let Some(label) = is_label {
         let lw = text_render::measure(label, SMALL_FONT, false);
         svg.text_element(
-            TEXT_COLOR,
+            &text_color,
             "sans-serif",
             SMALL_FONT,
             lw,
-            cx + cond_w / 2.0 + DIAMOND_HALF + 5.0,
+            cx + cond_inner_w / 2.0 + DIAMOND_HALF + 5.0,
             diamond_cy + pm::text_height(SMALL_FONT) / 2.0 - pm::descent(SMALL_FONT),
             label,
             false,
@@ -1836,7 +1903,7 @@ fn emit_while(
         cx,
         diamond_bottom,
         diamond_bottom + IF_BRANCH_DOWN,
-        ARROW_COLOR,
+        &arrow_color,
     );
     emit_sequence(svg, body, cx, diamond_bottom + IF_BRANCH_DOWN)
 }
@@ -1849,50 +1916,56 @@ fn emit_repeat(
     condition: &str,
     is_label: &Option<String>,
 ) -> f64 {
+    let arrow_color = svg.palette.arrow_color.clone();
+    let diamond_stroke = svg.palette.diamond_stroke.clone();
+    let diamond_fill = svg.palette.diamond_fill.clone();
+    let text_color = svg.palette.text_color.clone();
+
     // Top diamond (entry point)
     let top_diamond_size = DIAMOND_HALF;
     svg.polygon_shape(
-        DIAMOND_FILL,
+        &diamond_fill,
         &[
             (cx, y),
             (cx + top_diamond_size, y + top_diamond_size),
             (cx, y + top_diamond_size * 2.0),
             (cx - top_diamond_size, y + top_diamond_size),
         ],
-        ACTION_STROKE,
+        &diamond_stroke,
         ACTION_STROKE_WIDTH,
     );
 
     let top_bottom = y + top_diamond_size * 2.0;
 
     // Arrow from top diamond to body
-    svg.down_arrow(cx, top_bottom, top_bottom + ARROW_LEN, ARROW_COLOR);
+    svg.down_arrow(cx, top_bottom, top_bottom + ARROW_LEN, &arrow_color);
     let body_bottom = emit_sequence(svg, body, cx, top_bottom + ARROW_LEN);
 
     // Arrow from body to condition diamond
-    svg.down_arrow(cx, body_bottom, body_bottom + ARROW_LEN, ARROW_COLOR);
+    svg.down_arrow(cx, body_bottom, body_bottom + ARROW_LEN, &arrow_color);
     let cond_y = body_bottom + ARROW_LEN;
 
     // Condition diamond
-    let cond_w = text_render::measure(condition, SMALL_FONT, false);
+    let cond_inner_w = diamond_inner_w(condition);
+    let cond_text_w = text_render::measure(condition, SMALL_FONT, false);
     let cond_diamond_cy = cond_y + DIAMOND_HALF;
     let pts = vec![
-        (cx - cond_w / 2.0, cond_y),
-        (cx + cond_w / 2.0, cond_y),
-        (cx + cond_w / 2.0 + DIAMOND_HALF, cond_diamond_cy),
-        (cx + cond_w / 2.0, cond_y + DIAMOND_HALF * 2.0),
-        (cx - cond_w / 2.0, cond_y + DIAMOND_HALF * 2.0),
-        (cx - cond_w / 2.0 - DIAMOND_HALF, cond_diamond_cy),
+        (cx - cond_inner_w / 2.0, cond_y),
+        (cx + cond_inner_w / 2.0, cond_y),
+        (cx + cond_inner_w / 2.0 + DIAMOND_HALF, cond_diamond_cy),
+        (cx + cond_inner_w / 2.0, cond_y + DIAMOND_HALF * 2.0),
+        (cx - cond_inner_w / 2.0, cond_y + DIAMOND_HALF * 2.0),
+        (cx - cond_inner_w / 2.0 - DIAMOND_HALF, cond_diamond_cy),
     ];
-    svg.polygon_shape(DIAMOND_FILL, &pts, ACTION_STROKE, ACTION_STROKE_WIDTH);
+    svg.polygon_shape(&diamond_fill, &pts, &diamond_stroke, ACTION_STROKE_WIDTH);
 
     let text_y = cond_diamond_cy + pm::text_height(SMALL_FONT) / 2.0 - pm::descent(SMALL_FONT);
     svg.text_element(
-        TEXT_COLOR,
+        &text_color,
         "sans-serif",
         SMALL_FONT,
-        cond_w,
-        cx - cond_w / 2.0,
+        cond_text_w,
+        cx - cond_text_w / 2.0,
         text_y,
         condition,
         false,
@@ -1901,9 +1974,9 @@ fn emit_repeat(
     // "is" label
     if let Some(label) = is_label {
         let lw = text_render::measure(label, SMALL_FONT, false);
-        let diamond_right = cx + cond_w / 2.0 + DIAMOND_HALF;
+        let diamond_right = cx + cond_inner_w / 2.0 + DIAMOND_HALF;
         svg.text_element(
-            TEXT_COLOR,
+            &text_color,
             "sans-serif",
             SMALL_FONT,
             lw,
@@ -1918,7 +1991,7 @@ fn emit_repeat(
         // Loop-back arrow (right side, up to top diamond)
         let loop_x = diamond_right + 5.0 + lw + 5.0;
         svg.line_styled(
-            ARROW_COLOR,
+            &arrow_color,
             "1",
             diamond_right,
             loop_x,
@@ -1928,10 +2001,10 @@ fn emit_repeat(
         );
         // Vertical line up
         let top_cy = y + top_diamond_size;
-        svg.up_arrow(loop_x, top_cy, cond_diamond_cy, ARROW_COLOR);
+        svg.up_arrow(loop_x, top_cy, cond_diamond_cy, &arrow_color);
         // Horizontal to top diamond
         svg.line_styled(
-            ARROW_COLOR,
+            &arrow_color,
             "1",
             loop_x,
             cx + top_diamond_size,
@@ -1939,7 +2012,7 @@ fn emit_repeat(
             top_cy,
             false,
         );
-        svg.left_arrow(cx + top_diamond_size, top_cy, ARROW_COLOR);
+        svg.left_arrow(cx + top_diamond_size, top_cy, &arrow_color);
     }
 
     cond_y + DIAMOND_HALF * 2.0
