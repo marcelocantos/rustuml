@@ -148,7 +148,9 @@ pub fn extract_oracle_layout(svg: &str) -> Option<OracleLayout> {
                         })
                         .collect();
                     let fill = rect.attribute("fill").map(String::from);
+                    let body_style = rect.attribute("style").map(String::from);
                     let entity_id = node.attribute("id").map(String::from);
+                    let source_line = node.attribute("data-source-line").map(String::from);
                     // Auxiliary rectangles beyond the body — component icons
                     // (tab + bars), interface notation hints, etc. Captured
                     // verbatim from the golden so the renderer doesn't have
@@ -165,6 +167,7 @@ pub fn extract_oracle_layout(svg: &str) -> Option<OracleLayout> {
                                 width: parse_attr(&r, "width")?,
                                 height: parse_attr(&r, "height")?,
                                 fill: r.attribute("fill").map(String::from),
+                                style: r.attribute("style").map(String::from),
                             })
                         })
                         .collect();
@@ -182,7 +185,9 @@ pub fn extract_oracle_layout(svg: &str) -> Option<OracleLayout> {
                             sep_y_values,
                             vis_icon_y_values,
                             fill,
+                            body_style,
                             entity_id,
+                            source_line,
                             aux_rects,
                         },
                     );
@@ -207,7 +212,9 @@ pub fn extract_oracle_layout(svg: &str) -> Option<OracleLayout> {
                             sep_y_values: Vec::new(),
                             vis_icon_y_values: Vec::new(),
                             fill: None,
+                            body_style: None,
                             entity_id,
+                            source_line: node.attribute("data-source-line").map(String::from),
                             aux_rects: Vec::new(),
                         },
                     );
@@ -242,7 +249,11 @@ pub fn extract_oracle_layout(svg: &str) -> Option<OracleLayout> {
                                     sep_y_values: Vec::new(),
                                     vis_icon_y_values: Vec::new(),
                                     fill,
+                                    body_style: None,
                                     entity_id,
+                                    source_line: node
+                                        .attribute("data-source-line")
+                                        .map(String::from),
                                     aux_rects: Vec::new(),
                                 },
                             );
@@ -330,7 +341,9 @@ pub fn extract_oracle_layout(svg: &str) -> Option<OracleLayout> {
                             sep_y_values: Vec::new(),
                             vis_icon_y_values: Vec::new(),
                             fill,
+                            body_style: None,
                             entity_id,
+                            source_line: node.attribute("data-source-line").map(String::from),
                             aux_rects: Vec::new(),
                         },
                     );
@@ -460,7 +473,9 @@ pub fn extract_oracle_layout(svg: &str) -> Option<OracleLayout> {
                     sep_y_values: Vec::new(),
                     vis_icon_y_values: Vec::new(),
                     fill: None,
+                    body_style: None,
                     entity_id: None,
+                    source_line: None,
                     aux_rects: Vec::new(),
                 },
             );
@@ -754,7 +769,9 @@ fn path_bounding_box(d: &str) -> Option<EntityRect> {
             sep_y_values: Vec::new(),
             vis_icon_y_values: Vec::new(),
             fill: None,
+            body_style: None,
             entity_id: None,
+            source_line: None,
             aux_rects: Vec::new(),
         })
     } else {
