@@ -808,54 +808,81 @@ pub fn render_with_oracle(
                     // Already rendered as bare rect above.
                 }
                 Some(StateKind::History) => {
-                    // History pseudo-state.
+                    // History pseudo-state. PlantUML emits a bare
+                    // `<ellipse>` + `<text>` pair (NO `<g class="entity">`
+                    // wrapper) with rx/ry=11, fill `#F1F1F1`, and a
+                    // half-weight stroke matching state boxes.
+                    let h_radius = END_OUTER_RADIUS;
+                    let (px, py) = oracle
+                        .and_then(|orc| {
+                            let mut keys: Vec<&String> = orc
+                                .entities
+                                .keys()
+                                .filter(|k| k.starts_with("__history_"))
+                                .collect();
+                            keys.sort();
+                            keys.into_iter().find_map(|k| {
+                                orc.entities
+                                    .get(k)
+                                    .map(|r| (r.x + r.width / 2.0, r.y + r.height / 2.0))
+                            })
+                        })
+                        .unwrap_or((*cx, *cy));
                     write!(
                         svg,
-                        r#"<g class="entity" data-qualified-name="{id}" id="{}">"#,
-                        ent_id_of(id),
-                    )
-                    .unwrap();
-                    write!(
-                        svg,
-                        r#"<ellipse cx="{}" cy="{}" fill="none" rx="{START_RADIUS}" ry="{START_RADIUS}" style="stroke:{STROKE_COLOR};stroke-width:1;"/>"#,
-                        fmt_f(*cx), fmt_f(*cy),
+                        r#"<ellipse cx="{}" cy="{}" fill="{STATE_FILL}" rx="{h_radius}" ry="{h_radius}" style="stroke:{STROKE_COLOR};stroke-width:0.5;"/>"#,
+                        fmt_f(px), fmt_f(py),
                     )
                     .unwrap();
                     let tw = text_render::measure("H", STATE_FONT_SIZE, false);
+                    // PlantUML's actual text baseline is empirically at
+                    // py + ~5.291 for the 14pt sans-serif "H" glyph; the
+                    // analytic "py + font_size/3" form misses by ~1px.
+                    let text_y = py + 5.291;
                     write!(
                         svg,
                         r#"<text fill="{TEXT_COLOR}" font-family="sans-serif" font-size="{STATE_FONT_SIZE}" lengthAdjust="spacing" textLength="{}" x="{}" y="{}">H</text>"#,
                         fmt_f(tw),
-                        fmt_f(cx - tw / 2.0),
-                        fmt_f(cy + STATE_FONT_SIZE / 3.0),
+                        fmt_f(px - tw / 2.0),
+                        fmt_f(text_y),
                     )
                     .unwrap();
-                    svg.push_str("</g>");
                 }
                 Some(StateKind::DeepHistory) => {
-                    // Deep history pseudo-state.
+                    // Deep history pseudo-state — same bare-pair output as
+                    // History but with `H*` label.
+                    let h_radius = END_OUTER_RADIUS;
+                    let (px, py) = oracle
+                        .and_then(|orc| {
+                            let mut keys: Vec<&String> = orc
+                                .entities
+                                .keys()
+                                .filter(|k| k.starts_with("__history_"))
+                                .collect();
+                            keys.sort();
+                            keys.into_iter().find_map(|k| {
+                                orc.entities
+                                    .get(k)
+                                    .map(|r| (r.x + r.width / 2.0, r.y + r.height / 2.0))
+                            })
+                        })
+                        .unwrap_or((*cx, *cy));
                     write!(
                         svg,
-                        r#"<g class="entity" data-qualified-name="{id}" id="{}">"#,
-                        ent_id_of(id),
-                    )
-                    .unwrap();
-                    write!(
-                        svg,
-                        r#"<ellipse cx="{}" cy="{}" fill="none" rx="{START_RADIUS}" ry="{START_RADIUS}" style="stroke:{STROKE_COLOR};stroke-width:1;"/>"#,
-                        fmt_f(*cx), fmt_f(*cy),
+                        r#"<ellipse cx="{}" cy="{}" fill="{STATE_FILL}" rx="{h_radius}" ry="{h_radius}" style="stroke:{STROKE_COLOR};stroke-width:0.5;"/>"#,
+                        fmt_f(px), fmt_f(py),
                     )
                     .unwrap();
                     let tw = text_render::measure("H*", STATE_FONT_SIZE, false);
+                    let text_y = py + 5.291;
                     write!(
                         svg,
                         r#"<text fill="{TEXT_COLOR}" font-family="sans-serif" font-size="{STATE_FONT_SIZE}" lengthAdjust="spacing" textLength="{}" x="{}" y="{}">H*</text>"#,
                         fmt_f(tw),
-                        fmt_f(cx - tw / 2.0),
-                        fmt_f(cy + STATE_FONT_SIZE / 3.0),
+                        fmt_f(px - tw / 2.0),
+                        fmt_f(text_y),
                     )
                     .unwrap();
-                    svg.push_str("</g>");
                 }
                 _ => {
                     // Normal state box.
@@ -866,11 +893,41 @@ pub fn render_with_oracle(
                     let box_y = cy - bh / 2.0;
 
                     // Resolve fill from oracle (recovers `state X #color`/named
-                    // colors) or fall back to PlantUML default.
+                    // colors) or fall back to PlantUML default. The parser
+                    // also records `#color` / `##color` for the no-oracle
+                    // path; oracle wins when both exist.
+                    let parser_fill = state_def
+                        .and_then(|s| s.fill.as_deref())
+                        .map(crate::sequence::resolve_color);
                     let fill_color: String = oracle
                         .and_then(|orc| orc.entities.get(id.as_str()))
                         .and_then(|r| r.fill.clone())
+                        .or(parser_fill)
                         .unwrap_or_else(|| STATE_FILL.to_string());
+
+                    // Border style: `state X ##color` sets stroke colour;
+                    // `##[dashed]color` adds a dash pattern; `##[bold]`
+                    // bumps the stroke width. Falls back to PlantUML's
+                    // default `#181818;stroke-width:0.5;`.
+                    let stroke_style: String =
+                        if let Some(stroke) = state_def.and_then(|s| s.stroke.as_deref()) {
+                            let stroke_color = crate::sequence::resolve_color(stroke);
+                            let style_mod = state_def
+                                .and_then(|s| s.stroke_style.as_deref())
+                                .unwrap_or("");
+                            match style_mod {
+                                "bold" => format!("stroke:{stroke_color};stroke-width:2;"),
+                                "dashed" => format!(
+                                    "stroke:{stroke_color};stroke-width:1;stroke-dasharray:7,7;"
+                                ),
+                                "dotted" => format!(
+                                    "stroke:{stroke_color};stroke-width:1;stroke-dasharray:1,3;"
+                                ),
+                                _ => format!("stroke:{stroke_color};stroke-width:0.5;"),
+                            }
+                        } else {
+                            format!("stroke:{STROKE_COLOR};stroke-width:0.5;")
+                        };
 
                     if hide_empty_desc && descriptions.is_empty() {
                         // PlantUML drops the `<g class="entity">` wrapper and
@@ -878,7 +935,7 @@ pub fn render_with_oracle(
                         // line; the text is vertically centred.
                         write!(
                             svg,
-                            r#"<rect fill="{fill_color}" height="{}" rx="{STATE_RX}" ry="{STATE_RX}" style="stroke:{STROKE_COLOR};stroke-width:0.5;" width="{}" x="{}" y="{}"/>"#,
+                            r#"<rect fill="{fill_color}" height="{}" rx="{STATE_RX}" ry="{STATE_RX}" style="{stroke_style}" width="{}" x="{}" y="{}"/>"#,
                             fmt_f(*bh),
                             fmt_f(*bw),
                             fmt_f(box_x),
@@ -920,7 +977,7 @@ pub fn render_with_oracle(
                         // State rectangle.
                         write!(
                             svg,
-                            r#"<rect fill="{fill_color}" height="{}" rx="{STATE_RX}" ry="{STATE_RX}" style="stroke:{STROKE_COLOR};stroke-width:0.5;" width="{}" x="{}" y="{}"/>"#,
+                            r#"<rect fill="{fill_color}" height="{}" rx="{STATE_RX}" ry="{STATE_RX}" style="{stroke_style}" width="{}" x="{}" y="{}"/>"#,
                             fmt_f(*bh),
                             fmt_f(*bw),
                             fmt_f(box_x),
@@ -932,7 +989,7 @@ pub fn render_with_oracle(
                         let div_y = box_y + DIVIDER_OFFSET;
                         write!(
                             svg,
-                            r#"<line style="stroke:{STROKE_COLOR};stroke-width:0.5;" x1="{}" x2="{}" y1="{}" y2="{}"/>"#,
+                            r#"<line style="{stroke_style}" x1="{}" x2="{}" y1="{}" y2="{}"/>"#,
                             fmt_f(box_x),
                             fmt_f(box_x + bw),
                             fmt_f(div_y),
@@ -1558,6 +1615,9 @@ mod tests {
                     descriptions: vec![],
                     substates: vec![],
                     source_line: 0,
+                    fill: None,
+                    stroke: None,
+                    stroke_style: None,
                 },
                 State {
                     id: "Inactive".into(),
@@ -1566,6 +1626,9 @@ mod tests {
                     descriptions: vec![],
                     substates: vec![],
                     source_line: 0,
+                    fill: None,
+                    stroke: None,
+                    stroke_style: None,
                 },
             ],
             transitions: vec![
