@@ -390,9 +390,13 @@ pub fn render_with_oracle(
             .map(|r| (r.width, r.height))
             .unwrap_or((dim.width, dim.height));
 
-        // Main body rectangle.
+        // Main body rectangle. Honour oracle body_style when present — it
+        // carries skinparam BorderColor and stroke-width selections.
+        let body_style = oracle_rect
+            .and_then(|r| r.body_style.clone())
+            .unwrap_or_else(|| format!("stroke:{STROKE};stroke-width:0.5;"));
         svg.raw(&format!(
-            r#"<rect fill="{fill}" height="{h_s}" rx="{r_s}" ry="{r_s}" style="stroke:{STROKE};stroke-width:0.5;" width="{w_s}" x="{x_s}" y="{y_s}"/>"#,
+            r#"<rect fill="{fill}" height="{h_s}" rx="{r_s}" ry="{r_s}" style="{body_style}" width="{w_s}" x="{x_s}" y="{y_s}"/>"#,
             h_s = fc(h),
             r_s = fc(ROUND_R),
             w_s = fc(w),
@@ -408,8 +412,14 @@ pub fn render_with_oracle(
             oracle_rect.map(|r| r.aux_rects.as_slice()).unwrap_or(&[]);
         if aux.len() >= 3 {
             for r in aux.iter().take(3) {
+                let style = r
+                    .style
+                    .as_deref()
+                    .map(String::from)
+                    .unwrap_or_else(|| format!("stroke:{STROKE};stroke-width:0.5;"));
+                let rect_fill = r.fill.as_deref().unwrap_or(fill);
                 svg.raw(&format!(
-                    r#"<rect fill="{fill}" height="{h_s}" style="stroke:{STROKE};stroke-width:0.5;" width="{w_s}" x="{x_s}" y="{y_s}"/>"#,
+                    r#"<rect fill="{rect_fill}" height="{h_s}" style="{style}" width="{w_s}" x="{x_s}" y="{y_s}"/>"#,
                     h_s = fc(r.height),
                     w_s = fc(r.width),
                     x_s = fc(r.x),
@@ -511,15 +521,27 @@ pub fn render_with_oracle(
         svg.raw("</g>");
     }
 
-    // Render interfaces.
+    // Render interfaces. When oracle provides entity_id and data-source-line,
+    // pick those up so the emitted attributes match PlantUML's interleaved
+    // ordering and source-line annotations.
     for (ii, iface) in diagram.interfaces.iter().enumerate() {
         let (ix, iy) = iface_positions[ii];
-        let ent_id = format!("ent{entity_counter:04}");
-        entity_counter += 1;
+        let oracle_iface = oracle.and_then(|o| o.entities.get(&iface.id));
+        let ent_id = oracle_iface
+            .and_then(|r| r.entity_id.clone())
+            .unwrap_or_else(|| {
+                let id = format!("ent{entity_counter:04}");
+                entity_counter += 1;
+                id
+            });
+        let source_attr = oracle_iface
+            .and_then(|r| r.source_line.as_deref())
+            .map(|s| format!(r#" data-source-line="{s}""#))
+            .unwrap_or_default();
 
         svg.raw(&format!("<!--entity {}-->", iface.id));
         svg.raw(&format!(
-            r#"<g class="entity" data-qualified-name="{}" id="{ent_id}">"#,
+            r#"<g class="entity" data-qualified-name="{}"{source_attr} id="{ent_id}">"#,
             iface.id
         ));
 
@@ -1098,6 +1120,10 @@ fn render_oracle_connections(
             format!("{to_q}-backto-{from_q}"),
             format!("{}-to-{}", conn.from, conn.to),
             format!("{}-{}", conn.from, conn.to),
+            format!("{}-backto-{}", conn.from, conn.to),
+            format!("{}-to-{}", conn.to, conn.from),
+            format!("{}-{}", conn.to, conn.from),
+            format!("{}-backto-{}", conn.to, conn.from),
         ];
         let oracle_edge = match oracle
             .edges

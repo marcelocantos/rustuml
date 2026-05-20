@@ -69,12 +69,19 @@ pub struct EntityRect {
     /// Declared fill from the first `<rect fill="…">` child, if any.
     /// Lets renderers recover entity colours from the oracle without parser plumbing.
     pub fill: Option<String>,
+    /// Declared style attribute on the first `<rect>` child. Captures
+    /// stroke colour and width set by skinparam BorderColor and similar.
+    pub body_style: Option<String>,
     /// Java entity ID (`ent000N`) — value of the `id="..."` attribute on the
     /// `<g class="entity">` / `start_entity` / `end_entity` wrapper. Lets
     /// renderers reproduce Java's exact counter allocation, including the
     /// start/end-entity ID-sharing quirk that resists clean modelling from
     /// the parser side.
     pub entity_id: Option<String>,
+    /// `data-source-line` attribute on the entity wrapper, if present.
+    /// Useful when the parser model doesn't track source line (e.g.
+    /// component-diagram interfaces).
+    pub source_line: Option<String>,
     /// Auxiliary rectangles inside the entity beyond the first (body) rect,
     /// captured in document order. Component diagrams emit a tab + two bars
     /// (the right-side icon) after the body rect; storing them verbatim lets
@@ -91,6 +98,7 @@ pub struct AuxRect {
     pub width: f64,
     pub height: f64,
     pub fill: Option<String>,
+    pub style: Option<String>,
 }
 
 /// An edge path extracted from a golden SVG.
