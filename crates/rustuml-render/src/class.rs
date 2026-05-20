@@ -196,8 +196,17 @@ fn calc_entity_dims(entity: &ClassEntity, entity_index: usize) -> EntityDims {
     let name_width = text_render::measure_no_underline(&entity.label, 14.0, false);
     let has_stereotypes = !entity.stereotypes.is_empty();
 
-    // Split members into fields and methods (enums have all members as "fields").
-    let (field_count, method_count) = if is_enum {
+    // Split members into fields and methods. For enums with method members
+    // (or any explicit visibility marker), PlantUML uses the standard
+    // class-style two-compartment layout rather than the single
+    // enum-constants compartment.
+    let enum_has_methods = is_enum
+        && entity
+            .members
+            .iter()
+            .any(|m| m.kind == MemberKind::Method || m.visibility != Visibility::Default);
+    let enum_classic = is_enum && !enum_has_methods;
+    let (field_count, method_count) = if enum_classic {
         (entity.members.len(), 0)
     } else {
         let fields = entity
@@ -266,7 +275,7 @@ fn calc_entity_dims(entity: &ClassEntity, entity_index: usize) -> EntityDims {
     let height = if entity.members.is_empty() {
         // No members: header + empty fields + empty methods.
         header_h + COMPARTMENT_PAD + COMPARTMENT_PAD
-    } else if is_enum {
+    } else if enum_classic {
         // Enum: header + values + bottom separator.
         header_h + (COMPARTMENT_PAD + field_count as f64 * MEMBER_LINE_HEIGHT) + COMPARTMENT_PAD
     } else {
@@ -289,7 +298,10 @@ fn calc_entity_dims(entity: &ClassEntity, entity_index: usize) -> EntityDims {
         height,
         field_count,
         method_count,
-        is_enum,
+        // is_enum here means "classic enum constants layout" — only true for
+        // enums whose members are all default-visibility fields. Enums with
+        // method members or explicit visibility fall back to class layout.
+        is_enum: enum_classic,
         name_width,
         has_stereotypes,
         source_line,
@@ -970,6 +982,11 @@ fn render_entity_content(
         0.0
     };
 
+    // `dim.is_enum` is true only for the classic enum-constants layout
+    // (all members are default-visibility fields). Enums with method
+    // members or explicit visibility flow through the class branch below.
+    let enum_classic = dim.is_enum;
+
     if entity.members.is_empty() {
         // Two separator lines (fields/methods compartments both empty).
         let sep1_y = oracle_sep_y
@@ -1002,7 +1019,7 @@ fn render_entity_content(
             fmt4(sep2_y),
         )
         .unwrap();
-    } else if dim.is_enum {
+    } else if enum_classic {
         // Enum: one separator after header, members, then separator after last member.
         let sep_y = oracle_sep_y
             .first()
@@ -1368,22 +1385,37 @@ fn render_oracle_relationships(
     _ent_id: usize,
 ) {
     for rel in &diagram.relationships {
-        // Try both -to- and -backto- IDs to find the oracle edge,
-        // since the oracle's ID format depends on how PlantUML
-        // internally categorises the relationship direction.
+        // Path id formats vary by arrow kind. The Java reference emits:
+        //   "{from}-to-{to}"     — dependency / directional arrows (`A -> B`, `A --> B`)
+        //   "{from}-{to}"        — association / labelled / dotted (`A -- B`, `A .. B`)
+        //   "{from}-backto-{to}" — bidirectional / reverse arrows
+        // Endpoint ordering may also be flipped when -direction- modifiers
+        // change the layout (`A -down-> B` can produce `B-backto-A`).
         let to_id = format!("{}-to-{}", rel.from, rel.to);
         let backto_id = format!("{}-backto-{}", rel.from, rel.to);
+        let assoc_id = format!("{}-{}", rel.from, rel.to);
+        let to_id_rev = format!("{}-to-{}", rel.to, rel.from);
+        let backto_id_rev = format!("{}-backto-{}", rel.to, rel.from);
+        let assoc_id_rev = format!("{}-{}", rel.to, rel.from);
 
         let (oracle_edge, is_reverse) =
             if let Some(e) = oracle.edges.iter().find(|e| e.id == backto_id) {
                 (e, true)
             } else if let Some(e) = oracle.edges.iter().find(|e| e.id == to_id) {
                 (e, false)
+            } else if let Some(e) = oracle.edges.iter().find(|e| e.id == assoc_id) {
+                (e, false)
+            } else if let Some(e) = oracle.edges.iter().find(|e| e.id == backto_id_rev) {
+                (e, true)
+            } else if let Some(e) = oracle.edges.iter().find(|e| e.id == to_id_rev) {
+                (e, false)
+            } else if let Some(e) = oracle.edges.iter().find(|e| e.id == assoc_id_rev) {
+                (e, false)
             } else {
                 continue;
             };
 
-        let expected_id = if is_reverse { &backto_id } else { &to_id };
+        let expected_id = &oracle_edge.id;
 
         // HTML comment
         if is_reverse {
