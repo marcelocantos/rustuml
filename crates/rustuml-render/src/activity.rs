@@ -876,10 +876,10 @@ impl SvgEmitter {
         // as the last entry. Arrowhead/connector polygons (polygon_connector)
         // do not.
         let mut closed: Vec<(f64, f64)> = points.to_vec();
-        if let (Some(first), Some(last)) = (points.first(), points.last()) {
-            if first != last {
-                closed.push(*first);
-            }
+        if let (Some(first), Some(last)) = (points.first(), points.last())
+            && first != last
+        {
+            closed.push(*first);
         }
         let pts = polygon_points(&closed);
         write!(
