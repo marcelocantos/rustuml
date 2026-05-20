@@ -677,10 +677,12 @@ impl PreprocessContext {
                 };
             // A definelong expansion can produce multiple lines joined with '\n'.
             // Split them so each line is processed individually by the parser.
+            // Blank lines are pushed too so that source-line indices match the
+            // input file (parsers skip blank lines themselves on the `trim().is_empty()`
+            // check, but the index advances). PlantUML's `data-source-line` counts
+            // blank lines but excludes the dropped `@startuml`.
             for expanded_line in line_to_process.split('\n') {
-                if !expanded_line.trim().is_empty() {
-                    output.push(expanded_line.to_string());
-                }
+                output.push(expanded_line.to_string());
             }
         }
     }
