@@ -222,16 +222,17 @@ fn guillemet_width(table: &[f64; 95]) -> f64 {
 /// PlantUML rounds to 4 decimal places for SVG coordinate output,
 /// then strips trailing zeros.
 pub fn fmt_coord(v: f64) -> String {
-    // Round to 4 decimal places (matches Java's formatting).
-    let rounded = (v * 10000.0).round() / 10000.0;
-    if rounded == rounded.floor() && rounded.abs() < 1e15 {
-        format!("{}", rounded as i64)
-    } else {
-        let s = format!("{:.4}", rounded);
-        let s = s.trim_end_matches('0');
-        let s = s.trim_end_matches('.');
-        s.to_string()
+    // Detect integer values up front to preserve "25" rather than "25.0000"
+    // after trailing-zero stripping. The {:.4} formatter uses Rust's
+    // round-half-to-even (banker's rounding), matching Java's BigDecimal
+    // HALF_EVEN default used by PlantUML's coordinate emitter.
+    if v == v.floor() && v.abs() < 1e15 {
+        return format!("{}", v as i64);
     }
+    let s = format!("{:.4}", v);
+    let s = s.trim_end_matches('0');
+    let s = s.trim_end_matches('.');
+    s.to_string()
 }
 
 // ─── Character width tables ─────────────────────────────────────────
