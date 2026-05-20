@@ -443,7 +443,7 @@ pub fn render(diagram: &EbnfDiagram, _theme: &Theme) -> String {
     total_h -= RULE_GAP; // no gap after last rule
     total_h += MARGIN;
 
-    let mut svg = SvgBuilder::new(max_w, total_h);
+    let mut svg = SvgBuilder::new_plantuml(max_w, total_h, "EBNF");
 
     // Second pass: render each rule.
     let mut y = MARGIN;
@@ -453,7 +453,7 @@ pub fn render(diagram: &EbnfDiagram, _theme: &Theme) -> String {
         let _ = rule_heights[i]; // already computed
     }
 
-    svg.finalize()
+    svg.finalize_plantuml()
 }
 
 #[cfg(test)]
