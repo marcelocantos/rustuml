@@ -233,10 +233,8 @@ fn build_entity_id_map(diagram: &UseCaseDiagram) -> HashMap<String, String> {
     }
     entries.sort_by_key(|e| e.line);
     let mut map = HashMap::new();
-    let mut counter = 2usize;
-    for e in entries {
+    for (counter, e) in (2usize..).zip(entries) {
         map.insert(e.key, format!("ent{counter:04}"));
-        counter += 1;
     }
     map
 }
@@ -536,6 +534,7 @@ fn render_actor(
     svg.raw("</g>");
 }
 
+#[allow(clippy::too_many_arguments)]
 fn render_use_case(
     svg: &mut SvgBuilder,
     uc: &UseCase,

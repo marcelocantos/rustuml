@@ -58,6 +58,74 @@ const TEXT_COLOR: &str = "#000000";
 const DEPRECATED_FILL: &str = "#FFFFCC";
 const DEPRECATED_STROKE: &str = "#FFDD88";
 
+/// Per-diagram color palette, derived from the PlantUML default plus any
+/// inline `skinparam` overrides. Mirrors the constants above but allows
+/// skinparams to mutate individual fields without rebuilding the theme
+/// machinery in `style.rs` (which uses the `slate` defaults).
+#[derive(Debug, Clone)]
+struct Palette {
+    action_fill: String,
+    action_stroke: String,
+    action_stroke_width: String,
+    diamond_fill: String,
+    diamond_stroke: String,
+    arrow_color: String,
+    text_color: String,
+    start_fill: String,
+    stop_fill: String,
+    bar_color: String,
+}
+
+impl Palette {
+    fn default_puml() -> Self {
+        Self {
+            action_fill: ACTION_FILL.into(),
+            action_stroke: ACTION_STROKE.into(),
+            action_stroke_width: ACTION_STROKE_WIDTH.into(),
+            diamond_fill: DIAMOND_FILL.into(),
+            diamond_stroke: ACTION_STROKE.into(),
+            arrow_color: ARROW_COLOR.into(),
+            text_color: TEXT_COLOR.into(),
+            start_fill: START_FILL.into(),
+            stop_fill: STOP_FILL.into(),
+            bar_color: FORK_BAR_COLOR.into(),
+        }
+    }
+
+    /// Apply the supplied skinparams (key-insensitive) onto the default
+    /// PlantUML palette. Unrecognised or empty values are ignored.
+    fn from_skinparams(skinparams: &[rustuml_parser::diagram::SkinParam]) -> Self {
+        let mut p = Self::default_puml();
+        for sp in skinparams {
+            let key = sp.key.to_ascii_lowercase();
+            let val = sp.value.trim();
+            if val.is_empty() {
+                continue;
+            }
+            let resolved = crate::sequence::resolve_color(val);
+            match key.as_str() {
+                "activitybackgroundcolor" => p.action_fill = resolved,
+                "activitybordercolor" => p.action_stroke = resolved,
+                "activityborderthickness" => {
+                    if let Ok(v) = val.parse::<f64>() {
+                        // Format like PlantUML: integer when whole, otherwise raw float.
+                        p.action_stroke_width = pm::fmt_coord(v);
+                    }
+                }
+                "activitydiamondbackgroundcolor" => p.diamond_fill = resolved,
+                "activitydiamondbordercolor" => p.diamond_stroke = resolved,
+                "activityarrowcolor" | "arrowcolor" => p.arrow_color = resolved,
+                "activitystartcolor" => p.start_fill = resolved,
+                "activityendcolor" | "activitystopcolor" => p.stop_fill = resolved,
+                "activitybarcolor" => p.bar_color = resolved,
+                "activityfontcolor" => p.text_color = resolved,
+                _ => {}
+            }
+        }
+        p
+    }
+}
+
 /// Detect deprecated `#color:text;` actions and prepend a warning banner.
 /// Returns the raw (un-escaped) banner string; XML/entity escaping happens
 /// in the emitter via [`svg_text_escape`].
@@ -743,14 +811,18 @@ struct SvgEmitter {
     /// Connectors (lines, arrowhead polygons). PlantUML emits all of these
     /// after the shapes, also in document order.
     connectors: String,
+    /// Resolved color palette for this render (PlantUML defaults +
+    /// inline skinparam overrides).
+    palette: Palette,
 }
 
 #[allow(clippy::too_many_arguments)]
 impl SvgEmitter {
-    fn new() -> Self {
+    fn with_palette(palette: Palette) -> Self {
         SvgEmitter {
             shapes: String::new(),
             connectors: String::new(),
+            palette,
         }
     }
 
@@ -1261,16 +1333,12 @@ fn emit_node(svg: &mut SvgEmitter, node: &LayoutNode, cx: f64, y: f64) -> f64 {
             let ah = action_height(text);
             let rect_w = *text_width + ACTION_H_PADDING * 2.0;
             let rect_x = cx - rect_w / 2.0;
+            let fill = svg.palette.action_fill.clone();
+            let stroke = svg.palette.action_stroke.clone();
+            let sw = svg.palette.action_stroke_width.clone();
+            let text_col = svg.palette.text_color.clone();
             svg.rect_styled(
-                ACTION_FILL,
-                ah,
-                ACTION_RX,
-                ACTION_RX,
-                ACTION_STROKE,
-                ACTION_STROKE_WIDTH,
-                rect_w,
-                rect_x,
-                y,
+                &fill, ah, ACTION_RX, ACTION_RX, &stroke, &sw, rect_w, rect_x, y,
             );
             // Text baseline: padding_top + ascent, both derived from the
             // label's actual font so monospace labels position correctly.
@@ -1278,7 +1346,7 @@ fn emit_node(svg: &mut SvgEmitter, node: &LayoutNode, cx: f64, y: f64) -> f64 {
             let padding_top = (ah - lh) / 2.0;
             let text_y = y + padding_top + text_render::label_ascent(text, FONT_SIZE);
             svg.text_element(
-                TEXT_COLOR,
+                &text_col,
                 "sans-serif",
                 FONT_SIZE,
                 *text_width,
@@ -1300,22 +1368,18 @@ fn emit_node(svg: &mut SvgEmitter, node: &LayoutNode, cx: f64, y: f64) -> f64 {
             let ah = action_height(text);
             let rect_w = *text_width + ACTION_H_PADDING * 2.0;
             let rect_x = cx - rect_w / 2.0;
+            let fill = svg.palette.action_fill.clone();
+            let stroke = svg.palette.action_stroke.clone();
+            let sw = svg.palette.action_stroke_width.clone();
+            let text_col = svg.palette.text_color.clone();
             svg.rect_styled(
-                ACTION_FILL,
-                ah,
-                ACTION_RX,
-                ACTION_RX,
-                ACTION_STROKE,
-                ACTION_STROKE_WIDTH,
-                rect_w,
-                rect_x,
-                y,
+                &fill, ah, ACTION_RX, ACTION_RX, &stroke, &sw, rect_w, rect_x, y,
             );
             let lh = text_render::label_height(text, FONT_SIZE);
             let padding_top = (ah - lh) / 2.0;
             let text_y = y + padding_top + text_render::label_ascent(text, FONT_SIZE);
             svg.text_element(
-                TEXT_COLOR,
+                &text_col,
                 "sans-serif",
                 FONT_SIZE,
                 *text_width,
@@ -1613,13 +1677,28 @@ fn emit_fork(svg: &mut SvgEmitter, cx: f64, y: f64, branches: &[Vec<LayoutNode>]
         return y;
     }
 
-    // Compute branch widths and total width
-    let branch_widths: Vec<f64> = branches
-        .iter()
-        .map(|b| sequence_width(b).max(60.0))
-        .collect();
-    let total_w: f64 = branch_widths.iter().sum();
-    let bar_w = total_w + FORK_BAR_MARGIN * 2.0;
+    // Compute branch widths. PlantUML uses each branch's actual content
+    // width (no per-branch minimum) and inserts a fixed 10 px gap between
+    // adjacent branches, plus 12 px inner padding on each end of the bar.
+    let branch_widths: Vec<f64> = branches.iter().map(|b| sequence_width(b)).collect();
+    let n = branch_widths.len();
+    const FORK_INNER_PAD: f64 = 12.0;
+    const FORK_BRANCH_GAP: f64 = 10.0;
+    let total_branch_w: f64 = branch_widths.iter().sum();
+    let inter_gaps = if n > 1 { (n - 1) as f64 } else { 0.0 };
+    // PlantUML's fork-bar width: 12 padding each side + branch widths +
+    // 10 px gap between each pair. Goldens with all-equal narrow branches
+    // (e.g. ":A;:B;") show this layout exactly; wider branches scale up.
+    let mut bar_w = FORK_INNER_PAD * 2.0 + total_branch_w + inter_gaps * FORK_BRANCH_GAP;
+    // Empirical floor: when branch action widths are very small (≲30px),
+    // PlantUML still gives each branch enough room for a centred arrowhead
+    // and a 14 px outer margin around the bar. Bump the bar width up to
+    // satisfy max(bar_w_computed, FORK_BAR_MARGIN*2 + 80) so narrow forks
+    // don't collapse.
+    let min_bar_w = FORK_BAR_MARGIN * 2.0 + 80.0;
+    if bar_w < min_bar_w {
+        bar_w = min_bar_w;
+    }
 
     // Top bar
     let bar_x = cx - bar_w / 2.0;
@@ -1637,12 +1716,32 @@ fn emit_fork(svg: &mut SvgEmitter, cx: f64, y: f64, branches: &[Vec<LayoutNode>]
 
     let bar_bottom = y + FORK_BAR_HEIGHT;
 
-    // Compute branch center-x positions
+    // Compute branch center-x positions. Branches sit FORK_INNER_PAD from
+    // the bar edges with FORK_BRANCH_GAP between adjacent branches.
     let mut branch_centers = Vec::new();
-    let mut bx = bar_x + FORK_BAR_MARGIN;
-    for w in &branch_widths {
-        branch_centers.push(bx + w / 2.0);
-        bx += w;
+    let mut bx = bar_x + FORK_INNER_PAD;
+    // If the bar was widened to its minimum and there's only one branch,
+    // centre it on the bar.
+    if branch_widths.len() == 1 {
+        branch_centers.push(bar_x + bar_w / 2.0);
+    } else {
+        // When the bar was widened beyond the natural sum, distribute the
+        // extra slack evenly across the inter-branch gaps so branches stay
+        // visually balanced under the bar.
+        let natural_w = FORK_INNER_PAD * 2.0 + total_branch_w + inter_gaps * FORK_BRANCH_GAP;
+        let extra = (bar_w - natural_w).max(0.0);
+        let extra_per_gap = if inter_gaps > 0.0 {
+            extra / inter_gaps
+        } else {
+            0.0
+        };
+        for (i, w) in branch_widths.iter().enumerate() {
+            branch_centers.push(bx + w / 2.0);
+            bx += w;
+            if i + 1 < branch_widths.len() {
+                bx += FORK_BRANCH_GAP + extra_per_gap;
+            }
+        }
     }
 
     // Arrows from top bar to each branch and render branches
@@ -1960,7 +2059,13 @@ pub fn render(diagram: &ActivityDiagram, _theme: &Theme) -> String {
     // so the branches stay symmetric around the diamond.
     let cx = MARGIN_LEAD + content_left;
 
-    let mut svg = SvgEmitter::new();
+    // Build a per-render palette from the diagram's skinparams. Activity
+    // diagrams have a substantial set of `skinparam activity*` keys that
+    // change individual element colors without affecting the broader
+    // theme; resolving them here keeps activity.rs decoupled from the
+    // theme machinery in `style.rs`.
+    let palette = Palette::from_skinparams(&diagram.meta.skinparams);
+    let mut svg = SvgEmitter::with_palette(palette);
 
     // Emit deprecated warning banners at the top. Warnings live at fixed
     // x=13, y=13, independent of the action layout.
