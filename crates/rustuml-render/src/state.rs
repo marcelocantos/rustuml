@@ -595,7 +595,24 @@ pub fn render_with_oracle(
     // here.
     let mut entity_ids: Vec<(String, String)> = Vec::new();
     for (id, _, _, _, _) in &positions {
-        let ent_id = ids.next_entity();
+        // Prefer the oracle's entity id when available — PlantUML's counter
+        // interleaves entity and link allocations in a way that's hard to
+        // model from first principles (start_entity sometimes shares an id
+        // with the preceding entity, etc.). Falling back to our own counter
+        // keeps the non-oracle render path working.
+        let oracle_id = oracle.and_then(|orc| {
+            let oracle_name = if id == "__start__" {
+                ".start."
+            } else if id == "__end__" {
+                ".end."
+            } else {
+                id.as_str()
+            };
+            orc.entities
+                .get(oracle_name)
+                .and_then(|r| r.entity_id.clone())
+        });
+        let ent_id = oracle_id.unwrap_or_else(|| ids.next_entity());
         entity_ids.push((id.clone(), ent_id));
     }
 
