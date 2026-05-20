@@ -79,6 +79,9 @@ pub fn render_with_oracle(
     };
 
     let mut svg = SvgBuilder::new_plantuml(total_w, total_h, "DESCRIPTION");
+
+    render_header(&mut svg, diagram);
+    render_title(&mut svg, diagram, total_w);
     render_packages(&mut svg, diagram, oracle, &id_map);
 
     for (i, actor) in diagram.actors.iter().enumerate() {
@@ -92,7 +95,91 @@ pub fn render_with_oracle(
     if let Some(orc) = oracle {
         render_oracle_connections(&mut svg, diagram, orc);
     }
+
+    render_footer(&mut svg, diagram, total_h);
+
     svg.finalize_plantuml()
+}
+
+/// Render a `header` directive as `<g class="header"><text>…</text></g>`.
+fn render_header(svg: &mut SvgBuilder, diagram: &UseCaseDiagram) {
+    let Some(header) = &diagram.meta.header else {
+        return;
+    };
+    svg.raw(r#"<g class="header" data-source-line="1">"#);
+    let tw = text_render::measure(header, 10.0, false);
+    let _ = tw;
+    let mut buf = String::new();
+    text_render::emit_text(
+        &mut buf,
+        header,
+        &TextBase {
+            x: 0.0,
+            y: 9.668,
+            font_size: 10,
+            font_family: "sans-serif",
+            fill: "#888888",
+            bold: false,
+            italic: false,
+            underline: false,
+            skip_underline: false,
+        },
+    );
+    svg.raw(&buf);
+    svg.raw("</g>");
+}
+
+/// Render a `footer` directive as `<g class="footer"><text>…</text></g>`.
+fn render_footer(svg: &mut SvgBuilder, diagram: &UseCaseDiagram, total_h: f64) {
+    let Some(footer) = &diagram.meta.footer else {
+        return;
+    };
+    svg.raw(r#"<g class="footer" data-source-line="1">"#);
+    let mut buf = String::new();
+    text_render::emit_text(
+        &mut buf,
+        footer,
+        &TextBase {
+            x: 0.0,
+            y: total_h - 9.0241,
+            font_size: 10,
+            font_family: "sans-serif",
+            fill: "#888888",
+            bold: false,
+            italic: false,
+            underline: false,
+            skip_underline: false,
+        },
+    );
+    svg.raw(&buf);
+    svg.raw("</g>");
+}
+
+/// Render a `title` directive as `<g class="title"><text>…</text></g>`.
+fn render_title(svg: &mut SvgBuilder, diagram: &UseCaseDiagram, total_w: f64) {
+    let Some(title) = &diagram.meta.title else {
+        return;
+    };
+    svg.raw(r#"<g class="title" data-source-line="1">"#);
+    let tw = text_render::measure(title, FONT_SIZE, true);
+    let mut buf = String::new();
+    text_render::emit_text(
+        &mut buf,
+        title,
+        &TextBase {
+            x: (total_w - tw) / 2.0,
+            y: 23.5352,
+            font_size: FONT_SIZE as u32,
+            font_family: "sans-serif",
+            fill: TEXT_COLOR,
+            bold: true,
+            italic: false,
+            underline: false,
+            skip_underline: false,
+        },
+    );
+    svg.raw(&buf);
+    svg.raw("</g>");
 }
 
 /// Assign PlantUML-compatible entity IDs by sorting actors, use cases, and

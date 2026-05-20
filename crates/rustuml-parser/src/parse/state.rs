@@ -171,16 +171,25 @@ impl StateParser {
         static RE: LazyLock<Regex> = LazyLock::new(|| {
             // State IDs may include dots for substate references (e.g. `S.H`).
             // Pseudo-states: [*] (initial/final), [H] (shallow history), [H*] (deep history).
+            //
+            // Arrow forms recognised between source and target:
+            //   `-->`, `->`, `-up->`, `-down->`, `-left->`, `-right->`, `-le->`, ...
+            //   `-[#color]->`, `-[#color,thickness=N]->`, etc. (bracketed style)
+            //   `..>`, `.up.>`, `-[#blue]..->`, etc. (dotted variants)
+            //   `<--`, `<.>`, `<-->` (reverse / bidirectional)
+            // The regex consumes any non-space sequence between source and `>` /
+            // `<` to keep this loose — exact arrow semantics are recovered
+            // downstream from the source text when needed.
             Regex::new(
-                r"^(\[[\w*]*\]|[\w.]+)\s*-+(?:left|right|up|down|le|ri|do)?-*>\s*(\[[\w*]*\]|[\w.]+)(?:\s*:\s*(.+))?$",
+                r"^(\[[\w*]*\]|[\w.]+)\s*([-.<>][-.<>\[\]#,=\w]*[->])\s*(\[[\w*]*\]|[\w.]+)(?:\s*:\s*(.+))?$",
             )
             .unwrap()
         });
 
         if let Some(caps) = RE.captures(line) {
             let from = self.ensure_state(&caps[1]);
-            let to = self.ensure_state(&caps[2]);
-            let label = caps.get(3).map(|m| m.as_str().trim().to_string());
+            let to = self.ensure_state(&caps[3]);
+            let label = caps.get(4).map(|m| m.as_str().trim().to_string());
             self.transitions.push(Transition {
                 from,
                 to,
