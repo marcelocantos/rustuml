@@ -48,6 +48,12 @@ pub struct EntityRect {
     /// Declared fill from the first `<rect fill="…">` child, if any.
     /// Lets renderers recover entity colours from the oracle without parser plumbing.
     pub fill: Option<String>,
+    /// Java entity ID (`ent000N`) — value of the `id="..."` attribute on the
+    /// `<g class="entity">` / `start_entity` / `end_entity` wrapper. Lets
+    /// renderers reproduce Java's exact counter allocation, including the
+    /// start/end-entity ID-sharing quirk that resists clean modelling from
+    /// the parser side.
+    pub entity_id: Option<String>,
 }
 
 /// An edge path extracted from a golden SVG.
