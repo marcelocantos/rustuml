@@ -102,8 +102,6 @@ pub fn extract_oracle_layout(svg: &str) -> Option<OracleLayout> {
                                     }
                                     "ellipse" => parse_attr(&el, "cy"),
                                     "polygon" => {
-                                        // Diamond glyph for package/protected visibility.
-                                        // Vertical centroid = (min_y + max_y) / 2.
                                         let points = el.attribute("points")?;
                                         let ys: Vec<f64> = points
                                             .split(|c: char| c == ',' || c.is_whitespace())
@@ -253,13 +251,42 @@ pub fn extract_oracle_layout(svg: &str) -> Option<OracleLayout> {
                     label: None,
                 };
 
-                // Find <polygon> child for arrowhead.
-                if let Some(polygon) = find_first_child(&node, "polygon")
+                // Find <polygon> children for arrowheads (first = primary, second = bidirectional).
+                let polygons: Vec<roxmltree::Node> = node
+                    .children()
+                    .filter(|c| c.tag_name().name() == "polygon")
+                    .collect();
+                if let Some(polygon) = polygons.first()
                     && let Some(points) = polygon.attribute("points")
                 {
                     oracle_edge.arrow_points = Some(points.to_string());
                     oracle_edge.arrow_fill = polygon.attribute("fill").map(String::from);
                     oracle_edge.polygon_style = polygon.attribute("style").map(String::from);
+                }
+                if let Some(polygon) = polygons.get(1)
+                    && let Some(points) = polygon.attribute("points")
+                {
+                    oracle_edge.second_arrow_points = Some(points.to_string());
+                }
+
+                // Extract edge label from <text> children: first text element supplies x/y,
+                // descendant text content of all text children is joined with "\n".
+                let texts: Vec<roxmltree::Node> = node
+                    .children()
+                    .filter(|c| c.tag_name().name() == "text")
+                    .collect();
+                if let Some(first_text) = texts.first()
+                    && let (Some(tx), Some(ty)) =
+                        (parse_attr(first_text, "x"), parse_attr(first_text, "y"))
+                {
+                    let joined: String = texts
+                        .iter()
+                        .map(|t| collect_text(t))
+                        .collect::<Vec<_>>()
+                        .join("\n");
+                    if !joined.is_empty() {
+                        oracle_edge.label = Some((tx, ty, joined));
+                    }
                 }
 
                 layout.edges.push(oracle_edge);
@@ -279,6 +306,17 @@ fn find_first_child<'a>(
 
 fn parse_attr(node: &roxmltree::Node, attr: &str) -> Option<f64> {
     node.attribute(attr)?.parse().ok()
+}
+
+/// Recursively concatenate the text content of an element's descendants.
+fn collect_text(node: &roxmltree::Node) -> String {
+    let mut out = String::new();
+    for desc in node.descendants() {
+        if let Some(t) = desc.text() {
+            out.push_str(t);
+        }
+    }
+    out
 }
 
 /// Extract a rough bounding box from an SVG path `d` attribute.
