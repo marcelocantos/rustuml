@@ -1358,6 +1358,119 @@ impl PlantUmlSvg {
         self.buf.push_str("</g>");
     }
 
+    /// Write a message group with a cross "X" arrow (->x or x<-).
+    /// `tip_x` is the X centre (right side for right-going arrows).
+    /// The line ends 5px before the tip (cross half-width).
+    #[allow(clippy::too_many_arguments)]
+    fn message_cross_arrow(
+        &mut self,
+        entity1: &str,
+        entity2: &str,
+        source_line: u32,
+        msg_id: u32,
+        tip_x: f64,
+        msg_y: f64,
+        is_right: bool,
+        line_x1: f64,
+        line_x2: f64,
+        line_style: &str,
+        text_x: f64,
+        text_y: f64,
+        text_content: &str,
+        _text_len: f64,
+        color: &str,
+        autonumber: Option<(&str, f64, &AutoNumberStyle)>,
+    ) {
+        write!(
+            self.buf,
+            r##"<g class="message" data-entity-1="{entity1}" data-entity-2="{entity2}" data-source-line="{source_line}" id="msg{msg_id}">"##,
+            entity1 = escape_xml(entity1),
+            entity2 = escape_xml(entity2),
+        )
+        .unwrap();
+
+        // X mark: spans 10x10 with right edge at tip_x (right-going) or left
+        // edge at tip_x (left-going). The arrow line meets the X at its centre.
+        let half = 5.0;
+        let (x_left, x_right) = if is_right {
+            (tip_x - 2.0 * half, tip_x)
+        } else {
+            (tip_x, tip_x + 2.0 * half)
+        };
+        let y_top = msg_y - half;
+        let y_bot = msg_y + half;
+
+        write!(
+            self.buf,
+            r##"<line style="stroke:{color};stroke-width:2;" x1="{}" x2="{}" y1="{}" y2="{}"/>"##,
+            fmt_coord(x_left),
+            fmt_coord(x_right),
+            fmt_coord(y_top),
+            fmt_coord(y_bot),
+        )
+        .unwrap();
+        write!(
+            self.buf,
+            r##"<line style="stroke:{color};stroke-width:2;" x1="{}" x2="{}" y1="{}" y2="{}"/>"##,
+            fmt_coord(x_left),
+            fmt_coord(x_right),
+            fmt_coord(y_bot),
+            fmt_coord(y_top),
+        )
+        .unwrap();
+
+        write!(
+            self.buf,
+            r##"<line style="stroke:{color};stroke-width:1;{line_style}" x1="{}" x2="{}" y1="{}" y2="{}"/>"##,
+            fmt_coord(line_x1),
+            fmt_coord(line_x2),
+            fmt_coord(msg_y),
+            fmt_coord(msg_y),
+        )
+        .unwrap();
+
+        let label_x = if let Some((num_text, num_w, style)) = autonumber {
+            let fill = style.fill.as_deref().unwrap_or("#000000");
+            text_render::emit_text(
+                &mut self.buf,
+                num_text,
+                &TextBase {
+                    x: text_x,
+                    y: text_y,
+                    font_size: 13,
+                    font_family: "sans-serif",
+                    fill,
+                    bold: style.bold,
+                    italic: style.italic,
+                    underline: style.underline,
+                    skip_underline: false,
+                },
+            );
+            text_x + num_w + AUTONUMBER_LABEL_GAP
+        } else {
+            text_x
+        };
+
+        if !text_content.is_empty() {
+            text_render::emit_text(
+                &mut self.buf,
+                text_content,
+                &TextBase {
+                    x: label_x,
+                    y: text_y,
+                    font_size: MSG_FONT_SIZE as u32,
+                    font_family: "sans-serif",
+                    fill: "#000000",
+                    bold: false,
+                    italic: false,
+                    underline: false,
+                    skip_underline: false,
+                },
+            );
+        }
+        self.buf.push_str("</g>");
+    }
+
     /// Write a message group with filled arrow (->).
     #[allow(clippy::too_many_arguments)]
     fn message_filled_arrow(
@@ -3238,6 +3351,7 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme) -> String {
                 let is_right = to_x > from_x;
                 let is_dotted = msg.arrow.line == LineStyle::Dotted;
                 let is_open = msg.arrow.head == ArrowHead::Open;
+                let is_cross = msg.arrow.head == ArrowHead::Cross;
 
                 // Check if source/target are activated.
                 // Also look ahead: if the next event activates the target, treat it as
@@ -3478,7 +3592,30 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme) -> String {
                             tip_x - FILLED_ARROW_NOTCH
                         };
 
-                        if is_open {
+                        if is_cross {
+                            // ->x: PlantUML positions the cross 6px before the
+                            // filled arrow tip and ends the line at the cross
+                            // centre.
+                            let cross_right = tip_x - 6.0;
+                            svg.message_cross_arrow(
+                                &from_uid,
+                                &to_uid,
+                                src_line,
+                                msg_id,
+                                cross_right,
+                                msg_y,
+                                true,
+                                from_x_shifted,
+                                cross_right - 5.0,
+                                line_style,
+                                text_x,
+                                text_y_pos,
+                                &label,
+                                label_w,
+                                &arrow_color,
+                                autonumber_ref,
+                            );
+                        } else if is_open {
                             // Open arrow: V-shape tip at tip_x, main line extends 1px past
                             svg.message_open_arrow(
                                 &from_uid,
@@ -3541,7 +3678,28 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme) -> String {
                         // PlantUML draws the left-going line to from edge - 1
                         let line_x2_end = from_x_shifted - 1.0;
 
-                        if is_open {
+                        if is_cross {
+                            // x<-: cross 6px to the right of the filled tip.
+                            let cross_left = tip_x + 6.0;
+                            svg.message_cross_arrow(
+                                &from_uid,
+                                &to_uid,
+                                src_line,
+                                msg_id,
+                                cross_left,
+                                msg_y,
+                                false,
+                                cross_left + 5.0,
+                                line_x2_end,
+                                line_style,
+                                text_x,
+                                text_y_pos,
+                                &label,
+                                label_w,
+                                &arrow_color,
+                                autonumber_ref,
+                            );
+                        } else if is_open {
                             // Open arrow: V-shape tip at tip_x, main line starts 1px before
                             svg.message_open_arrow(
                                 &from_uid,
