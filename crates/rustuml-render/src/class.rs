@@ -1329,12 +1329,11 @@ fn render_member_line(
         svg.push_str("</g>");
     }
 
-    let text_x = entity_x
-        + if visibility_modifier(member).is_some() {
-            MEMBER_TEXT_OFFSET
-        } else {
-            ENUM_TEXT_OFFSET
-        };
+    // Members of a class (with or without visibility icons) all start at
+    // entity_x + MEMBER_TEXT_OFFSET. Default-visibility entries here are
+    // body-continuation lines of a multi-line method, not enum constants
+    // — those go through a separate render path in the enum branch.
+    let text_x = entity_x + MEMBER_TEXT_OFFSET;
 
     let mut text_buf = String::new();
     text_render::emit_text(
