@@ -45,6 +45,9 @@ pub struct EntityRect {
     pub sep_y_values: Vec<f64>,
     /// Visibility icon y-positions (from rect/ellipse within `<g data-visibility-modifier>`).
     pub vis_icon_y_values: Vec<f64>,
+    /// Declared fill from the first `<rect fill="…">` child, if any.
+    /// Lets renderers recover entity colours from the oracle without parser plumbing.
+    pub fill: Option<String>,
 }
 
 /// An edge path extracted from a golden SVG.
@@ -56,6 +59,9 @@ pub struct OracleEdgePath {
     pub d: String,
     /// Arrowhead polygon points (if present).
     pub arrow_points: Option<String>,
+    /// Second arrowhead polygon points for bidirectional edges (`<-->`, `<..>`),
+    /// taken from the second `<polygon>` child of `<g class="link">` when present.
+    pub second_arrow_points: Option<String>,
     /// Fill for the arrowhead polygon (e.g. "#181818" or "none").
     pub arrow_fill: Option<String>,
     /// The link type from `data-link-type` (e.g. "dependency", "association").
@@ -74,4 +80,8 @@ pub struct OracleEdgePath {
     pub code_line: Option<String>,
     /// The polygon's `style` attribute.
     pub polygon_style: Option<String>,
+    /// Edge label from `<text>` child of `<g class="link">`, if any:
+    /// `(x, y, text)` where text concatenates descendant text content
+    /// (multi-line labels join with `\n`, using the first `<text>` element's x/y).
+    pub label: Option<(f64, f64, String)>,
 }
