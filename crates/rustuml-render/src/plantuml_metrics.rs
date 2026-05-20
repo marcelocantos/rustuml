@@ -141,23 +141,25 @@ fn char_width(c: char, table: &[f64; 95]) -> f64 {
 /// table by its space-character width (table[0]) to infer the size.
 fn guillemet_width(table: &[f64; 95]) -> f64 {
     // Map table identity by its space-character (index 0) width to the
-    // corresponding guillemet width measured from goldens.
+    // corresponding guillemet width measured from goldens. Each value is
+    // `size * 0.52392578125`, an exact f64 ratio derived from the JVM's
+    // AWT SansSerif metrics.
     let space = table[0];
     if (space - 3.796875).abs() < 1e-9 {
         // size 12
         6.287109375
     } else if (space - 4.4296875).abs() < 1e-9 {
         // size 14
-        8.8525
+        7.3349609375
     } else if (space - 4.11328125).abs() < 1e-9 {
         // size 13
-        7.5698
+        6.81103515625
     } else if (space - 3.48046875).abs() < 1e-9 {
-        // size 11
-        6.0
+        // size 11 (no golden samples available; computed from ratio)
+        5.76318359375
     } else if (space - 3.1640625).abs() < 1e-9 {
-        // size 10
-        5.5
+        // size 10 (no golden samples available; computed from ratio)
+        5.2392578125
     } else {
         // Fallback to 'a' width if the table isn't recognized.
         table[('a' as u32 - 32) as usize]
