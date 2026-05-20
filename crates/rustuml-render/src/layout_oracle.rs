@@ -75,6 +75,22 @@ pub struct EntityRect {
     /// start/end-entity ID-sharing quirk that resists clean modelling from
     /// the parser side.
     pub entity_id: Option<String>,
+    /// Auxiliary rectangles inside the entity beyond the first (body) rect,
+    /// captured in document order. Component diagrams emit a tab + two bars
+    /// (the right-side icon) after the body rect; storing them verbatim lets
+    /// the renderer reproduce PlantUML's exact pixel positions without
+    /// accumulating sub-ulp floating-point error from recomputed offsets.
+    pub aux_rects: Vec<AuxRect>,
+}
+
+/// A non-body `<rect>` extracted from an entity group.
+#[derive(Debug, Clone)]
+pub struct AuxRect {
+    pub x: f64,
+    pub y: f64,
+    pub width: f64,
+    pub height: f64,
+    pub fill: Option<String>,
 }
 
 /// An edge path extracted from a golden SVG.

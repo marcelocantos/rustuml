@@ -34,6 +34,30 @@ fn main() {
         None
     };
 
+    if std::env::var("DIFF_ONE_DEBUG").is_ok() {
+        let d = rustuml_parser::parse::parse(&source).unwrap();
+        if let rustuml_parser::diagram::Diagram::Component(c) = &d {
+            eprintln!(
+                "DEBUG components: {:?}",
+                c.components.iter().map(|c| &c.id).collect::<Vec<_>>()
+            );
+            eprintln!("DEBUG connections: {:?}", c.connections);
+        }
+        if let Some(ref o) = oracle_layout {
+            eprintln!(
+                "DEBUG oracle edges: {:?}",
+                o.edges.iter().map(|e| &e.id).collect::<Vec<_>>()
+            );
+            eprintln!(
+                "DEBUG oracle clusters: {:?}",
+                o.clusters
+                    .iter()
+                    .map(|c| &c.qualified_name)
+                    .collect::<Vec<_>>()
+            );
+        }
+    }
+
     let blocks = rustuml_parser::parse::split_blocks(&source);
     let is_multi_block = blocks.len() > 1;
     let rust_svg = if is_multi_block {

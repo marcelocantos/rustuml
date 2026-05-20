@@ -6,7 +6,9 @@
 //! Parses a golden SVG to extract entity positions and edge paths,
 //! producing an `OracleLayout` that can be fed to renderers.
 
-use rustuml_render::layout_oracle::{EntityRect, OracleCluster, OracleEdgePath, OracleLayout};
+use rustuml_render::layout_oracle::{
+    AuxRect, EntityRect, OracleCluster, OracleEdgePath, OracleLayout,
+};
 
 /// Extract layout data from a golden SVG string.
 ///
@@ -147,6 +149,25 @@ pub fn extract_oracle_layout(svg: &str) -> Option<OracleLayout> {
                         .collect();
                     let fill = rect.attribute("fill").map(String::from);
                     let entity_id = node.attribute("id").map(String::from);
+                    // Auxiliary rectangles beyond the body — component icons
+                    // (tab + bars), interface notation hints, etc. Captured
+                    // verbatim from the golden so the renderer doesn't have
+                    // to recompute their positions and accumulate sub-ulp
+                    // drift versus PlantUML.
+                    let aux_rects: Vec<AuxRect> = node
+                        .children()
+                        .filter(|c| c.tag_name().name() == "rect")
+                        .skip(1)
+                        .filter_map(|r| {
+                            Some(AuxRect {
+                                x: parse_attr(&r, "x")?,
+                                y: parse_attr(&r, "y")?,
+                                width: parse_attr(&r, "width")?,
+                                height: parse_attr(&r, "height")?,
+                                fill: r.attribute("fill").map(String::from),
+                            })
+                        })
+                        .collect();
                     layout.entities.insert(
                         name.to_string(),
                         EntityRect {
@@ -162,6 +183,7 @@ pub fn extract_oracle_layout(svg: &str) -> Option<OracleLayout> {
                             vis_icon_y_values,
                             fill,
                             entity_id,
+                            aux_rects,
                         },
                     );
                 } else if let Some(ellipse) = find_first_child(&node, "ellipse") {
@@ -186,6 +208,7 @@ pub fn extract_oracle_layout(svg: &str) -> Option<OracleLayout> {
                             vis_icon_y_values: Vec::new(),
                             fill: None,
                             entity_id,
+                            aux_rects: Vec::new(),
                         },
                     );
                 } else if let Some(polygon) = find_first_child(&node, "polygon") {
@@ -220,6 +243,7 @@ pub fn extract_oracle_layout(svg: &str) -> Option<OracleLayout> {
                                     vis_icon_y_values: Vec::new(),
                                     fill,
                                     entity_id,
+                                    aux_rects: Vec::new(),
                                 },
                             );
                         }
@@ -256,6 +280,7 @@ pub fn extract_oracle_layout(svg: &str) -> Option<OracleLayout> {
                             vis_icon_y_values: Vec::new(),
                             fill: None,
                             entity_id,
+                            aux_rects: Vec::new(),
                         },
                     );
                 }
@@ -624,6 +649,7 @@ fn path_bounding_box(d: &str) -> Option<EntityRect> {
             vis_icon_y_values: Vec::new(),
             fill: None,
             entity_id: None,
+            aux_rects: Vec::new(),
         })
     } else {
         None
