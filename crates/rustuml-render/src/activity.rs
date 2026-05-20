@@ -560,6 +560,24 @@ fn node_extents(node: &LayoutNode) -> (f64, f64) {
                 branch_dist / 2.0 + else_w / 2.0,
             )
         }
+        LayoutNode::Repeat {
+            body, condition, ..
+        } => {
+            // Every `repeatwhile` runs a loop-back arrow up the right side
+            // (with or without an `is (...)` label). PlantUML places the
+            // condition diamond's left vertex 9 px inside the content area
+            // (so left extent is cond_half + 9 regardless of body width),
+            // and the loop-back arrow extends 12 px past max(diamond_right,
+            // body_right) with another 15 px of right margin past that.
+            // Reverse-engineered from goldens with varying body/condition
+            // widths.
+            let body_w = sequence_width(body);
+            let cond_half = diamond_inner_w(condition) / 2.0 + DIAMOND_HALF;
+            let body_half = body_w / 2.0;
+            let left_extent = cond_half + 9.0;
+            let right_extent = cond_half.max(body_half) + 12.0 + 15.0;
+            (left_extent, right_extent)
+        }
         _ => {
             let w = node_width(node);
             (w / 2.0, w / 2.0)
@@ -614,8 +632,16 @@ fn node_width(node: &LayoutNode) -> f64 {
             branch_dist + (then_w + else_w) / 2.0
         }
         LayoutNode::Fork { branches } => {
-            let total: f64 = branches.iter().map(|b| sequence_width(b).max(60.0)).sum();
-            total + FORK_BAR_MARGIN * 2.0
+            // Mirror emit_fork's bar-width formula: 12 px inner pad each side,
+            // 28 px gap between adjacent branches, with a minimum bar width
+            // when all branches are narrow.
+            let branch_widths: Vec<f64> = branches.iter().map(|b| sequence_width(b)).collect();
+            let n = branch_widths.len();
+            let total_branch_w: f64 = branch_widths.iter().sum();
+            let inter_gaps = if n > 1 { (n - 1) as f64 } else { 0.0 };
+            let bar_w = 12.0 * 2.0 + total_branch_w + inter_gaps * 28.0;
+            let min_bar_w = FORK_BAR_MARGIN * 2.0 + 80.0;
+            bar_w.max(min_bar_w)
         }
         LayoutNode::While {
             body, condition, ..
@@ -627,9 +653,15 @@ fn node_width(node: &LayoutNode) -> f64 {
         LayoutNode::Repeat {
             body, condition, ..
         } => {
+            // Every `repeatwhile` produces a loop-back arrow on the right;
+            // see node_extents for the formula derivation.
             let body_w = sequence_width(body);
             let cond_w = diamond_inner_w(condition) + DIAMOND_HALF * 2.0;
-            body_w.max(cond_w + 40.0)
+            let cond_half = cond_w / 2.0;
+            let body_half = body_w / 2.0;
+            let left = cond_half + 9.0;
+            let right = cond_half.max(body_half) + 12.0 + 15.0;
+            left + right
         }
         // Arrows, notes, detach/kill/break, and bare titles contribute no
         // horizontal extent of their own. (Notes will need width once they're
@@ -1743,7 +1775,10 @@ fn emit_fork(svg: &mut SvgEmitter, cx: f64, y: f64, branches: &[Vec<LayoutNode>]
     let branch_widths: Vec<f64> = branches.iter().map(|b| sequence_width(b)).collect();
     let n = branch_widths.len();
     const FORK_INNER_PAD: f64 = 12.0;
-    const FORK_BRANCH_GAP: f64 = 10.0;
+    /// Gap between adjacent fork branches. Reverse-engineered from goldens:
+    /// 2-branch and 3-branch forks at varying widths all produce a 28-px gap
+    /// between consecutive branch rects (not the 10-px gap previously here).
+    const FORK_BRANCH_GAP: f64 = 28.0;
     let total_branch_w: f64 = branch_widths.iter().sum();
     let inter_gaps = if n > 1 { (n - 1) as f64 } else { 0.0 };
     // PlantUML's fork-bar width: 12 padding each side + branch widths +
@@ -1849,8 +1884,10 @@ fn emit_while(
     is_label: &Option<String>,
     body: &[LayoutNode],
 ) -> f64 {
-    // TODO: proper while layout matching PlantUML
-    // For now, simplified linear layout
+    // PlantUML emits the while body's shapes BEFORE the condition diamond's
+    // shape in the SVG (the diamond visually sits above the body, but in
+    // emission order the body comes first). Compute geometry first, emit
+    // body, then the diamond + texts, then the inbound connector.
     let arrow_color = svg.palette.arrow_color.clone();
     let diamond_stroke = svg.palette.diamond_stroke.clone();
     let diamond_fill = svg.palette.diamond_fill.clone();
@@ -1858,8 +1895,12 @@ fn emit_while(
     let cond_inner_w = diamond_inner_w(condition);
     let cond_text_w = text_render::measure(condition, SMALL_FONT, false);
     let diamond_cy = y + DIAMOND_HALF;
+    let diamond_bottom = y + DIAMOND_HALF * 2.0;
 
-    // Diamond
+    // Body below diamond — emit it first.
+    let body_bottom = emit_sequence(svg, body, cx, diamond_bottom + IF_BRANCH_DOWN);
+
+    // Now the diamond + its texts (lands after body shapes in `shapes`).
     let pts = vec![
         (cx - cond_inner_w / 2.0, y),
         (cx + cond_inner_w / 2.0, y),
@@ -1896,16 +1937,16 @@ fn emit_while(
         );
     }
 
-    let diamond_bottom = y + DIAMOND_HALF * 2.0;
-
-    // Body below diamond
+    // Inbound connector from diamond down to body (after body shapes and
+    // diamond shape are in place).
     svg.down_arrow(
         cx,
         diamond_bottom,
         diamond_bottom + IF_BRANCH_DOWN,
         &arrow_color,
     );
-    emit_sequence(svg, body, cx, diamond_bottom + IF_BRANCH_DOWN)
+
+    body_bottom
 }
 
 fn emit_repeat(
@@ -1921,8 +1962,18 @@ fn emit_repeat(
     let diamond_fill = svg.palette.diamond_fill.clone();
     let text_color = svg.palette.text_color.clone();
 
-    // Top diamond (entry point)
+    // PlantUML emits repeat in this order: body shapes → top entry diamond
+    // → condition diamond → labels → connectors. Compute positions
+    // up-front so we can defer the diamond emits until after the body.
     let top_diamond_size = DIAMOND_HALF;
+    let top_bottom = y + top_diamond_size * 2.0;
+    let body_y = top_bottom + ARROW_LEN;
+
+    // Body first — its rects/texts land in `shapes` before either diamond.
+    let body_bottom = emit_sequence(svg, body, cx, body_y);
+    let cond_y = body_bottom + ARROW_LEN;
+
+    // Top entry diamond (small rhombus at y).
     svg.polygon_shape(
         &diamond_fill,
         &[
@@ -1935,17 +1986,7 @@ fn emit_repeat(
         ACTION_STROKE_WIDTH,
     );
 
-    let top_bottom = y + top_diamond_size * 2.0;
-
-    // Arrow from top diamond to body
-    svg.down_arrow(cx, top_bottom, top_bottom + ARROW_LEN, &arrow_color);
-    let body_bottom = emit_sequence(svg, body, cx, top_bottom + ARROW_LEN);
-
-    // Arrow from body to condition diamond
-    svg.down_arrow(cx, body_bottom, body_bottom + ARROW_LEN, &arrow_color);
-    let cond_y = body_bottom + ARROW_LEN;
-
-    // Condition diamond
+    // Condition diamond (hexagon below body).
     let cond_inner_w = diamond_inner_w(condition);
     let cond_text_w = text_render::measure(condition, SMALL_FONT, false);
     let cond_diamond_cy = cond_y + DIAMOND_HALF;
@@ -1971,49 +2012,56 @@ fn emit_repeat(
         false,
     );
 
-    // "is" label
+    // "is" label (optional)
+    let diamond_right = cx + cond_inner_w / 2.0 + DIAMOND_HALF;
     if let Some(label) = is_label {
         let lw = text_render::measure(label, SMALL_FONT, false);
-        let diamond_right = cx + cond_inner_w / 2.0 + DIAMOND_HALF;
         svg.text_element(
             &text_color,
             "sans-serif",
             SMALL_FONT,
             lw,
-            diamond_right + 5.0,
+            diamond_right,
             cond_diamond_cy + pm::text_height(SMALL_FONT) / 2.0
                 - pm::descent(SMALL_FONT)
                 - DIAMOND_HALF / 2.0,
             label,
             false,
         );
-
-        // Loop-back arrow (right side, up to top diamond)
-        let loop_x = diamond_right + 5.0 + lw + 5.0;
-        svg.line_styled(
-            &arrow_color,
-            "1",
-            diamond_right,
-            loop_x,
-            cond_diamond_cy,
-            cond_diamond_cy,
-            false,
-        );
-        // Vertical line up
-        let top_cy = y + top_diamond_size;
-        svg.up_arrow(loop_x, top_cy, cond_diamond_cy, &arrow_color);
-        // Horizontal to top diamond
-        svg.line_styled(
-            &arrow_color,
-            "1",
-            loop_x,
-            cx + top_diamond_size,
-            top_cy,
-            top_cy,
-            false,
-        );
-        svg.left_arrow(cx + top_diamond_size, top_cy, &arrow_color);
     }
+
+    // Loop-back arrow runs up the right side regardless of whether `is`
+    // has a label — every `repeatwhile` produces it. The arrow's x sits
+    // 12 px past max(diamond_right, body_right).
+    let body_w = sequence_width(body);
+    let body_right = cx + body_w / 2.0;
+    let loop_x = diamond_right.max(body_right) + 12.0;
+    svg.line_styled(
+        &arrow_color,
+        "1",
+        diamond_right,
+        loop_x,
+        cond_diamond_cy,
+        cond_diamond_cy,
+        false,
+    );
+    let top_cy = y + top_diamond_size;
+    svg.up_arrow(loop_x, top_cy, cond_diamond_cy, &arrow_color);
+    svg.line_styled(
+        &arrow_color,
+        "1",
+        loop_x,
+        cx + top_diamond_size,
+        top_cy,
+        top_cy,
+        false,
+    );
+    svg.left_arrow(cx + top_diamond_size, top_cy, &arrow_color);
+
+    // Inbound connectors emitted after both diamonds + body are in the
+    // shapes buffer: top-diamond → body, body → condition diamond.
+    svg.down_arrow(cx, top_bottom, body_y, &arrow_color);
+    svg.down_arrow(cx, body_bottom, cond_y, &arrow_color);
 
     cond_y + DIAMOND_HALF * 2.0
 }
