@@ -154,7 +154,7 @@ targets:
     discovered: 2026-05-17
   T4.10:
     name: Shared-file infrastructure gaps blocking multiple strict-XML buckets are closed
-    status: identified
+    status: achieved
     value: 0.0
     cost: 0.0
     acceptance:
@@ -180,6 +180,7 @@ targets:
       Rough cascade estimate when all eight acceptance items land: ~200 guillemet-related, ~140 state colour fills, ~400+ edge labels across class/state/deployment, ~200+ cluster bbox failures, plus 1-ULP cleanup across every renderer using `fmt_coord`. Total order: 1,000–1,500 strict-XML failures resolved across many T4.x targets simultaneously.
     origin: manual
     discovered: 2026-05-19
+    achieved: 2026-05-20
   T4.2:
     name: Class diagrams strict-XML pass
     status: identified
