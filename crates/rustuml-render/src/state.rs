@@ -269,17 +269,43 @@ pub fn render_with_oracle(
                 && sp.value.eq_ignore_ascii_case("empty description"))
     });
 
-    // Collect ordered unique state IDs in PlantUML's render order: explicitly
-    // declared states first, then start [*], then transition-discovered states,
-    // then end [*].
+    // Collect ordered unique state IDs in PlantUML's render order.
+    //
+    // PlantUML emits entities in source-declaration order: states defined on a
+    // line before the first `[*]` transition appear ahead of the start pseudo-
+    // state, states defined after appear behind it. Transition-discovered
+    // states (no explicit `state X` line) come in transition encounter order.
+    //
+    // We approximate "explicitly declared" by checking whether the state's
+    // recorded source line precedes the first `[*]` reference. The parser
+    // stamps a state's source_line at its first textual encounter, so a
+    // transition-only state inherits the transition's line — which is on or
+    // after the first `[*]` line whenever the diagram uses `[*]` at all.
+    let first_star_line: Option<usize> = diagram
+        .transitions
+        .iter()
+        .filter(|t| t.from == "[*]" || t.to == "[*]")
+        .map(|t| t.source_line)
+        .min();
+    let is_pre_start = |s: &State| -> bool {
+        match first_star_line {
+            Some(line) => s.source_line < line,
+            None => true,
+        }
+    };
     let mut state_ids: Vec<String> = Vec::new();
     for s in &diagram.states {
-        if !state_ids.contains(&s.id) && s.id != "[*]" {
+        if is_pre_start(s) && !state_ids.contains(&s.id) && s.id != "[*]" {
             state_ids.push(s.id.clone());
         }
     }
     if has_start {
         state_ids.push("__start__".to_string());
+    }
+    for s in &diagram.states {
+        if !is_pre_start(s) && !state_ids.contains(&s.id) && s.id != "[*]" {
+            state_ids.push(s.id.clone());
+        }
     }
     for t in &diagram.transitions {
         for id in [&t.from, &t.to] {
