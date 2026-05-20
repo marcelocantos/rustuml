@@ -279,7 +279,7 @@ targets:
     discovered: 2026-05-17
   T5:
     name: Tier-1 quick-win strict-XML fixes are landed in master
-    status: converging
+    status: achieved
     value: 0.0
     cost: 0.0
     acceptance:
@@ -311,7 +311,7 @@ targets:
     achieved: 2026-05-20
   T5.1:
     name: Activity if/else cond_* tests pass byte-exact
-    status: converging
+    status: achieved
     value: 0.0
     cost: 0.0
     acceptance:
@@ -353,7 +353,7 @@ targets:
     achieved: 2026-05-20
   T5.1.2:
     name: Activity diagrams with content_w near .95 fractional render at the correct svg width
-    status: identified
+    status: achieved
     value: 0.0
     cost: 0.0
     acceptance:
@@ -387,6 +387,7 @@ targets:
       Pulled out of T5.1.1 on 2026-05-20 because the framing was \"all 6 remaining cond_* pass\" and 1 of those 6 (empty_labels) actually shared a totally different root cause that closed cleanly; pretending they were one bug muddied the work.
     origin: manual
     discovered: 2026-05-20
+    achieved: 2026-05-20
   T5.2:
     name: Activity Title.emit_node uses unified cursor convention with warnings band and Start ellipse
     status: achieved
