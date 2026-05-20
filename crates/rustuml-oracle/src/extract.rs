@@ -101,10 +101,32 @@ pub fn extract_oracle_layout(svg: &str) -> Option<OracleLayout> {
                                         Some(y + h / 2.0)
                                     }
                                     "ellipse" => parse_attr(&el, "cy"),
-                                    _ => None, // polygon — skip for now
+                                    "polygon" => {
+                                        // Diamond glyph for package/protected visibility.
+                                        // Vertical centroid = (min_y + max_y) / 2.
+                                        let points = el.attribute("points")?;
+                                        let ys: Vec<f64> = points
+                                            .split(|c: char| c == ',' || c.is_whitespace())
+                                            .filter_map(|s| s.parse::<f64>().ok())
+                                            .enumerate()
+                                            .filter_map(
+                                                |(i, v)| if i % 2 == 1 { Some(v) } else { None },
+                                            )
+                                            .collect();
+                                        if ys.is_empty() {
+                                            return None;
+                                        }
+                                        let min_y =
+                                            ys.iter().copied().fold(f64::INFINITY, f64::min);
+                                        let max_y =
+                                            ys.iter().copied().fold(f64::NEG_INFINITY, f64::max);
+                                        Some((min_y + max_y) / 2.0)
+                                    }
+                                    _ => None,
                                 })
                         })
                         .collect();
+                    let fill = rect.attribute("fill").map(String::from);
                     layout.entities.insert(
                         name.to_string(),
                         EntityRect {
@@ -118,6 +140,7 @@ pub fn extract_oracle_layout(svg: &str) -> Option<OracleLayout> {
                             text_y_values,
                             sep_y_values,
                             vis_icon_y_values,
+                            fill,
                         },
                     );
                 } else if let Some(ellipse) = find_first_child(&node, "ellipse") {
@@ -139,6 +162,7 @@ pub fn extract_oracle_layout(svg: &str) -> Option<OracleLayout> {
                             text_y_values: Vec::new(),
                             sep_y_values: Vec::new(),
                             vis_icon_y_values: Vec::new(),
+                            fill: None,
                         },
                     );
                 } else if let Some(polygon) = find_first_child(&node, "polygon") {
@@ -168,6 +192,7 @@ pub fn extract_oracle_layout(svg: &str) -> Option<OracleLayout> {
                                     text_y_values: Vec::new(),
                                     sep_y_values: Vec::new(),
                                     vis_icon_y_values: Vec::new(),
+                                    fill: None,
                                 },
                             );
                         }
@@ -201,6 +226,7 @@ pub fn extract_oracle_layout(svg: &str) -> Option<OracleLayout> {
                             text_y_values: Vec::new(),
                             sep_y_values: Vec::new(),
                             vis_icon_y_values: Vec::new(),
+                            fill: None,
                         },
                     );
                 }
@@ -214,6 +240,7 @@ pub fn extract_oracle_layout(svg: &str) -> Option<OracleLayout> {
                     id: id.to_string(),
                     d: d.to_string(),
                     arrow_points: None,
+                    second_arrow_points: None,
                     arrow_fill: None,
                     link_type: node.attribute("data-link-type").map(String::from),
                     entity_1: node.attribute("data-entity-1").map(String::from),
@@ -223,6 +250,7 @@ pub fn extract_oracle_layout(svg: &str) -> Option<OracleLayout> {
                     path_style: path.attribute("style").map(String::from),
                     code_line: path.attribute("codeLine").map(String::from),
                     polygon_style: None,
+                    label: None,
                 };
 
                 // Find <polygon> child for arrowhead.
@@ -294,6 +322,7 @@ fn path_bounding_box(d: &str) -> Option<EntityRect> {
             text_y_values: Vec::new(),
             sep_y_values: Vec::new(),
             vis_icon_y_values: Vec::new(),
+            fill: None,
         })
     } else {
         None
