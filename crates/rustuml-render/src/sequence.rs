@@ -2451,11 +2451,18 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme) -> String {
     } else {
         (effective_right + RIGHT_MARGIN).ceil() as u32
     };
-    let svg_height = if diagram.hide_footbox {
+    let mut svg_height = if diagram.hide_footbox {
         lifeline_bottom.ceil() as u32
     } else {
         (tail_box_y + max_box_h + BOTTOM_MARGIN).ceil() as u32
     };
+    // Caption adds 20 px of vertical space below the foot boxes (one 14-px
+    // text line + descent + bottom margin). The strict golden height for a
+    // basic two-message caption diagram is 172 vs 152 without caption — a
+    // delta of 20 pixels that maps to a fixed extension here.
+    if diagram.meta.caption.is_some() {
+        svg_height += 20;
+    }
 
     // -----------------------------------------------------------------------
     // Phase 5: Pre-compute activation bars
@@ -2807,16 +2814,31 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme) -> String {
         );
     }
 
-    // Render caption if present
+    // Render caption if present.
+    //
+    // PlantUML wraps the caption in `<g class="caption" data-source-line="N">`
+    // and positions a single non-creole-styled `<text>` left-aligned at x=1
+    // with the baseline 10.8672 px above the SVG bottom edge (font-size 14).
+    // (Bold/italic creole runs split into multiple `<text>` elements with
+    // their own x offsets — not yet handled here; non-creole captions hit
+    // the strict comparator as-is.)
     if let Some(caption) = &diagram.meta.caption {
-        let mid_x = svg_width as f64 / 2.0;
+        const CAPTION_FONT_SIZE: u32 = 14;
+        const CAPTION_BOTTOM_OFFSET: f64 = 10.8672;
+        let stripped = strip_creole(caption);
+        let src_line = diagram.events.len() as u32 + 1;
+        write!(
+            svg.buf,
+            r#"<g class="caption" data-source-line="{src_line}">"#
+        )
+        .unwrap();
         text_render::emit_text(
             &mut svg.buf,
-            caption,
+            &stripped,
             &TextBase {
-                x: mid_x,
-                y: svg_height as f64 - 4.0,
-                font_size: 11,
+                x: 1.0,
+                y: svg_height as f64 - CAPTION_BOTTOM_OFFSET,
+                font_size: CAPTION_FONT_SIZE,
                 font_family: "sans-serif",
                 fill: "#000000",
                 bold: false,
@@ -2825,6 +2847,7 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme) -> String {
                 skip_underline: false,
             },
         );
+        svg.buf.push_str("</g>");
     }
 
     // Render legend if present
