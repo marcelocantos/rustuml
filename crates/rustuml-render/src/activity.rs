@@ -27,7 +27,6 @@ const LABELED_ARROW_LEN: f64 = 41.2754;
 const ACTION_PADDING: f64 = 20.0; // total vertical padding in action box
 const ACTION_H_PADDING: f64 = 10.0; // horizontal padding each side
 const ACTION_RX: f64 = 12.5;
-const ACTION_MIN_X: f64 = 16.0; // minimum x position for elements
 const DIAMOND_HALF: f64 = 12.0; // half-size of decision diamond
 const FORK_BAR_HEIGHT: f64 = 6.0;
 const FORK_BAR_RX: f64 = 2.5;
@@ -459,30 +458,24 @@ fn node_width(node: &LayoutNode) -> f64 {
             condition,
             then_branch,
             else_branches,
-            then_label,
             ..
         } => {
             let cond_w = text_render::measure(condition, SMALL_FONT, false);
             let diamond_w = cond_w + DIAMOND_HALF * 2.0;
-            let then_w = sequence_width(then_branch).max(60.0);
+            let then_w = sequence_width(then_branch);
             let else_w: f64 = else_branches
                 .iter()
-                .map(|b| sequence_width(&b.body).max(60.0))
+                .map(|b| sequence_width(&b.body))
                 .sum();
-            let label_w = then_label
-                .as_ref()
-                .map(|l| text_render::measure(l, SMALL_FONT, false))
-                .unwrap_or(0.0);
-            let else_label_w: f64 = else_branches
-                .iter()
-                .map(|b| {
-                    b.label
-                        .as_ref()
-                        .map(|l| text_render::measure(l, SMALL_FONT, false))
-                        .unwrap_or(0.0)
-                })
-                .sum();
-            (then_w + else_w + label_w + else_label_w + 20.0).max(diamond_w + ACTION_MIN_X * 2.0)
+            // PlantUML places the then/else branches with their centrelines
+            // `branch_dist` apart, where `branch_dist = diamond_w + 20`. The
+            // outermost extents are then `branch_dist/2 + then_w/2` (left)
+            // and `branch_dist/2 + else_w/2` (right) from the diagram centre,
+            // so content_w = branch_dist + (then_w + else_w) / 2. Branch
+            // labels are positioned at the diamond corners and don't widen
+            // the diagram by themselves at typical sizes.
+            let branch_dist = diamond_w + 20.0;
+            branch_dist + (then_w + else_w) / 2.0
         }
         LayoutNode::Fork { branches } => {
             let total: f64 = branches.iter().map(|b| sequence_width(b).max(60.0)).sum();
@@ -1389,12 +1382,13 @@ fn emit_if(
         );
     }
 
-    // Compute branch widths
-    let then_w = sequence_width(then_branch).max(60.0);
+    // Compute branch positions: PlantUML places the then/else branches
+    // with their centrelines `branch_dist = diamond_w + 20` apart,
+    // independent of branch box width.
+    let diamond_w = cond_w + DIAMOND_HALF * 2.0;
+    let branch_dist = diamond_w + 20.0;
     let _else_count = else_branches.len().max(1);
-
-    // Left branch (then): centered to the left
-    let then_cx = cx - then_w / 2.0;
+    let then_cx = cx - branch_dist / 2.0;
 
     // Then arrow: horizontal from diamond left to then_cx, then down
     svg.line_styled(
@@ -1427,13 +1421,8 @@ fn emit_if(
         "1",
     );
 
-    // Else label and branch
-    let else_cx = if else_branches.is_empty() {
-        cx + then_w / 2.0
-    } else {
-        let else_w = sequence_width(&else_branches[0].body).max(60.0);
-        cx + else_w / 2.0
-    };
+    // Else label and branch: mirror of then_cx at the same branch_dist.
+    let else_cx = cx + branch_dist / 2.0;
 
     if let Some(label) = else_branches.first().and_then(|b| b.label.as_ref()) {
         let lw = text_render::measure(label, SMALL_FONT, false);
