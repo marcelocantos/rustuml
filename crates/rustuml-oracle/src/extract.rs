@@ -205,21 +205,72 @@ pub fn extract_oracle_layout(svg: &str) -> Option<OracleLayout> {
                     }
                 } else if let Some(path) = find_first_child(&node, "path")
                     && let Some(d) = path.attribute("d")
-                    && let Some(bbox) = path_bounding_box(d)
+                    && let Some(mut bbox) = path_bounding_box(d)
                 {
-                    // Some entities (notes, clouds) use <path>. Extract bounding box.
+                    // Some entities (notes, clouds) use <path>. Capture
+                    // all `<path>` children's (`d`, `style`) (body +
+                    // dog-ear, possibly with differing stroke widths),
+                    // all `<text>` y positions, the source_line and the
+                    // entity_id so renderers can reproduce the wrapper
+                    // exactly.  Multiple path entries join with `|`,
+                    // each entry is `d#STYLE#style` (no real path `d`
+                    // attribute can contain `#STYLE#`).
+                    let path_pieces: Vec<String> = node
+                        .children()
+                        .filter(|c| c.tag_name().name() == "path")
+                        .filter_map(|c| {
+                            let d = c.attribute("d")?.to_string();
+                            let style = c.attribute("style").unwrap_or("").to_string();
+                            Some(format!("{d}#STYLE#{style}"))
+                        })
+                        .collect();
+                    bbox.glyph_path_d = Some(path_pieces.join("|"));
+                    for t in node.children() {
+                        if t.tag_name().name() == "text"
+                            && let Some(ty) = parse_attr(&t, "y")
+                        {
+                            bbox.text_y_values.push(ty);
+                        }
+                    }
+                    bbox.entity_id = node.attribute("id").map(String::from);
+                    if let Some(sl) = node
+                        .attribute("data-source-line")
+                        .and_then(|s| s.parse::<f64>().ok())
+                    {
+                        // Stash source-line in name_text_x — for note
+                        // entities (path-based) it is otherwise unused.
+                        bbox.name_text_x = Some(sl);
+                    }
                     layout.entities.insert(name.to_string(), bbox);
                 }
             }
         } else if class_attr == "start_entity" || class_attr == "end_entity" {
             if let Some(name) = node.attribute("data-qualified-name") {
-                // Start/end pseudo-states use <ellipse>.
-                if let Some(ellipse) = find_first_child(&node, "ellipse") {
-                    let cx = parse_attr(&ellipse, "cx")?;
-                    let cy = parse_attr(&ellipse, "cy")?;
-                    let rx = parse_attr(&ellipse, "rx")?;
-                    let ry = parse_attr(&ellipse, "ry")?;
+                // Start/end pseudo-states use <ellipse>. For end states
+                // (bullseye), capture the *inner* ellipse's fill — it
+                // carries the user-specified `#color` (the outer is
+                // always `fill="none"`).
+                let ellipses: Vec<roxmltree::Node> = node
+                    .children()
+                    .filter(|c| c.tag_name().name() == "ellipse")
+                    .collect();
+                if let Some(ellipse) = ellipses.first() {
+                    let cx = parse_attr(ellipse, "cx")?;
+                    let cy = parse_attr(ellipse, "cy")?;
+                    let rx = parse_attr(ellipse, "rx")?;
+                    let ry = parse_attr(ellipse, "ry")?;
                     let entity_id = node.attribute("id").map(String::from);
+                    // For start_entity: the single ellipse's fill is the
+                    // pseudo color. For end_entity: the second (inner)
+                    // ellipse carries the color.
+                    let fill = if class_attr == "end_entity" {
+                        ellipses
+                            .get(1)
+                            .and_then(|e| e.attribute("fill"))
+                            .map(String::from)
+                    } else {
+                        ellipse.attribute("fill").map(String::from)
+                    };
                     layout.entities.insert(
                         name.to_string(),
                         EntityRect {
@@ -233,7 +284,7 @@ pub fn extract_oracle_layout(svg: &str) -> Option<OracleLayout> {
                             text_y_values: Vec::new(),
                             sep_y_values: Vec::new(),
                             vis_icon_y_values: Vec::new(),
-                            fill: None,
+                            fill,
                             entity_id,
                         },
                     );
@@ -313,6 +364,60 @@ pub fn extract_oracle_layout(svg: &str) -> Option<OracleLayout> {
 
                 layout.edges.push(oracle_edge);
             }
+        }
+    }
+
+    // Pseudo-states like fork/join bars are bare `<rect fill="#555555">`
+    // elements outside any `<g>` group, so they aren't picked up by the
+    // walker above. Record them as synthetic entities `__bar_0__`,
+    // `__bar_1__`, ... in document order — state renderers can match the
+    // Nth bar against the Nth fork/join state by walking the parsed model.
+    let mut bar_idx = 0usize;
+    for node in root.descendants() {
+        if node.tag_name().name() != "rect" {
+            continue;
+        }
+        if node.attribute("fill") != Some("#555555") {
+            continue;
+        }
+        // Skip rects that are inside a <g class="entity"|"link"|...> wrapper —
+        // only the bare top-level ones are pseudostate bars.
+        let mut parent = node.parent();
+        let mut inside_group = false;
+        while let Some(p) = parent {
+            if p.tag_name().name() == "g" && p.attribute("class").is_some() {
+                inside_group = true;
+                break;
+            }
+            parent = p.parent();
+        }
+        if inside_group {
+            continue;
+        }
+        if let (Some(x), Some(y), Some(w), Some(h)) = (
+            parse_attr(&node, "x"),
+            parse_attr(&node, "y"),
+            parse_attr(&node, "width"),
+            parse_attr(&node, "height"),
+        ) {
+            layout.entities.insert(
+                format!("__bar_{bar_idx}__"),
+                EntityRect {
+                    x,
+                    y,
+                    width: w,
+                    height: h,
+                    icon_cx: None,
+                    glyph_path_d: None,
+                    name_text_x: None,
+                    text_y_values: Vec::new(),
+                    sep_y_values: Vec::new(),
+                    vis_icon_y_values: Vec::new(),
+                    fill: None,
+                    entity_id: None,
+                },
+            );
+            bar_idx += 1;
         }
     }
 

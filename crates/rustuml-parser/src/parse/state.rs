@@ -204,8 +204,16 @@ impl StateParser {
 
     fn try_state_decl(&mut self, line: &str) -> bool {
         static RE: LazyLock<Regex> = LazyLock::new(|| {
-            Regex::new(r#"^state\s+(?:"([^"]+)"\s+as\s+)?(\w+)(?:\s*<<(\w+\*?)>>)?(?:\s*(#\w+))?(?:\s*\{)?$"#)
-                .unwrap()
+            // Trailing decoration accepted in any order:
+            //   `#color`        — fill colour
+            //   `##color`       — line (stroke) colour
+            //   `##[dashed]col` — line style + colour
+            //   `<<stereotype>>`
+            //   `{`             — opens a composite block
+            Regex::new(
+                r#"^state\s+(?:"([^"]+)"\s+as\s+)?(\w+)(?:\s*<<(\w+\*?)>>)?(?:\s*(##?(?:\[[^\]]*\])?\w+))*(?:\s*\{)?$"#,
+            )
+            .unwrap()
         });
         // Also handles: state ID : description
         static RE_DESC: LazyLock<Regex> = LazyLock::new(|| {
