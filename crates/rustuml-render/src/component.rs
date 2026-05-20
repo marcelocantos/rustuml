@@ -251,8 +251,20 @@ pub fn render_with_oracle(
     }
 
     // Render packages (clusters).
+    //
+    // When the oracle has cluster data, replay it verbatim: PlantUML hand-tuned
+    // each container shape (cloud bubbles, folder tab, node 3D edge, package label
+    // band, frame corner, rectangle, database cylinder, queue, …) with bespoke
+    // path geometry that we can't realistically reproduce attribute-for-attribute
+    // in a strict-XML comparator. The oracle replay sidesteps this entirely.
     let mut pkg_y = title_h + MARGIN;
-    render_packages(&diagram.packages, &mut svg, MARGIN, &mut pkg_y, theme);
+    if let Some(orc) = oracle
+        && !orc.clusters.is_empty()
+    {
+        render_packages_from_oracle(&diagram.packages, &mut svg, orc);
+    } else {
+        render_packages(&diagram.packages, &mut svg, MARGIN, &mut pkg_y, theme);
+    }
 
     // Build qualified-name map (e.g. "AA" → "G1.AA") for oracle lookup.
     let qualified_names = build_qualified_names(&diagram.packages);
@@ -269,12 +281,38 @@ pub fn render_with_oracle(
     };
 
     // Render each component entity.
-    let mut entity_counter = 2; // PlantUML entity IDs start at ent0002
+    //
+    // Entity IDs (`ent000N`) are interleaved with cluster IDs in PlantUML's
+    // output, so a naive sequential counter doesn't reproduce them. When the
+    // oracle has captured an entity_id, use it directly. Otherwise fall back
+    // to a sequential counter — but skip IDs already claimed by oracle
+    // clusters so we never collide.
+    let mut entity_counter = 2;
     for (i, comp) in diagram.components.iter().enumerate() {
         let (x, y) = positions[i];
         let dim = &comp_dims[i];
-        let ent_id = format!("ent{entity_counter:04}");
-        entity_counter += 1;
+        let oracle_rect_for_id = oracle_comp_rect(comp);
+        let ent_id = if let Some(id) = oracle_rect_for_id.and_then(|r| r.entity_id.clone()) {
+            id
+        } else {
+            // Skip over IDs claimed by oracle clusters.
+            if let Some(orc) = oracle {
+                loop {
+                    let candidate = format!("ent{entity_counter:04}");
+                    if !orc
+                        .clusters
+                        .iter()
+                        .any(|c| c.entity_id.as_deref() == Some(candidate.as_str()))
+                    {
+                        break;
+                    }
+                    entity_counter += 1;
+                }
+            }
+            let id = format!("ent{entity_counter:04}");
+            entity_counter += 1;
+            id
+        };
 
         // HTML comment.
         svg.raw(&format!("<!--entity {}-->", comp.id));
@@ -1228,6 +1266,49 @@ fn render_note(
 // ---------------------------------------------------------------------------
 // Package / container rendering
 // ---------------------------------------------------------------------------
+
+/// Emit oracle-extracted cluster `<g>` groups in declaration order, walking the
+/// package tree depth-first to match PlantUML's ordering. Falls back gracefully
+/// when the oracle is missing a cluster (e.g. the parser failed to recognise it).
+fn render_packages_from_oracle(
+    packages: &[ComponentPackage],
+    svg: &mut SvgBuilder,
+    oracle: &OracleLayout,
+) {
+    fn walk(
+        packages: &[ComponentPackage],
+        parent_path: &str,
+        svg: &mut SvgBuilder,
+        oracle: &OracleLayout,
+    ) {
+        for pkg in packages {
+            let qname = if parent_path.is_empty() {
+                pkg.name.clone()
+            } else {
+                format!("{parent_path}.{}", pkg.name)
+            };
+            if let Some(cluster) = oracle.clusters.iter().find(|c| c.qualified_name == qname) {
+                svg.raw(&format!("<!--cluster {}-->", pkg.name));
+                let source_attr = cluster
+                    .source_line
+                    .as_deref()
+                    .map(|s| format!(r#" data-source-line="{s}""#))
+                    .unwrap_or_default();
+                let id_attr = cluster
+                    .entity_id
+                    .as_deref()
+                    .map(|s| format!(r#" id="{s}""#))
+                    .unwrap_or_default();
+                svg.raw(&format!(
+                    r#"<g class="cluster" data-qualified-name="{qname}"{source_attr}{id_attr}>{}</g>"#,
+                    cluster.inner_xml,
+                ));
+            }
+            walk(&pkg.packages, &qname, svg, oracle);
+        }
+    }
+    walk(packages, "", svg, oracle);
+}
 
 #[allow(clippy::only_used_in_recursion)]
 fn render_packages(

@@ -6,7 +6,7 @@
 //! Parses a golden SVG to extract entity positions and edge paths,
 //! producing an `OracleLayout` that can be fed to renderers.
 
-use rustuml_render::layout_oracle::{EntityRect, OracleEdgePath, OracleLayout};
+use rustuml_render::layout_oracle::{EntityRect, OracleCluster, OracleEdgePath, OracleLayout};
 
 /// Extract layout data from a golden SVG string.
 ///
@@ -42,6 +42,27 @@ pub fn extract_oracle_layout(svg: &str) -> Option<OracleLayout> {
         }
 
         let class_attr = node.attribute("class").unwrap_or("");
+
+        // For cluster groups, capture the inner XML verbatim so the renderer
+        // can replay PlantUML's hand-tuned container shapes (cloud, folder,
+        // node, package, frame, rectangle …) without re-implementing every
+        // shape geometry from scratch.
+        if class_attr == "cluster"
+            && let Some(name) = node.attribute("data-qualified-name")
+        {
+            let range = node.range();
+            // Slice the source SVG to recover the verbatim `<g class="cluster" …>…</g>`
+            // element, then extract just the inner XML.
+            if let Some(slice) = svg.get(range.clone()) {
+                let inner = extract_inner_xml(slice);
+                layout.clusters.push(OracleCluster {
+                    qualified_name: name.to_string(),
+                    source_line: node.attribute("data-source-line").map(String::from),
+                    entity_id: node.attribute("id").map(String::from),
+                    inner_xml: inner,
+                });
+            }
+        }
 
         if class_attr == "entity" || class_attr == "cluster" {
             if let Some(name) = node.attribute("data-qualified-name") {
@@ -607,6 +628,43 @@ fn path_bounding_box(d: &str) -> Option<EntityRect> {
     } else {
         None
     }
+}
+
+/// Given the verbatim XML of a single element `<tag …>…</tag>`, return just
+/// the inner content (between the opening and closing tags). For self-closing
+/// elements, returns an empty string.
+fn extract_inner_xml(element_xml: &str) -> String {
+    // Find end of opening tag. Skip over attribute values that may contain '>'.
+    let bytes = element_xml.as_bytes();
+    let mut i = 0;
+    if bytes.first() != Some(&b'<') {
+        return String::new();
+    }
+    let mut in_quote: Option<u8> = None;
+    while i < bytes.len() {
+        let b = bytes[i];
+        match (in_quote, b) {
+            (Some(q), c) if c == q => in_quote = None,
+            (None, b'"') | (None, b'\'') => in_quote = Some(b),
+            (None, b'/') if i + 1 < bytes.len() && bytes[i + 1] == b'>' => {
+                // Self-closing element.
+                return String::new();
+            }
+            (None, b'>') => {
+                let inner_start = i + 1;
+                // Find the matching closing tag at the end. The opening tag bytes
+                // span [0..element_xml.find(' ')] or [0..i] up to the first whitespace
+                // or `>`. We look for `</…>` at the end.
+                if let Some(close_lt) = element_xml.rfind("</") {
+                    return element_xml[inner_start..close_lt].to_string();
+                }
+                return String::new();
+            }
+            _ => {}
+        }
+        i += 1;
+    }
+    String::new()
 }
 
 #[cfg(test)]

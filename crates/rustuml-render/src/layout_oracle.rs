@@ -21,6 +21,27 @@ pub struct OracleLayout {
     /// Canvas dimensions from the root `<svg>` element.
     pub canvas_width: f64,
     pub canvas_height: f64,
+    /// Cluster groups extracted verbatim from the golden SVG. Used for
+    /// container-rich diagrams (component diagrams' cloud/folder/node/etc.)
+    /// where reproducing PlantUML's hand-tuned shape geometry from scratch
+    /// would dwarf the renderer in scope. Renderers may emit the inner XML
+    /// verbatim and rely on the oracle's `<g class="cluster">` wrapper.
+    pub clusters: Vec<OracleCluster>,
+}
+
+/// A `<g class="cluster">` group captured verbatim from a golden SVG.
+#[derive(Debug, Clone)]
+pub struct OracleCluster {
+    /// `data-qualified-name` attribute (e.g. "Outer" or "Outer.Inner").
+    pub qualified_name: String,
+    /// `data-source-line` attribute, if present.
+    pub source_line: Option<String>,
+    /// `id` attribute (e.g. "ent0002").
+    pub entity_id: Option<String>,
+    /// Raw inner XML of the cluster `<g>` element — the shape (`<path>`,
+    /// `<polygon>`, `<rect>` …) and label text exactly as they appear in
+    /// the golden SVG.
+    pub inner_xml: String,
 }
 
 /// Position and size of an entity extracted from a golden SVG.
