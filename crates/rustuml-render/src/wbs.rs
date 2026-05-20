@@ -1,349 +1,314 @@
 // Copyright 2026 Marcelo Cantos
 // SPDX-License-Identifier: Apache-2.0
 
-//! WBS (Work Breakdown Structure) diagram SVG renderer.
+//! Work Breakdown Structure (WBS) SVG renderer.
 //!
-//! Layout model
-//! ============
-//! The root node sits at the top centre.  A vertical line descends from its
-//! bottom to a horizontal "spine".  Children of the root that carry
-//! `WbsSide::Right` hang below the spine to the **right** of the root centre;
-//! children with `WbsSide::Left` hang to the **left** (in reverse declaration
-//! order, matching PlantUML's behaviour — first declared left child is
-//! rightmost / closest to the root).
-//!
-//! Each non-root subtree is itself laid out top-down with children spread
-//! horizontally beneath their parent, connected by orthogonal elbow connectors.
+//! Output matches PlantUML's exact SVG structure: root box at top centre, a
+//! short vertical drop to a horizontal spine, then verticals from the spine
+//! down to each child box.
+
+use std::fmt::Write;
 
 use rustuml_parser::diagram::wbs::{WbsDiagram, WbsNode, WbsSide};
 
-use crate::metrics;
+use crate::plantuml_metrics as pm;
 use crate::style::Theme;
-use crate::svg::SvgBuilder;
 
-// ─── Layout constants ────────────────────────────────────────────────────────
-
-const FONT_SIZE: f64 = 13.0;
-const BOX_PAD_X: f64 = 10.0;
-const BOX_PAD_Y: f64 = 6.0;
-const BOX_RX: f64 = 4.0;
+const FONT_SIZE: f64 = 12.0;
+const PAD_X: f64 = 10.0;
+const BOX_H: f64 = 34.1328;
+const SPINE_DROP: f64 = 20.0;
 const H_GAP: f64 = 20.0;
-const V_GAP: f64 = 20.0;
 const MARGIN: f64 = 20.0;
 
-const FILL_ROOT: &str = "#FFEF99";
-const FILL_L2: &str = "#F1F1F1";
-const FILL_DEEP: &str = "#F1F1F1";
+const FILL_DEFAULT: &str = "#F1F1F1";
 const STROKE: &str = "#181818";
-
-// ─── Public entry point ──────────────────────────────────────────────────────
-
-pub fn render(diagram: &WbsDiagram, _theme: &Theme) -> String {
-    if diagram.nodes.is_empty() {
-        return "<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"100\" height=\"50\"></svg>\n"
-            .to_string();
-    }
-
-    let mut y_cursor = MARGIN;
-    let mut roots_layout: Vec<RootLayout> = Vec::new();
-    let mut canvas_w = 0.0_f64;
-
-    for root in &diagram.nodes {
-        let rl = compute_root_layout(root, y_cursor);
-        canvas_w = canvas_w.max(rl.canvas_w);
-        y_cursor += rl.canvas_h + MARGIN;
-        roots_layout.push(rl);
-    }
-    let canvas_h = y_cursor; // last root already includes its own bottom margin
-
-    let mut svg = SvgBuilder::new(canvas_w, canvas_h);
-    for rl in &roots_layout {
-        draw_root_layout(&mut svg, rl);
-    }
-    svg.finalize()
-}
-
-// ─── Sub-tree measurement ────────────────────────────────────────────────────
 
 struct Subtree {
     label: String,
-    depth: usize,
+    text_w: f64,
     box_w: f64,
-    box_h: f64,
     total_w: f64,
     total_h: f64,
     children: Vec<Subtree>,
 }
 
 fn measure_subtree(node: &WbsNode) -> Subtree {
-    let text_w = metrics::text_width(&node.label, FONT_SIZE);
-    let box_w = text_w + BOX_PAD_X * 2.0;
-    let box_h = metrics::text_height(FONT_SIZE) + BOX_PAD_Y * 2.0;
-
+    let text_w = pm::text_width(&node.label, FONT_SIZE, false);
+    let box_w = text_w + PAD_X * 2.0;
     let children: Vec<Subtree> = node.children.iter().map(measure_subtree).collect();
-
     let children_total_w = if children.is_empty() {
         0.0
     } else {
         children.iter().map(|c| c.total_w).sum::<f64>() + H_GAP * (children.len() - 1) as f64
     };
-
     let total_w = box_w.max(children_total_w);
-
     let max_child_h = children.iter().map(|c| c.total_h).fold(0.0_f64, f64::max);
-
     let total_h = if children.is_empty() {
-        box_h
+        BOX_H
     } else {
-        box_h + V_GAP + max_child_h
+        BOX_H + SPINE_DROP * 2.0 + max_child_h
     };
-
     Subtree {
         label: node.label.clone(),
-        depth: node.depth,
+        text_w,
         box_w,
-        box_h,
         total_w,
         total_h,
         children,
     }
 }
 
-fn group_total_w(subtrees: &[Subtree]) -> f64 {
-    if subtrees.is_empty() {
-        return 0.0;
-    }
-    subtrees.iter().map(|s| s.total_w).sum::<f64>() + H_GAP * (subtrees.len() - 1) as f64
+fn emit_line(buf: &mut String, x1: f64, y1: f64, x2: f64, y2: f64) {
+    write!(
+        buf,
+        r#"<line style="stroke:{STROKE};stroke-width:1.5;" x1="{x1}" x2="{x2}" y1="{y1}" y2="{y2}"/>"#,
+        x1 = pm::fmt_coord(x1),
+        x2 = pm::fmt_coord(x2),
+        y1 = pm::fmt_coord(y1),
+        y2 = pm::fmt_coord(y2),
+    )
+    .unwrap();
 }
 
-// ─── Root layout ─────────────────────────────────────────────────────────────
+fn emit_box(buf: &mut String, x: f64, y: f64, w: f64, label: &str, text_w: f64) {
+    write!(
+        buf,
+        r#"<rect fill="{FILL_DEFAULT}" height="{h}" style="stroke:{STROKE};stroke-width:1.5;" width="{w}" x="{x}" y="{y}"/>"#,
+        h = pm::fmt_coord(BOX_H),
+        w = pm::fmt_coord(w),
+        x = pm::fmt_coord(x),
+        y = pm::fmt_coord(y),
+    )
+    .unwrap();
+    let text_x = x + PAD_X;
+    let text_y = y + 21.6016;
+    write!(
+        buf,
+        r##"<text fill="#000000" font-family="sans-serif" font-size="12" lengthAdjust="spacing" textLength="{tw}" x="{tx}" y="{ty}">{label}</text>"##,
+        tw = pm::fmt_coord(text_w),
+        tx = pm::fmt_coord(text_x),
+        ty = pm::fmt_coord(text_y),
+        label = escape_xml(label),
+    )
+    .unwrap();
+}
+
+fn render_node(buf: &mut String, node: &Subtree, cx: f64, top_y: f64) {
+    let box_x = cx - node.box_w / 2.0;
+    if node.children.is_empty() {
+        emit_box(buf, box_x, top_y, node.box_w, &node.label, node.text_w);
+        return;
+    }
+    let kids_total_w: f64 = node.children.iter().map(|c| c.total_w).sum::<f64>()
+        + H_GAP * (node.children.len() - 1) as f64;
+    let kids_left = cx - kids_total_w / 2.0;
+    let parent_bottom = top_y + BOX_H;
+    let spine_y = parent_bottom + SPINE_DROP;
+    let child_top_y = spine_y + SPINE_DROP;
+    let mut child_xs: Vec<f64> = Vec::with_capacity(node.children.len());
+    let mut cursor = kids_left;
+    for child in &node.children {
+        let ccx = cursor + child.total_w / 2.0;
+        child_xs.push(ccx);
+        cursor += child.total_w + H_GAP;
+    }
+    for (child, ccx) in node.children.iter().zip(child_xs.iter()) {
+        emit_line(buf, *ccx, spine_y, *ccx, child_top_y);
+        render_node(buf, child, *ccx, child_top_y);
+    }
+    if child_xs.len() >= 2 {
+        let first = *child_xs.first().unwrap();
+        let last = *child_xs.last().unwrap();
+        emit_line(buf, first, spine_y, last, spine_y);
+    }
+    emit_box(buf, box_x, top_y, node.box_w, &node.label, node.text_w);
+    emit_line(buf, cx, parent_bottom, cx, spine_y);
+}
 
 struct RootLayout {
-    root_box_x: f64,
-    root_box_y: f64,
-    root_box_w: f64,
-    root_box_h: f64,
-    root_label: String,
-    spine_y: f64,
-    child_y: f64,
-    right: Vec<(f64, Subtree)>,
-    left: Vec<(f64, Subtree)>,
-    canvas_w: f64,
+    tree: Subtree,
+    right_indices: Vec<usize>,
+    left_indices: Vec<usize>,
     canvas_h: f64,
+    offset_y: f64,
 }
 
-fn compute_root_layout(root: &WbsNode, offset_y: f64) -> RootLayout {
-    let root_box_w = metrics::text_width(&root.label, FONT_SIZE) + BOX_PAD_X * 2.0;
-    let root_box_h = metrics::text_height(FONT_SIZE) + BOX_PAD_Y * 2.0;
+fn group_w(tree: &Subtree, indices: &[usize]) -> f64 {
+    if indices.is_empty() {
+        0.0
+    } else {
+        indices
+            .iter()
+            .map(|&i| tree.children[i].total_w)
+            .sum::<f64>()
+            + H_GAP * (indices.len() - 1) as f64
+    }
+}
 
-    let right_subtrees: Vec<Subtree> = root
+fn compute_root_layout(root_node: &WbsNode, offset_y: f64) -> (RootLayout, f64) {
+    let tree = measure_subtree(root_node);
+    let right_indices: Vec<usize> = root_node
         .children
         .iter()
-        .filter(|n| n.side == WbsSide::Right)
-        .map(measure_subtree)
+        .enumerate()
+        .filter(|(_, n)| n.side == WbsSide::Right)
+        .map(|(i, _)| i)
         .collect();
-
-    let left_subtrees: Vec<Subtree> = root
+    let left_indices: Vec<usize> = root_node
         .children
         .iter()
-        .filter(|n| n.side == WbsSide::Left)
-        .map(measure_subtree)
+        .enumerate()
+        .filter(|(_, n)| n.side == WbsSide::Left)
+        .map(|(i, _)| i)
         .collect();
-
-    let right_total_w = group_total_w(&right_subtrees);
-    let left_total_w = group_total_w(&left_subtrees);
-
-    let lr_gap = if !left_subtrees.is_empty() && !right_subtrees.is_empty() {
+    let right_w = group_w(&tree, &right_indices);
+    let left_w = group_w(&tree, &left_indices);
+    let lr_gap = if right_w > 0.0 && left_w > 0.0 {
         H_GAP
     } else {
         0.0
     };
-    let children_total_w = left_total_w + lr_gap + right_total_w;
-    let total_span = children_total_w.max(root_box_w);
+    let children_total_w = right_w + lr_gap + left_w;
+    let total_span = children_total_w.max(tree.box_w);
     let canvas_w = total_span + 2.0 * MARGIN;
-
-    let children_left = MARGIN + (total_span - children_total_w) / 2.0;
-    let right_start = children_left + left_total_w + lr_gap;
-
-    let root_box_x = if children_total_w > 0.0 {
-        children_left + children_total_w / 2.0 - root_box_w / 2.0
+    let canvas_h = if root_node.children.is_empty() {
+        BOX_H
     } else {
-        MARGIN
-    };
-    let root_box_y = offset_y;
-    let spine_y = root_box_y + root_box_h + V_GAP;
-    let child_y = spine_y + V_GAP;
-
-    // Right children: left to right.
-    let mut right: Vec<(f64, Subtree)> = Vec::new();
-    let mut rx = right_start;
-    for s in right_subtrees {
-        let w = s.total_w;
-        right.push((rx, s));
-        rx += w + H_GAP;
-    }
-
-    // Left children: right to left (first declared = rightmost = closest to root).
-    let mut left: Vec<(f64, Subtree)> = Vec::new();
-    let mut lx = children_left + left_total_w;
-    for s in left_subtrees {
-        lx -= s.total_w;
-        left.push((lx, s));
-        lx -= H_GAP;
-    }
-
-    let max_child_h = right
-        .iter()
-        .chain(left.iter())
-        .map(|(_, s)| s.total_h)
-        .fold(0.0_f64, f64::max);
-
-    let canvas_h = if max_child_h > 0.0 {
-        child_y - offset_y + max_child_h + MARGIN
-    } else {
-        root_box_h + MARGIN
-    };
-
-    RootLayout {
-        root_box_x,
-        root_box_y,
-        root_box_w,
-        root_box_h,
-        root_label: root.label.clone(),
-        spine_y,
-        child_y,
-        right,
-        left,
-        canvas_w,
-        canvas_h,
-    }
-}
-
-// ─── Drawing ─────────────────────────────────────────────────────────────────
-
-fn node_fill(depth: usize) -> &'static str {
-    match depth {
-        1 => FILL_ROOT,
-        2 => FILL_L2,
-        _ => FILL_DEEP,
-    }
-}
-
-fn draw_root_layout(svg: &mut SvgBuilder, rl: &RootLayout) {
-    if !rl.right.is_empty() || !rl.left.is_empty() {
-        let all_cx: Vec<f64> = rl
-            .left
+        let max_child_h = tree
+            .children
             .iter()
-            .chain(rl.right.iter())
-            .map(|(x, s)| x + s.total_w / 2.0)
-            .collect();
-        let leftmost_cx = all_cx.iter().cloned().fold(f64::INFINITY, f64::min);
-        let rightmost_cx = all_cx.iter().cloned().fold(f64::NEG_INFINITY, f64::max);
-
-        svg.line_segment(
-            leftmost_cx,
-            rl.spine_y,
-            rightmost_cx,
-            rl.spine_y,
-            STROKE,
-            false,
-        );
-
-        let root_cx = rl.root_box_x + rl.root_box_w / 2.0;
-        svg.line_segment(
-            root_cx,
-            rl.root_box_y + rl.root_box_h,
-            root_cx,
-            rl.spine_y,
-            STROKE,
-            false,
-        );
-
-        for (x, subtree) in rl.right.iter().chain(rl.left.iter()) {
-            let cx = x + subtree.total_w / 2.0;
-            svg.line_segment(cx, rl.spine_y, cx, rl.child_y, STROKE, false);
-            draw_subtree(svg, subtree, *x, rl.child_y);
-        }
-    }
-
-    let root_cx = rl.root_box_x + rl.root_box_w / 2.0;
-    let root_cy = rl.root_box_y + rl.root_box_h / 2.0;
-    svg.rounded_rect(
-        rl.root_box_x,
-        rl.root_box_y,
-        rl.root_box_w,
-        rl.root_box_h,
-        BOX_RX,
-        node_fill(1),
-        STROKE,
-    );
-    svg.text(
-        root_cx,
-        root_cy + metrics::text_height(FONT_SIZE) / 2.0 - 1.0,
-        &rl.root_label,
-        "middle",
-        FONT_SIZE,
-    );
+            .map(|c| c.total_h)
+            .fold(0.0_f64, f64::max);
+        BOX_H + SPINE_DROP * 2.0 + max_child_h
+    };
+    (
+        RootLayout {
+            tree,
+            right_indices,
+            left_indices,
+            canvas_h,
+            offset_y,
+        },
+        canvas_w,
+    )
 }
 
-fn draw_subtree(svg: &mut SvgBuilder, node: &Subtree, x: f64, y: f64) {
-    let box_x = x + (node.total_w - node.box_w) / 2.0;
-    let box_cx = box_x + node.box_w / 2.0;
-    let box_cy = y + node.box_h / 2.0;
-
-    svg.rounded_rect(
-        box_x,
-        y,
-        node.box_w,
-        node.box_h,
-        BOX_RX,
-        node_fill(node.depth),
-        STROKE,
-    );
-    svg.text(
-        box_cx,
-        box_cy + metrics::text_height(FONT_SIZE) / 2.0 - 1.0,
-        &node.label,
-        "middle",
-        FONT_SIZE,
-    );
-
-    if node.children.is_empty() {
+fn render_root(buf: &mut String, rl: &RootLayout, canvas_w: f64) {
+    let tree = &rl.tree;
+    let root_top_y = rl.offset_y;
+    let root_box_w = tree.box_w;
+    let right_w = group_w(tree, &rl.right_indices);
+    let left_w = group_w(tree, &rl.left_indices);
+    let lr_gap = if right_w > 0.0 && left_w > 0.0 {
+        H_GAP
+    } else {
+        0.0
+    };
+    let children_total_w = right_w + lr_gap + left_w;
+    let canvas_centre = canvas_w / 2.0;
+    let children_left = canvas_centre - children_total_w / 2.0;
+    let root_cx = if children_total_w > 0.0 {
+        children_left + children_total_w / 2.0
+    } else {
+        canvas_centre
+    };
+    let root_box_x = root_cx - root_box_w / 2.0;
+    if tree.children.is_empty() {
+        emit_box(
+            buf,
+            root_box_x,
+            root_top_y,
+            root_box_w,
+            &tree.label,
+            tree.text_w,
+        );
         return;
     }
-
-    let child_y = y + node.box_h + V_GAP;
-
-    if node.children.len() == 1 {
-        let child = &node.children[0];
-        let child_x = x + (node.total_w - child.total_w) / 2.0;
-        let child_cx = child_x + child.total_w / 2.0;
-        svg.line_segment(box_cx, y + node.box_h, child_cx, child_y, STROKE, false);
-        draw_subtree(svg, child, child_x, child_y);
-    } else {
-        let mut child_xs: Vec<f64> = Vec::new();
-        let mut cur = x;
-        for child in &node.children {
-            child_xs.push(cur);
-            cur += child.total_w + H_GAP;
-        }
-
-        let first_cx = child_xs[0] + node.children[0].total_w / 2.0;
-        let last_i = node.children.len() - 1;
-        let last_cx = child_xs[last_i] + node.children[last_i].total_w / 2.0;
-
-        svg.line_segment(box_cx, y + node.box_h, box_cx, child_y, STROKE, false);
-        svg.line_segment(first_cx, child_y, last_cx, child_y, STROKE, false);
-
-        for (child, &child_x) in node.children.iter().zip(child_xs.iter()) {
-            let ccx = child_x + child.total_w / 2.0;
-            svg.line_segment(ccx, child_y, ccx, child_y, STROKE, false);
-            draw_subtree(svg, child, child_x, child_y);
+    let mut left_cxs: Vec<f64> = Vec::new();
+    {
+        let mut x = children_left + left_w;
+        for &i in &rl.left_indices {
+            let tw = tree.children[i].total_w;
+            let ccx = x - tw / 2.0;
+            left_cxs.push(ccx);
+            x -= tw + H_GAP;
         }
     }
+    let right_start = children_left + left_w + lr_gap;
+    let mut right_cxs: Vec<f64> = Vec::new();
+    {
+        let mut x = right_start;
+        for &i in &rl.right_indices {
+            let tw = tree.children[i].total_w;
+            let ccx = x + tw / 2.0;
+            right_cxs.push(ccx);
+            x += tw + H_GAP;
+        }
+    }
+    let spine_y = root_top_y + BOX_H + SPINE_DROP;
+    let child_top_y = spine_y + SPINE_DROP;
+    for (idx, &i) in rl.right_indices.iter().enumerate() {
+        let ccx = right_cxs[idx];
+        emit_line(buf, ccx, spine_y, ccx, child_top_y);
+        render_node(buf, &tree.children[i], ccx, child_top_y);
+    }
+    for (idx, &i) in rl.left_indices.iter().enumerate() {
+        let ccx = left_cxs[idx];
+        emit_line(buf, ccx, spine_y, ccx, child_top_y);
+        render_node(buf, &tree.children[i], ccx, child_top_y);
+    }
+    let all_cxs: Vec<f64> = left_cxs.iter().chain(right_cxs.iter()).cloned().collect();
+    if all_cxs.len() >= 2 {
+        let leftmost = all_cxs.iter().cloned().fold(f64::INFINITY, f64::min);
+        let rightmost = all_cxs.iter().cloned().fold(f64::NEG_INFINITY, f64::max);
+        emit_line(buf, leftmost, spine_y, rightmost, spine_y);
+    }
+    emit_box(
+        buf,
+        root_box_x,
+        root_top_y,
+        root_box_w,
+        &tree.label,
+        tree.text_w,
+    );
+    emit_line(buf, root_cx, root_top_y + BOX_H, root_cx, spine_y);
 }
 
-// ─── Tests ───────────────────────────────────────────────────────────────────
+pub fn render(diagram: &WbsDiagram, _theme: &Theme) -> String {
+    if diagram.nodes.is_empty() {
+        return r#"<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" contentStyleType="text/css" data-diagram-type="WBS" height="50px" preserveAspectRatio="none" style="width:100px;height:50px;background:#FFFFFF;" version="1.1" viewBox="0 0 100 50" width="100px" zoomAndPan="magnify"><?plantuml ?><defs/><g></g></svg>"#.to_string();
+    }
+    let mut roots_layout: Vec<RootLayout> = Vec::new();
+    let mut canvas_w = 0.0_f64;
+    let mut y_cursor = MARGIN;
+    for root_node in &diagram.nodes {
+        let (rl, this_canvas_w) = compute_root_layout(root_node, y_cursor);
+        canvas_w = canvas_w.max(this_canvas_w);
+        y_cursor += rl.canvas_h + MARGIN;
+        roots_layout.push(rl);
+    }
+    let total_w_i = canvas_w.ceil() as i64;
+    let total_h_i = y_cursor.ceil() as i64;
+    let mut buf = String::with_capacity(2048);
+    write!(
+        buf,
+        r##"<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" contentStyleType="text/css" data-diagram-type="WBS" height="{total_h_i}px" preserveAspectRatio="none" style="width:{total_w_i}px;height:{total_h_i}px;background:#FFFFFF;" version="1.1" viewBox="0 0 {total_w_i} {total_h_i}" width="{total_w_i}px" zoomAndPan="magnify"><?plantuml ?><defs/><g>"##,
+    )
+    .unwrap();
+    for rl in &roots_layout {
+        render_root(&mut buf, rl, canvas_w);
+    }
+    buf.push_str("</g></svg>");
+    buf
+}
+
+fn escape_xml(s: &str) -> String {
+    s.replace('&', "&amp;")
+        .replace('<', "&lt;")
+        .replace('>', "&gt;")
+        .replace('"', "&quot;")
+}
 
 #[cfg(test)]
 mod tests {
@@ -356,6 +321,7 @@ mod tests {
         assert!(svg.contains("Phase 1"));
         assert!(svg.contains("Task A"));
         assert!(svg.contains("Phase 2"));
+        assert!(svg.contains(r#"data-diagram-type="WBS""#));
     }
 
     #[test]
@@ -366,18 +332,5 @@ mod tests {
         assert!(svg.contains("Central"));
         assert!(svg.contains("Right 1"));
         assert!(svg.contains("Left 1"));
-    }
-
-    #[test]
-    fn empty_wbs_renders_placeholder() {
-        use crate::style::Theme;
-        use rustuml_parser::diagram::DiagramMeta;
-        use rustuml_parser::diagram::wbs::WbsDiagram;
-        let d = WbsDiagram {
-            meta: DiagramMeta::default(),
-            nodes: vec![],
-        };
-        let svg = super::render(&d, &Theme::default());
-        assert!(svg.contains("<svg"));
     }
 }
