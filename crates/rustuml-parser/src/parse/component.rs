@@ -437,12 +437,12 @@ pub fn parse_component(lines: &[String]) -> Result<ComponentDiagram, ParseError>
             continue;
         }
 
-        // Strip embedded direction tokens (`-down-`, `-up->`, `<-left-`, …)
-        // so the arrow falls within the character class used by RE_CONN.
-        // Direction is purely a layout hint in PlantUML; the connection
-        // structure is unchanged.
+        // Strip embedded direction tokens (`-down-`, `-up->`, `-up.>`,
+        // `<-left-`, …) so the arrow falls within the character class used
+        // by RE_CONN. Direction is purely a layout hint in PlantUML; the
+        // connection structure is unchanged.
         static RE_DIR: LazyLock<Regex> =
-            LazyLock::new(|| Regex::new(r"-(?:down|up|left|right)(-|>)").unwrap());
+            LazyLock::new(|| Regex::new(r"-(?:down|up|left|right)([-.>])").unwrap());
         let trimmed_owned = RE_DIR.replace_all(trimmed, "-$1").to_string();
         let trimmed = trimmed_owned.as_str();
 
