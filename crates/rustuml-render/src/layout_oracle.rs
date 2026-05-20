@@ -163,4 +163,7 @@ pub struct OracleEdgePath {
     /// to three labels per link: middle label first, then optional start/end
     /// cardinality labels.
     pub labels: Vec<(f64, f64, String)>,
+    /// Additional `<path>` children after the first (e.g. the half-circle
+    /// of a lollipop `-(` connector). Captured `(d, style)`.
+    pub extra_paths: Vec<(String, Option<String>)>,
 }
