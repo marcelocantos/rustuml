@@ -287,8 +287,52 @@ pub fn render_with_oracle(
     // oracle has captured an entity_id, use it directly. Otherwise fall back
     // to a sequential counter — but skip IDs already claimed by oracle
     // clusters so we never collide.
+    //
+    // PlantUML emits entities ordered by depth-then-declaration, not raw
+    // declaration order: a container's direct children come before its
+    // nested grand-children. When the oracle is available, sort the
+    // component indices by their oracle-assigned ent_id so the emitted
+    // sequence matches PlantUML's.
+    // Collect all package names (at every nesting depth) so we can skip
+    // phantom components the parser auto-creates from connection endpoints
+    // that actually refer to a container (e.g. `Inner --> Gamma` where
+    // `Inner` is a folder, not a component).
+    let package_names: std::collections::HashSet<String> = {
+        let mut set = std::collections::HashSet::new();
+        fn collect(packages: &[ComponentPackage], set: &mut std::collections::HashSet<String>) {
+            for p in packages {
+                set.insert(p.name.clone());
+                collect(&p.packages, set);
+            }
+        }
+        collect(&diagram.packages, &mut set);
+        set
+    };
+
+    // Depth = number of dots in qualified name (top-level → 0). PlantUML emits
+    // entities sorted by (parent depth ascending, declaration order ascending),
+    // so a top-level entity precedes one nested two clusters deep even if the
+    // nested one is declared earlier in the source.
+    let comp_indices: Vec<usize> = (0..diagram.components.len())
+        .filter(|&i| !package_names.contains(&diagram.components[i].id))
+        .collect();
+    let comp_order: Vec<usize> = if oracle.is_some() {
+        let mut order = comp_indices.clone();
+        order.sort_by_key(|&i| {
+            let comp = &diagram.components[i];
+            let depth = qualified_names
+                .get(&comp.id)
+                .map(|q| q.matches('.').count())
+                .unwrap_or(0);
+            (depth, i)
+        });
+        order
+    } else {
+        comp_indices
+    };
     let mut entity_counter = 2;
-    for (i, comp) in diagram.components.iter().enumerate() {
+    for &i in &comp_order {
+        let comp = &diagram.components[i];
         let (x, y) = positions[i];
         let dim = &comp_dims[i];
         let oracle_rect_for_id = oracle_comp_rect(comp);
@@ -356,34 +400,51 @@ pub fn render_with_oracle(
             y_s = fc(y),
         ));
 
-        // Component icon (tab + bars) at top-right.
-        let tab_x = x + w - ICON_TAB_RIGHT_OFFSET;
-        let tab_y = y + ICON_TAB_TOP_OFFSET;
-        svg.raw(&format!(
-            r#"<rect fill="{fill}" height="{h_s}" style="stroke:{STROKE};stroke-width:0.5;" width="{w_s}" x="{x_s}" y="{y_s}"/>"#,
-            h_s = fc(ICON_TAB_H),
-            w_s = fc(ICON_TAB_W),
-            x_s = fc(tab_x),
-            y_s = fc(tab_y),
-        ));
+        // Component icon (tab + bars) at top-right. When the oracle has
+        // captured the rects' exact x/y, replay them verbatim — recomputing
+        // tab_x = x + w - 20 from rounded oracle inputs accumulates sub-ulp
+        // drift versus PlantUML's full-precision intermediates.
+        let aux: &[crate::layout_oracle::AuxRect] =
+            oracle_rect.map(|r| r.aux_rects.as_slice()).unwrap_or(&[]);
+        if aux.len() >= 3 {
+            for r in aux.iter().take(3) {
+                svg.raw(&format!(
+                    r#"<rect fill="{fill}" height="{h_s}" style="stroke:{STROKE};stroke-width:0.5;" width="{w_s}" x="{x_s}" y="{y_s}"/>"#,
+                    h_s = fc(r.height),
+                    w_s = fc(r.width),
+                    x_s = fc(r.x),
+                    y_s = fc(r.y),
+                ));
+            }
+        } else {
+            let tab_x = x + w - ICON_TAB_RIGHT_OFFSET;
+            let tab_y = y + ICON_TAB_TOP_OFFSET;
+            svg.raw(&format!(
+                r#"<rect fill="{fill}" height="{h_s}" style="stroke:{STROKE};stroke-width:0.5;" width="{w_s}" x="{x_s}" y="{y_s}"/>"#,
+                h_s = fc(ICON_TAB_H),
+                w_s = fc(ICON_TAB_W),
+                x_s = fc(tab_x),
+                y_s = fc(tab_y),
+            ));
 
-        let bar_x = tab_x - ICON_BAR_LEFT_OFFSET;
-        let bar_y1 = tab_y + ICON_BAR_TOP_OFFSET_1;
-        let bar_y2 = tab_y + ICON_BAR_TOP_OFFSET_2;
-        svg.raw(&format!(
-            r#"<rect fill="{fill}" height="{h_s}" style="stroke:{STROKE};stroke-width:0.5;" width="{w_s}" x="{x_s}" y="{y_s}"/>"#,
-            h_s = fc(ICON_BAR_H),
-            w_s = fc(ICON_BAR_W),
-            x_s = fc(bar_x),
-            y_s = fc(bar_y1),
-        ));
-        svg.raw(&format!(
-            r#"<rect fill="{fill}" height="{h_s}" style="stroke:{STROKE};stroke-width:0.5;" width="{w_s}" x="{x_s}" y="{y_s}"/>"#,
-            h_s = fc(ICON_BAR_H),
-            w_s = fc(ICON_BAR_W),
-            x_s = fc(bar_x),
-            y_s = fc(bar_y2),
-        ));
+            let bar_x = tab_x - ICON_BAR_LEFT_OFFSET;
+            let bar_y1 = tab_y + ICON_BAR_TOP_OFFSET_1;
+            let bar_y2 = tab_y + ICON_BAR_TOP_OFFSET_2;
+            svg.raw(&format!(
+                r#"<rect fill="{fill}" height="{h_s}" style="stroke:{STROKE};stroke-width:0.5;" width="{w_s}" x="{x_s}" y="{y_s}"/>"#,
+                h_s = fc(ICON_BAR_H),
+                w_s = fc(ICON_BAR_W),
+                x_s = fc(bar_x),
+                y_s = fc(bar_y1),
+            ));
+            svg.raw(&format!(
+                r#"<rect fill="{fill}" height="{h_s}" style="stroke:{STROKE};stroke-width:0.5;" width="{w_s}" x="{x_s}" y="{y_s}"/>"#,
+                h_s = fc(ICON_BAR_H),
+                w_s = fc(ICON_BAR_W),
+                x_s = fc(bar_x),
+                y_s = fc(bar_y2),
+            ));
+        }
 
         // Render text lines.
         // PlantUML positions text such that the last (label) baseline sits at
