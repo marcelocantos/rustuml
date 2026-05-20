@@ -941,11 +941,15 @@ impl ClassParser {
         }
 
         // Labeled separator — store as Separator member so the label can be rendered.
+        // `return_type` is repurposed to hold the separator symbol (one of
+        // `--`, `..`, `==`, `__`) so the renderer can pick the right stroke
+        // style.
         if let Some(caps) = SEPARATOR_LABELED_RE.captures(trimmed) {
+            let symbol = caps[1].to_string();
             let label = caps[2].to_string();
             let member = Member {
                 name: label.clone(),
-                return_type: None,
+                return_type: Some(symbol),
                 visibility: Visibility::Default,
                 is_static: false,
                 is_abstract: false,
@@ -960,11 +964,12 @@ impl ClassParser {
             return;
         }
 
-        // Bare separator lines — render as unlabeled separator.
+        // Bare separator lines — render as unlabeled separator. `return_type`
+        // carries the symbol so the renderer can dispatch on line style.
         if trimmed == "--" || trimmed == ".." || trimmed == "==" || trimmed == "__" {
             let member = Member {
                 name: String::new(),
-                return_type: None,
+                return_type: Some(trimmed.to_string()),
                 visibility: Visibility::Default,
                 is_static: false,
                 is_abstract: false,
