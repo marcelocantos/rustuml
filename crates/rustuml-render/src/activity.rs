@@ -458,15 +458,15 @@ fn node_extents(node: &LayoutNode) -> (f64, f64) {
             let cond_w = text_render::measure(condition, SMALL_FONT, false);
             let diamond_w = cond_w + DIAMOND_HALF * 2.0;
             let then_w = sequence_width(then_branch);
-            let else_w: f64 = else_branches
-                .iter()
-                .map(|b| sequence_width(&b.body))
-                .sum();
+            let else_w: f64 = else_branches.iter().map(|b| sequence_width(&b.body)).sum();
             // Branch centrelines are at least `diamond_w + 20` apart, but
             // also at least `(then_w + else_w)/2 + 20` so the branch boxes
             // don't crowd each other. PlantUML takes the max of these two.
             let branch_dist = (diamond_w + 20.0).max((then_w + else_w) / 2.0 + 20.0);
-            (branch_dist / 2.0 + then_w / 2.0, branch_dist / 2.0 + else_w / 2.0)
+            (
+                branch_dist / 2.0 + then_w / 2.0,
+                branch_dist / 2.0 + else_w / 2.0,
+            )
         }
         _ => {
             let w = node_width(node);
@@ -514,10 +514,7 @@ fn node_width(node: &LayoutNode) -> f64 {
             let cond_w = text_render::measure(condition, SMALL_FONT, false);
             let diamond_w = cond_w + DIAMOND_HALF * 2.0;
             let then_w = sequence_width(then_branch);
-            let else_w: f64 = else_branches
-                .iter()
-                .map(|b| sequence_width(&b.body))
-                .sum();
+            let else_w: f64 = else_branches.iter().map(|b| sequence_width(&b.body)).sum();
             // Branch centrelines are at least `diamond_w + 20` apart, but
             // also at least `(then_w + else_w)/2 + 20` so the branch boxes
             // don't crowd each other when the branches are wider than the
@@ -1448,10 +1445,7 @@ fn emit_if(
     // wider branches don't crowd each other.
     let diamond_w = cond_w + DIAMOND_HALF * 2.0;
     let then_w = sequence_width(then_branch);
-    let else_w: f64 = else_branches
-        .iter()
-        .map(|b| sequence_width(&b.body))
-        .sum();
+    let else_w: f64 = else_branches.iter().map(|b| sequence_width(&b.body)).sum();
     let branch_dist = (diamond_w + 20.0).max((then_w + else_w) / 2.0 + 20.0);
     let _else_count = else_branches.len().max(1);
     let then_cx = cx - branch_dist / 2.0;
@@ -1739,7 +1733,12 @@ fn emit_while(
     let diamond_bottom = y + DIAMOND_HALF * 2.0;
 
     // Body below diamond
-    svg.down_arrow(cx, diamond_bottom, diamond_bottom + IF_BRANCH_DOWN, ARROW_COLOR);
+    svg.down_arrow(
+        cx,
+        diamond_bottom,
+        diamond_bottom + IF_BRANCH_DOWN,
+        ARROW_COLOR,
+    );
     emit_sequence(svg, body, cx, diamond_bottom + IF_BRANCH_DOWN)
 }
 

@@ -379,10 +379,7 @@ pub fn compare_svg_strict(expected: &str, actual: &str) -> Result<CompareResult,
 /// allows numeric drift; it specifically targets PlantUML's internal
 /// outer-dimension rounding that the renderer can't reproduce without
 /// instrumenting PlantUML itself.
-fn root_svg_attrs_match_within_1px(
-    exp: &[(String, String)],
-    act: &[(String, String)],
-) -> bool {
+fn root_svg_attrs_match_within_1px(exp: &[(String, String)], act: &[(String, String)]) -> bool {
     if exp.len() != act.len() {
         return false;
     }
@@ -396,8 +393,12 @@ fn root_svg_attrs_match_within_1px(
         match ek.as_str() {
             "width" | "height" => {
                 // "Npx" form (e.g., "139px").
-                let Some(ep) = ev.strip_suffix("px") else { return false; };
-                let Some(ap) = av.strip_suffix("px") else { return false; };
+                let Some(ep) = ev.strip_suffix("px") else {
+                    return false;
+                };
+                let Some(ap) = av.strip_suffix("px") else {
+                    return false;
+                };
                 let (Ok(ev_num), Ok(av_num)) = (ep.parse::<i64>(), ap.parse::<i64>()) else {
                     return false;
                 };
@@ -416,8 +417,7 @@ fn root_svg_attrs_match_within_1px(
                     return false;
                 }
                 for idx in [2, 3] {
-                    let (Ok(en), Ok(an)) = (ep[idx].parse::<i64>(), ap[idx].parse::<i64>())
-                    else {
+                    let (Ok(en), Ok(an)) = (ep[idx].parse::<i64>(), ap[idx].parse::<i64>()) else {
                         return false;
                     };
                     if (en - an).abs() > 1 {
@@ -456,8 +456,12 @@ fn style_attrs_match_within_1px(exp: &str, act: &str) -> bool {
             return false;
         }
         if matches!(ek, "width" | "height") {
-            let Some(ep_n) = ev.strip_suffix("px") else { return false; };
-            let Some(ap_n) = av.strip_suffix("px") else { return false; };
+            let Some(ep_n) = ev.strip_suffix("px") else {
+                return false;
+            };
+            let Some(ap_n) = av.strip_suffix("px") else {
+                return false;
+            };
             let (Ok(en), Ok(an)) = (ep_n.parse::<i64>(), ap_n.parse::<i64>()) else {
                 return false;
             };
