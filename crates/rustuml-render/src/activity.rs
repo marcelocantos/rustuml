@@ -442,6 +442,46 @@ fn sequence_width(nodes: &[LayoutNode]) -> f64 {
     nodes.iter().map(node_width).fold(0.0f64, f64::max)
 }
 
+/// Compute the asymmetric (left, right) extents of a single node from its
+/// vertical centreline. For most nodes this is symmetric (width/2, width/2);
+/// for if/else with unequal branches, the left extent (then-side) and right
+/// extent (else-side) can differ, which shifts the diagram's cx so both
+/// branches remain symmetric around the diamond.
+fn node_extents(node: &LayoutNode) -> (f64, f64) {
+    match node {
+        LayoutNode::If {
+            condition,
+            then_branch,
+            else_branches,
+            ..
+        } => {
+            let cond_w = text_render::measure(condition, SMALL_FONT, false);
+            let diamond_w = cond_w + DIAMOND_HALF * 2.0;
+            let then_w = sequence_width(then_branch);
+            let else_w: f64 = else_branches
+                .iter()
+                .map(|b| sequence_width(&b.body))
+                .sum();
+            let branch_dist = diamond_w + 20.0;
+            (branch_dist / 2.0 + then_w / 2.0, branch_dist / 2.0 + else_w / 2.0)
+        }
+        _ => {
+            let w = node_width(node);
+            (w / 2.0, w / 2.0)
+        }
+    }
+}
+
+/// Compute the (left, right) extents of a sequence, taking the max of each
+/// dimension independently so an asymmetric node anywhere in the sequence
+/// shifts cx as needed.
+fn sequence_extents(nodes: &[LayoutNode]) -> (f64, f64) {
+    nodes
+        .iter()
+        .map(node_extents)
+        .fold((0.0f64, 0.0f64), |(l, r), (nl, nr)| (l.max(nl), r.max(nr)))
+}
+
 fn node_width(node: &LayoutNode) -> f64 {
     match node {
         // Bare start/stop circles: PlantUML lays them out at minimum width
@@ -835,7 +875,16 @@ impl SvgEmitter {
         stroke: &str,
         stroke_width: &str,
     ) {
-        let pts = polygon_points(points);
+        // PlantUML closes filled shape polygons by repeating the first point
+        // as the last entry. Arrowhead/connector polygons (polygon_connector)
+        // do not.
+        let mut closed: Vec<(f64, f64)> = points.to_vec();
+        if let (Some(first), Some(last)) = (points.first(), points.last()) {
+            if first != last {
+                closed.push(*first);
+            }
+        }
+        let pts = polygon_points(&closed);
         write!(
             self.shapes,
             r#"<polygon fill="{}" points="{}" style="stroke:{};stroke-width:{};"/>"#,
@@ -1061,9 +1110,13 @@ fn emit_sequence(svg: &mut SvgEmitter, nodes: &[LayoutNode], cx: f64, mut y: f64
             y = emit_node(svg, node, cx, y);
             continue;
         }
+        // Compute the inbound down-arrow's style + gap (if any). PlantUML
+        // emits inbound connectors AFTER the destination node's internal
+        // connectors, so we defer the actual svg writes until after
+        // emit_node returns. We still advance `y` upfront so the node lands
+        // at the right position.
+        let mut pending_arrow: Option<(f64, ArrowStyle, Option<String>)> = None;
         if i > 0 {
-            // Find the most recent flow-producing previous node and the
-            // optional explicit Arrow between it and us.
             let mut explicit_arrow: Option<&LayoutNode> = None;
             let mut prev_idx: Option<usize> = None;
             for j in (0..i).rev() {
@@ -1074,10 +1127,8 @@ fn emit_sequence(svg: &mut SvgEmitter, nodes: &[LayoutNode], cx: f64, mut y: f64
                         }
                     }
                     LayoutNode::Note { .. } => {}
-                    // Title is a free-standing label; not part of the flow.
                     LayoutNode::Title(_) => {}
                     LayoutNode::Detach | LayoutNode::Kill | LayoutNode::Break => {
-                        // Previous flow terminated; no connector to draw.
                         prev_idx = None;
                         break;
                     }
@@ -1104,12 +1155,9 @@ fn emit_sequence(svg: &mut SvgEmitter, nodes: &[LayoutNode], cx: f64, mut y: f64
                     _ => ArrowStyle::default(),
                 };
                 let label = match explicit_arrow {
-                    Some(LayoutNode::Arrow { label: Some(l), .. }) => Some(l.as_str()),
+                    Some(LayoutNode::Arrow { label: Some(l), .. }) => Some(l.clone()),
                     _ => None,
                 };
-                // Hidden arrows consume 10 px (half the normal arrow gap).
-                // Labelled arrows extend to 41.275 px to fit the label text
-                // beside the line.
                 let gap = if style.hidden {
                     10.0
                 } else if label.is_some() {
@@ -1117,29 +1165,38 @@ fn emit_sequence(svg: &mut SvgEmitter, nodes: &[LayoutNode], cx: f64, mut y: f64
                 } else {
                     ARROW_LEN
                 };
+                let arrow_top_y = y;
                 if !style.hidden {
-                    svg.down_arrow_full(cx, y, y + gap, &style);
-                    if let Some(l) = label {
-                        let lw = text_render::measure(l, SMALL_FONT, false);
-                        // Label sits to the right of the arrow line, baseline
-                        // at arrow_top + 21.4551 (= ascent(11) + 10.8203,
-                        // empirical from goldens).  Part of the connector
-                        // group in PlantUML's emission order.
-                        svg.connector_text(
-                            TEXT_COLOR,
-                            "sans-serif",
-                            SMALL_FONT,
-                            lw,
-                            cx + 4.0,
-                            y + 21.455078125,
-                            l,
-                        );
-                    }
+                    pending_arrow = Some((arrow_top_y, style, label));
                 }
                 y += gap;
             }
         }
-        y = emit_node(svg, node, cx, y);
+        let node_y = emit_node(svg, node, cx, y);
+        // Inbound connector goes AFTER the node's own emit so it lands
+        // after the node's internal connectors in the connectors buffer
+        // (matches PlantUML's emission order: internal first, then inbound).
+        if let Some((arrow_top, style, label)) = pending_arrow {
+            let gap = if label.is_some() {
+                LABELED_ARROW_LEN
+            } else {
+                ARROW_LEN
+            };
+            svg.down_arrow_full(cx, arrow_top, arrow_top + gap, &style);
+            if let Some(l) = label {
+                let lw = text_render::measure(&l, SMALL_FONT, false);
+                svg.connector_text(
+                    TEXT_COLOR,
+                    "sans-serif",
+                    SMALL_FONT,
+                    lw,
+                    cx + 4.0,
+                    arrow_top + 21.455078125,
+                    &l,
+                );
+            }
+        }
+        y = node_y;
     }
     y
 }
@@ -1392,8 +1449,59 @@ fn emit_if(
     let branch_dist = diamond_w + 20.0;
     let _else_count = else_branches.len().max(1);
     let then_cx = cx - branch_dist / 2.0;
+    let else_cx = cx + branch_dist / 2.0;
 
-    // Then arrow: horizontal from diamond left to then_cx, then down
+    // Else label: text shape, must land in shapes buffer before branch
+    // shapes (matches golden order: yes label, no label, then branch boxes).
+    if let Some(label) = else_branches.first().and_then(|b| b.label.as_ref()) {
+        let lw = text_render::measure(label, SMALL_FONT, false);
+        svg.text_element(
+            TEXT_COLOR,
+            "sans-serif",
+            SMALL_FONT,
+            lw,
+            diamond_right,
+            diamond_cy - pm::descent(SMALL_FONT),
+            label,
+            false,
+        );
+    }
+
+    // Render branches first — this puts the branch shapes into the shapes
+    // buffer (after the diamond/condition/labels) and any branch-internal
+    // connectors into the connectors buffer FIRST. PlantUML emits branch-
+    // internal connectors before the diamond→branch outbound connectors.
+    let branch_y = diamond_bottom + IF_BRANCH_DOWN;
+    let then_bottom = emit_sequence(svg, then_branch, then_cx, branch_y);
+    let else_bottom = if !else_branches.is_empty() {
+        emit_sequence(svg, &else_branches[0].body, else_cx, branch_y)
+    } else {
+        branch_y
+    };
+
+    // Merge diamond at bottom — sits IF_BRANCH_UP px below the deepest branch.
+    let merge_y = then_bottom.max(else_bottom) + IF_BRANCH_UP;
+    let merge_diamond_top = merge_y;
+    let merge_cy = merge_diamond_top + DIAMOND_HALF;
+
+    // Small merge diamond shape (lands in shapes buffer after branch shapes).
+    svg.polygon_shape(
+        DIAMOND_FILL,
+        &[
+            (cx, merge_diamond_top),
+            (cx + DIAMOND_HALF, merge_cy),
+            (cx, merge_diamond_top + DIAMOND_HALF * 2.0),
+            (cx - DIAMOND_HALF, merge_cy),
+        ],
+        ACTION_STROKE,
+        ACTION_STROKE_WIDTH,
+    );
+
+    // Now emit the if/else-frame connectors AFTER the branch-internal ones.
+    // Order: diamond→then, diamond→else, then→merge, else→merge.
+
+    // Diamond → then: horizontal from diamond left to then_cx, then down to
+    // branch top, with an arrowhead overlay.
     svg.line_styled(
         ARROW_COLOR,
         "1",
@@ -1424,24 +1532,7 @@ fn emit_if(
         "1",
     );
 
-    // Else label and branch: mirror of then_cx at the same branch_dist.
-    let else_cx = cx + branch_dist / 2.0;
-
-    if let Some(label) = else_branches.first().and_then(|b| b.label.as_ref()) {
-        let lw = text_render::measure(label, SMALL_FONT, false);
-        svg.text_element(
-            TEXT_COLOR,
-            "sans-serif",
-            SMALL_FONT,
-            lw,
-            diamond_right,
-            diamond_cy - pm::descent(SMALL_FONT),
-            label,
-            false,
-        );
-    }
-
-    // Else arrow: horizontal from diamond right to else_cx, then down
+    // Diamond → else: mirror of the then side.
     svg.line_styled(
         ARROW_COLOR,
         "1",
@@ -1472,35 +1563,7 @@ fn emit_if(
         "1",
     );
 
-    // Render branches
-    let branch_y = diamond_bottom + IF_BRANCH_DOWN;
-    let then_bottom = emit_sequence(svg, then_branch, then_cx, branch_y);
-    let else_bottom = if !else_branches.is_empty() {
-        emit_sequence(svg, &else_branches[0].body, else_cx, branch_y)
-    } else {
-        branch_y
-    };
-
-    // Merge diamond at bottom — sits IF_BRANCH_UP px below the deepest branch.
-    let merge_y = then_bottom.max(else_bottom) + IF_BRANCH_UP;
-    let merge_diamond_top = merge_y;
-    let merge_cy = merge_diamond_top + DIAMOND_HALF;
-
-    // Small merge diamond
-    svg.polygon_shape(
-        DIAMOND_FILL,
-        &[
-            (cx, merge_diamond_top),
-            (cx + DIAMOND_HALF, merge_cy),
-            (cx, merge_diamond_top + DIAMOND_HALF * 2.0),
-            (cx - DIAMOND_HALF, merge_cy),
-        ],
-        ACTION_STROKE,
-        ACTION_STROKE_WIDTH,
-    );
-
-    // Arrows from branches to merge
-    // Then branch to merge
+    // Then branch → merge.
     svg.line_styled(
         ARROW_COLOR,
         "1",
@@ -1521,7 +1584,7 @@ fn emit_if(
     );
     svg.right_arrow(cx - DIAMOND_HALF, merge_cy, ARROW_COLOR);
 
-    // Else branch to merge
+    // Else branch → merge.
     svg.line_styled(
         ARROW_COLOR,
         "1",
@@ -1808,8 +1871,11 @@ pub fn render(diagram: &ActivityDiagram, _theme: &Theme) -> String {
         .collect();
     let has_deprecated = !deprecated_warnings.is_empty();
 
-    // Compute overall dimensions.
-    let content_w = sequence_width(&tree);
+    // Compute overall dimensions. `extents` is asymmetric (left, right) from
+    // the diagram's centreline — for if/else with unequal branches, the
+    // centreline shifts so both branches stay symmetric around the diamond.
+    let (content_left, content_right) = sequence_extents(&tree);
+    let content_w = content_left + content_right;
     let content_h = sequence_height(&tree);
 
     // Total SVG dimensions: PlantUML uses asymmetric margins on both axes —
@@ -1860,7 +1926,7 @@ pub fn render(diagram: &ActivityDiagram, _theme: &Theme) -> String {
         .iter()
         .map(|label| text_render::measure(label, SMALL_FONT, false))
         .fold(0.0f64, f64::max);
-    let cx_preview = MARGIN_LEAD + content_w / 2.0;
+    let cx_preview = MARGIN_LEAD + content_left;
     let label_total_w = if label_extent > 0.0 {
         cx_preview + 4.0 + label_extent + 20.0
     } else {
@@ -1883,9 +1949,11 @@ pub fn render(diagram: &ActivityDiagram, _theme: &Theme) -> String {
         0.0
     };
     let svg_h = (start_y + content_h - start_h_delta + MARGIN_TRAIL).ceil() as u32;
-    // cx is the centre of the action content area (left-aligned at
-    // MARGIN_LEAD, width = content_w), NOT the geometric centre of the SVG.
-    let cx = MARGIN_LEAD + content_w / 2.0;
+    // cx aligns the diagram's vertical centreline to MARGIN_LEAD + content_left
+    // (the asymmetric left extent). For symmetric layouts this equals
+    // MARGIN_LEAD + content_w/2; for if/else with unequal branches it shifts
+    // so the branches stay symmetric around the diamond.
+    let cx = MARGIN_LEAD + content_left;
 
     let mut svg = SvgEmitter::new();
 
