@@ -190,25 +190,27 @@ fn bold_text_width(text: &str, font_size: f64) -> f64 {
 }
 
 /// Format an f64 as a PlantUML-compatible coordinate string.
-/// PlantUML uses `String.format(Locale.US, "%.4f", x)` then trims trailing zeros.
-/// We must NOT pre-round via multiply/round/divide — that introduces precision errors
-/// at boundary values (e.g., 76.023449... * 10000 = 760234.5 exactly, which rounds
-/// to 760235 via round-half-away-from-zero, but Java formats the original double to
-/// 76.0234 because the 5th decimal of the ACTUAL value is 4).
+///
+/// PlantUML emits SVG coordinates via `String.format(Locale.US, "%.4f", x)`
+/// followed by trailing-zero stripping (see PlantUML's SvgGraphics.format).
+/// Java's `%.4f` uses HALF_UP rounding (e.g. `110.15625` → `"110.1563"`),
+/// whereas Rust's `format!("{:.4}")` uses HALF_EVEN (banker's rounding,
+/// → `"110.1562"`). For exact-string golden parity we round explicitly to
+/// HALF_UP at the 4th decimal place before formatting.
 fn fmt_coord(v: f64) -> String {
-    // Format to 4 decimal places (Rust uses round-half-to-even, matching Java's
-    // behavior for non-midpoint values, which is the vast majority of cases).
-    let s = format!("{v:.4}");
-
-    // Check if the result is an integer (all zeros after decimal point)
-    if s.ends_with(".0000") {
-        // Return just the integer part
-        return s[..s.len() - 5].to_string();
+    // Integer fast-path preserves "25" rather than "25.0000" after trim.
+    if v == v.floor() && v.abs() < 1e15 {
+        return format!("{}", v as i64);
     }
-
-    // Trim trailing zeros after decimal point
+    // HALF_UP at 4 decimals: scale by 10000, add ±0.5, floor toward -inf.
+    let scaled = v * 10000.0;
+    let rounded = if scaled >= 0.0 {
+        (scaled + 0.5).floor()
+    } else {
+        -((-scaled + 0.5).floor())
+    };
+    let s = format!("{:.4}", rounded / 10000.0);
     let s = s.trim_end_matches('0');
-    // Don't leave a trailing decimal point
     let s = s.trim_end_matches('.');
     s.to_string()
 }
