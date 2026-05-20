@@ -271,10 +271,7 @@ fn golden_pairs() {
                 .to_string_lossy()
                 .contains(&filter)
         });
-        eprintln!(
-            "GOLDEN_FILTER={filter:?} → {} pairs match",
-            pairs.len()
-        );
+        eprintln!("GOLDEN_FILTER={filter:?} → {} pairs match", pairs.len());
         if pairs.is_empty() {
             return;
         }
