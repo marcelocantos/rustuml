@@ -3,15 +3,13 @@
 
 //! Math/LaTeX diagram renderer.
 //!
-//! Renders the LaTeX content via KaTeX (through the `rustuml-math` crate)
-//! wrapped in an SVG `<foreignObject>`.  The source expression is also
-//! included as a hidden `<text>` element so that structural golden-pair
-//! comparison (which checks for text content) can match Java PlantUML's
-//! output, which renders math as monospace source text.
+//! Renders the LaTeX content as monospace text to match Java PlantUML's
+//! `@startlatex` behavior, which emits the raw LaTeX source in a monospace
+//! `<text>` element wrapped in the standard `<defs/><g>...</g>` envelope.
 
-use rustuml_math::{MathRenderOpts, render_math_with_opts};
 use rustuml_parser::diagram::math::MathDiagram;
 
+use crate::plantuml_metrics::{fmt_coord, mono_ascent, mono_text_height, mono_text_width};
 use crate::style::Theme;
 
 const FONT_SIZE: f64 = 14.0;
@@ -22,62 +20,34 @@ const V_PADDING: f64 = 5.0;
 pub fn render(diagram: &MathDiagram, _theme: &Theme) -> String {
     let content = diagram.content.trim();
 
-    // Estimate dimensions for the SVG canvas.
-    let char_w = FONT_SIZE * 0.6;
-    let text_w = content.chars().count() as f64 * char_w;
-    let svg_w = text_w + H_PADDING * 2.0;
-    let svg_h = FONT_SIZE * 2.0;
+    // Java PlantUML emits the raw LaTeX as a single monospace text line.
+    // Compute the exact textLength using PlantUML's monospace font metrics.
+    let text_len = mono_text_width(content, FONT_SIZE);
+    let text_h = mono_text_height(FONT_SIZE);
+    let ascent = mono_ascent(FONT_SIZE);
 
-    // Attempt KaTeX rendering inside a <foreignObject>.
-    let katex_fragment = try_katex(content, svg_w, svg_h);
+    // Outer dimensions: text + 2 * padding, rounded to int (ceil).
+    let svg_w = (text_len + H_PADDING * 2.0).ceil() as i64;
+    let svg_h = (text_h + V_PADDING * 2.0).ceil() as i64;
 
-    // The source text is included as a <text> element so that golden-pair
-    // comparison (which looks for text content from the reference SVG) can
-    // match.  Java PlantUML currently outputs the raw LaTeX source as
-    // monospace text, so including it here keeps structural parity.
+    // Baseline y = top padding + ascent. With FONT_SIZE=14:
+    // 5 + 14 * 0.92822265625 = 17.9951...
+    let text_y = V_PADDING + ascent;
+
     // Java PlantUML encodes spaces as non-breaking spaces (U+00A0) in the
     // monospace text element; match that so golden-pair comparison passes.
     let src_nbsp = xml_escape(&content.replace(' ', "\u{00A0}"));
+
     format!(
-        r##"<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="{w}px" height="{h}px" viewBox="0 0 {w} {h}">
-{katex}  <text fill="#000000" font-family="monospace" font-size="{fs}" x="{px}" y="{ty}">{src}</text>
-</svg>"##,
+        r##"<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" contentStyleType="text/css" height="{h}px" preserveAspectRatio="none" style="width:{w}px;height:{h}px;background:#FFFFFF;" version="1.1" viewBox="0 0 {w} {h}" width="{w}px" zoomAndPan="magnify"><defs/><g><text fill="#000000" font-family="monospace" font-size="{fs}" lengthAdjust="spacing" textLength="{tl}" x="{px}" y="{ty}">{src}</text></g></svg>"##,
         w = svg_w,
         h = svg_h,
-        katex = katex_fragment,
-        fs = FONT_SIZE,
-        px = H_PADDING,
-        ty = FONT_SIZE + V_PADDING,
+        fs = FONT_SIZE as i64,
+        tl = fmt_coord(text_len),
+        px = H_PADDING as i64,
+        ty = fmt_coord(text_y),
         src = src_nbsp,
     )
-}
-
-/// Try to render `latex` with KaTeX; returns an empty string on failure.
-fn try_katex(latex: &str, w: f64, h: f64) -> String {
-    let opts = MathRenderOpts {
-        display_mode: true,
-        ..Default::default()
-    };
-    match render_math_with_opts(latex, &opts) {
-        Ok(_html) => {
-            // Embed KaTeX output in a foreignObject.
-            // Note: real KaTeX HTML output requires inline CSS; we emit a
-            // simplified placeholder here.  Full KaTeX CSS support will be
-            // added when the rendering pipeline supports it.
-            format!(
-                r##"  <foreignObject x="{px}" y="{py}" width="{w}" height="{h}">
-    <div xmlns="http://www.w3.org/1999/xhtml">{html}</div>
-  </foreignObject>
-"##,
-                px = H_PADDING,
-                py = V_PADDING,
-                w = w,
-                h = h,
-                html = xml_escape(&_html),
-            )
-        }
-        Err(_) => String::new(),
-    }
 }
 
 fn xml_escape(s: &str) -> String {
