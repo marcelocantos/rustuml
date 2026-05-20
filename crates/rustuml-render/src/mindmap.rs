@@ -241,8 +241,8 @@ pub fn render(diagram: &MindMapDiagram, _theme: &Theme) -> String {
         shift_x(p, dx);
     }
 
-    // Reserve a level slot of space to the right (even for childless roots,
-    // matching PlantUML's canvas-sizing convention).
+    // Reserve a level slot of space to the right (matching PlantUML's canvas
+    // sizing for childless roots).
     let total_w = (global_max_x - global_min_x) + 2.0 * X_MARGIN + LEVEL_DX + 10.0;
     let total_h = global_max_cy + Y_MARGIN;
     let w_i = total_w.ceil() as i64;
