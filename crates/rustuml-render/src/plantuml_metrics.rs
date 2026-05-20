@@ -131,9 +131,60 @@ fn char_width(c: char, table: &[f64; 95]) -> f64 {
         // Both have the same advance per size in the AWT logical font.
         // Picks a value matching plantuml_metrics' sans-serif scale.
         guillemet_width(table)
+    } else if let Some(ascii) = ascii_equivalent(c) {
+        // Latin-1 accented letters: approximate by the unaccented ASCII
+        // form's advance width. The visual glyph differs but the advance
+        // is close enough for layout purposes, and matches what Java's
+        // Lucida Grande emits for most accented glyphs.
+        table[(ascii as u32 - 32) as usize]
+    } else if code >= 0x3000 {
+        // CJK Unified Ideographs, Hiragana, Katakana, full-width Latin,
+        // and other East Asian scripts have roughly square advance equal
+        // to the font size (the table identity is encoded in table[0]
+        // which is size * 0.31640625, so size = table[0] / 0.31640625).
+        table[0] / 0.31640625
     } else {
-        // For characters outside ASCII, use 'a' width as approximation.
+        // For other non-ASCII characters, use 'a' width as a sensible
+        // default approximation.
         table[('a' as u32 - 32) as usize]
+    }
+}
+
+/// Map a Latin-1 supplement character (U+00A0..U+00FF) to an ASCII
+/// equivalent for width-table lookup. Covers accented Latin letters,
+/// where the visual advance closely matches the unaccented form.
+/// Returns `None` for symbols (punctuation, currency, etc.) that have
+/// no obvious ASCII analog.
+fn ascii_equivalent(c: char) -> Option<char> {
+    match c {
+        // Uppercase Latin
+        'À' | 'Á' | 'Â' | 'Ã' | 'Ä' | 'Å' => Some('A'),
+        'Æ' => Some('A'),
+        'Ç' => Some('C'),
+        'È' | 'É' | 'Ê' | 'Ë' => Some('E'),
+        'Ì' | 'Í' | 'Î' | 'Ï' => Some('I'),
+        'Ð' => Some('D'),
+        'Ñ' => Some('N'),
+        'Ò' | 'Ó' | 'Ô' | 'Õ' | 'Ö' | 'Ø' => Some('O'),
+        'Ù' | 'Ú' | 'Û' | 'Ü' => Some('U'),
+        'Ý' => Some('Y'),
+        'Þ' => Some('P'),
+        // Lowercase Latin
+        'à' | 'á' | 'â' | 'ã' | 'ä' | 'å' => Some('a'),
+        'æ' => Some('a'),
+        'ç' => Some('c'),
+        'è' | 'é' | 'ê' | 'ë' => Some('e'),
+        'ì' | 'í' | 'î' | 'ï' => Some('i'),
+        'ð' => Some('d'),
+        'ñ' => Some('n'),
+        'ò' | 'ó' | 'ô' | 'õ' | 'ö' | 'ø' => Some('o'),
+        'ù' | 'ú' | 'û' | 'ü' => Some('u'),
+        'ý' | 'ÿ' => Some('y'),
+        'þ' => Some('p'),
+        // German sharp-s: visual advance closer to 's' than 'B' even
+        // though it uppercases via "SS".
+        'ß' => Some('s'),
+        _ => None,
     }
 }
 
