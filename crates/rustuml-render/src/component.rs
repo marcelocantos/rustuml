@@ -1252,8 +1252,30 @@ fn render_oracle_connections(
             ));
         }
 
-        // Edge label from oracle.
-        if let Some((lx, ly, ref text)) = oracle_edge.label {
+        // Edge labels from oracle. Class/component diagrams emit up to three
+        // labels per link (start cardinality, middle label, end cardinality)
+        // each at its own (x, y); use the per-label positions when available.
+        if !oracle_edge.labels.is_empty() {
+            for (lx, ly, text) in &oracle_edge.labels {
+                let mut text_buf = String::new();
+                text_render::emit_text(
+                    &mut text_buf,
+                    text,
+                    &TextBase {
+                        x: *lx,
+                        y: *ly,
+                        font_size: LINK_FONT as u32,
+                        font_family: "sans-serif",
+                        fill: TEXT_COLOR,
+                        bold: false,
+                        italic: false,
+                        underline: false,
+                        skip_underline: false,
+                    },
+                );
+                svg.raw(&text_buf);
+            }
+        } else if let Some((lx, ly, ref text)) = oracle_edge.label {
             for (i, line) in text.lines().enumerate() {
                 let ty = ly + i as f64 * LINK_FONT;
                 let mut text_buf = String::new();
