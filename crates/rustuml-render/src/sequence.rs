@@ -502,6 +502,19 @@ fn process_label(s: &str) -> String {
     result
 }
 
+/// Returns true if autonumber should be rendered bold.
+///
+/// PlantUML default (no format, or empty format string "") renders the number
+/// in bold. Any non-empty format string (parens, plain digits, creole tags)
+/// suppresses the default bold and uses creole tags from the format if any.
+fn autonumber_is_bold(format: &Option<String>) -> bool {
+    match format {
+        None => true,
+        Some(s) if s.is_empty() => true,
+        _ => false,
+    }
+}
+
 /// Format an autonumber counter according to an optional format string.
 fn format_autonumber(n: u32, format: &Option<String>) -> String {
     let Some(fmt) = format else {
@@ -1297,7 +1310,7 @@ impl PlantUmlSvg {
         text_content: &str,
         text_len: f64,
         color: &str,
-        autonumber: Option<(&str, f64)>, // (number_text, number_width)
+        autonumber: Option<(&str, f64, bool)>, // (number_text, number_width, is_bold)
     ) {
         write!(
             self.buf,
@@ -1323,8 +1336,8 @@ impl PlantUmlSvg {
         )
         .unwrap();
 
-        let label_x = if let Some((num_text, num_w)) = autonumber {
-            // Bold autonumber text
+        let label_x = if let Some((num_text, num_w, num_bold)) = autonumber {
+            // Autonumber text, bold only when default (no format / empty format).
             text_render::emit_text(
                 &mut self.buf,
                 num_text,
@@ -1334,7 +1347,7 @@ impl PlantUmlSvg {
                     font_size: 13,
                     font_family: "sans-serif",
                     fill: "#000000",
-                    bold: true,
+                    bold: num_bold,
                     italic: false,
                     underline: false,
                     skip_underline: false,
@@ -1387,7 +1400,7 @@ impl PlantUmlSvg {
         text_content: &str,
         text_len: f64,
         color: &str,
-        autonumber: Option<(&str, f64)>, // (number_text, number_width)
+        autonumber: Option<(&str, f64, bool)>, // (number_text, number_width, is_bold)
     ) {
         write!(
             self.buf,
@@ -1442,8 +1455,8 @@ impl PlantUmlSvg {
         )
         .unwrap();
 
-        let label_x = if let Some((num_text, num_w)) = autonumber {
-            // Bold autonumber text
+        let label_x = if let Some((num_text, num_w, num_bold)) = autonumber {
+            // Autonumber text, bold only when default (no format / empty format).
             text_render::emit_text(
                 &mut self.buf,
                 num_text,
@@ -1453,7 +1466,7 @@ impl PlantUmlSvg {
                     font_size: 13,
                     font_family: "sans-serif",
                     fill: "#000000",
-                    bold: true,
+                    bold: num_bold,
                     italic: false,
                     underline: false,
                     skip_underline: false,
@@ -1648,7 +1661,7 @@ fn render_participant_shape(
                 text_y,
                 &p.label,
                 p.text_width,
-                        fill_color,
+                fill_color,
             );
         }
         ParticipantKind::Queue => {
@@ -1666,7 +1679,7 @@ fn render_participant_shape(
                 text_y,
                 &p.label,
                 p.text_width,
-                        fill_color,
+                fill_color,
             );
         }
         ParticipantKind::Participant => {
@@ -1875,6 +1888,12 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme) -> String {
     let n = participants.len();
     let mut pair_max_label_width = vec![0.0_f64; n.saturating_sub(1)];
 
+    // Multi-span constraints (left, right_exclusive, needed_total_width).
+    // Applied as a post-pass: only widen pairs in span if cumulative existing
+    // width is insufficient. Matches PlantUML's behavior where spanning
+    // messages don't force intermediate pairs to widen if already covered.
+    let mut multi_span_constraints: Vec<(usize, usize, f64)> = Vec::new();
+
     // Track maximum right extent of self-messages (for SVG width calculation).
     let mut max_self_msg_right: f64 = 0.0;
 
@@ -1901,11 +1920,17 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme) -> String {
                         let label = process_label(&msg.label);
                         let label_w = text_width(&label, MSG_FONT_SIZE);
 
-                        // Autonumber adds bold text + gap before the label
+                        // Autonumber adds bold-or-plain text + gap before the label
+                        // depending on whether a format string is set.
                         let autonumber_extra = if let Some(num) = spacing_auto_num.as_ref() {
                             let an = diagram.autonumber.as_ref().unwrap();
                             let num_text = format_autonumber(*num, &an.format);
-                            bold_text_width(&num_text, MSG_FONT_SIZE) + AUTONUMBER_LABEL_GAP
+                            let w = if autonumber_is_bold(&an.format) {
+                                bold_text_width(&num_text, MSG_FONT_SIZE)
+                            } else {
+                                text_width(&num_text, MSG_FONT_SIZE)
+                            };
+                            w + AUTONUMBER_LABEL_GAP
                         } else {
                             0.0
                         };
@@ -1940,10 +1965,8 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme) -> String {
                         if right - left == 1 {
                             pair_max_label_width[left] = pair_max_label_width[left].max(needed);
                         } else {
-                            let per_pair = needed / (right - left) as f64;
-                            for slot in &mut pair_max_label_width[left..right] {
-                                *slot = slot.max(per_pair);
-                            }
+                            // Defer multi-span constraint to post-pass.
+                            multi_span_constraints.push((left, right, needed));
                         }
                     }
                 }
@@ -1990,11 +2013,17 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme) -> String {
                         };
                         let label_w = text_width(&label, MSG_FONT_SIZE);
 
-                        // Autonumber adds bold text + gap before the label
+                        // Autonumber adds bold-or-plain text + gap before the label
+                        // depending on whether a format string is set.
                         let autonumber_extra = if let Some(num) = spacing_auto_num.as_ref() {
                             let an = diagram.autonumber.as_ref().unwrap();
                             let num_text = format_autonumber(*num, &an.format);
-                            bold_text_width(&num_text, MSG_FONT_SIZE) + AUTONUMBER_LABEL_GAP
+                            let w = if autonumber_is_bold(&an.format) {
+                                bold_text_width(&num_text, MSG_FONT_SIZE)
+                            } else {
+                                text_width(&num_text, MSG_FONT_SIZE)
+                            };
+                            w + AUTONUMBER_LABEL_GAP
                         } else {
                             0.0
                         };
@@ -2024,10 +2053,8 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme) -> String {
                         if right - left == 1 {
                             pair_max_label_width[left] = pair_max_label_width[left].max(needed);
                         } else {
-                            let per_pair = needed / (right - left) as f64;
-                            for slot in &mut pair_max_label_width[left..right] {
-                                *slot = slot.max(per_pair);
-                            }
+                            // Defer multi-span constraint to post-pass.
+                            multi_span_constraints.push((left, right, needed));
                         }
                     }
 
@@ -2129,6 +2156,36 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme) -> String {
                 }
                 _ => {}
             }
+        }
+    }
+
+    // Resolve multi-span constraints: only widen the rightmost pair if the
+    // cumulative existing width across the span is less than needed. This
+    // matches PlantUML — a message spanning multiple participants doesn't
+    // force intermediate pairs to widen when neighbouring messages already
+    // provide enough room.
+    //
+    // We also need to consider min_gap_boxes for each pair (from Phase 3),
+    // so compute that ahead of the constraint pass.
+    let min_gap_boxes_for_pair = |i: usize| -> f64 {
+        participants[i].box_width / 2.0 + participants[i + 1].box_width / 2.0 + 10.0
+    };
+    for &(left, right, needed) in &multi_span_constraints {
+        let mut cumulative = 0.0_f64;
+        for (i, w) in pair_max_label_width
+            .iter()
+            .enumerate()
+            .take(right)
+            .skip(left)
+        {
+            cumulative += w.max(min_gap_boxes_for_pair(i));
+        }
+        if cumulative < needed {
+            // Add the deficit to the rightmost pair.
+            let deficit = needed - cumulative;
+            let last = right - 1;
+            pair_max_label_width[last] =
+                pair_max_label_width[last].max(min_gap_boxes_for_pair(last)) + deficit;
         }
     }
 
@@ -3131,13 +3188,20 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme) -> String {
                 let src_line = msg.source_line as u32;
 
                 // Compute autonumber info for passing into the message group
-                let autonumber_info: Option<(String, f64)> = auto_num.as_ref().map(|n| {
+                let autonumber_info: Option<(String, f64, bool)> = auto_num.as_ref().map(|n| {
                     let an = diagram.autonumber.as_ref().unwrap();
                     let num_text = format_autonumber(*n, &an.format);
-                    let num_w = bold_text_width(&num_text, MSG_FONT_SIZE);
-                    (num_text, num_w)
+                    let is_bold = autonumber_is_bold(&an.format);
+                    let num_w = if is_bold {
+                        bold_text_width(&num_text, MSG_FONT_SIZE)
+                    } else {
+                        text_width(&num_text, MSG_FONT_SIZE)
+                    };
+                    (num_text, num_w, is_bold)
                 });
-                let autonumber_ref = autonumber_info.as_ref().map(|(t, w)| (t.as_str(), *w));
+                let autonumber_ref = autonumber_info
+                    .as_ref()
+                    .map(|(t, w, b)| (t.as_str(), *w, *b));
 
                 if is_self {
                     // Self-message: U-shaped loopback
@@ -3461,14 +3525,20 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme) -> String {
                 msg_id += 1;
 
                 // Compute autonumber info for return messages
-                let ret_autonumber_info: Option<(String, f64)> = auto_num.as_ref().map(|n| {
+                let ret_autonumber_info: Option<(String, f64, bool)> = auto_num.as_ref().map(|n| {
                     let an = diagram.autonumber.as_ref().unwrap();
                     let num_text = format_autonumber(*n, &an.format);
-                    let num_w = bold_text_width(&num_text, MSG_FONT_SIZE);
-                    (num_text, num_w)
+                    let is_bold = autonumber_is_bold(&an.format);
+                    let num_w = if is_bold {
+                        bold_text_width(&num_text, MSG_FONT_SIZE)
+                    } else {
+                        text_width(&num_text, MSG_FONT_SIZE)
+                    };
+                    (num_text, num_w, is_bold)
                 });
-                let ret_autonumber_ref =
-                    ret_autonumber_info.as_ref().map(|(t, w)| (t.as_str(), *w));
+                let ret_autonumber_ref = ret_autonumber_info
+                    .as_ref()
+                    .map(|(t, w, b)| (t.as_str(), *w, *b));
 
                 // Pop the return stack to find from/to participants and arrow style
                 let (ret_from, ret_to, ret_open) = if let Some(entry) = return_stack.pop() {
