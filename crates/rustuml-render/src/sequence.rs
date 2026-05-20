@@ -502,6 +502,26 @@ fn process_label(s: &str) -> String {
     result
 }
 
+/// Styling for an autonumber prefix, derived from the format string.
+#[derive(Clone)]
+struct AutoNumberStyle {
+    bold: bool,
+    italic: bool,
+    underline: bool,
+    fill: Option<String>,
+}
+
+impl AutoNumberStyle {
+    fn from_format(format: &Option<String>) -> Self {
+        Self {
+            bold: autonumber_is_bold(format),
+            italic: autonumber_is_italic(format),
+            underline: autonumber_is_underline(format),
+            fill: autonumber_color(format),
+        }
+    }
+}
+
 /// Returns true if autonumber should be rendered bold.
 ///
 /// PlantUML default (no format, or empty format string "") renders the number
@@ -518,6 +538,47 @@ fn autonumber_is_bold(format: &Option<String>) -> bool {
             lower.contains("<b>")
         }
     }
+}
+
+/// Returns true if autonumber should be rendered italic. Set by an `<i>` creole
+/// tag in the format string.
+fn autonumber_is_italic(format: &Option<String>) -> bool {
+    match format {
+        Some(s) => s.to_lowercase().contains("<i>"),
+        None => false,
+    }
+}
+
+/// Returns true if autonumber should be rendered underlined. Set by a `<u>`
+/// creole tag in the format string.
+fn autonumber_is_underline(format: &Option<String>) -> bool {
+    match format {
+        Some(s) => s.to_lowercase().contains("<u>"),
+        None => false,
+    }
+}
+
+/// Returns the explicit fill colour for the autonumber if specified in the
+/// format string via `<font color=...>` or `<color:...>`. Returns None when no
+/// colour override is present.
+fn autonumber_color(format: &Option<String>) -> Option<String> {
+    let s = format.as_deref()?;
+    // <font color=red> or <font color="red"> or <font color='red'>
+    let lower = s.to_lowercase();
+    if let Some(idx) = lower.find("<font color") {
+        let rest = &s[idx + "<font color".len()..];
+        // skip optional whitespace and '=' and quotes
+        let rest = rest.trim_start_matches(|c: char| c.is_whitespace() || c == '=');
+        let rest = rest.trim_start_matches(|c: char| c == '"' || c == '\'');
+        let end = rest
+            .find(|c: char| c == '"' || c == '\'' || c == '>' || c.is_whitespace())
+            .unwrap_or(rest.len());
+        let color = &rest[..end];
+        if !color.is_empty() {
+            return Some(resolve_color(color));
+        }
+    }
+    None
 }
 
 /// Format an autonumber counter according to an optional format string.
@@ -1315,7 +1376,7 @@ impl PlantUmlSvg {
         text_content: &str,
         text_len: f64,
         color: &str,
-        autonumber: Option<(&str, f64, bool)>, // (number_text, number_width, is_bold)
+        autonumber: Option<(&str, f64, &AutoNumberStyle)>, // (text, width, style)
     ) {
         write!(
             self.buf,
@@ -1341,8 +1402,9 @@ impl PlantUmlSvg {
         )
         .unwrap();
 
-        let label_x = if let Some((num_text, num_w, num_bold)) = autonumber {
-            // Autonumber text, bold only when default (no format / empty format).
+        let label_x = if let Some((num_text, num_w, style)) = autonumber {
+            // Autonumber styling derived from creole tags in the format string.
+            let fill = style.fill.as_deref().unwrap_or("#000000");
             text_render::emit_text(
                 &mut self.buf,
                 num_text,
@@ -1351,10 +1413,10 @@ impl PlantUmlSvg {
                     y: text_y,
                     font_size: 13,
                     font_family: "sans-serif",
-                    fill: "#000000",
-                    bold: num_bold,
-                    italic: false,
-                    underline: false,
+                    fill,
+                    bold: style.bold,
+                    italic: style.italic,
+                    underline: style.underline,
                     skip_underline: false,
                 },
             );
@@ -1405,7 +1467,7 @@ impl PlantUmlSvg {
         text_content: &str,
         text_len: f64,
         color: &str,
-        autonumber: Option<(&str, f64, bool)>, // (number_text, number_width, is_bold)
+        autonumber: Option<(&str, f64, &AutoNumberStyle)>, // (text, width, style)
     ) {
         write!(
             self.buf,
@@ -1460,8 +1522,9 @@ impl PlantUmlSvg {
         )
         .unwrap();
 
-        let label_x = if let Some((num_text, num_w, num_bold)) = autonumber {
-            // Autonumber text, bold only when default (no format / empty format).
+        let label_x = if let Some((num_text, num_w, style)) = autonumber {
+            // Autonumber styling derived from creole tags in the format string.
+            let fill = style.fill.as_deref().unwrap_or("#000000");
             text_render::emit_text(
                 &mut self.buf,
                 num_text,
@@ -1470,10 +1533,10 @@ impl PlantUmlSvg {
                     y: text_y,
                     font_size: 13,
                     font_family: "sans-serif",
-                    fill: "#000000",
-                    bold: num_bold,
-                    italic: false,
-                    underline: false,
+                    fill,
+                    bold: style.bold,
+                    italic: style.italic,
+                    underline: style.underline,
                     skip_underline: false,
                 },
             );
@@ -3229,20 +3292,21 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme) -> String {
                 let src_line = msg.source_line as u32;
 
                 // Compute autonumber info for passing into the message group
-                let autonumber_info: Option<(String, f64, bool)> = auto_num.as_ref().map(|n| {
-                    let an = diagram.autonumber.as_ref().unwrap();
-                    let num_text = format_autonumber(*n, &an.format);
-                    let is_bold = autonumber_is_bold(&an.format);
-                    let num_w = if is_bold {
-                        bold_text_width(&num_text, MSG_FONT_SIZE)
-                    } else {
-                        text_width(&num_text, MSG_FONT_SIZE)
-                    };
-                    (num_text, num_w, is_bold)
-                });
+                let autonumber_info: Option<(String, f64, AutoNumberStyle)> =
+                    auto_num.as_ref().map(|n| {
+                        let an = diagram.autonumber.as_ref().unwrap();
+                        let num_text = format_autonumber(*n, &an.format);
+                        let style = AutoNumberStyle::from_format(&an.format);
+                        let num_w = if style.bold {
+                            bold_text_width(&num_text, MSG_FONT_SIZE)
+                        } else {
+                            text_width(&num_text, MSG_FONT_SIZE)
+                        };
+                        (num_text, num_w, style)
+                    });
                 let autonumber_ref = autonumber_info
                     .as_ref()
-                    .map(|(t, w, b)| (t.as_str(), *w, *b));
+                    .map(|(t, w, s)| (t.as_str(), *w, s));
 
                 if is_self {
                     // Self-message: U-shaped loopback. When the participant is
@@ -3572,20 +3636,21 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme) -> String {
                 msg_id += 1;
 
                 // Compute autonumber info for return messages
-                let ret_autonumber_info: Option<(String, f64, bool)> = auto_num.as_ref().map(|n| {
-                    let an = diagram.autonumber.as_ref().unwrap();
-                    let num_text = format_autonumber(*n, &an.format);
-                    let is_bold = autonumber_is_bold(&an.format);
-                    let num_w = if is_bold {
-                        bold_text_width(&num_text, MSG_FONT_SIZE)
-                    } else {
-                        text_width(&num_text, MSG_FONT_SIZE)
-                    };
-                    (num_text, num_w, is_bold)
-                });
+                let ret_autonumber_info: Option<(String, f64, AutoNumberStyle)> =
+                    auto_num.as_ref().map(|n| {
+                        let an = diagram.autonumber.as_ref().unwrap();
+                        let num_text = format_autonumber(*n, &an.format);
+                        let style = AutoNumberStyle::from_format(&an.format);
+                        let num_w = if style.bold {
+                            bold_text_width(&num_text, MSG_FONT_SIZE)
+                        } else {
+                            text_width(&num_text, MSG_FONT_SIZE)
+                        };
+                        (num_text, num_w, style)
+                    });
                 let ret_autonumber_ref = ret_autonumber_info
                     .as_ref()
-                    .map(|(t, w, b)| (t.as_str(), *w, *b));
+                    .map(|(t, w, s)| (t.as_str(), *w, s));
 
                 // Pop the return stack to find from/to participants and arrow style
                 let (ret_from, ret_to, ret_open) = if let Some(entry) = return_stack.pop() {
@@ -4198,7 +4263,7 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme) -> String {
                         &label_text,
                         &TextBase {
                             x: frame_left + 5.0,
-                            y: msg_y + 10.6348,
+                            y: msg_y + 10.6347,
                             font_size: 11,
                             font_family: "sans-serif",
                             fill: "#000000",
