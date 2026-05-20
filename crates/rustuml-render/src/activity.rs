@@ -462,7 +462,10 @@ fn node_extents(node: &LayoutNode) -> (f64, f64) {
                 .iter()
                 .map(|b| sequence_width(&b.body))
                 .sum();
-            let branch_dist = diamond_w + 20.0;
+            // Branch centrelines are at least `diamond_w + 20` apart, but
+            // also at least `(then_w + else_w)/2 + 20` so the branch boxes
+            // don't crowd each other. PlantUML takes the max of these two.
+            let branch_dist = (diamond_w + 20.0).max((then_w + else_w) / 2.0 + 20.0);
             (branch_dist / 2.0 + then_w / 2.0, branch_dist / 2.0 + else_w / 2.0)
         }
         _ => {
@@ -515,14 +518,11 @@ fn node_width(node: &LayoutNode) -> f64 {
                 .iter()
                 .map(|b| sequence_width(&b.body))
                 .sum();
-            // PlantUML places the then/else branches with their centrelines
-            // `branch_dist` apart, where `branch_dist = diamond_w + 20`. The
-            // outermost extents are then `branch_dist/2 + then_w/2` (left)
-            // and `branch_dist/2 + else_w/2` (right) from the diagram centre,
-            // so content_w = branch_dist + (then_w + else_w) / 2. Branch
-            // labels are positioned at the diamond corners and don't widen
-            // the diagram by themselves at typical sizes.
-            let branch_dist = diamond_w + 20.0;
+            // Branch centrelines are at least `diamond_w + 20` apart, but
+            // also at least `(then_w + else_w)/2 + 20` so the branch boxes
+            // don't crowd each other when the branches are wider than the
+            // diamond. content_w = branch_dist + (then_w + else_w) / 2.
+            let branch_dist = (diamond_w + 20.0).max((then_w + else_w) / 2.0 + 20.0);
             branch_dist + (then_w + else_w) / 2.0
         }
         LayoutNode::Fork { branches } => {
@@ -1443,10 +1443,16 @@ fn emit_if(
     }
 
     // Compute branch positions: PlantUML places the then/else branches
-    // with their centrelines `branch_dist = diamond_w + 20` apart,
-    // independent of branch box width.
+    // with their centrelines `branch_dist` apart, where
+    // `branch_dist = max(diamond_w + 20, (then_w + else_w)/2 + 20)` so
+    // wider branches don't crowd each other.
     let diamond_w = cond_w + DIAMOND_HALF * 2.0;
-    let branch_dist = diamond_w + 20.0;
+    let then_w = sequence_width(then_branch);
+    let else_w: f64 = else_branches
+        .iter()
+        .map(|b| sequence_width(&b.body))
+        .sum();
+    let branch_dist = (diamond_w + 20.0).max((then_w + else_w) / 2.0 + 20.0);
     let _else_count = else_branches.len().max(1);
     let then_cx = cx - branch_dist / 2.0;
     let else_cx = cx + branch_dist / 2.0;
