@@ -131,8 +131,20 @@ impl StateParser {
             }
             return Ok(());
         }
-        // Skip decoration lines.
-        if line.starts_with("hide ") || line.starts_with("show ") {
+        // `hide empty description[s]` / `show empty description[s]` — capture
+        // as skinparam so the renderer can switch to the no-divider 40px box.
+        // Other `hide ` / `show ` decoration lines are still ignored.
+        if let Some(rest) = line
+            .strip_prefix("hide ")
+            .or_else(|| line.strip_prefix("show "))
+        {
+            let show = line.starts_with("show ");
+            if matches!(rest, "empty description" | "empty descriptions") {
+                self.meta.skinparams.push(crate::diagram::SkinParam {
+                    key: "hideEmptyDescription".to_string(),
+                    value: if show { "false" } else { "true" }.to_string(),
+                });
+            }
             return Ok(());
         }
 
