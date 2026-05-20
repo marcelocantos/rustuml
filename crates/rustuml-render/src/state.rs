@@ -217,23 +217,9 @@ fn note_box_width(text: &str) -> f64 {
     (max_chars as f64 * NOTE_CHAR_WIDTH + NOTE_PADDING * 2.0 + NOTE_EAR).max(NOTE_MIN_WIDTH)
 }
 
-/// Format a float with PlantUML-style precision (remove trailing zeros but keep
-/// at least one decimal).
+/// Format a float with PlantUML-style precision (4-decimal HALF_EVEN, trailing zeros stripped).
 fn fmt_f(v: f64) -> String {
-    // PlantUML uses 2 decimal places for most coordinates.
-    let s = format!("{:.2}", v);
-    // Strip trailing zeros after decimal point, but keep at least one digit.
-    if s.contains('.') {
-        let trimmed = s.trim_end_matches('0');
-        if let Some(without_dot) = trimmed.strip_suffix('.') {
-            // Integer value — drop the dot entirely for PlantUML compatibility.
-            without_dot.to_string()
-        } else {
-            trimmed.to_string()
-        }
-    } else {
-        s
-    }
+    crate::plantuml_metrics::fmt_coord(v)
 }
 
 /// Determine if a [*] reference is a start or end node based on context.
@@ -283,21 +269,22 @@ pub fn render_with_oracle(
                 && sp.value.eq_ignore_ascii_case("empty description"))
     });
 
-    // Collect ordered unique state IDs.
-    // Start [*] first, then declared states, then undeclared transition targets.
+    // Collect ordered unique state IDs in PlantUML's render order: explicitly
+    // declared states first, then start [*], then transition-discovered states,
+    // then end [*].
     let mut state_ids: Vec<String> = Vec::new();
-    if has_start {
-        state_ids.push("__start__".to_string());
-    }
     for s in &diagram.states {
         if !state_ids.contains(&s.id) && s.id != "[*]" {
             state_ids.push(s.id.clone());
         }
     }
+    if has_start {
+        state_ids.push("__start__".to_string());
+    }
     for t in &diagram.transitions {
         for id in [&t.from, &t.to] {
             if id == "[*]" {
-                continue; // Handled separately as start/end.
+                continue;
             }
             if !state_ids.contains(id) {
                 state_ids.push(id.clone());
