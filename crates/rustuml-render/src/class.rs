@@ -1289,14 +1289,16 @@ fn render_member_line(
                 } else {
                     VIS_PACKAGE_FILL_FIELD
                 };
-                // Triangle icon (3 points, pointing up).
+                // Triangle icon (3 points, pointing up). icon_cy is the bbox
+                // centre; the triangle spans ±3 vertically (height 6) so that
+                // its centre coincides with the oracle-supplied polygon centre.
                 write!(
                     svg,
                     r#"<polygon fill="{}" points="{},{},{},{},{},{}" style="stroke:{};stroke-width:{};"/>"#,
                     fill,
-                    fmt4(vis_cx), fmt_tl(icon_cy - 6.0),
-                    fmt4(vis_cx - 4.0), fmt_tl(icon_cy),
-                    fmt4(vis_cx + 4.0), fmt_tl(icon_cy),
+                    fmt4(vis_cx), fmt_tl(icon_cy - 3.0),
+                    fmt4(vis_cx - 4.0), fmt_tl(icon_cy + 3.0),
+                    fmt4(vis_cx + 4.0), fmt_tl(icon_cy + 3.0),
                     VIS_PACKAGE_STROKE, ICON_STROKE_WIDTH,
                 )
                 .unwrap();
