@@ -25,6 +25,25 @@ pub struct OracleLayout {
     /// emit the inner XML verbatim between the cluster's opening and
     /// closing `<g>` tags to reproduce PlantUML's shape and label.
     pub clusters: Vec<OracleCluster>,
+    /// Note entities captured verbatim from the golden SVG, keyed by
+    /// auto-generated qualified name (typically `GMNn`). PlantUML emits
+    /// notes as `<g class="entity">` with a hand-rolled path including
+    /// the dog-ear and the connector to the target — replaying this
+    /// verbatim sidesteps replicating both shapes.
+    pub note_entities: Vec<OracleNoteEntity>,
+}
+
+/// A `<g class="entity">` group whose qualified name marks it as an
+/// auto-generated note (`GMN…`), captured verbatim from a golden SVG.
+#[derive(Debug, Clone)]
+pub struct OracleNoteEntity {
+    pub qualified_name: String,
+    pub source_line: Option<String>,
+    pub entity_id: Option<String>,
+    pub inner_xml: String,
+    /// Concatenated text content of the note (used for matching back to
+    /// the parser's note model when multiple notes are present).
+    pub text: String,
 }
 
 /// A cluster group captured from the golden SVG.
@@ -60,6 +79,10 @@ pub struct EntityRect {
     /// All text y-positions within the entity (from `<text y="...">`), in order.
     /// Index 0 is the name text y; subsequent entries are member baselines.
     pub text_y_values: Vec<f64>,
+    /// All text x-positions within the entity, in the same order as
+    /// `text_y_values`. Lets renderers honour per-line x alignment when
+    /// PlantUML centres a label relative to a stereotype above it.
+    pub text_x_values: Vec<f64>,
     /// All separator line y-positions (from `<line y1="...">`), in order.
     pub sep_y_values: Vec<f64>,
     /// Visibility icon y-positions (from rect/ellipse within `<g data-visibility-modifier>`).
