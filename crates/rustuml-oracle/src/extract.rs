@@ -7,7 +7,7 @@
 //! producing an `OracleLayout` that can be fed to renderers.
 
 use rustuml_render::layout_oracle::{
-    AuxRect, EntityRect, OracleCluster, OracleEdgePath, OracleLayout,
+    AuxRect, EntityRect, OracleCluster, OracleEdgePath, OracleLayout, OracleNoteEntity,
 };
 
 /// Extract layout data from a golden SVG string.
@@ -66,6 +66,31 @@ pub fn extract_oracle_layout(svg: &str) -> Option<OracleLayout> {
             }
         }
 
+        // PlantUML emits notes as `<g class="entity">` with either an
+        // auto-generated `data-qualified-name` (`GMNn`) or an explicit alias
+        // from `note "…" as ALIAS` syntax. Capture inner XML for entities
+        // that don't have the standard component rect-body+icon+text layout —
+        // detect via the first child element being a `<path>` (note bodies
+        // start with a path), since rect-based entities lead with `<rect>`.
+        if class_attr == "entity"
+            && let Some(name) = node.attribute("data-qualified-name")
+            && let Some(first_child) = node.children().find(|c| c.is_element())
+            && first_child.tag_name().name() == "path"
+        {
+            let range = node.range();
+            if let Some(slice) = svg.get(range.clone()) {
+                let inner = extract_inner_xml(slice);
+                let text = collect_text(&node);
+                layout.note_entities.push(OracleNoteEntity {
+                    qualified_name: name.to_string(),
+                    source_line: node.attribute("data-source-line").map(String::from),
+                    entity_id: node.attribute("id").map(String::from),
+                    inner_xml: inner,
+                    text,
+                });
+            }
+        }
+
         if class_attr == "entity" || class_attr == "cluster" {
             if let Some(name) = node.attribute("data-qualified-name") {
                 // Find the first <rect> child for position data.
@@ -94,6 +119,11 @@ pub fn extract_oracle_layout(svg: &str) -> Option<OracleLayout> {
                         .children()
                         .filter(|c| c.tag_name().name() == "text")
                         .filter_map(|t| parse_attr(&t, "y"))
+                        .collect();
+                    let text_x_values: Vec<f64> = node
+                        .children()
+                        .filter(|c| c.tag_name().name() == "text")
+                        .filter_map(|t| parse_attr(&t, "x"))
                         .collect();
                     let sep_y_values: Vec<f64> = node
                         .children()
@@ -182,6 +212,7 @@ pub fn extract_oracle_layout(svg: &str) -> Option<OracleLayout> {
                             glyph_path_d,
                             name_text_x,
                             text_y_values,
+                            text_x_values,
                             sep_y_values,
                             vis_icon_y_values,
                             fill,
@@ -209,6 +240,7 @@ pub fn extract_oracle_layout(svg: &str) -> Option<OracleLayout> {
                             glyph_path_d: None,
                             name_text_x: None,
                             text_y_values: Vec::new(),
+                            text_x_values: Vec::new(),
                             sep_y_values: Vec::new(),
                             vis_icon_y_values: Vec::new(),
                             fill: None,
@@ -246,6 +278,7 @@ pub fn extract_oracle_layout(svg: &str) -> Option<OracleLayout> {
                                     glyph_path_d: None,
                                     name_text_x: None,
                                     text_y_values: Vec::new(),
+                                    text_x_values: Vec::new(),
                                     sep_y_values: Vec::new(),
                                     vis_icon_y_values: Vec::new(),
                                     fill,
@@ -287,6 +320,7 @@ pub fn extract_oracle_layout(svg: &str) -> Option<OracleLayout> {
                             glyph_path_d: None,
                             name_text_x: None,
                             text_y_values: Vec::new(),
+                            text_x_values: Vec::new(),
                             sep_y_values: Vec::new(),
                             vis_icon_y_values: Vec::new(),
                             fill: None,
@@ -658,6 +692,7 @@ fn path_bounding_box(d: &str) -> Option<EntityRect> {
             glyph_path_d: None,
             name_text_x: None,
             text_y_values: Vec::new(),
+            text_x_values: Vec::new(),
             sep_y_values: Vec::new(),
             vis_icon_y_values: Vec::new(),
             fill: None,

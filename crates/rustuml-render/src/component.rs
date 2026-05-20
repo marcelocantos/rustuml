@@ -297,17 +297,26 @@ pub fn render_with_oracle(
     // phantom components the parser auto-creates from connection endpoints
     // that actually refer to a container (e.g. `Inner --> Gamma` where
     // `Inner` is a folder, not a component).
-    let package_names: std::collections::HashSet<String> = {
-        let mut set = std::collections::HashSet::new();
-        fn collect(packages: &[ComponentPackage], set: &mut std::collections::HashSet<String>) {
-            for p in packages {
-                set.insert(p.name.clone());
-                collect(&p.packages, set);
-            }
+    let mut skip_ids: std::collections::HashSet<String> = std::collections::HashSet::new();
+    fn collect_pkg_names(
+        packages: &[ComponentPackage],
+        set: &mut std::collections::HashSet<String>,
+    ) {
+        for p in packages {
+            set.insert(p.name.clone());
+            collect_pkg_names(&p.packages, set);
         }
-        collect(&diagram.packages, &mut set);
-        set
-    };
+    }
+    collect_pkg_names(&diagram.packages, &mut skip_ids);
+    // Also skip components that are actually note aliases (`note "…" as ID`).
+    // The oracle captures these as note_entities; emitting them as regular
+    // components would duplicate the note.
+    if let Some(orc) = oracle {
+        for ne in &orc.note_entities {
+            skip_ids.insert(ne.qualified_name.clone());
+        }
+    }
+    let package_names = skip_ids;
 
     // Depth = number of dots in qualified name (top-level → 0). PlantUML emits
     // entities sorted by (parent depth ascending, declaration order ascending),
@@ -460,7 +469,8 @@ pub fn render_with_oracle(
         // PlantUML positions text such that the last (label) baseline sits at
         // `y + h - LABEL_BASELINE_FROM_BOTTOM`. Use oracle text_y_values when available.
         let oracle_text_y = oracle_rect.map(|r| r.text_y_values.as_slice());
-        let text_x = oracle_rect
+        let oracle_text_x = oracle_rect.map(|r| r.text_x_values.as_slice());
+        let text_x_default = oracle_rect
             .and_then(|r| r.name_text_x)
             .unwrap_or(x + TEXT_PAD_LEFT);
         let n_stereo = comp.stereotypes.len();
@@ -475,13 +485,16 @@ pub fn render_with_oracle(
             let ty = oracle_text_y
                 .and_then(|v| v.get(si).copied())
                 .unwrap_or(stereo_first_y + si as f64 * LINE_HEIGHT);
+            let tx = oracle_text_x
+                .and_then(|v| v.get(si).copied())
+                .unwrap_or(text_x_default);
             let label = format!("\u{00AB}{stereo}\u{00BB}"); // «stereo»
             let mut text_buf = String::new();
             text_render::emit_text(
                 &mut text_buf,
                 &label,
                 &TextBase {
-                    x: text_x,
+                    x: tx,
                     y: ty,
                     font_size: FONT_SIZE as u32,
                     font_family: "sans-serif",
@@ -496,12 +509,15 @@ pub fn render_with_oracle(
         }
 
         // Label (last line).
+        let label_tx = oracle_text_x
+            .and_then(|v| v.get(n_stereo).copied())
+            .unwrap_or(text_x_default);
         let mut text_buf = String::new();
         text_render::emit_text(
             &mut text_buf,
             &comp.label,
             &TextBase {
-                x: text_x,
+                x: label_tx,
                 y: label_y,
                 font_size: FONT_SIZE as u32,
                 font_family: "sans-serif",
@@ -573,6 +589,31 @@ pub fn render_with_oracle(
         svg.raw(&text_buf);
 
         svg.raw("</g>");
+    }
+
+    // Render note entities verbatim from oracle, BEFORE connections —
+    // PlantUML emits them interleaved with regular entities, and connections
+    // that touch a note (e.g. `N1 .. Foo`) come after the note's `<g>`.
+    if let Some(orc) = oracle
+        && !orc.note_entities.is_empty()
+    {
+        for ne in &orc.note_entities {
+            svg.raw(&format!("<!--entity {}-->", ne.qualified_name));
+            let source_attr = ne
+                .source_line
+                .as_deref()
+                .map(|s| format!(r#" data-source-line="{s}""#))
+                .unwrap_or_default();
+            let id_attr = ne
+                .entity_id
+                .as_deref()
+                .map(|s| format!(r#" id="{s}""#))
+                .unwrap_or_default();
+            svg.raw(&format!(
+                r#"<g class="entity" data-qualified-name="{}"{source_attr}{id_attr}>{}</g>"#,
+                ne.qualified_name, ne.inner_xml,
+            ));
+        }
     }
 
     // Render connections (links).
@@ -850,17 +891,21 @@ pub fn render_with_oracle(
         }
     } // end else (non-oracle connections)
 
-    // Render notes.
-    for note in &diagram.notes {
-        render_note(
-            note,
-            &positions,
-            &comp_dims,
-            &diagram.components,
-            &mut svg,
-            total_w,
-            total_h,
-        );
+    // When oracle is absent (Sugiyama path), fall back to our own note
+    // rendering. When oracle is present, notes have already been replayed
+    // verbatim before connections (see above).
+    if oracle.is_none() {
+        for note in &diagram.notes {
+            render_note(
+                note,
+                &positions,
+                &comp_dims,
+                &diagram.components,
+                &mut svg,
+                total_w,
+                total_h,
+            );
+        }
     }
 
     // Footer.
