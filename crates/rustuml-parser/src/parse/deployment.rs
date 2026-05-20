@@ -212,10 +212,43 @@ fn try_parse_connection(
     let (raw_from, after_from) = parse_endpoint(rest)?;
     let after_from = after_from.trim_start();
 
-    // Parse arrow: one or more of `-`, `.`, `<`, `>`, `|`.
-    let arrow_end = after_from
-        .find(|c: char| !matches!(c, '-' | '.' | '<' | '>' | '|'))
-        .unwrap_or(after_from.len());
+    // Parse arrow: one or more of `-`, `.`, `<`, `>`, `|`, optionally with
+    // an embedded direction keyword `-down-`, `-up-`, `-left-`, `-right-`
+    // (PlantUML uses these to hint layout direction; semantically equivalent
+    // to a plain dashed arrow for our purposes).
+    let arrow_end = {
+        let bytes = after_from.as_bytes();
+        let mut i = 0;
+        while i < bytes.len() {
+            let c = bytes[i] as char;
+            if matches!(c, '-' | '.' | '<' | '>' | '|') {
+                i += 1;
+            } else if matches!(c, 'd' | 'u' | 'l' | 'r')
+                && i > 0
+                && matches!(bytes[i - 1] as char, '-' | '.')
+            {
+                // Look for `down`, `up`, `left`, `right` followed by another
+                // shaft char (`-` or `.`).
+                let rest = &after_from[i..];
+                let kw_len = ["down", "up", "left", "right"]
+                    .iter()
+                    .find(|kw| rest.starts_with(*kw))
+                    .map(|kw| kw.len())
+                    .unwrap_or(0);
+                if kw_len > 0
+                    && i + kw_len < bytes.len()
+                    && matches!(bytes[i + kw_len] as char, '-' | '.')
+                {
+                    i += kw_len;
+                } else {
+                    break;
+                }
+            } else {
+                break;
+            }
+        }
+        i
+    };
     if arrow_end < 2 {
         // Need at least 2 arrow characters (e.g., `--`, `->`, `..`).
         return None;
