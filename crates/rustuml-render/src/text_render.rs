@@ -140,6 +140,13 @@ pub fn total_width(content: &str, base: &TextBase<'_>) -> f64 {
 
 /// Shared emission body: walks segments, writes one `<text>` per segment,
 /// advancing `x` by each segment's width. Returns the sum of widths.
+///
+/// PlantUML strips leading and trailing ASCII whitespace from each segment's
+/// emitted text but counts those spaces in the cumulative x-advance. So
+/// `**bold** State` emits a "bold" element followed by a "State" element
+/// whose x is shifted right by one space width (the leading space of
+/// segment 2 becomes a gap between the two text elements). Monospace
+/// segments use NBSP (U+00A0) instead of ASCII space; NBSP is not stripped.
 fn emit_segments(buf: &mut String, segments: &[Segment], base: &TextBase<'_>) -> f64 {
     if segments.is_empty() {
         // Nothing to emit. Still produce an empty <text> with zero width so
@@ -152,17 +159,67 @@ fn emit_segments(buf: &mut String, segments: &[Segment], base: &TextBase<'_>) ->
     let mut x = base.x;
     let mut total = 0.0;
     for seg in segments {
-        let w = segment_width(seg, base);
-        write_text_element(buf, &seg.text, base, &seg.style, x, w);
-        x += w;
-        total += w;
+        let full_w = segment_width(seg, base);
+        let (lead_w, trimmed_text, trimmed_w) = trim_segment_for_emit(seg, base);
+        write_text_element(buf, &trimmed_text, base, &seg.style, x + lead_w, trimmed_w);
+        x += full_w;
+        total += full_w;
     }
     total
 }
 
+/// Trim leading/trailing ASCII whitespace from a segment's emitted text.
+/// Returns the leading-whitespace advance width, the trimmed text body,
+/// and the width of the trimmed text body. Spaces are stripped from the
+/// rendered text but still contribute to the segment's cumulative advance
+/// (handled by the caller).
+///
+/// A pure-whitespace segment (e.g. the single space between `**bold**`
+/// and `//italic//`) is left untrimmed — Java PlantUML emits these as
+/// literal-space `<text>` elements with their own `textLength`.
+fn trim_segment_for_emit(seg: &Segment, base: &TextBase<'_>) -> (f64, String, f64) {
+    // Monospace segments use NBSP instead of ASCII space; PlantUML does
+    // not trim NBSP, so pass through unchanged.
+    if seg.style.monospace {
+        let w = segment_width(seg, base);
+        return (0.0, seg.text.clone(), w);
+    }
+    // Count leading and trailing ASCII spaces in the *escaped* form. The
+    // escape form only differs for non-space characters, so a leading
+    // space stays a leading space.
+    let bytes = seg.text.as_bytes();
+    let mut lead = 0;
+    while lead < bytes.len() && bytes[lead] == b' ' {
+        lead += 1;
+    }
+    // Whole-segment whitespace: don't trim, emit as-is.
+    if lead == bytes.len() {
+        let w = segment_width(seg, base);
+        return (0.0, seg.text.clone(), w);
+    }
+    let mut trail = 0;
+    while trail < bytes.len() - lead && bytes[bytes.len() - 1 - trail] == b' ' {
+        trail += 1;
+    }
+    if lead == 0 && trail == 0 {
+        let w = segment_width(seg, base);
+        return (0.0, seg.text.clone(), w);
+    }
+    let trimmed = &seg.text[lead..seg.text.len() - trail];
+    let bold = base.bold || seg.style.bold;
+    let font_size = seg
+        .style
+        .size
+        .map(|s| s as f64)
+        .unwrap_or(base.font_size as f64);
+    let lead_w = sans_text_width(&" ".repeat(lead), font_size, bold);
+    let trimmed_w = sans_text_width(&unescape_for_metrics(trimmed), font_size, bold);
+    (lead_w, trimmed.to_string(), trimmed_w)
+}
+
 /// Width of one segment under the effective styling. Routes to the
 /// monospace metric path when the segment is monospaced; otherwise uses
-/// sans-serif.
+/// sans-serif (with linear scaling for non-tabulated font sizes).
 fn segment_width(seg: &Segment, base: &TextBase<'_>) -> f64 {
     let raw = unescape_for_metrics(&seg.text);
     let bold = base.bold || seg.style.bold;
@@ -174,7 +231,24 @@ fn segment_width(seg: &Segment, base: &TextBase<'_>) -> f64 {
     if seg.style.monospace {
         pm::mono_text_width(&raw, font_size)
     } else {
-        pm::text_width(&raw, font_size, bold)
+        sans_text_width(&raw, font_size, bold)
+    }
+}
+
+/// Sans-serif text width with linear scaling for non-tabulated sizes.
+///
+/// `plantuml_metrics::text_width` tabulates sizes 10–14 exactly; for other
+/// sizes it currently falls back to size 12 without scaling. Java AWT's
+/// Lucida Grande (the underlying font for PlantUML's `SansSerif` on macOS)
+/// has fractional metrics that scale linearly with font size, so we lift
+/// the size-12 width by `size / 12` for sizes outside the table.
+fn sans_text_width(text: &str, font_size: f64, bold: bool) -> f64 {
+    let sz = font_size as u32;
+    if (10..=14).contains(&sz) {
+        pm::text_width(text, font_size, bold)
+    } else {
+        let base = pm::text_width(text, 12.0, bold);
+        base * font_size / 12.0
     }
 }
 
@@ -362,10 +436,14 @@ fn write_text_element(
 ) {
     let bold = base.bold || style.bold;
     let italic = base.italic || style.italic;
-    let font_family = if style.monospace {
-        "monospace"
-    } else if let Some(f) = style.font_family.as_deref() {
+    // `<font:Courier>` sets both `style.font_family` AND `style.monospace`
+    // (so widths use monospace metrics and spaces become NBSP), but the
+    // emitted `font-family` attribute must carry the user-supplied name —
+    // not the literal string "monospace".
+    let font_family = if let Some(f) = style.font_family.as_deref() {
         f
+    } else if style.monospace {
+        "monospace"
     } else {
         base.font_family
     };
@@ -403,6 +481,17 @@ fn write_text_element(
     // Build a deterministic attribute order matching PlantUML's golden
     // output: fill, font-family, font-size, font-style, font-weight,
     // lengthAdjust, text-decoration, textLength, x, y.
+    //
+    // When the segment carries a link URL, PlantUML wraps the <text> in an
+    // <a> element with both modern (href) and legacy (xlink:*) attributes.
+    if let Some(url) = style.link_url.as_deref() {
+        let escaped = escape_xml_attr(url);
+        write!(
+            buf,
+            r#"<a href="{escaped}" target="_top" title="{escaped}" xlink:actuate="onRequest" xlink:href="{escaped}" xlink:show="new" xlink:title="{escaped}" xlink:type="simple">"#,
+        )
+        .unwrap();
+    }
     write!(
         buf,
         r#"<text fill="{fill}" font-family="{font_family}" font-size="{font_size}"{style_attr}{weight_attr}{baseline_attr} lengthAdjust="spacing"{text_decoration} textLength="{tl}" x="{x_s}" y="{y_s}">{content}</text>"#,
@@ -411,6 +500,17 @@ fn write_text_element(
         y_s = pm::fmt_coord(base.y),
     )
     .unwrap();
+    if style.link_url.is_some() {
+        buf.push_str("</a>");
+    }
+}
+
+/// Escape characters that have special meaning in an XML attribute value.
+fn escape_xml_attr(s: &str) -> String {
+    s.replace('&', "&amp;")
+        .replace('<', "&lt;")
+        .replace('>', "&gt;")
+        .replace('"', "&quot;")
 }
 
 #[cfg(test)]
