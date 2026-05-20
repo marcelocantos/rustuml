@@ -219,17 +219,25 @@ fn guillemet_width(table: &[f64; 95]) -> f64 {
 
 /// Format a coordinate value matching PlantUML's decimal formatting.
 ///
-/// PlantUML rounds to 4 decimal places for SVG coordinate output,
-/// then strips trailing zeros.
+/// PlantUML's SvgGraphics emits SVG coordinates via
+/// `String.format(Locale.US, "%.4f", x)` followed by trailing-zero
+/// stripping. Java's `%.4f` rounds HALF_UP (e.g. `110.15625` →
+/// `"110.1563"`); Rust's `format!("{:.4}")` rounds HALF_EVEN
+/// (banker's, → `"110.1562"`). For exact-string golden parity we
+/// round explicitly to HALF_UP at the 4th decimal place.
 pub fn fmt_coord(v: f64) -> String {
-    // Detect integer values up front to preserve "25" rather than "25.0000"
-    // after trailing-zero stripping. The {:.4} formatter uses Rust's
-    // round-half-to-even (banker's rounding), matching Java's BigDecimal
-    // HALF_EVEN default used by PlantUML's coordinate emitter.
+    // Integer fast-path preserves "25" rather than "25.0000" after trim.
     if v == v.floor() && v.abs() < 1e15 {
         return format!("{}", v as i64);
     }
-    let s = format!("{:.4}", v);
+    // HALF_UP at 4 decimals: scale, add ±0.5, floor.
+    let scaled = v * 10000.0;
+    let rounded = if scaled >= 0.0 {
+        (scaled + 0.5).floor()
+    } else {
+        -((-scaled + 0.5).floor())
+    };
+    let s = format!("{:.4}", rounded / 10000.0);
     let s = s.trim_end_matches('0');
     let s = s.trim_end_matches('.');
     s.to_string()
