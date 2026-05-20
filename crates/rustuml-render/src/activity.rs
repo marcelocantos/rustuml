@@ -1175,6 +1175,7 @@ impl SvgEmitter {
     }
 
     /// Emit an upward arrow (arrowhead pointing up).
+    #[allow(dead_code)]
     fn up_arrow(&mut self, cx: f64, y1: f64, y2: f64, color: &str) {
         self.polygon_connector(
             color,
@@ -2012,7 +2013,8 @@ fn emit_repeat(
         false,
     );
 
-    // "is" label (optional)
+    // "is" label (optional). Sits with its baseline at cond_cy - descent(11)
+    // so the text aligns vertically slightly above the diamond's mid-line.
     let diamond_right = cx + cond_inner_w / 2.0 + DIAMOND_HALF;
     if let Some(label) = is_label {
         let lw = text_render::measure(label, SMALL_FONT, false);
@@ -2022,13 +2024,15 @@ fn emit_repeat(
             SMALL_FONT,
             lw,
             diamond_right,
-            cond_diamond_cy + pm::text_height(SMALL_FONT) / 2.0
-                - pm::descent(SMALL_FONT)
-                - DIAMOND_HALF / 2.0,
+            cond_diamond_cy - pm::descent(SMALL_FONT),
             label,
             false,
         );
     }
+
+    // Top-diamond → body inbound connector — PlantUML emits this BEFORE
+    // the loop-back path in the connector stream.
+    svg.down_arrow(cx, top_bottom, body_y, &arrow_color);
 
     // Loop-back arrow runs up the right side regardless of whether `is`
     // has a label — every `repeatwhile` produces it. The arrow's x sits
@@ -2046,7 +2050,31 @@ fn emit_repeat(
         false,
     );
     let top_cy = y + top_diamond_size;
-    svg.up_arrow(loop_x, top_cy, cond_diamond_cy, &arrow_color);
+    // Vertical loop-back: PlantUML emits the arrowhead polygon BEFORE the
+    // line in the SVG, and places the arrowhead at the midpoint of the
+    // long vertical run (not at the top) so the direction is clear when
+    // the loop spans many actions.
+    let mid_y = (top_cy + cond_diamond_cy) / 2.0;
+    svg.polygon_connector(
+        &arrow_color,
+        &[
+            (loop_x - 4.0, mid_y + 10.0),
+            (loop_x, mid_y),
+            (loop_x + 4.0, mid_y + 10.0),
+            (loop_x, mid_y + 6.0),
+        ],
+        &arrow_color,
+        "1",
+    );
+    svg.line_styled(
+        &arrow_color,
+        "1",
+        loop_x,
+        loop_x,
+        top_cy,
+        cond_diamond_cy,
+        false,
+    );
     svg.line_styled(
         &arrow_color,
         "1",
@@ -2058,9 +2086,7 @@ fn emit_repeat(
     );
     svg.left_arrow(cx + top_diamond_size, top_cy, &arrow_color);
 
-    // Inbound connectors emitted after both diamonds + body are in the
-    // shapes buffer: top-diamond → body, body → condition diamond.
-    svg.down_arrow(cx, top_bottom, body_y, &arrow_color);
+    // Body → condition diamond connector (after loop-back path).
     svg.down_arrow(cx, body_bottom, cond_y, &arrow_color);
 
     cond_y + DIAMOND_HALF * 2.0
