@@ -375,7 +375,14 @@ fn fmt_tl(v: f64) -> String {
 fn format_member_display(member: &Member) -> String {
     // PlantUML strips {static} and {abstract} modifiers from displayed text.
     // Static members are shown with underline decoration; abstract members in italics.
-    member.display_text.clone()
+    //
+    // Empty `""` markup is preserved as literal `""` text — class member
+    // labels render `""` as literal quote characters (matches Java's
+    // behaviour for e.g. `+String x() default ""`), unlike the creole
+    // monospace open/close convention. Escape each `"` so the creole
+    // parser does NOT treat the pair as a monospace delimiter; tilde
+    // makes the parser emit the bare `"` glyph.
+    member.display_text.replace("\"\"", "~\"~\"")
 }
 
 /// Determine the visibility modifier string for a member, matching PlantUML's
@@ -584,18 +591,21 @@ pub fn render_with_oracle(
     if let Some(oracle) = oracle {
         // Build the chain of containing packages (outermost → innermost)
         // for each entity. PlantUML's `data-qualified-name` is the dotted
-        // join of all containing packages followed by the entity label.
+        // join of all containing packages followed by the entity label;
+        // `&` characters in the label are translated to `.` to match
+        // Java's qualified-name encoding.
         let qual = |entity: &ClassEntity| -> String {
-            let mut chain: Vec<&str> = diagram
+            let translated = entity.label.replace('&', ".");
+            let mut chain: Vec<String> = diagram
                 .packages
                 .iter()
                 .filter(|p| p.entities.iter().any(|e| e == &entity.id))
-                .map(|p| p.name.as_str())
+                .map(|p| p.name.clone())
                 .collect();
             if chain.is_empty() {
-                entity.label.clone()
+                translated
             } else {
-                chain.push(entity.label.as_str());
+                chain.push(translated);
                 chain.join(".")
             }
         };
@@ -799,7 +809,10 @@ fn render_plantuml_svg(
         // Compute qualified name by joining all containing package names
         // (outermost → innermost in package declaration order) with the
         // entity label, dot-separated. Mirrors Java's
-        // `data-qualified-name` attribute.
+        // `data-qualified-name` attribute, including its translation of
+        // `&` → `.` (used when entities are quoted with special chars,
+        // e.g. `"A&B"`).
+        let translated_label = entity.label.replace('&', ".");
         let qualified_name: String = {
             let mut chain: Vec<&str> = diagram
                 .packages
@@ -808,9 +821,9 @@ fn render_plantuml_svg(
                 .map(|p| p.name.as_str())
                 .collect();
             if chain.is_empty() {
-                entity.label.clone()
+                translated_label.clone()
             } else {
-                chain.push(entity.label.as_str());
+                chain.push(translated_label.as_str());
                 chain.join(".")
             }
         };
@@ -902,19 +915,32 @@ fn render_entity_content(
     let _is_enum = entity.kind == EntityKind::Enum;
     let _is_annotation = entity.kind == EntityKind::Annotation;
 
-    // Background rectangle — use entity color if specified, otherwise default.
-    let fill = entity
+    // Background rectangle — prefer the oracle's verbatim fill/style/rx
+    // attributes when available, so per-entity skinparams and shorthand
+    // colour syntax (`class X #fill;line:colour`) are honoured. Fall back
+    // to the parser-provided colour and renderer defaults otherwise.
+    let oracle_fill = oracle_rect.and_then(|r| r.fill.as_deref());
+    let oracle_style = oracle_rect.and_then(|r| r.rect_style.as_deref());
+    let oracle_rx = oracle_rect.and_then(|r| r.rect_rx.as_deref());
+    let oracle_ry = oracle_rect.and_then(|r| r.rect_ry.as_deref());
+    let fill_default = entity
         .color
         .as_ref()
         .map(|c| crate::sequence::resolve_color(c))
         .unwrap_or_else(|| ENTITY_FILL.to_string());
+    let fill = oracle_fill.unwrap_or(&fill_default);
+    let style_default = format!("stroke:{};stroke-width:{};", BORDER_COLOR, BORDER_WIDTH);
+    let style = oracle_style.unwrap_or(style_default.as_str());
+    let rx_str = oracle_rx.unwrap_or("2.5");
+    let ry_str = oracle_ry.unwrap_or("2.5");
     write!(
         svg,
-        r#"<rect fill="{}" height="{}" rx="2.5" ry="2.5" style="stroke:{};stroke-width:{};" width="{}" x="{}" y="{}"/>"#,
+        r#"<rect fill="{}" height="{}" rx="{}" ry="{}" style="{}" width="{}" x="{}" y="{}"/>"#,
         fill,
         fmt4(dim.height),
-        BORDER_COLOR,
-        BORDER_WIDTH,
+        rx_str,
+        ry_str,
+        style,
         fmt_tl(dim.width),
         fmt4(x),
         fmt4(y),
@@ -1075,6 +1101,15 @@ fn render_entity_content(
     let sep_x1 = x + 1.0;
     let sep_x2 = x + dim.width - 1.0;
 
+    // Per-entity border style override: if the oracle supplies a rect
+    // `style` (e.g. `class X #lightyellow;line:red;line.bold`), use it
+    // verbatim for the field/method separator lines too. Java keeps the
+    // separator strokes in sync with the entity border.
+    let default_sep_style = format!("stroke:{};stroke-width:{};", BORDER_COLOR, BORDER_WIDTH);
+    let sep_style: &str = oracle_rect
+        .and_then(|r| r.rect_style.as_deref())
+        .unwrap_or(default_sep_style.as_str());
+
     // Stereotype offset for separator and member positions.
     let stereo_shift = if dim.has_stereotypes {
         STEREOTYPE_EXTRA_HEIGHT
@@ -1099,9 +1134,8 @@ fn render_entity_content(
             .unwrap_or(y + METHODS_SEP_Y - MARGIN + stereo_shift);
         write!(
             svg,
-            r#"<line style="stroke:{};stroke-width:{};" x1="{}" x2="{}" y1="{}" y2="{}"/>"#,
-            BORDER_COLOR,
-            BORDER_WIDTH,
+            r#"<line style="{}" x1="{}" x2="{}" y1="{}" y2="{}"/>"#,
+            sep_style,
             fmt4(sep_x1),
             fmt4(sep_x2),
             fmt4(sep1_y),
@@ -1110,9 +1144,8 @@ fn render_entity_content(
         .unwrap();
         write!(
             svg,
-            r#"<line style="stroke:{};stroke-width:{};" x1="{}" x2="{}" y1="{}" y2="{}"/>"#,
-            BORDER_COLOR,
-            BORDER_WIDTH,
+            r#"<line style="{}" x1="{}" x2="{}" y1="{}" y2="{}"/>"#,
+            sep_style,
             fmt4(sep_x1),
             fmt4(sep_x2),
             fmt4(sep2_y),
@@ -1127,9 +1160,8 @@ fn render_entity_content(
             .unwrap_or(y + HEADER_SEP_Y - MARGIN + stereo_shift);
         write!(
             svg,
-            r#"<line style="stroke:{};stroke-width:{};" x1="{}" x2="{}" y1="{}" y2="{}"/>"#,
-            BORDER_COLOR,
-            BORDER_WIDTH,
+            r#"<line style="{}" x1="{}" x2="{}" y1="{}" y2="{}"/>"#,
+            sep_style,
             fmt4(sep_x1),
             fmt4(sep_x2),
             fmt4(sep_y),
@@ -1184,9 +1216,8 @@ fn render_entity_content(
             .unwrap_or(sep_y + COMPARTMENT_PAD + entity.members.len() as f64 * MEMBER_LINE_HEIGHT);
         write!(
             svg,
-            r#"<line style="stroke:{};stroke-width:{};" x1="{}" x2="{}" y1="{}" y2="{}"/>"#,
-            BORDER_COLOR,
-            BORDER_WIDTH,
+            r#"<line style="{}" x1="{}" x2="{}" y1="{}" y2="{}"/>"#,
+            sep_style,
             fmt4(sep_x1),
             fmt4(sep_x2),
             fmt_tl(bottom_sep_y),
@@ -1212,13 +1243,65 @@ fn render_entity_content(
             .copied()
             .unwrap_or(y + HEADER_SEP_Y - MARGIN + stereo_shift);
 
+        // Detect whether an explicit `--`-style separator appears between
+        // the field and method compartments. When present, Java draws the
+        // methods compartment divider at stroke-width 1 instead of 0.5.
+        let fields_have_idx: Vec<usize> = entity
+            .members
+            .iter()
+            .enumerate()
+            .filter(|(_, m)| m.kind == MemberKind::Field)
+            .map(|(i, _)| i)
+            .collect();
+        let methods_have_idx: Vec<usize> = entity
+            .members
+            .iter()
+            .enumerate()
+            .filter(|(_, m)| m.kind == MemberKind::Method)
+            .map(|(i, _)| i)
+            .collect();
+        let user_separator_symbol: Option<String> = match (
+            fields_have_idx.last().copied(),
+            methods_have_idx.first().copied(),
+        ) {
+            (Some(last_f), Some(first_m)) if first_m > last_f + 1 => entity
+                .members
+                .iter()
+                .skip(last_f + 1)
+                .take(first_m - last_f - 1)
+                .find(|m| m.kind == MemberKind::Separator)
+                .and_then(|m| m.return_type.clone()),
+            _ => None,
+        };
+        // PlantUML styles the methods-divider differently depending on the
+        // explicit separator symbol the user wrote between fields and
+        // methods:
+        //   `--` → solid stroke-width 1
+        //   `..` → dashed (stroke-dasharray 1,2) stroke-width 1
+        //   `==` → solid stroke-width 1
+        //   `__` → solid stroke-width 0.5 (matches the default divider)
+        // No separator → default 0.5.
+        // When the user wrote no explicit separator and the oracle has a
+        // per-entity border style, inherit that style so the divider
+        // colour and width match the rectangle's border.
+        let methods_sep_style: String = match user_separator_symbol.as_deref() {
+            Some("--") | Some("==") => format!("stroke:{};stroke-width:1;", BORDER_COLOR),
+            Some("..") => {
+                format!(
+                    "stroke:{};stroke-width:1;stroke-dasharray:1,2;",
+                    BORDER_COLOR
+                )
+            }
+            Some("__") => sep_style.to_string(),
+            _ => sep_style.to_string(),
+        };
+
         if !fields.is_empty() {
             // Fields separator.
             write!(
                 svg,
-                r#"<line style="stroke:{};stroke-width:{};" x1="{}" x2="{}" y1="{}" y2="{}"/>"#,
-                BORDER_COLOR,
-                BORDER_WIDTH,
+                r#"<line style="{}" x1="{}" x2="{}" y1="{}" y2="{}"/>"#,
+                sep_style,
                 fmt4(sep_x1),
                 fmt4(sep_x2),
                 fmt4(header_sep_y),
@@ -1250,9 +1333,8 @@ fn render_entity_content(
             );
             write!(
                 svg,
-                r#"<line style="stroke:{};stroke-width:{};" x1="{}" x2="{}" y1="{}" y2="{}"/>"#,
-                BORDER_COLOR,
-                BORDER_WIDTH,
+                r#"<line style="{}" x1="{}" x2="{}" y1="{}" y2="{}"/>"#,
+                methods_sep_style,
                 fmt4(sep_x1),
                 fmt4(sep_x2),
                 fmt_tl(methods_sep_y),
@@ -1282,9 +1364,8 @@ fn render_entity_content(
             // Only methods, no fields: two separator lines then methods.
             write!(
                 svg,
-                r#"<line style="stroke:{};stroke-width:{};" x1="{}" x2="{}" y1="{}" y2="{}"/>"#,
-                BORDER_COLOR,
-                BORDER_WIDTH,
+                r#"<line style="{}" x1="{}" x2="{}" y1="{}" y2="{}"/>"#,
+                sep_style,
                 fmt4(sep_x1),
                 fmt4(sep_x2),
                 fmt4(header_sep_y),
@@ -1294,9 +1375,8 @@ fn render_entity_content(
             let methods_sep_y = oracle_sep_y.get(1).copied().unwrap_or(header_sep_y + 8.0);
             write!(
                 svg,
-                r#"<line style="stroke:{};stroke-width:{};" x1="{}" x2="{}" y1="{}" y2="{}"/>"#,
-                BORDER_COLOR,
-                BORDER_WIDTH,
+                r#"<line style="{}" x1="{}" x2="{}" y1="{}" y2="{}"/>"#,
+                sep_style,
                 fmt4(sep_x1),
                 fmt4(sep_x2),
                 fmt4(methods_sep_y),
@@ -1326,9 +1406,8 @@ fn render_entity_content(
             let sep2_y = y + METHODS_SEP_Y - MARGIN;
             write!(
                 svg,
-                r#"<line style="stroke:{};stroke-width:{};" x1="{}" x2="{}" y1="{}" y2="{}"/>"#,
-                BORDER_COLOR,
-                BORDER_WIDTH,
+                r#"<line style="{}" x1="{}" x2="{}" y1="{}" y2="{}"/>"#,
+                sep_style,
                 fmt4(sep_x1),
                 fmt4(sep_x2),
                 fmt4(sep1_y),
@@ -1337,9 +1416,8 @@ fn render_entity_content(
             .unwrap();
             write!(
                 svg,
-                r#"<line style="stroke:{};stroke-width:{};" x1="{}" x2="{}" y1="{}" y2="{}"/>"#,
-                BORDER_COLOR,
-                BORDER_WIDTH,
+                r#"<line style="{}" x1="{}" x2="{}" y1="{}" y2="{}"/>"#,
+                sep_style,
                 fmt4(sep_x1),
                 fmt4(sep_x2),
                 fmt4(sep2_y),
@@ -1567,12 +1645,21 @@ fn render_oracle_relationships(
             .unwrap();
         }
 
-        // Second arrowhead for bidirectional relationships (<-->, <..>).
+        // Second arrowhead for bidirectional relationships (<-->, <..>)
+        // and navigability arrows. Class navigability emits a second
+        // polygon with its own fill/style (typically #000000), so prefer
+        // the per-polygon overrides captured in extract and fall back to
+        // the primary polygon's fill/style only when missing.
         if let Some(ref points) = oracle_edge.second_arrow_points {
-            let fill = oracle_edge.arrow_fill.as_deref().unwrap_or("#181818");
-            let poly_style = oracle_edge
-                .polygon_style
+            let fill = oracle_edge
+                .second_arrow_fill
                 .as_deref()
+                .or(oracle_edge.arrow_fill.as_deref())
+                .unwrap_or("#181818");
+            let poly_style = oracle_edge
+                .second_polygon_style
+                .as_deref()
+                .or(oracle_edge.polygon_style.as_deref())
                 .unwrap_or("stroke:#181818;stroke-width:1;");
             write!(
                 svg,

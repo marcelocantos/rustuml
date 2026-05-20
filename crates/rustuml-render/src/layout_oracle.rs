@@ -77,6 +77,16 @@ pub struct EntityRect {
     /// Declared fill from the first `<rect fill="…">` child, if any.
     /// Lets renderers recover entity colours from the oracle without parser plumbing.
     pub fill: Option<String>,
+    /// `style` attribute of the entity's background `<rect>`. Captures
+    /// per-entity border colour/width/etc. (e.g. `#back:lightyellow;
+    /// line:red;line.bold` produces `stroke:#FF0000;stroke-width:2;`),
+    /// which is otherwise tricky to recover from the parser alone.
+    pub rect_style: Option<String>,
+    /// `rx`/`ry` from the entity's background `<rect>`. Required to honour
+    /// per-entity rounded corners (e.g. `skinparam ClassBackgroundColor`
+    /// with explicit corner radius).
+    pub rect_rx: Option<String>,
+    pub rect_ry: Option<String>,
     /// Java entity ID (`ent000N`) — value of the `id="..."` attribute on the
     /// `<g class="entity">` / `start_entity` / `end_entity` wrapper. Lets
     /// renderers reproduce Java's exact counter allocation, including the
@@ -97,6 +107,13 @@ pub struct OracleEdgePath {
     /// Second arrowhead polygon points for bidirectional edges (`<-->`, `<..>`),
     /// taken from the second `<polygon>` child of `<g class="link">` when present.
     pub second_arrow_points: Option<String>,
+    /// Fill colour of the second polygon, when present. Class navigability
+    /// arrows (`> places >`, `< belongs to`) emit a second polygon with a
+    /// distinct fill (typically `#000000`), so this cannot reuse
+    /// `arrow_fill`.
+    pub second_arrow_fill: Option<String>,
+    /// Style attribute of the second polygon, when present.
+    pub second_polygon_style: Option<String>,
     /// Fill for the arrowhead polygon (e.g. "#181818" or "none").
     pub arrow_fill: Option<String>,
     /// The link type from `data-link-type` (e.g. "dependency", "association").

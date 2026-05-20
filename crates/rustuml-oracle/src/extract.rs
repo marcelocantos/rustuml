@@ -173,6 +173,9 @@ pub fn extract_oracle_layout(svg: &str) -> Option<OracleLayout> {
                         })
                         .collect();
                     let fill = rect.attribute("fill").map(String::from);
+                    let rect_style = rect.attribute("style").map(String::from);
+                    let rect_rx = rect.attribute("rx").map(String::from);
+                    let rect_ry = rect.attribute("ry").map(String::from);
                     let entity_id = node.attribute("id").map(String::from);
                     layout.entities.insert(
                         name.to_string(),
@@ -188,6 +191,9 @@ pub fn extract_oracle_layout(svg: &str) -> Option<OracleLayout> {
                             sep_y_values,
                             vis_icon_y_values,
                             fill,
+                            rect_style,
+                            rect_rx,
+                            rect_ry,
                             entity_id,
                         },
                     );
@@ -212,6 +218,9 @@ pub fn extract_oracle_layout(svg: &str) -> Option<OracleLayout> {
                             sep_y_values: Vec::new(),
                             vis_icon_y_values: Vec::new(),
                             fill: None,
+                            rect_style: None,
+                            rect_rx: None,
+                            rect_ry: None,
                             entity_id,
                         },
                     );
@@ -246,6 +255,9 @@ pub fn extract_oracle_layout(svg: &str) -> Option<OracleLayout> {
                                     sep_y_values: Vec::new(),
                                     vis_icon_y_values: Vec::new(),
                                     fill,
+                                    rect_style: None,
+                                    rect_rx: None,
+                                    rect_ry: None,
                                     entity_id,
                                 },
                             );
@@ -282,6 +294,9 @@ pub fn extract_oracle_layout(svg: &str) -> Option<OracleLayout> {
                             sep_y_values: Vec::new(),
                             vis_icon_y_values: Vec::new(),
                             fill: None,
+                            rect_style: None,
+                            rect_rx: None,
+                            rect_ry: None,
                             entity_id,
                         },
                     );
@@ -297,6 +312,8 @@ pub fn extract_oracle_layout(svg: &str) -> Option<OracleLayout> {
                     d: d.to_string(),
                     arrow_points: None,
                     second_arrow_points: None,
+                    second_arrow_fill: None,
+                    second_polygon_style: None,
                     arrow_fill: None,
                     link_type: node.attribute("data-link-type").map(String::from),
                     entity_1: node.attribute("data-entity-1").map(String::from),
@@ -326,6 +343,8 @@ pub fn extract_oracle_layout(svg: &str) -> Option<OracleLayout> {
                     && let Some(points) = polygon.attribute("points")
                 {
                     oracle_edge.second_arrow_points = Some(points.to_string());
+                    oracle_edge.second_arrow_fill = polygon.attribute("fill").map(String::from);
+                    oracle_edge.second_polygon_style = polygon.attribute("style").map(String::from);
                 }
 
                 // Extract edge labels. PlantUML class diagrams emit each label
@@ -650,6 +669,9 @@ fn path_bounding_box(d: &str) -> Option<EntityRect> {
             sep_y_values: Vec::new(),
             vis_icon_y_values: Vec::new(),
             fill: None,
+            rect_style: None,
+            rect_rx: None,
+            rect_ry: None,
             entity_id: None,
         })
     } else {
