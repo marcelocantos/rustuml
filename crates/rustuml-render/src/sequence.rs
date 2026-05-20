@@ -569,7 +569,7 @@ fn autonumber_color(format: &Option<String>) -> Option<String> {
         let rest = &s[idx + "<font color".len()..];
         // skip optional whitespace and '=' and quotes
         let rest = rest.trim_start_matches(|c: char| c.is_whitespace() || c == '=');
-        let rest = rest.trim_start_matches(|c: char| c == '"' || c == '\'');
+        let rest = rest.trim_start_matches(['"', '\'']);
         let end = rest
             .find(|c: char| c == '"' || c == '\'' || c == '>' || c.is_whitespace())
             .unwrap_or(rest.len());
