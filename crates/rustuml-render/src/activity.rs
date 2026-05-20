@@ -1140,19 +1140,13 @@ fn emit_sequence(svg: &mut SvgEmitter, nodes: &[LayoutNode], cx: f64, mut y: f64
 fn emit_node(svg: &mut SvgEmitter, node: &LayoutNode, cx: f64, y: f64) -> f64 {
     match node {
         LayoutNode::Start => {
-            // When start is the first element in the diagram (cursor at
-            // MARGIN_LEAD=16) PlantUML places the ellipse with cy=25 — the
-            // top edge sits one pixel above the cursor.  When the cursor
-            // has been advanced past START_CY (deprecation banner) the
-            // ellipse's centre sits AT the cursor.  Otherwise (after a
-            // title) the ellipse sits flush below the cursor.
-            let cy = if (y - 16.0).abs() < 0.001 {
-                START_CY
-            } else if y >= START_CY {
-                y
-            } else {
-                y + START_R
-            };
+            // The cursor (`y`) represents the centreline at which the next
+            // node should sit. PlantUML enforces a minimum of START_CY (25)
+            // so the ellipse's top is at least 15 px from the SVG top edge;
+            // for first-thing layouts the cursor sits at MARGIN_LEAD (16)
+            // and gets clamped up. After a warnings band or title the
+            // cursor is already past START_CY and is used as-is.
+            let cy = y.max(START_CY);
             svg.ellipse(cx, cy, START_R, START_R, START_FILL, START_STROKE, "1");
             cy + START_R
         }
