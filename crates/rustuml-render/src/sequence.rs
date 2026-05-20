@@ -505,13 +505,18 @@ fn process_label(s: &str) -> String {
 /// Returns true if autonumber should be rendered bold.
 ///
 /// PlantUML default (no format, or empty format string "") renders the number
-/// in bold. Any non-empty format string (parens, plain digits, creole tags)
-/// suppresses the default bold and uses creole tags from the format if any.
+/// in bold. A non-empty format string suppresses the default bold UNLESS the
+/// format itself contains the creole bold tag `<b>` (case-insensitive), which
+/// re-enables bold for the autonumber text.
 fn autonumber_is_bold(format: &Option<String>) -> bool {
     match format {
         None => true,
         Some(s) if s.is_empty() => true,
-        _ => false,
+        Some(s) => {
+            // Detect explicit creole bold tag in the format string.
+            let lower = s.to_lowercase();
+            lower.contains("<b>")
+        }
     }
 }
 
@@ -2234,17 +2239,53 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme) -> String {
     };
 
     // Compute self-message right extent now that x positions are assigned.
-    for event in &diagram.events {
-        if let Event::Message(msg) = event
-            && msg.from == msg.to
-        {
-            let cx = center_of(&msg.from);
-            let label = process_label(&msg.label);
-            let label_w = text_width(&label, MSG_FONT_SIZE);
-            let loopback_right = cx + SELF_MSG_EXTEND;
-            let text_right = cx + SELF_MSG_TEXT_X_PAD + label_w;
-            let self_right = loopback_right.max(text_right) + SELF_MSG_RIGHT_PAD;
-            max_self_msg_right = max_self_msg_right.max(self_right);
+    // Replay activation state to know whether the participant is active at the
+    // moment of each self-message — shifts cx by ACTIVATION_HALF_W if so.
+    {
+        let mut act_depth: HashMap<String, usize> = HashMap::new();
+        for event in &diagram.events {
+            if let Event::Message(msg) = event {
+                if msg.from == msg.to {
+                    let cx_base = center_of(&msg.from);
+                    let active = act_depth.get(msg.from.as_str()).copied().unwrap_or(0) > 0
+                        || matches!(msg.activation, Some(ActivationChange::Activate));
+                    let cx = if active {
+                        cx_base + ACTIVATION_HALF_W
+                    } else {
+                        cx_base
+                    };
+                    let label = process_label(&msg.label);
+                    let label_w = text_width(&label, MSG_FONT_SIZE);
+                    let loopback_right = cx + SELF_MSG_EXTEND;
+                    let text_right = cx + SELF_MSG_TEXT_X_PAD + label_w;
+                    let self_right = loopback_right.max(text_right) + SELF_MSG_RIGHT_PAD;
+                    max_self_msg_right = max_self_msg_right.max(self_right);
+                }
+                // Update activation state from message activation flag
+                if let Some(act) = &msg.activation {
+                    match act {
+                        ActivationChange::Activate => {
+                            *act_depth.entry(msg.to.clone()).or_default() += 1;
+                        }
+                        ActivationChange::Deactivate => {
+                            if let Some(d) = act_depth.get_mut(&msg.from) {
+                                *d = d.saturating_sub(1);
+                            }
+                        }
+                        ActivationChange::Destroy => {
+                            if let Some(d) = act_depth.get_mut(&msg.to) {
+                                *d = d.saturating_sub(1);
+                            }
+                        }
+                    }
+                }
+            } else if let Event::Activate(id, _) = event {
+                *act_depth.entry(id.clone()).or_default() += 1;
+            } else if let Event::Deactivate(id) = event
+                && let Some(d) = act_depth.get_mut(id)
+            {
+                *d = d.saturating_sub(1);
+            }
         }
     }
 
@@ -3204,8 +3245,14 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme) -> String {
                     .map(|(t, w, b)| (t.as_str(), *w, *b));
 
                 if is_self {
-                    // Self-message: U-shaped loopback
-                    let cx = from_x;
+                    // Self-message: U-shaped loopback. When the participant is
+                    // activated, the loop starts from the activation bar's right
+                    // edge (lifeline center + ACTIVATION_HALF_W).
+                    let cx = if from_active || to_active {
+                        from_x + ACTIVATION_HALF_W
+                    } else {
+                        from_x
+                    };
                     let loop_right = cx + SELF_MSG_EXTEND;
                     let loop_bottom = msg_y + SELF_MSG_DROP;
                     let text_x = cx + SELF_MSG_TEXT_X_PAD;
@@ -4219,8 +4266,34 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme) -> String {
                     *d = d.saturating_sub(1);
                 }
             }
+            Event::Destroy(id) => {
+                // Render the X mark on the lifeline at this y position.
+                // PlantUML draws an 18x18 cross in stroke #A80036, stroke-width 2.
+                let cx = center_of(id);
+                let half = 9.0;
+                let y_top = msg_y - half;
+                let y_bot = msg_y + half;
+                write!(
+                    svg.buf,
+                    r##"<line style="stroke:#A80036;stroke-width:2;" x1="{}" x2="{}" y1="{}" y2="{}"/>"##,
+                    fmt_coord(cx - half),
+                    fmt_coord(cx + half),
+                    fmt_coord(y_top),
+                    fmt_coord(y_bot),
+                )
+                .unwrap();
+                write!(
+                    svg.buf,
+                    r##"<line style="stroke:#A80036;stroke-width:2;" x1="{}" x2="{}" y1="{}" y2="{}"/>"##,
+                    fmt_coord(cx - half),
+                    fmt_coord(cx + half),
+                    fmt_coord(y_bot),
+                    fmt_coord(y_top),
+                )
+                .unwrap();
+            }
             _ => {
-                // Remaining events (Destroy, Create, NewPage)
+                // Remaining events (Create, NewPage)
                 // don't emit visible text labels or change activation state.
             }
         }
