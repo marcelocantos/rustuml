@@ -845,11 +845,14 @@ fn compute_positions_from_oracle(
     let mut positions = Vec::with_capacity(diagram.components.len());
     let mut iface_positions = Vec::with_capacity(diagram.interfaces.len());
 
+    // Map bare id → fully-qualified name (e.g. "X1" → "Grp.X1") for oracle lookup.
+    let qualified_names = build_qualified_names(&diagram.packages);
+
     for (i, comp) in diagram.components.iter().enumerate() {
-        // Try qualified name (may be package.component) and bare id.
-        let rect = oracle
-            .entities
+        let rect = qualified_names
             .get(&comp.id)
+            .and_then(|q| oracle.entities.get(q))
+            .or_else(|| oracle.entities.get(&comp.id))
             .or_else(|| oracle.entities.get(&comp.label));
         if let Some(rect) = rect {
             positions.push((rect.x, rect.y));
