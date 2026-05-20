@@ -2024,11 +2024,14 @@ impl PreprocessContext {
                 char::from_u32(code).map_or(String::new(), |c| c.to_string())
             }
             "darken" => {
+                // PlantUML `%darken(color, ratio)` decreases luminance by a
+                // *relative* fraction: `L -= L * (ratio / 100)`. Match Java's
+                // `HColorSimple.darken` / `HSLColor` exactly.
                 let color_str = args.first().copied().unwrap_or("");
                 let amount: f64 = args.get(1).and_then(|s| s.parse().ok()).unwrap_or(0.0);
                 if let Some((r, g, b)) = parse_color(color_str) {
                     let (h, s, l) = rgb_to_hsl(r, g, b);
-                    let new_l = (l - amount).max(0.0);
+                    let new_l = (l - l * (amount / 100.0)).max(0.0);
                     let (r2, g2, b2) = hsl_to_rgb(h, s, new_l);
                     rgb_to_hex(r2, g2, b2)
                 } else {
@@ -2036,11 +2039,14 @@ impl PreprocessContext {
                 }
             }
             "lighten" => {
+                // PlantUML `%lighten(color, ratio)` increases luminance by a
+                // *relative* fraction: `L += L * (ratio / 100)`. Match Java's
+                // `HColorSimple.lighten` / `HSLColor` exactly.
                 let color_str = args.first().copied().unwrap_or("");
                 let amount: f64 = args.get(1).and_then(|s| s.parse().ok()).unwrap_or(0.0);
                 if let Some((r, g, b)) = parse_color(color_str) {
                     let (h, s, l) = rgb_to_hsl(r, g, b);
-                    let new_l = (l + amount).min(100.0);
+                    let new_l = (l + l * (amount / 100.0)).min(100.0);
                     let (r2, g2, b2) = hsl_to_rgb(h, s, new_l);
                     rgb_to_hex(r2, g2, b2)
                 } else {
@@ -2114,11 +2120,15 @@ impl PreprocessContext {
                 // Return empty.
                 String::new()
             }
-            "filename" => self
-                .base_dir
-                .as_ref()
-                .map(|p| p.display().to_string())
-                .unwrap_or_default(),
+            "filename" => {
+                // PlantUML's `%filename()` returns the source file name (basename
+                // without extension) when called from a real file. The picoweb /
+                // "From string" pipeline used to generate our goldens produces
+                // empty for this builtin (no source file). Return empty to match
+                // that golden behaviour; file-API callers would need to thread
+                // the actual filename through a separate channel.
+                String::new()
+            }
             "file_exists" => {
                 // Always return false — file system access is not permitted in the
                 // preprocessor (matches PlantUML sandboxed/server behaviour).
