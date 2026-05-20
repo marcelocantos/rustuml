@@ -323,6 +323,19 @@ fn fmt4(v: f64) -> String {
     fmt_tl(v)
 }
 
+/// Round to 4 decimal places (HALF_UP) without formatting. Used to keep
+/// re-centering arithmetic on PlantUML's float trajectory when combining
+/// oracle-rounded coordinates with locally-measured widths.
+fn round_4dp(v: f64) -> f64 {
+    let scaled = v * 10000.0;
+    let rounded = if scaled >= 0.0 {
+        (scaled + 0.5).floor()
+    } else {
+        -((-scaled + 0.5).floor())
+    };
+    rounded / 10000.0
+}
+
 /// Format a numeric value matching PlantUML's `SvgGraphics.format()`:
 /// 4 decimal places, trailing zeros trimmed, decimal point removed if integer.
 fn fmt_tl(v: f64) -> String {
@@ -886,12 +899,19 @@ fn render_entity_content(
     // When stereotypes are present and the oracle provides a text x (which is
     // the stereotype's x), compute the name x by re-centering: both texts share
     // the same center point but differ in width.
+    //
+    // The oracle's stereo_x is already rounded to PlantUML's 4-decimal output
+    // precision. To stay on PlantUML's float trajectory through the
+    // re-centering arithmetic, round the measured text widths to the same
+    // precision before combining — otherwise sub-half-ULP drift produces a
+    // last-digit difference (e.g. 57.8227 vs 57.8228).
     let name_x = if dim.has_stereotypes {
         if let Some(oracle_x) = name_text_x_override {
             let stereo_text = format_stereotype_text(&entity.stereotypes);
-            let stereo_tl = text_render::measure(&stereo_text, 12.0, false);
+            let stereo_tl = round_4dp(text_render::measure(&stereo_text, 12.0, false));
+            let name_tl_r = round_4dp(name_tl);
             let text_center = oracle_x + stereo_tl / 2.0;
-            text_center - name_tl / 2.0
+            text_center - name_tl_r / 2.0
         } else {
             icon_cx + ICON_RX + ICON_TEXT_GAP
         }
