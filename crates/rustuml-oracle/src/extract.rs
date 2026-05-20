@@ -319,9 +319,14 @@ fn collect_text(node: &roxmltree::Node) -> String {
     out
 }
 
-/// Extract a rough bounding box from an SVG path `d` attribute.
+/// Extract a bounding box from an SVG path `d` attribute via grammatical parsing.
 ///
-/// Only considers M/L/C coordinates (ignores arcs and relative commands).
+/// Walks `d` command-by-command, consuming the correct number of numeric arguments
+/// for each. Critically, for arc commands (`A`/`a`), only the trailing (x, y) endpoint
+/// contributes to the bbox — the three flags (rx, ry, rotation) and two boolean flags
+/// (large-arc, sweep, which are always 0/1) are not coordinates and would pollute the
+/// bbox if treated as such. Relative commands accumulate against a current point.
+///
 /// Returns `None` if no coordinates could be parsed.
 fn path_bounding_box(d: &str) -> Option<EntityRect> {
     let mut min_x = f64::INFINITY;
@@ -330,21 +335,229 @@ fn path_bounding_box(d: &str) -> Option<EntityRect> {
     let mut max_y = f64::NEG_INFINITY;
     let mut found = false;
 
-    // Simple tokenizer: split on command letters and commas/spaces.
-    let nums: Vec<f64> = d
-        .replace(|c: char| c.is_ascii_alphabetic(), " ")
-        .split(|c: char| c == ',' || c.is_whitespace())
-        .filter_map(|s| s.parse::<f64>().ok())
-        .collect();
+    let mut cx = 0.0f64;
+    let mut cy = 0.0f64;
+    // Subpath start, for Z/z handling.
+    let mut sx = 0.0f64;
+    let mut sy = 0.0f64;
 
-    // Take pairs as (x, y).
-    for pair in nums.chunks(2) {
-        if pair.len() == 2 {
-            min_x = min_x.min(pair[0]);
-            max_x = max_x.max(pair[0]);
-            min_y = min_y.min(pair[1]);
-            max_y = max_y.max(pair[1]);
-            found = true;
+    let mut extend = |x: f64, y: f64, found: &mut bool| {
+        min_x = min_x.min(x);
+        max_x = max_x.max(x);
+        min_y = min_y.min(y);
+        max_y = max_y.max(y);
+        *found = true;
+    };
+
+    // Tokenize: command letters are single chars; numbers are everything else.
+    // We scan char-by-char, splitting on letters and on whitespace/commas.
+    let bytes = d.as_bytes();
+    let mut i = 0;
+    let mut current_cmd: Option<u8> = None;
+    // Number of remaining numeric args expected for the *current* command before
+    // we either repeat the command (implicit continuation) or read a new letter.
+    let mut pending: Vec<f64> = Vec::new();
+
+    fn args_for(cmd: u8) -> Option<usize> {
+        match cmd {
+            b'M' | b'm' | b'L' | b'l' | b'T' | b't' => Some(2),
+            b'H' | b'h' | b'V' | b'v' => Some(1),
+            b'C' | b'c' => Some(6),
+            b'S' | b's' | b'Q' | b'q' => Some(4),
+            b'A' | b'a' => Some(7),
+            b'Z' | b'z' => Some(0),
+            _ => None,
+        }
+    }
+
+    fn read_number(bytes: &[u8], start: usize) -> Option<(f64, usize)> {
+        let mut j = start;
+        // Skip whitespace and commas.
+        while j < bytes.len() && (bytes[j] == b',' || bytes[j].is_ascii_whitespace()) {
+            j += 1;
+        }
+        let num_start = j;
+        // Optional sign.
+        if j < bytes.len() && (bytes[j] == b'+' || bytes[j] == b'-') {
+            j += 1;
+        }
+        // Integer part.
+        while j < bytes.len() && bytes[j].is_ascii_digit() {
+            j += 1;
+        }
+        // Fractional part.
+        if j < bytes.len() && bytes[j] == b'.' {
+            j += 1;
+            while j < bytes.len() && bytes[j].is_ascii_digit() {
+                j += 1;
+            }
+        }
+        // Exponent.
+        if j < bytes.len() && (bytes[j] == b'e' || bytes[j] == b'E') {
+            j += 1;
+            if j < bytes.len() && (bytes[j] == b'+' || bytes[j] == b'-') {
+                j += 1;
+            }
+            while j < bytes.len() && bytes[j].is_ascii_digit() {
+                j += 1;
+            }
+        }
+        if j == num_start {
+            return None;
+        }
+        let s = std::str::from_utf8(&bytes[num_start..j]).ok()?;
+        let v: f64 = s.parse().ok()?;
+        Some((v, j))
+    }
+
+    // Apply a fully-collected command's args to the bbox & current point.
+    let mut apply = |cmd: u8,
+                     args: &[f64],
+                     cx: &mut f64,
+                     cy: &mut f64,
+                     sx: &mut f64,
+                     sy: &mut f64,
+                     found: &mut bool| {
+        let rel = cmd.is_ascii_lowercase();
+        match cmd {
+            b'M' | b'm' => {
+                let (mut x, mut y) = (args[0], args[1]);
+                if rel {
+                    x += *cx;
+                    y += *cy;
+                }
+                *cx = x;
+                *cy = y;
+                *sx = x;
+                *sy = y;
+                extend(x, y, found);
+            }
+            b'L' | b'l' | b'T' | b't' => {
+                let (mut x, mut y) = (args[0], args[1]);
+                if rel {
+                    x += *cx;
+                    y += *cy;
+                }
+                *cx = x;
+                *cy = y;
+                extend(x, y, found);
+            }
+            b'H' | b'h' => {
+                let mut x = args[0];
+                if rel {
+                    x += *cx;
+                }
+                *cx = x;
+                extend(x, *cy, found);
+            }
+            b'V' | b'v' => {
+                let mut y = args[0];
+                if rel {
+                    y += *cy;
+                }
+                *cy = y;
+                extend(*cx, y, found);
+            }
+            b'C' | b'c' => {
+                // 3 (x,y) points: control1, control2, end.
+                for k in 0..3 {
+                    let mut x = args[k * 2];
+                    let mut y = args[k * 2 + 1];
+                    if rel {
+                        x += *cx;
+                        y += *cy;
+                    }
+                    extend(x, y, found);
+                    if k == 2 {
+                        *cx = x;
+                        *cy = y;
+                    }
+                }
+            }
+            b'S' | b's' | b'Q' | b'q' => {
+                // 2 (x,y) points: control, end.
+                for k in 0..2 {
+                    let mut x = args[k * 2];
+                    let mut y = args[k * 2 + 1];
+                    if rel {
+                        x += *cx;
+                        y += *cy;
+                    }
+                    extend(x, y, found);
+                    if k == 1 {
+                        *cx = x;
+                        *cy = y;
+                    }
+                }
+            }
+            b'A' | b'a' => {
+                // rx, ry, x-axis-rotation, large-arc-flag, sweep-flag, x, y.
+                // Only (x, y) contributes to the bbox; flags are not coordinates.
+                let mut x = args[5];
+                let mut y = args[6];
+                if rel {
+                    x += *cx;
+                    y += *cy;
+                }
+                *cx = x;
+                *cy = y;
+                extend(x, y, found);
+            }
+            b'Z' | b'z' => {
+                *cx = *sx;
+                *cy = *sy;
+            }
+            _ => {}
+        }
+    };
+
+    while i < bytes.len() {
+        // Skip whitespace and commas.
+        if bytes[i] == b',' || bytes[i].is_ascii_whitespace() {
+            i += 1;
+            continue;
+        }
+        if bytes[i].is_ascii_alphabetic() {
+            // New command.
+            current_cmd = Some(bytes[i]);
+            pending.clear();
+            i += 1;
+            // Z/z take zero args: apply immediately.
+            if let Some(cmd) = current_cmd
+                && args_for(cmd) == Some(0)
+            {
+                apply(cmd, &[], &mut cx, &mut cy, &mut sx, &mut sy, &mut found);
+                current_cmd = None;
+            }
+            continue;
+        }
+        // Otherwise expect a number for the current command.
+        let Some(cmd) = current_cmd else {
+            // No command set — skip stray character.
+            i += 1;
+            continue;
+        };
+        let Some(n) = args_for(cmd) else {
+            // Unknown command — abandon.
+            current_cmd = None;
+            continue;
+        };
+        let Some((v, next)) = read_number(bytes, i) else {
+            i += 1;
+            continue;
+        };
+        i = next;
+        pending.push(v);
+        if pending.len() == n {
+            let args = std::mem::take(&mut pending);
+            apply(cmd, &args, &mut cx, &mut cy, &mut sx, &mut sy, &mut found);
+            // Per SVG spec, after the first M/m the command implicitly becomes L/l
+            // for further coord pairs in the same run.
+            match cmd {
+                b'M' => current_cmd = Some(b'L'),
+                b'm' => current_cmd = Some(b'l'),
+                _ => {}
+            }
         }
     }
 
@@ -466,6 +679,29 @@ mod tests {
             cmp.is_match(),
             "Oracle rendering should match golden:\n{cmp}"
         );
+    }
+
+    #[test]
+    fn path_bounding_box_ignores_arc_flags() {
+        // An arc command has 7 args: rx, ry, x-axis-rotation, large-arc-flag, sweep-flag, x, y.
+        // The two flags (0, 1) must not pollute the bbox.
+        let d = "M0,0 L100,0 A 2.5,2.5 0 0,1 100,100 L0,100 Z";
+        let bbox = path_bounding_box(d).expect("should parse");
+        assert!((bbox.x - 0.0).abs() < 1e-9, "x = {}", bbox.x);
+        assert!((bbox.y - 0.0).abs() < 1e-9, "y = {}", bbox.y);
+        assert!((bbox.width - 100.0).abs() < 1e-9, "w = {}", bbox.width);
+        assert!((bbox.height - 100.0).abs() < 1e-9, "h = {}", bbox.height);
+    }
+
+    #[test]
+    fn path_bounding_box_relative_commands() {
+        // m 10,10 l 20,0 l 0,30 -> bbox should be (10,10)-(30,40).
+        let d = "m 10,10 l 20,0 l 0,30 z";
+        let bbox = path_bounding_box(d).expect("should parse");
+        assert!((bbox.x - 10.0).abs() < 1e-9);
+        assert!((bbox.y - 10.0).abs() < 1e-9);
+        assert!((bbox.width - 20.0).abs() < 1e-9);
+        assert!((bbox.height - 30.0).abs() < 1e-9);
     }
 
     #[test]
