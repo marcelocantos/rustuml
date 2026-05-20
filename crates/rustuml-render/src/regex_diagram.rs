@@ -646,7 +646,7 @@ pub fn render(diagram: &RegexDiagram, _theme: &Theme) -> String {
     let canvas_w = (MARGIN + m.width + MARGIN).ceil();
     let canvas_h = (global_rail + m.below + 15.5).ceil();
 
-    let mut svg = SvgBuilder::new(canvas_w, canvas_h);
+    let mut svg = SvgBuilder::new_plantuml(canvas_w, canvas_h, "REGEX");
 
     // Left rail line into content
     let content_x = MARGIN;
@@ -656,5 +656,5 @@ pub fn render(diagram: &RegexDiagram, _theme: &Theme) -> String {
 
     draw(ast, content_x, global_rail, &mut svg);
 
-    svg.finalize()
+    svg.finalize_plantuml()
 }
