@@ -329,7 +329,7 @@ targets:
     discovered: 2026-05-20
   T5.2:
     name: Activity Title.emit_node uses unified cursor convention with warnings band and Start ellipse
-    status: identified
+    status: achieved
     value: 0.0
     cost: 0.0
     acceptance:
@@ -354,3 +354,4 @@ targets:
       Deferred from T5 because it's a structural refactor without a clear pass-count signal, not a single-file quick win. Worth tackling when there's a concrete title-related failure cluster that the refactor unblocks.
     origin: manual
     discovered: 2026-05-20
+    achieved: 2026-05-20
