@@ -7,9 +7,12 @@
 //! PlantUML emits use-case diagrams as `data-diagram-type="DESCRIPTION"` —
 //! the same envelope used by component and deployment diagrams.
 
+use std::collections::HashMap;
+
 use rustuml_parser::diagram::usecase::*;
 
 use crate::layout_oracle::OracleLayout;
+use crate::plantuml_metrics as pm;
 use crate::style::Theme;
 use crate::svg::SvgBuilder;
 use crate::text_render::{self, TextBase};
@@ -27,6 +30,8 @@ const ACTOR_ARM_OFFSET: f64 = 8.0;
 const ACTOR_LEG_RUN: f64 = 13.0;
 const ACTOR_LEG_DROP: f64 = 15.0;
 const ACTOR_LABEL_GAP: f64 = 15.0352;
+/// Vertical offset from head centre to stereotype baseline (measured).
+const ACTOR_STEREO_OFFSET: f64 = 11.4531;
 const LINE_H: f64 = 16.4883;
 const UC_TEXT_OFFSET_SINGLE: f64 = 4.7441;
 
@@ -35,6 +40,11 @@ const UC_RY_PAD: f64 = 23.6825;
 
 const MARGIN: f64 = 7.0;
 const GAP: f64 = 40.0;
+
+/// Round a coordinate to PlantUML's 4-decimal format, dropping trailing zeros.
+fn fc(v: f64) -> String {
+    pm::fmt_coord(v)
+}
 
 pub fn render(diagram: &UseCaseDiagram, theme: &Theme) -> String {
     render_with_oracle(diagram, theme, None)
@@ -57,6 +67,7 @@ pub fn render_with_oracle(
     let actor_dims: Vec<ActorDim> = diagram.actors.iter().map(actor_dim).collect();
     let uc_dims: Vec<UseCaseDim> = diagram.use_cases.iter().map(use_case_dim).collect();
     let positions = resolve_positions(diagram, &actor_dims, &uc_dims, oracle);
+    let id_map = build_entity_id_map(diagram);
 
     let (total_w, total_h) = if let Some(orc) = oracle
         && orc.canvas_width > 0.0
@@ -68,20 +79,79 @@ pub fn render_with_oracle(
     };
 
     let mut svg = SvgBuilder::new_plantuml(total_w, total_h, "DESCRIPTION");
-    render_packages(&mut svg, diagram, oracle);
+    render_packages(&mut svg, diagram, oracle, &id_map);
 
     for (i, actor) in diagram.actors.iter().enumerate() {
         let (cx, cy) = positions.actors[i];
-        render_actor(&mut svg, actor, &actor_dims[i], cx, cy);
+        render_actor(&mut svg, actor, &actor_dims[i], cx, cy, &id_map);
     }
     for (i, uc) in diagram.use_cases.iter().enumerate() {
         let (cx, cy) = positions.use_cases[i];
-        render_use_case(&mut svg, uc, &uc_dims[i], diagram, cx, cy, oracle);
+        render_use_case(&mut svg, uc, &uc_dims[i], diagram, cx, cy, oracle, &id_map);
     }
     if let Some(orc) = oracle {
         render_oracle_connections(&mut svg, diagram, orc);
     }
     svg.finalize_plantuml()
+}
+
+/// Assign PlantUML-compatible entity IDs by sorting actors, use cases, and
+/// packages by `source_line` and numbering sequentially from `ent0002`.
+fn build_entity_id_map(diagram: &UseCaseDiagram) -> HashMap<String, String> {
+    struct Entry {
+        key: String,
+        line: usize,
+    }
+    let mut entries: Vec<Entry> = Vec::new();
+    for a in &diagram.actors {
+        entries.push(Entry {
+            key: format!("actor::{}", a.id),
+            line: a.source_line,
+        });
+    }
+    for uc in &diagram.use_cases {
+        entries.push(Entry {
+            key: format!("uc::{}", uc.id),
+            line: uc.source_line,
+        });
+    }
+    // Packages have no source_line in the model; pin them at the lowest line
+    // of their first declared child entity (a reasonable proxy for declaration
+    // order). Fall back to declaration index when empty.
+    for (i, p) in diagram.packages.iter().enumerate() {
+        let line = p
+            .elements
+            .iter()
+            .filter_map(|eid| {
+                diagram
+                    .actors
+                    .iter()
+                    .find(|a| &a.id == eid)
+                    .map(|a| a.source_line)
+                    .or_else(|| {
+                        diagram
+                            .use_cases
+                            .iter()
+                            .find(|u| &u.id == eid)
+                            .map(|u| u.source_line)
+                    })
+            })
+            .min()
+            .map(|l| l.saturating_sub(1))
+            .unwrap_or(i);
+        entries.push(Entry {
+            key: format!("pkg::{}", p.name),
+            line,
+        });
+    }
+    entries.sort_by_key(|e| e.line);
+    let mut map = HashMap::new();
+    let mut counter = 2usize;
+    for e in entries {
+        map.insert(e.key, format!("ent{counter:04}"));
+        counter += 1;
+    }
+    map
 }
 
 struct ActorDim {
@@ -241,13 +311,21 @@ fn compute_canvas(
     (max_x, max_y)
 }
 
-fn render_packages(svg: &mut SvgBuilder, diagram: &UseCaseDiagram, oracle: Option<&OracleLayout>) {
+fn render_packages(
+    svg: &mut SvgBuilder,
+    diagram: &UseCaseDiagram,
+    oracle: Option<&OracleLayout>,
+    id_map: &HashMap<String, String>,
+) {
     for pkg in &diagram.packages {
         let Some(orc) = oracle else { continue };
         let Some(rect) = orc.entities.get(&pkg.name) else {
             continue;
         };
-        let ent_id = "ent0003";
+        let ent_id = id_map
+            .get(&format!("pkg::{}", pkg.name))
+            .cloned()
+            .unwrap_or_else(|| "ent0003".to_string());
         svg.raw(&format!("<!--cluster {}-->", pkg.name));
         svg.raw(&format!(
             r#"<g class="cluster" data-qualified-name="{}" id="{ent_id}">"#,
@@ -255,10 +333,10 @@ fn render_packages(svg: &mut SvgBuilder, diagram: &UseCaseDiagram, oracle: Optio
         ));
         svg.raw(&format!(
             r#"<rect fill="none" height="{h}" rx="2.5" ry="2.5" style="stroke:#181818;stroke-width:1;" width="{w}" x="{x}" y="{y}"/>"#,
-            h = rect.height,
-            w = rect.width,
-            x = rect.x,
-            y = rect.y,
+            h = fc(rect.height),
+            w = fc(rect.width),
+            x = fc(rect.x),
+            y = fc(rect.y),
         ));
         let label_w = text_render::measure(&pkg.name, FONT_SIZE, true);
         let label_x = rect.x + (rect.width - label_w) / 2.0;
@@ -284,8 +362,18 @@ fn render_packages(svg: &mut SvgBuilder, diagram: &UseCaseDiagram, oracle: Optio
     }
 }
 
-fn render_actor(svg: &mut SvgBuilder, actor: &Actor, dim: &ActorDim, cx: f64, cy: f64) {
-    let ent_id = entity_id_for_source_line(actor.source_line);
+fn render_actor(
+    svg: &mut SvgBuilder,
+    actor: &Actor,
+    dim: &ActorDim,
+    cx: f64,
+    cy: f64,
+    id_map: &HashMap<String, String>,
+) {
+    let ent_id = id_map
+        .get(&format!("actor::{}", actor.id))
+        .cloned()
+        .unwrap_or_else(|| "ent0002".to_string());
     svg.raw(&format!("<!--entity {}-->", actor.id));
     let src_attr = source_line_attr(actor.source_line);
     svg.raw(&format!(
@@ -294,6 +382,8 @@ fn render_actor(svg: &mut SvgBuilder, actor: &Actor, dim: &ActorDim, cx: f64, cy
     ));
     svg.raw(&format!(
         r#"<ellipse cx="{cx}" cy="{cy}" fill="{ENTITY_FILL}" rx="{ACTOR_HEAD_R}" ry="{ACTOR_HEAD_R}" style="stroke:{STROKE};stroke-width:0.5;"/>"#,
+        cx = fc(cx),
+        cy = fc(cy),
     ));
     let body_top_y = cy + ACTOR_HEAD_R;
     let body_bot_y = body_top_y + ACTOR_BODY_LEN;
@@ -301,10 +391,19 @@ fn render_actor(svg: &mut SvgBuilder, actor: &Actor, dim: &ActorDim, cx: f64, cy
     let leg_x_left = cx - ACTOR_LEG_RUN;
     let leg_x_right = cx + ACTOR_LEG_RUN;
     let leg_y = body_bot_y + ACTOR_LEG_DROP;
+    let arm_left_x = cx - ACTOR_ARM_HALF;
+    let arm_right_x = cx + ACTOR_ARM_HALF;
     svg.raw(&format!(
         r#"<path d="M{cx},{body_top_y} L{cx},{body_bot_y} M{arm_left_x},{arm_y} L{arm_right_x},{arm_y} M{cx},{body_bot_y} L{leg_x_left},{leg_y} M{cx},{body_bot_y} L{leg_x_right},{leg_y}" fill="none" style="stroke:{STROKE};stroke-width:0.5;"/>"#,
-        arm_left_x = cx - ACTOR_ARM_HALF,
-        arm_right_x = cx + ACTOR_ARM_HALF,
+        cx = fc(cx),
+        body_top_y = fc(body_top_y),
+        body_bot_y = fc(body_bot_y),
+        arm_left_x = fc(arm_left_x),
+        arm_right_x = fc(arm_right_x),
+        arm_y = fc(arm_y),
+        leg_x_left = fc(leg_x_left),
+        leg_x_right = fc(leg_x_right),
+        leg_y = fc(leg_y),
     ));
     let label_x = cx - dim.label_w / 2.0;
     let label_y = leg_y + ACTOR_LABEL_GAP;
@@ -328,7 +427,7 @@ fn render_actor(svg: &mut SvgBuilder, actor: &Actor, dim: &ActorDim, cx: f64, cy
     if let Some(stereo) = &actor.stereotype {
         let stereo_text = format!("\u{00AB}{stereo}\u{00BB}");
         let stereo_x = cx - dim.stereo_w / 2.0;
-        let stereo_y = cy - ACTOR_HEAD_R - 4.0;
+        let stereo_y = cy - ACTOR_STEREO_OFFSET;
         let mut buf = String::new();
         text_render::emit_text(
             &mut buf,
@@ -358,9 +457,13 @@ fn render_use_case(
     cx: f64,
     cy: f64,
     oracle: Option<&OracleLayout>,
+    id_map: &HashMap<String, String>,
 ) {
     let qualified = qualified_name(&uc.id, diagram);
-    let ent_id = entity_id_for_source_line(uc.source_line);
+    let ent_id = id_map
+        .get(&format!("uc::{}", uc.id))
+        .cloned()
+        .unwrap_or_else(|| "ent0003".to_string());
     svg.raw(&format!("<!--entity {}-->", uc.id));
     let src_attr = source_line_attr(uc.source_line);
     svg.raw(&format!(
@@ -379,6 +482,10 @@ fn render_use_case(
     };
     svg.raw(&format!(
         r#"<ellipse cx="{cx}" cy="{cy}" fill="{ENTITY_FILL}" rx="{rx}" ry="{ry}" style="stroke:{STROKE};stroke-width:0.5;"/>"#,
+        cx = fc(cx),
+        cy = fc(cy),
+        rx = fc(rx),
+        ry = fc(ry),
     ));
     let n_lines = dim.line_count;
     let bottom_y = cy + UC_TEXT_OFFSET_SINGLE + (n_lines as f64 - 1.0) * LINE_H;
@@ -452,14 +559,6 @@ fn render_use_case(
         }
     }
     svg.raw("</g>");
-}
-
-fn entity_id_for_source_line(source_line: usize) -> String {
-    if source_line == 0 {
-        "ent0002".to_string()
-    } else {
-        format!("ent{:04}", source_line + 1)
-    }
 }
 
 fn source_line_attr(source_line: usize) -> String {
