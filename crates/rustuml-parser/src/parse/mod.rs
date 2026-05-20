@@ -135,8 +135,13 @@ fn detect_uml_subtype(lines: &[String]) -> UmlSubtype {
             scores[6] += 5;
         }
         // State.
+        //
+        // `[*]` is the unmistakable state-diagram pseudostate marker; any line
+        // mentioning it (as source `[*] ...->`, target `...-> [*]`, or a
+        // bracketed coloured arrow `-[#blue]-> [*]`) is a strong state signal.
         if trimmed.starts_with("[*]")
-            || trimmed.contains("--> [*]")
+            || trimmed.contains("> [*]")
+            || trimmed.contains(">[*]")
             || (trimmed.starts_with("state ") && !trimmed.contains("<<"))
         {
             scores[3] += 5;
