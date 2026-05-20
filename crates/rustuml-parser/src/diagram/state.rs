@@ -48,6 +48,18 @@ pub struct State {
     /// 1-based line number within the `@startuml` block.
     #[serde(default)]
     pub source_line: usize,
+    /// `state X #color` — explicit fill from the source. The renderer
+    /// prefers oracle-captured colour over this, but it lets the no-
+    /// oracle path produce colourful diagrams too.
+    #[serde(default)]
+    pub fill: Option<String>,
+    /// `state X ##color` / `##[dashed]color` — explicit border colour
+    /// and optional dash style.
+    #[serde(default)]
+    pub stroke: Option<String>,
+    /// Dash style hint (`bold`, `dashed`, `dotted`) parsed from `##[…]color`.
+    #[serde(default)]
+    pub stroke_style: Option<String>,
 }
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Default, Serialize, Deserialize)]

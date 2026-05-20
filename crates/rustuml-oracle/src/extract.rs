@@ -367,6 +367,68 @@ pub fn extract_oracle_layout(svg: &str) -> Option<OracleLayout> {
         }
     }
 
+    // Bare-ellipse history pseudo-states ("H" / "H*") also live outside
+    // any `<g>` wrapper. Pair each top-level history ellipse with the
+    // immediately-following `<text>` to extract its glyph label, and
+    // record under the synthetic key `__history_N__`.
+    let mut hist_idx = 0usize;
+    let root_children: Vec<roxmltree::Node> = root
+        .descendants()
+        .filter(|n| {
+            let parent = n.parent();
+            // Top-level (parent is the outer `<g>` of the SVG, not a
+            // class="entity"/"link"/etc. wrapper).
+            match parent {
+                Some(p) => {
+                    p.tag_name().name() == "g"
+                        && p.attribute("class").is_none()
+                        && (n.tag_name().name() == "ellipse" || n.tag_name().name() == "text")
+                }
+                None => false,
+            }
+        })
+        .collect();
+    let mut i = 0;
+    while i < root_children.len() {
+        let n = &root_children[i];
+        if n.tag_name().name() == "ellipse"
+            && n.attribute("fill") == Some("#F1F1F1")
+            && let Some(cx) = parse_attr(n, "cx")
+            && let Some(cy) = parse_attr(n, "cy")
+            && let Some(rx) = parse_attr(n, "rx")
+            && let Some(ry) = parse_attr(n, "ry")
+        {
+            // Peek forward for a matching `<text>` whose y is near cy.
+            let mut label = String::new();
+            if let Some(next) = root_children.get(i + 1)
+                && next.tag_name().name() == "text"
+            {
+                label = collect_text(next);
+            }
+            layout.entities.insert(
+                format!("__history_{hist_idx}__"),
+                EntityRect {
+                    x: cx - rx,
+                    y: cy - ry,
+                    width: rx * 2.0,
+                    height: ry * 2.0,
+                    icon_cx: None,
+                    glyph_path_d: Some(label),
+                    name_text_x: None,
+                    text_y_values: Vec::new(),
+                    sep_y_values: Vec::new(),
+                    vis_icon_y_values: Vec::new(),
+                    fill: None,
+                    entity_id: None,
+                },
+            );
+            hist_idx += 1;
+            i += 2;
+            continue;
+        }
+        i += 1;
+    }
+
     // Pseudo-states like fork/join bars are bare `<rect fill="#555555">`
     // elements outside any `<g>` group, so they aren't picked up by the
     // walker above. Record them as synthetic entities `__bar_0__`,

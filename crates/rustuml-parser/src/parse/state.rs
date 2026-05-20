@@ -95,6 +95,9 @@ impl StateParser {
                 descriptions: Vec::new(),
                 substates: Vec::new(),
                 source_line: self.current_line,
+                fill: None,
+                stroke: None,
+                stroke_style: None,
             });
         }
         id
@@ -215,6 +218,11 @@ impl StateParser {
             )
             .unwrap()
         });
+        // Capture every `#color` / `##color` / `##[style]color` token after
+        // the state id so the renderer can recover fill / stroke styling
+        // without an oracle.
+        static COLOR_RE: LazyLock<Regex> =
+            LazyLock::new(|| Regex::new(r"(##?)(?:\[([^\]]*)\])?(\w+)").unwrap());
         // Also handles: state ID : description
         static RE_DESC: LazyLock<Regex> = LazyLock::new(|| {
             Regex::new(r#"^state\s+(?:"([^"]+)"\s+as\s+)?(\w+)\s*:\s*(.+)$"#).unwrap()
@@ -238,11 +246,45 @@ impl StateParser {
                 _ => StateKind::Normal,
             };
 
+            // Walk every `#color` / `##color` / `##[style]color` token in
+            // the trailing decoration. Each match's first group is the
+            // hash prefix (`#` vs `##`), the optional second group is the
+            // style modifier, and the third is the colour name.
+            let mut fill: Option<String> = None;
+            let mut stroke: Option<String> = None;
+            let mut stroke_style: Option<String> = None;
+            for cm in COLOR_RE.captures_iter(line) {
+                // Skip the matches that overlap with the state name token
+                // (e.g. `<<history*>>`) — those don't start with `#`.
+                let prefix = &cm[1];
+                let style = cm.get(2).map(|m| m.as_str().to_string());
+                let color = cm[3].to_string();
+                match prefix {
+                    "##" if stroke.is_none() => {
+                        stroke = Some(color);
+                        stroke_style = style;
+                    }
+                    "#" if fill.is_none() => {
+                        fill = Some(color);
+                    }
+                    _ => {}
+                }
+            }
+
             if let Some(state) = self.states.iter_mut().find(|s| s.id == id) {
                 state.label = label;
                 state.kind = kind;
                 if state.source_line == 0 {
                     state.source_line = self.current_line;
+                }
+                if state.fill.is_none() {
+                    state.fill = fill;
+                }
+                if state.stroke.is_none() {
+                    state.stroke = stroke;
+                }
+                if state.stroke_style.is_none() {
+                    state.stroke_style = stroke_style;
                 }
             } else {
                 self.states.push(State {
@@ -252,6 +294,9 @@ impl StateParser {
                     descriptions: Vec::new(),
                     substates: Vec::new(),
                     source_line: self.current_line,
+                    fill,
+                    stroke,
+                    stroke_style,
                 });
             }
             true
@@ -272,6 +317,9 @@ impl StateParser {
                     descriptions: vec![desc],
                     substates: Vec::new(),
                     source_line: self.current_line,
+                    fill: None,
+                    stroke: None,
+                    stroke_style: None,
                 });
             }
             true
