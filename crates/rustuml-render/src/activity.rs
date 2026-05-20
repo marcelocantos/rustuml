@@ -38,7 +38,14 @@ const IF_BRANCH_DOWN: f64 = 10.0;
 const IF_BRANCH_UP: f64 = 6.0;
 const FORK_BAR_HEIGHT: f64 = 6.0;
 const FORK_BAR_RX: f64 = 2.5;
-const FORK_BAR_MARGIN: f64 = 14.0; // margin on each side of fork bar
+const FORK_BAR_MARGIN: f64 = 12.0; // margin on each side of fork bar (per goldens)
+/// Gap between adjacent branches that do not straddle the diagram's central
+/// vertical axis (the spine the inbound/outbound arrows travel along).
+const FORK_BRANCH_GAP: f64 = 10.0;
+/// Gap between the two branches that straddle the central spine. PlantUML
+/// uses a wider gap (≈ 2 × FORK_BRANCH_GAP + arrow allowance) so the
+/// inbound/outbound arrows can pass between them.
+const FORK_CENTER_GAP: f64 = 28.0;
 
 const FONT_SIZE: f64 = 12.0;
 const SMALL_FONT: f64 = 11.0;
@@ -437,6 +444,39 @@ fn collect_until(
     build_tree(&steps[start..*i])
 }
 
+/// Per-branch widths for a fork's children, each clamped to a 60 px minimum.
+fn fork_branch_widths(branches: &[Vec<LayoutNode>]) -> Vec<f64> {
+    branches
+        .iter()
+        .map(|b| sequence_width(b).max(60.0))
+        .collect()
+}
+
+/// Sum of inter-branch gaps inside a fork's content area. PlantUML uses
+/// `FORK_BRANCH_GAP` between adjacent branches that don't straddle the
+/// central spine, and `FORK_CENTER_GAP` for the one pair that does (the
+/// middle gap in an even-width fork). For odd-N forks the middle branch
+/// sits on the spine, so all gaps are `FORK_BRANCH_GAP`.
+fn fork_gaps_total(n: usize) -> f64 {
+    if n <= 1 {
+        return 0.0;
+    }
+    if n.is_multiple_of(2) {
+        // Even: one wide central gap, (n-2) narrow gaps elsewhere.
+        FORK_CENTER_GAP + (n as f64 - 2.0) * FORK_BRANCH_GAP
+    } else {
+        // Odd: middle branch on spine; all (n-1) gaps are narrow.
+        (n as f64 - 1.0) * FORK_BRANCH_GAP
+    }
+}
+
+/// Total width of the fork (matches the dark fork bar width).
+fn fork_total_width(branches: &[Vec<LayoutNode>]) -> f64 {
+    let widths = fork_branch_widths(branches);
+    let branches_w: f64 = widths.iter().sum();
+    branches_w + fork_gaps_total(widths.len()) + FORK_BAR_MARGIN * 2.0
+}
+
 /// Compute the width needed for a sequence of layout nodes.
 fn sequence_width(nodes: &[LayoutNode]) -> f64 {
     nodes.iter().map(node_width).fold(0.0f64, f64::max)
@@ -522,10 +562,7 @@ fn node_width(node: &LayoutNode) -> f64 {
             let branch_dist = (diamond_w + 20.0).max((then_w + else_w) / 2.0 + 20.0);
             branch_dist + (then_w + else_w) / 2.0
         }
-        LayoutNode::Fork { branches } => {
-            let total: f64 = branches.iter().map(|b| sequence_width(b).max(60.0)).sum();
-            total + FORK_BAR_MARGIN * 2.0
-        }
+        LayoutNode::Fork { branches } => fork_total_width(branches),
         LayoutNode::While {
             body, condition, ..
         } => {
@@ -1613,13 +1650,13 @@ fn emit_fork(svg: &mut SvgEmitter, cx: f64, y: f64, branches: &[Vec<LayoutNode>]
         return y;
     }
 
-    // Compute branch widths and total width
-    let branch_widths: Vec<f64> = branches
-        .iter()
-        .map(|b| sequence_width(b).max(60.0))
-        .collect();
-    let total_w: f64 = branch_widths.iter().sum();
-    let bar_w = total_w + FORK_BAR_MARGIN * 2.0;
+    // Compute branch widths and total width. Branches are packed left-to-right
+    // with FORK_BRANCH_GAP between them, except the two that straddle the
+    // central spine in an even-N fork, which use FORK_CENTER_GAP. In an odd-N
+    // fork the middle branch is centred on the spine.
+    let branch_widths = fork_branch_widths(branches);
+    let n = branch_widths.len();
+    let bar_w = fork_total_width(branches);
 
     // Top bar
     let bar_x = cx - bar_w / 2.0;
@@ -1637,19 +1674,36 @@ fn emit_fork(svg: &mut SvgEmitter, cx: f64, y: f64, branches: &[Vec<LayoutNode>]
 
     let bar_bottom = y + FORK_BAR_HEIGHT;
 
-    // Compute branch center-x positions
+    // Compute branch center-x positions with the right gap between each pair.
     let mut branch_centers = Vec::new();
     let mut bx = bar_x + FORK_BAR_MARGIN;
-    for w in &branch_widths {
+    for (i, w) in branch_widths.iter().enumerate() {
         branch_centers.push(bx + w / 2.0);
-        bx += w;
+        if i + 1 < n {
+            // Pick the gap between branch i and branch i+1.
+            let center_pair = if n.is_multiple_of(2) {
+                // Even: central crossing is between (n/2 - 1) and (n/2).
+                i + 1 == n / 2
+            } else {
+                // Odd: middle branch centered, no wide central crossing.
+                false
+            };
+            let gap = if center_pair {
+                FORK_CENTER_GAP
+            } else {
+                FORK_BRANCH_GAP
+            };
+            bx += w + gap;
+        }
     }
 
-    // Arrows from top bar to each branch and render branches
+    // Render branches first (their bodies emit shapes + inter-action
+    // connectors into the appropriate buffers). PlantUML emits the fork's
+    // in/out connectors AFTER the bodies in the connectors stream, with
+    // out-arrows coming before in-arrows.
     let mut branch_bottoms = Vec::new();
     for (i, branch) in branches.iter().enumerate() {
         let bcx = branch_centers[i];
-        svg.down_arrow(bcx, bar_bottom, bar_bottom + ARROW_LEN, ARROW_COLOR);
         let bottom = emit_sequence(svg, branch, bcx, bar_bottom + ARROW_LEN);
         branch_bottoms.push(bottom);
     }
@@ -1657,13 +1711,7 @@ fn emit_fork(svg: &mut SvgEmitter, cx: f64, y: f64, branches: &[Vec<LayoutNode>]
     // Find the maximum bottom
     let max_bottom = branch_bottoms.iter().cloned().fold(0.0f64, f64::max);
 
-    // Arrows from each branch to bottom bar
-    for (i, bottom) in branch_bottoms.iter().enumerate() {
-        let bcx = branch_centers[i];
-        svg.down_arrow(bcx, *bottom, max_bottom + ARROW_LEN, ARROW_COLOR);
-    }
-
-    // Bottom bar
+    // Bottom bar (emitted as a SHAPE — flushed before the connectors below).
     let bottom_bar_y = max_bottom + ARROW_LEN;
     svg.rect_styled(
         FORK_BAR_COLOR,
@@ -1676,6 +1724,20 @@ fn emit_fork(svg: &mut SvgEmitter, cx: f64, y: f64, branches: &[Vec<LayoutNode>]
         bar_x,
         bottom_bar_y,
     );
+
+    // In-arrows: top bar down to each branch's first node. PlantUML emits
+    // these AFTER each branch body's own connectors but BEFORE the
+    // bottom-bar out-arrows in the connectors stream.
+    for (i, _) in branches.iter().enumerate() {
+        let bcx = branch_centers[i];
+        svg.down_arrow(bcx, bar_bottom, bar_bottom + ARROW_LEN, ARROW_COLOR);
+    }
+
+    // Out-arrows: each branch tail down to the bottom bar.
+    for (i, bottom) in branch_bottoms.iter().enumerate() {
+        let bcx = branch_centers[i];
+        svg.down_arrow(bcx, *bottom, max_bottom + ARROW_LEN, ARROW_COLOR);
+    }
 
     bottom_bar_y + FORK_BAR_HEIGHT
 }
