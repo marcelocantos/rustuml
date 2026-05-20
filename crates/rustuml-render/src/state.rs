@@ -41,7 +41,7 @@ const DIVIDER_OFFSET: f64 = 26.4883;
 /// Vertical position of the state name text baseline relative to box top.
 const NAME_BASELINE_OFFSET: f64 = 18.5352;
 /// Vertical position of first description line baseline relative to divider.
-const FIRST_DESC_OFFSET: f64 = 16.6016;
+const FIRST_DESC_OFFSET: f64 = 16.6015;
 /// Vertical spacing between description lines.
 const DESC_LINE_SPACING: f64 = 14.1328;
 /// Additional height per description line.
@@ -625,21 +625,37 @@ pub fn render_with_oracle(
     };
 
     // Render fork/join bars first (they appear before entity groups in PlantUML).
+    // The oracle exposes bar positions as synthetic entities `__bar_N__`
+    // in document order; assign them to fork/join states in the same
+    // order they appear in `positions`.
+    let mut bar_index = 0usize;
     for (id, cx, cy, _, _) in &positions {
         if id.starts_with("[*]") {
             continue;
         }
         let state_def = find_state(id);
         if let Some(StateKind::Fork | StateKind::Join) = state_def.map(|s| s.kind) {
-            let bx = cx - BAR_WIDTH / 2.0;
-            let by = cy - BAR_HEIGHT / 2.0;
+            let bar_rect = oracle.and_then(|orc| orc.entities.get(&format!("__bar_{bar_index}__")));
+            let (bx, by, bw, bh) = if let Some(r) = bar_rect {
+                (r.x, r.y, r.width, r.height)
+            } else {
+                (
+                    cx - BAR_WIDTH / 2.0,
+                    cy - BAR_HEIGHT / 2.0,
+                    BAR_WIDTH,
+                    BAR_HEIGHT,
+                )
+            };
             write!(
                 svg,
-                r#"<rect fill="{BAR_COLOR}" height="{BAR_HEIGHT}" style="stroke:none;stroke-width:1;" width="{BAR_WIDTH}" x="{}" y="{}"/>"#,
+                r#"<rect fill="{BAR_COLOR}" height="{}" style="stroke:none;stroke-width:1;" width="{}" x="{}" y="{}"/>"#,
+                fmt_f(bh),
+                fmt_f(bw),
                 fmt_f(bx),
                 fmt_f(by),
             )
             .unwrap();
+            bar_index += 1;
         }
     }
 
@@ -669,12 +685,11 @@ pub fn render_with_oracle(
             .unwrap();
             svg.push_str("</g>");
         } else if id == "__end__" {
-            // End pseudo-state — use the source_line from the last transition
-            // targeting [*].
+            // End pseudo-state — use the source_line from the FIRST transition
+            // targeting [*] (Java picks the first encounter, not the last).
             let source_line = diagram
                 .transitions
                 .iter()
-                .rev()
                 .find(|t| t.to == "[*]")
                 .map(|t| t.source_line)
                 .unwrap_or(1);
@@ -706,6 +721,11 @@ pub fn render_with_oracle(
                     // `<<start>>` stereotype — render as a filled start
                     // pseudostate but tagged with the user-given name.
                     let source_line = state_def.map_or(1, |s| s.source_line);
+                    // Recover `state X <<start>> #color` from the oracle.
+                    let fill_color: String = oracle
+                        .and_then(|orc| orc.entities.get(id.as_str()))
+                        .and_then(|r| r.fill.clone())
+                        .unwrap_or_else(|| PSEUDO_COLOR.to_string());
                     write!(
                         svg,
                         r#"<g class="start_entity" data-qualified-name="{id}" data-source-line="{source_line}" id="{}">"#,
@@ -714,7 +734,7 @@ pub fn render_with_oracle(
                     .unwrap();
                     write!(
                         svg,
-                        r#"<ellipse cx="{}" cy="{}" fill="{PSEUDO_COLOR}" rx="{START_RADIUS}" ry="{START_RADIUS}" style="stroke:{PSEUDO_COLOR};stroke-width:1;"/>"#,
+                        r#"<ellipse cx="{}" cy="{}" fill="{fill_color}" rx="{START_RADIUS}" ry="{START_RADIUS}" style="stroke:{PSEUDO_COLOR};stroke-width:1;"/>"#,
                         fmt_f(*cx),
                         fmt_f(*cy),
                     )
@@ -725,6 +745,12 @@ pub fn render_with_oracle(
                     // `<<end>>` stereotype — render as the bullseye end
                     // pseudostate but tagged with the user-given name.
                     let source_line = state_def.map_or(1, |s| s.source_line);
+                    // Recover `state X <<end>> #color` from the oracle's
+                    // inner-ellipse fill when available.
+                    let inner_fill: String = oracle
+                        .and_then(|orc| orc.entities.get(id.as_str()))
+                        .and_then(|r| r.fill.clone())
+                        .unwrap_or_else(|| PSEUDO_COLOR.to_string());
                     write!(
                         svg,
                         r#"<g class="end_entity" data-qualified-name="{id}" data-source-line="{source_line}" id="{}">"#,
@@ -740,7 +766,7 @@ pub fn render_with_oracle(
                     .unwrap();
                     write!(
                         svg,
-                        r#"<ellipse cx="{}" cy="{}" fill="{PSEUDO_COLOR}" rx="{END_INNER_RADIUS}" ry="{END_INNER_RADIUS}" style="stroke:{PSEUDO_COLOR};stroke-width:1;"/>"#,
+                        r#"<ellipse cx="{}" cy="{}" fill="{inner_fill}" rx="{END_INNER_RADIUS}" ry="{END_INNER_RADIUS}" style="stroke:{PSEUDO_COLOR};stroke-width:1;"/>"#,
                         fmt_f(*cx),
                         fmt_f(*cy),
                     )
@@ -748,7 +774,9 @@ pub fn render_with_oracle(
                     svg.push_str("</g>");
                 }
                 Some(StateKind::Choice) => {
-                    // Choice pseudo-state (diamond).
+                    // Choice pseudo-state (diamond). PlantUML closes the
+                    // polygon by repeating the first vertex, so the point
+                    // list has 5 entries.
                     write!(
                         svg,
                         r#"<g class="entity" data-qualified-name="{id}" id="{}">"#,
@@ -759,13 +787,19 @@ pub fn render_with_oracle(
                     let right = cx + CHOICE_SIZE;
                     let bottom = cy + CHOICE_SIZE;
                     let left = cx - CHOICE_SIZE;
+                    // Resolve fill from oracle (recovers `#color` skinparam) or default.
+                    let fill_color: String = oracle
+                        .and_then(|orc| orc.entities.get(id.as_str()))
+                        .and_then(|r| r.fill.clone())
+                        .unwrap_or_else(|| STATE_FILL.to_string());
                     write!(
                         svg,
-                        r#"<polygon fill="{STATE_FILL}" points="{},{},{},{},{},{},{},{}" style="stroke:{STROKE_COLOR};stroke-width:0.5;"/>"#,
+                        r#"<polygon fill="{fill_color}" points="{},{},{},{},{},{},{},{},{},{}" style="stroke:{STROKE_COLOR};stroke-width:0.5;"/>"#,
                         fmt_f(*cx), fmt_f(top),
                         fmt_f(right), fmt_f(*cy),
                         fmt_f(*cx), fmt_f(bottom),
                         fmt_f(left), fmt_f(*cy),
+                        fmt_f(*cx), fmt_f(top),
                     )
                     .unwrap();
                     svg.push_str("</g>");
@@ -831,13 +865,20 @@ pub fn render_with_oracle(
                     let box_x = cx - bw / 2.0;
                     let box_y = cy - bh / 2.0;
 
+                    // Resolve fill from oracle (recovers `state X #color`/named
+                    // colors) or fall back to PlantUML default.
+                    let fill_color: String = oracle
+                        .and_then(|orc| orc.entities.get(id.as_str()))
+                        .and_then(|r| r.fill.clone())
+                        .unwrap_or_else(|| STATE_FILL.to_string());
+
                     if hide_empty_desc && descriptions.is_empty() {
                         // PlantUML drops the `<g class="entity">` wrapper and
                         // emits bare `<rect>` + `<text>` here. No divider
                         // line; the text is vertically centred.
                         write!(
                             svg,
-                            r#"<rect fill="{STATE_FILL}" height="{}" rx="{STATE_RX}" ry="{STATE_RX}" style="stroke:{STROKE_COLOR};stroke-width:0.5;" width="{}" x="{}" y="{}"/>"#,
+                            r#"<rect fill="{fill_color}" height="{}" rx="{STATE_RX}" ry="{STATE_RX}" style="stroke:{STROKE_COLOR};stroke-width:0.5;" width="{}" x="{}" y="{}"/>"#,
                             fmt_f(*bh),
                             fmt_f(*bw),
                             fmt_f(box_x),
@@ -879,7 +920,7 @@ pub fn render_with_oracle(
                         // State rectangle.
                         write!(
                             svg,
-                            r#"<rect fill="{STATE_FILL}" height="{}" rx="{STATE_RX}" ry="{STATE_RX}" style="stroke:{STROKE_COLOR};stroke-width:0.5;" width="{}" x="{}" y="{}"/>"#,
+                            r#"<rect fill="{fill_color}" height="{}" rx="{STATE_RX}" ry="{STATE_RX}" style="stroke:{STROKE_COLOR};stroke-width:0.5;" width="{}" x="{}" y="{}"/>"#,
                             fmt_f(*bh),
                             fmt_f(*bw),
                             fmt_f(box_x),
@@ -951,8 +992,97 @@ pub fn render_with_oracle(
         }
     }
 
-    // Render notes.
-    for note in &diagram.notes {
+    // Render notes. When the oracle layout is available, prefer its
+    // captured path geometry — note placement depends on adjacent state
+    // sizes (which we don't yet compute identically to Java), so the
+    // computed path almost always disagrees. Walk oracle GMN entities
+    // in numeric order and pair them with `diagram.notes` 1:1.
+    let oracle_gmns: Vec<(&String, &crate::layout_oracle::EntityRect)> = oracle
+        .map(|orc| {
+            let mut v: Vec<_> = orc
+                .entities
+                .iter()
+                .filter(|(k, _)| k.starts_with("GMN"))
+                .collect();
+            v.sort_by_key(|(k, _)| k.trim_start_matches("GMN").parse::<u32>().unwrap_or(0));
+            v
+        })
+        .unwrap_or_default();
+
+    for (note_idx, note) in diagram.notes.iter().enumerate() {
+        if let Some((gmn_name, rect)) = oracle_gmns.get(note_idx) {
+            // Oracle path: replay the captured path strings verbatim and
+            // place text using the captured y positions.
+            let entity_id = rect
+                .entity_id
+                .clone()
+                .unwrap_or_else(|| "ent0000".to_string());
+            let source_line = rect.name_text_x.map(|sl| sl as usize).unwrap_or(0);
+            write!(
+                svg,
+                r#"<g class="entity" data-qualified-name="{gmn_name}" data-source-line="{source_line}" id="{entity_id}">"#,
+            )
+            .unwrap();
+            // Replay each captured path with its own style — note
+            // bodies and dog-ear folds sometimes use different stroke
+            // widths in PlantUML's output.
+            let mut first_d_for_left: Option<&str> = None;
+            if let Some(paths) = &rect.glyph_path_d {
+                for piece in paths.split('|') {
+                    let (d, style) = piece
+                        .split_once("#STYLE#")
+                        .unwrap_or((piece, "stroke:#181818;stroke-width:0.5;"));
+                    if first_d_for_left.is_none() {
+                        first_d_for_left = Some(d);
+                    }
+                    write!(svg, r#"<path d="{d}" fill="{NOTE_FILL}" style="{style}"/>"#,).unwrap();
+                }
+            }
+            // Note text — use oracle text_y values for vertical positions
+            // and align horizontally to the *body* left edge (the first
+            // `M` x in the body path). For `note right of`, the bbox
+            // left sits at the arrow tip; the body's left is further
+            // right.
+            let body_left_x = first_d_for_left
+                .and_then(|d| {
+                    d.strip_prefix('M')
+                        .and_then(|rest| rest.split(',').next())
+                        .and_then(|s| s.parse::<f64>().ok())
+                })
+                .unwrap_or(rect.x);
+            let text_x = body_left_x + NOTE_PADDING;
+            let lines: Vec<&str> = note
+                .text
+                .lines()
+                .map(|l| l.trim())
+                .filter(|l| !l.is_empty())
+                .collect();
+            for (i, line) in lines.iter().enumerate() {
+                let fallback_y =
+                    rect.y + NOTE_PADDING + LINK_FONT_SIZE + i as f64 * NOTE_LINE_HEIGHT;
+                let ty = rect.text_y_values.get(i).copied().unwrap_or(fallback_y);
+                let mut text_buf = String::new();
+                text_render::emit_text(
+                    &mut text_buf,
+                    line,
+                    &TextBase {
+                        x: text_x,
+                        y: ty,
+                        font_size: LINK_FONT_SIZE as u32,
+                        font_family: "sans-serif",
+                        fill: TEXT_COLOR,
+                        bold: false,
+                        italic: false,
+                        underline: false,
+                        skip_underline: false,
+                    },
+                );
+                svg.push_str(&text_buf);
+            }
+            svg.push_str("</g>");
+            continue;
+        }
+
         let note_w = note_box_width(&note.text);
         let note_h = note_box_height(&note.text);
 
@@ -1293,18 +1423,55 @@ fn render_arrowhead(svg: &mut String, control: (f64, f64), endpoint: (f64, f64))
 
 /// Render transitions directly from oracle edge data.
 fn render_oracle_transitions(svg: &mut String, diagram: &StateDiagram, oracle: &OracleLayout) {
+    // Track which oracle edges we've consumed — duplicate IDs (e.g. self
+    // transitions `A-to-A`, `A-to-A-1`, ...) are matched in order.
+    let mut used = vec![false; oracle.edges.len()];
+
+    let find_unused = |used: &mut [bool], target: &str| -> Option<usize> {
+        for (i, e) in oracle.edges.iter().enumerate() {
+            if used[i] {
+                continue;
+            }
+            // Accept either the exact id or any `id-N` disambiguation.
+            if e.id == target
+                || e.id
+                    .strip_prefix(target)
+                    .and_then(|s| s.strip_prefix('-'))
+                    .is_some_and(|s| s.chars().all(|c| c.is_ascii_digit()))
+            {
+                return Some(i);
+            }
+        }
+        None
+    };
+
     for t in &diagram.transitions {
         let from_name = if t.from == "[*]" { "*start*" } else { &t.from };
         let to_name = if t.to == "[*]" { "*end*" } else { &t.to };
-        let expected_id = format!("{from_name}-to-{to_name}");
+        let forward_id = format!("{from_name}-to-{to_name}");
+        // PlantUML emits a `reverse` link when the layout sweeps the
+        // arrow in the opposite direction (e.g. `-left->` / `-up->` when
+        // the dependent state already sits ahead of the target). The
+        // edge id flips to `to-backto-from` and the comment becomes
+        // `reverse link to to from`.
+        let reverse_id = format!("{to_name}-backto-{from_name}");
 
-        let oracle_edge = match oracle.edges.iter().find(|e| e.id == expected_id) {
-            Some(e) => e,
-            None => continue,
+        let (idx, is_reverse) = match find_unused(&mut used, &forward_id) {
+            Some(i) => (i, false),
+            None => match find_unused(&mut used, &reverse_id) {
+                Some(i) => (i, true),
+                None => continue,
+            },
         };
+        used[idx] = true;
+        let oracle_edge = &oracle.edges[idx];
 
         // HTML comment.
-        write!(svg, "<!--link {from_name} to {to_name}-->").unwrap();
+        if is_reverse {
+            write!(svg, "<!--reverse link {to_name} to {from_name}-->").unwrap();
+        } else {
+            write!(svg, "<!--link {from_name} to {to_name}-->").unwrap();
+        }
 
         // Link group wrapper using oracle attributes.
         let entity_1 = oracle_edge.entity_1.as_deref().unwrap_or("ent0002");
@@ -1324,9 +1491,10 @@ fn render_oracle_transitions(svg: &mut String, diagram: &StateDiagram, oracle: &
             .path_style
             .as_deref()
             .unwrap_or("stroke:#181818;stroke-width:1;");
+        let path_id = &oracle_edge.id;
         write!(
             svg,
-            r#"<path d="{}" fill="none" id="{expected_id}" style="{path_style}"/>"#,
+            r#"<path d="{}" fill="none" id="{path_id}" style="{path_style}"/>"#,
             oracle_edge.d,
         )
         .unwrap();
@@ -1343,6 +1511,30 @@ fn render_oracle_transitions(svg: &mut String, diagram: &StateDiagram, oracle: &
                 r#"<polygon fill="{fill}" points="{points}" style="{poly_style}"/>"#,
             )
             .unwrap();
+        }
+
+        // Edge labels from oracle. PlantUML emits one or more `<text>`
+        // children inside the `<g class="link">` for transition labels.
+        // We trust the oracle for exact x/y placement and reuse our
+        // text renderer for the markup (lengthAdjust/textLength etc.).
+        for (lx, ly, text) in &oracle_edge.labels {
+            let mut text_buf = String::new();
+            text_render::emit_text(
+                &mut text_buf,
+                text,
+                &TextBase {
+                    x: *lx,
+                    y: *ly,
+                    font_size: LINK_FONT_SIZE as u32,
+                    font_family: "sans-serif",
+                    fill: TEXT_COLOR,
+                    bold: false,
+                    italic: false,
+                    underline: false,
+                    skip_underline: false,
+                },
+            );
+            svg.push_str(&text_buf);
         }
 
         svg.push_str("</g>");
