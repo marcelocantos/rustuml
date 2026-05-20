@@ -257,6 +257,7 @@ pub fn extract_oracle_layout(svg: &str) -> Option<OracleLayout> {
                     code_line: path.attribute("codeLine").map(String::from),
                     polygon_style: None,
                     label: None,
+                    labels: Vec::new(),
                 };
 
                 // Find <polygon> children for arrowheads (first = primary, second = bidirectional).
@@ -277,12 +278,23 @@ pub fn extract_oracle_layout(svg: &str) -> Option<OracleLayout> {
                     oracle_edge.second_arrow_points = Some(points.to_string());
                 }
 
-                // Extract edge label from <text> children: first text element supplies x/y,
-                // descendant text content of all text children is joined with "\n".
+                // Extract edge labels. PlantUML class diagrams emit each label
+                // as its own <text> sibling (middle label, then optional
+                // start/end cardinality). Capture each separately in `labels`
+                // and keep the joined form in `label` for callers that still
+                // use the legacy single-text view.
                 let texts: Vec<roxmltree::Node> = node
                     .children()
                     .filter(|c| c.tag_name().name() == "text")
                     .collect();
+                for t in &texts {
+                    if let (Some(tx), Some(ty)) = (parse_attr(t, "x"), parse_attr(t, "y")) {
+                        let content = collect_text(t);
+                        if !content.is_empty() {
+                            oracle_edge.labels.push((tx, ty, content));
+                        }
+                    }
+                }
                 if let Some(first_text) = texts.first()
                     && let (Some(tx), Some(ty)) =
                         (parse_attr(first_text, "x"), parse_attr(first_text, "y"))
