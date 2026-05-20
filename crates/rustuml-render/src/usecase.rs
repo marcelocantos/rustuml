@@ -2,513 +2,502 @@
 // SPDX-License-Identifier: Apache-2.0
 
 //! Use case diagram SVG renderer.
+//!
+//! Produces SVG output that matches PlantUML's use-case diagram rendering.
+//! PlantUML emits use-case diagrams as `data-diagram-type="DESCRIPTION"` —
+//! the same envelope used by component and deployment diagrams.
 
-use rustuml_layout::graph::{Direction, EdgePath, LayoutGraph};
 use rustuml_parser::diagram::usecase::*;
 
 use crate::layout_oracle::OracleLayout;
-use crate::metrics;
 use crate::style::Theme;
 use crate::svg::SvgBuilder;
+use crate::text_render::{self, TextBase};
 
-const UC_RX: f64 = 60.0;
-const UC_RY: f64 = 25.0;
-const ACTOR_H: f64 = 50.0;
-const MARGIN: f64 = 40.0;
-const GAP: f64 = 60.0;
-const FONT_SIZE: f64 = 12.0;
-const SMALL_FONT: f64 = 10.0;
+const FONT_SIZE: f64 = 14.0;
+const STEREO_FONT: f64 = 14.0;
+const STROKE: &str = "#181818";
+const ENTITY_FILL: &str = "#F1F1F1";
+const TEXT_COLOR: &str = "#000000";
+
+const ACTOR_HEAD_R: f64 = 8.0;
+const ACTOR_BODY_LEN: f64 = 27.0;
+const ACTOR_ARM_HALF: f64 = 13.0;
+const ACTOR_ARM_OFFSET: f64 = 8.0;
+const ACTOR_LEG_RUN: f64 = 13.0;
+const ACTOR_LEG_DROP: f64 = 15.0;
+const ACTOR_LABEL_GAP: f64 = 15.0352;
+const LINE_H: f64 = 16.4883;
+const UC_TEXT_OFFSET_SINGLE: f64 = 4.7441;
+
+const UC_RX_PAD: f64 = 23.6825;
+const UC_RY_PAD: f64 = 23.6825;
+
+const MARGIN: f64 = 7.0;
+const GAP: f64 = 40.0;
 
 pub fn render(diagram: &UseCaseDiagram, theme: &Theme) -> String {
     render_with_oracle(diagram, theme, None)
 }
 
-/// Render a use case diagram to SVG, optionally using pre-computed layout from an oracle.
 pub fn render_with_oracle(
     diagram: &UseCaseDiagram,
-    theme: &Theme,
+    _theme: &Theme,
     oracle: Option<&OracleLayout>,
 ) -> String {
-    let total_actors = diagram.actors.len();
-    let total_uc = diagram.use_cases.len();
-    if total_actors == 0
-        && total_uc == 0
+    if diagram.actors.is_empty()
+        && diagram.use_cases.is_empty()
+        && diagram.packages.is_empty()
         && diagram.notes.is_empty()
         && diagram.meta.title.is_none()
     {
-        return "<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"100\" height=\"50\"></svg>\n"
-            .to_string();
+        return r#"<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" contentStyleType="text/css" data-diagram-type="DESCRIPTION" height="50px" preserveAspectRatio="none" style="width:100px;height:50px;background:#FFFFFF;" version="1.1" viewBox="0 0 100 50" width="100px" zoomAndPan="magnify"><defs/><g></g></svg>"#.to_string();
     }
 
-    let actor_col_w = 80.0;
-    let uc_col_w = UC_RX * 2.0 + 40.0;
-    // Add space for title if present, and for notes.
-    let title_h = if diagram.meta.title.is_some() {
-        FONT_SIZE + 10.0
+    let actor_dims: Vec<ActorDim> = diagram.actors.iter().map(actor_dim).collect();
+    let uc_dims: Vec<UseCaseDim> = diagram.use_cases.iter().map(use_case_dim).collect();
+    let positions = resolve_positions(diagram, &actor_dims, &uc_dims, oracle);
+
+    let (total_w, total_h) = if let Some(orc) = oracle
+        && orc.canvas_width > 0.0
+        && orc.canvas_height > 0.0
+    {
+        (orc.canvas_width, orc.canvas_height)
     } else {
-        0.0
-    };
-    let notes_h = if !diagram.notes.is_empty() {
-        diagram
-            .notes
-            .iter()
-            .map(|n| n.text.lines().count() as f64 * (FONT_SIZE + 2.0) + 12.0)
-            .sum::<f64>()
-    } else {
-        0.0
+        compute_canvas(&positions, &actor_dims, &uc_dims)
     };
 
-    let use_oracle = oracle.is_some();
+    let mut svg = SvgBuilder::new_plantuml(total_w, total_h, "DESCRIPTION");
+    render_packages(&mut svg, diagram, oracle);
 
-    // Try Sugiyama layout for actors + use cases (skip when oracle is available).
-    let layout_result = if use_oracle {
-        None
-    } else if total_actors > 0 || total_uc > 0 {
-        let mut layout = LayoutGraph::new(Direction::LeftToRight);
-        for actor in &diagram.actors {
-            layout.add_node(&actor.id, &actor.label, actor_col_w, ACTOR_H);
-        }
-        for uc in &diagram.use_cases {
-            let text_w = metrics::text_width(&uc.label, FONT_SIZE);
-            let rx = (text_w / 2.0 + 20.0).max(UC_RX);
-            layout.add_node(&uc.id, &uc.label, rx * 2.0, UC_RY * 2.0);
-        }
-        for conn in &diagram.connections {
-            layout.add_edge(&conn.from, &conn.to, conn.label.as_deref());
-        }
-        layout.layout_full(std::time::Duration::from_secs(5))
-    } else {
-        None
-    };
+    for (i, actor) in diagram.actors.iter().enumerate() {
+        let (cx, cy) = positions.actors[i];
+        render_actor(&mut svg, actor, &actor_dims[i], cx, cy);
+    }
+    for (i, uc) in diagram.use_cases.iter().enumerate() {
+        let (cx, cy) = positions.use_cases[i];
+        render_use_case(&mut svg, uc, &uc_dims[i], diagram, cx, cy, oracle);
+    }
+    if let Some(orc) = oracle {
+        render_oracle_connections(&mut svg, diagram, orc);
+    }
+    svg.finalize_plantuml()
+}
 
-    let layout_positions = layout_result.as_ref().map(|r| &r.node_positions[..]);
-    let empty_edge_paths: Vec<EdgePath> = Vec::new();
-    let edge_paths: &[EdgePath] = if use_oracle {
-        &empty_edge_paths
-    } else {
-        layout_result
-            .as_ref()
-            .map(|r| r.edge_paths.as_slice())
-            .unwrap_or(&[])
-    };
+struct ActorDim {
+    label_w: f64,
+    stereo_w: f64,
+}
 
-    let total_nodes = total_actors + total_uc;
-    let use_sugiyama = !use_oracle && layout_positions.is_some_and(|p| p.len() >= total_nodes);
+struct UseCaseDim {
+    label_w: f64,
+    stereo_w: f64,
+    line_count: usize,
+    rx: f64,
+    ry: f64,
+}
 
-    // Compute positions for actors and use cases.
-    let max_items = total_actors.max(total_uc).max(1);
-    let (total_w, total_h, actor_xy, uc_xy) = if let Some(orc) = oracle {
-        // Oracle mode: extract positions from oracle entity data.
-        let axy: Vec<(f64, f64)> = diagram
+fn actor_dim(actor: &Actor) -> ActorDim {
+    let label_w = text_render::measure(&actor.label, FONT_SIZE, false);
+    let stereo_w = actor
+        .stereotype
+        .as_ref()
+        .map(|s| text_render::measure(&format!("\u{00AB}{s}\u{00BB}"), STEREO_FONT, false))
+        .unwrap_or(0.0);
+    ActorDim { label_w, stereo_w }
+}
+
+fn use_case_dim(uc: &UseCase) -> UseCaseDim {
+    let label_w = text_render::measure(&uc.label, FONT_SIZE, false);
+    let stereo_w = uc
+        .stereotype
+        .as_ref()
+        .map(|s| text_render::measure(&format!("\u{00AB}{s}\u{00BB}"), STEREO_FONT, false))
+        .unwrap_or(0.0);
+    let desc_max_w = uc
+        .description
+        .iter()
+        .map(|d| text_render::measure(d, FONT_SIZE, false))
+        .fold(0.0_f64, f64::max);
+    let max_w = label_w.max(stereo_w).max(desc_max_w);
+    let line_count = uc.description.len().max(1) + if uc.stereotype.is_some() { 1 } else { 0 };
+    let rx = max_w / 2.0 + UC_RX_PAD;
+    let ry = (line_count as f64 * LINE_H) / 2.0 + UC_RY_PAD - FONT_SIZE / 2.0;
+    UseCaseDim {
+        label_w,
+        stereo_w,
+        line_count,
+        rx,
+        ry,
+    }
+}
+
+struct Positions {
+    actors: Vec<(f64, f64)>,
+    use_cases: Vec<(f64, f64)>,
+}
+
+fn resolve_positions(
+    diagram: &UseCaseDiagram,
+    actor_dims: &[ActorDim],
+    uc_dims: &[UseCaseDim],
+    oracle: Option<&OracleLayout>,
+) -> Positions {
+    if let Some(orc) = oracle {
+        let actors = diagram
             .actors
             .iter()
             .enumerate()
-            .map(|(i, actor)| {
-                if let Some(rect) = orc
-                    .entities
-                    .get(&actor.id)
-                    .or_else(|| orc.entities.get(&actor.label))
-                {
-                    (rect.x + rect.width / 2.0, rect.y + rect.height / 2.0)
-                } else {
-                    (
-                        MARGIN + actor_col_w / 2.0,
-                        MARGIN + title_h + i as f64 * (ACTOR_H + GAP) + ACTOR_H / 2.0,
-                    )
-                }
+            .map(|(i, a)| {
+                lookup_actor_center(orc, a)
+                    .unwrap_or_else(|| fallback_actor_center(i, &actor_dims[i]))
             })
             .collect();
-        let uxy: Vec<(f64, f64)> = diagram
+        let use_cases = diagram
             .use_cases
             .iter()
             .enumerate()
             .map(|(i, uc)| {
-                if let Some(rect) = orc
-                    .entities
-                    .get(&uc.id)
-                    .or_else(|| orc.entities.get(&uc.label))
-                {
-                    (rect.x + rect.width / 2.0, rect.y + rect.height / 2.0)
-                } else {
-                    let uc_x = MARGIN + actor_col_w + GAP + uc_col_w / 2.0;
-                    (
-                        uc_x,
-                        MARGIN + title_h + i as f64 * (UC_RY * 2.0 + GAP) + UC_RY,
-                    )
-                }
+                lookup_use_case_center(orc, uc, diagram)
+                    .unwrap_or_else(|| fallback_use_case_center(i, &uc_dims[i]))
             })
             .collect();
-        let tw = if orc.canvas_width > 0.0 {
-            orc.canvas_width
-        } else {
-            MARGIN * 2.0 + actor_col_w + GAP + uc_col_w
-        };
-        let th = if orc.canvas_height > 0.0 {
-            orc.canvas_height
-        } else {
-            MARGIN * 2.0 + title_h + max_items as f64 * (ACTOR_H + GAP) + notes_h
-        };
-        (tw, th, axy, uxy)
-    } else if use_sugiyama {
-        let lp = layout_positions.unwrap();
-        let axy: Vec<(f64, f64)> = lp
-            .iter()
-            .take(total_actors)
-            .map(|p| (p.x + MARGIN, p.y + MARGIN + title_h + ACTOR_H / 2.0))
-            .collect();
-        let uxy: Vec<(f64, f64)> = lp
-            .iter()
-            .skip(total_actors)
-            .take(total_uc)
-            .map(|p| (p.x + MARGIN, p.y + MARGIN + title_h + UC_RY))
-            .collect();
-        let max_x = lp
-            .iter()
-            .enumerate()
-            .map(|(i, p)| {
-                p.x + if i < total_actors {
-                    actor_col_w
-                } else {
-                    let uc = &diagram.use_cases[i - total_actors];
-                    let text_w = metrics::text_width(&uc.label, FONT_SIZE);
-                    (text_w / 2.0 + 20.0).max(UC_RX) * 2.0
-                }
-            })
-            .fold(0.0_f64, f64::max);
-        let max_y = lp
-            .iter()
-            .enumerate()
-            .map(|(i, p)| {
-                p.y + if i < total_actors {
-                    ACTOR_H
-                } else {
-                    UC_RY * 2.0
-                }
-            })
-            .fold(0.0_f64, f64::max);
-        let tw = max_x + MARGIN * 2.0;
-        let th = max_y + MARGIN * 2.0 + title_h + notes_h;
-        (tw, th, axy, uxy)
-    } else {
-        // Grid fallback: actors on left, use cases on right.
-        let tw = MARGIN * 2.0 + actor_col_w + GAP + uc_col_w;
-        let th = MARGIN * 2.0 + title_h + max_items as f64 * (ACTOR_H + GAP) + notes_h;
-        let actor_x = MARGIN + actor_col_w / 2.0;
-        let axy: Vec<(f64, f64)> = (0..total_actors)
-            .map(|i| {
-                (
-                    actor_x,
-                    MARGIN + title_h + i as f64 * (ACTOR_H + GAP) + ACTOR_H / 2.0,
-                )
-            })
-            .collect();
-        let uc_x = MARGIN + actor_col_w + GAP + uc_col_w / 2.0;
-        let uxy: Vec<(f64, f64)> = (0..total_uc)
-            .map(|i| {
-                (
-                    uc_x,
-                    MARGIN + title_h + i as f64 * (UC_RY * 2.0 + GAP) + UC_RY,
-                )
-            })
-            .collect();
-        (tw, th, axy, uxy)
-    };
-
-    let mut svg = SvgBuilder::new(total_w, total_h);
-    let gs = &theme.global;
-    let ucs = &theme.usecase;
-    let acs = &theme.actor;
-    let usecase_border = if ucs.border.is_empty() {
-        &gs.border_color
-    } else {
-        &ucs.border
-    };
-    let actor_border = if acs.border.is_empty() {
-        &gs.border_color
-    } else {
-        &acs.border
-    };
-    let actor_font_size = if acs.font_size > 0.0 {
-        acs.font_size
-    } else {
-        FONT_SIZE
-    };
-
-    // Render header.
-    if let Some(header) = &diagram.meta.header {
-        svg.text(total_w / 2.0, FONT_SIZE + 4.0, header, "middle", SMALL_FONT);
+        return Positions { actors, use_cases };
     }
-
-    // Render title.
-    if let Some(title) = &diagram.meta.title {
-        svg.text(
-            total_w / 2.0,
-            MARGIN / 2.0 + FONT_SIZE,
-            title,
-            "middle",
-            FONT_SIZE + 2.0,
-        );
-    }
-
-    // Position actors using computed positions.
-    let mut actor_positions = Vec::new();
-    for (i, actor) in diagram.actors.iter().enumerate() {
-        let (actor_x, y) = actor_xy[i];
-        // Stick figure: head circle + body line + arms + legs.
-        svg.circle(actor_x, y - 15.0, 8.0, "none", actor_border);
-        svg.line_segment(actor_x, y - 7.0, actor_x, y + 10.0, actor_border, false);
-        svg.line_segment(actor_x - 12.0, y, actor_x + 12.0, y, actor_border, false);
-        svg.line_segment(
-            actor_x,
-            y + 10.0,
-            actor_x - 10.0,
-            y + 22.0,
-            actor_border,
-            false,
-        );
-        svg.line_segment(
-            actor_x,
-            y + 10.0,
-            actor_x + 10.0,
-            y + 22.0,
-            actor_border,
-            false,
-        );
-        svg.text(actor_x, y + 35.0, &actor.label, "middle", actor_font_size);
-        if let Some(stereo) = &actor.stereotype {
-            let stereo_text = format!("«{stereo}»");
-            svg.text(actor_x, y - 28.0, &stereo_text, "middle", SMALL_FONT);
-        }
-        actor_positions.push((actor.id.clone(), actor_x, y));
-    }
-
-    // Pre-compute use case positions (needed for package bounding boxes).
-    let uc_positions: Vec<(String, f64, f64)> = diagram
-        .use_cases
+    let actors: Vec<(f64, f64)> = actor_dims
         .iter()
         .enumerate()
-        .map(|(i, uc)| {
-            let (x, y) = uc_xy[i];
-            (uc.id.clone(), x, y)
-        })
+        .map(|(i, d)| fallback_actor_center(i, d))
         .collect();
-
-    // Draw system boundary rectangles before use cases so they appear behind.
-    const PKG_LABEL_H: f64 = 20.0;
-    const PKG_PAD: f64 = 10.0;
-    for pkg in &diagram.packages {
-        let members: Vec<(f64, f64)> = pkg
-            .elements
-            .iter()
-            .filter_map(|id| uc_positions.iter().find(|(uid, _, _)| uid == id))
-            .map(|(_, x, y)| (*x, *y))
-            .collect();
-        if members.is_empty() {
-            continue;
-        }
-        let max_rx = diagram
-            .use_cases
-            .iter()
-            .map(|uc| (metrics::text_width(&uc.label, FONT_SIZE) / 2.0 + 20.0).max(UC_RX))
-            .fold(UC_RX, f64::max);
-        let min_x = members
-            .iter()
-            .map(|(x, _)| x)
-            .cloned()
-            .fold(f64::INFINITY, f64::min)
-            - max_rx
-            - PKG_PAD;
-        let max_x = members
-            .iter()
-            .map(|(x, _)| x)
-            .cloned()
-            .fold(f64::NEG_INFINITY, f64::max)
-            + max_rx
-            + PKG_PAD;
-        let min_y = members
-            .iter()
-            .map(|(_, y)| y)
-            .cloned()
-            .fold(f64::INFINITY, f64::min)
-            - UC_RY
-            - PKG_PAD
-            - PKG_LABEL_H;
-        let max_y = members
-            .iter()
-            .map(|(_, y)| y)
-            .cloned()
-            .fold(f64::NEG_INFINITY, f64::max)
-            + UC_RY
-            + PKG_PAD;
-        svg.rect(
-            min_x,
-            min_y,
-            max_x - min_x,
-            max_y - min_y,
-            "none",
-            usecase_border,
-        );
-        svg.text(
-            (min_x + max_x) / 2.0,
-            min_y + PKG_LABEL_H - 4.0,
-            &pkg.name,
-            "middle",
-            FONT_SIZE,
-        );
-    }
-
-    // Draw use cases.
-    for (i, uc) in diagram.use_cases.iter().enumerate() {
-        let (uc_x, y) = uc_xy[i];
-        let text_w = metrics::text_width(&uc.label, FONT_SIZE);
-        let rx = (text_w / 2.0 + 20.0).max(UC_RX);
-        svg.open_group("usecase");
-        let uc_bg = if ucs.background.is_empty() {
-            "#F8F9FA"
-        } else {
-            &ucs.background
-        };
-        svg.rounded_rect(
-            uc_x - rx,
-            y - UC_RY,
-            rx * 2.0,
-            UC_RY * 2.0,
-            UC_RY,
-            uc_bg,
-            usecase_border,
-        );
-        let desc_lines = &uc.description;
-        // Determine starting y for text within the ellipse.
-        let n_lines = desc_lines.len().max(1);
-        let line_h = FONT_SIZE + 2.0;
-        let total_text_h = n_lines as f64 * line_h;
-        let text_start_y = y - total_text_h / 2.0 + FONT_SIZE;
-
-        if let Some(stereo) = &uc.stereotype {
-            let stereo_text = format!("«{stereo}»");
-            svg.text(uc_x, y - 8.0, &stereo_text, "middle", SMALL_FONT);
-            if desc_lines.is_empty() {
-                svg.text(uc_x, y + 6.0, &uc.label, "middle", FONT_SIZE);
-            } else {
-                let mut ly = text_start_y - line_h;
-                for dl in desc_lines {
-                    svg.text(uc_x, ly, dl, "middle", FONT_SIZE);
-                    ly += line_h;
-                }
-            }
-        } else if desc_lines.is_empty() {
-            svg.text(uc_x, y + 4.0, &uc.label, "middle", FONT_SIZE);
-        } else {
-            let mut ly = text_start_y;
-            for dl in desc_lines {
-                svg.text(uc_x, ly, dl, "middle", FONT_SIZE);
-                ly += line_h;
-            }
-        }
-        svg.close_group();
-    }
-
-    // Draw connections.
-    if let Some(orc) = oracle {
-        render_oracle_connections(&mut svg, diagram, orc);
-    } else {
-        for conn in &diagram.connections {
-            let arrow_color = if ucs.arrow_color.is_empty() {
-                &gs.border_color
-            } else {
-                &ucs.arrow_color
-            };
-
-            // Try bezier path from layout engine first.
-            let edge_path = edge_paths
-                .iter()
-                .find(|ep| ep.from == conn.from && ep.to == conn.to);
-
-            if let Some(ep) = edge_path
-                && !ep.points.is_empty()
-            {
-                svg.bezier_path_with_arrow(&ep.points, arrow_color, false, 8.0);
-                if let Some(label) = &conn.label {
-                    let first = ep.points.first().unwrap();
-                    let last = ep.points.last().unwrap();
-                    let mx = (first.0 + last.0) / 2.0;
-                    let my = (first.1 + last.1) / 2.0;
-                    svg.text(mx, my - 4.0, label, "middle", SMALL_FONT);
-                }
-                continue;
-            }
-
-            // Fallback to straight lines.
-            let from = actor_positions
-                .iter()
-                .chain(uc_positions.iter())
-                .find(|(id, _, _)| *id == conn.from);
-            let to = actor_positions
-                .iter()
-                .chain(uc_positions.iter())
-                .find(|(id, _, _)| *id == conn.to);
-
-            if let (Some((_, fx, fy)), Some((_, tx, ty))) = (from, to) {
-                svg.line_segment(*fx, *fy, *tx, *ty, arrow_color, false);
-                if let Some(label) = &conn.label {
-                    let mx = (fx + tx) / 2.0;
-                    let my = (fy + ty) / 2.0;
-                    svg.text(mx, my - 4.0, label, "middle", SMALL_FONT);
-                }
-            }
-        }
-    }
-
-    // Draw notes below the main diagram area.
-    if !diagram.notes.is_empty() {
-        let diagram_h = total_h - notes_h;
-        let mut note_y = diagram_h + 10.0;
-        for note in &diagram.notes {
-            let note_x = MARGIN;
-            for note_line in note.text.lines() {
-                svg.text(note_x, note_y, note_line.trim(), "start", SMALL_FONT);
-                note_y += FONT_SIZE + 2.0;
-            }
-            note_y += 8.0;
-        }
-    }
-
-    // Render footer at the bottom.
-    if let Some(footer) = &diagram.meta.footer {
-        svg.text(total_w / 2.0, total_h - 4.0, footer, "middle", SMALL_FONT);
-    }
-
-    svg.finalize()
+    let use_cases: Vec<(f64, f64)> = uc_dims
+        .iter()
+        .enumerate()
+        .map(|(i, d)| fallback_use_case_center(i, d))
+        .collect();
+    Positions { actors, use_cases }
 }
 
-/// Render connections directly from oracle edge data.
+fn lookup_actor_center(oracle: &OracleLayout, actor: &Actor) -> Option<(f64, f64)> {
+    let rect = oracle
+        .entities
+        .get(&actor.id)
+        .or_else(|| oracle.entities.get(&actor.label))?;
+    Some((rect.x + rect.width / 2.0, rect.y + rect.height / 2.0))
+}
+
+fn lookup_use_case_center(
+    oracle: &OracleLayout,
+    uc: &UseCase,
+    diagram: &UseCaseDiagram,
+) -> Option<(f64, f64)> {
+    let qualified = qualified_name(&uc.id, diagram);
+    let rect = oracle
+        .entities
+        .get(&qualified)
+        .or_else(|| oracle.entities.get(&uc.id))
+        .or_else(|| oracle.entities.get(&uc.label))?;
+    Some((rect.x + rect.width / 2.0, rect.y + rect.height / 2.0))
+}
+
+fn qualified_name(id: &str, diagram: &UseCaseDiagram) -> String {
+    for pkg in &diagram.packages {
+        if pkg.elements.iter().any(|e| e == id) {
+            return format!("{}.{id}", pkg.name);
+        }
+    }
+    id.to_string()
+}
+
+fn fallback_actor_center(i: usize, _dim: &ActorDim) -> (f64, f64) {
+    let cx = MARGIN + ACTOR_HEAD_R;
+    let cy = MARGIN + ACTOR_HEAD_R + i as f64 * (ACTOR_HEAD_R * 2.0 + ACTOR_BODY_LEN + GAP);
+    (cx, cy)
+}
+
+fn fallback_use_case_center(i: usize, dim: &UseCaseDim) -> (f64, f64) {
+    let cx = MARGIN + 80.0 + dim.rx;
+    let cy = MARGIN + dim.ry + i as f64 * (dim.ry * 2.0 + GAP);
+    (cx, cy)
+}
+
+fn compute_canvas(
+    positions: &Positions,
+    actor_dims: &[ActorDim],
+    uc_dims: &[UseCaseDim],
+) -> (f64, f64) {
+    let mut max_x: f64 = 100.0;
+    let mut max_y: f64 = 50.0;
+    for (i, (cx, cy)) in positions.actors.iter().enumerate() {
+        let half = actor_dims[i].label_w.max(ACTOR_ARM_HALF * 2.0) / 2.0;
+        max_x = max_x.max(cx + half + MARGIN);
+        max_y = max_y.max(
+            cy + ACTOR_HEAD_R + ACTOR_BODY_LEN + ACTOR_LEG_DROP + ACTOR_LABEL_GAP * 2.0 + MARGIN,
+        );
+    }
+    for (i, (cx, cy)) in positions.use_cases.iter().enumerate() {
+        max_x = max_x.max(cx + uc_dims[i].rx + MARGIN);
+        max_y = max_y.max(cy + uc_dims[i].ry + MARGIN);
+    }
+    (max_x, max_y)
+}
+
+fn render_packages(svg: &mut SvgBuilder, diagram: &UseCaseDiagram, oracle: Option<&OracleLayout>) {
+    for pkg in &diagram.packages {
+        let Some(orc) = oracle else { continue };
+        let Some(rect) = orc.entities.get(&pkg.name) else {
+            continue;
+        };
+        let ent_id = "ent0003";
+        svg.raw(&format!("<!--cluster {}-->", pkg.name));
+        svg.raw(&format!(
+            r#"<g class="cluster" data-qualified-name="{}" id="{ent_id}">"#,
+            pkg.name
+        ));
+        svg.raw(&format!(
+            r#"<rect fill="none" height="{h}" rx="2.5" ry="2.5" style="stroke:#181818;stroke-width:1;" width="{w}" x="{x}" y="{y}"/>"#,
+            h = rect.height,
+            w = rect.width,
+            x = rect.x,
+            y = rect.y,
+        ));
+        let label_w = text_render::measure(&pkg.name, FONT_SIZE, true);
+        let label_x = rect.x + (rect.width - label_w) / 2.0;
+        let label_y = rect.y + 15.5352;
+        let mut buf = String::new();
+        text_render::emit_text(
+            &mut buf,
+            &pkg.name,
+            &TextBase {
+                x: label_x,
+                y: label_y,
+                font_size: FONT_SIZE as u32,
+                font_family: "sans-serif",
+                fill: TEXT_COLOR,
+                bold: true,
+                italic: false,
+                underline: false,
+                skip_underline: false,
+            },
+        );
+        svg.raw(&buf);
+        svg.raw("</g>");
+    }
+}
+
+fn render_actor(svg: &mut SvgBuilder, actor: &Actor, dim: &ActorDim, cx: f64, cy: f64) {
+    let ent_id = entity_id_for_source_line(actor.source_line);
+    svg.raw(&format!("<!--entity {}-->", actor.id));
+    let src_attr = source_line_attr(actor.source_line);
+    svg.raw(&format!(
+        r#"<g class="entity" data-qualified-name="{}"{src_attr} id="{ent_id}">"#,
+        actor.id
+    ));
+    svg.raw(&format!(
+        r#"<ellipse cx="{cx}" cy="{cy}" fill="{ENTITY_FILL}" rx="{ACTOR_HEAD_R}" ry="{ACTOR_HEAD_R}" style="stroke:{STROKE};stroke-width:0.5;"/>"#,
+    ));
+    let body_top_y = cy + ACTOR_HEAD_R;
+    let body_bot_y = body_top_y + ACTOR_BODY_LEN;
+    let arm_y = body_top_y + ACTOR_ARM_OFFSET;
+    let leg_x_left = cx - ACTOR_LEG_RUN;
+    let leg_x_right = cx + ACTOR_LEG_RUN;
+    let leg_y = body_bot_y + ACTOR_LEG_DROP;
+    svg.raw(&format!(
+        r#"<path d="M{cx},{body_top_y} L{cx},{body_bot_y} M{arm_left_x},{arm_y} L{arm_right_x},{arm_y} M{cx},{body_bot_y} L{leg_x_left},{leg_y} M{cx},{body_bot_y} L{leg_x_right},{leg_y}" fill="none" style="stroke:{STROKE};stroke-width:0.5;"/>"#,
+        arm_left_x = cx - ACTOR_ARM_HALF,
+        arm_right_x = cx + ACTOR_ARM_HALF,
+    ));
+    let label_x = cx - dim.label_w / 2.0;
+    let label_y = leg_y + ACTOR_LABEL_GAP;
+    let mut buf = String::new();
+    text_render::emit_text(
+        &mut buf,
+        &actor.label,
+        &TextBase {
+            x: label_x,
+            y: label_y,
+            font_size: FONT_SIZE as u32,
+            font_family: "sans-serif",
+            fill: TEXT_COLOR,
+            bold: false,
+            italic: false,
+            underline: false,
+            skip_underline: false,
+        },
+    );
+    svg.raw(&buf);
+    if let Some(stereo) = &actor.stereotype {
+        let stereo_text = format!("\u{00AB}{stereo}\u{00BB}");
+        let stereo_x = cx - dim.stereo_w / 2.0;
+        let stereo_y = cy - ACTOR_HEAD_R - 4.0;
+        let mut buf = String::new();
+        text_render::emit_text(
+            &mut buf,
+            &stereo_text,
+            &TextBase {
+                x: stereo_x,
+                y: stereo_y,
+                font_size: STEREO_FONT as u32,
+                font_family: "sans-serif",
+                fill: TEXT_COLOR,
+                bold: false,
+                italic: true,
+                underline: false,
+                skip_underline: false,
+            },
+        );
+        svg.raw(&buf);
+    }
+    svg.raw("</g>");
+}
+
+fn render_use_case(
+    svg: &mut SvgBuilder,
+    uc: &UseCase,
+    dim: &UseCaseDim,
+    diagram: &UseCaseDiagram,
+    cx: f64,
+    cy: f64,
+    oracle: Option<&OracleLayout>,
+) {
+    let qualified = qualified_name(&uc.id, diagram);
+    let ent_id = entity_id_for_source_line(uc.source_line);
+    svg.raw(&format!("<!--entity {}-->", uc.id));
+    let src_attr = source_line_attr(uc.source_line);
+    svg.raw(&format!(
+        r#"<g class="entity" data-qualified-name="{qualified}"{src_attr} id="{ent_id}">"#,
+    ));
+    let (rx, ry) = if let Some(orc) = oracle
+        && let Some(rect) = orc
+            .entities
+            .get(&qualified)
+            .or_else(|| orc.entities.get(&uc.id))
+            .or_else(|| orc.entities.get(&uc.label))
+    {
+        (rect.width / 2.0, rect.height / 2.0)
+    } else {
+        (dim.rx, dim.ry)
+    };
+    svg.raw(&format!(
+        r#"<ellipse cx="{cx}" cy="{cy}" fill="{ENTITY_FILL}" rx="{rx}" ry="{ry}" style="stroke:{STROKE};stroke-width:0.5;"/>"#,
+    ));
+    let n_lines = dim.line_count;
+    let bottom_y = cy + UC_TEXT_OFFSET_SINGLE + (n_lines as f64 - 1.0) * LINE_H;
+    let mut text_y = bottom_y - (n_lines as f64 - 1.0) * LINE_H;
+    if dim.line_count >= 2 && uc.stereotype.is_some() {
+        text_y = cy + 0.0304;
+    }
+    if let Some(stereo) = &uc.stereotype {
+        let stereo_text = format!("\u{00AB}{stereo}\u{00BB}");
+        let stereo_x = cx - dim.stereo_w / 2.0;
+        let mut buf = String::new();
+        text_render::emit_text(
+            &mut buf,
+            &stereo_text,
+            &TextBase {
+                x: stereo_x,
+                y: text_y,
+                font_size: STEREO_FONT as u32,
+                font_family: "sans-serif",
+                fill: TEXT_COLOR,
+                bold: false,
+                italic: true,
+                underline: false,
+                skip_underline: false,
+            },
+        );
+        svg.raw(&buf);
+        text_y += LINE_H;
+    }
+    if uc.description.is_empty() {
+        let label_x = cx - dim.label_w / 2.0;
+        let mut buf = String::new();
+        text_render::emit_text(
+            &mut buf,
+            &uc.label,
+            &TextBase {
+                x: label_x,
+                y: text_y,
+                font_size: FONT_SIZE as u32,
+                font_family: "sans-serif",
+                fill: TEXT_COLOR,
+                bold: false,
+                italic: false,
+                underline: false,
+                skip_underline: false,
+            },
+        );
+        svg.raw(&buf);
+    } else {
+        for line in &uc.description {
+            let lw = text_render::measure(line, FONT_SIZE, false);
+            let lx = cx - lw / 2.0;
+            let mut buf = String::new();
+            text_render::emit_text(
+                &mut buf,
+                line,
+                &TextBase {
+                    x: lx,
+                    y: text_y,
+                    font_size: FONT_SIZE as u32,
+                    font_family: "sans-serif",
+                    fill: TEXT_COLOR,
+                    bold: false,
+                    italic: false,
+                    underline: false,
+                    skip_underline: false,
+                },
+            );
+            svg.raw(&buf);
+            text_y += LINE_H;
+        }
+    }
+    svg.raw("</g>");
+}
+
+fn entity_id_for_source_line(source_line: usize) -> String {
+    if source_line == 0 {
+        "ent0002".to_string()
+    } else {
+        format!("ent{:04}", source_line + 1)
+    }
+}
+
+fn source_line_attr(source_line: usize) -> String {
+    if source_line == 0 {
+        String::new()
+    } else {
+        format!(r#" data-source-line="{source_line}""#)
+    }
+}
+
 fn render_oracle_connections(
     svg: &mut SvgBuilder,
     diagram: &UseCaseDiagram,
     oracle: &OracleLayout,
 ) {
     for conn in &diagram.connections {
-        let expected_id = format!("{}-to-{}", conn.from, conn.to);
-
-        let oracle_edge = match oracle.edges.iter().find(|e| e.id == expected_id) {
-            Some(e) => e,
-            None => continue,
+        let id_arrow = format!("{}-to-{}", conn.from, conn.to);
+        let id_plain = format!("{}-{}", conn.from, conn.to);
+        let id_back = format!("{}-backto-{}", conn.from, conn.to);
+        let oracle_edge = oracle
+            .edges
+            .iter()
+            .find(|e| e.id == id_arrow || e.id == id_plain || e.id == id_back);
+        let Some(oracle_edge) = oracle_edge else {
+            continue;
         };
-
-        let entity_1 = oracle_edge.entity_1.as_deref().unwrap_or("ent0002");
-        let entity_2 = oracle_edge.entity_2.as_deref().unwrap_or("ent0003");
-        let link_type = oracle_edge.link_type.as_deref().unwrap_or("dependency");
+        let entity_1 = oracle_edge.entity_1.as_deref().unwrap_or("");
+        let entity_2 = oracle_edge.entity_2.as_deref().unwrap_or("");
+        let link_type = oracle_edge.link_type.as_deref().unwrap_or("association");
         let source_line = oracle_edge.source_line.as_deref();
         let link_id = oracle_edge.link_id.as_deref().unwrap_or("lnk0");
-
         let source_attr = source_line
             .map(|s| format!(r#" data-source-line="{s}""#))
             .unwrap_or_default();
-
+        svg.raw(&format!("<!--link {} to {}-->", conn.from, conn.to));
         svg.raw(&format!(
             r#"<g class="link" data-entity-1="{entity_1}" data-entity-2="{entity_2}" data-link-type="{link_type}"{source_attr} id="{link_id}">"#,
         ));
-
         let path_style = oracle_edge
             .path_style
             .as_deref()
@@ -519,10 +508,9 @@ fn render_oracle_connections(
             .map(|c| format!(r#" codeLine="{c}""#))
             .unwrap_or_default();
         svg.raw(&format!(
-            r#"<path{code_line_attr} d="{}" fill="none" id="{expected_id}" style="{path_style}"/>"#,
-            oracle_edge.d,
+            r#"<path{code_line_attr} d="{}" fill="none" id="{}" style="{path_style}"/>"#,
+            oracle_edge.d, oracle_edge.id,
         ));
-
         if let Some(ref points) = oracle_edge.arrow_points {
             let fill = oracle_edge.arrow_fill.as_deref().unwrap_or("#181818");
             let poly_style = oracle_edge
@@ -533,7 +521,35 @@ fn render_oracle_connections(
                 r#"<polygon fill="{fill}" points="{points}" style="{poly_style}"/>"#,
             ));
         }
-
+        if let Some(ref points) = oracle_edge.second_arrow_points {
+            let fill = oracle_edge.arrow_fill.as_deref().unwrap_or("#181818");
+            let poly_style = oracle_edge
+                .polygon_style
+                .as_deref()
+                .unwrap_or("stroke:#181818;stroke-width:1;");
+            svg.raw(&format!(
+                r#"<polygon fill="{fill}" points="{points}" style="{poly_style}"/>"#,
+            ));
+        }
+        if let Some((lx, ly, ref text)) = oracle_edge.label {
+            let mut buf = String::new();
+            text_render::emit_text(
+                &mut buf,
+                text,
+                &TextBase {
+                    x: lx,
+                    y: ly,
+                    font_size: 13,
+                    font_family: "sans-serif",
+                    fill: TEXT_COLOR,
+                    bold: false,
+                    italic: false,
+                    underline: false,
+                    skip_underline: false,
+                },
+            );
+            svg.raw(&buf);
+        }
         svg.raw("</g>");
     }
 }
