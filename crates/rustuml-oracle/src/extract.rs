@@ -125,6 +125,7 @@ pub fn extract_oracle_layout(svg: &str) -> Option<OracleLayout> {
                         })
                         .collect();
                     let fill = rect.attribute("fill").map(String::from);
+                    let entity_id = node.attribute("id").map(String::from);
                     layout.entities.insert(
                         name.to_string(),
                         EntityRect {
@@ -139,6 +140,7 @@ pub fn extract_oracle_layout(svg: &str) -> Option<OracleLayout> {
                             sep_y_values,
                             vis_icon_y_values,
                             fill,
+                            entity_id,
                         },
                     );
                 } else if let Some(ellipse) = find_first_child(&node, "ellipse") {
@@ -147,6 +149,7 @@ pub fn extract_oracle_layout(svg: &str) -> Option<OracleLayout> {
                     let cy = parse_attr(&ellipse, "cy")?;
                     let rx = parse_attr(&ellipse, "rx")?;
                     let ry = parse_attr(&ellipse, "ry")?;
+                    let entity_id = node.attribute("id").map(String::from);
                     layout.entities.insert(
                         name.to_string(),
                         EntityRect {
@@ -161,6 +164,7 @@ pub fn extract_oracle_layout(svg: &str) -> Option<OracleLayout> {
                             sep_y_values: Vec::new(),
                             vis_icon_y_values: Vec::new(),
                             fill: None,
+                            entity_id,
                         },
                     );
                 } else if let Some(polygon) = find_first_child(&node, "polygon") {
@@ -177,6 +181,7 @@ pub fn extract_oracle_layout(svg: &str) -> Option<OracleLayout> {
                             let max_x = xs.iter().copied().fold(f64::NEG_INFINITY, f64::max);
                             let min_y = ys.iter().copied().fold(f64::INFINITY, f64::min);
                             let max_y = ys.iter().copied().fold(f64::NEG_INFINITY, f64::max);
+                            let entity_id = node.attribute("id").map(String::from);
                             layout.entities.insert(
                                 name.to_string(),
                                 EntityRect {
@@ -191,6 +196,7 @@ pub fn extract_oracle_layout(svg: &str) -> Option<OracleLayout> {
                                     sep_y_values: Vec::new(),
                                     vis_icon_y_values: Vec::new(),
                                     fill: None,
+                                    entity_id,
                                 },
                             );
                         }
@@ -211,6 +217,7 @@ pub fn extract_oracle_layout(svg: &str) -> Option<OracleLayout> {
                     let cy = parse_attr(&ellipse, "cy")?;
                     let rx = parse_attr(&ellipse, "rx")?;
                     let ry = parse_attr(&ellipse, "ry")?;
+                    let entity_id = node.attribute("id").map(String::from);
                     layout.entities.insert(
                         name.to_string(),
                         EntityRect {
@@ -225,6 +232,7 @@ pub fn extract_oracle_layout(svg: &str) -> Option<OracleLayout> {
                             sep_y_values: Vec::new(),
                             vis_icon_y_values: Vec::new(),
                             fill: None,
+                            entity_id,
                         },
                     );
                 }
@@ -309,10 +317,16 @@ fn parse_attr(node: &roxmltree::Node, attr: &str) -> Option<f64> {
 }
 
 /// Recursively concatenate the text content of an element's descendants.
+///
+/// Only text-node descendants contribute (element nodes' `.text()` also
+/// returns their first child's text, so iterating without this filter
+/// would double-count leaf text content).
 fn collect_text(node: &roxmltree::Node) -> String {
     let mut out = String::new();
     for desc in node.descendants() {
-        if let Some(t) = desc.text() {
+        if desc.is_text()
+            && let Some(t) = desc.text()
+        {
             out.push_str(t);
         }
     }
@@ -574,6 +588,7 @@ fn path_bounding_box(d: &str) -> Option<EntityRect> {
             sep_y_values: Vec::new(),
             vis_icon_y_values: Vec::new(),
             fill: None,
+            entity_id: None,
         })
     } else {
         None
