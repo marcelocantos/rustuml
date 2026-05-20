@@ -168,7 +168,8 @@ pub fn extract_oracle_layout(svg: &str) -> Option<OracleLayout> {
                         },
                     );
                 } else if let Some(polygon) = find_first_child(&node, "polygon") {
-                    // Choice pseudo-states use <polygon> (diamond).
+                    // Choice pseudo-states use <polygon> (diamond), and
+                    // deployment Node shape uses a "tag" polygon.
                     if let Some(points) = polygon.attribute("points") {
                         let coords: Vec<f64> = points
                             .split(|c: char| c == ',' || c.is_whitespace())
@@ -182,6 +183,7 @@ pub fn extract_oracle_layout(svg: &str) -> Option<OracleLayout> {
                             let min_y = ys.iter().copied().fold(f64::INFINITY, f64::min);
                             let max_y = ys.iter().copied().fold(f64::NEG_INFINITY, f64::max);
                             let entity_id = node.attribute("id").map(String::from);
+                            let fill = polygon.attribute("fill").map(String::from);
                             layout.entities.insert(
                                 name.to_string(),
                                 EntityRect {
@@ -195,7 +197,7 @@ pub fn extract_oracle_layout(svg: &str) -> Option<OracleLayout> {
                                     text_y_values: Vec::new(),
                                     sep_y_values: Vec::new(),
                                     vis_icon_y_values: Vec::new(),
-                                    fill: None,
+                                    fill,
                                     entity_id,
                                 },
                             );

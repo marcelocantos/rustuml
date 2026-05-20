@@ -1450,9 +1450,25 @@ fn render_oracle_relationships(
             .unwrap();
         }
 
-        // Edge label (text on relationship), if present in the oracle. Emitted
-        // as one <text> per line at the recorded x/y with font-size 13.
-        if let Some((lx, ly, ref text)) = oracle_edge.label {
+        // Edge labels (text on relationship), if present in the oracle. Each
+        // text child of the link group becomes its own <text>: middle label
+        // first, optional cardinality labels second and third. Font-size 13,
+        // sans-serif, fill #000000. Falls back to the legacy joined `label`
+        // when `labels` is empty (older oracle data).
+        if !oracle_edge.labels.is_empty() {
+            for (lx, ly, text) in &oracle_edge.labels {
+                let tl = text_render::measure(text, 13.0, false);
+                write!(
+                    svg,
+                    r##"<text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="{}" x="{}" y="{}">{}</text>"##,
+                    fmt4(tl),
+                    fmt4(*lx),
+                    fmt4(*ly),
+                    escape_xml(text),
+                )
+                .unwrap();
+            }
+        } else if let Some((lx, ly, ref text)) = oracle_edge.label {
             let first_line = text.lines().next().unwrap_or("");
             let tl = text_render::measure(first_line, 13.0, false);
             write!(

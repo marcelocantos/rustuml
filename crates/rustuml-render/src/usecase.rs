@@ -656,19 +656,42 @@ fn source_line_attr(source_line: usize) -> String {
     }
 }
 
+fn entity_label<'a>(diagram: &'a UseCaseDiagram, id: &'a str) -> &'a str {
+    if let Some(a) = diagram.actors.iter().find(|a| a.id == id) {
+        return a.label.as_str();
+    }
+    if let Some(u) = diagram.use_cases.iter().find(|u| u.id == id) {
+        return u.label.as_str();
+    }
+    id
+}
+
 fn render_oracle_connections(
     svg: &mut SvgBuilder,
     diagram: &UseCaseDiagram,
     oracle: &OracleLayout,
 ) {
-    for conn in &diagram.connections {
-        let id_arrow = format!("{}-to-{}", conn.from, conn.to);
-        let id_plain = format!("{}-{}", conn.from, conn.to);
-        let id_back = format!("{}-backto-{}", conn.from, conn.to);
+    // PlantUML emits links sorted by source line. The parser already stores
+    // connections in declaration order, but sort defensively.
+    let mut conns: Vec<&UseCaseConnection> = diagram.connections.iter().collect();
+    conns.sort_by_key(|c| c.source_line);
+    for conn in &conns {
+        let conn: &UseCaseConnection = conn;
+        // Oracle edge ids are built from the label form, not the id form.
+        let from_label = entity_label(diagram, &conn.from);
+        let to_label = entity_label(diagram, &conn.to);
+        let candidates = [
+            format!("{from_label}-to-{to_label}"),
+            format!("{from_label}-{to_label}"),
+            format!("{from_label}-backto-{to_label}"),
+            format!("{}-to-{}", conn.from, conn.to),
+            format!("{}-{}", conn.from, conn.to),
+            format!("{}-backto-{}", conn.from, conn.to),
+        ];
         let oracle_edge = oracle
             .edges
             .iter()
-            .find(|e| e.id == id_arrow || e.id == id_plain || e.id == id_back);
+            .find(|e| candidates.iter().any(|c| c == &e.id));
         let Some(oracle_edge) = oracle_edge else {
             continue;
         };
@@ -680,7 +703,7 @@ fn render_oracle_connections(
         let source_attr = source_line
             .map(|s| format!(r#" data-source-line="{s}""#))
             .unwrap_or_default();
-        svg.raw(&format!("<!--link {} to {}-->", conn.from, conn.to));
+        svg.raw(&format!("<!--link {from_label} to {to_label}-->"));
         svg.raw(&format!(
             r#"<g class="link" data-entity-1="{entity_1}" data-entity-2="{entity_2}" data-link-type="{link_type}"{source_attr} id="{link_id}">"#,
         ));

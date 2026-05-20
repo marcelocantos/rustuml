@@ -90,4 +90,9 @@ pub struct OracleEdgePath {
     /// `(x, y, text)` where text concatenates descendant text content
     /// (multi-line labels join with `\n`, using the first `<text>` element's x/y).
     pub label: Option<(f64, f64, String)>,
+    /// All edge text labels (`<text>` children of `<g class="link">`) in
+    /// document order. Each entry is `(x, y, text)`. Class diagrams emit up
+    /// to three labels per link: middle label first, then optional start/end
+    /// cardinality labels.
+    pub labels: Vec<(f64, f64, String)>,
 }
