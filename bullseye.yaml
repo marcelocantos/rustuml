@@ -279,7 +279,7 @@ targets:
     discovered: 2026-05-17
   T5:
     name: Tier-1 quick-win strict-XML fixes are landed in master
-    status: achieved
+    status: converging
     value: 0.0
     cost: 0.0
     acceptance:
@@ -303,12 +303,15 @@ targets:
       Net measurable impact on the strict-XML golden suite: +9 passes (2,109 → 2,118 across the bullseye-measured baseline; +5 class, +4 deployment). The other commits are structural precursors with no immediate byte-exact pass-count effect but unblock downstream geometry work. The two follow-up targets capture the genuinely harder pieces so they don't get conflated with quick wins again.
 
       Sources: agent reports from worktree-agent-* branches on 2026-05-18 and 2026-05-20, direct investigation on master 2026-05-19/20.
+    depends_on:
+    - T5.1
+    - T5.2
     origin: manual
     discovered: 2026-05-19
     achieved: 2026-05-20
   T5.1:
     name: Activity if/else cond_* tests pass byte-exact
-    status: achieved
+    status: converging
     value: 0.0
     cost: 0.0
     acceptance:
@@ -323,39 +326,65 @@ targets:
       Total strict-XML impact across master after these commits: 2,118 → 2,187 (+69 passes, no regressions in any bucket; activity bucket alone dropped 1,165 → 1,099). The acceptance items are now phrased in terms of what was actually implemented rather than the original aspirational \"all cond_* pass\" framing.
 
       Sources: 2026-05-20 investigation while executing T5.1. Multiple formula iterations attempted before settling on the narrow-action 1-px gap as a separate concern.
+    depends_on:
+    - T5.1.1
+    - T5.1.2
     origin: manual
     discovered: 2026-05-20
     achieved: 2026-05-20
   T5.1.1:
     name: Activity diagrams with single-character branch actions render with the correct svg width
+    status: achieved
+    value: 0.0
+    cost: 0.0
+    acceptance:
+    - Branch-distance formula updated to `max(diamond_w + 20, (then_w + else_w)/2 + 20)` so branches don't crowd each other when wider than the diamond. Closes the `act_condition_labels_empty_labels` failure (originally listed in T5.1.1 acceptance) and a further +18 strict-XML passes across the activity bucket. — commit `748ca7b9`.
+    - Investigation completed for the 5 remaining `act_cond_style_diamonds_*` failures. The root cause is **not** a min-branch-width or single-character heuristic as originally hypothesised; it is a 1-px svg-width adder in PlantUML that fires when content_w's fractional part lands ~0.95 (e.g., 102.95 → svg should be 139, ceil gives 138). Every cheap-fix tested (+0.5 content_w, +0.05 MARGIN_TRAIL, +0.25 per extent, +1 when narrow) introduces 60–150 regressions in unrelated tests. Captured as a separate target [[bullseye/T5.1.2]] for follow-up requiring deeper PlantUML source inspection.
+    context: |-
+      **Revised on 2026-05-20 after execution.** Original framing assumed all 6 remaining `act_cond_*` failures shared a common single-character-branch root cause. Investigation revealed the framing was wrong:
+
+      1. `act_condition_labels_empty_labels` was actually a **branch-crowding** bug independent of branch-character-count: the branch_dist formula `diamond_w + 20` under-spaced branches when the branch text was wider than the diamond. Fixed by switching to `max(diamond_w + 20, (then_w + else_w)/2 + 20)`. Closed cleanly with +19 total bucket gain and zero regressions.
+
+      2. The 5 remaining `act_cond_style_diamonds_*` tests are a **different** bug — a 1-px svg-width discrepancy that appears when `content_w + 35` lands at e.g. `137.95` (ceil = 138) but golden expects 139. Every isolated formula tweak that closes those 5 introduces 60-150 regressions across activity/creole/preprocessing/skinparam because the 1-px adder is bound to specific PlantUML internal state we can't observe externally. The fix needs deeper investigation against PlantUML's `Dimension` rounding logic in its Java source.
+
+      Cumulative T5.1.1 impact: +19 strict-XML passes (2,187 → 2,206); 34/39 `act_cond_*` pass (was 33/39). The 5 remaining diamonds tests are split off as [[bullseye/T5.1.2]].
+    origin: manual
+    discovered: 2026-05-20
+    achieved: 2026-05-20
+  T5.1.2:
+    name: Activity diagrams with content_w near .95 fractional render at the correct svg width
     status: identified
     value: 0.0
     cost: 0.0
     acceptance:
-    - The 6 remaining `act_cond_*` failures (`act_cond_style_diamonds_both_labeled`, `_is`, `_no_labels`, `_then_only`, `_yes_only`, and `act_condition_labels_empty_labels`) pass strict-XML comparison.
-    - The fix does not regress any currently-passing test in activity, creole, preprocessing, skinparam, or any other bucket.
+    - The 5 remaining `act_cond_style_diamonds_*` failures (`both_labeled`, `is`, `no_labels`, `then_only`, `yes_only`) pass strict-XML comparison.
+    - The fix does not regress any currently-passing test in any bucket.
     context: |-
-      After T5.1's structural fixes (cx asymmetry, if-branch arrow lengths, polygon closing, emit reorder), 33 of 39 `act_cond_*` tests pass byte-exact. The remaining 6 all share a 1-px svg-width discrepancy that fires specifically when both branch actions have single-character content (`Y`, `N`).
+      After T5.1.1 fixed the branch-crowding bug, 5 activity tests still fail with a 1-px svg-width discrepancy. All five have `cond_w ≈ 30.78` (text `cond?`) and single-char branches (`Y`, `N`), and all produce content_w + 35 = ~137.955 — where ceil gives 138 but golden expects 139.
 
-      Empirical evidence on `act_cond_style_diamonds_no_labels`:
-      - Y rect: x=16, width=27.4766
-      - N rect: x=90.0874, width=28.8652
-      - cond width 30.78 → diamond_w 54.78 → branch_dist 74.78
-      - content_left=51.13, content_right=51.82, content_w=102.95
-      - svg_w by current formula: ceil(102.95 + 35) = 138
-      - Golden svg_w: 139
+      The fractional pattern is the discriminator: tests whose content_w + 35 lands at X.95+ need +1 in svg_w (PlantUML internal extra), tests whose fractional is X.0-X.9 already match ceil. Empirical evidence across the activity bucket:
 
-      For wider branches (the 33 passing tests) the same formula gives the correct golden width — so the discrepancy is specifically tied to narrow branch content somehow.
+      | content_w + 35 | golden svg | ceil(...) | Need +1? |
+      |---|---|---|---|
+      | 137.95 | 139 | 138 | YES |
+      | 183.48 | 184 | 184 | NO |
+      | 238.82 | 239 | 239 | NO |
+      | 253.87 | 254 | 254 | NO |
+      | 270.94 | 271 | 271 | NO |
 
-      **Failed hypotheses (all introduced regressions elsewhere):**
-      - Uniform `+0.5` to content_w (broke 91 unrelated tests in creole, activity, preprocessing, skinparam).
-      - Asymmetric `+0.25` to left and right extents (cx shift broke other layouts).
-      - Branch min width of 30 px (over-widened wider cases by 1 px each).
-      - Branch min width of 28.5 px (broke wider cases differently).
+      So when fractional > some threshold (≈0.95), PlantUML emits svg_w as ceil + 1.
 
-      **Likely root cause** (untested): PlantUML may apply an extra stroke-padding pixel when the rightmost element has a stroke width AND its right edge plus stroke half-width crosses an integer-pixel boundary that wider branches naturally clear. Verifying this requires (a) finding multiple passing single-char tests outside cond_* to triangulate, (b) inspecting PlantUML's `Dimension` rounding logic in its Java source, or (c) brute-forcing the formula across the full activity bucket to find a delta that adds exactly the missing pixel without breaking wider cases.
+      **Failed hypotheses (all caused 60–150 regressions):**
+      - Add 0.05 to MARGIN_TRAIL (broke fractionals like 0.94 that were previously rounding correctly).
+      - Add 0.5 to content_w globally (broke creole/preprocessing tests with no if/else).
+      - Add 0.5 to right_extent of If only (broke labelled `condition_labels_*` tests where content was already wide enough).
+      - Use `max(branch_w, 30)` for min branch contribution (over-widens wider cases by 1).
 
-      Deferred from T5.1 because the structural work landed cleanly and this last 1 px is its own investigation. Estimated effort: 1 session of targeted formula derivation, ideally with access to PlantUML's Activity Beta dimension code.
+      **Likely root cause** (untested, would require PlantUML source inspection): PlantUML's Java `Dimension2D.getWidth()` may return a value rounded with a different precision (e.g., half-banker rather than half-up) which yields different ceil behaviour. Or there's a per-axis stroke half-pixel accommodation that fires conditionally.
+
+      Path forward: read PlantUML's `net.sourceforge.plantuml.activitydiagram3.ftile.Ftile.calculateDimension()` and the SVG-emit dimension computation, or instrument PlantUML's render of one failing test to capture the actual internal width values before SVG rounding. Until then, deferred.
+
+      Pulled out of T5.1.1 on 2026-05-20 because the framing was \"all 6 remaining cond_* pass\" and 1 of those 6 (empty_labels) actually shared a totally different root cause that closed cleanly; pretending they were one bug muddied the work.
     origin: manual
     discovered: 2026-05-20
   T5.2:
