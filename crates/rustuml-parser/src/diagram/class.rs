@@ -41,6 +41,19 @@ pub struct ClassDiagram {
     /// renderer can interpret per-entity selectors as well as global ones.
     #[serde(default)]
     pub hide_show: Vec<HideShow>,
+    /// 1-based source line of the `header`/`footer`/`title`/`caption`/`legend`
+    /// declaration, when present. Used to populate `data-source-line` on the
+    /// `<g class="header">`-style decoration wrappers PlantUML emits.
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub header_line: Option<usize>,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub footer_line: Option<usize>,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub title_line: Option<usize>,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub caption_line: Option<usize>,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub legend_line: Option<usize>,
 }
 
 /// One `hide`/`show` directive (verbatim arguments).

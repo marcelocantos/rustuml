@@ -60,6 +60,11 @@ struct ClassParser {
     current_line: usize,
     /// Accumulated `hide` / `show` directives, in source order.
     hide_show: Vec<crate::diagram::class::HideShow>,
+    header_line: Option<usize>,
+    footer_line: Option<usize>,
+    title_line: Option<usize>,
+    caption_line: Option<usize>,
+    legend_line: Option<usize>,
 }
 
 impl ClassParser {
@@ -79,6 +84,11 @@ impl ClassParser {
             meta_block: None,
             current_line: 0,
             hide_show: Vec::new(),
+            header_line: None,
+            footer_line: None,
+            title_line: None,
+            caption_line: None,
+            legend_line: None,
         }
     }
 
@@ -90,6 +100,11 @@ impl ClassParser {
             packages: self.packages,
             notes: self.notes,
             hide_show: self.hide_show,
+            header_line: self.header_line,
+            footer_line: self.footer_line,
+            title_line: self.title_line,
+            caption_line: self.caption_line,
+            legend_line: self.legend_line,
         }
     }
 
@@ -489,8 +504,10 @@ impl ClassParser {
         let stripped_line = strip_arrow_modifiers(line);
         let line = stripped_line.as_str();
         static RE: LazyLock<Regex> = LazyLock::new(|| {
+            // Endpoint may be a bare identifier (`[\w.]+`) or a quoted name
+            // (`"any text"`) so labels with whitespace or punctuation work.
             Regex::new(
-                r#"^([\w.]+)\s*(?:"([^"]+)")?\s*((?:<\|--\|>|<\.\.>|<\|--|--\|>|\.\.\|>|<\|\.\.|<\.\.|\*--|--\*|o--|--o|<-->|<--|-->|->|<-|-{2,}|\.\.|\.\.>))\s*(?:"([^"]+)")?\s*([\w.]+)(?:\s*:\s*(.+))?$"#,
+                r#"^(?:"([^"]+)"|([\w.]+))\s*(?:"([^"]+)")?\s*((?:<\|--\|>|<\.\.>|<\|--|--\|>|\.\.\|>|<\|\.\.|<\.\.|\*--|--\*|o--|--o|<-->|<--|-->|->|<-|-{2,}|\.\.|\.\.>))\s*(?:"([^"]+)")?\s*(?:"([^"]+)"|([\w.]+))(?:\s*:\s*(.+))?$"#,
             )
             .unwrap()
         });
@@ -500,12 +517,20 @@ impl ClassParser {
         });
 
         if let Some(caps) = RE.captures(line) {
-            let from_raw = &caps[1];
-            let from_mult = caps.get(2).map(|m| m.as_str().to_string());
-            let rel_str = &caps[3];
-            let to_mult = caps.get(4).map(|m| m.as_str().to_string());
-            let to_raw = &caps[5];
-            let label = caps.get(6).map(|m| m.as_str().trim().to_string());
+            let from_raw = caps
+                .get(1)
+                .or_else(|| caps.get(2))
+                .map(|m| m.as_str())
+                .unwrap_or("");
+            let from_mult = caps.get(3).map(|m| m.as_str().to_string());
+            let rel_str = &caps[4];
+            let to_mult = caps.get(5).map(|m| m.as_str().to_string());
+            let to_raw = caps
+                .get(6)
+                .or_else(|| caps.get(7))
+                .map(|m| m.as_str())
+                .unwrap_or("");
+            let label = caps.get(8).map(|m| m.as_str().trim().to_string());
 
             let (kind, dashed) = parse_relationship_kind(rel_str);
             let from = self.ensure_entity(from_raw);
@@ -850,14 +875,17 @@ impl ClassParser {
     fn try_meta(&mut self, line: &str) -> bool {
         if let Some(rest) = line.strip_prefix("title ") {
             self.meta.title = Some(super::strip_title_quotes(rest).to_string());
+            self.title_line.get_or_insert(self.current_line);
             return true;
         }
         if line == "title" {
             self.meta_block = Some(MetaBlock::Title);
+            self.title_line.get_or_insert(self.current_line);
             return true;
         }
         if let Some(rest) = line.strip_prefix("header ") {
             self.meta.header = Some(rest.trim().to_string());
+            self.header_line.get_or_insert(self.current_line);
             return true;
         }
         if line == "header"
@@ -866,10 +894,12 @@ impl ClassParser {
             || line.starts_with("center header")
         {
             self.meta_block = Some(MetaBlock::Header);
+            self.header_line.get_or_insert(self.current_line);
             return true;
         }
         if let Some(rest) = line.strip_prefix("footer ") {
             self.meta.footer = Some(rest.trim().to_string());
+            self.footer_line.get_or_insert(self.current_line);
             return true;
         }
         if line == "footer"
@@ -878,14 +908,17 @@ impl ClassParser {
             || line.starts_with("center footer")
         {
             self.meta_block = Some(MetaBlock::Footer);
+            self.footer_line.get_or_insert(self.current_line);
             return true;
         }
         if let Some(rest) = line.strip_prefix("caption ") {
             self.meta.caption = Some(rest.trim().to_string());
+            self.caption_line.get_or_insert(self.current_line);
             return true;
         }
         if line == "caption" {
             self.meta_block = Some(MetaBlock::Caption);
+            self.caption_line.get_or_insert(self.current_line);
             return true;
         }
         if line == "legend"
@@ -896,6 +929,7 @@ impl ClassParser {
             || line.starts_with("legend bottom")
         {
             self.meta_block = Some(MetaBlock::Legend);
+            self.legend_line.get_or_insert(self.current_line);
             return true;
         }
         if line == "set namespaceSeparator none" {
