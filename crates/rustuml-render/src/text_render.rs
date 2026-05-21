@@ -85,12 +85,16 @@ fn measure_inner(content: &str, font_size: f64, bold: bool, skip_underline: bool
 /// Height of `content` after creole resolution — the value a renderer
 /// needs to size boxes around a label vertically. Returns the max of
 /// per-segment heights (mono vs sans-serif) at the resolved font size.
+///
+/// Lines containing `<sub>` or `<sup>` segments grow by `|getSpace()|` to
+/// accommodate the descender / ascender beyond the line — matching Java
+/// PlantUML's `TileText.spaceBottom`.
 pub fn label_height(content: &str, font_size: f64) -> f64 {
     let segments = creole::parse_segments(content);
     if segments.is_empty() {
         return pm::text_height(font_size);
     }
-    segments
+    let base_height = segments
         .iter()
         .map(|seg| {
             let size = seg.style.size.map(|s| s as f64).unwrap_or(font_size);
@@ -100,18 +104,24 @@ pub fn label_height(content: &str, font_size: f64) -> f64 {
                 pm::text_height(size)
             }
         })
-        .fold(0.0f64, f64::max)
+        .fold(0.0f64, f64::max);
+    base_height + line_extra_space(&segments)
 }
 
 /// Ascent for vertical positioning of the text baseline within a label box.
 /// Picks the max of per-segment ascents (matches PlantUML's behaviour for
 /// mixed-font lines).
+///
+/// When `<sub>` is present, the baseline shifts down by the sub `getSpace()`
+/// so the descender stays within the line — the ascent therefore grows.
+/// `<sup>` does not affect ascent (the sup glyph extends above the existing
+/// ascent but doesn't move the baseline).
 pub fn label_ascent(content: &str, font_size: f64) -> f64 {
     let segments = creole::parse_segments(content);
     if segments.is_empty() {
         return pm::ascent(font_size);
     }
-    segments
+    let base_ascent = segments
         .iter()
         .map(|seg| {
             let size = seg.style.size.map(|s| s as f64).unwrap_or(font_size);
@@ -121,7 +131,38 @@ pub fn label_ascent(content: &str, font_size: f64) -> f64 {
                 pm::ascent(size)
             }
         })
-        .fold(0.0f64, f64::max)
+        .fold(0.0f64, f64::max);
+    base_ascent + sub_extra_space(&segments)
+}
+
+/// Extra vertical space the line needs beyond the maximum atom height to
+/// fit `<sub>` descenders and `<sup>` ascenders — matches Java's
+/// `TileText.spaceBottom = abs(getSpace())` per atom kind. We treat sub
+/// and sup as additive (line can host both), capped at one each.
+fn line_extra_space(segments: &[Segment]) -> f64 {
+    let mut has_sub = false;
+    let mut has_sup = false;
+    for s in segments {
+        match s.style.baseline_shift {
+            Some("sub") => has_sub = true,
+            Some("super") => has_sup = true,
+            _ => {}
+        }
+    }
+    (if has_sub { 3.0 } else { 0.0 }) + (if has_sup { 6.0 } else { 0.0 })
+}
+
+/// Portion of the extra space that pushes the baseline down (sub glyphs
+/// only — sup extends upward from the same baseline).
+fn sub_extra_space(segments: &[Segment]) -> f64 {
+    if segments
+        .iter()
+        .any(|s| matches!(s.style.baseline_shift, Some("sub")))
+    {
+        3.0
+    } else {
+        0.0
+    }
 }
 
 /// Pre-computed widths for the segments. Useful when the caller needs the
@@ -207,11 +248,7 @@ fn trim_segment_for_emit(seg: &Segment, base: &TextBase<'_>) -> (f64, String, f6
     }
     let trimmed = &seg.text[lead..seg.text.len() - trail];
     let bold = base.bold || seg.style.bold;
-    let font_size = seg
-        .style
-        .size
-        .map(|s| s as f64)
-        .unwrap_or(base.font_size as f64);
+    let font_size = effective_font_size(seg, base);
     let lead_w = sans_text_width(&" ".repeat(lead), font_size, bold);
     let trimmed_w = sans_text_width(&unescape_for_metrics(trimmed), font_size, bold);
     (lead_w, trimmed.to_string(), trimmed_w)
@@ -223,15 +260,29 @@ fn trim_segment_for_emit(seg: &Segment, base: &TextBase<'_>) -> (f64, String, f6
 fn segment_width(seg: &Segment, base: &TextBase<'_>) -> f64 {
     let raw = unescape_for_metrics(&seg.text);
     let bold = base.bold || seg.style.bold;
-    let font_size = seg
-        .style
-        .size
-        .map(|s| s as f64)
-        .unwrap_or(base.font_size as f64);
+    let font_size = effective_font_size(seg, base);
     if seg.style.monospace {
         pm::mono_text_width(&raw, font_size)
     } else {
         sans_text_width(&raw, font_size, bold)
+    }
+}
+
+/// Compute the effective rendered font size for a segment. PlantUML's
+/// `FontPosition.mute(font)` decreases the size by 3 (minimum 2) for sub /
+/// sup positioning, then the smaller font is used for both width
+/// measurement and the emitted `font-size` attribute. The reduction is
+/// applied AFTER any explicit `<size:N>` override.
+fn effective_font_size(seg: &Segment, base: &TextBase<'_>) -> f64 {
+    let nominal = seg
+        .style
+        .size
+        .map(|s| s as f64)
+        .unwrap_or(base.font_size as f64);
+    if seg.style.baseline_shift.is_some() {
+        (nominal - 3.0).max(2.0)
+    } else {
+        nominal
     }
 }
 
@@ -447,7 +498,27 @@ fn write_text_element(
     } else {
         base.font_family
     };
-    let font_size = style.size.unwrap_or(base.font_size);
+    let nominal_size = style.size.unwrap_or(base.font_size);
+    // Sub/sup: render with a smaller font and a y offset, matching Java
+    // PlantUML's `FontPosition.mute(font)` (size -= 3, min 2) plus a
+    // baseline shift of `getSpace()` adjusted by the descent difference
+    // between the original and reduced sizes (the smaller glyph's baseline
+    // sits descent_diff above the line bottom, so the y attribute must
+    // compensate). PlantUML does NOT emit `baseline-shift`; it emits a
+    // plain <text> with a smaller font-size at a shifted y.
+    let (font_size, y_offset) = match style.baseline_shift {
+        Some("sub") => {
+            let small = (nominal_size as i32 - 3).max(2) as u32;
+            let descent_diff = pm::descent(nominal_size as f64) - pm::descent(small as f64);
+            (small, 3.0 + descent_diff)
+        }
+        Some("super") => {
+            let small = (nominal_size as i32 - 3).max(2) as u32;
+            let descent_diff = pm::descent(nominal_size as f64) - pm::descent(small as f64);
+            (small, -6.0 + descent_diff)
+        }
+        _ => (nominal_size, 0.0),
+    };
     let raw_fill = style.fill.as_deref().unwrap_or(base.fill);
     let fill = normalize_color(raw_fill);
 
@@ -473,10 +544,6 @@ fn write_text_element(
     } else {
         ""
     };
-    let baseline_attr = match style.baseline_shift {
-        Some(shift) => format!(r#" baseline-shift="{shift}" font-size="0.7em""#),
-        None => String::new(),
-    };
 
     // Build a deterministic attribute order matching PlantUML's golden
     // output: fill, font-family, font-size, font-style, font-weight,
@@ -494,10 +561,10 @@ fn write_text_element(
     }
     write!(
         buf,
-        r#"<text fill="{fill}" font-family="{font_family}" font-size="{font_size}"{style_attr}{weight_attr}{baseline_attr} lengthAdjust="spacing"{text_decoration} textLength="{tl}" x="{x_s}" y="{y_s}">{content}</text>"#,
+        r#"<text fill="{fill}" font-family="{font_family}" font-size="{font_size}"{style_attr}{weight_attr} lengthAdjust="spacing"{text_decoration} textLength="{tl}" x="{x_s}" y="{y_s}">{content}</text>"#,
         tl = pm::fmt_coord(width),
         x_s = pm::fmt_coord(x),
-        y_s = pm::fmt_coord(base.y),
+        y_s = pm::fmt_coord(base.y + y_offset),
     )
     .unwrap();
     if style.link_url.is_some() {
