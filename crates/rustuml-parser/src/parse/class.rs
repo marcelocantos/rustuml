@@ -119,6 +119,7 @@ impl ClassParser {
                 stereotypes: Vec::new(),
                 url: None,
                 color: None,
+                text_color: None,
                 source_line: self.current_line,
             });
         }
@@ -426,6 +427,9 @@ impl ClassParser {
                 if entity_color.is_some() {
                     entity.color = entity_color.clone();
                 }
+                if let Some(tc) = extract_text_color(line) {
+                    entity.text_color = Some(tc);
+                }
             } else {
                 self.entities.push(ClassEntity {
                     id: final_id.clone(),
@@ -435,6 +439,7 @@ impl ClassParser {
                     stereotypes,
                     url: url.clone(),
                     color: entity_color.clone(),
+                    text_color: extract_text_color(line),
                     source_line: self.current_line,
                 });
             }
@@ -474,6 +479,7 @@ impl ClassParser {
                     stereotypes: Vec::new(),
                     url: None,
                     color: None,
+                    text_color: None,
                     source_line: self.current_line,
                 });
             }
@@ -593,6 +599,7 @@ impl ClassParser {
                     stereotypes: Vec::new(),
                     url: None,
                     color: None,
+                    text_color: None,
                     source_line: self.current_line,
                 });
             }
@@ -857,6 +864,7 @@ impl ClassParser {
                         stereotypes: Vec::new(),
                         url: None,
                         color: None,
+                        text_color: None,
                         source_line: self.current_line,
                     });
                 }
@@ -1115,6 +1123,15 @@ fn parse_relationship_kind(s: &str) -> (RelationshipKind, bool) {
         // Plain association (-- or ---- etc.)
         (RelationshipKind::Association, false)
     }
+}
+
+/// Extract `text:colour` from the entity shorthand
+/// `#back:colour;line:colour;line.bold;text:colour` (any order). Returns the
+/// raw colour token (e.g. `"blue"` or `"#FF0000"`) so the renderer can map it
+/// to a CSS-compatible `fill`.
+fn extract_text_color(line: &str) -> Option<String> {
+    static RE: LazyLock<Regex> = LazyLock::new(|| Regex::new(r"text:([#A-Za-z0-9]+)").unwrap());
+    RE.captures(line).map(|c| c[1].to_string())
 }
 
 fn parse_member(s: &str) -> Member {

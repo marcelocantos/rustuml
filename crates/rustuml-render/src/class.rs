@@ -511,7 +511,10 @@ fn calc_entity_dims(entity: &ClassEntity, entity_index: usize, hide: HideFlags) 
         HEADER_H
     };
 
-    let height = if entity.members.is_empty()
+    let height = if hide.fields && hide.methods {
+        // Both compartments hidden — header only, no body or separators.
+        header_h
+    } else if entity.members.is_empty()
         || (eff_field_count == 0 && eff_method_count == 0 && !enum_classic)
     {
         // No members: header + empty fields + empty methods.
@@ -564,14 +567,14 @@ fn format_stereotype_text(stereotypes: &[String]) -> String {
 // ---------------------------------------------------------------------------
 
 /// Translate special characters in an entity label to PlantUML's
-/// `data-qualified-name` form. Java's serialiser replaces every character
-/// that isn't a letter, digit, dot, or underscore with `.` so that the
-/// attribute remains a valid XML name fragment.
+/// `data-qualified-name` form. Java's serialiser replaces ASCII punctuation
+/// (other than `.` and `_`) with `.`; alphanumerics (including non-ASCII
+/// letters), spaces, and dots pass through unchanged.
 fn translate_qualified_name(label: &str) -> String {
     label
         .chars()
         .map(|c| {
-            if c.is_alphanumeric() || c == '.' || c == '_' {
+            if c.is_alphanumeric() || c == '.' || c == '_' || c == ' ' || !c.is_ascii() {
                 c
             } else {
                 '.'
@@ -1110,7 +1113,24 @@ fn render_plantuml_svg(
         )
         .unwrap();
 
+        // PlantUML wraps the entity content in `<a>` when the user attached a
+        // URL with `[[http://...]]`. The anchor carries the same href four
+        // ways (target, title, xlink:* attributes) to support multiple SVG
+        // viewers.
+        let has_url = entity.url.is_some();
+        if let Some(url) = entity.url.as_deref() {
+            let h = escape_xml(url);
+            write!(
+                svg,
+                r#"<a href="{h}" target="_top" title="{h}" xlink:actuate="onRequest" xlink:href="{h}" xlink:show="new" xlink:title="{h}" xlink:type="simple">"#,
+                h = h,
+            )
+            .unwrap();
+        }
         render_entity_content(&mut svg, entity, x, y, dim, oracle_rect);
+        if has_url {
+            svg.push_str("</a>");
+        }
 
         svg.push_str("</g>");
     }
@@ -1188,6 +1208,14 @@ fn render_entity_content(
         .map(|c| crate::sequence::resolve_color(c))
         .unwrap_or_else(|| ENTITY_FILL.to_string());
     let fill = oracle_fill.unwrap_or(&fill_default);
+    // Resolve the per-entity text colour from `#back:...;text:colour`
+    // shorthand. Default to black when absent.
+    let text_fill_owned = entity
+        .text_color
+        .as_ref()
+        .map(|c| crate::sequence::resolve_color(c))
+        .unwrap_or_else(|| "#000000".to_string());
+    let text_fill: &str = &text_fill_owned;
     let style_default = format!("stroke:{};stroke-width:{};", BORDER_COLOR, BORDER_WIDTH);
     let style = oracle_style.unwrap_or(style_default.as_str());
     let rx_str = oracle_rx.unwrap_or("2.5");
@@ -1284,7 +1312,7 @@ fn render_entity_content(
                 y: stereo_y,
                 font_size: 12,
                 font_family: "sans-serif",
-                fill: "#000000",
+                fill: text_fill,
                 bold: false,
                 italic: true,
                 underline: false,
@@ -1336,7 +1364,7 @@ fn render_entity_content(
             y: name_y,
             font_size: 14,
             font_family: "sans-serif",
-            fill: "#000000",
+            fill: text_fill,
             bold: false,
             italic: is_abstract || is_interface,
             underline: false,
@@ -1363,9 +1391,13 @@ fn render_entity_content(
         .unwrap_or(&[]);
     let mut vis_icon_idx = 0usize;
 
-    // Separator lines and members.
+    // Separator lines and members. Prefer the oracle's recorded entity
+    // width when available so the separator endpoints sit on PlantUML's
+    // exact float trajectory; otherwise fall back to our measured width.
     let sep_x1 = x + 1.0;
-    let sep_x2 = x + dim.width - 1.0;
+    let sep_x2 = oracle_rect
+        .map(|r| r.x + r.width - 1.0)
+        .unwrap_or(x + dim.width - 1.0);
 
     // Per-entity border style override: if the oracle supplies a rect
     // `style` (e.g. `class X #lightyellow;line:red;line.bold`), use it
@@ -1397,16 +1429,21 @@ fn render_entity_content(
     let enum_classic = dim.is_enum;
 
     let any_compartment_hidden = dim.hide.fields || dim.hide.methods;
+    let both_compartments_hidden = dim.hide.fields && dim.hide.methods;
     // `hide attributes`/`hide methods` collapses both compartments down to a
     // single separator line below the header, regardless of whether the
     // surviving compartment has any members. The "two separators" empty
     // layout is reserved for entities with no members and no hide directive.
-    let collapsing_hide_one_section =
-        any_compartment_hidden && !(dim.hide.fields && dim.hide.methods);
-    let effectively_no_members = (dim.hide.fields && dim.hide.methods)
-        || (!any_compartment_hidden && entity.members.is_empty());
+    let collapsing_hide_one_section = any_compartment_hidden && !both_compartments_hidden;
+    // When BOTH compartments are hidden (e.g. `hide empty members` applied
+    // to a memberless entity), PlantUML draws no separators at all — the
+    // entity collapses to a header-only rectangle.
+    let header_only = both_compartments_hidden;
+    let effectively_no_members = !any_compartment_hidden && entity.members.is_empty();
 
-    if collapsing_hide_one_section {
+    if header_only {
+        // Nothing to emit after the header content.
+    } else if collapsing_hide_one_section {
         let visible_members: Vec<&Member> = entity
             .members
             .iter()
@@ -1446,7 +1483,7 @@ fn render_entity_content(
             } else {
                 None
             };
-            render_member_line(svg, member, x, eff_y, vis_ov, narrow_default);
+            render_member_line(svg, member, x, eff_y, vis_ov, narrow_default, text_fill);
             member_y += MEMBER_SPACING;
         }
     } else if effectively_no_members {
@@ -1506,7 +1543,15 @@ fn render_entity_content(
                 } else {
                     None
                 };
-                render_member_line(svg, member, x, eff_member_y, vis_ov, is_enum_entity);
+                render_member_line(
+                    svg,
+                    member,
+                    x,
+                    eff_member_y,
+                    vis_ov,
+                    is_enum_entity,
+                    text_fill,
+                );
             } else {
                 let text = format_member_display(member);
                 let mut text_buf = String::new();
@@ -1518,7 +1563,7 @@ fn render_entity_content(
                         y: eff_member_y,
                         font_size: 14,
                         font_family: "sans-serif",
-                        fill: "#000000",
+                        fill: text_fill,
                         bold: false,
                         italic: false,
                         underline: false,
@@ -1661,7 +1706,15 @@ fn render_entity_content(
                 } else {
                     None
                 };
-                render_member_line(svg, member, x, eff_y, vis_ov, fields_narrow_default);
+                render_member_line(
+                    svg,
+                    member,
+                    x,
+                    eff_y,
+                    vis_ov,
+                    fields_narrow_default,
+                    text_fill,
+                );
                 member_y += MEMBER_SPACING;
             }
 
@@ -1695,7 +1748,15 @@ fn render_entity_content(
                 } else {
                     None
                 };
-                render_member_line(svg, member, x, eff_y, vis_ov, methods_narrow_default);
+                render_member_line(
+                    svg,
+                    member,
+                    x,
+                    eff_y,
+                    vis_ov,
+                    methods_narrow_default,
+                    text_fill,
+                );
                 method_y += MEMBER_SPACING;
             }
         } else if !methods.is_empty() {
@@ -1735,7 +1796,15 @@ fn render_entity_content(
                 } else {
                     None
                 };
-                render_member_line(svg, member, x, eff_y, vis_ov, methods_narrow_default);
+                render_member_line(
+                    svg,
+                    member,
+                    x,
+                    eff_y,
+                    vis_ov,
+                    methods_narrow_default,
+                    text_fill,
+                );
                 method_y += MEMBER_SPACING;
             }
         } else {
@@ -1775,6 +1844,7 @@ fn render_member_line(
     baseline_y: f64,
     vis_icon_y_override: Option<f64>,
     default_uses_narrow: bool,
+    text_fill: &str,
 ) {
     let text = format_member_display(member);
 
@@ -1884,7 +1954,7 @@ fn render_member_line(
             y: baseline_y,
             font_size: 14,
             font_family: "sans-serif",
-            fill: "#000000",
+            fill: text_fill,
             bold: false,
             italic: member.is_abstract,
             underline: member.is_static,
@@ -2405,6 +2475,7 @@ mod tests {
                     stereotypes: vec![],
                     url: None,
                     color: None,
+                    text_color: None,
                     source_line: 0,
                 },
                 ClassEntity {
@@ -2423,6 +2494,7 @@ mod tests {
                     stereotypes: vec![],
                     url: None,
                     color: None,
+                    text_color: None,
                     source_line: 0,
                 },
             ],
@@ -2566,6 +2638,7 @@ mod tests {
                 stereotypes: vec![],
                 url: None,
                 color: None,
+                text_color: None,
                 source_line: 0,
             }],
             relationships: vec![],
