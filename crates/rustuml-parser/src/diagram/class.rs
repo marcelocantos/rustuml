@@ -120,6 +120,9 @@ pub enum Visibility {
     Private,
     Protected,
     Package,
+    /// IE (entity-relationship) mandatory column, denoted by the `*` prefix
+    /// in PlantUML's entity-syntax diagrams.
+    IeMandatory,
 }
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Serialize, Deserialize)]
