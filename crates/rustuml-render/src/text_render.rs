@@ -233,10 +233,13 @@ fn trim_segment_for_emit(seg: &Segment, base: &TextBase<'_>) -> (f64, String, f6
     while lead < bytes.len() && bytes[lead] == b' ' {
         lead += 1;
     }
-    // Whole-segment whitespace: don't trim, emit as-is.
+    // Whole-segment whitespace: PlantUML emits these as literal-space
+    // `<text>` elements but converts each ASCII space to NBSP (U+00A0)
+    // in the rendered text. Width still counts as a normal ASCII space.
     if lead == bytes.len() {
         let w = segment_width(seg, base);
-        return (0.0, seg.text.clone(), w);
+        let nbsp_text = "\u{00a0}".repeat(lead);
+        return (0.0, nbsp_text, w);
     }
     let mut trail = 0;
     while trail < bytes.len() - lead && bytes[bytes.len() - 1 - trail] == b' ' {

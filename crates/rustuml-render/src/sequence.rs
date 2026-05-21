@@ -3110,41 +3110,9 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme) -> String {
         );
     }
 
-    // Render caption if present.
-    //
-    // PlantUML wraps the caption in `<g class="caption" data-source-line="N">`
-    // and positions a single non-creole-styled `<text>` left-aligned at x=1
-    // with the baseline 10.8672 px above the SVG bottom edge (font-size 14).
-    // (Bold/italic creole runs split into multiple `<text>` elements with
-    // their own x offsets — not yet handled here; non-creole captions hit
-    // the strict comparator as-is.)
-    if let Some(caption) = &diagram.meta.caption {
-        const CAPTION_FONT_SIZE: u32 = 14;
-        const CAPTION_BOTTOM_OFFSET: f64 = 10.8672;
-        let stripped = strip_creole(caption);
-        let src_line = diagram.events.len() as u32 + 1;
-        write!(
-            svg.buf,
-            r#"<g class="caption" data-source-line="{src_line}">"#
-        )
-        .unwrap();
-        text_render::emit_text(
-            &mut svg.buf,
-            &stripped,
-            &TextBase {
-                x: 1.0,
-                y: svg_height as f64 - CAPTION_BOTTOM_OFFSET,
-                font_size: CAPTION_FONT_SIZE,
-                font_family: "sans-serif",
-                fill: "#000000",
-                bold: false,
-                italic: false,
-                underline: false,
-                skip_underline: false,
-            },
-        );
-        svg.buf.push_str("</g>");
-    }
+    // Caption is rendered AFTER all messages — see the dedicated block just
+    // before `svg.close_svg(...)` at the end of this function. PlantUML emits
+    // the caption group as the last visible element inside `<g>`.
 
     // Render legend if present
     if let Some(legend) = &diagram.meta.legend {
@@ -4520,6 +4488,39 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme) -> String {
                 // don't emit visible text labels or change activation state.
             }
         }
+    }
+
+    // Caption appears at the bottom of the diagram, AFTER messages.
+    // PlantUML wraps it in `<g class="caption" data-source-line="N">` and
+    // routes the text through the creole segmenter so bold/italic/under runs
+    // split into separate `<text>` elements at calculated x offsets.
+    if let Some(caption) = &diagram.meta.caption {
+        const CAPTION_FONT_SIZE: u32 = 14;
+        const CAPTION_BOTTOM_OFFSET: f64 = 10.8672;
+        // We don't yet track caption_line in DiagramMeta for sequence diagrams,
+        // so fall back to 1 (matches captions defined at top of source files).
+        let src_line: u32 = 1;
+        write!(
+            svg.buf,
+            r#"<g class="caption" data-source-line="{src_line}">"#
+        )
+        .unwrap();
+        text_render::emit_text(
+            &mut svg.buf,
+            caption,
+            &TextBase {
+                x: 1.0,
+                y: svg_height as f64 - CAPTION_BOTTOM_OFFSET,
+                font_size: CAPTION_FONT_SIZE,
+                font_family: "sans-serif",
+                fill: "#000000",
+                bold: false,
+                italic: false,
+                underline: false,
+                skip_underline: false,
+            },
+        );
+        svg.buf.push_str("</g>");
     }
 
     svg.close_svg("");

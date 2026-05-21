@@ -135,16 +135,25 @@ pub fn extract_oracle_layout(svg: &str) -> Option<OracleLayout> {
                         .find(|c| c.tag_name().name() == "text")
                         .and_then(|t| parse_attr(&t, "x"));
                     // Extract all text y-values and separator line y-values.
-                    let text_y_values: Vec<f64> = node
-                        .children()
-                        .filter(|c| c.tag_name().name() == "text")
-                        .filter_map(|t| parse_attr(&t, "y"))
-                        .collect();
-                    let text_x_values: Vec<f64> = node
-                        .children()
-                        .filter(|c| c.tag_name().name() == "text")
-                        .filter_map(|t| parse_attr(&t, "x"))
-                        .collect();
+                    // Creole-styled labels split into multiple <text> elements
+                    // at the same baseline, so deduplicate consecutive y-values
+                    // to recover the per-line y sequence the renderer expects.
+                    let mut text_y_values: Vec<f64> = Vec::new();
+                    let mut text_x_values: Vec<f64> = Vec::new();
+                    for t in node.children().filter(|c| c.tag_name().name() == "text") {
+                        let y = parse_attr(&t, "y");
+                        let x = parse_attr(&t, "x");
+                        if let Some(y) = y
+                            && text_y_values
+                                .last()
+                                .is_none_or(|&last: &f64| (last - y).abs() > 0.5)
+                        {
+                            text_y_values.push(y);
+                            if let Some(x) = x {
+                                text_x_values.push(x);
+                            }
+                        }
+                    }
                     let sep_y_values: Vec<f64> = node
                         .children()
                         .filter(|c| c.tag_name().name() == "line")
@@ -255,16 +264,24 @@ pub fn extract_oracle_layout(svg: &str) -> Option<OracleLayout> {
                     let rx = parse_attr(&ellipse, "rx")?;
                     let ry = parse_attr(&ellipse, "ry")?;
                     let entity_id = node.attribute("id").map(String::from);
-                    let text_y_values: Vec<f64> = node
-                        .children()
-                        .filter(|c| c.tag_name().name() == "text")
-                        .filter_map(|t| parse_attr(&t, "y"))
-                        .collect();
-                    let text_x_values: Vec<f64> = node
-                        .children()
-                        .filter(|c| c.tag_name().name() == "text")
-                        .filter_map(|t| parse_attr(&t, "x"))
-                        .collect();
+                    // Creole-styled labels emit multiple <text> elements at the
+                    // same baseline; deduplicate consecutive y-values.
+                    let mut text_y_values: Vec<f64> = Vec::new();
+                    let mut text_x_values: Vec<f64> = Vec::new();
+                    for t in node.children().filter(|c| c.tag_name().name() == "text") {
+                        let y = parse_attr(&t, "y");
+                        let x = parse_attr(&t, "x");
+                        if let Some(y) = y
+                            && text_y_values
+                                .last()
+                                .is_none_or(|&last: &f64| (last - y).abs() > 0.5)
+                        {
+                            text_y_values.push(y);
+                            if let Some(x) = x {
+                                text_x_values.push(x);
+                            }
+                        }
+                    }
                     layout.entities.insert(
                         name.to_string(),
                         EntityRect {
