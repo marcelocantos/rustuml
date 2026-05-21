@@ -1449,14 +1449,19 @@ fn emit_sequence(svg: &mut SvgEmitter, nodes: &[LayoutNode], cx: f64, mut y: f64
                 // arrow to the current node extends back 12 px into the
                 // partition's bottom margin (overlaying the partition rect).
                 let arrow_top_y = if prev_was_partition { y - 12.0 } else { y };
-                let arrow_gap = if let Some(tg) = partition_top_gap {
-                    // y_in is `y` (no advance yet); first inner action sits
-                    // at y + tg + 36.4883.
-                    tg + 36.4883
-                } else if prev_was_partition {
-                    gap + 12.0
-                } else {
-                    gap
+                let arrow_gap = {
+                    let base = if let Some(tg) = partition_top_gap {
+                        // y_in is `y` (no advance yet); first inner action
+                        // sits at y + tg + 36.4883.
+                        tg + 36.4883
+                    } else {
+                        gap
+                    };
+                    if prev_was_partition {
+                        base + 12.0
+                    } else {
+                        base
+                    }
                 };
                 if !style.hidden {
                     pending_arrow = Some((arrow_top_y, style, label, arrow_gap));
@@ -1727,9 +1732,8 @@ fn emit_node(svg: &mut SvgEmitter, node: &LayoutNode, cx: f64, y: f64) -> f64 {
             // accounts for Java's intermediate-rounding quirk: the displayed
             // rect_y matches golden (HALF_UP rounding kicks 81.48825 →
             // 81.4883) while inner text_y baselines compute from the
-            // un-rounded 81.48825 value, landing on golden's 103.0898 instead
-            // of 103.0899. Coloured / descender-titled partitions already
-            // have the 0.4531 top-gap shift absorb this.
+            // un-rounded 81.48825 value. Coloured / descender-titled
+            // partitions already have the 0.4531 top-gap shift absorb this.
             let needs_nudge = top_gap == 10.0;
             let body_top = partition_top + title_band_h - if needs_nudge { 0.00005 } else { 0.0 };
             emit_sequence(svg, body, cx, body_top);
