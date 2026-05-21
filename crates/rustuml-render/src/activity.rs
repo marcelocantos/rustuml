@@ -641,13 +641,19 @@ fn node_width(node: &LayoutNode) -> f64 {
         }
         LayoutNode::Fork { branches } => {
             // Mirror emit_fork's bar-width formula: 12 px inner pad each side,
-            // 28 px gap between adjacent branches, with a minimum bar width
-            // when all branches are narrow.
+            // 10 px gap between adjacent branches, +18 in the middle gap when
+            // the branch count is even, with a minimum bar width when all
+            // branches are narrow.
             let branch_widths: Vec<f64> = branches.iter().map(|b| sequence_width(b)).collect();
             let n = branch_widths.len();
             let total_branch_w: f64 = branch_widths.iter().sum();
             let inter_gaps = if n > 1 { (n - 1) as f64 } else { 0.0 };
-            let bar_w = 12.0 * 2.0 + total_branch_w + inter_gaps * 28.0;
+            let even_extra = if n >= 2 && n.is_multiple_of(2) {
+                18.0
+            } else {
+                0.0
+            };
+            let bar_w = 12.0 * 2.0 + total_branch_w + inter_gaps * 10.0 + even_extra;
             let min_bar_w = FORK_BAR_MARGIN * 2.0 + 80.0;
             bar_w.max(min_bar_w)
         }
@@ -1789,22 +1795,25 @@ fn emit_fork(svg: &mut SvgEmitter, cx: f64, y: f64, branches: &[Vec<LayoutNode>]
         return y;
     }
 
-    // Compute branch widths. PlantUML uses each branch's actual content
-    // width (no per-branch minimum) and inserts a fixed 10 px gap between
-    // adjacent branches, plus 12 px inner padding on each end of the bar.
+    // Compute branch widths. PlantUML's fork-bar layout:
+    //   bar_w = 24 (inner pad each side) + sum(branch_widths) + (n-1)*10 +
+    //           (18 if n is even else 0)
+    // The extra 18 px goes into the middle gap for even branch counts,
+    // pushing the centre branches apart (so the fork has a visual midpoint
+    // on the bar rather than landing on a branch).
     let branch_widths: Vec<f64> = branches.iter().map(|b| sequence_width(b)).collect();
     let n = branch_widths.len();
     const FORK_INNER_PAD: f64 = 12.0;
-    /// Gap between adjacent fork branches. Reverse-engineered from goldens:
-    /// 2-branch and 3-branch forks at varying widths all produce a 28-px gap
-    /// between consecutive branch rects (not the 10-px gap previously here).
-    const FORK_BRANCH_GAP: f64 = 28.0;
+    const FORK_BRANCH_GAP: f64 = 10.0;
     let total_branch_w: f64 = branch_widths.iter().sum();
     let inter_gaps = if n > 1 { (n - 1) as f64 } else { 0.0 };
-    // PlantUML's fork-bar width: 12 padding each side + branch widths +
-    // 10 px gap between each pair. Goldens with all-equal narrow branches
-    // (e.g. ":A;:B;") show this layout exactly; wider branches scale up.
-    let mut bar_w = FORK_INNER_PAD * 2.0 + total_branch_w + inter_gaps * FORK_BRANCH_GAP;
+    let even_extra = if n >= 2 && n.is_multiple_of(2) {
+        18.0
+    } else {
+        0.0
+    };
+    let mut bar_w =
+        FORK_INNER_PAD * 2.0 + total_branch_w + inter_gaps * FORK_BRANCH_GAP + even_extra;
     // Empirical floor: when branch action widths are very small (≲30px),
     // PlantUML still gives each branch enough room for a centred arrowhead
     // and a 14 px outer margin around the bar. Bump the bar width up to
@@ -1834,29 +1843,40 @@ fn emit_fork(svg: &mut SvgEmitter, cx: f64, y: f64, branches: &[Vec<LayoutNode>]
     let bar_bottom = y + FORK_BAR_HEIGHT;
 
     // Compute branch center-x positions. Branches sit FORK_INNER_PAD from
-    // the bar edges with FORK_BRANCH_GAP between adjacent branches.
+    // the bar edges with FORK_BRANCH_GAP between adjacent branches. When the
+    // branch count is even, an extra 18 px goes into the middle gap.
     let mut branch_centers = Vec::new();
     let mut bx = bar_x + FORK_INNER_PAD;
-    // If the bar was widened to its minimum and there's only one branch,
-    // centre it on the bar.
     if branch_widths.len() == 1 {
         branch_centers.push(bar_x + bar_w / 2.0);
     } else {
-        // When the bar was widened beyond the natural sum, distribute the
-        // extra slack evenly across the inter-branch gaps so branches stay
-        // visually balanced under the bar.
-        let natural_w = FORK_INNER_PAD * 2.0 + total_branch_w + inter_gaps * FORK_BRANCH_GAP;
-        let extra = (bar_w - natural_w).max(0.0);
-        let extra_per_gap = if inter_gaps > 0.0 {
-            extra / inter_gaps
+        // Distribute extra slack: when the bar was widened past the natural
+        // sum (e.g. by min_bar_w), spread across all gaps. Otherwise the
+        // 18 px even-count bonus lands solely in the middle gap.
+        let natural_w =
+            FORK_INNER_PAD * 2.0 + total_branch_w + inter_gaps * FORK_BRANCH_GAP + even_extra;
+        let slack = (bar_w - natural_w).max(0.0);
+        let slack_per_gap = if inter_gaps > 0.0 {
+            slack / inter_gaps
         } else {
             0.0
+        };
+        // The middle gap index for even n is between branches n/2-1 and n/2.
+        let middle_gap_idx = if even_extra > 0.0 {
+            Some(n / 2 - 1)
+        } else {
+            None
         };
         for (i, w) in branch_widths.iter().enumerate() {
             branch_centers.push(bx + w / 2.0);
             bx += w;
             if i + 1 < branch_widths.len() {
-                bx += FORK_BRANCH_GAP + extra_per_gap;
+                let extra = if Some(i) == middle_gap_idx {
+                    even_extra
+                } else {
+                    0.0
+                };
+                bx += FORK_BRANCH_GAP + slack_per_gap + extra;
             }
         }
     }
