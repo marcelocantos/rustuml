@@ -1861,11 +1861,12 @@ fn emit_fork(svg: &mut SvgEmitter, cx: f64, y: f64, branches: &[Vec<LayoutNode>]
         }
     }
 
-    // Arrows from top bar to each branch and render branches
+    // Render branches FIRST so their internal arrow connectors land in the
+    // connectors buffer before the top/bottom-bar arrows below. Java
+    // emits in this order: branch internal connectors, then all top arrows,
+    // then all bottom arrows. Reverse-engineered from goldens.
     let mut branch_bottoms = Vec::new();
-    for (i, branch) in branches.iter().enumerate() {
-        let bcx = branch_centers[i];
-        svg.down_arrow(bcx, bar_bottom, bar_bottom + ARROW_LEN, &arrow_color);
+    for (branch, &bcx) in branches.iter().zip(branch_centers.iter()) {
         let bottom = emit_sequence(svg, branch, bcx, bar_bottom + ARROW_LEN);
         branch_bottoms.push(bottom);
     }
@@ -1873,7 +1874,12 @@ fn emit_fork(svg: &mut SvgEmitter, cx: f64, y: f64, branches: &[Vec<LayoutNode>]
     // Find the maximum bottom
     let max_bottom = branch_bottoms.iter().cloned().fold(0.0f64, f64::max);
 
-    // Arrows from each branch to bottom bar
+    // Top arrows from bar to each branch (all together, after internals).
+    for &bcx in &branch_centers {
+        svg.down_arrow(bcx, bar_bottom, bar_bottom + ARROW_LEN, &arrow_color);
+    }
+
+    // Bottom arrows from each branch to bottom bar.
     for (i, bottom) in branch_bottoms.iter().enumerate() {
         let bcx = branch_centers[i];
         svg.down_arrow(bcx, *bottom, max_bottom + ARROW_LEN, &arrow_color);
