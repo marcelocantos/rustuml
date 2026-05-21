@@ -293,6 +293,11 @@ mod tests {
             packages: vec![],
             notes: vec![],
             hide_show: vec![],
+            header_line: None,
+            footer_line: None,
+            title_line: None,
+            caption_line: None,
+            legend_line: None,
         }
     }
 

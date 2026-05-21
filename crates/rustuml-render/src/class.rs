@@ -316,9 +316,7 @@ fn resolve_hide(entity: &ClassEntity, directives: &[HideShow]) -> HideFlags {
                 (None, "methods" | "method") if !empty_only || !has_methods => {
                     h.methods = !d.show;
                 }
-                (None, "members" | "member")
-                    if !empty_only || entity.members.is_empty() =>
-                {
+                (None, "members" | "member") if !empty_only || entity.members.is_empty() => {
                     h.fields = !d.show;
                     h.methods = !d.show;
                 }
@@ -564,6 +562,23 @@ fn format_stereotype_text(stereotypes: &[String]) -> String {
 // ---------------------------------------------------------------------------
 // SVG output helpers
 // ---------------------------------------------------------------------------
+
+/// Translate special characters in an entity label to PlantUML's
+/// `data-qualified-name` form. Java's serialiser replaces every character
+/// that isn't a letter, digit, dot, or underscore with `.` so that the
+/// attribute remains a valid XML name fragment.
+fn translate_qualified_name(label: &str) -> String {
+    label
+        .chars()
+        .map(|c| {
+            if c.is_alphanumeric() || c == '.' || c == '_' {
+                c
+            } else {
+                '.'
+            }
+        })
+        .collect()
+}
 
 fn escape_xml(s: &str) -> String {
     s.replace('&', "&amp;")
@@ -839,7 +854,7 @@ pub fn render_with_oracle(
         // `&` characters in the label are translated to `.` to match
         // Java's qualified-name encoding.
         let qual = |entity: &ClassEntity| -> String {
-            let translated = entity.label.replace('&', ".");
+            let translated = translate_qualified_name(&entity.label);
             let mut chain: Vec<String> = diagram
                 .packages
                 .iter()
@@ -1056,7 +1071,7 @@ fn render_plantuml_svg(
         // `data-qualified-name` attribute, including its translation of
         // `&` → `.` (used when entities are quoted with special chars,
         // e.g. `"A&B"`).
-        let translated_label = entity.label.replace('&', ".");
+        let translated_label = translate_qualified_name(&entity.label);
         let qualified_name: String = {
             let mut chain: Vec<&str> = diagram
                 .packages
@@ -1381,16 +1396,15 @@ fn render_entity_content(
     // members or explicit visibility flow through the class branch below.
     let enum_classic = dim.is_enum;
 
-    let effectively_no_members = entity.members.is_empty()
-        || (dim.hide.fields && dim.hide.methods)
-        || (dim.hide.fields && !entity.members.iter().any(|m| m.kind == MemberKind::Method))
-        || (dim.hide.methods && !entity.members.iter().any(|m| m.kind == MemberKind::Field));
-
-    // `hide attributes` (or `hide methods`) collapses the hidden compartment
-    // to zero height: one separator line between the header and the surviving
-    // compartment, no second divider.
+    let any_compartment_hidden = dim.hide.fields || dim.hide.methods;
+    // `hide attributes`/`hide methods` collapses both compartments down to a
+    // single separator line below the header, regardless of whether the
+    // surviving compartment has any members. The "two separators" empty
+    // layout is reserved for entities with no members and no hide directive.
     let collapsing_hide_one_section =
-        !effectively_no_members && (dim.hide.fields || dim.hide.methods);
+        any_compartment_hidden && !(dim.hide.fields && dim.hide.methods);
+    let effectively_no_members = (dim.hide.fields && dim.hide.methods)
+        || (!any_compartment_hidden && entity.members.is_empty());
 
     if collapsing_hide_one_section {
         let visible_members: Vec<&Member> = entity
@@ -2425,6 +2439,11 @@ mod tests {
             packages: vec![],
             notes: vec![],
             hide_show: vec![],
+            header_line: None,
+            footer_line: None,
+            title_line: None,
+            caption_line: None,
+            legend_line: None,
         }
     }
 
@@ -2553,6 +2572,11 @@ mod tests {
             packages: vec![],
             notes: vec![],
             hide_show: vec![],
+            header_line: None,
+            footer_line: None,
+            title_line: None,
+            caption_line: None,
+            legend_line: None,
         };
         let svg = render(&diagram, &Theme::default());
         assert!(svg.contains("Drawable"));
@@ -2581,6 +2605,11 @@ mod tests {
             packages: vec![],
             notes: vec![],
             hide_show: vec![],
+            header_line: None,
+            footer_line: None,
+            title_line: None,
+            caption_line: None,
+            legend_line: None,
         };
         let svg = render(&diagram, &Theme::default());
         assert!(svg.contains("<svg"));
