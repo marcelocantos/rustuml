@@ -32,7 +32,7 @@ fn main() {
             );
             eprintln!("DEBUG connections: {:?}", c.connections);
         }
-        if let Some(ref o) = oracle_layout {
+        if let Some(ref o) = oracle {
             eprintln!(
                 "DEBUG oracle edges: {:?}",
                 o.edges.iter().map(|e| &e.id).collect::<Vec<_>>()

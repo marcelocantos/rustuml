@@ -147,7 +147,7 @@ fn detect_uml_subtype(lines: &[String]) -> UmlSubtype {
             || trimmed.contains(">[*]")
             || (trimmed.starts_with("state ") && !trimmed.contains("<<"))
         {
-            scores[3] += 20;
+            scores[3] += 50;
         }
         // `note on link` annotates transitions (state diagrams) and connections
         // (use case diagrams). Score it for state so that state diagrams beat
@@ -259,7 +259,20 @@ fn detect_uml_subtype(lines: &[String]) -> UmlSubtype {
         // (e.g. `Alice -[#red]> Bob`).
         // Exclude `return [...]` lines which are sequence diagram syntax.
         let looks_like_member = matches!(trimmed.chars().next(), Some('+' | '-' | '#' | '~'));
+        // `[...]` after the `:` of a transition label is a state-diagram guard
+        // expression (e.g. `A --> B : [count < 3]` or `... : event [guard]`)
+        // — do not credit it as a component-style bracket reference.
+        let bracket_is_transition_guard = if let Some(colon) = trimmed.find(':') {
+            let before = &trimmed[..colon];
+            let after = &trimmed[colon + 1..];
+            (before.contains("->") || before.contains("<-"))
+                && after.contains('[')
+                && after.contains(']')
+        } else {
+            false
+        };
         if !looks_like_member
+            && !bracket_is_transition_guard
             && trimmed.contains('[')
             && trimmed.contains(']')
             && !trimmed.contains("[*]")

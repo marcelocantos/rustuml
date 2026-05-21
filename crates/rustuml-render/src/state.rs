@@ -76,9 +76,9 @@ const TITLE_FONT_SIZE: f64 = 14.0;
 const TITLE_HEIGHT: f64 = TITLE_FONT_SIZE + 10.0;
 
 /// PlantUML default state background.
-const STATE_FILL: &str = "#F1F1F1";
+const DEFAULT_STATE_FILL: &str = "#F1F1F1";
 /// PlantUML default stroke color.
-const STROKE_COLOR: &str = "#181818";
+const DEFAULT_STROKE_COLOR: &str = "#181818";
 /// PlantUML default start/end circle color.
 const PSEUDO_COLOR: &str = "#222222";
 /// PlantUML default fork/join bar color.
@@ -86,7 +86,7 @@ const BAR_COLOR: &str = "#555555";
 /// Note fill color.
 const NOTE_FILL: &str = "#FEFFDD";
 /// PlantUML default text color.
-const TEXT_COLOR: &str = "#000000";
+const DEFAULT_TEXT_COLOR: &str = "#000000";
 
 /// Arrow polygon half-width.
 const ARROW_HALF: f64 = 4.0;
@@ -240,6 +240,51 @@ fn classify_star_nodes(transitions: &[Transition]) -> (bool, bool) {
 
 // --- Rendering ---
 
+/// Effective skinparam values for a state diagram, resolved from
+/// `skinparam state { ... }` blocks and standalone `skinparam X Y` lines.
+struct StateSkin {
+    /// Resolved stroke colour for state rectangles, notes, and transitions.
+    stroke: String,
+    /// Resolved text fill colour for state labels and other body text.
+    text_color: String,
+    /// Resolved state rectangle fill.
+    state_fill: String,
+    /// Resolved transition arrow stroke colour.
+    arrow_color: String,
+}
+
+impl StateSkin {
+    fn from_diagram(diagram: &StateDiagram) -> Self {
+        let find = |key: &str| -> Option<String> {
+            diagram
+                .meta
+                .skinparams
+                .iter()
+                .rev()
+                .find(|sp| sp.key.eq_ignore_ascii_case(key))
+                .map(|sp| sp.value.trim().to_string())
+        };
+        let color =
+            |k: &str| -> Option<String> { find(k).map(|v| crate::sequence::resolve_color(&v)) };
+        let stroke = color("stateBorderColor").unwrap_or_else(|| DEFAULT_STROKE_COLOR.to_string());
+        // PlantUML applies stateAttributeFontColor to state-name labels as
+        // well as inline attribute lines. Prefer the explicit FontColor;
+        // fall back to AttributeFontColor; then to the default.
+        let text_color = color("stateFontColor")
+            .or_else(|| color("stateAttributeFontColor"))
+            .unwrap_or_else(|| DEFAULT_TEXT_COLOR.to_string());
+        let state_fill =
+            color("stateBackgroundColor").unwrap_or_else(|| DEFAULT_STATE_FILL.to_string());
+        let arrow_color = color("stateArrowColor").unwrap_or_else(|| stroke.clone());
+        Self {
+            stroke,
+            text_color,
+            state_fill,
+            arrow_color,
+        }
+    }
+}
+
 /// Build a PlantUML-compatible SVG for a state diagram.
 ///
 /// The output uses inline formatting (no extra whitespace) to match PlantUML's
@@ -259,6 +304,19 @@ pub fn render_with_oracle(
     if diagram.states.is_empty() && diagram.transitions.is_empty() {
         return r#"<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" contentStyleType="text/css" data-diagram-type="STATE" height="50px" preserveAspectRatio="none" style="width:100px;height:50px;background:#FFFFFF;" version="1.1" viewBox="0 0 100 50" width="100px" zoomAndPan="magnify"><?plantuml ?><defs/><g></g></svg>"#.to_string();
     }
+
+    // Resolve skinparam-driven colour overrides. Format-string sites inside
+    // this function reference these locals, so any `skinparam state { ... }`
+    // override is picked up automatically. Local names intentionally shadow
+    // the module-level `DEFAULT_*` constants.
+    let skin = StateSkin::from_diagram(diagram);
+    #[allow(non_snake_case)]
+    let STROKE_COLOR: &str = skin.stroke.as_str();
+    #[allow(non_snake_case)]
+    let TEXT_COLOR: &str = skin.text_color.as_str();
+    #[allow(non_snake_case)]
+    let STATE_FILL: &str = skin.state_fill.as_str();
+    let _arrow_color: &str = skin.arrow_color.as_str();
 
     let (has_start, has_end) = classify_star_nodes(&diagram.transitions);
 
@@ -1467,6 +1525,8 @@ fn render_arrowhead(svg: &mut String, control: (f64, f64), endpoint: (f64, f64))
     let indent_x = tip_x - (ARROW_LEN - 4.0) * angle.cos();
     let indent_y = tip_y - (ARROW_LEN - 4.0) * angle.sin();
 
+    #[allow(non_snake_case)]
+    let STROKE_COLOR = DEFAULT_STROKE_COLOR;
     write!(
         svg,
         r#"<polygon fill="{STROKE_COLOR}" points="{},{},{},{},{},{},{},{}" style="stroke:{STROKE_COLOR};stroke-width:1;"/>"#,
@@ -1480,48 +1540,64 @@ fn render_arrowhead(svg: &mut String, control: (f64, f64), endpoint: (f64, f64))
 
 /// Render transitions directly from oracle edge data.
 fn render_oracle_transitions(svg: &mut String, diagram: &StateDiagram, oracle: &OracleLayout) {
-    // Track which oracle edges we've consumed — duplicate IDs (e.g. self
-    // transitions `A-to-A`, `A-to-A-1`, ...) are matched in order.
-    let mut used = vec![false; oracle.edges.len()];
-
-    let find_unused = |used: &mut [bool], target: &str| -> Option<usize> {
-        for (i, e) in oracle.edges.iter().enumerate() {
-            if used[i] {
-                continue;
-            }
-            // Accept either the exact id or any `id-N` disambiguation.
-            if e.id == target
-                || e.id
-                    .strip_prefix(target)
-                    .and_then(|s| s.strip_prefix('-'))
-                    .is_some_and(|s| s.chars().all(|c| c.is_ascii_digit()))
-            {
-                return Some(i);
-            }
-        }
-        None
+    // Skinparam-aware text colour for transition labels: `stateArrowFontColor`
+    // overrides the default `#000000`. Note that `stateFontColor` only
+    // affects state names, not transition labels — keep them separate.
+    let arrow_font_color = diagram
+        .meta
+        .skinparams
+        .iter()
+        .rev()
+        .find(|sp| {
+            sp.key.eq_ignore_ascii_case("stateArrowFontColor")
+                || sp.key.eq_ignore_ascii_case("arrowFontColor")
+        })
+        .map(|sp| crate::sequence::resolve_color(sp.value.trim()))
+        .unwrap_or_else(|| DEFAULT_TEXT_COLOR.to_string());
+    #[allow(non_snake_case)]
+    let TEXT_COLOR: &str = arrow_font_color.as_str();
+    // PlantUML's emission order for transitions does not always match the
+    // parser's source order — when layout decides to bend an edge or sort
+    // siblings differently, the golden SVG reorders them. Walking the
+    // oracle's edges in their captured document order and mapping each
+    // back to one of the parser's transitions preserves PlantUML's order.
+    let mut consumed = vec![false; diagram.transitions.len()];
+    let strip_suffix_digits = |full: &str, base: &str| -> bool {
+        full == base
+            || full
+                .strip_prefix(base)
+                .and_then(|s| s.strip_prefix('-'))
+                .is_some_and(|s| !s.is_empty() && s.chars().all(|c| c.is_ascii_digit()))
     };
 
-    for t in &diagram.transitions {
+    for oracle_edge in &oracle.edges {
+        // Find an unused parser transition whose forward/reverse id matches
+        // this oracle edge's `id` (with optional `-N` disambiguation).
+        let mut matched: Option<(usize, bool)> = None;
+        for (ti, t) in diagram.transitions.iter().enumerate() {
+            if consumed[ti] {
+                continue;
+            }
+            let from_name = if t.from == "[*]" { "*start*" } else { &t.from };
+            let to_name = if t.to == "[*]" { "*end*" } else { &t.to };
+            let forward_id = format!("{from_name}-to-{to_name}");
+            let reverse_id = format!("{to_name}-backto-{from_name}");
+            if strip_suffix_digits(&oracle_edge.id, &forward_id) {
+                matched = Some((ti, false));
+                break;
+            }
+            if strip_suffix_digits(&oracle_edge.id, &reverse_id) {
+                matched = Some((ti, true));
+                break;
+            }
+        }
+        let Some((ti, is_reverse)) = matched else {
+            continue;
+        };
+        consumed[ti] = true;
+        let t = &diagram.transitions[ti];
         let from_name = if t.from == "[*]" { "*start*" } else { &t.from };
         let to_name = if t.to == "[*]" { "*end*" } else { &t.to };
-        let forward_id = format!("{from_name}-to-{to_name}");
-        // PlantUML emits a `reverse` link when the layout sweeps the
-        // arrow in the opposite direction (e.g. `-left->` / `-up->` when
-        // the dependent state already sits ahead of the target). The
-        // edge id flips to `to-backto-from` and the comment becomes
-        // `reverse link to to from`.
-        let reverse_id = format!("{to_name}-backto-{from_name}");
-
-        let (idx, is_reverse) = match find_unused(&mut used, &forward_id) {
-            Some(i) => (i, false),
-            None => match find_unused(&mut used, &reverse_id) {
-                Some(i) => (i, true),
-                None => continue,
-            },
-        };
-        used[idx] = true;
-        let oracle_edge = &oracle.edges[idx];
 
         // HTML comment.
         if is_reverse {

@@ -45,6 +45,8 @@ struct StateParser {
     note_buffer: Option<NoteBuffer>,
     /// Current 1-based source line number (set before each parse_line call).
     current_line: usize,
+    /// Active prefix when inside a `skinparam <prefix> { ... }` block.
+    skinparam_block_prefix: Option<String>,
 }
 
 impl StateParser {
@@ -56,6 +58,7 @@ impl StateParser {
             notes: Vec::new(),
             note_buffer: None,
             current_line: 0,
+            skinparam_block_prefix: None,
         }
     }
 
@@ -105,6 +108,19 @@ impl StateParser {
 
     fn parse_line(&mut self, line_num: usize, line: &str) -> Result<(), ParseError> {
         self.current_line = line_num;
+        // Inside a `skinparam <prefix> { ... }` block: collect `Key Value`
+        // pairs as `<prefix><Key>` skinparams until the closing `}`.
+        if let Some(prefix) = self.skinparam_block_prefix.clone() {
+            if line == "}" {
+                self.skinparam_block_prefix = None;
+            } else if let Some((key, value)) = line.split_once(' ') {
+                self.meta.skinparams.push(crate::diagram::SkinParam {
+                    key: format!("{}{}", prefix, key.trim()),
+                    value: value.trim().to_string(),
+                });
+            }
+            return Ok(());
+        }
         // Handle multi-line note body accumulation.
         if self.note_buffer.is_some() {
             if line == "end note" || line == "endnote" {
@@ -126,11 +142,21 @@ impl StateParser {
         }
         // Parse skinparam directives.
         if let Some(rest) = line.strip_prefix("skinparam ") {
+            let rest = rest.trim();
             if let Some((key, value)) = rest.split_once(' ') {
-                self.meta.skinparams.push(crate::diagram::SkinParam {
-                    key: key.trim().to_string(),
-                    value: value.trim().to_string(),
-                });
+                let value = value.trim();
+                if value == "{" {
+                    // Block form: `skinparam state {` — collect nested entries.
+                    self.skinparam_block_prefix = Some(key.trim().to_string());
+                } else {
+                    self.meta.skinparams.push(crate::diagram::SkinParam {
+                        key: key.trim().to_string(),
+                        value: value.to_string(),
+                    });
+                }
+            } else if let Some(key) = rest.strip_suffix('{') {
+                // `skinparam state{` (no space) form.
+                self.skinparam_block_prefix = Some(key.trim().to_string());
             }
             return Ok(());
         }
