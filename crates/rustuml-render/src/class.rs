@@ -238,7 +238,7 @@ impl HideFlags {
             Visibility::Package => {
                 (is_field && self.hide_package_fields) || (is_method && self.hide_package_methods)
             }
-            Visibility::Default => false,
+            Visibility::Default | Visibility::IeMandatory => false,
         }
     }
 }
@@ -365,7 +365,7 @@ fn resolve_hide(entity: &ClassEntity, directives: &[HideShow]) -> HideFlags {
                                 h.hide_package_methods = val;
                             }
                         }
-                        Visibility::Default => {}
+                        Visibility::Default | Visibility::IeMandatory => {}
                     }
                 }
                 _ => {}
@@ -676,6 +676,7 @@ fn visibility_modifier(member: &Member) -> Option<&'static str> {
         } else {
             "PACKAGE_PRIVATE_FIELD"
         }),
+        Visibility::IeMandatory => Some("IE_MANDATORY"),
         Visibility::Default => None,
     }
 }
@@ -1924,6 +1925,19 @@ fn render_member_line(
                     fmt4(vis_cx - 4.0), fmt_tl(icon_cy + 3.0),
                     fmt4(vis_cx + 4.0), fmt_tl(icon_cy + 3.0),
                     VIS_PACKAGE_STROKE, ICON_STROKE_WIDTH,
+                )
+                .unwrap();
+            }
+            Visibility::IeMandatory => {
+                // Filled black circle indicating a mandatory ER column.
+                write!(
+                    svg,
+                    r##"<ellipse cx="{}" cy="{}" fill="#000000" rx="{}" ry="{}" style="stroke:#000000;stroke-width:{};"/>"##,
+                    fmt4(vis_cx),
+                    fmt_tl(icon_cy),
+                    VIS_ICON_R as i64,
+                    VIS_ICON_R as i64,
+                    ICON_STROKE_WIDTH,
                 )
                 .unwrap();
             }

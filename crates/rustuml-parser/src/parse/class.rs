@@ -1166,7 +1166,7 @@ fn parse_member(s: &str) -> Member {
         Some('#') => (Visibility::Protected, &text[1..]),
         Some('~') => (Visibility::Package, &text[1..]),
         // ER diagrams use '*' to mark required/primary-key fields.
-        Some('*') => (Visibility::Default, &text[1..]),
+        Some('*') => (Visibility::IeMandatory, &text[1..]),
         _ => (Visibility::Default, text.as_str()),
     };
 

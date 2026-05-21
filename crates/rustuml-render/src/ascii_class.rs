@@ -29,6 +29,7 @@ fn visibility_char(v: Visibility) -> char {
         Visibility::Protected => '#',
         Visibility::Package => '~',
         Visibility::Default => ' ',
+        Visibility::IeMandatory => '*',
     }
 }
 
