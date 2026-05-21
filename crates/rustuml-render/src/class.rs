@@ -1021,6 +1021,25 @@ fn render_plantuml_svg(
     svg.push_str("<defs/>");
     svg.push_str("<g>");
 
+    // Top-of-canvas decorations: title (above), then header below it. Each
+    // emits `<g class="..." data-source-line="N"><text ...>TEXT</text></g>`.
+    emit_decoration_top(
+        &mut svg,
+        "title",
+        diagram.meta.title.as_deref(),
+        diagram.title_line,
+        canvas_w as f64,
+        true,
+    );
+    emit_decoration_top(
+        &mut svg,
+        "header",
+        diagram.meta.header.as_deref(),
+        diagram.header_line,
+        canvas_w as f64,
+        false,
+    );
+
     // Render any oracle-captured clusters (package/database/folder/...)
     // and path-shaped GMN* note entities verbatim, in document order,
     // BEFORE the diagram entities. This matches Java's emission order and
@@ -1169,9 +1188,120 @@ fn render_plantuml_svg(
         }
     }
 
+    // Bottom-of-canvas decorations: caption (above footer), then footer.
+    emit_decoration_bottom(
+        &mut svg,
+        "caption",
+        diagram.meta.caption.as_deref(),
+        diagram.caption_line,
+        canvas_w as f64,
+        canvas_h as f64,
+        false,
+    );
+    emit_decoration_bottom(
+        &mut svg,
+        "footer",
+        diagram.meta.footer.as_deref(),
+        diagram.footer_line,
+        canvas_w as f64,
+        canvas_h as f64,
+        true,
+    );
+
     // Close top-level group and SVG.
     svg.push_str("</g></svg>");
     svg
+}
+
+fn emit_decoration_top(
+    svg: &mut String,
+    class_name: &str,
+    text: Option<&str>,
+    line: Option<usize>,
+    canvas_w: f64,
+    is_title: bool,
+) {
+    let Some(text) = text else {
+        return;
+    };
+    if text.is_empty() {
+        return;
+    }
+    let font_size = if is_title { 14.0 } else { 10.0 };
+    let fill = if is_title { "#000000" } else { "#888888" };
+    let bold = if is_title {
+        r#" font-weight="700""#
+    } else {
+        ""
+    };
+    let text_length = text_render::measure_no_underline(text, font_size, is_title);
+    let x = if is_title {
+        (canvas_w - text_length) / 2.0
+    } else {
+        0.0
+    };
+    let y = if is_title { 23.5352 } else { 9.668 };
+    let source_line = line.unwrap_or(1);
+    write!(
+        svg,
+        r#"<g class="{}" data-source-line="{}"><text fill="{}" font-family="sans-serif" font-size="{}"{} lengthAdjust="spacing" textLength="{}" x="{}" y="{}">{}</text></g>"#,
+        class_name,
+        source_line,
+        fill,
+        font_size as i64,
+        bold,
+        fmt4(text_length),
+        fmt4(x),
+        fmt4(y),
+        escape_xml(text),
+    )
+    .unwrap();
+}
+
+fn emit_decoration_bottom(
+    svg: &mut String,
+    class_name: &str,
+    text: Option<&str>,
+    line: Option<usize>,
+    canvas_w: f64,
+    canvas_h: f64,
+    is_footer: bool,
+) {
+    let Some(text) = text else {
+        return;
+    };
+    if text.is_empty() {
+        return;
+    }
+    let font_size = if is_footer { 10.0 } else { 14.0 };
+    let fill = if is_footer { "#888888" } else { "#000000" };
+    let text_length = text_render::measure_no_underline(text, font_size, false);
+    // Footer is rendered at the left margin (PlantUML default), caption is
+    // centred. We approximate the exact x by leaving footer at x=0.
+    let x = if is_footer {
+        0.0
+    } else {
+        (canvas_w - text_length) / 2.0
+    };
+    let y = if is_footer {
+        canvas_h - 8.332
+    } else {
+        canvas_h - 10.4648
+    };
+    let source_line = line.unwrap_or(1);
+    write!(
+        svg,
+        r#"<g class="{}" data-source-line="{}"><text fill="{}" font-family="sans-serif" font-size="{}" lengthAdjust="spacing" textLength="{}" x="{}" y="{}">{}</text></g>"#,
+        class_name,
+        source_line,
+        fill,
+        font_size as i64,
+        fmt4(text_length),
+        fmt4(x),
+        fmt4(y),
+        escape_xml(text),
+    )
+    .unwrap();
 }
 
 /// Render the content of a single entity (rect, icon, name, separator lines, members).
