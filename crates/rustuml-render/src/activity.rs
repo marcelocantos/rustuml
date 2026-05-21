@@ -2130,20 +2130,27 @@ pub fn render(diagram: &ActivityDiagram, _theme: &Theme) -> String {
         tree.insert(0, LayoutNode::Title(title.clone()));
     }
 
-    // Collect deprecated color action warnings.
-    let deprecated_warnings: Vec<(String, f64)> = diagram
-        .steps
-        .iter()
-        .filter_map(|s| {
-            if let ActivityStep::DeprecatedColorAction(dca) = s {
-                let warning = deprecated_warning(&dca.color);
-                let ww = pm::mono_text_width(&warning, 10.0);
-                Some((warning, ww))
-            } else {
-                None
+    // Collect deprecated color action warnings, deduplicated by color
+    // (PlantUML emits one banner per unique color, not one per usage).
+    let deprecated_warnings: Vec<(String, f64)> = {
+        let mut seen = std::collections::HashSet::new();
+        let mut order: Vec<String> = Vec::new();
+        for s in &diagram.steps {
+            if let ActivityStep::DeprecatedColorAction(dca) = s
+                && seen.insert(dca.color.clone())
+            {
+                order.push(dca.color.clone());
             }
-        })
-        .collect();
+        }
+        order
+            .into_iter()
+            .map(|color| {
+                let warning = deprecated_warning(&color);
+                let ww = pm::mono_text_width(&warning, 10.0);
+                (warning, ww)
+            })
+            .collect()
+    };
     let has_deprecated = !deprecated_warnings.is_empty();
 
     // Compute overall dimensions. `extents` is asymmetric (left, right) from
