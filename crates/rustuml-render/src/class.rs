@@ -1227,14 +1227,9 @@ fn emit_decoration_top(
     if text.is_empty() {
         return;
     }
-    let font_size = if is_title { 14.0 } else { 10.0 };
+    let font_size: u32 = if is_title { 14 } else { 10 };
     let fill = if is_title { "#000000" } else { "#888888" };
-    let bold = if is_title {
-        r#" font-weight="700""#
-    } else {
-        ""
-    };
-    let text_length = text_render::measure_no_underline(text, font_size, is_title);
+    let text_length = text_render::measure_no_underline(text, font_size as f64, is_title);
     let x = if is_title {
         (canvas_w - text_length) / 2.0
     } else {
@@ -1244,18 +1239,25 @@ fn emit_decoration_top(
     let source_line = line.unwrap_or(1);
     write!(
         svg,
-        r#"<g class="{}" data-source-line="{}"><text fill="{}" font-family="sans-serif" font-size="{}"{} lengthAdjust="spacing" textLength="{}" x="{}" y="{}">{}</text></g>"#,
-        class_name,
-        source_line,
-        fill,
-        font_size as i64,
-        bold,
-        fmt4(text_length),
-        fmt4(x),
-        fmt4(y),
-        escape_xml(text),
+        r#"<g class="{class_name}" data-source-line="{source_line}">"#
     )
     .unwrap();
+    text_render::emit_text(
+        svg,
+        text,
+        &text_render::TextBase {
+            x,
+            y,
+            font_size,
+            font_family: "sans-serif",
+            fill,
+            bold: is_title,
+            italic: false,
+            underline: false,
+            skip_underline: false,
+        },
+    );
+    svg.push_str("</g>");
 }
 
 fn emit_decoration_bottom(
@@ -1273,9 +1275,9 @@ fn emit_decoration_bottom(
     if text.is_empty() {
         return;
     }
-    let font_size = if is_footer { 10.0 } else { 14.0 };
+    let font_size: u32 = if is_footer { 10 } else { 14 };
     let fill = if is_footer { "#888888" } else { "#000000" };
-    let text_length = text_render::measure_no_underline(text, font_size, false);
+    let text_length = text_render::measure_no_underline(text, font_size as f64, false);
     // Footer is rendered at the left margin (PlantUML default), caption is
     // centred. We approximate the exact x by leaving footer at x=0.
     let x = if is_footer {
@@ -1291,17 +1293,25 @@ fn emit_decoration_bottom(
     let source_line = line.unwrap_or(1);
     write!(
         svg,
-        r#"<g class="{}" data-source-line="{}"><text fill="{}" font-family="sans-serif" font-size="{}" lengthAdjust="spacing" textLength="{}" x="{}" y="{}">{}</text></g>"#,
-        class_name,
-        source_line,
-        fill,
-        font_size as i64,
-        fmt4(text_length),
-        fmt4(x),
-        fmt4(y),
-        escape_xml(text),
+        r#"<g class="{class_name}" data-source-line="{source_line}">"#
     )
     .unwrap();
+    text_render::emit_text(
+        svg,
+        text,
+        &text_render::TextBase {
+            x,
+            y,
+            font_size,
+            font_family: "sans-serif",
+            fill,
+            bold: false,
+            italic: false,
+            underline: false,
+            skip_underline: false,
+        },
+    );
+    svg.push_str("</g>");
 }
 
 /// Render the content of a single entity (rect, icon, name, separator lines, members).
@@ -2312,29 +2322,39 @@ fn render_oracle_relationships(
         // when `labels` is empty (older oracle data).
         if !oracle_edge.labels.is_empty() {
             for (lx, ly, text) in &oracle_edge.labels {
-                let tl = text_render::measure(text, 13.0, false);
-                write!(
+                text_render::emit_text(
                     svg,
-                    r##"<text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="{}" x="{}" y="{}">{}</text>"##,
-                    fmt4(tl),
-                    fmt4(*lx),
-                    fmt4(*ly),
-                    escape_xml(text),
-                )
-                .unwrap();
+                    text,
+                    &text_render::TextBase {
+                        x: *lx,
+                        y: *ly,
+                        font_size: 13,
+                        font_family: "sans-serif",
+                        fill: "#000000",
+                        bold: false,
+                        italic: false,
+                        underline: false,
+                        skip_underline: false,
+                    },
+                );
             }
         } else if let Some((lx, ly, ref text)) = oracle_edge.label {
             let first_line = text.lines().next().unwrap_or("");
-            let tl = text_render::measure(first_line, 13.0, false);
-            write!(
+            text_render::emit_text(
                 svg,
-                r##"<text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="{}" x="{}" y="{}">{}</text>"##,
-                fmt4(tl),
-                fmt4(lx),
-                fmt4(ly),
-                escape_xml(first_line),
-            )
-            .unwrap();
+                first_line,
+                &text_render::TextBase {
+                    x: lx,
+                    y: ly,
+                    font_size: 13,
+                    font_family: "sans-serif",
+                    fill: "#000000",
+                    bold: false,
+                    italic: false,
+                    underline: false,
+                    skip_underline: false,
+                },
+            );
         }
 
         svg.push_str("</g>");

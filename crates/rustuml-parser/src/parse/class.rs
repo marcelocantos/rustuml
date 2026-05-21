@@ -1159,14 +1159,13 @@ fn parse_member(s: &str) -> Member {
         }
     }
 
-    // Parse visibility prefix. A leading `**` is creole bold markup, not the
-    // ER-diagram `*` mandatory marker — treat it as Default visibility and
-    // pass the full text (with the `**...**` markers) through to the renderer.
+    // Parse visibility prefix. Double-character creole markers (`**`, `--`,
+    // `~~`, `__`) take precedence over visibility prefixes that share the
+    // same leading character — leave the markup intact for the renderer.
     let (visibility, rest) = match text.chars().next() {
         Some('+') => (Visibility::Public, &text[1..]),
-        Some('-') => (Visibility::Private, &text[1..]),
+        Some('-') if !text.starts_with("--") => (Visibility::Private, &text[1..]),
         Some('#') => (Visibility::Protected, &text[1..]),
-        // Single `~` is package visibility; double `~~` is creole strikethrough.
         Some('~') if !text.starts_with("~~") => (Visibility::Package, &text[1..]),
         // ER diagrams use '*' to mark required/primary-key fields.
         Some('*') if !text.starts_with("**") => (Visibility::IeMandatory, &text[1..]),
