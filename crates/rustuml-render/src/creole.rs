@@ -503,6 +503,24 @@ fn collect_until_char(chars: &mut std::iter::Peekable<std::str::Chars>, end: cha
     buf
 }
 
+/// Like [`collect_until_char`] but reports whether the terminator was
+/// actually reached. Returns `(consumed, found_end)` — callers that need to
+/// fall back to literal text when the input had no matching `>` should use
+/// this variant. The `consumed` portion does NOT include the terminator.
+fn collect_until_char_checked(
+    chars: &mut std::iter::Peekable<std::str::Chars>,
+    end: char,
+) -> (String, bool) {
+    let mut buf = String::new();
+    for c in chars.by_ref() {
+        if c == end {
+            return (buf, true);
+        }
+        buf.push(c);
+    }
+    (buf, false)
+}
+
 fn collect_until_tag(chars: &mut std::iter::Peekable<std::str::Chars>, tag: &str) -> String {
     let mut buf = String::new();
     while chars.peek().is_some() {
@@ -1050,10 +1068,18 @@ fn walk_segments(text: &str, style: &Style, skip_underline: bool, out: &mut Vec<
                 }
             }
             '<' => {
-                let tag = collect_until_char(&mut chars, '>');
-                flush_buf!();
-                handle_tag(&tag, &mut chars, style, skip_underline, out);
-                last_char = None; // tag content already emitted
+                let (tag, found_close) = collect_until_char_checked(&mut chars, '>');
+                if !found_close {
+                    // No matching `>` — treat the `<` and the rest as literal
+                    // characters (e.g. `[count < 3]` guard expressions).
+                    buf.push('<');
+                    buf.push_str(&tag);
+                    last_char = tag.chars().last().or(Some('<'));
+                } else {
+                    flush_buf!();
+                    handle_tag(&tag, &mut chars, style, skip_underline, out);
+                    last_char = None; // tag content already emitted
+                }
             }
             '[' if chars.peek() == Some(&'[') => {
                 chars.next();
