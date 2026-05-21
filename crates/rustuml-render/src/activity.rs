@@ -578,6 +578,14 @@ fn node_extents(node: &LayoutNode) -> (f64, f64) {
             let right_extent = cond_half.max(body_half) + 12.0 + 15.0;
             (left_extent, right_extent)
         }
+        // Title contributes 3 px of asymmetric padding on each side beyond
+        // tw/2 (reverse-engineered against multiple title goldens). This
+        // shifts cx 3 px right of action's natural midline when the title
+        // is the widest element.
+        LayoutNode::Title(t) => {
+            let tw = text_render::measure(t, TITLE_FONT_SIZE, true);
+            (tw / 2.0 + 3.0, tw / 2.0 + 3.0)
+        }
         _ => {
             let w = node_width(node);
             (w / 2.0, w / 2.0)
@@ -686,6 +694,15 @@ fn sequence_height(nodes: &[LayoutNode]) -> f64 {
     for node in nodes {
         // Notes contribute nothing themselves.
         if matches!(node, LayoutNode::Note { .. }) {
+            continue;
+        }
+        // Title contributes its own height but never has a connector arrow
+        // before or after it — the emit loop also skips arrows around titles.
+        // Don't toggle prior_flow so the following node (typically `start`)
+        // doesn't get an unwanted ARROW_LEN gap.
+        if matches!(node, LayoutNode::Title(_)) {
+            h += node_height(node);
+            pending_gap = None;
             continue;
         }
         // Track explicit arrow style for the next flow connector.
@@ -800,9 +817,11 @@ fn node_height(node: &LayoutNode) -> f64 {
         LayoutNode::Arrow { .. } => 0.0, // arrows don't add height (they're between nodes)
         LayoutNode::Note { .. } => 0.0,
         LayoutNode::Detach | LayoutNode::Kill | LayoutNode::Break => 0.0,
-        // Title region: text_height + 19.78 of vertical padding before the
-        // next node. Reverse-engineered from golden SVGs.
-        LayoutNode::Title(_) => pm::text_height(TITLE_FONT_SIZE) + 19.78125,
+        // Title region: text_height + 30 of vertical padding so the cursor
+        // lands at the cy of the following Start ellipse (composed of 4 px
+        // text-top offset + text_height + 16 px gap below text + START_R).
+        // Reverse-engineered from golden SVGs.
+        LayoutNode::Title(_) => pm::text_height(TITLE_FONT_SIZE) + 30.0,
     }
 }
 
@@ -1497,13 +1516,13 @@ fn emit_node(svg: &mut SvgEmitter, node: &LayoutNode, cx: f64, y: f64) -> f64 {
                 "sans-serif",
                 TITLE_FONT_SIZE,
                 tw,
-                cx - tw / 2.0 + 4.0,
+                cx - tw / 2.0 + 1.0,
                 text_y,
                 text,
                 true,
             );
             svg.shapes.push_str("</g>");
-            y + pm::text_height(TITLE_FONT_SIZE) + 19.78125
+            y + pm::text_height(TITLE_FONT_SIZE) + 30.0
         }
     }
 }
@@ -1926,13 +1945,15 @@ fn emit_while(
 
     if let Some(label) = is_label {
         let lw = text_render::measure(label, SMALL_FONT, false);
+        // "is (label)" sits just below the diamond on the body's down-path,
+        // at cx + 4 horizontally and one ascent below the diamond's bottom.
         svg.text_element(
             &text_color,
             "sans-serif",
             SMALL_FONT,
             lw,
-            cx + cond_inner_w / 2.0 + DIAMOND_HALF + 5.0,
-            diamond_cy + pm::text_height(SMALL_FONT) / 2.0 - pm::descent(SMALL_FONT),
+            cx + 4.0,
+            diamond_bottom + pm::ascent(SMALL_FONT),
             label,
             false,
         );
@@ -2136,10 +2157,8 @@ pub fn render(diagram: &ActivityDiagram, _theme: &Theme) -> String {
     const MARGIN_TRAIL: f64 = 19.0; // right and bottom
     let margin_top = MARGIN_LEAD;
 
-    // Title pads the SVG width by ~7 px (4 left + 3 right beyond the
-    // standard 16/19 margins).
-    let has_title = diagram.meta.title.is_some();
-    let title_w_pad = if has_title { 7.0 } else { 0.0 };
+    // Title contributes its own 3 px asymmetric padding through node_extents
+    // so it doesn't need additional SVG-level padding here.
 
     // Warnings live in their own horizontal band at x=13 — independent of
     // the action layout. SVG width must cover the wider of the action band
@@ -2164,7 +2183,7 @@ pub fn render(diagram: &ActivityDiagram, _theme: &Theme) -> String {
         margin_top
     };
 
-    let action_total_w = content_w + MARGIN_LEAD + MARGIN_TRAIL + title_w_pad;
+    let action_total_w = content_w + MARGIN_LEAD + MARGIN_TRAIL;
     // PlantUML enforces a minimum SVG width of 65 px (= 30 px content
     // breathing room + 35 px margins), so very narrow diagrams (single
     // letter actions) don't collapse to bare lines.
@@ -2193,8 +2212,22 @@ pub fn render(diagram: &ActivityDiagram, _theme: &Theme) -> String {
     // content_h was computed by sequence_height assuming Start contributes
     // 19 px (cy=25 - MARGIN_LEAD=16 + START_R=10). When start_y > START_CY
     // the actual Start contribution is only START_R (cy = start_y).
-    // Subtract the 9 px discrepancy in that case.
-    let start_h_delta = if start_y > START_CY && matches!(tree.first(), Some(LayoutNode::Start)) {
+    // Subtract the 9 px discrepancy in that case. The same applies when a
+    // Title precedes Start — the title's height contribution already places
+    // the cursor at the Start ellipse's cy, so Start only adds START_R.
+    let title_precedes_start = matches!(tree.first(), Some(LayoutNode::Title(_)))
+        && tree
+            .iter()
+            .skip(1)
+            .find_map(|n| match n {
+                LayoutNode::Title(_) | LayoutNode::Note { .. } | LayoutNode::Arrow { .. } => None,
+                other => Some(other),
+            })
+            .map(|n| matches!(n, LayoutNode::Start))
+            .unwrap_or(false);
+    let start_h_delta = if (start_y > START_CY && matches!(tree.first(), Some(LayoutNode::Start)))
+        || title_precedes_start
+    {
         START_CY + START_R - MARGIN_LEAD - START_R
     } else {
         0.0
