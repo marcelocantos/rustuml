@@ -1866,12 +1866,9 @@ fn emit_fork(svg: &mut SvgEmitter, cx: f64, y: f64, branches: &[Vec<LayoutNode>]
     // emits in this order: branch internal connectors, then all top arrows,
     // then all bottom arrows. Reverse-engineered from goldens.
     let mut branch_bottoms = Vec::new();
-    for (i, branch) in branches.iter().enumerate() {
-        let bcx = branch_centers[i];
+    for (branch, &bcx) in branches.iter().zip(branch_centers.iter()) {
         let bottom = emit_sequence(svg, branch, bcx, bar_bottom + ARROW_LEN);
         branch_bottoms.push(bottom);
-        // Drop unused
-        let _ = i;
     }
 
     // Find the maximum bottom
