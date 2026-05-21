@@ -1931,18 +1931,9 @@ fn emit_while(
     ];
     svg.polygon_shape(&diamond_fill, &pts, &diamond_stroke, ACTION_STROKE_WIDTH);
 
-    let text_y = y + DIAMOND_HALF + pm::text_height(SMALL_FONT) / 2.0 - pm::descent(SMALL_FONT);
-    svg.text_element(
-        &text_color,
-        "sans-serif",
-        SMALL_FONT,
-        cond_text_w,
-        cx - cond_text_w / 2.0,
-        text_y,
-        condition,
-        false,
-    );
-
+    // PlantUML emits the "is (label)" text BEFORE the condition text, so
+    // the body-path "yes" appears in the SVG before the inside-diamond
+    // condition label.
     if let Some(label) = is_label {
         let lw = text_render::measure(label, SMALL_FONT, false);
         // "is (label)" sits just below the diamond on the body's down-path,
@@ -1958,6 +1949,18 @@ fn emit_while(
             false,
         );
     }
+
+    let text_y = y + DIAMOND_HALF + pm::text_height(SMALL_FONT) / 2.0 - pm::descent(SMALL_FONT);
+    svg.text_element(
+        &text_color,
+        "sans-serif",
+        SMALL_FONT,
+        cond_text_w,
+        cx - cond_text_w / 2.0,
+        text_y,
+        condition,
+        false,
+    );
 
     // Inbound connector from diamond down to body (after body shapes and
     // diamond shape are in place).
@@ -2174,11 +2177,17 @@ pub fn render(diagram: &ActivityDiagram, _theme: &Theme) -> String {
         0.0
     };
 
-    // Vertical extent of the warning band: starts at y=13, one banner per
-    // deprecated action, then 17 px gap before the first flow node.
+    // Vertical extent of the warning band: starts at y=13, contains one
+    // rect spanning all warnings ((n-1) * 21.6406 + 16.6406), then 17 px
+    // gap before the first flow node.
     let num_warnings = deprecated_warnings.len() as f64;
+    let warn_band_h = if has_deprecated {
+        (num_warnings - 1.0) * (warn_h_each + 5.0) + warn_h_each
+    } else {
+        0.0
+    };
     let start_y = if has_deprecated {
-        13.0 + num_warnings * warn_h_each + 17.0
+        13.0 + warn_band_h + 17.0
     } else {
         margin_top
     };
@@ -2248,26 +2257,29 @@ pub fn render(diagram: &ActivityDiagram, _theme: &Theme) -> String {
     let mut svg = SvgEmitter::with_palette(palette);
 
     // Emit deprecated warning banners at the top. Warnings live at fixed
-    // x=13, y=13, independent of the action layout.
+    // x=13, y=13, independent of the action layout. PlantUML emits a single
+    // rect enclosing all warnings and one text element per warning stacked
+    // inside (21.6406 px between baselines, first baseline at line_pitch-6
+    // = 10.6406 below the rect top).
     if has_deprecated {
-        let mut warn_y = 13.0;
+        let line_pitch = warn_h_each; // = 16.6406
+        let baseline_pitch = line_pitch + 5.0; // = 21.6406
+        let rect_w = max_warning_w;
+        svg.rect_styled(
+            DEPRECATED_FILL,
+            warn_band_h,
+            2.5,
+            2.5,
+            DEPRECATED_STROKE,
+            "3",
+            rect_w,
+            13.0,
+            13.0,
+        );
+        let mut warn_text_y = 13.0 + line_pitch - 6.0;
         for (warning, ww) in &deprecated_warnings {
-            let warn_w = *ww + 10.0;
-            svg.rect_styled(
-                DEPRECATED_FILL,
-                warn_h_each,
-                2.5,
-                2.5,
-                DEPRECATED_STROKE,
-                "3",
-                warn_w,
-                13.0,
-                warn_y,
-            );
-            // Text baseline sits at warn_y + warn_h - 6 (= warn_y + mono_text_height - 1).
-            let warn_text_y = warn_y + warn_h_each - 6.0;
             svg.monospace_text_element(TEXT_COLOR, 10.0, *ww, 13.0 + 7.0, warn_text_y, warning);
-            warn_y += warn_h_each;
+            warn_text_y += baseline_pitch;
         }
     }
 
