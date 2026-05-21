@@ -1614,6 +1614,35 @@ fn render_entity_content(
                 .collect()
         };
 
+        // Identify any user-emitted `--` (or `..`/`==`/`__`) separators that
+        // appear BETWEEN field-kind members (entity-table primary-key /
+        // body divisions). They contribute an extra horizontal line inside
+        // the fields compartment and reset the text offset of subsequent
+        // default-visibility entries to ENUM_TEXT_OFFSET.
+        let inline_field_separators: Vec<(usize, String)> = {
+            let mut out = Vec::new();
+            let mut field_index = 0usize;
+            let mut seen_first_field = false;
+            for m in entity.members.iter() {
+                match m.kind {
+                    MemberKind::Field if !dim.hide.hides_member(m) => {
+                        field_index += 1;
+                        seen_first_field = true;
+                    }
+                    MemberKind::Separator if seen_first_field => {
+                        let sym = m.return_type.clone().unwrap_or_else(|| "--".to_string());
+                        out.push((field_index, sym));
+                    }
+                    _ => {}
+                }
+            }
+            // Drop any trailing separator that is followed only by methods
+            // (those are handled separately as the fields/methods divider).
+            let total_fields = field_index;
+            out.retain(|(idx, _)| *idx < total_fields);
+            out
+        };
+
         // A compartment with NO icon-bearing members renders default-visibility
         // entries at the narrower ENUM_TEXT_OFFSET (lone body stereotypes,
         // inner-class declarations, all-constant enum-style compartments).
@@ -1694,7 +1723,15 @@ fn render_entity_content(
             .unwrap();
 
             // Field members (skip header texts, then fields start).
+            // `inline_field_separators` records `--`/`..` separators that
+            // appear BETWEEN fields; emit them as horizontal lines after
+            // the matching field and switch subsequent default-visibility
+            // members to the narrow ENUM_TEXT_OFFSET inset.
             let mut member_y = header_sep_y + FIRST_MEMBER_OFFSET;
+            // `inline_sep_consumed_idx` walks `oracle_sep_y` past the header
+            // separator. Index 1 is the first inline separator y from oracle.
+            let mut inline_sep_oracle_idx = 1usize;
+            let mut narrow_after_separator = fields_narrow_default;
             for (fi, member) in fields.iter().enumerate() {
                 let eff_y = oracle_text_y
                     .get(text_header_count + fi)
@@ -1713,52 +1750,92 @@ fn render_entity_content(
                     x,
                     eff_y,
                     vis_ov,
-                    fields_narrow_default,
+                    narrow_after_separator,
                     text_fill,
                 );
                 member_y += MEMBER_SPACING;
+                // Emit any inline separators that fall AFTER this field.
+                for (_, sym) in inline_field_separators
+                    .iter()
+                    .filter(|(idx, _)| *idx == fi + 1)
+                {
+                    let style = match sym.as_str() {
+                        "--" | "==" => format!("stroke:{};stroke-width:1;", BORDER_COLOR),
+                        ".." => format!(
+                            "stroke:{};stroke-width:1;stroke-dasharray:1,2;",
+                            BORDER_COLOR
+                        ),
+                        _ => sep_style.to_string(),
+                    };
+                    let sep_inline_y = oracle_sep_y
+                        .get(inline_sep_oracle_idx)
+                        .copied()
+                        .unwrap_or(member_y - FIRST_MEMBER_OFFSET + COMPARTMENT_PAD - 1.0);
+                    inline_sep_oracle_idx += 1;
+                    write!(
+                        svg,
+                        r#"<line style="{}" x1="{}" x2="{}" y1="{}" y2="{}"/>"#,
+                        style,
+                        fmt4(sep_x1),
+                        fmt4(sep_x2),
+                        fmt4(sep_inline_y),
+                        fmt4(sep_inline_y),
+                    )
+                    .unwrap();
+                    narrow_after_separator = true;
+                }
             }
 
-            // Methods separator: header_sep + compartment_pad + n_fields * line_height.
-            let methods_sep_y = oracle_sep_y.get(1).copied().unwrap_or(
-                header_sep_y + COMPARTMENT_PAD + fields.len() as f64 * MEMBER_LINE_HEIGHT,
-            );
-            write!(
-                svg,
-                r#"<line style="{}" x1="{}" x2="{}" y1="{}" y2="{}"/>"#,
-                methods_sep_style,
-                fmt4(sep_x1),
-                fmt4(sep_x2),
-                fmt_tl(methods_sep_y),
-                fmt_tl(methods_sep_y),
-            )
-            .unwrap();
-
-            // Method members (text_y index continues after header + fields).
-            let method_text_offset = text_header_count + fields.len();
-            let mut method_y = methods_sep_y + FIRST_MEMBER_OFFSET;
-            for (mi, member) in methods.iter().enumerate() {
-                let eff_y = oracle_text_y
-                    .get(method_text_offset + mi)
+            // Methods separator and members. When the fields compartment
+            // already contains an inline `--`/`..` divider AND there are
+            // no methods, PlantUML's entity-table layout suppresses the
+            // trailing methods divider entirely.
+            let skip_methods_sep =
+                !inline_field_separators.is_empty() && methods.is_empty() && !dim.hide.methods;
+            if !skip_methods_sep {
+                let methods_sep_y = oracle_sep_y
+                    .get(1 + inline_field_separators.len())
                     .copied()
-                    .unwrap_or(method_y);
-                let vis_ov = if member.visibility != Visibility::Default {
-                    let v = oracle_vis_y.get(vis_icon_idx).copied();
-                    vis_icon_idx += 1;
-                    v
-                } else {
-                    None
-                };
-                render_member_line(
+                    .unwrap_or(
+                        header_sep_y + COMPARTMENT_PAD + fields.len() as f64 * MEMBER_LINE_HEIGHT,
+                    );
+                write!(
                     svg,
-                    member,
-                    x,
-                    eff_y,
-                    vis_ov,
-                    methods_narrow_default,
-                    text_fill,
-                );
-                method_y += MEMBER_SPACING;
+                    r#"<line style="{}" x1="{}" x2="{}" y1="{}" y2="{}"/>"#,
+                    methods_sep_style,
+                    fmt4(sep_x1),
+                    fmt4(sep_x2),
+                    fmt_tl(methods_sep_y),
+                    fmt_tl(methods_sep_y),
+                )
+                .unwrap();
+
+                // Method members (text_y index continues after header + fields).
+                let method_text_offset = text_header_count + fields.len();
+                let mut method_y = methods_sep_y + FIRST_MEMBER_OFFSET;
+                for (mi, member) in methods.iter().enumerate() {
+                    let eff_y = oracle_text_y
+                        .get(method_text_offset + mi)
+                        .copied()
+                        .unwrap_or(method_y);
+                    let vis_ov = if member.visibility != Visibility::Default {
+                        let v = oracle_vis_y.get(vis_icon_idx).copied();
+                        vis_icon_idx += 1;
+                        v
+                    } else {
+                        None
+                    };
+                    render_member_line(
+                        svg,
+                        member,
+                        x,
+                        eff_y,
+                        vis_ov,
+                        methods_narrow_default,
+                        text_fill,
+                    );
+                    method_y += MEMBER_SPACING;
+                }
             }
         } else if !methods.is_empty() {
             // Only methods, no fields: two separator lines then methods.
