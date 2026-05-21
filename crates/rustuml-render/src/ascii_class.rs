@@ -269,6 +269,7 @@ mod tests {
             stereotypes: vec![],
             url: None,
             color: None,
+            text_color: None,
             source_line: 0,
         }
     }

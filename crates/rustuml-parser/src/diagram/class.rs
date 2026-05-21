@@ -78,6 +78,9 @@ pub struct ClassEntity {
     /// Optional background color (e.g., "#lightblue", "#FF0000").
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub color: Option<String>,
+    /// Optional text colour from `text:colour` shorthand.
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub text_color: Option<String>,
     /// 1-based line number within the `@startuml` block.
     #[serde(default)]
     pub source_line: usize,
