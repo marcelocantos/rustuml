@@ -1172,8 +1172,14 @@ fn parse_member(s: &str) -> Member {
 
     let rest = rest.trim();
 
-    // Determine if method (contains parens) or field.
-    let is_method = rest.contains('(');
+    // Determine if method (contains parens) or field. A `:` BEFORE any `(`
+    // signals the line is a typed field (e.g. ER-table `name : VARCHAR(20)`):
+    // the parens belong to the type, not a method signature.
+    let is_method = match (rest.find('('), rest.find(':')) {
+        (Some(paren), Some(colon)) => paren < colon,
+        (Some(_), None) => true,
+        _ => false,
+    };
 
     // `rest` is the text after stripping the visibility prefix. It is used
     // verbatim as the display text (preserves original colon spacing).
