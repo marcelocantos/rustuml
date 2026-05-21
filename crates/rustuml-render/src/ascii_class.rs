@@ -292,6 +292,7 @@ mod tests {
             relationships,
             packages: vec![],
             notes: vec![],
+            hide_show: vec![],
         }
     }
 

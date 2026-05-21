@@ -58,6 +58,8 @@ struct ClassParser {
     meta_block: Option<MetaBlock>,
     /// Current 1-based source line number (set before each parse_line call).
     current_line: usize,
+    /// Accumulated `hide` / `show` directives, in source order.
+    hide_show: Vec<crate::diagram::class::HideShow>,
 }
 
 impl ClassParser {
@@ -76,6 +78,7 @@ impl ClassParser {
             namespace_sep: Some(".".to_string()),
             meta_block: None,
             current_line: 0,
+            hide_show: Vec::new(),
         }
     }
 
@@ -86,6 +89,7 @@ impl ClassParser {
             relationships: self.relationships,
             packages: self.packages,
             notes: self.notes,
+            hide_show: self.hide_show,
         }
     }
 
@@ -918,10 +922,24 @@ impl ClassParser {
             }
             return true;
         }
-        // Skip hide, show, together, etc.
-        line.starts_with("hide ")
-            || line.starts_with("show ")
-            || line.starts_with("together")
+        // Capture hide/show directives so the renderer can suppress
+        // circles, members, attributes, etc.
+        if let Some(rest) = line.strip_prefix("hide ") {
+            self.hide_show.push(crate::diagram::class::HideShow {
+                show: false,
+                arg: rest.split_whitespace().collect::<Vec<_>>().join(" "),
+            });
+            return true;
+        }
+        if let Some(rest) = line.strip_prefix("show ") {
+            self.hide_show.push(crate::diagram::class::HideShow {
+                show: true,
+                arg: rest.split_whitespace().collect::<Vec<_>>().join(" "),
+            });
+            return true;
+        }
+        // Skip other layout/format directives.
+        line.starts_with("together")
             || line.starts_with("allowmixing")
             || line.starts_with("map ")
             || line.starts_with("set ")
