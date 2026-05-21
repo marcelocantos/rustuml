@@ -1449,14 +1449,19 @@ fn emit_sequence(svg: &mut SvgEmitter, nodes: &[LayoutNode], cx: f64, mut y: f64
                 // arrow to the current node extends back 12 px into the
                 // partition's bottom margin (overlaying the partition rect).
                 let arrow_top_y = if prev_was_partition { y - 12.0 } else { y };
-                let arrow_gap = if let Some(tg) = partition_top_gap {
-                    // y_in is `y` (no advance yet); first inner action sits
-                    // at y + tg + 36.4883.
-                    tg + 36.4883
-                } else if prev_was_partition {
-                    gap + 12.0
-                } else {
-                    gap
+                let arrow_gap = {
+                    let base = if let Some(tg) = partition_top_gap {
+                        // y_in is `y` (no advance yet); first inner action
+                        // sits at y + tg + 36.4883.
+                        tg + 36.4883
+                    } else {
+                        gap
+                    };
+                    if prev_was_partition {
+                        base + 12.0
+                    } else {
+                        base
+                    }
                 };
                 if !style.hidden {
                     pending_arrow = Some((arrow_top_y, style, label, arrow_gap));
@@ -1723,12 +1728,13 @@ fn emit_node(svg: &mut SvgEmitter, node: &LayoutNode, cx: f64, y: f64) -> f64 {
             );
 
             // Emit body inside, at the diagram's cx, starting at partition_top + 36.49.
-            // Pass body_top so the body's first action sits at the right y;
-            // emit_sequence treats this as the first node's top (no inbound
-            // arrow within the body context). The partition's caller will
-            // have already drawn the inbound flow line from prev cursor to
-            // body_top through the title bar.
-            let body_top = partition_top + title_band_h;
+            // For uncoloured / descender-less partitions a 0.00005 px nudge
+            // shifts the first inner action's text_y down by 0.0001 to match
+            // Java's intermediate-rounding behaviour. Java doesn't propagate
+            // the nudge to subsequent actions; we accept those as 0.0001
+            // off-by-one rounding diffs.
+            let needs_nudge = top_gap == 10.0;
+            let body_top = partition_top + title_band_h - if needs_nudge { 0.00005 } else { 0.0 };
             emit_sequence(svg, body, cx, body_top);
 
             partition_top + partition_h
