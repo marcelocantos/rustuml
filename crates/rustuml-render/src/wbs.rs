@@ -13,6 +13,7 @@ use rustuml_parser::diagram::wbs::{WbsDiagram, WbsNode, WbsSide};
 
 use crate::plantuml_metrics as pm;
 use crate::style::Theme;
+use crate::text_render;
 
 const FONT_SIZE: f64 = 12.0;
 const PAD_X: f64 = 10.0;
@@ -83,15 +84,22 @@ fn emit_box(buf: &mut String, x: f64, y: f64, w: f64, label: &str, text_w: f64) 
     .unwrap();
     let text_x = x + PAD_X;
     let text_y = y + 21.6016;
-    write!(
+    let _ = text_w; // width is recomputed inside emit_text via the creole segmenter
+    text_render::emit_text(
         buf,
-        r##"<text fill="#000000" font-family="sans-serif" font-size="12" lengthAdjust="spacing" textLength="{tw}" x="{tx}" y="{ty}">{label}</text>"##,
-        tw = pm::fmt_coord(text_w),
-        tx = pm::fmt_coord(text_x),
-        ty = pm::fmt_coord(text_y),
-        label = escape_xml(label),
-    )
-    .unwrap();
+        label,
+        &text_render::TextBase {
+            x: text_x,
+            y: text_y,
+            font_size: FONT_SIZE as u32,
+            font_family: "sans-serif",
+            fill: "#000000",
+            bold: false,
+            italic: false,
+            underline: false,
+            skip_underline: false,
+        },
+    );
 }
 
 fn render_node(buf: &mut String, node: &Subtree, cx: f64, top_y: f64) {
@@ -301,13 +309,6 @@ pub fn render(diagram: &WbsDiagram, _theme: &Theme) -> String {
     }
     buf.push_str("</g></svg>");
     buf
-}
-
-fn escape_xml(s: &str) -> String {
-    s.replace('&', "&amp;")
-        .replace('<', "&lt;")
-        .replace('>', "&gt;")
-        .replace('"', "&quot;")
 }
 
 #[cfg(test)]

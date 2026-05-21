@@ -10,6 +10,7 @@ use rustuml_parser::diagram::mindmap::{MindMapDiagram, MindMapNode, Side};
 
 use crate::plantuml_metrics as pm;
 use crate::style::Theme;
+use crate::text_render;
 
 const FONT_SIZE: f64 = 14.0;
 const PAD_X: f64 = 10.0;
@@ -27,6 +28,7 @@ struct Placed {
     x: f64,
     cy: f64,
     w: f64,
+    #[allow(dead_code)]
     text_w: f64,
     label: String,
     side: Side,
@@ -138,15 +140,21 @@ fn emit_box(buf: &mut String, p: &Placed) {
     .unwrap();
     let text_y = y + 23.5352;
     let text_x = p.x + PAD_X;
-    write!(
+    text_render::emit_text(
         buf,
-        r##"<text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="{tw}" x="{tx}" y="{ty}">{label}</text>"##,
-        tw = pm::fmt_coord(p.text_w),
-        tx = pm::fmt_coord(text_x),
-        ty = pm::fmt_coord(text_y),
-        label = escape_xml(&p.label),
-    )
-    .unwrap();
+        &p.label,
+        &text_render::TextBase {
+            x: text_x,
+            y: text_y,
+            font_size: FONT_SIZE as u32,
+            font_family: "sans-serif",
+            fill: "#000000",
+            bold: false,
+            italic: false,
+            underline: false,
+            skip_underline: false,
+        },
+    );
 }
 
 fn emit_edge(buf: &mut String, parent: &Placed, child: &Placed) {
@@ -288,13 +296,6 @@ pub fn render(diagram: &MindMapDiagram, _theme: &Theme) -> String {
 
     buf.push_str("</g></svg>");
     buf
-}
-
-fn escape_xml(s: &str) -> String {
-    s.replace('&', "&amp;")
-        .replace('<', "&lt;")
-        .replace('>', "&gt;")
-        .replace('"', "&quot;")
 }
 
 #[cfg(test)]
