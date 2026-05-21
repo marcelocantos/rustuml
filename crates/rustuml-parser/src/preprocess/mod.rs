@@ -453,23 +453,30 @@ impl PreprocessContext {
             return;
         }
 
-        // Handle block comments.
+        // Handle block comments. We emit empty placeholder lines for each
+        // comment line so downstream parsers preserve original source line
+        // numbers (PlantUML's `data-source-line` attribute matches the
+        // user's editor view).
         if self.in_block_comment {
             if trimmed.contains("'/") {
                 self.in_block_comment = false;
             }
+            output.push(String::new());
             return;
         }
         if trimmed.starts_with("/'") {
             if !trimmed.contains("'/") || trimmed.ends_with("/'") {
                 self.in_block_comment = true;
             }
+            output.push(String::new());
             return;
         }
 
         // Skip single-line comments — but NOT inside EBNF blocks where
-        // single quotes delimit terminals.
+        // single quotes delimit terminals. Emit a placeholder so source
+        // line numbers stay aligned downstream.
         if !self.in_ebnf_block && trimmed.starts_with('\'') {
+            output.push(String::new());
             return;
         }
 
@@ -2815,14 +2822,18 @@ mod tests {
     fn single_line_comment() {
         let input = "@startuml\n' This is a comment\nAlice -> Bob\n@enduml";
         let lines = preprocess(input);
-        assert_eq!(lines, vec!["Alice -> Bob"]);
+        // Empty placeholder for the comment line keeps downstream source-line
+        // numbering aligned with the original input.
+        assert_eq!(lines, vec!["", "Alice -> Bob"]);
     }
 
     #[test]
     fn block_comment() {
         let input = "@startuml\n/'\nThis is a\nblock comment\n'/\nAlice -> Bob\n@enduml";
         let lines = preprocess(input);
-        assert_eq!(lines, vec!["Alice -> Bob"]);
+        // Each comment line emits an empty placeholder so original line
+        // numbers survive into the parser.
+        assert_eq!(lines, vec!["", "", "", "", "Alice -> Bob"]);
     }
 
     #[test]
