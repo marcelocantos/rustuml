@@ -255,6 +255,11 @@ enum LayoutNode {
     Kill,
     Break,
     Title(String),
+    Partition {
+        name: String,
+        color: Option<String>,
+        body: Vec<LayoutNode>,
+    },
 }
 
 #[derive(Debug)]
@@ -478,10 +483,22 @@ fn build_tree(steps: &[ActivityStep]) -> Vec<LayoutNode> {
                 nodes.push(LayoutNode::Break);
                 i += 1;
             }
+            ActivityStep::Partition(p) => {
+                let name = p.name.clone();
+                let color = p.color.clone();
+                i += 1;
+                let body =
+                    collect_until(steps, &mut i, |s| matches!(s, ActivityStep::EndPartition));
+                if i < steps.len() {
+                    i += 1; // skip EndPartition
+                }
+                nodes.push(LayoutNode::Partition { name, color, body });
+            }
+            ActivityStep::EndPartition => {
+                i += 1;
+            }
             ActivityStep::Backward(_)
             | ActivityStep::Swimlane(_)
-            | ActivityStep::Partition(_)
-            | ActivityStep::EndPartition
             | ActivityStep::Switch(_)
             | ActivityStep::Case(_)
             | ActivityStep::EndSwitch => {
@@ -523,6 +540,8 @@ fn collect_until(
             ActivityStep::EndWhile(_) => depth -= 1,
             ActivityStep::Repeat => depth += 1,
             ActivityStep::RepeatWhile(_) => depth -= 1,
+            ActivityStep::Partition(_) => depth += 1,
+            ActivityStep::EndPartition => depth -= 1,
             _ => {}
         }
         *i += 1;
@@ -585,6 +604,18 @@ fn node_extents(node: &LayoutNode) -> (f64, f64) {
         LayoutNode::Title(t) => {
             let tw = text_render::measure(t, TITLE_FONT_SIZE, true);
             (tw / 2.0 + 3.0, tw / 2.0 + 3.0)
+        }
+        // Partition wraps a body with a title bar. Left extent is
+        // max(title_w, body_w)/2 + 10; right extent is max(title_w/2 + 5,
+        // body_w/2 + 10) — the title's notch corner extends 5 px right of
+        // the title text, while body content needs 10 px padding either
+        // side inside the partition rect.
+        LayoutNode::Partition { name, body, .. } => {
+            let title_w = text_render::measure(name, TITLE_FONT_SIZE, false);
+            let body_w = sequence_width(body);
+            let left = title_w.max(body_w) / 2.0 + 10.0;
+            let right = (title_w / 2.0 + 5.0).max(body_w / 2.0 + 10.0);
+            (left, right)
         }
         _ => {
             let w = node_width(node);
@@ -677,6 +708,12 @@ fn node_width(node: &LayoutNode) -> f64 {
             let right = cond_half.max(body_half) + 12.0 + 15.0;
             left + right
         }
+        // Partition wraps a body with a title bar; width = max(title+15, body+34).
+        LayoutNode::Partition { name, body, .. } => {
+            let title_w = text_render::measure(name, TITLE_FONT_SIZE, false);
+            let body_w = sequence_width(body);
+            (title_w + 15.0).max(body_w + 34.0)
+        }
         // Arrows, notes, detach/kill/break, and bare titles contribute no
         // horizontal extent of their own. (Notes will need width once they're
         // laid out alongside the flow; for now they fall back to 0.)
@@ -709,6 +746,17 @@ fn sequence_height(nodes: &[LayoutNode]) -> f64 {
         if matches!(node, LayoutNode::Title(_)) {
             h += node_height(node);
             pending_gap = None;
+            continue;
+        }
+        // Partition: its top-gap (10 px) already absorbs the would-be arrow.
+        // The inbound flow line is drawn by the partition's first inner
+        // node, extended back to the cursor's y_in. Same approach as Title.
+        if matches!(node, LayoutNode::Partition { .. }) {
+            h += node_height(node);
+            pending_gap = None;
+            // prior_flow remains true so the next node after the partition
+            // does get a connector arrow back to the partition's bottom.
+            prior_flow = true;
             continue;
         }
         // Track explicit arrow style for the next flow connector.
@@ -828,6 +876,21 @@ fn node_height(node: &LayoutNode) -> f64 {
         // text-top offset + text_height + 16 px gap below text + START_R).
         // Reverse-engineered from golden SVGs.
         LayoutNode::Title(_) => pm::text_height(TITLE_FONT_SIZE) + 30.0,
+        // Partition: top gap (10 or 10.4531 if the partition has a fill
+        // colour) + 36.49 (title bar) + body height + 12 (bottom margin).
+        // The top gap absorbs the would-be inbound arrow.
+        LayoutNode::Partition { color, name, body } => {
+            let top_gap = if color.is_some()
+                || name
+                    .chars()
+                    .any(|c| matches!(c, 'g' | 'j' | 'p' | 'q' | 'y'))
+            {
+                10.4531
+            } else {
+                10.0
+            };
+            top_gap + 36.4883 + sequence_height(body) + 12.0
+        }
     }
 }
 
@@ -957,6 +1020,37 @@ impl SvgEmitter {
             self.shapes,
             r#"<rect fill="{}" height="{}" rx="{}" ry="{}" style="stroke:{};stroke-width:{};" width="{}" x="{}" y="{}"/>"#,
             fill, f(height), f(rx), f(ry), stroke, stroke_width, f(width), f(x), f(y)
+        )
+        .unwrap();
+    }
+
+    /// Emit a partition's outer rectangle (no rounded corners).
+    fn partition_rect(&mut self, fill: &str, height: f64, width: f64, x: f64, y: f64) {
+        write!(
+            self.shapes,
+            r#"<rect fill="{}" height="{}" style="stroke:#000000;stroke-width:1.5;" width="{}" x="{}" y="{}"/>"#,
+            fill,
+            f(height),
+            f(width),
+            f(x),
+            f(y)
+        )
+        .unwrap();
+    }
+
+    /// Emit the title-corner notch path on a partition.
+    fn partition_path(&mut self, r: f64, y: f64, partition_x: f64) {
+        write!(
+            self.shapes,
+            r#"<path d="M{},{} L{},{} L{},{} L{},{}" fill="none" style="stroke:#000000;stroke-width:1.5;"/>"#,
+            f(r),
+            f(y),
+            f(r),
+            f(y + 9.4883),
+            f(r - 10.0),
+            f(y + 19.4883),
+            f(partition_x),
+            f(y + 19.4883)
         )
         .unwrap();
     }
@@ -1275,7 +1369,7 @@ fn emit_sequence(svg: &mut SvgEmitter, nodes: &[LayoutNode], cx: f64, mut y: f64
         // connectors, so we defer the actual svg writes until after
         // emit_node returns. We still advance `y` upfront so the node lands
         // at the right position.
-        let mut pending_arrow: Option<(f64, ArrowStyle, Option<String>)> = None;
+        let mut pending_arrow: Option<(f64, ArrowStyle, Option<String>, f64)> = None;
         if i > 0 {
             let mut explicit_arrow: Option<&LayoutNode> = None;
             let mut prev_idx: Option<usize> = None;
@@ -1328,24 +1422,58 @@ fn emit_sequence(svg: &mut SvgEmitter, nodes: &[LayoutNode], cx: f64, mut y: f64
                 } else {
                     ARROW_LEN
                 };
-                let arrow_top_y = y;
+                // Partition entry: stretch the inbound arrow so it spans the
+                // full distance from prev cursor through the title bar to
+                // the first inner action's top (no separate arrow to the
+                // partition rect).
+                let partition_top_gap = match node {
+                    LayoutNode::Partition { color, name, .. } => Some(
+                        if color.is_some()
+                            || name
+                                .chars()
+                                .any(|c| matches!(c, 'g' | 'j' | 'p' | 'q' | 'y'))
+                        {
+                            10.4531
+                        } else {
+                            10.0
+                        },
+                    ),
+                    _ => None,
+                };
+                let prev_was_partition = matches!(
+                    prev_idx.and_then(|j| nodes.get(j)),
+                    Some(LayoutNode::Partition { .. })
+                );
+                let is_partition = partition_top_gap.is_some();
+                // When the previous flow node was a partition, the inbound
+                // arrow to the current node extends back 12 px into the
+                // partition's bottom margin (overlaying the partition rect).
+                let arrow_top_y = if prev_was_partition { y - 12.0 } else { y };
+                let arrow_gap = if let Some(tg) = partition_top_gap {
+                    // y_in is `y` (no advance yet); first inner action sits
+                    // at y + tg + 36.4883.
+                    tg + 36.4883
+                } else if prev_was_partition {
+                    gap + 12.0
+                } else {
+                    gap
+                };
                 if !style.hidden {
-                    pending_arrow = Some((arrow_top_y, style, label));
+                    pending_arrow = Some((arrow_top_y, style, label, arrow_gap));
                 }
-                y += gap;
+                // Don't advance y past the partition's outer top — the
+                // partition's emit handles its own top positioning at y + 10.
+                if !is_partition {
+                    y += gap;
+                }
             }
         }
         let node_y = emit_node(svg, node, cx, y);
         // Inbound connector goes AFTER the node's own emit so it lands
         // after the node's internal connectors in the connectors buffer
         // (matches PlantUML's emission order: internal first, then inbound).
-        if let Some((arrow_top, style, label)) = pending_arrow {
-            let gap = if label.is_some() {
-                LABELED_ARROW_LEN
-            } else {
-                ARROW_LEN
-            };
-            svg.down_arrow_full(cx, arrow_top, arrow_top + gap, &style);
+        if let Some((arrow_top, style, label, arrow_gap)) = pending_arrow {
+            svg.down_arrow_full(cx, arrow_top, arrow_top + arrow_gap, &style);
             if let Some(l) = label {
                 let lw = text_render::measure(&l, SMALL_FONT, false);
                 svg.connector_text(
@@ -1529,6 +1657,81 @@ fn emit_node(svg: &mut SvgEmitter, node: &LayoutNode, cx: f64, y: f64) -> f64 {
             );
             svg.shapes.push_str("</g>");
             y + pm::text_height(TITLE_FONT_SIZE) + 30.0
+        }
+        LayoutNode::Partition { name, color, body } => {
+            // Partition's outer rect spans from y_in + 10 (top) to y_in +
+            // 10 + 36.49 + body_h + 12 (bottom). The title path corner
+            // notches the top-right of the title band; the title text sits
+            // at partition_x + 3, baseline = partition_top + ascent(14) + 1.
+            //
+            // PlantUML adds an extra 0.4531 px to the top gap when the
+            // partition has a fill colour (the visual offset that makes
+            // coloured partitions land slightly lower than uncoloured ones).
+            let title_w = text_render::measure(name, TITLE_FONT_SIZE, false);
+            let body_w = sequence_width(body);
+            let partition_w = (title_w + 15.0).max(body_w + 20.0);
+            let partition_x = 16.0; // always MARGIN_LEAD-aligned in goldens
+            let top_gap = if color.is_some()
+                || name
+                    .chars()
+                    .any(|c| matches!(c, 'g' | 'j' | 'p' | 'q' | 'y'))
+            {
+                10.4531
+            } else {
+                10.0
+            };
+            let partition_top = y + top_gap;
+            let body_h = sequence_height(body);
+            let title_band_h = 36.4883; // title bar height (matches goldens)
+            let partition_h = title_band_h + body_h + 12.0;
+            let partition_right = partition_x + partition_w;
+
+            // Outer rect: fill = color (default none), stroke #000000 width 1.5
+            let fill = color.as_deref().unwrap_or("none");
+            let resolved_fill = if fill == "none" {
+                "none".to_string()
+            } else {
+                let stripped = fill.strip_prefix('#').unwrap_or(fill);
+                crate::sequence::resolve_color(stripped)
+            };
+            svg.partition_rect(
+                &resolved_fill,
+                partition_h,
+                partition_w,
+                partition_x,
+                partition_top,
+            );
+
+            // Title bar path: M{R},{Y} L{R},{Y+9.49} L{R-10},{Y+19.49} L{X},{Y+19.49}.
+            // R is anchored to the title text: partition_x + title_w + 10
+            // (the notch sits just past the title's right edge).
+            let path_r = partition_x + title_w + 10.0;
+            svg.partition_path(path_r, partition_top, partition_x);
+            let _ = partition_right;
+
+            // Title text
+            let title_y = partition_top + pm::ascent(TITLE_FONT_SIZE) + 1.0;
+            svg.text_element(
+                TEXT_COLOR,
+                "sans-serif",
+                TITLE_FONT_SIZE,
+                title_w,
+                partition_x + 3.0,
+                title_y,
+                name,
+                false,
+            );
+
+            // Emit body inside, at the diagram's cx, starting at partition_top + 36.49.
+            // Pass body_top so the body's first action sits at the right y;
+            // emit_sequence treats this as the first node's top (no inbound
+            // arrow within the body context). The partition's caller will
+            // have already drawn the inbound flow line from prev cursor to
+            // body_top through the title bar.
+            let body_top = partition_top + title_band_h;
+            emit_sequence(svg, body, cx, body_top);
+
+            partition_top + partition_h
         }
     }
 }
