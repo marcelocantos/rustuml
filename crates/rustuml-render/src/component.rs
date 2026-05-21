@@ -231,23 +231,57 @@ pub fn render_with_oracle(
 
     let mut svg = SvgBuilder::new_plantuml(total_w, total_h, "DESCRIPTION");
 
-    // Title.
+    // Title — wrap in <g class="title"> and route through creole segmenter.
     if let Some(title) = &diagram.meta.title {
         for (i, tline) in title.lines().enumerate() {
             let ty = TITLE_HEIGHT - 4.0 + i as f64 * (TITLE_FONT_SIZE + 2.0);
-            svg.text(total_w / 2.0, ty, tline, "middle", TITLE_FONT_SIZE);
+            let tl = text_render::measure(tline, TITLE_FONT_SIZE, true);
+            let x = (total_w - tl) / 2.0;
+            let mut buf = String::new();
+            buf.push_str(r#"<g class="title" data-source-line="1">"#);
+            text_render::emit_text(
+                &mut buf,
+                tline,
+                &text_render::TextBase {
+                    x,
+                    y: ty,
+                    font_size: TITLE_FONT_SIZE as u32,
+                    font_family: "sans-serif",
+                    fill: "#000000",
+                    bold: true,
+                    italic: false,
+                    underline: false,
+                    skip_underline: false,
+                },
+            );
+            buf.push_str("</g>");
+            svg.raw_inline(&buf);
         }
     }
 
-    // Header.
+    // Header — wrap in <g class="header">.
     if let Some(header) = &diagram.meta.header {
-        svg.text(
-            total_w / 2.0,
-            SMALL_FONT + 2.0,
+        let tl = text_render::measure(header, SMALL_FONT, false);
+        let x = (total_w - tl) / 2.0;
+        let mut buf = String::new();
+        buf.push_str(r#"<g class="header" data-source-line="1">"#);
+        text_render::emit_text(
+            &mut buf,
             header,
-            "middle",
-            SMALL_FONT,
+            &text_render::TextBase {
+                x,
+                y: SMALL_FONT + 2.0,
+                font_size: SMALL_FONT as u32,
+                font_family: "sans-serif",
+                fill: "#888888",
+                bold: false,
+                italic: false,
+                underline: false,
+                skip_underline: false,
+            },
         );
+        buf.push_str("</g>");
+        svg.raw_inline(&buf);
     }
 
     // Render packages (clusters).
@@ -915,9 +949,27 @@ pub fn render_with_oracle(
         }
     }
 
-    // Footer.
+    // Footer — wrap in <g class="footer">.
     if let Some(footer) = &diagram.meta.footer {
-        svg.text(total_w / 2.0, total_h - 4.0, footer, "middle", SMALL_FONT);
+        let mut buf = String::new();
+        buf.push_str(r#"<g class="footer" data-source-line="1">"#);
+        text_render::emit_text(
+            &mut buf,
+            footer,
+            &text_render::TextBase {
+                x: 0.0,
+                y: total_h - 4.0,
+                font_size: SMALL_FONT as u32,
+                font_family: "sans-serif",
+                fill: "#888888",
+                bold: false,
+                italic: false,
+                underline: false,
+                skip_underline: false,
+            },
+        );
+        buf.push_str("</g>");
+        svg.raw_inline(&buf);
     }
     // Legend.
     if let Some(legend) = &diagram.meta.legend {
