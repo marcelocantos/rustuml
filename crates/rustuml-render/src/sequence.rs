@@ -3050,80 +3050,98 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme) -> String {
         );
     }
 
-    // Render title if present
+    // Render title if present. PlantUML wraps the title in
+    // `<g class="title" data-source-line="N">` and emits a bold 14pt text
+    // centered horizontally: x = (svg_width - textLength) / 2.
     if let Some(title) = &diagram.meta.title {
-        let mid_x = svg_width as f64 / 2.0;
+        const TITLE_FONT_SIZE: u32 = 14;
+        let text_length = text_render::measure(title, TITLE_FONT_SIZE as f64, true);
+        let x = (svg_width as f64 - text_length) / 2.0;
+        svg.buf
+            .push_str(r#"<g class="title" data-source-line="1">"#);
         text_render::emit_text(
             &mut svg.buf,
             title,
             &TextBase {
-                x: mid_x,
+                x,
                 y: HEAD_BOX_Y + 13.0,
-                font_size: 15,
+                font_size: TITLE_FONT_SIZE,
                 font_family: "sans-serif",
                 fill: "#000000",
-                bold: false,
+                bold: true,
                 italic: false,
                 underline: false,
                 skip_underline: false,
             },
         );
+        svg.buf.push_str("</g>");
     }
 
-    // Render header if present
+    // Render header if present. PlantUML wraps in `<g class="header">` and
+    // emits a 10pt #888888 text right-aligned to a small inset from the
+    // right edge: x = svg_width - textLength - 5.
     if let Some(header) = &diagram.meta.header {
-        let mid_x = svg_width as f64 / 2.0;
+        const HEADER_FONT_SIZE: u32 = 10;
+        let text_length = text_render::measure(header, HEADER_FONT_SIZE as f64, false);
+        let x = svg_width as f64 - text_length - 5.0;
+        svg.buf
+            .push_str(r#"<g class="header" data-source-line="1">"#);
         text_render::emit_text(
             &mut svg.buf,
             header,
             &TextBase {
-                x: mid_x,
-                y: HEAD_BOX_Y * 0.8,
-                font_size: 11,
+                x,
+                y: 14.668,
+                font_size: HEADER_FONT_SIZE,
                 font_family: "sans-serif",
-                fill: "#000000",
+                fill: "#888888",
                 bold: false,
                 italic: false,
                 underline: false,
                 skip_underline: false,
             },
         );
+        svg.buf.push_str("</g>");
     }
 
-    // Render footer if present
+    // Render footer if present. PlantUML wraps in `<g class="footer">` and
+    // emits a 10pt #888888 text at the left edge (x=0).
     if let Some(footer) = &diagram.meta.footer {
-        let mid_x = svg_width as f64 / 2.0;
+        const FOOTER_FONT_SIZE: u32 = 10;
+        svg.buf
+            .push_str(r#"<g class="footer" data-source-line="1">"#);
         text_render::emit_text(
             &mut svg.buf,
             footer,
             &TextBase {
-                x: mid_x,
+                x: 0.0,
                 y: svg_height as f64 - 4.0,
-                font_size: 11,
+                font_size: FOOTER_FONT_SIZE,
                 font_family: "sans-serif",
-                fill: "#000000",
+                fill: "#888888",
                 bold: false,
                 italic: false,
                 underline: false,
                 skip_underline: false,
             },
         );
+        svg.buf.push_str("</g>");
     }
 
     // Caption is rendered AFTER all messages — see the dedicated block just
     // before `svg.close_svg(...)` at the end of this function. PlantUML emits
     // the caption group as the last visible element inside `<g>`.
 
-    // Render legend if present
+    // Render legend if present. Pass the raw legend line through the creole
+    // segmenter so bold/italic/under runs split into separate <text> elements.
     if let Some(legend) = &diagram.meta.legend {
-        // Emit each non-empty line of the legend as a text element
         let lx = svg_width as f64 - 200.0;
         let mut ly = svg_height as f64 - 150.0;
         for line in legend.lines() {
             let trimmed = line.trim();
             if !trimmed.is_empty() {
-                let stripped = if trimmed.contains('|') {
-                    // Table cells: extract cell text
+                let label = if trimmed.contains('|') {
+                    // Table cells: extract cell text. (Strip HTML cell decoration.)
                     trimmed
                         .trim_matches('|')
                         .split('|')
@@ -3140,12 +3158,12 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme) -> String {
                         .collect::<Vec<_>>()
                         .join(" ")
                 } else {
-                    strip_creole(trimmed)
+                    trimmed.to_string()
                 };
-                if !stripped.is_empty() {
+                if !label.is_empty() {
                     text_render::emit_text(
                         &mut svg.buf,
-                        &stripped,
+                        &label,
                         &TextBase {
                             x: lx,
                             y: ly,
