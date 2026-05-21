@@ -29,6 +29,12 @@ use crate::text_render::{self, TextBase};
 
 /// Margin from SVG edge to entity boxes.
 const MARGIN: f64 = 7.0;
+/// Header height when `hide circle` removes the entity icon. Reduced from the
+/// standard 32px header because the name no longer needs to clear the 22px-tall
+/// icon glyph; PlantUML pushes the header separator up to y_rect + 26.4883.
+const HEADER_H_NO_CIRCLE: f64 = 26.4883;
+/// Name baseline y (relative to rect top) when `hide circle` is active.
+const NAME_BASELINE_Y_NO_CIRCLE: f64 = 25.5352;
 /// Gap between icon and entity name text.
 const ICON_TEXT_GAP: f64 = 3.0;
 /// Icon ellipse radius.
@@ -187,14 +193,227 @@ struct EntityDims {
     has_stereotypes: bool,
     /// Source line number from the parser (1-based).
     source_line: usize,
+    /// Visibility flags from `hide`/`show` directives applied to this entity.
+    hide: HideFlags,
 }
 
-fn calc_entity_dims(entity: &ClassEntity, entity_index: usize) -> EntityDims {
+/// What's hidden for one entity, after resolving global and per-kind
+/// `hide`/`show` directives.
+#[derive(Debug, Clone, Copy, Default)]
+struct HideFlags {
+    circle: bool,
+    fields: bool,
+    methods: bool,
+    stereotype: bool,
+    hide_private_fields: bool,
+    hide_private_methods: bool,
+    hide_protected_fields: bool,
+    hide_protected_methods: bool,
+    hide_public_fields: bool,
+    hide_public_methods: bool,
+    hide_package_fields: bool,
+    hide_package_methods: bool,
+}
+
+impl HideFlags {
+    fn hides_member(self, m: &Member) -> bool {
+        if (self.fields && m.kind == MemberKind::Field)
+            || (self.methods && m.kind == MemberKind::Method)
+        {
+            return true;
+        }
+        let is_field = m.kind == MemberKind::Field;
+        let is_method = m.kind == MemberKind::Method;
+        match m.visibility {
+            Visibility::Private => {
+                (is_field && self.hide_private_fields) || (is_method && self.hide_private_methods)
+            }
+            Visibility::Protected => {
+                (is_field && self.hide_protected_fields)
+                    || (is_method && self.hide_protected_methods)
+            }
+            Visibility::Public => {
+                (is_field && self.hide_public_fields) || (is_method && self.hide_public_methods)
+            }
+            Visibility::Package => {
+                (is_field && self.hide_package_fields) || (is_method && self.hide_package_methods)
+            }
+            Visibility::Default => false,
+        }
+    }
+}
+
+/// Resolve the `hide_show` directives against one entity's kind / stereotypes.
+fn resolve_hide(entity: &ClassEntity, directives: &[HideShow]) -> HideFlags {
+    let mut h = HideFlags::default();
+    let entity_kind_word = match entity.kind {
+        EntityKind::Class => "class",
+        EntityKind::Interface => "interface",
+        EntityKind::Enum => "enum",
+        EntityKind::AbstractClass => "abstract",
+        EntityKind::Annotation => "annotation",
+        EntityKind::Entity => "entity",
+    };
+    for d in directives {
+        // Tokenise: optional selector (entity kind keyword, `<<stereo>>`, or
+        // entity name) followed by the visibility keyword(s).
+        let arg = d.arg.trim();
+        let (selector, what) = split_hide_selector(arg);
+        let applies = match selector {
+            None => true,
+            Some(s) if s.eq_ignore_ascii_case(entity_kind_word) => true,
+            Some(s) if s.eq_ignore_ascii_case("class") && entity.kind == EntityKind::Entity => true,
+            Some(s) if s.starts_with("<<") && s.ends_with(">>") => {
+                let stereo = s[2..s.len() - 2].trim();
+                entity
+                    .stereotypes
+                    .iter()
+                    .any(|t| t.eq_ignore_ascii_case(stereo))
+            }
+            Some(s) if s.eq_ignore_ascii_case(&entity.id) => true,
+            _ => false,
+        };
+        if !applies {
+            continue;
+        }
+        // Tokenise the remainder. Recognised modifier prefixes:
+        //   `empty`              — only act when the named compartment is empty
+        //   `private/protected/public/package` — restrict to that visibility
+        let tokens: Vec<&str> = what.split_whitespace().collect();
+        let mut empty_only = false;
+        let mut visibility_filter: Option<Visibility> = None;
+        let mut idx = 0;
+        if let Some(first) = tokens.first()
+            && first.eq_ignore_ascii_case("empty")
+        {
+            empty_only = true;
+            idx = 1;
+        }
+        if let Some(tok) = tokens.get(idx) {
+            let vis = match tok.to_ascii_lowercase().as_str() {
+                "private" => Some(Visibility::Private),
+                "protected" => Some(Visibility::Protected),
+                "public" => Some(Visibility::Public),
+                "package" => Some(Visibility::Package),
+                _ => None,
+            };
+            if let Some(v) = vis {
+                visibility_filter = Some(v);
+                idx += 1;
+            }
+        }
+        let has_fields = entity.members.iter().any(|m| m.kind == MemberKind::Field);
+        let has_methods = entity.members.iter().any(|m| m.kind == MemberKind::Method);
+        for tok in &tokens[idx..] {
+            let t = tok.to_ascii_lowercase();
+            match (visibility_filter, t.as_str()) {
+                (None, "circle") => h.circle = !d.show,
+                (None, "attributes" | "fields" | "attribute" | "field")
+                    if !empty_only || !has_fields =>
+                {
+                    h.fields = !d.show;
+                }
+                (None, "methods" | "method") if !empty_only || !has_methods => {
+                    h.methods = !d.show;
+                }
+                (None, "members" | "member")
+                    if !empty_only || entity.members.is_empty() =>
+                {
+                    h.fields = !d.show;
+                    h.methods = !d.show;
+                }
+                (None, "stereotype" | "stereotypes") => h.stereotype = !d.show,
+                (
+                    Some(v),
+                    kind @ ("attributes" | "fields" | "attribute" | "field" | "methods" | "method"
+                    | "members" | "member"),
+                ) => {
+                    let want_field = matches!(
+                        kind,
+                        "attributes" | "fields" | "attribute" | "field" | "members" | "member"
+                    );
+                    let want_method = matches!(kind, "methods" | "method" | "members" | "member");
+                    let val = !d.show;
+                    match v {
+                        Visibility::Private => {
+                            if want_field {
+                                h.hide_private_fields = val;
+                            }
+                            if want_method {
+                                h.hide_private_methods = val;
+                            }
+                        }
+                        Visibility::Protected => {
+                            if want_field {
+                                h.hide_protected_fields = val;
+                            }
+                            if want_method {
+                                h.hide_protected_methods = val;
+                            }
+                        }
+                        Visibility::Public => {
+                            if want_field {
+                                h.hide_public_fields = val;
+                            }
+                            if want_method {
+                                h.hide_public_methods = val;
+                            }
+                        }
+                        Visibility::Package => {
+                            if want_field {
+                                h.hide_package_fields = val;
+                            }
+                            if want_method {
+                                h.hide_package_methods = val;
+                            }
+                        }
+                        Visibility::Default => {}
+                    }
+                }
+                _ => {}
+            }
+        }
+    }
+    h
+}
+
+/// Split a hide-directive argument into `(selector, rest)`.
+/// Selectors recognised: entity-kind keywords, `<<stereotype>>` references,
+/// and bare identifiers that name a known entity.
+fn split_hide_selector(arg: &str) -> (Option<&str>, &str) {
+    // `<<stereo>>` selector: extract up to closing `>>`.
+    if let Some(rest) = arg.strip_prefix("<<")
+        && let Some(end) = rest.find(">>")
+    {
+        let selector = &arg[..end + 4];
+        let what = arg[end + 4..].trim_start();
+        return (Some(selector), what);
+    }
+    // First token may be a selector keyword. `empty members` is a property
+    // keyword pair, not a selector.
+    if let Some((first, rest)) = arg.split_once(char::is_whitespace) {
+        let f = first.to_ascii_lowercase();
+        const KINDS: &[&str] = &[
+            "class",
+            "interface",
+            "enum",
+            "abstract",
+            "annotation",
+            "entity",
+        ];
+        if KINDS.contains(&f.as_str()) {
+            return (Some(first), rest.trim_start());
+        }
+    }
+    (None, arg)
+}
+
+fn calc_entity_dims(entity: &ClassEntity, entity_index: usize, hide: HideFlags) -> EntityDims {
     let is_enum = entity.kind == EntityKind::Enum;
     // Entity labels treat `__` as literal underscores, not underline markup,
     // so width must include those characters.
     let name_width = text_render::measure_no_underline(&entity.label, 14.0, false);
-    let has_stereotypes = !entity.stereotypes.is_empty();
+    let has_stereotypes = !entity.stereotypes.is_empty() && !hide.stereotype;
 
     // Split members into fields and methods. For enums with method members
     // (or any explicit visibility marker), PlantUML uses the standard
@@ -207,17 +426,24 @@ fn calc_entity_dims(entity: &ClassEntity, entity_index: usize) -> EntityDims {
             .any(|m| m.kind == MemberKind::Method || m.visibility != Visibility::Default);
     let enum_classic = is_enum && !enum_has_methods;
     let (field_count, method_count) = if enum_classic {
-        (entity.members.len(), 0)
+        (
+            entity
+                .members
+                .iter()
+                .filter(|m| !hide.hides_member(m))
+                .count(),
+            0,
+        )
     } else {
         let fields = entity
             .members
             .iter()
-            .filter(|m| m.kind == MemberKind::Field)
+            .filter(|m| m.kind == MemberKind::Field && !hide.hides_member(m))
             .count();
         let methods = entity
             .members
             .iter()
-            .filter(|m| m.kind == MemberKind::Method)
+            .filter(|m| m.kind == MemberKind::Method && !hide.hides_member(m))
             .count();
         // If there are only methods (no fields), PlantUML puts them after the
         // header with two separator lines. If there are only fields, methods
@@ -225,8 +451,17 @@ fn calc_entity_dims(entity: &ClassEntity, entity_index: usize) -> EntityDims {
         (fields, methods)
     };
 
-    // Compute width from icon area + name + member text widths.
-    let icon_area = ICON_CX_OFFSET + ICON_RX + ICON_TEXT_GAP; // 29
+    // Compute width from icon area + name + member text widths. When the
+    // circle is hidden the icon contributes no horizontal real estate; the
+    // name is centred in the available header instead.
+    let icon_area = if hide.circle {
+        // `MyType` etc. golden output shows the name horizontally centred
+        // inside a 2*HEADER_RIGHT_PAD-padded box; treat the icon area as
+        // empty padding to recover the matching width.
+        HEADER_RIGHT_PAD
+    } else {
+        ICON_CX_OFFSET + ICON_RX + ICON_TEXT_GAP // 29
+    };
     let name_total = icon_area + name_width + HEADER_RIGHT_PAD;
 
     // Stereotype text may also affect width.
@@ -243,6 +478,7 @@ fn calc_entity_dims(entity: &ClassEntity, entity_index: usize) -> EntityDims {
         .members
         .iter()
         .filter(|m| m.kind != MemberKind::Separator)
+        .filter(|m| !hide.hides_member(m))
         .map(|m| {
             let text = format_member_display(m);
             let text_w = text_render::measure_no_underline(&text, 14.0, false);
@@ -257,6 +493,9 @@ fn calc_entity_dims(entity: &ClassEntity, entity_index: usize) -> EntityDims {
         .collect();
 
     let max_member_width = member_widths.iter().cloned().fold(0.0_f64, f64::max);
+    // Hidden compartments contribute nothing to the per-compartment count.
+    let eff_field_count = if hide.fields { 0 } else { field_count };
+    let eff_method_count = if hide.methods { 0 } else { method_count };
     let width = name_total.max(stereo_width).max(max_member_width);
 
     // Height calculation.
@@ -268,20 +507,24 @@ fn calc_entity_dims(entity: &ClassEntity, entity_index: usize) -> EntityDims {
     const HEADER_H: f64 = 32.0;
     let header_h = if has_stereotypes {
         HEADER_H + STEREOTYPE_EXTRA_HEIGHT
+    } else if hide.circle {
+        HEADER_H_NO_CIRCLE
     } else {
         HEADER_H
     };
 
-    let height = if entity.members.is_empty() {
+    let height = if entity.members.is_empty()
+        || (eff_field_count == 0 && eff_method_count == 0 && !enum_classic)
+    {
         // No members: header + empty fields + empty methods.
         header_h + COMPARTMENT_PAD + COMPARTMENT_PAD
     } else if enum_classic {
         // Enum: header + values + bottom separator.
-        header_h + (COMPARTMENT_PAD + field_count as f64 * MEMBER_LINE_HEIGHT) + COMPARTMENT_PAD
+        header_h + (COMPARTMENT_PAD + eff_field_count as f64 * MEMBER_LINE_HEIGHT) + COMPARTMENT_PAD
     } else {
         // Class/interface/abstract/annotation.
-        let fields_section = COMPARTMENT_PAD + field_count as f64 * MEMBER_LINE_HEIGHT;
-        let methods_section = COMPARTMENT_PAD + method_count as f64 * MEMBER_LINE_HEIGHT;
+        let fields_section = COMPARTMENT_PAD + eff_field_count as f64 * MEMBER_LINE_HEIGHT;
+        let methods_section = COMPARTMENT_PAD + eff_method_count as f64 * MEMBER_LINE_HEIGHT;
         header_h + fields_section + methods_section
     };
 
@@ -296,15 +539,16 @@ fn calc_entity_dims(entity: &ClassEntity, entity_index: usize) -> EntityDims {
     EntityDims {
         width,
         height,
-        field_count,
-        method_count,
+        field_count: eff_field_count,
+        method_count: eff_method_count,
         // is_enum here means "classic enum constants layout" — only true for
         // enums whose members are all default-visibility fields. Enums with
         // method members or explicit visibility fall back to class layout.
-        is_enum: enum_classic,
+        is_enum: enum_classic && !hide.fields,
         name_width,
         has_stereotypes,
         source_line,
+        hide,
     }
 }
 
@@ -584,7 +828,7 @@ pub fn render_with_oracle(
         .entities
         .iter()
         .enumerate()
-        .map(|(i, e)| calc_entity_dims(e, i))
+        .map(|(i, e)| calc_entity_dims(e, i, resolve_hide(e, &diagram.hide_show)))
         .collect();
 
     // If oracle layout is provided, use it directly instead of running Graphviz.
@@ -912,7 +1156,7 @@ fn render_entity_content(
     let name_text_x_override = oracle_rect.and_then(|r| r.name_text_x);
     let is_abstract = entity.kind == EntityKind::AbstractClass;
     let is_interface = entity.kind == EntityKind::Interface;
-    let _is_enum = entity.kind == EntityKind::Enum;
+    let is_enum_entity = entity.kind == EntityKind::Enum;
     let _is_annotation = entity.kind == EntityKind::Annotation;
 
     // Background rectangle — prefer the oracle's verbatim fill/style/rx
@@ -947,66 +1191,68 @@ fn render_entity_content(
     )
     .unwrap();
 
-    // Icon (colored ellipse + letter glyph).
+    // Icon (colored ellipse + letter glyph). Skipped entirely when `hide circle`.
     let icon_cx = icon_cx_override.unwrap_or(x + ICON_CX_OFFSET);
     let icon_cy = if dim.has_stereotypes {
         y + ICON_CY_WITH_STEREO
     } else {
         y + (ICON_CY - MARGIN)
     };
-    let icon_fill = match entity.kind {
-        EntityKind::Class => CLASS_ICON_FILL,
-        EntityKind::Interface => INTERFACE_ICON_FILL,
-        EntityKind::Enum => ENUM_ICON_FILL,
-        EntityKind::AbstractClass => ABSTRACT_ICON_FILL,
-        EntityKind::Annotation => ANNOTATION_ICON_FILL,
-        EntityKind::Entity => CLASS_ICON_FILL, // Entity uses class icon
-    };
+    if !dim.hide.circle {
+        let icon_fill = match entity.kind {
+            EntityKind::Class => CLASS_ICON_FILL,
+            EntityKind::Interface => INTERFACE_ICON_FILL,
+            EntityKind::Enum => ENUM_ICON_FILL,
+            EntityKind::AbstractClass => ABSTRACT_ICON_FILL,
+            EntityKind::Annotation => ANNOTATION_ICON_FILL,
+            EntityKind::Entity => CLASS_ICON_FILL, // Entity uses class icon
+        };
 
-    write!(
-        svg,
-        r#"<ellipse cx="{}" cy="{}" fill="{}" rx="{}" ry="{}" style="stroke:{};stroke-width:{};"/>"#,
-        fmt4(icon_cx),
-        fmt4(icon_cy),
-        icon_fill,
-        ICON_RX as i64,
-        ICON_RX as i64,
-        BORDER_COLOR,
-        ICON_STROKE_WIDTH,
-    )
-    .unwrap();
+        write!(
+            svg,
+            r#"<ellipse cx="{}" cy="{}" fill="{}" rx="{}" ry="{}" style="stroke:{};stroke-width:{};"/>"#,
+            fmt4(icon_cx),
+            fmt4(icon_cy),
+            icon_fill,
+            ICON_RX as i64,
+            ICON_RX as i64,
+            BORDER_COLOR,
+            ICON_STROKE_WIDTH,
+        )
+        .unwrap();
 
-    // Letter glyph path — use oracle override if available to avoid float precision issues.
-    let glyph_path = if let Some(d) = glyph_path_override {
-        d.to_string()
-    } else {
-        match entity.kind {
-            EntityKind::Class | EntityKind::Entity => {
-                // Offset the C glyph from reference position (cx=22) to actual cx.
-                let dx = icon_cx - 22.0;
-                let dy = icon_cy - 23.0;
-                if dx.abs() < 0.001 && dy.abs() < 0.001 {
-                    CLASS_GLYPH.to_string()
-                } else {
-                    offset_path(CLASS_GLYPH, dx, dy)
+        // Letter glyph path — use oracle override if available to avoid float precision issues.
+        let glyph_path = if let Some(d) = glyph_path_override {
+            d.to_string()
+        } else {
+            match entity.kind {
+                EntityKind::Class | EntityKind::Entity => {
+                    // Offset the C glyph from reference position (cx=22) to actual cx.
+                    let dx = icon_cx - 22.0;
+                    let dy = icon_cy - 23.0;
+                    if dx.abs() < 0.001 && dy.abs() < 0.001 {
+                        CLASS_GLYPH.to_string()
+                    } else {
+                        offset_path(CLASS_GLYPH, dx, dy)
+                    }
                 }
-            }
-            EntityKind::Interface => interface_glyph(icon_cx, icon_cy),
-            EntityKind::Enum => {
-                let dx = icon_cx - 22.0;
-                let dy = icon_cy - 23.0;
-                if dx.abs() < 0.001 && dy.abs() < 0.001 {
-                    ENUM_GLYPH.to_string()
-                } else {
-                    offset_path(ENUM_GLYPH, dx, dy)
+                EntityKind::Interface => interface_glyph(icon_cx, icon_cy),
+                EntityKind::Enum => {
+                    let dx = icon_cx - 22.0;
+                    let dy = icon_cy - 23.0;
+                    if dx.abs() < 0.001 && dy.abs() < 0.001 {
+                        ENUM_GLYPH.to_string()
+                    } else {
+                        offset_path(ENUM_GLYPH, dx, dy)
+                    }
                 }
+                EntityKind::AbstractClass => abstract_glyph(icon_cx, icon_cy),
+                EntityKind::Annotation => annotation_glyph(icon_cx, icon_cy),
             }
-            EntityKind::AbstractClass => abstract_glyph(icon_cx, icon_cy),
-            EntityKind::Annotation => annotation_glyph(icon_cx, icon_cy),
-        }
-    };
+        };
 
-    write!(svg, r##"<path d="{}" fill="#000000"/>"##, glyph_path,).unwrap();
+        write!(svg, r##"<path d="{}" fill="#000000"/>"##, glyph_path,).unwrap();
+    }
 
     // Stereotype text (if present).
     let name_tl = text_render::measure_no_underline(&entity.label, 14.0, false);
@@ -1053,11 +1299,16 @@ fn render_entity_content(
         } else {
             icon_cx + ICON_RX + ICON_TEXT_GAP
         }
+    } else if dim.hide.circle {
+        // With the icon hidden the name is centred inside the rectangle.
+        x + (dim.width - round_4dp(name_tl)) / 2.0
     } else {
         name_text_x_override.unwrap_or(icon_cx + ICON_RX + ICON_TEXT_GAP)
     };
     let name_y = if dim.has_stereotypes {
         y + NAME_Y_WITH_STEREO
+    } else if dim.hide.circle {
+        y + NAME_BASELINE_Y_NO_CIRCLE - MARGIN
     } else {
         y + NAME_BASELINE_Y - MARGIN
     };
@@ -1117,17 +1368,76 @@ fn render_entity_content(
         0.0
     };
 
+    // Default header-separator y (rect-relative): icon-less entities use a
+    // shorter header so the separator sits 5.5px higher.
+    let header_sep_default = if dim.hide.circle {
+        y + HEADER_H_NO_CIRCLE + stereo_shift
+    } else {
+        y + HEADER_SEP_Y - MARGIN + stereo_shift
+    };
+
     // `dim.is_enum` is true only for the classic enum-constants layout
     // (all members are default-visibility fields). Enums with method
     // members or explicit visibility flow through the class branch below.
     let enum_classic = dim.is_enum;
 
-    if entity.members.is_empty() {
+    let effectively_no_members = entity.members.is_empty()
+        || (dim.hide.fields && dim.hide.methods)
+        || (dim.hide.fields && !entity.members.iter().any(|m| m.kind == MemberKind::Method))
+        || (dim.hide.methods && !entity.members.iter().any(|m| m.kind == MemberKind::Field));
+
+    // `hide attributes` (or `hide methods`) collapses the hidden compartment
+    // to zero height: one separator line between the header and the surviving
+    // compartment, no second divider.
+    let collapsing_hide_one_section =
+        !effectively_no_members && (dim.hide.fields || dim.hide.methods);
+
+    if collapsing_hide_one_section {
+        let visible_members: Vec<&Member> = entity
+            .members
+            .iter()
+            .filter(|m| {
+                if dim.hide.fields {
+                    m.kind == MemberKind::Method
+                } else {
+                    m.kind == MemberKind::Field
+                }
+            })
+            .collect();
+        let sep_y = oracle_sep_y.first().copied().unwrap_or(header_sep_default);
+        write!(
+            svg,
+            r#"<line style="{}" x1="{}" x2="{}" y1="{}" y2="{}"/>"#,
+            sep_style,
+            fmt4(sep_x1),
+            fmt4(sep_x2),
+            fmt4(sep_y),
+            fmt4(sep_y),
+        )
+        .unwrap();
+        let narrow_default = is_enum_entity
+            || visible_members
+                .iter()
+                .all(|m| m.visibility == Visibility::Default);
+        let mut member_y = sep_y + FIRST_MEMBER_OFFSET;
+        for (mi, member) in visible_members.iter().enumerate() {
+            let eff_y = oracle_text_y
+                .get(text_header_count + mi)
+                .copied()
+                .unwrap_or(member_y);
+            let vis_ov = if member.visibility != Visibility::Default {
+                let v = oracle_vis_y.get(vis_icon_idx).copied();
+                vis_icon_idx += 1;
+                v
+            } else {
+                None
+            };
+            render_member_line(svg, member, x, eff_y, vis_ov, narrow_default);
+            member_y += MEMBER_SPACING;
+        }
+    } else if effectively_no_members {
         // Two separator lines (fields/methods compartments both empty).
-        let sep1_y = oracle_sep_y
-            .first()
-            .copied()
-            .unwrap_or(y + HEADER_SEP_Y - MARGIN + stereo_shift);
+        let sep1_y = oracle_sep_y.first().copied().unwrap_or(header_sep_default);
         let sep2_y = oracle_sep_y
             .get(1)
             .copied()
@@ -1154,10 +1464,7 @@ fn render_entity_content(
         .unwrap();
     } else if enum_classic {
         // Enum: one separator after header, members, then separator after last member.
-        let sep_y = oracle_sep_y
-            .first()
-            .copied()
-            .unwrap_or(y + HEADER_SEP_Y - MARGIN + stereo_shift);
+        let sep_y = oracle_sep_y.first().copied().unwrap_or(header_sep_default);
         write!(
             svg,
             r#"<line style="{}" x1="{}" x2="{}" y1="{}" y2="{}"/>"#,
@@ -1185,7 +1492,7 @@ fn render_entity_content(
                 } else {
                     None
                 };
-                render_member_line(svg, member, x, eff_member_y, vis_ov);
+                render_member_line(svg, member, x, eff_member_y, vis_ov, is_enum_entity);
             } else {
                 let text = format_member_display(member);
                 let mut text_buf = String::new();
@@ -1226,22 +1533,39 @@ fn render_entity_content(
         .unwrap();
     } else {
         // Class/interface/abstract/annotation with members.
-        // Split members into fields and methods.
-        let fields: Vec<&Member> = entity
-            .members
-            .iter()
-            .filter(|m| m.kind == MemberKind::Field)
-            .collect();
-        let methods: Vec<&Member> = entity
-            .members
-            .iter()
-            .filter(|m| m.kind == MemberKind::Method)
-            .collect();
+        // Split members into fields and methods, honouring `hide ...`
+        // directives (both whole-compartment and per-visibility hides).
+        let fields: Vec<&Member> = if dim.hide.fields {
+            Vec::new()
+        } else {
+            entity
+                .members
+                .iter()
+                .filter(|m| m.kind == MemberKind::Field && !dim.hide.hides_member(m))
+                .collect()
+        };
+        let methods: Vec<&Member> = if dim.hide.methods {
+            Vec::new()
+        } else {
+            entity
+                .members
+                .iter()
+                .filter(|m| m.kind == MemberKind::Method && !dim.hide.hides_member(m))
+                .collect()
+        };
 
-        let header_sep_y = oracle_sep_y
-            .first()
-            .copied()
-            .unwrap_or(y + HEADER_SEP_Y - MARGIN + stereo_shift);
+        // A compartment with NO icon-bearing members renders default-visibility
+        // entries at the narrower ENUM_TEXT_OFFSET (lone body stereotypes,
+        // inner-class declarations, all-constant enum-style compartments).
+        // Enum entities always render default-vis members narrow regardless
+        // of compartment mix (enum constants flush-left next to icon-bearing
+        // typed fields).
+        let fields_narrow_default =
+            is_enum_entity || fields.iter().all(|m| m.visibility == Visibility::Default);
+        let methods_narrow_default =
+            is_enum_entity || methods.iter().all(|m| m.visibility == Visibility::Default);
+
+        let header_sep_y = oracle_sep_y.first().copied().unwrap_or(header_sep_default);
 
         // Detect whether an explicit `--`-style separator appears between
         // the field and method compartments. When present, Java draws the
@@ -1323,7 +1647,7 @@ fn render_entity_content(
                 } else {
                     None
                 };
-                render_member_line(svg, member, x, eff_y, vis_ov);
+                render_member_line(svg, member, x, eff_y, vis_ov, fields_narrow_default);
                 member_y += MEMBER_SPACING;
             }
 
@@ -1357,7 +1681,7 @@ fn render_entity_content(
                 } else {
                     None
                 };
-                render_member_line(svg, member, x, eff_y, vis_ov);
+                render_member_line(svg, member, x, eff_y, vis_ov, methods_narrow_default);
                 method_y += MEMBER_SPACING;
             }
         } else if !methods.is_empty() {
@@ -1397,7 +1721,7 @@ fn render_entity_content(
                 } else {
                     None
                 };
-                render_member_line(svg, member, x, eff_y, vis_ov);
+                render_member_line(svg, member, x, eff_y, vis_ov, methods_narrow_default);
                 method_y += MEMBER_SPACING;
             }
         } else {
@@ -1436,6 +1760,7 @@ fn render_member_line(
     entity_x: f64,
     baseline_y: f64,
     vis_icon_y_override: Option<f64>,
+    default_uses_narrow: bool,
 ) {
     let text = format_member_display(member);
 
@@ -1524,11 +1849,17 @@ fn render_member_line(
         svg.push_str("</g>");
     }
 
-    // Members of a class (with or without visibility icons) all start at
-    // entity_x + MEMBER_TEXT_OFFSET. Default-visibility entries here are
-    // body-continuation lines of a multi-line method, not enum constants
-    // — those go through a separate render path in the enum branch.
-    let text_x = entity_x + MEMBER_TEXT_OFFSET;
+    // Default-visibility members have no icon. PlantUML uses the narrower
+    // ENUM_TEXT_OFFSET when the surrounding compartment contains no
+    // icon-bearing members (enum-constant compartments, lone body
+    // stereotypes, inner-class declarations); otherwise default-visibility
+    // entries (continuation lines after `+method() { ... }` bodies) align
+    // to MEMBER_TEXT_OFFSET so they sit under the icon-bearing text.
+    let text_x = if member.visibility == Visibility::Default && default_uses_narrow {
+        entity_x + ENUM_TEXT_OFFSET
+    } else {
+        entity_x + MEMBER_TEXT_OFFSET
+    };
 
     let mut text_buf = String::new();
     text_render::emit_text(
@@ -1872,7 +2203,7 @@ fn render_grid_fallback(diagram: &ClassDiagram, _cs: &crate::style::ClassStyle) 
         .entities
         .iter()
         .enumerate()
-        .map(|(i, e)| calc_entity_dims(e, i))
+        .map(|(i, e)| calc_entity_dims(e, i, resolve_hide(e, &diagram.hide_show)))
         .collect();
     let cols = (diagram.entities.len() as f64).sqrt().ceil() as usize;
 
@@ -2093,6 +2424,7 @@ mod tests {
             }],
             packages: vec![],
             notes: vec![],
+            hide_show: vec![],
         }
     }
 
@@ -2220,6 +2552,7 @@ mod tests {
             relationships: vec![],
             packages: vec![],
             notes: vec![],
+            hide_show: vec![],
         };
         let svg = render(&diagram, &Theme::default());
         assert!(svg.contains("Drawable"));
@@ -2247,6 +2580,7 @@ mod tests {
             relationships: vec![],
             packages: vec![],
             notes: vec![],
+            hide_show: vec![],
         };
         let svg = render(&diagram, &Theme::default());
         assert!(svg.contains("<svg"));

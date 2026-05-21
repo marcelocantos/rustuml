@@ -36,6 +36,20 @@ pub struct ClassDiagram {
     pub relationships: Vec<Relationship>,
     pub packages: Vec<Package>,
     pub notes: Vec<Note>,
+    /// Visibility-control directives accumulated from `hide ...` / `show ...`
+    /// statements. Stored as the raw argument list after the keyword so the
+    /// renderer can interpret per-entity selectors as well as global ones.
+    #[serde(default)]
+    pub hide_show: Vec<HideShow>,
+}
+
+/// One `hide`/`show` directive (verbatim arguments).
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct HideShow {
+    pub show: bool,
+    /// Lower-cased space-collapsed argument text (e.g. `"circle"`, `"empty members"`,
+    /// `"<<myStereo>> circle"`, `"myClass attributes"`).
+    pub arg: String,
 }
 
 /// A class, interface, enum, or other entity.
