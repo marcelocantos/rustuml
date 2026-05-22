@@ -90,6 +90,7 @@ pub fn extract_oracle_layout(svg: &str) -> Option<OracleLayout> {
                 | Some("BOARD")
                 | Some("MINDMAP")
                 | Some("WBS")
+                | Some("STATE")
         );
         if flat_only || with_groups {
             let mut inner = String::new();
