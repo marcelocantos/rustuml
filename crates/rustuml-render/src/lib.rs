@@ -133,6 +133,11 @@ fn render_with_theme_and_oracle(
         Diagram::UseCase(uc) => usecase::render_with_oracle(uc, theme, oracle),
         Diagram::Object(obj) => object::render_with_oracle(obj, theme, oracle),
         Diagram::Json(jd) => json_diagram::render_with_oracle(jd, theme, oracle),
+        Diagram::Timing(td) => timing::render_with_oracle(td, theme, oracle),
+        Diagram::Gantt(g) => gantt::render_with_oracle(g, theme, oracle),
+        Diagram::Salt(s) => salt::render_with_oracle(s, theme, oracle),
+        Diagram::Nwdiag(nw) => nwdiag::render_with_oracle(nw, theme, oracle),
+        Diagram::Archimate(a) => archimate::render_with_oracle(a, theme, oracle),
         _ => render_with_theme(diagram, theme),
     }
 }

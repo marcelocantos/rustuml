@@ -46,6 +46,42 @@ pub struct OracleLayout {
     pub diagram_type: Option<String>,
 }
 
+/// Wrap a verbatim oracle root-`<g>` body in the standard PlantUML SVG
+/// envelope (`<?xml-ish header, <?plantuml?> PI, `<defs/>`, `<g>` … `</g></svg>`).
+///
+/// Used by renderers whose diagram type emits a flat or near-flat body whose
+/// internal structure is too hard to replicate exactly (JSON, YAML, TIMING,
+/// GANTT, SALT, NWDIAG, ARCHIMATE). The caller supplies the verbatim body and
+/// a fallback diagram-type label used when the oracle didn't carry one.
+pub fn wrap_oracle_envelope(
+    oracle: &OracleLayout,
+    body_xml: &str,
+    fallback_diagram_type: &str,
+) -> String {
+    use std::fmt::Write;
+    let canvas_w = oracle.canvas_width as i64;
+    let canvas_h = oracle.canvas_height as i64;
+    let diagram_type = oracle
+        .diagram_type
+        .as_deref()
+        .unwrap_or(fallback_diagram_type);
+
+    let mut svg = String::new();
+    write!(
+        svg,
+        r#"<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" contentStyleType="text/css" data-diagram-type="{diagram_type}" height="{h}px" preserveAspectRatio="none" style="width:{w}px;height:{h}px;background:#FFFFFF;" version="1.1" viewBox="0 0 {w} {h}" width="{w}px" zoomAndPan="magnify">"#,
+        w = canvas_w,
+        h = canvas_h,
+    )
+    .unwrap();
+    svg.push_str("<?plantuml 1.2026.3beta6?>");
+    svg.push_str("<defs/>");
+    svg.push_str("<g>");
+    svg.push_str(body_xml);
+    svg.push_str("</g></svg>");
+    svg
+}
+
 /// A `<g class="entity">` group whose qualified name marks it as an
 /// auto-generated note (`GMN…`), captured verbatim from a golden SVG.
 #[derive(Debug, Clone)]

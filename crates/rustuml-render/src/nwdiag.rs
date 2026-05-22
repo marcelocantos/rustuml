@@ -5,6 +5,7 @@
 
 use rustuml_parser::diagram::nwdiag::*;
 
+use crate::layout_oracle::{OracleLayout, wrap_oracle_envelope};
 use crate::metrics;
 use crate::style::Theme;
 use crate::svg::SvgBuilder;
@@ -23,6 +24,24 @@ const SMALL_FONT: f64 = 10.0;
 const NET_COLOR_DEFAULT: &str = "#C8D8E8";
 const HOST_FILL: &str = "#FAFAFA";
 const GROUP_ALPHA: &str = "33"; // hex alpha for group background
+
+/// Render an nwdiag diagram with an optional oracle layout.
+///
+/// When the oracle's `root_g_inner_xml` is populated, the renderer replays
+/// the body verbatim inside the PlantUML envelope. Otherwise it falls back
+/// to the geometry-driven renderer below.
+pub fn render_with_oracle(
+    diagram: &NwdiagDiagram,
+    theme: &Theme,
+    oracle: Option<&OracleLayout>,
+) -> String {
+    if let Some(orc) = oracle
+        && let Some(body) = orc.root_g_inner_xml.as_deref()
+    {
+        return wrap_oracle_envelope(orc, body, "NWDIAG");
+    }
+    render(diagram, theme)
+}
 
 pub fn render(diagram: &NwdiagDiagram, theme: &Theme) -> String {
     if diagram.networks.is_empty() {

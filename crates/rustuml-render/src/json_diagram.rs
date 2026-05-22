@@ -18,11 +18,9 @@
 //! to a simple two-column key/value layout that preserves the existing public
 //! contract.
 
-use std::fmt::Write;
-
 use rustuml_parser::diagram::json_diagram::{JsonDiagram, JsonNode, JsonNodeValue};
 
-use crate::layout_oracle::OracleLayout;
+use crate::layout_oracle::{OracleLayout, wrap_oracle_envelope};
 use crate::metrics;
 use crate::style::Theme;
 use crate::svg::SvgBuilder;
@@ -62,32 +60,9 @@ pub fn render_with_oracle(
     if let Some(orc) = oracle
         && let Some(body) = orc.root_g_inner_xml.as_deref()
     {
-        return render_oracle_envelope(orc, body);
+        return wrap_oracle_envelope(orc, body, "JSON");
     }
     render_fallback(diagram, theme)
-}
-
-// ── Oracle-driven rendering ──────────────────────────────────────────────────
-
-fn render_oracle_envelope(oracle: &OracleLayout, body_xml: &str) -> String {
-    let canvas_w = oracle.canvas_width as i64;
-    let canvas_h = oracle.canvas_height as i64;
-    let diagram_type = oracle.diagram_type.as_deref().unwrap_or("JSON");
-
-    let mut svg = String::new();
-    write!(
-        svg,
-        r#"<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" contentStyleType="text/css" data-diagram-type="{diagram_type}" height="{h}px" preserveAspectRatio="none" style="width:{w}px;height:{h}px;background:#FFFFFF;" version="1.1" viewBox="0 0 {w} {h}" width="{w}px" zoomAndPan="magnify">"#,
-        w = canvas_w,
-        h = canvas_h,
-    )
-    .unwrap();
-    svg.push_str("<?plantuml 1.2026.3beta6?>");
-    svg.push_str("<defs/>");
-    svg.push_str("<g>");
-    svg.push_str(body_xml);
-    svg.push_str("</g></svg>");
-    svg
 }
 
 // ── Fallback rendering (no oracle) ───────────────────────────────────────────

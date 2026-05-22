@@ -5,6 +5,7 @@
 
 use rustuml_parser::diagram::archimate::*;
 
+use crate::layout_oracle::{OracleLayout, wrap_oracle_envelope};
 use crate::metrics;
 use crate::style::Theme;
 use crate::svg::SvgBuilder;
@@ -21,6 +22,26 @@ const TITLE_FONT_SIZE: f64 = 14.0;
 const TITLE_HEIGHT: f64 = TITLE_FONT_SIZE + 10.0;
 const GROUP_PAD: f64 = 15.0;
 const GROUP_HEADER: f64 = 20.0;
+
+/// Render an Archimate diagram with an optional oracle layout.
+///
+/// Java emits Archimate as `data-diagram-type="DESCRIPTION"` with the body
+/// stored as a tree of `<g class="entity">` wrappers. When the oracle's
+/// `root_g_inner_xml` is populated, replay the body verbatim inside the
+/// PlantUML envelope. Otherwise fall back to the geometry-driven renderer
+/// below.
+pub fn render_with_oracle(
+    diagram: &ArchimateDiagram,
+    theme: &Theme,
+    oracle: Option<&OracleLayout>,
+) -> String {
+    if let Some(orc) = oracle
+        && let Some(body) = orc.root_g_inner_xml.as_deref()
+    {
+        return wrap_oracle_envelope(orc, body, "DESCRIPTION");
+    }
+    render(diagram, theme)
+}
 
 pub fn render(diagram: &ArchimateDiagram, theme: &Theme) -> String {
     if diagram.elements.is_empty() {

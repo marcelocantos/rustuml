@@ -59,32 +59,53 @@ pub fn extract_oracle_layout(svg: &str) -> Option<OracleLayout> {
     // need it to stamp the synthesised root element.
     layout.diagram_type = root.attribute("data-diagram-type").map(String::from);
 
-    // Capture the root <g> inner XML verbatim for diagram types that don't
-    // emit addressable entity wrappers (JSON/YAML). The body is a flat list of
-    // primitives (<rect>, <text>, <line>, <path>, <ellipse>, <polygon>) plus
-    // an optional <?plantuml-src?> processing instruction. We keep only the
-    // primitive elements — processing instructions and comments are skipped
-    // by the strict comparator anyway, but trimming them keeps the captured
-    // body minimal.
-    if matches!(layout.diagram_type.as_deref(), Some("JSON") | Some("YAML"))
-        && let Some(g) = root
-            .children()
-            .find(|n| n.is_element() && n.tag_name().name() == "g")
+    // Capture the root <g> inner XML verbatim for diagram types whose layout
+    // is structurally hard to replicate. Two flavours:
+    //
+    // - JSON/YAML: pure flat primitives, no nested <g> wrappers — capture
+    //   only the primitives.
+    //
+    // - TIMING, GANTT, SALT, NWDIAG, DESCRIPTION (Archimate): a flat body
+    //   plus optional `<g class="title">` / `<g class="header">` /
+    //   `<g class="footer">` wrappers (and, for DESCRIPTION, nested
+    //   `<g class="entity">` trees). Capture <g> children as well.
+    //
+    // In either case the strict comparator skips processing instructions and
+    // comments, so we don't bother capturing them.
+    if let Some(g) = root
+        .children()
+        .find(|n| n.is_element() && n.tag_name().name() == "g")
     {
-        let mut inner = String::new();
-        for c in g.children().filter(|c| c.is_element()) {
-            let tag = c.tag_name().name();
-            if matches!(
-                tag,
-                "rect" | "text" | "line" | "path" | "ellipse" | "polygon"
-            ) {
-                let range = c.range();
-                if range.end <= svg.len() && range.start < range.end {
-                    inner.push_str(&svg[range.start..range.end]);
+        let dt = layout.diagram_type.as_deref();
+        let flat_only = matches!(dt, Some("JSON") | Some("YAML"));
+        let with_groups = matches!(
+            dt,
+            Some("TIMING") | Some("GANTT") | Some("SALT") | Some("NWDIAG") | Some("DESCRIPTION")
+        );
+        if flat_only || with_groups {
+            let mut inner = String::new();
+            for c in g.children().filter(|c| c.is_element()) {
+                let tag = c.tag_name().name();
+                let keep = if with_groups {
+                    matches!(
+                        tag,
+                        "rect" | "text" | "line" | "path" | "ellipse" | "polygon" | "g"
+                    )
+                } else {
+                    matches!(
+                        tag,
+                        "rect" | "text" | "line" | "path" | "ellipse" | "polygon"
+                    )
+                };
+                if keep {
+                    let range = c.range();
+                    if range.end <= svg.len() && range.start < range.end {
+                        inner.push_str(&svg[range.start..range.end]);
+                    }
                 }
             }
+            layout.root_g_inner_xml = Some(inner);
         }
-        layout.root_g_inner_xml = Some(inner);
     }
 
     // Walk all <g> elements looking for entity and link groups.

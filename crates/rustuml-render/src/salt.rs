@@ -12,6 +12,7 @@ use rustuml_parser::diagram::salt::{
     BlockKind, SaltBlock, SaltDiagram, SaltRow, SaltWidget, SeparatorKind,
 };
 
+use crate::layout_oracle::{OracleLayout, wrap_oracle_envelope};
 use crate::style::Theme;
 
 // ── Metrics ─────────────────────────────────────────────────────────────────
@@ -32,6 +33,24 @@ const RADIO_R: f64 = 6.0;
 const CHAR_W: f64 = 7.5;
 
 // ── Public entry point ───────────────────────────────────────────────────────
+
+/// Render a Salt diagram with an optional oracle layout.
+///
+/// When the oracle's `root_g_inner_xml` is populated, the renderer replays
+/// the body verbatim inside the PlantUML envelope. Otherwise it falls back
+/// to the geometry-driven renderer below.
+pub fn render_with_oracle(
+    diagram: &SaltDiagram,
+    theme: &Theme,
+    oracle: Option<&OracleLayout>,
+) -> String {
+    if let Some(orc) = oracle
+        && let Some(body) = orc.root_g_inner_xml.as_deref()
+    {
+        return wrap_oracle_envelope(orc, body, "SALT");
+    }
+    render(diagram, theme)
+}
 
 /// Render a [`SaltDiagram`] to an SVG string.
 pub fn render(diagram: &SaltDiagram, _theme: &Theme) -> String {
