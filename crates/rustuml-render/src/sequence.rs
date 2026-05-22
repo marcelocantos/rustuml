@@ -690,12 +690,17 @@ impl ActivationTracker {
 
 struct PlantUmlSvg {
     buf: String,
+    /// Stroke-width string used for message arrow lines and polygon outlines.
+    /// Defaults to "1" (PlantUML's historical line weight) but can be raised
+    /// by `skinparam arrowThickness N`.
+    arrow_thickness: String,
 }
 
 impl PlantUmlSvg {
     fn new() -> Self {
         Self {
             buf: String::with_capacity(4096),
+            arrow_thickness: "1".into(),
         }
     }
 
@@ -1420,9 +1425,10 @@ impl PlantUmlSvg {
         )
         .unwrap();
 
+        let thickness = self.arrow_thickness.clone();
         write!(
             self.buf,
-            r##"<line style="stroke:{color};stroke-width:1;{line_style}" x1="{}" x2="{}" y1="{}" y2="{}"/>"##,
+            r##"<line style="stroke:{color};stroke-width:{thickness};{line_style}" x1="{}" x2="{}" y1="{}" y2="{}"/>"##,
             fmt_coord(line_x1),
             fmt_coord(line_x2),
             fmt_coord(msg_y),
@@ -1500,15 +1506,18 @@ impl PlantUmlSvg {
         )
         .unwrap();
 
+        // Arrow head polygon keeps stroke-width:1 even when the line is
+        // thickened — PlantUML scales the line only.
         write!(
             self.buf,
             r##"<polygon fill="{color}" points="{arrow_points}" style="stroke:{color};stroke-width:1;"/>"##,
         )
         .unwrap();
 
+        let thickness = self.arrow_thickness.clone();
         write!(
             self.buf,
-            r##"<line style="stroke:{color};stroke-width:1;{line_style}" x1="{}" x2="{}" y1="{}" y2="{}"/>"##,
+            r##"<line style="stroke:{color};stroke-width:{thickness};{line_style}" x1="{}" x2="{}" y1="{}" y2="{}"/>"##,
             fmt_coord(line_x1),
             fmt_coord(line_x2),
             fmt_coord(line_y),
@@ -1606,9 +1615,10 @@ impl PlantUmlSvg {
             )
         };
 
+        let thickness = self.arrow_thickness.clone();
         write!(
             self.buf,
-            r##"<line style="stroke:{color};stroke-width:1;" x1="{}" x2="{}" y1="{}" y2="{}"/>"##,
+            r##"<line style="stroke:{color};stroke-width:{thickness};" x1="{}" x2="{}" y1="{}" y2="{}"/>"##,
             fmt_coord(tip_x),
             fmt_coord(back_x),
             fmt_coord(tip_y),
@@ -1618,7 +1628,7 @@ impl PlantUmlSvg {
 
         write!(
             self.buf,
-            r##"<line style="stroke:{color};stroke-width:1;" x1="{}" x2="{}" y1="{}" y2="{}"/>"##,
+            r##"<line style="stroke:{color};stroke-width:{thickness};" x1="{}" x2="{}" y1="{}" y2="{}"/>"##,
             fmt_coord(tip_x),
             fmt_coord(back_x),
             fmt_coord(tip_y),
@@ -1628,7 +1638,7 @@ impl PlantUmlSvg {
 
         write!(
             self.buf,
-            r##"<line style="stroke:{color};stroke-width:1;{line_style}" x1="{}" x2="{}" y1="{}" y2="{}"/>"##,
+            r##"<line style="stroke:{color};stroke-width:{thickness};{line_style}" x1="{}" x2="{}" y1="{}" y2="{}"/>"##,
             fmt_coord(line_x1),
             fmt_coord(line_x2),
             fmt_coord(line_y),
@@ -1895,6 +1905,32 @@ fn render_participant_shape(
 
 /// Render a sequence diagram to SVG matching PlantUML's exact output.
 pub fn render(diagram: &SequenceDiagram, _theme: &Theme) -> String {
+    // Per-diagram skinparam overrides relevant to sequence arrow rendering.
+    // These are read directly from the parser's skinparam list (rather than
+    // the cascading `Theme`) so any value-less default tracks PlantUML's
+    // historical colours rather than the workspace `slate` theme.
+    let mut default_arrow_color = "#181818".to_string();
+    let mut default_arrow_thickness: String = "1".to_string();
+    for sp in &diagram.meta.skinparams {
+        let key = sp.key.to_ascii_lowercase();
+        let val = sp.value.trim();
+        if val.is_empty() {
+            continue;
+        }
+        match key.as_str() {
+            "arrowcolor" | "sequencearrowcolor" => {
+                default_arrow_color = resolve_color(val);
+            }
+            "arrowthickness" | "sequencearrowthickness" => {
+                if let Ok(v) = val.parse::<f64>() {
+                    default_arrow_thickness = plantuml_metrics::fmt_coord(v);
+                }
+            }
+            _ => {}
+        }
+    }
+    let default_arrow_color = default_arrow_color.as_str();
+    let default_arrow_thickness = default_arrow_thickness.as_str();
     // Empty diagram with no title — render the PlantUML welcome screen.
     if diagram.participants.is_empty() && diagram.events.is_empty() && diagram.meta.title.is_none()
     {
@@ -3045,6 +3081,7 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme) -> String {
     // -----------------------------------------------------------------------
 
     let mut svg = PlantUmlSvg::new();
+    svg.arrow_thickness = default_arrow_thickness.to_string();
     svg.open_svg(svg_width, svg_height);
 
     // Emit handwritten warning if present
@@ -3412,13 +3449,14 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme) -> String {
                 let label = process_label(&msg.label);
                 let label_w = text_width(&label, MSG_FONT_SIZE);
 
-                // Arrow color (default #181818)
+                // Arrow color: per-message override beats theme default
+                // (which already incorporates any `skinparam arrowColor`).
                 let arrow_color = msg
                     .arrow
                     .color
                     .as_ref()
                     .map(|c| resolve_color(c))
-                    .unwrap_or_else(|| "#181818".to_string());
+                    .unwrap_or_else(|| default_arrow_color.to_string());
 
                 // Source participant uid
                 let from_uid = id_to_idx

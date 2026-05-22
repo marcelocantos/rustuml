@@ -73,6 +73,7 @@ struct Palette {
     action_stroke_width: String,
     diamond_fill: String,
     diamond_stroke: String,
+    diamond_stroke_width: String,
     arrow_color: String,
     text_color: String,
     start_fill: String,
@@ -88,6 +89,7 @@ impl Palette {
             action_stroke_width: ACTION_STROKE_WIDTH.into(),
             diamond_fill: DIAMOND_FILL.into(),
             diamond_stroke: ACTION_STROKE.into(),
+            diamond_stroke_width: ACTION_STROKE_WIDTH.into(),
             arrow_color: ARROW_COLOR.into(),
             text_color: TEXT_COLOR.into(),
             start_fill: START_FILL.into(),
@@ -98,6 +100,12 @@ impl Palette {
 
     /// Apply the supplied skinparams (key-insensitive) onto the default
     /// PlantUML palette. Unrecognised or empty values are ignored.
+    ///
+    /// Activity skinparams cascade: `activityBackgroundColor` also sets the
+    /// diamond fill, `activityBorderColor` also sets diamond stroke, and
+    /// `activityBorderThickness` also sets diamond stroke width — unless a
+    /// more specific `activityDiamond*` override appears later in the
+    /// skinparam list.
     fn from_skinparams(skinparams: &[rustuml_parser::diagram::SkinParam]) -> Self {
         let mut p = Self::default_puml();
         for sp in skinparams {
@@ -108,16 +116,29 @@ impl Palette {
             }
             let resolved = crate::sequence::resolve_color(val);
             match key.as_str() {
-                "activitybackgroundcolor" => p.action_fill = resolved,
-                "activitybordercolor" => p.action_stroke = resolved,
+                "activitybackgroundcolor" => {
+                    p.action_fill = resolved.clone();
+                    p.diamond_fill = resolved;
+                }
+                "activitybordercolor" => {
+                    p.action_stroke = resolved.clone();
+                    p.diamond_stroke = resolved;
+                }
                 "activityborderthickness" => {
                     if let Ok(v) = val.parse::<f64>() {
                         // Format like PlantUML: integer when whole, otherwise raw float.
-                        p.action_stroke_width = pm::fmt_coord(v);
+                        let w = pm::fmt_coord(v);
+                        p.action_stroke_width = w.clone();
+                        p.diamond_stroke_width = w;
                     }
                 }
                 "activitydiamondbackgroundcolor" => p.diamond_fill = resolved,
                 "activitydiamondbordercolor" => p.diamond_stroke = resolved,
+                "activitydiamondborderthickness" => {
+                    if let Ok(v) = val.parse::<f64>() {
+                        p.diamond_stroke_width = pm::fmt_coord(v);
+                    }
+                }
                 "activityarrowcolor" | "arrowcolor" => p.arrow_color = resolved,
                 "activitystartcolor" => p.start_fill = resolved,
                 "activityendcolor" | "activitystopcolor" => p.stop_fill = resolved,
@@ -1757,6 +1778,7 @@ fn emit_if(
     let arrow_color = svg.palette.arrow_color.clone();
     let diamond_stroke = svg.palette.diamond_stroke.clone();
     let diamond_fill = svg.palette.diamond_fill.clone();
+    let diamond_stroke_width = svg.palette.diamond_stroke_width.clone();
 
     // The diamond's inner edge is clamped to DIAMOND_MIN_INNER_W; the
     // condition's `textLength` is the measured width (no clamp). Track both
@@ -1778,7 +1800,7 @@ fn emit_if(
         (cx - cond_inner_w / 2.0, y + DIAMOND_HALF * 2.0),
         (diamond_left, diamond_cy),
     ];
-    svg.polygon_shape(&diamond_fill, &pts, &diamond_stroke, ACTION_STROKE_WIDTH);
+    svg.polygon_shape(&diamond_fill, &pts, &diamond_stroke, &diamond_stroke_width);
 
     // Condition text (textLength = measured, centred under cx).
     let text_y = y + DIAMOND_HALF + pm::text_height(SMALL_FONT) / 2.0 - pm::descent(SMALL_FONT);
@@ -1876,7 +1898,7 @@ fn emit_if(
                 (cx - DIAMOND_HALF, merge_cy),
             ],
             &diamond_stroke,
-            ACTION_STROKE_WIDTH,
+            &diamond_stroke_width,
         );
     }
 
@@ -2147,6 +2169,7 @@ fn emit_while(
     let arrow_color = svg.palette.arrow_color.clone();
     let diamond_stroke = svg.palette.diamond_stroke.clone();
     let diamond_fill = svg.palette.diamond_fill.clone();
+    let diamond_stroke_width = svg.palette.diamond_stroke_width.clone();
     let text_color = svg.palette.text_color.clone();
     let cond_inner_w = diamond_inner_w(condition);
     let cond_text_w = text_render::measure(condition, SMALL_FONT, false);
@@ -2165,7 +2188,7 @@ fn emit_while(
         (cx - cond_inner_w / 2.0, y + DIAMOND_HALF * 2.0),
         (cx - cond_inner_w / 2.0 - DIAMOND_HALF, diamond_cy),
     ];
-    svg.polygon_shape(&diamond_fill, &pts, &diamond_stroke, ACTION_STROKE_WIDTH);
+    svg.polygon_shape(&diamond_fill, &pts, &diamond_stroke, &diamond_stroke_width);
 
     // PlantUML emits the "is (label)" text BEFORE the condition text, so
     // the body-path "yes" appears in the SVG before the inside-diamond
@@ -2221,6 +2244,7 @@ fn emit_repeat(
     let arrow_color = svg.palette.arrow_color.clone();
     let diamond_stroke = svg.palette.diamond_stroke.clone();
     let diamond_fill = svg.palette.diamond_fill.clone();
+    let diamond_stroke_width = svg.palette.diamond_stroke_width.clone();
     let text_color = svg.palette.text_color.clone();
 
     // PlantUML emits repeat in this order: body shapes → top entry diamond
@@ -2244,7 +2268,7 @@ fn emit_repeat(
             (cx - top_diamond_size, y + top_diamond_size),
         ],
         &diamond_stroke,
-        ACTION_STROKE_WIDTH,
+        &diamond_stroke_width,
     );
 
     // Condition diamond (hexagon below body).
@@ -2259,7 +2283,7 @@ fn emit_repeat(
         (cx - cond_inner_w / 2.0, cond_y + DIAMOND_HALF * 2.0),
         (cx - cond_inner_w / 2.0 - DIAMOND_HALF, cond_diamond_cy),
     ];
-    svg.polygon_shape(&diamond_fill, &pts, &diamond_stroke, ACTION_STROKE_WIDTH);
+    svg.polygon_shape(&diamond_fill, &pts, &diamond_stroke, &diamond_stroke_width);
 
     let text_y = cond_diamond_cy + pm::text_height(SMALL_FONT) / 2.0 - pm::descent(SMALL_FONT);
     svg.text_element(
