@@ -75,7 +75,13 @@ pub fn wrap_oracle_envelope(
     )
     .unwrap();
     svg.push_str("<?plantuml 1.2026.3beta6?>");
-    svg.push_str("<defs/>");
+    if oracle.defs_inner_xml.is_empty() {
+        svg.push_str("<defs/>");
+    } else {
+        svg.push_str("<defs>");
+        svg.push_str(&oracle.defs_inner_xml);
+        svg.push_str("</defs>");
+    }
     svg.push_str("<g>");
     svg.push_str(body_xml);
     svg.push_str("</g></svg>");

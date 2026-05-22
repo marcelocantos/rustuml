@@ -80,7 +80,14 @@ pub fn extract_oracle_layout(svg: &str) -> Option<OracleLayout> {
         let flat_only = matches!(dt, Some("JSON") | Some("YAML"));
         let with_groups = matches!(
             dt,
-            Some("TIMING") | Some("GANTT") | Some("SALT") | Some("NWDIAG") | Some("DESCRIPTION")
+            Some("TIMING")
+                | Some("GANTT")
+                | Some("SALT")
+                | Some("NWDIAG")
+                | Some("DESCRIPTION")
+                | Some("REGEX")
+                | Some("EBNF")
+                | Some("BOARD")
         );
         if flat_only || with_groups {
             let mut inner = String::new();

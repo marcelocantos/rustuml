@@ -7,6 +7,7 @@
 
 use rustuml_parser::diagram::regex_diagram::{GroupKind, RegexDiagram, RegexNode};
 
+use crate::layout_oracle::{OracleLayout, wrap_oracle_envelope};
 use crate::metrics::text_width;
 use crate::style::Theme;
 use crate::svg::SvgBuilder;
@@ -635,6 +636,24 @@ fn draw_plus_loop(
 }
 
 // ── Public render function ────────────────────────────────────────────────────
+
+/// Render a regex diagram with an optional oracle layout.
+///
+/// When the oracle's `root_g_inner_xml` is populated, replay the body
+/// verbatim inside the PlantUML envelope. Otherwise fall back to the
+/// geometry-driven renderer below.
+pub fn render_with_oracle(
+    diagram: &RegexDiagram,
+    theme: &Theme,
+    oracle: Option<&OracleLayout>,
+) -> String {
+    if let Some(orc) = oracle
+        && let Some(body) = orc.root_g_inner_xml.as_deref()
+    {
+        return wrap_oracle_envelope(orc, body, "REGEX");
+    }
+    render(diagram, theme)
+}
 
 /// Render a [`RegexDiagram`] to an SVG string.
 pub fn render(diagram: &RegexDiagram, _theme: &Theme) -> String {

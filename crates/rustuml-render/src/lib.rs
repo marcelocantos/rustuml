@@ -138,6 +138,9 @@ fn render_with_theme_and_oracle(
         Diagram::Salt(s) => salt::render_with_oracle(s, theme, oracle),
         Diagram::Nwdiag(nw) => nwdiag::render_with_oracle(nw, theme, oracle),
         Diagram::Archimate(a) => archimate::render_with_oracle(a, theme, oracle),
+        Diagram::Regex(r) => regex_diagram::render_with_oracle(r, theme, oracle),
+        Diagram::Ebnf(e) => ebnf::render_with_oracle(e, theme, oracle),
+        Diagram::Board(b) => board::render_with_oracle(b, theme, oracle),
         _ => render_with_theme(diagram, theme),
     }
 }

@@ -178,6 +178,9 @@ fn run_one(puml_path: &Path, root: &Path) -> TestResult {
         || golden_svg.contains(r#"data-diagram-type="GANTT""#)
         || golden_svg.contains(r#"data-diagram-type="SALT""#)
         || golden_svg.contains(r#"data-diagram-type="NWDIAG""#)
+        || golden_svg.contains(r#"data-diagram-type="REGEX""#)
+        || golden_svg.contains(r#"data-diagram-type="EBNF""#)
+        || golden_svg.contains(r#"data-diagram-type="BOARD""#)
     {
         extract::extract_oracle_layout(&golden_svg)
     } else {
