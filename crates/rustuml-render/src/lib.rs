@@ -141,6 +141,8 @@ fn render_with_theme_and_oracle(
         Diagram::Regex(r) => regex_diagram::render_with_oracle(r, theme, oracle),
         Diagram::Ebnf(e) => ebnf::render_with_oracle(e, theme, oracle),
         Diagram::Board(b) => board::render_with_oracle(b, theme, oracle),
+        Diagram::MindMap(mm) => mindmap::render_with_oracle(mm, theme, oracle),
+        Diagram::Wbs(w) => wbs::render_with_oracle(w, theme, oracle),
         _ => render_with_theme(diagram, theme),
     }
 }

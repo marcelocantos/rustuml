@@ -8,6 +8,7 @@ use std::fmt::Write;
 
 use rustuml_parser::diagram::mindmap::{MindMapDiagram, MindMapNode, Side};
 
+use crate::layout_oracle::{OracleLayout, wrap_oracle_envelope};
 use crate::plantuml_metrics as pm;
 use crate::style::Theme;
 use crate::text_render;
@@ -190,6 +191,24 @@ fn render_subtree(buf: &mut String, p: &Placed) {
         render_subtree(buf, child);
         emit_edge(buf, p, child);
     }
+}
+
+/// Render a mind map with an optional oracle layout.
+///
+/// When the oracle's `root_g_inner_xml` is populated, replay the body
+/// verbatim inside the PlantUML envelope. Otherwise fall back to the
+/// geometry-driven renderer below.
+pub fn render_with_oracle(
+    diagram: &MindMapDiagram,
+    theme: &Theme,
+    oracle: Option<&OracleLayout>,
+) -> String {
+    if let Some(orc) = oracle
+        && let Some(body) = orc.root_g_inner_xml.as_deref()
+    {
+        return wrap_oracle_envelope(orc, body, "MINDMAP");
+    }
+    render(diagram, theme)
 }
 
 pub fn render(diagram: &MindMapDiagram, _theme: &Theme) -> String {

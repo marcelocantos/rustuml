@@ -88,6 +88,8 @@ pub fn extract_oracle_layout(svg: &str) -> Option<OracleLayout> {
                 | Some("REGEX")
                 | Some("EBNF")
                 | Some("BOARD")
+                | Some("MINDMAP")
+                | Some("WBS")
         );
         if flat_only || with_groups {
             let mut inner = String::new();
