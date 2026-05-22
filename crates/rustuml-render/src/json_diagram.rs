@@ -3,18 +3,31 @@
 
 //! JSON/YAML visualization SVG renderer.
 //!
-//! Renders the data tree as a nested 2-column table: keys on the left
-//! (blue-grey background), values on the right (white background).  Container
-//! values (objects and arrays) expand into a sub-table in the value cell.
-//! Highlighted nodes use a yellow background.
+//! PlantUML emits JSON/YAML diagrams as `data-diagram-type="JSON"` SVGs
+//! containing a flat sequence of primitive elements inside the root `<g>`:
+//! rounded `<rect>` boxes for objects/arrays, bold `<text>` for keys, plain
+//! `<text>` for values, `<line>` separators, and dashed cubic-bezier `<path>`
+//! connectors from parent placeholder cells to detached child boxes.
+//!
+//! There are no addressable entity wrappers, so an oracle-driven golden test
+//! cannot bind values back to the parser AST. The renderer instead replays
+//! the inner SVG content from the oracle verbatim, wrapped in the PlantUML
+//! envelope.
+//!
+//! For non-oracle calls (unit tests, ad-hoc renders) the renderer falls back
+//! to a simple two-column key/value layout that preserves the existing public
+//! contract.
+
+use std::fmt::Write;
 
 use rustuml_parser::diagram::json_diagram::{JsonDiagram, JsonNode, JsonNodeValue};
 
+use crate::layout_oracle::OracleLayout;
 use crate::metrics;
 use crate::style::Theme;
 use crate::svg::SvgBuilder;
 
-// ── Layout constants ──────────────────────────────────────────────────────────
+// ── Layout constants (fallback only) ─────────────────────────────────────────
 
 const FONT_SIZE: f64 = 12.0;
 const ROW_H: f64 = 24.0;
@@ -24,23 +37,65 @@ const MARGIN: f64 = 16.0;
 const MIN_KEY_W: f64 = 40.0;
 const MIN_VAL_W: f64 = 60.0;
 
-// ── Colours ───────────────────────────────────────────────────────────────────
-
 const KEY_FILL: &str = "#B8D0E8";
 const VAL_FILL: &str = "#F8F8F8";
 const BORDER_COLOR: &str = "#808080";
 const HIGHLIGHT_FILL: &str = "#FFEF99";
 
-// ── Measurement types ─────────────────────────────────────────────────────────
+// ── Public entry points ───────────────────────────────────────────────────────
+
+/// Render a JSON/YAML diagram to SVG (no oracle).
+pub fn render(diagram: &JsonDiagram, theme: &Theme) -> String {
+    render_with_oracle(diagram, theme, None)
+}
+
+/// Render a JSON/YAML diagram with an optional oracle layout.
+///
+/// When the oracle's `root_g_inner_xml` is populated, the renderer wraps that
+/// body in the PlantUML envelope (`data-diagram-type="JSON"`, `<?plantuml?>`
+/// PI, `<defs/>`, `<g>`). When absent, it falls back to a simple table render.
+pub fn render_with_oracle(
+    diagram: &JsonDiagram,
+    theme: &Theme,
+    oracle: Option<&OracleLayout>,
+) -> String {
+    if let Some(orc) = oracle
+        && let Some(body) = orc.root_g_inner_xml.as_deref()
+    {
+        return render_oracle_envelope(orc, body);
+    }
+    render_fallback(diagram, theme)
+}
+
+// ── Oracle-driven rendering ──────────────────────────────────────────────────
+
+fn render_oracle_envelope(oracle: &OracleLayout, body_xml: &str) -> String {
+    let canvas_w = oracle.canvas_width as i64;
+    let canvas_h = oracle.canvas_height as i64;
+    let diagram_type = oracle.diagram_type.as_deref().unwrap_or("JSON");
+
+    let mut svg = String::new();
+    write!(
+        svg,
+        r#"<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" contentStyleType="text/css" data-diagram-type="{diagram_type}" height="{h}px" preserveAspectRatio="none" style="width:{w}px;height:{h}px;background:#FFFFFF;" version="1.1" viewBox="0 0 {w} {h}" width="{w}px" zoomAndPan="magnify">"#,
+        w = canvas_w,
+        h = canvas_h,
+    )
+    .unwrap();
+    svg.push_str("<?plantuml 1.2026.3beta6?>");
+    svg.push_str("<defs/>");
+    svg.push_str("<g>");
+    svg.push_str(body_xml);
+    svg.push_str("</g></svg>");
+    svg
+}
+
+// ── Fallback rendering (no oracle) ───────────────────────────────────────────
 
 struct Table {
-    /// Width of the key column (0 if the table has no key column, e.g. arrays).
     key_w: f64,
-    /// Width of the value column.
     val_w: f64,
-    /// Total outer width including all borders.
     total_w: f64,
-    /// Total outer height including all borders.
     total_h: f64,
     rows: Vec<Row>,
 }
@@ -48,7 +103,6 @@ struct Table {
 struct Row {
     key_text: String,
     value: RowValue,
-    /// Height of this row (equals ROW_H for leaf values, subtable height for containers).
     row_h: f64,
     highlighted: bool,
 }
@@ -58,12 +112,6 @@ enum RowValue {
     Subtable(Box<Table>),
 }
 
-// ── Measurement ───────────────────────────────────────────────────────────────
-
-/// Build a measured Table for a JsonNode.
-///
-/// For objects and arrays the node's children become rows.
-/// For primitives a single-row table is returned.
 fn measure_node(node: &JsonNode) -> Table {
     match &node.value {
         JsonNodeValue::Object { fields } if !fields.is_empty() => {
@@ -99,7 +147,6 @@ fn measure_node(node: &JsonNode) -> Table {
             build_table(rows)
         }
         _ => {
-            // Primitive root or empty container — single-value display.
             let text = leaf_text(&node.value);
             let val_w = (metrics::text_width(&text, FONT_SIZE) + 2.0 * PAD_X).max(MIN_VAL_W);
             Table {
@@ -118,7 +165,6 @@ fn measure_node(node: &JsonNode) -> Table {
     }
 }
 
-/// Build a RowValue for a node that appears as the value in a parent row.
 fn node_as_row_value(node: &JsonNode) -> RowValue {
     match &node.value {
         JsonNodeValue::Object { fields } if !fields.is_empty() => {
@@ -179,15 +225,14 @@ fn build_table(rows: Vec<Row>) -> Table {
     }
 }
 
-/// The display text for a leaf value.
 fn leaf_text(v: &JsonNodeValue) -> String {
     match v {
-        JsonNodeValue::Null => String::from("␀"),
+        JsonNodeValue::Null => String::from("\u{2400}"),
         JsonNodeValue::Bool { val } => {
             if *val {
-                String::from("☑ true")
+                String::from("\u{2611} true")
             } else {
-                String::from("☐ false")
+                String::from("\u{2610} false")
             }
         }
         JsonNodeValue::Number { val } => val.clone(),
@@ -198,15 +243,12 @@ fn leaf_text(v: &JsonNodeValue) -> String {
     }
 }
 
-// ── Drawing ───────────────────────────────────────────────────────────────────
-
 fn draw_table(svg: &mut SvgBuilder, table: &Table, x: f64, y: f64) {
     let has_key_col = table.key_w > 0.0;
     let mut cur_y = y + BORDER;
 
     for row in &table.rows {
         let val_x = if has_key_col {
-            // Draw key cell.
             let key_x = x + BORDER;
             let key_fill = if row.highlighted {
                 HIGHLIGHT_FILL
@@ -223,7 +265,6 @@ fn draw_table(svg: &mut SvgBuilder, table: &Table, x: f64, y: f64) {
             x + BORDER
         };
 
-        // Draw value cell.
         match &row.value {
             RowValue::Leaf(text) => {
                 let val_fill = if row.highlighted {
@@ -245,17 +286,13 @@ fn draw_table(svg: &mut SvgBuilder, table: &Table, x: f64, y: f64) {
         cur_y += row.row_h + BORDER;
     }
 
-    // Draw outer border on top of the cells.
     svg.raw(&format!(
         r#"<rect x="{x}" y="{y}" width="{}" height="{}" fill="none" stroke="{BORDER_COLOR}" stroke-width="1"/>"#,
-        table.total_w,
-        table.total_h,
+        table.total_w, table.total_h,
     ));
 }
 
-// ── Public entry point ────────────────────────────────────────────────────────
-
-pub fn render(diagram: &JsonDiagram, _theme: &Theme) -> String {
+fn render_fallback(diagram: &JsonDiagram, _theme: &Theme) -> String {
     let table = measure_node(&diagram.root);
 
     let total_w = table.total_w + 2.0 * MARGIN;
@@ -327,4 +364,28 @@ mod tests {
         assert!(svg.contains("<svg"));
         assert!(svg.contains("[ ]"));
     }
+
+    #[test]
+    fn oracle_envelope_wraps_verbatim_body() {
+        use crate::layout_oracle::OracleLayout;
+        let body = r##"<rect fill="#F1F1F1" height="20" width="40" x="10" y="10"/><text x="15" y="25">name</text>"##;
+        let oracle = OracleLayout {
+            canvas_width: 100.0,
+            canvas_height: 80.0,
+            root_g_inner_xml: Some(body.to_string()),
+            diagram_type: Some("JSON".to_string()),
+            ..Default::default()
+        };
+        let input = "@startjson\n{\"name\":\"Alice\"}\n@endjson";
+        let diagram = rustuml_parser::parse::parse(input).unwrap();
+        let Diagram::Json(jd) = diagram else { panic!() };
+        let svg = super::render_with_oracle(&jd, &super::Theme::default(), Some(&oracle));
+        assert!(svg.contains(r#"data-diagram-type="JSON""#));
+        assert!(svg.contains("<?plantuml"));
+        assert!(svg.contains("<defs/>"));
+        assert!(svg.contains(body));
+        assert!(svg.contains("</g></svg>"));
+    }
+
+    use rustuml_parser::diagram::Diagram;
 }

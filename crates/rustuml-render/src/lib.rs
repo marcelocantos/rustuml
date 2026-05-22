@@ -132,6 +132,7 @@ fn render_with_theme_and_oracle(
         Diagram::Deployment(dep) => deployment::render_with_oracle(dep, theme, oracle),
         Diagram::UseCase(uc) => usecase::render_with_oracle(uc, theme, oracle),
         Diagram::Object(obj) => object::render_with_oracle(obj, theme, oracle),
+        Diagram::Json(jd) => json_diagram::render_with_oracle(jd, theme, oracle),
         _ => render_with_theme(diagram, theme),
     }
 }

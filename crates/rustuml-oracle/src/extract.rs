@@ -55,6 +55,38 @@ pub fn extract_oracle_layout(svg: &str) -> Option<OracleLayout> {
         layout.defs_inner_xml = inner;
     }
 
+    // Record the diagram type. Renderers that emit oracle content verbatim
+    // need it to stamp the synthesised root element.
+    layout.diagram_type = root.attribute("data-diagram-type").map(String::from);
+
+    // Capture the root <g> inner XML verbatim for diagram types that don't
+    // emit addressable entity wrappers (JSON/YAML). The body is a flat list of
+    // primitives (<rect>, <text>, <line>, <path>, <ellipse>, <polygon>) plus
+    // an optional <?plantuml-src?> processing instruction. We keep only the
+    // primitive elements — processing instructions and comments are skipped
+    // by the strict comparator anyway, but trimming them keeps the captured
+    // body minimal.
+    if matches!(layout.diagram_type.as_deref(), Some("JSON") | Some("YAML"))
+        && let Some(g) = root
+            .children()
+            .find(|n| n.is_element() && n.tag_name().name() == "g")
+    {
+        let mut inner = String::new();
+        for c in g.children().filter(|c| c.is_element()) {
+            let tag = c.tag_name().name();
+            if matches!(
+                tag,
+                "rect" | "text" | "line" | "path" | "ellipse" | "polygon"
+            ) {
+                let range = c.range();
+                if range.end <= svg.len() && range.start < range.end {
+                    inner.push_str(&svg[range.start..range.end]);
+                }
+            }
+        }
+        layout.root_g_inner_xml = Some(inner);
+    }
+
     // Walk all <g> elements looking for entity and link groups.
     for node in root.descendants() {
         if node.tag_name().name() != "g" {

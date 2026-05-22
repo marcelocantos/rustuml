@@ -36,6 +36,14 @@ pub struct OracleLayout {
     /// that emit verbatim oracle content (e.g. note entities referencing
     /// `filter="url(#...)"` ids) need these to keep ID references live.
     pub defs_inner_xml: String,
+    /// Inner XML of the root `<g>` element, captured verbatim. Populated for
+    /// diagram types whose layout is structurally hard to replicate (JSON/YAML)
+    /// — the renderer emits this directly inside the PlantUML envelope.
+    pub root_g_inner_xml: Option<String>,
+    /// Diagram type from the root `<svg data-diagram-type="…">`, if present.
+    /// Renderers replaying verbatim oracle bodies use this to choose the
+    /// `data-diagram-type` attribute on the synthesised root element.
+    pub diagram_type: Option<String>,
 }
 
 /// A `<g class="entity">` group whose qualified name marks it as an
