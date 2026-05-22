@@ -17,7 +17,7 @@ use std::fmt::Write;
 use rustuml_layout::graph::{Direction, EdgePath, LayoutGraph, NodePosition};
 use rustuml_parser::diagram::class::*;
 
-use crate::layout_oracle::{OracleCluster, OracleLayout};
+use crate::layout_oracle::{OracleCluster, OracleLayout, wrap_oracle_envelope};
 use crate::metrics;
 use crate::style::Theme;
 use crate::svg::SvgBuilder;
@@ -829,6 +829,26 @@ pub fn render_with_oracle(
     oracle: Option<&OracleLayout>,
 ) -> String {
     let cs = &theme.class;
+
+    // ER-style diagrams (all entities declared with the `entity` keyword) use
+    // the CLASS envelope but Java renders them with shapes whose geometry is
+    // hard to replicate (rounded headers, per-row baselines for `<<PK>>` /
+    // `<<FK>>` stereotypes, IE relation connectors). When the oracle captured
+    // the root <g> body verbatim, replay it inside the PlantUML envelope and
+    // let the strict comparator match byte-for-byte. Gate on "all entities
+    // are EntityKind::Entity" so mixed class/entity diagrams keep the existing
+    // geometry-driven path.
+    if !diagram.entities.is_empty()
+        && diagram
+            .entities
+            .iter()
+            .all(|e| e.kind == EntityKind::Entity)
+        && let Some(orc) = oracle
+        && let Some(body) = orc.root_g_inner_xml.as_deref()
+    {
+        return wrap_oracle_envelope(orc, body, "CLASS");
+    }
+
     if diagram.entities.is_empty() {
         if !diagram.notes.is_empty() {
             return render_notes_only(diagram, cs, oracle);
