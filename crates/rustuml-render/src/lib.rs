@@ -144,6 +144,7 @@ fn render_with_theme_and_oracle(
         Diagram::MindMap(mm) => mindmap::render_with_oracle(mm, theme, oracle),
         Diagram::Wbs(w) => wbs::render_with_oracle(w, theme, oracle),
         Diagram::Activity(act) => activity::render_with_oracle(act, theme, oracle),
+        Diagram::Sequence(seq) => sequence::render_with_oracle(seq, theme, oracle),
         _ => render_with_theme(diagram, theme),
     }
 }

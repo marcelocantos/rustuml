@@ -93,6 +93,7 @@ pub fn extract_oracle_layout(svg: &str) -> Option<OracleLayout> {
                 | Some("STATE")
                 | Some("CLASS")
                 | Some("ACTIVITY")
+                | Some("SEQUENCE")
         );
         if flat_only || with_groups {
             let mut inner = String::new();
