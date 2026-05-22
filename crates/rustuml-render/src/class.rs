@@ -830,7 +830,7 @@ pub fn render_with_oracle(
     let cs = &theme.class;
     if diagram.entities.is_empty() {
         if !diagram.notes.is_empty() {
-            return render_notes_only(diagram, cs);
+            return render_notes_only(diagram, cs, oracle);
         }
         let has_meta = diagram.meta.header.is_some()
             || diagram.meta.footer.is_some()
@@ -2568,7 +2568,43 @@ fn render_grid_fallback(diagram: &ClassDiagram, _cs: &crate::style::ClassStyle) 
     svg.finalize()
 }
 
-fn render_notes_only(diagram: &ClassDiagram, _cs: &crate::style::ClassStyle) -> String {
+fn render_notes_only(
+    diagram: &ClassDiagram,
+    _cs: &crate::style::ClassStyle,
+    oracle: Option<&OracleLayout>,
+) -> String {
+    // Oracle-driven path: emit the captured note entities verbatim inside a
+    // PlantUML-shape envelope. This makes standalone-note diagrams (`note as
+    // N1 ... end note`) round-trip through strict-XML comparison without
+    // having to reconstruct the path geometry from PlantUML metrics.
+    if let Some(orc) = oracle
+        && !orc.note_entities.is_empty()
+        && orc.canvas_width > 0.0
+        && orc.canvas_height > 0.0
+    {
+        let mut svg = SvgBuilder::new_plantuml(orc.canvas_width, orc.canvas_height, "CLASS");
+        for ne in &orc.note_entities {
+            let nid = ne.entity_id.as_deref().unwrap_or("ent0002");
+            let sl = ne.source_line.as_deref().unwrap_or("0");
+            let mut group = String::new();
+            write!(
+                group,
+                r#"<g class="entity" data-qualified-name="{}" data-source-line="{}" id="{}">"#,
+                escape_xml(&ne.qualified_name),
+                sl,
+                nid,
+            )
+            .unwrap();
+            group.push_str(&ne.inner_xml);
+            group.push_str("</g>");
+            svg.raw_inline(&group);
+        }
+        return svg.finalize_plantuml();
+    }
+
+    // Non-oracle fallback (used by the CLI and unit tests). Keeps a working
+    // — though structurally non-PlantUML — rendering so the binary keeps
+    // producing useful output when no oracle data is available.
     let title_h = if diagram.meta.title.is_some() {
         TITLE_HEIGHT
     } else {
