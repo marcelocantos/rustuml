@@ -96,6 +96,7 @@ const NOTE_FOLD: f64 = 10.0;
 const NOTE_PAD_X: f64 = 6.0;
 const NOTE_PAD_Y: f64 = 4.0;
 const NOTE_LINE_HEIGHT: f64 = 16.0;
+#[allow(dead_code)]
 const SMALL_FONT: f64 = 11.0;
 const TITLE_FONT_SIZE: f64 = 14.0;
 const TITLE_HEIGHT: f64 = TITLE_FONT_SIZE + 10.0;
@@ -834,7 +835,8 @@ pub fn render_with_oracle(
         }
         let has_meta = diagram.meta.header.is_some()
             || diagram.meta.footer.is_some()
-            || diagram.meta.legend.is_some();
+            || diagram.meta.legend.is_some()
+            || diagram.meta.title.is_some();
         if has_meta {
             return render_meta_only(diagram);
         }
@@ -2643,34 +2645,170 @@ fn render_notes_only(
     svg.finalize()
 }
 
+/// Render a class-diagram that has no entities/notes but does carry one or
+/// more meta decorations (title, header, footer, legend). PlantUML wraps
+/// each decoration in its own `<g class="...">` group inside the standard
+/// envelope; mirror that shape.
 fn render_meta_only(diagram: &ClassDiagram) -> String {
-    let width = 200.0;
-    let mut y = SMALL_FONT + 2.0;
-    let mut lines: Vec<(f64, String)> = Vec::new();
+    // Per-line dimensions and y baseline computations match the strict-XML
+    // goldens for the single-decoration cases. Multi-decoration is best-
+    // effort.
+    let header = diagram.meta.header.as_deref().filter(|s| !s.is_empty());
+    let footer = diagram.meta.footer.as_deref().filter(|s| !s.is_empty());
+    let title = diagram.meta.title.as_deref().filter(|s| !s.is_empty());
+    let legend = diagram.meta.legend.as_deref().filter(|s| !s.is_empty());
 
-    if let Some(header) = &diagram.meta.header {
-        lines.push((y, header.clone()));
-        y += SMALL_FONT + 6.0;
+    // Pre-compute widths via PlantUML's text metrics so the canvas width
+    // matches the golden exactly when only one decoration is present.
+    let header_w = header.map(|t| text_render::measure_no_underline(t, 10.0, false));
+    let footer_w = footer.map(|t| text_render::measure_no_underline(t, 10.0, false));
+    let title_w = title.map(|t| text_render::measure_no_underline(t, 14.0, true));
+    let legend_w = legend.map(|t| {
+        t.lines()
+            .filter(|l| !l.trim().is_empty())
+            .map(|l| text_render::measure_no_underline(l, 14.0, false))
+            .fold(0.0_f64, f64::max)
+    });
+
+    let max_text_w = [header_w, footer_w, title_w, legend_w]
+        .iter()
+        .filter_map(|w| *w)
+        .fold(0.0_f64, f64::max);
+
+    // Canvas geometry per golden inspection:
+    // - header-only: width = text_w + 7, height = 28 (text y=9.668)
+    // - footer-only: width = text_w + 7, height = 28 (text y=19.668)
+    // - title-only:  width = text_w + 27, height = 53
+    // - legend-only: width = max_line_w + ~30, height = 27 + 26.4883 * line_count + ~14
+    let (canvas_w, canvas_h) =
+        if title.is_some() && header.is_none() && footer.is_none() && legend.is_none() {
+            (max_text_w + 27.0, 53.0)
+        } else if legend.is_some() && header.is_none() && footer.is_none() && title.is_none() {
+            let lines = legend
+                .unwrap()
+                .lines()
+                .filter(|l| !l.trim().is_empty())
+                .count();
+            let rect_h = 26.4883 * lines as f64;
+            // Canvas adds left margin (12), rect_w = text+10, then right margin (~18).
+            // Height is rect_y(22) + rect_h + bottom margin (~18.5), rounded up.
+            (max_text_w + 40.4, 22.0 + rect_h + 18.6)
+        } else {
+            (max_text_w + 7.0, 28.0)
+        };
+
+    let mut svg = SvgBuilder::new_plantuml(canvas_w, canvas_h, "CLASS");
+    let mut buf = String::new();
+
+    // Header (top, grey, small).
+    if let Some(text) = header {
+        let sl = diagram.header_line.unwrap_or(1);
+        write!(buf, r#"<g class="header" data-source-line="{sl}">"#).unwrap();
+        text_render::emit_text(
+            &mut buf,
+            text,
+            &text_render::TextBase {
+                x: 0.0,
+                y: 9.668,
+                font_size: 10,
+                font_family: "sans-serif",
+                fill: "#888888",
+                bold: false,
+                italic: false,
+                underline: false,
+                skip_underline: false,
+            },
+        );
+        buf.push_str("</g>");
     }
-    if let Some(legend) = &diagram.meta.legend {
-        for line in legend.lines() {
-            if !line.trim().is_empty() {
-                lines.push((y, line.to_string()));
-                y += SMALL_FONT + 6.0;
-            }
+
+    // Title (top, bold, centred-ish — golden has x=10).
+    if let Some(text) = title {
+        let sl = diagram.title_line.unwrap_or(1);
+        write!(buf, r#"<g class="title" data-source-line="{sl}">"#).unwrap();
+        text_render::emit_text(
+            &mut buf,
+            text,
+            &text_render::TextBase {
+                x: 10.0,
+                y: 23.5352,
+                font_size: 14,
+                font_family: "sans-serif",
+                fill: "#000000",
+                bold: true,
+                italic: false,
+                underline: false,
+                skip_underline: false,
+            },
+        );
+        buf.push_str("</g>");
+    }
+
+    // Legend (centred rect with text inside).
+    if let Some(text) = legend {
+        let sl = diagram.legend_line.unwrap_or(1);
+        write!(buf, r#"<g class="legend" data-source-line="{sl}">"#).unwrap();
+        let lines: Vec<&str> = text.lines().filter(|l| !l.trim().is_empty()).collect();
+        let line_w = lines
+            .iter()
+            .map(|l| text_render::measure_no_underline(l, 14.0, false))
+            .fold(0.0_f64, f64::max);
+        let rect_w = line_w + 10.0;
+        let rect_h = 26.4883 * lines.len() as f64;
+        let rect_x = 12.0;
+        let rect_y = 22.0;
+        let rect_w_str = crate::plantuml_metrics::fmt_coord(rect_w);
+        write!(
+            buf,
+            "<rect fill=\"#DDDDDD\" height=\"{rect_h}\" rx=\"7.5\" ry=\"7.5\" style=\"stroke:#000000;stroke-width:1;\" width=\"{rect_w_str}\" x=\"{rect_x}\" y=\"{rect_y}\"/>",
+        )
+        .unwrap();
+        for (i, line) in lines.iter().enumerate() {
+            let y = 40.5352 + i as f64 * 26.4883;
+            text_render::emit_text(
+                &mut buf,
+                line,
+                &text_render::TextBase {
+                    x: 17.0,
+                    y,
+                    font_size: 14,
+                    font_family: "sans-serif",
+                    fill: "#000000",
+                    bold: false,
+                    italic: false,
+                    underline: false,
+                    skip_underline: false,
+                },
+            );
         }
-    }
-    if let Some(footer) = &diagram.meta.footer {
-        lines.push((y, footer.clone()));
-        y += SMALL_FONT + 6.0;
+        buf.push_str("</g>");
     }
 
-    let height = (y + 4.0).max(30.0);
-    let mut svg = SvgBuilder::new(width, height);
-    for (text_y, text) in &lines {
-        svg.text(width / 2.0, *text_y, text, "middle", SMALL_FONT);
+    // Footer (bottom, grey, small).
+    if let Some(text) = footer {
+        let sl = diagram.footer_line.unwrap_or(1);
+        let y = canvas_h - 8.332;
+        write!(buf, r#"<g class="footer" data-source-line="{sl}">"#).unwrap();
+        text_render::emit_text(
+            &mut buf,
+            text,
+            &text_render::TextBase {
+                x: 0.0,
+                y,
+                font_size: 10,
+                font_family: "sans-serif",
+                fill: "#888888",
+                bold: false,
+                italic: false,
+                underline: false,
+                skip_underline: false,
+            },
+        );
+        buf.push_str("</g>");
     }
-    svg.finalize()
+
+    svg.raw_inline(&buf);
+    svg.finalize_plantuml()
 }
 
 fn note_box_dims(note: &Note) -> (f64, f64) {

@@ -413,6 +413,8 @@ fn detect_uml_subtype(lines: &[String]) -> UmlSubtype {
             || trimmed.starts_with("right footer")
             || trimmed.starts_with("center footer")
             || trimmed == "endfooter"
+            || trimmed.starts_with("title ")
+            || trimmed == "title"
         {
             scores[1] += 1; // weak class signal
         }
