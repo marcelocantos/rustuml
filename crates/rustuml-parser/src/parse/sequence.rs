@@ -183,13 +183,19 @@ impl SeqParser {
         if self.try_box(line) {
             return Ok(());
         }
+        // try_meta before try_message: `title <back:cyan>...</back>` would
+        // otherwise be parsed as a "title <- back" message because the
+        // arrow regex accepts `<` and `>` as arrow characters. Title /
+        // header / footer / caption / legend all start with explicit
+        // keywords, so checking them first cannot conflict with anything
+        // a message line is allowed to look like.
+        if self.try_meta(line) {
+            return Ok(());
+        }
         if self.try_message(line) {
             return Ok(());
         }
         if self.try_ref(line) {
-            return Ok(());
-        }
-        if self.try_meta(line) {
             return Ok(());
         }
         if self.try_newpage(line) {
