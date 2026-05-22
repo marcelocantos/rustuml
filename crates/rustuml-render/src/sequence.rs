@@ -694,6 +694,18 @@ struct PlantUmlSvg {
     /// Defaults to "1" (PlantUML's historical line weight) but can be raised
     /// by `skinparam arrowThickness N`.
     arrow_thickness: String,
+    /// Participant head/tail box border colour (default `#181818`). Driven
+    /// by `skinparam participantBorderColor`.
+    participant_border: String,
+    /// Participant head/tail box border thickness (default `0.5`). Driven
+    /// by `skinparam participantBorderThickness`.
+    participant_border_thickness: String,
+    /// Lifeline dashed-line stroke colour (default `#181818`). Driven by
+    /// `skinparam sequenceLifeLineBorderColor`.
+    lifeline_border: String,
+    /// Lifeline dashed-line stroke thickness (default `0.5`). Driven by
+    /// `skinparam sequenceLifeLineBorderThickness`.
+    lifeline_border_thickness: String,
 }
 
 impl PlantUmlSvg {
@@ -701,6 +713,10 @@ impl PlantUmlSvg {
         Self {
             buf: String::with_capacity(4096),
             arrow_thickness: "1".into(),
+            participant_border: "#181818".into(),
+            participant_border_thickness: "0.5".into(),
+            lifeline_border: "#181818".into(),
+            lifeline_border_thickness: "0.5".into(),
         }
     }
 
@@ -758,7 +774,9 @@ impl PlantUmlSvg {
 
         write!(
             self.buf,
-            r##"<line style="stroke:#181818;stroke-width:0.5;stroke-dasharray:5,5;" x1="{}" x2="{}" y1="{}" y2="{}"/>"##,
+            r##"<line style="stroke:{};stroke-width:{};stroke-dasharray:5,5;" x1="{}" x2="{}" y1="{}" y2="{}"/>"##,
+            self.lifeline_border,
+            self.lifeline_border_thickness,
             fmt_coord(line_x),
             fmt_coord(line_x),
             fmt_coord(line_y1),
@@ -800,11 +818,13 @@ impl PlantUmlSvg {
 
         write!(
             self.buf,
-            r##"<rect fill="{}" height="{}" rx="{}" ry="{}" style="stroke:#181818;stroke-width:0.5;" width="{}" x="{}" y="{}"/>"##,
+            r##"<rect fill="{}" height="{}" rx="{}" ry="{}" style="stroke:{};stroke-width:{};" width="{}" x="{}" y="{}"/>"##,
             fill_color,
             fmt_coord(rect_h),
             fmt_coord(HEAD_BOX_RX),
             fmt_coord(HEAD_BOX_RX),
+            self.participant_border,
+            self.participant_border_thickness,
             fmt_coord(rect_w),
             fmt_coord(rect_x),
             fmt_coord(rect_y),
@@ -1911,6 +1931,11 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme) -> String {
     // historical colours rather than the workspace `slate` theme.
     let mut default_arrow_color = "#181818".to_string();
     let mut default_arrow_thickness: String = "1".to_string();
+    let mut participant_fill = "#E2E2F0".to_string();
+    let mut participant_border = "#181818".to_string();
+    let mut participant_border_thickness: String = "0.5".to_string();
+    let mut lifeline_border = "#181818".to_string();
+    let mut lifeline_border_thickness: String = "0.5".to_string();
     for sp in &diagram.meta.skinparams {
         let key = sp.key.to_ascii_lowercase();
         let val = sp.value.trim();
@@ -1924,6 +1949,25 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme) -> String {
             "arrowthickness" | "sequencearrowthickness" => {
                 if let Ok(v) = val.parse::<f64>() {
                     default_arrow_thickness = plantuml_metrics::fmt_coord(v);
+                }
+            }
+            "participantbackgroundcolor" | "sequenceparticipantbackgroundcolor" => {
+                participant_fill = resolve_color(val);
+            }
+            "participantbordercolor" | "sequenceparticipantbordercolor" => {
+                participant_border = resolve_color(val);
+            }
+            "participantborderthickness" | "sequenceparticipantborderthickness" => {
+                if let Ok(v) = val.parse::<f64>() {
+                    participant_border_thickness = plantuml_metrics::fmt_coord(v);
+                }
+            }
+            "sequencelifelinebordercolor" => {
+                lifeline_border = resolve_color(val);
+            }
+            "sequencelifelineborderthickness" => {
+                if let Ok(v) = val.parse::<f64>() {
+                    lifeline_border_thickness = plantuml_metrics::fmt_coord(v);
                 }
             }
             _ => {}
@@ -3082,6 +3126,10 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme) -> String {
 
     let mut svg = PlantUmlSvg::new();
     svg.arrow_thickness = default_arrow_thickness.to_string();
+    svg.participant_border = participant_border.clone();
+    svg.participant_border_thickness = participant_border_thickness.clone();
+    svg.lifeline_border = lifeline_border.clone();
+    svg.lifeline_border_thickness = lifeline_border_thickness.clone();
     svg.open_svg(svg_width, svg_height);
 
     // Emit handwritten warning if present
@@ -3333,12 +3381,13 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme) -> String {
         let part_uid = format!("part{}", p.idx + 1);
         let sl = source_line_for(&diagram.participants[i].id);
 
-        // Resolve participant fill color (default #E2E2F0).
+        // Resolve participant fill color (per-participant override beats
+        // the skinparam default, which beats the historical `#E2E2F0`).
         let fill_color = diagram.participants[i]
             .color
             .as_ref()
             .map(|c| resolve_color(c))
-            .unwrap_or_else(|| "#E2E2F0".to_string());
+            .unwrap_or_else(|| participant_fill.clone());
 
         // Head: base_y is where this participant's shape starts (bottom-aligned).
         let head_base_y = head_box_y + (max_box_h - p.box_height);

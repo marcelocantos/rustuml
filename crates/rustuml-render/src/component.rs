@@ -155,6 +155,35 @@ pub fn render_with_oracle(
         return r#"<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" contentStyleType="text/css" data-diagram-type="DESCRIPTION" height="50px" preserveAspectRatio="none" style="width:100px;height:50px;background:#FFFFFF;" version="1.1" viewBox="0 0 100 50" width="100px" zoomAndPan="magnify"><defs/><g></g></svg>"#.to_string();
     }
 
+    // Resolve component-specific skinparams. We read these directly from the
+    // diagram's `skinparams` rather than the cascading `Theme` so the
+    // workspace `slate` default does not clobber PlantUML's historical
+    // values.
+    let mut interface_fill = COMP_FILL.to_string();
+    let mut interface_stroke = STROKE.to_string();
+    let mut component_round_corner: Option<f64> = None;
+    for sp in &diagram.meta.skinparams {
+        let key = sp.key.to_ascii_lowercase();
+        let val = sp.value.trim();
+        if val.is_empty() {
+            continue;
+        }
+        match key.as_str() {
+            "interfacebackgroundcolor" => {
+                interface_fill = crate::sequence::resolve_color(val);
+            }
+            "interfacebordercolor" => {
+                interface_stroke = crate::sequence::resolve_color(val);
+            }
+            "componentroundcorner" | "roundcorner" => {
+                if let Ok(v) = val.parse::<f64>() {
+                    component_round_corner = Some(v / 2.0);
+                }
+            }
+            _ => {}
+        }
+    }
+
     // Compute dimensions for each component.
     let comp_dims: Vec<CompDim> = diagram.components.iter().map(calc_component_dim).collect();
 
@@ -438,10 +467,11 @@ pub fn render_with_oracle(
         let body_style = oracle_rect
             .and_then(|r| r.body_style.clone())
             .unwrap_or_else(|| format!("stroke:{STROKE};stroke-width:0.5;"));
+        let round_r = component_round_corner.unwrap_or(ROUND_R);
         svg.raw(&format!(
             r#"<rect fill="{fill}" height="{h_s}" rx="{r_s}" ry="{r_s}" style="{body_style}" width="{w_s}" x="{x_s}" y="{y_s}"/>"#,
             h_s = fc(h),
-            r_s = fc(ROUND_R),
+            r_s = fc(round_r),
             w_s = fc(w),
             x_s = fc(x),
             y_s = fc(y),
@@ -597,7 +627,7 @@ pub fn render_with_oracle(
 
         // Circle.
         svg.raw(&format!(
-            r#"<ellipse cx="{ix}" cy="{iy}" fill="{COMP_FILL}" rx="{IFACE_R}" ry="{IFACE_R}" style="stroke:{STROKE};stroke-width:0.5;"/>"#,
+            r#"<ellipse cx="{ix}" cy="{iy}" fill="{interface_fill}" rx="{IFACE_R}" ry="{IFACE_R}" style="stroke:{interface_stroke};stroke-width:0.5;"/>"#,
         ));
 
         // Label below. Prefer oracle text_x/y when present — PlantUML's
