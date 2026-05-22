@@ -14,6 +14,7 @@ use crate::diagram::SpriteData;
 
 mod debug;
 mod stdlib;
+mod themes;
 
 use debug::{RenderClock, TzSpec};
 
@@ -37,7 +38,21 @@ pub fn preprocess_with_base(input: &str, base_dir: &Path) -> Vec<String> {
 /// definitions collected from `sprite $name { ... }` blocks.
 pub fn preprocess_full(input: &str, base_dir: Option<PathBuf>) -> PreprocessOutput {
     let mut ctx = PreprocessContext::new(base_dir);
-    let lines = ctx.process(input);
+    let mut lines = ctx.process(input);
+    // Append any accumulated theme expansion to the end of the diagram so
+    // user-source line numbers are preserved (see `theme_tail`).
+    if !ctx.theme_tail.is_empty() {
+        let tail = std::mem::take(&mut ctx.theme_tail);
+        // Find the last `@end…` marker; insert before it if present so the
+        // diagram parser still terminates correctly.
+        let insert_at = lines
+            .iter()
+            .rposition(|l| l.trim_start().starts_with("@end"))
+            .unwrap_or(lines.len());
+        for (i, line) in tail.into_iter().enumerate() {
+            lines.insert(insert_at + i, line);
+        }
+    }
     PreprocessOutput {
         lines,
         sprites: ctx.sprites,
@@ -313,6 +328,16 @@ struct PreprocessContext {
     /// Defaults to system time + local timezone; both overridable via
     /// `RUSTUML_DEBUG` (see [`debug`]) for deterministic golden tests.
     render_clock: RenderClock,
+    /// Theme expansion output accumulated across `!theme` directives.
+    ///
+    /// Themes emit many `skinparam` lines plus a `<style>` block (the latter
+    /// is dropped during flattening). Inlining the expansion in place would
+    /// push every subsequent diagram line down by ~150 positions, breaking
+    /// `data-source-line=` matching in goldens. Instead we collect the
+    /// expansion here and append it once at the end of the preprocessed
+    /// output — skinparams are position-insensitive so this is semantically
+    /// equivalent to in-place expansion for everything we currently render.
+    theme_tail: Vec<String>,
 }
 
 const MAX_INCLUDE_DEPTH: usize = 10;
@@ -379,6 +404,7 @@ impl PreprocessContext {
             local_vars: Vec::new(),
             return_signal: None,
             render_clock: RenderClock::from_env(),
+            theme_tail: Vec::new(),
         }
     }
 
@@ -637,7 +663,10 @@ impl PreprocessContext {
             }
             return;
         }
-        if self.try_theme(trimmed, output) {
+        if let Some(theme_lines) = self.try_theme(trimmed) {
+            if self.is_active() {
+                output.extend(theme_lines);
+            }
             return;
         }
 
@@ -1268,15 +1297,51 @@ impl PreprocessContext {
         }
     }
 
-    fn try_theme(&self, line: &str, output: &mut Vec<String>) -> bool {
-        if let Some(rest) = line.strip_prefix("!theme ") {
-            let theme_name = rest.trim();
-            if self.is_active() && !theme_name.is_empty() {
-                output.push(format!("skinparam __theme {theme_name}"));
-            }
-            return true;
+    /// Expand a `!theme NAME` (or `!theme NAME from URL`) directive.
+    ///
+    /// Returns `Some(lines)` when the directive is consumed (whether the
+    /// theme was found or not — unknown themes silently drop just like
+    /// PlantUML when no theme by that name exists). Returns `None` when
+    /// the line is not a theme directive.
+    ///
+    /// In-place output is empty: the theme expansion is appended to
+    /// `theme_tail` so the user diagram keeps its original line numbers
+    /// (see the `theme_tail` doc comment for the rationale).
+    fn try_theme(&mut self, line: &str) -> Option<Vec<String>> {
+        let rest = line.strip_prefix("!theme ")?;
+        let mut name_part = rest.trim();
+        // `!theme NAME from URL` — strip the `from URL` portion. We always
+        // resolve from the embedded bundle regardless of the URL.
+        if let Some(idx) = name_part.find(" from ") {
+            name_part = name_part[..idx].trim();
         }
-        false
+        if name_part.is_empty() {
+            // Keep a placeholder so subsequent diagram lines retain their
+            // original source-line numbers in the preprocessed output.
+            return Some(vec![String::new()]);
+        }
+        if !self.is_active() {
+            return Some(vec![String::new()]);
+        }
+        self.theme_tail
+            .push(format!("skinparam __theme {name_part}"));
+        if let Some(theme_src) = themes::get_theme_source(name_part) {
+            let body = themes::strip_front_matter(theme_src);
+            if self.include_depth < MAX_INCLUDE_DEPTH {
+                self.include_depth += 1;
+                let expanded = self.process(body);
+                self.include_depth -= 1;
+                // Themes emit `<style>` blocks and grouped `skinparam X { ... }`
+                // declarations. Most parsers don't recognise `<style>` so we
+                // strip it, and we flatten any leftover grouped skinparams so
+                // every parser sees plain `skinparam Key Value` lines.
+                self.theme_tail
+                    .extend(themes::flatten_theme_output(&expanded));
+            }
+        }
+        // Emit a placeholder blank line so the diagram body's source-line
+        // numbers stay aligned with the original .puml.
+        Some(vec![String::new()])
     }
 
     fn try_undefine(&mut self, line: &str) -> bool {
@@ -1297,13 +1362,15 @@ impl PreprocessContext {
         static RE_ELSEIF: LazyLock<Regex> =
             LazyLock::new(|| Regex::new(r#"^!elseif\s+(.+)$"#).unwrap());
         static RE_IFDEF: LazyLock<Regex> =
-            LazyLock::new(|| Regex::new(r"^!ifdef\s+(\w+)$").unwrap());
+            LazyLock::new(|| Regex::new(r"^!ifdef\s+\$?(\w+)$").unwrap());
         static RE_IFNDEF: LazyLock<Regex> =
-            LazyLock::new(|| Regex::new(r"^!ifndef\s+(\w+)$").unwrap());
+            LazyLock::new(|| Regex::new(r"^!ifndef\s+\$?(\w+)$").unwrap());
 
         if let Some(caps) = RE_IFDEF.captures(line) {
-            let defined =
-                self.defines.contains_key(&caps[1]) || self.token_defines.contains_key(&caps[1]);
+            let name = &caps[1];
+            let defined = self.defines.contains_key(name)
+                || self.token_defines.contains_key(name)
+                || self.get_var(name).is_some();
             self.cond_stack.push(CondState {
                 active: defined && self.is_active(),
                 has_matched: defined,
@@ -1311,11 +1378,13 @@ impl PreprocessContext {
             return true;
         }
         if let Some(caps) = RE_IFNDEF.captures(line) {
-            let not_defined =
-                !self.defines.contains_key(&caps[1]) && !self.token_defines.contains_key(&caps[1]);
+            let name = &caps[1];
+            let defined = self.defines.contains_key(name)
+                || self.token_defines.contains_key(name)
+                || self.get_var(name).is_some();
             self.cond_stack.push(CondState {
-                active: not_defined && self.is_active(),
-                has_matched: not_defined,
+                active: !defined && self.is_active(),
+                has_matched: !defined,
             });
             return true;
         }
