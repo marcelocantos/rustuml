@@ -1936,6 +1936,17 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme) -> String {
     let mut participant_border_thickness: String = "0.5".to_string();
     let mut lifeline_border = "#181818".to_string();
     let mut lifeline_border_thickness: String = "0.5".to_string();
+    // Per-participant-kind background overrides. Each defaults to
+    // `participant_fill`; the relevant `<kind>BackgroundColor` skinparam
+    // (with or without the `sequence` prefix) sets it.
+    let mut actor_fill_override: Option<String> = None;
+    let mut _actor_border_override: Option<String> = None;
+    let mut boundary_fill_override: Option<String> = None;
+    let mut control_fill_override: Option<String> = None;
+    let mut entity_fill_override: Option<String> = None;
+    let mut database_fill_override: Option<String> = None;
+    let mut collections_fill_override: Option<String> = None;
+    let mut queue_fill_override: Option<String> = None;
     for sp in &diagram.meta.skinparams {
         let key = sp.key.to_ascii_lowercase();
         let val = sp.value.trim();
@@ -1969,6 +1980,30 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme) -> String {
                 if let Ok(v) = val.parse::<f64>() {
                     lifeline_border_thickness = plantuml_metrics::fmt_coord(v);
                 }
+            }
+            "actorbackgroundcolor" | "sequenceactorbackgroundcolor" => {
+                actor_fill_override = Some(resolve_color(val));
+            }
+            "actorbordercolor" | "sequenceactorbordercolor" => {
+                _actor_border_override = Some(resolve_color(val));
+            }
+            "boundarybackgroundcolor" | "sequenceboundarybackgroundcolor" => {
+                boundary_fill_override = Some(resolve_color(val));
+            }
+            "controlbackgroundcolor" | "sequencecontrolbackgroundcolor" => {
+                control_fill_override = Some(resolve_color(val));
+            }
+            "entitybackgroundcolor" | "sequenceentitybackgroundcolor" => {
+                entity_fill_override = Some(resolve_color(val));
+            }
+            "databasebackgroundcolor" | "sequencedatabasebackgroundcolor" => {
+                database_fill_override = Some(resolve_color(val));
+            }
+            "collectionsbackgroundcolor" | "sequencecollectionsbackgroundcolor" => {
+                collections_fill_override = Some(resolve_color(val));
+            }
+            "queuebackgroundcolor" | "sequencequeuebackgroundcolor" => {
+                queue_fill_override = Some(resolve_color(val));
             }
             _ => {}
         }
@@ -3383,10 +3418,24 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme) -> String {
 
         // Resolve participant fill color (per-participant override beats
         // the skinparam default, which beats the historical `#E2E2F0`).
+        // Kind-specific shapes (actor/boundary/control/...) also consult
+        // their dedicated `<kind>BackgroundColor` skinparam when no
+        // per-participant override is present.
+        let kind_specific_fill = match p.kind {
+            ParticipantKind::Actor => actor_fill_override.clone(),
+            ParticipantKind::Boundary => boundary_fill_override.clone(),
+            ParticipantKind::Control => control_fill_override.clone(),
+            ParticipantKind::Entity => entity_fill_override.clone(),
+            ParticipantKind::Database => database_fill_override.clone(),
+            ParticipantKind::Collections => collections_fill_override.clone(),
+            ParticipantKind::Queue => queue_fill_override.clone(),
+            _ => None,
+        };
         let fill_color = diagram.participants[i]
             .color
             .as_ref()
             .map(|c| resolve_color(c))
+            .or(kind_specific_fill)
             .unwrap_or_else(|| participant_fill.clone());
 
         // Head: base_y is where this participant's shape starts (bottom-aligned).
