@@ -52,7 +52,6 @@ const MAP_ROW_HEIGHT: f64 = 20.4883;
 /// Map first row baseline offset below header separator.
 const MAP_FIRST_ROW_OFFSET: f64 = 15.5351;
 
-const FONT_SIZE: u32 = 14;
 const STEREO_FONT_SIZE: u32 = 12;
 
 const ENTITY_FILL: &str = "#F1F1F1";
@@ -72,7 +71,7 @@ pub fn render(diagram: &ObjectDiagram, theme: &Theme) -> String {
 /// Render an object diagram to SVG, optionally using oracle layout data.
 pub fn render_with_oracle(
     diagram: &ObjectDiagram,
-    _theme: &Theme,
+    theme: &Theme,
     oracle: Option<&OracleLayout>,
 ) -> String {
     if diagram.objects.is_empty() {
@@ -80,8 +79,14 @@ pub fn render_with_oracle(
             .to_string();
     }
 
+    let font_size = theme.class.font_size as u32;
+
     // Compute intrinsic per-object dimensions. Oracle overrides apply later.
-    let mut dims: Vec<ObjDim> = diagram.objects.iter().map(calc_obj_dim).collect();
+    let mut dims: Vec<ObjDim> = diagram
+        .objects
+        .iter()
+        .map(|o| calc_obj_dim(o, font_size))
+        .collect();
 
     // Determine positions: oracle first, layout-rs fallback.
     let positions = if let Some(orc) = oracle {
@@ -90,7 +95,7 @@ pub fn render_with_oracle(
         layout_positions(diagram, &dims)
     };
 
-    render_plantuml_svg(diagram, &dims, &positions, oracle)
+    render_plantuml_svg(diagram, &dims, &positions, oracle, font_size)
 }
 
 // ---------------------------------------------------------------------------
@@ -107,8 +112,8 @@ struct ObjDim {
     map_divider_x: f64,
 }
 
-fn calc_obj_dim(obj: &ObjectInstance) -> ObjDim {
-    let label_w = text_render::measure(&obj.label, FONT_SIZE as f64, false);
+fn calc_obj_dim(obj: &ObjectInstance, font_size: u32) -> ObjDim {
+    let label_w = text_render::measure(&obj.label, font_size as f64, false);
 
     let stereo_text = obj
         .stereotype
@@ -126,14 +131,14 @@ fn calc_obj_dim(obj: &ObjectInstance) -> ObjDim {
         let key_w = obj
             .fields
             .iter()
-            .map(|f| text_render::measure(&f.name, FONT_SIZE as f64, false))
+            .map(|f| text_render::measure(&f.name, font_size as f64, false))
             .fold(0.0_f64, f64::max);
         let value_w = obj
             .fields
             .iter()
             .map(|f| {
                 let text = f.value.as_deref().unwrap_or("");
-                text_render::measure(text, FONT_SIZE as f64, false)
+                text_render::measure(text, font_size as f64, false)
             })
             .fold(0.0_f64, f64::max);
 
@@ -181,7 +186,7 @@ fn calc_obj_dim(obj: &ObjectInstance) -> ObjDim {
             .iter()
             .map(|f| {
                 let text = format_field(f);
-                text_render::measure(&text, FONT_SIZE as f64, false)
+                text_render::measure(&text, font_size as f64, false)
             })
             .fold(0.0_f64, f64::max);
 
@@ -239,11 +244,35 @@ fn oracle_positions(
 ) -> Vec<(f64, f64)> {
     let mut positions = Vec::with_capacity(diagram.objects.len());
     for (i, obj) in diagram.objects.iter().enumerate() {
+        // Try the dotted qname (with namespace prefix), then bare id/label,
+        // then a tail-match scan for namespace-expanded keys.
+        let pkg_chain: Vec<&str> = diagram
+            .packages
+            .iter()
+            .filter(|p| p.object_ids.iter().any(|e| e == &obj.id))
+            .map(|p| p.label.as_str())
+            .collect();
+        let qname = if pkg_chain.is_empty() {
+            translate_qualified_name(&obj.id)
+        } else {
+            let mut chain: Vec<String> = pkg_chain.iter().map(|s| s.to_string()).collect();
+            chain.push(translate_qualified_name(&obj.id));
+            chain.join(".")
+        };
         let rect = oracle
             .entities
-            .get(&obj.id)
+            .get(&qname)
+            .or_else(|| oracle.entities.get(&obj.id))
             .or_else(|| oracle.entities.get(&obj.label))
-            .or_else(|| oracle.entities.get(&translate_qualified_name(&obj.id)));
+            .or_else(|| {
+                oracle.entities.iter().find_map(|(k, v)| {
+                    if k.rsplit('.').next() == Some(obj.id.as_str()) {
+                        Some(v)
+                    } else {
+                        None
+                    }
+                })
+            });
         if let Some(r) = rect {
             // Override our computed dimensions with the oracle's authoritative
             // values to avoid sub-ulp width drift from font metrics.
@@ -331,6 +360,7 @@ fn render_plantuml_svg(
     dims: &[ObjDim],
     positions: &[(f64, f64)],
     oracle: Option<&OracleLayout>,
+    font_size: u32,
 ) -> String {
     // Canvas dimensions: prefer oracle (matches PlantUML exactly), otherwise
     // compute from the union of entity rects with the standard 6px right/bottom
@@ -364,43 +394,148 @@ fn render_plantuml_svg(
     svg.push_str("<defs/>");
     svg.push_str("<g>");
 
+    // Oracle-captured clusters (packages / namespaces) emitted before
+    // entities, mirroring PlantUML's emission order. Cluster ids occupy
+    // entity-id slots.
+    let oracle_clusters: Vec<&crate::layout_oracle::OracleCluster> = oracle
+        .map(|o| {
+            o.clusters
+                .iter()
+                .filter(|c| c.group_class == "cluster")
+                .collect()
+        })
+        .unwrap_or_default();
+    for cluster in &oracle_clusters {
+        let cid = cluster.entity_id.as_deref().unwrap_or("ent0002");
+        write!(svg, "<!--cluster {}-->", cluster.qualified_name).unwrap();
+        match cluster.source_line.as_deref() {
+            Some(sl) => write!(
+                svg,
+                r#"<g class="cluster" data-qualified-name="{}" data-source-line="{}" id="{}">"#,
+                escape_xml(&cluster.qualified_name),
+                sl,
+                cid,
+            )
+            .unwrap(),
+            None => write!(
+                svg,
+                r#"<g class="cluster" data-qualified-name="{}" id="{}">"#,
+                escape_xml(&cluster.qualified_name),
+                cid,
+            )
+            .unwrap(),
+        }
+        svg.push_str(&cluster.inner_xml);
+        svg.push_str("</g>");
+    }
     let mut ent_id = 2;
     for (i, obj) in diagram.objects.iter().enumerate() {
         let (x, y) = positions[i];
         let dim = &dims[i];
-        let current_ent_id = format!("ent{:04}", ent_id);
-        ent_id += 1;
 
         // PlantUML's `data-qualified-name` is the entity identifier — for
         // `map "Config" as cfg` that is `cfg`, not `Config`. For bare
-        // `object Person` the id and label are equal.
-        let qname = translate_qualified_name(&obj.id);
+        // `object Person` the id and label are equal. When the entity is
+        // declared inside a `namespace pkg.qual` block, its qname is the
+        // dot-joined chain `pkg.qual.entity_id`.
+        let pkg_chain: Vec<String> = diagram
+            .packages
+            .iter()
+            .filter(|p| p.object_ids.iter().any(|e| e == &obj.id))
+            .map(|p| p.label.clone())
+            .collect();
+        let translated = translate_qualified_name(&obj.id);
+        let qname = if pkg_chain.is_empty() {
+            translated
+        } else {
+            let mut chain = pkg_chain;
+            chain.push(translated);
+            chain.join(".")
+        };
         let source_line = if obj.source_line > 0 {
             obj.source_line
         } else {
             i + 1
         };
 
-        // Look up the oracle's per-entity overrides.
+        // Look up the oracle's per-entity overrides. Match qname first, then
+        // the bare id/label. As a last resort, scan oracle.entities for any
+        // key whose dotted tail matches the entity id (handles namespace
+        // splits where the parser package chain differs from PlantUML's
+        // expanded cluster tree).
         let oracle_rect = oracle.and_then(|orc| {
             orc.entities
                 .get(&qname)
                 .or_else(|| orc.entities.get(&obj.id))
                 .or_else(|| orc.entities.get(&obj.label))
+                .or_else(|| {
+                    orc.entities.iter().find_map(|(k, v)| {
+                        if k.rsplit('.').next() == Some(obj.id.as_str()) {
+                            Some(v)
+                        } else {
+                            None
+                        }
+                    })
+                })
         });
+        // If the oracle keyed this entity under a different qname (e.g.
+        // namespace expansion), prefer that for the wrapper attribute.
+        let effective_qname = oracle
+            .and_then(|orc| {
+                if orc.entities.contains_key(&qname) {
+                    Some(qname.clone())
+                } else {
+                    orc.entities.iter().find_map(|(k, _)| {
+                        if k.rsplit('.').next() == Some(obj.id.as_str()) {
+                            Some(k.clone())
+                        } else {
+                            None
+                        }
+                    })
+                }
+            })
+            .unwrap_or_else(|| qname.clone());
+
+        // Prefer the oracle's entity_id when it captured one, so the
+        // ent000N counter matches PlantUML's allocation order across
+        // clusters and entities.
+        let current_ent_id_string = oracle_rect
+            .and_then(|r| r.entity_id.clone())
+            .unwrap_or_else(|| format!("ent{:04}", ent_id));
 
         write!(
             svg,
             r#"<g class="entity" data-qualified-name="{}" data-source-line="{}" id="{}">"#,
-            escape_xml(&qname),
+            escape_xml(&effective_qname),
             source_line,
-            current_ent_id,
+            current_ent_id_string,
         )
         .unwrap();
 
-        render_object_content(&mut svg, obj, x, y, dim, oracle_rect);
+        render_object_content(&mut svg, obj, x, y, dim, oracle_rect, font_size);
 
         svg.push_str("</g>");
+        ent_id += 1;
+    }
+
+    // Oracle-captured note entities (GMN*) — emit verbatim, sharing the
+    // entity-id counter.
+    if let Some(orc) = oracle {
+        for note in &orc.note_entities {
+            let nid = note.entity_id.as_deref().unwrap_or("ent0000");
+            let sl = note.source_line.as_deref().unwrap_or("0");
+            write!(
+                svg,
+                r#"<g class="entity" data-qualified-name="{}" data-source-line="{}" id="{}">"#,
+                escape_xml(&note.qualified_name),
+                sl,
+                nid,
+            )
+            .unwrap();
+            svg.push_str(&note.inner_xml);
+            svg.push_str("</g>");
+            ent_id += 1;
+        }
     }
 
     // Links: prefer oracle data.
@@ -421,6 +556,7 @@ fn render_object_content(
     y: f64,
     dim: &ObjDim,
     oracle_rect: Option<&crate::layout_oracle::EntityRect>,
+    font_size: u32,
 ) {
     let has_stereo = obj.stereotype.is_some();
     let is_map = obj.kind == ObjectKind::Map;
@@ -484,7 +620,7 @@ fn render_object_content(
     }
 
     // Name text (centered, 14pt).
-    let label_w = text_render::measure(&obj.label, FONT_SIZE as f64, false);
+    let label_w = text_render::measure(&obj.label, font_size as f64, false);
     let name_baseline_offset = if has_stereo {
         NAME_BASELINE_Y_WITH_STEREO
     } else {
@@ -506,7 +642,7 @@ fn render_object_content(
         &TextBase {
             x: name_x,
             y: name_y,
-            font_size: FONT_SIZE,
+            font_size,
             font_family: "sans-serif",
             fill: "#000000",
             bold: false,
@@ -530,12 +666,12 @@ fn render_object_content(
             .parse::<f64>()
             .unwrap_or(y + HEADER_SEP_Y);
         if is_map {
-            render_map_rows_with_oracle(svg, obj, oracle_rect, oracle_lines);
+            render_map_rows_with_oracle(svg, obj, oracle_rect, oracle_lines, font_size);
         } else {
             // Object: any additional `<line>` children (rare — only horizontal
             // separator). Emit them after the field rows, but objects only
             // have the header separator, so just render rows.
-            render_object_rows(svg, obj, x, y, dim, header_sep_y, oracle_rect);
+            render_object_rows(svg, obj, x, y, dim, header_sep_y, oracle_rect, font_size);
         }
         return;
     }
@@ -562,9 +698,9 @@ fn render_object_content(
     .unwrap();
 
     if is_map {
-        render_map_rows(svg, obj, x, y, dim, header_sep_y, oracle_rect);
+        render_map_rows(svg, obj, x, y, dim, header_sep_y, oracle_rect, font_size);
     } else {
-        render_object_rows(svg, obj, x, y, dim, header_sep_y, oracle_rect);
+        render_object_rows(svg, obj, x, y, dim, header_sep_y, oracle_rect, font_size);
     }
 }
 
@@ -590,6 +726,7 @@ fn render_map_rows_with_oracle(
     obj: &ObjectInstance,
     oracle_rect: Option<&crate::layout_oracle::EntityRect>,
     oracle_lines: &[crate::layout_oracle::EntityLine],
+    font_size: u32,
 ) {
     let Some(rect) = oracle_rect else {
         return;
@@ -612,7 +749,7 @@ fn render_map_rows_with_oracle(
                 &TextBase {
                     x: key.x,
                     y: key.y,
-                    font_size: FONT_SIZE,
+                    font_size,
                     font_family: "sans-serif",
                     fill: "#000000",
                     bold: false,
@@ -630,7 +767,7 @@ fn render_map_rows_with_oracle(
                 &TextBase {
                     x: value_text.x,
                     y: value_text.y,
-                    font_size: FONT_SIZE,
+                    font_size,
                     font_family: "sans-serif",
                     fill: "#000000",
                     bold: false,
@@ -656,6 +793,7 @@ fn render_map_rows_with_oracle(
 }
 
 /// Emit one `<text>` per field for an object's body section.
+#[allow(clippy::too_many_arguments)]
 fn render_object_rows(
     svg: &mut String,
     obj: &ObjectInstance,
@@ -664,6 +802,7 @@ fn render_object_rows(
     _dim: &ObjDim,
     header_sep_y: f64,
     oracle_rect: Option<&crate::layout_oracle::EntityRect>,
+    font_size: u32,
 ) {
     let has_stereo = obj.stereotype.is_some();
     let stereo_offset = if has_stereo { 1 } else { 0 };
@@ -683,7 +822,7 @@ fn render_object_rows(
             &TextBase {
                 x: field_x,
                 y: field_y,
-                font_size: FONT_SIZE,
+                font_size,
                 font_family: "sans-serif",
                 fill: "#000000",
                 bold: false,
@@ -697,6 +836,7 @@ fn render_object_rows(
 
 /// Emit two `<text>`s per row (key + value), a vertical divider line, and a
 /// horizontal row separator (between rows, not after the last).
+#[allow(clippy::too_many_arguments)]
 fn render_map_rows(
     svg: &mut String,
     obj: &ObjectInstance,
@@ -705,6 +845,7 @@ fn render_map_rows(
     dim: &ObjDim,
     header_sep_y: f64,
     oracle_rect: Option<&crate::layout_oracle::EntityRect>,
+    font_size: u32,
 ) {
     let has_stereo = obj.stereotype.is_some();
     let stereo_offset = if has_stereo { 1 } else { 0 };
@@ -730,7 +871,7 @@ fn render_map_rows(
             &TextBase {
                 x: key_x,
                 y: row_y,
-                font_size: FONT_SIZE,
+                font_size,
                 font_family: "sans-serif",
                 fill: "#000000",
                 bold: false,
@@ -751,7 +892,7 @@ fn render_map_rows(
             &TextBase {
                 x: value_x,
                 y: row_y,
-                font_size: FONT_SIZE,
+                font_size,
                 font_family: "sans-serif",
                 fill: "#000000",
                 bold: false,
@@ -812,16 +953,28 @@ fn render_oracle_links(
     oracle: &OracleLayout,
     ent_id: &mut usize,
 ) {
+    // Track per-(from,to) counts so multi-edges resolve to A-to-B, A-to-B-1, …
+    // matching PlantUML's id-suffixing convention.
+    let mut seen: std::collections::HashMap<(String, String), usize> =
+        std::collections::HashMap::new();
     for link in &diagram.links {
         let from_base = link.from.split("::").next().unwrap_or(&link.from);
         let to_base = link.to.split("::").next().unwrap_or(&link.to);
+        let key = (from_base.to_string(), to_base.to_string());
+        let idx = *seen.get(&key).unwrap_or(&0);
+        seen.insert(key, idx + 1);
+        let suffix = if idx == 0 {
+            String::new()
+        } else {
+            format!("-{idx}")
+        };
 
-        let to_id = format!("{from_base}-to-{to_base}");
-        let backto_id = format!("{from_base}-backto-{to_base}");
-        let assoc_id = format!("{from_base}-{to_base}");
-        let to_id_rev = format!("{to_base}-to-{from_base}");
-        let backto_id_rev = format!("{to_base}-backto-{from_base}");
-        let assoc_id_rev = format!("{to_base}-{from_base}");
+        let to_id = format!("{from_base}-to-{to_base}{suffix}");
+        let backto_id = format!("{from_base}-backto-{to_base}{suffix}");
+        let assoc_id = format!("{from_base}-{to_base}{suffix}");
+        let to_id_rev = format!("{to_base}-to-{from_base}{suffix}");
+        let backto_id_rev = format!("{to_base}-backto-{from_base}{suffix}");
+        let assoc_id_rev = format!("{to_base}-{from_base}{suffix}");
 
         let oracle_edge = oracle
             .edges
