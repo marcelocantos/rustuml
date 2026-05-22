@@ -18,6 +18,7 @@ pub mod ditaa;
 pub mod dot_diagram;
 pub mod ebnf;
 pub mod eps;
+pub mod filter_registry;
 pub mod font_metrics;
 pub mod gantt;
 pub mod git_diagram;
@@ -78,7 +79,7 @@ pub fn render_svg_with_theme(diagram: &Diagram, theme: &Theme) -> String {
     } else {
         skinparam::apply_skinparams(theme, meta_params)
     };
-    render_with_theme(diagram, &effective_theme)
+    render_under_filter_registry(diagram, |d| render_with_theme(d, &effective_theme))
 }
 
 /// Render a parsed diagram to SVG with optional oracle layout data.
@@ -93,7 +94,30 @@ pub fn render_svg_with_oracle(diagram: &Diagram, oracle: Option<&OracleLayout>) 
     } else {
         skinparam::apply_skinparams(&Theme::default(), meta_params)
     };
-    render_with_theme_and_oracle(diagram, &theme, oracle)
+    render_under_filter_registry(diagram, |d| render_with_theme_and_oracle(d, &theme, oracle))
+}
+
+/// Install a fresh background-filter registry for the duration of one
+/// render call, then splice the collected `<filter>` elements into the
+/// final SVG's `<defs>` block. PlantUML-shaped SVGs ship a `<defs/>` self-
+/// closing tag when there is nothing to put in there; if any segment
+/// requested a filter, we rewrite that occurrence into a `<defs>...</defs>`
+/// block holding the filters in insertion order.
+fn render_under_filter_registry(
+    diagram: &Diagram,
+    render: impl FnOnce(&Diagram) -> String,
+) -> String {
+    let source = diagram.meta().source.as_deref().unwrap_or("");
+    let (svg, registry) = filter_registry::with_registry(source, || render(diagram));
+    if registry.is_empty() {
+        return svg;
+    }
+    let defs_content = registry.render_defs_content();
+    let replacement = format!("<defs>{defs_content}</defs>");
+    // PlantUML-shape SVGs emit `<defs/>`; substitute. Other shapes may not
+    // contain `<defs/>` at all (no entry point allocated any background),
+    // in which case nothing to substitute.
+    svg.replacen("<defs/>", &replacement, 1)
 }
 
 fn render_with_theme_and_oracle(

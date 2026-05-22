@@ -772,7 +772,61 @@ pub fn parse_with_base(
         meta.sprites = sprites;
     }
 
+    // Stash the diagram source for downstream seed computation (filter
+    // UIDs, gradient/shadow ids). Mirrors PlantUML's
+    // `UmlSource.getPlainString("\n")` — every line of the @startuml ...
+    // @enduml block (including the markers) joined by `\n` with a trailing
+    // `\n`. PlantUML's preprocessor preserves these markers; ours strips
+    // them, so we rebuild the equivalent string from the raw input.
+    {
+        let meta = diagram.meta_mut();
+        meta.source = Some(seed_source_string(input));
+    }
+
     Ok(diagram)
+}
+
+/// Reconstruct the seed-source string that PlantUML's
+/// `UmlSource.getPlainString("\n")` would have produced for `input`. That
+/// string is built from the `source` list inside `UmlSource`, which in
+/// practice is "every line between (and including) `@startXXX` and
+/// `@endXXX`, with a trailing `\n`". For inputs that omit the markers we
+/// take the input as-is. The output is used purely to derive deterministic
+/// element ids (filter UIDs etc.) via `StringUtils.seed`.
+fn seed_source_string(input: &str) -> String {
+    let mut out = String::new();
+    let mut in_block = false;
+    let mut saw_marker = false;
+    for line in input.lines() {
+        let trimmed = line.trim_start();
+        if !in_block {
+            if trimmed.starts_with("@start") {
+                in_block = true;
+                saw_marker = true;
+                out.push_str(line);
+                out.push('\n');
+            }
+            continue;
+        }
+        out.push_str(line);
+        out.push('\n');
+        if trimmed.starts_with("@end") {
+            break;
+        }
+    }
+    let _ = in_block;
+    if saw_marker {
+        out
+    } else {
+        // Headerless input — match PlantUML's `\n`-joined form with a
+        // trailing newline.
+        let mut joined = String::new();
+        for line in input.lines() {
+            joined.push_str(line);
+            joined.push('\n');
+        }
+        joined
+    }
 }
 
 #[cfg(test)]

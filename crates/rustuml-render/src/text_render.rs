@@ -19,6 +19,7 @@
 use std::fmt::Write;
 
 use crate::creole::{self, Segment, Style};
+use crate::filter_registry;
 use crate::plantuml_metrics as pm;
 
 /// Effective styling for a base font that the caller controls. Each call to
@@ -320,7 +321,7 @@ fn unescape_for_metrics(s: &str) -> String {
 ///
 /// PlantUML emits resolved hex colours in SVG output even when the source
 /// uses HTML colour names — `<color:blue>` becomes `fill="#0000FF"`.
-fn normalize_color(s: &str) -> String {
+pub(crate) fn normalize_color(s: &str) -> String {
     if s.starts_with('#') {
         return s.to_string();
     }
@@ -525,6 +526,16 @@ fn write_text_element(
     let raw_fill = style.fill.as_deref().unwrap_or(base.fill);
     let fill = normalize_color(raw_fill);
 
+    // `<back:color>` segments carry an SVG `<filter>` reference. The id is
+    // allocated lazily in the active `FilterRegistry`; the filter element
+    // itself is emitted into `<defs>` at the end of the render pass.
+    let filter_attr = style
+        .background
+        .as_deref()
+        .and_then(filter_registry::id_for_current)
+        .map(|id| format!(r#" filter="url(#{id})""#))
+        .unwrap_or_default();
+
     let mut decorations: Vec<&str> = Vec::new();
     if style.underline || base.underline {
         decorations.push("underline");
@@ -564,7 +575,7 @@ fn write_text_element(
     }
     write!(
         buf,
-        r#"<text fill="{fill}" font-family="{font_family}" font-size="{font_size}"{style_attr}{weight_attr} lengthAdjust="spacing"{text_decoration} textLength="{tl}" x="{x_s}" y="{y_s}">{content}</text>"#,
+        r#"<text fill="{fill}"{filter_attr} font-family="{font_family}" font-size="{font_size}"{style_attr}{weight_attr} lengthAdjust="spacing"{text_decoration} textLength="{tl}" x="{x_s}" y="{y_s}">{content}</text>"#,
         tl = pm::fmt_coord(width),
         x_s = pm::fmt_coord(x),
         y_s = pm::fmt_coord(base.y + y_offset),

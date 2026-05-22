@@ -823,6 +823,10 @@ pub struct Style {
     pub baseline_shift: Option<&'static str>,
     /// Hyperlink target from `[[url label]]`; carries blue underline styling.
     pub link_url: Option<String>,
+    /// Background colour from `<back:color>...</back>`, normalised to upper-
+    /// case `#RRGGBB`. The renderer emits an SVG `<filter>` per unique value
+    /// and references it via `filter="url(#...)"` on the matching `<text>`.
+    pub background: Option<String>,
 }
 
 /// A contiguous run of uniformly-styled text.
@@ -1293,8 +1297,16 @@ fn handle_tag(
             walk_segments(&content, style, skip_underline, out);
         }
         _ if tag.starts_with("back:") || tag.starts_with("BACK:") => {
+            let color = tag
+                .split_once(':')
+                .map(|(_, c)| c.to_string())
+                .unwrap_or_default();
             let content = collect_until_tag(chars, "</back>");
-            walk_segments(&content, style, skip_underline, out);
+            let mut nested = style.clone();
+            // Store the raw colour spec; the filter registry resolves named
+            // colours to upper-case hex when materialising the SVG `<filter>`.
+            nested.background = Some(color);
+            walk_segments(&content, &nested, skip_underline, out);
         }
         _ if tag.starts_with("img:") => {
             let raw_src = &tag["img:".len()..];
