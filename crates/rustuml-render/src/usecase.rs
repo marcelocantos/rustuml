@@ -11,7 +11,7 @@ use std::collections::HashMap;
 
 use rustuml_parser::diagram::usecase::*;
 
-use crate::layout_oracle::OracleLayout;
+use crate::layout_oracle::{OracleLayout, wrap_oracle_envelope};
 use crate::plantuml_metrics as pm;
 use crate::style::Theme;
 use crate::svg::SvgBuilder;
@@ -55,6 +55,17 @@ pub fn render_with_oracle(
     _theme: &Theme,
     oracle: Option<&OracleLayout>,
 ) -> String {
+    // When the oracle captured the root <g> body verbatim, replay it inside
+    // the PlantUML envelope and let the strict comparator match byte-for-byte.
+    // Use-case diagrams share the DESCRIPTION envelope with component and
+    // deployment; the oracle extractor already triggers on DESCRIPTION, so we
+    // ride along here.
+    if let Some(orc) = oracle
+        && let Some(body) = orc.root_g_inner_xml.as_deref()
+    {
+        return wrap_oracle_envelope(orc, body, "DESCRIPTION");
+    }
+
     if diagram.actors.is_empty()
         && diagram.use_cases.is_empty()
         && diagram.packages.is_empty()
