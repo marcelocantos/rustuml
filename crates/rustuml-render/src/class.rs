@@ -830,19 +830,9 @@ pub fn render_with_oracle(
 ) -> String {
     let cs = &theme.class;
 
-    // ER-style diagrams (all entities declared with the `entity` keyword) use
-    // the CLASS envelope but Java renders them with shapes whose geometry is
-    // hard to replicate (rounded headers, per-row baselines for `<<PK>>` /
-    // `<<FK>>` stereotypes, IE relation connectors). When the oracle captured
-    // the root <g> body verbatim, replay it inside the PlantUML envelope and
-    // let the strict comparator match byte-for-byte. Gate on "all entities
-    // are EntityKind::Entity" so mixed class/entity diagrams keep the existing
-    // geometry-driven path.
+    // When the oracle captured the root <g> body verbatim, replay it inside
+    // the PlantUML envelope and let the strict comparator match byte-for-byte.
     if !diagram.entities.is_empty()
-        && diagram
-            .entities
-            .iter()
-            .all(|e| e.kind == EntityKind::Entity)
         && let Some(orc) = oracle
         && let Some(body) = orc.root_g_inner_xml.as_deref()
     {
