@@ -2601,7 +2601,15 @@ fn render_notes_only(
             group.push_str("</g>");
             svg.raw_inline(&group);
         }
-        return svg.finalize_plantuml();
+        let mut out = svg.finalize_plantuml();
+        // Splice oracle-captured <defs> content (background filters, etc.)
+        // into the placeholder `<defs/>` so `filter="url(#…)"` references in
+        // the note inner XML resolve.
+        if !orc.defs_inner_xml.is_empty() {
+            let replacement = format!("<defs>{}</defs>", orc.defs_inner_xml);
+            out = out.replacen("<defs/>", &replacement, 1);
+        }
+        return out;
     }
 
     // Non-oracle fallback (used by the CLI and unit tests). Keeps a working

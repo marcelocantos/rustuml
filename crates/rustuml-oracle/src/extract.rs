@@ -37,6 +37,23 @@ pub fn extract_oracle_layout(svg: &str) -> Option<OracleLayout> {
         }
     }
 
+    // Capture <defs> inner XML verbatim. PlantUML stashes background-color
+    // filters here; renderers that splice the oracle's note inner XML need
+    // these defs to keep `filter="url(#...)"` references live.
+    if let Some(defs) = root
+        .children()
+        .find(|n| n.is_element() && n.tag_name().name() == "defs")
+    {
+        let mut inner = String::new();
+        for c in defs.children().filter(|c| c.is_element()) {
+            let range = c.range();
+            if range.end <= svg.len() && range.start < range.end {
+                inner.push_str(&svg[range.start..range.end]);
+            }
+        }
+        layout.defs_inner_xml = inner;
+    }
+
     // Walk all <g> elements looking for entity and link groups.
     for node in root.descendants() {
         if node.tag_name().name() != "g" {

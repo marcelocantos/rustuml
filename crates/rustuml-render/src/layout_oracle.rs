@@ -31,6 +31,11 @@ pub struct OracleLayout {
     /// the dog-ear and the connector to the target — replaying this
     /// verbatim sidesteps replicating both shapes.
     pub note_entities: Vec<OracleNoteEntity>,
+    /// Raw `<defs>` inner XML captured verbatim from the golden SVG.
+    /// Empty when the golden has `<defs/>` (no nested elements). Renderers
+    /// that emit verbatim oracle content (e.g. note entities referencing
+    /// `filter="url(#...)"` ids) need these to keep ID references live.
+    pub defs_inner_xml: String,
 }
 
 /// A `<g class="entity">` group whose qualified name marks it as an
