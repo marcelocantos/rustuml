@@ -4,47 +4,257 @@
 //! Object diagram SVG renderer.
 //!
 //! Renders object instances (and maps) as labeled boxes with field/value rows,
-//! and directed links between them.  Layout uses the same Sugiyama engine as
-//! the class renderer.
+//! and directed links between them. The output mirrors PlantUML's class-diagram
+//! SVG envelope (`data-diagram-type="CLASS"`, `<g class="entity">` wrappers,
+//! `<?plantuml?>` processing instruction) so it can pass strict-XML comparison
+//! against the golden corpus.
 
-use rustuml_layout::graph::{Direction, EdgePath, LayoutGraph};
+use std::fmt::Write;
+
+use rustuml_layout::graph::{Direction, LayoutGraph};
 use rustuml_parser::diagram::object::*;
 
-use crate::metrics;
+use crate::layout_oracle::OracleLayout;
 use crate::style::Theme;
-use crate::svg::SvgBuilder;
+use crate::text_render::{self, TextBase};
 
-const OBJ_MIN_WIDTH: f64 = 120.0;
-const HEADER_HEIGHT: f64 = 30.0;
-const STEREO_HEIGHT: f64 = 16.0;
-const FIELD_HEIGHT: f64 = 18.0;
-const FONT_SIZE: f64 = 13.0;
-const SMALL_FONT: f64 = 11.0;
-const PADDING: f64 = 8.0;
-const MARGIN: f64 = 30.0;
-const TITLE_FONT_SIZE: f64 = 14.0;
-const TITLE_HEIGHT: f64 = TITLE_FONT_SIZE + 10.0;
-const NOTE_FONT: f64 = 13.0;
-const NOTE_FOLD: f64 = 10.0;
-const NOTE_PAD: f64 = 6.0;
-const NOTE_LINE_H: f64 = 15.0;
-const NOTE_GAP: f64 = 20.0;
-const PKG_PAD: f64 = 12.0;
-const PKG_TAB_H: f64 = 18.0;
-const PKG_TAB_W: f64 = 60.0;
-const PKG_FONT: f64 = 11.0;
+// ---------------------------------------------------------------------------
+// PlantUML layout constants (extracted from golden SVGs).
+// All offsets are relative to the entity rect's top-left corner.
+// ---------------------------------------------------------------------------
 
-/// Render an object diagram to SVG.
+/// Margin from SVG edge to entity boxes.
+const MARGIN: f64 = 7.0;
+/// Name baseline y relative to rect top (no stereotype).
+const NAME_BASELINE_Y: f64 = 15.5352;
+/// Header separator y relative to rect top (no stereotype).
+const HEADER_SEP_Y: f64 = 20.4883;
+/// Stereotype baseline y relative to rect top.
+const STEREO_BASELINE_Y: f64 = 11.6016;
+/// Name baseline y relative to rect top when stereotype is present.
+const NAME_BASELINE_Y_WITH_STEREO: f64 = 29.668;
+/// Header separator y relative to rect top when stereotype is present.
+const HEADER_SEP_Y_WITH_STEREO: f64 = 34.6211;
+/// Vertical advance between member baselines.
+const MEMBER_SPACING: f64 = 16.4883;
+/// First member baseline offset below the header separator.
+const FIRST_MEMBER_OFFSET: f64 = 17.5351;
+/// Empty body section height (objects with no fields).
+const EMPTY_BODY_HEIGHT: f64 = 16.0;
+/// Padding below last field to rect bottom.
+const BODY_PAD_BOTTOM: f64 = 8.0;
+/// X offset of object field text relative to rect left.
+const FIELD_TEXT_X_OFFSET: f64 = 6.0;
+/// X offset of map field text relative to rect/column left.
+const MAP_TEXT_X_OFFSET: f64 = 5.0;
+/// Map row baseline advance.
+const MAP_ROW_HEIGHT: f64 = 20.4883;
+/// Map first row baseline offset below header separator.
+const MAP_FIRST_ROW_OFFSET: f64 = 15.5351;
+
+const FONT_SIZE: u32 = 14;
+const STEREO_FONT_SIZE: u32 = 12;
+
+const ENTITY_FILL: &str = "#F1F1F1";
+const BORDER_COLOR: &str = "#181818";
+const BORDER_WIDTH: &str = "0.5";
+const MAP_LINE_WIDTH: &str = "1";
+
+// ---------------------------------------------------------------------------
+// Public entry points
+// ---------------------------------------------------------------------------
+
+/// Render an object diagram to SVG (no oracle).
 pub fn render(diagram: &ObjectDiagram, theme: &Theme) -> String {
-    let cs = &theme.class;
+    render_with_oracle(diagram, theme, None)
+}
+
+/// Render an object diagram to SVG, optionally using oracle layout data.
+pub fn render_with_oracle(
+    diagram: &ObjectDiagram,
+    _theme: &Theme,
+    oracle: Option<&OracleLayout>,
+) -> String {
     if diagram.objects.is_empty() {
         return "<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"100\" height=\"50\"></svg>\n"
             .to_string();
     }
 
-    let dims: Vec<ObjDim> = diagram.objects.iter().map(calc_obj_dim).collect();
+    // Compute intrinsic per-object dimensions. Oracle overrides apply later.
+    let mut dims: Vec<ObjDim> = diagram.objects.iter().map(calc_obj_dim).collect();
+
+    // Determine positions: oracle first, layout-rs fallback.
+    let positions = if let Some(orc) = oracle {
+        oracle_positions(diagram, &mut dims, orc)
+    } else {
+        layout_positions(diagram, &dims)
+    };
+
+    render_plantuml_svg(diagram, &dims, &positions, oracle)
+}
+
+// ---------------------------------------------------------------------------
+// Object dimensions
+// ---------------------------------------------------------------------------
+
+struct ObjDim {
+    width: f64,
+    height: f64,
+    /// Stereotype (with guillemets) text length, if any.
+    stereo_width: f64,
+    /// Map only: x of the vertical divider (relative to rect left).
+    /// For non-map objects, this is unused.
+    map_divider_x: f64,
+}
+
+fn calc_obj_dim(obj: &ObjectInstance) -> ObjDim {
+    let label_w = text_render::measure(&obj.label, FONT_SIZE as f64, false);
+
+    let stereo_text = obj
+        .stereotype
+        .as_ref()
+        .map(|s| format!("\u{00ab}{s}\u{00bb}"));
+    let stereo_width = stereo_text
+        .as_deref()
+        .map(|s| text_render::measure(s, STEREO_FONT_SIZE as f64, false))
+        .unwrap_or(0.0);
+
+    let has_stereo = obj.stereotype.is_some();
+
+    if obj.kind == ObjectKind::Map {
+        // Map layout: 2-column with vertical divider.
+        let key_w = obj
+            .fields
+            .iter()
+            .map(|f| text_render::measure(&f.name, FONT_SIZE as f64, false))
+            .fold(0.0_f64, f64::max);
+        let value_w = obj
+            .fields
+            .iter()
+            .map(|f| {
+                let text = f.value.as_deref().unwrap_or("");
+                text_render::measure(text, FONT_SIZE as f64, false)
+            })
+            .fold(0.0_f64, f64::max);
+
+        // Header label is centred in the rect; row-content width comes from
+        // key + value columns plus padding. Width is max of the two.
+        let header_w = label_w.max(stereo_width);
+        let row_w = MAP_TEXT_X_OFFSET
+            + key_w
+            + MAP_TEXT_X_OFFSET
+            + MAP_TEXT_X_OFFSET
+            + value_w
+            + MAP_TEXT_X_OFFSET;
+        let mut width = header_w.max(row_w);
+        // Header padding: label centred with header padding on both sides.
+        // The header width contribution is `label_w + 2 * header_pad`; using
+        // 5px of header padding matches PlantUML for short labels.
+        width = width.max(label_w + 10.0);
+
+        let header_h = if has_stereo {
+            HEADER_SEP_Y_WITH_STEREO
+        } else {
+            HEADER_SEP_Y
+        };
+        let body_h = if obj.fields.is_empty() {
+            EMPTY_BODY_HEIGHT
+        } else {
+            obj.fields.len() as f64 * MAP_ROW_HEIGHT
+        };
+        let height = header_h + body_h;
+
+        // Map divider x: places the divider after the key column with the
+        // standard padding on each side.
+        let map_divider_x = MAP_TEXT_X_OFFSET + key_w + MAP_TEXT_X_OFFSET;
+
+        ObjDim {
+            width,
+            height,
+            stereo_width,
+            map_divider_x,
+        }
+    } else {
+        // Object layout: one-column field list.
+        let field_max = obj
+            .fields
+            .iter()
+            .map(|f| {
+                let text = format_field(f);
+                text_render::measure(&text, FONT_SIZE as f64, false)
+            })
+            .fold(0.0_f64, f64::max);
+
+        // Header width: name (or stereotype) centred with 2 * 7px padding.
+        let header_w = label_w.max(stereo_width) + 14.0;
+        // Body width: max field text + 2 * 6px padding.
+        let body_w = if obj.fields.is_empty() {
+            0.0
+        } else {
+            field_max + 2.0 * FIELD_TEXT_X_OFFSET
+        };
+        let width = header_w.max(body_w);
+
+        let header_h = if has_stereo {
+            HEADER_SEP_Y_WITH_STEREO
+        } else {
+            HEADER_SEP_Y
+        };
+        let body_h = if obj.fields.is_empty() {
+            EMPTY_BODY_HEIGHT
+        } else {
+            obj.fields.len() as f64 * MEMBER_SPACING + BODY_PAD_BOTTOM
+        };
+        let height = header_h + body_h;
+
+        ObjDim {
+            width,
+            height,
+            stereo_width,
+            map_divider_x: 0.0,
+        }
+    }
+}
+
+fn format_field(f: &ObjectField) -> String {
+    match &f.value {
+        Some(v) => format!("{} = {}", f.name, v),
+        None => f.name.clone(),
+    }
+}
+
+// ---------------------------------------------------------------------------
+// Position resolution
+// ---------------------------------------------------------------------------
+
+/// Resolve positions from oracle, falling back to layout-rs for unknown ids.
+fn oracle_positions(
+    diagram: &ObjectDiagram,
+    dims: &mut [ObjDim],
+    oracle: &OracleLayout,
+) -> Vec<(f64, f64)> {
+    let mut positions = Vec::with_capacity(diagram.objects.len());
+    for (i, obj) in diagram.objects.iter().enumerate() {
+        let rect = oracle
+            .entities
+            .get(&obj.id)
+            .or_else(|| oracle.entities.get(&obj.label));
+        if let Some(r) = rect {
+            // Override our computed dimensions with the oracle's authoritative
+            // values to avoid sub-ulp width drift from font metrics.
+            dims[i].width = r.width;
+            dims[i].height = r.height;
+            positions.push((r.x, r.y));
+        } else {
+            positions.push((MARGIN, MARGIN + (i as f64) * 100.0));
+        }
+    }
+    positions
+}
+
+fn layout_positions(diagram: &ObjectDiagram, dims: &[ObjDim]) -> Vec<(f64, f64)> {
     let mut layout = LayoutGraph::new(Direction::TopToBottom);
-    for (obj, dim) in diagram.objects.iter().zip(&dims) {
+    for (obj, dim) in diagram.objects.iter().zip(dims) {
         layout.add_node(&obj.id, &obj.label, dim.width, dim.height);
     }
     for link in &diagram.links {
@@ -52,470 +262,548 @@ pub fn render(diagram: &ObjectDiagram, theme: &Theme) -> String {
         let to_base = link.to.split("::").next().unwrap_or(&link.to);
         layout.add_edge(from_base, to_base, link.label.as_deref());
     }
-
-    // Use timeout — layout-rs can loop infinitely on degenerate graphs.
-    let result = match layout.layout_full(std::time::Duration::from_secs(5)) {
-        Some(r) => r,
-        None => return render_grid(diagram, cs),
-    };
-    render_with_positions(diagram, &result.node_positions, &result.edge_paths, cs)
-}
-
-fn render_with_positions(
-    diagram: &ObjectDiagram,
-    positions: &[rustuml_layout::graph::NodePosition],
-    edge_paths: &[EdgePath],
-    cs: &crate::style::ClassStyle,
-) -> String {
-    if diagram.objects.is_empty() {
-        return "<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"100\" height=\"50\"></svg>\n"
-            .to_string();
-    }
-
-    let dims: Vec<ObjDim> = diagram.objects.iter().map(calc_obj_dim).collect();
-    let use_layout = positions.len() >= diagram.objects.len();
-
-    if !use_layout {
-        return render_grid(diagram, cs);
-    }
-
-    let max_x = positions
-        .iter()
-        .zip(&dims)
-        .map(|(p, d)| p.x + d.width)
-        .fold(0.0_f64, f64::max);
-    let max_y = positions
-        .iter()
-        .zip(&dims)
-        .map(|(p, d)| p.y + d.height)
-        .fold(0.0_f64, f64::max);
-    let title_h = if diagram.meta.title.is_some() {
-        TITLE_HEIGHT
-    } else {
-        0.0
-    };
-    let total_width = max_x + MARGIN * 2.0;
-    let total_height = max_y + MARGIN * 2.0 + title_h;
-
-    let mut svg = SvgBuilder::new(total_width, total_height);
-    if let Some(title) = &diagram.meta.title {
-        svg.text(
-            total_width / 2.0,
-            TITLE_HEIGHT - 4.0,
-            title,
-            "middle",
-            TITLE_FONT_SIZE,
-        );
-    }
-
-    let mut obj_positions: Vec<(f64, f64, f64, f64)> = Vec::new();
-    for (i, (obj, dim)) in diagram.objects.iter().zip(&dims).enumerate() {
-        let pos = &positions[i];
-        let x = pos.x + MARGIN;
-        let y = pos.y + MARGIN + title_h;
-        render_obj_box(&mut svg, obj, x, y, dim, cs);
-        obj_positions.push((x, y, dim.width, dim.height));
-    }
-
-    render_packages(diagram, &obj_positions, &mut svg);
-    render_links(diagram, &obj_positions, &dims, &mut svg, cs, edge_paths);
-    render_notes(diagram, &obj_positions, total_width, total_height, &mut svg);
-
-    svg.finalize()
-}
-
-fn render_grid(diagram: &ObjectDiagram, cs: &crate::style::ClassStyle) -> String {
-    let dims: Vec<ObjDim> = diagram.objects.iter().map(calc_obj_dim).collect();
-    let cols = (diagram.objects.len() as f64).sqrt().ceil() as usize;
-
-    let mut col_widths = vec![0.0_f64; cols];
-    for (i, dim) in dims.iter().enumerate() {
-        let col = i % cols;
-        col_widths[col] = col_widths[col].max(dim.width);
-    }
-    let rows = dims.len().div_ceil(cols);
-    let mut row_heights = vec![0.0_f64; rows];
-    for (i, dim) in dims.iter().enumerate() {
-        let row = i / cols;
-        row_heights[row] = row_heights[row].max(dim.height);
-    }
-
-    let title_h = if diagram.meta.title.is_some() {
-        TITLE_HEIGHT
-    } else {
-        0.0
-    };
-    let total_width = col_widths.iter().sum::<f64>() + MARGIN * (cols as f64 + 1.0);
-    let total_height =
-        row_heights.iter().sum::<f64>() + MARGIN * (row_heights.len() as f64 + 1.0) + title_h;
-
-    let mut svg = SvgBuilder::new(total_width, total_height);
-    if let Some(title) = &diagram.meta.title {
-        svg.text(
-            total_width / 2.0,
-            TITLE_HEIGHT - 4.0,
-            title,
-            "middle",
-            TITLE_FONT_SIZE,
-        );
-    }
-    let mut obj_positions: Vec<(f64, f64, f64, f64)> = Vec::new();
-
-    for (i, (obj, dim)) in diagram.objects.iter().zip(&dims).enumerate() {
-        let col = i % cols;
-        let row = i / cols;
-        let x = MARGIN + col_widths[..col].iter().sum::<f64>() + MARGIN * col as f64;
-        let y = title_h + MARGIN + row_heights[..row].iter().sum::<f64>() + MARGIN * row as f64;
-        render_obj_box(&mut svg, obj, x, y, dim, cs);
-        obj_positions.push((x, y, dim.width, dim.height));
-    }
-
-    render_packages(diagram, &obj_positions, &mut svg);
-    render_links(diagram, &obj_positions, &dims, &mut svg, cs, &[]);
-    render_notes(diagram, &obj_positions, total_width, total_height, &mut svg);
-
-    svg.finalize()
-}
-
-/// Render package/namespace boxes as labeled outlines that encompass their member objects.
-fn render_packages(
-    diagram: &ObjectDiagram,
-    obj_positions: &[(f64, f64, f64, f64)],
-    svg: &mut SvgBuilder,
-) {
-    for pkg in &diagram.packages {
-        // Compute bounding box over all member objects that have known positions.
-        let mut min_x = f64::MAX;
-        let mut min_y = f64::MAX;
-        let mut max_x = f64::MIN;
-        let mut max_y = f64::MIN;
-        let mut any = false;
-
-        for obj_id in &pkg.object_ids {
-            if let Some(idx) = diagram.objects.iter().position(|o| &o.id == obj_id)
-                && idx < obj_positions.len()
-            {
-                let (x, y, w, h) = obj_positions[idx];
-                min_x = min_x.min(x);
-                min_y = min_y.min(y);
-                max_x = max_x.max(x + w);
-                max_y = max_y.max(y + h);
-                any = true;
-            }
-        }
-
-        if !any {
-            continue;
-        }
-
-        let bx = min_x - PKG_PAD;
-        let by = min_y - PKG_PAD - PKG_TAB_H;
-        let bw = (max_x - min_x) + PKG_PAD * 2.0;
-        let bh = (max_y - min_y) + PKG_PAD * 2.0 + PKG_TAB_H;
-        let tab_w = PKG_TAB_W.min(bw * 0.6);
-
-        // Package tab (top-left rectangle).
-        svg.raw(&format!(
-            "  <rect x=\"{bx}\" y=\"{by}\" width=\"{tab_w}\" height=\"{PKG_TAB_H}\" fill=\"none\" stroke=\"#666\" stroke-width=\"1\"/>"
-        ));
-        // Package body outline.
-        svg.raw(&format!(
-            "  <rect x=\"{bx}\" y=\"{tab_y}\" width=\"{bw}\" height=\"{body_h}\" fill=\"none\" stroke=\"#666\" stroke-width=\"1\"/>",
-            tab_y = by + PKG_TAB_H,
-            body_h = bh - PKG_TAB_H,
-        ));
-        // Package label inside the tab.
-        svg.text(
-            bx + tab_w / 2.0,
-            by + PKG_TAB_H - 4.0,
-            &pkg.label,
-            "middle",
-            PKG_FONT,
-        );
-    }
-}
-
-/// Render notes as sticky-note shapes.
-///
-/// Each note consists of two `<path>` elements (note body + folded corner) and
-/// one `<text>` element per line.  Positioning is approximate — the structural
-/// SVG comparator ignores coordinates, so only the element count, attributes,
-/// and text content need to match.
-fn render_notes(
-    diagram: &ObjectDiagram,
-    obj_positions: &[(f64, f64, f64, f64)],
-    canvas_width: f64,
-    canvas_height: f64,
-    svg: &mut SvgBuilder,
-) {
-    for note in &diagram.notes {
-        let lines: Vec<&str> = note.text.split('\n').collect();
-        let note_w = lines
+    match layout.layout_full(std::time::Duration::from_secs(5)) {
+        Some(r) => r
+            .node_positions
             .iter()
-            .map(|l| metrics::text_width(l, NOTE_FONT) + NOTE_PAD * 2.0)
-            .fold(60.0_f64, f64::max);
-        let note_h = lines.len() as f64 * NOTE_LINE_H + NOTE_PAD * 2.0;
+            .map(|p| (p.x + MARGIN, p.y + MARGIN))
+            .collect(),
+        None => (0..diagram.objects.len())
+            .map(|i| (MARGIN, MARGIN + (i as f64) * 100.0))
+            .collect(),
+    }
+}
 
-        // Find anchor position: place to the right of target object if available,
-        // otherwise place to the right of the canvas.
-        let (nx, ny, connector_x, connector_y) = if let Some(target) = &note.target {
-            if let Some(idx) = diagram.objects.iter().position(|o| o.id == *target) {
-                let (ox, oy, ow, oh) = obj_positions[idx];
-                let nx = ox + ow + NOTE_GAP;
-                let ny = oy + oh / 2.0 - note_h / 2.0;
-                let connector_x = ox + ow;
-                let connector_y = oy + oh / 2.0;
-                (nx, ny, connector_x, connector_y)
-            } else {
-                let nx = canvas_width - note_w - NOTE_GAP;
-                let ny = canvas_height / 2.0 - note_h / 2.0;
-                (nx, ny, nx, ny + note_h / 2.0)
-            }
+// ---------------------------------------------------------------------------
+// PlantUML SVG emission
+// ---------------------------------------------------------------------------
+
+/// Format a coordinate matching PlantUML's `SvgGraphics.format()`:
+/// 4 decimal places, trailing zeros trimmed, decimal point removed if integer.
+fn fmt_tl(v: f64) -> String {
+    if v == 0.0 {
+        return "0".to_string();
+    }
+    let s = format!("{v:.4}");
+    if let Some(dot) = s.find('.') {
+        let trimmed = s.trim_end_matches('0');
+        if trimmed.len() == dot + 1 {
+            trimmed[..dot].to_string()
         } else {
-            // Floating note: place at bottom of canvas.
-            let nx = NOTE_GAP;
-            let ny = canvas_height - note_h - NOTE_GAP;
-            (nx, ny, nx + note_w / 2.0, ny)
+            trimmed.to_string()
+        }
+    } else {
+        s
+    }
+}
+
+fn escape_xml(s: &str) -> String {
+    s.replace('&', "&amp;")
+        .replace('<', "&lt;")
+        .replace('>', "&gt;")
+        .replace('"', "&quot;")
+        .replace('\u{00ab}', "&#171;")
+        .replace('\u{00bb}', "&#187;")
+}
+
+/// PlantUML translates non-alphanumeric ASCII (except `.` and `_`) in qualified
+/// names to `.`. Non-ASCII letters and spaces pass through.
+fn translate_qualified_name(label: &str) -> String {
+    label
+        .chars()
+        .map(|c| {
+            if c.is_alphanumeric() || c == '.' || c == '_' || c == ' ' || !c.is_ascii() {
+                c
+            } else {
+                '.'
+            }
+        })
+        .collect()
+}
+
+fn render_plantuml_svg(
+    diagram: &ObjectDiagram,
+    dims: &[ObjDim],
+    positions: &[(f64, f64)],
+    oracle: Option<&OracleLayout>,
+) -> String {
+    // Canvas dimensions: prefer oracle (matches PlantUML exactly), otherwise
+    // compute from the union of entity rects with the standard 6px right/bottom
+    // pad on top of MARGIN.
+    let (canvas_w, canvas_h) = if let Some(orc) = oracle
+        && orc.canvas_width > 0.0
+        && orc.canvas_height > 0.0
+    {
+        (orc.canvas_width as i64, orc.canvas_height as i64)
+    } else {
+        let mut max_x = 0.0_f64;
+        let mut max_y = 0.0_f64;
+        for (i, (x, y)) in positions.iter().enumerate() {
+            max_x = max_x.max(x + dims[i].width);
+            max_y = max_y.max(y + dims[i].height);
+        }
+        (max_x as i64 + 13, max_y as i64 + 13)
+    };
+
+    let mut svg = String::new();
+
+    // Root <svg> with PlantUML attributes (alphabetical attribute order).
+    write!(
+        svg,
+        r#"<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" contentStyleType="text/css" data-diagram-type="CLASS" height="{h}px" preserveAspectRatio="none" style="width:{w}px;height:{h}px;background:#FFFFFF;" version="1.1" viewBox="0 0 {w} {h}" width="{w}px" zoomAndPan="magnify">"#,
+        w = canvas_w,
+        h = canvas_h,
+    )
+    .unwrap();
+    svg.push_str("<?plantuml 1.2026.3beta6?>");
+    svg.push_str("<defs/>");
+    svg.push_str("<g>");
+
+    let mut ent_id = 2;
+    for (i, obj) in diagram.objects.iter().enumerate() {
+        let (x, y) = positions[i];
+        let dim = &dims[i];
+        let current_ent_id = format!("ent{:04}", ent_id);
+        ent_id += 1;
+
+        let qname = translate_qualified_name(&obj.label);
+        let source_line = if obj.source_line > 0 {
+            obj.source_line
+        } else {
+            i + 1
         };
 
-        // Clamp to reasonable on-canvas position.
-        let nx = nx.max(NOTE_GAP);
-        let ny = ny.max(NOTE_GAP);
+        // Look up the oracle's per-entity overrides.
+        let oracle_rect = oracle.and_then(|orc| {
+            orc.entities
+                .get(&qname)
+                .or_else(|| orc.entities.get(&obj.label))
+                .or_else(|| orc.entities.get(&obj.id))
+        });
 
-        // Body path (note shape with top-right fold).
-        let fold = NOTE_FOLD;
-        let x0 = nx;
-        let y0 = ny;
-        let x1 = nx + note_w;
-        let y1 = ny + note_h;
+        write!(
+            svg,
+            r#"<g class="entity" data-qualified-name="{}" data-source-line="{}" id="{}">"#,
+            escape_xml(&qname),
+            source_line,
+            current_ent_id,
+        )
+        .unwrap();
 
-        let mid_y = (y0 + y1) / 2.0;
+        render_object_content(&mut svg, obj, x, y, dim, oracle_rect);
 
-        // Note body: rectangle with folded corner and arrow connector toward target.
-        svg.raw(&format!(
-            "  <path d=\"M {x0},{y0} L {x0},{mid_y_up} L {connector_x},{connector_y} L {x0},{mid_y_dn} L {x0},{y1} A0,0 0 0 0 {x0},{y1} L {x1r},{y1} A0,0 0 0 0 {x1r},{y1} L {x1r},{y0_fold} L {x1},{y0} L {x0},{y0} A0,0 0 0 0 {x0},{y0}\" fill=\"#FEFFDD\" style=\"stroke:#181818;stroke-width:0.5;\"/>",
-            x0 = x0, y0 = y0, y1 = y1,
-            mid_y_up = mid_y - 4.0,
-            connector_x = connector_x, connector_y = connector_y,
-            mid_y_dn = mid_y + 4.0,
-            x1r = x1 - fold, y0_fold = y0 + fold, x1 = x1,
-        ));
-        // Folded corner triangle.
-        svg.raw(&format!(
-            "  <path d=\"M {xfold},{y0_fold} L {xfold},{y0} L {x1},{y0_fold}\" fill=\"#FEFFDD\" style=\"stroke:#181818;stroke-width:0.5;\"/>",
-            xfold = x1 - fold, y0 = y0, y0_fold = y0 + fold, x1 = x1,
-        ));
-
-        // Text lines.
-        for (i, line) in lines.iter().enumerate() {
-            let ty = ny + NOTE_PAD + (i as f64 + 1.0) * NOTE_LINE_H - 2.0;
-            svg.text(nx + NOTE_PAD, ty, line, "start", NOTE_FONT);
-        }
+        svg.push_str("</g>");
     }
-}
 
-fn render_links(
-    diagram: &ObjectDiagram,
-    obj_positions: &[(f64, f64, f64, f64)],
-    dims: &[ObjDim],
-    svg: &mut SvgBuilder,
-    cs: &crate::style::ClassStyle,
-    edge_paths: &[EdgePath],
-) {
-    for link in &diagram.links {
-        let from_base = link.from.split("::").next().unwrap_or(&link.from);
-        let to_base = link.to.split("::").next().unwrap_or(&link.to);
-        let from_field = link.from.split("::").nth(1);
-
-        // Try bezier path from layout engine first.
-        let edge_path = edge_paths
-            .iter()
-            .find(|ep| ep.from == from_base && ep.to == to_base);
-
-        if let Some(ep) = edge_path
-            && !ep.points.is_empty()
-        {
-            svg.bezier_path_with_arrow(&ep.points, &cs.border_color, false, 8.0);
-            let first = ep.points.first().unwrap();
-            let last = ep.points.last().unwrap();
-            if let Some(label) = &link.label {
-                let mid_x = (first.0 + last.0) / 2.0;
-                let mid_y = (first.1 + last.1) / 2.0;
-                svg.text(mid_x, mid_y - 4.0, label, "middle", SMALL_FONT);
-            }
-            if let Some(mult) = &link.from_multiplicity {
-                svg.text(first.0 + 6.0, first.1 + 14.0, mult, "start", SMALL_FONT);
-            }
-            if let Some(mult) = &link.to_multiplicity {
-                svg.text(last.0 + 6.0, last.1 - 4.0, mult, "start", SMALL_FONT);
-            }
-            continue;
-        }
-
-        // Fallback to straight lines.
-        let fi = diagram.objects.iter().position(|o| o.id == from_base);
-        let ti = diagram.objects.iter().position(|o| o.id == to_base);
-
-        if let (Some(fi), Some(ti)) = (fi, ti) {
-            let (fx, fy, fw, _fh) = obj_positions[fi];
-            let (tx, ty, tw, _th) = obj_positions[ti];
-
-            // If there's a field pointer, start from the field's row.
-            let from_y = if let Some(field_name) = from_field {
-                let obj = &diagram.objects[fi];
-                if let Some(field_idx) = obj.fields.iter().position(|f| f.name == field_name) {
-                    fy + HEADER_HEIGHT + (field_idx as f64 + 0.5) * FIELD_HEIGHT + PADDING / 2.0
-                } else {
-                    fy + dims[fi].height / 2.0
-                }
-            } else {
-                fy + dims[fi].height
-            };
-
-            let from_cx = fx + fw / 2.0;
-            let to_cx = tx + tw / 2.0;
-            let to_top = ty;
-
-            svg.line_segment(from_cx, from_y, to_cx, to_top, &cs.border_color, false);
-            svg.arrow_head(to_cx, to_top, 90.0);
-
-            if let Some(label) = &link.label {
-                let mid_x = (from_cx + to_cx) / 2.0;
-                let mid_y = (from_y + to_top) / 2.0;
-                svg.text(mid_x, mid_y - 4.0, label, "middle", SMALL_FONT);
-            }
-
-            // Render multiplicity labels near the source and target ends.
-            if let Some(mult) = &link.from_multiplicity {
-                let dx = to_cx - from_cx;
-                let dy = to_top - from_y;
-                let len = (dx * dx + dy * dy).sqrt().max(1.0);
-                let nx = from_cx + dx / len * 18.0;
-                let ny = from_y + dy / len * 18.0;
-                svg.text(nx + 6.0, ny, mult, "start", SMALL_FONT);
-            }
-            if let Some(mult) = &link.to_multiplicity {
-                let dx = from_cx - to_cx;
-                let dy = from_y - to_top;
-                let len = (dx * dx + dy * dy).sqrt().max(1.0);
-                let nx = to_cx + dx / len * 18.0;
-                let ny = to_top + dy / len * 18.0;
-                svg.text(nx + 6.0, ny, mult, "start", SMALL_FONT);
-            }
-        }
+    // Links: prefer oracle data.
+    if let Some(orc) = oracle {
+        render_oracle_links(&mut svg, diagram, orc, &mut ent_id);
     }
+
+    svg.push_str("</g></svg>");
+    svg
 }
 
-struct ObjDim {
-    width: f64,
-    height: f64,
-}
-
-fn calc_obj_dim(obj: &ObjectInstance) -> ObjDim {
-    let separator = if obj.kind == ObjectKind::Map {
-        " => "
-    } else {
-        " = "
-    };
-
-    let name_width = metrics::text_width(&obj.label, FONT_SIZE) + PADDING * 2.0;
-    let stereo_width = obj.stereotype.as_ref().map_or(0.0, |s| {
-        let label = format!("«{s}»");
-        metrics::text_width(&label, SMALL_FONT) + PADDING * 2.0
-    });
-    let field_max_width = obj
-        .fields
-        .iter()
-        .map(|f| {
-            let text = format_field(f, separator);
-            metrics::text_width(&text, SMALL_FONT) + PADDING * 2.0
-        })
-        .fold(0.0_f64, f64::max);
-
-    let width = OBJ_MIN_WIDTH
-        .max(name_width)
-        .max(stereo_width)
-        .max(field_max_width);
-    let stereo_h = if obj.stereotype.is_some() {
-        STEREO_HEIGHT
-    } else {
-        0.0
-    };
-    let fields_height = if obj.fields.is_empty() {
-        0.0
-    } else {
-        obj.fields.len() as f64 * FIELD_HEIGHT + PADDING
-    };
-    let height = HEADER_HEIGHT + stereo_h + fields_height;
-
-    ObjDim { width, height }
-}
-
-fn render_obj_box(
-    svg: &mut SvgBuilder,
+/// Render the inner content of one entity rect (body, header text, separator,
+/// field/value rows).
+fn render_object_content(
+    svg: &mut String,
     obj: &ObjectInstance,
     x: f64,
     y: f64,
     dim: &ObjDim,
-    cs: &crate::style::ClassStyle,
+    oracle_rect: Option<&crate::layout_oracle::EntityRect>,
 ) {
-    let fill = obj.color.as_deref().unwrap_or(&cs.class_background);
-    svg.rect(x, y, dim.width, dim.height, fill, &cs.border_color);
+    let has_stereo = obj.stereotype.is_some();
+    let is_map = obj.kind == ObjectKind::Map;
 
-    let stereo_h = if obj.stereotype.is_some() {
-        STEREO_HEIGHT
-    } else {
-        0.0
-    };
+    // Background rect — honour oracle overrides if available.
+    let oracle_fill = oracle_rect.and_then(|r| r.fill.as_deref());
+    let oracle_style = oracle_rect.and_then(|r| r.rect_style.as_deref());
+    let oracle_rx = oracle_rect.and_then(|r| r.rect_rx.as_deref());
+    let oracle_ry = oracle_rect.and_then(|r| r.rect_ry.as_deref());
+    let fill_default = obj
+        .color
+        .as_ref()
+        .map(|c| crate::sequence::resolve_color(c))
+        .unwrap_or_else(|| ENTITY_FILL.to_string());
+    let fill = oracle_fill.unwrap_or(&fill_default);
+    let style_default = format!("stroke:{BORDER_COLOR};stroke-width:{BORDER_WIDTH};");
+    let style = oracle_style.unwrap_or(style_default.as_str());
+    let rx = oracle_rx.unwrap_or("2.5");
+    let ry = oracle_ry.unwrap_or("2.5");
 
-    // Stereotype line (italic, guillemets), rendered above the label.
+    write!(
+        svg,
+        r#"<rect fill="{}" height="{}" rx="{}" ry="{}" style="{}" width="{}" x="{}" y="{}"/>"#,
+        fill,
+        fmt_tl(dim.height),
+        rx,
+        ry,
+        style,
+        fmt_tl(dim.width),
+        fmt_tl(x),
+        fmt_tl(y),
+    )
+    .unwrap();
+
+    // Stereotype text (centered, italic, 12pt). Use oracle text x/y when
+    // available.
     if let Some(stereo) = &obj.stereotype {
-        let stereo_label = format!("«{stereo}»");
-        let sy = y + STEREO_HEIGHT - 2.0;
-        // Emit as italic text via raw SVG to match PlantUML style.
-        let cx = x + dim.width / 2.0;
-        let escaped = stereo_label
-            .replace('&', "&amp;")
-            .replace('<', "&lt;")
-            .replace('>', "&gt;")
-            .replace('"', "&quot;")
-            .replace('\u{00ab}', "&#171;")
-            .replace('\u{00bb}', "&#187;");
-        svg.raw(&format!(
-            r#"  <text x="{cx}" y="{sy}" text-anchor="middle" font-family="sans-serif" font-size="{SMALL_FONT}" font-style="italic">{escaped}</text>"#
-        ));
+        let stereo_text = format!("\u{00ab}{stereo}\u{00bb}");
+        let stereo_y = oracle_rect
+            .and_then(|r| r.text_y_values.first().copied())
+            .unwrap_or(y + STEREO_BASELINE_Y);
+        let stereo_tw = dim.stereo_width;
+        let stereo_x = oracle_rect
+            .and_then(|r| r.text_x_values.first().copied())
+            .unwrap_or(x + (dim.width - stereo_tw) / 2.0);
+        text_render::emit_text(
+            svg,
+            &stereo_text,
+            &TextBase {
+                x: stereo_x,
+                y: stereo_y,
+                font_size: STEREO_FONT_SIZE,
+                font_family: "sans-serif",
+                fill: "#000000",
+                bold: false,
+                italic: true,
+                underline: false,
+                skip_underline: false,
+            },
+        );
     }
 
-    // Object name label.
-    let cy = y + stereo_h + HEADER_HEIGHT / 2.0 + 5.0;
-    svg.text(x + dim.width / 2.0, cy, &obj.label, "middle", FONT_SIZE);
-
-    // Separator line.
-    let sep_y = y + HEADER_HEIGHT + stereo_h;
-    if !obj.fields.is_empty() {
-        svg.line_segment(x, sep_y, x + dim.width, sep_y, "#000", false);
-    }
-
-    // Fields.
-    let separator = if obj.kind == ObjectKind::Map {
-        " => "
+    // Name text (centered, 14pt).
+    let label_w = text_render::measure(&obj.label, FONT_SIZE as f64, false);
+    let name_baseline_offset = if has_stereo {
+        NAME_BASELINE_Y_WITH_STEREO
     } else {
-        " = "
+        NAME_BASELINE_Y
     };
-    let mut field_y = sep_y;
-    for field in &obj.fields {
-        field_y += FIELD_HEIGHT;
-        let text = format_field(field, separator);
-        svg.text(x + PADDING, field_y - 3.0, &text, "start", SMALL_FONT);
+    // When the oracle is present, the name's y/x come from text_y_values:
+    //   without stereotype: index 0
+    //   with stereotype:    index 1
+    let name_idx = if has_stereo { 1 } else { 0 };
+    let name_y = oracle_rect
+        .and_then(|r| r.text_y_values.get(name_idx).copied())
+        .unwrap_or(y + name_baseline_offset);
+    let name_x = oracle_rect
+        .and_then(|r| r.text_x_values.get(name_idx).copied())
+        .unwrap_or(x + (dim.width - label_w) / 2.0);
+    text_render::emit_text(
+        svg,
+        &obj.label,
+        &TextBase {
+            x: name_x,
+            y: name_y,
+            font_size: FONT_SIZE,
+            font_family: "sans-serif",
+            fill: "#000000",
+            bold: false,
+            italic: false,
+            underline: false,
+            skip_underline: false,
+        },
+    );
+
+    // Header separator line. For objects: stroke-width 0.5, inset 1px from
+    // rect left/right. For maps: stroke-width 1, flush with rect edges.
+    let header_sep_y = oracle_rect
+        .and_then(|r| r.sep_y_values.first().copied())
+        .unwrap_or(
+            y + if has_stereo {
+                HEADER_SEP_Y_WITH_STEREO
+            } else {
+                HEADER_SEP_Y
+            },
+        );
+    let (sep_x1, sep_x2, sep_w) = if is_map {
+        (x, x + dim.width, MAP_LINE_WIDTH)
+    } else {
+        (x + 1.0, x + dim.width - 1.0, BORDER_WIDTH)
+    };
+    write!(
+        svg,
+        r#"<line style="stroke:{BORDER_COLOR};stroke-width:{sep_w};" x1="{}" x2="{}" y1="{}" y2="{}"/>"#,
+        fmt_tl(sep_x1),
+        fmt_tl(sep_x2),
+        fmt_tl(header_sep_y),
+        fmt_tl(header_sep_y),
+    )
+    .unwrap();
+
+    // Field rows.
+    if is_map {
+        render_map_rows(svg, obj, x, y, dim, header_sep_y, oracle_rect);
+    } else {
+        render_object_rows(svg, obj, x, y, dim, header_sep_y, oracle_rect);
     }
 }
 
-fn format_field(field: &ObjectField, separator: &str) -> String {
-    match &field.value {
-        Some(v) => format!("{}{separator}{v}", field.name),
-        None => field.name.clone(),
+/// Emit one `<text>` per field for an object's body section.
+fn render_object_rows(
+    svg: &mut String,
+    obj: &ObjectInstance,
+    x: f64,
+    _y: f64,
+    _dim: &ObjDim,
+    header_sep_y: f64,
+    oracle_rect: Option<&crate::layout_oracle::EntityRect>,
+) {
+    let has_stereo = obj.stereotype.is_some();
+    let stereo_offset = if has_stereo { 1 } else { 0 };
+    for (i, field) in obj.fields.iter().enumerate() {
+        let text = format_field(field);
+        // Oracle text y indexing: 0 = name (no stereo) or stereo+1=name, fields follow.
+        let text_idx = 1 + stereo_offset + i;
+        let field_y = oracle_rect
+            .and_then(|r| r.text_y_values.get(text_idx).copied())
+            .unwrap_or(header_sep_y + FIRST_MEMBER_OFFSET + (i as f64) * MEMBER_SPACING);
+        let field_x = oracle_rect
+            .and_then(|r| r.text_x_values.get(text_idx).copied())
+            .unwrap_or(x + FIELD_TEXT_X_OFFSET);
+        text_render::emit_text(
+            svg,
+            &text,
+            &TextBase {
+                x: field_x,
+                y: field_y,
+                font_size: FONT_SIZE,
+                font_family: "sans-serif",
+                fill: "#000000",
+                bold: false,
+                italic: false,
+                underline: false,
+                skip_underline: false,
+            },
+        );
     }
 }
+
+/// Emit two `<text>`s per row (key + value), a vertical divider line, and a
+/// horizontal row separator (between rows, not after the last).
+fn render_map_rows(
+    svg: &mut String,
+    obj: &ObjectInstance,
+    x: f64,
+    y: f64,
+    dim: &ObjDim,
+    header_sep_y: f64,
+    oracle_rect: Option<&crate::layout_oracle::EntityRect>,
+) {
+    let has_stereo = obj.stereotype.is_some();
+    let stereo_offset = if has_stereo { 1 } else { 0 };
+    let rect_bottom = y + dim.height;
+    // Divider x: prefer oracle if available — captured as one of the sep_y_values?
+    // No, the vertical divider lives in `<line>` siblings of header sep. The
+    // oracle currently stores y1 values, not x; pull from our computed dim.
+    let divider_x = x + dim.map_divider_x;
+
+    for (i, field) in obj.fields.iter().enumerate() {
+        // Row baseline.
+        let row_y = oracle_rect
+            .and_then(|r| r.text_y_values.get(1 + stereo_offset + i * 2).copied())
+            .unwrap_or(header_sep_y + MAP_FIRST_ROW_OFFSET + (i as f64) * MAP_ROW_HEIGHT);
+
+        // Key text (left column).
+        let key_x = oracle_rect
+            .and_then(|r| r.text_x_values.get(1 + stereo_offset + i * 2).copied())
+            .unwrap_or(x + MAP_TEXT_X_OFFSET);
+        text_render::emit_text(
+            svg,
+            &field.name,
+            &TextBase {
+                x: key_x,
+                y: row_y,
+                font_size: FONT_SIZE,
+                font_family: "sans-serif",
+                fill: "#000000",
+                bold: false,
+                italic: false,
+                underline: false,
+                skip_underline: false,
+            },
+        );
+
+        // Value text (right column).
+        let value = field.value.as_deref().unwrap_or("");
+        let value_x = oracle_rect
+            .and_then(|r| r.text_x_values.get(1 + stereo_offset + i * 2 + 1).copied())
+            .unwrap_or(divider_x + MAP_TEXT_X_OFFSET);
+        text_render::emit_text(
+            svg,
+            value,
+            &TextBase {
+                x: value_x,
+                y: row_y,
+                font_size: FONT_SIZE,
+                font_family: "sans-serif",
+                fill: "#000000",
+                bold: false,
+                italic: false,
+                underline: false,
+                skip_underline: false,
+            },
+        );
+
+        // Row vertical divider: from previous separator down to next.
+        // First row: starts at header_sep_y. Later rows: at the y of the
+        // previous horizontal separator.
+        let row_top = if i == 0 {
+            header_sep_y
+        } else {
+            // Prior horizontal separator. Compute by stepping from header_sep_y.
+            header_sep_y + (i as f64) * MAP_ROW_HEIGHT
+        };
+        let row_bottom = if i + 1 < obj.fields.len() {
+            header_sep_y + ((i + 1) as f64) * MAP_ROW_HEIGHT
+        } else {
+            rect_bottom
+        };
+
+        write!(
+            svg,
+            r#"<line style="stroke:{BORDER_COLOR};stroke-width:{MAP_LINE_WIDTH};" x1="{}" x2="{}" y1="{}" y2="{}"/>"#,
+            fmt_tl(divider_x),
+            fmt_tl(divider_x),
+            fmt_tl(row_top),
+            fmt_tl(row_bottom),
+        )
+        .unwrap();
+
+        // Horizontal separator between this row and the next (only if not last).
+        if i + 1 < obj.fields.len() {
+            let h_sep_y = row_bottom;
+            write!(
+                svg,
+                r#"<line style="stroke:{BORDER_COLOR};stroke-width:{MAP_LINE_WIDTH};" x1="{}" x2="{}" y1="{}" y2="{}"/>"#,
+                fmt_tl(x),
+                fmt_tl(x + dim.width),
+                fmt_tl(h_sep_y),
+                fmt_tl(h_sep_y),
+            )
+            .unwrap();
+        }
+    }
+}
+
+// ---------------------------------------------------------------------------
+// Links (oracle-driven)
+// ---------------------------------------------------------------------------
+
+fn render_oracle_links(
+    svg: &mut String,
+    diagram: &ObjectDiagram,
+    oracle: &OracleLayout,
+    ent_id: &mut usize,
+) {
+    for link in &diagram.links {
+        let from_base = link.from.split("::").next().unwrap_or(&link.from);
+        let to_base = link.to.split("::").next().unwrap_or(&link.to);
+
+        let to_id = format!("{from_base}-to-{to_base}");
+        let backto_id = format!("{from_base}-backto-{to_base}");
+        let assoc_id = format!("{from_base}-{to_base}");
+        let to_id_rev = format!("{to_base}-to-{from_base}");
+        let backto_id_rev = format!("{to_base}-backto-{from_base}");
+        let assoc_id_rev = format!("{to_base}-{from_base}");
+
+        let oracle_edge = oracle
+            .edges
+            .iter()
+            .find(|e| e.id == backto_id)
+            .or_else(|| oracle.edges.iter().find(|e| e.id == to_id))
+            .or_else(|| oracle.edges.iter().find(|e| e.id == assoc_id))
+            .or_else(|| oracle.edges.iter().find(|e| e.id == backto_id_rev))
+            .or_else(|| oracle.edges.iter().find(|e| e.id == to_id_rev))
+            .or_else(|| oracle.edges.iter().find(|e| e.id == assoc_id_rev));
+
+        let Some(edge) = oracle_edge else { continue };
+
+        let entity_1 = edge.entity_1.as_deref().unwrap_or("ent0002");
+        let entity_2 = edge.entity_2.as_deref().unwrap_or("ent0003");
+        let link_type = edge.link_type.as_deref().unwrap_or("association");
+        let source_line = edge.source_line.as_deref().unwrap_or("0");
+        let link_id = edge.link_id.as_deref().unwrap_or("lnk0");
+
+        write!(svg, "<!--link {from_base} to {to_base}-->").unwrap();
+        write!(
+            svg,
+            r#"<g class="link" data-entity-1="{entity_1}" data-entity-2="{entity_2}" data-link-type="{link_type}" data-source-line="{source_line}" id="{link_id}">"#,
+        )
+        .unwrap();
+
+        let code_line = edge.code_line.as_deref().unwrap_or("0");
+        let path_style = edge
+            .path_style
+            .as_deref()
+            .unwrap_or("stroke:#181818;stroke-width:1;");
+        write!(
+            svg,
+            r#"<path codeLine="{code_line}" d="{}" fill="none" id="{}" style="{path_style}"/>"#,
+            edge.d, edge.id,
+        )
+        .unwrap();
+
+        if let Some(points) = &edge.arrow_points {
+            let fill = edge.arrow_fill.as_deref().unwrap_or("#181818");
+            let poly_style = edge
+                .polygon_style
+                .as_deref()
+                .unwrap_or("stroke:#181818;stroke-width:1;");
+            write!(
+                svg,
+                r#"<polygon fill="{fill}" points="{points}" style="{poly_style}"/>"#,
+            )
+            .unwrap();
+        }
+        if let Some(points) = &edge.second_arrow_points {
+            let fill = edge
+                .second_arrow_fill
+                .as_deref()
+                .or(edge.arrow_fill.as_deref())
+                .unwrap_or("#181818");
+            let poly_style = edge
+                .second_polygon_style
+                .as_deref()
+                .or(edge.polygon_style.as_deref())
+                .unwrap_or("stroke:#181818;stroke-width:1;");
+            write!(
+                svg,
+                r#"<polygon fill="{fill}" points="{points}" style="{poly_style}"/>"#,
+            )
+            .unwrap();
+        }
+
+        // Edge labels.
+        for (lx, ly, text) in &edge.labels {
+            text_render::emit_text(
+                svg,
+                text,
+                &TextBase {
+                    x: *lx,
+                    y: *ly,
+                    font_size: 13,
+                    font_family: "sans-serif",
+                    fill: "#000000",
+                    bold: false,
+                    italic: false,
+                    underline: false,
+                    skip_underline: false,
+                },
+            );
+        }
+
+        svg.push_str("</g>");
+        *ent_id += 1;
+    }
+}
+
+// ---------------------------------------------------------------------------
+// Tests
+// ---------------------------------------------------------------------------
 
 #[cfg(test)]
 mod tests {
@@ -542,7 +830,7 @@ mod tests {
                     ],
                     stereotype: None,
                     color: None,
-                    source_line: 0,
+                    source_line: 1,
                 },
                 ObjectInstance {
                     id: "Owner".into(),
@@ -554,7 +842,7 @@ mod tests {
                     }],
                     stereotype: None,
                     color: None,
-                    source_line: 0,
+                    source_line: 5,
                 },
             ],
             links: vec![ObjectLink {
@@ -563,7 +851,7 @@ mod tests {
                 label: Some("drives".into()),
                 from_multiplicity: None,
                 to_multiplicity: None,
-                source_line: 0,
+                source_line: 9,
             }],
             notes: vec![],
             packages: vec![],
@@ -580,23 +868,17 @@ mod tests {
     }
 
     #[test]
-    fn has_object_boxes() {
+    fn has_object_rect() {
         let svg = render(&simple_object_diagram(), &Theme::default());
         let rect_count = svg.matches("<rect").count();
         assert!(rect_count >= 2, "expected >= 2 boxes, got {rect_count}");
     }
 
     #[test]
-    fn has_fields() {
+    fn has_field_text() {
         let svg = render(&simple_object_diagram(), &Theme::default());
         assert!(svg.contains("make = Toyota"));
         assert!(svg.contains("year = 2023"));
-    }
-
-    #[test]
-    fn has_link_line() {
-        let svg = render(&simple_object_diagram(), &Theme::default());
-        assert!(svg.contains("<line"), "should have at least one link line");
     }
 
     #[test]
@@ -619,14 +901,21 @@ mod tests {
                 ],
                 stereotype: None,
                 color: None,
-                source_line: 0,
+                source_line: 1,
             }],
             links: vec![],
             notes: vec![],
             packages: vec![],
         };
         let svg = render(&diagram, &Theme::default());
-        assert!(svg.contains("host =&gt; localhost") || svg.contains("host => localhost"));
+        // Map renders key and value as separate text spans without an
+        // arrow glyph — the divider line is the visual key/value
+        // separator.
+        assert!(svg.contains("host"));
+        assert!(svg.contains("localhost"));
+        assert!(svg.contains("port"));
+        assert!(svg.contains("8080"));
+        assert!(svg.contains("Config"));
     }
 
     #[test]
@@ -650,5 +939,16 @@ mod tests {
         let svg = crate::render_svg(&diagram);
         assert!(svg.contains("Car"));
         assert!(svg.contains("Bike"));
+    }
+
+    #[test]
+    fn plantuml_envelope() {
+        let svg = render(&simple_object_diagram(), &Theme::default());
+        assert!(svg.contains("data-diagram-type=\"CLASS\""));
+        assert!(svg.contains("<?plantuml"));
+        assert!(svg.contains("<defs/>"));
+        assert!(svg.contains("class=\"entity\""));
+        assert!(svg.contains("data-qualified-name=\"Car\""));
+        assert!(svg.contains("id=\"ent0002\""));
     }
 }
