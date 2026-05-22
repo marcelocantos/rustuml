@@ -120,6 +120,37 @@ pub struct EntityRect {
     /// the renderer reproduce PlantUML's exact pixel positions without
     /// accumulating sub-ulp floating-point error from recomputed offsets.
     pub aux_rects: Vec<AuxRect>,
+    /// All `<line>` children of the entity group, captured verbatim. Useful
+    /// for renderers that need to reproduce header separators and (in maps)
+    /// vertical column dividers and horizontal row separators without
+    /// recomputing the y coordinates from float metric formulas.
+    pub lines: Vec<EntityLine>,
+    /// All `<text>` children of the entity group with their x/y positions and
+    /// concatenated text content. Unlike `text_y_values` / `text_x_values`
+    /// (which dedup consecutive same-y entries to recover the per-line
+    /// sequence for creole-wrapped labels), this preserves every text
+    /// element so renderers can recover multi-column layouts like maps
+    /// where two `<text>` elements share a baseline.
+    pub texts: Vec<EntityText>,
+}
+
+/// A `<line>` element extracted from an entity group, captured verbatim.
+#[derive(Debug, Clone)]
+pub struct EntityLine {
+    pub x1: String,
+    pub x2: String,
+    pub y1: String,
+    pub y2: String,
+    pub style: Option<String>,
+}
+
+/// A `<text>` element extracted from an entity group, with concatenated
+/// text content (descendant tspans flattened).
+#[derive(Debug, Clone)]
+pub struct EntityText {
+    pub x: f64,
+    pub y: f64,
+    pub text: String,
 }
 
 /// A non-body `<rect>` extracted from an entity group.

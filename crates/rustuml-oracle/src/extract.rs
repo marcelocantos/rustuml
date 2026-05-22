@@ -7,7 +7,8 @@
 //! producing an `OracleLayout` that can be fed to renderers.
 
 use rustuml_render::layout_oracle::{
-    AuxRect, EntityRect, OracleCluster, OracleEdgePath, OracleLayout, OracleNoteEntity,
+    AuxRect, EntityLine, EntityRect, EntityText, OracleCluster, OracleEdgePath, OracleLayout,
+    OracleNoteEntity,
 };
 
 /// Extract layout data from a golden SVG string.
@@ -250,6 +251,35 @@ pub fn extract_oracle_layout(svg: &str) -> Option<OracleLayout> {
                             })
                         })
                         .collect();
+                    // Capture every <line> child verbatim. Map renderers use
+                    // these to emit the header separator, vertical column
+                    // divider, and per-row horizontal separators without
+                    // recomputing positions and risking sub-ulp drift.
+                    let lines: Vec<EntityLine> = node
+                        .children()
+                        .filter(|c| c.tag_name().name() == "line")
+                        .map(|l| EntityLine {
+                            x1: l.attribute("x1").unwrap_or("0").to_string(),
+                            x2: l.attribute("x2").unwrap_or("0").to_string(),
+                            y1: l.attribute("y1").unwrap_or("0").to_string(),
+                            y2: l.attribute("y2").unwrap_or("0").to_string(),
+                            style: l.attribute("style").map(String::from),
+                        })
+                        .collect();
+                    // Capture every <text> child with position and content.
+                    // Unlike text_y_values (dedup'd for creole-wrapped labels),
+                    // this preserves siblings sharing a y baseline.
+                    let texts: Vec<EntityText> = node
+                        .children()
+                        .filter(|c| c.tag_name().name() == "text")
+                        .filter_map(|t| {
+                            Some(EntityText {
+                                x: parse_attr(&t, "x")?,
+                                y: parse_attr(&t, "y")?,
+                                text: collect_text(&t),
+                            })
+                        })
+                        .collect();
                     layout.entities.insert(
                         name.to_string(),
                         EntityRect {
@@ -272,6 +302,8 @@ pub fn extract_oracle_layout(svg: &str) -> Option<OracleLayout> {
                             entity_id,
                             source_line,
                             aux_rects,
+                            lines,
+                            texts,
                         },
                     );
                 } else if let Some(ellipse) = find_first_child(&node, "ellipse") {
@@ -321,6 +353,8 @@ pub fn extract_oracle_layout(svg: &str) -> Option<OracleLayout> {
                             entity_id,
                             source_line: node.attribute("data-source-line").map(String::from),
                             aux_rects: Vec::new(),
+                            lines: Vec::new(),
+                            texts: Vec::new(),
                         },
                     );
                 } else if let Some(polygon) = find_first_child(&node, "polygon") {
@@ -364,6 +398,8 @@ pub fn extract_oracle_layout(svg: &str) -> Option<OracleLayout> {
                                         .attribute("data-source-line")
                                         .map(String::from),
                                     aux_rects: Vec::new(),
+                                    lines: Vec::new(),
+                                    texts: Vec::new(),
                                 },
                             );
                         }
@@ -458,6 +494,8 @@ pub fn extract_oracle_layout(svg: &str) -> Option<OracleLayout> {
                             entity_id,
                             source_line: node.attribute("data-source-line").map(String::from),
                             aux_rects: Vec::new(),
+                            lines: Vec::new(),
+                            texts: Vec::new(),
                         },
                     );
                 }
@@ -614,6 +652,8 @@ pub fn extract_oracle_layout(svg: &str) -> Option<OracleLayout> {
                     entity_id: None,
                     source_line: None,
                     aux_rects: Vec::new(),
+                    lines: Vec::new(),
+                    texts: Vec::new(),
                 },
             );
             hist_idx += 1;
@@ -678,6 +718,8 @@ pub fn extract_oracle_layout(svg: &str) -> Option<OracleLayout> {
                     entity_id: None,
                     source_line: None,
                     aux_rects: Vec::new(),
+                    lines: Vec::new(),
+                    texts: Vec::new(),
                 },
             );
             bar_idx += 1;
@@ -978,6 +1020,8 @@ fn path_bounding_box(d: &str) -> Option<EntityRect> {
             entity_id: None,
             source_line: None,
             aux_rects: Vec::new(),
+            lines: Vec::new(),
+            texts: Vec::new(),
         })
     } else {
         None

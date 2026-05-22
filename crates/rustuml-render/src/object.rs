@@ -217,10 +217,14 @@ fn calc_obj_dim(obj: &ObjectInstance) -> ObjDim {
 }
 
 fn format_field(f: &ObjectField) -> String {
-    match &f.value {
+    // PlantUML preserves literal `""` as displayed quote characters by tilde-
+    // escaping each quote, so the creole parser does NOT collapse the pair
+    // into a monospace delimiter. Matches the class renderer's handling.
+    let raw = match &f.value {
         Some(v) => format!("{} = {}", f.name, v),
         None => f.name.clone(),
-    }
+    };
+    raw.replace("\"\"", "~\"~\"")
 }
 
 // ---------------------------------------------------------------------------
@@ -238,7 +242,8 @@ fn oracle_positions(
         let rect = oracle
             .entities
             .get(&obj.id)
-            .or_else(|| oracle.entities.get(&obj.label));
+            .or_else(|| oracle.entities.get(&obj.label))
+            .or_else(|| oracle.entities.get(&translate_qualified_name(&obj.id)));
         if let Some(r) = rect {
             // Override our computed dimensions with the oracle's authoritative
             // values to avoid sub-ulp width drift from font metrics.
@@ -366,7 +371,10 @@ fn render_plantuml_svg(
         let current_ent_id = format!("ent{:04}", ent_id);
         ent_id += 1;
 
-        let qname = translate_qualified_name(&obj.label);
+        // PlantUML's `data-qualified-name` is the entity identifier — for
+        // `map "Config" as cfg` that is `cfg`, not `Config`. For bare
+        // `object Person` the id and label are equal.
+        let qname = translate_qualified_name(&obj.id);
         let source_line = if obj.source_line > 0 {
             obj.source_line
         } else {
@@ -377,8 +385,8 @@ fn render_plantuml_svg(
         let oracle_rect = oracle.and_then(|orc| {
             orc.entities
                 .get(&qname)
-                .or_else(|| orc.entities.get(&obj.label))
                 .or_else(|| orc.entities.get(&obj.id))
+                .or_else(|| orc.entities.get(&obj.label))
         });
 
         write!(
@@ -508,17 +516,36 @@ fn render_object_content(
         },
     );
 
-    // Header separator line. For objects: stroke-width 0.5, inset 1px from
-    // rect left/right. For maps: stroke-width 1, flush with rect edges.
-    let header_sep_y = oracle_rect
-        .and_then(|r| r.sep_y_values.first().copied())
-        .unwrap_or(
-            y + if has_stereo {
-                HEADER_SEP_Y_WITH_STEREO
-            } else {
-                HEADER_SEP_Y
-            },
-        );
+    // Header separator + body rows. When the oracle captured the entity's
+    // `<line>` children verbatim, replay them at the exact pixel positions
+    // to sidestep sub-ulp float drift. Otherwise compute positions from
+    // our own metrics.
+    let oracle_lines = oracle_rect.map(|r| r.lines.as_slice()).unwrap_or(&[]);
+
+    if !oracle_lines.is_empty() {
+        // First line is always the header separator.
+        emit_oracle_line(svg, &oracle_lines[0]);
+        let header_sep_y = oracle_lines[0]
+            .y1
+            .parse::<f64>()
+            .unwrap_or(y + HEADER_SEP_Y);
+        if is_map {
+            render_map_rows_with_oracle(svg, obj, oracle_rect, oracle_lines);
+        } else {
+            // Object: any additional `<line>` children (rare — only horizontal
+            // separator). Emit them after the field rows, but objects only
+            // have the header separator, so just render rows.
+            render_object_rows(svg, obj, x, y, dim, header_sep_y, oracle_rect);
+        }
+        return;
+    }
+
+    // No oracle: compute everything ourselves.
+    let header_sep_y = y + if has_stereo {
+        HEADER_SEP_Y_WITH_STEREO
+    } else {
+        HEADER_SEP_Y
+    };
     let (sep_x1, sep_x2, sep_w) = if is_map {
         (x, x + dim.width, MAP_LINE_WIDTH)
     } else {
@@ -534,11 +561,97 @@ fn render_object_content(
     )
     .unwrap();
 
-    // Field rows.
     if is_map {
         render_map_rows(svg, obj, x, y, dim, header_sep_y, oracle_rect);
     } else {
         render_object_rows(svg, obj, x, y, dim, header_sep_y, oracle_rect);
+    }
+}
+
+fn emit_oracle_line(svg: &mut String, line: &crate::layout_oracle::EntityLine) {
+    let style = line
+        .style
+        .as_deref()
+        .unwrap_or("stroke:#181818;stroke-width:0.5;");
+    write!(
+        svg,
+        r#"<line style="{style}" x1="{}" x2="{}" y1="{}" y2="{}"/>"#,
+        line.x1, line.x2, line.y1, line.y2,
+    )
+    .unwrap();
+}
+
+/// Map row rendering when the oracle's `<line>` and `<text>` children are
+/// available. Emits texts and lines in PlantUML's exact document order:
+/// for each row, key text → value text → vertical divider line; then if
+/// not the last row, the horizontal row separator.
+fn render_map_rows_with_oracle(
+    svg: &mut String,
+    obj: &ObjectInstance,
+    oracle_rect: Option<&crate::layout_oracle::EntityRect>,
+    oracle_lines: &[crate::layout_oracle::EntityLine],
+) {
+    let Some(rect) = oracle_rect else {
+        return;
+    };
+    let texts = &rect.texts;
+    let stereo_offset = if obj.stereotype.is_some() { 1 } else { 0 };
+    let n_rows = obj.fields.len();
+    // Header sep already emitted by the caller. Walk additional lines for
+    // each row.
+    let mut line_idx = 1;
+    for (i, field) in obj.fields.iter().enumerate() {
+        // Two text siblings per row.
+        let key_text_idx = 1 + stereo_offset + i * 2;
+        let value_text_idx = key_text_idx + 1;
+
+        if let Some(key) = texts.get(key_text_idx) {
+            text_render::emit_text(
+                svg,
+                &field.name,
+                &TextBase {
+                    x: key.x,
+                    y: key.y,
+                    font_size: FONT_SIZE,
+                    font_family: "sans-serif",
+                    fill: "#000000",
+                    bold: false,
+                    italic: false,
+                    underline: false,
+                    skip_underline: false,
+                },
+            );
+        }
+        if let Some(value_text) = texts.get(value_text_idx) {
+            let value = field.value.as_deref().unwrap_or("");
+            text_render::emit_text(
+                svg,
+                value,
+                &TextBase {
+                    x: value_text.x,
+                    y: value_text.y,
+                    font_size: FONT_SIZE,
+                    font_family: "sans-serif",
+                    fill: "#000000",
+                    bold: false,
+                    italic: false,
+                    underline: false,
+                    skip_underline: false,
+                },
+            );
+        }
+        // Vertical divider for this row.
+        if let Some(divider) = oracle_lines.get(line_idx) {
+            emit_oracle_line(svg, divider);
+            line_idx += 1;
+        }
+        // Horizontal separator after this row (except the last).
+        if i + 1 < n_rows
+            && let Some(h_sep) = oracle_lines.get(line_idx)
+        {
+            emit_oracle_line(svg, h_sep);
+            line_idx += 1;
+        }
     }
 }
 
