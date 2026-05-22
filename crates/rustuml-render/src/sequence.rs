@@ -11,6 +11,7 @@ use std::fmt::Write;
 
 use rustuml_parser::diagram::sequence::*;
 
+use crate::plantuml_metrics;
 use crate::style::Theme;
 use crate::text_render::{self, TextBase};
 
@@ -1900,6 +1901,32 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme) -> String {
         return render_empty_welcome();
     }
 
+    // Title-band height: when the diagram has a `title ...` directive, PlantUML
+    // reserves a band above the participant heads for the bold 14pt text.
+    // Empirical formula from goldens:
+    //   band = 21 + n_lines * text_height(14)
+    // where 21 = 10 (top pad to first baseline) + 11 (descent + gap to head box)
+    // and text_height(14) = 16.48828125 (Java AWT LineMetrics).
+    // The participant top, lifeline top, message Ys, tail box Y, and the SVG
+    // height all shift down by this band.
+    const TITLE_FONT_SIZE: u32 = 14;
+    const TITLE_TOP_PAD: f64 = 10.0; // gap from y=0 to first title baseline (minus ascent)
+    const TITLE_BOTTOM_PAD: f64 = 11.0; // gap from last title descent line to head top
+    let title_lines: Vec<&str> = diagram
+        .meta
+        .title
+        .as_deref()
+        .map(|t| t.split("\\n").collect())
+        .unwrap_or_default();
+    let title_band_h = if title_lines.is_empty() {
+        0.0
+    } else {
+        TITLE_TOP_PAD
+            + title_lines.len() as f64 * plantuml_metrics::text_height(TITLE_FONT_SIZE as f64)
+            + TITLE_BOTTOM_PAD
+    };
+    let head_box_y = HEAD_BOX_Y + title_band_h;
+
     // -----------------------------------------------------------------------
     // Phase 1: Compute participant layouts
     // -----------------------------------------------------------------------
@@ -2474,7 +2501,7 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme) -> String {
         .iter()
         .map(|p| p.box_height)
         .fold(HEAD_BOX_H, f64::max);
-    let lifeline_top = HEAD_BOX_Y + max_box_h + LIFELINE_Y_OFFSET;
+    let lifeline_top = head_box_y + max_box_h + LIFELINE_Y_OFFSET;
 
     // Pre-compute message y positions. PlantUML sizes each message step
     // dynamically: messages with label text get extra height for the text line.
@@ -3052,28 +3079,42 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme) -> String {
 
     // Render title if present. PlantUML wraps the title in
     // `<g class="title" data-source-line="N">` and emits a bold 14pt text
-    // centered horizontally: x = (svg_width - textLength) / 2.
-    if let Some(title) = &diagram.meta.title {
-        const TITLE_FONT_SIZE: u32 = 14;
-        let text_length = text_render::measure(title, TITLE_FONT_SIZE as f64, true);
-        let x = (svg_width as f64 - text_length) / 2.0;
+    // per line. Each line is centered around the midpoint between the first
+    // participant's box left edge and the last participant's box right edge
+    // (minus 0.5 px), and the first baseline sits at HEAD_BOX_Y + TITLE_TOP_PAD
+    // + ascent(14). Subsequent lines step down by text_height(14).
+    if !title_lines.is_empty() {
+        let title_center =
+            if let (Some(first), Some(last)) = (participants.first(), participants.last()) {
+                (first.box_x + last.box_x + last.box_width - 1.0) / 2.0
+            } else {
+                svg_width as f64 / 2.0 - 0.5
+            };
+        let line_height = plantuml_metrics::text_height(TITLE_FONT_SIZE as f64);
+        let first_baseline_y =
+            HEAD_BOX_Y + TITLE_TOP_PAD + plantuml_metrics::ascent(TITLE_FONT_SIZE as f64);
         svg.buf
             .push_str(r#"<g class="title" data-source-line="1">"#);
-        text_render::emit_text(
-            &mut svg.buf,
-            title,
-            &TextBase {
-                x,
-                y: HEAD_BOX_Y + 13.0,
-                font_size: TITLE_FONT_SIZE,
-                font_family: "sans-serif",
-                fill: "#000000",
-                bold: true,
-                italic: false,
-                underline: false,
-                skip_underline: false,
-            },
-        );
+        for (i, line) in title_lines.iter().enumerate() {
+            let text_length = text_render::measure(line, TITLE_FONT_SIZE as f64, true);
+            let x = title_center - text_length / 2.0;
+            let y = first_baseline_y + i as f64 * line_height;
+            text_render::emit_text(
+                &mut svg.buf,
+                line,
+                &TextBase {
+                    x,
+                    y,
+                    font_size: TITLE_FONT_SIZE,
+                    font_family: "sans-serif",
+                    fill: "#000000",
+                    bold: true,
+                    italic: false,
+                    underline: false,
+                    skip_underline: false,
+                },
+            );
+        }
         svg.buf.push_str("</g>");
     }
 
@@ -3263,7 +3304,7 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme) -> String {
             .unwrap_or_else(|| "#E2E2F0".to_string());
 
         // Head: base_y is where this participant's shape starts (bottom-aligned).
-        let head_base_y = HEAD_BOX_Y + (max_box_h - p.box_height);
+        let head_base_y = head_box_y + (max_box_h - p.box_height);
 
         render_participant_shape(
             &mut svg,
