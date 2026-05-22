@@ -75,9 +75,19 @@ struct Palette {
     diamond_stroke: String,
     diamond_stroke_width: String,
     arrow_color: String,
+    /// Stroke-width string used for activity connector lines (the ones that
+    /// link nodes top-to-bottom and the if/fork frame). Defaults to "1" and
+    /// rises with `skinparam activityBorderThickness` — PlantUML cascades
+    /// the border thickness onto the connector strokes too.
+    arrow_thickness: String,
     text_color: String,
     start_fill: String,
+    /// Stroke colour for the start ellipse. Mirrors `start_fill` by default
+    /// but stays at `#222222` when only `activityStartColor` is set —
+    /// PlantUML keeps the original border when only the fill changes.
+    start_stroke: String,
     stop_fill: String,
+    stop_stroke: String,
     bar_color: String,
 }
 
@@ -91,9 +101,12 @@ impl Palette {
             diamond_stroke: ACTION_STROKE.into(),
             diamond_stroke_width: ACTION_STROKE_WIDTH.into(),
             arrow_color: ARROW_COLOR.into(),
+            arrow_thickness: "1".into(),
             text_color: TEXT_COLOR.into(),
             start_fill: START_FILL.into(),
+            start_stroke: START_FILL.into(),
             stop_fill: STOP_FILL.into(),
+            stop_stroke: STOP_FILL.into(),
             bar_color: FORK_BAR_COLOR.into(),
         }
     }
@@ -129,7 +142,8 @@ impl Palette {
                         // Format like PlantUML: integer when whole, otherwise raw float.
                         let w = pm::fmt_coord(v);
                         p.action_stroke_width = w.clone();
-                        p.diamond_stroke_width = w;
+                        p.diamond_stroke_width = w.clone();
+                        p.arrow_thickness = w;
                     }
                 }
                 "activitydiamondbackgroundcolor" => p.diamond_fill = resolved,
@@ -140,8 +154,22 @@ impl Palette {
                     }
                 }
                 "activityarrowcolor" | "arrowcolor" => p.arrow_color = resolved,
+                // `activityStartColor` sets the start ellipse fill (border
+                // keeps its `#222222` default unless a border colour is
+                // specified). `activityStopColor` and `activityEndColor`
+                // affect distinct shapes in PlantUML — the former targets
+                // the `stop` (filled bullseye), the latter the `end` (X-in-
+                // circle). Each leaves its border colour at the default.
                 "activitystartcolor" => p.start_fill = resolved,
-                "activityendcolor" | "activitystopcolor" => p.stop_fill = resolved,
+                "activitystopcolor" => p.stop_fill = resolved,
+                "activitystartbordercolor" => p.start_stroke = resolved,
+                "activitystopbordercolor" => p.stop_stroke = resolved,
+                "activityendcolor" => {
+                    // The `end` node ignores this skinparam in PlantUML —
+                    // its rendering is the X-in-circle in the default
+                    // border colour. Accept the key without effect so the
+                    // skinparam doesn't fall into the unknown bucket.
+                }
                 "activitybarcolor" => p.bar_color = resolved,
                 "activityfontcolor" => p.text_color = resolved,
                 _ => {}
@@ -1192,6 +1220,15 @@ impl SvgEmitter {
         .unwrap();
     }
 
+    /// Emit a connector line that follows the palette's arrow thickness
+    /// (so `skinparam activityBorderThickness` cascades through the
+    /// if/fork/while/repeat connector frames without each callsite having
+    /// to thread the value).
+    fn connector_line(&mut self, stroke: &str, x1: f64, x2: f64, y1: f64, y2: f64, dashed: bool) {
+        let thickness = self.palette.arrow_thickness.clone();
+        self.line_styled(stroke, &thickness, x1, x2, y1, y2, dashed);
+    }
+
     /// Arrowhead-style polygon for connectors — goes after all shapes.
     fn polygon_connector(
         &mut self,
@@ -1211,8 +1248,10 @@ impl SvgEmitter {
 
     /// Emit a downward arrow (vertical line + arrowhead polygon).
     fn down_arrow(&mut self, cx: f64, y1: f64, y2: f64, color: &str) {
-        self.line_styled(color, "1", cx, cx, y1, y2, false);
-        // Arrowhead: 4px each side, 10px tall, 4px notch
+        let thickness = self.palette.arrow_thickness.clone();
+        self.line_styled(color, &thickness, cx, cx, y1, y2, false);
+        // Arrowhead: 4px each side, 10px tall, 4px notch. The arrowhead
+        // keeps stroke-width:1 — PlantUML scales only the line.
         self.polygon_connector(
             color,
             &[
@@ -1228,12 +1267,16 @@ impl SvgEmitter {
 
     /// Emit a styled downward arrow (handles colour, dashed/dotted, bold).
     fn down_arrow_full(&mut self, cx: f64, y1: f64, y2: f64, style: &ArrowStyle) {
-        let sw = if style.bold {
+        // Per-arrow style markers (bold/dotted) override any global
+        // `activityBorderThickness` cascade. A plain arrow follows the
+        // palette's connector thickness.
+        let palette_thickness = self.palette.arrow_thickness.clone();
+        let sw: &str = if style.bold {
             "2"
         } else if style.dotted {
             "1.5"
         } else {
-            "1"
+            palette_thickness.as_str()
         };
         let dash = if style.dotted {
             Some("1,3")
@@ -1531,14 +1574,16 @@ fn emit_node(svg: &mut SvgEmitter, node: &LayoutNode, cx: f64, y: f64) -> f64 {
             // cursor is already past START_CY and is used as-is.
             let cy = y.max(START_CY);
             let fill = svg.palette.start_fill.clone();
-            svg.ellipse(cx, cy, START_R, START_R, &fill, &fill, "1");
+            let stroke = svg.palette.start_stroke.clone();
+            svg.ellipse(cx, cy, START_R, START_R, &fill, &stroke, "1");
             cy + START_R
         }
         LayoutNode::Stop => {
             let cy = y + STOP_OUTER_R;
             let fill = svg.palette.stop_fill.clone();
-            svg.ellipse(cx, cy, STOP_OUTER_R, STOP_OUTER_R, "none", &fill, "1");
-            svg.ellipse(cx, cy, STOP_INNER_R, STOP_INNER_R, &fill, &fill, "1");
+            let stroke = svg.palette.stop_stroke.clone();
+            svg.ellipse(cx, cy, STOP_OUTER_R, STOP_OUTER_R, "none", &stroke, "1");
+            svg.ellipse(cx, cy, STOP_INNER_R, STOP_INNER_R, &fill, &stroke, "1");
             y + STOP_OUTER_R * 2.0
         }
         LayoutNode::End => {
@@ -1550,7 +1595,7 @@ fn emit_node(svg: &mut SvgEmitter, node: &LayoutNode, cx: f64, y: f64) -> f64 {
             const END_R: f64 = 10.0;
             const X_HALF: f64 = 6.1872; // empirical from goldens
             let cy = y + END_R;
-            let stroke = svg.palette.stop_fill.clone();
+            let stroke = svg.palette.stop_stroke.clone();
             svg.ellipse(cx, cy, END_R, END_R, "none", &stroke, "1.5");
             // X lines belong with shapes (between ellipse and any following
             // text) — they are the visual content of the end node.
@@ -1907,18 +1952,16 @@ fn emit_if(
 
     // Diamond → then: horizontal from diamond left to then_cx, then down to
     // branch top, with an arrowhead overlay.
-    svg.line_styled(
+    svg.connector_line(
         &arrow_color,
-        "1",
         diamond_left,
         then_cx,
         diamond_cy,
         diamond_cy,
         false,
     );
-    svg.line_styled(
+    svg.connector_line(
         &arrow_color,
-        "1",
         then_cx,
         then_cx,
         diamond_cy,
@@ -1938,18 +1981,16 @@ fn emit_if(
     );
 
     // Diamond → else: mirror of the then side.
-    svg.line_styled(
+    svg.connector_line(
         &arrow_color,
-        "1",
         diamond_right,
         else_cx,
         diamond_cy,
         diamond_cy,
         false,
     );
-    svg.line_styled(
+    svg.connector_line(
         &arrow_color,
-        "1",
         else_cx,
         else_cx,
         diamond_cy,
@@ -1970,18 +2011,9 @@ fn emit_if(
 
     // Then branch → merge — skipped if the branch terminates.
     if !then_terminates {
-        svg.line_styled(
+        svg.connector_line(&arrow_color, then_cx, then_cx, then_bottom, merge_cy, false);
+        svg.connector_line(
             &arrow_color,
-            "1",
-            then_cx,
-            then_cx,
-            then_bottom,
-            merge_cy,
-            false,
-        );
-        svg.line_styled(
-            &arrow_color,
-            "1",
             then_cx,
             cx - DIAMOND_HALF,
             merge_cy,
@@ -1993,18 +2025,9 @@ fn emit_if(
 
     // Else branch → merge — skipped if every else branch terminates.
     if !else_terminates {
-        svg.line_styled(
+        svg.connector_line(&arrow_color, else_cx, else_cx, else_bottom, merge_cy, false);
+        svg.connector_line(
             &arrow_color,
-            "1",
-            else_cx,
-            else_cx,
-            else_bottom,
-            merge_cy,
-            false,
-        );
-        svg.line_styled(
-            &arrow_color,
-            "1",
             else_cx,
             cx + DIAMOND_HALF,
             merge_cy,
