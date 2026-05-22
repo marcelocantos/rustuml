@@ -93,10 +93,39 @@ impl ClassParser {
     }
 
     fn finish(self) -> ClassDiagram {
+        // Filter out phantom entities created by `ensure_entity` on
+        // relationship endpoints when the endpoint is a note alias
+        // (e.g. `A .. N1` after `note "..." as N1`). These should not be
+        // rendered as classes — they are notes. Their relationships are
+        // dropped too (PlantUML expresses the connector via the note's
+        // shape, not a separate relationship).
+        let note_aliases: std::collections::HashSet<&str> = self
+            .notes
+            .iter()
+            .filter_map(|n| n.alias.as_deref())
+            .collect();
+        let entities = if note_aliases.is_empty() {
+            self.entities
+        } else {
+            self.entities
+                .into_iter()
+                .filter(|e| !note_aliases.contains(e.id.as_str()))
+                .collect()
+        };
+        let relationships = if note_aliases.is_empty() {
+            self.relationships
+        } else {
+            self.relationships
+                .into_iter()
+                .filter(|r| {
+                    !note_aliases.contains(r.from.as_str()) && !note_aliases.contains(r.to.as_str())
+                })
+                .collect()
+        };
         ClassDiagram {
             meta: self.meta,
-            entities: self.entities,
-            relationships: self.relationships,
+            entities,
+            relationships,
             packages: self.packages,
             notes: self.notes,
             hide_show: self.hide_show,

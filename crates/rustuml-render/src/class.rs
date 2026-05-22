@@ -1054,13 +1054,12 @@ fn render_plantuml_svg(
                 .collect()
         })
         .unwrap_or_default();
-    let oracle_note_clusters: Vec<&OracleCluster> = oracle
-        .map(|o| {
-            o.clusters
-                .iter()
-                .filter(|c| c.group_class != "cluster")
-                .collect()
-        })
+    // Note entities (alias-named like `N1` AND auto-generated `GMNn`) are
+    // captured separately in `note_entities`. The legacy `clusters`
+    // collection only picks up GMN-prefixed qnames; reading from
+    // `note_entities` covers explicit aliases too.
+    let oracle_note_entities: Vec<&crate::layout_oracle::OracleNoteEntity> = oracle
+        .map(|o| o.note_entities.iter().collect())
         .unwrap_or_default();
     for cluster in &oracle_pkg_clusters {
         write!(svg, "<!--cluster {}-->", cluster.qualified_name).unwrap();
@@ -1155,9 +1154,10 @@ fn render_plantuml_svg(
         svg.push_str("</g>");
     }
 
-    // Emit any oracle-captured note entities (GMN*) after the diagram
-    // entities — they share the ent000N counter.
-    for note in &oracle_note_clusters {
+    // Emit any oracle-captured note entities (both auto-generated `GMNn`
+    // and explicit aliases like `N1`) after the diagram entities — they
+    // share the ent000N counter.
+    for note in &oracle_note_entities {
         let nid = note.entity_id.as_deref().unwrap_or("ent0000");
         let sl = note.source_line.as_deref().unwrap_or("0");
         write!(
