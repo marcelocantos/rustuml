@@ -145,6 +145,7 @@ fn render_with_theme_and_oracle(
         Diagram::Wbs(w) => wbs::render_with_oracle(w, theme, oracle),
         Diagram::Activity(act) => activity::render_with_oracle(act, theme, oracle),
         Diagram::Sequence(seq) => sequence::render_with_oracle(seq, theme, oracle),
+        Diagram::Math(m) => math::render_with_oracle(m, theme, oracle),
         _ => render_with_theme(diagram, theme),
     }
 }

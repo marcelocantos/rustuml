@@ -105,7 +105,11 @@ pub fn extract_oracle_layout(svg: &str) -> Option<OracleLayout> {
                 | Some("ACTIVITY")
                 | Some("SEQUENCE")
         );
-        if flat_only || with_groups {
+        // When no `data-diagram-type` is set (e.g. `@startmath`/`@startlatex`),
+        // default to flat-primitive capture so renderers can opt into verbatim
+        // replay.
+        let untyped_flat = dt.is_none();
+        if flat_only || with_groups || untyped_flat {
             let mut inner = String::new();
             for c in g.children().filter(|c| c.is_element()) {
                 let tag = c.tag_name().name();

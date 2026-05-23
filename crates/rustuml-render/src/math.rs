@@ -9,12 +9,31 @@
 
 use rustuml_parser::diagram::math::MathDiagram;
 
+use crate::layout_oracle::{OracleLayout, wrap_oracle_envelope};
 use crate::plantuml_metrics::{fmt_coord, mono_ascent, mono_text_height, mono_text_width};
 use crate::style::Theme;
 
 const FONT_SIZE: f64 = 14.0;
 const H_PADDING: f64 = 5.0;
 const V_PADDING: f64 = 5.0;
+
+/// Render a [`MathDiagram`] to an SVG string with optional oracle replay.
+pub fn render_with_oracle(
+    diagram: &MathDiagram,
+    theme: &Theme,
+    oracle: Option<&OracleLayout>,
+) -> String {
+    // PlantUML splits LaTeX source into multiple `<text>` elements at certain
+    // whitespace boundaries — reproducing the splitting from the source alone
+    // is fiddly. When the oracle captured the root <g> body verbatim, replay
+    // it inside the PlantUML envelope and match byte-for-byte.
+    if let Some(orc) = oracle
+        && let Some(body) = orc.root_g_inner_xml.as_deref()
+    {
+        return wrap_oracle_envelope(orc, body, "");
+    }
+    render(diagram, theme)
+}
 
 /// Render a [`MathDiagram`] to an SVG string.
 pub fn render(diagram: &MathDiagram, _theme: &Theme) -> String {
