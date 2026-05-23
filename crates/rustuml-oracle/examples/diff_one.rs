@@ -14,10 +14,7 @@ fn main() {
     let source = std::fs::read_to_string(&puml_path).unwrap();
     let golden = std::fs::read_to_string(puml_path.with_extension("svg")).unwrap();
 
-    let oracle = if golden.contains(r#"data-diagram-type="CLASS""#)
-        || golden.contains(r#"data-diagram-type="STATE""#)
-        || golden.contains(r#"data-diagram-type="DESCRIPTION""#)
-    {
+    let oracle = if golden.contains("<?plantuml ") {
         rustuml_oracle::extract::extract_oracle_layout(&golden)
     } else {
         None
