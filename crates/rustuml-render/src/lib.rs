@@ -3,6 +3,34 @@
 
 //! SVG rendering for parsed PlantUML diagrams.
 
+/// Product name embedded in user-facing strings of the rendered SVG
+/// (the welcome screen and the "more info on …" URL line).
+///
+/// Defaults to `PlantUML` so the strict-XML golden_pairs suite — which
+/// matches Java PlantUML byte-for-byte — keeps passing without changes.
+/// Set the `RUSTUML_PRODUCT_NAME` environment variable to override (e.g.
+/// `RUSTUML_PRODUCT_NAME=rustuml`); the corresponding info URL can be
+/// overridden via `RUSTUML_PRODUCT_URL`.
+///
+/// **Not configurable:** the `<?plantuml ?>` processing instruction is
+/// a format-identifier (consumed by tools that recognise PlantUML's
+/// PI convention), not a brand. It stays `plantuml` regardless.
+pub fn product_name() -> &'static str {
+    static NAME: std::sync::OnceLock<String> = std::sync::OnceLock::new();
+    NAME.get_or_init(|| std::env::var("RUSTUML_PRODUCT_NAME").unwrap_or_else(|_| "PlantUML".into()))
+        .as_str()
+}
+
+/// URL shown in the welcome-screen "more info on …" line. Defaults to
+/// `https://plantuml.com`. Override via `RUSTUML_PRODUCT_URL`.
+pub fn product_url() -> &'static str {
+    static URL: std::sync::OnceLock<String> = std::sync::OnceLock::new();
+    URL.get_or_init(|| {
+        std::env::var("RUSTUML_PRODUCT_URL").unwrap_or_else(|_| "https://plantuml.com".into())
+    })
+    .as_str()
+}
+
 pub mod activity;
 pub mod archimate;
 pub mod ascii;

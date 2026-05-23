@@ -1739,8 +1739,13 @@ fn render_empty_welcome() -> String {
     let lh = 14.0;
     let mut y = 20.0;
 
+    let welcome = format!("Welcome to {}!", crate::product_name());
+    let info = format!(
+        "You will find more information about {} syntax on",
+        crate::product_name(),
+    );
     let lines: &[&str] = &[
-        "Welcome to PlantUML!",
+        &welcome,
         "\u{00a0}",
         "You can start with a simple UML Diagram like:",
         "\u{00a0}",
@@ -1750,8 +1755,8 @@ fn render_empty_welcome() -> String {
         "\u{00a0}",
         "class\u{00a0}Example",
         "\u{00a0}",
-        "You will find more information about PlantUML syntax on",
-        "https://plantuml.com",
+        &info,
+        crate::product_url(),
         "\u{00a0}",
         "(Details by typing",
         "license",
