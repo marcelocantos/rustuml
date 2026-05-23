@@ -33,7 +33,65 @@ const EDGE_STROKE: &str = "#A80036";
 const DIAMOND_SIZE: f64 = 14.0;
 
 /// Render a DOT diagram to SVG.
-pub fn render(diagram: &DotDiagram, _theme: &Theme) -> String {
+///
+/// PlantUML's `@startdot` / `@enddot` pipeline shells out to the `dot`
+/// binary and forwards its SVG output verbatim. We do the same when `dot`
+/// is on PATH — the strict comparator skips PIs, comments, and the DTD
+/// reference, so Graphviz-emitted SVG matches byte-for-byte (modulo the
+/// version-string in the generator comment, which is ignored). Falls back
+/// to the layout-based renderer when `dot` is unavailable.
+pub fn render(diagram: &DotDiagram, theme: &Theme) -> String {
+    if let Some(svg) = try_render_with_dot(diagram) {
+        return svg;
+    }
+    render_fallback(diagram, theme)
+}
+
+fn try_render_with_dot(diagram: &DotDiagram) -> Option<String> {
+    use std::io::Write;
+    use std::process::{Command, Stdio};
+
+    let source = diagram.meta.source.as_deref()?;
+    let dot_input = extract_dot_input(source)?;
+
+    let mut child = Command::new("dot")
+        .arg("-Tsvg")
+        .stdin(Stdio::piped())
+        .stdout(Stdio::piped())
+        .stderr(Stdio::piped())
+        .spawn()
+        .ok()?;
+    child.stdin.as_mut()?.write_all(dot_input.as_bytes()).ok()?;
+    let output = child.wait_with_output().ok()?;
+    if !output.status.success() {
+        return None;
+    }
+    String::from_utf8(output.stdout).ok()
+}
+
+/// Strip the `@startdot` / `@enddot` markers from `meta.source` to recover
+/// the raw DOT graph definition to pipe into `dot`.
+fn extract_dot_input(source: &str) -> Option<String> {
+    let mut out = String::new();
+    let mut inside = false;
+    for line in source.lines() {
+        let trimmed = line.trim_start();
+        if !inside {
+            if trimmed.starts_with("@startdot") {
+                inside = true;
+            }
+            continue;
+        }
+        if trimmed.starts_with("@enddot") {
+            break;
+        }
+        out.push_str(line);
+        out.push('\n');
+    }
+    if out.is_empty() { None } else { Some(out) }
+}
+
+fn render_fallback(diagram: &DotDiagram, _theme: &Theme) -> String {
     // Collect all nodes (top-level + cluster members).
     let all_nodes = collect_all_nodes(diagram);
     if all_nodes.is_empty() {
