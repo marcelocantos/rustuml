@@ -168,24 +168,12 @@ fn run_one(puml_path: &Path, root: &Path) -> TestResult {
         };
     }
 
-    // Extract oracle layout from golden SVG for supported diagram types.
-    let oracle_layout = if golden_svg.contains(r#"data-diagram-type="CLASS""#)
-        || golden_svg.contains(r#"data-diagram-type="STATE""#)
-        || golden_svg.contains(r#"data-diagram-type="DESCRIPTION""#)
-        || golden_svg.contains(r#"data-diagram-type="JSON""#)
-        || golden_svg.contains(r#"data-diagram-type="YAML""#)
-        || golden_svg.contains(r#"data-diagram-type="TIMING""#)
-        || golden_svg.contains(r#"data-diagram-type="GANTT""#)
-        || golden_svg.contains(r#"data-diagram-type="SALT""#)
-        || golden_svg.contains(r#"data-diagram-type="NWDIAG""#)
-        || golden_svg.contains(r#"data-diagram-type="REGEX""#)
-        || golden_svg.contains(r#"data-diagram-type="EBNF""#)
-        || golden_svg.contains(r#"data-diagram-type="BOARD""#)
-        || golden_svg.contains(r#"data-diagram-type="MINDMAP""#)
-        || golden_svg.contains(r#"data-diagram-type="WBS""#)
-        || golden_svg.contains(r#"data-diagram-type="ACTIVITY""#)
-        || golden_svg.contains(r#"data-diagram-type="SEQUENCE""#)
-    {
+    // Extract oracle layout from any golden SVG that looks PlantUML-emitted.
+    // The `<?plantuml ?>` processing instruction is present in every
+    // PlantUML-generated golden regardless of diagram type — using it as the
+    // trigger avoids per-type allow-listing and lets `@startmath`/`@startlatex`
+    // (which carry no `data-diagram-type` attribute) pick up oracle data too.
+    let oracle_layout = if golden_svg.contains("<?plantuml ") {
         extract::extract_oracle_layout(&golden_svg)
     } else {
         None
