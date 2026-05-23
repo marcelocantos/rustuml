@@ -4,31 +4,21 @@
 //! SVG rendering for parsed PlantUML diagrams.
 
 /// Product name embedded in user-facing strings of the rendered SVG
-/// (the welcome screen and the "more info on …" URL line).
-///
-/// Defaults to `PlantUML` so the strict-XML golden_pairs suite — which
-/// matches Java PlantUML byte-for-byte — keeps passing without changes.
-/// Set the `RUSTUML_PRODUCT_NAME` environment variable to override (e.g.
-/// `RUSTUML_PRODUCT_NAME=rustuml`); the corresponding info URL can be
-/// overridden via `RUSTUML_PRODUCT_URL`.
+/// (welcome screen and any other in-diagram brand mention). Always
+/// `RustUML` — the strict-XML golden_pairs comparator rebrands the
+/// goldens' `PlantUML` to `RustUML` on the fly so parity tests still
+/// pass (see `rustuml_oracle::compare::rebrand_plantuml`).
 ///
 /// **Not configurable:** the `<?plantuml ?>` processing instruction is
 /// a format-identifier (consumed by tools that recognise PlantUML's
 /// PI convention), not a brand. It stays `plantuml` regardless.
-pub fn product_name() -> &'static str {
-    static NAME: std::sync::OnceLock<String> = std::sync::OnceLock::new();
-    NAME.get_or_init(|| std::env::var("RUSTUML_PRODUCT_NAME").unwrap_or_else(|_| "PlantUML".into()))
-        .as_str()
+pub const fn product_name() -> &'static str {
+    "RustUML"
 }
 
-/// URL shown in the welcome-screen "more info on …" line. Defaults to
-/// `https://plantuml.com`. Override via `RUSTUML_PRODUCT_URL`.
-pub fn product_url() -> &'static str {
-    static URL: std::sync::OnceLock<String> = std::sync::OnceLock::new();
-    URL.get_or_init(|| {
-        std::env::var("RUSTUML_PRODUCT_URL").unwrap_or_else(|_| "https://plantuml.com".into())
-    })
-    .as_str()
+/// URL shown in the welcome-screen "more info on …" line.
+pub const fn product_url() -> &'static str {
+    "https://github.com/marcelocantos/rustuml"
 }
 
 pub mod activity;
@@ -137,15 +127,44 @@ fn render_under_filter_registry(
 ) -> String {
     let source = diagram.meta().source.as_deref().unwrap_or("");
     let (svg, registry) = filter_registry::with_registry(source, || render(diagram));
-    if registry.is_empty() {
-        return svg;
+    let svg = if registry.is_empty() {
+        svg
+    } else {
+        // PlantUML-shape SVGs emit `<defs/>`; substitute. Other shapes may not
+        // contain `<defs/>` at all (no entry point allocated any background),
+        // in which case nothing to substitute.
+        let defs_content = registry.render_defs_content();
+        let replacement = format!("<defs>{defs_content}</defs>");
+        svg.replacen("<defs/>", &replacement, 1)
+    };
+    rebrand_in_svg(svg)
+}
+
+/// Swap PlantUML's own brand self-references for rustuml equivalents in
+/// the rendered SVG. Targets only the specific welcome-screen phrases
+/// that PlantUML emits when describing itself — never bare "PlantUML" or
+/// the plantuml.com URL on their own, because those legitimately appear
+/// in user content (e.g. `[[https://plantuml.com]]` link markup).
+///
+/// The `<?plantuml ?>` PI is intentionally lowercased and untouched.
+fn rebrand_in_svg(svg: String) -> String {
+    let name = product_name();
+    // Each pair: (PlantUML self-reference, rustuml replacement).
+    // Add new entries as PlantUML's welcome / error pages are exercised.
+    let needles: &[(&str, String)] = &[
+        ("Welcome to PlantUML!", format!("Welcome to {name}!")),
+        (
+            "more information about PlantUML syntax on",
+            format!("more information about {name} syntax on"),
+        ),
+    ];
+    let mut out = svg;
+    for (from, to) in needles {
+        if out.contains(from) {
+            out = out.replace(from, to);
+        }
     }
-    let defs_content = registry.render_defs_content();
-    let replacement = format!("<defs>{defs_content}</defs>");
-    // PlantUML-shape SVGs emit `<defs/>`; substitute. Other shapes may not
-    // contain `<defs/>` at all (no entry point allocated any background),
-    // in which case nothing to substitute.
-    svg.replacen("<defs/>", &replacement, 1)
+    out
 }
 
 fn render_with_theme_and_oracle(

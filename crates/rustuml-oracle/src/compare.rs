@@ -345,8 +345,22 @@ pub fn compare_svg_strict(expected: &str, actual: &str) -> Result<CompareResult,
         // specific fractional boundaries. Interior elements are still
         // strictly compared, so this only relaxes the advertised outer
         // size — content geometry stays locked.
+        //
+        // For <text> elements whose expected content contains "PlantUML" or
+        // the "plantuml.com" URL, normalise to the rustuml brand. Renderer
+        // emits "RustUML" / the rustuml URL unconditionally (see
+        // rustuml_render::product_name / product_url). The replacement
+        // changes the rendered string width, so textLength is also dropped
+        // from comparison on those elements.
+        let exp_text_branded = exp.tag == "text"
+            && exp
+                .text
+                .as_deref()
+                .is_some_and(|t| t.contains("PlantUML") || t.contains("plantuml.com"));
         let attrs_equal = if i == 0 && exp.tag == "svg" {
             root_svg_attrs_match_within_1px(&exp.attrs, &act.attrs)
+        } else if exp_text_branded {
+            attrs_match_ignoring_text_length(&exp.attrs, &act.attrs)
         } else {
             exp.attrs == act.attrs
         };
@@ -359,7 +373,19 @@ pub fn compare_svg_strict(expected: &str, actual: &str) -> Result<CompareResult,
             });
         }
 
-        if exp.text != act.text {
+        // For branded text elements, accept either the original PlantUML
+        // wording OR its rebranded equivalent. Verbatim oracle-replay paths
+        // emit the golden body unchanged (so actual still says "PlantUML");
+        // the geometry/welcome-screen path emits "RustUML" through
+        // rustuml_render::product_name(). Both should compare equal.
+        let texts_equal = if exp_text_branded {
+            let act_text = act.text.as_deref();
+            act_text == exp.text.as_deref()
+                || act_text == exp.text.as_deref().map(rebrand_plantuml).as_deref()
+        } else {
+            exp.text == act.text
+        };
+        if !texts_equal {
             differences.push(Difference::TextMismatch {
                 index: i,
                 tag: exp.tag.clone(),
@@ -370,6 +396,28 @@ pub fn compare_svg_strict(expected: &str, actual: &str) -> Result<CompareResult,
     }
 
     Ok(CompareResult { differences })
+}
+
+/// Replace PlantUML brand strings with their rustuml equivalents.
+/// Kept in sync with `rustuml_render::product_name()` / `product_url()`.
+fn rebrand_plantuml(text: &str) -> String {
+    text.replace("PlantUML", "RustUML").replace(
+        "https://plantuml.com",
+        "https://github.com/marcelocantos/rustuml",
+    )
+}
+
+/// Compare two attribute lists ignoring the `textLength` attribute. Used
+/// for text elements whose content has been rebranded (PlantUML → RustUML),
+/// where the rendered string width necessarily differs.
+fn attrs_match_ignoring_text_length(exp: &[(String, String)], act: &[(String, String)]) -> bool {
+    let strip = |xs: &[(String, String)]| -> Vec<(String, String)> {
+        xs.iter()
+            .filter(|(k, _)| k != "textLength")
+            .cloned()
+            .collect()
+    };
+    strip(exp) == strip(act)
 }
 
 /// Compare the root `<svg>` element's attributes, allowing the advertised
