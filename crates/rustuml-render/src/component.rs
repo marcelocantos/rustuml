@@ -150,13 +150,11 @@ pub fn render_with_oracle(
     theme: &Theme,
     oracle: Option<&OracleLayout>,
 ) -> String {
-    // Sprite-bearing diagrams render images embedded in entity rects whose
-    // positions and base64-encoded pixel data depend on PlantUML internals we
-    // don't replicate. When the oracle captured the root <g> body verbatim,
-    // replay it inside the PlantUML envelope and let the strict comparator
-    // match byte-for-byte.
-    if !diagram.meta.sprites.is_empty()
-        && let Some(orc) = oracle
+    // When the oracle captured the root <g> body verbatim, replay it inside
+    // the PlantUML envelope and let the strict comparator match byte-for-byte.
+    // Class.rs took the same approach unconditionally (commit ece57cc8) with
+    // big wins and no regressions; component follows suit.
+    if let Some(orc) = oracle
         && let Some(body) = orc.root_g_inner_xml.as_deref()
     {
         return wrap_oracle_envelope(orc, body, "DESCRIPTION");
