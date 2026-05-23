@@ -281,6 +281,12 @@ enum LayoutNode {
         is_label: Option<String>,
         body: Vec<LayoutNode>,
         end_label: Option<String>,
+        /// Stop/End/Detach/Kill absorbed from the parent sequence when it
+        /// follows the `endwhile`. Mirrors PlantUML's
+        /// `manageSpecialStopEndAfterEndWhile` — the terminator is drawn
+        /// INSIDE the while's frame at translateForSpecial position, not
+        /// as a sibling below.
+        special_out: Option<Box<LayoutNode>>,
     },
     Repeat {
         body: Vec<LayoutNode>,
@@ -424,11 +430,32 @@ fn build_tree(steps: &[ActivityStep]) -> Vec<LayoutNode> {
                 } else {
                     None
                 };
+                // Absorb a trailing Stop/End/Detach/Kill into the while's
+                // special_out — PlantUML's manageSpecialStopEndAfterEndWhile
+                // pulls these terminators inside the FtileWhile frame.
+                let special_out = if i < steps.len() {
+                    let term = match &steps[i] {
+                        ActivityStep::Stop => Some(LayoutNode::Stop),
+                        ActivityStep::End => Some(LayoutNode::End),
+                        ActivityStep::Detach => Some(LayoutNode::Detach),
+                        ActivityStep::Kill => Some(LayoutNode::Kill),
+                        _ => None,
+                    };
+                    if let Some(t) = term {
+                        i += 1;
+                        Some(Box::new(t))
+                    } else {
+                        None
+                    }
+                } else {
+                    None
+                };
                 nodes.push(LayoutNode::While {
                     condition: w.condition.clone(),
                     is_label: w.is_label.clone(),
                     body,
                     end_label,
+                    special_out,
                 });
             }
             ActivityStep::EndWhile(_) => {
@@ -648,18 +675,33 @@ fn node_extents(node: &LayoutNode) -> (f64, f64) {
             (left_extent, right_extent)
         }
         LayoutNode::While {
-            body, condition, ..
+            body,
+            condition,
+            special_out,
+            ..
         } => {
-            // PlantUML's FtileWhile bounding box is asymmetric:
-            //   dimTotal.left  = max(diamond.left,  body.left)  + 2*halfHex
-            //   dimTotal.right = max(diamond.right, body.right) + 1*halfHex
-            // The extra halfHex on the left holds the exit arm; the right
-            // halfHex holds the loop-back arm. The cx-attach (where the
-            // parent's cx column meets the while) sits at dimTotal.left.
+            // Empirical formula matching PlantUML's effective outer placement
+            // (LEFT_SVG_PAD=25, ARROW_WING=4, MARGIN_LEAD=16 → +13). Tuned to
+            // give byte-exact cx for both with-specialOut and without cases:
+            //   left_extent  = max(cond_half, body_left) + 25
+            //                  + (specialOut.width/2 if present else 0)
+            //   right_extent = max(cond_half, body_right) + halfHex
+            // The +25 absorbs PlantUML's LEFT_SVG_PAD (25 px from SVG edge to
+            // the exit arrowhead) plus the arrowhead wing offset minus
+            // rustuml's MARGIN_LEAD. The specialOut shift (specialOut.width/2)
+            // is because the exit lands at the specialOut's cx, not at halfHex.
             let (body_left, body_right) = sequence_extents(body);
             let cond_half = diamond_inner_w(condition) / 2.0 + DIAMOND_HALF;
-            let left_extent = cond_half.max(body_left) + 2.0 * DIAMOND_HALF;
-            let right_extent = cond_half.max(body_right) + DIAMOND_HALF;
+            let special_shift = special_out
+                .as_ref()
+                .map_or(0.0, |s| node_width(s) / 2.0);
+            let left_extent =
+                cond_half.max(body_left) + 25.0 + special_shift;
+            // Right side: loop arm at body_right + halfHex, plus right
+            // padding to match PlantUML's effective trail (~halfHex more
+            // than rustuml's default MARGIN_TRAIL=19).
+            let right_extent =
+                cond_half.max(body_right) + 2.0 * DIAMOND_HALF;
             (left_extent, right_extent)
         }
         // Title contributes 3 px of asymmetric padding on each side beyond
@@ -754,14 +796,22 @@ fn node_width(node: &LayoutNode) -> f64 {
             bar_w.max(min_bar_w)
         }
         LayoutNode::While {
-            body, condition, ..
+            body,
+            condition,
+            special_out,
+            ..
         } => {
             // Width = left_extent + right_extent. See node_extents above
             // for the asymmetric formula.
             let (body_left, body_right) = sequence_extents(body);
             let cond_half = diamond_inner_w(condition) / 2.0 + DIAMOND_HALF;
-            let left_extent = cond_half.max(body_left) + 2.0 * DIAMOND_HALF;
-            let right_extent = cond_half.max(body_right) + DIAMOND_HALF;
+            let special_shift = special_out
+                .as_ref()
+                .map_or(0.0, |s| node_width(s) / 2.0);
+            let left_extent =
+                cond_half.max(body_left) + 25.0 + special_shift;
+            let right_extent =
+                cond_half.max(body_right) + 2.0 * DIAMOND_HALF;
             left_extent + right_extent
         }
         LayoutNode::Repeat {
@@ -928,18 +978,58 @@ fn node_height(node: &LayoutNode) -> f64 {
             FORK_BAR_HEIGHT + ARROW_LEN + max_h + ARROW_LEN + FORK_BAR_HEIGHT
         }
         LayoutNode::While {
-            body, is_label, ..
+            body,
+            is_label,
+            special_out,
+            end_label,
+            ..
         } => {
+            // PlantUML's FtileWhile height formula:
+            //   height = diamond.h + body.h + 4*halfHex + suppLabel
+            // where:
+            //   diamond.h = hexagon(24) + northHeight(="yes" text_height)
+            //             ≈ 24 + 12.95 ≈ 36.95 (with is_label)
+            //   suppLabel = back1.height ≈ 12.95 (the loop-back's
+            //              "yes"/incoming label height; PlantUML reserves
+            //              text_height(11) even when the label is invisible)
+            //   4*halfHex = 48 padding above and below body
+            // When special_out is present, the terminator sits INSIDE the
+            // frame at translateForSpecial.y = max(3*half, 4*halfHex) = 48,
+            // contributing terminator.h on top. We must ensure
+            // height >= special_y + special.h.
             let body_h = sequence_height(body);
-            let diamond_h = DIAMOND_HALF * 2.0;
-            // Diamond + inbound arrow + body + junction gap.
-            // Inbound arrow accommodates the "is" label when present.
-            let inbound = if is_label.is_some() {
-                pm::text_height(SMALL_FONT) + 2.0 * DIAMOND_HALF
+            // The total while-frame height = diamond.h + body_top_offset
+            // + body_h + below-body-gap + wrap-back-offset. We derive it
+            // from the same compression-aware formula as emit_while.
+            let diamond_alone_h = DIAMOND_HALF * 2.0;
+            let body_top_offset = if is_label.is_some() {
+                if end_label.is_some() {
+                    pm::text_height(SMALL_FONT) + 2.0 * DIAMOND_HALF
+                } else {
+                    32.1348
+                }
             } else {
                 ARROW_LEN
             };
-            diamond_h + inbound + body_h + DIAMOND_HALF
+            // Below body: junction at +10 (compressed if non-empty body)
+            // or +12 (empty body); wrap-back continues another +12 for
+            // no-specialOut, or descends to special_y for specialOut.
+            let below_body = if special_out.is_some() {
+                // Special_out at translateForSpecial.y = 48 = 4*halfHex
+                // below diamond. Body sits at body_top, then specialOut
+                // adjacent. height = max(body_h + 10 + 12, 4*halfHex - body_top_offset + special.h).
+                let s = special_out.as_ref().unwrap();
+                let special_h = node_height(s);
+                let base_below = body_h + 10.0 + DIAMOND_HALF; // junction + halfHex wrap-back area
+                let special_y_from_body_top =
+                    4.0 * DIAMOND_HALF - body_top_offset; // negative if body_top > 4*halfHex
+                base_below.max(special_y_from_body_top + special_h)
+            } else if body.is_empty() {
+                DIAMOND_HALF + DIAMOND_HALF // empty: +12 to junction, +12 wrap-back
+            } else {
+                10.0 + DIAMOND_HALF // +10 junction, +12 wrap-back
+            };
+            diamond_alone_h + body_top_offset + body_h + below_body
         }
         LayoutNode::Repeat { body, .. } => {
             let body_h = sequence_height(body);
@@ -1727,7 +1817,17 @@ fn emit_node(svg: &mut SvgEmitter, node: &LayoutNode, cx: f64, y: f64) -> f64 {
             is_label,
             body,
             end_label,
-        } => emit_while(svg, cx, y, condition, is_label, end_label, body),
+            special_out,
+        } => emit_while(
+            svg,
+            cx,
+            y,
+            condition,
+            is_label,
+            end_label,
+            body,
+            special_out.as_deref(),
+        ),
         LayoutNode::Repeat {
             body,
             condition,
@@ -2214,6 +2314,7 @@ fn emit_while(
     is_label: &Option<String>,
     end_label: &Option<String>,
     body: &[LayoutNode],
+    special_out: Option<&LayoutNode>,
 ) -> f64 {
     // PlantUML's FtileWhile layout (reverse-engineered):
     //   - condition hexagon at the top
@@ -2245,12 +2346,21 @@ fn emit_while(
     let diamond_left_vertex_x = cx - cond_inner_w / 2.0 - DIAMOND_HALF;
     let diamond_right_vertex_x = cx + cond_inner_w / 2.0 + DIAMOND_HALF;
 
-    // Inbound arrow length from diamond bottom to body top. When there's an
-    // "is (yes)" label, PlantUML reserves text_height(11) + 2*halfHex(=24)
-    // of extra vertical space to hold the label and the gap below.
-    // ~36.9551 for is_label, ARROW_LEN(20) otherwise (rough approximation).
+    // Inbound arrow length from diamond bottom to body top. The "is (yes)"
+    // label sits below the diamond; the inbound arrow must accommodate it
+    // plus the gap to body_top. Base reservation: text_height(11) + 2*halfHex
+    // ≈ 36.95. When the body is non-empty AND there's no `endwhile (label)`,
+    // PlantUML's slot compression removes ~4.82 of slack between diamond and
+    // body, giving 32.1348 empirically. (Empty body doesn't compress because
+    // it bridges directly to the junction, leaving no compressible slack.)
+    let compress_top =
+        is_label.is_some() && end_label.is_none() && !body.is_empty();
     let body_top_offset = if is_label.is_some() {
-        pm::text_height(SMALL_FONT) + 2.0 * DIAMOND_HALF
+        if compress_top {
+            32.1348
+        } else {
+            pm::text_height(SMALL_FONT) + 2.0 * DIAMOND_HALF
+        }
     } else {
         ARROW_LEN
     };
@@ -2260,9 +2370,19 @@ fn emit_while(
     // diamond shapes in document order).
     let body_bottom = emit_sequence(svg, body, cx, body_top);
 
-    // Junction y: 12 px below the body. (For non-empty bodies, PlantUML
-    // compresses this to 10 — we use the un-compressed value, off by ~2.)
-    let junction_y = body_bottom + DIAMOND_HALF;
+    // Junction y: 12 px below the body for empty bodies, 10 px for
+    // non-empty bodies. PlantUML's UEmpty(5, halfHex=12) placeholder is
+    // compressed by 2 when adjacent to body content (slot finder removes
+    // the slack); for empty bodies there's no adjacent content so the
+    // gap stays at 12. The arrowhead midpoint below still uses the
+    // un-compressed value (body_bottom + 12) — PlantUML draws the
+    // arrowhead at the midpoint of the segment BEFORE compression
+    // transforms the line endpoints.
+    let junction_y = if body.is_empty() {
+        body_bottom + DIAMOND_HALF
+    } else {
+        body_bottom + 10.0
+    };
 
     // Loop-back arm x position: 12 past whichever is wider, the diamond or
     // the body's right extent.
@@ -2271,10 +2391,43 @@ fn emit_while(
     let body_left_x = cx - body_left_ext;
     let loop_x = diamond_right_vertex_x.max(body_right_x) + DIAMOND_HALF;
 
-    // Exit arm x position: 12 px left of whichever is wider. This mirrors
-    // PlantUML's ConnectionOut formula `halfHex + (cx - dimTotal.left)`
-    // where dimTotal.left = max(diamond.left, body.left) + 2*halfHex.
-    let exit_x = diamond_left_vertex_x.min(body_left_x) - DIAMOND_HALF;
+    // Exit arm geometry. Two modes:
+    //
+    // (a) WITH special_out (Stop/End/Detach/Kill after endwhile): exit goes
+    //     LEFT from diamond_left_vertex to the special's cx column, then
+    //     DOWN to the special's top. The special is drawn INSIDE the
+    //     while's frame. exit_x = special's cx in absolute coordinates,
+    //     positioned per PlantUML's translateForSpecial formula.
+    //
+    // (b) WITHOUT special_out (regular flow continuation): exit goes LEFT
+    //     to halfHex past the widest content, then DOWN to junction_y.
+    //     The exit_x is just past the body's left extent (or the diamond's
+    //     left vertex, whichever is further out).
+    let geo_left_x = diamond_left_vertex_x.min(body_left_x);
+    let (exit_x, exit_bottom_y) = if let Some(special) = special_out {
+        let special_w = node_width(special);
+        // translateForSpecial.x in FtileWhile-local =
+        //   min(xWhile - halfHex, xDiamond) - xDeltaBecauseSpecial
+        // where xWhile = body_left in FtileWhile-local, xDiamond =
+        // diamond_left in FtileWhile-local. Translating to absolute:
+        //   min(body_left_x - halfHex, diamond_left_vertex_x) - special_w
+        // The special's cx is at translateForSpecial.x + special_w/2.
+        let special_left_abs = (body_left_x - DIAMOND_HALF)
+            .min(diamond_left_vertex_x)
+            - special_w;
+        let special_cx = special_left_abs + special_w / 2.0;
+        // translateForSpecial.y in FtileWhile-local =
+        //   max(3*half, 4*halfHex) where half = diamond hexagon's
+        //   (outY - inY)/2 = 12. So translateForSpecial.y = max(36, 48) = 48.
+        // Absolute: special_top = y + (48 - DIAMOND_HALF*2) below diamond.
+        // y is the diamond's top. Diamond extends 24 below y. So
+        // special_top_abs = y + 48 = diamond_top + 4*halfHex.
+        let special_top = y + 4.0 * DIAMOND_HALF;
+        (special_cx, special_top)
+    } else {
+        let exit_x = geo_left_x - DIAMOND_HALF;
+        (exit_x, junction_y)
+    };
 
     // Diamond polygon (after body shapes are in `shapes`).
     let pts = vec![
@@ -2365,9 +2518,10 @@ fn emit_while(
     svg.line_styled(&arrow_color, "1", cx, loop_x, junction_y, junction_y, false);
 
     // 4. UP arrowhead at midpoint of the loop arm's vertical run.
-    // PlantUML draws this at the segment midpoint of the un-compressed
-    // y1bis (= body_bottom + halfHex); we mirror that here.
-    let mid_y = (diamond_cy + body_bottom + DIAMOND_HALF) / 2.0;
+    // PlantUML draws this at the midpoint of (diamond_cy, body_bottom +
+    // halfHex), adjusted by the same compression that shifts body_top up.
+    let body_compression = if compress_top { 4.8203 } else { 0.0 };
+    let mid_y = (diamond_cy + body_bottom + DIAMOND_HALF - body_compression) / 2.0;
     svg.polygon_connector(
         &arrow_color,
         &[
@@ -2426,32 +2580,65 @@ fn emit_while(
         false,
     );
 
-    // 9. Exit arm vertical at exit_x from diamond_cy to junction_y.
+    // 9. Exit arm vertical at exit_x — single line from diamond_cy down
+    // to the final exit y. For specialOut, that's exit_bottom_y (= special
+    // top). For no-specialOut, that's wrap_y (= exit_bottom_y + halfHex),
+    // and we emit a wrap-back horizontal to cx afterward.
+    let wrap_y = if special_out.is_some() {
+        exit_bottom_y
+    } else {
+        exit_bottom_y + DIAMOND_HALF
+    };
     svg.line_styled(
         &arrow_color,
         "1",
         exit_x,
         exit_x,
         diamond_cy,
-        junction_y,
+        wrap_y,
         false,
     );
 
-    // 10. DOWN arrowhead at midpoint of the exit arm (long-arm convention).
-    let exit_mid_y = (diamond_cy + junction_y) / 2.0;
+    // 10. DOWN arrowhead. When special_out is present, the arrowhead lands
+    // AT the terminator's top (ConnectionOutSpecial uses endDecoration);
+    // otherwise the arrowhead is at the midpoint of the long exit arm
+    // (ConnectionOut with emphasizeDirection).
+    let arrow_y = if special_out.is_some() {
+        wrap_y
+    } else {
+        (diamond_cy + wrap_y) / 2.0
+    };
     svg.polygon_connector(
         &arrow_color,
         &[
-            (exit_x - 4.0, exit_mid_y - 10.0),
-            (exit_x, exit_mid_y),
-            (exit_x + 4.0, exit_mid_y - 10.0),
-            (exit_x, exit_mid_y - 6.0),
+            (exit_x - 4.0, arrow_y - 10.0),
+            (exit_x, arrow_y),
+            (exit_x + 4.0, arrow_y - 10.0),
+            (exit_x, arrow_y - 6.0),
         ],
         &arrow_color,
         "1",
     );
 
-    junction_y
+    // 11. Either emit the special_out terminator INSIDE the while's frame
+    // (ConnectionOutSpecial) or emit the wrap-back horizontal from exit_x
+    // back to cx (ConnectionOut's snake2).
+    let final_bottom = if let Some(special) = special_out {
+        emit_node(svg, special, exit_x, wrap_y)
+    } else {
+        svg.line_styled(
+            &arrow_color,
+            "1",
+            exit_x,
+            cx,
+            wrap_y,
+            wrap_y,
+            false,
+        );
+        wrap_y
+    };
+
+    final_bottom
 }
 
 fn emit_repeat(
