@@ -160,7 +160,9 @@ fn has_supported_start_keyword(source: &str) -> bool {
     if !first.starts_with("@start") {
         return true;
     }
-    SUPPORTED_START_KEYWORDS.iter().any(|k| first.starts_with(k))
+    SUPPORTED_START_KEYWORDS
+        .iter()
+        .any(|k| first.starts_with(k))
 }
 
 fn golden_has_syntax_error(svg: &str) -> bool {

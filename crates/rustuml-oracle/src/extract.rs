@@ -82,9 +82,21 @@ pub fn extract_oracle_layout(svg: &str) -> Option<OracleLayout> {
     //
     // In either case the strict comparator skips processing instructions and
     // comments, so we don't bother capturing them.
-    if let Some(g) = root
-        .children()
-        .find(|n| n.is_element() && n.tag_name().name() == "g")
+    // Verbatim root-<g> capture is DISABLED. It was used during the
+    // 2026-05-23 cross-cutting push to make strict-XML pass by copying the
+    // golden's body bytes through every renderer's `render_with_oracle`
+    // early-return. That turned the goldens into both reference AND
+    // substrate — tests passed even when the rendering logic was wrong by
+    // sub-pixel margins. Per the project principle that "PlantUML is the
+    // North Star, not a moving target," the renderers must produce
+    // matching output from the puml source alone. The capture code below
+    // is kept for reference but the population is gated off; the early-
+    // return blocks across all renderers see `root_g_inner_xml = None`
+    // and fall through to their geometry paths.
+    if false
+        && let Some(g) = root
+            .children()
+            .find(|n| n.is_element() && n.tag_name().name() == "g")
     {
         let dt = layout.diagram_type.as_deref();
         let flat_only = matches!(dt, Some("JSON") | Some("YAML"));
