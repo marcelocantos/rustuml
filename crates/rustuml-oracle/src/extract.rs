@@ -112,12 +112,12 @@ pub fn extract_oracle_layout(svg: &str) -> Option<OracleLayout> {
                 let keep = if with_groups {
                     matches!(
                         tag,
-                        "rect" | "text" | "line" | "path" | "ellipse" | "polygon" | "g"
+                        "rect" | "text" | "line" | "path" | "ellipse" | "polygon" | "g" | "a"
                     )
                 } else {
                     matches!(
                         tag,
-                        "rect" | "text" | "line" | "path" | "ellipse" | "polygon"
+                        "rect" | "text" | "line" | "path" | "ellipse" | "polygon" | "a"
                     )
                 };
                 if keep {
