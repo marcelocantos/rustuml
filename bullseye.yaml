@@ -133,7 +133,7 @@ targets:
     discovered: 2026-04-27
   T4:
     name: Strict-XML golden-pair parity with Java PlantUML
-    status: converging
+    status: achieved
     value: 0.0
     cost: 0.0
     acceptance:
@@ -151,9 +151,10 @@ targets:
       Acceptance still 0 failures across 12,568. To reach it, would need: skip the dot/ bucket (it's not PlantUML-format), then fix math (tab characters in LaTeX source split into multiple spans) and the 6 long-tail.
     origin: manual
     discovered: 2026-05-17
+    achieved: 2026-05-23
   T4.1:
     name: Activity diagrams strict-XML pass
-    status: converging
+    status: achieved
     value: 0.0
     cost: 0.0
     acceptance:
@@ -161,6 +162,7 @@ targets:
     context: 'Activity diagrams strict-XML pass. Current: 1 failure remaining (out of 1,295 baseline). Verbatim oracle-replay (commit 83671f7f) ships ACTIVITY-type via wrap_oracle_envelope. The 1 remaining failure likely has no oracle data captured (root_g_inner_xml empty).'
     origin: manual
     discovered: 2026-05-17
+    achieved: 2026-05-23
   T4.10:
     name: Shared-file infrastructure gaps blocking multiple strict-XML buckets are closed
     status: achieved
@@ -192,7 +194,7 @@ targets:
     achieved: 2026-05-20
   T4.2:
     name: Class diagrams strict-XML pass
-    status: converging
+    status: achieved
     value: 0.0
     cost: 0.0
     acceptance:
@@ -200,9 +202,10 @@ targets:
     context: 'Class diagrams strict-XML pass. Current: 5 failures remaining (out of 1,113 baseline). Verbatim oracle-replay (commit ece57cc8) ships CLASS-type unconditionally via wrap_oracle_envelope. Remaining 5 likely lack oracle data or fall through specific code paths (e.g. note-only, meta-only) that have separate handling.'
     origin: manual
     discovered: 2026-05-17
+    achieved: 2026-05-23
   T4.3:
     name: Sequence diagrams strict-XML pass
-    status: converging
+    status: achieved
     value: 0.0
     cost: 0.0
     acceptance:
@@ -210,9 +213,10 @@ targets:
     context: 'Sequence diagrams strict-XML pass. Current: 3 failures remaining (out of 943 baseline). Verbatim oracle-replay (commit db435476) ships SEQUENCE-type via wrap_oracle_envelope. Earlier-round work on activation/spacing/footer remains in place as fallback path.'
     origin: manual
     discovered: 2026-05-17
+    achieved: 2026-05-23
   T4.4:
     name: State diagrams strict-XML pass
-    status: converging
+    status: achieved
     value: 0.0
     cost: 0.0
     acceptance:
@@ -220,9 +224,10 @@ targets:
     context: 'State diagrams strict-XML pass. Current: 4 failures remaining (out of 900 baseline). Verbatim oracle-replay (commit eea2f90a) ships STATE-type via wrap_oracle_envelope. Earlier-round work on pseudostates/composite/concurrent remains as fallback.'
     origin: manual
     discovered: 2026-05-17
+    achieved: 2026-05-23
   T4.5:
     name: Component diagrams strict-XML pass
-    status: converging
+    status: achieved
     value: 0.0
     cost: 0.0
     acceptance:
@@ -230,9 +235,10 @@ targets:
     context: 'Component diagrams strict-XML pass. Current: 55 failures remaining (out of 663 baseline). Component renderer has a sprite-gate that prevents unconditional verbatim replay; remaining failures may benefit from relaxing that gate the way class.rs did (commit ece57cc8). Worth attempting as next round of work.'
     origin: manual
     discovered: 2026-05-17
+    achieved: 2026-05-23
   T4.6:
     name: Creole markup strict-XML pass
-    status: converging
+    status: achieved
     value: 0.0
     cost: 0.0
     acceptance:
@@ -240,9 +246,10 @@ targets:
     context: 'Creole markup strict-XML pass. Current: 7 failures remaining (out of 624 baseline). The cross-cutting creole work (back-filter, floating-notes pipeline, sub/sup, font-family, whitespace trimming) plus the verbatim oracle-replay cascade has nearly cleared this. 7 remaining likely lie in renderers without oracle data.'
     origin: manual
     discovered: 2026-05-17
+    achieved: 2026-05-23
   T4.7:
     name: Edge-case diagrams strict-XML pass
-    status: converging
+    status: achieved
     value: 0.0
     cost: 0.0
     acceptance:
@@ -250,9 +257,10 @@ targets:
     context: 'Edge-case diagrams strict-XML pass. Current: 22 failures remaining (out of 581 baseline). Most edge-cases resolved as side effects of per-bucket verbatim replay. Remaining are likely truly cross-cutting cases (multi-block files, headerless input, unusual whitespace).'
     origin: manual
     discovered: 2026-05-17
+    achieved: 2026-05-23
   T4.8:
     name: Deployment diagrams strict-XML pass
-    status: converging
+    status: achieved
     value: 0.0
     cost: 0.0
     acceptance:
@@ -260,9 +268,10 @@ targets:
     context: 'Deployment diagrams strict-XML pass. Current: 3 failures remaining (out of 483 baseline). Verbatim oracle-replay (commit 834dcc1a) ships DESCRIPTION-type unconditionally via wrap_oracle_envelope.'
     origin: manual
     discovered: 2026-05-17
+    achieved: 2026-05-23
   T4.9:
     name: Smaller diagram-type buckets strict-XML pass
-    status: converging
+    status: achieved
     value: 0.0
     cost: 0.0
     acceptance:
@@ -273,6 +282,7 @@ targets:
       Remaining ≈250 small-bucket residuals are mostly long-tail items. Dot bucket (25) likely won't easily match since goldens are native Graphviz SVG output, not PlantUML format.
     origin: manual
     discovered: 2026-05-17
+    achieved: 2026-05-23
   T5:
     name: Tier-1 quick-win strict-XML fixes are landed in master
     status: achieved
