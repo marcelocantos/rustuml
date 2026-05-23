@@ -31,6 +31,7 @@ from pathlib import Path
 REPO_ROOT = Path(__file__).resolve().parent.parent
 GOLDEN_ROOT = REPO_ROOT / "test-diagrams" / "golden"
 DIFF_ONE_BIN = REPO_ROOT / "target" / "release" / "examples" / "diff_one"
+CHECK_ALL_BIN = REPO_ROOT / "target" / "release" / "examples" / "check_all"
 PORT = 8788
 
 
@@ -46,6 +47,37 @@ def build_tree() -> dict:
         if names:
             tree[bucket_dir.name] = names
     return tree
+
+
+def compute_diff_set() -> set:
+    """Run check_all and return a set of 'bucket/name' strings whose
+    rustuml render disagrees with the golden under the strict-XML
+    comparator. Empty set when everything passes."""
+    if not CHECK_ALL_BIN.is_file():
+        sys.stderr.write(
+            "[viewer] check_all binary missing; differences-only filter unavailable.\n"
+            "         Build with: cargo build --release --example check_all -p rustuml-oracle\n"
+        )
+        return set()
+    try:
+        result = subprocess.run(
+            [str(CHECK_ALL_BIN)],
+            capture_output=True,
+            cwd=str(REPO_ROOT),
+            timeout=300,
+        )
+    except subprocess.TimeoutExpired:
+        sys.stderr.write("[viewer] check_all timed out; differences filter empty.\n")
+        return set()
+    if result.returncode != 0:
+        sys.stderr.write(f"[viewer] check_all failed: {result.stderr.decode()[:300]}\n")
+        return set()
+    try:
+        items = json.loads(result.stdout.decode())
+        return set(items)
+    except json.JSONDecodeError as e:
+        sys.stderr.write(f"[viewer] check_all output not JSON: {e}\n")
+        return set()
 
 
 INDEX_HTML = """<!doctype html>
@@ -99,13 +131,30 @@ INDEX_HTML = """<!doctype html>
   }
   #search {
     width: calc(100% - 28px);
-    margin: 10px 14px;
+    margin: 10px 14px 4px;
     padding: 6px 8px;
     border: 1px solid var(--border);
     border-radius: 6px;
     background: var(--bg);
     color: var(--text);
     font: inherit;
+  }
+  .toolbar {
+    padding: 6px 14px 10px;
+    border-bottom: 1px solid var(--border);
+    display: flex; flex-direction: column; gap: 4px;
+    font-size: 12px;
+    color: var(--muted);
+  }
+  .toolbar label {
+    display: flex; align-items: center; gap: 6px;
+    cursor: pointer; user-select: none;
+  }
+  .empty-state {
+    padding: 18px 14px;
+    color: var(--muted);
+    font-size: 13px;
+    line-height: 1.5;
   }
   details { margin: 0; }
   details > summary {
@@ -180,6 +229,13 @@ INDEX_HTML = """<!doctype html>
   <nav id="sidebar">
     <header>Goldens</header>
     <input id="search" type="search" placeholder="Filter…" autocomplete="off" />
+    <div class="toolbar">
+      <label>
+        <input id="differences-only" type="checkbox" checked>
+        Show only differences (<span id="diff-count">…</span>)
+      </label>
+      <span style="font-size: 11px;">↑↓ navigate · ←→ collapse/expand</span>
+    </div>
     <div id="tree"></div>
   </nav>
   <main id="main">
@@ -202,8 +258,11 @@ INDEX_HTML = """<!doctype html>
 </div>
 <script>
   const tree = TREE_JSON;
+  const diffSet = new Set(DIFFS_JSON);
   const treeEl = document.getElementById("tree");
   const searchEl = document.getElementById("search");
+  const diffOnlyEl = document.getElementById("differences-only");
+  const diffCountEl = document.getElementById("diff-count");
   const headerEl = document.getElementById("header");
   const panelsEl = document.getElementById("panels");
   const placeholderEl = document.getElementById("placeholder");
@@ -213,16 +272,33 @@ INDEX_HTML = """<!doctype html>
   const rustEl = document.getElementById("rust");
   let activeLink = null;
 
+  diffCountEl.textContent = diffSet.size;
+  // When there's nothing to review, leave the filter off so the user
+  // can still browse the corpus without unchecking the box first.
+  if (diffSet.size === 0) {
+    diffOnlyEl.checked = false;
+    diffOnlyEl.disabled = true;
+  }
+
   function renderTree(filter) {
     treeEl.innerHTML = "";
     const f = filter.toLowerCase();
+    const diffOnly = diffOnlyEl.checked;
+    let total = 0;
     for (const [bucket, names] of Object.entries(tree)) {
-      const matches = f
-        ? names.filter(n => n.toLowerCase().includes(f) || bucket.toLowerCase().includes(f))
-        : names;
+      let matches = names;
+      if (diffOnly) {
+        matches = matches.filter(n => diffSet.has(bucket + "/" + n));
+      }
+      if (f) {
+        matches = matches.filter(
+          n => n.toLowerCase().includes(f) || bucket.toLowerCase().includes(f)
+        );
+      }
       if (!matches.length) continue;
+      total += matches.length;
       const details = document.createElement("details");
-      details.open = f.length > 0;
+      details.open = f.length > 0 || diffOnly;
       const summary = document.createElement("summary");
       summary.textContent = bucket + " (" + matches.length + ")";
       details.appendChild(summary);
@@ -234,6 +310,7 @@ INDEX_HTML = """<!doctype html>
         a.textContent = name;
         a.dataset.bucket = bucket;
         a.dataset.name = name;
+        a.tabIndex = -1;
         a.addEventListener("click", e => {
           e.preventDefault();
           window.location.hash = a.getAttribute("href").slice(1);
@@ -243,6 +320,20 @@ INDEX_HTML = """<!doctype html>
       }
       details.appendChild(ul);
       treeEl.appendChild(details);
+    }
+    if (total === 0) {
+      const empty = document.createElement("div");
+      empty.className = "empty-state";
+      if (diffOnly && diffSet.size === 0) {
+        empty.innerHTML =
+          "Nothing to review — every golden matches the rustuml render " +
+          "under the strict‑XML comparator. " +
+          "<br><br>Uncheck “Show only differences” to browse " +
+          "the whole corpus.";
+      } else {
+        empty.textContent = "No matches.";
+      }
+      treeEl.appendChild(empty);
     }
   }
 
@@ -257,7 +348,7 @@ INDEX_HTML = """<!doctype html>
     placeholderEl.classList.add("hidden");
     if (activeLink) activeLink.classList.remove("active");
     activeLink = treeEl.querySelector(
-      `a[data-bucket="${bucket}"][data-name="${name}"]`
+      `a[data-bucket="${CSS.escape(bucket)}"][data-name="${CSS.escape(name)}"]`
     );
     if (activeLink) {
       activeLink.classList.add("active");
@@ -274,7 +365,86 @@ INDEX_HTML = """<!doctype html>
     show(h.slice(0, ix), h.slice(ix + 1));
   }
 
+  // List of leaf anchors in document order (open groups only — collapsed
+  // groups are skipped, matching what's visible). Rebuilt on demand.
+  function visibleLinks() {
+    return Array.from(
+      treeEl.querySelectorAll("details[open] > ul > li > a")
+    );
+  }
+
+  function activeOrFirst() {
+    if (activeLink && activeLink.isConnected && activeLink.offsetParent !== null) {
+      return activeLink;
+    }
+    const links = visibleLinks();
+    return links.length ? links[0] : null;
+  }
+
+  function navigate(delta) {
+    const links = visibleLinks();
+    if (!links.length) return;
+    const cur = activeOrFirst();
+    const ix = cur ? links.indexOf(cur) : -1;
+    const next = links[Math.max(0, Math.min(links.length - 1, ix + delta))];
+    if (next && next !== cur) {
+      window.location.hash = next.getAttribute("href").slice(1);
+    }
+  }
+
+  function detailsOf(link) {
+    return link ? link.closest("details") : null;
+  }
+
+  function bucketDetailsList() {
+    return Array.from(treeEl.querySelectorAll(":scope > details"));
+  }
+
+  function activeOrFocusedDetails() {
+    if (activeLink) return detailsOf(activeLink);
+    const all = bucketDetailsList();
+    return all.length ? all[0] : null;
+  }
+
+  function expandActiveBucket() {
+    const d = activeOrFocusedDetails();
+    if (!d) return;
+    if (!d.open) { d.open = true; renderActiveHighlight(); }
+  }
+
+  function collapseActiveBucket() {
+    const d = activeOrFocusedDetails();
+    if (!d) return;
+    if (d.open) {
+      d.open = false;
+      // If the active leaf was inside this group, it's no longer visible.
+      // Activate the bucket's summary by selecting its first child.
+      activeLink = null;
+      renderActiveHighlight();
+    }
+  }
+
+  function renderActiveHighlight() {
+    treeEl.querySelectorAll("a.active").forEach(a => a.classList.remove("active"));
+    if (activeLink && activeLink.isConnected) {
+      activeLink.classList.add("active");
+    }
+  }
+
+  document.addEventListener("keydown", e => {
+    // Ignore keystrokes while typing in the filter / search.
+    if (e.target instanceof HTMLInputElement) return;
+    switch (e.key) {
+      case "ArrowDown": e.preventDefault(); navigate(1); break;
+      case "ArrowUp":   e.preventDefault(); navigate(-1); break;
+      case "ArrowRight": e.preventDefault(); expandActiveBucket(); break;
+      case "ArrowLeft":  e.preventDefault(); collapseActiveBucket(); break;
+      case "/":         e.preventDefault(); searchEl.focus(); break;
+    }
+  });
+
   searchEl.addEventListener("input", () => renderTree(searchEl.value));
+  diffOnlyEl.addEventListener("change", () => renderTree(searchEl.value));
   window.addEventListener("hashchange", syncFromHash);
   renderTree("");
   syncFromHash();
@@ -306,7 +476,12 @@ class Handler(http.server.BaseHTTPRequestHandler):
 
     def send_index(self):
         tree = build_tree()
-        body = INDEX_HTML.replace("TREE_JSON", json.dumps(tree)).encode("utf-8")
+        diff_set = self.server.diff_set  # populated at startup
+        body = (
+            INDEX_HTML
+            .replace("TREE_JSON", json.dumps(tree))
+            .replace("DIFFS_JSON", json.dumps(sorted(diff_set)))
+        ).encode("utf-8")
         self.send_response(200)
         self.send_header("Content-Type", "text/html; charset=utf-8")
         self.send_header("Content-Length", str(len(body)))
@@ -385,8 +560,12 @@ def main():
             "(starting server anyway; renders will fail until you build)",
             file=sys.stderr,
         )
+    print("computing strict-XML differences …", end=" ", flush=True)
+    diff_set = compute_diff_set()
+    print(f"{len(diff_set)} differing")
     server = socketserver.ThreadingTCPServer(("127.0.0.1", PORT), Handler)
     server.allow_reuse_address = True
+    server.diff_set = diff_set
     print(f"viewer running at http://127.0.0.1:{PORT}/")
     try:
         server.serve_forever()
