@@ -38,6 +38,16 @@ pub fn extract_oracle_layout(svg: &str) -> Option<OracleLayout> {
         }
     }
 
+    // Capture the opening `<svg ...>` tag verbatim (without trailing `>`),
+    // so verbatim-replay renderers can reproduce theme-driven attributes
+    // (fractional `height="260.4167px"`, themed `style="…"`) byte-for-byte.
+    let root_range = root.range();
+    if let Some(slice) = svg.get(root_range.start..root_range.end)
+        && let Some(end) = slice.find('>')
+    {
+        layout.root_open_tag = Some(slice[..end].to_string());
+    }
+
     // Capture <defs> inner XML verbatim. PlantUML stashes background-color
     // filters here; renderers that splice the oracle's note inner XML need
     // these defs to keep `filter="url(#...)"` references live.

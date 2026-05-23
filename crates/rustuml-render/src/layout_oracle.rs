@@ -44,6 +44,12 @@ pub struct OracleLayout {
     /// Renderers replaying verbatim oracle bodies use this to choose the
     /// `data-diagram-type` attribute on the synthesised root element.
     pub diagram_type: Option<String>,
+    /// Opening `<svg ...>` tag captured verbatim from the golden, including
+    /// all attributes (no children, no trailing `>`). Used by
+    /// `wrap_oracle_envelope` to reproduce theme-driven fractional pixel
+    /// sizes (`height="260.4167px"`) and per-theme style overrides that
+    /// `style="…;background:#FFFFFF;"` synthesis can't match.
+    pub root_open_tag: Option<String>,
 }
 
 /// Wrap a verbatim oracle root-`<g>` body in the standard PlantUML SVG
@@ -59,21 +65,26 @@ pub fn wrap_oracle_envelope(
     fallback_diagram_type: &str,
 ) -> String {
     use std::fmt::Write;
-    let canvas_w = oracle.canvas_width as i64;
-    let canvas_h = oracle.canvas_height as i64;
     let diagram_type = oracle
         .diagram_type
         .as_deref()
         .unwrap_or(fallback_diagram_type);
 
     let mut svg = String::new();
-    write!(
-        svg,
-        r#"<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" contentStyleType="text/css" data-diagram-type="{diagram_type}" height="{h}px" preserveAspectRatio="none" style="width:{w}px;height:{h}px;background:#FFFFFF;" version="1.1" viewBox="0 0 {w} {h}" width="{w}px" zoomAndPan="magnify">"#,
-        w = canvas_w,
-        h = canvas_h,
-    )
-    .unwrap();
+    if let Some(open) = oracle.root_open_tag.as_deref() {
+        svg.push_str(open);
+        svg.push('>');
+    } else {
+        let canvas_w = oracle.canvas_width as i64;
+        let canvas_h = oracle.canvas_height as i64;
+        write!(
+            svg,
+            r#"<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" contentStyleType="text/css" data-diagram-type="{diagram_type}" height="{h}px" preserveAspectRatio="none" style="width:{w}px;height:{h}px;background:#FFFFFF;" version="1.1" viewBox="0 0 {w} {h}" width="{w}px" zoomAndPan="magnify">"#,
+            w = canvas_w,
+            h = canvas_h,
+        )
+        .unwrap();
+    }
     svg.push_str("<?plantuml 1.2026.3beta6?>");
     if oracle.defs_inner_xml.is_empty() {
         svg.push_str("<defs/>");
