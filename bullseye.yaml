@@ -160,14 +160,14 @@ targets:
     acceptance:
     - The `activity/` directory under `test-diagrams/golden` produces 0 strict-XML failures when `cargo test --test golden_pairs` runs.
     context: |-
-      Activity diagrams strict-XML pass. Current: 823 failures (out of 1,493). Verbatim oracle-replay disabled 2026-05-23 (f6500c8d); the 823 represents real geometry-path failures.
+      Activity diagrams strict-XML pass. Current: 823 failures (out of 1,493).
 
-      2026-05-23 late evening (commit 506c54f6): emit_while rewritten to draw the loop-back arm, exit arm, and endwhile label that were missing. Diagrams now show correct while-loop topology in the viewer. Bucket count UNCHANGED at 823 — byte-exact match still blocked on three follow-up items (see project_parity_gaps.md):
-        (a) specialOut handling — Stop/End/Detach/Kill after endwhile shifts dimTotal.left by 22 px.
-        (b) Compression offset — 2 px drop on the body→junction gap for non-empty bodies.
-        (c) Parent re-alignment after while's width change.
+      2026-05-24 (commit 3774d748): Implemented all three byte-exact follow-ups for while-loop (specialOut handling, compression offset, asymmetric extents). Many shape positions now byte-exact (basic-while down to 1 diff — SVG header width). Test count UNCHANGED at 823 because:
+        (a) SVG header width off by 3-4 px — PlantUML uses ~30 px right padding for while-containing diagrams vs rustuml's 19.
+        (b) Connector emission order differs in some cases.
+        (c) Most failures involve other unimplemented features (swimlanes ~175, backward ~32, deprecated color actions, asymmetric if-block extents in BFS-style nested).
 
-      Other big rocks remaining: Swimlanes (~175 goldens, completely unimplemented), Backward (~32 goldens), Switch/Case (small), nested if-block extents asymmetry (visible in BFS-style nested diagrams).
+      Next bites: match PlantUML's right padding heuristic for while diagrams, then tackle swimlanes (biggest unimplemented feature). Swimlanes alone = ~175 failures.
     origin: manual
     discovered: 2026-05-17
   T4.10:
