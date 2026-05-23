@@ -647,6 +647,21 @@ fn node_extents(node: &LayoutNode) -> (f64, f64) {
             let right_extent = cond_half.max(body_half) + 12.0 + 15.0;
             (left_extent, right_extent)
         }
+        LayoutNode::While {
+            body, condition, ..
+        } => {
+            // PlantUML's FtileWhile bounding box is asymmetric:
+            //   dimTotal.left  = max(diamond.left,  body.left)  + 2*halfHex
+            //   dimTotal.right = max(diamond.right, body.right) + 1*halfHex
+            // The extra halfHex on the left holds the exit arm; the right
+            // halfHex holds the loop-back arm. The cx-attach (where the
+            // parent's cx column meets the while) sits at dimTotal.left.
+            let (body_left, body_right) = sequence_extents(body);
+            let cond_half = diamond_inner_w(condition) / 2.0 + DIAMOND_HALF;
+            let left_extent = cond_half.max(body_left) + 2.0 * DIAMOND_HALF;
+            let right_extent = cond_half.max(body_right) + DIAMOND_HALF;
+            (left_extent, right_extent)
+        }
         // Title contributes 3 px of asymmetric padding on each side beyond
         // tw/2 (reverse-engineered against multiple title goldens). This
         // shifts cx 3 px right of action's natural midline when the title
@@ -741,9 +756,13 @@ fn node_width(node: &LayoutNode) -> f64 {
         LayoutNode::While {
             body, condition, ..
         } => {
-            let body_w = sequence_width(body);
-            let cond_w = diamond_inner_w(condition) + DIAMOND_HALF * 2.0;
-            body_w.max(cond_w + 40.0) // extra space for loop-back arrow
+            // Width = left_extent + right_extent. See node_extents above
+            // for the asymmetric formula.
+            let (body_left, body_right) = sequence_extents(body);
+            let cond_half = diamond_inner_w(condition) / 2.0 + DIAMOND_HALF;
+            let left_extent = cond_half.max(body_left) + 2.0 * DIAMOND_HALF;
+            let right_extent = cond_half.max(body_right) + DIAMOND_HALF;
+            left_extent + right_extent
         }
         LayoutNode::Repeat {
             body, condition, ..
@@ -908,10 +927,19 @@ fn node_height(node: &LayoutNode) -> f64 {
                 .fold(0.0f64, f64::max);
             FORK_BAR_HEIGHT + ARROW_LEN + max_h + ARROW_LEN + FORK_BAR_HEIGHT
         }
-        LayoutNode::While { body, .. } => {
+        LayoutNode::While {
+            body, is_label, ..
+        } => {
             let body_h = sequence_height(body);
             let diamond_h = DIAMOND_HALF * 2.0;
-            diamond_h + ARROW_LEN + body_h + ARROW_LEN
+            // Diamond + inbound arrow + body + junction gap.
+            // Inbound arrow accommodates the "is" label when present.
+            let inbound = if is_label.is_some() {
+                pm::text_height(SMALL_FONT) + 2.0 * DIAMOND_HALF
+            } else {
+                ARROW_LEN
+            };
+            diamond_h + inbound + body_h + DIAMOND_HALF
         }
         LayoutNode::Repeat { body, .. } => {
             let body_h = sequence_height(body);
@@ -1698,8 +1726,8 @@ fn emit_node(svg: &mut SvgEmitter, node: &LayoutNode, cx: f64, y: f64) -> f64 {
             condition,
             is_label,
             body,
-            end_label: _,
-        } => emit_while(svg, cx, y, condition, is_label, body),
+            end_label,
+        } => emit_while(svg, cx, y, condition, is_label, end_label, body),
         LayoutNode::Repeat {
             body,
             condition,
@@ -2184,43 +2212,85 @@ fn emit_while(
     y: f64,
     condition: &str,
     is_label: &Option<String>,
+    end_label: &Option<String>,
     body: &[LayoutNode],
 ) -> f64 {
-    // PlantUML emits the while body's shapes BEFORE the condition diamond's
-    // shape in the SVG (the diamond visually sits above the body, but in
-    // emission order the body comes first). Compute geometry first, emit
-    // body, then the diamond + texts, then the inbound connector.
+    // PlantUML's FtileWhile layout (reverse-engineered):
+    //   - condition hexagon at the top
+    //   - "is (yes)" label sits just below the diamond, on the body-path
+    //   - inbound arrow from diamond bottom down to body top — long enough
+    //     (~37 px) to accommodate the "yes" label
+    //   - body (sequence inside the loop)
+    //   - junction 12 px below body where the loop-back arm attaches
+    //   - loop-back arm: junction → right (loop_x) → up to diamond_cy →
+    //     left into diamond's right vertex (the "back to condition" path)
+    //   - exit arm: from diamond's left vertex left to exit_x, then down to
+    //     the next sibling's y (for byte-exact match this would route around
+    //     the full body — we approximate by stopping at junction_y here)
+    //   - "endwhile (no)" label sits just outside the diamond's left vertex
+    //
+    // Geometry constants are derived empirically from goldens. Byte-exact
+    // match across all cases (with/without specialOut, with/without
+    // compression) requires more work — see project notes.
     let arrow_color = svg.palette.arrow_color.clone();
     let diamond_stroke = svg.palette.diamond_stroke.clone();
     let diamond_fill = svg.palette.diamond_fill.clone();
     let diamond_stroke_width = svg.palette.diamond_stroke_width.clone();
     let text_color = svg.palette.text_color.clone();
+
     let cond_inner_w = diamond_inner_w(condition);
     let cond_text_w = text_render::measure(condition, SMALL_FONT, false);
     let diamond_cy = y + DIAMOND_HALF;
     let diamond_bottom = y + DIAMOND_HALF * 2.0;
+    let diamond_left_vertex_x = cx - cond_inner_w / 2.0 - DIAMOND_HALF;
+    let diamond_right_vertex_x = cx + cond_inner_w / 2.0 + DIAMOND_HALF;
 
-    // Body below diamond — emit it first.
-    let body_bottom = emit_sequence(svg, body, cx, diamond_bottom + IF_BRANCH_DOWN);
+    // Inbound arrow length from diamond bottom to body top. When there's an
+    // "is (yes)" label, PlantUML reserves text_height(11) + 2*halfHex(=24)
+    // of extra vertical space to hold the label and the gap below.
+    // ~36.9551 for is_label, ARROW_LEN(20) otherwise (rough approximation).
+    let body_top_offset = if is_label.is_some() {
+        pm::text_height(SMALL_FONT) + 2.0 * DIAMOND_HALF
+    } else {
+        ARROW_LEN
+    };
+    let body_top = diamond_bottom + body_top_offset;
 
-    // Now the diamond + its texts (lands after body shapes in `shapes`).
+    // Body below diamond — emit it first (PlantUML emits body shapes before
+    // diamond shapes in document order).
+    let body_bottom = emit_sequence(svg, body, cx, body_top);
+
+    // Junction y: 12 px below the body. (For non-empty bodies, PlantUML
+    // compresses this to 10 — we use the un-compressed value, off by ~2.)
+    let junction_y = body_bottom + DIAMOND_HALF;
+
+    // Loop-back arm x position: 12 past whichever is wider, the diamond or
+    // the body's right extent.
+    let (body_left_ext, body_right_ext) = sequence_extents(body);
+    let body_right_x = cx + body_right_ext;
+    let body_left_x = cx - body_left_ext;
+    let loop_x = diamond_right_vertex_x.max(body_right_x) + DIAMOND_HALF;
+
+    // Exit arm x position: 12 px left of whichever is wider. This mirrors
+    // PlantUML's ConnectionOut formula `halfHex + (cx - dimTotal.left)`
+    // where dimTotal.left = max(diamond.left, body.left) + 2*halfHex.
+    let exit_x = diamond_left_vertex_x.min(body_left_x) - DIAMOND_HALF;
+
+    // Diamond polygon (after body shapes are in `shapes`).
     let pts = vec![
         (cx - cond_inner_w / 2.0, y),
         (cx + cond_inner_w / 2.0, y),
-        (cx + cond_inner_w / 2.0 + DIAMOND_HALF, diamond_cy),
-        (cx + cond_inner_w / 2.0, y + DIAMOND_HALF * 2.0),
-        (cx - cond_inner_w / 2.0, y + DIAMOND_HALF * 2.0),
-        (cx - cond_inner_w / 2.0 - DIAMOND_HALF, diamond_cy),
+        (diamond_right_vertex_x, diamond_cy),
+        (cx + cond_inner_w / 2.0, diamond_bottom),
+        (cx - cond_inner_w / 2.0, diamond_bottom),
+        (diamond_left_vertex_x, diamond_cy),
     ];
     svg.polygon_shape(&diamond_fill, &pts, &diamond_stroke, &diamond_stroke_width);
 
-    // PlantUML emits the "is (label)" text BEFORE the condition text, so
-    // the body-path "yes" appears in the SVG before the inside-diamond
-    // condition label.
+    // "is (yes)" label below diamond on the body-down path. PlantUML emits
+    // this BEFORE the inside-diamond condition text.
     if let Some(label) = is_label {
         let lw = text_render::measure(label, SMALL_FONT, false);
-        // "is (label)" sits just below the diamond on the body's down-path,
-        // at cx + 4 horizontally and one ascent below the diamond's bottom.
         svg.text_element(
             &text_color,
             "sans-serif",
@@ -2233,6 +2303,7 @@ fn emit_while(
         );
     }
 
+    // Condition text inside diamond.
     let text_y = y + DIAMOND_HALF + pm::text_height(SMALL_FONT) / 2.0 - pm::descent(SMALL_FONT);
     svg.text_element(
         &text_color,
@@ -2245,16 +2316,142 @@ fn emit_while(
         false,
     );
 
-    // Inbound connector from diamond down to body (after body shapes and
-    // diamond shape are in place).
-    svg.down_arrow(
-        cx,
-        diamond_bottom,
-        diamond_bottom + IF_BRANCH_DOWN,
+    // "endwhile (no)" label just outside diamond's left vertex, with its
+    // baseline at diamond_cy - descent(11).
+    if let Some(label) = end_label {
+        let lw = text_render::measure(label, SMALL_FONT, false);
+        svg.text_element(
+            &text_color,
+            "sans-serif",
+            SMALL_FONT,
+            lw,
+            diamond_left_vertex_x - lw,
+            diamond_cy - pm::descent(SMALL_FONT),
+            label,
+            false,
+        );
+    }
+
+    // Connector emission order (matches PlantUML's snake walk):
+    //   1. body cx vertical: diamond_bottom → body_top (with inbound arrowhead)
+    //   2. body cx vertical: body_bottom → junction_y (no arrowhead)
+    //   3. junction horizontal: cx → loop_x
+    //   4. loop arm UP arrowhead at midpoint
+    //   5. loop arm vertical: loop_x from diamond_cy → junction_y
+    //   6. loop arm horizontal: diamond_cy from loop_x → diamond_right_vertex
+    //   7. loop arm LEFT arrowhead at diamond_right_vertex
+    //   8. exit arm horizontal: diamond_cy from diamond_left_vertex → exit_x
+    //   9. exit arm vertical: exit_x from diamond_cy → junction_y
+    //  10. exit arm DOWN arrowhead at the end (or at midpoint for long arms)
+
+    // 1. Inbound arrow from diamond bottom to body top.
+    svg.down_arrow(cx, diamond_bottom, body_top, &arrow_color);
+
+    // 2. Body bottom → junction (only if body has content; for empty body
+    // the inbound arrow already reaches the junction-equivalent point).
+    if !body.is_empty() {
+        svg.line_styled(
+            &arrow_color,
+            "1",
+            cx,
+            cx,
+            body_bottom,
+            junction_y,
+            false,
+        );
+    }
+
+    // 3. Horizontal at junction from body cx out to loop_x.
+    svg.line_styled(&arrow_color, "1", cx, loop_x, junction_y, junction_y, false);
+
+    // 4. UP arrowhead at midpoint of the loop arm's vertical run.
+    // PlantUML draws this at the segment midpoint of the un-compressed
+    // y1bis (= body_bottom + halfHex); we mirror that here.
+    let mid_y = (diamond_cy + body_bottom + DIAMOND_HALF) / 2.0;
+    svg.polygon_connector(
         &arrow_color,
+        &[
+            (loop_x - 4.0, mid_y + 10.0),
+            (loop_x, mid_y),
+            (loop_x + 4.0, mid_y + 10.0),
+            (loop_x, mid_y + 6.0),
+        ],
+        &arrow_color,
+        "1",
     );
 
-    body_bottom
+    // 5. Loop arm vertical at loop_x.
+    svg.line_styled(
+        &arrow_color,
+        "1",
+        loop_x,
+        loop_x,
+        diamond_cy,
+        junction_y,
+        false,
+    );
+
+    // 6. Loop arm horizontal at diamond_cy: loop_x → diamond_right_vertex.
+    svg.line_styled(
+        &arrow_color,
+        "1",
+        loop_x,
+        diamond_right_vertex_x,
+        diamond_cy,
+        diamond_cy,
+        false,
+    );
+
+    // 7. LEFT arrowhead at diamond_right_vertex.
+    svg.polygon_connector(
+        &arrow_color,
+        &[
+            (diamond_right_vertex_x + 10.0, diamond_cy - 4.0),
+            (diamond_right_vertex_x, diamond_cy),
+            (diamond_right_vertex_x + 10.0, diamond_cy + 4.0),
+            (diamond_right_vertex_x + 6.0, diamond_cy),
+        ],
+        &arrow_color,
+        "1",
+    );
+
+    // 8. Exit arm horizontal at diamond_cy: diamond_left_vertex → exit_x.
+    svg.line_styled(
+        &arrow_color,
+        "1",
+        diamond_left_vertex_x,
+        exit_x,
+        diamond_cy,
+        diamond_cy,
+        false,
+    );
+
+    // 9. Exit arm vertical at exit_x from diamond_cy to junction_y.
+    svg.line_styled(
+        &arrow_color,
+        "1",
+        exit_x,
+        exit_x,
+        diamond_cy,
+        junction_y,
+        false,
+    );
+
+    // 10. DOWN arrowhead at midpoint of the exit arm (long-arm convention).
+    let exit_mid_y = (diamond_cy + junction_y) / 2.0;
+    svg.polygon_connector(
+        &arrow_color,
+        &[
+            (exit_x - 4.0, exit_mid_y - 10.0),
+            (exit_x, exit_mid_y),
+            (exit_x + 4.0, exit_mid_y - 10.0),
+            (exit_x, exit_mid_y - 6.0),
+        ],
+        &arrow_color,
+        "1",
+    );
+
+    junction_y
 }
 
 fn emit_repeat(
