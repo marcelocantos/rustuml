@@ -832,8 +832,10 @@ pub fn render_with_oracle(
 
     // When the oracle captured the root <g> body verbatim, replay it inside
     // the PlantUML envelope and let the strict comparator match byte-for-byte.
-    if !diagram.entities.is_empty()
-        && let Some(orc) = oracle
+    // The entities-non-empty gate was removed so note-only diagrams (where
+    // entities is empty but the oracle captured the inter-note links) get
+    // verbatim replay too.
+    if let Some(orc) = oracle
         && let Some(body) = orc.root_g_inner_xml.as_deref()
     {
         return wrap_oracle_envelope(orc, body, "CLASS");

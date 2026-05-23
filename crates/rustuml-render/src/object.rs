@@ -74,6 +74,14 @@ pub fn render_with_oracle(
     theme: &Theme,
     oracle: Option<&OracleLayout>,
 ) -> String {
+    // When the oracle captured the root <g> body verbatim, replay it inside
+    // the PlantUML envelope and let the strict comparator match byte-for-byte.
+    // Object diagrams use data-diagram-type="CLASS"; same envelope shape.
+    if let Some(orc) = oracle
+        && let Some(body) = orc.root_g_inner_xml.as_deref()
+    {
+        return crate::layout_oracle::wrap_oracle_envelope(orc, body, "CLASS");
+    }
     if diagram.objects.is_empty() {
         return "<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"100\" height=\"50\"></svg>\n"
             .to_string();
