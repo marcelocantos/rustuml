@@ -133,36 +133,38 @@ targets:
     discovered: 2026-04-27
   T4:
     name: Strict-XML golden-pair parity with Java PlantUML
-    status: achieved
+    status: converging
     value: 0.0
     cost: 0.0
     acceptance:
     - '`cargo test --test golden_pairs` reports 0 failures across all 12,568 golden pairs.'
     - 'Skips remain bounded to the legitimate categories: Java reference is itself a syntax-error page (~1,199), ditaa raster diagrams (parked under T2), and I/O errors. No skips for `%date(...)`, no skips for unsupported keywords, no skips for parse failures.'
     context: |-
-      Strict-XML golden-pair parity. Current state (2026-05-23, end of day): 12,568 total · 11,228 pass · 41 fail · 1,299 skip — 99.86% effective pass rate (41 / 11,244 fixable). Session went from baseline 1,856 → 11,228 (+9,372).
+      Strict-XML golden-pair parity by renderer correctness alone — no verbatim oracle-replay shortcuts. State after the 2026-05-23 honesty strip (commit f6500c8d): 12,568 total · 5,936 pass · 5,333 fail · 1,299 skip.
 
-      Two breakthroughs landed today:
-      1. Verbatim root-<g> replay pattern across every renderer that has data-diagram-type set (16 buckets converted). Each adds an early-return in render_with_oracle that wraps the oracle's captured root-<g> body in wrap_oracle_envelope.
-      2. Verbatim root_open_tag capture (commit fe25a567) — the oracle now preserves the golden's exact `<svg ...>` attributes (fractional pixel sizes from theme DPI, themed style strings without background:#FFFFFF;). wrap_oracle_envelope uses it directly.
+      The previous "11,269 / 0 fail" headline (also 2026-05-23, before the strip) was achieved via verbatim root-<g> replay: each renderer's render_with_oracle copied the golden's body bytes back into our envelope, making the test structurally tautological. That violated the project principle "PlantUML is the North Star, not a moving target" — the goldens became both reference AND substrate, masking sub-pixel and structural bugs in the geometry path.
 
-      Per-bucket residuals (2026-05-23): dot 25 (native Graphviz SVG output, structurally different from PlantUML — likely permanently unfixable), math 10 (font/tab handling), creole 4, edge-cases 1, type-detection 1. Total 41.
+      The capture code is dormant (extract.rs gates the population with `if false`); the replay early-returns across 18 renderers now see None and fall through to the geometry path. Real work remaining is to fix those geometry paths so they match PlantUML's output from the puml source alone.
 
-      Acceptance still 0 failures across 12,568. To reach it, would need: skip the dot/ bucket (it's not PlantUML-format), then fix math (tab characters in LaTeX source split into multiple spans) and the 6 long-tail.
+      Per-bucket failures (2026-05-23, post-strip): activity 823, sequence 805, edge-cases 364, usecase 283, preprocessing 277, skinparam 266, class 245, deployment 236, state 232, combo 215, creole 173, er 157, mindmap 156, json-yaml 147, timing 141, wbs 134, gantt 114, salt 103, nwdiag 89, component 56, links 49, sprites 49, archimate 48, regex 45, rendering 33, chart 25, ebnf 25, type-detection 19, multi-diagram 13, math 10, object 1, dot 0.
+
+      Cross-cutting work that DID hold up under the strip (no oracle dependence): T4.10 infrastructure (oracle field shapes, plantuml_metrics fixes, grammatical path parser), themes preprocessor stdlib, dot pass-through to graphviz, the RustUML rebrand, the back-filter generator. Those count.
     origin: manual
     discovered: 2026-05-17
     achieved: 2026-05-23
   T4.1:
     name: Activity diagrams strict-XML pass
-    status: achieved
+    status: converging
     value: 0.0
     cost: 0.0
     acceptance:
     - The `activity/` directory under `test-diagrams/golden` produces 0 strict-XML failures when `cargo test --test golden_pairs` runs.
-    context: 'Activity diagrams strict-XML pass. Current: 1 failure remaining (out of 1,295 baseline). Verbatim oracle-replay (commit 83671f7f) ships ACTIVITY-type via wrap_oracle_envelope. The 1 remaining failure likely has no oracle data captured (root_g_inner_xml empty).'
+    context: |-
+      Activity diagrams strict-XML pass. Current: 1 failure remaining (out of 1,295 baseline). Verbatim oracle-replay (commit 83671f7f) ships ACTIVITY-type via wrap_oracle_envelope. The 1 remaining failure likely has no oracle data captured (root_g_inner_xml empty).
+
+      Reverted 2026-05-23: Retirement was driven by verbatim oracle-replay (commit 83671f7f) which copied the golden's <g> body through render_with_oracle. Replay disabled in f6500c8d; activity bucket back to 823 failures via the geometry path. Real renderer correctness work resumes.
     origin: manual
     discovered: 2026-05-17
-    achieved: 2026-05-23
   T4.10:
     name: Shared-file infrastructure gaps blocking multiple strict-XML buckets are closed
     status: achieved
@@ -194,84 +196,98 @@ targets:
     achieved: 2026-05-20
   T4.2:
     name: Class diagrams strict-XML pass
-    status: achieved
+    status: converging
     value: 0.0
     cost: 0.0
     acceptance:
     - The `class/` directory under `test-diagrams/golden` produces 0 strict-XML failures when `cargo test --test golden_pairs` runs.
-    context: 'Class diagrams strict-XML pass. Current: 5 failures remaining (out of 1,113 baseline). Verbatim oracle-replay (commit ece57cc8) ships CLASS-type unconditionally via wrap_oracle_envelope. Remaining 5 likely lack oracle data or fall through specific code paths (e.g. note-only, meta-only) that have separate handling.'
+    context: |-
+      Class diagrams strict-XML pass. Current: 5 failures remaining (out of 1,113 baseline). Verbatim oracle-replay (commit ece57cc8) ships CLASS-type unconditionally via wrap_oracle_envelope. Remaining 5 likely lack oracle data or fall through specific code paths (e.g. note-only, meta-only) that have separate handling.
+
+      Reverted 2026-05-23: Verbatim oracle-replay (ece57cc8) made the test tautological. Replay disabled in f6500c8d; class bucket back to 245 failures via geometry.
     origin: manual
     discovered: 2026-05-17
-    achieved: 2026-05-23
   T4.3:
     name: Sequence diagrams strict-XML pass
-    status: achieved
+    status: converging
     value: 0.0
     cost: 0.0
     acceptance:
     - The `sequence/` directory under `test-diagrams/golden` produces 0 strict-XML failures when `cargo test --test golden_pairs` runs.
-    context: 'Sequence diagrams strict-XML pass. Current: 3 failures remaining (out of 943 baseline). Verbatim oracle-replay (commit db435476) ships SEQUENCE-type via wrap_oracle_envelope. Earlier-round work on activation/spacing/footer remains in place as fallback path.'
+    context: |-
+      Sequence diagrams strict-XML pass. Current: 3 failures remaining (out of 943 baseline). Verbatim oracle-replay (commit db435476) ships SEQUENCE-type via wrap_oracle_envelope. Earlier-round work on activation/spacing/footer remains in place as fallback path.
+
+      Reverted 2026-05-23: Verbatim oracle-replay (db435476) papered over the geometry path. Replay disabled in f6500c8d; sequence bucket back to 805 failures.
     origin: manual
     discovered: 2026-05-17
-    achieved: 2026-05-23
   T4.4:
     name: State diagrams strict-XML pass
-    status: achieved
+    status: converging
     value: 0.0
     cost: 0.0
     acceptance:
     - The `state/` directory under `test-diagrams/golden` produces 0 strict-XML failures when `cargo test --test golden_pairs` runs.
-    context: 'State diagrams strict-XML pass. Current: 4 failures remaining (out of 900 baseline). Verbatim oracle-replay (commit eea2f90a) ships STATE-type via wrap_oracle_envelope. Earlier-round work on pseudostates/composite/concurrent remains as fallback.'
+    context: |-
+      State diagrams strict-XML pass. Current: 4 failures remaining (out of 900 baseline). Verbatim oracle-replay (commit eea2f90a) ships STATE-type via wrap_oracle_envelope. Earlier-round work on pseudostates/composite/concurrent remains as fallback.
+
+      Reverted 2026-05-23: Verbatim oracle-replay (eea2f90a) made the test tautological. Replay disabled in f6500c8d; state bucket back to 232 failures via geometry.
     origin: manual
     discovered: 2026-05-17
-    achieved: 2026-05-23
   T4.5:
     name: Component diagrams strict-XML pass
-    status: achieved
+    status: converging
     value: 0.0
     cost: 0.0
     acceptance:
     - The `component/` directory under `test-diagrams/golden` produces 0 strict-XML failures when `cargo test --test golden_pairs` runs.
-    context: 'Component diagrams strict-XML pass. Current: 55 failures remaining (out of 663 baseline). Component renderer has a sprite-gate that prevents unconditional verbatim replay; remaining failures may benefit from relaxing that gate the way class.rs did (commit ece57cc8). Worth attempting as next round of work.'
+    context: |-
+      Component diagrams strict-XML pass. Current: 55 failures remaining (out of 663 baseline). Component renderer has a sprite-gate that prevents unconditional verbatim replay; remaining failures may benefit from relaxing that gate the way class.rs did (commit ece57cc8). Worth attempting as next round of work.
+
+      Reverted 2026-05-23: Verbatim oracle-replay (commit 11caea70 removed the sprite-gate) papered over the geometry path. Replay disabled in f6500c8d; component bucket back to 56 failures.
     origin: manual
     discovered: 2026-05-17
-    achieved: 2026-05-23
   T4.6:
     name: Creole markup strict-XML pass
-    status: achieved
+    status: converging
     value: 0.0
     cost: 0.0
     acceptance:
     - The `creole/` directory under `test-diagrams/golden` produces 0 strict-XML failures when `cargo test --test golden_pairs` runs.
-    context: 'Creole markup strict-XML pass. Current: 7 failures remaining (out of 624 baseline). The cross-cutting creole work (back-filter, floating-notes pipeline, sub/sup, font-family, whitespace trimming) plus the verbatim oracle-replay cascade has nearly cleared this. 7 remaining likely lie in renderers without oracle data.'
+    context: |-
+      Creole markup strict-XML pass. Current: 7 failures remaining (out of 624 baseline). The cross-cutting creole work (back-filter, floating-notes pipeline, sub/sup, font-family, whitespace trimming) plus the verbatim oracle-replay cascade has nearly cleared this. 7 remaining likely lie in renderers without oracle data.
+
+      Reverted 2026-05-23: Creole bucket was cleared through verbatim replay cascading from other renderers (sequence/class/etc.). Replay disabled in f6500c8d; creole bucket back to 173 failures.
     origin: manual
     discovered: 2026-05-17
-    achieved: 2026-05-23
   T4.7:
     name: Edge-case diagrams strict-XML pass
-    status: achieved
+    status: converging
     value: 0.0
     cost: 0.0
     acceptance:
     - The `edge-cases/` directory under `test-diagrams/golden` produces 0 strict-XML failures when `cargo test --test golden_pairs` runs.
-    context: 'Edge-case diagrams strict-XML pass. Current: 22 failures remaining (out of 581 baseline). Most edge-cases resolved as side effects of per-bucket verbatim replay. Remaining are likely truly cross-cutting cases (multi-block files, headerless input, unusual whitespace).'
+    context: |-
+      Edge-case diagrams strict-XML pass. Current: 22 failures remaining (out of 581 baseline). Most edge-cases resolved as side effects of per-bucket verbatim replay. Remaining are likely truly cross-cutting cases (multi-block files, headerless input, unusual whitespace).
+
+      Reverted 2026-05-23: Edge-cases bucket was cleared by cascade from replayed renderers. Replay disabled in f6500c8d; bucket back to 364 failures.
     origin: manual
     discovered: 2026-05-17
-    achieved: 2026-05-23
   T4.8:
     name: Deployment diagrams strict-XML pass
-    status: achieved
+    status: converging
     value: 0.0
     cost: 0.0
     acceptance:
     - The `deployment/` directory under `test-diagrams/golden` produces 0 strict-XML failures when `cargo test --test golden_pairs` runs.
-    context: 'Deployment diagrams strict-XML pass. Current: 3 failures remaining (out of 483 baseline). Verbatim oracle-replay (commit 834dcc1a) ships DESCRIPTION-type unconditionally via wrap_oracle_envelope.'
+    context: |-
+      Deployment diagrams strict-XML pass. Current: 3 failures remaining (out of 483 baseline). Verbatim oracle-replay (commit 834dcc1a) ships DESCRIPTION-type unconditionally via wrap_oracle_envelope.
+
+      Reverted 2026-05-23: Verbatim oracle-replay (834dcc1a) made deployment tests tautological. Replay disabled in f6500c8d; deployment bucket back to 236 failures.
     origin: manual
     discovered: 2026-05-17
-    achieved: 2026-05-23
   T4.9:
     name: Smaller diagram-type buckets strict-XML pass
-    status: achieved
+    status: converging
     value: 0.0
     cost: 0.0
     acceptance:
@@ -280,9 +296,10 @@ targets:
       Smaller diagram-type buckets strict-XML pass. Current (2026-05-23): timing/gantt/salt/nwdiag/archimate/mindmap/wbs/json-yaml/regex/ebnf/chart/git all at 0 failures via verbatim oracle-replay (commits 20900b32, c7ccc835, fe0c8ec1, c903fac8). Object 1, sprites 2, math 10, dot 25, usecase 1, type-detection 2, multi-diagram 1, links 1, rendering 1, er 0. Combo 57 (combinations of multiple types). Preprocessing 119 (theme font cascade). Skinparam 33.
 
       Remaining ≈250 small-bucket residuals are mostly long-tail items. Dot bucket (25) likely won't easily match since goldens are native Graphviz SVG output, not PlantUML format.
+
+      Reverted 2026-05-23: Smaller buckets (timing, gantt, salt, nwdiag, archimate, mindmap, wbs, json-yaml, sprites, regex, ebnf, chart, math, object) were cleared via verbatim oracle-replay (20900b32, c7ccc835, fe0c8ec1, c903fac8 etc.). Replay disabled in f6500c8d; aggregate ~1,150 failures across these buckets via geometry path.
     origin: manual
     discovered: 2026-05-17
-    achieved: 2026-05-23
   T5:
     name: Tier-1 quick-win strict-XML fixes are landed in master
     status: achieved
