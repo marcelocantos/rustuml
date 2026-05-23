@@ -422,3 +422,22 @@ targets:
     origin: manual
     discovered: 2026-05-20
     achieved: 2026-05-20
+  T6:
+    name: Welcome-screen URL points to a rustuml-owned destination (not plantuml.com)
+    status: identified
+    value: 0.0
+    cost: 0.0
+    acceptance:
+    - The welcome/error-page SVG renders a URL that points to a rustuml-controlled destination (e.g. https://github.com/marcelocantos/rustuml or a future docs site), not to plantuml.com.
+    - The rebrand_in_svg post-process in crates/rustuml-render/src/lib.rs substitutes plantuml.com when it appears in PlantUML's own welcome-screen text, without rebranding user-supplied content like [[https://plantuml.com]] link markup.
+    - Strict-XML golden_pairs still reports 0 failures (the comparator's rebrand_plantuml continues to handle the substitution).
+    context: |-
+      Brand-name rebrand (PlantUML → RustUML) shipped 2026-05-23 in commit d769d504. The URL portion was deliberately left as plantuml.com because the substring appears both in PlantUML's own welcome-screen text ("https://plantuml.com" as a standalone text element) AND in user-supplied link markup ([[https://plantuml.com]] in a user puml). A brute substring replace caught the user case as well, breaking 9 creole link goldens.
+
+      Resolution requires either:
+      - A context-aware substitution that recognises welcome-screen URL emission specifically (e.g. by detecting the surrounding "Welcome to RustUML!" phrase in the same <g> wrapper), OR
+      - A rustuml-owned canonical URL to point at, plus the same narrow phrase-match strategy as for "Welcome to PlantUML!" / "about PlantUML syntax on".
+
+      Blocking on the second piece (no rustuml-owned destination URL exists yet). When one does, add a needle to rebrand_in_svg's pair list and rerun golden_pairs to confirm no regression.
+    origin: manual
+    discovered: 2026-05-23
