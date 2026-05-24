@@ -160,19 +160,22 @@ targets:
     acceptance:
     - The `activity/` directory under `test-diagrams/golden` produces 0 strict-XML failures when `cargo test --test golden_pairs` runs.
     context: |-
-      Activity diagrams strict-XML pass. Current: 821 failures (out of 1,493).
+      Activity diagrams strict-XML pass. Current: 821 failures (out of 1,493), 474 pass.
 
-      2026-05-24 swimlanes (commits 2e736d39, 35bf5f2d): Implemented Swimlanes LayoutNode + emit_swimlanes. Headers, dividers, per-lane content with own cx, cross-lane arrows, lane titles all working. Most byte-exact: act_swim2_acts1, act_swimlane_2lanes_basic, act_swimlane2_fork_simple. Bucket count 823 → 821 (-2 net; ~7 cases newly passing, ~5 likely regressed elsewhere from layout changes).
+      2026-05-24 while-height fix (this session): node_height(While) special_out branch was double-counting body_h (below_body = body_h+10+12, but body_h already added in the final sum), overshooting canvas height by ~body_h (33px for a single-action body). Fixed: below_body = max(10 + text_height(SMALL_FONT), special-terminator extent). Canvas HEIGHT now byte-exact for while+terminator diagrams. Full golden suite improved 5333->5309 fails (gains in combo/ending buckets that nest while+stop). Activity bucket itself net-neutral because the same 19 svg-only while cases ALSO have a width bug (below).
 
-      Earlier (commit 3774d748): byte-exact follow-ups for while (specialOut, compression, asymmetric extents). Many shape positions now byte-exact for while diagrams; basic-while down to 1 diff (just SVG header width 189 vs 192).
+      OPEN — while WIDTH off by ~3px when condition dominates: act_while_basic etc. render width 189 vs golden 192 (and 212 vs 215 for wider conds). right_extent = cond_half.max(body_right) + 2*DIAMOND_HALF undershoots by 3 when cond_half is the max. NOT a universal +3 constant: passing while+stop cases with narrow bodies (act_ending_inp_ctx_while) are correct at +24, so the gap is condition/body-dependent. Also a systematic ~+2px cx/diamond shift appears in multi-action while bodies (act_while_1actions_body: rect x=52 vs golden 50). Cracking width is the sole blocker for the ~19 svg-only while cases. Next: reverse-engineer PlantUML's FtileWhile right-edge (loop_x = max(diamond_right_vertex, body_right_x)+halfHex; golden loop arm sits ~2px right of that) and the diamond-width/cx for non-trivial conditions.
 
-      Failing-list size 5300 → 5276 (-24). The activity bucket count moves slowly because most failures involve cascading position diffs from accumulating 0.0001-px float rounding (PlantUML uses 4-decimal precision internally; rustuml uses full IEEE 754).
+      While-bucket triage (this session): 99 act_while failures = 19 svg-root-only (canvas dims wrong, body perfect) + 80 body-misplaced. Other big buckets: switch 60 (unimplemented no-op, ActivityStep::Switch/Case/EndSwitch fall through at activity.rs:679), note 55, swimlane family ~72 (impl'd 2026-05-24, still tuning), fork 47, partition+parts 79, if+elseif 69, skinparam 37, repeat 33.
+
+      Tooling note: golden_pairs needs NO server (reads pre-generated SVGs). Filter via GOLDEN_FILTER=activity/. Per-case diff: `cargo run --release -q -p rustuml-oracle --example diff_one -- <puml>` (also --print-rust / --print-golden). The harness's panic hook swallows the assert message, so use diff_one for detail.
+
+      Earlier (commit 3774d748): byte-exact follow-ups for while (specialOut, compression, asymmetric extents). The activity bucket count moves slowly because most failures involve cascading position diffs from accumulating sub-pixel rounding (PlantUML uses 4-decimal precision internally; rustuml uses full IEEE 754).
 
       Next bites:
-      - Backward (~32 goldens, currently a no-op TODO).
-      - Asymmetric if-block extents (visible in nested BFS-style diagrams; significant impact on activity bucket).
-      - Deprecated color actions, switch/case (smaller buckets).
-      - Match PlantUML's 4-decimal intermediate rounding consistently across emit_sequence (could unlock dozens of near-pass swimlanes).
+      - while WIDTH/cx (above) — unlocks ~19 svg-only cases + helps the 80 body-misplaced.
+      - switch/case (60) — currently a no-op; additive implementation, low regression risk.
+      - Backward (~32 goldens, currently a no-op TODO at activity.rs:679).
     origin: manual
     discovered: 2026-05-17
   T4.10:
