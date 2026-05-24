@@ -1135,14 +1135,20 @@ fn node_height(node: &LayoutNode) -> f64 {
             // or +12 (empty body); wrap-back continues another +12 for
             // no-specialOut, or descends to special_y for specialOut.
             let below_body = if special_out.is_some() {
-                // Special_out at translateForSpecial.y = 48 = 4*halfHex
-                // below diamond. Body sits at body_top, then specialOut
-                // adjacent. height = max(body_h + 10 + 12, 4*halfHex - body_top_offset + special.h).
+                // Two competing lower extents, both measured from body_bottom:
+                //   (a) the loop-back junction at body_bottom + 10, plus
+                //       PlantUML's reserved back-edge label height
+                //       (text_height(SMALL_FONT), present even when the
+                //       back-label is empty); this is the usual winner.
+                //   (b) the special terminator's bottom: it sits at
+                //       4*halfHex below the diamond bottom (translateForSpecial.y),
+                //       so relative to body_bottom that's
+                //       4*halfHex + special.h - body_top_offset - body_h.
                 let s = special_out.as_ref().unwrap();
                 let special_h = node_height(s);
-                let base_below = body_h + 10.0 + DIAMOND_HALF; // junction + halfHex wrap-back area
-                let special_y_from_body_top = 4.0 * DIAMOND_HALF - body_top_offset; // negative if body_top > 4*halfHex
-                base_below.max(special_y_from_body_top + special_h)
+                let junction_below = 10.0 + pm::text_height(SMALL_FONT);
+                let special_below = 4.0 * DIAMOND_HALF + special_h - body_top_offset - body_h;
+                junction_below.max(special_below)
             } else if body.is_empty() {
                 DIAMOND_HALF + DIAMOND_HALF // empty: +12 to junction, +12 wrap-back
             } else {
