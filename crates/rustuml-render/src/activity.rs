@@ -2996,7 +2996,10 @@ fn emit_swimlanes(
     .unwrap();
 
     // Pre-compute the final last_y so dividers (emitted interleaved with
-    // lane bodies) can use the full vertical extent.
+    // lane bodies) can use the full vertical extent. Round to 4 decimals
+    // (HALF_UP) before adding to body_top — this matches PlantUML's
+    // intermediate precision and avoids accumulating IEEE 754 sub-ULPs
+    // that would push final_last_y across rounding boundaries.
     let mut body_h_total = 0.0_f64;
     for (i, lane) in lanes.iter().enumerate() {
         let mut h = sequence_height(&lane.body);
@@ -3008,6 +3011,7 @@ fn emit_swimlanes(
             body_h_total += ARROW_LEN;
         }
     }
+    body_h_total = (body_h_total * 10000.0 + 0.5).floor() / 10000.0;
     let final_last_y = body_top + body_h_total;
 
     // Emit lane bodies, interleaving the LEFT divider of each lane after
