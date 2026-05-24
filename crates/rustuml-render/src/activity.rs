@@ -2460,6 +2460,7 @@ fn emit_fork(svg: &mut SvgEmitter, cx: f64, y: f64, branches: &[Vec<LayoutNode>]
     bottom_bar_y + FORK_BAR_HEIGHT
 }
 
+#[allow(clippy::too_many_arguments)]
 fn emit_while(
     svg: &mut SvgEmitter,
     cx: f64,
@@ -2758,14 +2759,12 @@ fn emit_while(
     // 11. Either emit the special_out terminator INSIDE the while's frame
     // (ConnectionOutSpecial) or emit the wrap-back horizontal from exit_x
     // back to cx (ConnectionOut's snake2).
-    let final_bottom = if let Some(special) = special_out {
+    if let Some(special) = special_out {
         emit_node(svg, special, exit_x, wrap_y)
     } else {
         svg.line_styled(&arrow_color, "1", exit_x, cx, wrap_y, wrap_y, false);
         wrap_y
-    };
-
-    final_bottom
+    }
 }
 
 fn emit_repeat(
