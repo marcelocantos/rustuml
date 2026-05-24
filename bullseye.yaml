@@ -160,14 +160,19 @@ targets:
     acceptance:
     - The `activity/` directory under `test-diagrams/golden` produces 0 strict-XML failures when `cargo test --test golden_pairs` runs.
     context: |-
-      Activity diagrams strict-XML pass. Current: 823 failures (out of 1,493).
+      Activity diagrams strict-XML pass. Current: 821 failures (out of 1,493).
 
-      2026-05-24 (commit 3774d748): Implemented all three byte-exact follow-ups for while-loop (specialOut handling, compression offset, asymmetric extents). Many shape positions now byte-exact (basic-while down to 1 diff — SVG header width). Test count UNCHANGED at 823 because:
-        (a) SVG header width off by 3-4 px — PlantUML uses ~30 px right padding for while-containing diagrams vs rustuml's 19.
-        (b) Connector emission order differs in some cases.
-        (c) Most failures involve other unimplemented features (swimlanes ~175, backward ~32, deprecated color actions, asymmetric if-block extents in BFS-style nested).
+      2026-05-24 swimlanes (commits 2e736d39, 35bf5f2d): Implemented Swimlanes LayoutNode + emit_swimlanes. Headers, dividers, per-lane content with own cx, cross-lane arrows, lane titles all working. Most byte-exact: act_swim2_acts1, act_swimlane_2lanes_basic, act_swimlane2_fork_simple. Bucket count 823 → 821 (-2 net; ~7 cases newly passing, ~5 likely regressed elsewhere from layout changes).
 
-      Next bites: match PlantUML's right padding heuristic for while diagrams, then tackle swimlanes (biggest unimplemented feature). Swimlanes alone = ~175 failures.
+      Earlier (commit 3774d748): byte-exact follow-ups for while (specialOut, compression, asymmetric extents). Many shape positions now byte-exact for while diagrams; basic-while down to 1 diff (just SVG header width 189 vs 192).
+
+      Failing-list size 5300 → 5276 (-24). The activity bucket count moves slowly because most failures involve cascading position diffs from accumulating 0.0001-px float rounding (PlantUML uses 4-decimal precision internally; rustuml uses full IEEE 754).
+
+      Next bites:
+      - Backward (~32 goldens, currently a no-op TODO).
+      - Asymmetric if-block extents (visible in nested BFS-style diagrams; significant impact on activity bucket).
+      - Deprecated color actions, switch/case (smaller buckets).
+      - Match PlantUML's 4-decimal intermediate rounding consistently across emit_sequence (could unlock dozens of near-pass swimlanes).
     origin: manual
     discovered: 2026-05-17
   T4.10:
