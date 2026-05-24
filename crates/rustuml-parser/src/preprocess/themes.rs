@@ -7,7 +7,13 @@
 //! themes directory and applies its skinparam declarations plus `<style>`
 //! block. We embed a vendored copy of the themes shipped with PlantUML
 //! (sourced from `plantuml/src/main/resources/themes/puml-theme-*.puml`)
-//! so the binary stays self-contained.
+//! so the binary stays self-contained. Each bundled theme carries its own
+//! permissive licence (MIT or Apache-2.0) in its YAML front matter. Themes
+//! that are GPL-3+ or have no licence declared (and therefore inherit
+//! PlantUML's GPL-3+ by default) are deliberately excluded to keep the
+//! distribution Apache-2.0 clean. Users who want an excluded theme can supply
+//! it themselves from the PlantUML source tree. See `get_theme_source` for the
+//! exclusion list.
 //!
 //! Themes are normalised by stripping the optional YAML front matter
 //! (`---\n…\n---`) before expansion, then handed back to the preprocessor
@@ -20,18 +26,23 @@
 /// Returns `None` if the theme name is not bundled.
 pub(super) fn get_theme_source(name: &str) -> Option<&'static str> {
     Some(match name {
+        // Only themes carrying a permissive licence (MIT or Apache-2.0) in
+        // their upstream YAML front matter are bundled. Themes with a GPL-3+
+        // licence (`sunlust`) or a blank/unspecified licence (`amiga`,
+        // `blueprint`, `carbon-gray`, `crt-amber`, `crt-green`, `mimeograph`,
+        // `mono`, `plain`) inherit PlantUML's GPL-3+ by default and are
+        // excluded to keep this distribution Apache-2.0 clean. Such names fall
+        // through to `None` and render unstyled, matching PlantUML's behaviour
+        // for an unknown theme. `_none_` is an intentionally empty file (no
+        // copyrightable content), kept as a baseline. Users who want an
+        // excluded theme can supply it from the PlantUML source tree.
         "_none_" => include_str!("../../themes/puml-theme-_none_.puml"),
-        "amiga" => include_str!("../../themes/puml-theme-amiga.puml"),
         "aws-orange" => include_str!("../../themes/puml-theme-aws-orange.puml"),
         "black-knight" => include_str!("../../themes/puml-theme-black-knight.puml"),
         "bluegray" => include_str!("../../themes/puml-theme-bluegray.puml"),
-        "blueprint" => include_str!("../../themes/puml-theme-blueprint.puml"),
-        "carbon-gray" => include_str!("../../themes/puml-theme-carbon-gray.puml"),
         "cerulean" => include_str!("../../themes/puml-theme-cerulean.puml"),
         "cerulean-outline" => include_str!("../../themes/puml-theme-cerulean-outline.puml"),
         "cloudscape-design" => include_str!("../../themes/puml-theme-cloudscape-design.puml"),
-        "crt-amber" => include_str!("../../themes/puml-theme-crt-amber.puml"),
-        "crt-green" => include_str!("../../themes/puml-theme-crt-green.puml"),
         "cyborg" => include_str!("../../themes/puml-theme-cyborg.puml"),
         "cyborg-outline" => include_str!("../../themes/puml-theme-cyborg-outline.puml"),
         "hacker" => include_str!("../../themes/puml-theme-hacker.puml"),
@@ -40,10 +51,7 @@ pub(super) fn get_theme_source(name: &str) -> Option<&'static str> {
         "materia" => include_str!("../../themes/puml-theme-materia.puml"),
         "materia-outline" => include_str!("../../themes/puml-theme-materia-outline.puml"),
         "metal" => include_str!("../../themes/puml-theme-metal.puml"),
-        "mimeograph" => include_str!("../../themes/puml-theme-mimeograph.puml"),
         "minty" => include_str!("../../themes/puml-theme-minty.puml"),
-        "mono" => include_str!("../../themes/puml-theme-mono.puml"),
-        "plain" => include_str!("../../themes/puml-theme-plain.puml"),
         "reddress-darkblue" => include_str!("../../themes/puml-theme-reddress-darkblue.puml"),
         "reddress-darkgreen" => include_str!("../../themes/puml-theme-reddress-darkgreen.puml"),
         "reddress-darkorange" => include_str!("../../themes/puml-theme-reddress-darkorange.puml"),
@@ -58,7 +66,6 @@ pub(super) fn get_theme_source(name: &str) -> Option<&'static str> {
         "sketchy-outline" => include_str!("../../themes/puml-theme-sketchy-outline.puml"),
         "spacelab" => include_str!("../../themes/puml-theme-spacelab.puml"),
         "spacelab-white" => include_str!("../../themes/puml-theme-spacelab-white.puml"),
-        "sunlust" => include_str!("../../themes/puml-theme-sunlust.puml"),
         "superhero" => include_str!("../../themes/puml-theme-superhero.puml"),
         "superhero-outline" => include_str!("../../themes/puml-theme-superhero-outline.puml"),
         "toy" => include_str!("../../themes/puml-theme-toy.puml"),
@@ -211,14 +218,29 @@ mod tests {
 
     #[test]
     fn known_themes_resolve() {
-        assert!(get_theme_source("plain").is_some());
         assert!(get_theme_source("cerulean").is_some());
         assert!(get_theme_source("superhero").is_some());
+        assert!(get_theme_source("_none_").is_some());
     }
 
     #[test]
     fn unknown_theme_returns_none() {
         assert!(get_theme_source("not-a-real-theme").is_none());
+    }
+
+    #[test]
+    fn non_permissive_themes_excluded() {
+        // GPL-3+ and blank-licence themes are deliberately not bundled, to keep
+        // the distribution Apache-2.0 clean (see `get_theme_source`).
+        for name in [
+            "sunlust", "plain", "amiga", "blueprint", "carbon-gray", "crt-amber",
+            "crt-green", "mimeograph", "mono",
+        ] {
+            assert!(
+                get_theme_source(name).is_none(),
+                "{name} should be excluded for licence reasons"
+            );
+        }
     }
 
     #[test]
