@@ -147,7 +147,7 @@ pub struct Span {
 }
 
 /// Common metadata that any diagram can carry.
-#[derive(Debug, Default, Serialize, Deserialize)]
+#[derive(Debug, Default, Clone, Serialize, Deserialize)]
 pub struct DiagramMeta {
     #[serde(skip_serializing_if = "Option::is_none")]
     pub title: Option<String>,

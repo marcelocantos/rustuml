@@ -50,6 +50,7 @@ const FORK_BAR_MARGIN: f64 = 14.0; // margin on each side of fork bar
 const FONT_SIZE: f64 = 12.0;
 const SMALL_FONT: f64 = 11.0;
 const TITLE_FONT_SIZE: f64 = 14.0;
+const LANE_TITLE_FONT: f64 = 18.0;
 
 const START_FILL: &str = "#222222";
 const STOP_FILL: &str = "#222222";
@@ -316,6 +317,19 @@ enum LayoutNode {
         color: Option<String>,
         body: Vec<LayoutNode>,
     },
+    /// A top-level swimlanes container. Each lane has its own vertical
+    /// column with a header label at the top; the activity flow weaves
+    /// across lanes via cross-lane arrows. PlantUML's `|Lane|` markers
+    /// in the source partition the flat step list into lane bodies.
+    Swimlanes { lanes: Vec<Lane> },
+}
+
+#[derive(Debug)]
+struct Lane {
+    name: String,
+    #[allow(dead_code)]
+    color: Option<String>,
+    body: Vec<LayoutNode>,
 }
 
 #[derive(Debug)]
@@ -347,6 +361,84 @@ fn diamond_inner_w(condition: &str) -> f64 {
 
 /// Build a layout tree from the flat step list.
 fn build_tree(steps: &[ActivityStep]) -> Vec<LayoutNode> {
+    // Swimlane detection: if any `|Lane|` marker appears (and there's more
+    // than one distinct lane, or content exists before the first marker),
+    // wrap the whole flow in a Swimlanes node. PlantUML treats a single-
+    // lane diagram (only one `|Lane|` marker with no content before it) as
+    // a no-op — the lane chrome is suppressed and the output matches a
+    // plain activity diagram.
+    let swimlane_markers: Vec<&str> = steps
+        .iter()
+        .filter_map(|s| match s {
+            ActivityStep::Swimlane(n) => Some(n.as_str()),
+            _ => None,
+        })
+        .collect();
+    let distinct_lanes: std::collections::BTreeSet<&str> =
+        swimlane_markers.iter().copied().collect();
+    let has_pre_lane_content = steps.iter().take_while(|s| {
+        !matches!(s, ActivityStep::Swimlane(_))
+    }).any(|s| !matches!(s,
+        ActivityStep::Note(_) | ActivityStep::Arrow(_)));
+    if distinct_lanes.len() > 1
+        || (distinct_lanes.len() == 1 && has_pre_lane_content)
+    {
+        return build_swimlanes(steps);
+    }
+
+    build_tree_inner(steps)
+}
+
+/// Strip the lane name and optional `#color` prefix from a Swimlane
+/// marker payload (e.g. `#blue|Colored Lane` → ("Colored Lane",
+/// Some("#blue")), `Lane1` → ("Lane1", None)).
+fn parse_lane_marker(raw: &str) -> (String, Option<String>) {
+    if let Some(rest) = raw.strip_prefix('#')
+        && let Some((color, name)) = rest.split_once('|')
+    {
+        return (name.to_string(), Some(format!("#{color}")));
+    }
+    (raw.to_string(), None)
+}
+
+fn build_swimlanes(steps: &[ActivityStep]) -> Vec<LayoutNode> {
+    let mut lanes: Vec<Lane> = Vec::new();
+    let mut current_name: Option<String> = None;
+    let mut current_color: Option<String> = None;
+    let mut current_steps: Vec<ActivityStep> = Vec::new();
+
+    let flush = |lanes: &mut Vec<Lane>,
+                 name: &Option<String>,
+                 color: &Option<String>,
+                 steps: &mut Vec<ActivityStep>| {
+        if name.is_none() && steps.is_empty() {
+            return;
+        }
+        let name = name.clone().unwrap_or_default();
+        lanes.push(Lane {
+            name,
+            color: color.clone(),
+            body: build_tree_inner(steps),
+        });
+        steps.clear();
+    };
+
+    for step in steps {
+        if let ActivityStep::Swimlane(raw) = step {
+            flush(&mut lanes, &current_name, &current_color, &mut current_steps);
+            let (name, color) = parse_lane_marker(raw);
+            current_name = Some(name);
+            current_color = color;
+        } else {
+            current_steps.push(step.clone());
+        }
+    }
+    flush(&mut lanes, &current_name, &current_color, &mut current_steps);
+
+    vec![LayoutNode::Swimlanes { lanes }]
+}
+
+fn build_tree_inner(steps: &[ActivityStep]) -> Vec<LayoutNode> {
     let mut nodes = Vec::new();
     let mut i = 0;
     while i < steps.len() {
@@ -712,6 +804,12 @@ fn node_extents(node: &LayoutNode) -> (f64, f64) {
             let tw = text_render::measure(t, TITLE_FONT_SIZE, true);
             (tw / 2.0 + 3.0, tw / 2.0 + 3.0)
         }
+        // Swimlanes: asymmetric +4 left / +9 right so cx aligns lane_left
+        // at PlantUML's fixed x=20 from SVG edge.
+        LayoutNode::Swimlanes { lanes } => {
+            let total_w: f64 = lanes.iter().map(lane_width).sum();
+            (total_w / 2.0 + 4.0, total_w / 2.0 + 9.0)
+        }
         // Partition wraps a body with a title bar. Left extent is
         // max(title_w, body_w)/2 + 10; right extent is max(title_w/2 + 5,
         // body_w/2 + 10) — the title's notch corner extends 5 px right of
@@ -739,6 +837,22 @@ fn sequence_extents(nodes: &[LayoutNode]) -> (f64, f64) {
         .iter()
         .map(node_extents)
         .fold((0.0f64, 0.0f64), |(l, r), (nl, nr)| (l.max(nl), r.max(nr)))
+}
+
+/// Width of a single swimlane: the wider of the content (with 10 px
+/// internal padding) and the title text (with ~10 px each side).
+fn lane_width(lane: &Lane) -> f64 {
+    let content_w = sequence_width(&lane.body);
+    let title_w = text_render::measure(&lane.name, LANE_TITLE_FONT, false);
+    (content_w + 10.0).max(title_w + 10.0)
+}
+
+/// cx of the content column within a lane, given the lane's left edge x.
+/// Content is left-anchored at `lane_left + 6` and centred on its own
+/// natural cx, NOT the geometric centre of the lane.
+fn lane_content_cx(lane: &Lane, lane_left: f64) -> f64 {
+    let (content_left_ext, _content_right_ext) = sequence_extents(&lane.body);
+    lane_left + 6.0 + content_left_ext
 }
 
 fn node_width(node: &LayoutNode) -> f64 {
@@ -832,6 +946,12 @@ fn node_width(node: &LayoutNode) -> f64 {
             let title_w = text_render::measure(name, TITLE_FONT_SIZE, false);
             let body_w = sequence_width(body);
             (title_w + 15.0).max(body_w + 34.0)
+        }
+        // Swimlanes: sum of per-lane widths. Each lane width is the wider
+        // of its content_w + 10 (6 left + 4 right padding inside the lane)
+        // and its title_w + horizontal padding for the heading text.
+        LayoutNode::Swimlanes { lanes } => {
+            lanes.iter().map(lane_width).sum()
         }
         // Arrows, notes, detach/kill/break, and bare titles contribute no
         // horizontal extent of their own. (Notes will need width once they're
@@ -1058,6 +1178,40 @@ fn node_height(node: &LayoutNode) -> f64 {
                 10.0
             };
             top_gap + 36.4883 + sequence_height(body) + 12.0
+        }
+        // Swimlanes: header band + start-gap + cumulative body heights
+        // across lanes (with cross-lane transitions between them). Lanes
+        // are columns spatially but temporally sequential — the flow
+        // exits one lane and enters the next, so their bodies stack
+        // vertically not side-by-side.
+        //
+        // Each lane's body contributes its own sequence_height. Between
+        // consecutive lanes, the cross-lane arrow takes ARROW_LEN of
+        // vertical extent. Within a lane, if the first node is Start,
+        // sequence_height overcounts by 9 (START_CY+START_R-MARGIN_LEAD-
+        // START_R = 19 vs the swimlane-context 10) because Start sits at
+        // body_top instead of START_CY. We subtract that overcount.
+        //
+        // The final +1.3 (matches header_top offset of 1.2969 above
+        // MARGIN_LEAD) absorbs PlantUML's slightly larger top margin for
+        // swimlane diagrams. The +2.54 trailing absorbs the slightly
+        // larger bottom margin.
+        LayoutNode::Swimlanes { lanes } => {
+            let header_h = pm::text_height(LANE_TITLE_FONT);
+            let mut body_h = 0.0_f64;
+            for (i, lane) in lanes.iter().enumerate() {
+                let mut h = sequence_height(&lane.body);
+                if matches!(lane.body.first(), Some(LayoutNode::Start)) {
+                    h -= START_CY + START_R - 16.0 - START_R; // = 9
+                }
+                body_h += h;
+                if i + 1 < lanes.len() {
+                    body_h += ARROW_LEN; // cross-lane transition
+                }
+            }
+            // 1.30 top offset + header + 15 to start cy + bodies + 1.24
+            // bottom adjustment (empirical match to golden svg height).
+            1.2969 + header_h + 15.0 + body_h + 1.24
         }
     }
 }
@@ -1935,6 +2089,7 @@ fn emit_node(svg: &mut SvgEmitter, node: &LayoutNode, cx: f64, y: f64) -> f64 {
 
             partition_top + partition_h
         }
+        LayoutNode::Swimlanes { lanes } => emit_swimlanes(svg, cx, y, lanes),
     }
 }
 
@@ -2782,6 +2937,201 @@ fn emit_repeat(
     svg.down_arrow(cx, body_bottom, cond_y, &arrow_color);
 
     cond_y + DIAMOND_HALF * 2.0
+}
+
+/// Emit a swimlanes block. Lanes are arranged left-to-right with vertical
+/// dividers between them; each lane's content flows in its own column with
+/// cross-lane arrows joining steps that change lane.
+///
+/// Layout (reverse-engineered from goldens):
+///   - Header band at the top: text_height(18) ≈ 21.2 px tall, spans all
+///     lanes. Title text per lane sits centered on its lane's content cx.
+///   - Vertical dividers (stroke-width 1.5) at each lane boundary, from
+///     header top to last_content_y.
+///   - Per-lane content centered on lane.cx with 6 left + 4 right padding.
+///   - Cross-lane arrow: source_cx vertical down 5 → horizontal at +5 →
+///     target_cx vertical down (15 more) with arrowhead.
+fn emit_swimlanes(
+    svg: &mut SvgEmitter,
+    cx: f64,
+    _y: f64,
+    lanes: &[Lane],
+) -> f64 {
+    let arrow_color = svg.palette.arrow_color.clone();
+    let text_color = svg.palette.text_color.clone();
+    let divider_color = "#000000";
+
+    // PlantUML uses a slightly shifted header_top for swimlanes (y=17.2969
+    // ≈ MARGIN_LEAD + 1.30) and a +4/+9 asymmetric extra padding around
+    // the lanes (see node_extents below). We compute lane_left from the
+    // passed cx, which has been positioned to make lane_lefts[0] = 20.
+    let header_text_h = pm::text_height(LANE_TITLE_FONT);
+    let header_top = 17.2969;
+    let header_bottom = header_top + header_text_h;
+    let body_top = header_bottom + 15.0;
+
+    let lane_widths: Vec<f64> = lanes.iter().map(lane_width).collect();
+    let total_w: f64 = lane_widths.iter().sum();
+    let mut lane_left = cx - total_w / 2.0;
+    let mut lane_lefts: Vec<f64> = Vec::with_capacity(lanes.len());
+    let mut lane_cxs: Vec<f64> = Vec::with_capacity(lanes.len());
+    for (lane, &lw) in lanes.iter().zip(lane_widths.iter()) {
+        lane_lefts.push(lane_left);
+        lane_cxs.push(lane_content_cx(lane, lane_left));
+        lane_left += lw;
+    }
+    let right_edge = lane_left;
+
+    // Empty header rect spanning all lanes (fill=none, stroke=none).
+    // PlantUML's header_rect.width = sum_lane_widths + 1.8477 (empirical
+    // constant — purpose unknown, but consistent across all golden cases).
+    write!(
+        svg.shapes,
+        r#"<rect fill="none" height="{}" style="stroke:none;stroke-width:1;" width="{}" x="{}" y="{}"/>"#,
+        f(header_text_h),
+        f(total_w + 1.8476),
+        f(lane_lefts[0]),
+        f(header_top),
+    )
+    .unwrap();
+
+    // Pre-compute the final last_y so dividers (emitted interleaved with
+    // lane bodies) can use the full vertical extent.
+    let mut body_h_total = 0.0_f64;
+    for (i, lane) in lanes.iter().enumerate() {
+        let mut h = sequence_height(&lane.body);
+        if matches!(lane.body.first(), Some(LayoutNode::Start)) {
+            h -= 9.0; // Start contributes only START_R inside swimlane.
+        }
+        body_h_total += h;
+        if i + 1 < lanes.len() {
+            body_h_total += ARROW_LEN;
+        }
+    }
+    let final_last_y = body_top + body_h_total;
+
+    // Emit lane bodies, interleaving the LEFT divider of each lane after
+    // its body shapes land. Cross-lane arrow CONNECTORS are deferred
+    // (collected per-lane and emitted after all bodies) so they appear at
+    // the end of the connectors buffer, matching PlantUML's golden order
+    // (per-lane internal arrows first, then all cross-lane arrows).
+    let mut last_y = body_top;
+    let mut prev_lane_idx: Option<usize> = None;
+    // (prev_cx, prev_last_y, target_cx, target_y) for each cross-lane.
+    let mut deferred_cross_lanes: Vec<(f64, f64, f64, f64)> = Vec::new();
+    for (lane_idx, lane) in lanes.iter().enumerate() {
+        let lane_cx = lane_cxs[lane_idx];
+        let lane_y = if let Some(prev) = prev_lane_idx {
+            let prev_cx = lane_cxs[prev];
+            let target_y = last_y + ARROW_LEN;
+            deferred_cross_lanes.push((prev_cx, last_y, lane_cx, target_y));
+            target_y
+        } else {
+            body_top
+        };
+        last_y = emit_sequence(svg, &lane.body, lane_cx, lane_y);
+
+        // Emit this lane's LEFT divider with the FULL final_last_y so it
+        // spans the entire diagram height (not just up to the current
+        // lane's bottom). Skip on the last lane — its left divider + the
+        // final right divider are emitted together after the loop.
+        if lane_idx + 1 < lanes.len() {
+            write!(
+                svg.shapes,
+                r#"<line style="stroke:{};stroke-width:1.5;" x1="{}" x2="{}" y1="{}" y2="{}"/>"#,
+                divider_color,
+                f(lane_lefts[lane_idx]),
+                f(lane_lefts[lane_idx]),
+                f(header_top),
+                f(final_last_y),
+            )
+            .unwrap();
+        }
+        prev_lane_idx = Some(lane_idx);
+    }
+
+    // Now flush the deferred cross-lane arrows to the connectors buffer.
+    // These appear AFTER all per-lane internal arrows in the SVG, matching
+    // PlantUML's emission order.
+    for &(prev_cx, prev_y, lane_cx, target_y) in &deferred_cross_lanes {
+        let cross_y = prev_y + 5.0;
+        svg.line_styled(
+            &arrow_color, "1",
+            prev_cx, prev_cx, prev_y, cross_y, false,
+        );
+        svg.line_styled(
+            &arrow_color, "1",
+            prev_cx, lane_cx, cross_y, cross_y, false,
+        );
+        svg.line_styled(
+            &arrow_color, "1",
+            lane_cx, lane_cx, cross_y, target_y, false,
+        );
+        svg.polygon_connector(
+            &arrow_color,
+            &[
+                (lane_cx - 4.0, target_y - 10.0),
+                (lane_cx, target_y),
+                (lane_cx + 4.0, target_y - 10.0),
+                (lane_cx, target_y - 6.0),
+            ],
+            &arrow_color,
+            "1",
+        );
+    }
+
+    // After the last lane: emit its LEFT divider, then the final RIGHT
+    // divider. Both use final_last_y.
+    if let Some(last_idx) = lanes.len().checked_sub(1) {
+        write!(
+            svg.shapes,
+            r#"<line style="stroke:{};stroke-width:1.5;" x1="{}" x2="{}" y1="{}" y2="{}"/>"#,
+            divider_color,
+            f(lane_lefts[last_idx]),
+            f(lane_lefts[last_idx]),
+            f(header_top),
+            f(final_last_y),
+        )
+        .unwrap();
+        write!(
+            svg.shapes,
+            r#"<line style="stroke:{};stroke-width:1.5;" x1="{}" x2="{}" y1="{}" y2="{}"/>"#,
+            divider_color,
+            f(right_edge),
+            f(right_edge),
+            f(header_top),
+            f(final_last_y),
+        )
+        .unwrap();
+    }
+
+    // Lane titles emitted LAST (after all connectors). Titles are centred
+    // on the LANE'S GEOMETRIC MID (lane_left + lane_w/2), NOT the content
+    // cx — these differ when content is anchored off-centre in its lane
+    // (which it is, since content sits at lane_left + 6 + content_left).
+    let title_baseline = header_top + pm::ascent(LANE_TITLE_FONT);
+    let _ = lane_cxs; // content cx is used for arrows, not titles
+    for (i, lane) in lanes.iter().enumerate() {
+        if lane.name.is_empty() {
+            continue;
+        }
+        let lane_mid = lane_lefts[i] + lane_widths[i] / 2.0;
+        let tw = text_render::measure(&lane.name, LANE_TITLE_FONT, false);
+        std::mem::swap(&mut svg.shapes, &mut svg.connectors);
+        svg.text_element(
+            &text_color,
+            "sans-serif",
+            LANE_TITLE_FONT,
+            tw,
+            lane_mid - tw / 2.0,
+            title_baseline,
+            &lane.name,
+            false,
+        );
+        std::mem::swap(&mut svg.shapes, &mut svg.connectors);
+    }
+
+    last_y
 }
 
 /// Render an activity diagram with an optional oracle layout.

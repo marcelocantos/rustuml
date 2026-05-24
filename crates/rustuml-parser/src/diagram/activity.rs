@@ -7,14 +7,14 @@ use super::DiagramMeta;
 use serde::{Deserialize, Serialize};
 
 /// A complete activity diagram.
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct ActivityDiagram {
     pub meta: DiagramMeta,
     pub steps: Vec<ActivityStep>,
 }
 
 /// A step in an activity diagram.
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize)]
 pub enum ActivityStep {
     Start,
     Stop,
@@ -50,21 +50,21 @@ pub enum ActivityStep {
 }
 
 /// Deprecated `#color:text;` syntax -- renders a warning banner.
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct DeprecatedColorAction {
     pub color: String,
     pub text: String,
 }
 
 /// An explicit arrow step (`->`, `-->`, `-[#color]->`).
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct ArrowStep {
     pub dashed: bool,
     pub color: Option<String>,
     pub label: Option<String>,
 }
 
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct IfBlock {
     pub condition: String,
     pub then_label: Option<String>,
@@ -73,7 +73,7 @@ pub struct IfBlock {
     pub source_line: usize,
 }
 
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct ElseIfBranch {
     pub condition: String,
     pub then_label: Option<String>,
@@ -82,7 +82,7 @@ pub struct ElseIfBranch {
     pub source_line: usize,
 }
 
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct WhileBlock {
     pub condition: String,
     pub is_label: Option<String>,
@@ -98,14 +98,14 @@ pub enum NotePosition {
     Right,
 }
 
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct NoteBlock {
     pub text: String,
     pub color: Option<String>,
     pub position: NotePosition,
 }
 
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct PartitionBlock {
     pub name: String,
     pub color: Option<String>,
@@ -114,7 +114,7 @@ pub struct PartitionBlock {
     pub source_line: usize,
 }
 
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct RepeatWhileBlock {
     pub condition: String,
     /// Label for the loop-back branch (e.g. `is (yes)` in `repeat while (c) is (yes)`).
