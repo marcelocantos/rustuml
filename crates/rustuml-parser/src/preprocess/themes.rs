@@ -233,8 +233,15 @@ mod tests {
         // GPL-3+ and blank-licence themes are deliberately not bundled, to keep
         // the distribution Apache-2.0 clean (see `get_theme_source`).
         for name in [
-            "sunlust", "plain", "amiga", "blueprint", "carbon-gray", "crt-amber",
-            "crt-green", "mimeograph", "mono",
+            "sunlust",
+            "plain",
+            "amiga",
+            "blueprint",
+            "carbon-gray",
+            "crt-amber",
+            "crt-green",
+            "mimeograph",
+            "mono",
         ] {
             assert!(
                 get_theme_source(name).is_none(),

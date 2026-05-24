@@ -321,7 +321,9 @@ enum LayoutNode {
     /// column with a header label at the top; the activity flow weaves
     /// across lanes via cross-lane arrows. PlantUML's `|Lane|` markers
     /// in the source partition the flat step list into lane bodies.
-    Swimlanes { lanes: Vec<Lane> },
+    Swimlanes {
+        lanes: Vec<Lane>,
+    },
 }
 
 #[derive(Debug)]
@@ -376,13 +378,11 @@ fn build_tree(steps: &[ActivityStep]) -> Vec<LayoutNode> {
         .collect();
     let distinct_lanes: std::collections::BTreeSet<&str> =
         swimlane_markers.iter().copied().collect();
-    let has_pre_lane_content = steps.iter().take_while(|s| {
-        !matches!(s, ActivityStep::Swimlane(_))
-    }).any(|s| !matches!(s,
-        ActivityStep::Note(_) | ActivityStep::Arrow(_)));
-    if distinct_lanes.len() > 1
-        || (distinct_lanes.len() == 1 && has_pre_lane_content)
-    {
+    let has_pre_lane_content = steps
+        .iter()
+        .take_while(|s| !matches!(s, ActivityStep::Swimlane(_)))
+        .any(|s| !matches!(s, ActivityStep::Note(_) | ActivityStep::Arrow(_)));
+    if distinct_lanes.len() > 1 || (distinct_lanes.len() == 1 && has_pre_lane_content) {
         return build_swimlanes(steps);
     }
 
@@ -425,7 +425,12 @@ fn build_swimlanes(steps: &[ActivityStep]) -> Vec<LayoutNode> {
 
     for step in steps {
         if let ActivityStep::Swimlane(raw) = step {
-            flush(&mut lanes, &current_name, &current_color, &mut current_steps);
+            flush(
+                &mut lanes,
+                &current_name,
+                &current_color,
+                &mut current_steps,
+            );
             let (name, color) = parse_lane_marker(raw);
             current_name = Some(name);
             current_color = color;
@@ -433,7 +438,12 @@ fn build_swimlanes(steps: &[ActivityStep]) -> Vec<LayoutNode> {
             current_steps.push(step.clone());
         }
     }
-    flush(&mut lanes, &current_name, &current_color, &mut current_steps);
+    flush(
+        &mut lanes,
+        &current_name,
+        &current_color,
+        &mut current_steps,
+    );
 
     vec![LayoutNode::Swimlanes { lanes }]
 }
@@ -784,16 +794,12 @@ fn node_extents(node: &LayoutNode) -> (f64, f64) {
             // is because the exit lands at the specialOut's cx, not at halfHex.
             let (body_left, body_right) = sequence_extents(body);
             let cond_half = diamond_inner_w(condition) / 2.0 + DIAMOND_HALF;
-            let special_shift = special_out
-                .as_ref()
-                .map_or(0.0, |s| node_width(s) / 2.0);
-            let left_extent =
-                cond_half.max(body_left) + 25.0 + special_shift;
+            let special_shift = special_out.as_ref().map_or(0.0, |s| node_width(s) / 2.0);
+            let left_extent = cond_half.max(body_left) + 25.0 + special_shift;
             // Right side: loop arm at body_right + halfHex, plus right
             // padding to match PlantUML's effective trail (~halfHex more
             // than rustuml's default MARGIN_TRAIL=19).
-            let right_extent =
-                cond_half.max(body_right) + 2.0 * DIAMOND_HALF;
+            let right_extent = cond_half.max(body_right) + 2.0 * DIAMOND_HALF;
             (left_extent, right_extent)
         }
         // Title contributes 3 px of asymmetric padding on each side beyond
@@ -919,13 +925,9 @@ fn node_width(node: &LayoutNode) -> f64 {
             // for the asymmetric formula.
             let (body_left, body_right) = sequence_extents(body);
             let cond_half = diamond_inner_w(condition) / 2.0 + DIAMOND_HALF;
-            let special_shift = special_out
-                .as_ref()
-                .map_or(0.0, |s| node_width(s) / 2.0);
-            let left_extent =
-                cond_half.max(body_left) + 25.0 + special_shift;
-            let right_extent =
-                cond_half.max(body_right) + 2.0 * DIAMOND_HALF;
+            let special_shift = special_out.as_ref().map_or(0.0, |s| node_width(s) / 2.0);
+            let left_extent = cond_half.max(body_left) + 25.0 + special_shift;
+            let right_extent = cond_half.max(body_right) + 2.0 * DIAMOND_HALF;
             left_extent + right_extent
         }
         LayoutNode::Repeat {
@@ -950,9 +952,7 @@ fn node_width(node: &LayoutNode) -> f64 {
         // Swimlanes: sum of per-lane widths. Each lane width is the wider
         // of its content_w + 10 (6 left + 4 right padding inside the lane)
         // and its title_w + horizontal padding for the heading text.
-        LayoutNode::Swimlanes { lanes } => {
-            lanes.iter().map(lane_width).sum()
-        }
+        LayoutNode::Swimlanes { lanes } => lanes.iter().map(lane_width).sum(),
         // Arrows, notes, detach/kill/break, and bare titles contribute no
         // horizontal extent of their own. (Notes will need width once they're
         // laid out alongside the flow; for now they fall back to 0.)
@@ -1141,8 +1141,7 @@ fn node_height(node: &LayoutNode) -> f64 {
                 let s = special_out.as_ref().unwrap();
                 let special_h = node_height(s);
                 let base_below = body_h + 10.0 + DIAMOND_HALF; // junction + halfHex wrap-back area
-                let special_y_from_body_top =
-                    4.0 * DIAMOND_HALF - body_top_offset; // negative if body_top > 4*halfHex
+                let special_y_from_body_top = 4.0 * DIAMOND_HALF - body_top_offset; // negative if body_top > 4*halfHex
                 base_below.max(special_y_from_body_top + special_h)
             } else if body.is_empty() {
                 DIAMOND_HALF + DIAMOND_HALF // empty: +12 to junction, +12 wrap-back
@@ -2508,8 +2507,7 @@ fn emit_while(
     // PlantUML's slot compression removes ~4.82 of slack between diamond and
     // body, giving 32.1348 empirically. (Empty body doesn't compress because
     // it bridges directly to the junction, leaving no compressible slack.)
-    let compress_top =
-        is_label.is_some() && end_label.is_none() && !body.is_empty();
+    let compress_top = is_label.is_some() && end_label.is_none() && !body.is_empty();
     let body_top_offset = if is_label.is_some() {
         if compress_top {
             32.1348
@@ -2567,9 +2565,7 @@ fn emit_while(
         // diamond_left in FtileWhile-local. Translating to absolute:
         //   min(body_left_x - halfHex, diamond_left_vertex_x) - special_w
         // The special's cx is at translateForSpecial.x + special_w/2.
-        let special_left_abs = (body_left_x - DIAMOND_HALF)
-            .min(diamond_left_vertex_x)
-            - special_w;
+        let special_left_abs = (body_left_x - DIAMOND_HALF).min(diamond_left_vertex_x) - special_w;
         let special_cx = special_left_abs + special_w / 2.0;
         // translateForSpecial.y in FtileWhile-local =
         //   max(3*half, 4*halfHex) where half = diamond hexagon's
@@ -2658,15 +2654,7 @@ fn emit_while(
     // 2. Body bottom → junction (only if body has content; for empty body
     // the inbound arrow already reaches the junction-equivalent point).
     if !body.is_empty() {
-        svg.line_styled(
-            &arrow_color,
-            "1",
-            cx,
-            cx,
-            body_bottom,
-            junction_y,
-            false,
-        );
+        svg.line_styled(&arrow_color, "1", cx, cx, body_bottom, junction_y, false);
     }
 
     // 3. Horizontal at junction from body cx out to loop_x.
@@ -2744,15 +2732,7 @@ fn emit_while(
     } else {
         exit_bottom_y + DIAMOND_HALF
     };
-    svg.line_styled(
-        &arrow_color,
-        "1",
-        exit_x,
-        exit_x,
-        diamond_cy,
-        wrap_y,
-        false,
-    );
+    svg.line_styled(&arrow_color, "1", exit_x, exit_x, diamond_cy, wrap_y, false);
 
     // 10. DOWN arrowhead. When special_out is present, the arrowhead lands
     // AT the terminator's top (ConnectionOutSpecial uses endDecoration);
@@ -2781,15 +2761,7 @@ fn emit_while(
     let final_bottom = if let Some(special) = special_out {
         emit_node(svg, special, exit_x, wrap_y)
     } else {
-        svg.line_styled(
-            &arrow_color,
-            "1",
-            exit_x,
-            cx,
-            wrap_y,
-            wrap_y,
-            false,
-        );
+        svg.line_styled(&arrow_color, "1", exit_x, cx, wrap_y, wrap_y, false);
         wrap_y
     };
 
@@ -2951,12 +2923,7 @@ fn emit_repeat(
 ///   - Per-lane content centered on lane.cx with 6 left + 4 right padding.
 ///   - Cross-lane arrow: source_cx vertical down 5 → horizontal at +5 →
 ///     target_cx vertical down (15 more) with arrowhead.
-fn emit_swimlanes(
-    svg: &mut SvgEmitter,
-    cx: f64,
-    _y: f64,
-    lanes: &[Lane],
-) -> f64 {
+fn emit_swimlanes(svg: &mut SvgEmitter, cx: f64, _y: f64, lanes: &[Lane]) -> f64 {
     let arrow_color = svg.palette.arrow_color.clone();
     let text_color = svg.palette.text_color.clone();
     let divider_color = "#000000";
@@ -3059,17 +3026,16 @@ fn emit_swimlanes(
     // PlantUML's emission order.
     for &(prev_cx, prev_y, lane_cx, target_y) in &deferred_cross_lanes {
         let cross_y = prev_y + 5.0;
+        svg.line_styled(&arrow_color, "1", prev_cx, prev_cx, prev_y, cross_y, false);
+        svg.line_styled(&arrow_color, "1", prev_cx, lane_cx, cross_y, cross_y, false);
         svg.line_styled(
-            &arrow_color, "1",
-            prev_cx, prev_cx, prev_y, cross_y, false,
-        );
-        svg.line_styled(
-            &arrow_color, "1",
-            prev_cx, lane_cx, cross_y, cross_y, false,
-        );
-        svg.line_styled(
-            &arrow_color, "1",
-            lane_cx, lane_cx, cross_y, target_y, false,
+            &arrow_color,
+            "1",
+            lane_cx,
+            lane_cx,
+            cross_y,
+            target_y,
+            false,
         );
         svg.polygon_connector(
             &arrow_color,
