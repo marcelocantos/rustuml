@@ -2694,7 +2694,7 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme) -> String {
                     // The event_y is positioned at the divider text baseline, which is
                     // at msg_step + 5.258 from the previous event. The remaining
                     // MSG_BASE_STEP - 5.258 = 8.742 adds to the gap before the next message.
-                    const DIVIDER_TEXT_OFFSET: f64 = 5.258;
+                    const DIVIDER_TEXT_OFFSET: f64 = 5.2578;
                     const DIVIDER_TAIL_PAD: f64 = MSG_BASE_STEP - DIVIDER_TEXT_OFFSET;
                     if msg_count == 0 {
                         y += first_msg_offset(has_text) + DIVIDER_TEXT_OFFSET;
