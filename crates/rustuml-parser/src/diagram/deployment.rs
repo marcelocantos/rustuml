@@ -35,6 +35,11 @@ pub struct DeploymentNode {
     pub label: String,
     pub kind: DeploymentNodeKind,
     pub stereotype: Option<String>,
+    /// Explicit background colour from a trailing `#color` token (raw, e.g.
+    /// `Pink`, `LightBlue`, or `#FF8888`). The renderer resolves named
+    /// colours to hex.
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub color: Option<String>,
     pub children: Vec<String>,
     /// 1-based line number within the `@startuml` block.
     #[serde(default)]

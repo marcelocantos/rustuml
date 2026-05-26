@@ -255,7 +255,19 @@ fn emit_clusters_dfs(
                 r#"<g class="cluster" data-qualified-name="{qname}" data-source-line="{sl}" id="{ent_id}">"#,
                 sl = node.source_line,
             ));
-            emit_cluster_shape(svg, node.kind, rect.x, rect.y, rect.width, rect.height);
+            // A `#color` on a container fills the cluster shape (replacing the
+            // default `fill="none"`); the stroke width stays at the cluster
+            // value. Without a colour, clusters render unfilled.
+            let cluster_fill = node.color.as_deref().map(resolve_fill);
+            emit_cluster_shape(
+                svg,
+                node.kind,
+                rect.x,
+                rect.y,
+                rect.width,
+                rect.height,
+                cluster_fill.as_deref(),
+            );
             emit_cluster_label(svg, node.kind, node, rect.x, rect.y, rect.width);
             svg.raw("</g>");
         }
@@ -290,7 +302,21 @@ fn emit_entities_dfs(
                 r#"<g class="entity" data-qualified-name="{qname}" data-source-line="{sl}" id="{ent_id}">"#,
                 sl = node.source_line,
             ));
-            emit_entity_shape(svg, node.kind, rect.x, rect.y, rect.width, rect.height);
+            // A `#color` on a leaf element overrides the default `#F1F1F1` fill.
+            let entity_fill = node
+                .color
+                .as_deref()
+                .map(resolve_fill)
+                .unwrap_or_else(|| FILL.to_string());
+            emit_entity_shape(
+                svg,
+                node.kind,
+                rect.x,
+                rect.y,
+                rect.width,
+                rect.height,
+                &entity_fill,
+            );
             emit_entity_label(svg, node.kind, node, rect.x, rect.y, rect.width);
             svg.raw("</g>");
         }
@@ -324,6 +350,20 @@ fn qualified_name(node: &DeploymentNode, parent_qname: Option<&str>) -> String {
     }
 }
 
+/// Resolve a raw `#color` token (the parser strips the leading `#`, so we
+/// receive e.g. `Pink`, `LightBlue`, or `FF8888`) into a PlantUML-style fill
+/// string. Named colours resolve to `#RRGGBB`; bare hex digits get a `#`
+/// prepended (PlantUML emits `#FF8888` for `#FF8888` in the source).
+fn resolve_fill(raw: &str) -> String {
+    let normalized = text_render::normalize_color(raw);
+    if normalized.starts_with('#') {
+        normalized
+    } else {
+        // Not a recognised name — treat the token as a bare hex value.
+        format!("#{normalized}")
+    }
+}
+
 fn label_to_id(label: &str) -> String {
     let mut id = String::new();
     for ch in label.chars() {
@@ -351,22 +391,23 @@ fn emit_entity_shape(
     y: f64,
     w: f64,
     h: f64,
+    fill: &str,
 ) {
     use DeploymentNodeKind::*;
     match kind {
-        Node => emit_tag_polygon(svg, x, y, w, h, FILL, 0.5),
-        Artifact => emit_artifact(svg, x, y, w, h),
-        Card | Rectangle | Agent => emit_rounded_rect(svg, x, y, w, h),
-        Component => emit_component(svg, x, y, w, h),
-        Frame => emit_frame(svg, x, y, w, h),
-        Folder => emit_folder(svg, x, y, w, h),
-        File => emit_file(svg, x, y, w, h),
-        Package => emit_package(svg, x, y, w, h),
-        Stack => emit_stack(svg, x, y, w, h),
-        Storage => emit_storage(svg, x, y, w, h),
-        Database => emit_database(svg, x, y, w, h),
-        Queue => emit_queue(svg, x, y, w, h),
-        _ => emit_rounded_rect(svg, x, y, w, h),
+        Node => emit_tag_polygon(svg, x, y, w, h, fill, 0.5),
+        Artifact => emit_artifact(svg, x, y, w, h, fill),
+        Card | Rectangle | Agent => emit_rounded_rect(svg, x, y, w, h, fill),
+        Component => emit_component(svg, x, y, w, h, fill),
+        Frame => emit_frame(svg, x, y, w, h, fill),
+        Folder => emit_folder(svg, x, y, w, h, fill),
+        File => emit_file(svg, x, y, w, h, fill),
+        Package => emit_package(svg, x, y, w, h, fill),
+        Stack => emit_stack(svg, x, y, w, h, fill),
+        Storage => emit_storage(svg, x, y, w, h, fill),
+        Database => emit_database(svg, x, y, w, h, fill),
+        Queue => emit_queue(svg, x, y, w, h, fill),
+        _ => emit_rounded_rect(svg, x, y, w, h, fill),
     }
 }
 
@@ -377,25 +418,28 @@ fn emit_cluster_shape(
     y: f64,
     w: f64,
     h: f64,
+    fill: Option<&str>,
 ) {
     use DeploymentNodeKind::*;
+    // Clusters default to no fill; a `#color` paints the cluster background.
+    let fill = fill.unwrap_or("none");
     match kind {
-        // Clusters use no fill and stroke-width=1 (per goldens).
-        Node => emit_tag_polygon(svg, x, y, w, h, "none", 1.0),
+        // Clusters use stroke-width=1 (per goldens).
+        Node => emit_tag_polygon(svg, x, y, w, h, fill, 1.0),
         // Card cluster has rect + horizontal line under title.
-        Card => emit_card_cluster(svg, x, y, w, h),
+        Card => emit_card_cluster(svg, x, y, w, h, fill),
         // Rectangle / Agent cluster: bare rect, no line.
-        Rectangle | Agent => emit_plain_rect_cluster(svg, x, y, w, h),
-        Frame => emit_frame_cluster(svg, x, y, w, h),
+        Rectangle | Agent => emit_plain_rect_cluster(svg, x, y, w, h, fill),
+        Frame => emit_frame_cluster(svg, x, y, w, h, fill),
         Folder => emit_folder_cluster(svg, x, y, w, h),
         Package => emit_package_cluster(svg, x, y, w, h),
-        _ => emit_tag_polygon(svg, x, y, w, h, "none", 1.0),
+        _ => emit_tag_polygon(svg, x, y, w, h, fill, 1.0),
     }
 }
 
-fn emit_plain_rect_cluster(svg: &mut SvgBuilder, x: f64, y: f64, w: f64, h: f64) {
+fn emit_plain_rect_cluster(svg: &mut SvgBuilder, x: f64, y: f64, w: f64, h: f64, fill: &str) {
     svg.raw(&format!(
-        r#"<rect fill="none" height="{h}" rx="{RX_RY}" ry="{RX_RY}" style="stroke:{STROKE};stroke-width:1;" width="{w}" x="{x}" y="{y}"/>"#,
+        r#"<rect fill="{fill}" height="{h}" rx="{RX_RY}" ry="{RX_RY}" style="stroke:{STROKE};stroke-width:1;" width="{w}" x="{x}" y="{y}"/>"#,
         h = fc(h),
         w = fc(w),
         x = fc(x),
@@ -439,13 +483,13 @@ fn emit_tag_polygon(svg: &mut SvgBuilder, x: f64, y: f64, w: f64, h: f64, fill: 
 
 // ---- Artifact (rect + folded corner) --------------------------------------
 
-fn emit_artifact(svg: &mut SvgBuilder, x: f64, y: f64, w: f64, h: f64) {
+fn emit_artifact(svg: &mut SvgBuilder, x: f64, y: f64, w: f64, h: f64, fill: &str) {
     let x_s = fc(x);
     let y_s = fc(y);
     let w_s = fc(w);
     let h_s = fc(h);
     svg.raw(&format!(
-        r#"<rect fill="{FILL}" height="{h_s}" rx="{RX_RY}" ry="{RX_RY}" style="stroke:{STROKE};stroke-width:0.5;" width="{w_s}" x="{x_s}" y="{y_s}"/>"#,
+        r#"<rect fill="{fill}" height="{h_s}" rx="{RX_RY}" ry="{RX_RY}" style="stroke:{STROKE};stroke-width:0.5;" width="{w_s}" x="{x_s}" y="{y_s}"/>"#,
     ));
     // Folded corner polygon at top-right (12x14 box, inset 5 from right and 5 from top).
     let fx = x + w - 17.0; // 12 wide, then 5 from right edge
@@ -471,7 +515,7 @@ fn emit_artifact(svg: &mut SvgBuilder, x: f64, y: f64, w: f64, h: f64) {
         fc(p1.1),
     );
     svg.raw(&format!(
-        r#"<polygon fill="{FILL}" points="{pts}" style="stroke:{STROKE};stroke-width:0.5;"/>"#,
+        r#"<polygon fill="{fill}" points="{pts}" style="stroke:{STROKE};stroke-width:0.5;"/>"#,
     ));
     // Two lines for the fold detail.
     svg.raw(&format!(
@@ -490,9 +534,9 @@ fn emit_artifact(svg: &mut SvgBuilder, x: f64, y: f64, w: f64, h: f64) {
 
 // ---- Rounded rect (card / rectangle / agent leaf) --------------------------
 
-fn emit_rounded_rect(svg: &mut SvgBuilder, x: f64, y: f64, w: f64, h: f64) {
+fn emit_rounded_rect(svg: &mut SvgBuilder, x: f64, y: f64, w: f64, h: f64, fill: &str) {
     svg.raw(&format!(
-        r#"<rect fill="{FILL}" height="{h}" rx="{RX_RY}" ry="{RX_RY}" style="stroke:{STROKE};stroke-width:0.5;" width="{w}" x="{x}" y="{y}"/>"#,
+        r#"<rect fill="{fill}" height="{h}" rx="{RX_RY}" ry="{RX_RY}" style="stroke:{STROKE};stroke-width:0.5;" width="{w}" x="{x}" y="{y}"/>"#,
         h = fc(h),
         w = fc(w),
         x = fc(x),
@@ -502,9 +546,9 @@ fn emit_rounded_rect(svg: &mut SvgBuilder, x: f64, y: f64, w: f64, h: f64) {
 
 // ---- Card cluster (rect + horizontal line) --------------------------------
 
-fn emit_card_cluster(svg: &mut SvgBuilder, x: f64, y: f64, w: f64, h: f64) {
+fn emit_card_cluster(svg: &mut SvgBuilder, x: f64, y: f64, w: f64, h: f64, fill: &str) {
     svg.raw(&format!(
-        r#"<rect fill="none" height="{h}" rx="{RX_RY}" ry="{RX_RY}" style="stroke:{STROKE};stroke-width:1;" width="{w}" x="{x}" y="{y}"/>"#,
+        r#"<rect fill="{fill}" height="{h}" rx="{RX_RY}" ry="{RX_RY}" style="stroke:{STROKE};stroke-width:1;" width="{w}" x="{x}" y="{y}"/>"#,
         h = fc(h),
         w = fc(w),
         x = fc(x),
@@ -522,9 +566,9 @@ fn emit_card_cluster(svg: &mut SvgBuilder, x: f64, y: f64, w: f64, h: f64) {
 
 // ---- Component (rect + tab + bars) ----------------------------------------
 
-fn emit_component(svg: &mut SvgBuilder, x: f64, y: f64, w: f64, h: f64) {
+fn emit_component(svg: &mut SvgBuilder, x: f64, y: f64, w: f64, h: f64, fill: &str) {
     svg.raw(&format!(
-        r#"<rect fill="{FILL}" height="{h}" rx="{RX_RY}" ry="{RX_RY}" style="stroke:{STROKE};stroke-width:0.5;" width="{w}" x="{x}" y="{y}"/>"#,
+        r#"<rect fill="{fill}" height="{h}" rx="{RX_RY}" ry="{RX_RY}" style="stroke:{STROKE};stroke-width:0.5;" width="{w}" x="{x}" y="{y}"/>"#,
         h = fc(h),
         w = fc(w),
         x = fc(x),
@@ -534,19 +578,19 @@ fn emit_component(svg: &mut SvgBuilder, x: f64, y: f64, w: f64, h: f64) {
     let tab_x = x + w - 20.0;
     let tab_y = y + 5.0;
     svg.raw(&format!(
-        r#"<rect fill="{FILL}" height="10" style="stroke:{STROKE};stroke-width:0.5;" width="15" x="{x}" y="{y}"/>"#,
+        r#"<rect fill="{fill}" height="10" style="stroke:{STROKE};stroke-width:0.5;" width="15" x="{x}" y="{y}"/>"#,
         x = fc(tab_x),
         y = fc(tab_y),
     ));
     // Two small bars left of tab (4w x 2h each).
     let bar_x = tab_x - 2.0;
     svg.raw(&format!(
-        r#"<rect fill="{FILL}" height="2" style="stroke:{STROKE};stroke-width:0.5;" width="4" x="{x}" y="{y}"/>"#,
+        r#"<rect fill="{fill}" height="2" style="stroke:{STROKE};stroke-width:0.5;" width="4" x="{x}" y="{y}"/>"#,
         x = fc(bar_x),
         y = fc(tab_y + 2.0),
     ));
     svg.raw(&format!(
-        r#"<rect fill="{FILL}" height="2" style="stroke:{STROKE};stroke-width:0.5;" width="4" x="{x}" y="{y}"/>"#,
+        r#"<rect fill="{fill}" height="2" style="stroke:{STROKE};stroke-width:0.5;" width="4" x="{x}" y="{y}"/>"#,
         x = fc(bar_x),
         y = fc(tab_y + 6.0),
     ));
@@ -554,9 +598,9 @@ fn emit_component(svg: &mut SvgBuilder, x: f64, y: f64, w: f64, h: f64) {
 
 // ---- Frame (rect + small tab path top-left) -------------------------------
 
-fn emit_frame(svg: &mut SvgBuilder, x: f64, y: f64, w: f64, h: f64) {
+fn emit_frame(svg: &mut SvgBuilder, x: f64, y: f64, w: f64, h: f64, fill: &str) {
     svg.raw(&format!(
-        r#"<rect fill="{FILL}" height="{h}" rx="{RX_RY}" ry="{RX_RY}" style="stroke:{STROKE};stroke-width:0.5;" width="{w}" x="{x}" y="{y}"/>"#,
+        r#"<rect fill="{fill}" height="{h}" rx="{RX_RY}" ry="{RX_RY}" style="stroke:{STROKE};stroke-width:0.5;" width="{w}" x="{x}" y="{y}"/>"#,
         h = fc(h),
         w = fc(w),
         x = fc(x),
@@ -573,11 +617,11 @@ fn emit_frame(svg: &mut SvgBuilder, x: f64, y: f64, w: f64, h: f64) {
 
 // ---- Frame cluster --------------------------------------------------------
 
-fn emit_frame_cluster(svg: &mut SvgBuilder, x: f64, y: f64, w: f64, h: f64) {
+fn emit_frame_cluster(svg: &mut SvgBuilder, x: f64, y: f64, w: f64, h: f64, fill: &str) {
     // Frame cluster: bare rect with stroke-width=1. The tab is emitted
     // by emit_cluster_label since it depends on label width.
     svg.raw(&format!(
-        r#"<rect fill="none" height="{h}" rx="{RX_RY}" ry="{RX_RY}" style="stroke:{STROKE};stroke-width:1;" width="{w}" x="{x}" y="{y}"/>"#,
+        r#"<rect fill="{fill}" height="{h}" rx="{RX_RY}" ry="{RX_RY}" style="stroke:{STROKE};stroke-width:1;" width="{w}" x="{x}" y="{y}"/>"#,
         h = fc(h),
         w = fc(w),
         x = fc(x),
@@ -609,7 +653,7 @@ fn emit_frame_tab(svg: &mut SvgBuilder, x: f64, y: f64, label_w: f64) {
 
 // ---- Folder ---------------------------------------------------------------
 
-fn emit_folder(_svg: &mut SvgBuilder, _x: f64, _y: f64, _w: f64, _h: f64) {
+fn emit_folder(_svg: &mut SvgBuilder, _x: f64, _y: f64, _w: f64, _h: f64, _fill: &str) {
     // TODO: complex path; oracle bbox is unreliable.
 }
 
@@ -619,13 +663,13 @@ fn emit_folder_cluster(_svg: &mut SvgBuilder, _x: f64, _y: f64, _w: f64, _h: f64
 
 // ---- File -----------------------------------------------------------------
 
-fn emit_file(_svg: &mut SvgBuilder, _x: f64, _y: f64, _w: f64, _h: f64) {
+fn emit_file(_svg: &mut SvgBuilder, _x: f64, _y: f64, _w: f64, _h: f64, _fill: &str) {
     // TODO: complex path with corner fold; oracle bbox unreliable.
 }
 
 // ---- Package --------------------------------------------------------------
 
-fn emit_package(_svg: &mut SvgBuilder, _x: f64, _y: f64, _w: f64, _h: f64) {
+fn emit_package(_svg: &mut SvgBuilder, _x: f64, _y: f64, _w: f64, _h: f64, _fill: &str) {
     // TODO: complex path with tab and bold title.
 }
 
@@ -635,7 +679,7 @@ fn emit_package_cluster(_svg: &mut SvgBuilder, _x: f64, _y: f64, _w: f64, _h: f6
 
 // ---- Stack ----------------------------------------------------------------
 
-fn emit_stack(svg: &mut SvgBuilder, x: f64, y: f64, w: f64, h: f64) {
+fn emit_stack(svg: &mut SvgBuilder, x: f64, y: f64, w: f64, h: f64, fill: &str) {
     // Stack: an inner rect with no stroke (just fill), plus an outline path
     // that extends 15px on either side. Geometry from goldens:
     //   rect at (x, y, w, h) — the inner fill
@@ -644,7 +688,7 @@ fn emit_stack(svg: &mut SvgBuilder, x: f64, y: f64, w: f64, h: f64) {
     //         L{x+w-2.5},{y+h} A2.5,2.5 0 0 0 {x+w},{y+h-2.5}
     //         L{x+w},{y+2.5} A2.5,2.5 0 0 1 {x+w+2.5},{y} L{x+w+15},{y}
     svg.raw(&format!(
-        r#"<rect fill="{FILL}" height="{h}" rx="{RX_RY}" ry="{RX_RY}" style="stroke:none;stroke-width:0.5;" width="{w}" x="{x}" y="{y}"/>"#,
+        r#"<rect fill="{fill}" height="{h}" rx="{RX_RY}" ry="{RX_RY}" style="stroke:none;stroke-width:0.5;" width="{w}" x="{x}" y="{y}"/>"#,
         h = fc(h),
         w = fc(w),
         x = fc(x),
@@ -674,9 +718,9 @@ fn emit_stack(svg: &mut SvgBuilder, x: f64, y: f64, w: f64, h: f64) {
 
 // ---- Storage (rounded rect with rx=35, ry=35) -----------------------------
 
-fn emit_storage(svg: &mut SvgBuilder, x: f64, y: f64, w: f64, h: f64) {
+fn emit_storage(svg: &mut SvgBuilder, x: f64, y: f64, w: f64, h: f64, fill: &str) {
     svg.raw(&format!(
-        r#"<rect fill="{FILL}" height="{h}" rx="35" ry="35" style="stroke:{STROKE};stroke-width:0.5;" width="{w}" x="{x}" y="{y}"/>"#,
+        r#"<rect fill="{fill}" height="{h}" rx="35" ry="35" style="stroke:{STROKE};stroke-width:0.5;" width="{w}" x="{x}" y="{y}"/>"#,
         h = fc(h),
         w = fc(w),
         x = fc(x),
@@ -686,7 +730,7 @@ fn emit_storage(svg: &mut SvgBuilder, x: f64, y: f64, w: f64, h: f64) {
 
 // ---- Database (cylinder via 2 bezier paths) -------------------------------
 
-fn emit_database(svg: &mut SvgBuilder, x: f64, y: f64, w: f64, h: f64) {
+fn emit_database(svg: &mut SvgBuilder, x: f64, y: f64, w: f64, h: f64, fill: &str) {
     // Recover full-precision width from oracle width to avoid 1-ULP drift.
     // For database the geometry is symmetric so cx = (x_low + x_high) / 2
     // where x_high = x + w_full. Width is determined by label, but for
@@ -709,7 +753,7 @@ fn emit_database(svg: &mut SvgBuilder, x: f64, y: f64, w: f64, h: f64) {
         bl = fc(bot_low),
     );
     svg.raw(&format!(
-        r#"<path d="{d}" fill="{FILL}" style="stroke:{STROKE};stroke-width:0.5;"/>"#
+        r#"<path d="{d}" fill="{fill}" style="stroke:{STROKE};stroke-width:0.5;"/>"#
     ));
     // The "top wall" of the cylinder (inner curve under the lip).
     let d2 = format!(
@@ -727,7 +771,7 @@ fn emit_database(svg: &mut SvgBuilder, x: f64, y: f64, w: f64, h: f64) {
 
 // ---- Queue (cylinder rotated 90 degrees) ---------------------------------
 
-fn emit_queue(svg: &mut SvgBuilder, x: f64, y: f64, w: f64, h: f64) {
+fn emit_queue(svg: &mut SvgBuilder, x: f64, y: f64, w: f64, h: f64, fill: &str) {
     // Like database but rotated: rounded left + straight top/bottom + rounded right.
     // The "right wall" lip is at x+w-10.
     //
@@ -750,7 +794,7 @@ fn emit_queue(svg: &mut SvgBuilder, x: f64, y: f64, w: f64, h: f64) {
         yh_s = fc(y + h_full),
     );
     svg.raw(&format!(
-        r#"<path d="{d}" fill="{FILL}" style="stroke:{STROKE};stroke-width:0.5;"/>"#
+        r#"<path d="{d}" fill="{fill}" style="stroke:{STROKE};stroke-width:0.5;"/>"#
     ));
     // The inner left wall (right-side of the lip).
     let inner_x = x + w - 10.0;

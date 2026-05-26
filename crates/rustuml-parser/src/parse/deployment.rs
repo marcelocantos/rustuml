@@ -93,12 +93,14 @@ fn kind_from_keyword(keyword: &str) -> DeploymentNodeKind {
     }
 }
 
+#[allow(clippy::too_many_arguments)]
 fn push_node(
     nodes: &mut Vec<DeploymentNode>,
     id: String,
     label: String,
     kind: DeploymentNodeKind,
     stereotype: Option<String>,
+    color: Option<String>,
     source_line: usize,
 ) {
     if !nodes.iter().any(|n| n.id == id) {
@@ -107,6 +109,7 @@ fn push_node(
             label,
             kind,
             stereotype,
+            color,
             children: Vec::new(),
             source_line,
         });
@@ -307,7 +310,7 @@ pub fn parse_deployment(lines: &[String]) -> Result<DeploymentDiagram, ParseErro
     // keyword id [as "label"] [<<stereo>>] [#color] [{]
     static RE_NODE_BARE: LazyLock<Regex> = LazyLock::new(|| {
         Regex::new(
-            r#"^(\w+)\s+(\w[\w.]*)(?:\s+as\s+"([^"]+)")?(?:\s+<<([^>]+)>>)?(?:\s+#\w+)?(?:\s*\{)?"#,
+            r#"^(\w+)\s+(\w[\w.]*)(?:\s+as\s+"([^"]+)")?(?:\s+<<([^>]+)>>)?(?:\s+#(\w+))?(?:\s*\{)?"#,
         )
         .unwrap()
     });
@@ -315,14 +318,15 @@ pub fn parse_deployment(lines: &[String]) -> Result<DeploymentDiagram, ParseErro
     // keyword "label" [as id] [<<stereo>>] [#color] [{]
     static RE_NODE_QUOTED: LazyLock<Regex> = LazyLock::new(|| {
         Regex::new(
-            r#"^(\w+)\s+"([^"]+)"(?:\s+as\s+(\w+))?(?:\s+<<([^>]+)>>)?(?:\s+#\w+)?(?:\s*\{)?"#,
+            r#"^(\w+)\s+"([^"]+)"(?:\s+as\s+(\w+))?(?:\s+<<([^>]+)>>)?(?:\s+#(\w+))?(?:\s*\{)?"#,
         )
         .unwrap()
     });
 
     // [Label] [as id] [<<stereo>>] [#color]  — bracket component notation
     static RE_NODE_BRACKET: LazyLock<Regex> = LazyLock::new(|| {
-        Regex::new(r#"^\[([^\]]+)\](?:\s+as\s+(\w+))?(?:\s+<<([^>]+)>>)?(?:\s+#\w+)?\s*$"#).unwrap()
+        Regex::new(r#"^\[([^\]]+)\](?:\s+as\s+(\w+))?(?:\s+<<([^>]+)>>)?(?:\s+#(\w+))?\s*$"#)
+            .unwrap()
     });
 
     // note "text" as ID  — floating note
@@ -431,12 +435,14 @@ pub fn parse_deployment(lines: &[String]) -> Result<DeploymentDiagram, ParseErro
                 .map(|m| m.as_str().to_string())
                 .unwrap_or_else(|| label_to_id(&label));
             let stereotype = caps.get(3).map(|m| m.as_str().trim().to_string());
+            let color = caps.get(4).map(|m| m.as_str().to_string());
             push_node(
                 &mut nodes,
                 id.clone(),
                 label,
                 DeploymentNodeKind::Component,
                 stereotype,
+                color,
                 current_line,
             );
             if let Some(parent_id) = stack.last().cloned() {
@@ -510,6 +516,7 @@ pub fn parse_deployment(lines: &[String]) -> Result<DeploymentDiagram, ParseErro
                             label: lbl.clone(),
                             kind: DeploymentNodeKind::Node,
                             stereotype: None,
+                            color: None,
                             children: Vec::new(),
                             source_line: current_line,
                         });
@@ -535,6 +542,7 @@ pub fn parse_deployment(lines: &[String]) -> Result<DeploymentDiagram, ParseErro
                         .unwrap_or_else(|| raw_id.clone());
                     let id = raw_id;
                     let stereotype = caps.get(4).map(|m| m.as_str().trim().to_string());
+                    let color = caps.get(5).map(|m| m.as_str().to_string());
                     let kind = kind_from_keyword(keyword);
 
                     push_node(
@@ -543,6 +551,7 @@ pub fn parse_deployment(lines: &[String]) -> Result<DeploymentDiagram, ParseErro
                         label,
                         kind,
                         stereotype,
+                        color,
                         current_line,
                     );
                     if let Some(parent_id) = stack.last().cloned() {
@@ -566,6 +575,7 @@ pub fn parse_deployment(lines: &[String]) -> Result<DeploymentDiagram, ParseErro
                         .map(|m| m.as_str().to_string())
                         .unwrap_or_else(|| label_to_id(&label));
                     let stereotype = caps.get(4).map(|m| m.as_str().trim().to_string());
+                    let color = caps.get(5).map(|m| m.as_str().to_string());
                     let kind = kind_from_keyword(keyword);
 
                     push_node(
@@ -574,6 +584,7 @@ pub fn parse_deployment(lines: &[String]) -> Result<DeploymentDiagram, ParseErro
                         label,
                         kind,
                         stereotype,
+                        color,
                         current_line,
                     );
                     if let Some(parent_id) = stack.last().cloned() {
@@ -600,6 +611,7 @@ pub fn parse_deployment(lines: &[String]) -> Result<DeploymentDiagram, ParseErro
                         label: lbl.clone(),
                         kind: DeploymentNodeKind::Node,
                         stereotype: None,
+                        color: None,
                         children: Vec::new(),
                         source_line: current_line,
                     });
@@ -734,5 +746,44 @@ mod tests {
         assert_eq!(d.nodes[0].label, "MyComponent");
         assert_eq!(d.nodes[0].id, "MyComponent");
         assert_eq!(d.nodes[0].kind, DeploymentNodeKind::Component);
+    }
+
+    #[test]
+    fn element_color_captured() {
+        let d =
+            parse("node AppNode #Pink\nartifact a #FF8888\ncloud C #LightBlue {\n  node Inner\n}");
+        assert_eq!(
+            d.nodes
+                .iter()
+                .find(|n| n.id == "AppNode")
+                .unwrap()
+                .color
+                .as_deref(),
+            Some("Pink")
+        );
+        assert_eq!(
+            d.nodes
+                .iter()
+                .find(|n| n.id == "a")
+                .unwrap()
+                .color
+                .as_deref(),
+            Some("FF8888")
+        );
+        // Colour on a container is captured too.
+        assert_eq!(
+            d.nodes
+                .iter()
+                .find(|n| n.id == "C")
+                .unwrap()
+                .color
+                .as_deref(),
+            Some("LightBlue")
+        );
+        // Plain element has no colour.
+        assert_eq!(
+            d.nodes.iter().find(|n| n.id == "Inner").unwrap().color,
+            None
+        );
     }
 }
