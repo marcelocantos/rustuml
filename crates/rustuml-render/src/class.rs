@@ -2385,10 +2385,16 @@ fn render_oracle_relationships(
             .as_deref()
             .unwrap_or("stroke:#181818;stroke-width:1;");
 
+        // The edge id embeds the entity names; escape XML specials (e.g. `&`
+        // in a class named "A&B") so the attribute stays well-formed, matching
+        // PlantUML's `id="A&amp;B-to-Other"`.
         write!(
             svg,
             r#"<path codeLine="{}" d="{}" fill="none" id="{}" style="{}"/>"#,
-            code_line, oracle_edge.d, expected_id, path_style,
+            code_line,
+            oracle_edge.d,
+            escape_xml(expected_id),
+            path_style,
         )
         .unwrap();
 
