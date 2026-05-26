@@ -195,12 +195,33 @@ fn render_oracle(diagram: &DeploymentDiagram, _theme: &Theme, oracle: &OracleLay
         counter += 1;
     }
 
+    // Per-kind default background fills from `skinparam <kind> { BackgroundColor X }`
+    // (flattened by the parser to `<kind>BackgroundColor`). PlantUML skinparam
+    // keys are case-insensitive, so match case-insensitively.
+    let skin_fills = skin_background_fills(&diagram.meta.skinparams);
+
     // Emit clusters first (depth-first), then leaf entities (depth-first).
     for root in &roots {
-        emit_clusters_dfs(&mut svg, root, &diagram.nodes, None, oracle, &id_for_node);
+        emit_clusters_dfs(
+            &mut svg,
+            root,
+            &diagram.nodes,
+            None,
+            oracle,
+            &id_for_node,
+            &skin_fills,
+        );
     }
     for root in &roots {
-        emit_entities_dfs(&mut svg, root, &diagram.nodes, None, oracle, &id_for_node);
+        emit_entities_dfs(
+            &mut svg,
+            root,
+            &diagram.nodes,
+            None,
+            oracle,
+            &id_for_node,
+            &skin_fills,
+        );
     }
 
     // Emit connections in source order.
@@ -222,6 +243,77 @@ fn render_oracle(diagram: &DeploymentDiagram, _theme: &Theme, oracle: &OracleLay
     svg.finalize_plantuml()
 }
 
+/// The skinparam keyword for each element kind (e.g. `node`, `database`).
+/// Used to look up `<kind>BackgroundColor` defaults.
+fn skin_keyword(kind: DeploymentNodeKind) -> &'static str {
+    use DeploymentNodeKind::*;
+    match kind {
+        Node => "node",
+        Artifact => "artifact",
+        Cloud => "cloud",
+        Database => "database",
+        Storage => "storage",
+        Frame => "frame",
+        Folder => "folder",
+        Actor => "actor",
+        Queue => "queue",
+        Component => "component",
+        Rectangle => "rectangle",
+        Agent => "agent",
+        Boundary => "boundary",
+        Card => "card",
+        Collections => "collections",
+        Control => "control",
+        Entity => "entity",
+        File => "file",
+        Package => "package",
+        Stack => "stack",
+    }
+}
+
+/// Build a per-kind map of background fills from `<kind>BackgroundColor`
+/// skinparams. Keys are matched case-insensitively (PlantUML convention).
+fn skin_background_fills(
+    skinparams: &[rustuml_parser::diagram::SkinParam],
+) -> HashMap<DeploymentNodeKind, String> {
+    use DeploymentNodeKind::*;
+    const KINDS: &[DeploymentNodeKind] = &[
+        Node,
+        Artifact,
+        Cloud,
+        Database,
+        Storage,
+        Frame,
+        Folder,
+        Actor,
+        Queue,
+        Component,
+        Rectangle,
+        Agent,
+        Boundary,
+        Card,
+        Collections,
+        Control,
+        Entity,
+        File,
+        Package,
+        Stack,
+    ];
+    let mut map = HashMap::new();
+    for &kind in KINDS {
+        let target = format!("{}backgroundcolor", skin_keyword(kind));
+        // Last write wins, matching PlantUML's later-skinparam-overrides.
+        if let Some(sp) = skinparams
+            .iter()
+            .rev()
+            .find(|sp| sp.key.to_ascii_lowercase() == target)
+        {
+            map.insert(kind, resolve_fill(&sp.value));
+        }
+    }
+    map
+}
+
 /// Compute the "own" qualified-name (last segment) for a node.
 fn own_qname(node: &DeploymentNode) -> String {
     let derived = label_to_id(&node.label);
@@ -232,6 +324,7 @@ fn own_qname(node: &DeploymentNode) -> String {
     }
 }
 
+#[allow(clippy::too_many_arguments)]
 fn emit_clusters_dfs(
     svg: &mut SvgBuilder,
     node: &DeploymentNode,
@@ -239,6 +332,7 @@ fn emit_clusters_dfs(
     parent_qname: Option<&str>,
     oracle: &OracleLayout,
     id_for_node: &HashMap<String, String>,
+    skin_fills: &HashMap<DeploymentNodeKind, String>,
 ) {
     let qname = qualified_name(node, parent_qname);
     let is_cluster = !node.children.is_empty();
@@ -255,10 +349,14 @@ fn emit_clusters_dfs(
                 r#"<g class="cluster" data-qualified-name="{qname}" data-source-line="{sl}" id="{ent_id}">"#,
                 sl = node.source_line,
             ));
-            // A `#color` on a container fills the cluster shape (replacing the
-            // default `fill="none"`); the stroke width stays at the cluster
-            // value. Without a colour, clusters render unfilled.
-            let cluster_fill = node.color.as_deref().map(resolve_fill);
+            // A `#color` (or a `skinparam <kind> { BackgroundColor }`) fills
+            // the cluster shape, replacing the default `fill="none"`; the
+            // stroke width stays at the cluster value. Otherwise unfilled.
+            let cluster_fill = node
+                .color
+                .as_deref()
+                .map(resolve_fill)
+                .or_else(|| skin_fills.get(&node.kind).cloned());
             emit_cluster_shape(
                 svg,
                 node.kind,
@@ -273,12 +371,21 @@ fn emit_clusters_dfs(
         }
         for child_id in &node.children {
             if let Some(child) = all.iter().find(|n| n.id == *child_id) {
-                emit_clusters_dfs(svg, child, all, Some(&qname), oracle, id_for_node);
+                emit_clusters_dfs(
+                    svg,
+                    child,
+                    all,
+                    Some(&qname),
+                    oracle,
+                    id_for_node,
+                    skin_fills,
+                );
             }
         }
     }
 }
 
+#[allow(clippy::too_many_arguments)]
 fn emit_entities_dfs(
     svg: &mut SvgBuilder,
     node: &DeploymentNode,
@@ -286,6 +393,7 @@ fn emit_entities_dfs(
     parent_qname: Option<&str>,
     oracle: &OracleLayout,
     id_for_node: &HashMap<String, String>,
+    skin_fills: &HashMap<DeploymentNodeKind, String>,
 ) {
     let qname = qualified_name(node, parent_qname);
     let is_cluster = !node.children.is_empty();
@@ -302,11 +410,13 @@ fn emit_entities_dfs(
                 r#"<g class="entity" data-qualified-name="{qname}" data-source-line="{sl}" id="{ent_id}">"#,
                 sl = node.source_line,
             ));
-            // A `#color` on a leaf element overrides the default `#F1F1F1` fill.
+            // Fill precedence: explicit `#color` > `skinparam <kind>
+            // BackgroundColor` > the `#F1F1F1` default.
             let entity_fill = node
                 .color
                 .as_deref()
                 .map(resolve_fill)
+                .or_else(|| skin_fills.get(&node.kind).cloned())
                 .unwrap_or_else(|| FILL.to_string());
             emit_entity_shape(
                 svg,
@@ -323,7 +433,15 @@ fn emit_entities_dfs(
     } else {
         for child_id in &node.children {
             if let Some(child) = all.iter().find(|n| n.id == *child_id) {
-                emit_entities_dfs(svg, child, all, Some(&qname), oracle, id_for_node);
+                emit_entities_dfs(
+                    svg,
+                    child,
+                    all,
+                    Some(&qname),
+                    oracle,
+                    id_for_node,
+                    skin_fills,
+                );
             }
         }
     }

@@ -46,7 +46,7 @@ pub struct DeploymentNode {
     pub source_line: usize,
 }
 
-#[derive(Debug, Clone, Copy, PartialEq, Eq, Default, Serialize, Deserialize)]
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Hash, Default, Serialize, Deserialize)]
 pub enum DeploymentNodeKind {
     #[default]
     Node,

@@ -305,6 +305,10 @@ pub fn parse_deployment(lines: &[String]) -> Result<DeploymentDiagram, ParseErro
     let mut in_legend = false;
     let mut legend_lines: Vec<String> = Vec::new();
 
+    // Skinparam block accumulator. When inside `skinparam node { ... }`,
+    // nested `Key Value` lines are flattened to `nodeKey` = `Value`.
+    let mut skinparam_block_prefix: Option<String> = None;
+
     let keyword_set: HashSet<&str> = DEPLOYMENT_KEYWORDS.iter().copied().collect();
 
     // keyword id [as "label"] [<<stereo>>] [#color] [{]
@@ -351,6 +355,23 @@ pub fn parse_deployment(lines: &[String]) -> Result<DeploymentDiagram, ParseErro
         let current_line = line_idx + 1;
         let trimmed = line.trim();
         if trimmed.is_empty() {
+            continue;
+        }
+
+        // Inside a `skinparam <prefix> { ... }` block: flatten nested
+        // `Key Value` entries to `<prefix>Key` until the closing `}`.
+        if let Some(prefix) = &skinparam_block_prefix {
+            if trimmed == "}" {
+                skinparam_block_prefix = None;
+            } else {
+                let parts: Vec<&str> = trimmed.splitn(2, char::is_whitespace).collect();
+                if parts.len() == 2 {
+                    meta.skinparams.push(crate::diagram::SkinParam {
+                        key: format!("{prefix}{}", parts[0]),
+                        value: parts[1].trim().to_string(),
+                    });
+                }
+            }
             continue;
         }
 
@@ -401,7 +422,14 @@ pub fn parse_deployment(lines: &[String]) -> Result<DeploymentDiagram, ParseErro
         }
         // Skinparam.
         if let Some(rest) = trimmed.strip_prefix("skinparam ") {
-            let parts: Vec<&str> = rest.splitn(2, ' ').collect();
+            let rest = rest.trim();
+            // Block form: `skinparam node {` opens a nested block whose
+            // `Key Value` entries are flattened to `<prefix>Key`.
+            if let Some(prefix) = rest.strip_suffix('{') {
+                skinparam_block_prefix = Some(prefix.trim().to_string());
+                continue;
+            }
+            let parts: Vec<&str> = rest.splitn(2, char::is_whitespace).collect();
             if parts.len() == 2 {
                 meta.skinparams.push(crate::diagram::SkinParam {
                     key: parts[0].to_string(),
