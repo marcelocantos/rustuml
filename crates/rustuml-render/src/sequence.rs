@@ -1276,7 +1276,7 @@ impl PlantUmlSvg {
             r##"<rect fill="{}" height="{}" style="stroke:#181818;stroke-width:0.5;" width="{}" x="{}" y="{}"/>"##,
             fill_color,
             fmt_coord(HEAD_BOX_H),
-            fmt_coord(box_w),
+            fmt_coord(box_w - COLLECTIONS_OFFSET),
             fmt_coord(back_x),
             fmt_coord(back_y),
         )
@@ -1289,7 +1289,7 @@ impl PlantUmlSvg {
             r##"<rect fill="{}" height="{}" style="stroke:#181818;stroke-width:0.5;" width="{}" x="{}" y="{}"/>"##,
             fill_color,
             fmt_coord(HEAD_BOX_H),
-            fmt_coord(box_w),
+            fmt_coord(box_w - COLLECTIONS_OFFSET),
             fmt_coord(box_x),
             fmt_coord(front_y),
         )
@@ -2141,8 +2141,10 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme) -> String {
                     (w, h)
                 }
                 ParticipantKind::Collections => {
-                    // Collections: two stacked rectangles.
-                    let w = max_text_w + 2.0 * BOX_TEXT_X_PAD;
+                    // Collections: two stacked rectangles offset by COLLECTIONS_OFFSET.
+                    // The layout width must include the stacking offset so the
+                    // lifeline centres on the full visual span.
+                    let w = max_text_w + 2.0 * BOX_TEXT_X_PAD + COLLECTIONS_OFFSET;
                     let h = HEAD_BOX_H + COLLECTIONS_EXTRA_H;
                     (w, h)
                 }
