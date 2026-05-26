@@ -4608,7 +4608,7 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme) -> String {
                         &label_text,
                         &TextBase {
                             x: frame_left + 5.0,
-                            y: msg_y + 10.6347,
+                            y: msg_y + 10.63475,
                             font_size: 11,
                             font_family: "sans-serif",
                             fill: "#000000",
