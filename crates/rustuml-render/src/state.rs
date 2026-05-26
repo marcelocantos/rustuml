@@ -37,15 +37,15 @@ const DESC_FONT_SIZE: f64 = 12.0;
 const LINK_FONT_SIZE: f64 = 13.0;
 /// Vertical position of the divider line relative to state box top.
 /// In PlantUML, this is consistently at y + 26.4883 from the box top.
-const DIVIDER_OFFSET: f64 = 26.4883;
+const DIVIDER_OFFSET: f64 = 26.48828125;
 /// Vertical position of the state name text baseline relative to box top.
-const NAME_BASELINE_OFFSET: f64 = 18.5352;
+const NAME_BASELINE_OFFSET: f64 = 18.53515625;
 /// Vertical position of first description line baseline relative to divider.
-const FIRST_DESC_OFFSET: f64 = 16.6015;
+const FIRST_DESC_OFFSET: f64 = 16.6015625;
 /// Vertical spacing between description lines.
-const DESC_LINE_SPACING: f64 = 14.1328;
+const DESC_LINE_SPACING: f64 = 14.1328125;
 /// Additional height per description line.
-const DESC_LINE_HEIGHT: f64 = 14.1328;
+const DESC_LINE_HEIGHT: f64 = 14.1328125;
 /// Base height of description area (padding above first line).
 const DESC_BASE_HEIGHT: f64 = 0.6211;
 
@@ -329,7 +329,7 @@ pub fn render_with_oracle(
     let STATE_FILL: &str = skin.state_fill.as_str();
     let _arrow_color: &str = skin.arrow_color.as_str();
 
-    let (has_start, has_end) = classify_star_nodes(&diagram.transitions);
+    let (has_start, _has_end) = classify_star_nodes(&diagram.transitions);
 
     // Check for `hide empty description` directive.
     let hide_empty_desc = diagram.meta.skinparams.iter().any(|sp| {
@@ -338,57 +338,96 @@ pub fn render_with_oracle(
                 && sp.value.eq_ignore_ascii_case("empty description"))
     });
 
-    // Collect ordered unique state IDs in PlantUML's render order.
+    // Collect ordered unique entity IDs in PlantUML's render order.
     //
-    // PlantUML emits entities in source-declaration order: states defined on a
-    // line before the first `[*]` transition appear ahead of the start pseudo-
-    // state, states defined after appear behind it. Transition-discovered
-    // states (no explicit `state X` line) come in transition encounter order.
-    //
-    // We approximate "explicitly declared" by checking whether the state's
-    // recorded source line precedes the first `[*]` reference. The parser
-    // stamps a state's source_line at its first textual encounter, so a
-    // transition-only state inherits the transition's line — which is on or
-    // after the first `[*]` line whenever the diagram uses `[*]` at all.
-    let first_star_line: Option<usize> = diagram
+    // PlantUML emits entities (including the `.start.`/`.end.` pseudo-states)
+    // in order of first textual appearance. A state's first appearance is its
+    // `state X` declaration line, or the line of the earliest transition that
+    // references it. The start pseudo-state first appears on the earliest
+    // `[*] -->` line; the end pseudo-state on the earliest `--> [*]` line.
+    // Ordering by first-appearance line (with a stable tiebreak on encounter
+    // sequence) reproduces interleavings like `End0, .end., End1` that the old
+    // "everything-before-start, then start, then everything-after, then end"
+    // bucketing got wrong.
+    let first_start_line: Option<usize> = diagram
         .transitions
         .iter()
-        .filter(|t| t.from == "[*]" || t.to == "[*]")
+        .filter(|t| t.from == "[*]")
         .map(|t| t.source_line)
         .min();
-    let is_pre_start = |s: &State| -> bool {
-        match first_star_line {
-            Some(line) => s.source_line < line,
-            None => true,
+    let first_end_line: Option<usize> = diagram
+        .transitions
+        .iter()
+        .filter(|t| t.to == "[*]")
+        .map(|t| t.source_line)
+        .min();
+
+    let _ = (first_start_line, first_end_line);
+    // (first_appearance_line, encounter_seq, id). `encounter_seq` preserves
+    // the order entities are first seen so the stable sort keeps same-line
+    // ties in source order. Entities are visited as: declared `state X` lines
+    // first (registering their declaration line), then each transition's
+    // endpoints in `from`-then-`to` order — so a `[*] --> S` line emits the
+    // start pseudo-state ahead of `S`, matching PlantUML's interleaving.
+    let mut ordered: Vec<(usize, usize, String)> = Vec::new();
+    let mut seen: std::collections::HashSet<String> = std::collections::HashSet::new();
+    let mut seq = 0usize;
+    let mut push_entity = |line: usize, id: String| {
+        if seen.insert(id.clone()) {
+            ordered.push((line, seq, id));
+            seq += 1;
         }
     };
-    let mut state_ids: Vec<String> = Vec::new();
+    // Pre-register states whose first textual appearance is an explicit
+    // declaration that precedes any transition referencing them. A state
+    // whose recorded `source_line` is the same as its earliest transition
+    // line was discovered *by* that transition, so leave it for the
+    // transition walk below (which orders `from` before `to`, putting a
+    // `[*]` source ahead of its target).
+    let first_txn_line = |id: &str| -> Option<usize> {
+        diagram
+            .transitions
+            .iter()
+            .filter(|t| t.from == id || t.to == id)
+            .map(|t| t.source_line)
+            .min()
+    };
     for s in &diagram.states {
-        if is_pre_start(s) && !state_ids.contains(&s.id) && s.id != "[*]" {
-            state_ids.push(s.id.clone());
+        if s.id == "[*]" {
+            continue;
         }
-    }
-    if has_start {
-        state_ids.push("__start__".to_string());
-    }
-    for s in &diagram.states {
-        if !is_pre_start(s) && !state_ids.contains(&s.id) && s.id != "[*]" {
-            state_ids.push(s.id.clone());
+        let declared_before_use = match first_txn_line(&s.id) {
+            Some(txn_line) => s.source_line < txn_line,
+            None => true,
+        };
+        if declared_before_use {
+            push_entity(s.source_line, s.id.clone());
         }
     }
     for t in &diagram.transitions {
-        for id in [&t.from, &t.to] {
-            if id == "[*]" {
-                continue;
-            }
-            if !state_ids.contains(id) {
-                state_ids.push(id.clone());
-            }
+        let from = if t.from == "[*]" {
+            "__start__".to_string()
+        } else {
+            t.from.clone()
+        };
+        let to = if t.to == "[*]" {
+            "__end__".to_string()
+        } else {
+            t.to.clone()
+        };
+        push_entity(t.source_line, from);
+        push_entity(t.source_line, to);
+    }
+    // Any state never touched by a transition and not declared-before-use
+    // (e.g. an isolated `state X` after its only transition) still needs to
+    // appear; fall back to its declaration line.
+    for s in &diagram.states {
+        if s.id != "[*]" {
+            push_entity(s.source_line, s.id.clone());
         }
     }
-    if has_end {
-        state_ids.push("__end__".to_string());
-    }
+    ordered.sort_by_key(|(line, seq, _)| (*line, *seq));
+    let state_ids: Vec<String> = ordered.into_iter().map(|(_, _, id)| id).collect();
 
     let title_h = if diagram.meta.title.is_some() {
         TITLE_HEIGHT
@@ -693,40 +732,11 @@ pub fn render_with_oracle(
             .unwrap_or("ent0002")
     };
 
-    // Render fork/join bars first (they appear before entity groups in PlantUML).
-    // The oracle exposes bar positions as synthetic entities `__bar_N__`
-    // in document order; assign them to fork/join states in the same
-    // order they appear in `positions`.
+    // Fork/join bars are emitted inline within the entity loop below, in
+    // entity-declaration order (PlantUML interleaves them with the other
+    // entities rather than grouping them up front). `bar_index` selects the
+    // matching oracle `__bar_N__` synthetic entity in document order.
     let mut bar_index = 0usize;
-    for (id, cx, cy, _, _) in &positions {
-        if id.starts_with("[*]") {
-            continue;
-        }
-        let state_def = find_state(id);
-        if let Some(StateKind::Fork | StateKind::Join) = state_def.map(|s| s.kind) {
-            let bar_rect = oracle.and_then(|orc| orc.entities.get(&format!("__bar_{bar_index}__")));
-            let (bx, by, bw, bh) = if let Some(r) = bar_rect {
-                (r.x, r.y, r.width, r.height)
-            } else {
-                (
-                    cx - BAR_WIDTH / 2.0,
-                    cy - BAR_HEIGHT / 2.0,
-                    BAR_WIDTH,
-                    BAR_HEIGHT,
-                )
-            };
-            write!(
-                svg,
-                r#"<rect fill="{BAR_COLOR}" height="{}" style="stroke:none;stroke-width:1;" width="{}" x="{}" y="{}"/>"#,
-                fmt_f(bh),
-                fmt_f(bw),
-                fmt_f(bx),
-                fmt_f(by),
-            )
-            .unwrap();
-            bar_index += 1;
-        }
-    }
 
     // Render entities.
     for (id, cx, cy, bw, bh) in &positions {
@@ -874,7 +884,30 @@ pub fn render_with_oracle(
                     svg.push_str("</g>");
                 }
                 Some(StateKind::Fork | StateKind::Join) => {
-                    // Already rendered as bare rect above.
+                    // Fork/join bar — a bare `<rect>` (no `<g class="entity">`
+                    // wrapper), emitted here so it lands in entity order.
+                    let bar_rect =
+                        oracle.and_then(|orc| orc.entities.get(&format!("__bar_{bar_index}__")));
+                    let (bx, by, bw_bar, bh_bar) = if let Some(r) = bar_rect {
+                        (r.x, r.y, r.width, r.height)
+                    } else {
+                        (
+                            cx - BAR_WIDTH / 2.0,
+                            cy - BAR_HEIGHT / 2.0,
+                            BAR_WIDTH,
+                            BAR_HEIGHT,
+                        )
+                    };
+                    write!(
+                        svg,
+                        r#"<rect fill="{BAR_COLOR}" height="{}" style="stroke:none;stroke-width:1;" width="{}" x="{}" y="{}"/>"#,
+                        fmt_f(bh_bar),
+                        fmt_f(bw_bar),
+                        fmt_f(bx),
+                        fmt_f(by),
+                    )
+                    .unwrap();
+                    bar_index += 1;
                 }
                 Some(StateKind::History) => {
                     // History pseudo-state. PlantUML emits a bare
