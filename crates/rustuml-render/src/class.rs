@@ -949,6 +949,7 @@ pub fn render_with_oracle(
             &edge_paths,
             canvas_dims,
             Some(oracle),
+            cs,
         );
     }
 
@@ -976,6 +977,7 @@ pub fn render_with_oracle(
         &result.edge_paths,
         None,
         None,
+        cs,
     )
 }
 
@@ -994,10 +996,25 @@ fn render_plantuml_svg(
     edge_paths: &[EdgePath],
     canvas_override: Option<(f64, f64)>,
     oracle: Option<&OracleLayout>,
+    cs: &crate::style::ClassStyle,
 ) -> String {
     if positions.len() < diagram.entities.len() {
-        return render_grid_fallback(diagram, &Theme::default().class);
+        return render_grid_fallback(diagram, cs);
     }
+
+    // Explicit class font-colour skinparams. Only honour a colour the user
+    // actually set — the theme's own default font colour must not leak into
+    // class text, which renders black under PlantUML's classic palette.
+    let skin_value = |names: &[&str]| -> Option<&str> {
+        diagram
+            .meta
+            .skinparams
+            .iter()
+            .find(|sp| names.iter().any(|n| sp.key.eq_ignore_ascii_case(n)))
+            .map(|sp| sp.value.as_str())
+    };
+    let skin_font_color = skin_value(&["ClassFontColor"]);
+    let skin_attr_font_color = skin_value(&["ClassAttributeFontColor"]);
 
     // Compute entity positions (offset from layout).
     let entity_positions: Vec<(f64, f64)> = (0..diagram.entities.len())
@@ -1160,7 +1177,16 @@ fn render_plantuml_svg(
             )
             .unwrap();
         }
-        render_entity_content(&mut svg, entity, x, y, dim, oracle_rect);
+        render_entity_content(
+            &mut svg,
+            entity,
+            x,
+            y,
+            dim,
+            oracle_rect,
+            skin_font_color,
+            skin_attr_font_color,
+        );
         if has_url {
             svg.push_str("</a>");
         }
@@ -1333,6 +1359,7 @@ fn emit_decoration_bottom(
 /// When `oracle_rect` is provided, oracle overrides are used for icon position,
 /// glyph path, name text x, member y-positions, and separator y-positions to
 /// match PlantUML's exact output (bypassing float-precision differences).
+#[allow(clippy::too_many_arguments)]
 fn render_entity_content(
     svg: &mut String,
     entity: &ClassEntity,
@@ -1340,6 +1367,8 @@ fn render_entity_content(
     y: f64,
     dim: &EntityDims,
     oracle_rect: Option<&crate::layout_oracle::EntityRect>,
+    skin_font_color: Option<&str>,
+    skin_attr_font_color: Option<&str>,
 ) {
     let icon_cx_override = oracle_rect.and_then(|r| r.icon_cx);
     let glyph_path_override = oracle_rect.and_then(|r| r.glyph_path_d.as_deref());
@@ -1364,13 +1393,31 @@ fn render_entity_content(
         .unwrap_or_else(|| ENTITY_FILL.to_string());
     let fill = oracle_fill.unwrap_or(&fill_default);
     // Resolve the per-entity text colour from `#back:...;text:colour`
-    // shorthand. Default to black when absent.
+    // shorthand. When absent, fall back to an explicitly-set
+    // `skinparam ClassFontColor` (the name) and `ClassAttributeFontColor`
+    // (members), else plain black. `skin_*` are `Some` only when the user set
+    // the skinparam — we must NOT use the theme's own default font colour, as
+    // PlantUML's classic palette renders class text black by default.
+    // The name uses `ClassFontColor`; failing that it inherits an explicit
+    // `ClassAttributeFontColor` (which colours all class text), else black.
     let text_fill_owned = entity
         .text_color
         .as_ref()
         .map(|c| crate::sequence::resolve_color(c))
+        .or_else(|| skin_font_color.map(crate::sequence::resolve_color))
+        .or_else(|| skin_attr_font_color.map(crate::sequence::resolve_color))
         .unwrap_or_else(|| "#000000".to_string());
     let text_fill: &str = &text_fill_owned;
+    // Member (attribute) text colour: `ClassAttributeFontColor` colours
+    // fields/methods independently of the name's `ClassFontColor`. Per-entity
+    // `text:colour` shorthand still wins; otherwise members default to black.
+    let member_fill_owned = entity
+        .text_color
+        .as_ref()
+        .map(|c| crate::sequence::resolve_color(c))
+        .or_else(|| skin_attr_font_color.map(crate::sequence::resolve_color))
+        .unwrap_or_else(|| "#000000".to_string());
+    let member_fill: &str = &member_fill_owned;
     let style_default = format!("stroke:{};stroke-width:{};", BORDER_COLOR, BORDER_WIDTH);
     let style = oracle_style.unwrap_or(style_default.as_str());
     let rx_str = oracle_rx.unwrap_or("2.5");
@@ -1649,7 +1696,7 @@ fn render_entity_content(
             } else {
                 None
             };
-            render_member_line(svg, member, x, eff_y, vis_ov, narrow_default, text_fill);
+            render_member_line(svg, member, x, eff_y, vis_ov, narrow_default, member_fill);
             member_y += MEMBER_SPACING;
         }
     } else if effectively_no_members {
@@ -1716,7 +1763,7 @@ fn render_entity_content(
                     eff_member_y,
                     vis_ov,
                     is_enum_entity,
-                    text_fill,
+                    member_fill,
                 );
             } else {
                 let text = format_member_display(member);
@@ -1729,7 +1776,7 @@ fn render_entity_content(
                         y: eff_member_y,
                         font_size: 14,
                         font_family: "sans-serif",
-                        fill: text_fill,
+                        fill: member_fill,
                         bold: false,
                         italic: false,
                         underline: false,
@@ -1916,7 +1963,7 @@ fn render_entity_content(
                     eff_y,
                     vis_ov,
                     narrow_after_separator,
-                    text_fill,
+                    member_fill,
                 );
                 member_y += MEMBER_SPACING;
                 // Emit any inline separators that fall AFTER this field.
@@ -1997,7 +2044,7 @@ fn render_entity_content(
                         eff_y,
                         vis_ov,
                         methods_narrow_default,
-                        text_fill,
+                        member_fill,
                     );
                     method_y += MEMBER_SPACING;
                 }
@@ -2046,7 +2093,7 @@ fn render_entity_content(
                     eff_y,
                     vis_ov,
                     methods_narrow_default,
-                    text_fill,
+                    member_fill,
                 );
                 method_y += MEMBER_SPACING;
             }
