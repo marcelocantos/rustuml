@@ -2136,7 +2136,7 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme) -> String {
                 }
                 ParticipantKind::Database => {
                     // Database: cylinder, text below.
-                    let w = max_text_w.max(DB_CYLINDER_WIDTH) + 2.0 * ACTOR_TEXT_PAD;
+                    let w = (max_text_w + 2.0 * ACTOR_TEXT_PAD).max(DB_CYLINDER_WIDTH);
                     let h = HEAD_BOX_H + DB_EXTRA_H;
                     (w, h)
                 }
