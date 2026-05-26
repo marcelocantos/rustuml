@@ -2114,7 +2114,7 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme) -> String {
             let (bw, bh) = match p.kind {
                 ParticipantKind::Actor => {
                     // Actor: width = max(arm_span, text_width) + 2*padding
-                    let w = max_text_w.max(ACTOR_ARM_SPAN) + 2.0 * ACTOR_TEXT_PAD;
+                    let w = (max_text_w + 2.0 * ACTOR_TEXT_PAD).max(ACTOR_ARM_SPAN + 1.0);
                     let h = HEAD_BOX_H + ACTOR_EXTRA_H;
                     (w, h)
                 }
