@@ -240,7 +240,10 @@ impl StateParser {
             //   `<<stereotype>>`
             //   `{`             — opens a composite block
             Regex::new(
-                r#"^state\s+(?:"([^"]+)"\s+as\s+)?(\w+)(?:\s*<<(\w+\*?)>>)?(?:\s*(##?(?:\[[^\]]*\])?\w+))*(?:\s*\{)?$"#,
+                // The colour token accepts plain (`#color`), stroke
+                // (`##color`), styled (`##[dashed]color`) and gradient
+                // (`#c1/c2`, `#c1-c2`, `#c1\c2`) forms.
+                r#"^state\s+(?:"([^"]+)"\s+as\s+)?(\w+)(?:\s*<<(\w+\*?)>>)?(?:\s*(##?(?:\[[^\]]*\])?\w+(?:[/\\-]\w+)?))*(?:\s*\{)?$"#,
             )
             .unwrap()
         });

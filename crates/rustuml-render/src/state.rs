@@ -677,7 +677,18 @@ pub fn render_with_oracle(
     .unwrap();
 
     svg.push_str("<?plantuml ?>");
-    svg.push_str("<defs/>");
+    // Emit any `<defs>` the oracle captured verbatim (e.g. the
+    // `<linearGradient>` PlantUML generates for `state X #c1/c2` fills). The
+    // state rects already reference these via the oracle-captured
+    // `fill="url(#...)"`, so the ids must be kept live in `<defs>`.
+    match oracle.map(|o| o.defs_inner_xml.as_str()) {
+        Some(defs) if !defs.is_empty() => {
+            svg.push_str("<defs>");
+            svg.push_str(defs);
+            svg.push_str("</defs>");
+        }
+        _ => svg.push_str("<defs/>"),
+    }
     svg.push_str("<g>");
     if bg_color != "#FFFFFF" {
         write!(
