@@ -321,6 +321,30 @@ pub fn render_with_oracle(
     // override is picked up automatically. Local names intentionally shadow
     // the module-level `DEFAULT_*` constants.
     let skin = StateSkin::from_diagram(diagram);
+    // `skinparam backgroundColor <c>` paints the whole canvas: it sets the
+    // SVG root `background:` and emits a full-size `<rect>` just inside the
+    // root `<g>`. PlantUML keeps the default `#FFFFFF` when unset.
+    let bg_color: String = diagram
+        .meta
+        .skinparams
+        .iter()
+        .rev()
+        .find(|sp| sp.key.eq_ignore_ascii_case("backgroundColor"))
+        .map(|sp| crate::sequence::resolve_color(sp.value.trim()))
+        .unwrap_or_else(|| "#FFFFFF".to_string());
+    // `skinparam roundCorner <n>` sets the state-box corner radius to n/2
+    // (the default 12.5 corresponds to roundCorner 25). PlantUML applies this
+    // to the `rx`/`ry` of every normal state rectangle.
+    let state_rx: f64 = diagram
+        .meta
+        .skinparams
+        .iter()
+        .rev()
+        .find(|sp| sp.key.eq_ignore_ascii_case("roundCorner"))
+        .and_then(|sp| sp.value.trim().parse::<f64>().ok())
+        .map(|n| n / 2.0)
+        .unwrap_or(STATE_RX);
+    let rx_s = fmt_f(state_rx);
     #[allow(non_snake_case)]
     let STROKE_COLOR: &str = skin.stroke.as_str();
     #[allow(non_snake_case)]
@@ -648,13 +672,20 @@ pub fn render_with_oracle(
     let mut svg = String::with_capacity(4096);
     write!(
         svg,
-        r#"<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" contentStyleType="text/css" data-diagram-type="STATE" height="{h}px" preserveAspectRatio="none" style="width:{w}px;height:{h}px;background:#FFFFFF;" version="1.1" viewBox="0 0 {w} {h}" width="{w}px" zoomAndPan="magnify">"#,
+        r#"<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" contentStyleType="text/css" data-diagram-type="STATE" height="{h}px" preserveAspectRatio="none" style="width:{w}px;height:{h}px;background:{bg_color};" version="1.1" viewBox="0 0 {w} {h}" width="{w}px" zoomAndPan="magnify">"#,
     )
     .unwrap();
 
     svg.push_str("<?plantuml ?>");
     svg.push_str("<defs/>");
     svg.push_str("<g>");
+    if bg_color != "#FFFFFF" {
+        write!(
+            svg,
+            r#"<rect fill="{bg_color}" height="{h}" style="stroke:none;stroke-width:1;" width="{w}" x="0" y="0"/>"#,
+        )
+        .unwrap();
+    }
 
     let mut ids = IdCounter::new();
 
@@ -1037,7 +1068,7 @@ pub fn render_with_oracle(
                         // line; the text is vertically centred.
                         write!(
                             svg,
-                            r#"<rect fill="{fill_color}" height="{}" rx="{STATE_RX}" ry="{STATE_RX}" style="{stroke_style}" width="{}" x="{}" y="{}"/>"#,
+                            r#"<rect fill="{fill_color}" height="{}" rx="{rx_s}" ry="{rx_s}" style="{stroke_style}" width="{}" x="{}" y="{}"/>"#,
                             fmt_f(*bh),
                             fmt_f(*bw),
                             fmt_f(box_x),
@@ -1079,7 +1110,7 @@ pub fn render_with_oracle(
                         // State rectangle.
                         write!(
                             svg,
-                            r#"<rect fill="{fill_color}" height="{}" rx="{STATE_RX}" ry="{STATE_RX}" style="{stroke_style}" width="{}" x="{}" y="{}"/>"#,
+                            r#"<rect fill="{fill_color}" height="{}" rx="{rx_s}" ry="{rx_s}" style="{stroke_style}" width="{}" x="{}" y="{}"/>"#,
                             fmt_f(*bh),
                             fmt_f(*bw),
                             fmt_f(box_x),
@@ -1600,6 +1631,20 @@ fn render_oracle_transitions(svg: &mut String, diagram: &StateDiagram, oracle: &
         .unwrap_or_else(|| DEFAULT_TEXT_COLOR.to_string());
     #[allow(non_snake_case)]
     let TEXT_COLOR: &str = arrow_font_color.as_str();
+    // `skinparam ArrowFontSize <n>` (or the legacy `stateArrowFontSize`)
+    // overrides the default 13pt transition-label size; this also feeds
+    // `text_render` so the emitted `textLength` matches the smaller glyphs.
+    let arrow_font_size: u32 = diagram
+        .meta
+        .skinparams
+        .iter()
+        .rev()
+        .find(|sp| {
+            sp.key.eq_ignore_ascii_case("ArrowFontSize")
+                || sp.key.eq_ignore_ascii_case("stateArrowFontSize")
+        })
+        .and_then(|sp| sp.value.trim().parse::<u32>().ok())
+        .unwrap_or(LINK_FONT_SIZE as u32);
     // PlantUML's emission order for transitions does not always match the
     // parser's source order — when layout decides to bend an edge or sort
     // siblings differently, the golden SVG reorders them. Walking the
@@ -1702,7 +1747,7 @@ fn render_oracle_transitions(svg: &mut String, diagram: &StateDiagram, oracle: &
                 &TextBase {
                     x: *lx,
                     y: *ly,
-                    font_size: LINK_FONT_SIZE as u32,
+                    font_size: arrow_font_size,
                     font_family: "sans-serif",
                     fill: TEXT_COLOR,
                     bold: false,
