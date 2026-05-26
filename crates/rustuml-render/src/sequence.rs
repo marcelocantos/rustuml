@@ -2928,7 +2928,7 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme) -> String {
     // The SVG width must accommodate both participant boxes and group frames.
     // Group frames already include their margin; just add RIGHT_MARGIN + 5.
     let svg_width = if has_groups {
-        let from_participants = effective_right + RIGHT_MARGIN + GROUP_FRAME_MARGIN + 5.0;
+        let from_participants = effective_right + RIGHT_MARGIN;
         let from_groups = max_group_right + RIGHT_MARGIN + 5.0;
         from_participants.max(from_groups).ceil() as u32
     } else {
@@ -3194,7 +3194,7 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme) -> String {
     let svg_width = if !group_frames.is_empty() {
         let max_frame_right = group_frames.iter().map(|f| f.right).fold(0.0f64, f64::max);
         let from_frames = max_frame_right + RIGHT_MARGIN + 5.0;
-        let from_participants = effective_right + RIGHT_MARGIN + GROUP_FRAME_MARGIN + 5.0;
+        let from_participants = effective_right + RIGHT_MARGIN;
         from_participants.max(from_frames).ceil() as u32
     } else {
         svg_width
