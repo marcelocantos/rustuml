@@ -981,6 +981,44 @@ pub fn render_with_oracle(
     )
 }
 
+/// Class font overrides derived from explicit `skinparam Class*Font*` settings.
+///
+/// Only fields the user actually set are populated — the styled default theme's
+/// own font attributes must not leak into class text (PlantUML renders class
+/// text black, 14px, plain by default).
+#[derive(Default, Clone)]
+struct ClassFontOverrides {
+    /// `skinparam ClassFontColor` — colours the class name.
+    font_color: Option<String>,
+    /// `skinparam ClassAttributeFontColor` — colours members, and the name when
+    /// no `ClassFontColor` is set.
+    attr_font_color: Option<String>,
+    /// `skinparam ClassFontSize` — the class name's font size in px.
+    font_size: Option<u32>,
+    /// `skinparam ClassFontStyle` — bold/italic styling of the class name.
+    font_bold: bool,
+    font_italic: bool,
+}
+
+impl ClassFontOverrides {
+    fn from_skinparams(params: &[rustuml_parser::diagram::SkinParam]) -> Self {
+        let find = |names: &[&str]| -> Option<String> {
+            params
+                .iter()
+                .find(|sp| names.iter().any(|n| sp.key.eq_ignore_ascii_case(n)))
+                .map(|sp| sp.value.clone())
+        };
+        let style = find(&["ClassFontStyle"]).unwrap_or_default().to_lowercase();
+        Self {
+            font_color: find(&["ClassFontColor"]),
+            attr_font_color: find(&["ClassAttributeFontColor"]),
+            font_size: find(&["ClassFontSize"]).and_then(|v| v.trim().parse::<u32>().ok()),
+            font_bold: style.contains("bold"),
+            font_italic: style.contains("italic"),
+        }
+    }
+}
+
 /// Render the full SVG with PlantUML-compatible structure.
 ///
 /// When `canvas_override` is `Some((w, h))`, use those dimensions for the SVG
@@ -1002,19 +1040,7 @@ fn render_plantuml_svg(
         return render_grid_fallback(diagram, cs);
     }
 
-    // Explicit class font-colour skinparams. Only honour a colour the user
-    // actually set — the theme's own default font colour must not leak into
-    // class text, which renders black under PlantUML's classic palette.
-    let skin_value = |names: &[&str]| -> Option<&str> {
-        diagram
-            .meta
-            .skinparams
-            .iter()
-            .find(|sp| names.iter().any(|n| sp.key.eq_ignore_ascii_case(n)))
-            .map(|sp| sp.value.as_str())
-    };
-    let skin_font_color = skin_value(&["ClassFontColor"]);
-    let skin_attr_font_color = skin_value(&["ClassAttributeFontColor"]);
+    let font = ClassFontOverrides::from_skinparams(&diagram.meta.skinparams);
 
     // Compute entity positions (offset from layout).
     let entity_positions: Vec<(f64, f64)> = (0..diagram.entities.len())
@@ -1177,16 +1203,7 @@ fn render_plantuml_svg(
             )
             .unwrap();
         }
-        render_entity_content(
-            &mut svg,
-            entity,
-            x,
-            y,
-            dim,
-            oracle_rect,
-            skin_font_color,
-            skin_attr_font_color,
-        );
+        render_entity_content(&mut svg, entity, x, y, dim, oracle_rect, &font);
         if has_url {
             svg.push_str("</a>");
         }
@@ -1359,7 +1376,6 @@ fn emit_decoration_bottom(
 /// When `oracle_rect` is provided, oracle overrides are used for icon position,
 /// glyph path, name text x, member y-positions, and separator y-positions to
 /// match PlantUML's exact output (bypassing float-precision differences).
-#[allow(clippy::too_many_arguments)]
 fn render_entity_content(
     svg: &mut String,
     entity: &ClassEntity,
@@ -1367,8 +1383,7 @@ fn render_entity_content(
     y: f64,
     dim: &EntityDims,
     oracle_rect: Option<&crate::layout_oracle::EntityRect>,
-    skin_font_color: Option<&str>,
-    skin_attr_font_color: Option<&str>,
+    font: &ClassFontOverrides,
 ) {
     let icon_cx_override = oracle_rect.and_then(|r| r.icon_cx);
     let glyph_path_override = oracle_rect.and_then(|r| r.glyph_path_d.as_deref());
@@ -1404,8 +1419,16 @@ fn render_entity_content(
         .text_color
         .as_ref()
         .map(|c| crate::sequence::resolve_color(c))
-        .or_else(|| skin_font_color.map(crate::sequence::resolve_color))
-        .or_else(|| skin_attr_font_color.map(crate::sequence::resolve_color))
+        .or_else(|| {
+            font.font_color
+                .as_deref()
+                .map(crate::sequence::resolve_color)
+        })
+        .or_else(|| {
+            font.attr_font_color
+                .as_deref()
+                .map(crate::sequence::resolve_color)
+        })
         .unwrap_or_else(|| "#000000".to_string());
     let text_fill: &str = &text_fill_owned;
     // Member (attribute) text colour: `ClassAttributeFontColor` colours
@@ -1415,7 +1438,11 @@ fn render_entity_content(
         .text_color
         .as_ref()
         .map(|c| crate::sequence::resolve_color(c))
-        .or_else(|| skin_attr_font_color.map(crate::sequence::resolve_color))
+        .or_else(|| {
+            font.attr_font_color
+                .as_deref()
+                .map(crate::sequence::resolve_color)
+        })
         .unwrap_or_else(|| "#000000".to_string());
     let member_fill: &str = &member_fill_owned;
     let style_default = format!("stroke:{};stroke-width:{};", BORDER_COLOR, BORDER_WIDTH);
@@ -1505,7 +1532,12 @@ fn render_entity_content(
     }
 
     // Stereotype text (if present).
-    let name_tl = text_render::measure_no_underline(&entity.label, 14.0, false);
+    // Name font size/style honour `skinparam ClassFontSize`/`ClassFontStyle`.
+    let name_font_size = font.font_size.unwrap_or(14);
+    let name_bold = font.font_bold;
+    let name_italic = is_abstract || is_interface || font.font_italic;
+    let name_tl =
+        text_render::measure_no_underline(&entity.label, name_font_size as f64, name_bold);
     if dim.has_stereotypes {
         let stereo_text = format_stereotype_text(&entity.stereotypes);
         let stereo_x = name_text_x_override.unwrap_or(icon_cx + ICON_RX + ICON_TEXT_GAP);
@@ -1561,12 +1593,21 @@ fn render_entity_content(
     } else {
         name_text_x_override.unwrap_or(icon_cx + ICON_RX + ICON_TEXT_GAP)
     };
-    let name_y = if dim.has_stereotypes {
+    let name_y_default = if dim.has_stereotypes {
         y + NAME_Y_WITH_STEREO
     } else if dim.hide.circle {
         y + NAME_BASELINE_Y_NO_CIRCLE - MARGIN
     } else {
         y + NAME_BASELINE_Y - MARGIN
+    };
+    // A non-default name font size shifts the baseline; the oracle's recorded
+    // name y (text_y_values[0] when no stereotype) carries the exact value.
+    let name_y = if font.font_size.is_some() && !dim.has_stereotypes {
+        oracle_rect
+            .and_then(|r| r.text_y_values.first().copied())
+            .unwrap_or(name_y_default)
+    } else {
+        name_y_default
     };
     let mut text_buf = String::new();
     text_render::emit_text(
@@ -1575,11 +1616,11 @@ fn render_entity_content(
         &TextBase {
             x: name_x,
             y: name_y,
-            font_size: 14,
+            font_size: name_font_size,
             font_family: "sans-serif",
             fill: text_fill,
-            bold: false,
-            italic: is_abstract || is_interface,
+            bold: name_bold,
+            italic: name_italic,
             underline: false,
             skip_underline: true,
         },
