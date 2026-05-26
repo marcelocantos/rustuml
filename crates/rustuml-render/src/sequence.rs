@@ -3546,6 +3546,8 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme) -> String {
     let mut return_stack: Vec<(String, String, bool)> = Vec::new();
 
     let events = &diagram.events;
+    // Track enclosing group frame bounds so else dividers span the full frame.
+    let mut else_frame_stack: Vec<(f64, f64)> = Vec::new();
     for (ev_idx, event) in events.iter().enumerate() {
         let msg_y = event_y_positions[ev_idx];
         match event {
@@ -4529,6 +4531,7 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme) -> String {
                     };
                     (fl, fr, msg_y, 50.0)
                 };
+                else_frame_stack.push((frame_left, frame_right));
 
                 // Emit header tab FIRST (pentagon shape), then frame rect, then text.
                 // This matches PlantUML's SVG element order.
@@ -4599,17 +4602,24 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme) -> String {
             Event::GroupElse(g) => {
                 // Emit else dashed divider line
                 // Find the enclosing group frame
-                let frame_left = if participants.is_empty() {
-                    GROUP_FRAME_MARGIN
-                } else {
-                    participants[0].box_x - GROUP_FRAME_MARGIN
-                };
-                let frame_right = if participants.is_empty() {
-                    100.0
-                } else {
-                    let last = &participants[n - 1];
-                    last.box_x + last.box_width + GROUP_FRAME_MARGIN
-                };
+                // Use the enclosing group frame bounds (which account for the
+                // header label width and the participant subset) rather than the
+                // full participant extent.
+                let (frame_left, frame_right) =
+                    else_frame_stack.last().copied().unwrap_or_else(|| {
+                        let fl = if participants.is_empty() {
+                            GROUP_FRAME_MARGIN
+                        } else {
+                            participants[0].box_x - GROUP_FRAME_MARGIN
+                        };
+                        let fr = if participants.is_empty() {
+                            100.0
+                        } else {
+                            let last = &participants[n - 1];
+                            last.box_x + last.box_width + GROUP_FRAME_MARGIN
+                        };
+                        (fl, fr)
+                    });
                 write!(
                     svg.buf,
                     r##"<line style="stroke:#000000;stroke-width:1;stroke-dasharray:2,2;" x1="{}" x2="{}" y1="{}" y2="{}"/>"##,
@@ -4642,7 +4652,8 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme) -> String {
                 }
             }
             Event::GroupEnd => {
-                // Group end is handled by the frame rect emitted at GroupStart
+                // Group end is handled by the frame rect emitted at GroupStart.
+                else_frame_stack.pop();
             }
             Event::NoteOnLink(text) => {
                 let mid_x = if !participants.is_empty() {
