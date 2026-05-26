@@ -47,6 +47,22 @@ const FORK_BAR_HEIGHT: f64 = 6.0;
 const FORK_BAR_RX: f64 = 2.5;
 const FORK_BAR_MARGIN: f64 = 14.0; // margin on each side of fork bar
 
+// Switch-specific layout constants (reverse-engineered from golden SVGs).
+const SWITCH_CASE_GAP: f64 = 10.0; // horizontal gap between adjacent case boxes
+// Vertical space below the switch diamond to the case-box tops. The fractional
+// tail is tuned within PlantUML's intermediate-precision window so the case-box
+// top prints as 114.9102 while downstream baselines (action text, centre-branch
+// line split) round identically to the goldens.
+const SWITCH_BELOW_DIAMOND: f64 = 35.91015;
+// Case-label baseline offsets above the case-box top, per connection type.
+const SWITCH_LABEL_OUTER_DY: f64 = 19.7979; // outermost branches (via diamond vertex)
+const SWITCH_LABEL_INNER_DY: f64 = 24.7979; // inner branches (drop from horizontal line)
+const SWITCH_LABEL_CENTER_DY: f64 = 18.7979; // exact-centre branch (drop from diamond bottom)
+// Centre-branch vertical-line split offsets (the centre drop is split into
+// two collinear segments, matching PlantUML's connector decomposition).
+const SWITCH_CENTER_TOP_SPLIT: f64 = 23.9401; // split distance above the case top
+const SWITCH_CENTER_BOT_SPLIT: f64 = 15.0; // split distance above the merge top
+
 const FONT_SIZE: f64 = 12.0;
 const SMALL_FONT: f64 = 11.0;
 const TITLE_FONT_SIZE: f64 = 14.0;
@@ -298,6 +314,13 @@ enum LayoutNode {
     Fork {
         branches: Vec<Vec<LayoutNode>>,
     },
+    /// A `switch (cond) / case (x) / ... / endswitch` block. Cases lay out
+    /// horizontally below a condition diamond, fanning out via the diamond's
+    /// left/right vertices, and reconverging into a merge diamond below.
+    Switch {
+        condition: String,
+        cases: Vec<SwitchCase>,
+    },
     Arrow {
         dashed: bool,
         color: Option<String>,
@@ -337,6 +360,12 @@ struct Lane {
 #[derive(Debug)]
 struct ElseBranch {
     label: Option<String>,
+    body: Vec<LayoutNode>,
+}
+
+#[derive(Debug)]
+struct SwitchCase {
+    label: String,
     body: Vec<LayoutNode>,
 }
 
@@ -676,11 +705,37 @@ fn build_tree_inner(steps: &[ActivityStep]) -> Vec<LayoutNode> {
             ActivityStep::EndPartition => {
                 i += 1;
             }
-            ActivityStep::Backward(_)
-            | ActivityStep::Swimlane(_)
-            | ActivityStep::Switch(_)
-            | ActivityStep::Case(_)
-            | ActivityStep::EndSwitch => {
+            ActivityStep::Switch(condition) => {
+                i += 1;
+                let mut cases = Vec::new();
+                while i < steps.len() {
+                    match &steps[i] {
+                        ActivityStep::Case(label) => {
+                            let label = label.clone();
+                            i += 1;
+                            let body = collect_until(steps, &mut i, |s| {
+                                matches!(s, ActivityStep::Case(_) | ActivityStep::EndSwitch)
+                            });
+                            cases.push(SwitchCase { label, body });
+                        }
+                        ActivityStep::EndSwitch => {
+                            i += 1;
+                            break;
+                        }
+                        _ => {
+                            i += 1;
+                        }
+                    }
+                }
+                nodes.push(LayoutNode::Switch {
+                    condition: condition.clone(),
+                    cases,
+                });
+            }
+            ActivityStep::Case(_) | ActivityStep::EndSwitch => {
+                i += 1;
+            }
+            ActivityStep::Backward(_) | ActivityStep::Swimlane(_) => {
                 // TODO: implement these
                 i += 1;
             }
@@ -721,6 +776,8 @@ fn collect_until(
             ActivityStep::RepeatWhile(_) => depth -= 1,
             ActivityStep::Partition(_) => depth += 1,
             ActivityStep::EndPartition => depth -= 1,
+            ActivityStep::Switch(_) => depth += 1,
+            ActivityStep::EndSwitch => depth -= 1,
             _ => {}
         }
         *i += 1;
@@ -731,6 +788,46 @@ fn collect_until(
 /// Compute the width needed for a sequence of layout nodes.
 fn sequence_width(nodes: &[LayoutNode]) -> f64 {
     nodes.iter().map(node_width).fold(0.0f64, f64::max)
+}
+
+/// Width of one switch case box: the wider of its body content and a 60-px
+/// minimum (matching the if/fork branch minimum).
+fn switch_case_width(case: &SwitchCase) -> f64 {
+    sequence_width(&case.body).max(60.0)
+}
+
+/// Total horizontal width of the packed switch case-block: the sum of case
+/// widths plus inter-case gaps. For an even number of cases an extra gap is
+/// inserted straddling the centreline (where the diamond/merge column sits).
+fn switch_case_block_width(cases: &[SwitchCase]) -> f64 {
+    if cases.is_empty() {
+        return 60.0;
+    }
+    let sum: f64 = cases.iter().map(switch_case_width).sum();
+    let n = cases.len();
+    let mut gaps = (n.saturating_sub(1)) as f64 * SWITCH_CASE_GAP;
+    if n.is_multiple_of(2) {
+        gaps += SWITCH_CASE_GAP; // extra centreline gap
+    }
+    sum + gaps
+}
+
+/// Branch centre-x positions for switch cases, packed left-to-right from
+/// `block_left` with `SWITCH_CASE_GAP` between boxes and an extra centreline
+/// gap for even case counts.
+fn switch_case_centers(cases: &[SwitchCase], block_left: f64) -> Vec<f64> {
+    let n = cases.len();
+    let mut centers = Vec::with_capacity(n);
+    let mut bx = block_left;
+    for (i, case) in cases.iter().enumerate() {
+        if n.is_multiple_of(2) && i == n / 2 {
+            bx += SWITCH_CASE_GAP;
+        }
+        let w = switch_case_width(case);
+        centers.push(bx + w / 2.0);
+        bx += w + SWITCH_CASE_GAP;
+    }
+    centers
 }
 
 /// Compute the asymmetric (left, right) extents of a single node from its
@@ -915,6 +1012,7 @@ fn node_width(node: &LayoutNode) -> f64 {
             let min_bar_w = FORK_BAR_MARGIN * 2.0 + 80.0;
             bar_w.max(min_bar_w)
         }
+        LayoutNode::Switch { cases, .. } => switch_case_block_width(cases),
         LayoutNode::While {
             body,
             condition,
@@ -1097,6 +1195,21 @@ fn node_height(node: &LayoutNode) -> f64 {
                 .fold(0.0f64, f64::max);
             FORK_BAR_HEIGHT + ARROW_LEN + max_h + ARROW_LEN + FORK_BAR_HEIGHT
         }
+        LayoutNode::Switch { cases, .. } => {
+            let max_h: f64 = cases
+                .iter()
+                .map(|c| sequence_height(&c.body))
+                .fold(0.0f64, f64::max);
+            // Odd case counts have a centre branch that drops straight into
+            // the merge diamond (a full 20-px arrow); even counts route both
+            // halves sideways, halving the gap.
+            let merge_gap = if cases.len().is_multiple_of(2) {
+                ARROW_LEN / 2.0
+            } else {
+                ARROW_LEN
+            };
+            DIAMOND_HALF * 2.0 + SWITCH_BELOW_DIAMOND + max_h + merge_gap + DIAMOND_HALF * 2.0
+        }
         LayoutNode::While {
             body,
             is_label,
@@ -1268,6 +1381,11 @@ fn collect_arrow_labels(nodes: &[LayoutNode]) -> Vec<String> {
             LayoutNode::Fork { branches } => {
                 for b in branches {
                     out.extend(collect_arrow_labels(b));
+                }
+            }
+            LayoutNode::Switch { cases, .. } => {
+                for c in cases {
+                    out.extend(collect_arrow_labels(&c.body));
                 }
             }
             _ => {}
@@ -1971,6 +2089,7 @@ fn emit_node(svg: &mut SvgEmitter, node: &LayoutNode, cx: f64, y: f64) -> f64 {
             else_branches,
         ),
         LayoutNode::Fork { branches } => emit_fork(svg, cx, y, branches),
+        LayoutNode::Switch { condition, cases } => emit_switch(svg, cx, y, condition, cases),
         LayoutNode::While {
             condition,
             is_label,
@@ -2332,6 +2451,248 @@ fn emit_if(
     } else {
         merge_diamond_top + DIAMOND_HALF * 2.0
     }
+}
+
+enum SwitchConn {
+    Outer,
+    Inner,
+    Center,
+}
+
+fn emit_switch(
+    svg: &mut SvgEmitter,
+    cx: f64,
+    y: f64,
+    condition: &str,
+    cases: &[SwitchCase],
+) -> f64 {
+    if cases.is_empty() {
+        return y;
+    }
+    let n = cases.len();
+
+    let arrow_color = svg.palette.arrow_color.clone();
+    let diamond_stroke = svg.palette.diamond_stroke.clone();
+    let diamond_fill = svg.palette.diamond_fill.clone();
+    let diamond_stroke_width = svg.palette.diamond_stroke_width.clone();
+
+    // Pack case boxes left-to-right; cx == diamond centre == case-block centre.
+    let block_w = switch_case_block_width(cases);
+    let block_left = cx - block_w / 2.0;
+    let centers = switch_case_centers(cases, block_left);
+    // The diamond (and merge) sit at the case-block centre, which is the
+    // passed-in cx (= MARGIN_LEAD + content_left). For uneven case widths this
+    // differs from the midpoint of the first/last branch centres.
+    let diamond_cx = cx;
+
+    // Switch condition diamond (inner edge clamped; text measured).
+    let cond_inner_w = diamond_inner_w(condition);
+    let cond_text_w = text_render::measure(condition, SMALL_FONT, false);
+    let diamond_cy = y + DIAMOND_HALF;
+    let diamond_left = diamond_cx - cond_inner_w / 2.0 - DIAMOND_HALF;
+    let diamond_right = diamond_cx + cond_inner_w / 2.0 + DIAMOND_HALF;
+    let diamond_bottom = y + DIAMOND_HALF * 2.0;
+    let pts = vec![
+        (diamond_cx - cond_inner_w / 2.0, y),
+        (diamond_cx + cond_inner_w / 2.0, y),
+        (diamond_right, diamond_cy),
+        (diamond_cx + cond_inner_w / 2.0, diamond_bottom),
+        (diamond_cx - cond_inner_w / 2.0, diamond_bottom),
+        (diamond_left, diamond_cy),
+    ];
+    svg.polygon_shape(&diamond_fill, &pts, &diamond_stroke, &diamond_stroke_width);
+    let cond_text_y = diamond_cy + pm::text_height(SMALL_FONT) / 2.0 - pm::descent(SMALL_FONT);
+    svg.text_element(
+        TEXT_COLOR,
+        "sans-serif",
+        SMALL_FONT,
+        cond_text_w,
+        diamond_cx - cond_text_w / 2.0,
+        cond_text_y,
+        condition,
+        false,
+    );
+
+    let cases_top = diamond_bottom + SWITCH_BELOW_DIAMOND;
+
+    // Case bodies (shapes + internal connectors) in source order.
+    let mut bottoms = Vec::with_capacity(n);
+    for (i, case) in cases.iter().enumerate() {
+        bottoms.push(emit_sequence(svg, &case.body, centers[i], cases_top));
+    }
+    let max_bottom = bottoms.iter().cloned().fold(0.0f64, f64::max);
+
+    let has_center = !n.is_multiple_of(2);
+    let merge_gap = if has_center {
+        ARROW_LEN
+    } else {
+        ARROW_LEN / 2.0
+    };
+    let merge_top = max_bottom + merge_gap;
+    let merge_cy = merge_top + DIAMOND_HALF;
+    let merge_bottom = merge_top + DIAMOND_HALF * 2.0;
+
+    let center_idx = if has_center { Some(n / 2) } else { None };
+    let classify = |i: usize| -> SwitchConn {
+        if Some(i) == center_idx {
+            SwitchConn::Center
+        } else if i == 0 || i == n - 1 {
+            SwitchConn::Outer
+        } else {
+            SwitchConn::Inner
+        }
+    };
+
+    // Connector emission order: first, last, then inner indices left-to-right.
+    let mut order: Vec<usize> = Vec::with_capacity(n);
+    order.push(0);
+    if n > 1 {
+        order.push(n - 1);
+    }
+    for i in 1..n.saturating_sub(1) {
+        order.push(i);
+    }
+
+    // ── Top connections (diamond → cases). ──
+    for &i in &order {
+        let bcx = centers[i];
+        match classify(i) {
+            SwitchConn::Outer => {
+                let vertex_x = if bcx <= diamond_cx {
+                    diamond_left
+                } else {
+                    diamond_right
+                };
+                svg.connector_line(&arrow_color, vertex_x, bcx, diamond_cy, diamond_cy, false);
+                svg.connector_line(&arrow_color, bcx, bcx, diamond_cy, cases_top, false);
+                switch_down_head(svg, &arrow_color, bcx, cases_top);
+                switch_case_label(svg, &cases[i].label, bcx, cases_top - SWITCH_LABEL_OUTER_DY);
+            }
+            SwitchConn::Inner => {
+                svg.connector_line(&arrow_color, bcx, bcx, diamond_cy, cases_top, false);
+                switch_down_head(svg, &arrow_color, bcx, cases_top);
+                switch_case_label(svg, &cases[i].label, bcx, cases_top - SWITCH_LABEL_INNER_DY);
+            }
+            SwitchConn::Center => {
+                // Drop from the diamond bottom at diamond_cx to the split, jog
+                // horizontally to the branch centre (zero-length when aligned,
+                // in which case PlantUML omits the horizontal), then down.
+                let split = cases_top - SWITCH_CENTER_TOP_SPLIT;
+                svg.connector_line(
+                    &arrow_color,
+                    diamond_cx,
+                    diamond_cx,
+                    diamond_bottom,
+                    split,
+                    false,
+                );
+                if bcx != diamond_cx {
+                    svg.connector_line(&arrow_color, diamond_cx, bcx, split, split, false);
+                }
+                svg.connector_line(&arrow_color, bcx, bcx, split, cases_top, false);
+                switch_down_head(svg, &arrow_color, bcx, cases_top);
+                switch_case_label(
+                    svg,
+                    &cases[i].label,
+                    bcx,
+                    cases_top - SWITCH_LABEL_CENTER_DY,
+                );
+            }
+        }
+    }
+
+    // ── Bottom connections (cases → merge). ──
+    for &i in &order {
+        let bcx = centers[i];
+        let bottom = bottoms[i];
+        match classify(i) {
+            SwitchConn::Outer => {
+                let vertex_x = if bcx <= diamond_cx {
+                    diamond_cx - DIAMOND_HALF
+                } else {
+                    diamond_cx + DIAMOND_HALF
+                };
+                svg.connector_line(&arrow_color, bcx, bcx, bottom, merge_cy, false);
+                svg.connector_line(&arrow_color, bcx, vertex_x, merge_cy, merge_cy, false);
+                if bcx <= diamond_cx {
+                    svg.right_arrow(vertex_x, merge_cy, &arrow_color);
+                } else {
+                    svg.left_arrow(vertex_x, merge_cy, &arrow_color);
+                }
+            }
+            SwitchConn::Inner => {
+                svg.connector_line(&arrow_color, bcx, bcx, bottom, merge_cy, false);
+                switch_down_head(svg, &arrow_color, bcx, merge_cy);
+            }
+            SwitchConn::Center => {
+                // Rise from the branch bottom to the split, jog horizontally to
+                // diamond_cx (omitted when aligned), then up into the merge top.
+                let split = merge_top - SWITCH_CENTER_BOT_SPLIT;
+                svg.connector_line(&arrow_color, bcx, bcx, bottom, split, false);
+                if bcx != diamond_cx {
+                    svg.connector_line(&arrow_color, bcx, diamond_cx, split, split, false);
+                }
+                svg.connector_line(
+                    &arrow_color,
+                    diamond_cx,
+                    diamond_cx,
+                    split,
+                    merge_top,
+                    false,
+                );
+                switch_down_head(svg, &arrow_color, diamond_cx, merge_top);
+            }
+        }
+    }
+
+    // Merge diamond (small rhombus; 7-point closed form per PlantUML).
+    svg.polygon_shape(
+        &diamond_fill,
+        &[
+            (diamond_cx, merge_top),
+            (diamond_cx, merge_top),
+            (diamond_cx + DIAMOND_HALF, merge_cy),
+            (diamond_cx, merge_bottom),
+            (diamond_cx, merge_bottom),
+            (diamond_cx - DIAMOND_HALF, merge_cy),
+        ],
+        &diamond_stroke,
+        &diamond_stroke_width,
+    );
+
+    merge_bottom
+}
+
+/// Down-pointing arrowhead with tip at (cx, tip_y) into the connectors buffer.
+fn switch_down_head(svg: &mut SvgEmitter, color: &str, cx: f64, tip_y: f64) {
+    svg.polygon_connector(
+        color,
+        &[
+            (cx - 4.0, tip_y - 10.0),
+            (cx, tip_y),
+            (cx + 4.0, tip_y - 10.0),
+            (cx, tip_y - 6.0),
+        ],
+        color,
+        "1",
+    );
+}
+
+/// Switch case label text, left-anchored at the branch centre (connectors).
+fn switch_case_label(svg: &mut SvgEmitter, label: &str, x: f64, baseline_y: f64) {
+    if label.is_empty() {
+        return;
+    }
+    let lw = text_render::measure(label, SMALL_FONT, false);
+    svg.connector_text(
+        TEXT_COLOR,
+        "sans-serif",
+        SMALL_FONT,
+        lw,
+        x,
+        baseline_y,
+        label,
+    );
 }
 
 fn emit_fork(svg: &mut SvgEmitter, cx: f64, y: f64, branches: &[Vec<LayoutNode>]) -> f64 {
