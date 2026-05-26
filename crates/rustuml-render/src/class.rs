@@ -1600,14 +1600,17 @@ fn render_entity_content(
     } else {
         y + NAME_BASELINE_Y - MARGIN
     };
-    // A non-default name font size shifts the baseline; the oracle's recorded
-    // name y (text_y_values[0] when no stereotype) carries the exact value.
-    let name_y = if font.font_size.is_some() && !dim.has_stereotypes {
+    // Prefer the oracle's recorded name y (text_y_values[0] when no
+    // stereotype) verbatim — it carries PlantUML's exact baseline, including
+    // header/footer offsets and font-size shifts, avoiding 1-LSB drift in our
+    // computed baseline. With a stereotype the index shifts, so keep the
+    // computed value there.
+    let name_y = if dim.has_stereotypes {
+        name_y_default
+    } else {
         oracle_rect
             .and_then(|r| r.text_y_values.first().copied())
             .unwrap_or(name_y_default)
-    } else {
-        name_y_default
     };
     let mut text_buf = String::new();
     text_render::emit_text(
