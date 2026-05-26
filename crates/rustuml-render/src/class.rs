@@ -1397,13 +1397,18 @@ fn render_entity_content(
         y + (ICON_CY - MARGIN)
     };
     if !dim.hide.circle {
-        let icon_fill = match entity.kind {
-            EntityKind::Class => CLASS_ICON_FILL,
-            EntityKind::Interface => INTERFACE_ICON_FILL,
-            EntityKind::Enum => ENUM_ICON_FILL,
-            EntityKind::AbstractClass => ABSTRACT_ICON_FILL,
-            EntityKind::Annotation => ANNOTATION_ICON_FILL,
-            EntityKind::Entity => CLASS_ICON_FILL, // Entity uses class icon
+        // A hex spot color from `<< (X,#HEX) Name >>` overrides the default
+        // kind-based circle fill. Named spot colors do not (PlantUML behavior).
+        let icon_fill: &str = match &entity.spot_color {
+            Some(c) => c,
+            None => match entity.kind {
+                EntityKind::Class => CLASS_ICON_FILL,
+                EntityKind::Interface => INTERFACE_ICON_FILL,
+                EntityKind::Enum => ENUM_ICON_FILL,
+                EntityKind::AbstractClass => ABSTRACT_ICON_FILL,
+                EntityKind::Annotation => ANNOTATION_ICON_FILL,
+                EntityKind::Entity => CLASS_ICON_FILL, // Entity uses class icon
+            },
         };
 
         write!(
@@ -1478,16 +1483,22 @@ fn render_entity_content(
     }
 
     // Entity name text.
-    // When stereotypes are present and the oracle provides a text x (which is
-    // the stereotype's x), compute the name x by re-centering: both texts share
-    // the same center point but differ in width.
+    // When stereotypes are present the oracle records each header line's x in
+    // `text_x_values` (index 0 = stereotype, index 1 = name). Prefer the
+    // oracle's exact name x verbatim — reconstructing it from the stereotype x
+    // plus measured widths lands on a .5 rounding boundary in some cases and
+    // rounds the wrong way (e.g. 68.0357 vs golden 68.0356).
     //
-    // The oracle's stereo_x is already rounded to PlantUML's 4-decimal output
-    // precision. To stay on PlantUML's float trajectory through the
-    // re-centering arithmetic, round the measured text widths to the same
-    // precision before combining — otherwise sub-half-ULP drift produces a
-    // last-digit difference (e.g. 57.8227 vs 57.8228).
-    let name_x = if dim.has_stereotypes {
+    // Fall back to re-centering arithmetic when the oracle didn't capture a
+    // second text x (e.g. a name-only header with no separate stereotype line).
+    let oracle_name_x = if dim.has_stereotypes {
+        oracle_rect.and_then(|r| r.text_x_values.get(1).copied())
+    } else {
+        None
+    };
+    let name_x = if let Some(nx) = oracle_name_x {
+        nx
+    } else if dim.has_stereotypes {
         if let Some(oracle_x) = name_text_x_override {
             let stereo_text = format_stereotype_text(&entity.stereotypes);
             let stereo_tl = round_4dp(text_render::measure(&stereo_text, 12.0, false));
@@ -2908,6 +2919,7 @@ mod tests {
                         },
                     ],
                     stereotypes: vec![],
+                    spot_color: None,
                     url: None,
                     color: None,
                     text_color: None,
@@ -2927,6 +2939,7 @@ mod tests {
                         display_text: "fetch(): void".into(),
                     }],
                     stereotypes: vec![],
+                    spot_color: None,
                     url: None,
                     color: None,
                     text_color: None,
@@ -3071,6 +3084,7 @@ mod tests {
                     display_text: "draw(): void".into(),
                 }],
                 stereotypes: vec![],
+                spot_color: None,
                 url: None,
                 color: None,
                 text_color: None,

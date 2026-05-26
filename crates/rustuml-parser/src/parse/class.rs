@@ -146,6 +146,7 @@ impl ClassParser {
                 kind: EntityKind::Class,
                 members: Vec::new(),
                 stereotypes: Vec::new(),
+                spot_color: None,
                 url: None,
                 color: None,
                 text_color: None,
@@ -412,9 +413,16 @@ impl ClassParser {
                 (label, id)
             };
 
+            let mut spot_color: Option<String> = None;
             let stereotypes: Vec<String> = STEREOTYPE_RE
                 .captures_iter(line)
-                .map(|c| process_spot_stereotype(c[1].trim()))
+                .map(|c| {
+                    let (text, color) = process_spot_stereotype_with_color(c[1].trim());
+                    if spot_color.is_none() {
+                        spot_color = color;
+                    }
+                    text
+                })
                 .filter(|s| !s.is_empty())
                 .collect();
 
@@ -450,6 +458,9 @@ impl ClassParser {
                 entity.kind = kind;
                 entity.label = display_label;
                 entity.stereotypes.extend(stereotypes);
+                if spot_color.is_some() {
+                    entity.spot_color = spot_color.clone();
+                }
                 if url.is_some() {
                     entity.url = url.clone();
                 }
@@ -466,6 +477,7 @@ impl ClassParser {
                     kind,
                     members: Vec::new(),
                     stereotypes,
+                    spot_color,
                     url: url.clone(),
                     color: entity_color.clone(),
                     text_color: extract_text_color(line),
@@ -506,6 +518,7 @@ impl ClassParser {
                     kind: EntityKind::Enum,
                     members: Vec::new(),
                     stereotypes: Vec::new(),
+                    spot_color: None,
                     url: None,
                     color: None,
                     text_color: None,
@@ -626,6 +639,7 @@ impl ClassParser {
                     kind: EntityKind::Interface,
                     members: Vec::new(),
                     stereotypes: Vec::new(),
+                    spot_color: None,
                     url: None,
                     color: None,
                     text_color: None,
@@ -891,6 +905,7 @@ impl ClassParser {
                         kind: EntityKind::Class,
                         members: vec![member],
                         stereotypes: Vec::new(),
+                        spot_color: None,
                         url: None,
                         color: None,
                         text_color: None,
@@ -1260,15 +1275,15 @@ fn parse_member(s: &str) -> Member {
     }
 }
 
-/// Strip Creole/HTML markup from a display name to produce a plain identifier.
-/// Used when a class is declared with a quoted markup name but no `as` alias.
 /// Process a stereotype string that may contain spot notation `(S,#color) Name`.
 ///
-/// PlantUML's behavior:
-/// - If the color is a named color (e.g. `#red`, `#blue`), keep the full `(S,#color) Name` prefix.
-/// - If the color is a hex code (e.g. `#FF7700`, `#00AAFF`), strip the `(S,#color)` prefix
-///   and return just the name.
-fn process_spot_stereotype(s: &str) -> String {
+/// Returns the stereotype display text and the hex spot color (with leading
+/// `#`) when the spot uses a hex code. PlantUML's behavior:
+/// - Named color (e.g. `#red`, `#blue`): keep the full `(S,#color) Name` prefix
+///   in the text and return no spot color (named colors don't fill the circle).
+/// - Hex code (e.g. `#FF7700`, `#00AAFF`): strip the `(S,#color)` prefix,
+///   returning just the name plus the hex color for the circle fill.
+fn process_spot_stereotype_with_color(s: &str) -> (String, Option<String>) {
     let s = s.trim();
     // Look for spot notation: `(X,#color) Name`
     if let Some(rest) = s.strip_prefix('(')
@@ -1284,16 +1299,19 @@ fn process_spot_stereotype(s: &str) -> String {
                 let is_hex =
                     !color_hex.is_empty() && color_hex.chars().all(|c| c.is_ascii_hexdigit());
                 if is_hex {
-                    // Hex color: strip spot prefix, return just the name.
-                    return after.to_string();
+                    // Hex color: strip spot prefix, return just the name and
+                    // capture the hex color for the circle fill.
+                    return (after.to_string(), Some(format!("#{color_hex}")));
                 }
             }
         }
     }
     // Named color or no spot notation: return as-is.
-    s.to_string()
+    (s.to_string(), None)
 }
 
+/// Strip Creole/HTML markup from a display name to produce a plain identifier.
+/// Used when a class is declared with a quoted markup name but no `as` alias.
 fn strip_creole_for_id(s: &str) -> String {
     let mut out = s.to_string();
     for marker in &["**", "//", "__", "--"] {

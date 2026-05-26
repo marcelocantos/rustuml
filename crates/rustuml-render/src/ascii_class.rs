@@ -268,6 +268,7 @@ mod tests {
             kind: EntityKind::Class,
             members,
             stereotypes: vec![],
+            spot_color: None,
             url: None,
             color: None,
             text_color: None,

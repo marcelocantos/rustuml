@@ -75,6 +75,11 @@ pub struct ClassEntity {
     pub stereotypes: Vec<String>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub url: Option<String>,
+    /// Optional hex spot color from `<< (X,#HEX) Name >>` notation, applied to
+    /// the stereotype circle fill. Only hex colors override the fill; named
+    /// colors are ignored for the circle (PlantUML behavior).
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub spot_color: Option<String>,
     /// Optional background color (e.g., "#lightblue", "#FF0000").
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub color: Option<String>,
