@@ -357,6 +357,10 @@ const NOTE_FOLD_SIZE: f64 = 10.0;
 /// Text left padding inside the note box.
 const NOTE_TEXT_X_PAD: f64 = 6.0;
 const RNOTE_TEXT_X_PAD: f64 = 4.0;
+// Queue pill total horizontal padding (text + this = box width).
+const QUEUE_TEXT_H_PAD: f64 = 20.0;
+// Queue text inset from box left edge (cap radius).
+const QUEUE_TEXT_X_PAD: f64 = 5.0;
 /// Vertical offset from note top to the text baseline of the first line.
 const NOTE_TEXT_Y_OFFSET: f64 = 17.568359375; // exact Java double
 /// Line spacing between text lines in a multi-line note (= MSG_TEXT_HEIGHT).
@@ -1331,9 +1335,17 @@ impl PlantUmlSvg {
         let cap_r = 5.0;
         let inner_left = left + cap_r;
         let inner_right = right - cap_r;
-        let top = base_y;
-        let mid = base_y + HEAD_BOX_H / 2.0;
-        let bottom = base_y + HEAD_BOX_H;
+        // The queue pill is 4px shorter than a normal head box and is
+        // vertically offset: pushed down 5px in the head region, flush with
+        // the top in the tail region (matching PlantUML).
+        let pill_h = HEAD_BOX_H - 4.0;
+        let top = if position == "tail" {
+            base_y
+        } else {
+            base_y + 5.0
+        };
+        let mid = top + pill_h / 2.0;
+        let bottom = top + pill_h;
         let inner_right_inner = inner_right - cap_r;
 
         // Outer body
@@ -1884,8 +1896,14 @@ fn render_participant_shape(
             );
         }
         ParticipantKind::Queue => {
-            let text_x = p.box_x + BOX_TEXT_X_PAD;
-            let text_y = base_y + BOX_TEXT_Y_OFFSET;
+            let text_x = p.box_x + QUEUE_TEXT_X_PAD;
+            // Queue pill is shorter and offset; text baseline tracks the pill mid.
+            let pill_top = if position == "tail" {
+                base_y
+            } else {
+                base_y + 5.0
+            };
+            let text_y = pill_top + (HEAD_BOX_H - 4.0) / 2.0 + 5.29102;
             svg.queue_shape(
                 part_uid,
                 qualified_name,
@@ -2129,8 +2147,8 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme) -> String {
                     (w, h)
                 }
                 ParticipantKind::Queue => {
-                    // Queue: pill shape, same dimensions as participant.
-                    let w = max_text_w + 2.0 * BOX_TEXT_X_PAD;
+                    // Queue: pill shape, width = text + 20 (caps + padding).
+                    let w = max_text_w + QUEUE_TEXT_H_PAD;
                     let h = HEAD_BOX_H;
                     (w, h)
                 }
