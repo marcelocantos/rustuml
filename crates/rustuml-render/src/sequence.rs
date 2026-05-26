@@ -356,6 +356,7 @@ const NOTE_LINE_HEIGHT: f64 = 15.0;
 const NOTE_FOLD_SIZE: f64 = 10.0;
 /// Text left padding inside the note box.
 const NOTE_TEXT_X_PAD: f64 = 6.0;
+const RNOTE_TEXT_X_PAD: f64 = 4.0;
 /// Vertical offset from note top to the text baseline of the first line.
 const NOTE_TEXT_Y_OFFSET: f64 = 17.568359375; // exact Java double
 /// Line spacing between text lines in a multi-line note (= MSG_TEXT_HEIGHT).
@@ -4451,7 +4452,7 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme) -> String {
                 let (text_x, text_y_offset) = match note.shape {
                     NoteShape::Note => (note_left + NOTE_TEXT_X_PAD, NOTE_TEXT_Y_OFFSET),
                     NoteShape::Hexagonal => (note_left + HNOTE_INDENT + 2.0, HNOTE_TEXT_Y_OFFSET),
-                    NoteShape::Rectangular => (note_left + NOTE_TEXT_X_PAD, HNOTE_TEXT_Y_OFFSET),
+                    NoteShape::Rectangular => (note_left + RNOTE_TEXT_X_PAD, HNOTE_TEXT_Y_OFFSET),
                 };
                 let mut text_y = note_top + text_y_offset;
                 for line in &lines {
