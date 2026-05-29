@@ -2097,7 +2097,15 @@ fn render_entity_content(
                         fmt4(sep_inline_y),
                     )
                     .unwrap();
-                    narrow_after_separator = true;
+                    // After an inline divider, subsequent default-visibility
+                    // fields move to the narrow inset ONLY when the whole
+                    // post-divider sub-compartment is default-visibility. If
+                    // any later member carries a visibility icon (e.g. `* fk`),
+                    // PlantUML keeps the default fields at the wide MEMBER
+                    // offset so they align with the icon-bearing rows.
+                    narrow_after_separator = fields[fi + 1..]
+                        .iter()
+                        .all(|m| m.visibility == Visibility::Default);
                 }
             }
 
