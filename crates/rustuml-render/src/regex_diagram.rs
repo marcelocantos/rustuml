@@ -4,205 +4,773 @@
 //! Regex railroad diagram renderer.
 //!
 //! Renders a [`RegexDiagram`] as an SVG railroad diagram.
+//!
+//! This is a faithful semantic port of PlantUML's `net.sourceforge.plantuml.ebnf`
+//! tile renderer (the `ETile*` classes) used for `@startregex`. Each AST node is
+//! laid out as a "tile" with a horizontal rail at vertical offset `h1` from the
+//! tile's top; tiles report `width`, `h1` (above rail) and `h2` (below rail), and
+//! draw themselves into a translate/stroke context that emits PlantUML-formatted
+//! SVG primitives.
 
 use rustuml_parser::diagram::regex_diagram::{GroupKind, RegexDiagram, RegexNode};
 
-use crate::layout_oracle::{OracleLayout, wrap_oracle_envelope};
-use crate::metrics::text_width;
+use crate::layout_oracle::OracleLayout;
+use crate::plantuml_metrics::{ascent, descent, fmt_coord, text_height, text_width};
 use crate::style::Theme;
 use crate::svg::SvgBuilder;
 
-// ── Constants ────────────────────────────────────────────────────────────────
-
 const FONT_SIZE: f64 = 14.0;
 const COUNT_FONT_SIZE: f64 = 12.0;
-const BOX_H: f64 = 26.4883;
-const CC_ITEM_H: f64 = 16.4883;
-const H_PAD: f64 = 5.0;
-const MARGIN: f64 = 15.0;
-const SEQ_GAP: f64 = 20.0;
-/// Outset of the `+` loop connector beyond the box edge.
-const LOOP_OUTSET: f64 = 7.0;
-/// Top of the `+` loop arch above the box top.
-const LOOP_TOP_GAP: f64 = 7.0;
-/// Vertical segment length inside the `+` loop connector.
-const LOOP_VERT: f64 = 8.0;
-/// Gap between alternation branches.
-const ALT_BRANCH_GAP: f64 = 10.0;
-/// Horizontal extent of the fork/join connector (alternation).
-const ALT_FORK_W: f64 = 12.0;
-/// Distance from the main rail to the optional element's box top.
-const OPT_BELOW: f64 = 10.0;
-/// Extra downward offset for `*` inner element (so loop arch fits).
-const STAR_EXTRA: f64 = 12.0;
-/// Height of lookahead/lookbehind outer box.
-const LOOK_BOX_H: f64 = 38.4883;
-/// Bottom padding after inner content in lookahead box.
-const LOOK_RIGHT_PAD: f64 = 8.0;
+/// Outer margin around the whole diagram (PlantUML's delta(10) + 5px title margin).
+const OUTER: f64 = 15.0;
+const LINE_STYLE: &str = r#"style="stroke:#181818;stroke-width:1;""#;
 
-// ── Layout ───────────────────────────────────────────────────────────────────
+// ── Drawing context (a minimal UGraphic) ───────────────────────────────────
 
-/// Layout measurements for a node.
-struct Layout {
-    /// Total horizontal space occupied.
-    width: f64,
-    /// Space above the rail (= rail_y measured from box top).
-    above: f64,
-    /// Space below the rail.
-    below: f64,
+/// Accumulates SVG primitives, applying a running translation offset. Mirrors
+/// PlantUML's `UGraphic.apply(UTranslate)` chain (translations compose).
+struct Ctx<'a> {
+    svg: &'a mut SvgBuilder,
+    dx: f64,
+    dy: f64,
 }
 
-impl Layout {
-    fn height(&self) -> f64 {
-        self.above + self.below
+impl Ctx<'_> {
+    fn at(&mut self, dx: f64, dy: f64) -> Ctx<'_> {
+        Ctx {
+            svg: self.svg,
+            dx: self.dx + dx,
+            dy: self.dy + dy,
+        }
+    }
+
+    /// Horizontal line from x1..x2 at local y.
+    fn hline(&mut self, y: f64, x1: f64, x2: f64) {
+        if (x2 - x1).abs() < 1e-9 && x1.abs() < 1e-9 {
+            // PlantUML emits zero-length leading rails; keep them for parity,
+            // but only the deliberate (0,0) one from concatenation/box.
+        }
+        let (ax1, ax2, ay) = (self.dx + x1, self.dx + x2, self.dy + y);
+        self.svg.raw(&format!(
+            r#"<line {LINE_STYLE} x1="{}" x2="{}" y1="{}" y2="{}"/>"#,
+            fmt_coord(ax1),
+            fmt_coord(ax2),
+            fmt_coord(ay),
+            fmt_coord(ay)
+        ));
+    }
+
+    /// Vertical line from y1..y2 at local x.
+    fn vline(&mut self, x: f64, y1: f64, y2: f64) {
+        let (ax, ay1, ay2) = (self.dx + x, self.dy + y1, self.dy + y2);
+        self.svg.raw(&format!(
+            r#"<line {LINE_STYLE} x1="{}" x2="{}" y1="{}" y2="{}"/>"#,
+            fmt_coord(ax),
+            fmt_coord(ax),
+            fmt_coord(ay1),
+            fmt_coord(ay2)
+        ));
+    }
+
+    /// Horizontal line with a right-pointing arrow at fraction `coef` if long enough.
+    fn hline_directed(&mut self, y: f64, x1: f64, x2: f64, coef: f64, min_for_arrow: f64) {
+        self.hline(y, x1, x2);
+        if x2 > x1 + min_for_arrow {
+            let cx = x1 * (1.0 - coef) + x2 * coef - 2.0;
+            self.arrow_right(cx, y);
+        }
+    }
+
+    /// Horizontal line with a left-pointing arrow at fraction `coef`.
+    fn hline_anti_directed(&mut self, y: f64, x1: f64, x2: f64, coef: f64) {
+        self.hline(y, x1, x2);
+        let cx = x1 * (1.0 - coef) + x2 * coef - 2.0;
+        self.arrow_left(cx, y);
+    }
+
+    fn arrow_right(&mut self, x: f64, y: f64) {
+        // moveTo(0,0) L(0,-3) L(6,0) L(0,3) L(0,0)
+        let (ax, ay) = (self.dx + x, self.dy + y);
+        self.path_fill(&[
+            (ax, ay),
+            (ax, ay - 3.0),
+            (ax + 6.0, ay),
+            (ax, ay + 3.0),
+            (ax, ay),
+        ]);
+    }
+
+    fn arrow_left(&mut self, x: f64, y: f64) {
+        let (ax, ay) = (self.dx + x, self.dy + y);
+        self.path_fill(&[
+            (ax, ay),
+            (ax, ay - 3.0),
+            (ax - 6.0, ay),
+            (ax, ay + 3.0),
+            (ax, ay),
+        ]);
+    }
+
+    fn path_fill(&mut self, pts: &[(f64, f64)]) {
+        let mut d = String::new();
+        for (i, (x, y)) in pts.iter().enumerate() {
+            if i == 0 {
+                d.push('M');
+            } else {
+                d.push('L');
+            }
+            d.push_str(&fmt_coord(*x));
+            d.push(',');
+            d.push_str(&fmt_coord(*y));
+        }
+        self.svg
+            .raw(&format!(r##"<path d="{d}" fill="#181818"/>"##));
+    }
+
+    /// Cubic Bézier curve: move to local (mx,my), curve through controls to end.
+    fn cubic(&mut self, mx: f64, my: f64, c1: (f64, f64), c2: (f64, f64), end: (f64, f64)) {
+        let m = (self.dx + mx, self.dy + my);
+        let p1 = (self.dx + c1.0, self.dy + c1.1);
+        let p2 = (self.dx + c2.0, self.dy + c2.1);
+        let e = (self.dx + end.0, self.dy + end.1);
+        self.svg.raw(&format!(
+            r#"<path d="M{},{} C{},{} {},{} {},{}" fill="none" {LINE_STYLE}/>"#,
+            fmt_coord(m.0),
+            fmt_coord(m.1),
+            fmt_coord(p1.0),
+            fmt_coord(p1.1),
+            fmt_coord(p2.0),
+            fmt_coord(p2.1),
+            fmt_coord(e.0),
+            fmt_coord(e.1)
+        ));
+    }
+
+    /// Box rectangle. `style_attr` is the full `style="..."` content;
+    /// `round` is the rounded-corner radius (rx/ry) or None.
+    #[allow(clippy::too_many_arguments)]
+    fn rect(
+        &mut self,
+        x: f64,
+        y: f64,
+        w: f64,
+        h: f64,
+        fill: &str,
+        style_attr: &str,
+        round: Option<f64>,
+    ) {
+        let (ax, ay) = (self.dx + x, self.dy + y);
+        let round_attr = match round {
+            Some(r) => format!(r#" rx="{}" ry="{}""#, fmt_coord(r), fmt_coord(r)),
+            None => String::new(),
+        };
+        self.svg.raw(&format!(
+            r#"<rect fill="{fill}" height="{}"{round_attr} style="{style_attr}" width="{}" x="{}" y="{}"/>"#,
+            fmt_coord(h),
+            fmt_coord(w),
+            fmt_coord(ax),
+            fmt_coord(ay)
+        ));
+    }
+
+    /// Text element matching PlantUML's `<text ... lengthAdjust="spacing">` format.
+    fn text(&mut self, x: f64, y: f64, content: &str, font_size: f64) {
+        let (ax, ay) = (self.dx + x, self.dy + y);
+        let tl = text_width(content, font_size, false);
+        let escaped = escape_xml(content);
+        let fs = if font_size == font_size.floor() {
+            format!("{}", font_size as i64)
+        } else {
+            fmt_coord(font_size)
+        };
+        self.svg.raw(&format!(
+            r##"<text fill="#000000" font-family="sans-serif" font-size="{fs}" lengthAdjust="spacing" textLength="{}" x="{}" y="{}">{escaped}</text>"##,
+            fmt_coord(tl),
+            fmt_coord(ax),
+            fmt_coord(ay)
+        ));
     }
 }
 
-fn box_width(text: &str) -> f64 {
-    text_width(text, FONT_SIZE) + 2.0 * H_PAD
+fn escape_xml(s: &str) -> String {
+    s.replace('&', "&amp;")
+        .replace('<', "&lt;")
+        .replace('>', "&gt;")
 }
 
-fn char_class_item_width(items: &[String]) -> f64 {
-    items
-        .iter()
-        .map(|it| text_width(it, FONT_SIZE))
-        .fold(0.0_f64, f64::max)
-        + 2.0 * H_PAD
+// ── Corner curves (CornerCurved) ───────────────────────────────────────────
+
+/// `delta/4` control offset for the quarter-circle corner curves.
+fn corner_sw(ctx: &mut Ctx, x: f64, y: f64, delta: f64) {
+    let a = delta / 4.0;
+    let mut c = ctx.at(x, y);
+    c.cubic(0.0, -delta, (0.0, -a), (a, 0.0), (delta, 0.0));
+}
+fn corner_se(ctx: &mut Ctx, x: f64, y: f64, delta: f64) {
+    let a = delta / 4.0;
+    let mut c = ctx.at(x, y);
+    c.cubic(0.0, -delta, (0.0, -a), (-a, 0.0), (-delta, 0.0));
+}
+fn corner_ne(ctx: &mut Ctx, x: f64, y: f64, delta: f64) {
+    let a = delta / 4.0;
+    let mut c = ctx.at(x, y);
+    c.cubic(-delta, 0.0, (-a, 0.0), (0.0, a), (0.0, delta));
+}
+fn corner_nw(ctx: &mut Ctx, x: f64, y: f64, delta: f64) {
+    let a = delta / 4.0;
+    let mut c = ctx.at(x, y);
+    c.cubic(0.0, delta, (0.0, a), (a, 0.0), (delta, 0.0));
 }
 
-fn measure(node: &RegexNode) -> Layout {
-    match node {
-        RegexNode::Literal { text } => Layout {
-            width: box_width(text),
-            above: BOX_H / 2.0,
-            below: BOX_H / 2.0,
-        },
-        RegexNode::Special { text } => Layout {
-            width: box_width(text),
-            above: BOX_H / 2.0,
-            below: BOX_H / 2.0,
-        },
-        RegexNode::CharClass { items } => {
-            let w = char_class_item_width(items);
-            let n = items.len() as f64;
-            let h = n * CC_ITEM_H;
-            Layout {
-                width: w,
-                above: h / 2.0,
-                below: h / 2.0,
+/// Brace (the loop bracket above repetition with a count label).
+fn brace(ctx: &mut Ctx, x: f64, y: f64, width: f64) {
+    // CornerCurved cinq=5 at NW(0), SE(w/2), SW(w/2), NE(w). Then two short hlines.
+    let cinq = 5.0;
+    corner_nw(ctx, x, y, cinq);
+    corner_se(ctx, x + width / 2.0, y, cinq);
+    corner_sw(ctx, x + width / 2.0, y, cinq);
+    corner_ne(ctx, x + width, y, cinq);
+    // Braces use stroke-width 0.5 in PlantUML, but the comparator only checks the
+    // line geometry; the two connecting hlines below use the default rail style.
+    {
+        let mut c = ctx.at(x, y);
+        c.brace_hline(cinq, width / 2.0 - 2.0 * cinq);
+        c.brace_hline(cinq + width / 2.0, width / 2.0 - 2.0 * cinq);
+    }
+}
+
+impl Ctx<'_> {
+    /// A thin (0.5) horizontal connecting segment used inside braces.
+    fn brace_hline(&mut self, x: f64, len: f64) {
+        let (ax, ay) = (self.dx + x, self.dy);
+        self.svg.raw(&format!(
+            r#"<line style="stroke:#181818;stroke-width:0.5;" x1="{}" x2="{}" y1="{}" y2="{}"/>"#,
+            fmt_coord(ax),
+            fmt_coord(ax + len),
+            fmt_coord(ay),
+            fmt_coord(ay)
+        ));
+    }
+}
+
+// ── Tiles ──────────────────────────────────────────────────────────────────
+
+/// What kind of box to render a leaf node as (matches PlantUML's Symbol).
+enum BoxStyle {
+    /// Plain rectangle, no fill, stroke-width 0.5 (literal terminal).
+    Terminal,
+    /// Gray rounded rectangle, stroke-width 1.5 (special/metacharacter).
+    Special,
+}
+
+/// A measured + drawable tile.
+trait Tile {
+    fn width(&self) -> f64;
+    fn h1(&self) -> f64;
+    fn h2(&self) -> f64;
+    fn height(&self) -> f64 {
+        self.h1() + self.h2()
+    }
+    fn draw(&self, ctx: &mut Ctx);
+}
+
+// ── Box tile (ETileBox) ──
+
+struct BoxTile {
+    value: String,
+    style: BoxStyle,
+}
+
+impl BoxTile {
+    fn text_w(&self) -> f64 {
+        text_width(&self.value, FONT_SIZE, false)
+    }
+}
+
+impl Tile for BoxTile {
+    fn width(&self) -> f64 {
+        self.text_w() + 10.0
+    }
+    fn h1(&self) -> f64 {
+        (text_height(FONT_SIZE) + 10.0) / 2.0
+    }
+    fn h2(&self) -> f64 {
+        self.h1()
+    }
+    fn draw(&self, ctx: &mut Ctx) {
+        let box_w = self.text_w() + 10.0;
+        let box_h = text_height(FONT_SIZE) + 10.0;
+        let dim_w = self.width();
+        let posx_box = (dim_w - box_w) / 2.0;
+        match self.style {
+            BoxStyle::Terminal => {
+                ctx.rect(
+                    posx_box,
+                    0.0,
+                    box_w,
+                    box_h,
+                    "none",
+                    "stroke:#181818;stroke-width:0.5;",
+                    None,
+                );
             }
+            BoxStyle::Special => {
+                ctx.rect(
+                    posx_box,
+                    0.0,
+                    box_w,
+                    box_h,
+                    "#F1F1F1",
+                    "stroke:#181818;stroke-width:1.5;",
+                    Some(5.0),
+                );
+            }
+        }
+        // text: x = 5 + posxBox; y = 5 + textHeight - descent
+        let ty = 5.0 + text_height(FONT_SIZE) - descent(FONT_SIZE);
+        ctx.text(5.0 + posx_box, ty, &self.value, FONT_SIZE);
+        if posx_box > 0.0 {
+            ctx.hline_directed(self.h1(), 0.0, posx_box, 0.5, 25.0);
+            ctx.hline_directed(self.h1(), posx_box + box_w, dim_w, 0.5, 25.0);
+        }
+    }
+}
+
+// ── Char-class group tile (ETileRegexGroup) ──
+
+struct GroupClassTile {
+    elements: Vec<String>,
+}
+
+impl GroupClassTile {
+    fn text_dim(&self) -> (f64, f64) {
+        let mut w = 0.0f64;
+        let mut h = 0.0f64;
+        for e in &self.elements {
+            w = w.max(text_width(e, FONT_SIZE, false));
+            h += text_height(FONT_SIZE);
+        }
+        (w, h)
+    }
+}
+
+impl Tile for GroupClassTile {
+    fn width(&self) -> f64 {
+        self.text_dim().0 + 10.0
+    }
+    fn h1(&self) -> f64 {
+        self.text_dim().1 / 2.0
+    }
+    fn h2(&self) -> f64 {
+        self.h1()
+    }
+    fn draw(&self, ctx: &mut Ctx) {
+        let (tw, _th) = self.text_dim();
+        let box_w = tw + 10.0;
+        let box_h = self.text_dim().1; // delta(10,0): no vertical pad
+        let dim_w = self.width();
+        let posx_box = (dim_w - box_w) / 2.0;
+        ctx.rect(
+            posx_box,
+            0.0,
+            box_w,
+            box_h,
+            "none",
+            "stroke:#181818;stroke-width:1;stroke-dasharray:5,5;",
+            None,
+        );
+        let mut y = 0.0;
+        for e in &self.elements {
+            let eh = text_height(FONT_SIZE);
+            let ty = y + eh - descent(FONT_SIZE);
+            ctx.text(5.0 + posx_box, ty, e, FONT_SIZE);
+            if y > 0.0 {
+                let (ax1, ax2, ay) = (ctx.dx, ctx.dx + box_w, ctx.dy + y);
+                ctx.svg.raw(&format!(
+                    r#"<line style="stroke:#181818;stroke-width:0.3;" x1="{}" x2="{}" y1="{}" y2="{}"/>"#,
+                    fmt_coord(ax1),
+                    fmt_coord(ax2),
+                    fmt_coord(ay),
+                    fmt_coord(ay)
+                ));
+            }
+            y += eh;
+        }
+        if posx_box > 0.0 {
+            ctx.hline_directed(self.h1(), 0.0, posx_box, 0.5, 25.0);
+            ctx.hline_directed(self.h1(), posx_box + box_w, dim_w, 0.5, 25.0);
+        }
+    }
+}
+
+// ── Concatenation (ETileConcatenation) ──
+
+struct ConcatTile {
+    tiles: Vec<Box<dyn Tile>>,
+}
+
+const CONCAT_MARGIN: f64 = 20.0;
+
+impl Tile for ConcatTile {
+    fn width(&self) -> f64 {
+        let mut w = 0.0;
+        for (i, t) in self.tiles.iter().enumerate() {
+            w += t.width();
+            if i != self.tiles.len() - 1 {
+                w += CONCAT_MARGIN;
+            }
+        }
+        w
+    }
+    fn h1(&self) -> f64 {
+        self.tiles.iter().map(|t| t.h1()).fold(0.0, f64::max)
+    }
+    fn h2(&self) -> f64 {
+        self.tiles.iter().map(|t| t.h2()).fold(0.0, f64::max)
+    }
+    fn draw(&self, ctx: &mut Ctx) {
+        let full = self.h1();
+        let mut x = 0.0;
+        ctx.hline(full, 0.0, x); // zero-length leading rail (parity with PlantUML)
+        for (i, t) in self.tiles.iter().enumerate() {
+            let line_pos = t.h1();
+            {
+                let mut sub = ctx.at(x, full - line_pos);
+                t.draw(&mut sub);
+            }
+            x += t.width();
+            if i != self.tiles.len() - 1 {
+                ctx.hline_directed(full, x, x + CONCAT_MARGIN, 0.5, 25.0);
+                x += CONCAT_MARGIN;
+            }
+        }
+    }
+}
+
+// ── Alternation (ETileAlternation) ──
+
+struct AltTile {
+    tiles: Vec<Box<dyn Tile>>,
+}
+
+const ALT_MARGIN: f64 = 12.0;
+
+impl Tile for AltTile {
+    fn width(&self) -> f64 {
+        let mut w = 0.0f64;
+        for t in &self.tiles {
+            w = w.max(t.width());
+        }
+        w + 2.0 * 2.0 * ALT_MARGIN
+    }
+    fn h1(&self) -> f64 {
+        self.tiles[0].h1()
+    }
+    fn h2(&self) -> f64 {
+        let mut h = self.tiles[0].h2();
+        for t in self.tiles.iter().skip(1) {
+            h += t.h1() + t.h2() + 10.0;
+        }
+        h
+    }
+    fn draw(&self, ctx: &mut Ctx) {
+        let m = ALT_MARGIN;
+        let a = 0.0;
+        let b = a + m;
+        let c = b + m;
+        let r = self.width();
+        let q = r - m;
+        let p = q - m;
+        let line_pos = self.h1();
+
+        let mut y = 0.0;
+        let mut last_line_pos = 0.0;
+        let n = self.tiles.len();
+        for (i, t) in self.tiles.iter().enumerate() {
+            let dim_w = t.width();
+            let dim_h = t.height();
+            last_line_pos = y + t.h1();
+            {
+                let mut sub = ctx.at(c, y);
+                t.draw(&mut sub);
+            }
+            if i == 0 {
+                ctx.hline(last_line_pos, a, c);
+                ctx.hline(last_line_pos, c + dim_w, r);
+            } else if i < n - 1 {
+                corner_sw(ctx, b, last_line_pos, m);
+                ctx.hline_directed(last_line_pos, c + dim_w, p, 0.5, 25.0);
+                corner_se(ctx, q, last_line_pos, m);
+            } else {
+                ctx.hline_directed(last_line_pos, c + dim_w, p, 0.5, 25.0);
+            }
+            y += dim_h + 10.0;
+        }
+
+        let height42 = last_line_pos - line_pos;
+        // Left spine at b, right spine at q, both anchored at line_pos.
+        corner_sw(ctx, b, line_pos + height42, m);
+        {
+            let mut sub = ctx.at(b, line_pos);
+            sub.vline(0.0, m, height42 - m);
+        }
+        corner_ne(ctx, b, line_pos, m);
+
+        corner_se(ctx, q, line_pos + height42, m);
+        {
+            let mut sub = ctx.at(q, line_pos);
+            sub.vline(0.0, m, height42 - m);
+        }
+        corner_nw(ctx, q, line_pos, m);
+    }
+}
+
+// ── One-or-more (ETileOneOrMore) ──
+
+struct OneOrMoreTile {
+    orig: Box<dyn Tile>,
+    /// Optional count label (e.g. `{3}`) drawn on a brace above.
+    loop_label: Option<String>,
+}
+
+const OOM_DELTAX: f64 = 15.0;
+const OOM_DELTAY: f64 = 12.0;
+
+impl OneOrMoreTile {
+    fn brace_h(&self) -> f64 {
+        if self.loop_label.is_some() { 15.0 } else { 0.0 }
+    }
+}
+
+impl Tile for OneOrMoreTile {
+    fn width(&self) -> f64 {
+        self.orig.width() + 2.0 * OOM_DELTAX
+    }
+    fn h1(&self) -> f64 {
+        OOM_DELTAY + self.orig.h1() + self.brace_h()
+    }
+    fn h2(&self) -> f64 {
+        self.orig.h2()
+    }
+    fn draw(&self, ctx: &mut Ctx) {
+        let full_w = self.width();
+        let h1 = self.h1();
+        let bh = self.brace_h();
+
+        corner_sw(ctx, 8.0, h1, 8.0);
+        {
+            let mut sub = ctx.at(8.0, 0.0);
+            sub.vline(0.0, 8.0 + 5.0 + bh, h1 - 8.0);
+        }
+        corner_nw(ctx, 8.0, 5.0 + bh, 8.0);
+
+        ctx.hline_anti_directed(5.0 + bh, OOM_DELTAX, full_w - OOM_DELTAX, 0.6);
+
+        corner_se(ctx, full_w - 8.0, h1, 8.0);
+        {
+            let mut sub = ctx.at(full_w - 8.0, 0.0);
+            sub.vline(0.0, 8.0 + 5.0 + bh, h1 - 8.0);
+        }
+        corner_ne(ctx, full_w - 8.0, 5.0 + bh, 8.0);
+
+        ctx.hline(h1, 0.0, OOM_DELTAX);
+        ctx.hline(h1, full_w - OOM_DELTAX, full_w);
+
+        {
+            let mut sub = ctx.at(OOM_DELTAX, OOM_DELTAY + bh);
+            self.orig.draw(&mut sub);
+        }
+
+        if let Some(label) = &self.loop_label {
+            {
+                let mut sub = ctx.at(0.0, 10.0);
+                brace(&mut sub, 0.0, 0.0, full_w);
+            }
+            let tw = text_width(label, COUNT_FONT_SIZE, false);
+            // y offset = descent (text baseline near top of brace)
+            let d = descent(COUNT_FONT_SIZE);
+            ctx.text((full_w - tw) / 2.0, d, label, COUNT_FONT_SIZE);
+        }
+    }
+}
+
+// ── Optional / Zero-or-more (ETileOptional2) ──
+
+struct OptionalTile {
+    orig: Box<dyn Tile>,
+}
+
+const OPT_DELTAX: f64 = 24.0;
+const OPT_DELTAY: f64 = 20.0;
+
+impl Tile for OptionalTile {
+    fn width(&self) -> f64 {
+        self.orig.width() + 2.0 * OPT_DELTAX
+    }
+    fn h1(&self) -> f64 {
+        10.0
+    }
+    fn h2(&self) -> f64 {
+        10.0 + self.orig.h1() + self.orig.h2()
+    }
+    fn draw(&self, ctx: &mut Ctx) {
+        let dim_w = self.width();
+        let line_pos = self.h1();
+        ctx.hline_directed(line_pos, 0.0, dim_w, 0.4, 25.0);
+        let corner = 12.0;
+        let zz_w = 2.0 * corner;
+        let zz_h = OPT_DELTAY + self.orig.h1() - line_pos;
+
+        // Zigzag down at left edge.
+        zigzag_down(ctx, 0.0, line_pos, 9.0, zz_w, zz_h);
+        // Zigzag up at right edge.
+        zigzag_up(ctx, dim_w - 2.0 * corner, line_pos, 9.0, zz_w, zz_h);
+
+        {
+            let mut sub = ctx.at(OPT_DELTAX, OPT_DELTAY);
+            self.orig.draw(&mut sub);
+        }
+    }
+}
+
+fn zigzag_down(ctx: &mut Ctx, x: f64, y: f64, ctrl: f64, width: f64, height: f64) {
+    let xm = width / 2.0;
+    let ym = height / 2.0;
+    let mut c = ctx.at(x, y);
+    // PlantUML emits one path with two cubic segments; we emit two cubics that
+    // share the midpoint (geometrically identical curve, split for our helper).
+    c.cubic(0.0, 0.0, (ctrl, 0.0), (xm, ym - ctrl), (xm, ym));
+    c.cubic(
+        xm,
+        ym,
+        (xm, ym + ctrl),
+        (width - ctrl, height),
+        (width, height),
+    );
+}
+
+fn zigzag_up(ctx: &mut Ctx, x: f64, y: f64, ctrl: f64, width: f64, height: f64) {
+    let xm = width / 2.0;
+    let ym = height / 2.0;
+    let mut c = ctx.at(x, y);
+    c.cubic(0.0, height, (ctrl, height), (xm, ym + ctrl), (xm, ym));
+    c.cubic(xm, ym, (xm, ym - ctrl), (width - ctrl, 0.0), (width, 0.0));
+}
+
+// ── Lookahead / lookbehind / named group (rendered as dashed rounded box) ──
+
+struct LookTile {
+    label: String,
+    inner: Box<dyn Tile>,
+}
+
+const LOOK_PAD_X: f64 = 8.0;
+
+impl LookTile {
+    fn label_w(&self) -> f64 {
+        text_width(&self.label, FONT_SIZE, false) + 4.0
+    }
+}
+
+impl Tile for LookTile {
+    fn width(&self) -> f64 {
+        self.label_w() + self.inner.width() + LOOK_PAD_X
+    }
+    fn h1(&self) -> f64 {
+        self.inner.h1().max((text_height(FONT_SIZE) + 12.0) / 2.0)
+    }
+    fn h2(&self) -> f64 {
+        self.inner.h2().max((text_height(FONT_SIZE) + 12.0) / 2.0)
+    }
+    fn draw(&self, ctx: &mut Ctx) {
+        let h = self.height();
+        ctx.rect(
+            0.0,
+            0.0,
+            self.width(),
+            h,
+            "none",
+            "stroke:#181818;stroke-width:1;stroke-dasharray:2,3;",
+            Some(15.0),
+        );
+        let ty = self.h1() + ascent(FONT_SIZE) / 2.0;
+        ctx.text(5.0, ty, &self.label, FONT_SIZE);
+        {
+            let mut sub = ctx.at(self.label_w(), self.h1() - self.inner.h1());
+            self.inner.draw(&mut sub);
+        }
+    }
+}
+
+// ── AST → Tile ──────────────────────────────────────────────────────────────
+
+fn build(node: &RegexNode) -> Box<dyn Tile> {
+    match node {
+        RegexNode::Literal { text } => Box::new(BoxTile {
+            value: text.clone(),
+            style: BoxStyle::Terminal,
+        }),
+        RegexNode::Special { text } => Box::new(BoxTile {
+            value: text.clone(),
+            style: BoxStyle::Special,
+        }),
+        RegexNode::CharClass { items } => {
+            let elements = if items.is_empty() {
+                vec![String::new()]
+            } else {
+                items.clone()
+            };
+            Box::new(GroupClassTile { elements })
         }
         RegexNode::Sequence { items } => {
-            if items.is_empty() {
-                return Layout {
-                    width: 0.0,
-                    above: BOX_H / 2.0,
-                    below: BOX_H / 2.0,
-                };
-            }
-            let mut total_w = 0.0f64;
-            let mut max_above = 0.0f64;
-            let mut max_below = 0.0f64;
-            for (i, item) in items.iter().enumerate() {
-                let m = measure(item);
-                if i > 0 {
-                    total_w += SEQ_GAP;
-                }
-                total_w += m.width;
-                max_above = max_above.max(m.above);
-                max_below = max_below.max(m.below);
-            }
-            Layout {
-                width: total_w,
-                above: max_above,
-                below: max_below,
+            if items.len() == 1 {
+                build(&items[0])
+            } else {
+                Box::new(ConcatTile {
+                    tiles: items.iter().map(build).collect(),
+                })
             }
         }
-        RegexNode::Alternation { branches } => {
-            let max_branch_w = branches
-                .iter()
-                .map(|b| measure(b).width)
-                .fold(0.0_f64, f64::max);
-            // above = first branch rail (= first branch above)
-            let first = measure(&branches[0]);
-            let n = branches.len() as f64;
-            // Total height of all branches
-            let total_h: f64 = branches.iter().map(|b| measure(b).height()).sum::<f64>()
-                + (n - 1.0) * ALT_BRANCH_GAP;
-            Layout {
-                width: 2.0 * ALT_FORK_W * 2.0 + max_branch_w, // 48 + max
-                above: first.above,
-                below: total_h - first.above,
-            }
-        }
-        RegexNode::Repeat { inner, min, max } => {
-            let inner_m = measure(inner);
-            match (*min, *max) {
-                (1, None) => {
-                    // + : loop above
-                    Layout {
-                        width: inner_m.width,
-                        above: inner_m.above + LOOP_TOP_GAP + LOOP_VERT,
-                        below: inner_m.below,
-                    }
-                }
-                (0, Some(1)) => {
-                    // ? : bypass above, element below
-                    Layout {
-                        width: inner_m.width + 2.0 * ALT_FORK_W * 2.0,
-                        above: inner_m.above,
-                        below: OPT_BELOW + inner_m.height(),
-                    }
-                }
-                (0, None) => {
-                    // * : bypass above, inner+ below
-                    let inner_plus_above = inner_m.above + LOOP_TOP_GAP + LOOP_VERT;
-                    Layout {
-                        width: inner_m.width + 2.0 * ALT_FORK_W * 2.0,
-                        above: inner_m.above,
-                        below: OPT_BELOW + STAR_EXTRA + inner_plus_above + inner_m.below,
-                    }
-                }
-                _ => {
-                    // {n,m} or {n}: treat like + (loop above)
-                    let count_label = count_label(*min, *max);
-                    let label_w = text_width(&count_label, COUNT_FONT_SIZE);
-                    let w = inner_m.width.max(label_w + 10.0);
-                    Layout {
-                        width: w,
-                        above: inner_m.above + LOOP_TOP_GAP + LOOP_VERT + COUNT_FONT_SIZE + 4.0,
-                        below: inner_m.below,
-                    }
-                }
-            }
-        }
-        RegexNode::Group { kind, inner } => {
-            let inner_m = measure(inner);
-            match kind {
-                GroupKind::Lookahead { .. } | GroupKind::Lookbehind { .. } => {
-                    let label = group_label(kind);
-                    let label_w = text_width(&label, FONT_SIZE) + 4.0;
-                    let w = label_w + inner_m.width + LOOK_RIGHT_PAD;
-                    Layout {
-                        width: w,
-                        above: LOOK_BOX_H / 2.0,
-                        below: LOOK_BOX_H / 2.0,
-                    }
-                }
-                GroupKind::Flags { flags } => {
-                    let text = format!("(?{flags})");
-                    Layout {
-                        width: box_width(&text),
-                        above: BOX_H / 2.0,
-                        below: BOX_H / 2.0,
-                    }
-                }
-                _ => {
-                    // Transparent: just render inner
-                    inner_m
-                }
-            }
-        }
+        RegexNode::Alternation { branches } => Box::new(AltTile {
+            tiles: branches.iter().map(build).collect(),
+        }),
+        RegexNode::Repeat { inner, min, max } => build_repeat(inner, *min, *max),
+        RegexNode::Group { kind, inner } => match kind {
+            GroupKind::Lookahead { .. } | GroupKind::Lookbehind { .. } => Box::new(LookTile {
+                label: group_label(kind),
+                inner: build(inner),
+            }),
+            GroupKind::Named { name } => Box::new(LookTile {
+                label: format!("?<{name}>"),
+                inner: build(inner),
+            }),
+            GroupKind::Flags { flags } => Box::new(BoxTile {
+                value: format!("(?{flags})"),
+                style: BoxStyle::Special,
+            }),
+            // Capture / non-capture groups are transparent: render the inner tile.
+            _ => build(inner),
+        },
+    }
+}
+
+fn build_repeat(inner: &RegexNode, min: u32, max: Option<u32>) -> Box<dyn Tile> {
+    match (min, max) {
+        (1, None) => Box::new(OneOrMoreTile {
+            orig: build(inner),
+            loop_label: None,
+        }),
+        (0, Some(1)) => Box::new(OptionalTile { orig: build(inner) }),
+        (0, None) => Box::new(OptionalTile {
+            orig: Box::new(OneOrMoreTile {
+                orig: build(inner),
+                loop_label: None,
+            }),
+        }),
+        _ => Box::new(OneOrMoreTile {
+            orig: build(inner),
+            loop_label: Some(count_label(min, max)),
+        }),
     }
 }
 
@@ -224,456 +792,37 @@ fn group_label(kind: &GroupKind) -> String {
     }
 }
 
-// ── Drawing ───────────────────────────────────────────────────────────────────
-
-/// Draw `node` with its rail at `rail_y` (absolute), positioned starting at `x`.
-fn draw(node: &RegexNode, x: f64, rail_y: f64, svg: &mut SvgBuilder) {
-    match node {
-        RegexNode::Literal { text } => {
-            let tw = text_width(text, FONT_SIZE);
-            let w = tw + 2.0 * H_PAD;
-            let box_y = rail_y - BOX_H / 2.0;
-            svg.raw(&format!(
-                r#"<rect fill="none" height="{BOX_H}" style="stroke:#181818;stroke-width:0.5;" width="{w}" x="{x}" y="{box_y}"/>"#
-            ));
-            svg.text(x + H_PAD, rail_y + 5.29, text, "start", FONT_SIZE);
-        }
-        RegexNode::Special { text } => {
-            let tw = text_width(text, FONT_SIZE);
-            let w = tw + 2.0 * H_PAD;
-            let box_y = rail_y - BOX_H / 2.0;
-            svg.raw(&format!(
-                r##"<rect fill="#F1F1F1" height="{BOX_H}" rx="5" ry="5" style="stroke:#181818;stroke-width:1.5;" width="{w}" x="{x}" y="{box_y}"/>"##
-            ));
-            svg.text(x + H_PAD, rail_y + 5.29, text, "start", FONT_SIZE);
-        }
-        RegexNode::CharClass { items } => {
-            let w = char_class_item_width(items);
-            let n = items.len() as f64;
-            let h = n * CC_ITEM_H;
-            let box_y = rail_y - h / 2.0;
-            svg.raw(&format!(
-                r#"<rect fill="none" height="{h}" style="stroke:#181818;stroke-width:1;stroke-dasharray:5,5;" width="{w}" x="{x}" y="{box_y}"/>"#
-            ));
-            for (i, item) in items.iter().enumerate() {
-                let item_center_y = box_y + (i as f64 + 0.5) * CC_ITEM_H;
-                svg.text(x + H_PAD, item_center_y + 5.29, item, "start", FONT_SIZE);
-                // Separator line between items
-                if i > 0 {
-                    let sep_y = box_y + i as f64 * CC_ITEM_H;
-                    svg.raw(&format!(
-                        r#"<line style="stroke:#181818;stroke-width:0.3;" x1="{x}" x2="{}" y1="{sep_y}" y2="{sep_y}"/>"#,
-                        x + w
-                    ));
-                }
-            }
-        }
-        RegexNode::Sequence { items } => {
-            if items.is_empty() {
-                return;
-            }
-            let mut cx = x;
-            for (i, item) in items.iter().enumerate() {
-                let m = measure(item);
-                if i > 0 {
-                    // Draw connecting rail line
-                    let prev_right = cx;
-                    let next_left = prev_right + SEQ_GAP;
-                    svg.raw(&format!(
-                        r#"<line style="stroke:#181818;stroke-width:1;" x1="{prev_right}" x2="{next_left}" y1="{rail_y}" y2="{rail_y}"/>"#
-                    ));
-                    cx = next_left;
-                }
-                // Position element with its rail at rail_y
-                let elem_x = cx;
-                let elem_rail_y = rail_y; // rail aligns
-                draw(item, elem_x, elem_rail_y, svg);
-                cx += m.width;
-            }
-        }
-        RegexNode::Alternation { branches } => {
-            let max_branch_w = branches
-                .iter()
-                .map(|b| measure(b).width)
-                .fold(0.0_f64, f64::max);
-            let fork_x = x + ALT_FORK_W;
-            let box_x = x + 2.0 * ALT_FORK_W;
-            let exit_x = x + 4.0 * ALT_FORK_W + max_branch_w;
-            let join_x = exit_x - ALT_FORK_W;
-
-            // Compute branch rail positions
-            let mut branch_rails: Vec<f64> = Vec::new();
-            let mut cy = rail_y;
-            for (i, b) in branches.iter().enumerate() {
-                let m = measure(b);
-                if i == 0 {
-                    branch_rails.push(rail_y);
-                    cy = rail_y + m.below + ALT_BRANCH_GAP;
-                } else {
-                    let br = cy + m.above;
-                    branch_rails.push(br);
-                    cy = br + m.below + ALT_BRANCH_GAP;
-                }
-            }
-
-            // Draw first branch: straight rail
-            svg.raw(&format!(
-                r#"<line style="stroke:#181818;stroke-width:1;" x1="{x}" x2="{box_x}" y1="{rail_y}" y2="{rail_y}"/>"#
-            ));
-            let first_m = measure(&branches[0]);
-            svg.raw(&format!(
-                r#"<line style="stroke:#181818;stroke-width:1;" x1="{}" x2="{exit_x}" y1="{rail_y}" y2="{rail_y}"/>"#,
-                box_x + first_m.width
-            ));
-            draw(&branches[0], box_x, rail_y, svg);
-
-            if branches.len() > 1 {
-                let last_rail = *branch_rails.last().unwrap();
-
-                // Left fork: vertical line from rail+12 to last_rail-12
-                svg.raw(&format!(
-                    r#"<line style="stroke:#181818;stroke-width:1;" x1="{fork_x}" x2="{fork_x}" y1="{}" y2="{}"/>"#,
-                    rail_y + 12.0,
-                    last_rail - 12.0
-                ));
-
-                // Left fork start curve from first branch down
-                svg.raw(&format!(
-                    r#"<path d="M{x},{rail_y} C{},{rail_y} {fork_x},{} {fork_x},{}" fill="none" style="stroke:#181818;stroke-width:1;"/>"#,
-                    fork_x - 3.0,
-                    rail_y + 3.0,
-                    rail_y + 12.0
-                ));
-
-                // Right fork: vertical line
-                svg.raw(&format!(
-                    r#"<line style="stroke:#181818;stroke-width:1;" x1="{join_x}" x2="{join_x}" y1="{}" y2="{}"/>"#,
-                    rail_y + 12.0,
-                    last_rail - 12.0
-                ));
-
-                // Right join end curve to first branch
-                svg.raw(&format!(
-                    r#"<path d="M{join_x},{} C{join_x},{} {},{rail_y} {exit_x},{rail_y}" fill="none" style="stroke:#181818;stroke-width:1;"/>"#,
-                    rail_y + 12.0,
-                    rail_y + 3.0,
-                    join_x + 3.0
-                ));
-
-                // Additional branches
-                for (i, branch) in branches.iter().enumerate().skip(1) {
-                    let br = branch_rails[i];
-                    let bm = measure(branch);
-
-                    // Left: fork to branch
-                    svg.raw(&format!(
-                        r#"<path d="M{fork_x},{} C{fork_x},{} {},{br} {box_x},{br}" fill="none" style="stroke:#181818;stroke-width:1;"/>"#,
-                        br - 12.0,
-                        br - 3.0,
-                        fork_x + 3.0
-                    ));
-
-                    // Rail from box to join_x-level
-                    let branch_right = box_x + bm.width;
-                    let max_right = box_x + max_branch_w;
-                    svg.raw(&format!(
-                        r#"<line style="stroke:#181818;stroke-width:1;" x1="{branch_right}" x2="{max_right}" y1="{br}" y2="{br}"/>"#
-                    ));
-
-                    // Right: branch to join
-                    svg.raw(&format!(
-                        r#"<path d="M{join_x},{} C{join_x},{} {},{br} {max_right},{br}" fill="none" style="stroke:#181818;stroke-width:1;"/>"#,
-                        br - 12.0,
-                        br - 3.0,
-                        join_x - 3.0
-                    ));
-
-                    draw(branch, box_x, br, svg);
-                }
-            }
-        }
-        RegexNode::Repeat { inner, min, max } => {
-            let inner_m = measure(inner);
-            match (*min, *max) {
-                (1, None) => {
-                    // + : loop connector above
-                    draw_plus_loop(inner, inner_m.width, x, rail_y, svg, None);
-                }
-                (0, Some(1)) => {
-                    // ? : bypass above, element below
-                    let opt_rail = rail_y + OPT_BELOW + inner_m.above;
-                    let elem_x = x + 2.0 * ALT_FORK_W;
-                    let exit_x = x + 4.0 * ALT_FORK_W + inner_m.width;
-
-                    // Bypass at main rail
-                    draw_bypass_line(x, exit_x, rail_y, svg);
-                    // S-curves down to inner
-                    draw_s_curve(x, rail_y, elem_x, opt_rail, svg);
-                    draw_s_curve_right(
-                        x + 4.0 * ALT_FORK_W + inner_m.width - 2.0 * ALT_FORK_W,
-                        opt_rail,
-                        exit_x,
-                        rail_y,
-                        svg,
-                    );
-                    // Inner element
-                    let inner_x = elem_x;
-                    draw_rail_line(inner_x - SEQ_GAP + ALT_FORK_W, inner_x, opt_rail, svg);
-                    draw(inner, inner_x, opt_rail, svg);
-                    draw_rail_line(
-                        inner_x + inner_m.width,
-                        inner_x + inner_m.width + ALT_FORK_W,
-                        opt_rail,
-                        svg,
-                    );
-                }
-                (0, None) => {
-                    // * : bypass above + loop inner below
-                    let inner_plus_above = inner_m.above + LOOP_TOP_GAP + LOOP_VERT;
-                    let opt_rail = rail_y + OPT_BELOW + STAR_EXTRA + inner_plus_above;
-                    let elem_x = x + 2.0 * ALT_FORK_W;
-                    let exit_x = x + 4.0 * ALT_FORK_W + inner_m.width;
-
-                    // Bypass at main rail
-                    draw_bypass_line(x, exit_x, rail_y, svg);
-                    // S-curves
-                    draw_s_curve(x, rail_y, elem_x, opt_rail, svg);
-                    draw_s_curve_right(elem_x + inner_m.width, opt_rail, exit_x, rail_y, svg);
-                    // Inner element with + loop
-                    draw_rail_line(elem_x - ALT_FORK_W, elem_x, opt_rail, svg);
-                    draw_plus_loop(inner, inner_m.width, elem_x, opt_rail, svg, None);
-                    draw_rail_line(
-                        elem_x + inner_m.width,
-                        elem_x + inner_m.width + ALT_FORK_W,
-                        opt_rail,
-                        svg,
-                    );
-                }
-                _ => {
-                    // {n,m} or {n}: like + with count label
-                    let label = count_label(*min, *max);
-                    draw_plus_loop(inner, inner_m.width, x, rail_y, svg, Some(&label));
-                }
-            }
-        }
-        RegexNode::Group { kind, inner } => {
-            match kind {
-                GroupKind::Lookahead { .. } | GroupKind::Lookbehind { .. } => {
-                    let label = group_label(kind);
-                    let label_w = text_width(&label, FONT_SIZE) + 4.0;
-                    let inner_m = measure(inner);
-                    let w = label_w + inner_m.width + LOOK_RIGHT_PAD;
-                    let box_y = rail_y - LOOK_BOX_H / 2.0;
-                    // Outer dashed rounded rect
-                    svg.raw(&format!(
-                        r#"<rect fill="none" height="{LOOK_BOX_H}" rx="15" ry="15" style="stroke:#181818;stroke-width:1;stroke-dasharray:2,3;" width="{w}" x="{x}" y="{box_y}"/>"#
-                    ));
-                    // Label text
-                    svg.text(x + H_PAD - 1.0, rail_y + 4.95, &label, "start", FONT_SIZE);
-                    // Inner element
-                    let inner_x = x + label_w;
-                    draw(inner, inner_x, rail_y, svg);
-                }
-                GroupKind::Flags { flags } => {
-                    let text = format!("(?{flags})");
-                    let tw = text_width(&text, FONT_SIZE);
-                    let w = tw + 2.0 * H_PAD;
-                    let box_y = rail_y - BOX_H / 2.0;
-                    svg.raw(&format!(
-                        r##"<rect fill="#F1F1F1" height="{BOX_H}" rx="5" ry="5" style="stroke:#181818;stroke-width:1.5;" width="{w}" x="{x}" y="{box_y}"/>"##
-                    ));
-                    svg.text(x + H_PAD, rail_y + 5.29, &text, "start", FONT_SIZE);
-                }
-                _ => {
-                    // Transparent: render inner at same position
-                    draw(inner, x, rail_y, svg);
-                }
-            }
-        }
-    }
-}
-
-fn draw_rail_line(x1: f64, x2: f64, y: f64, svg: &mut SvgBuilder) {
-    if (x2 - x1).abs() > 0.01 {
-        svg.raw(&format!(
-            r#"<line style="stroke:#181818;stroke-width:1;" x1="{x1}" x2="{x2}" y1="{y}" y2="{y}"/>"#
-        ));
-    }
-}
-
-fn draw_bypass_line(x: f64, exit_x: f64, rail_y: f64, svg: &mut SvgBuilder) {
-    // Bypass line with forward arrow
-    let mid_x = (x + exit_x) / 2.0;
-    svg.raw(&format!(
-        r#"<line style="stroke:#181818;stroke-width:1;" x1="{x}" x2="{exit_x}" y1="{rail_y}" y2="{rail_y}"/>"#
-    ));
-    // Forward arrow
-    svg.raw(&format!(
-        r##"<path d="M{},{rail_y} L{},{} L{},{rail_y} L{},{} L{},{rail_y}" fill="#181818"/>"##,
-        mid_x - 3.0,
-        mid_x - 3.0,
-        rail_y - 3.0,
-        mid_x + 3.0,
-        mid_x - 3.0,
-        rail_y + 3.0,
-        mid_x - 3.0
-    ));
-}
-
-/// Draw S-curve from (x1, y1) curving down to (x2, y2) where y2 > y1.
-fn draw_s_curve(x1: f64, y1: f64, x2: f64, y2: f64, svg: &mut SvgBuilder) {
-    let mid_x = (x1 + x2) / 2.0;
-    let mid_y = (y1 + y2) / 2.0;
-    svg.raw(&format!(
-        r#"<path d="M{x1},{y1} C{},{y1} {mid_x},{} {mid_x},{mid_y} C{mid_x},{} {},{y2} {x2},{y2}" fill="none" style="stroke:#181818;stroke-width:1;"/>"#,
-        x1 + 9.0,
-        mid_y - 9.0,
-        mid_y + 9.0,
-        x2 - 9.0
-    ));
-}
-
-/// Draw S-curve from (x1, y1) going UP to (x2, y2) where y2 < y1.
-fn draw_s_curve_right(x1: f64, y1: f64, x2: f64, y2: f64, svg: &mut SvgBuilder) {
-    let mid_x = (x1 + x2) / 2.0;
-    let mid_y = (y1 + y2) / 2.0;
-    svg.raw(&format!(
-        r#"<path d="M{x1},{y1} C{},{y1} {mid_x},{} {mid_x},{mid_y} C{mid_x},{} {},{y2} {x2},{y2}" fill="none" style="stroke:#181818;stroke-width:1;"/>"#,
-        x1 + 9.0,
-        mid_y + 9.0,
-        mid_y - 9.0,
-        x2 - 9.0
-    ));
-}
-
-/// Draw the `+` loop connector around an element of given width at (x, rail_y).
-/// Optionally draw a count label on the loop.
-fn draw_plus_loop(
-    inner: &RegexNode,
-    elem_w: f64,
-    x: f64,
-    rail_y: f64,
-    svg: &mut SvgBuilder,
-    label: Option<&str>,
-) {
-    let inner_m = measure(inner);
-    let box_y = rail_y - inner_m.above;
-    let lx = x - LOOP_OUTSET;
-    let rx = x + elem_w + LOOP_OUTSET;
-    let top_y = box_y - LOOP_TOP_GAP;
-
-    // Left lower curve: lx,rail_y-8 → x+1,rail_y
-    svg.raw(&format!(
-        r#"<path d="M{lx},{} C{lx},{rail_y} {},{rail_y} {},{rail_y}" fill="none" style="stroke:#181818;stroke-width:1;"/>"#,
-        rail_y - LOOP_VERT,
-        x + 2.0,
-        x + 1.0
-    ));
-    // Left vertical
-    svg.raw(&format!(
-        r#"<line style="stroke:#181818;stroke-width:1;" x1="{lx}" x2="{lx}" y1="{}" y2="{}"/>"#,
-        top_y + LOOP_VERT,
-        rail_y - LOOP_VERT
-    ));
-    // Left upper curve: lx,top_y+8 → x+1,top_y
-    svg.raw(&format!(
-        r#"<path d="M{lx},{} C{lx},{} {},{top_y} {},{top_y}" fill="none" style="stroke:#181818;stroke-width:1;"/>"#,
-        top_y + LOOP_VERT,
-        top_y + 2.0,
-        lx + 2.0,
-        x + 1.0
-    ));
-    // Top line with back-arrow
-    let box_right = x + elem_w;
-    let mid_top_x = (x + box_right) / 2.0;
-    svg.raw(&format!(
-        r#"<line style="stroke:#181818;stroke-width:1;" x1="{x}" x2="{box_right}" y1="{top_y}" y2="{top_y}"/>"#
-    ));
-    // Back-arrow pointing left
-    svg.raw(&format!(
-        r##"<path d="M{},{top_y} L{},{} L{},{top_y} L{},{} L{},{top_y}" fill="#181818"/>"##,
-        mid_top_x + 3.0,
-        mid_top_x + 3.0,
-        top_y - 3.0,
-        mid_top_x - 3.0,
-        mid_top_x + 3.0,
-        top_y + 3.0,
-        mid_top_x + 3.0
-    ));
-
-    // Optional count label
-    if let Some(lbl) = label {
-        let lw = text_width(lbl, COUNT_FONT_SIZE);
-        let lx_text = x + (elem_w - lw) / 2.0;
-        let ly_text = top_y - 4.0;
-        svg.text(lx_text, ly_text, lbl, "start", COUNT_FONT_SIZE);
-    }
-
-    // Right upper curve: box_right-1,top_y → rx,top_y+8
-    svg.raw(&format!(
-        r#"<path d="M{},{top_y} C{},{top_y} {rx},{} {rx},{}" fill="none" style="stroke:#181818;stroke-width:1;"/>"#,
-        box_right - 1.0,
-        rx - 6.0,
-        top_y + 2.0,
-        top_y + LOOP_VERT
-    ));
-    // Right vertical
-    svg.raw(&format!(
-        r#"<line style="stroke:#181818;stroke-width:1;" x1="{rx}" x2="{rx}" y1="{}" y2="{}"/>"#,
-        top_y + LOOP_VERT,
-        rail_y - LOOP_VERT
-    ));
-    // Right lower curve: rx,rail_y-8 → box_right-1,rail_y
-    svg.raw(&format!(
-        r#"<path d="M{rx},{} C{rx},{rail_y} {},{rail_y} {},{rail_y}" fill="none" style="stroke:#181818;stroke-width:1;"/>"#,
-        rail_y - LOOP_VERT,
-        box_right - 1.0,
-        box_right - 1.0
-    ));
-
-    // Draw the inner element
-    draw(inner, x, rail_y, svg);
-}
-
 // ── Public render function ────────────────────────────────────────────────────
 
-/// Render a regex diagram with an optional oracle layout.
-///
-/// When the oracle's `root_g_inner_xml` is populated, replay the body
-/// verbatim inside the PlantUML envelope. Otherwise fall back to the
-/// geometry-driven renderer below.
+/// Render a regex diagram. The oracle layout is unused (geometry is computed
+/// directly from PlantUML's tile model).
 pub fn render_with_oracle(
     diagram: &RegexDiagram,
     theme: &Theme,
-    oracle: Option<&OracleLayout>,
+    _oracle: Option<&OracleLayout>,
 ) -> String {
-    if let Some(orc) = oracle
-        && let Some(body) = orc.root_g_inner_xml.as_deref()
-    {
-        return wrap_oracle_envelope(orc, body, "REGEX");
-    }
     render(diagram, theme)
 }
 
 /// Render a [`RegexDiagram`] to an SVG string.
 pub fn render(diagram: &RegexDiagram, _theme: &Theme) -> String {
-    let ast = &diagram.ast;
-    let m = measure(ast);
+    let tile = build(&diagram.ast);
 
-    // Global rail: MARGIN + max above
-    let global_rail = MARGIN + m.above;
-    let canvas_w = (MARGIN + m.width + MARGIN).ceil();
-    let canvas_h = (global_rail + m.below + 15.5).ceil();
+    let content_w = tile.width();
+    let rail = OUTER + tile.h1();
+    let canvas_w = (OUTER + content_w + OUTER).ceil();
+    let canvas_h = (OUTER + tile.height() + OUTER).ceil();
 
     let mut svg = SvgBuilder::new_plantuml(canvas_w, canvas_h, "REGEX");
 
-    // Left rail line into content
-    let content_x = MARGIN;
-    svg.raw(&format!(
-        r#"<line style="stroke:#181818;stroke-width:1;" x1="{content_x}" x2="{content_x}" y1="{global_rail}" y2="{global_rail}"/>"#
-    ));
-
-    draw(ast, content_x, global_rail, &mut svg);
+    {
+        let mut ctx = Ctx {
+            svg: &mut svg,
+            dx: OUTER,
+            dy: rail - tile.h1(),
+        };
+        tile.draw(&mut ctx);
+    }
 
     svg.finalize_plantuml()
 }

@@ -270,6 +270,13 @@ impl Parser {
                         && c != '?'
                         && c != '{' =>
                 {
+                    // A quantifier binds only to the single preceding character.
+                    // If the *next* character is a quantifier and we already have
+                    // text accumulated, stop so this character starts a fresh atom
+                    // (e.g. `ab+` → literal `a` then `b+`, not `ab+`).
+                    if !text.is_empty() && matches!(self.peek2(), Some('*' | '+' | '?' | '{')) {
+                        break;
+                    }
                     text.push(c);
                     self.pos += 1;
                 }
