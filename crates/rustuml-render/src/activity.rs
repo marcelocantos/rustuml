@@ -896,7 +896,11 @@ fn node_extents(node: &LayoutNode) -> (f64, f64) {
             // Right side: loop arm at body_right + halfHex, plus right
             // padding to match PlantUML's effective trail (~halfHex more
             // than rustuml's default MARGIN_TRAIL=19).
-            let right_extent = cond_half.max(body_right) + 2.0 * DIAMOND_HALF;
+            // The loop-back arm reaches max(cond,body)+halfHex with a 4 px
+            // arrowhead, and PlantUML leaves ~11.4 px of breathing room past
+            // it (verified against the width-only while goldens: +3 over the
+            // bare 2*halfHex absorbs that gap once MARGIN_TRAIL is added).
+            let right_extent = cond_half.max(body_right) + 2.0 * DIAMOND_HALF + 3.0;
             (left_extent, right_extent)
         }
         // Title contributes 3 px of asymmetric padding on each side beyond
@@ -1025,7 +1029,7 @@ fn node_width(node: &LayoutNode) -> f64 {
             let cond_half = diamond_inner_w(condition) / 2.0 + DIAMOND_HALF;
             let special_shift = special_out.as_ref().map_or(0.0, |s| node_width(s) / 2.0);
             let left_extent = cond_half.max(body_left) + 25.0 + special_shift;
-            let right_extent = cond_half.max(body_right) + 2.0 * DIAMOND_HALF;
+            let right_extent = cond_half.max(body_right) + 2.0 * DIAMOND_HALF + 3.0;
             left_extent + right_extent
         }
         LayoutNode::Repeat {
