@@ -412,6 +412,20 @@ impl PreprocessContext {
         self.cond_stack.iter().all(|c| c.active)
     }
 
+    /// Push a blank placeholder for a directive line that produced no diagram
+    /// content. PlantUML preserves the original line position of surviving
+    /// content (it strips only the `@startuml` line), so its `data-source-line`
+    /// attribute equals the original 1-based file line minus one. Keeping a
+    /// placeholder for every consumed directive line keeps our preprocessed
+    /// stream — which the diagram parser indexes 1-based — aligned with that.
+    /// Placeholders are only emitted while collecting a single top-level
+    /// diagram block; nested includes manage their own numbering.
+    fn push_directive_placeholder(&self, output: &mut Vec<String>) {
+        if self.include_depth == 0 && self.in_diagram_block {
+            output.push(String::new());
+        }
+    }
+
     fn get_var(&self, name: &str) -> Option<&String> {
         // Check local scope first, then global.
         for scope in self.local_vars.iter().rev() {
@@ -578,6 +592,7 @@ impl PreprocessContext {
             {
                 dl.body.push(line.to_string());
             }
+            self.push_directive_placeholder(output);
             return;
         }
 
@@ -588,11 +603,13 @@ impl PreprocessContext {
             } else if let Some(name) = self.collecting_sub.clone() {
                 self.subs.entry(name).or_default().push(line.to_string());
             }
+            self.push_directive_placeholder(output);
             return;
         }
 
         // Function definition collection.
         if self.try_function_def(trimmed) {
+            self.push_directive_placeholder(output);
             return;
         }
 
@@ -608,15 +625,18 @@ impl PreprocessContext {
 
         // Directives that are consumed silently.
         if self.try_silent_directive(trimmed) {
+            self.push_directive_placeholder(output);
             return;
         }
 
         // Startsub.
         if let Some(name) = trimmed.strip_prefix("!startsub ") {
             self.collecting_sub = Some(name.trim().to_string());
+            self.push_directive_placeholder(output);
             return;
         }
         if trimmed == "!endsub" {
+            self.push_directive_placeholder(output);
             return;
         }
 
@@ -625,14 +645,19 @@ impl PreprocessContext {
             return;
         }
 
-        // Process TIM directives.
+        // Process TIM directives. Each consumes a single source line and emits
+        // no diagram content; push a blank placeholder so surviving content
+        // keeps its original line offset (see `push_directive_placeholder`).
         if self.try_define(trimmed) {
+            self.push_directive_placeholder(output);
             return;
         }
         if self.try_local_var(trimmed) {
+            self.push_directive_placeholder(output);
             return;
         }
         if self.try_conditional(trimmed) {
+            self.push_directive_placeholder(output);
             return;
         }
 
@@ -645,10 +670,12 @@ impl PreprocessContext {
                 // "2.0") to have their quotes stripped during concatenation.
                 self.return_signal = Some(self.eval_expr_to_value(expr));
             }
+            self.push_directive_placeholder(output);
             return;
         }
 
         if self.try_undefine(trimmed) {
+            self.push_directive_placeholder(output);
             return;
         }
         if let Some(included_lines) = self.try_include(trimmed) {
@@ -720,6 +747,11 @@ impl PreprocessContext {
             for expanded_line in line_to_process.split('\n') {
                 output.push(expanded_line.to_string());
             }
+        } else {
+            // Line suppressed by an inactive conditional branch. It still
+            // occupied a source line, so emit a placeholder to keep downstream
+            // `data-source-line` numbering aligned with the original file.
+            self.push_directive_placeholder(output);
         }
     }
 
@@ -2817,73 +2849,85 @@ fn strip_inline_comment(line: &str) -> String {
 mod tests {
     use super::*;
 
+    /// Preprocess and drop blank placeholder lines. The preprocessor emits a
+    /// blank line for every consumed directive so that surviving content keeps
+    /// its original file line position (matching PlantUML's `data-source-line`).
+    /// Content-focused tests use this helper to assert on the expanded output
+    /// without threading the numbering placeholders through every expectation.
+    fn pp(input: &str) -> Vec<String> {
+        preprocess(input)
+            .into_iter()
+            .filter(|l| !l.is_empty())
+            .collect()
+    }
+
     #[test]
     fn strips_start_end_tags() {
         let input = "@startuml\nAlice -> Bob : hello\n@enduml\n";
-        let lines = preprocess(input);
+        let lines = pp(input);
         assert_eq!(lines, vec!["Alice -> Bob : hello"]);
     }
 
     #[test]
     fn handles_startuml_with_name() {
         let input = "@startuml MyDiagram\nA -> B\n@enduml";
-        let lines = preprocess(input);
+        let lines = pp(input);
         assert_eq!(lines, vec!["A -> B"]);
     }
 
     #[test]
     fn handles_non_uml_tags() {
         let input = "@startjson\n{\"key\": \"value\"}\n@endjson";
-        let lines = preprocess(input);
+        let lines = pp(input);
         assert_eq!(lines, vec!["{\"key\": \"value\"}"]);
     }
 
     #[test]
     fn define_substitution() {
         let input = "@startuml\n!define NAME Alice\n$NAME -> Bob : hello\n@enduml";
-        let lines = preprocess(input);
+        let lines = pp(input);
         assert_eq!(lines, vec!["Alice -> Bob : hello"]);
     }
 
     #[test]
     fn var_assignment() {
         let input = "@startuml\n!$name = \"World\"\nAlice -> $name : hi\n@enduml";
-        let lines = preprocess(input);
+        let lines = pp(input);
         assert_eq!(lines, vec!["Alice -> World : hi"]);
     }
 
     #[test]
     fn ifdef_defined() {
         let input = "@startuml\n!define FEATURE\n!ifdef FEATURE\nAlice -> Bob\n!endif\n@enduml";
-        let lines = preprocess(input);
+        let lines = pp(input);
         assert_eq!(lines, vec!["Alice -> Bob"]);
     }
 
     #[test]
     fn ifdef_not_defined() {
         let input = "@startuml\n!ifdef FEATURE\nAlice -> Bob\n!endif\n@enduml";
-        let lines = preprocess(input);
+        let lines = pp(input);
         assert!(lines.is_empty());
     }
 
     #[test]
     fn ifndef() {
         let input = "@startuml\n!ifndef FEATURE\nAlice -> Bob\n!endif\n@enduml";
-        let lines = preprocess(input);
+        let lines = pp(input);
         assert_eq!(lines, vec!["Alice -> Bob"]);
     }
 
     #[test]
     fn if_else() {
         let input = "@startuml\n!define MODE prod\n!if $MODE == \"prod\"\nA -> B : production\n!else\nA -> B : dev\n!endif\n@enduml";
-        let lines = preprocess(input);
+        let lines = pp(input);
         assert_eq!(lines, vec!["A -> B : production"]);
     }
 
     #[test]
     fn if_else_false_branch() {
         let input = "@startuml\n!define MODE dev\n!if $MODE == \"prod\"\nA -> B : production\n!else\nA -> B : dev\n!endif\n@enduml";
-        let lines = preprocess(input);
+        let lines = pp(input);
         assert_eq!(lines, vec!["A -> B : dev"]);
     }
 
@@ -2908,14 +2952,14 @@ mod tests {
     #[test]
     fn inline_comment() {
         let input = "@startuml\nAlice -> Bob : hello ' with comment\n@enduml";
-        let lines = preprocess(input);
+        let lines = pp(input);
         assert_eq!(lines, vec!["Alice -> Bob : hello "]);
     }
 
     #[test]
     fn undef() {
         let input = "@startuml\n!define X yes\n!ifdef X\nA -> B\n!endif\n!undef X\n!ifdef X\nC -> D\n!endif\n@enduml";
-        let lines = preprocess(input);
+        let lines = pp(input);
         assert_eq!(lines, vec!["A -> B"]);
     }
 
@@ -2923,28 +2967,28 @@ mod tests {
     fn nested_conditionals() {
         let input =
             "@startuml\n!define A\n!define B\n!ifdef A\n!ifdef B\ndeep\n!endif\n!endif\n@enduml";
-        let lines = preprocess(input);
+        let lines = pp(input);
         assert_eq!(lines, vec!["deep"]);
     }
 
     #[test]
     fn nested_conditional_outer_false() {
         let input = "@startuml\n!ifdef MISSING\n!ifdef ALSO_MISSING\nnope\n!endif\n!endif\n@enduml";
-        let lines = preprocess(input);
+        let lines = pp(input);
         assert!(lines.is_empty());
     }
 
     #[test]
     fn multiple_vars() {
         let input = "@startuml\n!define FROM Alice\n!define TO Bob\n!define MSG hello\n$FROM -> $TO : $MSG\n@enduml";
-        let lines = preprocess(input);
+        let lines = pp(input);
         assert_eq!(lines, vec!["Alice -> Bob : hello"]);
     }
 
     #[test]
     fn empty_define() {
         let input = "@startuml\n!define FEATURE\n!ifdef FEATURE\nyes\n!endif\n@enduml";
-        let lines = preprocess(input);
+        let lines = pp(input);
         assert_eq!(lines, vec!["yes"]);
     }
 
@@ -2964,7 +3008,7 @@ mod tests {
     #[test]
     fn include_missing_file_is_silent() {
         let input = "@startuml\n!include nonexistent.puml\nA -> B\n@enduml";
-        let lines = preprocess(input);
+        let lines = pp(input);
         assert_eq!(lines, vec!["A -> B"]);
     }
 
@@ -2984,7 +3028,7 @@ mod tests {
     #[test]
     fn foreach_basic() {
         let input = "@startuml\n!foreach $name in [\"Alice\", \"Bob\", \"Charlie\"]\nparticipant $name\n!endfor\n@enduml";
-        let lines = preprocess(input);
+        let lines = pp(input);
         assert_eq!(
             lines,
             vec![
@@ -2998,56 +3042,56 @@ mod tests {
     #[test]
     fn foreach_with_message() {
         let input = "@startuml\n!foreach $x in [\"a\", \"b\"]\nAlice -> Bob : $x\n!endfor\n@enduml";
-        let lines = preprocess(input);
+        let lines = pp(input);
         assert_eq!(lines, vec!["Alice -> Bob : a", "Alice -> Bob : b"]);
     }
 
     #[test]
     fn foreach_preserves_other_vars() {
         let input = "@startuml\n!define WHO Alice\n!foreach $x in [\"hello\", \"world\"]\n$WHO -> Bob : $x\n!endfor\n@enduml";
-        let lines = preprocess(input);
+        let lines = pp(input);
         assert_eq!(lines, vec!["Alice -> Bob : hello", "Alice -> Bob : world"]);
     }
 
     #[test]
     fn foreach_endforeach() {
         let input = "@startuml\n!foreach $x in [\"a\"]\nline $x\n!endforeach\n@enduml";
-        let lines = preprocess(input);
+        let lines = pp(input);
         assert_eq!(lines, vec!["line a"]);
     }
 
     #[test]
     fn function_basic() {
         let input = "@startuml\n!function $greet($name)\nAlice -> $name : hello\n!endfunction\n$greet(\"Bob\")\n@enduml";
-        let lines = preprocess(input);
+        let lines = pp(input);
         assert_eq!(lines, vec!["Alice -> Bob : hello"]);
     }
 
     #[test]
     fn function_multiple_params() {
         let input = "@startuml\n!function $msg($from, $to, $text)\n$from -> $to : $text\n!endfunction\n$msg(\"Alice\", \"Bob\", \"hi\")\n@enduml";
-        let lines = preprocess(input);
+        let lines = pp(input);
         assert_eq!(lines, vec!["Alice -> Bob : hi"]);
     }
 
     #[test]
     fn function_no_params() {
         let input = "@startuml\n!function $header()\ntitle My Diagram\n!endfunction\n$header()\nAlice -> Bob\n@enduml";
-        let lines = preprocess(input);
+        let lines = pp(input);
         assert_eq!(lines, vec!["title My Diagram", "Alice -> Bob"]);
     }
 
     #[test]
     fn function_called_multiple_times() {
         let input = "@startuml\n!function $arrow($to)\nAlice -> $to : msg\n!endfunction\n$arrow(\"Bob\")\n$arrow(\"Charlie\")\n@enduml";
-        let lines = preprocess(input);
+        let lines = pp(input);
         assert_eq!(lines, vec!["Alice -> Bob : msg", "Alice -> Charlie : msg"]);
     }
 
     #[test]
     fn procedure_syntax() {
         let input = "@startuml\n!procedure $setup($name)\nparticipant $name\n!endprocedure\n$setup(\"Alice\")\n@enduml";
-        let lines = preprocess(input);
+        let lines = pp(input);
         assert_eq!(lines, vec!["participant Alice"]);
     }
 
@@ -3056,42 +3100,42 @@ mod tests {
     #[test]
     fn variable_arithmetic() {
         let input = "@startuml\n!$x = 10\n!$y = 20\n!$sum = $x + $y\nnote : $sum\n@enduml";
-        let lines = preprocess(input);
+        let lines = pp(input);
         assert_eq!(lines, vec!["note : 30"]);
     }
 
     #[test]
     fn while_loop() {
         let input = "@startuml\n!$i = 1\n!while $i <= 3\nline $i\n!$i = $i + 1\n!endwhile\n@enduml";
-        let lines = preprocess(input);
+        let lines = pp(input);
         assert_eq!(lines, vec!["line 1", "line 2", "line 3"]);
     }
 
     #[test]
     fn elseif_branch() {
         let input = "@startuml\n!$x = 2\n!if $x == 1\nfirst\n!elseif $x == 2\nsecond\n!else\nother\n!endif\n@enduml";
-        let lines = preprocess(input);
+        let lines = pp(input);
         assert_eq!(lines, vec!["second"]);
     }
 
     #[test]
     fn pragma_consumed() {
         let input = "@startuml\n!pragma teoz true\nA -> B\n@enduml";
-        let lines = preprocess(input);
+        let lines = pp(input);
         assert_eq!(lines, vec!["A -> B"]);
     }
 
     #[test]
     fn function_return_value() {
         let input = "@startuml\n!function $double($n)\n!return $n * 2\n!endfunction\n!$x = $double(5)\nnote : $x\n@enduml";
-        let lines = preprocess(input);
+        let lines = pp(input);
         assert_eq!(lines, vec!["note : 10"]);
     }
 
     #[test]
     fn numeric_comparison() {
         let input = "@startuml\n!$x = 5\n!if $x > 3\nyes\n!endif\n@enduml";
-        let lines = preprocess(input);
+        let lines = pp(input);
         assert_eq!(lines, vec!["yes"]);
     }
 
@@ -3103,7 +3147,7 @@ mod tests {
     fn includeurl_is_stripped_silently() {
         // !includeurl should consume the line without producing output or error.
         let input = "@startuml\n!includeurl https://example.com/common.puml\nA -> B\n@enduml";
-        let lines = preprocess(input);
+        let lines = pp(input);
         assert_eq!(lines, vec!["A -> B"]);
     }
 
@@ -3111,7 +3155,7 @@ mod tests {
     fn import_is_stripped_silently() {
         // !import is an alias for !includeurl — also silently consumed.
         let input = "@startuml\n!import https://example.com/lib.puml\nA -> B\n@enduml";
-        let lines = preprocess(input);
+        let lines = pp(input);
         assert_eq!(lines, vec!["A -> B"]);
     }
 
@@ -3119,14 +3163,14 @@ mod tests {
     fn dump_memory_no_vars() {
         // With no defines, !dump_memory emits an empty dump comment.
         let input = "@startuml\n!dump_memory\nA -> B\n@enduml";
-        let lines = preprocess(input);
+        let lines = pp(input);
         assert_eq!(lines, vec!["' [dump] ", "A -> B"]);
     }
 
     #[test]
     fn dump_memory_with_vars() {
         let input = "@startuml\n!$foo = \"bar\"\n!$baz = \"qux\"\n!dump_memory\n@enduml";
-        let lines = preprocess(input);
+        let lines = pp(input);
         // Output must contain the dump comment. Variable order is sorted.
         assert_eq!(lines.len(), 1);
         let dump = &lines[0];
@@ -3139,7 +3183,7 @@ mod tests {
     fn dump_memory_inactive_branch() {
         // !dump_memory inside an inactive branch should produce no output.
         let input = "@startuml\n!ifdef MISSING\n!dump_memory\n!endif\nA -> B\n@enduml";
-        let lines = preprocess(input);
+        let lines = pp(input);
         assert_eq!(lines, vec!["A -> B"]);
     }
 
@@ -3150,42 +3194,42 @@ mod tests {
     #[test]
     fn builtin_float() {
         let input = "@startuml\n!$v = %float(\"3.14\")\nnote : $v\n@enduml";
-        let lines = preprocess(input);
+        let lines = pp(input);
         assert_eq!(lines, vec!["note : 3.14"]);
     }
 
     #[test]
     fn builtin_float_integer_string() {
         let input = "@startuml\n!$v = %float(\"42\")\nnote : $v\n@enduml";
-        let lines = preprocess(input);
+        let lines = pp(input);
         assert_eq!(lines, vec!["note : 42"]);
     }
 
     #[test]
     fn builtin_dec2hex() {
         let input = "@startuml\n!$h = %dec2hex(255)\nnote : $h\n@enduml";
-        let lines = preprocess(input);
+        let lines = pp(input);
         assert_eq!(lines, vec!["note : ff"]);
     }
 
     #[test]
     fn builtin_dec2hex_zero() {
         let input = "@startuml\n!$h = %dec2hex(0)\nnote : $h\n@enduml";
-        let lines = preprocess(input);
+        let lines = pp(input);
         assert_eq!(lines, vec!["note : 0"]);
     }
 
     #[test]
     fn builtin_hex2dec() {
         let input = "@startuml\n!$d = %hex2dec(\"ff\")\nnote : $d\n@enduml";
-        let lines = preprocess(input);
+        let lines = pp(input);
         assert_eq!(lines, vec!["note : 255"]);
     }
 
     #[test]
     fn builtin_hex2dec_zero() {
         let input = "@startuml\n!$d = %hex2dec(\"0\")\nnote : $d\n@enduml";
-        let lines = preprocess(input);
+        let lines = pp(input);
         assert_eq!(lines, vec!["note : 0"]);
     }
 
@@ -3193,7 +3237,7 @@ mod tests {
     fn builtin_dirpath_no_base() {
         // Without a base dir, %dirpath() returns ".".
         let input = "@startuml\n!$p = %dirpath()\nnote : $p\n@enduml";
-        let lines = preprocess(input);
+        let lines = pp(input);
         assert_eq!(lines, vec!["note : ."]);
     }
 
@@ -3202,7 +3246,10 @@ mod tests {
         let dir = std::env::temp_dir().join("rustuml_test_dirpath");
         let _ = std::fs::create_dir_all(&dir);
         let input = "@startuml\n!$p = %dirpath()\nnote : $p\n@enduml";
-        let lines = preprocess_with_base(input, &dir);
+        let lines: Vec<String> = preprocess_with_base(input, &dir)
+            .into_iter()
+            .filter(|l| !l.is_empty())
+            .collect();
         assert_eq!(lines, vec![format!("note : {}", dir.display())]);
         let _ = std::fs::remove_dir_all(&dir);
     }
@@ -3211,7 +3258,7 @@ mod tests {
     fn builtin_feature_returns_false() {
         // All features are unsupported; always returns "false".
         let input = "@startuml\n!$f = %feature(\"dark-mode\")\nnote : $f\n@enduml";
-        let lines = preprocess(input);
+        let lines = pp(input);
         assert_eq!(lines, vec!["note : false"]);
     }
 
@@ -3219,7 +3266,7 @@ mod tests {
     fn builtin_feature_in_conditional() {
         // %feature() returning "false" means the ifdef branch is inactive.
         let input = "@startuml\n!if %feature(\"dark-mode\") == \"true\"\ndark\n!else\nlight\n!endif\n@enduml";
-        let lines = preprocess(input);
+        let lines = pp(input);
         assert_eq!(lines, vec!["light"]);
     }
 
@@ -3284,7 +3331,7 @@ mod tests {
         stdlib::set_stdlib_override(Some(dir.clone()));
 
         let input = "@startuml\n!include <C4/C4_Context>\n!ifdef C4_CONTEXT_LOADED\nloaded\n!endif\n@enduml";
-        let lines = preprocess(input);
+        let lines = pp(input);
         assert_eq!(lines, vec!["loaded"]);
 
         stdlib::set_stdlib_override(None);
@@ -3302,7 +3349,7 @@ mod tests {
         stdlib::set_stdlib_override(Some(dir.clone()));
 
         let input = "@startuml\n!include <nonexistent/Lib>\nA -> B\n@enduml";
-        let lines = preprocess(input);
+        let lines = pp(input);
         assert_eq!(lines, vec!["A -> B"]);
 
         stdlib::set_stdlib_override(None);
@@ -3335,7 +3382,7 @@ mod tests {
         stdlib::set_stdlib_override(Some(dir.clone()));
 
         let input = "@startuml\n!include <lib/common.iuml>\n@enduml";
-        let lines = preprocess(input);
+        let lines = pp(input);
         assert_eq!(lines, vec!["participant StdLib"]);
 
         stdlib::set_stdlib_override(None);
