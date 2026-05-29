@@ -2088,6 +2088,26 @@ fn render_entity_content(
                 )
                 .unwrap();
 
+                // An explicit `==` divider draws as a double rule: a second
+                // parallel line 2px below the first. The oracle records both
+                // y-values, so consume the next one (falling back to +2).
+                if user_separator_symbol.as_deref() == Some("==") {
+                    let second_y = oracle_sep_y
+                        .get(2 + inline_field_separators.len())
+                        .copied()
+                        .unwrap_or(methods_sep_y + 2.0);
+                    write!(
+                        svg,
+                        r#"<line style="{}" x1="{}" x2="{}" y1="{}" y2="{}"/>"#,
+                        methods_sep_style,
+                        fmt4(sep_x1),
+                        fmt4(sep_x2),
+                        fmt_tl(second_y),
+                        fmt_tl(second_y),
+                    )
+                    .unwrap();
+                }
+
                 // Method members (text_y index continues after header + fields).
                 let method_text_offset = text_header_count + fields.len();
                 let mut method_y = methods_sep_y + FIRST_MEMBER_OFFSET;
