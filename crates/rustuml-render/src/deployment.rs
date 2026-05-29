@@ -241,12 +241,28 @@ fn render_oracle(diagram: &DeploymentDiagram, _theme: &Theme, oracle: &OracleLay
             &skin_strokes,
         );
     }
+    // Leaf-entity emission order. With no connections PlantUML keeps the
+    // natural source-order (pre-order DFS) traversal. Once connections are
+    // present its layout reorders leaves by ascending nesting depth (a
+    // cluster's direct leaf children before any deeper-nested leaves), with
+    // root-level (depth-0) leaves emitted last; within a depth, source line.
+    let mut leaves: Vec<(usize, usize, &DeploymentNode, String)> = Vec::new();
     for root in &roots {
-        emit_entities_dfs(
+        collect_entities_dfs(root, &diagram.nodes, None, 0, &mut leaves);
+    }
+    if !diagram.connections.is_empty() {
+        leaves.sort_by(|a, b| {
+            // depth 0 (root leaves) sort last; otherwise ascending depth.
+            let ka = (a.0 == 0, a.0, a.1);
+            let kb = (b.0 == 0, b.0, b.1);
+            ka.cmp(&kb)
+        });
+    }
+    for (_, _, node, qname) in &leaves {
+        emit_entity(
             &mut svg,
-            root,
-            &diagram.nodes,
-            None,
+            node,
+            qname,
             oracle,
             &id_for_node,
             &skin_fills,
@@ -484,86 +500,88 @@ fn emit_clusters_dfs(
     }
 }
 
-#[allow(clippy::too_many_arguments)]
-fn emit_entities_dfs(
+/// Walk the node tree depth-first, collecting leaf entities together with
+/// their nesting depth and computed qualified name. PlantUML emits these
+/// ordered by depth (shallowest first), then by source line.
+fn collect_entities_dfs<'a>(
+    node: &'a DeploymentNode,
+    all: &'a [DeploymentNode],
+    parent_qname: Option<&str>,
+    depth: usize,
+    out: &mut Vec<(usize, usize, &'a DeploymentNode, String)>,
+) {
+    let qname = qualified_name(node, parent_qname);
+    let is_cluster = !node.children.is_empty();
+    if !is_cluster {
+        out.push((depth, node.source_line, node, qname));
+    } else {
+        for child_id in &node.children {
+            if let Some(child) = all.iter().find(|n| n.id == *child_id) {
+                collect_entities_dfs(child, all, Some(&qname), depth + 1, out);
+            }
+        }
+    }
+}
+
+fn emit_entity(
     svg: &mut SvgBuilder,
     node: &DeploymentNode,
-    all: &[DeploymentNode],
-    parent_qname: Option<&str>,
+    qname: &str,
     oracle: &OracleLayout,
     id_for_node: &HashMap<String, String>,
     skin_fills: &HashMap<DeploymentNodeKind, String>,
     skin_strokes: &HashMap<DeploymentNodeKind, String>,
 ) {
-    let qname = qualified_name(node, parent_qname);
-    let is_cluster = !node.children.is_empty();
-    if !is_cluster {
-        let ent_id = id_for_node.get(&node.id).cloned().unwrap_or_default();
-        let rect = oracle
-            .entities
-            .get(&qname)
-            .or_else(|| oracle.entities.get(&node.id))
-            .or_else(|| oracle.entities.get(&node.label));
-        if let Some(rect) = rect {
-            svg.raw(&format!("<!--entity {}-->", node.label));
-            svg.raw(&format!(
-                r#"<g class="entity" data-qualified-name="{qname}" data-source-line="{sl}" id="{ent_id}">"#,
-                sl = node.source_line,
-            ));
-            // Fill precedence: explicit `#color` > `skinparam <kind>
-            // BackgroundColor` > the `#F1F1F1` default.
-            let entity_fill = node
-                .color
-                .as_deref()
-                .map(resolve_fill)
-                .or_else(|| skin_fills.get(&node.kind).cloned())
-                .unwrap_or_else(|| FILL.to_string());
-            let stroke = skin_strokes
-                .get(&node.kind)
-                .map(String::as_str)
-                .unwrap_or(STROKE);
-            // Sequence-style icon shapes (boundary/control/entity) are drawn
-            // from an ellipse-anchored EntityRect; their decorations and label
-            // sit at fixed offsets from the icon centre, so they render their
-            // own shape + label together rather than via the generic path.
-            use DeploymentNodeKind::*;
-            if matches!(node.kind, Boundary | Control | Entity) {
-                emit_icon_entity(svg, node, rect, &entity_fill);
-            } else if matches!(node.kind, Collections) {
-                emit_collections_entity(svg, node, rect, &entity_fill);
-            } else if matches!(node.kind, Cloud) {
-                emit_cloud_entity(svg, node, rect, &entity_fill);
-            } else {
-                emit_entity_shape(
-                    svg,
-                    node.kind,
-                    rect.x,
-                    rect.y,
-                    rect.width,
-                    rect.height,
-                    &entity_fill,
-                    stroke,
-                    &node.label,
-                );
-                emit_entity_label(svg, node.kind, node, rect.x, rect.y, rect.width);
-            }
-            svg.raw("</g>");
+    let ent_id = id_for_node.get(&node.id).cloned().unwrap_or_default();
+    let rect = oracle
+        .entities
+        .get(qname)
+        .or_else(|| oracle.entities.get(&node.id))
+        .or_else(|| oracle.entities.get(&node.label));
+    if let Some(rect) = rect {
+        svg.raw(&format!("<!--entity {}-->", node.label));
+        svg.raw(&format!(
+            r#"<g class="entity" data-qualified-name="{qname}" data-source-line="{sl}" id="{ent_id}">"#,
+            sl = node.source_line,
+        ));
+        // Fill precedence: explicit `#color` > `skinparam <kind>
+        // BackgroundColor` > the `#F1F1F1` default.
+        let entity_fill = node
+            .color
+            .as_deref()
+            .map(resolve_fill)
+            .or_else(|| skin_fills.get(&node.kind).cloned())
+            .unwrap_or_else(|| FILL.to_string());
+        let stroke = skin_strokes
+            .get(&node.kind)
+            .map(String::as_str)
+            .unwrap_or(STROKE);
+        // Sequence-style icon shapes (boundary/control/entity) are drawn
+        // from an ellipse-anchored EntityRect; their decorations and label
+        // sit at fixed offsets from the icon centre, so they render their
+        // own shape + label together rather than via the generic path.
+        use DeploymentNodeKind::*;
+        if matches!(node.kind, Boundary | Control | Entity) {
+            emit_icon_entity(svg, node, rect, &entity_fill);
+        } else if matches!(node.kind, Collections) {
+            emit_collections_entity(svg, node, rect, &entity_fill);
+        } else if matches!(node.kind, Cloud) {
+            emit_cloud_entity(svg, node, rect, &entity_fill);
+        } else {
+            emit_entity_shape(
+                svg,
+                node.kind,
+                rect.x,
+                rect.y,
+                rect.width,
+                rect.height,
+                &entity_fill,
+                stroke,
+                &node.label,
+            );
+            emit_entity_label(svg, node.kind, node, rect.x, rect.y, rect.width);
         }
-    } else {
-        for child_id in &node.children {
-            if let Some(child) = all.iter().find(|n| n.id == *child_id) {
-                emit_entities_dfs(
-                    svg,
-                    child,
-                    all,
-                    Some(&qname),
-                    oracle,
-                    id_for_node,
-                    skin_fills,
-                    skin_strokes,
-                );
-            }
-        }
+        svg.raw("</g>");
     }
 }
 
