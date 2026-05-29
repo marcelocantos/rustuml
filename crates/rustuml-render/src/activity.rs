@@ -48,12 +48,7 @@ const FORK_BAR_RX: f64 = 2.5;
 const FORK_BAR_MARGIN: f64 = 14.0; // margin on each side of fork bar
 
 // Switch-specific layout constants (reverse-engineered from golden SVGs).
-const SWITCH_CASE_GAP: f64 = 10.0; // horizontal gap between adjacent case boxes
-// Vertical space below the switch diamond to the case-box tops. The fractional
-// tail is tuned within PlantUML's intermediate-precision window so the case-box
-// top prints as 114.9102 while downstream baselines (action text, centre-branch
-// line split) round identically to the goldens.
-const SWITCH_BELOW_DIAMOND: f64 = 35.91015;
+const SWITCH_CASE_GAP: f64 = 10.0; // horizontal gap between adjacent SMALL-mode case boxes
 // Case-label baseline offsets above the case-box top, per connection type.
 const SWITCH_LABEL_OUTER_DY: f64 = 19.7979; // outermost branches (via diamond vertex)
 const SWITCH_LABEL_INNER_DY: f64 = 24.7979; // inner branches (drop from horizontal line)
@@ -805,44 +800,130 @@ fn sequence_width(nodes: &[LayoutNode]) -> f64 {
     nodes.iter().map(node_width).fold(0.0f64, f64::max)
 }
 
-/// Width of one switch case box: the wider of its body content and a 60-px
-/// minimum (matching the if/fork branch minimum).
+/// Width of one switch case box: the tile's own content width (PlantUML
+/// imposes no extra minimum on switch case tiles).
 fn switch_case_width(case: &SwitchCase) -> f64 {
-    sequence_width(&case.body).max(60.0)
+    sequence_width(&case.body)
 }
 
-/// Total horizontal width of the packed switch case-block: the sum of case
-/// widths plus inter-case gaps. For an even number of cases an extra gap is
-/// inserted straddling the centreline (where the diamond/merge column sits).
-fn switch_case_block_width(cases: &[SwitchCase]) -> f64 {
-    if cases.is_empty() {
-        return 60.0;
-    }
-    let sum: f64 = cases.iter().map(switch_case_width).sum();
-    let n = cases.len();
-    let mut gaps = (n.saturating_sub(1)) as f64 * SWITCH_CASE_GAP;
-    if n.is_multiple_of(2) {
-        gaps += SWITCH_CASE_GAP; // extra centreline gap
-    }
-    sum + gaps
+/// PlantUML's `SUPP15` margin used by `FtileSwitchWithDiamonds` in
+/// BIG_DIAMOND mode (the horizontal padding either side of the diamond
+/// column between the first and last case tiles).
+const SWITCH_SUPP15: f64 = 15.0;
+
+/// Faithful port of PlantUML's `FtileSwitchWithDiamonds` horizontal layout.
+///
+/// `centers` holds the per-case spine x relative to the block-left edge,
+/// `block_w` the total packed width, and `diamond_dx` the switch/merge
+/// diamond centre x relative to the same block-left edge (the diagram spine
+/// aligns to this, *not* to the geometric block centre).
+///
+/// PlantUML picks BIG_DIAMOND vs SMALL_DIAMOND mode by comparing the spare
+/// horizontal room either side of the diamond (`w13`) against the combined
+/// width of the inner case tiles (`w9`). In BIG mode the diamond is wide
+/// enough that the inner cases are spread evenly under it; in SMALL mode the
+/// cases are packed tight and the diamond sits over the geometric centre.
+struct SwitchXLayout {
+    centers: Vec<f64>,
+    block_w: f64,
+    diamond_dx: f64,
+    big_diamond: bool,
 }
 
-/// Branch centre-x positions for switch cases, packed left-to-right from
-/// `block_left` with `SWITCH_CASE_GAP` between boxes and an extra centreline
-/// gap for even case counts.
-fn switch_case_centers(cases: &[SwitchCase], block_left: f64) -> Vec<f64> {
+fn switch_x_layout(cases: &[SwitchCase], condition: &str) -> SwitchXLayout {
     let n = cases.len();
-    let mut centers = Vec::with_capacity(n);
-    let mut bx = block_left;
-    for (i, case) in cases.iter().enumerate() {
-        if n.is_multiple_of(2) && i == n / 2 {
-            bx += SWITCH_CASE_GAP;
+    let widths: Vec<f64> = cases.iter().map(switch_case_width).collect();
+    let diamond_w = diamond_inner_w(condition) + DIAMOND_HALF * 2.0;
+
+    if n == 0 {
+        return SwitchXLayout {
+            centers: Vec::new(),
+            block_w: diamond_w.max(60.0),
+            diamond_dx: diamond_w.max(60.0) / 2.0,
+            big_diamond: false,
+        };
+    }
+    if n == 1 {
+        let w = widths[0];
+        let block_w = w.max(diamond_w);
+        return SwitchXLayout {
+            centers: vec![block_w / 2.0],
+            block_w,
+            diamond_dx: block_w / 2.0,
+            big_diamond: false,
+        };
+    }
+
+    // Simple action tiles are symmetric, so getLeft == getRight == w/2.
+    let w13 = diamond_w - widths[0] / 2.0 - widths[n - 1] / 2.0;
+    let w9: f64 = widths[1..n - 1].iter().sum();
+
+    if w13 > w9 {
+        // BIG_DIAMOND: cases[0] flush left, cases[last] at a fixed offset,
+        // inner cases spread by suppx = (w13 - w9) / (n - 1).
+        let suppx = (w13 - w9) / (n - 1) as f64;
+        let mut centers = vec![0.0f64; n];
+        let mut dx = 0.0;
+        for i in 0..n - 1 {
+            centers[i] = dx + widths[i] / 2.0;
+            dx += widths[i] + suppx;
         }
-        let w = switch_case_width(case);
-        centers.push(bx + w / 2.0);
-        bx += w + SWITCH_CASE_GAP;
+        let dx_last = widths[0] + w13 + SWITCH_SUPP15 + SWITCH_SUPP15;
+        centers[n - 1] = dx_last + widths[n - 1] / 2.0;
+        let block_w = widths[0] + SWITCH_SUPP15 + w13 + SWITCH_SUPP15 + widths[n - 1];
+        // dimTotal.getLeft = tile0.getLeft + SUPP15 + dim1.getLeft.
+        let diamond_dx = widths[0] / 2.0 + SWITCH_SUPP15 + diamond_w / 2.0;
+        SwitchXLayout {
+            centers,
+            block_w,
+            diamond_dx,
+            big_diamond: true,
+        }
+    } else {
+        // SMALL_DIAMOND: cases packed tight with a 10-px gap, plus an extra
+        // 10-px gap straddling the centreline for even case counts (so the
+        // diamond/merge column has room). The diamond sits at the geometric
+        // block centre.
+        let mut centers = vec![0.0f64; n];
+        let mut x = 0.0;
+        for i in 0..n {
+            if n.is_multiple_of(2) && i == n / 2 {
+                x += SWITCH_CASE_GAP;
+            }
+            centers[i] = x + widths[i] / 2.0;
+            x += widths[i] + SWITCH_CASE_GAP;
+        }
+        let block_w = x - SWITCH_CASE_GAP;
+        SwitchXLayout {
+            centers,
+            block_w,
+            diamond_dx: block_w / 2.0,
+            big_diamond: false,
+        }
     }
-    centers
+}
+
+fn switch_case_block_width(cases: &[SwitchCase], condition: &str) -> f64 {
+    switch_x_layout(cases, condition).block_w
+}
+
+/// Maximum case-label line count across all cases (≥1).
+fn switch_label_lines(cases: &[SwitchCase]) -> f64 {
+    cases
+        .iter()
+        .map(|c| c.label.split('\n').count().max(1) as f64)
+        .fold(1.0f64, f64::max)
+}
+
+/// Distance from the switch diamond's *bottom* to the case-box tops, i.e.
+/// PlantUML's `FtileSwitchWithManyLinks.getYdelta1a`. The label band sits
+/// here; its height drives the gap, and BIG_DIAMOND mode adds an extra
+/// `diamondHeight/2`. The single-line bases (35.91015 SMALL, 42.95508 BIG)
+/// are taken from the goldens; each extra label line adds one text line.
+fn switch_below_diamond(cases: &[SwitchCase], big_diamond: bool) -> f64 {
+    let extra = (switch_label_lines(cases) - 1.0) * pm::text_height(SMALL_FONT);
+    let base = if big_diamond { 42.95508 } else { 35.91015 };
+    base + extra
 }
 
 /// Left extent (centreline → leftmost drawn element) of a `while` tile.
@@ -1040,6 +1121,12 @@ fn node_extents(node: &LayoutNode) -> (f64, f64) {
             let right = (title_w / 2.0 + 5.0).max(body_w / 2.0 + 10.0);
             (left, right)
         }
+        // The switch spine aligns to the condition/merge diamond, which in
+        // BIG_DIAMOND mode is offset from the geometric block centre.
+        LayoutNode::Switch { cases, condition } => {
+            let layout = switch_x_layout(cases, condition);
+            (layout.diamond_dx, layout.block_w - layout.diamond_dx)
+        }
         _ => {
             let w = node_width(node);
             (w / 2.0, w / 2.0)
@@ -1155,7 +1242,7 @@ fn node_width(node: &LayoutNode) -> f64 {
             let min_bar_w = FORK_BAR_MARGIN * 2.0 + 80.0;
             bar_w.max(min_bar_w)
         }
-        LayoutNode::Switch { cases, .. } => switch_case_block_width(cases),
+        LayoutNode::Switch { cases, condition } => switch_case_block_width(cases, condition),
         LayoutNode::While { .. } => {
             // Width = left_extent + right_extent. The asymmetric formula lives
             // in node_extents (single source of truth for While geometry).
@@ -1329,7 +1416,7 @@ fn node_height(node: &LayoutNode) -> f64 {
                 .fold(0.0f64, f64::max);
             FORK_BAR_HEIGHT + ARROW_LEN + max_h + ARROW_LEN + FORK_BAR_HEIGHT
         }
-        LayoutNode::Switch { cases, .. } => {
+        LayoutNode::Switch { cases, condition } => {
             let max_h: f64 = cases
                 .iter()
                 .map(|c| sequence_height(&c.body))
@@ -1342,7 +1429,12 @@ fn node_height(node: &LayoutNode) -> f64 {
             } else {
                 ARROW_LEN
             };
-            DIAMOND_HALF * 2.0 + SWITCH_BELOW_DIAMOND + max_h + merge_gap + DIAMOND_HALF * 2.0
+            let big = switch_x_layout(cases, condition).big_diamond;
+            DIAMOND_HALF * 2.0
+                + switch_below_diamond(cases, big)
+                + max_h
+                + merge_gap
+                + DIAMOND_HALF * 2.0
         }
         LayoutNode::While {
             body,
@@ -2731,13 +2823,12 @@ fn emit_switch(
     let diamond_fill = svg.palette.diamond_fill.clone();
     let diamond_stroke_width = svg.palette.diamond_stroke_width.clone();
 
-    // Pack case boxes left-to-right; cx == diamond centre == case-block centre.
-    let block_w = switch_case_block_width(cases);
-    let block_left = cx - block_w / 2.0;
-    let centers = switch_case_centers(cases, block_left);
-    // The diamond (and merge) sit at the case-block centre, which is the
-    // passed-in cx (= MARGIN_LEAD + content_left). For uneven case widths this
-    // differs from the midpoint of the first/last branch centres.
+    // Faithful FtileSwitchWithDiamonds layout. The passed-in cx is the spine,
+    // which aligns to the condition/merge diamond (NOT the block centre); the
+    // block extends asymmetrically around it per the BIG/SMALL diamond model.
+    let layout = switch_x_layout(cases, condition);
+    let block_left = cx - layout.diamond_dx;
+    let centers: Vec<f64> = layout.centers.iter().map(|c| block_left + c).collect();
     let diamond_cx = cx;
 
     // Switch condition diamond (inner edge clamped; text measured).
@@ -2769,7 +2860,7 @@ fn emit_switch(
         false,
     );
 
-    let cases_top = diamond_bottom + SWITCH_BELOW_DIAMOND;
+    let cases_top = diamond_bottom + switch_below_diamond(cases, layout.big_diamond);
 
     // Case bodies (shapes + internal connectors) in source order.
     let mut bottoms = Vec::with_capacity(n);
@@ -2809,6 +2900,14 @@ fn emit_switch(
         order.push(i);
     }
 
+    // The outer-branch label baseline sits slightly lower in BIG_DIAMOND mode
+    // (the wider diamond shifts the label box down by ~1.7 px).
+    let outer_label_dy = if layout.big_diamond {
+        21.5
+    } else {
+        SWITCH_LABEL_OUTER_DY
+    };
+
     // ── Top connections (diamond → cases). ──
     for &i in &order {
         let bcx = centers[i];
@@ -2822,7 +2921,7 @@ fn emit_switch(
                 svg.connector_line(&arrow_color, vertex_x, bcx, diamond_cy, diamond_cy, false);
                 svg.connector_line(&arrow_color, bcx, bcx, diamond_cy, cases_top, false);
                 switch_down_head(svg, &arrow_color, bcx, cases_top);
-                switch_case_label(svg, &cases[i].label, bcx, cases_top - SWITCH_LABEL_OUTER_DY);
+                switch_case_label(svg, &cases[i].label, bcx, cases_top - outer_label_dy);
             }
             SwitchConn::Inner => {
                 svg.connector_line(&arrow_color, bcx, bcx, diamond_cy, cases_top, false);
