@@ -2178,6 +2178,12 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme) -> String {
     // non-`#FFFFFF` `style="...background:...;"`) when `backgroundColor` is set
     // to a non-default value.
     let mut bg_color: Option<String> = None;
+    // Divider (`== ... ==`) styling overrides. Defaults: #EEEEEE fill,
+    // #000000 border and font, 13px font.
+    let mut divider_fill = "#EEEEEE".to_string();
+    let mut divider_border = "#000000".to_string();
+    let mut divider_font_color = "#000000".to_string();
+    let mut divider_font_size: u32 = MSG_FONT_SIZE as u32;
     for sp in &diagram.meta.skinparams {
         let key = sp.key.to_ascii_lowercase();
         let val = sp.value.trim();
@@ -2241,6 +2247,20 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme) -> String {
             }
             "queuebackgroundcolor" | "sequencequeuebackgroundcolor" => {
                 queue_fill_override = Some(resolve_color(val));
+            }
+            "sequencedividerbackgroundcolor" => {
+                divider_fill = resolve_color(val);
+            }
+            "sequencedividerbordercolor" => {
+                divider_border = resolve_color(val);
+            }
+            "sequencedividerfontcolor" => {
+                divider_font_color = resolve_color(val);
+            }
+            "sequencedividerfontsize" => {
+                if let Ok(v) = val.parse::<u32>() {
+                    divider_font_size = v;
+                }
             }
             _ => {}
         }
@@ -3174,6 +3194,16 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme) -> String {
         last.box_x + last.box_width
     };
     // Check if any note extends beyond the last participant box.
+    // Dividers whose label box is wider than the participant span extend the
+    // background strip (and hence the canvas) to box width + 12px each side.
+    let mut max_divider_right: f64 = 0.0;
+    for event in &diagram.events {
+        if let Event::Divider(text) = event {
+            let tw = bold_text_width(text, MSG_FONT_SIZE);
+            let label_box_w = tw + 2.0 * 6.0 + 6.2847;
+            max_divider_right = max_divider_right.max(label_box_w + 24.0);
+        }
+    }
     let mut max_note_right: f64 = 0.0;
     for event in &diagram.events {
         if let Event::Note(note) = event {
@@ -3246,7 +3276,10 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme) -> String {
         } else {
             0.0
         })
-        .max(max_self_msg_right);
+        .max(max_self_msg_right)
+        // A wide divider strip ends at max_divider_right; the canvas adds
+        // RIGHT_MARGIN (10) but the divider only needs +5, so offset by -5.
+        .max(max_divider_right - 5.0);
     // If groups are present, the group frame may extend beyond participant boxes.
     // Compute the maximum right extent of any group frame (header text + guard).
     let mut max_group_right: f64 = 0.0;
@@ -4758,12 +4791,20 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme) -> String {
                 // 3. A label box rect (EEEEEE, bordered)
                 // 4. Bold text inside the label box
                 let tw = bold_text_width(text, MSG_FONT_SIZE);
-                let (line_left, line_right) = if !participants.is_empty() {
+                // Label box dimensions: 6px padding on each side, centered on divider
+                let label_box_w = tw + 2.0 * 6.0 + 6.2847; // PlantUML adds extra padding
+                let participant_span = if !participants.is_empty() {
                     let last = &participants[participants.len() - 1];
-                    (0.0, last.box_x + last.box_width + 5.0)
+                    last.box_x + last.box_width + 5.0
                 } else {
-                    (0.0, 200.0)
+                    200.0
                 };
+                // When the label box is wider than the participant span, the
+                // background strip and lines grow to box width + 12px margin
+                // on each side; otherwise they span the participants. The box
+                // is always centred on the resulting span.
+                let line_left = 0.0;
+                let line_right = participant_span.max(label_box_w + 24.0);
                 let mid_x = (line_left + line_right) / 2.0;
 
                 // Event_y is the text baseline position.
@@ -4771,8 +4812,6 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme) -> String {
                 let line2_y = text_y - 2.9131;
                 let line1_y = line2_y - 3.0;
 
-                // Label box dimensions: 6px padding on each side, centered on divider
-                let label_box_w = tw + 2.0 * 6.0 + 6.2847; // PlantUML adds extra padding
                 let label_box_h = 23.3105;
                 let label_box_x = mid_x - label_box_w / 2.0;
                 let label_box_y = line1_y - 10.6553; // Box extends above the lines
@@ -4781,7 +4820,7 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme) -> String {
                 // 1. Background strip rect
                 write!(
                     svg.buf,
-                    r##"<rect fill="#EEEEEE" height="3" style="stroke:#EEEEEE;stroke-width:1;" width="{}" x="{}" y="{}"/>"##,
+                    r##"<rect fill="{divider_fill}" height="3" style="stroke:{divider_fill};stroke-width:1;" width="{}" x="{}" y="{}"/>"##,
                     fmt_coord(line_right - line_left),
                     fmt_coord(line_left),
                     fmt_coord(line1_y),
@@ -4791,7 +4830,7 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme) -> String {
                 // 2. First horizontal line
                 write!(
                     svg.buf,
-                    r##"<line style="stroke:#000000;stroke-width:1;" x1="{}" x2="{}" y1="{}" y2="{}"/>"##,
+                    r##"<line style="stroke:{divider_border};stroke-width:1;" x1="{}" x2="{}" y1="{}" y2="{}"/>"##,
                     fmt_coord(line_left),
                     fmt_coord(line_right),
                     fmt_coord(line1_y),
@@ -4802,7 +4841,7 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme) -> String {
                 // 3. Second horizontal line
                 write!(
                     svg.buf,
-                    r##"<line style="stroke:#000000;stroke-width:1;" x1="{}" x2="{}" y1="{}" y2="{}"/>"##,
+                    r##"<line style="stroke:{divider_border};stroke-width:1;" x1="{}" x2="{}" y1="{}" y2="{}"/>"##,
                     fmt_coord(line_left),
                     fmt_coord(line_right),
                     fmt_coord(line2_y),
@@ -4813,7 +4852,7 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme) -> String {
                 // 4. Label box rect
                 write!(
                     svg.buf,
-                    r##"<rect fill="#EEEEEE" height="{}" style="stroke:#000000;stroke-width:2;" width="{}" x="{}" y="{}"/>"##,
+                    r##"<rect fill="{divider_fill}" height="{}" style="stroke:{divider_border};stroke-width:2;" width="{}" x="{}" y="{}"/>"##,
                     fmt_coord(label_box_h),
                     fmt_coord(label_box_w),
                     fmt_coord(label_box_x),
@@ -4828,9 +4867,9 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme) -> String {
                     &TextBase {
                         x: text_x,
                         y: text_y,
-                        font_size: 13,
+                        font_size: divider_font_size,
                         font_family: "sans-serif",
-                        fill: "#000000",
+                        fill: &divider_font_color,
                         bold: true,
                         italic: false,
                         underline: false,
