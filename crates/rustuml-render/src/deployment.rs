@@ -658,7 +658,7 @@ fn emit_entity_shape(
         Artifact => emit_artifact(svg, x, y, w, h, fill, stroke),
         Card | Rectangle | Agent => emit_rounded_rect(svg, x, y, w, h, fill, stroke),
         Component => emit_component(svg, x, y, w, h, fill, stroke),
-        Frame => emit_frame(svg, x, y, w, h, fill),
+        Frame => emit_frame(svg, x, y, w, h, fill, label),
         Folder => emit_folder(svg, x, y, w, h, fill, stroke),
         File => emit_file(svg, x, y, w, h, fill, stroke),
         Package => emit_package(svg, x, y, w, h, fill, stroke, label),
@@ -894,7 +894,7 @@ fn emit_component(svg: &mut SvgBuilder, x: f64, y: f64, w: f64, h: f64, fill: &s
 
 // ---- Frame (rect + small tab path top-left) -------------------------------
 
-fn emit_frame(svg: &mut SvgBuilder, x: f64, y: f64, w: f64, h: f64, fill: &str) {
+fn emit_frame(svg: &mut SvgBuilder, x: f64, y: f64, w: f64, h: f64, fill: &str, label: &str) {
     svg.raw(&format!(
         r#"<rect fill="{fill}" height="{h}" rx="{RX_RY}" ry="{RX_RY}" style="stroke:{STROKE};stroke-width:0.5;" width="{w}" x="{x}" y="{y}"/>"#,
         h = fc(h),
@@ -902,13 +902,23 @@ fn emit_frame(svg: &mut SvgBuilder, x: f64, y: f64, w: f64, h: f64, fill: &str) 
         x = fc(x),
         y = fc(y),
     ));
-    // Tab path: from a point partway across the top, draw down then bend to the left edge.
-    // For a 1-line label of width 73.6025, the tab path went to x=44.8675 (=7+37.8675),
-    // so tab_w = label_w/2 + 1 ≈ but actually it's roughly half the text width.
-    // From the golden we have: M44.8675,7 L44.8675,12 L37.8675,19 L7,19
-    // So the right edge is at x_label_end + 1 ish? Hard to compute generically.
-    // Approximation: tab_x_right = x + (w/2) - 1, tab corner offset = 7.
-    let _ = (x, y, w);
+    // Tab path in the top-left corner: drop 5px, then a 7px diagonal cut down
+    // to y+12, then back to the left edge. The tab's right edge sits at
+    // x + (label_w + 40) / 3 (derived from goldens).
+    let label_w = text_render::measure(label, FONT_SIZE, false);
+    let right_x = x + (label_w + 40.0) / 3.0;
+    let d = format!(
+        "M{rx},{y_s} L{rx},{y5} L{rx_in},{y12} L{x_s},{y12}",
+        rx = fc(right_x),
+        rx_in = fc(right_x - 7.0),
+        y_s = fc(y),
+        y5 = fc(y + 5.0),
+        y12 = fc(y + 12.0),
+        x_s = fc(x),
+    );
+    svg.raw(&format!(
+        r#"<path d="{d}" fill="none" style="stroke:{STROKE};stroke-width:0.5;"/>"#
+    ));
 }
 
 // ---- Frame cluster --------------------------------------------------------
