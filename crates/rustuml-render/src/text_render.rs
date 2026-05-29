@@ -194,16 +194,43 @@ fn emit_segments(buf: &mut String, segments: &[Segment], base: &TextBase<'_>) ->
         // Nothing to emit. Still produce an empty <text> with zero width so
         // surrounding layout stays consistent — matches PlantUML behaviour
         // for empty labels.
-        write_text_element(buf, "", base, &Style::default(), base.x, 0.0);
+        write_text_element(
+            buf,
+            "",
+            base,
+            &Style::default(),
+            base.x,
+            0.0,
+            base.font_size,
+        );
         return 0.0;
     }
+
+    // When a line mixes font sizes, PlantUML bottom-aligns the runs: each
+    // run's baseline sits `descent(maxSize) - descent(ownSize)` below the
+    // line baseline of the largest run, so all descenders share a line
+    // bottom. The largest run (and every run on a single-size line) gets a
+    // zero offset, so single-size lines are unaffected.
+    let line_max_size = segments
+        .iter()
+        .map(|s| s.style.size.unwrap_or(base.font_size))
+        .max()
+        .unwrap_or(base.font_size);
 
     let mut x = base.x;
     let mut total = 0.0;
     for seg in segments {
         let full_w = segment_width(seg, base);
         let (lead_w, trimmed_text, trimmed_w) = trim_segment_for_emit(seg, base);
-        write_text_element(buf, &trimmed_text, base, &seg.style, x + lead_w, trimmed_w);
+        write_text_element(
+            buf,
+            &trimmed_text,
+            base,
+            &seg.style,
+            x + lead_w,
+            trimmed_w,
+            line_max_size,
+        );
         x += full_w;
         total += full_w;
     }
@@ -488,6 +515,7 @@ fn write_text_element(
     style: &Style,
     x: f64,
     width: f64,
+    line_max_size: u32,
 ) {
     let bold = base.bold || style.bold;
     let italic = base.italic || style.italic;
@@ -510,18 +538,22 @@ fn write_text_element(
     // sits descent_diff above the line bottom, so the y attribute must
     // compensate). PlantUML does NOT emit `baseline-shift`; it emits a
     // plain <text> with a smaller font-size at a shifted y.
+    // Mixed-size lines bottom-align their runs: a run smaller than the
+    // line's largest run drops by the difference of their descents so the
+    // descenders share a line bottom. Zero when this run is the largest.
+    let line_descent_diff = pm::descent(line_max_size as f64) - pm::descent(nominal_size as f64);
     let (font_size, y_offset) = match style.baseline_shift {
         Some("sub") => {
             let small = (nominal_size as i32 - 3).max(2) as u32;
             let descent_diff = pm::descent(nominal_size as f64) - pm::descent(small as f64);
-            (small, 3.0 + descent_diff)
+            (small, 3.0 + descent_diff + line_descent_diff)
         }
         Some("super") => {
             let small = (nominal_size as i32 - 3).max(2) as u32;
             let descent_diff = pm::descent(nominal_size as f64) - pm::descent(small as f64);
-            (small, -6.0 + descent_diff)
+            (small, -6.0 + descent_diff + line_descent_diff)
         }
-        _ => (nominal_size, 0.0),
+        _ => (nominal_size, line_descent_diff),
     };
     let raw_fill = style.fill.as_deref().unwrap_or(base.fill);
     let fill = normalize_color(raw_fill);
@@ -573,12 +605,24 @@ fn write_text_element(
         )
         .unwrap();
     }
+    // PlantUML rounds each run's baseline from the unrounded line baseline,
+    // but the oracle hands us `base.y` already rounded to 4 decimals. Adding
+    // the exact descent offset to that rounded value double-rounds. The true
+    // baseline is a multiple of 1/128 (a sum of dyadic ascent/descent terms),
+    // so snap back to that grid before applying a non-zero line offset to
+    // reproduce PlantUML's single-rounding. Single-size lines have a zero
+    // offset and are left untouched.
+    let effective_y = if y_offset != 0.0 {
+        (base.y * 128.0).round() / 128.0 + y_offset
+    } else {
+        base.y + y_offset
+    };
     write!(
         buf,
         r#"<text fill="{fill}"{filter_attr} font-family="{font_family}" font-size="{font_size}"{style_attr}{weight_attr} lengthAdjust="spacing"{text_decoration} textLength="{tl}" x="{x_s}" y="{y_s}">{content}</text>"#,
         tl = pm::fmt_coord(width),
         x_s = pm::fmt_coord(x),
-        y_s = pm::fmt_coord(base.y + y_offset),
+        y_s = pm::fmt_coord(effective_y),
     )
     .unwrap();
     if style.link_url.is_some() {
