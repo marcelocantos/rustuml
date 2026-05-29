@@ -1141,7 +1141,7 @@ fn render_plantuml_svg(
     for (i, entity) in diagram.entities.iter().enumerate() {
         let (x, y) = entity_positions[i];
         let dim = &dims[i];
-        let current_ent_id = format!("ent{:04}", ent_id);
+        let seq_ent_id = format!("ent{:04}", ent_id);
         ent_id += 1;
 
         // Compute qualified name by joining all containing package names
@@ -1175,6 +1175,16 @@ fn render_plantuml_svg(
                 .or_else(|| orc.entities.get(&entity.label))
                 .or_else(|| orc.entities.get(&entity.id))
         });
+
+        // Prefer the oracle's verbatim entity id. PlantUML's `ent000N`
+        // counter is not a clean source-order sequence: interface targets of
+        // realization edges and other entities can claim ids out of step with
+        // our left-to-right entity walk, so reconstructing the counter
+        // ourselves drifts. Consume the captured id like other verbatim oracle
+        // data, falling back to the sequential counter when absent.
+        let current_ent_id = oracle_rect
+            .and_then(|r| r.entity_id.clone())
+            .unwrap_or(seq_ent_id);
 
         // HTML comment before entity.
         write!(svg, "<!--class {}-->", entity.label).unwrap();
