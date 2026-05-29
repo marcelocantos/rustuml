@@ -159,6 +159,11 @@ pub struct Note {
     /// Optional background color (e.g., "#blue", "#FEFFDD").
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub color: Option<String>,
+    /// True when this note was attached to the preceding message via a bare
+    /// `note left` / `note right` (no participant). Such notes straddle the
+    /// message's arrow band rather than consuming their own vertical row.
+    #[serde(default, skip_serializing_if = "std::ops::Not::not")]
+    pub on_message: bool,
     /// 1-based line number within the `@startuml` block.
     #[serde(default)]
     pub source_line: usize,

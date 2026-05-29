@@ -632,6 +632,7 @@ mod tests {
                     text: "a note".to_string(),
                     shape: NoteShape::Note,
                     color: None,
+                    on_message: false,
                     source_line: 0,
                 }),
             ],

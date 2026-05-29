@@ -384,6 +384,14 @@ const NOTE_TEXT_LINE_SPACING: f64 = MSG_TEXT_HEIGHT; // 15.310546875
 const NOTE_GAP_AFTER_MSG: f64 = 13.0;
 /// Gap between lifeline top and note top (first event).
 const NOTE_GAP_FIRST: f64 = 15.0;
+/// Vertical offset from a message-attached note's top edge to the message
+/// arrow line (single-line note). The note straddles the arrow band:
+/// arrow_y = note_top + this + (lines-1) * MSG_TEXT_HEIGHT/2.
+const NOTE_MSG_ARROW_OFFSET: f64 = MSG_TEXT_HEIGHT + ARROW_HALF_H; // 19.3105
+/// Extra vertical space a single-line message-attached note adds both above
+/// (pushing its message arrow down) and below (pushing the next event down).
+/// Each additional note line adds MSG_TEXT_HEIGHT/2 to each side.
+const NOTE_MSG_EXTRA_BASE: f64 = 3.0;
 /// Note fill color.
 const NOTE_FILL: &str = "#FEFFDD";
 /// Gap from participant lifeline to note edge for left/right notes.
@@ -2572,11 +2580,19 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme) -> String {
     let mut min_first_center_x: f64 = 0.0;
     for event in &diagram.events {
         if let Event::Note(note) = event {
-            let first_part = note
-                .participants
-                .first()
-                .and_then(|id| id_to_idx.get(id.as_str()))
-                .copied();
+            // A message-attached Left note anchors to the leftmost endpoint by
+            // index; otherwise the first listed participant.
+            let first_part = if note.on_message && note.position == NotePosition::Left {
+                note.participants
+                    .iter()
+                    .filter_map(|id| id_to_idx.get(id.as_str()).copied())
+                    .min()
+            } else {
+                note.participants
+                    .first()
+                    .and_then(|id| id_to_idx.get(id.as_str()))
+                    .copied()
+            };
             match note.position {
                 NotePosition::Over if note.participants.len() == 1 && first_part == Some(0) => {
                     let max_tw = note
@@ -2782,6 +2798,33 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme) -> String {
         .fold(HEAD_BOX_H, f64::max);
     let lifeline_top = head_box_y + max_box_h + LIFELINE_Y_OFFSET;
 
+    // Pre-scan: a bare `note left` / `note right` attached to a message
+    // (Note.on_message) straddles that message's arrow band rather than
+    // consuming its own vertical row. Map each such note event to the
+    // preceding message event it belongs to, and track the maximum note
+    // line-count per owning message (the tile grows for multi-line notes).
+    let mut note_owner: HashMap<usize, usize> = HashMap::new();
+    let mut msg_note_lines: HashMap<usize, usize> = HashMap::new();
+    {
+        let mut last_msg_idx: Option<usize> = None;
+        for (idx, event) in diagram.events.iter().enumerate() {
+            match event {
+                Event::Message(_) | Event::Return(_) | Event::Delay(_) => {
+                    last_msg_idx = Some(idx);
+                }
+                Event::Note(note) if note.on_message => {
+                    if let Some(owner) = last_msg_idx {
+                        note_owner.insert(idx, owner);
+                        let lines = note.text.lines().count().max(1);
+                        let e = msg_note_lines.entry(owner).or_insert(0);
+                        *e = (*e).max(lines);
+                    }
+                }
+                _ => {}
+            }
+        }
+    }
+
     // Pre-compute message y positions. PlantUML sizes each message step
     // dynamically: messages with label text get extra height for the text line.
     // Notes consume vertical space (note height + gap) and count as events
@@ -2806,12 +2849,25 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme) -> String {
             match event {
                 Event::Message(msg) => {
                     let is_self = msg.from == msg.to;
+                    // A message-attached note (bare `note left`/`note right`)
+                    // straddles this message's arrow band. It adds equal extra
+                    // space above (pushing the arrow down) and below (pushing the
+                    // next event down): NOTE_MSG_EXTRA_BASE + (lines-1)*MSG_TEXT_HEIGHT/2.
+                    let note_extra = msg_note_lines.get(&idx).map(|&lines| {
+                        NOTE_MSG_EXTRA_BASE + (lines as f64 - 1.0) * MSG_TEXT_HEIGHT / 2.0
+                    });
                     if msg_count == 0 {
                         y += first_msg_offset(has_text);
                     } else {
                         y += msg_step(has_text);
                     }
+                    if let Some(extra) = note_extra {
+                        y += extra;
+                    }
                     event_y_positions.push(y);
+                    if let Some(extra) = note_extra {
+                        y += extra;
+                    }
                     if is_self {
                         // Self-messages have a loopback that drops below the top line.
                         // The next message's y step starts from the bottom of the loop.
@@ -2825,12 +2881,21 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme) -> String {
                     msg_count += 1;
                 }
                 Event::Return(_) => {
+                    let note_extra = msg_note_lines.get(&idx).map(|&lines| {
+                        NOTE_MSG_EXTRA_BASE + (lines as f64 - 1.0) * MSG_TEXT_HEIGHT / 2.0
+                    });
                     if msg_count == 0 {
                         y += first_msg_offset(has_text);
                     } else {
                         y += msg_step(has_text);
                     }
+                    if let Some(extra) = note_extra {
+                        y += extra;
+                    }
                     event_y_positions.push(y);
+                    if let Some(extra) = note_extra {
+                        y += extra;
+                    }
                     msg_count += 1;
                 }
                 Event::Divider(_) => {
@@ -2862,14 +2927,6 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme) -> String {
                     msg_count += 1;
                 }
                 Event::Note(note) => {
-                    // Notes consume vertical space. The note top is positioned
-                    // relative to the current y cursor. After the note, subsequent
-                    // events use msg_step (note counts as an event).
-                    let note_top = if msg_count == 0 {
-                        y + NOTE_GAP_FIRST
-                    } else {
-                        y + NOTE_GAP_AFTER_MSG
-                    };
                     let num_lines = note.text.lines().count().max(1);
                     // hnote/rnote have a smaller base height (23 vs 25), reducing
                     // the vertical space consumed by 2px.
@@ -2877,10 +2934,37 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme) -> String {
                         NoteShape::Note => 7.0,
                         NoteShape::Hexagonal | NoteShape::Rectangular => 5.0,
                     };
-                    let note_event_y = note_top + note_y_extra + num_lines as f64 * MSG_TEXT_HEIGHT;
-                    y = note_event_y;
-                    event_y_positions.push(y);
-                    msg_count += 1; // note counts as an event for spacing
+                    if let Some(&owner) = note_owner.get(&idx) {
+                        // Message-attached note: it straddles the owning message's
+                        // arrow band and does NOT consume its own vertical row
+                        // (the owning message already reserved the extra space).
+                        // Position note_top so the arrow sits at
+                        // note_top + NOTE_MSG_ARROW_OFFSET + (lines-1)*MSG_TEXT_HEIGHT/2.
+                        let arrow_y = event_y_positions.get(owner).copied().unwrap_or(y);
+                        let note_top = arrow_y
+                            - NOTE_MSG_ARROW_OFFSET
+                            - (num_lines as f64 - 1.0) * MSG_TEXT_HEIGHT / 2.0;
+                        // The draw site derives note_top from event_y via
+                        // note_top = event_y - note_y_extra - num_lines*MSG_TEXT_HEIGHT.
+                        let note_event_y =
+                            note_top + note_y_extra + num_lines as f64 * MSG_TEXT_HEIGHT;
+                        event_y_positions.push(note_event_y);
+                        // Do not advance y or increment msg_count.
+                    } else {
+                        // Standalone note: consumes vertical space. The note top is
+                        // positioned relative to the current y cursor. After the
+                        // note, subsequent events use msg_step (note counts as an event).
+                        let note_top = if msg_count == 0 {
+                            y + NOTE_GAP_FIRST
+                        } else {
+                            y + NOTE_GAP_AFTER_MSG
+                        };
+                        let note_event_y =
+                            note_top + note_y_extra + num_lines as f64 * MSG_TEXT_HEIGHT;
+                        y = note_event_y;
+                        event_y_positions.push(y);
+                        msg_count += 1; // note counts as an event for spacing
+                    }
                 }
                 Event::GroupStart(_) => {
                     // Group frame top is offset from the preceding message.
@@ -2963,11 +3047,27 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme) -> String {
             let note_content_w = note_content_width(max_line_width, note.shape);
             match note.position {
                 NotePosition::Right => {
-                    if let Some(first) = note.participants.first()
-                        && let Some(&idx) = id_to_idx.get(first.as_str())
-                    {
-                        let ll_x = participants[idx].lifeline_line_x;
-                        let note_right = ll_x.ceil() + NOTE_LIFELINE_GAP + note_content_w;
+                    // A message-attached note anchors to the rightmost endpoint.
+                    let anchor_x = if note.on_message {
+                        note.participants
+                            .iter()
+                            .filter_map(|id| id_to_idx.get(id.as_str()))
+                            .map(|&i| participants[i].lifeline_line_x)
+                            .fold(f64::MIN, f64::max)
+                    } else {
+                        note.participants
+                            .first()
+                            .and_then(|id| id_to_idx.get(id.as_str()))
+                            .map(|&i| participants[i].lifeline_line_x)
+                            .unwrap_or(f64::MIN)
+                    };
+                    if anchor_x != f64::MIN {
+                        let mut note_right = anchor_x.ceil() + NOTE_LIFELINE_GAP + note_content_w;
+                        // A message-attached note sits inside a message tile, which
+                        // reserves an extra NOTE_LIFELINE_GAP of right margin.
+                        if note.on_message {
+                            note_right += NOTE_LIFELINE_GAP;
+                        }
                         max_note_right = max_note_right.max(note_right);
                     }
                 }
@@ -4564,6 +4664,11 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme) -> String {
                 // y position already accounted for in event_y_positions
             }
             Event::Note(note) => {
+                // A message-attached note occupies an arrow-id slot in PlantUML's
+                // global tile counter, so the following message's id skips ahead.
+                if note.on_message {
+                    msg_id += 1;
+                }
                 // Compute note dimensions and position.
                 let lines: Vec<&str> = note.text.lines().collect();
                 let num_lines = lines.len().max(1);
@@ -4585,25 +4690,35 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme) -> String {
                     .fold(0.0_f64, f64::max);
                 let note_content_w = note_content_width(max_text_w, note.shape);
 
-                // Compute note left/right based on position.
+                // Lifeline x values of the note's anchor participant(s).
+                let anchor_xs: Vec<f64> = note
+                    .participants
+                    .iter()
+                    .filter_map(|id| id_to_idx.get(id.as_str()))
+                    .map(|&i| participants[i].lifeline_line_x)
+                    .collect();
+                // Compute note left/right based on position. A message-attached
+                // note anchors to the leftmost (Left) / rightmost (Right) endpoint
+                // of the message by screen position; a participant note uses its
+                // single anchor.
                 let (note_left, note_right) = match note.position {
                     NotePosition::Right => {
-                        let ll_x = note
-                            .participants
-                            .first()
-                            .and_then(|id| id_to_idx.get(id.as_str()))
-                            .map(|&i| participants[i].lifeline_line_x)
-                            .unwrap_or(50.0);
+                        let ll_x = if note.on_message {
+                            anchor_xs.iter().copied().fold(f64::MIN, f64::max)
+                        } else {
+                            anchor_xs.first().copied().unwrap_or(50.0)
+                        };
+                        let ll_x = if ll_x == f64::MIN { 50.0 } else { ll_x };
                         let left = ll_x.ceil() + NOTE_LIFELINE_GAP;
                         (left, left + note_content_w)
                     }
                     NotePosition::Left => {
-                        let ll_x = note
-                            .participants
-                            .first()
-                            .and_then(|id| id_to_idx.get(id.as_str()))
-                            .map(|&i| participants[i].lifeline_line_x)
-                            .unwrap_or(50.0);
+                        let ll_x = if note.on_message {
+                            anchor_xs.iter().copied().fold(f64::MAX, f64::min)
+                        } else {
+                            anchor_xs.first().copied().unwrap_or(50.0)
+                        };
+                        let ll_x = if ll_x == f64::MAX { 50.0 } else { ll_x };
                         let right = ll_x.floor() - NOTE_LIFELINE_GAP;
                         (right - note_content_w, right)
                     }

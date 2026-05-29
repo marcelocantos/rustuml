@@ -58,6 +58,7 @@ struct NoteBuffer {
     lines: Vec<String>,
     shape: NoteShape,
     color: Option<String>,
+    on_message: bool,
     source_line: usize,
 }
 
@@ -145,6 +146,7 @@ impl SeqParser {
                     text,
                     shape: buf.shape,
                     color: buf.color,
+                    on_message: buf.on_message,
                     source_line: buf.source_line,
                 }));
             } else if let Some(buf) = &mut self.note_buffer {
@@ -423,6 +425,7 @@ impl SeqParser {
                     text: text.to_string(),
                     shape: NoteShape::Note,
                     color: None,
+                    on_message: false,
                     source_line: self.current_line,
                 }));
             }
@@ -456,6 +459,7 @@ impl SeqParser {
                     lines: Vec::new(),
                     shape: NoteShape::Note,
                     color,
+                    on_message: false,
                     source_line: self.current_line,
                 });
             } else {
@@ -465,6 +469,7 @@ impl SeqParser {
                     text,
                     shape: NoteShape::Note,
                     color,
+                    on_message: false,
                     source_line: self.current_line,
                 }));
             }
@@ -495,18 +500,19 @@ impl SeqParser {
                     .map(|s| self.ensure_participant(s.trim()))
                     .collect()
             });
-            // Bare "note left" / "note right" (no participant) attaches to the last message:
-            // "note left" → source participant of the last message
-            // "note right" → target participant of the last message
+            // Bare "note left" / "note right" (no participant) attaches to the
+            // last message and straddles its arrow band (on_message). PlantUML
+            // anchors such notes to the message's leftmost/rightmost endpoint by
+            // screen position, so store BOTH endpoints and let the renderer pick.
+            // "note left"  → left of the leftmost endpoint
+            // "note right" → right of the rightmost endpoint
+            let mut on_message = false;
             if participants.is_empty()
                 && position != NotePosition::Over
                 && let Some((from, to)) = &self.last_message
             {
-                participants = match position {
-                    NotePosition::Left => vec![from.clone()],
-                    NotePosition::Right => vec![to.clone()],
-                    _ => Vec::new(),
-                };
+                participants = vec![from.clone(), to.clone()];
+                on_message = true;
             }
             let color = caps.get(4).map(|m| m.as_str().to_string());
 
@@ -519,6 +525,7 @@ impl SeqParser {
                     text,
                     shape,
                     color,
+                    on_message,
                     source_line: self.current_line,
                 }));
             } else {
@@ -529,6 +536,7 @@ impl SeqParser {
                     lines: Vec::new(),
                     shape,
                     color,
+                    on_message,
                     source_line: self.current_line,
                 });
             }
