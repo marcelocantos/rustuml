@@ -336,10 +336,9 @@ fn render_root(buf: &mut String, rl: &RootLayout, canvas_w: f64) {
     let leftmost = centers.iter().cloned().fold(f64::INFINITY, f64::min);
     let rightmost = centers.iter().cloned().fold(f64::NEG_INFINITY, f64::max);
 
-    // Horizontal spine across all depth-2 centres.
-    if centers.len() >= 2 {
-        emit_line(buf, leftmost, spine_y, rightmost, spine_y);
-    }
+    // Horizontal spine across all depth-2 centres.  PlantUML emits this even
+    // for a single child, as a degenerate zero-length line at that centre.
+    emit_line(buf, leftmost, spine_y, rightmost, spine_y);
 
     // Root box centred over the span of depth-2 centres.
     let root_cx = (leftmost + rightmost) / 2.0;
