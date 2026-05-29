@@ -224,6 +224,14 @@ fn render_oracle(diagram: &DeploymentDiagram, _theme: &Theme, oracle: &OracleLay
         );
     }
 
+    // Emit attached/floating notes. PlantUML lays each note out as a
+    // `<g class="entity">` with an auto-generated `GMN*` qualified name and a
+    // hand-rolled box-plus-leader path. We reconstruct that path locally from
+    // the box rectangle and leader apex the oracle extracted from the golden.
+    for note in &oracle.note_entities {
+        emit_note(&mut svg, note);
+    }
+
     // Emit connections in source order.
     for (i, conn) in diagram.connections.iter().enumerate() {
         let link_id = link_id_for_conn
@@ -1122,6 +1130,138 @@ fn emit_text(
         },
     );
     svg.raw(&buf);
+}
+
+// ---------------------------------------------------------------------------
+// Notes (oracle-anchored geometry, locally constructed path)
+// ---------------------------------------------------------------------------
+
+const NOTE_FILL: &str = "#FEFFDD";
+const NOTE_FOLD: f64 = 10.0;
+const NOTE_FONT_SIZE: f64 = 13.0;
+
+/// Which edge of the note box the leader notch is spliced into, derived
+/// from the apex position relative to the box.
+#[derive(Clone, Copy)]
+enum LeaderSide {
+    /// Apex above the box → notch on the top edge.
+    Top,
+    /// Apex below the box → notch on the bottom edge.
+    Bottom,
+    /// Apex left of the box → notch on the left edge.
+    Left,
+    /// Apex right of the box → notch on the right edge.
+    Right,
+}
+
+fn emit_note(svg: &mut SvgBuilder, note: &crate::layout_oracle::OracleNoteEntity) {
+    let Some(g) = note.box_geom.as_ref() else {
+        return;
+    };
+    let bx = g.x;
+    let by = g.y;
+    let right = g.x + g.width;
+    let bottom = g.y + g.height;
+    let rf = right - NOTE_FOLD; // fold inner x
+    let yf = by + NOTE_FOLD; // fold inner y
+
+    // Determine which edge carries the leader from the apex position.
+    let side = g.apex.map(|(ax, ay)| {
+        if ay < by {
+            LeaderSide::Top
+        } else if ay > bottom {
+            LeaderSide::Bottom
+        } else if ax < bx {
+            LeaderSide::Left
+        } else {
+            LeaderSide::Right
+        }
+        // (Left/Right name the box edge the notch sits on, matching the apex.)
+    });
+
+    // Emit the leader triple (base_prev → apex → base_next) using the exact
+    // points the oracle captured; PlantUML does not place the base points
+    // symmetrically about the apex, so they're consumed verbatim per-point.
+    let leader = |d: &mut String| {
+        if let (Some((ax, ay)), Some((b0, b1))) = (g.apex, g.leader_base) {
+            let _ = write!(
+                d,
+                "L{},{} L{},{} L{},{} ",
+                fc(b0.0),
+                fc(b0.1),
+                fc(ax),
+                fc(ay),
+                fc(b1.0),
+                fc(b1.1),
+            );
+        }
+    };
+
+    // Build the body path, walking the outline counter-clockwise from the
+    // top-left corner and splicing the leader into the appropriate edge.
+    let mut d = String::new();
+    let _ = write!(d, "M{},{} ", fc(bx), fc(by));
+    // Left edge downward.
+    if matches!(side, Some(LeaderSide::Left)) {
+        leader(&mut d);
+    }
+    let _ = write!(d, "L{},{} ", fc(bx), fc(bottom));
+    let _ = write!(d, "A0,0 0 0 0 {},{} ", fc(bx), fc(bottom));
+    // Bottom edge left→right.
+    if matches!(side, Some(LeaderSide::Bottom)) {
+        leader(&mut d);
+    }
+    let _ = write!(d, "L{},{} ", fc(right), fc(bottom));
+    let _ = write!(d, "A0,0 0 0 0 {},{} ", fc(right), fc(bottom));
+    // Right edge bottom→top up to the fold.
+    if matches!(side, Some(LeaderSide::Right)) {
+        leader(&mut d);
+    }
+    let _ = write!(d, "L{},{} ", fc(right), fc(yf));
+    // Folded corner: from (right, yf) to (rf, by).
+    let _ = write!(d, "L{},{} ", fc(rf), fc(by));
+    // Top edge right→left back to the start.
+    if matches!(side, Some(LeaderSide::Top)) {
+        leader(&mut d);
+    }
+    let _ = write!(d, "L{},{} ", fc(bx), fc(by));
+    let _ = write!(d, "A0,0 0 0 0 {},{}", fc(bx), fc(by));
+
+    let comment = note
+        .source_line
+        .as_deref()
+        .map(|sl| format!(r#" data-source-line="{sl}""#))
+        .unwrap_or_default();
+    let ent_id = note.entity_id.as_deref().unwrap_or("");
+    svg.raw(&format!(
+        r#"<g class="entity" data-qualified-name="{qn}"{comment} id="{ent_id}">"#,
+        qn = note.qualified_name,
+    ));
+    svg.raw(&format!(
+        r#"<path d="{d}" fill="{NOTE_FILL}" style="stroke:{STROKE};stroke-width:0.5;"/>"#,
+    ));
+    // Folded-corner detail (second path).
+    svg.raw(&format!(
+        r#"<path d="M{rf_s},{by_s} L{rf_s},{yf_s} L{r_s},{yf_s} L{rf_s},{by_s}" fill="{NOTE_FILL}" style="stroke:{STROKE};stroke-width:0.5;"/>"#,
+        rf_s = fc(rf),
+        by_s = fc(by),
+        yf_s = fc(yf),
+        r_s = fc(right),
+    ));
+    // Text lines, each at its own oracle-captured baseline.
+    if g.text_lines.is_empty() {
+        let tx = g.text_x.unwrap_or(bx + 6.0);
+        let ty0 = g.text_y.unwrap_or(by + pm::ascent(NOTE_FONT_SIZE) + 5.0);
+        for (i, line) in note.text.split('\n').enumerate() {
+            let ty = ty0 + (i as f64) * pm::text_height(NOTE_FONT_SIZE);
+            emit_text(svg, line, tx, ty, NOTE_FONT_SIZE, false, false);
+        }
+    } else {
+        for (tx, ty, line) in &g.text_lines {
+            emit_text(svg, line, *tx, *ty, NOTE_FONT_SIZE, false, false);
+        }
+    }
+    svg.raw("</g>");
 }
 
 // ---------------------------------------------------------------------------

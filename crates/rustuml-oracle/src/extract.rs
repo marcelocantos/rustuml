@@ -7,9 +7,112 @@
 //! producing an `OracleLayout` that can be fed to renderers.
 
 use rustuml_render::layout_oracle::{
-    AuxRect, EntityLine, EntityRect, EntityText, OracleCluster, OracleEdgePath, OracleLayout,
-    OracleNoteEntity,
+    AuxRect, EntityLine, EntityRect, EntityText, NoteBoxGeom, OracleCluster, OracleEdgePath,
+    OracleLayout, OracleNoteEntity,
 };
+
+/// Parse the coordinate pairs from a note's body path `d` string and recover
+/// the box rectangle plus the leader apex. PlantUML draws a note as a
+/// rounded-corner box (with a folded top-right corner) plus an optional
+/// triangular "leader" notch pointing at the target. Every path point but the
+/// apex lies on the box outline, so the box is the bounding rect of all points
+/// except the single one that escapes it; that escaping point is the apex.
+fn parse_note_geom(d: &str) -> Option<NoteBoxGeom> {
+    // Collect every numeric coordinate pair following an L/M command. The
+    // SVG arc segments (`A0,0 0 0 0 x,y`) repeat box-corner points, which is
+    // harmless for a bounding box, but their radius/flag run of `0`s would be
+    // mis-read as coordinates, so only take the trailing `x,y` of each token.
+    let mut pts: Vec<(f64, f64)> = Vec::new();
+    for tok in d.split(['L', 'M', 'A']) {
+        let tok = tok.trim();
+        if tok.is_empty() {
+            continue;
+        }
+        // For an arc token the relevant pair is the last two numbers; for L/M
+        // it is the only pair. Grab the last comma-joined pair on the token.
+        let nums: Vec<f64> = tok
+            .split([' ', ','])
+            .filter(|s| !s.is_empty())
+            .filter_map(|s| s.parse::<f64>().ok())
+            .collect();
+        if nums.len() >= 2 {
+            let n = nums.len();
+            pts.push((nums[n - 2], nums[n - 1]));
+        }
+    }
+    if pts.len() < 4 {
+        return None;
+    }
+    // Find the apex: the point whose removal shrinks the bounding box the most,
+    // i.e. the point lying outside the bbox of all the others. Notes always
+    // have exactly one such escaping point (or none, for a floating note).
+    let bbox = |skip: usize| {
+        let mut minx = f64::INFINITY;
+        let mut miny = f64::INFINITY;
+        let mut maxx = f64::NEG_INFINITY;
+        let mut maxy = f64::NEG_INFINITY;
+        for (i, &(x, y)) in pts.iter().enumerate() {
+            if i == skip {
+                continue;
+            }
+            minx = minx.min(x);
+            miny = miny.min(y);
+            maxx = maxx.max(x);
+            maxy = maxy.max(y);
+        }
+        (minx, miny, maxx, maxy)
+    };
+    let full = {
+        let mut minx = f64::INFINITY;
+        let mut miny = f64::INFINITY;
+        let mut maxx = f64::NEG_INFINITY;
+        let mut maxy = f64::NEG_INFINITY;
+        for &(x, y) in &pts {
+            minx = minx.min(x);
+            miny = miny.min(y);
+            maxx = maxx.max(x);
+            maxy = maxy.max(y);
+        }
+        (minx, miny, maxx, maxy)
+    };
+    // Identify the apex as the point that, when excluded, most reduces the
+    // bounding-box area. If excluding any single point doesn't change the box,
+    // there is no leader (floating note).
+    let mut apex_idx: Option<usize> = None;
+    let mut apex: Option<(f64, f64)> = None;
+    let mut box_rect = full;
+    for (i, &pt) in pts.iter().enumerate() {
+        let b = bbox(i);
+        // A reduced box means pts[i] was an extreme (the apex).
+        if b.0 > full.0 || b.1 > full.1 || b.2 < full.2 || b.3 < full.3 {
+            apex_idx = Some(i);
+            apex = Some(pt);
+            box_rect = b;
+            break;
+        }
+    }
+    // The leader's two base points are the apex's path neighbours.
+    let leader_base = apex_idx.and_then(|i| {
+        let prev = if i > 0 { pts.get(i - 1).copied() } else { None };
+        let next = pts.get(i + 1).copied();
+        match (prev, next) {
+            (Some(p), Some(n)) => Some((p, n)),
+            _ => None,
+        }
+    });
+    let (minx, miny, maxx, maxy) = box_rect;
+    Some(NoteBoxGeom {
+        x: minx,
+        y: miny,
+        width: maxx - minx,
+        height: maxy - miny,
+        apex,
+        leader_base,
+        text_x: None,
+        text_y: None,
+        text_lines: Vec::new(),
+    })
+}
 
 /// Extract layout data from a golden SVG string.
 ///
@@ -211,12 +314,27 @@ pub fn extract_oracle_layout(svg: &str) -> Option<OracleLayout> {
             if let Some(slice) = svg.get(range.clone()) {
                 let inner = extract_inner_xml(slice);
                 let text = collect_text(&node);
+                // Parse the note box + leader geometry from the body path so
+                // the renderer can reconstruct the shape locally.
+                let mut box_geom = first_child.attribute("d").and_then(parse_note_geom);
+                if let Some(g) = box_geom.as_mut() {
+                    for t in node.descendants().filter(|c| c.tag_name().name() == "text") {
+                        if let (Some(tx), Some(ty)) = (parse_attr(&t, "x"), parse_attr(&t, "y")) {
+                            g.text_lines.push((tx, ty, collect_text(&t)));
+                        }
+                    }
+                    if let Some((tx, ty, _)) = g.text_lines.first() {
+                        g.text_x = Some(*tx);
+                        g.text_y = Some(*ty);
+                    }
+                }
                 layout.note_entities.push(OracleNoteEntity {
                     qualified_name: name.to_string(),
                     source_line: node.attribute("data-source-line").map(String::from),
                     entity_id: node.attribute("id").map(String::from),
                     inner_xml: inner,
                     text,
+                    box_geom,
                 });
             }
         }

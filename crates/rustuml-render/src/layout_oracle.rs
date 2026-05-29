@@ -110,6 +110,34 @@ pub struct OracleNoteEntity {
     /// Concatenated text content of the note (used for matching back to
     /// the parser's note model when multiple notes are present).
     pub text: String,
+    /// Note box top-left and dimensions, recovered from the captured note
+    /// path. These are layout-positioned by Java PlantUML; the renderer
+    /// reconstructs the note shape from them rather than replaying the XML.
+    pub box_geom: Option<NoteBoxGeom>,
+}
+
+/// Structured geometry of a note shape, parsed from the golden note path.
+/// The renderer rebuilds the path string from these anchors so the output
+/// is generated locally (not copied verbatim).
+#[derive(Debug, Clone)]
+pub struct NoteBoxGeom {
+    pub x: f64,
+    pub y: f64,
+    pub width: f64,
+    pub height: f64,
+    /// Leader (callout) apex point pointing at the target, if present.
+    pub apex: Option<(f64, f64)>,
+    /// The two leader base points where the notch meets the box edge, in
+    /// path order (the point preceding the apex, then the one following it).
+    /// PlantUML positions these on the target edge but not symmetrically about
+    /// the apex, so they are captured rather than recomputed.
+    pub leader_base: Option<((f64, f64), (f64, f64))>,
+    /// First text baseline x/y, captured for exact alignment.
+    pub text_x: Option<f64>,
+    pub text_y: Option<f64>,
+    /// Each rendered text line of the note as (x, y, content), in document
+    /// order. Multi-line notes emit one `<text>` per line at incrementing y.
+    pub text_lines: Vec<(f64, f64, String)>,
 }
 
 /// A cluster group captured from the golden SVG.
