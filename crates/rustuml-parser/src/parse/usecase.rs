@@ -54,6 +54,9 @@ pub fn parse_usecase(lines: &[String]) -> Result<UseCaseDiagram, ParseError> {
     // For multiline note blocks.
     let mut in_note_block = false;
     let mut note_block_lines: Vec<String> = Vec::new();
+    // For `skinparam <prefix> { ... }` blocks: flatten nested `Key Value`
+    // entries to `<prefix>Key`.
+    let mut skinparam_block_prefix: Option<String> = None;
 
     // Regex patterns compiled once.
 
@@ -185,6 +188,25 @@ pub fn parse_usecase(lines: &[String]) -> Result<UseCaseDiagram, ParseError> {
             continue;
         }
 
+        // Inside a `skinparam <prefix> { ... }` block: flatten nested
+        // `Key Value` entries to `<prefix>Key` until the closing `}`. Must be
+        // checked before the package-close handler so the block's `}` resets
+        // the prefix rather than being swallowed as a package terminator.
+        if let Some(prefix) = &skinparam_block_prefix {
+            if trimmed == "}" {
+                skinparam_block_prefix = None;
+            } else {
+                let parts: Vec<&str> = trimmed.splitn(2, char::is_whitespace).collect();
+                if parts.len() == 2 {
+                    meta.skinparams.push(crate::diagram::SkinParam {
+                        key: format!("{prefix}{}", parts[0]),
+                        value: parts[1].trim().to_string(),
+                    });
+                }
+            }
+            continue;
+        }
+
         if trimmed == "}" {
             current_package = None;
             continue;
@@ -210,6 +232,12 @@ pub fn parse_usecase(lines: &[String]) -> Result<UseCaseDiagram, ParseError> {
 
         // Collect skinparam directives into metadata.
         if let Some(rest) = trimmed.strip_prefix("skinparam ") {
+            let rest = rest.trim();
+            // Block form: `skinparam usecase {` opens a nested block.
+            if let Some(prefix) = rest.strip_suffix('{') {
+                skinparam_block_prefix = Some(prefix.trim().to_string());
+                continue;
+            }
             if let Some((key, value)) = rest.split_once(' ') {
                 meta.skinparams.push(crate::diagram::SkinParam {
                     key: key.trim().to_string(),
