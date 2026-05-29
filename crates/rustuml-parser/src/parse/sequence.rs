@@ -225,14 +225,15 @@ impl SeqParser {
     fn try_participant_decl(&mut self, line: &str) -> bool {
         let (url, clean_line) = super::extract_link_url(line);
         let line = clean_line.as_str();
-        // Matches four forms:
+        // Matches these forms (label = display text, id = entity key):
         //   1. keyword "Long Label" as alias  <<stereotype>>
         //   2. keyword alias as "Long Label"  <<stereotype>>
-        //   3. keyword SimpleName            <<stereotype>>
-        //   4. keyword "Long Label"          <<stereotype>>  (no alias; id = label)
+        //   3. keyword Label as alias         <<stereotype>>  (both unquoted)
+        //   4. keyword SimpleName             <<stereotype>>
+        //   5. keyword "Long Label"           <<stereotype>>  (no alias; id = label)
         static RE: LazyLock<Regex> = LazyLock::new(|| {
             Regex::new(
-                r#"^(participant|actor|boundary|control|entity|database|collections|queue)\s+(?:"([^"]+)"\s+as\s+(\w+)|(\w+)\s+as\s+"([^"]+)"|"([^"]+)"|(\w+))(?:\s+<<([^>]+)>>)?(?:\s+(#\S+))?(?:\s+order\s+\d+)?"#,
+                r#"^(participant|actor|boundary|control|entity|database|collections|queue)\s+(?:"([^"]+)"\s+as\s+(\w+)|(\w+)\s+as\s+"([^"]+)"|(\w+)\s+as\s+(\w+)|"([^"]+)"|(\w+))(?:\s+<<([^>]+)>>)?(?:\s+(#\S+))?(?:\s+order\s+\d+)?"#,
             )
             .unwrap()
         });
@@ -246,23 +247,26 @@ impl SeqParser {
                 // Form 2: alias as "Long Label"
                 let lbl = caps.get(5).map_or("", |m| m.as_str()).to_string();
                 (lbl, alias.as_str().to_string())
-            } else if let Some(quoted) = caps.get(6) {
-                // Form 4: "Long Label" (no alias; id = label)
+            } else if let Some(label) = caps.get(6) {
+                // Form 3: Label as alias (both unquoted) — id is the alias.
+                (label.as_str().to_string(), caps[7].to_string())
+            } else if let Some(quoted) = caps.get(8) {
+                // Form 5: "Long Label" (no alias; id = label)
                 let lbl = quoted.as_str().to_string();
                 (lbl.clone(), lbl)
             } else {
-                // Form 3: SimpleName
-                let name = caps[7].to_string();
+                // Form 4: SimpleName
+                let name = caps[9].to_string();
                 (name.clone(), name)
             };
             // Extract <<stereotype>> from within the label text (e.g. "Service 1 <<internal>>").
             let (label, label_stereotype) = extract_stereotype_from_label(&raw_label);
             let stereotype = caps
-                .get(8)
+                .get(10)
                 .map(|m| m.as_str().to_string())
                 .or(label_stereotype);
 
-            let color = caps.get(9).map(|m| m.as_str().to_string());
+            let color = caps.get(11).map(|m| m.as_str().to_string());
 
             if !self.participant_ids.contains(&id) {
                 self.participant_ids.push(id.clone());
