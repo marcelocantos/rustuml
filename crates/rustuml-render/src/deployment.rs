@@ -258,7 +258,18 @@ fn render_oracle(diagram: &DeploymentDiagram, _theme: &Theme, oracle: &OracleLay
     // `<g class="entity">` with an auto-generated `GMN*` qualified name and a
     // hand-rolled box-plus-leader path. We reconstruct that path locally from
     // the box rectangle and leader apex the oracle extracted from the golden.
+    //
+    // The oracle captures any entity that leads with a filled `<path>` as a
+    // note, which also sweeps up `file`/`folder`/`package` leaf shapes (their
+    // outlines are filled paths too). Skip any "note" whose qualified name is
+    // actually a diagram node — those are element shapes drawn by the entity
+    // pass, not real notes.
+    let node_qnames: std::collections::HashSet<&str> =
+        qname_for_id.values().map(String::as_str).collect();
     for note in &oracle.note_entities {
+        if node_qnames.contains(note.qualified_name.as_str()) {
+            continue;
+        }
         emit_note(&mut svg, note);
     }
 
@@ -629,8 +640,8 @@ fn emit_entity_shape(
         Card | Rectangle | Agent => emit_rounded_rect(svg, x, y, w, h, fill, stroke),
         Component => emit_component(svg, x, y, w, h, fill, stroke),
         Frame => emit_frame(svg, x, y, w, h, fill),
-        Folder => emit_folder(svg, x, y, w, h, fill),
-        File => emit_file(svg, x, y, w, h, fill),
+        Folder => emit_folder(svg, x, y, w, h, fill, stroke),
+        File => emit_file(svg, x, y, w, h, fill, stroke),
         Package => emit_package(svg, x, y, w, h, fill),
         Stack => emit_stack(svg, x, y, w, h, fill, stroke),
         Storage => emit_storage(svg, x, y, w, h, fill, stroke),
@@ -926,8 +937,40 @@ fn emit_frame_tab(svg: &mut SvgBuilder, x: f64, y: f64, label_w: f64) {
 
 // ---- Folder ---------------------------------------------------------------
 
-fn emit_folder(_svg: &mut SvgBuilder, _x: f64, _y: f64, _w: f64, _h: f64, _fill: &str) {
-    // TODO: complex path; oracle bbox is unreliable.
+/// Folder shape: a rounded rectangle with a tab (file-folder flap) across the
+/// top-left. The flap is a fixed 43.5px wide and the tab band is 21px tall for
+/// a single-line title. A horizontal line separates the tab from the body.
+fn emit_folder(svg: &mut SvgBuilder, x: f64, y: f64, w: f64, h: f64, fill: &str, stroke: &str) {
+    let xr = x + w;
+    let yb = y + h;
+    let flap_r = x + 43.5;
+    let tab_y = y + 21.0;
+    let d = format!(
+        "M{x25},{y_s} L{flap_r},{y_s} A3.75,3.75 0 0 1 {flap_r2},{y85} L{flap_r95},{ty} L{xr25},{ty} A2.5,2.5 0 0 1 {xr_s},{ty25} L{xr_s},{yb2} A2.5,2.5 0 0 1 {xr25},{yb_s} L{x25},{yb_s} A2.5,2.5 0 0 1 {x_s},{yb2} L{x_s},{y85} A2.5,2.5 0 0 1 {x25},{y_s}",
+        x25 = fc(x + 2.5),
+        y_s = fc(y),
+        flap_r = fc(flap_r),
+        flap_r2 = fc(flap_r + 2.5),
+        y85 = fc(y + 2.5),
+        flap_r95 = fc(flap_r + 9.5),
+        ty = fc(tab_y),
+        xr25 = fc(xr - 2.5),
+        xr_s = fc(xr),
+        ty25 = fc(tab_y + 2.5),
+        yb2 = fc(yb - 2.5),
+        yb_s = fc(yb),
+        x_s = fc(x),
+    );
+    svg.raw(&format!(
+        r#"<path d="{d}" fill="{fill}" style="stroke:{stroke};stroke-width:0.5;"/>"#
+    ));
+    // Horizontal divider under the tab, from the left edge to the flap end.
+    svg.raw(&format!(
+        r#"<line style="stroke:{stroke};stroke-width:0.5;" x1="{x1}" x2="{x2}" y1="{ty}" y2="{ty}"/>"#,
+        x1 = fc(x),
+        x2 = fc(flap_r + 9.5),
+        ty = fc(tab_y),
+    ));
 }
 
 fn emit_folder_cluster(_svg: &mut SvgBuilder, _x: f64, _y: f64, _w: f64, _h: f64) {
@@ -936,8 +979,39 @@ fn emit_folder_cluster(_svg: &mut SvgBuilder, _x: f64, _y: f64, _w: f64, _h: f64
 
 // ---- File -----------------------------------------------------------------
 
-fn emit_file(_svg: &mut SvgBuilder, _x: f64, _y: f64, _w: f64, _h: f64, _fill: &str) {
-    // TODO: complex path with corner fold; oracle bbox unreliable.
+/// File (document) shape: a rounded rectangle with a folded top-right corner
+/// (a 10×10 dog-ear). Two paths: the body outline and the fold triangle.
+fn emit_file(svg: &mut SvgBuilder, x: f64, y: f64, w: f64, h: f64, fill: &str, stroke: &str) {
+    let xr = x + w;
+    let yb = y + h;
+    let body = format!(
+        "M{x_s},{y2} L{x_s},{yb2} A2.5,2.5 0 0 0 {x25},{yb_s} L{xr25},{yb_s} A2.5,2.5 0 0 0 {xr_s},{yb2} L{xr_s},{y10} L{xr10},{y_s} L{x25},{y_s} A2.5,2.5 0 0 0 {x_s},{y2}",
+        x_s = fc(x),
+        y2 = fc(y + 2.5),
+        yb2 = fc(yb - 2.5),
+        x25 = fc(x + 2.5),
+        yb_s = fc(yb),
+        xr25 = fc(xr - 2.5),
+        xr_s = fc(xr),
+        y10 = fc(y + 10.0),
+        xr10 = fc(xr - 10.0),
+        y_s = fc(y),
+    );
+    svg.raw(&format!(
+        r#"<path d="{body}" fill="{fill}" style="stroke:{stroke};stroke-width:0.5;"/>"#
+    ));
+    let fold = format!(
+        "M{xr10},{y_s} L{xr10},{y75} A2.5,2.5 0 0 0 {xr75},{y10} L{xr_s},{y10}",
+        xr10 = fc(xr - 10.0),
+        y_s = fc(y),
+        y75 = fc(y + 7.5),
+        xr75 = fc(xr - 7.5),
+        y10 = fc(y + 10.0),
+        xr_s = fc(xr),
+    );
+    svg.raw(&format!(
+        r#"<path d="{fold}" fill="{fill}" style="stroke:{stroke};stroke-width:0.5;"/>"#
+    ));
 }
 
 // ---- Package --------------------------------------------------------------
@@ -1126,6 +1200,8 @@ fn emit_entity_label(
     let (_text_x_pad, top_pad, bold) = entity_text_geom(kind, w, &node.label);
     let label_w = text_render::measure(&node.label, FONT_SIZE, bold);
     let center_x = entity_text_center(kind, x, w);
+    // Folder labels are left-aligned with a 10px indent rather than centred.
+    let folder_label_x = matches!(kind, DeploymentNodeKind::Folder).then_some(x + 10.0);
 
     if let Some(stereo) = &node.stereotype {
         let stereo_label = format!("\u{00AB}{stereo}\u{00BB}");
@@ -1151,7 +1227,7 @@ fn emit_entity_label(
             false,
         );
     } else {
-        let label_x = center_x - label_w / 2.0;
+        let label_x = folder_label_x.unwrap_or(center_x - label_w / 2.0);
         emit_text(
             svg,
             &node.label,
@@ -1264,7 +1340,9 @@ fn entity_text_geom(kind: DeploymentNodeKind, _w: f64, _label: &str) -> (f64, f6
         Node | Component | Frame => (15.0, TEXT_PAD_NODE, false),
         Artifact => (10.0, TEXT_PAD_ARTIFACT, false),
         Card => (10.0, TEXT_PAD_CARD, false),
-        Rectangle | Agent | File | Folder | Storage => (10.0, TEXT_PAD_RECTLIKE, false),
+        Rectangle | Agent | File | Storage => (10.0, TEXT_PAD_RECTLIKE, false),
+        // Folder label sits below the tab band (tab height 21 + ascent + 7).
+        Folder => (10.0, ASCENT_14 + 28.0, false),
         // Queue is shorter vertically: ascent + 5.
         Queue => (5.0, ASCENT_14 + 5.0, false),
         // Database label sits below the lip: ascent + 24.
