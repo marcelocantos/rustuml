@@ -117,7 +117,7 @@ impl Ctx<'_> {
             if i == 0 {
                 d.push('M');
             } else {
-                d.push('L');
+                d.push_str(" L");
             }
             d.push_str(&fmt_coord(*x));
             d.push(',');
