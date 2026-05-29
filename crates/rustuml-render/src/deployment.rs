@@ -48,6 +48,11 @@ const RX_RY: f64 = 2.5;
 
 // Title block layout (matches the component renderer's constants).
 const TITLE_FONT_SIZE: f64 = 14.0;
+/// Header/footer captions render at font size 10 in grey.
+const HEADER_FONT_SIZE: f64 = 10.0;
+/// Vertical gap between the footer caption baseline and the canvas bottom,
+/// measured from the deployment goldens.
+const FOOTER_BOTTOM_GAP: f64 = 8.5764;
 const TITLE_MARGIN_X: f64 = 10.0;
 const TITLE_TOP_PAD: f64 = 10.0;
 const TITLE_LINE_H: f64 = 16.48828125;
@@ -228,6 +233,35 @@ fn render_oracle(diagram: &DeploymentDiagram, _theme: &Theme, oracle: &OracleLay
         svg.raw("</g>");
     }
 
+    // Header/footer captions are centred within a block whose width is the
+    // wider of the two captions (anchored at x=0), not the full canvas width.
+    let caption_block_w = {
+        let hw = diagram
+            .meta
+            .header
+            .as_deref()
+            .map(|h| text_render::measure(h, HEADER_FONT_SIZE, false))
+            .unwrap_or(0.0);
+        let fw = diagram
+            .meta
+            .footer
+            .as_deref()
+            .map(|f| text_render::measure(f, HEADER_FONT_SIZE, false))
+            .unwrap_or(0.0);
+        hw.max(fw)
+    };
+
+    // Header — a centred grey caption above the diagram (font 10). The oracle
+    // canvas already includes the vertical space the header occupies.
+    if let Some(header) = &diagram.meta.header {
+        let tl = text_render::measure(header, HEADER_FONT_SIZE, false);
+        let hx = (caption_block_w - tl) / 2.0;
+        let hy = pm::ascent(HEADER_FONT_SIZE);
+        svg.raw(r#"<g class="header" data-source-line="1">"#);
+        emit_grey_text(&mut svg, header, hx, hy);
+        svg.raw("</g>");
+    }
+
     // Emit clusters first (depth-first), then leaf entities (depth-first).
     for root in &roots {
         emit_clusters_dfs(
@@ -305,7 +339,38 @@ fn render_oracle(diagram: &DeploymentDiagram, _theme: &Theme, oracle: &OracleLay
         );
     }
 
+    // Footer — a centred grey caption pinned near the bottom (font 10).
+    if let Some(footer) = &diagram.meta.footer {
+        let tl = text_render::measure(footer, HEADER_FONT_SIZE, false);
+        let fx = (caption_block_w - tl) / 2.0;
+        let fy = canvas_h - FOOTER_BOTTOM_GAP;
+        svg.raw(r#"<g class="footer" data-source-line="2">"#);
+        emit_grey_text(&mut svg, footer, fx, fy);
+        svg.raw("</g>");
+    }
+
     svg.finalize_plantuml()
+}
+
+/// Emit a grey caption line (header/footer) at font size 10.
+fn emit_grey_text(svg: &mut SvgBuilder, content: &str, x: f64, y: f64) {
+    let mut buf = String::new();
+    text_render::emit_text(
+        &mut buf,
+        content,
+        &TextBase {
+            x,
+            y,
+            font_size: HEADER_FONT_SIZE as u32,
+            font_family: "sans-serif",
+            fill: "#888888",
+            bold: false,
+            italic: false,
+            underline: false,
+            skip_underline: false,
+        },
+    );
+    svg.raw(&buf);
 }
 
 /// The skinparam keyword for each element kind (e.g. `node`, `database`).
