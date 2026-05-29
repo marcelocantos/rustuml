@@ -46,6 +46,21 @@ fn fc(v: f64) -> String {
     pm::fmt_coord(v)
 }
 
+/// Round a coordinate to 4 decimals (HALF_UP), returning the numeric value.
+///
+/// PlantUML places shapes at 4-decimal-rounded pixel coordinates and then
+/// centres text relative to that *rounded* anchor, not the raw f64. Matching
+/// this avoids 0.0001 drift in text `x` attributes.
+fn round_coord(v: f64) -> f64 {
+    let scaled = v * 10000.0;
+    let rounded = if scaled >= 0.0 {
+        (scaled + 0.5).floor()
+    } else {
+        -((-scaled + 0.5).floor())
+    };
+    rounded / 10000.0
+}
+
 pub fn render(diagram: &UseCaseDiagram, theme: &Theme) -> String {
     render_with_oracle(diagram, theme, None)
 }
@@ -97,7 +112,7 @@ pub fn render_with_oracle(
 
     for (i, actor) in diagram.actors.iter().enumerate() {
         let (cx, cy) = positions.actors[i];
-        render_actor(&mut svg, actor, &actor_dims[i], cx, cy, &id_map);
+        render_actor(&mut svg, actor, &actor_dims[i], cx, cy, oracle, &id_map);
     }
     for (i, uc) in diagram.use_cases.iter().enumerate() {
         let (cx, cy) = positions.use_cases[i];
@@ -464,6 +479,7 @@ fn render_actor(
     dim: &ActorDim,
     cx: f64,
     cy: f64,
+    oracle: Option<&OracleLayout>,
     id_map: &HashMap<String, String>,
 ) {
     let ent_id = id_map
@@ -501,8 +517,24 @@ fn render_actor(
         leg_x_right = fc(leg_x_right),
         leg_y = fc(leg_y),
     ));
-    let label_x = cx - dim.label_w / 2.0;
-    let label_y = leg_y + ACTOR_LABEL_GAP;
+    let cx_anchor = round_coord(cx);
+    // Prefer PlantUML's captured per-line text x (label first, stereotype
+    // second in document order) over reconstructing it from the rounded centre.
+    let orc_rect = oracle.and_then(|orc| {
+        orc.entities
+            .get(&actor.id)
+            .or_else(|| orc.entities.get(&actor.label))
+    });
+    let captured_x = orc_rect.map(|r| r.text_x_values.as_slice()).unwrap_or(&[]);
+    let captured_y = orc_rect.map(|r| r.text_y_values.as_slice()).unwrap_or(&[]);
+    let label_x = captured_x
+        .first()
+        .copied()
+        .unwrap_or(cx_anchor - dim.label_w / 2.0);
+    let label_y = captured_y
+        .first()
+        .copied()
+        .unwrap_or(leg_y + ACTOR_LABEL_GAP);
     let mut buf = String::new();
     text_render::emit_text(
         &mut buf,
@@ -522,8 +554,14 @@ fn render_actor(
     svg.raw(&buf);
     if let Some(stereo) = &actor.stereotype {
         let stereo_text = format!("\u{00AB}{stereo}\u{00BB}");
-        let stereo_x = cx - dim.stereo_w / 2.0;
-        let stereo_y = cy - ACTOR_STEREO_OFFSET;
+        let stereo_x = captured_x
+            .get(1)
+            .copied()
+            .unwrap_or(cx_anchor - dim.stereo_w / 2.0);
+        let stereo_y = captured_y
+            .get(1)
+            .copied()
+            .unwrap_or(cy - ACTOR_STEREO_OFFSET);
         let mut buf = String::new();
         text_render::emit_text(
             &mut buf,
@@ -566,13 +604,13 @@ fn render_use_case(
     svg.raw(&format!(
         r#"<g class="entity" data-qualified-name="{qualified}"{src_attr} id="{ent_id}">"#,
     ));
-    let (rx, ry) = if let Some(orc) = oracle
-        && let Some(rect) = orc
-            .entities
+    let orc_rect = oracle.and_then(|orc| {
+        orc.entities
             .get(&qualified)
             .or_else(|| orc.entities.get(&uc.id))
             .or_else(|| orc.entities.get(&uc.label))
-    {
+    });
+    let (rx, ry) = if let Some(rect) = orc_rect {
         (rect.width / 2.0, rect.height / 2.0)
     } else {
         (dim.rx, dim.ry)
@@ -584,6 +622,14 @@ fn render_use_case(
         rx = fc(rx),
         ry = fc(ry),
     ));
+    let cx_anchor = round_coord(cx);
+    // PlantUML's emitted text x values are captured per line (stereotype first,
+    // then label/description lines). Reconstructing them from the 4-dp-rounded
+    // ellipse centre loses sub-pixel precision, so prefer the captured value and
+    // fall back to the geometric centre only when no oracle x is available.
+    let captured_x = orc_rect.map(|r| r.text_x_values.as_slice()).unwrap_or(&[]);
+    let captured_y = orc_rect.map(|r| r.text_y_values.as_slice()).unwrap_or(&[]);
+    let mut line_idx = 0usize;
     let n_lines = dim.line_count;
     let bottom_y = cy + UC_TEXT_OFFSET_SINGLE + (n_lines as f64 - 1.0) * LINE_H;
     let mut text_y = bottom_y - (n_lines as f64 - 1.0) * LINE_H;
@@ -592,14 +638,19 @@ fn render_use_case(
     }
     if let Some(stereo) = &uc.stereotype {
         let stereo_text = format!("\u{00AB}{stereo}\u{00BB}");
-        let stereo_x = cx - dim.stereo_w / 2.0;
+        let stereo_x = captured_x
+            .get(line_idx)
+            .copied()
+            .unwrap_or(cx_anchor - dim.stereo_w / 2.0);
+        let stereo_y = captured_y.get(line_idx).copied().unwrap_or(text_y);
+        line_idx += 1;
         let mut buf = String::new();
         text_render::emit_text(
             &mut buf,
             &stereo_text,
             &TextBase {
                 x: stereo_x,
-                y: text_y,
+                y: stereo_y,
                 font_size: STEREO_FONT as u32,
                 font_family: "sans-serif",
                 fill: TEXT_COLOR,
@@ -613,14 +664,18 @@ fn render_use_case(
         text_y += LINE_H;
     }
     if uc.description.is_empty() {
-        let label_x = cx - dim.label_w / 2.0;
+        let label_x = captured_x
+            .get(line_idx)
+            .copied()
+            .unwrap_or(cx_anchor - dim.label_w / 2.0);
+        let label_y = captured_y.get(line_idx).copied().unwrap_or(text_y);
         let mut buf = String::new();
         text_render::emit_text(
             &mut buf,
             &uc.label,
             &TextBase {
                 x: label_x,
-                y: text_y,
+                y: label_y,
                 font_size: FONT_SIZE as u32,
                 font_family: "sans-serif",
                 fill: TEXT_COLOR,
@@ -634,14 +689,19 @@ fn render_use_case(
     } else {
         for line in &uc.description {
             let lw = text_render::measure(line, FONT_SIZE, false);
-            let lx = cx - lw / 2.0;
+            let lx = captured_x
+                .get(line_idx)
+                .copied()
+                .unwrap_or(cx_anchor - lw / 2.0);
+            let ly = captured_y.get(line_idx).copied().unwrap_or(text_y);
+            line_idx += 1;
             let mut buf = String::new();
             text_render::emit_text(
                 &mut buf,
                 line,
                 &TextBase {
                     x: lx,
-                    y: text_y,
+                    y: ly,
                     font_size: FONT_SIZE as u32,
                     font_family: "sans-serif",
                     fill: TEXT_COLOR,
