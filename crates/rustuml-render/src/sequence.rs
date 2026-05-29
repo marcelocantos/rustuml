@@ -2971,7 +2971,8 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme) -> String {
     // bottom margin must fit inside the canvas.
     if has_boxes {
         let box_bottom = if diagram.hide_footbox {
-            lifeline_bottom + BOX_BOTTOM_MARGIN
+            // With no foot boxes the lifelines extend 6px below the box frame.
+            lifeline_bottom - 6.0
         } else {
             tail_box_y + max_box_h + BOX_BOTTOM_MARGIN
         };
@@ -3426,7 +3427,8 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme) -> String {
     if has_boxes {
         let box_top = HEAD_BOX_Y + title_band_h + 1.0;
         let box_bottom = if diagram.hide_footbox {
-            lifeline_bottom + BOX_BOTTOM_MARGIN
+            // With no foot boxes the lifelines extend 6px below the box frame.
+            lifeline_bottom - 6.0
         } else {
             tail_box_y + max_box_h + BOX_BOTTOM_MARGIN
         };
