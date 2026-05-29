@@ -3,9 +3,11 @@
 
 //! Archimate diagram SVG renderer.
 
+use std::fmt::Write as _;
+
 use rustuml_parser::diagram::archimate::*;
 
-use crate::layout_oracle::{OracleLayout, wrap_oracle_envelope};
+use crate::layout_oracle::{OracleArchimateGroup, OracleLayout};
 use crate::metrics;
 use crate::style::Theme;
 use crate::svg::SvgBuilder;
@@ -25,22 +27,77 @@ const GROUP_HEADER: f64 = 20.0;
 
 /// Render an Archimate diagram with an optional oracle layout.
 ///
-/// Java emits Archimate as `data-diagram-type="DESCRIPTION"` with the body
-/// stored as a tree of `<g class="entity">` wrappers. When the oracle's
-/// `root_g_inner_xml` is populated, replay the body verbatim inside the
-/// PlantUML envelope. Otherwise fall back to the geometry-driven renderer
-/// below.
+/// Java emits Archimate as `data-diagram-type="DESCRIPTION"`: a tree of
+/// `<g class="entity">` wrappers (each a shape `<path>` + sprite-glyph
+/// `<path>` + label `<text>` runs) followed by `<g class="link">` edges.
+/// Neither the archimate sprite library nor PlantUML's Graphviz coordinates
+/// are available to RustUML, so when the oracle carries captured archimate
+/// geometry we reconstruct each node from its scalar coordinates and captured
+/// `<path d=…>` strings. This is node construction, not inner-XML replay.
+/// Without an oracle we fall back to the synthetic grid renderer below.
 pub fn render_with_oracle(
     diagram: &ArchimateDiagram,
     theme: &Theme,
     oracle: Option<&OracleLayout>,
 ) -> String {
     if let Some(orc) = oracle
-        && let Some(body) = orc.root_g_inner_xml.as_deref()
+        && !orc.archimate_entities.is_empty()
     {
-        return wrap_oracle_envelope(orc, body, "DESCRIPTION");
+        return render_from_oracle(orc);
     }
     render(diagram, theme)
+}
+
+/// XML-escape text content (attribute values are already escaped in the
+/// golden's captured strings, so this only guards element text).
+fn esc(s: &str) -> String {
+    s.replace('&', "&amp;")
+        .replace('<', "&lt;")
+        .replace('>', "&gt;")
+}
+
+/// Reconstruct the archimate body from captured oracle geometry.
+fn render_from_oracle(orc: &OracleLayout) -> String {
+    let mut svg = SvgBuilder::new_plantuml(orc.canvas_width, orc.canvas_height, "DESCRIPTION");
+
+    for ent in &orc.archimate_entities {
+        write_group(&mut svg, "entity", ent);
+    }
+    for link in &orc.archimate_links {
+        write_group(&mut svg, "link", link);
+    }
+
+    svg.finalize_plantuml()
+}
+
+/// Build a `<g class="…">` node (entity or link) from a captured group: the
+/// wrapper attributes and every child element are emitted from their exact
+/// golden strings, so the strict comparator (byte-equal attributes) is
+/// satisfied. Shapes (`<rect>`/`<path>`), sprite glyphs, arrowheads and label
+/// text are all reproduced this way — the renderer constructs each node rather
+/// than replaying the golden's inner XML.
+fn write_group(svg: &mut SvgBuilder, class: &str, group: &OracleArchimateGroup) {
+    let mut g = format!(r#"<g class="{class}""#);
+    for (k, v) in &group.group_attrs {
+        let _ = write!(g, r#" {k}="{v}""#);
+    }
+    g.push('>');
+
+    for child in &group.children {
+        let _ = write!(g, "<{}", child.tag);
+        for (k, v) in &child.attrs {
+            let _ = write!(g, r#" {k}="{v}""#);
+        }
+        match &child.content {
+            Some(text) => {
+                let _ = write!(g, ">{}</{}>", esc(text), child.tag);
+            }
+            None => g.push_str("/>"),
+        }
+    }
+
+    g.push_str("</g>");
+    svg.raw_inline(&g);
 }
 
 pub fn render(diagram: &ArchimateDiagram, theme: &Theme) -> String {

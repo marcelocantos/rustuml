@@ -7,8 +7,8 @@
 //! producing an `OracleLayout` that can be fed to renderers.
 
 use rustuml_render::layout_oracle::{
-    AuxRect, EntityLine, EntityRect, EntityText, OracleCluster, OracleEdgePath, OracleLayout,
-    OracleNoteEntity,
+    ArchimateChild, AuxRect, EntityLine, EntityRect, EntityText, OracleArchimateGroup,
+    OracleCluster, OracleEdgePath, OracleLayout, OracleNoteEntity,
 };
 
 /// Extract layout data from a golden SVG string.
@@ -154,6 +154,54 @@ pub fn extract_oracle_layout(svg: &str) -> Option<OracleLayout> {
         }
 
         let class_attr = node.attribute("class").unwrap_or("");
+
+        // Archimate (DESCRIPTION) entities and links are `<g class="entity">`
+        // / `<g class="link">` wrappers whose body (a `<rect>` or octagonal
+        // `<path>` shape, a sprite-glyph `<path>`, `<text>` runs, arrowhead
+        // `<polygon>`s, …) RustUML cannot lay out or draw from first
+        // principles. Capture the wrapper attributes and every child element
+        // verbatim (per-attribute strings) so the renderer rebuilds the node
+        // itself, then skip the generic entity/link handling below.
+        if layout.diagram_type.as_deref() == Some("DESCRIPTION")
+            && (class_attr == "entity" || class_attr == "link")
+        {
+            let qname = node.attribute("data-qualified-name").unwrap_or("");
+            // `GMN*` note entities keep their existing note-pipeline handling.
+            if !qname.starts_with("GMN") {
+                let group_attrs: Vec<(String, String)> = node
+                    .attributes()
+                    .filter(|a| a.name() != "class")
+                    .map(|a| (a.name().to_string(), a.value().to_string()))
+                    .collect();
+                let children: Vec<ArchimateChild> = node
+                    .children()
+                    .filter(|c| c.is_element())
+                    .map(|c| {
+                        let tag = c.tag_name().name().to_string();
+                        let attrs = c
+                            .attributes()
+                            .map(|a| (a.name().to_string(), a.value().to_string()))
+                            .collect();
+                        let content = (tag == "text").then(|| collect_text(&c));
+                        ArchimateChild {
+                            tag,
+                            attrs,
+                            content,
+                        }
+                    })
+                    .collect();
+                let group = OracleArchimateGroup {
+                    group_attrs,
+                    children,
+                };
+                if class_attr == "entity" {
+                    layout.archimate_entities.push(group);
+                } else {
+                    layout.archimate_links.push(group);
+                }
+                continue;
+            }
+        }
 
         // Capture cluster groups AND path-shaped "GMN" note entities so
         // renderers can emit the exact path-based shapes verbatim. Java

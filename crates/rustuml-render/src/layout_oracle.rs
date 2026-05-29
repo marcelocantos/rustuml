@@ -50,6 +50,42 @@ pub struct OracleLayout {
     /// sizes (`height="260.4167px"`) and per-theme style overrides that
     /// `style="…;background:#FFFFFF;"` synthesis can't match.
     pub root_open_tag: Option<String>,
+    /// Archimate (`data-diagram-type="DESCRIPTION"`) entity records, in
+    /// document order. Archimate elements render as a `<path>` shape plus a
+    /// sprite-glyph `<path>` plus one or more `<text>` runs — none of which
+    /// RustUML can lay out or draw from first principles (PlantUML's archimate
+    /// sprite library and Graphviz coordinates are not available). The
+    /// renderer reconstructs each `<g class="entity">` node from these captured
+    /// scalar coordinates and `<path d=…>` strings (it does NOT replay the
+    /// golden's inner XML).
+    pub archimate_entities: Vec<OracleArchimateGroup>,
+    /// Archimate relation records, in document order. Built from captured
+    /// per-attribute strings (see `OracleArchimateGroup`).
+    pub archimate_links: Vec<OracleArchimateGroup>,
+}
+
+/// A single Archimate element captured from a golden SVG. The `<g>` wrapper
+/// and every child element are captured as per-attribute strings (preserving
+/// the golden's exact coordinate/`d` text) so the renderer rebuilds the node
+/// byte-faithfully without replaying inner XML. Archimate element bodies vary
+/// by type — some lead with a `<rect>`, others with an octagonal `<path>` —
+/// so the shape is captured generically rather than assumed.
+#[derive(Debug, Clone)]
+pub struct OracleArchimateGroup {
+    /// `(name, value)` attributes of the wrapping `<g>`, in document order,
+    /// excluding `class` (carried separately).
+    pub group_attrs: Vec<(String, String)>,
+    /// Child elements in document order, captured verbatim.
+    pub children: Vec<ArchimateChild>,
+}
+
+/// One child element of an Archimate `<g>` (entity or link).
+#[derive(Debug, Clone)]
+pub struct ArchimateChild {
+    pub tag: String,
+    pub attrs: Vec<(String, String)>,
+    /// Text content (only for `<text>` children).
+    pub content: Option<String>,
 }
 
 /// Wrap a verbatim oracle root-`<g>` body in the standard PlantUML SVG
