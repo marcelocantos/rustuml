@@ -1248,9 +1248,13 @@ fn emit_database(
     // width is `text_width(label) + 20`; recover it from metrics and only
     // adopt it when its display rounding agrees with the oracle's `w` (so a
     // clamped/min-width box keeps the oracle value).
-    let _ = h;
     let w_full = recover_db_width(label, w, x);
-    let h_full = pm::text_height(FONT_SIZE) + 29.0;
+    // Cylinder body height comes from the oracle's box height (which already
+    // accounts for multi-line content such as a stereotype). The single-line
+    // default is `text_height + 29`; fall back to it only when the oracle box
+    // is no taller (avoids a degenerate clamp).
+    let single_line = pm::text_height(FONT_SIZE) + 29.0;
+    let h_full = if h > single_line { h } else { single_line };
     let cx = x + w_full / 2.0;
     let w = w_full;
     let bot_y = y + h_full;
