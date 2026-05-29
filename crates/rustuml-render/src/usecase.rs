@@ -490,13 +490,42 @@ fn lookup_use_case_center(
     Some((rect.x + rect.width / 2.0, rect.y + rect.height / 2.0))
 }
 
+/// PlantUML strips spaces and punctuation when deriving an entity id from a
+/// quoted label (mirrors the parser's `label_to_id`).
+fn label_to_id(label: &str) -> String {
+    label
+        .chars()
+        .filter(|c| c.is_alphanumeric() || *c == '_')
+        .collect()
+}
+
+/// The name PlantUML emits as `data-qualified-name` and keys oracle entities
+/// by. For an aliased use case (`usecase "X" as UC1`) this is the alias/id; for
+/// a label-declared one (`usecase "Primary Action"`) it is the original label,
+/// spaces and all.
+fn display_name(uc: &UseCase) -> &str {
+    if uc.id == label_to_id(&uc.label) {
+        &uc.label
+    } else {
+        &uc.id
+    }
+}
+
 fn qualified_name(id: &str, diagram: &UseCaseDiagram) -> String {
+    // Resolve the display name for use cases (label-declared ones use their
+    // label, not the space-stripped id).
+    let display = diagram
+        .use_cases
+        .iter()
+        .find(|u| u.id == id)
+        .map(display_name)
+        .unwrap_or(id);
     for pkg in &diagram.packages {
         if pkg.elements.iter().any(|e| e == id) {
-            return format!("{}.{id}", pkg.name);
+            return format!("{}.{display}", pkg.name);
         }
     }
-    id.to_string()
+    display.to_string()
 }
 
 fn fallback_actor_center(i: usize, _dim: &ActorDim) -> (f64, f64) {
