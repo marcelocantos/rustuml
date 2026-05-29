@@ -15,7 +15,13 @@ use crate::text_render;
 
 const FONT_SIZE: f64 = 14.0;
 const PAD_X: f64 = 10.0;
-const BOX_H: f64 = 36.4883;
+// Exact unrounded box height: text_height(14) + 2*PAD_Y where PAD_Y = 10.
+// text_height(14) = 16.48828125 → 36.48828125 (displays as "36.4883").
+// Using the unrounded value avoids propagating rounding error through the
+// Y-coordinate accumulation.
+const BOX_H: f64 = 36.48828125;
+// Text baseline offset within the box: PAD_Y + ascent(14) = 10 + 13.53515625.
+const TEXT_BASELINE_DY: f64 = 23.53515625;
 const SIBLING_GAP: f64 = 20.0;
 const LEVEL_DX: f64 = 50.0;
 const X_MARGIN: f64 = 10.0;
@@ -139,7 +145,7 @@ fn emit_box(buf: &mut String, p: &Placed) {
         y = pm::fmt_coord(y),
     )
     .unwrap();
-    let text_y = y + 23.5352;
+    let text_y = y + TEXT_BASELINE_DY;
     let text_x = p.x + PAD_X;
     text_render::emit_text(
         buf,
@@ -289,17 +295,24 @@ pub fn render(diagram: &MindMapDiagram, _theme: &Theme) -> String {
         shift_x(p, dx);
     }
 
-    // PlantUML reserves a level slot for a phantom child when there are no
-    // children at all.
+    // PlantUML ceils the rightmost element edge to an integer pixel before
+    // adding the trailing margin, so the width gains a fractional bump on top
+    // of the nominal margin. After the shift above, `global_max_x` is the
+    // rightmost box edge (its left margin already baked in via the shift to
+    // X_MARGIN); ceil it, then add a left+right margin pair.
+    //
+    // When the root has no children at all, PlantUML still reserves a phantom
+    // level slot to the right.
     let any_children = placed.iter().any(|p| !p.children.is_empty());
-    let right_pad = if any_children {
-        X_MARGIN
+    let shifted_max_x = global_max_x + dx;
+    let right_extra = if any_children {
+        2.0 * X_MARGIN
     } else {
         X_MARGIN + LEVEL_DX + 10.0
     };
-    let total_w = (global_max_x - global_min_x) + X_MARGIN + right_pad;
+    let total_w = shifted_max_x.ceil() + right_extra;
     let total_h = global_max_cy + Y_MARGIN;
-    let w_i = total_w.ceil() as i64;
+    let w_i = total_w as i64;
     let h_i = total_h.ceil() as i64;
 
     let mut buf = String::with_capacity(2048);
