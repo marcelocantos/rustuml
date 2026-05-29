@@ -661,7 +661,7 @@ fn emit_entity_shape(
         Frame => emit_frame(svg, x, y, w, h, fill),
         Folder => emit_folder(svg, x, y, w, h, fill, stroke),
         File => emit_file(svg, x, y, w, h, fill, stroke),
-        Package => emit_package(svg, x, y, w, h, fill),
+        Package => emit_package(svg, x, y, w, h, fill, stroke, label),
         Stack => emit_stack(svg, x, y, w, h, fill, stroke),
         Storage => emit_storage(svg, x, y, w, h, fill, stroke),
         Database => emit_database(svg, x, y, w, h, fill, stroke, label),
@@ -694,7 +694,7 @@ fn emit_cluster_shape(
         Rectangle | Agent => emit_plain_rect_cluster(svg, x, y, w, h, fill, stroke),
         Frame => emit_frame_cluster(svg, x, y, w, h, fill, stroke),
         Folder => emit_folder_cluster(svg, x, y, w, h, fill, label),
-        Package => emit_package_cluster(svg, x, y, w, h),
+        Package => emit_package_cluster(svg, x, y, w, h, fill, label),
         _ => emit_tag_polygon(svg, x, y, w, h, fill, 1.0, stroke),
     }
 }
@@ -1077,12 +1077,81 @@ fn emit_file(svg: &mut SvgBuilder, x: f64, y: f64, w: f64, h: f64, fill: &str, s
 
 // ---- Package --------------------------------------------------------------
 
-fn emit_package(_svg: &mut SvgBuilder, _x: f64, _y: f64, _w: f64, _h: f64, _fill: &str) {
-    // TODO: complex path with tab and bold title.
+/// Package shape: a rounded-rectangle body with a tab whose right edge slopes
+/// outward. The tab width tracks the (bold) label; the tab band height is
+/// `text_height + 6`. Geometry derived from goldens.
+#[allow(clippy::too_many_arguments)]
+fn emit_package_path(
+    svg: &mut SvgBuilder,
+    x: f64,
+    y: f64,
+    w: f64,
+    h: f64,
+    fill: &str,
+    stroke: &str,
+    sw: f64,
+    label: &str,
+) {
+    let xr = x + w;
+    let yb = y + h;
+    let label_w = text_render::measure(label, FONT_SIZE, true);
+    // Tab top-right corner: label start (x+10) + label width + 5.5 trailing pad.
+    let tab_tr = x + 10.0 + label_w + 5.5;
+    let tab_y = y + pm::text_height(FONT_SIZE) + 6.0;
+    let d = format!(
+        "M{x25},{y_s} L{tab_tr},{y_s} A3.75,3.75 0 0 1 {tab_tr25},{y85} L{tab_br},{ty} L{xr25},{ty} A2.5,2.5 0 0 1 {xr_s},{ty25} L{xr_s},{yb2} A2.5,2.5 0 0 1 {xr25},{yb_s} L{x25},{yb_s} A2.5,2.5 0 0 1 {x_s},{yb2} L{x_s},{y85} A2.5,2.5 0 0 1 {x25},{y_s}",
+        x25 = fc(x + 2.5),
+        y_s = fc(y),
+        tab_tr = fc(tab_tr),
+        tab_tr25 = fc(tab_tr + 2.5),
+        y85 = fc(y + 2.5),
+        tab_br = fc(tab_tr + 9.5),
+        ty = fc(tab_y),
+        xr25 = fc(xr - 2.5),
+        xr_s = fc(xr),
+        ty25 = fc(tab_y + 2.5),
+        yb2 = fc(yb - 2.5),
+        yb_s = fc(yb),
+        x_s = fc(x),
+    );
+    svg.raw(&format!(
+        r#"<path d="{d}" fill="{fill}" style="stroke:{stroke};stroke-width:{sw};"/>"#,
+        sw = fc(sw),
+    ));
+    // Horizontal divider under the tab, from the left edge to the slope end.
+    svg.raw(&format!(
+        r#"<line style="stroke:{stroke};stroke-width:{sw};" x1="{x1}" x2="{x2}" y1="{ty}" y2="{ty}"/>"#,
+        x1 = fc(x),
+        x2 = fc(tab_tr + 9.5),
+        ty = fc(tab_y),
+        sw = fc(sw),
+    ));
 }
 
-fn emit_package_cluster(_svg: &mut SvgBuilder, _x: f64, _y: f64, _w: f64, _h: f64) {
-    // TODO
+#[allow(clippy::too_many_arguments)]
+fn emit_package(
+    svg: &mut SvgBuilder,
+    x: f64,
+    y: f64,
+    w: f64,
+    h: f64,
+    fill: &str,
+    stroke: &str,
+    label: &str,
+) {
+    emit_package_path(svg, x, y, w, h, fill, stroke, 0.5, label);
+}
+
+fn emit_package_cluster(
+    svg: &mut SvgBuilder,
+    x: f64,
+    y: f64,
+    w: f64,
+    h: f64,
+    fill: &str,
+    label: &str,
+) {
+    emit_package_path(svg, x, y, w, h, fill, "#000000", 1.5, label);
 }
 
 // ---- Stack ----------------------------------------------------------------
@@ -1261,8 +1330,13 @@ fn emit_entity_label(
     let (_text_x_pad, top_pad, bold) = entity_text_geom(kind, w, &node.label);
     let label_w = text_render::measure(&node.label, FONT_SIZE, bold);
     let center_x = entity_text_center(kind, x, w);
-    // Folder labels are left-aligned with a 10px indent rather than centred.
-    let folder_label_x = matches!(kind, DeploymentNodeKind::Folder).then_some(x + 10.0);
+    // Folder and package labels are left-aligned with a 10px indent rather
+    // than centred.
+    let folder_label_x = matches!(
+        kind,
+        DeploymentNodeKind::Folder | DeploymentNodeKind::Package
+    )
+    .then_some(x + 10.0);
 
     if let Some(stereo) = &node.stereotype {
         let stereo_label = format!("\u{00AB}{stereo}\u{00BB}");
