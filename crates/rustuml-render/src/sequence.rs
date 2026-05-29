@@ -2683,9 +2683,18 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme) -> String {
             }
         }
     }
-    // Set of event indices that are creating messages (trigger extra advance).
-    let create_msg_events: std::collections::HashSet<usize> =
-        create_msg_idx.values().copied().collect();
+    // Map creating-message event index -> extra vertical advance for that event:
+    // the base advance plus any extent by which a tall inline head shape (actor,
+    // boundary, etc.) reaches below a rectangle box.
+    let create_msg_extra: HashMap<usize, f64> = create_msg_idx
+        .iter()
+        .filter_map(|(id, &idx)| {
+            id_to_idx.get(id).map(|&pi| {
+                let extra_h = (participants[pi].box_height - HEAD_BOX_H).max(0.0);
+                (idx, CREATE_EXTRA_ADVANCE + extra_h)
+            })
+        })
+        .collect();
 
     // Compute self-message right extent now that x positions are assigned.
     // Replay activation state to know whether the participant is active at the
@@ -2786,8 +2795,8 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme) -> String {
                     }
                     // A creating message draws an inline head box that straddles the
                     // arrow; the next event must clear the box bottom.
-                    if create_msg_events.contains(&idx) {
-                        y += CREATE_EXTRA_ADVANCE;
+                    if let Some(&extra) = create_msg_extra.get(&idx) {
+                        y += extra;
                     }
                     msg_count += 1;
                 }
@@ -3181,7 +3190,18 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme) -> String {
     // message instead of the global top, and draw their head box inline there.
     let created_lifeline_top: HashMap<String, f64> = create_msg_idx
         .iter()
-        .map(|(id, &idx)| (id.clone(), event_y(idx) + CREATE_LIFELINE_TOP_OFFSET))
+        .map(|(id, &idx)| {
+            // For tall shapes (actor, boundary, ...) the lifeline emerges lower,
+            // shifted by half the shape's excess height over a rectangle box.
+            let half_extra = id_to_idx
+                .get(id)
+                .map(|&pi| (participants[pi].box_height - HEAD_BOX_H).max(0.0) / 2.0)
+                .unwrap_or(0.0);
+            (
+                id.clone(),
+                event_y(idx) + CREATE_LIFELINE_TOP_OFFSET + half_extra,
+            )
+        })
         .collect();
 
     // -----------------------------------------------------------------------
