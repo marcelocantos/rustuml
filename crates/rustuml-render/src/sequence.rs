@@ -4213,6 +4213,11 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme) -> String {
                     .as_ref()
                     .map(|(t, w, s)| (t.as_str(), *w, s));
 
+                // When a message carries the `!!` destroy shorthand, PlantUML draws
+                // an 18x18 cross centred on the arrow tip. Captured in the arrow
+                // branches (where `tip_x` is known) and drawn after the message.
+                let mut destroy_cross_center: Option<f64> = None;
+
                 if is_self {
                     // Self-message: U-shaped loopback. When the participant is
                     // activated, the loop starts from the activation bar's right
@@ -4432,6 +4437,9 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme) -> String {
 
                     if is_right {
                         let tip_x = to_x - target_shift - ARROW_TIP_GAP;
+                        if matches!(msg.activation, Some(ActivationChange::Destroy)) {
+                            destroy_cross_center = Some(tip_x + ARROW_TIP_GAP);
+                        }
                         let line_x2 = if is_open {
                             tip_x
                         } else {
@@ -4538,6 +4546,9 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme) -> String {
                     } else {
                         // Left-pointing arrow: tip offset accounts for target activation
                         let tip_x = to_x + target_shift + 1.0;
+                        if matches!(msg.activation, Some(ActivationChange::Destroy)) {
+                            destroy_cross_center = Some(tip_x - ARROW_TIP_GAP);
+                        }
                         let line_x1 = if is_open {
                             tip_x
                         } else {
@@ -4643,6 +4654,33 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme) -> String {
                         }
                     }
                 } // end non-self message else
+
+                // `!!` destroy shorthand on a message: draw the 18x18 cross on the
+                // target lifeline at the arrow tip (same red X as a standalone
+                // `destroy` event, but centred on the message tip).
+                if let Some(cx) = destroy_cross_center {
+                    let half = 9.0;
+                    let y_top = msg_y - half;
+                    let y_bot = msg_y + half;
+                    write!(
+                        svg.buf,
+                        r##"<line style="stroke:#A80036;stroke-width:2;" x1="{}" x2="{}" y1="{}" y2="{}"/>"##,
+                        fmt_coord(cx - half),
+                        fmt_coord(cx + half),
+                        fmt_coord(y_top),
+                        fmt_coord(y_bot),
+                    )
+                    .unwrap();
+                    write!(
+                        svg.buf,
+                        r##"<line style="stroke:#A80036;stroke-width:2;" x1="{}" x2="{}" y1="{}" y2="{}"/>"##,
+                        fmt_coord(cx - half),
+                        fmt_coord(cx + half),
+                        fmt_coord(y_bot),
+                        fmt_coord(y_top),
+                    )
+                    .unwrap();
+                }
 
                 // Update activation state and return stack after this message
                 if let Some(act) = &msg.activation {
