@@ -2060,6 +2060,15 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme) -> String {
             _ => {}
         }
     }
+    // `skinparam monochrome true` desaturates the palette. The only colour the
+    // sequence renderer normally emits beyond the already-monochrome #181818
+    // stroke is the participant/shape background, which becomes #E3E3E3.
+    let monochrome = diagram.meta.skinparams.iter().any(|sp| {
+        sp.key.eq_ignore_ascii_case("monochrome") && sp.value.trim().eq_ignore_ascii_case("true")
+    });
+    if monochrome && participant_fill == "#E2E2F0" {
+        participant_fill = "#E3E3E3".to_string();
+    }
     let default_arrow_color = default_arrow_color.as_str();
     let default_arrow_thickness = default_arrow_thickness.as_str();
     // Empty diagram with no title — render the PlantUML welcome screen.
