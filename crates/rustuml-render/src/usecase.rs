@@ -58,6 +58,35 @@ fn resolve_fill(raw: &str) -> String {
     }
 }
 
+/// Look up a skinparam value case-insensitively (PlantUML convention) and
+/// resolve it to a fill string. The parser flattens block skinparams like
+/// `skinparam usecase { BackgroundColor X }` to the key `usecaseBackgroundColor`.
+fn skin_color(skinparams: &[rustuml_parser::diagram::SkinParam], key: &str) -> Option<String> {
+    skinparams
+        .iter()
+        .find(|p| p.key.eq_ignore_ascii_case(key))
+        .map(|p| resolve_fill(p.value.trim_start_matches('#')))
+}
+
+/// Per-kind background/border defaults derived from `skinparam` directives.
+struct SkinColors {
+    actor_fill: Option<String>,
+    actor_border: Option<String>,
+    uc_fill: Option<String>,
+    uc_border: Option<String>,
+}
+
+impl SkinColors {
+    fn from_meta(skinparams: &[rustuml_parser::diagram::SkinParam]) -> Self {
+        SkinColors {
+            actor_fill: skin_color(skinparams, "actorBackgroundColor"),
+            actor_border: skin_color(skinparams, "actorBorderColor"),
+            uc_fill: skin_color(skinparams, "usecaseBackgroundColor"),
+            uc_border: skin_color(skinparams, "usecaseBorderColor"),
+        }
+    }
+}
+
 /// Round a coordinate to 4 decimals (HALF_UP), returning the numeric value.
 ///
 /// PlantUML places shapes at 4-decimal-rounded pixel coordinates and then
@@ -106,6 +135,7 @@ pub fn render_with_oracle(
     let uc_dims: Vec<UseCaseDim> = diagram.use_cases.iter().map(use_case_dim).collect();
     let positions = resolve_positions(diagram, &actor_dims, &uc_dims, oracle);
     let id_map = build_entity_id_map(diagram);
+    let skin = SkinColors::from_meta(&diagram.meta.skinparams);
 
     let (total_w, total_h) = if let Some(orc) = oracle
         && orc.canvas_width > 0.0
@@ -142,6 +172,7 @@ pub fn render_with_oracle(
             cy,
             oracle,
             &id_map,
+            &skin,
         );
     };
     let render_uc_i = |svg: &mut SvgBuilder, i: usize| {
@@ -155,6 +186,7 @@ pub fn render_with_oracle(
             cy,
             oracle,
             &id_map,
+            &skin,
         );
     };
 
@@ -555,6 +587,7 @@ fn render_package_group(
     svg.raw("</g>");
 }
 
+#[allow(clippy::too_many_arguments)]
 fn render_actor(
     svg: &mut SvgBuilder,
     actor: &Actor,
@@ -563,6 +596,7 @@ fn render_actor(
     cy: f64,
     oracle: Option<&OracleLayout>,
     id_map: &HashMap<String, String>,
+    skin: &SkinColors,
 ) {
     let ent_id = id_map
         .get(&format!("actor::{}", actor.id))
@@ -574,13 +608,16 @@ fn render_actor(
         r#"<g class="entity" data-qualified-name="{}"{src_attr} id="{ent_id}">"#,
         actor.id
     ));
+    // Per-element `#color` overrides skinparam; both override the default.
     let fill = actor
         .color
         .as_deref()
         .map(resolve_fill)
+        .or_else(|| skin.actor_fill.clone())
         .unwrap_or_else(|| ENTITY_FILL.to_string());
+    let stroke = skin.actor_border.as_deref().unwrap_or(STROKE);
     svg.raw(&format!(
-        r#"<ellipse cx="{cx}" cy="{cy}" fill="{fill}" rx="{ACTOR_HEAD_R}" ry="{ACTOR_HEAD_R}" style="stroke:{STROKE};stroke-width:0.5;"/>"#,
+        r#"<ellipse cx="{cx}" cy="{cy}" fill="{fill}" rx="{ACTOR_HEAD_R}" ry="{ACTOR_HEAD_R}" style="stroke:{stroke};stroke-width:0.5;"/>"#,
         cx = fc(cx),
         cy = fc(cy),
     ));
@@ -593,7 +630,7 @@ fn render_actor(
     let arm_left_x = cx - ACTOR_ARM_HALF;
     let arm_right_x = cx + ACTOR_ARM_HALF;
     svg.raw(&format!(
-        r#"<path d="M{cx},{body_top_y} L{cx},{body_bot_y} M{arm_left_x},{arm_y} L{arm_right_x},{arm_y} M{cx},{body_bot_y} L{leg_x_left},{leg_y} M{cx},{body_bot_y} L{leg_x_right},{leg_y}" fill="none" style="stroke:{STROKE};stroke-width:0.5;"/>"#,
+        r#"<path d="M{cx},{body_top_y} L{cx},{body_bot_y} M{arm_left_x},{arm_y} L{arm_right_x},{arm_y} M{cx},{body_bot_y} L{leg_x_left},{leg_y} M{cx},{body_bot_y} L{leg_x_right},{leg_y}" fill="none" style="stroke:{stroke};stroke-width:0.5;"/>"#,
         cx = fc(cx),
         body_top_y = fc(body_top_y),
         body_bot_y = fc(body_bot_y),
@@ -680,6 +717,7 @@ fn render_use_case(
     cy: f64,
     oracle: Option<&OracleLayout>,
     id_map: &HashMap<String, String>,
+    skin: &SkinColors,
 ) {
     let qualified = qualified_name(&uc.id, diagram);
     let ent_id = id_map
@@ -702,13 +740,16 @@ fn render_use_case(
     } else {
         (dim.rx, dim.ry)
     };
+    // Per-element `#color` overrides skinparam; both override the default.
     let fill = uc
         .color
         .as_deref()
         .map(resolve_fill)
+        .or_else(|| skin.uc_fill.clone())
         .unwrap_or_else(|| ENTITY_FILL.to_string());
+    let stroke = skin.uc_border.as_deref().unwrap_or(STROKE);
     svg.raw(&format!(
-        r#"<ellipse cx="{cx}" cy="{cy}" fill="{fill}" rx="{rx}" ry="{ry}" style="stroke:{STROKE};stroke-width:0.5;"/>"#,
+        r#"<ellipse cx="{cx}" cy="{cy}" fill="{fill}" rx="{rx}" ry="{ry}" style="stroke:{stroke};stroke-width:0.5;"/>"#,
         cx = fc(cx),
         cy = fc(cy),
         rx = fc(rx),
