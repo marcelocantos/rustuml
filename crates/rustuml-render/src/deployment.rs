@@ -199,6 +199,7 @@ fn render_oracle(diagram: &DeploymentDiagram, _theme: &Theme, oracle: &OracleLay
     // (flattened by the parser to `<kind>BackgroundColor`). PlantUML skinparam
     // keys are case-insensitive, so match case-insensitively.
     let skin_fills = skin_background_fills(&diagram.meta.skinparams);
+    let skin_strokes = skin_border_colors(&diagram.meta.skinparams);
 
     // Emit clusters first (depth-first), then leaf entities (depth-first).
     for root in &roots {
@@ -210,6 +211,7 @@ fn render_oracle(diagram: &DeploymentDiagram, _theme: &Theme, oracle: &OracleLay
             oracle,
             &id_for_node,
             &skin_fills,
+            &skin_strokes,
         );
     }
     for root in &roots {
@@ -221,6 +223,7 @@ fn render_oracle(diagram: &DeploymentDiagram, _theme: &Theme, oracle: &OracleLay
             oracle,
             &id_for_node,
             &skin_fills,
+            &skin_strokes,
         );
     }
 
@@ -322,6 +325,48 @@ fn skin_background_fills(
     map
 }
 
+/// Build a per-kind map of border (stroke) colours from `<kind>BorderColor`
+/// skinparams. Keys are matched case-insensitively (PlantUML convention).
+fn skin_border_colors(
+    skinparams: &[rustuml_parser::diagram::SkinParam],
+) -> HashMap<DeploymentNodeKind, String> {
+    use DeploymentNodeKind::*;
+    const KINDS: &[DeploymentNodeKind] = &[
+        Node,
+        Artifact,
+        Cloud,
+        Database,
+        Storage,
+        Frame,
+        Folder,
+        Actor,
+        Queue,
+        Component,
+        Rectangle,
+        Agent,
+        Boundary,
+        Card,
+        Collections,
+        Control,
+        Entity,
+        File,
+        Package,
+        Stack,
+    ];
+    let mut map = HashMap::new();
+    for &kind in KINDS {
+        let target = format!("{}bordercolor", skin_keyword(kind));
+        if let Some(sp) = skinparams
+            .iter()
+            .rev()
+            .find(|sp| sp.key.to_ascii_lowercase() == target)
+        {
+            map.insert(kind, resolve_fill(&sp.value));
+        }
+    }
+    map
+}
+
 /// Compute the "own" qualified-name (last segment) for a node.
 fn own_qname(node: &DeploymentNode) -> String {
     let derived = label_to_id(&node.label);
@@ -341,6 +386,7 @@ fn emit_clusters_dfs(
     oracle: &OracleLayout,
     id_for_node: &HashMap<String, String>,
     skin_fills: &HashMap<DeploymentNodeKind, String>,
+    skin_strokes: &HashMap<DeploymentNodeKind, String>,
 ) {
     let qname = qualified_name(node, parent_qname);
     let is_cluster = !node.children.is_empty();
@@ -365,6 +411,10 @@ fn emit_clusters_dfs(
                 .as_deref()
                 .map(resolve_fill)
                 .or_else(|| skin_fills.get(&node.kind).cloned());
+            let stroke = skin_strokes
+                .get(&node.kind)
+                .map(String::as_str)
+                .unwrap_or(STROKE);
             emit_cluster_shape(
                 svg,
                 node.kind,
@@ -373,6 +423,7 @@ fn emit_clusters_dfs(
                 rect.width,
                 rect.height,
                 cluster_fill.as_deref(),
+                stroke,
             );
             emit_cluster_label(svg, node.kind, node, rect.x, rect.y, rect.width);
             svg.raw("</g>");
@@ -387,6 +438,7 @@ fn emit_clusters_dfs(
                     oracle,
                     id_for_node,
                     skin_fills,
+                    skin_strokes,
                 );
             }
         }
@@ -402,6 +454,7 @@ fn emit_entities_dfs(
     oracle: &OracleLayout,
     id_for_node: &HashMap<String, String>,
     skin_fills: &HashMap<DeploymentNodeKind, String>,
+    skin_strokes: &HashMap<DeploymentNodeKind, String>,
 ) {
     let qname = qualified_name(node, parent_qname);
     let is_cluster = !node.children.is_empty();
@@ -426,6 +479,10 @@ fn emit_entities_dfs(
                 .map(resolve_fill)
                 .or_else(|| skin_fills.get(&node.kind).cloned())
                 .unwrap_or_else(|| FILL.to_string());
+            let stroke = skin_strokes
+                .get(&node.kind)
+                .map(String::as_str)
+                .unwrap_or(STROKE);
             // Sequence-style icon shapes (boundary/control/entity) are drawn
             // from an ellipse-anchored EntityRect; their decorations and label
             // sit at fixed offsets from the icon centre, so they render their
@@ -446,6 +503,8 @@ fn emit_entities_dfs(
                     rect.width,
                     rect.height,
                     &entity_fill,
+                    stroke,
+                    &node.label,
                 );
                 emit_entity_label(svg, node.kind, node, rect.x, rect.y, rect.width);
             }
@@ -462,6 +521,7 @@ fn emit_entities_dfs(
                     oracle,
                     id_for_node,
                     skin_fills,
+                    skin_strokes,
                 );
             }
         }
@@ -523,6 +583,7 @@ fn label_to_id(label: &str) -> String {
 // Shape emission — leaf entities
 // ---------------------------------------------------------------------------
 
+#[allow(clippy::too_many_arguments)]
 fn emit_entity_shape(
     svg: &mut SvgBuilder,
     kind: DeploymentNodeKind,
@@ -531,25 +592,28 @@ fn emit_entity_shape(
     w: f64,
     h: f64,
     fill: &str,
+    stroke: &str,
+    label: &str,
 ) {
     use DeploymentNodeKind::*;
     match kind {
-        Node => emit_tag_polygon(svg, x, y, w, h, fill, 0.5),
-        Artifact => emit_artifact(svg, x, y, w, h, fill),
-        Card | Rectangle | Agent => emit_rounded_rect(svg, x, y, w, h, fill),
-        Component => emit_component(svg, x, y, w, h, fill),
+        Node => emit_tag_polygon(svg, x, y, w, h, fill, 0.5, stroke),
+        Artifact => emit_artifact(svg, x, y, w, h, fill, stroke),
+        Card | Rectangle | Agent => emit_rounded_rect(svg, x, y, w, h, fill, stroke),
+        Component => emit_component(svg, x, y, w, h, fill, stroke),
         Frame => emit_frame(svg, x, y, w, h, fill),
         Folder => emit_folder(svg, x, y, w, h, fill),
         File => emit_file(svg, x, y, w, h, fill),
         Package => emit_package(svg, x, y, w, h, fill),
-        Stack => emit_stack(svg, x, y, w, h, fill),
-        Storage => emit_storage(svg, x, y, w, h, fill),
-        Database => emit_database(svg, x, y, w, h, fill),
-        Queue => emit_queue(svg, x, y, w, h, fill),
-        _ => emit_rounded_rect(svg, x, y, w, h, fill),
+        Stack => emit_stack(svg, x, y, w, h, fill, stroke),
+        Storage => emit_storage(svg, x, y, w, h, fill, stroke),
+        Database => emit_database(svg, x, y, w, h, fill, stroke, label),
+        Queue => emit_queue(svg, x, y, w, h, fill, stroke),
+        _ => emit_rounded_rect(svg, x, y, w, h, fill, stroke),
     }
 }
 
+#[allow(clippy::too_many_arguments)]
 fn emit_cluster_shape(
     svg: &mut SvgBuilder,
     kind: DeploymentNodeKind,
@@ -558,27 +622,36 @@ fn emit_cluster_shape(
     w: f64,
     h: f64,
     fill: Option<&str>,
+    stroke: &str,
 ) {
     use DeploymentNodeKind::*;
     // Clusters default to no fill; a `#color` paints the cluster background.
     let fill = fill.unwrap_or("none");
     match kind {
         // Clusters use stroke-width=1 (per goldens).
-        Node => emit_tag_polygon(svg, x, y, w, h, fill, 1.0),
+        Node => emit_tag_polygon(svg, x, y, w, h, fill, 1.0, stroke),
         // Card cluster has rect + horizontal line under title.
-        Card => emit_card_cluster(svg, x, y, w, h, fill),
+        Card => emit_card_cluster(svg, x, y, w, h, fill, stroke),
         // Rectangle / Agent cluster: bare rect, no line.
-        Rectangle | Agent => emit_plain_rect_cluster(svg, x, y, w, h, fill),
-        Frame => emit_frame_cluster(svg, x, y, w, h, fill),
+        Rectangle | Agent => emit_plain_rect_cluster(svg, x, y, w, h, fill, stroke),
+        Frame => emit_frame_cluster(svg, x, y, w, h, fill, stroke),
         Folder => emit_folder_cluster(svg, x, y, w, h),
         Package => emit_package_cluster(svg, x, y, w, h),
-        _ => emit_tag_polygon(svg, x, y, w, h, fill, 1.0),
+        _ => emit_tag_polygon(svg, x, y, w, h, fill, 1.0, stroke),
     }
 }
 
-fn emit_plain_rect_cluster(svg: &mut SvgBuilder, x: f64, y: f64, w: f64, h: f64, fill: &str) {
+fn emit_plain_rect_cluster(
+    svg: &mut SvgBuilder,
+    x: f64,
+    y: f64,
+    w: f64,
+    h: f64,
+    fill: &str,
+    stroke: &str,
+) {
     svg.raw(&format!(
-        r#"<rect fill="{fill}" height="{h}" rx="{RX_RY}" ry="{RX_RY}" style="stroke:{STROKE};stroke-width:1;" width="{w}" x="{x}" y="{y}"/>"#,
+        r#"<rect fill="{fill}" height="{h}" rx="{RX_RY}" ry="{RX_RY}" style="stroke:{stroke};stroke-width:1;" width="{w}" x="{x}" y="{y}"/>"#,
         h = fc(h),
         w = fc(w),
         x = fc(x),
@@ -588,7 +661,17 @@ fn emit_plain_rect_cluster(svg: &mut SvgBuilder, x: f64, y: f64, w: f64, h: f64,
 
 // ---- Node ("tag" polygon) -------------------------------------------------
 
-fn emit_tag_polygon(svg: &mut SvgBuilder, x: f64, y: f64, w: f64, h: f64, fill: &str, sw: f64) {
+#[allow(clippy::too_many_arguments)]
+fn emit_tag_polygon(
+    svg: &mut SvgBuilder,
+    x: f64,
+    y: f64,
+    w: f64,
+    h: f64,
+    fill: &str,
+    sw: f64,
+    stroke: &str,
+) {
     let off = 10.0;
     let x1 = fc(x);
     let y1 = fc(y + off);
@@ -600,7 +683,7 @@ fn emit_tag_polygon(svg: &mut SvgBuilder, x: f64, y: f64, w: f64, h: f64, fill: 
     let y4 = fc(y + h);
     let points = format!("{x1},{y1},{x2},{y2},{x3},{y2},{x3},{y3},{x4},{y4},{x1},{y4},{x1},{y1}");
     svg.raw(&format!(
-        r#"<polygon fill="{fill}" points="{points}" style="stroke:{STROKE};stroke-width:{sw};"/>"#,
+        r#"<polygon fill="{fill}" points="{points}" style="stroke:{stroke};stroke-width:{sw};"/>"#,
     ));
     // 3 lines for the 3D effect: top-right diagonal, top inner, right inner.
     let xa = fc(x + w - off);
@@ -608,27 +691,27 @@ fn emit_tag_polygon(svg: &mut SvgBuilder, x: f64, y: f64, w: f64, h: f64, fill: 
     let ya = fc(y + off);
     let yb = fc(y);
     svg.raw(&format!(
-        r#"<line style="stroke:{STROKE};stroke-width:{sw};" x1="{xa}" x2="{xb}" y1="{ya}" y2="{yb}"/>"#,
+        r#"<line style="stroke:{stroke};stroke-width:{sw};" x1="{xa}" x2="{xb}" y1="{ya}" y2="{yb}"/>"#,
     ));
     let xc = fc(x);
     svg.raw(&format!(
-        r#"<line style="stroke:{STROKE};stroke-width:{sw};" x1="{xc}" x2="{xa}" y1="{ya}" y2="{ya}"/>"#,
+        r#"<line style="stroke:{stroke};stroke-width:{sw};" x1="{xc}" x2="{xa}" y1="{ya}" y2="{ya}"/>"#,
     ));
     let yc = fc(y + h);
     svg.raw(&format!(
-        r#"<line style="stroke:{STROKE};stroke-width:{sw};" x1="{xa}" x2="{xa}" y1="{ya}" y2="{yc}"/>"#,
+        r#"<line style="stroke:{stroke};stroke-width:{sw};" x1="{xa}" x2="{xa}" y1="{ya}" y2="{yc}"/>"#,
     ));
 }
 
 // ---- Artifact (rect + folded corner) --------------------------------------
 
-fn emit_artifact(svg: &mut SvgBuilder, x: f64, y: f64, w: f64, h: f64, fill: &str) {
+fn emit_artifact(svg: &mut SvgBuilder, x: f64, y: f64, w: f64, h: f64, fill: &str, stroke: &str) {
     let x_s = fc(x);
     let y_s = fc(y);
     let w_s = fc(w);
     let h_s = fc(h);
     svg.raw(&format!(
-        r#"<rect fill="{fill}" height="{h_s}" rx="{RX_RY}" ry="{RX_RY}" style="stroke:{STROKE};stroke-width:0.5;" width="{w_s}" x="{x_s}" y="{y_s}"/>"#,
+        r#"<rect fill="{fill}" height="{h_s}" rx="{RX_RY}" ry="{RX_RY}" style="stroke:{stroke};stroke-width:0.5;" width="{w_s}" x="{x_s}" y="{y_s}"/>"#,
     ));
     // Folded corner polygon at top-right (12x14 box, inset 5 from right and 5 from top).
     let fx = x + w - 17.0; // 12 wide, then 5 from right edge
@@ -654,17 +737,17 @@ fn emit_artifact(svg: &mut SvgBuilder, x: f64, y: f64, w: f64, h: f64, fill: &st
         fc(p1.1),
     );
     svg.raw(&format!(
-        r#"<polygon fill="{fill}" points="{pts}" style="stroke:{STROKE};stroke-width:0.5;"/>"#,
+        r#"<polygon fill="{fill}" points="{pts}" style="stroke:{stroke};stroke-width:0.5;"/>"#,
     ));
     // Two lines for the fold detail.
     svg.raw(&format!(
-        r#"<line style="stroke:{STROKE};stroke-width:0.5;" x1="{a}" x2="{a}" y1="{y1}" y2="{y2}"/>"#,
+        r#"<line style="stroke:{stroke};stroke-width:0.5;" x1="{a}" x2="{a}" y1="{y1}" y2="{y2}"/>"#,
         a = fc(fx + 6.0),
         y1 = fc(fy),
         y2 = fc(fy + 6.0),
     ));
     svg.raw(&format!(
-        r#"<line style="stroke:{STROKE};stroke-width:0.5;" x1="{x1}" x2="{x2}" y1="{y}" y2="{y}"/>"#,
+        r#"<line style="stroke:{stroke};stroke-width:0.5;" x1="{x1}" x2="{x2}" y1="{y}" y2="{y}"/>"#,
         x1 = fc(fx + 12.0),
         x2 = fc(fx + 6.0),
         y = fc(fy + 6.0),
@@ -673,9 +756,17 @@ fn emit_artifact(svg: &mut SvgBuilder, x: f64, y: f64, w: f64, h: f64, fill: &st
 
 // ---- Rounded rect (card / rectangle / agent leaf) --------------------------
 
-fn emit_rounded_rect(svg: &mut SvgBuilder, x: f64, y: f64, w: f64, h: f64, fill: &str) {
+fn emit_rounded_rect(
+    svg: &mut SvgBuilder,
+    x: f64,
+    y: f64,
+    w: f64,
+    h: f64,
+    fill: &str,
+    stroke: &str,
+) {
     svg.raw(&format!(
-        r#"<rect fill="{fill}" height="{h}" rx="{RX_RY}" ry="{RX_RY}" style="stroke:{STROKE};stroke-width:0.5;" width="{w}" x="{x}" y="{y}"/>"#,
+        r#"<rect fill="{fill}" height="{h}" rx="{RX_RY}" ry="{RX_RY}" style="stroke:{stroke};stroke-width:0.5;" width="{w}" x="{x}" y="{y}"/>"#,
         h = fc(h),
         w = fc(w),
         x = fc(x),
@@ -685,9 +776,17 @@ fn emit_rounded_rect(svg: &mut SvgBuilder, x: f64, y: f64, w: f64, h: f64, fill:
 
 // ---- Card cluster (rect + horizontal line) --------------------------------
 
-fn emit_card_cluster(svg: &mut SvgBuilder, x: f64, y: f64, w: f64, h: f64, fill: &str) {
+fn emit_card_cluster(
+    svg: &mut SvgBuilder,
+    x: f64,
+    y: f64,
+    w: f64,
+    h: f64,
+    fill: &str,
+    stroke: &str,
+) {
     svg.raw(&format!(
-        r#"<rect fill="{fill}" height="{h}" rx="{RX_RY}" ry="{RX_RY}" style="stroke:{STROKE};stroke-width:1;" width="{w}" x="{x}" y="{y}"/>"#,
+        r#"<rect fill="{fill}" height="{h}" rx="{RX_RY}" ry="{RX_RY}" style="stroke:{stroke};stroke-width:1;" width="{w}" x="{x}" y="{y}"/>"#,
         h = fc(h),
         w = fc(w),
         x = fc(x),
@@ -696,7 +795,7 @@ fn emit_card_cluster(svg: &mut SvgBuilder, x: f64, y: f64, w: f64, h: f64, fill:
     // Horizontal line under the title row (at y + 20.4883).
     let ly = y + 20.4883;
     svg.raw(&format!(
-        r#"<line style="stroke:{STROKE};stroke-width:1;" x1="{x1}" x2="{x2}" y1="{ly_s}" y2="{ly_s}"/>"#,
+        r#"<line style="stroke:{stroke};stroke-width:1;" x1="{x1}" x2="{x2}" y1="{ly_s}" y2="{ly_s}"/>"#,
         x1 = fc(x),
         x2 = fc(x + w),
         ly_s = fc(ly),
@@ -705,9 +804,9 @@ fn emit_card_cluster(svg: &mut SvgBuilder, x: f64, y: f64, w: f64, h: f64, fill:
 
 // ---- Component (rect + tab + bars) ----------------------------------------
 
-fn emit_component(svg: &mut SvgBuilder, x: f64, y: f64, w: f64, h: f64, fill: &str) {
+fn emit_component(svg: &mut SvgBuilder, x: f64, y: f64, w: f64, h: f64, fill: &str, stroke: &str) {
     svg.raw(&format!(
-        r#"<rect fill="{fill}" height="{h}" rx="{RX_RY}" ry="{RX_RY}" style="stroke:{STROKE};stroke-width:0.5;" width="{w}" x="{x}" y="{y}"/>"#,
+        r#"<rect fill="{fill}" height="{h}" rx="{RX_RY}" ry="{RX_RY}" style="stroke:{stroke};stroke-width:0.5;" width="{w}" x="{x}" y="{y}"/>"#,
         h = fc(h),
         w = fc(w),
         x = fc(x),
@@ -717,19 +816,19 @@ fn emit_component(svg: &mut SvgBuilder, x: f64, y: f64, w: f64, h: f64, fill: &s
     let tab_x = x + w - 20.0;
     let tab_y = y + 5.0;
     svg.raw(&format!(
-        r#"<rect fill="{fill}" height="10" style="stroke:{STROKE};stroke-width:0.5;" width="15" x="{x}" y="{y}"/>"#,
+        r#"<rect fill="{fill}" height="10" style="stroke:{stroke};stroke-width:0.5;" width="15" x="{x}" y="{y}"/>"#,
         x = fc(tab_x),
         y = fc(tab_y),
     ));
     // Two small bars left of tab (4w x 2h each).
     let bar_x = tab_x - 2.0;
     svg.raw(&format!(
-        r#"<rect fill="{fill}" height="2" style="stroke:{STROKE};stroke-width:0.5;" width="4" x="{x}" y="{y}"/>"#,
+        r#"<rect fill="{fill}" height="2" style="stroke:{stroke};stroke-width:0.5;" width="4" x="{x}" y="{y}"/>"#,
         x = fc(bar_x),
         y = fc(tab_y + 2.0),
     ));
     svg.raw(&format!(
-        r#"<rect fill="{fill}" height="2" style="stroke:{STROKE};stroke-width:0.5;" width="4" x="{x}" y="{y}"/>"#,
+        r#"<rect fill="{fill}" height="2" style="stroke:{stroke};stroke-width:0.5;" width="4" x="{x}" y="{y}"/>"#,
         x = fc(bar_x),
         y = fc(tab_y + 6.0),
     ));
@@ -756,11 +855,19 @@ fn emit_frame(svg: &mut SvgBuilder, x: f64, y: f64, w: f64, h: f64, fill: &str) 
 
 // ---- Frame cluster --------------------------------------------------------
 
-fn emit_frame_cluster(svg: &mut SvgBuilder, x: f64, y: f64, w: f64, h: f64, fill: &str) {
+fn emit_frame_cluster(
+    svg: &mut SvgBuilder,
+    x: f64,
+    y: f64,
+    w: f64,
+    h: f64,
+    fill: &str,
+    stroke: &str,
+) {
     // Frame cluster: bare rect with stroke-width=1. The tab is emitted
     // by emit_cluster_label since it depends on label width.
     svg.raw(&format!(
-        r#"<rect fill="{fill}" height="{h}" rx="{RX_RY}" ry="{RX_RY}" style="stroke:{STROKE};stroke-width:1;" width="{w}" x="{x}" y="{y}"/>"#,
+        r#"<rect fill="{fill}" height="{h}" rx="{RX_RY}" ry="{RX_RY}" style="stroke:{stroke};stroke-width:1;" width="{w}" x="{x}" y="{y}"/>"#,
         h = fc(h),
         w = fc(w),
         x = fc(x),
@@ -818,7 +925,7 @@ fn emit_package_cluster(_svg: &mut SvgBuilder, _x: f64, _y: f64, _w: f64, _h: f6
 
 // ---- Stack ----------------------------------------------------------------
 
-fn emit_stack(svg: &mut SvgBuilder, x: f64, y: f64, w: f64, h: f64, fill: &str) {
+fn emit_stack(svg: &mut SvgBuilder, x: f64, y: f64, w: f64, h: f64, fill: &str, stroke: &str) {
     // Stack: an inner rect with no stroke (just fill), plus an outline path
     // that extends 15px on either side. Geometry from goldens:
     //   rect at (x, y, w, h) — the inner fill
@@ -851,15 +958,15 @@ fn emit_stack(svg: &mut SvgBuilder, x: f64, y: f64, w: f64, h: f64, fill: &str) 
         y_pm1 = fc(y + h - 2.5),
     );
     svg.raw(&format!(
-        r#"<path d="{d}" fill="none" style="stroke:{STROKE};stroke-width:0.5;"/>"#
+        r#"<path d="{d}" fill="none" style="stroke:{stroke};stroke-width:0.5;"/>"#
     ));
 }
 
 // ---- Storage (rounded rect with rx=35, ry=35) -----------------------------
 
-fn emit_storage(svg: &mut SvgBuilder, x: f64, y: f64, w: f64, h: f64, fill: &str) {
+fn emit_storage(svg: &mut SvgBuilder, x: f64, y: f64, w: f64, h: f64, fill: &str, stroke: &str) {
     svg.raw(&format!(
-        r#"<rect fill="{fill}" height="{h}" rx="35" ry="35" style="stroke:{STROKE};stroke-width:0.5;" width="{w}" x="{x}" y="{y}"/>"#,
+        r#"<rect fill="{fill}" height="{h}" rx="35" ry="35" style="stroke:{stroke};stroke-width:0.5;" width="{w}" x="{x}" y="{y}"/>"#,
         h = fc(h),
         w = fc(w),
         x = fc(x),
@@ -869,15 +976,42 @@ fn emit_storage(svg: &mut SvgBuilder, x: f64, y: f64, w: f64, h: f64, fill: &str
 
 // ---- Database (cylinder via 2 bezier paths) -------------------------------
 
-fn emit_database(svg: &mut SvgBuilder, x: f64, y: f64, w: f64, h: f64, fill: &str) {
-    // Recover full-precision width from oracle width to avoid 1-ULP drift.
-    // For database the geometry is symmetric so cx = (x_low + x_high) / 2
-    // where x_high = x + w_full. Width is determined by label, but for
-    // matching we can use the oracle's reported w and let cx ride the
-    // truncated computation — for the symmetric case, just use oracle w.
+/// Recover the full-precision database/queue body width from text metrics.
+/// PlantUML lays the cylinder out as `text_width(label) + 20`. We only adopt
+/// the metric-derived value when its display rounding (left + width) matches
+/// the oracle's right edge, so any clamped or otherwise atypical box falls
+/// back to the oracle's display-rounded width.
+fn recover_db_width(label: &str, oracle_w: f64, x: f64) -> f64 {
+    let candidate = pm::text_width(label, FONT_SIZE, false) + 20.0;
+    if fc(x + candidate) == fc(x + oracle_w) {
+        candidate
+    } else {
+        oracle_w
+    }
+}
+
+#[allow(clippy::too_many_arguments)]
+fn emit_database(
+    svg: &mut SvgBuilder,
+    x: f64,
+    y: f64,
+    w: f64,
+    h: f64,
+    fill: &str,
+    stroke: &str,
+    label: &str,
+) {
+    // The cylinder midline `cx = x + w/2` must use the full-precision width,
+    // not the display-rounded oracle width: a half-integer midpoint (e.g.
+    // 70.56225) would otherwise round the wrong way. PlantUML's database
+    // width is `text_width(label) + 20`; recover it from metrics and only
+    // adopt it when its display rounding agrees with the oracle's `w` (so a
+    // clamped/min-width box keeps the oracle value).
     let _ = h;
+    let w_full = recover_db_width(label, w, x);
     let h_full = pm::text_height(FONT_SIZE) + 29.0;
-    let cx = x + w / 2.0;
+    let cx = x + w_full / 2.0;
+    let w = w_full;
     let bot_y = y + h_full;
     let top_low = y + 10.0;
     let bot_low = y + h_full - 10.0;
@@ -892,7 +1026,7 @@ fn emit_database(svg: &mut SvgBuilder, x: f64, y: f64, w: f64, h: f64, fill: &st
         bl = fc(bot_low),
     );
     svg.raw(&format!(
-        r#"<path d="{d}" fill="{fill}" style="stroke:{STROKE};stroke-width:0.5;"/>"#
+        r#"<path d="{d}" fill="{fill}" style="stroke:{stroke};stroke-width:0.5;"/>"#
     ));
     // The "top wall" of the cylinder (inner curve under the lip).
     let d2 = format!(
@@ -904,13 +1038,13 @@ fn emit_database(svg: &mut SvgBuilder, x: f64, y: f64, w: f64, h: f64, fill: &st
         ml = fc(y + 20.0),
     );
     svg.raw(&format!(
-        r#"<path d="{d2}" fill="none" style="stroke:{STROKE};stroke-width:0.5;"/>"#
+        r#"<path d="{d2}" fill="none" style="stroke:{stroke};stroke-width:0.5;"/>"#
     ));
 }
 
 // ---- Queue (cylinder rotated 90 degrees) ---------------------------------
 
-fn emit_queue(svg: &mut SvgBuilder, x: f64, y: f64, w: f64, h: f64, fill: &str) {
+fn emit_queue(svg: &mut SvgBuilder, x: f64, y: f64, w: f64, h: f64, fill: &str, stroke: &str) {
     // Like database but rotated: rounded left + straight top/bottom + rounded right.
     // The "right wall" lip is at x+w-10.
     //
@@ -933,7 +1067,7 @@ fn emit_queue(svg: &mut SvgBuilder, x: f64, y: f64, w: f64, h: f64, fill: &str) 
         yh_s = fc(y + h_full),
     );
     svg.raw(&format!(
-        r#"<path d="{d}" fill="{fill}" style="stroke:{STROKE};stroke-width:0.5;"/>"#
+        r#"<path d="{d}" fill="{fill}" style="stroke:{stroke};stroke-width:0.5;"/>"#
     ));
     // The inner left wall (right-side of the lip).
     let inner_x = x + w - 10.0;
@@ -946,7 +1080,7 @@ fn emit_queue(svg: &mut SvgBuilder, x: f64, y: f64, w: f64, h: f64, fill: &str) 
         yh_s = fc(y + h_full),
     );
     svg.raw(&format!(
-        r#"<path d="{d2}" fill="none" style="stroke:{STROKE};stroke-width:0.5;"/>"#
+        r#"<path d="{d2}" fill="none" style="stroke:{stroke};stroke-width:0.5;"/>"#
     ));
 }
 
@@ -1246,7 +1380,7 @@ fn emit_collections_entity(
     fill: &str,
 ) {
     // Back card (the captured body rect).
-    emit_rounded_rect(svg, rect.x, rect.y, rect.width, rect.height, fill);
+    emit_rounded_rect(svg, rect.x, rect.y, rect.width, rect.height, fill, STROKE);
     // Front card: offset up-left by 4px. Prefer the oracle's aux rect when
     // present, else derive it.
     let (fx, fy, fw, fh) = rect
@@ -1254,7 +1388,7 @@ fn emit_collections_entity(
         .first()
         .map(|a| (a.x, a.y, a.width, a.height))
         .unwrap_or((rect.x - 4.0, rect.y - 4.0, rect.width, rect.height));
-    emit_rounded_rect(svg, fx, fy, fw, fh, fill);
+    emit_rounded_rect(svg, fx, fy, fw, fh, fill, STROKE);
     let label_w = text_render::measure(&node.label, FONT_SIZE, false);
     let label_x = rect
         .text_x_values
