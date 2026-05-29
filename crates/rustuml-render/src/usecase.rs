@@ -210,22 +210,35 @@ fn render_title(svg: &mut SvgBuilder, diagram: &UseCaseDiagram, total_w: f64) {
 
 /// Assign PlantUML-compatible entity IDs by sorting actors, use cases, and
 /// packages by `source_line` and numbering sequentially from `ent0002`.
+///
+/// PlantUML draws entity *and* link uids from a single monotonic counter in
+/// source-line order, so a connection declared between two entity declarations
+/// consumes a counter slot (it becomes a `lnk` id) and pushes later entities to
+/// higher `ent` numbers. We model this by interleaving connections as
+/// slot-consuming entries that produce no `ent` mapping.
 fn build_entity_id_map(diagram: &UseCaseDiagram) -> HashMap<String, String> {
     struct Entry {
-        key: String,
+        /// `None` for a connection (consumes a counter slot but emits no `ent` id).
+        key: Option<String>,
         line: usize,
     }
     let mut entries: Vec<Entry> = Vec::new();
     for a in &diagram.actors {
         entries.push(Entry {
-            key: format!("actor::{}", a.id),
+            key: Some(format!("actor::{}", a.id)),
             line: a.source_line,
         });
     }
     for uc in &diagram.use_cases {
         entries.push(Entry {
-            key: format!("uc::{}", uc.id),
+            key: Some(format!("uc::{}", uc.id)),
             line: uc.source_line,
+        });
+    }
+    for c in &diagram.connections {
+        entries.push(Entry {
+            key: None,
+            line: c.source_line,
         });
     }
     // Packages have no source_line in the model; pin them at the lowest line
@@ -253,14 +266,16 @@ fn build_entity_id_map(diagram: &UseCaseDiagram) -> HashMap<String, String> {
             .map(|l| l.saturating_sub(1))
             .unwrap_or(i);
         entries.push(Entry {
-            key: format!("pkg::{}", p.name),
+            key: Some(format!("pkg::{}", p.name)),
             line,
         });
     }
     entries.sort_by_key(|e| e.line);
     let mut map = HashMap::new();
     for (counter, e) in (2usize..).zip(entries) {
-        map.insert(e.key, format!("ent{counter:04}"));
+        if let Some(key) = e.key {
+            map.insert(key, format!("ent{counter:04}"));
+        }
     }
     map
 }
