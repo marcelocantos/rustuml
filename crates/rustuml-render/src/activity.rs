@@ -830,6 +830,45 @@ fn switch_case_centers(cases: &[SwitchCase], block_left: f64) -> Vec<f64> {
     centers
 }
 
+/// Left extent (centreline → leftmost drawn element) of a `while` tile.
+///
+/// Faithful port of PlantUML's `FtileWhile.getTranslateForSpecial`: with a
+/// trailing terminator (`stop`/`end`/etc., the `specialOut` ftile), the
+/// terminator is pulled left of the loop and becomes the leftmost element. Its
+/// centre sits `special_offset` left of the spine, where
+///
+///   special_offset = max(body_left + halfHex, cond_half) + specialOut.width/2
+///
+/// (`xWhile = bodyLeft - halfHex` further left, `xDiamond = condHalf`; the
+/// special is then offset by its own half-width). The diagram adds a fixed
+/// 13px lead from that centre to the SVG content-left edge (LEFT_SVG_PAD 25 −
+/// MARGIN_LEAD 16 + arrowhead wing 4). Without a terminator the exit arm wraps
+/// at `geo_left − halfHex`; we keep the legacy +25 lead for that (untested)
+/// path since no golden exercises it.
+fn while_left_extent(
+    body_left: f64,
+    cond_half: f64,
+    end_label: Option<&str>,
+    special_out: Option<&LayoutNode>,
+) -> f64 {
+    let special_extent = match special_out {
+        Some(special) => {
+            let special_half = node_width(special) / 2.0;
+            let special_offset = (body_left + DIAMOND_HALF).max(cond_half) + special_half;
+            special_offset + 13.0
+        }
+        None => cond_half.max(body_left) + 25.0,
+    };
+    // The `endwhile (label)` text is drawn flush left of the diamond's left
+    // vertex (its right edge at diamond_left_vertex). When wide enough it
+    // becomes the leftmost element and drives the content-left edge: the label
+    // sits 1px left of MARGIN_LEAD, so it contributes cond_half + label_w − 1.
+    let label_extent = end_label
+        .map(|l| cond_half + text_render::measure(l, SMALL_FONT, false) - 1.0)
+        .unwrap_or(0.0);
+    special_extent.max(label_extent)
+}
+
 /// Compute the asymmetric (left, right) extents of a single node from its
 /// vertical centreline. For most nodes this is symmetric (width/2, width/2);
 /// for if/else with unequal branches, the left extent (then-side) and right
@@ -876,30 +915,22 @@ fn node_extents(node: &LayoutNode) -> (f64, f64) {
         LayoutNode::While {
             body,
             condition,
+            end_label,
             special_out,
             ..
         } => {
-            // Empirical formula matching PlantUML's effective outer placement
-            // (LEFT_SVG_PAD=25, ARROW_WING=4, MARGIN_LEAD=16 → +13). Tuned to
-            // give byte-exact cx for both with-specialOut and without cases:
-            //   left_extent  = max(cond_half, body_left) + 25
-            //                  + (specialOut.width/2 if present else 0)
-            //   right_extent = max(cond_half, body_right) + halfHex
-            // The +25 absorbs PlantUML's LEFT_SVG_PAD (25 px from SVG edge to
-            // the exit arrowhead) plus the arrowhead wing offset minus
-            // rustuml's MARGIN_LEAD. The specialOut shift (specialOut.width/2)
-            // is because the exit lands at the specialOut's cx, not at halfHex.
             let (body_left, body_right) = sequence_extents(body);
             let cond_half = diamond_inner_w(condition) / 2.0 + DIAMOND_HALF;
-            let special_shift = special_out.as_ref().map_or(0.0, |s| node_width(s) / 2.0);
-            let left_extent = cond_half.max(body_left) + 25.0 + special_shift;
-            // Right side: loop arm at body_right + halfHex, plus right
-            // padding to match PlantUML's effective trail (~halfHex more
-            // than rustuml's default MARGIN_TRAIL=19).
-            // The loop-back arm reaches max(cond,body)+halfHex with a 4 px
-            // arrowhead, and PlantUML leaves ~11.4 px of breathing room past
-            // it (verified against the width-only while goldens: +3 over the
-            // bare 2*halfHex absorbs that gap once MARGIN_TRAIL is added).
+            let left_extent = while_left_extent(
+                body_left,
+                cond_half,
+                end_label.as_deref(),
+                special_out.as_deref(),
+            );
+            // Right side: loop-back arm at max(cond,body) + halfHex with a 4px
+            // arrowhead, plus halfHex of trailing reservation from FtileWhile's
+            // `dx + halfHex` term (= 2*halfHex + 3 past max). Verified against
+            // the width-only while goldens.
             let right_extent = cond_half.max(body_right) + 2.0 * DIAMOND_HALF + 3.0;
             (left_extent, right_extent)
         }
@@ -1017,20 +1048,11 @@ fn node_width(node: &LayoutNode) -> f64 {
             bar_w.max(min_bar_w)
         }
         LayoutNode::Switch { cases, .. } => switch_case_block_width(cases),
-        LayoutNode::While {
-            body,
-            condition,
-            special_out,
-            ..
-        } => {
-            // Width = left_extent + right_extent. See node_extents above
-            // for the asymmetric formula.
-            let (body_left, body_right) = sequence_extents(body);
-            let cond_half = diamond_inner_w(condition) / 2.0 + DIAMOND_HALF;
-            let special_shift = special_out.as_ref().map_or(0.0, |s| node_width(s) / 2.0);
-            let left_extent = cond_half.max(body_left) + 25.0 + special_shift;
-            let right_extent = cond_half.max(body_right) + 2.0 * DIAMOND_HALF + 3.0;
-            left_extent + right_extent
+        LayoutNode::While { .. } => {
+            // Width = left_extent + right_extent. The asymmetric formula lives
+            // in node_extents (single source of truth for While geometry).
+            let (l, r) = node_extents(node);
+            l + r
         }
         LayoutNode::Repeat {
             body, condition, ..
@@ -2879,13 +2901,13 @@ fn emit_while(
     // PlantUML's slot compression removes ~4.82 of slack between diamond and
     // body, giving 32.1348 empirically. (Empty body doesn't compress because
     // it bridges directly to the junction, leaving no compressible slack.)
-    let compress_top = is_label.is_some() && end_label.is_none() && !body.is_empty();
+    // The "is (yes)" label below the diamond reserves text_height(11) plus
+    // two hexagon half-sizes of vertical lead before the body top. There is
+    // no slot compression here: PlantUML's FtileWhile reserves the full
+    // 4*halfHex + label height regardless of whether `endwhile` carries a
+    // trailing label (faithful port of calculateDimensionFtile).
     let body_top_offset = if is_label.is_some() {
-        if compress_top {
-            32.1348
-        } else {
-            pm::text_height(SMALL_FONT) + 2.0 * DIAMOND_HALF
-        }
+        pm::text_height(SMALL_FONT) + 2.0 * DIAMOND_HALF
     } else {
         ARROW_LEN
     };
@@ -3035,8 +3057,7 @@ fn emit_while(
     // 4. UP arrowhead at midpoint of the loop arm's vertical run.
     // PlantUML draws this at the midpoint of (diamond_cy, body_bottom +
     // halfHex), adjusted by the same compression that shifts body_top up.
-    let body_compression = if compress_top { 4.8203 } else { 0.0 };
-    let mid_y = (diamond_cy + body_bottom + DIAMOND_HALF - body_compression) / 2.0;
+    let mid_y = (diamond_cy + body_bottom + DIAMOND_HALF) / 2.0;
     svg.polygon_connector(
         &arrow_color,
         &[
