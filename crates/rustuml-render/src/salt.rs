@@ -32,6 +32,13 @@ const RC_MARGIN: f64 = 20.0; // text offset
 const RC_RECT: f64 = 10.0;
 const RC_ELLIPSE2: f64 = 4.0;
 
+// AbstractElementText: getSingleSpace() returns a fixed 8px.
+const CHAR_SPACE: f64 = 8.0;
+
+// ElementButton
+const BTN_STROKE: f64 = 2.5;
+const BTN_MARGIN: f64 = 2.0;
+
 // ── Public entry point ───────────────────────────────────────────────────────
 
 /// Render a Salt diagram with an optional oracle layout.
@@ -158,23 +165,31 @@ fn widget_dim(widget: &SaltWidget) -> (f64, f64) {
     let th = pm::text_height(FONT_SIZE);
     match widget {
         SaltWidget::Label(t) => {
-            let display = strip_creole(t);
-            (pm::text_width(&display, FONT_SIZE, false), th)
+            let s = TextStyle::parse(t);
+            (pm::text_width(&s.display, FONT_SIZE, s.bold), th)
         }
         SaltWidget::Checkbox { label, .. } | SaltWidget::Radio { label, .. } => {
-            let display = strip_creole(label);
-            (pm::text_width(&display, FONT_SIZE, false) + RC_MARGIN, th)
+            let s = TextStyle::parse(label);
+            (
+                pm::text_width(&s.display, FONT_SIZE, s.bold) + RC_MARGIN,
+                th,
+            )
         }
         SaltWidget::Separator(_) => (RC_RECT, 6.0), // ElementLine: (10, 6)
-        // Best-effort for widgets not yet fully reproduced.
         SaltWidget::Button(t) => {
-            let tw = pm::text_width(t, FONT_SIZE, false);
-            (tw + 9.0, th + 4.0 + 5.0)
+            // managed length: max(textWidth, charLen * 8), then + 2*marginX + 2*stroke.
+            let mw = managed_text_width(t);
+            (
+                mw + 2.0 * BTN_MARGIN + 2.0 * BTN_STROKE,
+                th + 2.0 * BTN_MARGIN + 2.0 * BTN_STROKE,
+            )
         }
         SaltWidget::TextField(t) => {
-            let tw = pm::text_width(t, FONT_SIZE, false);
-            (tw + 6.0, th + 2.0)
+            // managed length, then delta(6, 2).
+            let mw = managed_text_width(t);
+            (mw + 6.0, th + 2.0)
         }
+        // Best-effort for widgets not yet fully reproduced.
         SaltWidget::Dropdown(t) => {
             let tw = pm::text_width(t, FONT_SIZE, false);
             (tw + 20.0, th)
@@ -238,18 +253,40 @@ fn draw_widget(widget: &SaltWidget, x: f64, y: f64, cell_w: f64, cell_h: f64, bu
             emit_separator(buf, x, y + y2, cell_w, *kind);
         }
 
-        // ── Best-effort fallbacks (geometry not yet exact) ──
         SaltWidget::Button(label) => {
-            let stroke = 2.5;
-            let rw = cell_w.max(pm::text_width(label, FONT_SIZE, false) + 4.0 + stroke);
-            let rh = pm::text_height(FONT_SIZE) + 4.0 + stroke;
-            emit_rounded_rect_stroke(buf, x + stroke, y + stroke, rw, rh, "#EEEEEE", stroke);
-            let tx = x + stroke + 2.0;
-            emit_text(buf, tx, y + stroke + 2.0 + ascent, label);
+            // Preferred dimension (uses managed width).
+            let (pw, ph) = widget_dim(widget);
+            // Rounded rect at translate(stroke, stroke), inset by 2*stroke.
+            emit_rounded_rect_stroke(
+                buf,
+                x + BTN_STROKE,
+                y + BTN_STROKE,
+                pw - 2.0 * BTN_STROKE,
+                ph - 2.0 * BTN_STROKE,
+                "#EEEEEE",
+                BTN_STROKE,
+            );
+            // Text centred: drawText at ((pw - pureTextWidth)/2, stroke + marginY).
+            let pure_w = pm::text_width(&strip_creole(label), FONT_SIZE, false);
+            let tx = x + (pw - pure_w) / 2.0;
+            let ty = y + BTN_STROKE + BTN_MARGIN + ascent;
+            emit_text(buf, tx, ty, label);
         }
         SaltWidget::TextField(t) => {
+            // drawText at (3, 0).
             emit_text(buf, x + 3.0, y + ascent, t);
+            let (pw, _) = widget_dim(widget);
+            let text_h = pref_h; // getTextDimensionAt height
+            let managed_w = managed_text_width(t);
+            // hline at translate(1, text_h), width = preferred.width - 3.
+            emit_hline_black(buf, x + 1.0, y + text_h, pw - 3.0);
+            // Two vertical ticks at translate(1, y3) and (3 + managedW + 1, y3),
+            // each 2px tall, where y3 = text_h - 3.
+            let y3 = text_h - 3.0;
+            emit_vline_black(buf, x + 1.0, y + y3, 2.0);
+            emit_vline_black(buf, x + 3.0 + managed_w + 1.0, y + y3, 2.0);
         }
+        // ── Best-effort fallbacks (geometry not yet exact) ──
         SaltWidget::Dropdown(label) => {
             emit_text(buf, x, y + ascent, label);
         }
@@ -267,15 +304,54 @@ fn draw_widget(widget: &SaltWidget, x: f64, y: f64, cell_w: f64, cell_h: f64, bu
 // ── SVG emit helpers (PlantUML-style attributes) ─────────────────────────────
 
 fn emit_text(buf: &mut String, x: f64, y: f64, content: &str) {
-    let display = strip_creole(content);
-    let tl = pm::text_width(&display, FONT_SIZE, false);
-    let escaped = escape_text(&display);
+    let style = TextStyle::parse(content);
+    let tl = pm::text_width(&style.display, FONT_SIZE, style.bold);
+    let escaped = escape_text(&style.display);
+    // PlantUML emits attributes alphabetically; the comparator sorts them
+    // anyway, so we just include the relevant style attributes.
+    let weight = if style.bold {
+        r#" font-weight="700""#
+    } else {
+        ""
+    };
+    let italic = if style.italic {
+        r#" font-style="italic""#
+    } else {
+        ""
+    };
+    let underline = if style.underline {
+        r#" text-decoration="underline""#
+    } else {
+        ""
+    };
     buf.push_str(&format!(
-        r##"<text fill="#000000" font-family="sans-serif" font-size="12" lengthAdjust="spacing" textLength="{tl}" x="{x}" y="{y}">{escaped}</text>"##,
+        r##"<text fill="#000000" font-family="sans-serif" font-size="12"{italic}{weight} lengthAdjust="spacing"{underline} textLength="{tl}" x="{x}" y="{y}">{escaped}</text>"##,
         tl = pm::fmt_coord(tl),
         x = pm::fmt_coord(x),
         y = pm::fmt_coord(y),
     ));
+}
+
+/// Text content with simple creole `<b>`/`<i>`/`<u>` styling stripped out.
+struct TextStyle {
+    display: String,
+    bold: bool,
+    italic: bool,
+    underline: bool,
+}
+
+impl TextStyle {
+    fn parse(content: &str) -> TextStyle {
+        let bold = content.contains("<b>");
+        let italic = content.contains("<i>");
+        let underline = content.contains("<u>");
+        TextStyle {
+            display: strip_creole(content),
+            bold,
+            italic,
+            underline,
+        }
+    }
 }
 
 fn emit_rect_15(buf: &mut String, x: f64, y: f64, w: f64, h: f64, fill: &str) {
@@ -367,6 +443,32 @@ fn emit_separator(buf: &mut String, x: f64, y: f64, width: f64, kind: SeparatorK
             ));
         }
     }
+}
+
+fn emit_hline_black(buf: &mut String, x: f64, y: f64, width: f64) {
+    buf.push_str(&format!(
+        r##"<line style="stroke:#000000;stroke-width:1;" x1="{x1}" x2="{x2}" y1="{y}" y2="{y}"/>"##,
+        x1 = pm::fmt_coord(x),
+        x2 = pm::fmt_coord(x + width),
+        y = pm::fmt_coord(y),
+    ));
+}
+
+fn emit_vline_black(buf: &mut String, x: f64, y: f64, height: f64) {
+    buf.push_str(&format!(
+        r##"<line style="stroke:#000000;stroke-width:1;" x1="{x}" x2="{x}" y1="{y1}" y2="{y2}"/>"##,
+        x = pm::fmt_coord(x),
+        y1 = pm::fmt_coord(y),
+        y2 = pm::fmt_coord(y + height),
+    ));
+}
+
+/// Managed text width for buttons/textfields: `max(textWidth, charLen * 8)`.
+fn managed_text_width(t: &str) -> f64 {
+    let display = strip_creole(t);
+    let tw = pm::text_width(&display, FONT_SIZE, false);
+    let char_len = display.chars().count() as f64;
+    tw.max(char_len * CHAR_SPACE)
 }
 
 /// Strip simple creole markup tags for measurement/display fallback.
