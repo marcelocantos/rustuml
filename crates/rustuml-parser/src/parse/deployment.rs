@@ -516,15 +516,23 @@ pub fn parse_deployment(lines: &[String]) -> Result<DeploymentDiagram, ParseErro
             continue;
         }
 
-        // Note link: N1 .. N2
+        // Note link: N1 .. N2 — only when one endpoint is a known floating
+        // note id. Otherwise `X .. Y` is an ordinary (dotted) association
+        // between two nodes and must fall through to connection parsing.
         if let Some(caps) = RE_NOTE_LINK.captures(trimmed) {
-            let note_id = caps[1].to_string();
-            let target_id = caps[2].to_string();
-            // If there's a floating note with this id, set its target.
-            if let Some(note) = notes.iter_mut().find(|n| n.id.as_deref() == Some(&note_id)) {
-                note.target = Some(target_id);
+            let lhs = caps[1].to_string();
+            let rhs = caps[2].to_string();
+            let lhs_note = notes.iter().any(|n| n.id.as_deref() == Some(lhs.as_str()));
+            let rhs_note = notes.iter().any(|n| n.id.as_deref() == Some(rhs.as_str()));
+            if lhs_note || rhs_note {
+                // Attach the note to the non-note endpoint.
+                let (note_id, target_id) = if lhs_note { (lhs, rhs) } else { (rhs, lhs) };
+                if let Some(note) = notes.iter_mut().find(|n| n.id.as_deref() == Some(&note_id)) {
+                    note.target = Some(target_id);
+                }
+                continue;
             }
-            continue;
+            // Not a note link — fall through to connection handling below.
         }
 
         // Check if the first word is a deployment keyword.
