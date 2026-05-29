@@ -64,7 +64,19 @@ pub fn parse_wbs(lines: &[String]) -> Result<WbsDiagram, ParseError> {
             continue;
         };
 
-        let label = trimmed[prefix_len..].trim().to_string();
+        let rest = trimmed[prefix_len..].trim_start();
+
+        // Optional leading `[#color]` fill token, e.g. `**[#blue] Subtask`.
+        let (color, after_color) = if let Some(stripped) = rest.strip_prefix("[#") {
+            match stripped.split_once(']') {
+                Some((c, tail)) => (Some(format!("#{}", c.trim())), tail),
+                None => (None, rest),
+            }
+        } else {
+            (None, rest)
+        };
+
+        let label = after_color.trim().to_string();
         if label.is_empty() {
             return Err(ParseError {
                 line: line_no + 1,
@@ -75,6 +87,7 @@ pub fn parse_wbs(lines: &[String]) -> Result<WbsDiagram, ParseError> {
         let depth = prefix_len;
         let node = WbsNode {
             label,
+            color,
             depth,
             side,
             children: Vec::new(),

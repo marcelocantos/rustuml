@@ -18,45 +18,66 @@ use crate::text_render;
 
 const FONT_SIZE: f64 = 12.0;
 const PAD_X: f64 = 10.0;
-const BOX_H: f64 = 34.1328;
+/// Exact box height: text height (14.1328125 at size 12) + 20px vertical
+/// padding.  Kept un-rounded so accumulated row offsets match PlantUML's
+/// per-coordinate HALF_UP rounding.
+const BOX_H: f64 = 34.1328125;
+/// Baseline offset inside a box: (box_h − text_height)/2 + ascent.
+const TEXT_BASELINE: f64 = 21.6015625;
 const SPINE_DROP: f64 = 20.0;
 const H_GAP: f64 = 20.0;
 const MARGIN: f64 = 20.0;
+/// Vertical gap between stacked boxes; stride = `BOX_H + V_GAP`.
+const V_GAP: f64 = 15.0;
+const V_STRIDE: f64 = BOX_H + V_GAP;
+/// Horizontal indent of a child box past its parent's centre (also the
+/// length of the elbow stub line).
+const INDENT: f64 = 10.0;
 
 const FILL_DEFAULT: &str = "#F1F1F1";
 const STROKE: &str = "#181818";
 
 struct Subtree {
     label: String,
+    fill: String,
     text_w: f64,
     box_w: f64,
-    total_w: f64,
-    total_h: f64,
+    /// Horizontal extent of the vertical-stack subtree rooted here, measured
+    /// from this box's left edge.  Children indent `box_w/2 + INDENT` past the
+    /// left edge, so the extent is the wider of this box and the deepest child.
+    hwidth: f64,
+    /// Number of boxes in the subtree (this node plus all descendants), i.e.
+    /// the row count a vertical stack occupies.
+    rows: usize,
+    /// Whether this depth-2 branch grows from the left (`--` prefix).  Only
+    /// meaningful for the root's direct children.
+    is_left: bool,
     children: Vec<Subtree>,
 }
 
 fn measure_subtree(node: &WbsNode) -> Subtree {
     let text_w = pm::text_width(&node.label, FONT_SIZE, false);
     let box_w = text_w + PAD_X * 2.0;
+    let fill = node
+        .color
+        .as_deref()
+        .map(crate::sequence::resolve_color)
+        .unwrap_or_else(|| FILL_DEFAULT.to_string());
     let children: Vec<Subtree> = node.children.iter().map(measure_subtree).collect();
-    let children_total_w = if children.is_empty() {
-        0.0
-    } else {
-        children.iter().map(|c| c.total_w).sum::<f64>() + H_GAP * (children.len() - 1) as f64
-    };
-    let total_w = box_w.max(children_total_w);
-    let max_child_h = children.iter().map(|c| c.total_h).fold(0.0_f64, f64::max);
-    let total_h = if children.is_empty() {
-        BOX_H
-    } else {
-        BOX_H + SPINE_DROP * 2.0 + max_child_h
-    };
+    let child_indent = box_w / 2.0 + INDENT;
+    let hwidth = children
+        .iter()
+        .map(|c| child_indent + c.hwidth)
+        .fold(box_w, f64::max);
+    let rows = 1 + children.iter().map(|c| c.rows).sum::<usize>();
     Subtree {
         label: node.label.clone(),
+        fill,
         text_w,
         box_w,
-        total_w,
-        total_h,
+        hwidth,
+        rows,
+        is_left: node.side == WbsSide::Left,
         children,
     }
 }
@@ -73,10 +94,10 @@ fn emit_line(buf: &mut String, x1: f64, y1: f64, x2: f64, y2: f64) {
     .unwrap();
 }
 
-fn emit_box(buf: &mut String, x: f64, y: f64, w: f64, label: &str, text_w: f64) {
+fn emit_box(buf: &mut String, x: f64, y: f64, w: f64, label: &str, text_w: f64, fill: &str) {
     write!(
         buf,
-        r#"<rect fill="{FILL_DEFAULT}" height="{h}" style="stroke:{STROKE};stroke-width:1.5;" width="{w}" x="{x}" y="{y}"/>"#,
+        r#"<rect fill="{fill}" height="{h}" style="stroke:{STROKE};stroke-width:1.5;" width="{w}" x="{x}" y="{y}"/>"#,
         h = pm::fmt_coord(BOX_H),
         w = pm::fmt_coord(w),
         x = pm::fmt_coord(x),
@@ -84,7 +105,7 @@ fn emit_box(buf: &mut String, x: f64, y: f64, w: f64, label: &str, text_w: f64) 
     )
     .unwrap();
     let text_x = x + PAD_X;
-    let text_y = y + 21.6016;
+    let text_y = y + TEXT_BASELINE;
     let _ = text_w; // width is recomputed inside emit_text via the creole segmenter
     text_render::emit_text(
         buf,
@@ -103,127 +124,151 @@ fn emit_box(buf: &mut String, x: f64, y: f64, w: f64, label: &str, text_w: f64) 
     );
 }
 
-fn render_node(buf: &mut String, node: &Subtree, cx: f64, top_y: f64) {
-    let box_x = cx - node.box_w / 2.0;
+/// Place a depth-≥2 subtree as a vertical stack growing rightward.
+///
+/// `box_left`/`box_top` position this node's own box; descendants stack below
+/// in DFS pre-order at a constant `V_STRIDE`, indented `INDENT` past this
+/// node's centre.  Returns the next free box-top below the whole subtree.
+fn render_vstack(buf: &mut String, node: &Subtree, box_left: f64, box_top: f64) -> f64 {
+    let center_x = box_left + node.box_w / 2.0;
+    emit_box(
+        buf,
+        box_left,
+        box_top,
+        node.box_w,
+        &node.label,
+        node.text_w,
+        &node.fill,
+    );
     if node.children.is_empty() {
-        emit_box(buf, box_x, top_y, node.box_w, &node.label, node.text_w);
-        return;
+        return box_top + V_STRIDE;
     }
-    let kids_total_w: f64 = node.children.iter().map(|c| c.total_w).sum::<f64>()
-        + H_GAP * (node.children.len() - 1) as f64;
-    let kids_left = cx - kids_total_w / 2.0;
-    let parent_bottom = top_y + BOX_H;
-    let spine_y = parent_bottom + SPINE_DROP;
-    let child_top_y = spine_y + SPINE_DROP;
-    let mut child_xs: Vec<f64> = Vec::with_capacity(node.children.len());
-    let mut cursor = kids_left;
+    let child_left = center_x + INDENT;
+    let mut cursor = box_top + V_STRIDE;
+    let mut last_center_y = box_top + BOX_H / 2.0;
     for child in &node.children {
-        let ccx = cursor + child.total_w / 2.0;
-        child_xs.push(ccx);
-        cursor += child.total_w + H_GAP;
+        let child_center_y = cursor + BOX_H / 2.0;
+        // Elbow stub from this node's centre out to the child box's left edge.
+        emit_line(buf, center_x, child_center_y, child_left, child_center_y);
+        last_center_y = child_center_y;
+        cursor = render_vstack(buf, child, child_left, cursor);
     }
-    for (child, ccx) in node.children.iter().zip(child_xs.iter()) {
-        emit_line(buf, *ccx, spine_y, *ccx, child_top_y);
-        render_node(buf, child, *ccx, child_top_y);
+    // Vertical spine from this box's bottom down to the last child's centre.
+    emit_line(buf, center_x, box_top + BOX_H, center_x, last_center_y);
+    cursor
+}
+
+/// Place one depth-≥2 subtree as a mirror-image vertical stack growing
+/// leftward (left-side `--` branches).  `box_right` is the right edge of this
+/// node's own box.
+fn render_vstack_left(buf: &mut String, node: &Subtree, box_right: f64, box_top: f64) -> f64 {
+    let box_left = box_right - node.box_w;
+    let center_x = box_right - node.box_w / 2.0;
+    emit_box(
+        buf,
+        box_left,
+        box_top,
+        node.box_w,
+        &node.label,
+        node.text_w,
+        &node.fill,
+    );
+    if node.children.is_empty() {
+        return box_top + V_STRIDE;
     }
-    if child_xs.len() >= 2 {
-        let first = *child_xs.first().unwrap();
-        let last = *child_xs.last().unwrap();
-        emit_line(buf, first, spine_y, last, spine_y);
+    let child_right = center_x - INDENT;
+    let mut cursor = box_top + V_STRIDE;
+    let mut last_center_y = box_top + BOX_H / 2.0;
+    for child in &node.children {
+        let child_center_y = cursor + BOX_H / 2.0;
+        emit_line(buf, center_x, child_center_y, child_right, child_center_y);
+        last_center_y = child_center_y;
+        cursor = render_vstack_left(buf, child, child_right, cursor);
     }
-    emit_box(buf, box_x, top_y, node.box_w, &node.label, node.text_w);
-    emit_line(buf, cx, parent_bottom, cx, spine_y);
+    emit_line(buf, center_x, box_top + BOX_H, center_x, last_center_y);
+    cursor
 }
 
 struct RootLayout {
     tree: Subtree,
-    right_indices: Vec<usize>,
-    left_indices: Vec<usize>,
-    canvas_h: f64,
     offset_y: f64,
-}
-
-fn group_w(tree: &Subtree, indices: &[usize]) -> f64 {
-    if indices.is_empty() {
-        0.0
-    } else {
-        indices
-            .iter()
-            .map(|&i| tree.children[i].total_w)
-            .sum::<f64>()
-            + H_GAP * (indices.len() - 1) as f64
-    }
+    /// Total vertical extent of this root's diagram (root box + spine + the
+    /// tallest depth-2 stack).
+    canvas_h: f64,
+    /// Total width (excluding the page margins applied by the caller).
+    span_w: f64,
 }
 
 fn compute_root_layout(root_node: &WbsNode, offset_y: f64) -> (RootLayout, f64) {
     let tree = measure_subtree(root_node);
-    let right_indices: Vec<usize> = root_node
-        .children
-        .iter()
-        .enumerate()
-        .filter(|(_, n)| n.side == WbsSide::Right)
-        .map(|(i, _)| i)
-        .collect();
-    let left_indices: Vec<usize> = root_node
-        .children
-        .iter()
-        .enumerate()
-        .filter(|(_, n)| n.side == WbsSide::Left)
-        .map(|(i, _)| i)
-        .collect();
-    let right_w = group_w(&tree, &right_indices);
-    let left_w = group_w(&tree, &left_indices);
+    let (right_w, left_w) = side_widths(root_node, &tree);
     let lr_gap = if right_w > 0.0 && left_w > 0.0 {
         H_GAP
     } else {
         0.0
     };
-    let children_total_w = right_w + lr_gap + left_w;
-    let total_span = children_total_w.max(tree.box_w);
-    let canvas_w = total_span + 2.0 * MARGIN;
+    let span_w = (right_w + lr_gap + left_w).max(tree.box_w);
+    let canvas_w = span_w + 2.0 * MARGIN;
     let canvas_h = if root_node.children.is_empty() {
         BOX_H
     } else {
-        let max_child_h = tree
+        // Header (root box, two drops) plus the tallest depth-2 stack.
+        let max_rows = root_node
             .children
             .iter()
-            .map(|c| c.total_h)
-            .fold(0.0_f64, f64::max);
-        BOX_H + SPINE_DROP * 2.0 + max_child_h
+            .zip(tree.children.iter())
+            .map(|(_, c)| c.rows)
+            .max()
+            .unwrap_or(0);
+        BOX_H + SPINE_DROP * 2.0 + max_rows as f64 * V_STRIDE - V_GAP
     };
     (
         RootLayout {
             tree,
-            right_indices,
-            left_indices,
-            canvas_h,
             offset_y,
+            canvas_h,
+            span_w,
         },
         canvas_w,
     )
+}
+
+/// Sum of the horizontal widths of the right-side and left-side depth-2
+/// columns (each separated internally by `H_GAP`).
+fn side_widths(root_node: &WbsNode, tree: &Subtree) -> (f64, f64) {
+    let mut right = 0.0;
+    let mut right_n = 0usize;
+    let mut left = 0.0;
+    let mut left_n = 0usize;
+    for (n, c) in root_node.children.iter().zip(tree.children.iter()) {
+        match n.side {
+            WbsSide::Right => {
+                right += c.hwidth;
+                right_n += 1;
+            }
+            WbsSide::Left => {
+                left += c.hwidth;
+                left_n += 1;
+            }
+        }
+    }
+    if right_n > 1 {
+        right += H_GAP * (right_n - 1) as f64;
+    }
+    if left_n > 1 {
+        left += H_GAP * (left_n - 1) as f64;
+    }
+    (right, left)
 }
 
 fn render_root(buf: &mut String, rl: &RootLayout, canvas_w: f64) {
     let tree = &rl.tree;
     let root_top_y = rl.offset_y;
     let root_box_w = tree.box_w;
-    let right_w = group_w(tree, &rl.right_indices);
-    let left_w = group_w(tree, &rl.left_indices);
-    let lr_gap = if right_w > 0.0 && left_w > 0.0 {
-        H_GAP
-    } else {
-        0.0
-    };
-    let children_total_w = right_w + lr_gap + left_w;
-    let canvas_centre = canvas_w / 2.0;
-    let children_left = canvas_centre - children_total_w / 2.0;
-    let root_cx = if children_total_w > 0.0 {
-        children_left + children_total_w / 2.0
-    } else {
-        canvas_centre
-    };
-    let root_box_x = root_cx - root_box_w / 2.0;
+    let span_left = (canvas_w - rl.span_w) / 2.0;
+
     if tree.children.is_empty() {
+        let root_box_x = canvas_w / 2.0 - root_box_w / 2.0;
         emit_box(
             buf,
             root_box_x,
@@ -231,48 +276,74 @@ fn render_root(buf: &mut String, rl: &RootLayout, canvas_w: f64) {
             root_box_w,
             &tree.label,
             tree.text_w,
+            &tree.fill,
         );
         return;
     }
-    let mut left_cxs: Vec<f64> = Vec::new();
-    {
-        let mut x = children_left + left_w;
-        for &i in &rl.left_indices {
-            let tw = tree.children[i].total_w;
-            let ccx = x - tw / 2.0;
-            left_cxs.push(ccx);
-            x -= tw + H_GAP;
-        }
-    }
-    let right_start = children_left + left_w + lr_gap;
-    let mut right_cxs: Vec<f64> = Vec::new();
-    {
-        let mut x = right_start;
-        for &i in &rl.right_indices {
-            let tw = tree.children[i].total_w;
-            let ccx = x + tw / 2.0;
-            right_cxs.push(ccx);
-            x += tw + H_GAP;
-        }
-    }
+
     let spine_y = root_top_y + BOX_H + SPINE_DROP;
-    let child_top_y = spine_y + SPINE_DROP;
-    for (idx, &i) in rl.right_indices.iter().enumerate() {
-        let ccx = right_cxs[idx];
-        emit_line(buf, ccx, spine_y, ccx, child_top_y);
-        render_node(buf, &tree.children[i], ccx, child_top_y);
+    let depth2_top = spine_y + SPINE_DROP;
+
+    // Partition depth-2 columns into left- and right-side branches.
+    let left_cols: Vec<usize> = (0..tree.children.len())
+        .filter(|&i| tree.children[i].is_left)
+        .collect();
+    let right_cols: Vec<usize> = (0..tree.children.len())
+        .filter(|&i| !tree.children[i].is_left)
+        .collect();
+
+    let left_block_w = block_w(tree, &left_cols);
+    let lr_gap = if !left_cols.is_empty() && !right_cols.is_empty() {
+        H_GAP
+    } else {
+        0.0
+    };
+    let right_block_start = span_left + left_block_w + lr_gap;
+
+    // Centre x of each depth-2 box.  Left columns occupy the left part of the
+    // span (boxes anchored to the right edge of their column, growing left);
+    // right columns occupy the right part (boxes anchored to the left edge).
+    let mut centers = vec![0.0_f64; tree.children.len()];
+    {
+        let mut x = span_left;
+        for &i in &left_cols {
+            let c = &tree.children[i];
+            let col_right = x + c.hwidth;
+            centers[i] = col_right - c.box_w / 2.0;
+            x += c.hwidth + H_GAP;
+        }
     }
-    for (idx, &i) in rl.left_indices.iter().enumerate() {
-        let ccx = left_cxs[idx];
-        emit_line(buf, ccx, spine_y, ccx, child_top_y);
-        render_node(buf, &tree.children[i], ccx, child_top_y);
+    {
+        let mut x = right_block_start;
+        for &i in &right_cols {
+            let c = &tree.children[i];
+            centers[i] = x + c.box_w / 2.0;
+            x += c.hwidth + H_GAP;
+        }
     }
-    let all_cxs: Vec<f64> = left_cxs.iter().chain(right_cxs.iter()).cloned().collect();
-    if all_cxs.len() >= 2 {
-        let leftmost = all_cxs.iter().cloned().fold(f64::INFINITY, f64::min);
-        let rightmost = all_cxs.iter().cloned().fold(f64::NEG_INFINITY, f64::max);
+
+    // Emit each depth-2 subtree in source order: drop line then the stack.
+    for (i, c) in tree.children.iter().enumerate() {
+        let cx = centers[i];
+        emit_line(buf, cx, spine_y, cx, depth2_top);
+        if c.is_left {
+            render_vstack_left(buf, c, cx + c.box_w / 2.0, depth2_top);
+        } else {
+            render_vstack(buf, c, cx - c.box_w / 2.0, depth2_top);
+        }
+    }
+
+    let leftmost = centers.iter().cloned().fold(f64::INFINITY, f64::min);
+    let rightmost = centers.iter().cloned().fold(f64::NEG_INFINITY, f64::max);
+
+    // Horizontal spine across all depth-2 centres.
+    if centers.len() >= 2 {
         emit_line(buf, leftmost, spine_y, rightmost, spine_y);
     }
+
+    // Root box centred over the span of depth-2 centres.
+    let root_cx = (leftmost + rightmost) / 2.0;
+    let root_box_x = root_cx - root_box_w / 2.0;
     emit_box(
         buf,
         root_box_x,
@@ -280,8 +351,17 @@ fn render_root(buf: &mut String, rl: &RootLayout, canvas_w: f64) {
         root_box_w,
         &tree.label,
         tree.text_w,
+        &tree.fill,
     );
     emit_line(buf, root_cx, root_top_y + BOX_H, root_cx, spine_y);
+}
+
+/// Total horizontal width of a set of depth-2 columns (internal `H_GAP`s).
+fn block_w(tree: &Subtree, cols: &[usize]) -> f64 {
+    if cols.is_empty() {
+        return 0.0;
+    }
+    cols.iter().map(|&i| tree.children[i].hwidth).sum::<f64>() + H_GAP * (cols.len() - 1) as f64
 }
 
 /// Render a WBS diagram with an optional oracle layout.
