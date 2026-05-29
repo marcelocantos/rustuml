@@ -178,6 +178,9 @@ pub fn render_with_oracle(
     let mut interface_fill = COMP_FILL.to_string();
     let mut interface_stroke = STROKE.to_string();
     let mut component_round_corner: Option<f64> = None;
+    // `skinparam componentStyle rectangle` draws components as plain rectangles
+    // with no UML "tab" icon.
+    let mut component_style_rectangle = false;
     for sp in &diagram.meta.skinparams {
         let key = sp.key.to_ascii_lowercase();
         let val = sp.value.trim();
@@ -195,6 +198,9 @@ pub fn render_with_oracle(
                 if let Ok(v) = val.parse::<f64>() {
                     component_round_corner = Some(v / 2.0);
                 }
+            }
+            "componentstyle" => {
+                component_style_rectangle = val.eq_ignore_ascii_case("rectangle");
             }
             _ => {}
         }
@@ -509,7 +515,9 @@ pub fn render_with_oracle(
         // drift versus PlantUML's full-precision intermediates.
         let aux: &[crate::layout_oracle::AuxRect] =
             oracle_rect.map(|r| r.aux_rects.as_slice()).unwrap_or(&[]);
-        if aux.len() >= 3 {
+        if component_style_rectangle {
+            // Plain rectangle style: no UML tab icon.
+        } else if aux.len() >= 3 {
             for r in aux.iter().take(3) {
                 let style = r
                     .style
