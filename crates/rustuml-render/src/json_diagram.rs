@@ -172,6 +172,14 @@ fn render_single_box(rows: &[FlatRow], diagram_type: &str) -> String {
     // Background fill rect (stroke matches fill so only the fill shows).
     svg.raw_inline(&rounded_rect(box_x, box_y, box_w, box_h, FILL, FILL, 1.5));
 
+    // The highlight rect for a row is emitted just before that row's top edge:
+    // immediately after the fill for the first row, otherwise just before the
+    // horizontal separator above the row.
+    let highlight_rect = |y: f64| highlight_box(box_x, y, box_w, row_h);
+    if rows[0].highlighted {
+        svg.raw_inline(&highlight_rect(box_y));
+    }
+
     let mut row_top = box_y;
     for (i, row) in rows.iter().enumerate() {
         let baseline = row_top + TEXT_TOP_PAD + ascent(FONT_SIZE);
@@ -198,12 +206,15 @@ fn render_single_box(rows: &[FlatRow], diagram_type: &str) -> String {
             svg.raw_inline(&line(val_col_x, row_top, val_col_x, row_bottom));
         }
 
-        // Horizontal separator below this row, except after the last.
+        // Horizontal separator below this row, except after the last. The next
+        // row's highlight rect (if any) is drawn immediately before it.
         if i + 1 < rows.len() {
+            if rows[i + 1].highlighted {
+                svg.raw_inline(&highlight_rect(row_bottom));
+            }
             svg.raw_inline(&line(box_x, row_bottom, box_right, row_bottom));
         }
 
-        let _ = row.highlighted; // highlight fill reserved for future work
         row_top = row_bottom;
     }
 
@@ -216,6 +227,18 @@ fn render_single_box(rows: &[FlatRow], diagram_type: &str) -> String {
 }
 
 // ── Element emitters (PlantUML attribute order) ───────────────────────────────
+
+/// Highlight rect drawn behind a `#highlight`-ed row: inset 1.5px from the box
+/// sides, `rx`/`ry` 2, fill and stroke both `#CCFF02`.
+fn highlight_box(box_x: f64, row_top: f64, box_w: f64, row_h: f64) -> String {
+    format!(
+        r##"<rect fill="#CCFF02" height="{h}" rx="2" ry="2" style="stroke:#CCFF02;stroke-width:1;" width="{w}" x="{x}" y="{y}"/>"##,
+        h = fmt_coord(row_h),
+        w = fmt_coord(box_w - 2.0),
+        x = fmt_coord(box_x + 1.5),
+        y = fmt_coord(row_top),
+    )
+}
 
 fn rounded_rect(x: f64, y: f64, w: f64, h: f64, fill: &str, stroke: &str, sw: f64) -> String {
     format!(
