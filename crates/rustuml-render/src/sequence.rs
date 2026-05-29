@@ -387,11 +387,24 @@ const NOTE_GAP_FIRST: f64 = 15.0;
 /// Vertical offset from a message-attached note's top edge to the message
 /// arrow line (single-line note). The note straddles the arrow band:
 /// arrow_y = note_top + this + (lines-1) * MSG_TEXT_HEIGHT/2.
-const NOTE_MSG_ARROW_OFFSET: f64 = MSG_TEXT_HEIGHT + ARROW_HALF_H; // 19.3105
+/// hnote/rnote sit 1px higher (their text baseline is 1px less).
+fn note_msg_arrow_offset(shape: NoteShape) -> f64 {
+    let base = MSG_TEXT_HEIGHT + ARROW_HALF_H; // 19.3105
+    match shape {
+        NoteShape::Note => base,
+        NoteShape::Hexagonal | NoteShape::Rectangular => base - 1.0,
+    }
+}
 /// Extra vertical space a single-line message-attached note adds both above
 /// (pushing its message arrow down) and below (pushing the next event down).
-/// Each additional note line adds MSG_TEXT_HEIGHT/2 to each side.
-const NOTE_MSG_EXTRA_BASE: f64 = 3.0;
+/// Each additional note line adds MSG_TEXT_HEIGHT/2 to each side. hnote/rnote
+/// are 2px shorter than a standard note, contributing 1px less per side.
+fn note_msg_extra_base(shape: NoteShape) -> f64 {
+    match shape {
+        NoteShape::Note => 3.0,
+        NoteShape::Hexagonal | NoteShape::Rectangular => 2.0,
+    }
+}
 /// Note fill color.
 const NOTE_FILL: &str = "#FEFFDD";
 /// Gap from participant lifeline to note edge for left/right notes.
@@ -2804,7 +2817,9 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme) -> String {
     // preceding message event it belongs to, and track the maximum note
     // line-count per owning message (the tile grows for multi-line notes).
     let mut note_owner: HashMap<usize, usize> = HashMap::new();
-    let mut msg_note_lines: HashMap<usize, usize> = HashMap::new();
+    // Extra vertical space each owning message reserves above and below its
+    // arrow for the attached note (max across multiple attached notes).
+    let mut msg_note_extra: HashMap<usize, f64> = HashMap::new();
     {
         let mut last_msg_idx: Option<usize> = None;
         for (idx, event) in diagram.events.iter().enumerate() {
@@ -2816,8 +2831,10 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme) -> String {
                     if let Some(owner) = last_msg_idx {
                         note_owner.insert(idx, owner);
                         let lines = note.text.lines().count().max(1);
-                        let e = msg_note_lines.entry(owner).or_insert(0);
-                        *e = (*e).max(lines);
+                        let extra = note_msg_extra_base(note.shape)
+                            + (lines as f64 - 1.0) * MSG_TEXT_HEIGHT / 2.0;
+                        let e = msg_note_extra.entry(owner).or_insert(0.0);
+                        *e = e.max(extra);
                     }
                 }
                 _ => {}
@@ -2852,10 +2869,8 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme) -> String {
                     // A message-attached note (bare `note left`/`note right`)
                     // straddles this message's arrow band. It adds equal extra
                     // space above (pushing the arrow down) and below (pushing the
-                    // next event down): NOTE_MSG_EXTRA_BASE + (lines-1)*MSG_TEXT_HEIGHT/2.
-                    let note_extra = msg_note_lines.get(&idx).map(|&lines| {
-                        NOTE_MSG_EXTRA_BASE + (lines as f64 - 1.0) * MSG_TEXT_HEIGHT / 2.0
-                    });
+                    // next event down).
+                    let note_extra = msg_note_extra.get(&idx).copied();
                     if msg_count == 0 {
                         y += first_msg_offset(has_text);
                     } else {
@@ -2881,9 +2896,7 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme) -> String {
                     msg_count += 1;
                 }
                 Event::Return(_) => {
-                    let note_extra = msg_note_lines.get(&idx).map(|&lines| {
-                        NOTE_MSG_EXTRA_BASE + (lines as f64 - 1.0) * MSG_TEXT_HEIGHT / 2.0
-                    });
+                    let note_extra = msg_note_extra.get(&idx).copied();
                     if msg_count == 0 {
                         y += first_msg_offset(has_text);
                     } else {
@@ -2942,7 +2955,7 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme) -> String {
                         // note_top + NOTE_MSG_ARROW_OFFSET + (lines-1)*MSG_TEXT_HEIGHT/2.
                         let arrow_y = event_y_positions.get(owner).copied().unwrap_or(y);
                         let note_top = arrow_y
-                            - NOTE_MSG_ARROW_OFFSET
+                            - note_msg_arrow_offset(note.shape)
                             - (num_lines as f64 - 1.0) * MSG_TEXT_HEIGHT / 2.0;
                         // The draw site derives note_top from event_y via
                         // note_top = event_y - note_y_extra - num_lines*MSG_TEXT_HEIGHT.
