@@ -15,6 +15,9 @@ use crate::text_render;
 
 const FONT_SIZE: f64 = 14.0;
 const PAD_X: f64 = 10.0;
+// Boxless nodes (`_` modifier) have no rect: text is inset 3px from the
+// node's connection point and the node width is text_width + 3.
+const BOXLESS_PAD_X: f64 = 3.0;
 // Exact unrounded box height: text_height(14) + 2*PAD_Y where PAD_Y = 10.
 // text_height(14) = 16.48828125 → 36.48828125 (displays as "36.4883").
 // Using the unrounded value avoids propagating rounding error through the
@@ -35,20 +38,39 @@ struct Placed {
     x: f64,
     cy: f64,
     w: f64,
-    #[allow(dead_code)]
-    text_w: f64,
     label: String,
     side: Side,
+    /// Resolved fill colour (`#RRGGBB`), or `None` for the default fill.
+    fill: Option<String>,
+    /// Boxless node: render bare text, no rect.
+    boxless: bool,
     height: f64,
     children: Vec<Placed>,
+}
+
+/// Width a node occupies: text plus padding (full box padding, or the
+/// reduced boxless inset).
+fn placed_width(text_w: f64, boxless: bool) -> f64 {
+    if boxless {
+        text_w + BOXLESS_PAD_X
+    } else {
+        text_w + 2.0 * PAD_X
+    }
 }
 
 fn node_text_width(label: &str) -> f64 {
     pm::text_width(label, FONT_SIZE, false)
 }
 
-fn node_w(label: &str) -> f64 {
-    node_text_width(label) + 2.0 * PAD_X
+/// Resolve a node's `[#color]` modifier to a `#RRGGBB` fill, dropping `none`.
+fn resolve_fill(color: &Option<String>) -> Option<String> {
+    color.as_deref().and_then(|c| {
+        if c.eq_ignore_ascii_case("none") || c.eq_ignore_ascii_case("#none") {
+            None
+        } else {
+            Some(crate::sequence::resolve_color(c))
+        }
+    })
 }
 
 fn sum_with_gaps(kids: &[Placed]) -> f64 {
@@ -61,16 +83,18 @@ fn sum_with_gaps(kids: &[Placed]) -> f64 {
 
 fn measure(node: &MindMapNode, side: Side) -> Placed {
     let text_w = node_text_width(&node.label);
-    let w = text_w + 2.0 * PAD_X;
+    let w = placed_width(text_w, node.boxless);
+    let fill = resolve_fill(&node.color);
     let kid_refs: Vec<&MindMapNode> = node.children.iter().filter(|c| c.side == side).collect();
     if kid_refs.is_empty() {
         return Placed {
             x: 0.0,
             cy: 0.0,
             w,
-            text_w,
             label: node.label.clone(),
             side,
+            fill,
+            boxless: node.boxless,
             height: BOX_H,
             children: Vec::new(),
         };
@@ -81,9 +105,10 @@ fn measure(node: &MindMapNode, side: Side) -> Placed {
         x: 0.0,
         cy: 0.0,
         w,
-        text_w,
         label: node.label.clone(),
         side,
+        fill,
+        boxless: node.boxless,
         height: h,
         children: kids,
     }
@@ -136,17 +161,22 @@ fn shift_x(p: &mut Placed, dx: f64) {
 
 fn emit_box(buf: &mut String, p: &Placed) {
     let y = p.cy - BOX_H / 2.0;
-    write!(
-        buf,
-        r#"<rect fill="{FILL_DEFAULT}" height="{h}" rx="{RX}" ry="{RX}" style="stroke:{STROKE};stroke-width:1.5;" width="{w}" x="{x}" y="{y}"/>"#,
-        h = pm::fmt_coord(BOX_H),
-        w = pm::fmt_coord(p.w),
-        x = pm::fmt_coord(p.x),
-        y = pm::fmt_coord(y),
-    )
-    .unwrap();
-    let text_y = y + TEXT_BASELINE_DY;
-    let text_x = p.x + PAD_X;
+    let (text_x, text_y) = if p.boxless {
+        // Boxless: bare text, no rect; text inset BOXLESS_PAD_X from the left.
+        (p.x + BOXLESS_PAD_X, y + TEXT_BASELINE_DY)
+    } else {
+        let fill = p.fill.as_deref().unwrap_or(FILL_DEFAULT);
+        write!(
+            buf,
+            r#"<rect fill="{fill}" height="{h}" rx="{RX}" ry="{RX}" style="stroke:{STROKE};stroke-width:1.5;" width="{w}" x="{x}" y="{y}"/>"#,
+            h = pm::fmt_coord(BOX_H),
+            w = pm::fmt_coord(p.w),
+            x = pm::fmt_coord(p.x),
+            y = pm::fmt_coord(y),
+        )
+        .unwrap();
+        (p.x + PAD_X, y + TEXT_BASELINE_DY)
+    };
     text_render::emit_text(
         buf,
         &p.label,
@@ -233,7 +263,8 @@ pub fn render(diagram: &MindMapDiagram, _theme: &Theme) -> String {
         let kids_h = right_h.max(left_h);
         let total_h = if kids_h > 0.0 { kids_h } else { BOX_H };
 
-        let root_w = node_w(&root.label);
+        let root_text_w = node_text_width(&root.label);
+        let root_w = placed_width(root_text_w, root.boxless);
         // Top of root's allocated band = cursor_y. Root centred vertically.
         let root_cy = cursor_y + total_h / 2.0;
 
@@ -241,9 +272,10 @@ pub fn render(diagram: &MindMapDiagram, _theme: &Theme) -> String {
             x: 0.0,
             cy: root_cy,
             w: root_w,
-            text_w: node_text_width(&root.label),
             label: root.label.clone(),
             side: Side::Right,
+            fill: resolve_fill(&root.color),
+            boxless: root.boxless,
             height: total_h,
             children: Vec::new(),
         };

@@ -54,13 +54,14 @@ pub fn parse_mindmap(lines: &[String]) -> Result<MindMapDiagram, ParseError> {
     // Multiline node accumulation: `**:first line\nsecond line;`
     // When we see `**:text` without a closing `;` on the same line, we
     // accumulate subsequent lines until a line ending with `;` is found.
-    let mut multiline_buf: Option<(usize, usize, Side, String)> = None; // (line_no, depth, side, text)
+    // (line_no, depth, side, color, boxless, text)
+    let mut multiline_buf: Option<(usize, usize, Side, Option<String>, bool, String)> = None;
 
     for (line_no, line) in lines.iter().enumerate() {
         let trimmed = line.trim();
 
         // If we are accumulating a multiline node, keep collecting until `;`.
-        if let Some((start_no, depth, side, ref mut buf)) = multiline_buf {
+        if let Some((start_no, depth, side, ref color, boxless, ref mut buf)) = multiline_buf {
             if trimmed.ends_with(';') {
                 // Last line of multiline node (strip trailing `;`).
                 let last = trimmed.trim_end_matches(';').trim_end();
@@ -75,6 +76,8 @@ pub fn parse_mindmap(lines: &[String]) -> Result<MindMapDiagram, ParseError> {
                     label,
                     depth,
                     side,
+                    color: color.clone(),
+                    boxless,
                     children: Vec::new(),
                 };
                 let (depth, side) = (depth, side);
@@ -148,7 +151,27 @@ pub fn parse_mindmap(lines: &[String]) -> Result<MindMapDiagram, ParseError> {
         };
 
         let count = trimmed.chars().take_while(|&c| c == bullet).count();
-        let rest = trimmed[count..].trim();
+        // After the bullet run come optional modifiers, in either order:
+        //   `_`        — boxless node (rendered as bare text, no rect)
+        //   `[#color]` — explicit fill colour
+        // e.g. `**[#green] Label`, `***_ No box`, `**_[#red] x`.
+        let mut after = &trimmed[count..];
+        let mut color: Option<String> = None;
+        let mut boxless = false;
+        loop {
+            if let Some(stripped) = after.strip_prefix('_') {
+                boxless = true;
+                after = stripped;
+            } else if after.starts_with('[')
+                && let Some(end) = after.find(']')
+            {
+                color = Some(after[1..end].trim().to_string());
+                after = &after[end + 1..];
+            } else {
+                break;
+            }
+        }
+        let rest = after.trim();
 
         // Detect multiline block syntax: `**:first line` (no closing `;` yet).
         if let Some(after_colon) = rest.strip_prefix(':') {
@@ -168,6 +191,8 @@ pub fn parse_mindmap(lines: &[String]) -> Result<MindMapDiagram, ParseError> {
                     label,
                     depth,
                     side,
+                    color: color.clone(),
+                    boxless,
                     children: Vec::new(),
                 };
                 insert_node(
@@ -181,7 +206,14 @@ pub fn parse_mindmap(lines: &[String]) -> Result<MindMapDiagram, ParseError> {
                 )?;
             } else {
                 // Start of multiline block — accumulate until `;`.
-                multiline_buf = Some((line_no, depth, side, after_colon.trim().to_string()));
+                multiline_buf = Some((
+                    line_no,
+                    depth,
+                    side,
+                    color.clone(),
+                    boxless,
+                    after_colon.trim().to_string(),
+                ));
             }
             continue;
         }
@@ -206,6 +238,8 @@ pub fn parse_mindmap(lines: &[String]) -> Result<MindMapDiagram, ParseError> {
             label,
             depth,
             side,
+            color: color.clone(),
+            boxless,
             children: Vec::new(),
         };
         insert_node(
