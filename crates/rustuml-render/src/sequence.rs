@@ -991,6 +991,7 @@ impl PlantUmlSvg {
         text_content: &str,
         text_len: f64,
         fill_color: &str,
+        border_color: &str,
     ) {
         self.participant_group_open(part_uid, qualified_name, source_line, position);
 
@@ -1015,7 +1016,7 @@ impl PlantUmlSvg {
         let head_cy = figure_base + ACTOR_HEAD_CY_OFFSET;
         write!(
             self.buf,
-            r##"<ellipse cx="{}" cy="{}" fill="{}" rx="8" ry="8" style="stroke:#181818;stroke-width:0.5;"/>"##,
+            r##"<ellipse cx="{}" cy="{}" fill="{}" rx="8" ry="8" style="stroke:{border_color};stroke-width:0.5;"/>"##,
             fmt_coord(cx),
             fmt_coord(head_cy),
             fill_color,
@@ -1031,7 +1032,7 @@ impl PlantUmlSvg {
         let leg_bottom = figure_base + ACTOR_LEG_BOTTOM_OFFSET;
         write!(
             self.buf,
-            r##"<path d="M{cx},{st} L{cx},{sb} M{al},{ay} L{ar},{ay} M{cx},{sb} L{al},{lb} M{cx},{sb} L{ar},{lb}" fill="none" style="stroke:#181818;stroke-width:0.5;"/>"##,
+            r##"<path d="M{cx},{st} L{cx},{sb} M{al},{ay} L{ar},{ay} M{cx},{sb} L{al},{lb} M{cx},{sb} L{ar},{lb}" fill="none" style="stroke:{border_color};stroke-width:0.5;"/>"##,
             cx = fmt_coord(cx),
             st = fmt_coord(spine_top),
             sb = fmt_coord(spine_bottom),
@@ -1059,6 +1060,7 @@ impl PlantUmlSvg {
         text_content: &str,
         text_len: f64,
         fill_color: &str,
+        border_color: &str,
     ) {
         self.participant_group_open(part_uid, qualified_name, source_line, position);
 
@@ -1088,7 +1090,7 @@ impl PlantUmlSvg {
 
         write!(
             self.buf,
-            r##"<path d="M{lx},{lt} L{lx},{lb} M{lx},{cy} L{ht},{cy}" fill="none" style="stroke:#181818;stroke-width:0.5;"/>"##,
+            r##"<path d="M{lx},{lt} L{lx},{lb} M{lx},{cy} L{ht},{cy}" fill="none" style="stroke:{border_color};stroke-width:0.5;"/>"##,
             lx = fmt_coord(line_x),
             lt = fmt_coord(line_top),
             lb = fmt_coord(line_bottom),
@@ -1099,7 +1101,7 @@ impl PlantUmlSvg {
 
         write!(
             self.buf,
-            r##"<ellipse cx="{}" cy="{}" fill="{}" rx="{}" ry="{}" style="stroke:#181818;stroke-width:0.5;"/>"##,
+            r##"<ellipse cx="{}" cy="{}" fill="{}" rx="{}" ry="{}" style="stroke:{border_color};stroke-width:0.5;"/>"##,
             fmt_coord(circle_cx),
             fmt_coord(circle_cy),
             fill_color,
@@ -1125,6 +1127,7 @@ impl PlantUmlSvg {
         text_content: &str,
         text_len: f64,
         fill_color: &str,
+        border_color: &str,
     ) {
         self.participant_group_open(part_uid, qualified_name, source_line, position);
 
@@ -1145,7 +1148,7 @@ impl PlantUmlSvg {
         let circle_cy = figure_base + STEREOTYPE_CIRCLE_CY;
         write!(
             self.buf,
-            r##"<ellipse cx="{}" cy="{}" fill="{}" rx="{}" ry="{}" style="stroke:#181818;stroke-width:0.5;"/>"##,
+            r##"<ellipse cx="{}" cy="{}" fill="{}" rx="{}" ry="{}" style="stroke:{border_color};stroke-width:0.5;"/>"##,
             fmt_coord(cx),
             fmt_coord(circle_cy),
             fill_color,
@@ -1168,7 +1171,7 @@ impl PlantUmlSvg {
         let p4y = arrow_cy + 5.0;
         write!(
             self.buf,
-            r##"<polygon fill="#181818" points="{},{},{},{},{},{},{},{},{},{}" style="stroke:#181818;stroke-width:1;"/>"##,
+            r##"<polygon fill="{border_color}" points="{},{},{},{},{},{},{},{},{},{}" style="stroke:{border_color};stroke-width:1;"/>"##,
             fmt_coord(p1x), fmt_coord(p1y),
             fmt_coord(p2x), fmt_coord(p2y),
             fmt_coord(p3x), fmt_coord(p3y),
@@ -1194,6 +1197,7 @@ impl PlantUmlSvg {
         text_content: &str,
         text_len: f64,
         fill_color: &str,
+        border_color: &str,
     ) {
         self.participant_group_open(part_uid, qualified_name, source_line, position);
 
@@ -1214,7 +1218,7 @@ impl PlantUmlSvg {
         let circle_cy = figure_base + STEREOTYPE_CIRCLE_CY;
         write!(
             self.buf,
-            r##"<ellipse cx="{}" cy="{}" fill="{}" rx="{}" ry="{}" style="stroke:#181818;stroke-width:0.5;"/>"##,
+            r##"<ellipse cx="{}" cy="{}" fill="{}" rx="{}" ry="{}" style="stroke:{border_color};stroke-width:0.5;"/>"##,
             fmt_coord(cx),
             fmt_coord(circle_cy),
             fill_color,
@@ -1229,7 +1233,7 @@ impl PlantUmlSvg {
         let line_x2 = cx + STEREOTYPE_CIRCLE_R;
         write!(
             self.buf,
-            r##"<line style="stroke:#181818;stroke-width:0.5;" x1="{}" x2="{}" y1="{}" y2="{}"/>"##,
+            r##"<line style="stroke:{border_color};stroke-width:0.5;" x1="{}" x2="{}" y1="{}" y2="{}"/>"##,
             fmt_coord(line_x1),
             fmt_coord(line_x2),
             fmt_coord(line_y),
@@ -1254,6 +1258,7 @@ impl PlantUmlSvg {
         text_content: &str,
         text_len: f64,
         fill_color: &str,
+        border_color: &str,
     ) {
         self.participant_group_open(part_uid, qualified_name, source_line, position);
 
@@ -1280,7 +1285,7 @@ impl PlantUmlSvg {
 
         write!(
             self.buf,
-            r##"<path d="M{l},{t} C{l},{tc} {cx},{tc} {cx},{tc} C{cx},{tc} {r},{tc} {r},{t} L{r},{b} C{r},{bc} {cx},{bc} {cx},{bc} C{cx},{bc} {l},{bc} {l},{b} L{l},{t}" fill="{fc}" style="stroke:#181818;stroke-width:0.5;"/>"##,
+            r##"<path d="M{l},{t} C{l},{tc} {cx},{tc} {cx},{tc} C{cx},{tc} {r},{tc} {r},{t} L{r},{b} C{r},{bc} {cx},{bc} {cx},{bc} C{cx},{bc} {l},{bc} {l},{b} L{l},{t}" fill="{fc}" style="stroke:{border_color};stroke-width:0.5;"/>"##,
             l = fmt_coord(left),
             r = fmt_coord(right),
             t = fmt_coord(top),
@@ -1296,7 +1301,7 @@ impl PlantUmlSvg {
         let top_arc_bottom = figure_base + 2.0 * DB_ELLIPSE_RY;
         write!(
             self.buf,
-            r##"<path d="M{l},{t} C{l},{tab} {cx},{tab} {cx},{tab} C{cx},{tab} {r},{tab} {r},{t}" fill="none" style="stroke:#181818;stroke-width:0.5;"/>"##,
+            r##"<path d="M{l},{t} C{l},{tab} {cx},{tab} {cx},{tab} C{cx},{tab} {r},{tab} {r},{t}" fill="none" style="stroke:{border_color};stroke-width:0.5;"/>"##,
             l = fmt_coord(left),
             r = fmt_coord(right),
             t = fmt_coord(top),
@@ -1324,6 +1329,7 @@ impl PlantUmlSvg {
         text_content: &str,
         text_len: f64,
         fill_color: &str,
+        border_color: &str,
     ) {
         self.participant_group_open(part_uid, qualified_name, source_line, position);
 
@@ -1332,7 +1338,7 @@ impl PlantUmlSvg {
         let back_y = base_y;
         write!(
             self.buf,
-            r##"<rect fill="{}" height="{}" style="stroke:#181818;stroke-width:0.5;" width="{}" x="{}" y="{}"/>"##,
+            r##"<rect fill="{}" height="{}" style="stroke:{border_color};stroke-width:0.5;" width="{}" x="{}" y="{}"/>"##,
             fill_color,
             fmt_coord(HEAD_BOX_H),
             fmt_coord(box_w - COLLECTIONS_OFFSET),
@@ -1345,7 +1351,7 @@ impl PlantUmlSvg {
         let front_y = base_y + COLLECTIONS_OFFSET;
         write!(
             self.buf,
-            r##"<rect fill="{}" height="{}" style="stroke:#181818;stroke-width:0.5;" width="{}" x="{}" y="{}"/>"##,
+            r##"<rect fill="{}" height="{}" style="stroke:{border_color};stroke-width:0.5;" width="{}" x="{}" y="{}"/>"##,
             fill_color,
             fmt_coord(HEAD_BOX_H),
             fmt_coord(box_w - COLLECTIONS_OFFSET),
@@ -1376,6 +1382,7 @@ impl PlantUmlSvg {
         text_content: &str,
         text_len: f64,
         fill_color: &str,
+        border_color: &str,
     ) {
         self.participant_group_open(part_uid, qualified_name, source_line, position);
 
@@ -1410,7 +1417,7 @@ impl PlantUmlSvg {
         // Outer body
         write!(
             self.buf,
-            r##"<path d="M{il},{t} L{ir},{t} C{r},{t} {r},{m} {r},{m} C{r},{m} {r},{b} {ir},{b} L{il},{b} C{l},{b} {l},{m} {l},{m} C{l},{m} {l},{t} {il},{t}" fill="{fc}" style="stroke:#181818;stroke-width:0.5;"/>"##,
+            r##"<path d="M{il},{t} L{ir},{t} C{r},{t} {r},{m} {r},{m} C{r},{m} {r},{b} {ir},{b} L{il},{b} C{l},{b} {l},{m} {l},{m} C{l},{m} {l},{t} {il},{t}" fill="{fc}" style="stroke:{border_color};stroke-width:0.5;"/>"##,
             il = fmt_coord(inner_left),
             ir = fmt_coord(inner_right),
             l = fmt_coord(left),
@@ -1425,7 +1432,7 @@ impl PlantUmlSvg {
         // Inner right curve (the divider inside the pill)
         write!(
             self.buf,
-            r##"<path d="M{ir},{t} C{iri},{t} {iri},{m} {iri},{m} C{iri},{b} {ir},{b} {ir},{b}" fill="none" style="stroke:#181818;stroke-width:0.5;"/>"##,
+            r##"<path d="M{ir},{t} C{iri},{t} {iri},{m} {iri},{m} C{iri},{b} {ir},{b} {ir},{b}" fill="none" style="stroke:{border_color};stroke-width:0.5;"/>"##,
             ir = fmt_coord(inner_right),
             iri = fmt_coord(inner_right_inner),
             t = fmt_coord(top),
@@ -1978,6 +1985,7 @@ fn render_participant_shape(
     base_y: f64,
     _max_box_h: f64,
     fill_color: &str,
+    border_color: &str,
 ) {
     match p.kind {
         ParticipantKind::Actor
@@ -2000,6 +2008,7 @@ fn render_participant_shape(
                         &p.label,
                         p.text_width,
                         fill_color,
+                        border_color,
                     );
                 }
                 ParticipantKind::Boundary => {
@@ -2014,6 +2023,7 @@ fn render_participant_shape(
                         &p.label,
                         p.text_width,
                         fill_color,
+                        border_color,
                     );
                 }
                 ParticipantKind::Control => {
@@ -2028,6 +2038,7 @@ fn render_participant_shape(
                         &p.label,
                         p.text_width,
                         fill_color,
+                        border_color,
                     );
                 }
                 ParticipantKind::Entity => {
@@ -2042,6 +2053,7 @@ fn render_participant_shape(
                         &p.label,
                         p.text_width,
                         fill_color,
+                        border_color,
                     );
                 }
                 ParticipantKind::Database => {
@@ -2056,6 +2068,7 @@ fn render_participant_shape(
                         &p.label,
                         p.text_width,
                         fill_color,
+                        border_color,
                     );
                 }
                 _ => unreachable!(),
@@ -2077,6 +2090,7 @@ fn render_participant_shape(
                 &p.label,
                 p.text_width,
                 fill_color,
+                border_color,
             );
         }
         ParticipantKind::Queue => {
@@ -2101,6 +2115,7 @@ fn render_participant_shape(
                 &p.label,
                 p.text_width,
                 fill_color,
+                border_color,
             );
         }
         ParticipantKind::Participant => {
@@ -2167,13 +2182,19 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme) -> String {
     // `participant_fill`; the relevant `<kind>BackgroundColor` skinparam
     // (with or without the `sequence` prefix) sets it.
     let mut actor_fill_override: Option<String> = None;
-    let mut _actor_border_override: Option<String> = None;
+    let mut actor_border_override: Option<String> = None;
     let mut boundary_fill_override: Option<String> = None;
+    let mut boundary_border_override: Option<String> = None;
     let mut control_fill_override: Option<String> = None;
+    let mut control_border_override: Option<String> = None;
     let mut entity_fill_override: Option<String> = None;
+    let mut entity_border_override: Option<String> = None;
     let mut database_fill_override: Option<String> = None;
+    let mut database_border_override: Option<String> = None;
     let mut collections_fill_override: Option<String> = None;
+    let mut collections_border_override: Option<String> = None;
     let mut queue_fill_override: Option<String> = None;
+    let mut queue_border_override: Option<String> = None;
     // Canvas background. PlantUML only emits a full-canvas `<rect>` (and a
     // non-`#FFFFFF` `style="...background:...;"`) when `backgroundColor` is set
     // to a non-default value.
@@ -2228,25 +2249,43 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme) -> String {
                 actor_fill_override = Some(resolve_color(val));
             }
             "actorbordercolor" | "sequenceactorbordercolor" => {
-                _actor_border_override = Some(resolve_color(val));
+                actor_border_override = Some(resolve_color(val));
             }
             "boundarybackgroundcolor" | "sequenceboundarybackgroundcolor" => {
                 boundary_fill_override = Some(resolve_color(val));
             }
+            "boundarybordercolor" | "sequenceboundarybordercolor" => {
+                boundary_border_override = Some(resolve_color(val));
+            }
             "controlbackgroundcolor" | "sequencecontrolbackgroundcolor" => {
                 control_fill_override = Some(resolve_color(val));
+            }
+            "controlbordercolor" | "sequencecontrolbordercolor" => {
+                control_border_override = Some(resolve_color(val));
             }
             "entitybackgroundcolor" | "sequenceentitybackgroundcolor" => {
                 entity_fill_override = Some(resolve_color(val));
             }
+            "entitybordercolor" | "sequenceentitybordercolor" => {
+                entity_border_override = Some(resolve_color(val));
+            }
             "databasebackgroundcolor" | "sequencedatabasebackgroundcolor" => {
                 database_fill_override = Some(resolve_color(val));
+            }
+            "databasebordercolor" | "sequencedatabasebordercolor" => {
+                database_border_override = Some(resolve_color(val));
             }
             "collectionsbackgroundcolor" | "sequencecollectionsbackgroundcolor" => {
                 collections_fill_override = Some(resolve_color(val));
             }
+            "collectionsbordercolor" | "sequencecollectionsbordercolor" => {
+                collections_border_override = Some(resolve_color(val));
+            }
             "queuebackgroundcolor" | "sequencequeuebackgroundcolor" => {
                 queue_fill_override = Some(resolve_color(val));
+            }
+            "queuebordercolor" | "sequencequeuebordercolor" => {
+                queue_border_override = Some(resolve_color(val));
             }
             "sequencedividerbackgroundcolor" => {
                 divider_fill = resolve_color(val);
@@ -3992,6 +4031,20 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme) -> String {
             .or(kind_specific_fill)
             .unwrap_or_else(|| participant_fill.clone());
 
+        // Resolve the shape border colour: a kind-specific `<kind>BorderColor`
+        // skinparam wins, otherwise fall back to the participant border default.
+        let kind_specific_border = match p.kind {
+            ParticipantKind::Actor => actor_border_override.clone(),
+            ParticipantKind::Boundary => boundary_border_override.clone(),
+            ParticipantKind::Control => control_border_override.clone(),
+            ParticipantKind::Entity => entity_border_override.clone(),
+            ParticipantKind::Database => database_border_override.clone(),
+            ParticipantKind::Collections => collections_border_override.clone(),
+            ParticipantKind::Queue => queue_border_override.clone(),
+            _ => None,
+        };
+        let border_color = kind_specific_border.unwrap_or_else(|| participant_border.clone());
+
         // Created participants draw their head box inline at the creating message
         // (emitted in the message loop below), not at the top — skip the top head.
         if let Some(&ev_idx) = create_msg_idx.get(&p.id) {
@@ -4010,6 +4063,7 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme) -> String {
                 head_base_y,
                 max_box_h,
                 &fill_color,
+                &border_color,
             );
         }
 
@@ -4026,6 +4080,7 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme) -> String {
                 tail_box_y,
                 max_box_h,
                 &fill_color,
+                &border_color,
             );
         }
     }
@@ -5371,6 +5426,7 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme) -> String {
             let mut scratch = PlantUmlSvg::new();
             scratch.participant_border = svg.participant_border.clone();
             scratch.participant_border_thickness = svg.participant_border_thickness.clone();
+            let inline_border = svg.participant_border.clone();
             render_participant_shape(
                 &mut scratch,
                 &part_uid,
@@ -5381,6 +5437,7 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme) -> String {
                 inline_base_y,
                 p.box_height,
                 fill_color,
+                &inline_border,
             );
             // Strip the surrounding `<g class="participant participant-head" ...>`
             // wrapper: PlantUML draws the created head box as bare shape elements.
