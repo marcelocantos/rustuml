@@ -400,6 +400,15 @@ const GROUP_END_HEIGHT: f64 = 7.0;
 /// Left/right margin for group frame beyond participant boxes.
 const GROUP_FRAME_MARGIN: f64 = 10.0;
 
+/// Font size of a named participant box title (bold).
+const BOX_TITLE_FONT_SIZE: u32 = 13;
+/// Default fill colour of a named participant box.
+const BOX_DEFAULT_FILL: &str = "#DDDDDD";
+/// Horizontal margin between the box frame and the enclosed head boxes.
+const BOX_SIDE_MARGIN: f64 = 4.0;
+/// Vertical gap below the participant heads' tail boxes to the box bottom.
+const BOX_BOTTOM_MARGIN: f64 = 5.0;
+
 /// Check if text contains creole or HTML markup that needs processing.
 #[allow(dead_code)]
 fn has_creole_markup(content: &str) -> bool {
@@ -2083,7 +2092,19 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme) -> String {
             + title_lines.len() as f64 * plantuml_metrics::text_height(TITLE_FONT_SIZE as f64)
             + TITLE_BOTTOM_PAD
     };
-    let head_box_y = HEAD_BOX_Y + title_band_h;
+    // Named participant boxes add a title band above the participant heads.
+    // The heads drop by text_height(13) + 5 to make room for the bold box label.
+    let has_boxes = !diagram.boxes.is_empty();
+    let any_box_titled = diagram.boxes.iter().any(|b| !b.title.is_empty());
+    let box_band_h = if !has_boxes {
+        0.0
+    } else if any_box_titled {
+        plantuml_metrics::text_height(BOX_TITLE_FONT_SIZE as f64) + 5.0
+    } else {
+        // Untitled boxes only contribute their top margin, no title line.
+        5.0
+    };
+    let head_box_y = HEAD_BOX_Y + title_band_h + box_band_h;
 
     // -----------------------------------------------------------------------
     // Phase 1: Compute participant layouts
@@ -2946,6 +2967,17 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme) -> String {
     if diagram.meta.caption.is_some() {
         svg_height += 20;
     }
+    // Named boxes extend below the foot boxes; the frame bottom plus its own
+    // bottom margin must fit inside the canvas.
+    if has_boxes {
+        let box_bottom = if diagram.hide_footbox {
+            lifeline_bottom + BOX_BOTTOM_MARGIN
+        } else {
+            tail_box_y + max_box_h + BOX_BOTTOM_MARGIN
+        };
+        // The canvas extends 6px below the (ceiled) box frame bottom.
+        svg_height = svg_height.max(box_bottom.ceil() as u32 + 6);
+    }
 
     // -----------------------------------------------------------------------
     // Phase 5: Pre-compute activation bars
@@ -3385,6 +3417,72 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme) -> String {
                 }
             }
             ly += 14.0;
+        }
+    }
+
+    // Named participant boxes: a titled, optionally coloured rectangle drawn
+    // first, so activation bars, group frames, lifelines and heads render on
+    // top of it.
+    if has_boxes {
+        let box_top = HEAD_BOX_Y + title_band_h + 1.0;
+        let box_bottom = if diagram.hide_footbox {
+            lifeline_bottom + BOX_BOTTOM_MARGIN
+        } else {
+            tail_box_y + max_box_h + BOX_BOTTOM_MARGIN
+        };
+        for b in &diagram.boxes {
+            // Resolve the layout entries for this box's members.
+            let members: Vec<&ParticipantLayout> = b
+                .members
+                .iter()
+                .filter_map(|&pi| participants.iter().find(|p| p.idx == pi))
+                .collect();
+            if members.is_empty() {
+                continue;
+            }
+            let box_left = members
+                .iter()
+                .map(|p| p.box_x)
+                .fold(f64::INFINITY, f64::min)
+                - BOX_SIDE_MARGIN;
+            let box_right = members
+                .iter()
+                .map(|p| p.box_x + p.box_width)
+                .fold(f64::NEG_INFINITY, f64::max)
+                + BOX_SIDE_MARGIN;
+            let fill = b
+                .color
+                .as_ref()
+                .map(|c| resolve_color(c))
+                .unwrap_or_else(|| BOX_DEFAULT_FILL.to_string());
+            write!(
+                svg.buf,
+                r#"<rect fill="{fill}" height="{h}" style="stroke:#181818;stroke-width:0.5;" width="{w}" x="{x}" y="{y}"/>"#,
+                fill = fill,
+                h = fmt_coord(box_bottom - box_top),
+                w = fmt_coord(box_right - box_left),
+                x = fmt_coord(box_left),
+                y = fmt_coord(box_top),
+            )
+            .unwrap();
+            if !b.title.is_empty() {
+                let title_w = bold_text_width(&b.title, BOX_TITLE_FONT_SIZE as f64);
+                text_render::emit_text(
+                    &mut svg.buf,
+                    &b.title,
+                    &TextBase {
+                        x: box_left + (box_right - box_left - title_w) / 2.0,
+                        y: box_top + plantuml_metrics::ascent(BOX_TITLE_FONT_SIZE as f64),
+                        font_size: BOX_TITLE_FONT_SIZE,
+                        font_family: "sans-serif",
+                        fill: "#000000",
+                        bold: true,
+                        italic: false,
+                        underline: false,
+                        skip_underline: false,
+                    },
+                );
+            }
         }
     }
 
@@ -4826,6 +4924,7 @@ mod tests {
             })],
             autonumber: None,
             hide_footbox: false,
+            boxes: Vec::new(),
         }
     }
 

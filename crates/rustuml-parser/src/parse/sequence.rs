@@ -46,6 +46,10 @@ struct SeqParser {
     hide_footbox: bool,
     /// Current 1-based source line number (set before each parse_line call).
     current_line: usize,
+    /// Named participant boxes (`box ... end box`).
+    boxes: Vec<ParticipantBox>,
+    /// Index into `boxes` of the box currently being collected, if any.
+    current_box: Option<usize>,
 }
 
 struct NoteBuffer {
@@ -77,6 +81,8 @@ impl SeqParser {
             in_legend: false,
             hide_footbox: false,
             current_line: 0,
+            boxes: Vec::new(),
+            current_box: None,
         }
     }
 
@@ -87,6 +93,7 @@ impl SeqParser {
             events: self.events,
             autonumber: self.autonumber,
             hide_footbox: self.hide_footbox,
+            boxes: self.boxes,
         }
     }
 
@@ -259,16 +266,20 @@ impl SeqParser {
 
             if !self.participant_ids.contains(&id) {
                 self.participant_ids.push(id.clone());
+                let idx = self.participants.len();
                 self.participants.push(Participant {
                     id: id.clone(),
                     label,
                     kind,
-                    order: Some(self.participants.len()),
+                    order: Some(idx),
                     stereotype,
                     url,
                     color,
                     source_line: self.current_line,
                 });
+                if let Some(bi) = self.current_box {
+                    self.boxes[bi].members.push(idx);
+                }
             }
             true
         } else {
@@ -794,13 +805,33 @@ impl SeqParser {
     }
 
     fn try_box(&mut self, line: &str) -> bool {
-        // Boxes are decorative containers — they don't affect message flow or
-        // vertical layout. We parse and silently skip them for now.
-        // TODO: Implement box rendering (colored background + title).
+        // `box ["Title"] [#color] ... end box` groups consecutive participant
+        // declarations into a titled, optionally coloured rectangle.
         if line == "end box" {
+            self.current_box = None;
             return true;
         }
-        if line.starts_with("box") {
+        if line == "box" || line.starts_with("box ") {
+            let rest = line[3..].trim();
+            // Title is an optional quoted string; colour is an optional #token.
+            let (title, after_title) = if let Some(stripped) = rest.strip_prefix('"') {
+                match stripped.find('"') {
+                    Some(end) => (stripped[..end].to_string(), stripped[end + 1..].trim()),
+                    None => (stripped.to_string(), ""),
+                }
+            } else {
+                (String::new(), rest)
+            };
+            let color = after_title
+                .split_whitespace()
+                .find(|tok| tok.starts_with('#'))
+                .map(|tok| tok.to_string());
+            self.boxes.push(ParticipantBox {
+                title,
+                color,
+                members: Vec::new(),
+            });
+            self.current_box = Some(self.boxes.len() - 1);
             return true;
         }
         false

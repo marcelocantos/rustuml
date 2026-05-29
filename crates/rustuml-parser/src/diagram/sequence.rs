@@ -16,6 +16,21 @@ pub struct SequenceDiagram {
     /// Whether `hide footbox` was specified — suppresses tail participant boxes.
     #[serde(default)]
     pub hide_footbox: bool,
+    /// Named `box ... end box` groupings of participants.
+    #[serde(default, skip_serializing_if = "Vec::is_empty")]
+    pub boxes: Vec<ParticipantBox>,
+}
+
+/// A named `box "Title" #color ... end box` grouping of participants.
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct ParticipantBox {
+    /// Optional box title (empty string if unnamed).
+    pub title: String,
+    /// Optional background color (e.g., "#lightblue", "#FFE4E1").
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub color: Option<String>,
+    /// Indices into `SequenceDiagram::participants` of the members, in order.
+    pub members: Vec<usize>,
 }
 
 /// A participant (lifeline) in a sequence diagram.
