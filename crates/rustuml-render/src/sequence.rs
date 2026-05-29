@@ -1724,15 +1724,23 @@ impl PlantUmlSvg {
             )
             .unwrap();
         } else {
-            // Filled triangle: tip, wing base on the flat side, and the wing tip.
+            // Filled triangle. PlantUML emits the wing vertices in order
+            // [wing-far, tip, wing-near]: for a bottom half the far vertex sits
+            // on the line and the near vertex drops to wing_y; for a top half
+            // the order flips so the raised vertex comes first.
+            let (y_first, y_third) = if top {
+                (wing_y, line_y)
+            } else {
+                (line_y, wing_y)
+            };
             let arrow_points = format!(
                 "{},{},{},{},{},{}",
                 fmt_coord(wing_x),
-                fmt_coord(line_y),
+                fmt_coord(y_first),
                 fmt_coord(tip_x),
                 fmt_coord(line_y),
                 fmt_coord(wing_x),
-                fmt_coord(wing_y),
+                fmt_coord(y_third),
             );
             write!(
                 self.buf,
@@ -4577,6 +4585,29 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme) -> String {
                                 text_y_pos,
                                 &label,
                                 label_w,
+                                &arrow_color,
+                                autonumber_ref,
+                            );
+                        } else if let Some(half) = head_half {
+                            // Half arrowhead pointing left: tip on the target
+                            // side, wing 10px to its right; line runs full like
+                            // an open arrow.
+                            svg.message_half_arrow(
+                                &from_uid,
+                                &to_uid,
+                                src_line,
+                                msg_id,
+                                tip_x,
+                                tip_x + ARROW_SIZE,
+                                tip_x - 1.0,
+                                line_x2_end,
+                                msg_y,
+                                half == ArrowHalf::Top,
+                                thin_head,
+                                line_style,
+                                text_x,
+                                text_y_pos,
+                                &label,
                                 &arrow_color,
                                 autonumber_ref,
                             );
