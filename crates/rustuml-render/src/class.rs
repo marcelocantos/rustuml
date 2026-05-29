@@ -1020,14 +1020,23 @@ impl ClassFontOverrides {
         let attr_style = find(&["ClassAttributeFontStyle"])
             .unwrap_or_default()
             .to_lowercase();
+        // `skinparam defaultFontSize` is the base size for all class text,
+        // overridden by the more specific `ClassFontSize` (name) and
+        // `ClassAttributeFontSize` (members). It only applies when the
+        // specific skinparam is absent.
+        let default_font_size =
+            find(&["defaultFontSize"]).and_then(|v| v.trim().parse::<u32>().ok());
         Self {
             font_color: find(&["ClassFontColor"]),
             attr_font_color: find(&["ClassAttributeFontColor"]),
-            font_size: find(&["ClassFontSize"]).and_then(|v| v.trim().parse::<u32>().ok()),
+            font_size: find(&["ClassFontSize"])
+                .and_then(|v| v.trim().parse::<u32>().ok())
+                .or(default_font_size),
             font_bold: style.contains("bold"),
             font_italic: style.contains("italic"),
             attr_font_size: find(&["ClassAttributeFontSize"])
-                .and_then(|v| v.trim().parse::<u32>().ok()),
+                .and_then(|v| v.trim().parse::<u32>().ok())
+                .or(default_font_size),
             attr_font_bold: attr_style.contains("bold"),
             attr_font_italic: attr_style.contains("italic"),
         }

@@ -751,10 +751,16 @@ impl PlantUmlSvg {
     }
 
     /// Write the opening `<svg>` tag with PlantUML's exact attributes.
-    fn open_svg(&mut self, width: u32, height: u32) {
+    ///
+    /// When `bg_color` is `Some`, the canvas background is set to that colour
+    /// (in the root `style` attribute) and a full-canvas `<rect>` is emitted as
+    /// the first child of the main group — matching PlantUML's behaviour for a
+    /// non-default `skinparam backgroundColor`.
+    fn open_svg(&mut self, width: u32, height: u32, bg_color: Option<&str>) {
+        let bg = bg_color.unwrap_or("#FFFFFF");
         write!(
             self.buf,
-            r##"<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" contentStyleType="text/css" data-diagram-type="SEQUENCE" height="{height}px" preserveAspectRatio="none" style="width:{width}px;height:{height}px;background:#FFFFFF;" version="1.1" viewBox="0 0 {width} {height}" width="{width}px" zoomAndPan="magnify">"##,
+            r##"<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" contentStyleType="text/css" data-diagram-type="SEQUENCE" height="{height}px" preserveAspectRatio="none" style="width:{width}px;height:{height}px;background:{bg};" version="1.1" viewBox="0 0 {width} {height}" width="{width}px" zoomAndPan="magnify">"##,
         )
         .unwrap();
         // Processing instruction
@@ -763,6 +769,14 @@ impl PlantUmlSvg {
         self.buf.push_str("<defs/>");
         // Open main group
         self.buf.push_str("<g>");
+        // Non-default backgrounds get an explicit full-canvas rect.
+        if let Some(color) = bg_color {
+            write!(
+                self.buf,
+                r##"<rect fill="{color}" height="{height}" style="stroke:none;stroke-width:1;" width="{width}" x="0" y="0"/>"##,
+            )
+            .unwrap();
+        }
     }
 
     /// Write a participant lifeline group.
@@ -2014,6 +2028,10 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme) -> String {
     let mut database_fill_override: Option<String> = None;
     let mut collections_fill_override: Option<String> = None;
     let mut queue_fill_override: Option<String> = None;
+    // Canvas background. PlantUML only emits a full-canvas `<rect>` (and a
+    // non-`#FFFFFF` `style="...background:...;"`) when `backgroundColor` is set
+    // to a non-default value.
+    let mut bg_color: Option<String> = None;
     for sp in &diagram.meta.skinparams {
         let key = sp.key.to_ascii_lowercase();
         let val = sp.value.trim();
@@ -2021,6 +2039,12 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme) -> String {
             continue;
         }
         match key.as_str() {
+            "backgroundcolor" => {
+                let c = resolve_color(val);
+                if c != "#FFFFFF" {
+                    bg_color = Some(c);
+                }
+            }
             "arrowcolor" | "sequencearrowcolor" => {
                 default_arrow_color = resolve_color(val);
             }
@@ -3340,7 +3364,7 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme) -> String {
     svg.participant_border_thickness = participant_border_thickness.clone();
     svg.lifeline_border = lifeline_border.clone();
     svg.lifeline_border_thickness = lifeline_border_thickness.clone();
-    svg.open_svg(svg_width, svg_height);
+    svg.open_svg(svg_width, svg_height, bg_color.as_deref());
 
     // Emit handwritten warning if present
     let is_handwritten = diagram
