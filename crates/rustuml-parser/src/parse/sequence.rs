@@ -383,6 +383,8 @@ impl SeqParser {
                     head: ArrowHead::Filled,
                     direction: ArrowDirection::LeftToRight,
                     color: None,
+                    head_half: None,
+                    thin_head: false,
                 },
                 activation: None,
                 activation_color: None,
@@ -401,6 +403,8 @@ impl SeqParser {
                     head: ArrowHead::Filled,
                     direction: ArrowDirection::LeftToRight,
                     color: None,
+                    head_half: None,
+                    thin_head: false,
                 },
                 activation: None,
                 activation_color: None,
@@ -958,6 +962,21 @@ fn parse_arrow(s: &str) -> Arrow {
         ArrowHead::Filled
     };
 
+    // Half-arrowhead modifiers: `/` draws only the bottom wing, `\` only the
+    // top wing. Doubling the modifier (`//`, `\\`) renders a thin open stroke
+    // instead of a filled triangle.
+    let (head_half, thin_head) = if s.contains("//") {
+        (Some(ArrowHalf::Bottom), true)
+    } else if s.contains("\\\\") {
+        (Some(ArrowHalf::Top), true)
+    } else if s.contains('/') {
+        (Some(ArrowHalf::Bottom), false)
+    } else if s.contains('\\') {
+        (Some(ArrowHalf::Top), false)
+    } else {
+        (None, false)
+    };
+
     let direction = if s.contains("<->") {
         ArrowDirection::Bidirectional
     } else if s.contains("<-") || s.contains("<") && !s.contains("->") {
@@ -971,6 +990,8 @@ fn parse_arrow(s: &str) -> Arrow {
         head,
         direction,
         color: None,
+        head_half,
+        thin_head,
     }
 }
 

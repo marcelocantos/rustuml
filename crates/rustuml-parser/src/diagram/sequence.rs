@@ -112,6 +112,23 @@ pub struct Arrow {
     /// Optional arrow color (e.g., "#red", "#FF0000").
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub color: Option<String>,
+    /// Half-arrowhead modifier from `/` (bottom half) or `\` (top half).
+    /// `None` for a normal full arrowhead.
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub head_half: Option<ArrowHalf>,
+    /// True when the arrowhead is drawn as a thin open stroke rather than a
+    /// filled triangle. Triggered by doubling the half modifier (`//`, `\\`).
+    #[serde(default, skip_serializing_if = "std::ops::Not::not")]
+    pub thin_head: bool,
+}
+
+/// Which half of the arrowhead is drawn when a `/` or `\` modifier is present.
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Serialize, Deserialize)]
+pub enum ArrowHalf {
+    /// `/` — only the bottom wing of the arrowhead.
+    Bottom,
+    /// `\` — only the top wing of the arrowhead.
+    Top,
 }
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Default, Serialize, Deserialize)]

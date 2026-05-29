@@ -1663,6 +1663,131 @@ impl PlantUmlSvg {
         self.buf.push_str("</g>");
     }
 
+    /// Write a message group with a half arrowhead (`/`, `\`, `//`, `\\`).
+    ///
+    /// `tip_x` is the arrow tip (lifeline end); `wing_x` is the far x of the
+    /// arrowhead (10px back from the tip, on the source side). A single
+    /// modifier (`thin = false`) draws a filled triangle covering one wing; a
+    /// doubled modifier (`thin = true`) draws a single open stroke for that
+    /// wing. `top` selects the top wing (`\`) instead of the bottom (`/`).
+    #[allow(clippy::too_many_arguments)]
+    fn message_half_arrow(
+        &mut self,
+        entity1: &str,
+        entity2: &str,
+        source_line: u32,
+        msg_id: u32,
+        tip_x: f64,
+        wing_x: f64,
+        line_x1: f64,
+        line_x2: f64,
+        line_y: f64,
+        top: bool,
+        thin: bool,
+        line_style: &str,
+        text_x: f64,
+        text_y: f64,
+        text_content: &str,
+        color: &str,
+        autonumber: Option<(&str, f64, &AutoNumberStyle)>,
+    ) {
+        write!(
+            self.buf,
+            r##"<g class="message" data-entity-1="{entity1}" data-entity-2="{entity2}" data-source-line="{source_line}" id="msg{msg_id}">"##,
+            entity1 = escape_xml(entity1),
+            entity2 = escape_xml(entity2),
+        )
+        .unwrap();
+
+        let wing_y = if top {
+            line_y - ARROW_HALF_H
+        } else {
+            line_y + ARROW_HALF_H
+        };
+
+        if thin {
+            // Single open stroke from the tip back to the wing endpoint.
+            write!(
+                self.buf,
+                r##"<line style="stroke:{color};stroke-width:1;" x1="{}" x2="{}" y1="{}" y2="{}"/>"##,
+                fmt_coord(tip_x),
+                fmt_coord(wing_x),
+                fmt_coord(line_y),
+                fmt_coord(wing_y),
+            )
+            .unwrap();
+        } else {
+            // Filled triangle: tip, wing base on the flat side, and the wing tip.
+            let arrow_points = format!(
+                "{},{},{},{},{},{}",
+                fmt_coord(wing_x),
+                fmt_coord(line_y),
+                fmt_coord(tip_x),
+                fmt_coord(line_y),
+                fmt_coord(wing_x),
+                fmt_coord(wing_y),
+            );
+            write!(
+                self.buf,
+                r##"<polygon fill="{color}" points="{arrow_points}" style="stroke:{color};stroke-width:1;"/>"##,
+            )
+            .unwrap();
+        }
+
+        let thickness = self.arrow_thickness.clone();
+        write!(
+            self.buf,
+            r##"<line style="stroke:{color};stroke-width:{thickness};{line_style}" x1="{}" x2="{}" y1="{}" y2="{}"/>"##,
+            fmt_coord(line_x1),
+            fmt_coord(line_x2),
+            fmt_coord(line_y),
+            fmt_coord(line_y),
+        )
+        .unwrap();
+
+        let label_x = if let Some((num_text, num_w, style)) = autonumber {
+            let fill = style.fill.as_deref().unwrap_or("#000000");
+            text_render::emit_text(
+                &mut self.buf,
+                num_text,
+                &TextBase {
+                    x: text_x,
+                    y: text_y,
+                    font_size: 13,
+                    font_family: "sans-serif",
+                    fill,
+                    bold: style.bold,
+                    italic: style.italic,
+                    underline: style.underline,
+                    skip_underline: false,
+                },
+            );
+            text_x + num_w + AUTONUMBER_LABEL_GAP
+        } else {
+            text_x
+        };
+
+        if !text_content.is_empty() {
+            text_render::emit_text(
+                &mut self.buf,
+                text_content,
+                &TextBase {
+                    x: label_x,
+                    y: text_y,
+                    font_size: 13,
+                    font_family: "sans-serif",
+                    fill: "#000000",
+                    bold: false,
+                    italic: false,
+                    underline: false,
+                    skip_underline: false,
+                },
+            );
+        }
+
+        self.buf.push_str("</g>");
+    }
+
     /// Write a message group with open arrow (>>).
     #[allow(clippy::too_many_arguments)]
     fn message_open_arrow(
@@ -3918,6 +4043,9 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme) -> String {
                 let is_dotted = msg.arrow.line == LineStyle::Dotted;
                 let is_open = msg.arrow.head == ArrowHead::Open;
                 let is_cross = msg.arrow.head == ArrowHead::Cross;
+                // Half-arrowhead modifiers (`/`, `\`, `//`, `\\`).
+                let head_half = msg.arrow.head_half;
+                let thin_head = msg.arrow.thin_head;
 
                 // Check if source/target are activated.
                 // Also look ahead: if the next event activates the target, treat it as
@@ -4044,8 +4172,8 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme) -> String {
                     // Line 3: horizontal left (from loop right back toward lifeline)
                     // For filled arrows, the return line starts 1px right of center
                     // For open arrows, the return line starts at center
-                    let return_left = if is_open {
-                        cx // open: line goes to center
+                    let return_left = if is_open || (head_half.is_some() && thin_head) {
+                        cx // open / thin half: line goes to center
                     } else {
                         cx + 1.0 // filled: line stops 1px right (polygon takes over)
                     };
@@ -4062,7 +4190,45 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme) -> String {
                     .unwrap();
 
                     // Arrow head at bottom-left
-                    if is_open {
+                    if let Some(half) = head_half {
+                        let top = half == ArrowHalf::Top;
+                        let wing_y = if top {
+                            loop_bottom - ARROW_HALF_H
+                        } else {
+                            loop_bottom + ARROW_HALF_H
+                        };
+                        if thin_head {
+                            // Single open stroke from tip back to the wing.
+                            let tip_x = cx + 1.0;
+                            write!(
+                                svg.buf,
+                                r##"<line style="stroke:{};stroke-width:1;" x1="{}" x2="{}" y1="{}" y2="{}"/>"##,
+                                &arrow_color,
+                                fmt_coord(tip_x),
+                                fmt_coord(tip_x + ARROW_SIZE),
+                                fmt_coord(loop_bottom),
+                                fmt_coord(wing_y),
+                            )
+                            .unwrap();
+                        } else {
+                            // Filled triangle: wing base, tip, wing tip.
+                            let arrow_pts = format!(
+                                "{},{},{},{},{},{}",
+                                fmt_coord(cx + ARROW_SIZE),
+                                fmt_coord(loop_bottom),
+                                fmt_coord(cx),
+                                fmt_coord(loop_bottom),
+                                fmt_coord(cx + ARROW_SIZE),
+                                fmt_coord(wing_y),
+                            );
+                            write!(
+                                svg.buf,
+                                r##"<polygon fill="{}" points="{}" style="stroke:{};stroke-width:1;"/>"##,
+                                &arrow_color, arrow_pts, &arrow_color,
+                            )
+                            .unwrap();
+                        }
+                    } else if is_open {
                         // Open arrow: two V-shape lines
                         let tip_x = cx + 1.0;
                         write!(
@@ -4217,6 +4383,28 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme) -> String {
                                 text_y_pos,
                                 &label,
                                 label_w,
+                                &arrow_color,
+                                autonumber_ref,
+                            );
+                        } else if let Some(half) = head_half {
+                            // Half arrowhead (`/`, `\`, `//`, `\\`): the line
+                            // runs to 1px past the tip, like an open arrow.
+                            svg.message_half_arrow(
+                                &from_uid,
+                                &to_uid,
+                                src_line,
+                                msg_id,
+                                tip_x,
+                                tip_x - ARROW_SIZE,
+                                from_x_shifted,
+                                tip_x + 1.0,
+                                msg_y,
+                                half == ArrowHalf::Top,
+                                thin_head,
+                                line_style,
+                                text_x,
+                                text_y_pos,
+                                &label,
                                 &arrow_color,
                                 autonumber_ref,
                             );
@@ -5245,6 +5433,8 @@ mod tests {
                     head: ArrowHead::Filled,
                     direction: ArrowDirection::LeftToRight,
                     color: None,
+                    head_half: None,
+                    thin_head: false,
                 },
                 activation: None,
                 activation_color: None,
