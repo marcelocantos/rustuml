@@ -32,6 +32,10 @@ pub struct Actor {
     pub label: String,
     /// Optional UML stereotype text, e.g. `<<system>>` → `"system"`.
     pub stereotype: Option<String>,
+    /// Optional inline background colour token, e.g. `#Pink`, `#AAFFAA`.
+    /// Stored without the leading `#`.
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub color: Option<String>,
     /// 1-based line number within the `@startuml` block.
     #[serde(default)]
     pub source_line: usize,
@@ -46,6 +50,10 @@ pub struct UseCase {
     /// Optional additional description lines (from multiline `as "Title\n--\n..."` syntax).
     #[serde(default, skip_serializing_if = "Vec::is_empty")]
     pub description: Vec<String>,
+    /// Optional inline background colour token, e.g. `#Cyan`, `#AAFFAA`.
+    /// Stored without the leading `#`.
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub color: Option<String>,
     /// 1-based line number within the `@startuml` block.
     #[serde(default)]
     pub source_line: usize,

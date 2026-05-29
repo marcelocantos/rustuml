@@ -46,6 +46,18 @@ fn fc(v: f64) -> String {
     pm::fmt_coord(v)
 }
 
+/// Resolve a raw `#color` token (parser strips the leading `#`, so we receive
+/// e.g. `Pink`, `LightBlue`, or `FFC0CB`) into a PlantUML fill string. Named
+/// colours resolve to `#RRGGBB`; bare hex digits get a `#` prepended.
+fn resolve_fill(raw: &str) -> String {
+    let normalized = text_render::normalize_color(raw);
+    if normalized.starts_with('#') {
+        normalized
+    } else {
+        format!("#{normalized}")
+    }
+}
+
 /// Round a coordinate to 4 decimals (HALF_UP), returning the numeric value.
 ///
 /// PlantUML places shapes at 4-decimal-rounded pixel coordinates and then
@@ -507,8 +519,13 @@ fn render_actor(
         r#"<g class="entity" data-qualified-name="{}"{src_attr} id="{ent_id}">"#,
         actor.id
     ));
+    let fill = actor
+        .color
+        .as_deref()
+        .map(resolve_fill)
+        .unwrap_or_else(|| ENTITY_FILL.to_string());
     svg.raw(&format!(
-        r#"<ellipse cx="{cx}" cy="{cy}" fill="{ENTITY_FILL}" rx="{ACTOR_HEAD_R}" ry="{ACTOR_HEAD_R}" style="stroke:{STROKE};stroke-width:0.5;"/>"#,
+        r#"<ellipse cx="{cx}" cy="{cy}" fill="{fill}" rx="{ACTOR_HEAD_R}" ry="{ACTOR_HEAD_R}" style="stroke:{STROKE};stroke-width:0.5;"/>"#,
         cx = fc(cx),
         cy = fc(cy),
     ));
@@ -630,8 +647,13 @@ fn render_use_case(
     } else {
         (dim.rx, dim.ry)
     };
+    let fill = uc
+        .color
+        .as_deref()
+        .map(resolve_fill)
+        .unwrap_or_else(|| ENTITY_FILL.to_string());
     svg.raw(&format!(
-        r#"<ellipse cx="{cx}" cy="{cy}" fill="{ENTITY_FILL}" rx="{rx}" ry="{ry}" style="stroke:{STROKE};stroke-width:0.5;"/>"#,
+        r#"<ellipse cx="{cx}" cy="{cy}" fill="{fill}" rx="{rx}" ry="{ry}" style="stroke:{STROKE};stroke-width:0.5;"/>"#,
         cx = fc(cx),
         cy = fc(cy),
         rx = fc(rx),

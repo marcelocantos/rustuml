@@ -24,6 +24,14 @@ fn extract_stereotype_text(s: &str) -> Option<String> {
     RE.captures(s).map(|c| c[1].trim().to_string())
 }
 
+/// Extract a trailing `#color` modifier from an actor/use-case declaration
+/// line, e.g. `actor User #Pink` → `Some("Pink")`, `usecase "X" #AAFFAA` →
+/// `Some("AAFFAA")`. Returns the token without the leading `#`.
+fn trailing_color(line: &str) -> Option<String> {
+    static RE: LazyLock<Regex> = LazyLock::new(|| Regex::new(r"#([0-9A-Za-z]+)\s*$").unwrap());
+    RE.captures(line).map(|c| c[1].to_string())
+}
+
 /// Turn a label into a simple identifier (strip spaces, keep alphanumerics/underscores).
 fn label_to_id(label: &str) -> String {
     label
@@ -161,6 +169,7 @@ pub fn parse_usecase(lines: &[String]) -> Result<UseCaseDiagram, ParseError> {
                         label,
                         stereotype: None,
                         description,
+                        color: None,
                         source_line: current_line,
                     });
                 }
@@ -294,6 +303,7 @@ pub fn parse_usecase(lines: &[String]) -> Result<UseCaseDiagram, ParseError> {
                     id,
                     label,
                     stereotype,
+                    color: trailing_color(trimmed),
                     source_line: current_line,
                 });
             }
@@ -305,6 +315,7 @@ pub fn parse_usecase(lines: &[String]) -> Result<UseCaseDiagram, ParseError> {
                     id,
                     label,
                     stereotype: None,
+                    color: None,
                     source_line: current_line,
                 });
             }
@@ -319,6 +330,7 @@ pub fn parse_usecase(lines: &[String]) -> Result<UseCaseDiagram, ParseError> {
                     id,
                     label,
                     stereotype,
+                    color: trailing_color(trimmed),
                     source_line: current_line,
                 });
             }
@@ -335,6 +347,7 @@ pub fn parse_usecase(lines: &[String]) -> Result<UseCaseDiagram, ParseError> {
                     label,
                     stereotype: None,
                     description: Vec::new(),
+                    color: trailing_color(trimmed),
                     source_line: current_line,
                 });
             }
@@ -360,6 +373,7 @@ pub fn parse_usecase(lines: &[String]) -> Result<UseCaseDiagram, ParseError> {
                     label,
                     stereotype: None,
                     description: Vec::new(),
+                    color: trailing_color(trimmed),
                     source_line: current_line,
                 });
             }
@@ -378,6 +392,7 @@ pub fn parse_usecase(lines: &[String]) -> Result<UseCaseDiagram, ParseError> {
                     label,
                     stereotype,
                     description: Vec::new(),
+                    color: trailing_color(trimmed),
                     source_line: current_line,
                 });
             }
@@ -396,6 +411,7 @@ pub fn parse_usecase(lines: &[String]) -> Result<UseCaseDiagram, ParseError> {
                     label,
                     stereotype,
                     description: Vec::new(),
+                    color: trailing_color(trimmed),
                     source_line: current_line,
                 });
             }
@@ -414,6 +430,7 @@ pub fn parse_usecase(lines: &[String]) -> Result<UseCaseDiagram, ParseError> {
                     label,
                     stereotype,
                     description: Vec::new(),
+                    color: trailing_color(trimmed),
                     source_line: current_line,
                 });
             }
@@ -429,6 +446,7 @@ pub fn parse_usecase(lines: &[String]) -> Result<UseCaseDiagram, ParseError> {
                     label,
                     stereotype: None,
                     description: Vec::new(),
+                    color: None,
                     source_line: current_line,
                 });
             }
@@ -452,6 +470,7 @@ pub fn parse_usecase(lines: &[String]) -> Result<UseCaseDiagram, ParseError> {
                             label: inner,
                             stereotype: None,
                             description: Vec::new(),
+                            color: None,
                             source_line: current_line,
                         });
                     }
@@ -470,6 +489,7 @@ pub fn parse_usecase(lines: &[String]) -> Result<UseCaseDiagram, ParseError> {
                             id,
                             label: inner,
                             stereotype: None,
+                            color: None,
                             source_line: current_line,
                         });
                     }
