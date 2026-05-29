@@ -1240,7 +1240,6 @@ fn node_height(node: &LayoutNode) -> f64 {
             body,
             is_label,
             special_out,
-            end_label,
             ..
         } => {
             // PlantUML's FtileWhile height formula:
@@ -1262,11 +1261,7 @@ fn node_height(node: &LayoutNode) -> f64 {
             // from the same compression-aware formula as emit_while.
             let diamond_alone_h = DIAMOND_HALF * 2.0;
             let body_top_offset = if is_label.is_some() {
-                if end_label.is_some() {
-                    pm::text_height(SMALL_FONT) + 2.0 * DIAMOND_HALF
-                } else {
-                    32.1348
-                }
+                pm::text_height(SMALL_FONT) + 2.0 * DIAMOND_HALF
             } else {
                 ARROW_LEN
             };
