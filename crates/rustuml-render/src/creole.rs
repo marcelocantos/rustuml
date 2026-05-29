@@ -264,25 +264,9 @@ fn to_svg_tspans_inner(text: &str, skip_underline: bool) -> String {
                         )
                         .unwrap();
                     }
-                    "strong" => {
-                        let content = collect_until_tag(&mut chars, "</strong>");
-                        let inner = to_svg_tspans_inner(&content, skip_underline);
-                        write!(result, "<tspan font-weight=\"bold\">{inner}</tspan>").unwrap();
-                    }
-                    "em" => {
-                        let content = collect_until_tag(&mut chars, "</em>");
-                        let inner = to_svg_tspans_inner(&content, skip_underline);
-                        write!(result, "<tspan font-style=\"italic\">{inner}</tspan>").unwrap();
-                    }
-                    "ins" => {
-                        let content = collect_until_tag(&mut chars, "</ins>");
-                        let inner = to_svg_tspans_inner(&content, skip_underline);
-                        write!(
-                            result,
-                            "<tspan text-decoration=\"underline\">{inner}</tspan>"
-                        )
-                        .unwrap();
-                    }
+                    // `<strong>`, `<em>`, `<ins>` are not part of PlantUML's
+                    // HTML subset; they fall through to the unknown-tag arm
+                    // and render literally.
                     "sub" => {
                         let content = collect_until_tag(&mut chars, "</sub>");
                         let inner = to_svg_tspans_inner(&content, skip_underline);
@@ -1151,21 +1135,26 @@ fn handle_tag(
     out: &mut Vec<Segment>,
 ) {
     match tag {
-        "b" | "strong" => walk_with(
+        // PlantUML's HTML subset supports only the short tags (`<b>`, `<i>`,
+        // `<u>`, `<s>`, `<del>`, `<strike>`, `<code>`, `<sub>`, `<sup>`,
+        // `<color:>`, `<size:>`, `<font:>`, `<back:>`, `<img:>`). The HTML5
+        // synonyms `<strong>`, `<em>`, `<ins>` are NOT recognized and render
+        // literally, so they deliberately fall through to the unknown-tag arm.
+        "b" => walk_with(
             chars,
-            "</b>".replace("b", tag),
+            "</b>".into(),
             tag,
-            "strong",
+            "",
             style,
             |s| s.bold = true,
             skip_underline,
             out,
         ),
-        "i" | "em" => walk_with(
+        "i" => walk_with(
             chars,
-            format!("</{tag}>"),
+            "</i>".into(),
             tag,
-            "em",
+            "",
             style,
             |s| s.italic = true,
             skip_underline,
@@ -1174,16 +1163,6 @@ fn handle_tag(
         "u" => walk_with(
             chars,
             "</u>".into(),
-            tag,
-            "",
-            style,
-            |s| s.underline = true,
-            skip_underline,
-            out,
-        ),
-        "ins" => walk_with(
-            chars,
-            "</ins>".into(),
             tag,
             "",
             style,
