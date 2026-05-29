@@ -462,6 +462,7 @@ fn emit_clusters_dfs(
                 rect.height,
                 cluster_fill.as_deref(),
                 stroke,
+                &node.label,
             );
             emit_cluster_label(svg, node.kind, node, rect.x, rect.y, rect.width);
             svg.raw("</g>");
@@ -661,6 +662,7 @@ fn emit_cluster_shape(
     h: f64,
     fill: Option<&str>,
     stroke: &str,
+    label: &str,
 ) {
     use DeploymentNodeKind::*;
     // Clusters default to no fill; a `#color` paints the cluster background.
@@ -673,7 +675,7 @@ fn emit_cluster_shape(
         // Rectangle / Agent cluster: bare rect, no line.
         Rectangle | Agent => emit_plain_rect_cluster(svg, x, y, w, h, fill, stroke),
         Frame => emit_frame_cluster(svg, x, y, w, h, fill, stroke),
-        Folder => emit_folder_cluster(svg, x, y, w, h),
+        Folder => emit_folder_cluster(svg, x, y, w, h, fill, label),
         Package => emit_package_cluster(svg, x, y, w, h),
         _ => emit_tag_polygon(svg, x, y, w, h, fill, 1.0, stroke),
     }
@@ -973,8 +975,49 @@ fn emit_folder(svg: &mut SvgBuilder, x: f64, y: f64, w: f64, h: f64, fill: &str,
     ));
 }
 
-fn emit_folder_cluster(_svg: &mut SvgBuilder, _x: f64, _y: f64, _w: f64, _h: f64) {
-    // TODO
+/// Folder cluster shape: like the leaf folder but the tab width tracks the
+/// (bold) title width and the divider/outline use the cluster stroke
+/// (#000000, width 1.5). Tab band height is text_height + 6.
+fn emit_folder_cluster(
+    svg: &mut SvgBuilder,
+    x: f64,
+    y: f64,
+    w: f64,
+    h: f64,
+    fill: &str,
+    label: &str,
+) {
+    let xr = x + w;
+    let yb = y + h;
+    let label_w = text_render::measure(label, FONT_SIZE, true);
+    let flap_r = x + label_w + 3.5;
+    let tab_y = y + pm::text_height(FONT_SIZE) + 6.0;
+    let cstroke = "#000000";
+    let d = format!(
+        "M{x25},{y_s} L{flap_r},{y_s} A3.75,3.75 0 0 1 {flap_r2},{y85} L{flap_r95},{ty} L{xr25},{ty} A2.5,2.5 0 0 1 {xr_s},{ty25} L{xr_s},{yb2} A2.5,2.5 0 0 1 {xr25},{yb_s} L{x25},{yb_s} A2.5,2.5 0 0 1 {x_s},{yb2} L{x_s},{y85} A2.5,2.5 0 0 1 {x25},{y_s}",
+        x25 = fc(x + 2.5),
+        y_s = fc(y),
+        flap_r = fc(flap_r),
+        flap_r2 = fc(flap_r + 2.5),
+        y85 = fc(y + 2.5),
+        flap_r95 = fc(flap_r + 9.5),
+        ty = fc(tab_y),
+        xr25 = fc(xr - 2.5),
+        xr_s = fc(xr),
+        ty25 = fc(tab_y + 2.5),
+        yb2 = fc(yb - 2.5),
+        yb_s = fc(yb),
+        x_s = fc(x),
+    );
+    svg.raw(&format!(
+        r#"<path d="{d}" fill="{fill}" style="stroke:{cstroke};stroke-width:1.5;"/>"#
+    ));
+    svg.raw(&format!(
+        r#"<line style="stroke:{cstroke};stroke-width:1.5;" x1="{x1}" x2="{x2}" y1="{ty}" y2="{ty}"/>"#,
+        x1 = fc(x),
+        x2 = fc(flap_r + 9.5),
+        ty = fc(tab_y),
+    ));
 }
 
 // ---- File -----------------------------------------------------------------
@@ -1258,6 +1301,16 @@ fn emit_cluster_label(
         emit_frame_tab(svg, x, y, label_w);
         let label_x = x + 3.0;
         let label_y = y + ASCENT_14 + 1.0;
+        emit_text(svg, &node.label, label_x, label_y, FONT_SIZE, true, false);
+        return;
+    }
+
+    if matches!(kind, DeploymentNodeKind::Folder) {
+        // Folder cluster: left-aligned bold title in the tab band at
+        // (x+4, y+ascent+2). The shape (with the matching tab) is drawn by
+        // emit_folder_cluster.
+        let label_x = x + 4.0;
+        let label_y = y + ASCENT_14 + 2.0;
         emit_text(svg, &node.label, label_x, label_y, FONT_SIZE, true, false);
         return;
     }
