@@ -367,11 +367,34 @@ impl GanttParser {
         }
     }
 
-    /// `[name] is N% completed` — parsed but ignored
+    /// `[name] is N% completed` — records the completion percentage.
     fn try_completed(&mut self, line: &str) -> bool {
         static RE: LazyLock<Regex> =
-            LazyLock::new(|| Regex::new(r"^\[([^\]]+)\]\s+is\s+\d+%\s+completed$").unwrap());
-        RE.is_match(line)
+            LazyLock::new(|| Regex::new(r"^\[([^\]]+)\]\s+is\s+(\d+)%\s+completed$").unwrap());
+        if let Some(caps) = RE.captures(line) {
+            let name = caps[1].to_string();
+            let pct: u32 = caps[2].parse().unwrap_or(0);
+            self.upsert_completed(name, pct);
+            true
+        } else {
+            false
+        }
+    }
+
+    /// Insert or update completion percentage only.
+    fn upsert_completed(&mut self, name: String, pct: u32) {
+        if let Some(task) = self.tasks.iter_mut().find(|t| t.name == name) {
+            task.completed = Some(pct);
+        } else {
+            self.tasks.push(GanttTask {
+                name,
+                duration: 1,
+                start: TaskStart::Day(0),
+                color: None,
+                completed: Some(pct),
+                resources: Vec::new(),
+            });
+        }
     }
 
     /// `Project starts YYYY-MM-DD`
@@ -434,6 +457,7 @@ impl GanttParser {
                 duration,
                 start,
                 color: None,
+                completed: None,
                 resources: Vec::new(),
             });
         }
@@ -457,6 +481,7 @@ impl GanttParser {
                 duration,
                 start: TaskStart::Day(0),
                 color: None,
+                completed: None,
                 resources: Vec::new(),
             });
         }
@@ -479,6 +504,7 @@ impl GanttParser {
                 duration: 1,
                 start,
                 color: None,
+                completed: None,
                 resources: Vec::new(),
             });
         }
@@ -495,6 +521,7 @@ impl GanttParser {
                 duration: 1,
                 start: TaskStart::Day(0),
                 color: Some(color),
+                completed: None,
                 resources: Vec::new(),
             });
         }
@@ -526,6 +553,7 @@ impl GanttParser {
                 duration,
                 start,
                 color: None,
+                completed: None,
                 resources: task_resources,
             });
         }

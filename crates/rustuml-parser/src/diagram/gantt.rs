@@ -62,6 +62,9 @@ pub struct GanttTask {
     pub start: TaskStart,
     /// Optional task color (CSS color name or hex).
     pub color: Option<String>,
+    /// Completion percentage (0-100), if specified with `is N% completed`.
+    #[serde(default)]
+    pub completed: Option<u32>,
     /// Resource assignments for this task (may be multiple with percentages).
     pub resources: Vec<TaskResource>,
 }
