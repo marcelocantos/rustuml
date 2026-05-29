@@ -702,23 +702,48 @@ impl SeqParser {
     }
 
     fn try_create_destroy(&mut self, line: &str) -> bool {
-        static RE: LazyLock<Regex> =
-            LazyLock::new(|| Regex::new(r"^(create|destroy)\s+(?:participant\s+)?(\w+)").unwrap());
+        static KW: LazyLock<Regex> =
+            LazyLock::new(|| Regex::new(r"^(create|destroy)\s+(.*)$").unwrap());
+        // Identifier extraction from a participant declaration tail. Mirrors the
+        // forms in `try_participant_decl`; the id is the alias when `as` is
+        // present, otherwise the simple name (or quoted label).
+        static REST: LazyLock<Regex> = LazyLock::new(|| {
+            Regex::new(
+                r#"^(?:participant|actor|boundary|control|entity|database|collections|queue)?\s*(?:"[^"]+"\s+as\s+(\w+)|(\w+)\s+as\s+(?:"[^"]+"|\w+)|"([^"]+)"|(\w+))"#,
+            )
+            .unwrap()
+        });
 
-        if let Some(caps) = RE.captures(line) {
-            let id = caps[2].to_string();
-            match &caps[1] {
-                "create" => {
+        let Some(kw) = KW.captures(line) else {
+            return false;
+        };
+        let rest = kw[2].trim();
+        let Some(caps) = REST.captures(rest) else {
+            return false;
+        };
+        let id = caps
+            .get(1)
+            .or_else(|| caps.get(2))
+            .or_else(|| caps.get(3))
+            .or_else(|| caps.get(4))
+            .map(|m| m.as_str().to_string());
+        let Some(id) = id else {
+            return false;
+        };
+
+        match &kw[1] {
+            "create" => {
+                // Register with the declared kind/alias/label if a full declaration
+                // was given; otherwise ensure a plain participant exists.
+                if !self.try_participant_decl(rest) {
                     self.ensure_participant(&id);
-                    self.events.push(Event::Create(id));
                 }
-                "destroy" => self.events.push(Event::Destroy(id)),
-                _ => {}
+                self.events.push(Event::Create(id));
             }
-            true
-        } else {
-            false
+            "destroy" => self.events.push(Event::Destroy(id)),
+            _ => {}
         }
+        true
     }
 
     fn try_return(&mut self, line: &str) -> bool {

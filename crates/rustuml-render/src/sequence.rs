@@ -232,6 +232,21 @@ fn note_content_width(max_text_w: f64, shape: NoteShape) -> f64 {
 
 const HEAD_BOX_Y: f64 = 5.0;
 const HEAD_BOX_H: f64 = 30.488281250; // exact Java double
+
+// Create-message layout (reverse-engineered from golden SVGs).
+// When `create X` precedes a message targeting X, PlantUML draws X's head box
+// inline at the message instead of at the top, and the lifeline begins there.
+/// Offset from the create message's arrow y up to the inline head box top.
+const CREATE_BOX_TOP_OFFSET: f64 = 21.310575;
+/// Offset from the create message's arrow y down to the created lifeline top.
+const CREATE_LIFELINE_TOP_OFFSET: f64 = 9.4336;
+/// Extra vertical advance added to the y cursor after a create message,
+/// accounting for the inline head box that straddles the arrow. Reverse-engineered
+/// from goldens (the next event sits this much further down than a normal step).
+const CREATE_EXTRA_ADVANCE: f64 = 12.177753125;
+/// Offset for an activation bar that begins on a create+activate message: the bar
+/// starts below the inline head box rather than at the arrow.
+const CREATE_BAR_OFFSET: f64 = 10.0;
 const HEAD_BOX_RX: f64 = 2.5;
 const BOX_TEXT_X_PAD: f64 = 7.0;
 const BOX_TEXT_Y_OFFSET: f64 = 20.535156250; // exact Java double: baseline from box top
@@ -2305,8 +2320,13 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme) -> String {
     // Track autonumber counter during spacing phase to compute bold label widths.
     let mut spacing_auto_num: Option<u32> = diagram.autonumber.as_ref().map(|an| an.start);
 
+    // Pending `create X` ids awaiting their first message — that message reserves
+    // extra horizontal space for the inline head box centered on X's lifeline.
+    let mut spacing_pending_create: Vec<String> = Vec::new();
+
     for event in &diagram.events {
         match event {
+            Event::Create(id) => spacing_pending_create.push(id.clone()),
             Event::Message(msg) => {
                 let from_idx = id_to_idx.get(msg.from.as_str()).copied();
                 let to_idx = id_to_idx.get(msg.to.as_str()).copied();
@@ -2357,7 +2377,19 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme) -> String {
                         };
                         let target_shift = if to_depth > 0 { ACTIVATION_HALF_W } else { 0.0 };
 
-                        let needed = arrow_only_w + source_shift + target_shift;
+                        // A message that creates its target reserves extra space
+                        // for the inline head box centered on the target lifeline:
+                        // half the box width sits left of center.
+                        let create_extra = if let Some(pos) =
+                            spacing_pending_create.iter().position(|id| *id == msg.to)
+                        {
+                            spacing_pending_create.remove(pos);
+                            participants[ti].box_width / 2.0
+                        } else {
+                            0.0
+                        };
+
+                        let needed = arrow_only_w + source_shift + target_shift + create_extra;
 
                         let (left, right) = if fi < ti { (fi, ti) } else { (ti, fi) };
                         if right - left == 1 {
@@ -2631,6 +2663,30 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme) -> String {
             .unwrap_or(0.0)
     };
 
+    // Created participants: `create X` causes X's head box to be drawn inline at
+    // the message that creates it (the first message targeting X at or after the
+    // Create event) rather than at the top, with the lifeline starting there.
+    // Map: created participant id -> index of its creating message event.
+    let mut create_msg_idx: HashMap<String, usize> = HashMap::new();
+    {
+        let mut pending: Vec<String> = Vec::new();
+        for (idx, event) in diagram.events.iter().enumerate() {
+            match event {
+                Event::Create(id) => pending.push(id.clone()),
+                Event::Message(msg) => {
+                    if let Some(pos) = pending.iter().position(|id| *id == msg.to) {
+                        let id = pending.remove(pos);
+                        create_msg_idx.entry(id).or_insert(idx);
+                    }
+                }
+                _ => {}
+            }
+        }
+    }
+    // Set of event indices that are creating messages (trigger extra advance).
+    let create_msg_events: std::collections::HashSet<usize> =
+        create_msg_idx.values().copied().collect();
+
     // Compute self-message right extent now that x positions are assigned.
     // Replay activation state to know whether the participant is active at the
     // moment of each self-message — shifts cx by ACTIVATION_HALF_W if so.
@@ -2703,7 +2759,7 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme) -> String {
     let last_effective_y;
     {
         let mut y = lifeline_top;
-        for event in &diagram.events {
+        for (idx, event) in diagram.events.iter().enumerate() {
             let has_text = match event {
                 Event::Message(msg) => {
                     let label = process_label(&msg.label);
@@ -2727,6 +2783,11 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme) -> String {
                         // Self-messages have a loopback that drops below the top line.
                         // The next message's y step starts from the bottom of the loop.
                         y += SELF_MSG_DROP;
+                    }
+                    // A creating message draws an inline head box that straddles the
+                    // arrow; the next event must clear the box bottom.
+                    if create_msg_events.contains(&idx) {
+                        y += CREATE_EXTRA_ADVANCE;
                     }
                     msg_count += 1;
                 }
@@ -3116,6 +3177,13 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme) -> String {
     let event_y =
         |idx: usize| -> f64 { event_y_positions.get(idx).copied().unwrap_or(lifeline_top) };
 
+    // Per-participant lifeline top: created participants begin at their creating
+    // message instead of the global top, and draw their head box inline there.
+    let created_lifeline_top: HashMap<String, f64> = create_msg_idx
+        .iter()
+        .map(|(id, &idx)| (id.clone(), event_y(idx) + CREATE_LIFELINE_TOP_OFFSET))
+        .collect();
+
     // -----------------------------------------------------------------------
     // Phase 5.5: Pre-compute group frames
     // -----------------------------------------------------------------------
@@ -3501,11 +3569,20 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme) -> String {
     // Order: activation bars, group frame rects, lifelines, participants, activation bars
     // again, then messages.
 
+    // When a message both creates and activates its target, the activation bar
+    // begins below the inline head box (10px past the arrow), not at the arrow.
+    let bar_create_offset = |bar: &ActivationBar| -> f64 {
+        match create_msg_idx.get(&bar.participant_id) {
+            Some(&cidx) if cidx == bar.start_event_idx => CREATE_BAR_OFFSET,
+            _ => 0.0,
+        }
+    };
+
     // First pass: activation bars (rendered twice in PlantUML's SVG)
     for bar in &activation_bars {
         let cx = center_of(&bar.participant_id);
         let bar_x = cx - ACTIVATION_HALF_W + (bar.depth as f64 * ACTIVATION_HALF_W);
-        let bar_y = event_y(bar.start_event_idx);
+        let bar_y = event_y(bar.start_event_idx) + bar_create_offset(bar);
         let bar_end_y = event_y(bar.end_event_idx);
         let bar_h = bar_end_y - bar_y;
         let title = &participants
@@ -3548,19 +3625,27 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme) -> String {
     for p in &participants {
         let part_uid = format!("part{}", p.idx + 1);
         let ll_rect_x = p.center_x - LIFELINE_RECT_WIDTH / 2.0;
+        let (p_top, p_height) = match created_lifeline_top.get(&p.id) {
+            Some(&top) => (top, lifeline_bottom - top),
+            None => (lifeline_top, lifeline_height),
+        };
         svg.lifeline(
             &part_uid,
             &p.id,
             source_line_for(&p.id),
             &p.label,
             ll_rect_x,
-            lifeline_top,
-            lifeline_height,
+            p_top,
+            p_height,
             p.lifeline_line_x, // PlantUML uses box_x + floor(box_width/2) for the dashed line
-            lifeline_top,
+            p_top,
             lifeline_bottom,
         );
     }
+
+    // Inline head boxes for created participants: keyed by creating-message event
+    // index, emitted in the message loop. Value: (participant index, fill color).
+    let mut created_inline: HashMap<usize, (usize, String)> = HashMap::new();
 
     // Participant head and tail boxes (interleaved per participant, matching PlantUML order).
     // Non-rectangle shapes (actor, boundary, etc.) are bottom-aligned: their box_y is
@@ -3592,20 +3677,26 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme) -> String {
             .or(kind_specific_fill)
             .unwrap_or_else(|| participant_fill.clone());
 
-        // Head: base_y is where this participant's shape starts (bottom-aligned).
-        let head_base_y = head_box_y + (max_box_h - p.box_height);
+        // Created participants draw their head box inline at the creating message
+        // (emitted in the message loop below), not at the top — skip the top head.
+        if let Some(&ev_idx) = create_msg_idx.get(&p.id) {
+            created_inline.insert(ev_idx, (i, fill_color.clone()));
+        } else {
+            // Head: base_y is where this participant's shape starts (bottom-aligned).
+            let head_base_y = head_box_y + (max_box_h - p.box_height);
 
-        render_participant_shape(
-            &mut svg,
-            &part_uid,
-            &p.id,
-            sl,
-            "head",
-            p,
-            head_base_y,
-            max_box_h,
-            &fill_color,
-        );
+            render_participant_shape(
+                &mut svg,
+                &part_uid,
+                &p.id,
+                sl,
+                "head",
+                p,
+                head_base_y,
+                max_box_h,
+                &fill_color,
+            );
+        }
 
         // Tail (skip if hide footbox) — all participants start at tail_box_y
         // (no bottom-alignment offset; the SVG height accounts for max_box_h).
@@ -3628,7 +3719,7 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme) -> String {
     for bar in &activation_bars {
         let cx = center_of(&bar.participant_id);
         let bar_x = cx - ACTIVATION_HALF_W + (bar.depth as f64 * ACTIVATION_HALF_W);
-        let bar_y = event_y(bar.start_event_idx);
+        let bar_y = event_y(bar.start_event_idx) + bar_create_offset(bar);
         let bar_end_y = event_y(bar.end_event_idx);
         let bar_h = bar_end_y - bar_y;
         let title = &participants
@@ -3891,9 +3982,26 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme) -> String {
                         from_x
                     };
 
+                    // Creating messages terminate at the inline head box's near
+                    // edge, not the lifeline center; the activation bar (if any)
+                    // sits below the box, so the arrow ignores the target shift.
+                    let is_create_msg = created_inline.contains_key(&ev_idx);
+
                     // Target shift: when the target is activated, the arrow tip
                     // stops at the activation bar edge.
-                    let target_shift = if to_active { ACTIVATION_HALF_W } else { 0.0 };
+                    let target_shift = if to_active && !is_create_msg {
+                        ACTIVATION_HALF_W
+                    } else {
+                        0.0
+                    };
+
+                    let to_x = if is_create_msg {
+                        let half =
+                            participants[*id_to_idx.get(msg.to.as_str()).unwrap()].box_width / 2.0;
+                        if is_right { to_x - half } else { to_x + half }
+                    } else {
+                        to_x
+                    };
 
                     // Text position
                     let text_y_pos = msg_y - 4.742187500;
@@ -4848,6 +4956,43 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme) -> String {
             _ => {
                 // Remaining events (Create, NewPage)
                 // don't emit visible text labels or change activation state.
+            }
+        }
+
+        // A created participant's head box is drawn inline, right after the
+        // message that creates it — as bare shape elements (no participant `<g>`
+        // wrapper). The box top sits CREATE_BOX_TOP_OFFSET above the arrow.
+        if let Some((pi, fill_color)) = created_inline.get(&ev_idx) {
+            // The created participant's box occupies the next message-id slot.
+            msg_id += 1;
+            let p = &participants[*pi];
+            let part_uid = format!("part{}", p.idx + 1);
+            let sl = source_line_for(&p.id);
+            let inline_base_y = msg_y - CREATE_BOX_TOP_OFFSET;
+            let mut scratch = PlantUmlSvg::new();
+            scratch.participant_border = svg.participant_border.clone();
+            scratch.participant_border_thickness = svg.participant_border_thickness.clone();
+            render_participant_shape(
+                &mut scratch,
+                &part_uid,
+                &p.id,
+                sl,
+                "head",
+                p,
+                inline_base_y,
+                p.box_height,
+                fill_color,
+            );
+            // Strip the surrounding `<g class="participant participant-head" ...>`
+            // wrapper: PlantUML draws the created head box as bare shape elements.
+            let inner = scratch.buf.as_str();
+            if let Some(start) = inner.find('>') {
+                let body = inner[start + 1..]
+                    .strip_suffix("</g>")
+                    .unwrap_or(&inner[start + 1..]);
+                svg.buf.push_str(body);
+            } else {
+                svg.buf.push_str(inner);
             }
         }
     }
