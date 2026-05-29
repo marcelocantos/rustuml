@@ -422,13 +422,11 @@ impl Parser {
 
     fn parse_class(&mut self) -> RegexNode {
         self.advance(); // consume '['
-        let negated = self.try_consume('^');
-        let mut items: Vec<String> = Vec::new();
-        let mut raw = String::new();
-        if negated {
-            raw.push('^');
-        }
 
+        // Collect the raw group content (the characters up to the closing `]`),
+        // keeping the leading negation `^` and escape sequences intact — this
+        // mirrors PlantUML's GroupSplitter input.
+        let mut group = String::new();
         loop {
             match self.peek() {
                 None | Some(']') => {
@@ -437,56 +435,42 @@ impl Parser {
                 }
                 Some('\\') => {
                     self.advance();
+                    group.push('\\');
                     if let Some(c) = self.advance() {
-                        let escape = format!("\\{c}");
-                        // If it's a shorthand class, add as separate item
-                        if "dwsDWS".contains(c) {
-                            if !raw.is_empty() {
-                                items.push(raw.clone());
-                                raw.clear();
-                            }
-                            items.push(escape);
-                        } else {
-                            raw.push_str(&escape);
-                        }
+                        group.push(c);
                     }
                 }
                 Some(c) => {
                     self.advance();
-                    // Check for range a-z
-                    if self.peek() == Some('-')
-                        && self.peek2() != Some(']')
-                        && self.peek2().is_some()
-                    {
-                        self.advance(); // consume '-'
-                        if let Some(end) = self.advance() {
-                            let range = format!("{c}-{end}");
-                            if !raw.is_empty() {
-                                items.push(raw.clone());
-                                raw.clear();
-                            }
-                            items.push(range);
-                        }
-                    } else {
-                        raw.push(c);
-                    }
+                    group.push(c);
                 }
             }
         }
 
-        if !raw.is_empty() {
-            items.push(raw);
+        // Split into rendered items following PlantUML's GroupSplitter: a
+        // range `x-y` (when a `-` separates two chars), an escape `\x`, or a
+        // single character.
+        let chars: Vec<char> = group.chars().collect();
+        let mut items: Vec<String> = Vec::new();
+        let mut i = 0;
+        while i < chars.len() {
+            if i + 2 < chars.len() && chars[i + 1] == '-' {
+                items.push(chars[i..i + 3].iter().collect());
+                i += 3;
+            } else if i + 1 < chars.len() && chars[i] == '\\' {
+                items.push(chars[i..i + 2].iter().collect());
+                i += 2;
+            } else {
+                items.push(chars[i].to_string());
+                i += 1;
+            }
         }
 
         if items.is_empty() {
             items.push(String::new());
         }
 
-        // Prefix first item with '^' if negated
-        if negated && !items.is_empty() {
-            items[0] = format!("^{}", items[0]);
-        }
-
-        RegexNode::CharClass { items }
+        let negated = items.first().map(String::as_str) == Some("^");
+        RegexNode::CharClass { items, negated }
     }
 }

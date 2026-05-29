@@ -425,6 +425,118 @@ impl Tile for GroupClassTile {
     }
 }
 
+// ── Negated char-class group tile (ETileRegexGroupAllBut) ──
+
+/// `[^...]`: the first element (the `^`) is drawn in a left notch open on its
+/// left side; the remaining elements stack inside a dashed box on the right.
+struct NotClassTile {
+    elements: Vec<String>,
+}
+
+impl NotClassTile {
+    fn dim1(&self) -> (f64, f64) {
+        // elements[0] only (the "^").
+        let w = text_width(&self.elements[0], FONT_SIZE, false);
+        (w, text_height(FONT_SIZE))
+    }
+    fn dim2(&self) -> (f64, f64) {
+        let mut w = 0.0f64;
+        let mut h = 0.0f64;
+        for e in &self.elements[1..] {
+            w = w.max(text_width(e, FONT_SIZE, false));
+            h += text_height(FONT_SIZE);
+        }
+        (w, h)
+    }
+    fn half_h(&self) -> f64 {
+        self.dim1().1.max(self.dim2().1) / 2.0
+    }
+}
+
+impl Tile for NotClassTile {
+    fn width(&self) -> f64 {
+        self.dim1().0 + self.dim2().0 + 20.0
+    }
+    fn h1(&self) -> f64 {
+        self.half_h()
+    }
+    fn h2(&self) -> f64 {
+        self.half_h()
+    }
+    fn draw(&self, ctx: &mut Ctx) {
+        let total_h = self.height();
+        let (d1w, d1h) = self.dim1();
+        let (d2w, d2h) = self.dim2();
+        let box1_w = d1w + 10.0;
+        let box2_w = d2w + 10.0;
+        let dash = "stroke:#181818;stroke-width:1;stroke-dasharray:5,5;";
+
+        // Right dashed box (dim2.delta(10,0)) translated by box1_w.
+        ctx.rect(box1_w, 0.0, box2_w, d2h, "none", dash, None);
+
+        // Left notch: open path on the left side, offset by (total_h-d1h)/2.
+        let notch_dy = (total_h - d1h) / 2.0;
+        {
+            let c = ctx.at(0.0, notch_dy);
+            let mut c = c;
+            c.open_path_dashed(
+                &[(box1_w, 0.0), (0.0, 0.0), (0.0, d1h), (box1_w, d1h)],
+                dash,
+            );
+        }
+
+        // elements[0] centered vertically.
+        {
+            let mut c = ctx.at(0.0, (total_h - d1h) / 2.0);
+            let ty = d1h - descent(FONT_SIZE);
+            c.text(5.0, ty, &self.elements[0], FONT_SIZE);
+        }
+
+        // elements[1..] stacked inside the right box.
+        let list_w = 10.0 + d1w; // PlantUML uses elements1 width here (a known quirk)
+        let mut y = 0.0;
+        for e in &self.elements[1..] {
+            let eh = text_height(FONT_SIZE);
+            let ty = y + eh - descent(FONT_SIZE);
+            {
+                let mut c = ctx.at(box1_w, 0.0);
+                c.text(5.0, ty, e, FONT_SIZE);
+            }
+            if y > 0.0 {
+                let (ax1, ax2, ay) = (ctx.dx + box1_w, ctx.dx + box1_w + list_w, ctx.dy + y);
+                ctx.svg.raw(&format!(
+                    r#"<line style="stroke:#181818;stroke-width:0.3;" x1="{}" x2="{}" y1="{}" y2="{}"/>"#,
+                    fmt_coord(ax1),
+                    fmt_coord(ax2),
+                    fmt_coord(ay),
+                    fmt_coord(ay)
+                ));
+            }
+            y += eh;
+        }
+    }
+}
+
+impl Ctx<'_> {
+    /// Open (non-closed) poly-line path drawn with a custom style (e.g. dashed).
+    fn open_path_dashed(&mut self, pts: &[(f64, f64)], style_attr: &str) {
+        let mut d = String::new();
+        for (i, (x, y)) in pts.iter().enumerate() {
+            if i == 0 {
+                d.push('M');
+            } else {
+                d.push_str(" L");
+            }
+            d.push_str(&fmt_coord(self.dx + *x));
+            d.push(',');
+            d.push_str(&fmt_coord(self.dy + *y));
+        }
+        self.svg.raw(&format!(
+            r#"<path d="{d}" fill="none" style="{style_attr}"/>"#
+        ));
+    }
+}
+
 // ── Concatenation (ETileConcatenation) ──
 
 struct ConcatTile {
@@ -742,13 +854,17 @@ fn build(node: &RegexNode) -> Box<dyn Tile> {
             value: text.clone(),
             style: BoxStyle::Special,
         }),
-        RegexNode::CharClass { items } => {
+        RegexNode::CharClass { items, negated } => {
             let elements = if items.is_empty() {
                 vec![String::new()]
             } else {
                 items.clone()
             };
-            Box::new(GroupClassTile { elements })
+            if *negated && elements.len() >= 2 {
+                Box::new(NotClassTile { elements })
+            } else {
+                Box::new(GroupClassTile { elements })
+            }
         }
         RegexNode::Sequence { items } => {
             if items.len() == 1 {

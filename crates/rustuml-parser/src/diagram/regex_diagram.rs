@@ -25,8 +25,14 @@ pub enum RegexNode {
     /// A special/metacharacter: `.`, `^`, `$`, `\d`, `\w`, `\s`, `\b`, `\1`, etc.
     /// Rendered as a gray rounded rectangle.
     Special { text: String },
-    /// A character class `[...]`. Items are the pieces inside the brackets.
-    CharClass { items: Vec<String> },
+    /// A character class `[...]`. Items are the pieces inside the brackets
+    /// (split per PlantUML's GroupSplitter: ranges `a-z`, escapes `\d`, and
+    /// individual characters). `negated` is set for `[^...]`.
+    CharClass {
+        items: Vec<String>,
+        #[serde(default)]
+        negated: bool,
+    },
     /// A sequence of nodes rendered left-to-right.
     Sequence { items: Vec<RegexNode> },
     /// Alternation: one of several branches.
