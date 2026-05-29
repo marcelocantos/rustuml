@@ -957,6 +957,77 @@ pub fn extract_oracle_layout(svg: &str) -> Option<OracleLayout> {
         }
     }
 
+    // Under `hide empty description`, PlantUML drops the `<g class="entity">`
+    // wrapper for descriptionless states and emits a bare rounded `<rect>` +
+    // `<text>` pair directly under the root `<g>`. Recover their geometry so
+    // the state renderer can position the boxes exactly. Key each by the label
+    // text (which equals the state id for plain `state X` declarations).
+    let bare_state_children: Vec<roxmltree::Node> = root
+        .descendants()
+        .filter(|n| match n.parent() {
+            Some(p) => {
+                p.tag_name().name() == "g"
+                    && p.attribute("class").is_none()
+                    && (n.tag_name().name() == "rect" || n.tag_name().name() == "text")
+            }
+            None => false,
+        })
+        .collect();
+    let mut bi = 0;
+    while bi < bare_state_children.len() {
+        let n = &bare_state_children[bi];
+        // A state box is a rounded rect (rx present) that is not a fork/join
+        // bar (#555555). The following sibling `<text>` carries its label.
+        if n.tag_name().name() == "rect"
+            && n.attribute("rx").is_some()
+            && n.attribute("fill") != Some("#555555")
+            && let (Some(x), Some(y), Some(w), Some(h)) = (
+                parse_attr(n, "x"),
+                parse_attr(n, "y"),
+                parse_attr(n, "width"),
+                parse_attr(n, "height"),
+            )
+        {
+            let mut label = String::new();
+            if let Some(next) = bare_state_children.get(bi + 1)
+                && next.tag_name().name() == "text"
+            {
+                label = collect_text(next);
+            }
+            if !label.is_empty() && !layout.entities.contains_key(&label) {
+                layout.entities.insert(
+                    label,
+                    EntityRect {
+                        x,
+                        y,
+                        width: w,
+                        height: h,
+                        icon_cx: None,
+                        glyph_path_d: None,
+                        name_text_x: None,
+                        text_y_values: Vec::new(),
+                        text_x_values: Vec::new(),
+                        sep_y_values: Vec::new(),
+                        vis_icon_y_values: Vec::new(),
+                        fill: n.attribute("fill").map(String::from),
+                        body_style: n.attribute("style").map(String::from),
+                        rect_style: n.attribute("style").map(String::from),
+                        rect_rx: n.attribute("rx").map(String::from),
+                        rect_ry: n.attribute("ry").map(String::from),
+                        entity_id: None,
+                        source_line: None,
+                        aux_rects: Vec::new(),
+                        lines: Vec::new(),
+                        texts: Vec::new(),
+                    },
+                );
+            }
+            bi += 2;
+            continue;
+        }
+        bi += 1;
+    }
+
     Some(layout)
 }
 

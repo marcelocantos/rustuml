@@ -412,12 +412,13 @@ impl StateParser {
         // `note "floating text" as ALIAS`
         {
             static RE: LazyLock<Regex> =
-                LazyLock::new(|| Regex::new(r#"^note\s+"([^"]+)"\s+as\s+\w+$"#).unwrap());
+                LazyLock::new(|| Regex::new(r#"^note\s+"([^"]+)"\s+as\s+(\w+)$"#).unwrap());
             if let Some(caps) = RE.captures(line) {
                 let text = caps[1].to_string();
+                let alias = caps[2].to_string();
                 self.notes.push(StateNote {
                     text,
-                    kind: StateNoteKind::Floating,
+                    kind: StateNoteKind::Floating(Some(alias)),
                 });
                 return true;
             }
@@ -568,7 +569,7 @@ mod tests {
         let d = parse("note \"Floating note 1\" as FN1\n[*] --> A\nA --> [*]");
         assert_eq!(d.notes.len(), 1);
         assert_eq!(d.notes[0].text, "Floating note 1");
-        assert!(matches!(&d.notes[0].kind, StateNoteKind::Floating));
+        assert!(matches!(&d.notes[0].kind, StateNoteKind::Floating(Some(a)) if a == "FN1"));
     }
 
     #[test]

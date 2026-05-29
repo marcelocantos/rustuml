@@ -31,8 +31,10 @@ pub enum StateNoteKind {
     LeftOf(String),
     /// `note right of <state> : text`
     RightOf(String),
-    /// `note "..." as <alias>` — free-floating note
-    Floating,
+    /// `note "..." as <alias>` — free-floating note. Carries the explicit
+    /// alias (`as FN1`) when present so the renderer can pair it with the
+    /// oracle entity of the same qualified name.
+    Floating(Option<String>),
     /// `note on link` — attached to the most recent transition
     OnLink,
 }

@@ -774,6 +774,81 @@ pub fn render_with_oracle(
             .unwrap_or("ent0002")
     };
 
+    // Named floating notes (`note "…" as FN1`) are emitted by PlantUML at the
+    // very top of the body, *before* the pseudo-states and entities, using the
+    // alias as the qualified name. Replay the oracle's captured path geometry
+    // when available; the alias entity lives in `oracle.entities` keyed by its
+    // alias (e.g. "FN1"), not under a `GMN*` name.
+    if let Some(orc) = oracle {
+        for note in &diagram.notes {
+            let StateNoteKind::Floating(Some(alias)) = &note.kind else {
+                continue;
+            };
+            let Some(rect) = orc.entities.get(alias) else {
+                continue;
+            };
+            let entity_id = rect
+                .entity_id
+                .clone()
+                .unwrap_or_else(|| "ent0000".to_string());
+            let source_line = rect.name_text_x.map(|sl| sl as usize).unwrap_or(0);
+            write!(
+                svg,
+                r#"<g class="entity" data-qualified-name="{alias}" data-source-line="{source_line}" id="{entity_id}">"#,
+            )
+            .unwrap();
+            let mut first_d_for_left: Option<&str> = None;
+            if let Some(paths) = &rect.glyph_path_d {
+                for piece in paths.split('|') {
+                    let (d, style) = piece
+                        .split_once("#STYLE#")
+                        .unwrap_or((piece, "stroke:#181818;stroke-width:0.5;"));
+                    if first_d_for_left.is_none() {
+                        first_d_for_left = Some(d);
+                    }
+                    write!(svg, r#"<path d="{d}" fill="{NOTE_FILL}" style="{style}"/>"#).unwrap();
+                }
+            }
+            let body_left_x = first_d_for_left
+                .and_then(|d| {
+                    d.strip_prefix('M')
+                        .and_then(|rest| rest.split(',').next())
+                        .and_then(|s| s.parse::<f64>().ok())
+                })
+                .unwrap_or(rect.x);
+            let text_x = body_left_x + NOTE_PADDING;
+            let lines: Vec<&str> = note
+                .text
+                .lines()
+                .map(|l| l.trim())
+                .filter(|l| !l.is_empty())
+                .collect();
+            for (i, line) in lines.iter().enumerate() {
+                let fallback_y =
+                    rect.y + NOTE_PADDING + LINK_FONT_SIZE + i as f64 * NOTE_LINE_HEIGHT;
+                let ty = rect.text_y_values.get(i).copied().unwrap_or(fallback_y);
+                let mut text_buf = String::new();
+                text_render::emit_text(
+                    &mut text_buf,
+                    line,
+                    &TextBase {
+                        x: text_x,
+                        y: ty,
+                        font_size: LINK_FONT_SIZE as u32,
+                        font_family: "sans-serif",
+                        fill: TEXT_COLOR,
+                        bold: false,
+                        italic: false,
+                        underline: false,
+                        skip_underline: false,
+                    },
+                );
+                svg.push_str(&text_buf);
+            }
+            svg.push_str("</g>");
+        }
+    }
+
     // Fork/join bars are emitted inline within the entity loop below, in
     // entity-declaration order (PlantUML interleaves them with the other
     // entities rather than grouping them up front). `bar_index` selects the
@@ -1141,9 +1216,15 @@ pub fn render_with_oracle(
                         )
                         .unwrap();
 
-                        // State name label.
+                        // State name label. Prefer the oracle's captured name
+                        // text x (exact byte-for-byte) over our re-centred
+                        // value, which can drift by sub-ulp amounts versus
+                        // PlantUML's own text measurement.
                         let text_w = text_render::measure(label, STATE_FONT_SIZE, false);
-                        let text_x = cx - text_w / 2.0;
+                        let text_x = oracle
+                            .and_then(|orc| orc.entities.get(id.as_str()))
+                            .and_then(|r| r.name_text_x)
+                            .unwrap_or(cx - text_w / 2.0);
                         let text_y = box_y + NAME_BASELINE_OFFSET;
                         let mut text_buf = String::new();
                         text_render::emit_text(
@@ -1210,7 +1291,15 @@ pub fn render_with_oracle(
         })
         .unwrap_or_default();
 
-    for (note_idx, note) in diagram.notes.iter().enumerate() {
+    // Named floating notes (`as FN1`) were already emitted up front, keyed by
+    // their alias rather than a `GMN*` name — skip them here so the 1:1 GMN
+    // pairing stays aligned with the remaining (anchored / anonymous) notes.
+    for (note_idx, note) in diagram
+        .notes
+        .iter()
+        .filter(|n| !(oracle.is_some() && matches!(&n.kind, StateNoteKind::Floating(Some(_)))))
+        .enumerate()
+    {
         if let Some((gmn_name, rect)) = oracle_gmns.get(note_idx) {
             // Oracle path: replay the captured path strings verbatim and
             // place text using the captured y positions.
@@ -1310,7 +1399,7 @@ pub fn render_with_oracle(
                 let ny = sy - sh / 2.0;
                 (nx, ny, sx - sw / 2.0, sy)
             }
-            StateNoteKind::Floating => {
+            StateNoteKind::Floating(_) => {
                 (MARGIN, MARGIN + title_h, MARGIN + note_w, MARGIN + title_h)
             }
             StateNoteKind::OnLink => {
