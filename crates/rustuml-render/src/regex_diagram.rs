@@ -25,6 +25,9 @@ const COUNT_FONT_SIZE: f64 = 12.0;
 const OUTER: f64 = 15.0;
 const LINE_STYLE: &str = r#"style="stroke:#181818;stroke-width:1;""#;
 
+/// One cubic Bézier segment: `(control1, control2, endpoint)` in local coords.
+type CubicSeg = ((f64, f64), (f64, f64), (f64, f64));
+
 // ── Drawing context (a minimal UGraphic) ───────────────────────────────────
 
 /// Accumulates SVG primitives, applying a running translation offset. Mirrors
@@ -127,22 +130,24 @@ impl Ctx<'_> {
             .raw(&format!(r##"<path d="{d}" fill="#181818"/>"##));
     }
 
-    /// Cubic Bézier curve: move to local (mx,my), curve through controls to end.
-    fn cubic(&mut self, mx: f64, my: f64, c1: (f64, f64), c2: (f64, f64), end: (f64, f64)) {
-        let m = (self.dx + mx, self.dy + my);
-        let p1 = (self.dx + c1.0, self.dy + c1.1);
-        let p2 = (self.dx + c2.0, self.dy + c2.1);
-        let e = (self.dx + end.0, self.dy + end.1);
+    /// One path, starting with a move to (mx,my), followed by one or more cubic
+    /// segments, drawn with the given stroke width.
+    fn cubic_stroke(&mut self, stroke: f64, mx: f64, my: f64, segs: &[CubicSeg]) {
+        let mut d = format!("M{},{}", fmt_coord(self.dx + mx), fmt_coord(self.dy + my));
+        for (c1, c2, end) in segs {
+            d.push_str(&format!(
+                " C{},{} {},{} {},{}",
+                fmt_coord(self.dx + c1.0),
+                fmt_coord(self.dy + c1.1),
+                fmt_coord(self.dx + c2.0),
+                fmt_coord(self.dy + c2.1),
+                fmt_coord(self.dx + end.0),
+                fmt_coord(self.dy + end.1)
+            ));
+        }
         self.svg.raw(&format!(
-            r#"<path d="M{},{} C{},{} {},{} {},{}" fill="none" {LINE_STYLE}/>"#,
-            fmt_coord(m.0),
-            fmt_coord(m.1),
-            fmt_coord(p1.0),
-            fmt_coord(p1.1),
-            fmt_coord(p2.0),
-            fmt_coord(p2.1),
-            fmt_coord(e.0),
-            fmt_coord(e.1)
+            r#"<path d="{d}" fill="none" style="stroke:#181818;stroke-width:{};"/>"#,
+            fmt_coord(stroke)
         ));
     }
 
@@ -200,38 +205,55 @@ fn escape_xml(s: &str) -> String {
 
 // ── Corner curves (CornerCurved) ───────────────────────────────────────────
 
-/// `delta/4` control offset for the quarter-circle corner curves.
+/// `delta/4` control offset for the quarter-circle corner curves. The default
+/// rail stroke (1.0) is used; `corner_*_s` variants take an explicit stroke.
 fn corner_sw(ctx: &mut Ctx, x: f64, y: f64, delta: f64) {
-    let a = delta / 4.0;
-    let mut c = ctx.at(x, y);
-    c.cubic(0.0, -delta, (0.0, -a), (a, 0.0), (delta, 0.0));
+    corner_sw_s(ctx, x, y, delta, 1.0);
 }
 fn corner_se(ctx: &mut Ctx, x: f64, y: f64, delta: f64) {
-    let a = delta / 4.0;
-    let mut c = ctx.at(x, y);
-    c.cubic(0.0, -delta, (0.0, -a), (-a, 0.0), (-delta, 0.0));
+    corner_se_s(ctx, x, y, delta, 1.0);
 }
 fn corner_ne(ctx: &mut Ctx, x: f64, y: f64, delta: f64) {
-    let a = delta / 4.0;
-    let mut c = ctx.at(x, y);
-    c.cubic(-delta, 0.0, (-a, 0.0), (0.0, a), (0.0, delta));
+    corner_ne_s(ctx, x, y, delta, 1.0);
 }
 fn corner_nw(ctx: &mut Ctx, x: f64, y: f64, delta: f64) {
-    let a = delta / 4.0;
-    let mut c = ctx.at(x, y);
-    c.cubic(0.0, delta, (0.0, a), (a, 0.0), (delta, 0.0));
+    corner_nw_s(ctx, x, y, delta, 1.0);
 }
 
-/// Brace (the loop bracket above repetition with a count label).
+fn corner_sw_s(ctx: &mut Ctx, x: f64, y: f64, delta: f64, stroke: f64) {
+    let a = delta / 4.0;
+    let mut c = ctx.at(x, y);
+    c.cubic_stroke(stroke, 0.0, -delta, &[((0.0, -a), (a, 0.0), (delta, 0.0))]);
+}
+fn corner_se_s(ctx: &mut Ctx, x: f64, y: f64, delta: f64, stroke: f64) {
+    let a = delta / 4.0;
+    let mut c = ctx.at(x, y);
+    c.cubic_stroke(
+        stroke,
+        0.0,
+        -delta,
+        &[((0.0, -a), (-a, 0.0), (-delta, 0.0))],
+    );
+}
+fn corner_ne_s(ctx: &mut Ctx, x: f64, y: f64, delta: f64, stroke: f64) {
+    let a = delta / 4.0;
+    let mut c = ctx.at(x, y);
+    c.cubic_stroke(stroke, -delta, 0.0, &[((-a, 0.0), (0.0, a), (0.0, delta))]);
+}
+fn corner_nw_s(ctx: &mut Ctx, x: f64, y: f64, delta: f64, stroke: f64) {
+    let a = delta / 4.0;
+    let mut c = ctx.at(x, y);
+    c.cubic_stroke(stroke, 0.0, delta, &[((0.0, a), (a, 0.0), (delta, 0.0))]);
+}
+
+/// Brace (the loop bracket above repetition with a count label). Drawn with a
+/// 0.5 stroke, matching PlantUML's `UStroke.withThickness(0.5)`.
 fn brace(ctx: &mut Ctx, x: f64, y: f64, width: f64) {
-    // CornerCurved cinq=5 at NW(0), SE(w/2), SW(w/2), NE(w). Then two short hlines.
     let cinq = 5.0;
-    corner_nw(ctx, x, y, cinq);
-    corner_se(ctx, x + width / 2.0, y, cinq);
-    corner_sw(ctx, x + width / 2.0, y, cinq);
-    corner_ne(ctx, x + width, y, cinq);
-    // Braces use stroke-width 0.5 in PlantUML, but the comparator only checks the
-    // line geometry; the two connecting hlines below use the default rail style.
+    corner_nw_s(ctx, x, y, cinq, 0.5);
+    corner_se_s(ctx, x + width / 2.0, y, cinq, 0.5);
+    corner_sw_s(ctx, x + width / 2.0, y, cinq, 0.5);
+    corner_ne_s(ctx, x + width, y, cinq, 0.5);
     {
         let mut c = ctx.at(x, y);
         c.brace_hline(cinq, width / 2.0 - 2.0 * cinq);
@@ -637,15 +659,14 @@ fn zigzag_down(ctx: &mut Ctx, x: f64, y: f64, ctrl: f64, width: f64, height: f64
     let xm = width / 2.0;
     let ym = height / 2.0;
     let mut c = ctx.at(x, y);
-    // PlantUML emits one path with two cubic segments; we emit two cubics that
-    // share the midpoint (geometrically identical curve, split for our helper).
-    c.cubic(0.0, 0.0, (ctrl, 0.0), (xm, ym - ctrl), (xm, ym));
-    c.cubic(
-        xm,
-        ym,
-        (xm, ym + ctrl),
-        (width - ctrl, height),
-        (width, height),
+    c.cubic_stroke(
+        1.0,
+        0.0,
+        0.0,
+        &[
+            ((ctrl, 0.0), (xm, ym - ctrl), (xm, ym)),
+            ((xm, ym + ctrl), (width - ctrl, height), (width, height)),
+        ],
     );
 }
 
@@ -653,8 +674,15 @@ fn zigzag_up(ctx: &mut Ctx, x: f64, y: f64, ctrl: f64, width: f64, height: f64) 
     let xm = width / 2.0;
     let ym = height / 2.0;
     let mut c = ctx.at(x, y);
-    c.cubic(0.0, height, (ctrl, height), (xm, ym + ctrl), (xm, ym));
-    c.cubic(xm, ym, (xm, ym - ctrl), (width - ctrl, 0.0), (width, 0.0));
+    c.cubic_stroke(
+        1.0,
+        0.0,
+        height,
+        &[
+            ((ctrl, height), (xm, ym + ctrl), (xm, ym)),
+            ((xm, ym - ctrl), (width - ctrl, 0.0), (width, 0.0)),
+        ],
+    );
 }
 
 // ── Lookahead / lookbehind / named group (rendered as dashed rounded box) ──
