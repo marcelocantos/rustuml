@@ -53,6 +53,8 @@ pub fn parse_usecase(lines: &[String]) -> Result<UseCaseDiagram, ParseError> {
     let mut multiline_label_lines: Vec<String> = Vec::new();
     // Source line of the `usecase ID as "` opening for a multiline label.
     let mut multiline_start_line: usize = 0;
+    // Inline `#color` from the multiline opening line, if any.
+    let mut multiline_color: Option<String> = None;
     // For multiline note blocks.
     let mut in_note_block = false;
     let mut note_block_lines: Vec<String> = Vec::new();
@@ -93,8 +95,9 @@ pub fn parse_usecase(lines: &[String]) -> Result<UseCaseDiagram, ParseError> {
     static RE_UC_PAREN_AS: LazyLock<Regex> =
         LazyLock::new(|| Regex::new(r"^usecase\s+\(([^)]+)\)\s+as\s+(\w+)").unwrap());
     // usecase ID [#color] as " (multiline label start — opening quote not closed on same line)
-    static RE_UC_ID_AS_MULTI: LazyLock<Regex> =
-        LazyLock::new(|| Regex::new(r#"^usecase\s+(\w+)(?:\s+#\w+)?\s+as\s+"\s*$"#).unwrap());
+    static RE_UC_ID_AS_MULTI: LazyLock<Regex> = LazyLock::new(|| {
+        Regex::new(r#"^usecase\s+(\w+)(?:\s+#([0-9A-Za-z]+))?\s+as\s+"\s*$"#).unwrap()
+    });
     // usecase ID <<stereotype>>  (bare word, with optional stereotype/color)
     static RE_UC_BARE: LazyLock<Regex> = LazyLock::new(|| {
         Regex::new(r#"^usecase\s+(\w+)(?:\s+(<<\s*[^>]+\s*>>))?(?:\s+#\w+)?"#).unwrap()
@@ -178,7 +181,7 @@ pub fn parse_usecase(lines: &[String]) -> Result<UseCaseDiagram, ParseError> {
                         label,
                         stereotype: None,
                         description,
-                        color: None,
+                        color: multiline_color.take(),
                         source_line: multiline_start_line,
                     });
                 }
@@ -395,6 +398,7 @@ pub fn parse_usecase(lines: &[String]) -> Result<UseCaseDiagram, ParseError> {
             multiline_uc_id = Some(id);
             multiline_label_lines.clear();
             multiline_start_line = current_line;
+            multiline_color = caps.get(2).map(|m| m.as_str().to_string());
         } else if let Some(caps) = RE_UC_PAREN_AS.captures(trimmed) {
             // usecase (Label) as ID
             let label = caps[1].trim().to_string();

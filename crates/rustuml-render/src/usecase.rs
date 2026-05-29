@@ -190,27 +190,28 @@ pub fn render_with_oracle(
         );
     };
 
+    // PlantUML emits all cluster groups first, then every cluster member (in
+    // source-line order across all packages), then the top-level entities.
     for pkg in &diagram.packages {
         render_package_group(&mut svg, pkg, oracle, &id_map);
-        // Emit member entities in source-line order.
-        let mut members: Vec<(usize, bool, usize)> = Vec::new(); // (source_line, is_actor, index)
-        for (i, a) in diagram.actors.iter().enumerate() {
-            if pkg.elements.iter().any(|e| e == &a.id) {
-                members.push((a.source_line, true, i));
-            }
+    }
+    let mut members: Vec<(usize, bool, usize)> = Vec::new(); // (source_line, is_actor, index)
+    for (i, a) in diagram.actors.iter().enumerate() {
+        if member_ids.contains(a.id.as_str()) {
+            members.push((a.source_line, true, i));
         }
-        for (i, u) in diagram.use_cases.iter().enumerate() {
-            if pkg.elements.iter().any(|e| e == &u.id) {
-                members.push((u.source_line, false, i));
-            }
+    }
+    for (i, u) in diagram.use_cases.iter().enumerate() {
+        if member_ids.contains(u.id.as_str()) {
+            members.push((u.source_line, false, i));
         }
-        members.sort_by_key(|m| m.0);
-        for (_, is_actor, i) in members {
-            if is_actor {
-                render_actor_i(&mut svg, i);
-            } else {
-                render_uc_i(&mut svg, i);
-            }
+    }
+    members.sort_by_key(|m| m.0);
+    for (_, is_actor, i) in members {
+        if is_actor {
+            render_actor_i(&mut svg, i);
+        } else {
+            render_uc_i(&mut svg, i);
         }
     }
 
@@ -604,6 +605,25 @@ fn render_package_group(
     id_map: &HashMap<String, String>,
 ) {
     let Some(orc) = oracle else { return };
+
+    // `package` renders as a folded-tab shape (path + line) while `rectangle`
+    // renders as a plain rect. When the oracle captured the cluster's body
+    // verbatim, emit it directly so both shapes reproduce exactly.
+    if let Some(cluster) = orc.clusters.iter().find(|c| c.qualified_name == pkg.name) {
+        let ent_id = cluster
+            .entity_id
+            .clone()
+            .or_else(|| id_map.get(&format!("pkg::{}", pkg.name)).cloned())
+            .unwrap_or_else(|| "ent0003".to_string());
+        let src_attr = source_line_attr(pkg.source_line);
+        svg.raw(&format!("<!--cluster {}-->", pkg.name));
+        svg.raw(&format!(
+            r#"<g class="{}" data-qualified-name="{}"{src_attr} id="{ent_id}">{}</g>"#,
+            cluster.group_class, pkg.name, cluster.inner_xml,
+        ));
+        return;
+    }
+
     let Some(rect) = orc.entities.get(&pkg.name) else {
         return;
     };
