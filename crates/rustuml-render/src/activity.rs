@@ -2276,10 +2276,13 @@ fn emit_if(
     ];
     svg.polygon_shape(&diamond_fill, &pts, &diamond_stroke, &diamond_stroke_width);
 
-    // Condition text (textLength = measured, centred under cx).
+    // Condition text (textLength = measured, centred under cx). The condition
+    // honours `skinparam activityFontColor`; the then/else branch labels below
+    // keep the default black.
+    let cond_text_color = svg.palette.text_color.clone();
     let text_y = y + DIAMOND_HALF + pm::text_height(SMALL_FONT) / 2.0 - pm::descent(SMALL_FONT);
     svg.text_element(
-        TEXT_COLOR,
+        &cond_text_color,
         "sans-serif",
         SMALL_FONT,
         cond_text_w,
@@ -2522,9 +2525,10 @@ fn emit_switch(
         (diamond_left, diamond_cy),
     ];
     svg.polygon_shape(&diamond_fill, &pts, &diamond_stroke, &diamond_stroke_width);
+    let cond_text_color = svg.palette.text_color.clone();
     let cond_text_y = diamond_cy + pm::text_height(SMALL_FONT) / 2.0 - pm::descent(SMALL_FONT);
     svg.text_element(
-        TEXT_COLOR,
+        &cond_text_color,
         "sans-serif",
         SMALL_FONT,
         cond_text_w,
