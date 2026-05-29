@@ -140,19 +140,20 @@ targets:
     - '`cargo test --test golden_pairs` reports 0 failures across all 12,568 golden pairs.'
     - 'Skips remain bounded to the legitimate categories: Java reference is itself a syntax-error page (~1,199), ditaa raster diagrams (parked under T2), and I/O errors. No skips for `%date(...)`, no skips for unsupported keywords, no skips for parse failures.'
     context: |-
-      Strict-XML golden-pair parity by renderer correctness. FORBIDDEN: wholesale verbatim subtree replay (root_g_inner_xml gated off in f6500c8d; cluster.inner_xml/note.inner_xml replay in class/object/component still live — tracked as 🎯T4.11; structured field-by-field echo of captured attributes is ALSO replay — see archimate rejection below). ACCEPTED: granular oracle consumption (text x/y, separator x2, entity layout positions, captured edge/note <path d=...>) while the renderer constructs shapes/text/styling from source + font metrics. Discriminator: does it render from the puml source alone (computing geometry, e.g. regex's ETile port, wave-2 renderers' arithmetic), or echo the golden's captured attributes (archimate)?
+      Strict-XML golden-pair parity by renderer correctness. FORBIDDEN: any wholesale verbatim subtree replay — `svg.push_str(&…inner_xml)` OR field-by-field re-emit of captured `<g>`/child attributes (same violation; archimate's 48→0 was rejected for this). root_g_inner_xml is gated off (f6500c8d, dead code); cluster.inner_xml/note.inner_xml still live in class/object/component → 🎯T4.11. ACCEPTED: COMPUTE geometry from source + font metrics, consuming oracle only for genuinely-uncomputable bits already blessed (entity layout positions, captured edge/note <path d=...>). Discriminator: renders from puml source alone (regex/ebnf/chart ETile & grid ports, wave-2 renderer arithmetic) vs echoes captured golden attributes.
 
-      STATE after waves 1+2+3 (2026-05-29): 12,546 total · 7,500 pass · 3,747 fail · 1,299 skip. Session start: 6,312 pass / 4,935 fail. Total −1,188, ZERO regressions, zero panics, across three 6-7 agent isolated-worktree fan-outs. Work on branch strict-xml-wave1 (57 commits), UNPUSHED.
+      STATE after waves 1-4 (2026-05-29): 12,546 total · 7,551 pass · 3,696 fail · 1,299 skip. Session start: 6,312 / 4,935. Total −1,239 (−25%), ZERO regressions, zero panics, four 2-7 agent isolated-worktree fan-outs assembled by cherry-pick on branch strict-xml-wave1 (62 commits, UNPUSHED). Buckets cleared to 0: regex, ebnf, chart(@startboard).
 
-      Per-bucket now: activity 786, sequence 576, edge-cases 291, skinparam 251, preprocessing 200, combo 165, creole 157, er 156, state 147, deployment 147, class 144, json-yaml 93, gantt 86, usecase 84, timing 54, links 49, sprites 48, archimate 48, salt 40, component 36, nwdiag 29, mindmap 26, wbs 25, ebnf 25, chart 25, rendering 24, type-detection 14, multi-diagram 10, math 10, object 1. (regex now 0.)
+      Per-bucket now: activity 786, sequence 576, edge-cases 291, skinparam 251, preprocessing 200, combo 165, creole 157, er 156, state 147, deployment 147, class 144, json-yaml 93, gantt 86, usecase 84, timing 54, links 49, sprites 48, archimate 48, salt 40, component 36, nwdiag 29, mindmap 26, wbs 25, rendering 24, type-detection 13, multi-diagram 10, math 10, object 1.
 
-      Wave deltas: W1 (per-type renderers) usecase −198, class −58, sequence −55, state −53, deployment −23, activity −19. W2 (standalone renderer rewrites, removed dead root_g_inner_xml) mindmap −130, wbs −109, timing −87, salt −63, nwdiag −60, json-yaml −54, gantt −28. W3 regex −45, preprocessing −53, combo −50(cascade), component −20, creole −13, sprites −1.
+      NEXT-WORK MAP:
+      - BLOCKED ON MERGE (biggest prizes; isolation worktrees base on origin/master=v0.7.0 so can't build on this branch): activity 786, sequence 576, skinparam 251, second-passes on json-yaml 93 / gantt 86 / etc. Merge strict-xml-wave1 → master, then a fan-out clears large ground. OR work them solo in the main checkout (which IS on the branch).
+      - HARD-INFRA / possibly-unreachable under strict XML: deployment cloud ~70 (sub-ULP FP cascade vs JVM), sprites ~47 (need SpriteMonochrome gradient encoder + bilinear scaler), archimate 48 (need sprite glyph lib + Graphviz-matching layout — PARK like ditaa), math 10.
+      - HONEST-REGRESSION: 🎯T4.11 (remove cluster/note inner_xml replay in class/object/component — raises the count, correct per north-star).
+      - CASCADE (shrink as per-type renderers improve): edge-cases 291, combo 165, creole's 78 in_sequence, links, rendering, type-detection, multi-diagram.
+      - object 1: largely T4.11-inflated.
 
-      ARCHIMATE REJECTED (agent reported 48→0 but it was structured replay — write_group re-emits every captured child element's attributes verbatim; agent admitted archimate can't be drawn from first principles, no sprite lib / no layout). Archimate is a known-HARD bucket like ditaa: needs the PlantUML archimate sprite glyph library + a Graphviz-matching layout engine. Park it; do not accept oracle-echo solutions.
-
-      BLOCKED ON USER MERGE: the biggest remaining prizes — activity 786 (FtileWhile left-margin ~50, fork-nested-if 33), sequence 576 (create/destroy ~31), skinparam 251, second-passes on json-yaml/gantt — all need waves 1+2+3 as their base, but isolation worktrees base on origin/master (v0.7.0). They become trivially fan-out-able once strict-xml-wave1 is merged to master. Until then only buckets DISJOINT from session file-changes can be fanned out.
-
-      PROCESS: 600s no-progress watchdog kills opus agents mid long reasoning — ALL wave-2 + 5/6 wave-3 agents stalled but had committed validated clusters salvaged from worktrees. Wave-3 prompts added a watchdog-avoidance instruction (commit per cluster, frequent tool calls) which helped but didn't fully prevent stalls. Always salvage via `git -C <worktree> diff master`.
+      PROCESS: 600s no-progress watchdog stalls long-reasoning opus agents (most wave 2/3 agents stalled but committed clusters were salvaged via `git -C <worktree> diff master`). Wave-3/4 watchdog-avoidance instruction (commit per cluster) helped. Always salvage committed work from stalled-agent worktrees; audit every patch for inner_xml/attr-echo before cherry-picking.
     origin: manual
     discovered: 2026-05-17
     achieved: 2026-05-23
@@ -364,13 +365,18 @@ targets:
     acceptance:
     - All test-diagrams/golden directories not covered by T4.1–T4.8 (skinparam, combo, preprocessing, usecase, er, mindmap, object, json-yaml, timing, wbs, gantt, salt, nwdiag, rendering, links, math, sprites, archimate, regex, type-detection, chart, dot, ebnf, git, multi-diagram) collectively produce 0 strict-XML failures.
     context: |-
-      Smaller diagram-type buckets strict-XML. After waves 1+2+3 (2026-05-29):
-      - regex 0 (was 45): ACHIEVED. Honest 1736-line port of PlantUML's ebnf ETile* railroad tile model (Box/Concat/Alt/OneOrMore/ZeroOrMore/Optional/char-class/negated/lookahead-behind) with computed geometry via plantuml_metrics::text_width + HALF_UP; oracle param UNUSED, renders from source alone; deleted the old root_g_inner_xml replay. 5 remaining are skipped (inline-flag/named-group cases produce PlantUML error screens). Gold-standard honest renderer.
-      - preprocessing 200 (was 253, −53): blank placeholders for consumed directive lines so data-source-line stays aligned (PlantUML strips only @startuml; +51), + sequence parser unquoted `Foo as A` participant form. Remaining 202→200: 83 ELEMCOUNT + 63 SVGBG (renderer theme-cascade: svg.rs:38 hardcodes background:#FFFFFF, themes want transparent + fractional dims), 22 SRCLINE (!while/!foreach loop-body elements all share one source line — needs a per-line source map threaded through parsers), ATTR/TAG sub-pixel.
-      - sprites 48 (was 49, −1): fixed source-line placeholders across sprite-def blocks. Remaining ~47 are sprite_variant_* needing a SpriteMonochrome-faithful gradient encoder + byte-exact bilinear scaler (all variant sprites are bilinear-interpolated, not native-scale) — sizeable standalone effort.
-      - archimate 48 (UNCHANGED): wave-3 agent's 48→0 was REJECTED as structured replay (echoes captured attributes; archimate not drawable from first principles without bundling PlantUML's sprite glyph library + a Graphviz-matching layout). PARK like ditaa.
+      Smaller diagram-type buckets strict-XML. After waves 1-4 (2026-05-29):
+      ACHIEVED → 0 (honest, computed geometry, no oracle echo):
+      - regex 0 (was 45): 1736-line port of PlantUML ebnf ETile* railroad model, computed via plantuml_metrics::text_width + HALF_UP, oracle param unused.
+      - ebnf 0 (was 25): same ETile port (ETileBox/Concatenation/Alternation/Optional2/OneOrMore/ZeroOrMore/WithCircles + special-sequence dashed boxes); deleted root_g_inner_xml replay.
+      - chart 0 (was 25): @startboard is a degenerate two-row WBS grid of 150x70 shadowed boxes (NOT columns-of-cards); rewrote parser model + renderer, computed grid + font metrics, shadow-id seed = 'f'+base36(plantuml_seed) via new filter_registry::shadow_id_for helper.
 
-      Unchanged wave-3+ candidates: skinparam 251 (needs post-merge base — touches renderer skinparam handling wave-1 changed), combo 165 (cross-cutting, cascades), links 49, ebnf 25, chart 25, rendering 24, type-detection 14, multi-diagram 10, math 10, object 1 (object's low count is partly 🎯T4.11-inflated — object.rs replays cluster/note inner_xml). Dot likely unmatchable (native Graphviz SVG goldens).
+      STILL OPEN:
+      - preprocessing 200: 83 ELEMCOUNT + 63 SVGBG (svg.rs:38 hardcodes background:#FFFFFF; themes want transparent + fractional dims — renderer theme-cascade work) + 22 SRCLINE (!while/!foreach loop-body elements share one source line — needs per-line source map) + sub-pixel.
+      - sprites 48: ~47 sprite_variant_* need a SpriteMonochrome gradient encoder + byte-exact bilinear scaler (all variants are interpolated). Standalone effort.
+      - archimate 48: PARKED — agent's 48→0 rejected (structured attribute-echo replay); real fix needs PlantUML archimate sprite glyph library + Graphviz-matching layout.
+      - skinparam 251: needs post-merge base (touches renderer skinparam handling wave-1 changed).
+      - links 49, rendering 24, type-detection 13, multi-diagram 10, math 10, object 1 (object largely 🎯T4.11-inflated). Dot likely unmatchable (native Graphviz goldens).
     origin: manual
     discovered: 2026-05-17
   T5:
