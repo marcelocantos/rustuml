@@ -4351,16 +4351,18 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme) -> String {
                             // "across" note — starts at HEAD_BOX_Y and extends by note_content_w
                             (HEAD_BOX_Y, HEAD_BOX_Y + note_content_w)
                         } else if note.participants.len() == 1 {
-                            // Centered on participant's lifeline_line_x (integer-based).
-                            // PlantUML floors the left position.
-                            let ll_x = note
+                            // Java NoteBox.getStartingX: xStart = (int)(box centerX
+                            // - preferredWidth/2). Centered on the participant box
+                            // center (not the integer lifeline x), truncated toward
+                            // zero (floor for non-negative coords).
+                            let cx = note
                                 .participants
                                 .first()
                                 .and_then(|id| id_to_idx.get(id.as_str()))
-                                .map(|&i| participants[i].lifeline_line_x)
+                                .map(|&i| participants[i].center_x)
                                 .unwrap_or(50.0);
                             let half_w = note_content_w / 2.0;
-                            let left = (ll_x - half_w).max(HEAD_BOX_Y).floor();
+                            let left = (cx - half_w).max(HEAD_BOX_Y).floor();
                             (left, left + note_content_w)
                         } else {
                             // Spanning multiple participants.
