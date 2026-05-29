@@ -125,9 +125,13 @@ pub fn parse_usecase(lines: &[String]) -> Result<UseCaseDiagram, ParseError> {
     static RE_NOTE_FLOAT: LazyLock<Regex> =
         LazyLock::new(|| Regex::new(r#"^note\s+"([^"]+)""#).unwrap());
 
-    // Package/rectangle opening (with optional color/style modifiers)
+    // Package/rectangle opening (with optional color/style modifiers). The
+    // optional `#color` modifier (named or hex) before the brace is captured.
     static RE_PKG: LazyLock<Regex> = LazyLock::new(|| {
-        Regex::new(r#"^(?:rectangle|package)\s+(?:"([^"]+)"|(\w+))(?:\s+[^{]*)?\{"#).unwrap()
+        Regex::new(
+            r#"^(?:rectangle|package)\s+(?:"([^"]+)"|(\w+))(?:\s+[^{]*?#([0-9A-Za-z]+))?(?:\s+[^{]*)?\{"#,
+        )
+        .unwrap()
     });
 
     for (line_idx, line) in lines.iter().enumerate() {
@@ -509,10 +513,13 @@ pub fn parse_usecase(lines: &[String]) -> Result<UseCaseDiagram, ParseError> {
                 .or(caps.get(2))
                 .map(|m| m.as_str().to_string())
                 .unwrap_or_default();
+            let color = caps.get(3).map(|m| m.as_str().to_string());
             current_package = Some(packages.len());
             packages.push(UseCasePackage {
                 name,
                 elements: Vec::new(),
+                color,
+                source_line: current_line,
             });
         }
     }

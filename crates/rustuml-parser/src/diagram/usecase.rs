@@ -74,4 +74,11 @@ pub struct UseCaseConnection {
 pub struct UseCasePackage {
     pub name: String,
     pub elements: Vec<String>,
+    /// Optional inline background colour token, e.g. `#Yellow`, `#AAFFAA`.
+    /// Stored without the leading `#`.
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub color: Option<String>,
+    /// 1-based line number of the package/rectangle opening within the block.
+    #[serde(default)]
+    pub source_line: usize,
 }

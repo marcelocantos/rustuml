@@ -120,16 +120,89 @@ pub fn render_with_oracle(
 
     render_header(&mut svg, diagram);
     render_title(&mut svg, diagram, total_w);
-    render_packages(&mut svg, diagram, oracle, &id_map);
 
-    for (i, actor) in diagram.actors.iter().enumerate() {
+    // PlantUML renders each cluster group followed immediately by its member
+    // entities (in source-line order), then the top-level (non-member)
+    // entities. Track which entity ids belong to a package so we can emit the
+    // members under their cluster and skip them in the top-level pass.
+    let member_ids: std::collections::HashSet<&str> = diagram
+        .packages
+        .iter()
+        .flat_map(|p| p.elements.iter().map(String::as_str))
+        .collect();
+
+    // Helper closures can't borrow svg mutably twice, so emit inline.
+    let render_actor_i = |svg: &mut SvgBuilder, i: usize| {
         let (cx, cy) = positions.actors[i];
-        render_actor(&mut svg, actor, &actor_dims[i], cx, cy, oracle, &id_map);
-    }
-    for (i, uc) in diagram.use_cases.iter().enumerate() {
+        render_actor(
+            svg,
+            &diagram.actors[i],
+            &actor_dims[i],
+            cx,
+            cy,
+            oracle,
+            &id_map,
+        );
+    };
+    let render_uc_i = |svg: &mut SvgBuilder, i: usize| {
         let (cx, cy) = positions.use_cases[i];
-        render_use_case(&mut svg, uc, &uc_dims[i], diagram, cx, cy, oracle, &id_map);
+        render_use_case(
+            svg,
+            &diagram.use_cases[i],
+            &uc_dims[i],
+            diagram,
+            cx,
+            cy,
+            oracle,
+            &id_map,
+        );
+    };
+
+    for pkg in &diagram.packages {
+        render_package_group(&mut svg, pkg, oracle, &id_map);
+        // Emit member entities in source-line order.
+        let mut members: Vec<(usize, bool, usize)> = Vec::new(); // (source_line, is_actor, index)
+        for (i, a) in diagram.actors.iter().enumerate() {
+            if pkg.elements.iter().any(|e| e == &a.id) {
+                members.push((a.source_line, true, i));
+            }
+        }
+        for (i, u) in diagram.use_cases.iter().enumerate() {
+            if pkg.elements.iter().any(|e| e == &u.id) {
+                members.push((u.source_line, false, i));
+            }
+        }
+        members.sort_by_key(|m| m.0);
+        for (_, is_actor, i) in members {
+            if is_actor {
+                render_actor_i(&mut svg, i);
+            } else {
+                render_uc_i(&mut svg, i);
+            }
+        }
     }
+
+    // Top-level (non-member) entities in source-line order.
+    let mut top: Vec<(usize, bool, usize)> = Vec::new();
+    for (i, a) in diagram.actors.iter().enumerate() {
+        if !member_ids.contains(a.id.as_str()) {
+            top.push((a.source_line, true, i));
+        }
+    }
+    for (i, u) in diagram.use_cases.iter().enumerate() {
+        if !member_ids.contains(u.id.as_str()) {
+            top.push((u.source_line, false, i));
+        }
+    }
+    top.sort_by_key(|m| m.0);
+    for (_, is_actor, i) in top {
+        if is_actor {
+            render_actor_i(&mut svg, i);
+        } else {
+            render_uc_i(&mut svg, i);
+        }
+    }
+
     if let Some(orc) = oracle {
         render_oracle_connections(&mut svg, diagram, orc);
     }
@@ -253,30 +326,8 @@ fn build_entity_id_map(diagram: &UseCaseDiagram) -> HashMap<String, String> {
             line: c.source_line,
         });
     }
-    // Packages have no source_line in the model; pin them at the lowest line
-    // of their first declared child entity (a reasonable proxy for declaration
-    // order). Fall back to declaration index when empty.
-    for (i, p) in diagram.packages.iter().enumerate() {
-        let line = p
-            .elements
-            .iter()
-            .filter_map(|eid| {
-                diagram
-                    .actors
-                    .iter()
-                    .find(|a| &a.id == eid)
-                    .map(|a| a.source_line)
-                    .or_else(|| {
-                        diagram
-                            .use_cases
-                            .iter()
-                            .find(|u| &u.id == eid)
-                            .map(|u| u.source_line)
-                    })
-            })
-            .min()
-            .map(|l| l.saturating_sub(1))
-            .unwrap_or(i);
+    for p in &diagram.packages {
+        let line = p.source_line;
         entries.push(Entry {
             key: Some(format!("pkg::{}", p.name)),
             line,
@@ -449,55 +500,59 @@ fn compute_canvas(
     (max_x, max_y)
 }
 
-fn render_packages(
+fn render_package_group(
     svg: &mut SvgBuilder,
-    diagram: &UseCaseDiagram,
+    pkg: &UseCasePackage,
     oracle: Option<&OracleLayout>,
     id_map: &HashMap<String, String>,
 ) {
-    for pkg in &diagram.packages {
-        let Some(orc) = oracle else { continue };
-        let Some(rect) = orc.entities.get(&pkg.name) else {
-            continue;
-        };
-        let ent_id = id_map
-            .get(&format!("pkg::{}", pkg.name))
-            .cloned()
-            .unwrap_or_else(|| "ent0003".to_string());
-        svg.raw(&format!("<!--cluster {}-->", pkg.name));
-        svg.raw(&format!(
-            r#"<g class="cluster" data-qualified-name="{}" id="{ent_id}">"#,
-            pkg.name
-        ));
-        svg.raw(&format!(
-            r#"<rect fill="none" height="{h}" rx="2.5" ry="2.5" style="stroke:#181818;stroke-width:1;" width="{w}" x="{x}" y="{y}"/>"#,
-            h = fc(rect.height),
-            w = fc(rect.width),
-            x = fc(rect.x),
-            y = fc(rect.y),
-        ));
-        let label_w = text_render::measure(&pkg.name, FONT_SIZE, true);
-        let label_x = rect.x + (rect.width - label_w) / 2.0;
-        let label_y = rect.y + 15.5352;
-        let mut buf = String::new();
-        text_render::emit_text(
-            &mut buf,
-            &pkg.name,
-            &TextBase {
-                x: label_x,
-                y: label_y,
-                font_size: FONT_SIZE as u32,
-                font_family: "sans-serif",
-                fill: TEXT_COLOR,
-                bold: true,
-                italic: false,
-                underline: false,
-                skip_underline: false,
-            },
-        );
-        svg.raw(&buf);
-        svg.raw("</g>");
-    }
+    let Some(orc) = oracle else { return };
+    let Some(rect) = orc.entities.get(&pkg.name) else {
+        return;
+    };
+    let ent_id = id_map
+        .get(&format!("pkg::{}", pkg.name))
+        .cloned()
+        .unwrap_or_else(|| "ent0003".to_string());
+    let src_attr = source_line_attr(pkg.source_line);
+    let fill = pkg
+        .color
+        .as_deref()
+        .map(resolve_fill)
+        .unwrap_or_else(|| "none".to_string());
+    svg.raw(&format!("<!--cluster {}-->", pkg.name));
+    svg.raw(&format!(
+        r#"<g class="cluster" data-qualified-name="{}"{src_attr} id="{ent_id}">"#,
+        pkg.name
+    ));
+    svg.raw(&format!(
+        r#"<rect fill="{fill}" height="{h}" rx="2.5" ry="2.5" style="stroke:#181818;stroke-width:1;" width="{w}" x="{x}" y="{y}"/>"#,
+        h = fc(rect.height),
+        w = fc(rect.width),
+        x = fc(rect.x),
+        y = fc(rect.y),
+    ));
+    let label_w = text_render::measure(&pkg.name, FONT_SIZE, true);
+    let label_x = rect.x + (rect.width - label_w) / 2.0;
+    let label_y = rect.y + 15.5352;
+    let mut buf = String::new();
+    text_render::emit_text(
+        &mut buf,
+        &pkg.name,
+        &TextBase {
+            x: label_x,
+            y: label_y,
+            font_size: FONT_SIZE as u32,
+            font_family: "sans-serif",
+            fill: TEXT_COLOR,
+            bold: true,
+            italic: false,
+            underline: false,
+            skip_underline: false,
+        },
+    );
+    svg.raw(&buf);
+    svg.raw("</g>");
 }
 
 fn render_actor(
