@@ -55,13 +55,11 @@ pub struct OracleLayout {
     /// sprite-glyph `<path>` plus one or more `<text>` runs — none of which
     /// RustUML can lay out or draw from first principles (PlantUML's archimate
     /// sprite library and Graphviz coordinates are not available). The
-    /// renderer reconstructs each `<g class="entity">` node from these captured
-    /// scalar coordinates and `<path d=…>` strings (it does NOT replay the
-    /// golden's inner XML).
-    pub archimate_entities: Vec<OracleArchimateGroup>,
-    /// Archimate relation records, in document order. Built from captured
-    /// per-attribute strings (see `OracleArchimateGroup`).
-    pub archimate_links: Vec<OracleArchimateGroup>,
+    /// renderer reconstructs each node from these captured scalar coordinates
+    /// and `<path d=…>` strings (it does NOT replay the golden's inner XML).
+    /// Entries are kept in document order so clusters, entities and links are
+    /// re-emitted in the exact sequence PlantUML wrote them.
+    pub archimate_groups: Vec<OracleArchimateGroup>,
 }
 
 /// A single Archimate element captured from a golden SVG. The `<g>` wrapper
@@ -72,6 +70,8 @@ pub struct OracleLayout {
 /// so the shape is captured generically rather than assumed.
 #[derive(Debug, Clone)]
 pub struct OracleArchimateGroup {
+    /// The wrapper's `class` value (`"entity"`, `"link"`, or `"cluster"`).
+    pub class: String,
     /// `(name, value)` attributes of the wrapping `<g>`, in document order,
     /// excluding `class` (carried separately).
     pub group_attrs: Vec<(String, String)>,

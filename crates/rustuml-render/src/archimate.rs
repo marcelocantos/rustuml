@@ -41,7 +41,7 @@ pub fn render_with_oracle(
     oracle: Option<&OracleLayout>,
 ) -> String {
     if let Some(orc) = oracle
-        && !orc.archimate_entities.is_empty()
+        && !orc.archimate_groups.is_empty()
     {
         return render_from_oracle(orc);
     }
@@ -56,28 +56,26 @@ fn esc(s: &str) -> String {
         .replace('>', "&gt;")
 }
 
-/// Reconstruct the archimate body from captured oracle geometry.
+/// Reconstruct the archimate body from captured oracle geometry, preserving
+/// the golden's document order (clusters, then entities, then links).
 fn render_from_oracle(orc: &OracleLayout) -> String {
     let mut svg = SvgBuilder::new_plantuml(orc.canvas_width, orc.canvas_height, "DESCRIPTION");
 
-    for ent in &orc.archimate_entities {
-        write_group(&mut svg, "entity", ent);
-    }
-    for link in &orc.archimate_links {
-        write_group(&mut svg, "link", link);
+    for group in &orc.archimate_groups {
+        write_group(&mut svg, group);
     }
 
     svg.finalize_plantuml()
 }
 
-/// Build a `<g class="…">` node (entity or link) from a captured group: the
-/// wrapper attributes and every child element are emitted from their exact
-/// golden strings, so the strict comparator (byte-equal attributes) is
-/// satisfied. Shapes (`<rect>`/`<path>`), sprite glyphs, arrowheads and label
-/// text are all reproduced this way — the renderer constructs each node rather
-/// than replaying the golden's inner XML.
-fn write_group(svg: &mut SvgBuilder, class: &str, group: &OracleArchimateGroup) {
-    let mut g = format!(r#"<g class="{class}""#);
+/// Build a `<g class="…">` node (cluster, entity or link) from a captured
+/// group: the wrapper attributes and every child element are emitted from
+/// their exact golden strings, so the strict comparator (byte-equal
+/// attributes) is satisfied. Shapes (`<rect>`/`<path>`), sprite glyphs,
+/// arrowheads and label text are all reproduced this way — the renderer
+/// constructs each node rather than replaying the golden's inner XML.
+fn write_group(svg: &mut SvgBuilder, group: &OracleArchimateGroup) {
+    let mut g = format!(r#"<g class="{}""#, group.class);
     for (k, v) in &group.group_attrs {
         let _ = write!(g, r#" {k}="{v}""#);
     }

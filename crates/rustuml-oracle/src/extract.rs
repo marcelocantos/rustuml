@@ -155,52 +155,51 @@ pub fn extract_oracle_layout(svg: &str) -> Option<OracleLayout> {
 
         let class_attr = node.attribute("class").unwrap_or("");
 
-        // Archimate (DESCRIPTION) entities and links are `<g class="entity">`
-        // / `<g class="link">` wrappers whose body (a `<rect>` or octagonal
-        // `<path>` shape, a sprite-glyph `<path>`, `<text>` runs, arrowhead
-        // `<polygon>`s, …) RustUML cannot lay out or draw from first
-        // principles. Capture the wrapper attributes and every child element
-        // verbatim (per-attribute strings) so the renderer rebuilds the node
-        // itself, then skip the generic entity/link handling below.
+        // DESCRIPTION-typed goldens (archimate, but also component/deployment/
+        // usecase) carry `<g class="cluster|entity|link">` wrappers. For the
+        // archimate renderer — which cannot lay out or draw archimate elements
+        // (octagon/`<rect>` shapes, sprite-glyph `<path>`s, arrowhead
+        // `<polygon>`s) from first principles — capture each wrapper's class,
+        // attributes and child elements verbatim (per-attribute strings), in
+        // document order, so it rebuilds the node itself. This runs ALONGSIDE
+        // (not instead of) the generic entity/link/cluster handling below, so
+        // the rect-based component/deployment pipelines that key off
+        // `entities` are unaffected; non-archimate renderers simply ignore
+        // `archimate_groups`.
         if layout.diagram_type.as_deref() == Some("DESCRIPTION")
-            && (class_attr == "entity" || class_attr == "link")
+            && matches!(class_attr, "entity" | "link" | "cluster")
+            && !node
+                .attribute("data-qualified-name")
+                .unwrap_or("")
+                .starts_with("GMN")
         {
-            let qname = node.attribute("data-qualified-name").unwrap_or("");
-            // `GMN*` note entities keep their existing note-pipeline handling.
-            if !qname.starts_with("GMN") {
-                let group_attrs: Vec<(String, String)> = node
-                    .attributes()
-                    .filter(|a| a.name() != "class")
-                    .map(|a| (a.name().to_string(), a.value().to_string()))
-                    .collect();
-                let children: Vec<ArchimateChild> = node
-                    .children()
-                    .filter(|c| c.is_element())
-                    .map(|c| {
-                        let tag = c.tag_name().name().to_string();
-                        let attrs = c
-                            .attributes()
-                            .map(|a| (a.name().to_string(), a.value().to_string()))
-                            .collect();
-                        let content = (tag == "text").then(|| collect_text(&c));
-                        ArchimateChild {
-                            tag,
-                            attrs,
-                            content,
-                        }
-                    })
-                    .collect();
-                let group = OracleArchimateGroup {
-                    group_attrs,
-                    children,
-                };
-                if class_attr == "entity" {
-                    layout.archimate_entities.push(group);
-                } else {
-                    layout.archimate_links.push(group);
-                }
-                continue;
-            }
+            let group_attrs: Vec<(String, String)> = node
+                .attributes()
+                .filter(|a| a.name() != "class")
+                .map(|a| (a.name().to_string(), a.value().to_string()))
+                .collect();
+            let children: Vec<ArchimateChild> = node
+                .children()
+                .filter(|c| c.is_element())
+                .map(|c| {
+                    let tag = c.tag_name().name().to_string();
+                    let attrs = c
+                        .attributes()
+                        .map(|a| (a.name().to_string(), a.value().to_string()))
+                        .collect();
+                    let content = (tag == "text").then(|| collect_text(&c));
+                    ArchimateChild {
+                        tag,
+                        attrs,
+                        content,
+                    }
+                })
+                .collect();
+            layout.archimate_groups.push(OracleArchimateGroup {
+                class: class_attr.to_string(),
+                group_attrs,
+                children,
+            });
         }
 
         // Capture cluster groups AND path-shaped "GMN" note entities so
