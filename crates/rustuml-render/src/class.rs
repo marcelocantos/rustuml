@@ -1652,8 +1652,14 @@ fn render_entity_content(
     // width when available so the separator endpoints sit on PlantUML's
     // exact float trajectory; otherwise fall back to our measured width.
     let sep_x1 = x + 1.0;
+    // Prefer the oracle's verbatim separator x2: every separator line within a
+    // class entity shares the entity's right-border x2, captured per-entity in
+    // `lines`. Reconstructing it as `x + width - 1` rounds x and width
+    // independently and can drift 1 ULP from PlantUML's single-rounded value.
     let sep_x2 = oracle_rect
-        .map(|r| r.x + r.width - 1.0)
+        .and_then(|r| r.lines.first())
+        .and_then(|l| l.x2.parse::<f64>().ok())
+        .or_else(|| oracle_rect.map(|r| r.x + r.width - 1.0))
         .unwrap_or(x + dim.width - 1.0);
 
     // Per-entity border style override: if the oracle supplies a rect
