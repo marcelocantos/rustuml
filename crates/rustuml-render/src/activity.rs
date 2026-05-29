@@ -68,6 +68,21 @@ const SMALL_FONT: f64 = 11.0;
 const TITLE_FONT_SIZE: f64 = 14.0;
 const LANE_TITLE_FONT: f64 = 18.0;
 
+// Note geometry (attached `note left/right` beside the anchoring flow node).
+// Reverse-engineered from activity goldens.
+const NOTE_FONT: f64 = 13.0;
+const NOTE_TEXT_PAD_X: f64 = 6.0; // text inset from the note box's left edge
+const NOTE_FOLD: f64 = 10.0; // folded-corner size (top-right)
+// Box width = max line textLength + this. (6 left pad + 5 right pad + 10 fold.)
+const NOTE_BOX_EXTRA_W: f64 = 21.0;
+const NOTE_LINE_H: f64 = 15.3105; // per-line height inside a note
+const NOTE_FIRST_BASELINE_DY: f64 = 17.5684; // box top → first text baseline
+const NOTE_BOX_BASE_H: f64 = 10.0001; // height = this + nlines * NOTE_LINE_H
+const NOTE_GAP: f64 = 20.0; // horizontal gap between anchor box and note box
+const NOTE_FILL: &str = "#FEFFDD";
+const NOTE_STROKE: &str = "#181818";
+const NOTE_STROKE_WIDTH: &str = "0.5";
+
 const START_FILL: &str = "#222222";
 const STOP_FILL: &str = "#222222";
 const ACTION_FILL: &str = "#F1F1F1";
@@ -869,6 +884,71 @@ fn while_left_extent(
     special_extent.max(label_extent)
 }
 
+/// The lines of note text (block notes accumulate `\n`-joined lines; single
+/// `note left: text` notes are one line).
+fn note_lines(text: &str) -> Vec<&str> {
+    text.split('\n').collect()
+}
+
+/// Total drawn width of a note box: longest line's textLength + padding/fold.
+fn note_box_width(text: &str) -> f64 {
+    let max_line = note_lines(text)
+        .iter()
+        .map(|l| text_render::measure(l, NOTE_FONT, false))
+        .fold(0.0f64, f64::max);
+    max_line + NOTE_BOX_EXTRA_W
+}
+
+/// Total drawn height of a note box.
+fn note_box_height(text: &str) -> f64 {
+    NOTE_BOX_BASE_H + note_lines(text).len() as f64 * NOTE_LINE_H
+}
+
+/// Emit a note attached beside an Action-style anchor. `cx`/`anchor_w` give
+/// the anchor box centre and width; `anchor_cy` its vertical centre. The note
+/// box is vertically centred on the anchor and offset `NOTE_GAP` to the side.
+fn emit_attached_note(
+    svg: &mut SvgEmitter,
+    text: &str,
+    position: &NotePosition,
+    color: Option<&str>,
+    cx: f64,
+    anchor_w: f64,
+    anchor_cy: f64,
+) {
+    let box_w = note_box_width(text);
+    let box_h = note_box_height(text);
+    let box_top = anchor_cy - box_h / 2.0;
+    let anchor_half = anchor_w / 2.0;
+    let fill = color
+        .map(crate::sequence::resolve_color)
+        .unwrap_or_else(|| NOTE_FILL.to_string());
+    let left_side = matches!(position, NotePosition::Left);
+    let (box_left, tip_x) = if left_side {
+        let box_right = cx - anchor_half - NOTE_GAP;
+        (box_right - box_w, cx - anchor_half)
+    } else {
+        (cx + anchor_half + NOTE_GAP, cx + anchor_half)
+    };
+    svg.note_opale(
+        &fill, box_left, box_top, box_w, box_h, tip_x, anchor_cy, left_side,
+    );
+    for (i, line) in note_lines(text).iter().enumerate() {
+        let baseline = box_top + NOTE_FIRST_BASELINE_DY + i as f64 * NOTE_LINE_H;
+        let lw = text_render::measure(line, NOTE_FONT, false);
+        svg.text_element(
+            TEXT_COLOR,
+            "sans-serif",
+            NOTE_FONT,
+            lw,
+            box_left + NOTE_TEXT_PAD_X,
+            baseline,
+            line,
+            false,
+        );
+    }
+}
+
 /// Compute the asymmetric (left, right) extents of a single node from its
 /// vertical centreline. For most nodes this is symmetric (width/2, width/2);
 /// for if/else with unequal branches, the left extent (then-side) and right
@@ -971,10 +1051,38 @@ fn node_extents(node: &LayoutNode) -> (f64, f64) {
 /// dimension independently so an asymmetric node anywhere in the sequence
 /// shifts cx as needed.
 fn sequence_extents(nodes: &[LayoutNode]) -> (f64, f64) {
-    nodes
-        .iter()
-        .map(node_extents)
-        .fold((0.0f64, 0.0f64), |(l, r), (nl, nr)| (l.max(nl), r.max(nr)))
+    let mut left = 0.0f64;
+    let mut right = 0.0f64;
+    // The half-width of the most recent flow node — a note attaches to it and
+    // sits `NOTE_GAP` to one side, so its lateral reach from the spine is
+    // anchor_half + NOTE_GAP + note_box_width.
+    let mut anchor_half = 0.0f64;
+    for node in nodes {
+        match node {
+            LayoutNode::Note { text, position, .. } => {
+                let box_w = note_box_width(text);
+                let reach = anchor_half + NOTE_GAP + box_w;
+                match position {
+                    // The left note's left edge lands 1px left of MARGIN_LEAD,
+                    // so it contributes reach − 1 to the left extent.
+                    NotePosition::Left => left = left.max(reach - 1.0),
+                    // The right note's right edge sits 1px past `reach` from
+                    // the spine (mirrors the left's −1).
+                    NotePosition::Right => right = right.max(reach + 1.0),
+                }
+            }
+            _ => {
+                let (nl, nr) = node_extents(node);
+                left = left.max(nl);
+                right = right.max(nr);
+                // Only genuine flow nodes (those with width) can anchor a note.
+                if node_width(node) > 0.0 {
+                    anchor_half = node_width(node) / 2.0;
+                }
+            }
+        }
+    }
+    (left, right)
 }
 
 /// Width of a single swimlane: the wider of the content (with 10 px
@@ -1490,6 +1598,93 @@ impl SvgEmitter {
         .unwrap();
     }
 
+    /// Emit a note "opale" (folded-corner box with a tail pointing at the
+    /// anchoring node). `box_left`/`box_top` are the box's top-left corner;
+    /// `box_w`/`box_h` its drawn size; `tip` the absolute coordinates of the
+    /// tail's point on the anchor; `anchor_cy` the anchor's vertical centre.
+    /// `left_side` is true when the note sits to the LEFT of its anchor (tail
+    /// on the right edge, PlantUML's `getPolygonRight`); false when it sits to
+    /// the right (tail on the left edge, `getPolygonLeft`). Faithful port of
+    /// `Opale.getPolygonLeft`/`getPolygonRight` with `roundCorner == 0`.
+    fn note_opale(
+        &mut self,
+        fill: &str,
+        box_left: f64,
+        box_top: f64,
+        box_w: f64,
+        box_h: f64,
+        tip_x: f64,
+        anchor_cy: f64,
+        left_side: bool,
+    ) {
+        const CS: f64 = NOTE_FOLD; // cornersize
+        const DELTA: f64 = 4.0;
+        let bl = box_left;
+        let bt = box_top;
+        let br = box_left + box_w;
+        let bb = box_top + box_h;
+        let tip_y = anchor_cy;
+        let mut d = String::new();
+        if left_side {
+            // getPolygonRight: tail on the right edge.
+            let y1 = (tip_y - bt - DELTA).clamp(CS, box_h - 2.0 * DELTA);
+            write!(
+                d,
+                "M{},{} L{},{} A0,0 0 0 0 {},{} L{},{} A0,0 0 0 0 {},{} L{},{} L{},{} L{},{} L{},{} L{},{} L{},{} A0,0 0 0 0 {},{}",
+                f(bl), f(bt),
+                f(bl), f(bb),
+                f(bl), f(bb),
+                f(br), f(bb),
+                f(br), f(bb),
+                f(br), f(bt + y1 + 2.0 * DELTA),
+                f(tip_x), f(tip_y),
+                f(br), f(bt + y1),
+                f(br), f(bt + CS),
+                f(br - CS), f(bt),
+                f(bl), f(bt),
+                f(bl), f(bt),
+            )
+            .unwrap();
+        } else {
+            // getPolygonLeft: tail on the left edge.
+            let y1 = (tip_y - bt - DELTA).clamp(0.0, box_h - 2.0 * DELTA);
+            write!(
+                d,
+                "M{},{} L{},{} L{},{} L{},{} L{},{} A0,0 0 0 0 {},{} L{},{} A0,0 0 0 0 {},{} L{},{} L{},{} L{},{} A0,0 0 0 0 {},{}",
+                f(bl), f(bt),
+                f(bl), f(bt + y1),
+                f(tip_x), f(tip_y),
+                f(bl), f(bt + y1 + 2.0 * DELTA),
+                f(bl), f(bb),
+                f(bl), f(bb),
+                f(br), f(bb),
+                f(br), f(bb),
+                f(br), f(bt + CS),
+                f(br - CS), f(bt),
+                f(bl), f(bt),
+                f(bl), f(bt),
+            )
+            .unwrap();
+        }
+        write!(
+            self.shapes,
+            r#"<path d="{}" fill="{}" style="stroke:{};stroke-width:{};"/>"#,
+            d, fill, NOTE_STROKE, NOTE_STROKE_WIDTH
+        )
+        .unwrap();
+        // Fold corner (top-right triangle).
+        write!(
+            self.shapes,
+            r#"<path d="M{},{} L{},{} L{},{} L{},{}" fill="{}" style="stroke:{};stroke-width:{};"/>"#,
+            f(br - CS), f(bt),
+            f(br - CS), f(bt + CS),
+            f(br), f(bt + CS),
+            f(br - CS), f(bt),
+            fill, NOTE_STROKE, NOTE_STROKE_WIDTH
+        )
+        .unwrap();
+    }
+
     /// Emit a partition's outer rectangle (no rounded corners).
     fn partition_rect(&mut self, fill: &str, height: f64, width: f64, x: f64, y: f64) {
         write!(
@@ -1951,6 +2146,42 @@ fn emit_sequence(svg: &mut SvgEmitter, nodes: &[LayoutNode], cx: f64, mut y: f64
                 // partition's emit handles its own top positioning at y + 10.
                 if !is_partition {
                     y += gap;
+                }
+            }
+        }
+        // Emit any notes attached to this flow node BEFORE the node itself,
+        // so the note's box/text precede the anchor's shape in document order
+        // (matching PlantUML's emission). Notes that follow the node (until the
+        // next flow node) anchor to it.
+        if matches!(node, LayoutNode::Action { .. }) {
+            let anchor_w = node_width(node);
+            let anchor_h = node_height(node);
+            let anchor_cy = y + anchor_h / 2.0;
+            for follow in nodes[i + 1..].iter() {
+                match follow {
+                    LayoutNode::Note {
+                        text,
+                        position,
+                        color,
+                    } => {
+                        // Only the note-fits-in-row case is handled here; a
+                        // taller note would shift the anchor down (not yet
+                        // wired), so skip it to avoid mis-positioning.
+                        if note_box_height(text) > anchor_h {
+                            continue;
+                        }
+                        emit_attached_note(
+                            svg,
+                            text,
+                            position,
+                            color.as_deref(),
+                            cx,
+                            anchor_w,
+                            anchor_cy,
+                        );
+                    }
+                    LayoutNode::Arrow { .. } => {}
+                    _ => break,
                 }
             }
         }
