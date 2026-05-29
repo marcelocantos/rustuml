@@ -131,9 +131,10 @@ impl Tile {
             Tile::Box { text, .. } => box_pure_h1(text),
             Tile::Concat(tiles) => tiles.iter().map(|t| t.h1()).fold(0.0_f64, f64::max),
             Tile::Alt(tiles) => tiles[0].h1(),
-            Tile::Optional(inner) => 16.0 + inner.h1(), // deltay
+            // `[ x ]` builds an ETileOptional2 directly; `getH1` is a flat 10.
+            Tile::Optional(_) => 10.0,
             Tile::OneOrMore(inner) => 12.0 + inner.h1(), // deltay (no brace label)
-            Tile::ZeroOrMore(_) => 10.0,                // Optional2.getH1
+            Tile::ZeroOrMore(_) => 10.0,                 // Optional2.getH1
         }
     }
 
@@ -148,7 +149,8 @@ impl Tile {
                 }
                 h
             }
-            Tile::Optional(inner) => inner.h2(),
+            // ETileOptional2.getH2 = 10 + inner.h1 + inner.h2.
+            Tile::Optional(inner) => 10.0 + inner.h1() + inner.h2(),
             Tile::OneOrMore(inner) => inner.h2(),
             Tile::ZeroOrMore(inner) => {
                 // Optional2.getH2 over OneOrMore(inner)
