@@ -3,42 +3,38 @@
 
 //! Salt (UI wireframe) diagram renderer.
 //!
-//! Produces an SVG that resembles a hand-drawn UI wireframe: buttons are
-//! rounded rectangles, text fields are bordered boxes, checkboxes are small
-//! squares, radio buttons are circles, and containers are drawn with thin
-//! borders.
+//! This is a geometry-faithful port of PlantUML's salt layout engine
+//! (`net.sourceforge.plantuml.salt`).  Widgets are laid out on a grid
+//! (`ElementPyramid`): every cell contributes `dim.width + 2` to its
+//! column span and `dim.height + 2` to its row span.  Each element is
+//! drawn at `(colsStart[col] + 1, rowsStart[row] + 1)`, and the whole
+//! drawing is offset by a 5px margin on every side.
+//!
+//! Font metrics come from [`crate::plantuml_metrics`], which reproduce
+//! Java AWT's `SansSerif` advances exactly, so `textLength` values match
+//! the golden SVGs.
 
-use rustuml_parser::diagram::salt::{
-    BlockKind, SaltBlock, SaltDiagram, SaltRow, SaltWidget, SeparatorKind,
-};
+use rustuml_parser::diagram::salt::{SaltBlock, SaltDiagram, SaltWidget, SeparatorKind};
 
 use crate::layout_oracle::{OracleLayout, wrap_oracle_envelope};
+use crate::plantuml_metrics as pm;
 use crate::style::Theme;
 
-// ── Metrics ─────────────────────────────────────────────────────────────────
+// ── Metrics constants (from the Java element classes) ────────────────────────
 
-const FONT_SIZE: f64 = 13.0;
-const LINE_H: f64 = 22.0; // row height
-const PADDING: f64 = 8.0; // outer padding around the root block
-const H_PAD: f64 = 6.0; // horizontal cell padding
-const V_PAD: f64 = 4.0; // vertical cell padding
+const FONT_SIZE: f64 = 12.0;
+const MARGIN: f64 = 5.0; // PSystemSalt default margin (all sides)
+const CELL_PAD: f64 = 2.0; // ElementPyramid: dim + 2 per cell span
+const DRAW_OFFSET: f64 = 1.0; // ElementPyramid draws at colsStart+1 / rowsStart+1
 
-// Minimum widths for specific widget types.
-const MIN_BUTTON_W: f64 = 60.0;
-const MIN_FIELD_W: f64 = 80.0;
-const CHECKBOX_SIZE: f64 = 12.0;
-const RADIO_R: f64 = 6.0;
-
-// Approximate character width for width estimation.
-const CHAR_W: f64 = 7.5;
+// ElementRadioCheckbox
+const RC_MARGIN: f64 = 20.0; // text offset
+const RC_RECT: f64 = 10.0;
+const RC_ELLIPSE2: f64 = 4.0;
 
 // ── Public entry point ───────────────────────────────────────────────────────
 
 /// Render a Salt diagram with an optional oracle layout.
-///
-/// When the oracle's `root_g_inner_xml` is populated, the renderer replays
-/// the body verbatim inside the PlantUML envelope. Otherwise it falls back
-/// to the geometry-driven renderer below.
 pub fn render_with_oracle(
     diagram: &SaltDiagram,
     theme: &Theme,
@@ -54,509 +50,341 @@ pub fn render_with_oracle(
 
 /// Render a [`SaltDiagram`] to an SVG string.
 pub fn render(diagram: &SaltDiagram, _theme: &Theme) -> String {
-    let ctx = RenderCtx::new();
-    let block_size = ctx.measure_block(&diagram.root);
-    let w = block_size.0 + PADDING * 2.0;
-    let h = block_size.1 + PADDING * 2.0;
+    let grid = Grid::layout(&diagram.root);
+    let total_w = grid.width() + MARGIN * 2.0;
+    let total_h = grid.height() + MARGIN * 2.0;
 
-    let mut buf = format!(
-        r#"<svg xmlns="http://www.w3.org/2000/svg" width="{w}" height="{h}" viewBox="0 0 {w} {h}">
-"#
-    );
-    ctx.draw_block(&diagram.root, PADDING, PADDING, block_size.0, &mut buf);
-    buf.push_str("</svg>\n");
-    buf
+    // PlantUML rounds the SVG canvas up to whole pixels.
+    let w = total_w.ceil() as i64;
+    let h = total_h.ceil() as i64;
+
+    let mut body = String::new();
+    grid.draw(MARGIN, MARGIN, &mut body);
+
+    format!(
+        r#"<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" contentStyleType="text/css" data-diagram-type="SALT" height="{h}px" preserveAspectRatio="none" style="width:{w}px;height:{h}px;background:#FFFFFF;" version="1.1" viewBox="0 0 {w} {h}" width="{w}px" zoomAndPan="magnify"><?plantuml 1.2026.3beta6?><defs/><g>{body}</g></svg>"#
+    )
 }
 
-// ── Render context ───────────────────────────────────────────────────────────
+// ── Grid layout ──────────────────────────────────────────────────────────────
 
-struct RenderCtx;
+/// A laid-out cell: the widget plus its grid position.
+struct PlacedCell<'a> {
+    widget: &'a SaltWidget,
+    row: usize,
+    col: usize,
+}
 
-impl RenderCtx {
-    fn new() -> Self {
-        RenderCtx
-    }
+struct Grid<'a> {
+    cells: Vec<PlacedCell<'a>>,
+    cols_start: Vec<f64>,
+    rows_start: Vec<f64>,
+}
 
-    // ── Measurement ─────────────────────────────────────────────────────────
-
-    /// Returns `(width, height)` for a block.
-    fn measure_block(&self, block: &SaltBlock) -> (f64, f64) {
-        let mut total_h = V_PAD;
-        // Extra space for group-box title.
-        if block.title.is_some() {
-            total_h += LINE_H;
-        }
-        // Tab bar row for {/ blocks.
-        if block.kind == BlockKind::Tabs && !block.rows.is_empty() {
-            total_h += LINE_H;
-        }
-
-        let col_widths = self.column_widths(block);
-        let total_w: f64 = col_widths.iter().sum::<f64>() + H_PAD * 2.0;
-
-        let row_start = if block.kind == BlockKind::Tabs { 1 } else { 0 };
-        for row in block.rows.iter().skip(row_start) {
-            total_h += self.measure_row_height(row);
-        }
-        total_h += V_PAD;
-
-        (total_w.max(80.0), total_h.max(30.0))
-    }
-
-    /// Compute the width for each column across all rows.
-    fn column_widths(&self, block: &SaltBlock) -> Vec<f64> {
-        let row_start = if block.kind == BlockKind::Tabs { 1 } else { 0 };
-        let max_cols = block
-            .rows
-            .iter()
-            .skip(row_start)
-            .map(|r| r.cells.len())
-            .max()
-            .unwrap_or(1);
-
-        let mut col_w = vec![0f64; max_cols];
-        for row in block.rows.iter().skip(row_start) {
-            for (i, cell) in row.cells.iter().enumerate() {
-                if i < max_cols {
-                    let w = self.measure_widget_width(cell);
-                    if w > col_w[i] {
-                        col_w[i] = w;
-                    }
-                }
+impl<'a> Grid<'a> {
+    fn layout(block: &'a SaltBlock) -> Grid<'a> {
+        // Assign row/col positions (Positionner2).
+        let mut cells: Vec<PlacedCell<'a>> = Vec::new();
+        let mut n_cols = 1usize;
+        for (r, row) in block.rows.iter().enumerate() {
+            for (c, widget) in row.cells.iter().enumerate() {
+                cells.push(PlacedCell {
+                    widget,
+                    row: r,
+                    col: c,
+                });
+                n_cols = n_cols.max(c + 1);
             }
         }
-        // Also account for tab bar widths.
-        if block.kind == BlockKind::Tabs
-            && let Some(tab_row) = block.rows.first()
-        {
-            let tab_w = self.measure_tabs_width(tab_row);
-            if tab_w > col_w.iter().sum::<f64>() {
-                // Distribute extra width evenly.
-                let extra = (tab_w - col_w.iter().sum::<f64>()) / col_w.len().max(1) as f64;
-                for w in &mut col_w {
-                    *w += extra;
-                }
-            }
+        let n_rows = block.rows.len().max(1);
+
+        // Column widths (LeftFirst): ensure col span >= dim.width + 2.
+        let mut cols_start = vec![0f64; n_cols + 1];
+        for cell in &cells {
+            let (w, _) = widget_dim(cell.widget);
+            ensure_span(&mut cols_start, cell.col, cell.col + 1, w + CELL_PAD);
         }
-        col_w
-    }
 
-    fn measure_tabs_width(&self, tab_row: &SaltRow) -> f64 {
-        tab_row
-            .cells
-            .iter()
-            .map(|c| self.measure_widget_width(c) + H_PAD * 2.0)
-            .sum()
-    }
+        // Row heights (TopFirst): ensure row span >= dim.height + 2.
+        let mut rows_start = vec![0f64; n_rows + 1];
+        for cell in &cells {
+            let (_, h) = widget_dim(cell.widget);
+            ensure_span(&mut rows_start, cell.row, cell.row + 1, h + CELL_PAD);
+        }
 
-    fn measure_widget_width(&self, widget: &SaltWidget) -> f64 {
-        match widget {
-            SaltWidget::Block(b) => self.measure_block(b).0,
-            SaltWidget::Button(label) => {
-                (label.chars().count() as f64 * CHAR_W + H_PAD * 2.0).max(MIN_BUTTON_W)
-            }
-            SaltWidget::TextField(text) => {
-                (text.chars().count() as f64 * CHAR_W + H_PAD * 2.0).max(MIN_FIELD_W)
-            }
-            SaltWidget::Checkbox { label, .. } => {
-                CHECKBOX_SIZE + H_PAD + label.chars().count() as f64 * CHAR_W
-            }
-            SaltWidget::Radio { label, .. } => {
-                RADIO_R * 2.0 + H_PAD + label.chars().count() as f64 * CHAR_W
-            }
-            SaltWidget::Dropdown(label) => {
-                (label.chars().count() as f64 * CHAR_W + H_PAD * 2.0 + 20.0).max(MIN_FIELD_W)
-            }
-            SaltWidget::Label(text) => text.chars().count() as f64 * CHAR_W + H_PAD,
-            SaltWidget::TreeNode { depth, label } => {
-                (*depth as f64 * 16.0) + label.chars().count() as f64 * CHAR_W + H_PAD
-            }
-            SaltWidget::Separator(_) => 0.0, // spans full width
+        Grid {
+            cells,
+            cols_start,
+            rows_start,
         }
     }
 
-    fn measure_row_height(&self, row: &SaltRow) -> f64 {
-        row.cells
-            .iter()
-            .map(|c| match c {
-                SaltWidget::Block(b) => self.measure_block(b).1,
-                _ => LINE_H,
-            })
-            .fold(LINE_H, f64::max)
+    fn width(&self) -> f64 {
+        *self.cols_start.last().unwrap_or(&0.0)
     }
 
-    // ── Drawing ──────────────────────────────────────────────────────────────
-
-    /// Draw a block at `(x, y)` with known outer width `w`.
-    fn draw_block(&self, block: &SaltBlock, x: f64, y: f64, w: f64, buf: &mut String) {
-        let (_, h) = self.measure_block(block);
-
-        // Outer border.
-        match block.kind {
-            BlockKind::Table => {
-                // Table border: solid rect.
-                emit_rect(buf, x, y, w, h, "white", "#444444");
-            }
-            BlockKind::Plain | BlockKind::Tabs | BlockKind::ScrollInput => {
-                emit_rect(buf, x, y, w, h, "white", "#555555");
-            }
-            BlockKind::Tree => {
-                emit_rect(buf, x, y, w, h, "#FAFAFA", "#555555");
-            }
-        }
-
-        let mut cur_y = y + V_PAD;
-
-        // Group-box title.
-        if let Some(title) = &block.title {
-            // Draw title bar.
-            emit_rect(buf, x, y, w, LINE_H, "#E8E8E8", "#555555");
-            emit_text(
-                buf,
-                x + H_PAD,
-                y + LINE_H - V_PAD,
-                title,
-                FONT_SIZE,
-                "start",
-            );
-            cur_y = y + LINE_H + V_PAD;
-        }
-
-        // Tab bar for {/ blocks.
-        if block.kind == BlockKind::Tabs
-            && let Some(tab_row) = block.rows.first()
-        {
-            cur_y = self.draw_tab_bar(tab_row, x, cur_y, w, buf);
-        }
-
-        let col_widths = self.column_widths(block);
-        let row_start = if block.kind == BlockKind::Tabs { 1 } else { 0 };
-
-        for (row_idx, row) in block.rows.iter().enumerate().skip(row_start) {
-            let row_h = self.measure_row_height(row);
-
-            // For Table blocks, render the first row as a header row: emit
-            // all cell labels joined by " | " in a single text element so
-            // that structural comparisons against Java-generated goldens can
-            // match the combined header string (e.g. "Header 0 | Header 1").
-            if block.kind == BlockKind::Table && row_idx == 0 {
-                let header_text: String = row
-                    .cells
-                    .iter()
-                    .map(widget_label)
-                    .collect::<Vec<_>>()
-                    .join(" | ");
-                let text_y = cur_y + row_h / 2.0 + FONT_SIZE / 2.0 - 1.0;
-                emit_text(buf, x + H_PAD, text_y, &header_text, FONT_SIZE, "start");
-            } else {
-                self.draw_row(
-                    block,
-                    row,
-                    &col_widths,
-                    x + H_PAD,
-                    cur_y,
-                    w - H_PAD * 2.0,
-                    row_h,
-                    buf,
-                );
-            }
-
-            cur_y += row_h;
-
-            // Draw horizontal grid lines for table blocks.
-            if block.kind == BlockKind::Table {
-                emit_hline(buf, x, cur_y, x + w, "#AAAAAA");
-            }
-        }
-
-        // Draw vertical grid lines for table blocks.
-        if block.kind == BlockKind::Table {
-            let mut col_x = x + H_PAD;
-            for (i, cw) in col_widths.iter().enumerate() {
-                if i > 0 {
-                    emit_vline(buf, col_x, y, cur_y, "#AAAAAA");
-                }
-                col_x += cw;
-            }
-        }
+    fn height(&self) -> f64 {
+        *self.rows_start.last().unwrap_or(&0.0)
     }
 
-    fn draw_tab_bar(
-        &self,
-        tab_row: &SaltRow,
-        x: f64,
-        y: f64,
-        _total_w: f64,
-        buf: &mut String,
-    ) -> f64 {
-        let mut tab_x = x;
-        for (i, cell) in tab_row.cells.iter().enumerate() {
-            let label = widget_label(cell);
-            let tab_w = label.chars().count() as f64 * CHAR_W + H_PAD * 3.0;
-            let fill = if i == 0 { "white" } else { "#D8D8D8" };
-            // Tab rounded rect.
-            emit_rounded_rect(buf, tab_x, y, tab_w, LINE_H, 4.0, fill, "#555555");
-            emit_text(
-                buf,
-                tab_x + tab_w / 2.0,
-                y + LINE_H - V_PAD,
-                &label,
-                FONT_SIZE,
-                "middle",
-            );
-            tab_x += tab_w;
-        }
-        y + LINE_H
-    }
-
-    #[allow(clippy::too_many_arguments)]
-    fn draw_row(
-        &self,
-        block: &SaltBlock,
-        row: &SaltRow,
-        col_widths: &[f64],
-        x: f64,
-        y: f64,
-        _total_w: f64,
-        row_h: f64,
-        buf: &mut String,
-    ) {
-        let mut cell_x = x;
-        for (i, cell) in row.cells.iter().enumerate() {
-            let cell_w = col_widths.get(i).copied().unwrap_or(80.0);
-            self.draw_widget(block, cell, cell_x, y, cell_w, row_h, buf);
-            cell_x += cell_w;
-        }
-    }
-
-    #[allow(clippy::too_many_arguments)]
-    fn draw_widget(
-        &self,
-        _block: &SaltBlock,
-        widget: &SaltWidget,
-        x: f64,
-        y: f64,
-        w: f64,
-        h: f64,
-        buf: &mut String,
-    ) {
-        let mid_y = y + h / 2.0;
-        let text_y = y + h / 2.0 + FONT_SIZE / 2.0 - 1.0;
-
-        match widget {
-            SaltWidget::Block(sub) => {
-                let sub_w = self.measure_block(sub).0;
-                self.draw_block(sub, x, y, sub_w.max(w), buf);
-            }
-
-            SaltWidget::Button(label) => {
-                let bw = (label.chars().count() as f64 * CHAR_W + H_PAD * 2.0)
-                    .max(MIN_BUTTON_W)
-                    .min(w);
-                emit_rounded_rect(buf, x, y + 2.0, bw, h - 4.0, 5.0, "#EEEEEE", "#888888");
-                emit_text(buf, x + bw / 2.0, text_y - 1.0, label, FONT_SIZE, "middle");
-            }
-
-            SaltWidget::TextField(text) => {
-                emit_rect(buf, x, y + 2.0, w, h - 4.0, "white", "#AAAAAA");
-                emit_text(buf, x + H_PAD / 2.0, text_y - 1.0, text, FONT_SIZE, "start");
-            }
-
-            SaltWidget::Checkbox { checked, label } => {
-                let box_y = mid_y - CHECKBOX_SIZE / 2.0;
-                emit_rect(
-                    buf,
-                    x,
-                    box_y,
-                    CHECKBOX_SIZE,
-                    CHECKBOX_SIZE,
-                    "white",
-                    "#666666",
-                );
-                if *checked {
-                    // Draw a checkmark.
-                    let cx = x + CHECKBOX_SIZE / 2.0;
-                    let cy = mid_y;
-                    let (x1, y1) = (cx - 4.0, cy);
-                    let (x2, y2) = (cx - 1.0, cy + 3.0);
-                    let (x3, y3) = (cx + 4.0, cy - 3.5);
-                    buf.push_str(&format!(
-                        "  <polyline points=\"{x1},{y1} {x2},{y2} {x3},{y3}\" fill=\"none\" stroke=\"#333333\" stroke-width=\"1.5\"/>\n"
-                    ));
-                }
-                emit_text(
-                    buf,
-                    x + CHECKBOX_SIZE + H_PAD / 2.0,
-                    text_y,
-                    label,
-                    FONT_SIZE,
-                    "start",
-                );
-            }
-
-            SaltWidget::Radio { selected, label } => {
-                let cx = x + RADIO_R;
-                emit_circle(buf, cx, mid_y, RADIO_R, "white", "#666666");
-                if *selected {
-                    emit_circle(buf, cx, mid_y, RADIO_R / 2.0, "#333333", "#333333");
-                }
-                emit_text(
-                    buf,
-                    cx + RADIO_R + H_PAD / 2.0,
-                    text_y,
-                    label,
-                    FONT_SIZE,
-                    "start",
-                );
-            }
-
-            SaltWidget::Dropdown(label) => {
-                emit_rect(buf, x, y + 2.0, w, h - 4.0, "white", "#AAAAAA");
-                // Render label with carets so that structural comparisons can
-                // match both the plain label ("English") and the full widget
-                // syntax ("^English^") depending on how the golden was
-                // generated.
-                let display = format!("^{label}^");
-                emit_text(
-                    buf,
-                    x + H_PAD / 2.0,
-                    text_y - 1.0,
-                    &display,
-                    FONT_SIZE,
-                    "start",
-                );
-                // Small triangle indicator.
-                let tx = x + w - H_PAD - 4.0;
-                let ty = mid_y;
-                let (p1x, p1y) = (tx - 4.0, ty - 2.0);
-                let (p2x, p2y) = (tx + 4.0, ty - 2.0);
-                let (p3x, p3y) = (tx, ty + 3.0);
-                buf.push_str(&format!(
-                    "  <polygon points=\"{p1x},{p1y} {p2x},{p2y} {p3x},{p3y}\" fill=\"#666666\"/>\n"
-                ));
-            }
-
-            SaltWidget::Label(text) => {
-                emit_text(buf, x, text_y, text, FONT_SIZE, "start");
-            }
-
-            SaltWidget::Separator(kind) => {
-                // Draw the separator spanning the available width.
-                // x here is relative to the block interior, so use the block's full width.
-                let x1 = x - H_PAD; // extend to block border
-                let x2 = x + w + H_PAD;
-                let sy = mid_y;
-                match kind {
-                    SeparatorKind::Dots => {
-                        buf.push_str(&format!(
-                            "  <line x1=\"{x1}\" y1=\"{sy}\" x2=\"{x2}\" y2=\"{sy}\" stroke=\"#AAAAAA\" stroke-width=\"1\" stroke-dasharray=\"2,3\"/>\n"
-                        ));
-                        // Emit invisible (zero-opacity) text so that structural
-                        // comparisons against goldens that include ".." in their
-                        // text list can find the separator.
-                        emit_text(buf, x1, sy, "..", FONT_SIZE, "start");
-                    }
-                    SeparatorKind::Double => {
-                        let ya = sy - 2.0;
-                        let yb = sy + 2.0;
-                        buf.push_str(&format!(
-                            "  <line x1=\"{x1}\" y1=\"{ya}\" x2=\"{x2}\" y2=\"{ya}\" stroke=\"#888888\" stroke-width=\"1\"/>\n  <line x1=\"{x1}\" y1=\"{yb}\" x2=\"{x2}\" y2=\"{yb}\" stroke=\"#888888\" stroke-width=\"1\"/>\n"
-                        ));
-                    }
-                    SeparatorKind::Single | SeparatorKind::Solid => {
-                        buf.push_str(&format!(
-                            "  <line x1=\"{x1}\" y1=\"{sy}\" x2=\"{x2}\" y2=\"{sy}\" stroke=\"#888888\" stroke-width=\"1\"/>\n"
-                        ));
-                    }
-                }
-            }
-
-            SaltWidget::TreeNode { depth, label } => {
-                let indent = *depth as f64 * 16.0;
-                // Small expand/collapse icon.
-                let icon_x = x + indent;
-                let icon_y = mid_y - 5.0;
-                emit_rect(buf, icon_x, icon_y, 10.0, 10.0, "#EEEEEE", "#888888");
-                // "+" inside the box.
-                emit_text(buf, icon_x + 5.0, icon_y + 8.5, "+", 9.0, "middle");
-                emit_text(buf, icon_x + 14.0, text_y, label, FONT_SIZE, "start");
-            }
+    fn draw(&self, ox: f64, oy: f64, buf: &mut String) {
+        for cell in &self.cells {
+            let cx = ox + self.cols_start[cell.col] + DRAW_OFFSET;
+            let cy = oy + self.rows_start[cell.row] + DRAW_OFFSET;
+            // dimToUse for the cell (span minus 1, per ElementPyramid).
+            let cell_w = self.cols_start[cell.col + 1] - self.cols_start[cell.col] - 1.0;
+            let cell_h = self.rows_start[cell.row + 1] - self.rows_start[cell.row] - 1.0;
+            draw_widget(cell.widget, cx, cy, cell_w, cell_h, buf);
         }
     }
 }
 
-// ── SVG emit helpers ─────────────────────────────────────────────────────────
+/// Distribute the missing width/height so that `start[last] - start[first] >= size`.
+fn ensure_span(start: &mut [f64], first: usize, last: usize, size: f64) {
+    let actual = start[last] - start[first];
+    let missing = size - actual;
+    if missing > 0.0 {
+        for s in start.iter_mut().skip(last) {
+            *s += missing;
+        }
+    }
+}
 
-fn emit_rect(buf: &mut String, x: f64, y: f64, w: f64, h: f64, fill: &str, stroke: &str) {
+// ── Widget measurement ───────────────────────────────────────────────────────
+
+/// Preferred `(width, height)` of a widget, matching the Java
+/// `getPreferredDimension`.
+fn widget_dim(widget: &SaltWidget) -> (f64, f64) {
+    let th = pm::text_height(FONT_SIZE);
+    match widget {
+        SaltWidget::Label(t) => {
+            let display = strip_creole(t);
+            (pm::text_width(&display, FONT_SIZE, false), th)
+        }
+        SaltWidget::Checkbox { label, .. } | SaltWidget::Radio { label, .. } => {
+            let display = strip_creole(label);
+            (pm::text_width(&display, FONT_SIZE, false) + RC_MARGIN, th)
+        }
+        SaltWidget::Separator(_) => (RC_RECT, 6.0), // ElementLine: (10, 6)
+        // Best-effort for widgets not yet fully reproduced.
+        SaltWidget::Button(t) => {
+            let tw = pm::text_width(t, FONT_SIZE, false);
+            (tw + 9.0, th + 4.0 + 5.0)
+        }
+        SaltWidget::TextField(t) => {
+            let tw = pm::text_width(t, FONT_SIZE, false);
+            (tw + 6.0, th + 2.0)
+        }
+        SaltWidget::Dropdown(t) => {
+            let tw = pm::text_width(t, FONT_SIZE, false);
+            (tw + 20.0, th)
+        }
+        SaltWidget::TreeNode { depth, label } => (
+            (*depth as f64) * 8.0 + pm::text_width(label, FONT_SIZE, false),
+            th,
+        ),
+        SaltWidget::Block(b) => {
+            let g = Grid::layout(b);
+            (g.width(), g.height())
+        }
+    }
+}
+
+// ── Widget drawing ───────────────────────────────────────────────────────────
+
+#[allow(clippy::too_many_arguments)]
+fn draw_widget(widget: &SaltWidget, x: f64, y: f64, cell_w: f64, cell_h: f64, buf: &mut String) {
+    let ascent = pm::ascent(FONT_SIZE);
+    let pref_h = pm::text_height(FONT_SIZE);
+
+    match widget {
+        SaltWidget::Label(t) => {
+            emit_text(buf, x, y + ascent, t);
+        }
+
+        SaltWidget::Checkbox { checked, label } => {
+            // Text at translate(margin).
+            emit_text(buf, x + RC_MARGIN, y + ascent, label);
+            // Box at translate(2, (prefH - 10) / 2), stroke 1.5.
+            let bx = x + 2.0;
+            let by = y + (pref_h - RC_RECT) / 2.0;
+            emit_rect_15(buf, bx, by, RC_RECT, RC_RECT, "none");
+            if *checked {
+                // Polygon at translate(2,...) box origin? No: from element
+                // origin translate(3,6): points (0,0)(3,3)(10,-6)(3,1).
+                let px = x + 3.0;
+                let py = y + 6.0;
+                emit_check_poly(buf, px, py);
+            }
+        }
+
+        SaltWidget::Radio { selected, label } => {
+            emit_text(buf, x + RC_MARGIN, y + ascent, label);
+            // Ellipse at translate(2, (prefH-10)/2), 10x10 → cx = x+2+5.
+            let ecx = x + 2.0 + RC_RECT / 2.0;
+            let ecy = y + (pref_h - RC_RECT) / 2.0 + RC_RECT / 2.0;
+            emit_ellipse_15(buf, ecx, ecy, RC_RECT / 2.0, "none");
+            if *selected {
+                // Inner ellipse 4x4 at translate(2 + (10-4)/2, (prefH-4)/2).
+                let icx = x + 2.0 + (RC_RECT - RC_ELLIPSE2) / 2.0 + RC_ELLIPSE2 / 2.0;
+                let icy = y + (pref_h - RC_ELLIPSE2) / 2.0 + RC_ELLIPSE2 / 2.0;
+                emit_ellipse_15(buf, icx, icy, RC_ELLIPSE2 / 2.0, "#000000");
+            }
+        }
+
+        SaltWidget::Separator(kind) => {
+            // ElementLine: line at y = cell_h/2, spanning the cell width.
+            let y2 = cell_h / 2.0;
+            emit_separator(buf, x, y + y2, cell_w, *kind);
+        }
+
+        // ── Best-effort fallbacks (geometry not yet exact) ──
+        SaltWidget::Button(label) => {
+            let stroke = 2.5;
+            let rw = cell_w.max(pm::text_width(label, FONT_SIZE, false) + 4.0 + stroke);
+            let rh = pm::text_height(FONT_SIZE) + 4.0 + stroke;
+            emit_rounded_rect_stroke(buf, x + stroke, y + stroke, rw, rh, "#EEEEEE", stroke);
+            let tx = x + stroke + 2.0;
+            emit_text(buf, tx, y + stroke + 2.0 + ascent, label);
+        }
+        SaltWidget::TextField(t) => {
+            emit_text(buf, x + 3.0, y + ascent, t);
+        }
+        SaltWidget::Dropdown(label) => {
+            emit_text(buf, x, y + ascent, label);
+        }
+        SaltWidget::TreeNode { depth, label } => {
+            let indent = (*depth as f64) * 8.0;
+            emit_text(buf, x + indent, y + ascent, label);
+        }
+        SaltWidget::Block(b) => {
+            let g = Grid::layout(b);
+            g.draw(x, y, buf);
+        }
+    }
+}
+
+// ── SVG emit helpers (PlantUML-style attributes) ─────────────────────────────
+
+fn emit_text(buf: &mut String, x: f64, y: f64, content: &str) {
+    let display = strip_creole(content);
+    let tl = pm::text_width(&display, FONT_SIZE, false);
+    let escaped = escape_text(&display);
     buf.push_str(&format!(
-        r#"  <rect x="{x}" y="{y}" width="{w}" height="{h}" fill="{fill}" stroke="{stroke}" stroke-width="1"/>
-"#
+        r##"<text fill="#000000" font-family="sans-serif" font-size="12" lengthAdjust="spacing" textLength="{tl}" x="{x}" y="{y}">{escaped}</text>"##,
+        tl = pm::fmt_coord(tl),
+        x = pm::fmt_coord(x),
+        y = pm::fmt_coord(y),
     ));
 }
 
-#[allow(clippy::too_many_arguments)]
-fn emit_rounded_rect(
+fn emit_rect_15(buf: &mut String, x: f64, y: f64, w: f64, h: f64, fill: &str) {
+    buf.push_str(&format!(
+        r##"<rect fill="{fill}" height="{h}" style="stroke:#000000;stroke-width:1.5;" width="{w}" x="{x}" y="{y}"/>"##,
+        h = pm::fmt_coord(h),
+        w = pm::fmt_coord(w),
+        x = pm::fmt_coord(x),
+        y = pm::fmt_coord(y),
+    ));
+}
+
+fn emit_rounded_rect_stroke(
     buf: &mut String,
     x: f64,
     y: f64,
     w: f64,
     h: f64,
-    rx: f64,
     fill: &str,
-    stroke: &str,
+    stroke_w: f64,
 ) {
     buf.push_str(&format!(
-        r#"  <rect x="{x}" y="{y}" width="{w}" height="{h}" rx="{rx}" fill="{fill}" stroke="{stroke}" stroke-width="1"/>
-"#
+        r##"<rect fill="{fill}" height="{h}" rx="5" ry="5" style="stroke:#000000;stroke-width:{sw};" width="{w}" x="{x}" y="{y}"/>"##,
+        h = pm::fmt_coord(h),
+        sw = pm::fmt_coord(stroke_w),
+        w = pm::fmt_coord(w),
+        x = pm::fmt_coord(x),
+        y = pm::fmt_coord(y),
     ));
 }
 
-fn emit_circle(buf: &mut String, cx: f64, cy: f64, r: f64, fill: &str, stroke: &str) {
+fn emit_ellipse_15(buf: &mut String, cx: f64, cy: f64, r: f64, fill: &str) {
     buf.push_str(&format!(
-        r#"  <circle cx="{cx}" cy="{cy}" r="{r}" fill="{fill}" stroke="{stroke}" stroke-width="1"/>
-"#
+        r##"<ellipse cx="{cx}" cy="{cy}" fill="{fill}" rx="{r}" ry="{r}" style="stroke:#000000;stroke-width:1.5;"/>"##,
+        cx = pm::fmt_coord(cx),
+        cy = pm::fmt_coord(cy),
+        r = pm::fmt_coord(r),
     ));
 }
 
-fn emit_text(buf: &mut String, x: f64, y: f64, text: &str, font_size: f64, anchor: &str) {
-    let escaped = xml_escape(text);
-    let fill = "#333333";
+fn emit_check_poly(buf: &mut String, px: f64, py: f64) {
+    // Polygon points (0,0)(3,3)(10,-6)(3,1) translated by (px,py).
+    let pts = [(0.0, 0.0), (3.0, 3.0), (10.0, -6.0), (3.0, 1.0)];
+    let s: Vec<String> = pts
+        .iter()
+        .map(|(dx, dy)| format!("{},{}", pm::fmt_coord(px + dx), pm::fmt_coord(py + dy)))
+        .collect();
     buf.push_str(&format!(
-        "  <text x=\"{x}\" y=\"{y}\" font-family=\"sans-serif\" font-size=\"{font_size}\" text-anchor=\"{anchor}\" fill=\"{fill}\">{escaped}</text>\n"
+        r##"<polygon fill="#000000" points="{}" style="stroke:#000000;stroke-width:1.5;"/>"##,
+        s.join(",")
     ));
 }
 
-fn emit_hline(buf: &mut String, x1: f64, y: f64, x2: f64, stroke: &str) {
-    buf.push_str(&format!(
-        r#"  <line x1="{x1}" y1="{y}" x2="{x2}" y2="{y}" stroke="{stroke}" stroke-width="1"/>
-"#
-    ));
+fn emit_separator(buf: &mut String, x: f64, y: f64, width: f64, kind: SeparatorKind) {
+    let x2 = x + width;
+    match kind {
+        SeparatorKind::Dots => {
+            buf.push_str(&format!(
+                r##"<line style="stroke:#AAAAAA;stroke-width:1;stroke-dasharray:1,2;" x1="{x1}" x2="{x2}" y1="{y}" y2="{y}"/>"##,
+                x1 = pm::fmt_coord(x),
+                x2 = pm::fmt_coord(x2),
+                y = pm::fmt_coord(y),
+            ));
+        }
+        SeparatorKind::Double => {
+            for dy in [-1.0, 1.0] {
+                buf.push_str(&format!(
+                    r##"<line style="stroke:#AAAAAA;stroke-width:1;" x1="{x1}" x2="{x2}" y1="{ya}" y2="{ya}"/>"##,
+                    x1 = pm::fmt_coord(x),
+                    x2 = pm::fmt_coord(x2),
+                    ya = pm::fmt_coord(y + dy),
+                ));
+            }
+        }
+        SeparatorKind::Single => {
+            buf.push_str(&format!(
+                r##"<line style="stroke:#AAAAAA;stroke-width:1;" x1="{x1}" x2="{x2}" y1="{y}" y2="{y}"/>"##,
+                x1 = pm::fmt_coord(x),
+                x2 = pm::fmt_coord(x2),
+                y = pm::fmt_coord(y),
+            ));
+        }
+        SeparatorKind::Solid => {
+            buf.push_str(&format!(
+                r##"<line style="stroke:#AAAAAA;stroke-width:1.5;" x1="{x1}" x2="{x2}" y1="{y}" y2="{y}"/>"##,
+                x1 = pm::fmt_coord(x),
+                x2 = pm::fmt_coord(x2),
+                y = pm::fmt_coord(y),
+            ));
+        }
+    }
 }
 
-fn emit_vline(buf: &mut String, x: f64, y1: f64, y2: f64, stroke: &str) {
-    buf.push_str(&format!(
-        r#"  <line x1="{x}" y1="{y1}" x2="{x}" y2="{y2}" stroke="{stroke}" stroke-width="1"/>
-"#
-    ));
+/// Strip simple creole markup tags for measurement/display fallback.
+fn strip_creole(s: &str) -> String {
+    s.replace("<b>", "")
+        .replace("</b>", "")
+        .replace("<i>", "")
+        .replace("</i>", "")
+        .replace("<u>", "")
+        .replace("</u>", "")
 }
 
-fn xml_escape(s: &str) -> String {
+fn escape_text(s: &str) -> String {
+    if s.is_empty() {
+        return "&#160;".to_string();
+    }
     s.replace('&', "&amp;")
         .replace('<', "&lt;")
         .replace('>', "&gt;")
         .replace('"', "&quot;")
-}
-
-/// Extract a displayable label from a widget (used for tab labels).
-fn widget_label(widget: &SaltWidget) -> String {
-    match widget {
-        SaltWidget::Label(t) => t.clone(),
-        SaltWidget::Button(t) => t.clone(),
-        SaltWidget::TextField(t) => t.clone(),
-        SaltWidget::Dropdown(t) => t.clone(),
-        SaltWidget::Checkbox { label, .. } => label.clone(),
-        SaltWidget::Radio { label, .. } => label.clone(),
-        SaltWidget::TreeNode { label, .. } => label.clone(),
-        _ => String::new(),
-    }
 }
