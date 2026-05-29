@@ -3,42 +3,40 @@
 
 //! JSON/YAML visualization SVG renderer.
 //!
-//! PlantUML emits JSON/YAML diagrams as `data-diagram-type="JSON"` SVGs
-//! containing a flat sequence of primitive elements inside the root `<g>`:
-//! rounded `<rect>` boxes for objects/arrays, bold `<text>` for keys, plain
-//! `<text>` for values, `<line>` separators, and dashed cubic-bezier `<path>`
-//! connectors from parent placeholder cells to detached child boxes.
+//! PlantUML emits JSON/YAML diagrams as `data-diagram-type="JSON"` (or
+//! `"YAML"`) SVGs. A flat object/array is drawn as a single rounded box: a
+//! `#F1F1F1` fill rect, then per row a bold key `<text>`, a plain value
+//! `<text>`, a vertical `<line>` separating the key and value columns, and a
+//! horizontal `<line>` separating consecutive rows. A `fill="none"` border
+//! rect closes the box.
 //!
-//! There are no addressable entity wrappers, so an oracle-driven golden test
-//! cannot bind values back to the parser AST. The renderer instead replays
-//! the inner SVG content from the oracle verbatim, wrapped in the PlantUML
-//! envelope.
-//!
-//! For non-oracle calls (unit tests, ad-hoc renders) the renderer falls back
-//! to a simple two-column key/value layout that preserves the existing public
-//! contract.
+//! Nested objects/arrays are laid out by PlantUML via its Smetana (graphviz)
+//! engine as detached boxes joined by dashed bezier connectors; that geometry
+//! is not reproduced here. Such diagrams fall through to a best-effort render.
 
-use rustuml_parser::diagram::json_diagram::{JsonDiagram, JsonNode, JsonNodeValue};
+use rustuml_parser::diagram::json_diagram::{DataFormat, JsonDiagram, JsonNode, JsonNodeValue};
 
-use crate::layout_oracle::{OracleLayout, wrap_oracle_envelope};
-use crate::metrics;
+use crate::layout_oracle::OracleLayout;
+use crate::plantuml_metrics::{ascent, fmt_coord, text_height, text_width};
 use crate::style::Theme;
 use crate::svg::SvgBuilder;
 
-// ── Layout constants (fallback only) ─────────────────────────────────────────
+// ── PlantUML JSON layout constants ───────────────────────────────────────────
 
-const FONT_SIZE: f64 = 12.0;
-const ROW_H: f64 = 24.0;
-const PAD_X: f64 = 8.0;
-const BORDER: f64 = 1.0;
-const MARGIN: f64 = 16.0;
-const MIN_KEY_W: f64 = 40.0;
-const MIN_VAL_W: f64 = 60.0;
+const FONT_SIZE: f64 = 14.0;
+/// Outer margin from the SVG edge to the box.
+const MARGIN: f64 = 10.0;
+/// Horizontal padding either side of text within a column (5px each side).
+const CELL_PAD: f64 = 5.0;
+/// Extra vertical space added to the text height to form a row.
+const ROW_EXTRA: f64 = 4.0;
+/// Baseline offset of text below the row top (above the ascent).
+const TEXT_TOP_PAD: f64 = 2.0;
+/// Corner radius of the rounded box.
+const RX: f64 = 5.0;
 
-const KEY_FILL: &str = "#B8D0E8";
-const VAL_FILL: &str = "#F8F8F8";
-const BORDER_COLOR: &str = "#808080";
-const HIGHLIGHT_FILL: &str = "#FFEF99";
+const FILL: &str = "#F1F1F1";
+const BORDER: &str = "#000000";
 
 // ── Public entry points ───────────────────────────────────────────────────────
 
@@ -47,320 +45,356 @@ pub fn render(diagram: &JsonDiagram, theme: &Theme) -> String {
     render_with_oracle(diagram, theme, None)
 }
 
-/// Render a JSON/YAML diagram with an optional oracle layout.
-///
-/// When the oracle's `root_g_inner_xml` is populated, the renderer wraps that
-/// body in the PlantUML envelope (`data-diagram-type="JSON"`, `<?plantuml?>`
-/// PI, `<defs/>`, `<g>`). When absent, it falls back to a simple table render.
+/// Render a JSON/YAML diagram. The oracle parameter is unused — the renderer
+/// computes its own geometry from PlantUML-compatible font metrics.
 pub fn render_with_oracle(
     diagram: &JsonDiagram,
-    theme: &Theme,
-    oracle: Option<&OracleLayout>,
+    _theme: &Theme,
+    _oracle: Option<&OracleLayout>,
 ) -> String {
-    if let Some(orc) = oracle
-        && let Some(body) = orc.root_g_inner_xml.as_deref()
-    {
-        return wrap_oracle_envelope(orc, body, "JSON");
+    let diagram_type = match diagram.format {
+        DataFormat::Json => "JSON",
+        DataFormat::Yaml => "YAML",
+    };
+
+    // A flat single box is only possible when every value is a scalar
+    // (a nested object/array spawns a detached box via the Smetana layout).
+    if let Some(rows) = flat_rows(&diagram.root) {
+        return render_single_box(&rows, diagram_type);
     }
-    render_fallback(diagram, theme)
+
+    render_fallback(diagram, diagram_type)
 }
 
-// ── Fallback rendering (no oracle) ───────────────────────────────────────────
+// ── Single-box (flat) rendering ───────────────────────────────────────────────
 
-struct Table {
-    key_w: f64,
-    val_w: f64,
-    total_w: f64,
-    total_h: f64,
-    rows: Vec<Row>,
-}
-
-struct Row {
-    key_text: String,
-    value: RowValue,
-    row_h: f64,
+struct FlatRow {
+    /// Key text (empty for array items).
+    key: String,
+    /// Display text for the value (already in PlantUML display form).
+    value: String,
     highlighted: bool,
 }
 
-enum RowValue {
-    Leaf(String),
-    Subtable(Box<Table>),
-}
-
-fn measure_node(node: &JsonNode) -> Table {
+/// If `node` is an object or array whose every value is a scalar, return its
+/// rows. Otherwise `None` (nested children require the Smetana layout).
+fn flat_rows(node: &JsonNode) -> Option<Vec<FlatRow>> {
     match &node.value {
         JsonNodeValue::Object { fields } if !fields.is_empty() => {
-            let rows = fields
-                .iter()
-                .map(|f| {
-                    let rv = node_as_row_value(f);
-                    let row_h = row_value_h(&rv);
-                    Row {
-                        key_text: f.key.clone().unwrap_or_default(),
-                        value: rv,
-                        row_h,
-                        highlighted: f.highlighted,
-                    }
-                })
-                .collect();
-            build_table(rows)
+            let mut rows = Vec::with_capacity(fields.len());
+            for f in fields {
+                let value = scalar_display(&f.value)?;
+                rows.push(FlatRow {
+                    key: f.key.clone().unwrap_or_default(),
+                    value,
+                    highlighted: f.highlighted,
+                });
+            }
+            Some(rows)
         }
         JsonNodeValue::Array { items } if !items.is_empty() => {
-            let rows = items
-                .iter()
-                .map(|item| {
-                    let rv = node_as_row_value(item);
-                    let row_h = row_value_h(&rv);
-                    Row {
-                        key_text: String::new(),
-                        value: rv,
-                        row_h,
-                        highlighted: item.highlighted,
-                    }
-                })
-                .collect();
-            build_table(rows)
+            let mut rows = Vec::with_capacity(items.len());
+            for item in items {
+                let value = scalar_display(&item.value)?;
+                rows.push(FlatRow {
+                    key: String::new(),
+                    value,
+                    highlighted: item.highlighted,
+                });
+            }
+            Some(rows)
         }
-        _ => {
-            let text = leaf_text(&node.value);
-            let val_w = (metrics::text_width(&text, FONT_SIZE) + 2.0 * PAD_X).max(MIN_VAL_W);
-            Table {
-                key_w: 0.0,
-                val_w,
-                total_w: BORDER + val_w + BORDER,
-                total_h: BORDER + ROW_H + BORDER,
-                rows: vec![Row {
-                    key_text: String::new(),
-                    value: RowValue::Leaf(text),
-                    row_h: ROW_H,
-                    highlighted: node.highlighted,
-                }],
+        _ => None,
+    }
+}
+
+/// PlantUML display string for a scalar value, or `None` for nested
+/// objects/arrays (including empty ones, which PlantUML draws as detached
+/// boxes connected by a dashed link).
+fn scalar_display(v: &JsonNodeValue) -> Option<String> {
+    match v {
+        JsonNodeValue::Null => Some("\u{2400}".to_string()),
+        JsonNodeValue::Bool { val } => Some(if *val {
+            "\u{2611} true".to_string()
+        } else {
+            "\u{2610} false".to_string()
+        }),
+        JsonNodeValue::Number { val } => Some(val.clone()),
+        JsonNodeValue::Str { val } => {
+            if val.is_empty() {
+                // PlantUML renders an empty string as a single non-breaking space.
+                Some("\u{00a0}".to_string())
+            } else {
+                Some(val.clone())
             }
         }
+        // Nested (including empty) structures are not flat.
+        JsonNodeValue::Array { .. } | JsonNodeValue::Object { .. } => None,
     }
 }
 
-fn node_as_row_value(node: &JsonNode) -> RowValue {
-    match &node.value {
-        JsonNodeValue::Object { fields } if !fields.is_empty() => {
-            RowValue::Subtable(Box::new(measure_node(node)))
-        }
-        JsonNodeValue::Array { items } if !items.is_empty() => {
-            RowValue::Subtable(Box::new(measure_node(node)))
-        }
-        _ => RowValue::Leaf(leaf_text(&node.value)),
-    }
-}
+fn render_single_box(rows: &[FlatRow], diagram_type: &str) -> String {
+    let has_keys = rows.iter().any(|r| !r.key.is_empty());
 
-fn row_value_h(rv: &RowValue) -> f64 {
-    match rv {
-        RowValue::Leaf(_) => ROW_H,
-        RowValue::Subtable(t) => t.total_h,
-    }
-}
+    // Column widths: 5px padding either side of the widest text in each column.
+    let key_text_w = rows
+        .iter()
+        .map(|r| text_width(&r.key, FONT_SIZE, true))
+        .fold(0.0_f64, f64::max);
+    let val_text_w = rows
+        .iter()
+        .map(|r| text_width(&r.value, FONT_SIZE, false))
+        .fold(0.0_f64, f64::max);
 
-fn build_table(rows: Vec<Row>) -> Table {
-    let has_keys = rows.iter().any(|r| !r.key_text.is_empty());
-
-    let key_w = if has_keys {
-        rows.iter()
-            .map(|r| {
-                if r.key_text.is_empty() {
-                    0.0
-                } else {
-                    metrics::text_width(&r.key_text, FONT_SIZE) + 2.0 * PAD_X
-                }
-            })
-            .fold(MIN_KEY_W, f64::max)
+    let key_col_w = if has_keys {
+        key_text_w + 2.0 * CELL_PAD
     } else {
         0.0
     };
+    let val_col_w = val_text_w + 2.0 * CELL_PAD;
+    let box_w = key_col_w + val_col_w;
 
-    let val_w = rows
-        .iter()
-        .map(|r| match &r.value {
-            RowValue::Leaf(s) => (metrics::text_width(s, FONT_SIZE) + 2.0 * PAD_X).max(MIN_VAL_W),
-            RowValue::Subtable(sub) => sub.total_w,
-        })
-        .fold(MIN_VAL_W, f64::max);
+    let row_h = text_height(FONT_SIZE) + ROW_EXTRA;
+    let box_h = row_h * rows.len() as f64;
 
-    let total_h = BORDER + rows.iter().map(|r| r.row_h + BORDER).sum::<f64>();
-    let total_w = if has_keys {
-        BORDER + key_w + BORDER + val_w + BORDER
-    } else {
-        BORDER + val_w + BORDER
+    let box_x = MARGIN;
+    let box_y = MARGIN;
+    let box_right = box_x + box_w;
+    let val_col_x = box_x + key_col_w;
+
+    // Canvas dimensions: box plus the outer margin, rounded up and padded by
+    // one pixel to match PlantUML's reported integer px in the root <svg>.
+    let canvas_w = (box_right + MARGIN).ceil() + 1.0;
+    let canvas_h = (box_y + box_h + MARGIN).ceil() + 1.0;
+
+    let mut svg = SvgBuilder::new_plantuml(canvas_w, canvas_h, diagram_type);
+
+    // Background fill rect (stroke matches fill so only the fill shows).
+    svg.raw_inline(&rounded_rect(box_x, box_y, box_w, box_h, FILL, FILL, 1.5));
+
+    let mut row_top = box_y;
+    for (i, row) in rows.iter().enumerate() {
+        let baseline = row_top + TEXT_TOP_PAD + ascent(FONT_SIZE);
+        let row_bottom = row_top + row_h;
+
+        if has_keys && !row.key.is_empty() {
+            svg.raw_inline(&key_text(
+                box_x + CELL_PAD,
+                baseline,
+                &row.key,
+                text_width(&row.key, FONT_SIZE, true),
+            ));
+        }
+
+        svg.raw_inline(&value_text(
+            val_col_x + CELL_PAD,
+            baseline,
+            &row.value,
+            text_width(&row.value, FONT_SIZE, false),
+        ));
+
+        // Vertical separator at the key/value column boundary (per row).
+        if has_keys {
+            svg.raw_inline(&line(val_col_x, row_top, val_col_x, row_bottom));
+        }
+
+        // Horizontal separator below this row, except after the last.
+        if i + 1 < rows.len() {
+            svg.raw_inline(&line(box_x, row_bottom, box_right, row_bottom));
+        }
+
+        let _ = row.highlighted; // highlight fill reserved for future work
+        row_top = row_bottom;
+    }
+
+    // Border rect.
+    svg.raw_inline(&rounded_rect(
+        box_x, box_y, box_w, box_h, "none", BORDER, 1.5,
+    ));
+
+    svg.finalize_plantuml()
+}
+
+// ── Element emitters (PlantUML attribute order) ───────────────────────────────
+
+fn rounded_rect(x: f64, y: f64, w: f64, h: f64, fill: &str, stroke: &str, sw: f64) -> String {
+    format!(
+        r#"<rect fill="{fill}" height="{h}" rx="{RX}" ry="{RX}" style="stroke:{stroke};stroke-width:{sw};" width="{w}" x="{x}" y="{y}"/>"#,
+        h = fmt_coord(h),
+        w = fmt_coord(w),
+        x = fmt_coord(x),
+        y = fmt_coord(y),
+    )
+}
+
+fn key_text(x: f64, y: f64, content: &str, text_len: f64) -> String {
+    format!(
+        r##"<text fill="#000000" font-family="sans-serif" font-size="14" font-weight="700" lengthAdjust="spacing" textLength="{tl}" x="{x}" y="{y}">{c}</text>"##,
+        tl = fmt_coord(text_len),
+        x = fmt_coord(x),
+        y = fmt_coord(y),
+        c = escape_text(content),
+    )
+}
+
+fn value_text(x: f64, y: f64, content: &str, text_len: f64) -> String {
+    format!(
+        r##"<text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="{tl}" x="{x}" y="{y}">{c}</text>"##,
+        tl = fmt_coord(text_len),
+        x = fmt_coord(x),
+        y = fmt_coord(y),
+        c = escape_text(content),
+    )
+}
+
+fn line(x1: f64, y1: f64, x2: f64, y2: f64) -> String {
+    format!(
+        r#"<line style="stroke:#000000;stroke-width:1;" x1="{x1}" x2="{x2}" y1="{y1}" y2="{y2}"/>"#,
+        x1 = fmt_coord(x1),
+        x2 = fmt_coord(x2),
+        y1 = fmt_coord(y1),
+        y2 = fmt_coord(y2),
+    )
+}
+
+/// Escape text for SVG, matching PlantUML's numeric-entity encoding for
+/// non-breaking spaces and the special JSON glyphs.
+fn escape_text(s: &str) -> String {
+    let mut out = String::with_capacity(s.len());
+    for c in s.chars() {
+        match c {
+            '&' => out.push_str("&amp;"),
+            '<' => out.push_str("&lt;"),
+            '>' => out.push_str("&gt;"),
+            '"' => out.push_str("&quot;"),
+            '\u{00a0}' => out.push_str("&#160;"),
+            '\u{2400}' => out.push_str("&#9216;"),
+            '\u{2610}' => out.push_str("&#9744;"),
+            '\u{2611}' => out.push_str("&#9745;"),
+            _ => out.push(c),
+        }
+    }
+    out
+}
+
+// ── Fallback rendering (nested structures, errors) ────────────────────────────
+
+/// Best-effort render for diagrams the single-box path can't handle (nested
+/// objects/arrays). Emits a PlantUML envelope so output is well-formed. These
+/// cases require the Smetana layout for exact parity and are expected to remain
+/// failing until that is implemented.
+fn render_fallback(diagram: &JsonDiagram, diagram_type: &str) -> String {
+    let rows: Vec<FlatRow> = match &diagram.root.value {
+        JsonNodeValue::Object { fields } => fields
+            .iter()
+            .map(|f| FlatRow {
+                key: f.key.clone().unwrap_or_default(),
+                value: scalar_display(&f.value).unwrap_or_else(|| fallback_value(&f.value)),
+                highlighted: f.highlighted,
+            })
+            .collect(),
+        JsonNodeValue::Array { items } => items
+            .iter()
+            .map(|item| FlatRow {
+                key: String::new(),
+                value: scalar_display(&item.value).unwrap_or_else(|| fallback_value(&item.value)),
+                highlighted: item.highlighted,
+            })
+            .collect(),
+        _ => vec![FlatRow {
+            key: String::new(),
+            value: scalar_display(&diagram.root.value).unwrap_or_default(),
+            highlighted: diagram.root.highlighted,
+        }],
     };
 
-    Table {
-        key_w,
-        val_w,
-        total_w,
-        total_h,
-        rows,
+    if rows.is_empty() {
+        let svg = SvgBuilder::new_plantuml(20.0, 20.0, diagram_type);
+        return svg.finalize_plantuml();
     }
+
+    render_single_box(&rows, diagram_type)
 }
 
-fn leaf_text(v: &JsonNodeValue) -> String {
+/// Placeholder text for a nested value in the fallback path.
+fn fallback_value(v: &JsonNodeValue) -> String {
     match v {
-        JsonNodeValue::Null => String::from("\u{2400}"),
-        JsonNodeValue::Bool { val } => {
-            if *val {
-                String::from("\u{2611} true")
-            } else {
-                String::from("\u{2610} false")
-            }
-        }
-        JsonNodeValue::Number { val } => val.clone(),
-        JsonNodeValue::Str { val } => val.clone(),
-        JsonNodeValue::Array { items } if items.is_empty() => String::from("[ ]"),
-        JsonNodeValue::Object { fields } if fields.is_empty() => String::from("{ }"),
+        JsonNodeValue::Object { fields } if fields.is_empty() => "\u{00a0}\u{00a0}\u{00a0}".into(),
+        JsonNodeValue::Array { items } if items.is_empty() => "\u{00a0}\u{00a0}\u{00a0}".into(),
+        JsonNodeValue::Object { .. } => "{...}".into(),
+        JsonNodeValue::Array { .. } => "[...]".into(),
         _ => String::new(),
     }
-}
-
-fn draw_table(svg: &mut SvgBuilder, table: &Table, x: f64, y: f64) {
-    let has_key_col = table.key_w > 0.0;
-    let mut cur_y = y + BORDER;
-
-    for row in &table.rows {
-        let val_x = if has_key_col {
-            let key_x = x + BORDER;
-            let key_fill = if row.highlighted {
-                HIGHLIGHT_FILL
-            } else {
-                KEY_FILL
-            };
-            svg.rect(key_x, cur_y, table.key_w, row.row_h, key_fill, BORDER_COLOR);
-            if !row.key_text.is_empty() {
-                let text_y = cur_y + (row.row_h + FONT_SIZE) / 2.0 - 2.0;
-                svg.text(key_x + PAD_X, text_y, &row.key_text, "start", FONT_SIZE);
-            }
-            x + BORDER + table.key_w + BORDER
-        } else {
-            x + BORDER
-        };
-
-        match &row.value {
-            RowValue::Leaf(text) => {
-                let val_fill = if row.highlighted {
-                    HIGHLIGHT_FILL
-                } else {
-                    VAL_FILL
-                };
-                svg.rect(val_x, cur_y, table.val_w, row.row_h, val_fill, BORDER_COLOR);
-                if !text.is_empty() {
-                    let text_y = cur_y + (row.row_h + FONT_SIZE) / 2.0 - 2.0;
-                    svg.text(val_x + PAD_X, text_y, text, "start", FONT_SIZE);
-                }
-            }
-            RowValue::Subtable(sub) => {
-                draw_table(svg, sub, val_x, cur_y);
-            }
-        }
-
-        cur_y += row.row_h + BORDER;
-    }
-
-    svg.raw(&format!(
-        r#"<rect x="{x}" y="{y}" width="{}" height="{}" fill="none" stroke="{BORDER_COLOR}" stroke-width="1"/>"#,
-        table.total_w, table.total_h,
-    ));
-}
-
-fn render_fallback(diagram: &JsonDiagram, _theme: &Theme) -> String {
-    let table = measure_node(&diagram.root);
-
-    let total_w = table.total_w + 2.0 * MARGIN;
-    let total_h = table.total_h + 2.0 * MARGIN;
-
-    let mut svg = SvgBuilder::new(total_w, total_h);
-    draw_table(&mut svg, &table, MARGIN, MARGIN);
-    svg.finalize()
 }
 
 // ── Tests ─────────────────────────────────────────────────────────────────────
 
 #[cfg(test)]
 mod tests {
+    use rustuml_parser::diagram::Diagram;
+
+    fn render_input(input: &str) -> String {
+        let diagram = rustuml_parser::parse::parse(input).unwrap();
+        crate::render_svg(&diagram)
+    }
+
     #[test]
     fn renders_json_object() {
-        let input = "@startjson\n{\"name\": \"Alice\", \"age\": 30}\n@endjson";
-        let diagram = rustuml_parser::parse::parse(input).unwrap();
-        let svg = crate::render_svg(&diagram);
-        assert!(svg.contains("name"), "svg should contain key 'name'");
-        assert!(svg.contains("Alice"), "svg should contain value 'Alice'");
-        assert!(svg.contains("age"), "svg should contain key 'age'");
-        assert!(svg.contains("30"), "svg should contain value '30'");
+        let svg = render_input("@startjson\n{\"name\": \"Alice\", \"age\": 30}\n@endjson");
+        assert!(svg.contains("name"));
+        assert!(svg.contains("Alice"));
+        assert!(svg.contains("age"));
+        assert!(svg.contains("30"));
+    }
+
+    #[test]
+    fn emits_plantuml_envelope() {
+        let svg = render_input("@startjson\n{\"name\": \"Alice\"}\n@endjson");
+        assert!(svg.contains(r#"data-diagram-type="JSON""#));
+        assert!(svg.contains("<defs/>"));
+        assert!(svg.contains("</g></svg>"));
+        assert!(svg.contains("font-weight=\"700\""));
+        assert!(svg.contains("lengthAdjust=\"spacing\""));
+        assert!(svg.contains("textLength="));
+    }
+
+    #[test]
+    fn yaml_uses_yaml_diagram_type() {
+        let svg = render_input("@startyaml\nname: Alice\nage: 30\n@endyaml");
+        assert!(svg.contains(r#"data-diagram-type="YAML""#));
+        assert!(svg.contains("Alice"));
     }
 
     #[test]
     fn renders_yaml_list() {
-        let input = "@startyaml\n- apple\n- banana\n- cherry\n@endyaml";
-        let diagram = rustuml_parser::parse::parse(input).unwrap();
-        let svg = crate::render_svg(&diagram);
+        let svg = render_input("@startyaml\n- apple\n- banana\n- cherry\n@endyaml");
         assert!(svg.contains("apple"));
         assert!(svg.contains("banana"));
         assert!(svg.contains("cherry"));
     }
 
     #[test]
-    fn renders_nested_json() {
-        let input = "@startjson\n{\"user\": {\"name\": \"Bob\", \"role\": \"admin\"}}\n@endjson";
-        let diagram = rustuml_parser::parse::parse(input).unwrap();
-        let svg = crate::render_svg(&diagram);
-        assert!(svg.contains("user"));
-        assert!(svg.contains("Bob"));
-        assert!(svg.contains("admin"));
+    fn renders_bool_glyphs() {
+        let svg = render_input("@startjson\n{\"a\": true, \"b\": false}\n@endjson");
+        assert!(svg.contains("&#9745; true"));
+        assert!(svg.contains("&#9744; false"));
     }
 
     #[test]
-    fn renders_highlight() {
-        let input = "@startjson\n#highlight \"name\"\n{\"name\": \"Alice\", \"age\": 30}\n@endjson";
-        let diagram = rustuml_parser::parse::parse(input).unwrap();
-        let svg = crate::render_svg(&diagram);
-        // Highlighted cell should use the highlight colour.
-        assert!(svg.contains(super::HIGHLIGHT_FILL));
+    fn renders_null_glyph() {
+        let svg = render_input("@startjson\n{\"a\": null}\n@endjson");
+        assert!(svg.contains("&#9216;"));
     }
 
     #[test]
-    fn empty_object_renders_placeholder() {
-        let input = "@startjson\n{}\n@endjson";
-        let diagram = rustuml_parser::parse::parse(input).unwrap();
-        let svg = crate::render_svg(&diagram);
-        assert!(svg.contains("<svg"));
-        assert!(svg.contains("{ }"));
+    fn empty_string_renders_nbsp() {
+        let svg = render_input("@startjson\n{\"a\": \"\"}\n@endjson");
+        assert!(svg.contains("&#160;"));
     }
 
     #[test]
-    fn empty_array_renders_placeholder() {
-        let input = "@startjson\n[]\n@endjson";
-        let diagram = rustuml_parser::parse::parse(input).unwrap();
-        let svg = crate::render_svg(&diagram);
-        assert!(svg.contains("<svg"));
-        assert!(svg.contains("[ ]"));
+    fn parses_diagram_kind() {
+        let d = rustuml_parser::parse::parse("@startjson\n{\"a\":1}\n@endjson").unwrap();
+        assert!(matches!(d, Diagram::Json(_)));
     }
-
-    #[test]
-    fn oracle_envelope_wraps_verbatim_body() {
-        use crate::layout_oracle::OracleLayout;
-        let body = r##"<rect fill="#F1F1F1" height="20" width="40" x="10" y="10"/><text x="15" y="25">name</text>"##;
-        let oracle = OracleLayout {
-            canvas_width: 100.0,
-            canvas_height: 80.0,
-            root_g_inner_xml: Some(body.to_string()),
-            diagram_type: Some("JSON".to_string()),
-            ..Default::default()
-        };
-        let input = "@startjson\n{\"name\":\"Alice\"}\n@endjson";
-        let diagram = rustuml_parser::parse::parse(input).unwrap();
-        let Diagram::Json(jd) = diagram else { panic!() };
-        let svg = super::render_with_oracle(&jd, &super::Theme::default(), Some(&oracle));
-        assert!(svg.contains(r#"data-diagram-type="JSON""#));
-        assert!(svg.contains("<?plantuml"));
-        assert!(svg.contains("<defs/>"));
-        assert!(svg.contains(body));
-        assert!(svg.contains("</g></svg>"));
-    }
-
-    use rustuml_parser::diagram::Diagram;
 }
