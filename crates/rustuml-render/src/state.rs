@@ -2228,7 +2228,6 @@ fn render_composite_with_oracle(diagram: &StateDiagram, orc: &OracleLayout) -> S
         ordered_children: &'a dyn Fn(Option<&str>) -> Vec<String>,
         emit_pseudo: &'a dyn Fn(&mut String, &str, bool, &str) -> bool,
         emit_state_box: &'a dyn Fn(&mut String, &State),
-        emit_cluster: &'a dyn Fn(&mut String, &State),
         pseudo_qname: &'a dyn Fn(&str, bool) -> String,
     }
     fn emit_scope_entities(svg: &mut String, scope: Option<&str>, e: &ScopeEmit) {
@@ -2236,7 +2235,6 @@ fn render_composite_with_oracle(diagram: &StateDiagram, orc: &OracleLayout) -> S
         let ordered_children = e.ordered_children;
         let emit_pseudo = e.emit_pseudo;
         let emit_state_box = e.emit_state_box;
-        let emit_cluster = e.emit_cluster;
         let pseudo_qname = e.pseudo_qname;
         for token in ordered_children(scope) {
             // Role-tagged scoped pseudo-state (`\u{1}S<marker>` / `\u{1}E…`).
@@ -2263,7 +2261,6 @@ fn render_composite_with_oracle(diagram: &StateDiagram, orc: &OracleLayout) -> S
                 continue;
             };
             if st.composite {
-                emit_cluster(svg, st);
                 emit_scope_entities(svg, Some(&st.id), e);
             } else {
                 emit_state_box(svg, st);
@@ -2276,6 +2273,21 @@ fn render_composite_with_oracle(diagram: &StateDiagram, orc: &OracleLayout) -> S
         let Some(rect) = orc.entities.get(st.label.as_str()) else {
             return;
         };
+        // When PlantUML draws the composite as a `<g class="cluster">` group
+        // (multiple sibling composites), the oracle captures an `entity_id` for
+        // it; the bare-composite form (single composite) has none. Emit the
+        // wrapper only in the cluster-group case.
+        let cluster_wrapped = rect.entity_id.is_some();
+        if cluster_wrapped {
+            let source_line = rect.source_line.as_deref().unwrap_or("0");
+            write!(
+                svg,
+                r#"<g class="cluster" data-qualified-name="{}" data-source-line="{source_line}" id="{}">"#,
+                st.id,
+                rect.entity_id.as_deref().unwrap_or("ent0000"),
+            )
+            .unwrap();
+        }
         // Header band path (rounded top, square bottom meeting the divider).
         // Stored as `d#FILL#<fill>`.
         if let Some(raw) = &rect.glyph_path_d {
@@ -2358,6 +2370,9 @@ fn render_composite_with_oracle(diagram: &StateDiagram, orc: &OracleLayout) -> S
                 svg.push_str(&buf);
             }
         }
+        if cluster_wrapped {
+            svg.push_str("</g>");
+        }
     };
 
     // Emit links whose both endpoints are inside `scope` (None = top level),
@@ -2386,9 +2401,53 @@ fn render_composite_with_oracle(diagram: &StateDiagram, orc: &OracleLayout) -> S
         }
     };
 
-    // Walk top-level children: emit composites (cluster + inner entities +
-    // inner links) and plain states, then top-level pseudo-states, then
-    // top-level links.
+    // PlantUML emits every `<g class="cluster">` border group up front, in
+    // depth-first declaration order (outer composite, then its nested
+    // composites), *before* any entity or link. `emit_cluster` self-guards on
+    // the oracle having a captured cluster entity for the composite's label, so
+    // composites that PlantUML renders as plain nested boxes (no cluster) emit
+    // nothing here. Walk composites DFS following `ordered_children` order.
+    fn emit_clusters_dfs(
+        svg: &mut String,
+        scope: Option<&str>,
+        diagram: &StateDiagram,
+        ordered_children: &dyn Fn(Option<&str>) -> Vec<String>,
+        emit_cluster: &dyn Fn(&mut String, &State),
+    ) {
+        for token in ordered_children(scope) {
+            if token.starts_with('\u{1}') {
+                continue;
+            }
+            let Some(st) = diagram.states.iter().find(|s| s.id == token) else {
+                continue;
+            };
+            if st.composite {
+                emit_cluster(svg, st);
+                emit_clusters_dfs(svg, Some(&st.id), diagram, ordered_children, emit_cluster);
+            }
+        }
+    }
+    // When PlantUML wraps composites in `<g class="cluster">` groups (captured
+    // as an `entity_id` on the composite's oracle entity), it emits every
+    // cluster border first, then all entities, then ALL links at the very end
+    // in oracle edge order. The bare-composite form instead interleaves each
+    // composite's header band, entities and links inline per scope.
+    // `has_clusters` selects between the two emission shapes.
+    let has_clusters = diagram.states.iter().any(|s| {
+        s.composite
+            && orc
+                .entities
+                .get(s.label.as_str())
+                .is_some_and(|r| r.entity_id.is_some())
+    });
+
+    if has_clusters {
+        emit_clusters_dfs(&mut svg, None, diagram, &ordered_children, &emit_cluster);
+    }
+
+    // Walk top-level children: emit composites (header band when bare, inner
+    // entities, plus inner links when bare) and plain states, then top-level
+    // pseudo-states, then the remaining links.
     for token in ordered_children(None) {
         if token.starts_with('\u{1}') {
             continue; // top-level pseudo-states emitted after composites
@@ -2397,7 +2456,9 @@ fn render_composite_with_oracle(diagram: &StateDiagram, orc: &OracleLayout) -> S
             continue;
         };
         if st.composite {
-            emit_cluster(&mut svg, st);
+            if !has_clusters {
+                emit_cluster(&mut svg, st);
+            }
             emit_scope_entities(
                 &mut svg,
                 Some(&st.id),
@@ -2406,11 +2467,12 @@ fn render_composite_with_oracle(diagram: &StateDiagram, orc: &OracleLayout) -> S
                     ordered_children: &ordered_children,
                     emit_pseudo: &emit_pseudo,
                     emit_state_box: &emit_state_box,
-                    emit_cluster: &emit_cluster,
                     pseudo_qname: &pseudo_qname,
                 },
             );
-            emit_scope_links(&mut svg, Some(&st.id));
+            if !has_clusters {
+                emit_scope_links(&mut svg, Some(&st.id));
+            }
         } else {
             emit_state_box(&mut svg, st);
         }
@@ -2436,8 +2498,19 @@ fn render_composite_with_oracle(diagram: &StateDiagram, orc: &OracleLayout) -> S
             .unwrap_or_else(|| "0".to_string());
         emit_pseudo(&mut svg, &pseudo_qname(marker, is_start), is_start, &sl);
     }
-    // Top-level links.
-    emit_scope_links(&mut svg, None);
+    // Links. In the cluster-group layout PlantUML defers every link to the end
+    // in oracle edge order; emit all not-yet-emitted edges verbatim. Otherwise
+    // only the top-level (scope-None) links remain.
+    if has_clusters {
+        for (ei, edge) in orc.edges.iter().enumerate() {
+            if !emitted_edge[ei] {
+                emit_oracle_edge_verbatim(&mut svg, edge);
+                emitted_edge[ei] = true;
+            }
+        }
+    } else {
+        emit_scope_links(&mut svg, None);
+    }
 
     wrap_oracle_envelope(orc, &svg, "STATE")
 }

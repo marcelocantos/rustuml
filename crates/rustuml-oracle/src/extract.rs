@@ -366,12 +366,28 @@ pub fn extract_oracle_layout(svg: &str) -> Option<OracleLayout> {
                     let icon_cx = find_first_child(&content_node, "ellipse")
                         .and_then(|e| parse_attr(&e, "cx"));
                     // Extract glyph path d attribute (the <path> with fill="#000000").
-                    let glyph_path_d = content_node
-                        .children()
-                        .find(|c| {
-                            c.tag_name().name() == "path" && c.attribute("fill") == Some("#000000")
-                        })
-                        .and_then(|p| p.attribute("d").map(String::from));
+                    // For composite clusters the leading <path> is instead the
+                    // rounded-top header band (a non-#000000 fill). Capture it as
+                    // `d#FILL#<fill>` — the same representation the bare-composite
+                    // path uses — so the renderer reproduces the band verbatim.
+                    let glyph_path_d = if class_attr == "cluster" {
+                        content_node
+                            .children()
+                            .find(|c| c.tag_name().name() == "path")
+                            .and_then(|p| {
+                                let d = p.attribute("d")?;
+                                let fill = p.attribute("fill").unwrap_or("#F1F1F1");
+                                Some(format!("{d}#FILL#{fill}"))
+                            })
+                    } else {
+                        content_node
+                            .children()
+                            .find(|c| {
+                                c.tag_name().name() == "path"
+                                    && c.attribute("fill") == Some("#000000")
+                            })
+                            .and_then(|p| p.attribute("d").map(String::from))
+                    };
                     // Extract name text x (first <text> child).
                     let name_text_x = content_node
                         .children()
