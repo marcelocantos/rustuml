@@ -305,10 +305,16 @@ pub fn extract_oracle_layout(svg: &str) -> Option<OracleLayout> {
         // that don't have the standard component rect-body+icon+text layout —
         // detect via the first child element being a `<path>` (note bodies
         // start with a path), since rect-based entities lead with `<rect>`.
+        //
+        // Sequence-style icon entities (boundary/control/entity) also lead
+        // with a `<path>`/`<ellipse>`, but their shape strokes are unfilled
+        // (`fill="none"`); a real note body always carries a background fill,
+        // so the fill guard keeps icons out of the note pipeline.
         if class_attr == "entity"
             && let Some(name) = node.attribute("data-qualified-name")
             && let Some(first_child) = node.children().find(|c| c.is_element())
             && first_child.tag_name().name() == "path"
+            && first_child.attribute("fill").is_some_and(|f| f != "none")
         {
             let range = node.range();
             if let Some(slice) = svg.get(range.clone()) {

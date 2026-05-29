@@ -426,16 +426,27 @@ fn emit_entities_dfs(
                 .map(resolve_fill)
                 .or_else(|| skin_fills.get(&node.kind).cloned())
                 .unwrap_or_else(|| FILL.to_string());
-            emit_entity_shape(
-                svg,
-                node.kind,
-                rect.x,
-                rect.y,
-                rect.width,
-                rect.height,
-                &entity_fill,
-            );
-            emit_entity_label(svg, node.kind, node, rect.x, rect.y, rect.width);
+            // Sequence-style icon shapes (boundary/control/entity) are drawn
+            // from an ellipse-anchored EntityRect; their decorations and label
+            // sit at fixed offsets from the icon centre, so they render their
+            // own shape + label together rather than via the generic path.
+            use DeploymentNodeKind::*;
+            if matches!(node.kind, Boundary | Control | Entity) {
+                emit_icon_entity(svg, node, rect, &entity_fill);
+            } else if matches!(node.kind, Collections) {
+                emit_collections_entity(svg, node, rect, &entity_fill);
+            } else {
+                emit_entity_shape(
+                    svg,
+                    node.kind,
+                    rect.x,
+                    rect.y,
+                    rect.width,
+                    rect.height,
+                    &entity_fill,
+                );
+                emit_entity_label(svg, node.kind, node, rect.x, rect.y, rect.width);
+            }
             svg.raw("</g>");
         }
     } else {
@@ -1130,6 +1141,130 @@ fn emit_text(
         },
     );
     svg.raw(&buf);
+}
+
+// ---------------------------------------------------------------------------
+// Sequence-style icon entities (boundary / control / entity)
+// ---------------------------------------------------------------------------
+
+/// Emit a sequence-style icon entity. The supplied rect is the icon's ellipse
+/// bounding box (captured by the oracle's ellipse fallback), so the icon
+/// centre is the rect centre and the radius is half its width. Each icon
+/// kind adds a fixed decoration around a 12-radius circle:
+///   * boundary — a vertical bar + stub to the left of the circle
+///   * control  — a small arrow notch at the top of the circle
+///   * entity   — an underline beneath the circle
+fn emit_icon_entity(
+    svg: &mut SvgBuilder,
+    node: &DeploymentNode,
+    rect: &crate::layout_oracle::EntityRect,
+    fill: &str,
+) {
+    use DeploymentNodeKind::*;
+    let r = rect.width / 2.0;
+    let cx = rect.x + r;
+    let cy = rect.y + r;
+    // Boundary draws its bar+stub *before* the ellipse; the others draw it
+    // after. Match PlantUML's child ordering exactly.
+    if matches!(node.kind, Boundary) {
+        let bar_x = cx - r - 17.0; // 17px stub reaches the circle's left edge
+        let top = cy - r;
+        let bot = cy + r;
+        svg.raw(&format!(
+            r#"<path d="M{bx},{t} L{bx},{b} M{bx},{cy_s} L{stub},{cy_s}" fill="none" style="stroke:{STROKE};stroke-width:0.5;"/>"#,
+            bx = fc(bar_x),
+            t = fc(top),
+            b = fc(bot),
+            cy_s = fc(cy),
+            stub = fc(cx - r),
+        ));
+    }
+    svg.raw(&format!(
+        r#"<ellipse cx="{cx_s}" cy="{cy_s}" fill="{fill}" rx="{r_s}" ry="{r_s}" style="stroke:{STROKE};stroke-width:0.5;"/>"#,
+        cx_s = fc(cx),
+        cy_s = fc(cy),
+        r_s = fc(r),
+    ));
+    match node.kind {
+        Control => {
+            // Arrow notch at the top of the circle, tip pointing left-up.
+            let ty = cy - r;
+            let pts = format!(
+                "{},{},{},{},{},{},{},{},{},{}",
+                fc(cx - 4.0),
+                fc(ty),
+                fc(cx + 2.0),
+                fc(ty - 5.0),
+                fc(cx),
+                fc(ty),
+                fc(cx + 2.0),
+                fc(ty + 5.0),
+                fc(cx - 4.0),
+                fc(ty),
+            );
+            svg.raw(&format!(
+                r#"<polygon fill="{STROKE}" points="{pts}" style="stroke:{STROKE};stroke-width:1;"/>"#,
+            ));
+        }
+        Entity => {
+            // Underline 2px below the bottom of the circle.
+            let ly = cy + r + 2.0;
+            svg.raw(&format!(
+                r#"<line style="stroke:{STROKE};stroke-width:0.5;" x1="{x1}" x2="{x2}" y1="{ly_s}" y2="{ly_s}"/>"#,
+                x1 = fc(cx - r),
+                x2 = fc(cx + r),
+                ly_s = fc(ly),
+            ));
+        }
+        _ => {}
+    }
+    // Label below the icon, at the oracle-captured baseline.
+    let label_w = text_render::measure(&node.label, FONT_SIZE, false);
+    let label_x = rect
+        .text_x_values
+        .first()
+        .copied()
+        .unwrap_or(cx - label_w / 2.0);
+    let label_y = rect
+        .text_y_values
+        .first()
+        .copied()
+        .unwrap_or(cy + r + 17.5352);
+    emit_text(svg, &node.label, label_x, label_y, FONT_SIZE, false, false);
+}
+
+/// Emit a `collections` entity: two stacked rounded rects (a back card offset
+/// down-right behind a front card) with the label on the front card. The
+/// oracle captures the back rect as the body and the front rect as the first
+/// aux rect; PlantUML offsets the front by (-4, -4) from the back.
+fn emit_collections_entity(
+    svg: &mut SvgBuilder,
+    node: &DeploymentNode,
+    rect: &crate::layout_oracle::EntityRect,
+    fill: &str,
+) {
+    // Back card (the captured body rect).
+    emit_rounded_rect(svg, rect.x, rect.y, rect.width, rect.height, fill);
+    // Front card: offset up-left by 4px. Prefer the oracle's aux rect when
+    // present, else derive it.
+    let (fx, fy, fw, fh) = rect
+        .aux_rects
+        .first()
+        .map(|a| (a.x, a.y, a.width, a.height))
+        .unwrap_or((rect.x - 4.0, rect.y - 4.0, rect.width, rect.height));
+    emit_rounded_rect(svg, fx, fy, fw, fh, fill);
+    let label_w = text_render::measure(&node.label, FONT_SIZE, false);
+    let label_x = rect
+        .text_x_values
+        .first()
+        .copied()
+        .unwrap_or(fx + fw / 2.0 - label_w / 2.0);
+    let label_y = rect
+        .text_y_values
+        .first()
+        .copied()
+        .unwrap_or(fy + TEXT_PAD_RECTLIKE);
+    emit_text(svg, &node.label, label_x, label_y, FONT_SIZE, false, false);
 }
 
 // ---------------------------------------------------------------------------
