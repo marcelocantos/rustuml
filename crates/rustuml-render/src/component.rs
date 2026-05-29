@@ -102,8 +102,14 @@ const NOTE_GAP: f64 = 10.0;
 
 /// Title font size.
 const TITLE_FONT_SIZE: f64 = 14.0;
-/// Title height including padding.
-const TITLE_HEIGHT: f64 = TITLE_FONT_SIZE + 10.0;
+/// Title left margin (PlantUML fixes the title block's left edge here).
+const TITLE_MARGIN_X: f64 = 10.0;
+/// Vertical pad above the first title baseline (baseline = pad + ascent).
+const TITLE_TOP_PAD: f64 = 10.0;
+/// Per-line height for the title block (ascent + descent at the title size).
+const TITLE_LINE_H: f64 = 16.48828125;
+/// Gap between the title block and the first laid-out element.
+const TITLE_BOTTOM_PAD: f64 = 11.0;
 
 /// Container (package) label height.
 const CONTAINER_LABEL_H: f64 = 22.0;
@@ -197,8 +203,11 @@ pub fn render_with_oracle(
     // Compute dimensions for each component.
     let comp_dims: Vec<CompDim> = diagram.components.iter().map(calc_component_dim).collect();
 
-    let title_h = if diagram.meta.title.is_some() {
-        TITLE_HEIGHT
+    let title_h = if let Some(title) = &diagram.meta.title {
+        // PlantUML title band: 10px top, n line-heights, 11px bottom gap before
+        // the first entity. Line height is ascent + descent at the title size.
+        let n_lines = title.lines().count().max(1) as f64;
+        TITLE_TOP_PAD + n_lines * TITLE_LINE_H + TITLE_BOTTOM_PAD
     } else {
         0.0
     };
@@ -271,13 +280,20 @@ pub fn render_with_oracle(
     let mut svg = SvgBuilder::new_plantuml(total_w, total_h, "DESCRIPTION");
 
     // Title — wrap in <g class="title"> and route through creole segmenter.
+    // PlantUML anchors the title block's left edge at TITLE_MARGIN_X and centres
+    // each line within the block (block width = widest line). Baselines step by
+    // TITLE_LINE_H starting at TITLE_TOP_PAD + ascent.
     if let Some(title) = &diagram.meta.title {
+        let widths: Vec<f64> = title
+            .lines()
+            .map(|t| text_render::measure(t, TITLE_FONT_SIZE, true))
+            .collect();
+        let block_w = widths.iter().cloned().fold(0.0_f64, f64::max);
+        let mut buf = String::new();
+        buf.push_str(r#"<g class="title" data-source-line="1">"#);
         for (i, tline) in title.lines().enumerate() {
-            let ty = TITLE_HEIGHT - 4.0 + i as f64 * (TITLE_FONT_SIZE + 2.0);
-            let tl = text_render::measure(tline, TITLE_FONT_SIZE, true);
-            let x = (total_w - tl) / 2.0;
-            let mut buf = String::new();
-            buf.push_str(r#"<g class="title" data-source-line="1">"#);
+            let ty = TITLE_TOP_PAD + pm::ascent(TITLE_FONT_SIZE) + i as f64 * TITLE_LINE_H;
+            let x = TITLE_MARGIN_X + (block_w - widths[i]) / 2.0;
             text_render::emit_text(
                 &mut buf,
                 tline,
@@ -293,9 +309,9 @@ pub fn render_with_oracle(
                     skip_underline: false,
                 },
             );
-            buf.push_str("</g>");
-            svg.raw_inline(&buf);
         }
+        buf.push_str("</g>");
+        svg.raw_inline(&buf);
     }
 
     // Header — wrap in <g class="header">.
