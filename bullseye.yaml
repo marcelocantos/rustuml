@@ -140,22 +140,19 @@ targets:
     - '`cargo test --test golden_pairs` reports 0 failures across all 12,568 golden pairs.'
     - 'Skips remain bounded to the legitimate categories: Java reference is itself a syntax-error page (~1,199), ditaa raster diagrams (parked under T2), and I/O errors. No skips for `%date(...)`, no skips for unsupported keywords, no skips for parse failures.'
     context: |-
-      Strict-XML golden-pair parity by renderer correctness — no wholesale verbatim oracle-replay (inner_xml entity/cluster dumps forbidden; blanket shortcut stripped in f6500c8d; the dead root_g_inner_xml consumer paths were removed from standalone renderers in wave-2).
+      Strict-XML golden-pair parity by renderer correctness. FORBIDDEN: wholesale verbatim subtree replay (root_g_inner_xml gated off in f6500c8d; cluster.inner_xml/note.inner_xml replay in class/object/component still live — tracked as 🎯T4.11; structured field-by-field echo of captured attributes is ALSO replay — see archimate rejection below). ACCEPTED: granular oracle consumption (text x/y, separator x2, entity layout positions, captured edge/note <path d=...>) while the renderer constructs shapes/text/styling from source + font metrics. Discriminator: does it render from the puml source alone (computing geometry, e.g. regex's ETile port, wave-2 renderers' arithmetic), or echo the golden's captured attributes (archimate)?
 
-      HONESTY CALIBRATION (learned 2026-05-29): the accepted "geometry path" DOES include granular oracle-data consumption — emitting captured oracle EDGE/note `<path d=...>` strings verbatim (master already does this: class.rs render_oracle_relationships uses oracle_edge.d; state.rs note/edge paths), and consuming oracle text x/y, separator x2, entity rects. FORBIDDEN is `svg.raw(<g class="entity|cluster">{inner_xml}</g>)` — dumping a whole captured subtree so the test validates the golden against itself. Audit every agent patch for inner_xml emission before merging (a usecase agent did this in wave-1; commits dropped).
+      STATE after waves 1+2+3 (2026-05-29): 12,546 total · 7,500 pass · 3,747 fail · 1,299 skip. Session start: 6,312 pass / 4,935 fail. Total −1,188, ZERO regressions, zero panics, across three 6-7 agent isolated-worktree fan-outs. Work on branch strict-xml-wave1 (57 commits), UNPUSHED.
 
-      STATE after wave-1 + wave-2 (2026-05-29): 12,546 total · 7,310 pass · 3,937 fail · 1,299 skip. Session start (same day): 6,312 pass / 4,935 fail. Total this session −998, ZERO regressions, zero panics. Work on branch strict-xml-wave1 (41 commits), unpushed.
+      Per-bucket now: activity 786, sequence 576, edge-cases 291, skinparam 251, preprocessing 200, combo 165, creole 157, er 156, state 147, deployment 147, class 144, json-yaml 93, gantt 86, usecase 84, timing 54, links 49, sprites 48, archimate 48, salt 40, component 36, nwdiag 29, mindmap 26, wbs 25, ebnf 25, chart 25, rendering 24, type-detection 14, multi-diagram 10, math 10, object 1. (regex now 0.)
 
-      Per-bucket after wave-2: activity 786, sequence 576, edge-cases 299, preprocessing 253, skinparam 251, combo 215, creole 170, er 156, state 147, deployment 147, class 144, json-yaml 93, gantt 86, usecase 84, component 56, timing 54, sprites 49, links 49, archimate 48, regex 45, salt 40, nwdiag 29, mindmap 26, wbs 25, ebnf 25, chart 25, rendering 24, type-detection 14, multi-diagram 10, math 10, object 1.
+      Wave deltas: W1 (per-type renderers) usecase −198, class −58, sequence −55, state −53, deployment −23, activity −19. W2 (standalone renderer rewrites, removed dead root_g_inner_xml) mindmap −130, wbs −109, timing −87, salt −63, nwdiag −60, json-yaml −54, gantt −28. W3 regex −45, preprocessing −53, combo −50(cascade), component −20, creole −13, sprites −1.
 
-      Wave-1 (per-type renderers): usecase −198, class −58, sequence −55, state −53, deployment −23, activity −19, er −1 + cascades.
-      Wave-2 (standalone renderer rewrites, all removed dead root_g_inner_xml replay + built real geometry): mindmap −130, wbs −109, timing −87, salt −63, nwdiag −60, json-yaml −54, gantt −28 + cascades.
+      ARCHIMATE REJECTED (agent reported 48→0 but it was structured replay — write_group re-emits every captured child element's attributes verbatim; agent admitted archimate can't be drawn from first principles, no sprite lib / no layout). Archimate is a known-HARD bucket like ditaa: needs the PlantUML archimate sprite glyph library + a Graphviz-matching layout engine. Park it; do not accept oracle-echo solutions.
 
-      PROCESS NOTE: the 600s no-progress stream watchdog kills opus agents that do long uninterrupted Java-algorithm reverse-engineering reasoning without tool calls. ALL 7 wave-2 agents stalled this way but had committed validated clusters salvaged from their worktrees. Future fan-out prompts must tell agents to make tool calls / commit frequently (every few min) to avoid the watchdog.
+      BLOCKED ON USER MERGE: the biggest remaining prizes — activity 786 (FtileWhile left-margin ~50, fork-nested-if 33), sequence 576 (create/destroy ~31), skinparam 251, second-passes on json-yaml/gantt — all need waves 1+2+3 as their base, but isolation worktrees base on origin/master (v0.7.0). They become trivially fan-out-able once strict-xml-wave1 is merged to master. Until then only buckets DISJOINT from session file-changes can be fanned out.
 
-      KNOWN-HARD / possibly-unreachable under strict XML: deployment cloud (~70) — honest USymbolCloud port done but sub-ULP FP cascade vs JVM blocks strict match. This FP-determinism class may cap several buckets short of 0.
-
-      WAVE-3 CANDIDATES: cross-cutting systemic buckets that didn't cascade away (preprocessing 253 theme/font cascade, skinparam 251, creole 170); second-pass on wave-2 renderers (json-yaml 93, gantt 86); the two hard giants (activity 786 FtileWhile-left-margin ~50 + fork-nested-if 33; sequence 576 create/destroy ~31). combo 215 + edge-cases 299 are cross-cutting — they'll keep cascading down as activity/sequence/class/state get fixed; not worth isolated agents yet.
+      PROCESS: 600s no-progress watchdog kills opus agents mid long reasoning — ALL wave-2 + 5/6 wave-3 agents stalled but had committed validated clusters salvaged from worktrees. Wave-3 prompts added a watchdog-avoidance instruction (commit per cluster, frequent tool calls) which helped but didn't fully prevent stalls. Always salvage via `git -C <worktree> diff master`.
     origin: manual
     discovered: 2026-05-17
     achieved: 2026-05-23
@@ -306,9 +303,9 @@ targets:
     acceptance:
     - The `component/` directory under `test-diagrams/golden` produces 0 strict-XML failures when `cargo test --test golden_pairs` runs.
     context: |-
-      Component diagrams strict-XML pass. Current: 55 failures remaining (out of 663 baseline). Component renderer has a sprite-gate that prevents unconditional verbatim replay; remaining failures may benefit from relaxing that gate the way class.rs did (commit ece57cc8). Worth attempting as next round of work.
+      Component strict-XML. After wave-3: 36 failures (was 56, −20, zero regressions). Renderer/parser only (no shared-file edits). Wave-3 landed: title left-anchor + per-line block-centring (2); `together { }` as transparent layout block so its `}` doesn't pop the package frame (12); `skinparam componentStyle rectangle` skips the UML tab/bars icon (5); hide/remove directives drop elements + touching links + memberships + notes (3).
 
-      Reverted 2026-05-23: Verbatim oracle-replay (commit 11caea70 removed the sprite-gate) papered over the geometry path. Replay disabled in f6500c8d; component bucket back to 56 failures.
+      Remaining 36: comp_elem_{database,storage,queue,interface}_as_node — BLOCKED on 🎯T4.11 (the note-entity heuristic at extract.rs misclassifies path-first leaf containers as notes and replays inner_xml verbatim via the forbidden component.rs path; clean discriminator is qname GMN* vs ordinary names). comp_lollipop_*/required_provided/socket — PlantUML routes these through the CLASS engine (golden data-diagram-type=CLASS), different structure. comp_note_on_* — container notes not captured. comp_unicode_stereotypes — non-ASCII qname mangling + α/β metrics. comp_header_footer — font-size 10 not 14, header x=0, footer centred, footer source-line not stored. Architecture composites layer several of these.
     origin: manual
     discovered: 2026-05-17
   T4.6:
@@ -319,9 +316,14 @@ targets:
     acceptance:
     - The `creole/` directory under `test-diagrams/golden` produces 0 strict-XML failures when `cargo test --test golden_pairs` runs.
     context: |-
-      Creole markup strict-XML pass. Current: 7 failures remaining (out of 624 baseline). The cross-cutting creole work (back-filter, floating-notes pipeline, sub/sup, font-family, whitespace trimming) plus the verbatim oracle-replay cascade has nearly cleared this. 7 remaining likely lie in renderers without oracle data.
+      Creole markup strict-XML. After wave-3: 157 failures (was 170, −13, zero regressions). Wave-3 landed (in creole.rs + text_render.rs — the shared text engine; verified no cross-bucket regression): mixed-size text runs bottom-aligned to a shared line bottom (baseline = base.y + descent(firstSize)−descent(ownSize), with oracle base.y snapped back to the 1/256 dyadic grid before applying, reproducing single HALF_UP rounding) — fixed size_{10,12,16,18,small}_in_class; `<strong>`/`<em>`/`<ins>` rendered literally (not in PlantUML's HTML subset).
 
-      Reverted 2026-05-23: Creole bucket was cleared through verbatim replay cascading from other renderers (sequence/class/etc.). Replay disabled in f6500c8d; creole bucket back to 173 failures.
+      Remaining 157 are mostly NOT the creole engine itself (creole.rs/text_render now largely correct for markup) — they're container-renderer/parser integration:
+      - 78 `*_in_sequence`: sequence note/message layout differs (sequence.rs), text styling itself matches.
+      - `*_in_title`: title layout feature (~17 mismatches each).
+      - creole_combo_mono_in_class / mixed_mono_plain: class.rs:648 format_member_display escapes "" → ~"~" for literal default ""; should only escape EMPTY "" pairs (class.rs edit, T4.2).
+      - size_8_in_class: sub-9px metric outside the tabulated 10-14 range.
+      - triple-quote class names, hline/linebreak in class, creole_in_stereotype: class.rs/parser.
     origin: manual
     discovered: 2026-05-17
   T4.7:
@@ -362,19 +364,13 @@ targets:
     acceptance:
     - All test-diagrams/golden directories not covered by T4.1–T4.8 (skinparam, combo, preprocessing, usecase, er, mindmap, object, json-yaml, timing, wbs, gantt, salt, nwdiag, rendering, links, math, sprites, archimate, regex, type-detection, chart, dot, ebnf, git, multi-diagram) collectively produce 0 strict-XML failures.
     context: |-
-      Smaller diagram-type buckets strict-XML. After wave-1 + wave-2 (2026-05-29):
-      WAVE-2 rewrote 7 standalone renderers that had been falling through to the now-dead root_g_inner_xml replay path (removed it, built real PlantUML-faithful geometry):
-      - mindmap 26 (was 156, −130): exact box metrics + ceil-first width, [#color]/boxless(_) nodes, creole-resolved text width.
-      - wbs 25 (was 134, −109): nested vertical-stack layout + inline colours, degenerate spine for single-child roots.
-      - timing 54 (was 141, −87): faithful geometry port (0→87 passing in-bucket).
-      - salt 40 (was 103, −63): grid layout for checkbox/radio/separator, exact button/textfield geometry, creole bold/italic/underline, raw text-field content for managed width.
-      - nwdiag 29 (was 89, −60): faithful grid layout port.
-      - json-yaml 93 (was 147, −54): semantic single-box renderer for flat JSON/YAML, #highlight row backgrounds. Added serde_json preserve_order + plantuml_metrics char widths for ☐☑␀© glyphs.
-      - gantt 86 (was 114, −28): daily-timescale rewrite (most residual — second pass worthwhile).
+      Smaller diagram-type buckets strict-XML. After waves 1+2+3 (2026-05-29):
+      - regex 0 (was 45): ACHIEVED. Honest 1736-line port of PlantUML's ebnf ETile* railroad tile model (Box/Concat/Alt/OneOrMore/ZeroOrMore/Optional/char-class/negated/lookahead-behind) with computed geometry via plantuml_metrics::text_width + HALF_UP; oracle param UNUSED, renders from source alone; deleted the old root_g_inner_xml replay. 5 remaining are skipped (inline-flag/named-group cases produce PlantUML error screens). Gold-standard honest renderer.
+      - preprocessing 200 (was 253, −53): blank placeholders for consumed directive lines so data-source-line stays aligned (PlantUML strips only @startuml; +51), + sequence parser unquoted `Foo as A` participant form. Remaining 202→200: 83 ELEMCOUNT + 63 SVGBG (renderer theme-cascade: svg.rs:38 hardcodes background:#FFFFFF, themes want transparent + fractional dims), 22 SRCLINE (!while/!foreach loop-body elements all share one source line — needs a per-line source map threaded through parsers), ATTR/TAG sub-pixel.
+      - sprites 48 (was 49, −1): fixed source-line placeholders across sprite-def blocks. Remaining ~47 are sprite_variant_* needing a SpriteMonochrome-faithful gradient encoder + byte-exact bilinear scaler (all variant sprites are bilinear-interpolated, not native-scale) — sizeable standalone effort.
+      - archimate 48 (UNCHANGED): wave-3 agent's 48→0 was REJECTED as structured replay (echoes captured attributes; archimate not drawable from first principles without bundling PlantUML's sprite glyph library + a Graphviz-matching layout). PARK like ditaa.
 
-      usecase 84, er 156 unchanged since wave-1 (er still gated on crow's-foot lines, see T4.2 / spec at /tmp/rustuml-patches/DEFERRED-crowsfoot-spec.md).
-
-      Unchanged this session (wave-3+ candidates): preprocessing 253 (theme/font cascade — systemic), skinparam 251 (systemic), creole 170 (markup — systemic), combo 215 (cross-cutting), sprites 49, links 49, archimate 48, regex 45, ebnf 25, chart 25, rendering 24, type-detection 14, multi-diagram 10, math 10, object 1. Dot likely unmatchable (native Graphviz SVG goldens).
+      Unchanged wave-3+ candidates: skinparam 251 (needs post-merge base — touches renderer skinparam handling wave-1 changed), combo 165 (cross-cutting, cascades), links 49, ebnf 25, chart 25, rendering 24, type-detection 14, multi-diagram 10, math 10, object 1 (object's low count is partly 🎯T4.11-inflated — object.rs replays cluster/note inner_xml). Dot likely unmatchable (native Graphviz SVG goldens).
     origin: manual
     discovered: 2026-05-17
   T5:
