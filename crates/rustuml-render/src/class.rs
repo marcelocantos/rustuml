@@ -58,6 +58,8 @@ const MEMBER_LINE_HEIGHT: f64 = 16.48828125;
 const FIRST_MEMBER_OFFSET: f64 = 17.53515625;
 /// Subsequent member baseline spacing.
 const MEMBER_SPACING: f64 = 16.48828125;
+/// Baseline rise of a labelled-separator caption above its divider rule.
+const LABEL_SEP_TEXT_RISE: f64 = 4.791015625;
 /// Offset from entity x to member text start.
 const MEMBER_TEXT_OFFSET: f64 = 20.0;
 /// Offset from entity x to enum constant text start.
@@ -1970,7 +1972,7 @@ fn render_entity_content(
             .filter(|(_, m)| m.kind == MemberKind::Method)
             .map(|(i, _)| i)
             .collect();
-        let user_separator_symbol: Option<String> = match (
+        let methods_separator_member: Option<&Member> = match (
             fields_have_idx.last().copied(),
             methods_have_idx.first().copied(),
         ) {
@@ -1979,10 +1981,17 @@ fn render_entity_content(
                 .iter()
                 .skip(last_f + 1)
                 .take(first_m - last_f - 1)
-                .find(|m| m.kind == MemberKind::Separator)
-                .and_then(|m| m.return_type.clone()),
+                .find(|m| m.kind == MemberKind::Separator),
             _ => None,
         };
+        let user_separator_symbol: Option<String> =
+            methods_separator_member.and_then(|m| m.return_type.clone());
+        // A labelled divider (`-- label --`) carries non-empty text. PlantUML
+        // renders it as a centred caption flanked by two short rules rather
+        // than a single full-width line, and emits it AFTER the member text.
+        let methods_sep_label: Option<&str> = methods_separator_member
+            .map(|m| m.display_text.as_str())
+            .filter(|s| !s.is_empty());
         // PlantUML styles the methods-divider differently depending on the
         // explicit separator symbol the user wrote between fields and
         // methods:
@@ -2096,35 +2105,40 @@ fn render_entity_content(
                     .unwrap_or(
                         header_sep_y + COMPARTMENT_PAD + fields.len() as f64 * MEMBER_LINE_HEIGHT,
                     );
-                write!(
-                    svg,
-                    r#"<line style="{}" x1="{}" x2="{}" y1="{}" y2="{}"/>"#,
-                    methods_sep_style,
-                    fmt4(sep_x1),
-                    fmt4(sep_x2),
-                    fmt_tl(methods_sep_y),
-                    fmt_tl(methods_sep_y),
-                )
-                .unwrap();
-
-                // An explicit `==` divider draws as a double rule: a second
-                // parallel line 2px below the first. The oracle records both
-                // y-values, so consume the next one (falling back to +2).
-                if user_separator_symbol.as_deref() == Some("==") {
-                    let second_y = oracle_sep_y
-                        .get(2 + inline_field_separators.len())
-                        .copied()
-                        .unwrap_or(methods_sep_y + 2.0);
+                // A labelled divider is drawn AFTER the member text (centred
+                // caption flanked by two short rules), so suppress the normal
+                // full-width line here when a label is present.
+                if methods_sep_label.is_none() {
                     write!(
                         svg,
                         r#"<line style="{}" x1="{}" x2="{}" y1="{}" y2="{}"/>"#,
                         methods_sep_style,
                         fmt4(sep_x1),
                         fmt4(sep_x2),
-                        fmt_tl(second_y),
-                        fmt_tl(second_y),
+                        fmt_tl(methods_sep_y),
+                        fmt_tl(methods_sep_y),
                     )
                     .unwrap();
+
+                    // An explicit `==` divider draws as a double rule: a second
+                    // parallel line 2px below the first. The oracle records both
+                    // y-values, so consume the next one (falling back to +2).
+                    if user_separator_symbol.as_deref() == Some("==") {
+                        let second_y = oracle_sep_y
+                            .get(2 + inline_field_separators.len())
+                            .copied()
+                            .unwrap_or(methods_sep_y + 2.0);
+                        write!(
+                            svg,
+                            r#"<line style="{}" x1="{}" x2="{}" y1="{}" y2="{}"/>"#,
+                            methods_sep_style,
+                            fmt4(sep_x1),
+                            fmt4(sep_x2),
+                            fmt_tl(second_y),
+                            fmt_tl(second_y),
+                        )
+                        .unwrap();
+                    }
                 }
 
                 // Method members (text_y index continues after header + fields).
@@ -2152,6 +2166,63 @@ fn render_entity_content(
                         attr_font,
                     );
                     method_y += MEMBER_SPACING;
+                }
+
+                // Emit a labelled divider after the members: two short rules
+                // flanking a centred caption. PlantUML measures the caption at
+                // 14px and centres it across the entity's interior width.
+                if let Some(label) = methods_sep_label {
+                    let label_len = text_render::measure_no_underline(label, 14.0, false);
+                    let text_left = round_4dp(sep_x1 + (sep_x2 - sep_x1 - label_len) / 2.0);
+                    let text_right = round_4dp(text_left + label_len);
+                    // A `==` caption divider doubles each flanking rule (a
+                    // second parallel line 2px below).
+                    let line_ys: &[f64] = if user_separator_symbol.as_deref() == Some("==") {
+                        &[methods_sep_y, methods_sep_y + 2.0]
+                    } else {
+                        std::slice::from_ref(&methods_sep_y)
+                    };
+                    for &ly in line_ys {
+                        write!(
+                            svg,
+                            r#"<line style="{}" x1="{}" x2="{}" y1="{}" y2="{}"/>"#,
+                            methods_sep_style,
+                            fmt4(sep_x1),
+                            fmt4(text_left),
+                            fmt_tl(ly),
+                            fmt_tl(ly),
+                        )
+                        .unwrap();
+                    }
+                    let mut label_buf = String::new();
+                    text_render::emit_text(
+                        &mut label_buf,
+                        label,
+                        &TextBase {
+                            x: text_left,
+                            y: methods_sep_y + LABEL_SEP_TEXT_RISE,
+                            font_size: 14,
+                            font_family: "sans-serif",
+                            fill: member_fill,
+                            bold: false,
+                            italic: false,
+                            underline: false,
+                            skip_underline: true,
+                        },
+                    );
+                    svg.push_str(&label_buf);
+                    for &ly in line_ys {
+                        write!(
+                            svg,
+                            r#"<line style="{}" x1="{}" x2="{}" y1="{}" y2="{}"/>"#,
+                            methods_sep_style,
+                            fmt4(text_right),
+                            fmt4(sep_x2),
+                            fmt_tl(ly),
+                            fmt_tl(ly),
+                        )
+                        .unwrap();
+                    }
                 }
             }
         } else if !methods.is_empty() {
