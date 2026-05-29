@@ -695,6 +695,7 @@ fn emit_cluster_shape(
         Frame => emit_frame_cluster(svg, x, y, w, h, fill, stroke),
         Folder => emit_folder_cluster(svg, x, y, w, h, fill, label),
         Package => emit_package_cluster(svg, x, y, w, h, fill, label),
+        Stack => emit_stack_cluster(svg, x, y, w, h, fill),
         _ => emit_tag_polygon(svg, x, y, w, h, fill, 1.0, stroke),
     }
 }
@@ -1200,6 +1201,39 @@ fn emit_stack(svg: &mut SvgBuilder, x: f64, y: f64, w: f64, h: f64, fill: &str, 
     );
     svg.raw(&format!(
         r#"<path d="{d}" fill="none" style="stroke:{stroke};stroke-width:0.5;"/>"#
+    ));
+}
+
+/// Stack cluster: a fill-only inner rect (no stroke) plus the same bracket
+/// outline as the leaf stack, drawn with the cluster stroke width.
+fn emit_stack_cluster(svg: &mut SvgBuilder, x: f64, y: f64, w: f64, h: f64, fill: &str) {
+    let stroke = "#181818";
+    svg.raw(&format!(
+        r#"<rect fill="{fill}" height="{h}" rx="{RX_RY}" ry="{RX_RY}" style="stroke:none;stroke-width:1;" width="{w}" x="{x}" y="{y}"/>"#,
+        h = fc(h),
+        w = fc(w),
+        x = fc(x),
+        y = fc(y),
+    ));
+    let xl = x - 15.0;
+    let xr = x + w + 15.0;
+    let d = format!(
+        "M{xl},{y_s} L{x_lp1},{y_s} A2.5,2.5 0 0 1 {x_s},{y_p1} L{x_s},{y_pm1} A2.5,2.5 0 0 0 {x_lp2},{yh_s} L{x_rm2},{yh_s} A2.5,2.5 0 0 0 {xw_s},{y_pm1} L{xw_s},{y_p1} A2.5,2.5 0 0 1 {x_rp2},{y_s} L{xr},{y_s}",
+        xl = fc(xl),
+        xr = fc(xr),
+        x_s = fc(x),
+        xw_s = fc(x + w),
+        y_s = fc(y),
+        yh_s = fc(y + h),
+        x_lp1 = fc(x - 2.5),
+        x_lp2 = fc(x + 2.5),
+        x_rm2 = fc(x + w - 2.5),
+        x_rp2 = fc(x + w + 2.5),
+        y_p1 = fc(y + 2.5),
+        y_pm1 = fc(y + h - 2.5),
+    );
+    svg.raw(&format!(
+        r#"<path d="{d}" fill="none" style="stroke:{stroke};stroke-width:1;"/>"#
     ));
 }
 
