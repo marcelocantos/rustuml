@@ -2203,6 +2203,16 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme) -> String {
     let mut collections_border_override: Option<String> = None;
     let mut queue_fill_override: Option<String> = None;
     let mut queue_border_override: Option<String> = None;
+    // Note fill/border overrides via `skinparam noteBackgroundColor` /
+    // `noteBorderColor`. Default fill #FEFFDD, default border #181818.
+    let mut note_fill_override: Option<String> = None;
+    let mut note_border_override: Option<String> = None;
+    // Whether `ParticipantBackgroundColor` / `ParticipantBorderColor` were set
+    // explicitly. These only affect the plain `participant` rectangle, so other
+    // shape kinds must fall back to the (monochrome-aware) historical default
+    // rather than the participant override.
+    let mut participant_fill_set = false;
+    let mut participant_border_set = false;
     // Canvas background. PlantUML only emits a full-canvas `<rect>` (and a
     // non-`#FFFFFF` `style="...background:...;"`) when `backgroundColor` is set
     // to a non-default value.
@@ -2236,9 +2246,11 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme) -> String {
             }
             "participantbackgroundcolor" | "sequenceparticipantbackgroundcolor" => {
                 participant_fill = resolve_color(val);
+                participant_fill_set = true;
             }
             "participantbordercolor" | "sequenceparticipantbordercolor" => {
                 participant_border = resolve_color(val);
+                participant_border_set = true;
             }
             "participantborderthickness" | "sequenceparticipantborderthickness" => {
                 if let Ok(v) = val.parse::<f64>() {
@@ -2295,6 +2307,12 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme) -> String {
             "queuebordercolor" | "sequencequeuebordercolor" => {
                 queue_border_override = Some(resolve_color(val));
             }
+            "notebackgroundcolor" | "sequencenotebackgroundcolor" => {
+                note_fill_override = Some(resolve_color(val));
+            }
+            "notebordercolor" | "sequencenotebordercolor" => {
+                note_border_override = Some(resolve_color(val));
+            }
             "sequencedividerbackgroundcolor" => {
                 divider_fill = resolve_color(val);
             }
@@ -2321,6 +2339,20 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme) -> String {
     if monochrome && participant_fill == "#E2E2F0" {
         participant_fill = "#E3E3E3".to_string();
     }
+    // Default fill/border for non-`participant` shape kinds (actor, boundary,
+    // ...). These ignore `ParticipantBackgroundColor`/`ParticipantBorderColor`
+    // but still honour monochrome. When the participant override was NOT set,
+    // `participant_fill`/`participant_border` already hold the correct default.
+    let nonparticipant_fill_default = if participant_fill_set {
+        if monochrome { "#E3E3E3" } else { "#E2E2F0" }.to_string()
+    } else {
+        participant_fill.clone()
+    };
+    let nonparticipant_border_default = if participant_border_set {
+        "#181818".to_string()
+    } else {
+        participant_border.clone()
+    };
     let default_arrow_color = default_arrow_color.as_str();
     let default_arrow_thickness = default_arrow_thickness.as_str();
     // Empty diagram with no title — render the PlantUML welcome screen.
@@ -4032,12 +4064,21 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme) -> String {
             ParticipantKind::Queue => queue_fill_override.clone(),
             _ => None,
         };
+        // `skinparam ParticipantBackgroundColor` only affects the plain
+        // `participant` rectangle; actor/boundary/control/... keep the
+        // historical default (#E2E2F0) unless their dedicated
+        // `<kind>BackgroundColor` skinparam is set.
+        let kind_fill_default = if p.kind == ParticipantKind::Participant {
+            participant_fill.clone()
+        } else {
+            nonparticipant_fill_default.clone()
+        };
         let fill_color = diagram.participants[i]
             .color
             .as_ref()
             .map(|c| resolve_color(c))
             .or(kind_specific_fill)
-            .unwrap_or_else(|| participant_fill.clone());
+            .unwrap_or(kind_fill_default);
 
         // Resolve the shape border colour: a kind-specific `<kind>BorderColor`
         // skinparam wins, otherwise fall back to the participant border default.
@@ -4051,7 +4092,14 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme) -> String {
             ParticipantKind::Queue => queue_border_override.clone(),
             _ => None,
         };
-        let border_color = kind_specific_border.unwrap_or_else(|| participant_border.clone());
+        // As with the fill, `skinparam ParticipantBorderColor` only affects the
+        // plain `participant` rectangle; other kinds keep the #181818 default.
+        let kind_border_default = if p.kind == ParticipantKind::Participant {
+            participant_border.clone()
+        } else {
+            nonparticipant_border_default.clone()
+        };
+        let border_color = kind_specific_border.unwrap_or(kind_border_default);
 
         // Created participants draw their head box inline at the creating message
         // (emitted in the message loop below), not at the top — skip the top head.
@@ -5138,12 +5186,15 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme) -> String {
                     }
                 };
 
-                // Resolve note fill color.
+                // Resolve note fill color. Inline `#color` wins, then
+                // `skinparam noteBackgroundColor`, then the historical default.
                 let note_fill = note
                     .color
                     .as_ref()
                     .map(|c| resolve_color(c))
+                    .or_else(|| note_fill_override.clone())
                     .unwrap_or_else(|| NOTE_FILL.to_string());
+                let note_stroke = note_border_override.as_deref().unwrap_or("#181818");
 
                 match note.shape {
                     NoteShape::Hexagonal => {
@@ -5156,8 +5207,9 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme) -> String {
                         let ri = note_right - HNOTE_INDENT; // right indent x
                         write!(
                             svg.buf,
-                            r##"<polygon fill="{fill}" points="{li},{top},{ri},{top},{nr},{mid},{ri},{bot},{li},{bot},{nl},{mid},{li},{top}" style="stroke:#181818;stroke-width:0.5;"/>"##,
+                            r##"<polygon fill="{fill}" points="{li},{top},{ri},{top},{nr},{mid},{ri},{bot},{li},{bot},{nl},{mid},{li},{top}" style="stroke:{stroke};stroke-width:0.5;"/>"##,
                             fill = note_fill,
+                            stroke = note_stroke,
                             li = fmt_coord(li),
                             top = fmt_coord(note_top),
                             ri = fmt_coord(ri),
@@ -5172,8 +5224,9 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme) -> String {
                         // Rectangular note (rnote): a simple rectangle.
                         write!(
                             svg.buf,
-                            r##"<rect fill="{fill}" height="{h}" style="stroke:#181818;stroke-width:0.5;" width="{w}" x="{x}" y="{y}"/>"##,
+                            r##"<rect fill="{fill}" height="{h}" style="stroke:{stroke};stroke-width:0.5;" width="{w}" x="{x}" y="{y}"/>"##,
                             fill = note_fill,
+                            stroke = note_stroke,
                             h = fmt_coord(note_bottom - note_top),
                             w = fmt_coord(note_right - note_left),
                             x = fmt_coord(note_left),
@@ -5187,7 +5240,8 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme) -> String {
                         let fold_y = note_top + NOTE_FOLD_SIZE;
                         write!(
                             svg.buf,
-                            r##"<path d="M{left},{top} L{left},{bottom} L{right},{bottom} L{right},{fold_y} L{fold_x},{top} L{left},{top}" fill="{fill}" style="stroke:#181818;stroke-width:0.5;"/>"##,
+                            r##"<path d="M{left},{top} L{left},{bottom} L{right},{bottom} L{right},{fold_y} L{fold_x},{top} L{left},{top}" fill="{fill}" style="stroke:{stroke};stroke-width:0.5;"/>"##,
+                            stroke = note_stroke,
                             left = fmt_coord(note_left),
                             top = fmt_coord(note_top),
                             bottom = fmt_coord(note_bottom),
@@ -5201,7 +5255,8 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme) -> String {
                         // Emit the fold triangle.
                         write!(
                             svg.buf,
-                            r##"<path d="M{fold_x},{top} L{fold_x},{fold_y} L{right},{fold_y} L{fold_x},{top}" fill="{fill}" style="stroke:#181818;stroke-width:0.5;"/>"##,
+                            r##"<path d="M{fold_x},{top} L{fold_x},{fold_y} L{right},{fold_y} L{fold_x},{top}" fill="{fill}" style="stroke:{stroke};stroke-width:0.5;"/>"##,
+                            stroke = note_stroke,
                             fold_x = fmt_coord(fold_x),
                             top = fmt_coord(note_top),
                             fold_y = fmt_coord(fold_y),
