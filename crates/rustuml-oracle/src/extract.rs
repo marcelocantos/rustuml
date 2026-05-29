@@ -7,8 +7,8 @@
 //! producing an `OracleLayout` that can be fed to renderers.
 
 use rustuml_render::layout_oracle::{
-    AuxRect, EntityLine, EntityRect, EntityText, NoteBoxGeom, OracleCluster, OracleEdgePath,
-    OracleLayout, OracleNoteEntity,
+    AuxRect, CrowMark, EntityLine, EntityRect, EntityText, NoteBoxGeom, OracleCluster,
+    OracleEdgePath, OracleLayout, OracleNoteEntity,
 };
 
 /// Parse the coordinate pairs from a note's body path `d` string and recover
@@ -809,6 +809,27 @@ pub fn extract_oracle_layout(svg: &str) -> Option<OracleLayout> {
                                 p.attribute("d")?.to_string(),
                                 p.attribute("style").map(String::from),
                             ))
+                        })
+                        .collect(),
+                    crow_lines: node
+                        .children()
+                        .filter_map(|c| match c.tag_name().name() {
+                            "line" => Some(CrowMark::Line(
+                                c.attribute("style").unwrap_or_default().to_string(),
+                                parse_attr(&c, "x1")?,
+                                parse_attr(&c, "y1")?,
+                                parse_attr(&c, "x2")?,
+                                parse_attr(&c, "y2")?,
+                            )),
+                            "ellipse" => Some(CrowMark::Ellipse(
+                                c.attribute("style").unwrap_or_default().to_string(),
+                                parse_attr(&c, "cx")?,
+                                parse_attr(&c, "cy")?,
+                                parse_attr(&c, "rx")?,
+                                parse_attr(&c, "ry")?,
+                                c.attribute("fill").unwrap_or("none").to_string(),
+                            )),
+                            _ => None,
                         })
                         .collect(),
                 };

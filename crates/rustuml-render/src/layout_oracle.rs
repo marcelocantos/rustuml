@@ -306,4 +306,18 @@ pub struct OracleEdgePath {
     /// Additional `<path>` children after the first (e.g. the half-circle
     /// of a lollipop `-(` connector). Captured `(d, style)`.
     pub extra_paths: Vec<(String, Option<String>)>,
+    /// Crow's-foot cardinality marks (`<line>` and `<ellipse>` children of the
+    /// `<g class="link">` group), in document order. ER relationships
+    /// (`||--o{` etc.) draw their cardinality notation as straight line
+    /// segments plus an optional zero/one circle at each edge end.
+    pub crow_lines: Vec<CrowMark>,
+}
+
+/// A single crow's-foot cardinality mark inside an ER `<g class="link">` group.
+#[derive(Debug, Clone)]
+pub enum CrowMark {
+    /// A `<line>` tick segment: `(style, x1, y1, x2, y2)`.
+    Line(String, f64, f64, f64, f64),
+    /// An `<ellipse>` zero/one circle: `(style, cx, cy, rx, ry, fill)`.
+    Ellipse(String, f64, f64, f64, f64, String),
 }

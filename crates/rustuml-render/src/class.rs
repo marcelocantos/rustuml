@@ -17,7 +17,7 @@ use std::fmt::Write;
 use rustuml_layout::graph::{Direction, EdgePath, LayoutGraph, NodePosition};
 use rustuml_parser::diagram::class::*;
 
-use crate::layout_oracle::{OracleCluster, OracleLayout, wrap_oracle_envelope};
+use crate::layout_oracle::{CrowMark, OracleCluster, OracleLayout, wrap_oracle_envelope};
 use crate::metrics;
 use crate::style::Theme;
 use crate::svg::SvgBuilder;
@@ -2548,6 +2548,40 @@ fn render_oracle_relationships(
             path_style,
         )
         .unwrap();
+
+        // Crow's-foot cardinality marks (ER relationships). PlantUML draws the
+        // `||--o{` notation as `<line>` tick segments plus an optional
+        // zero/one `<ellipse>` at each edge end, sitting between the edge
+        // `<path>` and the label `<text>`. Emit them in captured document order.
+        for mark in &oracle_edge.crow_lines {
+            match mark {
+                CrowMark::Line(style, x1, y1, x2, y2) => {
+                    write!(
+                        svg,
+                        r#"<line style="{}" x1="{}" x2="{}" y1="{}" y2="{}"/>"#,
+                        style,
+                        crate::plantuml_metrics::fmt_coord(*x1),
+                        crate::plantuml_metrics::fmt_coord(*x2),
+                        crate::plantuml_metrics::fmt_coord(*y1),
+                        crate::plantuml_metrics::fmt_coord(*y2),
+                    )
+                    .unwrap();
+                }
+                CrowMark::Ellipse(style, cx, cy, rx, ry, fill) => {
+                    write!(
+                        svg,
+                        r#"<ellipse cx="{}" cy="{}" fill="{}" rx="{}" ry="{}" style="{}"/>"#,
+                        crate::plantuml_metrics::fmt_coord(*cx),
+                        crate::plantuml_metrics::fmt_coord(*cy),
+                        fill,
+                        crate::plantuml_metrics::fmt_coord(*rx),
+                        crate::plantuml_metrics::fmt_coord(*ry),
+                        style,
+                    )
+                    .unwrap();
+                }
+            }
+        }
 
         // Arrowhead polygon — use oracle's exact points, fill, and style.
         if let Some(ref points) = oracle_edge.arrow_points {
