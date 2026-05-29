@@ -475,7 +475,9 @@ impl PreprocessContext {
     fn process_one_line(&mut self, line: &str, output: &mut Vec<String>) {
         let trimmed = line.trim();
 
-        // Collect sprite pixel-data blocks.
+        // Collect sprite pixel-data blocks. Emit empty placeholder lines so
+        // downstream parsers preserve original source line numbers (PlantUML's
+        // `data-source-line` attribute matches the user's editor view).
         if self.in_sprite_block {
             if trimmed == "}" {
                 self.in_sprite_block = false;
@@ -490,6 +492,7 @@ impl PreprocessContext {
                     }
                 }
             }
+            output.push(String::new());
             return;
         }
 
@@ -580,6 +583,9 @@ impl PreprocessContext {
                 }
                 self.in_sprite_block = true;
             }
+            // Emit a placeholder for the `sprite $name {` opening line so
+            // downstream source-line numbers stay aligned (see block above).
+            output.push(String::new());
             return;
         }
 
@@ -3275,12 +3281,15 @@ mod tests {
         let input =
             "@startuml\nsprite $disk [8x8/16] {\nFF00FF00\n00FF00FF\n}\nnote : hello\n@enduml";
         let out = preprocess_full(input, None);
-        // The sprite block should NOT appear in the preprocessed lines.
+        // The sprite block should NOT appear as content in the preprocessed
+        // lines, but each block line is replaced by an empty placeholder so
+        // downstream source-line numbers stay aligned with the original source.
         assert!(
             !out.lines.iter().any(|l| l.contains("FF00FF00")),
             "sprite pixel rows should not appear in output lines"
         );
-        assert_eq!(out.lines, vec!["note : hello"]);
+        // 4 sprite-block lines (opener, 2 pixel rows, closer) → 4 placeholders.
+        assert_eq!(out.lines, vec!["", "", "", "", "note : hello"]);
         // The sprite should be collected.
         assert!(
             out.sprites.contains_key("disk"),
@@ -3298,7 +3307,8 @@ mod tests {
         let input =
             "@startuml\nsprite $icon [4x4/16] {\nFFFF\nFFFF\n}\nnote : <$icon> hello\n@enduml";
         let out = preprocess_full(input, None);
-        assert_eq!(out.lines, vec!["note : <$icon> hello"]);
+        // 4 sprite-block lines become empty placeholders (source-line alignment).
+        assert_eq!(out.lines, vec!["", "", "", "", "note : <$icon> hello"]);
         assert!(out.sprites.contains_key("icon"));
     }
 
