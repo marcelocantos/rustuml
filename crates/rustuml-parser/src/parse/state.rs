@@ -47,6 +47,10 @@ struct StateParser {
     current_line: usize,
     /// Active prefix when inside a `skinparam <prefix> { ... }` block.
     skinparam_block_prefix: Option<String>,
+    /// Stack of enclosing composite-state ids (already fully qualified).
+    /// Empty at top level; each `state X { … }` pushes its qualified id and
+    /// the matching `}` pops it.
+    scope_stack: Vec<String>,
 }
 
 impl StateParser {
@@ -59,6 +63,40 @@ impl StateParser {
             note_buffer: None,
             current_line: 0,
             skinparam_block_prefix: None,
+            scope_stack: Vec::new(),
+        }
+    }
+
+    /// Fully-qualified id of the current scope (the enclosing composite), or
+    /// `None` at top level.
+    fn current_scope(&self) -> Option<&str> {
+        self.scope_stack.last().map(String::as_str)
+    }
+
+    /// Resolve a raw state reference within the current scope.
+    ///
+    /// - `[*]` becomes a scoped pseudo-state marker `[*]<scope>` (the empty
+    ///   scope yields plain `[*]`); the renderer splits the marker back into a
+    ///   pseudo-state plus its owning composite.
+    /// - `[H]` / `[H*]` history markers and other bracketed pseudo-states are
+    ///   qualified the same way.
+    /// - A plain name nested inside composite `Outer` resolves to `Outer.name`,
+    ///   matching PlantUML's qualified entity naming. A name that already
+    ///   carries its full scope prefix (rare, when authors dot-qualify) is left
+    ///   untouched.
+    fn qualify(&self, raw: &str) -> String {
+        let raw = raw.trim();
+        match self.current_scope() {
+            None => raw.to_string(),
+            Some(scope) => {
+                if raw.starts_with('[') && raw.ends_with(']') {
+                    format!("{raw}{scope}")
+                } else if raw.starts_with(scope) && raw[scope.len()..].starts_with('.') {
+                    raw.to_string()
+                } else {
+                    format!("{scope}.{raw}")
+                }
+            }
         }
     }
 
@@ -83,24 +121,24 @@ impl StateParser {
         }
     }
 
-    fn ensure_state(&mut self, id: &str) -> String {
-        let id = id.trim().to_string();
+    fn ensure_state(&mut self, raw: &str) -> String {
+        let raw = raw.trim();
         // Pseudo-states ([*], [H], [H*]) are handled by the renderer directly
-        // and do not need a corresponding State entry in the states list.
-        if id.starts_with('[') && id.ends_with(']') {
-            return id;
+        // and do not need a corresponding State entry in the states list. They
+        // are still scope-qualified so the renderer can map them to the right
+        // composite's start/end pseudo-state.
+        if raw.starts_with('[') && raw.ends_with(']') {
+            return self.qualify(raw);
         }
+        let id = self.qualify(raw);
+        let parent = self.current_scope().map(String::from);
         if !self.states.iter().any(|s| s.id == id) {
             self.states.push(State {
                 id: id.clone(),
-                label: id.clone(),
-                kind: StateKind::Normal,
-                descriptions: Vec::new(),
-                substates: Vec::new(),
+                label: raw.to_string(),
                 source_line: self.current_line,
-                fill: None,
-                stroke: None,
-                stroke_style: None,
+                parent,
+                ..State::default()
             });
         }
         id
@@ -174,6 +212,12 @@ impl StateParser {
                     value: if show { "false" } else { "true" }.to_string(),
                 });
             }
+            return Ok(());
+        }
+
+        // Closing brace of a composite block: pop the current scope.
+        if line == "}" {
+            self.scope_stack.pop();
             return Ok(());
         }
 
@@ -261,8 +305,14 @@ impl StateParser {
             let label = caps
                 .get(1)
                 .map_or_else(|| caps[2].to_string(), |m| m.as_str().to_string());
-            let id = caps[2].to_string();
+            let raw_id = caps[2].to_string();
+            let id = self.qualify(&raw_id);
+            let parent = self.current_scope().map(String::from);
             let stereotype = caps.get(3).map(|m| m.as_str());
+            // A trailing `{` opens a composite block; mark the state and push
+            // its qualified id so nested declarations/transitions qualify
+            // against it.
+            let is_composite = line.trim_end().ends_with('{');
 
             let kind = match stereotype {
                 Some("start") => StateKind::Initial,
@@ -303,6 +353,10 @@ impl StateParser {
             if let Some(state) = self.states.iter_mut().find(|s| s.id == id) {
                 state.label = label;
                 state.kind = kind;
+                state.composite |= is_composite;
+                if state.parent.is_none() {
+                    state.parent = parent;
+                }
                 if state.source_line == 0 {
                     state.source_line = self.current_line;
                 }
@@ -320,20 +374,25 @@ impl StateParser {
                     id: id.clone(),
                     label,
                     kind,
-                    descriptions: Vec::new(),
-                    substates: Vec::new(),
                     source_line: self.current_line,
                     fill,
                     stroke,
                     stroke_style,
+                    composite: is_composite,
+                    parent,
+                    ..State::default()
                 });
+            }
+            if is_composite {
+                self.scope_stack.push(id);
             }
             true
         } else if let Some(caps) = RE_DESC.captures(line) {
             let label = caps
                 .get(1)
                 .map_or_else(|| caps[2].to_string(), |m| m.as_str().to_string());
-            let id = caps[2].to_string();
+            let id = self.qualify(&caps[2]);
+            let parent = self.current_scope().map(String::from);
             let desc = caps[3].trim().to_string();
             if let Some(state) = self.states.iter_mut().find(|s| s.id == id) {
                 state.label = label;
@@ -342,13 +401,10 @@ impl StateParser {
                 self.states.push(State {
                     id: id.clone(),
                     label,
-                    kind: StateKind::Normal,
                     descriptions: vec![desc],
-                    substates: Vec::new(),
                     source_line: self.current_line,
-                    fill: None,
-                    stroke: None,
-                    stroke_style: None,
+                    parent,
+                    ..State::default()
                 });
             }
             true
@@ -361,9 +417,8 @@ impl StateParser {
         static RE: LazyLock<Regex> = LazyLock::new(|| Regex::new(r"^(\w+)\s*:\s*(.+)$").unwrap());
 
         if let Some(caps) = RE.captures(line) {
-            let id = caps[1].to_string();
+            let id = self.ensure_state(&caps[1]);
             let desc = caps[2].trim().to_string();
-            self.ensure_state(&id);
             if let Some(state) = self.states.iter_mut().find(|s| s.id == id) {
                 state.descriptions.push(desc);
             }

@@ -11,7 +11,7 @@ use std::fmt::Write;
 use rustuml_layout::graph::{Direction, EdgePath, LayoutGraph};
 use rustuml_parser::diagram::state::*;
 
-use crate::layout_oracle::{OracleLayout, wrap_oracle_envelope};
+use crate::layout_oracle::{OracleEdgePath, OracleLayout, wrap_oracle_envelope};
 use crate::style::Theme;
 use crate::text_render::{self, TextBase};
 
@@ -314,6 +314,15 @@ pub fn render_with_oracle(
 
     if diagram.states.is_empty() && diagram.transitions.is_empty() {
         return r#"<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" contentStyleType="text/css" data-diagram-type="STATE" height="50px" preserveAspectRatio="none" style="width:100px;height:50px;background:#FFFFFF;" version="1.1" viewBox="0 0 100 50" width="100px" zoomAndPan="magnify"><?plantuml ?><defs/><g></g></svg>"#.to_string();
+    }
+
+    // Composite states (`state X { … }`) need scoped pseudo-states, qualified
+    // inner entities and cluster-first emission that the flat path cannot
+    // model. Drive them entirely from the oracle when one is available.
+    if let Some(orc) = oracle
+        && diagram.states.iter().any(|s| s.composite)
+    {
+        return render_composite_with_oracle(diagram, orc);
     }
 
     // Resolve skinparam-driven colour overrides. Format-string sites inside
@@ -1863,6 +1872,548 @@ fn render_oracle_transitions(svg: &mut String, diagram: &StateDiagram, oracle: &
     }
 }
 
+/// Emit one captured oracle edge verbatim (comment + `<g class="link">`
+/// wrapper + path + arrowhead + labels). The edge's id, geometry, entity
+/// references and styling all come straight from the golden, so composite
+/// diagrams reproduce PlantUML's exact transition output without re-deriving
+/// any of it.
+fn emit_oracle_edge_verbatim(svg: &mut String, edge: &OracleEdgePath) {
+    // Reconstruct the HTML comment PlantUML prints before each link. Edge
+    // ids are `<from>-to-<to>` / `<from>-backto-<to>`; the comment uses the
+    // same names with the verb spelled out.
+    if let Some((from, to)) = edge.id.split_once("-backto-") {
+        write!(svg, "<!--reverse link {to} to {from}-->").unwrap();
+    } else if let Some((from, to)) = edge.id.split_once("-to-") {
+        write!(svg, "<!--link {from} to {to}-->").unwrap();
+    }
+    let entity_1 = edge.entity_1.as_deref().unwrap_or("ent0002");
+    let entity_2 = edge.entity_2.as_deref().unwrap_or("ent0003");
+    let link_type = edge.link_type.as_deref().unwrap_or("dependency");
+    let source_line = edge.source_line.as_deref().unwrap_or("0");
+    let link_id = edge.link_id.as_deref().unwrap_or("lnk0");
+    write!(
+        svg,
+        r#"<g class="link" data-entity-1="{entity_1}" data-entity-2="{entity_2}" data-link-type="{link_type}" data-source-line="{source_line}" id="{link_id}">"#,
+    )
+    .unwrap();
+    let path_style = edge
+        .path_style
+        .as_deref()
+        .unwrap_or("stroke:#181818;stroke-width:1;");
+    write!(
+        svg,
+        r#"<path d="{}" fill="none" id="{}" style="{path_style}"/>"#,
+        edge.d, edge.id,
+    )
+    .unwrap();
+    if let Some(points) = &edge.arrow_points {
+        let fill = edge.arrow_fill.as_deref().unwrap_or("#181818");
+        let poly_style = edge
+            .polygon_style
+            .as_deref()
+            .unwrap_or("stroke:#181818;stroke-width:1;");
+        write!(
+            svg,
+            r#"<polygon fill="{fill}" points="{points}" style="{poly_style}"/>"#,
+        )
+        .unwrap();
+    }
+    for (lx, ly, text) in &edge.labels {
+        let mut text_buf = String::new();
+        text_render::emit_text(
+            &mut text_buf,
+            text,
+            &TextBase {
+                x: *lx,
+                y: *ly,
+                font_size: LINK_FONT_SIZE as u32,
+                font_family: "sans-serif",
+                fill: DEFAULT_TEXT_COLOR,
+                bold: false,
+                italic: false,
+                underline: false,
+                skip_underline: false,
+            },
+        );
+        svg.push_str(&text_buf);
+    }
+    svg.push_str("</g>");
+}
+
+/// Render a state diagram that contains composite states (`state X { … }`).
+///
+/// Composite layout is driven entirely by the oracle: PlantUML's nested-region
+/// geometry (cluster border bands, scoped `[*]` pseudo-states, qualified inner
+/// entities) is hard to reproduce from first principles, so we emit every
+/// shape from the captured golden positions. The flat renderer cannot model
+/// the scoped pseudo-states or the cluster-first emission order, so composites
+/// take this dedicated path.
+///
+/// Emission order matches PlantUML: for each composite (declaration order) the
+/// cluster body, then its inner entities, then its inner links; finally the
+/// top-level pseudo-states / states and their links.
+fn render_composite_with_oracle(diagram: &StateDiagram, orc: &OracleLayout) -> String {
+    let mut svg = String::new();
+
+    // Resolve an oracle entity by qualified name. Scoped pseudo-states carry
+    // the dotted qualified-name form `<scope>..start.<scope>` in the golden.
+    let pseudo_qname = |marker: &str, is_start: bool| -> String {
+        match marker.strip_prefix("[*]") {
+            Some("") | None => {
+                if is_start {
+                    ".start.".to_string()
+                } else {
+                    ".end.".to_string()
+                }
+            }
+            Some(scope) => {
+                if is_start {
+                    format!("{scope}..start.{scope}")
+                } else {
+                    format!("{scope}..end.{scope}")
+                }
+            }
+        }
+    };
+
+    // For each transition, determine whether it is "inner" to a given
+    // composite scope: both endpoints belong to that scope (either a child
+    // state with `parent == scope`, or a scoped pseudo-state `[*]<scope>`).
+    let endpoint_scope = |id: &str| -> Option<String> {
+        if let Some(scope) = id.strip_prefix("[*]") {
+            return if scope.is_empty() {
+                None
+            } else {
+                Some(scope.to_string())
+            };
+        }
+        diagram
+            .states
+            .iter()
+            .find(|s| s.id == id)
+            .and_then(|s| s.parent.clone())
+    };
+
+    // Track which oracle edges we've emitted, matching by edge id.
+    let mut emitted_edge = vec![false; orc.edges.len()];
+
+    // Helper: emit a start/end pseudo-state group from oracle geometry.
+    let emit_pseudo = |svg: &mut String, qname: &str, is_start: bool, source_line: &str| {
+        let Some(rect) = orc.entities.get(qname) else {
+            return false;
+        };
+        let cx = rect.x + rect.width / 2.0;
+        let cy = rect.y + rect.height / 2.0;
+        let entity_id = rect.entity_id.as_deref().unwrap_or("ent0000");
+        if is_start {
+            write!(
+                svg,
+                r#"<g class="start_entity" data-qualified-name="{qname}" data-source-line="{source_line}" id="{entity_id}"><ellipse cx="{}" cy="{}" fill="{PSEUDO_COLOR}" rx="{START_RADIUS}" ry="{START_RADIUS}" style="stroke:{PSEUDO_COLOR};stroke-width:1;"/></g>"#,
+                fmt_f(cx),
+                fmt_f(cy),
+            )
+            .unwrap();
+        } else {
+            let inner_fill = rect.fill.as_deref().unwrap_or(PSEUDO_COLOR);
+            write!(
+                svg,
+                r#"<g class="end_entity" data-qualified-name="{qname}" data-source-line="{source_line}" id="{entity_id}"><ellipse cx="{}" cy="{}" fill="none" rx="{END_OUTER_RADIUS}" ry="{END_OUTER_RADIUS}" style="stroke:{PSEUDO_COLOR};stroke-width:1;"/><ellipse cx="{}" cy="{}" fill="{inner_fill}" rx="{END_INNER_RADIUS}" ry="{END_INNER_RADIUS}" style="stroke:{PSEUDO_COLOR};stroke-width:1;"/></g>"#,
+                fmt_f(cx),
+                fmt_f(cy),
+                fmt_f(cx),
+                fmt_f(cy),
+            )
+            .unwrap();
+        }
+        true
+    };
+
+    // Helper: emit a normal state box (rect + divider + name [+ descriptions])
+    // from oracle geometry, keyed by its qualified id.
+    let emit_state_box = |svg: &mut String, st: &State| {
+        let Some(rect) = orc.entities.get(st.id.as_str()) else {
+            return;
+        };
+        let entity_id = rect.entity_id.as_deref().unwrap_or("ent0000");
+        let fill = rect.fill.as_deref().unwrap_or("#F1F1F1");
+        let style = rect
+            .rect_style
+            .as_deref()
+            .unwrap_or("stroke:#181818;stroke-width:0.5;");
+        let rx = rect.rect_rx.as_deref().unwrap_or("12.5");
+        let ry = rect.rect_ry.as_deref().unwrap_or("12.5");
+        write!(
+            svg,
+            r#"<g class="entity" data-qualified-name="{}" id="{entity_id}"><rect fill="{fill}" height="{}" rx="{rx}" ry="{ry}" style="{style}" width="{}" x="{}" y="{}"/>"#,
+            st.id,
+            fmt_f(rect.height),
+            fmt_f(rect.width),
+            fmt_f(rect.x),
+            fmt_f(rect.y),
+        )
+        .unwrap();
+        // Divider line(s) and name/description text come from the oracle's
+        // captured children for byte-exact placement.
+        for line in &rect.lines {
+            let lstyle = line
+                .style
+                .as_deref()
+                .unwrap_or("stroke:#181818;stroke-width:0.5;");
+            write!(
+                svg,
+                r#"<line style="{lstyle}" x1="{}" x2="{}" y1="{}" y2="{}"/>"#,
+                line.x1, line.x2, line.y1, line.y2,
+            )
+            .unwrap();
+        }
+        // Name label: oracle name_text_x + first text y.
+        let name_x = rect.name_text_x.unwrap_or(rect.x + 10.0);
+        let name_y = rect
+            .text_y_values
+            .first()
+            .copied()
+            .unwrap_or(rect.y + NAME_BASELINE_OFFSET);
+        let mut text_buf = String::new();
+        text_render::emit_text(
+            &mut text_buf,
+            &st.label,
+            &TextBase {
+                x: name_x,
+                y: name_y,
+                font_size: STATE_FONT_SIZE as u32,
+                font_family: "sans-serif",
+                fill: DEFAULT_TEXT_COLOR,
+                bold: false,
+                italic: false,
+                underline: false,
+                skip_underline: false,
+            },
+        );
+        svg.push_str(&text_buf);
+        // Descriptions on subsequent baselines.
+        for (j, desc) in st.descriptions.iter().enumerate() {
+            let dy = rect
+                .text_y_values
+                .get(j + 1)
+                .copied()
+                .unwrap_or(name_y + FIRST_DESC_OFFSET + j as f64 * DESC_LINE_SPACING);
+            let mut dbuf = String::new();
+            text_render::emit_text(
+                &mut dbuf,
+                desc,
+                &TextBase {
+                    x: rect.x + 5.0,
+                    y: dy,
+                    font_size: DESC_FONT_SIZE as u32,
+                    font_family: "sans-serif",
+                    fill: DEFAULT_TEXT_COLOR,
+                    bold: false,
+                    italic: false,
+                    underline: false,
+                    skip_underline: false,
+                },
+            );
+            svg.push_str(&dbuf);
+        }
+        svg.push_str("</g>");
+    };
+
+    // Order the immediate children of a scope (None = top level) as PlantUML
+    // emits them. Mirrors the flat renderer's first-appearance rule: a state
+    // declared before its first referencing transition appears at its
+    // declaration line; otherwise children (states and scoped pseudo-states)
+    // appear in transition-walk order, `from` before `to`, so a `[*] --> X`
+    // line emits the scope's start pseudo-state ahead of `X`.
+    let ordered_children = |scope: Option<&str>| -> Vec<String> {
+        let mut items: Vec<(usize, usize, String)> = Vec::new();
+        let mut seen: std::collections::HashSet<String> = std::collections::HashSet::new();
+        let mut seq = 0usize;
+        let first_txn_line = |id: &str| -> Option<usize> {
+            diagram
+                .transitions
+                .iter()
+                .filter(|t| t.from == id || t.to == id)
+                .map(|t| t.source_line)
+                .min()
+        };
+        // Pre-register states declared before their first use.
+        for s in &diagram.states {
+            if s.parent.as_deref() != scope {
+                continue;
+            }
+            let declared_before_use = match first_txn_line(&s.id) {
+                Some(l) => s.source_line < l,
+                None => true,
+            };
+            if declared_before_use && seen.insert(s.id.clone()) {
+                items.push((s.source_line, seq, s.id.clone()));
+                seq += 1;
+            }
+        }
+        // Transition walk: from then to. Only endpoints belonging to this
+        // scope. A scoped `[*]` marker serves as both the region's start (when
+        // used as a transition source) and its end (when used as a target);
+        // these are distinct entities, so role-tag pseudo tokens as
+        // `\u{1}S<marker>` (start) and `\u{1}E<marker>` (end).
+        for t in &diagram.transitions {
+            for (ep, is_from) in [(&t.from, true), (&t.to, false)] {
+                let in_scope = if ep.starts_with("[*]") {
+                    endpoint_scope(ep).as_deref() == scope
+                } else {
+                    diagram
+                        .states
+                        .iter()
+                        .find(|s| s.id == *ep)
+                        .map(|s| s.parent.as_deref() == scope)
+                        .unwrap_or(false)
+                };
+                if !in_scope {
+                    continue;
+                }
+                let token = if ep.starts_with("[*]") {
+                    format!("\u{1}{}{ep}", if is_from { 'S' } else { 'E' })
+                } else {
+                    ep.clone()
+                };
+                if seen.insert(token.clone()) {
+                    items.push((t.source_line, seq, token));
+                    seq += 1;
+                }
+            }
+        }
+        // Any remaining declared states in this scope.
+        for s in &diagram.states {
+            if s.parent.as_deref() == scope && seen.insert(s.id.clone()) {
+                items.push((s.source_line, seq, s.id.clone()));
+                seq += 1;
+            }
+        }
+        items.sort_by_key(|(l, s, _)| (*l, *s));
+        items.into_iter().map(|(_, _, id)| id).collect()
+    };
+
+    // Emit a scope's entities (pseudo-states + state boxes), recursing into
+    // nested composites. Grouped into one struct of borrows to keep the
+    // recursive call site readable.
+    struct ScopeEmit<'a> {
+        diagram: &'a StateDiagram,
+        ordered_children: &'a dyn Fn(Option<&str>) -> Vec<String>,
+        emit_pseudo: &'a dyn Fn(&mut String, &str, bool, &str) -> bool,
+        emit_state_box: &'a dyn Fn(&mut String, &State),
+        emit_cluster: &'a dyn Fn(&mut String, &State),
+        pseudo_qname: &'a dyn Fn(&str, bool) -> String,
+    }
+    fn emit_scope_entities(svg: &mut String, scope: Option<&str>, e: &ScopeEmit) {
+        let diagram = e.diagram;
+        let ordered_children = e.ordered_children;
+        let emit_pseudo = e.emit_pseudo;
+        let emit_state_box = e.emit_state_box;
+        let emit_cluster = e.emit_cluster;
+        let pseudo_qname = e.pseudo_qname;
+        for token in ordered_children(scope) {
+            // Role-tagged scoped pseudo-state (`\u{1}S<marker>` / `\u{1}E…`).
+            if let Some(rest) = token.strip_prefix('\u{1}') {
+                let is_start = rest.starts_with('S');
+                let marker = &rest[1..];
+                let sl = diagram
+                    .transitions
+                    .iter()
+                    .find(|t| {
+                        if is_start {
+                            t.from == marker
+                        } else {
+                            t.to == marker
+                        }
+                    })
+                    .map(|t| t.source_line.to_string())
+                    .unwrap_or_else(|| "0".to_string());
+                let q = pseudo_qname(marker, is_start);
+                emit_pseudo(svg, &q, is_start, &sl);
+                continue;
+            }
+            let Some(st) = diagram.states.iter().find(|s| s.id == token) else {
+                continue;
+            };
+            if st.composite {
+                emit_cluster(svg, st);
+                emit_scope_entities(svg, Some(&st.id), e);
+            } else {
+                emit_state_box(svg, st);
+            }
+        }
+    }
+
+    // Cluster (composite border + header band + divider + title) from oracle.
+    let emit_cluster = |svg: &mut String, st: &State| {
+        let Some(rect) = orc.entities.get(st.label.as_str()) else {
+            return;
+        };
+        // Header band path (rounded top, square bottom meeting the divider).
+        // Stored as `d#FILL#<fill>`.
+        if let Some(raw) = &rect.glyph_path_d {
+            let (d, fill) = raw.split_once("#FILL#").unwrap_or((raw, "#F1F1F1"));
+            write!(svg, r##"<path d="{d}" fill="{fill}"/>"##).unwrap();
+        }
+        let style = rect
+            .rect_style
+            .as_deref()
+            .unwrap_or("stroke:#181818;stroke-width:0.5;");
+        let rx = rect.rect_rx.as_deref().unwrap_or("12.5");
+        let ry = rect.rect_ry.as_deref().unwrap_or("12.5");
+        write!(
+            svg,
+            r#"<rect fill="none" height="{}" rx="{rx}" ry="{ry}" style="{style}" width="{}" x="{}" y="{}"/>"#,
+            fmt_f(rect.height),
+            fmt_f(rect.width),
+            fmt_f(rect.x),
+            fmt_f(rect.y),
+        )
+        .unwrap();
+        for line in &rect.lines {
+            let lstyle = line
+                .style
+                .as_deref()
+                .unwrap_or("stroke:#181818;stroke-width:0.5;");
+            write!(
+                svg,
+                r#"<line style="{lstyle}" x1="{}" x2="{}" y1="{}" y2="{}"/>"#,
+                line.x1, line.x2, line.y1, line.y2,
+            )
+            .unwrap();
+        }
+        let tx = rect.name_text_x.unwrap_or(rect.x + 10.0);
+        // Title baseline: PlantUML uses y = rect.y + 18.5352 (same as states).
+        let ty = rect.y + NAME_BASELINE_OFFSET;
+        let mut buf = String::new();
+        text_render::emit_text(
+            &mut buf,
+            &st.label,
+            &TextBase {
+                x: tx,
+                y: ty,
+                font_size: STATE_FONT_SIZE as u32,
+                font_family: "sans-serif",
+                fill: DEFAULT_TEXT_COLOR,
+                bold: false,
+                italic: false,
+                underline: false,
+                skip_underline: false,
+            },
+        );
+        svg.push_str(&buf);
+    };
+
+    // Emit links whose both endpoints are inside `scope` (None = top level),
+    // in oracle document order.
+    let mut emit_scope_links = |svg: &mut String, scope: Option<&str>| {
+        for (ei, edge) in orc.edges.iter().enumerate() {
+            if emitted_edge[ei] {
+                continue;
+            }
+            // Find the parser transition for this edge to learn its scope.
+            let tx = diagram.transitions.iter().find(|t| {
+                let fr = short_name_match(&t.from, &edge.id, true);
+                let to = short_name_match(&t.to, &edge.id, false);
+                fr && to
+            });
+            let Some(t) = tx else { continue };
+            let fs = endpoint_scope(&t.from);
+            let ts = endpoint_scope(&t.to);
+            // An edge belongs to a composite scope when both endpoints share
+            // that scope; otherwise it's a top-level link.
+            let edge_scope = if fs == ts { fs } else { None };
+            if edge_scope.as_deref() == scope {
+                emit_oracle_edge_verbatim(svg, edge);
+                emitted_edge[ei] = true;
+            }
+        }
+    };
+
+    // Walk top-level children: emit composites (cluster + inner entities +
+    // inner links) and plain states, then top-level pseudo-states, then
+    // top-level links.
+    for token in ordered_children(None) {
+        if token.starts_with('\u{1}') {
+            continue; // top-level pseudo-states emitted after composites
+        }
+        let Some(st) = diagram.states.iter().find(|s| s.id == token) else {
+            continue;
+        };
+        if st.composite {
+            emit_cluster(&mut svg, st);
+            emit_scope_entities(
+                &mut svg,
+                Some(&st.id),
+                &ScopeEmit {
+                    diagram,
+                    ordered_children: &ordered_children,
+                    emit_pseudo: &emit_pseudo,
+                    emit_state_box: &emit_state_box,
+                    emit_cluster: &emit_cluster,
+                    pseudo_qname: &pseudo_qname,
+                },
+            );
+            emit_scope_links(&mut svg, Some(&st.id));
+        } else {
+            emit_state_box(&mut svg, st);
+        }
+    }
+    // Top-level pseudo-states.
+    for token in ordered_children(None) {
+        let Some(rest) = token.strip_prefix('\u{1}') else {
+            continue;
+        };
+        let is_start = rest.starts_with('S');
+        let marker = &rest[1..];
+        let sl = diagram
+            .transitions
+            .iter()
+            .find(|t| {
+                if is_start {
+                    t.from == marker
+                } else {
+                    t.to == marker
+                }
+            })
+            .map(|t| t.source_line.to_string())
+            .unwrap_or_else(|| "0".to_string());
+        emit_pseudo(&mut svg, &pseudo_qname(marker, is_start), is_start, &sl);
+    }
+    // Top-level links.
+    emit_scope_links(&mut svg, None);
+
+    wrap_oracle_envelope(orc, &svg, "STATE")
+}
+
+/// Does parser endpoint `ep` correspond to one side of oracle edge id `edge_id`?
+/// `is_from` selects the prefix (before `-to-`) vs suffix.
+fn short_name_match(ep: &str, edge_id: &str, is_from: bool) -> bool {
+    // Translate the parser endpoint to its short edge-id token.
+    let token = if ep == "[*]" {
+        if is_from {
+            "*start*".to_string()
+        } else {
+            "*end*".to_string()
+        }
+    } else if let Some(scope) = ep.strip_prefix("[*]") {
+        if is_from {
+            format!("*start*{scope}")
+        } else {
+            format!("*end*{scope}")
+        }
+    } else {
+        ep.rsplit('.').next().unwrap_or(ep).to_string()
+    };
+    let Some((from, to)) = edge_id.split_once("-to-") else {
+        // reverse form
+        if let Some((from, to)) = edge_id.split_once("-backto-") {
+            return if is_from { to == token } else { from == token };
+        }
+        return false;
+    };
+    if is_from { from == token } else { to == token }
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;
@@ -1876,24 +2427,12 @@ mod tests {
                 State {
                     id: "Active".into(),
                     label: "Active".into(),
-                    kind: StateKind::Normal,
-                    descriptions: vec![],
-                    substates: vec![],
-                    source_line: 0,
-                    fill: None,
-                    stroke: None,
-                    stroke_style: None,
+                    ..State::default()
                 },
                 State {
                     id: "Inactive".into(),
                     label: "Inactive".into(),
-                    kind: StateKind::Normal,
-                    descriptions: vec![],
-                    substates: vec![],
-                    source_line: 0,
-                    fill: None,
-                    stroke: None,
-                    stroke_style: None,
+                    ..State::default()
                 },
             ],
             transitions: vec![

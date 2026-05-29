@@ -40,7 +40,7 @@ pub enum StateNoteKind {
 }
 
 /// A state in a state diagram.
-#[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Debug, Clone, Default, Serialize, Deserialize)]
 pub struct State {
     pub id: String,
     pub label: String,
@@ -62,6 +62,14 @@ pub struct State {
     /// Dash style hint (`bold`, `dashed`, `dotted`) parsed from `##[…]color`.
     #[serde(default)]
     pub stroke_style: Option<String>,
+    /// True when this state opened a composite block (`state X { … }`),
+    /// i.e. it contains nested states. Rendered as a cluster.
+    #[serde(default)]
+    pub composite: bool,
+    /// Qualified id of the immediately-enclosing composite state, if this
+    /// state is nested inside one. `None` for top-level states.
+    #[serde(default)]
+    pub parent: Option<String>,
 }
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Default, Serialize, Deserialize)]

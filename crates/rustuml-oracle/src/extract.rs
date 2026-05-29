@@ -962,13 +962,20 @@ pub fn extract_oracle_layout(svg: &str) -> Option<OracleLayout> {
     // `<text>` pair directly under the root `<g>`. Recover their geometry so
     // the state renderer can position the boxes exactly. Key each by the label
     // text (which equals the state id for plain `state X` declarations).
+    //
+    // Composite states (`state X { … }`) share the bare-element idiom: Java
+    // emits a header `<path>` (rounded-top fill band), a `<rect fill="none">`
+    // border, a `<line>` divider, and the title `<text>`, all at top level.
+    // We distinguish the two by the body rect's fill: descriptionless state
+    // boxes carry the theme fill (`#F1F1F1`/colour), composite borders use
+    // `fill="none"`.
     let bare_state_children: Vec<roxmltree::Node> = root
         .descendants()
         .filter(|n| match n.parent() {
             Some(p) => {
                 p.tag_name().name() == "g"
                     && p.attribute("class").is_none()
-                    && (n.tag_name().name() == "rect" || n.tag_name().name() == "text")
+                    && matches!(n.tag_name().name(), "rect" | "text" | "path" | "line")
             }
             None => false,
         })
@@ -976,40 +983,84 @@ pub fn extract_oracle_layout(svg: &str) -> Option<OracleLayout> {
     let mut bi = 0;
     while bi < bare_state_children.len() {
         let n = &bare_state_children[bi];
-        // A state box is a rounded rect (rx present) that is not a fork/join
-        // bar (#555555). The following sibling `<text>` carries its label.
-        if n.tag_name().name() == "rect"
-            && n.attribute("rx").is_some()
-            && n.attribute("fill") != Some("#555555")
-            && let (Some(x), Some(y), Some(w), Some(h)) = (
-                parse_attr(n, "x"),
-                parse_attr(n, "y"),
-                parse_attr(n, "width"),
-                parse_attr(n, "height"),
-            )
-        {
-            let mut label = String::new();
-            if let Some(next) = bare_state_children.get(bi + 1)
-                && next.tag_name().name() == "text"
-            {
-                label = collect_text(next);
+        if n.tag_name().name() != "rect" || n.attribute("rx").is_none() {
+            bi += 1;
+            continue;
+        }
+        let fill = n.attribute("fill");
+        if fill == Some("#555555") {
+            // Fork/join bar — handled elsewhere.
+            bi += 1;
+            continue;
+        }
+        let (Some(x), Some(y), Some(w), Some(h)) = (
+            parse_attr(n, "x"),
+            parse_attr(n, "y"),
+            parse_attr(n, "width"),
+            parse_attr(n, "height"),
+        ) else {
+            bi += 1;
+            continue;
+        };
+
+        if fill == Some("none") {
+            // Composite-state border. The header `<path>` precedes it; the
+            // divider `<line>` and title `<text>` follow. Stash the header
+            // path in `glyph_path_d`, the divider in `lines`, and the title
+            // x in `name_text_x`, keyed by the composite's title text.
+            // The header band path carries the composite's fill colour. Stash
+            // it as `d#FILL#<fill>` so the renderer can reproduce themed and
+            // `state X #color` composite headers verbatim.
+            let header_path = bi
+                .checked_sub(1)
+                .and_then(|p| bare_state_children.get(p))
+                .filter(|p| p.tag_name().name() == "path")
+                .and_then(|p| {
+                    let d = p.attribute("d")?;
+                    let fill = p.attribute("fill").unwrap_or("#F1F1F1");
+                    Some(format!("{d}#FILL#{fill}"))
+                });
+            let mut lines = Vec::new();
+            let mut title = String::new();
+            let mut title_x = None;
+            let mut j = bi + 1;
+            while let Some(next) = bare_state_children.get(j) {
+                match next.tag_name().name() {
+                    "line" => {
+                        lines.push(EntityLine {
+                            x1: next.attribute("x1").unwrap_or("0").to_string(),
+                            x2: next.attribute("x2").unwrap_or("0").to_string(),
+                            y1: next.attribute("y1").unwrap_or("0").to_string(),
+                            y2: next.attribute("y2").unwrap_or("0").to_string(),
+                            style: next.attribute("style").map(String::from),
+                        });
+                        j += 1;
+                    }
+                    "text" => {
+                        title = collect_text(next);
+                        title_x = parse_attr(next, "x");
+                        j += 1;
+                        break;
+                    }
+                    _ => break,
+                }
             }
-            if !label.is_empty() && !layout.entities.contains_key(&label) {
+            if !title.is_empty() && !layout.entities.contains_key(&title) {
                 layout.entities.insert(
-                    label,
+                    title,
                     EntityRect {
                         x,
                         y,
                         width: w,
                         height: h,
                         icon_cx: None,
-                        glyph_path_d: None,
-                        name_text_x: None,
+                        glyph_path_d: header_path,
+                        name_text_x: title_x,
                         text_y_values: Vec::new(),
                         text_x_values: Vec::new(),
                         sep_y_values: Vec::new(),
                         vis_icon_y_values: Vec::new(),
-                        fill: n.attribute("fill").map(String::from),
+                        fill: Some("none".to_string()),
                         body_style: n.attribute("style").map(String::from),
                         rect_style: n.attribute("style").map(String::from),
                         rect_rx: n.attribute("rx").map(String::from),
@@ -1017,15 +1068,52 @@ pub fn extract_oracle_layout(svg: &str) -> Option<OracleLayout> {
                         entity_id: None,
                         source_line: None,
                         aux_rects: Vec::new(),
-                        lines: Vec::new(),
+                        lines,
                         texts: Vec::new(),
                     },
                 );
             }
-            bi += 2;
+            bi = j;
             continue;
         }
-        bi += 1;
+
+        // Bare state box under `hide empty description`. The following
+        // sibling `<text>` carries its label.
+        let mut label = String::new();
+        if let Some(next) = bare_state_children.get(bi + 1)
+            && next.tag_name().name() == "text"
+        {
+            label = collect_text(next);
+        }
+        if !label.is_empty() && !layout.entities.contains_key(&label) {
+            layout.entities.insert(
+                label,
+                EntityRect {
+                    x,
+                    y,
+                    width: w,
+                    height: h,
+                    icon_cx: None,
+                    glyph_path_d: None,
+                    name_text_x: None,
+                    text_y_values: Vec::new(),
+                    text_x_values: Vec::new(),
+                    sep_y_values: Vec::new(),
+                    vis_icon_y_values: Vec::new(),
+                    fill: n.attribute("fill").map(String::from),
+                    body_style: n.attribute("style").map(String::from),
+                    rect_style: n.attribute("style").map(String::from),
+                    rect_rx: n.attribute("rx").map(String::from),
+                    rect_ry: n.attribute("ry").map(String::from),
+                    entity_id: None,
+                    source_line: None,
+                    aux_rects: Vec::new(),
+                    lines: Vec::new(),
+                    texts: Vec::new(),
+                },
+            );
+        }
+        bi += 2;
     }
 
     Some(layout)
