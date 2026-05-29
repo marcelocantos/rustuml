@@ -575,7 +575,13 @@ fn translate_qualified_name(label: &str) -> String {
     label
         .chars()
         .map(|c| {
-            if c.is_alphanumeric() || c == '.' || c == '_' || c == ' ' || !c.is_ascii() {
+            if c.is_alphanumeric()
+                || c == '.'
+                || c == '_'
+                || c == ' '
+                || c == '-'
+                || !c.is_ascii()
+            {
                 c
             } else {
                 '.'
