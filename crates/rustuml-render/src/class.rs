@@ -83,6 +83,17 @@ const FONT_SIZE: f64 = 14.0;
 /// Font size for stereotype text.
 #[allow(dead_code)]
 const STEREOTYPE_FONT_SIZE: f64 = 12.0;
+
+// Generic type-parameter box (`class Foo<T>`): a small dashed rectangle at the
+// entity's top-right corner. 12px italic text, 1px pad each side, overhanging
+// the corner by 3px.
+const GENERIC_FONT_SIZE: u32 = 12;
+const GENERIC_BOX_PAD: f64 = 1.0;
+const GENERIC_BOX_OVERHANG: f64 = 3.0;
+const GENERIC_BOX_HEIGHT: f64 = 16.1328;
+const GENERIC_TEXT_BASELINE: f64 = 12.6016;
+// Gap between the header (icon + name) right edge and the generic box left edge.
+const GENERIC_HEADER_GAP: f64 = 8.0;
 /// Extra header height when stereotypes are present.
 const STEREOTYPE_EXTRA_HEIGHT: f64 = 8.6211;
 /// Stereotype text baseline y relative to entity rect top.
@@ -497,7 +508,21 @@ fn calc_entity_dims(entity: &ClassEntity, entity_index: usize, hide: HideFlags) 
     // Hidden compartments contribute nothing to the per-compartment count.
     let eff_field_count = if hide.fields { 0 } else { field_count };
     let eff_method_count = if hide.methods { 0 } else { method_count };
-    let width = name_total.max(stereo_width).max(max_member_width);
+    let mut width = name_total.max(stereo_width).max(max_member_width);
+
+    // Generic type-parameter box widening: when `class Foo<T extends Bar>` has a
+    // wide `<...>`, the dashed box at the top-right corner forces the entity
+    // wider so the box's left edge sits just past the header (icon + name + 8px
+    // gap) instead of overflowing the canvas. The box overhangs the right edge
+    // by GENERIC_BOX_OVERHANG, so the required entity width is
+    //   icon_area + name + gap + box_width - overhang.
+    if let Some(generic) = entity.generic.as_deref() {
+        let gen_tl = text_render::measure(generic, GENERIC_FONT_SIZE as f64, false);
+        let box_w = gen_tl + GENERIC_BOX_PAD * 2.0;
+        let generic_driven =
+            icon_area + name_width + GENERIC_HEADER_GAP + box_w - GENERIC_BOX_OVERHANG;
+        width = width.max(generic_driven);
+    }
 
     // Height calculation.
     // PlantUML layout formula (derived from golden SVGs):
@@ -1675,6 +1700,49 @@ fn render_entity_content(
         },
     );
     svg.push_str(&text_buf);
+
+    // Generic type-parameter box: a dashed rectangle at the entity's top-right
+    // corner carrying the `<...>` content (e.g. `T`, `K, V`, `T extends Bar`).
+    // PlantUML draws it at 12px italic, overhanging the top-right corner by 3px;
+    // the box width is the text advance plus a 1px pad on each side. The entity
+    // width (in `dim.width`) is already widened in `calc_entity_dims` so that,
+    // when the generic text is wide, the box's left edge anchors just past the
+    // header rather than overflowing the canvas.
+    if let Some(generic) = entity.generic.as_deref() {
+        let gen_tl = text_render::measure(generic, GENERIC_FONT_SIZE as f64, false);
+        let box_w = gen_tl + GENERIC_BOX_PAD * 2.0;
+        // HALF_UP rounding (PlantUML's convention) — `fmt4`'s underlying
+        // `{:.4}` is round-half-even and drifts 1 ULP on `.xxxx5` boundaries.
+        let box_x = round_4dp(x + dim.width - box_w + GENERIC_BOX_OVERHANG);
+        let box_y = y - GENERIC_BOX_OVERHANG;
+        write!(
+            svg,
+            r##"<rect fill="#FFFFFF" height="{}" style="stroke:{};stroke-width:1;stroke-dasharray:2,2;" width="{}" x="{}" y="{}"/>"##,
+            fmt4(GENERIC_BOX_HEIGHT),
+            BORDER_COLOR,
+            fmt_tl(box_w),
+            fmt4(box_x),
+            fmt4(box_y),
+        )
+        .unwrap();
+        let mut gen_buf = String::new();
+        text_render::emit_text(
+            &mut gen_buf,
+            generic,
+            &TextBase {
+                x: box_x + GENERIC_BOX_PAD,
+                y: box_y + GENERIC_TEXT_BASELINE,
+                font_size: GENERIC_FONT_SIZE,
+                font_family: "sans-serif",
+                fill: "#000000",
+                bold: false,
+                italic: true,
+                underline: false,
+                skip_underline: false,
+            },
+        );
+        svg.push_str(&gen_buf);
+    }
 
     // Oracle y-position overrides: text_y_values[0] is name (or stereotype if
     // present), then subsequent entries are members. When stereotypes are present,
@@ -3209,6 +3277,7 @@ mod tests {
                         },
                     ],
                     stereotypes: vec![],
+                    generic: None,
                     spot_color: None,
                     url: None,
                     color: None,
@@ -3229,6 +3298,7 @@ mod tests {
                         display_text: "fetch(): void".into(),
                     }],
                     stereotypes: vec![],
+                    generic: None,
                     spot_color: None,
                     url: None,
                     color: None,
@@ -3374,6 +3444,7 @@ mod tests {
                     display_text: "draw(): void".into(),
                 }],
                 stereotypes: vec![],
+                generic: None,
                 spot_color: None,
                 url: None,
                 color: None,

@@ -73,6 +73,12 @@ pub struct ClassEntity {
     pub kind: EntityKind,
     pub members: Vec<Member>,
     pub stereotypes: Vec<String>,
+    /// Generic type parameter(s) declared with `<...>` after the entity name,
+    /// e.g. `class Foo<T>` → `Some("T")`, `class Foo<K, V>` → `Some("K, V")`.
+    /// Rendered as a dashed box at the entity's top-right corner; never part of
+    /// the entity id, label, or qualified name.
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub generic: Option<String>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub url: Option<String>,
     /// Optional hex spot color from `<< (X,#HEX) Name >>` notation, applied to

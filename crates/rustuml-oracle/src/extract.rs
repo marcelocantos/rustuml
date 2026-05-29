@@ -403,6 +403,13 @@ pub fn extract_oracle_layout(svg: &str) -> Option<OracleLayout> {
                         .children()
                         .filter(|c| c.tag_name().name() == "text")
                     {
+                        // Skip the generic type-parameter box text (`class Foo<T>`):
+                        // it sits in a dashed rect at the top-right corner and is
+                        // not part of the header/member text-y sequence. It is the
+                        // `<text>` immediately following a dashed-stroke `<rect>`.
+                        if is_generic_box_text(&t) {
+                            continue;
+                        }
                         let y = parse_attr(&t, "y");
                         let x = parse_attr(&t, "x");
                         if let Some(y) = y
@@ -529,6 +536,7 @@ pub fn extract_oracle_layout(svg: &str) -> Option<OracleLayout> {
                     let texts: Vec<EntityText> = content_node
                         .children()
                         .filter(|c| c.tag_name().name() == "text")
+                        .filter(|t| !is_generic_box_text(t))
                         .filter_map(|t| {
                             Some(EntityText {
                                 x: parse_attr(&t, "x")?,
@@ -1209,6 +1217,20 @@ fn find_first_child<'a>(
 
 fn parse_attr(node: &roxmltree::Node, attr: &str) -> Option<f64> {
     node.attribute(attr)?.parse().ok()
+}
+
+/// True if `text` is the generic type-parameter box label (`class Foo<T>`).
+/// PlantUML draws it as the `<text>` immediately following a dashed-stroke
+/// `<rect>` at the entity's top-right corner; that rect is its only structural
+/// signature, so a preceding sibling `<rect>` with `stroke-dasharray` identifies
+/// it. Such text is excluded from the entity's header/member text-y sequence.
+fn is_generic_box_text(text: &roxmltree::Node) -> bool {
+    text.prev_sibling_element().is_some_and(|prev| {
+        prev.tag_name().name() == "rect"
+            && prev
+                .attribute("style")
+                .is_some_and(|s| s.contains("stroke-dasharray"))
+    })
 }
 
 /// Recursively concatenate the text content of an element's descendants.

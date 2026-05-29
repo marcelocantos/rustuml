@@ -146,6 +146,7 @@ impl ClassParser {
                 kind: EntityKind::Class,
                 members: Vec::new(),
                 stereotypes: Vec::new(),
+                generic: None,
                 spot_color: None,
                 url: None,
                 color: None,
@@ -374,14 +375,14 @@ impl ClassParser {
         // Allows dots in the identifier (for `set namespaceSeparator none`).
         static RE_DOTTED: LazyLock<Regex> = LazyLock::new(|| {
             Regex::new(
-                r#"^(class|abstract\s+class|abstract|interface|enum|annotation|entity|object)\s+(?:(?:"([^"]+)"\s+as\s+)?(\w[\w.]*(?:<[^>]+>)?)|"([^"]+)")"#,
+                r#"^(class|abstract\s+class|abstract|interface|enum|annotation|entity|object)\s+(?:(?:"([^"]+)"\s+as\s+)?(\w[\w.]*(?:<[^<>]*(?:<[^<>]*>[^<>]*)*>)?)|"([^"]+)")"#,
             )
             .unwrap()
         });
         // Permissive regex: accepts any non-whitespace name (for custom namespace separators).
         static RE_PERMISSIVE: LazyLock<Regex> = LazyLock::new(|| {
             Regex::new(
-                r#"^(class|abstract\s+class|abstract|interface|enum|annotation|entity|object)\s+(?:(?:"([^"]+)"\s+as\s+)?([^\s{<>]+(?:<[^>]+>)?)|"([^"]+)")"#,
+                r#"^(class|abstract\s+class|abstract|interface|enum|annotation|entity|object)\s+(?:(?:"([^"]+)"\s+as\s+)?([^\s{<>]+(?:<[^<>]*(?:<[^<>]*>[^<>]*)*>)?)|"([^"]+)")"#,
             )
             .unwrap()
         });
@@ -401,7 +402,7 @@ impl ClassParser {
         if let Some(caps) = re.captures(line) {
             let kind = parse_entity_kind(caps[1].trim());
             // Group 4: quoted-only form — class "**Name**" with no `as` keyword.
-            let (label, id) = if let Some(m) = caps.get(4) {
+            let (mut label, mut id) = if let Some(m) = caps.get(4) {
                 let label_raw = m.as_str().to_string();
                 let id = strip_creole_for_id(&label_raw);
                 (label_raw, id)
@@ -412,6 +413,16 @@ impl ClassParser {
                 let id = caps[3].to_string();
                 (label, id)
             };
+
+            // A trailing `<...>` is a generic type parameter, not part of the
+            // entity id/label/qualified-name. Split it off the id; mirror the
+            // split onto the label only when the label was derived from the id
+            // (no explicit alias / quoted name).
+            let label_was_id = caps.get(2).is_none() && caps.get(4).is_none();
+            let generic = split_generic(&mut id);
+            if label_was_id {
+                split_generic(&mut label);
+            }
 
             let mut spot_color: Option<String> = None;
             let stereotypes: Vec<String> = STEREOTYPE_RE
@@ -470,6 +481,9 @@ impl ClassParser {
                 if let Some(tc) = extract_text_color(line) {
                     entity.text_color = Some(tc);
                 }
+                if generic.is_some() {
+                    entity.generic = generic.clone();
+                }
             } else {
                 self.entities.push(ClassEntity {
                     id: final_id.clone(),
@@ -477,6 +491,7 @@ impl ClassParser {
                     kind,
                     members: Vec::new(),
                     stereotypes,
+                    generic: generic.clone(),
                     spot_color,
                     url: url.clone(),
                     color: entity_color.clone(),
@@ -518,6 +533,7 @@ impl ClassParser {
                     kind: EntityKind::Enum,
                     members: Vec::new(),
                     stereotypes: Vec::new(),
+                    generic: None,
                     spot_color: None,
                     url: None,
                     color: None,
@@ -639,6 +655,7 @@ impl ClassParser {
                     kind: EntityKind::Interface,
                     members: Vec::new(),
                     stereotypes: Vec::new(),
+                    generic: None,
                     spot_color: None,
                     url: None,
                     color: None,
@@ -905,6 +922,7 @@ impl ClassParser {
                         kind: EntityKind::Class,
                         members: vec![member],
                         stereotypes: Vec::new(),
+                        generic: None,
                         spot_color: None,
                         url: None,
                         color: None,
@@ -1105,6 +1123,43 @@ fn parse_note_position(s: &str) -> NotePosition {
         "right" => NotePosition::Right,
         _ => NotePosition::Right,
     }
+}
+
+/// If `name` ends with a balanced `<...>` generic suffix, strip it in place
+/// and return the inner text (e.g. `Foo<T>` → name becomes `Foo`, returns
+/// `Some("T")`). Handles nested angle brackets (`Wrapper<Container<T>>`).
+/// Returns `None` when there is no trailing generic.
+fn split_generic(name: &mut String) -> Option<String> {
+    let trimmed = name.trim_end();
+    if !trimmed.ends_with('>') {
+        return None;
+    }
+    // Walk back from the end matching nested angle brackets.
+    let bytes = trimmed.as_bytes();
+    let mut depth = 0i32;
+    let mut open_idx = None;
+    for (i, &b) in bytes.iter().enumerate().rev() {
+        match b {
+            b'>' => depth += 1,
+            b'<' => {
+                depth -= 1;
+                if depth == 0 {
+                    open_idx = Some(i);
+                    break;
+                }
+            }
+            _ => {}
+        }
+    }
+    let open = open_idx?;
+    // The base name must be non-empty (avoid stripping a leading `<...>`).
+    if open == 0 {
+        return None;
+    }
+    let inner = trimmed[open + 1..trimmed.len() - 1].trim().to_string();
+    let base = trimmed[..open].trim_end().to_string();
+    *name = base;
+    Some(inner)
 }
 
 fn parse_entity_kind(s: &str) -> EntityKind {
@@ -1439,10 +1494,26 @@ mod tests {
 
     #[test]
     fn generics() {
+        // The trailing `<...>` is a generic type parameter, captured separately
+        // and stripped from the entity id/label (it must not pollute the
+        // qualified name, which is keyed on the bare name for edge lookup).
         let d = parse("class Container<T>\nclass Map<K, V>");
         assert_eq!(d.entities.len(), 2);
-        assert_eq!(d.entities[0].id, "Container<T>");
-        assert_eq!(d.entities[1].id, "Map<K, V>");
+        assert_eq!(d.entities[0].id, "Container");
+        assert_eq!(d.entities[0].label, "Container");
+        assert_eq!(d.entities[0].generic.as_deref(), Some("T"));
+        assert_eq!(d.entities[1].id, "Map");
+        assert_eq!(d.entities[1].generic.as_deref(), Some("K, V"));
+    }
+
+    #[test]
+    fn nested_generics() {
+        let d = parse("class Foo<T extends Comparable<T>>");
+        assert_eq!(d.entities[0].id, "Foo");
+        assert_eq!(
+            d.entities[0].generic.as_deref(),
+            Some("T extends Comparable<T>")
+        );
     }
 
     #[test]
