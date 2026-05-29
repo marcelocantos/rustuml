@@ -298,9 +298,11 @@ fn parse_row_part(part: &str) -> Vec<SaltWidget> {
         return vec![SaltWidget::Button(label)];
     }
 
-    // Text field: `"text"`.
-    if trimmed.starts_with('"') {
-        let inner = trimmed.trim_matches('"').trim_end().to_string();
+    // Text field: `"text"`.  Preserve the inner text verbatim (including
+    // trailing spaces): PlantUML uses the raw character count for the
+    // field's managed width, even though it trims the text for display.
+    if trimmed.starts_with('"') && trimmed.len() >= 2 && trimmed.ends_with('"') {
+        let inner = trimmed[1..trimmed.len() - 1].to_string();
         return vec![SaltWidget::TextField(inner)];
     }
 

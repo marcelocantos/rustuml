@@ -267,14 +267,17 @@ fn draw_widget(widget: &SaltWidget, x: f64, y: f64, cell_w: f64, cell_h: f64, bu
                 BTN_STROKE,
             );
             // Text centred: drawText at ((pw - pureTextWidth)/2, stroke + marginY).
-            let pure_w = pm::text_width(&strip_creole(label), FONT_SIZE, false);
+            let display = strip_creole(label);
+            let display = display.trim();
+            let pure_w = pm::text_width(display, FONT_SIZE, false);
             let tx = x + (pw - pure_w) / 2.0;
             let ty = y + BTN_STROKE + BTN_MARGIN + ascent;
-            emit_text(buf, tx, ty, label);
+            emit_text(buf, tx, ty, display);
         }
         SaltWidget::TextField(t) => {
-            // drawText at (3, 0).
-            emit_text(buf, x + 3.0, y + ascent, t);
+            // drawText at (3, 0); text is trimmed for display.
+            let display = strip_creole(t);
+            emit_text(buf, x + 3.0, y + ascent, display.trim());
             let (pw, _) = widget_dim(widget);
             let text_h = pref_h; // getTextDimensionAt height
             let managed_w = managed_text_width(t);
@@ -305,7 +308,13 @@ fn draw_widget(widget: &SaltWidget, x: f64, y: f64, cell_w: f64, cell_h: f64, bu
 
 fn emit_text(buf: &mut String, x: f64, y: f64, content: &str) {
     let style = TextStyle::parse(content);
-    let tl = pm::text_width(&style.display, FONT_SIZE, style.bold);
+    // PlantUML renders an empty string as a single non-breaking space whose
+    // textLength is the width of one space.
+    let tl = if style.display.is_empty() {
+        pm::text_width(" ", FONT_SIZE, false)
+    } else {
+        pm::text_width(&style.display, FONT_SIZE, style.bold)
+    };
     let escaped = escape_text(&style.display);
     // PlantUML emits attributes alphabetically; the comparator sorts them
     // anyway, so we just include the relevant style attributes.
@@ -464,10 +473,14 @@ fn emit_vline_black(buf: &mut String, x: f64, y: f64, height: f64) {
 }
 
 /// Managed text width for buttons/textfields: `max(textWidth, charLen * 8)`.
+///
+/// PlantUML trims the text for display (so `textWidth` uses the trimmed
+/// string) but counts the raw character length (including trailing spaces)
+/// for the `charLen * 8` term.
 fn managed_text_width(t: &str) -> f64 {
-    let display = strip_creole(t);
-    let tw = pm::text_width(&display, FONT_SIZE, false);
-    let char_len = display.chars().count() as f64;
+    let stripped = strip_creole(t);
+    let tw = pm::text_width(stripped.trim(), FONT_SIZE, false);
+    let char_len = stripped.chars().count() as f64;
     tw.max(char_len * CHAR_SPACE)
 }
 
