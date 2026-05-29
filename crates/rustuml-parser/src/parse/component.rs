@@ -94,6 +94,11 @@ pub fn parse_component(lines: &[String]) -> Result<ComponentDiagram, ParseError>
     let mut package_stack: Vec<ComponentPackage> = Vec::new();
     // Top-level packages collected.
     let mut top_packages: Vec<ComponentPackage> = Vec::new();
+    // Count of open *transparent* brace blocks (`together { ... }`). These are
+    // layout hints, not containers: the elements inside stay in the enclosing
+    // package, but the matching `}` must not pop a real package frame. We only
+    // track the innermost run, since `together` blocks do not nest in practice.
+    let mut transparent_braces: usize = 0;
 
     // Note buffer for multi-line notes.
     let mut note_target: Option<String> = None;
@@ -241,8 +246,20 @@ pub fn parse_component(lines: &[String]) -> Result<ComponentDiagram, ParseError>
             continue;
         }
 
+        // Opening transparent block — `together {` groups elements for layout
+        // but is not a container. Track the brace so its `}` is balanced without
+        // popping a real package frame.
+        if trimmed == "together {" || trimmed == "together{" {
+            transparent_braces += 1;
+            continue;
+        }
+
         // Closing brace — pop the stack.
         if trimmed == "}" {
+            if transparent_braces > 0 {
+                transparent_braces -= 1;
+                continue;
+            }
             if let Some(finished) = package_stack.pop() {
                 if let Some(parent) = package_stack.last_mut() {
                     parent.packages.push(finished);
