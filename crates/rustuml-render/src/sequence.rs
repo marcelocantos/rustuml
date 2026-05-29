@@ -5334,8 +5334,8 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme) -> String {
                 // This matches PlantUML's SVG element order.
                 let kind_w = bold_text_width(kind_str, MSG_FONT_SIZE);
                 let tab_right = frame_left + kind_w + 45.0;
-                let tab_bottom_left = frame_top + 17.3106;
-                let tab_bottom_right = frame_top + 7.3106;
+                let tab_bottom_left = frame_top + GROUP_HEADER_HEIGHT;
+                let tab_bottom_right = frame_top + GROUP_HEADER_HEIGHT - 10.0;
                 write!(
                     svg.buf,
                     r##"<path d="M{left},{top} L{right},{top} L{right},{br} L{diag},{bl} L{left},{bl} L{left},{top}" fill="#EEEEEE" style="stroke:#000000;stroke-width:1.5;"/>"##,
@@ -5365,7 +5365,7 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme) -> String {
                     kind_str,
                     &TextBase {
                         x: frame_left + 15.0,
-                        y: frame_top + 13.5684,
+                        y: frame_top + 13.568359375,
                         font_size: 13,
                         font_family: "sans-serif",
                         fill: "#000000",
@@ -5384,7 +5384,7 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme) -> String {
                         &guard,
                         &TextBase {
                             x: tab_right + 15.0,
-                            y: frame_top + 12.6348,
+                            y: frame_top + 12.634765625,
                             font_size: 11,
                             font_family: "sans-serif",
                             fill: "#000000",
