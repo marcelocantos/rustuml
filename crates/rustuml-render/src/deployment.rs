@@ -46,6 +46,12 @@ const STROKE: &str = "#181818";
 const TEXT_COLOR: &str = "#000000";
 const RX_RY: f64 = 2.5;
 
+// Title block layout (matches the component renderer's constants).
+const TITLE_FONT_SIZE: f64 = 14.0;
+const TITLE_MARGIN_X: f64 = 10.0;
+const TITLE_TOP_PAD: f64 = 10.0;
+const TITLE_LINE_H: f64 = 16.48828125;
+
 /// Baseline-y offset within the entity bounding box for a text line.
 ///
 /// Each shape kind has a different top padding above the first text
@@ -200,6 +206,27 @@ fn render_oracle(diagram: &DeploymentDiagram, _theme: &Theme, oracle: &OracleLay
     // keys are case-insensitive, so match case-insensitively.
     let skin_fills = skin_background_fills(&diagram.meta.skinparams);
     let skin_strokes = skin_border_colors(&diagram.meta.skinparams);
+
+    // Title block. PlantUML emits a `<g class="title">` before the entities,
+    // anchoring the block's left edge at TITLE_MARGIN_X and centring each line
+    // within the block (block width = widest line). Baselines step by
+    // TITLE_LINE_H starting at TITLE_TOP_PAD + ascent. The entity coordinates
+    // supplied by the oracle already include the vertical offset the title
+    // introduces, so we only need to draw the title itself.
+    if let Some(title) = &diagram.meta.title {
+        let widths: Vec<f64> = title
+            .lines()
+            .map(|t| text_render::measure(t, TITLE_FONT_SIZE, true))
+            .collect();
+        let block_w = widths.iter().cloned().fold(0.0_f64, f64::max);
+        svg.raw(r#"<g class="title" data-source-line="1">"#);
+        for (i, tline) in title.lines().enumerate() {
+            let ty = TITLE_TOP_PAD + pm::ascent(TITLE_FONT_SIZE) + i as f64 * TITLE_LINE_H;
+            let tx = TITLE_MARGIN_X + (block_w - widths[i]) / 2.0;
+            emit_text(&mut svg, tline, tx, ty, TITLE_FONT_SIZE, true, false);
+        }
+        svg.raw("</g>");
+    }
 
     // Emit clusters first (depth-first), then leaf entities (depth-first).
     for root in &roots {
