@@ -142,10 +142,18 @@ fn detect_uml_subtype(lines: &[String]) -> UmlSubtype {
         // Weighted heavily so chains of `A --> B` arrows can't overwhelm a
         // single `[*] --> X` line, and so that diagrams mixing floating
         // notes (class-typed) with `[*]` transitions still parse as state.
+        // A `state ` line is only a state declaration when an identifier or
+        // quoted name follows. Inside an entity/class body, `state : TYPE` is a
+        // member named "state" (the typed `name : type` form), not a state
+        // declaration — exclude it so an ER entity with a `state` column does
+        // not get misrouted to a STATE diagram.
+        let state_decl = trimmed.starts_with("state ")
+            && !trimmed.contains("<<")
+            && !trimmed["state ".len()..].trim_start().starts_with(':');
         if trimmed.starts_with("[*]")
             || trimmed.contains("> [*]")
             || trimmed.contains(">[*]")
-            || (trimmed.starts_with("state ") && !trimmed.contains("<<"))
+            || state_decl
         {
             scores[3] += 50;
         }
