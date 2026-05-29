@@ -223,24 +223,33 @@ pub fn extract_oracle_layout(svg: &str) -> Option<OracleLayout> {
 
         if class_attr == "entity" || class_attr == "cluster" {
             if let Some(name) = node.attribute("data-qualified-name") {
+                // When an entity carries a URL ([[...]]), PlantUML wraps the
+                // entire body (rect, icon, text, separators) in an `<a>`
+                // element. Descend through that wrapper so child lookups find
+                // the geometry; identity attributes stay on the `<g>` itself.
+                let content_node = node
+                    .children()
+                    .find(|c| c.is_element())
+                    .filter(|c| c.tag_name().name() == "a")
+                    .unwrap_or(node);
                 // Find the first <rect> child for position data.
-                if let Some(rect) = find_first_child(&node, "rect") {
+                if let Some(rect) = find_first_child(&content_node, "rect") {
                     let x = parse_attr(&rect, "x")?;
                     let y = parse_attr(&rect, "y")?;
                     let width = parse_attr(&rect, "width")?;
                     let height = parse_attr(&rect, "height")?;
                     // Look for an icon ellipse to extract icon_cx.
-                    let icon_cx =
-                        find_first_child(&node, "ellipse").and_then(|e| parse_attr(&e, "cx"));
+                    let icon_cx = find_first_child(&content_node, "ellipse")
+                        .and_then(|e| parse_attr(&e, "cx"));
                     // Extract glyph path d attribute (the <path> with fill="#000000").
-                    let glyph_path_d = node
+                    let glyph_path_d = content_node
                         .children()
                         .find(|c| {
                             c.tag_name().name() == "path" && c.attribute("fill") == Some("#000000")
                         })
                         .and_then(|p| p.attribute("d").map(String::from));
                     // Extract name text x (first <text> child).
-                    let name_text_x = node
+                    let name_text_x = content_node
                         .children()
                         .find(|c| c.tag_name().name() == "text")
                         .and_then(|t| parse_attr(&t, "x"));
@@ -250,7 +259,10 @@ pub fn extract_oracle_layout(svg: &str) -> Option<OracleLayout> {
                     // to recover the per-line y sequence the renderer expects.
                     let mut text_y_values: Vec<f64> = Vec::new();
                     let mut text_x_values: Vec<f64> = Vec::new();
-                    for t in node.children().filter(|c| c.tag_name().name() == "text") {
+                    for t in content_node
+                        .children()
+                        .filter(|c| c.tag_name().name() == "text")
+                    {
                         let y = parse_attr(&t, "y");
                         let x = parse_attr(&t, "x");
                         if let Some(y) = y
@@ -264,7 +276,7 @@ pub fn extract_oracle_layout(svg: &str) -> Option<OracleLayout> {
                             }
                         }
                     }
-                    let sep_y_values: Vec<f64> = node
+                    let sep_y_values: Vec<f64> = content_node
                         .children()
                         .filter(|c| c.tag_name().name() == "line")
                         .filter_map(|l| parse_attr(&l, "y1"))
@@ -273,7 +285,7 @@ pub fn extract_oracle_layout(svg: &str) -> Option<OracleLayout> {
                     // <g data-visibility-modifier><rect y="..."> or <ellipse cy="...">
                     // Extract visibility icon center-y: for rects (y + height/2),
                     // for ellipses (cy directly). Stored as icon_cy for uniformity.
-                    let vis_icon_y_values: Vec<f64> = node
+                    let vis_icon_y_values: Vec<f64> = content_node
                         .children()
                         .filter(|c| {
                             c.tag_name().name() == "g"
@@ -328,7 +340,7 @@ pub fn extract_oracle_layout(svg: &str) -> Option<OracleLayout> {
                     // verbatim from the golden so the renderer doesn't have
                     // to recompute their positions and accumulate sub-ulp
                     // drift versus PlantUML.
-                    let aux_rects: Vec<AuxRect> = node
+                    let aux_rects: Vec<AuxRect> = content_node
                         .children()
                         .filter(|c| c.tag_name().name() == "rect")
                         .skip(1)
@@ -347,7 +359,7 @@ pub fn extract_oracle_layout(svg: &str) -> Option<OracleLayout> {
                     // these to emit the header separator, vertical column
                     // divider, and per-row horizontal separators without
                     // recomputing positions and risking sub-ulp drift.
-                    let lines: Vec<EntityLine> = node
+                    let lines: Vec<EntityLine> = content_node
                         .children()
                         .filter(|c| c.tag_name().name() == "line")
                         .map(|l| EntityLine {
@@ -361,7 +373,7 @@ pub fn extract_oracle_layout(svg: &str) -> Option<OracleLayout> {
                     // Capture every <text> child with position and content.
                     // Unlike text_y_values (dedup'd for creole-wrapped labels),
                     // this preserves siblings sharing a y baseline.
-                    let texts: Vec<EntityText> = node
+                    let texts: Vec<EntityText> = content_node
                         .children()
                         .filter(|c| c.tag_name().name() == "text")
                         .filter_map(|t| {
