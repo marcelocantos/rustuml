@@ -15,7 +15,7 @@
 use rustuml_parser::diagram::regex_diagram::{GroupKind, RegexDiagram, RegexNode};
 
 use crate::layout_oracle::OracleLayout;
-use crate::plantuml_metrics::{ascent, descent, fmt_coord, text_height, text_width};
+use crate::plantuml_metrics::{descent, fmt_coord, text_height, text_width};
 use crate::style::Theme;
 use crate::svg::SvgBuilder;
 
@@ -47,12 +47,10 @@ impl Ctx<'_> {
         }
     }
 
-    /// Horizontal line from x1..x2 at local y.
+    /// Horizontal line from x1..x2 at local y. Zero-length lines are kept
+    /// verbatim — PlantUML emits them as leading rails (e.g. the `(0,0)` line
+    /// at the start of a concatenation), so dropping them would diverge.
     fn hline(&mut self, y: f64, x1: f64, x2: f64) {
-        if (x2 - x1).abs() < 1e-9 && x1.abs() < 1e-9 {
-            // PlantUML emits zero-length leading rails; keep them for parity,
-            // but only the deliberate (0,0) one from concatenation/box.
-        }
         let (ax1, ax2, ay) = (self.dx + x1, self.dx + x2, self.dy + y);
         self.svg.raw(&format!(
             r#"<line {LINE_STYLE} x1="{}" x2="{}" y1="{}" y2="{}"/>"#,
@@ -804,23 +802,26 @@ struct LookTile {
     inner: Box<dyn Tile>,
 }
 
-const LOOK_PAD_X: f64 = 8.0;
+/// `ETileLookAheadOrBehind` constants.
+const LOOK_DELTAX1: f64 = 4.0;
+const LOOK_DELTAX2: f64 = 8.0;
+const LOOK_DELTAY: f64 = 6.0;
 
 impl LookTile {
-    fn label_w(&self) -> f64 {
-        text_width(&self.label, FONT_SIZE, false) + 4.0
+    fn sup_w(&self) -> f64 {
+        text_width(&self.label, FONT_SIZE, false)
     }
 }
 
 impl Tile for LookTile {
     fn width(&self) -> f64 {
-        self.label_w() + self.inner.width() + LOOK_PAD_X
+        self.inner.width() + LOOK_DELTAX1 + LOOK_DELTAX2 + self.sup_w()
     }
     fn h1(&self) -> f64 {
-        self.inner.h1().max((text_height(FONT_SIZE) + 12.0) / 2.0)
+        LOOK_DELTAY + self.inner.h1()
     }
     fn h2(&self) -> f64 {
-        self.inner.h2().max((text_height(FONT_SIZE) + 12.0) / 2.0)
+        self.inner.h2() + LOOK_DELTAY
     }
     fn draw(&self, ctx: &mut Ctx) {
         let h = self.height();
@@ -833,10 +834,11 @@ impl Tile for LookTile {
             "stroke:#181818;stroke-width:1;stroke-dasharray:2,3;",
             Some(15.0),
         );
-        let ty = self.h1() + ascent(FONT_SIZE) / 2.0;
-        ctx.text(5.0, ty, &self.label, FONT_SIZE);
+        // supText at (4, 2 + h1 + descent).
+        let pos_text = self.h1() + descent(FONT_SIZE);
+        ctx.text(4.0, 2.0 + pos_text, &self.label, FONT_SIZE);
         {
-            let mut sub = ctx.at(self.label_w(), self.h1() - self.inner.h1());
+            let mut sub = ctx.at(LOOK_DELTAX1 + self.sup_w(), LOOK_DELTAY);
             self.inner.draw(&mut sub);
         }
     }

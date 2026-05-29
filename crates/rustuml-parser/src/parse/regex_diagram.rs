@@ -304,17 +304,20 @@ impl Parser {
             Some('r') => RegexNode::Special {
                 text: "\\r".to_string(),
             },
-            Some(c) if matches!(c, '+' | '*' | '?' | '.' | '^' | '$' | '|') => {
-                // Escaped quantifier/operator: \+  \*  \.  etc. → render as Special
-                // to show the backslash and distinguish from the bare operator.
+            // PlantUML's `isEscapedChar` set: these become ESCAPED_CHAR tokens
+            // rendered as plain terminal boxes showing only the unescaped char
+            // (e.g. `\.` -> a literal box containing `.`).
+            Some(
+                c @ ('.' | '*' | '\\' | '?' | '^' | '$' | '|' | '(' | ')' | '[' | ']' | '{' | '}'
+                | '<' | '>'),
+            ) => RegexNode::Literal {
+                text: c.to_string(),
+            },
+            Some(c) => {
+                // Any other escape (e.g. `\+`, `\/`) is treated as a metacharacter
+                // class and rendered as a gray special box showing the backslash.
                 RegexNode::Special {
                     text: format!("\\{c}"),
-                }
-            }
-            Some(c) => {
-                // Escaped structural char: \(  \)  \[  \]  etc. → render as literal
-                RegexNode::Literal {
-                    text: c.to_string(),
                 }
             }
             None => RegexNode::Literal {
