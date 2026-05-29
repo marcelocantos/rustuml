@@ -222,6 +222,14 @@ fn fmt_f(v: f64) -> String {
     crate::plantuml_metrics::fmt_coord(v)
 }
 
+/// Escape a string for use inside an XML attribute value.
+fn escape_attr(s: &str) -> String {
+    s.replace('&', "&amp;")
+        .replace('<', "&lt;")
+        .replace('>', "&gt;")
+        .replace('"', "&quot;")
+}
+
 /// Determine if a [*] reference is a start or end node based on context.
 /// In PlantUML, [*] as a source is the start node, and [*] as a target is the end node.
 fn classify_star_nodes(transitions: &[Transition]) -> (bool, bool) {
@@ -1202,6 +1210,22 @@ pub fn render_with_oracle(
                         )
                         .unwrap();
 
+                        // `state X [[url]]` wraps the entity body in an `<a>`.
+                        // `title`/`xlink:title` use the tooltip when present,
+                        // otherwise the URL itself.
+                        let url = state_def.and_then(|s| s.url.as_deref());
+                        if let Some(href) = url {
+                            let title =
+                                state_def.and_then(|s| s.tooltip.as_deref()).unwrap_or(href);
+                            let href_e = escape_attr(href);
+                            let title_e = escape_attr(title);
+                            write!(
+                                svg,
+                                r#"<a href="{href_e}" target="_top" title="{title_e}" xlink:actuate="onRequest" xlink:href="{href_e}" xlink:show="new" xlink:title="{title_e}" xlink:type="simple">"#,
+                            )
+                            .unwrap();
+                        }
+
                         // State rectangle.
                         write!(
                             svg,
@@ -1274,6 +1298,10 @@ pub fn render_with_oracle(
                                 },
                             );
                             svg.push_str(&text_buf);
+                        }
+
+                        if url.is_some() {
+                            svg.push_str("</a>");
                         }
 
                         svg.push_str("</g>");

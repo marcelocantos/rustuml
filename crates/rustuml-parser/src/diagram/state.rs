@@ -70,6 +70,13 @@ pub struct State {
     /// state is nested inside one. `None` for top-level states.
     #[serde(default)]
     pub parent: Option<String>,
+    /// `state X [[url]]` — hyperlink target. Rendered as an `<a>` wrapper
+    /// around the entity body.
+    #[serde(default)]
+    pub url: Option<String>,
+    /// `state X [[url{tooltip}]]` — optional tooltip text for the hyperlink.
+    #[serde(default)]
+    pub tooltip: Option<String>,
 }
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Default, Serialize, Deserialize)]

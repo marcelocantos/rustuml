@@ -300,6 +300,23 @@ impl StateParser {
         static RE_DESC: LazyLock<Regex> = LazyLock::new(|| {
             Regex::new(r#"^state\s+(?:"([^"]+)"\s+as\s+)?(\w+)\s*:\s*(.+)$"#).unwrap()
         });
+        // `state X [[url]]` / `state X [[url{tooltip}]]` — hyperlink decoration.
+        // PlantUML accepts this anywhere after the id; pull it out before the
+        // main match so the (otherwise strict) declaration regex still applies.
+        static URL_RE: LazyLock<Regex> =
+            LazyLock::new(|| Regex::new(r"\[\[([^\]{}]+?)(?:\{([^}]*)\})?\]\]").unwrap());
+
+        let mut url: Option<String> = None;
+        let mut tooltip: Option<String> = None;
+        let stripped;
+        let line = if let Some(uc) = URL_RE.captures(line) {
+            url = Some(uc[1].trim().to_string());
+            tooltip = uc.get(2).map(|m| m.as_str().trim().to_string());
+            stripped = URL_RE.replace(line, "").trim_end().to_string();
+            stripped.as_str()
+        } else {
+            line
+        };
 
         if let Some(caps) = RE.captures(line) {
             let label = caps
@@ -369,6 +386,10 @@ impl StateParser {
                 if state.stroke_style.is_none() {
                     state.stroke_style = stroke_style;
                 }
+                if state.url.is_none() {
+                    state.url = url;
+                    state.tooltip = tooltip;
+                }
             } else {
                 self.states.push(State {
                     id: id.clone(),
@@ -378,6 +399,8 @@ impl StateParser {
                     fill,
                     stroke,
                     stroke_style,
+                    url,
+                    tooltip,
                     composite: is_composite,
                     parent,
                     ..State::default()
