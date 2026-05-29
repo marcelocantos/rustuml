@@ -287,8 +287,15 @@ fn detect_uml_subtype(lines: &[String]) -> UmlSubtype {
             && !trimmed.contains("[[")
             && !trimmed.contains("[#")
             && !trimmed.starts_with("return ")
+            // `autonumber "<b>[000]"` uses brackets inside its format string;
+            // that is a sequence-diagram directive, not a component reference.
+            && !trimmed.starts_with("autonumber")
         {
             scores[5] += 5;
+        }
+        // `autonumber` (with or without start/step/format) is sequence-only.
+        if trimmed == "autonumber" || trimmed.starts_with("autonumber ") {
+            scores[0] += 10;
         }
         // `interface` in a component context: score for both class and component.
         // `interface` alone still tips to class (class score ≥ component score in
