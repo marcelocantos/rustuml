@@ -405,6 +405,19 @@ pub fn extract_oracle_layout(svg: &str) -> Option<OracleLayout> {
                         .filter(|c| c.tag_name().name() == "line")
                         .filter_map(|l| parse_attr(&l, "y1"))
                         .collect();
+                    // Full separator-line geometry (x1, x2, y1) so renderers can
+                    // emit the divider verbatim without reconstructing its inset.
+                    let sep_lines: Vec<(f64, f64, f64)> = node
+                        .children()
+                        .filter(|c| c.tag_name().name() == "line")
+                        .filter_map(|l| {
+                            Some((
+                                parse_attr(&l, "x1")?,
+                                parse_attr(&l, "x2")?,
+                                parse_attr(&l, "y1")?,
+                            ))
+                        })
+                        .collect();
                     // Extract visibility icon y-positions from
                     // <g data-visibility-modifier><rect y="..."> or <ellipse cy="...">
                     // Extract visibility icon center-y: for rects (y + height/2),
@@ -521,6 +534,7 @@ pub fn extract_oracle_layout(svg: &str) -> Option<OracleLayout> {
                             text_y_values,
                             text_x_values,
                             sep_y_values,
+                            sep_lines,
                             vis_icon_y_values,
                             fill,
                             body_style,
@@ -559,6 +573,19 @@ pub fn extract_oracle_layout(svg: &str) -> Option<OracleLayout> {
                             }
                         }
                     }
+                    // Capture separator dividers (e.g. use-case description
+                    // `--` lines) so the renderer can emit them verbatim.
+                    let sep_lines: Vec<(f64, f64, f64)> = node
+                        .children()
+                        .filter(|c| c.tag_name().name() == "line")
+                        .filter_map(|l| {
+                            Some((
+                                parse_attr(&l, "x1")?,
+                                parse_attr(&l, "x2")?,
+                                parse_attr(&l, "y1")?,
+                            ))
+                        })
+                        .collect();
                     layout.entities.insert(
                         name.to_string(),
                         EntityRect {
@@ -572,6 +599,7 @@ pub fn extract_oracle_layout(svg: &str) -> Option<OracleLayout> {
                             text_y_values,
                             text_x_values,
                             sep_y_values: Vec::new(),
+                            sep_lines,
                             vis_icon_y_values: Vec::new(),
                             fill: None,
                             body_style: None,
@@ -615,6 +643,7 @@ pub fn extract_oracle_layout(svg: &str) -> Option<OracleLayout> {
                                     text_y_values: Vec::new(),
                                     text_x_values: Vec::new(),
                                     sep_y_values: Vec::new(),
+                                    sep_lines: Vec::new(),
                                     vis_icon_y_values: Vec::new(),
                                     fill,
                                     body_style: None,
@@ -716,6 +745,7 @@ pub fn extract_oracle_layout(svg: &str) -> Option<OracleLayout> {
                             text_y_values: Vec::new(),
                             text_x_values: Vec::new(),
                             sep_y_values: Vec::new(),
+                            sep_lines: Vec::new(),
                             vis_icon_y_values: Vec::new(),
                             fill,
                             body_style: None,
@@ -874,6 +904,7 @@ pub fn extract_oracle_layout(svg: &str) -> Option<OracleLayout> {
                     text_y_values: Vec::new(),
                     text_x_values: Vec::new(),
                     sep_y_values: Vec::new(),
+                    sep_lines: Vec::new(),
                     vis_icon_y_values: Vec::new(),
                     fill: None,
                     body_style: None,
@@ -940,6 +971,7 @@ pub fn extract_oracle_layout(svg: &str) -> Option<OracleLayout> {
                     text_y_values: Vec::new(),
                     text_x_values: Vec::new(),
                     sep_y_values: Vec::new(),
+                    sep_lines: Vec::new(),
                     vis_icon_y_values: Vec::new(),
                     fill: None,
                     body_style: None,
@@ -1411,6 +1443,7 @@ fn path_bounding_box(d: &str) -> Option<EntityRect> {
             text_y_values: Vec::new(),
             text_x_values: Vec::new(),
             sep_y_values: Vec::new(),
+            sep_lines: Vec::new(),
             vis_icon_y_values: Vec::new(),
             fill: None,
             body_style: None,

@@ -51,6 +51,8 @@ pub fn parse_usecase(lines: &[String]) -> Result<UseCaseDiagram, ParseError> {
     // For multiline string literals in usecase declarations.
     let mut multiline_uc_id: Option<String> = None;
     let mut multiline_label_lines: Vec<String> = Vec::new();
+    // Source line of the `usecase ID as "` opening for a multiline label.
+    let mut multiline_start_line: usize = 0;
     // For multiline note blocks.
     let mut in_note_block = false;
     let mut note_block_lines: Vec<String> = Vec::new();
@@ -177,7 +179,7 @@ pub fn parse_usecase(lines: &[String]) -> Result<UseCaseDiagram, ParseError> {
                         stereotype: None,
                         description,
                         color: None,
-                        source_line: current_line,
+                        source_line: multiline_start_line,
                     });
                 }
                 multiline_uc_id = None;
@@ -392,6 +394,7 @@ pub fn parse_usecase(lines: &[String]) -> Result<UseCaseDiagram, ParseError> {
             }
             multiline_uc_id = Some(id);
             multiline_label_lines.clear();
+            multiline_start_line = current_line;
         } else if let Some(caps) = RE_UC_PAREN_AS.captures(trimmed) {
             // usecase (Label) as ID
             let label = caps[1].trim().to_string();
