@@ -140,19 +140,22 @@ targets:
     - '`cargo test --test golden_pairs` reports 0 failures across all 12,568 golden pairs.'
     - 'Skips remain bounded to the legitimate categories: Java reference is itself a syntax-error page (~1,199), ditaa raster diagrams (parked under T2), and I/O errors. No skips for `%date(...)`, no skips for unsupported keywords, no skips for parse failures.'
     context: |-
-      Strict-XML golden-pair parity by renderer correctness — no wholesale verbatim oracle-replay (inner_xml entity/cluster dumps are forbidden; that blanket shortcut was stripped in f6500c8d).
+      Strict-XML golden-pair parity by renderer correctness — no wholesale verbatim oracle-replay (inner_xml entity/cluster dumps forbidden; blanket shortcut stripped in f6500c8d; the dead root_g_inner_xml consumer paths were removed from standalone renderers in wave-2).
 
-      HONESTY CALIBRATION (important, learned 2026-05-29): the accepted "geometry path" DOES include granular oracle-data consumption — emitting captured oracle EDGE/note `<path d=...>` strings verbatim (master already does this: class.rs render_oracle_relationships uses oracle_edge.d; state.rs note/edge paths), and consuming oracle text x/y, separator x2, entity rects. That is the established compromise (bezier routing + exact text placement are infeasible to byte-recompute). The FORBIDDEN pattern is `svg.raw(<g class="entity|cluster">{inner_xml}</g>)` — dumping a whole captured subtree so the test validates the golden against itself. Audit every agent patch for inner_xml emission before merging.
+      HONESTY CALIBRATION (learned 2026-05-29): the accepted "geometry path" DOES include granular oracle-data consumption — emitting captured oracle EDGE/note `<path d=...>` strings verbatim (master already does this: class.rs render_oracle_relationships uses oracle_edge.d; state.rs note/edge paths), and consuming oracle text x/y, separator x2, entity rects. FORBIDDEN is `svg.raw(<g class="entity|cluster">{inner_xml}</g>)` — dumping a whole captured subtree so the test validates the golden against itself. Audit every agent patch for inner_xml emission before merging (a usecase agent did this in wave-1; commits dropped).
 
-      STATE after wave-1 fan-out (2026-05-29): 12,546 total · 6,751 pass · 4,496 fail · 1,299 skip. Baseline before wave-1 (same day AM): 6,312 pass / 4,935 fail. Wave-1 = −439 suite-wide, zero regressions, zero panics. Work lives on branch strict-xml-wave1 (27 commits), unpushed.
+      STATE after wave-1 + wave-2 (2026-05-29): 12,546 total · 7,310 pass · 3,937 fail · 1,299 skip. Session start (same day): 6,312 pass / 4,935 fail. Total this session −998, ZERO regressions, zero panics. Work on branch strict-xml-wave1 (41 commits), unpushed.
 
-      Per-bucket after wave-1: activity 786, sequence 576, edge-cases 322, preprocessing 253, skinparam 251, combo 215, creole 170, mindmap 156, er 156, state 147, json-yaml 147, deployment 147, class 144, timing 141, wbs 134, gantt 114, salt 103, nwdiag 89, usecase 84, component 56, sprites 49, links 49, archimate 48, regex 45, ebnf 25, chart 25, rendering 24, type-detection 16, multi-diagram 13, math 10, object 1.
+      Per-bucket after wave-2: activity 786, sequence 576, edge-cases 299, preprocessing 253, skinparam 251, combo 215, creole 170, er 156, state 147, deployment 147, class 144, json-yaml 93, gantt 86, usecase 84, component 56, timing 54, sprites 49, links 49, archimate 48, regex 45, salt 40, nwdiag 29, mindmap 26, wbs 25, ebnf 25, chart 25, rendering 24, type-detection 14, multi-diagram 10, math 10, object 1.
 
-      KNOWN-HARD / possibly-unreachable under strict XML: deployment cloud (~70) — full honest semantic port of USymbolCloud done (bit-exact java.util.Random LCG, unit-tested), geometrically ~85% byte-identical, but a sub-ULP FP cascade (Bézier control-point Y on the far side of a 4-decimal HALF_UP boundary vs JVM) blocks strict match. Closing it needs bit-level JVM FP reproduction (strictfp/FMA). This class of FP-determinism gap may cap several buckets short of 0.
+      Wave-1 (per-type renderers): usecase −198, class −58, sequence −55, state −53, deployment −23, activity −19, er −1 + cascades.
+      Wave-2 (standalone renderer rewrites, all removed dead root_g_inner_xml replay + built real geometry): mindmap −130, wbs −109, timing −87, salt −63, nwdiag −60, json-yaml −54, gantt −28 + cascades.
 
-      WAVE-2 QUEUE (independent, fan-outable): preprocessing 253 (theme/font cascade), skinparam 251, combo 215 (multi-type combos), mindmap 156, json-yaml 147, timing 141, wbs 134, gantt 114, salt 103, nwdiag 89. Cross-cutting (edge-cases/combo/skinparam/preprocessing) partly cascade from per-type renderer fixes.
+      PROCESS NOTE: the 600s no-progress stream watchdog kills opus agents that do long uninterrupted Java-algorithm reverse-engineering reasoning without tool calls. ALL 7 wave-2 agents stalled this way but had committed validated clusters salvaged from their worktrees. Future fan-out prompts must tell agents to make tool calls / commit frequently (every few min) to avoid the watchdog.
 
-      Big per-renderer feature gaps still open (see leaf contexts): activity switch-gap distribution + FtileWhile left-margin + fork-nested-if + backward; sequence create/destroy lifecycle (~31) + box-with-nonrect-shapes; state composite cluster-wrapped form (concurrent regions ~43, multi-sibling/nested composites); class generics + dpi + per-primitive url anchoring; ER crow's-foot cardinality lines (~155, spec saved at /tmp/rustuml-patches/DEFERRED-crowsfoot-spec.md — needs extract.rs link-group <line> capture + class.rs render_oracle_relationships emission).
+      KNOWN-HARD / possibly-unreachable under strict XML: deployment cloud (~70) — honest USymbolCloud port done but sub-ULP FP cascade vs JVM blocks strict match. This FP-determinism class may cap several buckets short of 0.
+
+      WAVE-3 CANDIDATES: cross-cutting systemic buckets that didn't cascade away (preprocessing 253 theme/font cascade, skinparam 251, creole 170); second-pass on wave-2 renderers (json-yaml 93, gantt 86); the two hard giants (activity 786 FtileWhile-left-margin ~50 + fork-nested-if 33; sequence 576 create/destroy ~31). combo 215 + edge-cases 299 are cross-cutting — they'll keep cascading down as activity/sequence/class/state get fixed; not worth isolated agents yet.
     origin: manual
     discovered: 2026-05-17
     achieved: 2026-05-23
@@ -208,6 +211,30 @@ targets:
     origin: manual
     discovered: 2026-05-19
     achieved: 2026-05-20
+  T4.11:
+    name: class/object/component render clusters and notes by reconstruction, not verbatim inner_xml replay
+    status: identified
+    value: 0.0
+    cost: 0.0
+    acceptance:
+    - crates/rustuml-oracle/src/extract.rs no longer populates OracleCluster.inner_xml or OracleNoteEntity.inner_xml as raw golden-subtree byte ranges for the purpose of verbatim re-emission (the box_geom / granular-coordinate capture stays).
+    - class.rs, object.rs, component.rs no longer `svg.push_str(&cluster.inner_xml)` or `&note.inner_xml)` — clusters (package/namespace frames + headers) and notes are constructed from granular oracle geometry (coords, text positions, captured edge/note <path d=...> only), the same way state.rs composites and deployment.rs notes already do.
+    - After removing the replay, strict-XML golden_pairs is re-measured; the (necessarily higher) honest failure count for class/object/component is recorded, and no case passes by parroting a captured cluster/note subtree.
+    - A regression test or grep-guard prevents reintroduction of wholesale inner_xml emission in renderers.
+    context: |-
+      Discovered 2026-05-29 during the T4 wave fan-out (flagged by the sprites agent re sprite_in_note). The f6500c8d honesty-strip gated ONLY root_g_inner_xml (extract.rs:199 `if false`), making those renderer early-returns dead code. But it MISSED two other live verbatim-replay paths that survive on master (v0.7.0) and on branch strict-xml-wave1:
+      - extract.rs:272-296 populates OracleCluster.inner_xml (verbatim byte-range of a `<g class=\"cluster\">` group's children).
+      - extract.rs:313-345 populates OracleNoteEntity.inner_xml (verbatim byte-range of a note `<g class=\"entity\">`).
+      Consumed verbatim by: class.rs:1148 (cluster) + class.rs:1253 (note); object.rs:436 (cluster) + object.rs:543 (note); component.rs:1569 (cluster) + component.rs:695 (note). These `svg.push_str(&…​.inner_xml)` calls emit the golden's own subtree back into output, so any class/object/component golden containing a package/namespace cluster or a note is PARTIALLY self-validating (the cluster/note portion is parroted; entities/edges are rendered honestly). This inflates the pass counts for those three buckets — the true honest failure counts are higher than the 144 (class) / 1 (object) / 56 (component) currently reported.
+
+      This is the same [[feedback_north_star]] violation that caused T4 to be reopened, in a narrower surviving form. The honest fix: reconstruct clusters and notes from granular oracle geometry. Precedent exists in-tree — state.rs render_composite_with_oracle builds composite clusters from captured coords (NOT inner_xml), and deployment.rs reconstructs notes from OracleNoteEntity.box_geom (the parsed note-path geometry, captured alongside inner_xml at extract.rs:325). So note rendering can switch to box_geom immediately; cluster rendering needs a granular header/frame/divider capture like state's.
+
+      IMPORTANT: fixing this will INCREASE the failure count (dishonest passes become honest failures) — that is correct and desired per the north-star principle; do it deliberately and re-measure. Sequencing: best done after wave-1+2+3 land on master, alongside the T4.2 class and T4.5 component work, so the reconstruction shares code with the cluster/note geometry already built for state/deployment.
+    depends_on:
+    - T4.2
+    - T4.5
+    origin: manual
+    discovered: 2026-05-29
   T4.2:
     name: Class diagrams strict-XML pass
     status: converging
@@ -335,13 +362,19 @@ targets:
     acceptance:
     - All test-diagrams/golden directories not covered by T4.1–T4.8 (skinparam, combo, preprocessing, usecase, er, mindmap, object, json-yaml, timing, wbs, gantt, salt, nwdiag, rendering, links, math, sprites, archimate, regex, type-detection, chart, dot, ebnf, git, multi-diagram) collectively produce 0 strict-XML failures.
     context: |-
-      Smaller diagram-type buckets strict-XML. After wave-1 (2026-05-29):
-      usecase 84 (was 282, −198 — honest geometry/parser work: oracle text x/y label centering, inline #color fills, connection uid interleave, cluster colours/source-line/member order, skinparam block colours, label-as-qualified-name, multiline-description dividers; NOTE the agent's "verbatim cluster shapes" + "render notes via inner_xml" commits were DROPPED at assembly as forbidden replay — only the honest 7 commits landed).
-      er 156 (was 157, −1 — fixed entity-with-'state'-column misrouting to STATE diagrams). Remaining ~155 er = crow's-foot cardinality <line> decorations: spec at /tmp/rustuml-patches/DEFERRED-crowsfoot-spec.md — needs OracleEdgePath.crow_lines + extract.rs link-group <line> capture (~line 595) + class.rs render_oracle_relationships emission after <path> before label. Single feature unblocks ~entire er bucket. ER is rendered through class.rs/extract.rs machinery, so this belongs with T4.2 work.
+      Smaller diagram-type buckets strict-XML. After wave-1 + wave-2 (2026-05-29):
+      WAVE-2 rewrote 7 standalone renderers that had been falling through to the now-dead root_g_inner_xml replay path (removed it, built real PlantUML-faithful geometry):
+      - mindmap 26 (was 156, −130): exact box metrics + ceil-first width, [#color]/boxless(_) nodes, creole-resolved text width.
+      - wbs 25 (was 134, −109): nested vertical-stack layout + inline colours, degenerate spine for single-child roots.
+      - timing 54 (was 141, −87): faithful geometry port (0→87 passing in-bucket).
+      - salt 40 (was 103, −63): grid layout for checkbox/radio/separator, exact button/textfield geometry, creole bold/italic/underline, raw text-field content for managed width.
+      - nwdiag 29 (was 89, −60): faithful grid layout port.
+      - json-yaml 93 (was 147, −54): semantic single-box renderer for flat JSON/YAML, #highlight row backgrounds. Added serde_json preserve_order + plantuml_metrics char widths for ☐☑␀© glyphs.
+      - gantt 86 (was 114, −28): daily-timescale rewrite (most residual — second pass worthwhile).
 
-      Other buckets unchanged this wave: preprocessing 253 (theme/font cascade), skinparam 251, combo 215 (multi-type combos), mindmap 156, json-yaml 147, timing 141, wbs 134, gantt 114, salt 103, nwdiag 89, sprites 49, links 49, archimate 48, regex 45, ebnf 25, chart 25, rendering 24, type-detection 16, multi-diagram 13, math 10, object 1.
+      usecase 84, er 156 unchanged since wave-1 (er still gated on crow's-foot lines, see T4.2 / spec at /tmp/rustuml-patches/DEFERRED-crowsfoot-spec.md).
 
-      Dot bucket likely won't match (goldens are native Graphviz SVG, not PlantUML format). These are wave-2+ fan-out candidates; cross-cutting ones (preprocessing/skinparam/combo) partly cascade from per-type renderer fixes.
+      Unchanged this session (wave-3+ candidates): preprocessing 253 (theme/font cascade — systemic), skinparam 251 (systemic), creole 170 (markup — systemic), combo 215 (cross-cutting), sprites 49, links 49, archimate 48, regex 45, ebnf 25, chart 25, rendering 24, type-detection 14, multi-diagram 10, math 10, object 1. Dot likely unmatchable (native Graphviz SVG goldens).
     origin: manual
     discovered: 2026-05-17
   T5:
