@@ -151,6 +151,10 @@ pub struct EntityRect {
     pub text_x_values: Vec<f64>,
     /// All separator line y-positions (from `<line y1="...">`), in order.
     pub sep_y_values: Vec<f64>,
+    /// Full separator-line geometry `(x1, x2, y1)` from each `<line>` child,
+    /// in document order. Lets renderers emit dividers (e.g. use-case
+    /// description separators) verbatim without reconstructing their inset.
+    pub sep_lines: Vec<(f64, f64, f64)>,
     /// Visibility icon y-positions (from rect/ellipse within `<g data-visibility-modifier>`).
     pub vis_icon_y_values: Vec<f64>,
     /// Declared fill from the first `<rect fill="…">` child, if any.

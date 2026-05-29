@@ -849,6 +849,28 @@ fn render_use_case(
         );
         svg.raw(&buf);
     } else {
+        // Separator dividers (from `--`/`==`/`..` lines in a multiline label)
+        // are captured verbatim from the oracle and interleaved with the text
+        // lines by y-position: each divider is flushed before the first text
+        // line whose baseline sits below it.
+        let sep_lines = orc_rect.map(|r| r.sep_lines.as_slice()).unwrap_or(&[]);
+        let mut sep_idx = 0usize;
+        let flush_seps = |svg: &mut SvgBuilder, sep_idx: &mut usize, before_y: f64| {
+            while let Some(&(x1, x2, y1)) = sep_lines.get(*sep_idx) {
+                if y1 < before_y {
+                    svg.raw(&format!(
+                        r#"<line style="stroke:{STROKE};stroke-width:1;" x1="{}" x2="{}" y1="{}" y2="{}"/>"#,
+                        fc(x1),
+                        fc(x2),
+                        fc(y1),
+                        fc(y1),
+                    ));
+                    *sep_idx += 1;
+                } else {
+                    break;
+                }
+            }
+        };
         for line in &uc.description {
             let lw = text_render::measure(line, FONT_SIZE, false);
             let lx = captured_x
@@ -856,6 +878,7 @@ fn render_use_case(
                 .copied()
                 .unwrap_or(cx_anchor - lw / 2.0);
             let ly = captured_y.get(line_idx).copied().unwrap_or(text_y);
+            flush_seps(svg, &mut sep_idx, ly);
             line_idx += 1;
             let mut buf = String::new();
             text_render::emit_text(
@@ -876,6 +899,8 @@ fn render_use_case(
             svg.raw(&buf);
             text_y += LINE_H;
         }
+        // Any trailing separators after the last text line.
+        flush_seps(svg, &mut sep_idx, f64::INFINITY);
     }
     svg.raw("</g>");
 }
