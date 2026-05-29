@@ -2281,26 +2281,55 @@ fn render_composite_with_oracle(diagram: &StateDiagram, orc: &OracleLayout) -> S
             )
             .unwrap();
         }
-        let tx = rect.name_text_x.unwrap_or(rect.x + 10.0);
-        // Title baseline: PlantUML uses y = rect.y + 18.5352 (same as states).
-        let ty = rect.y + NAME_BASELINE_OFFSET;
-        let mut buf = String::new();
-        text_render::emit_text(
-            &mut buf,
-            &st.label,
-            &TextBase {
-                x: tx,
-                y: ty,
-                font_size: STATE_FONT_SIZE as u32,
-                font_family: "sans-serif",
-                fill: DEFAULT_TEXT_COLOR,
-                bold: false,
-                italic: false,
-                underline: false,
-                skip_underline: false,
-            },
-        );
-        svg.push_str(&buf);
+        // Title (font 14) followed by any `state X : desc` lines (font 12).
+        // Use the oracle's captured text positions for byte-exact placement;
+        // fall back to computed positions when the oracle didn't capture them.
+        if rect.texts.is_empty() {
+            let tx = rect.name_text_x.unwrap_or(rect.x + 10.0);
+            let ty = rect.y + NAME_BASELINE_OFFSET;
+            let mut buf = String::new();
+            text_render::emit_text(
+                &mut buf,
+                &st.label,
+                &TextBase {
+                    x: tx,
+                    y: ty,
+                    font_size: STATE_FONT_SIZE as u32,
+                    font_family: "sans-serif",
+                    fill: DEFAULT_TEXT_COLOR,
+                    bold: false,
+                    italic: false,
+                    underline: false,
+                    skip_underline: false,
+                },
+            );
+            svg.push_str(&buf);
+        } else {
+            for (i, t) in rect.texts.iter().enumerate() {
+                let font = if i == 0 {
+                    STATE_FONT_SIZE as u32
+                } else {
+                    DESC_FONT_SIZE as u32
+                };
+                let mut buf = String::new();
+                text_render::emit_text(
+                    &mut buf,
+                    &t.text,
+                    &TextBase {
+                        x: t.x,
+                        y: t.y,
+                        font_size: font,
+                        font_family: "sans-serif",
+                        fill: DEFAULT_TEXT_COLOR,
+                        bold: false,
+                        italic: false,
+                        underline: false,
+                        skip_underline: false,
+                    },
+                );
+                svg.push_str(&buf);
+            }
+        }
     };
 
     // Emit links whose both endpoints are inside `scope` (None = top level),

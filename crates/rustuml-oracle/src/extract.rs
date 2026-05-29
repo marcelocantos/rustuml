@@ -1020,9 +1020,12 @@ pub fn extract_oracle_layout(svg: &str) -> Option<OracleLayout> {
                     let fill = p.attribute("fill").unwrap_or("#F1F1F1");
                     Some(format!("{d}#FILL#{fill}"))
                 });
+            // The composite's separator <line>s and its title/description
+            // <text>s follow the border rect at top level (the title text and
+            // any `state X : desc` lines). Capture them all so the renderer
+            // reproduces multi-line composite headers verbatim.
             let mut lines = Vec::new();
-            let mut title = String::new();
-            let mut title_x = None;
+            let mut texts: Vec<EntityText> = Vec::new();
             let mut j = bi + 1;
             while let Some(next) = bare_state_children.get(j) {
                 match next.tag_name().name() {
@@ -1037,14 +1040,21 @@ pub fn extract_oracle_layout(svg: &str) -> Option<OracleLayout> {
                         j += 1;
                     }
                     "text" => {
-                        title = collect_text(next);
-                        title_x = parse_attr(next, "x");
+                        if let (Some(tx), Some(ty)) = (parse_attr(next, "x"), parse_attr(next, "y"))
+                        {
+                            texts.push(EntityText {
+                                x: tx,
+                                y: ty,
+                                text: collect_text(next),
+                            });
+                        }
                         j += 1;
-                        break;
                     }
                     _ => break,
                 }
             }
+            let title = texts.first().map(|t| t.text.clone()).unwrap_or_default();
+            let title_x = texts.first().map(|t| t.x);
             if !title.is_empty() && !layout.entities.contains_key(&title) {
                 layout.entities.insert(
                     title,
@@ -1069,7 +1079,7 @@ pub fn extract_oracle_layout(svg: &str) -> Option<OracleLayout> {
                         source_line: None,
                         aux_rects: Vec::new(),
                         lines,
-                        texts: Vec::new(),
+                        texts,
                     },
                 );
             }
