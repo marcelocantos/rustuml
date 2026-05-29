@@ -42,8 +42,11 @@ fn n(v: f64) -> String {
 /// is the full horizontal extent.
 enum Tile {
     /// `ETileBox`: terminal (`is_terminal = true`, plain rect, stroke 0.5) or
-    /// nonterminal/special (rounded rect, stroke 1.5).
+    /// nonterminal (rounded rect, stroke 1.5).
     Box { text: String, terminal: bool },
+    /// `ETileBox` with `Symbol.SPECIAL_SEQUENCE`: a dashed rectangle. The box is
+    /// sized from the raw (untrimmed) text while the trimmed text is displayed.
+    Special { raw: String },
     /// `ETileConcatenation`: a horizontal run of tiles joined by directed rails.
     Concat(Vec<Tile>),
     /// `ETileAlternation`: vertically stacked branches with curved fork/join.
@@ -68,6 +71,7 @@ fn build(expr: &EbnfExpr) -> Tile {
             text: s.clone(),
             terminal: false,
         },
+        EbnfExpr::SpecialSequence(raw) => Tile::Special { raw: raw.clone() },
         EbnfExpr::Group(inner) => build(inner),
         EbnfExpr::Sequence(items) => {
             if items.len() == 1 {
@@ -103,6 +107,7 @@ impl Tile {
     fn width(&self) -> f64 {
         match self {
             Tile::Box { text, .. } => text_dim(text).0 + 10.0,
+            Tile::Special { raw } => pm::text_width(raw, FONT_SIZE, false) + 10.0,
             Tile::Concat(tiles) => {
                 let mut w = 0.0;
                 for (i, t) in tiles.iter().enumerate() {
@@ -129,6 +134,7 @@ impl Tile {
     fn h1(&self) -> f64 {
         match self {
             Tile::Box { text, .. } => box_pure_h1(text),
+            Tile::Special { .. } => box_pure_h1(""),
             Tile::Concat(tiles) => tiles.iter().map(|t| t.h1()).fold(0.0_f64, f64::max),
             Tile::Alt(tiles) => tiles[0].h1(),
             // `[ x ]` builds an ETileOptional2 directly; `getH1` is a flat 10.
@@ -141,6 +147,7 @@ impl Tile {
     fn h2(&self) -> f64 {
         match self {
             Tile::Box { text, .. } => box_pure_h1(text),
+            Tile::Special { .. } => box_pure_h1(""),
             Tile::Concat(tiles) => tiles.iter().map(|t| t.h2()).fold(0.0_f64, f64::max),
             Tile::Alt(tiles) => {
                 let mut h = tiles[0].h2();
@@ -173,6 +180,7 @@ fn clone_tile(t: &Tile) -> Tile {
             text: text.clone(),
             terminal: *terminal,
         },
+        Tile::Special { raw } => Tile::Special { raw: raw.clone() },
         Tile::Concat(v) => Tile::Concat(v.iter().map(clone_tile).collect()),
         Tile::Alt(v) => Tile::Alt(v.iter().map(clone_tile).collect()),
         Tile::Optional(i) => Tile::Optional(Box::new(clone_tile(i))),
@@ -381,6 +389,7 @@ fn draw(tile: &Tile, c: &mut Canvas) {
         Tile::Box { text, terminal } => {
             draw_box(text, *terminal, tile.width(), tile.h1() + tile.h2(), c)
         }
+        Tile::Special { raw } => draw_special(raw, tile.width(), c),
         Tile::Concat(tiles) => draw_concat(tiles, c),
         Tile::Alt(tiles) => draw_alt(tiles, c),
         Tile::Optional(inner) => draw_optional(inner, c),
@@ -402,6 +411,48 @@ fn draw_box(text: &str, terminal: bool, full_w: f64, full_h: f64, c: &mut Canvas
     c.text(5.0 + posx_box, baseline, text, false);
 
     let _ = full_h;
+    if posx_box > 0.0 {
+        c.hline_directed(h1, 0.0, posx_box, 0.5, MIN_ARROW);
+        c.hline_directed(h1, posx_box + box_w, full_w, 0.5, MIN_ARROW);
+    }
+}
+
+fn draw_special(raw: &str, full_w: f64, c: &mut Canvas) {
+    let th = pm::text_height(FONT_SIZE);
+    let raw_w = pm::text_width(raw, FONT_SIZE, false);
+    let box_w = raw_w + 10.0;
+    let box_h = th + 10.0;
+    let posx_box = (full_w - box_w) / 2.0;
+    let h1 = (th + 10.0) / 2.0;
+
+    // Dashed rectangle (Symbol.SPECIAL_SEQUENCE uses UStroke(5,5,1)).
+    let (ax, ay) = c.at(posx_box, 0.0);
+    let _ = write!(
+        c.buf,
+        r#"<rect fill="none" height="{}" style="stroke:{LINE_COLOR};stroke-width:1;stroke-dasharray:5,5;" width="{}" x="{}" y="{}"/>"#,
+        n(box_h),
+        n(box_w),
+        n(ax),
+        n(ay)
+    );
+
+    // PlantUML draws the raw string from x = 5, so leading whitespace offsets the
+    // visible glyphs; the emitted <text> carries the trimmed content with its
+    // textLength and an x already shifted by the leading-whitespace width.
+    let trimmed = raw.trim();
+    let leading_ws: String = raw.chars().take_while(|c| c.is_whitespace()).collect();
+    let lead_w = pm::text_width(&leading_ws, FONT_SIZE, false);
+    let baseline = 5.0 + th - pm::descent(FONT_SIZE);
+    let (tx, ty) = c.at(5.0 + posx_box + lead_w, baseline);
+    let _ = write!(
+        c.buf,
+        r##"<text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="{}" x="{}" y="{}">{}</text>"##,
+        n(pm::text_width(trimmed, FONT_SIZE, false)),
+        n(tx),
+        n(ty),
+        escape_xml(trimmed)
+    );
+
     if posx_box > 0.0 {
         c.hline_directed(h1, 0.0, posx_box, 0.5, MIN_ARROW);
         c.hline_directed(h1, posx_box + box_w, full_w, 0.5, MIN_ARROW);
