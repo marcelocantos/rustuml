@@ -435,6 +435,8 @@ fn emit_entities_dfs(
                 emit_icon_entity(svg, node, rect, &entity_fill);
             } else if matches!(node.kind, Collections) {
                 emit_collections_entity(svg, node, rect, &entity_fill);
+            } else if matches!(node.kind, Cloud) {
+                emit_cloud_entity(svg, node, rect, &entity_fill);
             } else {
                 emit_entity_shape(
                     svg,
@@ -1265,6 +1267,120 @@ fn emit_collections_entity(
         .copied()
         .unwrap_or(fy + TEXT_PAD_RECTLIKE);
     emit_text(svg, &node.label, label_x, label_y, FONT_SIZE, false, false);
+}
+
+/// Cloud margin (left/right/top/bottom) added around the label block.
+const CLOUD_MARGIN: f64 = 15.0;
+
+/// Emit a `cloud` entity. The puffy outline is generated locally by the exact
+/// PlantUML seeded algorithm (see `cloud_shape`); only its final translation
+/// comes from the oracle. The seed depends on the integer-truncated box
+/// dimensions (label block plus a 15px margin on every side), so the path is
+/// reproducible without consulting the golden geometry.
+fn emit_cloud_entity(
+    svg: &mut SvgBuilder,
+    node: &DeploymentNode,
+    rect: &crate::layout_oracle::EntityRect,
+    fill: &str,
+) {
+    // Box dimensions = label block + 15px margin on each side. With a
+    // stereotype the block stacks stereotype above the label.
+    let label_w = text_render::measure(&node.label, FONT_SIZE, false);
+    let (block_w, block_h) = if let Some(stereo) = &node.stereotype {
+        let stereo_label = format!("\u{00AB}{stereo}\u{00BB}");
+        let stereo_w = text_render::measure(&stereo_label, FONT_SIZE, false);
+        (label_w.max(stereo_w), pm::text_height(FONT_SIZE) * 2.0)
+    } else {
+        (label_w, pm::text_height(FONT_SIZE))
+    };
+    let width = block_w + 2.0 * CLOUD_MARGIN;
+    let height = block_h + 2.0 * CLOUD_MARGIN;
+
+    let path = crate::cloud_shape::generate(width, height);
+    // The cloud shape is drawn in the box's local frame ([0,width]×[0,height])
+    // and translated to the box's top-left corner. Recover that corner from
+    // the label: PlantUML centres the label horizontally in the box and places
+    // its baseline one margin + ascent below the box top. The label x/y are
+    // clean layout values in the oracle, so this yields the exact translate
+    // (the path bbox itself is unreliable — bubbles poke past the box edge).
+    let first_text_x = rect.text_x_values.first().copied();
+    let first_text_y = rect.text_y_values.first().copied();
+    let tx = match first_text_x {
+        Some(label_x) if node.stereotype.is_none() => label_x + label_w / 2.0 - width / 2.0,
+        _ => rect.x - path.min_xy().0,
+    };
+    let ty = match first_text_y {
+        Some(text_y) => text_y - CLOUD_MARGIN - pm::ascent(FONT_SIZE),
+        None => rect.y - path.min_xy().1,
+    };
+
+    // Coordinates are emitted with `fc` (Rust's `{:.4}`), which rounds the
+    // exact binary value — matching Java's `String.format("%.4f", …)`. A
+    // multiply-then-round approach drifts at half-boundaries and must be
+    // avoided here.
+    let mut d = String::new();
+    let _ = write!(d, "M{},{}", fc(path.start.0 + tx), fc(path.start.1 + ty));
+    for c in &path.cubics {
+        let _ = write!(
+            d,
+            " C{},{} {},{} {},{}",
+            fc(c.c1.0 + tx),
+            fc(c.c1.1 + ty),
+            fc(c.c2.0 + tx),
+            fc(c.c2.1 + ty),
+            fc(c.to.0 + tx),
+            fc(c.to.1 + ty),
+        );
+    }
+    svg.raw(&format!(
+        r#"<path d="{d}" fill="{fill}" style="stroke:{STROKE};stroke-width:0.5;"/>"#,
+    ));
+
+    // Label (and optional stereotype) centred horizontally in the box, at the
+    // oracle baselines.
+    let center_x = tx + width / 2.0;
+    let mut ty_iter = rect.text_y_values.iter();
+    if let Some(stereo) = &node.stereotype {
+        let stereo_label = format!("\u{00AB}{stereo}\u{00BB}");
+        let stereo_w = text_render::measure(&stereo_label, FONT_SIZE, false);
+        let stereo_y = ty_iter
+            .next()
+            .copied()
+            .unwrap_or(ty + CLOUD_MARGIN + ASCENT_14);
+        emit_text(
+            svg,
+            &stereo_label,
+            center_x - stereo_w / 2.0,
+            stereo_y,
+            FONT_SIZE,
+            false,
+            true,
+        );
+        let label_y = ty_iter.next().copied().unwrap_or(stereo_y + TEXT_LINE_H);
+        emit_text(
+            svg,
+            &node.label,
+            center_x - label_w / 2.0,
+            label_y,
+            FONT_SIZE,
+            false,
+            false,
+        );
+    } else {
+        let label_y = ty_iter
+            .next()
+            .copied()
+            .unwrap_or(ty + CLOUD_MARGIN + ASCENT_14);
+        emit_text(
+            svg,
+            &node.label,
+            center_x - label_w / 2.0,
+            label_y,
+            FONT_SIZE,
+            false,
+            false,
+        );
+    }
 }
 
 // ---------------------------------------------------------------------------

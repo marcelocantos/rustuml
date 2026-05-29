@@ -659,6 +659,9 @@ pub fn extract_oracle_layout(svg: &str) -> Option<OracleLayout> {
                             && let Some(ty) = parse_attr(&t, "y")
                         {
                             bbox.text_y_values.push(ty);
+                            if let Some(tx) = parse_attr(&t, "x") {
+                                bbox.text_x_values.push(tx);
+                            }
                         }
                     }
                     bbox.entity_id = node.attribute("id").map(String::from);

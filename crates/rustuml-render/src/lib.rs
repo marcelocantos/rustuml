@@ -29,6 +29,7 @@ pub mod ascii_class;
 pub mod ascii_state;
 pub mod board;
 pub mod class;
+pub mod cloud_shape;
 pub mod component;
 pub mod creole;
 pub mod deployment;
