@@ -94,6 +94,11 @@ pub fn parse_component(lines: &[String]) -> Result<ComponentDiagram, ParseError>
     let mut package_stack: Vec<ComponentPackage> = Vec::new();
     // Top-level packages collected.
     let mut top_packages: Vec<ComponentPackage> = Vec::new();
+    // `hide`/`remove` directives. PlantUML drops the targeted elements entirely
+    // (and any links touching them). We accept either a bare element id or a
+    // `<<stereotype>>` selector.
+    let mut hidden_ids: Vec<String> = Vec::new();
+    let mut hidden_stereotypes: Vec<String> = Vec::new();
     // Count of open *transparent* brace blocks (`together { ... }`). These are
     // layout hints, not containers: the elements inside stay in the enclosing
     // package, but the matching `}` must not pop a real package frame. We only
@@ -232,9 +237,44 @@ pub fn parse_component(lines: &[String]) -> Result<ComponentDiagram, ParseError>
             }
             continue;
         }
+        // `hide`/`remove` directives that target an element or stereotype drop
+        // it from the diagram. Other `hide` forms (e.g. `hide stereotype`,
+        // `hide empty members`) are display hints handled as skips below.
+        if let Some(arg) = trimmed
+            .strip_prefix("hide ")
+            .or_else(|| trimmed.strip_prefix("remove "))
+        {
+            let arg = arg.trim();
+            if let Some(stereo) = arg.strip_prefix("<<").and_then(|s| s.strip_suffix(">>")) {
+                hidden_stereotypes.push(stereo.trim().to_string());
+                continue;
+            }
+            // A bare identifier (optionally bracketed `[Name]`) names an element.
+            let id = arg.trim_matches(|c| c == '[' || c == ']');
+            const DISPLAY_HINTS: &[&str] = &[
+                "stereotype",
+                "stereotypes",
+                "empty",
+                "members",
+                "methods",
+                "fields",
+                "attributes",
+                "circle",
+                "footbox",
+                "unlinked",
+            ];
+            let first_word = id.split_whitespace().next().unwrap_or("");
+            if !id.is_empty()
+                && !id.contains(char::is_whitespace)
+                && !DISPLAY_HINTS.contains(&first_word)
+            {
+                hidden_ids.push(id.replace(' ', "_"));
+            }
+            continue;
+        }
+
         // Skip other decoration lines.
-        if trimmed.starts_with("hide ")
-            || trimmed.starts_with("show ")
+        if trimmed.starts_with("show ")
             || trimmed.starts_with("caption ")
             || trimmed.starts_with("left footer")
             || trimmed.starts_with("right footer")
@@ -517,6 +557,32 @@ pub fn parse_component(lines: &[String]) -> Result<ComponentDiagram, ParseError>
             parent.packages.push(finished);
         } else {
             top_packages.push(finished);
+        }
+    }
+
+    // Apply `hide`/`remove` directives: drop matching components and any links
+    // or package memberships referencing them.
+    if !hidden_ids.is_empty() || !hidden_stereotypes.is_empty() {
+        let mut drop: std::collections::HashSet<String> = hidden_ids.iter().cloned().collect();
+        for c in &components {
+            if c.stereotypes
+                .iter()
+                .any(|s| hidden_stereotypes.iter().any(|h| h == s))
+            {
+                drop.insert(c.id.clone());
+            }
+        }
+        components.retain(|c| !drop.contains(&c.id));
+        connections.retain(|c| !drop.contains(&c.from) && !drop.contains(&c.to));
+        notes.retain(|n| n.target.as_ref().is_none_or(|t| !drop.contains(t)));
+        fn prune_pkg(pkg: &mut ComponentPackage, drop: &std::collections::HashSet<String>) {
+            pkg.components.retain(|id| !drop.contains(id));
+            for child in &mut pkg.packages {
+                prune_pkg(child, drop);
+            }
+        }
+        for pkg in &mut top_packages {
+            prune_pkg(pkg, &drop);
         }
     }
 
