@@ -59,7 +59,10 @@ fn placed_width(text_w: f64, boxless: bool) -> f64 {
 }
 
 fn node_text_width(label: &str) -> f64 {
-    pm::text_width(label, FONT_SIZE, false)
+    // Measure the creole-resolved text (markup stripped, per-segment styling
+    // applied) rather than the raw label, so `**bold**` etc. size the box by
+    // the rendered glyphs, not the markup characters.
+    text_render::measure(label, FONT_SIZE, false)
 }
 
 /// Resolve a node's `[#color]` modifier to a `#RRGGBB` fill, dropping `none`.
