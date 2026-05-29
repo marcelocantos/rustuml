@@ -574,6 +574,77 @@ impl AutoNumberStyle {
     }
 }
 
+/// Live autonumber state, evolved as `Event::Autonumber` directives are
+/// encountered in the event stream. `active` distinguishes a paused (`stop`)
+/// state from a never-started one; the counter is retained across a stop so a
+/// later `resume` continues where it left off.
+#[derive(Clone, Default)]
+struct AutoState {
+    counter: u32,
+    step: u32,
+    format: Option<String>,
+    active: bool,
+}
+
+impl AutoState {
+    /// Apply an autonumber directive.
+    fn apply(&mut self, cmd: &AutonumberCmd) {
+        match cmd {
+            AutonumberCmd::Start {
+                start,
+                step,
+                format,
+            } => {
+                self.counter = *start;
+                self.step = *step;
+                self.format = format.clone();
+                self.active = true;
+            }
+            AutonumberCmd::Stop => {
+                self.active = false;
+            }
+            AutonumberCmd::Resume { step, format } => {
+                if let Some(s) = step {
+                    self.step = *s;
+                }
+                if format.is_some() {
+                    self.format = format.clone();
+                }
+                // A resume with no prior start begins at 1.
+                if self.step == 0 {
+                    self.step = 1;
+                }
+                if self.counter == 0 {
+                    self.counter = 1;
+                }
+                self.active = true;
+            }
+        }
+    }
+
+    /// The current number text + style + width, if numbering is active.
+    fn current(&self) -> Option<(String, f64, AutoNumberStyle)> {
+        if !self.active {
+            return None;
+        }
+        let num_text = format_autonumber(self.counter, &self.format);
+        let style = AutoNumberStyle::from_format(&self.format);
+        let num_w = if style.bold {
+            bold_text_width(&num_text, MSG_FONT_SIZE)
+        } else {
+            text_width(&num_text, MSG_FONT_SIZE)
+        };
+        Some((num_text, num_w, style))
+    }
+
+    /// Advance the counter after numbering a message.
+    fn advance(&mut self) {
+        if self.active {
+            self.counter = self.counter.saturating_add(self.step);
+        }
+    }
+}
+
 /// Returns true if autonumber should be rendered bold.
 ///
 /// PlantUML default (no format, or empty format string "") renders the number
@@ -2586,8 +2657,9 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme) -> String {
     // Each entry: (activated_participant, sender)
     let mut spacing_return_stack: Vec<(String, String)> = Vec::new();
 
-    // Track autonumber counter during spacing phase to compute bold label widths.
-    let mut spacing_auto_num: Option<u32> = diagram.autonumber.as_ref().map(|an| an.start);
+    // Track autonumber state during spacing phase to compute bold label widths.
+    // Driven entirely by `Event::Autonumber` directives in stream order.
+    let mut spacing_auto = AutoState::default();
 
     // Pending `create X` ids awaiting their first message — that message reserves
     // extra horizontal space for the inline head box centered on X's lifeline.
@@ -2609,14 +2681,7 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme) -> String {
 
                         // Autonumber adds bold-or-plain text + gap before the label
                         // depending on whether a format string is set.
-                        let autonumber_extra = if let Some(num) = spacing_auto_num.as_ref() {
-                            let an = diagram.autonumber.as_ref().unwrap();
-                            let num_text = format_autonumber(*num, &an.format);
-                            let w = if autonumber_is_bold(&an.format) {
-                                bold_text_width(&num_text, MSG_FONT_SIZE)
-                            } else {
-                                text_width(&num_text, MSG_FONT_SIZE)
-                            };
+                        let autonumber_extra = if let Some((_, w, _)) = spacing_auto.current() {
                             w + AUTONUMBER_LABEL_GAP
                         } else {
                             0.0
@@ -2691,10 +2756,7 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme) -> String {
                 }
 
                 // Advance autonumber during spacing phase
-                if let Some(num) = spacing_auto_num.as_mut() {
-                    let an = diagram.autonumber.as_ref().unwrap();
-                    *num = num.saturating_add(an.step);
-                }
+                spacing_auto.advance();
             }
             Event::Return(ret) => {
                 // Return messages need spacing computation like regular messages.
@@ -2714,14 +2776,7 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme) -> String {
 
                         // Autonumber adds bold-or-plain text + gap before the label
                         // depending on whether a format string is set.
-                        let autonumber_extra = if let Some(num) = spacing_auto_num.as_ref() {
-                            let an = diagram.autonumber.as_ref().unwrap();
-                            let num_text = format_autonumber(*num, &an.format);
-                            let w = if autonumber_is_bold(&an.format) {
-                                bold_text_width(&num_text, MSG_FONT_SIZE)
-                            } else {
-                                text_width(&num_text, MSG_FONT_SIZE)
-                            };
+                        let autonumber_extra = if let Some((_, w, _)) = spacing_auto.current() {
                             w + AUTONUMBER_LABEL_GAP
                         } else {
                             0.0
@@ -2764,10 +2819,7 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme) -> String {
                 }
 
                 // Advance autonumber
-                if let Some(num) = spacing_auto_num.as_mut() {
-                    let an = diagram.autonumber.as_ref().unwrap();
-                    *num = num.saturating_add(an.step);
-                }
+                spacing_auto.advance();
             }
             // Notes spanning multiple participants need gap between them.
             Event::Note(note)
@@ -2805,6 +2857,7 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme) -> String {
                     *d = d.saturating_sub(1);
                 }
             }
+            Event::Autonumber(cmd) => spacing_auto.apply(cmd),
             _ => {}
         }
     }
@@ -4163,7 +4216,7 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme) -> String {
 
     // Messages — use pre-computed y positions from event_y_positions
     let mut msg_id: u32 = 0;
-    let mut auto_num: Option<u32> = diagram.autonumber.as_ref().map(|an| an.start);
+    let mut auto_num = AutoState::default();
     // Track activation depth during message rendering to adjust arrow positions.
     let mut render_activation: HashMap<String, usize> = HashMap::new();
 
@@ -4245,18 +4298,7 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme) -> String {
                 let src_line = msg.source_line as u32;
 
                 // Compute autonumber info for passing into the message group
-                let autonumber_info: Option<(String, f64, AutoNumberStyle)> =
-                    auto_num.as_ref().map(|n| {
-                        let an = diagram.autonumber.as_ref().unwrap();
-                        let num_text = format_autonumber(*n, &an.format);
-                        let style = AutoNumberStyle::from_format(&an.format);
-                        let num_w = if style.bold {
-                            bold_text_width(&num_text, MSG_FONT_SIZE)
-                        } else {
-                            text_width(&num_text, MSG_FONT_SIZE)
-                        };
-                        (num_text, num_w, style)
-                    });
+                let autonumber_info = auto_num.current();
                 let autonumber_ref = autonumber_info
                     .as_ref()
                     .map(|(t, w, s)| (t.as_str(), *w, s));
@@ -4762,27 +4804,13 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme) -> String {
                 }
 
                 // Advance autonumber
-                if let Some(n) = auto_num.as_mut() {
-                    let an = diagram.autonumber.as_ref().unwrap();
-                    *n = n.saturating_add(an.step);
-                }
+                auto_num.advance();
             }
             Event::Return(ret) => {
                 msg_id += 1;
 
                 // Compute autonumber info for return messages
-                let ret_autonumber_info: Option<(String, f64, AutoNumberStyle)> =
-                    auto_num.as_ref().map(|n| {
-                        let an = diagram.autonumber.as_ref().unwrap();
-                        let num_text = format_autonumber(*n, &an.format);
-                        let style = AutoNumberStyle::from_format(&an.format);
-                        let num_w = if style.bold {
-                            bold_text_width(&num_text, MSG_FONT_SIZE)
-                        } else {
-                            text_width(&num_text, MSG_FONT_SIZE)
-                        };
-                        (num_text, num_w, style)
-                    });
+                let ret_autonumber_info = auto_num.current();
                 let ret_autonumber_ref = ret_autonumber_info
                     .as_ref()
                     .map(|(t, w, s)| (t.as_str(), *w, s));
@@ -4951,10 +4979,7 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme) -> String {
                 }
 
                 // Advance autonumber
-                if let Some(n) = auto_num.as_mut() {
-                    let an = diagram.autonumber.as_ref().unwrap();
-                    *n = n.saturating_add(an.step);
-                }
+                auto_num.advance();
             }
             Event::Divider(text) => {
                 // PlantUML renders dividers as:
@@ -5531,6 +5556,7 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme) -> String {
                 )
                 .unwrap();
             }
+            Event::Autonumber(cmd) => auto_num.apply(cmd),
             _ => {
                 // Remaining events (Create, NewPage)
                 // don't emit visible text labels or change activation state.

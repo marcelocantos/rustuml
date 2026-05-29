@@ -85,6 +85,28 @@ pub enum Event {
     Create(String),
     Return(ReturnMessage),
     NewPage(Option<String>),
+    /// A mid-stream autonumber directive (`autonumber`, `autonumber N M "fmt"`,
+    /// `autonumber stop`, `autonumber resume`). Applied to subsequent messages.
+    Autonumber(AutonumberCmd),
+}
+
+/// An autonumber directive encountered in the event stream.
+#[derive(Debug, Serialize, Deserialize, Clone)]
+pub enum AutonumberCmd {
+    /// `autonumber [start [step]] ["format"]` — (re)start numbering.
+    Start {
+        start: u32,
+        step: u32,
+        format: Option<String>,
+    },
+    /// `autonumber stop` — pause numbering (counter retained).
+    Stop,
+    /// `autonumber resume [step] ["format"]` — resume after a stop, keeping the
+    /// retained counter; optionally change step/format.
+    Resume {
+        step: Option<u32>,
+        format: Option<String>,
+    },
 }
 
 /// A message arrow between participants.

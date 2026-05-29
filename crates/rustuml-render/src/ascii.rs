@@ -458,7 +458,8 @@ pub fn render_ascii(diagram: &SequenceDiagram) -> String {
             | Event::Deactivate(_)
             | Event::Destroy(_)
             | Event::Create(_)
-            | Event::NewPage(_) => {}
+            | Event::NewPage(_)
+            | Event::Autonumber(_) => {}
         }
     }
 
@@ -484,7 +485,8 @@ fn count_event_rows(diagram: &SequenceDiagram) -> Vec<usize> {
             | Event::Deactivate(_)
             | Event::Destroy(_)
             | Event::Create(_)
-            | Event::NewPage(_) => 0,
+            | Event::NewPage(_)
+            | Event::Autonumber(_) => 0,
         })
         .collect()
 }

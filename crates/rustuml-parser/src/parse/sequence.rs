@@ -655,37 +655,30 @@ impl SeqParser {
     }
 
     fn try_autonumber(&mut self, line: &str) -> bool {
-        static RE: LazyLock<Regex> = LazyLock::new(|| {
+        static RE_START: LazyLock<Regex> = LazyLock::new(|| {
             Regex::new(r#"^autonumber(?:\s+(\d+))?(?:\s+(\d+))?(?:\s+"([^"]*)")?$"#).unwrap()
         });
+        static RE_RESUME: LazyLock<Regex> = LazyLock::new(|| {
+            Regex::new(r#"^autonumber\s+resume(?:\s+(\d+))?(?:\s+"([^"]*)")?$"#).unwrap()
+        });
 
-        if line == "autonumber" {
-            self.autonumber = Some(AutoNumber {
-                start: 1,
-                step: 1,
-                format: None,
-            });
-            return true;
-        }
         if line == "autonumber stop" {
-            self.autonumber = None;
+            self.push_autonumber(AutonumberCmd::Stop);
             return true;
         }
-        if line == "autonumber resume" {
-            if self.autonumber.is_none() {
-                self.autonumber = Some(AutoNumber {
-                    start: 1,
-                    step: 1,
-                    format: None,
-                });
-            }
+        if line.starts_with("autonumber resume")
+            && let Some(caps) = RE_RESUME.captures(line)
+        {
+            let step = caps.get(1).and_then(|m| m.as_str().parse().ok());
+            let format = caps.get(2).map(|m| m.as_str().to_string());
+            self.push_autonumber(AutonumberCmd::Resume { step, format });
             return true;
         }
-        if let Some(caps) = RE.captures(line) {
+        if let Some(caps) = RE_START.captures(line) {
             let start = caps.get(1).map_or(1, |m| m.as_str().parse().unwrap_or(1));
             let step = caps.get(2).map_or(1, |m| m.as_str().parse().unwrap_or(1));
             let format = caps.get(3).map(|m| m.as_str().to_string());
-            self.autonumber = Some(AutoNumber {
+            self.push_autonumber(AutonumberCmd::Start {
                 start,
                 step,
                 format,
@@ -693,6 +686,26 @@ impl SeqParser {
             return true;
         }
         false
+    }
+
+    /// Record an autonumber directive: keep the first `Start` in the legacy
+    /// `self.autonumber` field (so initial layout still sees it) and always emit
+    /// an event so mid-stream changes (stop/resume/restart) take effect.
+    fn push_autonumber(&mut self, cmd: AutonumberCmd) {
+        if self.autonumber.is_none()
+            && let AutonumberCmd::Start {
+                start,
+                step,
+                format,
+            } = &cmd
+        {
+            self.autonumber = Some(AutoNumber {
+                start: *start,
+                step: *step,
+                format: format.clone(),
+            });
+        }
+        self.events.push(Event::Autonumber(cmd));
     }
 
     fn try_activate_deactivate(&mut self, line: &str) -> bool {
