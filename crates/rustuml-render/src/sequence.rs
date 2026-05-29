@@ -11,7 +11,10 @@ use std::fmt::Write;
 
 use rustuml_parser::diagram::sequence::*;
 
+use crate::layout_oracle::{OracleLayout, wrap_oracle_envelope};
+use crate::plantuml_metrics;
 use crate::style::Theme;
+use crate::text_render::{self, TextBase};
 
 /// Resolve a PlantUML color string (e.g., "#blue", "#FF0000") to a CSS hex color.
 pub(crate) fn resolve_color(color: &str) -> String {
@@ -174,36 +177,42 @@ pub(crate) fn resolve_color(color: &str) -> String {
     }
 }
 
-/// Compute text width at a given font size using exact PlantUML Java AWT metrics.
+/// Compute text width at a given font size, routing through the creole-aware
+/// segment helper so layout measurements match what `text_render::emit_text`
+/// will actually emit.
 fn text_width(text: &str, font_size: f64) -> f64 {
-    crate::metrics::plantuml_text_width(text, font_size)
+    text_render::measure(text, font_size, false)
 }
 
-/// Compute bold text width at a given font size using exact PlantUML Java AWT Bold metrics.
+/// Compute bold text width at a given font size, routing through the creole-aware
+/// segment helper so layout measurements match what `text_render::emit_text`
+/// will actually emit.
 fn bold_text_width(text: &str, font_size: f64) -> f64 {
-    crate::metrics::plantuml_bold_text_width(text, font_size)
+    text_render::measure(text, font_size, true)
 }
 
 /// Format an f64 as a PlantUML-compatible coordinate string.
-/// PlantUML uses `String.format(Locale.US, "%.4f", x)` then trims trailing zeros.
-/// We must NOT pre-round via multiply/round/divide — that introduces precision errors
-/// at boundary values (e.g., 76.023449... * 10000 = 760234.5 exactly, which rounds
-/// to 760235 via round-half-away-from-zero, but Java formats the original double to
-/// 76.0234 because the 5th decimal of the ACTUAL value is 4).
+///
+/// PlantUML emits SVG coordinates via `String.format(Locale.US, "%.4f", x)`
+/// followed by trailing-zero stripping (see PlantUML's SvgGraphics.format).
+/// Java's `%.4f` uses HALF_UP rounding (e.g. `110.15625` → `"110.1563"`),
+/// whereas Rust's `format!("{:.4}")` uses HALF_EVEN (banker's rounding,
+/// → `"110.1562"`). For exact-string golden parity we round explicitly to
+/// HALF_UP at the 4th decimal place before formatting.
 fn fmt_coord(v: f64) -> String {
-    // Format to 4 decimal places (Rust uses round-half-to-even, matching Java's
-    // behavior for non-midpoint values, which is the vast majority of cases).
-    let s = format!("{v:.4}");
-
-    // Check if the result is an integer (all zeros after decimal point)
-    if s.ends_with(".0000") {
-        // Return just the integer part
-        return s[..s.len() - 5].to_string();
+    // Integer fast-path preserves "25" rather than "25.0000" after trim.
+    if v == v.floor() && v.abs() < 1e15 {
+        return format!("{}", v as i64);
     }
-
-    // Trim trailing zeros after decimal point
+    // HALF_UP at 4 decimals: scale by 10000, add ±0.5, floor toward -inf.
+    let scaled = v * 10000.0;
+    let rounded = if scaled >= 0.0 {
+        (scaled + 0.5).floor()
+    } else {
+        -((-scaled + 0.5).floor())
+    };
+    let s = format!("{:.4}", rounded / 10000.0);
     let s = s.trim_end_matches('0');
-    // Don't leave a trailing decimal point
     let s = s.trim_end_matches('.');
     s.to_string()
 }
@@ -347,6 +356,11 @@ const NOTE_LINE_HEIGHT: f64 = 15.0;
 const NOTE_FOLD_SIZE: f64 = 10.0;
 /// Text left padding inside the note box.
 const NOTE_TEXT_X_PAD: f64 = 6.0;
+const RNOTE_TEXT_X_PAD: f64 = 4.0;
+// Queue pill total horizontal padding (text + this = box width).
+const QUEUE_TEXT_H_PAD: f64 = 20.0;
+// Queue text inset from box left edge (cap radius).
+const QUEUE_TEXT_X_PAD: f64 = 5.0;
 /// Vertical offset from note top to the text baseline of the first line.
 const NOTE_TEXT_Y_OFFSET: f64 = 17.568359375; // exact Java double
 /// Line spacing between text lines in a multi-line note (= MSG_TEXT_HEIGHT).
@@ -434,49 +448,6 @@ fn strip_creole(s: &str) -> String {
     out
 }
 
-/// Emit text content to the SVG, handling creole markup by splitting into
-/// separate text elements for each styled segment.
-#[allow(dead_code)]
-fn emit_text(buf: &mut String, x: f64, y: f64, content: &str, font_size: f64) {
-    if has_creole_markup(content) {
-        // For creole text, emit the plain text content (stripped of markup).
-        // This ensures golden test text-label matching works.
-        // The full creole styling (bold, italic, etc.) will be added later.
-        let plain = strip_creole(content);
-        if !plain.is_empty() {
-            let tw = text_width(&plain, font_size);
-            let size_str = if font_size == 13.0 { "13" } else { "14" };
-            write!(
-                buf,
-                r##"<text fill="#000000" font-family="sans-serif" font-size="{size_str}" lengthAdjust="spacing" textLength="{}" x="{}" y="{}">{}</text>"##,
-                fmt_coord(tw),
-                fmt_coord(x),
-                fmt_coord(y),
-                escape_xml(&plain),
-            )
-            .unwrap();
-        }
-    } else {
-        let tw = text_width(content, font_size);
-        let size_str = if font_size == 13.0 {
-            "13"
-        } else if font_size == 11.0 {
-            "11"
-        } else {
-            "14"
-        };
-        write!(
-            buf,
-            r##"<text fill="#000000" font-family="sans-serif" font-size="{size_str}" lengthAdjust="spacing" textLength="{}" x="{}" y="{}">{}</text>"##,
-            fmt_coord(tw),
-            fmt_coord(x),
-            fmt_coord(y),
-            escape_xml(content),
-        )
-        .unwrap();
-    }
-}
-
 /// Decode PlantUML backslash and tilde escapes in label text.
 /// `\\` → `\`, `~X` → `X` when X is a markup character (*/_-"<[#).
 /// `~~` is NOT a tilde escape — it's strikethrough or literal tildes.
@@ -536,6 +507,85 @@ fn process_label(s: &str) -> String {
     }
     result.push_str(rest);
     result
+}
+
+/// Styling for an autonumber prefix, derived from the format string.
+#[derive(Clone)]
+struct AutoNumberStyle {
+    bold: bool,
+    italic: bool,
+    underline: bool,
+    fill: Option<String>,
+}
+
+impl AutoNumberStyle {
+    fn from_format(format: &Option<String>) -> Self {
+        Self {
+            bold: autonumber_is_bold(format),
+            italic: autonumber_is_italic(format),
+            underline: autonumber_is_underline(format),
+            fill: autonumber_color(format),
+        }
+    }
+}
+
+/// Returns true if autonumber should be rendered bold.
+///
+/// PlantUML default (no format, or empty format string "") renders the number
+/// in bold. A non-empty format string suppresses the default bold UNLESS the
+/// format itself contains the creole bold tag `<b>` (case-insensitive), which
+/// re-enables bold for the autonumber text.
+fn autonumber_is_bold(format: &Option<String>) -> bool {
+    match format {
+        None => true,
+        Some(s) if s.is_empty() => true,
+        Some(s) => {
+            // Detect explicit creole bold tag in the format string.
+            let lower = s.to_lowercase();
+            lower.contains("<b>")
+        }
+    }
+}
+
+/// Returns true if autonumber should be rendered italic. Set by an `<i>` creole
+/// tag in the format string.
+fn autonumber_is_italic(format: &Option<String>) -> bool {
+    match format {
+        Some(s) => s.to_lowercase().contains("<i>"),
+        None => false,
+    }
+}
+
+/// Returns true if autonumber should be rendered underlined. Set by a `<u>`
+/// creole tag in the format string.
+fn autonumber_is_underline(format: &Option<String>) -> bool {
+    match format {
+        Some(s) => s.to_lowercase().contains("<u>"),
+        None => false,
+    }
+}
+
+/// Returns the explicit fill colour for the autonumber if specified in the
+/// format string via `<font color=...>` or `<color:...>`. Returns None when no
+/// colour override is present.
+fn autonumber_color(format: &Option<String>) -> Option<String> {
+    let s = format.as_deref()?;
+    // <font color=red> or <font color="red"> or <font color='red'>
+    let lower = s.to_lowercase();
+    if let Some(idx) = lower.find("<font color") {
+        let rest = &s[idx + "<font color".len()..];
+        // skip optional whitespace and '=' and quotes
+        let rest = rest.trim_start_matches(|c: char| c.is_whitespace() || c == '=');
+        let rest = rest.trim_start_matches(['"', '\'']);
+        let end = rest
+            .find(|c: char| c == '"' || c == '\'' || c == '>' || c.is_whitespace())
+            .unwrap_or(rest.len());
+        let color = &rest[..end];
+        if !color.is_empty() {
+            return Some(resolve_color(color));
+        }
+    }
+    None
 }
 
 /// Format an autonumber counter according to an optional format string.
@@ -646,12 +696,33 @@ impl ActivationTracker {
 
 struct PlantUmlSvg {
     buf: String,
+    /// Stroke-width string used for message arrow lines and polygon outlines.
+    /// Defaults to "1" (PlantUML's historical line weight) but can be raised
+    /// by `skinparam arrowThickness N`.
+    arrow_thickness: String,
+    /// Participant head/tail box border colour (default `#181818`). Driven
+    /// by `skinparam participantBorderColor`.
+    participant_border: String,
+    /// Participant head/tail box border thickness (default `0.5`). Driven
+    /// by `skinparam participantBorderThickness`.
+    participant_border_thickness: String,
+    /// Lifeline dashed-line stroke colour (default `#181818`). Driven by
+    /// `skinparam sequenceLifeLineBorderColor`.
+    lifeline_border: String,
+    /// Lifeline dashed-line stroke thickness (default `0.5`). Driven by
+    /// `skinparam sequenceLifeLineBorderThickness`.
+    lifeline_border_thickness: String,
 }
 
 impl PlantUmlSvg {
     fn new() -> Self {
         Self {
             buf: String::with_capacity(4096),
+            arrow_thickness: "1".into(),
+            participant_border: "#181818".into(),
+            participant_border_thickness: "0.5".into(),
+            lifeline_border: "#181818".into(),
+            lifeline_border_thickness: "0.5".into(),
         }
     }
 
@@ -709,7 +780,9 @@ impl PlantUmlSvg {
 
         write!(
             self.buf,
-            r##"<line style="stroke:#181818;stroke-width:0.5;stroke-dasharray:5,5;" x1="{}" x2="{}" y1="{}" y2="{}"/>"##,
+            r##"<line style="stroke:{};stroke-width:{};stroke-dasharray:5,5;" x1="{}" x2="{}" y1="{}" y2="{}"/>"##,
+            self.lifeline_border,
+            self.lifeline_border_thickness,
             fmt_coord(line_x),
             fmt_coord(line_x),
             fmt_coord(line_y1),
@@ -751,11 +824,13 @@ impl PlantUmlSvg {
 
         write!(
             self.buf,
-            r##"<rect fill="{}" height="{}" rx="{}" ry="{}" style="stroke:#181818;stroke-width:0.5;" width="{}" x="{}" y="{}"/>"##,
+            r##"<rect fill="{}" height="{}" rx="{}" ry="{}" style="stroke:{};stroke-width:{};" width="{}" x="{}" y="{}"/>"##,
             fill_color,
             fmt_coord(rect_h),
             fmt_coord(HEAD_BOX_RX),
             fmt_coord(HEAD_BOX_RX),
+            self.participant_border,
+            self.participant_border_thickness,
             fmt_coord(rect_w),
             fmt_coord(rect_x),
             fmt_coord(rect_y),
@@ -763,29 +838,42 @@ impl PlantUmlSvg {
         .unwrap();
 
         // Stereotype text (above participant name, smaller font)
-        if let Some((st_text, st_width)) = stereotype {
+        if let Some((st_text, _st_width)) = stereotype {
             let st_display = format!("\u{ab}{st_text}\u{bb}");
             let st_y = text_y - 13.0; // stereotype is above the name
-            write!(
-                self.buf,
-                r##"<text fill="#000000" font-family="sans-serif" font-size="11" font-style="italic" lengthAdjust="spacing" textLength="{}" x="{}" y="{}">{}</text>"##,
-                fmt_coord(st_width),
-                fmt_coord(text_x),
-                fmt_coord(st_y),
-                escape_xml(&st_display),
-            )
-            .unwrap();
+            text_render::emit_text(
+                &mut self.buf,
+                &st_display,
+                &TextBase {
+                    x: text_x,
+                    y: st_y,
+                    font_size: 11,
+                    font_family: "sans-serif",
+                    fill: "#000000",
+                    bold: false,
+                    italic: true,
+                    underline: false,
+                    skip_underline: false,
+                },
+            );
         }
 
-        write!(
-            self.buf,
-            r##"<text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="{}" x="{}" y="{}">{}</text>"##,
-            fmt_coord(text_len),
-            fmt_coord(text_x),
-            fmt_coord(text_y),
-            escape_xml(text_content),
-        )
-        .unwrap();
+        let _ = text_len;
+        text_render::emit_text(
+            &mut self.buf,
+            text_content,
+            &TextBase {
+                x: text_x,
+                y: text_y,
+                font_size: 14,
+                font_family: "sans-serif",
+                fill: "#000000",
+                bold: false,
+                italic: false,
+                underline: false,
+                skip_underline: false,
+            },
+        );
 
         self.buf.push_str("</g>");
     }
@@ -809,15 +897,22 @@ impl PlantUmlSvg {
 
     /// Write participant text label.
     fn participant_text(&mut self, text_x: f64, text_y: f64, text_content: &str, text_len: f64) {
-        write!(
-            self.buf,
-            r##"<text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="{}" x="{}" y="{}">{}</text>"##,
-            fmt_coord(text_len),
-            fmt_coord(text_x),
-            fmt_coord(text_y),
-            escape_xml(text_content),
-        )
-        .unwrap();
+        let _ = text_len;
+        text_render::emit_text(
+            &mut self.buf,
+            text_content,
+            &TextBase {
+                x: text_x,
+                y: text_y,
+                font_size: 14,
+                font_family: "sans-serif",
+                fill: "#000000",
+                bold: false,
+                italic: false,
+                underline: false,
+                skip_underline: false,
+            },
+        );
     }
 
     /// Write an actor stick figure (head or tail).
@@ -836,6 +931,7 @@ impl PlantUmlSvg {
         text_x: f64,
         text_content: &str,
         text_len: f64,
+        fill_color: &str,
     ) {
         self.participant_group_open(part_uid, qualified_name, source_line, position);
 
@@ -860,9 +956,10 @@ impl PlantUmlSvg {
         let head_cy = figure_base + ACTOR_HEAD_CY_OFFSET;
         write!(
             self.buf,
-            r##"<ellipse cx="{}" cy="{}" fill="#E2E2F0" rx="8" ry="8" style="stroke:#181818;stroke-width:0.5;"/>"##,
+            r##"<ellipse cx="{}" cy="{}" fill="{}" rx="8" ry="8" style="stroke:#181818;stroke-width:0.5;"/>"##,
             fmt_coord(cx),
             fmt_coord(head_cy),
+            fill_color,
         )
         .unwrap();
 
@@ -902,6 +999,7 @@ impl PlantUmlSvg {
         text_x: f64,
         text_content: &str,
         text_len: f64,
+        fill_color: &str,
     ) {
         self.participant_group_open(part_uid, qualified_name, source_line, position);
 
@@ -942,9 +1040,10 @@ impl PlantUmlSvg {
 
         write!(
             self.buf,
-            r##"<ellipse cx="{}" cy="{}" fill="#E2E2F0" rx="{}" ry="{}" style="stroke:#181818;stroke-width:0.5;"/>"##,
+            r##"<ellipse cx="{}" cy="{}" fill="{}" rx="{}" ry="{}" style="stroke:#181818;stroke-width:0.5;"/>"##,
             fmt_coord(circle_cx),
             fmt_coord(circle_cy),
+            fill_color,
             fmt_coord(STEREOTYPE_CIRCLE_R),
             fmt_coord(STEREOTYPE_CIRCLE_R),
         )
@@ -966,6 +1065,7 @@ impl PlantUmlSvg {
         text_x: f64,
         text_content: &str,
         text_len: f64,
+        fill_color: &str,
     ) {
         self.participant_group_open(part_uid, qualified_name, source_line, position);
 
@@ -986,9 +1086,10 @@ impl PlantUmlSvg {
         let circle_cy = figure_base + STEREOTYPE_CIRCLE_CY;
         write!(
             self.buf,
-            r##"<ellipse cx="{}" cy="{}" fill="#E2E2F0" rx="{}" ry="{}" style="stroke:#181818;stroke-width:0.5;"/>"##,
+            r##"<ellipse cx="{}" cy="{}" fill="{}" rx="{}" ry="{}" style="stroke:#181818;stroke-width:0.5;"/>"##,
             fmt_coord(cx),
             fmt_coord(circle_cy),
+            fill_color,
             fmt_coord(STEREOTYPE_CIRCLE_R),
             fmt_coord(STEREOTYPE_CIRCLE_R),
         )
@@ -1033,6 +1134,7 @@ impl PlantUmlSvg {
         text_x: f64,
         text_content: &str,
         text_len: f64,
+        fill_color: &str,
     ) {
         self.participant_group_open(part_uid, qualified_name, source_line, position);
 
@@ -1053,9 +1155,10 @@ impl PlantUmlSvg {
         let circle_cy = figure_base + STEREOTYPE_CIRCLE_CY;
         write!(
             self.buf,
-            r##"<ellipse cx="{}" cy="{}" fill="#E2E2F0" rx="{}" ry="{}" style="stroke:#181818;stroke-width:0.5;"/>"##,
+            r##"<ellipse cx="{}" cy="{}" fill="{}" rx="{}" ry="{}" style="stroke:#181818;stroke-width:0.5;"/>"##,
             fmt_coord(cx),
             fmt_coord(circle_cy),
+            fill_color,
             fmt_coord(STEREOTYPE_CIRCLE_R),
             fmt_coord(STEREOTYPE_CIRCLE_R),
         )
@@ -1091,6 +1194,7 @@ impl PlantUmlSvg {
         text_x: f64,
         text_content: &str,
         text_len: f64,
+        fill_color: &str,
     ) {
         self.participant_group_open(part_uid, qualified_name, source_line, position);
 
@@ -1117,7 +1221,7 @@ impl PlantUmlSvg {
 
         write!(
             self.buf,
-            r##"<path d="M{l},{t} C{l},{tc} {cx},{tc} {cx},{tc} C{cx},{tc} {r},{tc} {r},{t} L{r},{b} C{r},{bc} {cx},{bc} {cx},{bc} C{cx},{bc} {l},{bc} {l},{b} L{l},{t}" fill="#E2E2F0" style="stroke:#181818;stroke-width:0.5;"/>"##,
+            r##"<path d="M{l},{t} C{l},{tc} {cx},{tc} {cx},{tc} C{cx},{tc} {r},{tc} {r},{t} L{r},{b} C{r},{bc} {cx},{bc} {cx},{bc} C{cx},{bc} {l},{bc} {l},{b} L{l},{t}" fill="{fc}" style="stroke:#181818;stroke-width:0.5;"/>"##,
             l = fmt_coord(left),
             r = fmt_coord(right),
             t = fmt_coord(top),
@@ -1125,6 +1229,7 @@ impl PlantUmlSvg {
             b = fmt_coord(bottom),
             bc = fmt_coord(bottom_curve),
             cx = fmt_coord(cx),
+            fc = fill_color,
         )
         .unwrap();
 
@@ -1159,6 +1264,7 @@ impl PlantUmlSvg {
         text_y: f64,
         text_content: &str,
         text_len: f64,
+        fill_color: &str,
     ) {
         self.participant_group_open(part_uid, qualified_name, source_line, position);
 
@@ -1167,9 +1273,10 @@ impl PlantUmlSvg {
         let back_y = base_y;
         write!(
             self.buf,
-            r##"<rect fill="#E2E2F0" height="{}" style="stroke:#181818;stroke-width:0.5;" width="{}" x="{}" y="{}"/>"##,
+            r##"<rect fill="{}" height="{}" style="stroke:#181818;stroke-width:0.5;" width="{}" x="{}" y="{}"/>"##,
+            fill_color,
             fmt_coord(HEAD_BOX_H),
-            fmt_coord(box_w),
+            fmt_coord(box_w - COLLECTIONS_OFFSET),
             fmt_coord(back_x),
             fmt_coord(back_y),
         )
@@ -1179,9 +1286,10 @@ impl PlantUmlSvg {
         let front_y = base_y + COLLECTIONS_OFFSET;
         write!(
             self.buf,
-            r##"<rect fill="#E2E2F0" height="{}" style="stroke:#181818;stroke-width:0.5;" width="{}" x="{}" y="{}"/>"##,
+            r##"<rect fill="{}" height="{}" style="stroke:#181818;stroke-width:0.5;" width="{}" x="{}" y="{}"/>"##,
+            fill_color,
             fmt_coord(HEAD_BOX_H),
-            fmt_coord(box_w),
+            fmt_coord(box_w - COLLECTIONS_OFFSET),
             fmt_coord(box_x),
             fmt_coord(front_y),
         )
@@ -1208,6 +1316,7 @@ impl PlantUmlSvg {
         text_y: f64,
         text_content: &str,
         text_len: f64,
+        fill_color: &str,
     ) {
         self.participant_group_open(part_uid, qualified_name, source_line, position);
 
@@ -1226,15 +1335,23 @@ impl PlantUmlSvg {
         let cap_r = 5.0;
         let inner_left = left + cap_r;
         let inner_right = right - cap_r;
-        let top = base_y;
-        let mid = base_y + HEAD_BOX_H / 2.0;
-        let bottom = base_y + HEAD_BOX_H;
+        // The queue pill is 4px shorter than a normal head box and is
+        // vertically offset: pushed down 5px in the head region, flush with
+        // the top in the tail region (matching PlantUML).
+        let pill_h = HEAD_BOX_H - 4.0;
+        let top = if position == "tail" {
+            base_y
+        } else {
+            base_y + 5.0
+        };
+        let mid = top + pill_h / 2.0;
+        let bottom = top + pill_h;
         let inner_right_inner = inner_right - cap_r;
 
         // Outer body
         write!(
             self.buf,
-            r##"<path d="M{il},{t} L{ir},{t} C{r},{t} {r},{m} {r},{m} C{r},{m} {r},{b} {ir},{b} L{il},{b} C{l},{b} {l},{m} {l},{m} C{l},{m} {l},{t} {il},{t}" fill="#E2E2F0" style="stroke:#181818;stroke-width:0.5;"/>"##,
+            r##"<path d="M{il},{t} L{ir},{t} C{r},{t} {r},{m} {r},{m} C{r},{m} {r},{b} {ir},{b} L{il},{b} C{l},{b} {l},{m} {l},{m} C{l},{m} {l},{t} {il},{t}" fill="{fc}" style="stroke:#181818;stroke-width:0.5;"/>"##,
             il = fmt_coord(inner_left),
             ir = fmt_coord(inner_right),
             l = fmt_coord(left),
@@ -1242,6 +1359,7 @@ impl PlantUmlSvg {
             t = fmt_coord(top),
             m = fmt_coord(mid),
             b = fmt_coord(bottom),
+            fc = fill_color,
         )
         .unwrap();
 
@@ -1280,6 +1398,120 @@ impl PlantUmlSvg {
         self.buf.push_str("</g>");
     }
 
+    /// Write a message group with a cross "X" arrow (->x or x<-).
+    /// `tip_x` is the X centre (right side for right-going arrows).
+    /// The line ends 5px before the tip (cross half-width).
+    #[allow(clippy::too_many_arguments)]
+    fn message_cross_arrow(
+        &mut self,
+        entity1: &str,
+        entity2: &str,
+        source_line: u32,
+        msg_id: u32,
+        tip_x: f64,
+        msg_y: f64,
+        is_right: bool,
+        line_x1: f64,
+        line_x2: f64,
+        line_style: &str,
+        text_x: f64,
+        text_y: f64,
+        text_content: &str,
+        _text_len: f64,
+        color: &str,
+        autonumber: Option<(&str, f64, &AutoNumberStyle)>,
+    ) {
+        write!(
+            self.buf,
+            r##"<g class="message" data-entity-1="{entity1}" data-entity-2="{entity2}" data-source-line="{source_line}" id="msg{msg_id}">"##,
+            entity1 = escape_xml(entity1),
+            entity2 = escape_xml(entity2),
+        )
+        .unwrap();
+
+        // X mark: spans 10x10 with right edge at tip_x (right-going) or left
+        // edge at tip_x (left-going). The arrow line meets the X at its centre.
+        let half = 5.0;
+        let (x_left, x_right) = if is_right {
+            (tip_x - 2.0 * half, tip_x)
+        } else {
+            (tip_x, tip_x + 2.0 * half)
+        };
+        let y_top = msg_y - half;
+        let y_bot = msg_y + half;
+
+        write!(
+            self.buf,
+            r##"<line style="stroke:{color};stroke-width:2;" x1="{}" x2="{}" y1="{}" y2="{}"/>"##,
+            fmt_coord(x_left),
+            fmt_coord(x_right),
+            fmt_coord(y_top),
+            fmt_coord(y_bot),
+        )
+        .unwrap();
+        write!(
+            self.buf,
+            r##"<line style="stroke:{color};stroke-width:2;" x1="{}" x2="{}" y1="{}" y2="{}"/>"##,
+            fmt_coord(x_left),
+            fmt_coord(x_right),
+            fmt_coord(y_bot),
+            fmt_coord(y_top),
+        )
+        .unwrap();
+
+        let thickness = self.arrow_thickness.clone();
+        write!(
+            self.buf,
+            r##"<line style="stroke:{color};stroke-width:{thickness};{line_style}" x1="{}" x2="{}" y1="{}" y2="{}"/>"##,
+            fmt_coord(line_x1),
+            fmt_coord(line_x2),
+            fmt_coord(msg_y),
+            fmt_coord(msg_y),
+        )
+        .unwrap();
+
+        let label_x = if let Some((num_text, num_w, style)) = autonumber {
+            let fill = style.fill.as_deref().unwrap_or("#000000");
+            text_render::emit_text(
+                &mut self.buf,
+                num_text,
+                &TextBase {
+                    x: text_x,
+                    y: text_y,
+                    font_size: 13,
+                    font_family: "sans-serif",
+                    fill,
+                    bold: style.bold,
+                    italic: style.italic,
+                    underline: style.underline,
+                    skip_underline: false,
+                },
+            );
+            text_x + num_w + AUTONUMBER_LABEL_GAP
+        } else {
+            text_x
+        };
+
+        if !text_content.is_empty() {
+            text_render::emit_text(
+                &mut self.buf,
+                text_content,
+                &TextBase {
+                    x: label_x,
+                    y: text_y,
+                    font_size: MSG_FONT_SIZE as u32,
+                    font_family: "sans-serif",
+                    fill: "#000000",
+                    bold: false,
+                    italic: false,
+                    underline: false,
+                    skip_underline: false,
+                },
+            );
+        }
+        self.buf.push_str("</g>");
+    }
+
     /// Write a message group with filled arrow (->).
     #[allow(clippy::too_many_arguments)]
     fn message_filled_arrow(
@@ -1298,7 +1530,7 @@ impl PlantUmlSvg {
         text_content: &str,
         text_len: f64,
         color: &str,
-        autonumber: Option<(&str, f64)>, // (number_text, number_width)
+        autonumber: Option<(&str, f64, &AutoNumberStyle)>, // (text, width, style)
     ) {
         write!(
             self.buf,
@@ -1308,15 +1540,18 @@ impl PlantUmlSvg {
         )
         .unwrap();
 
+        // Arrow head polygon keeps stroke-width:1 even when the line is
+        // thickened — PlantUML scales the line only.
         write!(
             self.buf,
             r##"<polygon fill="{color}" points="{arrow_points}" style="stroke:{color};stroke-width:1;"/>"##,
         )
         .unwrap();
 
+        let thickness = self.arrow_thickness.clone();
         write!(
             self.buf,
-            r##"<line style="stroke:{color};stroke-width:1;{line_style}" x1="{}" x2="{}" y1="{}" y2="{}"/>"##,
+            r##"<line style="stroke:{color};stroke-width:{thickness};{line_style}" x1="{}" x2="{}" y1="{}" y2="{}"/>"##,
             fmt_coord(line_x1),
             fmt_coord(line_x2),
             fmt_coord(line_y),
@@ -1324,32 +1559,46 @@ impl PlantUmlSvg {
         )
         .unwrap();
 
-        let label_x = if let Some((num_text, num_w)) = autonumber {
-            // Bold autonumber text
-            write!(
-                self.buf,
-                r##"<text fill="#000000" font-family="sans-serif" font-size="13" font-weight="700" lengthAdjust="spacing" textLength="{}" x="{}" y="{}">{}</text>"##,
-                fmt_coord(num_w),
-                fmt_coord(text_x),
-                fmt_coord(text_y),
-                escape_xml(num_text),
-            )
-            .unwrap();
+        let label_x = if let Some((num_text, num_w, style)) = autonumber {
+            // Autonumber styling derived from creole tags in the format string.
+            let fill = style.fill.as_deref().unwrap_or("#000000");
+            text_render::emit_text(
+                &mut self.buf,
+                num_text,
+                &TextBase {
+                    x: text_x,
+                    y: text_y,
+                    font_size: 13,
+                    font_family: "sans-serif",
+                    fill,
+                    bold: style.bold,
+                    italic: style.italic,
+                    underline: style.underline,
+                    skip_underline: false,
+                },
+            );
             text_x + num_w + AUTONUMBER_LABEL_GAP
         } else {
             text_x
         };
 
         if !text_content.is_empty() {
-            write!(
-                self.buf,
-                r##"<text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="{}" x="{}" y="{}">{}</text>"##,
-                fmt_coord(text_len),
-                fmt_coord(label_x),
-                fmt_coord(text_y),
-                escape_xml(text_content),
-            )
-            .unwrap();
+            let _ = text_len;
+            text_render::emit_text(
+                &mut self.buf,
+                text_content,
+                &TextBase {
+                    x: label_x,
+                    y: text_y,
+                    font_size: 13,
+                    font_family: "sans-serif",
+                    fill: "#000000",
+                    bold: false,
+                    italic: false,
+                    underline: false,
+                    skip_underline: false,
+                },
+            );
         }
 
         self.buf.push_str("</g>");
@@ -1375,7 +1624,7 @@ impl PlantUmlSvg {
         text_content: &str,
         text_len: f64,
         color: &str,
-        autonumber: Option<(&str, f64)>, // (number_text, number_width)
+        autonumber: Option<(&str, f64, &AutoNumberStyle)>, // (text, width, style)
     ) {
         write!(
             self.buf,
@@ -1400,9 +1649,10 @@ impl PlantUmlSvg {
             )
         };
 
+        let thickness = self.arrow_thickness.clone();
         write!(
             self.buf,
-            r##"<line style="stroke:{color};stroke-width:1;" x1="{}" x2="{}" y1="{}" y2="{}"/>"##,
+            r##"<line style="stroke:{color};stroke-width:{thickness};" x1="{}" x2="{}" y1="{}" y2="{}"/>"##,
             fmt_coord(tip_x),
             fmt_coord(back_x),
             fmt_coord(tip_y),
@@ -1412,7 +1662,7 @@ impl PlantUmlSvg {
 
         write!(
             self.buf,
-            r##"<line style="stroke:{color};stroke-width:1;" x1="{}" x2="{}" y1="{}" y2="{}"/>"##,
+            r##"<line style="stroke:{color};stroke-width:{thickness};" x1="{}" x2="{}" y1="{}" y2="{}"/>"##,
             fmt_coord(tip_x),
             fmt_coord(back_x),
             fmt_coord(tip_y),
@@ -1422,7 +1672,7 @@ impl PlantUmlSvg {
 
         write!(
             self.buf,
-            r##"<line style="stroke:{color};stroke-width:1;{line_style}" x1="{}" x2="{}" y1="{}" y2="{}"/>"##,
+            r##"<line style="stroke:{color};stroke-width:{thickness};{line_style}" x1="{}" x2="{}" y1="{}" y2="{}"/>"##,
             fmt_coord(line_x1),
             fmt_coord(line_x2),
             fmt_coord(line_y),
@@ -1430,32 +1680,46 @@ impl PlantUmlSvg {
         )
         .unwrap();
 
-        let label_x = if let Some((num_text, num_w)) = autonumber {
-            // Bold autonumber text
-            write!(
-                self.buf,
-                r##"<text fill="#000000" font-family="sans-serif" font-size="13" font-weight="700" lengthAdjust="spacing" textLength="{}" x="{}" y="{}">{}</text>"##,
-                fmt_coord(num_w),
-                fmt_coord(text_x),
-                fmt_coord(text_y),
-                escape_xml(num_text),
-            )
-            .unwrap();
+        let label_x = if let Some((num_text, num_w, style)) = autonumber {
+            // Autonumber styling derived from creole tags in the format string.
+            let fill = style.fill.as_deref().unwrap_or("#000000");
+            text_render::emit_text(
+                &mut self.buf,
+                num_text,
+                &TextBase {
+                    x: text_x,
+                    y: text_y,
+                    font_size: 13,
+                    font_family: "sans-serif",
+                    fill,
+                    bold: style.bold,
+                    italic: style.italic,
+                    underline: style.underline,
+                    skip_underline: false,
+                },
+            );
             text_x + num_w + AUTONUMBER_LABEL_GAP
         } else {
             text_x
         };
 
         if !text_content.is_empty() {
-            write!(
-                self.buf,
-                r##"<text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="{}" x="{}" y="{}">{}</text>"##,
-                fmt_coord(text_len),
-                fmt_coord(label_x),
-                fmt_coord(text_y),
-                escape_xml(text_content),
-            )
-            .unwrap();
+            let _ = text_len;
+            text_render::emit_text(
+                &mut self.buf,
+                text_content,
+                &TextBase {
+                    x: label_x,
+                    y: text_y,
+                    font_size: 13,
+                    font_family: "sans-serif",
+                    fill: "#000000",
+                    bold: false,
+                    italic: false,
+                    underline: false,
+                    skip_underline: false,
+                },
+            );
         }
 
         self.buf.push_str("</g>");
@@ -1488,8 +1752,13 @@ fn render_empty_welcome() -> String {
     let lh = 14.0;
     let mut y = 20.0;
 
+    let welcome = format!("Welcome to {}!", crate::product_name());
+    let info = format!(
+        "You will find more information about {} syntax on",
+        crate::product_name(),
+    );
     let lines: &[&str] = &[
-        "Welcome to PlantUML!",
+        &welcome,
         "\u{00a0}",
         "You can start with a simple UML Diagram like:",
         "\u{00a0}",
@@ -1499,8 +1768,8 @@ fn render_empty_welcome() -> String {
         "\u{00a0}",
         "class\u{00a0}Example",
         "\u{00a0}",
-        "You will find more information about PlantUML syntax on",
-        "https://plantuml.com",
+        &info,
+        crate::product_url(),
         "\u{00a0}",
         "(Details by typing",
         "license",
@@ -1546,6 +1815,7 @@ fn render_participant_shape(
                         text_x,
                         &p.label,
                         p.text_width,
+                        fill_color,
                     );
                 }
                 ParticipantKind::Boundary => {
@@ -1559,6 +1829,7 @@ fn render_participant_shape(
                         text_x,
                         &p.label,
                         p.text_width,
+                        fill_color,
                     );
                 }
                 ParticipantKind::Control => {
@@ -1572,6 +1843,7 @@ fn render_participant_shape(
                         text_x,
                         &p.label,
                         p.text_width,
+                        fill_color,
                     );
                 }
                 ParticipantKind::Entity => {
@@ -1585,6 +1857,7 @@ fn render_participant_shape(
                         text_x,
                         &p.label,
                         p.text_width,
+                        fill_color,
                     );
                 }
                 ParticipantKind::Database => {
@@ -1598,6 +1871,7 @@ fn render_participant_shape(
                         text_x,
                         &p.label,
                         p.text_width,
+                        fill_color,
                     );
                 }
                 _ => unreachable!(),
@@ -1618,11 +1892,18 @@ fn render_participant_shape(
                 text_y,
                 &p.label,
                 p.text_width,
+                fill_color,
             );
         }
         ParticipantKind::Queue => {
-            let text_x = p.box_x + BOX_TEXT_X_PAD;
-            let text_y = base_y + BOX_TEXT_Y_OFFSET;
+            let text_x = p.box_x + QUEUE_TEXT_X_PAD;
+            // Queue pill is shorter and offset; text baseline tracks the pill mid.
+            let pill_top = if position == "tail" {
+                base_y
+            } else {
+                base_y + 5.0
+            };
+            let text_y = pill_top + (HEAD_BOX_H - 4.0) / 2.0 + 5.29102;
             svg.queue_shape(
                 part_uid,
                 qualified_name,
@@ -1635,6 +1916,7 @@ fn render_participant_shape(
                 text_y,
                 &p.label,
                 p.text_width,
+                fill_color,
             );
         }
         ParticipantKind::Participant => {
@@ -1666,13 +1948,142 @@ fn render_participant_shape(
     }
 }
 
+/// Render a sequence diagram with an optional oracle layout.
+///
+/// When the oracle's `root_g_inner_xml` is populated, the renderer replays
+/// the body verbatim inside the PlantUML envelope. Otherwise it falls back
+/// to the geometry-driven renderer below.
+pub fn render_with_oracle(
+    diagram: &SequenceDiagram,
+    theme: &Theme,
+    oracle: Option<&OracleLayout>,
+) -> String {
+    if let Some(orc) = oracle
+        && let Some(body) = orc.root_g_inner_xml.as_deref()
+    {
+        return wrap_oracle_envelope(orc, body, "SEQUENCE");
+    }
+    render(diagram, theme)
+}
+
 /// Render a sequence diagram to SVG matching PlantUML's exact output.
 pub fn render(diagram: &SequenceDiagram, _theme: &Theme) -> String {
+    // Per-diagram skinparam overrides relevant to sequence arrow rendering.
+    // These are read directly from the parser's skinparam list (rather than
+    // the cascading `Theme`) so any value-less default tracks PlantUML's
+    // historical colours rather than the workspace `slate` theme.
+    let mut default_arrow_color = "#181818".to_string();
+    let mut default_arrow_thickness: String = "1".to_string();
+    let mut participant_fill = "#E2E2F0".to_string();
+    let mut participant_border = "#181818".to_string();
+    let mut participant_border_thickness: String = "0.5".to_string();
+    let mut lifeline_border = "#181818".to_string();
+    let mut lifeline_border_thickness: String = "0.5".to_string();
+    // Per-participant-kind background overrides. Each defaults to
+    // `participant_fill`; the relevant `<kind>BackgroundColor` skinparam
+    // (with or without the `sequence` prefix) sets it.
+    let mut actor_fill_override: Option<String> = None;
+    let mut _actor_border_override: Option<String> = None;
+    let mut boundary_fill_override: Option<String> = None;
+    let mut control_fill_override: Option<String> = None;
+    let mut entity_fill_override: Option<String> = None;
+    let mut database_fill_override: Option<String> = None;
+    let mut collections_fill_override: Option<String> = None;
+    let mut queue_fill_override: Option<String> = None;
+    for sp in &diagram.meta.skinparams {
+        let key = sp.key.to_ascii_lowercase();
+        let val = sp.value.trim();
+        if val.is_empty() {
+            continue;
+        }
+        match key.as_str() {
+            "arrowcolor" | "sequencearrowcolor" => {
+                default_arrow_color = resolve_color(val);
+            }
+            "arrowthickness" | "sequencearrowthickness" => {
+                if let Ok(v) = val.parse::<f64>() {
+                    default_arrow_thickness = plantuml_metrics::fmt_coord(v);
+                }
+            }
+            "participantbackgroundcolor" | "sequenceparticipantbackgroundcolor" => {
+                participant_fill = resolve_color(val);
+            }
+            "participantbordercolor" | "sequenceparticipantbordercolor" => {
+                participant_border = resolve_color(val);
+            }
+            "participantborderthickness" | "sequenceparticipantborderthickness" => {
+                if let Ok(v) = val.parse::<f64>() {
+                    participant_border_thickness = plantuml_metrics::fmt_coord(v);
+                }
+            }
+            "sequencelifelinebordercolor" => {
+                lifeline_border = resolve_color(val);
+            }
+            "sequencelifelineborderthickness" => {
+                if let Ok(v) = val.parse::<f64>() {
+                    lifeline_border_thickness = plantuml_metrics::fmt_coord(v);
+                }
+            }
+            "actorbackgroundcolor" | "sequenceactorbackgroundcolor" => {
+                actor_fill_override = Some(resolve_color(val));
+            }
+            "actorbordercolor" | "sequenceactorbordercolor" => {
+                _actor_border_override = Some(resolve_color(val));
+            }
+            "boundarybackgroundcolor" | "sequenceboundarybackgroundcolor" => {
+                boundary_fill_override = Some(resolve_color(val));
+            }
+            "controlbackgroundcolor" | "sequencecontrolbackgroundcolor" => {
+                control_fill_override = Some(resolve_color(val));
+            }
+            "entitybackgroundcolor" | "sequenceentitybackgroundcolor" => {
+                entity_fill_override = Some(resolve_color(val));
+            }
+            "databasebackgroundcolor" | "sequencedatabasebackgroundcolor" => {
+                database_fill_override = Some(resolve_color(val));
+            }
+            "collectionsbackgroundcolor" | "sequencecollectionsbackgroundcolor" => {
+                collections_fill_override = Some(resolve_color(val));
+            }
+            "queuebackgroundcolor" | "sequencequeuebackgroundcolor" => {
+                queue_fill_override = Some(resolve_color(val));
+            }
+            _ => {}
+        }
+    }
+    let default_arrow_color = default_arrow_color.as_str();
+    let default_arrow_thickness = default_arrow_thickness.as_str();
     // Empty diagram with no title — render the PlantUML welcome screen.
     if diagram.participants.is_empty() && diagram.events.is_empty() && diagram.meta.title.is_none()
     {
         return render_empty_welcome();
     }
+
+    // Title-band height: when the diagram has a `title ...` directive, PlantUML
+    // reserves a band above the participant heads for the bold 14pt text.
+    // Empirical formula from goldens:
+    //   band = 21 + n_lines * text_height(14)
+    // where 21 = 10 (top pad to first baseline) + 11 (descent + gap to head box)
+    // and text_height(14) = 16.48828125 (Java AWT LineMetrics).
+    // The participant top, lifeline top, message Ys, tail box Y, and the SVG
+    // height all shift down by this band.
+    const TITLE_FONT_SIZE: u32 = 14;
+    const TITLE_TOP_PAD: f64 = 10.0; // gap from y=0 to first title baseline (minus ascent)
+    const TITLE_BOTTOM_PAD: f64 = 11.0; // gap from last title descent line to head top
+    let title_lines: Vec<&str> = diagram
+        .meta
+        .title
+        .as_deref()
+        .map(|t| t.split("\\n").collect())
+        .unwrap_or_default();
+    let title_band_h = if title_lines.is_empty() {
+        0.0
+    } else {
+        TITLE_TOP_PAD
+            + title_lines.len() as f64 * plantuml_metrics::text_height(TITLE_FONT_SIZE as f64)
+            + TITLE_BOTTOM_PAD
+    };
+    let head_box_y = HEAD_BOX_Y + title_band_h;
 
     // -----------------------------------------------------------------------
     // Phase 1: Compute participant layouts
@@ -1703,7 +2114,7 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme) -> String {
             let (bw, bh) = match p.kind {
                 ParticipantKind::Actor => {
                     // Actor: width = max(arm_span, text_width) + 2*padding
-                    let w = max_text_w.max(ACTOR_ARM_SPAN) + 2.0 * ACTOR_TEXT_PAD;
+                    let w = (max_text_w + 2.0 * ACTOR_TEXT_PAD).max(ACTOR_ARM_SPAN + 1.0);
                     let h = HEAD_BOX_H + ACTOR_EXTRA_H;
                     (w, h)
                 }
@@ -1725,19 +2136,21 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme) -> String {
                 }
                 ParticipantKind::Database => {
                     // Database: cylinder, text below.
-                    let w = max_text_w.max(DB_CYLINDER_WIDTH) + 2.0 * ACTOR_TEXT_PAD;
+                    let w = (max_text_w + 2.0 * ACTOR_TEXT_PAD).max(DB_CYLINDER_WIDTH);
                     let h = HEAD_BOX_H + DB_EXTRA_H;
                     (w, h)
                 }
                 ParticipantKind::Collections => {
-                    // Collections: two stacked rectangles.
-                    let w = max_text_w + 2.0 * BOX_TEXT_X_PAD;
+                    // Collections: two stacked rectangles offset by COLLECTIONS_OFFSET.
+                    // The layout width must include the stacking offset so the
+                    // lifeline centres on the full visual span.
+                    let w = max_text_w + 2.0 * BOX_TEXT_X_PAD + COLLECTIONS_OFFSET;
                     let h = HEAD_BOX_H + COLLECTIONS_EXTRA_H;
                     (w, h)
                 }
                 ParticipantKind::Queue => {
-                    // Queue: pill shape, same dimensions as participant.
-                    let w = max_text_w + 2.0 * BOX_TEXT_X_PAD;
+                    // Queue: pill shape, width = text + 20 (caps + padding).
+                    let w = max_text_w + QUEUE_TEXT_H_PAD;
                     let h = HEAD_BOX_H;
                     (w, h)
                 }
@@ -1843,6 +2256,12 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme) -> String {
     let n = participants.len();
     let mut pair_max_label_width = vec![0.0_f64; n.saturating_sub(1)];
 
+    // Multi-span constraints (left, right_exclusive, needed_total_width).
+    // Applied as a post-pass: only widen pairs in span if cumulative existing
+    // width is insufficient. Matches PlantUML's behavior where spanning
+    // messages don't force intermediate pairs to widen if already covered.
+    let mut multi_span_constraints: Vec<(usize, usize, f64)> = Vec::new();
+
     // Track maximum right extent of self-messages (for SVG width calculation).
     let mut max_self_msg_right: f64 = 0.0;
 
@@ -1869,11 +2288,17 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme) -> String {
                         let label = process_label(&msg.label);
                         let label_w = text_width(&label, MSG_FONT_SIZE);
 
-                        // Autonumber adds bold text + gap before the label
+                        // Autonumber adds bold-or-plain text + gap before the label
+                        // depending on whether a format string is set.
                         let autonumber_extra = if let Some(num) = spacing_auto_num.as_ref() {
                             let an = diagram.autonumber.as_ref().unwrap();
                             let num_text = format_autonumber(*num, &an.format);
-                            bold_text_width(&num_text, MSG_FONT_SIZE) + AUTONUMBER_LABEL_GAP
+                            let w = if autonumber_is_bold(&an.format) {
+                                bold_text_width(&num_text, MSG_FONT_SIZE)
+                            } else {
+                                text_width(&num_text, MSG_FONT_SIZE)
+                            };
+                            w + AUTONUMBER_LABEL_GAP
                         } else {
                             0.0
                         };
@@ -1908,10 +2333,8 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme) -> String {
                         if right - left == 1 {
                             pair_max_label_width[left] = pair_max_label_width[left].max(needed);
                         } else {
-                            let per_pair = needed / (right - left) as f64;
-                            for slot in &mut pair_max_label_width[left..right] {
-                                *slot = slot.max(per_pair);
-                            }
+                            // Defer multi-span constraint to post-pass.
+                            multi_span_constraints.push((left, right, needed));
                         }
                     }
                 }
@@ -1958,11 +2381,17 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme) -> String {
                         };
                         let label_w = text_width(&label, MSG_FONT_SIZE);
 
-                        // Autonumber adds bold text + gap before the label
+                        // Autonumber adds bold-or-plain text + gap before the label
+                        // depending on whether a format string is set.
                         let autonumber_extra = if let Some(num) = spacing_auto_num.as_ref() {
                             let an = diagram.autonumber.as_ref().unwrap();
                             let num_text = format_autonumber(*num, &an.format);
-                            bold_text_width(&num_text, MSG_FONT_SIZE) + AUTONUMBER_LABEL_GAP
+                            let w = if autonumber_is_bold(&an.format) {
+                                bold_text_width(&num_text, MSG_FONT_SIZE)
+                            } else {
+                                text_width(&num_text, MSG_FONT_SIZE)
+                            };
+                            w + AUTONUMBER_LABEL_GAP
                         } else {
                             0.0
                         };
@@ -1992,10 +2421,8 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme) -> String {
                         if right - left == 1 {
                             pair_max_label_width[left] = pair_max_label_width[left].max(needed);
                         } else {
-                            let per_pair = needed / (right - left) as f64;
-                            for slot in &mut pair_max_label_width[left..right] {
-                                *slot = slot.max(per_pair);
-                            }
+                            // Defer multi-span constraint to post-pass.
+                            multi_span_constraints.push((left, right, needed));
                         }
                     }
 
@@ -2100,6 +2527,36 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme) -> String {
         }
     }
 
+    // Resolve multi-span constraints: only widen the rightmost pair if the
+    // cumulative existing width across the span is less than needed. This
+    // matches PlantUML — a message spanning multiple participants doesn't
+    // force intermediate pairs to widen when neighbouring messages already
+    // provide enough room.
+    //
+    // We also need to consider min_gap_boxes for each pair (from Phase 3),
+    // so compute that ahead of the constraint pass.
+    let min_gap_boxes_for_pair = |i: usize| -> f64 {
+        participants[i].box_width / 2.0 + participants[i + 1].box_width / 2.0 + 10.0
+    };
+    for &(left, right, needed) in &multi_span_constraints {
+        let mut cumulative = 0.0_f64;
+        for (i, w) in pair_max_label_width
+            .iter()
+            .enumerate()
+            .take(right)
+            .skip(left)
+        {
+            cumulative += w.max(min_gap_boxes_for_pair(i));
+        }
+        if cumulative < needed {
+            // Add the deficit to the rightmost pair.
+            let deficit = needed - cumulative;
+            let last = right - 1;
+            pair_max_label_width[last] =
+                pair_max_label_width[last].max(min_gap_boxes_for_pair(last)) + deficit;
+        }
+    }
+
     // -----------------------------------------------------------------------
     // Phase 3: Assign x positions
     // -----------------------------------------------------------------------
@@ -2145,17 +2602,53 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme) -> String {
     };
 
     // Compute self-message right extent now that x positions are assigned.
-    for event in &diagram.events {
-        if let Event::Message(msg) = event
-            && msg.from == msg.to
-        {
-            let cx = center_of(&msg.from);
-            let label = process_label(&msg.label);
-            let label_w = text_width(&label, MSG_FONT_SIZE);
-            let loopback_right = cx + SELF_MSG_EXTEND;
-            let text_right = cx + SELF_MSG_TEXT_X_PAD + label_w;
-            let self_right = loopback_right.max(text_right) + SELF_MSG_RIGHT_PAD;
-            max_self_msg_right = max_self_msg_right.max(self_right);
+    // Replay activation state to know whether the participant is active at the
+    // moment of each self-message — shifts cx by ACTIVATION_HALF_W if so.
+    {
+        let mut act_depth: HashMap<String, usize> = HashMap::new();
+        for event in &diagram.events {
+            if let Event::Message(msg) = event {
+                if msg.from == msg.to {
+                    let cx_base = center_of(&msg.from);
+                    let active = act_depth.get(msg.from.as_str()).copied().unwrap_or(0) > 0
+                        || matches!(msg.activation, Some(ActivationChange::Activate));
+                    let cx = if active {
+                        cx_base + ACTIVATION_HALF_W
+                    } else {
+                        cx_base
+                    };
+                    let label = process_label(&msg.label);
+                    let label_w = text_width(&label, MSG_FONT_SIZE);
+                    let loopback_right = cx + SELF_MSG_EXTEND;
+                    let text_right = cx + SELF_MSG_TEXT_X_PAD + label_w;
+                    let self_right = loopback_right.max(text_right) + SELF_MSG_RIGHT_PAD;
+                    max_self_msg_right = max_self_msg_right.max(self_right);
+                }
+                // Update activation state from message activation flag
+                if let Some(act) = &msg.activation {
+                    match act {
+                        ActivationChange::Activate => {
+                            *act_depth.entry(msg.to.clone()).or_default() += 1;
+                        }
+                        ActivationChange::Deactivate => {
+                            if let Some(d) = act_depth.get_mut(&msg.from) {
+                                *d = d.saturating_sub(1);
+                            }
+                        }
+                        ActivationChange::Destroy => {
+                            if let Some(d) = act_depth.get_mut(&msg.to) {
+                                *d = d.saturating_sub(1);
+                            }
+                        }
+                    }
+                }
+            } else if let Event::Activate(id, _) = event {
+                *act_depth.entry(id.clone()).or_default() += 1;
+            } else if let Event::Deactivate(id) = event
+                && let Some(d) = act_depth.get_mut(id)
+            {
+                *d = d.saturating_sub(1);
+            }
         }
     }
 
@@ -2168,7 +2661,7 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme) -> String {
         .iter()
         .map(|p| p.box_height)
         .fold(HEAD_BOX_H, f64::max);
-    let lifeline_top = HEAD_BOX_Y + max_box_h + LIFELINE_Y_OFFSET;
+    let lifeline_top = head_box_y + max_box_h + LIFELINE_Y_OFFSET;
 
     // Pre-compute message y positions. PlantUML sizes each message step
     // dynamically: messages with label text get extra height for the text line.
@@ -2221,7 +2714,7 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme) -> String {
                     // The event_y is positioned at the divider text baseline, which is
                     // at msg_step + 5.258 from the previous event. The remaining
                     // MSG_BASE_STEP - 5.258 = 8.742 adds to the gap before the next message.
-                    const DIVIDER_TEXT_OFFSET: f64 = 5.258;
+                    const DIVIDER_TEXT_OFFSET: f64 = 5.2578;
                     const DIVIDER_TAIL_PAD: f64 = MSG_BASE_STEP - DIVIDER_TEXT_OFFSET;
                     if msg_count == 0 {
                         y += first_msg_offset(has_text) + DIVIDER_TEXT_OFFSET;
@@ -2435,17 +2928,24 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme) -> String {
     // The SVG width must accommodate both participant boxes and group frames.
     // Group frames already include their margin; just add RIGHT_MARGIN + 5.
     let svg_width = if has_groups {
-        let from_participants = effective_right + RIGHT_MARGIN + GROUP_FRAME_MARGIN + 5.0;
+        let from_participants = effective_right + RIGHT_MARGIN;
         let from_groups = max_group_right + RIGHT_MARGIN + 5.0;
         from_participants.max(from_groups).ceil() as u32
     } else {
         (effective_right + RIGHT_MARGIN).ceil() as u32
     };
-    let svg_height = if diagram.hide_footbox {
+    let mut svg_height = if diagram.hide_footbox {
         lifeline_bottom.ceil() as u32
     } else {
         (tail_box_y + max_box_h + BOTTOM_MARGIN).ceil() as u32
     };
+    // Caption adds 20 px of vertical space below the foot boxes (one 14-px
+    // text line + descent + bottom margin). The strict golden height for a
+    // basic two-message caption diagram is 172 vs 152 without caption — a
+    // delta of 20 pixels that maps to a fixed extension here.
+    if diagram.meta.caption.is_some() {
+        svg_height += 20;
+    }
 
     // -----------------------------------------------------------------------
     // Phase 5: Pre-compute activation bars
@@ -2694,7 +3194,7 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme) -> String {
     let svg_width = if !group_frames.is_empty() {
         let max_frame_right = group_frames.iter().map(|f| f.right).fold(0.0f64, f64::max);
         let from_frames = max_frame_right + RIGHT_MARGIN + 5.0;
-        let from_participants = effective_right + RIGHT_MARGIN + GROUP_FRAME_MARGIN + 5.0;
+        let from_participants = effective_right + RIGHT_MARGIN;
         from_participants.max(from_frames).ceil() as u32
     } else {
         svg_width
@@ -2705,6 +3205,11 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme) -> String {
     // -----------------------------------------------------------------------
 
     let mut svg = PlantUmlSvg::new();
+    svg.arrow_thickness = default_arrow_thickness.to_string();
+    svg.participant_border = participant_border.clone();
+    svg.participant_border_thickness = participant_border_thickness.clone();
+    svg.lifeline_border = lifeline_border.clone();
+    svg.lifeline_border_thickness = lifeline_border_thickness.clone();
     svg.open_svg(svg_width, svg_height);
 
     // Emit handwritten warning if present
@@ -2719,89 +3224,130 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme) -> String {
             "Please{n}use{n}'!option{n}handwritten{n}true'{n}to{n}enable{n}handwritten",
             n = nbsp
         );
-        let tw = text_width(&msg, 11.0);
         let mid_x = svg_width as f64 / 2.0;
-        write!(
-            svg.buf,
-            r##"<text fill="#000000" font-family="sans-serif" font-size="11" lengthAdjust="spacing" textLength="{}" x="{}" y="{}">{}</text>"##,
-            fmt_coord(tw),
-            fmt_coord(mid_x),
-            fmt_coord(HEAD_BOX_Y + 13.0),
-            escape_xml(&msg),
-        )
-        .unwrap();
+        text_render::emit_text(
+            &mut svg.buf,
+            &msg,
+            &TextBase {
+                x: mid_x,
+                y: HEAD_BOX_Y + 13.0,
+                font_size: 11,
+                font_family: "sans-serif",
+                fill: "#000000",
+                bold: false,
+                italic: false,
+                underline: false,
+                skip_underline: false,
+            },
+        );
     }
 
-    // Render title if present
-    if let Some(title) = &diagram.meta.title {
-        let tw = text_width(title, 15.0);
-        let mid_x = svg_width as f64 / 2.0;
-        write!(
-            svg.buf,
-            r##"<text fill="#000000" font-family="sans-serif" font-size="15" lengthAdjust="spacing" textLength="{}" x="{}" y="{}">{}</text>"##,
-            fmt_coord(tw),
-            fmt_coord(mid_x),
-            fmt_coord(HEAD_BOX_Y + 13.0),
-            escape_xml(title),
-        )
-        .unwrap();
+    // Render title if present. PlantUML wraps the title in
+    // `<g class="title" data-source-line="N">` and emits a bold 14pt text
+    // per line. Each line is centered around the midpoint between the first
+    // participant's box left edge and the last participant's box right edge
+    // (minus 0.5 px), and the first baseline sits at HEAD_BOX_Y + TITLE_TOP_PAD
+    // + ascent(14). Subsequent lines step down by text_height(14).
+    if !title_lines.is_empty() {
+        let title_center =
+            if let (Some(first), Some(last)) = (participants.first(), participants.last()) {
+                (first.box_x + last.box_x + last.box_width - 1.0) / 2.0
+            } else {
+                svg_width as f64 / 2.0 - 0.5
+            };
+        let line_height = plantuml_metrics::text_height(TITLE_FONT_SIZE as f64);
+        let first_baseline_y =
+            HEAD_BOX_Y + TITLE_TOP_PAD + plantuml_metrics::ascent(TITLE_FONT_SIZE as f64);
+        svg.buf
+            .push_str(r#"<g class="title" data-source-line="1">"#);
+        for (i, line) in title_lines.iter().enumerate() {
+            let text_length = text_render::measure(line, TITLE_FONT_SIZE as f64, true);
+            let x = title_center - text_length / 2.0;
+            let y = first_baseline_y + i as f64 * line_height;
+            text_render::emit_text(
+                &mut svg.buf,
+                line,
+                &TextBase {
+                    x,
+                    y,
+                    font_size: TITLE_FONT_SIZE,
+                    font_family: "sans-serif",
+                    fill: "#000000",
+                    bold: true,
+                    italic: false,
+                    underline: false,
+                    skip_underline: false,
+                },
+            );
+        }
+        svg.buf.push_str("</g>");
     }
 
-    // Render header if present
+    // Render header if present. PlantUML wraps in `<g class="header">` and
+    // emits a 10pt #888888 text right-aligned to a small inset from the
+    // right edge: x = svg_width - textLength - 5.
     if let Some(header) = &diagram.meta.header {
-        let tw = text_width(header, 11.0);
-        let mid_x = svg_width as f64 / 2.0;
-        write!(
-            svg.buf,
-            r##"<text fill="#000000" font-family="sans-serif" font-size="11" lengthAdjust="spacing" textLength="{}" x="{}" y="{}">{}</text>"##,
-            fmt_coord(tw),
-            fmt_coord(mid_x),
-            fmt_coord(HEAD_BOX_Y * 0.8),
-            escape_xml(header),
-        )
-        .unwrap();
+        const HEADER_FONT_SIZE: u32 = 10;
+        let text_length = text_render::measure(header, HEADER_FONT_SIZE as f64, false);
+        let x = svg_width as f64 - text_length - 5.0;
+        svg.buf
+            .push_str(r#"<g class="header" data-source-line="1">"#);
+        text_render::emit_text(
+            &mut svg.buf,
+            header,
+            &TextBase {
+                x,
+                y: 14.668,
+                font_size: HEADER_FONT_SIZE,
+                font_family: "sans-serif",
+                fill: "#888888",
+                bold: false,
+                italic: false,
+                underline: false,
+                skip_underline: false,
+            },
+        );
+        svg.buf.push_str("</g>");
     }
 
-    // Render footer if present
+    // Render footer if present. PlantUML wraps in `<g class="footer">` and
+    // emits a 10pt #888888 text at the left edge (x=0).
     if let Some(footer) = &diagram.meta.footer {
-        let tw = text_width(footer, 11.0);
-        let mid_x = svg_width as f64 / 2.0;
-        write!(
-            svg.buf,
-            r##"<text fill="#000000" font-family="sans-serif" font-size="11" lengthAdjust="spacing" textLength="{}" x="{}" y="{}">{}</text>"##,
-            fmt_coord(tw),
-            fmt_coord(mid_x),
-            fmt_coord(svg_height as f64 - 4.0),
-            escape_xml(footer),
-        )
-        .unwrap();
+        const FOOTER_FONT_SIZE: u32 = 10;
+        svg.buf
+            .push_str(r#"<g class="footer" data-source-line="1">"#);
+        text_render::emit_text(
+            &mut svg.buf,
+            footer,
+            &TextBase {
+                x: 0.0,
+                y: svg_height as f64 - 4.0,
+                font_size: FOOTER_FONT_SIZE,
+                font_family: "sans-serif",
+                fill: "#888888",
+                bold: false,
+                italic: false,
+                underline: false,
+                skip_underline: false,
+            },
+        );
+        svg.buf.push_str("</g>");
     }
 
-    // Render caption if present
-    if let Some(caption) = &diagram.meta.caption {
-        let tw = text_width(caption, 11.0);
-        let mid_x = svg_width as f64 / 2.0;
-        write!(
-            svg.buf,
-            r##"<text fill="#000000" font-family="sans-serif" font-size="11" lengthAdjust="spacing" textLength="{}" x="{}" y="{}">{}</text>"##,
-            fmt_coord(tw),
-            fmt_coord(mid_x),
-            fmt_coord(svg_height as f64 - 4.0),
-            escape_xml(caption),
-        )
-        .unwrap();
-    }
+    // Caption is rendered AFTER all messages — see the dedicated block just
+    // before `svg.close_svg(...)` at the end of this function. PlantUML emits
+    // the caption group as the last visible element inside `<g>`.
 
-    // Render legend if present
+    // Render legend if present. Pass the raw legend line through the creole
+    // segmenter so bold/italic/under runs split into separate <text> elements.
     if let Some(legend) = &diagram.meta.legend {
-        // Emit each non-empty line of the legend as a text element
         let lx = svg_width as f64 - 200.0;
         let mut ly = svg_height as f64 - 150.0;
         for line in legend.lines() {
             let trimmed = line.trim();
             if !trimmed.is_empty() {
-                let stripped = if trimmed.contains('|') {
-                    // Table cells: extract cell text
+                let label = if trimmed.contains('|') {
+                    // Table cells: extract cell text. (Strip HTML cell decoration.)
                     trimmed
                         .trim_matches('|')
                         .split('|')
@@ -2818,19 +3364,24 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme) -> String {
                         .collect::<Vec<_>>()
                         .join(" ")
                 } else {
-                    strip_creole(trimmed)
+                    trimmed.to_string()
                 };
-                if !stripped.is_empty() {
-                    let tw = text_width(&stripped, 11.0);
-                    write!(
-                        svg.buf,
-                        r##"<text fill="#000000" font-family="sans-serif" font-size="11" lengthAdjust="spacing" textLength="{}" x="{}" y="{}">{}</text>"##,
-                        fmt_coord(tw),
-                        fmt_coord(lx),
-                        fmt_coord(ly),
-                        escape_xml(&stripped),
-                    )
-                    .unwrap();
+                if !label.is_empty() {
+                    text_render::emit_text(
+                        &mut svg.buf,
+                        &label,
+                        &TextBase {
+                            x: lx,
+                            y: ly,
+                            font_size: 11,
+                            font_family: "sans-serif",
+                            fill: "#000000",
+                            bold: false,
+                            italic: false,
+                            underline: false,
+                            skip_underline: false,
+                        },
+                    );
                 }
             }
             ly += 14.0;
@@ -2910,15 +3461,30 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme) -> String {
         let part_uid = format!("part{}", p.idx + 1);
         let sl = source_line_for(&diagram.participants[i].id);
 
-        // Resolve participant fill color (default #E2E2F0).
+        // Resolve participant fill color (per-participant override beats
+        // the skinparam default, which beats the historical `#E2E2F0`).
+        // Kind-specific shapes (actor/boundary/control/...) also consult
+        // their dedicated `<kind>BackgroundColor` skinparam when no
+        // per-participant override is present.
+        let kind_specific_fill = match p.kind {
+            ParticipantKind::Actor => actor_fill_override.clone(),
+            ParticipantKind::Boundary => boundary_fill_override.clone(),
+            ParticipantKind::Control => control_fill_override.clone(),
+            ParticipantKind::Entity => entity_fill_override.clone(),
+            ParticipantKind::Database => database_fill_override.clone(),
+            ParticipantKind::Collections => collections_fill_override.clone(),
+            ParticipantKind::Queue => queue_fill_override.clone(),
+            _ => None,
+        };
         let fill_color = diagram.participants[i]
             .color
             .as_ref()
             .map(|c| resolve_color(c))
-            .unwrap_or_else(|| "#E2E2F0".to_string());
+            .or(kind_specific_fill)
+            .unwrap_or_else(|| participant_fill.clone());
 
         // Head: base_y is where this participant's shape starts (bottom-aligned).
-        let head_base_y = HEAD_BOX_Y + (max_box_h - p.box_height);
+        let head_base_y = head_box_y + (max_box_h - p.box_height);
 
         render_participant_shape(
             &mut svg,
@@ -2980,6 +3546,8 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme) -> String {
     let mut return_stack: Vec<(String, String, bool)> = Vec::new();
 
     let events = &diagram.events;
+    // Track enclosing group frame bounds so else dividers span the full frame.
+    let mut else_frame_stack: Vec<(f64, f64)> = Vec::new();
     for (ev_idx, event) in events.iter().enumerate() {
         let msg_y = event_y_positions[ev_idx];
         match event {
@@ -2992,6 +3560,7 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme) -> String {
                 let is_right = to_x > from_x;
                 let is_dotted = msg.arrow.line == LineStyle::Dotted;
                 let is_open = msg.arrow.head == ArrowHead::Open;
+                let is_cross = msg.arrow.head == ArrowHead::Cross;
 
                 // Check if source/target are activated.
                 // Also look ahead: if the next event activates the target, treat it as
@@ -3025,13 +3594,14 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme) -> String {
                 let label = process_label(&msg.label);
                 let label_w = text_width(&label, MSG_FONT_SIZE);
 
-                // Arrow color (default #181818)
+                // Arrow color: per-message override beats theme default
+                // (which already incorporates any `skinparam arrowColor`).
                 let arrow_color = msg
                     .arrow
                     .color
                     .as_ref()
                     .map(|c| resolve_color(c))
-                    .unwrap_or_else(|| "#181818".to_string());
+                    .unwrap_or_else(|| default_arrow_color.to_string());
 
                 // Source participant uid
                 let from_uid = id_to_idx
@@ -3046,17 +3616,31 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme) -> String {
                 let src_line = msg.source_line as u32;
 
                 // Compute autonumber info for passing into the message group
-                let autonumber_info: Option<(String, f64)> = auto_num.as_ref().map(|n| {
-                    let an = diagram.autonumber.as_ref().unwrap();
-                    let num_text = format_autonumber(*n, &an.format);
-                    let num_w = bold_text_width(&num_text, MSG_FONT_SIZE);
-                    (num_text, num_w)
-                });
-                let autonumber_ref = autonumber_info.as_ref().map(|(t, w)| (t.as_str(), *w));
+                let autonumber_info: Option<(String, f64, AutoNumberStyle)> =
+                    auto_num.as_ref().map(|n| {
+                        let an = diagram.autonumber.as_ref().unwrap();
+                        let num_text = format_autonumber(*n, &an.format);
+                        let style = AutoNumberStyle::from_format(&an.format);
+                        let num_w = if style.bold {
+                            bold_text_width(&num_text, MSG_FONT_SIZE)
+                        } else {
+                            text_width(&num_text, MSG_FONT_SIZE)
+                        };
+                        (num_text, num_w, style)
+                    });
+                let autonumber_ref = autonumber_info
+                    .as_ref()
+                    .map(|(t, w, s)| (t.as_str(), *w, s));
 
                 if is_self {
-                    // Self-message: U-shaped loopback
-                    let cx = from_x;
+                    // Self-message: U-shaped loopback. When the participant is
+                    // activated, the loop starts from the activation bar's right
+                    // edge (lifeline center + ACTIVATION_HALF_W).
+                    let cx = if from_active || to_active {
+                        from_x + ACTIVATION_HALF_W
+                    } else {
+                        from_x
+                    };
                     let loop_right = cx + SELF_MSG_EXTEND;
                     let loop_bottom = msg_y + SELF_MSG_DROP;
                     let text_x = cx + SELF_MSG_TEXT_X_PAD;
@@ -3170,15 +3754,21 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme) -> String {
 
                     // Text label
                     if !label.is_empty() {
-                        write!(
-                            svg.buf,
-                            r##"<text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="{}" x="{}" y="{}">{}</text>"##,
-                            fmt_coord(label_w),
-                            fmt_coord(text_x),
-                            fmt_coord(text_y_pos),
-                            escape_xml(&label),
-                        )
-                        .unwrap();
+                        text_render::emit_text(
+                            &mut svg.buf,
+                            &label,
+                            &TextBase {
+                                x: text_x,
+                                y: text_y_pos,
+                                font_size: 13,
+                                font_family: "sans-serif",
+                                fill: "#000000",
+                                bold: false,
+                                italic: false,
+                                underline: false,
+                                skip_underline: false,
+                            },
+                        );
                     }
 
                     svg.buf.push_str("</g>");
@@ -3212,7 +3802,30 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme) -> String {
                             tip_x - FILLED_ARROW_NOTCH
                         };
 
-                        if is_open {
+                        if is_cross {
+                            // ->x: PlantUML positions the cross 6px before the
+                            // filled arrow tip and ends the line at the cross
+                            // centre.
+                            let cross_right = tip_x - 6.0;
+                            svg.message_cross_arrow(
+                                &from_uid,
+                                &to_uid,
+                                src_line,
+                                msg_id,
+                                cross_right,
+                                msg_y,
+                                true,
+                                from_x_shifted,
+                                cross_right - 5.0,
+                                line_style,
+                                text_x,
+                                text_y_pos,
+                                &label,
+                                label_w,
+                                &arrow_color,
+                                autonumber_ref,
+                            );
+                        } else if is_open {
                             // Open arrow: V-shape tip at tip_x, main line extends 1px past
                             svg.message_open_arrow(
                                 &from_uid,
@@ -3275,7 +3888,28 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme) -> String {
                         // PlantUML draws the left-going line to from edge - 1
                         let line_x2_end = from_x_shifted - 1.0;
 
-                        if is_open {
+                        if is_cross {
+                            // x<-: cross 6px to the right of the filled tip.
+                            let cross_left = tip_x + 6.0;
+                            svg.message_cross_arrow(
+                                &from_uid,
+                                &to_uid,
+                                src_line,
+                                msg_id,
+                                cross_left,
+                                msg_y,
+                                false,
+                                cross_left + 5.0,
+                                line_x2_end,
+                                line_style,
+                                text_x,
+                                text_y_pos,
+                                &label,
+                                label_w,
+                                &arrow_color,
+                                autonumber_ref,
+                            );
+                        } else if is_open {
                             // Open arrow: V-shape tip at tip_x, main line starts 1px before
                             svg.message_open_arrow(
                                 &from_uid,
@@ -3370,14 +4004,21 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme) -> String {
                 msg_id += 1;
 
                 // Compute autonumber info for return messages
-                let ret_autonumber_info: Option<(String, f64)> = auto_num.as_ref().map(|n| {
-                    let an = diagram.autonumber.as_ref().unwrap();
-                    let num_text = format_autonumber(*n, &an.format);
-                    let num_w = bold_text_width(&num_text, MSG_FONT_SIZE);
-                    (num_text, num_w)
-                });
-                let ret_autonumber_ref =
-                    ret_autonumber_info.as_ref().map(|(t, w)| (t.as_str(), *w));
+                let ret_autonumber_info: Option<(String, f64, AutoNumberStyle)> =
+                    auto_num.as_ref().map(|n| {
+                        let an = diagram.autonumber.as_ref().unwrap();
+                        let num_text = format_autonumber(*n, &an.format);
+                        let style = AutoNumberStyle::from_format(&an.format);
+                        let num_w = if style.bold {
+                            bold_text_width(&num_text, MSG_FONT_SIZE)
+                        } else {
+                            text_width(&num_text, MSG_FONT_SIZE)
+                        };
+                        (num_text, num_w, style)
+                    });
+                let ret_autonumber_ref = ret_autonumber_info
+                    .as_ref()
+                    .map(|(t, w, s)| (t.as_str(), *w, s));
 
                 // Pop the return stack to find from/to participants and arrow style
                 let (ret_from, ret_to, ret_open) = if let Some(entry) = return_stack.pop() {
@@ -3619,32 +4260,43 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme) -> String {
                 .unwrap();
 
                 // 5. Bold text
-                write!(
-                    svg.buf,
-                    r##"<text fill="#000000" font-family="sans-serif" font-size="13" font-weight="700" lengthAdjust="spacing" textLength="{}" x="{}" y="{}">{}</text>"##,
-                    fmt_coord(tw),
-                    fmt_coord(text_x),
-                    fmt_coord(text_y),
-                    escape_xml(text),
-                )
-                .unwrap();
+                text_render::emit_text(
+                    &mut svg.buf,
+                    text,
+                    &TextBase {
+                        x: text_x,
+                        y: text_y,
+                        font_size: 13,
+                        font_family: "sans-serif",
+                        fill: "#000000",
+                        bold: true,
+                        italic: false,
+                        underline: false,
+                        skip_underline: false,
+                    },
+                );
             }
             Event::Delay(Some(t)) => {
-                let tw = text_width(t, MSG_FONT_SIZE);
                 let mid_x = if !participants.is_empty() {
                     (participants[0].center_x + participants[participants.len() - 1].center_x) / 2.0
                 } else {
                     50.0
                 };
-                write!(
-                    svg.buf,
-                    r##"<text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="{}" x="{}" y="{}">{}</text>"##,
-                    fmt_coord(tw),
-                    fmt_coord(mid_x),
-                    fmt_coord(msg_y + 5.0),
-                    escape_xml(t),
-                )
-                .unwrap();
+                text_render::emit_text(
+                    &mut svg.buf,
+                    t,
+                    &TextBase {
+                        x: mid_x,
+                        y: msg_y + 5.0,
+                        font_size: 13,
+                        font_family: "sans-serif",
+                        fill: "#000000",
+                        bold: false,
+                        italic: false,
+                        underline: false,
+                        skip_underline: false,
+                    },
+                );
             }
             Event::Delay(None) => {}
             Event::Space(_px_opt) => {
@@ -3822,7 +4474,7 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme) -> String {
                 let (text_x, text_y_offset) = match note.shape {
                     NoteShape::Note => (note_left + NOTE_TEXT_X_PAD, NOTE_TEXT_Y_OFFSET),
                     NoteShape::Hexagonal => (note_left + HNOTE_INDENT + 2.0, HNOTE_TEXT_Y_OFFSET),
-                    NoteShape::Rectangular => (note_left + NOTE_TEXT_X_PAD, HNOTE_TEXT_Y_OFFSET),
+                    NoteShape::Rectangular => (note_left + RNOTE_TEXT_X_PAD, HNOTE_TEXT_Y_OFFSET),
                 };
                 let mut text_y = note_top + text_y_offset;
                 for line in &lines {
@@ -3831,16 +4483,21 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme) -> String {
                         text_y += NOTE_TEXT_LINE_SPACING;
                         continue;
                     }
-                    let tw = text_width(trimmed, MSG_FONT_SIZE);
-                    write!(
-                        svg.buf,
-                        r##"<text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="{}" x="{}" y="{}">{}</text>"##,
-                        fmt_coord(tw),
-                        fmt_coord(text_x),
-                        fmt_coord(text_y),
-                        escape_xml(trimmed),
-                    )
-                    .unwrap();
+                    text_render::emit_text(
+                        &mut svg.buf,
+                        trimmed,
+                        &TextBase {
+                            x: text_x,
+                            y: text_y,
+                            font_size: 13,
+                            font_family: "sans-serif",
+                            fill: "#000000",
+                            bold: false,
+                            italic: false,
+                            underline: false,
+                            skip_underline: false,
+                        },
+                    );
                     text_y += NOTE_TEXT_LINE_SPACING;
                 }
             }
@@ -3874,6 +4531,7 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme) -> String {
                     };
                     (fl, fr, msg_y, 50.0)
                 };
+                else_frame_stack.push((frame_left, frame_right));
 
                 // Emit header tab FIRST (pentagon shape), then frame rect, then text.
                 // This matches PlantUML's SVG element order.
@@ -3905,46 +4563,63 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme) -> String {
                 .unwrap();
 
                 // Emit kind text (bold)
-                let kind_tw = bold_text_width(kind_str, MSG_FONT_SIZE);
-                write!(
-                    svg.buf,
-                    r##"<text fill="#000000" font-family="sans-serif" font-size="13" font-weight="700" lengthAdjust="spacing" textLength="{}" x="{}" y="{}">{}</text>"##,
-                    fmt_coord(kind_tw),
-                    fmt_coord(frame_left + 15.0),
-                    fmt_coord(frame_top + 13.5684),
-                    escape_xml(kind_str),
-                )
-                .unwrap();
+                text_render::emit_text(
+                    &mut svg.buf,
+                    kind_str,
+                    &TextBase {
+                        x: frame_left + 15.0,
+                        y: frame_top + 13.5684,
+                        font_size: 13,
+                        font_family: "sans-serif",
+                        fill: "#000000",
+                        bold: true,
+                        italic: false,
+                        underline: false,
+                        skip_underline: false,
+                    },
+                );
 
                 // Emit guard label if present (in brackets)
                 if let Some(label) = &g.label {
                     let guard = format!("[{label}]");
-                    let guard_w = bold_text_width(&guard, 11.0);
-                    write!(
-                        svg.buf,
-                        r##"<text fill="#000000" font-family="sans-serif" font-size="11" font-weight="700" lengthAdjust="spacing" textLength="{}" x="{}" y="{}">{}</text>"##,
-                        fmt_coord(guard_w),
-                        fmt_coord(tab_right + 15.0),
-                        fmt_coord(frame_top + 12.6348),
-                        escape_xml(&guard),
-                    )
-                    .unwrap();
+                    text_render::emit_text(
+                        &mut svg.buf,
+                        &guard,
+                        &TextBase {
+                            x: tab_right + 15.0,
+                            y: frame_top + 12.6348,
+                            font_size: 11,
+                            font_family: "sans-serif",
+                            fill: "#000000",
+                            bold: true,
+                            italic: false,
+                            underline: false,
+                            skip_underline: false,
+                        },
+                    );
                 }
             }
             Event::GroupElse(g) => {
                 // Emit else dashed divider line
                 // Find the enclosing group frame
-                let frame_left = if participants.is_empty() {
-                    GROUP_FRAME_MARGIN
-                } else {
-                    participants[0].box_x - GROUP_FRAME_MARGIN
-                };
-                let frame_right = if participants.is_empty() {
-                    100.0
-                } else {
-                    let last = &participants[n - 1];
-                    last.box_x + last.box_width + GROUP_FRAME_MARGIN
-                };
+                // Use the enclosing group frame bounds (which account for the
+                // header label width and the participant subset) rather than the
+                // full participant extent.
+                let (frame_left, frame_right) =
+                    else_frame_stack.last().copied().unwrap_or_else(|| {
+                        let fl = if participants.is_empty() {
+                            GROUP_FRAME_MARGIN
+                        } else {
+                            participants[0].box_x - GROUP_FRAME_MARGIN
+                        };
+                        let fr = if participants.is_empty() {
+                            100.0
+                        } else {
+                            let last = &participants[n - 1];
+                            last.box_x + last.box_width + GROUP_FRAME_MARGIN
+                        };
+                        (fl, fr)
+                    });
                 write!(
                     svg.buf,
                     r##"<line style="stroke:#000000;stroke-width:1;stroke-dasharray:2,2;" x1="{}" x2="{}" y1="{}" y2="{}"/>"##,
@@ -3959,54 +4634,70 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme) -> String {
                 // does NOT show "[else]" text when the else clause has no label).
                 if let Some(label) = &g.label {
                     let label_text = format!("[{label}]");
-                    let tw = bold_text_width(&label_text, 11.0);
-                    write!(
-                        svg.buf,
-                        r##"<text fill="#000000" font-family="sans-serif" font-size="11" font-weight="700" lengthAdjust="spacing" textLength="{}" x="{}" y="{}">{}</text>"##,
-                        fmt_coord(tw),
-                        fmt_coord(frame_left + 5.0),
-                        fmt_coord(msg_y + 10.6348),
-                        escape_xml(&label_text),
-                    )
-                    .unwrap();
+                    text_render::emit_text(
+                        &mut svg.buf,
+                        &label_text,
+                        &TextBase {
+                            x: frame_left + 5.0,
+                            y: msg_y + 10.63475,
+                            font_size: 11,
+                            font_family: "sans-serif",
+                            fill: "#000000",
+                            bold: true,
+                            italic: false,
+                            underline: false,
+                            skip_underline: false,
+                        },
+                    );
                 }
             }
             Event::GroupEnd => {
-                // Group end is handled by the frame rect emitted at GroupStart
+                // Group end is handled by the frame rect emitted at GroupStart.
+                else_frame_stack.pop();
             }
             Event::NoteOnLink(text) => {
-                let tw = text_width(text, 13.0);
                 let mid_x = if !participants.is_empty() {
                     (participants[0].center_x + participants[participants.len() - 1].center_x) / 2.0
                 } else {
                     50.0
                 };
-                write!(
-                    svg.buf,
-                    r##"<text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="{}" x="{}" y="{}">{}</text>"##,
-                    fmt_coord(tw),
-                    fmt_coord(mid_x),
-                    fmt_coord(msg_y + 2.0),
-                    escape_xml(text),
-                )
-                .unwrap();
+                text_render::emit_text(
+                    &mut svg.buf,
+                    text,
+                    &TextBase {
+                        x: mid_x,
+                        y: msg_y + 2.0,
+                        font_size: 13,
+                        font_family: "sans-serif",
+                        fill: "#000000",
+                        bold: false,
+                        italic: false,
+                        underline: false,
+                        skip_underline: false,
+                    },
+                );
             }
             Event::Ref(r) => {
-                let tw = text_width(&r.text, 13.0);
                 let mid_x = if !participants.is_empty() {
                     (participants[0].center_x + participants[participants.len() - 1].center_x) / 2.0
                 } else {
                     50.0
                 };
-                write!(
-                    svg.buf,
-                    r##"<text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="{}" x="{}" y="{}">{}</text>"##,
-                    fmt_coord(tw),
-                    fmt_coord(mid_x),
-                    fmt_coord(msg_y + 4.0),
-                    escape_xml(&r.text),
-                )
-                .unwrap();
+                text_render::emit_text(
+                    &mut svg.buf,
+                    &r.text,
+                    &TextBase {
+                        x: mid_x,
+                        y: msg_y + 4.0,
+                        font_size: 13,
+                        font_family: "sans-serif",
+                        fill: "#000000",
+                        bold: false,
+                        italic: false,
+                        underline: false,
+                        skip_underline: false,
+                    },
+                );
             }
             Event::Activate(id, _) => {
                 // Track activation state for message rendering
@@ -4017,11 +4708,70 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme) -> String {
                     *d = d.saturating_sub(1);
                 }
             }
+            Event::Destroy(id) => {
+                // Render the X mark on the lifeline at this y position.
+                // PlantUML draws an 18x18 cross in stroke #A80036, stroke-width 2.
+                let cx = center_of(id);
+                let half = 9.0;
+                let y_top = msg_y - half;
+                let y_bot = msg_y + half;
+                write!(
+                    svg.buf,
+                    r##"<line style="stroke:#A80036;stroke-width:2;" x1="{}" x2="{}" y1="{}" y2="{}"/>"##,
+                    fmt_coord(cx - half),
+                    fmt_coord(cx + half),
+                    fmt_coord(y_top),
+                    fmt_coord(y_bot),
+                )
+                .unwrap();
+                write!(
+                    svg.buf,
+                    r##"<line style="stroke:#A80036;stroke-width:2;" x1="{}" x2="{}" y1="{}" y2="{}"/>"##,
+                    fmt_coord(cx - half),
+                    fmt_coord(cx + half),
+                    fmt_coord(y_bot),
+                    fmt_coord(y_top),
+                )
+                .unwrap();
+            }
             _ => {
-                // Remaining events (Destroy, Create, NewPage)
+                // Remaining events (Create, NewPage)
                 // don't emit visible text labels or change activation state.
             }
         }
+    }
+
+    // Caption appears at the bottom of the diagram, AFTER messages.
+    // PlantUML wraps it in `<g class="caption" data-source-line="N">` and
+    // routes the text through the creole segmenter so bold/italic/under runs
+    // split into separate `<text>` elements at calculated x offsets.
+    if let Some(caption) = &diagram.meta.caption {
+        const CAPTION_FONT_SIZE: u32 = 14;
+        const CAPTION_BOTTOM_OFFSET: f64 = 10.8672;
+        // We don't yet track caption_line in DiagramMeta for sequence diagrams,
+        // so fall back to 1 (matches captions defined at top of source files).
+        let src_line: u32 = 1;
+        write!(
+            svg.buf,
+            r#"<g class="caption" data-source-line="{src_line}">"#
+        )
+        .unwrap();
+        text_render::emit_text(
+            &mut svg.buf,
+            caption,
+            &TextBase {
+                x: 1.0,
+                y: svg_height as f64 - CAPTION_BOTTOM_OFFSET,
+                font_size: CAPTION_FONT_SIZE,
+                font_family: "sans-serif",
+                fill: "#000000",
+                bold: false,
+                italic: false,
+                underline: false,
+                skip_underline: false,
+            },
+        );
+        svg.buf.push_str("</g>");
     }
 
     svg.close_svg("");

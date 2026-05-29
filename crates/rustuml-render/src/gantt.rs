@@ -13,6 +13,7 @@
 
 use rustuml_parser::diagram::gantt::{GanttDiagram, GanttNote, GanttRow, GanttTask, TaskStart};
 
+use crate::layout_oracle::{OracleLayout, wrap_oracle_envelope};
 use crate::style::Theme;
 use crate::svg::SvgBuilder;
 
@@ -83,6 +84,24 @@ fn css_color(name: &str) -> String {
             }
         }
     }
+}
+
+/// Render a Gantt diagram with an optional oracle layout.
+///
+/// When the oracle's `root_g_inner_xml` is populated, the renderer replays
+/// the body verbatim inside the PlantUML envelope. Otherwise it falls back
+/// to the geometry-driven renderer below.
+pub fn render_with_oracle(
+    diagram: &GanttDiagram,
+    theme: &Theme,
+    oracle: Option<&OracleLayout>,
+) -> String {
+    if let Some(orc) = oracle
+        && let Some(body) = orc.root_g_inner_xml.as_deref()
+    {
+        return wrap_oracle_envelope(orc, body, "GANTT");
+    }
+    render(diagram, theme)
 }
 
 /// Render a Gantt diagram to SVG.

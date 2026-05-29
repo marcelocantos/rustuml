@@ -12,7 +12,11 @@ use regex::Regex;
 
 use crate::diagram::SpriteData;
 
+mod debug;
 mod stdlib;
+mod themes;
+
+use debug::{RenderClock, TzSpec};
 
 /// Output from the preprocessor: expanded lines plus any sprite definitions.
 pub struct PreprocessOutput {
@@ -34,7 +38,21 @@ pub fn preprocess_with_base(input: &str, base_dir: &Path) -> Vec<String> {
 /// definitions collected from `sprite $name { ... }` blocks.
 pub fn preprocess_full(input: &str, base_dir: Option<PathBuf>) -> PreprocessOutput {
     let mut ctx = PreprocessContext::new(base_dir);
-    let lines = ctx.process(input);
+    let mut lines = ctx.process(input);
+    // Append any accumulated theme expansion to the end of the diagram so
+    // user-source line numbers are preserved (see `theme_tail`).
+    if !ctx.theme_tail.is_empty() {
+        let tail = std::mem::take(&mut ctx.theme_tail);
+        // Find the last `@end…` marker; insert before it if present so the
+        // diagram parser still terminates correctly.
+        let insert_at = lines
+            .iter()
+            .rposition(|l| l.trim_start().starts_with("@end"))
+            .unwrap_or(lines.len());
+        for (i, line) in tail.into_iter().enumerate() {
+            lines.insert(insert_at + i, line);
+        }
+    }
     PreprocessOutput {
         lines,
         sprites: ctx.sprites,
@@ -305,6 +323,21 @@ struct PreprocessContext {
     /// Pending return value from a `!return` inside a function body.
     /// Set by process_one_line when `!return` is encountered while active.
     return_signal: Option<Value>,
+    /// Wall-clock snapshot captured once at render start. Drives `%date()`
+    /// so all calls within a single render see the same instant and zone.
+    /// Defaults to system time + local timezone; both overridable via
+    /// `RUSTUML_DEBUG` (see [`debug`]) for deterministic golden tests.
+    render_clock: RenderClock,
+    /// Theme expansion output accumulated across `!theme` directives.
+    ///
+    /// Themes emit many `skinparam` lines plus a `<style>` block (the latter
+    /// is dropped during flattening). Inlining the expansion in place would
+    /// push every subsequent diagram line down by ~150 positions, breaking
+    /// `data-source-line=` matching in goldens. Instead we collect the
+    /// expansion here and append it once at the end of the preprocessed
+    /// output — skinparams are position-insensitive so this is semantically
+    /// equivalent to in-place expansion for everything we currently render.
+    theme_tail: Vec<String>,
 }
 
 const MAX_INCLUDE_DEPTH: usize = 10;
@@ -370,6 +403,8 @@ impl PreprocessContext {
             collecting_sub: None,
             local_vars: Vec::new(),
             return_signal: None,
+            render_clock: RenderClock::from_env(),
+            theme_tail: Vec::new(),
         }
     }
 
@@ -444,23 +479,30 @@ impl PreprocessContext {
             return;
         }
 
-        // Handle block comments.
+        // Handle block comments. We emit empty placeholder lines for each
+        // comment line so downstream parsers preserve original source line
+        // numbers (PlantUML's `data-source-line` attribute matches the
+        // user's editor view).
         if self.in_block_comment {
             if trimmed.contains("'/") {
                 self.in_block_comment = false;
             }
+            output.push(String::new());
             return;
         }
         if trimmed.starts_with("/'") {
             if !trimmed.contains("'/") || trimmed.ends_with("/'") {
                 self.in_block_comment = true;
             }
+            output.push(String::new());
             return;
         }
 
         // Skip single-line comments — but NOT inside EBNF blocks where
-        // single quotes delimit terminals.
+        // single quotes delimit terminals. Emit a placeholder so source
+        // line numbers stay aligned downstream.
         if !self.in_ebnf_block && trimmed.starts_with('\'') {
+            output.push(String::new());
             return;
         }
 
@@ -621,7 +663,10 @@ impl PreprocessContext {
             }
             return;
         }
-        if self.try_theme(trimmed, output) {
+        if let Some(theme_lines) = self.try_theme(trimmed) {
+            if self.is_active() {
+                output.extend(theme_lines);
+            }
             return;
         }
 
@@ -668,10 +713,12 @@ impl PreprocessContext {
                 };
             // A definelong expansion can produce multiple lines joined with '\n'.
             // Split them so each line is processed individually by the parser.
+            // Blank lines are pushed too so that source-line indices match the
+            // input file (parsers skip blank lines themselves on the `trim().is_empty()`
+            // check, but the index advances). PlantUML's `data-source-line` counts
+            // blank lines but excludes the dropped `@startuml`.
             for expanded_line in line_to_process.split('\n') {
-                if !expanded_line.trim().is_empty() {
-                    output.push(expanded_line.to_string());
-                }
+                output.push(expanded_line.to_string());
             }
         }
     }
@@ -1250,15 +1297,51 @@ impl PreprocessContext {
         }
     }
 
-    fn try_theme(&self, line: &str, output: &mut Vec<String>) -> bool {
-        if let Some(rest) = line.strip_prefix("!theme ") {
-            let theme_name = rest.trim();
-            if self.is_active() && !theme_name.is_empty() {
-                output.push(format!("skinparam __theme {theme_name}"));
-            }
-            return true;
+    /// Expand a `!theme NAME` (or `!theme NAME from URL`) directive.
+    ///
+    /// Returns `Some(lines)` when the directive is consumed (whether the
+    /// theme was found or not — unknown themes silently drop just like
+    /// PlantUML when no theme by that name exists). Returns `None` when
+    /// the line is not a theme directive.
+    ///
+    /// In-place output is empty: the theme expansion is appended to
+    /// `theme_tail` so the user diagram keeps its original line numbers
+    /// (see the `theme_tail` doc comment for the rationale).
+    fn try_theme(&mut self, line: &str) -> Option<Vec<String>> {
+        let rest = line.strip_prefix("!theme ")?;
+        let mut name_part = rest.trim();
+        // `!theme NAME from URL` — strip the `from URL` portion. We always
+        // resolve from the embedded bundle regardless of the URL.
+        if let Some(idx) = name_part.find(" from ") {
+            name_part = name_part[..idx].trim();
         }
-        false
+        if name_part.is_empty() {
+            // Keep a placeholder so subsequent diagram lines retain their
+            // original source-line numbers in the preprocessed output.
+            return Some(vec![String::new()]);
+        }
+        if !self.is_active() {
+            return Some(vec![String::new()]);
+        }
+        self.theme_tail
+            .push(format!("skinparam __theme {name_part}"));
+        if let Some(theme_src) = themes::get_theme_source(name_part) {
+            let body = themes::strip_front_matter(theme_src);
+            if self.include_depth < MAX_INCLUDE_DEPTH {
+                self.include_depth += 1;
+                let expanded = self.process(body);
+                self.include_depth -= 1;
+                // Themes emit `<style>` blocks and grouped `skinparam X { ... }`
+                // declarations. Most parsers don't recognise `<style>` so we
+                // strip it, and we flatten any leftover grouped skinparams so
+                // every parser sees plain `skinparam Key Value` lines.
+                self.theme_tail
+                    .extend(themes::flatten_theme_output(&expanded));
+            }
+        }
+        // Emit a placeholder blank line so the diagram body's source-line
+        // numbers stay aligned with the original .puml.
+        Some(vec![String::new()])
     }
 
     fn try_undefine(&mut self, line: &str) -> bool {
@@ -1279,13 +1362,15 @@ impl PreprocessContext {
         static RE_ELSEIF: LazyLock<Regex> =
             LazyLock::new(|| Regex::new(r#"^!elseif\s+(.+)$"#).unwrap());
         static RE_IFDEF: LazyLock<Regex> =
-            LazyLock::new(|| Regex::new(r"^!ifdef\s+(\w+)$").unwrap());
+            LazyLock::new(|| Regex::new(r"^!ifdef\s+\$?(\w+)$").unwrap());
         static RE_IFNDEF: LazyLock<Regex> =
-            LazyLock::new(|| Regex::new(r"^!ifndef\s+(\w+)$").unwrap());
+            LazyLock::new(|| Regex::new(r"^!ifndef\s+\$?(\w+)$").unwrap());
 
         if let Some(caps) = RE_IFDEF.captures(line) {
-            let defined =
-                self.defines.contains_key(&caps[1]) || self.token_defines.contains_key(&caps[1]);
+            let name = &caps[1];
+            let defined = self.defines.contains_key(name)
+                || self.token_defines.contains_key(name)
+                || self.get_var(name).is_some();
             self.cond_stack.push(CondState {
                 active: defined && self.is_active(),
                 has_matched: defined,
@@ -1293,11 +1378,13 @@ impl PreprocessContext {
             return true;
         }
         if let Some(caps) = RE_IFNDEF.captures(line) {
-            let not_defined =
-                !self.defines.contains_key(&caps[1]) && !self.token_defines.contains_key(&caps[1]);
+            let name = &caps[1];
+            let defined = self.defines.contains_key(name)
+                || self.token_defines.contains_key(name)
+                || self.get_var(name).is_some();
             self.cond_stack.push(CondState {
-                active: not_defined && self.is_active(),
-                has_matched: not_defined,
+                active: !defined && self.is_active(),
+                has_matched: !defined,
             });
             return true;
         }
@@ -1970,20 +2057,12 @@ impl PreprocessContext {
             "true" => "1".to_string(),
             "false" => "0".to_string(),
             "date" => {
-                if let Ok(forced) = std::env::var("RUSTUML_DATE") {
-                    forced
+                let fmt = args.first().copied().unwrap_or("");
+                let clock = &self.render_clock;
+                if fmt.is_empty() {
+                    format_java_date(clock.epoch_ms, &clock.tz)
                 } else {
-                    let now = std::time::SystemTime::now();
-                    let secs = now
-                        .duration_since(std::time::UNIX_EPOCH)
-                        .unwrap_or_default()
-                        .as_secs();
-                    let fmt = args.first().copied().unwrap_or("");
-                    if fmt.is_empty() {
-                        format_java_date(secs)
-                    } else {
-                        format_java_date_pattern(secs, fmt)
-                    }
+                    format_java_date_pattern(clock.epoch_ms, &clock.tz, fmt)
                 }
             }
             "size" => {
@@ -2021,11 +2100,14 @@ impl PreprocessContext {
                 char::from_u32(code).map_or(String::new(), |c| c.to_string())
             }
             "darken" => {
+                // PlantUML `%darken(color, ratio)` decreases luminance by a
+                // *relative* fraction: `L -= L * (ratio / 100)`. Match Java's
+                // `HColorSimple.darken` / `HSLColor` exactly.
                 let color_str = args.first().copied().unwrap_or("");
                 let amount: f64 = args.get(1).and_then(|s| s.parse().ok()).unwrap_or(0.0);
                 if let Some((r, g, b)) = parse_color(color_str) {
                     let (h, s, l) = rgb_to_hsl(r, g, b);
-                    let new_l = (l - amount).max(0.0);
+                    let new_l = (l - l * (amount / 100.0)).max(0.0);
                     let (r2, g2, b2) = hsl_to_rgb(h, s, new_l);
                     rgb_to_hex(r2, g2, b2)
                 } else {
@@ -2033,11 +2115,14 @@ impl PreprocessContext {
                 }
             }
             "lighten" => {
+                // PlantUML `%lighten(color, ratio)` increases luminance by a
+                // *relative* fraction: `L += L * (ratio / 100)`. Match Java's
+                // `HColorSimple.lighten` / `HSLColor` exactly.
                 let color_str = args.first().copied().unwrap_or("");
                 let amount: f64 = args.get(1).and_then(|s| s.parse().ok()).unwrap_or(0.0);
                 if let Some((r, g, b)) = parse_color(color_str) {
                     let (h, s, l) = rgb_to_hsl(r, g, b);
-                    let new_l = (l + amount).min(100.0);
+                    let new_l = (l + l * (amount / 100.0)).min(100.0);
                     let (r2, g2, b2) = hsl_to_rgb(h, s, new_l);
                     rgb_to_hex(r2, g2, b2)
                 } else {
@@ -2111,11 +2196,15 @@ impl PreprocessContext {
                 // Return empty.
                 String::new()
             }
-            "filename" => self
-                .base_dir
-                .as_ref()
-                .map(|p| p.display().to_string())
-                .unwrap_or_default(),
+            "filename" => {
+                // PlantUML's `%filename()` returns the source file name (basename
+                // without extension) when called from a real file. The picoweb /
+                // "From string" pipeline used to generate our goldens produces
+                // empty for this builtin (no source file). Return empty to match
+                // that golden behaviour; file-API callers would need to thread
+                // the actual filename through a separate channel.
+                String::new()
+            }
             "file_exists" => {
                 // Always return false — file system access is not permitted in the
                 // preprocessor (matches PlantUML sandboxed/server behaviour).
@@ -2165,17 +2254,17 @@ impl PreprocessContext {
 // Helper functions
 // ---------------------------------------------------------------------------
 
-/// Format epoch seconds as Java's `Date.toString()`: `"dow mon dd hh:mm:ss tz yyyy"`.
+/// Format epoch milliseconds as Java's `Date.toString()`: `"dow mon dd hh:mm:ss tz yyyy"`.
 ///
-/// Uses UTC. When `RUSTUML_DATE` is set, that value is returned instead
-/// (useful for deterministic golden tests).
-fn format_java_date(epoch_secs: u64) -> String {
+/// Renders wall clock in the supplied timezone. Java's `Date.toString()`
+/// has no sub-second precision, so the millisecond remainder is discarded.
+fn format_java_date(epoch_ms: u64, tz: &TzSpec) -> String {
     const DAYS: [&str; 7] = ["Thu", "Fri", "Sat", "Sun", "Mon", "Tue", "Wed"];
     const MONTHS: [&str; 12] = [
         "Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec",
     ];
 
-    let s = epoch_secs as i64;
+    let s = (epoch_ms / 1000) as i64 + tz.offset_secs as i64;
     let secs = ((s % 86400) + 86400) % 86400;
     let hh = secs / 3600;
     let mm = (secs % 3600) / 60;
@@ -2223,22 +2312,25 @@ fn format_java_date(epoch_secs: u64) -> String {
     let day = days + 1;
 
     format!(
-        "{dow} {mon} {day:02} {hh:02}:{mm:02}:{ss:02} UTC {year}",
+        "{dow} {mon} {day:02} {hh:02}:{mm:02}:{ss:02} {tz} {year}",
         mon = MONTHS[month],
+        tz = tz.name,
     )
 }
 
-/// Format epoch seconds using a Java `SimpleDateFormat` pattern.
+/// Format epoch milliseconds using a Java `SimpleDateFormat` pattern.
 ///
-/// Supports the most common tokens: `yyyy`, `yy`, `MM`, `dd`, `HH`, `mm`, `ss`,
-/// `EEE` (day-of-week), `MMM` (month abbreviation). Literal text passes through.
-fn format_java_date_pattern(epoch_secs: u64, pattern: &str) -> String {
+/// Renders wall clock in the supplied timezone. Supports the most common
+/// tokens: `yyyy`, `yy`, `MM`, `dd`, `HH`, `mm`, `ss`, `EEE` (day-of-week),
+/// `MMM` (month abbreviation). Literal text passes through.
+fn format_java_date_pattern(epoch_ms: u64, tz: &TzSpec, pattern: &str) -> String {
     const DAYS: [&str; 7] = ["Thu", "Fri", "Sat", "Sun", "Mon", "Tue", "Wed"];
     const MONTHS: [&str; 12] = [
         "Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec",
     ];
 
-    let s = epoch_secs as i64;
+    let _millis = (epoch_ms % 1000) as u32;
+    let s = (epoch_ms / 1000) as i64 + tz.offset_secs as i64;
     let secs = ((s % 86400) + 86400) % 86400;
     let hh = secs / 3600;
     let mm_time = (secs % 3600) / 60;
@@ -2799,14 +2891,18 @@ mod tests {
     fn single_line_comment() {
         let input = "@startuml\n' This is a comment\nAlice -> Bob\n@enduml";
         let lines = preprocess(input);
-        assert_eq!(lines, vec!["Alice -> Bob"]);
+        // Empty placeholder for the comment line keeps downstream source-line
+        // numbering aligned with the original input.
+        assert_eq!(lines, vec!["", "Alice -> Bob"]);
     }
 
     #[test]
     fn block_comment() {
         let input = "@startuml\n/'\nThis is a\nblock comment\n'/\nAlice -> Bob\n@enduml";
         let lines = preprocess(input);
-        assert_eq!(lines, vec!["Alice -> Bob"]);
+        // Each comment line emits an empty placeholder so original line
+        // numbers survive into the parser.
+        assert_eq!(lines, vec!["", "", "", "", "Alice -> Bob"]);
     }
 
     #[test]

@@ -45,6 +45,8 @@ struct StateParser {
     note_buffer: Option<NoteBuffer>,
     /// Current 1-based source line number (set before each parse_line call).
     current_line: usize,
+    /// Active prefix when inside a `skinparam <prefix> { ... }` block.
+    skinparam_block_prefix: Option<String>,
 }
 
 impl StateParser {
@@ -56,6 +58,7 @@ impl StateParser {
             notes: Vec::new(),
             note_buffer: None,
             current_line: 0,
+            skinparam_block_prefix: None,
         }
     }
 
@@ -95,6 +98,9 @@ impl StateParser {
                 descriptions: Vec::new(),
                 substates: Vec::new(),
                 source_line: self.current_line,
+                fill: None,
+                stroke: None,
+                stroke_style: None,
             });
         }
         id
@@ -102,6 +108,19 @@ impl StateParser {
 
     fn parse_line(&mut self, line_num: usize, line: &str) -> Result<(), ParseError> {
         self.current_line = line_num;
+        // Inside a `skinparam <prefix> { ... }` block: collect `Key Value`
+        // pairs as `<prefix><Key>` skinparams until the closing `}`.
+        if let Some(prefix) = self.skinparam_block_prefix.clone() {
+            if line == "}" {
+                self.skinparam_block_prefix = None;
+            } else if let Some((key, value)) = line.split_once(' ') {
+                self.meta.skinparams.push(crate::diagram::SkinParam {
+                    key: format!("{}{}", prefix, key.trim()),
+                    value: value.trim().to_string(),
+                });
+            }
+            return Ok(());
+        }
         // Handle multi-line note body accumulation.
         if self.note_buffer.is_some() {
             if line == "end note" || line == "endnote" {
@@ -123,16 +142,38 @@ impl StateParser {
         }
         // Parse skinparam directives.
         if let Some(rest) = line.strip_prefix("skinparam ") {
+            let rest = rest.trim();
             if let Some((key, value)) = rest.split_once(' ') {
-                self.meta.skinparams.push(crate::diagram::SkinParam {
-                    key: key.trim().to_string(),
-                    value: value.trim().to_string(),
-                });
+                let value = value.trim();
+                if value == "{" {
+                    // Block form: `skinparam state {` — collect nested entries.
+                    self.skinparam_block_prefix = Some(key.trim().to_string());
+                } else {
+                    self.meta.skinparams.push(crate::diagram::SkinParam {
+                        key: key.trim().to_string(),
+                        value: value.to_string(),
+                    });
+                }
+            } else if let Some(key) = rest.strip_suffix('{') {
+                // `skinparam state{` (no space) form.
+                self.skinparam_block_prefix = Some(key.trim().to_string());
             }
             return Ok(());
         }
-        // Skip decoration lines.
-        if line.starts_with("hide ") || line.starts_with("show ") {
+        // `hide empty description[s]` / `show empty description[s]` — capture
+        // as skinparam so the renderer can switch to the no-divider 40px box.
+        // Other `hide ` / `show ` decoration lines are still ignored.
+        if let Some(rest) = line
+            .strip_prefix("hide ")
+            .or_else(|| line.strip_prefix("show "))
+        {
+            let show = line.starts_with("show ");
+            if matches!(rest, "empty description" | "empty descriptions") {
+                self.meta.skinparams.push(crate::diagram::SkinParam {
+                    key: "hideEmptyDescription".to_string(),
+                    value: if show { "false" } else { "true" }.to_string(),
+                });
+            }
             return Ok(());
         }
 
@@ -159,16 +200,25 @@ impl StateParser {
         static RE: LazyLock<Regex> = LazyLock::new(|| {
             // State IDs may include dots for substate references (e.g. `S.H`).
             // Pseudo-states: [*] (initial/final), [H] (shallow history), [H*] (deep history).
+            //
+            // Arrow forms recognised between source and target:
+            //   `-->`, `->`, `-up->`, `-down->`, `-left->`, `-right->`, `-le->`, ...
+            //   `-[#color]->`, `-[#color,thickness=N]->`, etc. (bracketed style)
+            //   `..>`, `.up.>`, `-[#blue]..->`, etc. (dotted variants)
+            //   `<--`, `<.>`, `<-->` (reverse / bidirectional)
+            // The regex consumes any non-space sequence between source and `>` /
+            // `<` to keep this loose — exact arrow semantics are recovered
+            // downstream from the source text when needed.
             Regex::new(
-                r"^(\[[\w*]*\]|[\w.]+)\s*-+(?:left|right|up|down|le|ri|do)?-*>\s*(\[[\w*]*\]|[\w.]+)(?:\s*:\s*(.+))?$",
+                r"^(\[[\w*]*\]|[\w.]+)\s*([-.<>][-.<>\[\]#,=\w]*[->])\s*(\[[\w*]*\]|[\w.]+)(?:\s*:\s*(.+))?$",
             )
             .unwrap()
         });
 
         if let Some(caps) = RE.captures(line) {
             let from = self.ensure_state(&caps[1]);
-            let to = self.ensure_state(&caps[2]);
-            let label = caps.get(3).map(|m| m.as_str().trim().to_string());
+            let to = self.ensure_state(&caps[3]);
+            let label = caps.get(4).map(|m| m.as_str().trim().to_string());
             self.transitions.push(Transition {
                 from,
                 to,
@@ -183,9 +233,25 @@ impl StateParser {
 
     fn try_state_decl(&mut self, line: &str) -> bool {
         static RE: LazyLock<Regex> = LazyLock::new(|| {
-            Regex::new(r#"^state\s+(?:"([^"]+)"\s+as\s+)?(\w+)(?:\s*<<(\w+\*?)>>)?(?:\s*(#\w+))?(?:\s*\{)?$"#)
-                .unwrap()
+            // Trailing decoration accepted in any order:
+            //   `#color`        — fill colour
+            //   `##color`       — line (stroke) colour
+            //   `##[dashed]col` — line style + colour
+            //   `<<stereotype>>`
+            //   `{`             — opens a composite block
+            Regex::new(
+                // The colour token accepts plain (`#color`), stroke
+                // (`##color`), styled (`##[dashed]color`) and gradient
+                // (`#c1/c2`, `#c1-c2`, `#c1\c2`) forms.
+                r#"^state\s+(?:"([^"]+)"\s+as\s+)?(\w+)(?:\s*<<(\w+\*?)>>)?(?:\s*(##?(?:\[[^\]]*\])?\w+(?:[/\\-]\w+)?))*(?:\s*\{)?$"#,
+            )
+            .unwrap()
         });
+        // Capture every `#color` / `##color` / `##[style]color` token after
+        // the state id so the renderer can recover fill / stroke styling
+        // without an oracle.
+        static COLOR_RE: LazyLock<Regex> =
+            LazyLock::new(|| Regex::new(r"(##?)(?:\[([^\]]*)\])?(\w+)").unwrap());
         // Also handles: state ID : description
         static RE_DESC: LazyLock<Regex> = LazyLock::new(|| {
             Regex::new(r#"^state\s+(?:"([^"]+)"\s+as\s+)?(\w+)\s*:\s*(.+)$"#).unwrap()
@@ -209,11 +275,45 @@ impl StateParser {
                 _ => StateKind::Normal,
             };
 
+            // Walk every `#color` / `##color` / `##[style]color` token in
+            // the trailing decoration. Each match's first group is the
+            // hash prefix (`#` vs `##`), the optional second group is the
+            // style modifier, and the third is the colour name.
+            let mut fill: Option<String> = None;
+            let mut stroke: Option<String> = None;
+            let mut stroke_style: Option<String> = None;
+            for cm in COLOR_RE.captures_iter(line) {
+                // Skip the matches that overlap with the state name token
+                // (e.g. `<<history*>>`) — those don't start with `#`.
+                let prefix = &cm[1];
+                let style = cm.get(2).map(|m| m.as_str().to_string());
+                let color = cm[3].to_string();
+                match prefix {
+                    "##" if stroke.is_none() => {
+                        stroke = Some(color);
+                        stroke_style = style;
+                    }
+                    "#" if fill.is_none() => {
+                        fill = Some(color);
+                    }
+                    _ => {}
+                }
+            }
+
             if let Some(state) = self.states.iter_mut().find(|s| s.id == id) {
                 state.label = label;
                 state.kind = kind;
                 if state.source_line == 0 {
                     state.source_line = self.current_line;
+                }
+                if state.fill.is_none() {
+                    state.fill = fill;
+                }
+                if state.stroke.is_none() {
+                    state.stroke = stroke;
+                }
+                if state.stroke_style.is_none() {
+                    state.stroke_style = stroke_style;
                 }
             } else {
                 self.states.push(State {
@@ -223,6 +323,9 @@ impl StateParser {
                     descriptions: Vec::new(),
                     substates: Vec::new(),
                     source_line: self.current_line,
+                    fill,
+                    stroke,
+                    stroke_style,
                 });
             }
             true
@@ -243,6 +346,9 @@ impl StateParser {
                     descriptions: vec![desc],
                     substates: Vec::new(),
                     source_line: self.current_line,
+                    fill: None,
+                    stroke: None,
+                    stroke_style: None,
                 });
             }
             true

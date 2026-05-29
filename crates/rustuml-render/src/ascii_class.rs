@@ -29,6 +29,7 @@ fn visibility_char(v: Visibility) -> char {
         Visibility::Protected => '#',
         Visibility::Package => '~',
         Visibility::Default => ' ',
+        Visibility::IeMandatory => '*',
     }
 }
 
@@ -267,8 +268,10 @@ mod tests {
             kind: EntityKind::Class,
             members,
             stereotypes: vec![],
+            spot_color: None,
             url: None,
             color: None,
+            text_color: None,
             source_line: 0,
         }
     }
@@ -292,6 +295,12 @@ mod tests {
             relationships,
             packages: vec![],
             notes: vec![],
+            hide_show: vec![],
+            header_line: None,
+            footer_line: None,
+            title_line: None,
+            caption_line: None,
+            legend_line: None,
         }
     }
 

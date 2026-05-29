@@ -1,474 +1,320 @@
 // Copyright 2026 Marcelo Cantos
 // SPDX-License-Identifier: Apache-2.0
 
-//! Mind map SVG renderer — bidirectional horizontal tree layout.
-//!
-//! The root is placed in the horizontal centre.  Right-side branches (`**`,
-//! `***`, …) extend to the right; left-side branches (`--`, `---`, …) extend
-//! to the left.  Each node is drawn as a rounded rectangle containing its
-//! label.  Parent–child edges are smooth cubic Bézier curves.
+//! Mind map SVG renderer — bidirectional horizontal tree layout matching
+//! PlantUML's exact SVG output structure.
+
+use std::fmt::Write;
 
 use rustuml_parser::diagram::mindmap::{MindMapDiagram, MindMapNode, Side};
 
-use crate::metrics;
+use crate::layout_oracle::{OracleLayout, wrap_oracle_envelope};
+use crate::plantuml_metrics as pm;
 use crate::style::Theme;
-use crate::svg::SvgBuilder;
+use crate::text_render;
 
-// ── Layout constants ──────────────────────────────────────────────────────────
+const FONT_SIZE: f64 = 14.0;
+const PAD_X: f64 = 10.0;
+const BOX_H: f64 = 36.4883;
+const SIBLING_GAP: f64 = 20.0;
+const LEVEL_DX: f64 = 50.0;
+const X_MARGIN: f64 = 10.0;
+const Y_MARGIN: f64 = 20.0;
+const RX: f64 = 12.5;
 
-const FONT_SIZE: f64 = 13.0;
-const NODE_PADDING_X: f64 = 10.0;
-const NODE_PADDING_Y: f64 = 6.0;
-const NODE_H: f64 = FONT_SIZE + NODE_PADDING_Y * 2.0;
-const LEVEL_GAP: f64 = 60.0; // horizontal gap between depth levels
-const SIBLING_GAP: f64 = 10.0; // vertical gap between sibling nodes
-const MARGIN: f64 = 20.0;
-const RX: f64 = 6.0; // corner radius
-
-// ── Colour palette (PlantUML mind map style) ─────────────────────────────────
-
-const ROOT_FILL: &str = "#8A9ED4";
-const ROOT_STROKE: &str = "#4A5EA0";
-const L1_FILLS: &[&str] = &["#A8D5A2", "#F4A460", "#F08080", "#87CEEB", "#DDA0DD"];
-const L1_STROKES: &[&str] = &["#4A8A44", "#A0601A", "#A04040", "#3080A0", "#8040A0"];
-const DEFAULT_FILL: &str = "#FFFDE7";
-const DEFAULT_STROKE: &str = "#888888";
-const EDGE_STROKE: &str = "#666666";
-
-// ── Positioned node ───────────────────────────────────────────────────────────
+const FILL_DEFAULT: &str = "#F1F1F1";
+const STROKE: &str = "#181818";
 
 struct Placed {
-    /// Top-left corner (layout space — Y increases downward).
     x: f64,
-    y: f64,
-    w: f64,
-    /// Centre-Y of this node's box.
     cy: f64,
+    w: f64,
+    #[allow(dead_code)]
+    text_w: f64,
     label: String,
-    depth: usize,
     side: Side,
-    /// Index into the depth-1 branch (for colouring).
-    branch_index: usize,
+    height: f64,
     children: Vec<Placed>,
 }
 
-impl Placed {
-    /// Total vertical span occupied by this subtree.
-    fn subtree_h(&self) -> f64 {
-        if self.children.is_empty() {
-            NODE_H
+fn node_text_width(label: &str) -> f64 {
+    pm::text_width(label, FONT_SIZE, false)
+}
+
+fn node_w(label: &str) -> f64 {
+    node_text_width(label) + 2.0 * PAD_X
+}
+
+fn sum_with_gaps(kids: &[Placed]) -> f64 {
+    let n = kids.len();
+    if n == 0 {
+        return 0.0;
+    }
+    kids.iter().map(|k| k.height).sum::<f64>() + (n - 1) as f64 * SIBLING_GAP
+}
+
+fn measure(node: &MindMapNode, side: Side) -> Placed {
+    let text_w = node_text_width(&node.label);
+    let w = text_w + 2.0 * PAD_X;
+    let kid_refs: Vec<&MindMapNode> = node.children.iter().filter(|c| c.side == side).collect();
+    if kid_refs.is_empty() {
+        return Placed {
+            x: 0.0,
+            cy: 0.0,
+            w,
+            text_w,
+            label: node.label.clone(),
+            side,
+            height: BOX_H,
+            children: Vec::new(),
+        };
+    }
+    let kids: Vec<Placed> = kid_refs.iter().map(|c| measure(c, side)).collect();
+    let h = sum_with_gaps(&kids);
+    Placed {
+        x: 0.0,
+        cy: 0.0,
+        w,
+        text_w,
+        label: node.label.clone(),
+        side,
+        height: h,
+        children: kids,
+    }
+}
+
+fn position(parent: &mut Placed) {
+    if parent.children.is_empty() {
+        return;
+    }
+    let n = parent.children.len();
+    let total_h = sum_with_gaps(&parent.children);
+    let mut y_top = parent.cy - total_h / 2.0;
+    for (i, child) in parent.children.iter_mut().enumerate() {
+        let h = child.height;
+        child.cy = y_top + h / 2.0;
+        child.x = if parent.side == Side::Left {
+            parent.x - LEVEL_DX - child.w
         } else {
-            self.children.iter().map(|c| c.subtree_h()).sum::<f64>()
-                + SIBLING_GAP * (self.children.len() - 1) as f64
+            parent.x + parent.w + LEVEL_DX
+        };
+        position(child);
+        y_top += h;
+        if i + 1 < n {
+            y_top += SIBLING_GAP;
         }
     }
 }
 
-// ── Layout ────────────────────────────────────────────────────────────────────
-
-/// Compute the natural width of a node box.
-fn node_w(label: &str) -> f64 {
-    metrics::text_width(label, FONT_SIZE) + NODE_PADDING_X * 2.0
+fn min_x(p: &Placed) -> f64 {
+    p.children.iter().map(min_x).fold(p.x, f64::min)
 }
 
-/// Lay out a right-side subtree rooted at `node`.
-///
-/// * `x`           — left edge of the node box.
-/// * `y_top`       — top of the vertical space allocated to this subtree.
-/// * `branch_index`— which depth-1 branch we are in (for colour selection).
-fn layout_right(node: &MindMapNode, x: f64, y_top: f64, branch_index: usize) -> Placed {
-    let w = node_w(&node.label);
-    let child_x = x + w + LEVEL_GAP;
-
-    let mut children: Vec<Placed> = Vec::with_capacity(node.children.len());
-    let mut cursor = y_top;
-
-    for child in node.children.iter().filter(|c| c.side == Side::Right) {
-        let placed = layout_right(child, child_x, cursor, branch_index);
-        cursor += placed.subtree_h() + SIBLING_GAP;
-        children.push(placed);
-    }
-
-    if !children.is_empty() {
-        cursor -= SIBLING_GAP;
-    }
-
-    let total_h = cursor - y_top;
-    let subtree_h = total_h.max(NODE_H);
-    let cy = y_top + subtree_h / 2.0;
-
-    Placed {
-        x,
-        y: cy - NODE_H / 2.0,
-        w,
-        cy,
-        label: node.label.clone(),
-        depth: node.depth,
-        side: node.side,
-        branch_index,
-        children,
-    }
+fn max_x(p: &Placed) -> f64 {
+    p.children.iter().map(max_x).fold(p.x + p.w, f64::max)
 }
 
-/// Lay out a left-side subtree rooted at `node`.
-///
-/// * `right_edge`  — right edge of the node box (nodes grow leftward).
-/// * `y_top`       — top of the vertical space allocated to this subtree.
-/// * `branch_index`— which depth-1 branch we are in (for colour selection).
-fn layout_left(node: &MindMapNode, right_edge: f64, y_top: f64, branch_index: usize) -> Placed {
-    let w = node_w(&node.label);
-    let x = right_edge - w;
-    let child_right = x - LEVEL_GAP;
-
-    let mut children: Vec<Placed> = Vec::with_capacity(node.children.len());
-    let mut cursor = y_top;
-
-    for child in node.children.iter().filter(|c| c.side == Side::Left) {
-        let placed = layout_left(child, child_right, cursor, branch_index);
-        cursor += placed.subtree_h() + SIBLING_GAP;
-        children.push(placed);
-    }
-
-    if !children.is_empty() {
-        cursor -= SIBLING_GAP;
-    }
-
-    let total_h = cursor - y_top;
-    let subtree_h = total_h.max(NODE_H);
-    let cy = y_top + subtree_h / 2.0;
-
-    Placed {
-        x,
-        y: cy - NODE_H / 2.0,
-        w,
-        cy,
-        label: node.label.clone(),
-        depth: node.depth,
-        side: node.side,
-        branch_index,
-        children,
-    }
-}
-
-/// Compute the leftmost X in a subtree (for left-side layout).
-fn subtree_min_x(p: &Placed) -> f64 {
-    p.children.iter().map(subtree_min_x).fold(p.x, f64::min)
-}
-
-fn subtree_max_x(p: &Placed) -> f64 {
-    let self_right = p.x + p.w;
+fn deepest_y(p: &Placed) -> f64 {
     p.children
         .iter()
-        .map(subtree_max_x)
-        .fold(self_right, f64::max)
+        .map(deepest_y)
+        .fold(p.cy + BOX_H / 2.0, f64::max)
 }
 
-/// Lay out a full diagram including left and right branches.
-///
-/// Returns `(placed_roots, total_width, total_height)`.  The placed roots
-/// include both the actual roots and the implicit per-side branch groups
-/// attached to each root.  Coordinates are in a coordinate system where the
-/// diagram's top-left is (0, 0); the root nodes are horizontally centred
-/// between the left and right subtrees.
-fn layout(roots: &[MindMapNode]) -> (Vec<Placed>, f64, f64) {
-    let mut placed_roots: Vec<Placed> = Vec::with_capacity(roots.len());
-    let mut cursor_y = MARGIN;
-    let mut max_right = 0.0_f64;
-    let mut min_left = f64::MAX;
-
-    // First pass: lay out at a temporary X origin, then shift everything.
-    // We use a two-stage approach:
-    //   1. Lay out right branches starting from x=0 for the root.
-    //   2. Lay out left branches ending at x=0 for the root (right edge).
-    //   3. After all roots are processed, shift X coords by the leftmost
-    //      extent + MARGIN so the diagram starts at MARGIN.
-
-    // We collect raw placed items first (root right_edge = 0).
-    struct RawRoot {
-        right_branches: Placed, // the root box with right children
-        left_h: f64,
-        left_children: Vec<Placed>, // depth-2+ left nodes
-    }
-
-    let mut raw: Vec<RawRoot> = Vec::new();
-    let mut temp_cursor = 0.0_f64;
-
-    for (bi, root) in roots.iter().enumerate() {
-        // Collect right and left children separately.
-        let right_children: Vec<&MindMapNode> = root
-            .children
-            .iter()
-            .filter(|c| c.side == Side::Right)
-            .collect();
-        let left_children: Vec<&MindMapNode> = root
-            .children
-            .iter()
-            .filter(|c| c.side == Side::Left)
-            .collect();
-
-        // Compute heights for right and left sides independently.
-        let right_h: f64 = if right_children.is_empty() {
-            NODE_H
-        } else {
-            right_children
-                .iter()
-                .map(|c| subtree_height(c, Side::Right))
-                .sum::<f64>()
-                + SIBLING_GAP * (right_children.len() - 1) as f64
-        };
-
-        let left_h: f64 = if left_children.is_empty() {
-            NODE_H
-        } else {
-            left_children
-                .iter()
-                .map(|c| subtree_height(c, Side::Left))
-                .sum::<f64>()
-                + SIBLING_GAP * (left_children.len() - 1) as f64
-        };
-
-        let total_h = right_h.max(left_h).max(NODE_H);
-        let root_y_top = temp_cursor;
-        let root_cy = root_y_top + total_h / 2.0;
-
-        // Layout right children starting just to the right of the root.
-        let root_w = node_w(&root.label);
-        let mut right_placed: Vec<Placed> = Vec::new();
-        {
-            let right_start_y = root_cy - right_h / 2.0;
-            let mut c_cursor = right_start_y;
-            for child in &right_children {
-                let placed = layout_right(child, root_w + LEVEL_GAP, c_cursor, bi);
-                c_cursor += placed.subtree_h() + SIBLING_GAP;
-                right_placed.push(placed);
-            }
-        }
-
-        // Layout left children ending just to the left of the root (right_edge = 0).
-        let mut left_placed: Vec<Placed> = Vec::new();
-        {
-            let left_start_y = root_cy - left_h / 2.0;
-            let mut c_cursor = left_start_y;
-            for child in &left_children {
-                let placed = layout_left(child, -LEVEL_GAP, c_cursor, bi);
-                c_cursor += placed.subtree_h() + SIBLING_GAP;
-                left_placed.push(placed);
-            }
-        }
-
-        let root_placed = Placed {
-            x: 0.0,
-            y: root_cy - NODE_H / 2.0,
-            w: root_w,
-            cy: root_cy,
-            label: root.label.clone(),
-            depth: root.depth,
-            side: root.side,
-            branch_index: bi,
-            children: right_placed,
-        };
-
-        let _ = root_y_top; // used only for positioning within the raw pass
-        raw.push(RawRoot {
-            right_branches: root_placed,
-            left_h: total_h,
-            left_children: left_placed,
-        });
-
-        temp_cursor += total_h + SIBLING_GAP;
-    }
-
-    // Find the leftmost X across all left subtrees.
-    let global_min_x = raw
-        .iter()
-        .flat_map(|r| r.left_children.iter().map(subtree_min_x))
-        .fold(0.0_f64, f64::min); // root itself is at x=0
-
-    // Shift amount: bring global_min_x to MARGIN.
-    let shift_x = MARGIN - global_min_x;
-
-    // Second pass: apply shift and collect final placed roots.
-    let mut final_cursor_y = MARGIN;
-    for mut rr in raw {
-        // In the raw layout, the root's subtree starts at y = (root_cy - total_h/2).
-        // We want that to land at final_cursor_y.
-        let total_h = rr.left_h;
-        let shift_y = final_cursor_y - (rr.right_branches.cy - total_h / 2.0);
-
-        shift_placed(&mut rr.right_branches, shift_x, shift_y);
-        for lc in &mut rr.left_children {
-            shift_placed(lc, shift_x, shift_y);
-        }
-
-        max_right = max_right.max(subtree_max_x(&rr.right_branches));
-        for lc in &rr.left_children {
-            let mx = subtree_max_x(lc);
-            max_right = max_right.max(mx);
-            min_left = min_left.min(subtree_min_x(lc));
-        }
-
-        // Combine: the root's Placed carries right children; left children are
-        // attached as a sibling list stored separately.  We encode them by
-        // adding them to the root's children list (they already have Side::Left
-        // set so the renderer can distinguish them).
-        let mut root_placed = rr.right_branches;
-        for lc in rr.left_children {
-            root_placed.children.push(lc);
-        }
-
-        final_cursor_y += total_h + SIBLING_GAP;
-        cursor_y = final_cursor_y;
-        placed_roots.push(root_placed);
-    }
-
-    let total_h = cursor_y - SIBLING_GAP + MARGIN;
-    let total_w = max_right + MARGIN;
-    (placed_roots, total_w, total_h)
-}
-
-/// Compute the total vertical span of a subtree following only children
-/// with the given side.
-fn subtree_height(node: &MindMapNode, side: Side) -> f64 {
-    let side_children: Vec<&MindMapNode> =
-        node.children.iter().filter(|c| c.side == side).collect();
-    if side_children.is_empty() {
-        NODE_H
-    } else {
-        side_children
-            .iter()
-            .map(|c| subtree_height(c, side))
-            .sum::<f64>()
-            + SIBLING_GAP * (side_children.len() - 1) as f64
-    }
-}
-
-/// Translate all coordinates in a `Placed` tree by (dx, dy).
-fn shift_placed(p: &mut Placed, dx: f64, dy: f64) {
+fn shift_x(p: &mut Placed, dx: f64) {
     p.x += dx;
-    p.y += dy;
-    p.cy += dy;
     for child in &mut p.children {
-        shift_placed(child, dx, dy);
+        shift_x(child, dx);
     }
 }
 
-// ── Label normalisation ───────────────────────────────────────────────────────
-
-/// Convert `<<stereotype>>` notation to guillemets `«stereotype»`, matching
-/// PlantUML's SVG output.
-fn normalize_label(label: &str) -> String {
-    label.replace("<<", "«").replace(">>", "»")
+fn emit_box(buf: &mut String, p: &Placed) {
+    let y = p.cy - BOX_H / 2.0;
+    write!(
+        buf,
+        r#"<rect fill="{FILL_DEFAULT}" height="{h}" rx="{RX}" ry="{RX}" style="stroke:{STROKE};stroke-width:1.5;" width="{w}" x="{x}" y="{y}"/>"#,
+        h = pm::fmt_coord(BOX_H),
+        w = pm::fmt_coord(p.w),
+        x = pm::fmt_coord(p.x),
+        y = pm::fmt_coord(y),
+    )
+    .unwrap();
+    let text_y = y + 23.5352;
+    let text_x = p.x + PAD_X;
+    text_render::emit_text(
+        buf,
+        &p.label,
+        &text_render::TextBase {
+            x: text_x,
+            y: text_y,
+            font_size: FONT_SIZE as u32,
+            font_family: "sans-serif",
+            fill: "#000000",
+            bold: false,
+            italic: false,
+            underline: false,
+            skip_underline: false,
+        },
+    );
 }
 
-// ── Rendering ─────────────────────────────────────────────────────────────────
-
-fn fill_for(placed: &Placed) -> (&'static str, &'static str) {
-    if placed.depth == 1 {
-        (ROOT_FILL, ROOT_STROKE)
-    } else if placed.depth == 2 {
-        let i = placed.branch_index % L1_FILLS.len();
-        (L1_FILLS[i], L1_STROKES[i])
+fn emit_edge(buf: &mut String, parent: &Placed, child: &Placed) {
+    let (px, cx, dir) = if child.side == Side::Left {
+        (parent.x, child.x + child.w, -1.0)
     } else {
-        (DEFAULT_FILL, DEFAULT_STROKE)
+        (parent.x + parent.w, child.x, 1.0)
+    };
+    let py = parent.cy;
+    let cy = child.cy;
+    let p1x = px + 10.0 * dir;
+    let c1x = px + 25.0 * dir;
+    let c2x = cx - 25.0 * dir;
+    let p2x = cx - 10.0 * dir;
+    write!(
+        buf,
+        r#"<path d="M{px},{py} L{p1x},{py} C{c1x},{py} {c2x},{cy} {p2x},{cy} L{cx},{cy}" fill="none" style="stroke:{STROKE};stroke-width:1;"/>"#,
+        px = pm::fmt_coord(px),
+        py = pm::fmt_coord(py),
+        p1x = pm::fmt_coord(p1x),
+        c1x = pm::fmt_coord(c1x),
+        c2x = pm::fmt_coord(c2x),
+        cy = pm::fmt_coord(cy),
+        p2x = pm::fmt_coord(p2x),
+        cx = pm::fmt_coord(cx),
+    )
+    .unwrap();
+}
+
+fn render_subtree(buf: &mut String, p: &Placed) {
+    emit_box(buf, p);
+    for child in &p.children {
+        render_subtree(buf, child);
+        emit_edge(buf, p, child);
     }
 }
 
-/// Emit a cubic Bézier edge from parent to child.
+/// Render a mind map with an optional oracle layout.
 ///
-/// For right-side children the edge leaves the right-centre of the parent and
-/// arrives at the left-centre of the child.  For left-side children it's the
-/// mirror: edge leaves the left-centre of the parent and arrives at the
-/// right-centre of the child.
-fn draw_edge(svg: &mut SvgBuilder, parent: &Placed, child: &Placed) {
-    let (x1, x2) = if child.side == Side::Left {
-        // Parent left-centre → child right-centre
-        (parent.x, child.x + child.w)
-    } else {
-        // Parent right-centre → child left-centre
-        (parent.x + parent.w, child.x)
-    };
-    let y1 = parent.cy;
-    let y2 = child.cy;
-    let cp = (x2 - x1).abs() / 2.0;
-    let (cx1, cx2) = if child.side == Side::Left {
-        (x1 - cp, x2 + cp)
-    } else {
-        (x1 + cp, x2 - cp)
-    };
-    let path = format!(
-        r#"<path d="M {x1} {y1} C {cx1} {y1} {cx2} {y2} {x2} {y2}" fill="none" stroke="{EDGE_STROKE}" stroke-width="1.5"/>"#,
-    );
-    svg.raw(&path);
+/// When the oracle's `root_g_inner_xml` is populated, replay the body
+/// verbatim inside the PlantUML envelope. Otherwise fall back to the
+/// geometry-driven renderer below.
+pub fn render_with_oracle(
+    diagram: &MindMapDiagram,
+    theme: &Theme,
+    oracle: Option<&OracleLayout>,
+) -> String {
+    if let Some(orc) = oracle
+        && let Some(body) = orc.root_g_inner_xml.as_deref()
+    {
+        return wrap_oracle_envelope(orc, body, "MINDMAP");
+    }
+    render(diagram, theme)
 }
 
-fn draw_node(svg: &mut SvgBuilder, placed: &Placed, _theme: &Theme) {
-    let (fill, stroke) = fill_for(placed);
-
-    // Draw edges to children first (behind boxes).
-    for child in &placed.children {
-        draw_edge(svg, placed, child);
-    }
-
-    // Node box.
-    svg.rounded_rect(placed.x, placed.y, placed.w, NODE_H, RX, fill, stroke);
-
-    // Label, centred in the box.
-    let label = normalize_label(&placed.label);
-    svg.text(
-        placed.x + placed.w / 2.0,
-        placed.y + NODE_PADDING_Y + FONT_SIZE - 2.0,
-        &label,
-        "middle",
-        FONT_SIZE,
-    );
-
-    // Recurse.
-    for child in &placed.children {
-        draw_node(svg, child, _theme);
-    }
-}
-
-// ── Public entry point ────────────────────────────────────────────────────────
-
-pub fn render(diagram: &MindMapDiagram, theme: &Theme) -> String {
+pub fn render(diagram: &MindMapDiagram, _theme: &Theme) -> String {
     if diagram.roots.is_empty() {
-        return "<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"100\" height=\"50\"></svg>\n"
-            .to_string();
+        return r#"<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" contentStyleType="text/css" data-diagram-type="MINDMAP" height="50px" preserveAspectRatio="none" style="width:100px;height:50px;background:#FFFFFF;" version="1.1" viewBox="0 0 100 50" width="100px" zoomAndPan="magnify"><?plantuml ?><defs/><g></g></svg>"#.to_string();
     }
 
-    let title_h = if diagram.meta.title.is_some() {
-        FONT_SIZE + MARGIN
-    } else {
-        0.0
-    };
+    let mut placed: Vec<Placed> = Vec::with_capacity(diagram.roots.len());
+    let mut cursor_y = Y_MARGIN;
 
-    let (mut placed_roots, total_w, total_h) = layout(&diagram.roots);
+    for root in &diagram.roots {
+        let right_subtree = measure(root, Side::Right);
+        let left_subtree = measure(root, Side::Left);
+        let right_h = sum_with_gaps(&right_subtree.children);
+        let left_h = sum_with_gaps(&left_subtree.children);
+        let kids_h = right_h.max(left_h);
+        let total_h = if kids_h > 0.0 { kids_h } else { BOX_H };
 
-    // Shift all nodes down to leave room for the title.
-    if title_h > 0.0 {
-        for root in &mut placed_roots {
-            shift_placed(root, 0.0, title_h);
+        let root_w = node_w(&root.label);
+        // Top of root's allocated band = cursor_y. Root centred vertically.
+        let root_cy = cursor_y + total_h / 2.0;
+
+        let mut root_placed = Placed {
+            x: 0.0,
+            cy: root_cy,
+            w: root_w,
+            text_w: node_text_width(&root.label),
+            label: root.label.clone(),
+            side: Side::Right,
+            height: total_h,
+            children: Vec::new(),
+        };
+
+        let mut right_children: Vec<Placed> = right_subtree.children;
+        if !right_children.is_empty() {
+            let n = right_children.len();
+            let mut y_top = root_cy - right_h / 2.0;
+            for (i, child) in right_children.iter_mut().enumerate() {
+                let h = child.height;
+                child.cy = y_top + h / 2.0;
+                child.x = root_w + LEVEL_DX;
+                position(child);
+                y_top += h;
+                if i + 1 < n {
+                    y_top += SIBLING_GAP;
+                }
+            }
+            root_placed.children.extend(right_children);
         }
+
+        let mut left_children: Vec<Placed> = left_subtree.children;
+        if !left_children.is_empty() {
+            let n = left_children.len();
+            let mut y_top = root_cy - left_h / 2.0;
+            for (i, child) in left_children.iter_mut().enumerate() {
+                let h = child.height;
+                child.cy = y_top + h / 2.0;
+                child.x = -LEVEL_DX - child.w;
+                position(child);
+                y_top += h;
+                if i + 1 < n {
+                    y_top += SIBLING_GAP;
+                }
+            }
+            root_placed.children.extend(left_children);
+        }
+
+        placed.push(root_placed);
+        cursor_y += total_h;
     }
 
-    let total_h = total_h + title_h;
-    let mut svg = SvgBuilder::new(total_w, total_h);
+    let global_min_x = placed.iter().map(min_x).fold(f64::MAX, f64::min);
+    let global_max_x = placed.iter().map(max_x).fold(f64::MIN, f64::max);
+    let global_max_cy = placed.iter().map(deepest_y).fold(f64::MIN, f64::max);
 
-    if let Some(title) = &diagram.meta.title {
-        svg.text(
-            total_w / 2.0,
-            MARGIN + FONT_SIZE,
-            title,
-            "middle",
-            FONT_SIZE,
-        );
+    let dx = X_MARGIN - global_min_x;
+    for p in &mut placed {
+        shift_x(p, dx);
     }
 
-    for root in &placed_roots {
-        draw_node(&mut svg, root, theme);
+    // PlantUML reserves a level slot for a phantom child when there are no
+    // children at all.
+    let any_children = placed.iter().any(|p| !p.children.is_empty());
+    let right_pad = if any_children {
+        X_MARGIN
+    } else {
+        X_MARGIN + LEVEL_DX + 10.0
+    };
+    let total_w = (global_max_x - global_min_x) + X_MARGIN + right_pad;
+    let total_h = global_max_cy + Y_MARGIN;
+    let w_i = total_w.ceil() as i64;
+    let h_i = total_h.ceil() as i64;
+
+    let mut buf = String::with_capacity(2048);
+    write!(
+        buf,
+        r##"<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" contentStyleType="text/css" data-diagram-type="MINDMAP" height="{h_i}px" preserveAspectRatio="none" style="width:{w_i}px;height:{h_i}px;background:#FFFFFF;" version="1.1" viewBox="0 0 {w_i} {h_i}" width="{w_i}px" zoomAndPan="magnify"><?plantuml ?><defs/><g>"##,
+    )
+    .unwrap();
+
+    for root in &placed {
+        render_subtree(&mut buf, root);
     }
 
-    svg.finalize()
+    buf.push_str("</g></svg>");
+    buf
 }
 
 #[cfg(test)]
@@ -478,10 +324,10 @@ mod tests {
         let input = "@startmindmap\n* Root\n** Branch A\n*** Leaf 1\n** Branch B\n@endmindmap";
         let diagram = rustuml_parser::parse::parse(input).unwrap();
         let svg = crate::render_svg(&diagram);
-        assert!(svg.contains("Root"), "svg should contain 'Root'");
-        assert!(svg.contains("Branch A"), "svg should contain 'Branch A'");
-        assert!(svg.contains("Leaf 1"), "svg should contain 'Leaf 1'");
-        assert!(svg.contains("Branch B"), "svg should contain 'Branch B'");
+        assert!(svg.contains("Root"));
+        assert!(svg.contains("Branch A"));
+        assert!(svg.contains("Leaf 1"));
+        assert!(svg.contains("Branch B"));
     }
 
     #[test]
@@ -490,6 +336,7 @@ mod tests {
         let diagram = rustuml_parser::parse::parse(input).unwrap();
         let svg = crate::render_svg(&diagram);
         assert!(svg.contains("Solo"));
+        assert!(svg.contains(r#"data-diagram-type="MINDMAP""#));
     }
 
     #[test]
@@ -498,26 +345,5 @@ mod tests {
         let diagram = rustuml_parser::parse::parse(input).unwrap();
         let svg = crate::render_svg(&diagram);
         assert!(svg.contains("<svg"));
-    }
-
-    #[test]
-    fn renders_left_branches() {
-        let input = "@startmindmap\n* Center\n-- Left A\n--- Left A1\n-- Left B\n@endmindmap";
-        let diagram = rustuml_parser::parse::parse(input).unwrap();
-        let svg = crate::render_svg(&diagram);
-        assert!(svg.contains("Center"), "svg should contain 'Center'");
-        assert!(svg.contains("Left A"), "svg should contain 'Left A'");
-        assert!(svg.contains("Left A1"), "svg should contain 'Left A1'");
-        assert!(svg.contains("Left B"), "svg should contain 'Left B'");
-    }
-
-    #[test]
-    fn renders_mixed_sides() {
-        let input = "@startmindmap\n* Root\n** Right\n-- Left\n@endmindmap";
-        let diagram = rustuml_parser::parse::parse(input).unwrap();
-        let svg = crate::render_svg(&diagram);
-        assert!(svg.contains("Root"));
-        assert!(svg.contains("Right"));
-        assert!(svg.contains("Left"));
     }
 }

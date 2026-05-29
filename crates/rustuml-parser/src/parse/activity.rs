@@ -643,7 +643,13 @@ impl ActivityParser {
             LazyLock::new(|| Regex::new(r"^(-(?:\[([^\]]+)\])?(-?)>)\s*(.+)?$").unwrap());
 
         if let Some(caps) = RE.captures(line) {
-            let dashed = &caps[3] == "-";
+            // The `(-?)` group greedily eats the trailing `-` from `->` when
+            // brackets are present (e.g. `-[#red]->` matches with group 3 = `-`),
+            // which would falsely report dashed=true. Only honour the second
+            // dash when no brackets are present; when brackets ARE present,
+            // dash-ness comes from a `dashed`/`dotted` token inside them,
+            // resolved downstream in arrow_style_from_brackets.
+            let dashed = caps.get(2).is_none() && &caps[3] == "-";
             let color = caps.get(2).map(|m| {
                 let s = m.as_str().trim();
                 if s.starts_with('#')

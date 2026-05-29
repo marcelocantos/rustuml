@@ -60,9 +60,50 @@ pub fn descent(font_size: f64) -> f64 {
     }
 }
 
+// ─── Monospaced metrics ─────────────────────────────────────────────
+// Java AWT's `Monospaced` logical font on macOS gives identical advance
+// widths for every printable ASCII character at a given size, and the
+// `BOLD` style produces the same width as `PLAIN`. The ascent / descent
+// / height are likewise size-proportional, so the whole set collapses
+// to four ratios.
+//
+// Extracted via tools/MonoMetricsExtract.java on the same JVM that
+// generates the golden SVGs.
+
+const MONO_WIDTH_PER_SIZE: f64 = 0.60205078125;
+const MONO_ASCENT_PER_SIZE: f64 = 0.92822265625;
+const MONO_DESCENT_PER_SIZE: f64 = 0.23583984375;
+const MONO_HEIGHT_PER_SIZE: f64 = 1.1640625;
+
+/// Width of `text` rendered in PlantUML's `Monospaced` font at the given
+/// size. Every character contributes the same advance, so the result is
+/// `char_count * size * ratio`. Bold doesn't change the width.
+pub fn mono_text_width(text: &str, font_size: f64) -> f64 {
+    text.chars().count() as f64 * font_size * MONO_WIDTH_PER_SIZE
+}
+
+/// Monospaced ascent (size * ratio).
+pub fn mono_ascent(font_size: f64) -> f64 {
+    font_size * MONO_ASCENT_PER_SIZE
+}
+
+/// Monospaced descent (size * ratio).
+pub fn mono_descent(font_size: f64) -> f64 {
+    font_size * MONO_DESCENT_PER_SIZE
+}
+
+/// Monospaced text height (ascent + descent).
+pub fn mono_text_height(font_size: f64) -> f64 {
+    font_size * MONO_HEIGHT_PER_SIZE
+}
+
 fn char_width_table(font_size: f64, bold: bool) -> &'static [f64; 95] {
     if bold {
         match font_size as u32 {
+            10 => &CHAR_WIDTHS_10_BOLD,
+            11 => &CHAR_WIDTHS_11_BOLD,
+            12 => &CHAR_WIDTHS_12_BOLD,
+            13 => &CHAR_WIDTHS_13_BOLD,
             14 => &CHAR_WIDTHS_14_BOLD,
             _ => char_width_table(font_size, false),
         }
@@ -85,27 +126,121 @@ fn char_width(c: char, table: &[f64; 95]) -> f64 {
     } else if c == '\u{00a0}' {
         // NBSP has same width as space
         table[0]
+    } else if c == '\u{00AB}' || c == '\u{00BB}' {
+        // Left/right guillemets — PlantUML uses these in stereotypes.
+        // Both have the same advance per size in the AWT logical font.
+        // Picks a value matching plantuml_metrics' sans-serif scale.
+        guillemet_width(table)
+    } else if let Some(ascii) = ascii_equivalent(c) {
+        // Latin-1 accented letters: approximate by the unaccented ASCII
+        // form's advance width. The visual glyph differs but the advance
+        // is close enough for layout purposes, and matches what Java's
+        // Lucida Grande emits for most accented glyphs.
+        table[(ascii as u32 - 32) as usize]
+    } else if code >= 0x3000 {
+        // CJK Unified Ideographs, Hiragana, Katakana, full-width Latin,
+        // and other East Asian scripts have roughly square advance equal
+        // to the font size (the table identity is encoded in table[0]
+        // which is size * 0.31640625, so size = table[0] / 0.31640625).
+        table[0] / 0.31640625
     } else {
-        // For characters outside ASCII, use 'a' width as approximation.
+        // For other non-ASCII characters, use 'a' width as a sensible
+        // default approximation.
+        table[('a' as u32 - 32) as usize]
+    }
+}
+
+/// Map a Latin-1 supplement character (U+00A0..U+00FF) to an ASCII
+/// equivalent for width-table lookup. Covers accented Latin letters,
+/// where the visual advance closely matches the unaccented form.
+/// Returns `None` for symbols (punctuation, currency, etc.) that have
+/// no obvious ASCII analog.
+fn ascii_equivalent(c: char) -> Option<char> {
+    match c {
+        // Uppercase Latin
+        'À' | 'Á' | 'Â' | 'Ã' | 'Ä' | 'Å' => Some('A'),
+        'Æ' => Some('A'),
+        'Ç' => Some('C'),
+        'È' | 'É' | 'Ê' | 'Ë' => Some('E'),
+        'Ì' | 'Í' | 'Î' | 'Ï' => Some('I'),
+        'Ð' => Some('D'),
+        'Ñ' => Some('N'),
+        'Ò' | 'Ó' | 'Ô' | 'Õ' | 'Ö' | 'Ø' => Some('O'),
+        'Ù' | 'Ú' | 'Û' | 'Ü' => Some('U'),
+        'Ý' => Some('Y'),
+        'Þ' => Some('P'),
+        // Lowercase Latin
+        'à' | 'á' | 'â' | 'ã' | 'ä' | 'å' => Some('a'),
+        'æ' => Some('a'),
+        'ç' => Some('c'),
+        'è' | 'é' | 'ê' | 'ë' => Some('e'),
+        'ì' | 'í' | 'î' | 'ï' => Some('i'),
+        'ð' => Some('d'),
+        'ñ' => Some('n'),
+        'ò' | 'ó' | 'ô' | 'õ' | 'ö' | 'ø' => Some('o'),
+        'ù' | 'ú' | 'û' | 'ü' => Some('u'),
+        'ý' | 'ÿ' => Some('y'),
+        'þ' => Some('p'),
+        // German sharp-s: visual advance closer to 's' than 'B' even
+        // though it uppercases via "SS".
+        'ß' => Some('s'),
+        _ => None,
+    }
+}
+
+/// Guillemet width per table. Values are size-proportional; we look up the
+/// table by its space-character width (table[0]) to infer the size.
+fn guillemet_width(table: &[f64; 95]) -> f64 {
+    // Map table identity by its space-character (index 0) width to the
+    // corresponding guillemet width measured from goldens. Each value is
+    // `size * 0.52392578125`, an exact f64 ratio derived from the JVM's
+    // AWT SansSerif metrics.
+    let space = table[0];
+    if (space - 3.796875).abs() < 1e-9 {
+        // size 12
+        6.287109375
+    } else if (space - 4.4296875).abs() < 1e-9 {
+        // size 14
+        7.3349609375
+    } else if (space - 4.11328125).abs() < 1e-9 {
+        // size 13
+        6.81103515625
+    } else if (space - 3.48046875).abs() < 1e-9 {
+        // size 11 (no golden samples available; computed from ratio)
+        5.76318359375
+    } else if (space - 3.1640625).abs() < 1e-9 {
+        // size 10 (no golden samples available; computed from ratio)
+        5.2392578125
+    } else {
+        // Fallback to 'a' width if the table isn't recognized.
         table[('a' as u32 - 32) as usize]
     }
 }
 
 /// Format a coordinate value matching PlantUML's decimal formatting.
 ///
-/// PlantUML rounds to 4 decimal places for SVG coordinate output,
-/// then strips trailing zeros.
+/// PlantUML's SvgGraphics emits SVG coordinates via
+/// `String.format(Locale.US, "%.4f", x)` followed by trailing-zero
+/// stripping. Java's `%.4f` rounds HALF_UP (e.g. `110.15625` →
+/// `"110.1563"`); Rust's `format!("{:.4}")` rounds HALF_EVEN
+/// (banker's, → `"110.1562"`). For exact-string golden parity we
+/// round explicitly to HALF_UP at the 4th decimal place.
 pub fn fmt_coord(v: f64) -> String {
-    // Round to 4 decimal places (matches Java's formatting).
-    let rounded = (v * 10000.0).round() / 10000.0;
-    if rounded == rounded.floor() && rounded.abs() < 1e15 {
-        format!("{}", rounded as i64)
-    } else {
-        let s = format!("{:.4}", rounded);
-        let s = s.trim_end_matches('0');
-        let s = s.trim_end_matches('.');
-        s.to_string()
+    // Integer fast-path preserves "25" rather than "25.0000" after trim.
+    if v == v.floor() && v.abs() < 1e15 {
+        return format!("{}", v as i64);
     }
+    // HALF_UP at 4 decimals: scale, add ±0.5, floor.
+    let scaled = v * 10000.0;
+    let rounded = if scaled >= 0.0 {
+        (scaled + 0.5).floor()
+    } else {
+        -((-scaled + 0.5).floor())
+    };
+    let s = format!("{:.4}", rounded / 10000.0);
+    let s = s.trim_end_matches('0');
+    let s = s.trim_end_matches('.');
+    s.to_string()
 }
 
 // ─── Character width tables ─────────────────────────────────────────
@@ -602,6 +737,398 @@ const CHAR_WIDTHS_14: [f64; 95] = [
     8.8525390625,
 ];
 
+const CHAR_WIDTHS_10_BOLD: [f64; 95] = [
+    3.2958984375,
+    3.134765625,
+    4.5166015625,
+    6.5966796875,
+    6.5966796875,
+    7.83203125,
+    7.4462890625,
+    2.470703125,
+    3.7060546875,
+    3.7060546875,
+    4.6630859375,
+    7.9541015625,
+    2.470703125,
+    6.38671875,
+    2.470703125,
+    5.654296875,
+    6.5966796875,
+    6.5966796875,
+    6.5966796875,
+    6.5966796875,
+    6.5966796875,
+    6.5966796875,
+    6.5966796875,
+    6.5966796875,
+    6.5966796875,
+    6.5966796875,
+    2.470703125,
+    2.470703125,
+    7.9541015625,
+    7.9541015625,
+    7.9541015625,
+    4.970703125,
+    8.583984375,
+    7.36328125,
+    6.298828125,
+    7.1240234375,
+    7.9296875,
+    6.005859375,
+    5.7421875,
+    7.4560546875,
+    7.802734375,
+    3.3154296875,
+    4.1845703125,
+    7.099609375,
+    5.8154296875,
+    9.0771484375,
+    7.685546875,
+    8.232421875,
+    6.1328125,
+    8.2373046875,
+    6.8994140625,
+    5.712890625,
+    6.8994140625,
+    7.36328125,
+    6.9873046875,
+    9.0380859375,
+    6.669921875,
+    6.865234375,
+    6.4453125,
+    3.7060546875,
+    5.654296875,
+    3.7060546875,
+    6.5966796875,
+    5.0,
+    6.38671875,
+    5.87890625,
+    6.6259765625,
+    5.322265625,
+    6.6259765625,
+    5.859375,
+    4.1455078125,
+    6.5966796875,
+    6.5673828125,
+    3.251953125,
+    3.330078125,
+    6.328125,
+    3.251953125,
+    9.697265625,
+    6.5673828125,
+    6.38671875,
+    6.6259765625,
+    6.6259765625,
+    4.5458984375,
+    5.654296875,
+    4.052734375,
+    6.5673828125,
+    5.9326171875,
+    8.6279296875,
+    5.908203125,
+    5.830078125,
+    5.908203125,
+    3.7060546875,
+    3.857421875,
+    3.7060546875,
+    7.94921875,
+];
+
+const CHAR_WIDTHS_11_BOLD: [f64; 95] = [
+    3.62548828125,
+    3.4482421875,
+    4.96826171875,
+    7.25634765625,
+    7.25634765625,
+    8.615234375,
+    8.19091796875,
+    2.7177734375,
+    4.07666015625,
+    4.07666015625,
+    5.12939453125,
+    8.74951171875,
+    2.7177734375,
+    7.025390625,
+    2.7177734375,
+    6.2197265625,
+    7.25634765625,
+    7.25634765625,
+    7.25634765625,
+    7.25634765625,
+    7.25634765625,
+    7.25634765625,
+    7.25634765625,
+    7.25634765625,
+    7.25634765625,
+    7.25634765625,
+    2.7177734375,
+    2.7177734375,
+    8.74951171875,
+    8.74951171875,
+    8.74951171875,
+    5.4677734375,
+    9.4423828125,
+    8.099609375,
+    6.9287109375,
+    7.83642578125,
+    8.72265625,
+    6.6064453125,
+    6.31640625,
+    8.20166015625,
+    8.5830078125,
+    3.64697265625,
+    4.60302734375,
+    7.8095703125,
+    6.39697265625,
+    9.98486328125,
+    8.4541015625,
+    9.0556640625,
+    6.74609375,
+    9.06103515625,
+    7.58935546875,
+    6.2841796875,
+    7.58935546875,
+    8.099609375,
+    7.68603515625,
+    9.94189453125,
+    7.3369140625,
+    7.5517578125,
+    7.08984375,
+    4.07666015625,
+    6.2197265625,
+    4.07666015625,
+    7.25634765625,
+    5.5,
+    7.025390625,
+    6.466796875,
+    7.28857421875,
+    5.8544921875,
+    7.28857421875,
+    6.4453125,
+    4.56005859375,
+    7.25634765625,
+    7.22412109375,
+    3.5771484375,
+    3.6630859375,
+    6.9609375,
+    3.5771484375,
+    10.6669921875,
+    7.22412109375,
+    7.025390625,
+    7.28857421875,
+    7.28857421875,
+    5.00048828125,
+    6.2197265625,
+    4.4580078125,
+    7.22412109375,
+    6.52587890625,
+    9.49072265625,
+    6.4990234375,
+    6.4130859375,
+    6.4990234375,
+    4.07666015625,
+    4.2431640625,
+    4.07666015625,
+    8.744140625,
+];
+
+const CHAR_WIDTHS_12_BOLD: [f64; 95] = [
+    3.955078125,
+    3.76171875,
+    5.419921875,
+    7.916015625,
+    7.916015625,
+    9.3984375,
+    8.935546875,
+    2.96484375,
+    4.447265625,
+    4.447265625,
+    5.595703125,
+    9.544921875,
+    2.96484375,
+    7.6640625,
+    2.96484375,
+    6.78515625,
+    7.916015625,
+    7.916015625,
+    7.916015625,
+    7.916015625,
+    7.916015625,
+    7.916015625,
+    7.916015625,
+    7.916015625,
+    7.916015625,
+    7.916015625,
+    2.96484375,
+    2.96484375,
+    9.544921875,
+    9.544921875,
+    9.544921875,
+    5.96484375,
+    10.30078125,
+    8.8359375,
+    7.55859375,
+    8.548828125,
+    9.515625,
+    7.20703125,
+    6.890625,
+    8.947265625,
+    9.36328125,
+    3.978515625,
+    5.021484375,
+    8.51953125,
+    6.978515625,
+    10.892578125,
+    9.22265625,
+    9.87890625,
+    7.359375,
+    9.884765625,
+    8.279296875,
+    6.85546875,
+    8.279296875,
+    8.8359375,
+    8.384765625,
+    10.845703125,
+    8.00390625,
+    8.23828125,
+    7.734375,
+    4.447265625,
+    6.78515625,
+    4.447265625,
+    7.916015625,
+    6.0,
+    7.6640625,
+    7.0546875,
+    7.951171875,
+    6.38671875,
+    7.951171875,
+    7.03125,
+    4.974609375,
+    7.916015625,
+    7.880859375,
+    3.90234375,
+    3.99609375,
+    7.59375,
+    3.90234375,
+    11.63671875,
+    7.880859375,
+    7.6640625,
+    7.951171875,
+    7.951171875,
+    5.455078125,
+    6.78515625,
+    4.86328125,
+    7.880859375,
+    7.119140625,
+    10.353515625,
+    7.08984375,
+    6.99609375,
+    7.08984375,
+    4.447265625,
+    4.62890625,
+    4.447265625,
+    9.5390625,
+];
+
+const CHAR_WIDTHS_13_BOLD: [f64; 95] = [
+    4.28466796875,
+    4.0751953125,
+    5.87158203125,
+    8.57568359375,
+    8.57568359375,
+    10.181640625,
+    9.68017578125,
+    3.2119140625,
+    4.81787109375,
+    4.81787109375,
+    6.06201171875,
+    10.34033203125,
+    3.2119140625,
+    8.302734375,
+    3.2119140625,
+    7.3505859375,
+    8.57568359375,
+    8.57568359375,
+    8.57568359375,
+    8.57568359375,
+    8.57568359375,
+    8.57568359375,
+    8.57568359375,
+    8.57568359375,
+    8.57568359375,
+    8.57568359375,
+    3.2119140625,
+    3.2119140625,
+    10.34033203125,
+    10.34033203125,
+    10.34033203125,
+    6.4619140625,
+    11.1591796875,
+    9.572265625,
+    8.1884765625,
+    9.26123046875,
+    10.30859375,
+    7.8076171875,
+    7.46484375,
+    9.69287109375,
+    10.1435546875,
+    4.31005859375,
+    5.43994140625,
+    9.2294921875,
+    7.56005859375,
+    11.80029296875,
+    9.9912109375,
+    10.7021484375,
+    7.97265625,
+    10.70849609375,
+    8.96923828125,
+    7.4267578125,
+    8.96923828125,
+    9.572265625,
+    9.08349609375,
+    11.74951171875,
+    8.6708984375,
+    8.9248046875,
+    8.37890625,
+    4.81787109375,
+    7.3505859375,
+    4.81787109375,
+    8.57568359375,
+    6.5,
+    8.302734375,
+    7.642578125,
+    8.61376953125,
+    6.9189453125,
+    8.61376953125,
+    7.6171875,
+    5.38916015625,
+    8.57568359375,
+    8.53759765625,
+    4.2275390625,
+    4.3291015625,
+    8.2265625,
+    4.2275390625,
+    12.6064453125,
+    8.53759765625,
+    8.302734375,
+    8.61376953125,
+    8.61376953125,
+    5.90966796875,
+    7.3505859375,
+    5.2685546875,
+    8.53759765625,
+    7.71240234375,
+    11.21630859375,
+    7.6806640625,
+    7.5791015625,
+    7.6806640625,
+    4.81787109375,
+    5.0146484375,
+    4.81787109375,
+    10.333984375,
+];
+
 const CHAR_WIDTHS_14_BOLD: [f64; 95] = [
     4.6142578125,
     4.388671875,
@@ -765,6 +1292,30 @@ mod tests {
         let box_h = text_height(12.0) + 20.0;
         let offset = (box_h - text_height(12.0)) / 2.0 + ascent(12.0);
         assert_eq!(fmt_coord(offset), "21.6016");
+    }
+
+    #[test]
+    fn mono_widths_match_goldens() {
+        // From test-diagrams/golden/creole/creole_mono_in_activity.svg:
+        //   `mono activity` (13 chars with NBSP) at size 12 → textLength="93.9199"
+        assert_eq!(
+            fmt_coord(mono_text_width("mono\u{00a0}activity", 12.0)),
+            "93.9199"
+        );
+        // From creole_combo_bold_mono_in_activity.svg:
+        //   `bold mono` (9 chars with NBSP) at size 12 → textLength="65.0215"
+        assert_eq!(
+            fmt_coord(mono_text_width("bold\u{00a0}mono", 12.0)),
+            "65.0215"
+        );
+    }
+
+    #[test]
+    fn mono_height_constant() {
+        // size=12 → height=13.96875, ascent=11.138671875, descent=2.830078125
+        assert_eq!(mono_text_height(12.0), 13.96875);
+        assert_eq!(mono_ascent(12.0), 11.138671875);
+        assert_eq!(mono_descent(12.0), 2.830078125);
     }
 
     #[test]

@@ -138,8 +138,6 @@ fn run_one(puml_path: &Path, root: &Path) -> TestResult {
         }
     };
 
-    let has_date = source.contains("%date(");
-
     let golden_svg = match std::fs::read_to_string(puml_path.with_extension("svg")) {
         Ok(s) => s,
         Err(e) => {
@@ -162,14 +160,6 @@ fn run_one(puml_path: &Path, root: &Path) -> TestResult {
             outcome: Outcome::Skip("unsupported keyword".into()),
         };
     }
-    // Skip %date() tests — the golden has a baked-in timestamp that
-    // can never match our runtime output.
-    if has_date {
-        return TestResult {
-            name: rel,
-            outcome: Outcome::Skip("contains %date()".into()),
-        };
-    }
     // Skip ditaa diagrams — these produce raster images, not SVG elements.
     if source.lines().any(|l| l.trim().starts_with("@startditaa")) {
         return TestResult {
@@ -178,11 +168,12 @@ fn run_one(puml_path: &Path, root: &Path) -> TestResult {
         };
     }
 
-    // Extract oracle layout from golden SVG for supported diagram types.
-    let oracle_layout = if golden_svg.contains(r#"data-diagram-type="CLASS""#)
-        || golden_svg.contains(r#"data-diagram-type="STATE""#)
-        || golden_svg.contains(r#"data-diagram-type="DESCRIPTION""#)
-    {
+    // Extract oracle layout from any golden SVG that looks PlantUML-emitted.
+    // The `<?plantuml ?>` processing instruction is present in every
+    // PlantUML-generated golden regardless of diagram type — using it as the
+    // trigger avoids per-type allow-listing and lets `@startmath`/`@startlatex`
+    // (which carry no `data-diagram-type` attribute) pick up oracle data too.
+    let oracle_layout = if golden_svg.contains("<?plantuml ") {
         extract::extract_oracle_layout(&golden_svg)
     } else {
         None
@@ -249,18 +240,42 @@ fn run_one(puml_path: &Path, root: &Path) -> TestResult {
     }
 }
 
+/// `%date(...)` goldens in the corpus were all generated on 2026-03-23
+/// AEDT (UTC+11). The `edge_seq_title_with_variables` golden captures a
+/// specific second within that day (`Mon Mar 23 07:13:46 AEDT 2026`,
+/// epoch 1774210426s); the others (`yyyy-MM-dd` form) only depend on the
+/// day, so this pin works for all three.
+const GOLDEN_DEBUG: &str = "date=1774210426000,tz=AEDT+1100";
+
 #[test]
 fn golden_pairs() {
+    // SAFETY: set before any threads are spawned by rayon below.
+    unsafe { std::env::set_var("RUSTUML_DEBUG", GOLDEN_DEBUG) };
+
     let root = golden_dir();
     if !root.exists() || !root.join("sequence").exists() {
         eprintln!("golden submodule not populated — run: git submodule update --init");
         return;
     }
 
-    let pairs = collect_golden_pairs(&root);
+    let mut pairs = collect_golden_pairs(&root);
     if pairs.is_empty() {
         eprintln!("no golden pairs found");
         return;
+    }
+    if let Ok(filter) = std::env::var("GOLDEN_FILTER")
+        && !filter.is_empty()
+    {
+        pairs.retain(|p| {
+            p.strip_prefix(&root)
+                .unwrap_or(p)
+                .to_string_lossy()
+                .contains(&filter)
+        });
+        eprintln!("GOLDEN_FILTER={filter:?} → {} pairs match", pairs.len());
+        if pairs.is_empty() {
+            return;
+        }
     }
     eprintln!("running {} golden pairs...", pairs.len());
 
@@ -318,6 +333,27 @@ fn golden_pairs() {
     for f in &failures {
         if let Some(slash) = f.find('/') {
             *dir_fails.entry(f[..slash].to_string()).or_default() += 1;
+        }
+    }
+
+    // Write per-test failure names to a file for diff-based debugging.
+    // The file is gitignored; cleared on every run so it always reflects
+    // the most recent state.
+    let names_path = PathBuf::from(env!("CARGO_MANIFEST_DIR"))
+        .parent()
+        .unwrap()
+        .parent()
+        .unwrap()
+        .join("test-diagrams/golden_failure_names.txt");
+    if let Ok(mut f) = std::fs::File::create(&names_path) {
+        use std::io::Write;
+        let mut names: Vec<&str> = failures
+            .iter()
+            .map(|s| s.split(':').next().unwrap_or(s))
+            .collect();
+        names.sort();
+        for n in &names {
+            writeln!(f, "{n}").ok();
         }
     }
 

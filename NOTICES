@@ -58,3 +58,42 @@ Licensed under the Eclipse Public License v2.0.
 Vendored C source (layout libraries only) for graph layout via the dot algorithm.
 Full licence: vendor/graphviz/LICENSE
 https://graphviz.org
+
+OpenIconic
+----------
+Copyright Waybury.
+Licensed under the MIT License (icons); the accompanying font is SIL OFL 1.1.
+SVG path data for the OpenIconic icon set, embedded for PlantUML's
+`<&icon_name>` syntax (crates/rustuml-render/src/openiconic.rs). The data was
+taken from the OpenIconic SVGs as bundled in the PlantUML source tree.
+https://github.com/iconic/open-iconic
+
+PlantUML Themes
+---------------
+The bundled `!theme` definitions (crates/rustuml-parser/themes/*.puml) are
+verbatim copies of theme files from the PlantUML source tree. Only themes
+under permissive licences are bundled; GPL-3+ and unlicensed themes are
+excluded (see crates/rustuml-parser/src/preprocess/themes.rs). Per the
+licence declared in each theme's YAML front matter:
+
+  Apache-2.0, Copyright future-architect:
+    mars, toy, vibrant
+
+  MIT, Copyright Brett Schwarz:
+    aws-orange, black-knight, bluegray, cerulean, cerulean-outline,
+    cloudscape-design, cyborg, cyborg-outline, hacker, lightgray, materia,
+    materia-outline, metal, minty, sandstone, silver, sketchy,
+    sketchy-outline, spacelab, superhero, superhero-outline, united
+
+  MIT, Copyright Drakemor:
+    reddress-darkblue, reddress-darkgreen, reddress-darkorange,
+    reddress-darkred, reddress-lightblue, reddress-lightgreen,
+    reddress-lightorange, reddress-lightred
+
+  MIT, Copyright KingPlus-lang:
+    spacelab-white
+
+  No copyrightable content (intentionally empty), Copyright The-Lum:
+    _none_
+
+https://github.com/plantuml/plantuml

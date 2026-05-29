@@ -36,6 +36,33 @@ pub struct ClassDiagram {
     pub relationships: Vec<Relationship>,
     pub packages: Vec<Package>,
     pub notes: Vec<Note>,
+    /// Visibility-control directives accumulated from `hide ...` / `show ...`
+    /// statements. Stored as the raw argument list after the keyword so the
+    /// renderer can interpret per-entity selectors as well as global ones.
+    #[serde(default)]
+    pub hide_show: Vec<HideShow>,
+    /// 1-based source line of the `header`/`footer`/`title`/`caption`/`legend`
+    /// declaration, when present. Used to populate `data-source-line` on the
+    /// `<g class="header">`-style decoration wrappers PlantUML emits.
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub header_line: Option<usize>,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub footer_line: Option<usize>,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub title_line: Option<usize>,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub caption_line: Option<usize>,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub legend_line: Option<usize>,
+}
+
+/// One `hide`/`show` directive (verbatim arguments).
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct HideShow {
+    pub show: bool,
+    /// Lower-cased space-collapsed argument text (e.g. `"circle"`, `"empty members"`,
+    /// `"<<myStereo>> circle"`, `"myClass attributes"`).
+    pub arg: String,
 }
 
 /// A class, interface, enum, or other entity.
@@ -48,9 +75,17 @@ pub struct ClassEntity {
     pub stereotypes: Vec<String>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub url: Option<String>,
+    /// Optional hex spot color from `<< (X,#HEX) Name >>` notation, applied to
+    /// the stereotype circle fill. Only hex colors override the fill; named
+    /// colors are ignored for the circle (PlantUML behavior).
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub spot_color: Option<String>,
     /// Optional background color (e.g., "#lightblue", "#FF0000").
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub color: Option<String>,
+    /// Optional text colour from `text:colour` shorthand.
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub text_color: Option<String>,
     /// 1-based line number within the `@startuml` block.
     #[serde(default)]
     pub source_line: usize,
@@ -90,6 +125,9 @@ pub enum Visibility {
     Private,
     Protected,
     Package,
+    /// IE (entity-relationship) mandatory column, denoted by the `*` prefix
+    /// in PlantUML's entity-syntax diagrams.
+    IeMandatory,
 }
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Serialize, Deserialize)]

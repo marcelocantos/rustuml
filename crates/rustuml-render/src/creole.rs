@@ -503,6 +503,24 @@ fn collect_until_char(chars: &mut std::iter::Peekable<std::str::Chars>, end: cha
     buf
 }
 
+/// Like [`collect_until_char`] but reports whether the terminator was
+/// actually reached. Returns `(consumed, found_end)` — callers that need to
+/// fall back to literal text when the input had no matching `>` should use
+/// this variant. The `consumed` portion does NOT include the terminator.
+fn collect_until_char_checked(
+    chars: &mut std::iter::Peekable<std::str::Chars>,
+    end: char,
+) -> (String, bool) {
+    let mut buf = String::new();
+    for c in chars.by_ref() {
+        if c == end {
+            return (buf, true);
+        }
+        buf.push(c);
+    }
+    (buf, false)
+}
+
 fn collect_until_tag(chars: &mut std::iter::Peekable<std::str::Chars>, tag: &str) -> String {
     let mut buf = String::new();
     while chars.peek().is_some() {
@@ -776,9 +794,716 @@ impl ListCounters {
     }
 }
 
+// ---------------------------------------------------------------------------
+// Segment-based parsing
+//
+// PlantUML emits styled text as separate `<text>` elements rather than nested
+// `<tspan>` runs — each contiguous run of uniform style becomes its own text
+// element, with the style lifted to attributes on the element itself. The
+// renderers consume `parse_segments` to drive that output shape.
+// ---------------------------------------------------------------------------
+
+/// Resolved style for a contiguous run of text. `None` fields inherit from
+/// the enclosing `<text>` element.
+#[derive(Debug, Clone, PartialEq, Eq, Hash, Default)]
+pub struct Style {
+    pub bold: bool,
+    pub italic: bool,
+    pub underline: bool,
+    pub wavy_underline: bool,
+    pub line_through: bool,
+    pub monospace: bool,
+    /// SVG `fill` attribute when overridden by `<color:...>`.
+    pub fill: Option<String>,
+    /// Absolute font-size override from `<size:N>` (pixels).
+    pub size: Option<u32>,
+    /// Custom font-family from `<font:Name>` (only used when not monospace).
+    pub font_family: Option<String>,
+    /// `"sub"` or `"super"` from `<sub>` / `<sup>`.
+    pub baseline_shift: Option<&'static str>,
+    /// Hyperlink target from `[[url label]]`; carries blue underline styling.
+    pub link_url: Option<String>,
+    /// Background colour from `<back:color>...</back>`, normalised to upper-
+    /// case `#RRGGBB`. The renderer emits an SVG `<filter>` per unique value
+    /// and references it via `filter="url(#...)"` on the matching `<text>`.
+    pub background: Option<String>,
+}
+
+/// A contiguous run of uniformly-styled text.
+#[derive(Debug, Clone, PartialEq, Eq)]
+pub struct Segment {
+    /// XML-escaped text content. Spaces are already converted to NBSP for
+    /// monospace runs.
+    pub text: String,
+    pub style: Style,
+}
+
+/// Parse creole markup into a sequence of uniformly-styled segments.
+///
+/// The renderer chooses how to emit them: a single segment may be lifted to
+/// `<text>` attributes; multiple segments split into separate `<text>`
+/// elements at calculated x offsets.
+pub fn parse_segments(text: &str) -> Vec<Segment> {
+    parse_segments_inner(text, false)
+}
+
+/// Variant that treats `__` markers as literal text rather than underline
+/// markup. Use in class-diagram entity labels where Java PlantUML does not
+/// process `__` as underline.
+pub fn parse_segments_no_underline(text: &str) -> Vec<Segment> {
+    parse_segments_inner(text, true)
+}
+
+/// Concatenate the unstyled text of all segments — the string PlantUML uses
+/// for textLength calculation when measuring a creole-marked label.
+pub fn stripped_text(text: &str) -> String {
+    parse_segments(text)
+        .into_iter()
+        .map(|s| unescape_for_metrics(&s.text))
+        .collect()
+}
+
+/// Reverse the XML escaping applied during segment building so the result
+/// matches the source string a font-metric calculation expects.
+fn unescape_for_metrics(s: &str) -> String {
+    s.replace("&amp;", "&")
+        .replace("&lt;", "<")
+        .replace("&gt;", ">")
+        .replace("&quot;", "\"")
+}
+
+fn parse_segments_inner(text: &str, skip_underline: bool) -> Vec<Segment> {
+    let mut out: Vec<Segment> = Vec::new();
+    let style = Style::default();
+    walk_segments(text, &style, skip_underline, &mut out);
+    out
+}
+
+fn push_segment(out: &mut Vec<Segment>, text: &str, style: &Style) {
+    if text.is_empty() {
+        return;
+    }
+    if let Some(last) = out.last_mut()
+        && last.style == *style
+    {
+        last.text.push_str(text);
+        return;
+    }
+    out.push(Segment {
+        text: text.to_string(),
+        style: style.clone(),
+    });
+}
+
+/// Emit a literal-character run, applying XML escaping and (for monospace)
+/// space-to-NBSP conversion.
+fn push_literal(out: &mut Vec<Segment>, text: &str, style: &Style) {
+    if text.is_empty() {
+        return;
+    }
+    let escaped = escape_creole_text(text);
+    let final_text = if style.monospace {
+        escaped.replace(' ', "\u{00a0}")
+    } else {
+        escaped
+    };
+    push_segment(out, &final_text, style);
+}
+
+fn walk_segments(text: &str, style: &Style, skip_underline: bool, out: &mut Vec<Segment>) {
+    let mut chars = text.chars().peekable();
+    let mut buf = String::new();
+    let mut last_char: Option<char> = None;
+
+    macro_rules! flush_buf {
+        () => {
+            if !buf.is_empty() {
+                push_literal(out, &buf, style);
+                buf.clear();
+            }
+        };
+    }
+
+    while let Some(c) = chars.next() {
+        match c {
+            '~' if chars.peek() == Some(&'~') => {
+                chars.next();
+                let (content, found) = collect_until(&mut chars, "~~");
+                flush_buf!();
+                if found {
+                    let mut nested = style.clone();
+                    nested.wavy_underline = true;
+                    // Recursively walk so inner markup (e.g. `__under__`,
+                    // `**bold**`) inside the wavy-underline span is honoured.
+                    walk_segments(&content, &nested, skip_underline, out);
+                    last_char = content.chars().last();
+                } else {
+                    push_literal(out, "~~", style);
+                    push_literal(out, &content, style);
+                    last_char = content.chars().last().or(Some('~'));
+                }
+            }
+            '~' => {
+                let mut peeked = chars.clone().take(2);
+                let c1 = peeked.next();
+                let c2 = peeked.next();
+                let is_two_char_delim = matches!(
+                    (c1, c2),
+                    (Some('/'), Some('/'))
+                        | (Some('*'), Some('*'))
+                        | (Some('-'), Some('-'))
+                        | (Some('_'), Some('_'))
+                        | (Some('"'), Some('"'))
+                );
+                if is_two_char_delim {
+                    let ch1 = chars.next().unwrap();
+                    let ch2 = chars.next().unwrap();
+                    buf.push(ch1);
+                    buf.push(ch2);
+                    last_char = Some(ch2);
+                } else if let Some(next_ch) = c1 {
+                    let is_markup_char = matches!(next_ch, '/' | '*' | '-' | '_' | '~' | '"' | '`');
+                    if is_markup_char {
+                        chars.next();
+                        buf.push(next_ch);
+                        last_char = Some(next_ch);
+                    } else {
+                        buf.push('~');
+                        last_char = Some('~');
+                    }
+                }
+            }
+            '"' if chars.peek() == Some(&'"') => {
+                chars.next();
+                let (content, _found) = collect_until(&mut chars, "\"\"");
+                flush_buf!();
+                let mut nested = style.clone();
+                nested.monospace = true;
+                walk_segments(&content, &nested, skip_underline, out);
+                last_char = content.chars().last();
+            }
+            '`' => {
+                let content = collect_until_char(&mut chars, '`');
+                flush_buf!();
+                let mut nested = style.clone();
+                nested.monospace = true;
+                walk_segments(&content, &nested, skip_underline, out);
+                last_char = content.chars().last();
+            }
+            '*' if chars.peek() == Some(&'*') => {
+                chars.next();
+                let (content, found) = collect_until(&mut chars, "**");
+                flush_buf!();
+                if found {
+                    let mut nested = style.clone();
+                    nested.bold = true;
+                    walk_segments(&content, &nested, skip_underline, out);
+                    last_char = content.chars().last();
+                } else {
+                    push_literal(out, "**", style);
+                    push_literal(out, &content, style);
+                    last_char = content.chars().last().or(Some('*'));
+                }
+            }
+            '/' if chars.peek() == Some(&'/') => {
+                let preceded_by_word = last_char.map(|c| !c.is_whitespace()).unwrap_or(false);
+                if preceded_by_word {
+                    buf.push('/');
+                    buf.push('/');
+                    chars.next();
+                    last_char = Some('/');
+                } else {
+                    chars.next();
+                    let (content, found) = collect_until(&mut chars, "//");
+                    flush_buf!();
+                    if found && !content.is_empty() {
+                        let mut nested = style.clone();
+                        nested.italic = true;
+                        walk_segments(&content, &nested, skip_underline, out);
+                        last_char = content.chars().last();
+                    } else if found {
+                        push_literal(out, "////", style);
+                        last_char = Some('/');
+                    } else {
+                        push_literal(out, "//", style);
+                        push_literal(out, &content, style);
+                        last_char = content.chars().last().or(Some('/'));
+                    }
+                }
+            }
+            '_' if chars.peek() == Some(&'_') => {
+                chars.next();
+                if skip_underline {
+                    buf.push('_');
+                    buf.push('_');
+                    last_char = Some('_');
+                } else {
+                    let (content, found) = collect_until(&mut chars, "__");
+                    flush_buf!();
+                    if found {
+                        let mut nested = style.clone();
+                        nested.underline = true;
+                        walk_segments(&content, &nested, skip_underline, out);
+                        last_char = content.chars().last();
+                    } else {
+                        push_literal(out, "__", style);
+                        push_literal(out, &content, style);
+                        last_char = content.chars().last().or(Some('_'));
+                    }
+                }
+            }
+            '_' => {
+                buf.push('_');
+                last_char = Some('_');
+            }
+            '-' if chars.peek() == Some(&'-') => {
+                chars.next();
+                let (content, found) = collect_until(&mut chars, "--");
+                flush_buf!();
+                if found {
+                    let mut nested = style.clone();
+                    nested.line_through = true;
+                    walk_segments(&content, &nested, skip_underline, out);
+                    last_char = content.chars().last();
+                } else {
+                    push_literal(out, "--", style);
+                    push_literal(out, &content, style);
+                    last_char = content.chars().last().or(Some('-'));
+                }
+            }
+            '<' => {
+                let (tag, found_close) = collect_until_char_checked(&mut chars, '>');
+                if !found_close {
+                    // No matching `>` — treat the `<` and the rest as literal
+                    // characters (e.g. `[count < 3]` guard expressions).
+                    buf.push('<');
+                    buf.push_str(&tag);
+                    last_char = tag.chars().last().or(Some('<'));
+                } else {
+                    flush_buf!();
+                    handle_tag(&tag, &mut chars, style, skip_underline, out);
+                    last_char = None; // tag content already emitted
+                }
+            }
+            '[' if chars.peek() == Some(&'[') => {
+                chars.next();
+                let mut inner = String::new();
+                loop {
+                    match chars.next() {
+                        Some(']') if chars.peek() == Some(&']') => {
+                            chars.next();
+                            break;
+                        }
+                        Some(ch) => inner.push(ch),
+                        None => break,
+                    }
+                }
+                let inner = if let Some(brace) = inner.find('{') {
+                    if let Some(end) = inner.find('}') {
+                        format!("{}{}", &inner[..brace], &inner[end + 1..])
+                    } else {
+                        inner
+                    }
+                } else {
+                    inner
+                };
+                let (url, label) = if let Some(pos) = inner.find('|') {
+                    (
+                        inner[..pos].trim().to_string(),
+                        inner[pos + 1..]
+                            .split('|')
+                            .next()
+                            .unwrap_or("")
+                            .trim()
+                            .to_string(),
+                    )
+                } else if let Some(pos) = inner.find(' ') {
+                    (
+                        inner[..pos].to_string(),
+                        inner[pos + 1..].trim().to_string(),
+                    )
+                } else {
+                    (inner.clone(), inner.clone())
+                };
+                let display = if label.is_empty() { &url } else { &label };
+                flush_buf!();
+                let mut nested = style.clone();
+                nested.link_url = Some(url.clone());
+                nested.fill = Some("#0000FF".to_string());
+                nested.underline = true;
+                push_literal(out, display, &nested);
+                last_char = display.chars().last();
+            }
+            _ => {
+                buf.push(c);
+                last_char = Some(c);
+            }
+        }
+    }
+    flush_buf!();
+}
+
+fn handle_tag(
+    tag: &str,
+    chars: &mut std::iter::Peekable<std::str::Chars>,
+    style: &Style,
+    skip_underline: bool,
+    out: &mut Vec<Segment>,
+) {
+    match tag {
+        "b" | "strong" => walk_with(
+            chars,
+            "</b>".replace("b", tag),
+            tag,
+            "strong",
+            style,
+            |s| s.bold = true,
+            skip_underline,
+            out,
+        ),
+        "i" | "em" => walk_with(
+            chars,
+            format!("</{tag}>"),
+            tag,
+            "em",
+            style,
+            |s| s.italic = true,
+            skip_underline,
+            out,
+        ),
+        "u" => walk_with(
+            chars,
+            "</u>".into(),
+            tag,
+            "",
+            style,
+            |s| s.underline = true,
+            skip_underline,
+            out,
+        ),
+        "ins" => walk_with(
+            chars,
+            "</ins>".into(),
+            tag,
+            "",
+            style,
+            |s| s.underline = true,
+            skip_underline,
+            out,
+        ),
+        "s" => walk_with(
+            chars,
+            "</s>".into(),
+            tag,
+            "",
+            style,
+            |s| s.line_through = true,
+            skip_underline,
+            out,
+        ),
+        "del" => walk_with(
+            chars,
+            "</del>".into(),
+            tag,
+            "",
+            style,
+            |s| s.line_through = true,
+            skip_underline,
+            out,
+        ),
+        "strike" => walk_with(
+            chars,
+            "</strike>".into(),
+            tag,
+            "",
+            style,
+            |s| s.line_through = true,
+            skip_underline,
+            out,
+        ),
+        "mono" => walk_with(
+            chars,
+            "</mono>".into(),
+            tag,
+            "",
+            style,
+            |s| s.monospace = true,
+            skip_underline,
+            out,
+        ),
+        "code" => walk_with(
+            chars,
+            "</code>".into(),
+            tag,
+            "",
+            style,
+            |s| s.monospace = true,
+            skip_underline,
+            out,
+        ),
+        "sub" => walk_with(
+            chars,
+            "</sub>".into(),
+            tag,
+            "",
+            style,
+            |s| s.baseline_shift = Some("sub"),
+            skip_underline,
+            out,
+        ),
+        "sup" => walk_with(
+            chars,
+            "</sup>".into(),
+            tag,
+            "",
+            style,
+            |s| s.baseline_shift = Some("super"),
+            skip_underline,
+            out,
+        ),
+        _ if tag.starts_with("color:") || tag.starts_with("COLOR:") => {
+            let color = tag
+                .split_once(':')
+                .map(|(_, c)| c.to_string())
+                .unwrap_or_default();
+            let content = collect_until_tag(chars, "</color>");
+            let mut nested = style.clone();
+            nested.fill = Some(color);
+            walk_segments(&content, &nested, skip_underline, out);
+        }
+        _ if tag.starts_with("size:") => {
+            let size = tag["size:".len()..].parse::<u32>().ok();
+            let content = collect_until_tag(chars, "</size>");
+            let mut nested = style.clone();
+            if let Some(s) = size {
+                nested.size = Some(s);
+            }
+            walk_segments(&content, &nested, skip_underline, out);
+        }
+        _ if tag.starts_with("font:") || tag.starts_with("FONT:") => {
+            let font_name = tag
+                .split_once(':')
+                .map(|(_, n)| n.to_string())
+                .unwrap_or_default();
+            let content = collect_until_tag(chars, "</font>");
+            let mut nested = style.clone();
+            nested.font_family = Some(font_name);
+            // <font:Name> behaves like monospace for spacing per existing impl.
+            nested.monospace = true;
+            walk_segments(&content, &nested, skip_underline, out);
+        }
+        _ if tag.starts_with("font") => {
+            let content = collect_until_tag(chars, "</font>");
+            walk_segments(&content, style, skip_underline, out);
+        }
+        _ if tag.starts_with("back:") || tag.starts_with("BACK:") => {
+            let color = tag
+                .split_once(':')
+                .map(|(_, c)| c.to_string())
+                .unwrap_or_default();
+            let content = collect_until_tag(chars, "</back>");
+            let mut nested = style.clone();
+            // Store the raw colour spec; the filter registry resolves named
+            // colours to upper-case hex when materialising the SVG `<filter>`.
+            nested.background = Some(color);
+            walk_segments(&content, &nested, skip_underline, out);
+        }
+        _ if tag.starts_with("img:") => {
+            let raw_src = &tag["img:".len()..];
+            let src = raw_src.find('{').map(|i| &raw_src[..i]).unwrap_or(raw_src);
+            let fallback = if src.starts_with("https://") || src.starts_with("http://") {
+                format!("(Cannot\u{00a0}decode:\u{00a0}{})", escape_creole_text(src))
+            } else {
+                "(Cannot\u{00a0}decode)".to_string()
+            };
+            let mut nested = style.clone();
+            nested.monospace = true;
+            push_segment(out, &fallback, &nested);
+        }
+        _ if tag.starts_with("&amp;") || tag.starts_with('&') => {
+            // OpenIconic icon — handled at the SVG builder level via text_with_icons.
+        }
+        _ => {
+            // Unknown tag — emit literally.
+            push_literal(out, &format!("<{tag}>"), style);
+        }
+    }
+}
+
+/// Helper that pushes a style modification, parses inner content until the
+/// closing tag, and emits resulting segments. The two name args are unused
+/// placeholders kept for call-site symmetry with the dispatch table above —
+/// they let the dispatch match arms read uniformly.
+#[allow(clippy::too_many_arguments)]
+fn walk_with(
+    chars: &mut std::iter::Peekable<std::str::Chars>,
+    close: String,
+    _open_name: &str,
+    _alias: &str,
+    style: &Style,
+    apply: impl FnOnce(&mut Style),
+    skip_underline: bool,
+    out: &mut Vec<Segment>,
+) {
+    let content = collect_until_tag(chars, &close);
+    let mut nested = style.clone();
+    apply(&mut nested);
+    walk_segments(&content, &nested, skip_underline, out);
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;
+
+    // --- Segment-based parsing tests ---
+
+    fn seg(text: &str, style: Style) -> Segment {
+        Segment {
+            text: text.to_string(),
+            style,
+        }
+    }
+
+    fn bold_style() -> Style {
+        Style {
+            bold: true,
+            ..Default::default()
+        }
+    }
+
+    fn italic_style() -> Style {
+        Style {
+            italic: true,
+            ..Default::default()
+        }
+    }
+
+    fn mono_style() -> Style {
+        Style {
+            monospace: true,
+            ..Default::default()
+        }
+    }
+
+    #[test]
+    fn segments_plain_text() {
+        assert_eq!(
+            parse_segments("hello world"),
+            vec![seg("hello world", Style::default())]
+        );
+    }
+
+    #[test]
+    fn segments_xml_escaping() {
+        // Unknown tags emit literally (matching existing to_svg_tspans behaviour).
+        assert_eq!(
+            parse_segments("<unknown>"),
+            vec![seg("&lt;unknown&gt;", Style::default())]
+        );
+        // `<&name>` is an OpenIconic icon — silently dropped from segments
+        // (handled at the SVG-builder level by text_with_icons).
+        assert_eq!(parse_segments("<&heart>"), vec![]);
+        // Real escape characters in text are escaped.
+        assert_eq!(
+            parse_segments("a & b"),
+            vec![seg("a &amp; b", Style::default())]
+        );
+    }
+
+    #[test]
+    fn segments_bold_only() {
+        // PlantUML's uniform-style case: one segment, bold lifted to text attrs.
+        assert_eq!(parse_segments("**bold**"), vec![seg("bold", bold_style())]);
+    }
+
+    #[test]
+    fn segments_nested_bold_italic() {
+        // **//bold italic//** → one segment with both flags.
+        let mut s = Style::default();
+        s.bold = true;
+        s.italic = true;
+        assert_eq!(
+            parse_segments("**//bold italic//**"),
+            vec![seg("bold italic", s)]
+        );
+    }
+
+    #[test]
+    fn segments_mono_with_nbsp() {
+        // Spaces in monospace runs become NBSP — matches PlantUML's
+        // Date.toString()-style mono output.
+        assert_eq!(
+            parse_segments(r#"""mono activity"""#),
+            vec![seg("mono\u{00a0}activity", mono_style())]
+        );
+    }
+
+    #[test]
+    fn segments_split_on_style_change() {
+        // <color:blue>**field**</color>: String → two segments:
+        //   "field" with fill=blue + bold
+        //   ": String" plain
+        let segs = parse_segments("<color:blue>**field**</color>: String");
+        assert_eq!(segs.len(), 2);
+        assert_eq!(segs[0].text, "field");
+        assert_eq!(segs[0].style.fill.as_deref(), Some("blue"));
+        assert!(segs[0].style.bold);
+        assert_eq!(segs[1].text, ": String");
+        assert_eq!(segs[1].style, Style::default());
+    }
+
+    #[test]
+    fn segments_text_around_italic() {
+        let segs = parse_segments("before //middle// after");
+        assert_eq!(segs.len(), 3);
+        assert_eq!(segs[0].text, "before ");
+        assert_eq!(segs[0].style, Style::default());
+        assert_eq!(segs[1].text, "middle");
+        assert_eq!(segs[1].style, italic_style());
+        assert_eq!(segs[2].text, " after");
+        assert_eq!(segs[2].style, Style::default());
+    }
+
+    #[test]
+    fn segments_strike_html_tag() {
+        let segs = parse_segments("<s>gone</s>");
+        let mut s = Style::default();
+        s.line_through = true;
+        assert_eq!(segs, vec![seg("gone", s)]);
+    }
+
+    #[test]
+    fn segments_hyperlink() {
+        let segs = parse_segments("[[https://example.com label]]");
+        assert_eq!(segs.len(), 1);
+        assert_eq!(segs[0].text, "label");
+        assert_eq!(
+            segs[0].style.link_url.as_deref(),
+            Some("https://example.com")
+        );
+        assert_eq!(segs[0].style.fill.as_deref(), Some("#0000FF"));
+        assert!(segs[0].style.underline);
+    }
+
+    #[test]
+    fn segments_skip_underline_for_class_labels() {
+        // In class entity labels, `__` is literal, not underline.
+        let segs = parse_segments_no_underline("__not__");
+        assert_eq!(segs, vec![seg("__not__", Style::default())]);
+    }
+
+    #[test]
+    fn segments_unmatched_bold_is_literal() {
+        let segs = parse_segments("**no close");
+        assert_eq!(segs, vec![seg("**no close", Style::default())]);
+    }
+
+    #[test]
+    fn stripped_text_drops_markers() {
+        assert_eq!(stripped_text("**hello** //world//"), "hello world");
+        assert_eq!(stripped_text(r#"""mono"""#), "mono");
+        assert_eq!(stripped_text("<color:red>x</color>"), "x");
+    }
 
     // --- Inline markup tests ---
 

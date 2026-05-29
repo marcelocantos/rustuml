@@ -147,7 +147,7 @@ pub struct Span {
 }
 
 /// Common metadata that any diagram can carry.
-#[derive(Debug, Default, Serialize, Deserialize)]
+#[derive(Debug, Default, Clone, Serialize, Deserialize)]
 pub struct DiagramMeta {
     #[serde(skip_serializing_if = "Option::is_none")]
     pub title: Option<String>,
@@ -164,6 +164,13 @@ pub struct DiagramMeta {
     /// Sprite definitions collected from the source (`sprite $name { ... }`).
     #[serde(default, skip_serializing_if = "HashMap::is_empty")]
     pub sprites: HashMap<String, SpriteData>,
+    /// The preprocessed PlantUML source — every non-empty line of the post-
+    /// preprocessor diagram body. Used to compute the seed for deterministic
+    /// SVG ids (filter UIDs, gradient UIDs, shadow UIDs) that match Java
+    /// PlantUML's byte-for-byte output. Joined with `\n` and a trailing
+    /// `\n`, this string is the input to `StringUtils.seed`.
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub source: Option<String>,
 }
 
 /// A skinparam key-value pair (e.g., `skinparam backgroundColor #FFFFFF`).

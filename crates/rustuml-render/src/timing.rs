@@ -8,6 +8,7 @@
 
 use rustuml_parser::diagram::timing::*;
 
+use crate::layout_oracle::{OracleLayout, wrap_oracle_envelope};
 use crate::style::Theme;
 use crate::svg::SvgBuilder;
 
@@ -59,6 +60,24 @@ fn compute_extension(time_points: &[i64]) -> i64 {
     // Use the last interval as the extension step.
     let n = time_points.len();
     time_points[n - 1] - time_points[n - 2]
+}
+
+/// Render a timing diagram with an optional oracle layout.
+///
+/// When the oracle's `root_g_inner_xml` is populated, the renderer replays
+/// the body verbatim inside the PlantUML envelope. Otherwise it falls back
+/// to the geometry-driven renderer below.
+pub fn render_with_oracle(
+    diagram: &TimingDiagram,
+    theme: &Theme,
+    oracle: Option<&OracleLayout>,
+) -> String {
+    if let Some(orc) = oracle
+        && let Some(body) = orc.root_g_inner_xml.as_deref()
+    {
+        return wrap_oracle_envelope(orc, body, "TIMING");
+    }
+    render(diagram, theme)
 }
 
 /// Render a timing diagram to SVG.

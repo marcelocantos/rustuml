@@ -93,12 +93,14 @@ fn kind_from_keyword(keyword: &str) -> DeploymentNodeKind {
     }
 }
 
+#[allow(clippy::too_many_arguments)]
 fn push_node(
     nodes: &mut Vec<DeploymentNode>,
     id: String,
     label: String,
     kind: DeploymentNodeKind,
     stereotype: Option<String>,
+    color: Option<String>,
     source_line: usize,
 ) {
     if !nodes.iter().any(|n| n.id == id) {
@@ -107,6 +109,7 @@ fn push_node(
             label,
             kind,
             stereotype,
+            color,
             children: Vec::new(),
             source_line,
         });
@@ -212,10 +215,43 @@ fn try_parse_connection(
     let (raw_from, after_from) = parse_endpoint(rest)?;
     let after_from = after_from.trim_start();
 
-    // Parse arrow: one or more of `-`, `.`, `<`, `>`, `|`.
-    let arrow_end = after_from
-        .find(|c: char| !matches!(c, '-' | '.' | '<' | '>' | '|'))
-        .unwrap_or(after_from.len());
+    // Parse arrow: one or more of `-`, `.`, `<`, `>`, `|`, optionally with
+    // an embedded direction keyword `-down-`, `-up-`, `-left-`, `-right-`
+    // (PlantUML uses these to hint layout direction; semantically equivalent
+    // to a plain dashed arrow for our purposes).
+    let arrow_end = {
+        let bytes = after_from.as_bytes();
+        let mut i = 0;
+        while i < bytes.len() {
+            let c = bytes[i] as char;
+            if matches!(c, '-' | '.' | '<' | '>' | '|') {
+                i += 1;
+            } else if matches!(c, 'd' | 'u' | 'l' | 'r')
+                && i > 0
+                && matches!(bytes[i - 1] as char, '-' | '.')
+            {
+                // Look for `down`, `up`, `left`, `right` followed by another
+                // shaft char (`-` or `.`).
+                let rest = &after_from[i..];
+                let kw_len = ["down", "up", "left", "right"]
+                    .iter()
+                    .find(|kw| rest.starts_with(*kw))
+                    .map(|kw| kw.len())
+                    .unwrap_or(0);
+                if kw_len > 0
+                    && i + kw_len < bytes.len()
+                    && matches!(bytes[i + kw_len] as char, '-' | '.')
+                {
+                    i += kw_len;
+                } else {
+                    break;
+                }
+            } else {
+                break;
+            }
+        }
+        i
+    };
     if arrow_end < 2 {
         // Need at least 2 arrow characters (e.g., `--`, `->`, `..`).
         return None;
@@ -269,12 +305,16 @@ pub fn parse_deployment(lines: &[String]) -> Result<DeploymentDiagram, ParseErro
     let mut in_legend = false;
     let mut legend_lines: Vec<String> = Vec::new();
 
+    // Skinparam block accumulator. When inside `skinparam node { ... }`,
+    // nested `Key Value` lines are flattened to `nodeKey` = `Value`.
+    let mut skinparam_block_prefix: Option<String> = None;
+
     let keyword_set: HashSet<&str> = DEPLOYMENT_KEYWORDS.iter().copied().collect();
 
     // keyword id [as "label"] [<<stereo>>] [#color] [{]
     static RE_NODE_BARE: LazyLock<Regex> = LazyLock::new(|| {
         Regex::new(
-            r#"^(\w+)\s+(\w[\w.]*)(?:\s+as\s+"([^"]+)")?(?:\s+<<([^>]+)>>)?(?:\s+#\w+)?(?:\s*\{)?"#,
+            r#"^(\w+)\s+(\w[\w.]*)(?:\s+as\s+"([^"]+)")?(?:\s+<<([^>]+)>>)?(?:\s+#(\w+))?(?:\s*\{)?"#,
         )
         .unwrap()
     });
@@ -282,14 +322,15 @@ pub fn parse_deployment(lines: &[String]) -> Result<DeploymentDiagram, ParseErro
     // keyword "label" [as id] [<<stereo>>] [#color] [{]
     static RE_NODE_QUOTED: LazyLock<Regex> = LazyLock::new(|| {
         Regex::new(
-            r#"^(\w+)\s+"([^"]+)"(?:\s+as\s+(\w+))?(?:\s+<<([^>]+)>>)?(?:\s+#\w+)?(?:\s*\{)?"#,
+            r#"^(\w+)\s+"([^"]+)"(?:\s+as\s+(\w+))?(?:\s+<<([^>]+)>>)?(?:\s+#(\w+))?(?:\s*\{)?"#,
         )
         .unwrap()
     });
 
     // [Label] [as id] [<<stereo>>] [#color]  — bracket component notation
     static RE_NODE_BRACKET: LazyLock<Regex> = LazyLock::new(|| {
-        Regex::new(r#"^\[([^\]]+)\](?:\s+as\s+(\w+))?(?:\s+<<([^>]+)>>)?(?:\s+#\w+)?\s*$"#).unwrap()
+        Regex::new(r#"^\[([^\]]+)\](?:\s+as\s+(\w+))?(?:\s+<<([^>]+)>>)?(?:\s+#(\w+))?\s*$"#)
+            .unwrap()
     });
 
     // note "text" as ID  — floating note
@@ -314,6 +355,23 @@ pub fn parse_deployment(lines: &[String]) -> Result<DeploymentDiagram, ParseErro
         let current_line = line_idx + 1;
         let trimmed = line.trim();
         if trimmed.is_empty() {
+            continue;
+        }
+
+        // Inside a `skinparam <prefix> { ... }` block: flatten nested
+        // `Key Value` entries to `<prefix>Key` until the closing `}`.
+        if let Some(prefix) = &skinparam_block_prefix {
+            if trimmed == "}" {
+                skinparam_block_prefix = None;
+            } else {
+                let parts: Vec<&str> = trimmed.splitn(2, char::is_whitespace).collect();
+                if parts.len() == 2 {
+                    meta.skinparams.push(crate::diagram::SkinParam {
+                        key: format!("{prefix}{}", parts[0]),
+                        value: parts[1].trim().to_string(),
+                    });
+                }
+            }
             continue;
         }
 
@@ -364,7 +422,14 @@ pub fn parse_deployment(lines: &[String]) -> Result<DeploymentDiagram, ParseErro
         }
         // Skinparam.
         if let Some(rest) = trimmed.strip_prefix("skinparam ") {
-            let parts: Vec<&str> = rest.splitn(2, ' ').collect();
+            let rest = rest.trim();
+            // Block form: `skinparam node {` opens a nested block whose
+            // `Key Value` entries are flattened to `<prefix>Key`.
+            if let Some(prefix) = rest.strip_suffix('{') {
+                skinparam_block_prefix = Some(prefix.trim().to_string());
+                continue;
+            }
+            let parts: Vec<&str> = rest.splitn(2, char::is_whitespace).collect();
             if parts.len() == 2 {
                 meta.skinparams.push(crate::diagram::SkinParam {
                     key: parts[0].to_string(),
@@ -398,12 +463,14 @@ pub fn parse_deployment(lines: &[String]) -> Result<DeploymentDiagram, ParseErro
                 .map(|m| m.as_str().to_string())
                 .unwrap_or_else(|| label_to_id(&label));
             let stereotype = caps.get(3).map(|m| m.as_str().trim().to_string());
+            let color = caps.get(4).map(|m| m.as_str().to_string());
             push_node(
                 &mut nodes,
                 id.clone(),
                 label,
                 DeploymentNodeKind::Component,
                 stereotype,
+                color,
                 current_line,
             );
             if let Some(parent_id) = stack.last().cloned() {
@@ -477,6 +544,7 @@ pub fn parse_deployment(lines: &[String]) -> Result<DeploymentDiagram, ParseErro
                             label: lbl.clone(),
                             kind: DeploymentNodeKind::Node,
                             stereotype: None,
+                            color: None,
                             children: Vec::new(),
                             source_line: current_line,
                         });
@@ -502,6 +570,7 @@ pub fn parse_deployment(lines: &[String]) -> Result<DeploymentDiagram, ParseErro
                         .unwrap_or_else(|| raw_id.clone());
                     let id = raw_id;
                     let stereotype = caps.get(4).map(|m| m.as_str().trim().to_string());
+                    let color = caps.get(5).map(|m| m.as_str().to_string());
                     let kind = kind_from_keyword(keyword);
 
                     push_node(
@@ -510,6 +579,7 @@ pub fn parse_deployment(lines: &[String]) -> Result<DeploymentDiagram, ParseErro
                         label,
                         kind,
                         stereotype,
+                        color,
                         current_line,
                     );
                     if let Some(parent_id) = stack.last().cloned() {
@@ -533,6 +603,7 @@ pub fn parse_deployment(lines: &[String]) -> Result<DeploymentDiagram, ParseErro
                         .map(|m| m.as_str().to_string())
                         .unwrap_or_else(|| label_to_id(&label));
                     let stereotype = caps.get(4).map(|m| m.as_str().trim().to_string());
+                    let color = caps.get(5).map(|m| m.as_str().to_string());
                     let kind = kind_from_keyword(keyword);
 
                     push_node(
@@ -541,6 +612,7 @@ pub fn parse_deployment(lines: &[String]) -> Result<DeploymentDiagram, ParseErro
                         label,
                         kind,
                         stereotype,
+                        color,
                         current_line,
                     );
                     if let Some(parent_id) = stack.last().cloned() {
@@ -567,6 +639,7 @@ pub fn parse_deployment(lines: &[String]) -> Result<DeploymentDiagram, ParseErro
                         label: lbl.clone(),
                         kind: DeploymentNodeKind::Node,
                         stereotype: None,
+                        color: None,
                         children: Vec::new(),
                         source_line: current_line,
                     });
@@ -701,5 +774,44 @@ mod tests {
         assert_eq!(d.nodes[0].label, "MyComponent");
         assert_eq!(d.nodes[0].id, "MyComponent");
         assert_eq!(d.nodes[0].kind, DeploymentNodeKind::Component);
+    }
+
+    #[test]
+    fn element_color_captured() {
+        let d =
+            parse("node AppNode #Pink\nartifact a #FF8888\ncloud C #LightBlue {\n  node Inner\n}");
+        assert_eq!(
+            d.nodes
+                .iter()
+                .find(|n| n.id == "AppNode")
+                .unwrap()
+                .color
+                .as_deref(),
+            Some("Pink")
+        );
+        assert_eq!(
+            d.nodes
+                .iter()
+                .find(|n| n.id == "a")
+                .unwrap()
+                .color
+                .as_deref(),
+            Some("FF8888")
+        );
+        // Colour on a container is captured too.
+        assert_eq!(
+            d.nodes
+                .iter()
+                .find(|n| n.id == "C")
+                .unwrap()
+                .color
+                .as_deref(),
+            Some("LightBlue")
+        );
+        // Plain element has no colour.
+        assert_eq!(
+            d.nodes.iter().find(|n| n.id == "Inner").unwrap().color,
+            None
+        );
     }
 }

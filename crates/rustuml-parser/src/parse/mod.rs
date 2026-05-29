@@ -135,11 +135,19 @@ fn detect_uml_subtype(lines: &[String]) -> UmlSubtype {
             scores[6] += 5;
         }
         // State.
+        //
+        // `[*]` is the unmistakable state-diagram pseudostate marker; any line
+        // mentioning it (as source `[*] ...->`, target `...-> [*]`, or a
+        // bracketed coloured arrow `-[#blue]-> [*]`) is a strong state signal.
+        // Weighted heavily so chains of `A --> B` arrows can't overwhelm a
+        // single `[*] --> X` line, and so that diagrams mixing floating
+        // notes (class-typed) with `[*]` transitions still parse as state.
         if trimmed.starts_with("[*]")
-            || trimmed.contains("--> [*]")
+            || trimmed.contains("> [*]")
+            || trimmed.contains(">[*]")
             || (trimmed.starts_with("state ") && !trimmed.contains("<<"))
         {
-            scores[3] += 5;
+            scores[3] += 50;
         }
         // `note on link` annotates transitions (state diagrams) and connections
         // (use case diagrams). Score it for state so that state diagrams beat
@@ -251,7 +259,20 @@ fn detect_uml_subtype(lines: &[String]) -> UmlSubtype {
         // (e.g. `Alice -[#red]> Bob`).
         // Exclude `return [...]` lines which are sequence diagram syntax.
         let looks_like_member = matches!(trimmed.chars().next(), Some('+' | '-' | '#' | '~'));
+        // `[...]` after the `:` of a transition label is a state-diagram guard
+        // expression (e.g. `A --> B : [count < 3]` or `... : event [guard]`)
+        // — do not credit it as a component-style bracket reference.
+        let bracket_is_transition_guard = if let Some(colon) = trimmed.find(':') {
+            let before = &trimmed[..colon];
+            let after = &trimmed[colon + 1..];
+            (before.contains("->") || before.contains("<-"))
+                && after.contains('[')
+                && after.contains(']')
+        } else {
+            false
+        };
         if !looks_like_member
+            && !bracket_is_transition_guard
             && trimmed.contains('[')
             && trimmed.contains(']')
             && !trimmed.contains("[*]")
@@ -392,6 +413,8 @@ fn detect_uml_subtype(lines: &[String]) -> UmlSubtype {
             || trimmed.starts_with("right footer")
             || trimmed.starts_with("center footer")
             || trimmed == "endfooter"
+            || trimmed.starts_with("title ")
+            || trimmed == "title"
         {
             scores[1] += 1; // weak class signal
         }
@@ -751,7 +774,61 @@ pub fn parse_with_base(
         meta.sprites = sprites;
     }
 
+    // Stash the diagram source for downstream seed computation (filter
+    // UIDs, gradient/shadow ids). Mirrors PlantUML's
+    // `UmlSource.getPlainString("\n")` — every line of the @startuml ...
+    // @enduml block (including the markers) joined by `\n` with a trailing
+    // `\n`. PlantUML's preprocessor preserves these markers; ours strips
+    // them, so we rebuild the equivalent string from the raw input.
+    {
+        let meta = diagram.meta_mut();
+        meta.source = Some(seed_source_string(input));
+    }
+
     Ok(diagram)
+}
+
+/// Reconstruct the seed-source string that PlantUML's
+/// `UmlSource.getPlainString("\n")` would have produced for `input`. That
+/// string is built from the `source` list inside `UmlSource`, which in
+/// practice is "every line between (and including) `@startXXX` and
+/// `@endXXX`, with a trailing `\n`". For inputs that omit the markers we
+/// take the input as-is. The output is used purely to derive deterministic
+/// element ids (filter UIDs etc.) via `StringUtils.seed`.
+fn seed_source_string(input: &str) -> String {
+    let mut out = String::new();
+    let mut in_block = false;
+    let mut saw_marker = false;
+    for line in input.lines() {
+        let trimmed = line.trim_start();
+        if !in_block {
+            if trimmed.starts_with("@start") {
+                in_block = true;
+                saw_marker = true;
+                out.push_str(line);
+                out.push('\n');
+            }
+            continue;
+        }
+        out.push_str(line);
+        out.push('\n');
+        if trimmed.starts_with("@end") {
+            break;
+        }
+    }
+    let _ = in_block;
+    if saw_marker {
+        out
+    } else {
+        // Headerless input — match PlantUML's `\n`-joined form with a
+        // trailing newline.
+        let mut joined = String::new();
+        for line in input.lines() {
+            joined.push_str(line);
+            joined.push('\n');
+        }
+        joined
+    }
 }
 
 #[cfg(test)]

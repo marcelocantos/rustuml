@@ -58,6 +58,13 @@ struct ClassParser {
     meta_block: Option<MetaBlock>,
     /// Current 1-based source line number (set before each parse_line call).
     current_line: usize,
+    /// Accumulated `hide` / `show` directives, in source order.
+    hide_show: Vec<crate::diagram::class::HideShow>,
+    header_line: Option<usize>,
+    footer_line: Option<usize>,
+    title_line: Option<usize>,
+    caption_line: Option<usize>,
+    legend_line: Option<usize>,
 }
 
 impl ClassParser {
@@ -76,16 +83,57 @@ impl ClassParser {
             namespace_sep: Some(".".to_string()),
             meta_block: None,
             current_line: 0,
+            hide_show: Vec::new(),
+            header_line: None,
+            footer_line: None,
+            title_line: None,
+            caption_line: None,
+            legend_line: None,
         }
     }
 
     fn finish(self) -> ClassDiagram {
+        // Filter out phantom entities created by `ensure_entity` on
+        // relationship endpoints when the endpoint is a note alias
+        // (e.g. `A .. N1` after `note "..." as N1`). These should not be
+        // rendered as classes — they are notes. Their relationships are
+        // dropped too (PlantUML expresses the connector via the note's
+        // shape, not a separate relationship).
+        let note_aliases: std::collections::HashSet<&str> = self
+            .notes
+            .iter()
+            .filter_map(|n| n.alias.as_deref())
+            .collect();
+        let entities = if note_aliases.is_empty() {
+            self.entities
+        } else {
+            self.entities
+                .into_iter()
+                .filter(|e| !note_aliases.contains(e.id.as_str()))
+                .collect()
+        };
+        let relationships = if note_aliases.is_empty() {
+            self.relationships
+        } else {
+            self.relationships
+                .into_iter()
+                .filter(|r| {
+                    !note_aliases.contains(r.from.as_str()) && !note_aliases.contains(r.to.as_str())
+                })
+                .collect()
+        };
         ClassDiagram {
             meta: self.meta,
-            entities: self.entities,
-            relationships: self.relationships,
+            entities,
+            relationships,
             packages: self.packages,
             notes: self.notes,
+            hide_show: self.hide_show,
+            header_line: self.header_line,
+            footer_line: self.footer_line,
+            title_line: self.title_line,
+            caption_line: self.caption_line,
+            legend_line: self.legend_line,
         }
     }
 
@@ -98,8 +146,10 @@ impl ClassParser {
                 kind: EntityKind::Class,
                 members: Vec::new(),
                 stereotypes: Vec::new(),
+                spot_color: None,
                 url: None,
                 color: None,
+                text_color: None,
                 source_line: self.current_line,
             });
         }
@@ -363,9 +413,16 @@ impl ClassParser {
                 (label, id)
             };
 
+            let mut spot_color: Option<String> = None;
             let stereotypes: Vec<String> = STEREOTYPE_RE
                 .captures_iter(line)
-                .map(|c| process_spot_stereotype(c[1].trim()))
+                .map(|c| {
+                    let (text, color) = process_spot_stereotype_with_color(c[1].trim());
+                    if spot_color.is_none() {
+                        spot_color = color;
+                    }
+                    text
+                })
                 .filter(|s| !s.is_empty())
                 .collect();
 
@@ -401,11 +458,17 @@ impl ClassParser {
                 entity.kind = kind;
                 entity.label = display_label;
                 entity.stereotypes.extend(stereotypes);
+                if spot_color.is_some() {
+                    entity.spot_color = spot_color.clone();
+                }
                 if url.is_some() {
                     entity.url = url.clone();
                 }
                 if entity_color.is_some() {
                     entity.color = entity_color.clone();
+                }
+                if let Some(tc) = extract_text_color(line) {
+                    entity.text_color = Some(tc);
                 }
             } else {
                 self.entities.push(ClassEntity {
@@ -414,8 +477,10 @@ impl ClassParser {
                     kind,
                     members: Vec::new(),
                     stereotypes,
+                    spot_color,
                     url: url.clone(),
                     color: entity_color.clone(),
+                    text_color: extract_text_color(line),
                     source_line: self.current_line,
                 });
             }
@@ -453,8 +518,10 @@ impl ClassParser {
                     kind: EntityKind::Enum,
                     members: Vec::new(),
                     stereotypes: Vec::new(),
+                    spot_color: None,
                     url: None,
                     color: None,
+                    text_color: None,
                     source_line: self.current_line,
                 });
             }
@@ -474,9 +541,21 @@ impl ClassParser {
         //                   <-->, <..>, --, -->, <--, <-, ->, .., ..>, <..
         //                   <|--|> (bidirectional inheritance), <..|.> etc.
         // Multiple dashes (e.g. ---- or ------) are treated as plain association.
+        //
+        // Colour / direction / bold / thickness modifiers attach to the arrow
+        // and are stripped before kind detection (e.g. `A -[#blue]- B`,
+        // `A -down-> B`, `A -[bold]-> B`). The modifier is matched but
+        // discarded — the kind comes from the surrounding arrow shape.
+        // Strip arrow modifiers like `[#color,bold]`, `down`, `[dashed]` etc.
+        // from the line before matching; replace with a single dash so the
+        // arrow shape continues to match cleanly.
+        let stripped_line = strip_arrow_modifiers(line);
+        let line = stripped_line.as_str();
         static RE: LazyLock<Regex> = LazyLock::new(|| {
+            // Endpoint may be a bare identifier (`[\w.]+`) or a quoted name
+            // (`"any text"`) so labels with whitespace or punctuation work.
             Regex::new(
-                r#"^([\w.]+)\s*(?:"([^"]+)")?\s*((?:<\|--\|>|<\.\.>|<\|--|--\|>|\.\.\|>|<\|\.\.|<\.\.|\*--|--\*|o--|--o|<-->|<--|-->|->|<-|-{2,}|\.\.|\.\.>))\s*(?:"([^"]+)")?\s*([\w.]+)(?:\s*:\s*(.+))?$"#,
+                r#"^(?:"([^"]+)"|([\w.]+))\s*(?:"([^"]+)")?\s*((?:<\|--\|>|<\.\.>|<\|--|--\|>|\.\.\|>|<\|\.\.|<\.\.|\*--|--\*|o--|--o|<-->|<--|-->|->|<-|-{2,}|\.\.|\.\.>))\s*(?:"([^"]+)")?\s*(?:"([^"]+)"|([\w.]+))(?:\s*:\s*(.+))?$"#,
             )
             .unwrap()
         });
@@ -486,12 +565,20 @@ impl ClassParser {
         });
 
         if let Some(caps) = RE.captures(line) {
-            let from_raw = &caps[1];
-            let from_mult = caps.get(2).map(|m| m.as_str().to_string());
-            let rel_str = &caps[3];
-            let to_mult = caps.get(4).map(|m| m.as_str().to_string());
-            let to_raw = &caps[5];
-            let label = caps.get(6).map(|m| m.as_str().trim().to_string());
+            let from_raw = caps
+                .get(1)
+                .or_else(|| caps.get(2))
+                .map(|m| m.as_str())
+                .unwrap_or("");
+            let from_mult = caps.get(3).map(|m| m.as_str().to_string());
+            let rel_str = &caps[4];
+            let to_mult = caps.get(5).map(|m| m.as_str().to_string());
+            let to_raw = caps
+                .get(6)
+                .or_else(|| caps.get(7))
+                .map(|m| m.as_str())
+                .unwrap_or("");
+            let label = caps.get(8).map(|m| m.as_str().trim().to_string());
 
             let (kind, dashed) = parse_relationship_kind(rel_str);
             let from = self.ensure_entity(from_raw);
@@ -552,8 +639,10 @@ impl ClassParser {
                     kind: EntityKind::Interface,
                     members: Vec::new(),
                     stereotypes: Vec::new(),
+                    spot_color: None,
                     url: None,
                     color: None,
+                    text_color: None,
                     source_line: self.current_line,
                 });
             }
@@ -816,8 +905,10 @@ impl ClassParser {
                         kind: EntityKind::Class,
                         members: vec![member],
                         stereotypes: Vec::new(),
+                        spot_color: None,
                         url: None,
                         color: None,
+                        text_color: None,
                         source_line: self.current_line,
                     });
                 }
@@ -836,14 +927,17 @@ impl ClassParser {
     fn try_meta(&mut self, line: &str) -> bool {
         if let Some(rest) = line.strip_prefix("title ") {
             self.meta.title = Some(super::strip_title_quotes(rest).to_string());
+            self.title_line.get_or_insert(self.current_line);
             return true;
         }
         if line == "title" {
             self.meta_block = Some(MetaBlock::Title);
+            self.title_line.get_or_insert(self.current_line);
             return true;
         }
         if let Some(rest) = line.strip_prefix("header ") {
             self.meta.header = Some(rest.trim().to_string());
+            self.header_line.get_or_insert(self.current_line);
             return true;
         }
         if line == "header"
@@ -852,10 +946,12 @@ impl ClassParser {
             || line.starts_with("center header")
         {
             self.meta_block = Some(MetaBlock::Header);
+            self.header_line.get_or_insert(self.current_line);
             return true;
         }
         if let Some(rest) = line.strip_prefix("footer ") {
             self.meta.footer = Some(rest.trim().to_string());
+            self.footer_line.get_or_insert(self.current_line);
             return true;
         }
         if line == "footer"
@@ -864,14 +960,17 @@ impl ClassParser {
             || line.starts_with("center footer")
         {
             self.meta_block = Some(MetaBlock::Footer);
+            self.footer_line.get_or_insert(self.current_line);
             return true;
         }
         if let Some(rest) = line.strip_prefix("caption ") {
             self.meta.caption = Some(rest.trim().to_string());
+            self.caption_line.get_or_insert(self.current_line);
             return true;
         }
         if line == "caption" {
             self.meta_block = Some(MetaBlock::Caption);
+            self.caption_line.get_or_insert(self.current_line);
             return true;
         }
         if line == "legend"
@@ -882,6 +981,7 @@ impl ClassParser {
             || line.starts_with("legend bottom")
         {
             self.meta_block = Some(MetaBlock::Legend);
+            self.legend_line.get_or_insert(self.current_line);
             return true;
         }
         if line == "set namespaceSeparator none" {
@@ -908,10 +1008,24 @@ impl ClassParser {
             }
             return true;
         }
-        // Skip hide, show, together, etc.
-        line.starts_with("hide ")
-            || line.starts_with("show ")
-            || line.starts_with("together")
+        // Capture hide/show directives so the renderer can suppress
+        // circles, members, attributes, etc.
+        if let Some(rest) = line.strip_prefix("hide ") {
+            self.hide_show.push(crate::diagram::class::HideShow {
+                show: false,
+                arg: rest.split_whitespace().collect::<Vec<_>>().join(" "),
+            });
+            return true;
+        }
+        if let Some(rest) = line.strip_prefix("show ") {
+            self.hide_show.push(crate::diagram::class::HideShow {
+                show: true,
+                arg: rest.split_whitespace().collect::<Vec<_>>().join(" "),
+            });
+            return true;
+        }
+        // Skip other layout/format directives.
+        line.starts_with("together")
             || line.starts_with("allowmixing")
             || line.starts_with("map ")
             || line.starts_with("set ")
@@ -931,11 +1045,15 @@ impl ClassParser {
         }
 
         // Labeled separator — store as Separator member so the label can be rendered.
+        // `return_type` is repurposed to hold the separator symbol (one of
+        // `--`, `..`, `==`, `__`) so the renderer can pick the right stroke
+        // style.
         if let Some(caps) = SEPARATOR_LABELED_RE.captures(trimmed) {
+            let symbol = caps[1].to_string();
             let label = caps[2].to_string();
             let member = Member {
                 name: label.clone(),
-                return_type: None,
+                return_type: Some(symbol),
                 visibility: Visibility::Default,
                 is_static: false,
                 is_abstract: false,
@@ -950,11 +1068,12 @@ impl ClassParser {
             return;
         }
 
-        // Bare separator lines — render as unlabeled separator.
+        // Bare separator lines — render as unlabeled separator. `return_type`
+        // carries the symbol so the renderer can dispatch on line style.
         if trimmed == "--" || trimmed == ".." || trimmed == "==" || trimmed == "__" {
             let member = Member {
                 name: String::new(),
-                return_type: None,
+                return_type: Some(trimmed.to_string()),
                 visibility: Visibility::Default,
                 is_static: false,
                 is_abstract: false,
@@ -999,6 +1118,32 @@ fn parse_entity_kind(s: &str) -> EntityKind {
     }
 }
 
+/// Strip arrow modifiers from a relationship line so the shape regex can
+/// match cleanly. PlantUML allows colour, thickness, direction and style
+/// adornments inside square brackets on the arrow body
+/// (e.g. `A -[#blue]- B`, `A -[#red,dashed]-> B`), plus bare direction
+/// words between dashes (`A -down-> B`, `A .left.> B`).
+///
+/// The replacement collapses bracketed modifiers to nothing and bare
+/// direction keywords to the empty string so the resulting arrow shape
+/// (`--`, `-->`, `..`, etc.) survives untouched.
+fn strip_arrow_modifiers(line: &str) -> String {
+    static BRACKETED: LazyLock<Regex> = LazyLock::new(|| Regex::new(r"\[[^\]]*\]").unwrap());
+    // Direction keywords appearing between dash/dot runs on the arrow body.
+    static DIRECTION: LazyLock<Regex> =
+        LazyLock::new(|| Regex::new(r"([-.])(left|right|up|down|l|r|u|d)([-.])").unwrap());
+    let s = BRACKETED.replace_all(line, "");
+    let s = DIRECTION.replace_all(&s, "$1$3");
+    // Re-promote isolated single-dash arrows (which result from bracketed
+    // modifiers next to a single dash, e.g. `A -[#blue] B`) into standard
+    // two-dash association arrows so the shape regex matches.
+    if s.contains(" - ") {
+        s.replace(" - ", " -- ")
+    } else {
+        s.into_owned()
+    }
+}
+
 /// Parse the relationship kind and whether the line style is dashed.
 fn parse_relationship_kind(s: &str) -> (RelationshipKind, bool) {
     if s.contains("<|--") || s.contains("--|>") || s.contains("<|--|>") {
@@ -1022,6 +1167,15 @@ fn parse_relationship_kind(s: &str) -> (RelationshipKind, bool) {
         // Plain association (-- or ---- etc.)
         (RelationshipKind::Association, false)
     }
+}
+
+/// Extract `text:colour` from the entity shorthand
+/// `#back:colour;line:colour;line.bold;text:colour` (any order). Returns the
+/// raw colour token (e.g. `"blue"` or `"#FF0000"`) so the renderer can map it
+/// to a CSS-compatible `fill`.
+fn extract_text_color(line: &str) -> Option<String> {
+    static RE: LazyLock<Regex> = LazyLock::new(|| Regex::new(r"text:([#A-Za-z0-9]+)").unwrap());
+    RE.captures(line).map(|c| c[1].to_string())
 }
 
 fn parse_member(s: &str) -> Member {
@@ -1049,21 +1203,29 @@ fn parse_member(s: &str) -> Member {
         }
     }
 
-    // Parse visibility prefix.
+    // Parse visibility prefix. Double-character creole markers (`**`, `--`,
+    // `~~`, `__`) take precedence over visibility prefixes that share the
+    // same leading character — leave the markup intact for the renderer.
     let (visibility, rest) = match text.chars().next() {
         Some('+') => (Visibility::Public, &text[1..]),
-        Some('-') => (Visibility::Private, &text[1..]),
+        Some('-') if !text.starts_with("--") => (Visibility::Private, &text[1..]),
         Some('#') => (Visibility::Protected, &text[1..]),
-        Some('~') => (Visibility::Package, &text[1..]),
+        Some('~') if !text.starts_with("~~") => (Visibility::Package, &text[1..]),
         // ER diagrams use '*' to mark required/primary-key fields.
-        Some('*') => (Visibility::Default, &text[1..]),
+        Some('*') if !text.starts_with("**") => (Visibility::IeMandatory, &text[1..]),
         _ => (Visibility::Default, text.as_str()),
     };
 
     let rest = rest.trim();
 
-    // Determine if method (contains parens) or field.
-    let is_method = rest.contains('(');
+    // Determine if method (contains parens) or field. A `:` BEFORE any `(`
+    // signals the line is a typed field (e.g. ER-table `name : VARCHAR(20)`):
+    // the parens belong to the type, not a method signature.
+    let is_method = match (rest.find('('), rest.find(':')) {
+        (Some(paren), Some(colon)) => paren < colon,
+        (Some(_), None) => true,
+        _ => false,
+    };
 
     // `rest` is the text after stripping the visibility prefix. It is used
     // verbatim as the display text (preserves original colon spacing).
@@ -1113,15 +1275,15 @@ fn parse_member(s: &str) -> Member {
     }
 }
 
-/// Strip Creole/HTML markup from a display name to produce a plain identifier.
-/// Used when a class is declared with a quoted markup name but no `as` alias.
 /// Process a stereotype string that may contain spot notation `(S,#color) Name`.
 ///
-/// PlantUML's behavior:
-/// - If the color is a named color (e.g. `#red`, `#blue`), keep the full `(S,#color) Name` prefix.
-/// - If the color is a hex code (e.g. `#FF7700`, `#00AAFF`), strip the `(S,#color)` prefix
-///   and return just the name.
-fn process_spot_stereotype(s: &str) -> String {
+/// Returns the stereotype display text and the hex spot color (with leading
+/// `#`) when the spot uses a hex code. PlantUML's behavior:
+/// - Named color (e.g. `#red`, `#blue`): keep the full `(S,#color) Name` prefix
+///   in the text and return no spot color (named colors don't fill the circle).
+/// - Hex code (e.g. `#FF7700`, `#00AAFF`): strip the `(S,#color)` prefix,
+///   returning just the name plus the hex color for the circle fill.
+fn process_spot_stereotype_with_color(s: &str) -> (String, Option<String>) {
     let s = s.trim();
     // Look for spot notation: `(X,#color) Name`
     if let Some(rest) = s.strip_prefix('(')
@@ -1137,16 +1299,19 @@ fn process_spot_stereotype(s: &str) -> String {
                 let is_hex =
                     !color_hex.is_empty() && color_hex.chars().all(|c| c.is_ascii_hexdigit());
                 if is_hex {
-                    // Hex color: strip spot prefix, return just the name.
-                    return after.to_string();
+                    // Hex color: strip spot prefix, return just the name and
+                    // capture the hex color for the circle fill.
+                    return (after.to_string(), Some(format!("#{color_hex}")));
                 }
             }
         }
     }
     // Named color or no spot notation: return as-is.
-    s.to_string()
+    (s.to_string(), None)
 }
 
+/// Strip Creole/HTML markup from a display name to produce a plain identifier.
+/// Used when a class is declared with a quoted markup name but no `as` alias.
 fn strip_creole_for_id(s: &str) -> String {
     let mut out = s.to_string();
     for marker in &["**", "//", "__", "--"] {

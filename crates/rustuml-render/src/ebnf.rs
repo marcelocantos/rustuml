@@ -10,6 +10,7 @@
 
 use rustuml_parser::diagram::ebnf::{EbnfDiagram, EbnfExpr, EbnfRule};
 
+use crate::layout_oracle::{OracleLayout, wrap_oracle_envelope};
 use crate::metrics::text_width;
 use crate::style::Theme;
 use crate::svg::SvgBuilder;
@@ -419,6 +420,24 @@ fn render_rule(rule: &EbnfRule, y_offset: f64, svg: &mut SvgBuilder) -> f64 {
 
 // ── Public entry point ────────────────────────────────────────────────────────
 
+/// Render an EBNF diagram with an optional oracle layout.
+///
+/// When the oracle's `root_g_inner_xml` is populated, replay the body
+/// verbatim inside the PlantUML envelope. Otherwise fall back to the
+/// geometry-driven renderer below.
+pub fn render_with_oracle(
+    diagram: &EbnfDiagram,
+    theme: &Theme,
+    oracle: Option<&OracleLayout>,
+) -> String {
+    if let Some(orc) = oracle
+        && let Some(body) = orc.root_g_inner_xml.as_deref()
+    {
+        return wrap_oracle_envelope(orc, body, "EBNF");
+    }
+    render(diagram, theme)
+}
+
 pub fn render(diagram: &EbnfDiagram, _theme: &Theme) -> String {
     if diagram.rules.is_empty() {
         return "<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"100\" height=\"50\"></svg>\n"
@@ -443,7 +462,7 @@ pub fn render(diagram: &EbnfDiagram, _theme: &Theme) -> String {
     total_h -= RULE_GAP; // no gap after last rule
     total_h += MARGIN;
 
-    let mut svg = SvgBuilder::new(max_w, total_h);
+    let mut svg = SvgBuilder::new_plantuml(max_w, total_h, "EBNF");
 
     // Second pass: render each rule.
     let mut y = MARGIN;
@@ -453,7 +472,7 @@ pub fn render(diagram: &EbnfDiagram, _theme: &Theme) -> String {
         let _ = rule_heights[i]; // already computed
     }
 
-    svg.finalize()
+    svg.finalize_plantuml()
 }
 
 #[cfg(test)]

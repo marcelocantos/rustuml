@@ -3,6 +3,24 @@
 
 //! SVG rendering for parsed PlantUML diagrams.
 
+/// Product name embedded in user-facing strings of the rendered SVG
+/// (welcome screen and any other in-diagram brand mention). Always
+/// `RustUML` — the strict-XML golden_pairs comparator rebrands the
+/// goldens' `PlantUML` to `RustUML` on the fly so parity tests still
+/// pass (see `rustuml_oracle::compare::rebrand_plantuml`).
+///
+/// **Not configurable:** the `<?plantuml ?>` processing instruction is
+/// a format-identifier (consumed by tools that recognise PlantUML's
+/// PI convention), not a brand. It stays `plantuml` regardless.
+pub const fn product_name() -> &'static str {
+    "RustUML"
+}
+
+/// URL shown in the welcome-screen "more info on …" line.
+pub const fn product_url() -> &'static str {
+    "https://github.com/marcelocantos/rustuml"
+}
+
 pub mod activity;
 pub mod archimate;
 pub mod ascii;
@@ -18,6 +36,7 @@ pub mod ditaa;
 pub mod dot_diagram;
 pub mod ebnf;
 pub mod eps;
+pub mod filter_registry;
 pub mod font_metrics;
 pub mod gantt;
 pub mod git_diagram;
@@ -40,6 +59,7 @@ pub mod sprite;
 pub mod state;
 pub mod style;
 pub mod svg;
+pub mod text_render;
 pub mod timing;
 pub mod usecase;
 pub mod wbs;
@@ -77,7 +97,7 @@ pub fn render_svg_with_theme(diagram: &Diagram, theme: &Theme) -> String {
     } else {
         skinparam::apply_skinparams(theme, meta_params)
     };
-    render_with_theme(diagram, &effective_theme)
+    render_under_filter_registry(diagram, |d| render_with_theme(d, &effective_theme))
 }
 
 /// Render a parsed diagram to SVG with optional oracle layout data.
@@ -92,7 +112,59 @@ pub fn render_svg_with_oracle(diagram: &Diagram, oracle: Option<&OracleLayout>) 
     } else {
         skinparam::apply_skinparams(&Theme::default(), meta_params)
     };
-    render_with_theme_and_oracle(diagram, &theme, oracle)
+    render_under_filter_registry(diagram, |d| render_with_theme_and_oracle(d, &theme, oracle))
+}
+
+/// Install a fresh background-filter registry for the duration of one
+/// render call, then splice the collected `<filter>` elements into the
+/// final SVG's `<defs>` block. PlantUML-shaped SVGs ship a `<defs/>` self-
+/// closing tag when there is nothing to put in there; if any segment
+/// requested a filter, we rewrite that occurrence into a `<defs>...</defs>`
+/// block holding the filters in insertion order.
+fn render_under_filter_registry(
+    diagram: &Diagram,
+    render: impl FnOnce(&Diagram) -> String,
+) -> String {
+    let source = diagram.meta().source.as_deref().unwrap_or("");
+    let (svg, registry) = filter_registry::with_registry(source, || render(diagram));
+    let svg = if registry.is_empty() {
+        svg
+    } else {
+        // PlantUML-shape SVGs emit `<defs/>`; substitute. Other shapes may not
+        // contain `<defs/>` at all (no entry point allocated any background),
+        // in which case nothing to substitute.
+        let defs_content = registry.render_defs_content();
+        let replacement = format!("<defs>{defs_content}</defs>");
+        svg.replacen("<defs/>", &replacement, 1)
+    };
+    rebrand_in_svg(svg)
+}
+
+/// Swap PlantUML's own brand self-references for rustuml equivalents in
+/// the rendered SVG. Targets only the specific welcome-screen phrases
+/// that PlantUML emits when describing itself — never bare "PlantUML" or
+/// the plantuml.com URL on their own, because those legitimately appear
+/// in user content (e.g. `[[https://plantuml.com]]` link markup).
+///
+/// The `<?plantuml ?>` PI is intentionally lowercased and untouched.
+fn rebrand_in_svg(svg: String) -> String {
+    let name = product_name();
+    // Each pair: (PlantUML self-reference, rustuml replacement).
+    // Add new entries as PlantUML's welcome / error pages are exercised.
+    let needles: &[(&str, String)] = &[
+        ("Welcome to PlantUML!", format!("Welcome to {name}!")),
+        (
+            "more information about PlantUML syntax on",
+            format!("more information about {name} syntax on"),
+        ),
+    ];
+    let mut out = svg;
+    for (from, to) in needles {
+        if out.contains(from) {
+            out = out.replace(from, to);
+        }
+    }
+    out
 }
 
 fn render_with_theme_and_oracle(
@@ -106,6 +178,21 @@ fn render_with_theme_and_oracle(
         Diagram::Component(comp) => component::render_with_oracle(comp, theme, oracle),
         Diagram::Deployment(dep) => deployment::render_with_oracle(dep, theme, oracle),
         Diagram::UseCase(uc) => usecase::render_with_oracle(uc, theme, oracle),
+        Diagram::Object(obj) => object::render_with_oracle(obj, theme, oracle),
+        Diagram::Json(jd) => json_diagram::render_with_oracle(jd, theme, oracle),
+        Diagram::Timing(td) => timing::render_with_oracle(td, theme, oracle),
+        Diagram::Gantt(g) => gantt::render_with_oracle(g, theme, oracle),
+        Diagram::Salt(s) => salt::render_with_oracle(s, theme, oracle),
+        Diagram::Nwdiag(nw) => nwdiag::render_with_oracle(nw, theme, oracle),
+        Diagram::Archimate(a) => archimate::render_with_oracle(a, theme, oracle),
+        Diagram::Regex(r) => regex_diagram::render_with_oracle(r, theme, oracle),
+        Diagram::Ebnf(e) => ebnf::render_with_oracle(e, theme, oracle),
+        Diagram::Board(b) => board::render_with_oracle(b, theme, oracle),
+        Diagram::MindMap(mm) => mindmap::render_with_oracle(mm, theme, oracle),
+        Diagram::Wbs(w) => wbs::render_with_oracle(w, theme, oracle),
+        Diagram::Activity(act) => activity::render_with_oracle(act, theme, oracle),
+        Diagram::Sequence(seq) => sequence::render_with_oracle(seq, theme, oracle),
+        Diagram::Math(m) => math::render_with_oracle(m, theme, oracle),
         _ => render_with_theme(diagram, theme),
     }
 }

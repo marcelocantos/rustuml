@@ -1093,7 +1093,7 @@ dependencies = [
 
 [[package]]
 name = "rustuml"
-version = "0.6.0"
+version = "0.7.0"
 dependencies = [
  "rustuml-parser",
  "rustuml-render",
@@ -1102,21 +1102,21 @@ dependencies = [
 
 [[package]]
 name = "rustuml-layout"
-version = "0.6.0"
+version = "0.7.0"
 dependencies = [
  "cc",
 ]
 
 [[package]]
 name = "rustuml-math"
-version = "0.6.0"
+version = "0.7.0"
 dependencies = [
  "katex",
 ]
 
 [[package]]
 name = "rustuml-oracle"
-version = "0.6.0"
+version = "0.7.0"
 dependencies = [
  "anyhow",
  "num_cpus",
@@ -1132,8 +1132,9 @@ dependencies = [
 
 [[package]]
 name = "rustuml-parser"
-version = "0.6.0"
+version = "0.7.0"
 dependencies = [
+ "libc",
  "regex",
  "serde",
  "serde_json",
@@ -1142,7 +1143,7 @@ dependencies = [
 
 [[package]]
 name = "rustuml-render"
-version = "0.6.0"
+version = "0.7.0"
 dependencies = [
  "ab_glyph",
  "regex",

@@ -38,6 +38,10 @@ struct ObjectParser {
     current_package: Option<usize>,
     /// Current 1-based source line number (set before each parse_line call).
     current_line: usize,
+    /// Prefix being collected from a `skinparam <prefix> { … }` block.
+    /// When non-None, every `Key Value` line inside the block becomes a
+    /// `<prefix><Key>` skinparam entry.
+    current_skin_prefix: Option<String>,
 }
 
 impl ObjectParser {
@@ -51,6 +55,7 @@ impl ObjectParser {
             current_object: None,
             current_package: None,
             current_line: 0,
+            current_skin_prefix: None,
         }
     }
 
@@ -82,6 +87,25 @@ impl ObjectParser {
 
     fn parse_line(&mut self, line_num: usize, line: &str) -> Result<(), ParseError> {
         self.current_line = line_num;
+        // Inside a `skinparam <prefix> { ... }` block?
+        if let Some(prefix) = &self.current_skin_prefix {
+            let trimmed = line.trim();
+            if trimmed == "}" {
+                self.current_skin_prefix = None;
+                return Ok(());
+            }
+            // `Key Value` (whitespace-separated) becomes `<prefix><Key>` = `Value`.
+            if let Some((k, v)) = trimmed.split_once(char::is_whitespace) {
+                // Lower-case the first letter of `Key` so it concatenates
+                // legibly: `object` + `BackgroundColor` → `objectBackgroundColor`.
+                let key = format!("{}{}", prefix, k.trim());
+                self.meta.skinparams.push(crate::diagram::SkinParam {
+                    key,
+                    value: v.trim().to_string(),
+                });
+            }
+            return Ok(());
+        }
         // Inside an object/map body?
         if self.current_object.is_some() {
             if line == "}" {
@@ -421,6 +445,14 @@ impl ObjectParser {
             return true;
         }
         if let Some(rest) = line.strip_prefix("skinparam ") {
+            let trimmed = rest.trim_end();
+            // Nested form: `skinparam object {` — enter prefix-collection mode.
+            if let Some(prefix) = trimmed.strip_suffix('{').map(|s| s.trim())
+                && !prefix.is_empty()
+            {
+                self.current_skin_prefix = Some(prefix.to_string());
+                return true;
+            }
             if let Some((key, value)) = rest.split_once(' ') {
                 self.meta.skinparams.push(crate::diagram::SkinParam {
                     key: key.trim().to_string(),

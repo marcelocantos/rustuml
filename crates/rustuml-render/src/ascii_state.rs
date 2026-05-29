@@ -174,6 +174,9 @@ mod tests {
             descriptions: vec![],
             substates: vec![],
             source_line: 0,
+            fill: None,
+            stroke: None,
+            stroke_style: None,
         }
     }
 
