@@ -575,12 +575,7 @@ fn translate_qualified_name(label: &str) -> String {
     label
         .chars()
         .map(|c| {
-            if c.is_alphanumeric()
-                || c == '.'
-                || c == '_'
-                || c == ' '
-                || c == '-'
-                || !c.is_ascii()
+            if c.is_alphanumeric() || c == '.' || c == '_' || c == ' ' || c == '-' || !c.is_ascii()
             {
                 c
             } else {
@@ -1004,6 +999,11 @@ struct ClassFontOverrides {
     /// `skinparam ClassFontStyle` — bold/italic styling of the class name.
     font_bold: bool,
     font_italic: bool,
+    /// `skinparam ClassAttributeFontSize` — member (field/method) font size.
+    attr_font_size: Option<u32>,
+    /// `skinparam ClassAttributeFontStyle` — member bold/italic styling.
+    attr_font_bold: bool,
+    attr_font_italic: bool,
 }
 
 impl ClassFontOverrides {
@@ -1015,12 +1015,19 @@ impl ClassFontOverrides {
                 .map(|sp| sp.value.clone())
         };
         let style = find(&["ClassFontStyle"]).unwrap_or_default().to_lowercase();
+        let attr_style = find(&["ClassAttributeFontStyle"])
+            .unwrap_or_default()
+            .to_lowercase();
         Self {
             font_color: find(&["ClassFontColor"]),
             attr_font_color: find(&["ClassAttributeFontColor"]),
             font_size: find(&["ClassFontSize"]).and_then(|v| v.trim().parse::<u32>().ok()),
             font_bold: style.contains("bold"),
             font_italic: style.contains("italic"),
+            attr_font_size: find(&["ClassAttributeFontSize"])
+                .and_then(|v| v.trim().parse::<u32>().ok()),
+            attr_font_bold: attr_style.contains("bold"),
+            attr_font_italic: attr_style.contains("italic"),
         }
     }
 }
@@ -1461,6 +1468,14 @@ fn render_entity_content(
         })
         .unwrap_or_else(|| "#000000".to_string());
     let member_fill: &str = &member_fill_owned;
+    // Member-text font overrides from `skinparam ClassAttributeFontSize` /
+    // `ClassAttributeFontStyle`. Default to the canonical 14px, non-styled.
+    let attr_font = AttrFont {
+        fill: member_fill,
+        size: font.attr_font_size.unwrap_or(14),
+        bold: font.attr_font_bold,
+        italic: font.attr_font_italic,
+    };
     let style_default = format!("stroke:{};stroke-width:{};", BORDER_COLOR, BORDER_WIDTH);
     let style = oracle_style.unwrap_or(style_default.as_str());
     let rx_str = oracle_rx.unwrap_or("2.5");
@@ -1549,9 +1564,13 @@ fn render_entity_content(
 
     // Stereotype text (if present).
     // Name font size/style honour `skinparam ClassFontSize`/`ClassFontStyle`.
-    let name_font_size = font.font_size.unwrap_or(14);
-    let name_bold = font.font_bold;
-    let name_italic = is_abstract || is_interface || font.font_italic;
+    // PlantUML sizes the entity name from `ClassFontSize`; when that is unset
+    // but `ClassAttributeFontSize` is, the name inherits the attribute size.
+    let name_font_size = font.font_size.or(font.attr_font_size).unwrap_or(14);
+    // As with font size, the name inherits `ClassAttributeFontStyle` when
+    // `ClassFontStyle` does not itself set the corresponding flag.
+    let name_bold = font.font_bold || font.attr_font_bold;
+    let name_italic = is_abstract || is_interface || font.font_italic || font.attr_font_italic;
     let name_tl =
         text_render::measure_no_underline(&entity.label, name_font_size as f64, name_bold);
     if dim.has_stereotypes {
@@ -1762,7 +1781,7 @@ fn render_entity_content(
             } else {
                 None
             };
-            render_member_line(svg, member, x, eff_y, vis_ov, narrow_default, member_fill);
+            render_member_line(svg, member, x, eff_y, vis_ov, narrow_default, attr_font);
             member_y += MEMBER_SPACING;
         }
     } else if effectively_no_members {
@@ -1829,7 +1848,7 @@ fn render_entity_content(
                     eff_member_y,
                     vis_ov,
                     is_enum_entity,
-                    member_fill,
+                    attr_font,
                 );
             } else {
                 let text = format_member_display(member);
@@ -2029,7 +2048,7 @@ fn render_entity_content(
                     eff_y,
                     vis_ov,
                     narrow_after_separator,
-                    member_fill,
+                    attr_font,
                 );
                 member_y += MEMBER_SPACING;
                 // Emit any inline separators that fall AFTER this field.
@@ -2130,7 +2149,7 @@ fn render_entity_content(
                         eff_y,
                         vis_ov,
                         methods_narrow_default,
-                        member_fill,
+                        attr_font,
                     );
                     method_y += MEMBER_SPACING;
                 }
@@ -2179,7 +2198,7 @@ fn render_entity_content(
                     eff_y,
                     vis_ov,
                     methods_narrow_default,
-                    member_fill,
+                    attr_font,
                 );
                 method_y += MEMBER_SPACING;
             }
@@ -2220,7 +2239,7 @@ fn render_member_line(
     baseline_y: f64,
     vis_icon_y_override: Option<f64>,
     default_uses_narrow: bool,
-    text_fill: &str,
+    attr_font: AttrFont,
 ) {
     let text = format_member_display(member);
 
@@ -2341,16 +2360,26 @@ fn render_member_line(
         &TextBase {
             x: text_x,
             y: baseline_y,
-            font_size: 14,
+            font_size: attr_font.size,
             font_family: "sans-serif",
-            fill: text_fill,
-            bold: false,
-            italic: member.is_abstract,
+            fill: attr_font.fill,
+            bold: attr_font.bold,
+            italic: member.is_abstract || attr_font.italic,
             underline: member.is_static,
             skip_underline: true,
         },
     );
     svg.push_str(&text_buf);
+}
+
+/// Member-text styling: fill colour plus the font overrides resolved from
+/// `skinparam ClassAttributeFont*`.
+#[derive(Clone, Copy)]
+struct AttrFont<'a> {
+    fill: &'a str,
+    size: u32,
+    bold: bool,
+    italic: bool,
 }
 
 // ---------------------------------------------------------------------------
