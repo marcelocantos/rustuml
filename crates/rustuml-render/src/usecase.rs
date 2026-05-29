@@ -214,24 +214,60 @@ pub fn render_with_oracle(
         }
     }
 
-    // Top-level (non-member) entities in source-line order.
-    let mut top: Vec<(usize, bool, usize)> = Vec::new();
+    // Top-level (non-member) entities and notes in source-line order. Notes
+    // are emitted verbatim from the oracle (they are layout-shaped GMN
+    // entities) and consume entity-id slots via their captured `entity_id`.
+    enum Item {
+        Actor(usize),
+        UseCase(usize),
+        Note(usize),
+    }
+    let mut top: Vec<(usize, Item)> = Vec::new();
     for (i, a) in diagram.actors.iter().enumerate() {
         if !member_ids.contains(a.id.as_str()) {
-            top.push((a.source_line, true, i));
+            top.push((a.source_line, Item::Actor(i)));
         }
     }
     for (i, u) in diagram.use_cases.iter().enumerate() {
         if !member_ids.contains(u.id.as_str()) {
-            top.push((u.source_line, false, i));
+            top.push((u.source_line, Item::UseCase(i)));
+        }
+    }
+    if let Some(orc) = oracle {
+        for (i, ne) in orc.note_entities.iter().enumerate() {
+            let line = ne
+                .source_line
+                .as_deref()
+                .and_then(|s| s.parse::<usize>().ok())
+                .unwrap_or(usize::MAX);
+            top.push((line, Item::Note(i)));
         }
     }
     top.sort_by_key(|m| m.0);
-    for (_, is_actor, i) in top {
-        if is_actor {
-            render_actor_i(&mut svg, i);
-        } else {
-            render_uc_i(&mut svg, i);
+    for (_, item) in top {
+        match item {
+            Item::Actor(i) => render_actor_i(&mut svg, i),
+            Item::UseCase(i) => render_uc_i(&mut svg, i),
+            Item::Note(i) => {
+                if let Some(orc) = oracle {
+                    let ne = &orc.note_entities[i];
+                    let source_attr = ne
+                        .source_line
+                        .as_deref()
+                        .map(|s| format!(r#" data-source-line="{s}""#))
+                        .unwrap_or_default();
+                    let id_attr = ne
+                        .entity_id
+                        .as_deref()
+                        .map(|s| format!(r#" id="{s}""#))
+                        .unwrap_or_default();
+                    svg.raw(&format!("<!--entity {}-->", ne.qualified_name));
+                    svg.raw(&format!(
+                        r#"<g class="entity" data-qualified-name="{}"{source_attr}{id_attr}>{}</g>"#,
+                        ne.qualified_name, ne.inner_xml,
+                    ));
+                }
+            }
         }
     }
 
@@ -571,9 +607,10 @@ fn render_package_group(
     let Some(rect) = orc.entities.get(&pkg.name) else {
         return;
     };
-    let ent_id = id_map
-        .get(&format!("pkg::{}", pkg.name))
-        .cloned()
+    let ent_id = rect
+        .entity_id
+        .clone()
+        .or_else(|| id_map.get(&format!("pkg::{}", pkg.name)).cloned())
         .unwrap_or_else(|| "ent0003".to_string());
     let src_attr = source_line_attr(pkg.source_line);
     let fill = pkg
@@ -627,9 +664,16 @@ fn render_actor(
     id_map: &HashMap<String, String>,
     skin: &SkinColors,
 ) {
-    let ent_id = id_map
-        .get(&format!("actor::{}", actor.id))
-        .cloned()
+    // Prefer PlantUML's exact id allocation captured from the oracle; fall
+    // back to our source-line-derived counter when unavailable.
+    let orc_rect = oracle.and_then(|orc| {
+        orc.entities
+            .get(&actor.id)
+            .or_else(|| orc.entities.get(&actor.label))
+    });
+    let ent_id = orc_rect
+        .and_then(|r| r.entity_id.clone())
+        .or_else(|| id_map.get(&format!("actor::{}", actor.id)).cloned())
         .unwrap_or_else(|| "ent0002".to_string());
     svg.raw(&format!("<!--entity {}-->", actor.id));
     let src_attr = source_line_attr(actor.source_line);
@@ -673,11 +717,6 @@ fn render_actor(
     let cx_anchor = round_coord(cx);
     // Prefer PlantUML's captured per-line text x (label first, stereotype
     // second in document order) over reconstructing it from the rounded centre.
-    let orc_rect = oracle.and_then(|orc| {
-        orc.entities
-            .get(&actor.id)
-            .or_else(|| orc.entities.get(&actor.label))
-    });
     let captured_x = orc_rect.map(|r| r.text_x_values.as_slice()).unwrap_or(&[]);
     let captured_y = orc_rect.map(|r| r.text_y_values.as_slice()).unwrap_or(&[]);
     let label_x = captured_x
@@ -749,21 +788,22 @@ fn render_use_case(
     skin: &SkinColors,
 ) {
     let qualified = qualified_name(&uc.id, diagram);
-    let ent_id = id_map
-        .get(&format!("uc::{}", uc.id))
-        .cloned()
-        .unwrap_or_else(|| "ent0003".to_string());
-    svg.raw(&format!("<!--entity {}-->", uc.id));
-    let src_attr = source_line_attr(uc.source_line);
-    svg.raw(&format!(
-        r#"<g class="entity" data-qualified-name="{qualified}"{src_attr} id="{ent_id}">"#,
-    ));
     let orc_rect = oracle.and_then(|orc| {
         orc.entities
             .get(&qualified)
             .or_else(|| orc.entities.get(&uc.id))
             .or_else(|| orc.entities.get(&uc.label))
     });
+    // Prefer PlantUML's exact id allocation captured from the oracle.
+    let ent_id = orc_rect
+        .and_then(|r| r.entity_id.clone())
+        .or_else(|| id_map.get(&format!("uc::{}", uc.id)).cloned())
+        .unwrap_or_else(|| "ent0003".to_string());
+    svg.raw(&format!("<!--entity {}-->", uc.id));
+    let src_attr = source_line_attr(uc.source_line);
+    svg.raw(&format!(
+        r#"<g class="entity" data-qualified-name="{qualified}"{src_attr} id="{ent_id}">"#,
+    ));
     let (rx, ry) = if let Some(rect) = orc_rect {
         (rect.width / 2.0, rect.height / 2.0)
     } else {
