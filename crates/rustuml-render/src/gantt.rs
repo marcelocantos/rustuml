@@ -11,7 +11,7 @@
 use rustuml_parser::diagram::gantt::{GanttDiagram, GanttRow, GanttTask, TaskStart};
 
 use crate::layout_oracle::{OracleLayout, wrap_oracle_envelope};
-use crate::plantuml_metrics::{ascent, fmt_coord, text_width};
+use crate::plantuml_metrics::{ascent, descent, fmt_coord, text_width};
 use crate::style::Theme;
 use crate::svg::SvgBuilder;
 
@@ -263,7 +263,9 @@ pub fn render(diagram: &GanttDiagram, _theme: &Theme) -> String {
     };
 
     let total_height = if has_cal {
-        grid_bottom + CAL_BOT_MONTH_OFF + 6.0
+        // Bottom-most drawn element is the month-label text; the SVG box is
+        // its baseline plus the font descent, rounded up to a whole pixel.
+        (grid_bottom + CAL_BOT_MONTH_OFF + descent(MONTH_FONT)).ceil()
     } else {
         grid_bottom + BOTTOM_DAYNUM_OFF_PLAIN + 2.4669
     };
@@ -426,12 +428,22 @@ pub fn render(diagram: &GanttDiagram, _theme: &Theme) -> String {
             LaidRow::Task(task, idx) => {
                 let (start_day, dur) = resolved[*idx];
                 let ly = row_bar_top(vi) + ascent(TASK_FONT);
+                let label = task_label(task);
                 let lx = if dur == 0 {
                     start_day as f64 * DAY_WIDTH
                 } else {
-                    start_day as f64 * DAY_WIDTH + 6.0
+                    // Labels normally sit inside the bar (4px from its left
+                    // edge). When the text is wider than the bar, PlantUML
+                    // places it just past the bar's right edge instead.
+                    let bar_x = start_day as f64 * DAY_WIDTH + 2.0;
+                    let bar_w = (dur as f64 * DAY_WIDTH - 4.0).max(1.0);
+                    let label_w = text_width(&label, TASK_FONT, false);
+                    if label_w > bar_w {
+                        bar_x + bar_w + 4.0
+                    } else {
+                        bar_x + 4.0
+                    }
                 };
-                let label = task_label(task);
                 gantt_text(&mut svg, lx, ly, &label, TASK_FONT, TEXT_COLOR);
             }
         }
