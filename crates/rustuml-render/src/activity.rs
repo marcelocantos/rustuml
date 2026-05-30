@@ -3706,7 +3706,12 @@ fn emit_swimlanes(svg: &mut SvgEmitter, cx: f64, _y: f64, lanes: &[Lane]) -> f64
         let lane_cx = lane_cxs[lane_idx];
         let lane_y = if let Some(prev) = prev_lane_idx {
             let prev_cx = lane_cxs[prev];
-            let target_y = last_y + ARROW_LEN;
+            // Round the cross-lane drop target to 4 decimals (HALF_UP) before
+            // feeding it into the next lane's body layout. PlantUML rounds
+            // tile coordinates at each boundary, so without this the
+            // accumulated float carries sub-ULP excess that pushes downstream
+            // y-values one ULP above the golden at the 4th decimal.
+            let target_y = ((last_y + ARROW_LEN) * 10000.0 + 0.5).floor() / 10000.0;
             deferred_cross_lanes.push((prev_cx, last_y, lane_cx, target_y));
             target_y
         } else {
