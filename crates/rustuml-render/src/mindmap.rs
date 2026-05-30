@@ -43,6 +43,12 @@ const TEXT_H: f64 = 16.48828125;
 // getX1 = margin.left, getX2 = margin.right + 30 (LR rankdir). getX12 = LEVEL_DX.
 const GETX1: f64 = NODE_MARGIN;
 const GETX2: f64 = NODE_MARGIN + 30.0;
+// Title: bold 14pt text centred above the diagram. Its first baseline sits at
+// TITLE_TOP_PAD + ascent(14); the whole mind map shifts down by the title's
+// vertical band (top pad + text height + a 1px bottom gap).
+const TITLE_FONT_SIZE: f64 = 14.0;
+const TITLE_TOP_PAD: f64 = 20.0;
+const TITLE_BOTTOM_GAP: f64 = 1.0;
 
 const FILL_DEFAULT: &str = "#F1F1F1";
 const STROKE: &str = "#181818";
@@ -534,6 +540,19 @@ pub fn render(diagram: &MindMapDiagram, _theme: &Theme) -> String {
         shift_x(p, dx);
     }
 
+    // A `title` directive draws a centred bold caption above the tree and
+    // pushes the whole mind map down by the title's vertical band.
+    let title_dy = if diagram.meta.title.is_some() {
+        TITLE_TOP_PAD + TEXT_H + TITLE_BOTTOM_GAP
+    } else {
+        0.0
+    };
+    if title_dy > 0.0 {
+        for p in &mut placed {
+            shift_cy(p, title_dy);
+        }
+    }
+
     // PlantUML ceils the rightmost element edge to an integer pixel before
     // adding the trailing margin, so the width gains a fractional bump on top
     // of the nominal margin. After the shift above, `global_max_x` is the
@@ -552,8 +571,8 @@ pub fn render(diagram: &MindMapDiagram, _theme: &Theme) -> String {
     let total_w = shifted_max_x.ceil() + right_extra;
     // `global_max_cy` is the deepest rendered box's bottom edge. Add the node's
     // bottom style margin (NODE_MARGIN) to reach the layout band bottom, then
-    // the outer margin.
-    let total_h = global_max_cy + NODE_MARGIN + OUTER_MARGIN;
+    // the outer margin, plus any title band pushed above.
+    let total_h = global_max_cy + NODE_MARGIN + OUTER_MARGIN + title_dy;
     let w_i = total_w as i64;
     let h_i = total_h.ceil() as i64;
 
@@ -563,6 +582,31 @@ pub fn render(diagram: &MindMapDiagram, _theme: &Theme) -> String {
         r##"<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" contentStyleType="text/css" data-diagram-type="MINDMAP" height="{h_i}px" preserveAspectRatio="none" style="width:{w_i}px;height:{h_i}px;background:#FFFFFF;" version="1.1" viewBox="0 0 {w_i} {h_i}" width="{w_i}px" zoomAndPan="magnify"><?plantuml ?><defs/><g>"##,
     )
     .unwrap();
+
+    if let Some(title) = &diagram.meta.title {
+        // Centre the bold title on the diagram's (unrounded) content width.
+        let title_w = text_render::measure(title, TITLE_FONT_SIZE, true);
+        let unrounded_w = shifted_max_x + right_extra;
+        let title_x = (unrounded_w - title_w) / 2.0 - 0.5;
+        let title_y = TITLE_TOP_PAD + pm::ascent(TITLE_FONT_SIZE);
+        buf.push_str(r#"<g class="title" data-source-line="1">"#);
+        text_render::emit_text(
+            &mut buf,
+            title,
+            &text_render::TextBase {
+                x: title_x,
+                y: title_y,
+                font_size: TITLE_FONT_SIZE as u32,
+                font_family: "sans-serif",
+                fill: "#000000",
+                bold: true,
+                italic: false,
+                underline: false,
+                skip_underline: false,
+            },
+        );
+        buf.push_str("</g>");
+    }
 
     for root in &placed {
         render_subtree(&mut buf, root);
