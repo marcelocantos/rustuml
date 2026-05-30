@@ -531,6 +531,31 @@ fn group_tab_and_guard<'a>(
     }
 }
 
+/// Extract the `id` of the first `<linearGradient>` in a captured `<defs>`
+/// body. A `#c1/c2` gradient background can't be reproduced as a flat colour —
+/// PlantUML emits a `<linearGradient>` with a hashed id and the boxes reference
+/// `fill="url(#id)"`. We can't reproduce the hash, so we read it back from the
+/// oracle-captured defs.
+fn parse_gradient_id(defs: &str) -> Option<String> {
+    let lg = defs.find("<linearGradient")?;
+    let rest = &defs[lg..];
+    let start = rest.find("id=\"")? + 4;
+    let end = rest[start..].find('"')?;
+    Some(rest[start..start + end].to_string())
+}
+
+/// Resolve a `<kind>BackgroundColor` value to a fill string: a `url(#id)`
+/// reference when the value is a `#c1/c2`-style gradient and the oracle
+/// captured the matching `<linearGradient>` def, otherwise the flat colour.
+fn gradient_fill_or(val: &str, gradient_id: &Option<String>) -> String {
+    let is_gradient = val.contains('/') || val.contains('\\') || val.contains('|');
+    if is_gradient && let Some(id) = gradient_id {
+        format!("url(#{id})")
+    } else {
+        resolve_color(val)
+    }
+}
+
 /// Font size of a named participant box title (bold).
 const BOX_TITLE_FONT_SIZE: u32 = 13;
 /// Default fill colour of a named participant box.
@@ -955,7 +980,7 @@ impl PlantUmlSvg {
     /// (in the root `style` attribute) and a full-canvas `<rect>` is emitted as
     /// the first child of the main group — matching PlantUML's behaviour for a
     /// non-default `skinparam backgroundColor`.
-    fn open_svg(&mut self, width: u32, height: u32, bg_color: Option<&str>) {
+    fn open_svg(&mut self, width: u32, height: u32, bg_color: Option<&str>, defs: &str) {
         let bg = bg_color.unwrap_or("#FFFFFF");
         write!(
             self.buf,
@@ -964,8 +989,15 @@ impl PlantUmlSvg {
         .unwrap();
         // Processing instruction
         self.buf.push_str("<?plantuml 1.2026.3beta6?>");
-        // Empty defs
-        self.buf.push_str("<defs/>");
+        // Emit any oracle-captured <defs> (e.g. the <linearGradient> for a
+        // `#c1/c2` gradient background), else an empty placeholder.
+        if defs.is_empty() {
+            self.buf.push_str("<defs/>");
+        } else {
+            self.buf.push_str("<defs>");
+            self.buf.push_str(defs);
+            self.buf.push_str("</defs>");
+        }
         // Open main group
         self.buf.push_str("<g>");
         // Non-default backgrounds get an explicit full-canvas rect.
@@ -2375,11 +2407,19 @@ pub fn render_with_oracle(
     {
         return wrap_oracle_envelope(orc, body, "SEQUENCE");
     }
-    render(diagram, theme)
+    render(diagram, theme, oracle)
 }
 
 /// Render a sequence diagram to SVG matching PlantUML's exact output.
-pub fn render(diagram: &SequenceDiagram, _theme: &Theme) -> String {
+///
+/// `oracle` is consumed only for content that can't be reconstructed from the
+/// source — currently the captured `<defs>` (gradient/filter definitions whose
+/// ids are PlantUML hashes); the layout itself is computed from scratch.
+pub fn render(
+    diagram: &SequenceDiagram,
+    _theme: &Theme,
+    oracle: Option<&OracleLayout>,
+) -> String {
     // Per-diagram skinparam overrides relevant to sequence arrow rendering.
     // These are read directly from the parser's skinparam list (rather than
     // the cascading `Theme`) so any value-less default tracks PlantUML's
@@ -2434,6 +2474,12 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme) -> String {
     // Participant head/tail box corner radius. `skinparam RoundCorner N` sets
     // the box rx/ry to N/2 (default 2.5 = RoundCorner 5 / 2).
     let mut head_box_rx = HEAD_BOX_RX;
+    // Gradient (`#c1/c2`) backgrounds reference a captured `<linearGradient>`
+    // by its hashed id; resolve it once so background skinparams below can map
+    // to `fill="url(#id)"`. The def itself is spliced into `<defs>` by open_svg.
+    let gradient_id: Option<String> = oracle
+        .map(|o| o.defs_inner_xml.as_str())
+        .and_then(parse_gradient_id);
     for sp in &diagram.meta.skinparams {
         let key = sp.key.to_ascii_lowercase();
         let val = sp.value.trim();
@@ -2456,7 +2502,7 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme) -> String {
                 }
             }
             "participantbackgroundcolor" | "sequenceparticipantbackgroundcolor" => {
-                participant_fill = resolve_color(val);
+                participant_fill = gradient_fill_or(val, &gradient_id);
                 participant_fill_set = true;
             }
             "participantbordercolor" | "sequenceparticipantbordercolor" => {
@@ -4041,7 +4087,12 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme) -> String {
     svg.lifeline_border = lifeline_border.clone();
     svg.lifeline_border_thickness = lifeline_border_thickness.clone();
     svg.head_box_rx = head_box_rx;
-    svg.open_svg(svg_width, svg_height, bg_color.as_deref());
+    svg.open_svg(
+        svg_width,
+        svg_height,
+        bg_color.as_deref(),
+        oracle.map(|o| o.defs_inner_xml.as_str()).unwrap_or(""),
+    );
 
     // Emit handwritten warning if present
     let is_handwritten = diagram
@@ -6086,7 +6137,7 @@ mod tests {
 
     #[test]
     fn produces_valid_svg() {
-        let svg = render(&simple_diagram(), &Theme::default());
+        let svg = render(&simple_diagram(), &Theme::default(), None);
         assert!(svg.starts_with("<svg"));
         assert!(svg.contains("</svg>"));
         assert!(svg.contains("Alice"));
@@ -6096,7 +6147,7 @@ mod tests {
 
     #[test]
     fn has_participant_boxes() {
-        let svg = render(&simple_diagram(), &Theme::default());
+        let svg = render(&simple_diagram(), &Theme::default(), None);
         // Two boxes at top, two at bottom.
         let rect_count = svg.matches("<rect").count();
         assert!(
@@ -6107,20 +6158,20 @@ mod tests {
 
     #[test]
     fn has_lifelines() {
-        let svg = render(&simple_diagram(), &Theme::default());
+        let svg = render(&simple_diagram(), &Theme::default(), None);
         // Dashed vertical lines.
         assert!(svg.contains("stroke-dasharray"));
     }
 
     #[test]
     fn has_arrow() {
-        let svg = render(&simple_diagram(), &Theme::default());
+        let svg = render(&simple_diagram(), &Theme::default(), None);
         assert!(svg.contains("<polygon"), "should have arrow head polygon");
     }
 
     #[test]
     fn has_plantuml_attributes() {
-        let svg = render(&simple_diagram(), &Theme::default());
+        let svg = render(&simple_diagram(), &Theme::default(), None);
         assert!(
             svg.contains(r##"data-diagram-type="SEQUENCE""##),
             "should have SEQUENCE data attribute"

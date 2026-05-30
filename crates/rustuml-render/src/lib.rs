@@ -293,7 +293,7 @@ fn render_with_theme_and_oracle(
 
 fn render_with_theme(diagram: &Diagram, theme: &Theme) -> String {
     match diagram {
-        Diagram::Sequence(seq) => sequence::render(seq, theme),
+        Diagram::Sequence(seq) => sequence::render(seq, theme, None),
         Diagram::Class(cls) => class::render(cls, theme),
         Diagram::State(st) => state::render(st, theme),
         Diagram::Activity(act) => activity::render(act, theme),
