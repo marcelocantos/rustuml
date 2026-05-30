@@ -569,6 +569,25 @@ fn display_name(uc: &UseCase) -> &str {
     }
 }
 
+/// PlantUML sanitises `data-qualified-name` (and the entity key it stores in
+/// the oracle map) by replacing every non-ASCII character with `.`. The visible
+/// label text keeps the original unicode; only the identifier attribute is
+/// folded.
+fn sanitize_qname(s: &str) -> String {
+    s.chars()
+        .map(|c| if c.is_ascii() { c } else { '.' })
+        .collect()
+}
+
+/// The form PlantUML uses in the `<!--entity/cluster …-->` comments: non-ASCII
+/// characters are replaced with `?` (distinct from the `.` used in
+/// `data-qualified-name`).
+fn sanitize_comment(s: &str) -> String {
+    s.chars()
+        .map(|c| if c.is_ascii() { c } else { '?' })
+        .collect()
+}
+
 fn qualified_name(id: &str, diagram: &UseCaseDiagram) -> String {
     // Resolve the display name for use cases (label-declared ones use their
     // label, not the space-stripped id).
@@ -580,10 +599,10 @@ fn qualified_name(id: &str, diagram: &UseCaseDiagram) -> String {
         .unwrap_or(id);
     for pkg in &diagram.packages {
         if pkg.elements.iter().any(|e| e == id) {
-            return format!("{}.{display}", pkg.name);
+            return sanitize_qname(&format!("{}.{display}", pkg.name));
         }
     }
-    display.to_string()
+    sanitize_qname(display)
 }
 
 fn fallback_actor_center(i: usize, _dim: &ActorDim) -> (f64, f64) {
@@ -626,7 +645,13 @@ fn render_package_group(
     id_map: &HashMap<String, String>,
 ) {
     let Some(orc) = oracle else { return };
-    let Some(rect) = orc.entities.get(&pkg.name) else {
+    // PlantUML keys clusters by the sanitised qualified name (non-ASCII → `.`).
+    let qname = sanitize_qname(&pkg.name);
+    let Some(rect) = orc
+        .entities
+        .get(&qname)
+        .or_else(|| orc.entities.get(&pkg.name))
+    else {
         return;
     };
     let ent_id = id_map
@@ -639,10 +664,9 @@ fn render_package_group(
         .as_deref()
         .map(resolve_fill)
         .unwrap_or_else(|| "none".to_string());
-    svg.raw(&format!("<!--cluster {}-->", pkg.name));
+    svg.raw(&format!("<!--cluster {}-->", sanitize_comment(&pkg.name)));
     svg.raw(&format!(
-        r#"<g class="cluster" data-qualified-name="{}"{src_attr} id="{ent_id}">"#,
-        pkg.name
+        r#"<g class="cluster" data-qualified-name="{qname}"{src_attr} id="{ent_id}">"#,
     ));
     let label_w = text_render::measure(&pkg.name, FONT_SIZE, true);
     let (label_x, label_y) = match pkg.kind {
@@ -748,12 +772,13 @@ fn render_actor(
     // For a label-declared actor (`actor "External System"`) PlantUML keys the
     // qualified name and comment on the original label (spaces and all); for an
     // aliased/bare actor it uses the id.
-    let display = if actor.id == label_to_id(&actor.label) {
+    let display_raw = if actor.id == label_to_id(&actor.label) {
         actor.label.as_str()
     } else {
         actor.id.as_str()
     };
-    svg.raw(&format!("<!--entity {display}-->"));
+    svg.raw(&format!("<!--entity {}-->", sanitize_comment(display_raw)));
+    let display = sanitize_qname(display_raw);
     let src_attr = source_line_attr(actor.source_line);
     svg.raw(&format!(
         r#"<g class="entity" data-qualified-name="{display}"{src_attr} id="{ent_id}">"#,
@@ -882,7 +907,10 @@ fn render_use_case(
     let ent_id = oracle_id
         .or_else(|| id_map.get(&format!("uc::{}", uc.id)).cloned())
         .unwrap_or_else(|| "ent0003".to_string());
-    svg.raw(&format!("<!--entity {}-->", display_name(uc)));
+    svg.raw(&format!(
+        "<!--entity {}-->",
+        sanitize_comment(display_name(uc))
+    ));
     let src_attr = source_line_attr(uc.source_line);
     svg.raw(&format!(
         r#"<g class="entity" data-qualified-name="{qualified}"{src_attr} id="{ent_id}">"#,
