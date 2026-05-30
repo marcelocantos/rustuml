@@ -1217,6 +1217,11 @@ struct ClassFontOverrides {
     /// `skinparam ClassAttributeFontStyle` — member bold/italic styling.
     attr_font_bold: bool,
     attr_font_italic: bool,
+    /// `skinparam classHeaderBackgroundColor` raw value. When this is a
+    /// gradient (`#c1/#c2`) distinct from the body background, the header
+    /// repaint rects must reference the header gradient's `<defs>` id rather
+    /// than the body fill.
+    header_background: Option<String>,
 }
 
 impl ClassFontOverrides {
@@ -1250,8 +1255,62 @@ impl ClassFontOverrides {
                 .or(default_font_size),
             attr_font_bold: attr_style.contains("bold"),
             attr_font_italic: attr_style.contains("italic"),
+            header_background: find(&["classHeaderBackgroundColor"]),
         }
     }
+}
+
+/// Resolve the `<defs>` linearGradient id whose two stops match the gradient
+/// spelled `c1/c2` (PlantUML's `#c1/#c2` shorthand). `defs_inner_xml` carries
+/// the captured `<linearGradient id=…><stop stop-color=…/><stop stop-color=…/>`
+/// entries; we parse each gradient's id and its two stop colours and pick the
+/// one whose colours match (case-insensitively). Returns `None` when no
+/// gradient matches (e.g. the header colour is solid, or the value isn't a
+/// gradient at all). Only granular id + stop-colour scalars are consumed.
+fn resolve_gradient_id(defs_inner_xml: &str, c1: &str, c2: &str) -> Option<String> {
+    let c1 = c1.trim_start_matches('#');
+    let c2 = c2.trim_start_matches('#');
+    let mut rest = defs_inner_xml;
+    while let Some(start) = rest.find("<linearGradient") {
+        rest = &rest[start..];
+        // Isolate this gradient element (up to its closing tag).
+        let end = rest
+            .find("</linearGradient>")
+            .map(|e| e + "</linearGradient>".len());
+        let (elem, after) = match end {
+            Some(e) => (&rest[..e], &rest[e..]),
+            None => (rest, ""),
+        };
+        rest = after;
+
+        let id = attr_value(elem, "id");
+        let stops: Vec<&str> = elem
+            .match_indices("stop-color=\"")
+            .filter_map(|(i, _)| {
+                let v = &elem[i + "stop-color=\"".len()..];
+                v.find('"').map(|q| &v[..q])
+            })
+            .collect();
+        if let (Some(id), [s0, s1, ..]) = (id, stops.as_slice())
+            && s0.trim_start_matches('#').eq_ignore_ascii_case(c1)
+            && s1.trim_start_matches('#').eq_ignore_ascii_case(c2)
+        {
+            return Some(id.to_string());
+        }
+        if after.is_empty() {
+            break;
+        }
+    }
+    None
+}
+
+/// Read the value of a double-quoted attribute `name="…"` from an element's
+/// opening tag text. Returns the first match.
+fn attr_value<'a>(elem: &'a str, name: &str) -> Option<&'a str> {
+    let needle = format!("{name}=\"");
+    let i = elem.find(&needle)? + needle.len();
+    let v = &elem[i..];
+    v.find('"').map(|q| &v[..q])
 }
 
 /// Render the full SVG with PlantUML-compatible structure.
@@ -1621,6 +1680,21 @@ fn render_plantuml_svg(
                 r#"<a href="{h}" target="_top" title="{title}" xlink:actuate="onRequest" xlink:href="{h}" xlink:show="new" xlink:title="{title}" xlink:type="simple">"#,
             )
         });
+        // When `classHeaderBackgroundColor` is itself a gradient distinct from
+        // the body gradient, the header repaint must reference the header
+        // gradient's own `<defs>` id. Resolve it by matching the header
+        // colour's two stops against the captured `<defs>`; otherwise the
+        // header reuses the body fill (single-gradient case).
+        let header_gradient_fill = font
+            .header_background
+            .as_deref()
+            .and_then(|hb| hb.split_once('/'))
+            .and_then(|(c1, c2)| {
+                oracle
+                    .map(|o| o.defs_inner_xml.as_str())
+                    .and_then(|defs| resolve_gradient_id(defs, c1.trim(), c2.trim()))
+            })
+            .map(|id| format!("url(#{id})"));
         render_entity_content(
             &mut svg,
             entity,
@@ -1631,6 +1705,7 @@ fn render_plantuml_svg(
             &font,
             link_anchor.as_deref(),
             explicit_padding,
+            header_gradient_fill.as_deref(),
         );
 
         svg.push_str("</g>");
@@ -1889,6 +1964,7 @@ fn render_entity_content(
     font: &ClassFontOverrides,
     link_anchor: Option<&str>,
     explicit_padding: Option<f64>,
+    header_gradient_fill: Option<&str>,
 ) {
     // PlantUML wraps the entity *header* (background rect, stereotype icon,
     // name text, and the two compartment separator rules) in a single `<a>`
@@ -1999,12 +2075,16 @@ fn render_entity_content(
         && let Some(&first_sep) = oracle_rect.and_then(|r| r.sep_y_values.first())
     {
         let header_h = first_sep - y;
-        let grad_style = format!("stroke:{fill};stroke-width:{BORDER_WIDTH};");
+        // The header compartment repaints with the header gradient when one is
+        // configured (combined body+header gradients); otherwise it reuses the
+        // body gradient (single-gradient classBackgroundColor).
+        let header_fill = header_gradient_fill.unwrap_or(fill);
+        let grad_style = format!("stroke:{header_fill};stroke-width:{BORDER_WIDTH};");
         // Header repaint (rounded, matching the full rect's corners).
         write!(
             svg,
             r#"<rect fill="{}" height="{}" rx="{}" ry="{}" style="{}" width="{}" x="{}" y="{}"/>"#,
-            fill,
+            header_fill,
             fmt4(header_h),
             rx_str,
             ry_str,
@@ -2018,7 +2098,7 @@ fn render_entity_content(
         write!(
             svg,
             r#"<rect fill="{}" height="2.5" style="{}" width="{}" x="{}" y="{}"/>"#,
-            fill,
+            header_fill,
             grad_style,
             fmt_tl(dim.width),
             fmt4(x),
