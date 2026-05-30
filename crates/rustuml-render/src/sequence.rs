@@ -2430,7 +2430,7 @@ pub fn render(
     let mut participant_border = "#181818".to_string();
     let mut participant_border_thickness: String = "0.5".to_string();
     let mut lifeline_border = "#181818".to_string();
-    let mut lifeline_border_thickness: String = "0.5".to_string();
+    let lifeline_border_thickness: String = "0.5".to_string();
     // Per-participant-kind background overrides. Each defaults to
     // `participant_fill`; the relevant `<kind>BackgroundColor` skinparam
     // (with or without the `sequence` prefix) sets it.
@@ -2518,9 +2518,10 @@ pub fn render(
                 lifeline_border = resolve_color(val);
             }
             "sequencelifelineborderthickness" => {
-                if let Ok(v) = val.parse::<f64>() {
-                    lifeline_border_thickness = plantuml_metrics::fmt_coord(v);
-                }
+                // PlantUML honours the lifeline border *colour* but not this
+                // *thickness*: every golden draws the dashed lifeline at the
+                // default 0.5 regardless of the value. Accept the key without
+                // effect so it doesn't fall through to unknown-skinparam paths.
             }
             "actorbackgroundcolor" | "sequenceactorbackgroundcolor" => {
                 actor_fill_override = Some(resolve_color(val));
