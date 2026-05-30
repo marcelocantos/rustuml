@@ -38,8 +38,12 @@ pub enum BlockKind {
     Tree,
     /// Tab bar: `{/`.
     Tabs,
-    /// Scrollable/multi-line input: `{SI`.
+    /// Scrollable container with both scrollbars: `{S`.
+    Scroll,
+    /// Scrollable container, vertical scrollbar only: `{SI`.
     ScrollInput,
+    /// Scrollable container, horizontal scrollbar only: `{S-`.
+    ScrollHorizontal,
 }
 
 /// A row of cells within a block, separated by `|`.

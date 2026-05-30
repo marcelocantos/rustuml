@@ -42,6 +42,48 @@ const BTN_MARGIN: f64 = 2.0;
 // ElementDroplist: the arrow box is a fixed 12px wide region on the right.
 const DROP_BOX: f64 = 12.0;
 
+// ElementPyramidScrolled: scrollbar thickness (v1) and arrow-track inset (v2).
+const SCROLL_BAR: f64 = 15.0; // v1
+const SCROLL_INSET: f64 = 12.0; // v2
+const SCROLL_GAP: f64 = 4.0; // gap between content and scrollbar
+const SCROLL_PAD: f64 = 30.0; // delta added to preferred dim per scrolled axis
+
+/// Which scrollbars a `{S` family block draws.
+#[derive(Clone, Copy, PartialEq, Eq)]
+enum ScrollStrategy {
+    Both,
+    VerticalOnly,
+    HorizontalOnly,
+}
+
+impl ScrollStrategy {
+    fn from_kind(kind: BlockKind) -> Option<ScrollStrategy> {
+        match kind {
+            BlockKind::Scroll => Some(ScrollStrategy::Both),
+            BlockKind::ScrollInput => Some(ScrollStrategy::VerticalOnly),
+            BlockKind::ScrollHorizontal => Some(ScrollStrategy::HorizontalOnly),
+            _ => None,
+        }
+    }
+
+    fn has_vertical(self) -> bool {
+        matches!(self, ScrollStrategy::Both | ScrollStrategy::VerticalOnly)
+    }
+
+    fn has_horizontal(self) -> bool {
+        matches!(self, ScrollStrategy::Both | ScrollStrategy::HorizontalOnly)
+    }
+
+    /// Extra `(dx, dy)` added to the base pyramid's preferred dimension.
+    fn delta(self) -> (f64, f64) {
+        match self {
+            ScrollStrategy::Both => (SCROLL_PAD, SCROLL_PAD),
+            ScrollStrategy::VerticalOnly => (SCROLL_PAD, 0.0),
+            ScrollStrategy::HorizontalOnly => (0.0, SCROLL_PAD),
+        }
+    }
+}
+
 // ── Public entry point ───────────────────────────────────────────────────────
 
 /// Render a Salt diagram with an optional oracle layout.
@@ -96,6 +138,8 @@ struct Grid<'a> {
     /// rendered height. `None` for all other blocks.
     title: Option<String>,
     title_height: f64,
+    /// Scrollbar decoration for `{S`/`{SI`/`{S-` blocks.
+    scroll: Option<ScrollStrategy>,
 }
 
 impl<'a> Grid<'a> {
@@ -156,15 +200,28 @@ impl<'a> Grid<'a> {
             n_cols,
             title,
             title_height,
+            scroll: ScrollStrategy::from_kind(block.kind),
         }
     }
 
-    fn width(&self) -> f64 {
+    /// Base pyramid width (excluding any scrollbar allocation).
+    fn base_width(&self) -> f64 {
         *self.cols_start.last().unwrap_or(&0.0)
     }
 
-    fn height(&self) -> f64 {
+    /// Base pyramid height (excluding any scrollbar allocation).
+    fn base_height(&self) -> f64 {
         *self.rows_start.last().unwrap_or(&0.0) + self.title_height
+    }
+
+    fn width(&self) -> f64 {
+        let (dx, _) = self.scroll.map_or((0.0, 0.0), ScrollStrategy::delta);
+        self.base_width() + dx
+    }
+
+    fn height(&self) -> f64 {
+        let (_, dy) = self.scroll.map_or((0.0, 0.0), ScrollStrategy::delta);
+        self.base_height() + dy
     }
 
     fn draw(&self, ox: f64, oy: f64, buf: &mut String) {
@@ -182,12 +239,83 @@ impl<'a> Grid<'a> {
         if self.kind == BlockKind::Table {
             self.draw_grid_lines(ox, oy, buf);
         }
-        if self.kind == BlockKind::Frame {
+        if self.kind == BlockKind::Frame || self.scroll.is_some() {
+            // A scrolled pyramid is a DRAW_OUTSIDE block (outer border only).
             self.draw_outside_border(ox, oy, buf);
+        }
+        if let Some(strategy) = self.scroll {
+            // The scrollbar decoration is emitted once per z-index pass (z=0
+            // and z=1); ElementText only draws on z=0, so the border and cell
+            // text appear once but the scrollbars appear twice.
+            self.draw_scrollbars(ox, oy, strategy, buf);
+            self.draw_scrollbars(ox, oy, strategy, buf);
         }
         if let Some(title) = &self.title {
             self.draw_group_box(ox, oy, title, buf);
         }
+    }
+
+    /// Draw the vertical/horizontal scrollbars for a `{S` family block,
+    /// mirroring `ElementPyramidScrolled.drawU`. `dim` is the base pyramid
+    /// size; bars are offset by `SCROLL_GAP` beyond the content edge.
+    fn draw_scrollbars(&self, ox: f64, oy: f64, strategy: ScrollStrategy, buf: &mut String) {
+        let dim_w = self.base_width();
+        let dim_h = self.base_height();
+        if strategy.has_vertical() {
+            // drawV at translate dx(dim.width + 4): rect (v1 × dim.height).
+            let vx = ox + dim_w + SCROLL_GAP;
+            self.draw_scroll_v(vx, oy, dim_h, buf);
+        }
+        if strategy.has_horizontal() {
+            // drawH at translate dy(dim.height + 4): rect (dim.width × v1).
+            let hy = oy + dim_h + SCROLL_GAP;
+            self.draw_scroll_h(ox, hy, dim_w, buf);
+        }
+    }
+
+    /// Vertical scrollbar: a `SCROLL_BAR`-wide rectangle of `height`, with two
+    /// arrow-track separators and up/down triangles (`getTr0`/`getTr180`).
+    fn draw_scroll_v(&self, x: f64, y: f64, height: f64, buf: &mut String) {
+        emit_rect_1(buf, x, y, SCROLL_BAR, height);
+        emit_hline_black(buf, x, y + SCROLL_INSET, SCROLL_BAR);
+        emit_hline_black(buf, x, y + height - SCROLL_INSET, SCROLL_BAR);
+        // getTr0 at translate(4,4): (3,0)(6,5)(0,5).
+        emit_filled_poly(
+            buf,
+            x + SCROLL_GAP,
+            y + SCROLL_GAP,
+            &[(3.0, 0.0), (6.0, 5.0), (0.0, 5.0)],
+        );
+        // getTr180 at translate(4, height - v2 + 4): (3,5)(6,0)(0,0).
+        emit_filled_poly(
+            buf,
+            x + SCROLL_GAP,
+            y + height - SCROLL_INSET + SCROLL_GAP,
+            &[(3.0, 5.0), (6.0, 0.0), (0.0, 0.0)],
+        );
+    }
+
+    /// Horizontal scrollbar: a `width`-wide rectangle of height `SCROLL_BAR`,
+    /// with two arrow-track separators and left/right triangles
+    /// (`getTr90`/`getTr270`).
+    fn draw_scroll_h(&self, x: f64, y: f64, width: f64, buf: &mut String) {
+        emit_rect_1(buf, x, y, width, SCROLL_BAR);
+        emit_vline_black(buf, x + SCROLL_INSET, y, SCROLL_BAR);
+        emit_vline_black(buf, x + width - SCROLL_INSET, y, SCROLL_BAR);
+        // getTr90 at translate(4,4): (0,3)(5,6)(5,0).
+        emit_filled_poly(
+            buf,
+            x + SCROLL_GAP,
+            y + SCROLL_GAP,
+            &[(0.0, 3.0), (5.0, 6.0), (5.0, 0.0)],
+        );
+        // getTr270 at translate(width - v2 + 4, 4): (5,3)(0,6)(0,0).
+        emit_filled_poly(
+            buf,
+            x + width - SCROLL_INSET + SCROLL_GAP,
+            y + SCROLL_GAP,
+            &[(5.0, 3.0), (0.0, 6.0), (0.0, 0.0)],
+        );
     }
 
     /// Draw the table's outer perimeter (DRAW_OUTSIDE) using the Java `Grid`
@@ -686,6 +814,43 @@ fn emit_separator(buf: &mut String, x: f64, y: f64, width: f64, kind: SeparatorK
             ));
         }
     }
+}
+
+/// A `fill:none; stroke-width:1` rectangle (scrollbar track).
+fn emit_rect_1(buf: &mut String, x: f64, y: f64, w: f64, h: f64) {
+    buf.push_str(&format!(
+        r##"<rect fill="none" height="{h}" style="stroke:#000000;stroke-width:1;" width="{w}" x="{x}" y="{y}"/>"##,
+        h = pm::fmt_coord(h),
+        w = pm::fmt_coord(w),
+        x = pm::fmt_coord(x),
+        y = pm::fmt_coord(y),
+    ));
+}
+
+/// A filled `<path>` (the scrollbar arrows are `UPath`s, not `<polygon>`s):
+/// `moveTo(p0) lineTo(p1..) lineTo(p0)`, no stroke. Points are translated by
+/// `(ox, oy)`.
+fn emit_filled_poly(buf: &mut String, ox: f64, oy: f64, pts: &[(f64, f64)]) {
+    let mut d = String::new();
+    for (i, (dx, dy)) in pts.iter().enumerate() {
+        let cmd = if i == 0 { 'M' } else { 'L' };
+        if i > 0 {
+            d.push(' ');
+        }
+        d.push_str(&format!(
+            "{cmd}{},{}",
+            pm::fmt_coord(ox + dx),
+            pm::fmt_coord(oy + dy)
+        ));
+    }
+    // Close back to the first point with an explicit lineTo (matches UPath).
+    let (fx, fy) = pts[0];
+    d.push_str(&format!(
+        " L{},{}",
+        pm::fmt_coord(ox + fx),
+        pm::fmt_coord(oy + fy)
+    ));
+    buf.push_str(&format!(r##"<path d="{d}" fill="#000000"/>"##));
 }
 
 fn emit_droplist_rect(buf: &mut String, x: f64, y: f64, w: f64, h: f64) {

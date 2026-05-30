@@ -230,6 +230,20 @@ fn parse_block_header(line: &str) -> (BlockKind, Option<String>, &str) {
     if let Some(stripped) = rest.strip_prefix("SI") {
         return (BlockKind::ScrollInput, None, stripped.trim_start());
     }
+    if let Some(stripped) = rest.strip_prefix("S-") {
+        return (BlockKind::ScrollHorizontal, None, stripped.trim_start());
+    }
+    // `{S` (scroll, both bars). Only when the next char is not part of an
+    // identifier (so `{Something` stays a plain block whose first widget is a
+    // label).
+    if rest.starts_with('S')
+        && rest[1..]
+            .chars()
+            .next()
+            .is_none_or(|c| !c.is_alphanumeric())
+    {
+        return (BlockKind::Scroll, None, rest[1..].trim_start());
+    }
     if rest.starts_with('T')
         && rest[1..]
             .chars()
@@ -449,6 +463,25 @@ mod tests {
             &diag.root.rows[2].cells[0],
             SaltWidget::TreeNode { depth: 3, .. }
         ));
+    }
+
+    #[test]
+    fn parse_scroll_kinds() {
+        assert_eq!(
+            parse_salt(&lines("{S\n  Item 1\n}")).unwrap().root.kind,
+            BlockKind::Scroll
+        );
+        assert_eq!(
+            parse_salt(&lines("{SI\n  Item 1\n}")).unwrap().root.kind,
+            BlockKind::ScrollInput
+        );
+        assert_eq!(
+            parse_salt(&lines("{S-\n  Item 1\n}")).unwrap().root.kind,
+            BlockKind::ScrollHorizontal
+        );
+        // `{Something` must stay a plain block (not misread as scroll).
+        let diag = parse_salt(&lines("{Stuff\n}")).unwrap();
+        assert_eq!(diag.root.kind, BlockKind::Plain);
     }
 
     #[test]
