@@ -39,6 +39,7 @@ pub mod ebnf;
 pub mod eps;
 pub mod filter_registry;
 pub mod font_metrics;
+mod non_ascii_widths;
 pub mod gantt;
 pub mod git_diagram;
 pub mod json_diagram;

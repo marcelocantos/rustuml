@@ -20,7 +20,7 @@
 /// on the JVM that generated the golden SVGs.
 pub fn text_width(text: &str, font_size: f64, bold: bool) -> f64 {
     let table = char_width_table(font_size, bold);
-    text.chars().map(|c| char_width(c, table)).sum()
+    text.chars().map(|c| char_width(c, table, bold)).sum()
 }
 
 /// Text height (ascent + descent) matching PlantUML's stringBounds.
@@ -119,11 +119,24 @@ fn char_width_table(font_size: f64, bold: bool) -> &'static [f64; 95] {
     }
 }
 
-fn char_width(c: char, table: &[f64; 95]) -> f64 {
+fn char_width(c: char, table: &[f64; 95], bold: bool) -> f64 {
     let code = c as u32;
     if (32..=126).contains(&code) {
-        table[(code - 32) as usize]
-    } else if c == '\u{00a0}' {
+        return table[(code - 32) as usize];
+    }
+    // Exact AWT advance for any non-ASCII codepoint that appears in the golden
+    // corpus, extracted from java.awt.FontMetrics on the JVM SansSerif logical
+    // font (see non_ascii_widths.rs). Stored as advance-per-unit-size; AWT
+    // advances are perfectly linear in point size, so scale by the font size
+    // (recovered from the space advance, which is size * 0.31640625).
+    if let Ok(i) = crate::non_ascii_widths::NON_ASCII_WIDTHS.binary_search_by(|e| e.0.cmp(&code)) {
+        let (_, plain, bold_w) = crate::non_ascii_widths::NON_ASCII_WIDTHS[i];
+        let size = table[0] / 0.31640625;
+        return (if bold { bold_w } else { plain }) * size;
+    }
+    // Fallback approximations for codepoints not in the corpus table (e.g. the
+    // CLI rendering arbitrary user text).
+    if c == '\u{00a0}' {
         // NBSP has same width as space
         table[0]
     } else if c == '\u{00AB}' || c == '\u{00BB}' {
