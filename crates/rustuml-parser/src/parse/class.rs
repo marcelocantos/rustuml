@@ -581,24 +581,29 @@ impl ClassParser {
         });
 
         if let Some(caps) = RE.captures(line) {
-            let from_raw = caps
-                .get(1)
-                .or_else(|| caps.get(2))
-                .map(|m| m.as_str())
-                .unwrap_or("");
+            // Quoted endpoints (groups 1/6) must be normalized the same way the
+            // entity declaration normalizes a quoted name (whitespace → `_`,
+            // creole markers stripped), so a relationship like
+            // `"Fish & Chips" --> "Bread & Butter"` resolves to the existing
+            // declared entity instead of creating a duplicate.
+            let from_raw = if let Some(m) = caps.get(1) {
+                strip_creole_for_id(m.as_str())
+            } else {
+                caps.get(2).map(|m| m.as_str()).unwrap_or("").to_string()
+            };
             let from_mult = caps.get(3).map(|m| m.as_str().to_string());
             let rel_str = &caps[4];
             let to_mult = caps.get(5).map(|m| m.as_str().to_string());
-            let to_raw = caps
-                .get(6)
-                .or_else(|| caps.get(7))
-                .map(|m| m.as_str())
-                .unwrap_or("");
+            let to_raw = if let Some(m) = caps.get(6) {
+                strip_creole_for_id(m.as_str())
+            } else {
+                caps.get(7).map(|m| m.as_str()).unwrap_or("").to_string()
+            };
             let label = caps.get(8).map(|m| m.as_str().trim().to_string());
 
             let (kind, dashed) = parse_relationship_kind(rel_str);
-            let from = self.ensure_entity(from_raw);
-            let to = self.ensure_entity(to_raw);
+            let from = self.ensure_entity(&from_raw);
+            let to = self.ensure_entity(&to_raw);
 
             self.relationships.push(Relationship {
                 from,

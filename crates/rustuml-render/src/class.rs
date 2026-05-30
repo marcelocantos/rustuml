@@ -2558,12 +2558,28 @@ fn render_oracle_relationships(
         //   "{from}-backto-{to}" — bidirectional / reverse arrows
         // Endpoint ordering may also be flipped when -direction- modifiers
         // change the layout (`A -down-> B` can produce `B-backto-A`).
-        let to_id = format!("{}-to-{}", rel.from, rel.to);
-        let backto_id = format!("{}-backto-{}", rel.from, rel.to);
-        let assoc_id = format!("{}-{}", rel.from, rel.to);
-        let to_id_rev = format!("{}-to-{}", rel.to, rel.from);
-        let backto_id_rev = format!("{}-backto-{}", rel.to, rel.from);
-        let assoc_id_rev = format!("{}-{}", rel.to, rel.from);
+        // PlantUML builds the edge path id from the entity *display name*, not
+        // the internal id. For a quoted name like `"Fish & Chips"` the id is
+        // normalized (spaces → `_`) but the edge id keeps the original
+        // `Fish & Chips`. Resolve each endpoint to its entity label so the
+        // edge-id lookup matches in both forms.
+        let from_key = diagram
+            .entities
+            .iter()
+            .find(|e| e.id == rel.from)
+            .map_or(rel.from.as_str(), |e| e.label.as_str());
+        let to_key = diagram
+            .entities
+            .iter()
+            .find(|e| e.id == rel.to)
+            .map_or(rel.to.as_str(), |e| e.label.as_str());
+
+        let to_id = format!("{}-to-{}", from_key, to_key);
+        let backto_id = format!("{}-backto-{}", from_key, to_key);
+        let assoc_id = format!("{}-{}", from_key, to_key);
+        let to_id_rev = format!("{}-to-{}", to_key, from_key);
+        let backto_id_rev = format!("{}-backto-{}", to_key, from_key);
+        let assoc_id_rev = format!("{}-{}", to_key, from_key);
 
         let (oracle_edge, is_reverse) =
             if let Some(e) = oracle.edges.iter().find(|e| e.id == backto_id) {
