@@ -391,6 +391,64 @@ fn branch_terminates(body: &[LayoutNode]) -> bool {
     )
 }
 
+/// A branch is "empty" (for if-down corridor purposes) if it has no flow nodes
+/// — only arrows/notes/titles, which take no vertical space.
+fn branch_is_empty(body: &[LayoutNode]) -> bool {
+    !body.iter().any(|n| {
+        !matches!(
+            n,
+            LayoutNode::Arrow { .. }
+                | LayoutNode::Note { .. }
+                | LayoutNode::Title(_)
+                | LayoutNode::Detach
+                | LayoutNode::Kill
+                | LayoutNode::Break
+        )
+    })
+}
+
+/// PlantUML's `ConditionalBuilder.create` routes an `if/else` to the asymmetric
+/// "down" layout (`FtileIfDown`) when exactly one branch is empty and the other
+/// is populated and non-terminating: the populated branch flows down the centre
+/// spine while the empty branch becomes a thin side corridor. Returns the
+/// populated branch's body (to lay out on the spine), the empty branch's label
+/// (drawn at the diamond) and the populated branch's label, when applicable.
+struct IfDownPlan<'a> {
+    /// Body of the populated branch (flows down the spine).
+    populated: &'a [LayoutNode],
+    /// True when the *then* branch is the populated one (controls which side
+    /// the diamond labels sit on).
+    then_populated: bool,
+}
+
+fn if_down_plan<'a>(
+    then_branch: &'a [LayoutNode],
+    else_branches: &'a [ElseBranch],
+) -> Option<IfDownPlan<'a>> {
+    // Only a single plain then + single else (no elseif cascade).
+    if else_branches.len() != 1 {
+        return None;
+    }
+    let else_body = &else_branches[0].body;
+    let then_empty = branch_is_empty(then_branch);
+    let else_empty = branch_is_empty(else_body);
+
+    // Exactly one branch empty.
+    if then_empty == else_empty {
+        return None;
+    }
+    let populated = if then_empty { else_body } else { then_branch };
+    // The populated branch must not terminate — a terminating populated branch
+    // is the single-stop case PlantUML handles with a different connector set.
+    if branch_terminates(populated) {
+        return None;
+    }
+    Some(IfDownPlan {
+        populated,
+        then_populated: !then_empty,
+    })
+}
+
 /// Width of an if/while/repeat condition diamond's inner (top/bottom) edge.
 /// PlantUML clamps this to a minimum of 24 px so very short conditions still
 /// produce a diamond wider than their text. The text inside stays at its
@@ -1040,8 +1098,22 @@ fn node_extents(node: &LayoutNode) -> (f64, f64) {
             condition,
             then_branch,
             else_branches,
-            ..
+            then_label,
         } => {
+            let _ = then_label;
+            if let Some(plan) = if_down_plan(then_branch, else_branches) {
+                // FtileIfDown reserves a fixed corridor on the right (the empty
+                // branch routes out the diamond's east vertex) plus a small
+                // left lead. Reverse-engineered against the act_if_*yes_*no
+                // goldens: left = cond_half + halfHex + 9, right = cond_half +
+                // halfHex + 27.2182 (independent of the east label width).
+                // A wide populated branch overrides via branch_w/2.
+                let cond_half = diamond_inner_w(condition) / 2.0 + DIAMOND_HALF;
+                let branch_w = sequence_width(plan.populated);
+                let left = (cond_half + IF_DOWN_LEFT_PAD).max(branch_w / 2.0);
+                let right = (cond_half + IF_DOWN_RIGHT_PAD).max(branch_w / 2.0);
+                return (left, right);
+            }
             let diamond_w = diamond_inner_w(condition) + DIAMOND_HALF * 2.0;
             let then_w = sequence_width(then_branch);
             let else_w: f64 = else_branches.iter().map(|b| sequence_width(&b.body)).sum();
@@ -1213,6 +1285,10 @@ fn node_width(node: &LayoutNode) -> f64 {
             else_branches,
             ..
         } => {
+            if if_down_plan(then_branch, else_branches).is_some() {
+                let (l, r) = node_extents(node);
+                return l + r;
+            }
             let diamond_w = diamond_inner_w(condition) + DIAMOND_HALF * 2.0;
             let then_w = sequence_width(then_branch);
             let else_w: f64 = else_branches.iter().map(|b| sequence_width(&b.body)).sum();
@@ -1386,6 +1462,15 @@ fn node_height(node: &LayoutNode) -> f64 {
             else_branches,
             ..
         } => {
+            if let Some(plan) = if_down_plan(then_branch, else_branches) {
+                // diamond + lead + populated branch + ARROW_LEN + merge diamond.
+                let branch_h = sequence_height(plan.populated);
+                return DIAMOND_HALF * 2.0
+                    + IF_DOWN_LEAD
+                    + branch_h
+                    + ARROW_LEN
+                    + DIAMOND_HALF * 2.0;
+            }
             let diamond_h = DIAMOND_HALF * 2.0;
             let then_h = sequence_height(then_branch);
             let max_else_h: f64 = else_branches
@@ -2567,6 +2652,15 @@ fn emit_if(
     then_branch: &[LayoutNode],
     else_branches: &[ElseBranch],
 ) -> f64 {
+    // Empty-branch corridor: when one branch is empty and the other populated
+    // and non-terminating, PlantUML's FtileIfDown routes the populated branch
+    // down the centre spine and the empty branch as a thin side corridor.
+    if let Some(plan) = if_down_plan(then_branch, else_branches) {
+        let then_label = then_label.as_deref();
+        let else_label = else_branches[0].label.as_deref();
+        return emit_if_down(svg, cx, y, condition, then_label, else_label, &plan);
+    }
+
     // Cache the per-diagram colours up front so the many line/polygon emit
     // calls below can borrow them as &str without re-borrowing svg.palette.
     let arrow_color = svg.palette.arrow_color.clone();
@@ -2795,6 +2889,189 @@ fn emit_if(
     } else {
         merge_diamond_top + DIAMOND_HALF * 2.0
     }
+}
+
+/// Gap from the condition diamond's bottom to the top of the (centred)
+/// populated branch in the FtileIfDown layout. PlantUML centres the branch in
+/// the vertical band, leaving `ARROW_LEN` below the branch (to the merge
+/// diamond) and a slightly larger lead above it: the diamond's south label
+/// (the populated branch's label) reserves half its text height beneath the
+/// hexagon, pushing the branch down by `text_height(11)/2 - 2`.
+const IF_DOWN_LEAD: f64 = ARROW_LEN + 4.477539062500001; // 24.4775
+
+/// Tip offset of the empty-corridor's mid-arrow above the corridor midpoint.
+/// PlantUML's `Snake.emphasizeDirection(DOWN)` lands the arrowhead tip
+/// `2.2388` px below the geometric midpoint of the corridor's vertical run.
+const IF_CORRIDOR_ARROW_OFFSET: f64 = 2.238769531250023;
+
+/// Left lead past the diamond's left vertex in the FtileIfDown layout.
+const IF_DOWN_LEFT_PAD: f64 = 9.0;
+/// Right corridor reservation past the diamond's right vertex.
+const IF_DOWN_RIGHT_PAD: f64 = 27.218200000000003;
+
+/// Asymmetric "down" layout for an `if/else` where one branch is empty.
+/// The populated branch flows down the centre spine; the empty branch is a
+/// thin corridor on the right that exits the diamond's east vertex and rejoins
+/// the merge diamond's east vertex.
+fn emit_if_down(
+    svg: &mut SvgEmitter,
+    cx: f64,
+    y: f64,
+    condition: &str,
+    then_label: Option<&str>,
+    else_label: Option<&str>,
+    plan: &IfDownPlan,
+) -> f64 {
+    let arrow_color = svg.palette.arrow_color.clone();
+    let diamond_stroke = svg.palette.diamond_stroke.clone();
+    let diamond_fill = svg.palette.diamond_fill.clone();
+    let diamond_stroke_width = svg.palette.diamond_stroke_width.clone();
+
+    let cond_inner_w = diamond_inner_w(condition);
+    let cond_text_w = text_render::measure(condition, SMALL_FONT, false);
+
+    let diamond_cy = y + DIAMOND_HALF;
+    let diamond_left = cx - cond_inner_w / 2.0 - DIAMOND_HALF;
+    let diamond_right = cx + cond_inner_w / 2.0 + DIAMOND_HALF;
+    let diamond_bottom = y + DIAMOND_HALF * 2.0;
+
+    // PlantUML's FtileIfDown.drawU emits the populated branch FIRST, then the
+    // condition diamond, then the merge diamond. The branch's internal
+    // connectors land in the connectors buffer before the if-frame connectors.
+    let branch_top = diamond_bottom + IF_DOWN_LEAD;
+    let branch_bottom = emit_sequence(svg, plan.populated, cx, branch_top);
+
+    // Condition hexagon.
+    let pts = vec![
+        (cx - cond_inner_w / 2.0, y),
+        (cx + cond_inner_w / 2.0, y),
+        (diamond_right, diamond_cy),
+        (cx + cond_inner_w / 2.0, y + DIAMOND_HALF * 2.0),
+        (cx - cond_inner_w / 2.0, y + DIAMOND_HALF * 2.0),
+        (diamond_left, diamond_cy),
+    ];
+    svg.polygon_shape(&diamond_fill, &pts, &diamond_stroke, &diamond_stroke_width);
+
+    // Diamond labels then condition text, matching PlantUML's draw order:
+    // polygon, SOUTH label (the populated branch's label), condition text,
+    // EAST label (the empty branch's label).
+    let (south_label, east_label) = if plan.then_populated {
+        (then_label, else_label)
+    } else {
+        (else_label, then_label)
+    };
+    if let Some(label) = south_label {
+        let lw = text_render::measure(label, SMALL_FONT, false);
+        svg.text_element(
+            TEXT_COLOR,
+            "sans-serif",
+            SMALL_FONT,
+            lw,
+            cx + 4.0,
+            diamond_bottom + pm::ascent(SMALL_FONT),
+            label,
+            false,
+        );
+    }
+    // Condition text (centred under cx).
+    let cond_text_color = svg.palette.text_color.clone();
+    let text_y = y + DIAMOND_HALF + pm::text_height(SMALL_FONT) / 2.0 - pm::descent(SMALL_FONT);
+    svg.text_element(
+        &cond_text_color,
+        "sans-serif",
+        SMALL_FONT,
+        cond_text_w,
+        cx - cond_text_w / 2.0,
+        text_y,
+        condition,
+        false,
+    );
+    if let Some(label) = east_label {
+        let lw = text_render::measure(label, SMALL_FONT, false);
+        svg.text_element(
+            TEXT_COLOR,
+            "sans-serif",
+            SMALL_FONT,
+            lw,
+            diamond_right,
+            diamond_cy - pm::descent(SMALL_FONT),
+            label,
+            false,
+        );
+    }
+
+    // Merge diamond ARROW_LEN below the branch.
+    let merge_top = branch_bottom + ARROW_LEN;
+    let merge_cy = merge_top + DIAMOND_HALF;
+    svg.polygon_shape(
+        &diamond_fill,
+        &[
+            (cx, merge_top),
+            (cx + DIAMOND_HALF, merge_cy),
+            (cx, merge_top + DIAMOND_HALF * 2.0),
+            (cx - DIAMOND_HALF, merge_cy),
+        ],
+        &diamond_stroke,
+        &diamond_stroke_width,
+    );
+
+    // Diamond → populated branch (down arrow on the spine).
+    svg.down_arrow(cx, diamond_bottom, branch_top, &arrow_color);
+
+    // Empty corridor on the right: exit east vertex, run down, rejoin merge
+    // east vertex with a left arrow. A mid-corridor down arrow marks flow.
+    let corridor_x = diamond_right + DIAMOND_HALF;
+    let merge_right = cx + DIAMOND_HALF;
+    // The corridor is a single PlantUML snake: exit-horizontal, then the
+    // emphasised mid down-arrow, then the vertical run, the merge-horizontal,
+    // and finally the terminal left-arrow into the merge diamond. The arrow
+    // polygons interleave with the line segments in that order.
+    // Exit horizontal: diamond east → corridor.
+    svg.connector_line(
+        &arrow_color,
+        diamond_right,
+        corridor_x,
+        diamond_cy,
+        diamond_cy,
+        false,
+    );
+    // Mid-corridor down arrowhead (emphasizeDirection on the vertical run).
+    let arrow_tip = (diamond_cy + merge_cy) / 2.0 + IF_CORRIDOR_ARROW_OFFSET;
+    svg.polygon_connector(
+        &arrow_color,
+        &[
+            (corridor_x - 4.0, arrow_tip - 10.0),
+            (corridor_x, arrow_tip),
+            (corridor_x + 4.0, arrow_tip - 10.0),
+            (corridor_x, arrow_tip - 6.0),
+        ],
+        &arrow_color,
+        "1",
+    );
+    // Corridor vertical: down to merge cy.
+    svg.connector_line(
+        &arrow_color,
+        corridor_x,
+        corridor_x,
+        diamond_cy,
+        merge_cy,
+        false,
+    );
+    // Corridor → merge east vertex (left arrow).
+    svg.connector_line(
+        &arrow_color,
+        corridor_x,
+        merge_right,
+        merge_cy,
+        merge_cy,
+        false,
+    );
+    svg.left_arrow(merge_right, merge_cy, &arrow_color);
+
+    // Branch → merge (down arrow on the spine).
+    svg.down_arrow(cx, branch_bottom, merge_top, &arrow_color);
+
+    merge_top + DIAMOND_HALF * 2.0
 }
 
 enum SwitchConn {
