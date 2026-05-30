@@ -312,9 +312,24 @@ pub fn render(diagram: &NwdiagDiagram, _theme: &Theme) -> String {
             let alpha = y_middle - box_h / 2.0;
             let pos_link1 = alpha / 2.0;
 
+            // A vertical connector that passes *through* an intermediate
+            // network bar (its x lies strictly within that bar's extent) gets
+            // a small rounded jog where it crosses. Mirror Java's `skip` set:
+            // the y of every network bar whose [xmin,xmax] contains x_middle.
+            let x_middle_abs = xstart + x_link_pos;
+            let mut skip: Vec<f64> = Vec::new();
+            for k in 0..num_rows {
+                let xmin = gx + net_xmin[k];
+                let xmax = gx + net_xmax[k];
+                if x_middle_abs > xmin && x_middle_abs < xmax {
+                    skip.push(gy + row_y[k]);
+                }
+            }
+            skip.sort_by(|a, b| a.partial_cmp(b).unwrap());
+
             // Main connector.
             let cx = xstart + x_link_pos + magic_delta(i);
-            connector(&mut s, cx, ynet1 + NETWORK_THIN, ynet1 + alpha);
+            vertical_line(&mut s, cx, ynet1 + NETWORK_THIN, ynet1 + alpha, &skip);
 
             if let Some(t) = link1_text(sv) {
                 let lx =
@@ -331,7 +346,7 @@ pub fn render(diagram: &NwdiagDiagram, _theme: &Theme) -> String {
             for &r in &extra {
                 let ynet2 = gy + row_y[r];
                 let cx2 = xstart + x - magic_delta(r);
-                connector(&mut s, cx2, ynet1 + y_middle + box_h / 2.0, ynet2);
+                vertical_line(&mut s, cx2, ynet1 + y_middle + box_h / 2.0, ynet2, &skip);
                 if let Some(t) = sv.addr.get(&r).filter(|x| !x.is_empty()) {
                     let tw = text_width(t, FONT_ARROW, false);
                     let xtext = if first && conns_size > 2 {
@@ -377,14 +392,63 @@ pub fn render(diagram: &NwdiagDiagram, _theme: &Theme) -> String {
     s
 }
 
-/// Vertical connector line from `(x, y1)` to `(x, y2)`.
-fn connector(buf: &mut String, x: f64, y1: f64, y2: f64) {
-    buf.push_str(&format!(
-        r#"<path d="M{x},{y1} L{x},{y2}" fill="none" style="stroke:{LINE_COLOR};stroke-width:1;"/>"#,
-        x = fmt_coord(x),
-        y1 = fmt_coord(y1),
-        y2 = fmt_coord(y2),
-    ));
+/// Vertical connector line from `(x, y1)` to `(x, y2)`, jogging around each
+/// network bar y in `skip` that the line passes through. Mirrors Java
+/// `nwdiag.VerticalLine.drawU`: at a crossed bar at `step`, the line stops at
+/// `step-3`, arcs (r=4) to `step+9`, then resumes. Each emitted path segment is
+/// a separate `<path>` element, exactly as Java's `ug.draw(path)` calls do.
+fn vertical_line(buf: &mut String, x: f64, ya: f64, yb: f64, skip: &[f64]) {
+    let y1 = ya.min(yb);
+    let y2 = ya.max(yb);
+
+    let emit = |buf: &mut String, d: &str| {
+        buf.push_str(&format!(
+            r#"<path d="{d}" fill="none" style="stroke:{LINE_COLOR};stroke-width:1;"/>"#,
+        ));
+    };
+
+    let mut drawn = false;
+    // `pending` is true once `seg` holds path commands past its leading moveTo
+    // that have not yet been flushed via `emit`.
+    let mut pending = false;
+    let mut seg = format!("M{},{}", fmt_coord(x), fmt_coord(y1));
+    for &step in skip {
+        if step < y1 {
+            continue;
+        }
+        drawn = true;
+        if step == y2 {
+            seg.push_str(&format!(" L{},{}", fmt_coord(x), fmt_coord(y2)));
+        } else {
+            let stop = y2.min(step - 3.0);
+            seg.push_str(&format!(" L{},{}", fmt_coord(x), fmt_coord(stop)));
+            pending = true;
+            if y2 > step {
+                seg.push_str(&format!(
+                    " A4,4 0 0 1 {},{}",
+                    fmt_coord(x),
+                    fmt_coord(step + 9.0)
+                ));
+                continue;
+            }
+        }
+        emit(buf, &seg);
+        pending = false;
+        let current = step + 9.0;
+        seg = format!("M{},{}", fmt_coord(x), fmt_coord(current));
+        if current >= y2 {
+            break;
+        }
+    }
+    if !drawn {
+        // No bars crossed: a single straight segment.
+        seg.push_str(&format!(" L{},{}", fmt_coord(x), fmt_coord(y2)));
+        emit(buf, &seg);
+    } else if pending {
+        // Path ended mid-jog (arc was the last command): finish it down to y2.
+        seg.push_str(&format!(" L{},{}", fmt_coord(x), fmt_coord(y2)));
+        emit(buf, &seg);
+    }
 }
 
 /// A font-12 label `<text>` with `y` as the top of the line (baseline added).
