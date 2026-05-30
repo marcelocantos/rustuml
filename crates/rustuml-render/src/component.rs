@@ -185,6 +185,15 @@ pub fn render_with_oracle(
     // `skinparam componentStyle rectangle` draws components as plain rectangles
     // with no UML "tab" icon.
     let mut component_style_rectangle = false;
+    // Component label font size. `componentFontSize` is the most specific
+    // skinparam; `defaultFontSize` is the fallback base; otherwise the built-in
+    // default (14). Only components (not interfaces, which keep their own
+    // interfaceFontSize) consume this. The oracle still supplies label
+    // positions; the resolved size only drives the `font-size` attribute and
+    // the textLength `emit_text` computes from it.
+    let mut default_font_size: Option<f64> = None;
+    let mut component_font_size_sp: Option<f64> = None;
+    let mut component_arrow_font_size_sp: Option<f64> = None;
     for sp in &diagram.meta.skinparams {
         let key = sp.key.to_ascii_lowercase();
         let val = sp.value.trim();
@@ -206,9 +215,26 @@ pub fn render_with_oracle(
             "componentstyle" => {
                 component_style_rectangle = val.eq_ignore_ascii_case("rectangle");
             }
+            "componentfontsize" => {
+                component_font_size_sp = val.parse::<f64>().ok();
+            }
+            "componentarrowfontsize" => {
+                component_arrow_font_size_sp = val.parse::<f64>().ok();
+            }
+            "defaultfontsize" => {
+                default_font_size = val.parse::<f64>().ok();
+            }
             _ => {}
         }
     }
+    let component_font_size = component_font_size_sp
+        .or(default_font_size)
+        .unwrap_or(FONT_SIZE);
+    // Edge/arrow label font size (link labels and multiplicities). Follows
+    // `componentArrowFontSize`, then `defaultFontSize`, then the built-in 13.
+    let component_arrow_font_size = component_arrow_font_size_sp
+        .or(default_font_size)
+        .unwrap_or(LINK_FONT);
 
     // Compute dimensions for each component.
     let comp_dims: Vec<CompDim> = diagram.components.iter().map(calc_component_dim).collect();
@@ -762,7 +788,7 @@ pub fn render_with_oracle(
                 &TextBase {
                     x: tx,
                     y: ty,
-                    font_size: FONT_SIZE as u32,
+                    font_size: component_font_size as u32,
                     font_family: "sans-serif",
                     fill: TEXT_COLOR,
                     bold: false,
@@ -785,7 +811,7 @@ pub fn render_with_oracle(
             &TextBase {
                 x: label_tx,
                 y: label_y,
-                font_size: FONT_SIZE as u32,
+                font_size: component_font_size as u32,
                 font_family: "sans-serif",
                 fill: TEXT_COLOR,
                 bold: false,
@@ -830,7 +856,7 @@ pub fn render_with_oracle(
 
     // Render connections (links).
     if let Some(orc) = oracle {
-        render_oracle_connections(&mut svg, diagram, orc);
+        render_oracle_connections(&mut svg, diagram, orc, component_arrow_font_size);
     } else {
         for (link_counter, conn) in (entity_counter..).zip(diagram.connections.iter()) {
             let link_id = format!("lnk{link_counter}");
@@ -1442,6 +1468,7 @@ fn render_oracle_connections(
     svg: &mut SvgBuilder,
     diagram: &ComponentDiagram,
     oracle: &OracleLayout,
+    arrow_font_size: f64,
 ) {
     // Map bare component id → qualified name for resolving oracle edge ids
     // (oracle stores e.g. "Grp.X1" but conn.from is bare "X1").
@@ -1485,7 +1512,7 @@ fn render_oracle_connections(
             None => continue,
         };
         emitted_edge_ids.insert(oracle_edge.id.clone());
-        emit_oracle_edge(svg, oracle_edge, &conn.from, &conn.to);
+        emit_oracle_edge(svg, oracle_edge, &conn.from, &conn.to, arrow_font_size);
     }
 
     // Note connectors: PlantUML links a `note … of X` to its target with a
@@ -1516,7 +1543,7 @@ fn render_oracle_connections(
                 continue;
             }
             let (from, to) = edge.id.rsplit_once('-').unwrap_or(("", edge.id.as_str()));
-            emit_oracle_edge(svg, edge, from, to);
+            emit_oracle_edge(svg, edge, from, to, arrow_font_size);
         }
     }
 }
@@ -1529,6 +1556,7 @@ fn emit_oracle_edge(
     oracle_edge: &crate::layout_oracle::OracleEdgePath,
     comment_from: &str,
     comment_to: &str,
+    arrow_font_size: f64,
 ) {
     {
         let expected_id = &oracle_edge.id;
@@ -1592,7 +1620,7 @@ fn emit_oracle_edge(
                 &TextBase {
                     x: lx,
                     y: ly,
-                    font_size: LINK_FONT as u32,
+                    font_size: arrow_font_size as u32,
                     font_family: "sans-serif",
                     fill: TEXT_COLOR,
                     bold: false,
@@ -1716,7 +1744,7 @@ fn emit_oracle_edge(
                 &TextBase {
                     x: lx,
                     y: ly,
-                    font_size: LINK_FONT as u32,
+                    font_size: arrow_font_size as u32,
                     font_family: "sans-serif",
                     fill: TEXT_COLOR,
                     bold: false,
@@ -1760,7 +1788,7 @@ fn emit_oracle_edge(
             }
         } else if let Some((lx, ly, ref text)) = oracle_edge.label {
             for (i, line) in text.lines().enumerate() {
-                emit_label(svg, lx, ly + i as f64 * LINK_FONT, line);
+                emit_label(svg, lx, ly + i as f64 * arrow_font_size, line);
             }
         }
 
