@@ -3259,10 +3259,24 @@ fn render_oracle_relationships(
         // sans-serif, fill #000000. Falls back to the legacy joined `label`
         // when `labels` is empty (older oracle data).
         if !oracle_edge.labels.is_empty() {
-            for (lx, ly, text) in &oracle_edge.labels {
+            // The first label is the relationship's middle label when the
+            // source carries one; the remaining labels are cardinality
+            // (multiplicity) texts which never carry creole markup. Feed the
+            // *source* markup through the creole engine so bold/italic/mono/
+            // size/colour render correctly — the oracle only supplies the
+            // (x, y) anchor, not the styled glyph runs. Class link labels
+            // treat `__` as a literal pair of underscores (matching member
+            // labels), so route through `skip_underline: true`.
+            for (i, (lx, ly, text)) in oracle_edge.labels.iter().enumerate() {
+                let middle = i == 0 && rel.label.is_some();
+                let content: &str = if middle {
+                    rel.label.as_deref().unwrap_or(text)
+                } else {
+                    text
+                };
                 text_render::emit_text(
                     svg,
-                    text,
+                    content,
                     &text_render::TextBase {
                         x: *lx,
                         y: *ly,
@@ -3272,7 +3286,7 @@ fn render_oracle_relationships(
                         bold: false,
                         italic: false,
                         underline: false,
-                        skip_underline: false,
+                        skip_underline: middle,
                     },
                 );
             }
