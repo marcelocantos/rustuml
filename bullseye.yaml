@@ -542,3 +542,16 @@ targets:
       Blocking on the second piece (no rustuml-owned destination URL exists yet). When one does, add a needle to rebrand_in_svg's pair list and rerun golden_pairs to confirm no regression.
     origin: manual
     discovered: 2026-05-23
+  T7:
+    name: Licensing is correct and complete across all components
+    status: identified
+    value: 0.0
+    cost: 0.0
+    acceptance:
+    - 'CLAUDE.md licensing section reflects actual deps: rustuml-layout vendors Graphviz under EPL 1.0 (NOT ''layout-rs, MIT'' — that''s stale); layout-rs is gone.'
+    - 'Root LICENSE/NOTICES include and correctly attribute: vendored Graphviz (EPL 1.0 + source-availability offer), Liberation Sans (SIL OFL), KaTeX (MIT), OpenIconic, Archimate sprites — each with its required notice.'
+    - A documented review confirms all PlantUML-derived code is genuine semantic reimplementation, not transliteration of the GPLv3 Java source (copyright-safe); flag any file that mirrors Java structure too closely.
+    - Own RustUML code remains Apache 2.0; the basis that PlantUML-generated golden images are not GPL (per PlantUML license.txt) is recorded.
+    context: 'Surfaced 2026-05-30 during T4 work. PlantUML is GPL v3 (confirmed: source headers + license.txt in ~/work/github.com/plantuml/plantuml). Our protection is semantic reimplementation (algorithms/formulas/constants aren''t copyrightable; expression is) — must stay genuine, esp. for Unit-4 entangled-layout ports. The concrete obligation is the vendored Graphviz (vendor/graphviz, compiled via rustuml-layout/build.rs) which is EPL 1.0, while CLAUDE.md:18 still wrongly says ''wraps layout-rs, MIT''. EPL is weak/file-level copyleft — combinable with our Apache 2.0, but obliges shipping its license + source offer. Goldens are explicitly NOT GPL (license.txt: PlantUML-generated images owned by the .puml author). Full analysis in memory [[project-licensing]]. NOT legal advice — user to confirm. (Aside: stale fan-out worktrees linger under .claude/worktrees/agent-*/ — unrelated cleanup.)'
+    origin: manual
+    discovered: 2026-05-30
