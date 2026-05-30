@@ -2456,25 +2456,38 @@ fn render_composite_with_oracle(diagram: &StateDiagram, orc: &OracleLayout) -> S
     // `<composite>.CONC{N+1}` introduced by `--`/`||` separators. Returns just
     // the composite id when there are no regions.
     let region_scopes = |composite_id: &str| -> Vec<String> {
-        let mut scopes = vec![composite_id.to_string()];
-        let mut n = 2usize;
-        loop {
-            let candidate = format!("{composite_id}.CONC{n}");
-            let exists = diagram
-                .states
-                .iter()
-                .any(|s| s.parent.as_deref() == Some(candidate.as_str()))
-                || diagram.transitions.iter().any(|t| {
-                    (t.from.strip_prefix("[*]") == Some(candidate.as_str()))
-                        || (t.to.strip_prefix("[*]") == Some(candidate.as_str()))
-                });
-            if exists {
-                scopes.push(candidate);
-                n += 1;
-            } else {
-                break;
+        // Collect every `<composite_id>.CONC{n}` sub-scope referenced by a
+        // child state or scoped pseudo-state. The CONC counter is diagram-wide,
+        // so a single composite's regions need not use consecutive indices
+        // (CS1 → CONC2, CS2 → CONC3); gather the distinct n values and sort.
+        let prefix = format!("{composite_id}.CONC");
+        let conc_n = |id: &str| -> Option<usize> {
+            id.strip_prefix(&prefix)
+                .and_then(|rest| rest.split('.').next())
+                .and_then(|n| n.parse::<usize>().ok())
+        };
+        let mut ns: Vec<usize> = Vec::new();
+        for s in &diagram.states {
+            if let Some(p) = s.parent.as_deref()
+                && let Some(n) = conc_n(p)
+                && !ns.contains(&n)
+            {
+                ns.push(n);
             }
         }
+        for t in &diagram.transitions {
+            for ep in [&t.from, &t.to] {
+                if let Some(scope) = ep.strip_prefix("[*]")
+                    && let Some(n) = conc_n(scope)
+                    && !ns.contains(&n)
+                {
+                    ns.push(n);
+                }
+            }
+        }
+        ns.sort_unstable();
+        let mut scopes = vec![composite_id.to_string()];
+        scopes.extend(ns.into_iter().map(|n| format!("{composite_id}.CONC{n}")));
         scopes
     };
 

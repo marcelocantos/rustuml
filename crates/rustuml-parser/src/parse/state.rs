@@ -60,16 +60,21 @@ struct StateParser {
     /// `||`) region separator inside a composite advances the top frame to a
     /// synthetic concurrent-region sub-scope.
     scope_stack: Vec<ScopeFrame>,
+    /// Diagram-wide concurrent-region counter. PlantUML names region sub-scopes
+    /// `CONC2`, `CONC3`, … sequentially across *every* composite in the diagram
+    /// (each composite's first region uses the composite's own scope and
+    /// consumes no counter value; the counter's first emitted value is 2), so
+    /// this is global rather than per-frame. Holds the highest CONC index
+    /// allocated so far (initially 1, so the first region becomes `CONC2`).
+    conc_counter: usize,
 }
 
 /// One enclosing-composite level on the scope stack.
 struct ScopeFrame {
     /// Qualified id of the composite itself (region 0's scope).
     base: String,
-    /// 0-based index of the current concurrent region. Region 0 uses `base`
-    /// directly; region N≥1 uses the synthetic sub-scope `<base>.CONC{N+1}`.
-    region: usize,
-    /// Active scope id: `base` for region 0, else `<base>.CONC{region+1}`.
+    /// Active scope id: `base` for region 0, else `<base>.CONC{n}` where `n`
+    /// is the diagram-wide counter value assigned when the region opened.
     current: String,
 }
 
@@ -84,6 +89,7 @@ impl StateParser {
             current_line: 0,
             skinparam_block_prefix: None,
             scope_stack: Vec::new(),
+            conc_counter: 1,
         }
     }
 
@@ -243,9 +249,10 @@ impl StateParser {
         // `[*]` pseudo-states. Only meaningful inside a composite — at top level
         // the line is ignored.
         if is_region_separator(line) {
+            self.conc_counter += 1;
+            let n = self.conc_counter;
             if let Some(frame) = self.scope_stack.last_mut() {
-                frame.region += 1;
-                frame.current = format!("{}.CONC{}", frame.base, frame.region + 1);
+                frame.current = format!("{}.CONC{}", frame.base, n);
             }
             return Ok(());
         }
@@ -444,7 +451,6 @@ impl StateParser {
             if is_composite {
                 self.scope_stack.push(ScopeFrame {
                     base: id.clone(),
-                    region: 0,
                     current: id,
                 });
             }
