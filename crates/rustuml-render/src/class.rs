@@ -786,7 +786,16 @@ fn qualify_entity(diagram: &ClassDiagram, entity: &ClassEntity, translated_label
     if survivors.is_empty() {
         translated_label.to_string()
     } else {
-        format!("{}.{}", survivors.join("."), translated_label)
+        // Package names carry the same `data-qualified-name` character
+        // translation as entity labels: creole markup chars (`*`, `/`, `<`,
+        // `>`, `:`, …) collapse to `.` so `"**bold** Package"` → `..bold..
+        // Package`.
+        let prefix = survivors
+            .iter()
+            .map(|name| translate_qualified_name(name))
+            .collect::<Vec<_>>()
+            .join(".");
+        format!("{}.{}", prefix, translated_label)
     }
 }
 
