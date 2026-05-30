@@ -424,6 +424,113 @@ fn split_hide_selector(arg: &str) -> (Option<&str>, &str) {
     (None, arg)
 }
 
+/// Whether `directive.arg` names a whole entity (or a `<<stereotype>>` group)
+/// rather than a compartment. `hide B`, `remove B`, `show B`, and
+/// `hide <<internal>>` are whole-entity directives; `hide circle`,
+/// `hide empty members`, `hide methods` are not.
+///
+/// Returns the matcher to apply against each entity, or `None` if this is a
+/// compartment-level directive that should be left to `resolve_hide`.
+fn whole_entity_selector(arg: &str, entities: &[ClassEntity]) -> Option<EntitySelector> {
+    let arg = arg.trim();
+    // `<<stereo>>` with nothing after it.
+    if let Some(rest) = arg.strip_prefix("<<")
+        && let Some(end) = rest.find(">>")
+    {
+        let after = rest[end + 2..].trim();
+        if after.is_empty() {
+            return Some(EntitySelector::Stereotype(rest[..end].trim().to_string()));
+        }
+        return None;
+    }
+    // A bare single token that exactly names a known entity (by id or label).
+    if !arg.is_empty()
+        && !arg.contains(char::is_whitespace)
+        && entities
+            .iter()
+            .any(|e| e.id.eq_ignore_ascii_case(arg) || e.label.eq_ignore_ascii_case(arg))
+    {
+        return Some(EntitySelector::Name(arg.to_string()));
+    }
+    None
+}
+
+/// A whole-entity selector resolved from a `hide`/`remove`/`show` directive.
+enum EntitySelector {
+    Name(String),
+    Stereotype(String),
+}
+
+impl EntitySelector {
+    fn matches(&self, entity: &ClassEntity) -> bool {
+        match self {
+            EntitySelector::Name(n) => {
+                entity.id.eq_ignore_ascii_case(n) || entity.label.eq_ignore_ascii_case(n)
+            }
+            EntitySelector::Stereotype(s) => {
+                entity.stereotypes.iter().any(|t| t.eq_ignore_ascii_case(s))
+            }
+        }
+    }
+}
+
+/// Compute the set of entity indices suppressed by whole-entity
+/// `hide`/`remove` directives, honouring later `show` directives that
+/// re-enable them (in source order).
+fn suppressed_entities(diagram: &ClassDiagram) -> std::collections::HashSet<usize> {
+    let mut suppressed = std::collections::HashSet::new();
+    for d in &diagram.hide_show {
+        let Some(sel) = whole_entity_selector(&d.arg, &diagram.entities) else {
+            continue;
+        };
+        for (i, e) in diagram.entities.iter().enumerate() {
+            if sel.matches(e) {
+                if d.show {
+                    suppressed.remove(&i);
+                } else {
+                    suppressed.insert(i);
+                }
+            }
+        }
+    }
+    suppressed
+}
+
+/// Build a copy of `diagram` with the given entity indices removed, along with
+/// any relationships and notes that reference them, and any package membership
+/// entries. Relationships/notes whose endpoints survive are kept verbatim.
+fn filter_suppressed(
+    diagram: &ClassDiagram,
+    suppressed: &std::collections::HashSet<usize>,
+) -> ClassDiagram {
+    let dropped_ids: std::collections::HashSet<&str> = suppressed
+        .iter()
+        .map(|&i| diagram.entities[i].id.as_str())
+        .collect();
+    let dropped_labels: std::collections::HashSet<&str> = suppressed
+        .iter()
+        .map(|&i| diagram.entities[i].label.as_str())
+        .collect();
+    let is_dropped = |name: &str| dropped_ids.contains(name) || dropped_labels.contains(name);
+
+    let mut out = diagram.clone();
+    out.entities = diagram
+        .entities
+        .iter()
+        .enumerate()
+        .filter(|(i, _)| !suppressed.contains(i))
+        .map(|(_, e)| e.clone())
+        .collect();
+    out.relationships
+        .retain(|r| !is_dropped(&r.from) && !is_dropped(&r.to));
+    out.notes
+        .retain(|n| !n.target.as_deref().is_some_and(is_dropped));
+    for pkg in &mut out.packages {
+        pkg.entities.retain(|name| !is_dropped(name));
+    }
+    out
+}
+
 fn calc_entity_dims(entity: &ClassEntity, entity_index: usize, hide: HideFlags) -> EntityDims {
     let is_enum = entity.kind == EntityKind::Enum;
     // Entity labels treat `__` as literal underscores, not underline markup,
@@ -913,6 +1020,16 @@ pub fn render_with_oracle(
         && let Some(body) = orc.root_g_inner_xml.as_deref()
     {
         return wrap_oracle_envelope(orc, body, "CLASS");
+    }
+
+    // Apply whole-entity `hide`/`remove` directives by dropping the targeted
+    // entities (and their links/notes/package memberships) before layout. The
+    // `ent000N` ids of surviving entities are taken from the oracle by name,
+    // so the dropped entity's slot in the id sequence is preserved naturally.
+    let suppressed = suppressed_entities(diagram);
+    if !suppressed.is_empty() {
+        let filtered = filter_suppressed(diagram, &suppressed);
+        return render_with_oracle(&filtered, theme, oracle);
     }
 
     if diagram.entities.is_empty() {

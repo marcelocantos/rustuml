@@ -1043,6 +1043,7 @@ impl ClassParser {
         if let Some(rest) = line.strip_prefix("hide ") {
             self.hide_show.push(crate::diagram::class::HideShow {
                 show: false,
+                remove: false,
                 arg: rest.split_whitespace().collect::<Vec<_>>().join(" "),
             });
             return true;
@@ -1050,6 +1051,17 @@ impl ClassParser {
         if let Some(rest) = line.strip_prefix("show ") {
             self.hide_show.push(crate::diagram::class::HideShow {
                 show: true,
+                remove: false,
+                arg: rest.split_whitespace().collect::<Vec<_>>().join(" "),
+            });
+            return true;
+        }
+        // `remove X` drops the named entity (or `<<stereotype>>`-matched
+        // entities) from the diagram entirely, along with their links.
+        if let Some(rest) = line.strip_prefix("remove ") {
+            self.hide_show.push(crate::diagram::class::HideShow {
+                show: false,
+                remove: true,
                 arg: rest.split_whitespace().collect::<Vec<_>>().join(" "),
             });
             return true;

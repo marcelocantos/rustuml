@@ -29,7 +29,7 @@ pub struct Note {
 }
 
 /// A complete class diagram.
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct ClassDiagram {
     pub meta: DiagramMeta,
     pub entities: Vec<ClassEntity>,
@@ -60,6 +60,11 @@ pub struct ClassDiagram {
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct HideShow {
     pub show: bool,
+    /// `true` when the directive came from `remove` rather than `hide`. For
+    /// whole-entity suppression `remove` and `hide` behave identically in the
+    /// renderer; the flag is kept for fidelity.
+    #[serde(default)]
+    pub remove: bool,
     /// Lower-cased space-collapsed argument text (e.g. `"circle"`, `"empty members"`,
     /// `"<<myStereo>> circle"`, `"myClass attributes"`).
     pub arg: String,
