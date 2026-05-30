@@ -387,12 +387,23 @@ pub fn render(diagram: &GanttDiagram, _theme: &Theme) -> String {
             && let Some(dep_idx) = diagram.tasks.iter().position(|t| &t.name == dep)
             && let Some(&dep_vi) = task_row_index.get(dep.as_str())
         {
+            // A milestone successor ("happens at X's end") draws no dependency
+            // arrow into the diamond; only real "starts at" tasks do.
+            if resolved[*idx].1 == 0 {
+                continue;
+            }
             let (dep_start, dep_dur) = resolved[dep_idx];
             let pred_end_x = (dep_start + dep_dur) as f64 * DAY_WIDTH;
-            let pred_bottom = row_bar_top(dep_vi) + BAR_H;
+            // From a milestone predecessor (zero-duration diamond) the arrow
+            // departs the diamond centre rather than the bottom of a bar.
+            let pred_exit_y = if dep_dur == 0 {
+                row_bar_top(dep_vi) + 5.0
+            } else {
+                row_bar_top(dep_vi) + BAR_H
+            };
             let succ_start_x = resolved[*idx].0 as f64 * DAY_WIDTH;
             let succ_center = row_bar_top(vi) + BAR_H / 2.0;
-            draw_dependency_arrow(&mut svg, pred_end_x, pred_bottom, succ_start_x, succ_center);
+            draw_dependency_arrow(&mut svg, pred_end_x, pred_exit_y, succ_start_x, succ_center);
         }
     }
 
@@ -432,7 +443,7 @@ pub fn render(diagram: &GanttDiagram, _theme: &Theme) -> String {
                     .map(css_color)
                     .unwrap_or_else(|| TEXT_COLOR.to_string());
                 svg.raw_inline(&format!(
-                    r#"<polygon fill="{fill}" points="{cx},{t} {r},{cy} {cx},{b} {l},{cy}" style="stroke:{fill};stroke-width:1;"/>"#,
+                    r#"<polygon fill="{fill}" points="{cx},{t},{r},{cy},{cx},{b},{l},{cy}" style="stroke:{fill};stroke-width:1;"/>"#,
                     cx = fmt_coord(cx),
                     t = fmt_coord(cy - 5.0),
                     r = fmt_coord(cx + 5.0),
