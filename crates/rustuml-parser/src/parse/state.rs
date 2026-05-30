@@ -415,6 +415,9 @@ impl StateParser {
                 state.label = label;
                 state.kind = kind;
                 state.composite |= is_composite;
+                if state.decl_line.is_none() {
+                    state.decl_line = Some(self.current_line);
+                }
                 if state.parent.is_none() {
                     state.parent = parent;
                 }
@@ -440,6 +443,7 @@ impl StateParser {
                     label,
                     kind,
                     source_line: self.current_line,
+                    decl_line: Some(self.current_line),
                     fill,
                     stroke,
                     stroke_style,
@@ -467,12 +471,16 @@ impl StateParser {
             if let Some(state) = self.states.iter_mut().find(|s| s.id == id) {
                 state.label = label;
                 state.descriptions.push(desc);
+                if state.decl_line.is_none() {
+                    state.decl_line = Some(self.current_line);
+                }
             } else {
                 self.states.push(State {
                     id: id.clone(),
                     label,
                     descriptions: vec![desc],
                     source_line: self.current_line,
+                    decl_line: Some(self.current_line),
                     parent,
                     ..State::default()
                 });
@@ -491,6 +499,9 @@ impl StateParser {
             let desc = caps[2].trim().to_string();
             if let Some(state) = self.states.iter_mut().find(|s| s.id == id) {
                 state.descriptions.push(desc);
+                if state.decl_line.is_none() {
+                    state.decl_line = Some(self.current_line);
+                }
             }
             true
         } else {

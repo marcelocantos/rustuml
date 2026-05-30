@@ -77,6 +77,15 @@ pub struct State {
     /// `state X [[url{tooltip}]]` — optional tooltip text for the hyperlink.
     #[serde(default)]
     pub tooltip: Option<String>,
+    /// 1-based line of the first explicit `state X` declaration or
+    /// `X : description` field line, if any. `None` when the state was only
+    /// discovered as a transition endpoint. PlantUML registers explicitly
+    /// declared/described states in the entity factory before it materialises
+    /// the `[*]` start/end pseudo-states (which are created lazily during link
+    /// resolution), so this line — when present — orders the state ahead of the
+    /// pseudo-states in the rendered emission sequence.
+    #[serde(default)]
+    pub decl_line: Option<usize>,
 }
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Default, Serialize, Deserialize)]

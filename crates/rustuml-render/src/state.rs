@@ -246,6 +246,68 @@ fn classify_star_nodes(transitions: &[Transition]) -> (bool, bool) {
     (has_start, has_end)
 }
 
+/// Generic entity emission order for non-simple state diagrams (those that
+/// contain composite states or fork/join/choice/history/entry/exit pseudo-
+/// states). Visits each entity by first textual appearance: declared `state X`
+/// lines first (registering their declaration line), then each transition's
+/// endpoints in `from`-then-`to` order — so a `[*] --> S` line emits the start
+/// pseudo-state ahead of `S`. A stable sort on `(line, encounter_seq)` keeps
+/// same-line ties in source order. The flat simple-topology path uses its own
+/// two-phase order in `render_with_oracle`.
+fn compute_first_appearance_order(diagram: &StateDiagram) -> Vec<String> {
+    // (first_appearance_line, encounter_seq, id).
+    let mut ordered: Vec<(usize, usize, String)> = Vec::new();
+    let mut seen: std::collections::HashSet<String> = std::collections::HashSet::new();
+    let mut seq = 0usize;
+    let mut push_entity = |line: usize, id: String| {
+        if seen.insert(id.clone()) {
+            ordered.push((line, seq, id));
+            seq += 1;
+        }
+    };
+    let first_txn_line = |id: &str| -> Option<usize> {
+        diagram
+            .transitions
+            .iter()
+            .filter(|t| t.from == id || t.to == id)
+            .map(|t| t.source_line)
+            .min()
+    };
+    for s in &diagram.states {
+        if s.id == "[*]" {
+            continue;
+        }
+        let declared_before_use = match first_txn_line(&s.id) {
+            Some(txn_line) => s.source_line < txn_line,
+            None => true,
+        };
+        if declared_before_use {
+            push_entity(s.source_line, s.id.clone());
+        }
+    }
+    for t in &diagram.transitions {
+        let from = if t.from == "[*]" {
+            "__start__".to_string()
+        } else {
+            t.from.clone()
+        };
+        let to = if t.to == "[*]" {
+            "__end__".to_string()
+        } else {
+            t.to.clone()
+        };
+        push_entity(t.source_line, from);
+        push_entity(t.source_line, to);
+    }
+    for s in &diagram.states {
+        if s.id != "[*]" {
+            push_entity(s.source_line, s.id.clone());
+        }
+    }
+    ordered.sort_by_key(|(line, seq, _)| (*line, *seq));
+    ordered.into_iter().map(|(_, _, id)| id).collect()
+}
+
 // --- Rendering ---
 
 /// Effective skinparam values for a state diagram, resolved from
@@ -404,71 +466,80 @@ pub fn render_with_oracle(
         .min();
 
     let _ = (first_start_line, first_end_line);
-    // (first_appearance_line, encounter_seq, id). `encounter_seq` preserves
-    // the order entities are first seen so the stable sort keeps same-line
-    // ties in source order. Entities are visited as: declared `state X` lines
-    // first (registering their declaration line), then each transition's
-    // endpoints in `from`-then-`to` order — so a `[*] --> S` line emits the
-    // start pseudo-state ahead of `S`, matching PlantUML's interleaving.
-    let mut ordered: Vec<(usize, usize, String)> = Vec::new();
-    let mut seen: std::collections::HashSet<String> = std::collections::HashSet::new();
-    let mut seq = 0usize;
-    let mut push_entity = |line: usize, id: String| {
-        if seen.insert(id.clone()) {
-            ordered.push((line, seq, id));
-            seq += 1;
-        }
-    };
-    // Pre-register states whose first textual appearance is an explicit
-    // declaration that precedes any transition referencing them. A state
-    // whose recorded `source_line` is the same as its earliest transition
-    // line was discovered *by* that transition, so leave it for the
-    // transition walk below (which orders `from` before `to`, putting a
-    // `[*]` source ahead of its target).
-    let first_txn_line = |id: &str| -> Option<usize> {
-        diagram
-            .transitions
+
+    // SIMPLE topology: a flat (no composite/cluster) diagram whose states are
+    // all plain `Normal` states — no fork/join/choice/history/entry/exit
+    // pseudo-state stereotypes. For this class PlantUML emits entities in a
+    // two-phase order that the generic first-appearance walk below gets wrong
+    // around the `[*]` pseudo-states:
+    //   1. every explicitly declared / described state (one with a `state X`
+    //      declaration or an `X : field` line), in order of that declaration
+    //      line — these are registered in the entity factory up front;
+    //   2. then a walk over the transitions in source order, appending each
+    //      newly-seen endpoint (`from` before `to`), where `[*]` materialises
+    //      as the lazily-created `.start.` / `.end.` pseudo-states.
+    // The pseudo-states are created during link resolution, *after* all
+    // explicit declarations, so a declared/described state always precedes
+    // `.start.`/`.end.` even when its `[*] --> X` transition appears earlier in
+    // the source. (Verified against the `state_alias_len_*`, `skin_state_*` and
+    // `skin_fontsize_state_*` golden families.)
+    let is_simple = diagram.states.iter().all(|s| {
+        !s.composite
+            && matches!(
+                s.kind,
+                StateKind::Normal | StateKind::Initial | StateKind::Final
+            )
+    });
+    let state_ids: Vec<String> = if is_simple {
+        let mut order: Vec<String> = Vec::new();
+        let mut seen: std::collections::HashSet<String> = std::collections::HashSet::new();
+        // Phase 1: explicitly declared / described states, by declaration line.
+        let mut declared: Vec<(usize, &str)> = diagram
+            .states
             .iter()
-            .filter(|t| t.from == id || t.to == id)
-            .map(|t| t.source_line)
-            .min()
+            .filter(|s| s.id != "[*]")
+            .filter_map(|s| s.decl_line.map(|l| (l, s.id.as_str())))
+            .collect();
+        declared.sort_by_key(|(l, _)| *l);
+        for (_, id) in declared {
+            if seen.insert(id.to_string()) {
+                order.push(id.to_string());
+            }
+        }
+        // Phase 2: transition walk in source order, `from` then `to`.
+        let mut txns: Vec<&Transition> = diagram.transitions.iter().collect();
+        txns.sort_by_key(|t| t.source_line);
+        let mut push = |id: String, order: &mut Vec<String>| {
+            if seen.insert(id.clone()) {
+                order.push(id);
+            }
+        };
+        for t in txns {
+            let from = if t.from == "[*]" {
+                "__start__".to_string()
+            } else {
+                t.from.clone()
+            };
+            let to = if t.to == "[*]" {
+                "__end__".to_string()
+            } else {
+                t.to.clone()
+            };
+            push(from, &mut order);
+            push(to, &mut order);
+        }
+        // Any state never referenced by a declaration or a transition still
+        // needs to appear (isolated, undescribed states are vanishingly rare
+        // but cheap to cover).
+        for s in &diagram.states {
+            if s.id != "[*]" {
+                push(s.id.clone(), &mut order);
+            }
+        }
+        order
+    } else {
+        compute_first_appearance_order(diagram)
     };
-    for s in &diagram.states {
-        if s.id == "[*]" {
-            continue;
-        }
-        let declared_before_use = match first_txn_line(&s.id) {
-            Some(txn_line) => s.source_line < txn_line,
-            None => true,
-        };
-        if declared_before_use {
-            push_entity(s.source_line, s.id.clone());
-        }
-    }
-    for t in &diagram.transitions {
-        let from = if t.from == "[*]" {
-            "__start__".to_string()
-        } else {
-            t.from.clone()
-        };
-        let to = if t.to == "[*]" {
-            "__end__".to_string()
-        } else {
-            t.to.clone()
-        };
-        push_entity(t.source_line, from);
-        push_entity(t.source_line, to);
-    }
-    // Any state never touched by a transition and not declared-before-use
-    // (e.g. an isolated `state X` after its only transition) still needs to
-    // appear; fall back to its declaration line.
-    for s in &diagram.states {
-        if s.id != "[*]" {
-            push_entity(s.source_line, s.id.clone());
-        }
-    }
-    ordered.sort_by_key(|(line, seq, _)| (*line, *seq));
-    let state_ids: Vec<String> = ordered.into_iter().map(|(_, _, id)| id).collect();
 
     let title_h = if diagram.meta.title.is_some() {
         TITLE_HEIGHT
