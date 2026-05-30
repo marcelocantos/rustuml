@@ -73,6 +73,25 @@ struct PlayerLayout<'a> {
     all_states: Vec<String>,
 }
 
+/// Absolute y of a robust state's horizontal line, for a player whose band
+/// begins at `band_top`.
+fn robust_state_line_y(p: &PlayerLayout, band_top: f64, state: &str) -> f64 {
+    band_top + y_of_state(&p.all_states, state)
+}
+
+/// The state active at time `t` on a robust timeline (the last change at or
+/// before `t`, falling back to the first change).
+fn state_at<'a>(p: &'a PlayerLayout, t: i64) -> Option<&'a str> {
+    let changes = &p.timeline.changes;
+    let mut found: Option<&str> = changes.first().map(|c| c.state.as_str());
+    for ch in changes {
+        if ch.at <= t {
+            found = Some(&ch.state);
+        }
+    }
+    found
+}
+
 /// Map a time value to its pixel offset from the first tick.
 fn pos_in_pixel(t: i64, time_min: i64, tick_unit: i64, tick_px: f64) -> f64 {
     (t - time_min) as f64 / tick_unit as f64 * tick_px
@@ -255,6 +274,25 @@ pub fn render(diagram: &TimingDiagram, _theme: &Theme) -> String {
         }
     }
 
+    // ── Time-range annotations (`@T1 <-> @T2 : label`) ──────────────────────────
+    // These attach to the last robust timeline; the arrow sits 5px above the
+    // state line active at the annotation's start time.
+    if !diagram.annotations.is_empty()
+        && let Some(p) = players
+            .iter()
+            .rev()
+            .find(|p| p.timeline.kind == TimelineKind::Robust)
+    {
+        let band_top = vtop + p.body_top + 10.0;
+        for ann in &diagram.annotations {
+            let state = state_at(p, ann.from);
+            let line_y = state
+                .map(|s| robust_state_line_y(p, band_top, s))
+                .unwrap_or(band_top);
+            draw_annotation(&mut svg, tx(ann.from), tx(ann.to), line_y - 5.0, &ann.label);
+        }
+    }
+
     // ── Time axis ─────────────────────────────────────────────────────────────────
     draw_time_axis(
         &mut svg,
@@ -306,6 +344,37 @@ fn highlight_fill(color: Option<&str>) -> String {
             }
         }
     }
+}
+
+/// Colour PlantUML uses for time-constraint annotations.
+const ANNO_COLOR: &str = "#8B0000";
+
+/// Draw a `@T1 <-> @T2 : label` time-range annotation: a double-headed arrow
+/// between the two tick x-positions, with the label centred above.
+fn draw_annotation(svg: &mut SvgBuilder, x_from: f64, x_to: f64, y: f64, label: &str) {
+    // Arrow shaft (inset 5.5px from each tick so the heads sit cleanly).
+    emit_line(svg, x_from + 5.5, y, x_to - 5.5, y, ANNO_COLOR, 1.5);
+    // Left arrowhead: tip at x_from+2.5, base at x_from+10.5.
+    emit_arrowhead(svg, x_from + 10.5, x_from + 2.5, y);
+    // Right arrowhead: tip at x_to-2.5, base at x_to-10.5.
+    emit_arrowhead(svg, x_to - 10.5, x_to - 2.5, y);
+    // Label centred on the span, sitting above the arrow.
+    let tw = text_width(label, FONT_STATE, false);
+    let cx = (x_from + x_to) / 2.0 - tw / 2.0;
+    let baseline = y - 5.0 - descent(FONT_STATE);
+    emit_text_colored(svg, cx, baseline, label, FONT_STATE, false, ANNO_COLOR);
+}
+
+/// A triangular arrowhead pointing from `base_x` toward `tip_x` at height `y`.
+fn emit_arrowhead(svg: &mut SvgBuilder, base_x: f64, tip_x: f64, y: f64) {
+    svg.raw(&format!(
+        r#"<polygon fill="{ANNO_COLOR}" points="{bx},{yb},{bx},{yt},{tx},{y}" style="stroke:{ANNO_COLOR};stroke-width:1;"/>"#,
+        bx = fmt_coord(base_x),
+        yb = fmt_coord(y + 4.0),
+        yt = fmt_coord(y - 4.0),
+        tx = fmt_coord(tip_x),
+        y = fmt_coord(y),
+    ));
 }
 
 /// Dashed highlight boundary line (`stroke-width:2;stroke-dasharray:4,4`).
