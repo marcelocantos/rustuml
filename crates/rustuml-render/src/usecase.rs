@@ -1300,7 +1300,13 @@ fn render_oracle_connections(
                 r#"<polygon fill="{fill}" points="{points}" style="{poly_style}"/>"#,
             ));
         }
-        if let Some((lx, ly, ref text)) = oracle_edge.label {
+        // Edge labels and any `note on link` shape. PlantUML emits, in document
+        // order: the link label (e.g. `«extend»`), then the note's box path and
+        // folded-corner path (`extra_paths`), then the note text. We replay that
+        // order: the first label, the extra paths, then the remaining labels.
+        // Falls back to the single concatenated `label` when no per-line labels
+        // were captured.
+        let emit_label = |svg: &mut SvgBuilder, lx: f64, ly: f64, text: &str| {
             let mut buf = String::new();
             text_render::emit_text(
                 &mut buf,
@@ -1318,6 +1324,36 @@ fn render_oracle_connections(
                 },
             );
             svg.raw(&buf);
+        };
+        let emit_extra_paths = |svg: &mut SvgBuilder| {
+            for (d, style) in &oracle_edge.extra_paths {
+                let style = style
+                    .as_deref()
+                    .unwrap_or("stroke:#181818;stroke-width:0.5;");
+                svg.raw(&format!(
+                    r#"<path d="{d}" fill="{NOTE_FILL}" style="{style}"/>"#
+                ));
+            }
+        };
+        if oracle_edge.labels.is_empty() {
+            emit_extra_paths(&mut *svg);
+            if let Some((lx, ly, ref text)) = oracle_edge.label {
+                emit_label(&mut *svg, lx, ly, text);
+            }
+        } else {
+            // The connection's own label (`: <<extend>>`) precedes the note
+            // shape; the note's text follows it. When the edge carries no label
+            // of its own, every captured text belongs to the note and follows
+            // the note box.
+            let mut labels = oracle_edge.labels.iter();
+            let has_edge_label = conn.label.is_some() || conn.stereotype.is_some();
+            if has_edge_label && let Some((lx, ly, text)) = labels.next() {
+                emit_label(&mut *svg, *lx, *ly, text);
+            }
+            emit_extra_paths(&mut *svg);
+            for (lx, ly, text) in labels {
+                emit_label(&mut *svg, *lx, *ly, text);
+            }
         }
         svg.raw("</g>");
     }
