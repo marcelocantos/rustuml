@@ -2565,7 +2565,7 @@ pub fn render(
                 queue_border_override = Some(resolve_color(val));
             }
             "notebackgroundcolor" | "sequencenotebackgroundcolor" => {
-                note_fill_override = Some(resolve_color(val));
+                note_fill_override = Some(gradient_fill_or(val, &gradient_id));
             }
             "notebordercolor" | "sequencenotebordercolor" => {
                 note_border_override = Some(resolve_color(val));
