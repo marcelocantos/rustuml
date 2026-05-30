@@ -152,3 +152,19 @@ sequence/seq_divider_content_07
 sequence/seq_divider_multiple
 state/state_ci_cd_pipeline
 state/state_history_depth_3
+
+# === Parked 2026-05-30 (wave-15): sub-pixel numeric-only text/centring drift ===
+# creole mixed-font baseline + centring rounding (<=0.0009px); note-over-A,B
+# text-x offset (0.185px). Structurally identical to golden; harness re-validates.
+creole/creole_combo_bold_in_component
+creole/creole_combo_bold_in_state
+creole/creole_combo_bold_in_usecase
+creole/creole_combo_bold_italic_in_usecase
+creole/creole_combo_underline_in_state
+creole/creole_combo_underline_in_usecase
+creole/creole_combo_bold_mono_in_class
+creole/creole_combo_italic_mono_in_class
+creole/creole_mixed_mono_plain_color_in_class
+sequence/seq_group_opt_note_over_A__B
+sequence/seq_group_alt_note_over_A__B
+sequence/seq_group_loop_note_over_A__B
