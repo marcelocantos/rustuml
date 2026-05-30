@@ -2028,8 +2028,10 @@ fn render_composite_with_oracle(diagram: &StateDiagram, orc: &OracleLayout) -> S
             .and_then(|s| s.parent.clone())
     };
 
-    // Track which oracle edges we've emitted, matching by edge id.
-    let mut emitted_edge = vec![false; orc.edges.len()];
+    // Track which oracle edges we've emitted, matching by edge id. A RefCell so
+    // both the top-level walk and the nested-composite recursion (which borrows
+    // it via the shared `ScopeEmit`) can mark edges emitted.
+    let emitted_edge = std::cell::RefCell::new(vec![false; orc.edges.len()]);
 
     // Helper: emit a start/end pseudo-state group from oracle geometry.
     let emit_pseudo = |svg: &mut String, qname: &str, is_start: bool, source_line: &str| {
@@ -2235,6 +2237,21 @@ fn render_composite_with_oracle(diagram: &StateDiagram, orc: &OracleLayout) -> S
         emit_pseudo: &'a dyn Fn(&mut String, &str, bool, &str) -> bool,
         emit_state_box: &'a dyn Fn(&mut String, &State),
         pseudo_qname: &'a dyn Fn(&str, bool) -> String,
+        region_scopes: &'a dyn Fn(&str) -> Vec<String>,
+        /// Free-standing region-divider lines in document order, plus the index
+        /// of the next one to splice. Consumed left-to-right as regions are
+        /// emitted across the whole diagram.
+        dividers: &'a [crate::layout_oracle::RegionDivider],
+        next_divider: &'a std::cell::Cell<usize>,
+        /// Emit a nested composite's header band (`<path>` + border + divider +
+        /// title). Only used on the bare-composite path.
+        emit_cluster: &'a dyn Fn(&mut String, &State),
+        /// Emit the links whose endpoints both sit in a given scope.
+        emit_scope_links: &'a dyn Fn(&mut String, Option<&str>),
+        /// False on the bare-composite path (headers + links emitted inline per
+        /// scope); true when PlantUML wrapped composites in `<g class="cluster">`
+        /// groups (headers up front, all links deferred to the end).
+        has_clusters: bool,
     }
     fn emit_scope_entities(svg: &mut String, scope: Option<&str>, e: &ScopeEmit) {
         let diagram = e.diagram;
@@ -2267,7 +2284,27 @@ fn render_composite_with_oracle(diagram: &StateDiagram, orc: &OracleLayout) -> S
                 continue;
             };
             if st.composite {
-                emit_scope_entities(svg, Some(&st.id), e);
+                // On the bare path, a nested composite emits its own header
+                // band before its regions (the cluster-group path emits all
+                // headers up front via `emit_clusters_dfs`).
+                if !e.has_clusters {
+                    (e.emit_cluster)(svg, st);
+                }
+                // Walk each concurrent region of the nested composite, splicing
+                // the dashed region divider before every region after the first.
+                for (ri, rscope) in (e.region_scopes)(&st.id).into_iter().enumerate() {
+                    if ri > 0 {
+                        let i = e.next_divider.get();
+                        if let Some(div) = e.dividers.get(i) {
+                            svg.push_str(&div.xml);
+                            e.next_divider.set(i + 1);
+                        }
+                    }
+                    emit_scope_entities(svg, Some(&rscope), e);
+                    if !e.has_clusters {
+                        (e.emit_scope_links)(svg, Some(&rscope));
+                    }
+                }
             } else {
                 emit_state_box(svg, st);
             }
@@ -2383,9 +2420,9 @@ fn render_composite_with_oracle(diagram: &StateDiagram, orc: &OracleLayout) -> S
 
     // Emit links whose both endpoints are inside `scope` (None = top level),
     // in oracle document order.
-    let mut emit_scope_links = |svg: &mut String, scope: Option<&str>| {
+    let emit_scope_links = |svg: &mut String, scope: Option<&str>| {
         for (ei, edge) in orc.edges.iter().enumerate() {
-            if emitted_edge[ei] {
+            if emitted_edge.borrow()[ei] {
                 continue;
             }
             // Find the parser transition for this edge to learn its scope.
@@ -2402,7 +2439,7 @@ fn render_composite_with_oracle(diagram: &StateDiagram, orc: &OracleLayout) -> S
             let edge_scope = if fs == ts { fs } else { None };
             if edge_scope.as_deref() == scope {
                 emit_oracle_edge_verbatim(svg, edge);
-                emitted_edge[ei] = true;
+                emitted_edge.borrow_mut()[ei] = true;
             }
         }
     };
@@ -2491,10 +2528,24 @@ fn render_composite_with_oracle(diagram: &StateDiagram, orc: &OracleLayout) -> S
         scopes
     };
 
-    // Pending region-divider lines, consumed in document (y) order. Each is
-    // spliced just before the region whose entities follow it.
-    let mut divider_iter = orc.region_dividers.iter();
-    let mut next_divider = divider_iter.next();
+    // Free-standing region-divider lines, consumed left-to-right (document
+    // order) as concurrent regions are emitted anywhere in the tree. A single
+    // shared cursor threads through both the top-level region walk below and
+    // the nested-composite recursion inside `emit_scope_entities`.
+    let next_divider = std::cell::Cell::new(0usize);
+    let scope_emit = ScopeEmit {
+        diagram,
+        ordered_children: &ordered_children,
+        emit_pseudo: &emit_pseudo,
+        emit_state_box: &emit_state_box,
+        pseudo_qname: &pseudo_qname,
+        region_scopes: &region_scopes,
+        dividers: &orc.region_dividers,
+        next_divider: &next_divider,
+        emit_cluster: &emit_cluster,
+        emit_scope_links: &emit_scope_links,
+        has_clusters,
+    };
 
     // Walk top-level children: emit composites (header band when bare, inner
     // entities, plus inner links when bare) and plain states, then top-level
@@ -2514,23 +2565,14 @@ fn render_composite_with_oracle(diagram: &StateDiagram, orc: &OracleLayout) -> S
             // (captured free-standing from the golden) precedes every region
             // after the first.
             for (ri, scope) in region_scopes(&st.id).into_iter().enumerate() {
-                if ri > 0
-                    && let Some(div) = next_divider
-                {
-                    svg.push_str(&div.xml);
-                    next_divider = divider_iter.next();
+                if ri > 0 {
+                    let i = next_divider.get();
+                    if let Some(div) = orc.region_dividers.get(i) {
+                        svg.push_str(&div.xml);
+                        next_divider.set(i + 1);
+                    }
                 }
-                emit_scope_entities(
-                    &mut svg,
-                    Some(&scope),
-                    &ScopeEmit {
-                        diagram,
-                        ordered_children: &ordered_children,
-                        emit_pseudo: &emit_pseudo,
-                        emit_state_box: &emit_state_box,
-                        pseudo_qname: &pseudo_qname,
-                    },
-                );
+                emit_scope_entities(&mut svg, Some(&scope), &scope_emit);
                 if !has_clusters {
                     emit_scope_links(&mut svg, Some(&scope));
                 }
@@ -2565,9 +2607,9 @@ fn render_composite_with_oracle(diagram: &StateDiagram, orc: &OracleLayout) -> S
     // only the top-level (scope-None) links remain.
     if has_clusters {
         for (ei, edge) in orc.edges.iter().enumerate() {
-            if !emitted_edge[ei] {
+            if !emitted_edge.borrow()[ei] {
                 emit_oracle_edge_verbatim(&mut svg, edge);
-                emitted_edge[ei] = true;
+                emitted_edge.borrow_mut()[ei] = true;
             }
         }
     } else {
