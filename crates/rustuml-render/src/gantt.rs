@@ -26,6 +26,7 @@ const SEP_RULE_OFF: f64 = 14.477565;
 const SEP_TEXT_OFF: f64 = 18.634765;
 const SEP_TEXT_X: f64 = 10.0;
 const BAR_H: f64 = 12.955078125;
+const MILESTONE_LABEL_MIN_W: f64 = 23.0;
 const BAR_TOP_PLAIN: f64 = 18.0;
 const GRID_TOP_PLAIN: f64 = 6.0;
 const GRID_BOTTOM_PAD_PLAIN: f64 = 6.0;
@@ -269,18 +270,25 @@ pub fn render(diagram: &GanttDiagram, _theme: &Theme) -> String {
             let (start_day, dur) = resolved[*idx];
             let label = task_label(task);
             let label_w = text_width(&label, TASK_FONT, false);
-            let lx = if dur == 0 {
-                start_day as f64 * DAY_WIDTH
+            let (lx, reserved_w) = if dur == 0 {
+                // A milestone label reserves at least a fixed minimum cell
+                // width to the right of its diamond, so a short label still
+                // pads the canvas.
+                (
+                    (start_day as f64 * DAY_WIDTH - 8.0).max(8.0) + 8.0,
+                    label_w.max(MILESTONE_LABEL_MIN_W),
+                )
             } else {
                 let bar_x = start_day as f64 * DAY_WIDTH + 2.0;
                 let bar_w = (dur as f64 * DAY_WIDTH - 4.0).max(1.0);
-                if label_w > bar_w {
+                let lx = if label_w > bar_w {
                     bar_x + bar_w + 4.0
                 } else {
                     bar_x + 4.0
-                }
+                };
+                (lx, label_w)
             };
-            label_right = label_right.max(lx + label_w);
+            label_right = label_right.max(lx + reserved_w);
         }
     }
     let total_width = (chart_width + 1.0).max(label_right + 1.0);
@@ -435,7 +443,9 @@ pub fn render(diagram: &GanttDiagram, _theme: &Theme) -> String {
             let (start_day, dur) = resolved[*idx];
             let bar_top = row_bar_top(vi);
             if dur == 0 {
-                let cx = start_day as f64 * DAY_WIDTH - 8.0;
+                // A day-0 milestone would push the diamond off the left edge;
+                // PlantUML clamps the centre so the diamond stays on-canvas.
+                let cx = (start_day as f64 * DAY_WIDTH - 8.0).max(8.0);
                 let cy = bar_top + 5.0;
                 let fill = task
                     .color
@@ -610,7 +620,8 @@ pub fn render(diagram: &GanttDiagram, _theme: &Theme) -> String {
                 let ly = row_bar_top(vi) + ascent(TASK_FONT);
                 let label = task_label(task);
                 let lx = if dur == 0 {
-                    start_day as f64 * DAY_WIDTH
+                    // Label sits 8px right of the (clamped) diamond centre.
+                    (start_day as f64 * DAY_WIDTH - 8.0).max(8.0) + 8.0
                 } else {
                     // Labels normally sit inside the bar (4px from its left
                     // edge). When the text is wider than the bar, PlantUML
