@@ -41,6 +41,18 @@ const UC_RY_PAD: f64 = 23.6825;
 const MARGIN: f64 = 7.0;
 const GAP: f64 = 40.0;
 
+const NOTE_FILL: &str = "#FEFFDD";
+const NOTE_FOLD: f64 = 10.0;
+const NOTE_FONT_SIZE: u32 = 13;
+
+/// Which box edge carries the note's leader (callout) notch.
+enum LeaderSide {
+    Top,
+    Bottom,
+    Left,
+    Right,
+}
+
 /// Round a coordinate to PlantUML's 4-decimal format, dropping trailing zeros.
 fn fc(v: f64) -> String {
     pm::fmt_coord(v)
@@ -232,6 +244,39 @@ pub fn render_with_oracle(
             render_actor_i(&mut svg, i);
         } else {
             render_uc_i(&mut svg, i);
+        }
+    }
+
+    // Attached/floating notes. PlantUML lays each note out as a
+    // `<g class="entity">` with an auto-generated `GMN*` qualified name and a
+    // box-plus-leader path; we reconstruct that path locally from the box
+    // rectangle and leader apex captured by the oracle. Notes are emitted after
+    // the entity passes but before links, matching PlantUML's source-line order
+    // (the note declaration precedes the connection in these diagrams).
+    if let Some(orc) = oracle {
+        // Build the set of qualified names that belong to real diagram nodes
+        // (actors, use cases, packages). The oracle also stashes each note's
+        // path-based shape in `entities`, so we can't rely on `entities` keys
+        // to tell notes apart — instead skip only notes whose name matches a
+        // declared element.
+        let mut node_qnames: std::collections::HashSet<String> = std::collections::HashSet::new();
+        for a in &diagram.actors {
+            node_qnames.insert(a.id.clone());
+            node_qnames.insert(a.label.clone());
+        }
+        for uc in &diagram.use_cases {
+            node_qnames.insert(qualified_name(&uc.id, diagram));
+            node_qnames.insert(uc.id.clone());
+            node_qnames.insert(uc.label.clone());
+        }
+        for p in &diagram.packages {
+            node_qnames.insert(p.name.clone());
+        }
+        for note in &orc.note_entities {
+            if node_qnames.contains(note.qualified_name.as_str()) {
+                continue;
+            }
+            emit_note(&mut svg, note);
         }
     }
 
@@ -901,6 +946,120 @@ fn render_use_case(
         }
         // Any trailing separators after the last text line.
         flush_seps(svg, &mut sep_idx, f64::INFINITY);
+    }
+    svg.raw("</g>");
+}
+
+/// Render a note entity, reconstructing the box-plus-leader path locally from
+/// the oracle-captured geometry (box rect, leader apex/base, text baselines).
+fn emit_note(svg: &mut SvgBuilder, note: &crate::layout_oracle::OracleNoteEntity) {
+    use std::fmt::Write;
+
+    let Some(g) = note.box_geom.as_ref() else {
+        return;
+    };
+    let bx = g.x;
+    let by = g.y;
+    let right = g.x + g.width;
+    let bottom = g.y + g.height;
+    let rf = right - NOTE_FOLD; // fold inner x
+    let yf = by + NOTE_FOLD; // fold inner y
+
+    // The leader sits on whichever box edge the apex points toward.
+    let side = g.apex.map(|(ax, ay)| {
+        if ay < by {
+            LeaderSide::Top
+        } else if ay > bottom {
+            LeaderSide::Bottom
+        } else if ax < bx {
+            LeaderSide::Left
+        } else {
+            LeaderSide::Right
+        }
+    });
+
+    // PlantUML does not place the leader base points symmetrically about the
+    // apex, so emit them verbatim from the captured geometry.
+    let leader = |d: &mut String| {
+        if let (Some((ax, ay)), Some((b0, b1))) = (g.apex, g.leader_base) {
+            let _ = write!(
+                d,
+                "L{},{} L{},{} L{},{} ",
+                fc(b0.0),
+                fc(b0.1),
+                fc(ax),
+                fc(ay),
+                fc(b1.0),
+                fc(b1.1),
+            );
+        }
+    };
+
+    // Walk the outline counter-clockwise from the top-left corner, splicing the
+    // leader into the appropriate edge.
+    let mut d = String::new();
+    let _ = write!(d, "M{},{} ", fc(bx), fc(by));
+    if matches!(side, Some(LeaderSide::Left)) {
+        leader(&mut d);
+    }
+    let _ = write!(d, "L{},{} ", fc(bx), fc(bottom));
+    let _ = write!(d, "A0,0 0 0 0 {},{} ", fc(bx), fc(bottom));
+    if matches!(side, Some(LeaderSide::Bottom)) {
+        leader(&mut d);
+    }
+    let _ = write!(d, "L{},{} ", fc(right), fc(bottom));
+    let _ = write!(d, "A0,0 0 0 0 {},{} ", fc(right), fc(bottom));
+    if matches!(side, Some(LeaderSide::Right)) {
+        leader(&mut d);
+    }
+    let _ = write!(d, "L{},{} ", fc(right), fc(yf));
+    let _ = write!(d, "L{},{} ", fc(rf), fc(by));
+    if matches!(side, Some(LeaderSide::Top)) {
+        leader(&mut d);
+    }
+    let _ = write!(d, "L{},{} ", fc(bx), fc(by));
+    let _ = write!(d, "A0,0 0 0 0 {},{}", fc(bx), fc(by));
+
+    let src_attr = note
+        .source_line
+        .as_deref()
+        .map(|sl| format!(r#" data-source-line="{sl}""#))
+        .unwrap_or_default();
+    let ent_id = note.entity_id.as_deref().unwrap_or("");
+    svg.raw(&format!(
+        r#"<g class="entity" data-qualified-name="{qn}"{src_attr} id="{ent_id}">"#,
+        qn = note.qualified_name,
+    ));
+    svg.raw(&format!(
+        r#"<path d="{d}" fill="{NOTE_FILL}" style="stroke:{STROKE};stroke-width:0.5;"/>"#,
+    ));
+    // Folded-corner detail (second path).
+    svg.raw(&format!(
+        r#"<path d="M{rf_s},{by_s} L{rf_s},{yf_s} L{r_s},{yf_s} L{rf_s},{by_s}" fill="{NOTE_FILL}" style="stroke:{STROKE};stroke-width:0.5;"/>"#,
+        rf_s = fc(rf),
+        by_s = fc(by),
+        yf_s = fc(yf),
+        r_s = fc(right),
+    ));
+    // Text lines at their captured baselines.
+    for (tx, ty, line) in &g.text_lines {
+        let mut buf = String::new();
+        text_render::emit_text(
+            &mut buf,
+            line,
+            &TextBase {
+                x: *tx,
+                y: *ty,
+                font_size: NOTE_FONT_SIZE,
+                font_family: "sans-serif",
+                fill: TEXT_COLOR,
+                bold: false,
+                italic: false,
+                underline: false,
+                skip_underline: false,
+            },
+        );
+        svg.raw(&buf);
     }
     svg.raw("</g>");
 }
