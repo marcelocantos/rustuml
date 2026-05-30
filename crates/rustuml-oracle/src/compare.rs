@@ -72,10 +72,173 @@ pub enum Difference {
     },
 }
 
+/// Geometry-coordinate attributes eligible for ULP-tolerance classification.
+/// DELIBERATELY excludes `style` (carries stroke-width — a diff there is a
+/// real bug), `font-size`, and `data-source-line` (a line index; off-by-one
+/// is a real bug, not rounding noise). Used ONLY by `is_ulp_only`, never to
+/// relax the strict pass/fail.
+const ULP_GEOM_ATTRS: &[&str] = &[
+    "x",
+    "x1",
+    "x2",
+    "y",
+    "y1",
+    "y2",
+    "cx",
+    "cy",
+    "width",
+    "height",
+    "rx",
+    "ry",
+    "viewBox",
+    "points",
+    "textLength",
+    "d",
+];
+
+/// One unit-in-the-last-place at PlantUML's 4-decimal emission precision is
+/// 1e-4; admit a single tick (and its fp representation) but reject >=2 ticks.
+pub const ULP_EPS: f64 = 1.5e-4;
+
 impl CompareResult {
     pub fn is_match(&self) -> bool {
         self.differences.is_empty()
     }
+
+    /// If — and only if — every difference is confined to geometry-coordinate
+    /// attribute VALUES, return `Some(max per-token absolute deviation)`.
+    /// Return `None` when there is any STRUCTURAL difference: an
+    /// element-count / tag / text / depth mismatch, a differing attribute SET,
+    /// or a diff in any non-geometry attribute (color, style, stroke-width,
+    /// font, `data-source-line`, …). Element ORDER is already structural here
+    /// (the comparator is positional), so a reordering surfaces as tag/attr
+    /// mismatches and yields `None`.
+    ///
+    /// This is the PARK-ELIGIBILITY guard: parking may forgive coordinate
+    /// deviations (FP-accumulation, missing font-metric tables, sub-pixel
+    /// drift) of ANY magnitude — that magnitude is a documented per-case
+    /// judgement — but it can NEVER forgive a structural difference. The
+    /// returned magnitude is reported so the parked set can be audited (a
+    /// large deviation in a "parked" case is a red flag to re-review).
+    pub fn numeric_only_max_deviation(&self) -> Option<f64> {
+        if self.differences.is_empty() {
+            return None;
+        }
+        let mut max_dev = 0.0_f64;
+        for d in &self.differences {
+            match d {
+                Difference::AttrMismatch {
+                    expected_attrs,
+                    actual_attrs,
+                    ..
+                } => {
+                    let dev = attrs_numeric_only_dev(expected_attrs, actual_attrs)?;
+                    max_dev = max_dev.max(dev);
+                }
+                _ => return None,
+            }
+        }
+        Some(max_dev)
+    }
+
+    /// Tight informational tier: numeric-only AND within `eps` (≈1 ULP at
+    /// 4-decimal precision). Used only for reporting the FP-rounding subset.
+    pub fn is_ulp_only(&self, eps: f64) -> bool {
+        self.numeric_only_max_deviation().is_some_and(|d| d <= eps)
+    }
+}
+
+/// `None` if the diff is structural (differing attribute set, duplicate name,
+/// or any non-geometry attribute differs, or a geometry value differs in its
+/// non-numeric skeleton / token count). Otherwise `Some(max token deviation)`.
+fn attrs_numeric_only_dev(exp: &[(String, String)], act: &[(String, String)]) -> Option<f64> {
+    use std::collections::BTreeMap;
+    let em: BTreeMap<&str, &str> = exp.iter().map(|(k, v)| (k.as_str(), v.as_str())).collect();
+    let am: BTreeMap<&str, &str> = act.iter().map(|(k, v)| (k.as_str(), v.as_str())).collect();
+    if em.len() != exp.len() || am.len() != act.len() || em.keys().ne(am.keys()) {
+        return None;
+    }
+    let mut max_dev = 0.0_f64;
+    for (name, ev) in &em {
+        let av = am[name];
+        if *ev == av {
+            continue;
+        }
+        if !ULP_GEOM_ATTRS.contains(name) {
+            return None; // a non-geometry attribute changed: structural
+        }
+        max_dev = max_dev.max(numeric_tokens_dev(ev, av)?);
+    }
+    Some(max_dev)
+}
+
+/// `None` if `a`/`b` differ in non-numeric skeleton or token count (a
+/// structural difference within the value); otherwise `Some(max |xi-yi|)`.
+fn numeric_tokens_dev(a: &str, b: &str) -> Option<f64> {
+    let (sa, na) = tokenize_numbers(a);
+    let (sb, nb) = tokenize_numbers(b);
+    if sa != sb || na.len() != nb.len() {
+        return None;
+    }
+    Some(
+        na.iter()
+            .zip(&nb)
+            .map(|(x, y)| (x - y).abs())
+            .fold(0.0_f64, f64::max),
+    )
+}
+
+/// Split a string into its non-numeric "skeleton" (numbers replaced by a
+/// sentinel) and the parsed numeric tokens, in order. A number is an optional
+/// sign (only at string start or after a non-number char) followed by digits
+/// with an optional single decimal point.
+fn tokenize_numbers(s: &str) -> (String, Vec<f64>) {
+    let bytes = s.as_bytes();
+    let mut skeleton = String::with_capacity(s.len());
+    let mut nums = Vec::new();
+    let mut i = 0;
+    while i < bytes.len() {
+        let c = bytes[i];
+        let prev_is_numish = i > 0 && {
+            let p = bytes[i - 1];
+            p.is_ascii_digit() || p == b'.'
+        };
+        let starts_number = c.is_ascii_digit()
+            || (c == b'.' && i + 1 < bytes.len() && bytes[i + 1].is_ascii_digit())
+            || ((c == b'-' || c == b'+')
+                && !prev_is_numish
+                && i + 1 < bytes.len()
+                && (bytes[i + 1].is_ascii_digit() || bytes[i + 1] == b'.'));
+        if starts_number {
+            let start = i;
+            if c == b'-' || c == b'+' {
+                i += 1;
+            }
+            let mut seen_dot = false;
+            while i < bytes.len() {
+                let d = bytes[i];
+                if d.is_ascii_digit() {
+                    i += 1;
+                } else if d == b'.' && !seen_dot {
+                    seen_dot = true;
+                    i += 1;
+                } else {
+                    break;
+                }
+            }
+            match s[start..i].parse::<f64>() {
+                Ok(n) => {
+                    skeleton.push('\u{0}');
+                    nums.push(n);
+                }
+                Err(_) => skeleton.push_str(&s[start..i]),
+            }
+        } else {
+            skeleton.push(c as char);
+            i += 1;
+        }
+    }
+    (skeleton, nums)
 }
 
 impl fmt::Display for CompareResult {
@@ -795,5 +958,44 @@ mod tests {
             result.is_match(),
             "xmlns attributes should be ignored: {result}"
         );
+    }
+
+    #[test]
+    fn numeric_only_classifier() {
+        let base = |w: &str, fill: &str, txt: &str| {
+            format!(
+                r##"<svg xmlns="http://www.w3.org/2000/svg" width="100" height="200">
+                <rect x="10" y="20" width="{w}" height="40" fill="{fill}"/>
+                <text x="11" y="33">{txt}</text>
+                </svg>"##
+            )
+        };
+        let golden = base("30.2618", "#F1F1F1", "Hi");
+
+        // Pure coordinate deviation (width off by 0.0001) → park-eligible, dev≈1e-4.
+        let r = compare_svg_strict(&golden, &base("30.2617", "#F1F1F1", "Hi")).unwrap();
+        let d = r
+            .numeric_only_max_deviation()
+            .expect("should be numeric-only");
+        assert!((d - 1e-4).abs() < 1e-9, "dev {d}");
+        assert!(r.is_ulp_only(ULP_EPS));
+
+        // Larger pure coordinate deviation (3px) → still numeric-only (magnitude
+        // is the reviewer's call), but NOT within the tight ULP tier.
+        let r = compare_svg_strict(&golden, &base("33.2618", "#F1F1F1", "Hi")).unwrap();
+        assert_eq!(r.numeric_only_max_deviation().map(|d| d.round()), Some(3.0));
+        assert!(!r.is_ulp_only(ULP_EPS));
+
+        // Color difference → structural, NEVER park-eligible.
+        let r = compare_svg_strict(&golden, &base("30.2618", "#FF0000", "Hi")).unwrap();
+        assert_eq!(r.numeric_only_max_deviation(), None);
+
+        // Text difference → structural.
+        let r = compare_svg_strict(&golden, &base("30.2618", "#F1F1F1", "Bye")).unwrap();
+        assert_eq!(r.numeric_only_max_deviation(), None);
+
+        // Exact match → None (not a near-miss).
+        let r = compare_svg_strict(&golden, &golden).unwrap();
+        assert_eq!(r.numeric_only_max_deviation(), None);
     }
 }

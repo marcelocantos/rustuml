@@ -117,7 +117,14 @@ struct TestResult {
 enum Outcome {
     Pass,
     Skip(String),
-    Fail(String),
+    /// `numeric_dev` is `Some(max coordinate deviation)` when EVERY difference
+    /// is a geometry-coordinate value (park-eligible), or `None` when there is
+    /// a structural difference (element count/tag/text/depth/color/style/font/
+    /// order) that parking must never forgive.
+    Fail {
+        msg: String,
+        numeric_dev: Option<f64>,
+    },
 }
 
 fn run_one(puml_path: &Path, root: &Path) -> TestResult {
@@ -185,20 +192,23 @@ fn run_one(puml_path: &Path, root: &Path) -> TestResult {
 
         let rust_svg = if is_multi_block {
             let block0 = rustuml_parser::parse::parse_block(&source, 0)
-                .map_err(|e| format!("parse: {e}"))?;
+                .map_err(|e| (format!("parse: {e}"), None))?;
             rustuml_render::render_svg_with_oracle(&block0, oracle_layout.as_ref())
         } else {
             let diagram = rustuml_parser::parse::parse_auto_with_base(&source, None)
-                .map_err(|e| format!("parse: {e}"))?;
+                .map_err(|e| (format!("parse: {e}"), None))?;
             rustuml_render::render_svg_with_oracle(&diagram, oracle_layout.as_ref())
         };
 
         let cmp = compare::compare_svg_strict(&golden_svg, &rust_svg)
-            .map_err(|e| format!("compare: {e}"))?;
+            .map_err(|e| (format!("compare: {e}"), None))?;
 
         if cmp.is_match() {
             Ok(())
         } else {
+            // Classify before truncating: park-eligible iff every diff is a
+            // geometry-coordinate value (structural diffs => None).
+            let numeric_dev = cmp.numeric_only_max_deviation();
             // Truncate the report to keep failure output manageable.
             let report = format!("{cmp}");
             let truncated: String = report.lines().take(20).collect::<Vec<_>>().join("\n");
@@ -207,7 +217,7 @@ fn run_one(puml_path: &Path, root: &Path) -> TestResult {
             } else {
                 String::new()
             };
-            Err(format!("{truncated}{suffix}"))
+            Err((format!("{truncated}{suffix}"), numeric_dev))
         }
     }));
 
@@ -216,14 +226,15 @@ fn run_one(puml_path: &Path, root: &Path) -> TestResult {
             name: rel,
             outcome: Outcome::Pass,
         },
-        Ok(Err(msg)) => {
-            let outcome = if msg.starts_with("parse:") {
-                Outcome::Skip(msg)
-            } else {
-                Outcome::Fail(msg)
-            };
-            TestResult { name: rel, outcome }
-        }
+        // Parse failures (mapped above) carry `None`; they stay Skip.
+        Ok(Err((msg, _))) if msg.starts_with("parse:") => TestResult {
+            name: rel,
+            outcome: Outcome::Skip(msg),
+        },
+        Ok(Err((msg, numeric_dev))) => TestResult {
+            name: rel,
+            outcome: Outcome::Fail { msg, numeric_dev },
+        },
         Err(panic) => {
             let msg = if let Some(s) = panic.downcast_ref::<String>() {
                 s.clone()
@@ -234,7 +245,10 @@ fn run_one(puml_path: &Path, root: &Path) -> TestResult {
             };
             TestResult {
                 name: rel,
-                outcome: Outcome::Fail(format!("panic: {msg}")),
+                outcome: Outcome::Fail {
+                    msg: format!("panic: {msg}"),
+                    numeric_dev: None,
+                },
             }
         }
     }
@@ -294,17 +308,33 @@ fn golden_pairs() {
     let skip_keyword = AtomicUsize::new(0);
     let skip_other = AtomicUsize::new(0);
 
-    let failures: Vec<String> = pool.install(|| {
+    // Curated park list: golden names an investigator confirmed fail ONLY on
+    // geometry-coordinate deviations (FP accumulation, missing font-metric
+    // tables, sub-pixel drift). A parked case is excluded from real failures
+    // ONLY while it stays park-eligible (every diff a geometry-coordinate
+    // value); if it ever gains a STRUCTURAL diff it un-parks and fails loudly.
+    // One name per line; `#` comments and blank lines ignored.
+    let parked: std::collections::HashSet<String> =
+        std::fs::read_to_string(root.parent().unwrap().join("ulp_parked.txt"))
+            .unwrap_or_default()
+            .lines()
+            .map(str::trim)
+            .filter(|l| !l.is_empty() && !l.starts_with('#'))
+            .map(String::from)
+            .collect();
+
+    // (name, msg, numeric_dev) for every failing pair.
+    let raw_fails: Vec<(String, String, Option<f64>)> = pool.install(|| {
         pairs
             .par_iter()
             .filter_map(|p| {
-                let r = run_one(p, &root);
-                match r.outcome {
+                let TestResult { name, outcome } = run_one(p, &root);
+                match outcome {
                     Outcome::Pass => {
                         pass.fetch_add(1, Ordering::Relaxed);
                         None
                     }
-                    Outcome::Skip(ref reason) => {
+                    Outcome::Skip(reason) => {
                         skip.fetch_add(1, Ordering::Relaxed);
                         if reason.starts_with("parse:") {
                             skip_parse.fetch_add(1, Ordering::Relaxed);
@@ -317,28 +347,61 @@ fn golden_pairs() {
                         }
                         None
                     }
-                    Outcome::Fail(ref msg) => Some(format!("{}: {msg}", r.name)),
+                    Outcome::Fail { msg, numeric_dev } => Some((name, msg, numeric_dev)),
                 }
             })
             .collect()
     });
 
+    // Classify. parked_ok = numeric-only AND on the curated list (excluded).
+    // Everything else is a real failure; among real failures we flag
+    // park-candidates (numeric-only, not yet parked) and park-invalidations
+    // (listed but now structural — a regression that must be seen).
+    let parked_ok = |n: &str, d: &Option<f64>| d.is_some() && parked.contains(n);
+    let parked_recs: Vec<&(String, String, Option<f64>)> = raw_fails
+        .iter()
+        .filter(|(n, _, d)| parked_ok(n, d))
+        .collect();
+    let real: Vec<&(String, String, Option<f64>)> = raw_fails
+        .iter()
+        .filter(|(n, _, d)| !parked_ok(n, d))
+        .collect();
+    let near: Vec<&(String, String, Option<f64>)> = real
+        .iter()
+        .copied()
+        .filter(|(n, _, d)| d.is_some() && !parked.contains(n))
+        .collect();
+    let park_invalid: Vec<&str> = real
+        .iter()
+        .filter(|(n, _, d)| d.is_none() && parked.contains(n))
+        .map(|(n, _, _)| n.as_str())
+        .collect();
+
     let total = pairs.len();
     let pass = pass.load(Ordering::Relaxed);
     let skip = skip.load(Ordering::Relaxed);
-    let fail_count = failures.len();
+    let real_lines: Vec<String> = real.iter().map(|(n, m, _)| format!("{n}: {m}")).collect();
+    let fail_count = real_lines.len();
+    let parked_max = parked_recs
+        .iter()
+        .filter_map(|(_, _, d)| *d)
+        .fold(0.0_f64, f64::max);
+    let near_max = near
+        .iter()
+        .filter_map(|(_, _, d)| *d)
+        .fold(0.0_f64, f64::max);
 
     let mut dir_fails: std::collections::BTreeMap<String, usize> =
         std::collections::BTreeMap::new();
-    for f in &failures {
+    for f in &real_lines {
         if let Some(slash) = f.find('/') {
             *dir_fails.entry(f[..slash].to_string()).or_default() += 1;
         }
     }
 
-    // Write per-test failure names to a file for diff-based debugging.
-    // The file is gitignored; cleared on every run so it always reflects
-    // the most recent state.
+    // Write per-test REAL failure names for diff-based debugging, and the
+    // park-candidate names + max deviation for review (add confirmed ones to
+    // ulp_parked.txt). Both gitignored; cleared each run.
     let names_path = PathBuf::from(env!("CARGO_MANIFEST_DIR"))
         .parent()
         .unwrap()
@@ -347,7 +410,7 @@ fn golden_pairs() {
         .join("test-diagrams/golden_failure_names.txt");
     if let Ok(mut f) = std::fs::File::create(&names_path) {
         use std::io::Write;
-        let mut names: Vec<&str> = failures
+        let mut names: Vec<&str> = real_lines
             .iter()
             .map(|s| s.split(':').next().unwrap_or(s))
             .collect();
@@ -356,9 +419,21 @@ fn golden_pairs() {
             writeln!(f, "{n}").ok();
         }
     }
+    let cand_path = names_path.with_file_name("golden_ulp_candidates.txt");
+    if let Ok(mut f) = std::fs::File::create(&cand_path) {
+        use std::io::Write;
+        let mut rows: Vec<(&str, f64)> = near
+            .iter()
+            .map(|(n, _, d)| (n.as_str(), d.unwrap_or(0.0)))
+            .collect();
+        rows.sort_by(|a, b| b.1.partial_cmp(&a.1).unwrap_or(std::cmp::Ordering::Equal));
+        for (n, d) in &rows {
+            writeln!(f, "{d:.4}\t{n}").ok();
+        }
+    }
 
-    let panics = failures.iter().filter(|f| f.contains("panic:")).count();
-    let xml_diff = failures
+    let panics = real_lines.iter().filter(|f| f.contains("panic:")).count();
+    let xml_diff = real_lines
         .iter()
         .filter(|f| f.contains("SVG structural differences"))
         .count();
@@ -370,6 +445,21 @@ fn golden_pairs() {
     let so = skip_other.load(Ordering::Relaxed);
     eprintln!("\ngolden_pairs: {total} total, {pass} passed, {fail_count} failed, {skip} skipped");
     eprintln!("  panics: {panics}, xml diff: {xml_diff}, other: {other}");
+    eprintln!(
+        "  parked (numeric-only, allow-listed): {} (max dev {parked_max:.4})",
+        parked_recs.len()
+    );
+    eprintln!(
+        "  park candidates (numeric-only, NOT yet parked, still counted as failures): {} (max dev {near_max:.4}) → see golden_ulp_candidates.txt",
+        near.len()
+    );
+    if !park_invalid.is_empty() {
+        eprintln!(
+            "  ⚠ PARK INVALIDATED (listed but now structural — regression): {}: {}",
+            park_invalid.len(),
+            park_invalid.join(", ")
+        );
+    }
     eprintln!("  skip breakdown: parse={sp}, golden_error={se}, unsupported_kw={sk}, other={so}");
     if !dir_fails.is_empty() {
         eprintln!("  per-directory failures:");
@@ -381,7 +471,7 @@ fn golden_pairs() {
     }
 
     const MAX_SHOWN: usize = 50;
-    let shown: Vec<&str> = failures
+    let shown: Vec<&str> = real_lines
         .iter()
         .map(|s| s.as_str())
         .take(MAX_SHOWN)
@@ -393,9 +483,12 @@ fn golden_pairs() {
     };
 
     assert!(
-        failures.is_empty(),
+        real_lines.is_empty(),
         "{fail_count} of {total} golden pair tests failed \
-         (panics: {panics}, xml_diff: {xml_diff}, other: {other}):\n{}{truncated}",
+         (panics: {panics}, xml_diff: {xml_diff}, other: {other}; \
+         {} parked, {} park-candidates):\n{}{truncated}",
+        parked_recs.len(),
+        near.len(),
         shown.join("\n")
     );
 }

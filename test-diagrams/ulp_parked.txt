@@ -1,0 +1,10 @@
+# Parked golden cases — confirmed by investigation to fail ONLY on
+# geometry-coordinate deviations (JVM floating-point accumulation, missing
+# font-metric tables, sub-pixel drift), with NO structural/text/color/count/
+# order difference. The harness re-validates park-eligibility every run: if a
+# listed case ever gains a structural diff it un-parks and fails loudly.
+#
+# One golden name per line (e.g. activity/act_partition_basic). Add a trailing
+# reason after `#`. Review candidates in test-diagrams/golden_ulp_candidates.txt
+# (max-deviation sorted) before adding. Tackle the parked set in a final pass
+# (port exact FP arithmetic, or accept as the documented ceiling).
