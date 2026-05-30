@@ -247,6 +247,9 @@ const CREATE_EXTRA_ADVANCE: f64 = 12.177753125;
 /// Offset for an activation bar that begins on a create+activate message: the bar
 /// starts below the inline head box rather than at the arrow.
 const CREATE_BAR_OFFSET: f64 = 10.0;
+/// Offset for a bare `activate` that precedes the first message: PlantUML draws
+/// the bar starting one message step below the participant head.
+const ACTIVATION_PRE_MESSAGE_OFFSET: f64 = 10.0;
 const HEAD_BOX_RX: f64 = 2.5;
 const BOX_TEXT_X_PAD: f64 = 7.0;
 const BOX_TEXT_Y_OFFSET: f64 = 20.535156250; // exact Java double: baseline from box top
@@ -3625,24 +3628,31 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme) -> String {
         end_event_idx: usize,   // event index where activation ends
         color: Option<String>,  // fill color (e.g., "#0000FF")
         depth: usize,           // nesting depth (0 = outermost)
+        // A bare `activate` before the first message draws its bar starting one
+        // message step below the participant head rather than flush with it.
+        pre_first_message: bool,
     }
 
     let mut activation_bars: Vec<ActivationBar> = Vec::new();
     {
         let mut tracker = ActivationTracker::new();
         // Track open activations: (participant_id, event_idx, color, depth)
-        let mut open_activations: Vec<(String, usize, Option<String>, usize)> = Vec::new();
+        // (id, start_event_idx, color, depth, pre_first_message)
+        let mut open_activations: Vec<(String, usize, Option<String>, usize, bool)> = Vec::new();
         let mut last_event_idx: usize = 0;
+        let mut seen_message = false;
 
         // Count currently open activations for a given participant.
-        let open_depth = |open: &[(String, usize, Option<String>, usize)], pid: &str| -> usize {
-            open.iter().filter(|(id, _, _, _)| id == pid).count()
-        };
+        let open_depth =
+            |open: &[(String, usize, Option<String>, usize, bool)], pid: &str| -> usize {
+                open.iter().filter(|(id, _, _, _, _)| id == pid).count()
+            };
 
         for (ev_idx, event) in diagram.events.iter().enumerate() {
             match event {
                 Event::Message(msg) => {
                     last_event_idx = ev_idx;
+                    seen_message = true;
 
                     // Process activation changes from ++ / -- on message
                     if let Some(act) = &msg.activation {
@@ -3655,15 +3665,16 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme) -> String {
                                     ev_idx,
                                     msg.activation_color.clone(),
                                     depth,
+                                    false,
                                 ));
                             }
                             ActivationChange::Deactivate => {
                                 tracker.deactivate(&msg.from);
                                 if let Some(pos) = open_activations
                                     .iter()
-                                    .rposition(|(id, _, _, _)| id == &msg.from)
+                                    .rposition(|(id, _, _, _, _)| id == &msg.from)
                                 {
-                                    let (pid, start_idx, color, depth) =
+                                    let (pid, start_idx, color, depth, pre) =
                                         open_activations.remove(pos);
                                     activation_bars.push(ActivationBar {
                                         participant_id: pid,
@@ -3671,6 +3682,7 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme) -> String {
                                         end_event_idx: ev_idx,
                                         color,
                                         depth,
+                                        pre_first_message: pre,
                                     });
                                 }
                             }
@@ -3683,21 +3695,28 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme) -> String {
                 Event::Activate(id, color) => {
                     let depth = open_depth(&open_activations, id);
                     tracker.activate(id);
-                    open_activations.push((id.clone(), last_event_idx, color.clone(), depth));
+                    open_activations.push((
+                        id.clone(),
+                        last_event_idx,
+                        color.clone(),
+                        depth,
+                        !seen_message,
+                    ));
                 }
                 Event::Deactivate(id) => {
                     tracker.deactivate(id);
                     if let Some(pos) = open_activations
                         .iter()
-                        .rposition(|(pid, _, _, _)| pid == id)
+                        .rposition(|(pid, _, _, _, _)| pid == id)
                     {
-                        let (pid, start_idx, color, depth) = open_activations.remove(pos);
+                        let (pid, start_idx, color, depth, pre) = open_activations.remove(pos);
                         activation_bars.push(ActivationBar {
                             participant_id: pid,
                             start_event_idx: start_idx,
                             end_event_idx: last_event_idx,
                             color,
                             depth,
+                            pre_first_message: pre,
                         });
                     }
                 }
@@ -3705,7 +3724,7 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme) -> String {
                     last_event_idx = ev_idx;
                     // Return deactivates the most recently activated participant
                     if let Some(pos) = open_activations.len().checked_sub(1) {
-                        let (pid, start_idx, color, depth) = open_activations.remove(pos);
+                        let (pid, start_idx, color, depth, pre) = open_activations.remove(pos);
                         tracker.deactivate(&pid);
                         activation_bars.push(ActivationBar {
                             participant_id: pid,
@@ -3713,6 +3732,7 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme) -> String {
                             end_event_idx: ev_idx,
                             color,
                             depth,
+                            pre_first_message: pre,
                         });
                     }
                 }
@@ -3722,13 +3742,14 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme) -> String {
 
         // Close any remaining open activations — extend to the last event
         let final_idx = diagram.events.len().saturating_sub(1);
-        for (pid, start_idx, color, depth) in open_activations {
+        for (pid, start_idx, color, depth, pre) in open_activations {
             activation_bars.push(ActivationBar {
                 participant_id: pid,
                 start_event_idx: start_idx,
                 end_event_idx: final_idx,
                 color,
                 depth,
+                pre_first_message: pre,
             });
         }
 
@@ -4160,9 +4181,16 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme) -> String {
     // When a message both creates and activates its target, the activation bar
     // begins below the inline head box (10px past the arrow), not at the arrow.
     let bar_create_offset = |bar: &ActivationBar| -> f64 {
+        // A bare `activate` before the first message begins its bar one message
+        // step below the participant head (PlantUML reserves a lead-in step).
+        let pre = if bar.pre_first_message {
+            ACTIVATION_PRE_MESSAGE_OFFSET
+        } else {
+            0.0
+        };
         match create_msg_idx.get(&bar.participant_id) {
-            Some(&cidx) if cidx == bar.start_event_idx => CREATE_BAR_OFFSET,
-            _ => 0.0,
+            Some(&cidx) if cidx == bar.start_event_idx => CREATE_BAR_OFFSET + pre,
+            _ => pre,
         }
     };
 
