@@ -1331,7 +1331,7 @@ fn recover_db_width(label: &str, oracle_w: f64, x: f64) -> f64 {
 }
 
 #[allow(clippy::too_many_arguments)]
-fn emit_database(
+pub(crate) fn emit_database(
     svg: &mut SvgBuilder,
     x: f64,
     y: f64,
@@ -1388,7 +1388,15 @@ fn emit_database(
 
 // ---- Queue (cylinder rotated 90 degrees) ---------------------------------
 
-fn emit_queue(svg: &mut SvgBuilder, x: f64, y: f64, w: f64, h: f64, fill: &str, stroke: &str) {
+pub(crate) fn emit_queue(
+    svg: &mut SvgBuilder,
+    x: f64,
+    y: f64,
+    w: f64,
+    h: f64,
+    fill: &str,
+    stroke: &str,
+) {
     // Like database but rotated: rounded left + straight top/bottom + rounded right.
     // The "right wall" lip is at x+w-10.
     //

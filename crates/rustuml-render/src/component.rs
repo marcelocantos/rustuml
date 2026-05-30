@@ -445,6 +445,19 @@ pub fn render_with_oracle(
         .filter(|&i| !package_names.contains(&diagram.components[i].id))
         .collect();
     let comp_order: Vec<usize> = if oracle.is_some() {
+        // PlantUML emits leaf entities ordered by nesting depth, but with one
+        // twist: when any element is nested in a container, the top-level
+        // (depth-0) leaves are emitted *after* the nested ones (a trailing
+        // top-level `database` gets the highest entity id). With no containers
+        // at all, plain declaration order holds. Mirror the deployment
+        // renderer's rule: sort by (is-depth-0 when nesting exists, depth,
+        // declaration index).
+        let any_nested = comp_indices.iter().any(|&i| {
+            qualified_names
+                .get(&diagram.components[i].id)
+                .map(|q| q.contains('.'))
+                .unwrap_or(false)
+        });
         let mut order = comp_indices.clone();
         order.sort_by_key(|&i| {
             let comp = &diagram.components[i];
@@ -452,7 +465,7 @@ pub fn render_with_oracle(
                 .get(&comp.id)
                 .map(|q| q.matches('.').count())
                 .unwrap_or(0);
-            (depth, i)
+            (any_nested && depth == 0, depth, i)
         });
         order
     } else {
@@ -618,7 +631,40 @@ pub fn render_with_oracle(
         let round_r = component_round_corner.unwrap_or(ROUND_R);
         let rx_s = oracle_rx.map(String::from).unwrap_or_else(|| fc(round_r));
         let ry_s = oracle_ry.map(String::from).unwrap_or_else(|| fc(round_r));
-        svg.raw(&format!(
+
+        // `database`/`queue` leaf elements draw a cylinder/queue outline (two
+        // bezier paths) in place of the rounded body rect and the UML tab icon.
+        // Reuse the deployment renderer's path geometry. The stroke colour is
+        // recovered from the oracle body_style (default #181818).
+        if matches!(
+            comp.kind,
+            ComponentElementKind::Database | ComponentElementKind::Queue
+        ) {
+            let stroke = body_style
+                .strip_prefix("stroke:")
+                .and_then(|s| s.split(';').next())
+                .unwrap_or(STROKE);
+            match comp.kind {
+                ComponentElementKind::Database => {
+                    crate::deployment::emit_database(
+                        &mut svg,
+                        x,
+                        y,
+                        w,
+                        h,
+                        fill,
+                        stroke,
+                        &comp.label,
+                    );
+                }
+                ComponentElementKind::Queue => {
+                    crate::deployment::emit_queue(&mut svg, x, y, w, h, fill, stroke);
+                }
+                ComponentElementKind::Component => unreachable!(),
+            }
+            // Skip the rect body and tab-icon block below.
+        } else {
+            svg.raw(&format!(
             r#"<rect fill="{fill}" height="{h_s}" rx="{rx_s}" ry="{ry_s}" style="{body_style}" width="{w_s}" x="{x_s}" y="{y_s}"/>"#,
             h_s = fc(h),
             w_s = fc(w),
@@ -626,38 +672,38 @@ pub fn render_with_oracle(
             y_s = fc(y),
         ));
 
-        // Component icon (tab + bars) at top-right. When the oracle has
-        // captured the rects' exact x/y, replay them verbatim — recomputing
-        // tab_x = x + w - 20 from rounded oracle inputs accumulates sub-ulp
-        // drift versus PlantUML's full-precision intermediates.
-        let aux: &[crate::layout_oracle::AuxRect] =
-            oracle_rect.map(|r| r.aux_rects.as_slice()).unwrap_or(&[]);
-        if component_style_rectangle {
-            // Plain rectangle style: no UML tab icon.
-        } else if use_oracle && aux.is_empty() {
-            // The oracle authoritatively captured zero auxiliary rects, so the
-            // golden element has no component tab (e.g. a `storage` rendered as
-            // a plain rounded rect). Suppress the synthesised tab+bars.
-        } else if aux.len() >= 3 {
-            for r in aux.iter().take(3) {
-                let style = r
-                    .style
-                    .as_deref()
-                    .map(String::from)
-                    .unwrap_or_else(|| format!("stroke:{STROKE};stroke-width:0.5;"));
-                let rect_fill = r.fill.as_deref().unwrap_or(fill);
-                svg.raw(&format!(
+            // Component icon (tab + bars) at top-right. When the oracle has
+            // captured the rects' exact x/y, replay them verbatim — recomputing
+            // tab_x = x + w - 20 from rounded oracle inputs accumulates sub-ulp
+            // drift versus PlantUML's full-precision intermediates.
+            let aux: &[crate::layout_oracle::AuxRect] =
+                oracle_rect.map(|r| r.aux_rects.as_slice()).unwrap_or(&[]);
+            if component_style_rectangle {
+                // Plain rectangle style: no UML tab icon.
+            } else if use_oracle && aux.is_empty() {
+                // The oracle authoritatively captured zero auxiliary rects, so the
+                // golden element has no component tab (e.g. a `storage` rendered as
+                // a plain rounded rect). Suppress the synthesised tab+bars.
+            } else if aux.len() >= 3 {
+                for r in aux.iter().take(3) {
+                    let style = r
+                        .style
+                        .as_deref()
+                        .map(String::from)
+                        .unwrap_or_else(|| format!("stroke:{STROKE};stroke-width:0.5;"));
+                    let rect_fill = r.fill.as_deref().unwrap_or(fill);
+                    svg.raw(&format!(
                     r#"<rect fill="{rect_fill}" height="{h_s}" style="{style}" width="{w_s}" x="{x_s}" y="{y_s}"/>"#,
                     h_s = fc(r.height),
                     w_s = fc(r.width),
                     x_s = fc(r.x),
                     y_s = fc(r.y),
                 ));
-            }
-        } else {
-            let tab_x = x + w - ICON_TAB_RIGHT_OFFSET;
-            let tab_y = y + ICON_TAB_TOP_OFFSET;
-            svg.raw(&format!(
+                }
+            } else {
+                let tab_x = x + w - ICON_TAB_RIGHT_OFFSET;
+                let tab_y = y + ICON_TAB_TOP_OFFSET;
+                svg.raw(&format!(
                 r#"<rect fill="{fill}" height="{h_s}" style="stroke:{STROKE};stroke-width:0.5;" width="{w_s}" x="{x_s}" y="{y_s}"/>"#,
                 h_s = fc(ICON_TAB_H),
                 w_s = fc(ICON_TAB_W),
@@ -665,23 +711,24 @@ pub fn render_with_oracle(
                 y_s = fc(tab_y),
             ));
 
-            let bar_x = tab_x - ICON_BAR_LEFT_OFFSET;
-            let bar_y1 = tab_y + ICON_BAR_TOP_OFFSET_1;
-            let bar_y2 = tab_y + ICON_BAR_TOP_OFFSET_2;
-            svg.raw(&format!(
+                let bar_x = tab_x - ICON_BAR_LEFT_OFFSET;
+                let bar_y1 = tab_y + ICON_BAR_TOP_OFFSET_1;
+                let bar_y2 = tab_y + ICON_BAR_TOP_OFFSET_2;
+                svg.raw(&format!(
                 r#"<rect fill="{fill}" height="{h_s}" style="stroke:{STROKE};stroke-width:0.5;" width="{w_s}" x="{x_s}" y="{y_s}"/>"#,
                 h_s = fc(ICON_BAR_H),
                 w_s = fc(ICON_BAR_W),
                 x_s = fc(bar_x),
                 y_s = fc(bar_y1),
             ));
-            svg.raw(&format!(
+                svg.raw(&format!(
                 r#"<rect fill="{fill}" height="{h_s}" style="stroke:{STROKE};stroke-width:0.5;" width="{w_s}" x="{x_s}" y="{y_s}"/>"#,
                 h_s = fc(ICON_BAR_H),
                 w_s = fc(ICON_BAR_W),
                 x_s = fc(bar_x),
                 y_s = fc(bar_y2),
             ));
+            }
         }
 
         // Render text lines.

@@ -336,6 +336,11 @@ pub fn parse_component(lines: &[String]) -> Result<ComponentDiagram, ParseError>
                 // e.g. `cloud "Production" as PROD`, `database "User DB" as UDB`
                 let rest = &container_clean[kw.len()..];
                 let (id, label) = parse_container_label(kw, rest);
+                let kind = match kw {
+                    "database" => ComponentElementKind::Database,
+                    "queue" => ComponentElementKind::Queue,
+                    _ => ComponentElementKind::Component,
+                };
                 if !components.iter().any(|c: &Component| c.id == id) {
                     components.push(Component {
                         id: id.clone(),
@@ -343,6 +348,7 @@ pub fn parse_component(lines: &[String]) -> Result<ComponentDiagram, ParseError>
                         stereotypes: parse_stereotypes(trimmed),
                         url: container_url,
                         source_line: current_line,
+                        kind,
                     });
                 }
                 if let Some(pkg) = package_stack.last_mut()
@@ -441,6 +447,7 @@ pub fn parse_component(lines: &[String]) -> Result<ComponentDiagram, ParseError>
                     stereotypes: parse_stereotypes(trimmed),
                     url: comp_url,
                     source_line: current_line,
+                    kind: ComponentElementKind::Component,
                 });
             }
             if let Some(pkg) = package_stack.last_mut()
@@ -462,6 +469,7 @@ pub fn parse_component(lines: &[String]) -> Result<ComponentDiagram, ParseError>
                     stereotypes: parse_stereotypes(trimmed),
                     url: None,
                     source_line: current_line,
+                    kind: ComponentElementKind::Component,
                 });
             }
             if let Some(pkg) = package_stack.last_mut()
@@ -555,6 +563,7 @@ pub fn parse_component(lines: &[String]) -> Result<ComponentDiagram, ParseError>
                         stereotypes: Vec::new(),
                         url: None,
                         source_line: current_line,
+                        kind: ComponentElementKind::Component,
                     });
                 }
             }

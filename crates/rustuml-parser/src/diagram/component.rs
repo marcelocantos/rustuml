@@ -17,6 +17,16 @@ pub struct ComponentDiagram {
     pub notes: Vec<ComponentNote>,
 }
 
+/// The shape an element renders as. A plain `component` draws the UML tab
+/// icon; `database`/`queue` leaf declarations draw a cylinder/queue outline.
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Default, Serialize, Deserialize)]
+pub enum ComponentElementKind {
+    #[default]
+    Component,
+    Database,
+    Queue,
+}
+
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct Component {
     pub id: String,
@@ -28,6 +38,9 @@ pub struct Component {
     /// 1-based line number within the `@startuml` block.
     #[serde(default)]
     pub source_line: usize,
+    /// Element shape (component tab vs database cylinder vs queue).
+    #[serde(default)]
+    pub kind: ComponentElementKind,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
