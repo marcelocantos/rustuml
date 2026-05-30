@@ -434,8 +434,94 @@ pub fn render_with_oracle(
     } else {
         comp_indices
     };
-    let mut entity_counter = 2;
-    for &i in &comp_order {
+    // PlantUML emits components and interfaces interleaved in declaration
+    // order (by source line), not all-components-then-all-interfaces. The
+    // oracle captures each entity's `id` (`ent000N`), which encodes that
+    // emission order, so when the oracle is present we merge both collections
+    // into a single sequence sorted by the oracle-assigned id and emit in that
+    // order. Without an oracle there is no golden to match, so we keep the
+    // historical components-then-interfaces order.
+    #[derive(Clone, Copy)]
+    enum EmitItem {
+        Comp(usize),
+        Iface(usize),
+    }
+    // Components keep their established `comp_order` (depth-then-declaration);
+    // that order is load-bearing for nested-package layouts and must not be
+    // perturbed. Interfaces are merged into that sequence by oracle entity id:
+    // each interface slots immediately before the first component whose
+    // oracle id exceeds it. Components without an oracle id (or all of them,
+    // when there is no oracle) anchor the sequence in `comp_order`, and any
+    // interfaces that don't slot earlier are appended at the end — matching the
+    // historical components-then-interfaces behaviour for those cases.
+    let ent_id_key = |id: Option<&str>| -> Option<i64> {
+        id.and_then(|s| s.strip_prefix("ent"))
+            .and_then(|s| s.parse::<i64>().ok())
+    };
+    let emit_order: Vec<EmitItem> = if oracle.is_some() {
+        // Interface ids paired with their declaration index.
+        let mut iface_keyed: Vec<(Option<i64>, usize)> = (0..diagram.interfaces.len())
+            .map(|ii| {
+                let key = ent_id_key(
+                    oracle
+                        .and_then(|o| o.entities.get(&diagram.interfaces[ii].id))
+                        .and_then(|r| r.entity_id.as_deref()),
+                );
+                (key, ii)
+            })
+            .collect();
+        // Emit interfaces in ascending id order so multiple interfaces between
+        // two components keep their relative order.
+        iface_keyed.sort_by_key(|&(key, ii)| (key.unwrap_or(i64::MAX), ii));
+        let mut out: Vec<EmitItem> = Vec::new();
+        let mut next_iface = 0usize;
+        for &i in &comp_order {
+            let comp_key = ent_id_key(
+                oracle_comp_rect(&diagram.components[i]).and_then(|r| r.entity_id.as_deref()),
+            );
+            if let Some(ck) = comp_key {
+                while next_iface < iface_keyed.len() {
+                    match iface_keyed[next_iface].0 {
+                        Some(ik) if ik < ck => {
+                            out.push(EmitItem::Iface(iface_keyed[next_iface].1));
+                            next_iface += 1;
+                        }
+                        _ => break,
+                    }
+                }
+            }
+            out.push(EmitItem::Comp(i));
+        }
+        for &(_, ii) in &iface_keyed[next_iface..] {
+            out.push(EmitItem::Iface(ii));
+        }
+        out
+    } else {
+        comp_order
+            .iter()
+            .map(|&i| EmitItem::Comp(i))
+            .chain((0..diagram.interfaces.len()).map(EmitItem::Iface))
+            .collect()
+    };
+
+    let mut entity_counter: usize = 2;
+    for emit_item in &emit_order {
+        let i = match *emit_item {
+            EmitItem::Comp(i) => i,
+            EmitItem::Iface(ii) => {
+                render_interface(
+                    &mut svg,
+                    diagram,
+                    oracle,
+                    ii,
+                    &iface_positions,
+                    &interface_fill,
+                    &interface_stroke,
+                    &mut entity_counter,
+                );
+                continue;
+            }
+        };
         let comp = &diagram.components[i];
         let (x, y) = positions[i];
         let dim = &comp_dims[i];
@@ -642,67 +728,6 @@ pub fn render_with_oracle(
         if comp.url.is_some() {
             svg.close_link();
         }
-
-        svg.raw("</g>");
-    }
-
-    // Render interfaces. When oracle provides entity_id and data-source-line,
-    // pick those up so the emitted attributes match PlantUML's interleaved
-    // ordering and source-line annotations.
-    for (ii, iface) in diagram.interfaces.iter().enumerate() {
-        let (ix, iy) = iface_positions[ii];
-        let oracle_iface = oracle.and_then(|o| o.entities.get(&iface.id));
-        let ent_id = oracle_iface
-            .and_then(|r| r.entity_id.clone())
-            .unwrap_or_else(|| {
-                let id = format!("ent{entity_counter:04}");
-                entity_counter += 1;
-                id
-            });
-        let source_attr = oracle_iface
-            .and_then(|r| r.source_line.as_deref())
-            .map(|s| format!(r#" data-source-line="{s}""#))
-            .unwrap_or_default();
-
-        svg.raw(&format!("<!--entity {}-->", iface.id));
-        svg.raw(&format!(
-            r#"<g class="entity" data-qualified-name="{}"{source_attr} id="{ent_id}">"#,
-            iface.id
-        ));
-
-        // Circle.
-        svg.raw(&format!(
-            r#"<ellipse cx="{ix}" cy="{iy}" fill="{interface_fill}" rx="{IFACE_R}" ry="{IFACE_R}" style="stroke:{interface_stroke};stroke-width:0.5;"/>"#,
-        ));
-
-        // Label below. Prefer oracle text_x/y when present — PlantUML's
-        // exact label positions depend on the surrounding diagram layout.
-        let label_y = oracle_iface
-            .and_then(|r| r.text_y_values.first().copied())
-            .unwrap_or(iy + IFACE_R + LINE_HEIGHT + 4.0);
-        let lx = oracle_iface
-            .and_then(|r| r.text_x_values.first().copied())
-            .unwrap_or_else(|| {
-                let lw = text_render::measure(&iface.label, FONT_SIZE, false);
-                ix - lw / 2.0
-            });
-        let mut text_buf = String::new();
-        text_render::emit_text(
-            &mut text_buf,
-            &iface.label,
-            &TextBase {
-                x: lx,
-                y: label_y,
-                font_size: FONT_SIZE as u32,
-                font_family: "sans-serif",
-                fill: TEXT_COLOR,
-                bold: false,
-                italic: false,
-                underline: false,
-                skip_underline: false,
-            },
-        );
-        svg.raw(&text_buf);
 
         svg.raw("</g>");
     }
@@ -1052,6 +1077,78 @@ pub fn render_with_oracle(
     }
 
     svg.finalize_plantuml()
+}
+
+/// Emit a single interface entity (the small lollipop circle plus its label).
+/// Split out of `render_with_oracle` so components and interfaces can be
+/// emitted interleaved in PlantUML's declaration order.
+#[allow(clippy::too_many_arguments)]
+fn render_interface(
+    svg: &mut SvgBuilder,
+    diagram: &ComponentDiagram,
+    oracle: Option<&OracleLayout>,
+    ii: usize,
+    iface_positions: &[(f64, f64)],
+    interface_fill: &str,
+    interface_stroke: &str,
+    entity_counter: &mut usize,
+) {
+    let iface = &diagram.interfaces[ii];
+    let (ix, iy) = iface_positions[ii];
+    let oracle_iface = oracle.and_then(|o| o.entities.get(&iface.id));
+    let ent_id = oracle_iface
+        .and_then(|r| r.entity_id.clone())
+        .unwrap_or_else(|| {
+            let id = format!("ent{:04}", *entity_counter);
+            *entity_counter += 1;
+            id
+        });
+    let source_attr = oracle_iface
+        .and_then(|r| r.source_line.as_deref())
+        .map(|s| format!(r#" data-source-line="{s}""#))
+        .unwrap_or_default();
+
+    svg.raw(&format!("<!--entity {}-->", iface.id));
+    svg.raw(&format!(
+        r#"<g class="entity" data-qualified-name="{}"{source_attr} id="{ent_id}">"#,
+        iface.id
+    ));
+
+    // Circle.
+    svg.raw(&format!(
+        r#"<ellipse cx="{ix}" cy="{iy}" fill="{interface_fill}" rx="{IFACE_R}" ry="{IFACE_R}" style="stroke:{interface_stroke};stroke-width:0.5;"/>"#,
+    ));
+
+    // Label below. Prefer oracle text_x/y when present — PlantUML's
+    // exact label positions depend on the surrounding diagram layout.
+    let label_y = oracle_iface
+        .and_then(|r| r.text_y_values.first().copied())
+        .unwrap_or(iy + IFACE_R + LINE_HEIGHT + 4.0);
+    let lx = oracle_iface
+        .and_then(|r| r.text_x_values.first().copied())
+        .unwrap_or_else(|| {
+            let lw = text_render::measure(&iface.label, FONT_SIZE, false);
+            ix - lw / 2.0
+        });
+    let mut text_buf = String::new();
+    text_render::emit_text(
+        &mut text_buf,
+        &iface.label,
+        &TextBase {
+            x: lx,
+            y: label_y,
+            font_size: FONT_SIZE as u32,
+            font_family: "sans-serif",
+            fill: TEXT_COLOR,
+            bold: false,
+            italic: false,
+            underline: false,
+            skip_underline: false,
+        },
+    );
+    svg.raw(&text_buf);
+
+    svg.raw("</g>");
 }
 
 // ---------------------------------------------------------------------------
