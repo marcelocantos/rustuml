@@ -107,10 +107,17 @@ fn to_svg_tspans_inner(text: &str, skip_underline: bool) -> String {
             '"' if chars.peek() == Some(&'"') => {
                 chars.next();
                 // ""monospace"" — collect until closing ""
-                let (content, _found) = collect_until(&mut chars, "\"\"");
-                let content = monospace_spaces(&content);
-                write!(result, "<tspan font-family=\"monospace\">{content}</tspan>").unwrap();
-                last_char = content.chars().last();
+                let (content, found) = collect_until(&mut chars, "\"\"");
+                if found {
+                    let content = monospace_spaces(&content);
+                    write!(result, "<tspan font-family=\"monospace\">{content}</tspan>").unwrap();
+                    last_char = content.chars().last();
+                } else {
+                    // Unterminated `""` (e.g. `default ""`): literal quotes.
+                    result.push_str("\"\"");
+                    result.push_str(&escape_creole_text(&content));
+                    last_char = content.chars().last().or(Some('"'));
+                }
             }
             '`' => {
                 // `code` backtick monospace
@@ -959,12 +966,20 @@ fn walk_segments(text: &str, style: &Style, skip_underline: bool, out: &mut Vec<
             }
             '"' if chars.peek() == Some(&'"') => {
                 chars.next();
-                let (content, _found) = collect_until(&mut chars, "\"\"");
+                let (content, found) = collect_until(&mut chars, "\"\"");
                 flush_buf!();
-                let mut nested = style.clone();
-                nested.monospace = true;
-                walk_segments(&content, &nested, skip_underline, out);
-                last_char = content.chars().last();
+                if found {
+                    let mut nested = style.clone();
+                    nested.monospace = true;
+                    walk_segments(&content, &nested, skip_underline, out);
+                    last_char = content.chars().last();
+                } else {
+                    // Unterminated `""` (e.g. `default ""`): literal quotes,
+                    // not an open monospace run.
+                    push_literal(out, "\"\"", style);
+                    push_literal(out, &content, style);
+                    last_char = content.chars().last().or(Some('"'));
+                }
             }
             '`' => {
                 let content = collect_until_char(&mut chars, '`');

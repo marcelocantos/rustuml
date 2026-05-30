@@ -54,6 +54,23 @@ pub fn emit_text(buf: &mut String, content: &str, base: &TextBase<'_>) -> f64 {
     emit_segments(buf, &segments, base)
 }
 
+/// Like [`emit_text`] but neutralises monospace styling: `""..."" ` and
+/// backtick runs render as plain (sans-serif) text. PlantUML's edge/link
+/// labels parse creole markup (bold, italic, size, colour) but, unlike
+/// entity bodies, do *not* honour the monospace delimiter — the `""` glue
+/// is consumed and the inner text falls back to the surrounding font.
+pub fn emit_text_no_mono(buf: &mut String, content: &str, base: &TextBase<'_>) -> f64 {
+    let mut segments = if base.skip_underline {
+        creole::parse_segments_no_underline(content)
+    } else {
+        creole::parse_segments(content)
+    };
+    for seg in &mut segments {
+        seg.style.monospace = false;
+    }
+    emit_segments(buf, &segments, base)
+}
+
 /// Width of `content` after creole resolution — the value a renderer needs
 /// to size boxes around a label. Per-segment styling (monospace vs sans-
 /// serif, bold, custom size) is honoured by routing through `total_width`.
@@ -201,23 +218,27 @@ fn emit_segments(buf: &mut String, segments: &[Segment], base: &TextBase<'_>) ->
             &Style::default(),
             base.x,
             0.0,
-            base.font_size,
+            pm::descent(base.font_size as f64),
         );
         return 0.0;
     }
 
-    // When a line mixes font sizes, PlantUML bottom-aligns the runs: all
-    // runs share one line bottom, so each run's baseline is
-    // `lineBottom - descent(ownSize)`. The oracle hands us the *first* run's
+    // When a line mixes font sizes OR font families, PlantUML bottom-aligns
+    // the runs: all runs share one line bottom, so each run's baseline is
+    // `lineBottom - descent(ownRun)`. The oracle hands us the *first* run's
     // baseline (the leftmost `<text>` on the line), so the line bottom is
-    // `base.y + descent(firstSize)` and every run's baseline offset from
-    // `base.y` is `descent(firstSize) - descent(ownSize)`. The first run
-    // (and every run on a single-size line) gets a zero offset, so single-
-    // size lines are unaffected.
-    let first_size = segments
-        .first()
-        .and_then(|s| s.style.size)
-        .unwrap_or(base.font_size);
+    // `base.y + descent(firstRun)` and every run's baseline offset from
+    // `base.y` is `descent(firstRun) - descent(ownRun)`. The first run (and
+    // every run on a uniform-metric line) gets a zero offset, so uniform
+    // lines are unaffected. Monospace and sans-serif have different descents
+    // even at the same size, so the run's font family matters too.
+    let first = &segments[0];
+    let first_size = first.style.size.unwrap_or(base.font_size) as f64;
+    let line_bottom_descent = if first.style.monospace {
+        pm::mono_descent(first_size)
+    } else {
+        pm::descent(first_size)
+    };
 
     let mut x = base.x;
     let mut total = 0.0;
@@ -231,7 +252,7 @@ fn emit_segments(buf: &mut String, segments: &[Segment], base: &TextBase<'_>) ->
             &seg.style,
             x + lead_w,
             trimmed_w,
-            first_size,
+            line_bottom_descent,
         );
         x += full_w;
         total += full_w;
@@ -517,7 +538,7 @@ fn write_text_element(
     style: &Style,
     x: f64,
     width: f64,
-    first_size: u32,
+    line_bottom_descent: f64,
 ) {
     let bold = base.bold || style.bold;
     let italic = base.italic || style.italic;
@@ -545,7 +566,12 @@ fn write_text_element(
     // `descent(firstSize) - descent(ownSize)` so all descenders align. Zero
     // when this run matches the first run's size (always true on a single-
     // size line).
-    let line_descent_diff = pm::descent(first_size as f64) - pm::descent(nominal_size as f64);
+    let own_descent = if style.monospace {
+        pm::mono_descent(nominal_size as f64)
+    } else {
+        pm::descent(nominal_size as f64)
+    };
+    let line_descent_diff = line_bottom_descent - own_descent;
     let (font_size, y_offset) = match style.baseline_shift {
         Some("sub") => {
             let small = (nominal_size as i32 - 3).max(2) as u32;

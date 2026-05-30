@@ -845,13 +845,11 @@ fn format_member_display(member: &Member) -> String {
     // PlantUML strips {static} and {abstract} modifiers from displayed text.
     // Static members are shown with underline decoration; abstract members in italics.
     //
-    // Empty `""` markup is preserved as literal `""` text — class member
-    // labels render `""` as literal quote characters (matches Java's
-    // behaviour for e.g. `+String x() default ""`), unlike the creole
-    // monospace open/close convention. Escape each `"` so the creole
-    // parser does NOT treat the pair as a monospace delimiter; tilde
-    // makes the parser emit the bare `"` glyph.
-    member.display_text.replace("\"\"", "~\"~\"")
+    // `""content""` is creole monospace; an *unterminated* `""` (e.g.
+    // `+String x() default ""`) is rendered as literal quote characters by
+    // the creole engine itself (see the `""` handler in creole.rs), so no
+    // pre-escaping is needed here.
+    member.display_text.clone()
 }
 
 /// Determine the visibility modifier string for a member, matching PlantUML's
@@ -3274,21 +3272,24 @@ fn render_oracle_relationships(
                 } else {
                     text
                 };
-                text_render::emit_text(
-                    svg,
-                    content,
-                    &text_render::TextBase {
-                        x: *lx,
-                        y: *ly,
-                        font_size: 13,
-                        font_family: "sans-serif",
-                        fill: "#000000",
-                        bold: false,
-                        italic: false,
-                        underline: false,
-                        skip_underline: middle,
-                    },
-                );
+                let base = text_render::TextBase {
+                    x: *lx,
+                    y: *ly,
+                    font_size: 13,
+                    font_family: "sans-serif",
+                    fill: "#000000",
+                    bold: false,
+                    italic: false,
+                    underline: false,
+                    skip_underline: middle,
+                };
+                if middle {
+                    // Edge labels honour bold/italic/size/colour but not the
+                    // `""` monospace delimiter (PlantUML renders it as plain).
+                    text_render::emit_text_no_mono(svg, content, &base);
+                } else {
+                    text_render::emit_text(svg, content, &base);
+                }
             }
         } else if let Some((lx, ly, ref text)) = oracle_edge.label {
             let first_line = text.lines().next().unwrap_or("");
