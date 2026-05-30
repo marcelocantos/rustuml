@@ -102,11 +102,24 @@ pub fn render(diagram: &NwdiagDiagram, _theme: &Theme) -> String {
         }
     }
 
-    // ─── Column assignment via tetris packing on [start_row..end_row] ──────
+    // ─── Column assignment via tetris packing on the bar's STAGE span ──────
+    // A server's vertical bar does not span every network row it touches.
+    // Following Java NServer.connectTo / NBar.addStage: the bar starts at the
+    // main (first-connected) network's stage, and each *additional* connection
+    // to a network at row r extends the bar to that network's `up` stage
+    // (= row r-1), never to r itself. The tetris packer burns this stage span,
+    // which lets a downstream-only host reuse a column occupied by an
+    // upstream-only host on a different network row.
     let mut burned: BTreeSet<(usize, usize)> = BTreeSet::new();
     for s in &mut servers {
-        let start = *s.rows.iter().min().unwrap();
-        let end = *s.rows.iter().max().unwrap();
+        let main = s.rows[0];
+        let mut start = main;
+        let mut end = main;
+        for &r in &s.rows[1..] {
+            let up = r.saturating_sub(1);
+            start = start.min(up);
+            end = end.max(up);
+        }
         let mut col = 0usize;
         loop {
             if (start..=end).all(|r| !burned.contains(&(col, r))) {
