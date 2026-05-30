@@ -140,17 +140,23 @@ targets:
     - '`cargo test --test golden_pairs` reports 0 failures across all 12,568 golden pairs.'
     - 'Skips remain bounded to the legitimate categories: Java reference is itself a syntax-error page (~1,199), ditaa raster diagrams (parked under T2), and I/O errors. No skips for `%date(...)`, no skips for unsupported keywords, no skips for parse failures.'
     context: |-
-      Strict-XML parity by renderer correctness. FORBIDDEN wholesale subtree replay (inner_xml/attr-echo); cluster/note inner_xml in class/object/component → 🎯T4.11. ACCEPTED: compute geometry; consume oracle for blessed bits (layout positions, captured edge/note/crow/divider path-d & line/ellipse coords).
+      Strict-XML parity by renderer correctness. FORBIDDEN wholesale subtree replay (inner_xml/attr-echo); cluster/note inner_xml in class/object/component → 🎯T4.11. ACCEPTED: compute geometry; consume oracle for blessed bits (layout positions, captured edge/note/crow/divider path-d & line/ellipse).
 
-      STATE after waves 1-9 (2026-05-30): 12,546 total · 8,281 pass · 2,966 fail · 1,299 skip. Session start 6,312/4,935. Total −1,969 (−40%), pass rate 50%→66%, ZERO regressions, zero panics, branch strict-xml-wave1 (125 commits, UNPUSHED). Near-cleared: regex/ebnf/chart 0, er 3, usecase 1.
+      STATE after waves 1-10 (2026-05-30): 12,546 total · 8,330 pass · 2,917 fail · 1,299 skip. Session start 6,312/4,935. Total −2,018 (−41%), pass rate 50%→66.4%, ZERO regressions, zero panics, branch strict-xml-wave1 (133 commits, UNPUSHED). Near/fully cleared: regex/ebnf/chart 0, er 3, usecase 1, timing ~9.
 
-      METHOD: non-isolated worktrees off branch tip + symlinked goldens + absolute-path agents committing `git add crates/` (NOT -A — see [[feedback_worktree_symlink_gitadd_clobber]]); guard `git ls-files -s test-diagrams/golden`==160000 after each cherry-pick.
+      METHOD: non-isolated worktrees off branch tip + symlinked goldens + absolute-path agents committing `git add crates/` (NOT -A; guard gitlink==160000 after cherry-pick — [[feedback_worktree_symlink_gitadd_clobber]]).
 
-      Per-bucket now: activity 689, sequence 500, edge-cases 271, skinparam 209, preprocessing 199, combo 165, creole 131, class 115, deployment 95, json-yaml 91, state 68, timing 54, links 49, sprites 48, archimate 48, salt 40, component 35, nwdiag 29, mindmap 26, wbs 25, rendering 24, type-detection 13, multi-diagram 10, math 10, object 1, er 3, usecase 1.
+      Per-bucket now: activity 689, sequence 500, edge-cases 270, skinparam 209, preprocessing 199, combo 165, creole 131, class 115, deployment 95, json-yaml 91, state 68, links 49, sprites 48, archimate 48, salt 40, component 32, nwdiag 29, mindmap 26, gantt 26, wbs 25, rendering 24, math 10, multi-diagram 10, type-detection ~9, er 3, usecase 1, object 1, timing ~9.
 
-      NEXT (tractable): preprocessing theme-cascade (199 — font scale 1.0417 + theme colors/fonts + the DEFERRED transparent-bg patch; biggest single lever); skinparam 209; creole 131 (mostly *_in_sequence — needs sequence note/self-in-group work); mid second-passes timing 54 / salt 40 / component 35 / nwdiag 29 / mindmap 26 / wbs 25 / rendering 24; state 68 (nested composites composite_nested_*/depth_*, entry/exit ~9).
-      HARD/PARKED: activity 689 (float-accumulation op-order + fork spine-reservation), sequence 500 (box-grouping width ~136), json-yaml ~91 (graphviz Smetana spline routing, bit-exact beziers), deployment cloud ~70 + ~25 metric-FP, sprites ~47 (SpriteMonochrome gradient+bilinear encoder), archimate 48 (sprite-glyph lib+layout), ditaa, Serif/CJK font-metric tables (gantt resources, japanese). combo 165/edge-cases 271 cascade as core renderers improve. 🎯T4.11 honest fix raises count.
-      DEFERRED zero-flip patches (apply with follow-on): /tmp/rustuml-patches/DEFERRED-{preproc-transparent-bg,activity-partition}.patch.
+      FRONTIER REACHED — remaining work is LARGE INFRA PROJECTS (not wave-able; need dedicated serial full-suite-gated effort) + parked:
+      - THEME CASCADE (~113 preproc + much of skinparam 209): apply global dpi/96 scale (cerulean dpi100→1.04167×) + theme styling (stroke #2683B9, 'Verdana', fills, gradients) across ALL 7 renderers. skinparam.rs parses dpi/defaultFontName/defaultFontSize into global.* but NO renderer reads them. Spec: /tmp/rustuml-patches/DEFERRED-theme-cascade-spec.md. Transparent-bg prerequisite done & deferred (/tmp/rustuml-patches/DEFERRED-preproc-transparent-bg.patch). Cross-cutting → high regression risk, must be ONE serial effort.
+      - GRAPHVIZ SMETANA spline routing: json-yaml multi-box ~91 (bit-exact beziers) + contributes elsewhere.
+      - FONT-METRIC TABLES: Serif (gantt resources), CJK/non-ASCII (usecase japanese, component unicode).
+      - HARD per-renderer geometry: activity float-accumulation op-order + fork-spine reservation; sequence box-grouping width ~136.
+      PARKED (FP/infra-bound): deployment cloud ~70 + ~25 metric-FP, sprites ~47 (SpriteMonochrome encoder), archimate 48 (sprite-glyph lib+layout), ditaa, math 10.
+      CASCADE: edge-cases 270, combo 165 shrink as activity/sequence/class improve.
+      TRACTABLE-ish leftovers: salt 40, nwdiag 29, mindmap 26, wbs 25, rendering 24, state nested-composites/entry-exit; creole 131 (mostly *_in_sequence → needs sequence note/self-in-group frame work).
+      DEFERRED zero-flip patches (apply w/ follow-on): DEFERRED-{preproc-transparent-bg,activity-partition}.patch.
     origin: manual
     discovered: 2026-05-17
     achieved: 2026-05-23
