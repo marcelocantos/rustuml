@@ -226,39 +226,16 @@ pub fn render_with_oracle(
         }
     }
 
-    // Top-level (non-member) entities in source-line order.
-    let mut top: Vec<(usize, bool, usize)> = Vec::new();
-    for (i, a) in diagram.actors.iter().enumerate() {
-        if !member_ids.contains(a.id.as_str()) {
-            top.push((a.source_line, true, i));
-        }
-    }
-    for (i, u) in diagram.use_cases.iter().enumerate() {
-        if !member_ids.contains(u.id.as_str()) {
-            top.push((u.source_line, false, i));
-        }
-    }
-    top.sort_by_key(|m| m.0);
-    for (_, is_actor, i) in top {
-        if is_actor {
-            render_actor_i(&mut svg, i);
-        } else {
-            render_uc_i(&mut svg, i);
-        }
-    }
-
     // Attached/floating notes. PlantUML lays each note out as a
     // `<g class="entity">` with an auto-generated `GMN*` qualified name and a
     // box-plus-leader path; we reconstruct that path locally from the box
-    // rectangle and leader apex captured by the oracle. Notes are emitted after
-    // the entity passes but before links, matching PlantUML's source-line order
-    // (the note declaration precedes the connection in these diagrams).
-    if let Some(orc) = oracle {
-        // Build the set of qualified names that belong to real diagram nodes
-        // (actors, use cases, packages). The oracle also stashes each note's
-        // path-based shape in `entities`, so we can't rely on `entities` keys
-        // to tell notes apart — instead skip only notes whose name matches a
-        // declared element.
+    // rectangle and leader apex captured by the oracle. Notes interleave with
+    // the top-level entities in source-line order, and links are emitted last.
+    //
+    // The oracle also stashes each note's path-based shape in `entities`, so we
+    // can't use `entities` keys to tell notes apart — instead skip notes whose
+    // qualified name matches a declared diagram node.
+    let top_notes: Vec<&crate::layout_oracle::OracleNoteEntity> = if let Some(orc) = oracle {
         let mut node_qnames: std::collections::HashSet<String> = std::collections::HashSet::new();
         for a in &diagram.actors {
             node_qnames.insert(a.id.clone());
@@ -272,11 +249,43 @@ pub fn render_with_oracle(
         for p in &diagram.packages {
             node_qnames.insert(p.name.clone());
         }
-        for note in &orc.note_entities {
-            if node_qnames.contains(note.qualified_name.as_str()) {
-                continue;
-            }
-            emit_note(&mut svg, note);
+        orc.note_entities
+            .iter()
+            .filter(|n| !node_qnames.contains(n.qualified_name.as_str()))
+            .collect()
+    } else {
+        Vec::new()
+    };
+
+    // Top-level (non-member) entities and notes, interleaved by source line.
+    // Kind: 0 = actor, 1 = use case, 2 = note.
+    let mut top: Vec<(usize, u8, usize)> = Vec::new();
+    for (i, a) in diagram.actors.iter().enumerate() {
+        if !member_ids.contains(a.id.as_str()) {
+            top.push((a.source_line, 0, i));
+        }
+    }
+    for (i, u) in diagram.use_cases.iter().enumerate() {
+        if !member_ids.contains(u.id.as_str()) {
+            top.push((u.source_line, 1, i));
+        }
+    }
+    for (i, n) in top_notes.iter().enumerate() {
+        let line = n
+            .source_line
+            .as_deref()
+            .and_then(|s| s.parse::<usize>().ok())
+            .unwrap_or(usize::MAX);
+        top.push((line, 2, i));
+    }
+    // Stable sort by source line; on ties keep declaration order (notes after
+    // their target on the same conceptual line never collide in practice).
+    top.sort_by_key(|m| m.0);
+    for (_, kind, i) in top {
+        match kind {
+            0 => render_actor_i(&mut svg, i),
+            1 => render_uc_i(&mut svg, i),
+            _ => emit_note(&mut svg, top_notes[i]),
         }
     }
 
@@ -672,9 +681,17 @@ fn render_actor(
     id_map: &HashMap<String, String>,
     skin: &SkinColors,
 ) {
-    let ent_id = id_map
-        .get(&format!("actor::{}", actor.id))
-        .cloned()
+    // Prefer the oracle-captured entity id (PlantUML's real counter allocation,
+    // which notes and other synthetic entities perturb), falling back to the
+    // source-line-derived map when no oracle is present.
+    let oracle_id = oracle.and_then(|orc| {
+        orc.entities
+            .get(&actor.id)
+            .or_else(|| orc.entities.get(&actor.label))
+            .and_then(|r| r.entity_id.clone())
+    });
+    let ent_id = oracle_id
+        .or_else(|| id_map.get(&format!("actor::{}", actor.id)).cloned())
         .unwrap_or_else(|| "ent0002".to_string());
     svg.raw(&format!("<!--entity {}-->", actor.id));
     let src_attr = source_line_attr(actor.source_line);
@@ -794,9 +811,17 @@ fn render_use_case(
     skin: &SkinColors,
 ) {
     let qualified = qualified_name(&uc.id, diagram);
-    let ent_id = id_map
-        .get(&format!("uc::{}", uc.id))
-        .cloned()
+    // Prefer the oracle-captured entity id (PlantUML's real counter allocation),
+    // falling back to the source-line-derived map when no oracle is present.
+    let oracle_id = oracle.and_then(|orc| {
+        orc.entities
+            .get(&qualified)
+            .or_else(|| orc.entities.get(&uc.id))
+            .or_else(|| orc.entities.get(&uc.label))
+            .and_then(|r| r.entity_id.clone())
+    });
+    let ent_id = oracle_id
+        .or_else(|| id_map.get(&format!("uc::{}", uc.id)).cloned())
         .unwrap_or_else(|| "ent0003".to_string());
     svg.raw(&format!("<!--entity {}-->", uc.id));
     let src_attr = source_line_attr(uc.source_line);
