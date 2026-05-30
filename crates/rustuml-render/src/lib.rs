@@ -161,7 +161,13 @@ fn apply_monochrome(svg: String, diagram: &Diagram) -> String {
     let Some(reverse) = mode else {
         return svg;
     };
+    grey_hex_colors(svg, reverse)
+}
 
+/// Map every `#RRGGBB` literal to its YIQ grey (`reverse` => `255-grey`).
+/// UTF-8 safe: non-matching bytes (incl. multibyte text content) are copied
+/// verbatim and only ASCII hex-colour runs are rewritten.
+fn grey_hex_colors(svg: String, reverse: bool) -> String {
     let b = svg.as_bytes();
     let mut out: Vec<u8> = Vec::with_capacity(b.len());
     let is_hex = |c: u8| c.is_ascii_hexdigit();
@@ -190,6 +196,42 @@ fn apply_monochrome(svg: String, diagram: &Diagram) -> String {
     }
     // Safe: only ASCII runs were rewritten; all other bytes copied verbatim.
     String::from_utf8(out).unwrap_or(svg)
+}
+
+#[cfg(test)]
+mod post_process_tests {
+    use super::grey_hex_colors;
+
+    /// Guards the byte-as-char bug class: an SVG-colour post-process must
+    /// preserve multibyte UTF-8 text content byte-for-byte while rewriting
+    /// only the ASCII hex colours. (Regression guard for the whole family of
+    /// final-SVG byte-scan passes — monochrome and any future scaler.)
+    #[test]
+    fn grey_hex_preserves_multibyte_text() {
+        // Guillemets, CJK, Cyrillic, accented Latin, emoji — all multibyte.
+        let svg = "<text fill=\"#ADD1B2\">«service» 客户端 Пользователь Ärger 🚀</text>\
+                   <rect style=\"stroke:#181818;fill:#FF0000\"/>";
+        let out = grey_hex_colors(svg.to_string(), false);
+        // Multibyte text content is untouched.
+        assert!(
+            out.contains("«service» 客户端 Пользователь Ärger 🚀"),
+            "text corrupted: {out}"
+        );
+        // Colours greyed: #ADD1B2 -> #C2C2C2, #181818 -> #181818, #FF0000 -> #4C4C4C.
+        assert!(out.contains("#C2C2C2"), "ADD1B2 not greyed: {out}");
+        assert!(out.contains("#4C4C4C"), "FF0000 not greyed: {out}");
+        // Output is valid UTF-8 and the same char count of the text run.
+        assert!(out.is_char_boundary(0));
+        // Reverse maps #FFFFFF->#000000 and #000000->#FFFFFF.
+        let rev = grey_hex_colors(
+            "<a fill=\"#FFFFFF\" stroke=\"#000000\">é</a>".to_string(),
+            true,
+        );
+        assert!(
+            rev.contains("#000000") && rev.contains("#FFFFFF") && rev.contains('é'),
+            "{rev}"
+        );
+    }
 }
 
 /// Swap PlantUML's own brand self-references for rustuml equivalents in
