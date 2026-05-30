@@ -398,6 +398,7 @@ fn skin_keyword(kind: DeploymentNodeKind) -> &'static str {
         File => "file",
         Package => "package",
         Stack => "stack",
+        Default => "",
     }
 }
 
@@ -626,7 +627,7 @@ fn emit_entity(
         // sit at fixed offsets from the icon centre, so they render their
         // own shape + label together rather than via the generic path.
         use DeploymentNodeKind::*;
-        if matches!(node.kind, Boundary | Control | Entity) {
+        if matches!(node.kind, Boundary | Control | Entity | Default) {
             emit_icon_entity(svg, node, rect, &entity_fill);
         } else if matches!(node.kind, Collections) {
             emit_collections_entity(svg, node, rect, &entity_fill);
@@ -2142,8 +2143,17 @@ fn render_connection(
                 r#"<polygon fill="{fill}" points="{points}" style="{poly_style}"/>"#,
             ));
         }
-        // Connection label — position taken from oracle.
-        if let Some((lx, ly, text)) = &oe.label {
+        // Connection labels — positions taken from the oracle. PlantUML emits
+        // each label (mid-edge label, plus any endpoint/qualifier labels) as a
+        // separate `<text>` child of the link group; `labels` captures them all
+        // in document order with their own coordinates. Multi-line mid-edge
+        // labels also arrive as one `<text>` per line, so emitting each entry
+        // verbatim reproduces both multi-line and multi-label edges.
+        if !oe.labels.is_empty() {
+            for (lx, ly, text) in &oe.labels {
+                emit_text(svg, text, *lx, *ly, 13.0, false, false);
+            }
+        } else if let Some((lx, ly, text)) = &oe.label {
             for (i, line) in text.split('\n').enumerate() {
                 let y = *ly + (i as f64) * pm::text_height(13.0);
                 emit_text(svg, line, *lx, y, 13.0, false, false);

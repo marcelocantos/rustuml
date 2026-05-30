@@ -550,7 +550,7 @@ pub fn parse_deployment(lines: &[String]) -> Result<DeploymentDiagram, ParseErro
                         nodes.push(DeploymentNode {
                             id: id.clone(),
                             label: lbl.clone(),
-                            kind: DeploymentNodeKind::Node,
+                            kind: DeploymentNodeKind::Default,
                             stereotype: None,
                             color: None,
                             children: Vec::new(),
