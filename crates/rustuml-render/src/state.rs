@@ -1995,10 +1995,16 @@ fn render_composite_with_oracle(diagram: &StateDiagram, orc: &OracleLayout) -> S
                 }
             }
             Some(scope) => {
+                // The suffix uses only the scope's last dotted segment: a
+                // top-level composite `Concurrent` yields
+                // `Concurrent..start.Concurrent`, while a concurrent-region
+                // sub-scope `Concurrent.CONC2` yields
+                // `Concurrent.CONC2..start.CONC2`.
+                let suffix = scope.rsplit('.').next().unwrap_or(scope);
                 if is_start {
-                    format!("{scope}..start.{scope}")
+                    format!("{scope}..start.{suffix}")
                 } else {
-                    format!("{scope}..end.{scope}")
+                    format!("{scope}..end.{suffix}")
                 }
             }
         }
@@ -2445,6 +2451,38 @@ fn render_composite_with_oracle(diagram: &StateDiagram, orc: &OracleLayout) -> S
         emit_clusters_dfs(&mut svg, None, diagram, &ordered_children, &emit_cluster);
     }
 
+    // Ordered concurrent-region scopes of a composite. Region 0 is the
+    // composite itself; regions N≥1 are the synthetic sub-scopes
+    // `<composite>.CONC{N+1}` introduced by `--`/`||` separators. Returns just
+    // the composite id when there are no regions.
+    let region_scopes = |composite_id: &str| -> Vec<String> {
+        let mut scopes = vec![composite_id.to_string()];
+        let mut n = 2usize;
+        loop {
+            let candidate = format!("{composite_id}.CONC{n}");
+            let exists = diagram
+                .states
+                .iter()
+                .any(|s| s.parent.as_deref() == Some(candidate.as_str()))
+                || diagram.transitions.iter().any(|t| {
+                    (t.from.strip_prefix("[*]") == Some(candidate.as_str()))
+                        || (t.to.strip_prefix("[*]") == Some(candidate.as_str()))
+                });
+            if exists {
+                scopes.push(candidate);
+                n += 1;
+            } else {
+                break;
+            }
+        }
+        scopes
+    };
+
+    // Pending region-divider lines, consumed in document (y) order. Each is
+    // spliced just before the region whose entities follow it.
+    let mut divider_iter = orc.region_dividers.iter();
+    let mut next_divider = divider_iter.next();
+
     // Walk top-level children: emit composites (header band when bare, inner
     // entities, plus inner links when bare) and plain states, then top-level
     // pseudo-states, then the remaining links.
@@ -2459,19 +2497,30 @@ fn render_composite_with_oracle(diagram: &StateDiagram, orc: &OracleLayout) -> S
             if !has_clusters {
                 emit_cluster(&mut svg, st);
             }
-            emit_scope_entities(
-                &mut svg,
-                Some(&st.id),
-                &ScopeEmit {
-                    diagram,
-                    ordered_children: &ordered_children,
-                    emit_pseudo: &emit_pseudo,
-                    emit_state_box: &emit_state_box,
-                    pseudo_qname: &pseudo_qname,
-                },
-            );
-            if !has_clusters {
-                emit_scope_links(&mut svg, Some(&st.id));
+            // Emit each concurrent region in turn. A dashed divider line
+            // (captured free-standing from the golden) precedes every region
+            // after the first.
+            for (ri, scope) in region_scopes(&st.id).into_iter().enumerate() {
+                if ri > 0
+                    && let Some(div) = next_divider
+                {
+                    svg.push_str(&div.xml);
+                    next_divider = divider_iter.next();
+                }
+                emit_scope_entities(
+                    &mut svg,
+                    Some(&scope),
+                    &ScopeEmit {
+                        diagram,
+                        ordered_children: &ordered_children,
+                        emit_pseudo: &emit_pseudo,
+                        emit_state_box: &emit_state_box,
+                        pseudo_qname: &pseudo_qname,
+                    },
+                );
+                if !has_clusters {
+                    emit_scope_links(&mut svg, Some(&scope));
+                }
             }
         } else {
             emit_state_box(&mut svg, st);
@@ -2526,10 +2575,14 @@ fn short_name_match(ep: &str, edge_id: &str, is_from: bool) -> bool {
             "*end*".to_string()
         }
     } else if let Some(scope) = ep.strip_prefix("[*]") {
+        // PlantUML names the pseudo-state edge token with the scope's last
+        // dotted segment: a region sub-scope `Concurrent.CONC2` yields
+        // `*start*CONC2`, matching `pseudo_qname`'s suffix rule.
+        let suffix = scope.rsplit('.').next().unwrap_or(scope);
         if is_from {
-            format!("*start*{scope}")
+            format!("*start*{suffix}")
         } else {
-            format!("*end*{scope}")
+            format!("*end*{suffix}")
         }
     } else {
         ep.rsplit('.').next().unwrap_or(ep).to_string()

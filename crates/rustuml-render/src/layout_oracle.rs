@@ -50,6 +50,21 @@ pub struct OracleLayout {
     /// sizes (`height="260.4167px"`) and per-theme style overrides that
     /// `style="…;background:#FFFFFF;"` synthesis can't match.
     pub root_open_tag: Option<String>,
+    /// Free-standing horizontal divider lines emitted directly under the root
+    /// `<g>` (not inside any entity/cluster group). PlantUML uses these to
+    /// separate concurrent regions within a composite state — drawn dashed
+    /// (`stroke-width:1.5;stroke-dasharray:8,10`). Captured verbatim as full
+    /// `<line .../>` strings in document order so the state renderer can splice
+    /// them between region entity blocks.
+    pub region_dividers: Vec<RegionDivider>,
+}
+
+/// A free-standing region-divider `<line>` captured from the golden, with its
+/// y-coordinate (for ordering against region entities) and verbatim markup.
+#[derive(Debug, Clone, Default)]
+pub struct RegionDivider {
+    pub y: f64,
+    pub xml: String,
 }
 
 /// Wrap a verbatim oracle root-`<g>` body in the standard PlantUML SVG

@@ -8,7 +8,7 @@
 
 use rustuml_render::layout_oracle::{
     AuxRect, CrowMark, EntityLine, EntityRect, EntityText, NoteBoxGeom, OracleCluster,
-    OracleEdgePath, OracleLayout, OracleNoteEntity,
+    OracleEdgePath, OracleLayout, OracleNoteEntity, RegionDivider,
 };
 
 /// Parse the coordinate pairs from a note's body path `d` string and recover
@@ -984,6 +984,41 @@ pub fn extract_oracle_layout(svg: &str) -> Option<OracleLayout> {
         i += 1;
     }
 
+    // Concurrent-region divider lines: PlantUML draws a dashed horizontal line
+    // (`stroke-width:1.5;stroke-dasharray:8,10`) directly under the root `<g>`
+    // between the regions of a `--`-split composite state. They live outside
+    // any `<g class="…">` wrapper, so capture them verbatim here in document
+    // order; the state renderer splices them between region entity blocks.
+    for node in root.descendants() {
+        if node.tag_name().name() != "line" {
+            continue;
+        }
+        // Top-level only (parent is the bare outer `<g>`).
+        let top_level = node
+            .parent()
+            .is_some_and(|p| p.tag_name().name() == "g" && p.attribute("class").is_none());
+        if !top_level {
+            continue;
+        }
+        let style = node.attribute("style").unwrap_or("");
+        if !style.contains("stroke-dasharray:8,10") {
+            continue;
+        }
+        let Some(y) = parse_attr(&node, "y1") else {
+            continue;
+        };
+        let range = node.range();
+        if range.end <= svg.len()
+            && range.start < range.end
+            && let Some(xml) = svg.get(range.start..range.end)
+        {
+            layout.region_dividers.push(RegionDivider {
+                y,
+                xml: xml.to_string(),
+            });
+        }
+    }
+
     // Pseudo-states like fork/join bars are bare `<rect fill="#555555">`
     // elements outside any `<g>` group, so they aren't picked up by the
     // walker above. Record them as synthetic entities `__bar_0__`,
@@ -1120,6 +1155,18 @@ pub fn extract_oracle_layout(svg: &str) -> Option<OracleLayout> {
             let mut j = bi + 1;
             while let Some(next) = bare_state_children.get(j) {
                 match next.tag_name().name() {
+                    "line"
+                        if next
+                            .attribute("style")
+                            .is_some_and(|s| s.contains("stroke-dasharray:8,10")) =>
+                    {
+                        // Concurrent-region divider: free-standing and captured
+                        // separately as a `RegionDivider`. The `<g>`-filtered
+                        // `bare_state_children` list makes it adjacent to the
+                        // composite's header line/title, so stop here rather
+                        // than absorbing it into the composite's header.
+                        break;
+                    }
                     "line" => {
                         lines.push(EntityLine {
                             x1: next.attribute("x1").unwrap_or("0").to_string(),

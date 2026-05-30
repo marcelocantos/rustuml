@@ -30,6 +30,14 @@ pub fn parse_state(lines: &[String]) -> Result<StateDiagram, ParseError> {
     Ok(parser.finish())
 }
 
+/// A concurrent-region separator is a line made entirely of two or more `-`
+/// (horizontal split) or two or more `|` (vertical split). PlantUML treats
+/// `--`, `---`, `||`, etc. inside a composite as region dividers.
+fn is_region_separator(line: &str) -> bool {
+    (line.len() >= 2 && line.bytes().all(|b| b == b'-'))
+        || (line.len() >= 2 && line.bytes().all(|b| b == b'|'))
+}
+
 /// Accumulator for a multi-line note body.
 struct NoteBuffer {
     kind: StateNoteKind,
@@ -47,10 +55,22 @@ struct StateParser {
     current_line: usize,
     /// Active prefix when inside a `skinparam <prefix> { ... }` block.
     skinparam_block_prefix: Option<String>,
-    /// Stack of enclosing composite-state ids (already fully qualified).
-    /// Empty at top level; each `state X { … }` pushes its qualified id and
-    /// the matching `}` pops it.
-    scope_stack: Vec<String>,
+    /// Stack of enclosing composite-state scopes. Empty at top level; each
+    /// `state X { … }` pushes a frame and the matching `}` pops it. A `--` (or
+    /// `||`) region separator inside a composite advances the top frame to a
+    /// synthetic concurrent-region sub-scope.
+    scope_stack: Vec<ScopeFrame>,
+}
+
+/// One enclosing-composite level on the scope stack.
+struct ScopeFrame {
+    /// Qualified id of the composite itself (region 0's scope).
+    base: String,
+    /// 0-based index of the current concurrent region. Region 0 uses `base`
+    /// directly; region N≥1 uses the synthetic sub-scope `<base>.CONC{N+1}`.
+    region: usize,
+    /// Active scope id: `base` for region 0, else `<base>.CONC{region+1}`.
+    current: String,
 }
 
 impl StateParser {
@@ -70,7 +90,7 @@ impl StateParser {
     /// Fully-qualified id of the current scope (the enclosing composite), or
     /// `None` at top level.
     fn current_scope(&self) -> Option<&str> {
-        self.scope_stack.last().map(String::as_str)
+        self.scope_stack.last().map(|f| f.current.as_str())
     }
 
     /// Resolve a raw state reference within the current scope.
@@ -211,6 +231,21 @@ impl StateParser {
                     key: "hideEmptyDescription".to_string(),
                     value: if show { "false" } else { "true" }.to_string(),
                 });
+            }
+            return Ok(());
+        }
+
+        // Concurrent-region separator inside a composite: a line of two or more
+        // `-` (horizontal split) or `|` (vertical split) characters advances
+        // the enclosing composite to its next concurrent region. PlantUML scopes
+        // region 0 to the composite itself; region N≥1 lives in a synthetic
+        // sub-scope `<Composite>.CONC{N+1}` so each region gets its own
+        // `[*]` pseudo-states. Only meaningful inside a composite — at top level
+        // the line is ignored.
+        if is_region_separator(line) {
+            if let Some(frame) = self.scope_stack.last_mut() {
+                frame.region += 1;
+                frame.current = format!("{}.CONC{}", frame.base, frame.region + 1);
             }
             return Ok(());
         }
@@ -407,7 +442,11 @@ impl StateParser {
                 });
             }
             if is_composite {
-                self.scope_stack.push(id);
+                self.scope_stack.push(ScopeFrame {
+                    base: id.clone(),
+                    region: 0,
+                    current: id,
+                });
             }
             true
         } else if let Some(caps) = RE_DESC.captures(line) {
