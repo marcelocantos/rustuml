@@ -27,6 +27,10 @@ const SEP_TEXT_OFF: f64 = 18.634765;
 const SEP_TEXT_X: f64 = 10.0;
 const BAR_H: f64 = 12.955078125;
 const MILESTONE_LABEL_MIN_W: f64 = 23.0;
+const TITLE_FONT: f64 = 14.0;
+const TITLE_TOP_PAD: f64 = 10.0;
+const TITLE_LINE_H: f64 = 16.48828125;
+const TITLE_BOTTOM_PAD: f64 = 11.0;
 const BAR_TOP_PLAIN: f64 = 18.0;
 const GRID_TOP_PLAIN: f64 = 6.0;
 const GRID_BOTTOM_PAD_PLAIN: f64 = 6.0;
@@ -281,7 +285,10 @@ pub fn render(diagram: &GanttDiagram, _theme: &Theme) -> String {
             } else {
                 let bar_x = start_day as f64 * DAY_WIDTH + 2.0;
                 let bar_w = (dur as f64 * DAY_WIDTH - 4.0).max(1.0);
-                let lx = if label_w > bar_w {
+                // The label sits inside only when it clears a 4px inset on
+                // each side of the bar; otherwise it is pushed past the right
+                // edge.
+                let lx = if label_w > bar_w - 4.0 {
                     bar_x + bar_w + 4.0
                 } else {
                     bar_x + 4.0
@@ -293,12 +300,21 @@ pub fn render(diagram: &GanttDiagram, _theme: &Theme) -> String {
     }
     let total_width = (chart_width + 1.0).max(label_right + 1.0);
 
-    let grid_top = if has_cal {
-        CAL_GRID_TOP
+    // A `title` pushes the whole chart down by a fixed band: 10px top pad,
+    // one title line, then an 11px bottom gap before the calendar/grid.
+    let title_h = if diagram.meta.title.is_some() {
+        TITLE_TOP_PAD + TITLE_LINE_H + TITLE_BOTTOM_PAD
     } else {
-        GRID_TOP_PLAIN
+        0.0
     };
-    let bar_top0 = if has_cal { CAL_BAR_TOP } else { BAR_TOP_PLAIN };
+
+    let grid_top = title_h
+        + if has_cal {
+            CAL_GRID_TOP
+        } else {
+            GRID_TOP_PLAIN
+        };
+    let bar_top0 = title_h + if has_cal { CAL_BAR_TOP } else { BAR_TOP_PLAIN };
 
     // Cumulative top offset of each row. Task rows advance by ROW_STRIDE;
     // separator rows are taller (they carry a label and a rule line).
@@ -330,6 +346,20 @@ pub fn render(diagram: &GanttDiagram, _theme: &Theme) -> String {
     };
 
     let mut svg = SvgBuilder::new_plantuml(total_width, total_height, "GANTT");
+
+    // 0. Title band (centred bold text wrapped in <g class="title">).
+    if let Some(title) = &diagram.meta.title {
+        let tw = text_width(title, TITLE_FONT, true);
+        let tx = ((total_width - tw) / 2.0).round();
+        let ty = TITLE_TOP_PAD + ascent(TITLE_FONT);
+        svg.raw_inline(&format!(
+            r#"<g class="title" data-source-line="1"><text fill="{TEXT_COLOR}" font-family="sans-serif" font-size="14" font-weight="700" lengthAdjust="spacing" textLength="{tw}" x="{tx}" y="{ty}">{}</text></g>"#,
+            escape_xml(title),
+            tw = fmt_n(tw),
+            tx = fmt_n(tx),
+            ty = fmt_n(ty),
+        ));
+    }
 
     // 1. Weekend shading (calendar only).
     if let Some(ref c) = cal {
@@ -363,7 +393,14 @@ pub fn render(diagram: &GanttDiagram, _theme: &Theme) -> String {
     // 2/3. Top axis + grid lines. PlantUML emits the calendar header (text)
     // before the grid lines, but the plain day-number axis after them.
     if let Some(ref c) = cal {
-        render_calendar_axis(&mut svg, c, diagram, CAL_DOW_Y, CAL_DAYNUM_Y, CAL_MONTH_Y);
+        render_calendar_axis(
+            &mut svg,
+            c,
+            diagram,
+            title_h + CAL_DOW_Y,
+            title_h + CAL_DAYNUM_Y,
+            title_h + CAL_MONTH_Y,
+        );
         for day in 0..=total_days {
             let gx = day as f64 * DAY_WIDTH;
             gantt_line(&mut svg, gx, grid_top, gx, grid_bottom, GRID_COLOR);
@@ -376,7 +413,7 @@ pub fn render(diagram: &GanttDiagram, _theme: &Theme) -> String {
             let gx = day as f64 * DAY_WIDTH;
             gantt_line(&mut svg, gx, grid_top, gx, grid_bottom, GRID_COLOR);
         }
-        render_day_numbers(&mut svg, total_days, ascent(AXIS_FONT));
+        render_day_numbers(&mut svg, total_days, title_h + ascent(AXIS_FONT));
     }
 
     // 4. Dependency arrows.
@@ -629,7 +666,7 @@ pub fn render(diagram: &GanttDiagram, _theme: &Theme) -> String {
                     let bar_x = start_day as f64 * DAY_WIDTH + 2.0;
                     let bar_w = (dur as f64 * DAY_WIDTH - 4.0).max(1.0);
                     let label_w = text_width(&label, TASK_FONT, false);
-                    if label_w > bar_w {
+                    if label_w > bar_w - 4.0 {
                         bar_x + bar_w + 4.0
                     } else {
                         bar_x + 4.0
@@ -833,6 +870,11 @@ fn render_calendar_axis(
         {
             display_label = month_only.to_string();
         }
+        // A bare month name that still overflows its sliver is abbreviated to
+        // its three-letter form (e.g. "March" -> "Mar").
+        if text_width(&display_label, MONTH_FONT, true) > span_w {
+            display_label = abbreviate_month_name(&display_label).to_string();
+        }
         let tl = text_width(&display_label, MONTH_FONT, true);
         let center = start_idx as f64 * DAY_WIDTH + span_w / 2.0;
         let mx = center - tl / 2.0;
@@ -872,28 +914,31 @@ fn days_in_month(year: i32, month: u32) -> u32 {
     }
 }
 
+fn abbreviate_month_name(month: &str) -> &str {
+    match month {
+        "January" => "Jan",
+        "February" => "Feb",
+        "March" => "Mar",
+        "April" => "Apr",
+        "May" => "May",
+        "June" => "Jun",
+        "July" => "Jul",
+        "August" => "Aug",
+        "September" => "Sep",
+        "October" => "Oct",
+        "November" => "Nov",
+        "December" => "Dec",
+        other => other,
+    }
+}
+
 fn abbreviate_month_label(label: &str) -> String {
     if let Some(pos) = label.find(' ') {
         let month_part = &label[..pos];
         let year_part = &label[pos..];
-        let abbr = match month_part {
-            "January" => "Jan",
-            "February" => "Feb",
-            "March" => "Mar",
-            "April" => "Apr",
-            "May" => "May",
-            "June" => "Jun",
-            "July" => "Jul",
-            "August" => "Aug",
-            "September" => "Sep",
-            "October" => "Oct",
-            "November" => "Nov",
-            "December" => "Dec",
-            other => other,
-        };
-        format!("{}{}", abbr, year_part)
+        format!("{}{}", abbreviate_month_name(month_part), year_part)
     } else {
-        label.to_string()
+        abbreviate_month_name(label).to_string()
     }
 }
 
