@@ -1254,11 +1254,17 @@ pub fn render_with_oracle(
                         // value, which can drift by sub-ulp amounts versus
                         // PlantUML's own text measurement.
                         let text_w = text_render::measure(label, STATE_FONT_SIZE, false);
-                        let text_x = oracle
-                            .and_then(|orc| orc.entities.get(id.as_str()))
+                        let orc_rect = oracle.and_then(|orc| orc.entities.get(id.as_str()));
+                        let text_x = orc_rect
                             .and_then(|r| r.name_text_x)
                             .unwrap_or(cx - text_w / 2.0);
-                        let text_y = box_y + NAME_BASELINE_OFFSET;
+                        // Prefer the oracle's captured baseline y: PlantUML
+                        // derives it from an unrounded box top, so recomputing
+                        // `box_y + offset` from the rounded rect.y can drift by
+                        // one ULP (e.g. 142.0234 vs 142.0235).
+                        let text_y = orc_rect
+                            .and_then(|r| r.text_y_values.first().copied())
+                            .unwrap_or(box_y + NAME_BASELINE_OFFSET);
                         let mut text_buf = String::new();
                         text_render::emit_text(
                             &mut text_buf,
