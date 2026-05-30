@@ -185,6 +185,20 @@ pub fn render(diagram: &TimingDiagram, _theme: &Theme) -> String {
     emit_vline(&mut svg, frame_left, axis_top, axis_bottom, 0.5, false);
     emit_vline(&mut svg, frame_right, axis_top, axis_bottom, 0.5, false);
 
+    // ── Highlight backgrounds (drawn behind the grid) ──────────────────────────
+    for hl in &diagram.highlights {
+        let x1 = tx(hl.from);
+        let x2 = tx(hl.to);
+        let fill = highlight_fill(hl.color.as_deref());
+        svg.raw(&format!(
+            r#"<rect fill="{fill}" height="{h}" style="stroke:none;stroke-width:1;" width="{w}" x="{x}" y="{y}"/>"#,
+            h = fmt_coord(axis_bottom - axis_top),
+            w = fmt_coord(x2 - x1),
+            x = fmt_coord(x1),
+            y = fmt_coord(axis_top),
+        ));
+    }
+
     // ── Ruler vertical grid lines ───────────────────────────────────────────────
     for i in 0..=nb_tick {
         let x = first_tick_x + TICK_INTERVAL_PX * i as f64;
@@ -218,7 +232,74 @@ pub fn render(diagram: &TimingDiagram, _theme: &Theme) -> String {
         ruler_width,
     );
 
+    // ── Highlight boundary lines + labels (drawn on top) ───────────────────────
+    for hl in &diagram.highlights {
+        let x1 = tx(hl.from);
+        let x2 = tx(hl.to);
+        emit_dashed_bound(&mut svg, x1, axis_top, axis_bottom);
+        emit_dashed_bound(&mut svg, x2, axis_top, axis_bottom);
+        if let Some(label) = &hl.label {
+            let baseline = ORIGIN + ascent(FONT_STATE) + 2.0;
+            emit_text_colored(
+                &mut svg,
+                x1 + 3.0,
+                baseline,
+                label,
+                FONT_STATE,
+                false,
+                "#000000",
+            );
+        }
+    }
+
     svg.finalize_plantuml()
+}
+
+/// Resolve a highlight fill colour. `None` → PlantUML's default `#EEEEEE`.
+/// A `#name` token is a named colour; `#RRGGBB` is literal.
+fn highlight_fill(color: Option<&str>) -> String {
+    match color {
+        None => "#EEEEEE".to_string(),
+        Some(c) => {
+            let stripped = c.strip_prefix('#').unwrap_or(c);
+            if stripped.len() == 6 && stripped.chars().all(|ch| ch.is_ascii_hexdigit()) {
+                format!("#{}", stripped.to_ascii_uppercase())
+            } else {
+                crate::text_render::normalize_color(stripped)
+            }
+        }
+    }
+}
+
+/// Dashed highlight boundary line (`stroke-width:2;stroke-dasharray:4,4`).
+fn emit_dashed_bound(svg: &mut SvgBuilder, x: f64, y1: f64, y2: f64) {
+    svg.raw(&format!(
+        r#"<line style="stroke:{LINE_COLOR};stroke-width:2;stroke-dasharray:4,4;" x1="{x}" x2="{x}" y1="{y1}" y2="{y2}"/>"#,
+        x = fmt_coord(x),
+        y1 = fmt_coord(y1),
+        y2 = fmt_coord(y2),
+    ));
+}
+
+/// Text with an explicit fill colour.
+fn emit_text_colored(
+    svg: &mut SvgBuilder,
+    x: f64,
+    y: f64,
+    content: &str,
+    size: f64,
+    bold: bool,
+    fill: &str,
+) {
+    let tl = fmt_coord(text_width(content, size, bold));
+    let weight = if bold { r#" font-weight="700""# } else { "" };
+    let escaped = escape(content);
+    svg.raw(&format!(
+        r#"<text fill="{fill}" font-family="sans-serif" font-size="{sz}"{weight} lengthAdjust="spacing" textLength="{tl}" x="{x}" y="{y}">{escaped}</text>"#,
+        sz = fmt_coord(size),
+        x = fmt_coord(x),
+        y = fmt_coord(y),
+    ));
 }
 
 /// Full panel height for a player (excludes the frame title).
