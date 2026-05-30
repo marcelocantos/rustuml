@@ -911,6 +911,10 @@ struct PlantUmlSvg {
     /// `participant_group_open` and consumed by `participant_group_close`. When
     /// present the shape contents are wrapped in a PlantUML `[[url]]` anchor.
     active_participant_url: Option<String>,
+    /// Corner radius (rx/ry) for participant head/tail boxes. Defaults to
+    /// `HEAD_BOX_RX` (2.5 = RoundCorner 5 / 2) and is overridden to
+    /// `RoundCorner / 2` by `skinparam RoundCorner N`.
+    head_box_rx: f64,
 }
 
 impl PlantUmlSvg {
@@ -923,6 +927,7 @@ impl PlantUmlSvg {
             lifeline_border: "#181818".into(),
             lifeline_border_thickness: "0.5".into(),
             active_participant_url: None,
+            head_box_rx: HEAD_BOX_RX,
         }
     }
 
@@ -1035,8 +1040,8 @@ impl PlantUmlSvg {
             r##"<rect fill="{}" height="{}" rx="{}" ry="{}" style="stroke:{};stroke-width:{};" width="{}" x="{}" y="{}"/>"##,
             fill_color,
             fmt_coord(rect_h),
-            fmt_coord(HEAD_BOX_RX),
-            fmt_coord(HEAD_BOX_RX),
+            fmt_coord(self.head_box_rx),
+            fmt_coord(self.head_box_rx),
             self.participant_border,
             self.participant_border_thickness,
             fmt_coord(rect_w),
@@ -2408,6 +2413,9 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme) -> String {
     // Message label horizontal alignment on the arrow span. PlantUML's
     // `skinparam SequenceMessageAlign` accepts left (default) | center | right.
     let mut message_align = MessageAlign::Left;
+    // Participant head/tail box corner radius. `skinparam RoundCorner N` sets
+    // the box rx/ry to N/2 (default 2.5 = RoundCorner 5 / 2).
+    let mut head_box_rx = HEAD_BOX_RX;
     for sp in &diagram.meta.skinparams {
         let key = sp.key.to_ascii_lowercase();
         let val = sp.value.trim();
@@ -2518,6 +2526,11 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme) -> String {
                     "right" => MessageAlign::Right,
                     _ => MessageAlign::Left,
                 };
+            }
+            "roundcorner" => {
+                if let Ok(v) = val.parse::<f64>() {
+                    head_box_rx = v / 2.0;
+                }
             }
             _ => {}
         }
@@ -4005,6 +4018,7 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme) -> String {
     svg.participant_border_thickness = participant_border_thickness.clone();
     svg.lifeline_border = lifeline_border.clone();
     svg.lifeline_border_thickness = lifeline_border_thickness.clone();
+    svg.head_box_rx = head_box_rx;
     svg.open_svg(svg_width, svg_height, bg_color.as_deref());
 
     // Emit handwritten warning if present
