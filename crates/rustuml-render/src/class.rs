@@ -819,6 +819,12 @@ fn fmt4(v: f64) -> String {
 /// re-centering arithmetic on PlantUML's float trajectory when combining
 /// oracle-rounded coordinates with locally-measured widths.
 fn round_4dp(v: f64) -> f64 {
+    // Under uniform scaling, keep layout arithmetic at full precision so the
+    // single final rounding matches PlantUML (which rounds only the scaled
+    // output). Rounding here would re-introduce the base-level 4-dp drift.
+    if crate::plantuml_metrics::full_precision_active() {
+        return v;
+    }
     let scaled = v * 10000.0;
     let rounded = if scaled >= 0.0 {
         (scaled + 0.5).floor()
@@ -833,6 +839,11 @@ fn round_4dp(v: f64) -> f64 {
 fn fmt_tl(v: f64) -> String {
     if v == 0.0 {
         return "0".to_string();
+    }
+    // During a uniform-scale render, emit full round-trippable precision so the
+    // final scaling pass rounds once (see `plantuml_metrics::fmt_coord`).
+    if crate::plantuml_metrics::full_precision_active() {
+        return crate::plantuml_metrics::fmt_coord(v);
     }
     let s = format!("{v:.4}");
     if let Some(dot) = s.find('.') {

@@ -200,6 +200,13 @@ fn bold_text_width(text: &str, font_size: f64) -> f64 {
 /// → `"110.1562"`). For exact-string golden parity we round explicitly to
 /// HALF_UP at the 4th decimal place before formatting.
 fn fmt_coord(v: f64) -> String {
+    // During a uniform-scale render (`skinparam dpi`/`scale`), defer to the
+    // shared formatter, which emits full round-trippable precision so the final
+    // scaling pass rounds once instead of double-rounding (see
+    // `plantuml_metrics::fmt_coord`).
+    if crate::plantuml_metrics::full_precision_active() {
+        return crate::plantuml_metrics::fmt_coord(v);
+    }
     // Integer fast-path preserves "25" rather than "25.0000" after trim.
     if v == v.floor() && v.abs() < 1e15 {
         return format!("{}", v as i64);

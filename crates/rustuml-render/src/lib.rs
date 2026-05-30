@@ -55,6 +55,7 @@ pub mod plantuml_metrics;
 pub mod png;
 pub mod regex_diagram;
 pub mod salt;
+pub mod scale;
 pub mod sequence;
 pub mod skinparam;
 pub mod sprite;
@@ -99,6 +100,16 @@ pub fn render_svg_with_theme(diagram: &Diagram, theme: &Theme) -> String {
     } else {
         skinparam::apply_skinparams(theme, meta_params)
     };
+    // Uniform geometric scaling (`skinparam dpi`/`scale`). No oracle on this
+    // path; render at base under full-precision formatting, then scale the
+    // final SVG up by `k` with a single 4-dp rounding (matching PlantUML).
+    let k = scale::factor_from_meta(diagram.meta());
+    if k != 1.0 {
+        let svg = plantuml_metrics::with_full_precision(|| {
+            render_under_filter_registry(diagram, |d| render_with_theme(d, &effective_theme))
+        });
+        return scale::scale_svg_numbers(&svg, k);
+    }
     render_under_filter_registry(diagram, |d| render_with_theme(d, &effective_theme))
 }
 
@@ -114,6 +125,27 @@ pub fn render_svg_with_oracle(diagram: &Diagram, oracle: Option<&OracleLayout>) 
     } else {
         skinparam::apply_skinparams(&Theme::default(), meta_params)
     };
+    // Uniform geometric scaling (`skinparam dpi`/`scale`). PlantUML lays the
+    // diagram out at base resolution and multiplies the *final* SVG by `k`,
+    // rounding once. We mirror that: the oracle (captured at golden, i.e.
+    // scaled, coordinates) is un-scaled by 1/k, the renderer runs at base under
+    // full-precision coordinate formatting (so no intermediate 4-dp rounding
+    // drifts when later multiplied), and the resulting SVG is scaled up by `k`
+    // with PlantUML's single 4-dp rounding.
+    let k = scale::factor_from_meta(diagram.meta());
+    if k != 1.0 {
+        let base_oracle = oracle.map(|o| {
+            let mut b = o.clone();
+            scale::scale_oracle_layout(&mut b, 1.0 / k);
+            b
+        });
+        let svg = plantuml_metrics::with_full_precision(|| {
+            render_under_filter_registry(diagram, |d| {
+                render_with_theme_and_oracle(d, &theme, base_oracle.as_ref())
+            })
+        });
+        return scale::scale_svg_numbers(&svg, k);
+    }
     render_under_filter_registry(diagram, |d| render_with_theme_and_oracle(d, &theme, oracle))
 }
 

@@ -130,16 +130,33 @@ pub fn extract_oracle_layout(svg: &str) -> Option<OracleLayout> {
 
     let mut layout = OracleLayout::default();
 
-    // Extract canvas dimensions from root <svg>.
-    if let Some(vb) = root.attribute("viewBox") {
+    // Extract canvas dimensions from root <svg>. Prefer the full-precision
+    // `width`/`height` pixel attributes (`221.875px`) over the integer-floored
+    // `viewBox` (`0 0 221 303`): for unscaled diagrams the px attr equals the
+    // viewBox integer (so this is a no-op), but for `skinparam dpi`/`scale`
+    // diagrams the px attr preserves the true scaled size, letting the scaling
+    // pipeline recover the exact base canvas via division by `k`. Renderers
+    // truncate the canvas to an integer for the root tag, so the extra
+    // precision never alters unscaled output.
+    let parse_px = |a: Option<&str>| -> Option<f64> {
+        a.and_then(|s| s.strip_suffix("px").unwrap_or(s).trim().parse::<f64>().ok())
+    };
+    let vb_dims = root.attribute("viewBox").and_then(|vb| {
         let parts: Vec<f64> = vb
             .split_whitespace()
             .filter_map(|s| s.parse().ok())
             .collect();
-        if parts.len() == 4 {
-            layout.canvas_width = parts[2];
-            layout.canvas_height = parts[3];
-        }
+        (parts.len() == 4).then_some((parts[2], parts[3]))
+    });
+    if let Some(w) = parse_px(root.attribute("width")) {
+        layout.canvas_width = w;
+    } else if let Some((w, _)) = vb_dims {
+        layout.canvas_width = w;
+    }
+    if let Some(h) = parse_px(root.attribute("height")) {
+        layout.canvas_height = h;
+    } else if let Some((_, h)) = vb_dims {
+        layout.canvas_height = h;
     }
 
     // Capture the opening `<svg ...>` tag verbatim (without trailing `>`),

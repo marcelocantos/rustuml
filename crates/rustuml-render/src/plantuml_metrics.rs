@@ -256,6 +256,16 @@ pub fn fmt_coord(v: f64) -> String {
     if v == v.floor() && v.abs() < 1e15 {
         return format!("{}", v as i64);
     }
+    // During a uniformly-scaled render (`skinparam dpi`/`scale`), the diagram
+    // is laid out at base resolution and the *final* SVG is multiplied by `k`
+    // and rounded once — matching PlantUML, which scales at the graphics layer.
+    // Emitting base coordinates at full precision here lets the single forward
+    // rounding land on PlantUML's value instead of double-rounding (base 4-dp
+    // then `* k`), which drifts by up to one tick. The shortest round-trippable
+    // f64 representation preserves the value through the later `* k`.
+    if FULL_PRECISION.with(std::cell::Cell::get) {
+        return format!("{v}");
+    }
     // HALF_UP at 4 decimals: scale, add ±0.5, floor.
     let scaled = v * 10000.0;
     let rounded = if scaled >= 0.0 {
@@ -267,6 +277,30 @@ pub fn fmt_coord(v: f64) -> String {
     let s = s.trim_end_matches('0');
     let s = s.trim_end_matches('.');
     s.to_string()
+}
+
+thread_local! {
+    /// When set, [`fmt_coord`] (and any formatter delegating to it) emits full
+    /// round-trippable precision instead of PlantUML's 4-dp rounding. Set for
+    /// the duration of a uniformly-scaled render so the final scaling pass can
+    /// round once. See [`with_full_precision`].
+    static FULL_PRECISION: std::cell::Cell<bool> = const { std::cell::Cell::new(false) };
+}
+
+/// Run `f` with full-precision coordinate formatting active (uniform-scale
+/// renders). Restores the previous state afterwards so nested/non-scaled
+/// renders are unaffected.
+pub fn with_full_precision<R>(f: impl FnOnce() -> R) -> R {
+    let prev = FULL_PRECISION.with(std::cell::Cell::get);
+    FULL_PRECISION.with(|c| c.set(true));
+    let r = f();
+    FULL_PRECISION.with(|c| c.set(prev));
+    r
+}
+
+/// Whether full-precision coordinate formatting is currently active.
+pub fn full_precision_active() -> bool {
+    FULL_PRECISION.with(std::cell::Cell::get)
 }
 
 // ─── Character width tables ─────────────────────────────────────────
