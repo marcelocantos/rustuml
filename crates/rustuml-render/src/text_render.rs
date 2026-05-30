@@ -629,9 +629,15 @@ fn write_text_element(
     // <a> element with both modern (href) and legacy (xlink:*) attributes.
     if let Some(url) = style.link_url.as_deref() {
         let escaped = escape_xml_attr(url);
+        // `title` / `xlink:title` is the `{tooltip}` when supplied, else the URL.
+        let title = style
+            .link_title
+            .as_deref()
+            .map(escape_xml_attr)
+            .unwrap_or_else(|| escaped.clone());
         write!(
             buf,
-            r#"<a href="{escaped}" target="_top" title="{escaped}" xlink:actuate="onRequest" xlink:href="{escaped}" xlink:show="new" xlink:title="{escaped}" xlink:type="simple">"#,
+            r#"<a href="{escaped}" target="_top" title="{title}" xlink:actuate="onRequest" xlink:href="{escaped}" xlink:show="new" xlink:title="{title}" xlink:type="simple">"#,
         )
         .unwrap();
     }

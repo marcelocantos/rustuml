@@ -814,6 +814,10 @@ pub struct Style {
     pub baseline_shift: Option<&'static str>,
     /// Hyperlink target from `[[url label]]`; carries blue underline styling.
     pub link_url: Option<String>,
+    /// Optional hyperlink tooltip from `[[url{tooltip} label]]`; becomes the
+    /// `<a>` element's `title` / `xlink:title`. Falls back to the URL when
+    /// absent.
+    pub link_title: Option<String>,
     /// Background colour from `<back:color>...</back>`, normalised to upper-
     /// case `#RRGGBB`. The renderer emits an SVG `<filter>` per unique value
     /// and references it via `filter="url(#...)"` on the matching `<text>`.
@@ -1097,8 +1101,12 @@ fn walk_segments(text: &str, style: &Style, skip_underline: bool, out: &mut Vec<
                         None => break,
                     }
                 }
+                // A `{tooltip}` segment becomes the link's title attribute and
+                // is stripped before URL/label parsing.
+                let mut tooltip: Option<String> = None;
                 let inner = if let Some(brace) = inner.find('{') {
                     if let Some(end) = inner.find('}') {
+                        tooltip = Some(inner[brace + 1..end].to_string());
                         format!("{}{}", &inner[..brace], &inner[end + 1..])
                     } else {
                         inner
@@ -1128,6 +1136,7 @@ fn walk_segments(text: &str, style: &Style, skip_underline: bool, out: &mut Vec<
                 flush_buf!();
                 let mut nested = style.clone();
                 nested.link_url = Some(url.clone());
+                nested.link_title = tooltip;
                 nested.fill = Some("#0000FF".to_string());
                 nested.underline = true;
                 push_literal(out, display, &nested);
