@@ -2310,8 +2310,46 @@ fn render_composite_with_oracle(diagram: &StateDiagram, orc: &OracleLayout) -> S
         let emit_pseudo = e.emit_pseudo;
         let emit_state_box = e.emit_state_box;
         let pseudo_qname = e.pseudo_qname;
-        for token in ordered_children(scope) {
-            // Role-tagged scoped pseudo-state (`\u{1}S<marker>` / `\u{1}E…`).
+        let tokens = ordered_children(scope);
+        // PlantUML emits a scope's nested composites first, then the scope's
+        // own pseudo-states and plain states in declaration/use order. The
+        // composite "float to front" is what places a deeply nested cluster
+        // ahead of its parent's `[*]` markers, while plain states still
+        // interleave with the pseudo-states by line (e.g. start, S, end).
+        for token in &tokens {
+            if token.starts_with('\u{1}') {
+                continue;
+            }
+            let Some(st) = diagram.states.iter().find(|s| s.id == *token) else {
+                continue;
+            };
+            if !st.composite {
+                continue;
+            }
+            // On the bare path, a nested composite emits its own header band
+            // before its regions (the cluster-group path emits all headers up
+            // front via `emit_clusters_dfs`).
+            if !e.has_clusters {
+                (e.emit_cluster)(svg, st);
+            }
+            // Walk each concurrent region of the nested composite, splicing the
+            // dashed region divider before every region after the first.
+            for (ri, rscope) in (e.region_scopes)(&st.id).into_iter().enumerate() {
+                if ri > 0 {
+                    let i = e.next_divider.get();
+                    if let Some(div) = e.dividers.get(i) {
+                        svg.push_str(&div.xml);
+                        e.next_divider.set(i + 1);
+                    }
+                }
+                emit_scope_entities(svg, Some(&rscope), e);
+                if !e.has_clusters {
+                    (e.emit_scope_links)(svg, Some(&rscope));
+                }
+            }
+        }
+        // Second pass: pseudo-states and plain states, in original order.
+        for token in &tokens {
             if let Some(rest) = token.strip_prefix('\u{1}') {
                 let is_start = rest.starts_with('S');
                 let marker = &rest[1..];
@@ -2329,34 +2367,9 @@ fn render_composite_with_oracle(diagram: &StateDiagram, orc: &OracleLayout) -> S
                     .unwrap_or_else(|| "0".to_string());
                 let q = pseudo_qname(marker, is_start);
                 emit_pseudo(svg, &q, is_start, &sl);
-                continue;
-            }
-            let Some(st) = diagram.states.iter().find(|s| s.id == token) else {
-                continue;
-            };
-            if st.composite {
-                // On the bare path, a nested composite emits its own header
-                // band before its regions (the cluster-group path emits all
-                // headers up front via `emit_clusters_dfs`).
-                if !e.has_clusters {
-                    (e.emit_cluster)(svg, st);
-                }
-                // Walk each concurrent region of the nested composite, splicing
-                // the dashed region divider before every region after the first.
-                for (ri, rscope) in (e.region_scopes)(&st.id).into_iter().enumerate() {
-                    if ri > 0 {
-                        let i = e.next_divider.get();
-                        if let Some(div) = e.dividers.get(i) {
-                            svg.push_str(&div.xml);
-                            e.next_divider.set(i + 1);
-                        }
-                    }
-                    emit_scope_entities(svg, Some(&rscope), e);
-                    if !e.has_clusters {
-                        (e.emit_scope_links)(svg, Some(&rscope));
-                    }
-                }
-            } else {
+            } else if let Some(st) = diagram.states.iter().find(|s| s.id == *token)
+                && !st.composite
+            {
                 emit_state_box(svg, st);
             }
         }
