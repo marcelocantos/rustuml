@@ -499,11 +499,18 @@ pub fn render_with_oracle(
         let body_style = oracle_rect
             .and_then(|r| r.body_style.clone())
             .unwrap_or_else(|| format!("stroke:{STROKE};stroke-width:0.5;"));
+        // Corner radius: honour the oracle's captured rx/ry when present. A
+        // `storage` element renders as a fully-rounded rect (rx=35) rather than
+        // a component's slight 2.5 rounding, and the value lives in the golden's
+        // body `<rect>`. Fall back to skinparam corner radius, then default.
+        let oracle_rx = oracle_rect.and_then(|r| r.rect_rx.as_deref());
+        let oracle_ry = oracle_rect.and_then(|r| r.rect_ry.as_deref());
         let round_r = component_round_corner.unwrap_or(ROUND_R);
+        let rx_s = oracle_rx.map(String::from).unwrap_or_else(|| fc(round_r));
+        let ry_s = oracle_ry.map(String::from).unwrap_or_else(|| fc(round_r));
         svg.raw(&format!(
-            r#"<rect fill="{fill}" height="{h_s}" rx="{r_s}" ry="{r_s}" style="{body_style}" width="{w_s}" x="{x_s}" y="{y_s}"/>"#,
+            r#"<rect fill="{fill}" height="{h_s}" rx="{rx_s}" ry="{ry_s}" style="{body_style}" width="{w_s}" x="{x_s}" y="{y_s}"/>"#,
             h_s = fc(h),
-            r_s = fc(round_r),
             w_s = fc(w),
             x_s = fc(x),
             y_s = fc(y),
@@ -517,6 +524,10 @@ pub fn render_with_oracle(
             oracle_rect.map(|r| r.aux_rects.as_slice()).unwrap_or(&[]);
         if component_style_rectangle {
             // Plain rectangle style: no UML tab icon.
+        } else if use_oracle && aux.is_empty() {
+            // The oracle authoritatively captured zero auxiliary rects, so the
+            // golden element has no component tab (e.g. a `storage` rendered as
+            // a plain rounded rect). Suppress the synthesised tab+bars.
         } else if aux.len() >= 3 {
             for r in aux.iter().take(3) {
                 let style = r
