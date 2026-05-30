@@ -74,7 +74,32 @@ fn node_text_width(label: &str) -> f64 {
     // Measure the creole-resolved text (markup stripped, per-segment styling
     // applied) rather than the raw label, so `**bold**` etc. size the box by
     // the rendered glyphs, not the markup characters.
-    text_render::measure(label, FONT_SIZE, false)
+    text_render::measure(&display_label(label), FONT_SIZE, false)
+}
+
+/// Convert UML stereotype angle brackets `<<x>>` to guillemets `«x»`, matching
+/// PlantUML's stereotype rendering. Applied to the label before measuring and
+/// emitting so the box width and glyphs reflect the displayed text.
+fn display_label(label: &str) -> String {
+    if !label.contains("<<") {
+        return label.to_string();
+    }
+    let mut out = String::with_capacity(label.len());
+    let mut rest = label;
+    while let Some(open) = rest.find("<<") {
+        if let Some(close_rel) = rest[open + 2..].find(">>") {
+            let close = open + 2 + close_rel;
+            out.push_str(&rest[..open]);
+            out.push('\u{00ab}');
+            out.push_str(&rest[open + 2..close]);
+            out.push('\u{00bb}');
+            rest = &rest[close + 2..];
+        } else {
+            break;
+        }
+    }
+    out.push_str(rest);
+    out
 }
 
 /// Resolve a node's `[#color]` modifier to a `#RRGGBB` fill, dropping `none`.
@@ -375,7 +400,7 @@ fn emit_box(buf: &mut String, p: &Placed) {
     };
     text_render::emit_text(
         buf,
-        &p.label,
+        &display_label(&p.label),
         &text_render::TextBase {
             x: text_x,
             y: text_y,
