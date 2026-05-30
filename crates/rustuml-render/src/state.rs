@@ -432,6 +432,27 @@ pub fn render_with_oracle(
     let STATE_FILL: &str = skin.state_fill.as_str();
     let _arrow_color: &str = skin.arrow_color.as_str();
 
+    // Resolve the state-box font size. PlantUML applies `skinparam stateFontSize`,
+    // `stateAttributeFontSize`, or the global `defaultFontSize` uniformly to both
+    // the state *name* label (default 14) and its *description* lines (default
+    // 12). Arrow/transition labels are sized separately (`arrow_font_size`).
+    // The override feeds the emitted `font-size` and `text_render::measure`, so
+    // the `textLength` matches the resized glyphs; any geometry the oracle did
+    // not capture (divider y, description baseline) scales with it too.
+    let state_font_override: Option<f64> = diagram
+        .meta
+        .skinparams
+        .iter()
+        .rev()
+        .find(|sp| {
+            sp.key.eq_ignore_ascii_case("stateFontSize")
+                || sp.key.eq_ignore_ascii_case("stateAttributeFontSize")
+                || sp.key.eq_ignore_ascii_case("defaultFontSize")
+        })
+        .and_then(|sp| sp.value.trim().parse::<f64>().ok());
+    let state_name_font_size = state_font_override.unwrap_or(STATE_FONT_SIZE);
+    let state_desc_font_size = state_font_override.unwrap_or(DESC_FONT_SIZE);
+
     let (has_start, _has_end) = classify_star_nodes(&diagram.transitions);
 
     // Check for `hide empty description` directive.
@@ -1250,12 +1271,13 @@ pub fn render_with_oracle(
                         )
                         .unwrap();
 
-                        let text_w = text_render::measure(label, STATE_FONT_SIZE, false);
+                        let text_w = text_render::measure(label, state_name_font_size, false);
                         let text_x = cx - text_w / 2.0;
                         // Centred baseline: (bh - text_height) / 2 + ascent.
                         let text_y = box_y
-                            + (*bh - crate::plantuml_metrics::text_height(STATE_FONT_SIZE)) / 2.0
-                            + crate::plantuml_metrics::ascent(STATE_FONT_SIZE);
+                            + (*bh - crate::plantuml_metrics::text_height(state_name_font_size))
+                                / 2.0
+                            + crate::plantuml_metrics::ascent(state_name_font_size);
                         let mut text_buf = String::new();
                         text_render::emit_text(
                             &mut text_buf,
@@ -1263,7 +1285,7 @@ pub fn render_with_oracle(
                             &TextBase {
                                 x: text_x,
                                 y: text_y,
-                                font_size: STATE_FONT_SIZE as u32,
+                                font_size: state_name_font_size as u32,
                                 font_family: "sans-serif",
                                 fill: TEXT_COLOR,
                                 bold: false,
@@ -1308,8 +1330,15 @@ pub fn render_with_oracle(
                         )
                         .unwrap();
 
-                        // Divider line (always present in PlantUML default mode).
-                        let div_y = box_y + DIVIDER_OFFSET;
+                        // Divider line (always present in PlantUML default
+                        // mode). Prefer the oracle's captured divider y: under a
+                        // font-size override the divider sits below a taller name
+                        // band, so the analytic `box_y + DIVIDER_OFFSET` (keyed to
+                        // the 14pt default) is wrong. The oracle value is exact.
+                        let orc_rect = oracle.and_then(|orc| orc.entities.get(id.as_str()));
+                        let div_y = orc_rect
+                            .and_then(|r| r.sep_y_values.first().copied())
+                            .unwrap_or(box_y + DIVIDER_OFFSET);
                         write!(
                             svg,
                             r#"<line style="{stroke_style}" x1="{}" x2="{}" y1="{}" y2="{}"/>"#,
@@ -1324,8 +1353,7 @@ pub fn render_with_oracle(
                         // text x (exact byte-for-byte) over our re-centred
                         // value, which can drift by sub-ulp amounts versus
                         // PlantUML's own text measurement.
-                        let text_w = text_render::measure(label, STATE_FONT_SIZE, false);
-                        let orc_rect = oracle.and_then(|orc| orc.entities.get(id.as_str()));
+                        let text_w = text_render::measure(label, state_name_font_size, false);
                         let text_x = orc_rect
                             .and_then(|r| r.name_text_x)
                             .unwrap_or(cx - text_w / 2.0);
@@ -1343,7 +1371,7 @@ pub fn render_with_oracle(
                             &TextBase {
                                 x: text_x,
                                 y: text_y,
-                                font_size: STATE_FONT_SIZE as u32,
+                                font_size: state_name_font_size as u32,
                                 font_family: "sans-serif",
                                 fill: TEXT_COLOR,
                                 bold: false,
@@ -1354,10 +1382,17 @@ pub fn render_with_oracle(
                         );
                         svg.push_str(&text_buf);
 
-                        // Description lines.
+                        // Description lines. Prefer the oracle's captured
+                        // baseline y (index j+1, after the name) so the spacing
+                        // tracks the resized font; fall back to the analytic
+                        // offsets for the default size.
                         for (j, desc) in descriptions.iter().enumerate() {
                             let desc_x = box_x + 5.0;
-                            let desc_y = div_y + FIRST_DESC_OFFSET + j as f64 * DESC_LINE_SPACING;
+                            let desc_y = orc_rect
+                                .and_then(|r| r.text_y_values.get(j + 1).copied())
+                                .unwrap_or(
+                                    div_y + FIRST_DESC_OFFSET + j as f64 * DESC_LINE_SPACING,
+                                );
                             let mut text_buf = String::new();
                             text_render::emit_text(
                                 &mut text_buf,
@@ -1365,7 +1400,7 @@ pub fn render_with_oracle(
                                 &TextBase {
                                     x: desc_x,
                                     y: desc_y,
-                                    font_size: DESC_FONT_SIZE as u32,
+                                    font_size: state_desc_font_size as u32,
                                     font_family: "sans-serif",
                                     fill: TEXT_COLOR,
                                     bold: false,
