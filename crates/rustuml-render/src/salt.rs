@@ -92,6 +92,10 @@ struct Grid<'a> {
     kind: BlockKind,
     n_rows: usize,
     n_cols: usize,
+    /// Title for a `{^Title` group box (DRAW_OUTSIDE_WITH_TITLE), plus its
+    /// rendered height. `None` for all other blocks.
+    title: Option<String>,
+    title_height: f64,
 }
 
 impl<'a> Grid<'a> {
@@ -111,6 +115,17 @@ impl<'a> Grid<'a> {
         }
         let n_rows = block.rows.len().max(1);
 
+        // A `{^Title` group box reserves half the title height above the
+        // grid (rowsStart[i] starts at titleHeight/2), and row-0 cells gain a
+        // further titleHeight/2 so the title sits inside the top border.
+        let title = block.title.clone();
+        let title_height = if title.is_some() {
+            pm::text_height(FONT_SIZE)
+        } else {
+            0.0
+        };
+        let half_title = title_height / 2.0;
+
         // Column widths (LeftFirst): ensure col span >= dim.width + 2.
         let mut cols_start = vec![0f64; n_cols + 1];
         for cell in &cells {
@@ -118,11 +133,18 @@ impl<'a> Grid<'a> {
             ensure_span(&mut cols_start, cell.col, cell.col + 1, w + CELL_PAD);
         }
 
-        // Row heights (TopFirst): ensure row span >= dim.height + 2.
-        let mut rows_start = vec![0f64; n_rows + 1];
+        // Row heights (TopFirst): ensure row span >= dim.height + supY + 2,
+        // where supY = titleHeight/2 for row-0 cells (matching ElementPyramid).
+        let mut rows_start = vec![half_title; n_rows + 1];
         for cell in &cells {
             let (_, h) = widget_dim(cell.widget);
-            ensure_span(&mut rows_start, cell.row, cell.row + 1, h + CELL_PAD);
+            let sup_y = if cell.row == 0 { half_title } else { 0.0 };
+            ensure_span(
+                &mut rows_start,
+                cell.row,
+                cell.row + 1,
+                h + sup_y + CELL_PAD,
+            );
         }
 
         Grid {
@@ -132,6 +154,8 @@ impl<'a> Grid<'a> {
             kind: block.kind,
             n_rows,
             n_cols,
+            title,
+            title_height,
         }
     }
 
@@ -140,13 +164,16 @@ impl<'a> Grid<'a> {
     }
 
     fn height(&self) -> f64 {
-        *self.rows_start.last().unwrap_or(&0.0)
+        *self.rows_start.last().unwrap_or(&0.0) + self.title_height
     }
 
     fn draw(&self, ox: f64, oy: f64, buf: &mut String) {
+        let half_title = self.title_height / 2.0;
         for cell in &self.cells {
+            // Row-0 cells are pushed down by titleHeight/2 (supY).
+            let sup_y = if cell.row == 0 { half_title } else { 0.0 };
             let cx = ox + self.cols_start[cell.col] + DRAW_OFFSET;
-            let cy = oy + self.rows_start[cell.row] + DRAW_OFFSET;
+            let cy = oy + self.rows_start[cell.row] + sup_y + DRAW_OFFSET;
             // dimToUse for the cell (span minus 1, per ElementPyramid).
             let cell_w = self.cols_start[cell.col + 1] - self.cols_start[cell.col] - 1.0;
             let cell_h = self.rows_start[cell.row + 1] - self.rows_start[cell.row] - 1.0;
@@ -155,6 +182,62 @@ impl<'a> Grid<'a> {
         if self.kind == BlockKind::Table {
             self.draw_grid_lines(ox, oy, buf);
         }
+        if let Some(title) = &self.title {
+            self.draw_group_box(ox, oy, title, buf);
+        }
+    }
+
+    /// Draw the outer border and title for a `{^Title` group box
+    /// (DRAW_OUTSIDE_WITH_TITLE): the border traces the grid perimeter using
+    /// the same segment-set ordering as the Java `Grid`, and the title text
+    /// sits on the top edge over a white backing rectangle.
+    fn draw_group_box(&self, ox: f64, oy: f64, title: &str, buf: &mut String) {
+        let mut horizontals = JavaSegmentSet::new();
+        let mut verticals = JavaSegmentSet::new();
+        for c in 0..self.n_cols {
+            horizontals.insert((0, c));
+            horizontals.insert((self.n_rows, c));
+        }
+        for r in 0..self.n_rows {
+            verticals.insert((r, 0));
+            verticals.insert((r, self.n_cols));
+        }
+        for &(row, col) in &horizontals.iter_order() {
+            let x1 = ox + self.cols_start[col];
+            let x2 = ox + self.cols_start[col + 1];
+            let y = oy + self.rows_start[row];
+            buf.push_str(&format!(
+                r##"<line style="stroke:#000000;stroke-width:1;" x1="{x1}" x2="{x2}" y1="{y}" y2="{y}"/>"##,
+                x1 = pm::fmt_coord(x1),
+                x2 = pm::fmt_coord(x2),
+                y = pm::fmt_coord(y),
+            ));
+        }
+        for &(row, col) in &verticals.iter_order() {
+            let x = ox + self.cols_start[col];
+            let y1 = oy + self.rows_start[row];
+            let y2 = oy + self.rows_start[row + 1];
+            buf.push_str(&format!(
+                r##"<line style="stroke:#000000;stroke-width:1;" x1="{x}" x2="{x}" y1="{y1}" y2="{y2}"/>"##,
+                x = pm::fmt_coord(x),
+                y1 = pm::fmt_coord(y1),
+                y2 = pm::fmt_coord(y2),
+            ));
+        }
+
+        // Title: a white-backed text at (x + 6, y), on the top border.
+        let tw = pm::text_width(title, FONT_SIZE, false);
+        let th = self.title_height;
+        let tx = ox + 6.0;
+        let ty = oy;
+        buf.push_str(&format!(
+            r##"<rect fill="#FFFFFF" height="{h}" style="stroke:#FFFFFF;stroke-width:1;" width="{w}" x="{x}" y="{y}"/>"##,
+            h = pm::fmt_coord(th),
+            w = pm::fmt_coord(tw),
+            x = pm::fmt_coord(tx),
+            y = pm::fmt_coord(ty),
+        ));
+        emit_text(buf, tx, ty + pm::ascent(FONT_SIZE), title);
     }
 
     /// Emit the table grid lines for a `{#` block, reproducing the Java
