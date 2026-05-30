@@ -410,9 +410,12 @@ fn note_msg_extra_base(shape: NoteShape) -> f64 {
 const NOTE_FILL: &str = "#FEFFDD";
 /// Gap from participant lifeline to note edge for left/right notes.
 const NOTE_LIFELINE_GAP: f64 = 5.0;
-/// "note across": minimum extra width over the first..last lifeline span when
-/// the note content is narrower than the span (Java NoteBox OVER_SEVERAL diff1).
+/// "note across" (spans every participant): minimum extra width over the
+/// first..last lifeline span when the content is narrower than the span.
 const ACROSS_NOTE_MARGIN: f64 = 25.0;
+/// "note over A, B" (explicit participant list): minimum extra width over the
+/// first..last lifeline span (19px overhang each side).
+const OVER_SEVERAL_NOTE_MARGIN: f64 = 38.0;
 /// Java ParticipantBox.outMargin (default skin): horizontal padding each side of
 /// a participant head box, used in note-across text centering.
 const PARTICIPANT_OUT_MARGIN: f64 = 5.0;
@@ -3069,8 +3072,13 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme) -> String {
                     .map(|l| text_width(l.trim(), MSG_FONT_SIZE))
                     .fold(0.0_f64, f64::max);
                 let note_content_w = note_content_width(max_tw, note.shape);
+                let margin = if note.participants.is_empty() {
+                    ACROSS_NOTE_MARGIN
+                } else {
+                    OVER_SEVERAL_NOTE_MARGIN
+                };
                 let span = participants[hi].lifeline_line_x - participants[lo].lifeline_line_x;
-                let pw = note_content_w.max(span.round() + ACROSS_NOTE_MARGIN);
+                let pw = note_content_w.max(span.round() + margin);
                 let centre = (participants[lo].center_x + participants[hi].center_x) / 2.0;
                 let note_left = (centre - pw / 2.0).floor();
                 let shift = (HEAD_BOX_Y - note_left).max(0.0);
@@ -3510,7 +3518,7 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme) -> String {
                         };
                         let span =
                             participants[hi].lifeline_line_x - participants[lo].lifeline_line_x;
-                        let note_w = note_content_w.max(span.round() + ACROSS_NOTE_MARGIN);
+                        let note_w = note_content_w.max(span.round() + OVER_SEVERAL_NOTE_MARGIN);
                         let centre = (participants[lo].center_x + participants[hi].center_x) / 2.0;
                         let note_right = (centre - note_w / 2.0).floor() + note_w;
                         max_note_right = max_note_right.max(note_right);
@@ -5336,7 +5344,7 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme) -> String {
                             let first_ll = participants[lo].lifeline_line_x;
                             let last_ll = participants[hi].lifeline_line_x;
                             let span = last_ll - first_ll;
-                            let pw = note_content_w.max(span.round() + ACROSS_NOTE_MARGIN);
+                            let pw = note_content_w.max(span.round() + OVER_SEVERAL_NOTE_MARGIN);
                             let centre =
                                 (participants[lo].center_x + participants[hi].center_x) / 2.0;
                             let left = (centre - pw / 2.0).floor();
@@ -5453,8 +5461,13 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme) -> String {
                             .unwrap_or(participants.len() - 1);
                         if a <= b { (a, b) } else { (b, a) }
                     };
+                    let margin = if note.participants.is_empty() {
+                        ACROSS_NOTE_MARGIN
+                    } else {
+                        OVER_SEVERAL_NOTE_MARGIN
+                    };
                     let span = participants[hi].lifeline_line_x - participants[lo].lifeline_line_x;
-                    if span.round() + ACROSS_NOTE_MARGIN > note_content_w {
+                    if span.round() + margin > note_content_w {
                         let centre = (participants[lo].center_x + participants[hi].center_x) / 2.0;
                         Some(centre - PARTICIPANT_OUT_MARGIN)
                     } else {
