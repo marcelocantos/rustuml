@@ -199,7 +199,15 @@ pub fn render(diagram: &GanttDiagram, _theme: &Theme) -> String {
             .iter()
             .map(|&(wd_start, wd_dur)| {
                 let cal_start = wd_to_cal(wd_start, start_dow, &diagram.closed_days);
-                let cal_end = wd_to_cal(wd_start + wd_dur, start_dow, &diagram.closed_days);
+                // The visible end is one column past the task's last open day.
+                // Using wd_to_cal(wd_start + wd_dur) would instead land on the
+                // first open day *after* any trailing weekend, over-extending
+                // the bar (and the chart width) by the skipped closed days.
+                let cal_end = if wd_dur == 0 {
+                    cal_start
+                } else {
+                    wd_to_cal(wd_start + wd_dur - 1, start_dow, &diagram.closed_days) + 1
+                };
                 (cal_start, cal_end - cal_start)
             })
             .collect();
@@ -339,23 +347,7 @@ pub fn render(diagram: &GanttDiagram, _theme: &Theme) -> String {
             && let Some(&dep_vi) = task_row_index.get(dep.as_str())
         {
             let (dep_start, dep_dur) = resolved[dep_idx];
-            // The arrow leaves the predecessor's visible right edge. With
-            // closed days that edge is one past the last open column, which
-            // may be earlier than the raw calendar span end.
-            let mut pred_end_col = dep_start + dep_dur;
-            while pred_end_col > dep_start {
-                let prev = pred_end_col - 1;
-                let closed = cal.as_ref().is_some_and(|c| {
-                    (prev as usize) < c.day_of_week.len()
-                        && diagram.closed_days.contains(&c.day_of_week[prev as usize])
-                });
-                if closed {
-                    pred_end_col -= 1;
-                } else {
-                    break;
-                }
-            }
-            let pred_end_x = pred_end_col as f64 * DAY_WIDTH;
+            let pred_end_x = (dep_start + dep_dur) as f64 * DAY_WIDTH;
             let pred_bottom = row_bar_top(dep_vi) + BAR_H;
             let succ_start_x = resolved[*idx].0 as f64 * DAY_WIDTH;
             let succ_center = row_bar_top(vi) + BAR_H / 2.0;
@@ -748,14 +740,23 @@ fn render_calendar_axis(
     }
 
     for &(start_idx, end_idx, ref label) in &cal.month_spans {
-        let display_label = if abbreviated {
+        let span_days = (end_idx - start_idx) as f64;
+        let span_w = span_days * DAY_WIDTH;
+        let mut display_label = if abbreviated {
             abbreviate_month_label(label)
         } else {
             label.clone()
         };
+        // When "Month Year" is wider than its column span, PlantUML drops
+        // the year and shows just the month name (e.g. a sliver of March at
+        // the right edge becomes "March", not "March 2024").
+        if text_width(&display_label, MONTH_FONT, true) > span_w
+            && let Some((month_only, _)) = display_label.rsplit_once(' ')
+        {
+            display_label = month_only.to_string();
+        }
         let tl = text_width(&display_label, MONTH_FONT, true);
-        let span_days = (end_idx - start_idx) as f64;
-        let center = start_idx as f64 * DAY_WIDTH + span_days * DAY_WIDTH / 2.0;
+        let center = start_idx as f64 * DAY_WIDTH + span_w / 2.0;
         let mx = center - tl / 2.0;
         gantt_text_bold(svg, mx, month_y, &display_label, MONTH_FONT);
     }
