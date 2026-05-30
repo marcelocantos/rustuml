@@ -319,6 +319,8 @@ enum LayoutNode {
         condition: String,
         is_label: Option<String>,
         not_label: Option<String>,
+        /// Label of a `backward :label;` action drawn on the loop-back arm.
+        backward: Option<String>,
     },
     Fork {
         branches: Vec<Vec<LayoutNode>>,
@@ -666,6 +668,20 @@ fn build_tree_inner(steps: &[ActivityStep]) -> Vec<LayoutNode> {
             }
             ActivityStep::Repeat => {
                 i += 1;
+                // PlantUML attaches a `backward :label;` action to the loop-back
+                // path (drawn on the right return arm), not to the body spine.
+                // Pull its label out of the raw step run before building the body
+                // tree so the body doesn't try to lay it out as a spine action.
+                let mut backward: Option<String> = None;
+                {
+                    let mut j = i;
+                    while j < steps.len() && !matches!(steps[j], ActivityStep::RepeatWhile(_)) {
+                        if let ActivityStep::Backward(label) = &steps[j] {
+                            backward = Some(label.clone());
+                        }
+                        j += 1;
+                    }
+                }
                 let body =
                     collect_until(steps, &mut i, |s| matches!(s, ActivityStep::RepeatWhile(_)));
                 let (condition, is_label, not_label) = if i < steps.len() {
@@ -687,6 +703,7 @@ fn build_tree_inner(steps: &[ActivityStep]) -> Vec<LayoutNode> {
                     condition,
                     is_label,
                     not_label,
+                    backward,
                 });
             }
             ActivityStep::RepeatWhile(_) => {
@@ -1132,7 +1149,11 @@ fn node_extents(node: &LayoutNode) -> (f64, f64) {
             )
         }
         LayoutNode::Repeat {
-            body, condition, ..
+            body,
+            condition,
+            is_label,
+            backward,
+            ..
         } => {
             // Every `repeatwhile` runs a loop-back arrow up the right side
             // (with or without an `is (...)` label). PlantUML places the
@@ -1145,9 +1166,19 @@ fn node_extents(node: &LayoutNode) -> (f64, f64) {
             let body_w = sequence_width(body);
             let cond_half = diamond_inner_w(condition) / 2.0 + DIAMOND_HALF;
             let body_half = body_w / 2.0;
-            let left_extent = cond_half + 9.0;
-            let right_extent = cond_half.max(body_half) + 12.0 + 15.0;
-            (left_extent, right_extent)
+            // A `backward :label;` action draws a box on the return arm at the
+            // far right; FtileRepeat widens the tile by the backward box's full
+            // width and centres on `getLeft = max(body_left, diamond_half)`.
+            if let Some(label) = backward {
+                let left_extent = cond_half.max(body_half);
+                let right_extent =
+                    repeat_backward_right_extent(cond_half, body_half, is_label, label);
+                (left_extent, right_extent)
+            } else {
+                let left_extent = cond_half + 9.0;
+                let right_extent = cond_half.max(body_half) + 12.0 + 15.0;
+                (left_extent, right_extent)
+            }
         }
         LayoutNode::While {
             body,
@@ -1264,6 +1295,29 @@ fn lane_content_cx(lane: &Lane, lane_left: f64) -> f64 {
     lane_left + 6.0 + content_left_ext
 }
 
+/// Width of a `backward :label;` action box drawn on a repeat's return arm.
+/// Same sizing as a normal action box: measured text + 10px padding each side.
+fn repeat_backward_box_w(label: &str) -> f64 {
+    text_render::measure(label, FONT_SIZE, false) + ACTION_H_PADDING * 2.0
+}
+
+/// Right extent (from the repeat spine) when a `backward :label;` box sits on
+/// the return arm. The box left edge clears the widest of the body's right
+/// half and the condition diamond east vertex plus its `is (...)` label, with
+/// a 10 px return-arm gap; the extent then spans the box's full width.
+fn repeat_backward_right_extent(
+    cond_half: f64,
+    body_half: f64,
+    is_label: &Option<String>,
+    backward_label: &str,
+) -> f64 {
+    let is_label_w = is_label
+        .as_ref()
+        .map(|l| text_render::measure(l, SMALL_FONT, false))
+        .unwrap_or(0.0);
+    body_half.max(cond_half + is_label_w) + 10.0 + repeat_backward_box_w(backward_label)
+}
+
 fn node_width(node: &LayoutNode) -> f64 {
     match node {
         // Bare start/stop circles: PlantUML lays them out at minimum width
@@ -1328,7 +1382,11 @@ fn node_width(node: &LayoutNode) -> f64 {
             l + r
         }
         LayoutNode::Repeat {
-            body, condition, ..
+            body,
+            condition,
+            is_label,
+            backward,
+            ..
         } => {
             // Every `repeatwhile` produces a loop-back arrow on the right;
             // see node_extents for the formula derivation.
@@ -1336,9 +1394,15 @@ fn node_width(node: &LayoutNode) -> f64 {
             let cond_w = diamond_inner_w(condition) + DIAMOND_HALF * 2.0;
             let cond_half = cond_w / 2.0;
             let body_half = body_w / 2.0;
-            let left = cond_half + 9.0;
-            let right = cond_half.max(body_half) + 12.0 + 15.0;
-            left + right
+            if let Some(label) = backward {
+                let left = cond_half.max(body_half);
+                let right = repeat_backward_right_extent(cond_half, body_half, is_label, label);
+                left + right
+            } else {
+                let left = cond_half + 9.0;
+                let right = cond_half.max(body_half) + 12.0 + 15.0;
+                left + right
+            }
         }
         // Partition wraps a body with a title bar; width = max(title+15, body+34).
         LayoutNode::Partition { name, body, .. } => {
@@ -1585,10 +1649,17 @@ fn node_height(node: &LayoutNode) -> f64 {
             };
             diamond_alone_h + body_top_offset + body_h + below_body
         }
-        LayoutNode::Repeat { body, .. } => {
+        LayoutNode::Repeat { body, backward, .. } => {
             let body_h = sequence_height(body);
             let diamond_h = DIAMOND_HALF * 2.0;
-            diamond_h + ARROW_LEN + body_h + ARROW_LEN + diamond_h
+            // A backward box on the return arm drops the condition diamond an
+            // extra halfHex below the body (see emit_repeat's cond_y).
+            let cond_gap = if backward.is_some() {
+                ARROW_LEN + 10.0
+            } else {
+                ARROW_LEN
+            };
+            diamond_h + ARROW_LEN + body_h + cond_gap + diamond_h
         }
         LayoutNode::Arrow { .. } => 0.0, // arrows don't add height (they're between nodes)
         LayoutNode::Note { .. } => 0.0,
@@ -2573,7 +2644,8 @@ fn emit_node(svg: &mut SvgEmitter, node: &LayoutNode, cx: f64, y: f64) -> f64 {
             condition,
             is_label,
             not_label: _,
-        } => emit_repeat(svg, cx, y, body, condition, is_label),
+            backward,
+        } => emit_repeat(svg, cx, y, body, condition, is_label, backward.as_deref()),
         LayoutNode::Arrow { .. } | LayoutNode::Note { .. } => y,
         LayoutNode::Detach | LayoutNode::Kill | LayoutNode::Break => y,
         LayoutNode::Title(text) => {
@@ -3812,6 +3884,7 @@ fn emit_repeat(
     body: &[LayoutNode],
     condition: &str,
     is_label: &Option<String>,
+    backward: Option<&str>,
 ) -> f64 {
     let arrow_color = svg.palette.arrow_color.clone();
     let diamond_stroke = svg.palette.diamond_stroke.clone();
@@ -3828,7 +3901,15 @@ fn emit_repeat(
 
     // Body first — its rects/texts land in `shapes` before either diamond.
     let body_bottom = emit_sequence(svg, body, cx, body_y);
-    let cond_y = body_bottom + ARROW_LEN;
+    // A `backward :label;` box sits on the return arm at the body's vertical
+    // band; FtileRepeat distributes its `8*halfHex` slack so the condition
+    // diamond drops an extra halfHex (10 px) below the body to clear the
+    // return path's arrowhead into the box bottom.
+    let cond_y = if backward.is_some() {
+        body_bottom + ARROW_LEN + 10.0
+    } else {
+        body_bottom + ARROW_LEN
+    };
 
     // Top entry diamond (small rhombus at y).
     svg.polygon_shape(
@@ -3895,52 +3976,129 @@ fn emit_repeat(
     // 12 px past max(diamond_right, body_right).
     let body_w = sequence_width(body);
     let body_right = cx + body_w / 2.0;
-    let loop_x = diamond_right.max(body_right) + 12.0;
-    svg.line_styled(
-        &arrow_color,
-        "1",
-        diamond_right,
-        loop_x,
-        cond_diamond_cy,
-        cond_diamond_cy,
-        false,
-    );
+    let arm_x = diamond_right.max(body_right) + 12.0;
     let top_cy = y + top_diamond_size;
-    // Vertical loop-back: PlantUML emits the arrowhead polygon BEFORE the
-    // line in the SVG, and places the arrowhead at the midpoint of the
-    // long vertical run (not at the top) so the direction is clear when
-    // the loop spans many actions.
-    let mid_y = (top_cy + cond_diamond_cy) / 2.0;
-    svg.polygon_connector(
-        &arrow_color,
-        &[
-            (loop_x - 4.0, mid_y + 10.0),
-            (loop_x, mid_y),
-            (loop_x + 4.0, mid_y + 10.0),
-            (loop_x, mid_y + 6.0),
-        ],
-        &arrow_color,
-        "1",
-    );
-    svg.line_styled(
-        &arrow_color,
-        "1",
-        loop_x,
-        loop_x,
-        top_cy,
-        cond_diamond_cy,
-        false,
-    );
-    svg.line_styled(
-        &arrow_color,
-        "1",
-        loop_x,
-        cx + top_diamond_size,
-        top_cy,
-        top_cy,
-        false,
-    );
-    svg.left_arrow(cx + top_diamond_size, top_cy, &arrow_color);
+
+    if let Some(label) = backward {
+        // `backward :label;` draws an action box on the return arm. The loop
+        // arm runs up the right side through the centre of this box, which sits
+        // at the same vertical band as the body. Mirrors FtileRepeat's
+        // ConnectionBackBackward1/2 routing: cond diamond → up into box bottom,
+        // box → up out of box top → across to the entry diamond.
+        //
+        // The box's left edge clears the widest of the body's right edge and
+        // the condition diamond's east vertex plus its `is (...)` label, then
+        // adds a 10 px gap (PlantUML's return-arm reservation).
+        let is_label_w = is_label
+            .as_ref()
+            .map(|l| text_render::measure(l, SMALL_FONT, false))
+            .unwrap_or(0.0);
+        let bw = repeat_backward_box_w(label);
+        let box_left = body_right.max(diamond_right + is_label_w) + 10.0;
+        let box_cx = box_left + bw / 2.0;
+        let box_top = body_y;
+        let box_bottom = body_y + action_height(label);
+
+        // Box shape first — PlantUML emits the backward tile's shapes before
+        // the loop-back connectors in document order.
+        let backward_node = LayoutNode::Action {
+            text: label.to_string(),
+            text_width: text_render::measure(label, FONT_SIZE, false),
+        };
+        emit_node(svg, &backward_node, box_cx, box_top);
+
+        // Horizontal from cond diamond's east vertex out to the arm column.
+        svg.line_styled(
+            &arrow_color,
+            "1",
+            diamond_right,
+            box_cx,
+            cond_diamond_cy,
+            cond_diamond_cy,
+            false,
+        );
+        // Up from the cond-diamond line into the box's bottom. PlantUML emits
+        // the line first, then the arrowhead polygon (tip at the box bottom).
+        svg.line_styled(
+            &arrow_color,
+            "1",
+            box_cx,
+            box_cx,
+            box_bottom,
+            cond_diamond_cy,
+            false,
+        );
+        svg.polygon_connector(
+            &arrow_color,
+            &[
+                (box_cx - 4.0, box_bottom + 10.0),
+                (box_cx, box_bottom),
+                (box_cx + 4.0, box_bottom + 10.0),
+                (box_cx, box_bottom + 6.0),
+            ],
+            &arrow_color,
+            "1",
+        );
+        // Up from the box's top to the entry-diamond row.
+        svg.line_styled(&arrow_color, "1", box_cx, box_cx, top_cy, box_top, false);
+        // Across to the entry diamond's east vertex (arrowhead left into it).
+        svg.line_styled(
+            &arrow_color,
+            "1",
+            box_cx,
+            cx + top_diamond_size,
+            top_cy,
+            top_cy,
+            false,
+        );
+        svg.left_arrow(cx + top_diamond_size, top_cy, &arrow_color);
+    } else {
+        let loop_x = arm_x;
+        svg.line_styled(
+            &arrow_color,
+            "1",
+            diamond_right,
+            loop_x,
+            cond_diamond_cy,
+            cond_diamond_cy,
+            false,
+        );
+        // Vertical loop-back: PlantUML emits the arrowhead polygon BEFORE the
+        // line in the SVG, and places the arrowhead at the midpoint of the
+        // long vertical run (not at the top) so the direction is clear when
+        // the loop spans many actions.
+        let mid_y = (top_cy + cond_diamond_cy) / 2.0;
+        svg.polygon_connector(
+            &arrow_color,
+            &[
+                (loop_x - 4.0, mid_y + 10.0),
+                (loop_x, mid_y),
+                (loop_x + 4.0, mid_y + 10.0),
+                (loop_x, mid_y + 6.0),
+            ],
+            &arrow_color,
+            "1",
+        );
+        svg.line_styled(
+            &arrow_color,
+            "1",
+            loop_x,
+            loop_x,
+            top_cy,
+            cond_diamond_cy,
+            false,
+        );
+        svg.line_styled(
+            &arrow_color,
+            "1",
+            loop_x,
+            cx + top_diamond_size,
+            top_cy,
+            top_cy,
+            false,
+        );
+        svg.left_arrow(cx + top_diamond_size, top_cy, &arrow_color);
+    }
 
     // Body → condition diamond connector (after loop-back path).
     svg.down_arrow(cx, body_bottom, cond_y, &arrow_color);
