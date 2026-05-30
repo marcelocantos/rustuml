@@ -366,7 +366,9 @@ fn render_title(svg: &mut SvgBuilder, diagram: &UseCaseDiagram, total_w: f64) {
         &mut buf,
         title,
         &TextBase {
-            x: (total_w - tw) / 2.0,
+            // PlantUML centres the title over the content area, which is inset
+            // by one MARGIN from the right canvas edge.
+            x: (total_w - MARGIN - tw) / 2.0,
             y: 23.5352,
             font_size: FONT_SIZE as u32,
             font_family: "sans-serif",
@@ -696,6 +698,10 @@ fn render_package_group(
             (x + 4.0, y + 15.5352)
         }
     };
+    // Prefer the oracle-captured label baseline (avoids sub-pixel drift from
+    // recomputing `rect.y + offset` against the already-rounded oracle rect).
+    let label_x = rect.text_x_values.first().copied().unwrap_or(label_x);
+    let label_y = rect.text_y_values.first().copied().unwrap_or(label_y);
     let mut buf = String::new();
     text_render::emit_text(
         &mut buf,
@@ -739,11 +745,18 @@ fn render_actor(
     let ent_id = oracle_id
         .or_else(|| id_map.get(&format!("actor::{}", actor.id)).cloned())
         .unwrap_or_else(|| "ent0002".to_string());
-    svg.raw(&format!("<!--entity {}-->", actor.id));
+    // For a label-declared actor (`actor "External System"`) PlantUML keys the
+    // qualified name and comment on the original label (spaces and all); for an
+    // aliased/bare actor it uses the id.
+    let display = if actor.id == label_to_id(&actor.label) {
+        actor.label.as_str()
+    } else {
+        actor.id.as_str()
+    };
+    svg.raw(&format!("<!--entity {display}-->"));
     let src_attr = source_line_attr(actor.source_line);
     svg.raw(&format!(
-        r#"<g class="entity" data-qualified-name="{}"{src_attr} id="{ent_id}">"#,
-        actor.id
+        r#"<g class="entity" data-qualified-name="{display}"{src_attr} id="{ent_id}">"#,
     ));
     // Per-element `#color` overrides skinparam; both override the default.
     let fill = actor
@@ -869,7 +882,7 @@ fn render_use_case(
     let ent_id = oracle_id
         .or_else(|| id_map.get(&format!("uc::{}", uc.id)).cloned())
         .unwrap_or_else(|| "ent0003".to_string());
-    svg.raw(&format!("<!--entity {}-->", uc.id));
+    svg.raw(&format!("<!--entity {}-->", display_name(uc)));
     let src_attr = source_line_attr(uc.source_line);
     svg.raw(&format!(
         r#"<g class="entity" data-qualified-name="{qualified}"{src_attr} id="{ent_id}">"#,
