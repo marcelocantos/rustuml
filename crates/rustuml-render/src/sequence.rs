@@ -788,6 +788,8 @@ struct ParticipantLayout {
     center_x: f64,
     /// Lifeline dashed line x (= box_x + floor(box_width / 2), matching PlantUML's int arithmetic)
     lifeline_line_x: f64,
+    /// Optional `[[url]]` link attached to the participant declaration.
+    url: Option<String>,
 }
 
 /// State of activation bars per participant.
@@ -836,6 +838,10 @@ struct PlantUmlSvg {
     /// Lifeline dashed-line stroke thickness (default `0.5`). Driven by
     /// `skinparam sequenceLifeLineBorderThickness`.
     lifeline_border_thickness: String,
+    /// URL of the participant whose head/tail group is currently open, set by
+    /// `participant_group_open` and consumed by `participant_group_close`. When
+    /// present the shape contents are wrapped in a PlantUML `[[url]]` anchor.
+    active_participant_url: Option<String>,
 }
 
 impl PlantUmlSvg {
@@ -847,6 +853,7 @@ impl PlantUmlSvg {
             participant_border_thickness: "0.5".into(),
             lifeline_border: "#181818".into(),
             lifeline_border_thickness: "0.5".into(),
+            active_participant_url: None,
         }
     }
 
@@ -952,13 +959,7 @@ impl PlantUmlSvg {
         stereotype: Option<(&str, f64)>, // (stereotype text, text width)
         fill_color: &str,
     ) {
-        write!(
-            self.buf,
-            r##"<g class="participant participant-{position}" data-entity-uid="{part_uid}" data-qualified-name="{qualified_name}" data-source-line="{source_line}" id="{part_uid}-{position}">"##,
-            part_uid = escape_xml(part_uid),
-            qualified_name = escape_xml(&crate::class::translate_qualified_name(qualified_name)),
-        )
-        .unwrap();
+        self.participant_group_open(part_uid, qualified_name, source_line, position);
 
         write!(
             self.buf,
@@ -1013,7 +1014,7 @@ impl PlantUmlSvg {
             },
         );
 
-        self.buf.push_str("</g>");
+        self.participant_group_close();
     }
 
     /// Open a participant group element (head or tail).
@@ -1031,6 +1032,25 @@ impl PlantUmlSvg {
             qualified_name = escape_xml(&crate::class::translate_qualified_name(qualified_name)),
         )
         .unwrap();
+        // When the participant carries a `[[url]]` link, PlantUML wraps the
+        // shape contents (text + glyph) in a link anchor inside the group.
+        if let Some(url) = self.active_participant_url.clone() {
+            let h = escape_xml(&url);
+            write!(
+                self.buf,
+                r#"<a href="{h}" target="_top" title="{h}" xlink:actuate="onRequest" xlink:href="{h}" xlink:show="new" xlink:title="{h}" xlink:type="simple">"#,
+            )
+            .unwrap();
+        }
+    }
+
+    /// Close a participant head/tail group, emitting `</a>` first when a link
+    /// anchor was opened by `participant_group_open`.
+    fn participant_group_close(&mut self) {
+        if self.active_participant_url.is_some() {
+            self.buf.push_str("</a>");
+        }
+        self.buf.push_str("</g>");
     }
 
     /// Write participant text label.
@@ -1122,7 +1142,7 @@ impl PlantUmlSvg {
         )
         .unwrap();
 
-        self.buf.push_str("</g>");
+        self.participant_group_close();
     }
 
     /// Write a boundary shape (vertical line + horizontal line + circle).
@@ -1189,7 +1209,7 @@ impl PlantUmlSvg {
         )
         .unwrap();
 
-        self.buf.push_str("</g>");
+        self.participant_group_close();
     }
 
     /// Write a control shape (circle + arrow on top).
@@ -1259,7 +1279,7 @@ impl PlantUmlSvg {
         )
         .unwrap();
 
-        self.buf.push_str("</g>");
+        self.participant_group_close();
     }
 
     /// Write an entity shape (circle + underline).
@@ -1320,7 +1340,7 @@ impl PlantUmlSvg {
         )
         .unwrap();
 
-        self.buf.push_str("</g>");
+        self.participant_group_close();
     }
 
     /// Write a database cylinder shape.
@@ -1389,7 +1409,7 @@ impl PlantUmlSvg {
         )
         .unwrap();
 
-        self.buf.push_str("</g>");
+        self.participant_group_close();
     }
 
     /// Write a collections shape (two stacked rectangles).
@@ -1442,7 +1462,7 @@ impl PlantUmlSvg {
         // Text (on front rectangle)
         self.participant_text(text_x, text_y, text_content, text_len);
 
-        self.buf.push_str("</g>");
+        self.participant_group_close();
     }
 
     /// Write a queue shape (pill/capsule).
@@ -1523,7 +1543,7 @@ impl PlantUmlSvg {
         // Text
         self.participant_text(text_x, text_y, text_content, text_len);
 
-        self.buf.push_str("</g>");
+        self.participant_group_close();
     }
 
     /// Write an activation bar with optional fill color.
@@ -2074,6 +2094,9 @@ fn render_participant_shape(
     fill_color: &str,
     border_color: &str,
 ) {
+    // Make the participant's link (if any) available to the group open/close
+    // helpers so the shape contents get wrapped in a link anchor.
+    svg.active_participant_url = p.url.clone();
     match p.kind {
         ParticipantKind::Actor
         | ParticipantKind::Boundary
@@ -2232,6 +2255,7 @@ fn render_participant_shape(
             );
         }
     }
+    svg.active_participant_url = None;
 }
 
 /// Render a sequence diagram with an optional oracle layout.
@@ -2572,6 +2596,7 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme) -> String {
                 box_x: 0.0,
                 center_x: 0.0,
                 lifeline_line_x: 0.0,
+                url: p.url.clone(),
             }
         })
         .collect();
