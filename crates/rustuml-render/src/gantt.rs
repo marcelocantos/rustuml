@@ -350,7 +350,9 @@ pub fn render(diagram: &GanttDiagram, _theme: &Theme) -> String {
     // 0. Title band (centred bold text wrapped in <g class="title">).
     if let Some(title) = &diagram.meta.title {
         let tw = text_width(title, TITLE_FONT, true);
-        let tx = ((total_width - tw) / 2.0).round();
+        // PlantUML centres the title over the content extent (the SVG box
+        // less its trailing 2px), not the integer canvas width.
+        let tx = (total_width - 2.0 - tw) / 2.0;
         let ty = TITLE_TOP_PAD + ascent(TITLE_FONT);
         svg.raw_inline(&format!(
             r#"<g class="title" data-source-line="1"><text fill="{TEXT_COLOR}" font-family="sans-serif" font-size="14" font-weight="700" lengthAdjust="spacing" textLength="{tw}" x="{tx}" y="{ty}">{}</text></g>"#,
@@ -876,8 +878,13 @@ fn render_calendar_axis(
             display_label = abbreviate_month_name(&display_label).to_string();
         }
         let tl = text_width(&display_label, MONTH_FONT, true);
-        let center = start_idx as f64 * DAY_WIDTH + span_w / 2.0;
-        let mx = center - tl / 2.0;
+        // A label that still overflows its (narrow) span is left-aligned to
+        // the span start rather than centred, so it grows rightwards.
+        let mx = if tl > span_w {
+            start_idx as f64 * DAY_WIDTH
+        } else {
+            start_idx as f64 * DAY_WIDTH + span_w / 2.0 - tl / 2.0
+        };
         gantt_text_bold(svg, mx, month_y, &display_label, MONTH_FONT);
     }
 }
