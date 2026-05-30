@@ -513,6 +513,24 @@ const GROUP_END_HEIGHT: f64 = 7.0;
 /// Left/right margin for group frame beyond participant boxes.
 const GROUP_FRAME_MARGIN: f64 = 10.0;
 
+/// Resolve the bold tab text and optional `[guard]` label for a frame header.
+///
+/// PlantUML renders `group <label>` with `<label>` as the bold tab text and no
+/// guard bracket, whereas `alt`/`opt`/`loop`/`par`/`break`/`critical` render the
+/// kind keyword as the tab text and the label as a `[guard]` to its right.
+/// `kind_str` is the keyword spelling; for a bare `group` with no label it is
+/// the fallback tab text.
+fn group_tab_and_guard<'a>(
+    kind: GroupKind,
+    kind_str: &'a str,
+    label: Option<&'a String>,
+) -> (&'a str, Option<&'a str>) {
+    match kind {
+        GroupKind::Group => (label.map(String::as_str).unwrap_or(kind_str), None),
+        _ => (kind_str, label.map(String::as_str)),
+    }
+}
+
 /// Font size of a named participant box title (bold).
 const BOX_TITLE_FONT_SIZE: u32 = 13;
 /// Default fill colour of a named participant box.
@@ -3655,9 +3673,11 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme) -> String {
                 } else {
                     alt_fl
                 };
-                let kw = bold_text_width(kind_str, MSG_FONT_SIZE);
+                let (tab_text, guard_label) =
+                    group_tab_and_guard(g.kind, kind_str, g.label.as_ref());
+                let kw = bold_text_width(tab_text, MSG_FONT_SIZE);
                 let tab_right = fl + kw + 45.0;
-                let guard_right = if let Some(label) = &g.label {
+                let guard_right = if let Some(label) = guard_label {
                     let guard = format!("[{label}]");
                     let gw = bold_text_width(&guard, 11.0);
                     tab_right + 15.0 + gw + 5.0
@@ -3932,9 +3952,11 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme) -> String {
                             } else {
                                 HEAD_BOX_Y
                             };
-                            let kw = bold_text_width(kind_str, MSG_FONT_SIZE);
+                            let (tab_text, guard_label) =
+                                group_tab_and_guard(g.kind, kind_str, g.label.as_ref());
+                            let kw = bold_text_width(tab_text, MSG_FONT_SIZE);
                             let tab_right = fl + kw + 45.0;
-                            if let Some(label) = &g.label {
+                            if let Some(label) = guard_label {
                                 let guard = format!("[{label}]");
                                 let gw = bold_text_width(&guard, 11.0);
                                 tab_right + 15.0 + gw + 5.0
@@ -5725,7 +5747,9 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme) -> String {
 
                 // Emit header tab FIRST (pentagon shape), then frame rect, then text.
                 // This matches PlantUML's SVG element order.
-                let kind_w = bold_text_width(kind_str, MSG_FONT_SIZE);
+                let (tab_text, guard_label) =
+                    group_tab_and_guard(g.kind, kind_str, g.label.as_ref());
+                let kind_w = bold_text_width(tab_text, MSG_FONT_SIZE);
                 let tab_right = frame_left + kind_w + 45.0;
                 let tab_bottom_left = frame_top + GROUP_HEADER_HEIGHT;
                 let tab_bottom_right = frame_top + GROUP_HEADER_HEIGHT - 10.0;
@@ -5752,10 +5776,10 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme) -> String {
                 )
                 .unwrap();
 
-                // Emit kind text (bold)
+                // Emit tab text (bold) — the label for `group`, else the keyword.
                 text_render::emit_text(
                     &mut svg.buf,
-                    kind_str,
+                    tab_text,
                     &TextBase {
                         x: frame_left + 15.0,
                         y: frame_top + 13.568359375,
@@ -5770,7 +5794,7 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme) -> String {
                 );
 
                 // Emit guard label if present (in brackets)
-                if let Some(label) = &g.label {
+                if let Some(label) = guard_label {
                     let guard = format!("[{label}]");
                     text_render::emit_text(
                         &mut svg.buf,
