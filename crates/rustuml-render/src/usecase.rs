@@ -839,11 +839,20 @@ fn render_use_case(
     } else {
         (dim.rx, dim.ry)
     };
-    // Per-element `#color` overrides skinparam; both override the default.
+    // Fill precedence: per-element `#color` > stereotype-scoped skinparam
+    // (`usecaseBackgroundColor<<stereo>>`) > generic `usecaseBackgroundColor` >
+    // default.
+    let stereo_fill = uc.stereotype.as_deref().and_then(|s| {
+        skin_color(
+            &diagram.meta.skinparams,
+            &format!("usecaseBackgroundColor<<{s}>>"),
+        )
+    });
     let fill = uc
         .color
         .as_deref()
         .map(resolve_fill)
+        .or(stereo_fill)
         .or_else(|| skin.uc_fill.clone())
         .unwrap_or_else(|| ENTITY_FILL.to_string());
     let stroke = skin.uc_border.as_deref().unwrap_or(STROKE);
