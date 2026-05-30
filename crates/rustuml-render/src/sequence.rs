@@ -3732,8 +3732,22 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme) -> String {
             });
         }
 
-        // Sort by start event index to match PlantUML's rendering order
-        activation_bars.sort_by_key(|b| b.start_event_idx);
+        // PlantUML draws activation bars per-participant (in participant order),
+        // and within a participant in start-time order. Match that ordering so
+        // the emitted rect sequence is identical.
+        activation_bars.sort_by(|a, b| {
+            let ai = id_to_idx
+                .get(a.participant_id.as_str())
+                .copied()
+                .unwrap_or(0);
+            let bi = id_to_idx
+                .get(b.participant_id.as_str())
+                .copied()
+                .unwrap_or(0);
+            ai.cmp(&bi)
+                .then(a.start_event_idx.cmp(&b.start_event_idx))
+                .then(a.depth.cmp(&b.depth))
+        });
     }
 
     // Helper to look up y position for an event
