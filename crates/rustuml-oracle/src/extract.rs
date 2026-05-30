@@ -7,8 +7,9 @@
 //! producing an `OracleLayout` that can be fed to renderers.
 
 use rustuml_render::layout_oracle::{
-    ApointMark, AuxRect, CrowMark, EntityLine, EntityRect, EntityText, JsonBox, JsonConnector,
-    NoteBoxGeom, OracleCluster, OracleEdgePath, OracleLayout, OracleNoteEntity, RegionDivider,
+    ApointMark, AuxRect, CrowMark, EdgeDecoration, EntityLine, EntityRect, EntityText, JsonBox,
+    JsonConnector, NoteBoxGeom, OracleCluster, OracleEdgePath, OracleLayout, OracleNoteEntity,
+    RegionDivider,
 };
 
 /// Parse the coordinate pairs from a note's body path `d` string and recover
@@ -860,6 +861,81 @@ pub fn extract_oracle_layout(svg: &str) -> Option<OracleLayout> {
                             _ => None,
                         })
                         .collect(),
+                    decorations: {
+                        // Ordered decoration children: every element child
+                        // except the first <path> (the main edge) and the
+                        // arrowhead <polygon>s, preserving document order so
+                        // lollipop/socket arcs, mask/ball ellipses, and the
+                        // interface label interleave exactly as PlantUML emits.
+                        let mut decos = Vec::new();
+                        let mut seen_main_path = false;
+                        for c in node.children().filter(|c| c.is_element()) {
+                            match c.tag_name().name() {
+                                "path" => {
+                                    if !seen_main_path {
+                                        seen_main_path = true;
+                                        continue;
+                                    }
+                                    if let Some(d) = c.attribute("d") {
+                                        decos.push(EdgeDecoration::Path {
+                                            d: d.to_string(),
+                                            fill: c.attribute("fill").unwrap_or("none").to_string(),
+                                            style: c.attribute("style").map(String::from),
+                                        });
+                                    }
+                                }
+                                "ellipse" => {
+                                    if let (Some(cx), Some(cy), Some(rx), Some(ry)) = (
+                                        parse_attr(&c, "cx"),
+                                        parse_attr(&c, "cy"),
+                                        parse_attr(&c, "rx"),
+                                        parse_attr(&c, "ry"),
+                                    ) {
+                                        decos.push(EdgeDecoration::Ellipse {
+                                            cx,
+                                            cy,
+                                            rx,
+                                            ry,
+                                            fill: c.attribute("fill").unwrap_or("none").to_string(),
+                                            style: c.attribute("style").map(String::from),
+                                        });
+                                    }
+                                }
+                                "line" => {
+                                    if let (Some(x1), Some(y1), Some(x2), Some(y2)) = (
+                                        parse_attr(&c, "x1"),
+                                        parse_attr(&c, "y1"),
+                                        parse_attr(&c, "x2"),
+                                        parse_attr(&c, "y2"),
+                                    ) {
+                                        decos.push(EdgeDecoration::Line {
+                                            x1,
+                                            y1,
+                                            x2,
+                                            y2,
+                                            style: c.attribute("style").map(String::from),
+                                        });
+                                    }
+                                }
+                                "text" => {
+                                    if let (Some(tx), Some(ty)) =
+                                        (parse_attr(&c, "x"), parse_attr(&c, "y"))
+                                    {
+                                        let content = collect_text(&c);
+                                        if !content.is_empty() {
+                                            decos.push(EdgeDecoration::Text {
+                                                x: tx,
+                                                y: ty,
+                                                text: content,
+                                            });
+                                        }
+                                    }
+                                }
+                                _ => {}
+                            }
+                        }
+                        decos
+                    },
                 };
 
                 // Find <polygon> children for arrowheads (first = primary, second = bidirectional).

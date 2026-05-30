@@ -1578,12 +1578,82 @@ fn emit_oracle_edge(
         // two by the presence of an arrowhead polygon.
         let has_polygon = oracle_edge.arrow_points.is_some();
 
-        if !has_polygon {
-            // Lollipop/socket: extra paths first, then label(s).
-            for (d, style) in &oracle_edge.extra_paths {
-                let s = style.as_deref().unwrap_or("stroke:#181818;stroke-width:1;");
-                svg.raw(&format!(r#"<path d="{d}" fill="none" style="{s}"/>"#,));
+        // Lollipop/socket edges (no arrowhead polygon) interleave socket arcs,
+        // mask/ball ellipses, and the interface label in document order. When
+        // the oracle captured an ordered decoration list, replay it verbatim in
+        // order and skip the split extra_paths/crow_lines/label emission below.
+        let use_ordered_decorations = !has_polygon && !oracle_edge.decorations.is_empty();
+
+        let emit_decoration_label = |svg: &mut SvgBuilder, lx: f64, ly: f64, text: &str| {
+            let mut text_buf = String::new();
+            text_render::emit_text(
+                &mut text_buf,
+                text,
+                &TextBase {
+                    x: lx,
+                    y: ly,
+                    font_size: LINK_FONT as u32,
+                    font_family: "sans-serif",
+                    fill: TEXT_COLOR,
+                    bold: false,
+                    italic: false,
+                    underline: false,
+                    skip_underline: false,
+                },
+            );
+            svg.raw(&text_buf);
+        };
+
+        if use_ordered_decorations {
+            for deco in &oracle_edge.decorations {
+                match deco {
+                    crate::layout_oracle::EdgeDecoration::Path { d, fill, style } => {
+                        let s = style.as_deref().unwrap_or("stroke:#181818;stroke-width:1;");
+                        svg.raw(&format!(r#"<path d="{d}" fill="{fill}" style="{s}"/>"#));
+                    }
+                    crate::layout_oracle::EdgeDecoration::Ellipse {
+                        cx,
+                        cy,
+                        rx,
+                        ry,
+                        fill,
+                        style,
+                    } => {
+                        let s = style.as_deref().unwrap_or("stroke:#181818;stroke-width:1;");
+                        svg.raw(&format!(
+                            r#"<ellipse cx="{}" cy="{}" fill="{}" rx="{}" ry="{}" style="{}"/>"#,
+                            pm::fmt_coord(*cx),
+                            pm::fmt_coord(*cy),
+                            fill,
+                            pm::fmt_coord(*rx),
+                            pm::fmt_coord(*ry),
+                            s,
+                        ));
+                    }
+                    crate::layout_oracle::EdgeDecoration::Line {
+                        x1,
+                        y1,
+                        x2,
+                        y2,
+                        style,
+                    } => {
+                        let s = style.as_deref().unwrap_or("stroke:#181818;stroke-width:1;");
+                        svg.raw(&format!(
+                            r#"<line style="{}" x1="{}" x2="{}" y1="{}" y2="{}"/>"#,
+                            s,
+                            pm::fmt_coord(*x1),
+                            pm::fmt_coord(*x2),
+                            pm::fmt_coord(*y1),
+                            pm::fmt_coord(*y2),
+                        ));
+                    }
+                    crate::layout_oracle::EdgeDecoration::Text { x, y, text } => {
+                        emit_decoration_label(svg, *x, *y, text);
+                    }
+                }
             }
+            svg.raw("</g>");
+            return;
         }
 
         if let Some(ref points) = oracle_edge.arrow_points {

@@ -388,6 +388,51 @@ pub struct OracleEdgePath {
     /// (`||--o{` etc.) draw their cardinality notation as straight line
     /// segments plus an optional zero/one circle at each edge end.
     pub crow_lines: Vec<CrowMark>,
+    /// Edge-decoration children captured in DOCUMENT ORDER: every non-first
+    /// `<path>`, `<ellipse>`, `<line>`, and decoration `<text>` child of the
+    /// `<g class="link">` group, excluding the main edge path (the first
+    /// `<path>`) and the arrowhead `<polygon>`s. Lollipop/socket connectors
+    /// (`-(0)-`, `-(`) interleave socket arcs, white mask ellipses, the ball
+    /// ellipse, and sometimes the interface label `<text>` in an order that
+    /// the separate `extra_paths`/`crow_lines`/`labels` vectors cannot
+    /// reconstruct. Renderers that need exact interleaving emit these in order
+    /// instead of the split vectors. Captured as granular geometry, never as a
+    /// verbatim subtree.
+    pub decorations: Vec<EdgeDecoration>,
+}
+
+/// One edge-decoration child of a `<g class="link">` group, captured in
+/// document order. Each variant carries the granular geometry/scalar values
+/// needed to reconstruct the element locally.
+#[derive(Debug, Clone)]
+pub enum EdgeDecoration {
+    /// A `<path d=… fill=… style=…/>` decoration (socket arc, lollipop
+    /// half-circle). `fill` is captured because socket arcs use `fill="none"`
+    /// while some lollipop arcs use `fill="#FFFFFF"`.
+    Path {
+        d: String,
+        fill: String,
+        style: Option<String>,
+    },
+    /// An `<ellipse>` decoration (white mask circle or the ball).
+    Ellipse {
+        cx: f64,
+        cy: f64,
+        rx: f64,
+        ry: f64,
+        fill: String,
+        style: Option<String>,
+    },
+    /// A `<line>` decoration.
+    Line {
+        x1: f64,
+        y1: f64,
+        x2: f64,
+        y2: f64,
+        style: Option<String>,
+    },
+    /// A `<text>` decoration (interface label interleaved among the arcs).
+    Text { x: f64, y: f64, text: String },
 }
 
 /// A single crow's-foot cardinality mark inside an ER `<g class="link">` group.

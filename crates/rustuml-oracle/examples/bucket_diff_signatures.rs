@@ -102,7 +102,10 @@ fn main() {
     unsafe { std::env::set_var("RUSTUML_DEBUG", "date=1774210426000,tz=AEDT+1100") };
     std::panic::set_hook(Box::new(|_| {}));
     let args: Vec<_> = std::env::args().collect();
-    let bucket_name = args.get(1).cloned().unwrap_or_else(|| "activity".to_string());
+    let bucket_name = args
+        .get(1)
+        .cloned()
+        .unwrap_or_else(|| "activity".to_string());
     let max: usize = args.get(2).and_then(|s| s.parse().ok()).unwrap_or(0);
 
     let root = golden_dir();

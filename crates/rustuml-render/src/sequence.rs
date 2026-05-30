@@ -2415,11 +2415,7 @@ pub fn render_with_oracle(
 /// `oracle` is consumed only for content that can't be reconstructed from the
 /// source — currently the captured `<defs>` (gradient/filter definitions whose
 /// ids are PlantUML hashes); the layout itself is computed from scratch.
-pub fn render(
-    diagram: &SequenceDiagram,
-    _theme: &Theme,
-    oracle: Option<&OracleLayout>,
-) -> String {
+pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleLayout>) -> String {
     // Per-diagram skinparam overrides relevant to sequence arrow rendering.
     // These are read directly from the parser's skinparam list (rather than
     // the cascading `Theme`) so any value-less default tracks PlantUML's
