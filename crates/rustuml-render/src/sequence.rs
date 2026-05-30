@@ -425,8 +425,16 @@ const HNOTE_TEXT_Y_OFFSET: f64 = NOTE_TEXT_Y_OFFSET - 1.0;
 const GROUP_HEADER_HEIGHT: f64 = 17.310546875;
 /// Gap from preceding message y to group frame top.
 const GROUP_GAP_AFTER_MSG: f64 = 15.0;
+/// Gap from the lifeline top to the group frame top when a group is the very
+/// first event (no preceding message). PlantUML reserves 2px more headroom in
+/// this case than the standalone-note first gap.
+const GROUP_GAP_FIRST: f64 = 17.0;
 /// Extra y advance after GroupStart event_y (before first inner message).
 const GROUP_INNER_TOP_PAD: f64 = 9.310546875;
+/// When a group is the very first event, the inner top pad is reduced by the
+/// same 2px that the frame top was pushed down, keeping the first inner
+/// message arrow in its golden position.
+const GROUP_INNER_TOP_PAD_FIRST: f64 = GROUP_INNER_TOP_PAD - 2.0;
 /// Vertical space consumed by a group else divider.
 const GROUP_ELSE_HEIGHT: f64 = 9.0;
 /// Extra y advance after GroupElse event_y (before next inner message).
@@ -3257,15 +3265,18 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme) -> String {
                     }
                 }
                 Event::GroupStart(_) => {
-                    // Group frame top is offset from the preceding message.
-                    if msg_count == 0 {
-                        y += NOTE_GAP_FIRST;
+                    // Group frame top is offset from the preceding message (or
+                    // the lifeline top when the group is the first event).
+                    let inner_pad = if msg_count == 0 {
+                        y += GROUP_GAP_FIRST;
+                        GROUP_INNER_TOP_PAD_FIRST
                     } else {
                         y += GROUP_GAP_AFTER_MSG;
-                    }
+                        GROUP_INNER_TOP_PAD
+                    };
                     event_y_positions.push(y);
                     // Advance y past the header so subsequent messages are positioned correctly.
-                    y += GROUP_INNER_TOP_PAD;
+                    y += inner_pad;
                     // Don't increment msg_count — the group header itself isn't a message
                 }
                 Event::GroupElse(g) => {
