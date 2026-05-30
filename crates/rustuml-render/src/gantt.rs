@@ -19,6 +19,12 @@ use crate::svg::SvgBuilder;
 
 const DAY_WIDTH: f64 = 16.0;
 const ROW_STRIDE: f64 = 16.955078125;
+/// A separator row is one task-row taller than a task row (it carries a
+/// centred label plus a horizontal rule).
+const SEP_STRIDE: f64 = ROW_STRIDE + 16.0;
+const SEP_RULE_OFF: f64 = 14.477565;
+const SEP_TEXT_OFF: f64 = 18.634765;
+const SEP_TEXT_X: f64 = 10.0;
 const BAR_H: f64 = 12.955078125;
 const BAR_TOP_PLAIN: f64 = 18.0;
 const GRID_TOP_PLAIN: f64 = 6.0;
@@ -263,11 +269,26 @@ pub fn render(diagram: &GanttDiagram, _theme: &Theme) -> String {
         GRID_TOP_PLAIN
     };
     let bar_top0 = if has_cal { CAL_BAR_TOP } else { BAR_TOP_PLAIN };
-    let last_bar_bottom = bar_top0 + (n_rows.saturating_sub(1)) as f64 * ROW_STRIDE + BAR_H;
+
+    // Cumulative top offset of each row. Task rows advance by ROW_STRIDE;
+    // separator rows are taller (they carry a label and a rule line).
+    let mut row_tops: Vec<f64> = Vec::with_capacity(n_rows + 1);
+    let mut acc = bar_top0;
+    for row in &laid {
+        row_tops.push(acc);
+        acc += match row {
+            LaidRow::Separator(_) => SEP_STRIDE,
+            LaidRow::Task(..) => ROW_STRIDE,
+        };
+    }
+    row_tops.push(acc);
+    let row_bar_top = |vi: usize| row_tops[vi];
+    let rows_extent = acc - ROW_STRIDE + BAR_H; // bottom of last row's bar
+
     let grid_bottom = if has_cal {
-        last_bar_bottom + 2.0
+        rows_extent + 2.0
     } else {
-        bar_top0 + n_rows as f64 * ROW_STRIDE + GRID_BOTTOM_PAD_PLAIN
+        acc + GRID_BOTTOM_PAD_PLAIN
     };
 
     let total_height = if has_cal {
@@ -277,8 +298,6 @@ pub fn render(diagram: &GanttDiagram, _theme: &Theme) -> String {
     } else {
         grid_bottom + BOTTOM_DAYNUM_OFF_PLAIN + 2.4669
     };
-
-    let row_bar_top = |vi: usize| bar_top0 + vi as f64 * ROW_STRIDE;
 
     let mut svg = SvgBuilder::new_plantuml(total_width, total_height, "GANTT");
 
@@ -355,8 +374,30 @@ pub fn render(diagram: &GanttDiagram, _theme: &Theme) -> String {
         }
     }
 
-    // 5. Bars / milestones.
+    // 5. Bars / milestones / separator rules.
     for (vi, row) in laid.iter().enumerate() {
+        if let LaidRow::Separator(label) = row {
+            // Horizontal rule running the full chart width, broken around the
+            // (left-aligned) label.
+            let line_y = row_bar_top(vi) + SEP_RULE_OFF;
+            let tl = text_width(label, TASK_FONT, false);
+            gantt_line(
+                &mut svg,
+                0.0,
+                line_y,
+                SEP_TEXT_X - 5.0,
+                line_y,
+                DEFAULT_BAR_STROKE,
+            );
+            gantt_line(
+                &mut svg,
+                SEP_TEXT_X + tl + 5.0,
+                line_y,
+                chart_width - 1.0,
+                line_y,
+                DEFAULT_BAR_STROKE,
+            );
+        }
         if let LaidRow::Task(task, idx) = row {
             let (start_day, dur) = resolved[*idx];
             let bar_top = row_bar_top(vi);
@@ -527,15 +568,8 @@ pub fn render(diagram: &GanttDiagram, _theme: &Theme) -> String {
         match row {
             LaidRow::Separator(label) => {
                 if !label.is_empty() {
-                    let ly = row_bar_top(vi) + ascent(TASK_FONT);
-                    gantt_text(
-                        &mut svg,
-                        chart_width / 2.0,
-                        ly,
-                        label,
-                        TASK_FONT,
-                        TEXT_COLOR,
-                    );
+                    let text_y = row_bar_top(vi) + SEP_TEXT_OFF;
+                    gantt_text(&mut svg, SEP_TEXT_X, text_y, label, TASK_FONT, TEXT_COLOR);
                 }
             }
             LaidRow::Task(task, idx) => {
