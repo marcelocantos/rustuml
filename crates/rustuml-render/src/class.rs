@@ -37,8 +37,17 @@ const HEADER_H_NO_CIRCLE: f64 = 26.4883;
 const NAME_BASELINE_Y_NO_CIRCLE: f64 = 25.5352;
 /// Gap between icon and entity name text.
 const ICON_TEXT_GAP: f64 = 3.0;
-/// Icon ellipse radius.
+/// Icon ellipse radius at the default circled-character font size (17): the
+/// radius is `circled_font_size / 3 + 6 = 17/3 + 6 = 11`.
 const ICON_RX: f64 = 11.0;
+/// PlantUML's `CIRCLED_CHARACTER` font default size. The circled header icon
+/// inherits `defaultFontSize` when set, otherwise this value (it does *not*
+/// inherit `ClassFontSize`). See `SkinParam.getCircledCharacterRadius`.
+const CIRCLED_CHARACTER_DEFAULT_SIZE: u32 = 17;
+/// Vertical inset of the circled-character icon centre below the rect top,
+/// before adding the icon/title half-height. Measured from default-size goldens
+/// (`cy = rect_top + 5 + max(radius, title_line_height/2)`).
+const CIRCLED_ICON_TOP_INSET: f64 = 5.0;
 /// Icon ellipse center x relative to entity left + 1.
 const ICON_CX_OFFSET: f64 = 15.0;
 /// Icon center y within the entity header.
@@ -64,8 +73,13 @@ const FIRST_MEMBER_OFFSET: f64 = 17.53515625;
 const MEMBER_SPACING: f64 = 16.48828125;
 /// Baseline rise of a labelled-separator caption above its divider rule.
 const LABEL_SEP_TEXT_RISE: f64 = 4.791015625;
-/// Offset from entity x to member text start.
+/// Offset from entity x to member text start, at the default circled radius
+/// (11): `MEMBER_TEXT_INSET + radius = 9 + 11 = 20`.
 const MEMBER_TEXT_OFFSET: f64 = 20.0;
+/// Member-text left inset relative to the circled icon radius. PlantUML places
+/// member text at `compartment_pad + (circledRadius + 3)`; with the compartment
+/// pad and entity left margin this nets to `entity_x + radius + 9`.
+const MEMBER_TEXT_INSET: f64 = 9.0;
 /// Offset from entity x to enum constant text start.
 const ENUM_TEXT_OFFSET: f64 = 6.0;
 /// Offset from entity x to visibility icon center.
@@ -1228,6 +1242,12 @@ struct ClassFontOverrides {
     /// `skinparam ClassAttributeFontStyle` — member bold/italic styling.
     attr_font_bold: bool,
     attr_font_italic: bool,
+    /// Resolved font size of the circled-character header icon. PlantUML sizes
+    /// it from `defaultFontSize` (falling back to the `CIRCLED_CHARACTER`
+    /// default of 17 — *not* `ClassFontSize`). This drives the circled icon's
+    /// radius (`size/3 + 6`), which in turn sets the icon ellipse rx/ry, its
+    /// vertical centre, and the member-text left inset.
+    circled_font_size: u32,
     /// `skinparam classHeaderBackgroundColor` raw value. When this is a
     /// gradient (`#c1/#c2`) distinct from the body background, the header
     /// repaint rects must reference the header gradient's `<defs>` id rather
@@ -1266,8 +1286,18 @@ impl ClassFontOverrides {
                 .or(default_font_size),
             attr_font_bold: attr_style.contains("bold"),
             attr_font_italic: attr_style.contains("italic"),
+            // The CIRCLED_CHARACTER font ignores ClassFontSize; it follows only
+            // defaultFontSize, defaulting to PlantUML's CIRCLED_CHARACTER size 17.
+            circled_font_size: default_font_size.unwrap_or(CIRCLED_CHARACTER_DEFAULT_SIZE),
             header_background: find(&["classHeaderBackgroundColor"]),
         }
+    }
+
+    /// Radius of the circled-character header icon, per
+    /// `SkinParam.getCircledCharacterRadius`: `circled_font_size / 3 + 6`
+    /// (integer division). At the default circled size (17) this is 11.
+    fn circled_radius(&self) -> f64 {
+        (self.circled_font_size / 3 + 6) as f64
     }
 }
 
@@ -2132,6 +2162,18 @@ fn render_entity_content(
     }
 
     // Icon (colored ellipse + letter glyph). Skipped entirely when `hide circle`.
+    // The circled-character icon scales with the resolved circled font size:
+    // its radius is `font_size/3 + 6` (11 at the default size 17). The default
+    // vertical placement centres the icon against the taller of the icon block
+    // and the title line: `cy = rect_top + 5 + max(radius, title_line_height/2)`
+    // (equals the legacy `y + 16` at the default radius/name size).
+    let icon_radius = font.circled_radius();
+    // Member text inset scales with the circled radius (20 at default).
+    let member_text_offset = MEMBER_TEXT_INSET + icon_radius;
+    // Name font size: honours `ClassFontSize`, falling back to
+    // `ClassAttributeFontSize`, then 14. Needed here to centre the icon against
+    // the title line height.
+    let name_font_size = font.font_size.or(font.attr_font_size).unwrap_or(14);
     let icon_cx = icon_cx_override.unwrap_or(x + ICON_CX_OFFSET);
     let icon_cy = if dim.has_stereotypes {
         y + ICON_CY_WITH_STEREO
@@ -2140,7 +2182,8 @@ fn render_entity_content(
         // measured from the rect top plus a fixed icon inset (16 - 2.7559).
         y + pad + (ICON_CY - MARGIN - PADDING_ICON_CY_BIAS)
     } else {
-        y + (ICON_CY - MARGIN)
+        let title_lh = text_render::label_height(&entity.label, name_font_size as f64);
+        y + CIRCLED_ICON_TOP_INSET + icon_radius.max(title_lh / 2.0)
     };
     if !dim.hide.circle {
         // A hex spot color from `<< (X,#HEX) Name >>` overrides the default
@@ -2163,8 +2206,8 @@ fn render_entity_content(
             fmt4(icon_cx),
             fmt4(icon_cy),
             icon_fill,
-            ICON_RX as i64,
-            ICON_RX as i64,
+            icon_radius as i64,
+            icon_radius as i64,
             BORDER_COLOR,
             ICON_STROKE_WIDTH,
         )
@@ -2207,7 +2250,7 @@ fn render_entity_content(
     // Name font size/style honour `skinparam ClassFontSize`/`ClassFontStyle`.
     // PlantUML sizes the entity name from `ClassFontSize`; when that is unset
     // but `ClassAttributeFontSize` is, the name inherits the attribute size.
-    let name_font_size = font.font_size.or(font.attr_font_size).unwrap_or(14);
+    // (`name_font_size` resolved above, before the header icon.)
     // As with font size, the name inherits `ClassAttributeFontStyle` when
     // `ClassFontStyle` does not itself set the corresponding flag.
     let name_bold = font.font_bold || font.attr_font_bold;
@@ -2480,6 +2523,7 @@ fn render_entity_content(
                 link_anchor,
                 None,
                 explicit_padding.unwrap_or(0.0),
+                member_text_offset,
             );
             member_y += MEMBER_SPACING;
         }
@@ -2555,6 +2599,7 @@ fn render_entity_content(
                     link_anchor,
                     None,
                     explicit_padding.unwrap_or(0.0),
+                    member_text_offset,
                 );
             } else {
                 let text = format_member_display(member);
@@ -2817,6 +2862,7 @@ fn render_entity_content(
                     member_anchor,
                     trailing,
                     explicit_padding.unwrap_or(0.0),
+                    member_text_offset,
                 );
                 member_y += MEMBER_SPACING;
                 // Emit any inline separators that fall AFTER this field.
@@ -2936,6 +2982,7 @@ fn render_entity_content(
                         member_anchor,
                         None,
                         explicit_padding.unwrap_or(0.0),
+                        member_text_offset,
                     );
                     method_y += MEMBER_SPACING;
                 }
@@ -3052,6 +3099,7 @@ fn render_entity_content(
                     member_anchor,
                     None,
                     explicit_padding.unwrap_or(0.0),
+                    member_text_offset,
                 );
                 method_y += MEMBER_SPACING;
             }
@@ -3103,6 +3151,9 @@ fn render_member_line(
     link_anchor: Option<&str>,
     trailing_in_anchor: Option<&str>,
     text_pad: f64,
+    // Offset from `entity_x` to icon-bearing member text, scaled with the
+    // circled-character radius (`MEMBER_TEXT_INSET + radius`; 20 at default).
+    member_text_offset: f64,
 ) {
     let text = format_member_display(member);
 
@@ -3221,7 +3272,7 @@ fn render_member_line(
         + if member.visibility == Visibility::Default && default_uses_narrow {
             entity_x + ENUM_TEXT_OFFSET
         } else {
-            entity_x + MEMBER_TEXT_OFFSET
+            entity_x + member_text_offset
         };
 
     let mut text_buf = String::new();
