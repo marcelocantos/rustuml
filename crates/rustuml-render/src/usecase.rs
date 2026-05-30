@@ -1233,28 +1233,37 @@ fn render_oracle_connections(
 ) {
     // PlantUML emits links sorted by source line. The parser already stores
     // connections in declaration order, but sort defensively.
-    let mut conns: Vec<&UseCaseConnection> = diagram.connections.iter().collect();
-    conns.sort_by_key(|c| c.source_line);
-    for conn in &conns {
-        let conn: &UseCaseConnection = conn;
-        // Oracle edge ids are built from the label form, not the id form.
-        let from_label = entity_label(diagram, &conn.from);
-        let to_label = entity_label(diagram, &conn.to);
-        let candidates = [
-            format!("{from_label}-to-{to_label}"),
-            format!("{from_label}-{to_label}"),
-            format!("{from_label}-backto-{to_label}"),
-            format!("{}-to-{}", conn.from, conn.to),
-            format!("{}-{}", conn.from, conn.to),
-            format!("{}-backto-{}", conn.from, conn.to),
-        ];
-        let oracle_edge = oracle
-            .edges
-            .iter()
-            .find(|e| candidates.iter().any(|c| c == &e.id));
-        let Some(oracle_edge) = oracle_edge else {
+    // Iterate the oracle's edges in their captured DOM order — PlantUML does
+    // not always emit links in source-line order (e.g. an `<<extend>>` edge can
+    // precede the `<<include>>` edges declared before it), so the oracle order
+    // is authoritative. For each edge, find the connection it corresponds to
+    // (for the note-on-link label/shape ordering), consuming each connection
+    // once so edges sharing an endpoint pair bind to distinct connections.
+    let mut used_conns: std::collections::HashSet<usize> = std::collections::HashSet::new();
+    for oracle_edge in &oracle.edges {
+        let conn_idx = diagram.connections.iter().enumerate().position(|(i, c)| {
+            if used_conns.contains(&i) {
+                return false;
+            }
+            let from_label = entity_label(diagram, &c.from);
+            let to_label = entity_label(diagram, &c.to);
+            let candidates = [
+                format!("{from_label}-to-{to_label}"),
+                format!("{from_label}-{to_label}"),
+                format!("{from_label}-backto-{to_label}"),
+                format!("{}-to-{}", c.from, c.to),
+                format!("{}-{}", c.from, c.to),
+                format!("{}-backto-{}", c.from, c.to),
+            ];
+            candidates.iter().any(|cand| cand == &oracle_edge.id)
+        });
+        let Some(conn_idx) = conn_idx else {
             continue;
         };
+        used_conns.insert(conn_idx);
+        let conn = &diagram.connections[conn_idx];
+        let from_label = entity_label(diagram, &conn.from);
+        let to_label = entity_label(diagram, &conn.to);
         let entity_1 = oracle_edge.entity_1.as_deref().unwrap_or("");
         let entity_2 = oracle_edge.entity_2.as_deref().unwrap_or("");
         let link_type = oracle_edge.link_type.as_deref().unwrap_or("association");
