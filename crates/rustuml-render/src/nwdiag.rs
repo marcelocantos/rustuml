@@ -30,6 +30,9 @@ const FONT_ARROW: f64 = 11.0; // link (address) font size
 const NET_FILL_DEFAULT: &str = "#E2E2F0";
 const HOST_FILL: &str = "#F1F1F1";
 const LINE_COLOR: &str = "#181818";
+const GROUP_LINE_DEFAULT: &str = "#E7E7E7"; // nwdiag group element LineColor
+const GROUP_FILL_DEFAULT: &str = "#FFFFFF"; // nwdiag group element BackGroundColor
+const GROUP_PAD: f64 = 5.0; // NServerDraw.getMinMax padding around each box
 
 /// A server (host) resolved across all the networks it connects to.
 struct Server {
@@ -280,6 +283,49 @@ pub fn render(diagram: &NwdiagDiagram, _theme: &Theme) -> String {
             let ax = right - text_width(addr, FONT_SERVER, false);
             let ay = block_top + text_height(FONT_SERVER) + ascent(FONT_SERVER);
             emit_text(&mut s, ax, ay, FONT_SERVER, addr);
+        }
+    }
+
+    // 1b. Group rectangles (drawn behind bars/boxes). Each group's rect is the
+    // union of its member host-box bounds, each expanded by GROUP_PAD on all
+    // sides (Java NServerDraw.getMinMax → NwGroup.drawGroup). Groups without a
+    // `description` carry no header label, which matches every golden case.
+    let server_box_rect = |sv: &Server| -> (f64, f64, f64, f64) {
+        let j = sv.col;
+        let i = sv.main_row();
+        let cw = col_width[j];
+        let bw = box_w(sv);
+        let bx = gx + col_x[j] + cw / 2.0 - bw / 2.0;
+        let by = gy + row_y[i] + row_height[i] / 2.0 - box_h / 2.0;
+        (bx, by, bw, box_h)
+    };
+    for group in &diagram.groups {
+        let mut bounds: Option<(f64, f64, f64, f64)> = None; // minx,miny,maxx,maxy
+        for name in &group.hosts {
+            let Some(sv) = servers.iter().find(|s| &s.name == name) else {
+                continue;
+            };
+            let (bx, by, bw, bh) = server_box_rect(sv);
+            let (x1, y1, x2, y2) = (
+                bx - GROUP_PAD,
+                by - GROUP_PAD,
+                bx + bw + GROUP_PAD,
+                by + bh + GROUP_PAD,
+            );
+            bounds = Some(match bounds {
+                None => (x1, y1, x2, y2),
+                Some((mx1, my1, mx2, my2)) => (mx1.min(x1), my1.min(y1), mx2.max(x2), my2.max(y2)),
+            });
+        }
+        if let Some((x1, y1, x2, y2)) = bounds {
+            let fill = group.color.as_deref().unwrap_or(GROUP_FILL_DEFAULT);
+            s.push_str(&format!(
+                r#"<rect fill="{fill}" height="{h}" style="stroke:{GROUP_LINE_DEFAULT};stroke-width:1;" width="{w}" x="{x}" y="{y}"/>"#,
+                h = fmt_coord(y2 - y1),
+                w = fmt_coord(x2 - x1),
+                x = fmt_coord(x1),
+                y = fmt_coord(y1),
+            ));
         }
     }
 
