@@ -327,6 +327,9 @@ const ACTOR_TAIL_FIGURE_Y_OFFSET: f64 = 16.488281250;
 
 /// Boundary/Control/Entity: circle radius = 12.
 const STEREOTYPE_CIRCLE_R: f64 = 12.0;
+/// Margin around the circle stickman (PlantUML Control/Entity/Boundary
+/// `margin = 4`). The stickman's intrinsic width is `2*radius + 2*margin`.
+const STEREOTYPE_CIRCLE_MARGIN: f64 = 4.0;
 /// Circle center Y (from HEAD_BOX_Y).
 const STEREOTYPE_CIRCLE_CY: f64 = 16.0; // 21 - 5 = 16 from HEAD_BOX_Y
 /// Extra height for boundary/control/entity beyond HEAD_BOX_H.
@@ -2545,9 +2548,10 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme) -> String {
                     (w, h)
                 }
                 ParticipantKind::Control | ParticipantKind::Entity => {
-                    // Control/Entity: circle r=12, text below.
-                    let shape_w = 2.0 * STEREOTYPE_CIRCLE_R;
-                    let w = max_text_w.max(shape_w) + 2.0 * ACTOR_TEXT_PAD;
+                    // Control/Entity: circle r=12 with 4px margin all round.
+                    // PlantUML width = max(stickman = 2*r + 2*margin, text + 2*pad).
+                    let shape_w = 2.0 * STEREOTYPE_CIRCLE_R + 2.0 * STEREOTYPE_CIRCLE_MARGIN;
+                    let w = (max_text_w + 2.0 * ACTOR_TEXT_PAD).max(shape_w);
                     let h = HEAD_BOX_H + CIRCLE_SHAPE_EXTRA_H;
                     (w, h)
                 }
