@@ -1324,7 +1324,18 @@ fn render_plantuml_svg(
 
     // Processing instruction and defs.
     svg.push_str("<?plantuml 1.2026.3beta6?>");
-    svg.push_str("<defs/>");
+    // Emit any `<defs>` the oracle captured verbatim (e.g. the
+    // `<linearGradient>` PlantUML generates for a `#c1/c2` gradient
+    // background, or background-colour filters). The entity rects reference
+    // these via oracle-captured `fill="url(#...)"`, so the ids must be live.
+    match oracle.map(|o| o.defs_inner_xml.as_str()) {
+        Some(defs) if !defs.is_empty() => {
+            svg.push_str("<defs>");
+            svg.push_str(defs);
+            svg.push_str("</defs>");
+        }
+        _ => svg.push_str("<defs/>"),
+    }
     svg.push_str("<g>");
 
     // Body bounding box (entity rects), used to position the page decorations
