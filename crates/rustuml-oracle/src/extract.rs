@@ -598,7 +598,10 @@ pub fn extract_oracle_layout(svg: &str) -> Option<OracleLayout> {
                         }
                     }
                     // Capture separator dividers (e.g. use-case description
-                    // `--` lines) so the renderer can emit them verbatim.
+                    // `--`/`==`/`..` lines) so the renderer can emit them
+                    // verbatim. `sep_lines` keeps geometry only; `lines` keeps
+                    // the full element including its style (dashed/solid) and
+                    // both x endpoints, which `==` double rules need.
                     let sep_lines: Vec<(f64, f64, f64)> = node
                         .children()
                         .filter(|c| c.tag_name().name() == "line")
@@ -608,6 +611,17 @@ pub fn extract_oracle_layout(svg: &str) -> Option<OracleLayout> {
                                 parse_attr(&l, "x2")?,
                                 parse_attr(&l, "y1")?,
                             ))
+                        })
+                        .collect();
+                    let lines: Vec<EntityLine> = node
+                        .children()
+                        .filter(|c| c.tag_name().name() == "line")
+                        .map(|l| EntityLine {
+                            x1: l.attribute("x1").unwrap_or("0").to_string(),
+                            x2: l.attribute("x2").unwrap_or("0").to_string(),
+                            y1: l.attribute("y1").unwrap_or("0").to_string(),
+                            y2: l.attribute("y2").unwrap_or("0").to_string(),
+                            style: l.attribute("style").map(String::from),
                         })
                         .collect();
                     layout.entities.insert(
@@ -633,7 +647,7 @@ pub fn extract_oracle_layout(svg: &str) -> Option<OracleLayout> {
                             entity_id,
                             source_line: node.attribute("data-source-line").map(String::from),
                             aux_rects: Vec::new(),
-                            lines: Vec::new(),
+                            lines,
                             texts: Vec::new(),
                         },
                     );

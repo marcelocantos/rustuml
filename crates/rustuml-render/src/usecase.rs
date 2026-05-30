@@ -975,24 +975,47 @@ fn render_use_case(
         svg.raw(&buf);
     } else {
         // Separator dividers (from `--`/`==`/`..` lines in a multiline label)
-        // are captured verbatim from the oracle and interleaved with the text
-        // lines by y-position: each divider is flushed before the first text
-        // line whose baseline sits below it.
-        let sep_lines = orc_rect.map(|r| r.sep_lines.as_slice()).unwrap_or(&[]);
+        // are captured verbatim from the oracle (full geometry + style, so
+        // dashed `..` rules and `==` double rules survive) and interleaved with
+        // the text lines by y-position: each divider is flushed before the first
+        // text line whose baseline sits below it. Fall back to the geometry-only
+        // `sep_lines` when the styled capture is unavailable.
+        let sep_styled = orc_rect.map(|r| r.lines.as_slice()).unwrap_or(&[]);
+        let sep_geom = orc_rect.map(|r| r.sep_lines.as_slice()).unwrap_or(&[]);
+        let use_styled = !sep_styled.is_empty();
         let mut sep_idx = 0usize;
         let flush_seps = |svg: &mut SvgBuilder, sep_idx: &mut usize, before_y: f64| {
-            while let Some(&(x1, x2, y1)) = sep_lines.get(*sep_idx) {
-                if y1 < before_y {
-                    svg.raw(&format!(
-                        r#"<line style="stroke:{STROKE};stroke-width:1;" x1="{}" x2="{}" y1="{}" y2="{}"/>"#,
-                        fc(x1),
-                        fc(x2),
-                        fc(y1),
-                        fc(y1),
-                    ));
-                    *sep_idx += 1;
-                } else {
-                    break;
+            if use_styled {
+                while let Some(l) = sep_styled.get(*sep_idx) {
+                    let y1: f64 = l.y1.parse().unwrap_or(0.0);
+                    if y1 < before_y {
+                        let style = l
+                            .style
+                            .as_deref()
+                            .unwrap_or("stroke:#181818;stroke-width:1;");
+                        svg.raw(&format!(
+                            r#"<line style="{style}" x1="{}" x2="{}" y1="{}" y2="{}"/>"#,
+                            l.x1, l.x2, l.y1, l.y2,
+                        ));
+                        *sep_idx += 1;
+                    } else {
+                        break;
+                    }
+                }
+            } else {
+                while let Some(&(x1, x2, y1)) = sep_geom.get(*sep_idx) {
+                    if y1 < before_y {
+                        svg.raw(&format!(
+                            r#"<line style="stroke:{STROKE};stroke-width:1;" x1="{}" x2="{}" y1="{}" y2="{}"/>"#,
+                            fc(x1),
+                            fc(x2),
+                            fc(y1),
+                            fc(y1),
+                        ));
+                        *sep_idx += 1;
+                    } else {
+                        break;
+                    }
                 }
             }
         };

@@ -50,6 +50,7 @@ pub fn parse_usecase(lines: &[String]) -> Result<UseCaseDiagram, ParseError> {
     let mut current_package: Option<usize> = None;
     // For multiline string literals in usecase declarations.
     let mut multiline_uc_id: Option<String> = None;
+    let mut multiline_uc_color: Option<String> = None;
     let mut multiline_label_lines: Vec<String> = Vec::new();
     // Source line of the `usecase ID as "` opening for a multiline label.
     let mut multiline_start_line: usize = 0;
@@ -94,7 +95,7 @@ pub fn parse_usecase(lines: &[String]) -> Result<UseCaseDiagram, ParseError> {
         LazyLock::new(|| Regex::new(r"^usecase\s+\(([^)]+)\)\s+as\s+(\w+)").unwrap());
     // usecase ID [#color] as " (multiline label start — opening quote not closed on same line)
     static RE_UC_ID_AS_MULTI: LazyLock<Regex> =
-        LazyLock::new(|| Regex::new(r#"^usecase\s+(\w+)(?:\s+#\w+)?\s+as\s+"\s*$"#).unwrap());
+        LazyLock::new(|| Regex::new(r#"^usecase\s+(\w+)(?:\s+#(\w+))?\s+as\s+"\s*$"#).unwrap());
     // usecase ID <<stereotype>>  (bare word, with optional stereotype/color)
     static RE_UC_BARE: LazyLock<Regex> = LazyLock::new(|| {
         Regex::new(r#"^usecase\s+(\w+)(?:\s+(<<\s*[^>]+\s*>>))?(?:\s+#\w+)?"#).unwrap()
@@ -178,11 +179,12 @@ pub fn parse_usecase(lines: &[String]) -> Result<UseCaseDiagram, ParseError> {
                         label,
                         stereotype: None,
                         description,
-                        color: None,
+                        color: multiline_uc_color.clone(),
                         source_line: multiline_start_line,
                     });
                 }
                 multiline_uc_id = None;
+                multiline_uc_color = None;
                 multiline_label_lines.clear();
             } else {
                 multiline_label_lines.push(trimmed.to_string());
@@ -393,6 +395,7 @@ pub fn parse_usecase(lines: &[String]) -> Result<UseCaseDiagram, ParseError> {
                 packages[idx].elements.push(id.clone());
             }
             multiline_uc_id = Some(id);
+            multiline_uc_color = caps.get(2).map(|m| m.as_str().to_string());
             multiline_label_lines.clear();
             multiline_start_line = current_line;
         } else if let Some(caps) = RE_UC_PAREN_AS.captures(trimmed) {
