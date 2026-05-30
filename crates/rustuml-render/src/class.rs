@@ -595,15 +595,15 @@ fn format_stereotype_text(stereotypes: &[String]) -> String {
 // ---------------------------------------------------------------------------
 
 /// Translate special characters in an entity label to PlantUML's
-/// `data-qualified-name` form. Java's serialiser replaces ASCII punctuation
-/// (other than `.` and `_`) with `.`; alphanumerics (including non-ASCII
-/// letters), spaces, and dots pass through unchanged.
-fn translate_qualified_name(label: &str) -> String {
+/// `data-qualified-name` form. Java's serialiser replaces every character
+/// that is not an ASCII alphanumeric, `.`, `_`, space, or `-` with `.` —
+/// this includes ASCII punctuation *and* all non-ASCII characters (CJK,
+/// accented Latin, etc.), so e.g. `Ärger` → `.rger` and `客户端` → `...`.
+pub(crate) fn translate_qualified_name(label: &str) -> String {
     label
         .chars()
         .map(|c| {
-            if c.is_alphanumeric() || c == '.' || c == '_' || c == ' ' || c == '-' || !c.is_ascii()
-            {
+            if c.is_ascii_alphanumeric() || c == '.' || c == '_' || c == ' ' || c == '-' {
                 c
             } else {
                 '.'

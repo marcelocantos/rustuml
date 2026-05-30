@@ -898,7 +898,7 @@ impl PlantUmlSvg {
             self.buf,
             r##"<g class="participant-lifeline" data-entity-uid="{part_uid}" data-qualified-name="{qualified_name}" data-source-line="{source_line}" id="{part_uid}-lifeline">"##,
             part_uid = escape_xml(part_uid),
-            qualified_name = escape_xml(qualified_name),
+            qualified_name = escape_xml(&crate::class::translate_qualified_name(qualified_name)),
         )
         .unwrap();
 
@@ -956,7 +956,7 @@ impl PlantUmlSvg {
             self.buf,
             r##"<g class="participant participant-{position}" data-entity-uid="{part_uid}" data-qualified-name="{qualified_name}" data-source-line="{source_line}" id="{part_uid}-{position}">"##,
             part_uid = escape_xml(part_uid),
-            qualified_name = escape_xml(qualified_name),
+            qualified_name = escape_xml(&crate::class::translate_qualified_name(qualified_name)),
         )
         .unwrap();
 
@@ -1028,7 +1028,7 @@ impl PlantUmlSvg {
             self.buf,
             r##"<g class="participant participant-{position}" data-entity-uid="{part_uid}" data-qualified-name="{qualified_name}" data-source-line="{source_line}" id="{part_uid}-{position}">"##,
             part_uid = escape_xml(part_uid),
-            qualified_name = escape_xml(qualified_name),
+            qualified_name = escape_xml(&crate::class::translate_qualified_name(qualified_name)),
         )
         .unwrap();
     }
