@@ -341,12 +341,17 @@ impl GanttParser {
     /// `[name] starts at [other]'s end`
     fn try_starts_after(&mut self, line: &str, _line_num: usize) -> Result<bool, ParseError> {
         static RE: LazyLock<Regex> = LazyLock::new(|| {
-            Regex::new(r"^\[([^\]]+)\]\s+starts\s+at\s+\[([^\]]+)\]'s\s+end$").unwrap()
+            Regex::new(r"^\[([^\]]+)\]\s+starts\s+at\s+\[([^\]]+)\]'s\s+(end|start)$").unwrap()
         });
         if let Some(caps) = RE.captures(line) {
             let name = caps[1].to_string();
             let dep = caps[2].to_string();
-            self.upsert_start(name, TaskStart::AfterTask(dep));
+            let start = if &caps[3] == "start" {
+                TaskStart::WithTask(dep)
+            } else {
+                TaskStart::AfterTask(dep)
+            };
+            self.upsert_start(name, start);
             Ok(true)
         } else {
             Ok(false)

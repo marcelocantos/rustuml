@@ -49,6 +49,8 @@ pub enum TaskStart {
     Day(u32),
     /// Starts when another named task ends.
     AfterTask(String),
+    /// Starts at the same day another named task starts (parallel tasks).
+    WithTask(String),
 }
 
 /// A single task in the Gantt chart.

@@ -451,6 +451,25 @@ pub fn render(diagram: &GanttDiagram, _theme: &Theme) -> String {
             let succ_start_x = resolved[*idx].0 as f64 * DAY_WIDTH;
             let succ_center = row_bar_top(vi) + BAR_H / 2.0;
             draw_dependency_arrow(&mut svg, pred_end_x, pred_exit_y, succ_start_x, succ_center);
+        } else if let LaidRow::Task(task, idx) = row
+            && let TaskStart::WithTask(dep) = &task.start
+            && let Some(&dep_vi) = task_row_index.get(dep.as_str())
+            && resolved[*idx].1 != 0
+        {
+            // A parallel start ("starts at X's start") routes the arrow out
+            // the predecessor's left edge, down the left margin, and into the
+            // successor's left edge.
+            let pred_left_x = resolved[*idx].0 as f64 * DAY_WIDTH + 2.0;
+            let pred_center = row_bar_top(dep_vi) + BAR_H / 2.0;
+            let succ_start_x = resolved[*idx].0 as f64 * DAY_WIDTH;
+            let succ_center = row_bar_top(vi) + BAR_H / 2.0;
+            draw_parallel_arrow(
+                &mut svg,
+                pred_left_x,
+                pred_center,
+                succ_start_x,
+                succ_center,
+            );
         }
     }
 
@@ -752,6 +771,34 @@ fn draw_dependency_arrow(
     ));
 }
 
+fn draw_parallel_arrow(
+    svg: &mut SvgBuilder,
+    pred_left_x: f64,
+    pred_center: f64,
+    succ_start_x: f64,
+    succ_center: f64,
+) {
+    let x_left = pred_left_x - 10.0;
+    let x_path_end = succ_start_x - 3.0;
+    svg.raw_inline(&format!(
+        r#"<path d="M{x1},{y1} L{xl},{y1} L{xl},{ymid} L{xend},{ymid}" fill="none" style="stroke:{ARROW_COLOR};stroke-width:1.5;"/>"#,
+        x1 = fmt_coord(pred_left_x),
+        y1 = fmt_coord(pred_center),
+        xl = fmt_coord(x_left),
+        ymid = fmt_coord(succ_center),
+        xend = fmt_coord(x_path_end),
+    ));
+    let tip = succ_start_x;
+    svg.raw_inline(&format!(
+        r#"<polygon fill="{ARROW_COLOR}" points="{a},{ta},{tip},{cy},{a},{tb},{a},{ta}" style="stroke:{ARROW_COLOR};stroke-width:1;"/>"#,
+        a = fmt_coord(tip - 4.0),
+        ta = fmt_coord(succ_center - 4.0),
+        tip = fmt_coord(tip),
+        cy = fmt_coord(succ_center),
+        tb = fmt_coord(succ_center + 4.0),
+    ));
+}
+
 struct CalendarInfo {
     day_of_week: Vec<u8>,
     day_of_month: Vec<u8>,
@@ -1002,6 +1049,13 @@ fn resolve_starts(tasks: &[GanttTask]) -> Vec<(u32, u32)> {
                 TaskStart::AfterTask(dep) => {
                     if let Some(dep_idx) = tasks.iter().position(|t| &t.name == dep) {
                         resolved[dep_idx].map(|ds| ds + tasks[dep_idx].duration)
+                    } else {
+                        Some(0)
+                    }
+                }
+                TaskStart::WithTask(dep) => {
+                    if let Some(dep_idx) = tasks.iter().position(|t| &t.name == dep) {
+                        resolved[dep_idx]
                     } else {
                         Some(0)
                     }
