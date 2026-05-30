@@ -293,8 +293,11 @@ fn parse_row_part(part: &str) -> Vec<SaltWidget> {
     }
 
     // Button: `[label]` — must not be checkbox (already handled above).
+    // The label keeps its interior spacing: PlantUML counts the raw character
+    // length (including padding spaces) when sizing the button, even though
+    // the displayed text is trimmed.
     if trimmed.starts_with('[') && trimmed.ends_with(']') {
-        let label = trimmed[1..trimmed.len() - 1].trim().to_string();
+        let label = trimmed[1..trimmed.len() - 1].to_string();
         return vec![SaltWidget::Button(label)];
     }
 
