@@ -45,7 +45,6 @@ const IF_BRANCH_DOWN: f64 = 10.0;
 const IF_BRANCH_UP: f64 = 6.0;
 const FORK_BAR_HEIGHT: f64 = 6.0;
 const FORK_BAR_RX: f64 = 2.5;
-const FORK_BAR_MARGIN: f64 = 14.0; // margin on each side of fork bar
 
 // Switch-specific layout constants (reverse-engineered from golden SVGs).
 const SWITCH_CASE_GAP: f64 = 10.0; // horizontal gap between adjacent SMALL-mode case boxes
@@ -1227,8 +1226,8 @@ fn node_width(node: &LayoutNode) -> f64 {
         LayoutNode::Fork { branches } => {
             // Mirror emit_fork's bar-width formula: 12 px inner pad each side,
             // 10 px gap between adjacent branches, +18 in the middle gap when
-            // the branch count is even, with a minimum bar width when all
-            // branches are narrow.
+            // the branch count is even. No minimum-width floor — PlantUML's
+            // bar spans exactly the branch extents plus 24 px outer pad.
             let branch_widths: Vec<f64> = branches.iter().map(|b| sequence_width(b)).collect();
             let n = branch_widths.len();
             let total_branch_w: f64 = branch_widths.iter().sum();
@@ -1238,9 +1237,7 @@ fn node_width(node: &LayoutNode) -> f64 {
             } else {
                 0.0
             };
-            let bar_w = 12.0 * 2.0 + total_branch_w + inter_gaps * 10.0 + even_extra;
-            let min_bar_w = FORK_BAR_MARGIN * 2.0 + 80.0;
-            bar_w.max(min_bar_w)
+            12.0 * 2.0 + total_branch_w + inter_gaps * 10.0 + even_extra
         }
         LayoutNode::Switch { cases, condition } => switch_case_block_width(cases, condition),
         LayoutNode::While { .. } => {
@@ -3072,17 +3069,12 @@ fn emit_fork(svg: &mut SvgEmitter, cx: f64, y: f64, branches: &[Vec<LayoutNode>]
     } else {
         0.0
     };
-    let mut bar_w =
-        FORK_INNER_PAD * 2.0 + total_branch_w + inter_gaps * FORK_BRANCH_GAP + even_extra;
-    // Empirical floor: when branch action widths are very small (≲30px),
-    // PlantUML still gives each branch enough room for a centred arrowhead
-    // and a 14 px outer margin around the bar. Bump the bar width up to
-    // satisfy max(bar_w_computed, FORK_BAR_MARGIN*2 + 80) so narrow forks
-    // don't collapse.
-    let min_bar_w = FORK_BAR_MARGIN * 2.0 + 80.0;
-    if bar_w < min_bar_w {
-        bar_w = min_bar_w;
-    }
+    let bar_w = FORK_INNER_PAD * 2.0 + total_branch_w + inter_gaps * FORK_BRANCH_GAP + even_extra;
+    // No empirical floor: PlantUML's fork bar spans exactly the leftmost
+    // branch box's left edge minus 12 px to the rightmost box's right edge
+    // plus 12 px, i.e. 24 px outer pad + summed branch widths + inter-branch
+    // gaps (10 px each, +18 px in the middle gap for even branch counts).
+    // Clamping to a minimum width shifts every branch off PlantUML's spine.
 
     // Top bar
     let bar_x = cx - bar_w / 2.0;
