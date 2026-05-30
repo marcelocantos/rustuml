@@ -39,6 +39,9 @@ const CHAR_SPACE: f64 = 8.0;
 const BTN_STROKE: f64 = 2.5;
 const BTN_MARGIN: f64 = 2.0;
 
+// ElementDroplist: the arrow box is a fixed 12px wide region on the right.
+const DROP_BOX: f64 = 12.0;
+
 // ── Public entry point ───────────────────────────────────────────────────────
 
 /// Render a Salt diagram with an optional oracle layout.
@@ -312,10 +315,14 @@ fn widget_dim(widget: &SaltWidget) -> (f64, f64) {
             let mw = managed_text_width(t);
             (mw + 6.0, th + 2.0)
         }
-        // Best-effort for widgets not yet fully reproduced.
+        // ElementDroplist: getTextDimensionAt then delta(4 + box, 4),
+        // where box = 12 and getTextDimensionAt = max(textWidth, charLen*8).
         SaltWidget::Dropdown(t) => {
-            let tw = pm::text_width(t, FONT_SIZE, false);
-            (tw + 20.0, th)
+            let display = strip_creole(t);
+            let tw = pm::text_width(display.trim(), FONT_SIZE, false);
+            let char_len = display.trim().chars().count() as f64;
+            let managed = tw.max(char_len * CHAR_SPACE);
+            (managed + 4.0 + DROP_BOX, th + 4.0)
         }
         SaltWidget::TreeNode { depth, label } => (
             (*depth as f64) * 8.0 + pm::text_width(label, FONT_SIZE, false),
@@ -412,9 +419,21 @@ fn draw_widget(widget: &SaltWidget, x: f64, y: f64, cell_w: f64, cell_h: f64, bu
             emit_vline_black(buf, x + 1.0, y + y3, 2.0);
             emit_vline_black(buf, x + 3.0 + managed_w + 1.0, y + y3, 2.0);
         }
-        // ── Best-effort fallbacks (geometry not yet exact) ──
         SaltWidget::Dropdown(label) => {
-            emit_text(buf, x, y + ascent, label);
+            // ElementDroplist: EE-filled rect, text at (2,2), a vertical
+            // divider `box` px from the right edge, and a down-triangle.
+            let (pw, ph) = widget_dim(widget);
+            emit_droplist_rect(buf, x, y, pw - 1.0, ph - 1.0);
+            let display = strip_creole(label);
+            emit_text(buf, x + 2.0, y + 2.0 + ascent, display.trim());
+            let xline = x + pw - DROP_BOX;
+            emit_vline_black(buf, xline, y, ph - 1.0);
+            // Down-triangle: points (0,0),(box-6,0),((box-6)/2, textH-8),
+            // translated by (xline + 3, 6).
+            let tx = xline + 3.0;
+            let ty = y + 6.0;
+            let tip_y = pref_h - 8.0;
+            emit_droplist_arrow(buf, tx, ty, DROP_BOX - 6.0, tip_y);
         }
         SaltWidget::TreeNode { depth, label } => {
             let indent = (*depth as f64) * 8.0;
@@ -575,6 +594,30 @@ fn emit_separator(buf: &mut String, x: f64, y: f64, width: f64, kind: SeparatorK
             ));
         }
     }
+}
+
+fn emit_droplist_rect(buf: &mut String, x: f64, y: f64, w: f64, h: f64) {
+    buf.push_str(&format!(
+        r##"<rect fill="#EEEEEE" height="{h}" style="stroke:#000000;stroke-width:1;" width="{w}" x="{x}" y="{y}"/>"##,
+        h = pm::fmt_coord(h),
+        w = pm::fmt_coord(w),
+        x = pm::fmt_coord(x),
+        y = pm::fmt_coord(y),
+    ));
+}
+
+/// Down-pointing triangle for a droplist: points `(0,0)`, `(base,0)`,
+/// `(base/2, tip_y)`, translated to `(ox, oy)`.
+fn emit_droplist_arrow(buf: &mut String, ox: f64, oy: f64, base: f64, tip_y: f64) {
+    let pts = [(0.0, 0.0), (base, 0.0), (base / 2.0, tip_y)];
+    let s: Vec<String> = pts
+        .iter()
+        .map(|(dx, dy)| format!("{},{}", pm::fmt_coord(ox + dx), pm::fmt_coord(oy + dy)))
+        .collect();
+    buf.push_str(&format!(
+        r##"<polygon fill="#000000" points="{}" style="stroke:#000000;stroke-width:1;"/>"##,
+        s.join(",")
+    ));
 }
 
 fn emit_hline_black(buf: &mut String, x: f64, y: f64, width: f64) {
