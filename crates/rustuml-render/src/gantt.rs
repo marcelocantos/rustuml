@@ -47,7 +47,7 @@ const CAL_BOT_DOW_OFF: f64 = 9.668;
 const CAL_BOT_DAYNUM_OFF: f64 = 23.668;
 const CAL_BOT_MONTH_OFF: f64 = 38.6016;
 
-const BOTTOM_DAYNUM_OFF_PLAIN: f64 = 4.668;
+const BOTTOM_DAYNUM_OFF_PLAIN: f64 = 4.66796875;
 
 /// Map a CSS color name (as used in PlantUML Gantt) to a hex string.
 fn css_color(name: &str) -> String {
