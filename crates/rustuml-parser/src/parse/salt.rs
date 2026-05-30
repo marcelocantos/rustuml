@@ -221,6 +221,9 @@ fn parse_block_header(line: &str) -> (BlockKind, Option<String>, &str) {
     if let Some(title) = rest.strip_prefix('^') {
         return (BlockKind::Plain, Some(title.trim().to_string()), "");
     }
+    if let Some(stripped) = rest.strip_prefix('+') {
+        return (BlockKind::Frame, None, stripped.trim_start());
+    }
     if let Some(stripped) = rest.strip_prefix('#') {
         return (BlockKind::Table, None, stripped.trim_start());
     }

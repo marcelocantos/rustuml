@@ -30,6 +30,8 @@ pub struct SaltBlock {
 pub enum BlockKind {
     /// Plain container: `{`.
     Plain,
+    /// Container with an outer border only: `{+` (DRAW_OUTSIDE).
+    Frame,
     /// Table with visible grid lines: `{#`.
     Table,
     /// Tree widget: `{T`.

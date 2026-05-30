@@ -182,16 +182,18 @@ impl<'a> Grid<'a> {
         if self.kind == BlockKind::Table {
             self.draw_grid_lines(ox, oy, buf);
         }
+        if self.kind == BlockKind::Frame {
+            self.draw_outside_border(ox, oy, buf);
+        }
         if let Some(title) = &self.title {
             self.draw_group_box(ox, oy, title, buf);
         }
     }
 
-    /// Draw the outer border and title for a `{^Title` group box
-    /// (DRAW_OUTSIDE_WITH_TITLE): the border traces the grid perimeter using
-    /// the same segment-set ordering as the Java `Grid`, and the title text
-    /// sits on the top edge over a white backing rectangle.
-    fn draw_group_box(&self, ox: f64, oy: f64, title: &str, buf: &mut String) {
+    /// Draw the table's outer perimeter (DRAW_OUTSIDE) using the Java `Grid`
+    /// segment-set ordering: top and bottom horizontals per column, then left
+    /// and right verticals per row.
+    fn draw_outside_border(&self, ox: f64, oy: f64, buf: &mut String) {
         let mut horizontals = JavaSegmentSet::new();
         let mut verticals = JavaSegmentSet::new();
         for c in 0..self.n_cols {
@@ -224,6 +226,13 @@ impl<'a> Grid<'a> {
                 y2 = pm::fmt_coord(y2),
             ));
         }
+    }
+
+    /// Draw the outer border and title for a `{^Title` group box
+    /// (DRAW_OUTSIDE_WITH_TITLE): the border traces the grid perimeter, and
+    /// the title text sits on the top edge over a white backing rectangle.
+    fn draw_group_box(&self, ox: f64, oy: f64, title: &str, buf: &mut String) {
+        self.draw_outside_border(ox, oy, buf);
 
         // Title: a white-backed text at (x + 6, y), on the top border.
         let tw = pm::text_width(title, FONT_SIZE, false);
