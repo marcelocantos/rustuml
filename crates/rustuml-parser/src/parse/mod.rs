@@ -93,6 +93,24 @@ pub fn strip_title_quotes(s: &str) -> &str {
     }
 }
 
+/// Truncate the preprocessed line list at the first standalone `newpage`
+/// directive. PlantUML's SVG renderer emits only the first page of a multipage
+/// (non-sequence) diagram, so everything from `newpage` onward is dropped. A
+/// `newpage <title>` form also delimits the page and is dropped along with its
+/// argument.
+fn truncate_at_newpage(lines: Vec<String>) -> Vec<String> {
+    if let Some(idx) = lines.iter().position(|l| {
+        let t = l.trim();
+        t == "newpage" || t.starts_with("newpage ") || t.starts_with("newpage\t")
+    }) {
+        let mut lines = lines;
+        lines.truncate(idx);
+        lines
+    } else {
+        lines
+    }
+}
+
 /// Detect the diagram type from the @start tag.
 ///
 /// If the input has an outer `@startuml` wrapper with an inner `@startXxx`
@@ -693,8 +711,19 @@ pub fn parse_with_base(
     let lines = preprocess_out.lines;
     let sprites = preprocess_out.sprites;
 
+    // For non-sequence UML diagrams a `newpage` directive splits the diagram
+    // into multiple pages, but PlantUML's SVG output renders only the first
+    // page. Sequence diagrams handle `newpage` as a paginating event with their
+    // own multipage rendering, so they keep all lines.
+    let uml_subtype = (typ == "uml").then(|| detect_uml_subtype(&lines));
+    let lines = if matches!(uml_subtype, Some(UmlSubtype::Sequence)) {
+        lines
+    } else {
+        truncate_at_newpage(lines)
+    };
+
     let mut diagram = match typ {
-        "uml" => match detect_uml_subtype(&lines) {
+        "uml" => match uml_subtype.expect("uml subtype computed above") {
             UmlSubtype::Sequence => {
                 let seq = sequence::parse_sequence(&lines)?;
                 Ok(Diagram::Sequence(seq))
