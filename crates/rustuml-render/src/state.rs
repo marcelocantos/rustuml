@@ -1824,6 +1824,14 @@ fn render_oracle_transitions(svg: &mut String, diagram: &StateDiagram, oracle: &
             }
         }
         let Some((ti, is_reverse)) = matched else {
+            // Note-attachment connectors (`<state>-GMN<n>`) have no parser
+            // transition: PlantUML adds a dashed association line when a note
+            // is displaced from the state it annotates (e.g. a second note on
+            // the same side). Emit the captured edge verbatim, in document
+            // order, so it lands where PlantUML placed it.
+            if oracle_edge.id.contains("GMN") {
+                emit_note_connector_verbatim(svg, oracle_edge);
+            }
             continue;
         };
         consumed[ti] = true;
@@ -1904,6 +1912,40 @@ fn render_oracle_transitions(svg: &mut String, diagram: &StateDiagram, oracle: &
 
         svg.push_str("</g>");
     }
+}
+
+/// Emit a note-attachment connector edge (`<state>-GMN<n>`) verbatim. These
+/// dashed association lines link a note back to the state it annotates when the
+/// note is displaced (e.g. a second note on the same side of a state). The id
+/// joins the state name and the auto-generated `GMN<n>` note name with a single
+/// dash; PlantUML's comment spells it `<!--link <state> to GMN<n>-->`.
+fn emit_note_connector_verbatim(svg: &mut String, edge: &OracleEdgePath) {
+    if let Some(idx) = edge.id.rfind("-GMN") {
+        let from = &edge.id[..idx];
+        let to = &edge.id[idx + 1..];
+        write!(svg, "<!--link {from} to {to}-->").unwrap();
+    }
+    let entity_1 = edge.entity_1.as_deref().unwrap_or("ent0002");
+    let entity_2 = edge.entity_2.as_deref().unwrap_or("ent0003");
+    let link_type = edge.link_type.as_deref().unwrap_or("association");
+    let source_line = edge.source_line.as_deref().unwrap_or("0");
+    let link_id = edge.link_id.as_deref().unwrap_or("lnk0");
+    write!(
+        svg,
+        r#"<g class="link" data-entity-1="{entity_1}" data-entity-2="{entity_2}" data-link-type="{link_type}" data-source-line="{source_line}" id="{link_id}">"#,
+    )
+    .unwrap();
+    let path_style = edge
+        .path_style
+        .as_deref()
+        .unwrap_or("stroke:#181818;stroke-width:1;stroke-dasharray:7,7;");
+    write!(
+        svg,
+        r#"<path d="{}" fill="none" id="{}" style="{path_style}"/>"#,
+        edge.d, edge.id,
+    )
+    .unwrap();
+    svg.push_str("</g>");
 }
 
 /// Emit one captured oracle edge verbatim (comment + `<g class="link">`
