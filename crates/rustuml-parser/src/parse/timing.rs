@@ -46,6 +46,10 @@ struct TimingParser {
     clock_periods: Vec<(String, i64)>,
     /// Notes attached to timelines.
     notes: Vec<TimingNote>,
+    /// Source lines of title/header/footer directives.
+    title_line: Option<usize>,
+    header_line: Option<usize>,
+    footer_line: Option<usize>,
 }
 
 impl TimingParser {
@@ -60,6 +64,9 @@ impl TimingParser {
             scale: None,
             clock_periods: Vec::new(),
             notes: Vec::new(),
+            title_line: None,
+            header_line: None,
+            footer_line: None,
         }
     }
 
@@ -95,6 +102,9 @@ impl TimingParser {
             annotations: self.annotations,
             scale: self.scale,
             notes: self.notes,
+            title_line: self.title_line,
+            header_line: self.header_line,
+            footer_line: self.footer_line,
         }
     }
 
@@ -106,7 +116,7 @@ impl TimingParser {
             return Ok(());
         }
 
-        if self.try_meta(line) {
+        if self.try_meta(line_num, line) {
             return Ok(());
         }
         if self.try_timeline_decl(line) {
@@ -186,17 +196,20 @@ impl TimingParser {
     }
 
     /// Try `title`, `header`, `footer`.
-    fn try_meta(&mut self, line: &str) -> bool {
+    fn try_meta(&mut self, line_num: usize, line: &str) -> bool {
         if let Some(rest) = line.strip_prefix("title ") {
             self.meta.title = Some(super::strip_title_quotes(rest).to_string());
+            self.title_line = Some(line_num);
             return true;
         }
         if let Some(rest) = line.strip_prefix("header ") {
             self.meta.header = Some(rest.trim().to_string());
+            self.header_line = Some(line_num);
             return true;
         }
         if let Some(rest) = line.strip_prefix("footer ") {
             self.meta.footer = Some(rest.trim().to_string());
+            self.footer_line = Some(line_num);
             return true;
         }
         false

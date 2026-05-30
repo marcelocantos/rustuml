@@ -24,6 +24,15 @@ pub struct TimingDiagram {
     /// Notes (`note top/bottom of X : text`).
     #[serde(default)]
     pub notes: Vec<TimingNote>,
+    /// Source line (`data-source-line`) of the `title` directive, if any.
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub title_line: Option<usize>,
+    /// Source line of the `header` directive, if any.
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub header_line: Option<usize>,
+    /// Source line of the `footer` directive, if any.
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub footer_line: Option<usize>,
 }
 
 /// A note attached to a timeline at a specific time.

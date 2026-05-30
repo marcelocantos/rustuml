@@ -11,7 +11,7 @@
 use rustuml_parser::diagram::timing::*;
 
 use crate::layout_oracle::{OracleLayout, wrap_oracle_envelope};
-use crate::plantuml_metrics::{ascent, fmt_coord, text_height, text_width};
+use crate::plantuml_metrics::{ascent, descent, fmt_coord, text_height, text_width};
 use crate::style::Theme;
 use crate::svg::SvgBuilder;
 
@@ -171,12 +171,22 @@ pub fn render(diagram: &TimingDiagram, _theme: &Theme) -> String {
     }
     let inner_height = y;
 
+    // ── Title block (pushes all content down) ──────────────────────────────────
+    // The `title` directive renders a centred bold band at the top; everything
+    // below shifts down by its height.
+    let title_offset = if diagram.meta.title.is_some() {
+        ORIGIN + ascent(FONT_TITLE) + descent(FONT_TITLE) + 1.0
+    } else {
+        0.0
+    };
+    let vtop = ORIGIN + title_offset;
+
     // ── Coordinate helpers ────────────────────────────────────────────────────
     let first_tick_x = ORIGIN + part1_max_width + MARGIN_X1;
     let frame_left = ORIGIN;
     let frame_right = first_tick_x + ruler_width + MARGIN_X2;
-    let axis_top = ORIGIN;
-    let axis_bottom = ORIGIN + inner_height;
+    let axis_top = vtop;
+    let axis_bottom = vtop + inner_height;
     let tx = |t: i64| first_tick_x + pos_in_pixel(t, time_min, tick_unit, tick_px);
 
     // ── Dimensions ──────────────────────────────────────────────────────────────
@@ -185,6 +195,19 @@ pub fn render(diagram: &TimingDiagram, _theme: &Theme) -> String {
     let total_height = round_half_up(max_y + HEIGHT_PAD);
 
     let mut svg = SvgBuilder::new_plantuml(total_width, total_height, "TIMING");
+
+    // ── Title ───────────────────────────────────────────────────────────────────
+    if let Some(title) = &diagram.meta.title {
+        let tw = text_width(title, FONT_TITLE, true);
+        let tx_title = (frame_right + 19.0 - tw) / 2.0;
+        let baseline = ORIGIN + ascent(FONT_TITLE);
+        let sl = diagram.title_line.unwrap_or(1);
+        svg.raw(&format!(r#"<g class="title" data-source-line="{sl}">"#));
+        emit_text_colored(
+            &mut svg, tx_title, baseline, title, FONT_TITLE, true, "#000000",
+        );
+        svg.raw("</g>");
+    }
 
     // ── Frame border (two vertical lines) ──────────────────────────────────────
     emit_vline(&mut svg, frame_left, axis_top, axis_bottom, 0.5, false);
@@ -213,14 +236,22 @@ pub fn render(diagram: &TimingDiagram, _theme: &Theme) -> String {
     // ── Players ─────────────────────────────────────────────────────────────────
     for p in &players {
         // Horizontal separator at the top of each player frame.
-        emit_hline(&mut svg, frame_left, frame_right, ORIGIN + p.frame_top, 0.5);
-        draw_frame_title(&mut svg, p);
+        emit_hline(&mut svg, frame_left, frame_right, vtop + p.frame_top, 0.5);
+        draw_frame_title(&mut svg, p, vtop);
         match p.timeline.kind {
-            TimelineKind::Robust => {
-                draw_robust(&mut svg, p, part1_max_width, &tx, ruler_width, first_tick_x)
+            TimelineKind::Robust => draw_robust(
+                &mut svg,
+                p,
+                part1_max_width,
+                &tx,
+                ruler_width,
+                first_tick_x,
+                vtop,
+            ),
+            TimelineKind::Concise => {
+                draw_concise(&mut svg, p, &tx, ruler_width, first_tick_x, vtop)
             }
-            TimelineKind::Concise => draw_concise(&mut svg, p, &tx, ruler_width, first_tick_x),
-            TimelineKind::Binary => draw_binary(&mut svg, p, &tx, ruler_width, first_tick_x),
+            TimelineKind::Binary => draw_binary(&mut svg, p, &tx, ruler_width, first_tick_x, vtop),
         }
     }
 
@@ -245,7 +276,7 @@ pub fn render(diagram: &TimingDiagram, _theme: &Theme) -> String {
         emit_dashed_bound(&mut svg, x1, axis_top, axis_bottom);
         emit_dashed_bound(&mut svg, x2, axis_top, axis_bottom);
         if let Some(label) = &hl.label {
-            let baseline = ORIGIN + ascent(FONT_STATE) + 2.0;
+            let baseline = vtop + ascent(FONT_STATE) + 2.0;
             emit_text_colored(
                 &mut svg,
                 x1 + 3.0,
@@ -392,21 +423,21 @@ fn escape(s: &str) -> String {
 
 // ── Frame title ───────────────────────────────────────────────────────────────
 
-fn draw_frame_title(svg: &mut SvgBuilder, p: &PlayerLayout) {
+fn draw_frame_title(svg: &mut SvgBuilder, p: &PlayerLayout, vtop: f64) {
     let label = &p.timeline.label;
     if label.is_empty() {
         return;
     }
     let title_w = text_width(label, FONT_TITLE, true);
     let title_h = text_height(FONT_TITLE);
-    let baseline = ORIGIN + p.frame_top + ascent(FONT_TITLE);
+    let baseline = vtop + p.frame_top + ascent(FONT_TITLE);
     emit_text(svg, ORIGIN + MARGIN_X1, baseline, label, FONT_TITLE, true);
 
     // L-underline: horizontal then diagonal, matching PlayerFrame.drawLine.
     let h = title_h + 1.0;
     let width_tmp = title_w + 1.0;
-    let y_line = ORIGIN + p.frame_top + h;
-    let y_top = ORIGIN + p.frame_top;
+    let y_line = vtop + p.frame_top + h;
+    let y_top = vtop + p.frame_top;
     let x0 = ORIGIN;
     let x1 = ORIGIN + MARGIN_X1 + width_tmp;
     let x2 = ORIGIN + MARGIN_X1 + width_tmp + 10.0;
@@ -422,6 +453,7 @@ fn y_of_state(all_states: &[String], state: &str) -> f64 {
     ROBUST_STEP_HEIGHT * nb as f64
 }
 
+#[allow(clippy::too_many_arguments)]
 fn draw_robust(
     svg: &mut SvgBuilder,
     p: &PlayerLayout,
@@ -429,6 +461,7 @@ fn draw_robust(
     tx: &dyn Fn(i64) -> f64,
     ruler_width: f64,
     first_tick_x: f64,
+    vtop: f64,
 ) {
     let changes = &p.timeline.changes;
     if changes.is_empty() {
@@ -441,7 +474,7 @@ fn draw_robust(
         ORIGIN + MARGIN_X1 + (part1_max_width - states_width)
     };
     let constraints_h = 10.0;
-    let band_top = ORIGIN + p.body_top + constraints_h;
+    let band_top = vtop + p.body_top + constraints_h;
 
     for state in &p.all_states {
         let yo = y_of_state(&p.all_states, state);
@@ -481,12 +514,13 @@ fn draw_concise(
     tx: &dyn Fn(i64) -> f64,
     ruler_width: f64,
     first_tick_x: f64,
+    vtop: f64,
 ) {
     let changes = &p.timeline.changes;
     if changes.is_empty() {
         return;
     }
-    let ribbon_top = ORIGIN + p.body_top + 5.0;
+    let ribbon_top = vtop + p.body_top + 5.0;
     let height = CONCISE_RIBBON_HEIGHT;
 
     for (i, ch) in changes.iter().enumerate() {
@@ -602,12 +636,13 @@ fn draw_binary(
     tx: &dyn Fn(i64) -> f64,
     ruler_width: f64,
     first_tick_x: f64,
+    vtop: f64,
 ) {
     let changes = &p.timeline.changes;
     if changes.is_empty() {
         return;
     }
-    let body = ORIGIN + p.body_top;
+    let body = vtop + p.body_top;
     let y_high = body + PANEL_MARGIN_Y;
     let y_low = body + BINARY_HEIGHT - PANEL_MARGIN_Y;
 
@@ -732,6 +767,9 @@ mod tests {
             annotations: vec![],
             scale: None,
             notes: vec![],
+            title_line: None,
+            header_line: None,
+            footer_line: None,
         }
     }
 
@@ -760,6 +798,9 @@ mod tests {
             annotations: vec![],
             scale: None,
             notes: vec![],
+            title_line: None,
+            header_line: None,
+            footer_line: None,
         };
         let svg = render(&d, &Theme::default());
         assert!(svg.starts_with("<svg"));
