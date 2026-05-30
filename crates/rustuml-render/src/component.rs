@@ -11,7 +11,7 @@ use std::fmt::Write;
 use rustuml_layout::graph::{Direction, EdgePath, LayoutGraph};
 use rustuml_parser::diagram::component::*;
 
-use crate::layout_oracle::{EntityRect, OracleLayout, wrap_oracle_envelope};
+use crate::layout_oracle::{CrowMark, EntityRect, OracleLayout, wrap_oracle_envelope};
 use crate::plantuml_metrics as pm;
 use crate::style::Theme;
 use crate::svg::SvgBuilder;
@@ -1607,6 +1607,35 @@ fn emit_oracle_edge(
             svg.raw(&format!(
                 r#"<polygon fill="{fill}" points="{points}" style="{poly_style}"/>"#,
             ));
+        }
+
+        // Crow-foot / socket-ball marks sit between the edge paths and the
+        // label. The `0` in a `-(0-`/`-(0)-` lollipop is captured here as an
+        // `<ellipse>` (the ball); without this it was silently dropped.
+        for mark in &oracle_edge.crow_lines {
+            match mark {
+                CrowMark::Line(style, x1, y1, x2, y2) => {
+                    svg.raw(&format!(
+                        r#"<line style="{}" x1="{}" x2="{}" y1="{}" y2="{}"/>"#,
+                        style,
+                        pm::fmt_coord(*x1),
+                        pm::fmt_coord(*x2),
+                        pm::fmt_coord(*y1),
+                        pm::fmt_coord(*y2),
+                    ));
+                }
+                CrowMark::Ellipse(style, cx, cy, rx, ry, fill) => {
+                    svg.raw(&format!(
+                        r#"<ellipse cx="{}" cy="{}" fill="{}" rx="{}" ry="{}" style="{}"/>"#,
+                        pm::fmt_coord(*cx),
+                        pm::fmt_coord(*cy),
+                        fill,
+                        pm::fmt_coord(*rx),
+                        pm::fmt_coord(*ry),
+                        style,
+                    ));
+                }
+            }
         }
 
         let emit_label = |svg: &mut SvgBuilder, lx: f64, ly: f64, text: &str| {
