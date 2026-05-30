@@ -4658,9 +4658,22 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme) -> String {
                 } else {
                     // Source shift: when the source is activated and sending right,
                     // the message line starts from the activation bar's right edge.
-                    // For left-pointing messages, PlantUML does NOT shift the source endpoint.
+                    // For left-pointing messages PlantUML normally keeps the source
+                    // at the lifeline center, EXCEPT a deactivating return from a
+                    // nested stack (depth >= 2) leaves from the bar that remains
+                    // active after this one closes (left edge of the depth-2 bar).
+                    let from_existing_depth = render_activation
+                        .get(msg.from.as_str())
+                        .copied()
+                        .unwrap_or(0);
                     let from_x_shifted = if is_right && from_active {
                         from_x + ACTIVATION_HALF_W
+                    } else if !is_right
+                        && matches!(msg.activation, Some(ActivationChange::Deactivate))
+                        && from_existing_depth >= 2
+                    {
+                        from_x - ACTIVATION_HALF_W
+                            + (from_existing_depth - 2) as f64 * ACTIVATION_HALF_W
                     } else {
                         from_x
                     };
@@ -4670,10 +4683,24 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme) -> String {
                     // sits below the box, so the arrow ignores the target shift.
                     let is_create_msg = created_inline.contains_key(&ev_idx);
 
-                    // Target shift: when the target is activated, the arrow tip
-                    // stops at the activation bar edge.
+                    // Target shift: the arrow tip stops at the left edge of the
+                    // bar it lands on. A bar at nesting depth d sits at
+                    // [cx-HALF_W + d*HALF_W, ...], so its left edge is
+                    // cx - HALF_W + d*HALF_W. Since the tip is computed as
+                    // to_x - target_shift, target_shift = HALF_W*(1 - d). A `++`
+                    // message lands on the new bar it creates (d = existing
+                    // depth); one arriving at an already-active target lands on
+                    // the outermost existing bar (d = existing - 1).
+                    let to_existing_depth =
+                        render_activation.get(msg.to.as_str()).copied().unwrap_or(0);
+                    let lands_on_depth =
+                        if matches!(msg.activation, Some(ActivationChange::Activate)) {
+                            to_existing_depth
+                        } else {
+                            to_existing_depth.saturating_sub(1)
+                        };
                     let target_shift = if to_active && !is_create_msg {
-                        ACTIVATION_HALF_W
+                        ACTIVATION_HALF_W * (1.0 - lands_on_depth as f64)
                     } else {
                         0.0
                     };
