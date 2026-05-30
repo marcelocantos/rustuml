@@ -11,7 +11,7 @@
 use rustuml_parser::diagram::gantt::{GanttDiagram, GanttRow, GanttTask, TaskStart};
 
 use crate::layout_oracle::{OracleLayout, wrap_oracle_envelope};
-use crate::plantuml_metrics::{ascent, descent, fmt_coord, text_width};
+use crate::plantuml_metrics::{ascent, descent, fmt_coord, serif_text_width, text_width};
 use crate::style::Theme;
 use crate::svg::SvgBuilder;
 
@@ -59,6 +59,22 @@ const CAL_BOT_DAYNUM_OFF: f64 = 23.66796875;
 const CAL_BOT_MONTH_OFF: f64 = 38.60156875;
 
 const BOTTOM_DAYNUM_OFF_PLAIN: f64 = 4.66796875;
+
+// ── Resource-load section (below the task rows) ────────────────────────────────
+// Each assigned resource gets a row: a Serif name label, a horizontal rule
+// beneath it, and one per-day load percentage centred in each occupied day
+// column. Rows are a fixed 32px tall. All offsets are measured from the
+// section top (the cumulative bottom of the task rows).
+const RES_ROW_STRIDE: f64 = 32.0;
+const RES_LABEL_OFF: f64 = 10.13671875;
+const RES_RULE_OFF: f64 = 12.94873046875;
+const RES_LOAD_OFF: f64 = 22.40234375;
+/// Pad below the last resource row before the grid bottom (matches the
+/// plain-axis bottom pad).
+const RES_BOTTOM_PAD: f64 = 6.0;
+const RES_LABEL_FONT: f64 = 13.0;
+const RES_LOAD_FONT: f64 = 9.0;
+const RES_LOAD_X_OFF: f64 = 1.25;
 
 /// Map a CSS color name (as used in PlantUML Gantt) to a hex string.
 fn css_color(name: &str) -> String {
@@ -122,6 +138,21 @@ fn gantt_text(svg: &mut SvgBuilder, x: f64, y: f64, content: &str, font_size: f6
     let escaped = escape_xml(content);
     svg.raw_inline(&format!(
         r#"<text fill="{fill}" font-family="sans-serif" font-size="{fs}" lengthAdjust="spacing" textLength="{tl}" x="{x}" y="{y}">{escaped}</text>"#,
+        fs = fmt_n(font_size),
+        tl = fmt_coord(tl),
+        x = fmt_coord(x),
+        y = fmt_coord(y),
+    ));
+}
+
+/// Emit a `<text>` element in the Serif font (used by the Gantt
+/// resource-load section). `textLength` is computed from the Serif metric
+/// table.
+fn gantt_text_serif(svg: &mut SvgBuilder, x: f64, y: f64, content: &str, font_size: f64) {
+    let tl = serif_text_width(content, font_size);
+    let escaped = escape_xml(content);
+    svg.raw_inline(&format!(
+        r#"<text fill="{TEXT_COLOR}" font-family="Serif" font-size="{fs}" lengthAdjust="spacing" textLength="{tl}" x="{x}" y="{y}">{escaped}</text>"#,
         fs = fmt_n(font_size),
         tl = fmt_coord(tl),
         x = fmt_coord(x),
@@ -331,8 +362,36 @@ pub fn render(diagram: &GanttDiagram, _theme: &Theme) -> String {
     let row_bar_top = |vi: usize| row_tops[vi];
     let rows_extent = acc - ROW_STRIDE + BAR_H; // bottom of last row's bar
 
+    // Resource-load section: one row per assigned resource, listed in
+    // first-appearance order. For each resource, accumulate the load
+    // percentage on every calendar day spanned by a task it is assigned to.
+    let mut res_names: Vec<&str> = Vec::new();
+    let mut res_loads: Vec<Vec<u32>> = Vec::new(); // index by res, then by day
+    for (idx, task) in diagram.tasks.iter().enumerate() {
+        let (start_day, dur) = resolved[idx];
+        for assignment in &task.resources {
+            let ri = match res_names.iter().position(|&n| n == assignment.name) {
+                Some(ri) => ri,
+                None => {
+                    res_names.push(assignment.name.as_str());
+                    res_loads.push(vec![0u32; total_days as usize]);
+                    res_names.len() - 1
+                }
+            };
+            for d in start_day..(start_day + dur) {
+                if (d as usize) < res_loads[ri].len() {
+                    res_loads[ri][d as usize] += assignment.percent;
+                }
+            }
+        }
+    }
+    let n_res = res_names.len();
+    let res_section_top = acc;
+
     let grid_bottom = if has_cal {
         rows_extent + 2.0
+    } else if n_res > 0 {
+        res_section_top + n_res as f64 * RES_ROW_STRIDE + RES_BOTTOM_PAD
     } else {
         acc + GRID_BOTTOM_PAD_PLAIN
     };
@@ -694,6 +753,38 @@ pub fn render(diagram: &GanttDiagram, _theme: &Theme) -> String {
                     }
                 };
                 gantt_text(&mut svg, lx, ly, &label, TASK_FONT, TEXT_COLOR);
+            }
+        }
+    }
+
+    // 6b. Resource-load section. For each resource: a Serif name label, a
+    // horizontal rule beneath it spanning the chart, and one load
+    // percentage centred in each occupied day column.
+    if !has_cal && n_res > 0 {
+        let rule_x2 = chart_width - 0.0002;
+        for (ri, name) in res_names.iter().enumerate() {
+            let row_top = res_section_top + ri as f64 * RES_ROW_STRIDE;
+            gantt_text_serif(&mut svg, 0.0, row_top + RES_LABEL_OFF, name, RES_LABEL_FONT);
+            gantt_line(
+                &mut svg,
+                0.0,
+                row_top + RES_RULE_OFF,
+                rule_x2,
+                row_top + RES_RULE_OFF,
+                TEXT_COLOR,
+            );
+            let load_y = row_top + RES_LOAD_OFF;
+            for (day, &load) in res_loads[ri].iter().enumerate() {
+                if load == 0 {
+                    continue;
+                }
+                gantt_text_serif(
+                    &mut svg,
+                    day as f64 * DAY_WIDTH + RES_LOAD_X_OFF,
+                    load_y,
+                    &load.to_string(),
+                    RES_LOAD_FONT,
+                );
             }
         }
     }

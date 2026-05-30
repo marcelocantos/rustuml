@@ -97,6 +97,55 @@ pub fn mono_text_height(font_size: f64) -> f64 {
     font_size * MONO_HEIGHT_PER_SIZE
 }
 
+// ─── Serif metrics ──────────────────────────────────────────────────
+// Java AWT's `Serif` logical font on macOS maps to "Times", a TrueType
+// face with unitsPerEm = 2048. Advance widths are exact integer font
+// units scaled linearly by point size: `advance = units / 2048 * size`.
+//
+// Serif text appears in only one place across the entire golden corpus:
+// the resource-load section of Gantt charts (resource name labels and
+// per-day load percentages). The per-character advances below were
+// recovered from those goldens; values for characters not yet observed
+// fall back to the half-em digit advance (1024 units), which matches
+// Times' uniform digit width.
+
+const SERIF_UPM: f64 = 2048.0;
+
+/// Advance width (in `SERIF_UPM` font units) of an ASCII character in the
+/// AWT `Serif` (macOS "Times") logical font.
+fn serif_char_units(c: char) -> f64 {
+    match c {
+        ' ' => 512.0,
+        '0'..='9' => 1024.0,
+        'A' => 1479.0,
+        'B' => 1366.0,
+        'C' => 1366.0,
+        'D' => 1479.0,
+        'E' => 1251.0,
+        'a' => 909.0,
+        'b' => 1024.0,
+        'c' => 909.0,
+        'd' => 1024.0,
+        'e' => 909.0,
+        'h' => 1024.0,
+        'i' => 569.0,
+        'l' => 569.0,
+        'o' => 1024.0,
+        'r' => 682.0,
+        'v' => 1024.0,
+        // Sensible default for unobserved characters: the half-em advance
+        // (matches digits and several common Times lowercase letters).
+        _ => 1024.0,
+    }
+}
+
+/// Width of `text` rendered in PlantUML's `Serif` font at the given size.
+pub fn serif_text_width(text: &str, font_size: f64) -> f64 {
+    text.chars()
+        .map(|c| serif_char_units(c) / SERIF_UPM * font_size)
+        .sum()
+}
+
 fn char_width_table(font_size: f64, bold: bool) -> &'static [f64; 95] {
     if bold {
         match font_size as u32 {
