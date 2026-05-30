@@ -116,6 +116,11 @@ struct Palette {
     stop_fill: String,
     stop_stroke: String,
     bar_color: String,
+    /// Corner radius for action boxes. PlantUML's default action box has a
+    /// 12.5 px radius (corresponding to a `roundCorner` of 25). The
+    /// `roundCorner` / `activityRoundCorner` skinparams set it to half their
+    /// value.
+    action_rx: f64,
 }
 
 impl Palette {
@@ -135,6 +140,7 @@ impl Palette {
             stop_fill: STOP_FILL.into(),
             stop_stroke: STOP_FILL.into(),
             bar_color: FORK_BAR_COLOR.into(),
+            action_rx: ACTION_RX,
         }
     }
 
@@ -199,6 +205,17 @@ impl Palette {
                 }
                 "activitybarcolor" => p.bar_color = resolved,
                 "activityfontcolor" => p.text_color = resolved,
+                // The global `roundCorner` skinparam sets the corner-radius
+                // diameter; the SVG rect radius is half that value (PlantUML
+                // stores a diameter and halves it when drawing the rounded
+                // rect). `activityRoundCorner` does NOT affect these action
+                // boxes in PlantUML — only the global key cascades — so it is
+                // intentionally not matched here.
+                "roundcorner" => {
+                    if let Ok(v) = val.parse::<f64>() {
+                        p.action_rx = v / 2.0;
+                    }
+                }
                 _ => {}
             }
         }
@@ -2555,7 +2572,15 @@ fn emit_node(svg: &mut SvgEmitter, node: &LayoutNode, cx: f64, y: f64) -> f64 {
             let sw = svg.palette.action_stroke_width.clone();
             let text_col = svg.palette.text_color.clone();
             svg.rect_styled(
-                &fill, ah, ACTION_RX, ACTION_RX, &stroke, &sw, rect_w, rect_x, y,
+                &fill,
+                ah,
+                svg.palette.action_rx,
+                svg.palette.action_rx,
+                &stroke,
+                &sw,
+                rect_w,
+                rect_x,
+                y,
             );
             // Text baseline: padding_top + ascent, both derived from the
             // label's actual font so monospace labels position correctly.
@@ -2590,7 +2615,15 @@ fn emit_node(svg: &mut SvgEmitter, node: &LayoutNode, cx: f64, y: f64) -> f64 {
             let sw = svg.palette.action_stroke_width.clone();
             let text_col = svg.palette.text_color.clone();
             svg.rect_styled(
-                &fill, ah, ACTION_RX, ACTION_RX, &stroke, &sw, rect_w, rect_x, y,
+                &fill,
+                ah,
+                svg.palette.action_rx,
+                svg.palette.action_rx,
+                &stroke,
+                &sw,
+                rect_w,
+                rect_x,
+                y,
             );
             let lh = text_render::label_height(text, FONT_SIZE);
             let padding_top = (ah - lh) / 2.0;
