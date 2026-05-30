@@ -261,7 +261,29 @@ pub fn render(diagram: &GanttDiagram, _theme: &Theme) -> String {
     let n_rows = laid.len();
 
     let chart_width = total_days as f64 * DAY_WIDTH;
-    let total_width = chart_width + 1.0;
+    // A task label that spills past the right edge of its bar widens the
+    // canvas to contain it.
+    let mut label_right = 0.0_f64;
+    for row in &laid {
+        if let LaidRow::Task(task, idx) = row {
+            let (start_day, dur) = resolved[*idx];
+            let label = task_label(task);
+            let label_w = text_width(&label, TASK_FONT, false);
+            let lx = if dur == 0 {
+                start_day as f64 * DAY_WIDTH
+            } else {
+                let bar_x = start_day as f64 * DAY_WIDTH + 2.0;
+                let bar_w = (dur as f64 * DAY_WIDTH - 4.0).max(1.0);
+                if label_w > bar_w {
+                    bar_x + bar_w + 4.0
+                } else {
+                    bar_x + 4.0
+                }
+            };
+            label_right = label_right.max(lx + label_w);
+        }
+    }
+    let total_width = (chart_width + 1.0).max(label_right + 1.0);
 
     let grid_top = if has_cal {
         CAL_GRID_TOP
