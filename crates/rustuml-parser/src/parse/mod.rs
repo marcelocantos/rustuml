@@ -64,6 +64,25 @@ pub fn extract_link_url(line: &str) -> (Option<String>, String) {
     (None, line.to_string())
 }
 
+/// Extract the optional tooltip from a `[[url{tooltip} label]]` link on the
+/// given line. PlantUML uses the `{...}` content as the anchor's `title`
+/// attribute (the URL is the title otherwise). A bare ` label` does not change
+/// the title, so it is not returned here. Returns `None` when there is no
+/// `[[ ]]` link or no `{...}` tooltip within it.
+pub fn extract_link_tooltip(line: &str) -> Option<String> {
+    let start = line.find("[[")?;
+    let rel_end = line[start..].find("]]")?;
+    let inner = &line[start + 2..start + rel_end];
+    let brace_start = inner.find('{')?;
+    let brace_end = inner[brace_start..].find('}')? + brace_start;
+    let tip = inner[brace_start + 1..brace_end].trim();
+    if tip.is_empty() {
+        None
+    } else {
+        Some(tip.to_string())
+    }
+}
+
 /// Strip surrounding double-quotes from a title string, then trim whitespace.
 pub fn strip_title_quotes(s: &str) -> &str {
     let s = s.trim();

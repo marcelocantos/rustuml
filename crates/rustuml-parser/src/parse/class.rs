@@ -149,6 +149,7 @@ impl ClassParser {
                 generic: None,
                 spot_color: None,
                 url: None,
+                url_tooltip: None,
                 color: None,
                 text_color: None,
                 source_line: self.current_line,
@@ -371,6 +372,7 @@ impl ClassParser {
 
     fn try_entity_decl(&mut self, line: &str) -> bool {
         let (url, clean_line) = super::extract_link_url(line);
+        let url_tooltip = super::extract_link_tooltip(line);
         let line = clean_line.as_str();
         // Allows dots in the identifier (for `set namespaceSeparator none`).
         static RE_DOTTED: LazyLock<Regex> = LazyLock::new(|| {
@@ -474,6 +476,7 @@ impl ClassParser {
                 }
                 if url.is_some() {
                     entity.url = url.clone();
+                    entity.url_tooltip = url_tooltip.clone();
                 }
                 if entity_color.is_some() {
                     entity.color = entity_color.clone();
@@ -494,6 +497,7 @@ impl ClassParser {
                     generic: generic.clone(),
                     spot_color,
                     url: url.clone(),
+                    url_tooltip: url_tooltip.clone(),
                     color: entity_color.clone(),
                     text_color: extract_text_color(line),
                     source_line: self.current_line,
@@ -536,6 +540,7 @@ impl ClassParser {
                     generic: None,
                     spot_color: None,
                     url: None,
+                    url_tooltip: None,
                     color: None,
                     text_color: None,
                     source_line: self.current_line,
@@ -663,6 +668,7 @@ impl ClassParser {
                     generic: None,
                     spot_color: None,
                     url: None,
+                    url_tooltip: None,
                     color: None,
                     text_color: None,
                     source_line: self.current_line,
@@ -930,6 +936,7 @@ impl ClassParser {
                         generic: None,
                         spot_color: None,
                         url: None,
+                        url_tooltip: None,
                         color: None,
                         text_color: None,
                         source_line: self.current_line,

@@ -271,6 +271,7 @@ mod tests {
             generic: None,
             spot_color: None,
             url: None,
+            url_tooltip: None,
             color: None,
             text_color: None,
             source_line: 0,

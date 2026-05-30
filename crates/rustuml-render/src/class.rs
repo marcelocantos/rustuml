@@ -1387,20 +1387,27 @@ fn render_plantuml_svg(
         // URL with `[[http://...]]`. The anchor carries the same href four
         // ways (target, title, xlink:* attributes) to support multiple SVG
         // viewers.
-        let has_url = entity.url.is_some();
-        if let Some(url) = entity.url.as_deref() {
+        let link_anchor = entity.url.as_deref().map(|url| {
             let h = escape_xml(url);
-            write!(
-                svg,
-                r#"<a href="{h}" target="_top" title="{h}" xlink:actuate="onRequest" xlink:href="{h}" xlink:show="new" xlink:title="{h}" xlink:type="simple">"#,
-                h = h,
+            let title = entity
+                .url_tooltip
+                .as_deref()
+                .map(escape_xml)
+                .unwrap_or_else(|| h.clone());
+            format!(
+                r#"<a href="{h}" target="_top" title="{title}" xlink:actuate="onRequest" xlink:href="{h}" xlink:show="new" xlink:title="{title}" xlink:type="simple">"#,
             )
-            .unwrap();
-        }
-        render_entity_content(&mut svg, entity, x, y, dim, oracle_rect, &font);
-        if has_url {
-            svg.push_str("</a>");
-        }
+        });
+        render_entity_content(
+            &mut svg,
+            entity,
+            x,
+            y,
+            dim,
+            oracle_rect,
+            &font,
+            link_anchor.as_deref(),
+        );
 
         svg.push_str("</g>");
     }
@@ -1570,6 +1577,7 @@ fn emit_decoration_bottom(
 /// When `oracle_rect` is provided, oracle overrides are used for icon position,
 /// glyph path, name text x, member y-positions, and separator y-positions to
 /// match PlantUML's exact output (bypassing float-precision differences).
+#[allow(clippy::too_many_arguments)]
 fn render_entity_content(
     svg: &mut String,
     entity: &ClassEntity,
@@ -1578,7 +1586,22 @@ fn render_entity_content(
     dim: &EntityDims,
     oracle_rect: Option<&crate::layout_oracle::EntityRect>,
     font: &ClassFontOverrides,
+    link_anchor: Option<&str>,
 ) {
+    // PlantUML wraps the entity *header* (background rect, stereotype icon,
+    // name text, and the two compartment separator rules) in a single `<a>`
+    // when the class carries a `[[url]]` link, then closes it and re-wraps
+    // each member's visibility icon and text in its own `<a>`. Open the
+    // header anchor here; the body-rendering block below closes it before the
+    // first member and emits the per-member anchors via `render_member_line`.
+    if let Some(anchor) = link_anchor {
+        svg.push_str(anchor);
+    }
+    // Tracks whether the header anchor has already been closed by a body
+    // branch (member-bearing layouts close it before the first member and
+    // re-wrap each member individually). Memberless layouts leave it open and
+    // the final close below wraps the whole header.
+    let mut header_anchor_closed = false;
     let icon_cx_override = oracle_rect.and_then(|r| r.icon_cx);
     let glyph_path_override = oracle_rect.and_then(|r| r.glyph_path_d.as_deref());
     let name_text_x_override = oracle_rect.and_then(|r| r.name_text_x);
@@ -1978,6 +2001,10 @@ fn render_entity_content(
             fmt4(sep_y),
         )
         .unwrap();
+        if link_anchor.is_some() {
+            svg.push_str("</a>");
+            header_anchor_closed = true;
+        }
         let narrow_default = is_enum_entity
             || visible_members
                 .iter()
@@ -1995,7 +2022,17 @@ fn render_entity_content(
             } else {
                 None
             };
-            render_member_line(svg, member, x, eff_y, vis_ov, narrow_default, attr_font);
+            render_member_line(
+                svg,
+                member,
+                x,
+                eff_y,
+                vis_ov,
+                narrow_default,
+                attr_font,
+                link_anchor,
+                None,
+            );
             member_y += MEMBER_SPACING;
         }
     } else if effectively_no_members {
@@ -2038,6 +2075,10 @@ fn render_entity_content(
             fmt4(sep_y),
         )
         .unwrap();
+        if link_anchor.is_some() {
+            svg.push_str("</a>");
+            header_anchor_closed = true;
+        }
 
         // Enum members: constants without visibility icons, fields/methods with icons.
         let mut member_y = sep_y + FIRST_MEMBER_OFFSET;
@@ -2063,6 +2104,8 @@ fn render_entity_content(
                     vis_ov,
                     is_enum_entity,
                     attr_font,
+                    link_anchor,
+                    None,
                 );
             } else {
                 let text = format_member_display(member);
@@ -2227,6 +2270,18 @@ fn render_entity_content(
             _ => sep_style.to_string(),
         };
 
+        // PlantUML only splits the link anchor (closing it after the header
+        // and re-wrapping each member individually) when at least one visible
+        // member carries a visibility icon. A class whose members are all
+        // default-visibility (e.g. `note: basic link`) keeps the entire entity
+        // inside a single header anchor.
+        let has_icon_member = fields
+            .iter()
+            .chain(methods.iter())
+            .any(|m| visibility_modifier(m).is_some());
+        let split_anchor = link_anchor.is_some() && has_icon_member;
+        let member_anchor = if split_anchor { link_anchor } else { None };
+
         if !fields.is_empty() {
             // Fields separator.
             write!(
@@ -2239,12 +2294,47 @@ fn render_entity_content(
                 fmt4(header_sep_y),
             )
             .unwrap();
+            // The header separator is the last element inside the link anchor;
+            // close it before the first field so each member self-wraps. Only
+            // when the anchor is split (icon-bearing members present).
+            if split_anchor {
+                svg.push_str("</a>");
+                header_anchor_closed = true;
+            }
+
+            // When the class carries a link, PlantUML nests the fields/methods
+            // divider inside the LAST field's text anchor. Pre-compute that
+            // divider line so it can be passed to the final field. Only the
+            // common single-rule case is nested; labelled/`==`/inline-separator
+            // layouts keep the standalone emission below.
+            let methods_divider_trailing: Option<String> = if split_anchor
+                && !methods.is_empty()
+                && methods_sep_label.is_none()
+                && user_separator_symbol.as_deref() != Some("==")
+                && inline_field_separators.is_empty()
+            {
+                let methods_sep_y = oracle_sep_y.get(1).copied().unwrap_or(
+                    header_sep_y + COMPARTMENT_PAD + fields.len() as f64 * MEMBER_LINE_HEIGHT,
+                );
+                Some(format!(
+                    r#"<line style="{}" x1="{}" x2="{}" y1="{}" y2="{}"/>"#,
+                    methods_sep_style,
+                    fmt4(sep_x1),
+                    fmt4(sep_x2),
+                    fmt_tl(methods_sep_y),
+                    fmt_tl(methods_sep_y),
+                ))
+            } else {
+                None
+            };
+            let nest_methods_divider = methods_divider_trailing.is_some();
 
             // Field members (skip header texts, then fields start).
             // `inline_field_separators` records `--`/`..` separators that
             // appear BETWEEN fields; emit them as horizontal lines after
             // the matching field and switch subsequent default-visibility
             // members to the narrow ENUM_TEXT_OFFSET inset.
+            let last_field_idx = fields.len().saturating_sub(1);
             let mut member_y = header_sep_y + FIRST_MEMBER_OFFSET;
             // `inline_sep_consumed_idx` walks `oracle_sep_y` past the header
             // separator. Index 1 is the first inline separator y from oracle.
@@ -2262,6 +2352,11 @@ fn render_entity_content(
                 } else {
                     None
                 };
+                let trailing = if fi == last_field_idx {
+                    methods_divider_trailing.as_deref()
+                } else {
+                    None
+                };
                 render_member_line(
                     svg,
                     member,
@@ -2270,6 +2365,8 @@ fn render_entity_content(
                     vis_ov,
                     narrow_after_separator,
                     attr_font,
+                    member_anchor,
+                    trailing,
                 );
                 member_y += MEMBER_SPACING;
                 // Emit any inline separators that fall AFTER this field.
@@ -2327,8 +2424,10 @@ fn render_entity_content(
                     );
                 // A labelled divider is drawn AFTER the member text (centred
                 // caption flanked by two short rules), so suppress the normal
-                // full-width line here when a label is present.
-                if methods_sep_label.is_none() {
+                // full-width line here when a label is present. When the
+                // divider was nested inside the last field's anchor (linked
+                // class), skip the standalone emission too.
+                if methods_sep_label.is_none() && !nest_methods_divider {
                     write!(
                         svg,
                         r#"<line style="{}" x1="{}" x2="{}" y1="{}" y2="{}"/>"#,
@@ -2384,6 +2483,8 @@ fn render_entity_content(
                         vis_ov,
                         methods_narrow_default,
                         attr_font,
+                        member_anchor,
+                        None,
                     );
                     method_y += MEMBER_SPACING;
                 }
@@ -2468,6 +2569,13 @@ fn render_entity_content(
                 fmt4(methods_sep_y),
             )
             .unwrap();
+            // Both header separators are inside the link anchor; close it
+            // before the first member so each method self-wraps. Only when
+            // the anchor is split (icon-bearing members present).
+            if split_anchor {
+                svg.push_str("</a>");
+                header_anchor_closed = true;
+            }
 
             let mut method_y = methods_sep_y + FIRST_MEMBER_OFFSET;
             for (mi, member) in methods.iter().enumerate() {
@@ -2490,6 +2598,8 @@ fn render_entity_content(
                     vis_ov,
                     methods_narrow_default,
                     attr_font,
+                    member_anchor,
+                    None,
                 );
                 method_y += MEMBER_SPACING;
             }
@@ -2519,10 +2629,17 @@ fn render_entity_content(
             .unwrap();
         }
     }
+
+    // Close the header anchor for memberless layouts (and as a safety net for
+    // any branch that did not close it explicitly).
+    if link_anchor.is_some() && !header_anchor_closed {
+        svg.push_str("</a>");
+    }
 }
 
 /// Render a single member line (visibility icon + text).
 /// `vis_icon_y_override`: oracle-provided visibility icon y position (rect y or ellipse cy).
+#[allow(clippy::too_many_arguments)]
 fn render_member_line(
     svg: &mut String,
     member: &Member,
@@ -2531,14 +2648,20 @@ fn render_member_line(
     vis_icon_y_override: Option<f64>,
     default_uses_narrow: bool,
     attr_font: AttrFont,
+    link_anchor: Option<&str>,
+    trailing_in_anchor: Option<&str>,
 ) {
     let text = format_member_display(member);
 
     if let Some(vis_mod) = visibility_modifier(member) {
-        // Visibility icon group.
+        // Visibility icon group. When the class carries a link, PlantUML wraps
+        // the icon shape (inside the `<g>`) in its own `<a>`.
         let icon_cy = vis_icon_y_override.unwrap_or(baseline_y - 3.791015625);
 
         write!(svg, r#"<g data-visibility-modifier="{}">"#, vis_mod,).unwrap();
+        if let Some(anchor) = link_anchor {
+            svg.push_str(anchor);
+        }
 
         let vis_cx = entity_x + VIS_ICON_OFFSET;
         match member.visibility {
@@ -2629,6 +2752,9 @@ fn render_member_line(
             Visibility::Default => {} // No icon.
         }
 
+        if link_anchor.is_some() {
+            svg.push_str("</a>");
+        }
         svg.push_str("</g>");
     }
 
@@ -2660,7 +2786,22 @@ fn render_member_line(
             skip_underline: true,
         },
     );
-    svg.push_str(&text_buf);
+    if let Some(anchor) = link_anchor {
+        svg.push_str(anchor);
+        svg.push_str(&text_buf);
+        // PlantUML emits the fields/methods compartment divider inside the
+        // last field's text anchor (it draws the divider lazily after the
+        // field text). Replicate that nesting when requested.
+        if let Some(trailing) = trailing_in_anchor {
+            svg.push_str(trailing);
+        }
+        svg.push_str("</a>");
+    } else {
+        svg.push_str(&text_buf);
+        if let Some(trailing) = trailing_in_anchor {
+            svg.push_str(trailing);
+        }
+    }
 }
 
 /// Member-text styling: fill colour plus the font overrides resolved from
@@ -3431,6 +3572,7 @@ mod tests {
                     generic: None,
                     spot_color: None,
                     url: None,
+                    url_tooltip: None,
                     color: None,
                     text_color: None,
                     source_line: 0,
@@ -3452,6 +3594,7 @@ mod tests {
                     generic: None,
                     spot_color: None,
                     url: None,
+                    url_tooltip: None,
                     color: None,
                     text_color: None,
                     source_line: 0,
@@ -3598,6 +3741,7 @@ mod tests {
                 generic: None,
                 spot_color: None,
                 url: None,
+                url_tooltip: None,
                 color: None,
                 text_color: None,
                 source_line: 0,

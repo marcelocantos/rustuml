@@ -81,6 +81,11 @@ pub struct ClassEntity {
     pub generic: Option<String>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub url: Option<String>,
+    /// Optional tooltip from `[[url{tooltip}]]` syntax. When present it
+    /// becomes the link anchor's `title`/`xlink:title`; otherwise the URL is
+    /// used. A plain ` label` after the URL does not populate this.
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub url_tooltip: Option<String>,
     /// Optional hex spot color from `<< (X,#HEX) Name >>` notation, applied to
     /// the stereotype circle fill. Only hex colors override the fill; named
     /// colors are ignored for the circle (PlantUML behavior).
