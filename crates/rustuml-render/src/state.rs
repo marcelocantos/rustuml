@@ -1952,6 +1952,76 @@ fn render_oracle_transitions(svg: &mut String, diagram: &StateDiagram, oracle: &
     }
 }
 
+/// Replay one captured `GMN*` note entity verbatim: the `<g class="entity">`
+/// wrapper, each captured body/dog-ear path, then the note text positioned
+/// from the oracle's captured y values. Shared by the flat and composite
+/// renderers so an anchored note (`note right of …`) renders identically
+/// regardless of whether its target sits inside a composite.
+fn emit_oracle_gmn_note(
+    svg: &mut String,
+    gmn_name: &str,
+    rect: &crate::layout_oracle::EntityRect,
+    note_text: &str,
+) {
+    let entity_id = rect
+        .entity_id
+        .clone()
+        .unwrap_or_else(|| "ent0000".to_string());
+    let source_line = rect.name_text_x.map(|sl| sl as usize).unwrap_or(0);
+    write!(
+        svg,
+        r#"<g class="entity" data-qualified-name="{gmn_name}" data-source-line="{source_line}" id="{entity_id}">"#,
+    )
+    .unwrap();
+    let mut first_d_for_left: Option<&str> = None;
+    if let Some(paths) = &rect.glyph_path_d {
+        for piece in paths.split('|') {
+            let (d, style) = piece
+                .split_once("#STYLE#")
+                .unwrap_or((piece, "stroke:#181818;stroke-width:0.5;"));
+            if first_d_for_left.is_none() {
+                first_d_for_left = Some(d);
+            }
+            write!(svg, r#"<path d="{d}" fill="{NOTE_FILL}" style="{style}"/>"#).unwrap();
+        }
+    }
+    let body_left_x = first_d_for_left
+        .and_then(|d| {
+            d.strip_prefix('M')
+                .and_then(|rest| rest.split(',').next())
+                .and_then(|s| s.parse::<f64>().ok())
+        })
+        .unwrap_or(rect.x);
+    let text_x = body_left_x + NOTE_PADDING;
+    let lines: Vec<&str> = note_text
+        .lines()
+        .map(|l| l.trim())
+        .filter(|l| !l.is_empty())
+        .collect();
+    for (i, line) in lines.iter().enumerate() {
+        let fallback_y = rect.y + NOTE_PADDING + LINK_FONT_SIZE + i as f64 * NOTE_LINE_HEIGHT;
+        let ty = rect.text_y_values.get(i).copied().unwrap_or(fallback_y);
+        let mut text_buf = String::new();
+        text_render::emit_text(
+            &mut text_buf,
+            line,
+            &TextBase {
+                x: text_x,
+                y: ty,
+                font_size: LINK_FONT_SIZE as u32,
+                font_family: "sans-serif",
+                fill: DEFAULT_TEXT_COLOR,
+                bold: false,
+                italic: false,
+                underline: false,
+                skip_underline: false,
+            },
+        );
+        svg.push_str(&text_buf);
+    }
+    svg.push_str("</g>");
+}
+
 /// Emit a note-attachment connector edge (`<state>-GMN<n>`) verbatim. These
 /// dashed association lines link a note back to the state it annotates when the
 /// note is displaced (e.g. a second note on the same side of a state). The id
@@ -2796,6 +2866,28 @@ fn render_composite_with_oracle(diagram: &StateDiagram, orc: &OracleLayout) -> S
             .map(|t| t.source_line.to_string())
             .unwrap_or_else(|| "0".to_string());
         emit_pseudo(&mut svg, &pseudo_qname(marker, is_start), is_start, &sl);
+    }
+    // Anchored notes (`note right/left of …`). PlantUML emits these `GMN*`
+    // entities after the top-level pseudo-states and before the top-level
+    // links. Pair the oracle's `GMN*` entities (numeric order) 1:1 with the
+    // parser's anchored notes, skipping note-on-link / named-floating notes
+    // which have no standalone `GMN*` entity.
+    {
+        let mut gmns: Vec<(&String, &crate::layout_oracle::EntityRect)> = orc
+            .entities
+            .iter()
+            .filter(|(k, _)| k.starts_with("GMN"))
+            .collect();
+        gmns.sort_by_key(|(k, _)| k.trim_start_matches("GMN").parse::<u32>().unwrap_or(0));
+        let anchored = diagram.notes.iter().filter(|n| {
+            !matches!(
+                &n.kind,
+                StateNoteKind::Floating(Some(_)) | StateNoteKind::OnLink
+            )
+        });
+        for (note, (gmn_name, rect)) in anchored.zip(gmns.iter()) {
+            emit_oracle_gmn_note(&mut svg, gmn_name, rect, &note.text);
+        }
     }
     // Links. In the cluster-group layout PlantUML defers every link to the end
     // in oracle edge order; emit all not-yet-emitted edges verbatim. Otherwise
