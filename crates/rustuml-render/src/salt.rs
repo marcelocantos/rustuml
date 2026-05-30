@@ -14,7 +14,7 @@
 //! Java AWT's `SansSerif` advances exactly, so `textLength` values match
 //! the golden SVGs.
 
-use rustuml_parser::diagram::salt::{SaltBlock, SaltDiagram, SaltWidget, SeparatorKind};
+use rustuml_parser::diagram::salt::{BlockKind, SaltBlock, SaltDiagram, SaltWidget, SeparatorKind};
 
 use crate::layout_oracle::{OracleLayout, wrap_oracle_envelope};
 use crate::plantuml_metrics as pm;
@@ -86,6 +86,9 @@ struct Grid<'a> {
     cells: Vec<PlacedCell<'a>>,
     cols_start: Vec<f64>,
     rows_start: Vec<f64>,
+    kind: BlockKind,
+    n_rows: usize,
+    n_cols: usize,
 }
 
 impl<'a> Grid<'a> {
@@ -123,6 +126,9 @@ impl<'a> Grid<'a> {
             cells,
             cols_start,
             rows_start,
+            kind: block.kind,
+            n_rows,
+            n_cols,
         }
     }
 
@@ -143,6 +149,123 @@ impl<'a> Grid<'a> {
             let cell_h = self.rows_start[cell.row + 1] - self.rows_start[cell.row] - 1.0;
             draw_widget(cell.widget, cx, cy, cell_w, cell_h, buf);
         }
+        if self.kind == BlockKind::Table {
+            self.draw_grid_lines(ox, oy, buf);
+        }
+    }
+
+    /// Emit the table grid lines for a `{#` block, reproducing the Java
+    /// `Grid` segment-set algorithm (DRAW_ALL strategy).
+    ///
+    /// Segments are keyed `(row, col)` and deduplicated.  A horizontal
+    /// segment draws a line at `y = rowsStart[row]` spanning one column;
+    /// a vertical segment draws at `x = colsStart[col]` spanning one row.
+    fn draw_grid_lines(&self, ox: f64, oy: f64, buf: &mut String) {
+        let mut horizontals = JavaSegmentSet::new();
+        let mut verticals = JavaSegmentSet::new();
+
+        // addOutside(): outer border of the whole table.
+        for c in 0..self.n_cols {
+            horizontals.insert((0, c));
+            horizontals.insert((self.n_rows, c));
+        }
+        for r in 0..self.n_rows {
+            verticals.insert((r, 0));
+            verticals.insert((r, self.n_cols));
+        }
+
+        // addCell() for every cell, in row-major (insertion) order, matching
+        // the Java `positions1.entrySet()` iteration over the LinkedHashMap.
+        for cell in &self.cells {
+            let (r, c) = (cell.row, cell.col);
+            horizontals.insert((r, c));
+            horizontals.insert((r + 1, c));
+            verticals.insert((r, c));
+            verticals.insert((r, c + 1));
+        }
+
+        for &(row, col) in &horizontals.iter_order() {
+            let x1 = ox + self.cols_start[col];
+            let x2 = ox + self.cols_start[col + 1];
+            let y = oy + self.rows_start[row];
+            buf.push_str(&format!(
+                r##"<line style="stroke:#000000;stroke-width:1;" x1="{x1}" x2="{x2}" y1="{y}" y2="{y}"/>"##,
+                x1 = pm::fmt_coord(x1),
+                x2 = pm::fmt_coord(x2),
+                y = pm::fmt_coord(y),
+            ));
+        }
+        for &(row, col) in &verticals.iter_order() {
+            let x = ox + self.cols_start[col];
+            let y1 = oy + self.rows_start[row];
+            let y2 = oy + self.rows_start[row + 1];
+            buf.push_str(&format!(
+                r##"<line style="stroke:#000000;stroke-width:1;" x1="{x}" x2="{x}" y1="{y1}" y2="{y2}"/>"##,
+                x = pm::fmt_coord(x),
+                y1 = pm::fmt_coord(y1),
+                y2 = pm::fmt_coord(y2),
+            ));
+        }
+    }
+}
+
+/// A faithful emulation of `java.util.HashSet<Segment>` iteration order.
+///
+/// PlantUML's `Grid` collects grid-line segments in `HashSet`s and emits them
+/// in the set's iteration order. Because the strict comparator matches SVG
+/// elements positionally, we must reproduce that order exactly. The order is
+/// governed by `Segment.hashCode() == row*47 + col`, the HashMap spread
+/// function `h ^ (h >>> 16)`, an initial capacity of 16 with load factor 0.75,
+/// and doubling resizes that preserve within-bucket insertion order.
+struct JavaSegmentSet {
+    /// Insertion-ordered unique keys.
+    keys: Vec<(usize, usize)>,
+}
+
+const JAVA_INITIAL_CAPACITY: usize = 16;
+const JAVA_LOAD_FACTOR_NUM: usize = 3; // 0.75 = 3/4
+const JAVA_LOAD_FACTOR_DEN: usize = 4;
+
+impl JavaSegmentSet {
+    fn new() -> JavaSegmentSet {
+        JavaSegmentSet { keys: Vec::new() }
+    }
+
+    fn insert(&mut self, key: (usize, usize)) {
+        if !self.keys.contains(&key) {
+            self.keys.push(key);
+        }
+    }
+
+    /// `Segment.hashCode()` spread through HashMap's hash function.
+    fn spread(key: (usize, usize)) -> u32 {
+        let h = (key.0 as u32).wrapping_mul(47).wrapping_add(key.1 as u32);
+        h ^ (h >> 16)
+    }
+
+    /// Capacity grows to the smallest power of two whose load threshold
+    /// (capacity * 0.75) is not exceeded by the element count, matching the
+    /// resize sequence of `java.util.HashMap`.
+    fn capacity_for(n: usize) -> usize {
+        let mut cap = JAVA_INITIAL_CAPACITY;
+        while n > cap * JAVA_LOAD_FACTOR_NUM / JAVA_LOAD_FACTOR_DEN {
+            cap <<= 1;
+        }
+        cap
+    }
+
+    /// Iterate keys in Java HashSet order: ascending bucket index, and within
+    /// each bucket in insertion order (HashMap appends to the bucket chain,
+    /// and resize splitting preserves relative order).
+    fn iter_order(&self) -> Vec<(usize, usize)> {
+        let cap = Self::capacity_for(self.keys.len());
+        let mask = (cap - 1) as u32;
+        let mut buckets: Vec<Vec<(usize, usize)>> = vec![Vec::new(); cap];
+        for &k in &self.keys {
+            let b = (Self::spread(k) & mask) as usize;
+            buckets[b].push(k);
+        }
+        buckets.into_iter().flatten().collect()
     }
 }
 
