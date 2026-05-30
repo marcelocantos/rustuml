@@ -341,8 +341,6 @@ const CIRCLE_SHAPE_TEXT_Y_OFFSET: f64 = 45.535156250;
 const BOUNDARY_LINE_TOP_OFFSET: f64 = 4.0; // relative to HEAD_BOX_Y
 const BOUNDARY_LINE_BOTTOM_OFFSET: f64 = 28.0;
 const BOUNDARY_LINE_TO_CIRCLE_GAP: f64 = 17.0; // horizontal gap from line to circle left
-/// Extra width padding for boundary shape.
-const BOUNDARY_EXTRA_WIDTH: f64 = 8.0;
 
 /// Database: cylinder dimensions.
 const DB_CYLINDER_WIDTH: f64 = 36.0;
@@ -2539,11 +2537,13 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme) -> String {
                     (w, h)
                 }
                 ParticipantKind::Boundary => {
-                    // Boundary: line + circle, wider than regular
-                    // The shape is: vertical line at left, horizontal line to circle, circle r=12.
-                    // Width = text_width + extra padding for the boundary adornments.
-                    let shape_w = BOUNDARY_LINE_TO_CIRCLE_GAP + 2.0 * STEREOTYPE_CIRCLE_R;
-                    let w = max_text_w.max(shape_w) + BOUNDARY_EXTRA_WIDTH;
+                    // Boundary: vertical line at left, horizontal connector to a
+                    // circle r=12. PlantUML stickman width = 2*r + left + 2*margin
+                    // (24 + 17 + 8 = 49). Overall width = max(stickman, text+2*pad).
+                    let shape_w = 2.0 * STEREOTYPE_CIRCLE_R
+                        + BOUNDARY_LINE_TO_CIRCLE_GAP
+                        + 2.0 * STEREOTYPE_CIRCLE_MARGIN;
+                    let w = (max_text_w + 2.0 * ACTOR_TEXT_PAD).max(shape_w);
                     let h = HEAD_BOX_H + CIRCLE_SHAPE_EXTRA_H;
                     (w, h)
                 }
