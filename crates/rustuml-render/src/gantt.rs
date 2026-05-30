@@ -339,7 +339,23 @@ pub fn render(diagram: &GanttDiagram, _theme: &Theme) -> String {
             && let Some(&dep_vi) = task_row_index.get(dep.as_str())
         {
             let (dep_start, dep_dur) = resolved[dep_idx];
-            let pred_end_x = (dep_start + dep_dur) as f64 * DAY_WIDTH;
+            // The arrow leaves the predecessor's visible right edge. With
+            // closed days that edge is one past the last open column, which
+            // may be earlier than the raw calendar span end.
+            let mut pred_end_col = dep_start + dep_dur;
+            while pred_end_col > dep_start {
+                let prev = pred_end_col - 1;
+                let closed = cal.as_ref().is_some_and(|c| {
+                    (prev as usize) < c.day_of_week.len()
+                        && diagram.closed_days.contains(&c.day_of_week[prev as usize])
+                });
+                if closed {
+                    pred_end_col -= 1;
+                } else {
+                    break;
+                }
+            }
+            let pred_end_x = pred_end_col as f64 * DAY_WIDTH;
             let pred_bottom = row_bar_top(dep_vi) + BAR_H;
             let succ_start_x = resolved[*idx].0 as f64 * DAY_WIDTH;
             let succ_center = row_bar_top(vi) + BAR_H / 2.0;
@@ -370,8 +386,6 @@ pub fn render(diagram: &GanttDiagram, _theme: &Theme) -> String {
                     l = fmt_coord(cx - 5.0),
                 ));
             } else {
-                let bar_x = start_day as f64 * DAY_WIDTH + 2.0;
-                let bar_w = (dur as f64 * DAY_WIDTH - 4.0).max(1.0);
                 let colored = task.color.is_some();
                 let fill = task
                     .color
@@ -384,26 +398,133 @@ pub fn render(diagram: &GanttDiagram, _theme: &Theme) -> String {
                     DEFAULT_BAR_STROKE.to_string()
                 };
 
-                if let Some(pct) = task.completed {
-                    let done_w = (bar_w * pct as f64 / 100.0).max(0.0);
-                    if done_w > 0.0 {
-                        gantt_rect_fill(&mut svg, bar_x, bar_top, done_w, BAR_H, &fill);
+                // Split the bar's calendar span into runs of consecutive open
+                // (non-closed) day columns. With no closed days this yields a
+                // single run spanning the whole bar.
+                let is_closed = |col: u32| -> bool {
+                    cal.as_ref().is_some_and(|c| {
+                        (col as usize) < c.day_of_week.len()
+                            && diagram.closed_days.contains(&c.day_of_week[col as usize])
+                    })
+                };
+                let mut runs: Vec<(u32, u32)> = Vec::new();
+                let mut col = start_day;
+                while col < start_day + dur {
+                    if is_closed(col) {
+                        col += 1;
+                        continue;
                     }
-                    let rem_w = bar_w - done_w;
-                    if rem_w > 0.0 {
-                        gantt_rect_fill(
-                            &mut svg,
-                            bar_x + done_w,
-                            bar_top,
-                            rem_w,
-                            BAR_H,
-                            COMPLETION_FILL,
-                        );
+                    let run_start = col;
+                    while col < start_day + dur && !is_closed(col) {
+                        col += 1;
                     }
-                    gantt_rect_outline(&mut svg, bar_x, bar_top, bar_w, BAR_H, &stroke);
-                } else {
-                    gantt_rect_fill(&mut svg, bar_x, bar_top, bar_w, BAR_H, &fill);
-                    gantt_rect_outline(&mut svg, bar_x, bar_top, bar_w, BAR_H, &stroke);
+                    runs.push((run_start, col));
+                }
+                if runs.is_empty() {
+                    runs.push((start_day, start_day + dur));
+                }
+
+                let n_runs = runs.len();
+                for (ri, &(cs, ce)) in runs.iter().enumerate() {
+                    let first = ri == 0;
+                    let last = ri == n_runs - 1;
+                    // Fill rect: the first run is inset 2px on its left, the
+                    // last run is inset 2px on its right; open-ended sides
+                    // overshoot the column boundary by 1px.
+                    let left = if first {
+                        cs as f64 * DAY_WIDTH + 2.0
+                    } else {
+                        cs as f64 * DAY_WIDTH
+                    };
+                    let fill_right = if last {
+                        ce as f64 * DAY_WIDTH - 2.0
+                    } else {
+                        ce as f64 * DAY_WIDTH + 1.0
+                    };
+                    let bar_w = (fill_right - left).max(1.0);
+
+                    if n_runs == 1 {
+                        // Single run: classic full rect + outline, with the
+                        // optional completion overlay.
+                        if let Some(pct) = task.completed {
+                            let done_w = (bar_w * pct as f64 / 100.0).max(0.0);
+                            if done_w > 0.0 {
+                                gantt_rect_fill(&mut svg, left, bar_top, done_w, BAR_H, &fill);
+                            }
+                            let rem_w = bar_w - done_w;
+                            if rem_w > 0.0 {
+                                gantt_rect_fill(
+                                    &mut svg,
+                                    left + done_w,
+                                    bar_top,
+                                    rem_w,
+                                    BAR_H,
+                                    COMPLETION_FILL,
+                                );
+                            }
+                        } else {
+                            gantt_rect_fill(&mut svg, left, bar_top, bar_w, BAR_H, &fill);
+                        }
+                        gantt_rect_outline(&mut svg, left, bar_top, bar_w, BAR_H, &stroke);
+                        continue;
+                    }
+
+                    gantt_rect_fill(&mut svg, left, bar_top, bar_w, BAR_H, &fill);
+
+                    // Outline: end caps only. The first run is open on the
+                    // right, the last run open on the left; middle runs get no
+                    // outline at all (the abutting fills cover their edges).
+                    let top = bar_top;
+                    let bot = bar_top + BAR_H;
+                    if first {
+                        let r = ce as f64 * DAY_WIDTH;
+                        svg.raw_inline(&format!(
+                            r#"<path d="M{r},{bot} L{l},{bot} L{l},{top} L{r},{top}" fill="none" style="stroke:{stroke};stroke-width:1;"/>"#,
+                            r = fmt_coord(r),
+                            bot = fmt_coord(bot),
+                            l = fmt_coord(left),
+                            top = fmt_coord(top),
+                        ));
+                    } else if last {
+                        let r = ce as f64 * DAY_WIDTH - 2.0;
+                        svg.raw_inline(&format!(
+                            r#"<path d="M{l},{top} L{r},{top} L{r},{bot} L{l},{bot}" fill="none" style="stroke:{stroke};stroke-width:1;"/>"#,
+                            l = fmt_coord(left),
+                            top = fmt_coord(top),
+                            r = fmt_coord(r),
+                            bot = fmt_coord(bot),
+                        ));
+                    } else {
+                        // Middle run: plain top and bottom border lines
+                        // spanning the fill width (left flush, right at the
+                        // column boundary).
+                        let r = ce as f64 * DAY_WIDTH;
+                        gantt_line(&mut svg, left, top, r, top, &stroke);
+                        gantt_line(&mut svg, left, bot, r, bot, &stroke);
+                    }
+                }
+
+                // Dashed connectors bridging each closed-day gap between
+                // consecutive runs, drawn at the bar's top and bottom edges.
+                if n_runs > 1 {
+                    let top = bar_top;
+                    let bot = bar_top + BAR_H;
+                    for w in runs.windows(2) {
+                        let gap_left = w[0].1 as f64 * DAY_WIDTH + 3.0;
+                        let gap_right = w[1].0 as f64 * DAY_WIDTH - 3.0;
+                        svg.raw_inline(&format!(
+                            r#"<line style="stroke:{stroke};stroke-width:1;stroke-dasharray:2,3;" x1="{x1}" x2="{x2}" y1="{y}" y2="{y}"/>"#,
+                            x1 = fmt_coord(gap_left),
+                            x2 = fmt_coord(gap_right),
+                            y = fmt_coord(top),
+                        ));
+                        svg.raw_inline(&format!(
+                            r#"<line style="stroke:{stroke};stroke-width:1;stroke-dasharray:2,3;" x1="{x1}" x2="{x2}" y1="{y}" y2="{y}"/>"#,
+                            x1 = fmt_coord(gap_left),
+                            x2 = fmt_coord(gap_right),
+                            y = fmt_coord(bot),
+                        ));
+                    }
                 }
             }
         }
