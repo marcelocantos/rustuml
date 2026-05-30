@@ -146,6 +146,10 @@ fn char_width(c: char, table: &[f64; 95]) -> f64 {
         // Symbol for null (␀) — JSON/YAML diagrams render null values as this.
         let size = table[0] / 0.31640625;
         size * 0.82763671875
+    } else if c == '\u{00A9}' {
+        // Copyright sign (©) — exact AWT advance, size-proportional.
+        let size = table[0] / 0.31640625;
+        size * 0.85546875
     } else if code >= 0x3000 {
         // CJK Unified Ideographs, Hiragana, Katakana, full-width Latin,
         // and other East Asian scripts have roughly square advance equal
