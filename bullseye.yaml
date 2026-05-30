@@ -550,3 +550,33 @@ targets:
     context: 'Surfaced 2026-05-30 during T4 work. PlantUML is GPL v3 (confirmed: source headers + license.txt in ~/work/github.com/plantuml/plantuml). Our protection is semantic reimplementation (algorithms/formulas/constants aren''t copyrightable; expression is) — must stay genuine, esp. for Unit-4 entangled-layout ports. The concrete obligation is the vendored Graphviz (vendor/graphviz, compiled via rustuml-layout/build.rs) which is EPL 1.0, while CLAUDE.md:18 still wrongly says ''wraps layout-rs, MIT''. EPL is weak/file-level copyleft — combinable with our Apache 2.0, but obliges shipping its license + source offer. Goldens are explicitly NOT GPL (license.txt: PlantUML-generated images owned by the .puml author). Full analysis in memory [[project-licensing]]. NOT legal advice — user to confirm. (Aside: stale fan-out worktrees linger under .claude/worktrees/agent-*/ — unrelated cleanup.)'
     origin: manual
     discovered: 2026-05-30
+  T8:
+    name: Salt diagram-chrome directives (header/footer/title/caption) render
+    status: identified
+    value: 0.0
+    cost: 0.0
+    acceptance:
+    - 'salt_table_r{3,5,8}c{2,3,4} golden pairs pass (the literal `Header` first-row keyword is consumed as a `header` directive, rendered as a font-10 #888888 <g class="header"> band above the table, with the table grid offset below)'
+    - header/footer/title/caption directives work inside @startsalt..@endsalt, matching the shared diagram-chrome layer used by other diagram types
+    - No regressions in other buckets that already use chrome directives
+    context: '9 of the 13 salt failures (salt_table_*) are not salt-widget gaps: their first row `Header 0 | Header 1` is parsed by PlantUML as a `header` diagram directive (the leading `Header` token, case-insensitive, is the `header` keyword; the remainder `0 | Header 1` becomes header text rendered font-10 grey in <g class=\"header\">). Reproducing this requires wiring the general header/footer/title/caption chrome into the salt envelope (salt.rs has its own SVG envelope separate from the shared chrome path). This is cross-cutting (affects the shared chrome layer / parser command handling), not contained to the salt renderer, so it was deliberately deferred from the salt-widget fix pass. Verified against reference JAR 1.2026.3beta6.'
+    tags:
+    - salt
+    - visual
+    - chrome
+    origin: manual
+    discovered: 2026-05-30
+  T9:
+    name: Salt tab-bar ({/) vertical layout and composite dialogs render
+    status: identified
+    value: 0.0
+    cost: 0.0
+    acceptance:
+    - 'salt_settings_dialog passes: the {/ tab-bar lays tabs out vertically (golden is 118w x 507h; current output renders tabs horizontally at 386w x 185h) with the active tab''s body block below'
+    - 'salt_complex_dialog passes: nested {SI scroll inside a {^ group, {T tree indent guides rendered as #888888 vertical lines, and `..` separators interleave in the correct z-order'
+    context: 'The two remaining non-table salt failures. salt_settings_dialog needs the {/ tab-bar widget to lay out vertically (ElementTabBar) and render each tab plus the active body; current renderer treats tabs as a flat row. salt_complex_dialog is a composite: nested vertical-scroll {SI (now partially supported), {T tree with #888888 indent guide lines, and `..` separators — element ordering and the tree guide color/geometry need work. Both are sizeable per-widget features, deferred from the contained salt-widget pass. Scrollbar ({S/{SI/{S-) and multiselect were fixed in commit a4d04ee0.'
+    tags:
+    - salt
+    - visual
+    origin: manual
+    discovered: 2026-05-30
