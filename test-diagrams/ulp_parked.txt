@@ -168,3 +168,8 @@ creole/creole_mixed_mono_plain_color_in_class
 sequence/seq_group_opt_note_over_A__B
 sequence/seq_group_alt_note_over_A__B
 sequence/seq_group_loop_note_over_A__B
+# wave-16 creole sub-pixel (≤0.0013px, per-renderer baseline rounding):
+creole/creole_font_name_in_class
+creole/creole_combo_size_large_in_usecase
+creole/creole_combo_size_large_in_component
+creole/creole_combo_mono_in_usecase
