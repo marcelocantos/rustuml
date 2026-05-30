@@ -3275,12 +3275,18 @@ fn render_oracle_relationships(
             // treat `__` as a literal pair of underscores (matching member
             // labels), so route through `skip_underline: true`.
             for (i, (lx, ly, text)) in oracle_edge.labels.iter().enumerate() {
-                let middle = i == 0 && rel.label.is_some();
-                let content: &str = if middle {
-                    rel.label.as_deref().unwrap_or(text)
-                } else {
-                    text
-                };
+                // Use the source markup for the middle label only when its
+                // plain (creole-stripped) form matches the oracle's extracted
+                // text. PlantUML strips navigability markers (`A --> B : foo >`
+                // renders `foo`) and other transforms we don't replay here; in
+                // those cases the source and oracle plain text differ, so fall
+                // back to the oracle text to avoid re-introducing the marker.
+                let src = rel.label.as_deref();
+                let middle = i == 0
+                    && src.is_some_and(|s| {
+                        crate::creole::stripped_text_no_underline(s).trim() == text.trim()
+                    });
+                let content: &str = if middle { src.unwrap_or(text) } else { text };
                 let base = text_render::TextBase {
                     x: *lx,
                     y: *ly,

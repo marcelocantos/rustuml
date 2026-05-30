@@ -858,6 +858,15 @@ pub fn stripped_text(text: &str) -> String {
         .collect()
 }
 
+/// Like [`stripped_text`] but treats `__` as literal underscores (matching
+/// contexts — class entity/link labels — where `__` is not underline markup).
+pub fn stripped_text_no_underline(text: &str) -> String {
+    parse_segments_no_underline(text)
+        .into_iter()
+        .map(|s| unescape_for_metrics(&s.text))
+        .collect()
+}
+
 /// Reverse the XML escaping applied during segment building so the result
 /// matches the source string a font-metric calculation expects.
 fn unescape_for_metrics(s: &str) -> String {
