@@ -337,8 +337,18 @@ impl SvgBuilder {
     }
 
     pub fn open_link(&mut self, url: &str) {
-        let escaped = escape_xml(url);
-        self.line(&format!(r#"<a href="{escaped}" target="_blank">"#));
+        self.open_link_with_title(url, None);
+    }
+
+    /// Open a PlantUML-style link anchor. The anchor carries the href four
+    /// ways (`href`, `xlink:href`, plus `target`/`title`/`xlink:*`) to support
+    /// multiple SVG viewers. `title` defaults to the URL when `None`.
+    pub fn open_link_with_title(&mut self, url: &str, title: Option<&str>) {
+        let h = escape_xml(url);
+        let t = title.map(escape_xml).unwrap_or_else(|| h.clone());
+        self.line(&format!(
+            r#"<a href="{h}" target="_top" title="{t}" xlink:actuate="onRequest" xlink:href="{h}" xlink:show="new" xlink:title="{t}" xlink:type="simple">"#,
+        ));
         self.indent += 1;
     }
 
