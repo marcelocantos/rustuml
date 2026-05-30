@@ -2229,10 +2229,74 @@ fn render_composite_with_oracle(diagram: &StateDiagram, orc: &OracleLayout) -> S
     // Fork/join bars live under the oracle's `__bar_N__` synthetic keys in SVG
     // document order; `bar_idx` walks them as the traversal meets Fork/Join.
     let bar_idx = std::cell::Cell::new(0usize);
+    // Entry/exit pseudo-states live under `__entryexit_N__` in SVG document
+    // order; `ee_idx` walks them as the traversal meets EntryPoint/ExitPoint.
+    let ee_idx = std::cell::Cell::new(0usize);
 
     // Helper: emit a normal state box (rect + divider + name [+ descriptions])
     // from oracle geometry, keyed by its qualified id.
     let emit_state_box = |svg: &mut String, st: &State| {
+        if matches!(st.kind, StateKind::EntryPoint | StateKind::ExitPoint) {
+            // The point's label (`<text>`) precedes the ellipse; an exit point
+            // adds two crossing lines after it. All geometry is captured from
+            // the golden under `__entryexit_N__`.
+            let key = format!("__entryexit_{}__", ee_idx.get());
+            ee_idx.set(ee_idx.get() + 1);
+            let Some(rect) = orc.entities.get(key.as_str()) else {
+                return;
+            };
+            for t in &rect.texts {
+                let tw = text_render::measure(&t.text, STATE_FONT_SIZE, false);
+                let mut buf = String::new();
+                text_render::emit_text(
+                    &mut buf,
+                    &t.text,
+                    &TextBase {
+                        x: t.x,
+                        y: t.y,
+                        font_size: STATE_FONT_SIZE as u32,
+                        font_family: "sans-serif",
+                        fill: DEFAULT_TEXT_COLOR,
+                        bold: false,
+                        italic: false,
+                        underline: false,
+                        skip_underline: false,
+                    },
+                );
+                let _ = tw;
+                svg.push_str(&buf);
+            }
+            let cx = rect.x + rect.width / 2.0;
+            let cy = rect.y + rect.height / 2.0;
+            let rxy = rect.width / 2.0;
+            let fill = rect.fill.as_deref().unwrap_or(DEFAULT_STATE_FILL);
+            let style = rect
+                .body_style
+                .as_deref()
+                .unwrap_or("stroke:#181818;stroke-width:1.5;");
+            write!(
+                svg,
+                r#"<ellipse cx="{}" cy="{}" fill="{fill}" rx="{}" ry="{}" style="{style}"/>"#,
+                fmt_f(cx),
+                fmt_f(cy),
+                fmt_f(rxy),
+                fmt_f(rxy),
+            )
+            .unwrap();
+            for l in &rect.lines {
+                let lstyle = l
+                    .style
+                    .as_deref()
+                    .unwrap_or("stroke:#181818;stroke-width:1.5;");
+                write!(
+                    svg,
+                    r#"<line style="{lstyle}" x1="{}" x2="{}" y1="{}" y2="{}"/>"#,
+                    l.x1, l.x2, l.y1, l.y2,
+                )
+                .unwrap();
+            }
+            return;
+        }
         if matches!(st.kind, StateKind::History | StateKind::DeepHistory) {
             let key = format!("__history_{}__", history_idx.get());
             history_idx.set(history_idx.get() + 1);

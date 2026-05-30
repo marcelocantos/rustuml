@@ -90,6 +90,11 @@ pub enum StateKind {
     Join,
     History,
     DeepHistory,
+    /// `<<entryPoint>>` — a small ellipse drawn on the composite boundary
+    /// marking an entry connection point into the composite state.
+    EntryPoint,
+    /// `<<exitPoint>>` — like an entry point but marked with an X cross.
+    ExitPoint,
 }
 
 /// A transition between states.

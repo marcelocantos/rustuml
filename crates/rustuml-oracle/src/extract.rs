@@ -936,8 +936,15 @@ pub fn extract_oracle_layout(svg: &str) -> Option<OracleLayout> {
     let mut i = 0;
     while i < root_children.len() {
         let n = &root_children[i];
+        // History markers use stroke-width 0.5; entry/exit points (handled in
+        // the dedicated pass below) use stroke-width 1.5. Skip the latter so
+        // the synthetic key counters don't collide.
+        let is_thin = n
+            .attribute("style")
+            .is_none_or(|s| !s.contains("stroke-width:1.5"));
         if n.tag_name().name() == "ellipse"
             && n.attribute("fill") == Some("#F1F1F1")
+            && is_thin
             && let Some(cx) = parse_attr(n, "cx")
             && let Some(cy) = parse_attr(n, "cy")
             && let Some(rx) = parse_attr(n, "rx")
@@ -982,6 +989,107 @@ pub fn extract_oracle_layout(svg: &str) -> Option<OracleLayout> {
             continue;
         }
         i += 1;
+    }
+
+    // Entry/exit pseudo-states (`<<entryPoint>>`/`<<exitPoint>>`) render as a
+    // small `#F1F1F1` ellipse (rx=6, stroke-width 1.5) sitting on the composite
+    // boundary, with the point's name as a `<text>` immediately *before* the
+    // ellipse (above for entry, below for exit). Exit points add two crossing
+    // `stroke-width:1.5` lines (an X). They live bare under the root `<g>`.
+    // Record each under `__entryexit_N__` in document order; the state renderer
+    // pairs the Nth such entity with the Nth entry/exit-kind state.
+    let ee_children: Vec<roxmltree::Node> = root
+        .descendants()
+        .filter(|n| match n.parent() {
+            Some(p) => {
+                p.tag_name().name() == "g"
+                    && p.attribute("class").is_none()
+                    && matches!(n.tag_name().name(), "ellipse" | "text" | "line")
+            }
+            None => false,
+        })
+        .collect();
+    let mut ee_idx = 0usize;
+    for (j, n) in ee_children.iter().enumerate() {
+        if n.tag_name().name() != "ellipse"
+            || n.attribute("fill") != Some("#F1F1F1")
+            || !n
+                .attribute("style")
+                .is_some_and(|s| s.contains("stroke-width:1.5"))
+        {
+            continue;
+        }
+        let (Some(cx), Some(cy), Some(rx), Some(ry)) = (
+            parse_attr(n, "cx"),
+            parse_attr(n, "cy"),
+            parse_attr(n, "rx"),
+            parse_attr(n, "ry"),
+        ) else {
+            continue;
+        };
+        // The label `<text>` is the element immediately before the ellipse.
+        let mut texts = Vec::new();
+        if j > 0 {
+            let prev = &ee_children[j - 1];
+            if prev.tag_name().name() == "text"
+                && let (Some(tx), Some(ty)) = (parse_attr(prev, "x"), parse_attr(prev, "y"))
+            {
+                texts.push(EntityText {
+                    x: tx,
+                    y: ty,
+                    text: collect_text(prev),
+                });
+            }
+        }
+        // Trailing crossing lines (exit-point X mark) follow the ellipse.
+        let mut lines = Vec::new();
+        let mut k = j + 1;
+        while let Some(next) = ee_children.get(k) {
+            if next.tag_name().name() == "line"
+                && next
+                    .attribute("style")
+                    .is_some_and(|s| s.contains("stroke-width:1.5"))
+            {
+                lines.push(EntityLine {
+                    x1: next.attribute("x1").unwrap_or("0").to_string(),
+                    x2: next.attribute("x2").unwrap_or("0").to_string(),
+                    y1: next.attribute("y1").unwrap_or("0").to_string(),
+                    y2: next.attribute("y2").unwrap_or("0").to_string(),
+                    style: next.attribute("style").map(String::from),
+                });
+                k += 1;
+            } else {
+                break;
+            }
+        }
+        layout.entities.insert(
+            format!("__entryexit_{ee_idx}__"),
+            EntityRect {
+                x: cx - rx,
+                y: cy - ry,
+                width: rx * 2.0,
+                height: ry * 2.0,
+                icon_cx: None,
+                glyph_path_d: None,
+                name_text_x: None,
+                text_y_values: Vec::new(),
+                text_x_values: Vec::new(),
+                sep_y_values: Vec::new(),
+                sep_lines: Vec::new(),
+                vis_icon_y_values: Vec::new(),
+                fill: n.attribute("fill").map(String::from),
+                body_style: n.attribute("style").map(String::from),
+                rect_style: None,
+                rect_rx: None,
+                rect_ry: None,
+                entity_id: None,
+                source_line: None,
+                aux_rects: Vec::new(),
+                lines,
+                texts,
+            },
+        );
+        ee_idx += 1;
     }
 
     // Concurrent-region divider lines: PlantUML draws a dashed horizontal line

@@ -381,6 +381,8 @@ impl StateParser {
                 Some("join") => StateKind::Join,
                 Some("history") => StateKind::History,
                 Some("history*") => StateKind::DeepHistory,
+                Some("entryPoint") => StateKind::EntryPoint,
+                Some("exitPoint") => StateKind::ExitPoint,
                 _ => StateKind::Normal,
             };
 
