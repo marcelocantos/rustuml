@@ -383,7 +383,7 @@ pub fn render(diagram: &GanttDiagram, _theme: &Theme) -> String {
                 };
 
                 if let Some(pct) = task.completed {
-                    let done_w = (bar_w * pct as f64 / 100.0).round().max(0.0);
+                    let done_w = (bar_w * pct as f64 / 100.0).max(0.0);
                     if done_w > 0.0 {
                         gantt_rect_fill(&mut svg, bar_x, bar_top, done_w, BAR_H, &fill);
                     }
