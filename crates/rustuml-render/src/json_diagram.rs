@@ -59,7 +59,7 @@ pub fn render_with_oracle(
 
     // A flat single box is only possible when every value is a scalar
     // (a nested object/array spawns a detached box via the Smetana layout).
-    if let Some(rows) = flat_rows(&diagram.root) {
+    if let Some(rows) = flat_rows(&diagram.root, diagram.format) {
         return render_single_box(&rows, diagram_type);
     }
 
@@ -78,12 +78,12 @@ struct FlatRow {
 
 /// If `node` is an object or array whose every value is a scalar, return its
 /// rows. Otherwise `None` (nested children require the Smetana layout).
-fn flat_rows(node: &JsonNode) -> Option<Vec<FlatRow>> {
+fn flat_rows(node: &JsonNode, format: DataFormat) -> Option<Vec<FlatRow>> {
     match &node.value {
         JsonNodeValue::Object { fields } if !fields.is_empty() => {
             let mut rows = Vec::with_capacity(fields.len());
             for f in fields {
-                let value = scalar_display(&f.value)?;
+                let value = scalar_display(&f.value, format)?;
                 rows.push(FlatRow {
                     key: f.key.clone().unwrap_or_default(),
                     value,
@@ -95,7 +95,7 @@ fn flat_rows(node: &JsonNode) -> Option<Vec<FlatRow>> {
         JsonNodeValue::Array { items } if !items.is_empty() => {
             let mut rows = Vec::with_capacity(items.len());
             for item in items {
-                let value = scalar_display(&item.value)?;
+                let value = scalar_display(&item.value, format)?;
                 rows.push(FlatRow {
                     key: String::new(),
                     value,
@@ -111,13 +111,22 @@ fn flat_rows(node: &JsonNode) -> Option<Vec<FlatRow>> {
 /// PlantUML display string for a scalar value, or `None` for nested
 /// objects/arrays (including empty ones, which PlantUML draws as detached
 /// boxes connected by a dashed link).
-fn scalar_display(v: &JsonNodeValue) -> Option<String> {
+fn scalar_display(v: &JsonNodeValue, format: DataFormat) -> Option<String> {
     match v {
-        JsonNodeValue::Null => Some("\u{2400}".to_string()),
-        JsonNodeValue::Bool { val } => Some(if *val {
-            "\u{2611} true".to_string()
-        } else {
-            "\u{2610} false".to_string()
+        // YAML renders bool/null as bare text; JSON uses checkbox/null glyphs.
+        JsonNodeValue::Null => Some(match format {
+            DataFormat::Json => "\u{2400}".to_string(),
+            DataFormat::Yaml => "null".to_string(),
+        }),
+        JsonNodeValue::Bool { val } => Some(match format {
+            DataFormat::Json => {
+                if *val {
+                    "\u{2611} true".to_string()
+                } else {
+                    "\u{2610} false".to_string()
+                }
+            }
+            DataFormat::Yaml => if *val { "true" } else { "false" }.to_string(),
         }),
         JsonNodeValue::Number { val } => Some(val.clone()),
         JsonNodeValue::Str { val } => {
@@ -312,7 +321,8 @@ fn render_fallback(diagram: &JsonDiagram, diagram_type: &str) -> String {
             .iter()
             .map(|f| FlatRow {
                 key: f.key.clone().unwrap_or_default(),
-                value: scalar_display(&f.value).unwrap_or_else(|| fallback_value(&f.value)),
+                value: scalar_display(&f.value, diagram.format)
+                    .unwrap_or_else(|| fallback_value(&f.value)),
                 highlighted: f.highlighted,
             })
             .collect(),
@@ -320,13 +330,14 @@ fn render_fallback(diagram: &JsonDiagram, diagram_type: &str) -> String {
             .iter()
             .map(|item| FlatRow {
                 key: String::new(),
-                value: scalar_display(&item.value).unwrap_or_else(|| fallback_value(&item.value)),
+                value: scalar_display(&item.value, diagram.format)
+                    .unwrap_or_else(|| fallback_value(&item.value)),
                 highlighted: item.highlighted,
             })
             .collect(),
         _ => vec![FlatRow {
             key: String::new(),
-            value: scalar_display(&diagram.root.value).unwrap_or_default(),
+            value: scalar_display(&diagram.root.value, diagram.format).unwrap_or_default(),
             highlighted: diagram.root.highlighted,
         }],
     };
