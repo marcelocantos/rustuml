@@ -7,7 +7,7 @@
 //! producing an `OracleLayout` that can be fed to renderers.
 
 use rustuml_render::layout_oracle::{
-    AuxRect, CrowMark, EntityLine, EntityRect, EntityText, NoteBoxGeom, OracleCluster,
+    ApointMark, AuxRect, CrowMark, EntityLine, EntityRect, EntityText, NoteBoxGeom, OracleCluster,
     OracleEdgePath, OracleLayout, OracleNoteEntity, RegionDivider,
 };
 
@@ -995,6 +995,46 @@ pub fn extract_oracle_layout(svg: &str) -> Option<OracleLayout> {
             continue;
         }
         i += 1;
+    }
+
+    // Association-class anchor points (`apoint`): a tiny filled ellipse
+    // (`rx="2" ry="2" fill="#181818"`) sitting bare under the root `<g>` on the
+    // A–B association line. Distinct from history (`#F1F1F1`, rx≈8) and
+    // entry/exit (`#F1F1F1`, rx=6) markers by its solid dark fill and small
+    // radius. Captured in document order; the class renderer matches each to its
+    // `Student-apointN` / `apointN-Course` / `apointN-Enrollment` edges.
+    for n in root.descendants() {
+        if n.tag_name().name() != "ellipse" {
+            continue;
+        }
+        let bare_top_level = n
+            .parent()
+            .is_some_and(|p| p.tag_name().name() == "g" && p.attribute("class").is_none());
+        if !bare_top_level {
+            continue;
+        }
+        let fill = n.attribute("fill").unwrap_or_default();
+        let (Some(cx), Some(cy), Some(rx), Some(ry)) = (
+            parse_attr(&n, "cx"),
+            parse_attr(&n, "cy"),
+            parse_attr(&n, "rx"),
+            parse_attr(&n, "ry"),
+        ) else {
+            continue;
+        };
+        // apoints are small and dark-filled; the radius guard keeps history /
+        // entry-exit (#F1F1F1) ellipses out even though those are also bare.
+        if fill.eq_ignore_ascii_case("none") || rx > 4.0 || ry > 4.0 {
+            continue;
+        }
+        layout.apoints.push(ApointMark {
+            cx,
+            cy,
+            rx,
+            ry,
+            fill: fill.to_string(),
+            style: n.attribute("style").unwrap_or_default().to_string(),
+        });
     }
 
     // Entry/exit pseudo-states (`<<entryPoint>>`/`<<exitPoint>>`) render as a

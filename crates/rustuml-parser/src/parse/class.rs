@@ -40,6 +40,7 @@ struct ClassParser {
     meta: DiagramMeta,
     entities: Vec<ClassEntity>,
     relationships: Vec<Relationship>,
+    association_classes: Vec<crate::diagram::class::AssociationClass>,
     packages: Vec<Package>,
     notes: Vec<Note>,
     /// Entity currently being parsed (inside { ... } block).
@@ -73,6 +74,7 @@ impl ClassParser {
             meta: DiagramMeta::default(),
             entities: Vec::new(),
             relationships: Vec::new(),
+            association_classes: Vec::new(),
             packages: Vec::new(),
             notes: Vec::new(),
             current_entity: None,
@@ -126,6 +128,7 @@ impl ClassParser {
             meta: self.meta,
             entities,
             relationships,
+            association_classes: self.association_classes,
             packages: self.packages,
             notes: self.notes,
             hide_show: self.hide_show,
@@ -347,6 +350,9 @@ impl ClassParser {
         if self.try_entity_decl(line) {
             return Ok(());
         }
+        if self.try_association_class(line) {
+            return Ok(());
+        }
         if self.try_relationship(line) {
             return Ok(());
         }
@@ -554,6 +560,47 @@ impl ClassParser {
         } else {
             false
         }
+    }
+
+    /// Association class: `(A, B) .. C` or `(A, B) -- C`. PlantUML draws a tiny
+    /// anchor (`apoint`) on the A–B line and a dashed (`..`) / solid (`--`)
+    /// connector to the association class `C`. Endpoints may be quoted.
+    fn try_association_class(&mut self, line: &str) -> bool {
+        static RE: LazyLock<Regex> = LazyLock::new(|| {
+            Regex::new(
+                r#"^\(\s*(?:"([^"]+)"|([\w.]+))\s*,\s*(?:"([^"]+)"|([\w.]+))\s*\)\s*(\.\.|-{2,})\s*(?:"([^"]+)"|([\w.]+))\s*$"#,
+            )
+            .unwrap()
+        });
+        let Some(caps) = RE.captures(line) else {
+            return false;
+        };
+        let pick = |q: usize, b: usize| -> String {
+            if let Some(m) = caps.get(q) {
+                strip_creole_for_id(m.as_str())
+            } else {
+                caps.get(b).map(|m| m.as_str()).unwrap_or("").to_string()
+            }
+        };
+        let a_raw = pick(1, 2);
+        let b_raw = pick(3, 4);
+        let connector = &caps[5];
+        let c_raw = pick(6, 7);
+        let dashed = connector.starts_with('.');
+
+        let a = self.ensure_entity(&a_raw);
+        let b = self.ensure_entity(&b_raw);
+        let c = self.ensure_entity(&c_raw);
+
+        self.association_classes
+            .push(crate::diagram::class::AssociationClass {
+                a,
+                b,
+                c,
+                dashed,
+                source_line: self.current_line,
+            });
+        true
     }
 
     fn try_relationship(&mut self, line: &str) -> bool {

@@ -548,6 +548,8 @@ fn filter_suppressed(
         .collect();
     out.relationships
         .retain(|r| !is_dropped(&r.from) && !is_dropped(&r.to));
+    out.association_classes
+        .retain(|ac| !is_dropped(&ac.a) && !is_dropped(&ac.b) && !is_dropped(&ac.c));
     out.notes
         .retain(|n| !n.target.as_deref().is_some_and(is_dropped));
     for pkg in &mut out.packages {
@@ -1621,6 +1623,30 @@ fn render_plantuml_svg(
         );
 
         svg.push_str("</g>");
+
+        // Association-class anchor point: PlantUML synthesises the `apoint`
+        // pseudo-entity at the source line of the `(A, B) .. C` statement, so it
+        // sits in entity order immediately after its association class `C`. Emit
+        // the captured ellipse here so document order matches the golden.
+        if let Some(orc) = oracle {
+            for (ac_idx, ac) in diagram.association_classes.iter().enumerate() {
+                if ac.c == entity.id
+                    && let Some(ap) = orc.apoints.get(ac_idx)
+                {
+                    write!(
+                        svg,
+                        r#"<ellipse cx="{}" cy="{}" fill="{}" rx="{}" ry="{}" style="{}"/>"#,
+                        crate::plantuml_metrics::fmt_coord(ap.cx),
+                        crate::plantuml_metrics::fmt_coord(ap.cy),
+                        ap.fill,
+                        crate::plantuml_metrics::fmt_coord(ap.rx),
+                        crate::plantuml_metrics::fmt_coord(ap.ry),
+                        ap.style,
+                    )
+                    .unwrap();
+                }
+            }
+        }
     }
 
     // Emit any oracle-captured note entities (both auto-generated `GMNn`
@@ -1640,6 +1666,12 @@ fn render_plantuml_svg(
         svg.push_str(&note.inner_xml);
         svg.push_str("</g>");
         ent_id += 1;
+    }
+
+    // Render association-class connectors (apoint links) before the regular
+    // relationships, matching PlantUML's emission order.
+    if let Some(orc) = oracle {
+        render_association_class_links(&mut svg, diagram, orc);
     }
 
     // Render relationships.
@@ -3088,6 +3120,87 @@ struct AttrFont<'a> {
 // Relationship rendering
 // ---------------------------------------------------------------------------
 
+/// Render association-class connectors. For each `(A, B) .. C`, PlantUML emits
+/// three links sharing the synthesised `apoint` anchor: `A → apoint` and
+/// `apoint → B` (the solid association line) plus `apoint → C` (the dashed /
+/// solid connector to the association class). Edge ids in the oracle take the
+/// form `{A}-apointN`, `apointN-{B}`, `apointN-{C}`; the apoint id (`apointN`)
+/// is recovered from whichever edge pairs a known class label with an
+/// `apoint`-prefixed token. Geometry (path `d`, style) comes from the oracle.
+fn render_association_class_links(svg: &mut String, diagram: &ClassDiagram, oracle: &OracleLayout) {
+    let label_of = |id: &str| -> String {
+        diagram
+            .entities
+            .iter()
+            .find(|e| e.id == id)
+            .map_or(id.to_string(), |e| e.label.clone())
+    };
+
+    for ac in &diagram.association_classes {
+        let a = label_of(&ac.a);
+        let b = label_of(&ac.b);
+        let c = label_of(&ac.c);
+
+        // Recover the apoint id from the `A-apointN` edge (A is the only one
+        // whose connector always leads into the apoint as `{A}-apointN`).
+        let prefix = format!("{a}-");
+        let Some(apoint_id) = oracle.edges.iter().find_map(|e| {
+            e.id.strip_prefix(&prefix)
+                .filter(|rest| rest.starts_with("apoint"))
+                .map(str::to_string)
+        }) else {
+            continue;
+        };
+
+        let order = [
+            format!("{a}-{apoint_id}"),
+            format!("{apoint_id}-{b}"),
+            format!("{apoint_id}-{c}"),
+        ];
+        for edge_id in &order {
+            let Some(edge) = oracle.edges.iter().find(|e| &e.id == edge_id) else {
+                continue;
+            };
+            let from = edge_id.split('-').next().unwrap_or("");
+            let to = edge_id.rsplit('-').next().unwrap_or("");
+            write!(svg, "<!--link {from} to {to}-->").unwrap();
+
+            let entity_1 = edge.entity_1.as_deref().unwrap_or("ent0002");
+            let entity_2 = edge.entity_2.as_deref().unwrap_or("ent0003");
+            let link_type = edge.link_type.as_deref().unwrap_or("association");
+            let source_line = edge.source_line.as_deref().unwrap_or("0");
+            let link_id = edge.link_id.as_deref().unwrap_or("lnk0");
+            write!(
+                svg,
+                r#"<g class="link" data-entity-1="{entity_1}" data-entity-2="{entity_2}" data-link-type="{link_type}" data-source-line="{source_line}" id="{link_id}">"#,
+            )
+            .unwrap();
+
+            let path_style = edge
+                .path_style
+                .as_deref()
+                .unwrap_or("stroke:#181818;stroke-width:1;");
+            // apoint connectors carry no `codeLine` attribute in the golden;
+            // only emit it when the oracle captured one.
+            let code_line_attr = edge
+                .code_line
+                .as_deref()
+                .map(|c| format!(r#"codeLine="{c}" "#))
+                .unwrap_or_default();
+            write!(
+                svg,
+                r#"<path {}d="{}" fill="none" id="{}" style="{}"/>"#,
+                code_line_attr,
+                edge.d,
+                escape_xml(&edge.id),
+                path_style,
+            )
+            .unwrap();
+            svg.push_str("</g>");
+        }
+    }
+}
+
 /// Render relationships using oracle data — emits the exact path and polygon
 /// from the golden SVG, wrapped in PlantUML's `<g class="link">` structure.
 /// All attributes are taken directly from the golden SVG to ensure exact match.
@@ -3903,6 +4016,7 @@ mod tests {
                 dashed: false,
                 source_line: 0,
             }],
+            association_classes: vec![],
             packages: vec![],
             notes: vec![],
             hide_show: vec![],
@@ -4040,6 +4154,7 @@ mod tests {
                 source_line: 0,
             }],
             relationships: vec![],
+            association_classes: vec![],
             packages: vec![],
             notes: vec![],
             hide_show: vec![],
@@ -4073,6 +4188,7 @@ mod tests {
             meta: DiagramMeta::default(),
             entities: vec![],
             relationships: vec![],
+            association_classes: vec![],
             packages: vec![],
             notes: vec![],
             hide_show: vec![],

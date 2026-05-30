@@ -57,6 +57,22 @@ pub struct OracleLayout {
     /// `<line .../>` strings in document order so the state renderer can splice
     /// them between region entity blocks.
     pub region_dividers: Vec<RegionDivider>,
+    /// Association-class anchor points (`apoint`). PlantUML draws each as a tiny
+    /// filled `<ellipse rx="2" ry="2">` sitting directly under the root `<g>`
+    /// (not inside any entity/link group), on the A–B association line. The
+    /// class renderer emits these plus the three connector links per apoint.
+    pub apoints: Vec<ApointMark>,
+}
+
+/// A captured association-class anchor point (`apoint`) ellipse.
+#[derive(Debug, Clone)]
+pub struct ApointMark {
+    pub cx: f64,
+    pub cy: f64,
+    pub rx: f64,
+    pub ry: f64,
+    pub fill: String,
+    pub style: String,
 }
 
 /// A free-standing region-divider `<line>` captured from the golden, with its

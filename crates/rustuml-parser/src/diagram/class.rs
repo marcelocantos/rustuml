@@ -34,6 +34,9 @@ pub struct ClassDiagram {
     pub meta: DiagramMeta,
     pub entities: Vec<ClassEntity>,
     pub relationships: Vec<Relationship>,
+    /// Association classes declared via `(A, B) .. C` syntax.
+    #[serde(default, skip_serializing_if = "Vec::is_empty")]
+    pub association_classes: Vec<AssociationClass>,
     pub packages: Vec<Package>,
     pub notes: Vec<Note>,
     /// Visibility-control directives accumulated from `hide ...` / `show ...`
@@ -152,6 +155,31 @@ pub enum MemberKind {
     Method,
     /// A labeled separator line within a class body (e.g. `-- Section --`, `== Title ==`).
     Separator,
+}
+
+/// An association class: `(A, B) .. C` (or `(A, B) -- C`). PlantUML synthesizes
+/// a tiny anchor point (`apoint`) on the A–B association line and draws a dashed
+/// (`..`) or solid (`--`) connector from it to the association class `C`. The
+/// apoint's id, position, and the three connector geometries are produced by
+/// Java's layout engine and surfaced via the oracle.
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct AssociationClass {
+    /// First endpoint of the association line.
+    pub a: String,
+    /// Second endpoint of the association line.
+    pub b: String,
+    /// The association class hanging off the apoint.
+    pub c: String,
+    /// Whether the apoint→C connector is dashed (`..`) rather than solid (`--`).
+    #[serde(default = "default_true")]
+    pub dashed: bool,
+    /// 1-based source line within the `@startuml` block.
+    #[serde(default)]
+    pub source_line: usize,
+}
+
+fn default_true() -> bool {
+    true
 }
 
 /// A relationship (association, inheritance, etc.) between entities.

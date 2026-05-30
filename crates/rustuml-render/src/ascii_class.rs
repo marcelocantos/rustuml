@@ -295,6 +295,7 @@ mod tests {
             meta: DiagramMeta::default(),
             entities,
             relationships,
+            association_classes: vec![],
             packages: vec![],
             notes: vec![],
             hide_show: vec![],
