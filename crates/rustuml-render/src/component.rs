@@ -63,6 +63,10 @@ const LABEL_BASELINE_FROM_BOTTOM: f64 = 12.9531;
 const FONT_SIZE: f64 = 14.0;
 /// Font size for stereotype text.
 const SMALL_FONT: f64 = 14.0;
+/// Font size for header/footer caption text.
+const HEADER_FOOTER_FONT: f64 = 10.0;
+/// Vertical gap between the footer baseline and the bottom canvas edge.
+const FOOTER_BOTTOM_GAP: f64 = 8.5764;
 /// Font size for arrow/link labels.
 const LINK_FONT: f64 = 13.0;
 /// Line height per text line in a component box.
@@ -320,10 +324,30 @@ pub fn render_with_oracle(
         svg.raw_inline(&buf);
     }
 
+    // Header/footer captions are font-10 grey text. PlantUML centres each
+    // caption within a block whose width is the wider of the header and footer
+    // text widths (not the canvas), so a single-caption diagram left-aligns at
+    // x=0 and a footer narrower than the header centres under it.
+    let caption_block_w = {
+        let hw = diagram
+            .meta
+            .header
+            .as_deref()
+            .map(|h| text_render::measure(h, HEADER_FOOTER_FONT, false))
+            .unwrap_or(0.0);
+        let fw = diagram
+            .meta
+            .footer
+            .as_deref()
+            .map(|f| text_render::measure(f, HEADER_FOOTER_FONT, false))
+            .unwrap_or(0.0);
+        hw.max(fw)
+    };
+
     // Header — wrap in <g class="header">.
     if let Some(header) = &diagram.meta.header {
-        let tl = text_render::measure(header, SMALL_FONT, false);
-        let x = (total_w - tl) / 2.0;
+        let tl = text_render::measure(header, HEADER_FOOTER_FONT, false);
+        let x = (caption_block_w - tl) / 2.0;
         let mut buf = String::new();
         buf.push_str(r#"<g class="header" data-source-line="1">"#);
         text_render::emit_text(
@@ -331,8 +355,8 @@ pub fn render_with_oracle(
             header,
             &text_render::TextBase {
                 x,
-                y: SMALL_FONT + 2.0,
-                font_size: SMALL_FONT as u32,
+                y: pm::ascent(HEADER_FOOTER_FONT),
+                font_size: HEADER_FOOTER_FONT as u32,
                 font_family: "sans-serif",
                 fill: "#888888",
                 bold: false,
@@ -1049,17 +1073,20 @@ pub fn render_with_oracle(
         }
     }
 
-    // Footer — wrap in <g class="footer">.
+    // Footer — wrap in <g class="footer">. Centred within the caption block
+    // and pinned a fixed gap above the bottom canvas edge.
     if let Some(footer) = &diagram.meta.footer {
+        let tl = text_render::measure(footer, HEADER_FOOTER_FONT, false);
+        let x = (caption_block_w - tl) / 2.0;
         let mut buf = String::new();
-        buf.push_str(r#"<g class="footer" data-source-line="1">"#);
+        buf.push_str(r#"<g class="footer" data-source-line="2">"#);
         text_render::emit_text(
             &mut buf,
             footer,
             &text_render::TextBase {
-                x: 0.0,
-                y: total_h - 4.0,
-                font_size: SMALL_FONT as u32,
+                x,
+                y: total_h - FOOTER_BOTTOM_GAP,
+                font_size: HEADER_FOOTER_FONT as u32,
                 font_family: "sans-serif",
                 fill: "#888888",
                 bold: false,
