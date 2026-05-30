@@ -43,6 +43,10 @@ const ICON_RX: f64 = 11.0;
 const ICON_CX_OFFSET: f64 = 15.0;
 /// Icon center y within the entity header.
 const ICON_CY: f64 = 23.0;
+/// When `skinparam padding N` is set, PlantUML positions the stereotype circle
+/// at `rect_top + N + (ICON_CY - MARGIN) - PADDING_ICON_CY_BIAS`. The bias was
+/// measured from golden output across padding 5/10/15/20/30.
+const PADDING_ICON_CY_BIAS: f64 = 2.7559;
 /// Y position of entity name text baseline.
 const NAME_BASELINE_Y: f64 = 28.291;
 /// Y position of separator line below header.
@@ -612,6 +616,48 @@ pub(crate) fn translate_qualified_name(label: &str) -> String {
         .collect()
 }
 
+/// Build an entity's `data-qualified-name`: the containing-package prefix
+/// joined with the (already translated) short label by dots.
+///
+/// Containing packages come in two flavours that must compose correctly:
+///   * namespace-separator packages (`set namespaceSeparator .`) whose `name`
+///     is itself the full dotted path (`com`, `com.example`, …) — joining all
+///     of them would duplicate the embedded prefixes, and
+///   * user `package`/`namespace` blocks whose `name` is a single short
+///     segment that genuinely nests (`outer`, then `inner`).
+///
+/// To handle both, drop any containing package whose path is a prefix of a
+/// deeper containing package, then join the survivors (outermost first).
+fn qualify_entity(diagram: &ClassDiagram, entity: &ClassEntity, translated_label: &str) -> String {
+    // Containing packages, in declaration (outermost → innermost nesting)
+    // order, which `diagram.packages` preserves.
+    let pkgs: Vec<&str> = diagram
+        .packages
+        .iter()
+        .filter(|p| p.entities.iter().any(|e| e == &entity.id))
+        .map(|p| p.name.as_str())
+        .collect();
+    // A namespace-separator package stores its full dotted path as its name
+    // (`com`, `com.example`, …), so a shallower one is a dotted prefix of a
+    // deeper one — drop the prefixes to avoid duplicating the embedded path.
+    // Genuinely-nested user `package` blocks have single-segment names that
+    // are never prefixes of one another, so all survive in nesting order.
+    let survivors: Vec<&str> = pkgs
+        .iter()
+        .copied()
+        .filter(|&name| {
+            !pkgs
+                .iter()
+                .any(|&other| other != name && other.starts_with(&format!("{name}.")))
+        })
+        .collect();
+    if survivors.is_empty() {
+        translated_label.to_string()
+    } else {
+        format!("{}.{}", survivors.join("."), translated_label)
+    }
+}
+
 fn escape_xml(s: &str) -> String {
     s.replace('&', "&amp;")
         .replace('<', "&lt;")
@@ -901,18 +947,7 @@ pub fn render_with_oracle(
         // Java's qualified-name encoding.
         let qual = |entity: &ClassEntity| -> String {
             let translated = translate_qualified_name(&entity.label);
-            let mut chain: Vec<String> = diagram
-                .packages
-                .iter()
-                .filter(|p| p.entities.iter().any(|e| e == &entity.id))
-                .map(|p| p.name.clone())
-                .collect();
-            if chain.is_empty() {
-                translated
-            } else {
-                chain.push(translated);
-                chain.join(".")
-            }
+            qualify_entity(diagram, entity, &translated)
         };
 
         // Override dims with oracle entity dimensions.
@@ -1090,6 +1125,20 @@ fn render_plantuml_svg(
     }
 
     let font = ClassFontOverrides::from_skinparams(&diagram.meta.skinparams);
+
+    // `skinparam padding N` shifts the in-box header icon and member text.
+    // When the directive is present PlantUML offsets the stereotype circle
+    // down by `N` (the glyph and name baseline already track this through the
+    // captured text-y geometry) and shifts member text right by `N`. The
+    // default (directive absent) contributes nothing here. The last explicit
+    // value wins.
+    let explicit_padding: Option<f64> = diagram
+        .meta
+        .skinparams
+        .iter()
+        .filter(|sp| sp.key.eq_ignore_ascii_case("padding"))
+        .filter_map(|sp| sp.value.trim().parse::<f64>().ok())
+        .next_back();
 
     // Compute entity positions (offset from layout).
     let entity_positions: Vec<(f64, f64)> = (0..diagram.entities.len())
@@ -1335,20 +1384,7 @@ fn render_plantuml_svg(
         // `&` → `.` (used when entities are quoted with special chars,
         // e.g. `"A&B"`).
         let translated_label = translate_qualified_name(&entity.label);
-        let qualified_name: String = {
-            let mut chain: Vec<&str> = diagram
-                .packages
-                .iter()
-                .filter(|p| p.entities.iter().any(|e| e == &entity.id))
-                .map(|p| p.name.as_str())
-                .collect();
-            if chain.is_empty() {
-                translated_label.clone()
-            } else {
-                chain.push(translated_label.as_str());
-                chain.join(".")
-            }
-        };
+        let qualified_name = qualify_entity(diagram, entity, &translated_label);
 
         // Look up oracle overrides for this entity. Try qualified name
         // first (for entities inside clusters), then the bare label and
@@ -1407,6 +1443,7 @@ fn render_plantuml_svg(
             oracle_rect,
             &font,
             link_anchor.as_deref(),
+            explicit_padding,
         );
 
         svg.push_str("</g>");
@@ -1587,6 +1624,7 @@ fn render_entity_content(
     oracle_rect: Option<&crate::layout_oracle::EntityRect>,
     font: &ClassFontOverrides,
     link_anchor: Option<&str>,
+    explicit_padding: Option<f64>,
 ) {
     // PlantUML wraps the entity *header* (background rect, stereotype icon,
     // name text, and the two compartment separator rules) in a single `<a>`
@@ -1692,6 +1730,10 @@ fn render_entity_content(
     let icon_cx = icon_cx_override.unwrap_or(x + ICON_CX_OFFSET);
     let icon_cy = if dim.has_stereotypes {
         y + ICON_CY_WITH_STEREO
+    } else if let Some(pad) = explicit_padding {
+        // PlantUML drops the stereotype circle by the explicit padding value,
+        // measured from the rect top plus a fixed icon inset (16 - 2.7559).
+        y + pad + (ICON_CY - MARGIN - PADDING_ICON_CY_BIAS)
     } else {
         y + (ICON_CY - MARGIN)
     };
@@ -2032,6 +2074,7 @@ fn render_entity_content(
                 attr_font,
                 link_anchor,
                 None,
+                explicit_padding.unwrap_or(0.0),
             );
             member_y += MEMBER_SPACING;
         }
@@ -2106,6 +2149,7 @@ fn render_entity_content(
                     attr_font,
                     link_anchor,
                     None,
+                    explicit_padding.unwrap_or(0.0),
                 );
             } else {
                 let text = format_member_display(member);
@@ -2367,6 +2411,7 @@ fn render_entity_content(
                     attr_font,
                     member_anchor,
                     trailing,
+                    explicit_padding.unwrap_or(0.0),
                 );
                 member_y += MEMBER_SPACING;
                 // Emit any inline separators that fall AFTER this field.
@@ -2485,6 +2530,7 @@ fn render_entity_content(
                         attr_font,
                         member_anchor,
                         None,
+                        explicit_padding.unwrap_or(0.0),
                     );
                     method_y += MEMBER_SPACING;
                 }
@@ -2600,6 +2646,7 @@ fn render_entity_content(
                     attr_font,
                     member_anchor,
                     None,
+                    explicit_padding.unwrap_or(0.0),
                 );
                 method_y += MEMBER_SPACING;
             }
@@ -2650,6 +2697,7 @@ fn render_member_line(
     attr_font: AttrFont,
     link_anchor: Option<&str>,
     trailing_in_anchor: Option<&str>,
+    text_pad: f64,
 ) {
     let text = format_member_display(member);
 
@@ -2764,11 +2812,12 @@ fn render_member_line(
     // stereotypes, inner-class declarations); otherwise default-visibility
     // entries (continuation lines after `+method() { ... }` bodies) align
     // to MEMBER_TEXT_OFFSET so they sit under the icon-bearing text.
-    let text_x = if member.visibility == Visibility::Default && default_uses_narrow {
-        entity_x + ENUM_TEXT_OFFSET
-    } else {
-        entity_x + MEMBER_TEXT_OFFSET
-    };
+    let text_x = text_pad
+        + if member.visibility == Visibility::Default && default_uses_narrow {
+            entity_x + ENUM_TEXT_OFFSET
+        } else {
+            entity_x + MEMBER_TEXT_OFFSET
+        };
 
     let mut text_buf = String::new();
     text_render::emit_text(

@@ -1199,7 +1199,39 @@ fn strip_arrow_modifiers(line: &str) -> String {
     // Direction keywords appearing between dash/dot runs on the arrow body.
     static DIRECTION: LazyLock<Regex> =
         LazyLock::new(|| Regex::new(r"([-.])(left|right|up|down|l|r|u|d)([-.])").unwrap());
-    let s = BRACKETED.replace_all(line, "");
+    // Bracketed `[...]` arrow modifiers must be stripped, but brackets inside a
+    // double-quoted endpoint name (e.g. `"Class[WithBrackets]"`) are part of
+    // the name. Strip only outside quoted spans by masking quoted regions.
+    let s: String = if line.contains('"') {
+        let mut out = String::with_capacity(line.len());
+        let mut rest = line;
+        loop {
+            match rest.find('"') {
+                None => {
+                    out.push_str(&BRACKETED.replace_all(rest, ""));
+                    break;
+                }
+                Some(open) => {
+                    out.push_str(&BRACKETED.replace_all(&rest[..open], ""));
+                    let after = &rest[open + 1..];
+                    match after.find('"') {
+                        None => {
+                            // Unterminated quote: keep the remainder verbatim.
+                            out.push_str(&rest[open..]);
+                            break;
+                        }
+                        Some(close) => {
+                            out.push_str(&rest[open..open + 1 + close + 1]);
+                            rest = &after[close + 1..];
+                        }
+                    }
+                }
+            }
+        }
+        out
+    } else {
+        BRACKETED.replace_all(line, "").into_owned()
+    };
     let s = DIRECTION.replace_all(&s, "$1$3");
     // Re-promote isolated single-dash arrows (which result from bracketed
     // modifiers next to a single dash, e.g. `A -[#blue] B`) into standard
