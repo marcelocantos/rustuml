@@ -1522,10 +1522,21 @@ fn emit_oracle_edge(
             oracle_edge.d,
         ));
 
-        // Additional paths after the main one (e.g. the lollipop half-circle).
-        for (d, style) in &oracle_edge.extra_paths {
-            let s = style.as_deref().unwrap_or("stroke:#181818;stroke-width:1;");
-            svg.raw(&format!(r#"<path d="{d}" fill="none" style="{s}"/>"#,));
+        // A `note on link` is emitted inside the link group as extra `<path>`
+        // children (the note box) plus trailing `<text>`. PlantUML orders the
+        // link group as: main path, arrowhead polygon(s), the link's own label,
+        // then the note box paths, then the note text. Lollipop/socket edges
+        // (no arrowhead polygon) keep their half-circle extra paths immediately
+        // after the main path and before any interface label. Distinguish the
+        // two by the presence of an arrowhead polygon.
+        let has_polygon = oracle_edge.arrow_points.is_some();
+
+        if !has_polygon {
+            // Lollipop/socket: extra paths first, then label(s).
+            for (d, style) in &oracle_edge.extra_paths {
+                let s = style.as_deref().unwrap_or("stroke:#181818;stroke-width:1;");
+                svg.raw(&format!(r#"<path d="{d}" fill="none" style="{s}"/>"#,));
+            }
         }
 
         if let Some(ref points) = oracle_edge.arrow_points {
@@ -1551,49 +1562,59 @@ fn emit_oracle_edge(
             ));
         }
 
+        let emit_label = |svg: &mut SvgBuilder, lx: f64, ly: f64, text: &str| {
+            let mut text_buf = String::new();
+            text_render::emit_text(
+                &mut text_buf,
+                text,
+                &TextBase {
+                    x: lx,
+                    y: ly,
+                    font_size: LINK_FONT as u32,
+                    font_family: "sans-serif",
+                    fill: TEXT_COLOR,
+                    bold: false,
+                    italic: false,
+                    underline: false,
+                    skip_underline: false,
+                },
+            );
+            svg.raw(&text_buf);
+        };
+
         // Edge labels from oracle. Class/component diagrams emit up to three
         // labels per link (start cardinality, middle label, end cardinality)
         // each at its own (x, y); use the per-label positions when available.
+        // When a note box is attached (extra paths present alongside an
+        // arrowhead), the FIRST label is the link's own label and any further
+        // labels are the note's text — the note box paths slot between them.
         if !oracle_edge.labels.is_empty() {
-            for (lx, ly, text) in &oracle_edge.labels {
-                let mut text_buf = String::new();
-                text_render::emit_text(
-                    &mut text_buf,
-                    text,
-                    &TextBase {
-                        x: *lx,
-                        y: *ly,
-                        font_size: LINK_FONT as u32,
-                        font_family: "sans-serif",
-                        fill: TEXT_COLOR,
-                        bold: false,
-                        italic: false,
-                        underline: false,
-                        skip_underline: false,
-                    },
-                );
-                svg.raw(&text_buf);
+            let note_attached = has_polygon && !oracle_edge.extra_paths.is_empty();
+            let link_label_count = if note_attached {
+                1
+            } else {
+                oracle_edge.labels.len()
+            };
+            for (lx, ly, text) in oracle_edge.labels.iter().take(link_label_count) {
+                emit_label(svg, *lx, *ly, text);
+            }
+            if note_attached {
+                // The note box paths carry the note background fill; the oracle's
+                // extra_paths capture drops the `fill` attribute, so supply the
+                // PlantUML note default here.
+                for (d, style) in &oracle_edge.extra_paths {
+                    let s = style.as_deref().unwrap_or("stroke:#181818;stroke-width:1;");
+                    svg.raw(&format!(
+                        r#"<path d="{d}" fill="{NOTE_FILL}" style="{s}"/>"#,
+                    ));
+                }
+                for (lx, ly, text) in oracle_edge.labels.iter().skip(link_label_count) {
+                    emit_label(svg, *lx, *ly, text);
+                }
             }
         } else if let Some((lx, ly, ref text)) = oracle_edge.label {
             for (i, line) in text.lines().enumerate() {
-                let ty = ly + i as f64 * LINK_FONT;
-                let mut text_buf = String::new();
-                text_render::emit_text(
-                    &mut text_buf,
-                    line,
-                    &TextBase {
-                        x: lx,
-                        y: ty,
-                        font_size: LINK_FONT as u32,
-                        font_family: "sans-serif",
-                        fill: TEXT_COLOR,
-                        bold: false,
-                        italic: false,
-                        underline: false,
-                        skip_underline: false,
-                    },
-                );
-                svg.raw(&text_buf);
+                emit_label(svg, lx, ly + i as f64 * LINK_FONT, line);
             }
         }
 
