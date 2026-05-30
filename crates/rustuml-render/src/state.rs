@@ -2076,6 +2076,9 @@ fn render_composite_with_oracle(diagram: &StateDiagram, orc: &OracleLayout) -> S
     // `history_idx` walks them as the bare-composite traversal encounters
     // History/DeepHistory states in declaration order.
     let history_idx = std::cell::Cell::new(0usize);
+    // Fork/join bars live under the oracle's `__bar_N__` synthetic keys in SVG
+    // document order; `bar_idx` walks them as the traversal meets Fork/Join.
+    let bar_idx = std::cell::Cell::new(0usize);
 
     // Helper: emit a normal state box (rect + divider + name [+ descriptions])
     // from oracle geometry, keyed by its qualified id.
@@ -2114,6 +2117,54 @@ fn render_composite_with_oracle(diagram: &StateDiagram, orc: &OracleLayout) -> S
                 fmt_f(tw),
                 fmt_f(px - tw / 2.0),
                 fmt_f(text_y),
+            )
+            .unwrap();
+            return;
+        }
+        if matches!(st.kind, StateKind::Choice) {
+            // Choice pseudo-state inside a composite — a `<polygon>` diamond
+            // wrapped in `<g class="entity">`, matching the top-level choice
+            // path. Geometry comes from the oracle's captured entity bounds.
+            let Some(rect) = orc.entities.get(st.id.as_str()) else {
+                return;
+            };
+            let entity_id = rect.entity_id.as_deref().unwrap_or("ent0000");
+            let cx = rect.x + rect.width / 2.0;
+            let cy = rect.y + rect.height / 2.0;
+            let top = cy - CHOICE_SIZE;
+            let right = cx + CHOICE_SIZE;
+            let bottom = cy + CHOICE_SIZE;
+            let left = cx - CHOICE_SIZE;
+            let fill = rect.fill.as_deref().unwrap_or(DEFAULT_STATE_FILL);
+            write!(
+                svg,
+                r#"<g class="entity" data-qualified-name="{}" id="{entity_id}"><polygon fill="{fill}" points="{},{},{},{},{},{},{},{},{},{}" style="stroke:{DEFAULT_STROKE_COLOR};stroke-width:0.5;"/></g>"#,
+                st.id,
+                fmt_f(cx), fmt_f(top),
+                fmt_f(right), fmt_f(cy),
+                fmt_f(cx), fmt_f(bottom),
+                fmt_f(left), fmt_f(cy),
+                fmt_f(cx), fmt_f(top),
+            )
+            .unwrap();
+            return;
+        }
+        if matches!(st.kind, StateKind::Fork | StateKind::Join) {
+            // Fork/join bar — a bare `<rect>` (no `<g>` wrapper). The oracle
+            // records the bar under `__bar_N__`; pair them in declaration
+            // order via `bar_idx`.
+            let key = format!("__bar_{}__", bar_idx.get());
+            bar_idx.set(bar_idx.get() + 1);
+            let Some(rect) = orc.entities.get(key.as_str()) else {
+                return;
+            };
+            write!(
+                svg,
+                r#"<rect fill="{BAR_COLOR}" height="{}" style="stroke:none;stroke-width:1;" width="{}" x="{}" y="{}"/>"#,
+                fmt_f(rect.height),
+                fmt_f(rect.width),
+                fmt_f(rect.x),
+                fmt_f(rect.y),
             )
             .unwrap();
             return;
