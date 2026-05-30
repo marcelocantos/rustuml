@@ -2864,7 +2864,12 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme) -> String {
                 // Advance autonumber
                 spacing_auto.advance();
             }
-            // Notes spanning multiple participants need gap between them.
+            // Notes over several participants (OVER_SEVERAL). Java NotesBoxes
+            // .ensureConstraints reserves width/2 in the gap *before* the first
+            // and *after* the last spanned participant — it does NOT widen the
+            // gap between the spanned participants. The before-first reservation
+            // (when first is participant 0) and after-last (when last is the
+            // final participant) are handled as canvas margins elsewhere.
             Event::Note(note)
                 if note.position == NotePosition::Over && note.participants.len() >= 2 =>
             {
@@ -2880,15 +2885,16 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme) -> String {
                         .lines()
                         .map(|l| text_width(l.trim(), MSG_FONT_SIZE))
                         .fold(0.0_f64, f64::max);
-                    // The rendered note width = max(note_content_w, span + 38).
-                    // The note fits if span >= note_content_w - 38. So the minimum
-                    // total span is (note_content_w - 38), divided evenly across pairs.
                     let note_content_w = note_content_width(max_tw, note.shape);
-                    let span_pairs = (li - fi) as f64;
-                    let per_pair = ((note_content_w - 38.0) / span_pairs).max(0.0);
-                    let (left, right) = if fi < li { (fi, li) } else { (li, fi) };
-                    for slot in &mut pair_max_label_width[left..right] {
-                        *slot = slot.max(per_pair);
+                    let half = note_content_w / 2.0;
+                    let (lo, hi) = if fi < li { (fi, li) } else { (li, fi) };
+                    // Gap before the first spanned participant.
+                    if lo > 0 {
+                        pair_max_label_width[lo - 1] = pair_max_label_width[lo - 1].max(half);
+                    }
+                    // Gap after the last spanned participant.
+                    if hi < pair_max_label_width.len() {
+                        pair_max_label_width[hi] = pair_max_label_width[hi].max(half);
                     }
                 }
             }
@@ -3028,28 +3034,44 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme) -> String {
                 participants[i].box_x + (participants[i].box_width / 2.0).floor();
         }
 
-        // "note across" (note over all participants, no explicit list) is centered
-        // on the midpoint of the participant span and extends note_w/2 each side.
-        // If its left edge would fall left of the HEAD_BOX_Y margin, the whole
-        // diagram must shift right. PlantUML: note_w = max(content, span + 38),
-        // centered on (first_ll + last_ll)/2; note_left = mid - note_w/2 >= margin.
+        // An OVER_SEVERAL note (note across, or note over A,B) is centered on the
+        // midpoint of its first/last participant box centers and extends pw/2 each
+        // side. If its left edge would fall left of the HEAD_BOX_Y margin, the
+        // whole diagram must shift right. pw = max(content, round(span) + 25).
         let mut across_shift: f64 = 0.0;
-        let first_ll = participants[0].lifeline_line_x;
-        let last_ll = participants[n - 1].lifeline_line_x;
         for event in &diagram.events {
             if let Event::Note(note) = event
                 && note.position == NotePosition::Over
-                && note.participants.is_empty()
+                && (note.participants.is_empty() || note.participants.len() >= 2)
             {
+                let (lo, hi) = if note.participants.is_empty() {
+                    (0, n - 1)
+                } else {
+                    let a = note
+                        .participants
+                        .first()
+                        .and_then(|id| id_to_idx.get(id.as_str()))
+                        .copied();
+                    let b = note
+                        .participants
+                        .last()
+                        .and_then(|id| id_to_idx.get(id.as_str()))
+                        .copied();
+                    match (a, b) {
+                        (Some(a), Some(b)) if a <= b => (a, b),
+                        (Some(a), Some(b)) => (b, a),
+                        _ => continue,
+                    }
+                };
                 let max_tw = note
                     .text
                     .lines()
                     .map(|l| text_width(l.trim(), MSG_FONT_SIZE))
                     .fold(0.0_f64, f64::max);
                 let note_content_w = note_content_width(max_tw, note.shape);
-                let span = last_ll - first_ll;
+                let span = participants[hi].lifeline_line_x - participants[lo].lifeline_line_x;
                 let pw = note_content_w.max(span.round() + ACROSS_NOTE_MARGIN);
-                let centre = (participants[0].center_x + participants[n - 1].center_x) / 2.0;
+                let centre = (participants[lo].center_x + participants[hi].center_x) / 2.0;
                 let note_left = (centre - pw / 2.0).floor();
                 let shift = (HEAD_BOX_Y - note_left).max(0.0);
                 across_shift = across_shift.max(shift);
@@ -3481,12 +3503,16 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme) -> String {
                         id_to_idx.get(note.participants.first().unwrap().as_str()),
                         id_to_idx.get(note.participants.last().unwrap().as_str()),
                     ) {
-                        let first_ll = participants[first_idx].lifeline_line_x;
-                        let last_ll = participants[last_idx].lifeline_line_x;
-                        let span = last_ll - first_ll;
-                        let note_w = note_content_w.max(span + 38.0);
-                        let mid = (first_ll + last_ll) / 2.0;
-                        let note_right = mid + note_w / 2.0;
+                        let (lo, hi) = if first_idx <= last_idx {
+                            (first_idx, last_idx)
+                        } else {
+                            (last_idx, first_idx)
+                        };
+                        let span =
+                            participants[hi].lifeline_line_x - participants[lo].lifeline_line_x;
+                        let note_w = note_content_w.max(span.round() + ACROSS_NOTE_MARGIN);
+                        let centre = (participants[lo].center_x + participants[hi].center_x) / 2.0;
+                        let note_right = (centre - note_w / 2.0).floor() + note_w;
                         max_note_right = max_note_right.max(note_right);
                     }
                 }
@@ -5286,35 +5312,35 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme) -> String {
                             let left = (cx - half_w).max(HEAD_BOX_Y).floor();
                             (left, left + note_content_w)
                         } else {
-                            // Spanning multiple participants.
-                            // When the note text fits within the participant span + margins,
-                            // position at first_ll - 19 .. last_ll + 19.
-                            // When the text is wider, center the note around the midpoint
-                            // and round the left edge.
-                            let first_ll = note
+                            // Note over multiple participants (OVER_SEVERAL).
+                            // Java NoteBox: preferredWidth = max(content, round(span)
+                            // + 25); centered on the midpoint of the first/last box
+                            // centers; left edge = (int)(centre - pw/2).
+                            let first_idx = note
                                 .participants
                                 .first()
                                 .and_then(|id| id_to_idx.get(id.as_str()))
-                                .map(|&i| participants[i].lifeline_line_x)
-                                .unwrap_or(20.0);
-                            let last_ll = note
+                                .copied()
+                                .unwrap_or(0);
+                            let last_idx = note
                                 .participants
                                 .last()
                                 .and_then(|id| id_to_idx.get(id.as_str()))
-                                .map(|&i| participants[i].lifeline_line_x)
-                                .unwrap_or(80.0);
-                            let span = last_ll - first_ll;
-                            if note_content_w <= span + 38.0 {
-                                // Text fits: use fixed margins
-                                let left = first_ll - 19.0;
-                                let right = last_ll + 19.0;
-                                (left.max(HEAD_BOX_Y), right)
+                                .copied()
+                                .unwrap_or(participants.len().saturating_sub(1));
+                            let (lo, hi) = if first_idx <= last_idx {
+                                (first_idx, last_idx)
                             } else {
-                                // Text wider than span: center and round
-                                let mid = (first_ll + last_ll) / 2.0;
-                                let left = (mid - note_content_w / 2.0).max(HEAD_BOX_Y).round();
-                                (left, left + note_content_w)
-                            }
+                                (last_idx, first_idx)
+                            };
+                            let first_ll = participants[lo].lifeline_line_x;
+                            let last_ll = participants[hi].lifeline_line_x;
+                            let span = last_ll - first_ll;
+                            let pw = note_content_w.max(span.round() + ACROSS_NOTE_MARGIN);
+                            let centre =
+                                (participants[lo].center_x + participants[hi].center_x) / 2.0;
+                            let left = (centre - pw / 2.0).floor();
+                            (left, left + pw)
                         }
                     }
                 };
@@ -5400,24 +5426,36 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme) -> String {
                     }
                 }
 
-                // A "note across" centers its text on the midpoint of the first
-                // and last participant box centers, offset left by one outMargin
-                // (Java: text laid out in the note content area within the wider
-                // OVER_SEVERAL box). Each line is independently centered.
-                let across_text_center = if note.position == NotePosition::Over
-                    && note.participants.is_empty()
+                // An OVER_SEVERAL note (note across / note over A,B) centers its
+                // text on the midpoint of the first/last participant box centers,
+                // offset left by one outMargin (Java: text laid out in the note
+                // content area within the wider box). Each line is independently
+                // centered, but only when the box is stretched to the participant
+                // span; a content-driven box keeps the text left-aligned.
+                let over_several = note.position == NotePosition::Over
                     && !participants.is_empty()
-                {
-                    let first_ll = participants[0].lifeline_line_x;
-                    let last_ll = participants[participants.len() - 1].lifeline_line_x;
-                    let span = last_ll - first_ll;
-                    // Text is centered only when the box is stretched to the
-                    // participant span; a content-driven box keeps the text
-                    // left-aligned at note_left + pad.
+                    && (note.participants.is_empty() || note.participants.len() >= 2);
+                let across_text_center = if over_several {
+                    let (lo, hi) = if note.participants.is_empty() {
+                        (0, participants.len() - 1)
+                    } else {
+                        let a = note
+                            .participants
+                            .first()
+                            .and_then(|id| id_to_idx.get(id.as_str()))
+                            .copied()
+                            .unwrap_or(0);
+                        let b = note
+                            .participants
+                            .last()
+                            .and_then(|id| id_to_idx.get(id.as_str()))
+                            .copied()
+                            .unwrap_or(participants.len() - 1);
+                        if a <= b { (a, b) } else { (b, a) }
+                    };
+                    let span = participants[hi].lifeline_line_x - participants[lo].lifeline_line_x;
                     if span.round() + ACROSS_NOTE_MARGIN > note_content_w {
-                        let centre = (participants[0].center_x
-                            + participants[participants.len() - 1].center_x)
-                            / 2.0;
+                        let centre = (participants[lo].center_x + participants[hi].center_x) / 2.0;
                         Some(centre - PARTICIPANT_OUT_MARGIN)
                     } else {
                         None
