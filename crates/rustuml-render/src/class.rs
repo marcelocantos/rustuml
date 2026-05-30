@@ -117,6 +117,31 @@ const NOTE_LINE_HEIGHT: f64 = 16.0;
 const SMALL_FONT: f64 = 11.0;
 const TITLE_FONT_SIZE: f64 = 14.0;
 const TITLE_HEIGHT: f64 = TITLE_FONT_SIZE + 10.0;
+
+// --- Page-decoration (title/header/footer/caption) layout constants ---
+//
+// PlantUML positions the page decorations over a shared width
+// `dimTotal = max(body_width, decoration_widths)` and anchors their baselines a
+// fixed gap from the body's top/bottom edges. All values verified against the
+// class golden SVGs (`class_title_basic`, `class_decoration_*`, etc.).
+//
+/// Left + right body margins added to the entity rect extent to form the body
+/// block width (`dimOriginal`): 7px left + 8px right.
+const BODY_DECORATION_MARGIN: f64 = 15.0;
+/// document.title style: Padding 5 + Margin 5 on each side.
+const DECORATION_TITLE_INSET: f64 = 10.0;
+/// document.caption style: Padding 0 + Margin 1 on each side.
+const DECORATION_CAPTION_INSET: f64 = 1.0;
+/// Header glyph baseline: fixed at the top of the canvas.
+const DECORATION_HEADER_BASELINE_Y: f64 = 9.668;
+/// Title glyph baseline sits this far above the body's top edge.
+const DECORATION_TITLE_GAP_ABOVE_BODY: f64 = 20.9531;
+/// Footer glyph baseline sits this far below the body's bottom edge.
+const DECORATION_FOOTER_GAP_BELOW_BODY: f64 = 18.668;
+/// Caption glyph baseline sits this far below the body's bottom edge.
+const DECORATION_CAPTION_GAP_BELOW_BODY: f64 = 23.5352;
+/// Height of a caption block (pushes the footer down when both are present).
+const DECORATION_CAPTION_BLOCK_H: f64 = 23.5352;
 const GRID_MARGIN: f64 = 30.0;
 #[allow(dead_code)]
 const CLASS_MIN_WIDTH: f64 = 120.0;
@@ -1293,23 +1318,48 @@ fn render_plantuml_svg(
     svg.push_str("<defs/>");
     svg.push_str("<g>");
 
-    // Top-of-canvas decorations: title (above), then header below it. Each
-    // emits `<g class="..." data-source-line="N"><text ...>TEXT</text></g>`.
-    emit_decoration_top(
-        &mut svg,
-        "title",
-        diagram.meta.title.as_deref(),
-        diagram.title_line,
-        canvas_w as f64,
-        true,
-    );
-    emit_decoration_top(
+    // Body bounding box (entity rects), used to position the page decorations
+    // and to drive the centring width. PlantUML lays out title/header/caption/
+    // footer over `dimTotal = max(body_width, decoration_widths)` (see
+    // `DecorateEntityImage`); the text baselines are anchored a fixed gap from
+    // the body's top/bottom edges.
+    let mut body_min_x = f64::INFINITY;
+    let mut body_max_x = f64::NEG_INFINITY;
+    let mut body_top = f64::INFINITY;
+    let mut body_bottom = f64::NEG_INFINITY;
+    for (i, (x, y)) in entity_positions.iter().enumerate() {
+        body_min_x = body_min_x.min(*x);
+        body_max_x = body_max_x.max(x + dims[i].width);
+        body_top = body_top.min(*y);
+        body_bottom = body_bottom.max(y + dims[i].height);
+    }
+    if !body_min_x.is_finite() {
+        body_min_x = 0.0;
+        body_max_x = 0.0;
+        body_top = 0.0;
+        body_bottom = 0.0;
+    }
+    // The body block (`dimOriginal`) is its rect extent plus PlantUML's left/
+    // right body margins (7 + 8 px).
+    let body_inner_w = (body_max_x - body_min_x) + BODY_DECORATION_MARGIN;
+    let layout = DecorationLayout::new(diagram, body_inner_w);
+
+    // Top-of-canvas decorations, emitted header-first then title (PlantUML's
+    // `addTopAndBottom` group order), each as
+    // `<g class="..." data-source-line="N"><text ...>TEXT</text></g>`.
+    layout.emit(
         &mut svg,
         "header",
         diagram.meta.header.as_deref(),
         diagram.header_line,
-        canvas_w as f64,
-        false,
+        DECORATION_HEADER_BASELINE_Y,
+    );
+    layout.emit(
+        &mut svg,
+        "title",
+        diagram.meta.title.as_deref(),
+        diagram.title_line,
+        body_top - DECORATION_TITLE_GAP_ABOVE_BODY,
     );
 
     // Render any oracle-captured clusters (package/database/folder/...)
@@ -1600,24 +1650,34 @@ fn render_plantuml_svg(
         }
     }
 
-    // Bottom-of-canvas decorations: caption (above footer), then footer.
-    emit_decoration_bottom(
+    // Bottom-of-canvas decorations: caption (above footer), then footer. Both
+    // baselines are anchored a fixed gap below the body's bottom edge; when a
+    // caption is present it pushes the footer down by the caption block height.
+    let caption_present = diagram
+        .meta
+        .caption
+        .as_deref()
+        .is_some_and(|c| !c.is_empty());
+    layout.emit(
         &mut svg,
         "caption",
         diagram.meta.caption.as_deref(),
         diagram.caption_line,
-        canvas_w as f64,
-        canvas_h as f64,
-        false,
+        body_bottom + DECORATION_CAPTION_GAP_BELOW_BODY,
     );
-    emit_decoration_bottom(
+    let footer_y = body_bottom
+        + DECORATION_FOOTER_GAP_BELOW_BODY
+        + if caption_present {
+            DECORATION_CAPTION_BLOCK_H
+        } else {
+            0.0
+        };
+    layout.emit(
         &mut svg,
         "footer",
         diagram.meta.footer.as_deref(),
         diagram.footer_line,
-        canvas_w as f64,
-        canvas_h as f64,
-        true,
+        footer_y,
     );
 
     // Close top-level group and SVG.
@@ -1625,105 +1685,142 @@ fn render_plantuml_svg(
     svg
 }
 
-fn emit_decoration_top(
-    svg: &mut String,
-    class_name: &str,
-    text: Option<&str>,
-    line: Option<usize>,
-    canvas_w: f64,
-    is_title: bool,
-) {
-    let Some(text) = text else {
-        return;
-    };
-    if text.is_empty() {
-        return;
-    }
-    let font_size: u32 = if is_title { 14 } else { 10 };
-    let fill = if is_title { "#000000" } else { "#888888" };
-    let text_length = text_render::measure_no_underline(text, font_size as f64, is_title);
-    let x = if is_title {
-        (canvas_w - text_length) / 2.0
-    } else {
-        0.0
-    };
-    let y = if is_title { 23.5352 } else { 9.668 };
-    let source_line = line.unwrap_or(1);
-    write!(
-        svg,
-        r#"<g class="{class_name}" data-source-line="{source_line}">"#
-    )
-    .unwrap();
-    text_render::emit_text(
-        svg,
-        text,
-        &text_render::TextBase {
-            x,
-            y,
-            font_size,
-            font_family: "sans-serif",
-            fill,
-            bold: is_title,
-            italic: false,
-            underline: false,
-            skip_underline: false,
-        },
-    );
-    svg.push_str("</g>");
+/// Page-decoration (title/header/footer/caption) layout, mirroring PlantUML's
+/// `DecorateEntityImage`.
+///
+/// PlantUML stacks the body (`dimOriginal`) between an optional header+title
+/// region (top) and an optional caption+footer region (bottom). Each text block
+/// is horizontally aligned over a shared width `dimTotal = max(dimOriginal,
+/// header, title, caption, footer)`, where each decoration's width is its glyph
+/// run plus the style's left/right padding+margin (the "border" of the bordered
+/// text block). The glyph `x` is then the block's aligned left edge plus the
+/// block's own left inset (padding+margin).
+struct DecorationLayout {
+    dim_total_w: f64,
 }
 
-fn emit_decoration_bottom(
-    svg: &mut String,
-    class_name: &str,
-    text: Option<&str>,
-    line: Option<usize>,
-    canvas_w: f64,
-    canvas_h: f64,
-    is_footer: bool,
-) {
-    let Some(text) = text else {
-        return;
-    };
-    if text.is_empty() {
-        return;
+/// Per-decoration style: glyph font size, fill, bold, the symmetric
+/// padding+margin inset added on each side, and the block alignment.
+struct DecorationStyle {
+    font_size: u32,
+    fill: &'static str,
+    bold: bool,
+    /// Padding + margin added to one side of the glyph run (the bordered text
+    /// block grows by `2 * inset`; the glyph starts `inset` from the block's
+    /// left edge).
+    inset: f64,
+    align_right: bool,
+}
+
+impl DecorationLayout {
+    fn style(class_name: &str) -> DecorationStyle {
+        match class_name {
+            // document.title: FontSize 14, bold, Padding 5 + Margin 5, centre.
+            "title" => DecorationStyle {
+                font_size: 14,
+                fill: "#000000",
+                bold: true,
+                inset: DECORATION_TITLE_INSET,
+                align_right: false,
+            },
+            // document.caption: FontSize 14, Padding 0 + Margin 1, centre.
+            "caption" => DecorationStyle {
+                font_size: 14,
+                fill: "#000000",
+                bold: false,
+                inset: DECORATION_CAPTION_INSET,
+                align_right: false,
+            },
+            // document.header: FontSize 10, grey, no padding/margin, right.
+            "header" => DecorationStyle {
+                font_size: 10,
+                fill: "#888888",
+                bold: false,
+                inset: 0.0,
+                align_right: true,
+            },
+            // document.footer: FontSize 10, grey, no padding/margin, centre.
+            _ => DecorationStyle {
+                font_size: 10,
+                fill: "#888888",
+                bold: false,
+                inset: 0.0,
+                align_right: false,
+            },
+        }
     }
-    let font_size: u32 = if is_footer { 10 } else { 14 };
-    let fill = if is_footer { "#888888" } else { "#000000" };
-    let text_length = text_render::measure_no_underline(text, font_size as f64, false);
-    // Footer is rendered at the left margin (PlantUML default), caption is
-    // centred. We approximate the exact x by leaving footer at x=0.
-    let x = if is_footer {
-        0.0
-    } else {
-        (canvas_w - text_length) / 2.0
-    };
-    let y = if is_footer {
-        canvas_h - 8.332
-    } else {
-        canvas_h - 10.4648
-    };
-    let source_line = line.unwrap_or(1);
-    write!(
-        svg,
-        r#"<g class="{class_name}" data-source-line="{source_line}">"#
-    )
-    .unwrap();
-    text_render::emit_text(
-        svg,
-        text,
-        &text_render::TextBase {
-            x,
-            y,
-            font_size,
-            font_family: "sans-serif",
-            fill,
-            bold: false,
-            italic: false,
-            underline: false,
-            skip_underline: false,
-        },
-    );
-    svg.push_str("</g>");
+
+    /// Width of a decoration's bordered text block (glyph run + 2 * inset).
+    fn block_width(class_name: &str, text: &str) -> f64 {
+        let st = Self::style(class_name);
+        text_render::measure_no_underline(text, st.font_size as f64, st.bold) + 2.0 * st.inset
+    }
+
+    /// Build the layout, computing `dimTotal` from the body width and any
+    /// present decorations.
+    fn new(diagram: &ClassDiagram, body_inner_w: f64) -> Self {
+        let mut dim_total_w = body_inner_w;
+        for (class_name, text) in [
+            ("title", diagram.meta.title.as_deref()),
+            ("header", diagram.meta.header.as_deref()),
+            ("caption", diagram.meta.caption.as_deref()),
+            ("footer", diagram.meta.footer.as_deref()),
+        ] {
+            if let Some(t) = text
+                && !t.is_empty()
+            {
+                dim_total_w = dim_total_w.max(Self::block_width(class_name, t));
+            }
+        }
+        Self { dim_total_w }
+    }
+
+    /// Emit a single decoration's `<g>`/`<text>` at the given glyph baseline `y`.
+    fn emit(
+        &self,
+        svg: &mut String,
+        class_name: &str,
+        text: Option<&str>,
+        line: Option<usize>,
+        y: f64,
+    ) {
+        let Some(text) = text else { return };
+        if text.is_empty() {
+            return;
+        }
+        let st = Self::style(class_name);
+        let block_w = Self::block_width(class_name, text);
+        // Aligned block left edge over the shared total width, then the block's
+        // own left inset to reach the glyph origin.
+        let block_x = if st.align_right {
+            self.dim_total_w - block_w
+        } else {
+            (self.dim_total_w - block_w) / 2.0
+        };
+        let x = block_x + st.inset;
+        let source_line = line.unwrap_or(1);
+        write!(
+            svg,
+            r#"<g class="{class_name}" data-source-line="{source_line}">"#
+        )
+        .unwrap();
+        text_render::emit_text(
+            svg,
+            text,
+            &text_render::TextBase {
+                x,
+                y,
+                font_size: st.font_size,
+                font_family: "sans-serif",
+                fill: st.fill,
+                bold: st.bold,
+                italic: false,
+                underline: false,
+                skip_underline: false,
+            },
+        );
+        svg.push_str("</g>");
+    }
 }
 
 /// Render the content of a single entity (rect, icon, name, separator lines, members).
