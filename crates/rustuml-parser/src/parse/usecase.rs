@@ -134,7 +134,7 @@ pub fn parse_usecase(lines: &[String]) -> Result<UseCaseDiagram, ParseError> {
     // optional `#color` modifier (named or hex) before the brace is captured.
     static RE_PKG: LazyLock<Regex> = LazyLock::new(|| {
         Regex::new(
-            r#"^(?:rectangle|package)\s+(?:"([^"]+)"|(\w+))(?:\s+[^{]*?#([0-9A-Za-z]+))?(?:\s+[^{]*)?\{"#,
+            r#"^(rectangle|package)\s+(?:"([^"]+)"|(\w+))(?:\s+[^{]*?#([0-9A-Za-z]+))?(?:\s+[^{]*)?\{"#,
         )
         .unwrap()
     });
@@ -539,17 +539,22 @@ pub fn parse_usecase(lines: &[String]) -> Result<UseCaseDiagram, ParseError> {
                 source_line: current_line,
             });
         } else if let Some(caps) = RE_PKG.captures(trimmed) {
+            let kind = match caps.get(1).map(|m| m.as_str()) {
+                Some("rectangle") => crate::diagram::usecase::PackageKind::Rectangle,
+                _ => crate::diagram::usecase::PackageKind::Package,
+            };
             let name = caps
-                .get(1)
-                .or(caps.get(2))
+                .get(2)
+                .or(caps.get(3))
                 .map(|m| m.as_str().to_string())
                 .unwrap_or_default();
-            let color = caps.get(3).map(|m| m.as_str().to_string());
+            let color = caps.get(4).map(|m| m.as_str().to_string());
             current_package = Some(packages.len());
             packages.push(UseCasePackage {
                 name,
                 elements: Vec::new(),
                 color,
+                kind,
                 source_line: current_line,
             });
         }

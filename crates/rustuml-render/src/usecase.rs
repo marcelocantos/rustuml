@@ -202,27 +202,29 @@ pub fn render_with_oracle(
         );
     };
 
+    // PlantUML emits all cluster groups first (in source-line order), then all
+    // member entities (in global source-line order), then the top-level
+    // entities. Emit the clusters, then collect and sort the members.
     for pkg in &diagram.packages {
         render_package_group(&mut svg, pkg, oracle, &id_map);
-        // Emit member entities in source-line order.
-        let mut members: Vec<(usize, bool, usize)> = Vec::new(); // (source_line, is_actor, index)
-        for (i, a) in diagram.actors.iter().enumerate() {
-            if pkg.elements.iter().any(|e| e == &a.id) {
-                members.push((a.source_line, true, i));
-            }
+    }
+    let mut members: Vec<(usize, bool, usize)> = Vec::new(); // (source_line, is_actor, index)
+    for (i, a) in diagram.actors.iter().enumerate() {
+        if member_ids.contains(a.id.as_str()) {
+            members.push((a.source_line, true, i));
         }
-        for (i, u) in diagram.use_cases.iter().enumerate() {
-            if pkg.elements.iter().any(|e| e == &u.id) {
-                members.push((u.source_line, false, i));
-            }
+    }
+    for (i, u) in diagram.use_cases.iter().enumerate() {
+        if member_ids.contains(u.id.as_str()) {
+            members.push((u.source_line, false, i));
         }
-        members.sort_by_key(|m| m.0);
-        for (_, is_actor, i) in members {
-            if is_actor {
-                render_actor_i(&mut svg, i);
-            } else {
-                render_uc_i(&mut svg, i);
-            }
+    }
+    members.sort_by_key(|m| m.0);
+    for (_, is_actor, i) in members {
+        if is_actor {
+            render_actor_i(&mut svg, i);
+        } else {
+            render_uc_i(&mut svg, i);
         }
     }
 
@@ -640,16 +642,60 @@ fn render_package_group(
         r#"<g class="cluster" data-qualified-name="{}"{src_attr} id="{ent_id}">"#,
         pkg.name
     ));
-    svg.raw(&format!(
-        r#"<rect fill="{fill}" height="{h}" rx="2.5" ry="2.5" style="stroke:#181818;stroke-width:1;" width="{w}" x="{x}" y="{y}"/>"#,
-        h = fc(rect.height),
-        w = fc(rect.width),
-        x = fc(rect.x),
-        y = fc(rect.y),
-    ));
     let label_w = text_render::measure(&pkg.name, FONT_SIZE, true);
-    let label_x = rect.x + (rect.width - label_w) / 2.0;
-    let label_y = rect.y + 15.5352;
+    let (label_x, label_y) = match pkg.kind {
+        PackageKind::Rectangle => {
+            // Plain rounded rect, centred bold label.
+            svg.raw(&format!(
+                r#"<rect fill="{fill}" height="{h}" rx="2.5" ry="2.5" style="stroke:#181818;stroke-width:1;" width="{w}" x="{x}" y="{y}"/>"#,
+                h = fc(rect.height),
+                w = fc(rect.width),
+                x = fc(rect.x),
+                y = fc(rect.y),
+            ));
+            (rect.x + (rect.width - label_w) / 2.0, rect.y + 15.5352)
+        }
+        PackageKind::Package => {
+            // Folder-tab outline: a notched top-left "tab" carrying the label,
+            // a diagonal slope down to the body's top edge, then a rounded
+            // rectangle body. Reconstructed from the oracle box rect and label
+            // width (HALF_UP coords).
+            let x = rect.x;
+            let y = rect.y;
+            let xr = rect.x + rect.width;
+            let yb = rect.y + rect.height;
+            // Tab top-right corner: label start (x+4) + label width, less 0.5.
+            let tab_tr = x + 3.5 + label_w;
+            let tab_y = y + pm::text_height(FONT_SIZE) + 6.0;
+            let d = format!(
+                "M{x25},{y_s} L{tab_tr},{y_s} A3.75,3.75 0 0 1 {tab_tr25},{y25} L{tab_br},{ty} L{xr25},{ty} A2.5,2.5 0 0 1 {xr_s},{ty25} L{xr_s},{yb2} A2.5,2.5 0 0 1 {xr25},{yb_s} L{x25},{yb_s} A2.5,2.5 0 0 1 {x_s},{yb2} L{x_s},{y25} A2.5,2.5 0 0 1 {x25},{y_s}",
+                x25 = fc(x + 2.5),
+                y_s = fc(y),
+                tab_tr = fc(tab_tr),
+                tab_tr25 = fc(tab_tr + 2.5),
+                y25 = fc(y + 2.5),
+                tab_br = fc(tab_tr + 9.5),
+                ty = fc(tab_y),
+                xr25 = fc(xr - 2.5),
+                xr_s = fc(xr),
+                ty25 = fc(tab_y + 2.5),
+                yb2 = fc(yb - 2.5),
+                yb_s = fc(yb),
+                x_s = fc(x),
+            );
+            svg.raw(&format!(
+                r#"<path d="{d}" fill="{fill}" style="stroke:#000000;stroke-width:1.5;"/>"#,
+            ));
+            // Divider under the tab from the left edge to the slope end.
+            svg.raw(&format!(
+                r#"<line style="stroke:#000000;stroke-width:1.5;" x1="{x1}" x2="{x2}" y1="{ty}" y2="{ty}"/>"#,
+                x1 = fc(x),
+                x2 = fc(tab_tr + 9.5),
+                ty = fc(tab_y),
+            ));
+            (x + 4.0, y + 15.5352)
+        }
+    };
     let mut buf = String::new();
     text_render::emit_text(
         &mut buf,

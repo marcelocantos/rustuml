@@ -70,6 +70,16 @@ pub struct UseCaseConnection {
     pub source_line: usize,
 }
 
+/// The grouping keyword used to open a use-case container, which selects its
+/// drawn shape: `package` renders a folder-tab outline, `rectangle` a plain
+/// rounded rect.
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Serialize, Deserialize, Default)]
+pub enum PackageKind {
+    #[default]
+    Package,
+    Rectangle,
+}
+
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct UseCasePackage {
     pub name: String,
@@ -78,6 +88,9 @@ pub struct UseCasePackage {
     /// Stored without the leading `#`.
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub color: Option<String>,
+    /// Which grouping keyword opened the container (`package` vs `rectangle`).
+    #[serde(default)]
+    pub kind: PackageKind,
     /// 1-based line number of the package/rectangle opening within the block.
     #[serde(default)]
     pub source_line: usize,
