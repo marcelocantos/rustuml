@@ -138,7 +138,58 @@ fn render_under_filter_registry(
         let replacement = format!("<defs>{defs_content}</defs>");
         svg.replacen("<defs/>", &replacement, 1)
     };
-    rebrand_in_svg(svg)
+    apply_monochrome(rebrand_in_svg(svg), diagram)
+}
+
+/// `skinparam monochrome true|reverse` maps every emitted colour to its YIQ
+/// grey level (PlantUML `ColorUtils.getGrayScale`: `(R*299+G*587+B*114)/1000`,
+/// integer division; `reverse` uses `255-grey`). Applied as a final-SVG pass
+/// over `#RRGGBB` literals. Gated on the skinparam — non-monochrome diagrams
+/// are returned untouched. UTF-8 safe: bytes are copied through verbatim and
+/// only ASCII hex-colour runs are rewritten (matched replacement is ASCII).
+fn apply_monochrome(svg: String, diagram: &Diagram) -> String {
+    let mode = diagram.meta().skinparams.iter().rev().find_map(|sp| {
+        if !sp.key.eq_ignore_ascii_case("monochrome") {
+            return None;
+        }
+        match sp.value.trim().to_ascii_lowercase().as_str() {
+            "true" => Some(false),
+            "reverse" => Some(true),
+            _ => None,
+        }
+    });
+    let Some(reverse) = mode else {
+        return svg;
+    };
+
+    let b = svg.as_bytes();
+    let mut out: Vec<u8> = Vec::with_capacity(b.len());
+    let is_hex = |c: u8| c.is_ascii_hexdigit();
+    let mut i = 0;
+    while i < b.len() {
+        // A 6-digit hex colour: '#' + 6 hex digits, not followed by a 7th.
+        if b[i] == b'#'
+            && i + 7 <= b.len()
+            && b[i + 1..i + 7].iter().all(|&c| is_hex(c))
+            && (i + 7 == b.len() || !is_hex(b[i + 7]))
+        {
+            let hex = std::str::from_utf8(&b[i + 1..i + 7]).unwrap();
+            let r = u32::from_str_radix(&hex[0..2], 16).unwrap();
+            let g = u32::from_str_radix(&hex[2..4], 16).unwrap();
+            let bl = u32::from_str_radix(&hex[4..6], 16).unwrap();
+            let mut grey = (r * 299 + g * 587 + bl * 114) / 1000;
+            if reverse {
+                grey = 255 - grey;
+            }
+            out.extend_from_slice(format!("#{grey:02X}{grey:02X}{grey:02X}").as_bytes());
+            i += 7;
+        } else {
+            out.push(b[i]);
+            i += 1;
+        }
+    }
+    // Safe: only ASCII runs were rewritten; all other bytes copied verbatim.
+    String::from_utf8(out).unwrap_or(svg)
 }
 
 /// Swap PlantUML's own brand self-references for rustuml equivalents in
