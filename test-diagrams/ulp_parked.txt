@@ -173,3 +173,11 @@ creole/creole_font_name_in_class
 creole/creole_combo_size_large_in_usecase
 creole/creole_combo_size_large_in_component
 creole/creole_combo_mono_in_usecase
+
+# Sub-ULP FP noise (≤0.01px, numeric-only), parked 2026-05-31 — JVM 4-decimal
+# HALF_UP rounding-boundary accumulation, unreproducible without bit-exact FP.
+creole/creole_unicode_cjk_in_sequence
+sequence/seq_kitchen_sink_07
+skinparam/skin_state_arrowFontSize_10
+sequence/seq_msg_creole_mixed
+activity/act_switch_in_fork
