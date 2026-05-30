@@ -2064,9 +2064,54 @@ fn render_composite_with_oracle(diagram: &StateDiagram, orc: &OracleLayout) -> S
         true
     };
 
+    // History pseudo-states render as a bare `<ellipse>` + `<text>` pair (no
+    // `<g class="entity">` wrapper) outside the entity loop. The oracle records
+    // each one under the synthetic key `__history_N__` in SVG document order;
+    // `history_idx` walks them as the bare-composite traversal encounters
+    // History/DeepHistory states in declaration order.
+    let history_idx = std::cell::Cell::new(0usize);
+
     // Helper: emit a normal state box (rect + divider + name [+ descriptions])
     // from oracle geometry, keyed by its qualified id.
     let emit_state_box = |svg: &mut String, st: &State| {
+        if matches!(st.kind, StateKind::History | StateKind::DeepHistory) {
+            let key = format!("__history_{}__", history_idx.get());
+            history_idx.set(history_idx.get() + 1);
+            let Some(rect) = orc.entities.get(key.as_str()) else {
+                return;
+            };
+            let px = rect.x + rect.width / 2.0;
+            let py = rect.y + rect.height / 2.0;
+            let h_radius = rect.width / 2.0;
+            let label = if matches!(st.kind, StateKind::DeepHistory) {
+                "H*"
+            } else {
+                "H"
+            };
+            let h_fill = DEFAULT_STATE_FILL;
+            let h_stroke = DEFAULT_STROKE_COLOR;
+            let h_text = DEFAULT_TEXT_COLOR;
+            write!(
+                svg,
+                r#"<ellipse cx="{}" cy="{}" fill="{h_fill}" rx="{}" ry="{}" style="stroke:{h_stroke};stroke-width:0.5;"/>"#,
+                fmt_f(px),
+                fmt_f(py),
+                fmt_f(h_radius),
+                fmt_f(h_radius),
+            )
+            .unwrap();
+            let tw = text_render::measure(label, STATE_FONT_SIZE, false);
+            let text_y = py + 5.291;
+            write!(
+                svg,
+                r#"<text fill="{h_text}" font-family="sans-serif" font-size="{STATE_FONT_SIZE}" lengthAdjust="spacing" textLength="{}" x="{}" y="{}">{label}</text>"#,
+                fmt_f(tw),
+                fmt_f(px - tw / 2.0),
+                fmt_f(text_y),
+            )
+            .unwrap();
+            return;
+        }
         let Some(rect) = orc.entities.get(st.id.as_str()) else {
             return;
         };

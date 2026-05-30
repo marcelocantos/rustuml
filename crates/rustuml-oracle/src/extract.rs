@@ -1101,7 +1101,15 @@ pub fn extract_oracle_layout(svg: &str) -> Option<OracleLayout> {
             Some(p) => {
                 p.tag_name().name() == "g"
                     && p.attribute("class").is_none()
-                    && matches!(n.tag_name().name(), "rect" | "text" | "path" | "line")
+                    // `ellipse` covers bare top-level history pseudo-states
+                    // (`<<history>>`/`<<history*>>`); including it lets the
+                    // composite-header title walk stop at the history marker
+                    // rather than absorbing the marker's `H` glyph as a
+                    // font-12 description line.
+                    && matches!(
+                        n.tag_name().name(),
+                        "rect" | "text" | "path" | "line" | "ellipse"
+                    )
             }
             None => false,
         })
