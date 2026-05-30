@@ -1340,7 +1340,18 @@ pub fn render_with_oracle(
     for (note_idx, note) in diagram
         .notes
         .iter()
-        .filter(|n| !(oracle.is_some() && matches!(&n.kind, StateNoteKind::Floating(Some(_)))))
+        .filter(|n| {
+            !(oracle.is_some()
+                && matches!(
+                    &n.kind,
+                    // Named floating notes are emitted up front under their
+                    // alias; `note on link` shapes are emitted inside the
+                    // preceding link's `<g class="link">` group. Neither has a
+                    // standalone `GMN*` entity, so skip both here to keep the
+                    // positional GMN pairing aligned.
+                    StateNoteKind::Floating(Some(_)) | StateNoteKind::OnLink
+                ))
+        })
         .enumerate()
     {
         if let Some((gmn_name, rect)) = oracle_gmns.get(note_idx) {
@@ -1886,18 +1897,21 @@ fn render_oracle_transitions(svg: &mut String, diagram: &StateDiagram, oracle: &
             .unwrap();
         }
 
-        // Edge labels from oracle. PlantUML emits one or more `<text>`
-        // children inside the `<g class="link">` for transition labels.
-        // We trust the oracle for exact x/y placement and reuse our
-        // text renderer for the markup (lengthAdjust/textLength etc.).
-        for (lx, ly, text) in &oracle_edge.labels {
+        // Edge labels plus any `note on link` shape. PlantUML emits, in
+        // document order: the transition's own label (e.g. `simple`), then the
+        // note's box path and folded-corner path (`extra_paths`), then the note
+        // text. We replay that order: the transition label first, the note's
+        // box paths, then the remaining labels (the note text). When the
+        // transition has no label of its own, every captured text belongs to
+        // the note and follows the box.
+        let emit_label = |svg: &mut String, lx: f64, ly: f64, text: &str| {
             let mut text_buf = String::new();
             text_render::emit_text(
                 &mut text_buf,
                 text,
                 &TextBase {
-                    x: *lx,
-                    y: *ly,
+                    x: lx,
+                    y: ly,
                     font_size: arrow_font_size,
                     font_family: "sans-serif",
                     fill: TEXT_COLOR,
@@ -1908,6 +1922,30 @@ fn render_oracle_transitions(svg: &mut String, diagram: &StateDiagram, oracle: &
                 },
             );
             svg.push_str(&text_buf);
+        };
+        let emit_extra_paths = |svg: &mut String| {
+            for (d, style) in &oracle_edge.extra_paths {
+                let style = style
+                    .as_deref()
+                    .unwrap_or("stroke:#181818;stroke-width:0.5;");
+                write!(svg, r#"<path d="{d}" fill="{NOTE_FILL}" style="{style}"/>"#).unwrap();
+            }
+        };
+        if oracle_edge.extra_paths.is_empty() {
+            for (lx, ly, text) in &oracle_edge.labels {
+                emit_label(svg, *lx, *ly, text);
+            }
+        } else {
+            let mut labels = oracle_edge.labels.iter();
+            if t.label.is_some()
+                && let Some((lx, ly, text)) = labels.next()
+            {
+                emit_label(svg, *lx, *ly, text);
+            }
+            emit_extra_paths(svg);
+            for (lx, ly, text) in labels {
+                emit_label(svg, *lx, *ly, text);
+            }
         }
 
         svg.push_str("</g>");
