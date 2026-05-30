@@ -74,8 +74,8 @@ struct PlayerLayout<'a> {
 }
 
 /// Map a time value to its pixel offset from the first tick.
-fn pos_in_pixel(t: i64, time_min: i64, tick_unit: i64) -> f64 {
-    (t - time_min) as f64 / tick_unit as f64 * TICK_INTERVAL_PX
+fn pos_in_pixel(t: i64, time_min: i64, tick_unit: i64, tick_px: f64) -> f64 {
+    (t - time_min) as f64 / tick_unit as f64 * tick_px
 }
 
 /// Highest common factor of the absolute non-zero tick values.
@@ -130,8 +130,13 @@ pub fn render(diagram: &TimingDiagram, _theme: &Theme) -> String {
         Some(scale) if scale.units > 0 => scale.units,
         _ => hcf(&times),
     };
+    // Pixels per tick interval: `scale N as M pixels` overrides the default 50.
+    let tick_px = match diagram.scale {
+        Some(scale) if scale.pixels > 0 => scale.pixels as f64,
+        _ => TICK_INTERVAL_PX,
+    };
     let delta = time_max - time_min;
-    let ruler_width = (delta as f64 / tick_unit as f64 + 1.0) * TICK_INTERVAL_PX;
+    let ruler_width = (delta as f64 / tick_unit as f64 + 1.0) * tick_px;
     let nb_tick = (1 + delta / tick_unit).min(1000) as usize;
 
     // ── Player layout (vertical) ──────────────────────────────────────────────
@@ -172,7 +177,7 @@ pub fn render(diagram: &TimingDiagram, _theme: &Theme) -> String {
     let frame_right = first_tick_x + ruler_width + MARGIN_X2;
     let axis_top = ORIGIN;
     let axis_bottom = ORIGIN + inner_height;
-    let tx = |t: i64| first_tick_x + pos_in_pixel(t, time_min, tick_unit);
+    let tx = |t: i64| first_tick_x + pos_in_pixel(t, time_min, tick_unit, tick_px);
 
     // ── Dimensions ──────────────────────────────────────────────────────────────
     let total_width = round_half_up(frame_right + WIDTH_PAD);
@@ -201,7 +206,7 @@ pub fn render(diagram: &TimingDiagram, _theme: &Theme) -> String {
 
     // ── Ruler vertical grid lines ───────────────────────────────────────────────
     for i in 0..=nb_tick {
-        let x = first_tick_x + TICK_INTERVAL_PX * i as f64;
+        let x = first_tick_x + tick_px * i as f64;
         emit_vline(&mut svg, x, axis_top, axis_bottom, 0.5, true);
     }
 
@@ -226,6 +231,7 @@ pub fn render(diagram: &TimingDiagram, _theme: &Theme) -> String {
         diagram,
         time_min,
         tick_unit,
+        tick_px,
         nb_tick,
         first_tick_x,
         axis_bottom,
@@ -643,6 +649,7 @@ fn draw_time_axis(
     diagram: &TimingDiagram,
     time_min: i64,
     tick_unit: i64,
+    tick_px: f64,
     nb_tick: usize,
     first_tick_x: f64,
     axis_bottom: f64,
@@ -653,7 +660,7 @@ fn draw_time_axis(
 
     let mut i = 0usize;
     loop {
-        let x = first_tick_x + TICK_INTERVAL_PX * i as f64;
+        let x = first_tick_x + tick_px * i as f64;
         if x > x_end + 1e-6 {
             break;
         }
@@ -684,7 +691,7 @@ fn draw_time_axis(
     for v in label_values {
         let s = v.to_string();
         let w = text_width(&s, FONT_TIME, false);
-        let cx = first_tick_x + pos_in_pixel(v, time_min, tick_unit);
+        let cx = first_tick_x + pos_in_pixel(v, time_min, tick_unit, tick_px);
         emit_text(svg, cx - w / 2.0, label_baseline, &s, FONT_TIME, false);
     }
 }
