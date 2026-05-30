@@ -1379,6 +1379,7 @@ fn render_oracle_connections(
             .unwrap_or_else(|| id.to_string())
     };
 
+    let mut emitted_edge_ids: std::collections::HashSet<String> = std::collections::HashSet::new();
     for conn in &diagram.connections {
         // Path id formats vary by arrow kind:
         //   "{from}-to-{to}"     — dependency  (`A -> B`, `A --> B`)
@@ -1409,9 +1410,56 @@ fn render_oracle_connections(
             Some(e) => e,
             None => continue,
         };
+        emitted_edge_ids.insert(oracle_edge.id.clone());
+        emit_oracle_edge(svg, oracle_edge, &conn.from, &conn.to);
+    }
+
+    // Note connectors: PlantUML links a `note … of X` to its target with a
+    // `<g class="link">` edge, but the parser models these as `ComponentNote`
+    // attachments rather than `Connection`s, so the loop above never emits
+    // them. Sweep any remaining oracle edges that touch a note entity (by
+    // qualified name) and emit them in oracle order. The edge id is
+    // `{target}-{note}`, from which we recover the comment endpoints.
+    if !oracle.note_entities.is_empty() {
+        let note_names: std::collections::HashSet<&str> = oracle
+            .note_entities
+            .iter()
+            .map(|ne| ne.qualified_name.as_str())
+            .collect();
+        for edge in &oracle.edges {
+            if emitted_edge_ids.contains(&edge.id) {
+                continue;
+            }
+            // Split the edge id at the last `-` so a note name like `GMN4`
+            // (no dashes) is recovered intact; container names with dashes
+            // are rare but the note suffix never contains one.
+            let touches_note = edge
+                .id
+                .rsplit_once('-')
+                .map(|(_, note)| note_names.contains(note))
+                .unwrap_or(false);
+            if !touches_note {
+                continue;
+            }
+            let (from, to) = edge.id.rsplit_once('-').unwrap_or(("", edge.id.as_str()));
+            emit_oracle_edge(svg, edge, from, to);
+        }
+    }
+}
+
+/// Emit a single `<g class="link">` group for an oracle edge: the main path,
+/// any extra paths, arrowheads, and labels. `comment_from`/`comment_to` supply
+/// the `<!--link X to Y-->` endpoints.
+fn emit_oracle_edge(
+    svg: &mut SvgBuilder,
+    oracle_edge: &crate::layout_oracle::OracleEdgePath,
+    comment_from: &str,
+    comment_to: &str,
+) {
+    {
         let expected_id = &oracle_edge.id;
 
-        svg.raw(&format!("<!--link {} to {}-->", conn.from, conn.to));
+        svg.raw(&format!("<!--link {comment_from} to {comment_to}-->"));
 
         let entity_1 = oracle_edge.entity_1.as_deref().unwrap_or("ent0002");
         let entity_2 = oracle_edge.entity_2.as_deref().unwrap_or("ent0003");
