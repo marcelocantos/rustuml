@@ -130,6 +130,12 @@ pub fn parse_component(lines: &[String]) -> Result<ComponentDiagram, ParseError>
         LazyLock::new(|| Regex::new(r"^interface\s+\[([^\]]+)\]\s+as\s+(\w+)").unwrap());
     static RE_IFACE_BARE: LazyLock<Regex> =
         LazyLock::new(|| Regex::new(r"^interface\s+(\w+)\s*$").unwrap());
+    // Lollipop interface shorthand: `() IFoo`, `() "Label"`, `() "Label" as ID`.
+    // Matched as a standalone declaration only (no trailing arrow), so it must
+    // be tried before RE_CONN, whose arrow class also contains `(`/`)`.
+    static RE_IFACE_PAREN: LazyLock<Regex> = LazyLock::new(|| {
+        Regex::new(r#"^\(\)\s+(?:"([^"]+)"|(\w+))(?:\s+as\s+(\w+))?\s*$"#).unwrap()
+    });
     // Note: `note right of ID : text` or `note right of ID` (multiline)
     static RE_NOTE_OF: LazyLock<Regex> = LazyLock::new(|| {
         Regex::new(r"^note\s+(?:right|left|top|bottom)\s+of\s+(\w+|\[[\w\s]+\])(?:\s*:\s*(.+))?$")
@@ -490,6 +496,22 @@ pub fn parse_component(lines: &[String]) -> Result<ComponentDiagram, ParseError>
                     id: name.clone(),
                     label: name,
                 });
+            }
+            continue;
+        }
+        // `() IFoo` / `() "Label" as ID` — lollipop interface shorthand.
+        if let Some(caps) = RE_IFACE_PAREN.captures(trimmed) {
+            let label = caps
+                .get(1)
+                .or_else(|| caps.get(2))
+                .map(|m| m.as_str().to_string())
+                .unwrap_or_default();
+            let id = caps
+                .get(3)
+                .map(|m| m.as_str().to_string())
+                .unwrap_or_else(|| label.clone());
+            if !interfaces.iter().any(|i: &Interface| i.id == id) {
+                interfaces.push(Interface { id, label });
             }
             continue;
         }
