@@ -281,6 +281,62 @@ const ARROW_HALF_H: f64 = 4.0; // vertical half-height of arrow polygon
 const FILLED_ARROW_NOTCH: f64 = 4.0; // notch indent in filled arrow
 const MSG_TEXT_LEFT_PAD: f64 = 7.0; // text offset from source lifeline
 const LEFT_ARROW_TEXT_PAD: f64 = 16.0; // text offset from arrow tip (left arrows)
+/// Java ComponentRoseArrow margins / deltas (AbstractTextualComponent super
+/// args 7,7,1 and arrowDeltaX = 10). Used to position message labels when
+/// `skinparam SequenceMessageAlign` is center or right.
+const ARROW_MARGIN_X1: f64 = 7.0;
+const ARROW_MARGIN_X2: f64 = 7.0;
+const ARROW_DELTA_X: f64 = 10.0;
+
+/// Message-label horizontal alignment selected by
+/// `skinparam SequenceMessageAlign`.
+#[derive(Clone, Copy, PartialEq, Eq)]
+enum MessageAlign {
+    Left,
+    Center,
+    Right,
+}
+
+/// Compute the message-label x given the left-aligned x that the renderer
+/// already produces, the drawn arrow-line endpoints, the label width and the
+/// arrow direction.
+///
+/// Ports `ComponentRoseArrow.drawInternalU` (lines ~165-179): the label is
+/// drawn at `componentLeft + textPos`, where for LEFT `textPos = marginX1
+/// (+ arrowDeltaX when the head is on the source/left side)`. The renderer's
+/// `left_x` already equals `componentLeft + that LEFT textPos`, so we recover
+/// `componentLeft` and apply the center/right formula. `width` is the arrow
+/// component width = drawn line length + 6 (Java draws `len = width - 1` then
+/// trims `arrowDeltaX/2` for the normal full head).
+fn aligned_label_x(
+    align: MessageAlign,
+    left_x: f64,
+    line_x1: f64,
+    line_x2: f64,
+    text_width: f64,
+    is_right: bool,
+) -> f64 {
+    if align == MessageAlign::Left {
+        return left_x;
+    }
+    let width = (line_x2 - line_x1).abs() + 6.0;
+    // LEFT textPos: marginX1 for an LTR-normal arrow (head on right), or
+    // marginX1 + arrowDeltaX for a reverse arrow (head on the source/left side).
+    let left_text_pos = if is_right {
+        ARROW_MARGIN_X1
+    } else {
+        ARROW_MARGIN_X1 + ARROW_DELTA_X
+    };
+    let component_left = left_x - left_text_pos;
+    let text_pos = match align {
+        MessageAlign::Center => (width - text_width) / 2.0,
+        MessageAlign::Right => {
+            width - text_width - ARROW_MARGIN_X2 - if is_right { ARROW_DELTA_X } else { 0.0 }
+        }
+        MessageAlign::Left => unreachable!(),
+    };
+    component_left + text_pos
+}
 const ACTIVATION_WIDTH: f64 = 10.0;
 const ACTIVATION_HALF_W: f64 = 5.0;
 /// Gap between autonumber bold text and message label text.
@@ -1595,10 +1651,12 @@ impl PlantUmlSvg {
         text_x: f64,
         text_y: f64,
         text_content: &str,
-        _text_len: f64,
+        text_len: f64,
         color: &str,
         autonumber: Option<(&str, f64, &AutoNumberStyle)>,
+        align: MessageAlign,
     ) {
+        let text_x = aligned_label_x(align, text_x, line_x1, line_x2, text_len, is_right);
         write!(
             self.buf,
             r##"<g class="message" data-entity-1="{entity1}" data-entity-2="{entity2}" data-source-line="{source_line}" id="msg{msg_id}">"##,
@@ -1709,7 +1767,10 @@ impl PlantUmlSvg {
         text_len: f64,
         color: &str,
         autonumber: Option<(&str, f64, &AutoNumberStyle)>, // (text, width, style)
+        is_right: bool,
+        align: MessageAlign,
     ) {
+        let text_x = aligned_label_x(align, text_x, line_x1, line_x2, text_len, is_right);
         write!(
             self.buf,
             r##"<g class="message" data-entity-1="{entity1}" data-entity-2="{entity2}" data-source-line="{source_line}" id="msg{msg_id}">"##,
@@ -1761,7 +1822,6 @@ impl PlantUmlSvg {
         };
 
         if !text_content.is_empty() {
-            let _ = text_len;
             text_render::emit_text(
                 &mut self.buf,
                 text_content,
@@ -1807,9 +1867,13 @@ impl PlantUmlSvg {
         text_x: f64,
         text_y: f64,
         text_content: &str,
+        text_len: f64,
         color: &str,
         autonumber: Option<(&str, f64, &AutoNumberStyle)>,
+        is_right: bool,
+        align: MessageAlign,
     ) {
+        let text_x = aligned_label_x(align, text_x, line_x1, line_x2, text_len, is_right);
         write!(
             self.buf,
             r##"<g class="message" data-entity-1="{entity1}" data-entity-2="{entity2}" data-source-line="{source_line}" id="msg{msg_id}">"##,
@@ -1936,7 +2000,9 @@ impl PlantUmlSvg {
         text_len: f64,
         color: &str,
         autonumber: Option<(&str, f64, &AutoNumberStyle)>, // (text, width, style)
+        align: MessageAlign,
     ) {
+        let text_x = aligned_label_x(align, text_x, line_x1, line_x2, text_len, is_right);
         write!(
             self.buf,
             r##"<g class="message" data-entity-1="{entity1}" data-entity-2="{entity2}" data-source-line="{source_line}" id="msg{msg_id}">"##,
@@ -2339,6 +2405,9 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme) -> String {
     let mut divider_border = "#000000".to_string();
     let mut divider_font_color = "#000000".to_string();
     let mut divider_font_size: u32 = MSG_FONT_SIZE as u32;
+    // Message label horizontal alignment on the arrow span. PlantUML's
+    // `skinparam SequenceMessageAlign` accepts left (default) | center | right.
+    let mut message_align = MessageAlign::Left;
     for sp in &diagram.meta.skinparams {
         let key = sp.key.to_ascii_lowercase();
         let val = sp.value.trim();
@@ -2442,6 +2511,13 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme) -> String {
                 if let Ok(v) = val.parse::<u32>() {
                     divider_font_size = v;
                 }
+            }
+            "sequencemessagealign" => {
+                message_align = match val.to_ascii_lowercase().as_str() {
+                    "center" => MessageAlign::Center,
+                    "right" => MessageAlign::Right,
+                    _ => MessageAlign::Left,
+                };
             }
             _ => {}
         }
@@ -4754,6 +4830,7 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme) -> String {
                                 label_w,
                                 &arrow_color,
                                 autonumber_ref,
+                                message_align,
                             );
                         } else if is_open {
                             // Open arrow: V-shape tip at tip_x, main line extends 1px past
@@ -4775,6 +4852,7 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme) -> String {
                                 label_w,
                                 &arrow_color,
                                 autonumber_ref,
+                                message_align,
                             );
                         } else if let Some(half) = head_half {
                             // Half arrowhead (`/`, `\`, `//`, `\\`): the line
@@ -4795,8 +4873,11 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme) -> String {
                                 text_x,
                                 text_y_pos,
                                 &label,
+                                label_w,
                                 &arrow_color,
                                 autonumber_ref,
+                                true,
+                                message_align,
                             );
                         } else {
                             // Filled arrow polygon
@@ -4827,6 +4908,8 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme) -> String {
                                 label_w,
                                 &arrow_color,
                                 autonumber_ref,
+                                true,
+                                message_align,
                             );
                         }
                     } else {
@@ -4863,6 +4946,7 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme) -> String {
                                 label_w,
                                 &arrow_color,
                                 autonumber_ref,
+                                message_align,
                             );
                         } else if is_open {
                             // Open arrow: V-shape tip at tip_x, main line starts 1px before
@@ -4884,6 +4968,7 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme) -> String {
                                 label_w,
                                 &arrow_color,
                                 autonumber_ref,
+                                message_align,
                             );
                         } else if let Some(half) = head_half {
                             // Half arrowhead pointing left: tip on the target
@@ -4905,8 +4990,11 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme) -> String {
                                 text_x,
                                 text_y_pos,
                                 &label,
+                                label_w,
                                 &arrow_color,
                                 autonumber_ref,
+                                false,
+                                message_align,
                             );
                         } else {
                             let arrow_pts = format!(
@@ -4936,6 +5024,8 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme) -> String {
                                 label_w,
                                 &arrow_color,
                                 autonumber_ref,
+                                false,
+                                message_align,
                             );
                         }
                     }
@@ -5080,6 +5170,7 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme) -> String {
                             label_w,
                             "#181818",
                             ret_autonumber_ref,
+                            message_align,
                         );
                     } else {
                         let line_x2 = tip_x - FILLED_ARROW_NOTCH;
@@ -5110,6 +5201,8 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme) -> String {
                             label_w,
                             "#181818",
                             ret_autonumber_ref,
+                            true,
+                            message_align,
                         );
                     }
                 } else {
@@ -5140,6 +5233,7 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme) -> String {
                             label_w,
                             "#181818",
                             ret_autonumber_ref,
+                            message_align,
                         );
                     } else {
                         let line_x1 = tip_x + FILLED_ARROW_NOTCH;
@@ -5170,6 +5264,8 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme) -> String {
                             label_w,
                             "#181818",
                             ret_autonumber_ref,
+                            false,
+                            message_align,
                         );
                     }
                 }
