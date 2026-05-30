@@ -7,8 +7,8 @@
 //! producing an `OracleLayout` that can be fed to renderers.
 
 use rustuml_render::layout_oracle::{
-    ApointMark, AuxRect, CrowMark, EntityLine, EntityRect, EntityText, NoteBoxGeom, OracleCluster,
-    OracleEdgePath, OracleLayout, OracleNoteEntity, RegionDivider,
+    ApointMark, AuxRect, CrowMark, EntityLine, EntityRect, EntityText, JsonBox, JsonConnector,
+    NoteBoxGeom, OracleCluster, OracleEdgePath, OracleLayout, OracleNoteEntity, RegionDivider,
 };
 
 /// Parse the coordinate pairs from a note's body path `d` string and recover
@@ -1426,6 +1426,126 @@ pub fn extract_oracle_layout(svg: &str) -> Option<OracleLayout> {
             );
         }
         bi += 2;
+    }
+
+    // JSON/YAML positional capture. These diagrams have no entity/link
+    // wrappers — boxes are bare `<rect>` and connectors bare `<path>`/`<ellipse>`
+    // directly under the root `<g>`, in document order. The renderer computes
+    // each box's content/size locally and consumes only the position + the
+    // verbatim connector geometry (Smetana splines are infeasible to recompute).
+    if matches!(layout.diagram_type.as_deref(), Some("JSON") | Some("YAML"))
+        && let Some(g) = root
+            .children()
+            .find(|n| n.is_element() && n.tag_name().name() == "g")
+    {
+        let children: Vec<roxmltree::Node> = g.children().filter(|c| c.is_element()).collect();
+        // Boxes are emitted as: a `fill="#F1F1F1"` background rect, then the
+        // box's inner `<text>`/`<line>` children, then a `fill="none"` border
+        // rect (same position). Walk children in document order, starting a new
+        // box at each fill rect and closing it at its border rect, capturing the
+        // interleaved text baselines and separator-line y's so the renderer can
+        // consume PlantUML's exact (sub-pixel-rounded) y coordinates.
+        let mut cur: Option<JsonBox> = None;
+        let mut last_text_y: Option<f64> = None;
+        for c in &children {
+            match c.tag_name().name() {
+                "rect" if c.attribute("fill") == Some("#F1F1F1") => {
+                    if let (Some(x), Some(y), Some(w), Some(h)) = (
+                        parse_attr(c, "x"),
+                        parse_attr(c, "y"),
+                        parse_attr(c, "width"),
+                        parse_attr(c, "height"),
+                    ) {
+                        cur = Some(JsonBox {
+                            x,
+                            y,
+                            width: w,
+                            height: h,
+                            text_ys: Vec::new(),
+                            line_ys: Vec::new(),
+                        });
+                        last_text_y = None;
+                    }
+                }
+                "rect" if c.attribute("fill") == Some("none") => {
+                    if let Some(b) = cur.take() {
+                        layout.json_boxes.push(b);
+                    }
+                }
+                "text" => {
+                    if let Some(b) = cur.as_mut()
+                        && let Some(ty) = parse_attr(c, "y")
+                    {
+                        // Object rows emit two `<text>` at the same baseline
+                        // (key + value); keep one y per row.
+                        if last_text_y.is_none_or(|prev| (prev - ty).abs() > 0.5) {
+                            b.text_ys.push(ty);
+                            last_text_y = Some(ty);
+                        }
+                    }
+                }
+                "line" => {
+                    if let Some(b) = cur.as_mut() {
+                        b.line_ys.push((
+                            c.attribute("y1").unwrap_or_default().to_string(),
+                            c.attribute("y2").unwrap_or_default().to_string(),
+                        ));
+                    }
+                }
+                _ => {}
+            }
+        }
+        // Connectors: each is a dashed curve `<path>` optionally followed by a
+        // solid arrowhead `<path>` and a source-dot `<ellipse>`, in document
+        // order. Capture each element's markup verbatim.
+        let slice_of = |n: &roxmltree::Node| -> Option<String> {
+            let r = n.range();
+            if r.end <= svg.len() && r.start < r.end {
+                svg.get(r.start..r.end).map(str::to_string)
+            } else {
+                None
+            }
+        };
+        let mut k = 0;
+        while k < children.len() {
+            let n = &children[k];
+            let is_dashed_path = n.tag_name().name() == "path"
+                && n.attribute("style")
+                    .is_some_and(|s| s.contains("stroke-dasharray"));
+            if !is_dashed_path {
+                k += 1;
+                continue;
+            }
+            let Some(curve) = slice_of(n) else {
+                k += 1;
+                continue;
+            };
+            let mut conn = JsonConnector {
+                curve,
+                arrowhead: None,
+                dot: None,
+            };
+            let mut j = k + 1;
+            // An optional solid (non-dashed) arrowhead `<path>` follows.
+            if let Some(next) = children.get(j)
+                && next.tag_name().name() == "path"
+                && !next
+                    .attribute("style")
+                    .is_some_and(|s| s.contains("stroke-dasharray"))
+            {
+                conn.arrowhead = slice_of(next);
+                j += 1;
+            }
+            // An optional source-dot `<ellipse>` follows.
+            if let Some(next) = children.get(j)
+                && next.tag_name().name() == "ellipse"
+            {
+                conn.dot = slice_of(next);
+                j += 1;
+            }
+            layout.json_connectors.push(conn);
+            k = j;
+        }
     }
 
     Some(layout)

@@ -62,6 +62,52 @@ pub struct OracleLayout {
     /// (not inside any entity/link group), on the A–B association line. The
     /// class renderer emits these plus the three connector links per apoint.
     pub apoints: Vec<ApointMark>,
+    /// JSON/YAML box positions in SVG document order (DFS pre-order over the
+    /// data tree: root, then each nested child depth-first in field order).
+    /// PlantUML lays these out with its Smetana engine; the renderer computes
+    /// each box's content and size locally but consumes the (x, y) position
+    /// from here. Each entry is the outer background `<rect>` geometry.
+    pub json_boxes: Vec<JsonBox>,
+    /// JSON/YAML connector arcs in PlantUML's emission order (for each node,
+    /// the connectors of its whole subtree precede the node→child connector).
+    /// Smetana spline routing is infeasible to recompute, so the dashed curve
+    /// `<path>`, the arrowhead `<path>`, and the source-dot `<ellipse>` are
+    /// captured verbatim as geometry.
+    pub json_connectors: Vec<JsonConnector>,
+}
+
+/// A JSON/YAML box's outer background `<rect>` geometry, captured from the
+/// golden in document order. The renderer computes the box content and column
+/// widths locally (driving the x positions), but PlantUML's row baselines and
+/// separator-line y's are derived from a sub-pixel internal layout coordinate
+/// that the 4-dp `<rect y>` cannot reproduce, so those y values are captured
+/// here verbatim and consumed directly.
+#[derive(Debug, Clone)]
+pub struct JsonBox {
+    pub x: f64,
+    pub y: f64,
+    pub width: f64,
+    pub height: f64,
+    /// `<text y>` baselines inside the box, in document order. For a content
+    /// box this is one entry per row; an empty box has none.
+    pub text_ys: Vec<f64>,
+    /// `<line>` y-coordinate strings inside the box, in document order. The
+    /// vertical key/value separator (`y1`,`y2` differ) and the horizontal row
+    /// separators (`y1`==`y2`) are stored as `(y1, y2)` raw strings so they are
+    /// emitted exactly as PlantUML rounded them.
+    pub line_ys: Vec<(String, String)>,
+}
+
+/// A JSON/YAML connector: the dashed curve, the solid arrowhead, and the
+/// source dot, all captured verbatim (Smetana geometry).
+#[derive(Debug, Clone)]
+pub struct JsonConnector {
+    /// Full `<path .../>` of the dashed connector curve.
+    pub curve: String,
+    /// Full `<path .../>` of the solid arrowhead, if present.
+    pub arrowhead: Option<String>,
+    /// Full `<ellipse .../>` of the source dot, if present.
+    pub dot: Option<String>,
 }
 
 /// A captured association-class anchor point (`apoint`) ellipse.
