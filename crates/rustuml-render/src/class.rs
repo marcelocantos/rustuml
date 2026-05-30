@@ -1990,6 +1990,56 @@ fn render_entity_content(
     )
     .unwrap();
 
+    // Gradient backgrounds (`#c1/c2`): PlantUML repaints the header compartment
+    // with its own 0→100% gradient (restarting the ramp per compartment), lays
+    // a 2.5px strip to square off the header rect's rounded bottom, then redraws
+    // the border on top so the repaint doesn't bury it. Emitted only for
+    // `url(#…)` gradient fills — solid fills keep the single rect above.
+    if fill.starts_with("url(#")
+        && let Some(&first_sep) = oracle_rect.and_then(|r| r.sep_y_values.first())
+    {
+        let header_h = first_sep - y;
+        let grad_style = format!("stroke:{fill};stroke-width:{BORDER_WIDTH};");
+        // Header repaint (rounded, matching the full rect's corners).
+        write!(
+            svg,
+            r#"<rect fill="{}" height="{}" rx="{}" ry="{}" style="{}" width="{}" x="{}" y="{}"/>"#,
+            fill,
+            fmt4(header_h),
+            rx_str,
+            ry_str,
+            grad_style,
+            fmt_tl(dim.width),
+            fmt4(x),
+            fmt4(y),
+        )
+        .unwrap();
+        // 2.5px squaring strip at the header bottom (no rounding).
+        write!(
+            svg,
+            r#"<rect fill="{}" height="2.5" style="{}" width="{}" x="{}" y="{}"/>"#,
+            fill,
+            grad_style,
+            fmt_tl(dim.width),
+            fmt4(x),
+            fmt4(first_sep - 2.5),
+        )
+        .unwrap();
+        // Border overlay (no fill) so the gradient repaint doesn't cover it.
+        write!(
+            svg,
+            r#"<rect fill="none" height="{}" rx="{}" ry="{}" style="{}" width="{}" x="{}" y="{}"/>"#,
+            fmt4(dim.height),
+            rx_str,
+            ry_str,
+            style,
+            fmt_tl(dim.width),
+            fmt4(x),
+            fmt4(y),
+        )
+        .unwrap();
+    }
+
     // Icon (colored ellipse + letter glyph). Skipped entirely when `hide circle`.
     let icon_cx = icon_cx_override.unwrap_or(x + ICON_CX_OFFSET);
     let icon_cy = if dim.has_stereotypes {
