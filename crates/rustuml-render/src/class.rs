@@ -1186,8 +1186,143 @@ fn render_plantuml_svg(
     // Entity ID counter (PlantUML starts at ent0002, shifted past clusters).
     let mut ent_id = 2 + oracle_pkg_clusters.len();
 
+    // PlantUML emits entities in package-tree pre-order, but emits a package's
+    // *direct* entities before descending into its nested packages. Our model
+    // stores entities in flat source order, so reorder the emission to match:
+    //   - top-level (package-less) entities first, in source order;
+    //   - then, for each package in declaration order (which is already a
+    //     valid pre-order), its direct entities in source order.
+    // `diagram.packages[*].entities` lists the entity ids directly contained
+    // in each package. The cluster pre-order is preserved, so iterating the
+    // packages in order and pulling each one's direct entities yields the
+    // "direct-before-nested" sequence PlantUML produces.
+    //
+    // `pkg.entities` lists *transitive* members (an outer package also lists
+    // entities owned by its nested packages), so an entity's innermost
+    // (direct) package is the one containing it with the smallest member set;
+    // declaration order (outer→inner) breaks ties toward the deeper package.
+    // A package's parent is the smallest *strictly larger* package that still
+    // contains all its members. Top-level items (package-less entities and
+    // root packages) interleave by source position; within a package, direct
+    // entities precede nested sub-packages.
+    let emission_order: Vec<usize> = {
+        let n_pkg = diagram.packages.len();
+        // Innermost (direct) package index for each entity.
+        let innermost_pkg: Vec<Option<usize>> = diagram
+            .entities
+            .iter()
+            .map(|e| {
+                diagram
+                    .packages
+                    .iter()
+                    .enumerate()
+                    .filter(|(_, p)| p.entities.iter().any(|m| m == &e.id))
+                    .min_by_key(|(idx, p)| (p.entities.len(), usize::MAX - idx))
+                    .map(|(idx, _)| idx)
+            })
+            .collect();
+
+        // Parent package index for each package (None ⇒ root). The parent is
+        // the smallest package strictly containing this one's member set.
+        let parent_pkg: Vec<Option<usize>> = (0..n_pkg)
+            .map(|i| {
+                let mine = &diagram.packages[i].entities;
+                (0..n_pkg)
+                    .filter(|&j| {
+                        j != i
+                            && diagram.packages[j].entities.len() > mine.len()
+                            && mine
+                                .iter()
+                                .all(|m| diagram.packages[j].entities.contains(m))
+                    })
+                    .min_by_key(|&j| diagram.packages[j].entities.len())
+            })
+            .collect();
+
+        // Source-line key for ordering siblings: a package sorts by the
+        // earliest source line among its (transitive) entities; a top-level
+        // entity by its own source line.
+        let pkg_sort_key = |pi: usize| -> usize {
+            diagram
+                .entities
+                .iter()
+                .filter(|e| diagram.packages[pi].entities.iter().any(|m| m == &e.id))
+                .map(|e| e.source_line)
+                .min()
+                .unwrap_or(usize::MAX)
+        };
+
+        // Recursive pre-order emission: for a package, emit its direct
+        // entities (source order) then recurse children (sorted by source
+        // line); children precede none of the direct entities.
+        fn emit_pkg(
+            pkg_idx: usize,
+            diagram: &ClassDiagram,
+            innermost_pkg: &[Option<usize>],
+            parent_pkg: &[Option<usize>],
+            pkg_sort_key: &dyn Fn(usize) -> usize,
+            order: &mut Vec<usize>,
+        ) {
+            for (i, _) in diagram.entities.iter().enumerate() {
+                if innermost_pkg[i] == Some(pkg_idx) {
+                    order.push(i);
+                }
+            }
+            let mut children: Vec<usize> = (0..diagram.packages.len())
+                .filter(|&c| parent_pkg[c] == Some(pkg_idx))
+                .collect();
+            children.sort_by_key(|&c| (pkg_sort_key(c), c));
+            for c in children {
+                emit_pkg(c, diagram, innermost_pkg, parent_pkg, pkg_sort_key, order);
+            }
+        }
+
+        // Top-level items: root packages and package-less entities, interleaved
+        // by source line.
+        enum Item {
+            Entity(usize),
+            Package(usize),
+        }
+        let mut items: Vec<(usize, Item)> = Vec::new();
+        for (i, e) in diagram.entities.iter().enumerate() {
+            if innermost_pkg[i].is_none() {
+                items.push((e.source_line, Item::Entity(i)));
+            }
+        }
+        for (pi, parent) in parent_pkg.iter().enumerate() {
+            if parent.is_none() {
+                items.push((pkg_sort_key(pi), Item::Package(pi)));
+            }
+        }
+        items.sort_by_key(|(line, _)| *line);
+
+        let mut order: Vec<usize> = Vec::with_capacity(diagram.entities.len());
+        for (_, item) in items {
+            match item {
+                Item::Entity(i) => order.push(i),
+                Item::Package(pi) => emit_pkg(
+                    pi,
+                    diagram,
+                    &innermost_pkg,
+                    &parent_pkg,
+                    &pkg_sort_key,
+                    &mut order,
+                ),
+            }
+        }
+        // Safety net for any entity not yet placed.
+        let placed: std::collections::HashSet<usize> = order.iter().copied().collect();
+        for (i, _) in diagram.entities.iter().enumerate() {
+            if !placed.contains(&i) {
+                order.push(i);
+            }
+        }
+        order
+    };
+
     // Render each entity.
-    for (i, entity) in diagram.entities.iter().enumerate() {
+    for &i in &emission_order {
+        let entity = &diagram.entities[i];
         let (x, y) = entity_positions[i];
         let dim = &dims[i];
         let seq_ent_id = format!("ent{:04}", ent_id);
