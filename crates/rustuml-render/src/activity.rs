@@ -391,20 +391,25 @@ fn branch_terminates(body: &[LayoutNode]) -> bool {
     )
 }
 
+/// True for nodes that occupy vertical space and receive inbound connectors —
+/// i.e. everything `emit_sequence` treats as a flow step. Mirrors the skip set
+/// at the top of `emit_sequence_ex`.
+fn node_is_flow(n: &LayoutNode) -> bool {
+    !matches!(
+        n,
+        LayoutNode::Arrow { .. }
+            | LayoutNode::Note { .. }
+            | LayoutNode::Title(_)
+            | LayoutNode::Detach
+            | LayoutNode::Kill
+            | LayoutNode::Break
+    )
+}
+
 /// A branch is "empty" (for if-down corridor purposes) if it has no flow nodes
 /// — only arrows/notes/titles, which take no vertical space.
 fn branch_is_empty(body: &[LayoutNode]) -> bool {
-    !body.iter().any(|n| {
-        !matches!(
-            n,
-            LayoutNode::Arrow { .. }
-                | LayoutNode::Note { .. }
-                | LayoutNode::Title(_)
-                | LayoutNode::Detach
-                | LayoutNode::Kill
-                | LayoutNode::Break
-        )
-    })
+    !body.iter().any(node_is_flow)
 }
 
 /// PlantUML's `ConditionalBuilder.create` routes an `if/else` to the asymmetric
@@ -1464,10 +1469,18 @@ fn node_height(node: &LayoutNode) -> f64 {
         } => {
             if let Some(plan) = if_down_plan(then_branch, else_branches) {
                 // diamond + lead + populated branch + ARROW_LEN + merge diamond.
+                // An even-action branch stretches its middle gap by 15 px.
                 let branch_h = sequence_height(plan.populated);
+                let flow_count = plan.populated.iter().filter(|n| node_is_flow(n)).count();
+                let stretch = if flow_count >= 2 && flow_count.is_multiple_of(2) {
+                    IF_DOWN_MID_STRETCH
+                } else {
+                    0.0
+                };
                 return DIAMOND_HALF * 2.0
                     + IF_DOWN_LEAD
                     + branch_h
+                    + stretch
                     + ARROW_LEN
                     + DIAMOND_HALF * 2.0;
             }
@@ -2194,7 +2207,24 @@ impl SvgEmitter {
 
 /// Render a linear sequence of nodes at a given center-x and starting y.
 /// Returns the y position after the last node.
-fn emit_sequence(svg: &mut SvgEmitter, nodes: &[LayoutNode], cx: f64, mut y: f64) -> f64 {
+fn emit_sequence(svg: &mut SvgEmitter, nodes: &[LayoutNode], cx: f64, y: f64) -> f64 {
+    emit_sequence_ex(svg, nodes, cx, y, None)
+}
+
+/// Like `emit_sequence`, but `mid_stretch = Some((flow_idx, extra))` adds
+/// `extra` px to the inbound arrow of the `flow_idx`-th flow node. Used by the
+/// FtileIfDown corridor layout, where an even-action populated branch stretches
+/// the gap straddling its vertical midpoint by 15 px.
+fn emit_sequence_ex(
+    svg: &mut SvgEmitter,
+    nodes: &[LayoutNode],
+    cx: f64,
+    mut y: f64,
+    mid_stretch: Option<(usize, f64)>,
+) -> f64 {
+    // Map flow-node ordinal → node index so the stretch can target the right
+    // inbound arrow.
+    let mut flow_ordinal = 0usize;
     for (i, node) in nodes.iter().enumerate() {
         // Skip layout for non-flow nodes (arrows and notes don't take vertical space
         // on their own).
@@ -2265,13 +2295,18 @@ fn emit_sequence(svg: &mut SvgEmitter, nodes: &[LayoutNode], cx: f64, mut y: f64
                     Some(LayoutNode::Arrow { label: Some(l), .. }) => Some(l.clone()),
                     _ => None,
                 };
-                let gap = if style.hidden {
-                    10.0
-                } else if label.is_some() {
-                    LABELED_ARROW_LEN
-                } else {
-                    ARROW_LEN
+                let stretch = match mid_stretch {
+                    Some((idx, extra)) if idx == flow_ordinal => extra,
+                    _ => 0.0,
                 };
+                let gap = stretch
+                    + if style.hidden {
+                        10.0
+                    } else if label.is_some() {
+                        LABELED_ARROW_LEN
+                    } else {
+                        ARROW_LEN
+                    };
                 // Partition entry: stretch the inbound arrow so it spans the
                 // full distance from prev cursor through the title bar to
                 // the first inner action's top (no separate arrow to the
@@ -2379,6 +2414,7 @@ fn emit_sequence(svg: &mut SvgEmitter, nodes: &[LayoutNode], cx: f64, mut y: f64
             }
         }
         y = node_y;
+        flow_ordinal += 1;
     }
     y
 }
@@ -2908,6 +2944,9 @@ const IF_CORRIDOR_ARROW_OFFSET: f64 = 2.238769531250023;
 const IF_DOWN_LEFT_PAD: f64 = 9.0;
 /// Right corridor reservation past the diamond's right vertex.
 const IF_DOWN_RIGHT_PAD: f64 = 27.218200000000003;
+/// Extra gap stretched onto the middle inter-action arrow of an even-action
+/// populated branch in the FtileIfDown layout.
+const IF_DOWN_MID_STRETCH: f64 = 15.0;
 
 /// Asymmetric "down" layout for an `if/else` where one branch is empty.
 /// The populated branch flows down the centre spine; the empty branch is a
@@ -2939,7 +2978,16 @@ fn emit_if_down(
     // condition diamond, then the merge diamond. The branch's internal
     // connectors land in the connectors buffer before the if-frame connectors.
     let branch_top = diamond_bottom + IF_DOWN_LEAD;
-    let branch_bottom = emit_sequence(svg, plan.populated, cx, branch_top);
+    // When the populated branch has an even number of flow nodes, PlantUML's
+    // vertical centring stretches the inter-action gap straddling the branch's
+    // midpoint by 15 px (the gap before the (N/2)-th flow node).
+    let flow_count = plan.populated.iter().filter(|n| node_is_flow(n)).count();
+    let mid_stretch = if flow_count >= 2 && flow_count.is_multiple_of(2) {
+        Some((flow_count / 2, IF_DOWN_MID_STRETCH))
+    } else {
+        None
+    };
+    let branch_bottom = emit_sequence_ex(svg, plan.populated, cx, branch_top, mid_stretch);
 
     // Condition hexagon.
     let pts = vec![
