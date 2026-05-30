@@ -410,6 +410,12 @@ fn note_msg_extra_base(shape: NoteShape) -> f64 {
 const NOTE_FILL: &str = "#FEFFDD";
 /// Gap from participant lifeline to note edge for left/right notes.
 const NOTE_LIFELINE_GAP: f64 = 5.0;
+/// "note across": minimum extra width over the first..last lifeline span when
+/// the note content is narrower than the span (Java NoteBox OVER_SEVERAL diff1).
+const ACROSS_NOTE_MARGIN: f64 = 25.0;
+/// Java ParticipantBox.outMargin (default skin): horizontal padding each side of
+/// a participant head box, used in note-across text centering.
+const PARTICIPANT_OUT_MARGIN: f64 = 5.0;
 /// Base height for hexagonal (hnote) and rectangular (rnote) notes.
 const HNOTE_BASE_HEIGHT: f64 = 23.0;
 /// Horizontal indent of hexagonal note vertices from note edges.
@@ -3021,6 +3027,42 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme) -> String {
             participants[i].lifeline_line_x =
                 participants[i].box_x + (participants[i].box_width / 2.0).floor();
         }
+
+        // "note across" (note over all participants, no explicit list) is centered
+        // on the midpoint of the participant span and extends note_w/2 each side.
+        // If its left edge would fall left of the HEAD_BOX_Y margin, the whole
+        // diagram must shift right. PlantUML: note_w = max(content, span + 38),
+        // centered on (first_ll + last_ll)/2; note_left = mid - note_w/2 >= margin.
+        let mut across_shift: f64 = 0.0;
+        let first_ll = participants[0].lifeline_line_x;
+        let last_ll = participants[n - 1].lifeline_line_x;
+        for event in &diagram.events {
+            if let Event::Note(note) = event
+                && note.position == NotePosition::Over
+                && note.participants.is_empty()
+            {
+                let max_tw = note
+                    .text
+                    .lines()
+                    .map(|l| text_width(l.trim(), MSG_FONT_SIZE))
+                    .fold(0.0_f64, f64::max);
+                let note_content_w = note_content_width(max_tw, note.shape);
+                let span = last_ll - first_ll;
+                let pw = note_content_w.max(span.round() + ACROSS_NOTE_MARGIN);
+                let centre = (participants[0].center_x + participants[n - 1].center_x) / 2.0;
+                let note_left = (centre - pw / 2.0).floor();
+                let shift = (HEAD_BOX_Y - note_left).max(0.0);
+                across_shift = across_shift.max(shift);
+            }
+        }
+        if across_shift > 0.0 {
+            let shift = across_shift.floor();
+            for p in participants.iter_mut() {
+                p.center_x += shift;
+                p.box_x += shift;
+                p.lifeline_line_x += shift;
+            }
+        }
     }
 
     let center_of = |id: &str| -> f64 {
@@ -3413,9 +3455,20 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme) -> String {
                 }
                 NotePosition::Over => {
                     if note.participants.is_empty() {
-                        // "across" note — starts at HEAD_BOX_Y (5) and extends rightward
-                        // by note_content_w. The SVG must be wide enough to contain it.
-                        let across_right = HEAD_BOX_Y + note_content_w;
+                        // "note across" — spans all participants. Right edge from
+                        // the OVER_SEVERAL centre model (see draw site).
+                        let across_right = if participants.is_empty() {
+                            HEAD_BOX_Y + note_content_w
+                        } else {
+                            let first_ll = participants[0].lifeline_line_x;
+                            let last_ll = participants[participants.len() - 1].lifeline_line_x;
+                            let span = last_ll - first_ll;
+                            let pw = note_content_w.max(span.round() + ACROSS_NOTE_MARGIN);
+                            let centre = (participants[0].center_x
+                                + participants[participants.len() - 1].center_x)
+                                / 2.0;
+                            (centre - pw / 2.0).floor() + pw
+                        };
                         max_note_right = max_note_right.max(across_right);
                     } else if note.participants.len() == 1 {
                         if let Some(&idx) = id_to_idx.get(note.participants[0].as_str()) {
@@ -5201,8 +5254,23 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme) -> String {
                     }
                     NotePosition::Over => {
                         if note.participants.is_empty() {
-                            // "across" note — starts at HEAD_BOX_Y and extends by note_content_w
-                            (HEAD_BOX_Y, HEAD_BOX_Y + note_content_w)
+                            // "note across" — spans all participants. Java NoteBox
+                            // OVER_SEVERAL: preferredWidth = max(content, lifeline
+                            // span + 25); centre = midpoint of first/last box
+                            // centers; xStart = (int)(centre - preferredWidth/2).
+                            if participants.is_empty() {
+                                (HEAD_BOX_Y, HEAD_BOX_Y + note_content_w)
+                            } else {
+                                let first_ll = participants[0].lifeline_line_x;
+                                let last_ll = participants[participants.len() - 1].lifeline_line_x;
+                                let span = last_ll - first_ll;
+                                let pw = note_content_w.max(span.round() + ACROSS_NOTE_MARGIN);
+                                let centre = (participants[0].center_x
+                                    + participants[participants.len() - 1].center_x)
+                                    / 2.0;
+                                let left = (centre - pw / 2.0).floor();
+                                (left, left + pw)
+                            }
                         } else if note.participants.len() == 1 {
                             // Java NoteBox.getStartingX: xStart = (int)(box centerX
                             // - preferredWidth/2). Centered on the participant box
@@ -5332,6 +5400,32 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme) -> String {
                     }
                 }
 
+                // A "note across" centers its text on the midpoint of the first
+                // and last participant box centers, offset left by one outMargin
+                // (Java: text laid out in the note content area within the wider
+                // OVER_SEVERAL box). Each line is independently centered.
+                let across_text_center = if note.position == NotePosition::Over
+                    && note.participants.is_empty()
+                    && !participants.is_empty()
+                {
+                    let first_ll = participants[0].lifeline_line_x;
+                    let last_ll = participants[participants.len() - 1].lifeline_line_x;
+                    let span = last_ll - first_ll;
+                    // Text is centered only when the box is stretched to the
+                    // participant span; a content-driven box keeps the text
+                    // left-aligned at note_left + pad.
+                    if span.round() + ACROSS_NOTE_MARGIN > note_content_w {
+                        let centre = (participants[0].center_x
+                            + participants[participants.len() - 1].center_x)
+                            / 2.0;
+                        Some(centre - PARTICIPANT_OUT_MARGIN)
+                    } else {
+                        None
+                    }
+                } else {
+                    None
+                };
+
                 // Emit note text lines.
                 let (text_x, text_y_offset) = match note.shape {
                     NoteShape::Note => (note_left + NOTE_TEXT_X_PAD, NOTE_TEXT_Y_OFFSET),
@@ -5345,11 +5439,15 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme) -> String {
                         text_y += NOTE_TEXT_LINE_SPACING;
                         continue;
                     }
+                    let line_x = match across_text_center {
+                        Some(c) => c - text_width(trimmed, MSG_FONT_SIZE) / 2.0,
+                        None => text_x,
+                    };
                     text_render::emit_text(
                         &mut svg.buf,
                         trimmed,
                         &TextBase {
-                            x: text_x,
+                            x: line_x,
                             y: text_y,
                             font_size: 13,
                             font_family: "sans-serif",
