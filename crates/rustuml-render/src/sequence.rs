@@ -3773,10 +3773,17 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
         effective_right + RIGHT_MARGIN
     };
     let svg_width = svg_width_exact.ceil() as u32;
-    let mut svg_height = if diagram.hide_footbox {
-        lifeline_bottom.ceil() as u32
+    // A `footer` directive reserves a band below the content (text_height(10)
+    // + 1.0 = 12.777), growing the canvas; the footer text sits in that band.
+    let footer_band_h = if diagram.meta.footer.is_some() {
+        plantuml_metrics::text_height(10.0) + 1.0
     } else {
-        (tail_box_y + max_box_h + BOTTOM_MARGIN).ceil() as u32
+        0.0
+    };
+    let mut svg_height = if diagram.hide_footbox {
+        (lifeline_bottom + footer_band_h).ceil() as u32
+    } else {
+        (tail_box_y + max_box_h + BOTTOM_MARGIN + footer_band_h).ceil() as u32
     };
     // Caption adds 20 px of vertical space below the foot boxes (one 14-px
     // text line + descent + bottom margin). The strict golden height for a
@@ -4224,29 +4231,9 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
         svg.buf.push_str("</g>");
     }
 
-    // Render footer if present. PlantUML wraps in `<g class="footer">` and
-    // emits a 10pt #888888 text at the left edge (x=0).
-    if let Some(footer) = &diagram.meta.footer {
-        const FOOTER_FONT_SIZE: u32 = 10;
-        svg.buf
-            .push_str(r#"<g class="footer" data-source-line="1">"#);
-        text_render::emit_text(
-            &mut svg.buf,
-            footer,
-            &TextBase {
-                x: 0.0,
-                y: svg_height as f64 - 4.0,
-                font_size: FOOTER_FONT_SIZE,
-                font_family: "sans-serif",
-                fill: "#888888",
-                bold: false,
-                italic: false,
-                underline: false,
-                skip_underline: false,
-            },
-        );
-        svg.buf.push_str("</g>");
-    }
+    // Footer is rendered AFTER all messages (PlantUML emits it as one of the
+    // last elements inside `<g>`) — see the dedicated block just before the
+    // caption near `svg.close_svg(...)` at the end of this function.
 
     // Caption is rendered AFTER all messages — see the dedicated block just
     // before `svg.close_svg(...)` at the end of this function. PlantUML emits
@@ -6076,6 +6063,32 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                 svg.buf.push_str(inner);
             }
         }
+    }
+
+    // Footer: emitted near the end of the document (after all messages), in a
+    // band reserved at the bottom (see footer_band_h). Single-line footers sit
+    // 8.7344px above the canvas bottom; left edge at x=0.
+    if let Some(footer) = &diagram.meta.footer {
+        const FOOTER_FONT_SIZE: u32 = 10;
+        const FOOTER_BOTTOM_OFFSET: f64 = 8.7344;
+        svg.buf
+            .push_str(r#"<g class="footer" data-source-line="1">"#);
+        text_render::emit_text(
+            &mut svg.buf,
+            footer,
+            &TextBase {
+                x: 0.0,
+                y: svg_height as f64 - FOOTER_BOTTOM_OFFSET,
+                font_size: FOOTER_FONT_SIZE,
+                font_family: "sans-serif",
+                fill: "#888888",
+                bold: false,
+                italic: false,
+                underline: false,
+                skip_underline: false,
+            },
+        );
+        svg.buf.push_str("</g>");
     }
 
     // Caption appears at the bottom of the diagram, AFTER messages.
