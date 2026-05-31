@@ -517,6 +517,7 @@ pub fn extract_oracle_layout(svg: &str) -> Option<OracleLayout> {
                     let rect_style = rect.attribute("style").map(String::from);
                     let rect_rx = rect.attribute("rx").map(String::from);
                     let rect_ry = rect.attribute("ry").map(String::from);
+                    let rect_filter = rect.attribute("filter").map(String::from);
                     let entity_id = node.attribute("id").map(String::from);
                     let source_line = node.attribute("data-source-line").map(String::from);
                     // Auxiliary rectangles beyond the body — component icons
@@ -589,6 +590,7 @@ pub fn extract_oracle_layout(svg: &str) -> Option<OracleLayout> {
                             rect_style,
                             rect_rx,
                             rect_ry,
+                            rect_filter,
                             entity_id,
                             source_line,
                             aux_rects,
@@ -668,6 +670,7 @@ pub fn extract_oracle_layout(svg: &str) -> Option<OracleLayout> {
                             rect_style: None,
                             rect_rx: None,
                             rect_ry: None,
+                            rect_filter: None,
                             entity_id,
                             source_line: node.attribute("data-source-line").map(String::from),
                             aux_rects: Vec::new(),
@@ -712,6 +715,7 @@ pub fn extract_oracle_layout(svg: &str) -> Option<OracleLayout> {
                                     rect_style: None,
                                     rect_rx: None,
                                     rect_ry: None,
+                                    rect_filter: None,
                                     entity_id,
                                     source_line: node
                                         .attribute("data-source-line")
@@ -814,6 +818,7 @@ pub fn extract_oracle_layout(svg: &str) -> Option<OracleLayout> {
                             rect_style: None,
                             rect_rx: None,
                             rect_ry: None,
+                            rect_filter: None,
                             entity_id,
                             source_line: node.attribute("data-source-line").map(String::from),
                             aux_rects: Vec::new(),
@@ -1076,6 +1081,7 @@ pub fn extract_oracle_layout(svg: &str) -> Option<OracleLayout> {
                     rect_style: None,
                     rect_rx: None,
                     rect_ry: None,
+                    rect_filter: None,
                     entity_id: None,
                     source_line: None,
                     aux_rects: Vec::new(),
@@ -1221,6 +1227,7 @@ pub fn extract_oracle_layout(svg: &str) -> Option<OracleLayout> {
                 rect_style: None,
                 rect_rx: None,
                 rect_ry: None,
+                rect_filter: None,
                 entity_id: None,
                 source_line: None,
                 aux_rects: Vec::new(),
@@ -1319,6 +1326,7 @@ pub fn extract_oracle_layout(svg: &str) -> Option<OracleLayout> {
                     rect_style: None,
                     rect_rx: None,
                     rect_ry: None,
+                    rect_filter: None,
                     entity_id: None,
                     source_line: None,
                     aux_rects: Vec::new(),
@@ -1468,6 +1476,7 @@ pub fn extract_oracle_layout(svg: &str) -> Option<OracleLayout> {
                         rect_style: n.attribute("style").map(String::from),
                         rect_rx: n.attribute("rx").map(String::from),
                         rect_ry: n.attribute("ry").map(String::from),
+                        rect_filter: n.attribute("filter").map(String::from),
                         entity_id: None,
                         source_line: None,
                         aux_rects: Vec::new(),
@@ -1509,6 +1518,7 @@ pub fn extract_oracle_layout(svg: &str) -> Option<OracleLayout> {
                     rect_style: n.attribute("style").map(String::from),
                     rect_rx: n.attribute("rx").map(String::from),
                     rect_ry: n.attribute("ry").map(String::from),
+                    rect_filter: n.attribute("filter").map(String::from),
                     entity_id: None,
                     source_line: None,
                     aux_rects: Vec::new(),
@@ -1947,6 +1957,7 @@ fn path_bounding_box(d: &str) -> Option<EntityRect> {
             rect_style: None,
             rect_rx: None,
             rect_ry: None,
+            rect_filter: None,
             entity_id: None,
             source_line: None,
             aux_rects: Vec::new(),

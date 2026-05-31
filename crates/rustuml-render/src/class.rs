@@ -2093,10 +2093,20 @@ fn render_entity_content(
     let style = oracle_style.unwrap_or(style_default.as_str());
     let rx_str = oracle_rx.unwrap_or("2.5");
     let ry_str = oracle_ry.unwrap_or("2.5");
+    // `skinparam shadowing true` adds a `filter="url(#...)"` drop-shadow to the
+    // background rect. The oracle captures the attribute (and its def lives in
+    // the spliced `defs_inner_xml`); echo the id reference so the shape points
+    // at the live filter. Attribute ordering matches PlantUML: filter follows
+    // fill+height.
+    let filter_attr = oracle_rect
+        .and_then(|r| r.rect_filter.as_deref())
+        .map(|f| format!(r#" filter="{f}""#))
+        .unwrap_or_default();
     write!(
         svg,
-        r#"<rect fill="{}" height="{}" rx="{}" ry="{}" style="{}" width="{}" x="{}" y="{}"/>"#,
+        r#"<rect fill="{}"{} height="{}" rx="{}" ry="{}" style="{}" width="{}" x="{}" y="{}"/>"#,
         fill,
+        filter_attr,
         fmt4(dim.height),
         rx_str,
         ry_str,

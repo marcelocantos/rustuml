@@ -274,6 +274,11 @@ pub struct EntityRect {
     /// per-entity rounded corners (e.g. class skinparam with corner radius).
     pub rect_rx: Option<String>,
     pub rect_ry: Option<String>,
+    /// `filter="url(#...)"` from the entity's background `<rect>`, present when
+    /// `skinparam shadowing true` adds a drop-shadow. The referenced filter def
+    /// lives in the captured `defs_inner_xml`; renderers re-emit this attribute
+    /// verbatim so the shape points at the live def.
+    pub rect_filter: Option<String>,
     /// Java entity ID (`ent000N`) — value of the `id="..."` attribute on the
     /// `<g class="entity">` / `start_entity` / `end_entity` wrapper. Lets
     /// renderers reproduce Java's exact counter allocation, including the

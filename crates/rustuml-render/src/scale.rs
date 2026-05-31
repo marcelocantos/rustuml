@@ -802,6 +802,7 @@ mod fp_tests {
             rect_style: None,
             rect_rx: None,
             rect_ry: None,
+            rect_filter: None,
             entity_id: None,
             source_line: None,
             aux_rects: vec![],
