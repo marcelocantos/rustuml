@@ -157,6 +157,10 @@ pub struct DiagramMeta {
     pub title_line: Option<usize>,
     #[serde(skip_serializing_if = "Option::is_none")]
     pub header: Option<String>,
+    /// Post-preprocessing source line of the `header` directive; emitted as the
+    /// header group's `data-source-line`, defaulting to 1 when unset.
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub header_line: Option<usize>,
     #[serde(skip_serializing_if = "Option::is_none")]
     pub footer: Option<String>,
     #[serde(skip_serializing_if = "Option::is_none")]

@@ -2680,7 +2680,16 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
         // Untitled boxes only contribute their top margin, no title line.
         5.0
     };
-    let head_box_y = HEAD_BOX_Y + title_band_h + box_band_h;
+    // A `header` directive reserves a band above the heads: the header text
+    // sits at the top (baseline y≈14.668) and the participant heads drop by
+    // text_height(10) + 1.0 (= 12.777) to clear it. Everything below shifts
+    // down with the heads, growing the canvas height.
+    let header_band_h = if diagram.meta.header.is_some() {
+        plantuml_metrics::text_height(10.0) + 1.0
+    } else {
+        0.0
+    };
+    let head_box_y = HEAD_BOX_Y + title_band_h + box_band_h + header_band_h;
 
     // -----------------------------------------------------------------------
     // Phase 1: Compute participant layouts
@@ -3753,13 +3762,17 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
     let has_groups = max_group_right > 0.0;
     // The SVG width must accommodate both participant boxes and group frames.
     // Group frames already include their margin; just add RIGHT_MARGIN + 5.
-    let svg_width = if has_groups {
+    // Unrounded canvas width (pre-ceil). PlantUML right-aligns the header to
+    // this exact value with a 6px margin, so the ceiled `svg_width` (used
+    // elsewhere) would mis-place the header by the rounding remainder.
+    let svg_width_exact = if has_groups {
         let from_participants = effective_right + RIGHT_MARGIN;
         let from_groups = max_group_right + RIGHT_MARGIN + 5.0;
-        from_participants.max(from_groups).ceil() as u32
+        from_participants.max(from_groups)
     } else {
-        (effective_right + RIGHT_MARGIN).ceil() as u32
+        effective_right + RIGHT_MARGIN
     };
+    let svg_width = svg_width_exact.ceil() as u32;
     let mut svg_height = if diagram.hide_footbox {
         lifeline_bottom.ceil() as u32
     } else {
@@ -4187,9 +4200,12 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
     if let Some(header) = &diagram.meta.header {
         const HEADER_FONT_SIZE: u32 = 10;
         let text_length = text_render::measure(header, HEADER_FONT_SIZE as f64, false);
-        let x = svg_width as f64 - text_length - 5.0;
+        let x = svg_width_exact - text_length - 6.0;
+        let header_line = diagram.meta.header_line.unwrap_or(1);
         svg.buf
-            .push_str(r#"<g class="header" data-source-line="1">"#);
+            .push_str(&format!(
+                r#"<g class="header" data-source-line="{header_line}">"#
+            ));
         text_render::emit_text(
             &mut svg.buf,
             header,

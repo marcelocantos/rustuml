@@ -829,6 +829,7 @@ impl SeqParser {
         }
         if let Some(rest) = line.strip_prefix("header ") {
             self.meta.header = Some(rest.trim().to_string());
+            self.meta.header_line = Some(self.current_line);
             return true;
         }
         if let Some(rest) = line.strip_prefix("footer ") {
