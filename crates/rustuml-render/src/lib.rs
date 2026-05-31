@@ -49,6 +49,7 @@ pub mod mindmap;
 mod non_ascii_widths;
 pub mod nwdiag;
 pub mod object;
+pub mod ftile;
 pub mod openiconic;
 pub mod pdf;
 pub mod plantuml_metrics;
