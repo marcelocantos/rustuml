@@ -20,6 +20,12 @@ const START_R: f64 = 10.0;
 const STOP_OUTER_R: f64 = 11.0;
 const STOP_INNER_R: f64 = 6.0;
 const START_CY: f64 = 25.0;
+/// Half-width of PlantUML's `FtileCircle*` terminal tile (start/stop/end).
+/// The circle glyph (rx 10-11) sits inside a fixed-width tile whose spine is
+/// 13 px from each side, so a bare start/stop/end column centres at
+/// MARGIN_LEAD + 13 = 29 (verified against act_minimal_just_start_{stop,end},
+/// act_empty_diagram, act_start_no_action: all golden cx="29").
+const CIRCLE_TILE_HALF: f64 = 13.0;
 const ARROW_LEN: f64 = 20.0;
 /// Vertical extent of a connector that carries a label (sans-serif 11).
 /// Reverse-engineered from PlantUML goldens: 20 (normal) + 21.275 extra to
@@ -1037,6 +1043,23 @@ fn switch_below_diamond(cases: &[SwitchCase], big_diamond: bool) -> f64 {
 /// MARGIN_LEAD 16 + arrowhead wing 4). Without a terminator the exit arm wraps
 /// at `geo_left − halfHex`; we keep the legacy +25 lead for that (untested)
 /// path since no golden exercises it.
+/// Effective left extent of a while body's leftward corridor. A deprecated
+/// `#color:text;` action in the loop body carries a top-band warning banner;
+/// PlantUML's FtileWhile then seats the loop-back/exit corridor (and the
+/// `manageSpecialStopEndAfterEndWhile` terminator) 2 px tighter on the left
+/// than for a normal body. The body box itself stays centred on the spine —
+/// only the while's left geometry sees the 2 px reduction.
+fn while_body_left(body: &[LayoutNode], body_left: f64) -> f64 {
+    if body
+        .iter()
+        .any(|n| matches!(n, LayoutNode::DeprecatedAction { .. }))
+    {
+        body_left - 2.0
+    } else {
+        body_left
+    }
+}
+
 fn while_left_extent(
     body_left: f64,
     cond_half: f64,
@@ -1126,6 +1149,80 @@ fn emit_attached_note(
     }
 }
 
+/// Detect a leading `floating note` anchored to the diagram's start node: the
+/// tree begins with `Start` immediately followed by a single `Note`, and the
+/// (pre-processed) source declares that note with the `floating` keyword.
+/// Returns the note's `(text, position, color)`. PlantUML draws such a note as
+/// a tail-less folded box at the top, vertically centred on the start ellipse,
+/// pushing the rest of the spine down.
+fn leading_floating_note(
+    tree: &[LayoutNode],
+    source: Option<&str>,
+) -> Option<(String, NotePosition, Option<String>)> {
+    // We can't distinguish floating from attached notes from the AST alone
+    // (the `floating` keyword is discarded during parsing), so gate on the raw
+    // source declaring a floating note.
+    let src = source?;
+    if !src
+        .lines()
+        .any(|l| l.trim_start().starts_with("floating note "))
+    {
+        return None;
+    }
+    // Tree shape: Start, then a Note, with nothing else between them.
+    match (tree.first(), tree.get(1)) {
+        (
+            Some(LayoutNode::Start),
+            Some(LayoutNode::Note {
+                text,
+                position,
+                color,
+            }),
+        ) => Some((text.clone(), position.clone(), color.clone())),
+        _ => None,
+    }
+}
+
+/// Emit a leading floating note (tail-less folded box) anchored to the start
+/// ellipse at spine centre `cx`. The note's top edge sits at `MARGIN_LEAD - 1`
+/// (15) and it is offset `NOTE_GAP` past the start ellipse's radius on the
+/// chosen side — mirroring `emit_attached_note`'s lateral placement but with
+/// no connector tail. Returns the note's box height.
+fn emit_leading_floating_note(
+    svg: &mut SvgEmitter,
+    text: &str,
+    position: &NotePosition,
+    color: Option<&str>,
+    cx: f64,
+) -> f64 {
+    let box_w = note_box_width(text);
+    let box_h = note_box_height(text);
+    let box_top = 15.0; // MARGIN_LEAD - 1
+    let fill = color
+        .map(crate::sequence::resolve_color)
+        .unwrap_or_else(|| NOTE_FILL.to_string());
+    let box_left = match position {
+        NotePosition::Left => cx - START_R - NOTE_GAP - box_w,
+        NotePosition::Right => cx + START_R + NOTE_GAP,
+    };
+    svg.note_folded(&fill, box_left, box_top, box_w, box_h);
+    for (i, line) in note_lines(text).iter().enumerate() {
+        let baseline = box_top + NOTE_FIRST_BASELINE_DY + i as f64 * NOTE_LINE_H;
+        let lw = text_render::measure(line, NOTE_FONT, false);
+        svg.text_element(
+            TEXT_COLOR,
+            "sans-serif",
+            NOTE_FONT,
+            lw,
+            box_left + NOTE_TEXT_PAD_X,
+            baseline,
+            line,
+            false,
+        );
+    }
+    box_h
+}
+
 /// Compute the asymmetric (left, right) extents of a single node from its
 /// vertical centreline. For most nodes this is symmetric (width/2, width/2);
 /// for if/else with unequal branches, the left extent (then-side) and right
@@ -1207,7 +1304,7 @@ fn node_extents(node: &LayoutNode) -> (f64, f64) {
             let (body_left, body_right) = sequence_extents(body);
             let cond_half = diamond_inner_w(condition) / 2.0 + DIAMOND_HALF;
             let left_extent = while_left_extent(
-                body_left,
+                while_body_left(body, body_left),
                 cond_half,
                 end_label.as_deref(),
                 special_out.as_deref(),
@@ -1250,6 +1347,13 @@ fn node_extents(node: &LayoutNode) -> (f64, f64) {
         LayoutNode::Switch { cases, condition } => {
             let layout = switch_x_layout(cases, condition);
             (layout.diamond_dx, layout.block_w - layout.diamond_dx)
+        }
+        // Terminal circles (start/stop/end) sit inside a fixed-width tile whose
+        // spine is 13 px from each side, independent of the glyph radius. When
+        // a circle is the widest node on the spine (a bare start→stop column),
+        // this pins cx at MARGIN_LEAD + 13 = 29 rather than MARGIN_LEAD + r.
+        LayoutNode::Start | LayoutNode::Stop | LayoutNode::End => {
+            (CIRCLE_TILE_HALF, CIRCLE_TILE_HALF)
         }
         _ => {
             let w = node_width(node);
@@ -1960,6 +2064,42 @@ impl SvgEmitter {
         .unwrap();
     }
 
+    /// Emit a tail-less folded-corner note box (a `floating note`, which has
+    /// no connector tail pointing at an anchor). Two paths — body then the
+    /// top-right fold triangle — matching PlantUML's floating-note emission.
+    fn note_folded(&mut self, fill: &str, box_left: f64, box_top: f64, box_w: f64, box_h: f64) {
+        const CS: f64 = NOTE_FOLD; // cornersize
+        let bl = box_left;
+        let bt = box_top;
+        let br = box_left + box_w;
+        let bb = box_top + box_h;
+        // Body: top-left → bottom-left → bottom-right → up to the fold base →
+        // diagonal across the fold → back to top-left.
+        write!(
+            self.shapes,
+            r#"<path d="M{},{} L{},{} L{},{} L{},{} L{},{} L{},{}" fill="{}" style="stroke:{};stroke-width:{};"/>"#,
+            f(bl), f(bt),
+            f(bl), f(bb),
+            f(br), f(bb),
+            f(br), f(bt + CS),
+            f(br - CS), f(bt),
+            f(bl), f(bt),
+            fill, NOTE_STROKE, NOTE_STROKE_WIDTH
+        )
+        .unwrap();
+        // Fold corner (top-right triangle).
+        write!(
+            self.shapes,
+            r#"<path d="M{},{} L{},{} L{},{} L{},{}" fill="{}" style="stroke:{};stroke-width:{};"/>"#,
+            f(br - CS), f(bt),
+            f(br - CS), f(bt + CS),
+            f(br), f(bt + CS),
+            f(br - CS), f(bt),
+            fill, NOTE_STROKE, NOTE_STROKE_WIDTH
+        )
+        .unwrap();
+    }
+
     /// Emit a partition's outer rectangle (no rounded corners).
     fn partition_rect(&mut self, fill: &str, height: f64, width: f64, x: f64, y: f64) {
         write!(
@@ -2296,23 +2436,32 @@ impl SvgEmitter {
 /// Render a linear sequence of nodes at a given center-x and starting y.
 /// Returns the y position after the last node.
 fn emit_sequence(svg: &mut SvgEmitter, nodes: &[LayoutNode], cx: f64, y: f64) -> f64 {
-    emit_sequence_ex(svg, nodes, cx, y, None)
+    emit_sequence_ex(svg, nodes, cx, y, None, None)
 }
 
 /// Like `emit_sequence`, but `mid_stretch = Some((flow_idx, extra))` adds
 /// `extra` px to the inbound arrow of the `flow_idx`-th flow node. Used by the
 /// FtileIfDown corridor layout, where an even-action populated branch stretches
 /// the gap straddling its vertical midpoint by 15 px.
+///
+/// `lead_note_h = Some(h)` signals that a leading `floating note` of box
+/// height `h` is centred on the diagram's start node: the start ellipse sits
+/// at cy = 15 + h/2 (top of the note tile pinned at 15) and the spine resumes
+/// from the note tile's bottom (15 + h), pushing everything below down.
 fn emit_sequence_ex(
     svg: &mut SvgEmitter,
     nodes: &[LayoutNode],
     cx: f64,
     mut y: f64,
     mid_stretch: Option<(usize, f64)>,
+    lead_note_h: Option<f64>,
 ) -> f64 {
     // Map flow-node ordinal → node index so the stretch can target the right
     // inbound arrow.
     let mut flow_ordinal = 0usize;
+    // Extra length applied to the single arrow leaving a leading-floating-note
+    // start node (consumed by the next flow node's inbound connector).
+    let mut lead_stretch = 0.0f64;
     for (i, node) in nodes.iter().enumerate() {
         // Skip layout for non-flow nodes (arrows and notes don't take vertical space
         // on their own).
@@ -2330,6 +2479,26 @@ fn emit_sequence_ex(
         // Title is a free-standing label; never gets an inbound connector.
         if let LayoutNode::Title(_) = node {
             y = emit_node(svg, node, cx, y);
+            continue;
+        }
+        // Leading floating note: the start ellipse is vertically centred on
+        // the note tile (top pinned at 15) and the spine is pushed down so the
+        // next node sits at `tile_bottom + ARROW_LEN`. The connector still
+        // departs from the ellipse's bottom (cy + START_R), so the outbound
+        // arrow lengthens by `tile_bottom - ellipse_bottom = nh/2 - START_R`,
+        // applied below as `lead_stretch`. The note paths/text were already
+        // emitted by the caller's prologue.
+        if let (0, LayoutNode::Start, Some(nh)) = (flow_ordinal, node, lead_note_h)
+            && nh > 2.0 * START_R
+        {
+            let top = 15.0; // MARGIN_LEAD - 1
+            let cy = top + nh / 2.0;
+            let fill = svg.palette.start_fill.clone();
+            let stroke = svg.palette.start_stroke.clone();
+            svg.ellipse(cx, cy, START_R, START_R, &fill, &stroke, "1");
+            y = cy + START_R; // connector departs from the ellipse bottom
+            lead_stretch = nh / 2.0 - START_R; // extra length for the next arrow
+            flow_ordinal += 1;
             continue;
         }
         // Compute the inbound down-arrow's style + gap (if any). PlantUML
@@ -2387,7 +2556,9 @@ fn emit_sequence_ex(
                     Some((idx, extra)) if idx == flow_ordinal => extra,
                     _ => 0.0,
                 };
+                let lead = std::mem::take(&mut lead_stretch);
                 let gap = stretch
+                    + lead
                     + if style.hidden {
                         10.0
                     } else if label.is_some() {
@@ -3092,7 +3263,7 @@ fn emit_if_down(
     } else {
         None
     };
-    let branch_bottom = emit_sequence_ex(svg, plan.populated, cx, branch_top, mid_stretch);
+    let branch_bottom = emit_sequence_ex(svg, plan.populated, cx, branch_top, mid_stretch, None);
 
     // Condition hexagon.
     let pts = vec![
@@ -3686,7 +3857,11 @@ fn emit_while(
     // the body's right extent.
     let (body_left_ext, body_right_ext) = sequence_extents(body);
     let body_right_x = cx + body_right_ext;
-    let body_left_x = cx - body_left_ext;
+    // A deprecated body pulls the left corridor 2 px tighter (see
+    // while_body_left); the special-terminator placement uses the adjusted
+    // extent so the terminator lands at the same absolute x as a
+    // non-deprecated body. The body box itself stays centred on the spine.
+    let body_left_x = cx - while_body_left(body, body_left_ext);
     let loop_x = diamond_right_vertex_x.max(body_right_x) + DIAMOND_HALF;
 
     // Exit arm geometry. Two modes:
@@ -4404,7 +4579,17 @@ pub fn render(diagram: &ActivityDiagram, _theme: &Theme) -> String {
     // centreline shifts so both branches stay symmetric around the diamond.
     let (content_left, content_right) = sequence_extents(&tree);
     let content_w = content_left + content_right;
-    let content_h = sequence_height(&tree);
+    // A leading `floating note` grows the start node's tile to the note's
+    // height (it is centred on the note). When the note is taller than the
+    // start ellipse, the spine is pushed down by `note_h - 2*START_R`. The
+    // start node already contributes its own `2*START_R`-equivalent tile to
+    // sequence_height, so we add only the surplus here.
+    let lead_note = leading_floating_note(&tree, diagram.meta.source.as_deref());
+    let lead_note_h = lead_note.as_ref().and_then(|(text, _, _)| {
+        let h = note_box_height(text);
+        (h > 2.0 * START_R).then_some(h)
+    });
+    let content_h = sequence_height(&tree) + lead_note_h.map_or(0.0, |h| h - 2.0 * START_R);
 
     // Total SVG dimensions: PlantUML uses asymmetric margins on both axes —
     // 16px left/top (the ACTION_MIN_X start position) and 19px right/bottom.
@@ -4549,8 +4734,14 @@ pub fn render(diagram: &ActivityDiagram, _theme: &Theme) -> String {
         }
     }
 
+    // A leading floating note is drawn first (before the start ellipse) so
+    // its paths/text precede the spine in document order, matching PlantUML.
+    if let (Some((text, position, color)), Some(_)) = (&lead_note, lead_note_h) {
+        emit_leading_floating_note(&mut svg, text, position, color.as_deref(), cx);
+    }
+
     // Emit all nodes.
-    emit_sequence(&mut svg, &tree, cx, start_y);
+    emit_sequence_ex(&mut svg, &tree, cx, start_y, None, lead_note_h);
 
     // Wrap in PlantUML-compatible SVG root.
     format_svg(svg_w, svg_h, &svg.finish())
