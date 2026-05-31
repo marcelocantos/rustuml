@@ -799,6 +799,16 @@ pub fn render_with_oracle(
         _ => svg.push_str("<defs/>"),
     }
     svg.push_str("<g>");
+
+    // `skinparam shadowing true` adds a `filter="url(#...)"` drop-shadow to
+    // every shape. The filter def is in the captured `defs_inner_xml`; its id
+    // is global to the diagram, so recover it from the first entity rect that
+    // carries one and echo it after `fill="…"` on each shape.
+    let shadow_attr: String = oracle
+        .and_then(|orc| orc.entities.values().find_map(|r| r.rect_filter.as_deref()))
+        .map(|f| format!(r#" filter="{f}""#))
+        .unwrap_or_default();
+
     if bg_color != "#FFFFFF" {
         write!(
             svg,
@@ -983,7 +993,7 @@ pub fn render_with_oracle(
             .unwrap();
             write!(
                 svg,
-                r#"<ellipse cx="{}" cy="{}" fill="{PSEUDO_COLOR}" rx="{START_RADIUS}" ry="{START_RADIUS}" style="stroke:{PSEUDO_COLOR};stroke-width:1;"/>"#,
+                r#"<ellipse cx="{}" cy="{}" fill="{PSEUDO_COLOR}"{shadow_attr} rx="{START_RADIUS}" ry="{START_RADIUS}" style="stroke:{PSEUDO_COLOR};stroke-width:1;"/>"#,
                 fmt_f(*cx),
                 fmt_f(*cy),
             )
@@ -1006,7 +1016,7 @@ pub fn render_with_oracle(
             .unwrap();
             write!(
                 svg,
-                r#"<ellipse cx="{}" cy="{}" fill="none" rx="{END_OUTER_RADIUS}" ry="{END_OUTER_RADIUS}" style="stroke:{PSEUDO_COLOR};stroke-width:1;"/>"#,
+                r#"<ellipse cx="{}" cy="{}" fill="none"{shadow_attr} rx="{END_OUTER_RADIUS}" ry="{END_OUTER_RADIUS}" style="stroke:{PSEUDO_COLOR};stroke-width:1;"/>"#,
                 fmt_f(*cx),
                 fmt_f(*cy),
             )
@@ -1263,7 +1273,7 @@ pub fn render_with_oracle(
                         // line; the text is vertically centred.
                         write!(
                             svg,
-                            r#"<rect fill="{fill_color}" height="{}" rx="{rx_s}" ry="{rx_s}" style="{stroke_style}" width="{}" x="{}" y="{}"/>"#,
+                            r#"<rect fill="{fill_color}"{shadow_attr} height="{}" rx="{rx_s}" ry="{rx_s}" style="{stroke_style}" width="{}" x="{}" y="{}"/>"#,
                             fmt_f(*bh),
                             fmt_f(*bw),
                             fmt_f(box_x),
@@ -1322,7 +1332,7 @@ pub fn render_with_oracle(
                         // State rectangle.
                         write!(
                             svg,
-                            r#"<rect fill="{fill_color}" height="{}" rx="{rx_s}" ry="{rx_s}" style="{stroke_style}" width="{}" x="{}" y="{}"/>"#,
+                            r#"<rect fill="{fill_color}"{shadow_attr} height="{}" rx="{rx_s}" ry="{rx_s}" style="{stroke_style}" width="{}" x="{}" y="{}"/>"#,
                             fmt_f(*bh),
                             fmt_f(*bw),
                             fmt_f(box_x),
