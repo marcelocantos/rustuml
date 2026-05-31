@@ -360,10 +360,39 @@ fn sans_text_width(text: &str, font_size: f64, bold: bool) -> f64 {
 /// Reverse XML escaping for metric calculation — PlantUML measures text
 /// against the source string, not its escaped form.
 fn unescape_for_metrics(s: &str) -> String {
-    s.replace("&amp;", "&")
-        .replace("&lt;", "<")
-        .replace("&gt;", ">")
-        .replace("&quot;", "\"")
+    single_pass_unescape(s)
+}
+
+/// Decode XML entities in a single left-to-right pass so each `&…;` is
+/// resolved exactly once. A naive chain of `.replace()` calls double-decodes:
+/// `&amp;lt;` first becomes `&lt;` (correct — the source held a literal
+/// `&lt;`) and is then wrongly collapsed to `<`. PlantUML keeps the literal
+/// `&lt;` and measures all four glyphs, so we must not re-scan produced text.
+pub(crate) fn single_pass_unescape(s: &str) -> String {
+    let mut out = String::with_capacity(s.len());
+    let mut rest = s;
+    while let Some(amp) = rest.find('&') {
+        out.push_str(&rest[..amp]);
+        let tail = &rest[amp..];
+        if let Some(t) = tail.strip_prefix("&amp;") {
+            out.push('&');
+            rest = t;
+        } else if let Some(t) = tail.strip_prefix("&lt;") {
+            out.push('<');
+            rest = t;
+        } else if let Some(t) = tail.strip_prefix("&gt;") {
+            out.push('>');
+            rest = t;
+        } else if let Some(t) = tail.strip_prefix("&quot;") {
+            out.push('"');
+            rest = t;
+        } else {
+            out.push('&');
+            rest = &tail[1..];
+        }
+    }
+    out.push_str(rest);
+    out
 }
 
 /// Normalise a colour spec to PlantUML's preferred form: lower-case hex

@@ -870,10 +870,7 @@ pub fn stripped_text_no_underline(text: &str) -> String {
 /// Reverse the XML escaping applied during segment building so the result
 /// matches the source string a font-metric calculation expects.
 fn unescape_for_metrics(s: &str) -> String {
-    s.replace("&amp;", "&")
-        .replace("&lt;", "<")
-        .replace("&gt;", ">")
-        .replace("&quot;", "\"")
+    crate::text_render::single_pass_unescape(s)
 }
 
 fn parse_segments_inner(text: &str, skip_underline: bool) -> Vec<Segment> {
