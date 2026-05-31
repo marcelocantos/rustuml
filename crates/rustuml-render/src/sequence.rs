@@ -4154,8 +4154,10 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
         let line_height = plantuml_metrics::text_height(TITLE_FONT_SIZE as f64);
         let first_baseline_y =
             HEAD_BOX_Y + TITLE_TOP_PAD + plantuml_metrics::ascent(TITLE_FONT_SIZE as f64);
-        svg.buf
-            .push_str(r#"<g class="title" data-source-line="1">"#);
+        let title_line = diagram.meta.title_line.unwrap_or(1);
+        svg.buf.push_str(&format!(
+            r#"<g class="title" data-source-line="{title_line}">"#
+        ));
         for (i, line) in title_lines.iter().enumerate() {
             let text_length = text_render::measure(line, TITLE_FONT_SIZE as f64, true);
             let x = title_center - text_length / 2.0;

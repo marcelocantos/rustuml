@@ -151,6 +151,10 @@ pub struct Span {
 pub struct DiagramMeta {
     #[serde(skip_serializing_if = "Option::is_none")]
     pub title: Option<String>,
+    /// Post-preprocessing source line of the `title` directive. PlantUML emits
+    /// it as the title group's `data-source-line`; defaults to 1 when unset.
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub title_line: Option<usize>,
     #[serde(skip_serializing_if = "Option::is_none")]
     pub header: Option<String>,
     #[serde(skip_serializing_if = "Option::is_none")]
