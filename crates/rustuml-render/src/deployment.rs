@@ -54,6 +54,10 @@ const HEADER_FONT_SIZE: f64 = 10.0;
 /// measured from the deployment goldens.
 const FOOTER_BOTTOM_GAP: f64 = 8.5764;
 const TITLE_MARGIN_X: f64 = 10.0;
+/// Trailing horizontal pad excluded from the title's centring region. PlantUML
+/// centres the title in the canvas width minus this 7px (3.5px each side),
+/// measured across the deployment goldens.
+const TITLE_RIGHT_PAD: f64 = 7.0;
 const TITLE_TOP_PAD: f64 = 10.0;
 const TITLE_LINE_H: f64 = 16.48828125;
 
@@ -213,21 +217,22 @@ fn render_oracle(diagram: &DeploymentDiagram, _theme: &Theme, oracle: &OracleLay
     let skin_strokes = skin_border_colors(&diagram.meta.skinparams);
 
     // Title block. PlantUML emits a `<g class="title">` before the entities,
-    // anchoring the block's left edge at TITLE_MARGIN_X and centring each line
-    // within the block (block width = widest line). Baselines step by
-    // TITLE_LINE_H starting at TITLE_TOP_PAD + ascent. The entity coordinates
-    // supplied by the oracle already include the vertical offset the title
-    // introduces, so we only need to draw the title itself.
+    // centring each line in the canvas width (minus a 7px trailing pad), but
+    // never placing it left of TITLE_MARGIN_X. When the body is wider the title
+    // centres over it; when the title itself drives the canvas width it sits at
+    // the left margin. Baselines step by TITLE_LINE_H starting at
+    // TITLE_TOP_PAD + ascent. The entity coordinates supplied by the oracle
+    // already include the vertical offset the title introduces, so we only need
+    // to draw the title itself.
     if let Some(title) = &diagram.meta.title {
         let widths: Vec<f64> = title
             .lines()
             .map(|t| text_render::measure(t, TITLE_FONT_SIZE, true))
             .collect();
-        let block_w = widths.iter().cloned().fold(0.0_f64, f64::max);
         svg.raw(r#"<g class="title" data-source-line="1">"#);
         for (i, tline) in title.lines().enumerate() {
             let ty = TITLE_TOP_PAD + pm::ascent(TITLE_FONT_SIZE) + i as f64 * TITLE_LINE_H;
-            let tx = TITLE_MARGIN_X + (block_w - widths[i]) / 2.0;
+            let tx = TITLE_MARGIN_X.max((canvas_w - TITLE_RIGHT_PAD - widths[i]) / 2.0);
             emit_text(&mut svg, tline, tx, ty, TITLE_FONT_SIZE, true, false);
         }
         svg.raw("</g>");
