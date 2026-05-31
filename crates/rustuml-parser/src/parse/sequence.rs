@@ -235,7 +235,7 @@ impl SeqParser {
         //   5. keyword "Long Label"           <<stereotype>>  (no alias; id = label)
         static RE: LazyLock<Regex> = LazyLock::new(|| {
             Regex::new(
-                r#"^(participant|actor|boundary|control|entity|database|collections|queue)\s+(?:"([^"]+)"\s+as\s+(\w+)|(\w+)\s+as\s+"([^"]+)"|(\w+)\s+as\s+(\w+)|"([^"]+)"|(\w+))(?:\s+<<([^>]+)>>)?(?:\s+(#\S+))?(?:\s+order\s+\d+)?"#,
+                r#"^(participant|actor|boundary|control|entity|database|collections|queue)\s+(?:"([^"]+)"\s+as\s+(\w+)|(\w+)\s+as\s+"([^"]+)"|(\w+)\s+as\s+(\w+)|"([^"]+)"|(\w+))(?:\s+<<([^>]+)>>)?(?:\s+(#\S+))?(?:\s+order\s+(\d+))?"#,
             )
             .unwrap()
         });
@@ -270,6 +270,13 @@ impl SeqParser {
 
             let color = caps.get(11).map(|m| m.as_str().to_string());
 
+            // Explicit `order N` sets the layout sort key; otherwise it defaults
+            // to the declaration index. Implicit participants (created by a
+            // message) also default to their declaration index, so a participant
+            // declared with a large `order N` can be positioned to the right of a
+            // later, implicitly-created one (matching Java PlantUML).
+            let explicit_order = caps.get(12).and_then(|m| m.as_str().parse::<usize>().ok());
+
             if !self.participant_ids.contains(&id) {
                 self.participant_ids.push(id.clone());
                 let idx = self.participants.len();
@@ -277,7 +284,7 @@ impl SeqParser {
                     id: id.clone(),
                     label,
                     kind,
-                    order: Some(idx),
+                    order: Some(explicit_order.unwrap_or(idx)),
                     stereotype,
                     url,
                     color,

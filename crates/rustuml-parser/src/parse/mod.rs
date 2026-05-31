@@ -147,6 +147,12 @@ fn detect_type(input: &str) -> &str {
 fn detect_uml_subtype(lines: &[String]) -> UmlSubtype {
     let mut scores = [0i32; 10]; // Seq, Class, Object, State, Activity, Component, UseCase, Deployment, Timing
 
+    // `allowmixing` is a class-diagram directive: it permits mixing other
+    // element kinds (state, object, etc.) into a CLASS diagram. When it appears
+    // alongside an explicit class-style declaration, the diagram is CLASS even
+    // if state/object signals would otherwise score higher.
+    let mut has_allowmixing = false;
+
     for line in lines {
         let trimmed = line.trim();
         // Normalize internal tabs to spaces so keyword detection works regardless
@@ -473,6 +479,29 @@ fn detect_uml_subtype(lines: &[String]) -> UmlSubtype {
         // Archimate -- preprocessor-expanded lines are unambiguous.
         if trimmed.starts_with("archimate_element ") || trimmed.starts_with("archimate_rel ") {
             scores[9] += 20;
+        }
+        // `allowmixing` directive (class-diagram only).
+        if trimmed == "allowmixing" || trimmed.starts_with("allowmixing ") {
+            has_allowmixing = true;
+        }
+    }
+
+    // `allowmixing` + an explicit class declaration => CLASS, overriding any
+    // state/object/etc. signals from the mixed-in elements. scores[1] (CLASS)
+    // is non-zero only when a real class-style declaration (class/interface/
+    // enum/abstract/annotation/inheritance) was seen, so this never fires on
+    // an `allowmixing` diagram that has no class content (e.g. participant +
+    // component, which Java PlantUML rejects as an error rather than CLASS).
+    if has_allowmixing && scores[1] > 0 {
+        let other_max = scores
+            .iter()
+            .enumerate()
+            .filter(|&(i, _)| i != 1)
+            .map(|(_, &s)| s)
+            .max()
+            .unwrap_or(0);
+        if scores[1] <= other_max {
+            scores[1] = other_max + 1;
         }
     }
 
