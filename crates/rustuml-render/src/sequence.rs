@@ -375,6 +375,10 @@ const SELF_MSG_DROP: f64 = 13.0;
 const SELF_MSG_TEXT_X_PAD: f64 = 7.0;
 /// Extra right padding beyond self-message text/loopback.
 const SELF_MSG_RIGHT_PAD: f64 = 2.0;
+/// Minimum preferred width a self-message reserves in the gap to the next
+/// participant. PlantUML's ComponentRoseSelfArrow.getPreferredWidth returns
+/// `max(textWidth, arrowWidth + 5)` with arrowWidth = 45, i.e. min 50.
+const SELF_MSG_MIN_PREF_WIDTH: f64 = 50.0;
 
 // ---------------------------------------------------------------------------
 // Participant-type shape constants (reverse-engineered from golden SVGs)
@@ -2898,8 +2902,57 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                 let to_idx = id_to_idx.get(msg.to.as_str()).copied();
                 if let (Some(fi), Some(ti)) = (from_idx, to_idx) {
                     if fi == ti {
-                        // Self-message: no pair spacing needed.
-                        // Width tracking deferred to after Phase 3 (x positions assigned).
+                        // Self-message. PlantUML's Step1Message reserves a constraint
+                        // in the gap *after* the source participant (getConstraintAfter):
+                        //   length = arrowOnlyWidth + segment.getLength()
+                        // and arrowOnlyWidth = ComponentRoseSelfArrow.getPreferredWidth
+                        //   = max(textWidth, 50)
+                        //   + segment.getLength()       (added a second time inside it)
+                        // so the gap to the next participant must be at least
+                        //   max(label_w + 2*MARGIN, 50) + 2 * segment_length
+                        // where segment_length = leftShift + rightShift of the lifeline
+                        // at this message level (0 when inactive, ACTIVATION_WIDTH at
+                        // depth 1). This pushes a right-hand neighbour further right.
+                        // (When fi is the rightmost participant there is no neighbour;
+                        // the right extent then feeds the canvas edge after Phase 3.)
+                        if fi + 1 < n {
+                            let label = process_label(&msg.label);
+                            let label_w = text_width(&label, MSG_FONT_SIZE);
+
+                            let autonumber_extra =
+                                if let Some((_, w, _)) = spacing_auto.current() {
+                                    w + AUTONUMBER_LABEL_GAP
+                                } else {
+                                    0.0
+                                };
+
+                            let text_pref = autonumber_extra
+                                + label_w
+                                + MSG_TEXT_LEFT_PAD
+                                + MSG_TEXT_LEFT_PAD;
+                            let arrow_only_w = text_pref.max(SELF_MSG_MIN_PREF_WIDTH);
+
+                            // Lifeline segment length at this level: left shift
+                            // (ACTIVATION_HALF_W when active) + right shift
+                            // (depth * ACTIVATION_HALF_W). Counted twice, matching
+                            // PlantUML's double-add via getPreferredWidth.
+                            let depth = activation_depth
+                                .get(msg.from.as_str())
+                                .copied()
+                                .unwrap_or(0)
+                                + usize::from(matches!(
+                                    msg.activation,
+                                    Some(ActivationChange::Activate)
+                                ));
+                            let segment_len = if depth > 0 {
+                                ACTIVATION_HALF_W + depth as f64 * ACTIVATION_HALF_W
+                            } else {
+                                0.0
+                            };
+
+                            let needed = arrow_only_w + 2.0 * segment_len;
+                            pair_max_label_width[fi] = pair_max_label_width[fi].max(needed);
+                        }
                     } else {
                         let label = process_label(&msg.label);
                         let label_w = text_width(&label, MSG_FONT_SIZE);
