@@ -92,6 +92,12 @@ pub fn parse_component(lines: &[String]) -> Result<ComponentDiagram, ParseError>
     // Parse into a nested structure via a stack.
     // Each stack frame is a mutable ComponentPackage under construction.
     let mut package_stack: Vec<ComponentPackage> = Vec::new();
+    // Names of every block container ever opened, so a connection that targets
+    // a container by name is not mistaken for an undeclared interface endpoint.
+    let mut known_packages: std::collections::HashSet<String> = std::collections::HashSet::new();
+    // Ids of floating notes (`note "..." as N1`), so a `N1 .. Foo` link does
+    // not auto-create N1 as an interface endpoint.
+    let mut known_note_ids: std::collections::HashSet<String> = std::collections::HashSet::new();
     // Top-level packages collected.
     let mut top_packages: Vec<ComponentPackage> = Vec::new();
     // `hide`/`remove` directives. PlantUML drops the targeted elements entirely
@@ -143,7 +149,7 @@ pub fn parse_component(lines: &[String]) -> Result<ComponentDiagram, ParseError>
     });
     // Floating note: `note "text" as ID` or `note : text`
     static RE_NOTE_INLINE: LazyLock<Regex> =
-        LazyLock::new(|| Regex::new(r#"^note\s+"([^"]+)"\s+as\s+\w+"#).unwrap());
+        LazyLock::new(|| Regex::new(r#"^note\s+"([^"]+)"\s+as\s+(\w+)"#).unwrap());
     // Matches: FROM ["from_mult"] ARROW ["to_mult"] TO [: label]
     // FROM and TO can be [bracket] or \w+ identifiers.
     // Arrow chars broadened to include lollipop notation: `-(`, `-(0-`, `--(`  etc.
@@ -323,6 +329,7 @@ pub fn parse_component(lines: &[String]) -> Result<ComponentDiagram, ParseError>
                 // Block container — push onto the stack.
                 let rest = &container_clean[kw.len()..];
                 let (id, label) = parse_container_label(kw, rest);
+                known_packages.insert(id.clone());
                 package_stack.push(ComponentPackage {
                     name: id,
                     label,
@@ -385,6 +392,7 @@ pub fn parse_component(lines: &[String]) -> Result<ComponentDiagram, ParseError>
         }
         // Floating inline note: `note "text" as ID`
         if let Some(caps) = RE_NOTE_INLINE.captures(trimmed) {
+            known_note_ids.insert(caps[2].to_string());
             notes.push(ComponentNote {
                 text: caps[1].to_string(),
                 target: None,
@@ -534,6 +542,11 @@ pub fn parse_component(lines: &[String]) -> Result<ComponentDiagram, ParseError>
         let trimmed = trimmed_owned.as_str();
 
         if let Some(caps) = RE_CONN.captures(trimmed) {
+            // Group 1/6 are bracketed (`[Name]`) endpoints; 2/7 are bare
+            // identifiers. PlantUML treats a bare, undeclared endpoint as an
+            // interface (drawn as a circle), and a bracketed endpoint as a
+            // component.
+            let from_bracketed = caps.get(1).is_some();
             let from = caps
                 .get(1)
                 .or(caps.get(2))
@@ -542,6 +555,7 @@ pub fn parse_component(lines: &[String]) -> Result<ComponentDiagram, ParseError>
             let from_mult = caps.get(3).map(|m| m.as_str().to_string());
             let arrow = &caps[4];
             let to_mult = caps.get(5).map(|m| m.as_str().to_string());
+            let to_bracketed = caps.get(6).is_some();
             let to = caps
                 .get(6)
                 .or(caps.get(7))
@@ -550,21 +564,30 @@ pub fn parse_component(lines: &[String]) -> Result<ComponentDiagram, ParseError>
             let label = caps.get(8).map(|m| m.as_str().trim().to_string());
             let dashed = arrow.contains("..") || arrow.contains('.');
 
-            // Auto-create components from connection endpoints if not already
-            // declared as a component or interface.
-            for id in [&from, &to] {
+            // Auto-create endpoints if not already declared. Bracketed
+            // endpoints become components; bare ones become interfaces.
+            for (id, bracketed) in [(&from, from_bracketed), (&to, to_bracketed)] {
                 if !id.is_empty()
                     && !components.iter().any(|c| c.id == *id)
                     && !interfaces.iter().any(|i| i.id == *id)
+                    && !known_packages.contains(id)
+                    && !known_note_ids.contains(id)
                 {
-                    components.push(Component {
-                        id: id.clone(),
-                        label: id.clone(),
-                        stereotypes: Vec::new(),
-                        url: None,
-                        source_line: current_line,
-                        kind: ComponentElementKind::Component,
-                    });
+                    if bracketed {
+                        components.push(Component {
+                            id: id.clone(),
+                            label: id.clone(),
+                            stereotypes: Vec::new(),
+                            url: None,
+                            source_line: current_line,
+                            kind: ComponentElementKind::Component,
+                        });
+                    } else {
+                        interfaces.push(Interface {
+                            id: id.clone(),
+                            label: id.clone(),
+                        });
+                    }
                 }
             }
 
