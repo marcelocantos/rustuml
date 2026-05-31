@@ -682,6 +682,9 @@ fn write_text_element(
     } else {
         base.y + y_offset
     };
+    // PlantUML emits the no-break space (U+00A0, used for inter-run gaps and
+    // monospace padding) as the XML entity `&#160;`, never as the raw byte.
+    let content = content.replace('\u{00a0}', "&#160;");
     write!(
         buf,
         r#"<text fill="{fill}"{filter_attr} font-family="{font_family}" font-size="{font_size}"{style_attr}{weight_attr} lengthAdjust="spacing"{text_decoration} textLength="{tl}" x="{x_s}" y="{y_s}">{content}</text>"#,
