@@ -206,6 +206,21 @@ fn node_width(id: &str, state_def: Option<&State>) -> f64 {
 }
 
 /// Note box height.
+/// Collapse a note's captured `text_y_values` to one baseline per visual
+/// line. A single line that mixes styled and plain runs (e.g.
+/// `<b>Bold</b> text`) emits several `<text>` elements that share one
+/// baseline; dropping consecutive duplicates realigns the per-line index
+/// with the visual lines.
+fn distinct_line_ys(ys: &[f64]) -> Vec<f64> {
+    let mut out: Vec<f64> = Vec::new();
+    for &y in ys {
+        if out.last() != Some(&y) {
+            out.push(y);
+        }
+    }
+    out
+}
+
 fn note_box_height(text: &str) -> f64 {
     let line_count = text.lines().filter(|l| !l.trim().is_empty()).count().max(1);
     NOTE_PADDING + line_count as f64 * NOTE_LINE_HEIGHT + NOTE_PADDING
@@ -942,10 +957,11 @@ pub fn render_with_oracle(
                 .map(|l| l.trim())
                 .filter(|l| !l.is_empty())
                 .collect();
+            let line_ys = distinct_line_ys(&rect.text_y_values);
             for (i, line) in lines.iter().enumerate() {
                 let fallback_y =
                     rect.y + NOTE_PADDING + LINK_FONT_SIZE + i as f64 * NOTE_LINE_HEIGHT;
-                let ty = rect.text_y_values.get(i).copied().unwrap_or(fallback_y);
+                let ty = line_ys.get(i).copied().unwrap_or(fallback_y);
                 let mut text_buf = String::new();
                 text_render::emit_text(
                     &mut text_buf,
@@ -1517,10 +1533,11 @@ pub fn render_with_oracle(
                 .map(|l| l.trim())
                 .filter(|l| !l.is_empty())
                 .collect();
+            let line_ys = distinct_line_ys(&rect.text_y_values);
             for (i, line) in lines.iter().enumerate() {
                 let fallback_y =
                     rect.y + NOTE_PADDING + LINK_FONT_SIZE + i as f64 * NOTE_LINE_HEIGHT;
-                let ty = rect.text_y_values.get(i).copied().unwrap_or(fallback_y);
+                let ty = line_ys.get(i).copied().unwrap_or(fallback_y);
                 let mut text_buf = String::new();
                 text_render::emit_text(
                     &mut text_buf,
@@ -2114,9 +2131,10 @@ fn emit_oracle_gmn_note(
         .map(|l| l.trim())
         .filter(|l| !l.is_empty())
         .collect();
+    let line_ys = distinct_line_ys(&rect.text_y_values);
     for (i, line) in lines.iter().enumerate() {
         let fallback_y = rect.y + NOTE_PADDING + LINK_FONT_SIZE + i as f64 * NOTE_LINE_HEIGHT;
-        let ty = rect.text_y_values.get(i).copied().unwrap_or(fallback_y);
+        let ty = line_ys.get(i).copied().unwrap_or(fallback_y);
         let mut text_buf = String::new();
         text_render::emit_text(
             &mut text_buf,
