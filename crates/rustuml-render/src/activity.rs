@@ -4151,7 +4151,7 @@ fn emit_repeat(
 ///   - Per-lane content centered on lane.cx with 6 left + 4 right padding.
 ///   - Cross-lane arrow: source_cx vertical down 5 → horizontal at +5 →
 ///     target_cx vertical down (15 more) with arrowhead.
-fn emit_swimlanes(svg: &mut SvgEmitter, cx: f64, _y: f64, lanes: &[Lane]) -> f64 {
+fn emit_swimlanes(svg: &mut SvgEmitter, cx: f64, y: f64, lanes: &[Lane]) -> f64 {
     let arrow_color = svg.palette.arrow_color.clone();
     let text_color = svg.palette.text_color.clone();
     let divider_color = "#000000";
@@ -4160,8 +4160,15 @@ fn emit_swimlanes(svg: &mut SvgEmitter, cx: f64, _y: f64, lanes: &[Lane]) -> f64
     // ≈ MARGIN_LEAD + 1.30) and a +4/+9 asymmetric extra padding around
     // the lanes (see node_extents below). We compute lane_left from the
     // passed cx, which has been positioned to make lane_lefts[0] = 20.
+    //
+    // The header band sits 1.2969 px below the content origin handed in by
+    // render() (= MARGIN_LEAD = 16 in the common case → 17.2969). When the
+    // diagram carries deprecation banners, render() raises that origin by
+    // one baseline pitch per banner, so the swimlane chrome floats below the
+    // banner band (e.g. y=38.9375 for one banner) instead of being pinned to
+    // the hardcoded 17.2969.
     let header_text_h = pm::text_height(LANE_TITLE_FONT);
-    let header_top = 17.2969;
+    let header_top = y + 1.2969;
     let header_bottom = header_top + header_text_h;
     let body_top = header_bottom + 15.0;
 
@@ -4432,7 +4439,20 @@ pub fn render(diagram: &ActivityDiagram, _theme: &Theme) -> String {
     } else {
         0.0
     };
-    let start_y = if has_deprecated {
+    // A top-level swimlanes block carries its own internal top structure
+    // (header band at MARGIN_LEAD + 1.2969 = 17.2969). The generic
+    // deprecation gap formula (13 + warn_band_h + 17) is calibrated for the
+    // flat-flow layout whose natural top is MARGIN_LEAD; applying it to a
+    // swimlane double-counts. Instead, each deprecation banner pushes the
+    // swimlane down by exactly one baseline pitch (warn_h_each + 5 =
+    // 21.6406): golden header_top = 17.2969 + num_warnings * 21.6406 (e.g.
+    // 38.9375 for one warning), so the content origin handed to
+    // emit_swimlanes is MARGIN_LEAD + num_warnings * 21.6406 (the +1.2969 is
+    // re-added inside emit_swimlanes).
+    let is_top_swimlanes = matches!(tree.first(), Some(LayoutNode::Swimlanes { .. }));
+    let start_y = if is_top_swimlanes {
+        margin_top + num_warnings * (warn_h_each + 5.0)
+    } else if has_deprecated {
         13.0 + warn_band_h + 17.0
     } else {
         margin_top
