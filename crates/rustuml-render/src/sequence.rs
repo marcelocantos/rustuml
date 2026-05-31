@@ -23,6 +23,16 @@ pub(crate) fn resolve_color(color: &str) -> String {
     if name.len() == 6 && name.chars().all(|c| c.is_ascii_hexdigit()) {
         return format!("#{}", name.to_uppercase());
     }
+    // 3-digit hex shorthand (#RGB → #RRGGBB), per PlantUML's HtmlColor parsing.
+    if name.len() == 3 && name.chars().all(|c| c.is_ascii_hexdigit()) {
+        let mut out = String::with_capacity(7);
+        out.push('#');
+        for c in name.to_uppercase().chars() {
+            out.push(c);
+            out.push(c);
+        }
+        return out;
+    }
     // Full CSS named colors (case-insensitive).
     match name.to_lowercase().as_str() {
         "aliceblue" => "#F0F8FF".to_string(),
