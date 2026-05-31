@@ -60,6 +60,31 @@ fn walk_pkg(
     }
 }
 
+/// Resolve an interface's oracle entity by its bare id.
+///
+/// Interfaces declared inside a `component`/`package` block are qualified by
+/// PlantUML (e.g. `interface HTTP` inside `component Server` becomes
+/// `Server.HTTP`), and the oracle keys its entity map by that qualified name.
+/// The parser, however, only records the bare interface id (`HTTP`) with no
+/// enclosing-package link, so a direct `entities.get(id)` lookup misses the
+/// qualified key. Match on exact id first, then on any key ending in `.{id}`
+/// (the qualified form). Returns the matched key (the qualified name PlantUML
+/// emits in `data-qualified-name`) alongside the entity.
+fn resolve_iface_entity<'a>(
+    oracle: &'a OracleLayout,
+    id: &str,
+) -> Option<(&'a str, &'a EntityRect)> {
+    if let Some((k, r)) = oracle.entities.get_key_value(id) {
+        return Some((k.as_str(), r));
+    }
+    let suffix = format!(".{id}");
+    oracle
+        .entities
+        .iter()
+        .find(|(k, _)| k.ends_with(&suffix))
+        .map(|(k, r)| (k.as_str(), r))
+}
+
 /// Y-baseline offset from rect top to the bottom-most text line (label),
 /// derived from PlantUML output: rect h=46.4883, baseline y=33.5352 from top.
 const LABEL_BASELINE_FROM_BOTTOM: f64 = 12.9531;
@@ -518,55 +543,58 @@ pub fn render_with_oracle(
         Comp(usize),
         Iface(usize),
     }
-    // Components keep their established `comp_order` (depth-then-declaration);
-    // that order is load-bearing for nested-package layouts and must not be
-    // perturbed. Interfaces are merged into that sequence by oracle entity id:
-    // each interface slots immediately before the first component whose
-    // oracle id exceeds it. Components without an oracle id (or all of them,
-    // when there is no oracle) anchor the sequence in `comp_order`, and any
-    // interfaces that don't slot earlier are appended at the end — matching the
-    // historical components-then-interfaces behaviour for those cases.
-    let ent_id_key = |id: Option<&str>| -> Option<i64> {
-        id.and_then(|s| s.strip_prefix("ent"))
-            .and_then(|s| s.parse::<i64>().ok())
-    };
     let emit_order: Vec<EmitItem> = if oracle.is_some() {
-        // Interface ids paired with their declaration index.
-        let mut iface_keyed: Vec<(Option<i64>, usize)> = (0..diagram.interfaces.len())
-            .map(|ii| {
-                let key = ent_id_key(
-                    oracle
-                        .and_then(|o| o.entities.get(&diagram.interfaces[ii].id))
-                        .and_then(|r| r.entity_id.as_deref()),
-                );
-                (key, ii)
-            })
+        let iface_qual = |ii: usize| -> Option<&str> {
+            oracle.and_then(|o| resolve_iface_entity(o, &diagram.interfaces[ii].id).map(|(k, _)| k))
+        };
+        // Whether any leaf (component or interface) is nested in a container.
+        // When so, the top-level (depth-0) leaves are emitted *last*.
+        let any_nested_all = comp_order.iter().any(|&i| {
+            qualified_names
+                .get(&diagram.components[i].id)
+                .map(|q| q.contains('.'))
+                .unwrap_or(false)
+        }) || (0..diagram.interfaces.len())
+            .any(|ii| iface_qual(ii).map(|q| q.contains('.')).unwrap_or(false));
+        // Source line for an interface, parsed from the oracle's
+        // `data-source-line` (the `Interface` model carries none). Falls back to
+        // a large sentinel so an interface with no captured line sorts after
+        // same-depth peers that have one.
+        let iface_src_line = |ii: usize| -> i64 {
+            oracle
+                .and_then(|o| resolve_iface_entity(o, &diagram.interfaces[ii].id))
+                .and_then(|(_, r)| r.source_line.as_deref())
+                .and_then(|s| s.parse::<i64>().ok())
+                .unwrap_or(i64::MAX)
+        };
+        // PlantUML emits leaf entities (components and interfaces alike) grouped
+        // by nesting depth, then by source line within each depth. The oracle's
+        // entity ids are NOT monotonic with emission order across depths, so a
+        // plain ascending-id merge mis-slots a deep interface ahead of a shallow
+        // component (e.g. `Inner.IInner` ahead of `OuterComp`). Build one
+        // unified list keyed by `(any_nested && depth == 0, depth, source_line)`
+        // — the same comparison `comp_order` uses — and sort components and
+        // interfaces together. The stable sort preserves `comp_order`'s
+        // intra-depth ordering on ties.
+        let mut out: Vec<EmitItem> = comp_order
+            .iter()
+            .map(|&i| EmitItem::Comp(i))
+            .chain((0..diagram.interfaces.len()).map(EmitItem::Iface))
             .collect();
-        // Emit interfaces in ascending id order so multiple interfaces between
-        // two components keep their relative order.
-        iface_keyed.sort_by_key(|&(key, ii)| (key.unwrap_or(i64::MAX), ii));
-        let mut out: Vec<EmitItem> = Vec::new();
-        let mut next_iface = 0usize;
-        for &i in &comp_order {
-            let comp_key = ent_id_key(
-                oracle_comp_rect(&diagram.components[i]).and_then(|r| r.entity_id.as_deref()),
-            );
-            if let Some(ck) = comp_key {
-                while next_iface < iface_keyed.len() {
-                    match iface_keyed[next_iface].0 {
-                        Some(ik) if ik < ck => {
-                            out.push(EmitItem::Iface(iface_keyed[next_iface].1));
-                            next_iface += 1;
-                        }
-                        _ => break,
-                    }
-                }
+        out.sort_by_key(|item| match *item {
+            EmitItem::Comp(i) => {
+                let comp = &diagram.components[i];
+                let depth = qualified_names
+                    .get(&comp.id)
+                    .map(|q| q.matches('.').count())
+                    .unwrap_or(0);
+                (any_nested_all && depth == 0, depth, comp.source_line as i64)
             }
-            out.push(EmitItem::Comp(i));
-        }
-        for &(_, ii) in &iface_keyed[next_iface..] {
-            out.push(EmitItem::Iface(ii));
-        }
+            EmitItem::Iface(ii) => {
+                let depth = iface_qual(ii).map(|q| q.matches('.').count()).unwrap_or(0);
+                (any_nested_all && depth == 0, depth, iface_src_line(ii))
+            }
+        });
         out
     } else {
         comp_order
@@ -1207,7 +1235,12 @@ fn render_interface(
 ) {
     let iface = &diagram.interfaces[ii];
     let (ix, iy) = iface_positions[ii];
-    let oracle_iface = oracle.and_then(|o| o.entities.get(&iface.id));
+    // Match the interface against its oracle entity by bare id *or* qualified
+    // name (`Server.HTTP` for `interface HTTP` inside `component Server`). The
+    // matched key is the qualified name PlantUML emits in `data-qualified-name`.
+    let resolved = oracle.and_then(|o| resolve_iface_entity(o, &iface.id));
+    let oracle_iface = resolved.map(|(_, r)| r);
+    let qualified_name = resolved.map(|(k, _)| k).unwrap_or(iface.id.as_str());
     let ent_id = oracle_iface
         .and_then(|r| r.entity_id.clone())
         .unwrap_or_else(|| {
@@ -1222,8 +1255,7 @@ fn render_interface(
 
     svg.raw(&format!("<!--entity {}-->", iface.id));
     svg.raw(&format!(
-        r#"<g class="entity" data-qualified-name="{}"{source_attr} id="{ent_id}">"#,
-        iface.id
+        r#"<g class="entity" data-qualified-name="{qualified_name}"{source_attr} id="{ent_id}">"#,
     ));
 
     // Circle.
@@ -1373,7 +1405,7 @@ fn compute_positions_from_oracle(
     }
 
     for iface in &diagram.interfaces {
-        let rect = oracle.entities.get(&iface.id);
+        let rect = resolve_iface_entity(oracle, &iface.id).map(|(_, r)| r);
         if let Some(rect) = rect {
             iface_positions.push((rect.x + rect.width / 2.0, rect.y + rect.height / 2.0));
         } else {

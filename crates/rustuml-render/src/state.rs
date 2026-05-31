@@ -468,6 +468,49 @@ pub fn render_with_oracle(
     let state_name_font_size = state_font_override.unwrap_or(STATE_FONT_SIZE);
     let state_desc_font_size = state_font_override.unwrap_or(DESC_FONT_SIZE);
 
+    // Resolve the state-node label font name and style. PlantUML applies
+    // `skinparam stateFontName` (or the global `defaultFontName`/`fontName`)
+    // and `stateFontStyle` to the state *name* label. A monospace font name
+    // (Courier et al.) also switches the width metric to the fixed-advance
+    // mono table — the emitted `font-family` then carries the user-supplied
+    // name. Non-monospace custom names are left to the default sans-serif
+    // metric (PlantUML only tabulates sans + mono advances), so we don't
+    // claim them here.
+    let state_font_name: Option<String> = diagram
+        .meta
+        .skinparams
+        .iter()
+        .rev()
+        .find(|sp| {
+            sp.key.eq_ignore_ascii_case("stateFontName")
+                || sp.key.eq_ignore_ascii_case("defaultFontName")
+                || sp.key.eq_ignore_ascii_case("fontName")
+        })
+        .map(|sp| sp.value.trim().to_string())
+        .filter(|v| !v.is_empty());
+    let state_name_is_mono = state_font_name
+        .as_deref()
+        .map(|n| {
+            matches!(
+                n.to_ascii_lowercase().as_str(),
+                "courier"
+                    | "courier new"
+                    | "monospaced"
+                    | "monospace"
+                    | "consolas"
+                    | "lucida console"
+            )
+        })
+        .unwrap_or(false);
+    let state_name_bold = diagram
+        .meta
+        .skinparams
+        .iter()
+        .rev()
+        .find(|sp| sp.key.eq_ignore_ascii_case("stateFontStyle"))
+        .map(|sp| sp.value.to_ascii_lowercase().contains("bold"))
+        .unwrap_or(false);
+
     let (has_start, _has_end) = classify_star_nodes(&diagram.transitions);
 
     // Check for `hide empty description` directive.
@@ -1379,7 +1422,14 @@ pub fn render_with_oracle(
                         // text x (exact byte-for-byte) over our re-centred
                         // value, which can drift by sub-ulp amounts versus
                         // PlantUML's own text measurement.
-                        let text_w = text_render::measure(label, state_name_font_size, false);
+                        let text_w = if state_name_is_mono {
+                            crate::plantuml_metrics::mono_text_width(
+                                label,
+                                state_name_font_size,
+                            )
+                        } else {
+                            text_render::measure(label, state_name_font_size, state_name_bold)
+                        };
                         let text_x = orc_rect
                             .and_then(|r| r.name_text_x)
                             .unwrap_or(cx - text_w / 2.0);
@@ -1390,23 +1440,44 @@ pub fn render_with_oracle(
                         let text_y = orc_rect
                             .and_then(|r| r.text_y_values.first().copied())
                             .unwrap_or(box_y + NAME_BASELINE_OFFSET);
-                        let mut text_buf = String::new();
-                        text_render::emit_text(
-                            &mut text_buf,
-                            label,
-                            &TextBase {
-                                x: text_x,
-                                y: text_y,
-                                font_size: state_name_font_size as u32,
-                                font_family: "sans-serif",
-                                fill: TEXT_COLOR,
-                                bold: false,
-                                italic: false,
-                                underline: false,
-                                skip_underline: false,
-                            },
-                        );
-                        svg.push_str(&text_buf);
+                        if state_name_is_mono {
+                            // Monospace font name (`skinparam stateFontName Courier`
+                            // / global `defaultFontName Courier`): emit the
+                            // user-supplied family with the fixed-advance mono
+                            // width. State names are plain identifiers, so a
+                            // single un-styled `<text>` matches PlantUML exactly.
+                            let fam = escape_attr(
+                                state_font_name.as_deref().unwrap_or("monospace"),
+                            );
+                            write!(
+                                svg,
+                                r#"<text fill="{TEXT_COLOR}" font-family="{fam}" font-size="{}" lengthAdjust="spacing" textLength="{}" x="{}" y="{}">{}</text>"#,
+                                state_name_font_size as u32,
+                                fmt_f(text_w),
+                                fmt_f(text_x),
+                                fmt_f(text_y),
+                                escape_attr(label),
+                            )
+                            .unwrap();
+                        } else {
+                            let mut text_buf = String::new();
+                            text_render::emit_text(
+                                &mut text_buf,
+                                label,
+                                &TextBase {
+                                    x: text_x,
+                                    y: text_y,
+                                    font_size: state_name_font_size as u32,
+                                    font_family: "sans-serif",
+                                    fill: TEXT_COLOR,
+                                    bold: state_name_bold,
+                                    italic: false,
+                                    underline: false,
+                                    skip_underline: false,
+                                },
+                            );
+                            svg.push_str(&text_buf);
+                        }
 
                         // Description lines. Prefer the oracle's captured
                         // baseline y (index j+1, after the name) so the spacing

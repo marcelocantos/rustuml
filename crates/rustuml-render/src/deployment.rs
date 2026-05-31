@@ -1406,14 +1406,19 @@ pub(crate) fn emit_queue(
     // Like database but rotated: rounded left + straight top/bottom + rounded right.
     // The "right wall" lip is at x+w-10.
     //
-    // Recover full-precision height from text metrics to avoid 1-ULP drift
-    // in midline rounding: cy = y + (text_height + 10) / 2 produces the
-    // same f64 the JVM emits.
-    let h_full = pm::text_height(FONT_SIZE) + 10.0;
+    // The queue body height is `n_lines * text_height + 10`, where the line
+    // count is one for a bare label and two when a stereotype stacks above it
+    // (e.g. `queue X <<container>>`). Recover the line count by snapping the
+    // oracle-reported height to that grid, then rebuild `h_full` from the
+    // text-metric arithmetic so the midline (`cy = y + h_full / 2`) matches
+    // the JVM's f64 to the last ULP — the oracle `h` itself carries sub-ULP
+    // accumulation noise and must not be used directly.
+    let line_h = pm::text_height(FONT_SIZE);
+    let n_lines = ((h - 10.0) / line_h).round().max(1.0);
+    let h_full = n_lines * line_h + 10.0;
     let cy = y + h_full / 2.0;
     let left_in = x + 5.0;
     let right_in = x + w - 5.0;
-    let _ = h;
     let d = format!(
         "M{li},{y_s} L{ri},{y_s} C{xw_s},{y_s} {xw_s},{cy_s} {xw_s},{cy_s} C{xw_s},{cy_s} {xw_s},{yh_s} {ri},{yh_s} L{li},{yh_s} C{x_s},{yh_s} {x_s},{cy_s} {x_s},{cy_s} C{x_s},{cy_s} {x_s},{y_s} {li},{y_s}",
         li = fc(left_in),

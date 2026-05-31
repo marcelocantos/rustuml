@@ -373,9 +373,19 @@ fn resolve_hide(entity: &ClassEntity, directives: &[HideShow]) -> HideFlags {
                 (None, "methods" | "method") if !empty_only || !has_methods => {
                     h.methods = !d.show;
                 }
-                (None, "members" | "member") if !empty_only || entity.members.is_empty() => {
-                    h.fields = !d.show;
-                    h.methods = !d.show;
+                (None, "members" | "member") => {
+                    // `hide members` hides both compartments. `hide empty
+                    // members` hides each compartment *independently* when
+                    // that compartment alone is empty: a class with methods
+                    // but no fields keeps its (non-empty) methods compartment
+                    // while suppressing the empty fields compartment, leaving
+                    // a single header separator rather than two.
+                    if !empty_only || !has_fields {
+                        h.fields = !d.show;
+                    }
+                    if !empty_only || !has_methods {
+                        h.methods = !d.show;
+                    }
                 }
                 (None, "stereotype" | "stereotypes") => h.stereotype = !d.show,
                 (
@@ -3697,6 +3707,16 @@ fn render_oracle_relationships(
                 fill, points, poly_style,
             )
             .unwrap();
+        }
+
+        // `note on link`: the note box is rendered inside the link group as
+        // two `<path>` elements (the folded-note outline and its corner fold)
+        // that sit between the arrowhead polygon and the note text. The oracle
+        // captures their `d`/`style` in `extra_paths` (it drops the `fill`,
+        // which is always the note background), so supply the note fill here.
+        for (d, style) in &oracle_edge.extra_paths {
+            let s = style.as_deref().unwrap_or("stroke:#181818;stroke-width:0.5;");
+            write!(svg, r#"<path d="{}" fill="{}" style="{}"/>"#, d, NOTE_FILL, s).unwrap();
         }
 
         // Edge labels (text on relationship), if present in the oracle. Each

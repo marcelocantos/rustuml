@@ -71,12 +71,43 @@ struct PlayerLayout<'a> {
     body_top: f64,
     /// Ordered distinct states (for robust left labels / yOfState).
     all_states: Vec<String>,
+    /// Vertical space reserved above the band for time-constraint arrows
+    /// (`PanelsRobust.getHeightForConstraints`). Defaults to the base 10 and
+    /// grows for the timeline that owns the constraint annotations.
+    constraints_h: f64,
 }
 
 /// Absolute y of a robust state's horizontal line, for a player whose band
 /// begins at `band_top`.
 fn robust_state_line_y(p: &PlayerLayout, band_top: f64, state: &str) -> f64 {
     band_top + y_of_state(&p.all_states, state)
+}
+
+/// `PanelsRobust.getHeightForConstraints`: the vertical space a robust band must
+/// reserve above its baseline for the time-constraint arrows that target it.
+///
+/// Mirrors PlantUML: `max(10, max over constraints of
+/// (getConstraintHeight - getConstraintDeltaY))`, where
+/// `getConstraintHeight = text_height(state font) + topMargin(5)` and
+/// `getConstraintDeltaY` is the lowest `yOfState` the constraint spans.
+fn robust_constraints_height(p: &PlayerLayout, annotations: &[Annotation]) -> f64 {
+    // getConstraintHeight = dimText.getHeight() + getTopMargin()  (topMargin = 5).
+    let constraint_h = text_height(FONT_STATE) + 5.0;
+    let mut result = 0.0_f64;
+    for ann in annotations {
+        // getConstraintDeltaY: yOfState at tick1, lowered by any change strictly
+        // inside the span (yOfState grows downward, so `min` picks the topmost).
+        let mut delta_y = state_at(p, ann.from)
+            .map(|s| y_of_state(&p.all_states, s))
+            .unwrap_or(0.0);
+        for ch in &p.timeline.changes {
+            if ann.from < ch.at && ch.at < ann.to {
+                delta_y = delta_y.min(y_of_state(&p.all_states, &ch.state));
+            }
+        }
+        result = result.max(constraint_h - delta_y);
+    }
+    result.max(10.0)
 }
 
 /// The state active at time `t` on a robust timeline (the last change at or
@@ -158,13 +189,24 @@ pub fn render(diagram: &TimingDiagram, _theme: &Theme) -> String {
     let ruler_width = (delta as f64 / tick_unit as f64 + 1.0) * tick_px;
     let nb_tick = (1 + delta / tick_unit).min(1000) as usize;
 
+    // ── Constraint owner ──────────────────────────────────────────────────────
+    // Time-constraint annotations attach to the last robust timeline; that one
+    // player reserves extra vertical space for the constraint arrows.
+    let anno_owner = if diagram.annotations.is_empty() {
+        None
+    } else {
+        diagram
+            .timelines
+            .iter()
+            .rposition(|tl| tl.kind == TimelineKind::Robust)
+    };
+
     // ── Player layout (vertical) ──────────────────────────────────────────────
     let mut players: Vec<PlayerLayout> = Vec::new();
     let mut part1_max_width: f64 = 0.0;
     let mut y = 0.0_f64;
-    for tl in &diagram.timelines {
+    for (idx, tl) in diagram.timelines.iter().enumerate() {
         let frame_height = text_height(FONT_TITLE) + 1.0;
-        let full_height = full_height_of(tl);
 
         let mut all_states: Vec<String> = Vec::new();
         for ch in &tl.changes {
@@ -180,13 +222,19 @@ pub fn render(diagram: &TimingDiagram, _theme: &Theme) -> String {
         };
         part1_max_width = part1_max_width.max(left_panel_width);
 
-        players.push(PlayerLayout {
+        let mut player = PlayerLayout {
             timeline: tl,
             frame_top: y,
             body_top: y + frame_height,
             all_states,
-        });
+            constraints_h: 10.0,
+        };
+        if Some(idx) == anno_owner {
+            player.constraints_h = robust_constraints_height(&player, &diagram.annotations);
+        }
+        let full_height = full_height_of(tl, player.constraints_h);
         y += frame_height + full_height;
+        players.push(player);
     }
     let inner_height = y;
 
@@ -283,7 +331,7 @@ pub fn render(diagram: &TimingDiagram, _theme: &Theme) -> String {
             .rev()
             .find(|p| p.timeline.kind == TimelineKind::Robust)
     {
-        let band_top = vtop + p.body_top + 10.0;
+        let band_top = vtop + p.body_top + p.constraints_h;
         for ann in &diagram.annotations {
             let state = state_at(p, ann.from);
             let line_y = state
@@ -408,8 +456,10 @@ fn emit_text_colored(
     ));
 }
 
-/// Full panel height for a player (excludes the frame title).
-fn full_height_of(tl: &Timeline) -> f64 {
+/// Full panel height for a player (excludes the frame title). `constraints_h` is
+/// `PanelsRobust.getHeightForConstraints` for this player (base 10, larger when
+/// it owns constraint annotations).
+fn full_height_of(tl: &Timeline, constraints_h: f64) -> f64 {
     match tl.kind {
         TimelineKind::Robust => {
             let mut all = Vec::new();
@@ -418,7 +468,7 @@ fn full_height_of(tl: &Timeline) -> f64 {
                     all.push(ch.state.clone());
                 }
             }
-            let mut h = 10.0; // getHeightForConstraints = max(10, 0)
+            let mut h = constraints_h; // getHeightForConstraints
             if !all.is_empty() {
                 h += ROBUST_STEP_HEIGHT * (all.len() as f64 - 1.0);
             }
@@ -542,8 +592,7 @@ fn draw_robust(
     } else {
         ORIGIN + MARGIN_X1 + (part1_max_width - states_width)
     };
-    let constraints_h = 10.0;
-    let band_top = vtop + p.body_top + constraints_h;
+    let band_top = vtop + p.body_top + p.constraints_h;
 
     for state in &p.all_states {
         let yo = y_of_state(&p.all_states, state);

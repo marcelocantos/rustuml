@@ -316,13 +316,14 @@ pub fn render(diagram: &GanttDiagram, _theme: &Theme) -> String {
             } else {
                 let bar_x = start_day as f64 * DAY_WIDTH + 2.0;
                 let bar_w = (dur as f64 * DAY_WIDTH - 4.0).max(1.0);
-                // The label sits inside only when it clears a 4px inset on
-                // each side of the bar; otherwise it is pushed past the right
-                // edge.
-                let lx = if label_w > bar_w - 4.0 {
-                    bar_x + bar_w + 4.0
-                } else {
+                // PlantUML draws the label inside only when the bar's 6px
+                // interior inset (pos1 = start+6, pos2 = end-6, span bar_w-8)
+                // strictly exceeds the label width; otherwise the label is
+                // pushed past the right edge.
+                let lx = if bar_w - 8.0 > label_w {
                     bar_x + 4.0
+                } else {
+                    bar_x + bar_w + 4.0
                 };
                 (lx, label_w)
             };
@@ -741,15 +742,17 @@ pub fn render(diagram: &GanttDiagram, _theme: &Theme) -> String {
                     (start_day as f64 * DAY_WIDTH - 8.0).max(8.0) + 8.0
                 } else {
                     // Labels normally sit inside the bar (4px from its left
-                    // edge). When the text is wider than the bar, PlantUML
-                    // places it just past the bar's right edge instead.
+                    // edge). The label fits inside only when the bar's 6px
+                    // interior inset (span bar_w-8) strictly exceeds the label
+                    // width; otherwise PlantUML places it just past the bar's
+                    // right edge instead.
                     let bar_x = start_day as f64 * DAY_WIDTH + 2.0;
                     let bar_w = (dur as f64 * DAY_WIDTH - 4.0).max(1.0);
                     let label_w = text_width(&label, TASK_FONT, false);
-                    if label_w > bar_w - 4.0 {
-                        bar_x + bar_w + 4.0
-                    } else {
+                    if bar_w - 8.0 > label_w {
                         bar_x + 4.0
+                    } else {
+                        bar_x + bar_w + 4.0
                     }
                 };
                 gantt_text(&mut svg, lx, ly, &label, TASK_FONT, TEXT_COLOR);
