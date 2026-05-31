@@ -280,6 +280,14 @@ const MSG_BASE_STEP: f64 = 14.0;
 const MSG_BASE_FIRST_OFFSET: f64 = 16.0;
 const TAIL_GAP: f64 = 17.0; // gap from last msg y to tail box y
 
+/// Vertical band an unlabelled delay (`...`) reserves for its dotted `1,4`
+/// lifeline gap. A labelled delay adds the label's text height on top.
+const DELAY_BAND_HEIGHT: f64 = 28.0;
+/// Font size of the delay (`...`) label text.
+const DELAY_LABEL_FONT_SIZE: u32 = 11;
+/// The delay band starts this far below the preceding message's arrow y.
+const DELAY_BAND_TOP_PAD: f64 = 8.0;
+
 /// Compute the vertical step for a message event.
 /// Messages with label text get extra height for the text line.
 fn msg_step(has_text: bool) -> f64 {
@@ -1045,6 +1053,7 @@ impl PlantUmlSvg {
         line_x: f64,
         line_y1: f64,
         line_y2: f64,
+        delay_bands: &[(f64, f64)],
     ) {
         write!(
             self.buf,
@@ -1054,33 +1063,67 @@ impl PlantUmlSvg {
         )
         .unwrap();
 
-        // Inner group with title, invisible rect, and dashed line
-        self.buf.push_str("<g>");
-        write!(self.buf, "<title>{}</title>", escape_xml(title),).unwrap();
+        // A delay (`...`) splits the lifeline into solid `5,5` segments joined by
+        // dotted `1,4` gap lines. Only bands strictly inside this lifeline's
+        // [line_y1, line_y2) span participate; with no bands this emits a single
+        // inner `<g>` byte-identical to the historical output.
+        let mut bands: Vec<(f64, f64)> = delay_bands
+            .iter()
+            .copied()
+            .filter(|&(bt, bb)| bb > bt && bb > line_y1 && bt < line_y2)
+            .collect();
+        bands.sort_by(|a, b| a.0.partial_cmp(&b.0).unwrap_or(std::cmp::Ordering::Equal));
 
-        write!(
-            self.buf,
-            r##"<rect fill="#000000" fill-opacity="0.00000" height="{}" width="{}" x="{}" y="{}"/>"##,
-            fmt_coord(rect_h),
-            LIFELINE_RECT_WIDTH as u32,
-            fmt_coord(rect_x),
-            fmt_coord(rect_y),
-        )
-        .unwrap();
+        let border = self.lifeline_border.clone();
+        let thickness = self.lifeline_border_thickness.clone();
+        // Emit one solid lifeline segment (invisible hit-rect + `5,5` dashed line)
+        // spanning [seg_top, seg_bottom]. The rect keeps the original `rect_x`.
+        let emit_segment = |buf: &mut String, seg_top: f64, seg_bottom: f64| {
+            buf.push_str("<g>");
+            write!(buf, "<title>{}</title>", escape_xml(title)).unwrap();
+            write!(
+                buf,
+                r##"<rect fill="#000000" fill-opacity="0.00000" height="{}" width="{}" x="{}" y="{}"/>"##,
+                fmt_coord(seg_bottom - seg_top),
+                LIFELINE_RECT_WIDTH as u32,
+                fmt_coord(rect_x),
+                fmt_coord(seg_top),
+            )
+            .unwrap();
+            write!(
+                buf,
+                r##"<line style="stroke:{};stroke-width:{};stroke-dasharray:5,5;" x1="{}" x2="{}" y1="{}" y2="{}"/>"##,
+                border,
+                thickness,
+                fmt_coord(line_x),
+                fmt_coord(line_x),
+                fmt_coord(seg_top),
+                fmt_coord(seg_bottom),
+            )
+            .unwrap();
+            buf.push_str("</g>");
+        };
 
-        write!(
-            self.buf,
-            r##"<line style="stroke:{};stroke-width:{};stroke-dasharray:5,5;" x1="{}" x2="{}" y1="{}" y2="{}"/>"##,
-            self.lifeline_border,
-            self.lifeline_border_thickness,
-            fmt_coord(line_x),
-            fmt_coord(line_x),
-            fmt_coord(line_y1),
-            fmt_coord(line_y2),
-        )
-        .unwrap();
+        let _ = (rect_y, rect_h);
+        let mut seg_top = line_y1;
+        for &(bt, bb) in &bands {
+            emit_segment(&mut self.buf, seg_top, bt);
+            // Dotted gap line bridging the delay band (sibling of the inner <g>s).
+            write!(
+                self.buf,
+                r##"<line style="stroke:{};stroke-width:{};stroke-dasharray:1,4;" x1="{}" x2="{}" y1="{}" y2="{}"/>"##,
+                border,
+                thickness,
+                fmt_coord(line_x),
+                fmt_coord(line_x),
+                fmt_coord(bt),
+                fmt_coord(bb),
+            )
+            .unwrap();
+            seg_top = bb;
+        }
+        emit_segment(&mut self.buf, seg_top, line_y2);
 
-        self.buf.push_str("</g>");
         self.buf.push_str("</g>");
     }
 
@@ -3238,6 +3281,16 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
     // -----------------------------------------------------------------------
 
     let mut participants = participants;
+    // Additional rightward shift forced by a title/caption/footer wider than the
+    // participant span. PlantUML centres each such band on the participant-span
+    // midpoint `(first.box_x + last.box_x + last.box_width - 1.0) / 2.0`; when the
+    // band (at its own left margin) would push that midpoint right of where the
+    // participants currently sit, the whole diagram shifts and the canvas grows
+    // symmetrically by `2 * meta_shift`. Derived from seq_footer_variant_01
+    // (footer 133.4033 @ m=0 -> shift 13.249, width 113->140), seq_title_basic
+    // (title 159.1133 @ m=10 -> shift 36.104, width 113->186) and the caption
+    // variants (m=1). See the C3 width-feedback note.
+    let mut meta_shift: f64 = 0.0;
     if !participants.is_empty() {
         // First participant center must be at least min_first_center_x (for notes)
         // and at least HEAD_BOX_Y + box_width/2 (to fit the box).
@@ -3323,6 +3376,42 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                 p.center_x += shift;
                 p.box_x += shift;
                 p.lifeline_line_x += shift;
+            }
+        }
+
+        // Title/caption/footer band feedback: if any band is wider than the
+        // current participant span, shift the participants so the span midpoint
+        // lands under the band's centre. `c0` is the span midpoint on the
+        // current (post-across-shift) layout; each band wants its own centre at
+        // `left_margin + band_width / 2`.
+        let first = &participants[0];
+        let last = &participants[n - 1];
+        let c0 = (first.box_x + last.box_x + last.box_width - 1.0) / 2.0;
+        let mut want_center: f64 = c0;
+        if let Some(footer) = &diagram.meta.footer {
+            // Footer left margin is 0.
+            let w = text_render::measure(footer, 10.0, false);
+            want_center = want_center.max(w / 2.0);
+        }
+        if let Some(caption) = &diagram.meta.caption {
+            // Caption left margin is 1.
+            let w = text_render::measure(caption, 14.0, false);
+            want_center = want_center.max(1.0 + w / 2.0);
+        }
+        if !title_lines.is_empty() {
+            // Title left margin is 10; use the widest line.
+            let w = title_lines
+                .iter()
+                .map(|line| text_render::measure(line, TITLE_FONT_SIZE as f64, true))
+                .fold(0.0_f64, f64::max);
+            want_center = want_center.max(10.0 + w / 2.0);
+        }
+        meta_shift = (want_center - c0).max(0.0);
+        if meta_shift > 0.0 {
+            for p in participants.iter_mut() {
+                p.center_x += meta_shift;
+                p.box_x += meta_shift;
+                p.lifeline_line_x += meta_shift;
             }
         }
     }
@@ -3548,11 +3637,18 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                     y += DIVIDER_TAIL_PAD;
                     msg_count += 1;
                 }
-                Event::Delay(_) => {
+                Event::Delay(t) => {
                     if msg_count == 0 {
                         y += first_msg_offset(has_text);
                     } else {
-                        y += msg_step(has_text);
+                        // A delay reserves a fixed 28px dotted band (plus the
+                        // label height when labelled), not a normal message step.
+                        y += DELAY_BAND_HEIGHT
+                            + if t.is_some() {
+                                plantuml_metrics::text_height(DELAY_LABEL_FONT_SIZE as f64)
+                            } else {
+                                0.0
+                            };
                     }
                     event_y_positions.push(y);
                     msg_count += 1;
@@ -3825,6 +3921,10 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
     } else {
         effective_right + RIGHT_MARGIN
     };
+    // A title/caption/footer band wider than the participant span shifted the
+    // participants right by `meta_shift` (so `effective_right` already grew by
+    // that much); add it once more to keep the band centred and symmetric.
+    let svg_width_exact = svg_width_exact + meta_shift;
     let svg_width = svg_width_exact.ceil() as u32;
     // A `footer` directive reserves a band below the content (text_height(10)
     // + 1.0 = 12.777), growing the canvas; the footer text sits in that band.
@@ -4066,7 +4166,48 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                         let frame_top = event_y_positions[start_idx];
                         let frame_bottom = event_y_positions[ev_idx];
 
-                        // Compute the header text right edge (group kind label + guard).
+                        // Account for nested child frames already computed. Because
+                        // every parent frame extends GROUP_FRAME_MARGIN beyond its
+                        // direct child on each side, the direct child is always the
+                        // most extreme enclosed frame, so taking the min/max over all
+                        // enclosed frames (start event index strictly between this
+                        // group's start and end) yields the direct child's extent.
+                        let mut child_left = f64::INFINITY;
+                        let mut child_right = f64::NEG_INFINITY;
+                        for cf in &group_frames {
+                            if cf.event_idx > start_idx && cf.event_idx < ev_idx {
+                                child_left = child_left.min(cf.left);
+                                child_right = child_right.max(cf.right);
+                            }
+                        }
+                        let has_child = child_left.is_finite();
+                        let has_msgs = min_idx <= max_idx && !participants.is_empty();
+
+                        // Compute the participant-based frame left first, then derive
+                        // the header right edge from the *final* left (so the guard
+                        // label measurement matches the tab that is actually drawn).
+                        // A group with no direct messages contributes no participant
+                        // extent of its own; its left/right come purely from any
+                        // enclosed child frame (each parent extends GROUP_FRAME_MARGIN
+                        // beyond its direct child). Only a group with neither direct
+                        // messages nor children falls back to the empty-group estimate.
+                        let frame_left = if has_msgs {
+                            let part_left = participants[min_idx].box_x - GROUP_FRAME_MARGIN;
+                            if has_child {
+                                part_left.min(child_left - GROUP_FRAME_MARGIN)
+                            } else {
+                                part_left
+                            }
+                        } else if has_child {
+                            child_left - GROUP_FRAME_MARGIN
+                        } else if !participants.is_empty() {
+                            participants[0].box_x + GROUP_FRAME_MARGIN
+                        } else {
+                            HEAD_BOX_Y
+                        };
+
+                        // Compute the header text right edge (group kind label + guard)
+                        // anchored at the final frame left.
                         let header_right = if let Event::GroupStart(g) = &diagram.events[start_idx]
                         {
                             let kind_str = match g.kind {
@@ -4078,17 +4219,10 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                                 GroupKind::Critical => "critical",
                                 GroupKind::Group => "group",
                             };
-                            let fl = if min_idx <= max_idx && !participants.is_empty() {
-                                participants[min_idx].box_x - GROUP_FRAME_MARGIN
-                            } else if !participants.is_empty() {
-                                participants[0].box_x + GROUP_FRAME_MARGIN
-                            } else {
-                                HEAD_BOX_Y
-                            };
                             let (tab_text, guard_label) =
                                 group_tab_and_guard(g.kind, kind_str, g.label.as_ref());
                             let kw = bold_text_width(tab_text, MSG_FONT_SIZE);
-                            let tab_right = fl + kw + 45.0;
+                            let tab_right = frame_left + kw + 45.0;
                             if let Some(label) = guard_label {
                                 let guard = format!("[{label}]");
                                 let gw = bold_text_width(&guard, 11.0);
@@ -4100,28 +4234,25 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                             0.0
                         };
 
-                        // Compute frame left/right based on which participants are inside.
-                        let (frame_left, frame_right) =
-                            if min_idx <= max_idx && !participants.is_empty() {
-                                // Group has messages — frame encompasses those participants
-                                let fl = participants[min_idx].box_x - GROUP_FRAME_MARGIN;
-                                let fr = (participants[max_idx].box_x
-                                    + participants[max_idx].box_width
-                                    + GROUP_FRAME_MARGIN)
-                                    .max(header_right);
-                                (fl, fr)
-                            } else if !participants.is_empty() {
-                                // Empty group — frame left at first box + margin
-                                let fl = participants[0].box_x + GROUP_FRAME_MARGIN;
-
-                                let last = &participants[n - 1];
-                                let participant_right =
-                                    last.box_x + last.box_width + GROUP_FRAME_MARGIN;
-                                let fr = participant_right.max(header_right);
-                                (fl, fr)
-                            } else {
-                                (HEAD_BOX_Y, 100.0)
-                            };
+                        // Compute frame right based on which participants are inside,
+                        // the header, and any enclosed child frame. A group with no
+                        // direct messages contributes no participant right of its own.
+                        let part_right = if has_msgs {
+                            participants[max_idx].box_x
+                                + participants[max_idx].box_width
+                                + GROUP_FRAME_MARGIN
+                        } else if has_child {
+                            f64::NEG_INFINITY
+                        } else if !participants.is_empty() {
+                            let last = &participants[n - 1];
+                            last.box_x + last.box_width + GROUP_FRAME_MARGIN
+                        } else {
+                            100.0
+                        };
+                        let mut frame_right = part_right.max(header_right);
+                        if has_child {
+                            frame_right = frame_right.max(child_right + GROUP_FRAME_MARGIN);
+                        }
 
                         group_frames.push(GroupFrame {
                             top: frame_top,
@@ -4150,6 +4281,12 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
             }
         }
     }
+
+    // Frames are popped inner-first (a nested group's GroupEnd precedes its
+    // enclosing group's GroupEnd), but PlantUML emits the first-instance frame
+    // rects in document order (outermost first). Sort by the group's start event
+    // index to restore document order.
+    group_frames.sort_by_key(|f| f.event_idx);
 
     // Recalculate svg_width after group frames are computed, since the frame
     // right edges may exceed the initial estimate (e.g., when group labels extend
@@ -4473,6 +4610,30 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
             .unwrap_or(1)
     };
 
+    // Delay (`...`) bands split every lifeline with a dotted `1,4` gap. The
+    // band starts DELAY_BAND_TOP_PAD below the preceding message and is
+    // DELAY_BAND_HEIGHT tall (plus the label height when labelled). The delay
+    // event's y equals preceding-y + band-height, so both edges recover from it.
+    let delay_bands: Vec<(f64, f64)> = diagram
+        .events
+        .iter()
+        .enumerate()
+        .filter_map(|(idx, ev)| match ev {
+            Event::Delay(t) => {
+                let band_h = DELAY_BAND_HEIGHT
+                    + if t.is_some() {
+                        plantuml_metrics::text_height(DELAY_LABEL_FONT_SIZE as f64)
+                    } else {
+                        0.0
+                    };
+                let ey = *event_y_positions.get(idx)?;
+                let band_bottom = ey + DELAY_BAND_TOP_PAD;
+                Some((band_bottom - band_h, band_bottom))
+            }
+            _ => None,
+        })
+        .collect();
+
     for p in &participants {
         let part_uid = format!("part{}", p.idx + 1);
         let ll_rect_x = p.center_x - LIFELINE_RECT_WIDTH / 2.0;
@@ -4491,6 +4652,7 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
             p.lifeline_line_x, // PlantUML uses box_x + floor(box_width/2) for the dashed line
             p_top,
             lifeline_bottom,
+            &delay_bands,
         );
     }
 
@@ -5531,13 +5693,22 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                 } else {
                     50.0
                 };
+                // The label is centered on the participant span, font-size 11,
+                // its baseline DELAY_BAND_TOP_PAD + MSG_BASE_STEP + ascent(11)
+                // below the band top (= msg_y - band_height).
+                let label_w = text_width(t, DELAY_LABEL_FONT_SIZE as f64);
+                let label_y = msg_y - DELAY_BAND_HEIGHT
+                    - plantuml_metrics::text_height(DELAY_LABEL_FONT_SIZE as f64)
+                    + DELAY_BAND_TOP_PAD
+                    + MSG_BASE_STEP
+                    + plantuml_metrics::ascent(DELAY_LABEL_FONT_SIZE as f64);
                 text_render::emit_text(
                     &mut svg.buf,
                     t,
                     &TextBase {
-                        x: mid_x,
-                        y: msg_y + 5.0,
-                        font_size: 13,
+                        x: mid_x - label_w / 2.0,
+                        y: label_y,
+                        font_size: DELAY_LABEL_FONT_SIZE,
                         font_family: "sans-serif",
                         fill: "#000000",
                         bold: false,
@@ -5640,8 +5811,26 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                                 .and_then(|id| id_to_idx.get(id.as_str()))
                                 .map(|&i| participants[i].center_x)
                                 .unwrap_or(50.0);
-                            let half_w = note_content_w / 2.0;
-                            let left = (cx - half_w).max(HEAD_BOX_Y).floor();
+                            // Java NoteBox.getStartingX centers on the
+                            // UN-truncated preferred width (raw text width + the
+                            // component's horizontal margins), then truncates the
+                            // resulting left edge: xStart = (int)(cx - rawW/2).
+                            // note_content_w is the ALREADY-truncated box width, so
+                            // halving it discards the fractional component and can
+                            // push the left edge 1px right (e.g. cx=83.3618,
+                            // text=61.7754 -> raw 82.7754: (int)(83.3618-41.3877)=41,
+                            // but floor(83.3618-41)=42). Recover the raw width from
+                            // the raw text width + per-shape margin sum: Note=6+15=21,
+                            // hnote=12+12=24, rnote=4+4=8 (= note_content_width's
+                            // additive constant + 1). The drawn box width stays
+                            // note_content_w (= floor(rawW)).
+                            let raw_margin = match note.shape {
+                                NoteShape::Note => 21.0,
+                                NoteShape::Hexagonal => 24.0,
+                                NoteShape::Rectangular => 8.0,
+                            };
+                            let raw_w = max_text_w + raw_margin;
+                            let left = (cx - raw_w / 2.0).max(HEAD_BOX_Y).floor();
                             (left, left + note_content_w)
                         } else {
                             // Note over multiple participants (OVER_SEVERAL).
@@ -6124,13 +6313,27 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
     if let Some(footer) = &diagram.meta.footer {
         const FOOTER_FONT_SIZE: u32 = 10;
         const FOOTER_BOTTOM_OFFSET: f64 = 8.7344;
+        // The footer is centred on the participant-span midpoint
+        // `(first.box_x + last.box_x + last.box_width - 1.0) / 2.0`. When the
+        // footer is wider than the span the diagram was already shifted right
+        // (see meta_shift), so this resolves to x=0 for the widest band and to a
+        // positive inset for narrower footers (seq_footer_variant_02..04).
+        let footer_x = if let (Some(first), Some(last)) =
+            (participants.first(), participants.last())
+        {
+            let center = (first.box_x + last.box_x + last.box_width - 1.0) / 2.0;
+            let w = text_render::measure(footer, FOOTER_FONT_SIZE as f64, false);
+            (center - w / 2.0).max(0.0)
+        } else {
+            0.0
+        };
         svg.buf
             .push_str(r#"<g class="footer" data-source-line="1">"#);
         text_render::emit_text(
             &mut svg.buf,
             footer,
             &TextBase {
-                x: 0.0,
+                x: footer_x,
                 y: svg_height as f64 - FOOTER_BOTTOM_OFFSET,
                 font_size: FOOTER_FONT_SIZE,
                 font_family: "sans-serif",
