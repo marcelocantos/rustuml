@@ -1253,6 +1253,13 @@ struct ClassFontOverrides {
     /// repaint rects must reference the header gradient's `<defs>` id rather
     /// than the body fill.
     header_background: Option<String>,
+    /// `skinparam monochrome true|reverse` is active. A final-SVG pass maps
+    /// every `#RRGGBB` literal to its YIQ grey; the oracle, however, captures
+    /// the golden's *already-monochromed* rect fill/style, so re-running the
+    /// map would double-invert (`reverse` greys flip back). When set, the
+    /// renderer emits raw default colours for the background rect instead of
+    /// the oracle's, letting the final pass map them exactly once.
+    monochrome: bool,
 }
 
 impl ClassFontOverrides {
@@ -1290,6 +1297,13 @@ impl ClassFontOverrides {
             // defaultFontSize, defaulting to PlantUML's CIRCLED_CHARACTER size 17.
             circled_font_size: default_font_size.unwrap_or(CIRCLED_CHARACTER_DEFAULT_SIZE),
             header_background: find(&["classHeaderBackgroundColor"]),
+            monochrome: params.iter().any(|sp| {
+                sp.key.eq_ignore_ascii_case("monochrome")
+                    && matches!(
+                        sp.value.trim().to_ascii_lowercase().as_str(),
+                        "true" | "reverse"
+                    )
+            }),
         }
     }
 
@@ -2033,8 +2047,16 @@ fn render_entity_content(
     // attributes when available, so per-entity skinparams and shorthand
     // colour syntax (`class X #fill;line:colour`) are honoured. Fall back
     // to the parser-provided colour and renderer defaults otherwise.
-    let oracle_fill = oracle_rect.and_then(|r| r.fill.as_deref());
-    let oracle_style = oracle_rect.and_then(|r| r.rect_style.as_deref());
+    // Under monochrome the oracle's captured rect fill/style are already the
+    // golden's post-monochrome greys; using them would double-invert through
+    // the final-SVG monochrome pass. Drop them so the raw renderer defaults
+    // flow through and get mapped exactly once.
+    let oracle_fill = oracle_rect
+        .and_then(|r| r.fill.as_deref())
+        .filter(|_| !font.monochrome);
+    let oracle_style = oracle_rect
+        .and_then(|r| r.rect_style.as_deref())
+        .filter(|_| !font.monochrome);
     let oracle_rx = oracle_rect.and_then(|r| r.rect_rx.as_deref());
     let oracle_ry = oracle_rect.and_then(|r| r.rect_ry.as_deref());
     let fill_default = entity
@@ -2441,6 +2463,7 @@ fn render_entity_content(
     let default_sep_style = format!("stroke:{};stroke-width:{};", BORDER_COLOR, BORDER_WIDTH);
     let sep_style: &str = oracle_rect
         .and_then(|r| r.rect_style.as_deref())
+        .filter(|_| !font.monochrome)
         .unwrap_or(default_sep_style.as_str());
 
     // Stereotype offset for separator and member positions.
@@ -3423,6 +3446,17 @@ fn render_oracle_relationships(
     oracle: &OracleLayout,
     _ent_id: usize,
 ) {
+    // Under monochrome the oracle's captured edge colours are golden
+    // post-monochrome greys; the final-SVG monochrome pass would re-invert
+    // them. When active, fall back to the raw `#181818` defaults so the pass
+    // maps them once (same handling as entity rects/separators above).
+    let monochrome = diagram.meta.skinparams.iter().any(|sp| {
+        sp.key.eq_ignore_ascii_case("monochrome")
+            && matches!(
+                sp.value.trim().to_ascii_lowercase().as_str(),
+                "true" | "reverse"
+            )
+    });
     for rel in &diagram.relationships {
         // Path id formats vary by arrow kind. The Java reference emits:
         //   "{from}-to-{to}"     — dependency / directional arrows (`A -> B`, `A --> B`)
@@ -3498,6 +3532,7 @@ fn render_oracle_relationships(
         let path_style = oracle_edge
             .path_style
             .as_deref()
+            .filter(|_| !monochrome)
             .unwrap_or("stroke:#181818;stroke-width:1;");
 
         // The edge id embeds the entity names; escape XML specials (e.g. `&`
@@ -3549,10 +3584,15 @@ fn render_oracle_relationships(
 
         // Arrowhead polygon — use oracle's exact points, fill, and style.
         if let Some(ref points) = oracle_edge.arrow_points {
-            let fill = oracle_edge.arrow_fill.as_deref().unwrap_or("#181818");
+            let fill = oracle_edge
+                .arrow_fill
+                .as_deref()
+                .filter(|_| !monochrome)
+                .unwrap_or("#181818");
             let poly_style = oracle_edge
                 .polygon_style
                 .as_deref()
+                .filter(|_| !monochrome)
                 .unwrap_or("stroke:#181818;stroke-width:1;");
             write!(
                 svg,
@@ -3572,11 +3612,13 @@ fn render_oracle_relationships(
                 .second_arrow_fill
                 .as_deref()
                 .or(oracle_edge.arrow_fill.as_deref())
+                .filter(|_| !monochrome)
                 .unwrap_or("#181818");
             let poly_style = oracle_edge
                 .second_polygon_style
                 .as_deref()
                 .or(oracle_edge.polygon_style.as_deref())
+                .filter(|_| !monochrome)
                 .unwrap_or("stroke:#181818;stroke-width:1;");
             write!(
                 svg,
