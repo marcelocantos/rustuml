@@ -20,7 +20,9 @@
 /// on the JVM that generated the golden SVGs.
 pub fn text_width(text: &str, font_size: f64, bold: bool) -> f64 {
     let table = char_width_table(font_size, bold);
-    text.chars().map(|c| char_width(c, table, bold)).sum()
+    text.chars()
+        .map(|c| char_width(c, table, bold, font_size))
+        .sum()
 }
 
 /// Text height (ascent + descent) matching PlantUML's stringBounds.
@@ -168,7 +170,7 @@ fn char_width_table(font_size: f64, bold: bool) -> &'static [f64; 95] {
     }
 }
 
-fn char_width(c: char, table: &[f64; 95], bold: bool) -> f64 {
+fn char_width(c: char, table: &[f64; 95], bold: bool, font_size: f64) -> f64 {
     let code = c as u32;
     if (32..=126).contains(&code) {
         return table[(code - 32) as usize];
@@ -176,12 +178,12 @@ fn char_width(c: char, table: &[f64; 95], bold: bool) -> f64 {
     // Exact AWT advance for any non-ASCII codepoint that appears in the golden
     // corpus, extracted from java.awt.FontMetrics on the JVM SansSerif logical
     // font (see non_ascii_widths.rs). Stored as advance-per-unit-size; AWT
-    // advances are perfectly linear in point size, so scale by the font size
-    // (recovered from the space advance, which is size * 0.31640625).
+    // advances are perfectly linear in point size, so scale directly by the
+    // font size. (Recovering size from `table[0]` is wrong when bold, because
+    // the bold table's space advance is wider than the plain one's.)
     if let Ok(i) = crate::non_ascii_widths::NON_ASCII_WIDTHS.binary_search_by(|e| e.0.cmp(&code)) {
         let (_, plain, bold_w) = crate::non_ascii_widths::NON_ASCII_WIDTHS[i];
-        let size = table[0] / 0.31640625;
-        return (if bold { bold_w } else { plain }) * size;
+        return (if bold { bold_w } else { plain }) * font_size;
     }
     // Fallback approximations for codepoints not in the corpus table (e.g. the
     // CLI rendering arbitrary user text).
@@ -202,22 +204,18 @@ fn char_width(c: char, table: &[f64; 95], bold: bool) -> f64 {
     } else if c == '\u{2610}' || c == '\u{2611}' {
         // Ballot box (☐) and ballot box with check (☑) — JSON/YAML diagrams
         // render booleans as these glyphs. Exact AWT advance, size-proportional.
-        let size = table[0] / 0.31640625;
-        size * 0.830078125
+        font_size * 0.830078125
     } else if c == '\u{2400}' {
         // Symbol for null (␀) — JSON/YAML diagrams render null values as this.
-        let size = table[0] / 0.31640625;
-        size * 0.82763671875
+        font_size * 0.82763671875
     } else if c == '\u{00A9}' {
         // Copyright sign (©) — exact AWT advance, size-proportional.
-        let size = table[0] / 0.31640625;
-        size * 0.85546875
+        font_size * 0.85546875
     } else if code >= 0x3000 {
         // CJK Unified Ideographs, Hiragana, Katakana, full-width Latin,
         // and other East Asian scripts have roughly square advance equal
-        // to the font size (the table identity is encoded in table[0]
-        // which is size * 0.31640625, so size = table[0] / 0.31640625).
-        table[0] / 0.31640625
+        // to the font size.
+        font_size
     } else {
         // For other non-ASCII characters, use 'a' width as a sensible
         // default approximation.
