@@ -1435,10 +1435,22 @@ fn render_plantuml_svg(
 
     let mut svg = String::new();
 
+    // `skinparam backgroundColor` recolours the canvas: the style `background`
+    // takes the colour and a full-canvas `<rect>` is emitted after `<g>` (white
+    // is the default and emits neither). Mirrors the sequence renderer.
+    let bg_color = diagram
+        .meta
+        .skinparams
+        .iter()
+        .find(|sp| sp.key.eq_ignore_ascii_case("backgroundColor"))
+        .map(|sp| crate::sequence::resolve_color(&sp.value))
+        .filter(|c| c != "#FFFFFF");
+    let bg_style = bg_color.as_deref().unwrap_or("#FFFFFF");
+
     // Root <svg> element with PlantUML attributes (alphabetical order).
     write!(
         svg,
-        r#"<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" contentStyleType="text/css" data-diagram-type="CLASS" height="{h}px" preserveAspectRatio="none" style="width:{w}px;height:{h}px;background:#FFFFFF;" version="1.1" viewBox="0 0 {w} {h}" width="{w}px" zoomAndPan="magnify">"#,
+        r#"<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" contentStyleType="text/css" data-diagram-type="CLASS" height="{h}px" preserveAspectRatio="none" style="width:{w}px;height:{h}px;background:{bg_style};" version="1.1" viewBox="0 0 {w} {h}" width="{w}px" zoomAndPan="magnify">"#,
         w = canvas_w,
         h = canvas_h,
     )
@@ -1459,6 +1471,13 @@ fn render_plantuml_svg(
         _ => svg.push_str("<defs/>"),
     }
     svg.push_str("<g>");
+    if let Some(color) = &bg_color {
+        write!(
+            svg,
+            r#"<rect fill="{color}" height="{canvas_h}" style="stroke:none;stroke-width:1;" width="{canvas_w}" x="0" y="0"/>"#,
+        )
+        .unwrap();
+    }
 
     // Body bounding box (entity rects), used to position the page decorations
     // and to drive the centring width. PlantUML lays out title/header/caption/
