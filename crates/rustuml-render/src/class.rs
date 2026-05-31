@@ -1253,6 +1253,12 @@ struct ClassFontOverrides {
     /// repaint rects must reference the header gradient's `<defs>` id rather
     /// than the body fill.
     header_background: Option<String>,
+    /// `skinparam classBackgroundColor` raw value — the entity body fill,
+    /// applied when no per-entity `#colour` shorthand overrides it.
+    class_background: Option<String>,
+    /// `skinparam classBorderColor` raw value — the entity border/separator
+    /// stroke colour, applied when no per-entity style overrides it.
+    border_color: Option<String>,
     /// `skinparam monochrome true|reverse` is active. A final-SVG pass maps
     /// every `#RRGGBB` literal to its YIQ grey; the oracle, however, captures
     /// the golden's *already-monochromed* rect fill/style, so re-running the
@@ -1297,6 +1303,8 @@ impl ClassFontOverrides {
             // defaultFontSize, defaulting to PlantUML's CIRCLED_CHARACTER size 17.
             circled_font_size: default_font_size.unwrap_or(CIRCLED_CHARACTER_DEFAULT_SIZE),
             header_background: find(&["classHeaderBackgroundColor"]),
+            class_background: find(&["classBackgroundColor"]),
+            border_color: find(&["classBorderColor"]),
             monochrome: params.iter().any(|sp| {
                 sp.key.eq_ignore_ascii_case("monochrome")
                     && matches!(
@@ -2063,8 +2071,21 @@ fn render_entity_content(
         .color
         .as_ref()
         .map(|c| crate::sequence::resolve_color(c))
+        .or_else(|| {
+            font.class_background
+                .as_deref()
+                .map(crate::sequence::resolve_color)
+        })
         .unwrap_or_else(|| ENTITY_FILL.to_string());
     let fill = oracle_fill.unwrap_or(&fill_default);
+    // `skinparam classBorderColor` recolours the body rect and compartment
+    // separator strokes (but NOT the circled icon, which keeps PlantUML's
+    // default #181818). Falls back to the default when unset.
+    let border_col = font
+        .border_color
+        .as_deref()
+        .map(crate::sequence::resolve_color)
+        .unwrap_or_else(|| BORDER_COLOR.to_string());
     // Resolve the per-entity text colour from `#back:...;text:colour`
     // shorthand. When absent, fall back to an explicitly-set
     // `skinparam ClassFontColor` (the name) and `ClassAttributeFontColor`
@@ -2111,7 +2132,7 @@ fn render_entity_content(
         bold: font.attr_font_bold,
         italic: font.attr_font_italic,
     };
-    let style_default = format!("stroke:{};stroke-width:{};", BORDER_COLOR, BORDER_WIDTH);
+    let style_default = format!("stroke:{};stroke-width:{};", border_col, BORDER_WIDTH);
     let style = oracle_style.unwrap_or(style_default.as_str());
     let rx_str = oracle_rx.unwrap_or("2.5");
     let ry_str = oracle_ry.unwrap_or("2.5");
@@ -2139,19 +2160,50 @@ fn render_entity_content(
     )
     .unwrap();
 
-    // Gradient backgrounds (`#c1/c2`): PlantUML repaints the header compartment
-    // with its own 0→100% gradient (restarting the ramp per compartment), lays
-    // a 2.5px strip to square off the header rect's rounded bottom, then redraws
-    // the border on top so the repaint doesn't bury it. Emitted only for
-    // `url(#…)` gradient fills — solid fills keep the single rect above.
-    if fill.starts_with("url(#")
-        && let Some(&first_sep) = oracle_rect.and_then(|r| r.sep_y_values.first())
-    {
+    // Header-compartment repaint: PlantUML paints the name compartment in its
+    // own colour and squares off the rounded bottom with a 2.5px strip, then
+    // redraws the border on top so the repaint doesn't bury it. Fires for two
+    // cases: a `#c1/c2` gradient body (header restarts the ramp; sep-y from the
+    // oracle), or a solid `skinparam classHeaderBackgroundColor` distinct from
+    // the body fill (sep-y computed from the header height, matching the
+    // separator-line default below).
+    let header_solid = font
+        .header_background
+        .as_deref()
+        .filter(|hb| !hb.contains('/'))
+        .map(crate::sequence::resolve_color)
+        .filter(|hb| hb.as_str() != fill);
+    let band_first_sep: Option<f64> = if fill.starts_with("url(#") {
+        oracle_rect.and_then(|r| r.sep_y_values.first().copied())
+    } else if header_solid.is_some() {
+        let stereo_shift = if dim.has_stereotypes {
+            STEREOTYPE_EXTRA_HEIGHT
+        } else {
+            0.0
+        };
+        let computed = if dim.hide.circle {
+            y + HEADER_H_NO_CIRCLE + stereo_shift
+        } else {
+            y + HEADER_SEP_Y - MARGIN + stereo_shift
+        };
+        Some(
+            oracle_rect
+                .and_then(|r| r.sep_y_values.first().copied())
+                .unwrap_or(computed),
+        )
+    } else {
+        None
+    };
+    if let Some(first_sep) = band_first_sep {
         let header_h = first_sep - y;
         // The header compartment repaints with the header gradient when one is
-        // configured (combined body+header gradients); otherwise it reuses the
-        // body gradient (single-gradient classBackgroundColor).
-        let header_fill = header_gradient_fill.unwrap_or(fill);
+        // configured (combined body+header gradients), then a solid header
+        // colour, otherwise it reuses the body gradient (single-gradient
+        // classBackgroundColor).
+        let header_fill = header_gradient_fill
+            .map(|s| s.to_string())
+            .or_else(|| header_solid.clone())
+            .unwrap_or_else(|| fill.to_string());
         let grad_style = format!("stroke:{header_fill};stroke-width:{BORDER_WIDTH};");
         // Header repaint (rounded, matching the full rect's corners).
         write!(
@@ -2460,7 +2512,7 @@ fn render_entity_content(
     // `style` (e.g. `class X #lightyellow;line:red;line.bold`), use it
     // verbatim for the field/method separator lines too. Java keeps the
     // separator strokes in sync with the entity border.
-    let default_sep_style = format!("stroke:{};stroke-width:{};", BORDER_COLOR, BORDER_WIDTH);
+    let default_sep_style = format!("stroke:{};stroke-width:{};", border_col, BORDER_WIDTH);
     let sep_style: &str = oracle_rect
         .and_then(|r| r.rect_style.as_deref())
         .filter(|_| !font.monochrome)
