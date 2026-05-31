@@ -23,6 +23,15 @@ fn fc(v: f64) -> String {
 
 /// Build a map from bare component id to qualified name (e.g. "G1.AA").
 /// Walks the package tree and concatenates package names.
+/// PlantUML folds non-ASCII characters when echoing an entity's name into the
+/// SVG: codepoints above U+007F become `.` in `data-qualified-name` and `?` in
+/// the `<!--entity …-->` marker. ASCII (including spaces) is preserved.
+fn fold_non_ascii(s: &str, replacement: char) -> String {
+    s.chars()
+        .map(|c| if c.is_ascii() { c } else { replacement })
+        .collect()
+}
+
 fn build_qualified_names(
     packages: &[ComponentPackage],
 ) -> std::collections::HashMap<String, String> {
@@ -612,13 +621,16 @@ pub fn render_with_oracle(
         };
 
         // HTML comment.
-        svg.raw(&format!("<!--entity {}-->", comp.id));
+        svg.raw(&format!("<!--entity {}-->", fold_non_ascii(&comp.id, '?')));
 
         // Open entity group. Use qualified name when component lives inside a package.
-        let qualified = qualified_names
-            .get(&comp.id)
-            .cloned()
-            .unwrap_or_else(|| comp.id.clone());
+        let qualified = fold_non_ascii(
+            &qualified_names
+                .get(&comp.id)
+                .cloned()
+                .unwrap_or_else(|| comp.id.clone()),
+            '.',
+        );
         let source_line_attr = if comp.source_line > 0 {
             format!(r#" data-source-line="{}""#, comp.source_line)
         } else {

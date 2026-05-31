@@ -151,11 +151,13 @@ pub fn parse_component(lines: &[String]) -> Result<ComponentDiagram, ParseError>
     static RE_NOTE_INLINE: LazyLock<Regex> =
         LazyLock::new(|| Regex::new(r#"^note\s+"([^"]+)"\s+as\s+(\w+)"#).unwrap());
     // Matches: FROM ["from_mult"] ARROW ["to_mult"] TO [: label]
-    // FROM and TO can be [bracket] or \w+ identifiers.
+    // FROM and TO can be [bracket], "quoted label", or \w+ identifiers.
+    // Group map: 1=from-bracket 2=from-quoted 3=from-word 4=from-mult
+    // 5=arrow 6=to-mult 7=to-bracket 8=to-quoted 9=to-word 10=label.
     // Arrow chars broadened to include lollipop notation: `-(`, `-(0-`, `--(`  etc.
     static RE_CONN: LazyLock<Regex> = LazyLock::new(|| {
         Regex::new(
-            r#"^(?:\[([^\]]+)\]|(\w+))\s*(?:"([^"]*)")?\s*([-.<>()|~0#*o]+)\s*(?:"([^"]*)")?\s*(?:\[([^\]]+)\]|(\w+))(?:\s*:\s*(.+))?$"#,
+            r#"^(?:\[([^\]]+)\]|"([^"]+)"|(\w+))\s*(?:"([^"]*)")?\s*([-.<>()|~0#*o]+)\s*(?:"([^"]*)")?\s*(?:\[([^\]]+)\]|"([^"]+)"|(\w+))(?:\s*:\s*(.+))?$"#,
         )
         .unwrap()
     });
@@ -542,31 +544,40 @@ pub fn parse_component(lines: &[String]) -> Result<ComponentDiagram, ParseError>
         let trimmed = trimmed_owned.as_str();
 
         if let Some(caps) = RE_CONN.captures(trimmed) {
-            // Group 1/6 are bracketed (`[Name]`) endpoints; 2/7 are bare
-            // identifiers. PlantUML treats a bare, undeclared endpoint as an
-            // interface (drawn as a circle), and a bracketed endpoint as a
-            // component.
+            // Group map (see RE_CONN): 1/7 bracketed (`[Name]`), 2/8 quoted
+            // (`"Name"`), 3/9 bare word. PlantUML treats a *bare*, undeclared
+            // endpoint as an interface (drawn as a circle); bracketed or
+            // quoted endpoints are components. Quoted endpoints keep their
+            // spaces (they reference a declared `component "Name"`); bare
+            // identifiers have spaces normalised to underscores.
             let from_bracketed = caps.get(1).is_some();
+            let from_quoted = caps.get(2).is_some();
             let from = caps
                 .get(1)
                 .or(caps.get(2))
-                .map(|m| m.as_str().replace(' ', "_"))
+                .map(|m| m.as_str().to_string())
+                .or_else(|| caps.get(3).map(|m| m.as_str().replace(' ', "_")))
                 .unwrap_or_default();
-            let from_mult = caps.get(3).map(|m| m.as_str().to_string());
-            let arrow = &caps[4];
-            let to_mult = caps.get(5).map(|m| m.as_str().to_string());
-            let to_bracketed = caps.get(6).is_some();
+            let from_mult = caps.get(4).map(|m| m.as_str().to_string());
+            let arrow = &caps[5];
+            let to_mult = caps.get(6).map(|m| m.as_str().to_string());
+            let to_bracketed = caps.get(7).is_some();
+            let to_quoted = caps.get(8).is_some();
             let to = caps
-                .get(6)
-                .or(caps.get(7))
-                .map(|m| m.as_str().replace(' ', "_"))
+                .get(7)
+                .or(caps.get(8))
+                .map(|m| m.as_str().to_string())
+                .or_else(|| caps.get(9).map(|m| m.as_str().replace(' ', "_")))
                 .unwrap_or_default();
-            let label = caps.get(8).map(|m| m.as_str().trim().to_string());
+            let label = caps.get(10).map(|m| m.as_str().trim().to_string());
             let dashed = arrow.contains("..") || arrow.contains('.');
 
-            // Auto-create endpoints if not already declared. Bracketed
-            // endpoints become components; bare ones become interfaces.
-            for (id, bracketed) in [(&from, from_bracketed), (&to, to_bracketed)] {
+            // Auto-create endpoints if not already declared. Bracketed and
+            // quoted endpoints become components; bare ones become interfaces.
+            for (id, bracketed) in [
+                (&from, from_bracketed || from_quoted),
+                (&to, to_bracketed || to_quoted),
+            ] {
                 if !id.is_empty()
                     && !components.iter().any(|c| c.id == *id)
                     && !interfaces.iter().any(|i| i.id == *id)
