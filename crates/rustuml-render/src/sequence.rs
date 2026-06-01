@@ -300,10 +300,12 @@ fn msg_step(has_text: bool) -> f64 {
 /// `header_w`/`header_h` are the integer corner-tab dims; `preferred_h` is the
 /// real box height (rect height = `preferred_h - 5`).
 struct RefBox {
+    /// Integer corner-tab width `(int)getHeaderWidth` — for the tab path only.
     header_w: f64,
     header_h: f64,
     preferred_h: f64,
-    body_w: f64,
+    /// `getPreferredWidth` — uses the *real* (untruncated) header width.
+    pref_w: f64,
 }
 
 const REF_HEADER_FONT: f64 = 13.0;
@@ -320,7 +322,8 @@ const REF_GAP_ABOVE: f64 = 8.0;
 
 fn ref_box(text: &str) -> RefBox {
     let ref_label_w = bold_text_width("ref", REF_HEADER_FONT);
-    let header_w = (ref_label_w + 45.0).floor();
+    let header_w_real = ref_label_w + 45.0; // getHeaderWidth (= headerDim.w + 30 + 15)
+    let header_w = header_w_real.floor(); // (int) cast, for the corner tab
     let header_h = (plantuml_metrics::text_height(REF_HEADER_FONT) + 2.0).floor();
     let n_lines = text.lines().count().max(1) as f64;
     let body_w = text
@@ -329,11 +332,14 @@ fn ref_box(text: &str) -> RefBox {
         .fold(0.0_f64, f64::max);
     let text_h = n_lines * plantuml_metrics::text_height(REF_BODY_FONT) + 8.0;
     let preferred_h = text_h + (plantuml_metrics::text_height(REF_HEADER_FONT) + 2.0) + REF_FOOTER;
+    // getTextWidth = body + marginX1(4) + marginX2(4); getPreferredWidth =
+    // max(textWidth, headerWidth) + xMargin*2.
+    let pref_w = (body_w + 8.0).max(header_w_real) + REF_XMARGIN * 2.0;
     RefBox {
         header_w,
         header_h,
         preferred_h,
-        body_w,
+        pref_w,
     }
 }
 
@@ -3230,7 +3236,7 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
             // preferred width minus the two end half-boxes.
             Event::Ref(r) => {
                 let rb = ref_box(&r.text);
-                let pref_w = (rb.body_w + 8.0).max(rb.header_w) + REF_XMARGIN * 2.0;
+                let pref_w = rb.pref_w;
                 let idxs: Vec<usize> = r
                     .participants
                     .iter()
@@ -3938,6 +3944,36 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
             }
         }
     }
+    // A `ref over` box anchors at its leftmost covered participant and extends
+    // right by its (preferred or span) width; over a single/narrow span it
+    // overhangs the participant boxes and widens the canvas.
+    let mut max_ref_right: f64 = 0.0;
+    for event in &diagram.events {
+        if let Event::Ref(r) = event {
+            let rb = ref_box(&r.text);
+            let mut r1 = f64::INFINITY;
+            let mut mx = f64::NEG_INFINITY;
+            for pid in &r.participants {
+                if let Some(&pi) = id_to_idx.get(pid.as_str()) {
+                    let p = &participants[pi];
+                    r1 = r1.min(p.box_x - REF_OUT_MARGIN);
+                    mx = mx.max(p.box_x + p.box_width + REF_OUT_MARGIN);
+                }
+            }
+            if r1.is_finite() {
+                let pref_w = rb.pref_w;
+                // Only when the box is WIDER than the participant span does it
+                // overhang and grow the canvas; a span-bound box fits within the
+                // participant-derived right edge already.
+                if pref_w > mx - r1 {
+                    // Use the box-edge-equivalent (living right minus the
+                    // participant outMargin), mirroring last_box_right, so the
+                    // standard RIGHT_MARGIN applies on top.
+                    max_ref_right = max_ref_right.max(r1 + pref_w - REF_OUT_MARGIN);
+                }
+            }
+        }
+    }
     // Add 1.0 for note stroke width when notes extend the right edge.
     let effective_right = last_box_right
         .max(if max_note_right > 0.0 {
@@ -3948,7 +3984,8 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
         .max(max_self_msg_right)
         // A wide divider strip ends at max_divider_right; the canvas adds
         // RIGHT_MARGIN (10) but the divider only needs +5, so offset by -5.
-        .max(max_divider_right - 5.0);
+        .max(max_divider_right - 5.0)
+        .max(max_ref_right);
     // If groups are present, the group frame may extend beyond participant boxes.
     // Compute the maximum right extent of any group frame (header text + guard).
     let mut max_group_right: f64 = 0.0;
@@ -6306,7 +6343,7 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                         .map(|p| p.box_x + p.box_width + REF_OUT_MARGIN)
                         .unwrap_or(100.0);
                 }
-                let pref_w = (rb.body_w + 8.0).max(rb.header_w) + REF_XMARGIN * 2.0;
+                let pref_w = rb.pref_w;
                 let total_w = (max_x - r1).max(pref_w);
                 let box_top = msg_y;
                 let rect_x = r1 + REF_XMARGIN;
@@ -6347,23 +6384,29 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                         skip_underline: false,
                     },
                 );
-                let body_x = r1 + (total_w - rb.body_w) / 2.0;
-                let body_y = box_top + 4.0 + rb.header_h + plantuml_metrics::ascent(REF_BODY_FONT);
-                text_render::emit_text(
-                    &mut svg.buf,
-                    &r.text,
-                    &TextBase {
-                        x: body_x,
-                        y: body_y,
-                        font_size: 12,
-                        font_family: "sans-serif",
-                        fill: "#000000",
-                        bold: false,
-                        italic: false,
-                        underline: false,
-                        skip_underline: false,
-                    },
-                );
+                // Body lines, each centred on the box (PlantUML CENTER aligns
+                // every line), stacked at text_height(12) intervals.
+                let body_baseline0 =
+                    box_top + 4.0 + rb.header_h + plantuml_metrics::ascent(REF_BODY_FONT);
+                for (li, line) in r.text.lines().enumerate() {
+                    let lw = text_width(line, REF_BODY_FONT);
+                    text_render::emit_text(
+                        &mut svg.buf,
+                        line,
+                        &TextBase {
+                            x: r1 + (total_w - lw) / 2.0,
+                            y: body_baseline0
+                                + li as f64 * plantuml_metrics::text_height(REF_BODY_FONT),
+                            font_size: 12,
+                            font_family: "sans-serif",
+                            fill: "#000000",
+                            bold: false,
+                            italic: false,
+                            underline: false,
+                            skip_underline: false,
+                        },
+                    );
+                }
             }
             Event::Activate(id, _) => {
                 // Track activation state for message rendering
