@@ -2689,6 +2689,51 @@ fn render_composite_with_oracle(diagram: &StateDiagram, orc: &OracleLayout) -> S
                 .map(|t| t.source_line)
                 .min()
         };
+        // True when some transition references `id` with its *other* endpoint
+        // also inside `scope` — i.e. the state participates in the composite's
+        // own flow rather than only being targeted from outside.
+        let has_in_scope_txn = |id: &str| -> bool {
+            diagram.transitions.iter().any(|t| {
+                let (other, mine) = if t.from == id {
+                    (&t.to, true)
+                } else if t.to == id {
+                    (&t.from, true)
+                } else {
+                    (&t.from, false)
+                };
+                if !mine {
+                    return false;
+                }
+                let other_scope = if other.starts_with("[*]") {
+                    endpoint_scope(other)
+                } else {
+                    diagram
+                        .states
+                        .iter()
+                        .find(|s| s.id == **other)
+                        .and_then(|s| s.parent.clone())
+                };
+                other_scope.as_deref() == scope
+            })
+        };
+        // A history pseudo-state that is never wired into its composite's own
+        // flow (only targeted from outside, as in `OutState --> S.H`) is drawn
+        // by PlantUML at the very front of the composite — ahead of the scope's
+        // `[*]` start pseudo-state and plain children. Float such orphan history
+        // nodes to effective line 0. (History nodes that DO take part in the
+        // internal flow keep their normal first-appearance ordering.)
+        for s in &diagram.states {
+            if s.parent.as_deref() != scope {
+                continue;
+            }
+            if matches!(s.kind, StateKind::History | StateKind::DeepHistory)
+                && !has_in_scope_txn(&s.id)
+                && seen.insert(s.id.clone())
+            {
+                items.push((0, seq, s.id.clone()));
+                seq += 1;
+            }
+        }
         // Pre-register states declared before their first use.
         for s in &diagram.states {
             if s.parent.as_deref() != scope {
@@ -2741,7 +2786,43 @@ fn render_composite_with_oracle(diagram: &StateDiagram, orc: &OracleLayout) -> S
                 seq += 1;
             }
         }
-        items.sort_by_key(|(l, s, _)| (*l, *s));
+        // PlantUML never draws a `[*]` start/end pseudo-state ahead of a
+        // composite (cluster) in the same scope, even when the pseudo-state's
+        // transition appears on an earlier source line. (Cf.
+        // `state_sequential_composites_*` and `state_composite_basic`, where
+        // `[*] --> Outer` on line 1 still renders after the Outer cluster.)
+        // Plain state boxes, by contrast, DO interleave with composites by line
+        // (cf. `Idle` before the `Moving` cluster in `state_game_character`).
+        // Model this by bumping each pseudo-state token's effective sort line up
+        // to the latest composite line in this scope; a per-item "composite
+        // wins ties" rank then keeps the cluster ahead of a pseudo-state landing
+        // on the same line. The stable `seq` tiebreak preserves the
+        // pseudo-states' own relative order and their interleaving with any
+        // later plain boxes (cf. `.start.` before the `Outside` box in
+        // `state_cross_boundary_out`).
+        let max_composite_line = diagram
+            .states
+            .iter()
+            .filter(|s| s.parent.as_deref() == scope && s.composite)
+            .map(|s| s.source_line)
+            .max();
+        if let Some(mc) = max_composite_line {
+            for (line, _, id) in &mut items {
+                if id.starts_with('\u{1}') && *line < mc {
+                    *line = mc;
+                }
+            }
+        }
+        // rank 0 = composite (sorts first on equal line); rank 1 = everything
+        // else (plain boxes, pseudo-states).
+        let rank = |id: &str| -> u8 {
+            if diagram.states.iter().any(|s| s.id == id && s.composite) {
+                0
+            } else {
+                1
+            }
+        };
+        items.sort_by_key(|(l, s, id)| (*l, rank(id), *s));
         items.into_iter().map(|(_, _, id)| id).collect()
     };
 
@@ -3077,12 +3158,33 @@ fn render_composite_with_oracle(diagram: &StateDiagram, orc: &OracleLayout) -> S
         has_clusters,
     };
 
-    // Walk top-level children: emit composites (header band when bare, inner
-    // entities, plus inner links when bare) and plain states, then top-level
-    // pseudo-states, then the remaining links.
+    // Walk top-level children in a single first-appearance pass: composites
+    // (clusters with their inner entities), plain state boxes, and the scope's
+    // own `[*]` pseudo-states all interleave in declaration/use order. This
+    // mirrors PlantUML's emission: a top-level state declared early (e.g.
+    // `Idle` in `state_game_character`) precedes a later composite, while a
+    // `[*] --> X` start pseudo-state precedes a plain state first referenced on
+    // a later line (e.g. `.start.` before `Outside` in
+    // `state_cross_boundary_out`).
     for token in ordered_children(None) {
-        if token.starts_with('\u{1}') {
-            continue; // top-level pseudo-states emitted after composites
+        if let Some(rest) = token.strip_prefix('\u{1}') {
+            // Top-level start/end pseudo-state.
+            let is_start = rest.starts_with('S');
+            let marker = &rest[1..];
+            let sl = diagram
+                .transitions
+                .iter()
+                .find(|t| {
+                    if is_start {
+                        t.from == marker
+                    } else {
+                        t.to == marker
+                    }
+                })
+                .map(|t| t.source_line.to_string())
+                .unwrap_or_else(|| "0".to_string());
+            emit_pseudo(&mut svg, &pseudo_qname(marker, is_start), is_start, &sl);
+            continue;
         }
         let Some(st) = diagram.states.iter().find(|s| s.id == token) else {
             continue;
@@ -3110,27 +3212,6 @@ fn render_composite_with_oracle(diagram: &StateDiagram, orc: &OracleLayout) -> S
         } else {
             emit_state_box(&mut svg, st);
         }
-    }
-    // Top-level pseudo-states.
-    for token in ordered_children(None) {
-        let Some(rest) = token.strip_prefix('\u{1}') else {
-            continue;
-        };
-        let is_start = rest.starts_with('S');
-        let marker = &rest[1..];
-        let sl = diagram
-            .transitions
-            .iter()
-            .find(|t| {
-                if is_start {
-                    t.from == marker
-                } else {
-                    t.to == marker
-                }
-            })
-            .map(|t| t.source_line.to_string())
-            .unwrap_or_else(|| "0".to_string());
-        emit_pseudo(&mut svg, &pseudo_qname(marker, is_start), is_start, &sl);
     }
     // Anchored notes (`note right/left of …`). PlantUML emits these `GMN*`
     // entities after the top-level pseudo-states and before the top-level
