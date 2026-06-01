@@ -348,6 +348,7 @@ pub fn parse_component(lines: &[String]) -> Result<ComponentDiagram, ParseError>
                 let kind = match kw {
                     "database" => ComponentElementKind::Database,
                     "queue" => ComponentElementKind::Queue,
+                    "cloud" => ComponentElementKind::Cloud,
                     _ => ComponentElementKind::Component,
                 };
                 if !components.iter().any(|c: &Component| c.id == id) {
