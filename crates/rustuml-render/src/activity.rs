@@ -4687,6 +4687,22 @@ pub fn render_with_oracle(
 }
 
 /// Render an activity diagram to SVG.
+/// incr-4 ftile-geometry render path. Returns `Some(svg)` only when the whole
+/// `tree` is geometry-portable AND fully emittable from the ported
+/// FtileGeometry layout; otherwise `None`, so `render` falls back to the legacy
+/// extent-model renderer. The geometry layer (`node_geometry`/`sequence_geometry`,
+/// covering leaves+linear+While+binary-If+Switch+Repeat) is ported and
+/// committed; the remaining incr-4 work is the EMITTER — drawing every tile and
+/// arrow at its ported position, with the canvas derived from the root
+/// geometry. Until that lands this defers (returns None); see the incr-4 plan
+/// in project memory (`project_parity_gaps.md`).
+fn render_ftile(tree: &[LayoutNode], _diagram: &ActivityDiagram) -> Option<String> {
+    // Portability gate: bail unless every tile maps to an FtileGeometry.
+    let _root = sequence_geometry(tree)?;
+    // TODO(incr-4): emit from `_root` + the `*_layout` fns instead of deferring.
+    None
+}
+
 pub fn render(diagram: &ActivityDiagram, _theme: &Theme) -> String {
     if diagram.steps.is_empty() {
         return empty_svg();
@@ -4698,6 +4714,15 @@ pub fn render(diagram: &ActivityDiagram, _theme: &Theme) -> String {
     // Prepend title if present.
     if let Some(ref title) = diagram.meta.title {
         tree.insert(0, LayoutNode::Title(title.clone()));
+    }
+
+    // incr-4 ftile-geometry render path (dual-path). When the whole tree is
+    // geometry-portable, the diagram can be laid out entirely from the faithful
+    // FtileGeometry port instead of the legacy reverse-engineered extent model.
+    // Returns None (falling through to the legacy renderer) until the emitter
+    // port lands — so this is currently a safe no-op.
+    if let Some(svg) = render_ftile(&tree, diagram) {
+        return svg;
     }
 
     // Collect deprecated color action warnings, deduplicated by color

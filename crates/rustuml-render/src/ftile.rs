@@ -467,7 +467,11 @@ pub fn switch_with_diamonds(
     let last = &tiles[tiles.len() - 1];
 
     let w13 = diamond1.width - first.right() - last.left;
-    let w9: f64 = tiles[1..tiles.len().saturating_sub(1)]
+    // Middle tiles (all but first/last); empty for ≤2 branches. `get` avoids a
+    // `1..0` slice panic when there is a single branch.
+    let w9: f64 = tiles
+        .get(1..tiles.len().saturating_sub(1))
+        .unwrap_or(&[])
         .iter()
         .map(|t| t.width)
         .sum();
@@ -651,7 +655,13 @@ pub fn switch_layout(
 
     // Mode discriminant, recomputed exactly as switch_with_diamonds.
     let w13 = diamond1.width - first.right() - last.left;
-    let w9: f64 = tiles[1..n.saturating_sub(1)].iter().map(|t| t.width).sum();
+    // `get` avoids a `1..0` slice panic for a single branch (no middle tiles).
+    let w9: f64 = tiles
+        .get(1..n.saturating_sub(1))
+        .unwrap_or(&[])
+        .iter()
+        .map(|t| t.width)
+        .sum();
     let big = w13 > w9;
 
     let dy = diamond1.height + Y_DELTA_1A; // getTranslateMain (dy only)
@@ -965,6 +975,18 @@ mod tests {
         assert_eq!(l.diamond2, (68.0, 200.0)); // 80 - 12, 224 - 24
         // Last branch fills the canvas: 130 + 30 = 160 = total width.
         assert_eq!(l.tiles[2].0 + tiles[2].width, total.width);
+    }
+
+    #[test]
+    fn switch_single_branch_does_not_panic() {
+        // A switch with one case has no middle tiles; the w9 slice must not
+        // panic (`tiles[1..0]`).
+        let d1 = FtileGeometry::new(60.0, 30.0, 30.0, 0.0, Some(30.0));
+        let d2 = FtileGeometry::new(24.0, 24.0, 12.0, 0.0, Some(24.0));
+        let tiles = [FtileGeometry::new(40.0, 30.0, 20.0, 0.0, Some(30.0))];
+        let g = switch_with_diamonds(&d1, &d2, &tiles, 20.0);
+        let l = switch_layout(&g, &d1, &d2, &tiles, 20.0);
+        assert_eq!(l.tiles.len(), 1);
     }
 
     #[test]
