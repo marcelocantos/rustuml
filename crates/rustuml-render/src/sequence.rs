@@ -234,12 +234,30 @@ fn fmt_coord(v: f64) -> String {
     s.to_string()
 }
 
-/// Compute note content width based on text width and note shape.
+/// Compute the *drawn* note box width based on text width and note shape.
+///
+/// PlantUML's `ComponentRoseNote.drawInternalU` draws the polygon at
+/// `(int) getTextWidth` (an integer truncation) but the note box's outer
+/// edges land on the area allocated for it, which equals the ceiling of the
+/// preferred width. Empirically the drawn outer width is `ceil(text) + margin`.
 fn note_content_width(max_text_w: f64, shape: NoteShape) -> f64 {
+    note_content_width_raw(max_text_w, shape).ceil()
+}
+
+/// Compute the *layout* (preferred) note width — the full-precision value Java
+/// uses for spacing/canvas reservation. `ComponentRoseNote.getPreferredWidth`
+/// returns `getTextWidth + 2*paddingX + deltaShadow` as a raw `double` (no
+/// rounding); `NotesBoxes.ensureConstraints` and `NoteBox.getStartingX` consume
+/// that raw value. Using the ceiled `note_content_width` for those purposes
+/// loses the sub-pixel fraction and tips downstream `floor`/`ceil` boundaries,
+/// shifting participants and the canvas right edge by 1px on many note cases.
+///
+/// The constants match `note_content_width`'s margins minus its `ceil`.
+fn note_content_width_raw(max_text_w: f64, shape: NoteShape) -> f64 {
     match shape {
-        NoteShape::Note => max_text_w.ceil() + 20.0, // 6 pad + text + 4 pad + 10 fold
-        NoteShape::Hexagonal => max_text_w.ceil() + 23.0, // 10 indent + 2 pad + text + 1 pad + 10 indent
-        NoteShape::Rectangular => max_text_w.ceil() + 7.0, // 6 pad + text + 1 pad
+        NoteShape::Note => max_text_w + 20.0, // 6 pad + text + 4 pad + 10 fold
+        NoteShape::Hexagonal => max_text_w + 23.0, // 10 indent + 2 pad + text + 1 pad + 10 indent
+        NoteShape::Rectangular => max_text_w + 7.0, // 6 pad + text + 1 pad
     }
 }
 
@@ -3298,9 +3316,18 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                         .lines()
                         .map(|l| text_width(l.trim(), MSG_FONT_SIZE))
                         .fold(0.0_f64, f64::max);
-                    let note_w = note_content_width(max_tw, note.shape);
-                    let shift = ((note_w - participants[0].box_width) / 2.0).floor();
-                    let min_cx = HEAD_BOX_Y + shift.max(0.0) + participants[0].box_width / 2.0;
+                    // Java centres the note on participant 0 using the raw
+                    // preferred width (`NoteBox.getStartingX` / `ensureConstraints`),
+                    // and the diagram is shifted right so the note's left edge sits
+                    // at the HEAD_BOX_Y margin. The participant box left edge then
+                    // lands at the rounded position
+                    // `round(HEAD_BOX_Y + (raw_note_w - box_width) / 2)`. Using the
+                    // ceiled width with `floor` here drops the sub-pixel fraction and
+                    // mis-rounds the box left by 1px on many cases.
+                    let note_w = note_content_width_raw(max_tw, note.shape);
+                    let bw = participants[0].box_width;
+                    let box_left = (HEAD_BOX_Y + (note_w - bw) / 2.0).max(HEAD_BOX_Y).round();
+                    let min_cx = box_left + bw / 2.0;
                     min_first_center_x = min_first_center_x.max(min_cx);
                 }
                 NotePosition::Left if first_part == Some(0) => {
@@ -3972,9 +3999,16 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                         max_note_right = max_note_right.max(across_right);
                     } else if note.participants.len() == 1 {
                         if let Some(&idx) = id_to_idx.get(note.participants[0].as_str()) {
-                            let ll_x = participants[idx].lifeline_line_x;
-                            let note_left = (ll_x - note_content_w / 2.0).max(HEAD_BOX_Y).floor();
-                            let note_right = note_left + note_content_w;
+                            // Java NoteBox.getMaxX = getStartingX + getPreferredWidth,
+                            // where getStartingX = (int)(centerX - rawW/2) and the
+                            // preferred width is the full-precision (un-ceiled) value.
+                            // Using the ceiled width here drops the sub-pixel fraction
+                            // and tips the canvas right edge / newpage separator x2 a
+                            // whole pixel short.
+                            let cx = participants[idx].center_x;
+                            let raw_w = note_content_width_raw(max_line_width, note.shape);
+                            let note_left = (cx - raw_w / 2.0).max(HEAD_BOX_Y).floor();
+                            let note_right = note_left + raw_w;
                             max_note_right = max_note_right.max(note_right);
                         }
                     } else if let (Some(&first_idx), Some(&last_idx)) = (
