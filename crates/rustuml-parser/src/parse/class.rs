@@ -677,10 +677,17 @@ impl ClassParser {
         let stripped_line = strip_arrow_modifiers(line);
         let line = stripped_line.as_str();
         static RE: LazyLock<Regex> = LazyLock::new(|| {
-            // Endpoint may be a bare identifier (`[\w.]+`) or a quoted name
-            // (`"any text"`) so labels with whitespace or punctuation work.
+            // Endpoint may be a bare identifier or a quoted name (`"any text"`)
+            // so labels with whitespace or punctuation work. The bare form
+            // accepts `/` and `:` (in addition to word chars and `.`) so a
+            // custom-namespace-separator endpoint (`com::service::UserService`,
+            // `com/example/Foo`) is captured whole — `[\w.]+` alone would stop
+            // at the first `:`/`/`, truncating the name and synthesising a
+            // phantom `com` entity. The label suffix still uses `\s*:\s*` (a
+            // separator colon flanked by optional space), which a bare endpoint
+            // (no spaces) never matches, so `A::B --> C::D : label` still splits.
             Regex::new(
-                r#"^(?:"([^"]+)"|([\w.]+))\s*(?:"([^"]+)")?\s*((?:<\|--\|>|<\.\.>|<\|--|--\|>|\.\.\|>|<\|\.\.|<\.\.|\*--|--\*|o--|--o|<-->|<--|-->|->|<-|-{2,}|\.\.|\.\.>))\s*(?:"([^"]+)")?\s*(?:"([^"]+)"|([\w.]+))(?:\s*:\s*(.+))?$"#,
+                r#"^(?:"([^"]+)"|([\w./:]+))\s*(?:"([^"]+)")?\s*((?:<\|--\|>|<\.\.>|<\|--|--\|>|\.\.\|>|<\|\.\.|<\.\.|\*--|--\*|o--|--o|<-->|<--|-->|->|<-|-{2,}|\.\.|\.\.>))\s*(?:"([^"]+)")?\s*(?:"([^"]+)"|([\w./:]+))(?:\s*:\s*(.+))?$"#,
             )
             .unwrap()
         });

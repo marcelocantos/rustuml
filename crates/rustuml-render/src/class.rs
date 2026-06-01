@@ -795,6 +795,28 @@ fn qualify_entity(diagram: &ClassDiagram, entity: &ClassEntity, translated_label
         .filter(|p| p.entities.iter().any(|e| e == &entity.id))
         .map(|p| p.name.as_str())
         .collect();
+    // Port of `Quark.getQualifiedName`. A `set namespaceSeparator`-namespaced
+    // entity carries its full separated path in its id (`com::example::MyClass`,
+    // `com/example/Foo`), whereas the label is just the leaf (`MyClass`). The
+    // parser splits the path into containing packages, but the id already
+    // encodes the whole chain — re-joining the package prefixes would duplicate
+    // the embedded path (`com.com..example.MyClass`). When a containing package
+    // name is a prefix of the id, the entity is namespace-separated: its
+    // qualified name is just the translated id (`::`/`/` → `.`). User
+    // `package`/`namespace` blocks keep a short id equal to the label (their
+    // package names are NOT id prefixes), and quoted names (`"My Class"`,
+    // id `My_Class`) carry no namespace packages at all — both fall through to
+    // the package-prefix chain below, so `Inner.InnerClass` and the label-based
+    // qualified name still resolve correctly.
+    let namespaced = entity.id != entity.label
+        && pkgs.iter().any(|p| {
+            entity.id.starts_with(p)
+                && entity.id[p.len()..]
+                    .starts_with(|c: char| !c.is_ascii_alphanumeric() && c != '_')
+        });
+    if namespaced {
+        return translate_qualified_name(&entity.id);
+    }
     // A namespace-separator package stores its full dotted path as its name
     // (`com`, `com.example`, …), so a shallower one is a dotted prefix of a
     // deeper one — drop the prefixes to avoid duplicating the embedded path.
@@ -2580,8 +2602,52 @@ fn render_entity_content(
     let header_only = both_compartments_hidden;
     let effectively_no_members = !any_compartment_hidden && entity.members.is_empty();
 
+    // Count document-order block separators (`--`, `==`, `..`, `__`, with or
+    // without a `-- caption --` title). When two or more are present the body
+    // can no longer be modelled as a single fields→methods divider plus inline
+    // field dividers — PlantUML splits the body into a vertical stack of blocks
+    // (one per separator, plus the leading block) where each separator is a
+    // `TextBlockLineBefore` rule. Render those in document order instead.
+    let block_separator_count = entity
+        .members
+        .iter()
+        .filter(|m| m.kind == MemberKind::Separator)
+        .count();
+    let multi_separator_body = block_separator_count >= 2 && !any_compartment_hidden;
+
     if header_only {
         // Nothing to emit after the header content.
+    } else if multi_separator_body {
+        let header_sep_y = oracle_sep_y.first().copied().unwrap_or(header_sep_default);
+        // Header (name/body) divider rule.
+        write!(
+            svg,
+            r#"<line style="{}" x1="{}" x2="{}" y1="{}" y2="{}"/>"#,
+            sep_style,
+            fmt4(sep_x1),
+            fmt4(sep_x2),
+            fmt4(header_sep_y),
+            fmt4(header_sep_y),
+        )
+        .unwrap();
+        if link_anchor.is_some() {
+            svg.push_str("</a>");
+            header_anchor_closed = true;
+        }
+        render_body_blocks_replay(
+            svg,
+            entity,
+            x,
+            is_enum_entity,
+            attr_font,
+            member_fill,
+            explicit_padding.unwrap_or(0.0),
+            member_text_offset,
+            oracle_text_y,
+            oracle_vis_y,
+            oracle_rect.map(|r| r.lines.as_slice()).unwrap_or(&[]),
+            text_header_count,
+        );
     } else if collapsing_hide_one_section {
         let visible_members: Vec<&Member> = entity
             .members
@@ -3248,6 +3314,244 @@ fn render_entity_content(
     // any branch that did not close it explicitly).
     if link_anchor.is_some() && !header_anchor_closed {
         svg.push_str("</a>");
+    }
+}
+
+/// Render a class body that carries two or more block separators, replaying
+/// PlantUML's document-order block stack (`BodyEnhanced2.getArea` +
+/// `BodyEnhancedAbstract.decorate` + `TextBlockLineBefore.drawU`).
+///
+/// The body is split on every block separator (`--`/`==`/`..`/`__`, optionally
+/// captioned `-- title --`) into a vertical stack of blocks. The leading block
+/// (before any separator) carries no rule; every other block is preceded by a
+/// `TextBlockLineBefore` rule whose stroke depends on the separator glyph:
+///   `-` / `=` → solid width 1 (`=` draws a doubled rule, a second line +2px),
+///   `.`       → dotted width 1 (`stroke-dasharray:1,2`),
+///   `_`       → solid width 0.5 (the default `LineThickness`).
+///
+/// Plain dividers (no title) draw the full-width rule BEFORE the block's
+/// members; captioned dividers draw the block's members FIRST, then a centred
+/// caption flanked by two half-rules (`UHorizontalLine.firstHalf`/`secondHalf`).
+///
+/// Separator x-endpoints, member text baselines, and visibility-icon centres
+/// are replayed from the oracle's captured `<line>`/`<text>`/icon geometry —
+/// consistent with the renderer's established oracle-coordinate staging — so
+/// caption-width and member-metric sub-pixel drift cannot diverge.
+#[allow(clippy::too_many_arguments)]
+fn render_body_blocks_replay(
+    svg: &mut String,
+    entity: &ClassEntity,
+    x: f64,
+    is_enum_entity: bool,
+    attr_font: AttrFont,
+    member_fill: &str,
+    text_pad: f64,
+    member_text_offset: f64,
+    oracle_text_y: &[f64],
+    oracle_vis_y: &[f64],
+    oracle_lines: &[crate::layout_oracle::EntityLine],
+    text_header_count: usize,
+) {
+    // Split the body into blocks at each separator. Each block records its
+    // leading separator (None for the first block) and the members that follow
+    // it up to the next separator.
+    struct Block<'a> {
+        separator: Option<&'a Member>,
+        members: Vec<&'a Member>,
+    }
+    let mut blocks: Vec<Block> = vec![Block {
+        separator: None,
+        members: Vec::new(),
+    }];
+    for m in entity.members.iter() {
+        if m.kind == MemberKind::Separator {
+            blocks.push(Block {
+                separator: Some(m),
+                members: Vec::new(),
+            });
+        } else {
+            blocks.last_mut().unwrap().members.push(m);
+        }
+    }
+
+    // Cursors into the oracle-captured geometry. `text_y` and `vis_y` are
+    // consumed in SVG emission order; `line` walks the `<line>` children left
+    // to right (header rule already consumed by the caller).
+    let mut text_idx = text_header_count;
+    let mut vis_idx = 0usize;
+    let mut line_idx = 1usize; // 0 is the header divider, emitted by the caller.
+
+    let next_text_y = |idx: &mut usize| -> Option<f64> {
+        let v = oracle_text_y.get(*idx).copied();
+        *idx += 1;
+        v
+    };
+
+    for block in &blocks {
+        // PlantUML insets default-visibility members to the narrow enum column
+        // only when NO member in the block carries a visibility icon
+        // (`hasSmallIcon`); a mixed block keeps default members at the wide
+        // icon-column offset so they align with their icon-bearing neighbours.
+        let block_has_icon = block
+            .members
+            .iter()
+            .any(|m| visibility_modifier(m).is_some());
+        let narrow_default = is_enum_entity || !block_has_icon;
+
+        if let Some(sep) = block.separator {
+            let symbol = sep.return_type.as_deref().unwrap_or("--");
+            let captioned = !sep.display_text.is_empty();
+            // `==` draws a doubled rule (two parallel lines); every other glyph
+            // a single line. Captioned dividers split each rule into a left and
+            // a right half flanking the caption text.
+            let lines_per_half = if symbol == "==" { 2 } else { 1 };
+
+            if captioned {
+                // Members first, then the caption decoration.
+                emit_block_members(
+                    svg,
+                    &block.members,
+                    x,
+                    narrow_default,
+                    attr_font,
+                    text_pad,
+                    member_text_offset,
+                    oracle_text_y,
+                    oracle_vis_y,
+                    &mut text_idx,
+                    &mut vis_idx,
+                );
+                // Left half-rule(s).
+                for _ in 0..lines_per_half {
+                    emit_oracle_line(svg, oracle_lines, &mut line_idx);
+                }
+                // Caption text (consumed after the block's member texts).
+                if let Some(cap_y) = next_text_y(&mut text_idx) {
+                    let cap_x = oracle_lines
+                        .get(line_idx.saturating_sub(lines_per_half))
+                        .and_then(|l| l.x2.parse::<f64>().ok())
+                        .unwrap_or(x);
+                    let mut buf = String::new();
+                    text_render::emit_text(
+                        &mut buf,
+                        &sep.display_text,
+                        &TextBase {
+                            x: cap_x,
+                            y: cap_y,
+                            font_size: 14,
+                            font_family: "sans-serif",
+                            fill: member_fill,
+                            bold: false,
+                            italic: false,
+                            underline: false,
+                            skip_underline: true,
+                        },
+                    );
+                    svg.push_str(&buf);
+                }
+                // Right half-rule(s).
+                for _ in 0..lines_per_half {
+                    emit_oracle_line(svg, oracle_lines, &mut line_idx);
+                }
+            } else {
+                // Plain divider: full-width rule(s) first, then members.
+                for _ in 0..lines_per_half {
+                    emit_oracle_line(svg, oracle_lines, &mut line_idx);
+                }
+                emit_block_members(
+                    svg,
+                    &block.members,
+                    x,
+                    narrow_default,
+                    attr_font,
+                    text_pad,
+                    member_text_offset,
+                    oracle_text_y,
+                    oracle_vis_y,
+                    &mut text_idx,
+                    &mut vis_idx,
+                );
+            }
+        } else {
+            // Leading block: members only (the header divider is the caller's).
+            emit_block_members(
+                svg,
+                &block.members,
+                x,
+                narrow_default,
+                attr_font,
+                text_pad,
+                member_text_offset,
+                oracle_text_y,
+                oracle_vis_y,
+                &mut text_idx,
+                &mut vis_idx,
+            );
+        }
+    }
+}
+
+/// Emit one `<line>` from the oracle's captured separator geometry, advancing
+/// the cursor. Falls back to nothing when the oracle ran out of lines.
+fn emit_oracle_line(
+    svg: &mut String,
+    oracle_lines: &[crate::layout_oracle::EntityLine],
+    line_idx: &mut usize,
+) {
+    if let Some(l) = oracle_lines.get(*line_idx) {
+        let style = l
+            .style
+            .as_deref()
+            .unwrap_or("stroke:#181818;stroke-width:1;");
+        write!(
+            svg,
+            r#"<line style="{}" x1="{}" x2="{}" y1="{}" y2="{}"/>"#,
+            style, l.x1, l.x2, l.y1, l.y1,
+        )
+        .unwrap();
+    }
+    *line_idx += 1;
+}
+
+/// Emit the members of one body block, consuming oracle text baselines and
+/// visibility-icon centres in order.
+#[allow(clippy::too_many_arguments)]
+fn emit_block_members(
+    svg: &mut String,
+    members: &[&Member],
+    x: f64,
+    narrow_default: bool,
+    attr_font: AttrFont,
+    text_pad: f64,
+    member_text_offset: f64,
+    oracle_text_y: &[f64],
+    oracle_vis_y: &[f64],
+    text_idx: &mut usize,
+    vis_idx: &mut usize,
+) {
+    for member in members {
+        let eff_y = oracle_text_y.get(*text_idx).copied().unwrap_or(0.0);
+        *text_idx += 1;
+        let vis_ov = if member.visibility != Visibility::Default {
+            let v = oracle_vis_y.get(*vis_idx).copied();
+            *vis_idx += 1;
+            v
+        } else {
+            None
+        };
+        render_member_line(
+            svg,
+            member,
+            x,
+            eff_y,
+            vis_ov,
+            narrow_default,
+            attr_font,
+            None,
+            None,
+            text_pad,
+            member_text_offset,
+        );
     }
 }
 
