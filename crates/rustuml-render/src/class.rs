@@ -3715,8 +3715,15 @@ fn render_oracle_relationships(
         // captures their `d`/`style` in `extra_paths` (it drops the `fill`,
         // which is always the note background), so supply the note fill here.
         for (d, style) in &oracle_edge.extra_paths {
-            let s = style.as_deref().unwrap_or("stroke:#181818;stroke-width:0.5;");
-            write!(svg, r#"<path d="{}" fill="{}" style="{}"/>"#, d, NOTE_FILL, s).unwrap();
+            let s = style
+                .as_deref()
+                .unwrap_or("stroke:#181818;stroke-width:0.5;");
+            write!(
+                svg,
+                r#"<path d="{}" fill="{}" style="{}"/>"#,
+                d, NOTE_FILL, s
+            )
+            .unwrap();
         }
 
         // Edge labels (text on relationship), if present in the oracle. Each

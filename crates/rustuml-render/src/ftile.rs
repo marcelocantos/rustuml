@@ -39,7 +39,13 @@ pub struct FtileGeometry {
 
 impl FtileGeometry {
     pub fn new(width: f64, height: f64, left: f64, in_y: f64, out_y: Option<f64>) -> Self {
-        Self { width, height, left, in_y, out_y }
+        Self {
+            width,
+            height,
+            left,
+            in_y,
+            out_y,
+        }
     }
 
     /// `getRight()` = width − left (the extent to the right of the spine).
@@ -58,7 +64,13 @@ impl FtileGeometry {
         let width = (self.width + dx1).max(other.width + dx2);
         let height = self.height + other.height;
         let out_y = other.out_y.map(|o| o + self.height);
-        FtileGeometry { width, height, left, in_y: self.in_y, out_y }
+        FtileGeometry {
+            width,
+            height,
+            left,
+            in_y: self.in_y,
+            out_y,
+        }
     }
 
     /// `addTop`: reserve `north` above; shifts in_y/out_y down.
@@ -73,27 +85,43 @@ impl FtileGeometry {
 
     /// `addBottom`: reserve `south` below; anchors unchanged.
     pub fn add_bottom(&self, south: f64) -> FtileGeometry {
-        FtileGeometry { height: self.height + south, ..*self }
+        FtileGeometry {
+            height: self.height + south,
+            ..*self
+        }
     }
 
     /// `incLeft`: widen on the left, moving the spine right with it.
     pub fn inc_left(&self, missing: f64) -> FtileGeometry {
-        FtileGeometry { width: self.width + missing, left: self.left + missing, ..*self }
+        FtileGeometry {
+            width: self.width + missing,
+            left: self.left + missing,
+            ..*self
+        }
     }
 
     /// `incRight`: widen on the right; spine unchanged.
     pub fn inc_right(&self, missing: f64) -> FtileGeometry {
-        FtileGeometry { width: self.width + missing, ..*self }
+        FtileGeometry {
+            width: self.width + missing,
+            ..*self
+        }
     }
 
     /// `incHeight`: grow height only (anchors unchanged).
     pub fn inc_height(&self, north: f64) -> FtileGeometry {
-        FtileGeometry { height: self.height + north, ..*self }
+        FtileGeometry {
+            height: self.height + north,
+            ..*self
+        }
     }
 
     /// `incInY`: shift the in anchor down; height and out unchanged.
     pub fn inc_in_y(&self, missing: f64) -> FtileGeometry {
-        FtileGeometry { in_y: self.in_y + missing, ..*self }
+        FtileGeometry {
+            in_y: self.in_y + missing,
+            ..*self
+        }
     }
 
     /// `incVertically`: reserve `missing1` above the in anchor and `missing2`
@@ -120,12 +148,20 @@ impl FtileGeometry {
 
     /// `addMarginX`: pad both sides equally; the spine recentres.
     pub fn add_margin_x(&self, margin: f64) -> FtileGeometry {
-        FtileGeometry { width: self.width + 2.0 * margin, left: self.left + margin, ..*self }
+        FtileGeometry {
+            width: self.width + 2.0 * margin,
+            left: self.left + margin,
+            ..*self
+        }
     }
 
     /// `addMarginX(m1, m2)`: pad the two sides independently.
     pub fn add_margin_x2(&self, margin1: f64, margin2: f64) -> FtileGeometry {
-        FtileGeometry { width: self.width + margin1 + margin2, left: self.left + margin1, ..*self }
+        FtileGeometry {
+            width: self.width + margin1 + margin2,
+            left: self.left + margin1,
+            ..*self
+        }
     }
 
     /// `fixedHeight`: force the height, keeping anchors.
@@ -135,12 +171,19 @@ impl FtileGeometry {
 
     /// `ensureHeight`: grow to `new_height` only if currently shorter.
     pub fn ensure_height(&self, new_height: f64) -> FtileGeometry {
-        if self.height > new_height { *self } else { self.fixed_height(new_height) }
+        if self.height > new_height {
+            *self
+        } else {
+            self.fixed_height(new_height)
+        }
     }
 
     /// `withoutPointOut`: drop the out anchor (mark terminal).
     pub fn without_point_out(&self) -> FtileGeometry {
-        FtileGeometry { out_y: None, ..*self }
+        FtileGeometry {
+            out_y: None,
+            ..*self
+        }
     }
 
     /// `hasPointOut`.
@@ -178,7 +221,14 @@ impl FtileGeometry {
     /// `FtileBox` (action): the text block inflated by the style padding;
     /// `left` centres the spine. Caller supplies the already-measured content
     /// width/height and the per-side padding (from the resolved style).
-    pub fn box_tile(text_w: f64, text_h: f64, pad_l: f64, pad_r: f64, pad_t: f64, pad_b: f64) -> Self {
+    pub fn box_tile(
+        text_w: f64,
+        text_h: f64,
+        pad_l: f64,
+        pad_r: f64,
+        pad_t: f64,
+        pad_b: f64,
+    ) -> Self {
         let width = text_w + pad_l + pad_r;
         let height = text_h + pad_t + pad_b;
         Self::new(width, height, width / 2.0, 0.0, Some(height))
@@ -202,7 +252,10 @@ impl FtileGeometry {
         let (w, h) = if label_w == 0.0 || label_h == 0.0 {
             (HEXAGON_HALF * 2.0, HEXAGON_HALF * 2.0)
         } else {
-            (label_w.max(HEXAGON_HALF * 2.0) + HEXAGON_HALF * 2.0, label_h.max(HEXAGON_HALF * 2.0))
+            (
+                label_w.max(HEXAGON_HALF * 2.0) + HEXAGON_HALF * 2.0,
+                label_h.max(HEXAGON_HALF * 2.0),
+            )
         };
         Self::new(w, h, w / 2.0, 0.0, Some(h))
     }
@@ -220,7 +273,11 @@ impl FtileGeometry {
         let diamond = Self::diamond_alone(label_w, label_h);
         let height = diamond.height + north_h;
         let left = diamond.width / 2.0;
-        let width = if north_w > left { left + north_w } else { diamond.width };
+        let width = if north_w > left {
+            left + north_w
+        } else {
+            diamond.width
+        };
         Self::new(width, height, left, 0.0, Some(diamond.height))
     }
 
@@ -351,9 +408,14 @@ pub fn repeat_tile(
     if let Some(b) = backward {
         width += b.width;
     }
-    let height =
-        diamond1.height + repeat.height + diamond2.height + 8.0 * HEXAGON_HALF;
-    FtileGeometry::new(width + 2.0 * HEXAGON_HALF, height, get_left, 0.0, Some(height))
+    let height = diamond1.height + repeat.height + diamond2.height + 8.0 * HEXAGON_HALF;
+    FtileGeometry::new(
+        width + 2.0 * HEXAGON_HALF,
+        height,
+        get_left,
+        0.0,
+        Some(height),
+    )
 }
 
 /// `FtileForkInner.calculateDimensionFtile`: the branches laid side by side
@@ -365,7 +427,13 @@ pub fn fork_inner(forks: &[FtileGeometry]) -> Option<FtileGeometry> {
     }
     let width: f64 = forks.iter().map(|f| f.width).sum();
     let height = forks.iter().map(|f| f.height).fold(0.0_f64, f64::max);
-    Some(FtileGeometry::new(width, height, width / 2.0, 0.0, Some(height)))
+    Some(FtileGeometry::new(
+        width,
+        height,
+        width / 2.0,
+        0.0,
+        Some(height),
+    ))
 }
 
 /// `FtileSwitchNude.calculateDimensionInternalSlow`: branch tiles laid
@@ -399,13 +467,22 @@ pub fn switch_with_diamonds(
     let last = &tiles[tiles.len() - 1];
 
     let w13 = diamond1.width - first.right() - last.left;
-    let w9: f64 = tiles[1..tiles.len().saturating_sub(1)].iter().map(|t| t.width).sum();
+    let w9: f64 = tiles[1..tiles.len().saturating_sub(1)]
+        .iter()
+        .map(|t| t.width)
+        .sum();
 
     if w13 > w9 {
         // BIG_DIAMOND
         let height = diamond1.height + nude.height + diamond2.height + Y_DELTA_1A + Y_DELTA_1B;
         let width = first.width + SUPP15 + w13 + SUPP15 + last.width;
-        FtileGeometry::new(width, height, first.left + SUPP15 + diamond1.left, 0.0, Some(height))
+        FtileGeometry::new(
+            width,
+            height,
+            first.left + SUPP15 + diamond1.left,
+            0.0,
+            Some(height),
+        )
     } else {
         // SMALL_DIAMOND
         let all = diamond1.append_bottom(&nude).append_bottom(diamond2);
@@ -446,14 +523,22 @@ pub fn while_layout(
     let body_t = (total.left - body.left, body_y);
     let backward_t = backward.map(|b| (total.width - b.width, (total.height - b.height) / 2.0));
     let special_t = special.map(|s| {
-        let half = (diamond1.out_y.expect("while test diamond has an out anchor") - diamond1.in_y)
+        let half = (diamond1
+            .out_y
+            .expect("while test diamond has an out anchor")
+            - diamond1.in_y)
             / 2.0;
         let y1 = (3.0 * half).max(4.0 * HEXAGON_HALF);
         let x_while = body_t.0 - HEXAGON_HALF;
         let x_diamond = diamond1_t.0;
         (x_while.min(x_diamond) - s.width, y1)
     });
-    WhileLayout { diamond1: diamond1_t, body: body_t, backward: backward_t, special: special_t }
+    WhileLayout {
+        diamond1: diamond1_t,
+        body: body_t,
+        backward: backward_t,
+        special: special_t,
+    }
 }
 
 /// Child offsets within an `FtileRepeat`.
@@ -476,9 +561,17 @@ pub fn repeat_layout(
     let space = total.height - diamond1.height - diamond2.height - repeat.height;
     let repeat_t = (total.left - repeat.left, diamond1.height + space / 2.0);
     let diamond1_t = (total.left - diamond1.width / 2.0, 0.0);
-    let diamond2_t = (total.left - diamond2.width / 2.0, total.height - diamond2.height);
+    let diamond2_t = (
+        total.left - diamond2.width / 2.0,
+        total.height - diamond2.height,
+    );
     let backward_t = backward.map(|b| (total.width - b.width, (total.height - b.height) / 2.0));
-    RepeatLayout { diamond1: diamond1_t, diamond2: diamond2_t, repeat: repeat_t, backward: backward_t }
+    RepeatLayout {
+        diamond1: diamond1_t,
+        diamond2: diamond2_t,
+        repeat: repeat_t,
+        backward: backward_t,
+    }
 }
 
 /// Child offsets within an `FtileIfWithDiamonds`.
@@ -506,7 +599,10 @@ pub fn if_layout(
     let branch_y = y_delta_note + diamond1.height + y_delta_1a;
     IfLayout {
         diamond1: (total.left - diamond1.left, y_delta_note),
-        diamond2: (total.left - diamond2.width / 2.0, total.height - diamond2.height),
+        diamond2: (
+            total.left - diamond2.width / 2.0,
+            total.height - diamond2.height,
+        ),
         branch1: (x_delta_note, branch_y),
         branch2: (total.width - tile2.width - supp_width_node, branch_y),
     }
@@ -583,9 +679,15 @@ mod tests {
 
     #[test]
     fn diamond_empty_reserves_north_above() {
-        assert_eq!(FtileGeometry::diamond_empty(0.0), FtileGeometry::new(24.0, 24.0, 12.0, 0.0, Some(24.0)));
+        assert_eq!(
+            FtileGeometry::diamond_empty(0.0),
+            FtileGeometry::new(24.0, 24.0, 12.0, 0.0, Some(24.0))
+        );
         // north_h reserved above the in anchor (inY = north_h).
-        assert_eq!(FtileGeometry::diamond_empty(14.0), FtileGeometry::new(24.0, 38.0, 12.0, 14.0, Some(38.0)));
+        assert_eq!(
+            FtileGeometry::diamond_empty(14.0),
+            FtileGeometry::new(24.0, 38.0, 12.0, 14.0, Some(38.0))
+        );
     }
 
     #[test]
@@ -596,12 +698,18 @@ mod tests {
             FtileGeometry::new(54.0, 34.0, 27.0, 0.0, Some(24.0))
         );
         // empty label collapses to 24×24.
-        assert_eq!(FtileGeometry::diamond_inside(0.0, 0.0, 0.0), FtileGeometry::new(24.0, 24.0, 12.0, 0.0, Some(24.0)));
+        assert_eq!(
+            FtileGeometry::diamond_inside(0.0, 0.0, 0.0),
+            FtileGeometry::new(24.0, 24.0, 12.0, 0.0, Some(24.0))
+        );
     }
 
     #[test]
     fn diamond_square_pads_both_axes() {
-        assert_eq!(FtileGeometry::diamond_square(40.0, 16.0), FtileGeometry::new(64.0, 40.0, 32.0, 0.0, Some(40.0)));
+        assert_eq!(
+            FtileGeometry::diamond_square(40.0, 16.0),
+            FtileGeometry::new(64.0, 40.0, 32.0, 0.0, Some(40.0))
+        );
     }
 
     #[test]
@@ -664,7 +772,10 @@ mod tests {
             FtileGeometry::new(40.0, 30.0, 20.0, 0.0, Some(30.0)),
             FtileGeometry::new(60.0, 50.0, 30.0, 0.0, Some(50.0)),
         ];
-        assert_eq!(fork_inner(&forks), Some(FtileGeometry::new(100.0, 50.0, 50.0, 0.0, Some(50.0))));
+        assert_eq!(
+            fork_inner(&forks),
+            Some(FtileGeometry::new(100.0, 50.0, 50.0, 0.0, Some(50.0)))
+        );
         assert_eq!(fork_inner(&[]), None);
     }
 
@@ -676,7 +787,10 @@ mod tests {
             FtileGeometry::new(30.0, 20.0, 15.0, 0.0, Some(20.0)),
         ];
         // width = 120 + 20*2 = 160; height = 40 + 100 = 140; out None.
-        assert_eq!(switch_nude(&tiles, 20.0), Some(FtileGeometry::new(160.0, 140.0, 80.0, 0.0, None)));
+        assert_eq!(
+            switch_nude(&tiles, 20.0),
+            Some(FtileGeometry::new(160.0, 140.0, 80.0, 0.0, None))
+        );
     }
 
     #[test]

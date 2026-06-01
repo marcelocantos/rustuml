@@ -2962,17 +2962,14 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                             let label = process_label(&msg.label);
                             let label_w = text_width(&label, MSG_FONT_SIZE);
 
-                            let autonumber_extra =
-                                if let Some((_, w, _)) = spacing_auto.current() {
-                                    w + AUTONUMBER_LABEL_GAP
-                                } else {
-                                    0.0
-                                };
+                            let autonumber_extra = if let Some((_, w, _)) = spacing_auto.current() {
+                                w + AUTONUMBER_LABEL_GAP
+                            } else {
+                                0.0
+                            };
 
-                            let text_pref = autonumber_extra
-                                + label_w
-                                + MSG_TEXT_LEFT_PAD
-                                + MSG_TEXT_LEFT_PAD;
+                            let text_pref =
+                                autonumber_extra + label_w + MSG_TEXT_LEFT_PAD + MSG_TEXT_LEFT_PAD;
                             let arrow_only_w = text_pref.max(SELF_MSG_MIN_PREF_WIDTH);
 
                             // Lifeline segment length at this level: left shift
@@ -4399,10 +4396,9 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
         let text_length = text_render::measure(header, HEADER_FONT_SIZE as f64, false);
         let x = svg_width_exact - text_length - 6.0;
         let header_line = diagram.meta.header_line.unwrap_or(1);
-        svg.buf
-            .push_str(&format!(
-                r#"<g class="header" data-source-line="{header_line}">"#
-            ));
+        svg.buf.push_str(&format!(
+            r#"<g class="header" data-source-line="{header_line}">"#
+        ));
         text_render::emit_text(
             &mut svg.buf,
             header,
@@ -5697,7 +5693,8 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                 // its baseline DELAY_BAND_TOP_PAD + MSG_BASE_STEP + ascent(11)
                 // below the band top (= msg_y - band_height).
                 let label_w = text_width(t, DELAY_LABEL_FONT_SIZE as f64);
-                let label_y = msg_y - DELAY_BAND_HEIGHT
+                let label_y = msg_y
+                    - DELAY_BAND_HEIGHT
                     - plantuml_metrics::text_height(DELAY_LABEL_FONT_SIZE as f64)
                     + DELAY_BAND_TOP_PAD
                     + MSG_BASE_STEP
@@ -6318,15 +6315,14 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
         // footer is wider than the span the diagram was already shifted right
         // (see meta_shift), so this resolves to x=0 for the widest band and to a
         // positive inset for narrower footers (seq_footer_variant_02..04).
-        let footer_x = if let (Some(first), Some(last)) =
-            (participants.first(), participants.last())
-        {
-            let center = (first.box_x + last.box_x + last.box_width - 1.0) / 2.0;
-            let w = text_render::measure(footer, FOOTER_FONT_SIZE as f64, false);
-            (center - w / 2.0).max(0.0)
-        } else {
-            0.0
-        };
+        let footer_x =
+            if let (Some(first), Some(last)) = (participants.first(), participants.last()) {
+                let center = (first.box_x + last.box_x + last.box_width - 1.0) / 2.0;
+                let w = text_render::measure(footer, FOOTER_FONT_SIZE as f64, false);
+                (center - w / 2.0).max(0.0)
+            } else {
+                0.0
+            };
         svg.buf
             .push_str(r#"<g class="footer" data-source-line="1">"#);
         text_render::emit_text(

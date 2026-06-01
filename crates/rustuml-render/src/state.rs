@@ -1423,10 +1423,7 @@ pub fn render_with_oracle(
                         // value, which can drift by sub-ulp amounts versus
                         // PlantUML's own text measurement.
                         let text_w = if state_name_is_mono {
-                            crate::plantuml_metrics::mono_text_width(
-                                label,
-                                state_name_font_size,
-                            )
+                            crate::plantuml_metrics::mono_text_width(label, state_name_font_size)
                         } else {
                             text_render::measure(label, state_name_font_size, state_name_bold)
                         };
@@ -1446,9 +1443,8 @@ pub fn render_with_oracle(
                             // user-supplied family with the fixed-advance mono
                             // width. State names are plain identifiers, so a
                             // single un-styled `<text>` matches PlantUML exactly.
-                            let fam = escape_attr(
-                                state_font_name.as_deref().unwrap_or("monospace"),
-                            );
+                            let fam =
+                                escape_attr(state_font_name.as_deref().unwrap_or("monospace"));
                             write!(
                                 svg,
                                 r#"<text fill="{TEXT_COLOR}" font-family="{fam}" font-size="{}" lengthAdjust="spacing" textLength="{}" x="{}" y="{}">{}</text>"#,
