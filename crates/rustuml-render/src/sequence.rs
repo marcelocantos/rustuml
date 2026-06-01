@@ -294,6 +294,49 @@ fn msg_step(has_text: bool) -> f64 {
     MSG_BASE_STEP + if has_text { MSG_TEXT_HEIGHT } else { 0.0 }
 }
 
+/// PlantUML `ComponentRoseReference` geometry for a `ref over … : text` box.
+/// Header ("ref") is 13pt bold; body is 12pt. Faithful port: cornersize 10,
+/// heightFooter 5, xMargin 2, header pad 30+15, marginX1/X2 4, marginY 4.
+/// `header_w`/`header_h` are the integer corner-tab dims; `preferred_h` is the
+/// real box height (rect height = `preferred_h - 5`).
+struct RefBox {
+    header_w: f64,
+    header_h: f64,
+    preferred_h: f64,
+    body_w: f64,
+}
+
+const REF_HEADER_FONT: f64 = 13.0;
+const REF_BODY_FONT: f64 = 12.0;
+const REF_CORNER: f64 = 10.0;
+const REF_FOOTER: f64 = 5.0;
+const REF_XMARGIN: f64 = 2.0;
+/// Participant `outMargin` (ParticipantBox.java): living getMinX = box_x - this,
+/// getMaxX = box_x + box_width + this.
+const REF_OUT_MARGIN: f64 = 5.0;
+/// Vertical gap from the preceding message arrow to the reference box top
+/// (verified against the golden flow: box_top = prev_arrow_y + 8).
+const REF_GAP_ABOVE: f64 = 8.0;
+
+fn ref_box(text: &str) -> RefBox {
+    let ref_label_w = bold_text_width("ref", REF_HEADER_FONT);
+    let header_w = (ref_label_w + 45.0).floor();
+    let header_h = (plantuml_metrics::text_height(REF_HEADER_FONT) + 2.0).floor();
+    let n_lines = text.lines().count().max(1) as f64;
+    let body_w = text
+        .lines()
+        .map(|l| text_width(l, REF_BODY_FONT))
+        .fold(0.0_f64, f64::max);
+    let text_h = n_lines * plantuml_metrics::text_height(REF_BODY_FONT) + 8.0;
+    let preferred_h = text_h + (plantuml_metrics::text_height(REF_HEADER_FONT) + 2.0) + REF_FOOTER;
+    RefBox {
+        header_w,
+        header_h,
+        preferred_h,
+        body_w,
+    }
+}
+
 /// Compute the first-message offset from lifeline top.
 fn first_msg_offset(has_text: bool) -> f64 {
     MSG_BASE_FIRST_OFFSET + if has_text { MSG_TEXT_HEIGHT } else { 0.0 }
@@ -3182,6 +3225,30 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                 }
             }
             Event::Autonumber(cmd) => spacing_auto.apply(cmd),
+            // A `ref over A, …, Z` box must span its covered participants: the
+            // centre-to-centre distance across them is at least the box's
+            // preferred width minus the two end half-boxes.
+            Event::Ref(r) => {
+                let rb = ref_box(&r.text);
+                let pref_w = (rb.body_w + 8.0).max(rb.header_w) + REF_XMARGIN * 2.0;
+                let idxs: Vec<usize> = r
+                    .participants
+                    .iter()
+                    .filter_map(|p| id_to_idx.get(p.as_str()).copied())
+                    .collect();
+                if let (Some(&lo), Some(&hi)) = (idxs.iter().min(), idxs.iter().max())
+                    && hi > lo
+                {
+                    let needed = pref_w
+                        - participants[lo].box_width / 2.0
+                        - participants[hi].box_width / 2.0;
+                    if hi - lo == 1 {
+                        pair_max_label_width[lo] = pair_max_label_width[lo].max(needed);
+                    } else {
+                        multi_span_constraints.push((lo, hi, needed));
+                    }
+                }
+            }
             _ => {}
         }
     }
@@ -3730,6 +3797,24 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                 Event::Space(px_opt) => {
                     y += px_opt.map(|p| p as f64).unwrap_or(20.0);
                     event_y_positions.push(y);
+                }
+                Event::Ref(r) => {
+                    // The reference box top sits REF_GAP_ABOVE below the
+                    // previous arrow; the box consumes `preferred_h` of vertical
+                    // flow measured from that previous arrow, so the next
+                    // message steps from `prev_y + preferred_h` (verified vs the
+                    // golden: box_top = call_y + 8, done = call_y + preferred_h
+                    // + msg_step).
+                    let rb = ref_box(&r.text);
+                    let prev_y = y;
+                    let box_top = if msg_count == 0 {
+                        prev_y + first_msg_offset(false)
+                    } else {
+                        prev_y + REF_GAP_ABOVE
+                    };
+                    event_y_positions.push(box_top);
+                    y = prev_y + rb.preferred_h;
+                    msg_count += 1;
                 }
                 Event::Activate(_, _) | Event::Deactivate(_) => {
                     event_y_positions.push(y);
@@ -6201,18 +6286,76 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                 );
             }
             Event::Ref(r) => {
-                let mid_x = if !participants.is_empty() {
-                    (participants[0].center_x + participants[participants.len() - 1].center_x) / 2.0
-                } else {
-                    50.0
-                };
+                let rb = ref_box(&r.text);
+                let mut r1 = f64::INFINITY;
+                let mut max_x = f64::NEG_INFINITY;
+                for pid in &r.participants {
+                    if let Some(&pi) = id_to_idx.get(pid.as_str()) {
+                        let p = &participants[pi];
+                        r1 = r1.min(p.box_x - REF_OUT_MARGIN);
+                        max_x = max_x.max(p.box_x + p.box_width + REF_OUT_MARGIN);
+                    }
+                }
+                if !r1.is_finite() {
+                    r1 = participants
+                        .first()
+                        .map(|p| p.box_x - REF_OUT_MARGIN)
+                        .unwrap_or(0.0);
+                    max_x = participants
+                        .last()
+                        .map(|p| p.box_x + p.box_width + REF_OUT_MARGIN)
+                        .unwrap_or(100.0);
+                }
+                let pref_w = (rb.body_w + 8.0).max(rb.header_w) + REF_XMARGIN * 2.0;
+                let total_w = (max_x - r1).max(pref_w);
+                let box_top = msg_y;
+                let rect_x = r1 + REF_XMARGIN;
+                let rect_w = total_w - REF_XMARGIN * 2.0;
+                let rect_h = rb.preferred_h - REF_FOOTER;
+                write!(
+                    svg.buf,
+                    r##"<rect fill="none" height="{}" style="stroke:#000000;stroke-width:1.5;" width="{}" x="{}" y="{}"/>"##,
+                    fmt_coord(rect_h),
+                    fmt_coord(rect_w),
+                    fmt_coord(rect_x),
+                    fmt_coord(box_top),
+                )
+                .unwrap();
+                write!(
+                    svg.buf,
+                    r##"<path d="M{x0},{y0} L{x1},{y0} L{x1},{y1} L{x2},{y2} L{x0},{y2} L{x0},{y0}" fill="#EEEEEE" style="stroke:#000000;stroke-width:2;"/>"##,
+                    x0 = fmt_coord(rect_x),
+                    y0 = fmt_coord(box_top),
+                    x1 = fmt_coord(rect_x + rb.header_w),
+                    y1 = fmt_coord(box_top + rb.header_h - REF_CORNER),
+                    x2 = fmt_coord(rect_x + rb.header_w - REF_CORNER),
+                    y2 = fmt_coord(box_top + rb.header_h),
+                )
+                .unwrap();
+                text_render::emit_text(
+                    &mut svg.buf,
+                    "ref",
+                    &TextBase {
+                        x: r1 + 15.0,
+                        y: box_top + 2.0 + plantuml_metrics::ascent(REF_HEADER_FONT),
+                        font_size: 13,
+                        font_family: "sans-serif",
+                        fill: "#000000",
+                        bold: true,
+                        italic: false,
+                        underline: false,
+                        skip_underline: false,
+                    },
+                );
+                let body_x = r1 + (total_w - rb.body_w) / 2.0;
+                let body_y = box_top + 4.0 + rb.header_h + plantuml_metrics::ascent(REF_BODY_FONT);
                 text_render::emit_text(
                     &mut svg.buf,
                     &r.text,
                     &TextBase {
-                        x: mid_x,
-                        y: msg_y + 4.0,
-                        font_size: 13,
+                        x: body_x,
+                        y: body_y,
+                        font_size: 12,
                         font_family: "sans-serif",
                         fill: "#000000",
                         bold: false,
