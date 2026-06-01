@@ -552,10 +552,14 @@ impl ClassParser {
         let stripped_line = strip_arrow_modifiers(line);
         let line = stripped_line.as_str();
         static RE: LazyLock<Regex> = LazyLock::new(|| {
-            // Endpoint may be a bare identifier (`[\w.]+`) or a quoted name
-            // (`"any text"`) so labels with whitespace or punctuation work.
+            // Endpoint may be a bare identifier or a quoted name (`"any text"`)
+            // so labels with whitespace or punctuation work. The bare form
+            // accepts `:` and `/` so custom-namespace-separated names
+            // (`set namespaceSeparator ::` → `com::service::UserService`) match
+            // as a single endpoint rather than truncating at the first
+            // separator char.
             Regex::new(
-                r#"^(?:"([^"]+)"|([\w.]+))\s*(?:"([^"]+)")?\s*((?:<\|--\|>|<\.\.>|<\|--|--\|>|\.\.\|>|<\|\.\.|<\.\.|\*--|--\*|o--|--o|<-->|<--|-->|->|<-|-{2,}|\.\.|\.\.>))\s*(?:"([^"]+)")?\s*(?:"([^"]+)"|([\w.]+))(?:\s*:\s*(.+))?$"#,
+                r#"^(?:"([^"]+)"|([\w./:]+))\s*(?:"([^"]+)")?\s*((?:<\|--\|>|<\.\.>|<\|--|--\|>|\.\.\|>|<\|\.\.|<\.\.|\*--|--\*|o--|--o|<-->|<--|-->|->|<-|-{2,}|\.\.|\.\.>))\s*(?:"([^"]+)")?\s*(?:"([^"]+)"|([\w./:]+))(?:\s*:\s*(.+))?$"#,
             )
             .unwrap()
         });

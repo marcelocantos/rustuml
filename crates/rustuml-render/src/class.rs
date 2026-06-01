@@ -58,6 +58,11 @@ const MEMBER_LINE_HEIGHT: f64 = 16.48828125;
 const FIRST_MEMBER_OFFSET: f64 = 17.53515625;
 /// Subsequent member baseline spacing.
 const MEMBER_SPACING: f64 = 16.48828125;
+/// Baseline rise of a labelled-separator caption above its divider rule.
+/// PlantUML positions the caption at `lineY - titleHeight/2 - 0.5`
+/// (`UHorizontalLine.drawTitleInternal`); the text baseline then sits a
+/// further `ascent` below that top, netting to this constant at 14px.
+const LABEL_SEP_TEXT_RISE: f64 = 4.791015625;
 /// Offset from entity x to member text start.
 const MEMBER_TEXT_OFFSET: f64 = 20.0;
 /// Offset from entity x to enum constant text start.
@@ -584,6 +589,55 @@ fn translate_qualified_name(label: &str) -> String {
         .collect()
 }
 
+/// Compute an entity's `data-qualified-name` the way PlantUML's Quark does.
+///
+/// PlantUML names entities by their position in the namespace tree: the
+/// qualified name is the parent path joined to the leaf by the namespace
+/// separator, with `:`/`/` (and other ASCII punctuation) mapped to `.` for the
+/// SVG attribute (`translate_qualified_name`).
+///
+/// Custom-namespace entities (`set namespaceSeparator ::`, `/`, …) carry their
+/// full separated path in `entity.id` and live inside auto-created namespace
+/// packages whose `name` is a proper prefix of that path. For those, the
+/// qualified name is simply the translated id. User-declared packages
+/// (`package Foo { class Bar }`) instead keep the short name in `entity.id`,
+/// so the qualified name is the chain of containing package names plus the
+/// (translated) short label.
+fn compute_qualified_name(entity: &ClassEntity, packages: &[Package]) -> String {
+    let translated_label = translate_qualified_name(&entity.label);
+    // Namespace-qualified: a containing package's name is a strict prefix *path*
+    // of this entity's id — the id continues past the package name with a
+    // separator character (`::`/`/`/`.`), e.g. package `com::example` contains
+    // `com::example::MyClass`. The id already encodes the full path, so the
+    // qualified name is the translated id. The separator guard prevents a
+    // coincidental prefix match (user package `Inner` vs class `InnerClass`),
+    // which must instead use the chain branch (`Inner.InnerClass`).
+    let is_namespaced = packages.iter().any(|p| {
+        p.entities.iter().any(|e| e == &entity.id)
+            && entity.id.len() > p.name.len()
+            && entity.id.starts_with(p.name.as_str())
+            && entity.id[p.name.len()..]
+                .chars()
+                .next()
+                .is_some_and(|c| !c.is_alphanumeric() && c != '_')
+    });
+    if is_namespaced {
+        return translate_qualified_name(&entity.id);
+    }
+    // User-package containment: join package names with the leaf label.
+    let mut chain: Vec<&str> = packages
+        .iter()
+        .filter(|p| p.entities.iter().any(|e| e == &entity.id))
+        .map(|p| p.name.as_str())
+        .collect();
+    if chain.is_empty() {
+        translated_label
+    } else {
+        chain.push(translated_label.as_str());
+        chain.join(".")
+    }
+}
+
 fn escape_xml(s: &str) -> String {
     s.replace('&', "&amp;")
         .replace('<', "&lt;")
@@ -871,21 +925,8 @@ pub fn render_with_oracle(
         // join of all containing packages followed by the entity label;
         // `&` characters in the label are translated to `.` to match
         // Java's qualified-name encoding.
-        let qual = |entity: &ClassEntity| -> String {
-            let translated = translate_qualified_name(&entity.label);
-            let mut chain: Vec<String> = diagram
-                .packages
-                .iter()
-                .filter(|p| p.entities.iter().any(|e| e == &entity.id))
-                .map(|p| p.name.clone())
-                .collect();
-            if chain.is_empty() {
-                translated
-            } else {
-                chain.push(translated);
-                chain.join(".")
-            }
-        };
+        let qual =
+            |entity: &ClassEntity| -> String { compute_qualified_name(entity, &diagram.packages) };
 
         // Override dims with oracle entity dimensions.
         let mut dims = dims;
@@ -1141,8 +1182,6 @@ fn render_plantuml_svg(
     for (i, entity) in diagram.entities.iter().enumerate() {
         let (x, y) = entity_positions[i];
         let dim = &dims[i];
-        let current_ent_id = format!("ent{:04}", ent_id);
-        ent_id += 1;
 
         // Compute qualified name by joining all containing package names
         // (outermost → innermost in package declaration order) with the
@@ -1150,21 +1189,7 @@ fn render_plantuml_svg(
         // `data-qualified-name` attribute, including its translation of
         // `&` → `.` (used when entities are quoted with special chars,
         // e.g. `"A&B"`).
-        let translated_label = translate_qualified_name(&entity.label);
-        let qualified_name: String = {
-            let mut chain: Vec<&str> = diagram
-                .packages
-                .iter()
-                .filter(|p| p.entities.iter().any(|e| e == &entity.id))
-                .map(|p| p.name.as_str())
-                .collect();
-            if chain.is_empty() {
-                translated_label.clone()
-            } else {
-                chain.push(translated_label.as_str());
-                chain.join(".")
-            }
-        };
+        let qualified_name: String = compute_qualified_name(entity, &diagram.packages);
 
         // Look up oracle overrides for this entity. Try qualified name
         // first (for entities inside clusters), then the bare label and
@@ -1175,6 +1200,17 @@ fn render_plantuml_svg(
                 .or_else(|| orc.entities.get(&entity.label))
                 .or_else(|| orc.entities.get(&entity.id))
         });
+
+        // PlantUML allocates the `entN` counter in declaration order, which for
+        // custom-namespace entities numbers the leaf class BEFORE the
+        // back-filled namespace clusters (unlike user packages, where the
+        // cluster precedes its contents). The oracle records the exact id, so
+        // prefer it; fall back to the sequential counter (shifted past the
+        // clusters) when no oracle is present.
+        let current_ent_id = oracle_rect
+            .and_then(|r| r.entity_id.clone())
+            .unwrap_or_else(|| format!("ent{:04}", ent_id));
+        ent_id += 1;
 
         // HTML comment before entity.
         write!(svg, "<!--class {}-->", entity.label).unwrap();
@@ -1698,7 +1734,53 @@ fn render_entity_content(
     let header_only = both_compartments_hidden;
     let effectively_no_members = !any_compartment_hidden && entity.members.is_empty();
 
-    if header_only {
+    // PlantUML's body layout (BodyEnhanced2) splits members on block separators
+    // (`--`/`..`/`==`/`__`, optionally with a `-- title --` caption) into a
+    // vertical stack of blocks, each preceded by a divider rule. The
+    // fields/methods bifurcation below only models a single field→method
+    // divider (plus entity-table inline field dividers); it cannot represent
+    // two or more interspersed separators (multiple sections, leading dividers,
+    // dividers among methods or enum constants). When the entity carries ≥2
+    // separators, render the whole body in document order, replaying PlantUML's
+    // per-block divider+caption algorithm.
+    let separator_count = entity
+        .members
+        .iter()
+        .filter(|m| m.kind == MemberKind::Separator)
+        .count();
+    let document_order_body =
+        separator_count >= 2 && !any_compartment_hidden && !entity.members.is_empty();
+
+    if document_order_body {
+        let header_sep_y = oracle_sep_y.first().copied().unwrap_or(header_sep_default);
+        write!(
+            svg,
+            r#"<line style="{}" x1="{}" x2="{}" y1="{}" y2="{}"/>"#,
+            sep_style,
+            fmt4(sep_x1),
+            fmt4(sep_x2),
+            fmt4(header_sep_y),
+            fmt4(header_sep_y),
+        )
+        .unwrap();
+        let oracle_lines = oracle_rect.map(|r| r.lines.as_slice()).unwrap_or(&[]);
+        render_body_document_order(
+            svg,
+            entity,
+            x,
+            is_enum_entity,
+            member_fill,
+            sep_x1,
+            sep_x2,
+            sep_style,
+            oracle_text_y,
+            oracle_sep_y,
+            oracle_lines,
+            oracle_vis_y,
+            text_header_count,
+            header_sep_y,
+        );
+    } else if header_only {
         // Nothing to emit after the header content.
     } else if collapsing_hide_one_section {
         let visible_members: Vec<&Member> = entity
@@ -2169,6 +2251,275 @@ fn render_entity_content(
     }
 }
 
+/// Replay PlantUML's `BodyEnhanced2` block layout in document order.
+///
+/// The body is split on block separators (`--`/`..`/`==`/`__`, optionally with
+/// a `-- title --` caption) into a vertical stack of blocks. Block 0 has no
+/// leading divider; every later block is preceded by a `TextBlockLineBefore`
+/// rule whose stroke style follows the separator symbol
+/// (`UHorizontalLine.getStroke`): `-`/`=` solid width 1 (and `=` doubles the
+/// rule 2px below), `.` dotted (`1,2` dash), `_` the entity's default border
+/// thickness. A captioned divider draws the rule as two short segments flanking
+/// the centred caption (`firstHalf`/`secondHalf`), and — matching
+/// `TextBlockLineBefore.drawU` — is emitted AFTER the block's member text
+/// (title != null draws the text block first), whereas a plain divider is
+/// emitted before it (title == null draws the line first).
+///
+/// The header separator (rule directly below the icon/name) is emitted by the
+/// caller; `header_sep_y` is its y (the fallback for an empty block 0).
+/// Geometry y-values are taken from the oracle (`oracle_text_y` for member and
+/// caption baselines, `oracle_sep_y` for divider rules, `oracle_vis_y` for
+/// visibility-icon centres), consistent with the rest of this renderer; the
+/// divider styles and caption x-split are computed from the Java algorithm.
+#[allow(clippy::too_many_arguments)]
+fn render_body_document_order(
+    svg: &mut String,
+    entity: &ClassEntity,
+    x: f64,
+    is_enum_entity: bool,
+    member_fill: &str,
+    sep_x1: f64,
+    sep_x2: f64,
+    sep_style: &str,
+    oracle_text_y: &[f64],
+    oracle_sep_y: &[f64],
+    oracle_lines: &[crate::layout_oracle::EntityLine],
+    oracle_vis_y: &[f64],
+    text_header_count: usize,
+    header_sep_y: f64,
+) {
+    // Group members into blocks. Block 0 is the run before the first separator;
+    // each subsequent block carries the leading separator that introduced it.
+    struct Block<'a> {
+        // `None` for block 0 (no leading divider); otherwise `(symbol, label)`.
+        sep: Option<(String, Option<String>)>,
+        members: Vec<&'a Member>,
+    }
+    let mut blocks: Vec<Block> = vec![Block {
+        sep: None,
+        members: Vec::new(),
+    }];
+    for m in &entity.members {
+        if m.kind == MemberKind::Separator {
+            let symbol = m.return_type.clone().unwrap_or_else(|| "--".to_string());
+            let label = if m.display_text.is_empty() {
+                None
+            } else {
+                Some(m.display_text.clone())
+            };
+            blocks.push(Block {
+                sep: Some((symbol, label)),
+                members: Vec::new(),
+            });
+        } else {
+            blocks.last_mut().unwrap().members.push(m);
+        }
+    }
+
+    // Cursors into the oracle geometry, advanced in document order.
+    let mut text_idx = text_header_count;
+    let mut sep_idx = 1usize; // index 0 was the header separator (caller-emitted)
+    let mut vis_idx = 0usize;
+    // Running fallback baselines/divider-y when the oracle is absent.
+    let mut fallback_y = header_sep_y + FIRST_MEMBER_OFFSET;
+
+    let emit_members = |svg: &mut String,
+                        members: &[&Member],
+                        narrow: bool,
+                        text_idx: &mut usize,
+                        vis_idx: &mut usize,
+                        fallback_y: &mut f64| {
+        for member in members {
+            let eff_y = oracle_text_y.get(*text_idx).copied().unwrap_or(*fallback_y);
+            *text_idx += 1;
+            let vis_ov = if member.visibility != Visibility::Default {
+                let v = oracle_vis_y.get(*vis_idx).copied();
+                *vis_idx += 1;
+                v
+            } else {
+                None
+            };
+            render_member_line(svg, member, x, eff_y, vis_ov, narrow, member_fill);
+            *fallback_y += MEMBER_SPACING;
+        }
+    };
+
+    // A separator's stroke style follows its symbol (UHorizontalLine.getStroke).
+    let divider_style = |symbol: &str| -> String {
+        match symbol {
+            "--" | "==" => format!("stroke:{};stroke-width:1;", BORDER_COLOR),
+            ".." => format!(
+                "stroke:{};stroke-width:1;stroke-dasharray:1,2;",
+                BORDER_COLOR
+            ),
+            // `__` (and any default) inherits the entity border thickness.
+            _ => sep_style.to_string(),
+        }
+    };
+    let is_double = |symbol: &str| symbol == "==";
+
+    // Emit one divider rule. Prefer the oracle's verbatim x1/x2 for the line at
+    // `idx` (PlantUML's single-rounded float endpoints), falling back to the
+    // supplied computed span. The y is the oracle line's y, falling back to
+    // `fallback_y`.
+    let emit_divider =
+        |svg: &mut String, idx: usize, style: &str, fb_x1: f64, fb_x2: f64, fb_y: f64| {
+            let (lx1, lx2, ly) = oracle_lines
+                .get(idx)
+                .map(|l| {
+                    (
+                        l.x1.parse::<f64>().unwrap_or(fb_x1),
+                        l.x2.parse::<f64>().unwrap_or(fb_x2),
+                        l.y1.parse::<f64>().unwrap_or(fb_y),
+                    )
+                })
+                .unwrap_or((fb_x1, fb_x2, fb_y));
+            write!(
+                svg,
+                r#"<line style="{}" x1="{}" x2="{}" y1="{}" y2="{}"/>"#,
+                style,
+                fmt4(lx1),
+                fmt4(lx2),
+                fmt_tl(ly),
+                fmt_tl(ly),
+            )
+            .unwrap();
+        };
+
+    for block in &blocks {
+        // `hasSmallIcon` is evaluated per MethodsOrFieldsArea block: the block
+        // gets the icon column (wide text inset) iff any of its members carries
+        // a visibility modifier. Enum entities always lay constants flush-left.
+        let narrow = is_enum_entity
+            || block
+                .members
+                .iter()
+                .all(|m| m.visibility == Visibility::Default);
+
+        match &block.sep {
+            None => {
+                // Block 0: no leading divider.
+                emit_members(
+                    svg,
+                    &block.members,
+                    narrow,
+                    &mut text_idx,
+                    &mut vis_idx,
+                    &mut fallback_y,
+                );
+            }
+            Some((symbol, label)) => {
+                let style = divider_style(symbol);
+                let double = is_double(symbol);
+                // First divider-line y (the doubled `==` line sits +2 below).
+                let line_y = oracle_sep_y.get(sep_idx).copied().unwrap_or(fallback_y);
+                // Number of horizontal rules per segment: 2 for a `==` double
+                // rule, 1 otherwise.
+                let rules = if double { 2usize } else { 1usize };
+                match label {
+                    None => {
+                        // Plain divider: full-width rule(s), emitted BEFORE the
+                        // block's members (TextBlockLineBefore, title == null).
+                        for k in 0..rules {
+                            emit_divider(
+                                svg,
+                                sep_idx,
+                                &style,
+                                sep_x1,
+                                sep_x2,
+                                line_y + 2.0 * k as f64,
+                            );
+                            sep_idx += 1;
+                        }
+                        emit_members(
+                            svg,
+                            &block.members,
+                            narrow,
+                            &mut text_idx,
+                            &mut vis_idx,
+                            &mut fallback_y,
+                        );
+                    }
+                    Some(label) => {
+                        // Captioned divider: the member text draws first
+                        // (TextBlockLineBefore, title != null), then the rule
+                        // splits around the centred caption (firstHalf/
+                        // secondHalf). The oracle records the segments in the
+                        // order: left rule(s), then right rule(s).
+                        emit_members(
+                            svg,
+                            &block.members,
+                            narrow,
+                            &mut text_idx,
+                            &mut vis_idx,
+                            &mut fallback_y,
+                        );
+                        // The caption sits flush against the right end of the
+                        // left segment; recover that x from the oracle line,
+                        // falling back to the computed firstHalf split.
+                        let left_idx = sep_idx;
+                        let title_w = text_render::measure_no_underline(label, 14.0, false);
+                        let half = (sep_x2 - sep_x1 - title_w) / 2.0;
+                        let fb_left = round_4dp(sep_x1 + half);
+                        let fb_right = round_4dp(sep_x2 - half);
+                        let text_left = oracle_lines
+                            .get(left_idx)
+                            .and_then(|l| l.x2.parse::<f64>().ok())
+                            .unwrap_or(fb_left);
+                        // Left rule(s).
+                        for k in 0..rules {
+                            emit_divider(
+                                svg,
+                                sep_idx,
+                                &style,
+                                sep_x1,
+                                fb_left,
+                                line_y + 2.0 * k as f64,
+                            );
+                            sep_idx += 1;
+                        }
+                        // Centred caption between the two segments.
+                        let caption_y = oracle_text_y
+                            .get(text_idx)
+                            .copied()
+                            .unwrap_or(line_y + LABEL_SEP_TEXT_RISE);
+                        text_idx += 1;
+                        let mut caption_buf = String::new();
+                        text_render::emit_text(
+                            &mut caption_buf,
+                            label,
+                            &TextBase {
+                                x: text_left,
+                                y: caption_y,
+                                font_size: 14,
+                                font_family: "sans-serif",
+                                fill: member_fill,
+                                bold: false,
+                                italic: false,
+                                underline: false,
+                                skip_underline: true,
+                            },
+                        );
+                        svg.push_str(&caption_buf);
+                        // Right rule(s).
+                        for k in 0..rules {
+                            emit_divider(
+                                svg,
+                                sep_idx,
+                                &style,
+                                fb_right,
+                                sep_x2,
+                                line_y + 2.0 * k as f64,
+                            );
+                            sep_idx += 1;
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+
 /// Render a single member line (visibility icon + text).
 /// `vis_icon_y_override`: oracle-provided visibility icon y position (rect y or ellipse cy).
 fn render_member_line(
@@ -2331,12 +2682,46 @@ fn render_oracle_relationships(
         //   "{from}-backto-{to}" — bidirectional / reverse arrows
         // Endpoint ordering may also be flipped when -direction- modifiers
         // change the layout (`A -down-> B` can produce `B-backto-A`).
-        let to_id = format!("{}-to-{}", rel.from, rel.to);
-        let backto_id = format!("{}-backto-{}", rel.from, rel.to);
-        let assoc_id = format!("{}-{}", rel.from, rel.to);
-        let to_id_rev = format!("{}-to-{}", rel.to, rel.from);
-        let backto_id_rev = format!("{}-backto-{}", rel.to, rel.from);
-        let assoc_id_rev = format!("{}-{}", rel.to, rel.from);
+        //
+        // The endpoint name in the path id is the entity's leaf (short) name,
+        // not its full qualified id. For custom-namespace entities
+        // (`com::example::service.ClassA`) the id carries the whole path while
+        // the path id uses the leaf (`service.ClassA`). Strip the longest
+        // containing-namespace-package prefix (and its trailing separator
+        // char). Only namespace packages have a name that is a separator-
+        // delimited prefix of the id, so aliased entities (`class "X" as Foo`,
+        // whose path id uses the code `Foo`, not the display `X`) are left
+        // untouched.
+        let short = |id: &str| -> String {
+            let best_prefix = diagram
+                .packages
+                .iter()
+                .filter(|p| {
+                    p.entities.iter().any(|e| e == id)
+                        && id.len() > p.name.len()
+                        && id.starts_with(p.name.as_str())
+                        && id[p.name.len()..]
+                            .chars()
+                            .next()
+                            .is_some_and(|c| !c.is_alphanumeric() && c != '_')
+                })
+                .map(|p| p.name.len())
+                .max();
+            match best_prefix {
+                Some(plen) => id[plen..]
+                    .trim_start_matches(|c: char| !c.is_alphanumeric() && c != '_')
+                    .to_string(),
+                None => id.to_string(),
+            }
+        };
+        let from_s = short(&rel.from);
+        let to_s = short(&rel.to);
+        let to_id = format!("{}-to-{}", from_s, to_s);
+        let backto_id = format!("{}-backto-{}", from_s, to_s);
+        let assoc_id = format!("{}-{}", from_s, to_s);
+        let to_id_rev = format!("{}-to-{}", to_s, from_s);
+        let backto_id_rev = format!("{}-backto-{}", to_s, from_s);
+        let assoc_id_rev = format!("{}-{}", to_s, from_s);
 
         let (oracle_edge, is_reverse) =
             if let Some(e) = oracle.edges.iter().find(|e| e.id == backto_id) {
