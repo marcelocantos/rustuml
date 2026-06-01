@@ -224,21 +224,27 @@ fn emit_segments(buf: &mut String, segments: &[Segment], base: &TextBase<'_>) ->
     }
 
     // When a line mixes font sizes OR font families, PlantUML bottom-aligns
-    // the runs: all runs share one line bottom, so each run's baseline is
-    // `lineBottom - descent(ownRun)`. The oracle hands us the *first* run's
-    // baseline (the leftmost `<text>` on the line), so the line bottom is
-    // `base.y + descent(firstRun)` and every run's baseline offset from
-    // `base.y` is `descent(firstRun) - descent(ownRun)`. The first run (and
-    // every run on a uniform-metric line) gets a zero offset, so uniform
-    // lines are unaffected. Monospace and sans-serif have different descents
-    // even at the same size, so the run's font family matters too.
+    // the runs to a shared line bottom (`Sea.doAlign` translates each atom by
+    // `-height` so every box bottom sits at the same y; `translateMinYto`
+    // then pins the line top). Each run's baseline within its box is
+    // `boxTop + ascent(ownRun)`, so its distance up from the line bottom is
+    // `boxHeight(ownRun) - ascent(ownRun)`, where `boxHeight = max(textHeight,
+    // 10)` — PlantUML clamps every atom's height to a 10px floor
+    // (`AtomText.calculateDimensionSlow`: `if (h < 10) h = 10`).
+    //
+    // The oracle hands us the *first* run's baseline (the leftmost `<text>` on
+    // the line), so the line bottom is `base.y + clampDrop(firstRun)` and
+    // every run's baseline offset from `base.y` is
+    // `clampDrop(firstRun) - clampDrop(ownRun)`. For sizes whose textHeight is
+    // already ≥ 10 (size ≳ 9) the clamp is inert and `clampDrop == descent`,
+    // so this reduces to the historical descent-difference and uniform lines
+    // are unaffected. The clamp only changes mixed lines that include a
+    // size ≤ 8 run, where the 10px floor lifts the small run's baseline.
+    // Monospace and sans-serif have different metrics even at the same size,
+    // so the run's font family matters too.
     let first = &segments[0];
     let first_size = first.style.size.unwrap_or(base.font_size) as f64;
-    let line_bottom_descent = if first.style.monospace {
-        pm::mono_descent(first_size)
-    } else {
-        pm::descent(first_size)
-    };
+    let line_bottom_drop = clamp_drop(first_size, first.style.monospace);
 
     let mut x = base.x;
     let mut total = 0.0;
@@ -252,12 +258,27 @@ fn emit_segments(buf: &mut String, segments: &[Segment], base: &TextBase<'_>) ->
             &seg.style,
             x + lead_w,
             trimmed_w,
-            line_bottom_descent,
+            line_bottom_drop,
         );
         x += full_w;
         total += full_w;
     }
     total
+}
+
+/// Distance from a run's text baseline up to the shared line bottom when
+/// PlantUML bottom-aligns mixed-metric runs (`Sea` alignment). Equals
+/// `boxHeight - ascent`, where `boxHeight = max(textHeight, 10)` applies
+/// PlantUML's per-atom 10px height floor (`AtomText.calculateDimensionSlow`).
+/// For sizes with `textHeight ≥ 10` (size ≳ 9) the floor is inert and this
+/// equals the plain font descent.
+fn clamp_drop(font_size: f64, monospace: bool) -> f64 {
+    let (text_height, ascent) = if monospace {
+        (pm::mono_text_height(font_size), pm::mono_ascent(font_size))
+    } else {
+        (pm::text_height(font_size), pm::ascent(font_size))
+    };
+    text_height.max(10.0) - ascent
 }
 
 /// Trim leading/trailing ASCII whitespace from a segment's emitted text.
@@ -567,7 +588,7 @@ fn write_text_element(
     style: &Style,
     x: f64,
     width: f64,
-    line_bottom_descent: f64,
+    line_bottom_drop: f64,
 ) {
     let bold = base.bold || style.bold;
     let italic = base.italic || style.italic;
@@ -592,15 +613,13 @@ fn write_text_element(
     // plain <text> with a smaller font-size at a shifted y.
     // Mixed-size lines bottom-align their runs to a shared line bottom. The
     // first run's baseline is `base.y`; every run's baseline is offset by
-    // `descent(firstSize) - descent(ownSize)` so all descenders align. Zero
-    // when this run matches the first run's size (always true on a single-
-    // size line).
-    let own_descent = if style.monospace {
-        pm::mono_descent(nominal_size as f64)
-    } else {
-        pm::descent(nominal_size as f64)
-    };
-    let line_descent_diff = line_bottom_descent - own_descent;
+    // `clampDrop(firstSize) - clampDrop(ownSize)` so all runs share one line
+    // bottom (see `emit_segments`). `clampDrop = max(textHeight,10) - ascent`
+    // reduces to the plain descent for size ≳ 9, so the offset is zero when
+    // this run matches the first run's metrics (always true on a single-size
+    // line).
+    let own_drop = clamp_drop(nominal_size as f64, style.monospace);
+    let line_descent_diff = line_bottom_drop - own_drop;
     let (font_size, y_offset) = match style.baseline_shift {
         Some("sub") => {
             let small = (nominal_size as i32 - 3).max(2) as u32;
