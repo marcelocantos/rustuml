@@ -3332,21 +3332,27 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                 }
                 NotePosition::Left if first_part == Some(0) => {
                     // "note left of" on participant 0: the note extends left from the
-                    // lifeline. The note right edge = floor(lifeline_line_x) - NOTE_LIFELINE_GAP.
+                    // lifeline. The note right edge = floor(lifeline_line_x) - gap.
                     // The note left edge = note_right - note_content_w, which must be >= HEAD_BOX_Y.
-                    // So: lifeline_line_x >= HEAD_BOX_Y + note_content_w + NOTE_LIFELINE_GAP
+                    // So: lifeline_line_x >= HEAD_BOX_Y + note_content_w + gap
                     // And: lifeline_line_x = center_x - box_width/2 + floor(box_width/2)
-                    // Therefore: center_x >= HEAD_BOX_Y + note_content_w + NOTE_LIFELINE_GAP
+                    // Therefore: center_x >= HEAD_BOX_Y + note_content_w + gap
                     //                        + box_width/2 - floor(box_width/2)
+                    // hnote/rnote sit 1px closer to the lifeline than a standard
+                    // note (the same shape offset as note_msg_arrow_offset): their
+                    // box right edge is gap-1 from the lifeline.
                     let max_tw = note
                         .text
                         .lines()
                         .map(|l| text_width(l.trim(), MSG_FONT_SIZE))
                         .fold(0.0_f64, f64::max);
                     let note_content_w = note_content_width(max_tw, note.shape);
+                    let gap = match note.shape {
+                        NoteShape::Note => NOTE_LIFELINE_GAP,
+                        NoteShape::Hexagonal | NoteShape::Rectangular => NOTE_LIFELINE_GAP - 1.0,
+                    };
                     let bw = participants[0].box_width;
-                    let min_cx = HEAD_BOX_Y + note_content_w + NOTE_LIFELINE_GAP + bw / 2.0
-                        - (bw / 2.0).floor();
+                    let min_cx = HEAD_BOX_Y + note_content_w + gap + bw / 2.0 - (bw / 2.0).floor();
                     min_first_center_x = min_first_center_x.max(min_cx);
                 }
                 _ => {}
@@ -6046,7 +6052,15 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                             anchor_xs.first().copied().unwrap_or(50.0)
                         };
                         let ll_x = if ll_x == f64::MAX { 50.0 } else { ll_x };
-                        let right = ll_x.floor() - NOTE_LIFELINE_GAP;
+                        // hnote/rnote box right edge sits 1px closer to the lifeline
+                        // than a standard note (same shape offset used elsewhere).
+                        let gap = match note.shape {
+                            NoteShape::Note => NOTE_LIFELINE_GAP,
+                            NoteShape::Hexagonal | NoteShape::Rectangular => {
+                                NOTE_LIFELINE_GAP - 1.0
+                            }
+                        };
+                        let right = ll_x.floor() - gap;
                         (right - note_content_w, right)
                     }
                     NotePosition::Over => {
