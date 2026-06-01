@@ -395,7 +395,20 @@ struct Lane {
 #[derive(Debug)]
 struct ElseBranch {
     label: Option<String>,
+    /// The `elseif` condition for this branch (`None` = the final bare `else`).
+    /// PlantUML's `FtileIfLongHorizontal` builds one condition diamond per
+    /// `then`/`elseif`; the final `else` has none. Carrying the condition here
+    /// lets the long-chain layout draw the per-elseif diamonds.
+    condition: Option<String>,
     body: Vec<LayoutNode>,
+}
+
+/// True when an `if` node is a genuine `if/elseif/.../else` chain (at least one
+/// `elseif`), which PlantUML renders with `FtileIfLongHorizontal` — a row of
+/// condition diamonds fanning out into branch columns. Detected by any else
+/// branch carrying a condition (an `elseif`).
+fn if_is_long(else_branches: &[ElseBranch]) -> bool {
+    else_branches.iter().any(|b| b.condition.is_some())
 }
 
 #[derive(Debug)]
@@ -619,14 +632,20 @@ fn build_tree_inner(steps: &[ActivityStep]) -> Vec<LayoutNode> {
                 while i < steps.len() {
                     match &steps[i] {
                         ActivityStep::Else(_) | ActivityStep::ElseIf(_) => {
-                            let label = match &steps[i] {
-                                ActivityStep::Else(l) => l.clone(),
-                                ActivityStep::ElseIf(eb) => eb.then_label.clone(),
-                                _ => None,
+                            let (label, condition) = match &steps[i] {
+                                ActivityStep::Else(l) => (l.clone(), None),
+                                ActivityStep::ElseIf(eb) => {
+                                    (eb.then_label.clone(), Some(eb.condition.clone()))
+                                }
+                                _ => (None, None),
                             };
                             i += 1;
                             let body = collect_until_else_or_endif(steps, &mut i);
-                            else_branches.push(ElseBranch { label, body });
+                            else_branches.push(ElseBranch {
+                                label,
+                                condition,
+                                body,
+                            });
                         }
                         ActivityStep::EndIf => {
                             i += 1;
@@ -1417,6 +1436,312 @@ fn if_ftile_layout(
     Some((then_off, else_off, left_ext, right_ext))
 }
 
+// --- FtileIfLongHorizontal (if / elseif* / else) -------------------------
+//
+// PlantUML's `FtileIfLongHorizontal` lays a condition diamond per `then`/
+// `elseif` in a horizontal row, each with its branch column directly below
+// (`FtileAssemblySimple(diamond, branch)` = a "couple"), the diamonds linked
+// left→right by "no"-style connectors, and the final bare `else` (`tile2`)
+// placed to the right of the last diamond. All branch outs collect on a single
+// horizontal merge line at the bottom (`ConnectionHline`).
+//
+// Geometry references (`activitydiagram3/ftile/vcompact/FtileIfLongHorizontal`):
+// - diamonds: `FtileDiamondInside2` (condition text *inside*, `then` label as
+//   `withNorth`, the else label as `withEast` on the LAST diamond), each padded
+//   by `alignDiamonds` → `incVertically(missing/2, 20)`.
+// - branch tiles: `FtileMinWidthCentered(branch, 30)`.
+// - couples placed at `x += couple.width + xSeparation(20)` (`getTranslateCouple1`).
+// - `tile2` at `width − tile2.width` (`getTranslate2`), shifted up by
+//   `getDiamondsHeight/2`.
+// - vertical reserve `max(100, maxOutY)` below the couples (`calculateDimensionInternal`).
+//
+// The one empirical constant is the inter-column *branch* clearance `IF_LONG_BRANCH_GAP`
+// (10): PlantUML's final image compacts the wide-branch columns from the raw
+// `xSeparation`-spaced layout down to a 10px branch gap. The diamond spacing
+// itself remains the sourced `xSeparation = 20`; the column pitch is the max of
+// the diamond requirement and the branch requirement (see `if_long_pitch`).
+
+/// `xSeparation` between adjacent condition diamonds (Java field, = 20).
+const IF_LONG_X_SEP: f64 = 20.0;
+/// Minimum horizontal gap between adjacent branch boxes in the long layout.
+/// Empirically 10 (half the diamond `xSeparation`) — the gap PlantUML's final
+/// horizontal compaction leaves between wide branch columns. Verified across
+/// equal-width, slightly-wide and asymmetric branch cases.
+const IF_LONG_BRANCH_GAP: f64 = 10.0;
+/// Vertical reserve below the couples (`Math.max(100, maxOutY)` with the
+/// single-line `maxOutY = 24 < 100`). Multi-line conditions are out of scope.
+const IF_LONG_BELOW: f64 = 100.0;
+/// `alignDiamonds` bottom margin (`incVertically(_, 20)`).
+const IF_LONG_ALIGN_BOTTOM: f64 = 20.0;
+
+/// One condition column of the long layout.
+struct IfLongCol {
+    /// Diamond polygon width (the `FtileDiamondInside2` "alone" width).
+    diamond_w: f64,
+    /// Branch box width (`FtileMinWidthCentered(branch, 30)`).
+    branch_w: f64,
+    /// Branch box height.
+    branch_h: f64,
+    /// Diamond center x relative to the if-block spine (filled by `if_long_layout`).
+    cx: f64,
+    /// The `then`/`elseif` north label.
+    north: Option<String>,
+    /// The condition text drawn inside the diamond.
+    condition: String,
+}
+
+/// The fully-placed long layout: per-column geometry plus the else tile and the
+/// derived vertical metrics. All x are relative to the if-block spine (x=0);
+/// `tile2_*` describe the final `else` column (which has no diamond).
+struct IfLongLayout {
+    cols: Vec<IfLongCol>,
+    /// East label drawn on the last diamond (the bare-else label, e.g. "no").
+    east_label: Option<String>,
+    /// Bare-else branch box height (laid out as `tile2`); 0 when there is no
+    /// final `else`.
+    tile2_h: f64,
+    /// `tile2` center x relative to the spine; `None` when there is no else.
+    tile2_cx: Option<f64>,
+    /// Diamond north label height (single-line; reserved below the diamond).
+    north_h: f64,
+    /// Left / right drawn extents from the spine.
+    left_ext: f64,
+    right_ext: f64,
+}
+
+/// Column pitch between adjacent diamonds: the max of the diamond requirement
+/// (`d_i/2 + d_{i+1}/2 + xSeparation`) and the branch requirement
+/// (`b_i/2 + b_{i+1}/2 + branch_gap`). See module note above.
+fn if_long_pitch(d_i: f64, b_i: f64, d_j: f64, b_j: f64) -> f64 {
+    let diamond_req = d_i / 2.0 + d_j / 2.0 + IF_LONG_X_SEP;
+    let branch_req = b_i / 2.0 + b_j / 2.0 + IF_LONG_BRANCH_GAP;
+    diamond_req.max(branch_req)
+}
+
+/// Build the placed long layout for an `if/elseif*/else`. Returns `None` if any
+/// branch isn't yet portable (so the caller falls back to the legacy path).
+fn if_long_layout(
+    condition: &str,
+    then_label: &Option<String>,
+    then_branch: &[LayoutNode],
+    else_branches: &[ElseBranch],
+) -> Option<IfLongLayout> {
+    // Split else branches into elseif columns (condition=Some) and the optional
+    // final bare else (condition=None, must be last if present).
+    let mut cols: Vec<IfLongCol> = Vec::new();
+    let north_h = pm::text_height(SMALL_FONT);
+
+    let mut push_col = |cond: &str, north: &Option<String>, body: &[LayoutNode]| -> Option<()> {
+        let g = sequence_geometry(body)?;
+        let branch_w = g.width.max(30.0);
+        let cond_text_w = text_render::measure(cond, SMALL_FONT, false);
+        let cond_text_h = pm::text_height(SMALL_FONT);
+        let north_w = north
+            .as_ref()
+            .map(|s| text_render::measure(s, SMALL_FONT, false))
+            .unwrap_or(0.0);
+        let dgeo =
+            ftile::FtileGeometry::diamond_inside2(cond_text_w, cond_text_h, north_w, north_h);
+        // Polygon width = the "alone" diamond (out_y carries the alone height,
+        // and left = alone width / 2). The north label only widens the tile
+        // when north_w > left; for single-word labels it does not.
+        let diamond_w = dgeo.left * 2.0;
+        cols.push(IfLongCol {
+            diamond_w,
+            branch_w,
+            branch_h: g.height,
+            cx: 0.0,
+            north: north.clone(),
+            condition: cond.to_string(),
+        });
+        Some(())
+    };
+
+    push_col(condition, then_label, then_branch)?;
+    let mut east_label: Option<String> = None;
+    let mut tile2_body: Option<&[LayoutNode]> = None;
+    let mut tile2_label: Option<String> = None;
+    for b in else_branches {
+        match &b.condition {
+            Some(c) => push_col(c, &b.label, &b.body)?,
+            None => {
+                // The final bare else → tile2. Its label is the last diamond's
+                // east label.
+                east_label = b.label.clone();
+                tile2_body = Some(&b.body);
+                tile2_label = b.label.clone();
+            }
+        }
+    }
+    let _ = tile2_label;
+
+    // tile2 geometry (FtileMinWidthCentered(else, 30)); empty if no else.
+    let (tile2_w, tile2_h) = match tile2_body {
+        Some(body) => {
+            let g = sequence_geometry(body)?;
+            (g.width.max(30.0), g.height)
+        }
+        None => (0.0, 0.0),
+    };
+
+    // Place diamond centers left→right using the pitch rule, spine-relative,
+    // then re-centre the whole drawn span on x=0.
+    let n = cols.len();
+    let mut centers = vec![0.0_f64; n];
+    for i in 1..n {
+        let pitch = if_long_pitch(
+            cols[i - 1].diamond_w,
+            cols[i - 1].branch_w,
+            cols[i].diamond_w,
+            cols[i].branch_w,
+        );
+        centers[i] = centers[i - 1] + pitch;
+    }
+    // tile2 center after the last diamond.
+    let tile2_center = if tile2_body.is_some() {
+        let last = &cols[n - 1];
+        let east_w = east_label
+            .as_ref()
+            .map(|s| text_render::measure(s, SMALL_FONT, false))
+            .unwrap_or(0.0);
+        // Else pitch: max of the diamond-east requirement and the branch
+        // requirement (mirrors the inter-couple rule, with the last diamond's
+        // east label included and tile2 contributing no diamond).
+        let diamond_req = last.diamond_w / 2.0 + east_w + IF_LONG_BRANCH_GAP + tile2_w / 2.0;
+        let branch_req = last.branch_w / 2.0 + tile2_w / 2.0 + IF_LONG_BRANCH_GAP;
+        Some(centers[n - 1] + diamond_req.max(branch_req))
+    } else {
+        None
+    };
+
+    // The if-block spine is `getLeft = internalWidth/2` in PlantUML's
+    // (un-compacted) frame. The final image *compacts* the inter-column gaps,
+    // but each column stays rigid — so the spine maps to the same offset
+    // *within* whichever column (or column gap) holds `internalWidth/2`.
+    //
+    // Build the internal (xSeparation-spaced) column centers in parallel with
+    // the compacted `centers`, locate `internalWidth/2`, and carry its offset
+    // across to the compacted frame to fix the spine. This reproduces the small
+    // left/right asymmetry the drawn-midpoint would miss.
+    //
+    // Columns (compacted center, internal center, half-width); tile2 is the
+    // trailing column when present.
+    let mut comp: Vec<f64> = Vec::with_capacity(n + 1);
+    let mut intl: Vec<f64> = Vec::with_capacity(n + 1);
+    let mut half: Vec<f64> = Vec::with_capacity(n + 1);
+    let mut ix = 0.0; // running internal left edge
+    for (i, c) in cols.iter().enumerate() {
+        let cw = c.diamond_w.max(c.branch_w);
+        comp.push(centers[i]);
+        intl.push(ix + cw / 2.0);
+        half.push(cw / 2.0);
+        ix += cw + IF_LONG_X_SEP;
+    }
+    if let (Some(tc), true) = (tile2_center, tile2_body.is_some()) {
+        comp.push(tc);
+        intl.push(ix + tile2_w / 2.0);
+        half.push(tile2_w / 2.0);
+        ix += tile2_w + IF_LONG_X_SEP;
+    }
+    // internalWidth = total internal span minus the trailing xSeparation.
+    let internal_w = ix - IF_LONG_X_SEP;
+    let spine_internal = internal_w / 2.0;
+    // Map spine_internal to the compacted frame via the column whose internal
+    // span (or whose right gap) contains it.
+    let mut spine_comp = comp[0]; // fallback
+    for k in 0..comp.len() {
+        let hi = intl[k] + half[k];
+        if spine_internal <= hi || k == comp.len() - 1 {
+            // Within column k (or to its left / past the last column): carry the
+            // rigid offset from this column.
+            spine_comp = comp[k] + (spine_internal - intl[k]);
+            break;
+        }
+        // In the gap after column k: clamp to this column's right edge offset
+        // (gaps compress, so the spine rarely lands here for real chains).
+        if spine_internal < intl[k + 1] - half[k + 1] {
+            spine_comp = comp[k] + half[k];
+            break;
+        }
+    }
+
+    // Re-origin everything on the spine (x = 0).
+    for (i, c) in cols.iter_mut().enumerate() {
+        c.cx = centers[i] - spine_comp;
+    }
+    let tile2_cx = tile2_center.map(|t| t - spine_comp);
+
+    // Drawn extents from the spine.
+    let mut min_x = f64::INFINITY;
+    let mut max_x = f64::NEG_INFINITY;
+    for (i, c) in cols.iter().enumerate() {
+        let h = c.diamond_w.max(c.branch_w) / 2.0;
+        min_x = min_x.min(c.cx - h);
+        max_x = max_x.max(c.cx + h);
+        let _ = i;
+    }
+    if let Some(tc) = tile2_cx {
+        min_x = min_x.min(tc - tile2_w / 2.0);
+        max_x = max_x.max(tc + tile2_w / 2.0);
+    }
+    let left_ext = -min_x;
+    let right_ext = max_x;
+
+    Some(IfLongLayout {
+        cols,
+        east_label,
+        tile2_h,
+        tile2_cx,
+        north_h,
+        left_ext,
+        right_ext,
+    })
+}
+
+/// Vertical metrics of a placed long layout, given `y` = the if-block's top
+/// (the previous node's bottom, where the `ConnectionIn` snake begins). All
+/// absolute. `couple_branch_top` is the top of the (diamond-fronted) branch
+/// boxes; `tile2_top` the top of the else box; `merge_y` the bottom merge line
+/// (also the if-block's out point).
+struct IfLongV {
+    dtop: f64,
+    couple_branch_top: f64,
+    tile2_top: f64,
+    merge_y: f64,
+}
+
+fn if_long_vmetrics(l: &IfLongLayout, y: f64) -> IfLongV {
+    let dtop = y + ARROW_LEN;
+    let diamond_aligned_h = DIAMOND_HALF * 2.0 + l.north_h + IF_LONG_ALIGN_BOTTOM;
+    let couple_branch_top = dtop + diamond_aligned_h;
+    // Internal height (calculateDimensionInternal): couples block vs the
+    // else tile lifted by diamondsHeight/2, plus the 100 reserve.
+    let couples_h = l
+        .cols
+        .iter()
+        .map(|c| diamond_aligned_h + c.branch_h)
+        .fold(0.0_f64, f64::max);
+    let diamonds_height = diamond_aligned_h;
+    let tile2_merged_h = l.tile2_h + diamonds_height / 2.0;
+    let internal_h = couples_h.max(tile2_merged_h) + IF_LONG_BELOW;
+    // tile2 dy in the if-frame = (internal_h − tile2_h)/2; if-frame top is
+    // 25 above the diamond row (couples dy = 25).
+    let if_frame_top = dtop - 25.0;
+    let tile2_top = if_frame_top + (internal_h - l.tile2_h) / 2.0;
+    // Branch bottoms; the merge line sits ARROW_LEN below the deepest.
+    let mut deepest = couple_branch_top + l.cols.iter().map(|c| c.branch_h).fold(0.0_f64, f64::max);
+    if l.tile2_cx.is_some() {
+        deepest = deepest.max(tile2_top + l.tile2_h);
+    }
+    let merge_y = deepest + ARROW_LEN;
+    IfLongV {
+        dtop,
+        couple_branch_top,
+        tile2_top,
+        merge_y,
+    }
+}
+
 /// Compute the asymmetric (left, right) extents of a single node from its
 /// vertical centreline. For most nodes this is symmetric (width/2, width/2);
 /// for if/else with unequal branches, the left extent (then-side) and right
@@ -1430,6 +1755,13 @@ fn node_extents(node: &LayoutNode) -> (f64, f64) {
             else_branches,
             then_label,
         } => {
+            // FtileIfLongHorizontal (if/elseif*/else): drawn extents from the
+            // placed diamond/branch row.
+            if if_is_long(else_branches)
+                && let Some(l) = if_long_layout(condition, then_label, then_branch, else_branches)
+            {
+                return (l.left_ext, l.right_ext);
+            }
             let _ = then_label;
             if let Some(plan) = if_down_plan(then_branch, else_branches) {
                 // FtileIfDown reserves a fixed corridor on the right (the empty
@@ -1665,6 +1997,10 @@ fn node_width(node: &LayoutNode) -> f64 {
             else_branches,
             ..
         } => {
+            if if_is_long(else_branches) {
+                let (l, r) = node_extents(node);
+                return l + r;
+            }
             if if_down_plan(then_branch, else_branches).is_some() {
                 let (l, r) = node_extents(node);
                 return l + r;
@@ -1853,10 +2189,20 @@ fn node_height(node: &LayoutNode) -> f64 {
             action_height(text)
         }
         LayoutNode::If {
+            condition,
+            then_label,
             then_branch,
             else_branches,
-            ..
         } => {
+            if if_is_long(else_branches)
+                && let Some(l) = if_long_layout(condition, then_label, then_branch, else_branches)
+            {
+                // Height measured from the diamond row top (dtop) to the merge
+                // line. `sequence_height` adds the leading ARROW_LEN gap
+                // (start→if) separately, so exclude the inbound run here.
+                let v = if_long_vmetrics(&l, 0.0);
+                return v.merge_y - v.dtop;
+            }
             if let Some(plan) = if_down_plan(then_branch, else_branches) {
                 // diamond + lead + populated branch + ARROW_LEN + merge diamond.
                 // An even-action branch stretches its middle gap by 15 px.
@@ -2794,6 +3140,14 @@ fn emit_sequence_ex(
                     Some(LayoutNode::Partition { .. })
                 );
                 let is_partition = partition_top_gap.is_some();
+                // A long if/elseif/else draws its own multi-segment inbound
+                // connector (`ConnectionIn`) from the previous node's bottom to
+                // the first diamond, so the standard straight inbound arrow is
+                // suppressed and `y` is not advanced past the prev bottom.
+                let is_long_if = matches!(
+                    node,
+                    LayoutNode::If { else_branches, .. } if if_is_long(else_branches)
+                );
                 // When the previous flow node was a partition, the inbound
                 // arrow to the current node extends back 12 px into the
                 // partition's bottom margin (overlaying the partition rect).
@@ -2812,12 +3166,14 @@ fn emit_sequence_ex(
                         base
                     }
                 };
-                if !style.hidden {
+                if !style.hidden && !is_long_if {
                     pending_arrow = Some((arrow_top_y, style, label, arrow_gap));
                 }
                 // Don't advance y past the partition's outer top — the
                 // partition's emit handles its own top positioning at y + 10.
-                if !is_partition {
+                // Long-ifs also keep `y` at the prev bottom (their own
+                // ConnectionIn spans the gap to the diamond row).
+                if !is_partition && !is_long_if {
                     y += gap;
                 }
             }
@@ -3169,6 +3525,13 @@ fn emit_if(
     then_branch: &[LayoutNode],
     else_branches: &[ElseBranch],
 ) -> f64 {
+    // if/elseif*/else chain → FtileIfLongHorizontal.
+    if if_is_long(else_branches)
+        && let Some(l) = if_long_layout(condition, then_label, then_branch, else_branches)
+    {
+        return emit_if_long(svg, cx, y, &l, then_branch, else_branches);
+    }
+
     // Empty-branch corridor: when one branch is empty and the other populated
     // and non-terminating, PlantUML's FtileIfDown routes the populated branch
     // down the centre spine and the empty branch as a thin side corridor.
@@ -3412,6 +3775,246 @@ fn emit_if(
     } else {
         merge_diamond_top + DIAMOND_HALF * 2.0
     }
+}
+
+/// Emit an `if/elseif*/else` chain (`FtileIfLongHorizontal`): a row of condition
+/// diamonds each fronting its branch column, linked left→right, with the final
+/// bare `else` to the right, all branch outs collected on a bottom merge line.
+///
+/// `cx` is the if-block spine, `y` the previous node's bottom (where the inbound
+/// `ConnectionIn` snake begins). Returns the merge-line y (the if-block's out
+/// point). `l` carries the placed geometry from [`if_long_layout`].
+fn emit_if_long(
+    svg: &mut SvgEmitter,
+    cx: f64,
+    y: f64,
+    l: &IfLongLayout,
+    then_branch: &[LayoutNode],
+    else_branches: &[ElseBranch],
+) -> f64 {
+    let arrow_color = svg.palette.arrow_color.clone();
+    let diamond_stroke = svg.palette.diamond_stroke.clone();
+    let diamond_fill = svg.palette.diamond_fill.clone();
+    let diamond_stroke_width = svg.palette.diamond_stroke_width.clone();
+    let cond_text_color = svg.palette.text_color.clone();
+
+    let v = if_long_vmetrics(l, y);
+    let dtop = v.dtop;
+    let diamond_cy = dtop + DIAMOND_HALF;
+    let diamond_bottom = dtop + DIAMOND_HALF * 2.0;
+    let n = l.cols.len();
+
+    // Branch bodies in column order: then_branch, then each elseif body.
+    let elseif_bodies: Vec<&[LayoutNode]> = else_branches
+        .iter()
+        .filter(|b| b.condition.is_some())
+        .map(|b| b.body.as_slice())
+        .collect();
+
+    // --- Shapes: per couple (diamond + labels + branch) ------------------
+    for (i, col) in l.cols.iter().enumerate() {
+        let dcx = cx + col.cx;
+        let inner = col.diamond_w - DIAMOND_HALF * 2.0;
+        let pts = vec![
+            (dcx - inner / 2.0, dtop),
+            (dcx + inner / 2.0, dtop),
+            (dcx + col.diamond_w / 2.0, diamond_cy),
+            (dcx + inner / 2.0, diamond_bottom),
+            (dcx - inner / 2.0, diamond_bottom),
+            (dcx - col.diamond_w / 2.0, diamond_cy),
+        ];
+        svg.polygon_shape(&diamond_fill, &pts, &diamond_stroke, &diamond_stroke_width);
+
+        // North label (the then/elseif positive label). PlantUML draws it at
+        // `4 + dimTotal.width/2` from the diamond's left edge (left-aligned),
+        // i.e. its left edge is `dcx + 4`. Baseline at diamond_bottom +
+        // ascent(11).
+        if let Some(north) = &col.north {
+            let nw = text_render::measure(north, SMALL_FONT, false);
+            svg.text_element(
+                TEXT_COLOR,
+                "sans-serif",
+                SMALL_FONT,
+                nw,
+                dcx + 4.0,
+                diamond_bottom + pm::ascent(SMALL_FONT),
+                north,
+                false,
+            );
+        }
+
+        // Condition text, centred inside the diamond.
+        let cw = text_render::measure(&col.condition, SMALL_FONT, false);
+        let cond_y = diamond_cy + pm::text_height(SMALL_FONT) / 2.0 - pm::descent(SMALL_FONT);
+        svg.text_element(
+            &cond_text_color,
+            "sans-serif",
+            SMALL_FONT,
+            cw,
+            dcx - cw / 2.0,
+            cond_y,
+            &col.condition,
+            false,
+        );
+
+        // East label on the LAST diamond (the bare-else label), baseline at
+        // diamond_cy − descent(11), x at the diamond's right vertex.
+        if i == n - 1
+            && let Some(east) = &l.east_label
+        {
+            let ew = text_render::measure(east, SMALL_FONT, false);
+            svg.text_element(
+                TEXT_COLOR,
+                "sans-serif",
+                SMALL_FONT,
+                ew,
+                dcx + col.diamond_w / 2.0,
+                diamond_cy - pm::descent(SMALL_FONT),
+                east,
+                false,
+            );
+        }
+
+        // Branch box(es) below the diamond.
+        let body: &[LayoutNode] = if i == 0 {
+            then_branch
+        } else {
+            elseif_bodies[i - 1]
+        };
+        emit_sequence(svg, body, dcx, v.couple_branch_top);
+    }
+
+    // tile2 (the bare else) to the right.
+    if let Some(tile2_cx) = l.tile2_cx {
+        let tcx = cx + tile2_cx;
+        let else_body = else_branches
+            .iter()
+            .find(|b| b.condition.is_none())
+            .map(|b| b.body.as_slice())
+            .unwrap_or(&[]);
+        emit_sequence(svg, else_body, tcx, v.tile2_top);
+    }
+
+    // --- Connectors ------------------------------------------------------
+    // Per-couple ConnectionVerticalIn (diamond→branch) + ConnectionVerticalOut
+    // (branch→merge line).
+    for col in &l.cols {
+        let dcx = cx + col.cx;
+        // Vertical in: diamond bottom → branch top.
+        svg.connector_line(
+            &arrow_color,
+            dcx,
+            dcx,
+            diamond_bottom,
+            v.couple_branch_top,
+            false,
+        );
+        svg.polygon_connector(
+            &arrow_color,
+            &[
+                (dcx - 4.0, v.couple_branch_top - 10.0),
+                (dcx, v.couple_branch_top),
+                (dcx + 4.0, v.couple_branch_top - 10.0),
+                (dcx, v.couple_branch_top - 6.0),
+            ],
+            &arrow_color,
+            "1",
+        );
+        // Vertical out: branch bottom → merge line.
+        let branch_bottom = v.couple_branch_top + col.branch_h;
+        svg.connector_line(&arrow_color, dcx, dcx, branch_bottom, v.merge_y, false);
+        svg.polygon_connector(
+            &arrow_color,
+            &[
+                (dcx - 4.0, v.merge_y - 10.0),
+                (dcx, v.merge_y),
+                (dcx + 4.0, v.merge_y - 10.0),
+                (dcx, v.merge_y - 6.0),
+            ],
+            &arrow_color,
+            "1",
+        );
+    }
+
+    // ConnectionHorizontal between adjacent diamonds (east vertex → west vertex).
+    for i in 0..n - 1 {
+        let d1 = &l.cols[i];
+        let d2 = &l.cols[i + 1];
+        let x1 = cx + d1.cx + d1.diamond_w / 2.0;
+        let x2 = cx + d2.cx - d2.diamond_w / 2.0;
+        svg.connector_line(&arrow_color, x1, x2, diamond_cy, diamond_cy, false);
+        svg.right_arrow(x2, diamond_cy, &arrow_color);
+    }
+
+    // ConnectionIn (prev bottom → first diamond): down 5, sideways, down to
+    // the first diamond top.
+    let d0cx = cx + l.cols[0].cx;
+    svg.connector_line(&arrow_color, cx, cx, y, y + 5.0, false);
+    svg.connector_line(&arrow_color, cx, d0cx, y + 5.0, y + 5.0, false);
+    svg.connector_line(&arrow_color, d0cx, d0cx, y + 5.0, dtop, false);
+    svg.polygon_connector(
+        &arrow_color,
+        &[
+            (d0cx - 4.0, dtop - 10.0),
+            (d0cx, dtop),
+            (d0cx + 4.0, dtop - 10.0),
+            (d0cx, dtop - 6.0),
+        ],
+        &arrow_color,
+        "1",
+    );
+
+    // ConnectionLastElseIn + ConnectionLastElseOut (last diamond east → tile2,
+    // then tile2 → merge line).
+    if let Some(tile2_cx) = l.tile2_cx {
+        let tcx = cx + tile2_cx;
+        let last = &l.cols[n - 1];
+        let east_x = cx + last.cx + last.diamond_w / 2.0;
+        // East vertex → above tile2, then down into tile2.
+        svg.connector_line(&arrow_color, east_x, tcx, diamond_cy, diamond_cy, false);
+        svg.connector_line(&arrow_color, tcx, tcx, diamond_cy, v.tile2_top, false);
+        svg.polygon_connector(
+            &arrow_color,
+            &[
+                (tcx - 4.0, v.tile2_top - 10.0),
+                (tcx, v.tile2_top),
+                (tcx + 4.0, v.tile2_top - 10.0),
+                (tcx, v.tile2_top - 6.0),
+            ],
+            &arrow_color,
+            "1",
+        );
+        // tile2 out → merge line.
+        let tile2_bottom = v.tile2_top + l.tile2_h;
+        svg.connector_line(&arrow_color, tcx, tcx, tile2_bottom, v.merge_y, false);
+        svg.polygon_connector(
+            &arrow_color,
+            &[
+                (tcx - 4.0, v.merge_y - 10.0),
+                (tcx, v.merge_y),
+                (tcx + 4.0, v.merge_y - 10.0),
+                (tcx, v.merge_y - 6.0),
+            ],
+            &arrow_color,
+            "1",
+        );
+    }
+
+    // ConnectionHline: the bottom merge line spanning the leftmost to rightmost
+    // branch out.
+    let mut min_out = cx + l.cols[0].cx;
+    let mut max_out = cx + l.cols[n - 1].cx;
+    for col in &l.cols {
+        min_out = min_out.min(cx + col.cx);
+        max_out = max_out.max(cx + col.cx);
+    }
+    if let Some(tile2_cx) = l.tile2_cx {
+        min_out = min_out.min(cx + tile2_cx);
+        max_out = max_out.max(cx + tile2_cx);
+    }
+    svg.connector_line(&arrow_color, min_out, max_out, v.merge_y, v.merge_y, false);
+
+    v.merge_y
 }
 
 /// Gap from the condition diamond's bottom to the top of the (centred)
