@@ -10,6 +10,7 @@ use std::fmt::Write;
 
 use rustuml_parser::diagram::activity::{ActivityDiagram, ActivityStep, NotePosition};
 
+use crate::ftile;
 use crate::layout_oracle::{OracleLayout, wrap_oracle_envelope};
 use crate::plantuml_metrics as pm;
 use crate::style::Theme;
@@ -1221,6 +1222,123 @@ fn emit_leading_floating_note(
         );
     }
     box_h
+}
+
+// ── ftile geometry bridge (incr-4 groundwork, PURE / not yet wired) ──────────
+//
+// Map a `LayoutNode` to its PlantUML `FtileGeometry` via the faithful port in
+// `ftile.rs`, so the canvas/spine can eventually be derived BY CONSTRUCTION
+// (replacing the reverse-engineered constants in node_extents/sequence_extents).
+//
+// Status: NOT wired into rendering — zero behavioural change. Only the tiles
+// whose port is verified exact against the Java are mapped here; the rest
+// return `None` so the eventual caller falls back to the legacy extent model:
+//   - Repeat/Fork: deferred — need the loop-back-arm + fork/join BAR geometry
+//     (ftile incr 3b) before their dimension is faithful.
+//   - Partition/Swimlanes/Note/Title/elseif-chains/empty-branch-IfDown: not
+//     ported; bail.
+// The returned `height` is the bare tile-stack height (no connection-gap tiles
+// inserted between siblings); width/left — the part that drives canvas width and
+// the spine — are exact. Heights are finished at wire time.
+
+/// The condition hexagon as an `FtileGeometry`. Width matches the validated
+/// `diamond_inner_w(c) + 2*DIAMOND_HALF` used throughout the emitters, which
+/// equals `FtileGeometry::diamond_inside(text_w, _, 0)` for a non-empty label.
+#[allow(dead_code)] // incr-4 groundwork: wired in a later increment
+fn condition_diamond(condition: &str) -> ftile::FtileGeometry {
+    let w = diamond_inner_w(condition) + DIAMOND_HALF * 2.0;
+    ftile::FtileGeometry::new(
+        w,
+        DIAMOND_HALF * 2.0,
+        w / 2.0,
+        0.0,
+        Some(DIAMOND_HALF * 2.0),
+    )
+}
+
+/// Fold a node sequence into one geometry via `assemble_linear`. Connectors and
+/// terminal markers contribute no tile; a not-yet-ported member bails the whole
+/// sequence to `None`.
+#[allow(dead_code)] // incr-4 groundwork: wired in a later increment
+fn sequence_geometry(nodes: &[LayoutNode]) -> Option<ftile::FtileGeometry> {
+    let mut geoms: Vec<ftile::FtileGeometry> = Vec::new();
+    for n in nodes {
+        match n {
+            LayoutNode::Arrow { .. }
+            | LayoutNode::Detach
+            | LayoutNode::Kill
+            | LayoutNode::Break => continue,
+            _ => geoms.push(node_geometry(n)?),
+        }
+    }
+    ftile::assemble_linear(&geoms)
+}
+
+/// `LayoutNode → FtileGeometry` via the ftile port. See the module note above
+/// for which tiles are mapped vs. deferred.
+#[allow(dead_code)] // incr-4 groundwork: wired in a later increment
+fn node_geometry(node: &LayoutNode) -> Option<ftile::FtileGeometry> {
+    use ftile::FtileGeometry as G;
+    let g = match node {
+        LayoutNode::Start => G::circle_start(),
+        LayoutNode::Stop => G::circle_stop(),
+        LayoutNode::End => G::circle_end(),
+        LayoutNode::Action { text, text_width }
+        | LayoutNode::DeprecatedAction {
+            text, text_width, ..
+        } => G::box_tile(
+            *text_width,
+            text_render::label_height(text, FONT_SIZE),
+            ACTION_H_PADDING,
+            ACTION_H_PADDING,
+            ACTION_H_PADDING,
+            ACTION_H_PADDING,
+        ),
+        LayoutNode::If {
+            condition,
+            then_branch,
+            else_branches,
+            ..
+        } => {
+            // Only the binary FtileIfWithDiamonds (one then + one populated
+            // else) is ported; elseif-chains (FtileIfLong) and the empty-branch
+            // FtileIfDown fall back to the legacy model.
+            if else_branches.len() != 1 || if_down_plan(then_branch, else_branches).is_some() {
+                return None;
+            }
+            let diamond1 = condition_diamond(condition);
+            let diamond2 = G::diamond_empty(0.0); // bare 24×24 merge diamond
+            let t1 = sequence_geometry(then_branch)?;
+            let t2 = sequence_geometry(&else_branches[0].body)?;
+            // Non-swimlane two-branch: Ydelta1a(10) + Ydelta1b(6) + labels(0).
+            ftile::if_with_diamonds(&diamond1, &t1, &t2, &diamond2, 16.0, (0.0, 0.0, 0.0))
+        }
+        LayoutNode::While {
+            condition,
+            body,
+            special_out,
+            ..
+        } => {
+            let diamond1 = condition_diamond(condition);
+            let block = sequence_geometry(body)?;
+            let special_g = special_out.as_deref().and_then(node_geometry);
+            ftile::while_tile(&diamond1, &block, None, special_g.as_ref(), 0.0)
+        }
+        LayoutNode::Switch { condition, cases } => {
+            if cases.is_empty() {
+                return None;
+            }
+            let diamond1 = condition_diamond(condition);
+            let diamond2 = G::diamond_empty(0.0);
+            let tiles = cases
+                .iter()
+                .map(|c| sequence_geometry(&c.body))
+                .collect::<Option<Vec<_>>>()?;
+            ftile::switch_with_diamonds(&diamond1, &diamond2, &tiles, 20.0)
+        }
+        _ => return None,
+    };
+    Some(g)
 }
 
 /// Compute the asymmetric (left, right) extents of a single node from its
