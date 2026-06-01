@@ -6224,7 +6224,18 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                 let over_several = note.position == NotePosition::Over
                     && !participants.is_empty()
                     && (note.participants.is_empty() || note.participants.len() >= 2);
-                let across_text_center = if over_several {
+                // A note spanning a participant range (`note over A, B` /
+                // `note across`) is drawn LEFT-aligned (PlantUML's default
+                // `noteTextAlignment`) inside an area equal to the spanned
+                // participants' full extent (`p2.getMaxX - p1.getMinX`, including
+                // the participant out-margins). Java's `ComponentRoseNote
+                // .drawInternalU` shifts the text block by `marginX1 + diffX/2`,
+                // where `diffX = areaWidth - preferredWidth` and the preferred
+                // width is the raw text-block width plus the component margins. So
+                // every line starts at the same x: note_left + marginX1 + diffX/2.
+                // (When the note text is wider than the span, diffX <= 0 and the
+                // text simply sits at the left text pad, handled by `text_x`.)
+                let over_several_text_x = if over_several && note.shape == NoteShape::Note {
                     let (lo, hi) = if note.participants.is_empty() {
                         (0, participants.len() - 1)
                     } else {
@@ -6242,18 +6253,17 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                             .unwrap_or(participants.len() - 1);
                         if a <= b { (a, b) } else { (b, a) }
                     };
-                    let margin = if note.participants.is_empty() {
-                        ACROSS_NOTE_MARGIN
-                    } else {
-                        OVER_SEVERAL_NOTE_MARGIN
-                    };
-                    let span = participants[hi].lifeline_line_x - participants[lo].lifeline_line_x;
-                    if span.round() + margin > note_content_w {
-                        let centre = (participants[lo].center_x + participants[hi].center_x) / 2.0;
-                        Some(centre - PARTICIPANT_OUT_MARGIN)
-                    } else {
-                        None
-                    }
+                    // areaWidth = p2.getMaxX - p1.getMinX. ParticipantBox.getMinX =
+                    // box_x; getMaxX = box_x + box_width + outMargin.
+                    let area_w = participants[hi].box_x
+                        + participants[hi].box_width
+                        + PARTICIPANT_OUT_MARGIN
+                        - participants[lo].box_x;
+                    // ComponentRoseNote preferred (text-block) width for LEFT text:
+                    // pure text + marginX1(6) + marginX2(15) + 2*paddingX(5) = +31.
+                    let pref_w = max_text_w + 31.0;
+                    let diff_x = (area_w - pref_w).max(0.0);
+                    Some(note_left + NOTE_TEXT_X_PAD + diff_x / 2.0)
                 } else {
                     None
                 };
@@ -6264,6 +6274,7 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                     NoteShape::Hexagonal => (note_left + HNOTE_INDENT + 2.0, HNOTE_TEXT_Y_OFFSET),
                     NoteShape::Rectangular => (note_left + RNOTE_TEXT_X_PAD, HNOTE_TEXT_Y_OFFSET),
                 };
+                let text_x = over_several_text_x.unwrap_or(text_x);
                 let mut text_y = note_top + text_y_offset;
                 for line in &lines {
                     let trimmed = line.trim();
@@ -6271,10 +6282,7 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                         text_y += NOTE_TEXT_LINE_SPACING;
                         continue;
                     }
-                    let line_x = match across_text_center {
-                        Some(c) => c - text_width(trimmed, MSG_FONT_SIZE) / 2.0,
-                        None => text_x,
-                    };
+                    let line_x = text_x;
                     text_render::emit_text(
                         &mut svg.buf,
                         trimmed,
