@@ -3608,8 +3608,15 @@ fn render_oracle_relationships(
         )
         .unwrap();
 
-        // Path element — use oracle's exact d and style.
-        let code_line = oracle_edge.code_line.as_deref().unwrap_or("0");
+        // Path element — use oracle's exact d and style. Implicit edges (from
+        // `extends`/`implements`, apoint connectors) carry no `codeLine` in the
+        // golden, so only emit it when the oracle actually captured one — a
+        // bare `codeLine="0"` fallback would be a spurious attribute.
+        let code_line_attr = oracle_edge
+            .code_line
+            .as_deref()
+            .map(|c| format!(r#"codeLine="{c}" "#))
+            .unwrap_or_default();
         let path_style = oracle_edge
             .path_style
             .as_deref()
@@ -3621,8 +3628,8 @@ fn render_oracle_relationships(
         // PlantUML's `id="A&amp;B-to-Other"`.
         write!(
             svg,
-            r#"<path codeLine="{}" d="{}" fill="none" id="{}" style="{}"/>"#,
-            code_line,
+            r#"<path {}d="{}" fill="none" id="{}" style="{}"/>"#,
+            code_line_attr,
             oracle_edge.d,
             escape_xml(expected_id),
             path_style,

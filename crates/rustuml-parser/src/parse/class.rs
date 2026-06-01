@@ -521,6 +521,11 @@ impl ClassParser {
                 }
             }
 
+            // `class Child extends Parent[, P2]` / `... implements I1[, I2]`
+            // create inheritance / realization relationships, exactly as
+            // `Child --|> Parent` / `Child ..|> Iface` would.
+            self.parse_supertypes(line, &final_id);
+
             if line.ends_with('{') || line.ends_with("{{") {
                 self.current_entity = Some(final_id.clone());
             }
@@ -528,6 +533,58 @@ impl ClassParser {
             true
         } else {
             false
+        }
+    }
+
+    /// Parse `extends`/`implements` clauses on a class-declaration line into
+    /// Inheritance/Implementation relationships from the declared entity to
+    /// each named supertype. Generic (`<...>`) and stereotype (`<<...>>`) spans
+    /// are stripped first so a bounded type param like `class Foo<T extends X>`
+    /// is not mistaken for an inheritance clause.
+    fn parse_supertypes(&mut self, line: &str, child_id: &str) {
+        let body = line.trim_end().trim_end_matches('{').trim_end();
+        // Drop angle-bracket spans (generics + `<<stereotype>>`).
+        let mut scan = String::new();
+        let mut depth: u32 = 0;
+        for ch in body.chars() {
+            match ch {
+                '<' => depth += 1,
+                '>' => depth = depth.saturating_sub(1),
+                _ if depth == 0 => scan.push(ch),
+                _ => {}
+            }
+        }
+        // Collect (supertype, kind, dashed) without borrowing self mutably yet.
+        let mut supers: Vec<(String, RelationshipKind, bool)> = Vec::new();
+        let mut current: Option<(RelationshipKind, bool)> = None;
+        for tok in scan.split_whitespace() {
+            match tok {
+                "extends" => current = Some((RelationshipKind::Inheritance, false)),
+                "implements" => current = Some((RelationshipKind::Implementation, true)),
+                _ => {
+                    if let Some((kind, dashed)) = current {
+                        for name in tok.split(',') {
+                            let name = name.trim();
+                            if !name.is_empty() {
+                                supers.push((name.to_string(), kind, dashed));
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        for (name, kind, dashed) in supers {
+            let to = self.ensure_entity(&name);
+            self.relationships.push(Relationship {
+                from: child_id.to_string(),
+                to,
+                kind,
+                label: None,
+                from_multiplicity: None,
+                to_multiplicity: None,
+                dashed,
+                source_line: self.current_line,
+            });
         }
     }
 
