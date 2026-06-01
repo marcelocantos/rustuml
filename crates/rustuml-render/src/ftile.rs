@@ -413,6 +413,117 @@ pub fn switch_with_diamonds(
     }
 }
 
+// --- Child translates (getTranslateFor*) ---
+//
+// Each composite positions its children relative to its own spine. These
+// mirror the Java `getTranslateFor*` helpers exactly. They read only the
+// composite's width/height/left, so the (un-stripped) internal geometry and the
+// final terminal-stripped geometry are interchangeable here. Offsets are
+// `(dx, dy)` relative to the composite's top-left.
+
+/// Child offsets within an `FtileWhile`.
+#[derive(Clone, Copy, Debug, PartialEq)]
+pub struct WhileLayout {
+    pub diamond1: (f64, f64),
+    pub body: (f64, f64),
+    pub backward: Option<(f64, f64)>,
+    pub special: Option<(f64, f64)>,
+}
+
+/// `FtileWhile.getTranslateFor*`. `total` is the composite geometry from
+/// [`while_tile`]; `supp_label_h` is the same backward-label height passed there.
+pub fn while_layout(
+    total: &FtileGeometry,
+    diamond1: &FtileGeometry,
+    body: &FtileGeometry,
+    backward: Option<&FtileGeometry>,
+    special: Option<&FtileGeometry>,
+    supp_label_h: f64,
+) -> WhileLayout {
+    let diamond1_t = (total.left - diamond1.left, 0.0);
+    let body_y =
+        diamond1.height + (total.height - diamond1.height - body.height - supp_label_h) / 2.0;
+    let body_t = (total.left - body.left, body_y);
+    let backward_t = backward.map(|b| (total.width - b.width, (total.height - b.height) / 2.0));
+    let special_t = special.map(|s| {
+        let half = (diamond1.out_y.expect("while test diamond has an out anchor") - diamond1.in_y)
+            / 2.0;
+        let y1 = (3.0 * half).max(4.0 * HEXAGON_HALF);
+        let x_while = body_t.0 - HEXAGON_HALF;
+        let x_diamond = diamond1_t.0;
+        (x_while.min(x_diamond) - s.width, y1)
+    });
+    WhileLayout { diamond1: diamond1_t, body: body_t, backward: backward_t, special: special_t }
+}
+
+/// Child offsets within an `FtileRepeat`.
+#[derive(Clone, Copy, Debug, PartialEq)]
+pub struct RepeatLayout {
+    pub diamond1: (f64, f64),
+    pub diamond2: (f64, f64),
+    pub repeat: (f64, f64),
+    pub backward: Option<(f64, f64)>,
+}
+
+/// `FtileRepeat.getTranslateFor*`. `total` is the composite from [`repeat_tile`].
+pub fn repeat_layout(
+    total: &FtileGeometry,
+    diamond1: &FtileGeometry,
+    diamond2: &FtileGeometry,
+    repeat: &FtileGeometry,
+    backward: Option<&FtileGeometry>,
+) -> RepeatLayout {
+    let space = total.height - diamond1.height - diamond2.height - repeat.height;
+    let repeat_t = (total.left - repeat.left, diamond1.height + space / 2.0);
+    let diamond1_t = (total.left - diamond1.width / 2.0, 0.0);
+    let diamond2_t = (total.left - diamond2.width / 2.0, total.height - diamond2.height);
+    let backward_t = backward.map(|b| (total.width - b.width, (total.height - b.height) / 2.0));
+    RepeatLayout { diamond1: diamond1_t, diamond2: diamond2_t, repeat: repeat_t, backward: backward_t }
+}
+
+/// Child offsets within an `FtileIfWithDiamonds`.
+#[derive(Clone, Copy, Debug, PartialEq)]
+pub struct IfLayout {
+    pub diamond1: (f64, f64),
+    pub diamond2: (f64, f64),
+    pub branch1: (f64, f64),
+    pub branch2: (f64, f64),
+}
+
+/// `FtileIfWithDiamonds.getTranslate*` (over `FtileIfNude`'s branch translates).
+/// `total` is the composite from [`if_with_diamonds`]; `y_delta_1a` is
+/// `getYdelta1a` (the gap below the test diamond); `note` is the same opale-note
+/// tuple `(xDeltaNote, yDeltaNote, suppWidthNode)` passed there.
+pub fn if_layout(
+    total: &FtileGeometry,
+    diamond1: &FtileGeometry,
+    diamond2: &FtileGeometry,
+    tile2: &FtileGeometry,
+    y_delta_1a: f64,
+    note: (f64, f64, f64),
+) -> IfLayout {
+    let (x_delta_note, y_delta_note, supp_width_node) = note;
+    let branch_y = y_delta_note + diamond1.height + y_delta_1a;
+    IfLayout {
+        diamond1: (total.left - diamond1.left, y_delta_note),
+        diamond2: (total.left - diamond2.width / 2.0, total.height - diamond2.height),
+        branch1: (x_delta_note, branch_y),
+        branch2: (total.width - tile2.width - supp_width_node, branch_y),
+    }
+}
+
+/// `FtileForkInner.getTranslateFor`: branches laid left-to-right at the running
+/// x offset (each at y = 0). The bar wrapping shifts these in the drawing layer.
+pub fn fork_inner_translates(forks: &[FtileGeometry]) -> Vec<(f64, f64)> {
+    let mut out = Vec::with_capacity(forks.len());
+    let mut x = 0.0;
+    for f in forks {
+        out.push((x, 0.0));
+        x += f.width;
+    }
+    out
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;
@@ -596,5 +707,58 @@ mod tests {
         // left = 20 + 15 + 100 = 135.
         let g = switch_with_diamonds(&d1, &d2, &tiles, 20.0);
         assert_eq!(g, FtileGeometry::new(265.0, 224.0, 135.0, 0.0, Some(224.0)));
+    }
+
+    // --- Child translates (hand-verified vs getTranslateFor*) ---
+
+    #[test]
+    fn while_layout_centres_body_below_diamond() {
+        let diamond1 = FtileGeometry::new(40.0, 30.0, 20.0, 8.0, Some(30.0));
+        let body = FtileGeometry::new(60.0, 50.0, 30.0, 0.0, Some(50.0));
+        let total = while_tile(&diamond1, &body, None, None, 12.0); // (96,140,54,8)
+        let l = while_layout(&total, &diamond1, &body, None, None, 12.0);
+        // diamond1 spine to total spine: 54-20 = 34 at y 0.
+        assert_eq!(l.diamond1, (34.0, 0.0));
+        // body y = 30 + (140-30-50-12)/2 = 30+24 = 54; x = 54-30 = 24.
+        assert_eq!(l.body, (24.0, 54.0));
+        assert_eq!(l.backward, None);
+        assert_eq!(l.special, None);
+    }
+
+    #[test]
+    fn repeat_layout_positions_diamonds_and_body() {
+        let d1 = FtileGeometry::new(24.0, 24.0, 12.0, 0.0, Some(24.0));
+        let d2 = FtileGeometry::new(24.0, 24.0, 12.0, 0.0, Some(24.0));
+        let repeat = FtileGeometry::new(50.0, 40.0, 25.0, 0.0, Some(40.0));
+        let total = repeat_tile(&d1, &d2, &repeat, 10.0, None); // (74,184,25,0)
+        let l = repeat_layout(&total, &d1, &d2, &repeat, None);
+        // space = 184-24-24-40 = 96; body y = 24+48 = 72; x = 25-25 = 0.
+        assert_eq!(l.repeat, (0.0, 72.0));
+        assert_eq!(l.diamond1, (13.0, 0.0)); // 25 - 12
+        assert_eq!(l.diamond2, (13.0, 160.0)); // 25 - 12, 184 - 24
+        assert_eq!(l.backward, None);
+    }
+
+    #[test]
+    fn if_layout_places_branches_and_diamonds() {
+        let diamond1 = FtileGeometry::new(50.0, 30.0, 25.0, 0.0, Some(30.0));
+        let t1 = FtileGeometry::new(40.0, 20.0, 20.0, 0.0, Some(20.0));
+        let t2 = FtileGeometry::new(60.0, 24.0, 30.0, 0.0, Some(24.0));
+        let diamond2 = FtileGeometry::new(24.0, 24.0, 12.0, 0.0, Some(24.0));
+        let total = if_with_diamonds(&diamond1, &t1, &t2, &diamond2, 16.0, (0.0, 0.0, 0.0)); // (120,94,55)
+        let l = if_layout(&total, &diamond1, &diamond2, &t2, 10.0, (0.0, 0.0, 0.0));
+        assert_eq!(l.diamond1, (30.0, 0.0)); // 55 - 25
+        assert_eq!(l.diamond2, (43.0, 70.0)); // 55 - 12, 94 - 24
+        assert_eq!(l.branch1, (0.0, 40.0)); // 0, 0 + 30 + 10
+        assert_eq!(l.branch2, (60.0, 40.0)); // 120 - 60 - 0, 40
+    }
+
+    #[test]
+    fn fork_translates_accumulate_x() {
+        let forks = [
+            FtileGeometry::new(40.0, 30.0, 20.0, 0.0, Some(30.0)),
+            FtileGeometry::new(60.0, 50.0, 30.0, 0.0, Some(50.0)),
+        ];
+        assert_eq!(fork_inner_translates(&forks), vec![(0.0, 0.0), (40.0, 0.0)]);
     }
 }
