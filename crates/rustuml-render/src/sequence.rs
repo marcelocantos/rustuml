@@ -280,6 +280,17 @@ const MSG_BASE_STEP: f64 = 14.0;
 const MSG_BASE_FIRST_OFFSET: f64 = 16.0;
 const TAIL_GAP: f64 = 17.0; // gap from last msg y to tail box y
 
+/// Vertical space a `newpage` separator reserves in the page-1 flow. Java
+/// `ComponentRoseNewpage.getPreferredHeight` returns 1; `prepareNewpage`
+/// advances `freeY2` by exactly this, shifting the foot boxes and lifelines
+/// of the (only-rendered) first page down by 1px.
+const NEWPAGE_SEPARATOR_HEIGHT: f64 = 1.0;
+/// The `newpage` separator rule sits this far above the foot-box top. Java
+/// draws the rule at the page-1 `freeY2` (which, after the separator's own +1
+/// advance, equals the foot-box top minus this gap) — a constant 10px across
+/// all page-1 endings (message, group, divider, note).
+const NEWPAGE_SEPARATOR_FOOT_GAP: f64 = 10.0;
+
 /// Vertical band an unlabelled delay (`...`) reserves for its dotted `1,4`
 /// lifeline gap. A labelled delay adds the label's text height on top.
 const DELAY_BAND_HEIGHT: f64 = 28.0;
@@ -3633,13 +3644,27 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
     // dynamically: messages with label text get extra height for the text line.
     // Notes consume vertical space (note height + gap) and count as events
     // for msg_count (so subsequent messages use msg_step, not first_msg_offset).
+    // `newpage` splits the diagram into pages; single-image SVG output renders
+    // only the FIRST page (participant box widths/positions are still derived
+    // from the whole diagram, so wide page-2 labels still set the canvas
+    // width). Everything from the first `newpage` onward is dropped from the
+    // height/message flow, and a horizontal separator rule is drawn at the
+    // bottom of page 1. See Java `SequenceDiagramFileMaker` page handling and
+    // `GraphicalNewpage`/`ComponentRoseNewpage`.
+    let page1_end = diagram
+        .events
+        .iter()
+        .position(|e| matches!(e, Event::NewPage(_)))
+        .unwrap_or(diagram.events.len());
+    let has_newpage = page1_end < diagram.events.len();
+
     // Groups add header/else/end vertical space.
     let mut event_y_positions: Vec<f64> = Vec::new();
     let mut msg_count: u32 = 0;
     let last_effective_y;
     {
         let mut y = lifeline_top;
-        for (idx, event) in diagram.events.iter().enumerate() {
+        for (idx, event) in diagram.events.iter().take(page1_end).enumerate() {
             let has_text = match event {
                 Event::Message(msg) => {
                     let label = process_label(&msg.label);
@@ -3851,6 +3876,13 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                     event_y_positions.push(y);
                 }
             }
+        }
+        // The first `newpage` reserves NEWPAGE_SEPARATOR_HEIGHT in the page-1
+        // flow (Java `prepareNewpage` advances `freeY2` by the separator
+        // component's preferred height of 1), shifting the foot boxes and
+        // lifeline bottoms of page 1 down by that amount.
+        if has_newpage {
+            y += NEWPAGE_SEPARATOR_HEIGHT;
         }
         last_effective_y = y;
     }
@@ -4146,7 +4178,7 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                 open.iter().filter(|(id, _, _, _, _)| id == pid).count()
             };
 
-        for (ev_idx, event) in diagram.events.iter().enumerate() {
+        for (ev_idx, event) in diagram.events.iter().take(page1_end).enumerate() {
             match event {
                 Event::Message(msg) => {
                     last_event_idx = ev_idx;
@@ -4238,8 +4270,17 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
             }
         }
 
-        // Close any remaining open activations — extend to the last event
-        let final_idx = diagram.events.len().saturating_sub(1);
+        // Close any remaining open activations. Without a `newpage` they extend
+        // to the last (page-1) event. With a `newpage`, a bar left open when the
+        // page breaks is closed at the page boundary instead (sentinel
+        // end_event_idx = usize::MAX → bottom computed from the separator y in
+        // the draw pass), matching Java per-page layout where the bar ends with
+        // the page's content.
+        let final_idx = if has_newpage {
+            usize::MAX
+        } else {
+            page1_end.saturating_sub(1)
+        };
         for (pid, start_idx, color, depth, pre) in open_activations {
             activation_bars.push(ActivationBar {
                 participant_id: pid,
@@ -4726,7 +4767,13 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
         let cx = center_of(&bar.participant_id);
         let bar_x = cx - ACTIVATION_HALF_W + (bar.depth as f64 * ACTIVATION_HALF_W);
         let bar_y = event_y(bar.start_event_idx) + bar_create_offset(bar);
-        let bar_end_y = event_y(bar.end_event_idx);
+        // A bar closed at a `newpage` boundary (sentinel end index) ends 2px
+        // below the separator rule, giving the minimal page-break bar.
+        let bar_end_y = if bar.end_event_idx == usize::MAX {
+            tail_box_y - NEWPAGE_SEPARATOR_FOOT_GAP + 2.0
+        } else {
+            event_y(bar.end_event_idx)
+        };
         let bar_h = bar_end_y - bar_y;
         let title = &participants
             .iter()
@@ -4920,7 +4967,13 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
         let cx = center_of(&bar.participant_id);
         let bar_x = cx - ACTIVATION_HALF_W + (bar.depth as f64 * ACTIVATION_HALF_W);
         let bar_y = event_y(bar.start_event_idx) + bar_create_offset(bar);
-        let bar_end_y = event_y(bar.end_event_idx);
+        // A bar closed at a `newpage` boundary (sentinel end index) ends 2px
+        // below the separator rule, giving the minimal page-break bar.
+        let bar_end_y = if bar.end_event_idx == usize::MAX {
+            tail_box_y - NEWPAGE_SEPARATOR_FOOT_GAP + 2.0
+        } else {
+            event_y(bar.end_event_idx)
+        };
         let bar_h = bar_end_y - bar_y;
         let title = &participants
             .iter()
@@ -4948,7 +5001,9 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
     let events = &diagram.events;
     // Track enclosing group frame bounds so else dividers span the full frame.
     let mut else_frame_stack: Vec<(f64, f64)> = Vec::new();
-    for (ev_idx, event) in events.iter().enumerate() {
+    // Only page-1 events are drawn (see `page1_end` above); event_y_positions
+    // only spans page 1, so the loop must not index past it either.
+    for (ev_idx, event) in events.iter().take(page1_end).enumerate() {
         let msg_y = event_y_positions[ev_idx];
         match event {
             Event::Message(msg) => {
@@ -6548,6 +6603,30 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                 svg.buf.push_str(inner);
             }
         }
+    }
+
+    // `newpage` separator: a single horizontal rule at the bottom of page 1,
+    // spanning the full drawing width (Java `GraphicalNewpage` draws at
+    // startingX=0, width=maxX; `ComponentRoseNewpage` emits one dashed hline
+    // via the `newpage { LineStyle 2 }` style). Drawn after all page-1
+    // messages, in document order.
+    if has_newpage {
+        // The rule spans the diagram's content width (Java `maxX`), which is
+        // the un-ceiled canvas width less the 5px right gutter — equivalently
+        // the divider/group "participant span" right edge. Holds whether the
+        // page-1 right edge is set by participant boxes, a wide group frame,
+        // a note, or a divider.
+        let sep_x2 = svg_width_exact - 5.0;
+        let sep_y = tail_box_y - NEWPAGE_SEPARATOR_FOOT_GAP;
+        write!(
+            svg.buf,
+            r##"<line style="stroke:{};stroke-width:0.5;stroke-dasharray:2,2;" x1="0" x2="{}" y1="{}" y2="{}"/>"##,
+            svg.lifeline_border,
+            fmt_coord(sep_x2),
+            fmt_coord(sep_y),
+            fmt_coord(sep_y),
+        )
+        .unwrap();
     }
 
     // Footer: emitted near the end of the document (after all messages), in a
