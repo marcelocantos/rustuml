@@ -3480,7 +3480,11 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                     .lines()
                     .map(|l| text_width(l.trim(), MSG_FONT_SIZE))
                     .fold(0.0_f64, f64::max);
-                let note_content_w = note_content_width(max_tw, note.shape);
+                // Java centres the note on the span midpoint using its raw
+                // (un-ceiled) preferred width, so the left-margin shift must use
+                // the raw width too; the ceiled width over-reserves by up to 1px
+                // and shifts the whole diagram right.
+                let note_content_w = note_content_width_raw(max_tw, note.shape);
                 let margin = if note.participants.is_empty() {
                     ACROSS_NOTE_MARGIN
                 } else {
@@ -6075,11 +6079,13 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                                 let first_ll = participants[0].lifeline_line_x;
                                 let last_ll = participants[participants.len() - 1].lifeline_line_x;
                                 let span = last_ll - first_ll;
+                                let pw_raw = note_content_width_raw(max_text_w, note.shape)
+                                    .max(span.round() + ACROSS_NOTE_MARGIN);
                                 let pw = note_content_w.max(span.round() + ACROSS_NOTE_MARGIN);
                                 let centre = (participants[0].center_x
                                     + participants[participants.len() - 1].center_x)
                                     / 2.0;
-                                let left = (centre - pw / 2.0).floor();
+                                let left = (centre - pw_raw / 2.0).floor();
                                 (left, left + pw)
                             }
                         } else if note.participants.len() == 1 {
@@ -6139,10 +6145,15 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                             let first_ll = participants[lo].lifeline_line_x;
                             let last_ll = participants[hi].lifeline_line_x;
                             let span = last_ll - first_ll;
+                            // The left edge is centred using the raw preferred
+                            // width (Java xStart = (int)(centre - getPreferredWidth/2))
+                            // while the drawn box snaps to the ceiled width.
+                            let pw_raw = note_content_width_raw(max_text_w, note.shape)
+                                .max(span.round() + OVER_SEVERAL_NOTE_MARGIN);
                             let pw = note_content_w.max(span.round() + OVER_SEVERAL_NOTE_MARGIN);
                             let centre =
                                 (participants[lo].center_x + participants[hi].center_x) / 2.0;
-                            let left = (centre - pw / 2.0).floor();
+                            let left = (centre - pw_raw / 2.0).floor();
                             (left, left + pw)
                         }
                     }
