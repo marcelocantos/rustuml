@@ -3314,6 +3314,16 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                 _ => {}
             }
         }
+        // A found message `[-> X` on the first participant reserves left space
+        // for its incoming arrow + label (arrow_len = center-6 = label_w+18,
+        // so center = label_w + 24).
+        if let Event::Message(msg) = event
+            && msg.from == "["
+            && id_to_idx.get(msg.to.as_str()) == Some(&0)
+        {
+            let label_w = text_width(&process_label(&msg.label), MSG_FONT_SIZE);
+            min_first_center_x = min_first_center_x.max(label_w + 24.0);
+        }
     }
 
     // Resolve multi-span constraints: only widen the rightmost pair if the
@@ -3974,6 +3984,20 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
             }
         }
     }
+    // A lost message `X ->]` runs an arrow rightward from X by label_w+18 (plus
+    // the arrowhead), extending the canvas to the right.
+    let mut max_lost_right: f64 = 0.0;
+    for event in &diagram.events {
+        if let Event::Message(msg) = event
+            && msg.to == "]"
+            && let Some(&fi) = id_to_idx.get(msg.from.as_str())
+        {
+            let label_w = text_width(&process_label(&msg.label), MSG_FONT_SIZE);
+            // Canvas edge = arrow line end (label_w+18) + 1px stroke; the
+            // arrowhead tip extends into the RIGHT_MARGIN.
+            max_lost_right = max_lost_right.max(participants[fi].center_x + label_w + 19.0);
+        }
+    }
     // Add 1.0 for note stroke width when notes extend the right edge.
     let effective_right = last_box_right
         .max(if max_note_right > 0.0 {
@@ -3985,7 +4009,8 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
         // A wide divider strip ends at max_divider_right; the canvas adds
         // RIGHT_MARGIN (10) but the divider only needs +5, so offset by -5.
         .max(max_divider_right - 5.0)
-        .max(max_ref_right);
+        .max(max_ref_right)
+        .max(max_lost_right);
     // If groups are present, the group frame may extend beyond participant boxes.
     // Compute the maximum right extent of any group frame (header text + guard).
     let mut max_group_right: f64 = 0.0;
@@ -4917,8 +4942,18 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
             Event::Message(msg) => {
                 msg_id += 1;
 
+                // Found (`[-> X`): from the virtual "[" at x=0 to X. Lost
+                // (`X ->]`): from X rightward to an external point label_w+18
+                // away. center_of("[")/("]") return 0, so override the lost end.
                 let from_x = center_of(&msg.from);
-                let to_x = center_of(&msg.to);
+                let to_x = if msg.to == "]" {
+                    // to_x is the conceptual arrowhead tip+2; the normal render
+                    // draws the line to to_x-6 and the tip at to_x-2, matching
+                    // the golden line end (label_w+18) and tip (label_w+22).
+                    from_x + text_width(&process_label(&msg.label), MSG_FONT_SIZE) + 24.0
+                } else {
+                    center_of(&msg.to)
+                };
                 let is_self = msg.from == msg.to;
                 let is_right = to_x > from_x;
                 let is_dotted = msg.arrow.line == LineStyle::Dotted;
@@ -4978,6 +5013,15 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                     .get(msg.to.as_str())
                     .map(|i| format!("part{}", i + 1))
                     .unwrap_or_default();
+                // Found/lost: PlantUML labels BOTH entities with the single real
+                // participant (the virtual "[" / "]" has no uid).
+                let (from_uid, to_uid) = if msg.from == "[" {
+                    (to_uid.clone(), to_uid)
+                } else if msg.to == "]" {
+                    (from_uid.clone(), from_uid)
+                } else {
+                    (from_uid, to_uid)
+                };
 
                 let src_line = msg.source_line as u32;
 
