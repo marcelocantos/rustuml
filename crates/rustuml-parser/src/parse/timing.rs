@@ -72,25 +72,15 @@ impl TimingParser {
 
     fn finish(self) -> TimingDiagram {
         let mut time_points = self.time_points;
-        // Generate clock-related time points: for each clock with period N,
-        // add t_min + N/2, t_min + N, t_min + 3N/2, ... up to t_max + N.
-        if !self.clock_periods.is_empty() {
-            let t_min = time_points.iter().next().copied().unwrap_or(0);
-            let t_max = time_points.iter().next_back().copied().unwrap_or(0);
-            for (_, period) in &self.clock_periods {
-                if *period <= 0 {
-                    continue;
-                }
-                // Add half-period boundaries as time points.
-                let half = period / 2;
-                if half <= 0 {
-                    continue;
-                }
-                let mut t = t_min + half;
-                while t <= t_max + period {
-                    time_points.insert(t);
-                    t += half;
-                }
+        // Each clock contributes exactly ONE tick to the ruler: its `period`
+        // (PlantUML `TimingDiagram.createPlayerClock` → `ruler.addTime(period)`).
+        // The ruler's tick unit is the highest common factor of all such ticks,
+        // so the period — not a half-period series — sets the grid granularity.
+        // The clock's own square-wave is generated at render time from the
+        // period/pulse/offset, not from these ruler ticks.
+        for (_, period) in &self.clock_periods {
+            if *period > 0 {
+                time_points.insert(*period);
             }
         }
         let time_points = time_points.into_iter().collect();
@@ -241,6 +231,7 @@ impl TimingParser {
                     label,
                     kind,
                     changes: Vec::new(),
+                    clock: None,
                 });
             }
             true
@@ -249,14 +240,16 @@ impl TimingParser {
         }
     }
 
-    /// Try `clock "Label" as Alias with period N`.
-    /// Creates a Binary timeline. The clock auto-toggles each half-period,
-    /// but we store it as a plain binary timeline; the actual waveform is
-    /// generated from state changes in the diagram. For the purposes of
-    /// label rendering, we just register the timeline.
+    /// Try `clock "Label" as Alias with period N [pulse P] [offset O]`.
+    /// Registers a [`TimelineKind::Clock`] carrying its [`ClockSpec`]; the
+    /// square-wave is generated at render time from period/pulse/offset
+    /// (PlantUML's `PlayerClock` + `PanelsClock`), not from state changes.
     fn try_clock_decl(&mut self, line: &str) -> bool {
         static RE: LazyLock<Regex> = LazyLock::new(|| {
-            Regex::new(r#"^clock\s+"([^"]+)"(?:\s+as\s+(\w+))?\s+with\s+period\s+(\d+)$"#).unwrap()
+            Regex::new(
+                r#"^clock\s+"([^"]+)"(?:\s+as\s+(\w+))?\s+with\s+period\s+(\d+)(?:\s+pulse\s+(\d+))?(?:\s+offset\s+(\d+))?$"#,
+            )
+            .unwrap()
         });
         if let Some(caps) = RE.captures(line) {
             let label = caps[1].to_string();
@@ -265,15 +258,27 @@ impl TimingParser {
                 .map(|m| m.as_str().to_string())
                 .unwrap_or_else(|| label.clone());
             let period: i64 = caps[3].parse().unwrap_or(10);
-            // Store period for time-point generation in finish().
+            let pulse: i64 = caps
+                .get(4)
+                .and_then(|m| m.as_str().parse().ok())
+                .unwrap_or(0);
+            let offset: i64 = caps
+                .get(5)
+                .and_then(|m| m.as_str().parse().ok())
+                .unwrap_or(0);
+            // The clock adds a single ruler tick (its period); see `finish()`.
             self.clock_periods.push((id.clone(), period));
-            // Register as Binary timeline.
             if !self.timelines.iter().any(|t| t.id == id) {
                 self.timelines.push(Timeline {
                     id,
                     label,
-                    kind: TimelineKind::Binary,
+                    kind: TimelineKind::Clock,
                     changes: Vec::new(),
+                    clock: Some(ClockSpec {
+                        period,
+                        pulse,
+                        offset,
+                    }),
                 });
             }
             true
@@ -480,6 +485,34 @@ mod tests {
     fn time_points_sorted() {
         let d = parse("robust \"X\" as X\n@300\nX is A\n@0\nX is B\n@150\nX is C");
         assert_eq!(d.time_points, vec![0, 150, 300]);
+    }
+
+    #[test]
+    fn clock_adds_single_period_tick() {
+        // PlantUML's `createPlayerClock` adds exactly ONE ruler tick — the
+        // period — so the tick unit (HCF of {20, 40, 100}) stays at 20, not
+        // the half-period 10. The clock's square-wave is generated at render
+        // time, not from extra time points.
+        let d = parse(
+            "clock \"CLK20\" as clk with period 20\n\
+             binary \"DATA\" as dat\n\
+             @0\ndat is low\n@40\ndat is high\n@100\ndat is low",
+        );
+        assert_eq!(d.time_points, vec![0, 20, 40, 100]);
+        let clk = d.timelines.iter().find(|t| t.id == "clk").unwrap();
+        assert_eq!(clk.kind, TimelineKind::Clock);
+        let spec = clk.clock.unwrap();
+        assert_eq!(spec.period, 20);
+        assert_eq!(spec.pulse, 0);
+        assert_eq!(spec.offset, 0);
+    }
+
+    #[test]
+    fn clock_parses_pulse_and_offset() {
+        let d = parse("clock \"C\" as c with period 30 pulse 10 offset 5\n@0\n@60");
+        let c = &d.timelines[0];
+        let spec = c.clock.unwrap();
+        assert_eq!((spec.period, spec.pulse, spec.offset), (30, 10, 5));
     }
 
     #[test]

@@ -60,6 +60,22 @@ pub struct Timeline {
     pub kind: TimelineKind,
     /// Ordered list of state transitions.
     pub changes: Vec<StateChange>,
+    /// Clock parameters when `kind == TimelineKind::Clock`. A clock generates
+    /// its own square-wave from `period`/`pulse`/`offset` rather than from
+    /// `changes` (which are unused). Mirrors PlantUML's `PlayerClock`.
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub clock: Option<ClockSpec>,
+}
+
+/// Clock waveform parameters (PlantUML `clock ... with period N [pulse P] [offset O]`).
+#[derive(Debug, Clone, Copy, Serialize, Deserialize)]
+pub struct ClockSpec {
+    /// Full cycle length, in time units.
+    pub period: i64,
+    /// High-level width per cycle; `0` means `period / 2` (PlantUML default).
+    pub pulse: i64,
+    /// Initial low offset before the first rising edge.
+    pub offset: i64,
 }
 
 /// Visual style of a timeline.
@@ -71,6 +87,8 @@ pub enum TimelineKind {
     Concise,
     /// Two-level digital signal (PlantUML `binary`).
     Binary,
+    /// Auto-generated periodic square wave (PlantUML `clock`).
+    Clock,
 }
 
 /// A state the timeline enters at a particular time.

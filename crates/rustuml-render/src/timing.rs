@@ -218,7 +218,8 @@ pub fn render(diagram: &TimingDiagram, _theme: &Theme) -> String {
         let left_panel_width = match tl.kind {
             TimelineKind::Robust => robust_states_width(&all_states),
             TimelineKind::Concise => 0.0,
-            TimelineKind::Binary => LEFT_PANEL_MIN_WIDTH,
+            // Both binary and clock use `PanelsNoLeft` → `LEFT_PANEL_MIN_WIDTH`.
+            TimelineKind::Binary | TimelineKind::Clock => LEFT_PANEL_MIN_WIDTH,
         };
         part1_max_width = part1_max_width.max(left_panel_width);
 
@@ -319,6 +320,16 @@ pub fn render(diagram: &TimingDiagram, _theme: &Theme) -> String {
                 draw_concise(&mut svg, p, &tx, ruler_width, first_tick_x, vtop)
             }
             TimelineKind::Binary => draw_binary(&mut svg, p, &tx, ruler_width, first_tick_x, vtop),
+            TimelineKind::Clock => draw_clock(
+                &mut svg,
+                p,
+                time_min,
+                tick_unit,
+                tick_px,
+                ruler_width,
+                first_tick_x,
+                vtop,
+            ),
         }
     }
 
@@ -475,7 +486,8 @@ fn full_height_of(tl: &Timeline, constraints_h: f64) -> f64 {
             h + HISTOGRAM_BOTTOM_MARGIN + 6.0
         }
         TimelineKind::Concise => 5.0 + CONCISE_RIBBON_HEIGHT + BOTTOM_MARGIN,
-        TimelineKind::Binary => BINARY_HEIGHT,
+        // Clock shares the binary `suggestedHeight` (PlayerClock(..., 30)).
+        TimelineKind::Binary | TimelineKind::Clock => BINARY_HEIGHT,
     }
 }
 
@@ -793,6 +805,96 @@ fn draw_binary(
     );
 }
 
+// ── Clock ────────────────────────────────────────────────────────────────
+
+/// Stroke width PlantUML uses for clock waveforms (`PanelsClock`); thinner than
+/// the binary trace (2.0).
+const CLOCK_LINE_WIDTH: f64 = 1.5;
+
+/// Port of `PanelsClock.drawRightPanel`: an auto-generated square wave with a
+/// rising edge every `pulse` units and a falling edge `period - pulse` later,
+/// starting at the panel's left edge (after an optional initial `offset`),
+/// repeating until the next transition would fall past the ruler width.
+#[allow(clippy::too_many_arguments)]
+fn draw_clock(
+    svg: &mut SvgBuilder,
+    p: &PlayerLayout,
+    time_min: i64,
+    tick_unit: i64,
+    tick_px: f64,
+    ruler_width: f64,
+    first_tick_x: f64,
+    vtop: f64,
+) {
+    let Some(spec) = p.timeline.clock else {
+        return;
+    };
+    let period = spec.period as f64;
+    if period <= 0.0 {
+        return;
+    }
+    let body = vtop + p.body_top;
+    let y_high = body + PANEL_MARGIN_Y;
+    let line_height = BINARY_HEIGHT - 2.0 * PANEL_MARGIN_Y; // PanelsClock getLineHeight
+    let y_low = y_high + line_height;
+
+    // `xOfTime` = TimingRuler.getPosInPixel: a local pixel offset from the first
+    // tick (the ruler min is subtracted, then scaled by tick unit / interval).
+    let x_of_time = |t: f64| (t - time_min as f64) / tick_unit as f64 * tick_px;
+    // Absolute x for a clock-local time, clamped to the ruler width on the
+    // right (`drawHorizontalBetweenTimes` uses `min(ruler.getWidth(), …)`).
+    let abs_x = |t: f64| first_tick_x + x_of_time(t);
+    let h_line = |svg: &mut SvgBuilder, y: f64, start: f64, end: f64| {
+        let x1 = x_of_time(start);
+        let x2 = ruler_width.min(x_of_time(end));
+        emit_line(
+            svg,
+            first_tick_x + x1,
+            y,
+            first_tick_x + x2,
+            y,
+            STATE_LINE_COLOR,
+            CLOCK_LINE_WIDTH,
+        );
+    };
+    let v_line = |svg: &mut SvgBuilder, t: f64| {
+        let x = abs_x(t);
+        emit_line(svg, x, y_high, x, y_low, STATE_LINE_COLOR, CLOCK_LINE_WIDTH);
+    };
+
+    let mut value = 0.0_f64;
+    if spec.offset != 0 {
+        let off = spec.offset as f64;
+        h_line(svg, y_low, value, off);
+        value += off;
+    }
+    if x_of_time(value) > ruler_width {
+        return;
+    }
+    v_line(svg, value);
+
+    let vpulse = if spec.pulse == 0 {
+        period / 2.0
+    } else {
+        spec.pulse as f64
+    };
+    let remain = period - vpulse;
+    for _ in 0..1000 {
+        h_line(svg, y_high, value, value + vpulse);
+        value += vpulse;
+        if x_of_time(value) > ruler_width {
+            return;
+        }
+        v_line(svg, value);
+        h_line(svg, y_low, value, value + remain);
+        value += remain;
+        if x_of_time(value) > ruler_width {
+            return;
+        }
+        v_line(svg, value);
+    }
+}
+
 // ── Time axis ──────────────────────────────────────────────────────────────
 
 #[allow(clippy::too_many_arguments)]
@@ -880,6 +982,7 @@ mod tests {
                         state: "Idle".into(),
                     },
                 ],
+                clock: None,
             }],
             highlights: vec![],
             annotations: vec![],
