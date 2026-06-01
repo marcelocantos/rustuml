@@ -1336,6 +1336,37 @@ fn node_geometry(node: &LayoutNode) -> Option<ftile::FtileGeometry> {
                 .collect::<Option<Vec<_>>>()?;
             ftile::switch_with_diamonds(&diamond1, &diamond2, &tiles, 20.0)
         }
+        LayoutNode::Repeat {
+            body,
+            condition,
+            backward,
+            ..
+        } => {
+            // FtileRepeat: diamond1 = empty top diamond, diamond2 =
+            // FtileDiamondInside(test), test_label_w = the bare test-label width
+            // (tbTest), backward = optional loop-back box.
+            let diamond1 = G::diamond_empty(0.0);
+            let diamond2 = condition_diamond(condition);
+            let repeat = sequence_geometry(body)?;
+            let test_label_w = text_render::measure(condition, SMALL_FONT, false);
+            let backward_g = backward.as_ref().map(|label| {
+                G::box_tile(
+                    text_render::measure(label, FONT_SIZE, false),
+                    text_render::label_height(label, FONT_SIZE),
+                    ACTION_H_PADDING,
+                    ACTION_H_PADDING,
+                    ACTION_H_PADDING,
+                    ACTION_H_PADDING,
+                )
+            });
+            ftile::repeat_tile(
+                &diamond1,
+                &diamond2,
+                &repeat,
+                test_label_w,
+                backward_g.as_ref(),
+            )
+        }
         _ => return None,
     };
     Some(g)
