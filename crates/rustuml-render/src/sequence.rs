@@ -3646,7 +3646,9 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                     !label.is_empty()
                 }
                 Event::Return(ret) => !ret.label.is_empty(),
-                Event::Divider(_) => true,
+                // An empty divider (`====`) has no label box/text line, so it
+                // reserves no text height.
+                Event::Divider(t) => !t.trim().is_empty(),
                 Event::Delay(t) => t.is_some(),
                 _ => false,
             };
@@ -3698,19 +3700,29 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                     }
                     msg_count += 1;
                 }
-                Event::Divider(_) => {
+                Event::Divider(dt) => {
                     // Dividers take a total of msg_step + MSG_BASE_STEP vertical space.
                     // The event_y is positioned at the divider text baseline, which is
                     // at msg_step + 5.258 from the previous event. The remaining
                     // MSG_BASE_STEP - 5.258 = 8.742 adds to the gap before the next message.
                     const DIVIDER_TEXT_OFFSET: f64 = 5.2578;
                     const DIVIDER_TAIL_PAD: f64 = MSG_BASE_STEP - DIVIDER_TEXT_OFFSET;
+                    // An empty divider (`====`) has no label box: has_text is
+                    // false (so msg_step drops the full text height), but the
+                    // strip still sits half a text-line lower than that.
+                    let empty_adj = if dt.trim().is_empty() {
+                        MSG_TEXT_HEIGHT / 2.0
+                    } else {
+                        0.0
+                    };
                     if msg_count == 0 {
                         y += first_msg_offset(has_text) + DIVIDER_TEXT_OFFSET;
                     } else {
                         y += msg_step(has_text) + DIVIDER_TEXT_OFFSET;
                     }
-                    event_y_positions.push(y);
+                    // The empty divider's strip sits half a text-line lower, but
+                    // this offset does not push subsequent events down.
+                    event_y_positions.push(y + empty_adj);
                     // The divider's tail padding accounts for the space below the
                     // text baseline (the double lines extend above, but PlantUML
                     // also reserves space below for visual balance).
@@ -5821,33 +5833,37 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                 )
                 .unwrap();
 
-                // 4. Label box rect
-                write!(
-                    svg.buf,
-                    r##"<rect fill="{divider_fill}" height="{}" style="stroke:{divider_border};stroke-width:2;" width="{}" x="{}" y="{}"/>"##,
-                    fmt_coord(label_box_h),
-                    fmt_coord(label_box_w),
-                    fmt_coord(label_box_x),
-                    fmt_coord(label_box_y),
-                )
-                .unwrap();
+                // An empty divider (`====`) draws only the strip + lines, no
+                // label box or text.
+                if !text.trim().is_empty() {
+                    // 4. Label box rect
+                    write!(
+                        svg.buf,
+                        r##"<rect fill="{divider_fill}" height="{}" style="stroke:{divider_border};stroke-width:2;" width="{}" x="{}" y="{}"/>"##,
+                        fmt_coord(label_box_h),
+                        fmt_coord(label_box_w),
+                        fmt_coord(label_box_x),
+                        fmt_coord(label_box_y),
+                    )
+                    .unwrap();
 
-                // 5. Bold text
-                text_render::emit_text(
-                    &mut svg.buf,
-                    text,
-                    &TextBase {
-                        x: text_x,
-                        y: text_y,
-                        font_size: divider_font_size,
-                        font_family: "sans-serif",
-                        fill: &divider_font_color,
-                        bold: true,
-                        italic: false,
-                        underline: false,
-                        skip_underline: false,
-                    },
-                );
+                    // 5. Bold text
+                    text_render::emit_text(
+                        &mut svg.buf,
+                        text,
+                        &TextBase {
+                            x: text_x,
+                            y: text_y,
+                            font_size: divider_font_size,
+                            font_family: "sans-serif",
+                            fill: &divider_font_color,
+                            bold: true,
+                            italic: false,
+                            underline: false,
+                            skip_underline: false,
+                        },
+                    );
+                }
             }
             Event::Delay(Some(t)) => {
                 let mid_x = if !participants.is_empty() {
