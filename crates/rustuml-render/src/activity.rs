@@ -1675,6 +1675,12 @@ fn if_long_layout(
     if let Some(tc) = tile2_center_u {
         occ.push((tc - tile2_w / 2.0, tc + tile2_w / 2.0));
     }
+    // The flow spine (start/stop circles, inbound/outbound connectors) sits at
+    // `internalWidth/2` and is seen by the global ON_X compaction, so it
+    // truncates any gap straddling the spine. Reserve the stop/start circle
+    // band (radius 11) there — matching the common start→if→stop column that
+    // every elseif-chain golden uses.
+    occ.push((spine_internal - STOP_OUTER_R, spine_internal + STOP_OUTER_R));
 
     // Build the compression transform: f(v) = v − (compressed empty space left
     // of v). Empty gaps come from the complement of the merged occupied set;
