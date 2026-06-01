@@ -11,7 +11,9 @@
 use rustuml_parser::diagram::gantt::{GanttDiagram, GanttRow, GanttTask, TaskStart};
 
 use crate::layout_oracle::{OracleLayout, wrap_oracle_envelope};
-use crate::plantuml_metrics::{ascent, descent, fmt_coord, serif_text_width, text_width};
+use crate::plantuml_metrics::{
+    ascent, descent, fmt_coord, serif_text_width, text_height, text_width,
+};
 use crate::style::Theme;
 use crate::svg::SvgBuilder;
 
@@ -38,6 +40,26 @@ const GRID_BOTTOM_PAD_PLAIN: f64 = 6.0;
 const TASK_FONT: f64 = 11.0;
 const AXIS_FONT: f64 = 10.0;
 const MONTH_FONT: f64 = 12.0;
+
+// ── Note (Opale) geometry, matching net.sourceforge.plantuml.svek.image.Opale ──
+// A note attached to a task is drawn as an "opale" box: a rectangle with a
+// folded top-right corner. Its width is the widest text line plus left/right
+// margins; its height is the stacked text plus top/bottom margins.
+const NOTE_FONT: f64 = 9.0;
+/// Opale.marginX1 (left text inset).
+const NOTE_MARGIN_X1: f64 = 6.0;
+/// Opale.marginX2 (right text inset).
+const NOTE_MARGIN_X2: f64 = 15.0;
+/// Opale.marginY (top and bottom text inset).
+const NOTE_MARGIN_Y: f64 = 5.0;
+/// Opale.cornersize (the folded corner is a 10×10 triangle).
+const NOTE_CORNER: f64 = 10.0;
+/// Gantt task style margin (top == bottom). The note sits this far below the
+/// task bar's bottom edge, and the next overlapping task sits this far below
+/// the note's bottom edge.
+const TASK_MARGIN: f64 = 2.0;
+const NOTE_FILL: &str = "#FEFFDD";
+const NOTE_STROKE: &str = "#181818";
 
 const DEFAULT_BAR_COLOR: &str = "#E2E2F0";
 const DEFAULT_BAR_STROKE: &str = "#181818";
@@ -222,6 +244,41 @@ enum LaidRow<'a> {
     Separator(&'a str),
 }
 
+/// A note (Opale box) attached to a task row, with its computed dimensions.
+struct RowNote {
+    /// Left edge (the attached task's start position).
+    x: f64,
+    /// Box width: widest line + left/right margins.
+    width: f64,
+    /// Box height: stacked text + top/bottom margins.
+    height: f64,
+    /// Text lines (escaped at draw time).
+    lines: Vec<String>,
+    /// Per-line text length (SVG `textLength`), parallel to `lines`.
+    line_widths: Vec<f64>,
+}
+
+impl RowNote {
+    fn new(lines: &[String], x: f64) -> Self {
+        // AWT SansSerif advances are perfectly linear in point size, so the
+        // size-9 width is the size-10 metric scaled by 0.9 (no size-9 table
+        // exists, and the global metric fallback would use size 12).
+        let line_widths: Vec<f64> = lines
+            .iter()
+            .map(|l| text_width(l, 10.0, false) * (NOTE_FONT / 10.0))
+            .collect();
+        let text_w = line_widths.iter().cloned().fold(0.0_f64, f64::max);
+        let text_h = lines.len() as f64 * text_height(NOTE_FONT);
+        RowNote {
+            x,
+            width: text_w + NOTE_MARGIN_X1 + NOTE_MARGIN_X2,
+            height: text_h + 2.0 * NOTE_MARGIN_Y,
+            lines: lines.to_vec(),
+            line_widths,
+        }
+    }
+}
+
 /// Render a Gantt diagram to SVG.
 pub fn render(diagram: &GanttDiagram, _theme: &Theme) -> String {
     if diagram.tasks.is_empty() {
@@ -230,17 +287,19 @@ pub fn render(diagram: &GanttDiagram, _theme: &Theme) -> String {
     }
 
     let resolved_wd = resolve_starts(&diagram.tasks);
-    let has_closed = !diagram.closed_days.is_empty() && diagram.project_start.is_some();
+    // Closures comprise repeating weekday closures plus specific holiday dates.
+    // Both require a project start to position them on the calendar.
+    let closures = diagram
+        .project_start
+        .as_deref()
+        .map(|ps| Closures::new(ps, &diagram.closed_days, &diagram.closed_dates));
+    let has_closed = closures.as_ref().is_some_and(Closures::any);
     let (resolved, total_days) = if has_closed {
-        let start_dow = diagram
-            .project_start
-            .as_deref()
-            .and_then(parse_start_dow)
-            .unwrap_or(0);
+        let closures = closures.as_ref().unwrap();
         let cal: Vec<(u32, u32)> = resolved_wd
             .iter()
             .map(|&(wd_start, wd_dur)| {
-                let cal_start = wd_to_cal(wd_start, start_dow, &diagram.closed_days);
+                let cal_start = closures.wd_to_cal(wd_start);
                 // The visible end is one column past the task's last open day.
                 // Using wd_to_cal(wd_start + wd_dur) would instead land on the
                 // first open day *after* any trailing weekend, over-extending
@@ -248,7 +307,7 @@ pub fn render(diagram: &GanttDiagram, _theme: &Theme) -> String {
                 let cal_end = if wd_dur == 0 {
                     cal_start
                 } else {
-                    wd_to_cal(wd_start + wd_dur - 1, start_dow, &diagram.closed_days) + 1
+                    closures.wd_to_cal(wd_start + wd_dur - 1) + 1
                 };
                 (cal_start, cal_end - cal_start)
             })
@@ -270,6 +329,14 @@ pub fn render(diagram: &GanttDiagram, _theme: &Theme) -> String {
         .as_deref()
         .and_then(|s| CalendarInfo::parse(s, total_days));
     let has_cal = cal.is_some();
+
+    // Per-column closed flag for the calendar range (weekday + holiday dates).
+    let closed_cols: Vec<bool> = match (&closures, has_closed) {
+        (Some(c), true) => (0..total_days).map(|col| c.is_col_closed(col)).collect(),
+        _ => vec![false; total_days as usize],
+    };
+    let is_closed_col =
+        |col: u32| -> bool { closed_cols.get(col as usize).copied().unwrap_or(false) };
 
     let fallback_rows: Vec<GanttRow>;
     let rows_list: Vec<&GanttRow> = if !diagram.rows.is_empty() {
@@ -330,7 +397,25 @@ pub fn render(diagram: &GanttDiagram, _theme: &Theme) -> String {
             label_right = label_right.max(lx + reserved_w);
         }
     }
-    let total_width = (chart_width + 1.0).max(label_right + 1.0);
+
+    // A parallel-start arrow ("starts at X's start") routes out to the left of
+    // the bar and back in. Its arrowhead polygon pushes the drawn content's
+    // left edge negative: PlantUML's LimitFinder pads polygons by 10px on each
+    // side (HACK_X_FOR_POLYGON), and the arrowhead's leftmost point sits 4px
+    // left of the successor's start. The image width is (maxX - minX) + 1, so a
+    // negative minX widens the canvas.
+    let mut content_min_x = 0.0_f64;
+    for row in &laid {
+        if let LaidRow::Task(task, idx) = row
+            && let TaskStart::WithTask(dep) = &task.start
+            && resolved[*idx].1 != 0
+            && diagram.tasks.iter().any(|t| &t.name == dep)
+        {
+            let succ_start_x = resolved[*idx].0 as f64 * DAY_WIDTH;
+            content_min_x = content_min_x.min(succ_start_x - 4.0 - 10.0);
+        }
+    }
+    let total_width = (chart_width.max(label_right) - content_min_x) + 1.0;
 
     // A `title` pushes the whole chart down by a fixed band: 10px top pad,
     // one title line, then an 11px bottom gap before the calendar/grid.
@@ -360,6 +445,66 @@ pub fn render(diagram: &GanttDiagram, _theme: &Theme) -> String {
         };
     }
     row_tops.push(acc);
+
+    // A note attached to a task is laid out below that task's bar. Compute
+    // each note's box (lines + dimensions) and the row it belongs to. The
+    // box top sits `BAR_H + TASK_MARGIN` below the row's bar top (PlantUML's
+    // getYNotePosition), spanning from the task's left edge.
+    let row_notes: Vec<Option<RowNote>> = laid
+        .iter()
+        .map(|row| match row {
+            LaidRow::Task(task, idx) => diagram
+                .notes
+                .iter()
+                .find(|n| n.task == task.name && !n.lines.is_empty())
+                .map(|n| RowNote::new(&n.lines, resolved[*idx].0 as f64 * DAY_WIDTH)),
+            LaidRow::Separator(_) => None,
+        })
+        .collect();
+
+    // Resolve note/task overlaps (PlantUML's TaskDrawRegistryData.resolveNoteOverlaps).
+    // A task whose bar overlaps an earlier note's box — both horizontally and
+    // vertically — is pushed down so it clears the note. Because PlantUML's
+    // layout chains task Y constraints, pushing one row shifts every later row
+    // (and its attached note) by the same delta; earlier notes stay put.
+    if row_notes.iter().any(|n| n.is_some()) {
+        for vi in 0..n_rows {
+            // Bar fingerprint of this task row.
+            let (bar_x0, bar_x1, bar_y0, bar_y1) = match &laid[vi] {
+                LaidRow::Task(_, idx) => {
+                    let (sd, dur) = resolved[*idx];
+                    let x0 = sd as f64 * DAY_WIDTH;
+                    let x1 = (sd + dur.max(1)) as f64 * DAY_WIDTH;
+                    let y0 = row_tops[vi];
+                    (x0, x1, y0, y0 + ROW_STRIDE)
+                }
+                LaidRow::Separator(_) => continue,
+            };
+            let mut required_top = row_tops[vi];
+            for nvi in 0..vi {
+                if let Some(note) = &row_notes[nvi] {
+                    let n_top = row_tops[nvi] + BAR_H + TASK_MARGIN;
+                    let n_bot = n_top + note.height;
+                    let n_x0 = note.x;
+                    let n_x1 = note.x + note.width;
+                    // 2D fingerprint overlap (FingerPrint.overlap).
+                    let x_overlap = bar_x0 < n_x1 && n_x0 < bar_x1;
+                    let y_overlap = bar_y0 < n_bot && n_top < bar_y1;
+                    if x_overlap && y_overlap {
+                        required_top = required_top.max(n_bot + TASK_MARGIN);
+                    }
+                }
+            }
+            let delta = required_top - row_tops[vi];
+            if delta > 0.0 {
+                for t in row_tops.iter_mut().skip(vi) {
+                    *t += delta;
+                }
+            }
+        }
+    }
+    acc = row_tops[n_rows];
+
     let row_bar_top = |vi: usize| row_tops[vi];
     let rows_extent = acc - ROW_STRIDE + BAR_H; // bottom of last row's bar
 
@@ -389,12 +534,26 @@ pub fn render(diagram: &GanttDiagram, _theme: &Theme) -> String {
     let n_res = res_names.len();
     let res_section_top = acc;
 
+    // A note whose box hangs below the last row extends the content bottom
+    // (PlantUML's computeBottomY maxes task.Y + heightMax over all tasks; a
+    // noted task contributes its note's bottom edge). The +TASK_MARGIN keeps
+    // the same offset the row accumulator carries past the last bar.
+    let note_bottom_extent = laid
+        .iter()
+        .enumerate()
+        .filter_map(|(vi, _)| {
+            row_notes[vi]
+                .as_ref()
+                .map(|note| row_tops[vi] + BAR_H + TASK_MARGIN + note.height + TASK_MARGIN)
+        })
+        .fold(0.0_f64, f64::max);
+
     let grid_bottom = if has_cal {
         rows_extent + 2.0
     } else if n_res > 0 {
         res_section_top + n_res as f64 * RES_ROW_STRIDE + RES_BOTTOM_PAD
     } else {
-        acc + GRID_BOTTOM_PAD_PLAIN
+        acc.max(note_bottom_extent) + GRID_BOTTOM_PAD_PLAIN
     };
 
     let total_height = if has_cal {
@@ -402,7 +561,20 @@ pub fn render(diagram: &GanttDiagram, _theme: &Theme) -> String {
         // its baseline plus the font descent, rounded up to a whole pixel.
         (grid_bottom + CAL_BOT_MONTH_OFF + descent(MONTH_FONT)).ceil()
     } else {
-        grid_bottom + BOTTOM_DAYNUM_OFF_PLAIN + 2.4669
+        // PlantUML composes the title as a fixed band of height `title_h`
+        // stacked above the chart body (ImageBuilder), so the image height is
+        // ceil(title_h + body_bound). The body bound is the LimitFinder min/max
+        // over the body's drawn content: the top day-number axis to the bottom
+        // day-number axis, each text run bounded from baseline - textHeight +
+        // 1.5 to baseline + 1.5. (grid_bottom and the top-axis baseline both
+        // carry the +title_h offset, so their difference is title-independent;
+        // the title band is then added back explicitly.)
+        let bottom_baseline = grid_bottom + BOTTOM_DAYNUM_OFF_PLAIN;
+        let max_y = bottom_baseline + 1.5;
+        let top_day_baseline = title_h + ascent(AXIS_FONT);
+        let top_day_top = top_day_baseline - text_height(AXIS_FONT) + 1.5;
+        let body_bound = max_y - top_day_top;
+        (title_h + body_bound).ceil()
     };
 
     let mut svg = SvgBuilder::new_plantuml(total_width, total_height, "GANTT");
@@ -423,17 +595,14 @@ pub fn render(diagram: &GanttDiagram, _theme: &Theme) -> String {
         ));
     }
 
-    // 1. Weekend shading (calendar only).
-    if let Some(ref c) = cal {
+    // 1. Weekend / holiday shading (calendar only).
+    if cal.is_some() {
         let mut day_idx = 0usize;
-        while day_idx < c.day_of_week.len() {
-            let dow = c.day_of_week[day_idx];
-            if diagram.closed_days.contains(&dow) {
+        while (day_idx as u32) < total_days {
+            if is_closed_col(day_idx as u32) {
                 // Coalesce consecutive closed days into one rect.
                 let start = day_idx;
-                while day_idx < c.day_of_week.len()
-                    && diagram.closed_days.contains(&c.day_of_week[day_idx])
-                {
+                while (day_idx as u32) < total_days && is_closed_col(day_idx as u32) {
                     day_idx += 1;
                 }
                 let gx = start as f64 * DAY_WIDTH;
@@ -459,6 +628,7 @@ pub fn render(diagram: &GanttDiagram, _theme: &Theme) -> String {
             &mut svg,
             c,
             diagram,
+            &closed_cols,
             title_h + CAL_DOW_Y,
             title_h + CAL_DAYNUM_Y,
             title_h + CAL_MONTH_Y,
@@ -533,6 +703,17 @@ pub fn render(diagram: &GanttDiagram, _theme: &Theme) -> String {
         }
     }
 
+    // 4b. Notes (Opale boxes). Drawn after dependency arrows and before the
+    // bars, matching PlantUML's document order (drawNote runs first in
+    // TaskDrawRegular.drawU). The box top sits BAR_H + TASK_MARGIN below the
+    // task's bar top.
+    for (vi, _) in laid.iter().enumerate() {
+        if let Some(note) = &row_notes[vi] {
+            let note_top = row_bar_top(vi) + BAR_H + TASK_MARGIN;
+            draw_note(&mut svg, note, note_top);
+        }
+    }
+
     // 5. Bars / milestones / separator rules.
     for (vi, row) in laid.iter().enumerate() {
         if let LaidRow::Separator(label) = row {
@@ -595,12 +776,7 @@ pub fn render(diagram: &GanttDiagram, _theme: &Theme) -> String {
                 // Split the bar's calendar span into runs of consecutive open
                 // (non-closed) day columns. With no closed days this yields a
                 // single run spanning the whole bar.
-                let is_closed = |col: u32| -> bool {
-                    cal.as_ref().is_some_and(|c| {
-                        (col as usize) < c.day_of_week.len()
-                            && diagram.closed_days.contains(&c.day_of_week[col as usize])
-                    })
-                };
+                let is_closed = |col: u32| -> bool { has_cal && is_closed_col(col) };
                 let mut runs: Vec<(u32, u32)> = Vec::new();
                 let mut col = start_day;
                 while col < start_day + dur {
@@ -798,6 +974,7 @@ pub fn render(diagram: &GanttDiagram, _theme: &Theme) -> String {
             &mut svg,
             c,
             diagram,
+            &closed_cols,
             grid_bottom + CAL_BOT_DOW_OFF,
             grid_bottom + CAL_BOT_DAYNUM_OFF,
             grid_bottom + CAL_BOT_MONTH_OFF,
@@ -835,6 +1012,52 @@ fn render_day_numbers(svg: &mut SvgBuilder, total_days: u32, baseline: f64) {
         let cell_x = day as f64 * DAY_WIDTH;
         let tx = cell_x + (DAY_WIDTH - tl) / 2.0;
         gantt_text(svg, tx, baseline, &label, AXIS_FONT, TEXT_COLOR);
+    }
+}
+
+/// Draw an Opale note box (rounded-corner-fold rectangle) plus its text
+/// lines, with the box top-left at `(note.x, top)`. Geometry mirrors
+/// net.sourceforge.plantuml.svek.image.Opale (roundCorner == 0).
+fn draw_note(svg: &mut SvgBuilder, note: &RowNote, top: f64) {
+    let x = note.x;
+    let w = note.width;
+    let h = note.height;
+    let r = x + w; // right edge
+    let b = top + h; // bottom edge
+    let fold_x = r - NOTE_CORNER; // x of the diagonal fold start
+    let fold_y = top + NOTE_CORNER; // y where the right edge meets the fold
+
+    // Main body outline: top-left → bottom-left → bottom-right → up to the
+    // fold → diagonal to the folded top → back to the start.
+    svg.raw_inline(&format!(
+        r#"<path d="M{x},{top} L{x},{b} L{r},{b} L{r},{fy} L{fx},{top} L{x},{top}" fill="{NOTE_FILL}" style="stroke:{NOTE_STROKE};stroke-width:0.5;"/>"#,
+        x = fmt_coord(x),
+        top = fmt_coord(top),
+        b = fmt_coord(b),
+        r = fmt_coord(r),
+        fy = fmt_coord(fold_y),
+        fx = fmt_coord(fold_x),
+    ));
+    // Folded corner triangle.
+    svg.raw_inline(&format!(
+        r#"<path d="M{fx},{top} L{fx},{fy} L{r},{fy} L{fx},{top}" fill="{NOTE_FILL}" style="stroke:{NOTE_STROKE};stroke-width:0.5;"/>"#,
+        fx = fmt_coord(fold_x),
+        top = fmt_coord(top),
+        fy = fmt_coord(fold_y),
+        r = fmt_coord(r),
+    ));
+    // Text lines, left-aligned at marginX1, stacked from marginY down.
+    let text_x = x + NOTE_MARGIN_X1;
+    let mut baseline = top + NOTE_MARGIN_Y + ascent(NOTE_FONT);
+    for (line, &tl) in note.lines.iter().zip(&note.line_widths) {
+        svg.raw_inline(&format!(
+            r#"<text fill="{TEXT_COLOR}" font-family="sans-serif" font-size="9" lengthAdjust="spacing" textLength="{tl}" x="{x}" y="{y}">{}</text>"#,
+            escape_xml(line),
+            tl = fmt_coord(tl),
+            x = fmt_coord(text_x),
+            y = fmt_coord(baseline),
+        ));
+        baseline += text_height(NOTE_FONT);
     }
 }
 
@@ -964,16 +1187,17 @@ fn render_calendar_axis(
     svg: &mut SvgBuilder,
     cal: &CalendarInfo,
     diagram: &GanttDiagram,
+    closed_cols: &[bool],
     dow_y: f64,
     daynum_y: f64,
     month_y: f64,
 ) {
     let abbreviated = diagram.printscale.as_deref() == Some("weekly");
+    let is_closed = |idx: usize| closed_cols.get(idx).copied().unwrap_or(false);
 
     for (day_idx, &dow) in cal.day_of_week.iter().enumerate() {
         let abbr = DOW_ABBR[dow as usize];
-        let closed = diagram.closed_days.contains(&dow);
-        let fill = if closed {
+        let fill = if is_closed(day_idx) {
             CLOSED_TEXT_COLOR
         } else {
             TEXT_COLOR
@@ -985,9 +1209,7 @@ fn render_calendar_axis(
 
     for (day_idx, &dom) in cal.day_of_month.iter().enumerate() {
         let label = dom.to_string();
-        let dow = cal.day_of_week[day_idx];
-        let closed = diagram.closed_days.contains(&dow);
-        let fill = if closed {
+        let fill = if is_closed(day_idx) {
             CLOSED_TEXT_COLOR
         } else {
             TEXT_COLOR
@@ -1108,25 +1330,84 @@ fn month_name(month: u32) -> &'static str {
     }
 }
 
-fn wd_to_cal(working_day: u32, start_dow: u8, closed_days: &[u8]) -> u32 {
-    if closed_days.is_empty() {
-        return working_day;
+/// Calendar closures: repeating weekday closures plus specific holiday dates,
+/// positioned relative to the project start date.
+struct Closures {
+    start_dow: u8,
+    closed_days: Vec<u8>,
+    /// Column offsets (days from project start) that are specific holidays.
+    closed_date_cols: Vec<u32>,
+}
+
+impl Closures {
+    fn new(project_start: &str, closed_days: &[u8], closed_dates: &[String]) -> Self {
+        let start_dow = parse_start_dow(project_start).unwrap_or(0);
+        let closed_date_cols = closed_dates
+            .iter()
+            .filter_map(|d| date_diff_days(project_start, d))
+            .collect();
+        Closures {
+            start_dow,
+            closed_days: closed_days.to_vec(),
+            closed_date_cols,
+        }
     }
-    let mut open_count = 0u32;
-    let mut cal = 0u32;
-    loop {
-        let dow = ((start_dow as u32 + cal) % 7) as u8;
-        if !closed_days.contains(&dow) {
-            if open_count == working_day {
+
+    /// Whether any closures are defined at all.
+    fn any(&self) -> bool {
+        !self.closed_days.is_empty() || !self.closed_date_cols.is_empty()
+    }
+
+    /// Whether calendar column `col` (days from project start) is closed.
+    fn is_col_closed(&self, col: u32) -> bool {
+        let dow = ((self.start_dow as u32 + col) % 7) as u8;
+        self.closed_days.contains(&dow) || self.closed_date_cols.contains(&col)
+    }
+
+    /// Map a working-day index (counting only open days) to its calendar
+    /// column, skipping closed columns.
+    fn wd_to_cal(&self, working_day: u32) -> u32 {
+        if !self.any() {
+            return working_day;
+        }
+        let mut open_count = 0u32;
+        let mut cal = 0u32;
+        loop {
+            if !self.is_col_closed(cal) {
+                if open_count == working_day {
+                    return cal;
+                }
+                open_count += 1;
+            }
+            cal += 1;
+            if cal > working_day * 7 + 366 {
                 return cal;
             }
-            open_count += 1;
-        }
-        cal += 1;
-        if cal > working_day * 7 + 14 {
-            return cal;
         }
     }
+}
+
+/// Number of calendar days between two YYYY-MM-DD dates, or `None` on failure.
+fn date_diff_days(from: &str, to: &str) -> Option<u32> {
+    fn to_jdn(y: i32, m: u32, d: u32) -> i64 {
+        let a = (14 - m as i32) / 12;
+        let yr = y + 4800 - a;
+        let mo = m as i32 + 12 * a - 3;
+        d as i64 + (153 * mo + 2) as i64 / 5 + 365 * yr as i64 + yr as i64 / 4 - yr as i64 / 100
+            + yr as i64 / 400
+            - 32045
+    }
+    fn parse(s: &str) -> Option<(i32, u32, u32)> {
+        let p: Vec<&str> = s.split('-').collect();
+        if p.len() != 3 {
+            return None;
+        }
+        Some((p[0].parse().ok()?, p[1].parse().ok()?, p[2].parse().ok()?))
+    }
+    let (fy, fm, fd) = parse(from)?;
+    let (ty, tm, td) = parse(to)?;
+    let diff = to_jdn(ty, tm, td) - to_jdn(fy, fm, fd);
+    if diff < 0 { None } else { Some(diff as u32) }
 }
 
 fn resolve_starts(tasks: &[GanttTask]) -> Vec<(u32, u32)> {
@@ -1187,6 +1468,7 @@ mod tests {
             meta: DiagramMeta::default(),
             project_start: None,
             closed_days: Vec::new(),
+            closed_dates: Vec::new(),
             printscale: None,
             resources: Vec::new(),
             notes: Vec::new(),
@@ -1219,6 +1501,7 @@ mod tests {
             meta: DiagramMeta::default(),
             project_start: None,
             closed_days: Vec::new(),
+            closed_dates: Vec::new(),
             printscale: None,
             resources: Vec::new(),
             notes: Vec::new(),
