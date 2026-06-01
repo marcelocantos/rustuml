@@ -856,6 +856,15 @@ fn escape_xml(s: &str) -> String {
         .replace('\u{00bb}', "&#187;")
 }
 
+/// Parse the numeric suffix of a PlantUML entity id (`ent0007` → 7). Used to
+/// interleave note entities with regular entities by their shared emission
+/// counter. Ids that are absent or unparseable sort last.
+fn ent_id_seq(id: Option<&str>) -> u32 {
+    id.and_then(|s| s.strip_prefix("ent"))
+        .and_then(|n| n.parse::<u32>().ok())
+        .unwrap_or(u32::MAX)
+}
+
 /// Format a coordinate/dimension value matching PlantUML's `SvgGraphics.format()`.
 fn fmt4(v: f64) -> String {
     fmt_tl(v)
@@ -1573,9 +1582,16 @@ fn render_plantuml_svg(
     // captured separately in `note_entities`. The legacy `clusters`
     // collection only picks up GMN-prefixed qnames; reading from
     // `note_entities` covers explicit aliases too.
-    let oracle_note_entities: Vec<&crate::layout_oracle::OracleNoteEntity> = oracle
+    // Note entities (`note "…" as N` floating notes, plus auto-generated
+    // `GMNn`) share the `ent000N` emission counter with regular entities and
+    // are interleaved with them in PlantUML's output by that counter — i.e. a
+    // note declared before an entity in the source is emitted before it.
+    // Order them by the numeric suffix of their captured `entity_id` so the
+    // interleave below matches the golden's document order.
+    let mut oracle_note_entities: Vec<&crate::layout_oracle::OracleNoteEntity> = oracle
         .map(|o| o.note_entities.iter().collect())
         .unwrap_or_default();
+    oracle_note_entities.sort_by_key(|n| ent_id_seq(n.entity_id.as_deref()));
     for cluster in &oracle_pkg_clusters {
         write!(svg, "<!--cluster {}-->", cluster.qualified_name).unwrap();
         let cluster_id = cluster.entity_id.as_deref().unwrap_or("ent0002");
@@ -1729,6 +1745,26 @@ fn render_plantuml_svg(
         order
     };
 
+    // Cursor over `oracle_note_entities` (already sorted by emission counter).
+    // `emit_note` writes one note's `<g class="entity">…</g>` wrapper; the loop
+    // below flushes any notes whose counter precedes the current entity so the
+    // interleaving matches PlantUML's document order.
+    let mut note_cursor = 0usize;
+    let emit_note = |svg: &mut String, note: &crate::layout_oracle::OracleNoteEntity| {
+        let nid = note.entity_id.as_deref().unwrap_or("ent0000");
+        let sl = note.source_line.as_deref().unwrap_or("0");
+        write!(
+            svg,
+            r#"<g class="entity" data-qualified-name="{}" data-source-line="{}" id="{}">"#,
+            escape_xml(&note.qualified_name),
+            sl,
+            nid,
+        )
+        .unwrap();
+        svg.push_str(&note.inner_xml);
+        svg.push_str("</g>");
+    };
+
     // Render each entity.
     for &i in &emission_order {
         let entity = &diagram.entities[i];
@@ -1765,6 +1801,17 @@ fn render_plantuml_svg(
         let current_ent_id = oracle_rect
             .and_then(|r| r.entity_id.clone())
             .unwrap_or(seq_ent_id);
+
+        // Flush any note entities whose emission counter precedes this entity's
+        // (e.g. a `note … as N` declared before the first `entity`).
+        let cur_seq = ent_id_seq(Some(&current_ent_id));
+        while note_cursor < oracle_note_entities.len()
+            && ent_id_seq(oracle_note_entities[note_cursor].entity_id.as_deref()) < cur_seq
+        {
+            emit_note(&mut svg, oracle_note_entities[note_cursor]);
+            note_cursor += 1;
+            ent_id += 1;
+        }
 
         // HTML comment before entity.
         write!(svg, "<!--class {}-->", entity.label).unwrap();
@@ -1849,22 +1896,12 @@ fn render_plantuml_svg(
         }
     }
 
-    // Emit any oracle-captured note entities (both auto-generated `GMNn`
-    // and explicit aliases like `N1`) after the diagram entities — they
-    // share the ent000N counter.
-    for note in &oracle_note_entities {
-        let nid = note.entity_id.as_deref().unwrap_or("ent0000");
-        let sl = note.source_line.as_deref().unwrap_or("0");
-        write!(
-            svg,
-            r#"<g class="entity" data-qualified-name="{}" data-source-line="{}" id="{}">"#,
-            escape_xml(&note.qualified_name),
-            sl,
-            nid,
-        )
-        .unwrap();
-        svg.push_str(&note.inner_xml);
-        svg.push_str("</g>");
+    // Emit any remaining note entities whose emission counter follows every
+    // regular entity (notes declared after the last `entity`). The interleave
+    // above has already placed notes that precede an entity in document order.
+    while note_cursor < oracle_note_entities.len() {
+        emit_note(&mut svg, oracle_note_entities[note_cursor]);
+        note_cursor += 1;
         ent_id += 1;
     }
 
