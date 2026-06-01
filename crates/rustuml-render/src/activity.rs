@@ -1451,28 +1451,84 @@ fn if_ftile_layout(
 //   by `alignDiamonds` → `incVertically(missing/2, 20)`.
 // - branch tiles: `FtileMinWidthCentered(branch, 30)`.
 // - couples placed at `x += couple.width + xSeparation(20)` (`getTranslateCouple1`).
-// - `tile2` at `width − tile2.width` (`getTranslate2`), shifted up by
+// - `tile2` at `internalWidth − tile2.width` (`getTranslate2`), shifted up by
 //   `getDiamondsHeight/2`.
 // - vertical reserve `max(100, maxOutY)` below the couples (`calculateDimensionInternal`).
 //
-// The one empirical constant is the inter-column *branch* clearance `IF_LONG_BRANCH_GAP`
-// (10): PlantUML's final image compacts the wide-branch columns from the raw
-// `xSeparation`-spaced layout down to a 10px branch gap. The diamond spacing
-// itself remains the sourced `xSeparation = 20`; the column pitch is the max of
-// the diamond requirement and the branch requirement (see `if_long_pitch`).
+// The diagram is then run through PlantUML's `CompressionXorYBuilder(ON_X)`
+// (`ActivityDiagram3.exportDiagramInternal`): a slot-based pass that removes
+// empty horizontal space, keeping 5px around each occupied cluster
+// (`SlotSet.reverse().smaller(5.0)` + `CompressionTransform`). [`XCompress`]
+// ports that transform. No magic constants — the layout is the un-compacted
+// PlantUML geometry, then the real compaction.
 
 /// `xSeparation` between adjacent condition diamonds (Java field, = 20).
 const IF_LONG_X_SEP: f64 = 20.0;
-/// Minimum horizontal gap between adjacent branch boxes in the long layout.
-/// Empirically 10 (half the diamond `xSeparation`) — the gap PlantUML's final
-/// horizontal compaction leaves between wide branch columns. Verified across
-/// equal-width, slightly-wide and asymmetric branch cases.
-const IF_LONG_BRANCH_GAP: f64 = 10.0;
 /// Vertical reserve below the couples (`Math.max(100, maxOutY)` with the
 /// single-line `maxOutY = 24 < 100`). Multi-line conditions are out of scope.
 const IF_LONG_BELOW: f64 = 100.0;
 /// `alignDiamonds` bottom margin (`incVertically(_, 20)`).
 const IF_LONG_ALIGN_BOTTOM: f64 = 20.0;
+/// `SlotSet.smaller(margin)` keeps this much empty space on each side of every
+/// compressed cluster (PlantUML calls `smaller(5.0)`).
+const X_COMPRESS_MARGIN: f64 = 5.0;
+
+/// Port of PlantUML's `CompressionTransform` (ON_X): given the occupied
+/// x-intervals of a drawing, removes the empty gaps between clusters — keeping
+/// `X_COMPRESS_MARGIN` on each side, and leaving gaps ≤ `2*margin` untouched
+/// (`SlotSet.reverse().smaller(margin)`). `transform(v) = v − Σ gap sizes left
+/// of v` (partial for the gap containing `v`).
+struct XCompress {
+    /// The compressible empty gaps `(start, end)`, sorted by start.
+    gaps: Vec<(f64, f64)>,
+}
+
+impl XCompress {
+    fn from_occupied(occ: &[(f64, f64)]) -> Self {
+        if occ.is_empty() {
+            return XCompress { gaps: Vec::new() };
+        }
+        // Merge occupied intervals.
+        let mut iv: Vec<(f64, f64)> = occ.to_vec();
+        iv.sort_by(|a, b| a.0.partial_cmp(&b.0).unwrap());
+        let mut merged: Vec<(f64, f64)> = Vec::new();
+        for (s, e) in iv {
+            if let Some(last) = merged.last_mut()
+                && s <= last.1
+            {
+                last.1 = last.1.max(e);
+            } else {
+                merged.push((s, e));
+            }
+        }
+        // Empty gaps = complement between consecutive occupied clusters, then
+        // `smaller(margin)`: drop gaps ≤ 2*margin, else shrink by margin/side.
+        let mut gaps: Vec<(f64, f64)> = Vec::new();
+        for w in merged.windows(2) {
+            let gap_start = w[0].1;
+            let gap_end = w[1].0;
+            if gap_end - gap_start > 2.0 * X_COMPRESS_MARGIN {
+                gaps.push((gap_start + X_COMPRESS_MARGIN, gap_end - X_COMPRESS_MARGIN));
+            }
+        }
+        XCompress { gaps }
+    }
+
+    fn transform(&self, v: f64) -> f64 {
+        let mut delta = 0.0;
+        for &(s, e) in &self.gaps {
+            if s > v {
+                continue;
+            }
+            if v > e {
+                delta += e - s;
+            } else {
+                delta += v - s;
+            }
+        }
+        v - delta
+    }
+}
 
 /// One condition column of the long layout.
 struct IfLongCol {
@@ -1507,15 +1563,6 @@ struct IfLongLayout {
     /// Left / right drawn extents from the spine.
     left_ext: f64,
     right_ext: f64,
-}
-
-/// Column pitch between adjacent diamonds: the max of the diamond requirement
-/// (`d_i/2 + d_{i+1}/2 + xSeparation`) and the branch requirement
-/// (`b_i/2 + b_{i+1}/2 + branch_gap`). See module note above.
-fn if_long_pitch(d_i: f64, b_i: f64, d_j: f64, b_j: f64) -> f64 {
-    let diamond_req = d_i / 2.0 + d_j / 2.0 + IF_LONG_X_SEP;
-    let branch_req = b_i / 2.0 + b_j / 2.0 + IF_LONG_BRANCH_GAP;
-    diamond_req.max(branch_req)
 }
 
 /// Build the placed long layout for an `if/elseif*/else`. Returns `None` if any
@@ -1584,86 +1631,58 @@ fn if_long_layout(
         None => (0.0, 0.0),
     };
 
-    // Place diamond centers left→right using the pitch rule, spine-relative,
-    // then re-centre the whole drawn span on x=0.
+    // Lay out un-compacted (PlantUML's `getTranslateCouple1`): couples placed
+    // left→right at `x += couple.width + xSeparation`, couple center = its
+    // FtileGeometry left (= max(diamond,branch)/2, centred). tile2 at
+    // `internalWidth − tile2.width`. Then apply PlantUML's `CompressionXorY`
+    // (ON_X) pass: empty x-gaps wider than 10 shrink to leave 5 each side.
     let n = cols.len();
-    let mut centers = vec![0.0_f64; n];
-    for i in 1..n {
-        let pitch = if_long_pitch(
-            cols[i - 1].diamond_w,
-            cols[i - 1].branch_w,
-            cols[i].diamond_w,
-            cols[i].branch_w,
-        );
-        centers[i] = centers[i - 1] + pitch;
-    }
-    // tile2 center after the last diamond.
-    let tile2_center = if tile2_body.is_some() {
-        let last = &cols[n - 1];
-        let east_w = east_label
-            .as_ref()
-            .map(|s| text_render::measure(s, SMALL_FONT, false))
-            .unwrap_or(0.0);
-        // Else pitch: max of the diamond-east requirement and the branch
-        // requirement (mirrors the inter-couple rule, with the last diamond's
-        // east label included and tile2 contributing no diamond).
-        let diamond_req = last.diamond_w / 2.0 + east_w + IF_LONG_BRANCH_GAP + tile2_w / 2.0;
-        let branch_req = last.branch_w / 2.0 + tile2_w / 2.0 + IF_LONG_BRANCH_GAP;
-        Some(centers[n - 1] + diamond_req.max(branch_req))
-    } else {
-        None
-    };
+    let east_w = east_label
+        .as_ref()
+        .map(|s| text_render::measure(s, SMALL_FONT, false))
+        .unwrap_or(0.0);
 
-    // The if-block spine is `getLeft = internalWidth/2` in PlantUML's
-    // (un-compacted) frame. The final image *compacts* the inter-column gaps,
-    // but each column stays rigid — so the spine maps to the same offset
-    // *within* whichever column (or column gap) holds `internalWidth/2`.
-    //
-    // Build the internal (xSeparation-spaced) column centers in parallel with
-    // the compacted `centers`, locate `internalWidth/2`, and carry its offset
-    // across to the compacted frame to fix the spine. This reproduces the small
-    // left/right asymmetry the drawn-midpoint would miss.
-    //
-    // Columns (compacted center, internal center, half-width); tile2 is the
-    // trailing column when present.
-    let mut comp: Vec<f64> = Vec::with_capacity(n + 1);
-    let mut intl: Vec<f64> = Vec::with_capacity(n + 1);
-    let mut half: Vec<f64> = Vec::with_capacity(n + 1);
-    let mut ix = 0.0; // running internal left edge
+    let mut centers_u = vec![0.0_f64; n]; // un-compacted column centers
+    let mut x = 0.0;
     for (i, c) in cols.iter().enumerate() {
         let cw = c.diamond_w.max(c.branch_w);
-        comp.push(centers[i]);
-        intl.push(ix + cw / 2.0);
-        half.push(cw / 2.0);
-        ix += cw + IF_LONG_X_SEP;
+        centers_u[i] = x + cw / 2.0;
+        x += cw + IF_LONG_X_SEP;
     }
-    if let (Some(tc), true) = (tile2_center, tile2_body.is_some()) {
-        comp.push(tc);
-        intl.push(ix + tile2_w / 2.0);
-        half.push(tile2_w / 2.0);
-        ix += tile2_w + IF_LONG_X_SEP;
-    }
-    // internalWidth = total internal span minus the trailing xSeparation.
-    let internal_w = ix - IF_LONG_X_SEP;
+    let internal_w = x + tile2_w; // = sum(couples)+xSep*n+tile2 (xSep already per couple)
+    let tile2_center_u = tile2_body.is_some().then(|| internal_w - tile2_w / 2.0);
     let spine_internal = internal_w / 2.0;
-    // Map spine_internal to the compacted frame via the column whose internal
-    // span (or whose right gap) contains it.
-    let mut spine_comp = comp[0]; // fallback
-    for k in 0..comp.len() {
-        let hi = intl[k] + half[k];
-        if spine_internal <= hi || k == comp.len() - 1 {
-            // Within column k (or to its left / past the last column): carry the
-            // rigid offset from this column.
-            spine_comp = comp[k] + (spine_internal - intl[k]);
-            break;
+
+    // Occupied x-intervals of everything drawn (un-compacted frame).
+    let mut occ: Vec<(f64, f64)> = Vec::new();
+    for (i, c) in cols.iter().enumerate() {
+        let cc = centers_u[i];
+        let dw = c.diamond_w;
+        // diamond polygon
+        occ.push((cc - dw / 2.0, cc + dw / 2.0));
+        // branch box
+        occ.push((cc - c.branch_w / 2.0, cc + c.branch_w / 2.0));
+        // north label: left edge at cc + 4
+        if let Some(north) = &c.north {
+            let nw = text_render::measure(north, SMALL_FONT, false);
+            occ.push((cc + 4.0, cc + 4.0 + nw));
         }
-        // In the gap after column k: clamp to this column's right edge offset
-        // (gaps compress, so the spine rarely lands here for real chains).
-        if spine_internal < intl[k + 1] - half[k + 1] {
-            spine_comp = comp[k] + half[k];
-            break;
+        // east label on the last diamond
+        if i == n - 1 && east_w > 0.0 {
+            occ.push((cc + dw / 2.0, cc + dw / 2.0 + east_w));
         }
     }
+    if let Some(tc) = tile2_center_u {
+        occ.push((tc - tile2_w / 2.0, tc + tile2_w / 2.0));
+    }
+
+    // Build the compression transform: f(v) = v − (compressed empty space left
+    // of v). Empty gaps come from the complement of the merged occupied set;
+    // gaps ≤ 10 are kept, larger gaps keep 5px each side (`smaller(5.0)`).
+    let compress = XCompress::from_occupied(&occ);
+    let centers: Vec<f64> = centers_u.iter().map(|&c| compress.transform(c)).collect();
+    let tile2_center = tile2_center_u.map(|t| compress.transform(t));
+    let spine_comp = compress.transform(spine_internal);
 
     // Re-origin everything on the spine (x = 0).
     for (i, c) in cols.iter_mut().enumerate() {
@@ -1671,18 +1690,12 @@ fn if_long_layout(
     }
     let tile2_cx = tile2_center.map(|t| t - spine_comp);
 
-    // Drawn extents from the spine.
+    // Drawn extents from the spine (compacted occupied span).
     let mut min_x = f64::INFINITY;
     let mut max_x = f64::NEG_INFINITY;
-    for (i, c) in cols.iter().enumerate() {
-        let h = c.diamond_w.max(c.branch_w) / 2.0;
-        min_x = min_x.min(c.cx - h);
-        max_x = max_x.max(c.cx + h);
-        let _ = i;
-    }
-    if let Some(tc) = tile2_cx {
-        min_x = min_x.min(tc - tile2_w / 2.0);
-        max_x = max_x.max(tc + tile2_w / 2.0);
+    for &(s, e) in &occ {
+        min_x = min_x.min(compress.transform(s) - spine_comp);
+        max_x = max_x.max(compress.transform(e) - spine_comp);
     }
     let left_ext = -min_x;
     let right_ext = max_x;
