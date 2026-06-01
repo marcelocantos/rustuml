@@ -620,6 +620,77 @@ pub fn fork_inner_translates(forks: &[FtileGeometry]) -> Vec<(f64, f64)> {
     out
 }
 
+/// Child offsets within an `FtileSwitchWithDiamonds`. `tiles` is one `(dx, dy)`
+/// per branch, in branch order; `diamond2` is positioned for drawing only when
+/// the composite still has an out anchor (`total.has_out()`).
+#[derive(Clone, Debug, PartialEq)]
+pub struct SwitchLayout {
+    pub diamond1: (f64, f64),
+    pub diamond2: (f64, f64),
+    pub tiles: Vec<(f64, f64)>,
+}
+
+/// `FtileSwitchWithDiamonds.getTranslate*` (over `FtileSwitchNude.getTranslateNude`).
+/// `total` is the composite from [`switch_with_diamonds`]; `tiles`/`x_separation`
+/// must match what was passed there so the BIG/SMALL mode is recomputed
+/// identically. All branch tiles share the y `diamond1.height + ydelta1a(20)`
+/// (`getTranslateMain` is dy-only); the modes differ only in the per-branch dx.
+pub fn switch_layout(
+    total: &FtileGeometry,
+    diamond1: &FtileGeometry,
+    diamond2: &FtileGeometry,
+    tiles: &[FtileGeometry],
+    x_separation: f64,
+) -> SwitchLayout {
+    const SUPP15: f64 = 15.0;
+    const Y_DELTA_1A: f64 = 20.0;
+
+    let n = tiles.len();
+    let first = &tiles[0];
+    let last = &tiles[n - 1];
+
+    // Mode discriminant, recomputed exactly as switch_with_diamonds.
+    let w13 = diamond1.width - first.right() - last.left;
+    let w9: f64 = tiles[1..n.saturating_sub(1)].iter().map(|t| t.width).sum();
+    let big = w13 > w9;
+
+    let dy = diamond1.height + Y_DELTA_1A; // getTranslateMain (dy only)
+    let mut tiles_t = Vec::with_capacity(n);
+    if big {
+        // suppx is unused for n == 1 (only the last-tile branch runs); guard the
+        // divide so we don't synthesise an inf/NaN that Java never materialises.
+        let suppx = if n > 1 {
+            (w13 - w9) / (n as f64 - 1.0)
+        } else {
+            0.0
+        };
+        let mut dx = 0.0;
+        for (i, t) in tiles.iter().enumerate() {
+            if i == n - 1 {
+                tiles_t.push((first.width + w13 + 2.0 * SUPP15, dy));
+            } else {
+                tiles_t.push((dx, dy));
+                dx += t.width + suppx;
+            }
+        }
+    } else {
+        let mut dx = 0.0;
+        for t in tiles {
+            tiles_t.push((dx, dy));
+            dx += t.width + x_separation;
+        }
+    }
+
+    SwitchLayout {
+        diamond1: (total.left - diamond1.left, 0.0),
+        diamond2: (
+            total.left - diamond2.width / 2.0,
+            total.height - diamond2.height,
+        ),
+        tiles: tiles_t,
+    }
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;
@@ -874,5 +945,46 @@ mod tests {
             FtileGeometry::new(60.0, 50.0, 30.0, 0.0, Some(50.0)),
         ];
         assert_eq!(fork_inner_translates(&forks), vec![(0.0, 0.0), (40.0, 0.0)]);
+    }
+
+    #[test]
+    fn switch_layout_small_diamond_lays_branches_with_separation() {
+        // Same fixture as switch_small_diamond_mode: total (160,224,80).
+        let d1 = FtileGeometry::new(60.0, 30.0, 30.0, 0.0, Some(30.0));
+        let d2 = FtileGeometry::new(24.0, 24.0, 12.0, 0.0, Some(24.0));
+        let tiles = [
+            FtileGeometry::new(40.0, 30.0, 20.0, 0.0, Some(30.0)),
+            FtileGeometry::new(50.0, 40.0, 25.0, 0.0, Some(40.0)),
+            FtileGeometry::new(30.0, 20.0, 15.0, 0.0, Some(20.0)),
+        ];
+        let total = switch_with_diamonds(&d1, &d2, &tiles, 20.0); // (160,224,80)
+        let l = switch_layout(&total, &d1, &d2, &tiles, 20.0);
+        // dy = d1.height 30 + ydelta1a 20 = 50; nude dx = cumulative width+20.
+        assert_eq!(l.tiles, vec![(0.0, 50.0), (60.0, 50.0), (130.0, 50.0)]);
+        assert_eq!(l.diamond1, (50.0, 0.0)); // 80 - 30
+        assert_eq!(l.diamond2, (68.0, 200.0)); // 80 - 12, 224 - 24
+        // Last branch fills the canvas: 130 + 30 = 160 = total width.
+        assert_eq!(l.tiles[2].0 + tiles[2].width, total.width);
+    }
+
+    #[test]
+    fn switch_layout_big_diamond_distributes_supp_gap() {
+        // Same fixture as switch_big_diamond_mode: total (265,224,135).
+        let d1 = FtileGeometry::new(200.0, 30.0, 100.0, 0.0, Some(30.0));
+        let d2 = FtileGeometry::new(24.0, 24.0, 12.0, 0.0, Some(24.0));
+        let tiles = [
+            FtileGeometry::new(40.0, 30.0, 20.0, 0.0, Some(30.0)),
+            FtileGeometry::new(50.0, 40.0, 25.0, 0.0, Some(40.0)),
+            FtileGeometry::new(30.0, 20.0, 15.0, 0.0, Some(20.0)),
+        ];
+        let total = switch_with_diamonds(&d1, &d2, &tiles, 20.0); // (265,224,135)
+        let l = switch_layout(&total, &d1, &d2, &tiles, 20.0);
+        // w13 = 165, w9 = 50, suppx = (165-50)/2 = 57.5; dy = 50.
+        // tile0 dx 0; tile1 dx = 40 + 57.5 = 97.5; last tile dx9 = 40 + 165 + 30 = 235.
+        assert_eq!(l.tiles, vec![(0.0, 50.0), (97.5, 50.0), (235.0, 50.0)]);
+        assert_eq!(l.diamond1, (35.0, 0.0)); // 135 - 100
+        assert_eq!(l.diamond2, (123.0, 200.0)); // 135 - 12, 224 - 24
+        // Last branch reaches the right edge: 235 + 30 = 265 = total width.
+        assert_eq!(l.tiles[2].0 + tiles[2].width, total.width);
     }
 }
