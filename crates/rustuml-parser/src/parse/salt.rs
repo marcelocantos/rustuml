@@ -23,32 +23,206 @@ use crate::diagram::salt::{BlockKind, SaltBlock, SaltDiagram, SaltRow, SaltWidge
 
 /// Parse preprocessed lines into a [`SaltDiagram`].
 pub fn parse_salt(lines: &[String]) -> Result<SaltDiagram, ParseError> {
-    // Find the first non-empty line — must be the opening brace.
-    let start = lines.iter().position(|l| !l.trim().is_empty()).unwrap_or(0);
+    // Salt diagrams still run the common single-line `header`/`footer`/`title`/
+    // `caption` commands (PSystemSaltFactory registers them via
+    // CommonCommands.addTitleCommands). Any body line — even one inside a
+    // `{...}` block — that matches such a command is consumed before the salt
+    // sub-parser sees it, so e.g. `Header 0 | Header 1` becomes the diagram
+    // header `0 | Header 1` rather than the first table row. Strip these
+    // directive lines out and record them in the diagram meta, keeping the
+    // 1-indexed body line for the `data-source-line` attribute.
+    let mut meta = DiagramMeta::default();
+    let mut body: Vec<String> = Vec::with_capacity(lines.len());
+    for (i, line) in lines.iter().enumerate() {
+        if let Some(directive) = match_chrome_directive(line) {
+            apply_chrome_directive(&mut meta, directive, i + 1);
+            continue;
+        }
+        body.push(line.clone());
+    }
 
-    if start >= lines.len() {
+    // Find the first non-empty line — must be the opening brace.
+    let start = body.iter().position(|l| !l.trim().is_empty()).unwrap_or(0);
+
+    if start >= body.len() {
         return Err(ParseError {
             line: 1,
             message: "empty salt diagram".into(),
         });
     }
 
-    if !lines[start].trim().starts_with('{') {
+    if !body[start].trim().starts_with('{') {
         return Err(ParseError {
             line: start + 1,
             message: format!(
                 "expected '{{' to open Salt block, got: {:?}",
-                lines[start].trim()
+                body[start].trim()
             ),
         });
     }
 
-    let (block, _) = parse_block(lines, start)?;
+    let (block, _) = parse_block(&body, start)?;
 
-    Ok(SaltDiagram {
-        meta: DiagramMeta::default(),
-        root: block,
-    })
+    Ok(SaltDiagram { meta, root: block })
+}
+
+/// Which diagram-chrome command a body line matched, plus its parsed argument
+/// and (for header/footer) horizontal alignment.
+struct ChromeDirective {
+    kind: ChromeKind,
+    text: String,
+    align: ChromeAlign,
+}
+
+#[derive(Clone, Copy)]
+enum ChromeKind {
+    Header,
+    Footer,
+    Title,
+    Caption,
+}
+
+#[derive(Clone, Copy)]
+enum ChromeAlign {
+    Default,
+    Left,
+    Right,
+    Center,
+}
+
+/// Recognise a salt body line as one of the common single-line chrome commands
+/// (`header`/`footer`/`title`/`caption`), mirroring PlantUML's `CommandHeader`
+/// family. The grammar is, case-insensitively:
+///
+/// ```text
+/// ^\s*(left|right|center)?\s*<keyword>(\s*:\s*|\s+)<label>$
+/// ```
+///
+/// where `<label>` is either a `"…"`/`'…'`-quoted string or any text containing
+/// at least one letter, digit, `_` or `.` (the `[%pLN_.]` class). The position
+/// prefix only applies to `header`/`footer`.
+fn match_chrome_directive(line: &str) -> Option<ChromeDirective> {
+    let trimmed = line.trim();
+    if trimmed.is_empty() {
+        return None;
+    }
+
+    // Optional leading alignment keyword (header/footer only — but harmless to
+    // accept on title/caption; PlantUML's title/caption have no POSITION group,
+    // so a leading `left ` etc. would simply not match. Keep it conservative.)
+    let mut rest = trimmed;
+    let mut align = ChromeAlign::Default;
+    let mut has_position = false;
+    for (kw, a) in [
+        ("left", ChromeAlign::Left),
+        ("right", ChromeAlign::Right),
+        ("center", ChromeAlign::Center),
+    ] {
+        if let Some(after) = strip_keyword_ci(rest, kw) {
+            rest = after.trim_start();
+            align = a;
+            has_position = true;
+            break;
+        }
+    }
+
+    let (kind, allow_position) = if let Some(after) = strip_keyword_ci(rest, "header") {
+        rest = after;
+        (ChromeKind::Header, true)
+    } else if let Some(after) = strip_keyword_ci(rest, "footer") {
+        rest = after;
+        (ChromeKind::Footer, true)
+    } else if let Some(after) = strip_keyword_ci(rest, "title") {
+        rest = after;
+        (ChromeKind::Title, false)
+    } else if let Some(after) = strip_keyword_ci(rest, "caption") {
+        rest = after;
+        (ChromeKind::Caption, false)
+    } else {
+        return None;
+    };
+
+    // A position prefix is only valid before header/footer.
+    if has_position && !allow_position {
+        return None;
+    }
+
+    // Separator: either `:` (optionally space-padded) or one-or-more spaces.
+    // PlantUML requires a separator, so a bare keyword with no argument (e.g.
+    // a cell literally named "Title") is NOT a command — but those are handled
+    // by the keyword strip below requiring a following separator/argument.
+    let label_src = if let Some(after) = rest.strip_prefix(':') {
+        after.trim()
+    } else if rest.starts_with(char::is_whitespace) {
+        rest.trim()
+    } else {
+        // No valid separator: keyword was glued to other text (e.g. "headerx").
+        return None;
+    };
+
+    if label_src.is_empty() {
+        return None;
+    }
+
+    // Label must be a quoted string or contain a letter/digit/`_`/`.`.
+    let text = if (label_src.starts_with('"') && label_src.ends_with('"') && label_src.len() >= 2)
+        || (label_src.starts_with('\'') && label_src.ends_with('\'') && label_src.len() >= 2)
+    {
+        label_src[1..label_src.len() - 1].to_string()
+    } else if label_src
+        .chars()
+        .any(|c| c.is_alphanumeric() || c == '_' || c == '.')
+    {
+        label_src.to_string()
+    } else {
+        return None;
+    };
+
+    Some(ChromeDirective { kind, text, align })
+}
+
+/// If `s` (after trimming leading whitespace) begins with `kw` case-insensitively
+/// and the keyword is followed by a non-alphabetic boundary, return the
+/// remainder after the keyword. Used to match command keywords without
+/// swallowing words that merely start with them (e.g. `header` vs `headers`).
+fn strip_keyword_ci<'a>(s: &'a str, kw: &str) -> Option<&'a str> {
+    let s = s.trim_start();
+    if s.len() < kw.len() {
+        return None;
+    }
+    let (head, tail) = s.split_at(kw.len());
+    if !head.eq_ignore_ascii_case(kw) {
+        return None;
+    }
+    // The next char must not continue an identifier word.
+    if let Some(c) = tail.chars().next()
+        && c.is_alphabetic()
+    {
+        return None;
+    }
+    Some(tail)
+}
+
+fn apply_chrome_directive(meta: &mut DiagramMeta, d: ChromeDirective, line_1indexed: usize) {
+    match d.kind {
+        ChromeKind::Header => {
+            meta.header = Some(d.text);
+            meta.header_line = Some(line_1indexed);
+            // Alignment is carried separately by the renderer's default (right);
+            // a non-default explicit alignment is rare for salt and unused here.
+            let _ = d.align;
+        }
+        ChromeKind::Footer => {
+            meta.footer = Some(d.text);
+        }
+        ChromeKind::Title => {
+            meta.title = Some(d.text);
+            meta.title_line = Some(line_1indexed);
+        }
+        ChromeKind::Caption => {
+            meta.caption = Some(d.text);
+        }
+    }
 }
 
 /// Parse a block starting at `lines[pos]` (which must begin with `{`).
@@ -495,6 +669,61 @@ mod tests {
         let diag = parse_salt(&input).unwrap();
         assert_eq!(diag.root.kind, BlockKind::Table);
         assert_eq!(diag.root.rows.len(), 2);
+    }
+
+    #[test]
+    fn header_command_consumes_first_row() {
+        // A `{#` table whose first row matches the `header` command grammar:
+        // the line is pulled out as the diagram header (case-insensitive `Header`),
+        // leaving the table with just the body rows.
+        let input = lines(
+            r#"{#
+  Header 0 | Header 1
+  R0C0 | R0C1
+  R1C0 | R1C1
+}"#,
+        );
+        let diag = parse_salt(&input).unwrap();
+        assert_eq!(diag.root.kind, BlockKind::Table);
+        // Only the two R*C* rows remain; the header row was consumed.
+        assert_eq!(diag.root.rows.len(), 2);
+        assert_eq!(diag.meta.header.as_deref(), Some("0 | Header 1"));
+        // 1-indexed body line: {# is line 1, the header directive is line 2.
+        assert_eq!(diag.meta.header_line, Some(2));
+    }
+
+    #[test]
+    fn chrome_directives_extracted() {
+        let input = lines(
+            r#"{
+  title My Title
+  caption My Caption
+  footer My Footer
+  [OK]
+}"#,
+        );
+        let diag = parse_salt(&input).unwrap();
+        assert_eq!(diag.meta.title.as_deref(), Some("My Title"));
+        assert_eq!(diag.meta.caption.as_deref(), Some("My Caption"));
+        assert_eq!(diag.meta.footer.as_deref(), Some("My Footer"));
+        // Only the [OK] button row survives in the block.
+        assert_eq!(diag.root.rows.len(), 1);
+        assert!(matches!(&diag.root.rows[0].cells[0], SaltWidget::Button(b) if b == "OK"));
+    }
+
+    #[test]
+    fn header_keyword_not_glued() {
+        // A cell whose text merely starts with "header" (no separator) must not
+        // be mistaken for the header command.
+        let input = lines(
+            r#"{
+  headerline
+}"#,
+        );
+        let diag = parse_salt(&input).unwrap();
+        assert!(diag.meta.header.is_none());
+        assert_eq!(diag.root.rows.len(), 1);
+        assert!(matches!(&diag.root.rows[0].cells[0], SaltWidget::Label(l) if l == "headerline"));
     }
 
     #[test]

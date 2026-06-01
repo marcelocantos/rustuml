@@ -100,22 +100,149 @@ pub fn render_with_oracle(
     render(diagram, theme)
 }
 
+// ── Diagram chrome (header / footer / caption ribbons) ───────────────────────
+
+/// Font size of header/footer ribbons (FontParam.HEADER/FOOTER = 10).
+const CHROME_FONT_SIZE: f64 = 10.0;
+/// Caption uses the default 12pt element font.
+const CAPTION_FONT_SIZE: f64 = 12.0;
+/// A ribbon's rendered box is the text plus a 1px border on width and height
+/// (matching the empty-bordered text block PlantUML wraps the directive in).
+const RIBBON_PAD: f64 = 1.0;
+
+/// A laid-out chrome ribbon (header or footer): the text plus its box size.
+struct Ribbon {
+    text: String,
+    /// Box width = text width + RIBBON_PAD.
+    box_w: f64,
+    /// Box height = text height + RIBBON_PAD.
+    box_h: f64,
+    font_size: f64,
+}
+
+impl Ribbon {
+    fn new(text: &str, font_size: f64) -> Ribbon {
+        let tw = pm::text_width(text, font_size, false);
+        Ribbon {
+            text: text.to_string(),
+            box_w: tw + RIBBON_PAD,
+            box_h: pm::text_height(font_size) + RIBBON_PAD,
+            font_size,
+        }
+    }
+}
+
 /// Render a [`SaltDiagram`] to an SVG string.
+///
+/// Salt diagrams run the common single-line `header`/`footer`/`title`/`caption`
+/// commands (PSystemSaltFactory registers them). When present, PlantUML wraps
+/// the salt image with `DecorateEntityImage`: a header ribbon on top, a footer
+/// ribbon and caption on the bottom, with the overall width set to the widest
+/// of {image, header, footer} and the image centred horizontally. We reproduce
+/// that stacking here.
 pub fn render(diagram: &SaltDiagram, _theme: &Theme) -> String {
     let grid = Grid::layout(&diagram.root);
-    let total_w = grid.width() + MARGIN * 2.0;
-    let total_h = grid.height() + MARGIN * 2.0;
+    let image_w = grid.width();
+    let image_h = grid.height();
+
+    let header = diagram
+        .meta
+        .header
+        .as_deref()
+        .map(|t| Ribbon::new(t, CHROME_FONT_SIZE));
+    let footer = diagram
+        .meta
+        .footer
+        .as_deref()
+        .map(|t| Ribbon::new(t, CHROME_FONT_SIZE));
+    let caption = diagram
+        .meta
+        .caption
+        .as_deref()
+        .map(|t| Ribbon::new(t, CAPTION_FONT_SIZE));
+
+    let header_h = header.as_ref().map_or(0.0, |r| r.box_h);
+    let footer_h = footer.as_ref().map_or(0.0, |r| r.box_h);
+    let caption_h = caption.as_ref().map_or(0.0, |r| r.box_h);
+
+    // mergeTB: total width = widest of the stacked blocks; total height = sum.
+    let content_w = image_w
+        .max(header.as_ref().map_or(0.0, |r| r.box_w))
+        .max(footer.as_ref().map_or(0.0, |r| r.box_w))
+        .max(caption.as_ref().map_or(0.0, |r| r.box_w));
+    let content_h = header_h + image_h + footer_h + caption_h;
+
+    let total_w = content_w + MARGIN * 2.0;
+    let total_h = content_h + MARGIN * 2.0;
 
     // PlantUML rounds the SVG canvas up to whole pixels.
     let w = total_w.ceil() as i64;
     let h = total_h.ceil() as i64;
 
+    // The image is centred horizontally; header sits above it, footer/caption
+    // below. All offsets carry the 5px diagram margin.
+    let image_ox = MARGIN + (content_w - image_w) / 2.0;
+    let image_oy = MARGIN + header_h;
+
     let mut body = String::new();
-    grid.draw(MARGIN, MARGIN, &mut body);
+
+    // Header ribbon first (PlantUML draws text1 before the original image).
+    if let Some(r) = &header {
+        // Default header alignment is RIGHT: box right edge flush with content.
+        let bx = MARGIN + (content_w - r.box_w);
+        let by = MARGIN;
+        let header_line = diagram.meta.header_line.unwrap_or(1);
+        body.push_str(&format!(
+            r#"<g class="header" data-source-line="{header_line}">"#
+        ));
+        emit_chrome_text(&mut body, bx, by, r);
+        body.push_str("</g>");
+    }
+
+    grid.draw(image_ox, image_oy, &mut body);
+
+    // Footer ribbon (default alignment CENTER), drawn after the image.
+    if let Some(r) = &footer {
+        let bx = MARGIN + (content_w - r.box_w) / 2.0;
+        let by = MARGIN + header_h + image_h;
+        body.push_str(r#"<g class="footer">"#);
+        emit_chrome_text(&mut body, bx, by, r);
+        body.push_str("</g>");
+    }
+
+    // Caption (default alignment CENTER), drawn last as the outermost decorator.
+    if let Some(r) = &caption {
+        let bx = MARGIN + (content_w - r.box_w) / 2.0;
+        let by = MARGIN + header_h + image_h + footer_h;
+        body.push_str(r#"<g class="caption">"#);
+        emit_chrome_text(&mut body, bx, by, r);
+        body.push_str("</g>");
+    }
 
     format!(
         r#"<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" contentStyleType="text/css" data-diagram-type="SALT" height="{h}px" preserveAspectRatio="none" style="width:{w}px;height:{h}px;background:#FFFFFF;" version="1.1" viewBox="0 0 {w} {h}" width="{w}px" zoomAndPan="magnify"><?plantuml 1.2026.3beta6?><defs/><g>{body}</g></svg>"#
     )
+}
+
+/// Emit a chrome ribbon's text. `bx`/`by` are the ribbon box's top-left; the
+/// text baseline sits at `by + ascent`, the text starting at the box left edge.
+/// Header/footer are 10pt #888888; caption is 12pt #000000.
+fn emit_chrome_text(buf: &mut String, bx: f64, by: f64, r: &Ribbon) {
+    let tl = pm::text_width(&r.text, r.font_size, false);
+    let baseline = by + pm::ascent(r.font_size);
+    let escaped = escape_text(&r.text);
+    let fill = if r.font_size == CAPTION_FONT_SIZE {
+        "#000000"
+    } else {
+        "#888888"
+    };
+    let fs = pm::fmt_coord(r.font_size);
+    buf.push_str(&format!(
+        r##"<text fill="{fill}" font-family="sans-serif" font-size="{fs}" lengthAdjust="spacing" textLength="{tl}" x="{x}" y="{y}">{escaped}</text>"##,
+        tl = pm::fmt_coord(tl),
+        x = pm::fmt_coord(bx),
+        y = pm::fmt_coord(baseline),
+    ));
 }
 
 // ── Grid layout ──────────────────────────────────────────────────────────────
