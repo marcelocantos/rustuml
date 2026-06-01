@@ -1372,6 +1372,51 @@ fn node_geometry(node: &LayoutNode) -> Option<ftile::FtileGeometry> {
     Some(g)
 }
 
+/// Branch tile geometry for an `if/else` branch, mirroring ConditionalBuilder:
+/// `FtileMinWidthCentered(30)` then `addHorizontalMargin(10)` (PlantUML always
+/// takes the `createWithLinks` path — build() L161). The +10/side is what
+/// produces the 20px inter-branch gap that the bare box geometry lacked.
+fn if_branch_tile(branch: &[LayoutNode]) -> Option<ftile::FtileGeometry> {
+    let g = sequence_geometry(branch)?;
+    // MinWidthCentered(30): widen narrow branches to 30, content centred.
+    let g = if g.width < 30.0 {
+        ftile::FtileGeometry::new(30.0, g.height, 15.0, g.in_y, g.out_y)
+    } else {
+        g
+    };
+    Some(g.add_margin_x(10.0))
+}
+
+/// For a binary `if/else`, return `(then_off, else_off, left_ext, right_ext)`:
+/// the then/else branch spine offsets from the if spine, and the if's DRAWN
+/// extents from its spine. `None` for elseif / IfDown / non-portable branches.
+/// Branch POSITIONS use the margined branch tiles (FtileIfWithDiamonds); the
+/// canvas EXTENTS use the branches' own drawn extents — the +10 tile margins
+/// are empty layout space (not drawn), so they position branches without
+/// widening the canvas. Verified vs act_if_simple + act_if_cond_valid_input.
+fn if_ftile_layout(
+    condition: &str,
+    then_branch: &[LayoutNode],
+    else_branches: &[ElseBranch],
+) -> Option<(f64, f64, f64, f64)> {
+    if else_branches.len() != 1 || if_down_plan(then_branch, else_branches).is_some() {
+        return None;
+    }
+    let (then_l, _then_r) = sequence_extents(then_branch);
+    let (_else_l, else_r) = sequence_extents(&else_branches[0].body);
+    let diamond1 = condition_diamond(condition);
+    let diamond2 = ftile::FtileGeometry::diamond_empty(0.0);
+    let t1 = if_branch_tile(then_branch)?;
+    let t2 = if_branch_tile(&else_branches[0].body)?;
+    let g = ftile::if_with_diamonds(&diamond1, &t1, &t2, &diamond2, 16.0, (0.0, 0.0, 0.0));
+    let then_off = t1.left - g.left; // negative: then spine left of if spine
+    let else_off = g.right() - t2.right();
+    let cond_half = diamond1.width / 2.0;
+    let left_ext = cond_half.max(-then_off + then_l);
+    let right_ext = cond_half.max(else_off + else_r);
+    Some((then_off, else_off, left_ext, right_ext))
+}
+
 /// Compute the asymmetric (left, right) extents of a single node from its
 /// vertical centreline. For most nodes this is symmetric (width/2, width/2);
 /// for if/else with unequal branches, the left extent (then-side) and right
@@ -1398,6 +1443,12 @@ fn node_extents(node: &LayoutNode) -> (f64, f64) {
                 let left = (cond_half + IF_DOWN_LEFT_PAD).max(branch_w / 2.0);
                 let right = (cond_half + IF_DOWN_RIGHT_PAD).max(branch_w / 2.0);
                 return (left, right);
+            }
+            // ftile wire (binary if): exact FtileIfWithDiamonds drawn extents.
+            if let Some((_, _, left_ext, right_ext)) =
+                if_ftile_layout(condition, then_branch, else_branches)
+            {
+                return (left_ext, right_ext);
             }
             let diamond_w = diamond_inner_w(condition) + DIAMOND_HALF * 2.0;
             let then_w = sequence_width(then_branch);
@@ -1617,6 +1668,11 @@ fn node_width(node: &LayoutNode) -> f64 {
             if if_down_plan(then_branch, else_branches).is_some() {
                 let (l, r) = node_extents(node);
                 return l + r;
+            }
+            if let Some((_, _, left_ext, right_ext)) =
+                if_ftile_layout(condition, then_branch, else_branches)
+            {
+                return left_ext + right_ext;
             }
             let diamond_w = diamond_inner_w(condition) + DIAMOND_HALF * 2.0;
             let then_w = sequence_width(then_branch);
@@ -3193,10 +3249,16 @@ fn emit_if(
     let diamond_w = cond_inner_w + DIAMOND_HALF * 2.0;
     let then_w = sequence_width(then_branch);
     let else_w: f64 = else_branches.iter().map(|b| sequence_width(&b.body)).sum();
-    let branch_dist = (diamond_w + 20.0).max((then_w + else_w) / 2.0 + 20.0);
-    let _else_count = else_branches.len().max(1);
-    let then_cx = cx - branch_dist / 2.0;
-    let else_cx = cx + branch_dist / 2.0;
+    // ftile wire (binary if): branch spines from the exact FtileIfWithDiamonds
+    // layout (consistent with node_extents). Legacy branch_dist otherwise.
+    let (then_cx, else_cx) = if let Some((then_off, else_off, _, _)) =
+        if_ftile_layout(condition, then_branch, else_branches)
+    {
+        (cx + then_off, cx + else_off)
+    } else {
+        let branch_dist = (diamond_w + 20.0).max((then_w + else_w) / 2.0 + 20.0);
+        (cx - branch_dist / 2.0, cx + branch_dist / 2.0)
+    };
 
     // Else label: text shape, must land in shapes buffer before branch
     // shapes (matches golden order: yes label, no label, then branch boxes).
