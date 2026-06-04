@@ -606,6 +606,8 @@ const GROUP_HEADER_FIRST_PAD_ADJUST: f64 = 2.0;
 const GROUP_HEADER_TEXT_TOP_PAD: f64 = 1.0;
 /// Gap from preceding message y to group frame top.
 const GROUP_GAP_AFTER_MSG: f64 = 15.0;
+/// Group frames clamp to PlantUML's 10px left canvas margin.
+const GROUP_FRAME_MIN_LEFT: f64 = 10.0;
 /// Gap from the lifeline top to the group frame top when a group is the very
 /// first event (no preceding message). PlantUML reserves 2px more headroom in
 /// this case than the standalone-note first gap.
@@ -2574,6 +2576,7 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
     let mut participant_font_size: u32 = PARTICIPANT_FONT_SIZE as u32;
     let mut participant_font_bold = false;
     let mut participant_font_italic = false;
+    let mut participant_padding = 0.0;
     let mut lifeline_background = "#FFFFFF".to_string();
     let mut lifeline_border = "#181818".to_string();
     let lifeline_border_thickness: String = "0.5".to_string();
@@ -2687,6 +2690,11 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                 let style = val.to_ascii_lowercase();
                 participant_font_bold = style.contains("bold");
                 participant_font_italic = style.contains("italic");
+            }
+            "participantpadding" | "sequenceparticipantpadding" => {
+                if let Ok(v) = val.parse::<f64>() {
+                    participant_padding = v;
+                }
             }
             "sequencelifelinebordercolor" => {
                 lifeline_border = resolve_color(val);
@@ -2819,6 +2827,7 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
     let group_inner_top_pad_first = group_inner_top_pad - GROUP_HEADER_FIRST_PAD_ADJUST;
     let group_header_text_baseline =
         plantuml_metrics::ascent(group_header_font_size_f) + GROUP_HEADER_TEXT_TOP_PAD;
+    let group_frame_margin = GROUP_FRAME_MARGIN + participant_padding;
     let message_label_width = |text: &str| {
         if message_font_bold {
             bold_text_width(text, message_font_size_f)
@@ -3042,10 +3051,6 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
             }
         }
     }
-
-    /// Extra left margin added to participant positions when groups encompass
-    /// the leftmost participant. This makes room for the group frame.
-    const GROUP_LEFT_SHIFT: f64 = 15.0;
 
     // -----------------------------------------------------------------------
     // Phase 2: Compute required gap between adjacent participant pairs
@@ -3492,7 +3497,7 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
         // and at least HEAD_BOX_Y + box_width/2 (to fit the box).
         // When groups encompass the leftmost participant, shift right for the frame margin.
         let group_shift = if group_needs_left_shift {
-            GROUP_LEFT_SHIFT
+            group_frame_margin + HEAD_BOX_Y
         } else {
             0.0
         };
@@ -3581,7 +3586,7 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
 
         // A note that overhangs participant 0 while enclosed by group frames is
         // held back by those frames: its drawn left edge cannot fall left of
-        // `GROUP_NOTE_LEFT_FLOOR_BASE + depth * GROUP_FRAME_MARGIN` (each frame
+        // `GROUP_NOTE_LEFT_FLOOR_BASE + depth * group_frame_margin` (each frame
         // insets its content a further MARGIN10; the outermost frame rect then
         // lands one MARGIN10 further left). When the note's natural left (at the
         // current participant positions) is left of that floor, the whole diagram
@@ -3616,7 +3621,7 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                         .lines()
                         .map(|l| text_width(l.trim(), MSG_FONT_SIZE))
                         .fold(0.0_f64, f64::max);
-                    let floor = GROUP_NOTE_LEFT_FLOOR_BASE + depth as f64 * GROUP_FRAME_MARGIN;
+                    let floor = GROUP_NOTE_LEFT_FLOOR_BASE + depth as f64 * group_frame_margin;
                     let natural_left = match note.position {
                         NotePosition::Over if note.participants.len() == 1 => {
                             // Mirror the renderer: left = floor(centerX - raw_w/2).
@@ -3654,6 +3659,18 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                 p.center_x += shift;
                 p.box_x += shift;
                 p.lifeline_line_x += shift;
+            }
+        }
+
+        if group_needs_left_shift && !participants.is_empty() {
+            let left = participants[0].box_x - group_frame_margin;
+            let shift = (GROUP_FRAME_MIN_LEFT - left).max(0.0);
+            if shift > 0.0 {
+                for p in participants.iter_mut() {
+                    p.center_x += shift;
+                    p.box_x += shift;
+                    p.lifeline_line_x += shift;
+                }
             }
         }
 
@@ -4255,8 +4272,8 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
     // Compute the maximum right extent of any group frame (header text + guard).
     let mut max_group_right: f64 = 0.0;
     if !participants.is_empty() {
-        let default_fl = participants[0].box_x - GROUP_FRAME_MARGIN;
-        let alt_fl = participants[0].box_x + GROUP_FRAME_MARGIN;
+        let default_fl = participants[0].box_x - group_frame_margin;
+        let alt_fl = participants[0].box_x + group_frame_margin;
         for event in &diagram.events {
             if let Event::GroupStart(g) = event {
                 let kind_str = match g.kind {
@@ -4287,7 +4304,7 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                     tab_right + 5.0
                 };
                 let last = &participants[n - 1];
-                let participant_right = last.box_x + last.box_width + GROUP_FRAME_MARGIN;
+                let participant_right = last.box_x + last.box_width + group_frame_margin;
                 max_group_right = max_group_right.max(guard_right.max(participant_right));
             }
         }
@@ -4683,16 +4700,16 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                         // beyond its direct child). Only a group with neither direct
                         // messages nor children falls back to the empty-group estimate.
                         let mut frame_left = if has_msgs {
-                            let part_left = participants[min_idx].box_x - GROUP_FRAME_MARGIN;
+                            let part_left = participants[min_idx].box_x - group_frame_margin;
                             if has_child {
-                                part_left.min(child_left - GROUP_FRAME_MARGIN)
+                                part_left.min(child_left - group_frame_margin)
                             } else {
                                 part_left
                             }
                         } else if has_child {
-                            child_left - GROUP_FRAME_MARGIN
+                            child_left - group_frame_margin
                         } else if !participants.is_empty() {
-                            participants[0].box_x + GROUP_FRAME_MARGIN
+                            participants[0].box_x + group_frame_margin
                         } else {
                             HEAD_BOX_Y
                         };
@@ -4700,7 +4717,7 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                         // frame to cover it: the frame's InGroupable left edge sits
                         // GROUP_FRAME_MARGIN beyond the note's drawn left.
                         if has_note {
-                            frame_left = frame_left.min(note_left - GROUP_FRAME_MARGIN);
+                            frame_left = frame_left.min(note_left - group_frame_margin);
                         }
 
                         // Compute the header text right edge (group kind label + guard)
@@ -4737,21 +4754,21 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                         let part_right = if has_msgs {
                             participants[max_idx].box_x
                                 + participants[max_idx].box_width
-                                + GROUP_FRAME_MARGIN
+                                + group_frame_margin
                         } else if has_child {
                             f64::NEG_INFINITY
                         } else if !participants.is_empty() {
                             let last = &participants[n - 1];
-                            last.box_x + last.box_width + GROUP_FRAME_MARGIN
+                            last.box_x + last.box_width + group_frame_margin
                         } else {
                             100.0
                         };
                         let mut frame_right = part_right.max(header_right);
                         if has_child {
-                            frame_right = frame_right.max(child_right + GROUP_FRAME_MARGIN);
+                            frame_right = frame_right.max(child_right + group_frame_margin);
                         }
                         if has_note {
-                            frame_right = frame_right.max(note_right + GROUP_FRAME_MARGIN);
+                            frame_right = frame_right.max(note_right + group_frame_margin);
                         }
 
                         group_frames.push(GroupFrame {
@@ -6607,15 +6624,15 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                 } else {
                     // Fallback: use participant extent
                     let fl = if participants.is_empty() {
-                        GROUP_FRAME_MARGIN
+                        group_frame_margin
                     } else {
-                        participants[0].box_x - GROUP_FRAME_MARGIN
+                        participants[0].box_x - group_frame_margin
                     };
                     let fr = if participants.is_empty() {
                         100.0
                     } else {
                         let last = &participants[n - 1];
-                        last.box_x + last.box_width + GROUP_FRAME_MARGIN
+                        last.box_x + last.box_width + group_frame_margin
                     };
                     (fl, fr, msg_y, 50.0)
                 };
@@ -6699,15 +6716,15 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                 let (frame_left, frame_right) =
                     else_frame_stack.last().copied().unwrap_or_else(|| {
                         let fl = if participants.is_empty() {
-                            GROUP_FRAME_MARGIN
+                            group_frame_margin
                         } else {
-                            participants[0].box_x - GROUP_FRAME_MARGIN
+                            participants[0].box_x - group_frame_margin
                         };
                         let fr = if participants.is_empty() {
                             100.0
                         } else {
                             let last = &participants[n - 1];
-                            last.box_x + last.box_width + GROUP_FRAME_MARGIN
+                            last.box_x + last.box_width + group_frame_margin
                         };
                         (fl, fr)
                     });
