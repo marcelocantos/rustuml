@@ -148,6 +148,14 @@ fn gradient_fill_or(val: &str, gradient_id: &Option<String>) -> String {
     }
 }
 
+fn action_text_for_family(text: &str, font_family: &str) -> String {
+    if font_family.to_ascii_lowercase().contains("courier") {
+        text.replace(' ', "\u{a0}")
+    } else {
+        text.to_string()
+    }
+}
+
 /// Per-diagram color palette, derived from the PlantUML default plus any
 /// inline `skinparam` overrides. Mirrors the constants above but allows
 /// skinparams to mutate individual fields without rebuilding the theme
@@ -161,9 +169,17 @@ struct Palette {
     action_pad_x: f64,
     action_pad_y: f64,
     action_font_family: String,
+    action_font_size: f64,
+    action_text_bold: bool,
+    action_text_italic: bool,
     diamond_fill: String,
     diamond_stroke: String,
     diamond_stroke_width: String,
+    diamond_font_family: String,
+    diamond_font_size: f64,
+    diamond_text_color: String,
+    diamond_text_bold: bool,
+    diamond_text_italic: bool,
     arrow_color: String,
     /// Stroke-width string used for activity connector lines (the ones that
     /// link nodes top-to-bottom and the if/fork frame). Defaults to "1" and
@@ -172,7 +188,6 @@ struct Palette {
     arrow_thickness: String,
     arrow_font_size: f64,
     text_color: String,
-    text_italic: bool,
     start_fill: String,
     /// Stroke colour for the start ellipse. Mirrors `start_fill` by default
     /// but stays at `#222222` when only `activityStartColor` is set —
@@ -198,14 +213,21 @@ impl Palette {
             action_pad_x: ACTION_H_PADDING,
             action_pad_y: ACTION_PADDING / 2.0,
             action_font_family: "sans-serif".into(),
+            action_font_size: FONT_SIZE,
+            action_text_bold: false,
+            action_text_italic: false,
             diamond_fill: DIAMOND_FILL.into(),
             diamond_stroke: ACTION_STROKE.into(),
             diamond_stroke_width: ACTION_STROKE_WIDTH.into(),
+            diamond_font_family: "sans-serif".into(),
+            diamond_font_size: SMALL_FONT,
+            diamond_text_color: TEXT_COLOR.into(),
+            diamond_text_bold: false,
+            diamond_text_italic: false,
             arrow_color: ARROW_COLOR.into(),
             arrow_thickness: "1".into(),
             arrow_font_size: SMALL_FONT,
             text_color: TEXT_COLOR.into(),
-            text_italic: false,
             start_fill: START_FILL.into(),
             start_stroke: START_FILL.into(),
             stop_fill: STOP_FILL.into(),
@@ -244,7 +266,22 @@ impl Palette {
                     }
                 }
                 "defaultfontname" | "activityfontname" => {
-                    p.action_font_family = canonical_font_family(val);
+                    let family = canonical_font_family(val);
+                    p.action_font_family = family.clone();
+                    p.diamond_font_family = family;
+                }
+                "defaultfontsize" => {
+                    if let Ok(v) = val.parse::<f64>() {
+                        p.action_font_size = v;
+                        p.diamond_font_size = v;
+                        p.arrow_font_size = v;
+                    }
+                }
+                "activityfontsize" => {
+                    if let Ok(v) = val.parse::<f64>() {
+                        p.action_font_size = v;
+                        p.diamond_font_size = v;
+                    }
                 }
                 "padding" => {
                     if let Ok(v) = val.parse::<f64>() {
@@ -292,6 +329,18 @@ impl Palette {
                         p.diamond_stroke_width = pm::fmt_coord(v);
                     }
                 }
+                "activitydiamondfontcolor" => p.diamond_text_color = resolved,
+                "activitydiamondfontname" => p.diamond_font_family = canonical_font_family(val),
+                "activitydiamondfontsize" => {
+                    if let Ok(v) = val.parse::<f64>() {
+                        p.diamond_font_size = v;
+                    }
+                }
+                "activitydiamondfontstyle" => {
+                    let lower = val.to_ascii_lowercase();
+                    p.diamond_text_bold = lower.contains("bold");
+                    p.diamond_text_italic = lower.contains("italic");
+                }
                 "activityarrowcolor" | "arrowcolor" => p.arrow_color = resolved,
                 "activityarrowthickness" | "arrowthickness" => {
                     if let Ok(v) = val.parse::<f64>() {
@@ -320,9 +369,16 @@ impl Palette {
                     // skinparam doesn't fall into the unknown bucket.
                 }
                 "activitybarcolor" => p.bar_color = resolved,
-                "activityfontcolor" => p.text_color = resolved,
+                "activityfontcolor" => {
+                    p.text_color = resolved.clone();
+                    p.diamond_text_color = resolved;
+                }
                 "activityfontstyle" => {
-                    p.text_italic = val.to_ascii_lowercase().contains("italic");
+                    let lower = val.to_ascii_lowercase();
+                    p.action_text_bold = lower.contains("bold");
+                    p.action_text_italic = lower.contains("italic");
+                    p.diamond_text_bold = p.action_text_bold;
+                    p.diamond_text_italic = p.action_text_italic;
                 }
                 // The global `roundCorner` skinparam sets the corner-radius
                 // diameter; the SVG rect radius is half that value (PlantUML
@@ -428,6 +484,9 @@ enum LayoutNode {
         pad_x: f64,
         pad_y: f64,
         font_family: String,
+        font_size: f64,
+        bold: bool,
+        italic: bool,
     },
     DeprecatedAction {
         color: String,
@@ -436,16 +495,30 @@ enum LayoutNode {
         pad_x: f64,
         pad_y: f64,
         font_family: String,
+        font_size: f64,
+        bold: bool,
+        italic: bool,
         warning_width: f64,
     },
     If {
         condition: String,
+        diamond_font_family: String,
+        diamond_font_size: f64,
+        diamond_text_color: String,
+        diamond_text_bold: bool,
+        diamond_text_italic: bool,
         then_label: Option<String>,
         then_branch: Vec<LayoutNode>,
         else_branches: Vec<ElseBranch>,
     },
     While {
         condition: String,
+        diamond_font_family: String,
+        diamond_font_size: f64,
+        diamond_text_color: String,
+        diamond_text_bold: bool,
+        diamond_text_italic: bool,
+        arrow_font_size: f64,
         is_label: Option<String>,
         body: Vec<LayoutNode>,
         end_label: Option<String>,
@@ -615,8 +688,13 @@ fn if_down_plan<'a>(
 /// PlantUML clamps this to a minimum of 24 px so very short conditions still
 /// produce a diamond wider than their text. The text inside stays at its
 /// measured length — the polygon and the text are sized independently.
+fn diamond_inner_w_styled(condition: &str, font_size: f64, bold: bool, font_family: &str) -> f64 {
+    text_render::measure_with_family(condition, font_size, bold, font_family)
+        .max(DIAMOND_MIN_INNER_W)
+}
+
 fn diamond_inner_w(condition: &str) -> f64 {
-    text_render::measure(condition, SMALL_FONT, false).max(DIAMOND_MIN_INNER_W)
+    diamond_inner_w_styled(condition, SMALL_FONT, false, "sans-serif")
 }
 
 /// Build a layout tree from the flat step list.
@@ -724,37 +802,45 @@ fn build_tree_inner(steps: &[ActivityStep], palette: &Palette) -> Vec<LayoutNode
                 i += 1;
             }
             ActivityStep::Action(text) => {
+                let text = action_text_for_family(text, &palette.action_font_family);
                 let tw = text_render::measure_with_family(
-                    text,
-                    FONT_SIZE,
-                    false,
+                    &text,
+                    palette.action_font_size,
+                    palette.action_text_bold,
                     &palette.action_font_family,
                 );
                 nodes.push(LayoutNode::Action {
-                    text: text.clone(),
+                    text,
                     text_width: tw,
                     pad_x: palette.action_pad_x,
                     pad_y: palette.action_pad_y,
                     font_family: palette.action_font_family.clone(),
+                    font_size: palette.action_font_size,
+                    bold: palette.action_text_bold,
+                    italic: palette.action_text_italic,
                 });
                 i += 1;
             }
             ActivityStep::DeprecatedColorAction(dca) => {
+                let text = action_text_for_family(&dca.text, &palette.action_font_family);
                 let tw = text_render::measure_with_family(
-                    &dca.text,
-                    FONT_SIZE,
-                    false,
+                    &text,
+                    palette.action_font_size,
+                    palette.action_text_bold,
                     &palette.action_font_family,
                 );
                 let warning = deprecated_warning(&dca.color);
                 let ww = pm::mono_text_width(&warning, 10.0);
                 nodes.push(LayoutNode::DeprecatedAction {
                     color: dca.color.clone(),
-                    text: dca.text.clone(),
+                    text,
                     text_width: tw,
                     pad_x: palette.action_pad_x,
                     pad_y: palette.action_pad_y,
                     font_family: palette.action_font_family.clone(),
+                    font_size: palette.action_font_size,
+                    bold: palette.action_text_bold,
+                    italic: palette.action_text_italic,
                     warning_width: ww,
                 });
                 i += 1;
@@ -790,6 +876,11 @@ fn build_tree_inner(steps: &[ActivityStep], palette: &Palette) -> Vec<LayoutNode
                 }
                 nodes.push(LayoutNode::If {
                     condition: block.condition.clone(),
+                    diamond_font_family: palette.diamond_font_family.clone(),
+                    diamond_font_size: palette.diamond_font_size,
+                    diamond_text_color: palette.diamond_text_color.clone(),
+                    diamond_text_bold: palette.diamond_text_bold,
+                    diamond_text_italic: palette.diamond_text_italic,
                     then_label: block.then_label.clone(),
                     then_branch,
                     else_branches,
@@ -836,6 +927,12 @@ fn build_tree_inner(steps: &[ActivityStep], palette: &Palette) -> Vec<LayoutNode
                 };
                 nodes.push(LayoutNode::While {
                     condition: w.condition.clone(),
+                    diamond_font_family: palette.diamond_font_family.clone(),
+                    diamond_font_size: palette.diamond_font_size,
+                    diamond_text_color: palette.diamond_text_color.clone(),
+                    diamond_text_bold: palette.diamond_text_bold,
+                    diamond_text_italic: palette.diamond_text_italic,
+                    arrow_font_size: palette.arrow_font_size,
                     is_label: w.is_label.clone(),
                     body,
                     end_label,
@@ -1408,7 +1505,16 @@ fn emit_leading_floating_note(
 /// equals `FtileGeometry::diamond_inside(text_w, _, 0)` for a non-empty label.
 #[allow(dead_code)] // incr-4 groundwork: wired in a later increment
 fn condition_diamond(condition: &str) -> ftile::FtileGeometry {
-    let w = diamond_inner_w(condition) + DIAMOND_HALF * 2.0;
+    condition_diamond_styled(condition, SMALL_FONT, false, "sans-serif")
+}
+
+fn condition_diamond_styled(
+    condition: &str,
+    font_size: f64,
+    bold: bool,
+    font_family: &str,
+) -> ftile::FtileGeometry {
+    let w = diamond_inner_w_styled(condition, font_size, bold, font_family) + DIAMOND_HALF * 2.0;
     ftile::FtileGeometry::new(
         w,
         DIAMOND_HALF * 2.0,
@@ -1451,6 +1557,8 @@ fn node_geometry(node: &LayoutNode) -> Option<ftile::FtileGeometry> {
             pad_x,
             pad_y,
             font_family,
+            font_size,
+            ..
         }
         | LayoutNode::DeprecatedAction {
             text,
@@ -1458,10 +1566,11 @@ fn node_geometry(node: &LayoutNode) -> Option<ftile::FtileGeometry> {
             pad_x,
             pad_y,
             font_family,
+            font_size,
             ..
         } => G::box_tile(
             *text_width,
-            text_render::label_height_with_family(text, FONT_SIZE, font_family),
+            text_render::label_height_with_family(text, *font_size, font_family),
             *pad_x,
             *pad_x,
             *pad_y,
@@ -1471,6 +1580,9 @@ fn node_geometry(node: &LayoutNode) -> Option<ftile::FtileGeometry> {
             condition,
             then_branch,
             else_branches,
+            diamond_font_family,
+            diamond_font_size,
+            diamond_text_bold,
             ..
         } => {
             // Only the binary FtileIfWithDiamonds (one then + one populated
@@ -1479,7 +1591,12 @@ fn node_geometry(node: &LayoutNode) -> Option<ftile::FtileGeometry> {
             if else_branches.len() != 1 || if_down_plan(then_branch, else_branches).is_some() {
                 return None;
             }
-            let diamond1 = condition_diamond(condition);
+            let diamond1 = condition_diamond_styled(
+                condition,
+                *diamond_font_size,
+                *diamond_text_bold,
+                diamond_font_family,
+            );
             let diamond2 = G::diamond_empty(0.0); // bare 24×24 merge diamond
             let t1 = sequence_geometry(then_branch)?;
             let t2 = sequence_geometry(&else_branches[0].body)?;
@@ -1567,8 +1684,11 @@ fn if_branch_tile(branch: &[LayoutNode]) -> Option<ftile::FtileGeometry> {
 /// canvas EXTENTS use the branches' own drawn extents — the +10 tile margins
 /// are empty layout space (not drawn), so they position branches without
 /// widening the canvas. Verified vs act_if_simple + act_if_cond_valid_input.
-fn if_ftile_layout(
+fn if_ftile_layout_styled(
     condition: &str,
+    diamond_font_size: f64,
+    diamond_bold: bool,
+    diamond_font_family: &str,
     then_branch: &[LayoutNode],
     else_branches: &[ElseBranch],
 ) -> Option<(f64, f64, f64, f64)> {
@@ -1577,7 +1697,12 @@ fn if_ftile_layout(
     }
     let (then_l, _then_r) = sequence_extents(then_branch);
     let (_else_l, else_r) = sequence_extents(&else_branches[0].body);
-    let diamond1 = condition_diamond(condition);
+    let diamond1 = condition_diamond_styled(
+        condition,
+        diamond_font_size,
+        diamond_bold,
+        diamond_font_family,
+    );
     let diamond2 = ftile::FtileGeometry::diamond_empty(0.0);
     let t1 = if_branch_tile(then_branch)?;
     let t2 = if_branch_tile(&else_branches[0].body)?;
@@ -1927,6 +2052,10 @@ fn node_extents(node: &LayoutNode) -> (f64, f64) {
             then_branch,
             else_branches,
             then_label,
+            diamond_font_family,
+            diamond_font_size,
+            diamond_text_bold,
+            ..
         } => {
             // FtileIfLongHorizontal (if/elseif*/else): drawn extents from the
             // placed diamond/branch row.
@@ -1943,19 +2072,35 @@ fn node_extents(node: &LayoutNode) -> (f64, f64) {
                 // goldens: left = cond_half + halfHex + 9, right = cond_half +
                 // halfHex + 27.2182 (independent of the east label width).
                 // A wide populated branch overrides via branch_w/2.
-                let cond_half = diamond_inner_w(condition) / 2.0 + DIAMOND_HALF;
+                let cond_half = diamond_inner_w_styled(
+                    condition,
+                    *diamond_font_size,
+                    *diamond_text_bold,
+                    diamond_font_family,
+                ) / 2.0
+                    + DIAMOND_HALF;
                 let branch_w = sequence_width(plan.populated);
                 let left = (cond_half + IF_DOWN_LEFT_PAD).max(branch_w / 2.0);
                 let right = (cond_half + IF_DOWN_RIGHT_PAD).max(branch_w / 2.0);
                 return (left, right);
             }
             // ftile wire (binary if): exact FtileIfWithDiamonds drawn extents.
-            if let Some((_, _, left_ext, right_ext)) =
-                if_ftile_layout(condition, then_branch, else_branches)
-            {
+            if let Some((_, _, left_ext, right_ext)) = if_ftile_layout_styled(
+                condition,
+                *diamond_font_size,
+                *diamond_text_bold,
+                diamond_font_family,
+                then_branch,
+                else_branches,
+            ) {
                 return (left_ext, right_ext);
             }
-            let diamond_w = diamond_inner_w(condition) + DIAMOND_HALF * 2.0;
+            let diamond_w = diamond_inner_w_styled(
+                condition,
+                *diamond_font_size,
+                *diamond_text_bold,
+                diamond_font_family,
+            ) + DIAMOND_HALF * 2.0;
             let then_w = sequence_width(then_branch);
             let else_w: f64 = else_branches.iter().map(|b| sequence_width(&b.body)).sum();
             // Branch centrelines are at least `diamond_w + 20` apart, but
@@ -2004,10 +2149,19 @@ fn node_extents(node: &LayoutNode) -> (f64, f64) {
             condition,
             end_label,
             special_out,
+            diamond_font_family,
+            diamond_font_size,
+            diamond_text_bold,
             ..
         } => {
             let (body_left, body_right) = sequence_extents(body);
-            let cond_half = diamond_inner_w(condition) / 2.0 + DIAMOND_HALF;
+            let cond_half = diamond_inner_w_styled(
+                condition,
+                *diamond_font_size,
+                *diamond_text_bold,
+                diamond_font_family,
+            ) / 2.0
+                + DIAMOND_HALF;
             let left_extent = while_left_extent(
                 while_body_left(body, body_left),
                 cond_half,
@@ -2172,6 +2326,9 @@ fn node_width(node: &LayoutNode) -> f64 {
             condition,
             then_branch,
             else_branches,
+            diamond_font_family,
+            diamond_font_size,
+            diamond_text_bold,
             ..
         } => {
             if if_is_long(else_branches) {
@@ -2182,12 +2339,22 @@ fn node_width(node: &LayoutNode) -> f64 {
                 let (l, r) = node_extents(node);
                 return l + r;
             }
-            if let Some((_, _, left_ext, right_ext)) =
-                if_ftile_layout(condition, then_branch, else_branches)
-            {
+            if let Some((_, _, left_ext, right_ext)) = if_ftile_layout_styled(
+                condition,
+                *diamond_font_size,
+                *diamond_text_bold,
+                diamond_font_family,
+                then_branch,
+                else_branches,
+            ) {
                 return left_ext + right_ext;
             }
-            let diamond_w = diamond_inner_w(condition) + DIAMOND_HALF * 2.0;
+            let diamond_w = diamond_inner_w_styled(
+                condition,
+                *diamond_font_size,
+                *diamond_text_bold,
+                diamond_font_family,
+            ) + DIAMOND_HALF * 2.0;
             let then_w = sequence_width(then_branch);
             let else_w: f64 = else_branches.iter().map(|b| sequence_width(&b.body)).sum();
             // Branch centrelines are at least `diamond_w + 20` apart, but
@@ -2345,10 +2512,10 @@ fn sequence_height(nodes: &[LayoutNode]) -> f64 {
     h
 }
 
-fn action_height(text: &str, pad_y: f64, font_family: &str) -> f64 {
+fn action_height(text: &str, pad_y: f64, font_family: &str, font_size: f64) -> f64 {
     // Pick the box height to match the label's actual font — monospace
     // labels render shorter than sans-serif at the same nominal size.
-    text_render::label_height_with_family(text, FONT_SIZE, font_family) + pad_y * 2.0
+    text_render::label_height_with_family(text, font_size, font_family) + pad_y * 2.0
 }
 
 fn node_height(node: &LayoutNode) -> f64 {
@@ -2363,23 +2530,26 @@ fn node_height(node: &LayoutNode) -> f64 {
             text,
             pad_y,
             font_family,
+            font_size,
             ..
-        } => action_height(text, *pad_y, font_family),
+        } => action_height(text, *pad_y, font_family, *font_size),
         LayoutNode::DeprecatedAction {
             text,
             pad_y,
             font_family,
+            font_size,
             ..
         } => {
             // Warning banner is accounted for separately by warning_band_h
             // in render; this node's own height is just the action box.
-            action_height(text, *pad_y, font_family)
+            action_height(text, *pad_y, font_family, *font_size)
         }
         LayoutNode::If {
             condition,
             then_label,
             then_branch,
             else_branches,
+            ..
         } => {
             if if_is_long(else_branches)
                 && let Some(l) = if_long_layout(condition, then_label, then_branch, else_branches)
@@ -2458,6 +2628,7 @@ fn node_height(node: &LayoutNode) -> f64 {
             body,
             is_label,
             special_out,
+            arrow_font_size,
             ..
         } => {
             // PlantUML's FtileWhile height formula:
@@ -2479,7 +2650,7 @@ fn node_height(node: &LayoutNode) -> f64 {
             // from the same compression-aware formula as emit_while.
             let diamond_alone_h = DIAMOND_HALF * 2.0;
             let body_top_offset = if is_label.is_some() {
-                pm::text_height(SMALL_FONT) + 2.0 * DIAMOND_HALF
+                pm::text_height(*arrow_font_size) + 2.0 * DIAMOND_HALF
             } else {
                 ARROW_LEN
             };
@@ -2498,7 +2669,7 @@ fn node_height(node: &LayoutNode) -> f64 {
                 //       4*halfHex + special.h - body_top_offset - body_h.
                 let s = special_out.as_ref().unwrap();
                 let special_h = node_height(s);
-                let junction_below = 10.0 + pm::text_height(SMALL_FONT);
+                let junction_below = 10.0 + pm::text_height(*arrow_font_size);
                 let special_below = 4.0 * DIAMOND_HALF + special_h - body_top_offset - body_h;
                 junction_below.max(special_below)
             } else if body.is_empty() {
@@ -3504,8 +3675,11 @@ fn emit_node(svg: &mut SvgEmitter, node: &LayoutNode, cx: f64, y: f64) -> f64 {
             pad_x,
             pad_y,
             font_family,
+            font_size,
+            bold,
+            italic,
         } => {
-            let ah = action_height(text, *pad_y, font_family);
+            let ah = action_height(text, *pad_y, font_family, *font_size);
             let rect_w = *text_width + *pad_x * 2.0;
             let rect_x = cx - rect_w / 2.0;
             let fill = svg.palette.action_fill.clone();
@@ -3525,20 +3699,20 @@ fn emit_node(svg: &mut SvgEmitter, node: &LayoutNode, cx: f64, y: f64) -> f64 {
             );
             // Text baseline: padding_top + ascent, both derived from the
             // label's actual font so monospace labels position correctly.
-            let lh = text_render::label_height_with_family(text, FONT_SIZE, font_family);
+            let lh = text_render::label_height_with_family(text, *font_size, font_family);
             let padding_top = (ah - lh) / 2.0;
             let text_y = y
                 + padding_top
-                + text_render::label_ascent_with_family(text, FONT_SIZE, font_family);
+                + text_render::label_ascent_with_family(text, *font_size, font_family);
             svg.text_element_styled(
                 &text_col,
                 font_family,
-                FONT_SIZE,
+                *font_size,
                 rect_x + *pad_x,
                 text_y,
                 text,
-                false,
-                svg.palette.text_italic,
+                *bold,
+                *italic,
             );
             y + ah
         }
@@ -3549,11 +3723,14 @@ fn emit_node(svg: &mut SvgEmitter, node: &LayoutNode, cx: f64, y: f64) -> f64 {
             pad_x,
             pad_y,
             font_family,
+            font_size,
+            bold,
+            italic,
             warning_width: _,
         } => {
             // The deprecated action renders just like a normal action.
             // The warning banner is emitted separately at the top of the diagram.
-            let ah = action_height(text, *pad_y, font_family);
+            let ah = action_height(text, *pad_y, font_family, *font_size);
             let rect_w = *text_width + *pad_x * 2.0;
             let rect_x = cx - rect_w / 2.0;
             let fill = svg.palette.action_fill.clone();
@@ -3571,25 +3748,30 @@ fn emit_node(svg: &mut SvgEmitter, node: &LayoutNode, cx: f64, y: f64) -> f64 {
                 rect_x,
                 y,
             );
-            let lh = text_render::label_height_with_family(text, FONT_SIZE, font_family);
+            let lh = text_render::label_height_with_family(text, *font_size, font_family);
             let padding_top = (ah - lh) / 2.0;
             let text_y = y
                 + padding_top
-                + text_render::label_ascent_with_family(text, FONT_SIZE, font_family);
+                + text_render::label_ascent_with_family(text, *font_size, font_family);
             svg.text_element_styled(
                 &text_col,
                 font_family,
-                FONT_SIZE,
+                *font_size,
                 rect_x + *pad_x,
                 text_y,
                 text,
-                false,
-                svg.palette.text_italic,
+                *bold,
+                *italic,
             );
             y + ah
         }
         LayoutNode::If {
             condition,
+            diamond_font_family,
+            diamond_font_size,
+            diamond_text_color,
+            diamond_text_bold,
+            diamond_text_italic,
             then_label,
             then_branch,
             else_branches,
@@ -3598,6 +3780,11 @@ fn emit_node(svg: &mut SvgEmitter, node: &LayoutNode, cx: f64, y: f64) -> f64 {
             cx,
             y,
             condition,
+            diamond_font_family,
+            *diamond_font_size,
+            diamond_text_color,
+            *diamond_text_bold,
+            *diamond_text_italic,
             then_label,
             then_branch,
             else_branches,
@@ -3606,15 +3793,26 @@ fn emit_node(svg: &mut SvgEmitter, node: &LayoutNode, cx: f64, y: f64) -> f64 {
         LayoutNode::Switch { condition, cases } => emit_switch(svg, cx, y, condition, cases),
         LayoutNode::While {
             condition,
+            diamond_font_family,
+            diamond_font_size,
+            diamond_text_color,
+            diamond_text_bold,
+            diamond_text_italic,
             is_label,
             body,
             end_label,
             special_out,
+            ..
         } => emit_while(
             svg,
             cx,
             y,
             condition,
+            diamond_font_family,
+            *diamond_font_size,
+            diamond_text_color,
+            *diamond_text_bold,
+            *diamond_text_italic,
             is_label,
             end_label,
             body,
@@ -3732,11 +3930,17 @@ fn emit_node(svg: &mut SvgEmitter, node: &LayoutNode, cx: f64, y: f64) -> f64 {
     }
 }
 
+#[allow(clippy::too_many_arguments)]
 fn emit_if(
     svg: &mut SvgEmitter,
     cx: f64,
     y: f64,
     condition: &str,
+    diamond_font_family: &str,
+    diamond_font_size: f64,
+    diamond_text_color: &str,
+    diamond_text_bold: bool,
+    diamond_text_italic: bool,
     then_label: &Option<String>,
     then_branch: &[LayoutNode],
     else_branches: &[ElseBranch],
@@ -3767,8 +3971,18 @@ fn emit_if(
     // The diamond's inner edge is clamped to DIAMOND_MIN_INNER_W; the
     // condition's `textLength` is the measured width (no clamp). Track both
     // separately so the polygon and the text are sized independently.
-    let cond_inner_w = diamond_inner_w(condition);
-    let cond_text_w = text_render::measure(condition, SMALL_FONT, false);
+    let cond_inner_w = diamond_inner_w_styled(
+        condition,
+        diamond_font_size,
+        diamond_text_bold,
+        diamond_font_family,
+    );
+    let cond_text_w = text_render::measure_with_family(
+        condition,
+        diamond_font_size,
+        diamond_text_bold,
+        diamond_font_family,
+    );
 
     // Diamond: centered at (cx, y + DIAMOND_HALF)
     let diamond_cy = y + DIAMOND_HALF;
@@ -3789,17 +4003,18 @@ fn emit_if(
     // Condition text (textLength = measured, centred under cx). The condition
     // honours `skinparam activityFontColor`; the then/else branch labels below
     // keep the default black.
-    let cond_text_color = svg.palette.text_color.clone();
-    let text_y = y + DIAMOND_HALF + pm::text_height(SMALL_FONT) / 2.0 - pm::descent(SMALL_FONT);
+    let text_y = y + DIAMOND_HALF
+        - text_render::text_height_for_family(diamond_font_size, diamond_font_family) / 2.0
+        + text_render::ascent_for_family(diamond_font_size, diamond_font_family);
     svg.text_element_styled(
-        &cond_text_color,
-        "sans-serif",
-        SMALL_FONT,
+        diamond_text_color,
+        diamond_font_family,
+        diamond_font_size,
         cx - cond_text_w / 2.0,
         text_y,
         condition,
-        false,
-        svg.palette.text_italic,
+        diamond_text_bold,
+        diamond_text_italic,
     );
 
     let diamond_bottom = y + DIAMOND_HALF * 2.0;
@@ -3831,9 +4046,14 @@ fn emit_if(
     let else_w: f64 = else_branches.iter().map(|b| sequence_width(&b.body)).sum();
     // ftile wire (binary if): branch spines from the exact FtileIfWithDiamonds
     // layout (consistent with node_extents). Legacy branch_dist otherwise.
-    let (then_cx, else_cx) = if let Some((then_off, else_off, _, _)) =
-        if_ftile_layout(condition, then_branch, else_branches)
-    {
+    let (then_cx, else_cx) = if let Some((then_off, else_off, _, _)) = if_ftile_layout_styled(
+        condition,
+        diamond_font_size,
+        diamond_text_bold,
+        diamond_font_family,
+        then_branch,
+        else_branches,
+    ) {
         (cx + then_off, cx + else_off)
     } else {
         let branch_dist = (diamond_w + 20.0).max((then_w + else_w) / 2.0 + 20.0);
@@ -4072,7 +4292,7 @@ fn emit_if_long(
             cond_y,
             &col.condition,
             false,
-            svg.palette.text_italic,
+            svg.palette.diamond_text_italic,
         );
 
         // East label on the LAST diamond (the bare-else label), baseline at
@@ -4342,7 +4562,7 @@ fn emit_if_down(
         text_y,
         condition,
         false,
-        svg.palette.text_italic,
+        svg.palette.diamond_text_italic,
     );
     if let Some(label) = east_label {
         let label_font_size = svg.palette.arrow_font_size;
@@ -4490,7 +4710,7 @@ fn emit_switch(
         cond_text_y,
         condition,
         false,
-        svg.palette.text_italic,
+        svg.palette.diamond_text_italic,
     );
 
     let cases_top = diamond_bottom + switch_below_diamond(cases, layout.big_diamond);
@@ -4817,6 +5037,11 @@ fn emit_while(
     cx: f64,
     y: f64,
     condition: &str,
+    diamond_font_family: &str,
+    diamond_font_size: f64,
+    diamond_text_color: &str,
+    diamond_text_bold: bool,
+    diamond_text_italic: bool,
     is_label: &Option<String>,
     end_label: &Option<String>,
     body: &[LayoutNode],
@@ -4845,8 +5070,18 @@ fn emit_while(
     let diamond_stroke_width = svg.palette.diamond_stroke_width.clone();
     let text_color = svg.palette.text_color.clone();
 
-    let cond_inner_w = diamond_inner_w(condition);
-    let cond_text_w = text_render::measure(condition, SMALL_FONT, false);
+    let cond_inner_w = diamond_inner_w_styled(
+        condition,
+        diamond_font_size,
+        diamond_text_bold,
+        diamond_font_family,
+    );
+    let cond_text_w = text_render::measure_with_family(
+        condition,
+        diamond_font_size,
+        diamond_text_bold,
+        diamond_font_family,
+    );
     let diamond_cy = y + DIAMOND_HALF;
     let diamond_bottom = y + DIAMOND_HALF * 2.0;
     let diamond_left_vertex_x = cx - cond_inner_w / 2.0 - DIAMOND_HALF;
@@ -4865,7 +5100,7 @@ fn emit_while(
     // 4*halfHex + label height regardless of whether `endwhile` carries a
     // trailing label (faithful port of calculateDimensionFtile).
     let body_top_offset = if is_label.is_some() {
-        pm::text_height(SMALL_FONT) + 2.0 * DIAMOND_HALF
+        pm::text_height(svg.palette.arrow_font_size) + 2.0 * DIAMOND_HALF
     } else {
         ARROW_LEN
     };
@@ -4965,16 +5200,18 @@ fn emit_while(
     }
 
     // Condition text inside diamond.
-    let text_y = y + DIAMOND_HALF + pm::text_height(SMALL_FONT) / 2.0 - pm::descent(SMALL_FONT);
+    let text_y = y + DIAMOND_HALF
+        - text_render::text_height_for_family(diamond_font_size, diamond_font_family) / 2.0
+        + text_render::ascent_for_family(diamond_font_size, diamond_font_family);
     svg.text_element_styled(
-        &text_color,
-        "sans-serif",
-        SMALL_FONT,
+        diamond_text_color,
+        diamond_font_family,
+        diamond_font_size,
         cx - cond_text_w / 2.0,
         text_y,
         condition,
-        false,
-        svg.palette.text_italic,
+        diamond_text_bold,
+        diamond_text_italic,
     );
 
     // "endwhile (no)" label just outside diamond's left vertex.
@@ -5192,7 +5429,7 @@ fn emit_repeat(
         text_y,
         condition,
         false,
-        svg.palette.text_italic,
+        svg.palette.diamond_text_italic,
     );
 
     // "is" label (optional). Sits with its baseline at cond_cy - descent(11)
@@ -5248,21 +5485,26 @@ fn emit_repeat(
                 label,
                 svg.palette.action_pad_y,
                 &svg.palette.action_font_family,
+                svg.palette.action_font_size,
             );
 
         // Box shape first — PlantUML emits the backward tile's shapes before
         // the loop-back connectors in document order.
+        let label_text = action_text_for_family(label, &svg.palette.action_font_family);
         let backward_node = LayoutNode::Action {
-            text: label.to_string(),
+            text: label_text.clone(),
             text_width: text_render::measure_with_family(
-                label,
-                FONT_SIZE,
-                false,
+                &label_text,
+                svg.palette.action_font_size,
+                svg.palette.action_text_bold,
                 &svg.palette.action_font_family,
             ),
             pad_x: svg.palette.action_pad_x,
             pad_y: svg.palette.action_pad_y,
             font_family: svg.palette.action_font_family.clone(),
+            font_size: svg.palette.action_font_size,
+            bold: svg.palette.action_text_bold,
+            italic: svg.palette.action_text_italic,
         };
         emit_node(svg, &backward_node, box_cx, box_top);
 
