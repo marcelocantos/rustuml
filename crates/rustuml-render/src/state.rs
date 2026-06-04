@@ -335,6 +335,8 @@ fn compute_first_appearance_order(diagram: &StateDiagram) -> Vec<String> {
 struct StateSkin {
     /// Resolved stroke colour for state rectangles, notes, and transitions.
     stroke: String,
+    /// Resolved stroke width for normal state rectangles and dividers.
+    border_thickness: String,
     /// Resolved text fill colour for state labels and other body text.
     text_color: String,
     /// Resolved state rectangle fill.
@@ -357,6 +359,10 @@ impl StateSkin {
         let color =
             |k: &str| -> Option<String> { find(k).map(|v| crate::sequence::resolve_color(&v)) };
         let stroke = color("stateBorderColor").unwrap_or_else(|| DEFAULT_STROKE_COLOR.to_string());
+        let border_thickness = find("stateBorderThickness")
+            .and_then(|v| v.parse::<f64>().ok())
+            .map(fmt_f)
+            .unwrap_or_else(|| "0.5".to_string());
         // PlantUML applies stateAttributeFontColor to state-name labels as
         // well as inline attribute lines. Prefer the explicit FontColor;
         // fall back to AttributeFontColor; then to the default.
@@ -368,6 +374,7 @@ impl StateSkin {
         let arrow_color = color("stateArrowColor").unwrap_or_else(|| stroke.clone());
         Self {
             stroke,
+            border_thickness,
             text_color,
             state_fill,
             arrow_color,
@@ -446,6 +453,8 @@ pub fn render_with_oracle(
     let rx_s = fmt_f(state_rx);
     #[allow(non_snake_case)]
     let STROKE_COLOR: &str = skin.stroke.as_str();
+    #[allow(non_snake_case)]
+    let STROKE_WIDTH: &str = skin.border_thickness.as_str();
     #[allow(non_snake_case)]
     let TEXT_COLOR: &str = skin.text_color.as_str();
     #[allow(non_snake_case)]
@@ -1311,8 +1320,8 @@ pub fn render_with_oracle(
 
                     // Border style: `state X ##color` sets stroke colour;
                     // `##[dashed]color` adds a dash pattern; `##[bold]`
-                    // bumps the stroke width. Falls back to PlantUML's
-                    // default `#181818;stroke-width:0.5;`.
+                    // bumps the stroke width. Falls back to the resolved
+                    // `stateBorderThickness` default (0.5 when unset).
                     let stroke_style: String =
                         if let Some(stroke) = state_def.and_then(|s| s.stroke.as_deref()) {
                             let stroke_color = crate::sequence::resolve_color(stroke);
@@ -1327,10 +1336,10 @@ pub fn render_with_oracle(
                                 "dotted" => format!(
                                     "stroke:{stroke_color};stroke-width:1;stroke-dasharray:1,3;"
                                 ),
-                                _ => format!("stroke:{stroke_color};stroke-width:0.5;"),
+                                _ => format!("stroke:{stroke_color};stroke-width:{STROKE_WIDTH};"),
                             }
                         } else {
-                            format!("stroke:{STROKE_COLOR};stroke-width:0.5;")
+                            format!("stroke:{STROKE_COLOR};stroke-width:{STROKE_WIDTH};")
                         };
 
                     if hide_empty_desc && descriptions.is_empty() {
