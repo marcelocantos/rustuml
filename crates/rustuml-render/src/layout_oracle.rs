@@ -74,6 +74,10 @@ pub struct OracleLayout {
     /// `<path>`, the arrowhead `<path>`, and the source-dot `<ellipse>` are
     /// captured verbatim as geometry.
     pub json_connectors: Vec<JsonConnector>,
+    /// Legend groups captured as granular geometry. PlantUML lays legend
+    /// tables out after the main diagram body; renderers consume these scalar
+    /// positions instead of replaying the legend subtree.
+    pub legends: Vec<OracleLegend>,
 }
 
 /// A JSON/YAML box's outer background `<rect>` geometry, captured from the
@@ -127,6 +131,28 @@ pub struct ApointMark {
 pub struct RegionDivider {
     pub y: f64,
     pub xml: String,
+}
+
+/// A captured legend group.
+#[derive(Debug, Clone)]
+pub struct OracleLegend {
+    pub source_line: Option<String>,
+    pub rect: OracleLegendRect,
+    pub texts: Vec<EntityText>,
+    pub lines: Vec<EntityLine>,
+}
+
+/// The rounded legend background rectangle.
+#[derive(Debug, Clone)]
+pub struct OracleLegendRect {
+    pub x: f64,
+    pub y: f64,
+    pub width: f64,
+    pub height: f64,
+    pub fill: String,
+    pub style: String,
+    pub rx: Option<String>,
+    pub ry: Option<String>,
 }
 
 /// Wrap a verbatim oracle root-`<g>` body in the standard PlantUML SVG

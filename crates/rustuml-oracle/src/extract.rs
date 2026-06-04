@@ -9,7 +9,7 @@
 use rustuml_render::layout_oracle::{
     ApointMark, AuxRect, CrowMark, EdgeDecoration, EdgeLabelLink, EntityLine, EntityRect,
     EntityText, JsonBox, JsonConnector, NoteBoxGeom, OracleCluster, OracleEdgePath, OracleLayout,
-    OracleNoteEntity, RegionDivider,
+    OracleLegend, OracleLegendRect, OracleNoteEntity, RegionDivider,
 };
 
 /// Parse the coordinate pairs from a note's body path `d` string and recover
@@ -367,6 +367,59 @@ pub fn extract_oracle_layout(svg: &str) -> Option<OracleLayout> {
                     box_geom,
                 });
             }
+        }
+
+        if class_attr == "legend"
+            && let Some(rect) = find_first_child(&node, "rect")
+            && let (Some(x), Some(y), Some(width), Some(height)) = (
+                parse_attr(&rect, "x"),
+                parse_attr(&rect, "y"),
+                parse_attr(&rect, "width"),
+                parse_attr(&rect, "height"),
+            )
+        {
+            let texts = node
+                .children()
+                .filter(|c| c.tag_name().name() == "text")
+                .filter_map(|t| {
+                    Some(EntityText {
+                        x: parse_attr(&t, "x")?,
+                        y: parse_attr(&t, "y")?,
+                        text: collect_text(&t),
+                    })
+                })
+                .collect();
+            let lines = node
+                .children()
+                .filter(|c| c.tag_name().name() == "line")
+                .filter_map(|line| {
+                    Some(EntityLine {
+                        x1: line.attribute("x1")?.to_string(),
+                        x2: line.attribute("x2")?.to_string(),
+                        y1: line.attribute("y1")?.to_string(),
+                        y2: line.attribute("y2")?.to_string(),
+                        style: line.attribute("style").map(String::from),
+                    })
+                })
+                .collect();
+            layout.legends.push(OracleLegend {
+                source_line: node.attribute("data-source-line").map(String::from),
+                rect: OracleLegendRect {
+                    x,
+                    y,
+                    width,
+                    height,
+                    fill: rect.attribute("fill").unwrap_or("#DDDDDD").to_string(),
+                    style: rect
+                        .attribute("style")
+                        .unwrap_or("stroke:#000000;stroke-width:1;")
+                        .to_string(),
+                    rx: rect.attribute("rx").map(String::from),
+                    ry: rect.attribute("ry").map(String::from),
+                },
+                texts,
+                lines,
+            });
         }
 
         if class_attr == "entity" || class_attr == "cluster" {

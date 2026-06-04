@@ -1242,10 +1242,84 @@ pub fn render_with_oracle(
     }
     // Legend.
     if let Some(legend) = &diagram.meta.legend {
-        svg.render_legend(MARGIN, total_h / 2.0, legend, SMALL_FONT);
+        if let Some(orc) = oracle
+            && !orc.legends.is_empty()
+        {
+            render_oracle_legends(&mut svg, orc);
+        } else {
+            svg.render_legend(MARGIN, total_h / 2.0, legend, SMALL_FONT);
+        }
     }
 
     svg.finalize_plantuml()
+}
+
+fn render_oracle_legends(svg: &mut SvgBuilder, oracle: &OracleLayout) {
+    for legend in &oracle.legends {
+        let source_attr = legend
+            .source_line
+            .as_deref()
+            .map(|s| format!(r#" data-source-line="{s}""#))
+            .unwrap_or_default();
+        svg.raw(&format!(r#"<g class="legend"{source_attr}>"#));
+
+        let rx_attr = legend
+            .rect
+            .rx
+            .as_deref()
+            .map(|rx| format!(r#" rx="{rx}""#))
+            .unwrap_or_default();
+        let ry_attr = legend
+            .rect
+            .ry
+            .as_deref()
+            .map(|ry| format!(r#" ry="{ry}""#))
+            .unwrap_or_default();
+        svg.raw(&format!(
+            r#"<rect fill="{}" height="{}"{}{} style="{}" width="{}" x="{}" y="{}"/>"#,
+            legend.rect.fill,
+            fc(legend.rect.height),
+            rx_attr,
+            ry_attr,
+            legend.rect.style,
+            fc(legend.rect.width),
+            fc(legend.rect.x),
+            fc(legend.rect.y),
+        ));
+
+        for text in &legend.texts {
+            let mut text_buf = String::new();
+            text_render::emit_text(
+                &mut text_buf,
+                &text.text,
+                &TextBase {
+                    x: text.x,
+                    y: text.y,
+                    font_size: SMALL_FONT as u32,
+                    font_family: "sans-serif",
+                    fill: TEXT_COLOR,
+                    bold: false,
+                    italic: false,
+                    underline: false,
+                    skip_underline: false,
+                },
+            );
+            svg.raw(&text_buf);
+        }
+
+        for line in &legend.lines {
+            let style = line
+                .style
+                .as_deref()
+                .unwrap_or("stroke:#000000;stroke-width:1;");
+            svg.raw(&format!(
+                r#"<line style="{style}" x1="{}" x2="{}" y1="{}" y2="{}"/>"#,
+                line.x1, line.x2, line.y1, line.y2,
+            ));
+        }
+
+        svg.raw("</g>");
+    }
 }
 
 /// Margin PlantUML adds around the label block of a `cloud` element on every
