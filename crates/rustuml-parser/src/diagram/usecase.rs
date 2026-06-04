@@ -7,6 +7,10 @@ use serde::{Deserialize, Serialize};
 
 use super::DiagramMeta;
 
+fn is_false(value: &bool) -> bool {
+    !*value
+}
+
 #[derive(Debug, Serialize, Deserialize)]
 pub struct UseCaseDiagram {
     pub meta: DiagramMeta,
@@ -45,6 +49,11 @@ pub struct Actor {
 pub struct UseCase {
     pub id: String,
     pub label: String,
+    /// True when the source supplied an explicit id/alias (`usecase ID as
+    /// "Label"` or `usecase "Label" as ID`). PlantUML uses the explicit id as
+    /// `data-qualified-name`; implicit quoted labels keep the visible label.
+    #[serde(default, skip_serializing_if = "is_false")]
+    pub explicit_id: bool,
     /// Optional UML stereotype text, e.g. `<<automated>>` → `"automated"`.
     pub stereotype: Option<String>,
     /// Optional additional description lines (from multiline `as "Title\n--\n..."` syntax).

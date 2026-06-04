@@ -177,6 +177,7 @@ pub fn parse_usecase(lines: &[String]) -> Result<UseCaseDiagram, ParseError> {
                     use_cases.push(UseCase {
                         id,
                         label,
+                        explicit_id: true,
                         stereotype: None,
                         description,
                         color: multiline_uc_color.clone(),
@@ -381,6 +382,7 @@ pub fn parse_usecase(lines: &[String]) -> Result<UseCaseDiagram, ParseError> {
                 use_cases.push(UseCase {
                     id,
                     label,
+                    explicit_id: true,
                     stereotype: None,
                     description: Vec::new(),
                     color: trailing_color(trimmed),
@@ -409,6 +411,7 @@ pub fn parse_usecase(lines: &[String]) -> Result<UseCaseDiagram, ParseError> {
                 use_cases.push(UseCase {
                     id,
                     label,
+                    explicit_id: true,
                     stereotype: None,
                     description: Vec::new(),
                     color: trailing_color(trimmed),
@@ -428,6 +431,7 @@ pub fn parse_usecase(lines: &[String]) -> Result<UseCaseDiagram, ParseError> {
                 use_cases.push(UseCase {
                     id,
                     label,
+                    explicit_id: true,
                     stereotype,
                     description: Vec::new(),
                     color: trailing_color(trimmed),
@@ -447,6 +451,7 @@ pub fn parse_usecase(lines: &[String]) -> Result<UseCaseDiagram, ParseError> {
                 use_cases.push(UseCase {
                     id,
                     label,
+                    explicit_id: false,
                     stereotype,
                     description: Vec::new(),
                     color: trailing_color(trimmed),
@@ -466,6 +471,7 @@ pub fn parse_usecase(lines: &[String]) -> Result<UseCaseDiagram, ParseError> {
                 use_cases.push(UseCase {
                     id,
                     label,
+                    explicit_id: false,
                     stereotype,
                     description: Vec::new(),
                     color: trailing_color(trimmed),
@@ -482,6 +488,7 @@ pub fn parse_usecase(lines: &[String]) -> Result<UseCaseDiagram, ParseError> {
                 use_cases.push(UseCase {
                     id,
                     label,
+                    explicit_id: false,
                     stereotype: None,
                     description: Vec::new(),
                     color: None,
@@ -506,6 +513,7 @@ pub fn parse_usecase(lines: &[String]) -> Result<UseCaseDiagram, ParseError> {
                         use_cases.push(UseCase {
                             id,
                             label: inner,
+                            explicit_id: false,
                             stereotype: None,
                             description: Vec::new(),
                             color: None,
@@ -673,6 +681,7 @@ mod tests {
         let d = parse("actor User\nusecase \"Action\"\nUser --> Action");
         assert_eq!(d.use_cases.len(), 1);
         assert_eq!(d.use_cases[0].label, "Action");
+        assert!(!d.use_cases[0].explicit_id);
     }
 
     #[test]
@@ -681,6 +690,7 @@ mod tests {
         assert_eq!(d.use_cases.len(), 1);
         assert_eq!(d.use_cases[0].id, "BaseUC");
         assert_eq!(d.use_cases[0].label, "Base Use Case");
+        assert!(d.use_cases[0].explicit_id);
     }
 
     #[test]
@@ -704,6 +714,7 @@ mod tests {
         assert_eq!(d.use_cases.len(), 1);
         assert_eq!(d.use_cases[0].id, "UC1");
         assert_eq!(d.use_cases[0].label, "Title");
+        assert!(d.use_cases[0].explicit_id);
         assert!(
             d.use_cases[0]
                 .description

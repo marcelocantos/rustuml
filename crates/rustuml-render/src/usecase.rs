@@ -562,7 +562,9 @@ fn label_to_id(label: &str) -> String {
 /// a label-declared one (`usecase "Primary Action"`) it is the original label,
 /// spaces and all.
 fn display_name(uc: &UseCase) -> &str {
-    if uc.id == label_to_id(&uc.label) {
+    if uc.explicit_id {
+        &uc.id
+    } else if uc.id == label_to_id(&uc.label) {
         &uc.label
     } else {
         &uc.id
