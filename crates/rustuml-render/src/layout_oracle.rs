@@ -87,6 +87,10 @@ pub struct OracleLayout {
     /// whole diagram body, so renderers can consume exact text anchors without
     /// replaying the surrounding SVG subtree.
     pub decorations: Vec<OracleDecoration>,
+    /// Deprecated `skinparam handwritten true` warning band, captured as
+    /// granular geometry. PlantUML emits it as a bare polygon plus monospace
+    /// text before the first diagram entity.
+    pub handwritten_warning: Option<OracleHandwrittenWarning>,
 }
 
 /// A JSON/YAML box's outer background `<rect>` geometry, captured from the
@@ -287,6 +291,15 @@ pub struct EntityRect {
     /// Glyph path `d` attribute from the golden SVG, if present.
     /// Used to bypass offset_path precision issues.
     pub glyph_path_d: Option<String>,
+    /// Handwritten outer body polygon, when PlantUML jitters the entity's
+    /// background instead of emitting a `<rect>`.
+    pub body_polygon: Option<EntityPolygon>,
+    /// Handwritten circled-type icon polygon, replacing the normal `<ellipse>`.
+    pub icon_polygon: Option<EntityPolygon>,
+    /// Handwritten compartment separator paths, replacing normal `<line>`s.
+    pub separator_paths: Vec<EntityPath>,
+    /// Handwritten visibility icon polygons, in member emission order.
+    pub visibility_polygons: Vec<EntityPolygon>,
     /// Name text x position from the golden SVG, if present.
     pub name_text_x: Option<f64>,
     /// All text y-positions within the entity (from `<text y="...">`), in order.
@@ -370,12 +383,36 @@ pub struct EntityText {
     pub text: String,
 }
 
+/// A `<polygon>` element extracted from an oracle entity/decoration.
+#[derive(Debug, Clone)]
+pub struct EntityPolygon {
+    pub points: String,
+    pub fill: String,
+    pub style: Option<String>,
+}
+
+/// A `<path>` element extracted from an oracle entity/decoration.
+#[derive(Debug, Clone)]
+pub struct EntityPath {
+    pub d: String,
+    pub fill: String,
+    pub style: Option<String>,
+}
+
 /// A top/bottom page decoration group captured from the golden SVG.
 #[derive(Debug, Clone)]
 pub struct OracleDecoration {
     pub class_name: String,
     pub source_line: Option<String>,
     pub texts: Vec<EntityText>,
+}
+
+/// Handwritten deprecation warning emitted for `skinparam handwritten true`.
+#[derive(Debug, Clone)]
+pub struct OracleHandwrittenWarning {
+    pub polygon: EntityPolygon,
+    pub text: EntityText,
+    pub text_length: Option<String>,
 }
 
 /// A non-body `<rect>` extracted from an entity group.
@@ -392,8 +429,15 @@ pub struct AuxRect {
 /// An edge path extracted from a golden SVG.
 #[derive(Debug, Clone)]
 pub struct OracleEdgePath {
-    /// The path id (e.g. "A-to-B" or "A-backto-B").
+    /// Stable edge id used to match a parsed relationship to this oracle edge
+    /// (e.g. "A-to-B" or "A-backto-B"). Usually copied from the path's `id`,
+    /// but synthesized from parent link metadata for handwritten paths that
+    /// omit the SVG `id` attribute.
     pub id: String,
+    /// The path's literal SVG `id` attribute. `None` means PlantUML did not
+    /// emit one, so renderers must omit the attribute even though `id` above is
+    /// still available for relationship matching.
+    pub path_id: Option<String>,
     /// The SVG path `d` attribute.
     pub d: String,
     /// Arrowhead polygon points (if present).

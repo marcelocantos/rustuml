@@ -7,10 +7,10 @@
 //! producing an `OracleLayout` that can be fed to renderers.
 
 use rustuml_render::layout_oracle::{
-    ApointMark, AuxRect, CrowMark, EdgeDecoration, EdgeLabelLink, EntityLine, EntityRect,
-    EntityText, JsonBox, JsonConnector, NoteBoxGeom, OracleCluster, OracleDecoration,
-    OracleEdgePath, OracleEntity, OracleLayout, OracleLegend, OracleLegendRect, OracleNoteEntity,
-    RegionDivider,
+    ApointMark, AuxRect, CrowMark, EdgeDecoration, EdgeLabelLink, EntityLine, EntityPath,
+    EntityPolygon, EntityRect, EntityText, JsonBox, JsonConnector, NoteBoxGeom, OracleCluster,
+    OracleDecoration, OracleEdgePath, OracleEntity, OracleHandwrittenWarning, OracleLayout,
+    OracleLegend, OracleLegendRect, OracleNoteEntity, RegionDivider,
 };
 
 /// Parse the coordinate pairs from a note's body path `d` string and recover
@@ -266,6 +266,38 @@ pub fn extract_oracle_layout(svg: &str) -> Option<OracleLayout> {
                 }
             }
             layout.root_g_inner_xml = Some(inner);
+        }
+    }
+
+    // `skinparam handwritten true` emits a deprecated-option warning as bare
+    // primitives before the diagram body. Capture the polygon and text
+    // separately so renderers can reconstruct the warning without replaying a
+    // subtree.
+    if let Some(g) = root
+        .children()
+        .find(|n| n.is_element() && n.tag_name().name() == "g")
+    {
+        let children: Vec<roxmltree::Node> = g.children().filter(|c| c.is_element()).collect();
+        for pair in children.windows(2) {
+            let polygon = pair[0];
+            let text = pair[1];
+            if polygon.tag_name().name() == "polygon"
+                && text.tag_name().name() == "text"
+                && collect_text(&text).contains("handwritten")
+                && let Some(polygon) = capture_polygon(&polygon)
+                && let (Some(x), Some(y)) = (parse_attr(&text, "x"), parse_attr(&text, "y"))
+            {
+                layout.handwritten_warning = Some(OracleHandwrittenWarning {
+                    polygon,
+                    text: EntityText {
+                        x,
+                        y,
+                        text: collect_text(&text),
+                    },
+                    text_length: text.attribute("textLength").map(String::from),
+                });
+                break;
+            }
         }
     }
 
@@ -652,6 +684,10 @@ pub fn extract_oracle_layout(svg: &str) -> Option<OracleLayout> {
                         height,
                         icon_cx,
                         glyph_path_d,
+                        body_polygon: None,
+                        icon_polygon: None,
+                        separator_paths: Vec::new(),
+                        visibility_polygons: Vec::new(),
                         name_text_x,
                         text_y_values,
                         text_x_values,
@@ -750,6 +786,10 @@ pub fn extract_oracle_layout(svg: &str) -> Option<OracleLayout> {
                         height: ry * 2.0,
                         icon_cx: None,
                         glyph_path_d: None,
+                        body_polygon: None,
+                        icon_polygon: None,
+                        separator_paths: Vec::new(),
+                        visibility_polygons: Vec::new(),
                         name_text_x: None,
                         text_y_values,
                         text_x_values,
@@ -774,54 +814,109 @@ pub fn extract_oracle_layout(svg: &str) -> Option<OracleLayout> {
                     });
                     layout.entities.insert(name.to_string(), rect);
                 } else if let Some(polygon) = find_first_child(&content_node, "polygon") {
-                    // Choice pseudo-states use <polygon> (diamond), and
-                    // deployment Node shape uses a "tag" polygon.
-                    if let Some(points) = polygon.attribute("points") {
-                        let coords: Vec<f64> = points
-                            .split(|c: char| c == ',' || c.is_whitespace())
-                            .filter_map(|s| s.parse().ok())
+                    // Choice pseudo-states use a lone <polygon> (diamond), but
+                    // handwritten class entities are polygon-first *and* still
+                    // contain text/glyph/separator children. Preserve those
+                    // granular children instead of collapsing the group to a
+                    // bare bbox.
+                    if let Some(body_polygon) = capture_polygon(&polygon)
+                        && let Some((min_x, min_y, max_x, max_y)) =
+                            polygon_bbox(&body_polygon.points)
+                    {
+                        let direct_polygons: Vec<roxmltree::Node> = content_node
+                            .children()
+                            .filter(|c| c.tag_name().name() == "polygon")
                             .collect();
-                        if coords.len() >= 8 {
-                            let xs: Vec<f64> = coords.iter().step_by(2).copied().collect();
-                            let ys: Vec<f64> = coords.iter().skip(1).step_by(2).copied().collect();
-                            let min_x = xs.iter().copied().fold(f64::INFINITY, f64::min);
-                            let max_x = xs.iter().copied().fold(f64::NEG_INFINITY, f64::max);
-                            let min_y = ys.iter().copied().fold(f64::INFINITY, f64::min);
-                            let max_y = ys.iter().copied().fold(f64::NEG_INFINITY, f64::max);
-                            let entity_id = node.attribute("id").map(String::from);
-                            let fill = polygon.attribute("fill").map(String::from);
-                            let body_style = polygon.attribute("style").map(String::from);
-                            let rect = EntityRect {
-                                x: min_x,
-                                y: min_y,
-                                width: max_x - min_x,
-                                height: max_y - min_y,
-                                icon_cx: None,
-                                glyph_path_d: None,
-                                name_text_x: None,
-                                text_y_values: Vec::new(),
-                                text_x_values: Vec::new(),
-                                sep_y_values: Vec::new(),
-                                sep_lines: Vec::new(),
-                                vis_icon_y_values: Vec::new(),
-                                fill,
-                                body_style: body_style.clone(),
-                                rect_style: body_style,
-                                rect_rx: None,
-                                rect_ry: None,
-                                rect_filter: None,
-                                entity_id,
-                                source_line: node.attribute("data-source-line").map(String::from),
-                                aux_rects: Vec::new(),
-                                lines: Vec::new(),
-                                texts: Vec::new(),
-                            };
-                            layout.entity_list.push(OracleEntity {
-                                qualified_name: name.to_string(),
-                                rect: rect.clone(),
-                            });
-                            layout.entities.insert(name.to_string(), rect);
-                        }
+                        let texts: Vec<EntityText> = content_node
+                            .children()
+                            .filter(|c| c.tag_name().name() == "text")
+                            .filter_map(|t| {
+                                Some(EntityText {
+                                    x: parse_attr(&t, "x")?,
+                                    y: parse_attr(&t, "y")?,
+                                    text: collect_text(&t),
+                                })
+                            })
+                            .collect();
+                        let has_text = !texts.is_empty();
+                        let text_y_values: Vec<f64> = texts.iter().map(|t| t.y).collect();
+                        let text_x_values: Vec<f64> = texts.iter().map(|t| t.x).collect();
+                        let glyph_path_d = content_node
+                            .children()
+                            .find(|c| {
+                                c.tag_name().name() == "path"
+                                    && c.attribute("fill") == Some("#000000")
+                            })
+                            .and_then(|p| p.attribute("d"))
+                            .map(String::from);
+                        let separator_paths: Vec<EntityPath> = content_node
+                            .children()
+                            .filter(|c| {
+                                c.tag_name().name() == "path"
+                                    && c.attribute("fill") != Some("#000000")
+                            })
+                            .filter_map(|p| capture_path(&p))
+                            .collect();
+                        let icon_polygon = if has_text {
+                            direct_polygons.get(1).and_then(capture_polygon)
+                        } else {
+                            None
+                        };
+                        let icon_cx = icon_polygon
+                            .as_ref()
+                            .and_then(|p| polygon_bbox(&p.points))
+                            .map(|(x1, _, x2, _)| (x1 + x2) / 2.0);
+                        let visibility_polygons: Vec<EntityPolygon> = content_node
+                            .children()
+                            .filter(|c| c.attribute("data-visibility-modifier").is_some())
+                            .filter_map(|g| {
+                                g.children()
+                                    .find(|c| c.tag_name().name() == "polygon")
+                                    .and_then(|p| capture_polygon(&p))
+                            })
+                            .collect();
+                        let vis_icon_y_values: Vec<f64> = visibility_polygons
+                            .iter()
+                            .filter_map(|p| {
+                                polygon_bbox(&p.points).map(|(_, y1, _, y2)| (y1 + y2) / 2.0)
+                            })
+                            .collect();
+                        let entity_id = node.attribute("id").map(String::from);
+                        let body_style = body_polygon.style.clone();
+                        let rect = EntityRect {
+                            x: min_x,
+                            y: min_y,
+                            width: max_x - min_x,
+                            height: max_y - min_y,
+                            icon_cx,
+                            glyph_path_d,
+                            body_polygon: has_text.then_some(body_polygon.clone()),
+                            icon_polygon,
+                            separator_paths,
+                            visibility_polygons,
+                            name_text_x: texts.first().map(|t| t.x),
+                            text_y_values,
+                            text_x_values,
+                            sep_y_values: Vec::new(),
+                            sep_lines: Vec::new(),
+                            vis_icon_y_values,
+                            fill: Some(body_polygon.fill),
+                            body_style: body_style.clone(),
+                            rect_style: body_style,
+                            rect_rx: None,
+                            rect_ry: None,
+                            rect_filter: None,
+                            entity_id,
+                            source_line: node.attribute("data-source-line").map(String::from),
+                            aux_rects: Vec::new(),
+                            lines: Vec::new(),
+                            texts,
+                        };
+                        layout.entity_list.push(OracleEntity {
+                            qualified_name: name.to_string(),
+                            rect: rect.clone(),
+                        });
+                        layout.entities.insert(name.to_string(), rect);
                     }
                 } else if let Some(path) = find_first_child(&content_node, "path")
                     && let Some(d) = path.attribute("d")
@@ -904,6 +999,10 @@ pub fn extract_oracle_layout(svg: &str) -> Option<OracleLayout> {
                             height: ry * 2.0,
                             icon_cx: None,
                             glyph_path_d: None,
+                            body_polygon: None,
+                            icon_polygon: None,
+                            separator_paths: Vec::new(),
+                            visibility_polygons: Vec::new(),
                             name_text_x: None,
                             text_y_values: Vec::new(),
                             text_x_values: Vec::new(),
@@ -926,12 +1025,21 @@ pub fn extract_oracle_layout(svg: &str) -> Option<OracleLayout> {
                 }
             }
         } else if class_attr == "link" {
-            // Find <path> child with id and d attributes.
+            // Find the main <path> child. Handwritten links keep the wrapper
+            // metadata (`data-entity-*`, `data-link-type`, `id="lnkN"`) but
+            // omit the path's own `id`, so synthesize a relationship-match id
+            // from the endpoint entities while preserving the absent SVG attr.
             if let Some(path) = find_first_child(&node, "path")
-                && let (Some(id), Some(d)) = (path.attribute("id"), path.attribute("d"))
+                && let Some(d) = path.attribute("d")
+                && let Some(id) = path
+                    .attribute("id")
+                    .map(String::from)
+                    .or_else(|| synthesize_link_path_id(&layout, &node))
             {
+                let path_id = path.attribute("id").map(String::from);
                 let mut oracle_edge = OracleEdgePath {
-                    id: id.to_string(),
+                    id,
+                    path_id,
                     d: d.to_string(),
                     arrow_points: None,
                     second_arrow_points: None,
@@ -1195,6 +1303,10 @@ pub fn extract_oracle_layout(svg: &str) -> Option<OracleLayout> {
                     height: ry * 2.0,
                     icon_cx: None,
                     glyph_path_d: Some(label),
+                    body_polygon: None,
+                    icon_polygon: None,
+                    separator_paths: Vec::new(),
+                    visibility_polygons: Vec::new(),
                     name_text_x: None,
                     text_y_values: Vec::new(),
                     text_x_values: Vec::new(),
@@ -1341,6 +1453,10 @@ pub fn extract_oracle_layout(svg: &str) -> Option<OracleLayout> {
                 height: ry * 2.0,
                 icon_cx: None,
                 glyph_path_d: None,
+                body_polygon: None,
+                icon_polygon: None,
+                separator_paths: Vec::new(),
+                visibility_polygons: Vec::new(),
                 name_text_x: None,
                 text_y_values: Vec::new(),
                 text_x_values: Vec::new(),
@@ -1440,6 +1556,10 @@ pub fn extract_oracle_layout(svg: &str) -> Option<OracleLayout> {
                     height: h,
                     icon_cx: None,
                     glyph_path_d: None,
+                    body_polygon: None,
+                    icon_polygon: None,
+                    separator_paths: Vec::new(),
+                    visibility_polygons: Vec::new(),
                     name_text_x: None,
                     text_y_values: Vec::new(),
                     text_x_values: Vec::new(),
@@ -1591,6 +1711,10 @@ pub fn extract_oracle_layout(svg: &str) -> Option<OracleLayout> {
                         height: h,
                         icon_cx: None,
                         glyph_path_d: header_path,
+                        body_polygon: None,
+                        icon_polygon: None,
+                        separator_paths: Vec::new(),
+                        visibility_polygons: Vec::new(),
                         name_text_x: title_x,
                         text_y_values: Vec::new(),
                         text_x_values: Vec::new(),
@@ -1633,6 +1757,10 @@ pub fn extract_oracle_layout(svg: &str) -> Option<OracleLayout> {
                     height: h,
                     icon_cx: None,
                     glyph_path_d: None,
+                    body_polygon: None,
+                    icon_polygon: None,
+                    separator_paths: Vec::new(),
+                    visibility_polygons: Vec::new(),
                     name_text_x: None,
                     text_y_values: Vec::new(),
                     text_x_values: Vec::new(),
@@ -2071,6 +2199,10 @@ fn path_bounding_box(d: &str) -> Option<EntityRect> {
             height: max_y - min_y,
             icon_cx: None,
             glyph_path_d: None,
+            body_polygon: None,
+            icon_polygon: None,
+            separator_paths: Vec::new(),
+            visibility_polygons: Vec::new(),
             name_text_x: None,
             text_y_values: Vec::new(),
             text_x_values: Vec::new(),
@@ -2092,6 +2224,63 @@ fn path_bounding_box(d: &str) -> Option<EntityRect> {
     } else {
         None
     }
+}
+
+fn synthesize_link_path_id(
+    layout: &OracleLayout,
+    node: &roxmltree::Node<'_, '_>,
+) -> Option<String> {
+    fn entity_name_for_id(layout: &OracleLayout, id: &str) -> Option<String> {
+        layout
+            .entity_list
+            .iter()
+            .find(|e| e.rect.entity_id.as_deref() == Some(id))
+            .map(|e| e.qualified_name.clone())
+            .or_else(|| {
+                layout
+                    .entities
+                    .iter()
+                    .find(|(_, rect)| rect.entity_id.as_deref() == Some(id))
+                    .map(|(name, _)| name.clone())
+            })
+    }
+
+    let from = entity_name_for_id(layout, node.attribute("data-entity-1")?)?;
+    let to = entity_name_for_id(layout, node.attribute("data-entity-2")?)?;
+    Some(format!("{from}-to-{to}"))
+}
+
+fn capture_polygon(node: &roxmltree::Node<'_, '_>) -> Option<EntityPolygon> {
+    Some(EntityPolygon {
+        points: node.attribute("points")?.to_string(),
+        fill: node.attribute("fill").unwrap_or("none").to_string(),
+        style: node.attribute("style").map(String::from),
+    })
+}
+
+fn capture_path(node: &roxmltree::Node<'_, '_>) -> Option<EntityPath> {
+    Some(EntityPath {
+        d: node.attribute("d")?.to_string(),
+        fill: node.attribute("fill").unwrap_or("none").to_string(),
+        style: node.attribute("style").map(String::from),
+    })
+}
+
+fn polygon_bbox(points: &str) -> Option<(f64, f64, f64, f64)> {
+    let coords: Vec<f64> = points
+        .split(|c: char| c == ',' || c.is_whitespace())
+        .filter_map(|s| s.parse().ok())
+        .collect();
+    if coords.len() < 8 {
+        return None;
+    }
+    let xs = coords.iter().step_by(2).copied();
+    let ys = coords.iter().skip(1).step_by(2).copied();
+    let min_x = xs.clone().fold(f64::INFINITY, f64::min);
+    let max_x = xs.fold(f64::NEG_INFINITY, f64::max);
+    let min_y = ys.clone().fold(f64::INFINITY, f64::min);
+    let max_y = ys.fold(f64::NEG_INFINITY, f64::max);
+    Some((min_x, min_y, max_x, max_y))
 }
 
 /// Given the verbatim XML of a single element `<tag …>…</tag>`, return just

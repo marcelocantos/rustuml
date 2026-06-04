@@ -18,8 +18,8 @@ use rustuml_layout::graph::{Direction, EdgePath, LayoutGraph, NodePosition};
 use rustuml_parser::diagram::class::*;
 
 use crate::layout_oracle::{
-    CrowMark, EntityRect, EntityText, OracleCluster, OracleEdgePath, OracleLayout,
-    wrap_oracle_envelope,
+    CrowMark, EntityPath, EntityPolygon, EntityRect, EntityText, OracleCluster, OracleEdgePath,
+    OracleHandwrittenWarning, OracleLayout, wrap_oracle_envelope,
 };
 use crate::metrics;
 use crate::style::Theme;
@@ -1647,6 +1647,11 @@ fn render_plantuml_svg(
         )
         .unwrap();
     }
+    if has_handwritten_skinparam(diagram)
+        && let Some(warning) = oracle.and_then(|o| o.handwritten_warning.as_ref())
+    {
+        emit_handwritten_warning(&mut svg, warning);
+    }
 
     // Body bounding box (entity rects), used to position the page decorations
     // and to drive the centring width. PlantUML lays out title/header/caption/
@@ -2491,20 +2496,24 @@ fn render_entity_content(
         .and_then(|r| r.rect_filter.as_deref())
         .map(|f| format!(r#" filter="{f}""#))
         .unwrap_or_default();
-    write!(
-        svg,
-        r#"<rect fill="{}"{} height="{}" rx="{}" ry="{}" style="{}" width="{}" x="{}" y="{}"/>"#,
-        fill,
-        filter_attr,
-        fmt4(dim.height),
-        rx_str,
-        ry_str,
-        style,
-        fmt_tl(dim.width),
-        fmt4(x),
-        fmt4(y),
-    )
-    .unwrap();
+    if let Some(polygon) = oracle_rect.and_then(|r| r.body_polygon.as_ref()) {
+        emit_entity_polygon(svg, polygon);
+    } else {
+        write!(
+            svg,
+            r#"<rect fill="{}"{} height="{}" rx="{}" ry="{}" style="{}" width="{}" x="{}" y="{}"/>"#,
+            fill,
+            filter_attr,
+            fmt4(dim.height),
+            rx_str,
+            ry_str,
+            style,
+            fmt_tl(dim.width),
+            fmt4(x),
+            fmt4(y),
+        )
+        .unwrap();
+    }
 
     // Header-compartment repaint: PlantUML paints the name compartment in its
     // own colour and squares off the rounded bottom with a 2.5px strip, then
@@ -2628,18 +2637,22 @@ fn render_entity_content(
             },
         };
 
-        write!(
-            svg,
-            r#"<ellipse cx="{}" cy="{}" fill="{}" rx="{}" ry="{}" style="stroke:{};stroke-width:{};"/>"#,
-            fmt4(icon_cx),
-            fmt4(icon_cy),
-            icon_fill,
-            icon_radius as i64,
-            icon_radius as i64,
-            BORDER_COLOR,
-            ICON_STROKE_WIDTH,
-        )
-        .unwrap();
+        if let Some(polygon) = oracle_rect.and_then(|r| r.icon_polygon.as_ref()) {
+            emit_entity_polygon(svg, polygon);
+        } else {
+            write!(
+                svg,
+                r#"<ellipse cx="{}" cy="{}" fill="{}" rx="{}" ry="{}" style="stroke:{};stroke-width:{};"/>"#,
+                fmt4(icon_cx),
+                fmt4(icon_cy),
+                icon_fill,
+                icon_radius as i64,
+                icon_radius as i64,
+                BORDER_COLOR,
+                ICON_STROKE_WIDTH,
+            )
+            .unwrap();
+        }
 
         // Letter glyph path — use oracle override if available to avoid float precision issues.
         let glyph_path = if let Some(d) = glyph_path_override {
@@ -2837,16 +2850,25 @@ fn render_entity_content(
     let oracle_text_y = oracle_rect
         .map(|r| r.text_y_values.as_slice())
         .unwrap_or(&[]);
+    let oracle_text_x = oracle_rect
+        .map(|r| r.text_x_values.as_slice())
+        .unwrap_or(&[]);
     // Number of extra text entries before members: the entity name plus all
     // visible stereotype lines above it.
     let text_header_count: usize = 1 + dim.stereotype_count;
     let oracle_sep_y = oracle_rect
         .map(|r| r.sep_y_values.as_slice())
         .unwrap_or(&[]);
+    let oracle_sep_paths = oracle_rect
+        .map(|r| r.separator_paths.as_slice())
+        .unwrap_or(&[]);
 
     // Oracle visibility icon cy overrides, indexed sequentially.
     let oracle_vis_y = oracle_rect
         .map(|r| r.vis_icon_y_values.as_slice())
+        .unwrap_or(&[]);
+    let oracle_vis_polygons = oracle_rect
+        .map(|r| r.visibility_polygons.as_slice())
         .unwrap_or(&[]);
     let mut vis_icon_idx = 0usize;
 
@@ -3004,6 +3026,8 @@ fn render_entity_content(
                 x,
                 eff_y,
                 vis_ov,
+                None,
+                None,
                 narrow_default,
                 attr_font,
                 link_anchor,
@@ -3020,26 +3044,34 @@ fn render_entity_content(
             .get(1)
             .copied()
             .unwrap_or(y + METHODS_SEP_Y - MARGIN + stereo_shift);
-        write!(
-            svg,
-            r#"<line style="{}" x1="{}" x2="{}" y1="{}" y2="{}"/>"#,
-            sep_style,
-            fmt4(sep_x1),
-            fmt4(sep_x2),
-            fmt4(sep1_y),
-            fmt4(sep1_y),
-        )
-        .unwrap();
-        write!(
-            svg,
-            r#"<line style="{}" x1="{}" x2="{}" y1="{}" y2="{}"/>"#,
-            sep_style,
-            fmt4(sep_x1),
-            fmt4(sep_x2),
-            fmt4(sep2_y),
-            fmt4(sep2_y),
-        )
-        .unwrap();
+        if let Some(path) = oracle_sep_paths.first() {
+            emit_entity_path(svg, path);
+        } else {
+            write!(
+                svg,
+                r#"<line style="{}" x1="{}" x2="{}" y1="{}" y2="{}"/>"#,
+                sep_style,
+                fmt4(sep_x1),
+                fmt4(sep_x2),
+                fmt4(sep1_y),
+                fmt4(sep1_y),
+            )
+            .unwrap();
+        }
+        if let Some(path) = oracle_sep_paths.get(1) {
+            emit_entity_path(svg, path);
+        } else {
+            write!(
+                svg,
+                r#"<line style="{}" x1="{}" x2="{}" y1="{}" y2="{}"/>"#,
+                sep_style,
+                fmt4(sep_x1),
+                fmt4(sep_x2),
+                fmt4(sep2_y),
+                fmt4(sep2_y),
+            )
+            .unwrap();
+        }
     } else if enum_classic {
         // Enum: one separator after header, members, then separator after last member.
         let sep_y = oracle_sep_y.first().copied().unwrap_or(header_sep_default);
@@ -3080,6 +3112,8 @@ fn render_entity_content(
                     x,
                     eff_member_y,
                     vis_ov,
+                    None,
+                    None,
                     is_enum_entity,
                     attr_font,
                     link_anchor,
@@ -3343,6 +3377,8 @@ fn render_entity_content(
                     x,
                     eff_y,
                     vis_ov,
+                    None,
+                    None,
                     narrow_after_separator,
                     attr_font,
                     member_anchor,
@@ -3463,6 +3499,8 @@ fn render_entity_content(
                         x,
                         eff_y,
                         vis_ov,
+                        None,
+                        None,
                         methods_narrow_default,
                         attr_font,
                         member_anchor,
@@ -3532,27 +3570,35 @@ fn render_entity_content(
             }
         } else if !methods.is_empty() {
             // Only methods, no fields: two separator lines then methods.
-            write!(
-                svg,
-                r#"<line style="{}" x1="{}" x2="{}" y1="{}" y2="{}"/>"#,
-                sep_style,
-                fmt4(sep_x1),
-                fmt4(sep_x2),
-                fmt4(header_sep_y),
-                fmt4(header_sep_y),
-            )
-            .unwrap();
+            if let Some(path) = oracle_sep_paths.first() {
+                emit_entity_path(svg, path);
+            } else {
+                write!(
+                    svg,
+                    r#"<line style="{}" x1="{}" x2="{}" y1="{}" y2="{}"/>"#,
+                    sep_style,
+                    fmt4(sep_x1),
+                    fmt4(sep_x2),
+                    fmt4(header_sep_y),
+                    fmt4(header_sep_y),
+                )
+                .unwrap();
+            }
             let methods_sep_y = oracle_sep_y.get(1).copied().unwrap_or(header_sep_y + 8.0);
-            write!(
-                svg,
-                r#"<line style="{}" x1="{}" x2="{}" y1="{}" y2="{}"/>"#,
-                sep_style,
-                fmt4(sep_x1),
-                fmt4(sep_x2),
-                fmt4(methods_sep_y),
-                fmt4(methods_sep_y),
-            )
-            .unwrap();
+            if let Some(path) = oracle_sep_paths.get(1) {
+                emit_entity_path(svg, path);
+            } else {
+                write!(
+                    svg,
+                    r#"<line style="{}" x1="{}" x2="{}" y1="{}" y2="{}"/>"#,
+                    sep_style,
+                    fmt4(sep_x1),
+                    fmt4(sep_x2),
+                    fmt4(methods_sep_y),
+                    fmt4(methods_sep_y),
+                )
+                .unwrap();
+            }
             // Both header separators are inside the link anchor; close it
             // before the first member so each method self-wraps. Only when
             // the anchor is split (icon-bearing members present).
@@ -3567,12 +3613,13 @@ fn render_entity_content(
                     .get(text_header_count + mi)
                     .copied()
                     .unwrap_or(method_y);
-                let vis_ov = if member.visibility != Visibility::Default {
+                let (vis_ov, vis_polygon) = if member.visibility != Visibility::Default {
                     let v = oracle_vis_y.get(vis_icon_idx).copied();
+                    let p = oracle_vis_polygons.get(vis_icon_idx);
                     vis_icon_idx += 1;
-                    v
+                    (v, p)
                 } else {
-                    None
+                    (None, None)
                 };
                 render_member_line(
                     svg,
@@ -3580,6 +3627,8 @@ fn render_entity_content(
                     x,
                     eff_y,
                     vis_ov,
+                    vis_polygon,
+                    oracle_text_x.get(text_header_count + mi).copied(),
                     methods_narrow_default,
                     attr_font,
                     member_anchor,
@@ -3862,6 +3911,8 @@ fn emit_block_members(
             x,
             eff_y,
             vis_ov,
+            None,
+            None,
             narrow_default,
             attr_font,
             None,
@@ -3881,6 +3932,8 @@ fn render_member_line(
     entity_x: f64,
     baseline_y: f64,
     vis_icon_y_override: Option<f64>,
+    vis_icon_polygon: Option<&EntityPolygon>,
+    text_x_override: Option<f64>,
     default_uses_narrow: bool,
     attr_font: AttrFont,
     link_anchor: Option<&str>,
@@ -3902,98 +3955,102 @@ fn render_member_line(
             svg.push_str(anchor);
         }
 
-        let icon = attr_font.icon;
-        let vis_cx = entity_x + icon.center_offset;
-        match member.visibility {
-            Visibility::Public => {
-                let fill = if member.kind == MemberKind::Method {
-                    VIS_PUBLIC_FILL_METHOD
-                } else {
-                    VIS_PUBLIC_FILL_FIELD
-                };
-                write!(
-                    svg,
-                    r#"<ellipse cx="{}" cy="{}" fill="{}" rx="{}" ry="{}" style="stroke:{};stroke-width:{};"/>"#,
-                    fmt4(vis_cx), fmt_tl(icon_cy),
-                    fill, icon.round_half as i64, icon.round_half as i64,
-                    VIS_PUBLIC_STROKE, ICON_STROKE_WIDTH,
-                )
-                .unwrap();
+        if let Some(polygon) = vis_icon_polygon {
+            emit_entity_polygon(svg, polygon);
+        } else {
+            let icon = attr_font.icon;
+            let vis_cx = entity_x + icon.center_offset;
+            match member.visibility {
+                Visibility::Public => {
+                    let fill = if member.kind == MemberKind::Method {
+                        VIS_PUBLIC_FILL_METHOD
+                    } else {
+                        VIS_PUBLIC_FILL_FIELD
+                    };
+                    write!(
+                        svg,
+                        r#"<ellipse cx="{}" cy="{}" fill="{}" rx="{}" ry="{}" style="stroke:{};stroke-width:{};"/>"#,
+                        fmt4(vis_cx), fmt_tl(icon_cy),
+                        fill, icon.round_half as i64, icon.round_half as i64,
+                        VIS_PUBLIC_STROKE, ICON_STROKE_WIDTH,
+                    )
+                    .unwrap();
+                }
+                Visibility::Private => {
+                    let fill = if member.kind == MemberKind::Method {
+                        VIS_PRIVATE_FILL_METHOD
+                    } else {
+                        VIS_PRIVATE_FILL_FIELD
+                    };
+                    let sq_x = vis_cx - icon.round_half;
+                    let sq_y = icon_cy - icon.round_half;
+                    let side = icon.round_half * 2.0;
+                    write!(
+                        svg,
+                        r#"<rect fill="{}" height="{}" style="stroke:{};stroke-width:{};" width="{}" x="{}" y="{}"/>"#,
+                        fill,
+                        fmt4(side),
+                        VIS_PRIVATE_STROKE,
+                        ICON_STROKE_WIDTH,
+                        fmt4(side),
+                        fmt4(sq_x), fmt_tl(sq_y),
+                    )
+                    .unwrap();
+                }
+                Visibility::Protected => {
+                    let fill = if member.kind == MemberKind::Method {
+                        VIS_PROTECTED_FILL_METHOD
+                    } else {
+                        VIS_PROTECTED_FILL_FIELD
+                    };
+                    // Diamond icon (4 points).
+                    write!(
+                        svg,
+                        r#"<polygon fill="{}" points="{},{},{},{},{},{},{},{}" style="stroke:{};stroke-width:{};"/>"#,
+                        fill,
+                        fmt4(vis_cx), fmt_tl(icon_cy - icon.angled_half),
+                        fmt4(vis_cx + icon.angled_half), fmt_tl(icon_cy),
+                        fmt4(vis_cx), fmt_tl(icon_cy + icon.angled_half),
+                        fmt4(vis_cx - icon.angled_half), fmt_tl(icon_cy),
+                        VIS_PROTECTED_STROKE, ICON_STROKE_WIDTH,
+                    )
+                    .unwrap();
+                }
+                Visibility::Package => {
+                    let fill = if member.kind == MemberKind::Method {
+                        VIS_PACKAGE_FILL_METHOD
+                    } else {
+                        VIS_PACKAGE_FILL_FIELD
+                    };
+                    // Triangle icon (3 points, pointing up). icon_cy is the bbox
+                    // centre; the triangle spans symmetrically vertically so that
+                    // its centre coincides with the oracle-supplied polygon centre.
+                    write!(
+                        svg,
+                        r#"<polygon fill="{}" points="{},{},{},{},{},{}" style="stroke:{};stroke-width:{};"/>"#,
+                        fill,
+                        fmt4(vis_cx), fmt_tl(icon_cy - icon.triangle_half_y),
+                        fmt4(vis_cx - icon.angled_half), fmt_tl(icon_cy + icon.triangle_half_y),
+                        fmt4(vis_cx + icon.angled_half), fmt_tl(icon_cy + icon.triangle_half_y),
+                        VIS_PACKAGE_STROKE, ICON_STROKE_WIDTH,
+                    )
+                    .unwrap();
+                }
+                Visibility::IeMandatory => {
+                    // Filled black circle indicating a mandatory ER column.
+                    write!(
+                        svg,
+                        r##"<ellipse cx="{}" cy="{}" fill="#000000" rx="{}" ry="{}" style="stroke:#000000;stroke-width:{};"/>"##,
+                        fmt4(vis_cx),
+                        fmt_tl(icon_cy),
+                        icon.round_half as i64,
+                        icon.round_half as i64,
+                        ICON_STROKE_WIDTH,
+                    )
+                    .unwrap();
+                }
+                Visibility::Default => {} // No icon.
             }
-            Visibility::Private => {
-                let fill = if member.kind == MemberKind::Method {
-                    VIS_PRIVATE_FILL_METHOD
-                } else {
-                    VIS_PRIVATE_FILL_FIELD
-                };
-                let sq_x = vis_cx - icon.round_half;
-                let sq_y = icon_cy - icon.round_half;
-                let side = icon.round_half * 2.0;
-                write!(
-                    svg,
-                    r#"<rect fill="{}" height="{}" style="stroke:{};stroke-width:{};" width="{}" x="{}" y="{}"/>"#,
-                    fill,
-                    fmt4(side),
-                    VIS_PRIVATE_STROKE,
-                    ICON_STROKE_WIDTH,
-                    fmt4(side),
-                    fmt4(sq_x), fmt_tl(sq_y),
-                )
-                .unwrap();
-            }
-            Visibility::Protected => {
-                let fill = if member.kind == MemberKind::Method {
-                    VIS_PROTECTED_FILL_METHOD
-                } else {
-                    VIS_PROTECTED_FILL_FIELD
-                };
-                // Diamond icon (4 points).
-                write!(
-                    svg,
-                    r#"<polygon fill="{}" points="{},{},{},{},{},{},{},{}" style="stroke:{};stroke-width:{};"/>"#,
-                    fill,
-                    fmt4(vis_cx), fmt_tl(icon_cy - icon.angled_half),
-                    fmt4(vis_cx + icon.angled_half), fmt_tl(icon_cy),
-                    fmt4(vis_cx), fmt_tl(icon_cy + icon.angled_half),
-                    fmt4(vis_cx - icon.angled_half), fmt_tl(icon_cy),
-                    VIS_PROTECTED_STROKE, ICON_STROKE_WIDTH,
-                )
-                .unwrap();
-            }
-            Visibility::Package => {
-                let fill = if member.kind == MemberKind::Method {
-                    VIS_PACKAGE_FILL_METHOD
-                } else {
-                    VIS_PACKAGE_FILL_FIELD
-                };
-                // Triangle icon (3 points, pointing up). icon_cy is the bbox
-                // centre; the triangle spans symmetrically vertically so that
-                // its centre coincides with the oracle-supplied polygon centre.
-                write!(
-                    svg,
-                    r#"<polygon fill="{}" points="{},{},{},{},{},{}" style="stroke:{};stroke-width:{};"/>"#,
-                    fill,
-                    fmt4(vis_cx), fmt_tl(icon_cy - icon.triangle_half_y),
-                    fmt4(vis_cx - icon.angled_half), fmt_tl(icon_cy + icon.triangle_half_y),
-                    fmt4(vis_cx + icon.angled_half), fmt_tl(icon_cy + icon.triangle_half_y),
-                    VIS_PACKAGE_STROKE, ICON_STROKE_WIDTH,
-                )
-                .unwrap();
-            }
-            Visibility::IeMandatory => {
-                // Filled black circle indicating a mandatory ER column.
-                write!(
-                    svg,
-                    r##"<ellipse cx="{}" cy="{}" fill="#000000" rx="{}" ry="{}" style="stroke:#000000;stroke-width:{};"/>"##,
-                    fmt4(vis_cx),
-                    fmt_tl(icon_cy),
-                    icon.round_half as i64,
-                    icon.round_half as i64,
-                    ICON_STROKE_WIDTH,
-                )
-                .unwrap();
-            }
-            Visibility::Default => {} // No icon.
         }
 
         if link_anchor.is_some() {
@@ -4008,12 +4065,13 @@ fn render_member_line(
     // stereotypes, inner-class declarations); otherwise default-visibility
     // entries (continuation lines after `+method() { ... }` bodies) align
     // to MEMBER_TEXT_OFFSET so they sit under the icon-bearing text.
-    let text_x = text_pad
+    let computed_text_x = text_pad
         + if member.visibility == Visibility::Default && default_uses_narrow {
             entity_x + ENUM_TEXT_OFFSET
         } else {
             entity_x + member_text_offset
         };
+    let text_x = text_x_override.unwrap_or(computed_text_x);
 
     let mut text_buf = String::new();
     text_render::emit_text(
@@ -4194,11 +4252,11 @@ fn render_oracle_note_connectors(svg: &mut String, oracle: &OracleLayout) {
             .path_style
             .as_deref()
             .unwrap_or("stroke:#181818;stroke-width:1;");
+        let path_id_attr = edge_path_id_attr(edge);
         write!(
             svg,
-            r#"<path {code_line_attr}d="{}" fill="none" id="{}" style="{path_style}"/>"#,
+            r#"<path {code_line_attr}d="{}" fill="none"{path_id_attr} style="{path_style}"/>"#,
             edge.d,
-            escape_xml(&edge.id),
         )
         .unwrap();
         svg.push_str("</g>");
@@ -4272,18 +4330,79 @@ fn render_association_class_links(svg: &mut String, diagram: &ClassDiagram, orac
                 .as_deref()
                 .map(|c| format!(r#"codeLine="{c}" "#))
                 .unwrap_or_default();
+            let path_id_attr = edge_path_id_attr(edge);
             write!(
                 svg,
-                r#"<path {}d="{}" fill="none" id="{}" style="{}"/>"#,
-                code_line_attr,
-                edge.d,
-                escape_xml(&edge.id),
-                path_style,
+                r#"<path {}d="{}" fill="none"{} style="{}"/>"#,
+                code_line_attr, edge.d, path_id_attr, path_style,
             )
             .unwrap();
             svg.push_str("</g>");
         }
     }
+}
+
+fn edge_path_id_attr(edge: &OracleEdgePath) -> String {
+    edge.path_id
+        .as_deref()
+        .map(|id| format!(r#" id="{}""#, escape_xml(id)))
+        .unwrap_or_default()
+}
+
+fn emit_entity_polygon(svg: &mut String, polygon: &EntityPolygon) {
+    match polygon.style.as_deref() {
+        Some(style) => write!(
+            svg,
+            r#"<polygon fill="{}" points="{}" style="{}"/>"#,
+            polygon.fill, polygon.points, style,
+        ),
+        None => write!(
+            svg,
+            r#"<polygon fill="{}" points="{}"/>"#,
+            polygon.fill, polygon.points,
+        ),
+    }
+    .unwrap();
+}
+
+fn emit_entity_path(svg: &mut String, path: &EntityPath) {
+    match path.style.as_deref() {
+        Some(style) => write!(
+            svg,
+            r#"<path d="{}" fill="{}" style="{}"/>"#,
+            path.d, path.fill, style,
+        ),
+        None => write!(svg, r#"<path d="{}" fill="{}"/>"#, path.d, path.fill,),
+    }
+    .unwrap();
+}
+
+fn emit_handwritten_warning(svg: &mut String, warning: &OracleHandwrittenWarning) {
+    emit_entity_polygon(svg, &warning.polygon);
+    match warning.text_length.as_deref() {
+        Some(text_length) => write!(
+            svg,
+            r##"<text fill="#000000" font-family="monospace" font-size="10" lengthAdjust="spacing" textLength="{}" x="{}" y="{}">{}</text>"##,
+            text_length,
+            fmt4(warning.text.x),
+            fmt4(warning.text.y),
+            escape_xml(&warning.text.text),
+        ),
+        None => write!(
+            svg,
+            r##"<text fill="#000000" font-family="monospace" font-size="10" x="{}" y="{}">{}</text>"##,
+            fmt4(warning.text.x),
+            fmt4(warning.text.y),
+            escape_xml(&warning.text.text),
+        ),
+    }
+    .unwrap();
+}
+
+fn has_handwritten_skinparam(diagram: &ClassDiagram) -> bool {
+    diagram.meta.skinparams.iter().any(|sp| {
+        sp.key.eq_ignore_ascii_case("handwritten") && sp.value.eq_ignore_ascii_case("true")
+    })
 }
 
 fn find_oracle_relationship_edge<'a>(
@@ -4397,8 +4516,6 @@ fn render_oracle_relationships(
     matches.sort_by_key(|(edge_index, _, _, _)| *edge_index);
 
     for (_, rel, oracle_edge, is_reverse) in matches {
-        let expected_id = &oracle_edge.id;
-
         // HTML comment
         if is_reverse {
             write!(svg, "<!--reverse link {} to {}-->", rel.from, rel.to).unwrap();
@@ -4438,13 +4555,11 @@ fn render_oracle_relationships(
         // The edge id embeds the entity names; escape XML specials (e.g. `&`
         // in a class named "A&B") so the attribute stays well-formed, matching
         // PlantUML's `id="A&amp;B-to-Other"`.
+        let path_id_attr = edge_path_id_attr(oracle_edge);
         write!(
             svg,
-            r#"<path {}d="{}" fill="none" id="{}" style="{}"/>"#,
-            code_line_attr,
-            oracle_edge.d,
-            escape_xml(expected_id),
-            path_style,
+            r#"<path {}d="{}" fill="none"{} style="{}"/>"#,
+            code_line_attr, oracle_edge.d, path_id_attr, path_style,
         )
         .unwrap();
 
@@ -4873,11 +4988,11 @@ fn render_notes_only(
                 r#"<g class="link" data-entity-1="{entity_1}" data-entity-2="{entity_2}" data-link-type="{link_type}" data-source-line="{source_line}" id="{link_id}">"#
             )
             .unwrap();
+            let path_id_attr = edge_path_id_attr(edge);
             write!(
                 group,
-                r#"<path {code_line_attr}d="{}" fill="none" id="{}" style="{path_style}"/>"#,
+                r#"<path {code_line_attr}d="{}" fill="none"{path_id_attr} style="{path_style}"/>"#,
                 edge.d,
-                escape_xml(&edge.id),
             )
             .unwrap();
             if let Some(points) = &edge.arrow_points {

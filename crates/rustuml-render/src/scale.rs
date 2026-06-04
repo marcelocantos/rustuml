@@ -463,6 +463,14 @@ fn scale_oracle_layout_inner(o: &mut OracleLayout, k: f64) {
             t.y *= k;
         }
     }
+    if let Some(w) = o.handwritten_warning.as_mut() {
+        scale_entity_polygon(&mut w.polygon, k);
+        w.text.x *= k;
+        w.text.y *= k;
+        if let Some(text_length) = w.text_length.as_mut() {
+            *text_length = scale_number_token(text_length, k);
+        }
+    }
     if !o.defs_inner_xml.is_empty() {
         o.defs_inner_xml = scale_svg_numbers(&o.defs_inner_xml, k);
     }
@@ -508,6 +516,21 @@ fn scale_entity(e: &mut EntityRect, k: f64) {
     }
     if let Some(d) = e.glyph_path_d.as_mut() {
         *d = scale_path_d(d, k);
+    }
+    if let Some(p) = e.body_polygon.as_mut() {
+        scale_entity_polygon(p, k);
+    }
+    if let Some(p) = e.icon_polygon.as_mut() {
+        scale_entity_polygon(p, k);
+    }
+    for p in &mut e.separator_paths {
+        p.d = scale_path_d(&p.d, k);
+        if let Some(s) = p.style.as_mut() {
+            *s = scale_style(s, k);
+        }
+    }
+    for p in &mut e.visibility_polygons {
+        scale_entity_polygon(p, k);
     }
     if let Some(v) = e.name_text_x.as_mut() {
         *v *= k;
@@ -562,6 +585,13 @@ fn scale_entity(e: &mut EntityRect, k: f64) {
     for t in &mut e.texts {
         t.x *= k;
         t.y *= k;
+    }
+}
+
+fn scale_entity_polygon(p: &mut crate::layout_oracle::EntityPolygon, k: f64) {
+    p.points = scale_svg_numbers(&p.points, k);
+    if let Some(s) = p.style.as_mut() {
+        *s = scale_style(s, k);
     }
 }
 
@@ -797,6 +827,10 @@ mod fp_tests {
             height: 0.0,
             icon_cx: None,
             glyph_path_d: Some("M48.9463,58.2861".to_string()),
+            body_polygon: None,
+            icon_polygon: None,
+            separator_paths: vec![],
+            visibility_polygons: vec![],
             name_text_x: None,
             text_y_values: vec![],
             text_x_values: vec![],
