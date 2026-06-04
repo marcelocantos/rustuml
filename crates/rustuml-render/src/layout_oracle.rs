@@ -283,6 +283,7 @@ pub enum OracleNoteChild {
 pub struct OracleNotePath {
     pub d: String,
     pub fill: Option<String>,
+    pub filter: Option<String>,
     pub style: Option<String>,
 }
 
@@ -510,6 +511,9 @@ fn emit_note_child(out: &mut String, child: &OracleNoteChild) {
             if let Some(fill) = path.fill.as_deref() {
                 let _ = write!(out, r#" fill="{}""#, escape_xml_attr(fill));
             }
+            if let Some(filter) = path.filter.as_deref() {
+                let _ = write!(out, r#" filter="{}""#, escape_xml_attr(filter));
+            }
             if let Some(style) = path.style.as_deref() {
                 let _ = write!(out, r#" style="{}""#, escape_xml_attr(style));
             }
@@ -659,6 +663,9 @@ pub fn emit_oracle_cluster_children(out: &mut String, cluster: &OracleCluster) {
                 let _ = write!(out, r#"<path d="{}""#, escape_xml_attr(&path.d));
                 if let Some(fill) = path.fill.as_deref() {
                     let _ = write!(out, r#" fill="{}""#, escape_xml_attr(fill));
+                }
+                if let Some(filter) = path.filter.as_deref() {
+                    let _ = write!(out, r#" filter="{}""#, escape_xml_attr(filter));
                 }
                 if let Some(style) = path.style.as_deref() {
                     let _ = write!(out, r#" style="{}""#, escape_xml_attr(style));

@@ -324,6 +324,7 @@ pub fn extract_oracle_layout(svg: &str) -> Option<OracleLayout> {
                                 children.push(OracleClusterChild::Path(OracleNotePath {
                                     d: d.to_string(),
                                     fill: c.attribute("fill").map(String::from),
+                                    filter: c.attribute("filter").map(String::from),
                                     style: c.attribute("style").map(String::from),
                                 }));
                             }
@@ -463,6 +464,7 @@ pub fn extract_oracle_layout(svg: &str) -> Option<OracleLayout> {
                                     g.children.push(OracleNoteChild::Path(OracleNotePath {
                                         d: d.to_string(),
                                         fill: child.attribute("fill").map(String::from),
+                                        filter: child.attribute("filter").map(String::from),
                                         style: child.attribute("style").map(String::from),
                                     }));
                                 }

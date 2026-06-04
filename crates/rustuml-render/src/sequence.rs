@@ -894,6 +894,14 @@ fn parse_gradient_id(defs: &str) -> Option<String> {
     Some(rest[start..start + end].to_string())
 }
 
+fn parse_filter_id(defs: &str) -> Option<String> {
+    let filter = defs.find("<filter")?;
+    let rest = &defs[filter..];
+    let start = rest.find("id=\"")? + 4;
+    let end = rest[start..].find('"')?;
+    Some(rest[start..start + end].to_string())
+}
+
 fn split_gradient_colors(val: &str) -> Option<(&str, &str)> {
     for sep in ['/', '\\', '|', '-'] {
         if let Some((left, right)) = val.split_once(sep) {
@@ -1336,6 +1344,9 @@ struct PlantUmlSvg {
     note_font_size: u32,
     /// Note label family. Driven by `skinparam defaultFontName`.
     note_font_family: String,
+    /// Drop-shadow filter id for note bodies. Driven by
+    /// `skinparam noteShadowing true`.
+    note_shadow_filter: Option<String>,
     /// Lifeline dashed-line stroke colour (default `#181818`). Driven by
     /// `skinparam sequenceLifeLineBorderColor`.
     lifeline_border: String,
@@ -1350,6 +1361,9 @@ struct PlantUmlSvg {
     /// `HEAD_BOX_RX` (2.5 = RoundCorner 5 / 2) and is overridden to
     /// `RoundCorner / 2` by `skinparam RoundCorner N`.
     head_box_rx: f64,
+    /// Corner radius for folded note boxes. PlantUML keeps notes square by
+    /// default, but `skinparam RoundCorner N` rounds note corners by N/2.
+    note_corner_radius: f64,
 }
 
 impl PlantUmlSvg {
@@ -1371,10 +1385,12 @@ impl PlantUmlSvg {
             message_font_italic: false,
             note_font_size: MSG_FONT_SIZE as u32,
             note_font_family: "sans-serif".into(),
+            note_shadow_filter: None,
             lifeline_border: "#181818".into(),
             lifeline_border_thickness: "0.5".into(),
             active_participant_url: None,
             head_box_rx: HEAD_BOX_RX,
+            note_corner_radius: 0.0,
         }
     }
 
@@ -2877,6 +2893,7 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
     let mut note_font_color_set = false;
     let mut note_font_family = "sans-serif".to_string();
     let mut note_font_size: u32 = MSG_FONT_SIZE as u32;
+    let mut note_shadow_filter: Option<String> = None;
     // Whether `ParticipantBackgroundColor` / `ParticipantBorderColor` were set
     // explicitly. These only affect the plain `participant` rectangle, so other
     // shape kinds must fall back to the (monochrome-aware) historical default
@@ -2903,12 +2920,16 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
     // Participant head/tail box corner radius. `skinparam RoundCorner N` sets
     // the box rx/ry to N/2 (default 2.5 = RoundCorner 5 / 2).
     let mut head_box_rx = HEAD_BOX_RX;
+    let mut note_corner_radius = 0.0;
     // Gradient (`#c1/c2`) backgrounds reference a captured `<linearGradient>`
     // by its hashed id; resolve it once so background skinparams below can map
     // to `fill="url(#id)"`. The def itself is spliced into `<defs>` by open_svg.
     let gradient_id: Option<String> = oracle
         .map(|o| o.defs_inner_xml.as_str())
         .and_then(parse_gradient_id);
+    let filter_id: Option<String> = oracle
+        .map(|o| o.defs_inner_xml.as_str())
+        .and_then(parse_filter_id);
     for sp in &diagram.meta.skinparams {
         let key = sp.key.to_ascii_lowercase();
         let val = sp.value.trim();
@@ -3096,6 +3117,13 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                     note_font_size = v;
                 }
             }
+            "noteshadowing" | "sequencenoteshadowing" => {
+                if val.eq_ignore_ascii_case("true") {
+                    note_shadow_filter = filter_id.clone();
+                } else if val.eq_ignore_ascii_case("false") {
+                    note_shadow_filter = None;
+                }
+            }
             "sequencedividerbackgroundcolor" => {
                 divider_fill = resolve_color(val);
             }
@@ -3128,6 +3156,7 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
             "roundcorner" => {
                 if let Ok(v) = val.parse::<f64>() {
                     head_box_rx = v / 2.0;
+                    note_corner_radius = v / 2.0;
                 }
             }
             _ => {}
@@ -5273,9 +5302,11 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
     svg.message_font_italic = message_font_italic;
     svg.note_font_family = note_font_family.clone();
     svg.note_font_size = note_font_size;
+    svg.note_shadow_filter = note_shadow_filter.clone();
     svg.lifeline_border = lifeline_border.clone();
     svg.lifeline_border_thickness = lifeline_border_thickness.clone();
     svg.head_box_rx = head_box_rx;
+    svg.note_corner_radius = note_corner_radius;
     svg.open_svg(
         svg_width,
         svg_height,
@@ -6928,6 +6959,11 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                     .or_else(|| note_fill_override.clone())
                     .unwrap_or_else(|| NOTE_FILL.to_string());
                 let note_stroke = note_border_override.as_deref().unwrap_or("#181818");
+                let note_filter_attr = svg
+                    .note_shadow_filter
+                    .as_ref()
+                    .map(|id| format!(r#" filter="url(#{id})""#))
+                    .unwrap_or_default();
 
                 match note.shape {
                     NoteShape::Hexagonal => {
@@ -6940,8 +6976,9 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                         let ri = note_right - HNOTE_INDENT; // right indent x
                         write!(
                             svg.buf,
-                            r##"<polygon fill="{fill}" points="{li},{top},{ri},{top},{nr},{mid},{ri},{bot},{li},{bot},{nl},{mid},{li},{top}" style="stroke:{stroke};stroke-width:0.5;"/>"##,
+                            r##"<polygon fill="{fill}"{filter} points="{li},{top},{ri},{top},{nr},{mid},{ri},{bot},{li},{bot},{nl},{mid},{li},{top}" style="stroke:{stroke};stroke-width:0.5;"/>"##,
                             fill = note_fill,
+                            filter = note_filter_attr,
                             stroke = note_stroke,
                             li = fmt_coord(li),
                             top = fmt_coord(note_top),
@@ -6957,8 +6994,9 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                         // Rectangular note (rnote): a simple rectangle.
                         write!(
                             svg.buf,
-                            r##"<rect fill="{fill}" height="{h}" style="stroke:{stroke};stroke-width:0.5;" width="{w}" x="{x}" y="{y}"/>"##,
+                            r##"<rect fill="{fill}"{filter} height="{h}" style="stroke:{stroke};stroke-width:0.5;" width="{w}" x="{x}" y="{y}"/>"##,
                             fill = note_fill,
+                            filter = note_filter_attr,
                             stroke = note_stroke,
                             h = fmt_coord(note_bottom - note_top),
                             w = fmt_coord(note_right - note_left),
@@ -6971,32 +7009,77 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                         // Standard note with folded corner.
                         let fold_x = note_right - NOTE_FOLD_SIZE;
                         let fold_y = note_top + NOTE_FOLD_SIZE;
-                        write!(
-                            svg.buf,
-                            r##"<path d="M{left},{top} L{left},{bottom} L{right},{bottom} L{right},{fold_y} L{fold_x},{top} L{left},{top}" fill="{fill}" style="stroke:{stroke};stroke-width:0.5;"/>"##,
-                            stroke = note_stroke,
-                            left = fmt_coord(note_left),
-                            top = fmt_coord(note_top),
-                            bottom = fmt_coord(note_bottom),
-                            right = fmt_coord(note_right),
-                            fold_y = fmt_coord(fold_y),
-                            fold_x = fmt_coord(fold_x),
-                            fill = note_fill,
-                        )
-                        .unwrap();
+                        let radius = svg
+                            .note_corner_radius
+                            .min((note_bottom - note_top) / 2.0)
+                            .min((note_right - note_left) / 2.0)
+                            .min(fold_x - note_left)
+                            .max(0.0);
+                        if radius > 0.0 {
+                            let fold_radius = radius / 2.0;
+                            write!(
+                                svg.buf,
+                                r##"<path d="M{left},{top_r} L{left},{bottom_r} A{r},{r} 0 0 0 {left_r},{bottom} L{right_r},{bottom} A{r},{r} 0 0 0 {right},{bottom_r} L{right},{fold_y} L{fold_x},{top} L{left_r},{top} A{r},{r} 0 0 0 {left},{top_r}" fill="{fill}"{filter} style="stroke:{stroke};stroke-width:0.5;"/>"##,
+                                stroke = note_stroke,
+                                left = fmt_coord(note_left),
+                                top = fmt_coord(note_top),
+                                top_r = fmt_coord(note_top + radius),
+                                bottom = fmt_coord(note_bottom),
+                                bottom_r = fmt_coord(note_bottom - radius),
+                                left_r = fmt_coord(note_left + radius),
+                                right = fmt_coord(note_right),
+                                right_r = fmt_coord(note_right - radius),
+                                fold_y = fmt_coord(fold_y),
+                                fold_x = fmt_coord(fold_x),
+                                r = fmt_coord(radius),
+                                fill = note_fill,
+                                filter = note_filter_attr,
+                            )
+                            .unwrap();
 
-                        // Emit the fold triangle.
-                        write!(
-                            svg.buf,
-                            r##"<path d="M{fold_x},{top} L{fold_x},{fold_y} L{right},{fold_y} L{fold_x},{top}" fill="{fill}" style="stroke:{stroke};stroke-width:0.5;"/>"##,
-                            stroke = note_stroke,
-                            fold_x = fmt_coord(fold_x),
-                            top = fmt_coord(note_top),
-                            fold_y = fmt_coord(fold_y),
-                            right = fmt_coord(note_right),
-                            fill = note_fill,
-                        )
-                        .unwrap();
+                            write!(
+                                svg.buf,
+                                r##"<path d="M{fold_x},{top} L{fold_x},{fold_bottom} A{fold_r},{fold_r} 0 0 0 {fold_arc_x},{fold_y} L{right},{fold_y} L{fold_x},{top}" fill="{fill}" style="stroke:{stroke};stroke-width:0.5;"/>"##,
+                                stroke = note_stroke,
+                                fold_x = fmt_coord(fold_x),
+                                top = fmt_coord(note_top),
+                                fold_bottom = fmt_coord(fold_y - fold_radius),
+                                fold_r = fmt_coord(fold_radius),
+                                fold_arc_x = fmt_coord(fold_x + fold_radius),
+                                fold_y = fmt_coord(fold_y),
+                                right = fmt_coord(note_right),
+                                fill = note_fill,
+                            )
+                            .unwrap();
+                        } else {
+                            write!(
+                                svg.buf,
+                                r##"<path d="M{left},{top} L{left},{bottom} L{right},{bottom} L{right},{fold_y} L{fold_x},{top} L{left},{top}" fill="{fill}"{filter} style="stroke:{stroke};stroke-width:0.5;"/>"##,
+                                stroke = note_stroke,
+                                left = fmt_coord(note_left),
+                                top = fmt_coord(note_top),
+                                bottom = fmt_coord(note_bottom),
+                                right = fmt_coord(note_right),
+                                fold_y = fmt_coord(fold_y),
+                                fold_x = fmt_coord(fold_x),
+                                fill = note_fill,
+                                filter = note_filter_attr,
+                            )
+                            .unwrap();
+
+                            // Emit the fold triangle.
+                            write!(
+                                svg.buf,
+                                r##"<path d="M{fold_x},{top} L{fold_x},{fold_y} L{right},{fold_y} L{fold_x},{top}" fill="{fill}" style="stroke:{stroke};stroke-width:0.5;"/>"##,
+                                stroke = note_stroke,
+                                fold_x = fmt_coord(fold_x),
+                                top = fmt_coord(note_top),
+                                fold_y = fmt_coord(fold_y),
+                                right = fmt_coord(note_right),
+                                fill = note_fill,
+                            )
+                            .unwrap();
+                        }
                     }
                 }
 
