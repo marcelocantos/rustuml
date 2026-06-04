@@ -660,6 +660,8 @@ pub fn extract_oracle_layout(svg: &str) -> Option<OracleLayout> {
                     let rx = parse_attr(&ellipse, "rx")?;
                     let ry = parse_attr(&ellipse, "ry")?;
                     let entity_id = node.attribute("id").map(String::from);
+                    let fill = ellipse.attribute("fill").map(String::from);
+                    let body_style = ellipse.attribute("style").map(String::from);
                     // Creole-styled labels emit multiple <text> elements at the
                     // same baseline; deduplicate consecutive y-values.
                     let mut text_y_values: Vec<f64> = Vec::new();
@@ -708,34 +710,47 @@ pub fn extract_oracle_layout(svg: &str) -> Option<OracleLayout> {
                             style: l.attribute("style").map(String::from),
                         })
                         .collect();
-                    layout.entities.insert(
-                        name.to_string(),
-                        EntityRect {
-                            x: cx - rx,
-                            y: cy - ry,
-                            width: rx * 2.0,
-                            height: ry * 2.0,
-                            icon_cx: None,
-                            glyph_path_d: None,
-                            name_text_x: None,
-                            text_y_values,
-                            text_x_values,
-                            sep_y_values: Vec::new(),
-                            sep_lines,
-                            vis_icon_y_values: Vec::new(),
-                            fill: None,
-                            body_style: None,
-                            rect_style: None,
-                            rect_rx: None,
-                            rect_ry: None,
-                            rect_filter: None,
-                            entity_id,
-                            source_line: node.attribute("data-source-line").map(String::from),
-                            aux_rects: Vec::new(),
-                            lines,
-                            texts: Vec::new(),
-                        },
-                    );
+                    let texts: Vec<EntityText> = content_node
+                        .children()
+                        .filter(|c| c.tag_name().name() == "text")
+                        .filter_map(|t| {
+                            Some(EntityText {
+                                x: parse_attr(&t, "x")?,
+                                y: parse_attr(&t, "y")?,
+                                text: collect_text(&t),
+                            })
+                        })
+                        .collect();
+                    let rect = EntityRect {
+                        x: cx - rx,
+                        y: cy - ry,
+                        width: rx * 2.0,
+                        height: ry * 2.0,
+                        icon_cx: None,
+                        glyph_path_d: None,
+                        name_text_x: None,
+                        text_y_values,
+                        text_x_values,
+                        sep_y_values: Vec::new(),
+                        sep_lines,
+                        vis_icon_y_values: Vec::new(),
+                        fill,
+                        body_style: body_style.clone(),
+                        rect_style: body_style,
+                        rect_rx: None,
+                        rect_ry: None,
+                        rect_filter: None,
+                        entity_id,
+                        source_line: node.attribute("data-source-line").map(String::from),
+                        aux_rects: Vec::new(),
+                        lines,
+                        texts,
+                    };
+                    layout.entity_list.push(OracleEntity {
+                        qualified_name: name.to_string(),
+                        rect: rect.clone(),
+                    });
+                    layout.entities.insert(name.to_string(), rect);
                 } else if let Some(polygon) = find_first_child(&content_node, "polygon") {
                     // Choice pseudo-states use <polygon> (diamond), and
                     // deployment Node shape uses a "tag" polygon.
@@ -753,36 +768,37 @@ pub fn extract_oracle_layout(svg: &str) -> Option<OracleLayout> {
                             let max_y = ys.iter().copied().fold(f64::NEG_INFINITY, f64::max);
                             let entity_id = node.attribute("id").map(String::from);
                             let fill = polygon.attribute("fill").map(String::from);
-                            layout.entities.insert(
-                                name.to_string(),
-                                EntityRect {
-                                    x: min_x,
-                                    y: min_y,
-                                    width: max_x - min_x,
-                                    height: max_y - min_y,
-                                    icon_cx: None,
-                                    glyph_path_d: None,
-                                    name_text_x: None,
-                                    text_y_values: Vec::new(),
-                                    text_x_values: Vec::new(),
-                                    sep_y_values: Vec::new(),
-                                    sep_lines: Vec::new(),
-                                    vis_icon_y_values: Vec::new(),
-                                    fill,
-                                    body_style: None,
-                                    rect_style: None,
-                                    rect_rx: None,
-                                    rect_ry: None,
-                                    rect_filter: None,
-                                    entity_id,
-                                    source_line: node
-                                        .attribute("data-source-line")
-                                        .map(String::from),
-                                    aux_rects: Vec::new(),
-                                    lines: Vec::new(),
-                                    texts: Vec::new(),
-                                },
-                            );
+                            let body_style = polygon.attribute("style").map(String::from);
+                            let rect = EntityRect {
+                                x: min_x,
+                                y: min_y,
+                                width: max_x - min_x,
+                                height: max_y - min_y,
+                                icon_cx: None,
+                                glyph_path_d: None,
+                                name_text_x: None,
+                                text_y_values: Vec::new(),
+                                text_x_values: Vec::new(),
+                                sep_y_values: Vec::new(),
+                                sep_lines: Vec::new(),
+                                vis_icon_y_values: Vec::new(),
+                                fill,
+                                body_style: body_style.clone(),
+                                rect_style: body_style,
+                                rect_rx: None,
+                                rect_ry: None,
+                                rect_filter: None,
+                                entity_id,
+                                source_line: node.attribute("data-source-line").map(String::from),
+                                aux_rects: Vec::new(),
+                                lines: Vec::new(),
+                                texts: Vec::new(),
+                            };
+                            layout.entity_list.push(OracleEntity {
+                                qualified_name: name.to_string(),
+                                rect: rect.clone(),
+                            });
+                            layout.entities.insert(name.to_string(), rect);
                         }
                     }
                 } else if let Some(path) = find_first_child(&content_node, "path")

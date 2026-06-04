@@ -324,6 +324,8 @@ fn resolve_hide(entity: &ClassEntity, directives: &[HideShow]) -> HideFlags {
         EntityKind::AbstractClass => "abstract",
         EntityKind::Annotation => "annotation",
         EntityKind::Entity => "entity",
+        EntityKind::Circle => "circle",
+        EntityKind::Diamond => "diamond",
     };
     for d in directives {
         // Tokenise: optional selector (entity kind keyword, `<<stereo>>`, or
@@ -601,6 +603,30 @@ fn calc_entity_dims(entity: &ClassEntity, entity_index: usize, hide: HideFlags) 
     // Entity labels treat `__` as literal underscores, not underline markup,
     // so width must include those characters.
     let name_width = text_render::measure_no_underline(&entity.label, 14.0, false);
+    if matches!(entity.kind, EntityKind::Circle | EntityKind::Diamond) {
+        let source_line = if entity.source_line > 0 {
+            entity.source_line
+        } else {
+            entity_index + 1
+        };
+        let shape_size = if entity.kind == EntityKind::Circle {
+            16.0
+        } else {
+            24.0
+        };
+        return EntityDims {
+            width: shape_size,
+            height: shape_size,
+            field_count: 0,
+            method_count: 0,
+            is_enum: false,
+            name_width,
+            has_stereotypes: false,
+            stereotype_count: 0,
+            hide,
+            source_line,
+        };
+    }
     let has_stereotypes = !entity.stereotypes.is_empty() && !hide.stereotype;
     let stereotype_count = if has_stereotypes {
         entity.stereotypes.len()
@@ -1916,12 +1942,18 @@ fn render_plantuml_svg(
         // Entity group wrapper.
         write!(
             svg,
-            r#"<g class="entity" data-qualified-name="{}" data-source-line="{}" id="{}">"#,
+            r#"<g class="entity" data-qualified-name="{}""#,
             escape_xml(&qualified_name),
-            dim.source_line,
-            current_ent_id,
         )
         .unwrap();
+        if let Some(source_line) = oracle_rect
+            .and_then(|r| r.source_line.as_deref())
+            .map(str::to_string)
+            .or_else(|| oracle_rect.is_none().then(|| dim.source_line.to_string()))
+        {
+            write!(svg, r#" data-source-line="{source_line}""#).unwrap();
+        }
+        write!(svg, r#" id="{current_ent_id}">"#).unwrap();
 
         // PlantUML wraps the entity content in `<a>` when the user attached a
         // URL with `[[http://...]]`. The anchor carries the same href four
@@ -2227,6 +2259,82 @@ fn render_entity_content(
     explicit_padding: Option<f64>,
     header_gradient_fill: Option<&str>,
 ) {
+    if matches!(entity.kind, EntityKind::Circle | EntityKind::Diamond) {
+        if let Some(anchor) = link_anchor {
+            svg.push_str(anchor);
+        }
+        let fill = oracle_rect
+            .and_then(|r| r.fill.as_deref())
+            .unwrap_or(ENTITY_FILL);
+        let style = oracle_rect
+            .and_then(|r| r.rect_style.as_deref())
+            .or_else(|| oracle_rect.and_then(|r| r.body_style.as_deref()))
+            .unwrap_or("stroke:#181818;stroke-width:0.5;");
+        match entity.kind {
+            EntityKind::Circle => {
+                let cx = x + dim.width / 2.0;
+                let cy = y + dim.height / 2.0;
+                write!(
+                    svg,
+                    r#"<ellipse cx="{}" cy="{}" fill="{}" rx="{}" ry="{}" style="{}"/>"#,
+                    crate::plantuml_metrics::fmt_coord(cx),
+                    crate::plantuml_metrics::fmt_coord(cy),
+                    fill,
+                    crate::plantuml_metrics::fmt_coord(dim.width / 2.0),
+                    crate::plantuml_metrics::fmt_coord(dim.height / 2.0),
+                    style,
+                )
+                .unwrap();
+                if let Some(text) = oracle_rect.and_then(|r| r.texts.first()) {
+                    text_render::emit_text(
+                        svg,
+                        &text.text,
+                        &TextBase {
+                            x: text.x,
+                            y: text.y,
+                            font_size: 14,
+                            font_family: "sans-serif",
+                            fill: "#000000",
+                            bold: false,
+                            italic: false,
+                            underline: false,
+                            skip_underline: true,
+                        },
+                    );
+                }
+            }
+            EntityKind::Diamond => {
+                let cx = x + dim.width / 2.0;
+                let cy = y + dim.height / 2.0;
+                let top = y;
+                let right = x + dim.width;
+                let bottom = y + dim.height;
+                write!(
+                    svg,
+                    r#"<polygon fill="{}" points="{},{},{},{},{},{},{},{},{},{}" style="{}"/>"#,
+                    fill,
+                    crate::plantuml_metrics::fmt_coord(cx),
+                    crate::plantuml_metrics::fmt_coord(top),
+                    crate::plantuml_metrics::fmt_coord(right),
+                    crate::plantuml_metrics::fmt_coord(cy),
+                    crate::plantuml_metrics::fmt_coord(cx),
+                    crate::plantuml_metrics::fmt_coord(bottom),
+                    crate::plantuml_metrics::fmt_coord(x),
+                    crate::plantuml_metrics::fmt_coord(cy),
+                    crate::plantuml_metrics::fmt_coord(cx),
+                    crate::plantuml_metrics::fmt_coord(top),
+                    style,
+                )
+                .unwrap();
+            }
+            _ => {}
+        }
+        if link_anchor.is_some() {
+            svg.push_str("</a>");
+        }
+        return;
+    }
+
     // PlantUML wraps the entity *header* (background rect, stereotype icon,
     // name text, and the two compartment separator rules) in a single `<a>`
     // when the class carries a `[[url]]` link, then closes it and re-wraps
@@ -2477,6 +2585,7 @@ fn render_entity_content(
                 EntityKind::AbstractClass => ABSTRACT_ICON_FILL,
                 EntityKind::Annotation => ANNOTATION_ICON_FILL,
                 EntityKind::Entity => CLASS_ICON_FILL, // Entity uses class icon
+                EntityKind::Circle | EntityKind::Diamond => CLASS_ICON_FILL,
             },
         };
 
@@ -2520,6 +2629,7 @@ fn render_entity_content(
                 }
                 EntityKind::AbstractClass => abstract_glyph(icon_cx, icon_cy),
                 EntityKind::Annotation => annotation_glyph(icon_cx, icon_cy),
+                EntityKind::Circle | EntityKind::Diamond => CLASS_GLYPH.to_string(),
             }
         };
 

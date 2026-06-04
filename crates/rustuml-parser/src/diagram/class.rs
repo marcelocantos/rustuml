@@ -120,6 +120,8 @@ pub enum EntityKind {
     Enum,
     Annotation,
     Entity,
+    Circle,
+    Diamond,
 }
 
 /// A field or method in a class.

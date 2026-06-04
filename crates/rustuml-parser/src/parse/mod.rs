@@ -384,6 +384,8 @@ fn detect_uml_subtype(lines: &[String]) -> UmlSubtype {
             || trimmed.starts_with("interface ")
             || trimmed.starts_with("enum ")
             || trimmed.starts_with("annotation ")
+            || trimmed.starts_with("circle ")
+            || trimmed.starts_with("diamond ")
             || trimmed.contains("<|--")
             || trimmed.contains("..|>")
         {
