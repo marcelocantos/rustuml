@@ -1001,8 +1001,10 @@ struct ParticipantLayout {
     kind: ParticipantKind,
     /// Optional stereotype text
     stereotype: Option<String>,
-    /// Text width at font-size 14
+    /// Text width at the participant label font size.
     text_width: f64,
+    /// Baseline offset from the participant box top for the label.
+    text_y_offset: f64,
     /// Stereotype display text width at font-size 11 (if any)
     stereotype_width: f64,
     /// Box width (used for spacing and centering — meaning varies by kind)
@@ -1062,6 +1064,15 @@ struct PlantUmlSvg {
     /// Plain participant head/tail label colour. Driven by
     /// `skinparam participantFontColor`.
     participant_font_color: String,
+    /// Plain participant head/tail label font size. Driven by
+    /// `skinparam participantFontSize`.
+    participant_font_size: u32,
+    /// Plain participant head/tail label bold style. Driven by
+    /// `skinparam participantFontStyle`.
+    participant_font_bold: bool,
+    /// Plain participant head/tail label italic style. Driven by
+    /// `skinparam participantFontStyle`.
+    participant_font_italic: bool,
     /// Lifeline dashed-line stroke colour (default `#181818`). Driven by
     /// `skinparam sequenceLifeLineBorderColor`.
     lifeline_border: String,
@@ -1086,6 +1097,9 @@ impl PlantUmlSvg {
             participant_border: "#181818".into(),
             participant_border_thickness: "0.5".into(),
             participant_font_color: "#000000".into(),
+            participant_font_size: PARTICIPANT_FONT_SIZE as u32,
+            participant_font_bold: false,
+            participant_font_italic: false,
             lifeline_border: "#181818".into(),
             lifeline_border_thickness: "0.5".into(),
             active_participant_url: None,
@@ -1282,11 +1296,11 @@ impl PlantUmlSvg {
             &TextBase {
                 x: text_x,
                 y: text_y,
-                font_size: 14,
+                font_size: self.participant_font_size,
                 font_family: "sans-serif",
                 fill: &self.participant_font_color,
-                bold: false,
-                italic: false,
+                bold: self.participant_font_bold,
+                italic: self.participant_font_italic,
                 underline: false,
                 skip_underline: false,
             },
@@ -1340,11 +1354,11 @@ impl PlantUmlSvg {
             &TextBase {
                 x: text_x,
                 y: text_y,
-                font_size: 14,
+                font_size: self.participant_font_size,
                 font_family: "sans-serif",
-                fill: "#000000",
-                bold: false,
-                italic: false,
+                fill: &self.participant_font_color,
+                bold: self.participant_font_bold,
+                italic: self.participant_font_italic,
                 underline: false,
                 skip_underline: false,
             },
@@ -2518,8 +2532,7 @@ fn render_participant_shape(
         }
         ParticipantKind::Participant => {
             let text_x = p.box_x + BOX_TEXT_X_PAD;
-            let text_y =
-                base_y + BOX_TEXT_Y_OFFSET + if p.stereotype.is_some() { 7.5 } else { 0.0 };
+            let text_y = base_y + p.text_y_offset + if p.stereotype.is_some() { 7.5 } else { 0.0 };
             let stereo_arg = p.stereotype.as_ref().map(|s| {
                 let display = format!("\u{ab}{s}\u{bb}");
                 (display, p.stereotype_width)
@@ -2580,6 +2593,9 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
     let mut participant_border = "#181818".to_string();
     let mut participant_border_thickness: String = "0.5".to_string();
     let mut participant_font_color = "#000000".to_string();
+    let mut participant_font_size: u32 = PARTICIPANT_FONT_SIZE as u32;
+    let mut participant_font_bold = false;
+    let mut participant_font_italic = false;
     let mut lifeline_border = "#181818".to_string();
     let lifeline_border_thickness: String = "0.5".to_string();
     // Per-participant-kind background overrides. Each defaults to
@@ -2667,6 +2683,16 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
             }
             "participantfontcolor" | "sequenceparticipantfontcolor" => {
                 participant_font_color = resolve_color(val);
+            }
+            "participantfontsize" | "sequenceparticipantfontsize" => {
+                if let Ok(v) = val.parse::<u32>() {
+                    participant_font_size = v;
+                }
+            }
+            "participantfontstyle" | "sequenceparticipantfontstyle" => {
+                let style = val.to_ascii_lowercase();
+                participant_font_bold = style.contains("bold");
+                participant_font_italic = style.contains("italic");
             }
             "sequencelifelinebordercolor" => {
                 lifeline_border = resolve_color(val);
@@ -2831,6 +2857,9 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
         0.0
     };
     let head_box_y = HEAD_BOX_Y + title_band_h + box_band_h + header_band_h;
+    let participant_font_size_f = participant_font_size as f64;
+    let participant_box_h = plantuml_metrics::text_height(participant_font_size_f) + 14.0;
+    let participant_text_y_offset = plantuml_metrics::ascent(participant_font_size_f) + 7.0;
 
     // -----------------------------------------------------------------------
     // Phase 1: Compute participant layouts
@@ -2853,7 +2882,11 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
             } else {
                 p.label.clone()
             };
-            let tw = text_width(&label, PARTICIPANT_FONT_SIZE);
+            let tw = if participant_font_bold {
+                bold_text_width(&label, participant_font_size_f)
+            } else {
+                text_width(&label, participant_font_size_f)
+            };
             // Box width must accommodate the display label (and stereotype if separate)
             let max_text_w = tw.max(st_w);
 
@@ -2908,9 +2941,9 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                     let w = max_text_w + 2.0 * BOX_TEXT_X_PAD;
                     // Box height is taller for stereotyped participants.
                     let h = if st.is_some() {
-                        HEAD_BOX_H + 15.0
+                        participant_box_h + 15.0
                     } else {
-                        HEAD_BOX_H
+                        participant_box_h
                     };
                     (w, h)
                 }
@@ -2923,6 +2956,7 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                 kind: p.kind,
                 stereotype: st,
                 text_width: tw,
+                text_y_offset: participant_text_y_offset,
                 stereotype_width: st_w,
                 box_width: bw,
                 box_height: bh,
@@ -3734,11 +3768,13 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
     // Phase 4: Pre-compute y positions for each event and vertical dimensions
     // -----------------------------------------------------------------------
 
-    // Use the maximum box height across all participants
+    // Use the actual maximum box height across participants. Smaller
+    // `participantFontSize` values shrink the head band rather than reserving
+    // the default 14pt participant height.
     let max_box_h = participants
         .iter()
         .map(|p| p.box_height)
-        .fold(HEAD_BOX_H, f64::max);
+        .fold(0.0_f64, f64::max);
     let lifeline_top = head_box_y + max_box_h + LIFELINE_Y_OFFSET;
 
     // Pre-scan: a bare `note left` / `note right` attached to a message
@@ -4762,6 +4798,9 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
     svg.participant_border = participant_border.clone();
     svg.participant_border_thickness = participant_border_thickness.clone();
     svg.participant_font_color = participant_font_color.clone();
+    svg.participant_font_size = participant_font_size;
+    svg.participant_font_bold = participant_font_bold;
+    svg.participant_font_italic = participant_font_italic;
     svg.lifeline_border = lifeline_border.clone();
     svg.lifeline_border_thickness = lifeline_border_thickness.clone();
     svg.head_box_rx = head_box_rx;
