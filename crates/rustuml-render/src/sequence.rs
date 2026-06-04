@@ -908,13 +908,29 @@ fn parse_gradient_id(defs: &str) -> Option<String> {
     Some(rest[start..start + end].to_string())
 }
 
+fn split_gradient_colors(val: &str) -> Option<(&str, &str)> {
+    for sep in ['/', '\\', '|', '-'] {
+        if let Some((left, right)) = val.split_once(sep) {
+            let left = left.trim();
+            let right = right.trim();
+            if !left.is_empty() && !right.is_empty() {
+                return Some((left, right));
+            }
+        }
+    }
+    None
+}
+
 /// Resolve a `<kind>BackgroundColor` value to a fill string: a `url(#id)`
 /// reference when the value is a `#c1/c2`-style gradient and the oracle
 /// captured the matching `<linearGradient>` def, otherwise the flat colour.
 fn gradient_fill_or(val: &str, gradient_id: &Option<String>) -> String {
-    let is_gradient = val.contains('/') || val.contains('\\') || val.contains('|');
-    if is_gradient && let Some(id) = gradient_id {
+    if split_gradient_colors(val).is_some()
+        && let Some(id) = gradient_id
+    {
         format!("url(#{id})")
+    } else if let Some((first, _)) = split_gradient_colors(val) {
+        resolve_color(first)
     } else {
         resolve_color(val)
     }
@@ -2634,6 +2650,7 @@ fn render_participant_shape(
     _max_box_h: f64,
     fill_color: &str,
     border_color: &str,
+    participant_inner_pad: f64,
 ) {
     // Make the participant's link (if any) available to the group open/close
     // helpers so the shape contents get wrapped in a link anchor.
@@ -2726,7 +2743,7 @@ fn render_participant_shape(
             }
         }
         ParticipantKind::Collections => {
-            let text_x = p.box_x + BOX_TEXT_X_PAD;
+            let text_x = p.box_x + participant_inner_pad;
             let text_y = base_y + COLLECTIONS_OFFSET + BOX_TEXT_Y_OFFSET;
             svg.collections_shape(
                 part_uid,
@@ -2770,7 +2787,7 @@ fn render_participant_shape(
             );
         }
         ParticipantKind::Participant => {
-            let text_x = p.box_x + BOX_TEXT_X_PAD;
+            let text_x = p.box_x + participant_inner_pad;
             let text_y = base_y + p.text_y_offset + if p.stereotype.is_some() { 7.5 } else { 0.0 };
             let stereo_arg = p.stereotype.as_ref().map(|s| {
                 let display = format!("\u{ab}{s}\u{bb}");
@@ -2843,7 +2860,9 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
     let mut participant_font_size: u32 = PARTICIPANT_FONT_SIZE as u32;
     let mut participant_font_bold = false;
     let mut participant_font_italic = false;
+    let mut global_padding = 0.0;
     let mut participant_padding = 0.0;
+    let mut participant_outer_padding_base: Option<f64> = None;
     let mut lifeline_background = "#FFFFFF".to_string();
     let mut lifeline_border = "#181818".to_string();
     let lifeline_border_thickness: String = "0.5".to_string();
@@ -2999,9 +3018,20 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                 participant_font_bold = style.contains("bold");
                 participant_font_italic = style.contains("italic");
             }
-            "participantpadding" | "sequenceparticipantpadding" => {
+            "participantpadding" => {
                 if let Ok(v) = val.parse::<f64>() {
                     participant_padding = v;
+                    participant_outer_padding_base = Some(v);
+                }
+            }
+            "sequenceparticipantpadding" => {
+                if let Ok(v) = val.parse::<f64>() {
+                    participant_padding = v;
+                }
+            }
+            "padding" | "sequencepadding" => {
+                if let Ok(v) = val.parse::<f64>() {
+                    global_padding = v;
                 }
             }
             "sequencelifelinebordercolor" => {
@@ -3145,7 +3175,11 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
     let group_header_text_baseline =
         ascent_with_family(group_header_font_size_f, &group_header_font_family)
             + GROUP_HEADER_TEXT_TOP_PAD;
+    let participant_outer_padding = participant_outer_padding_base
+        .map(|v| v + 2.0 * global_padding)
+        .unwrap_or(0.0);
     let group_frame_margin = GROUP_FRAME_MARGIN + participant_padding;
+    let participant_box_gap = 10.0 + 2.0 * participant_padding;
     let message_label_width = |text: &str| {
         text_render::measure_with_family(
             text,
@@ -3209,12 +3243,17 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
     } else {
         0.0
     };
-    let head_box_y = HEAD_BOX_Y + title_band_h + box_band_h + header_band_h;
+    let participant_inner_pad = BOX_TEXT_X_PAD + global_padding;
+    let head_box_y = HEAD_BOX_Y + global_padding + title_band_h + box_band_h + header_band_h;
     let participant_font_size_f = participant_font_size as f64;
     let participant_box_h =
-        atom_height_with_family(participant_font_size_f, &participant_font_family) + 14.0;
+        atom_height_with_family(participant_font_size_f, &participant_font_family)
+            + 14.0
+            + 2.0 * global_padding;
     let participant_text_y_offset =
-        ascent_with_family(participant_font_size_f, &participant_font_family) + 7.0;
+        ascent_with_family(participant_font_size_f, &participant_font_family)
+            + 7.0
+            + global_padding;
 
     // -----------------------------------------------------------------------
     // Phase 1: Compute participant layouts
@@ -3286,7 +3325,7 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                     // Collections: two stacked rectangles offset by COLLECTIONS_OFFSET.
                     // The layout width must include the stacking offset so the
                     // lifeline centres on the full visual span.
-                    let w = max_text_w + 2.0 * BOX_TEXT_X_PAD + COLLECTIONS_OFFSET;
+                    let w = max_text_w + 2.0 * participant_inner_pad + COLLECTIONS_OFFSET;
                     let h = HEAD_BOX_H + COLLECTIONS_EXTRA_H;
                     (w, h)
                 }
@@ -3297,7 +3336,7 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                     (w, h)
                 }
                 ParticipantKind::Participant => {
-                    let w = max_text_w + 2.0 * BOX_TEXT_X_PAD;
+                    let w = max_text_w + 2.0 * participant_inner_pad;
                     // Box height is taller for stereotyped participants.
                     let h = if st.is_some() {
                         participant_box_h + 15.0
@@ -3785,7 +3824,7 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
     // We also need to consider min_gap_boxes for each pair (from Phase 3),
     // so compute that ahead of the constraint pass.
     let min_gap_boxes_for_pair = |i: usize| -> f64 {
-        participants[i].box_width / 2.0 + participants[i + 1].box_width / 2.0 + 10.0
+        participants[i].box_width / 2.0 + participants[i + 1].box_width / 2.0 + participant_box_gap
     };
     for &(left, right, needed) in &multi_span_constraints {
         let mut cumulative = 0.0_f64;
@@ -3830,7 +3869,8 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
         } else {
             0.0
         };
-        let default_center = HEAD_BOX_Y + group_shift + participants[0].box_width / 2.0;
+        let default_center =
+            HEAD_BOX_Y + participant_outer_padding + group_shift + participants[0].box_width / 2.0;
         participants[0].center_x = default_center.max(min_first_center_x);
         participants[0].box_x = participants[0].center_x - participants[0].box_width / 2.0;
         // PlantUML computes lifeline line x as box_x + (int)(box_width / 2)
@@ -3838,9 +3878,10 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
             participants[0].box_x + (participants[0].box_width / 2.0).floor();
 
         for i in 1..n {
-            // Minimum gap between centers: ensure boxes don't overlap
-            let min_gap_boxes =
-                participants[i - 1].box_width / 2.0 + participants[i].box_width / 2.0 + 10.0; // minimum 10px between box edges
+            // Minimum center gap, including PlantUML's participant edge padding.
+            let min_gap_boxes = participants[i - 1].box_width / 2.0
+                + participants[i].box_width / 2.0
+                + participant_box_gap;
 
             // Gap from message labels
             let gap_from_labels = pair_max_label_width[i - 1];
@@ -4698,7 +4739,7 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
     // A title/caption/footer band wider than the participant span shifted the
     // participants right by `meta_shift` (so `effective_right` already grew by
     // that much); add it once more to keep the band centred and symmetric.
-    let svg_width_exact = svg_width_exact + meta_shift;
+    let svg_width_exact = svg_width_exact + meta_shift + participant_outer_padding;
     let svg_width = svg_width_exact.ceil() as u32;
     // A `footer` directive reserves a band below the content (text_height(10)
     // + 1.0 = 12.777), growing the canvas; the footer text sits in that band.
@@ -5671,6 +5712,7 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                 max_box_h,
                 &fill_color,
                 &border_color,
+                participant_inner_pad,
             );
         }
 
@@ -5688,6 +5730,7 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                 max_box_h,
                 &fill_color,
                 &border_color,
+                participant_inner_pad,
             );
         }
     }
@@ -7397,6 +7440,7 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                 p.box_height,
                 fill_color,
                 &inline_border,
+                participant_inner_pad,
             );
             // Strip the surrounding `<g class="participant participant-head" ...>`
             // wrapper: PlantUML draws the created head box as bare shape elements.
@@ -7624,6 +7668,17 @@ mod tests {
         );
         assert!(svg.contains("participant-head"), "should have head groups");
         assert!(svg.contains("participant-tail"), "should have tail groups");
+    }
+
+    #[test]
+    fn gradient_fill_accepts_dash_separator() {
+        let id = Some("gabc0".to_string());
+        assert_eq!(gradient_fill_or("#59B6EC-#2FA4E7", &id), "url(#gabc0)");
+    }
+
+    #[test]
+    fn gradient_fill_without_defs_uses_first_stop() {
+        assert_eq!(gradient_fill_or("#59B6EC-#2FA4E7", &None), "#59B6EC");
     }
 
     #[test]
