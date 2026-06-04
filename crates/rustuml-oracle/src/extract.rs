@@ -11,8 +11,8 @@ use rustuml_render::layout_oracle::{
     EntityPolygon, EntityRect, EntityText, JsonBox, JsonConnector, NoteBoxGeom, OracleCluster,
     OracleClusterChild, OracleClusterPolygon, OracleDecoration, OracleEdgePath, OracleEntity,
     OracleHandwrittenWarning, OracleLayout, OracleLegend, OracleLegendRect, OracleNoteChild,
-    OracleNoteEllipse, OracleNoteEntity, OracleNoteLine, OracleNotePath, OracleNoteRect,
-    OracleNoteText, RegionDivider,
+    OracleNoteEllipse, OracleNoteEntity, OracleNoteLine, OracleNoteLink, OracleNotePath,
+    OracleNoteRect, OracleNoteText, RegionDivider,
 };
 
 /// Parse the coordinate pairs from a note's body path `d` string and recover
@@ -489,41 +489,61 @@ pub fn extract_oracle_layout(svg: &str) -> Option<OracleLayout> {
                                 }
                             }
                             "text" => {
-                                if let (Some(tx), Some(ty)) =
-                                    (parse_attr(&child, "x"), parse_attr(&child, "y"))
-                                {
-                                    let child_text = collect_text(&child);
-                                    g.text_lines.push((tx, ty, child_text.clone()));
-                                    g.children.push(OracleNoteChild::Text(OracleNoteText {
-                                        x: tx,
-                                        y: ty,
-                                        text: child_text,
-                                        fill: child
-                                            .attribute("fill")
-                                            .unwrap_or("#000000")
-                                            .to_string(),
-                                        font_family: child
-                                            .attribute("font-family")
-                                            .unwrap_or("sans-serif")
-                                            .to_string(),
-                                        font_size: child
-                                            .attribute("font-size")
-                                            .unwrap_or("13")
-                                            .to_string(),
-                                        font_style: child.attribute("font-style").map(String::from),
-                                        font_weight: child
-                                            .attribute("font-weight")
-                                            .map(String::from),
-                                        length_adjust: child
-                                            .attribute("lengthAdjust")
-                                            .map(String::from),
-                                        text_decoration: child
-                                            .attribute("text-decoration")
-                                            .map(String::from),
-                                        text_length: child
-                                            .attribute("textLength")
-                                            .map(String::from),
-                                    }));
+                                if let Some(text) = capture_note_text(&child) {
+                                    g.text_lines.push((text.x, text.y, text.text.clone()));
+                                    g.children.push(OracleNoteChild::Text(text));
+                                }
+                            }
+                            "a" => {
+                                let href = child
+                                    .attribute("href")
+                                    .or_else(|| child.attribute("xlink:href"))
+                                    .map(String::from);
+                                if let Some(href) = href {
+                                    let title = child
+                                        .attribute("title")
+                                        .or_else(|| child.attribute("xlink:title"))
+                                        .unwrap_or(&href)
+                                        .to_string();
+                                    let texts: Vec<_> = child
+                                        .children()
+                                        .filter(|c| c.is_element() && c.tag_name().name() == "text")
+                                        .filter_map(|text| capture_note_text(&text))
+                                        .collect();
+                                    if !texts.is_empty() {
+                                        for text in &texts {
+                                            g.text_lines.push((text.x, text.y, text.text.clone()));
+                                        }
+                                        g.children.push(OracleNoteChild::Link(OracleNoteLink {
+                                            target: child
+                                                .attribute("target")
+                                                .unwrap_or("_top")
+                                                .to_string(),
+                                            xlink_actuate: child
+                                                .attribute("xlink:actuate")
+                                                .unwrap_or("onRequest")
+                                                .to_string(),
+                                            xlink_href: child
+                                                .attribute("xlink:href")
+                                                .unwrap_or(&href)
+                                                .to_string(),
+                                            xlink_show: child
+                                                .attribute("xlink:show")
+                                                .unwrap_or("new")
+                                                .to_string(),
+                                            xlink_title: child
+                                                .attribute("xlink:title")
+                                                .unwrap_or(&title)
+                                                .to_string(),
+                                            xlink_type: child
+                                                .attribute("xlink:type")
+                                                .unwrap_or("simple")
+                                                .to_string(),
+                                            href,
+                                            title,
+                                            texts,
+                                        }));
+                                    }
                                 }
                             }
                             "ellipse" => {
@@ -2139,6 +2159,28 @@ fn collect_text(node: &roxmltree::Node) -> String {
     out
 }
 
+fn capture_note_text(node: &roxmltree::Node<'_, '_>) -> Option<OracleNoteText> {
+    let (Some(x), Some(y)) = (parse_attr(node, "x"), parse_attr(node, "y")) else {
+        return None;
+    };
+    Some(OracleNoteText {
+        x,
+        y,
+        text: collect_text(node),
+        fill: node.attribute("fill").unwrap_or("#000000").to_string(),
+        font_family: node
+            .attribute("font-family")
+            .unwrap_or("sans-serif")
+            .to_string(),
+        font_size: node.attribute("font-size").unwrap_or("13").to_string(),
+        font_style: node.attribute("font-style").map(String::from),
+        font_weight: node.attribute("font-weight").map(String::from),
+        length_adjust: node.attribute("lengthAdjust").map(String::from),
+        text_decoration: node.attribute("text-decoration").map(String::from),
+        text_length: node.attribute("textLength").map(String::from),
+    })
+}
+
 /// Extract a bounding box from an SVG path `d` attribute via grammatical parsing.
 ///
 /// Walks `d` command-by-command, consuming the correct number of numeric arguments
@@ -2517,6 +2559,31 @@ mod tests {
         assert!((storage.height - 20.0).abs() < 0.001);
         assert_eq!(storage.text_x_values, vec![15.0]);
         assert_eq!(storage.text_y_values, vec![25.0]);
+    }
+
+    #[test]
+    fn extract_note_link_child() {
+        let svg = r##"<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 100 50">
+            <g><g class="entity" data-qualified-name="GMN1" data-source-line="2" id="ent0002">
+                <path d="M7,7 L7,32 L86,32 L86,17 L76,7 L7,7" fill="#FEFFDD" style="stroke:#181818;stroke-width:0.5;"/>
+                <a href="https://example.com" target="_top" title="tip" xlink:actuate="onRequest" xlink:href="https://example.com" xlink:show="new" xlink:title="tip" xlink:type="simple">
+                    <text fill="#0000FF" font-family="sans-serif" font-size="13" lengthAdjust="spacing" text-decoration="underline" textLength="29.4531" x="13" y="24">docs</text>
+                </a>
+            </g></g>
+        </svg>"##;
+
+        let layout = extract_oracle_layout(svg).unwrap();
+        assert_eq!(layout.note_entities.len(), 1);
+        let note = &layout.note_entities[0];
+        let geom = note.box_geom.as_ref().unwrap();
+        let Some(OracleNoteChild::Link(link)) = geom.children.get(1) else {
+            panic!("expected note link child after note body path");
+        };
+        assert_eq!(link.href, "https://example.com");
+        assert_eq!(link.title, "tip");
+        assert_eq!(link.texts.len(), 1);
+        assert_eq!(link.texts[0].text, "docs");
+        assert_eq!(link.texts[0].text_decoration.as_deref(), Some("underline"));
     }
 
     #[test]

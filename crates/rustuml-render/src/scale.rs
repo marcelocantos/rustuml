@@ -535,11 +535,11 @@ fn scale_note_child(child: &mut OracleNoteChild, k: f64) {
             }
         }
         OracleNoteChild::Text(text) => {
-            text.x *= k;
-            text.y *= k;
-            text.font_size = scale_number_token(&text.font_size, k);
-            if let Some(text_length) = text.text_length.as_mut() {
-                *text_length = scale_number_token(text_length, k);
+            scale_note_text(text, k);
+        }
+        OracleNoteChild::Link(link) => {
+            for text in &mut link.texts {
+                scale_note_text(text, k);
             }
         }
         OracleNoteChild::Ellipse(ellipse) => {
@@ -560,6 +560,15 @@ fn scale_note_child(child: &mut OracleNoteChild, k: f64) {
                 *style = scale_style(style, k);
             }
         }
+    }
+}
+
+fn scale_note_text(text: &mut crate::layout_oracle::OracleNoteText, k: f64) {
+    text.x *= k;
+    text.y *= k;
+    text.font_size = scale_number_token(&text.font_size, k);
+    if let Some(text_length) = text.text_length.as_mut() {
+        *text_length = scale_number_token(text_length, k);
     }
 }
 

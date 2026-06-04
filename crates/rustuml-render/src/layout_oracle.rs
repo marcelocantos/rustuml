@@ -275,6 +275,7 @@ pub enum OracleNoteChild {
     Path(OracleNotePath),
     Rect(OracleNoteRect),
     Text(OracleNoteText),
+    Link(OracleNoteLink),
     Ellipse(OracleNoteEllipse),
     Line(OracleNoteLine),
 }
@@ -312,6 +313,19 @@ pub struct OracleNoteText {
     pub length_adjust: Option<String>,
     pub text_decoration: Option<String>,
     pub text_length: Option<String>,
+}
+
+#[derive(Debug, Clone)]
+pub struct OracleNoteLink {
+    pub href: String,
+    pub target: String,
+    pub title: String,
+    pub xlink_actuate: String,
+    pub xlink_href: String,
+    pub xlink_show: String,
+    pub xlink_title: String,
+    pub xlink_type: String,
+    pub texts: Vec<OracleNoteText>,
 }
 
 #[derive(Debug, Clone)]
@@ -543,35 +557,25 @@ fn emit_note_child(out: &mut String, child: &OracleNoteChild) {
             );
         }
         OracleNoteChild::Text(text) => {
+            emit_note_text(out, text);
+        }
+        OracleNoteChild::Link(link) => {
             let _ = write!(
                 out,
-                r#"<text fill="{}" font-family="{}" font-size="{}""#,
-                escape_xml_attr(&text.fill),
-                escape_xml_attr(&text.font_family),
-                escape_xml_attr(&text.font_size),
+                r#"<a href="{}" target="{}" title="{}" xlink:actuate="{}" xlink:href="{}" xlink:show="{}" xlink:title="{}" xlink:type="{}">"#,
+                escape_xml_attr(&link.href),
+                escape_xml_attr(&link.target),
+                escape_xml_attr(&link.title),
+                escape_xml_attr(&link.xlink_actuate),
+                escape_xml_attr(&link.xlink_href),
+                escape_xml_attr(&link.xlink_show),
+                escape_xml_attr(&link.xlink_title),
+                escape_xml_attr(&link.xlink_type),
             );
-            if let Some(style) = text.font_style.as_deref() {
-                let _ = write!(out, r#" font-style="{}""#, escape_xml_attr(style));
+            for text in &link.texts {
+                emit_note_text(out, text);
             }
-            if let Some(weight) = text.font_weight.as_deref() {
-                let _ = write!(out, r#" font-weight="{}""#, escape_xml_attr(weight));
-            }
-            if let Some(length_adjust) = text.length_adjust.as_deref() {
-                let _ = write!(out, r#" lengthAdjust="{}""#, escape_xml_attr(length_adjust));
-            }
-            if let Some(decoration) = text.text_decoration.as_deref() {
-                let _ = write!(out, r#" text-decoration="{}""#, escape_xml_attr(decoration));
-            }
-            if let Some(text_length) = text.text_length.as_deref() {
-                let _ = write!(out, r#" textLength="{}""#, escape_xml_attr(text_length));
-            }
-            let _ = write!(
-                out,
-                r#" x="{}" y="{}">{}</text>"#,
-                pm::fmt_coord(text.x),
-                pm::fmt_coord(text.y),
-                escape_xml_text(&text.text),
-            );
+            out.push_str("</a>");
         }
         OracleNoteChild::Ellipse(ellipse) => {
             let _ = write!(
@@ -609,6 +613,38 @@ fn emit_note_child(out: &mut String, child: &OracleNoteChild) {
             );
         }
     }
+}
+
+fn emit_note_text(out: &mut String, text: &OracleNoteText) {
+    let _ = write!(
+        out,
+        r#"<text fill="{}" font-family="{}" font-size="{}""#,
+        escape_xml_attr(&text.fill),
+        escape_xml_attr(&text.font_family),
+        escape_xml_attr(&text.font_size),
+    );
+    if let Some(style) = text.font_style.as_deref() {
+        let _ = write!(out, r#" font-style="{}""#, escape_xml_attr(style));
+    }
+    if let Some(weight) = text.font_weight.as_deref() {
+        let _ = write!(out, r#" font-weight="{}""#, escape_xml_attr(weight));
+    }
+    if let Some(length_adjust) = text.length_adjust.as_deref() {
+        let _ = write!(out, r#" lengthAdjust="{}""#, escape_xml_attr(length_adjust));
+    }
+    if let Some(decoration) = text.text_decoration.as_deref() {
+        let _ = write!(out, r#" text-decoration="{}""#, escape_xml_attr(decoration));
+    }
+    if let Some(text_length) = text.text_length.as_deref() {
+        let _ = write!(out, r#" textLength="{}""#, escape_xml_attr(text_length));
+    }
+    let _ = write!(
+        out,
+        r#" x="{}" y="{}">{}</text>"#,
+        pm::fmt_coord(text.x),
+        pm::fmt_coord(text.y),
+        escape_xml_text(&text.text),
+    );
 }
 
 fn escape_xml_attr(s: &str) -> String {
