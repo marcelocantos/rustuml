@@ -620,8 +620,12 @@ fn calc_entity_dims(
     let is_enum = entity.kind == EntityKind::Enum;
     // Entity labels treat `__` as literal underscores, not underline markup,
     // so width must include those characters.
-    let name_width =
-        text_render::measure_no_underline_with_family(&entity.label, 14.0, false, &font.family);
+    let name_width = text_render::measure_no_underline_with_family(
+        &entity.label,
+        14.0,
+        false,
+        &font.name_family,
+    );
     if entity.kind == EntityKind::State {
         let source_line = if entity.source_line > 0 {
             entity.source_line
@@ -1408,6 +1412,10 @@ struct ClassFontOverrides {
     font_size: Option<u32>,
     /// `skinparam ClassFontName` / `defaultFontName` — base family for class text.
     family: String,
+    /// Class-name family. Usually the same as `family`, but older themes set
+    /// only `circledCharacterFontName`; PlantUML applies that to the class
+    /// header name while leaving member text on the default sans-serif family.
+    name_family: String,
     /// `skinparam ClassFontStyle` — bold/italic styling of the class name.
     font_bold: bool,
     font_italic: bool,
@@ -1427,6 +1435,8 @@ struct ClassFontOverrides {
     /// radius (`size/3 + 6`), which in turn sets the icon ellipse rx/ry, its
     /// vertical centre, and the member-text left inset.
     circled_font_size: u32,
+    /// Explicit `skinparam circledCharacter { radius ... }`.
+    circled_radius_override: Option<f64>,
     /// `skinparam classHeaderBackgroundColor` raw value. When this is a
     /// gradient (`#c1/#c2`) distinct from the body background, the header
     /// repaint rects must reference the header gradient's `<defs>` id rather
@@ -1488,6 +1498,13 @@ impl ClassFontOverrides {
         let family = find(&["ClassFontName", "defaultFontName", "fontName"])
             .map(|v| canonical_class_font_family(&v))
             .unwrap_or_else(|| "sans-serif".to_string());
+        let name_family = find(&["circledCharacterFontName"])
+            .map(|v| canonical_class_font_family(&v))
+            .unwrap_or_else(|| family.clone());
+        let circled_font_size = find(&["circledCharacterFontSize"])
+            .and_then(|v| v.trim().parse::<u32>().ok())
+            .or(default_font_size)
+            .unwrap_or(CIRCLED_CHARACTER_DEFAULT_SIZE);
         Self {
             font_color: find(&["ClassFontColor"]),
             attr_font_color: find(&["ClassAttributeFontColor"]),
@@ -1495,6 +1512,7 @@ impl ClassFontOverrides {
                 .and_then(|v| v.trim().parse::<u32>().ok())
                 .or(default_font_size),
             family,
+            name_family,
             font_bold: style.contains("bold"),
             font_italic: style.contains("italic"),
             stereotype_font_styles,
@@ -1505,9 +1523,12 @@ impl ClassFontOverrides {
             attr_font_italic: attr_style.contains("italic"),
             attr_icon_size: find(&["ClassAttributeIconSize"])
                 .and_then(|v| v.trim().parse::<u32>().ok()),
-            // The CIRCLED_CHARACTER font ignores ClassFontSize; it follows only
-            // defaultFontSize, defaulting to PlantUML's CIRCLED_CHARACTER size 17.
-            circled_font_size: default_font_size.unwrap_or(CIRCLED_CHARACTER_DEFAULT_SIZE),
+            // The CIRCLED_CHARACTER font ignores ClassFontSize; it follows
+            // circledCharacterFontSize, then defaultFontSize, then PlantUML's
+            // CIRCLED_CHARACTER size 17.
+            circled_font_size,
+            circled_radius_override: find(&["circledCharacterRadius"])
+                .and_then(|v| v.trim().parse::<f64>().ok()),
             header_background: find(&["classHeaderBackgroundColor"]),
             class_background: find(&["classBackgroundColor"]),
             border_color: find(&["classBorderColor"]),
@@ -1529,7 +1550,8 @@ impl ClassFontOverrides {
     /// `SkinParam.getCircledCharacterRadius`: `circled_font_size / 3 + 6`
     /// (integer division). At the default circled size (17) this is 11.
     fn circled_radius(&self) -> f64 {
-        (self.circled_font_size / 3 + 6) as f64
+        self.circled_radius_override
+            .unwrap_or((self.circled_font_size / 3 + 6) as f64)
     }
 
     fn visibility_icon_geom(&self) -> VisibilityIconGeom {
@@ -2997,7 +3019,7 @@ fn render_entity_content(
         &entity.label,
         name_font_size as f64,
         name_bold,
-        &font.family,
+        &font.name_family,
     );
     if dim.has_stereotypes {
         for (i, stereo_text) in format_stereotype_lines(&entity.stereotypes)
@@ -3017,7 +3039,7 @@ fn render_entity_content(
                     x: stereo_x,
                     y: stereo_y,
                     font_size: 12,
-                    font_family: &font.family,
+                    font_family: &font.name_family,
                     fill: text_fill,
                     bold: false,
                     italic: true,
@@ -3054,7 +3076,7 @@ fn render_entity_content(
                         line,
                         12.0,
                         false,
-                        &font.family,
+                        &font.name_family,
                     ))
                 })
                 .fold(0.0_f64, f64::max);
@@ -3098,7 +3120,7 @@ fn render_entity_content(
             x: name_x,
             y: name_y,
             font_size: name_font_size,
-            font_family: &font.family,
+            font_family: &font.name_family,
             fill: text_fill,
             bold: name_bold,
             italic: name_italic,
