@@ -37,6 +37,9 @@ const SHAPE_DELTA: f64 = 12.0;
 const BINARY_HEIGHT: f64 = 30.0;
 /// Concise ribbon default height (`PanelsState.DEFAULT_RIBBON_HEIGHT`).
 const CONCISE_RIBBON_HEIGHT: f64 = 24.0;
+/// Initial state assignments before the first `@N` draw one fixed-width segment
+/// immediately before the first ruler tick.
+const INITIAL_STATE_WIDTH: f64 = 40.0;
 /// Empirically-derived padding added by the image cropper.
 const WIDTH_PAD: f64 = 20.373;
 const HEIGHT_PAD: f64 = 16.877;
@@ -201,6 +204,15 @@ pub fn render(diagram: &TimingDiagram, _theme: &Theme) -> String {
     let delta = time_max - time_min;
     let ruler_width = (delta as f64 / tick_unit as f64 + 1.0) * tick_px;
     let nb_tick = (1 + delta / tick_unit).min(1000) as usize;
+    let pre_ruler_width = if diagram
+        .timelines
+        .iter()
+        .any(|tl| tl.changes.iter().any(|ch| ch.before_first_time))
+    {
+        INITIAL_STATE_WIDTH
+    } else {
+        0.0
+    };
 
     // ── Constraint owner ──────────────────────────────────────────────────────
     // Without an explicit player prefix, PlantUML attaches time constraints to
@@ -281,7 +293,7 @@ pub fn render(diagram: &TimingDiagram, _theme: &Theme) -> String {
     let vtop = ORIGIN + header_band_h + title_offset;
 
     // ── Coordinate helpers ────────────────────────────────────────────────────
-    let first_tick_x = ORIGIN + part1_max_width + MARGIN_X1;
+    let first_tick_x = ORIGIN + part1_max_width + MARGIN_X1 + pre_ruler_width;
     let frame_left = ORIGIN;
     let frame_right = first_tick_x + ruler_width + MARGIN_X2;
     let axis_top = vtop;
@@ -364,6 +376,7 @@ pub fn render(diagram: &TimingDiagram, _theme: &Theme) -> String {
                 &tx,
                 ruler_width,
                 first_tick_x,
+                pre_ruler_width,
                 vtop,
             ),
             TimelineKind::Concise => {
@@ -681,6 +694,7 @@ fn draw_robust(
     tx: &dyn Fn(i64) -> f64,
     ruler_width: f64,
     first_tick_x: f64,
+    pre_ruler_width: f64,
     vtop: f64,
 ) {
     let changes = &p.timeline.changes;
@@ -703,7 +717,11 @@ fn draw_robust(
     }
 
     for (i, ch) in changes.iter().enumerate() {
-        let a = tx(ch.at);
+        let a = if ch.before_first_time {
+            tx(ch.at) - pre_ruler_width
+        } else {
+            tx(ch.at)
+        };
         let b = if i + 1 < changes.len() {
             tx(changes[i + 1].at)
         } else {
@@ -1061,14 +1079,17 @@ mod tests {
                     StateChange {
                         at: 0,
                         state: "Idle".into(),
+                        before_first_time: false,
                     },
                     StateChange {
                         at: 100,
                         state: "Processing".into(),
+                        before_first_time: false,
                     },
                     StateChange {
                         at: 300,
                         state: "Idle".into(),
+                        before_first_time: false,
                     },
                 ],
                 clock: None,

@@ -98,6 +98,15 @@ pub struct StateChange {
     pub at: i64,
     /// The state name (e.g., `Idle`, `Processing`).
     pub state: String,
+    /// True when the state assignment appeared before the first explicit `@N`
+    /// marker. PlantUML renders that as an initial segment immediately before
+    /// the first ruler tick rather than as a zero-length transition at time 0.
+    #[serde(default, skip_serializing_if = "is_false")]
+    pub before_first_time: bool,
+}
+
+fn is_false(value: &bool) -> bool {
+    !*value
 }
 
 /// A highlighted time range.

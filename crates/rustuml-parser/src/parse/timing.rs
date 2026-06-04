@@ -44,6 +44,8 @@ struct TimingParser {
     scale: Option<Scale>,
     /// Clock timelines: (timeline_id, period). Used to auto-generate time points.
     clock_periods: Vec<(String, i64)>,
+    /// Whether the source has seen an explicit `@N` or `@+N` time marker yet.
+    seen_time_marker: bool,
     /// Notes attached to timelines.
     notes: Vec<TimingNote>,
     /// Source lines of title/header/footer directives.
@@ -63,6 +65,7 @@ impl TimingParser {
             annotations: Vec::new(),
             scale: None,
             clock_periods: Vec::new(),
+            seen_time_marker: false,
             notes: Vec::new(),
             title_line: None,
             header_line: None,
@@ -101,7 +104,9 @@ impl TimingParser {
     fn parse_line(&mut self, line_num: usize, line: &str) -> Result<(), ParseError> {
         // Skip @startuml / @enduml.
         if line.starts_with('@') {
-            self.try_time_point(line);
+            if self.try_time_point(line) {
+                self.seen_time_marker = true;
+            }
             self.try_annotation(line);
             return Ok(());
         }
@@ -305,6 +310,7 @@ impl TimingParser {
                 tl.changes.push(StateChange {
                     at: self.current_time,
                     state,
+                    before_first_time: !self.seen_time_marker,
                 });
                 self.time_points.insert(self.current_time);
                 true
