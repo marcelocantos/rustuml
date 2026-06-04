@@ -86,6 +86,12 @@ const ENUM_TEXT_OFFSET: f64 = 6.0;
 const VIS_ICON_OFFSET: f64 = 11.0;
 /// Visibility icon radius (small circle for method visibility).
 const VIS_ICON_R: f64 = 3.0;
+/// Default half-size for diamond and triangle visibility icons.
+const VIS_ICON_ANGLED_HALF: f64 = 4.0;
+/// PlantUML derives the round/square half-size as `classAttributeIconSize / 3`.
+const VIS_ICON_SIZE_RADIUS_DIVISOR: u32 = 3;
+/// Diamond/triangle horizontal half-size is one pixel inside half the icon box.
+const VIS_ICON_ANGLED_INSET: f64 = 1.0;
 /// Right padding for header (icon + name) area.
 const HEADER_RIGHT_PAD: f64 = 3.0;
 /// Right padding for member text area.
@@ -1283,6 +1289,8 @@ struct ClassFontOverrides {
     /// `skinparam ClassAttributeFontStyle` — member bold/italic styling.
     attr_font_bold: bool,
     attr_font_italic: bool,
+    /// `skinparam ClassAttributeIconSize` — visibility modifier icon size.
+    attr_icon_size: Option<u32>,
     /// Resolved font size of the circled-character header icon. PlantUML sizes
     /// it from `defaultFontSize` (falling back to the `CIRCLED_CHARACTER`
     /// default of 17 — *not* `ClassFontSize`). This drives the circled icon's
@@ -1340,6 +1348,8 @@ impl ClassFontOverrides {
                 .or(default_font_size),
             attr_font_bold: attr_style.contains("bold"),
             attr_font_italic: attr_style.contains("italic"),
+            attr_icon_size: find(&["ClassAttributeIconSize"])
+                .and_then(|v| v.trim().parse::<u32>().ok()),
             // The CIRCLED_CHARACTER font ignores ClassFontSize; it follows only
             // defaultFontSize, defaulting to PlantUML's CIRCLED_CHARACTER size 17.
             circled_font_size: default_font_size.unwrap_or(CIRCLED_CHARACTER_DEFAULT_SIZE),
@@ -1361,6 +1371,39 @@ impl ClassFontOverrides {
     /// (integer division). At the default circled size (17) this is 11.
     fn circled_radius(&self) -> f64 {
         (self.circled_font_size / 3 + 6) as f64
+    }
+
+    fn visibility_icon_geom(&self) -> VisibilityIconGeom {
+        VisibilityIconGeom::from_attribute_icon_size(self.attr_icon_size)
+    }
+}
+
+#[derive(Clone, Copy)]
+struct VisibilityIconGeom {
+    center_offset: f64,
+    round_half: f64,
+    angled_half: f64,
+    triangle_half_y: f64,
+}
+
+impl VisibilityIconGeom {
+    fn from_attribute_icon_size(size: Option<u32>) -> Self {
+        if let Some(size) = size {
+            let round_half = (size / VIS_ICON_SIZE_RADIUS_DIVISOR) as f64;
+            Self {
+                center_offset: size as f64,
+                round_half,
+                angled_half: (size as f64 / 2.0 - VIS_ICON_ANGLED_INSET).max(round_half),
+                triangle_half_y: round_half,
+            }
+        } else {
+            Self {
+                center_offset: VIS_ICON_OFFSET,
+                round_half: VIS_ICON_R,
+                angled_half: VIS_ICON_ANGLED_HALF,
+                triangle_half_y: VIS_ICON_R,
+            }
+        }
     }
 }
 
@@ -2219,6 +2262,7 @@ fn render_entity_content(
         size: font.attr_font_size.unwrap_or(14),
         bold: font.attr_font_bold,
         italic: font.attr_font_italic,
+        icon: font.visibility_icon_geom(),
     };
     let style_default = format!("stroke:{};stroke-width:{};", border_col, BORDER_WIDTH);
     let style = oracle_style.unwrap_or(style_default.as_str());
@@ -3622,7 +3666,8 @@ fn render_member_line(
             svg.push_str(anchor);
         }
 
-        let vis_cx = entity_x + VIS_ICON_OFFSET;
+        let icon = attr_font.icon;
+        let vis_cx = entity_x + icon.center_offset;
         match member.visibility {
             Visibility::Public => {
                 let fill = if member.kind == MemberKind::Method {
@@ -3634,7 +3679,7 @@ fn render_member_line(
                     svg,
                     r#"<ellipse cx="{}" cy="{}" fill="{}" rx="{}" ry="{}" style="stroke:{};stroke-width:{};"/>"#,
                     fmt4(vis_cx), fmt_tl(icon_cy),
-                    fill, VIS_ICON_R as i64, VIS_ICON_R as i64,
+                    fill, icon.round_half as i64, icon.round_half as i64,
                     VIS_PUBLIC_STROKE, ICON_STROKE_WIDTH,
                 )
                 .unwrap();
@@ -3645,13 +3690,17 @@ fn render_member_line(
                 } else {
                     VIS_PRIVATE_FILL_FIELD
                 };
-                // Square icon (6x6).
-                let sq_x = vis_cx - 3.0;
-                let sq_y = icon_cy - 3.0;
+                let sq_x = vis_cx - icon.round_half;
+                let sq_y = icon_cy - icon.round_half;
+                let side = icon.round_half * 2.0;
                 write!(
                     svg,
-                    r#"<rect fill="{}" height="6" style="stroke:{};stroke-width:{};" width="6" x="{}" y="{}"/>"#,
-                    fill, VIS_PRIVATE_STROKE, ICON_STROKE_WIDTH,
+                    r#"<rect fill="{}" height="{}" style="stroke:{};stroke-width:{};" width="{}" x="{}" y="{}"/>"#,
+                    fill,
+                    fmt4(side),
+                    VIS_PRIVATE_STROKE,
+                    ICON_STROKE_WIDTH,
+                    fmt4(side),
                     fmt4(sq_x), fmt_tl(sq_y),
                 )
                 .unwrap();
@@ -3667,10 +3716,10 @@ fn render_member_line(
                     svg,
                     r#"<polygon fill="{}" points="{},{},{},{},{},{},{},{}" style="stroke:{};stroke-width:{};"/>"#,
                     fill,
-                    fmt4(vis_cx), fmt_tl(icon_cy - 4.0),
-                    fmt4(vis_cx + 4.0), fmt_tl(icon_cy),
-                    fmt4(vis_cx), fmt_tl(icon_cy + 4.0),
-                    fmt4(vis_cx - 4.0), fmt_tl(icon_cy),
+                    fmt4(vis_cx), fmt_tl(icon_cy - icon.angled_half),
+                    fmt4(vis_cx + icon.angled_half), fmt_tl(icon_cy),
+                    fmt4(vis_cx), fmt_tl(icon_cy + icon.angled_half),
+                    fmt4(vis_cx - icon.angled_half), fmt_tl(icon_cy),
                     VIS_PROTECTED_STROKE, ICON_STROKE_WIDTH,
                 )
                 .unwrap();
@@ -3682,15 +3731,15 @@ fn render_member_line(
                     VIS_PACKAGE_FILL_FIELD
                 };
                 // Triangle icon (3 points, pointing up). icon_cy is the bbox
-                // centre; the triangle spans ±3 vertically (height 6) so that
+                // centre; the triangle spans symmetrically vertically so that
                 // its centre coincides with the oracle-supplied polygon centre.
                 write!(
                     svg,
                     r#"<polygon fill="{}" points="{},{},{},{},{},{}" style="stroke:{};stroke-width:{};"/>"#,
                     fill,
-                    fmt4(vis_cx), fmt_tl(icon_cy - 3.0),
-                    fmt4(vis_cx - 4.0), fmt_tl(icon_cy + 3.0),
-                    fmt4(vis_cx + 4.0), fmt_tl(icon_cy + 3.0),
+                    fmt4(vis_cx), fmt_tl(icon_cy - icon.triangle_half_y),
+                    fmt4(vis_cx - icon.angled_half), fmt_tl(icon_cy + icon.triangle_half_y),
+                    fmt4(vis_cx + icon.angled_half), fmt_tl(icon_cy + icon.triangle_half_y),
                     VIS_PACKAGE_STROKE, ICON_STROKE_WIDTH,
                 )
                 .unwrap();
@@ -3702,8 +3751,8 @@ fn render_member_line(
                     r##"<ellipse cx="{}" cy="{}" fill="#000000" rx="{}" ry="{}" style="stroke:#000000;stroke-width:{};"/>"##,
                     fmt4(vis_cx),
                     fmt_tl(icon_cy),
-                    VIS_ICON_R as i64,
-                    VIS_ICON_R as i64,
+                    icon.round_half as i64,
+                    icon.round_half as i64,
                     ICON_STROKE_WIDTH,
                 )
                 .unwrap();
@@ -3772,6 +3821,7 @@ struct AttrFont<'a> {
     size: u32,
     bold: bool,
     italic: bool,
+    icon: VisibilityIconGeom,
 }
 
 // ---------------------------------------------------------------------------
