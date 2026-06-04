@@ -596,21 +596,20 @@ const HNOTE_TEXT_Y_OFFSET: f64 = NOTE_TEXT_Y_OFFSET - 1.0;
 // Group layout constants (reverse-engineered from golden SVGs)
 // ---------------------------------------------------------------------------
 
-/// Vertical space consumed by a group start header.
-#[allow(dead_code)]
-const GROUP_HEADER_HEIGHT: f64 = 17.310546875;
+/// Difference between the drawn group header tab height and the vertical space
+/// advanced before the first inner message.
+const GROUP_HEADER_INNER_PAD_DROP: f64 = 8.0;
+/// First-event groups spend 2px extra above the frame, reducing the inner pad by
+/// the same amount so the first inner message remains aligned.
+const GROUP_HEADER_FIRST_PAD_ADJUST: f64 = 2.0;
+/// Tab label baseline is 1px below the font ascent from the frame top.
+const GROUP_HEADER_TEXT_TOP_PAD: f64 = 1.0;
 /// Gap from preceding message y to group frame top.
 const GROUP_GAP_AFTER_MSG: f64 = 15.0;
 /// Gap from the lifeline top to the group frame top when a group is the very
 /// first event (no preceding message). PlantUML reserves 2px more headroom in
 /// this case than the standalone-note first gap.
 const GROUP_GAP_FIRST: f64 = 17.0;
-/// Extra y advance after GroupStart event_y (before first inner message).
-const GROUP_INNER_TOP_PAD: f64 = 9.310546875;
-/// When a group is the very first event, the inner top pad is reduced by the
-/// same 2px that the frame top was pushed down, keeping the first inner
-/// message arrow in its golden position.
-const GROUP_INNER_TOP_PAD_FIRST: f64 = GROUP_INNER_TOP_PAD - 2.0;
 /// Vertical space consumed by a group else divider.
 const GROUP_ELSE_HEIGHT: f64 = 9.0;
 /// Extra y advance after GroupElse event_y (before next inner message).
@@ -2616,6 +2615,7 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
     let mut divider_font_color = "#000000".to_string();
     let mut divider_font_size: u32 = MSG_FONT_SIZE as u32;
     let mut group_background = "#EEEEEE".to_string();
+    let mut group_header_font_size: u32 = MSG_FONT_SIZE as u32;
     // Message label horizontal alignment on the arrow span. PlantUML's
     // `skinparam SequenceMessageAlign` accepts left (default) | center | right.
     let mut message_align = MessageAlign::Left;
@@ -2765,6 +2765,11 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
             "sequencegroupbackgroundcolor" => {
                 group_background = gradient_fill_or(val, &gradient_id);
             }
+            "sequencegroupheaderfontsize" => {
+                if let Ok(v) = val.parse::<u32>() {
+                    group_header_font_size = v;
+                }
+            }
             "sequencemessagealign" => {
                 message_align = match val.to_ascii_lowercase().as_str() {
                     "center" => MessageAlign::Center,
@@ -2808,6 +2813,12 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
     let message_font_size_f = message_font_size as f64;
     let message_text_height = plantuml_metrics::text_height(message_font_size_f);
     let message_text_y_drop = plantuml_metrics::descent(message_font_size_f) + 2.0;
+    let group_header_font_size_f = group_header_font_size as f64;
+    let group_header_height = plantuml_metrics::text_height(group_header_font_size_f) + 2.0;
+    let group_inner_top_pad = group_header_height - GROUP_HEADER_INNER_PAD_DROP;
+    let group_inner_top_pad_first = group_inner_top_pad - GROUP_HEADER_FIRST_PAD_ADJUST;
+    let group_header_text_baseline =
+        plantuml_metrics::ascent(group_header_font_size_f) + GROUP_HEADER_TEXT_TOP_PAD;
     let message_label_width = |text: &str| {
         if message_font_bold {
             bold_text_width(text, message_font_size_f)
@@ -3993,10 +4004,10 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                     // the lifeline top when the group is the first event).
                     let inner_pad = if msg_count == 0 {
                         y += GROUP_GAP_FIRST;
-                        GROUP_INNER_TOP_PAD_FIRST
+                        group_inner_top_pad_first
                     } else {
                         y += GROUP_GAP_AFTER_MSG;
-                        GROUP_INNER_TOP_PAD
+                        group_inner_top_pad
                     };
                     event_y_positions.push(y);
                     // Advance y past the header so subsequent messages are positioned correctly.
@@ -4266,7 +4277,7 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                 };
                 let (tab_text, guard_label) =
                     group_tab_and_guard(g.kind, kind_str, g.label.as_ref());
-                let kw = bold_text_width(tab_text, MSG_FONT_SIZE);
+                let kw = bold_text_width(tab_text, group_header_font_size_f);
                 let tab_right = fl + kw + 45.0;
                 let guard_right = if let Some(label) = guard_label {
                     let guard = format!("[{label}]");
@@ -4707,7 +4718,7 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                             };
                             let (tab_text, guard_label) =
                                 group_tab_and_guard(g.kind, kind_str, g.label.as_ref());
-                            let kw = bold_text_width(tab_text, MSG_FONT_SIZE);
+                            let kw = bold_text_width(tab_text, group_header_font_size_f);
                             let tab_right = frame_left + kw + 45.0;
                             if let Some(label) = guard_label {
                                 let guard = format!("[{label}]");
@@ -6614,10 +6625,10 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                 // This matches PlantUML's SVG element order.
                 let (tab_text, guard_label) =
                     group_tab_and_guard(g.kind, kind_str, g.label.as_ref());
-                let kind_w = bold_text_width(tab_text, MSG_FONT_SIZE);
+                let kind_w = bold_text_width(tab_text, group_header_font_size_f);
                 let tab_right = frame_left + kind_w + 45.0;
-                let tab_bottom_left = frame_top + GROUP_HEADER_HEIGHT;
-                let tab_bottom_right = frame_top + GROUP_HEADER_HEIGHT - 10.0;
+                let tab_bottom_left = frame_top + group_header_height;
+                let tab_bottom_right = frame_top + group_header_height - 10.0;
                 write!(
                     svg.buf,
                     r##"<path d="M{left},{top} L{right},{top} L{right},{br} L{diag},{bl} L{left},{bl} L{left},{top}" fill="{fill}" style="stroke:#000000;stroke-width:1.5;"/>"##,
@@ -6648,8 +6659,8 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                     tab_text,
                     &TextBase {
                         x: frame_left + 15.0,
-                        y: frame_top + 13.568359375,
-                        font_size: 13,
+                        y: frame_top + group_header_text_baseline,
+                        font_size: group_header_font_size,
                         font_family: "sans-serif",
                         fill: "#000000",
                         bold: true,
