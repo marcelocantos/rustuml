@@ -211,12 +211,17 @@ fn bold_text_width_with_family(text: &str, font_size: f64, font_family: &str) ->
 }
 
 fn canonical_font_family(value: &str) -> String {
-    let trimmed = value.trim().trim_matches('"').trim_matches('\'');
+    let raw = value.trim();
+    let quoted = (raw.starts_with('"') && raw.ends_with('"'))
+        || (raw.starts_with('\'') && raw.ends_with('\''));
+    let trimmed = raw.trim_matches('"').trim_matches('\'');
     if trimmed.is_empty()
         || trimmed.eq_ignore_ascii_case("sansserif")
         || trimmed.eq_ignore_ascii_case("sans-serif")
     {
         "sans-serif".to_string()
+    } else if quoted {
+        format!("'{trimmed}'")
     } else {
         trimmed.to_string()
     }
@@ -2846,7 +2851,7 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
     let mut participant_outer_padding_base: Option<f64> = None;
     let mut lifeline_background = "#FFFFFF".to_string();
     let mut lifeline_border = "#181818".to_string();
-    let lifeline_border_thickness: String = "0.5".to_string();
+    let mut lifeline_border_thickness: String = "0.5".to_string();
     // Per-participant-kind background overrides. Each defaults to
     // `participant_fill`; the relevant `<kind>BackgroundColor` skinparam
     // (with or without the `sequence` prefix) sets it.
@@ -2918,6 +2923,13 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                     note_font_size = v;
                     divider_font_size = v;
                     group_header_font_size = v;
+                }
+            }
+            "__stylerootlinethickness" => {
+                if let Ok(v) = val.parse::<f64>() {
+                    let thickness = plantuml_metrics::fmt_coord(v);
+                    participant_border_thickness = thickness.clone();
+                    lifeline_border_thickness = thickness;
                 }
             }
             "defaultfontname" => {
@@ -4224,6 +4236,7 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
     let last_effective_y;
     {
         let mut y = lifeline_top;
+        let message_vertical_padding = 2.0 * global_padding;
         for (idx, event) in diagram.events.iter().take(page1_end).enumerate() {
             let (has_text, event_text_height) = match event {
                 Event::Message(msg) => {
@@ -4269,9 +4282,10 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                     // next event down).
                     let note_extra = msg_note_extra.get(&idx).copied();
                     if msg_count == 0 {
-                        y += first_msg_offset(has_text, event_text_height);
+                        y += first_msg_offset(has_text, event_text_height)
+                            + message_vertical_padding;
                     } else {
-                        y += msg_step(has_text, event_text_height);
+                        y += msg_step(has_text, event_text_height) + message_vertical_padding;
                     }
                     if let Some(extra) = note_extra {
                         y += extra;
@@ -4295,9 +4309,10 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                 Event::Return(_) => {
                     let note_extra = msg_note_extra.get(&idx).copied();
                     if msg_count == 0 {
-                        y += first_msg_offset(has_text, event_text_height);
+                        y += first_msg_offset(has_text, event_text_height)
+                            + message_vertical_padding;
                     } else {
-                        y += msg_step(has_text, event_text_height);
+                        y += msg_step(has_text, event_text_height) + message_vertical_padding;
                     }
                     if let Some(extra) = note_extra {
                         y += extra;
@@ -4720,7 +4735,7 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
     // A title/caption/footer band wider than the participant span shifted the
     // participants right by `meta_shift` (so `effective_right` already grew by
     // that much); add it once more to keep the band centred and symmetric.
-    let svg_width_exact = svg_width_exact + meta_shift + participant_outer_padding;
+    let svg_width_exact = svg_width_exact + meta_shift + participant_outer_padding - global_padding;
     let svg_width = svg_width_exact.ceil() as u32;
     // A `footer` directive reserves a band below the content (text_height(10)
     // + 1.0 = 12.777), growing the canvas; the footer text sits in that band.
@@ -4732,7 +4747,7 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
     let mut svg_height = if diagram.hide_footbox {
         (lifeline_bottom + footer_band_h).ceil() as u32
     } else {
-        (tail_box_y + max_box_h + BOTTOM_MARGIN + footer_band_h).ceil() as u32
+        (tail_box_y + max_box_h + BOTTOM_MARGIN + footer_band_h + global_padding).ceil() as u32
     };
     // Caption adds 20 px of vertical space below the foot boxes (one 14-px
     // text line + descent + bottom margin). The strict golden height for a
@@ -5868,13 +5883,14 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                     };
                     let loop_right = cx + SELF_MSG_EXTEND;
                     let loop_bottom = msg_y + SELF_MSG_DROP;
-                    let text_x = cx + SELF_MSG_TEXT_X_PAD;
+                    let text_x = cx + SELF_MSG_TEXT_X_PAD + global_padding;
                     let text_y_pos = msg_y
                         - rendered_label_y_drop_with_family(
                             &label,
                             message_font_size_f,
                             &message_font_family,
-                        );
+                        )
+                        - global_padding;
 
                     // Open the message group
                     write!(
@@ -6090,11 +6106,12 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                             &label,
                             message_font_size_f,
                             &message_font_family,
-                        );
+                        )
+                        - global_padding;
                     let text_x = if is_right {
-                        from_x_shifted + MSG_TEXT_LEFT_PAD
+                        from_x_shifted + MSG_TEXT_LEFT_PAD + global_padding
                     } else {
-                        to_x + target_shift + LEFT_ARROW_TEXT_PAD + 1.0
+                        to_x + target_shift + LEFT_ARROW_TEXT_PAD + 1.0 + global_padding
                     };
 
                     if is_right {
@@ -6447,7 +6464,8 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                         &label,
                         message_font_size_f,
                         &message_font_family,
-                    );
+                    )
+                    - global_padding;
 
                 // Return messages are always dotted; arrow style matches the original
                 let line_style = "stroke-dasharray:2,2;";
@@ -6455,7 +6473,7 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                 if is_right {
                     // Right-pointing return (unusual but possible)
                     let tip_x = to_x - ARROW_TIP_GAP;
-                    let text_x = from_x + MSG_TEXT_LEFT_PAD;
+                    let text_x = from_x + MSG_TEXT_LEFT_PAD + global_padding;
                     if ret_open {
                         svg.message_open_arrow(
                             &from_uid,
@@ -6517,7 +6535,7 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                     let target_shift = if to_active { ACTIVATION_HALF_W } else { 0.0 };
                     let tip_x = to_x + target_shift + 1.0;
                     let line_x2_end = from_x - 1.0;
-                    let text_x = to_x + target_shift + LEFT_ARROW_TEXT_PAD + 1.0;
+                    let text_x = to_x + target_shift + LEFT_ARROW_TEXT_PAD + 1.0 + global_padding;
 
                     if ret_open {
                         svg.message_open_arrow(

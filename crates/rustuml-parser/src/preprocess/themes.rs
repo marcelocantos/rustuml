@@ -130,6 +130,7 @@ pub(super) fn strip_front_matter(source: &str) -> &str {
 pub(super) fn flatten_theme_output(lines: &[String]) -> Vec<String> {
     let mut out = Vec::with_capacity(lines.len());
     let mut in_style = false;
+    let mut style_scope: Option<String> = None;
     let mut skin_prefix: Option<String> = None;
 
     for raw in lines {
@@ -138,8 +139,22 @@ pub(super) fn flatten_theme_output(lines: &[String]) -> Vec<String> {
         // `<style>` block: drop everything up to `</style>` (case-sensitive,
         // matching PlantUML's own convention).
         if in_style {
+            if line == "}" {
+                style_scope = None;
+            } else if let Some(scope) = line.strip_suffix('{') {
+                style_scope = Some(scope.trim().to_ascii_lowercase());
+            } else if style_scope.as_deref() == Some("root")
+                && let Some((key, value)) = line.split_once(char::is_whitespace)
+                && key.eq_ignore_ascii_case("LineThickness")
+            {
+                out.push(format!(
+                    "skinparam __styleRootLineThickness {}",
+                    value.trim()
+                ));
+            }
             if line.contains("</style>") {
                 in_style = false;
+                style_scope = None;
             }
             continue;
         }
@@ -260,6 +275,26 @@ mod tests {
         ];
         let out = flatten_theme_output(&input);
         assert_eq!(out, vec!["skinparam shadowing false".to_string()]);
+    }
+
+    #[test]
+    fn flatten_preserves_root_line_thickness_from_style() {
+        let input = vec![
+            "<style>".to_string(),
+            "root {".to_string(),
+            "  LineThickness 1".to_string(),
+            "  Padding 6".to_string(),
+            "}".to_string(),
+            "activity {".to_string(),
+            "  LineThickness 2".to_string(),
+            "}".to_string(),
+            "</style>".to_string(),
+        ];
+        let out = flatten_theme_output(&input);
+        assert_eq!(
+            out,
+            vec!["skinparam __styleRootLineThickness 1".to_string()]
+        );
     }
 
     #[test]
