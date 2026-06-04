@@ -15,7 +15,7 @@
 use rustuml_parser::diagram::regex_diagram::{GroupKind, RegexDiagram, RegexNode};
 
 use crate::layout_oracle::OracleLayout;
-use crate::plantuml_metrics::{descent, fmt_coord, text_height, text_width};
+use crate::plantuml_metrics::{ascent, descent, fmt_coord, text_height, text_width};
 use crate::style::Theme;
 use crate::svg::SvgBuilder;
 
@@ -23,6 +23,7 @@ const FONT_SIZE: f64 = 14.0;
 const COUNT_FONT_SIZE: f64 = 12.0;
 /// Outer margin around the whole diagram (PlantUML's delta(10) + 5px title margin).
 const OUTER: f64 = 15.0;
+const TITLE_TOP: f64 = 20.0;
 const LINE_STYLE: &str = r#"style="stroke:#181818;stroke-width:1;""#;
 
 /// One cubic Bézier segment: `(control1, control2, endpoint)` in local coords.
@@ -956,16 +957,38 @@ pub fn render(diagram: &RegexDiagram, _theme: &Theme) -> String {
 
     let content_w = tile.width();
     let rail = OUTER + tile.h1();
-    let canvas_w = (OUTER + content_w + OUTER).ceil();
-    let canvas_h = (OUTER + tile.height() + OUTER).ceil();
+    let canvas_w_exact = OUTER + content_w + OUTER;
+    let title_offset = if diagram.meta.title.is_some() {
+        TITLE_TOP + text_height(FONT_SIZE) + 1.0
+    } else {
+        0.0
+    };
+    let canvas_w = canvas_w_exact.ceil();
+    let canvas_h = (OUTER + tile.height() + OUTER + title_offset).ceil();
 
     let mut svg = SvgBuilder::new_plantuml(canvas_w, canvas_h, "REGEX");
+
+    if let Some(title) = &diagram.meta.title {
+        let tw = text_width(title, FONT_SIZE, true);
+        let x = (canvas_w_exact - 1.0 - tw) / 2.0;
+        let y = TITLE_TOP + ascent(FONT_SIZE);
+        let sl = diagram.meta.title_line.unwrap_or(1);
+        svg.raw(&format!(r#"<g class="title" data-source-line="{sl}">"#));
+        svg.raw(&format!(
+            r##"<text fill="#000000" font-family="sans-serif" font-size="14" font-weight="700" lengthAdjust="spacing" textLength="{}" x="{}" y="{}">{}</text>"##,
+            fmt_coord(tw),
+            fmt_coord(x),
+            fmt_coord(y),
+            escape_xml(title)
+        ));
+        svg.raw("</g>");
+    }
 
     {
         let mut ctx = Ctx {
             svg: &mut svg,
             dx: OUTER,
-            dy: rail - tile.h1(),
+            dy: title_offset + rail - tile.h1(),
         };
         tile.draw(&mut ctx);
     }

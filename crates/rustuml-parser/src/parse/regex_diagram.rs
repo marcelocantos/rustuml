@@ -9,16 +9,22 @@ use crate::diagram::regex_diagram::{GroupKind, RegexDiagram, RegexNode};
 
 /// Parse pre-processed lines into a [`RegexDiagram`].
 pub fn parse_regex_diagram(lines: &[String]) -> Result<RegexDiagram, ParseError> {
-    // Join lines, skip @start/@end markers (already stripped by preprocessor).
-    let pattern = lines
-        .iter()
-        .map(|l| l.as_str())
-        .filter(|l| {
-            let t = l.trim();
-            !t.starts_with('@')
-        })
-        .collect::<Vec<_>>()
-        .join("");
+    let mut meta = DiagramMeta::default();
+    let mut pattern_lines = Vec::new();
+    for (idx, line) in lines.iter().enumerate() {
+        let trimmed = line.trim();
+        if trimmed.starts_with('@') {
+            continue;
+        }
+        if let Some(rest) = trimmed.strip_prefix("title ") {
+            meta.title = Some(super::strip_title_quotes(rest).to_string());
+            meta.title_line = Some(idx + 1);
+            continue;
+        }
+        pattern_lines.push(line.as_str());
+    }
+
+    let pattern = pattern_lines.join("");
 
     let pattern = pattern.trim().to_string();
 
@@ -31,11 +37,7 @@ pub fn parse_regex_diagram(lines: &[String]) -> Result<RegexDiagram, ParseError>
         simplify(node)
     };
 
-    Ok(RegexDiagram {
-        meta: DiagramMeta::default(),
-        pattern,
-        ast,
-    })
+    Ok(RegexDiagram { meta, pattern, ast })
 }
 
 fn simplify(node: RegexNode) -> RegexNode {
