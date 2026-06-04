@@ -235,7 +235,7 @@ targets:
     discovered: 2026-05-29
   T4.2:
     name: Class diagrams strict-XML pass
-    status: converging
+    status: achieved
     value: 0.0
     cost: 0.0
     acceptance:
@@ -256,6 +256,7 @@ targets:
       ALSO: ER crow's-foot lines (~155 er/) need extract.rs link-group <line> capture + class.rs render_oracle_relationships emission — spec at /tmp/rustuml-patches/DEFERRED-crowsfoot-spec.md.
     origin: manual
     discovered: 2026-05-17
+    achieved: 2026-06-05
   T4.3:
     name: Sequence diagrams strict-XML pass
     status: converging
