@@ -619,6 +619,14 @@ const GROUP_ELSE_INNER_PAD: f64 = 5.955078125;
 const GROUP_END_HEIGHT: f64 = 7.0;
 /// Left/right margin for group frame beyond participant boxes.
 const GROUP_FRAME_MARGIN: f64 = 10.0;
+/// Left-edge floor of the outermost group frame's enclosed content. A note that
+/// overhangs participant 0 inside groups has its left edge held back to
+/// `GROUP_NOTE_LEFT_FLOOR_BASE + depth * GROUP_FRAME_MARGIN` (the outermost frame
+/// rect itself then lands at `floor - GROUP_FRAME_MARGIN`, i.e. 9 for depth 1).
+/// Reverse-engineered from the Java oracle (`InGroupableList.getMinX` +
+/// `prepareMissingSpace`): a participant-anchored frame floors at 10, but a note
+/// member (no `outMargin`, only the list's MARGIN5) floors one pixel lower.
+const GROUP_NOTE_LEFT_FLOOR_BASE: f64 = 9.0;
 
 /// Resolve the bold tab text and optional `[guard]` label for a frame header.
 ///
@@ -3293,6 +3301,7 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
     // extend past the left margin (x = HEAD_BOX_Y).
     // "note left of" on the first participant: positioned entirely to the left
     // of the lifeline, so the lifeline must be far enough right to fit the note.
+    //
     let mut min_first_center_x: f64 = 0.0;
     for event in &diagram.events {
         if let Event::Note(note) = event {
@@ -3500,6 +3509,84 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
         }
         if across_shift > 0.0 {
             let shift = across_shift.floor();
+            for p in participants.iter_mut() {
+                p.center_x += shift;
+                p.box_x += shift;
+                p.lifeline_line_x += shift;
+            }
+        }
+
+        // A note that overhangs participant 0 while enclosed by group frames is
+        // held back by those frames: its drawn left edge cannot fall left of
+        // `GROUP_NOTE_LEFT_FLOOR_BASE + depth * GROUP_FRAME_MARGIN` (each frame
+        // insets its content a further MARGIN10; the outermost frame rect then
+        // lands one MARGIN10 further left). When the note's natural left (at the
+        // current participant positions) is left of that floor, the whole diagram
+        // shifts right by the integer deficit — mirroring Java's
+        // `prepareMissingSpace` push driven by the group header's `getStartingX`.
+        // The shift is integral so participant box_x values stay on whole pixels.
+        let mut group_note_shift: f64 = 0.0;
+        let mut depth: usize = 0;
+        for event in &diagram.events {
+            match event {
+                Event::GroupStart(_) => depth += 1,
+                Event::GroupEnd => depth = depth.saturating_sub(1),
+                Event::Note(note) if depth > 0 => {
+                    // Only notes anchored on (or extending left from) participant 0
+                    // can push the left margin.
+                    let first_part = if note.on_message && note.position == NotePosition::Left {
+                        note.participants
+                            .iter()
+                            .filter_map(|id| id_to_idx.get(id.as_str()).copied())
+                            .min()
+                    } else {
+                        note.participants
+                            .first()
+                            .and_then(|id| id_to_idx.get(id.as_str()))
+                            .copied()
+                    };
+                    if first_part != Some(0) {
+                        continue;
+                    }
+                    let max_tw = note
+                        .text
+                        .lines()
+                        .map(|l| text_width(l.trim(), MSG_FONT_SIZE))
+                        .fold(0.0_f64, f64::max);
+                    let floor = GROUP_NOTE_LEFT_FLOOR_BASE + depth as f64 * GROUP_FRAME_MARGIN;
+                    let natural_left = match note.position {
+                        NotePosition::Over if note.participants.len() == 1 => {
+                            // Mirror the renderer: left = floor(centerX - raw_w/2).
+                            let raw_margin = match note.shape {
+                                NoteShape::Note => 21.0,
+                                NoteShape::Hexagonal => 24.0,
+                                NoteShape::Rectangular => 8.0,
+                            };
+                            let raw_w = max_tw + raw_margin;
+                            Some((participants[0].center_x - raw_w / 2.0).floor())
+                        }
+                        NotePosition::Left => {
+                            let note_content_w = note_content_width(max_tw, note.shape);
+                            let gap = match note.shape {
+                                NoteShape::Note => NOTE_LIFELINE_GAP,
+                                NoteShape::Hexagonal | NoteShape::Rectangular => {
+                                    NOTE_LIFELINE_GAP - 1.0
+                                }
+                            };
+                            let right = participants[0].lifeline_line_x.floor() - gap;
+                            Some(right - note_content_w)
+                        }
+                        _ => None,
+                    };
+                    if let Some(nl) = natural_left {
+                        group_note_shift = group_note_shift.max(floor - nl);
+                    }
+                }
+                _ => {}
+            }
+        }
+        if group_note_shift > 0.0 {
+            let shift = group_note_shift.ceil();
             for p in participants.iter_mut() {
                 p.center_x += shift;
                 p.box_x += shift;
@@ -4391,19 +4478,116 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
         event_idx: usize,
     }
 
+    // Drawn horizontal extent (left, right) of a note, mirroring the note-render
+    // branch below. A note enclosed by a group frame contributes its overhang to
+    // the frame's InGroupable extent (Java `NoteBox.getMinX/getMaxX` feeding
+    // `InGroupableList`), so the frame grows to cover a note that sticks out past
+    // the messages. Returns `None` for notes with no resolvable anchor.
+    let note_drawn_extent = |note: &Note| -> Option<(f64, f64)> {
+        let lines: Vec<&str> = note.text.lines().collect();
+        let max_text_w = lines
+            .iter()
+            .map(|l| text_width(l.trim(), MSG_FONT_SIZE))
+            .fold(0.0_f64, f64::max);
+        let note_content_w = note_content_width(max_text_w, note.shape);
+        let anchor_xs: Vec<f64> = note
+            .participants
+            .iter()
+            .filter_map(|id| id_to_idx.get(id.as_str()))
+            .map(|&i| participants[i].lifeline_line_x)
+            .collect();
+        match note.position {
+            NotePosition::Right => {
+                let ll_x = if note.on_message {
+                    anchor_xs.iter().copied().fold(f64::MIN, f64::max)
+                } else {
+                    anchor_xs.first().copied()?
+                };
+                let left = ll_x.ceil() + NOTE_LIFELINE_GAP;
+                Some((left, left + note_content_w))
+            }
+            NotePosition::Left => {
+                let ll_x = if note.on_message {
+                    anchor_xs.iter().copied().fold(f64::MAX, f64::min)
+                } else {
+                    anchor_xs.first().copied()?
+                };
+                let gap = match note.shape {
+                    NoteShape::Note => NOTE_LIFELINE_GAP,
+                    NoteShape::Hexagonal | NoteShape::Rectangular => NOTE_LIFELINE_GAP - 1.0,
+                };
+                let right = ll_x.floor() - gap;
+                Some((right - note_content_w, right))
+            }
+            NotePosition::Over => {
+                if note.participants.is_empty() {
+                    if participants.is_empty() {
+                        Some((HEAD_BOX_Y, HEAD_BOX_Y + note_content_w))
+                    } else {
+                        let first_ll = participants[0].lifeline_line_x;
+                        let last_ll = participants[participants.len() - 1].lifeline_line_x;
+                        let span = last_ll - first_ll;
+                        let pw_raw = note_content_width_raw(max_text_w, note.shape)
+                            .max(span.round() + ACROSS_NOTE_MARGIN);
+                        let pw = note_content_w.max(span.round() + ACROSS_NOTE_MARGIN);
+                        let centre = (participants[0].center_x
+                            + participants[participants.len() - 1].center_x)
+                            / 2.0;
+                        let left = (centre - pw_raw / 2.0).floor();
+                        Some((left, left + pw))
+                    }
+                } else if note.participants.len() == 1 {
+                    let cx = participants[*id_to_idx.get(note.participants[0].as_str())?].center_x;
+                    let raw_margin = match note.shape {
+                        NoteShape::Note => 21.0,
+                        NoteShape::Hexagonal => 24.0,
+                        NoteShape::Rectangular => 8.0,
+                    };
+                    let raw_w = max_text_w + raw_margin;
+                    let left = (cx - raw_w / 2.0).max(HEAD_BOX_Y).floor();
+                    Some((left, left + note_content_w))
+                } else {
+                    let first_idx = *id_to_idx.get(note.participants.first()?.as_str())?;
+                    let last_idx = *id_to_idx.get(note.participants.last()?.as_str())?;
+                    let (lo, hi) = if first_idx <= last_idx {
+                        (first_idx, last_idx)
+                    } else {
+                        (last_idx, first_idx)
+                    };
+                    let span = participants[hi].lifeline_line_x - participants[lo].lifeline_line_x;
+                    let pw_raw = note_content_width_raw(max_text_w, note.shape)
+                        .max(span.round() + OVER_SEVERAL_NOTE_MARGIN);
+                    let pw = note_content_w.max(span.round() + OVER_SEVERAL_NOTE_MARGIN);
+                    let centre = (participants[lo].center_x + participants[hi].center_x) / 2.0;
+                    let left = (centre - pw_raw / 2.0).floor();
+                    Some((left, left + pw))
+                }
+            }
+        }
+    };
+
     let mut group_frames: Vec<GroupFrame> = Vec::new();
     {
         // Scan events to find group start/end pairs and compute their frames.
-        // Track which participant indices are referenced inside each group.
-        // (min_idx, max_idx, start_event_idx)
-        let mut group_start_stack: Vec<(usize, usize, usize)> = Vec::new();
+        // Track which participant indices are referenced inside each group,
+        // plus the drawn extent of any enclosed note (which the frame must cover).
+        // (min_idx, max_idx, start_event_idx, note_min_left, note_max_right)
+        let mut group_start_stack: Vec<(usize, usize, usize, f64, f64)> = Vec::new();
         for (ev_idx, event) in diagram.events.iter().enumerate() {
             match event {
                 Event::GroupStart(_) => {
-                    group_start_stack.push((usize::MAX, 0, ev_idx));
+                    group_start_stack.push((
+                        usize::MAX,
+                        0,
+                        ev_idx,
+                        f64::INFINITY,
+                        f64::NEG_INFINITY,
+                    ));
                 }
                 Event::GroupEnd => {
-                    if let Some((min_idx, max_idx, start_idx)) = group_start_stack.pop() {
+                    if let Some((min_idx, max_idx, start_idx, note_left, note_right)) =
+                        group_start_stack.pop()
+                    {
                         let frame_top = event_y_positions[start_idx];
                         let frame_bottom = event_y_positions[ev_idx];
 
@@ -4423,6 +4607,7 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                         }
                         let has_child = child_left.is_finite();
                         let has_msgs = min_idx <= max_idx && !participants.is_empty();
+                        let has_note = note_left.is_finite();
 
                         // Compute the participant-based frame left first, then derive
                         // the header right edge from the *final* left (so the guard
@@ -4432,7 +4617,7 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                         // enclosed child frame (each parent extends GROUP_FRAME_MARGIN
                         // beyond its direct child). Only a group with neither direct
                         // messages nor children falls back to the empty-group estimate.
-                        let frame_left = if has_msgs {
+                        let mut frame_left = if has_msgs {
                             let part_left = participants[min_idx].box_x - GROUP_FRAME_MARGIN;
                             if has_child {
                                 part_left.min(child_left - GROUP_FRAME_MARGIN)
@@ -4446,6 +4631,12 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                         } else {
                             HEAD_BOX_Y
                         };
+                        // An enclosed note that overhangs the messages widens the
+                        // frame to cover it: the frame's InGroupable left edge sits
+                        // GROUP_FRAME_MARGIN beyond the note's drawn left.
+                        if has_note {
+                            frame_left = frame_left.min(note_left - GROUP_FRAME_MARGIN);
+                        }
 
                         // Compute the header text right edge (group kind label + guard)
                         // anchored at the final frame left.
@@ -4494,6 +4685,9 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                         if has_child {
                             frame_right = frame_right.max(child_right + GROUP_FRAME_MARGIN);
                         }
+                        if has_note {
+                            frame_right = frame_right.max(note_right + GROUP_FRAME_MARGIN);
+                        }
 
                         group_frames.push(GroupFrame {
                             top: frame_top,
@@ -4515,6 +4709,16 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                         if let Some(ti) = ti {
                             top.0 = top.0.min(ti);
                             top.1 = top.1.max(ti);
+                        }
+                    }
+                }
+                Event::Note(note) if !group_start_stack.is_empty() => {
+                    // A note is an InGroupable of every enclosing frame (Java
+                    // `InGroupablesStack.addElement` adds it to all open lists).
+                    if let Some((nl, nr)) = note_drawn_extent(note) {
+                        for top in group_start_stack.iter_mut() {
+                            top.3 = top.3.min(nl);
+                            top.4 = top.4.max(nr);
                         }
                     }
                 }
