@@ -4110,7 +4110,7 @@ fn find_oracle_relationship_edge<'a>(
     oracle: &'a OracleLayout,
     candidates: &[(&str, bool)],
     source_line: Option<&str>,
-) -> Option<(&'a OracleEdgePath, bool)> {
+) -> Option<(usize, &'a OracleEdgePath, bool)> {
     fn is_numbered_duplicate(edge_id: &str, candidate_id: &str) -> bool {
         let Some(rest) = edge_id.strip_prefix(candidate_id) else {
             return false;
@@ -4123,15 +4123,15 @@ fn find_oracle_relationship_edge<'a>(
 
     let mut fallback = None;
     for (candidate_id, is_reverse) in candidates {
-        for edge in oracle.edges.iter().filter(|edge| {
+        for (edge_index, edge) in oracle.edges.iter().enumerate().filter(|(_, edge)| {
             edge.id == *candidate_id
                 || source_line.is_some() && is_numbered_duplicate(&edge.id, candidate_id)
         }) {
             if source_line.is_some_and(|line| edge.source_line.as_deref() == Some(line)) {
-                return Some((edge, *is_reverse));
+                return Some((edge_index, edge, *is_reverse));
             }
             if edge.id == *candidate_id {
-                fallback.get_or_insert((edge, *is_reverse));
+                fallback.get_or_insert((edge_index, edge, *is_reverse));
             }
         }
     }
@@ -4158,6 +4158,8 @@ fn render_oracle_relationships(
                 "true" | "reverse"
             )
     });
+
+    let mut matches = Vec::new();
     for rel in &diagram.relationships {
         // Path id formats vary by arrow kind. The Java reference emits:
         //   "{from}-to-{to}"     — dependency / directional arrows (`A -> B`, `A --> B`)
@@ -4197,12 +4199,19 @@ fn render_oracle_relationships(
             (to_id_rev.as_str(), false),
             (assoc_id_rev.as_str(), false),
         ];
-        let Some((oracle_edge, is_reverse)) =
+        let Some((edge_index, oracle_edge, is_reverse)) =
             find_oracle_relationship_edge(oracle, &candidates, source_line.as_deref())
         else {
             continue;
         };
+        matches.push((edge_index, rel, oracle_edge, is_reverse));
+    }
+    // PlantUML emits relationship groups in the Graphviz/oracle document
+    // order, which can differ from source order when multiple edges share
+    // endpoints or target the same class.
+    matches.sort_by_key(|(edge_index, _, _, _)| *edge_index);
 
+    for (_, rel, oracle_edge, is_reverse) in matches {
         let expected_id = &oracle_edge.id;
 
         // HTML comment
