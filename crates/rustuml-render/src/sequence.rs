@@ -319,8 +319,8 @@ const DELAY_BAND_TOP_PAD: f64 = 8.0;
 
 /// Compute the vertical step for a message event.
 /// Messages with label text get extra height for the text line.
-fn msg_step(has_text: bool) -> f64 {
-    MSG_BASE_STEP + if has_text { MSG_TEXT_HEIGHT } else { 0.0 }
+fn msg_step(has_text: bool, text_height: f64) -> f64 {
+    MSG_BASE_STEP + if has_text { text_height } else { 0.0 }
 }
 
 /// PlantUML `ComponentRoseReference` geometry for a `ref over … : text` box.
@@ -373,8 +373,8 @@ fn ref_box(text: &str) -> RefBox {
 }
 
 /// Compute the first-message offset from lifeline top.
-fn first_msg_offset(has_text: bool) -> f64 {
-    MSG_BASE_FIRST_OFFSET + if has_text { MSG_TEXT_HEIGHT } else { 0.0 }
+fn first_msg_offset(has_text: bool, text_height: f64) -> f64 {
+    MSG_BASE_FIRST_OFFSET + if has_text { text_height } else { 0.0 }
 }
 const LIFELINE_Y_OFFSET: f64 = 1.0; // lifeline starts 1px below head box
 const RIGHT_MARGIN: f64 = 10.0; // right margin beyond last box
@@ -1073,6 +1073,14 @@ struct PlantUmlSvg {
     /// Plain participant head/tail label italic style. Driven by
     /// `skinparam participantFontStyle`.
     participant_font_italic: bool,
+    /// Message/arrow label colour. Driven by `skinparam arrowFontColor`.
+    message_font_color: String,
+    /// Message/arrow label font size. Driven by `skinparam arrowFontSize`.
+    message_font_size: u32,
+    /// Message/arrow label bold style. Driven by `skinparam arrowFontStyle`.
+    message_font_bold: bool,
+    /// Message/arrow label italic style. Driven by `skinparam arrowFontStyle`.
+    message_font_italic: bool,
     /// Lifeline dashed-line stroke colour (default `#181818`). Driven by
     /// `skinparam sequenceLifeLineBorderColor`.
     lifeline_border: String,
@@ -1100,6 +1108,10 @@ impl PlantUmlSvg {
             participant_font_size: PARTICIPANT_FONT_SIZE as u32,
             participant_font_bold: false,
             participant_font_italic: false,
+            message_font_color: "#000000".into(),
+            message_font_size: MSG_FONT_SIZE as u32,
+            message_font_bold: false,
+            message_font_italic: false,
             lifeline_border: "#181818".into(),
             lifeline_border_thickness: "0.5".into(),
             active_participant_url: None,
@@ -1359,6 +1371,25 @@ impl PlantUmlSvg {
                 fill: &self.participant_font_color,
                 bold: self.participant_font_bold,
                 italic: self.participant_font_italic,
+                underline: false,
+                skip_underline: false,
+            },
+        );
+    }
+
+    /// Write a sequence message/arrow label.
+    fn emit_message_label(&mut self, text_x: f64, text_y: f64, text_content: &str) {
+        text_render::emit_text(
+            &mut self.buf,
+            text_content,
+            &TextBase {
+                x: text_x,
+                y: text_y,
+                font_size: self.message_font_size,
+                font_family: "sans-serif",
+                fill: &self.message_font_color,
+                bold: self.message_font_bold,
+                italic: self.message_font_italic,
                 underline: false,
                 skip_underline: false,
             },
@@ -1952,21 +1983,7 @@ impl PlantUmlSvg {
         };
 
         if !text_content.is_empty() {
-            text_render::emit_text(
-                &mut self.buf,
-                text_content,
-                &TextBase {
-                    x: label_x,
-                    y: text_y,
-                    font_size: MSG_FONT_SIZE as u32,
-                    font_family: "sans-serif",
-                    fill: "#000000",
-                    bold: false,
-                    italic: false,
-                    underline: false,
-                    skip_underline: false,
-                },
-            );
+            self.emit_message_label(label_x, text_y, text_content);
         }
         self.buf.push_str("</g>");
     }
@@ -2045,21 +2062,7 @@ impl PlantUmlSvg {
         };
 
         if !text_content.is_empty() {
-            text_render::emit_text(
-                &mut self.buf,
-                text_content,
-                &TextBase {
-                    x: label_x,
-                    y: text_y,
-                    font_size: 13,
-                    font_family: "sans-serif",
-                    fill: "#000000",
-                    bold: false,
-                    italic: false,
-                    underline: false,
-                    skip_underline: false,
-                },
-            );
+            self.emit_message_label(label_x, text_y, text_content);
         }
 
         self.buf.push_str("</g>");
@@ -2182,21 +2185,7 @@ impl PlantUmlSvg {
         };
 
         if !text_content.is_empty() {
-            text_render::emit_text(
-                &mut self.buf,
-                text_content,
-                &TextBase {
-                    x: label_x,
-                    y: text_y,
-                    font_size: 13,
-                    font_family: "sans-serif",
-                    fill: "#000000",
-                    bold: false,
-                    italic: false,
-                    underline: false,
-                    skip_underline: false,
-                },
-            );
+            self.emit_message_label(label_x, text_y, text_content);
         }
 
         self.buf.push_str("</g>");
@@ -2305,21 +2294,7 @@ impl PlantUmlSvg {
 
         if !text_content.is_empty() {
             let _ = text_len;
-            text_render::emit_text(
-                &mut self.buf,
-                text_content,
-                &TextBase {
-                    x: label_x,
-                    y: text_y,
-                    font_size: 13,
-                    font_family: "sans-serif",
-                    fill: "#000000",
-                    bold: false,
-                    italic: false,
-                    underline: false,
-                    skip_underline: false,
-                },
-            );
+            self.emit_message_label(label_x, text_y, text_content);
         }
 
         self.buf.push_str("</g>");
@@ -2589,6 +2564,10 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
     // historical colours rather than the workspace `slate` theme.
     let mut default_arrow_color = "#181818".to_string();
     let mut default_arrow_thickness: String = "1".to_string();
+    let mut message_font_color = "#000000".to_string();
+    let mut message_font_size: u32 = MSG_FONT_SIZE as u32;
+    let mut message_font_bold = false;
+    let mut message_font_italic = false;
     let mut participant_fill = "#E2E2F0".to_string();
     let mut participant_border = "#181818".to_string();
     let mut participant_border_thickness: String = "0.5".to_string();
@@ -2667,6 +2646,19 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                 if let Ok(v) = val.parse::<f64>() {
                     default_arrow_thickness = plantuml_metrics::fmt_coord(v);
                 }
+            }
+            "arrowfontcolor" | "sequencearrowfontcolor" => {
+                message_font_color = resolve_color(val);
+            }
+            "arrowfontsize" | "sequencearrowfontsize" => {
+                if let Ok(v) = val.parse::<u32>() {
+                    message_font_size = v;
+                }
+            }
+            "arrowfontstyle" | "sequencearrowfontstyle" => {
+                let style = val.to_ascii_lowercase();
+                message_font_bold = style.contains("bold");
+                message_font_italic = style.contains("italic");
             }
             "participantbackgroundcolor" | "sequenceparticipantbackgroundcolor" => {
                 participant_fill = gradient_fill_or(val, &gradient_id);
@@ -2805,6 +2797,16 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
     };
     let default_arrow_color = default_arrow_color.as_str();
     let default_arrow_thickness = default_arrow_thickness.as_str();
+    let message_font_size_f = message_font_size as f64;
+    let message_text_height = plantuml_metrics::text_height(message_font_size_f);
+    let message_text_y_drop = plantuml_metrics::descent(message_font_size_f) + 2.0;
+    let message_label_width = |text: &str| {
+        if message_font_bold {
+            bold_text_width(text, message_font_size_f)
+        } else {
+            text_width(text, message_font_size_f)
+        }
+    };
     // Empty diagram with no title — render the PlantUML welcome screen.
     if diagram.participants.is_empty() && diagram.events.is_empty() && diagram.meta.title.is_none()
     {
@@ -3088,7 +3090,7 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                         // the right extent then feeds the canvas edge after Phase 3.)
                         if fi + 1 < n {
                             let label = process_label(&msg.label);
-                            let label_w = text_width(&label, MSG_FONT_SIZE);
+                            let label_w = message_label_width(&label);
 
                             let autonumber_extra = if let Some((_, w, _)) = spacing_auto.current() {
                                 w + AUTONUMBER_LABEL_GAP
@@ -3123,7 +3125,7 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                         }
                     } else {
                         let label = process_label(&msg.label);
-                        let label_w = text_width(&label, MSG_FONT_SIZE);
+                        let label_w = message_label_width(&label);
 
                         // Autonumber adds bold-or-plain text + gap before the label
                         // depending on whether a format string is set.
@@ -3218,7 +3220,7 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                         } else {
                             decode_escapes(&ret.label)
                         };
-                        let label_w = text_width(&label, MSG_FONT_SIZE);
+                        let label_w = message_label_width(&label);
 
                         // Autonumber adds bold-or-plain text + gap before the label
                         // depending on whether a format string is set.
@@ -3416,7 +3418,7 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
             && msg.from == "["
             && id_to_idx.get(msg.to.as_str()) == Some(&0)
         {
-            let label_w = text_width(&process_label(&msg.label), MSG_FONT_SIZE);
+            let label_w = message_label_width(&process_label(&msg.label));
             min_first_center_x = min_first_center_x.max(label_w + 24.0);
         }
     }
@@ -3730,7 +3732,7 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                         cx_base
                     };
                     let label = process_label(&msg.label);
-                    let label_w = text_width(&label, MSG_FONT_SIZE);
+                    let label_w = message_label_width(&label);
                     let loopback_right = cx + SELF_MSG_EXTEND;
                     let text_right = cx + SELF_MSG_TEXT_X_PAD + label_w;
                     let self_right = loopback_right.max(text_right) + SELF_MSG_RIGHT_PAD;
@@ -3854,9 +3856,9 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                     // next event down).
                     let note_extra = msg_note_extra.get(&idx).copied();
                     if msg_count == 0 {
-                        y += first_msg_offset(has_text);
+                        y += first_msg_offset(has_text, message_text_height);
                     } else {
-                        y += msg_step(has_text);
+                        y += msg_step(has_text, message_text_height);
                     }
                     if let Some(extra) = note_extra {
                         y += extra;
@@ -3880,9 +3882,9 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                 Event::Return(_) => {
                     let note_extra = msg_note_extra.get(&idx).copied();
                     if msg_count == 0 {
-                        y += first_msg_offset(has_text);
+                        y += first_msg_offset(has_text, message_text_height);
                     } else {
-                        y += msg_step(has_text);
+                        y += msg_step(has_text, message_text_height);
                     }
                     if let Some(extra) = note_extra {
                         y += extra;
@@ -3909,9 +3911,9 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                         0.0
                     };
                     if msg_count == 0 {
-                        y += first_msg_offset(has_text) + DIVIDER_TEXT_OFFSET;
+                        y += first_msg_offset(has_text, MSG_TEXT_HEIGHT) + DIVIDER_TEXT_OFFSET;
                     } else {
-                        y += msg_step(has_text) + DIVIDER_TEXT_OFFSET;
+                        y += msg_step(has_text, MSG_TEXT_HEIGHT) + DIVIDER_TEXT_OFFSET;
                     }
                     // The empty divider's strip sits half a text-line lower, but
                     // this offset does not push subsequent events down.
@@ -3924,7 +3926,7 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                 }
                 Event::Delay(t) => {
                     if msg_count == 0 {
-                        y += first_msg_offset(has_text);
+                        y += first_msg_offset(has_text, MSG_TEXT_HEIGHT);
                     } else {
                         // A delay reserves a fixed 28px dotted band (plus the
                         // label height when labelled), not a normal message step.
@@ -4029,7 +4031,7 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                     let rb = ref_box(&r.text);
                     let prev_y = y;
                     let box_top = if msg_count == 0 {
-                        prev_y + first_msg_offset(false)
+                        prev_y + first_msg_offset(false, MSG_TEXT_HEIGHT)
                     } else {
                         prev_y + REF_GAP_ABOVE
                     };
@@ -4211,7 +4213,7 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
             && msg.to == "]"
             && let Some(&fi) = id_to_idx.get(msg.from.as_str())
         {
-            let label_w = text_width(&process_label(&msg.label), MSG_FONT_SIZE);
+            let label_w = message_label_width(&process_label(&msg.label));
             // Canvas edge = arrow line end (label_w+18) + 1px stroke; the
             // arrowhead tip extends into the RIGHT_MARGIN.
             max_lost_right = max_lost_right.max(participants[fi].center_x + label_w + 19.0);
@@ -4801,6 +4803,10 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
     svg.participant_font_size = participant_font_size;
     svg.participant_font_bold = participant_font_bold;
     svg.participant_font_italic = participant_font_italic;
+    svg.message_font_color = message_font_color.clone();
+    svg.message_font_size = message_font_size;
+    svg.message_font_bold = message_font_bold;
+    svg.message_font_italic = message_font_italic;
     svg.lifeline_border = lifeline_border.clone();
     svg.lifeline_border_thickness = lifeline_border_thickness.clone();
     svg.head_box_rx = head_box_rx;
@@ -5313,7 +5319,7 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                     // to_x is the conceptual arrowhead tip+2; the normal render
                     // draws the line to to_x-6 and the tip at to_x-2, matching
                     // the golden line end (label_w+18) and tip (label_w+22).
-                    from_x + text_width(&process_label(&msg.label), MSG_FONT_SIZE) + 24.0
+                    from_x + message_label_width(&process_label(&msg.label)) + 24.0
                 } else {
                     center_of(&msg.to)
                 };
@@ -5356,7 +5362,7 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
 
                 // Compute label
                 let label = process_label(&msg.label);
-                let label_w = text_width(&label, MSG_FONT_SIZE);
+                let label_w = message_label_width(&label);
 
                 // Arrow color: per-message override beats theme default
                 // (which already incorporates any `skinparam arrowColor`).
@@ -5411,7 +5417,7 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                     let loop_right = cx + SELF_MSG_EXTEND;
                     let loop_bottom = msg_y + SELF_MSG_DROP;
                     let text_x = cx + SELF_MSG_TEXT_X_PAD;
-                    let text_y_pos = msg_y - 4.742187500;
+                    let text_y_pos = msg_y - message_text_y_drop;
 
                     // Open the message group
                     write!(
@@ -5559,21 +5565,7 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
 
                     // Text label
                     if !label.is_empty() {
-                        text_render::emit_text(
-                            &mut svg.buf,
-                            &label,
-                            &TextBase {
-                                x: text_x,
-                                y: text_y_pos,
-                                font_size: 13,
-                                font_family: "sans-serif",
-                                fill: "#000000",
-                                bold: false,
-                                italic: false,
-                                underline: false,
-                                skip_underline: false,
-                            },
-                        );
+                        svg.emit_message_label(text_x, text_y_pos, &label);
                     }
 
                     svg.buf.push_str("</g>");
@@ -5636,7 +5628,7 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                     };
 
                     // Text position
-                    let text_y_pos = msg_y - 4.742187500;
+                    let text_y_pos = msg_y - message_text_y_drop;
                     let text_x = if is_right {
                         from_x_shifted + MSG_TEXT_LEFT_PAD
                     } else {
@@ -5985,10 +5977,10 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                 } else {
                     decode_escapes(&ret.label)
                 };
-                let label_w = text_width(&label, MSG_FONT_SIZE);
+                let label_w = message_label_width(&label);
 
                 let src_line = ret.source_line as u32;
-                let text_y_pos = msg_y - 4.742187500;
+                let text_y_pos = msg_y - message_text_y_drop;
 
                 // Return messages are always dotted; arrow style matches the original
                 let line_style = "stroke-dasharray:2,2;";
