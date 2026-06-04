@@ -57,6 +57,8 @@ struct ClassParser {
     namespace_sep: Option<String>,
     /// Whether we are inside a multi-line header/footer/legend block.
     meta_block: Option<MetaBlock>,
+    /// Prefix of an open `skinparam X { ... }` block.
+    current_skinparam_prefix: Option<String>,
     /// Current 1-based source line number (set before each parse_line call).
     current_line: usize,
     /// Accumulated `hide` / `show` directives, in source order.
@@ -84,6 +86,7 @@ impl ClassParser {
             namespace_sep_none: false,
             namespace_sep: Some(".".to_string()),
             meta_block: None,
+            current_skinparam_prefix: None,
             current_line: 0,
             hide_show: Vec::new(),
             header_line: None,
@@ -286,6 +289,23 @@ impl ClassParser {
 
     fn parse_line(&mut self, line_num: usize, line: &str) -> Result<(), ParseError> {
         self.current_line = line_num;
+        // Inside a grouped skinparam block?
+        if let Some(prefix) = self.current_skinparam_prefix.clone() {
+            if line == "}" {
+                self.current_skinparam_prefix = None;
+            } else if let Some((key, value)) = line.split_once(char::is_whitespace) {
+                let key = key.trim();
+                let value = value.trim();
+                if !key.is_empty() && !value.is_empty() {
+                    self.meta.skinparams.push(crate::diagram::SkinParam {
+                        key: format!("{prefix}{key}"),
+                        value: value.to_string(),
+                    });
+                }
+            }
+            return Ok(());
+        }
+
         // Inside a multi-line meta block (header/footer/legend/caption/title)?
         if let Some(block) = self.meta_block {
             let end1 = match block {
@@ -1167,6 +1187,14 @@ impl ClassParser {
         }
         // Parse skinparam key value (store for renderer use).
         if let Some(rest) = line.strip_prefix("skinparam ") {
+            let rest = rest.trim();
+            if let Some(prefix) = rest.strip_suffix('{') {
+                let prefix = prefix.trim();
+                if !prefix.is_empty() {
+                    self.current_skinparam_prefix = Some(prefix.to_string());
+                }
+                return true;
+            }
             if let Some((key, value)) = rest.split_once(' ') {
                 self.meta.skinparams.push(crate::diagram::SkinParam {
                     key: key.trim().to_string(),
@@ -1707,6 +1735,17 @@ mod tests {
     fn stereotype() {
         let d = parse("class Foo <<singleton>>");
         assert_eq!(d.entities[0].stereotypes, vec!["singleton"]);
+    }
+
+    #[test]
+    fn skinparam_stereotype_block_flattens() {
+        let d = parse("skinparam class<<service>> {\n  FontStyle bold\n}\nclass User <<service>>");
+        assert!(
+            d.meta
+                .skinparams
+                .iter()
+                .any(|sp| { sp.key == "class<<service>>FontStyle" && sp.value == "bold" })
+        );
     }
 
     #[test]

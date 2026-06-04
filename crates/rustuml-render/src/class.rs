@@ -1396,6 +1396,9 @@ struct ClassFontOverrides {
     /// `skinparam ClassFontStyle` — bold/italic styling of the class name.
     font_bold: bool,
     font_italic: bool,
+    /// `skinparam class<<stereotype>> { FontStyle ... }` — name styling for
+    /// entities carrying the matching stereotype.
+    stereotype_font_styles: Vec<ClassStereotypeFontStyle>,
     /// `skinparam ClassAttributeFontSize` — member (field/method) font size.
     attr_font_size: Option<u32>,
     /// `skinparam ClassAttributeFontStyle` — member bold/italic styling.
@@ -1429,6 +1432,13 @@ struct ClassFontOverrides {
     monochrome: bool,
 }
 
+#[derive(Clone)]
+struct ClassStereotypeFontStyle {
+    stereotype: String,
+    bold: bool,
+    italic: bool,
+}
+
 impl ClassFontOverrides {
     fn from_skinparams(params: &[rustuml_parser::diagram::SkinParam]) -> Self {
         let find = |names: &[&str]| -> Option<String> {
@@ -1441,6 +1451,10 @@ impl ClassFontOverrides {
         let attr_style = find(&["ClassAttributeFontStyle"])
             .unwrap_or_default()
             .to_lowercase();
+        let stereotype_font_styles = params
+            .iter()
+            .filter_map(stereotype_font_style_param)
+            .collect();
         // `skinparam defaultFontSize` is the base size for all class text,
         // overridden by the more specific `ClassFontSize` (name) and
         // `ClassAttributeFontSize` (members). It only applies when the
@@ -1455,6 +1469,7 @@ impl ClassFontOverrides {
                 .or(default_font_size),
             font_bold: style.contains("bold"),
             font_italic: style.contains("italic"),
+            stereotype_font_styles,
             attr_font_size: find(&["ClassAttributeFontSize"])
                 .and_then(|v| v.trim().parse::<u32>().ok())
                 .or(default_font_size),
@@ -1488,6 +1503,45 @@ impl ClassFontOverrides {
     fn visibility_icon_geom(&self) -> VisibilityIconGeom {
         VisibilityIconGeom::from_attribute_icon_size(self.attr_icon_size)
     }
+
+    fn stereotype_font_style(&self, stereotypes: &[String]) -> (bool, bool) {
+        for stereotype in stereotypes {
+            if let Some(style) = self
+                .stereotype_font_styles
+                .iter()
+                .find(|style| stereotype.eq_ignore_ascii_case(&style.stereotype))
+            {
+                return (style.bold, style.italic);
+            }
+        }
+        (false, false)
+    }
+}
+
+fn stereotype_font_style_param(
+    sp: &rustuml_parser::diagram::SkinParam,
+) -> Option<ClassStereotypeFontStyle> {
+    const PREFIX: &str = "class<<";
+    let key = sp.key.trim();
+    if !key.to_ascii_lowercase().starts_with(PREFIX) {
+        return None;
+    }
+    let after_prefix = &key[PREFIX.len()..];
+    let end = after_prefix.find(">>")?;
+    let suffix = after_prefix[end + 2..].trim();
+    if !suffix.eq_ignore_ascii_case("FontStyle") {
+        return None;
+    }
+    let stereotype = after_prefix[..end].trim();
+    if stereotype.is_empty() {
+        return None;
+    }
+    let style = sp.value.trim().to_ascii_lowercase();
+    Some(ClassStereotypeFontStyle {
+        stereotype: stereotype.to_string(),
+        bold: style.contains("bold"),
+        italic: style.contains("italic"),
+    })
 }
 
 #[derive(Clone, Copy)]
@@ -2795,8 +2849,13 @@ fn render_entity_content(
     // (`name_font_size` resolved above, before the header icon.)
     // As with font size, the name inherits `ClassAttributeFontStyle` when
     // `ClassFontStyle` does not itself set the corresponding flag.
-    let name_bold = font.font_bold || font.attr_font_bold;
-    let name_italic = is_abstract || is_interface || font.font_italic || font.attr_font_italic;
+    let (stereotype_bold, stereotype_italic) = font.stereotype_font_style(&entity.stereotypes);
+    let name_bold = font.font_bold || font.attr_font_bold || stereotype_bold;
+    let name_italic = is_abstract
+        || is_interface
+        || font.font_italic
+        || font.attr_font_italic
+        || stereotype_italic;
     let name_tl =
         text_render::measure_no_underline(&entity.label, name_font_size as f64, name_bold);
     if dim.has_stereotypes {
