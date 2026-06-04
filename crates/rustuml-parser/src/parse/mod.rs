@@ -561,8 +561,18 @@ pub struct DiagramBlock {
     pub typ: String,
     /// Full block text including @start/@end lines, plus any leading preamble.
     pub source: String,
+    /// 1-based source line of the block's top-level `@startXXX`.
+    pub start_line: usize,
     /// 0-based index of this block in the file.
     pub index: usize,
+}
+
+struct OpenDiagramBlock<'a> {
+    typ: String,
+    name: Option<String>,
+    start_line: usize,
+    lines: Vec<&'a str>,
+    depth: usize,
 }
 
 /// Split a PlantUML file into individual blocks.
@@ -575,13 +585,13 @@ pub struct DiagramBlock {
 pub fn split_blocks(input: &str) -> Vec<DiagramBlock> {
     let mut blocks = Vec::new();
     let mut preamble_lines: Vec<&str> = Vec::new();
-    // (outer-type, name, lines, nesting-depth)
-    // nesting_depth counts how many @start tags are open; the block closes
-    // when depth drops back to 0 on an @end.
-    let mut current_start: Option<(String, Option<String>, Vec<&str>, usize)> = None;
+    // depth counts how many @start tags are open; the block closes when it
+    // drops back to 0 on an @end.
+    let mut current_start: Option<OpenDiagramBlock<'_>> = None;
     let mut index = 0usize;
 
-    for line in input.lines() {
+    for (line_idx, line) in input.lines().enumerate() {
+        let source_line = line_idx + 1;
         let trimmed = line.trim();
 
         if let Some(rest) = trimmed.strip_prefix("@start") {
@@ -590,33 +600,40 @@ pub fn split_blocks(input: &str) -> Vec<DiagramBlock> {
                 let mut parts = rest.split_whitespace();
                 let typ = parts.next().unwrap_or("uml").to_string();
                 let name = parts.next().map(|s| s.to_string());
-                current_start = Some((typ, name, vec![line], 1));
-            } else if let Some((_, _, ref mut block_lines, ref mut depth)) = current_start {
+                current_start = Some(OpenDiagramBlock {
+                    typ,
+                    name,
+                    start_line: source_line,
+                    lines: vec![line],
+                    depth: 1,
+                });
+            } else if let Some(block) = &mut current_start {
                 // Nested @start inside an open block — treat as content.
                 // PlantUML allows @startjson embedded inside @startuml etc.
-                block_lines.push(line);
-                *depth += 1;
+                block.lines.push(line);
+                block.depth += 1;
             }
         } else if trimmed.starts_with("@end") {
-            if let Some((_, _, ref mut block_lines, ref mut depth)) = current_start {
-                block_lines.push(line);
-                *depth -= 1;
-                if *depth == 0 {
+            if let Some(block) = &mut current_start {
+                block.lines.push(line);
+                block.depth -= 1;
+                if block.depth == 0 {
                     // Outer block is closed — emit it.
-                    let (typ, name, block_lines, _) = current_start.take().unwrap();
-                    let source = build_source(&preamble_lines, &block_lines);
+                    let block = current_start.take().unwrap();
+                    let source = build_source(&preamble_lines, &block.lines);
                     blocks.push(DiagramBlock {
-                        name,
-                        typ,
+                        name: block.name,
+                        typ: block.typ,
                         source,
+                        start_line: block.start_line,
                         index,
                     });
                     index += 1;
                 }
             }
             // If there's no open block, this is a stray @end — ignore it.
-        } else if let Some((_, _, ref mut block_lines, _)) = current_start {
-            block_lines.push(line);
+        } else if let Some(block) = &mut current_start {
+            block.lines.push(line);
         } else {
             // Before the first block: accumulate as preamble.
             preamble_lines.push(line);
@@ -624,17 +641,44 @@ pub fn split_blocks(input: &str) -> Vec<DiagramBlock> {
     }
 
     // If a block was started but never closed, emit it anyway.
-    if let Some((typ, name, block_lines, _)) = current_start.take() {
-        let source = build_source(&preamble_lines, &block_lines);
+    if let Some(block) = current_start.take() {
+        let source = build_source(&preamble_lines, &block.lines);
         blocks.push(DiagramBlock {
-            name,
-            typ,
+            name: block.name,
+            typ: block.typ,
             source,
+            start_line: block.start_line,
             index,
         });
     }
 
     blocks
+}
+
+fn source_with_original_line_offset(block: &DiagramBlock) -> String {
+    if block.start_line <= 1 || preamble_contains_body_expansion(&block.source) {
+        return block.source.clone();
+    }
+
+    let mut source = "\n".repeat(block.start_line - 1);
+    source.push_str(&block.source);
+    source
+}
+
+fn preamble_contains_body_expansion(source: &str) -> bool {
+    for line in source.lines() {
+        let trimmed = line.trim_start();
+        if trimmed.starts_with("@start") {
+            return false;
+        }
+        if trimmed.starts_with("!procedure ")
+            || trimmed.starts_with("!function ")
+            || trimmed.starts_with("!definelong ")
+        {
+            return true;
+        }
+    }
+    false
 }
 
 fn build_source(preamble: &[&str], block_lines: &[&str]) -> String {
@@ -655,7 +699,7 @@ fn build_source(preamble: &[&str], block_lines: &[&str]) -> String {
 pub fn parse_all(input: &str) -> Vec<Result<Diagram, ParseError>> {
     split_blocks(input)
         .into_iter()
-        .map(|block| parse_with_base(&block.source, None))
+        .map(|block| parse_with_base(&source_with_original_line_offset(&block), None))
         .collect()
 }
 
@@ -674,7 +718,7 @@ pub fn parse_block(input: &str, index: usize) -> Result<Diagram, ParseError> {
             split_blocks(input).len()
         ),
     })?;
-    parse_with_base(&block.source, None)
+    parse_with_base(&source_with_original_line_offset(&block), None)
 }
 
 /// Parse only the block with the given name (from `@startXXX name`).
@@ -690,7 +734,7 @@ pub fn parse_named(input: &str, name: &str) -> Result<Diagram, ParseError> {
             line: 1,
             message: format!("no block named {name:?} found in input"),
         })?;
-    parse_with_base(&block.source, None)
+    parse_with_base(&source_with_original_line_offset(&block), None)
 }
 
 /// Parse YAML input into a diagram model.
@@ -1089,6 +1133,55 @@ mod tests {
         // Preamble should be prepended to each block's source.
         assert!(blocks[0].source.contains("!define ALICE Alice"));
         assert!(blocks[1].source.contains("!define ALICE Alice"));
+    }
+
+    #[test]
+    fn split_records_block_start_lines() {
+        let input = "!define ALICE Alice\n\n@startuml first\nAlice -> Bob\n@enduml\n\n@startuml second\nBob -> Alice\n@enduml";
+        let blocks = split_blocks(input);
+        assert_eq!(blocks.len(), 2);
+        assert_eq!(blocks[0].start_line, 3);
+        assert_eq!(blocks[1].start_line, 7);
+    }
+
+    #[test]
+    fn parse_block_preserves_absolute_source_lines() {
+        let input = "!define ALICE Alice\n!define BOB Bob\n\n@startuml\nALICE -> BOB : Hello\nBOB --> ALICE : Hi\n@enduml";
+        let diagram = parse_block(input, 0).unwrap();
+        let Diagram::Sequence(seq) = diagram else {
+            panic!("expected sequence diagram");
+        };
+        assert_eq!(seq.participants[0].source_line, 5);
+        let crate::diagram::sequence::Event::Message(message) = &seq.events[0] else {
+            panic!("expected message event");
+        };
+        assert_eq!(message.source_line, 5);
+    }
+
+    #[test]
+    fn parse_block_keeps_preamble_procedure_body_lines() {
+        let input = concat!(
+            "!procedure $stdflow($from, $to)\n",
+            "  $from -> $to : request\n",
+            "  $to --> $from : response\n",
+            "!endprocedure\n",
+            "\n",
+            "@startuml\n",
+            "$stdflow(\"Alice\", \"Bob\")\n",
+            "@enduml"
+        );
+        let diagram = parse_block(input, 0).unwrap();
+        let Diagram::Sequence(seq) = diagram else {
+            panic!("expected sequence diagram");
+        };
+        let crate::diagram::sequence::Event::Message(first) = &seq.events[0] else {
+            panic!("expected first message event");
+        };
+        let crate::diagram::sequence::Event::Message(second) = &seq.events[1] else {
+            panic!("expected second message event");
+        };
+        assert_eq!(first.source_line, 2);
+        assert_eq!(second.source_line, 3);
     }
 
     #[test]
