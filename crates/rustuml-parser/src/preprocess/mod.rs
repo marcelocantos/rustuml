@@ -317,7 +317,9 @@ struct PreprocessContext {
     collecting_function: Option<String>,
     collecting_definelong: Option<String>,
     subs: HashMap<String, Vec<String>>,
+    sub_blocks: Vec<SubBlock>,
     collecting_sub: Option<String>,
+    collecting_sub_lines: Vec<String>,
     /// Local variable scopes for function calls (stack of saved scopes).
     local_vars: Vec<HashMap<String, String>>,
     /// Pending return value from a `!return` inside a function body.
@@ -357,6 +359,11 @@ struct ForEachState {
 struct WhileState {
     condition: String,
     body_lines: Vec<String>,
+}
+
+#[derive(Clone)]
+struct SubBlock {
+    lines: Vec<String>,
 }
 
 #[derive(Clone)]
@@ -400,7 +407,9 @@ impl PreprocessContext {
             collecting_function: None,
             collecting_definelong: None,
             subs: HashMap::new(),
+            sub_blocks: Vec::new(),
             collecting_sub: None,
+            collecting_sub_lines: Vec::new(),
             local_vars: Vec::new(),
             return_signal: None,
             render_clock: RenderClock::from_env(),
@@ -605,9 +614,15 @@ impl PreprocessContext {
         // Collecting sub.
         if self.collecting_sub.is_some() {
             if trimmed == "!endsub" {
-                self.collecting_sub = None;
+                if self.collecting_sub.take().is_some() {
+                    self.sub_blocks.push(SubBlock {
+                        lines: std::mem::take(&mut self.collecting_sub_lines),
+                    });
+                }
             } else if let Some(name) = self.collecting_sub.clone() {
-                self.subs.entry(name).or_default().push(line.to_string());
+                let line = line.to_string();
+                self.subs.entry(name).or_default().push(line.clone());
+                self.collecting_sub_lines.push(line);
             }
             self.push_directive_placeholder(output);
             return;
@@ -638,6 +653,7 @@ impl PreprocessContext {
         // Startsub.
         if let Some(name) = trimmed.strip_prefix("!startsub ") {
             self.collecting_sub = Some(name.trim().to_string());
+            self.collecting_sub_lines.clear();
             self.push_directive_placeholder(output);
             return;
         }
@@ -1366,6 +1382,7 @@ impl PreprocessContext {
         if let Some(theme_src) = themes::get_theme_source(name_part) {
             let body = themes::strip_front_matter(theme_src);
             if self.include_depth < MAX_INCLUDE_DEPTH {
+                let sub_start = self.sub_blocks.len();
                 self.include_depth += 1;
                 let expanded = self.process(body);
                 self.include_depth -= 1;
@@ -1375,6 +1392,25 @@ impl PreprocessContext {
                 // every parser sees plain `skinparam Key Value` lines.
                 self.theme_tail
                     .extend(themes::flatten_theme_output(&expanded));
+
+                // PlantUML themes keep diagram-family styles in `!startsub`
+                // blocks (activity, sequence, class, arrow, note, etc.). A
+                // `!theme` load makes those family blocks available to the
+                // current diagram; process blocks collected by this theme
+                // through the normal TIM evaluator so procedure calls and
+                // variables are resolved before flattening.
+                let theme_subs: Vec<SubBlock> = self.sub_blocks[sub_start..].to_vec();
+                for sub in theme_subs {
+                    if sub.lines.is_empty() {
+                        continue;
+                    }
+                    let refs: Vec<&str> = sub.lines.iter().map(String::as_str).collect();
+                    self.include_depth += 1;
+                    let expanded = self.process_lines(&refs);
+                    self.include_depth -= 1;
+                    self.theme_tail
+                        .extend(themes::flatten_theme_output(&expanded));
+                }
             }
         }
         // Emit a placeholder blank line so the diagram body's source-line
@@ -3379,6 +3415,16 @@ mod tests {
         assert_eq!(lines, vec!["participant Local"]);
 
         let _ = std::fs::remove_dir_all(&dir);
+    }
+
+    #[test]
+    fn theme_expands_sub_blocks() {
+        let input = "@startuml\n!theme aws-orange\nstart\n@enduml";
+        let lines = pp(input);
+        assert!(lines.contains(&"skinparam activityBarColor #1D8102".to_string()));
+        assert!(lines.contains(&"skinparam activityStartColor #0073bb".to_string()));
+        assert!(lines.contains(&"skinparam arrowThickness 3".to_string()));
+        assert!(lines.contains(&"skinparam sequenceArrowThickness 3".to_string()));
     }
 
     #[test]

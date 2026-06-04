@@ -194,6 +194,11 @@ impl Palette {
                     }
                 }
                 "activityarrowcolor" | "arrowcolor" => p.arrow_color = resolved,
+                "activityarrowthickness" | "arrowthickness" => {
+                    if let Ok(v) = val.parse::<f64>() {
+                        p.arrow_thickness = pm::fmt_coord(v);
+                    }
+                }
                 // `activityStartColor` sets the start ellipse fill (border
                 // keeps its `#222222` default unless a border colour is
                 // specified). `activityStopColor` and `activityEndColor`

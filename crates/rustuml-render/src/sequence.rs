@@ -1059,6 +1059,9 @@ struct PlantUmlSvg {
     /// Participant head/tail box border thickness (default `0.5`). Driven
     /// by `skinparam participantBorderThickness`.
     participant_border_thickness: String,
+    /// Plain participant head/tail label colour. Driven by
+    /// `skinparam participantFontColor`.
+    participant_font_color: String,
     /// Lifeline dashed-line stroke colour (default `#181818`). Driven by
     /// `skinparam sequenceLifeLineBorderColor`.
     lifeline_border: String,
@@ -1082,6 +1085,7 @@ impl PlantUmlSvg {
             arrow_thickness: "1".into(),
             participant_border: "#181818".into(),
             participant_border_thickness: "0.5".into(),
+            participant_font_color: "#000000".into(),
             lifeline_border: "#181818".into(),
             lifeline_border_thickness: "0.5".into(),
             active_participant_url: None,
@@ -1280,7 +1284,7 @@ impl PlantUmlSvg {
                 y: text_y,
                 font_size: 14,
                 font_family: "sans-serif",
-                fill: "#000000",
+                fill: &self.participant_font_color,
                 bold: false,
                 italic: false,
                 underline: false,
@@ -2575,6 +2579,7 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
     let mut participant_fill = "#E2E2F0".to_string();
     let mut participant_border = "#181818".to_string();
     let mut participant_border_thickness: String = "0.5".to_string();
+    let mut participant_font_color = "#000000".to_string();
     let mut lifeline_border = "#181818".to_string();
     let lifeline_border_thickness: String = "0.5".to_string();
     // Per-participant-kind background overrides. Each defaults to
@@ -2659,6 +2664,9 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                 if let Ok(v) = val.parse::<f64>() {
                     participant_border_thickness = plantuml_metrics::fmt_coord(v);
                 }
+            }
+            "participantfontcolor" | "sequenceparticipantfontcolor" => {
+                participant_font_color = resolve_color(val);
             }
             "sequencelifelinebordercolor" => {
                 lifeline_border = resolve_color(val);
@@ -4753,6 +4761,7 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
     svg.arrow_thickness = default_arrow_thickness.to_string();
     svg.participant_border = participant_border.clone();
     svg.participant_border_thickness = participant_border_thickness.clone();
+    svg.participant_font_color = participant_font_color.clone();
     svg.lifeline_border = lifeline_border.clone();
     svg.lifeline_border_thickness = lifeline_border_thickness.clone();
     svg.head_box_rx = head_box_rx;
