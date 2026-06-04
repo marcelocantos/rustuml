@@ -2722,15 +2722,19 @@ fn render_entity_content(
             fmt4(y),
         )
         .unwrap();
-        // 2.5px squaring strip at the header bottom (no rounding).
+        // Squaring strip at the header bottom (no rounding). Its height
+        // matches the rounded corner radius, so `skinparam roundCorner N`
+        // uses an N/2 strip rather than the default 2.5px.
+        let corner_strip_h = rx_str.parse::<f64>().unwrap_or(2.5);
         write!(
             svg,
-            r#"<rect fill="{}" height="2.5" style="{}" width="{}" x="{}" y="{}"/>"#,
+            r#"<rect fill="{}" height="{}" style="{}" width="{}" x="{}" y="{}"/>"#,
             header_fill,
+            fmt4(corner_strip_h),
             grad_style,
             fmt_tl(dim.width),
             fmt4(x),
-            fmt4(first_sep - 2.5),
+            fmt4(first_sep - corner_strip_h),
         )
         .unwrap();
         // Border overlay (no fill) so the gradient repaint doesn't cover it.
