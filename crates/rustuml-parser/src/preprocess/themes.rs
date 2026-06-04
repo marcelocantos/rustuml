@@ -137,7 +137,8 @@ pub(super) fn flatten_theme_output(lines: &[String]) -> Vec<String> {
         let line = raw.trim();
 
         // `<style>` block: drop everything up to `</style>` (case-sensitive,
-        // matching PlantUML's own convention).
+        // matching PlantUML's own convention). Preserve the few root-level
+        // style values that older renderers can consume as skinparams.
         if in_style {
             if line == "}" {
                 style_scope = None;
@@ -145,12 +146,15 @@ pub(super) fn flatten_theme_output(lines: &[String]) -> Vec<String> {
                 style_scope = Some(scope.trim().to_ascii_lowercase());
             } else if style_scope.as_deref() == Some("root")
                 && let Some((key, value)) = line.split_once(char::is_whitespace)
-                && key.eq_ignore_ascii_case("LineThickness")
             {
-                out.push(format!(
-                    "skinparam __styleRootLineThickness {}",
-                    value.trim()
-                ));
+                if key.eq_ignore_ascii_case("LineThickness") {
+                    out.push(format!(
+                        "skinparam __styleRootLineThickness {}",
+                        value.trim()
+                    ));
+                } else if key.eq_ignore_ascii_case("LineColor") {
+                    out.push(format!("skinparam __styleRootLineColor {}", value.trim()));
+                }
             }
             if line.contains("</style>") {
                 in_style = false;
@@ -282,6 +286,7 @@ mod tests {
         let input = vec![
             "<style>".to_string(),
             "root {".to_string(),
+            "  LineColor #2683B9".to_string(),
             "  LineThickness 1".to_string(),
             "  Padding 6".to_string(),
             "}".to_string(),
@@ -293,7 +298,10 @@ mod tests {
         let out = flatten_theme_output(&input);
         assert_eq!(
             out,
-            vec!["skinparam __styleRootLineThickness 1".to_string()]
+            vec![
+                "skinparam __styleRootLineColor #2683B9".to_string(),
+                "skinparam __styleRootLineThickness 1".to_string(),
+            ]
         );
     }
 

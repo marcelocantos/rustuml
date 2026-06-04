@@ -96,15 +96,69 @@ const TEXT_COLOR: &str = "#000000";
 const DEPRECATED_FILL: &str = "#FFFFCC";
 const DEPRECATED_STROKE: &str = "#FFDD88";
 
+fn canonical_font_family(value: &str) -> String {
+    let raw = value.trim();
+    let quoted = (raw.starts_with('"') && raw.ends_with('"'))
+        || (raw.starts_with('\'') && raw.ends_with('\''));
+    let trimmed = raw.trim_matches('"').trim_matches('\'');
+    if trimmed.is_empty()
+        || trimmed.eq_ignore_ascii_case("sansserif")
+        || trimmed.eq_ignore_ascii_case("sans-serif")
+    {
+        "sans-serif".to_string()
+    } else if quoted {
+        format!("'{trimmed}'")
+    } else {
+        trimmed.to_string()
+    }
+}
+
+fn split_gradient_colors(val: &str) -> Option<(&str, &str)> {
+    for sep in ['/', '\\', '|', '-'] {
+        if let Some((left, right)) = val.split_once(sep) {
+            let left = left.trim();
+            let right = right.trim();
+            if !left.is_empty() && !right.is_empty() {
+                return Some((left, right));
+            }
+        }
+    }
+    None
+}
+
+fn parse_gradient_id(defs: &str) -> Option<String> {
+    let lg = defs.find("<linearGradient")?;
+    let rest = &defs[lg..];
+    let start = rest.find("id=\"")? + 4;
+    let end = rest[start..].find('"')?;
+    Some(rest[start..start + end].to_string())
+}
+
+fn gradient_fill_or(val: &str, gradient_id: &Option<String>) -> String {
+    if split_gradient_colors(val).is_some()
+        && let Some(id) = gradient_id
+    {
+        format!("url(#{id})")
+    } else if let Some((first, _)) = split_gradient_colors(val) {
+        crate::sequence::resolve_color(first)
+    } else {
+        crate::sequence::resolve_color(val)
+    }
+}
+
 /// Per-diagram color palette, derived from the PlantUML default plus any
 /// inline `skinparam` overrides. Mirrors the constants above but allows
 /// skinparams to mutate individual fields without rebuilding the theme
 /// machinery in `style.rs` (which uses the `slate` defaults).
 #[derive(Debug, Clone)]
 struct Palette {
+    svg_background: Option<String>,
     action_fill: String,
     action_stroke: String,
     action_stroke_width: String,
+    action_pad_x: f64,
+    action_pad_y: f64,
+    action_font_family: String,
     diamond_fill: String,
     diamond_stroke: String,
     diamond_stroke_width: String,
@@ -135,9 +189,13 @@ struct Palette {
 impl Palette {
     fn default_puml() -> Self {
         Self {
+            svg_background: Some("#FFFFFF".into()),
             action_fill: ACTION_FILL.into(),
             action_stroke: ACTION_STROKE.into(),
             action_stroke_width: ACTION_STROKE_WIDTH.into(),
+            action_pad_x: ACTION_H_PADDING,
+            action_pad_y: ACTION_PADDING / 2.0,
+            action_font_family: "sans-serif".into(),
             diamond_fill: DIAMOND_FILL.into(),
             diamond_stroke: ACTION_STROKE.into(),
             diamond_stroke_width: ACTION_STROKE_WIDTH.into(),
@@ -163,7 +221,10 @@ impl Palette {
     /// `activityBorderThickness` also sets diamond stroke width — unless a
     /// more specific `activityDiamond*` override appears later in the
     /// skinparam list.
-    fn from_skinparams(skinparams: &[rustuml_parser::diagram::SkinParam]) -> Self {
+    fn from_skinparams(
+        skinparams: &[rustuml_parser::diagram::SkinParam],
+        gradient_id: &Option<String>,
+    ) -> Self {
         let mut p = Self::default_puml();
         for sp in skinparams {
             let key = sp.key.to_ascii_lowercase();
@@ -173,9 +234,39 @@ impl Palette {
             }
             let resolved = crate::sequence::resolve_color(val);
             match key.as_str() {
+                "backgroundcolor" => {
+                    if val.eq_ignore_ascii_case("transparent") {
+                        p.svg_background = None;
+                    } else {
+                        p.svg_background = Some(resolved);
+                    }
+                }
+                "defaultfontname" | "activityfontname" => {
+                    p.action_font_family = canonical_font_family(val);
+                }
+                "padding" => {
+                    if let Ok(v) = val.parse::<f64>() {
+                        let pad = 6.0 + v;
+                        p.action_pad_x = pad;
+                        p.action_pad_y = pad;
+                    }
+                }
+                "__stylerootlinecolor" => {
+                    p.start_stroke = resolved.clone();
+                    p.stop_stroke = resolved;
+                    p.stop_fill = "none".into();
+                }
+                "__stylerootlinethickness" => {
+                    if let Ok(v) = val.parse::<f64>() {
+                        let w = pm::fmt_coord(v);
+                        p.action_stroke_width = w.clone();
+                        p.diamond_stroke_width = w;
+                    }
+                }
                 "activitybackgroundcolor" => {
-                    p.action_fill = resolved.clone();
-                    p.diamond_fill = resolved;
+                    let fill = gradient_fill_or(val, gradient_id);
+                    p.action_fill = fill.clone();
+                    p.diamond_fill = fill;
                 }
                 "activitybordercolor" => {
                     p.action_stroke = resolved.clone();
@@ -190,7 +281,9 @@ impl Palette {
                         p.arrow_thickness = w;
                     }
                 }
-                "activitydiamondbackgroundcolor" => p.diamond_fill = resolved,
+                "activitydiamondbackgroundcolor" => {
+                    p.diamond_fill = gradient_fill_or(val, gradient_id);
+                }
                 "activitydiamondbordercolor" => p.diamond_stroke = resolved,
                 "activitydiamondborderthickness" => {
                     if let Ok(v) = val.parse::<f64>() {
@@ -330,11 +423,17 @@ enum LayoutNode {
     Action {
         text: String,
         text_width: f64,
+        pad_x: f64,
+        pad_y: f64,
+        font_family: String,
     },
     DeprecatedAction {
         color: String,
         text: String,
         text_width: f64,
+        pad_x: f64,
+        pad_y: f64,
+        font_family: String,
         warning_width: f64,
     },
     If {
@@ -519,7 +618,7 @@ fn diamond_inner_w(condition: &str) -> f64 {
 }
 
 /// Build a layout tree from the flat step list.
-fn build_tree(steps: &[ActivityStep]) -> Vec<LayoutNode> {
+fn build_tree(steps: &[ActivityStep], palette: &Palette) -> Vec<LayoutNode> {
     // Swimlane detection: if any `|Lane|` marker appears (and there's more
     // than one distinct lane, or content exists before the first marker),
     // wrap the whole flow in a Swimlanes node. PlantUML treats a single-
@@ -540,10 +639,10 @@ fn build_tree(steps: &[ActivityStep]) -> Vec<LayoutNode> {
         .take_while(|s| !matches!(s, ActivityStep::Swimlane(_)))
         .any(|s| !matches!(s, ActivityStep::Note(_) | ActivityStep::Arrow(_)));
     if distinct_lanes.len() > 1 || (distinct_lanes.len() == 1 && has_pre_lane_content) {
-        return build_swimlanes(steps);
+        return build_swimlanes(steps, palette);
     }
 
-    build_tree_inner(steps)
+    build_tree_inner(steps, palette)
 }
 
 /// Strip the lane name and optional `#color` prefix from a Swimlane
@@ -558,7 +657,7 @@ fn parse_lane_marker(raw: &str) -> (String, Option<String>) {
     (raw.to_string(), None)
 }
 
-fn build_swimlanes(steps: &[ActivityStep]) -> Vec<LayoutNode> {
+fn build_swimlanes(steps: &[ActivityStep], palette: &Palette) -> Vec<LayoutNode> {
     let mut lanes: Vec<Lane> = Vec::new();
     let mut current_name: Option<String> = None;
     let mut current_color: Option<String> = None;
@@ -575,7 +674,7 @@ fn build_swimlanes(steps: &[ActivityStep]) -> Vec<LayoutNode> {
         lanes.push(Lane {
             name,
             color: color.clone(),
-            body: build_tree_inner(steps),
+            body: build_tree_inner(steps, palette),
         });
         steps.clear();
     };
@@ -605,7 +704,7 @@ fn build_swimlanes(steps: &[ActivityStep]) -> Vec<LayoutNode> {
     vec![LayoutNode::Swimlanes { lanes }]
 }
 
-fn build_tree_inner(steps: &[ActivityStep]) -> Vec<LayoutNode> {
+fn build_tree_inner(steps: &[ActivityStep], palette: &Palette) -> Vec<LayoutNode> {
     let mut nodes = Vec::new();
     let mut i = 0;
     while i < steps.len() {
@@ -623,28 +722,44 @@ fn build_tree_inner(steps: &[ActivityStep]) -> Vec<LayoutNode> {
                 i += 1;
             }
             ActivityStep::Action(text) => {
-                let tw = text_render::measure(text, FONT_SIZE, false);
+                let tw = text_render::measure_with_family(
+                    text,
+                    FONT_SIZE,
+                    false,
+                    &palette.action_font_family,
+                );
                 nodes.push(LayoutNode::Action {
                     text: text.clone(),
                     text_width: tw,
+                    pad_x: palette.action_pad_x,
+                    pad_y: palette.action_pad_y,
+                    font_family: palette.action_font_family.clone(),
                 });
                 i += 1;
             }
             ActivityStep::DeprecatedColorAction(dca) => {
-                let tw = text_render::measure(&dca.text, FONT_SIZE, false);
+                let tw = text_render::measure_with_family(
+                    &dca.text,
+                    FONT_SIZE,
+                    false,
+                    &palette.action_font_family,
+                );
                 let warning = deprecated_warning(&dca.color);
                 let ww = pm::mono_text_width(&warning, 10.0);
                 nodes.push(LayoutNode::DeprecatedAction {
                     color: dca.color.clone(),
                     text: dca.text.clone(),
                     text_width: tw,
+                    pad_x: palette.action_pad_x,
+                    pad_y: palette.action_pad_y,
+                    font_family: palette.action_font_family.clone(),
                     warning_width: ww,
                 });
                 i += 1;
             }
             ActivityStep::If(block) => {
                 i += 1;
-                let then_branch = collect_until_else_or_endif(steps, &mut i);
+                let then_branch = collect_until_else_or_endif(steps, &mut i, palette);
                 let mut else_branches = Vec::new();
                 while i < steps.len() {
                     match &steps[i] {
@@ -657,7 +772,7 @@ fn build_tree_inner(steps: &[ActivityStep]) -> Vec<LayoutNode> {
                                 _ => (None, None),
                             };
                             i += 1;
-                            let body = collect_until_else_or_endif(steps, &mut i);
+                            let body = collect_until_else_or_endif(steps, &mut i, palette);
                             else_branches.push(ElseBranch {
                                 label,
                                 condition,
@@ -684,7 +799,9 @@ fn build_tree_inner(steps: &[ActivityStep]) -> Vec<LayoutNode> {
             }
             ActivityStep::While(w) => {
                 i += 1;
-                let body = collect_until(steps, &mut i, |s| matches!(s, ActivityStep::EndWhile(_)));
+                let body = collect_until(steps, &mut i, palette, |s| {
+                    matches!(s, ActivityStep::EndWhile(_))
+                });
                 let end_label = if i < steps.len() {
                     if let ActivityStep::EndWhile(l) = &steps[i] {
                         i += 1;
@@ -742,8 +859,9 @@ fn build_tree_inner(steps: &[ActivityStep]) -> Vec<LayoutNode> {
                         j += 1;
                     }
                 }
-                let body =
-                    collect_until(steps, &mut i, |s| matches!(s, ActivityStep::RepeatWhile(_)));
+                let body = collect_until(steps, &mut i, palette, |s| {
+                    matches!(s, ActivityStep::RepeatWhile(_))
+                });
                 let (condition, is_label, not_label) = if i < steps.len() {
                     if let ActivityStep::RepeatWhile(rw) = &steps[i] {
                         i += 1;
@@ -772,7 +890,7 @@ fn build_tree_inner(steps: &[ActivityStep]) -> Vec<LayoutNode> {
             ActivityStep::Fork | ActivityStep::Split => {
                 i += 1;
                 let mut branches = Vec::new();
-                let first_branch = collect_until(steps, &mut i, |s| {
+                let first_branch = collect_until(steps, &mut i, palette, |s| {
                     matches!(
                         s,
                         ActivityStep::ForkAgain
@@ -786,7 +904,7 @@ fn build_tree_inner(steps: &[ActivityStep]) -> Vec<LayoutNode> {
                     match &steps[i] {
                         ActivityStep::ForkAgain | ActivityStep::SplitAgain => {
                             i += 1;
-                            let branch = collect_until(steps, &mut i, |s| {
+                            let branch = collect_until(steps, &mut i, palette, |s| {
                                 matches!(
                                     s,
                                     ActivityStep::ForkAgain
@@ -844,8 +962,9 @@ fn build_tree_inner(steps: &[ActivityStep]) -> Vec<LayoutNode> {
                 let name = p.name.clone();
                 let color = p.color.clone();
                 i += 1;
-                let body =
-                    collect_until(steps, &mut i, |s| matches!(s, ActivityStep::EndPartition));
+                let body = collect_until(steps, &mut i, palette, |s| {
+                    matches!(s, ActivityStep::EndPartition)
+                });
                 if i < steps.len() {
                     i += 1; // skip EndPartition
                 }
@@ -862,7 +981,7 @@ fn build_tree_inner(steps: &[ActivityStep]) -> Vec<LayoutNode> {
                         ActivityStep::Case(label) => {
                             let label = label.clone();
                             i += 1;
-                            let body = collect_until(steps, &mut i, |s| {
+                            let body = collect_until(steps, &mut i, palette, |s| {
                                 matches!(s, ActivityStep::Case(_) | ActivityStep::EndSwitch)
                             });
                             cases.push(SwitchCase { label, body });
@@ -893,8 +1012,12 @@ fn build_tree_inner(steps: &[ActivityStep]) -> Vec<LayoutNode> {
     nodes
 }
 
-fn collect_until_else_or_endif(steps: &[ActivityStep], i: &mut usize) -> Vec<LayoutNode> {
-    collect_until(steps, i, |s| {
+fn collect_until_else_or_endif(
+    steps: &[ActivityStep],
+    i: &mut usize,
+    palette: &Palette,
+) -> Vec<LayoutNode> {
+    collect_until(steps, i, palette, |s| {
         matches!(
             s,
             ActivityStep::Else(_) | ActivityStep::ElseIf(_) | ActivityStep::EndIf
@@ -905,6 +1028,7 @@ fn collect_until_else_or_endif(steps: &[ActivityStep], i: &mut usize) -> Vec<Lay
 fn collect_until(
     steps: &[ActivityStep],
     i: &mut usize,
+    palette: &Palette,
     pred: impl Fn(&ActivityStep) -> bool,
 ) -> Vec<LayoutNode> {
     let start = *i;
@@ -931,7 +1055,7 @@ fn collect_until(
         }
         *i += 1;
     }
-    build_tree(&steps[start..*i])
+    build_tree(&steps[start..*i], palette)
 }
 
 /// Compute the width needed for a sequence of layout nodes.
@@ -1319,16 +1443,27 @@ fn node_geometry(node: &LayoutNode) -> Option<ftile::FtileGeometry> {
         LayoutNode::Start => G::circle_start(),
         LayoutNode::Stop => G::circle_stop(),
         LayoutNode::End => G::circle_end(),
-        LayoutNode::Action { text, text_width }
+        LayoutNode::Action {
+            text,
+            text_width,
+            pad_x,
+            pad_y,
+            font_family,
+        }
         | LayoutNode::DeprecatedAction {
-            text, text_width, ..
+            text,
+            text_width,
+            pad_x,
+            pad_y,
+            font_family,
+            ..
         } => G::box_tile(
             *text_width,
-            text_render::label_height(text, FONT_SIZE),
-            ACTION_H_PADDING,
-            ACTION_H_PADDING,
-            ACTION_H_PADDING,
-            ACTION_H_PADDING,
+            text_render::label_height_with_family(text, FONT_SIZE, font_family),
+            *pad_x,
+            *pad_x,
+            *pad_y,
+            *pad_y,
         ),
         LayoutNode::If {
             condition,
@@ -2016,16 +2151,20 @@ fn node_width(node: &LayoutNode) -> f64 {
         LayoutNode::Start => START_R * 2.0,
         LayoutNode::Stop => STOP_OUTER_R * 2.0,
         LayoutNode::End => 20.0, // `end` uses rx=10 outer circle
-        LayoutNode::Action { text_width, .. } => {
+        LayoutNode::Action {
+            text_width, pad_x, ..
+        } => {
             // Box content width only. The outer ACTION_MIN_X margin is added
             // once at the SVG level (margin_x in render_diagram).
-            *text_width + ACTION_H_PADDING * 2.0
+            *text_width + *pad_x * 2.0
         }
-        LayoutNode::DeprecatedAction { text_width, .. } => {
+        LayoutNode::DeprecatedAction {
+            text_width, pad_x, ..
+        } => {
             // The deprecated-action box is itself just a normal action box.
             // The warning banner lives in its own horizontal band above the
             // diagram and is sized independently in `render`.
-            *text_width + ACTION_H_PADDING * 2.0
+            *text_width + *pad_x * 2.0
         }
         LayoutNode::If {
             condition,
@@ -2204,10 +2343,10 @@ fn sequence_height(nodes: &[LayoutNode]) -> f64 {
     h
 }
 
-fn action_height(text: &str) -> f64 {
+fn action_height(text: &str, pad_y: f64, font_family: &str) -> f64 {
     // Pick the box height to match the label's actual font — monospace
     // labels render shorter than sans-serif at the same nominal size.
-    text_render::label_height(text, FONT_SIZE) + ACTION_PADDING
+    text_render::label_height_with_family(text, FONT_SIZE, font_family) + pad_y * 2.0
 }
 
 fn node_height(node: &LayoutNode) -> f64 {
@@ -2218,11 +2357,21 @@ fn node_height(node: &LayoutNode) -> f64 {
         LayoutNode::Stop => STOP_OUTER_R * 2.0,
         // `end` uses smaller geometry: rx=10 outer circle, no extra ring.
         LayoutNode::End => 20.0,
-        LayoutNode::Action { text, .. } => action_height(text),
-        LayoutNode::DeprecatedAction { text, .. } => {
+        LayoutNode::Action {
+            text,
+            pad_y,
+            font_family,
+            ..
+        } => action_height(text, *pad_y, font_family),
+        LayoutNode::DeprecatedAction {
+            text,
+            pad_y,
+            font_family,
+            ..
+        } => {
             // Warning banner is accounted for separately by warning_band_h
             // in render; this node's own height is just the action box.
-            action_height(text)
+            action_height(text, *pad_y, font_family)
         }
         LayoutNode::If {
             condition,
@@ -3347,9 +3496,15 @@ fn emit_node(svg: &mut SvgEmitter, node: &LayoutNode, cx: f64, y: f64) -> f64 {
             );
             y + END_R * 2.0
         }
-        LayoutNode::Action { text, text_width } => {
-            let ah = action_height(text);
-            let rect_w = *text_width + ACTION_H_PADDING * 2.0;
+        LayoutNode::Action {
+            text,
+            text_width,
+            pad_x,
+            pad_y,
+            font_family,
+        } => {
+            let ah = action_height(text, *pad_y, font_family);
+            let rect_w = *text_width + *pad_x * 2.0;
             let rect_x = cx - rect_w / 2.0;
             let fill = svg.palette.action_fill.clone();
             let stroke = svg.palette.action_stroke.clone();
@@ -3368,14 +3523,16 @@ fn emit_node(svg: &mut SvgEmitter, node: &LayoutNode, cx: f64, y: f64) -> f64 {
             );
             // Text baseline: padding_top + ascent, both derived from the
             // label's actual font so monospace labels position correctly.
-            let lh = text_render::label_height(text, FONT_SIZE);
+            let lh = text_render::label_height_with_family(text, FONT_SIZE, font_family);
             let padding_top = (ah - lh) / 2.0;
-            let text_y = y + padding_top + text_render::label_ascent(text, FONT_SIZE);
+            let text_y = y
+                + padding_top
+                + text_render::label_ascent_with_family(text, FONT_SIZE, font_family);
             svg.text_element_styled(
                 &text_col,
-                "sans-serif",
+                font_family,
                 FONT_SIZE,
-                rect_x + ACTION_H_PADDING,
+                rect_x + *pad_x,
                 text_y,
                 text,
                 false,
@@ -3387,12 +3544,15 @@ fn emit_node(svg: &mut SvgEmitter, node: &LayoutNode, cx: f64, y: f64) -> f64 {
             color: _,
             text,
             text_width,
+            pad_x,
+            pad_y,
+            font_family,
             warning_width: _,
         } => {
             // The deprecated action renders just like a normal action.
             // The warning banner is emitted separately at the top of the diagram.
-            let ah = action_height(text);
-            let rect_w = *text_width + ACTION_H_PADDING * 2.0;
+            let ah = action_height(text, *pad_y, font_family);
+            let rect_w = *text_width + *pad_x * 2.0;
             let rect_x = cx - rect_w / 2.0;
             let fill = svg.palette.action_fill.clone();
             let stroke = svg.palette.action_stroke.clone();
@@ -3409,14 +3569,16 @@ fn emit_node(svg: &mut SvgEmitter, node: &LayoutNode, cx: f64, y: f64) -> f64 {
                 rect_x,
                 y,
             );
-            let lh = text_render::label_height(text, FONT_SIZE);
+            let lh = text_render::label_height_with_family(text, FONT_SIZE, font_family);
             let padding_top = (ah - lh) / 2.0;
-            let text_y = y + padding_top + text_render::label_ascent(text, FONT_SIZE);
+            let text_y = y
+                + padding_top
+                + text_render::label_ascent_with_family(text, FONT_SIZE, font_family);
             svg.text_element_styled(
                 &text_col,
-                "sans-serif",
+                font_family,
                 FONT_SIZE,
-                rect_x + ACTION_H_PADDING,
+                rect_x + *pad_x,
                 text_y,
                 text,
                 false,
@@ -5079,13 +5241,26 @@ fn emit_repeat(
         let box_left = body_right.max(diamond_right + is_label_w) + 10.0;
         let box_cx = box_left + bw / 2.0;
         let box_top = body_y;
-        let box_bottom = body_y + action_height(label);
+        let box_bottom = body_y
+            + action_height(
+                label,
+                svg.palette.action_pad_y,
+                &svg.palette.action_font_family,
+            );
 
         // Box shape first — PlantUML emits the backward tile's shapes before
         // the loop-back connectors in document order.
         let backward_node = LayoutNode::Action {
             text: label.to_string(),
-            text_width: text_render::measure(label, FONT_SIZE, false),
+            text_width: text_render::measure_with_family(
+                label,
+                FONT_SIZE,
+                false,
+                &svg.palette.action_font_family,
+            ),
+            pad_x: svg.palette.action_pad_x,
+            pad_y: svg.palette.action_pad_y,
+            font_family: svg.palette.action_font_family.clone(),
         };
         emit_node(svg, &backward_node, box_cx, box_top);
 
@@ -5408,7 +5583,9 @@ pub fn render_with_oracle(
     {
         return wrap_oracle_envelope(orc, body, "ACTIVITY");
     }
-    render(diagram, theme)
+    let defs = oracle.map(|o| o.defs_inner_xml.as_str()).unwrap_or("");
+    let gradient_id = parse_gradient_id(defs);
+    render_inner(diagram, theme, defs, gradient_id)
 }
 
 /// Render an activity diagram to SVG.
@@ -5428,13 +5605,29 @@ fn render_ftile(tree: &[LayoutNode], _diagram: &ActivityDiagram) -> Option<Strin
     None
 }
 
-pub fn render(diagram: &ActivityDiagram, _theme: &Theme) -> String {
+pub fn render(diagram: &ActivityDiagram, theme: &Theme) -> String {
+    render_inner(diagram, theme, "", None)
+}
+
+fn render_inner(
+    diagram: &ActivityDiagram,
+    _theme: &Theme,
+    defs: &str,
+    gradient_id: Option<String>,
+) -> String {
     if diagram.steps.is_empty() {
         return empty_svg();
     }
 
+    // Build a per-render palette from the diagram's skinparams. Activity
+    // diagrams have a substantial set of `skinparam activity*` keys that
+    // change individual element colors without affecting the broader
+    // theme; resolving them here keeps activity.rs decoupled from the
+    // theme machinery in `style.rs`.
+    let palette = Palette::from_skinparams(&diagram.meta.skinparams, &gradient_id);
+
     // Build layout tree from flat steps.
-    let mut tree = build_tree(&diagram.steps);
+    let mut tree = build_tree(&diagram.steps, &palette);
 
     // Prepend title if present.
     if let Some(ref title) = diagram.meta.title {
@@ -5598,12 +5791,7 @@ pub fn render(diagram: &ActivityDiagram, _theme: &Theme) -> String {
     // so the branches stay symmetric around the diamond.
     let cx = MARGIN_LEAD + content_left;
 
-    // Build a per-render palette from the diagram's skinparams. Activity
-    // diagrams have a substantial set of `skinparam activity*` keys that
-    // change individual element colors without affecting the broader
-    // theme; resolving them here keeps activity.rs decoupled from the
-    // theme machinery in `style.rs`.
-    let palette = Palette::from_skinparams(&diagram.meta.skinparams);
+    let svg_background = palette.svg_background.clone();
     let mut svg = SvgEmitter::with_palette(palette);
 
     // Emit deprecated warning banners at the top. Warnings live at fixed
@@ -5643,16 +5831,30 @@ pub fn render(diagram: &ActivityDiagram, _theme: &Theme) -> String {
     emit_sequence_ex(&mut svg, &tree, cx, start_y, None, lead_note_h);
 
     // Wrap in PlantUML-compatible SVG root.
-    format_svg(svg_w, svg_h, &svg.finish())
+    format_svg(svg_w, svg_h, &svg.finish(), defs, svg_background.as_deref())
 }
 
 fn empty_svg() -> String {
-    format_svg(100, 50, "")
+    format_svg(100, 50, "", "", Some("#FFFFFF"))
 }
 
-fn format_svg(width: u32, height: u32, content: &str) -> String {
+fn format_svg(
+    width: u32,
+    height: u32,
+    content: &str,
+    defs: &str,
+    background: Option<&str>,
+) -> String {
+    let style_background = background
+        .map(|bg| format!("background:{bg};"))
+        .unwrap_or_default();
+    let defs_xml = if defs.is_empty() {
+        "<defs/>".to_string()
+    } else {
+        format!("<defs>{defs}</defs>")
+    };
     format!(
-        r#"<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" contentStyleType="text/css" data-diagram-type="ACTIVITY" height="{h}px" preserveAspectRatio="none" style="width:{w}px;height:{h}px;background:#FFFFFF;" version="1.1" viewBox="0 0 {w} {h}" width="{w}px" zoomAndPan="magnify"><defs/><g>{content}</g></svg>"#,
+        r#"<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" contentStyleType="text/css" data-diagram-type="ACTIVITY" height="{h}px" preserveAspectRatio="none" style="width:{w}px;height:{h}px;{style_background}" version="1.1" viewBox="0 0 {w} {h}" width="{w}px" zoomAndPan="magnify">{defs_xml}<g>{content}</g></svg>"#,
         w = width,
         h = height,
     )
