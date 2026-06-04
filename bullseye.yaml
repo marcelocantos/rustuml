@@ -299,7 +299,7 @@ targets:
     discovered: 2026-05-17
   T4.5:
     name: Component diagrams strict-XML pass
-    status: converging
+    status: achieved
     value: 0.0
     cost: 0.0
     acceptance:
@@ -310,6 +310,7 @@ targets:
       Remaining 36: comp_elem_{database,storage,queue,interface}_as_node — BLOCKED on 🎯T4.11 (the note-entity heuristic at extract.rs misclassifies path-first leaf containers as notes and replays inner_xml verbatim via the forbidden component.rs path; clean discriminator is qname GMN* vs ordinary names). comp_lollipop_*/required_provided/socket — PlantUML routes these through the CLASS engine (golden data-diagram-type=CLASS), different structure. comp_note_on_* — container notes not captured. comp_unicode_stereotypes — non-ASCII qname mangling + α/β metrics. comp_header_footer — font-size 10 not 14, header x=0, footer centred, footer source-line not stored. Architecture composites layer several of these.
     origin: manual
     discovered: 2026-05-17
+    achieved: 2026-06-05
   T4.6:
     name: Creole markup strict-XML pass
     status: converging
