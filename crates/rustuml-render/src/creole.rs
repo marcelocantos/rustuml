@@ -1301,6 +1301,12 @@ fn handle_tag(
             nested.monospace = true;
             walk_segments(&content, &nested, skip_underline, out);
         }
+        _ if tag.starts_with("font ") && (tag.contains('\'') || tag.contains('"')) => {
+            let content = collect_until_tag(chars, "</font>");
+            let mut nested = style.clone();
+            nested.font_family = Some(tag["font ".len()..].to_string());
+            walk_segments(&content, &nested, skip_underline, out);
+        }
         _ if tag.starts_with("font") => {
             let content = collect_until_tag(chars, "</font>");
             walk_segments(&content, style, skip_underline, out);
@@ -1444,6 +1450,16 @@ mod tests {
         assert_eq!(
             parse_segments(r#"""mono activity"""#),
             vec![seg("mono\u{00a0}activity", mono_style())]
+        );
+    }
+
+    #[test]
+    fn segments_quoted_font_attrs_become_family() {
+        let mut style = Style::default();
+        style.font_family = Some("color='red'".to_string());
+        assert_eq!(
+            parse_segments("<font color='red'>font color</font>"),
+            vec![seg("font color", style)]
         );
     }
 
