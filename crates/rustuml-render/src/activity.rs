@@ -135,7 +135,9 @@ fn parse_gradient_id(defs: &str) -> Option<String> {
 }
 
 fn gradient_fill_or(val: &str, gradient_id: &Option<String>) -> String {
-    if split_gradient_colors(val).is_some()
+    if val.eq_ignore_ascii_case("transparent") {
+        "none".to_string()
+    } else if split_gradient_colors(val).is_some()
         && let Some(id) = gradient_id
     {
         format!("url(#{id})")
