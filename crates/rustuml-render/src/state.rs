@@ -250,6 +250,20 @@ fn escape_text_content(s: &str) -> String {
     escape_attr(s).replace('\u{00a0}', "&#160;")
 }
 
+fn stereotype_state_color(diagram: &StateDiagram, stereotype: &str, attr: &str) -> Option<String> {
+    let block_key = format!("state<<{stereotype}>>{attr}");
+    let suffix_key = format!("state{attr}<<{stereotype}>>");
+    diagram
+        .meta
+        .skinparams
+        .iter()
+        .rev()
+        .find(|sp| {
+            sp.key.eq_ignore_ascii_case(&block_key) || sp.key.eq_ignore_ascii_case(&suffix_key)
+        })
+        .map(|sp| crate::sequence::resolve_color(sp.value.trim()))
+}
+
 /// Determine if a [*] reference is a start or end node based on context.
 /// In PlantUML, [*] as a source is the start node, and [*] as a target is the end node.
 fn classify_star_nodes(transitions: &[Transition]) -> (bool, bool) {
@@ -1301,6 +1315,16 @@ pub fn render_with_oracle(
                     // Normal state box.
                     let label = state_def.map_or(id.as_str(), |s| s.label.as_str());
                     let descriptions = state_def.map_or(&[][..], |s| s.descriptions.as_slice());
+                    let state_stereotype = state_def.and_then(|s| s.stereotype.as_deref());
+                    let stereo_fill = state_stereotype
+                        .and_then(|s| stereotype_state_color(diagram, s, "BackgroundColor"));
+                    let stereo_stroke = state_stereotype
+                        .and_then(|s| stereotype_state_color(diagram, s, "BorderColor"));
+                    let stereo_text_color = state_stereotype.and_then(|s| {
+                        stereotype_state_color(diagram, s, "FontColor")
+                            .or_else(|| stereotype_state_color(diagram, s, "AttributeFontColor"))
+                    });
+                    let state_text_color = stereo_text_color.as_deref().unwrap_or(TEXT_COLOR);
 
                     let box_x = cx - bw / 2.0;
                     let box_y = cy - bh / 2.0;
@@ -1316,6 +1340,7 @@ pub fn render_with_oracle(
                         .and_then(|orc| orc.entities.get(id.as_str()))
                         .and_then(|r| r.fill.clone())
                         .or(parser_fill)
+                        .or(stereo_fill)
                         .unwrap_or_else(|| STATE_FILL.to_string());
 
                     // Border style: `state X ##color` sets stroke colour;
@@ -1338,6 +1363,8 @@ pub fn render_with_oracle(
                                 ),
                                 _ => format!("stroke:{stroke_color};stroke-width:{STROKE_WIDTH};"),
                             }
+                        } else if let Some(stroke_color) = stereo_stroke {
+                            format!("stroke:{stroke_color};stroke-width:{STROKE_WIDTH};")
                         } else {
                             format!("stroke:{STROKE_COLOR};stroke-width:{STROKE_WIDTH};")
                         };
@@ -1372,7 +1399,7 @@ pub fn render_with_oracle(
                                 y: text_y,
                                 font_size: state_name_font_size as u32,
                                 font_family: "sans-serif",
-                                fill: TEXT_COLOR,
+                                fill: state_text_color,
                                 bold: false,
                                 italic: false,
                                 underline: false,
@@ -1473,7 +1500,7 @@ pub fn render_with_oracle(
                             };
                             write!(
                                 svg,
-                                r#"<text fill="{TEXT_COLOR}" font-family="{fam}" font-size="{}"{style_attr}{weight_attr} lengthAdjust="spacing" textLength="{}" x="{}" y="{}">{}</text>"#,
+                                r#"<text fill="{state_text_color}" font-family="{fam}" font-size="{}"{style_attr}{weight_attr} lengthAdjust="spacing" textLength="{}" x="{}" y="{}">{}</text>"#,
                                 state_name_font_size as u32,
                                 fmt_f(text_w),
                                 fmt_f(text_x),
@@ -1491,7 +1518,7 @@ pub fn render_with_oracle(
                                     y: text_y,
                                     font_size: state_name_font_size as u32,
                                     font_family: "sans-serif",
-                                    fill: TEXT_COLOR,
+                                    fill: state_text_color,
                                     bold: state_font_bold,
                                     italic: state_font_italic,
                                     underline: false,
@@ -1532,7 +1559,7 @@ pub fn render_with_oracle(
                                 );
                                 write!(
                                     svg,
-                                    r#"<text fill="{TEXT_COLOR}" font-family="{fam}" font-size="{}"{style_attr}{weight_attr} lengthAdjust="spacing" textLength="{}" x="{}" y="{}">{}</text>"#,
+                                    r#"<text fill="{state_text_color}" font-family="{fam}" font-size="{}"{style_attr}{weight_attr} lengthAdjust="spacing" textLength="{}" x="{}" y="{}">{}</text>"#,
                                     state_desc_font_size as u32,
                                     fmt_f(width),
                                     fmt_f(desc_x),
@@ -1550,7 +1577,7 @@ pub fn render_with_oracle(
                                         y: desc_y,
                                         font_size: state_desc_font_size as u32,
                                         font_family: "sans-serif",
-                                        fill: TEXT_COLOR,
+                                        fill: state_text_color,
                                         bold: state_font_bold,
                                         italic: state_font_italic,
                                         underline: false,

@@ -62,6 +62,10 @@ pub struct State {
     /// Dash style hint (`bold`, `dashed`, `dotted`) parsed from `##[…]color`.
     #[serde(default)]
     pub stroke_style: Option<String>,
+    /// Ordinary UML stereotype (`state A <<important>>`). Pseudo-state
+    /// stereotypes such as `<<choice>>` are represented by `kind` instead.
+    #[serde(default)]
+    pub stereotype: Option<String>,
     /// True when this state opened a composite block (`state X { … }`),
     /// i.e. it contains nested states. Rendered as a cluster.
     #[serde(default)]

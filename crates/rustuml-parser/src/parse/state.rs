@@ -385,6 +385,9 @@ impl StateParser {
                 Some("exitPoint") => StateKind::ExitPoint,
                 _ => StateKind::Normal,
             };
+            let ordinary_stereotype = matches!(kind, StateKind::Normal)
+                .then(|| stereotype.map(str::to_string))
+                .flatten();
 
             // Walk every `#color` / `##color` / `##[style]color` token in
             // the trailing decoration. Each match's first group is the
@@ -433,6 +436,9 @@ impl StateParser {
                 if state.stroke_style.is_none() {
                     state.stroke_style = stroke_style;
                 }
+                if state.stereotype.is_none() {
+                    state.stereotype = ordinary_stereotype;
+                }
                 if state.url.is_none() {
                     state.url = url;
                     state.tooltip = tooltip;
@@ -447,6 +453,7 @@ impl StateParser {
                     fill,
                     stroke,
                     stroke_style,
+                    stereotype: ordinary_stereotype,
                     url,
                     tooltip,
                     composite: is_composite,
@@ -650,10 +657,19 @@ mod tests {
              state s4 <<fork>>\nstate s5 <<join>>",
         );
         assert_eq!(d.states[0].kind, StateKind::Initial);
+        assert_eq!(d.states[0].stereotype, None);
         assert_eq!(d.states[1].kind, StateKind::Final);
+        assert_eq!(d.states[1].stereotype, None);
         assert_eq!(d.states[2].kind, StateKind::Choice);
         assert_eq!(d.states[3].kind, StateKind::Fork);
         assert_eq!(d.states[4].kind, StateKind::Join);
+    }
+
+    #[test]
+    fn ordinary_state_stereotype() {
+        let d = parse("state A <<important>>");
+        assert_eq!(d.states[0].kind, StateKind::Normal);
+        assert_eq!(d.states[0].stereotype.as_deref(), Some("important"));
     }
 
     #[test]
