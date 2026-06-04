@@ -542,6 +542,12 @@ fn scale_note_child(child: &mut OracleNoteChild, k: f64) {
                 scale_note_text(text, k);
             }
         }
+        OracleNoteChild::Image(image) => {
+            image.x *= k;
+            image.y *= k;
+            image.width *= k;
+            image.height *= k;
+        }
         OracleNoteChild::Ellipse(ellipse) => {
             ellipse.cx *= k;
             ellipse.cy *= k;

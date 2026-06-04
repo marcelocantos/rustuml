@@ -276,6 +276,7 @@ pub enum OracleNoteChild {
     Rect(OracleNoteRect),
     Text(OracleNoteText),
     Link(OracleNoteLink),
+    Image(OracleNoteImage),
     Ellipse(OracleNoteEllipse),
     Line(OracleNoteLine),
 }
@@ -327,6 +328,15 @@ pub struct OracleNoteLink {
     pub xlink_title: String,
     pub xlink_type: String,
     pub texts: Vec<OracleNoteText>,
+}
+
+#[derive(Debug, Clone)]
+pub struct OracleNoteImage {
+    pub x: f64,
+    pub y: f64,
+    pub width: f64,
+    pub height: f64,
+    pub href: String,
 }
 
 #[derive(Debug, Clone)]
@@ -577,6 +587,17 @@ fn emit_note_child(out: &mut String, child: &OracleNoteChild) {
                 emit_note_text(out, text);
             }
             out.push_str("</a>");
+        }
+        OracleNoteChild::Image(image) => {
+            let _ = write!(
+                out,
+                r#"<image height="{}" width="{}" x="{}" xlink:href="{}" y="{}"/>"#,
+                pm::fmt_coord(image.height),
+                pm::fmt_coord(image.width),
+                pm::fmt_coord(image.x),
+                escape_xml_attr(&image.href),
+                pm::fmt_coord(image.y),
+            );
         }
         OracleNoteChild::Ellipse(ellipse) => {
             let _ = write!(

@@ -11,8 +11,8 @@ use rustuml_render::layout_oracle::{
     EntityPolygon, EntityRect, EntityText, JsonBox, JsonConnector, NoteBoxGeom, OracleCluster,
     OracleClusterChild, OracleClusterPolygon, OracleDecoration, OracleEdgePath, OracleEntity,
     OracleHandwrittenWarning, OracleLayout, OracleLegend, OracleLegendRect, OracleNoteChild,
-    OracleNoteEllipse, OracleNoteEntity, OracleNoteLine, OracleNoteLink, OracleNotePath,
-    OracleNoteRect, OracleNoteText, RegionDivider,
+    OracleNoteEllipse, OracleNoteEntity, OracleNoteImage, OracleNoteLine, OracleNoteLink,
+    OracleNotePath, OracleNoteRect, OracleNoteText, RegionDivider,
 };
 
 /// Parse the coordinate pairs from a note's body path `d` string and recover
@@ -545,6 +545,25 @@ pub fn extract_oracle_layout(svg: &str) -> Option<OracleLayout> {
                                             texts,
                                         }));
                                     }
+                                }
+                            }
+                            "image" => {
+                                if let (Some(x), Some(y), Some(width), Some(height), Some(href)) = (
+                                    parse_attr(&child, "x"),
+                                    parse_attr(&child, "y"),
+                                    parse_attr(&child, "width"),
+                                    parse_attr(&child, "height"),
+                                    child.attribute("href").or_else(|| {
+                                        child.attribute(("http://www.w3.org/1999/xlink", "href"))
+                                    }),
+                                ) {
+                                    g.children.push(OracleNoteChild::Image(OracleNoteImage {
+                                        x,
+                                        y,
+                                        width,
+                                        height,
+                                        href: href.to_string(),
+                                    }));
                                 }
                             }
                             "ellipse" => {
@@ -2571,6 +2590,7 @@ mod tests {
                 <a href="https://example.com" target="_top" title="tip" xlink:actuate="onRequest" xlink:href="https://example.com" xlink:show="new" xlink:title="tip" xlink:type="simple">
                     <text fill="#0000FF" filter="url(#shadow)" font-family="sans-serif" font-size="13" lengthAdjust="spacing" text-decoration="underline" textLength="29.4531" x="13" y="24">docs</text>
                 </a>
+                <image height="11" width="11" x="46" xlink:href="data:image/png;base64,abc" y="15"/>
             </g></g>
         </svg>"##;
 
@@ -2587,6 +2607,14 @@ mod tests {
         assert_eq!(link.texts[0].text, "docs");
         assert_eq!(link.texts[0].filter.as_deref(), Some("url(#shadow)"));
         assert_eq!(link.texts[0].text_decoration.as_deref(), Some("underline"));
+        let Some(OracleNoteChild::Image(image)) = geom.children.get(2) else {
+            panic!("expected note image child after link");
+        };
+        assert_eq!(image.href, "data:image/png;base64,abc");
+        assert_eq!(
+            (image.x, image.y, image.width, image.height),
+            (46.0, 15.0, 11.0, 11.0)
+        );
     }
 
     #[test]
