@@ -211,7 +211,7 @@ targets:
     achieved: 2026-05-20
   T4.11:
     name: class/object/component render clusters and notes by reconstruction, not verbatim inner_xml replay
-    status: converging
+    status: achieved
     value: 0.0
     cost: 0.0
     acceptance:
@@ -235,6 +235,7 @@ targets:
     - T4.5
     origin: manual
     discovered: 2026-05-29
+    achieved: 2026-06-05
   T4.2:
     name: Class diagrams strict-XML pass
     status: achieved
