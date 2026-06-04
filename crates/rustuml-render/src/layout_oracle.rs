@@ -380,11 +380,16 @@ pub struct OracleEdgePath {
     /// `(x, y, text)` where text concatenates descendant text content
     /// (multi-line labels join with `\n`, using the first `<text>` element's x/y).
     pub label: Option<(f64, f64, String)>,
-    /// All edge text labels (`<text>` children of `<g class="link">`) in
-    /// document order. Each entry is `(x, y, text)`. Class diagrams emit up
-    /// to three labels per link: middle label first, then optional start/end
-    /// cardinality labels.
+    /// All edge text labels (`<text>` children of `<g class="link">`, or
+    /// `<text>` nested inside an immediate child `<a>`) in document order.
+    /// Each entry is `(x, y, text)`. Class diagrams emit up to three labels
+    /// per link: middle label first, then optional start/end cardinality
+    /// labels.
     pub labels: Vec<(f64, f64, String)>,
+    /// Optional URL metadata for each entry in `labels`. URL-wrapped labels
+    /// are emitted by PlantUML as `<a><text>…</text></a>`; this captures the
+    /// anchor's scalar attributes without replaying the subtree.
+    pub label_links: Vec<Option<EdgeLabelLink>>,
     /// Additional `<path>` children after the first (e.g. the half-circle
     /// of a lollipop `-(` connector). Captured `(d, style)`.
     pub extra_paths: Vec<(String, Option<String>)>,
@@ -438,6 +443,13 @@ pub enum EdgeDecoration {
     },
     /// A `<text>` decoration (interface label interleaved among the arcs).
     Text { x: f64, y: f64, text: String },
+}
+
+/// Anchor metadata attached to an oracle edge label.
+#[derive(Debug, Clone)]
+pub struct EdgeLabelLink {
+    pub href: String,
+    pub title: Option<String>,
 }
 
 /// A single crow's-foot cardinality mark inside an ER `<g class="link">` group.

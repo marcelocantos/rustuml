@@ -7,9 +7,9 @@
 //! producing an `OracleLayout` that can be fed to renderers.
 
 use rustuml_render::layout_oracle::{
-    ApointMark, AuxRect, CrowMark, EdgeDecoration, EntityLine, EntityRect, EntityText, JsonBox,
-    JsonConnector, NoteBoxGeom, OracleCluster, OracleEdgePath, OracleLayout, OracleNoteEntity,
-    RegionDivider,
+    ApointMark, AuxRect, CrowMark, EdgeDecoration, EdgeLabelLink, EntityLine, EntityRect,
+    EntityText, JsonBox, JsonConnector, NoteBoxGeom, OracleCluster, OracleEdgePath, OracleLayout,
+    OracleNoteEntity, RegionDivider,
 };
 
 /// Parse the coordinate pairs from a note's body path `d` string and recover
@@ -851,6 +851,7 @@ pub fn extract_oracle_layout(svg: &str) -> Option<OracleLayout> {
                     polygon_style: None,
                     label: None,
                     labels: Vec::new(),
+                    label_links: Vec::new(),
                     extra_paths: node
                         .children()
                         .filter(|c| c.tag_name().name() == "path")
@@ -982,28 +983,55 @@ pub fn extract_oracle_layout(svg: &str) -> Option<OracleLayout> {
 
                 // Extract edge labels. PlantUML class diagrams emit each label
                 // as its own <text> sibling (middle label, then optional
-                // start/end cardinality). Capture each separately in `labels`
-                // and keep the joined form in `label` for callers that still
-                // use the legacy single-text view.
-                let texts: Vec<roxmltree::Node> = node
-                    .children()
-                    .filter(|c| c.tag_name().name() == "text")
-                    .collect();
-                for t in &texts {
+                // start/end cardinality). URL labels are wrapped as an
+                // immediate child <a><text>…</text></a>; capture the text
+                // geometry plus the anchor's scalar metadata, keeping the two
+                // vectors index-aligned.
+                let mut texts: Vec<(roxmltree::Node, Option<EdgeLabelLink>)> = Vec::new();
+                for child in node.children().filter(|c| c.is_element()) {
+                    match child.tag_name().name() {
+                        "text" => texts.push((child, None)),
+                        "a" => {
+                            let href = child
+                                .attribute("href")
+                                .or_else(|| child.attribute("xlink:href"))
+                                .map(String::from);
+                            let title = child
+                                .attribute("title")
+                                .or_else(|| child.attribute("xlink:title"))
+                                .map(String::from);
+                            for t in child
+                                .descendants()
+                                .filter(|c| c.tag_name().name() == "text")
+                            {
+                                texts.push((
+                                    t,
+                                    href.as_ref().map(|h| EdgeLabelLink {
+                                        href: h.clone(),
+                                        title: title.clone(),
+                                    }),
+                                ));
+                            }
+                        }
+                        _ => {}
+                    }
+                }
+                for (t, link) in &texts {
                     if let (Some(tx), Some(ty)) = (parse_attr(t, "x"), parse_attr(t, "y")) {
                         let content = collect_text(t);
                         if !content.is_empty() {
                             oracle_edge.labels.push((tx, ty, content));
+                            oracle_edge.label_links.push(link.clone());
                         }
                     }
                 }
-                if let Some(first_text) = texts.first()
+                if let Some((first_text, _)) = texts.first()
                     && let (Some(tx), Some(ty)) =
                         (parse_attr(first_text, "x"), parse_attr(first_text, "y"))
                 {
                     let joined: String = texts
                         .iter()
-                        .map(|t| collect_text(t))
+                        .map(|(t, _)| collect_text(t))
                         .collect::<Vec<_>>()
                         .join("\n");
                     if !joined.is_empty() {

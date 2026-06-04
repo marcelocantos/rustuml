@@ -2048,25 +2048,41 @@ fn emit_oracle_edge(
             }
         }
 
-        let emit_label = |svg: &mut SvgBuilder, lx: f64, ly: f64, text: &str| {
-            let mut text_buf = String::new();
-            text_render::emit_text(
-                &mut text_buf,
-                text,
-                &TextBase {
-                    x: lx,
-                    y: ly,
-                    font_size: arrow_font_size as u32,
-                    font_family: "sans-serif",
-                    fill: TEXT_COLOR,
-                    bold: false,
-                    italic: false,
-                    underline: false,
-                    skip_underline: false,
-                },
-            );
-            svg.raw(&text_buf);
-        };
+        let emit_label =
+            |svg: &mut SvgBuilder,
+             lx: f64,
+             ly: f64,
+             text: &str,
+             link: Option<&crate::layout_oracle::EdgeLabelLink>| {
+                let mut text_buf = String::new();
+                let (fill, underline) = if link.is_some() {
+                    ("#0000FF", true)
+                } else {
+                    (TEXT_COLOR, false)
+                };
+                if let Some(link) = link {
+                    svg.open_link_with_title(&link.href, link.title.as_deref());
+                }
+                text_render::emit_text(
+                    &mut text_buf,
+                    text,
+                    &TextBase {
+                        x: lx,
+                        y: ly,
+                        font_size: arrow_font_size as u32,
+                        font_family: "sans-serif",
+                        fill,
+                        bold: false,
+                        italic: false,
+                        underline,
+                        skip_underline: false,
+                    },
+                );
+                svg.raw(&text_buf);
+                if link.is_some() {
+                    svg.close_link();
+                }
+            };
 
         // Edge labels from oracle. Class/component diagrams emit up to three
         // labels per link (start cardinality, middle label, end cardinality)
@@ -2081,8 +2097,15 @@ fn emit_oracle_edge(
             } else {
                 oracle_edge.labels.len()
             };
-            for (lx, ly, text) in oracle_edge.labels.iter().take(link_label_count) {
-                emit_label(svg, *lx, *ly, text);
+            for (i, (lx, ly, text)) in oracle_edge.labels.iter().take(link_label_count).enumerate()
+            {
+                emit_label(
+                    svg,
+                    *lx,
+                    *ly,
+                    text,
+                    oracle_edge.label_links.get(i).and_then(Option::as_ref),
+                );
             }
             if note_attached {
                 // The note box paths carry the note background fill; the oracle's
@@ -2094,13 +2117,21 @@ fn emit_oracle_edge(
                         r#"<path d="{d}" fill="{NOTE_FILL}" style="{s}"/>"#,
                     ));
                 }
-                for (lx, ly, text) in oracle_edge.labels.iter().skip(link_label_count) {
-                    emit_label(svg, *lx, *ly, text);
+                for (i, (lx, ly, text)) in
+                    oracle_edge.labels.iter().enumerate().skip(link_label_count)
+                {
+                    emit_label(
+                        svg,
+                        *lx,
+                        *ly,
+                        text,
+                        oracle_edge.label_links.get(i).and_then(Option::as_ref),
+                    );
                 }
             }
         } else if let Some((lx, ly, ref text)) = oracle_edge.label {
             for (i, line) in text.lines().enumerate() {
-                emit_label(svg, lx, ly + i as f64 * arrow_font_size, line);
+                emit_label(svg, lx, ly + i as f64 * arrow_font_size, line, None);
             }
         }
 
