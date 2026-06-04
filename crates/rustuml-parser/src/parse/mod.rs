@@ -453,9 +453,12 @@ fn detect_uml_subtype(lines: &[String]) -> UmlSubtype {
             scores[8] += 10;
         }
         // Standalone floating notes (`note as X` or `note "text" as X`) are a
-        // class diagram feature in Java PlantUML and produce CLASS-type SVG output.
+        // class/object diagram feature in Java PlantUML and produce CLASS-type SVG
+        // output. Score both: note-only diagrams still tie back to CLASS by the
+        // default ordering, while object diagrams with floating notes stay OBJECT.
         if trimmed.starts_with("note as ") || trimmed.starts_with("note \"") {
             scores[1] += 10;
+            scores[2] += 10;
         }
         // `legend`, `header`/`endheader`, `footer`/`endfooter` — these are
         // meta elements that PlantUML defaults to CLASS when no other content exists.
@@ -963,6 +966,13 @@ mod tests {
         let input = "@startuml\nskinparam backgroundColor #FFFEF0\n@enduml";
         let diagram = parse(input).unwrap();
         assert!(matches!(diagram, Diagram::Class(_)));
+    }
+
+    #[test]
+    fn object_with_floating_note_stays_object() {
+        let input = "@startuml\nobject Server {\n  ip = \"192.168.1.1\"\n}\nnote \"text\" as N1\nServer .. N1\n@enduml";
+        let diagram = parse(input).unwrap();
+        assert!(matches!(diagram, Diagram::Object(_)));
     }
 
     #[test]

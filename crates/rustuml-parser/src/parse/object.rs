@@ -85,6 +85,10 @@ impl ObjectParser {
         id
     }
 
+    fn is_note_id(&self, id: &str) -> bool {
+        self.notes.iter().any(|n| n.id.as_deref() == Some(id))
+    }
+
     fn parse_line(&mut self, line_num: usize, line: &str) -> Result<(), ParseError> {
         self.current_line = line_num;
         // Inside a `skinparam <prefix> { ... }` block?
@@ -319,8 +323,12 @@ impl ObjectParser {
 
             let from_base = from_raw.split("::").next().unwrap_or(&from_raw).to_string();
             let to_base = to_raw.split("::").next().unwrap_or(&to_raw).to_string();
-            self.ensure_object(&from_base);
-            self.ensure_object(&to_base);
+            if !self.is_note_id(&from_base) {
+                self.ensure_object(&from_base);
+            }
+            if !self.is_note_id(&to_base) {
+                self.ensure_object(&to_base);
+            }
 
             self.links.push(ObjectLink {
                 from: from_raw,
@@ -546,6 +554,16 @@ mod tests {
         assert_eq!(d.links[0].from, "A");
         assert_eq!(d.links[0].to, "B");
         assert!(d.links[0].label.is_none());
+    }
+
+    #[test]
+    fn link_to_floating_note_does_not_create_object() {
+        let d = parse("object Server\nnote \"text\" as N1\nServer .. N1");
+        assert_eq!(d.objects.len(), 1);
+        assert_eq!(d.objects[0].id, "Server");
+        assert_eq!(d.notes.len(), 1);
+        assert_eq!(d.notes[0].id.as_deref(), Some("N1"));
+        assert_eq!(d.links.len(), 1);
     }
 
     #[test]
