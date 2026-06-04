@@ -460,6 +460,13 @@ fn detect_uml_subtype(lines: &[String]) -> UmlSubtype {
             scores[1] += 10;
             scores[2] += 10;
         }
+        // A leading `note : text` line is parsed by Java PlantUML as a CLASS
+        // note/entity diagram, even when later lines contain weak sequence-style
+        // arrows. Sequence notes use a side qualifier (`note right :`, etc.) or
+        // `note over`, so this bare form is a class signal.
+        if trimmed.starts_with("note :") {
+            scores[1] += 10;
+        }
         // `legend`, `header`/`endheader`, `footer`/`endfooter` — these are
         // meta elements that PlantUML defaults to CLASS when no other content exists.
         // Score them weakly for class so that a diagram with only meta elements
@@ -1008,6 +1015,13 @@ mod tests {
     #[test]
     fn skinparam_only_uml_defaults_to_class() {
         let input = "@startuml\nskinparam backgroundColor #FFFEF0\n@enduml";
+        let diagram = parse(input).unwrap();
+        assert!(matches!(diagram, Diagram::Class(_)));
+    }
+
+    #[test]
+    fn leading_bare_note_colon_routes_to_class() {
+        let input = "@startuml\nnote : x = 1\nAlice -> Bob : Message 1\n@enduml";
         let diagram = parse(input).unwrap();
         assert!(matches!(diagram, Diagram::Class(_)));
     }
