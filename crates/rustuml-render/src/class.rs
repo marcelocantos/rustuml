@@ -120,6 +120,8 @@ const GENERIC_TEXT_BASELINE: f64 = 12.6016;
 const GENERIC_HEADER_GAP: f64 = 8.0;
 /// Extra header height when stereotypes are present.
 const STEREOTYPE_EXTRA_HEIGHT: f64 = 8.6211;
+/// Baseline-to-baseline distance between multiple stereotype lines.
+const STEREOTYPE_LINE_HEIGHT: f64 = 14.1328;
 /// Stereotype text baseline y relative to entity rect top.
 const STEREOTYPE_Y_OFFSET: f64 = 16.6016;
 /// Name text baseline y relative to entity rect top when stereotypes are present.
@@ -254,6 +256,8 @@ struct EntityDims {
     name_width: f64,
     /// Whether the entity has stereotypes (affects header height and layout).
     has_stereotypes: bool,
+    /// Number of visible stereotype lines in the header.
+    stereotype_count: usize,
     /// Source line number from the parser (1-based).
     source_line: usize,
     /// Visibility flags from `hide`/`show` directives applied to this entity.
@@ -594,6 +598,11 @@ fn calc_entity_dims(entity: &ClassEntity, entity_index: usize, hide: HideFlags) 
     // so width must include those characters.
     let name_width = text_render::measure_no_underline(&entity.label, 14.0, false);
     let has_stereotypes = !entity.stereotypes.is_empty() && !hide.stereotype;
+    let stereotype_count = if has_stereotypes {
+        entity.stereotypes.len()
+    } else {
+        0
+    };
 
     // Split members into fields and methods. For enums with method members
     // (or any explicit visibility marker), PlantUML uses the standard
@@ -646,8 +655,10 @@ fn calc_entity_dims(entity: &ClassEntity, entity_index: usize, hide: HideFlags) 
 
     // Stereotype text may also affect width.
     let stereo_width = if has_stereotypes {
-        let stereo_text = format_stereotype_text(&entity.stereotypes);
-        let stereo_tw = text_render::measure(&stereo_text, 12.0, false);
+        let stereo_tw = format_stereotype_lines(&entity.stereotypes)
+            .iter()
+            .map(|line| text_render::measure(line, 12.0, false))
+            .fold(0.0_f64, f64::max);
         // Stereotype text is centered in the header area alongside the icon.
         icon_area + stereo_tw + HEADER_RIGHT_PAD
     } else {
@@ -700,7 +711,7 @@ fn calc_entity_dims(entity: &ClassEntity, entity_index: usize, hide: HideFlags) 
 
     const HEADER_H: f64 = 32.0;
     let header_h = if has_stereotypes {
-        HEADER_H + STEREOTYPE_EXTRA_HEIGHT
+        HEADER_H + stereotype_header_extra_height(stereotype_count)
     } else if hide.circle {
         HEADER_H_NO_CIRCLE
     } else {
@@ -744,18 +755,26 @@ fn calc_entity_dims(entity: &ClassEntity, entity_index: usize, hide: HideFlags) 
         is_enum: enum_classic && !hide.fields,
         name_width,
         has_stereotypes,
+        stereotype_count,
         source_line,
         hide,
     }
 }
 
-/// Format stereotype text with guillemets: `«entity»`.
-fn format_stereotype_text(stereotypes: &[String]) -> String {
+fn stereotype_header_extra_height(stereotype_count: usize) -> f64 {
+    if stereotype_count == 0 {
+        0.0
+    } else {
+        STEREOTYPE_EXTRA_HEIGHT
+            + (stereotype_count.saturating_sub(1) as f64) * STEREOTYPE_LINE_HEIGHT
+    }
+}
+
+fn format_stereotype_lines(stereotypes: &[String]) -> Vec<String> {
     stereotypes
         .iter()
         .map(|s| format!("\u{00AB}{s}\u{00BB}"))
-        .collect::<Vec<_>>()
-        .join("\n")
+        .collect()
 }
 
 // ---------------------------------------------------------------------------
@@ -2308,11 +2327,7 @@ fn render_entity_content(
     let band_first_sep: Option<f64> = if fill.starts_with("url(#") {
         oracle_rect.and_then(|r| r.sep_y_values.first().copied())
     } else if header_solid.is_some() {
-        let stereo_shift = if dim.has_stereotypes {
-            STEREOTYPE_EXTRA_HEIGHT
-        } else {
-            0.0
-        };
+        let stereo_shift = stereotype_header_extra_height(dim.stereotype_count);
         let computed = if dim.hide.circle {
             y + HEADER_H_NO_CIRCLE + stereo_shift
         } else {
@@ -2393,6 +2408,7 @@ fn render_entity_content(
     let icon_cx = icon_cx_override.unwrap_or(x + ICON_CX_OFFSET);
     let icon_cy = if dim.has_stereotypes {
         y + ICON_CY_WITH_STEREO
+            + (dim.stereotype_count.saturating_sub(1) as f64) * STEREOTYPE_LINE_HEIGHT / 2.0
     } else if let Some(pad) = explicit_padding {
         // PlantUML drops the stereotype circle by the explicit padding value,
         // measured from the rect top plus a fixed icon inset (16 - 2.7559).
@@ -2474,26 +2490,33 @@ fn render_entity_content(
     let name_tl =
         text_render::measure_no_underline(&entity.label, name_font_size as f64, name_bold);
     if dim.has_stereotypes {
-        let stereo_text = format_stereotype_text(&entity.stereotypes);
-        let stereo_x = name_text_x_override.unwrap_or(icon_cx + ICON_RX + ICON_TEXT_GAP);
-        let stereo_y = y + STEREOTYPE_Y_OFFSET;
-        let mut text_buf = String::new();
-        text_render::emit_text(
-            &mut text_buf,
-            &stereo_text,
-            &TextBase {
-                x: stereo_x,
-                y: stereo_y,
-                font_size: 12,
-                font_family: "sans-serif",
-                fill: text_fill,
-                bold: false,
-                italic: true,
-                underline: false,
-                skip_underline: false,
-            },
-        );
-        svg.push_str(&text_buf);
+        for (i, stereo_text) in format_stereotype_lines(&entity.stereotypes)
+            .iter()
+            .enumerate()
+        {
+            let stereo_x = oracle_rect
+                .and_then(|r| r.text_x_values.get(i).copied())
+                .or(name_text_x_override)
+                .unwrap_or(icon_cx + ICON_RX + ICON_TEXT_GAP);
+            let stereo_y = y + STEREOTYPE_Y_OFFSET + i as f64 * STEREOTYPE_LINE_HEIGHT;
+            let mut text_buf = String::new();
+            text_render::emit_text(
+                &mut text_buf,
+                stereo_text,
+                &TextBase {
+                    x: stereo_x,
+                    y: stereo_y,
+                    font_size: 12,
+                    font_family: "sans-serif",
+                    fill: text_fill,
+                    bold: false,
+                    italic: true,
+                    underline: false,
+                    skip_underline: false,
+                },
+            );
+            svg.push_str(&text_buf);
+        }
     }
 
     // Entity name text.
@@ -2506,7 +2529,7 @@ fn render_entity_content(
     // Fall back to re-centering arithmetic when the oracle didn't capture a
     // second text x (e.g. a name-only header with no separate stereotype line).
     let oracle_name_x = if dim.has_stereotypes {
-        oracle_rect.and_then(|r| r.text_x_values.get(1).copied())
+        oracle_rect.and_then(|r| r.text_x_values.get(dim.stereotype_count).copied())
     } else {
         None
     };
@@ -2514,8 +2537,10 @@ fn render_entity_content(
         nx
     } else if dim.has_stereotypes {
         if let Some(oracle_x) = name_text_x_override {
-            let stereo_text = format_stereotype_text(&entity.stereotypes);
-            let stereo_tl = round_4dp(text_render::measure(&stereo_text, 12.0, false));
+            let stereo_tl = format_stereotype_lines(&entity.stereotypes)
+                .iter()
+                .map(|line| round_4dp(text_render::measure(line, 12.0, false)))
+                .fold(0.0_f64, f64::max);
             let name_tl_r = round_4dp(name_tl);
             let text_center = oracle_x + stereo_tl / 2.0;
             text_center - name_tl_r / 2.0
@@ -2530,6 +2555,7 @@ fn render_entity_content(
     };
     let name_y_default = if dim.has_stereotypes {
         y + NAME_Y_WITH_STEREO
+            + (dim.stereotype_count.saturating_sub(1) as f64) * STEREOTYPE_LINE_HEIGHT
     } else if dim.hide.circle {
         y + NAME_BASELINE_Y_NO_CIRCLE - MARGIN
     } else {
@@ -2614,8 +2640,9 @@ fn render_entity_content(
     let oracle_text_y = oracle_rect
         .map(|r| r.text_y_values.as_slice())
         .unwrap_or(&[]);
-    // Number of extra text entries before members (1 for name, +1 if stereotype).
-    let text_header_count: usize = if dim.has_stereotypes { 2 } else { 1 };
+    // Number of extra text entries before members: the entity name plus all
+    // visible stereotype lines above it.
+    let text_header_count: usize = 1 + dim.stereotype_count;
     let oracle_sep_y = oracle_rect
         .map(|r| r.sep_y_values.as_slice())
         .unwrap_or(&[]);
@@ -2651,11 +2678,7 @@ fn render_entity_content(
         .unwrap_or(default_sep_style.as_str());
 
     // Stereotype offset for separator and member positions.
-    let stereo_shift = if dim.has_stereotypes {
-        STEREOTYPE_EXTRA_HEIGHT
-    } else {
-        0.0
-    };
+    let stereo_shift = stereotype_header_extra_height(dim.stereotype_count);
 
     // Default header-separator y (rect-relative): icon-less entities use a
     // shorter header so the separator sits 5.5px higher.
