@@ -384,6 +384,8 @@ targets:
       - archimate 48: PARKED — agent's 48→0 rejected (structured attribute-echo replay); real fix needs PlantUML archimate sprite glyph library + Graphviz-matching layout.
       - skinparam 251: needs post-merge base (touches renderer skinparam handling wave-1 changed).
       - links 49, rendering 24, type-detection 13, multi-diagram 10, math 10, object 1 (object largely 🎯T4.11-inflated). Dot likely unmatchable (native Graphviz goldens).
+
+      Progress 2026-06-05: cleared the last `type-detection/` and `multi-diagram/` failures. Fixes: meta-only `title`/`header` detection now defaults to CLASS only when no stronger UML signal exists; `allowmixing` class diagrams parse/render `state` declarations as state-shaped entities; sequence chrome emits `header` before `title` and offsets title baselines by the header band; top-level procedure calls pad source-line placeholders after body expansion so following block lines keep their absolute file line while expanded procedure body lines keep their definition lines. Full re-measure: 12,546 total · 9,852 pass · 1,395 fail · 1,299 skipped; failure breakdown no longer includes `type-detection/` or `multi-diagram/`.
     origin: manual
     discovered: 2026-05-17
   T5:

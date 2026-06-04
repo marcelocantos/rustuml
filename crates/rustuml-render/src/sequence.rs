@@ -5276,48 +5276,6 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
         );
     }
 
-    // Render title if present. PlantUML wraps the title in
-    // `<g class="title" data-source-line="N">` and emits a bold 14pt text
-    // per line. Each line is centered around the midpoint between the first
-    // participant's box left edge and the last participant's box right edge
-    // (minus 0.5 px), and each baseline uses the rendered line's ascent.
-    if !title_lines.is_empty() {
-        let title_center =
-            if let (Some(first), Some(last)) = (participants.first(), participants.last()) {
-                (first.box_x + last.box_x + last.box_width - 1.0) / 2.0
-            } else {
-                svg_width as f64 / 2.0 - 0.5
-            };
-        let title_line = diagram.meta.title_line.unwrap_or(1);
-        svg.buf.push_str(&format!(
-            r#"<g class="title" data-source-line="{title_line}">"#
-        ));
-        let mut line_top = HEAD_BOX_Y + TITLE_TOP_PAD;
-        for (i, line) in title_lines.iter().enumerate() {
-            let metrics = title_line_metrics[i];
-            let text_length = text_render::measure(line, TITLE_FONT_SIZE as f64, true);
-            let x = title_center - text_length / 2.0;
-            let y = line_top + metrics.ascent;
-            text_render::emit_text(
-                &mut svg.buf,
-                line,
-                &TextBase {
-                    x,
-                    y,
-                    font_size: TITLE_FONT_SIZE,
-                    font_family: "sans-serif",
-                    fill: "#000000",
-                    bold: true,
-                    italic: false,
-                    underline: false,
-                    skip_underline: false,
-                },
-            );
-            line_top += metrics.height;
-        }
-        svg.buf.push_str("</g>");
-    }
-
     // Render header if present. PlantUML wraps in `<g class="header">` and
     // emits a 10pt #888888 text right-aligned to a small inset from the
     // right edge: x = svg_width - textLength - 5.
@@ -5344,6 +5302,48 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                 skip_underline: false,
             },
         );
+        svg.buf.push_str("</g>");
+    }
+
+    // Render title if present. PlantUML wraps the title in
+    // `<g class="title" data-source-line="N">` and emits a bold 14pt text
+    // per line. Each line is centered around the midpoint between the first
+    // participant's box left edge and the last participant's box right edge
+    // (minus 0.5 px), and each baseline uses the rendered line's ascent.
+    if !title_lines.is_empty() {
+        let title_center =
+            if let (Some(first), Some(last)) = (participants.first(), participants.last()) {
+                (first.box_x + last.box_x + last.box_width - 1.0) / 2.0
+            } else {
+                svg_width as f64 / 2.0 - 0.5
+            };
+        let title_line = diagram.meta.title_line.unwrap_or(1);
+        svg.buf.push_str(&format!(
+            r#"<g class="title" data-source-line="{title_line}">"#
+        ));
+        let mut line_top = HEAD_BOX_Y + header_band_h + TITLE_TOP_PAD;
+        for (i, line) in title_lines.iter().enumerate() {
+            let metrics = title_line_metrics[i];
+            let text_length = text_render::measure(line, TITLE_FONT_SIZE as f64, true);
+            let x = title_center - text_length / 2.0;
+            let y = line_top + metrics.ascent;
+            text_render::emit_text(
+                &mut svg.buf,
+                line,
+                &TextBase {
+                    x,
+                    y,
+                    font_size: TITLE_FONT_SIZE,
+                    font_family: "sans-serif",
+                    fill: "#000000",
+                    bold: true,
+                    italic: false,
+                    underline: false,
+                    skip_underline: false,
+                },
+            );
+            line_top += metrics.height;
+        }
         svg.buf.push_str("</g>");
     }
 

@@ -325,6 +325,8 @@ struct PreprocessContext {
     /// Pending return value from a `!return` inside a function body.
     /// Set by process_one_line when `!return` is encountered while active.
     return_signal: Option<Value>,
+    /// 1-based line currently being processed within the active input chunk.
+    current_source_line: usize,
     /// Wall-clock snapshot captured once at render start. Drives `%date()`
     /// so all calls within a single render see the same instant and zone.
     /// Defaults to system time + local timezone; both overridable via
@@ -412,6 +414,7 @@ impl PreprocessContext {
             collecting_sub_lines: Vec::new(),
             local_vars: Vec::new(),
             return_signal: None,
+            current_source_line: 0,
             render_clock: RenderClock::from_env(),
             theme_tail: Vec::new(),
         }
@@ -474,9 +477,12 @@ impl PreprocessContext {
     fn process_lines(&mut self, lines: &[&str]) -> Vec<String> {
         let mut output = Vec::new();
 
-        for &line in lines {
+        let saved_source_line = self.current_source_line;
+        for (idx, &line) in lines.iter().enumerate() {
+            self.current_source_line = idx + 1;
             self.process_one_line(line, &mut output);
         }
+        self.current_source_line = saved_source_line;
 
         output
     }
@@ -1078,6 +1084,15 @@ impl PreprocessContext {
                 }
             } else {
                 output.extend(lines);
+            }
+
+            // Procedure bodies keep their own definition-line attribution; pad
+            // after the call so following source lines still retain file-line
+            // attribution.
+            if self.include_depth == 0 && self.in_diagram_block && self.local_vars.is_empty() {
+                while output.len() < self.current_source_line {
+                    output.push(String::new());
+                }
             }
 
             return true;

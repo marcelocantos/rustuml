@@ -120,6 +120,7 @@ pub enum EntityKind {
     Enum,
     Annotation,
     Entity,
+    State,
     Circle,
     Diamond,
 }

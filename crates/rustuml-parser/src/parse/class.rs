@@ -409,14 +409,14 @@ impl ClassParser {
         // Allows dots in the identifier (for `set namespaceSeparator none`).
         static RE_DOTTED: LazyLock<Regex> = LazyLock::new(|| {
             Regex::new(
-                r#"^(class|abstract\s+class|abstract|interface|enum|annotation|entity|object|circle|diamond)\s+(?:(?:"([^"]+)"\s+as\s+)?(\w[\w.]*(?:<[^<>]*(?:<[^<>]*>[^<>]*)*>)?)|"([^"]+)")"#,
+                r#"^(class|abstract\s+class|abstract|interface|enum|annotation|entity|object|state|circle|diamond)\s+(?:(?:"([^"]+)"\s+as\s+)?(\w[\w.]*(?:<[^<>]*(?:<[^<>]*>[^<>]*)*>)?)|"([^"]+)")"#,
             )
             .unwrap()
         });
         // Permissive regex: accepts any non-whitespace name (for custom namespace separators).
         static RE_PERMISSIVE: LazyLock<Regex> = LazyLock::new(|| {
             Regex::new(
-                r#"^(class|abstract\s+class|abstract|interface|enum|annotation|entity|object|circle|diamond)\s+(?:(?:"([^"]+)"\s+as\s+)?([^\s{<>]+(?:<[^<>]*(?:<[^<>]*>[^<>]*)*>)?)|"([^"]+)")"#,
+                r#"^(class|abstract\s+class|abstract|interface|enum|annotation|entity|object|state|circle|diamond)\s+(?:(?:"([^"]+)"\s+as\s+)?([^\s{<>]+(?:<[^<>]*(?:<[^<>]*>[^<>]*)*>)?)|"([^"]+)")"#,
             )
             .unwrap()
         });
@@ -1330,6 +1330,7 @@ fn parse_entity_kind(s: &str) -> EntityKind {
         "enum" => EntityKind::Enum,
         "annotation" => EntityKind::Annotation,
         "entity" => EntityKind::Entity,
+        "state" => EntityKind::State,
         "circle" => EntityKind::Circle,
         "diamond" => EntityKind::Diamond,
         _ => EntityKind::Class,
@@ -1616,13 +1617,16 @@ mod tests {
 
     #[test]
     fn entity_types() {
-        let d = parse("class A\nabstract class B\ninterface C\nenum D\nannotation E\nentity F");
+        let d = parse(
+            "class A\nabstract class B\ninterface C\nenum D\nannotation E\nentity F\nstate G",
+        );
         assert_eq!(d.entities[0].kind, EntityKind::Class);
         assert_eq!(d.entities[1].kind, EntityKind::AbstractClass);
         assert_eq!(d.entities[2].kind, EntityKind::Interface);
         assert_eq!(d.entities[3].kind, EntityKind::Enum);
         assert_eq!(d.entities[4].kind, EntityKind::Annotation);
         assert_eq!(d.entities[5].kind, EntityKind::Entity);
+        assert_eq!(d.entities[6].kind, EntityKind::State);
     }
 
     #[test]

@@ -66,6 +66,12 @@ const NAME_BASELINE_Y: f64 = 28.291;
 const HEADER_SEP_Y: f64 = 39.0;
 /// Y position of second separator line (empty methods compartment).
 const METHODS_SEP_Y: f64 = 47.0;
+/// State-shaped entities inside `allowmixing` class diagrams.
+const MIXED_STATE_HEIGHT: f64 = 50.0;
+const MIXED_STATE_MIN_WIDTH: f64 = 50.0;
+const MIXED_STATE_HPAD: f64 = 20.0;
+const MIXED_STATE_NAME_BASELINE: f64 = 18.5352;
+const MIXED_STATE_SEPARATOR_Y: f64 = 26.4883;
 /// Height of entity header (icon + name area) — used in height computations.
 #[allow(dead_code)]
 const HEADER_HEIGHT: f64 = 32.0;
@@ -330,6 +336,7 @@ fn resolve_hide(entity: &ClassEntity, directives: &[HideShow]) -> HideFlags {
         EntityKind::AbstractClass => "abstract",
         EntityKind::Annotation => "annotation",
         EntityKind::Entity => "entity",
+        EntityKind::State => "state",
         EntityKind::Circle => "circle",
         EntityKind::Diamond => "diamond",
     };
@@ -609,6 +616,25 @@ fn calc_entity_dims(entity: &ClassEntity, entity_index: usize, hide: HideFlags) 
     // Entity labels treat `__` as literal underscores, not underline markup,
     // so width must include those characters.
     let name_width = text_render::measure_no_underline(&entity.label, 14.0, false);
+    if entity.kind == EntityKind::State {
+        let source_line = if entity.source_line > 0 {
+            entity.source_line
+        } else {
+            entity_index + 1
+        };
+        return EntityDims {
+            width: MIXED_STATE_MIN_WIDTH.max(name_width + MIXED_STATE_HPAD),
+            height: MIXED_STATE_HEIGHT,
+            field_count: 0,
+            method_count: 0,
+            is_enum: false,
+            name_width,
+            has_stereotypes: false,
+            stereotype_count: 0,
+            hide,
+            source_line,
+        };
+    }
     if matches!(entity.kind, EntityKind::Circle | EntityKind::Diamond) {
         let source_line = if entity.source_line > 0 {
             entity.source_line
@@ -2370,6 +2396,87 @@ fn render_entity_content(
         return;
     }
 
+    if entity.kind == EntityKind::State {
+        if let Some(anchor) = link_anchor {
+            svg.push_str(anchor);
+        }
+        let fill = oracle_rect
+            .and_then(|r| r.fill.as_deref())
+            .unwrap_or(ENTITY_FILL);
+        let style = oracle_rect
+            .and_then(|r| r.rect_style.as_deref())
+            .or_else(|| oracle_rect.and_then(|r| r.body_style.as_deref()))
+            .unwrap_or("stroke:#181818;stroke-width:0.5;");
+        let rx = oracle_rect
+            .and_then(|r| r.rect_rx.as_deref())
+            .unwrap_or("12.5");
+        let ry = oracle_rect
+            .and_then(|r| r.rect_ry.as_deref())
+            .unwrap_or("12.5");
+        write!(
+            svg,
+            r#"<rect fill="{}" height="{}" rx="{}" ry="{}" style="{}" width="{}" x="{}" y="{}"/>"#,
+            fill,
+            fmt4(dim.height),
+            rx,
+            ry,
+            style,
+            fmt_tl(dim.width),
+            fmt4(x),
+            fmt4(y),
+        )
+        .unwrap();
+        if let Some(line) = oracle_rect.and_then(|r| r.lines.first()) {
+            let line_style = line
+                .style
+                .as_deref()
+                .unwrap_or("stroke:#181818;stroke-width:0.5;");
+            write!(
+                svg,
+                r#"<line style="{}" x1="{}" x2="{}" y1="{}" y2="{}"/>"#,
+                line_style, line.x1, line.x2, line.y1, line.y2,
+            )
+            .unwrap();
+        } else {
+            let line_y = y + MIXED_STATE_SEPARATOR_Y;
+            write!(
+                svg,
+                r#"<line style="{}" x1="{}" x2="{}" y1="{}" y2="{}"/>"#,
+                style,
+                fmt4(x),
+                fmt4(x + dim.width),
+                fmt4(line_y),
+                fmt4(line_y),
+            )
+            .unwrap();
+        }
+        let name_x = oracle_rect
+            .and_then(|r| r.texts.first().map(|t| t.x))
+            .unwrap_or_else(|| x + (dim.width - round_4dp(dim.name_width)) / 2.0);
+        let name_y = oracle_rect
+            .and_then(|r| r.texts.first().map(|t| t.y))
+            .unwrap_or(y + MIXED_STATE_NAME_BASELINE);
+        text_render::emit_text(
+            svg,
+            &entity.label,
+            &TextBase {
+                x: name_x,
+                y: name_y,
+                font_size: 14,
+                font_family: "sans-serif",
+                fill: "#000000",
+                bold: false,
+                italic: false,
+                underline: false,
+                skip_underline: true,
+            },
+        );
+        if link_anchor.is_some() {
+            svg.push_str("</a>");
+        }
+        return;
+    }
+
     // PlantUML wraps the entity *header* (background rect, stereotype icon,
     // name text, and the two compartment separator rules) in a single `<a>`
     // when the class carries a `[[url]]` link, then closes it and re-wraps
@@ -2624,6 +2731,7 @@ fn render_entity_content(
                 EntityKind::AbstractClass => ABSTRACT_ICON_FILL,
                 EntityKind::Annotation => ANNOTATION_ICON_FILL,
                 EntityKind::Entity => CLASS_ICON_FILL, // Entity uses class icon
+                EntityKind::State => CLASS_ICON_FILL,
                 EntityKind::Circle | EntityKind::Diamond => CLASS_ICON_FILL,
             },
         };
@@ -2672,6 +2780,7 @@ fn render_entity_content(
                 }
                 EntityKind::AbstractClass => abstract_glyph(icon_cx, icon_cy),
                 EntityKind::Annotation => annotation_glyph(icon_cx, icon_cy),
+                EntityKind::State => CLASS_GLYPH.to_string(),
                 EntityKind::Circle | EntityKind::Diamond => CLASS_GLYPH.to_string(),
             }
         };
