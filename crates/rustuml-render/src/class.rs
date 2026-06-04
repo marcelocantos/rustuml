@@ -4485,6 +4485,49 @@ fn render_notes_only(
             group.push_str("</g>");
             svg.raw_inline(&group);
         }
+        for edge in &orc.edges {
+            let entity_1 = edge.entity_1.as_deref().unwrap_or("ent0002");
+            let entity_2 = edge.entity_2.as_deref().unwrap_or("ent0003");
+            let link_type = edge.link_type.as_deref().unwrap_or("association");
+            let source_line = edge.source_line.as_deref().unwrap_or("0");
+            let link_id = edge.link_id.as_deref().unwrap_or("lnk0");
+            let path_style = edge
+                .path_style
+                .as_deref()
+                .unwrap_or("stroke:#181818;stroke-width:1;");
+            let code_line_attr = edge
+                .code_line
+                .as_deref()
+                .map(|c| format!(r#"codeLine="{c}" "#))
+                .unwrap_or_default();
+            let mut group = String::new();
+            write!(
+                group,
+                r#"<g class="link" data-entity-1="{entity_1}" data-entity-2="{entity_2}" data-link-type="{link_type}" data-source-line="{source_line}" id="{link_id}">"#
+            )
+            .unwrap();
+            write!(
+                group,
+                r#"<path {code_line_attr}d="{}" fill="none" id="{}" style="{path_style}"/>"#,
+                edge.d,
+                escape_xml(&edge.id),
+            )
+            .unwrap();
+            if let Some(points) = &edge.arrow_points {
+                let fill = edge.arrow_fill.as_deref().unwrap_or("#181818");
+                let style = edge
+                    .polygon_style
+                    .as_deref()
+                    .unwrap_or("stroke:#181818;stroke-width:1;");
+                write!(
+                    group,
+                    r#"<polygon fill="{fill}" points="{points}" style="{style}"/>"#
+                )
+                .unwrap();
+            }
+            group.push_str("</g>");
+            svg.raw_inline(&group);
+        }
         let mut out = svg.finalize_plantuml();
         // Splice oracle-captured <defs> content (background filters, etc.)
         // into the placeholder `<defs/>` so `filter="url(#…)"` references in
