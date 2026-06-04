@@ -115,6 +115,7 @@ struct Palette {
     /// the border thickness onto the connector strokes too.
     arrow_thickness: String,
     text_color: String,
+    text_italic: bool,
     start_fill: String,
     /// Stroke colour for the start ellipse. Mirrors `start_fill` by default
     /// but stays at `#222222` when only `activityStartColor` is set —
@@ -142,6 +143,7 @@ impl Palette {
             arrow_color: ARROW_COLOR.into(),
             arrow_thickness: "1".into(),
             text_color: TEXT_COLOR.into(),
+            text_italic: false,
             start_fill: START_FILL.into(),
             start_stroke: START_FILL.into(),
             stop_fill: STOP_FILL.into(),
@@ -217,6 +219,9 @@ impl Palette {
                 }
                 "activitybarcolor" => p.bar_color = resolved,
                 "activityfontcolor" => p.text_color = resolved,
+                "activityfontstyle" => {
+                    p.text_italic = val.to_ascii_lowercase().contains("italic");
+                }
                 // The global `roundCorner` skinparam sets the corner-radius
                 // diameter; the SVG rect radius is half that value (PlantUML
                 // stores a diameter and halves it when drawing the rounded
@@ -2717,6 +2722,21 @@ impl SvgEmitter {
         content: &str,
         bold: bool,
     ) {
+        self.text_element_styled(fill, font_family, font_size, x, y, content, bold, false);
+    }
+
+    #[allow(clippy::too_many_arguments)]
+    fn text_element_styled(
+        &mut self,
+        fill: &str,
+        font_family: &str,
+        font_size: f64,
+        x: f64,
+        y: f64,
+        content: &str,
+        bold: bool,
+        italic: bool,
+    ) {
         // text_length is ignored: emit_text computes widths from segments
         // (after creole stripping). Upstream geometry that sized boxes
         // around this text should already have measured the stripped text.
@@ -2727,7 +2747,7 @@ impl SvgEmitter {
             font_family,
             fill,
             bold,
-            italic: false,
+            italic,
             underline: false,
             skip_underline: false,
         };
@@ -3343,15 +3363,15 @@ fn emit_node(svg: &mut SvgEmitter, node: &LayoutNode, cx: f64, y: f64) -> f64 {
             let lh = text_render::label_height(text, FONT_SIZE);
             let padding_top = (ah - lh) / 2.0;
             let text_y = y + padding_top + text_render::label_ascent(text, FONT_SIZE);
-            svg.text_element(
+            svg.text_element_styled(
                 &text_col,
                 "sans-serif",
                 FONT_SIZE,
-                *text_width,
                 rect_x + ACTION_H_PADDING,
                 text_y,
                 text,
                 false,
+                svg.palette.text_italic,
             );
             y + ah
         }
@@ -3384,15 +3404,15 @@ fn emit_node(svg: &mut SvgEmitter, node: &LayoutNode, cx: f64, y: f64) -> f64 {
             let lh = text_render::label_height(text, FONT_SIZE);
             let padding_top = (ah - lh) / 2.0;
             let text_y = y + padding_top + text_render::label_ascent(text, FONT_SIZE);
-            svg.text_element(
+            svg.text_element_styled(
                 &text_col,
                 "sans-serif",
                 FONT_SIZE,
-                *text_width,
                 rect_x + ACTION_H_PADDING,
                 text_y,
                 text,
                 false,
+                svg.palette.text_italic,
             );
             y + ah
         }
@@ -3599,15 +3619,15 @@ fn emit_if(
     // keep the default black.
     let cond_text_color = svg.palette.text_color.clone();
     let text_y = y + DIAMOND_HALF + pm::text_height(SMALL_FONT) / 2.0 - pm::descent(SMALL_FONT);
-    svg.text_element(
+    svg.text_element_styled(
         &cond_text_color,
         "sans-serif",
         SMALL_FONT,
-        cond_text_w,
         cx - cond_text_w / 2.0,
         text_y,
         condition,
         false,
+        svg.palette.text_italic,
     );
 
     let diamond_bottom = y + DIAMOND_HALF * 2.0;
@@ -3870,15 +3890,15 @@ fn emit_if_long(
         // Condition text, centred inside the diamond.
         let cw = text_render::measure(&col.condition, SMALL_FONT, false);
         let cond_y = diamond_cy + pm::text_height(SMALL_FONT) / 2.0 - pm::descent(SMALL_FONT);
-        svg.text_element(
+        svg.text_element_styled(
             &cond_text_color,
             "sans-serif",
             SMALL_FONT,
-            cw,
             dcx - cw / 2.0,
             cond_y,
             &col.condition,
             false,
+            svg.palette.text_italic,
         );
 
         // East label on the LAST diamond (the bare-else label), baseline at
@@ -4138,15 +4158,15 @@ fn emit_if_down(
     // Condition text (centred under cx).
     let cond_text_color = svg.palette.text_color.clone();
     let text_y = y + DIAMOND_HALF + pm::text_height(SMALL_FONT) / 2.0 - pm::descent(SMALL_FONT);
-    svg.text_element(
+    svg.text_element_styled(
         &cond_text_color,
         "sans-serif",
         SMALL_FONT,
-        cond_text_w,
         cx - cond_text_w / 2.0,
         text_y,
         condition,
         false,
+        svg.palette.text_italic,
     );
     if let Some(label) = east_label {
         let lw = text_render::measure(label, SMALL_FONT, false);
@@ -4285,15 +4305,15 @@ fn emit_switch(
     svg.polygon_shape(&diamond_fill, &pts, &diamond_stroke, &diamond_stroke_width);
     let cond_text_color = svg.palette.text_color.clone();
     let cond_text_y = diamond_cy + pm::text_height(SMALL_FONT) / 2.0 - pm::descent(SMALL_FONT);
-    svg.text_element(
+    svg.text_element_styled(
         &cond_text_color,
         "sans-serif",
         SMALL_FONT,
-        cond_text_w,
         diamond_cx - cond_text_w / 2.0,
         cond_text_y,
         condition,
         false,
+        svg.palette.text_italic,
     );
 
     let cases_top = diamond_bottom + switch_below_diamond(cases, layout.big_diamond);
@@ -4767,15 +4787,15 @@ fn emit_while(
 
     // Condition text inside diamond.
     let text_y = y + DIAMOND_HALF + pm::text_height(SMALL_FONT) / 2.0 - pm::descent(SMALL_FONT);
-    svg.text_element(
+    svg.text_element_styled(
         &text_color,
         "sans-serif",
         SMALL_FONT,
-        cond_text_w,
         cx - cond_text_w / 2.0,
         text_y,
         condition,
         false,
+        svg.palette.text_italic,
     );
 
     // "endwhile (no)" label just outside diamond's left vertex, with its
@@ -4985,15 +5005,15 @@ fn emit_repeat(
     svg.polygon_shape(&diamond_fill, &pts, &diamond_stroke, &diamond_stroke_width);
 
     let text_y = cond_diamond_cy + pm::text_height(SMALL_FONT) / 2.0 - pm::descent(SMALL_FONT);
-    svg.text_element(
+    svg.text_element_styled(
         &text_color,
         "sans-serif",
         SMALL_FONT,
-        cond_text_w,
         cx - cond_text_w / 2.0,
         text_y,
         condition,
         false,
+        svg.palette.text_italic,
     );
 
     // "is" label (optional). Sits with its baseline at cond_cy - descent(11)
