@@ -44,9 +44,12 @@ const HEIGHT_PAD: f64 = 16.877;
 const FONT_TITLE: f64 = 14.0;
 const FONT_STATE: f64 = 12.0;
 const FONT_TIME: f64 = 11.0;
+const FONT_DECORATION: f64 = 10.0;
 const LINE_COLOR: &str = "#333333";
 const STATE_LINE_COLOR: &str = "#006400";
 const CONCISE_FILL: &str = "#E2E2F0";
+const DECORATION_COLOR: &str = "#888888";
+const TIMING_FOOTER_BOTTOM_GAP: f64 = 13.1348;
 
 /// Render a timing diagram with an optional oracle layout.
 pub fn render_with_oracle(
@@ -108,6 +111,16 @@ fn robust_constraints_height(p: &PlayerLayout, annotations: &[Annotation]) -> f6
         result = result.max(constraint_h - delta_y);
     }
     result.max(10.0)
+}
+
+/// `PanelsState.getHeightForConstraints`: concise timelines reserve one
+/// constraint label height plus the 5px top margin, with a 5px minimum.
+fn state_constraints_height(annotations: &[Annotation]) -> f64 {
+    if annotations.is_empty() {
+        5.0
+    } else {
+        (text_height(FONT_STATE) + 5.0).max(5.0)
+    }
 }
 
 /// The state active at time `t` on a robust timeline (the last change at or
@@ -190,15 +203,12 @@ pub fn render(diagram: &TimingDiagram, _theme: &Theme) -> String {
     let nb_tick = (1 + delta / tick_unit).min(1000) as usize;
 
     // ── Constraint owner ──────────────────────────────────────────────────────
-    // Time-constraint annotations attach to the last robust timeline; that one
-    // player reserves extra vertical space for the constraint arrows.
+    // Without an explicit player prefix, PlantUML attaches time constraints to
+    // the last declared timeline.
     let anno_owner = if diagram.annotations.is_empty() {
         None
     } else {
-        diagram
-            .timelines
-            .iter()
-            .rposition(|tl| tl.kind == TimelineKind::Robust)
+        diagram.timelines.len().checked_sub(1)
     };
 
     // ── Player layout (vertical) ──────────────────────────────────────────────
@@ -228,16 +238,37 @@ pub fn render(diagram: &TimingDiagram, _theme: &Theme) -> String {
             frame_top: y,
             body_top: y + frame_height,
             all_states,
-            constraints_h: 10.0,
+            constraints_h: match tl.kind {
+                TimelineKind::Robust => 10.0,
+                TimelineKind::Concise => 5.0,
+                TimelineKind::Binary | TimelineKind::Clock => 0.0,
+            },
         };
         if Some(idx) == anno_owner {
-            player.constraints_h = robust_constraints_height(&player, &diagram.annotations);
+            player.constraints_h = match tl.kind {
+                TimelineKind::Robust => robust_constraints_height(&player, &diagram.annotations),
+                TimelineKind::Concise | TimelineKind::Binary | TimelineKind::Clock => {
+                    state_constraints_height(&diagram.annotations)
+                }
+            };
         }
         let full_height = full_height_of(tl, player.constraints_h);
         y += frame_height + full_height;
         players.push(player);
     }
     let inner_height = y;
+
+    // ── Page decorations (push content down / reserve footer band) ─────────────
+    let header_band_h = if diagram.meta.header.is_some() {
+        text_height(FONT_DECORATION) + 1.0
+    } else {
+        0.0
+    };
+    let footer_band_h = if diagram.meta.footer.is_some() {
+        text_height(FONT_DECORATION)
+    } else {
+        0.0
+    };
 
     // ── Title block (pushes all content down) ──────────────────────────────────
     // The `title` directive renders a centred bold band at the top; everything
@@ -247,7 +278,7 @@ pub fn render(diagram: &TimingDiagram, _theme: &Theme) -> String {
     } else {
         0.0
     };
-    let vtop = ORIGIN + title_offset;
+    let vtop = ORIGIN + header_band_h + title_offset;
 
     // ── Coordinate helpers ────────────────────────────────────────────────────
     let first_tick_x = ORIGIN + part1_max_width + MARGIN_X1;
@@ -260,15 +291,34 @@ pub fn render(diagram: &TimingDiagram, _theme: &Theme) -> String {
     // ── Dimensions ──────────────────────────────────────────────────────────────
     let total_width = round_half_up(frame_right + WIDTH_PAD);
     let max_y = axis_bottom + 5.0 + 1.0 + ascent(FONT_TIME);
-    let total_height = round_half_up(max_y + HEIGHT_PAD);
+    let total_height = round_half_up(max_y + HEIGHT_PAD + footer_band_h);
 
     let mut svg = SvgBuilder::new_plantuml(total_width, total_height, "TIMING");
+
+    // ── Header ─────────────────────────────────────────────────────────────────
+    if let Some(header) = &diagram.meta.header {
+        let tw = text_width(header, FONT_DECORATION, false);
+        let x = frame_right + 9.0 - tw;
+        let y = 10.0 + ascent(FONT_DECORATION);
+        let sl = diagram.header_line.unwrap_or(1);
+        svg.raw(&format!(r#"<g class="header" data-source-line="{sl}">"#));
+        emit_text_colored(
+            &mut svg,
+            x,
+            y,
+            header,
+            FONT_DECORATION,
+            false,
+            DECORATION_COLOR,
+        );
+        svg.raw("</g>");
+    }
 
     // ── Title ───────────────────────────────────────────────────────────────────
     if let Some(title) = &diagram.meta.title {
         let tw = text_width(title, FONT_TITLE, true);
         let tx_title = (frame_right + 19.0 - tw) / 2.0;
-        let baseline = ORIGIN + ascent(FONT_TITLE);
+        let baseline = ORIGIN + header_band_h + ascent(FONT_TITLE);
         let sl = diagram.title_line.unwrap_or(1);
         svg.raw(&format!(r#"<g class="title" data-source-line="{sl}">"#));
         emit_text_colored(
@@ -334,21 +384,29 @@ pub fn render(diagram: &TimingDiagram, _theme: &Theme) -> String {
     }
 
     // ── Time-range annotations (`@T1 <-> @T2 : label`) ──────────────────────────
-    // These attach to the last robust timeline; the arrow sits 5px above the
-    // state line active at the annotation's start time.
+    // These attach to the last declared timeline. Robust constraints sit 5px
+    // above the active state line; concise/binary/clock constraints sit halfway
+    // through the reserved constraint band.
     if !diagram.annotations.is_empty()
-        && let Some(p) = players
-            .iter()
-            .rev()
-            .find(|p| p.timeline.kind == TimelineKind::Robust)
+        && let Some(owner_idx) = anno_owner
+        && let Some(p) = players.get(owner_idx)
     {
-        let band_top = vtop + p.body_top + p.constraints_h;
         for ann in &diagram.annotations {
-            let state = state_at(p, ann.from);
-            let line_y = state
-                .map(|s| robust_state_line_y(p, band_top, s))
-                .unwrap_or(band_top);
-            draw_annotation(&mut svg, tx(ann.from), tx(ann.to), line_y - 5.0, &ann.label);
+            let (y, margin_x) = match p.timeline.kind {
+                TimelineKind::Robust => {
+                    let band_top = vtop + p.body_top + p.constraints_h;
+                    let state = state_at(p, ann.from);
+                    let line_y = state
+                        .map(|s| robust_state_line_y(p, band_top, s))
+                        .unwrap_or(band_top);
+                    (line_y - 5.0, 2.5)
+                }
+                TimelineKind::Concise => (vtop + p.body_top + p.constraints_h / 2.0, 1.0),
+                TimelineKind::Binary | TimelineKind::Clock => {
+                    (vtop + p.body_top + p.constraints_h / 2.0, 2.5)
+                }
+            };
+            draw_annotation(&mut svg, tx(ann.from), tx(ann.to), y, &ann.label, margin_x);
         }
     }
 
@@ -386,6 +444,25 @@ pub fn render(diagram: &TimingDiagram, _theme: &Theme) -> String {
         }
     }
 
+    // ── Footer ─────────────────────────────────────────────────────────────────
+    if let Some(footer) = &diagram.meta.footer {
+        let tw = text_width(footer, FONT_DECORATION, false);
+        let x = (frame_right + 19.0 - tw) / 2.0;
+        let y = total_height - TIMING_FOOTER_BOTTOM_GAP;
+        let sl = diagram.footer_line.unwrap_or(1);
+        svg.raw(&format!(r#"<g class="footer" data-source-line="{sl}">"#));
+        emit_text_colored(
+            &mut svg,
+            x,
+            y,
+            footer,
+            FONT_DECORATION,
+            false,
+            DECORATION_COLOR,
+        );
+        svg.raw("</g>");
+    }
+
     svg.finalize_plantuml()
 }
 
@@ -410,13 +487,25 @@ const ANNO_COLOR: &str = "#8B0000";
 
 /// Draw a `@T1 <-> @T2 : label` time-range annotation: a double-headed arrow
 /// between the two tick x-positions, with the label centred above.
-fn draw_annotation(svg: &mut SvgBuilder, x_from: f64, x_to: f64, y: f64, label: &str) {
-    // Arrow shaft (inset 5.5px from each tick so the heads sit cleanly).
-    emit_line(svg, x_from + 5.5, y, x_to - 5.5, y, ANNO_COLOR, 1.5);
-    // Left arrowhead: tip at x_from+2.5, base at x_from+10.5.
-    emit_arrowhead(svg, x_from + 10.5, x_from + 2.5, y);
-    // Right arrowhead: tip at x_to-2.5, base at x_to-10.5.
-    emit_arrowhead(svg, x_to - 10.5, x_to - 2.5, y);
+fn draw_annotation(
+    svg: &mut SvgBuilder,
+    x_from: f64,
+    x_to: f64,
+    y: f64,
+    label: &str,
+    margin_x: f64,
+) {
+    emit_line(
+        svg,
+        x_from + margin_x + 3.0,
+        y,
+        x_to - margin_x - 3.0,
+        y,
+        ANNO_COLOR,
+        1.5,
+    );
+    emit_arrowhead(svg, x_from + margin_x + 8.0, x_from + margin_x, y);
+    emit_arrowhead(svg, x_to - margin_x - 8.0, x_to - margin_x, y);
     // Label centred on the span, sitting above the arrow.
     let tw = text_width(label, FONT_STATE, false);
     let cx = (x_from + x_to) / 2.0 - tw / 2.0;
@@ -485,9 +574,9 @@ fn full_height_of(tl: &Timeline, constraints_h: f64) -> f64 {
             }
             h + HISTOGRAM_BOTTOM_MARGIN + 6.0
         }
-        TimelineKind::Concise => 5.0 + CONCISE_RIBBON_HEIGHT + BOTTOM_MARGIN,
+        TimelineKind::Concise => constraints_h + CONCISE_RIBBON_HEIGHT + BOTTOM_MARGIN,
         // Clock shares the binary `suggestedHeight` (PlayerClock(..., 30)).
-        TimelineKind::Binary | TimelineKind::Clock => BINARY_HEIGHT,
+        TimelineKind::Binary | TimelineKind::Clock => constraints_h + BINARY_HEIGHT,
     }
 }
 
@@ -650,7 +739,7 @@ fn draw_concise(
     if changes.is_empty() {
         return;
     }
-    let ribbon_top = vtop + p.body_top + 5.0;
+    let ribbon_top = vtop + p.body_top + p.constraints_h;
     let height = CONCISE_RIBBON_HEIGHT;
 
     for (i, ch) in changes.iter().enumerate() {
@@ -772,7 +861,7 @@ fn draw_binary(
     if changes.is_empty() {
         return;
     }
-    let body = vtop + p.body_top;
+    let body = vtop + p.body_top + p.constraints_h;
     let y_high = body + PANEL_MARGIN_Y;
     let y_low = body + BINARY_HEIGHT - PANEL_MARGIN_Y;
 
@@ -833,7 +922,7 @@ fn draw_clock(
     if period <= 0.0 {
         return;
     }
-    let body = vtop + p.body_top;
+    let body = vtop + p.body_top + p.constraints_h;
     let y_high = body + PANEL_MARGIN_Y;
     let line_height = BINARY_HEIGHT - 2.0 * PANEL_MARGIN_Y; // PanelsClock getLineHeight
     let y_low = y_high + line_height;
