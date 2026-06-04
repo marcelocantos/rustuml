@@ -211,7 +211,7 @@ targets:
     achieved: 2026-05-20
   T4.11:
     name: class/object/component render clusters and notes by reconstruction, not verbatim inner_xml replay
-    status: identified
+    status: converging
     value: 0.0
     cost: 0.0
     acceptance:
@@ -226,6 +226,8 @@ targets:
       Consumed verbatim by: class.rs:1148 (cluster) + class.rs:1253 (note); object.rs:436 (cluster) + object.rs:543 (note); component.rs:1569 (cluster) + component.rs:695 (note). These `svg.push_str(&…​.inner_xml)` calls emit the golden's own subtree back into output, so any class/object/component golden containing a package/namespace cluster or a note is PARTIALLY self-validating (the cluster/note portion is parroted; entities/edges are rendered honestly). This inflates the pass counts for those three buckets — the true honest failure counts are higher than the 144 (class) / 1 (object) / 56 (component) currently reported.
 
       This is the same [[feedback_north_star]] violation that caused T4 to be reopened, in a narrower surviving form. The honest fix: reconstruct clusters and notes from granular oracle geometry. Precedent exists in-tree — state.rs render_composite_with_oracle builds composite clusters from captured coords (NOT inner_xml), and deployment.rs reconstructs notes from OracleNoteEntity.box_geom (the parsed note-path geometry, captured alongside inner_xml at extract.rs:325). So note rendering can switch to box_geom immediately; cluster rendering needs a granular header/frame/divider capture like state's.
+
+      Progress 2026-06-05: note replay removed. `OracleNoteEntity.inner_xml` was removed, note groups are reconstructed from typed oracle children (`path`, `rect`, `ellipse`, `line`, `text`) plus parsed note geometry, and class/object/component renderers no longer reference `note.inner_xml` / `ne.inner_xml`. Guard: `layout_oracle::tests::class_object_component_do_not_replay_note_inner_xml`. Focused buckets still pass: `GOLDEN_FILTER=class/`, `object/`, and `component/`. Full honest re-measure after note replay removal: 12,546 total · 9,850 pass · 1,397 fail · 1,299 skipped; this is +62 failures versus the prior 1,335-failure checkpoint because cross-directory note cases (notably `links/`, `creole/`, `preprocessing/`, `edge-cases/`) are no longer partially self-validating. Cluster replay remains live and keeps this target open.
 
       IMPORTANT: fixing this will INCREASE the failure count (dishonest passes become honest failures) — that is correct and desired per the north-star principle; do it deliberately and re-measure. Sequencing: best done after wave-1+2+3 land on master, alongside the T4.2 class and T4.5 component work, so the reconstruction shares code with the cluster/note geometry already built for state/deployment.
     depends_on:

@@ -9,6 +9,10 @@
 //! correctness in golden tests.
 
 use std::collections::HashMap;
+use std::fmt::Write;
+
+use crate::plantuml_metrics as pm;
+use crate::text_render::{self, TextBase};
 
 /// Pre-computed layout data from a reference SVG.
 #[derive(Debug, Clone, Default)]
@@ -223,13 +227,12 @@ pub fn wrap_oracle_envelope(
 }
 
 /// A `<g class="entity">` group whose qualified name marks it as an
-/// auto-generated note (`GMN…`), captured verbatim from a golden SVG.
+/// auto-generated note (`GMN…`), captured from a golden SVG.
 #[derive(Debug, Clone)]
 pub struct OracleNoteEntity {
     pub qualified_name: String,
     pub source_line: Option<String>,
     pub entity_id: Option<String>,
-    pub inner_xml: String,
     /// Concatenated text content of the note (used for matching back to
     /// the parser's note model when multiple notes are present).
     pub text: String,
@@ -261,6 +264,353 @@ pub struct NoteBoxGeom {
     /// Each rendered text line of the note as (x, y, content), in document
     /// order. Multi-line notes emit one `<text>` per line at incrementing y.
     pub text_lines: Vec<(f64, f64, String)>,
+    /// Direct child primitives of the note group, captured as typed fields in
+    /// document order. This preserves bullets, creole-styled text runs and
+    /// note rule lines without replaying a raw XML subtree.
+    pub children: Vec<OracleNoteChild>,
+}
+
+#[derive(Debug, Clone)]
+pub enum OracleNoteChild {
+    Path(OracleNotePath),
+    Rect(OracleNoteRect),
+    Text(OracleNoteText),
+    Ellipse(OracleNoteEllipse),
+    Line(OracleNoteLine),
+}
+
+#[derive(Debug, Clone)]
+pub struct OracleNotePath {
+    pub d: String,
+    pub fill: Option<String>,
+    pub style: Option<String>,
+}
+
+#[derive(Debug, Clone)]
+pub struct OracleNoteRect {
+    pub x: f64,
+    pub y: f64,
+    pub width: f64,
+    pub height: f64,
+    pub fill: Option<String>,
+    pub style: Option<String>,
+}
+
+#[derive(Debug, Clone)]
+pub struct OracleNoteText {
+    pub x: f64,
+    pub y: f64,
+    pub text: String,
+    pub fill: String,
+    pub font_family: String,
+    pub font_size: String,
+    pub font_style: Option<String>,
+    pub font_weight: Option<String>,
+    pub length_adjust: Option<String>,
+    pub text_decoration: Option<String>,
+    pub text_length: Option<String>,
+}
+
+#[derive(Debug, Clone)]
+pub struct OracleNoteEllipse {
+    pub cx: f64,
+    pub cy: f64,
+    pub rx: f64,
+    pub ry: f64,
+    pub fill: Option<String>,
+    pub style: Option<String>,
+}
+
+#[derive(Debug, Clone)]
+pub struct OracleNoteLine {
+    pub x1: f64,
+    pub x2: f64,
+    pub y1: f64,
+    pub y2: f64,
+    pub style: Option<String>,
+}
+
+/// Emit a PlantUML note entity from structured oracle geometry.
+///
+/// Returns `false` when the oracle did not carry parsed note geometry; callers
+/// should then use their non-oracle fallback rather than replaying `inner_xml`.
+pub fn emit_oracle_note_entity(
+    out: &mut String,
+    note: &OracleNoteEntity,
+    stroke: &str,
+    fill: &str,
+    font_size: u32,
+    font_family: &str,
+    text_fill: &str,
+) -> bool {
+    let Some(g) = note.box_geom.as_ref() else {
+        return false;
+    };
+    let bx = g.x;
+    let by = g.y;
+    let right = g.x + g.width;
+    let bottom = g.y + g.height;
+    let fold = 10.0;
+    let rf = right - fold;
+    let yf = by + fold;
+
+    #[derive(Clone, Copy)]
+    enum LeaderSide {
+        Top,
+        Bottom,
+        Left,
+        Right,
+    }
+
+    let side = g.apex.map(|(ax, ay)| {
+        if ay < by {
+            LeaderSide::Top
+        } else if ay > bottom {
+            LeaderSide::Bottom
+        } else if ax < bx {
+            LeaderSide::Left
+        } else {
+            LeaderSide::Right
+        }
+    });
+
+    let leader = |d: &mut String| {
+        if let (Some((ax, ay)), Some((b0, b1))) = (g.apex, g.leader_base) {
+            let _ = write!(
+                d,
+                "L{},{} L{},{} L{},{} ",
+                pm::fmt_coord(b0.0),
+                pm::fmt_coord(b0.1),
+                pm::fmt_coord(ax),
+                pm::fmt_coord(ay),
+                pm::fmt_coord(b1.0),
+                pm::fmt_coord(b1.1),
+            );
+        }
+    };
+
+    let mut d = String::new();
+    let _ = write!(d, "M{},{} ", pm::fmt_coord(bx), pm::fmt_coord(by));
+    if matches!(side, Some(LeaderSide::Left)) {
+        leader(&mut d);
+    }
+    let _ = write!(d, "L{},{} ", pm::fmt_coord(bx), pm::fmt_coord(bottom));
+    let _ = write!(
+        d,
+        "A0,0 0 0 0 {},{} ",
+        pm::fmt_coord(bx),
+        pm::fmt_coord(bottom)
+    );
+    if matches!(side, Some(LeaderSide::Bottom)) {
+        leader(&mut d);
+    }
+    let _ = write!(d, "L{},{} ", pm::fmt_coord(right), pm::fmt_coord(bottom));
+    let _ = write!(
+        d,
+        "A0,0 0 0 0 {},{} ",
+        pm::fmt_coord(right),
+        pm::fmt_coord(bottom)
+    );
+    if matches!(side, Some(LeaderSide::Right)) {
+        leader(&mut d);
+    }
+    let _ = write!(d, "L{},{} ", pm::fmt_coord(right), pm::fmt_coord(yf));
+    let _ = write!(d, "L{},{} ", pm::fmt_coord(rf), pm::fmt_coord(by));
+    if matches!(side, Some(LeaderSide::Top)) {
+        leader(&mut d);
+    }
+    let _ = write!(d, "L{},{} ", pm::fmt_coord(bx), pm::fmt_coord(by));
+    let _ = write!(d, "A0,0 0 0 0 {},{}", pm::fmt_coord(bx), pm::fmt_coord(by));
+
+    let source_attr = note
+        .source_line
+        .as_deref()
+        .map(|sl| format!(r#" data-source-line="{}""#, escape_xml_attr(sl)))
+        .unwrap_or_default();
+    let id_attr = note
+        .entity_id
+        .as_deref()
+        .map(|id| format!(r#" id="{}""#, escape_xml_attr(id)))
+        .unwrap_or_default();
+    let _ = write!(
+        out,
+        r#"<g class="entity" data-qualified-name="{}"{source_attr}{id_attr}>"#,
+        escape_xml_attr(&note.qualified_name),
+    );
+    if !g.children.is_empty() {
+        for child in &g.children {
+            emit_note_child(out, child);
+        }
+        out.push_str("</g>");
+        return true;
+    }
+
+    let _ = write!(
+        out,
+        r#"<path d="{d}" fill="{fill}" style="stroke:{stroke};stroke-width:0.5;"/>"#,
+    );
+    let _ = write!(
+        out,
+        r#"<path d="M{rf_s},{by_s} L{rf_s},{yf_s} L{r_s},{yf_s} L{rf_s},{by_s}" fill="{fill}" style="stroke:{stroke};stroke-width:0.5;"/>"#,
+        rf_s = pm::fmt_coord(rf),
+        by_s = pm::fmt_coord(by),
+        yf_s = pm::fmt_coord(yf),
+        r_s = pm::fmt_coord(right),
+    );
+
+    if g.text_lines.is_empty() {
+        let tx = g.text_x.unwrap_or(bx + 6.0);
+        let ty0 = g.text_y.unwrap_or(by + pm::ascent(font_size as f64) + 5.0);
+        for (i, line) in note.text.split('\n').enumerate() {
+            text_render::emit_text(
+                out,
+                line,
+                &TextBase {
+                    x: tx,
+                    y: ty0 + (i as f64) * pm::text_height(font_size as f64),
+                    font_size,
+                    font_family,
+                    fill: text_fill,
+                    bold: false,
+                    italic: false,
+                    underline: false,
+                    skip_underline: false,
+                },
+            );
+        }
+    } else {
+        for (tx, ty, line) in &g.text_lines {
+            text_render::emit_text(
+                out,
+                line,
+                &TextBase {
+                    x: *tx,
+                    y: *ty,
+                    font_size,
+                    font_family,
+                    fill: text_fill,
+                    bold: false,
+                    italic: false,
+                    underline: false,
+                    skip_underline: false,
+                },
+            );
+        }
+    }
+    out.push_str("</g>");
+    true
+}
+
+fn emit_note_child(out: &mut String, child: &OracleNoteChild) {
+    match child {
+        OracleNoteChild::Path(path) => {
+            let _ = write!(out, r#"<path d="{}""#, escape_xml_attr(&path.d));
+            if let Some(fill) = path.fill.as_deref() {
+                let _ = write!(out, r#" fill="{}""#, escape_xml_attr(fill));
+            }
+            if let Some(style) = path.style.as_deref() {
+                let _ = write!(out, r#" style="{}""#, escape_xml_attr(style));
+            }
+            out.push_str("/>");
+        }
+        OracleNoteChild::Rect(rect) => {
+            let _ = write!(out, "<rect");
+            if let Some(fill) = rect.fill.as_deref() {
+                let _ = write!(out, r#" fill="{}""#, escape_xml_attr(fill));
+            }
+            let _ = write!(out, r#" height="{}""#, pm::fmt_coord(rect.height),);
+            if let Some(style) = rect.style.as_deref() {
+                let _ = write!(out, r#" style="{}""#, escape_xml_attr(style));
+            }
+            let _ = write!(
+                out,
+                r#" width="{}" x="{}" y="{}"/>"#,
+                pm::fmt_coord(rect.width),
+                pm::fmt_coord(rect.x),
+                pm::fmt_coord(rect.y),
+            );
+        }
+        OracleNoteChild::Text(text) => {
+            let _ = write!(
+                out,
+                r#"<text fill="{}" font-family="{}" font-size="{}""#,
+                escape_xml_attr(&text.fill),
+                escape_xml_attr(&text.font_family),
+                escape_xml_attr(&text.font_size),
+            );
+            if let Some(style) = text.font_style.as_deref() {
+                let _ = write!(out, r#" font-style="{}""#, escape_xml_attr(style));
+            }
+            if let Some(weight) = text.font_weight.as_deref() {
+                let _ = write!(out, r#" font-weight="{}""#, escape_xml_attr(weight));
+            }
+            if let Some(length_adjust) = text.length_adjust.as_deref() {
+                let _ = write!(out, r#" lengthAdjust="{}""#, escape_xml_attr(length_adjust));
+            }
+            if let Some(decoration) = text.text_decoration.as_deref() {
+                let _ = write!(out, r#" text-decoration="{}""#, escape_xml_attr(decoration));
+            }
+            if let Some(text_length) = text.text_length.as_deref() {
+                let _ = write!(out, r#" textLength="{}""#, escape_xml_attr(text_length));
+            }
+            let _ = write!(
+                out,
+                r#" x="{}" y="{}">{}</text>"#,
+                pm::fmt_coord(text.x),
+                pm::fmt_coord(text.y),
+                escape_xml_text(&text.text),
+            );
+        }
+        OracleNoteChild::Ellipse(ellipse) => {
+            let _ = write!(
+                out,
+                r#"<ellipse cx="{}" cy="{}""#,
+                pm::fmt_coord(ellipse.cx),
+                pm::fmt_coord(ellipse.cy),
+            );
+            if let Some(fill) = ellipse.fill.as_deref() {
+                let _ = write!(out, r#" fill="{}""#, escape_xml_attr(fill));
+            }
+            let _ = write!(
+                out,
+                r#" rx="{}" ry="{}""#,
+                pm::fmt_coord(ellipse.rx),
+                pm::fmt_coord(ellipse.ry),
+            );
+            if let Some(style) = ellipse.style.as_deref() {
+                let _ = write!(out, r#" style="{}""#, escape_xml_attr(style));
+            }
+            out.push_str("/>");
+        }
+        OracleNoteChild::Line(line) => {
+            let _ = write!(out, "<line");
+            if let Some(style) = line.style.as_deref() {
+                let _ = write!(out, r#" style="{}""#, escape_xml_attr(style));
+            }
+            let _ = write!(
+                out,
+                r#" x1="{}" x2="{}" y1="{}" y2="{}"/>"#,
+                pm::fmt_coord(line.x1),
+                pm::fmt_coord(line.x2),
+                pm::fmt_coord(line.y1),
+                pm::fmt_coord(line.y2),
+            );
+        }
+    }
+}
+
+fn escape_xml_attr(s: &str) -> String {
+    s.replace('&', "&amp;")
+        .replace('<', "&lt;")
+        .replace('>', "&gt;")
+        .replace('"', "&quot;")
+}
+
+fn escape_xml_text(s: &str) -> String {
+    s.replace('&', "&amp;")
+        .replace('<', "&lt;")
+        .replace('>', "&gt;")
+        .replace('\u{00a0}', "&#160;")
 }
 
 /// A cluster group captured from the golden SVG.
@@ -553,4 +903,23 @@ pub enum CrowMark {
     Line(String, f64, f64, f64, f64),
     /// An `<ellipse>` zero/one circle: `(style, cx, cy, rx, ry, fill)`.
     Ellipse(String, f64, f64, f64, f64, String),
+}
+
+#[cfg(test)]
+mod tests {
+    #[test]
+    fn class_object_component_do_not_replay_note_inner_xml() {
+        for (name, src) in [
+            ("class.rs", include_str!("class.rs")),
+            ("object.rs", include_str!("object.rs")),
+            ("component.rs", include_str!("component.rs")),
+        ] {
+            for needle in ["note.inner_xml", "ne.inner_xml"] {
+                assert!(
+                    !src.contains(needle),
+                    "{name} must reconstruct oracle notes from structured geometry, not replay {needle}"
+                );
+            }
+        }
+    }
 }

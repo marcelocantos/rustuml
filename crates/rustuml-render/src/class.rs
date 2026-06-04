@@ -19,7 +19,7 @@ use rustuml_parser::diagram::class::*;
 
 use crate::layout_oracle::{
     CrowMark, EntityPath, EntityPolygon, EntityRect, EntityText, OracleCluster, OracleEdgePath,
-    OracleHandwrittenWarning, OracleLayout, wrap_oracle_envelope,
+    OracleHandwrittenWarning, OracleLayout, emit_oracle_note_entity, wrap_oracle_envelope,
 };
 use crate::metrics;
 use crate::style::Theme;
@@ -1708,7 +1708,7 @@ fn render_plantuml_svg(
     );
 
     // Render any oracle-captured clusters (package/database/folder/...)
-    // and path-shaped GMN* note entities verbatim, in document order,
+    // in document order,
     // BEFORE the diagram entities. This matches Java's emission order and
     // lets entities inside a cluster claim the next available `ent000N`
     // ID. Notes captured here have `group_class = "entity"` and are
@@ -1894,18 +1894,8 @@ fn render_plantuml_svg(
     // interleaving matches PlantUML's document order.
     let mut note_cursor = 0usize;
     let emit_note = |svg: &mut String, note: &crate::layout_oracle::OracleNoteEntity| {
-        let nid = note.entity_id.as_deref().unwrap_or("ent0000");
-        let sl = note.source_line.as_deref().unwrap_or("0");
-        write!(
-            svg,
-            r#"<g class="entity" data-qualified-name="{}" data-source-line="{}" id="{}">"#,
-            escape_xml(&note.qualified_name),
-            sl,
-            nid,
-        )
-        .unwrap();
-        svg.push_str(&note.inner_xml);
-        svg.push_str("</g>");
+        let _ =
+            emit_oracle_note_entity(svg, note, "#181818", "#FEFFDD", 13, "sans-serif", "#000000");
     };
 
     // Render each entity.
@@ -4952,19 +4942,16 @@ fn render_notes_only(
     {
         let mut svg = SvgBuilder::new_plantuml(orc.canvas_width, orc.canvas_height, "CLASS");
         for ne in &orc.note_entities {
-            let nid = ne.entity_id.as_deref().unwrap_or("ent0002");
-            let sl = ne.source_line.as_deref().unwrap_or("0");
             let mut group = String::new();
-            write!(
-                group,
-                r#"<g class="entity" data-qualified-name="{}" data-source-line="{}" id="{}">"#,
-                escape_xml(&ne.qualified_name),
-                sl,
-                nid,
-            )
-            .unwrap();
-            group.push_str(&ne.inner_xml);
-            group.push_str("</g>");
+            let _ = emit_oracle_note_entity(
+                &mut group,
+                ne,
+                "#181818",
+                "#FEFFDD",
+                13,
+                "sans-serif",
+                "#000000",
+            );
             svg.raw_inline(&group);
         }
         for edge in &orc.edges {

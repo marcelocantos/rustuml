@@ -29,6 +29,7 @@
 
 use crate::layout_oracle::{
     ApointMark, CrowMark, EdgeDecoration, EntityRect, JsonBox, OracleEdgePath, OracleLayout,
+    OracleNoteChild,
 };
 use crate::plantuml_metrics::{fmt_coord, with_full_precision};
 use rustuml_parser::diagram::DiagramMeta;
@@ -429,7 +430,6 @@ fn scale_oracle_layout_inner(o: &mut OracleLayout, k: f64) {
         c.inner_xml = scale_svg_numbers(&c.inner_xml, k);
     }
     for n in &mut o.note_entities {
-        n.inner_xml = scale_svg_numbers(&n.inner_xml, k);
         if let Some(g) = n.box_geom.as_mut() {
             g.x *= k;
             g.y *= k;
@@ -454,6 +454,9 @@ fn scale_oracle_layout_inner(o: &mut OracleLayout, k: f64) {
             for (x, y, _) in &mut g.text_lines {
                 *x *= k;
                 *y *= k;
+            }
+            for child in &mut g.children {
+                scale_note_child(child, k);
             }
         }
     }
@@ -502,6 +505,52 @@ fn scale_oracle_layout_inner(o: &mut OracleLayout, k: f64) {
         }
         if let Some(d) = jc.dot.as_mut() {
             *d = scale_svg_numbers(d, k);
+        }
+    }
+}
+
+fn scale_note_child(child: &mut OracleNoteChild, k: f64) {
+    match child {
+        OracleNoteChild::Path(path) => {
+            path.d = scale_path_d(&path.d, k);
+            if let Some(style) = path.style.as_mut() {
+                *style = scale_style(style, k);
+            }
+        }
+        OracleNoteChild::Rect(rect) => {
+            rect.x *= k;
+            rect.y *= k;
+            rect.width *= k;
+            rect.height *= k;
+            if let Some(style) = rect.style.as_mut() {
+                *style = scale_style(style, k);
+            }
+        }
+        OracleNoteChild::Text(text) => {
+            text.x *= k;
+            text.y *= k;
+            text.font_size = scale_number_token(&text.font_size, k);
+            if let Some(text_length) = text.text_length.as_mut() {
+                *text_length = scale_number_token(text_length, k);
+            }
+        }
+        OracleNoteChild::Ellipse(ellipse) => {
+            ellipse.cx *= k;
+            ellipse.cy *= k;
+            ellipse.rx *= k;
+            ellipse.ry *= k;
+            if let Some(style) = ellipse.style.as_mut() {
+                *style = scale_style(style, k);
+            }
+        }
+        OracleNoteChild::Line(line) => {
+            line.x1 *= k;
+            line.x2 *= k;
+            line.y1 *= k;
+            line.y2 *= k;
+            if let Some(style) = line.style.as_mut() {
+                *style = scale_style(style, k);
+            }
         }
     }
 }

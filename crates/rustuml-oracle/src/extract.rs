@@ -10,7 +10,8 @@ use rustuml_render::layout_oracle::{
     ApointMark, AuxRect, CrowMark, EdgeDecoration, EdgeLabelLink, EntityLine, EntityPath,
     EntityPolygon, EntityRect, EntityText, JsonBox, JsonConnector, NoteBoxGeom, OracleCluster,
     OracleDecoration, OracleEdgePath, OracleEntity, OracleHandwrittenWarning, OracleLayout,
-    OracleLegend, OracleLegendRect, OracleNoteEntity, RegionDivider,
+    OracleLegend, OracleLegendRect, OracleNoteChild, OracleNoteEllipse, OracleNoteEntity,
+    OracleNoteLine, OracleNotePath, OracleNoteRect, OracleNoteText, RegionDivider,
 };
 
 /// Parse the coordinate pairs from a note's body path `d` string and recover
@@ -113,6 +114,7 @@ fn parse_note_geom(d: &str) -> Option<NoteBoxGeom> {
         text_x: None,
         text_y: None,
         text_lines: Vec::new(),
+        children: Vec::new(),
     })
 }
 
@@ -374,16 +376,112 @@ pub fn extract_oracle_layout(svg: &str) -> Option<OracleLayout> {
             && !first_child.attribute("d").is_some_and(|d| d.contains('C'))
         {
             let range = node.range();
-            if let Some(slice) = svg.get(range.clone()) {
-                let inner = extract_inner_xml(slice);
+            if svg.get(range.clone()).is_some() {
                 let text = collect_text(&node);
                 // Parse the note box + leader geometry from the body path so
                 // the renderer can reconstruct the shape locally.
                 let mut box_geom = first_child.attribute("d").and_then(parse_note_geom);
                 if let Some(g) = box_geom.as_mut() {
-                    for t in node.descendants().filter(|c| c.tag_name().name() == "text") {
-                        if let (Some(tx), Some(ty)) = (parse_attr(&t, "x"), parse_attr(&t, "y")) {
-                            g.text_lines.push((tx, ty, collect_text(&t)));
+                    for child in node.children().filter(|c| c.is_element()) {
+                        match child.tag_name().name() {
+                            "path" => {
+                                if let Some(d) = child.attribute("d") {
+                                    g.children.push(OracleNoteChild::Path(OracleNotePath {
+                                        d: d.to_string(),
+                                        fill: child.attribute("fill").map(String::from),
+                                        style: child.attribute("style").map(String::from),
+                                    }));
+                                }
+                            }
+                            "rect" => {
+                                if let (Some(x), Some(y), Some(width), Some(height)) = (
+                                    parse_attr(&child, "x"),
+                                    parse_attr(&child, "y"),
+                                    parse_attr(&child, "width"),
+                                    parse_attr(&child, "height"),
+                                ) {
+                                    g.children.push(OracleNoteChild::Rect(OracleNoteRect {
+                                        x,
+                                        y,
+                                        width,
+                                        height,
+                                        fill: child.attribute("fill").map(String::from),
+                                        style: child.attribute("style").map(String::from),
+                                    }));
+                                }
+                            }
+                            "text" => {
+                                if let (Some(tx), Some(ty)) =
+                                    (parse_attr(&child, "x"), parse_attr(&child, "y"))
+                                {
+                                    let child_text = collect_text(&child);
+                                    g.text_lines.push((tx, ty, child_text.clone()));
+                                    g.children.push(OracleNoteChild::Text(OracleNoteText {
+                                        x: tx,
+                                        y: ty,
+                                        text: child_text,
+                                        fill: child
+                                            .attribute("fill")
+                                            .unwrap_or("#000000")
+                                            .to_string(),
+                                        font_family: child
+                                            .attribute("font-family")
+                                            .unwrap_or("sans-serif")
+                                            .to_string(),
+                                        font_size: child
+                                            .attribute("font-size")
+                                            .unwrap_or("13")
+                                            .to_string(),
+                                        font_style: child.attribute("font-style").map(String::from),
+                                        font_weight: child
+                                            .attribute("font-weight")
+                                            .map(String::from),
+                                        length_adjust: child
+                                            .attribute("lengthAdjust")
+                                            .map(String::from),
+                                        text_decoration: child
+                                            .attribute("text-decoration")
+                                            .map(String::from),
+                                        text_length: child
+                                            .attribute("textLength")
+                                            .map(String::from),
+                                    }));
+                                }
+                            }
+                            "ellipse" => {
+                                if let (Some(cx), Some(cy), Some(rx), Some(ry)) = (
+                                    parse_attr(&child, "cx"),
+                                    parse_attr(&child, "cy"),
+                                    parse_attr(&child, "rx"),
+                                    parse_attr(&child, "ry"),
+                                ) {
+                                    g.children.push(OracleNoteChild::Ellipse(OracleNoteEllipse {
+                                        cx,
+                                        cy,
+                                        rx,
+                                        ry,
+                                        fill: child.attribute("fill").map(String::from),
+                                        style: child.attribute("style").map(String::from),
+                                    }));
+                                }
+                            }
+                            "line" => {
+                                if let (Some(x1), Some(x2), Some(y1), Some(y2)) = (
+                                    parse_attr(&child, "x1"),
+                                    parse_attr(&child, "x2"),
+                                    parse_attr(&child, "y1"),
+                                    parse_attr(&child, "y2"),
+                                ) {
+                                    g.children.push(OracleNoteChild::Line(OracleNoteLine {
+                                        x1,
+                                        x2,
+                                        y1,
+                                        y2,
+                                        style: child.attribute("style").map(String::from),
+                                    }));
+                                }
+                            }
+                            _ => {}
                         }
                     }
                     if let Some((tx, ty, _)) = g.text_lines.first() {
@@ -395,7 +493,6 @@ pub fn extract_oracle_layout(svg: &str) -> Option<OracleLayout> {
                     qualified_name: name.to_string(),
                     source_line: node.attribute("data-source-line").map(String::from),
                     entity_id: node.attribute("id").map(String::from),
-                    inner_xml: inner,
                     text,
                     box_geom,
                 });
@@ -2281,43 +2378,6 @@ fn polygon_bbox(points: &str) -> Option<(f64, f64, f64, f64)> {
     let min_y = ys.clone().fold(f64::INFINITY, f64::min);
     let max_y = ys.fold(f64::NEG_INFINITY, f64::max);
     Some((min_x, min_y, max_x, max_y))
-}
-
-/// Given the verbatim XML of a single element `<tag …>…</tag>`, return just
-/// the inner content (between the opening and closing tags). For self-closing
-/// elements, returns an empty string.
-fn extract_inner_xml(element_xml: &str) -> String {
-    // Find end of opening tag. Skip over attribute values that may contain '>'.
-    let bytes = element_xml.as_bytes();
-    let mut i = 0;
-    if bytes.first() != Some(&b'<') {
-        return String::new();
-    }
-    let mut in_quote: Option<u8> = None;
-    while i < bytes.len() {
-        let b = bytes[i];
-        match (in_quote, b) {
-            (Some(q), c) if c == q => in_quote = None,
-            (None, b'"') | (None, b'\'') => in_quote = Some(b),
-            (None, b'/') if i + 1 < bytes.len() && bytes[i + 1] == b'>' => {
-                // Self-closing element.
-                return String::new();
-            }
-            (None, b'>') => {
-                let inner_start = i + 1;
-                // Find the matching closing tag at the end. The opening tag bytes
-                // span [0..element_xml.find(' ')] or [0..i] up to the first whitespace
-                // or `>`. We look for `</…>` at the end.
-                if let Some(close_lt) = element_xml.rfind("</") {
-                    return element_xml[inner_start..close_lt].to_string();
-                }
-                return String::new();
-            }
-            _ => {}
-        }
-        i += 1;
-    }
-    String::new()
 }
 
 #[cfg(test)]

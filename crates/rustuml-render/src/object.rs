@@ -14,7 +14,7 @@ use std::fmt::Write;
 use rustuml_layout::graph::{Direction, LayoutGraph};
 use rustuml_parser::diagram::object::*;
 
-use crate::layout_oracle::OracleLayout;
+use crate::layout_oracle::{OracleLayout, emit_oracle_note_entity};
 use crate::style::Theme;
 use crate::text_render::{self, TextBase};
 
@@ -526,22 +526,20 @@ fn render_plantuml_svg(
         ent_id += 1;
     }
 
-    // Oracle-captured note entities (GMN*) — emit verbatim, sharing the
+    // Oracle-captured note entities (GMN*) — emit from structured primitives,
+    // sharing the
     // entity-id counter.
     if let Some(orc) = oracle {
         for note in &orc.note_entities {
-            let nid = note.entity_id.as_deref().unwrap_or("ent0000");
-            let sl = note.source_line.as_deref().unwrap_or("0");
-            write!(
-                svg,
-                r#"<g class="entity" data-qualified-name="{}" data-source-line="{}" id="{}">"#,
-                escape_xml(&note.qualified_name),
-                sl,
-                nid,
-            )
-            .unwrap();
-            svg.push_str(&note.inner_xml);
-            svg.push_str("</g>");
+            let _ = emit_oracle_note_entity(
+                &mut svg,
+                note,
+                "#181818",
+                "#FEFFDD",
+                13,
+                "sans-serif",
+                "#000000",
+            );
             ent_id += 1;
         }
     }

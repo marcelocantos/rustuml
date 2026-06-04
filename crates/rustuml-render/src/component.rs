@@ -11,7 +11,9 @@ use std::fmt::Write;
 use rustuml_layout::graph::{Direction, EdgePath, LayoutGraph};
 use rustuml_parser::diagram::component::*;
 
-use crate::layout_oracle::{CrowMark, EntityRect, OracleLayout, wrap_oracle_envelope};
+use crate::layout_oracle::{
+    CrowMark, EntityRect, OracleLayout, emit_oracle_note_entity, wrap_oracle_envelope,
+};
 use crate::plantuml_metrics as pm;
 use crate::style::Theme;
 use crate::svg::SvgBuilder;
@@ -931,7 +933,7 @@ pub fn render_with_oracle(
         svg.raw("</g>");
     }
 
-    // Render note entities verbatim from oracle, BEFORE connections —
+    // Render note entities from structured oracle primitives, BEFORE connections —
     // PlantUML emits them interleaved with regular entities, and connections
     // that touch a note (e.g. `N1 .. Foo`) come after the note's `<g>`.
     if let Some(orc) = oracle
@@ -939,20 +941,17 @@ pub fn render_with_oracle(
     {
         for ne in &orc.note_entities {
             svg.raw(&format!("<!--entity {}-->", ne.qualified_name));
-            let source_attr = ne
-                .source_line
-                .as_deref()
-                .map(|s| format!(r#" data-source-line="{s}""#))
-                .unwrap_or_default();
-            let id_attr = ne
-                .entity_id
-                .as_deref()
-                .map(|s| format!(r#" id="{s}""#))
-                .unwrap_or_default();
-            svg.raw(&format!(
-                r#"<g class="entity" data-qualified-name="{}"{source_attr}{id_attr}>{}</g>"#,
-                ne.qualified_name, ne.inner_xml,
-            ));
+            let mut group = String::new();
+            let _ = emit_oracle_note_entity(
+                &mut group,
+                ne,
+                "#181818",
+                "#FEFFDD",
+                13,
+                "sans-serif",
+                "#000000",
+            );
+            svg.raw(&group);
         }
     }
 
