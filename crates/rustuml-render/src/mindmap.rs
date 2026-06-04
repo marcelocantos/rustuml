@@ -49,6 +49,8 @@ const GETX2: f64 = NODE_MARGIN + 30.0;
 const TITLE_FONT_SIZE: f64 = 14.0;
 const TITLE_TOP_PAD: f64 = 20.0;
 const TITLE_BOTTOM_GAP: f64 = 1.0;
+const RULE_LABEL_MARKER: &str = "--";
+const RULE_LABEL_BASELINE_ADJUST: f64 = -0.5;
 
 const FILL_DEFAULT: &str = "#F1F1F1";
 const STROKE: &str = "#181818";
@@ -106,6 +108,13 @@ fn display_label(label: &str) -> String {
     }
     out.push_str(rest);
     out
+}
+
+fn rule_label_text(label: &str) -> Option<&str> {
+    let inner = label
+        .strip_prefix(RULE_LABEL_MARKER)?
+        .strip_suffix(RULE_LABEL_MARKER)?;
+    if inner.is_empty() { None } else { Some(inner) }
 }
 
 /// Resolve a node's `[#color]` modifier to a `#RRGGBB` fill, dropping `none`.
@@ -404,21 +413,44 @@ fn emit_box(buf: &mut String, p: &Placed) {
         .unwrap();
         (p.x + PAD_X, y + TEXT_BASELINE_DY)
     };
-    text_render::emit_text(
-        buf,
-        &display_label(&p.label),
-        &text_render::TextBase {
-            x: text_x,
-            y: text_y,
-            font_size: FONT_SIZE as u32,
-            font_family: "sans-serif",
-            fill: "#000000",
-            bold: false,
-            italic: false,
-            underline: false,
-            skip_underline: false,
-        },
-    );
+    let label = display_label(&p.label);
+    let base = text_render::TextBase {
+        x: text_x,
+        y: text_y,
+        font_size: FONT_SIZE as u32,
+        font_family: "sans-serif",
+        fill: "#000000",
+        bold: false,
+        italic: false,
+        underline: false,
+        skip_underline: false,
+    };
+    if let Some(rule_text) = rule_label_text(&label) {
+        let base = text_render::TextBase {
+            y: base.y + RULE_LABEL_BASELINE_ADJUST,
+            ..base
+        };
+        let text_w = text_render::measure(rule_text, FONT_SIZE, false);
+        write!(
+            buf,
+            r#"<line style="stroke:{STROKE};stroke-width:1;" x1="{x1}" x2="{x2}" y1="{y}" y2="{y}"/>"#,
+            x1 = pm::fmt_coord(p.x),
+            x2 = pm::fmt_coord(text_x),
+            y = pm::fmt_coord(p.cy),
+        )
+        .unwrap();
+        text_render::emit_text(buf, rule_text, &base);
+        write!(
+            buf,
+            r#"<line style="stroke:{STROKE};stroke-width:1;" x1="{x1}" x2="{x2}" y1="{y}" y2="{y}"/>"#,
+            x1 = pm::fmt_coord(text_x + text_w),
+            x2 = pm::fmt_coord(p.x + p.w),
+            y = pm::fmt_coord(p.cy),
+        )
+        .unwrap();
+    } else {
+        text_render::emit_text(buf, &label, &base);
+    }
 }
 
 fn emit_edge(buf: &mut String, parent: &Placed, child: &Placed) {
@@ -636,6 +668,20 @@ mod tests {
         let svg = crate::render_svg(&diagram);
         assert!(svg.contains("Solo"));
         assert!(svg.contains(r#"data-diagram-type="MINDMAP""#));
+    }
+
+    #[test]
+    fn renders_mindmap_rule_label_as_lines() {
+        let input = "@startmindmap\n* Root\n** --Rule Label--\n@endmindmap";
+        let diagram = rustuml_parser::parse::parse(input).unwrap();
+        let svg = crate::render_svg(&diagram);
+        assert!(svg.contains(">Rule Label</text>"));
+        assert!(!svg.contains("text-decoration=\"line-through\""));
+        assert_eq!(
+            svg.matches(r#"<line style="stroke:#181818;stroke-width:1;""#)
+                .count(),
+            2
+        );
     }
 
     #[test]
