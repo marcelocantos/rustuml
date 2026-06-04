@@ -4179,12 +4179,14 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
             let note_content_w = note_content_width(max_line_width, note.shape);
             match note.position {
                 NotePosition::Right => {
-                    // A message-attached note anchors to the rightmost endpoint.
+                    // A message-attached note anchors to the message component's
+                    // right endpoint, which follows the participant's visual
+                    // centre rather than the integer lifeline line.
                     let anchor_x = if note.on_message {
                         note.participants
                             .iter()
                             .filter_map(|id| id_to_idx.get(id.as_str()))
-                            .map(|&i| participants[i].lifeline_line_x)
+                            .map(|&i| participants[i].center_x)
                             .fold(f64::MIN, f64::max)
                     } else {
                         note.participants
@@ -4194,7 +4196,12 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                             .unwrap_or(f64::MIN)
                     };
                     if anchor_x != f64::MIN {
-                        let mut note_right = anchor_x.ceil() + NOTE_LIFELINE_GAP + note_content_w;
+                        let gap = if note.on_message {
+                            NOTE_LIFELINE_GAP - 1.0
+                        } else {
+                            NOTE_LIFELINE_GAP
+                        };
+                        let mut note_right = anchor_x.ceil() + gap + note_content_w;
                         // A message-attached note sits inside a message tile, which
                         // reserves an extra NOTE_LIFELINE_GAP of right margin.
                         if note.on_message {
@@ -4620,7 +4627,13 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
             .participants
             .iter()
             .filter_map(|id| id_to_idx.get(id.as_str()))
-            .map(|&i| participants[i].lifeline_line_x)
+            .map(|&i| {
+                if note.on_message && note.position == NotePosition::Right {
+                    participants[i].center_x
+                } else {
+                    participants[i].lifeline_line_x
+                }
+            })
             .collect();
         match note.position {
             NotePosition::Right => {
@@ -4629,7 +4642,12 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                 } else {
                     anchor_xs.first().copied()?
                 };
-                let left = ll_x.ceil() + NOTE_LIFELINE_GAP;
+                let gap = if note.on_message {
+                    NOTE_LIFELINE_GAP - 1.0
+                } else {
+                    NOTE_LIFELINE_GAP
+                };
+                let left = ll_x.ceil() + gap;
                 Some((left, left + note_content_w))
             }
             NotePosition::Left => {
@@ -6357,7 +6375,13 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                     .participants
                     .iter()
                     .filter_map(|id| id_to_idx.get(id.as_str()))
-                    .map(|&i| participants[i].lifeline_line_x)
+                    .map(|&i| {
+                        if note.on_message && note.position == NotePosition::Right {
+                            participants[i].center_x
+                        } else {
+                            participants[i].lifeline_line_x
+                        }
+                    })
                     .collect();
                 // Compute note left/right based on position. A message-attached
                 // note anchors to the leftmost (Left) / rightmost (Right) endpoint
@@ -6371,7 +6395,12 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                             anchor_xs.first().copied().unwrap_or(50.0)
                         };
                         let ll_x = if ll_x == f64::MIN { 50.0 } else { ll_x };
-                        let left = ll_x.ceil() + NOTE_LIFELINE_GAP;
+                        let gap = if note.on_message {
+                            NOTE_LIFELINE_GAP - 1.0
+                        } else {
+                            NOTE_LIFELINE_GAP
+                        };
+                        let left = ll_x.ceil() + gap;
                         (left, left + note_content_w)
                     }
                     NotePosition::Left => {
