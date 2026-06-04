@@ -213,6 +213,11 @@ fn grey_hex_colors(svg: String, reverse: bool) -> String {
             && b[i + 1..i + 7].iter().all(|&c| is_hex(c))
             && (i + 7 == b.len() || !is_hex(b[i + 7]))
         {
+            if is_transparent_fill_hex(b, i) {
+                out.extend_from_slice(&b[i..i + 7]);
+                i += 7;
+                continue;
+            }
             let hex = std::str::from_utf8(&b[i + 1..i + 7]).unwrap();
             let r = u32::from_str_radix(&hex[0..2], 16).unwrap();
             let g = u32::from_str_radix(&hex[2..4], 16).unwrap();
@@ -230,6 +235,21 @@ fn grey_hex_colors(svg: String, reverse: bool) -> String {
     }
     // Safe: only ASCII runs were rewritten; all other bytes copied verbatim.
     String::from_utf8(out).unwrap_or(svg)
+}
+
+fn is_transparent_fill_hex(bytes: &[u8], hash_idx: usize) -> bool {
+    const FILL_PREFIX: &[u8] = b"fill=\"";
+    const TRANSPARENT_ATTR: &[u8] = b"fill-opacity=\"0.00000\"";
+    if hash_idx < FILL_PREFIX.len() || &bytes[hash_idx - FILL_PREFIX.len()..hash_idx] != FILL_PREFIX
+    {
+        return false;
+    }
+    let Some(tag_end_rel) = bytes[hash_idx..].iter().position(|&c| c == b'>') else {
+        return false;
+    };
+    bytes[hash_idx..hash_idx + tag_end_rel]
+        .windows(TRANSPARENT_ATTR.len())
+        .any(|w| w == TRANSPARENT_ATTR)
 }
 
 #[cfg(test)]
@@ -265,6 +285,17 @@ mod post_process_tests {
             rev.contains("#000000") && rev.contains("#FFFFFF") && rev.contains('é'),
             "{rev}"
         );
+    }
+
+    #[test]
+    fn grey_hex_preserves_transparent_hitbox_fill() {
+        let svg = r##"<rect fill="#000000" fill-opacity="0.00000" height="10"/><rect fill="#000000" height="10"/>"##;
+        let out = grey_hex_colors(svg.to_string(), true);
+        assert!(
+            out.contains(r##"fill="#000000" fill-opacity="0.00000""##),
+            "{out}"
+        );
+        assert!(out.contains(r##"fill="#FFFFFF" height="10""##), "{out}");
     }
 }
 
