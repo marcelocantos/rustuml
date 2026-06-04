@@ -213,6 +213,9 @@ struct Palette {
     stop_stroke: String,
     bar_color: String,
     shadow_filter: Option<String>,
+    swimlane_border_color: String,
+    swimlane_title_color: String,
+    swimlane_title_background: Option<String>,
     /// Corner radius for action boxes. PlantUML's default action box has a
     /// 12.5 px radius (corresponding to a `roundCorner` of 25). The
     /// `roundCorner` / `activityRoundCorner` skinparams set it to half their
@@ -251,6 +254,9 @@ impl Palette {
             stop_stroke: STOP_FILL.into(),
             bar_color: FORK_BAR_COLOR.into(),
             shadow_filter: None,
+            swimlane_border_color: "#000000".into(),
+            swimlane_title_color: TEXT_COLOR.into(),
+            swimlane_title_background: None,
             action_rx: ACTION_RX,
         }
     }
@@ -388,6 +394,11 @@ impl Palette {
                     // skinparam doesn't fall into the unknown bucket.
                 }
                 "activitybarcolor" => p.bar_color = resolved,
+                "swimlanebordercolor" => p.swimlane_border_color = resolved,
+                "swimlanetitlefontcolor" => p.swimlane_title_color = resolved,
+                "swimlanetitlebackgroundcolor" => {
+                    p.swimlane_title_background = Some(resolved);
+                }
                 "shadowing" | "activityshadowing" => {
                     if val.eq_ignore_ascii_case("true") {
                         p.shadow_filter = filter_id.clone();
@@ -5679,8 +5690,15 @@ fn emit_repeat(
 ///     target_cx vertical down (15 more) with arrowhead.
 fn emit_swimlanes(svg: &mut SvgEmitter, cx: f64, y: f64, lanes: &[Lane]) -> f64 {
     let arrow_color = svg.palette.arrow_color.clone();
-    let text_color = svg.palette.text_color.clone();
-    let divider_color = "#000000";
+    let title_color = svg.palette.swimlane_title_color.clone();
+    let divider_color = svg.palette.swimlane_border_color.clone();
+    let header_fill = svg
+        .palette
+        .swimlane_title_background
+        .as_deref()
+        .unwrap_or("none")
+        .to_string();
+    let header_stroke = header_fill.clone();
 
     // PlantUML uses a slightly shifted header_top for swimlanes (y=17.2969
     // ≈ MARGIN_LEAD + 1.30) and a +4/+9 asymmetric extra padding around
@@ -5715,8 +5733,10 @@ fn emit_swimlanes(svg: &mut SvgEmitter, cx: f64, y: f64, lanes: &[Lane]) -> f64 
     // constant — purpose unknown, but consistent across all golden cases).
     write!(
         svg.shapes,
-        r#"<rect fill="none" height="{}" style="stroke:none;stroke-width:1;" width="{}" x="{}" y="{}"/>"#,
+        r#"<rect fill="{}" height="{}" style="stroke:{};stroke-width:1;" width="{}" x="{}" y="{}"/>"#,
+        header_fill,
         f(header_text_h),
+        header_stroke,
         f(total_w + 1.8476),
         f(lane_lefts[0]),
         f(header_top),
@@ -5855,7 +5875,7 @@ fn emit_swimlanes(svg: &mut SvgEmitter, cx: f64, y: f64, lanes: &[Lane]) -> f64 
         let tw = text_render::measure(&lane.name, LANE_TITLE_FONT, false);
         std::mem::swap(&mut svg.shapes, &mut svg.connectors);
         svg.text_element(
-            &text_color,
+            &title_color,
             "sans-serif",
             LANE_TITLE_FONT,
             tw,
