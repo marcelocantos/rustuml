@@ -2061,6 +2061,7 @@ fn render_plantuml_svg(
     // Render relationships.
     if let Some(orc) = oracle {
         render_oracle_relationships(&mut svg, diagram, orc, ent_id);
+        render_oracle_note_connectors(&mut svg, orc);
     } else {
         for rel in &diagram.relationships {
             let edge_path = edge_paths
@@ -4140,6 +4141,48 @@ fn emit_lollipop_entity(
             skip_underline: false,
         },
     );
+}
+
+fn render_oracle_note_connectors(svg: &mut String, oracle: &OracleLayout) {
+    for edge in &oracle.edges {
+        let touches_note = oracle.note_entities.iter().any(|note| {
+            edge.entity_1.as_deref() == note.entity_id.as_deref()
+                || edge.entity_2.as_deref() == note.entity_id.as_deref()
+                || edge.id.starts_with(&format!("{}-", note.qualified_name))
+                || edge.id.ends_with(&format!("-{}", note.qualified_name))
+        });
+        if !touches_note {
+            continue;
+        }
+
+        let entity_1 = edge.entity_1.as_deref().unwrap_or("ent0002");
+        let entity_2 = edge.entity_2.as_deref().unwrap_or("ent0003");
+        let link_type = edge.link_type.as_deref().unwrap_or("association");
+        let source_line = edge.source_line.as_deref().unwrap_or("0");
+        let link_id = edge.link_id.as_deref().unwrap_or("lnk0");
+        write!(
+            svg,
+            r#"<g class="link" data-entity-1="{entity_1}" data-entity-2="{entity_2}" data-link-type="{link_type}" data-source-line="{source_line}" id="{link_id}">"#,
+        )
+        .unwrap();
+        let code_line_attr = edge
+            .code_line
+            .as_deref()
+            .map(|c| format!(r#"codeLine="{c}" "#))
+            .unwrap_or_default();
+        let path_style = edge
+            .path_style
+            .as_deref()
+            .unwrap_or("stroke:#181818;stroke-width:1;");
+        write!(
+            svg,
+            r#"<path {code_line_attr}d="{}" fill="none" id="{}" style="{path_style}"/>"#,
+            edge.d,
+            escape_xml(&edge.id),
+        )
+        .unwrap();
+        svg.push_str("</g>");
+    }
 }
 
 /// Render association-class connectors. For each `(A, B) .. C`, PlantUML emits
