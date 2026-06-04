@@ -154,6 +154,8 @@ pub(super) fn flatten_theme_output(lines: &[String]) -> Vec<String> {
                     ));
                 } else if key.eq_ignore_ascii_case("LineColor") {
                     out.push(format!("skinparam __styleRootLineColor {}", value.trim()));
+                } else if key.eq_ignore_ascii_case("FontColor") {
+                    out.push(format!("skinparam __styleRootFontColor {}", value.trim()));
                 }
             }
             if line.contains("</style>") {
@@ -286,6 +288,7 @@ mod tests {
         let input = vec![
             "<style>".to_string(),
             "root {".to_string(),
+            "  FontColor #FFFFFF".to_string(),
             "  LineColor #2683B9".to_string(),
             "  LineThickness 1".to_string(),
             "  Padding 6".to_string(),
@@ -299,6 +302,7 @@ mod tests {
         assert_eq!(
             out,
             vec![
+                "skinparam __styleRootFontColor #FFFFFF".to_string(),
                 "skinparam __styleRootLineColor #2683B9".to_string(),
                 "skinparam __styleRootLineThickness 1".to_string(),
             ]

@@ -588,7 +588,7 @@ impl ClassParser {
     /// are stripped first so a bounded type param like `class Foo<T extends X>`
     /// is not mistaken for an inheritance clause.
     fn parse_supertypes(&mut self, line: &str, child_id: &str) {
-        let body = line.trim_end().trim_end_matches('{').trim_end();
+        let body = strip_empty_inline_body(line);
         // Drop angle-bracket spans (generics + `<<stereotype>>`).
         let mut scan = String::new();
         let mut depth: u32 = 0;
@@ -1351,6 +1351,18 @@ fn split_generic(name: &mut String) -> Option<String> {
     Some(inner)
 }
 
+fn strip_empty_inline_body(line: &str) -> &str {
+    let trimmed = line.trim_end();
+    if let Some(before_close) = trimmed.strip_suffix('}') {
+        let before_close = before_close.trim_end();
+        if let Some(before_open) = before_close.strip_suffix('{') {
+            return before_open.trim_end();
+        }
+        return trimmed;
+    }
+    trimmed.trim_end_matches('{').trim_end()
+}
+
 fn parse_entity_kind(s: &str) -> EntityKind {
     match s {
         "abstract class" | "abstract" => EntityKind::AbstractClass,
@@ -1783,6 +1795,23 @@ mod tests {
         assert_eq!(
             d.entities[0].generic.as_deref(),
             Some("T extends Comparable<T>")
+        );
+    }
+
+    #[test]
+    fn inline_empty_body_after_extends_is_not_a_supertype() {
+        let d = parse("class Animal\nclass Dog extends Animal {}\nclass Cat extends Animal { }");
+        assert_eq!(d.entities.len(), 3);
+        assert!(d.entities.iter().any(|e| e.id == "Animal"));
+        assert!(d.entities.iter().any(|e| e.id == "Dog"));
+        assert!(d.entities.iter().any(|e| e.id == "Cat"));
+        assert!(!d.entities.iter().any(|e| e.id == "{}"));
+        assert!(!d.entities.iter().any(|e| e.id == "{"));
+        assert_eq!(d.relationships.len(), 2);
+        assert!(
+            d.relationships
+                .iter()
+                .all(|rel| rel.to == "Animal" && rel.kind == RelationshipKind::Inheritance)
         );
     }
 

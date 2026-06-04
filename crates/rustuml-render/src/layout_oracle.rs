@@ -790,6 +790,10 @@ pub struct EntityRect {
     /// Icon center x (from `<ellipse cx="...">`), if an icon is present.
     /// Used for class/interface/enum/abstract entity types.
     pub icon_cx: Option<f64>,
+    /// Icon center y (from `<ellipse cy="...">`), if an icon is present.
+    /// Used with `icon_cx` to avoid reconstructing PlantUML header-centering
+    /// quirks from font metrics.
+    pub icon_cy: Option<f64>,
     /// Glyph path `d` attribute from the golden SVG, if present.
     /// Used to bypass offset_path precision issues.
     pub glyph_path_d: Option<String>,

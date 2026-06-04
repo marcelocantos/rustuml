@@ -629,6 +629,9 @@ fn scale_entity(e: &mut EntityRect, k: f64) {
     if let Some(v) = e.icon_cx.as_mut() {
         *v *= k;
     }
+    if let Some(v) = e.icon_cy.as_mut() {
+        *v *= k;
+    }
     if let Some(d) = e.glyph_path_d.as_mut() {
         *d = scale_path_d(d, k);
     }
@@ -941,6 +944,7 @@ mod fp_tests {
             width: 0.0,
             height: 0.0,
             icon_cx: None,
+            icon_cy: None,
             glyph_path_d: Some("M48.9463,58.2861".to_string()),
             body_polygon: None,
             icon_polygon: None,

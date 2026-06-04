@@ -668,10 +668,13 @@ pub fn extract_oracle_layout(svg: &str) -> Option<OracleLayout> {
                     let y = parse_attr(&rect, "y")?;
                     let width = parse_attr(&rect, "width")?;
                     let height = parse_attr(&rect, "height")?;
-                    // Look for an icon ellipse to extract icon_cx.
-                    let icon_cx = find_first_child(&content_node, "ellipse")
-                        .and_then(|e| parse_attr(&e, "cx"));
-                    // Extract glyph path d attribute (the <path> with fill="#000000").
+                    // Look for an icon ellipse to extract its center.
+                    let icon_ellipse = find_first_child(&content_node, "ellipse");
+                    let icon_cx = icon_ellipse.as_ref().and_then(|e| parse_attr(e, "cx"));
+                    let icon_cy = icon_ellipse.as_ref().and_then(|e| parse_attr(e, "cy"));
+                    // Extract the circled-character glyph path. Theme root font
+                    // colours can make it white (or another fill), so match any
+                    // filled path when an icon ellipse is present.
                     // For composite clusters the leading <path> is instead the
                     // rounded-top header band (a non-#000000 fill). Capture it as
                     // `d#FILL#<fill>` — the same representation the bare-composite
@@ -685,14 +688,17 @@ pub fn extract_oracle_layout(svg: &str) -> Option<OracleLayout> {
                                 let fill = p.attribute("fill").unwrap_or("#F1F1F1");
                                 Some(format!("{d}#FILL#{fill}"))
                             })
-                    } else {
+                    } else if icon_cx.is_some() {
                         content_node
                             .children()
                             .find(|c| {
                                 c.tag_name().name() == "path"
-                                    && c.attribute("fill") == Some("#000000")
+                                    && c.attribute("d").is_some()
+                                    && c.attribute("fill").is_some_and(|fill| fill != "none")
                             })
                             .and_then(|p| p.attribute("d").map(String::from))
+                    } else {
+                        None
                     };
                     // Extract name text x (first <text> child).
                     let name_text_x = content_node
@@ -858,6 +864,7 @@ pub fn extract_oracle_layout(svg: &str) -> Option<OracleLayout> {
                         width,
                         height,
                         icon_cx,
+                        icon_cy,
                         glyph_path_d,
                         body_polygon: None,
                         icon_polygon: None,
@@ -960,6 +967,7 @@ pub fn extract_oracle_layout(svg: &str) -> Option<OracleLayout> {
                         width: rx * 2.0,
                         height: ry * 2.0,
                         icon_cx: None,
+                        icon_cy: None,
                         glyph_path_d: None,
                         body_polygon: None,
                         icon_polygon: None,
@@ -1064,6 +1072,7 @@ pub fn extract_oracle_layout(svg: &str) -> Option<OracleLayout> {
                             width: max_x - min_x,
                             height: max_y - min_y,
                             icon_cx,
+                            icon_cy: None,
                             glyph_path_d,
                             body_polygon: has_text.then_some(body_polygon.clone()),
                             icon_polygon,
@@ -1173,6 +1182,7 @@ pub fn extract_oracle_layout(svg: &str) -> Option<OracleLayout> {
                             width: rx * 2.0,
                             height: ry * 2.0,
                             icon_cx: None,
+                            icon_cy: None,
                             glyph_path_d: None,
                             body_polygon: None,
                             icon_polygon: None,
@@ -1477,6 +1487,7 @@ pub fn extract_oracle_layout(svg: &str) -> Option<OracleLayout> {
                     width: rx * 2.0,
                     height: ry * 2.0,
                     icon_cx: None,
+                    icon_cy: None,
                     glyph_path_d: Some(label),
                     body_polygon: None,
                     icon_polygon: None,
@@ -1627,6 +1638,7 @@ pub fn extract_oracle_layout(svg: &str) -> Option<OracleLayout> {
                 width: rx * 2.0,
                 height: ry * 2.0,
                 icon_cx: None,
+                icon_cy: None,
                 glyph_path_d: None,
                 body_polygon: None,
                 icon_polygon: None,
@@ -1730,6 +1742,7 @@ pub fn extract_oracle_layout(svg: &str) -> Option<OracleLayout> {
                     width: w,
                     height: h,
                     icon_cx: None,
+                    icon_cy: None,
                     glyph_path_d: None,
                     body_polygon: None,
                     icon_polygon: None,
@@ -1885,6 +1898,7 @@ pub fn extract_oracle_layout(svg: &str) -> Option<OracleLayout> {
                         width: w,
                         height: h,
                         icon_cx: None,
+                        icon_cy: None,
                         glyph_path_d: header_path,
                         body_polygon: None,
                         icon_polygon: None,
@@ -1931,6 +1945,7 @@ pub fn extract_oracle_layout(svg: &str) -> Option<OracleLayout> {
                     width: w,
                     height: h,
                     icon_cx: None,
+                    icon_cy: None,
                     glyph_path_d: None,
                     body_polygon: None,
                     icon_polygon: None,
@@ -2373,6 +2388,7 @@ fn path_bounding_box(d: &str) -> Option<EntityRect> {
             width: max_x - min_x,
             height: max_y - min_y,
             icon_cx: None,
+            icon_cy: None,
             glyph_path_d: None,
             body_polygon: None,
             icon_polygon: None,

@@ -1401,8 +1401,8 @@ pub fn render_with_oracle(
 struct ClassFontOverrides {
     /// `skinparam ClassFontColor` — colours the class name.
     font_color: Option<String>,
-    /// `skinparam ClassAttributeFontColor` — colours members, and the name when
-    /// no `ClassFontColor` is set.
+    /// `skinparam ClassAttributeFontColor` — colours members and, in themed
+    /// class styles, the name.
     attr_font_color: Option<String>,
     /// `skinparam ClassFontSize` — the class name's font size in px.
     font_size: Option<u32>,
@@ -1438,6 +1438,15 @@ struct ClassFontOverrides {
     /// `skinparam classBorderColor` raw value — the entity border/separator
     /// stroke colour, applied when no per-entity style overrides it.
     border_color: Option<String>,
+    /// Flattened root style values from `<style> root { ... }`. PlantUML
+    /// applies the root line colour to visibility modifiers and the root font
+    /// colour to the circled-character glyph.
+    root_line_color: Option<String>,
+    root_font_color: Option<String>,
+    /// `skinparam stereotype { CBackgroundColor/CBorderColor ... }`, used for
+    /// the standard class circled-character icon.
+    stereotype_c_background: Option<String>,
+    stereotype_c_border: Option<String>,
     /// `skinparam monochrome true|reverse` is active. A final-SVG pass maps
     /// every `#RRGGBB` literal to its YIQ grey; the oracle, however, captures
     /// the golden's *already-monochromed* rect fill/style, so re-running the
@@ -1502,6 +1511,10 @@ impl ClassFontOverrides {
             header_background: find(&["classHeaderBackgroundColor"]),
             class_background: find(&["classBackgroundColor"]),
             border_color: find(&["classBorderColor"]),
+            root_line_color: find(&["__styleRootLineColor"]),
+            root_font_color: find(&["__styleRootFontColor"]),
+            stereotype_c_background: find(&["stereotypeCBackgroundColor"]),
+            stereotype_c_border: find(&["stereotypeCBorderColor"]),
             monochrome: params.iter().any(|sp| {
                 sp.key.eq_ignore_ascii_case("monochrome")
                     && matches!(
@@ -1543,12 +1556,22 @@ impl ClassFontOverrides {
 
 fn canonical_class_font_family(value: &str) -> String {
     let raw = value.trim();
-    let trimmed = raw.trim_matches('"').trim_matches('\'').trim();
+    let (trimmed, quoted) = if raw.len() >= 2
+        && ((raw.starts_with('"') && raw.ends_with('"'))
+            || (raw.starts_with('\'') && raw.ends_with('\'')))
+    {
+        (&raw[1..raw.len() - 1], true)
+    } else {
+        (raw, false)
+    };
+    let trimmed = trimmed.trim();
     if trimmed.is_empty()
         || trimmed.eq_ignore_ascii_case("sansserif")
         || trimmed.eq_ignore_ascii_case("sans-serif")
     {
         "sans-serif".to_string()
+    } else if quoted {
+        format!("'{trimmed}'")
     } else {
         trimmed.to_string()
     }
@@ -1660,6 +1683,41 @@ fn resolve_gradient_id(defs_inner_xml: &str, c1: &str, c2: &str) -> Option<Strin
     None
 }
 
+fn split_gradient_colors(val: &str) -> Option<(&str, &str)> {
+    for sep in ['/', '\\', '|', '-'] {
+        if let Some((left, right)) = val.split_once(sep) {
+            let left = left.trim();
+            let right = right.trim();
+            if !left.is_empty() && !right.is_empty() {
+                return Some((left, right));
+            }
+        }
+    }
+    None
+}
+
+fn gradient_fill_from_defs(value: Option<&str>, oracle: Option<&OracleLayout>) -> Option<String> {
+    let (c1, c2) = split_gradient_colors(value?)?;
+    oracle
+        .map(|o| o.defs_inner_xml.as_str())
+        .and_then(|defs| resolve_gradient_id(defs, c1, c2))
+        .map(|id| format!("url(#{id})"))
+        .or_else(|| Some(crate::sequence::resolve_color(c1)))
+}
+
+fn resolve_flat_or_gradient_start(value: &str) -> String {
+    split_gradient_colors(value)
+        .map(|(first, _)| crate::sequence::resolve_color(first))
+        .unwrap_or_else(|| crate::sequence::resolve_color(value))
+}
+
+fn style_stroke_width(style: &str) -> Option<&str> {
+    style
+        .split(';')
+        .filter_map(|part| part.trim().strip_prefix("stroke-width:"))
+        .find(|width| !width.is_empty())
+}
+
 /// Read the value of a double-quoted attribute `name="…"` from an element's
 /// opening tag text. Returns the first match.
 fn attr_value<'a>(elem: &'a str, name: &str) -> Option<&'a str> {
@@ -1736,14 +1794,23 @@ fn render_plantuml_svg(
         .skinparams
         .iter()
         .find(|sp| sp.key.eq_ignore_ascii_case("backgroundColor"))
+        .filter(|sp| !sp.value.trim().eq_ignore_ascii_case("transparent"))
         .map(|sp| crate::sequence::resolve_color(&sp.value))
         .filter(|c| c != "#FFFFFF");
     let bg_style = bg_color.as_deref().unwrap_or("#FFFFFF");
+    let bg_style_suffix = if diagram.meta.skinparams.iter().any(|sp| {
+        sp.key.eq_ignore_ascii_case("backgroundColor")
+            && sp.value.trim().eq_ignore_ascii_case("transparent")
+    }) {
+        String::new()
+    } else {
+        format!("background:{bg_style};")
+    };
 
     // Root <svg> element with PlantUML attributes (alphabetical order).
     write!(
         svg,
-        r#"<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" contentStyleType="text/css" data-diagram-type="CLASS" height="{h}px" preserveAspectRatio="none" style="width:{w}px;height:{h}px;background:{bg_style};" version="1.1" viewBox="0 0 {w} {h}" width="{w}px" zoomAndPan="magnify">"#,
+        r#"<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" contentStyleType="text/css" data-diagram-type="CLASS" height="{h}px" preserveAspectRatio="none" style="width:{w}px;height:{h}px;{bg_style_suffix}" version="1.1" viewBox="0 0 {w} {h}" width="{w}px" zoomAndPan="magnify">"#,
         w = canvas_w,
         h = canvas_h,
     )
@@ -2118,21 +2185,14 @@ fn render_plantuml_svg(
                 r#"<a href="{h}" target="_top" title="{title}" xlink:actuate="onRequest" xlink:href="{h}" xlink:show="new" xlink:title="{title}" xlink:type="simple">"#,
             )
         });
+        let body_gradient_fill = gradient_fill_from_defs(font.class_background.as_deref(), oracle);
         // When `classHeaderBackgroundColor` is itself a gradient distinct from
         // the body gradient, the header repaint must reference the header
         // gradient's own `<defs>` id. Resolve it by matching the header
         // colour's two stops against the captured `<defs>`; otherwise the
         // header reuses the body fill (single-gradient case).
-        let header_gradient_fill = font
-            .header_background
-            .as_deref()
-            .and_then(|hb| hb.split_once('/'))
-            .and_then(|(c1, c2)| {
-                oracle
-                    .map(|o| o.defs_inner_xml.as_str())
-                    .and_then(|defs| resolve_gradient_id(defs, c1.trim(), c2.trim()))
-            })
-            .map(|id| format!("url(#{id})"));
+        let header_gradient_fill =
+            gradient_fill_from_defs(font.header_background.as_deref(), oracle);
         render_entity_content(
             &mut svg,
             entity,
@@ -2143,6 +2203,7 @@ fn render_plantuml_svg(
             &font,
             link_anchor.as_deref(),
             explicit_padding,
+            body_gradient_fill.as_deref(),
             header_gradient_fill.as_deref(),
         );
 
@@ -2415,6 +2476,7 @@ fn render_entity_content(
     font: &ClassFontOverrides,
     link_anchor: Option<&str>,
     explicit_padding: Option<f64>,
+    body_gradient_fill: Option<&str>,
     header_gradient_fill: Option<&str>,
 ) {
     if matches!(entity.kind, EntityKind::Circle | EntityKind::Diamond) {
@@ -2589,6 +2651,7 @@ fn render_entity_content(
     // the final close below wraps the whole header.
     let mut header_anchor_closed = false;
     let icon_cx_override = oracle_rect.and_then(|r| r.icon_cx);
+    let icon_cy_override = oracle_rect.and_then(|r| r.icon_cy);
     let glyph_path_override = oracle_rect.and_then(|r| r.glyph_path_d.as_deref());
     let name_text_x_override = oracle_rect.and_then(|r| r.name_text_x);
     let is_abstract = entity.kind == EntityKind::AbstractClass;
@@ -2616,10 +2679,11 @@ fn render_entity_content(
         .color
         .as_ref()
         .map(|c| crate::sequence::resolve_color(c))
+        .or_else(|| body_gradient_fill.map(str::to_string))
         .or_else(|| {
             font.class_background
                 .as_deref()
-                .map(crate::sequence::resolve_color)
+                .map(resolve_flat_or_gradient_start)
         })
         .unwrap_or_else(|| ENTITY_FILL.to_string());
     let fill = oracle_fill.unwrap_or(&fill_default);
@@ -2632,24 +2696,20 @@ fn render_entity_content(
         .map(crate::sequence::resolve_color)
         .unwrap_or_else(|| BORDER_COLOR.to_string());
     // Resolve the per-entity text colour from `#back:...;text:colour`
-    // shorthand. When absent, fall back to an explicitly-set
-    // `skinparam ClassFontColor` (the name) and `ClassAttributeFontColor`
-    // (members), else plain black. `skin_*` are `Some` only when the user set
-    // the skinparam — we must NOT use the theme's own default font colour, as
-    // PlantUML's classic palette renders class text black by default.
-    // The name uses `ClassFontColor`; failing that it inherits an explicit
-    // `ClassAttributeFontColor` (which colours all class text), else black.
+    // shorthand. When absent, PlantUML's class name follows
+    // `ClassAttributeFontColor` before `ClassFontColor` in the modern themed
+    // cascade (plain classic diagrams still leave both unset and render black).
     let text_fill_owned = entity
         .text_color
         .as_ref()
         .map(|c| crate::sequence::resolve_color(c))
         .or_else(|| {
-            font.font_color
+            font.attr_font_color
                 .as_deref()
                 .map(crate::sequence::resolve_color)
         })
         .or_else(|| {
-            font.attr_font_color
+            font.font_color
                 .as_deref()
                 .map(crate::sequence::resolve_color)
         })
@@ -2671,6 +2731,10 @@ fn render_entity_content(
     let member_fill: &str = &member_fill_owned;
     // Member-text font overrides from `skinparam ClassAttributeFontSize` /
     // `ClassAttributeFontStyle`. Default to the canonical 14px, non-styled.
+    let visibility_stroke_owned = font
+        .root_line_color
+        .as_deref()
+        .map(crate::sequence::resolve_color);
     let attr_font = AttrFont {
         fill: member_fill,
         size: font.attr_font_size.unwrap_or(14),
@@ -2679,6 +2743,7 @@ fn render_entity_content(
         italic: font.attr_font_italic,
         monospace_spaces: font.monospace_member_spaces(),
         icon: font.visibility_icon_geom(),
+        visibility_stroke: visibility_stroke_owned.as_deref(),
     };
     let style_default = format!("stroke:{};stroke-width:{};", border_col, BORDER_WIDTH);
     let style = oracle_style.unwrap_or(style_default.as_str());
@@ -2722,8 +2787,8 @@ fn render_entity_content(
     let header_solid = font
         .header_background
         .as_deref()
-        .filter(|hb| !hb.contains('/'))
-        .map(crate::sequence::resolve_color)
+        .filter(|hb| split_gradient_colors(hb).is_none())
+        .map(resolve_flat_or_gradient_start)
         .filter(|hb| hb.as_str() != fill);
     let band_first_sep: Option<f64> = if fill.starts_with("url(#") {
         oracle_rect.and_then(|r| r.sep_y_values.first().copied())
@@ -2752,7 +2817,8 @@ fn render_entity_content(
             .map(|s| s.to_string())
             .or_else(|| header_solid.clone())
             .unwrap_or_else(|| fill.to_string());
-        let grad_style = format!("stroke:{header_fill};stroke-width:{BORDER_WIDTH};");
+        let header_stroke_width = style_stroke_width(style).unwrap_or(BORDER_WIDTH);
+        let grad_style = format!("stroke:{header_fill};stroke-width:{header_stroke_width};");
         // Header repaint (rounded, matching the full rect's corners).
         write!(
             svg,
@@ -2806,12 +2872,13 @@ fn render_entity_content(
     let icon_radius = font.circled_radius();
     // Member text inset scales with the circled radius (20 at default).
     let member_text_offset = MEMBER_TEXT_INSET + icon_radius;
-    // Name font size: honours `ClassFontSize`, falling back to
-    // `ClassAttributeFontSize`, then 14. Needed here to centre the icon against
-    // the title line height.
-    let name_font_size = font.font_size.or(font.attr_font_size).unwrap_or(14);
+    // Name font size follows the same modern class cascade as the colour:
+    // `ClassAttributeFontSize`, then `ClassFontSize`/default, then 14.
+    let name_font_size = font.attr_font_size.or(font.font_size).unwrap_or(14);
     let icon_cx = icon_cx_override.unwrap_or(x + ICON_CX_OFFSET);
-    let icon_cy = if dim.has_stereotypes {
+    let icon_cy = if let Some(cy) = icon_cy_override {
+        cy
+    } else if dim.has_stereotypes {
         y + ICON_CY_WITH_STEREO
             + (dim.stereotype_count.saturating_sub(1) as f64) * STEREOTYPE_LINE_HEIGHT / 2.0
     } else if let Some(pad) = explicit_padding {
@@ -2825,18 +2892,34 @@ fn render_entity_content(
     if !dim.hide.circle {
         // A hex spot color from `<< (X,#HEX) Name >>` overrides the default
         // kind-based circle fill. Named spot colors do not (PlantUML behavior).
+        let stereotype_c_fill = font
+            .stereotype_c_background
+            .as_deref()
+            .map(crate::sequence::resolve_color);
+        let stereotype_c_stroke = font
+            .stereotype_c_border
+            .as_deref()
+            .map(crate::sequence::resolve_color);
         let icon_fill: &str = match &entity.spot_color {
             Some(c) => c,
             None => match entity.kind {
-                EntityKind::Class => CLASS_ICON_FILL,
+                EntityKind::Class => stereotype_c_fill.as_deref().unwrap_or(CLASS_ICON_FILL),
                 EntityKind::Interface => INTERFACE_ICON_FILL,
                 EntityKind::Enum => ENUM_ICON_FILL,
                 EntityKind::AbstractClass => ABSTRACT_ICON_FILL,
                 EntityKind::Annotation => ANNOTATION_ICON_FILL,
-                EntityKind::Entity => CLASS_ICON_FILL, // Entity uses class icon
-                EntityKind::State => CLASS_ICON_FILL,
-                EntityKind::Circle | EntityKind::Diamond => CLASS_ICON_FILL,
+                EntityKind::Entity => stereotype_c_fill.as_deref().unwrap_or(CLASS_ICON_FILL),
+                EntityKind::State => stereotype_c_fill.as_deref().unwrap_or(CLASS_ICON_FILL),
+                EntityKind::Circle | EntityKind::Diamond => {
+                    stereotype_c_fill.as_deref().unwrap_or(CLASS_ICON_FILL)
+                }
             },
+        };
+        let icon_stroke = match entity.kind {
+            EntityKind::Class | EntityKind::Entity | EntityKind::State => {
+                stereotype_c_stroke.as_deref().unwrap_or(BORDER_COLOR)
+            }
+            _ => BORDER_COLOR,
         };
 
         if let Some(polygon) = oracle_rect.and_then(|r| r.icon_polygon.as_ref()) {
@@ -2850,7 +2933,7 @@ fn render_entity_content(
                 icon_fill,
                 icon_radius as i64,
                 icon_radius as i64,
-                BORDER_COLOR,
+                icon_stroke,
                 ICON_STROKE_WIDTH,
             )
             .unwrap();
@@ -2888,7 +2971,12 @@ fn render_entity_content(
             }
         };
 
-        write!(svg, r##"<path d="{}" fill="#000000"/>"##, glyph_path,).unwrap();
+        let glyph_fill_owned = font
+            .root_font_color
+            .as_deref()
+            .map(crate::sequence::resolve_color);
+        let glyph_fill = glyph_fill_owned.as_deref().unwrap_or("#000000");
+        write!(svg, r#"<path d="{}" fill="{}"/>"#, glyph_path, glyph_fill).unwrap();
     }
 
     // Stereotype text (if present).
@@ -4186,12 +4274,13 @@ fn render_member_line(
                     } else {
                         VIS_PUBLIC_FILL_FIELD
                     };
+                    let stroke = attr_font.visibility_stroke.unwrap_or(VIS_PUBLIC_STROKE);
                     write!(
                         svg,
                         r#"<ellipse cx="{}" cy="{}" fill="{}" rx="{}" ry="{}" style="stroke:{};stroke-width:{};"/>"#,
                         fmt4(vis_cx), fmt_tl(icon_cy),
                         fill, icon.round_half as i64, icon.round_half as i64,
-                        VIS_PUBLIC_STROKE, ICON_STROKE_WIDTH,
+                        stroke, ICON_STROKE_WIDTH,
                     )
                     .unwrap();
                 }
@@ -4201,6 +4290,7 @@ fn render_member_line(
                     } else {
                         VIS_PRIVATE_FILL_FIELD
                     };
+                    let stroke = attr_font.visibility_stroke.unwrap_or(VIS_PRIVATE_STROKE);
                     let sq_x = vis_cx - icon.round_half;
                     let sq_y = icon_cy - icon.round_half;
                     let side = icon.round_half * 2.0;
@@ -4209,7 +4299,7 @@ fn render_member_line(
                         r#"<rect fill="{}" height="{}" style="stroke:{};stroke-width:{};" width="{}" x="{}" y="{}"/>"#,
                         fill,
                         fmt4(side),
-                        VIS_PRIVATE_STROKE,
+                        stroke,
                         ICON_STROKE_WIDTH,
                         fmt4(side),
                         fmt4(sq_x), fmt_tl(sq_y),
@@ -4222,6 +4312,7 @@ fn render_member_line(
                     } else {
                         VIS_PROTECTED_FILL_FIELD
                     };
+                    let stroke = attr_font.visibility_stroke.unwrap_or(VIS_PROTECTED_STROKE);
                     // Diamond icon (4 points).
                     write!(
                         svg,
@@ -4231,7 +4322,7 @@ fn render_member_line(
                         fmt4(vis_cx + icon.angled_half), fmt_tl(icon_cy),
                         fmt4(vis_cx), fmt_tl(icon_cy + icon.angled_half),
                         fmt4(vis_cx - icon.angled_half), fmt_tl(icon_cy),
-                        VIS_PROTECTED_STROKE, ICON_STROKE_WIDTH,
+                        stroke, ICON_STROKE_WIDTH,
                     )
                     .unwrap();
                 }
@@ -4241,6 +4332,7 @@ fn render_member_line(
                     } else {
                         VIS_PACKAGE_FILL_FIELD
                     };
+                    let stroke = attr_font.visibility_stroke.unwrap_or(VIS_PACKAGE_STROKE);
                     // Triangle icon (3 points, pointing up). icon_cy is the bbox
                     // centre; the triangle spans symmetrically vertically so that
                     // its centre coincides with the oracle-supplied polygon centre.
@@ -4251,7 +4343,7 @@ fn render_member_line(
                         fmt4(vis_cx), fmt_tl(icon_cy - icon.triangle_half_y),
                         fmt4(vis_cx - icon.angled_half), fmt_tl(icon_cy + icon.triangle_half_y),
                         fmt4(vis_cx + icon.angled_half), fmt_tl(icon_cy + icon.triangle_half_y),
-                        VIS_PACKAGE_STROKE, ICON_STROKE_WIDTH,
+                        stroke, ICON_STROKE_WIDTH,
                     )
                     .unwrap();
                 }
@@ -4337,6 +4429,7 @@ struct AttrFont<'a> {
     italic: bool,
     monospace_spaces: bool,
     icon: VisibilityIconGeom,
+    visibility_stroke: Option<&'a str>,
 }
 
 // ---------------------------------------------------------------------------
