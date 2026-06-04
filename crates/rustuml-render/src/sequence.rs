@@ -4478,6 +4478,7 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
             let max_line_width =
                 note_max_line_width_with_family(&note.text, note_font_size_f, &note_font_family);
             let note_content_w = note_content_width(max_line_width, note.shape);
+            let raw_note_content_w = note_content_width_raw(max_line_width, note.shape);
             match note.position {
                 NotePosition::Right => {
                     // A message-attached note anchors to the message component's
@@ -4505,8 +4506,15 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                         let mut note_right = anchor_x.ceil() + gap + note_content_w;
                         // A message-attached note sits inside a message tile, which
                         // reserves an extra NOTE_LIFELINE_GAP of right margin.
+                        // Its note box is drawn with the ceiled preferred width,
+                        // while the tile/canvas reservation follows PlantUML's
+                        // rounded raw-width extent. This can add one more pixel to
+                        // the full-canvas background rect without moving the note.
                         if note.on_message {
                             note_right += NOTE_LIFELINE_GAP;
+                            if raw_note_content_w.fract() > 0.57 {
+                                note_right += 1.0;
+                            }
                         }
                         max_note_right = max_note_right.max(note_right);
                     }
