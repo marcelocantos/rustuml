@@ -528,6 +528,9 @@ impl SeqParser {
             let color = caps.get(4).map(|m| m.as_str().to_string());
 
             if let Some(text_match) = caps.get(5) {
+                if participants.is_empty() && position != NotePosition::Over && !on_message {
+                    return true;
+                }
                 // Inline note: note right : text
                 let text = text_match.as_str().trim().to_string();
                 self.events.push(Event::Note(Note {
@@ -1097,6 +1100,13 @@ mod tests {
         } else {
             panic!("expected note");
         }
+    }
+
+    #[test]
+    fn bare_side_note_before_message_is_ignored() {
+        let d = parse("note left : orphan\nA -> B : msg");
+        assert_eq!(d.events.len(), 1);
+        assert!(matches!(d.events[0], Event::Message(_)));
     }
 
     #[test]
