@@ -194,11 +194,58 @@ fn text_width(text: &str, font_size: f64) -> f64 {
     text_render::measure(text, font_size, false)
 }
 
+fn text_width_with_family(text: &str, font_size: f64, font_family: &str) -> f64 {
+    text_render::measure_with_family(text, font_size, false, font_family)
+}
+
 /// Compute bold text width at a given font size, routing through the creole-aware
 /// segment helper so layout measurements match what `text_render::emit_text`
 /// will actually emit.
 fn bold_text_width(text: &str, font_size: f64) -> f64 {
     text_render::measure(text, font_size, true)
+}
+
+fn bold_text_width_with_family(text: &str, font_size: f64, font_family: &str) -> f64 {
+    text_render::measure_with_family(text, font_size, true, font_family)
+}
+
+fn canonical_font_family(value: &str) -> String {
+    let trimmed = value.trim().trim_matches('"').trim_matches('\'');
+    if trimmed.is_empty()
+        || trimmed.eq_ignore_ascii_case("sansserif")
+        || trimmed.eq_ignore_ascii_case("sans-serif")
+    {
+        "sans-serif".to_string()
+    } else {
+        trimmed.to_string()
+    }
+}
+
+fn is_courier_family(font_family: &str) -> bool {
+    matches!(
+        font_family
+            .trim_matches('"')
+            .trim_matches('\'')
+            .to_ascii_lowercase()
+            .as_str(),
+        "courier" | "courier new" | "monospace" | "monospaced"
+    )
+}
+
+fn text_height_with_family(font_size: f64, font_family: &str) -> f64 {
+    if is_courier_family(font_family) {
+        plantuml_metrics::mono_text_height(font_size)
+    } else {
+        plantuml_metrics::text_height(font_size)
+    }
+}
+
+fn ascent_with_family(font_size: f64, font_family: &str) -> f64 {
+    if is_courier_family(font_family) {
+        plantuml_metrics::mono_ascent(font_size)
+    } else {
+        plantuml_metrics::ascent(font_size)
+    }
 }
 
 /// Format an f64 as a PlantUML-compatible coordinate string.
@@ -545,8 +592,8 @@ const NOTE_GAP_AFTER_MSG: f64 = 13.0;
 const NOTE_GAP_FIRST: f64 = 15.0;
 /// PlantUML's text atoms reserve at least 10px height even when the font's real
 /// line metrics are smaller (notably `defaultFontSize 8`).
-fn atom_height(font_size: f64) -> f64 {
-    plantuml_metrics::text_height(font_size).max(10.0)
+fn atom_height_with_family(font_size: f64, font_family: &str) -> f64 {
+    text_height_with_family(font_size, font_family).max(10.0)
 }
 
 #[derive(Clone, Copy)]
@@ -556,14 +603,22 @@ struct RenderedLineMetrics {
 }
 
 fn rendered_line_metrics(content: &str, font_size: f64) -> RenderedLineMetrics {
+    rendered_line_metrics_with_family(content, font_size, "sans-serif")
+}
+
+fn rendered_line_metrics_with_family(
+    content: &str,
+    font_size: f64,
+    font_family: &str,
+) -> RenderedLineMetrics {
     RenderedLineMetrics {
-        height: text_render::label_height(content, font_size).max(10.0),
-        ascent: text_render::label_ascent(content, font_size),
+        height: text_render::label_height_with_family(content, font_size, font_family).max(10.0),
+        ascent: text_render::label_ascent_with_family(content, font_size, font_family),
     }
 }
 
-fn rendered_label_y_drop(content: &str, font_size: f64) -> f64 {
-    let metrics = rendered_line_metrics(content, font_size);
+fn rendered_label_y_drop_with_family(content: &str, font_size: f64, font_family: &str) -> f64 {
+    let metrics = rendered_line_metrics_with_family(content, font_size, font_family);
     metrics.height - metrics.ascent + 2.0
 }
 
@@ -573,13 +628,13 @@ struct NoteTextMetrics {
     total_height: f64,
 }
 
-fn note_text_metrics(text: &str, font_size: f64) -> NoteTextMetrics {
+fn note_text_metrics_with_family(text: &str, font_size: f64, font_family: &str) -> NoteTextMetrics {
     let mut line_heights = text
         .lines()
-        .map(|line| rendered_line_metrics(line.trim(), font_size).height)
+        .map(|line| rendered_line_metrics_with_family(line.trim(), font_size, font_family).height)
         .collect::<Vec<_>>();
     if line_heights.is_empty() {
-        line_heights.push(rendered_line_metrics("", font_size).height);
+        line_heights.push(rendered_line_metrics_with_family("", font_size, font_family).height);
     }
     let first_height = line_heights[0];
     let total_height = line_heights.iter().sum();
@@ -1116,6 +1171,9 @@ struct PlantUmlSvg {
     /// Plain participant head/tail label colour. Driven by
     /// `skinparam participantFontColor`.
     participant_font_color: String,
+    /// Plain participant head/tail label family. Driven by
+    /// `skinparam defaultFontName`.
+    participant_font_family: String,
     /// Plain participant head/tail label font size. Driven by
     /// `skinparam participantFontSize`.
     participant_font_size: u32,
@@ -1127,6 +1185,8 @@ struct PlantUmlSvg {
     participant_font_italic: bool,
     /// Message/arrow label colour. Driven by `skinparam arrowFontColor`.
     message_font_color: String,
+    /// Message/arrow label family. Driven by `skinparam defaultFontName`.
+    message_font_family: String,
     /// Message/arrow label font size. Driven by `skinparam arrowFontSize`.
     message_font_size: u32,
     /// Message/arrow label bold style. Driven by `skinparam arrowFontStyle`.
@@ -1136,6 +1196,8 @@ struct PlantUmlSvg {
     /// Note label font size. Driven by `skinparam defaultFontSize` and
     /// `skinparam noteFontSize`.
     note_font_size: u32,
+    /// Note label family. Driven by `skinparam defaultFontName`.
+    note_font_family: String,
     /// Lifeline dashed-line stroke colour (default `#181818`). Driven by
     /// `skinparam sequenceLifeLineBorderColor`.
     lifeline_border: String,
@@ -1160,14 +1222,17 @@ impl PlantUmlSvg {
             participant_border: "#181818".into(),
             participant_border_thickness: "0.5".into(),
             participant_font_color: "#000000".into(),
+            participant_font_family: "sans-serif".into(),
             participant_font_size: PARTICIPANT_FONT_SIZE as u32,
             participant_font_bold: false,
             participant_font_italic: false,
             message_font_color: "#000000".into(),
+            message_font_family: "sans-serif".into(),
             message_font_size: MSG_FONT_SIZE as u32,
             message_font_bold: false,
             message_font_italic: false,
             note_font_size: MSG_FONT_SIZE as u32,
+            note_font_family: "sans-serif".into(),
             lifeline_border: "#181818".into(),
             lifeline_border_thickness: "0.5".into(),
             active_participant_url: None,
@@ -1347,7 +1412,7 @@ impl PlantUmlSvg {
                     x: text_x,
                     y: st_y,
                     font_size: 11,
-                    font_family: "sans-serif",
+                    font_family: &self.participant_font_family,
                     fill: "#000000",
                     bold: false,
                     italic: true,
@@ -1365,7 +1430,7 @@ impl PlantUmlSvg {
                 x: text_x,
                 y: text_y,
                 font_size: self.participant_font_size,
-                font_family: "sans-serif",
+                font_family: &self.participant_font_family,
                 fill: &self.participant_font_color,
                 bold: self.participant_font_bold,
                 italic: self.participant_font_italic,
@@ -1423,7 +1488,7 @@ impl PlantUmlSvg {
                 x: text_x,
                 y: text_y,
                 font_size: self.participant_font_size,
-                font_family: "sans-serif",
+                font_family: &self.participant_font_family,
                 fill: &self.participant_font_color,
                 bold: self.participant_font_bold,
                 italic: self.participant_font_italic,
@@ -1442,7 +1507,7 @@ impl PlantUmlSvg {
                 x: text_x,
                 y: text_y,
                 font_size: self.message_font_size,
-                font_family: "sans-serif",
+                font_family: &self.message_font_family,
                 fill: &self.message_font_color,
                 bold: self.message_font_bold,
                 italic: self.message_font_italic,
@@ -2622,6 +2687,7 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
     let mut default_arrow_thickness: String = "1".to_string();
     let mut message_font_color = "#000000".to_string();
     let mut message_font_color_set = false;
+    let mut message_font_family = "sans-serif".to_string();
     let mut message_font_size: u32 = MSG_FONT_SIZE as u32;
     let mut message_font_bold = false;
     let mut message_font_italic = false;
@@ -2630,6 +2696,7 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
     let mut participant_border_thickness: String = "0.5".to_string();
     let mut participant_font_color = "#000000".to_string();
     let mut participant_font_color_set = false;
+    let mut participant_font_family = "sans-serif".to_string();
     let mut participant_font_size: u32 = PARTICIPANT_FONT_SIZE as u32;
     let mut participant_font_bold = false;
     let mut participant_font_italic = false;
@@ -2660,6 +2727,7 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
     let mut note_border_override: Option<String> = None;
     let mut note_font_color = "#000000".to_string();
     let mut note_font_color_set = false;
+    let mut note_font_family = "sans-serif".to_string();
     let mut note_font_size: u32 = MSG_FONT_SIZE as u32;
     // Whether `ParticipantBackgroundColor` / `ParticipantBorderColor` were set
     // explicitly. These only affect the plain `participant` rectangle, so other
@@ -2676,8 +2744,10 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
     let mut divider_fill = "#EEEEEE".to_string();
     let mut divider_border = "#000000".to_string();
     let mut divider_font_color = "#000000".to_string();
+    let mut divider_font_family = "sans-serif".to_string();
     let mut divider_font_size: u32 = MSG_FONT_SIZE as u32;
     let mut group_background = "#EEEEEE".to_string();
+    let mut group_header_font_family = "sans-serif".to_string();
     let mut group_header_font_size: u32 = MSG_FONT_SIZE as u32;
     // Message label horizontal alignment on the arrow span. PlantUML's
     // `skinparam SequenceMessageAlign` accepts left (default) | center | right.
@@ -2706,6 +2776,14 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                     divider_font_size = v;
                     group_header_font_size = v;
                 }
+            }
+            "defaultfontname" => {
+                let family = canonical_font_family(val);
+                message_font_family = family.clone();
+                participant_font_family = family.clone();
+                note_font_family = family.clone();
+                divider_font_family = family.clone();
+                group_header_font_family = family;
             }
             "defaultfontcolor" => {
                 let c = resolve_color(val);
@@ -2911,18 +2989,27 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
     let default_arrow_color = default_arrow_color.as_str();
     let default_arrow_thickness = default_arrow_thickness.as_str();
     let message_font_size_f = message_font_size as f64;
-    let message_text_height = atom_height(message_font_size_f);
+    let message_text_height = atom_height_with_family(message_font_size_f, &message_font_family);
     let group_header_font_size_f = group_header_font_size as f64;
-    let group_header_height = plantuml_metrics::text_height(group_header_font_size_f) + 2.0;
+    let group_header_height =
+        text_height_with_family(group_header_font_size_f, &group_header_font_family) + 2.0;
     let group_inner_top_pad = group_header_height - GROUP_HEADER_INNER_PAD_DROP;
     let group_inner_top_pad_first = group_inner_top_pad - GROUP_HEADER_FIRST_PAD_ADJUST;
     let group_header_text_baseline =
-        plantuml_metrics::ascent(group_header_font_size_f) + GROUP_HEADER_TEXT_TOP_PAD;
+        ascent_with_family(group_header_font_size_f, &group_header_font_family)
+            + GROUP_HEADER_TEXT_TOP_PAD;
     let group_frame_margin = GROUP_FRAME_MARGIN + participant_padding;
-    let message_label_width =
-        |text: &str| text_render::measure(text, message_font_size_f, message_font_bold);
+    let message_label_width = |text: &str| {
+        text_render::measure_with_family(
+            text,
+            message_font_size_f,
+            message_font_bold,
+            &message_font_family,
+        )
+    };
     let note_font_size_f = note_font_size as f64;
-    let note_label_width = |text: &str| text_width(text, note_font_size_f);
+    let note_label_width =
+        |text: &str| text_width_with_family(text, note_font_size_f, &note_font_family);
     // Empty diagram with no title — render the PlantUML welcome screen.
     if diagram.participants.is_empty() && diagram.events.is_empty() && diagram.meta.title.is_none()
     {
@@ -2979,8 +3066,10 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
     };
     let head_box_y = HEAD_BOX_Y + title_band_h + box_band_h + header_band_h;
     let participant_font_size_f = participant_font_size as f64;
-    let participant_box_h = atom_height(participant_font_size_f) + 14.0;
-    let participant_text_y_offset = plantuml_metrics::ascent(participant_font_size_f) + 7.0;
+    let participant_box_h =
+        atom_height_with_family(participant_font_size_f, &participant_font_family) + 14.0;
+    let participant_text_y_offset =
+        ascent_with_family(participant_font_size_f, &participant_font_family) + 7.0;
 
     // -----------------------------------------------------------------------
     // Phase 1: Compute participant layouts
@@ -2995,7 +3084,7 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
             let st_display = st.as_ref().map(|s| format!("\u{ab}{s}\u{bb}"));
             let st_w = st_display
                 .as_ref()
-                .map(|s| text_width(s, 11.0))
+                .map(|s| text_width_with_family(s, 11.0, &participant_font_family))
                 .unwrap_or(0.0);
             // Display label includes stereotype inline (matching PlantUML)
             let label = if let Some(ref st_text) = st {
@@ -3004,9 +3093,13 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                 p.label.clone()
             };
             let tw = if participant_font_bold {
-                bold_text_width(&label, participant_font_size_f)
+                bold_text_width_with_family(
+                    &label,
+                    participant_font_size_f,
+                    &participant_font_family,
+                )
             } else {
-                text_width(&label, participant_font_size_f)
+                text_width_with_family(&label, participant_font_size_f, &participant_font_family)
             };
             // Box width must accommodate the display label (and stereotype if separate)
             let max_text_w = tw.max(st_w);
@@ -3925,7 +4018,11 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                 Event::Note(note) if note.on_message => {
                     if let Some(owner) = last_msg_idx {
                         note_owner.insert(idx, owner);
-                        let metrics = note_text_metrics(&note.text, note_font_size_f);
+                        let metrics = note_text_metrics_with_family(
+                            &note.text,
+                            note_font_size_f,
+                            &note_font_family,
+                        );
                         let extra = note_msg_extra_base(note.shape) + note_msg_text_tail(&metrics);
                         let e = msg_note_extra.entry(owner).or_insert(0.0);
                         *e = e.max(extra);
@@ -3966,7 +4063,12 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                     let label = process_label(&msg.label);
                     (
                         !label.is_empty(),
-                        rendered_line_metrics(&label, message_font_size_f).height,
+                        rendered_line_metrics_with_family(
+                            &label,
+                            message_font_size_f,
+                            &message_font_family,
+                        )
+                        .height,
                     )
                 }
                 Event::Return(ret) => {
@@ -3977,7 +4079,12 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                     };
                     (
                         !label.is_empty(),
-                        rendered_line_metrics(&label, message_font_size_f).height,
+                        rendered_line_metrics_with_family(
+                            &label,
+                            message_font_size_f,
+                            &message_font_family,
+                        )
+                        .height,
                     )
                 }
                 // An empty divider (`====`) has no label box/text line, so it
@@ -4080,7 +4187,11 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                     msg_count += 1;
                 }
                 Event::Note(note) => {
-                    let metrics = note_text_metrics(&note.text, note_font_size_f);
+                    let metrics = note_text_metrics_with_family(
+                        &note.text,
+                        note_font_size_f,
+                        &note_font_family,
+                    );
                     // hnote/rnote have a smaller base height (23 vs 25), reducing
                     // the vertical space consumed by 2px.
                     let note_y_extra = match note.shape {
@@ -4220,7 +4331,7 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
     let mut max_divider_right: f64 = 0.0;
     for event in &diagram.events {
         if let Event::Divider(text) = event {
-            let tw = bold_text_width(text, MSG_FONT_SIZE);
+            let tw = bold_text_width_with_family(text, MSG_FONT_SIZE, &divider_font_family);
             let label_box_w = tw + 2.0 * 6.0 + 6.2847;
             max_divider_right = max_divider_right.max(label_box_w + 24.0);
         }
@@ -4402,11 +4513,15 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                 };
                 let (tab_text, guard_label) =
                     group_tab_and_guard(g.kind, kind_str, g.label.as_ref());
-                let kw = bold_text_width(tab_text, group_header_font_size_f);
+                let kw = bold_text_width_with_family(
+                    tab_text,
+                    group_header_font_size_f,
+                    &group_header_font_family,
+                );
                 let tab_right = fl + kw + 45.0;
                 let guard_right = if let Some(label) = guard_label {
                     let guard = format!("[{label}]");
-                    let gw = bold_text_width(&guard, 11.0);
+                    let gw = bold_text_width_with_family(&guard, 11.0, &group_header_font_family);
                     tab_right + 15.0 + gw + 5.0
                 } else {
                     tab_right + 5.0
@@ -4854,11 +4969,19 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                             };
                             let (tab_text, guard_label) =
                                 group_tab_and_guard(g.kind, kind_str, g.label.as_ref());
-                            let kw = bold_text_width(tab_text, group_header_font_size_f);
+                            let kw = bold_text_width_with_family(
+                                tab_text,
+                                group_header_font_size_f,
+                                &group_header_font_family,
+                            );
                             let tab_right = frame_left + kw + 45.0;
                             if let Some(label) = guard_label {
                                 let guard = format!("[{label}]");
-                                let gw = bold_text_width(&guard, 11.0);
+                                let gw = bold_text_width_with_family(
+                                    &guard,
+                                    11.0,
+                                    &group_header_font_family,
+                                );
                                 tab_right + 15.0 + gw + 5.0
                             } else {
                                 tab_right + 5.0
@@ -4955,13 +5078,16 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
     svg.participant_border = participant_border.clone();
     svg.participant_border_thickness = participant_border_thickness.clone();
     svg.participant_font_color = participant_font_color.clone();
+    svg.participant_font_family = participant_font_family.clone();
     svg.participant_font_size = participant_font_size;
     svg.participant_font_bold = participant_font_bold;
     svg.participant_font_italic = participant_font_italic;
     svg.message_font_color = message_font_color.clone();
+    svg.message_font_family = message_font_family.clone();
     svg.message_font_size = message_font_size;
     svg.message_font_bold = message_font_bold;
     svg.message_font_italic = message_font_italic;
+    svg.note_font_family = note_font_family.clone();
     svg.note_font_size = note_font_size;
     svg.lifeline_border = lifeline_border.clone();
     svg.lifeline_border_thickness = lifeline_border_thickness.clone();
@@ -5572,7 +5698,12 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                     let loop_right = cx + SELF_MSG_EXTEND;
                     let loop_bottom = msg_y + SELF_MSG_DROP;
                     let text_x = cx + SELF_MSG_TEXT_X_PAD;
-                    let text_y_pos = msg_y - rendered_label_y_drop(&label, message_font_size_f);
+                    let text_y_pos = msg_y
+                        - rendered_label_y_drop_with_family(
+                            &label,
+                            message_font_size_f,
+                            &message_font_family,
+                        );
 
                     // Open the message group
                     write!(
@@ -5783,7 +5914,12 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                     };
 
                     // Text position
-                    let text_y_pos = msg_y - rendered_label_y_drop(&label, message_font_size_f);
+                    let text_y_pos = msg_y
+                        - rendered_label_y_drop_with_family(
+                            &label,
+                            message_font_size_f,
+                            &message_font_family,
+                        );
                     let text_x = if is_right {
                         from_x_shifted + MSG_TEXT_LEFT_PAD
                     } else {
@@ -6135,7 +6271,12 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                 let label_w = message_label_width(&label);
 
                 let src_line = ret.source_line as u32;
-                let text_y_pos = msg_y - rendered_label_y_drop(&label, message_font_size_f);
+                let text_y_pos = msg_y
+                    - rendered_label_y_drop_with_family(
+                        &label,
+                        message_font_size_f,
+                        &message_font_family,
+                    );
 
                 // Return messages are always dotted; arrow style matches the original
                 let line_style = "stroke-dasharray:2,2;";
@@ -6272,7 +6413,7 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                 // 2. Two horizontal lines (3px apart)
                 // 3. A label box rect (EEEEEE, bordered)
                 // 4. Bold text inside the label box
-                let tw = bold_text_width(text, MSG_FONT_SIZE);
+                let tw = bold_text_width_with_family(text, MSG_FONT_SIZE, &divider_font_family);
                 // Label box dimensions: 6px padding on each side, centered on divider
                 let label_box_w = tw + 2.0 * 6.0 + 6.2847; // PlantUML adds extra padding
                 let participant_span = if !participants.is_empty() {
@@ -6353,7 +6494,7 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                             x: text_x,
                             y: text_y,
                             font_size: divider_font_size,
-                            font_family: "sans-serif",
+                            font_family: &divider_font_family,
                             fill: &divider_font_color,
                             bold: true,
                             italic: false,
@@ -6369,7 +6510,7 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                                 x: text_x + text_advance,
                                 y: text_y,
                                 font_size: divider_font_size,
-                                font_family: "sans-serif",
+                                font_family: &divider_font_family,
                                 fill: &divider_font_color,
                                 bold: true,
                                 italic: false,
@@ -6389,13 +6530,14 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                 // The label is centered on the participant span, font-size 11,
                 // its baseline DELAY_BAND_TOP_PAD + MSG_BASE_STEP + ascent(11)
                 // below the band top (= msg_y - band_height).
-                let label_w = text_width(t, DELAY_LABEL_FONT_SIZE as f64);
+                let label_w =
+                    text_width_with_family(t, DELAY_LABEL_FONT_SIZE as f64, &message_font_family);
                 let label_y = msg_y
                     - DELAY_BAND_HEIGHT
-                    - plantuml_metrics::text_height(DELAY_LABEL_FONT_SIZE as f64)
+                    - text_height_with_family(DELAY_LABEL_FONT_SIZE as f64, &message_font_family)
                     + DELAY_BAND_TOP_PAD
                     + MSG_BASE_STEP
-                    + plantuml_metrics::ascent(DELAY_LABEL_FONT_SIZE as f64);
+                    + ascent_with_family(DELAY_LABEL_FONT_SIZE as f64, &message_font_family);
                 text_render::emit_text(
                     &mut svg.buf,
                     t,
@@ -6403,7 +6545,7 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                         x: mid_x - label_w / 2.0,
                         y: label_y,
                         font_size: DELAY_LABEL_FONT_SIZE,
-                        font_family: "sans-serif",
+                        font_family: &message_font_family,
                         fill: "#000000",
                         bold: false,
                         italic: false,
@@ -6424,7 +6566,8 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                 }
                 // Compute note dimensions and position.
                 let lines: Vec<&str> = note.text.lines().collect();
-                let metrics = note_text_metrics(&note.text, note_font_size_f);
+                let metrics =
+                    note_text_metrics_with_family(&note.text, note_font_size_f, &note_font_family);
                 let note_y_extra = match note.shape {
                     NoteShape::Note => 7.0,
                     NoteShape::Hexagonal | NoteShape::Rectangular => 5.0,
@@ -6730,7 +6873,11 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                 let mut line_top = note_top;
                 for (line_idx, line) in lines.iter().enumerate() {
                     let trimmed = line.trim();
-                    let line_metrics = rendered_line_metrics(trimmed, note_font_size_f);
+                    let line_metrics = rendered_line_metrics_with_family(
+                        trimmed,
+                        note_font_size_f,
+                        &note_font_family,
+                    );
                     if trimmed.is_empty() {
                         line_top += metrics
                             .line_heights
@@ -6748,7 +6895,7 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                             x: line_x,
                             y: text_y,
                             font_size: svg.note_font_size,
-                            font_family: "sans-serif",
+                            font_family: &svg.note_font_family,
                             fill: &note_font_color,
                             bold: false,
                             italic: false,
@@ -6799,7 +6946,11 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                 // This matches PlantUML's SVG element order.
                 let (tab_text, guard_label) =
                     group_tab_and_guard(g.kind, kind_str, g.label.as_ref());
-                let kind_w = bold_text_width(tab_text, group_header_font_size_f);
+                let kind_w = bold_text_width_with_family(
+                    tab_text,
+                    group_header_font_size_f,
+                    &group_header_font_family,
+                );
                 let tab_right = frame_left + kind_w + 45.0;
                 let tab_bottom_left = frame_top + group_header_height;
                 let tab_bottom_right = frame_top + group_header_height - 10.0;
@@ -6835,7 +6986,7 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                         x: frame_left + 15.0,
                         y: frame_top + group_header_text_baseline,
                         font_size: group_header_font_size,
-                        font_family: "sans-serif",
+                        font_family: &group_header_font_family,
                         fill: "#000000",
                         bold: true,
                         italic: false,
@@ -6854,7 +7005,7 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                             x: tab_right + 15.0,
                             y: frame_top + 12.634765625,
                             font_size: 11,
-                            font_family: "sans-serif",
+                            font_family: &group_header_font_family,
                             fill: "#000000",
                             bold: true,
                             italic: false,

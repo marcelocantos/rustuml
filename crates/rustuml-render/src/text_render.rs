@@ -78,6 +78,13 @@ pub fn measure(content: &str, font_size: f64, bold: bool) -> f64 {
     measure_inner(content, font_size, bold, false)
 }
 
+/// Width of `content` using a caller-selected base font family. This preserves
+/// Creole segment overrides, while allowing diagram-wide `defaultFontName`
+/// skinparams to drive both emitted `font-family` and box/layout metrics.
+pub fn measure_with_family(content: &str, font_size: f64, bold: bool, font_family: &str) -> f64 {
+    measure_inner_with_family(content, font_size, bold, false, font_family)
+}
+
 /// Measure variant for class-entity labels where `__` is a literal pair of
 /// underscores (not underline markup). The literal `__` therefore counts
 /// toward textLength.
@@ -86,11 +93,21 @@ pub fn measure_no_underline(content: &str, font_size: f64, bold: bool) -> f64 {
 }
 
 fn measure_inner(content: &str, font_size: f64, bold: bool, skip_underline: bool) -> f64 {
+    measure_inner_with_family(content, font_size, bold, skip_underline, "sans-serif")
+}
+
+fn measure_inner_with_family(
+    content: &str,
+    font_size: f64,
+    bold: bool,
+    skip_underline: bool,
+    font_family: &str,
+) -> f64 {
     let base = TextBase {
         x: 0.0,
         y: 0.0,
         font_size: font_size as u32,
-        font_family: "sans-serif",
+        font_family,
         fill: "#000000",
         bold,
         italic: false,
@@ -108,19 +125,20 @@ fn measure_inner(content: &str, font_size: f64, bold: bool, skip_underline: bool
 /// accommodate the descender / ascender beyond the line — matching Java
 /// PlantUML's `TileText.spaceBottom`.
 pub fn label_height(content: &str, font_size: f64) -> f64 {
+    label_height_with_family(content, font_size, "sans-serif")
+}
+
+/// Height of `content` using the caller's base font family.
+pub fn label_height_with_family(content: &str, font_size: f64, font_family: &str) -> f64 {
     let segments = creole::parse_segments(content);
     if segments.is_empty() {
-        return pm::text_height(font_size);
+        return family_text_height(font_size, is_monospace_family(font_family));
     }
     let base_height = segments
         .iter()
         .map(|seg| {
             let size = seg.style.size.map(|s| s as f64).unwrap_or(font_size);
-            if seg.style.monospace {
-                pm::mono_text_height(size)
-            } else {
-                pm::text_height(size)
-            }
+            family_text_height(size, segment_uses_monospace_family(seg, font_family))
         })
         .fold(0.0f64, f64::max);
     base_height + line_extra_space(&segments)
@@ -135,19 +153,20 @@ pub fn label_height(content: &str, font_size: f64) -> f64 {
 /// `<sup>` does not affect ascent (the sup glyph extends above the existing
 /// ascent but doesn't move the baseline).
 pub fn label_ascent(content: &str, font_size: f64) -> f64 {
+    label_ascent_with_family(content, font_size, "sans-serif")
+}
+
+/// Ascent of `content` using the caller's base font family.
+pub fn label_ascent_with_family(content: &str, font_size: f64, font_family: &str) -> f64 {
     let segments = creole::parse_segments(content);
     if segments.is_empty() {
-        return pm::ascent(font_size);
+        return family_ascent(font_size, is_monospace_family(font_family));
     }
     let base_ascent = segments
         .iter()
         .map(|seg| {
             let size = seg.style.size.map(|s| s as f64).unwrap_or(font_size);
-            if seg.style.monospace {
-                pm::mono_ascent(size)
-            } else {
-                pm::ascent(size)
-            }
+            family_ascent(size, segment_uses_monospace_family(seg, font_family))
         })
         .fold(0.0f64, f64::max);
     base_ascent + sub_extra_space(&segments)
@@ -244,7 +263,7 @@ fn emit_segments(buf: &mut String, segments: &[Segment], base: &TextBase<'_>) ->
     // so the run's font family matters too.
     let first = &segments[0];
     let first_size = first.style.size.unwrap_or(base.font_size) as f64;
-    let line_bottom_drop = clamp_drop(first_size, first.style.monospace);
+    let line_bottom_drop = clamp_drop(first_size, segment_uses_monospace_metrics(first, base));
 
     let mut x = base.x;
     let mut total = 0.0;
@@ -324,8 +343,9 @@ fn trim_segment_for_emit(seg: &Segment, base: &TextBase<'_>) -> (f64, String, f6
     let trimmed = &seg.text[lead..seg.text.len() - trail];
     let bold = base.bold || seg.style.bold;
     let font_size = effective_font_size(seg, base);
-    let lead_w = sans_text_width(&" ".repeat(lead), font_size, bold);
-    let trimmed_w = sans_text_width(&unescape_for_metrics(trimmed), font_size, bold);
+    let mono = segment_uses_monospace_metrics(seg, base);
+    let lead_w = family_text_width(&" ".repeat(lead), font_size, bold, mono);
+    let trimmed_w = family_text_width(&unescape_for_metrics(trimmed), font_size, bold, mono);
     (lead_w, trimmed.to_string(), trimmed_w)
 }
 
@@ -336,11 +356,51 @@ fn segment_width(seg: &Segment, base: &TextBase<'_>) -> f64 {
     let raw = unescape_for_metrics(&seg.text);
     let bold = base.bold || seg.style.bold;
     let font_size = effective_font_size(seg, base);
-    if seg.style.monospace {
-        pm::mono_text_width(&raw, font_size)
-    } else {
-        sans_text_width(&raw, font_size, bold)
-    }
+    family_text_width(
+        &raw,
+        font_size,
+        bold,
+        segment_uses_monospace_metrics(seg, base),
+    )
+}
+
+fn segment_uses_monospace_metrics(seg: &Segment, base: &TextBase<'_>) -> bool {
+    seg.style.monospace
+        || seg
+            .style
+            .font_family
+            .as_deref()
+            .map(is_monospace_family)
+            .unwrap_or_else(|| is_monospace_family(base.font_family))
+}
+
+fn segment_uses_monospace_family(seg: &Segment, font_family: &str) -> bool {
+    seg.style.monospace
+        || seg
+            .style
+            .font_family
+            .as_deref()
+            .map(is_monospace_family)
+            .unwrap_or_else(|| is_monospace_family(font_family))
+}
+
+fn style_uses_monospace_metrics(style: &Style, base: &TextBase<'_>) -> bool {
+    style.monospace
+        || style
+            .font_family
+            .as_deref()
+            .map(is_monospace_family)
+            .unwrap_or_else(|| is_monospace_family(base.font_family))
+}
+
+fn is_monospace_family(font_family: &str) -> bool {
+    let normalized = font_family
+        .trim_matches(|c| c == '"' || c == '\'')
+        .to_ascii_lowercase();
+    matches!(
+        normalized.as_str(),
+        "courier" | "courier new" | "monospace" | "monospaced"
+    )
 }
 
 /// Compute the effective rendered font size for a segment. PlantUML's
@@ -375,6 +435,30 @@ fn sans_text_width(text: &str, font_size: f64, bold: bool) -> f64 {
     } else {
         let base = pm::text_width(text, 12.0, bold);
         base * font_size / 12.0
+    }
+}
+
+fn family_text_width(text: &str, font_size: f64, bold: bool, monospace: bool) -> f64 {
+    if monospace {
+        pm::mono_text_width(text, font_size)
+    } else {
+        sans_text_width(text, font_size, bold)
+    }
+}
+
+fn family_text_height(font_size: f64, monospace: bool) -> f64 {
+    if monospace {
+        pm::mono_text_height(font_size)
+    } else {
+        pm::text_height(font_size)
+    }
+}
+
+fn family_ascent(font_size: f64, monospace: bool) -> f64 {
+    if monospace {
+        pm::mono_ascent(font_size)
+    } else {
+        pm::ascent(font_size)
     }
 }
 
@@ -618,7 +702,10 @@ fn write_text_element(
     // reduces to the plain descent for size ≳ 9, so the offset is zero when
     // this run matches the first run's metrics (always true on a single-size
     // line).
-    let own_drop = clamp_drop(nominal_size as f64, style.monospace);
+    let own_drop = clamp_drop(
+        nominal_size as f64,
+        style_uses_monospace_metrics(style, base),
+    );
     let line_descent_diff = line_bottom_drop - own_drop;
     let (font_size, y_offset) = match style.baseline_shift {
         Some("sub") => {
@@ -762,6 +849,23 @@ mod tests {
         assert!(buf.contains(r#"font-weight="700""#));
         assert!(buf.contains(">bold</text>"));
         assert!(!buf.contains("**"));
+    }
+
+    #[test]
+    fn courier_base_uses_monospace_metrics() {
+        let mut b = base(10.0, 20.0);
+        b.font_family = "Courier";
+        let mut buf = String::new();
+        let width = emit_text(&mut buf, "Alice", &b);
+        assert_eq!(
+            pm::fmt_coord(width),
+            pm::fmt_coord(pm::mono_text_width("Alice", 12.0))
+        );
+        assert!(buf.contains(r#"font-family="Courier""#));
+        assert!(buf.contains(&format!(
+            r#"textLength="{}""#,
+            pm::fmt_coord(pm::mono_text_width("Alice", 12.0))
+        )));
     }
 
     #[test]
