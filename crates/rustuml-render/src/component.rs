@@ -228,6 +228,7 @@ pub fn render_with_oracle(
     let mut default_font_size: Option<f64> = None;
     let mut component_font_size_sp: Option<f64> = None;
     let mut component_arrow_font_size_sp: Option<f64> = None;
+    let mut component_font_color = TEXT_COLOR.to_string();
     for sp in &diagram.meta.skinparams {
         let key = sp.key.to_ascii_lowercase();
         let val = sp.value.trim();
@@ -251,6 +252,9 @@ pub fn render_with_oracle(
             }
             "componentfontsize" => {
                 component_font_size_sp = val.parse::<f64>().ok();
+            }
+            "componentfontcolor" => {
+                component_font_color = crate::sequence::resolve_color(val);
             }
             "componentarrowfontsize" => {
                 component_arrow_font_size_sp = val.parse::<f64>().ok();
@@ -848,7 +852,7 @@ pub fn render_with_oracle(
                     y: ty,
                     font_size: component_font_size as u32,
                     font_family: "sans-serif",
-                    fill: TEXT_COLOR,
+                    fill: &component_font_color,
                     bold: false,
                     italic: true,
                     underline: false,
@@ -871,7 +875,7 @@ pub fn render_with_oracle(
                 y: label_y,
                 font_size: component_font_size as u32,
                 font_family: "sans-serif",
-                fill: TEXT_COLOR,
+                fill: &component_font_color,
                 bold: false,
                 italic: false,
                 underline: false,
