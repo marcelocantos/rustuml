@@ -4979,6 +4979,14 @@ fn render_oracle_relationships(
             .unwrap();
         }
 
+        let note_on_link_edge_label_first = !oracle_edge.extra_paths.is_empty()
+            && rel.label.is_some()
+            && !oracle_edge.labels.is_empty();
+        if note_on_link_edge_label_first {
+            let (lx, ly, text) = &oracle_edge.labels[0];
+            emit_oracle_edge_label(svg, rel, 0, *lx, *ly, text);
+        }
+
         // `note on link`: the note box is rendered inside the link group as
         // two `<path>` elements (the folded-note outline and its corner fold)
         // that sit between the arrowhead polygon and the note text. The oracle
@@ -5002,45 +5010,9 @@ fn render_oracle_relationships(
         // sans-serif, fill #000000. Falls back to the legacy joined `label`
         // when `labels` is empty (older oracle data).
         if !oracle_edge.labels.is_empty() {
-            // The first label is the relationship's middle label when the
-            // source carries one; the remaining labels are cardinality
-            // (multiplicity) texts which never carry creole markup. Feed the
-            // *source* markup through the creole engine so bold/italic/mono/
-            // size/colour render correctly — the oracle only supplies the
-            // (x, y) anchor, not the styled glyph runs. Class link labels
-            // treat `__` as a literal pair of underscores (matching member
-            // labels), so route through `skip_underline: true`.
-            for (i, (lx, ly, text)) in oracle_edge.labels.iter().enumerate() {
-                // Use the source markup for the middle label only when its
-                // plain (creole-stripped) form matches the oracle's extracted
-                // text. PlantUML strips navigability markers (`A --> B : foo >`
-                // renders `foo`) and other transforms we don't replay here; in
-                // those cases the source and oracle plain text differ, so fall
-                // back to the oracle text to avoid re-introducing the marker.
-                let src = rel.label.as_deref();
-                let middle = i == 0
-                    && src.is_some_and(|s| {
-                        crate::creole::stripped_text_no_underline(s).trim() == text.trim()
-                    });
-                let content: &str = if middle { src.unwrap_or(text) } else { text };
-                let base = text_render::TextBase {
-                    x: *lx,
-                    y: *ly,
-                    font_size: 13,
-                    font_family: "sans-serif",
-                    fill: "#000000",
-                    bold: false,
-                    italic: false,
-                    underline: false,
-                    skip_underline: middle,
-                };
-                if middle {
-                    // Edge labels honour bold/italic/size/colour but not the
-                    // `""` monospace delimiter (PlantUML renders it as plain).
-                    text_render::emit_text_no_mono(svg, content, &base);
-                } else {
-                    text_render::emit_text(svg, content, &base);
-                }
+            let label_start = usize::from(note_on_link_edge_label_first);
+            for (i, (lx, ly, text)) in oracle_edge.labels.iter().enumerate().skip(label_start) {
+                emit_oracle_edge_label(svg, rel, i, *lx, *ly, text);
             }
         } else if let Some((lx, ly, ref text)) = oracle_edge.label {
             let first_line = text.lines().next().unwrap_or("");
@@ -5062,6 +5034,42 @@ fn render_oracle_relationships(
         }
 
         svg.push_str("</g>");
+    }
+}
+
+fn emit_oracle_edge_label(
+    svg: &mut String,
+    rel: &Relationship,
+    i: usize,
+    lx: f64,
+    ly: f64,
+    text: &str,
+) {
+    // The first label is the relationship's middle label when the source
+    // carries one; later labels are cardinality or note text. Feed the source
+    // markup through the creole engine only when its stripped form matches the
+    // oracle's extracted text.
+    let src = rel.label.as_deref();
+    let middle = i == 0
+        && src.is_some_and(|s| crate::creole::stripped_text_no_underline(s).trim() == text.trim());
+    let content: &str = if middle { src.unwrap_or(text) } else { text };
+    let base = text_render::TextBase {
+        x: lx,
+        y: ly,
+        font_size: 13,
+        font_family: "sans-serif",
+        fill: "#000000",
+        bold: false,
+        italic: false,
+        underline: false,
+        skip_underline: middle,
+    };
+    if middle {
+        // Edge labels honour bold/italic/size/colour but not the `""`
+        // monospace delimiter (PlantUML renders it as plain).
+        text_render::emit_text_no_mono(svg, content, &base);
+    } else {
+        text_render::emit_text(svg, content, &base);
     }
 }
 
