@@ -92,6 +92,16 @@ pub fn measure_no_underline(content: &str, font_size: f64, bold: bool) -> f64 {
     measure_inner(content, font_size, bold, true)
 }
 
+/// Class-label measurement with literal `__` and caller-selected base family.
+pub fn measure_no_underline_with_family(
+    content: &str,
+    font_size: f64,
+    bold: bool,
+    font_family: &str,
+) -> f64 {
+    measure_inner_with_family(content, font_size, bold, true, font_family)
+}
+
 fn measure_inner(content: &str, font_size: f64, bold: bool, skip_underline: bool) -> f64 {
     measure_inner_with_family(content, font_size, bold, skip_underline, "sans-serif")
 }

@@ -611,11 +611,17 @@ fn filter_suppressed(
     out
 }
 
-fn calc_entity_dims(entity: &ClassEntity, entity_index: usize, hide: HideFlags) -> EntityDims {
+fn calc_entity_dims(
+    entity: &ClassEntity,
+    entity_index: usize,
+    hide: HideFlags,
+    font: &ClassFontOverrides,
+) -> EntityDims {
     let is_enum = entity.kind == EntityKind::Enum;
     // Entity labels treat `__` as literal underscores, not underline markup,
     // so width must include those characters.
-    let name_width = text_render::measure_no_underline(&entity.label, 14.0, false);
+    let name_width =
+        text_render::measure_no_underline_with_family(&entity.label, 14.0, false, &font.family);
     if entity.kind == EntityKind::State {
         let source_line = if entity.source_line > 0 {
             entity.source_line
@@ -733,8 +739,9 @@ fn calc_entity_dims(entity: &ClassEntity, entity_index: usize, hide: HideFlags) 
         .filter(|m| m.kind != MemberKind::Separator)
         .filter(|m| !hide.hides_member(m))
         .map(|m| {
-            let text = format_member_display(m);
-            let text_w = text_render::measure_no_underline(&text, 14.0, false);
+            let text = format_member_display(m, font.monospace_member_spaces());
+            let text_w =
+                text_render::measure_no_underline_with_family(&text, 14.0, false, &font.family);
             if m.visibility == Visibility::Default {
                 // Default visibility (including enum constants): no icon.
                 ENUM_TEXT_OFFSET + text_w + MEMBER_RIGHT_PAD
@@ -1005,7 +1012,7 @@ fn fmt_tl(v: f64) -> String {
 // Member formatting
 // ---------------------------------------------------------------------------
 
-fn format_member_display(member: &Member) -> String {
+fn format_member_display(member: &Member, monospace_spaces: bool) -> String {
     // PlantUML strips {static} and {abstract} modifiers from displayed text.
     // Static members are shown with underline decoration; abstract members in italics.
     //
@@ -1013,7 +1020,11 @@ fn format_member_display(member: &Member) -> String {
     // `+String x() default ""`) is rendered as literal quote characters by
     // the creole engine itself (see the `""` handler in creole.rs), so no
     // pre-escaping is needed here.
-    member.display_text.clone()
+    if monospace_spaces {
+        member.display_text.replace(' ', "\u{00a0}")
+    } else {
+        member.display_text.clone()
+    }
 }
 
 /// Determine the visibility modifier string for a member, matching PlantUML's
@@ -1265,12 +1276,14 @@ pub fn render_with_oracle(
             .to_string();
     }
 
+    let font = ClassFontOverrides::from_skinparams(&diagram.meta.skinparams);
+
     // Phase 1: Calculate entity dimensions.
     let dims: Vec<EntityDims> = diagram
         .entities
         .iter()
         .enumerate()
-        .map(|(i, e)| calc_entity_dims(e, i, resolve_hide(e, &diagram.hide_show)))
+        .map(|(i, e)| calc_entity_dims(e, i, resolve_hide(e, &diagram.hide_show), &font))
         .collect();
 
     // If oracle layout is provided, use it directly instead of running Graphviz.
@@ -1393,6 +1406,8 @@ struct ClassFontOverrides {
     attr_font_color: Option<String>,
     /// `skinparam ClassFontSize` — the class name's font size in px.
     font_size: Option<u32>,
+    /// `skinparam ClassFontName` / `defaultFontName` — base family for class text.
+    family: String,
     /// `skinparam ClassFontStyle` — bold/italic styling of the class name.
     font_bold: bool,
     font_italic: bool,
@@ -1461,12 +1476,16 @@ impl ClassFontOverrides {
         // specific skinparam is absent.
         let default_font_size =
             find(&["defaultFontSize"]).and_then(|v| v.trim().parse::<u32>().ok());
+        let family = find(&["ClassFontName", "defaultFontName", "fontName"])
+            .map(|v| canonical_class_font_family(&v))
+            .unwrap_or_else(|| "sans-serif".to_string());
         Self {
             font_color: find(&["ClassFontColor"]),
             attr_font_color: find(&["ClassAttributeFontColor"]),
             font_size: find(&["ClassFontSize"])
                 .and_then(|v| v.trim().parse::<u32>().ok())
                 .or(default_font_size),
+            family,
             font_bold: style.contains("bold"),
             font_italic: style.contains("italic"),
             stereotype_font_styles,
@@ -1504,6 +1523,10 @@ impl ClassFontOverrides {
         VisibilityIconGeom::from_attribute_icon_size(self.attr_icon_size)
     }
 
+    fn monospace_member_spaces(&self) -> bool {
+        is_monospace_font(&self.family)
+    }
+
     fn stereotype_font_style(&self, stereotypes: &[String]) -> (bool, bool) {
         for stereotype in stereotypes {
             if let Some(style) = self
@@ -1516,6 +1539,26 @@ impl ClassFontOverrides {
         }
         (false, false)
     }
+}
+
+fn canonical_class_font_family(value: &str) -> String {
+    let raw = value.trim();
+    let trimmed = raw.trim_matches('"').trim_matches('\'').trim();
+    if trimmed.is_empty()
+        || trimmed.eq_ignore_ascii_case("sansserif")
+        || trimmed.eq_ignore_ascii_case("sans-serif")
+    {
+        "sans-serif".to_string()
+    } else {
+        trimmed.to_string()
+    }
+}
+
+fn is_monospace_font(font_family: &str) -> bool {
+    let normalized = font_family
+        .trim_matches(|c| c == '"' || c == '\'')
+        .to_ascii_lowercase();
+    MONOSPACE_FONTS.contains(&normalized.as_str())
 }
 
 fn stereotype_font_style_param(
@@ -2631,8 +2674,10 @@ fn render_entity_content(
     let attr_font = AttrFont {
         fill: member_fill,
         size: font.attr_font_size.unwrap_or(14),
+        family: &font.family,
         bold: font.attr_font_bold,
         italic: font.attr_font_italic,
+        monospace_spaces: font.monospace_member_spaces(),
         icon: font.visibility_icon_geom(),
     };
     let style_default = format!("stroke:{};stroke-width:{};", border_col, BORDER_WIDTH);
@@ -2860,8 +2905,12 @@ fn render_entity_content(
         || font.font_italic
         || font.attr_font_italic
         || stereotype_italic;
-    let name_tl =
-        text_render::measure_no_underline(&entity.label, name_font_size as f64, name_bold);
+    let name_tl = text_render::measure_no_underline_with_family(
+        &entity.label,
+        name_font_size as f64,
+        name_bold,
+        &font.family,
+    );
     if dim.has_stereotypes {
         for (i, stereo_text) in format_stereotype_lines(&entity.stereotypes)
             .iter()
@@ -2880,7 +2929,7 @@ fn render_entity_content(
                     x: stereo_x,
                     y: stereo_y,
                     font_size: 12,
-                    font_family: "sans-serif",
+                    font_family: &font.family,
                     fill: text_fill,
                     bold: false,
                     italic: true,
@@ -2912,7 +2961,14 @@ fn render_entity_content(
         if let Some(oracle_x) = name_text_x_override {
             let stereo_tl = format_stereotype_lines(&entity.stereotypes)
                 .iter()
-                .map(|line| round_4dp(text_render::measure(line, 12.0, false)))
+                .map(|line| {
+                    round_4dp(text_render::measure_with_family(
+                        line,
+                        12.0,
+                        false,
+                        &font.family,
+                    ))
+                })
                 .fold(0.0_f64, f64::max);
             let name_tl_r = round_4dp(name_tl);
             let text_center = oracle_x + stereo_tl / 2.0;
@@ -2954,7 +3010,7 @@ fn render_entity_content(
             x: name_x,
             y: name_y,
             font_size: name_font_size,
-            font_family: "sans-serif",
+            font_family: &font.family,
             fill: text_fill,
             bold: name_bold,
             italic: name_italic,
@@ -3285,7 +3341,7 @@ fn render_entity_content(
                     member_text_offset,
                 );
             } else {
-                let text = format_member_display(member);
+                let text = format_member_display(member, attr_font.monospace_spaces);
                 let mut text_buf = String::new();
                 text_render::emit_text(
                     &mut text_buf,
@@ -3294,7 +3350,7 @@ fn render_entity_content(
                         x: x + ENUM_TEXT_OFFSET,
                         y: eff_member_y,
                         font_size: 14,
-                        font_family: "sans-serif",
+                        font_family: attr_font.family,
                         fill: member_fill,
                         bold: false,
                         italic: false,
@@ -4106,7 +4162,7 @@ fn render_member_line(
     // circled-character radius (`MEMBER_TEXT_INSET + radius`; 20 at default).
     member_text_offset: f64,
 ) {
-    let text = format_member_display(member);
+    let text = format_member_display(member, attr_font.monospace_spaces);
 
     if let Some(vis_mod) = visibility_modifier(member) {
         // Visibility icon group. When the class carries a link, PlantUML wraps
@@ -4244,7 +4300,7 @@ fn render_member_line(
             x: text_x,
             y: baseline_y,
             font_size: attr_font.size,
-            font_family: "sans-serif",
+            font_family: attr_font.family,
             fill: attr_font.fill,
             bold: attr_font.bold,
             italic: member.is_abstract || attr_font.italic,
@@ -4276,8 +4332,10 @@ fn render_member_line(
 struct AttrFont<'a> {
     fill: &'a str,
     size: u32,
+    family: &'a str,
     bold: bool,
     italic: bool,
+    monospace_spaces: bool,
     icon: VisibilityIconGeom,
 }
 
@@ -4761,12 +4819,11 @@ fn render_oracle_relationships(
         }
 
         // Arrowhead polygon — use oracle's exact points, fill, and style.
+        // Under monochrome, real colours are emitted as their pre-monochrome
+        // defaults so the final pass greys them once; non-colour sentinels
+        // such as `none` must survive unchanged.
         if let Some(ref points) = oracle_edge.arrow_points {
-            let fill = oracle_edge
-                .arrow_fill
-                .as_deref()
-                .filter(|_| !monochrome)
-                .unwrap_or("#181818");
+            let fill = oracle_polygon_fill(oracle_edge.arrow_fill.as_deref(), monochrome);
             let poly_style = oracle_edge
                 .polygon_style
                 .as_deref()
@@ -4786,12 +4843,13 @@ fn render_oracle_relationships(
         // the per-polygon overrides captured in extract and fall back to
         // the primary polygon's fill/style only when missing.
         if let Some(ref points) = oracle_edge.second_arrow_points {
-            let fill = oracle_edge
-                .second_arrow_fill
-                .as_deref()
-                .or(oracle_edge.arrow_fill.as_deref())
-                .filter(|_| !monochrome)
-                .unwrap_or("#181818");
+            let fill = oracle_polygon_fill(
+                oracle_edge
+                    .second_arrow_fill
+                    .as_deref()
+                    .or(oracle_edge.arrow_fill.as_deref()),
+                monochrome,
+            );
             let poly_style = oracle_edge
                 .second_polygon_style
                 .as_deref()
@@ -4889,6 +4947,17 @@ fn render_oracle_relationships(
         }
 
         svg.push_str("</g>");
+    }
+}
+
+fn oracle_polygon_fill(fill: Option<&str>, monochrome: bool) -> &str {
+    if monochrome {
+        if fill.is_some_and(|value| value.trim().eq_ignore_ascii_case("none")) {
+            return "none";
+        }
+        "#181818"
+    } else {
+        fill.unwrap_or("#181818")
     }
 }
 
@@ -5050,16 +5119,13 @@ fn render_grid_fallback(diagram: &ClassDiagram, _cs: &crate::style::ClassStyle) 
             .to_string();
     }
 
-    let _use_monospace_members = diagram.meta.skinparams.iter().any(|sp| {
-        sp.key.to_lowercase() == "defaultfontname"
-            && MONOSPACE_FONTS.contains(&sp.value.to_lowercase().as_str())
-    });
+    let font = ClassFontOverrides::from_skinparams(&diagram.meta.skinparams);
 
     let dims: Vec<_> = diagram
         .entities
         .iter()
         .enumerate()
-        .map(|(i, e)| calc_entity_dims(e, i, resolve_hide(e, &diagram.hide_show)))
+        .map(|(i, e)| calc_entity_dims(e, i, resolve_hide(e, &diagram.hide_show), &font))
         .collect();
     let cols = (diagram.entities.len() as f64).sqrt().ceil() as usize;
 
