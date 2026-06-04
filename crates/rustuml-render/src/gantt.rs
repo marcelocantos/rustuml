@@ -20,6 +20,8 @@ use crate::svg::SvgBuilder;
 // ── Layout constants (matched to PlantUML's daily Gantt geometry) ───────────────
 
 const DAY_WIDTH: f64 = 16.0;
+const WEEKLY_DAY_WIDTH: f64 = 4.0;
+const MONTHLY_DAY_WIDTH: f64 = 32.0 / 30.0;
 const ROW_STRIDE: f64 = 16.955078125;
 /// A separator row is one task-row taller than a task row (it carries a
 /// centred label plus a horizontal rule).
@@ -75,10 +77,19 @@ const CAL_DOW_Y: f64 = 23.668;
 const CAL_DAYNUM_Y: f64 = 35.668;
 const CAL_GRID_TOP: f64 = 39.0;
 const CAL_BAR_TOP: f64 = 41.0;
+const WEEKLY_GRID_TOP: f64 = 16.0;
+const WEEKLY_BAR_TOP: f64 = 29.0;
+const WEEKLY_WEEK_LABEL_Y: f64 = 25.668;
+const WEEKLY_WEEK_RULE_Y: f64 = 27.0;
+const SCALED_MONTH_ROW_H: f64 = 14.0;
+const SCALED_YEAR_ROW_H: f64 = 16.0;
+const MONTHLY_GRID_TOP: f64 = SCALED_YEAR_ROW_H + SCALED_MONTH_ROW_H;
+const MONTHLY_BAR_TOP: f64 = MONTHLY_GRID_TOP + 2.0;
 
 const CAL_BOT_DOW_OFF: f64 = 9.66796875;
 const CAL_BOT_DAYNUM_OFF: f64 = 23.66796875;
 const CAL_BOT_MONTH_OFF: f64 = 38.60156875;
+const SCALED_AXIS_MONTH_BASELINE: f64 = 9.66796875;
 
 const BOTTOM_DAYNUM_OFF_PLAIN: f64 = 4.66796875;
 
@@ -97,6 +108,31 @@ const RES_BOTTOM_PAD: f64 = 6.0;
 const RES_LABEL_FONT: f64 = 13.0;
 const RES_LOAD_FONT: f64 = 9.0;
 const RES_LOAD_X_OFF: f64 = 1.25;
+
+#[derive(Clone, Copy, Debug, Eq, PartialEq)]
+enum PrintScale {
+    Daily,
+    Weekly,
+    Monthly,
+}
+
+impl PrintScale {
+    fn from_str(scale: Option<&str>) -> Self {
+        match scale {
+            Some("weekly") => Self::Weekly,
+            Some("monthly") => Self::Monthly,
+            _ => Self::Daily,
+        }
+    }
+
+    fn day_width(self) -> f64 {
+        match self {
+            Self::Daily => DAY_WIDTH,
+            Self::Weekly => WEEKLY_DAY_WIDTH,
+            Self::Monthly => MONTHLY_DAY_WIDTH,
+        }
+    }
+}
 
 /// Map a CSS color name (as used in PlantUML Gantt) to a hex string.
 fn css_color(name: &str) -> String {
@@ -286,6 +322,10 @@ pub fn render(diagram: &GanttDiagram, _theme: &Theme) -> String {
         return svg.finalize_plantuml();
     }
 
+    let print_scale = PrintScale::from_str(diagram.printscale.as_deref());
+    let day_width = print_scale.day_width();
+    let day_x = |day: u32| day as f64 * day_width;
+
     let resolved_wd = resolve_starts(&diagram.tasks);
     // Closures comprise repeating weekday closures plus specific holiday dates.
     // Both require a project start to position them on the calendar.
@@ -363,7 +403,7 @@ pub fn render(diagram: &GanttDiagram, _theme: &Theme) -> String {
         .collect();
     let n_rows = laid.len();
 
-    let chart_width = total_days as f64 * DAY_WIDTH;
+    let chart_width = day_x(total_days);
     // A task label that spills past the right edge of its bar widens the
     // canvas to contain it.
     let mut label_right = 0.0_f64;
@@ -377,12 +417,12 @@ pub fn render(diagram: &GanttDiagram, _theme: &Theme) -> String {
                 // width to the right of its diamond, so a short label still
                 // pads the canvas.
                 (
-                    (start_day as f64 * DAY_WIDTH - 8.0).max(8.0) + 8.0,
+                    (day_x(start_day) - 8.0).max(8.0) + 8.0,
                     label_w.max(MILESTONE_LABEL_MIN_W),
                 )
             } else {
-                let bar_x = start_day as f64 * DAY_WIDTH + 2.0;
-                let bar_w = (dur as f64 * DAY_WIDTH - 4.0).max(1.0);
+                let bar_x = day_x(start_day) + 2.0;
+                let bar_w = (dur as f64 * day_width - 4.0).max(1.0);
                 // PlantUML draws the label inside only when the bar's 6px
                 // interior inset (pos1 = start+6, pos2 = end-6, span bar_w-8)
                 // strictly exceeds the label width; otherwise the label is
@@ -411,7 +451,7 @@ pub fn render(diagram: &GanttDiagram, _theme: &Theme) -> String {
             && resolved[*idx].1 != 0
             && diagram.tasks.iter().any(|t| &t.name == dep)
         {
-            let succ_start_x = resolved[*idx].0 as f64 * DAY_WIDTH;
+            let succ_start_x = day_x(resolved[*idx].0);
             content_min_x = content_min_x.min(succ_start_x - 4.0 - 10.0);
         }
     }
@@ -427,11 +467,24 @@ pub fn render(diagram: &GanttDiagram, _theme: &Theme) -> String {
 
     let grid_top = title_h
         + if has_cal {
-            CAL_GRID_TOP
+            match print_scale {
+                PrintScale::Daily => CAL_GRID_TOP,
+                PrintScale::Weekly => WEEKLY_GRID_TOP,
+                PrintScale::Monthly => MONTHLY_GRID_TOP,
+            }
         } else {
             GRID_TOP_PLAIN
         };
-    let bar_top0 = title_h + if has_cal { CAL_BAR_TOP } else { BAR_TOP_PLAIN };
+    let bar_top0 = title_h
+        + if has_cal {
+            match print_scale {
+                PrintScale::Daily => CAL_BAR_TOP,
+                PrintScale::Weekly => WEEKLY_BAR_TOP,
+                PrintScale::Monthly => MONTHLY_BAR_TOP,
+            }
+        } else {
+            BAR_TOP_PLAIN
+        };
 
     // Cumulative top offset of each row. Task rows advance by ROW_STRIDE;
     // separator rows are taller (they carry a label and a rule line).
@@ -457,7 +510,7 @@ pub fn render(diagram: &GanttDiagram, _theme: &Theme) -> String {
                 .notes
                 .iter()
                 .find(|n| n.task == task.name && !n.lines.is_empty())
-                .map(|n| RowNote::new(&n.lines, resolved[*idx].0 as f64 * DAY_WIDTH)),
+                .map(|n| RowNote::new(&n.lines, day_x(resolved[*idx].0))),
             LaidRow::Separator(_) => None,
         })
         .collect();
@@ -473,8 +526,8 @@ pub fn render(diagram: &GanttDiagram, _theme: &Theme) -> String {
             let (bar_x0, bar_x1, bar_y0, bar_y1) = match &laid[vi] {
                 LaidRow::Task(_, idx) => {
                     let (sd, dur) = resolved[*idx];
-                    let x0 = sd as f64 * DAY_WIDTH;
-                    let x1 = (sd + dur.max(1)) as f64 * DAY_WIDTH;
+                    let x0 = day_x(sd);
+                    let x1 = day_x(sd + dur.max(1));
                     let y0 = row_tops[vi];
                     (x0, x1, y0, y0 + ROW_STRIDE)
                 }
@@ -557,9 +610,17 @@ pub fn render(diagram: &GanttDiagram, _theme: &Theme) -> String {
     };
 
     let total_height = if has_cal {
-        // Bottom-most drawn element is the month-label text; the SVG box is
-        // its baseline plus the font descent, rounded up to a whole pixel.
-        (grid_bottom + CAL_BOT_MONTH_OFF + descent(MONTH_FONT)).ceil()
+        match print_scale {
+            PrintScale::Daily => {
+                // Bottom-most drawn element is the month-label text; the SVG box is
+                // its baseline plus the font descent, rounded up to a whole pixel.
+                (grid_bottom + CAL_BOT_MONTH_OFF + descent(MONTH_FONT)).ceil()
+            }
+            PrintScale::Weekly => (grid_bottom + SCALED_YEAR_ROW_H + 1.0).ceil(),
+            PrintScale::Monthly => {
+                (grid_bottom + SCALED_MONTH_ROW_H + SCALED_YEAR_ROW_H + 1.0).ceil()
+            }
+        }
     } else {
         // PlantUML composes the title as a fixed band of height `title_h`
         // stacked above the chart body (ImageBuilder), so the image height is
@@ -605,8 +666,8 @@ pub fn render(diagram: &GanttDiagram, _theme: &Theme) -> String {
                 while (day_idx as u32) < total_days && is_closed_col(day_idx as u32) {
                     day_idx += 1;
                 }
-                let gx = start as f64 * DAY_WIDTH;
-                let w = (day_idx - start) as f64 * DAY_WIDTH;
+                let gx = day_x(start as u32);
+                let w = (day_idx - start) as f64 * day_width;
                 gantt_rect_fill(
                     &mut svg,
                     gx,
@@ -624,28 +685,39 @@ pub fn render(diagram: &GanttDiagram, _theme: &Theme) -> String {
     // 2/3. Top axis + grid lines. PlantUML emits the calendar header (text)
     // before the grid lines, but the plain day-number axis after them.
     if let Some(ref c) = cal {
-        render_calendar_axis(
-            &mut svg,
-            c,
-            diagram,
-            &closed_cols,
-            title_h + CAL_DOW_Y,
-            title_h + CAL_DAYNUM_Y,
-            title_h + CAL_MONTH_Y,
-        );
-        for day in 0..=total_days {
-            let gx = day as f64 * DAY_WIDTH;
-            gantt_line(&mut svg, gx, grid_top, gx, grid_bottom, GRID_COLOR);
+        match print_scale {
+            PrintScale::Daily => {
+                render_calendar_axis(
+                    &mut svg,
+                    c,
+                    diagram,
+                    &closed_cols,
+                    day_width,
+                    title_h + CAL_DOW_Y,
+                    title_h + CAL_DAYNUM_Y,
+                    title_h + CAL_MONTH_Y,
+                );
+                for day in 0..=total_days {
+                    let gx = day_x(day);
+                    gantt_line(&mut svg, gx, grid_top, gx, grid_bottom, GRID_COLOR);
+                }
+                let x_end = chart_width - 0.0002;
+                gantt_line(&mut svg, 0.0, grid_top, x_end, grid_top, GRID_COLOR);
+                gantt_line(&mut svg, 0.0, grid_bottom, x_end, grid_bottom, GRID_COLOR);
+            }
+            PrintScale::Weekly => {
+                render_weekly_top_axis(&mut svg, c, total_days, chart_width, grid_bottom, title_h);
+            }
+            PrintScale::Monthly => {
+                render_monthly_top_axis(&mut svg, c, chart_width, title_h);
+            }
         }
-        let x_end = chart_width - 0.0002;
-        gantt_line(&mut svg, 0.0, grid_top, x_end, grid_top, GRID_COLOR);
-        gantt_line(&mut svg, 0.0, grid_bottom, x_end, grid_bottom, GRID_COLOR);
     } else {
         for day in 0..=total_days {
-            let gx = day as f64 * DAY_WIDTH;
+            let gx = day_x(day);
             gantt_line(&mut svg, gx, grid_top, gx, grid_bottom, GRID_COLOR);
         }
-        render_day_numbers(&mut svg, total_days, title_h + ascent(AXIS_FONT));
+        render_day_numbers(&mut svg, total_days, day_width, title_h + ascent(AXIS_FONT));
     }
 
     // 4. Dependency arrows.
@@ -670,7 +742,7 @@ pub fn render(diagram: &GanttDiagram, _theme: &Theme) -> String {
                 continue;
             }
             let (dep_start, dep_dur) = resolved[dep_idx];
-            let pred_end_x = (dep_start + dep_dur) as f64 * DAY_WIDTH;
+            let pred_end_x = day_x(dep_start + dep_dur);
             // From a milestone predecessor (zero-duration diamond) the arrow
             // departs the diamond centre rather than the bottom of a bar.
             let pred_exit_y = if dep_dur == 0 {
@@ -678,7 +750,7 @@ pub fn render(diagram: &GanttDiagram, _theme: &Theme) -> String {
             } else {
                 row_bar_top(dep_vi) + BAR_H
             };
-            let succ_start_x = resolved[*idx].0 as f64 * DAY_WIDTH;
+            let succ_start_x = day_x(resolved[*idx].0);
             let succ_center = row_bar_top(vi) + BAR_H / 2.0;
             draw_dependency_arrow(&mut svg, pred_end_x, pred_exit_y, succ_start_x, succ_center);
         } else if let LaidRow::Task(task, idx) = row
@@ -689,9 +761,9 @@ pub fn render(diagram: &GanttDiagram, _theme: &Theme) -> String {
             // A parallel start ("starts at X's start") routes the arrow out
             // the predecessor's left edge, down the left margin, and into the
             // successor's left edge.
-            let pred_left_x = resolved[*idx].0 as f64 * DAY_WIDTH + 2.0;
+            let pred_left_x = day_x(resolved[*idx].0) + 2.0;
             let pred_center = row_bar_top(dep_vi) + BAR_H / 2.0;
-            let succ_start_x = resolved[*idx].0 as f64 * DAY_WIDTH;
+            let succ_start_x = day_x(resolved[*idx].0);
             let succ_center = row_bar_top(vi) + BAR_H / 2.0;
             draw_parallel_arrow(
                 &mut svg,
@@ -744,7 +816,7 @@ pub fn render(diagram: &GanttDiagram, _theme: &Theme) -> String {
             if dur == 0 {
                 // A day-0 milestone would push the diamond off the left edge;
                 // PlantUML clamps the centre so the diamond stays on-canvas.
-                let cx = (start_day as f64 * DAY_WIDTH - 8.0).max(8.0);
+                let cx = (day_x(start_day) - 8.0).max(8.0);
                 let cy = bar_top + 5.0;
                 let fill = task
                     .color
@@ -801,15 +873,11 @@ pub fn render(diagram: &GanttDiagram, _theme: &Theme) -> String {
                     // Fill rect: the first run is inset 2px on its left, the
                     // last run is inset 2px on its right; open-ended sides
                     // overshoot the column boundary by 1px.
-                    let left = if first {
-                        cs as f64 * DAY_WIDTH + 2.0
-                    } else {
-                        cs as f64 * DAY_WIDTH
-                    };
+                    let left = if first { day_x(cs) + 2.0 } else { day_x(cs) };
                     let fill_right = if last {
-                        ce as f64 * DAY_WIDTH - 2.0
+                        day_x(ce) - 2.0
                     } else {
-                        ce as f64 * DAY_WIDTH + 1.0
+                        day_x(ce) + 1.0
                     };
                     let bar_w = (fill_right - left).max(1.0);
 
@@ -847,7 +915,7 @@ pub fn render(diagram: &GanttDiagram, _theme: &Theme) -> String {
                     let top = bar_top;
                     let bot = bar_top + BAR_H;
                     if first {
-                        let r = ce as f64 * DAY_WIDTH;
+                        let r = day_x(ce);
                         svg.raw_inline(&format!(
                             r#"<path d="M{r},{bot} L{l},{bot} L{l},{top} L{r},{top}" fill="none" style="stroke:{stroke};stroke-width:1;"/>"#,
                             r = fmt_coord(r),
@@ -856,7 +924,7 @@ pub fn render(diagram: &GanttDiagram, _theme: &Theme) -> String {
                             top = fmt_coord(top),
                         ));
                     } else if last {
-                        let r = ce as f64 * DAY_WIDTH - 2.0;
+                        let r = day_x(ce) - 2.0;
                         svg.raw_inline(&format!(
                             r#"<path d="M{l},{top} L{r},{top} L{r},{bot} L{l},{bot}" fill="none" style="stroke:{stroke};stroke-width:1;"/>"#,
                             l = fmt_coord(left),
@@ -868,7 +936,7 @@ pub fn render(diagram: &GanttDiagram, _theme: &Theme) -> String {
                         // Middle run: plain top and bottom border lines
                         // spanning the fill width (left flush, right at the
                         // column boundary).
-                        let r = ce as f64 * DAY_WIDTH;
+                        let r = day_x(ce);
                         gantt_line(&mut svg, left, top, r, top, &stroke);
                         gantt_line(&mut svg, left, bot, r, bot, &stroke);
                     }
@@ -880,8 +948,8 @@ pub fn render(diagram: &GanttDiagram, _theme: &Theme) -> String {
                     let top = bar_top;
                     let bot = bar_top + BAR_H;
                     for w in runs.windows(2) {
-                        let gap_left = w[0].1 as f64 * DAY_WIDTH + 3.0;
-                        let gap_right = w[1].0 as f64 * DAY_WIDTH - 3.0;
+                        let gap_left = day_x(w[0].1) + 3.0;
+                        let gap_right = day_x(w[1].0) - 3.0;
                         svg.raw_inline(&format!(
                             r#"<line style="stroke:{stroke};stroke-width:1;stroke-dasharray:2,3;" x1="{x1}" x2="{x2}" y1="{y}" y2="{y}"/>"#,
                             x1 = fmt_coord(gap_left),
@@ -915,15 +983,15 @@ pub fn render(diagram: &GanttDiagram, _theme: &Theme) -> String {
                 let label = task_label(task);
                 let lx = if dur == 0 {
                     // Label sits 8px right of the (clamped) diamond centre.
-                    (start_day as f64 * DAY_WIDTH - 8.0).max(8.0) + 8.0
+                    (day_x(start_day) - 8.0).max(8.0) + 8.0
                 } else {
                     // Labels normally sit inside the bar (4px from its left
                     // edge). The label fits inside only when the bar's 6px
                     // interior inset (span bar_w-8) strictly exceeds the label
                     // width; otherwise PlantUML places it just past the bar's
                     // right edge instead.
-                    let bar_x = start_day as f64 * DAY_WIDTH + 2.0;
-                    let bar_w = (dur as f64 * DAY_WIDTH - 4.0).max(1.0);
+                    let bar_x = day_x(start_day) + 2.0;
+                    let bar_w = (dur as f64 * day_width - 4.0).max(1.0);
                     let label_w = text_width(&label, TASK_FONT, false);
                     if bar_w - 8.0 > label_w {
                         bar_x + 4.0
@@ -959,7 +1027,7 @@ pub fn render(diagram: &GanttDiagram, _theme: &Theme) -> String {
                 }
                 gantt_text_serif(
                     &mut svg,
-                    day as f64 * DAY_WIDTH + RES_LOAD_X_OFF,
+                    day as f64 * day_width + RES_LOAD_X_OFF,
                     load_y,
                     &load.to_string(),
                     RES_LOAD_FONT,
@@ -970,17 +1038,29 @@ pub fn render(diagram: &GanttDiagram, _theme: &Theme) -> String {
 
     // 7. Bottom axis.
     if let Some(ref c) = cal {
-        render_calendar_axis(
-            &mut svg,
-            c,
-            diagram,
-            &closed_cols,
-            grid_bottom + CAL_BOT_DOW_OFF,
-            grid_bottom + CAL_BOT_DAYNUM_OFF,
-            grid_bottom + CAL_BOT_MONTH_OFF,
-        );
+        match print_scale {
+            PrintScale::Daily => render_calendar_axis(
+                &mut svg,
+                c,
+                diagram,
+                &closed_cols,
+                day_width,
+                grid_bottom + CAL_BOT_DOW_OFF,
+                grid_bottom + CAL_BOT_DAYNUM_OFF,
+                grid_bottom + CAL_BOT_MONTH_OFF,
+            ),
+            PrintScale::Weekly => render_weekly_bottom_axis(&mut svg, c, chart_width, grid_bottom),
+            PrintScale::Monthly => {
+                render_monthly_bottom_axis(&mut svg, c, chart_width, grid_bottom)
+            }
+        }
     } else {
-        render_day_numbers(&mut svg, total_days, grid_bottom + BOTTOM_DAYNUM_OFF_PLAIN);
+        render_day_numbers(
+            &mut svg,
+            total_days,
+            day_width,
+            grid_bottom + BOTTOM_DAYNUM_OFF_PLAIN,
+        );
     }
 
     svg.finalize_plantuml()
@@ -1005,12 +1085,12 @@ fn task_label(task: &GanttTask) -> String {
     }
 }
 
-fn render_day_numbers(svg: &mut SvgBuilder, total_days: u32, baseline: f64) {
+fn render_day_numbers(svg: &mut SvgBuilder, total_days: u32, day_width: f64, baseline: f64) {
     for day in 0..total_days {
         let label = (day + 1).to_string();
         let tl = text_width(&label, AXIS_FONT, false);
-        let cell_x = day as f64 * DAY_WIDTH;
-        let tx = cell_x + (DAY_WIDTH - tl) / 2.0;
+        let cell_x = day as f64 * day_width;
+        let tx = cell_x + (day_width - tl) / 2.0;
         gantt_text(svg, tx, baseline, &label, AXIS_FONT, TEXT_COLOR);
     }
 }
@@ -1188,6 +1268,7 @@ fn render_calendar_axis(
     cal: &CalendarInfo,
     diagram: &GanttDiagram,
     closed_cols: &[bool],
+    day_width: f64,
     dow_y: f64,
     daynum_y: f64,
     month_y: f64,
@@ -1203,7 +1284,7 @@ fn render_calendar_axis(
             TEXT_COLOR
         };
         let tl = text_width(abbr, AXIS_FONT, false);
-        let tx = day_idx as f64 * DAY_WIDTH + (DAY_WIDTH - tl) / 2.0;
+        let tx = day_idx as f64 * day_width + (day_width - tl) / 2.0;
         gantt_text(svg, tx, dow_y, abbr, AXIS_FONT, fill);
     }
 
@@ -1215,13 +1296,13 @@ fn render_calendar_axis(
             TEXT_COLOR
         };
         let tl = text_width(&label, AXIS_FONT, false);
-        let tx = day_idx as f64 * DAY_WIDTH + (DAY_WIDTH - tl) / 2.0;
+        let tx = day_idx as f64 * day_width + (day_width - tl) / 2.0;
         gantt_text(svg, tx, daynum_y, &label, AXIS_FONT, fill);
     }
 
     for &(start_idx, end_idx, ref label) in &cal.month_spans {
         let span_days = (end_idx - start_idx) as f64;
-        let span_w = span_days * DAY_WIDTH;
+        let span_w = span_days * day_width;
         let mut display_label = if abbreviated {
             abbreviate_month_label(label)
         } else {
@@ -1244,12 +1325,238 @@ fn render_calendar_axis(
         // A label that still overflows its (narrow) span is left-aligned to
         // the span start rather than centred, so it grows rightwards.
         let mx = if tl > span_w {
-            start_idx as f64 * DAY_WIDTH
+            start_idx as f64 * day_width
         } else {
-            start_idx as f64 * DAY_WIDTH + span_w / 2.0 - tl / 2.0
+            start_idx as f64 * day_width + span_w / 2.0 - tl / 2.0
         };
         gantt_text_bold(svg, mx, month_y, &display_label, MONTH_FONT);
     }
+}
+
+fn render_weekly_top_axis(
+    svg: &mut SvgBuilder,
+    cal: &CalendarInfo,
+    total_days: u32,
+    chart_width: f64,
+    grid_bottom: f64,
+    title_h: f64,
+) {
+    render_week_numbers(svg, total_days, title_h + WEEKLY_WEEK_LABEL_Y);
+    for day in weekly_boundaries(total_days) {
+        let x = day as f64 * WEEKLY_DAY_WIDTH;
+        gantt_line(
+            svg,
+            x,
+            title_h + WEEKLY_GRID_TOP,
+            x,
+            grid_bottom,
+            GRID_COLOR,
+        );
+    }
+    render_weekly_month_axis(svg, cal, title_h, title_h + SCALED_YEAR_ROW_H);
+    gantt_line(svg, 0.0, title_h, chart_width, title_h, GRID_COLOR);
+    gantt_line(
+        svg,
+        0.0,
+        title_h + SCALED_YEAR_ROW_H,
+        chart_width,
+        title_h + SCALED_YEAR_ROW_H,
+        GRID_COLOR,
+    );
+    gantt_line(
+        svg,
+        0.0,
+        title_h + WEEKLY_WEEK_RULE_Y,
+        chart_width,
+        title_h + WEEKLY_WEEK_RULE_Y,
+        GRID_COLOR,
+    );
+}
+
+fn render_weekly_bottom_axis(
+    svg: &mut SvgBuilder,
+    cal: &CalendarInfo,
+    chart_width: f64,
+    grid_bottom: f64,
+) {
+    gantt_line(svg, 0.0, grid_bottom, chart_width, grid_bottom, GRID_COLOR);
+    render_weekly_month_axis(svg, cal, grid_bottom, grid_bottom + SCALED_YEAR_ROW_H);
+    gantt_line(
+        svg,
+        0.0,
+        grid_bottom + SCALED_YEAR_ROW_H,
+        chart_width,
+        grid_bottom + SCALED_YEAR_ROW_H,
+        GRID_COLOR,
+    );
+}
+
+fn render_monthly_top_axis(
+    svg: &mut SvgBuilder,
+    cal: &CalendarInfo,
+    chart_width: f64,
+    title_h: f64,
+) {
+    render_year_axis(svg, cal, title_h, title_h + SCALED_YEAR_ROW_H, chart_width);
+    render_month_name_axis(
+        svg,
+        cal,
+        title_h + SCALED_YEAR_ROW_H,
+        title_h + MONTHLY_GRID_TOP,
+        title_h + SCALED_YEAR_ROW_H + SCALED_AXIS_MONTH_BASELINE,
+    );
+    gantt_line(svg, 0.0, title_h, chart_width, title_h, GRID_COLOR);
+    gantt_line(
+        svg,
+        0.0,
+        title_h + SCALED_YEAR_ROW_H,
+        chart_width,
+        title_h + SCALED_YEAR_ROW_H,
+        GRID_COLOR,
+    );
+    gantt_line(
+        svg,
+        0.0,
+        title_h + MONTHLY_GRID_TOP,
+        chart_width,
+        title_h + MONTHLY_GRID_TOP,
+        GRID_COLOR,
+    );
+}
+
+fn render_monthly_bottom_axis(
+    svg: &mut SvgBuilder,
+    cal: &CalendarInfo,
+    chart_width: f64,
+    grid_bottom: f64,
+) {
+    render_month_name_axis(
+        svg,
+        cal,
+        grid_bottom,
+        grid_bottom + SCALED_MONTH_ROW_H,
+        grid_bottom + SCALED_AXIS_MONTH_BASELINE,
+    );
+    render_year_axis(
+        svg,
+        cal,
+        grid_bottom + SCALED_MONTH_ROW_H,
+        grid_bottom + SCALED_MONTH_ROW_H + SCALED_YEAR_ROW_H,
+        chart_width,
+    );
+    gantt_line(svg, 0.0, grid_bottom, chart_width, grid_bottom, GRID_COLOR);
+    gantt_line(
+        svg,
+        0.0,
+        grid_bottom + SCALED_MONTH_ROW_H,
+        chart_width,
+        grid_bottom + SCALED_MONTH_ROW_H,
+        GRID_COLOR,
+    );
+    gantt_line(
+        svg,
+        0.0,
+        grid_bottom + SCALED_MONTH_ROW_H + SCALED_YEAR_ROW_H,
+        chart_width,
+        grid_bottom + SCALED_MONTH_ROW_H + SCALED_YEAR_ROW_H,
+        GRID_COLOR,
+    );
+}
+
+fn render_week_numbers(svg: &mut SvgBuilder, total_days: u32, baseline: f64) {
+    for week in 0..total_days.div_ceil(7) {
+        let label = (week + 1).to_string();
+        let tx = week as f64 * 7.0 * WEEKLY_DAY_WIDTH + 5.0;
+        gantt_text(svg, tx, baseline, &label, AXIS_FONT, TEXT_COLOR);
+    }
+}
+
+fn weekly_boundaries(total_days: u32) -> Vec<u32> {
+    let mut out: Vec<u32> = (0..=total_days).step_by(7).collect();
+    if out.last().copied() != Some(total_days) {
+        out.push(total_days);
+    }
+    out
+}
+
+fn render_weekly_month_axis(svg: &mut SvgBuilder, cal: &CalendarInfo, y1: f64, y2: f64) {
+    if let Some((start_idx, _, _)) = cal.month_spans.first() {
+        let x = *start_idx as f64 * WEEKLY_DAY_WIDTH;
+        gantt_line(svg, x, y1, x, y2, GRID_COLOR);
+    }
+    for &(start_idx, end_idx, ref label) in &cal.month_spans {
+        let end_x = end_idx as f64 * WEEKLY_DAY_WIDTH;
+        gantt_line(svg, end_x, y1, end_x, y2, GRID_COLOR);
+        let span_w = (end_idx - start_idx) as f64 * WEEKLY_DAY_WIDTH;
+        let mut display_label = abbreviate_month_label(label);
+        if text_width(&display_label, MONTH_FONT, true) > span_w
+            && let Some((month_only, _)) = display_label.rsplit_once(' ')
+        {
+            display_label = month_only.to_string();
+        }
+        if text_width(&display_label, MONTH_FONT, true) > span_w {
+            display_label = abbreviate_month_name(&display_label).to_string();
+        }
+        let tl = text_width(&display_label, MONTH_FONT, true);
+        let x = start_idx as f64 * WEEKLY_DAY_WIDTH + span_w / 2.0 - tl / 2.0;
+        gantt_text_bold(svg, x, y1 + CAL_MONTH_Y, &display_label, MONTH_FONT);
+    }
+}
+
+fn render_month_name_axis(svg: &mut SvgBuilder, cal: &CalendarInfo, y1: f64, y2: f64, text_y: f64) {
+    if let Some((start_idx, _, _)) = cal.month_spans.first() {
+        let x = *start_idx as f64 * MONTHLY_DAY_WIDTH;
+        gantt_line(svg, x, y1, x, y2, GRID_COLOR);
+    }
+    for (idx, &(start_idx, end_idx, ref label)) in cal.month_spans.iter().enumerate() {
+        let span_w = (end_idx - start_idx) as f64 * MONTHLY_DAY_WIDTH;
+        let mut display_label = label
+            .rsplit_once(' ')
+            .map(|(month, _)| month.to_string())
+            .unwrap_or_else(|| label.clone());
+        if text_width(&display_label, AXIS_FONT, false) > span_w {
+            display_label = abbreviate_month_name(&display_label).to_string();
+        }
+        let tl = text_width(&display_label, AXIS_FONT, false);
+        let x = start_idx as f64 * MONTHLY_DAY_WIDTH + span_w / 2.0 - tl / 2.0;
+        let end_x = end_idx as f64 * MONTHLY_DAY_WIDTH;
+        if idx + 1 < cal.month_spans.len() {
+            gantt_line(svg, end_x, y1, end_x, y2, GRID_COLOR);
+        }
+        gantt_text(svg, x, text_y, &display_label, AXIS_FONT, TEXT_COLOR);
+        if idx + 1 == cal.month_spans.len() {
+            gantt_line(svg, end_x, y1, end_x, y2, GRID_COLOR);
+        }
+    }
+}
+
+fn render_year_axis(svg: &mut SvgBuilder, cal: &CalendarInfo, y1: f64, y2: f64, chart_width: f64) {
+    for (start_idx, end_idx, year) in year_spans(cal) {
+        let x = start_idx as f64 * MONTHLY_DAY_WIDTH;
+        gantt_line(svg, x, y1, x, y2, GRID_COLOR);
+        let span_w = (end_idx - start_idx) as f64 * MONTHLY_DAY_WIDTH;
+        let tl = text_width(&year, MONTH_FONT, true);
+        let tx = x + span_w / 2.0 - tl / 2.0;
+        gantt_text_bold(svg, tx, y1 + CAL_MONTH_Y, &year, MONTH_FONT);
+    }
+    gantt_line(svg, chart_width, y1, chart_width, y2, GRID_COLOR);
+}
+
+fn year_spans(cal: &CalendarInfo) -> Vec<(usize, usize, String)> {
+    let mut out: Vec<(usize, usize, String)> = Vec::new();
+    for &(start_idx, end_idx, ref label) in &cal.month_spans {
+        let Some((_, year)) = label.rsplit_once(' ') else {
+            continue;
+        };
+        if let Some((_, prev_end, prev_year)) = out.last_mut()
+            && prev_year == year
+        {
+            *prev_end = end_idx;
+            continue;
+        }
+        out.push((start_idx, end_idx, year.to_string()));
+    }
+    out
 }
 
 fn zeller_dow(year: i32, month: u32, day: u32) -> u8 {
