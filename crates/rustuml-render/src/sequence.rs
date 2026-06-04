@@ -2983,7 +2983,7 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                     }
                 }
             }
-            "arrowcolor" | "sequencearrowcolor" => {
+            "arrowcolor" | "sequencearrowcolor" | "classarrowcolor" => {
                 default_arrow_color = resolve_color(val);
             }
             "arrowthickness" | "sequencearrowthickness" => {
