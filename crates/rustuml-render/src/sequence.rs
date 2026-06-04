@@ -543,12 +543,18 @@ const QUEUE_TEXT_X_PAD: f64 = 5.0;
 const NOTE_GAP_AFTER_MSG: f64 = 13.0;
 /// Gap between lifeline top and note top (first event).
 const NOTE_GAP_FIRST: f64 = 15.0;
+/// PlantUML's text atoms reserve at least 10px height even when the font's real
+/// line metrics are smaller (notably `defaultFontSize 8`).
+fn atom_height(font_size: f64) -> f64 {
+    plantuml_metrics::text_height(font_size).max(10.0)
+}
+
 /// Vertical offset from a message-attached note's top edge to the message arrow
 /// line (single-line note). The note straddles the arrow band:
-/// arrow_y = note_top + this + (lines-1) * text_height/2.
+/// arrow_y = note_top + this + (lines-1) * atom_height/2.
 /// hnote/rnote sit 1px higher (their text baseline is 1px less).
 fn note_msg_arrow_offset(shape: NoteShape, font_size: f64) -> f64 {
-    let base = plantuml_metrics::text_height(font_size) + ARROW_HALF_H;
+    let base = atom_height(font_size) + ARROW_HALF_H;
     match shape {
         NoteShape::Note => base,
         NoteShape::Hexagonal | NoteShape::Rectangular => base - 1.0,
@@ -2848,8 +2854,9 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
     let default_arrow_color = default_arrow_color.as_str();
     let default_arrow_thickness = default_arrow_thickness.as_str();
     let message_font_size_f = message_font_size as f64;
-    let message_text_height = plantuml_metrics::text_height(message_font_size_f);
-    let message_text_y_drop = plantuml_metrics::descent(message_font_size_f) + 2.0;
+    let message_text_height = atom_height(message_font_size_f);
+    let message_text_y_drop =
+        message_text_height - plantuml_metrics::ascent(message_font_size_f) + 2.0;
     let group_header_font_size_f = group_header_font_size as f64;
     let group_header_height = plantuml_metrics::text_height(group_header_font_size_f) + 2.0;
     let group_inner_top_pad = group_header_height - GROUP_HEADER_INNER_PAD_DROP;
@@ -2865,7 +2872,7 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
         }
     };
     let note_font_size_f = note_font_size as f64;
-    let note_text_height = plantuml_metrics::text_height(note_font_size_f);
+    let note_text_height = atom_height(note_font_size_f);
     let note_line_height = note_text_height.floor();
     let note_base_height = (note_text_height + 10.0).floor();
     let hnote_base_height = note_base_height - 2.0;
@@ -2925,7 +2932,7 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
     };
     let head_box_y = HEAD_BOX_Y + title_band_h + box_band_h + header_band_h;
     let participant_font_size_f = participant_font_size as f64;
-    let participant_box_h = plantuml_metrics::text_height(participant_font_size_f) + 14.0;
+    let participant_box_h = atom_height(participant_font_size_f) + 14.0;
     let participant_text_y_offset = plantuml_metrics::ascent(participant_font_size_f) + 7.0;
 
     // -----------------------------------------------------------------------
