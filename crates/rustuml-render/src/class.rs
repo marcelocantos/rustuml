@@ -18,7 +18,7 @@ use rustuml_layout::graph::{Direction, EdgePath, LayoutGraph, NodePosition};
 use rustuml_parser::diagram::class::*;
 
 use crate::layout_oracle::{
-    CrowMark, OracleCluster, OracleEdgePath, OracleLayout, wrap_oracle_envelope,
+    CrowMark, EntityRect, OracleCluster, OracleEdgePath, OracleLayout, wrap_oracle_envelope,
 };
 use crate::metrics;
 use crate::style::Theme;
@@ -109,6 +109,10 @@ const FONT_SIZE: f64 = 14.0;
 /// Font size for stereotype text.
 #[allow(dead_code)]
 const STEREOTYPE_FONT_SIZE: f64 = 12.0;
+/// Lollipop interface labels sit below the small synthetic endpoint ellipse.
+const LOLLIPOP_LABEL_BASELINE_FROM_CENTER: f64 = 18.5352;
+/// PlantUML draws class lollipop endpoints as a 5px ellipse with 1.5px stroke.
+const LOLLIPOP_ENDPOINT_STYLE: &str = "stroke:#181818;stroke-width:1.5;";
 
 // Generic type-parameter box (`class Foo<T>`): a small dashed rectangle at the
 // entity's top-right corner. 12px italic text, 1px pad each side, overhanging
@@ -1914,6 +1918,8 @@ fn render_plantuml_svg(
                 .or_else(|| orc.entities.get(&entity.label))
                 .or_else(|| orc.entities.get(&entity.id))
         });
+        let oracle_lollipop =
+            oracle.and_then(|orc| oracle_lollipop_for_entity(diagram, orc, entity));
 
         // Prefer the oracle's verbatim entity id. PlantUML's `ent000N`
         // counter is not a clean source-order sequence: interface targets of
@@ -1923,6 +1929,7 @@ fn render_plantuml_svg(
         // data, falling back to the sequential counter when absent.
         let current_ent_id = oracle_rect
             .and_then(|r| r.entity_id.clone())
+            .or_else(|| oracle_lollipop.and_then(|(_, r)| r.entity_id.clone()))
             .unwrap_or(seq_ent_id);
 
         // Flush any note entities whose emission counter precedes this entity's
@@ -1934,6 +1941,17 @@ fn render_plantuml_svg(
             emit_note(&mut svg, oracle_note_entities[note_cursor]);
             note_cursor += 1;
             ent_id += 1;
+        }
+
+        if let Some((lollipop_name, lollipop_rect)) = oracle_lollipop {
+            emit_lollipop_entity(
+                &mut svg,
+                lollipop_name,
+                lollipop_rect,
+                &current_ent_id,
+                &entity.label,
+            );
+            continue;
         }
 
         // HTML comment before entity.
@@ -4025,6 +4043,105 @@ struct AttrFont<'a> {
 // Relationship rendering
 // ---------------------------------------------------------------------------
 
+fn oracle_lollipop_endpoint<'a>(
+    oracle: &'a OracleLayout,
+    from_key: &str,
+    source_line: usize,
+) -> Option<(&'a str, &'a EntityRect)> {
+    if source_line == 0 {
+        return None;
+    }
+    let prefix = format!("{from_key}lol");
+    let source_line = source_line.to_string();
+    oracle
+        .entity_list
+        .iter()
+        .find(|entity| {
+            entity.qualified_name.starts_with(&prefix)
+                && entity.rect.source_line.as_deref() == Some(source_line.as_str())
+        })
+        .map(|entity| (entity.qualified_name.as_str(), &entity.rect))
+}
+
+fn oracle_lollipop_for_entity<'a>(
+    diagram: &ClassDiagram,
+    oracle: &'a OracleLayout,
+    entity: &ClassEntity,
+) -> Option<(&'a str, &'a EntityRect)> {
+    if entity.kind != EntityKind::Interface || !entity.members.is_empty() {
+        return None;
+    }
+
+    let rel = diagram
+        .relationships
+        .iter()
+        .find(|rel| rel.to == entity.id && rel.source_line == entity.source_line)?;
+    let from_key = diagram
+        .entities
+        .iter()
+        .find(|e| e.id == rel.from)
+        .map_or(rel.from.as_str(), |e| e.label.as_str());
+    oracle_lollipop_endpoint(oracle, from_key, rel.source_line)
+}
+
+fn emit_lollipop_entity(
+    svg: &mut String,
+    qualified_name: &str,
+    rect: &EntityRect,
+    entity_id: &str,
+    label: &str,
+) {
+    let cx = rect.x + rect.width / 2.0;
+    let cy = rect.y + rect.height / 2.0;
+    let rx = rect.width / 2.0;
+    let ry = rect.height / 2.0;
+    let fill = rect.fill.as_deref().unwrap_or(ENTITY_FILL);
+    let style = rect
+        .rect_style
+        .as_deref()
+        .or(rect.body_style.as_deref())
+        .unwrap_or(LOLLIPOP_ENDPOINT_STYLE);
+    let source_line = rect.source_line.as_deref().unwrap_or("0");
+
+    write!(
+        svg,
+        r#"<g class="entity" data-qualified-name="{}" data-source-line="{}" id="{}">"#,
+        escape_xml(qualified_name),
+        source_line,
+        entity_id,
+    )
+    .unwrap();
+    write!(
+        svg,
+        r#"<ellipse cx="{}" cy="{}" fill="{}" rx="{}" ry="{}" style="{}"/>"#,
+        crate::plantuml_metrics::fmt_coord(cx),
+        crate::plantuml_metrics::fmt_coord(cy),
+        fill,
+        crate::plantuml_metrics::fmt_coord(rx),
+        crate::plantuml_metrics::fmt_coord(ry),
+        style,
+    )
+    .unwrap();
+    svg.push_str("</g>");
+
+    let label_width = text_render::measure(label, FONT_SIZE, false);
+    text_render::emit_text(
+        svg,
+        label,
+        &TextBase {
+            x: cx - label_width / 2.0,
+            y: cy + LOLLIPOP_LABEL_BASELINE_FROM_CENTER,
+            font_size: FONT_SIZE as u32,
+            font_family: "sans-serif",
+            fill: "#000000",
+            bold: false,
+            italic: false,
+            underline: false,
+            skip_underline: false,
+        },
+    );
+}
+
 /// Render association-class connectors. For each `(A, B) .. C`, PlantUML emits
 /// three links sharing the synthesised `apoint` anchor: `A → apoint` and
 /// `apoint → B` (the solid association line) plus `apoint → C` (the dashed /
@@ -4189,9 +4306,11 @@ fn render_oracle_relationships(
         let to_id_rev = format!("{}-to-{}", to_key, from_key);
         let backto_id_rev = format!("{}-backto-{}", to_key, from_key);
         let assoc_id_rev = format!("{}-{}", to_key, from_key);
+        let lollipop_assoc_id = oracle_lollipop_endpoint(oracle, from_key, rel.source_line)
+            .map(|(qualified_name, _)| format!("{from_key}-{qualified_name}"));
 
         let source_line = (rel.source_line > 0).then(|| rel.source_line.to_string());
-        let candidates = [
+        let mut candidates = vec![
             (backto_id.as_str(), true),
             (to_id.as_str(), false),
             (assoc_id.as_str(), false),
@@ -4199,6 +4318,9 @@ fn render_oracle_relationships(
             (to_id_rev.as_str(), false),
             (assoc_id_rev.as_str(), false),
         ];
+        if let Some(id) = lollipop_assoc_id.as_deref() {
+            candidates.push((id, false));
+        }
         let Some((edge_index, oracle_edge, is_reverse)) =
             find_oracle_relationship_edge(oracle, &candidates, source_line.as_deref())
         else {
