@@ -786,29 +786,18 @@ fn strip_creole(s: &str) -> String {
     out
 }
 
-/// Decode PlantUML backslash and tilde escapes in label text.
-/// `\\` → `\`, `~X` → `X` when X is a markup character (*/_-"<[#).
-/// `~~` is NOT a tilde escape — it's strikethrough or literal tildes.
-fn decode_escapes(s: &str) -> String {
+/// Decode PlantUML backslash escapes in label text.
+///
+/// Tilde escapes are deliberately left intact here: message labels are passed
+/// to the Creole-aware text renderer, and that parser needs to see `~**` /
+/// `~__` / `~""` so it can emit literal delimiters instead of live markup.
+fn decode_backslash_escapes(s: &str) -> String {
     let mut result = String::with_capacity(s.len());
     let mut chars = s.chars().peekable();
     while let Some(c) = chars.next() {
         if c == '\\' && chars.peek() == Some(&'\\') {
             chars.next();
             result.push('\\');
-        } else if c == '~' {
-            if let Some(&next) = chars.peek() {
-                // Tilde escape: consume only if next char is a creole markup char
-                // (but NOT another tilde — ~~ is strikethrough, not an escape)
-                if next != '~' && "*/_-\"<[#".contains(next) {
-                    chars.next();
-                    result.push(next);
-                } else {
-                    result.push('~');
-                }
-            } else {
-                result.push('~');
-            }
         } else {
             result.push(c);
         }
@@ -819,7 +808,7 @@ fn decode_escapes(s: &str) -> String {
 /// Process label text for SVG rendering: decode escapes and replace unsupported
 /// markup like `<img:...>` with a placeholder matching PlantUML's behavior.
 fn process_label(s: &str) -> String {
-    let decoded = decode_escapes(s);
+    let decoded = decode_backslash_escapes(s);
     let mut result = String::with_capacity(decoded.len());
     let mut rest = decoded.as_str();
     while let Some(start) = rest.find("<img:") {
@@ -2925,13 +2914,8 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
     let group_header_text_baseline =
         plantuml_metrics::ascent(group_header_font_size_f) + GROUP_HEADER_TEXT_TOP_PAD;
     let group_frame_margin = GROUP_FRAME_MARGIN + participant_padding;
-    let message_label_width = |text: &str| {
-        if message_font_bold {
-            bold_text_width(text, message_font_size_f)
-        } else {
-            text_width(text, message_font_size_f)
-        }
-    };
+    let message_label_width =
+        |text: &str| text_render::measure(text, message_font_size_f, message_font_bold);
     let note_font_size_f = note_font_size as f64;
     let note_label_width = |text: &str| text_width(text, note_font_size_f);
     // Empty diagram with no title — render the PlantUML welcome screen.
@@ -3344,7 +3328,7 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                         let label = if ret.label.is_empty() {
                             String::new()
                         } else {
-                            decode_escapes(&ret.label)
+                            decode_backslash_escapes(&ret.label)
                         };
                         let label_w = message_label_width(&label);
 
@@ -3984,7 +3968,7 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                     let label = if ret.label.is_empty() {
                         String::new()
                     } else {
-                        decode_escapes(&ret.label)
+                        decode_backslash_escapes(&ret.label)
                     };
                     (
                         !label.is_empty(),
@@ -6141,7 +6125,7 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                 let label = if ret.label.is_empty() {
                     String::new()
                 } else {
-                    decode_escapes(&ret.label)
+                    decode_backslash_escapes(&ret.label)
                 };
                 let label_w = message_label_width(&label);
 
@@ -7358,6 +7342,15 @@ mod tests {
         assert!(svg.contains("Alice"));
         assert!(svg.contains("hello"));
         assert!(svg.contains("hi"));
+    }
+
+    #[test]
+    fn message_label_tilde_escapes_creole_delimiters() {
+        let input = "@startuml\nAlice -> Bob : ~**not bold~**\n@enduml";
+        let diagram = rustuml_parser::parse::parse(input).unwrap();
+        let svg = crate::render_svg(&diagram);
+        assert!(svg.contains(">**not bold**</text>"));
+        assert!(!svg.contains(r#">not bold</text>"#));
     }
 
     #[test]

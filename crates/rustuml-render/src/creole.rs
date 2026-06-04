@@ -101,8 +101,11 @@ fn to_svg_tspans_inner(text: &str, skip_underline: bool) -> String {
                         last_char = Some('~');
                         // Leave next_ch for the main loop to process.
                     }
+                } else {
+                    // Lone trailing tilde is literal.
+                    result.push('~');
+                    last_char = Some('~');
                 }
-                // If c1 is None (~ at end of string), nothing to emit.
             }
             '"' if chars.peek() == Some(&'"') => {
                 chars.next();
@@ -972,6 +975,9 @@ fn walk_segments(text: &str, style: &Style, skip_underline: bool, out: &mut Vec<
                         buf.push('~');
                         last_char = Some('~');
                     }
+                } else {
+                    buf.push('~');
+                    last_char = Some('~');
                 }
             }
             '"' if chars.peek() == Some(&'"') => {
@@ -1409,6 +1415,13 @@ mod tests {
         }
     }
 
+    fn wavy_underline_style() -> Style {
+        Style {
+            wavy_underline: true,
+            ..Default::default()
+        }
+    }
+
     #[test]
     fn segments_plain_text() {
         assert_eq!(
@@ -1543,6 +1556,25 @@ mod tests {
     }
 
     #[test]
+    fn segments_lone_trailing_tilde_is_literal() {
+        assert_eq!(
+            parse_segments("done~"),
+            vec![seg("done~", Style::default())]
+        );
+    }
+
+    #[test]
+    fn segments_wavy_underline_preserves_trailing_tilde() {
+        assert_eq!(
+            parse_segments("~~~not strike~~~"),
+            vec![
+                seg("~not strike", wavy_underline_style()),
+                seg("~", Style::default()),
+            ]
+        );
+    }
+
+    #[test]
     fn stripped_text_drops_markers() {
         assert_eq!(stripped_text("**hello** //world//"), "hello world");
         assert_eq!(stripped_text(r#"""mono"""#), "mono");
@@ -1635,6 +1667,11 @@ mod tests {
     fn tilde_single_char() {
         // ~ before a non-markup char is emitted literally; the next char is also emitted.
         assert_eq!(to_svg_tspans("~x"), "~x");
+    }
+
+    #[test]
+    fn tilde_trailing_char() {
+        assert_eq!(to_svg_tspans("done~"), "done~");
     }
 
     #[test]
