@@ -692,10 +692,12 @@ pub fn render(diagram: &GanttDiagram, _theme: &Theme) -> String {
                     c,
                     diagram,
                     &closed_cols,
-                    day_width,
-                    title_h + CAL_DOW_Y,
-                    title_h + CAL_DAYNUM_Y,
-                    title_h + CAL_MONTH_Y,
+                    CalendarAxisGeom {
+                        day_width,
+                        dow_y: title_h + CAL_DOW_Y,
+                        daynum_y: title_h + CAL_DAYNUM_Y,
+                        month_y: title_h + CAL_MONTH_Y,
+                    },
                 );
                 for day in 0..=total_days {
                     let gx = day_x(day);
@@ -1044,10 +1046,12 @@ pub fn render(diagram: &GanttDiagram, _theme: &Theme) -> String {
                 c,
                 diagram,
                 &closed_cols,
-                day_width,
-                grid_bottom + CAL_BOT_DOW_OFF,
-                grid_bottom + CAL_BOT_DAYNUM_OFF,
-                grid_bottom + CAL_BOT_MONTH_OFF,
+                CalendarAxisGeom {
+                    day_width,
+                    dow_y: grid_bottom + CAL_BOT_DOW_OFF,
+                    daynum_y: grid_bottom + CAL_BOT_DAYNUM_OFF,
+                    month_y: grid_bottom + CAL_BOT_MONTH_OFF,
+                },
             ),
             PrintScale::Weekly => render_weekly_bottom_axis(&mut svg, c, chart_width, grid_bottom),
             PrintScale::Monthly => {
@@ -1263,15 +1267,19 @@ impl CalendarInfo {
 
 const DOW_ABBR: &[&str] = &["Mo", "Tu", "We", "Th", "Fr", "Sa", "Su"];
 
+struct CalendarAxisGeom {
+    day_width: f64,
+    dow_y: f64,
+    daynum_y: f64,
+    month_y: f64,
+}
+
 fn render_calendar_axis(
     svg: &mut SvgBuilder,
     cal: &CalendarInfo,
     diagram: &GanttDiagram,
     closed_cols: &[bool],
-    day_width: f64,
-    dow_y: f64,
-    daynum_y: f64,
-    month_y: f64,
+    geom: CalendarAxisGeom,
 ) {
     let abbreviated = diagram.printscale.as_deref() == Some("weekly");
     let is_closed = |idx: usize| closed_cols.get(idx).copied().unwrap_or(false);
@@ -1284,8 +1292,8 @@ fn render_calendar_axis(
             TEXT_COLOR
         };
         let tl = text_width(abbr, AXIS_FONT, false);
-        let tx = day_idx as f64 * day_width + (day_width - tl) / 2.0;
-        gantt_text(svg, tx, dow_y, abbr, AXIS_FONT, fill);
+        let tx = day_idx as f64 * geom.day_width + (geom.day_width - tl) / 2.0;
+        gantt_text(svg, tx, geom.dow_y, abbr, AXIS_FONT, fill);
     }
 
     for (day_idx, &dom) in cal.day_of_month.iter().enumerate() {
@@ -1296,13 +1304,13 @@ fn render_calendar_axis(
             TEXT_COLOR
         };
         let tl = text_width(&label, AXIS_FONT, false);
-        let tx = day_idx as f64 * day_width + (day_width - tl) / 2.0;
-        gantt_text(svg, tx, daynum_y, &label, AXIS_FONT, fill);
+        let tx = day_idx as f64 * geom.day_width + (geom.day_width - tl) / 2.0;
+        gantt_text(svg, tx, geom.daynum_y, &label, AXIS_FONT, fill);
     }
 
     for &(start_idx, end_idx, ref label) in &cal.month_spans {
         let span_days = (end_idx - start_idx) as f64;
-        let span_w = span_days * day_width;
+        let span_w = span_days * geom.day_width;
         let mut display_label = if abbreviated {
             abbreviate_month_label(label)
         } else {
@@ -1325,11 +1333,11 @@ fn render_calendar_axis(
         // A label that still overflows its (narrow) span is left-aligned to
         // the span start rather than centred, so it grows rightwards.
         let mx = if tl > span_w {
-            start_idx as f64 * day_width
+            start_idx as f64 * geom.day_width
         } else {
-            start_idx as f64 * day_width + span_w / 2.0 - tl / 2.0
+            start_idx as f64 * geom.day_width + span_w / 2.0 - tl / 2.0
         };
-        gantt_text_bold(svg, mx, month_y, &display_label, MONTH_FONT);
+        gantt_text_bold(svg, mx, geom.month_y, &display_label, MONTH_FONT);
     }
 }
 
