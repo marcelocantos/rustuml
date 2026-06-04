@@ -278,6 +278,15 @@ fn note_content_width(max_text_w: f64, shape: NoteShape) -> f64 {
     note_content_width_raw(max_text_w, shape).ceil()
 }
 
+fn aligned_note_content_width(max_text_w: f64, shape: NoteShape, align: MessageAlign) -> f64 {
+    let width = note_content_width(max_text_w, shape);
+    if align == MessageAlign::Center && shape == NoteShape::Note {
+        width + NOTE_FOLD_SIZE - 1.0
+    } else {
+        width
+    }
+}
+
 /// Compute the *layout* (preferred) note width — the full-precision value Java
 /// uses for spacing/canvas reservation. `ComponentRoseNote.getPreferredWidth`
 /// returns `getTextWidth + 2*paddingX + deltaShadow` as a raw `double` (no
@@ -292,6 +301,15 @@ fn note_content_width_raw(max_text_w: f64, shape: NoteShape) -> f64 {
         NoteShape::Note => max_text_w + 20.0, // 6 pad + text + 4 pad + 10 fold
         NoteShape::Hexagonal => max_text_w + 23.0, // 10 indent + 2 pad + text + 1 pad + 10 indent
         NoteShape::Rectangular => max_text_w + 7.0, // 6 pad + text + 1 pad
+    }
+}
+
+fn aligned_note_content_width_raw(max_text_w: f64, shape: NoteShape, align: MessageAlign) -> f64 {
+    let width = note_content_width_raw(max_text_w, shape);
+    if align == MessageAlign::Center && shape == NoteShape::Note {
+        width + NOTE_FOLD_SIZE - 1.0
+    } else {
+        width
     }
 }
 
@@ -473,6 +491,28 @@ fn aligned_label_x(
         MessageAlign::Left => unreachable!(),
     };
     component_left + text_pos
+}
+
+fn aligned_note_text_x(
+    align: MessageAlign,
+    left_x: f64,
+    note_left: f64,
+    note_right: f64,
+    shape: NoteShape,
+    text_width: f64,
+) -> f64 {
+    match align {
+        MessageAlign::Left => left_x,
+        MessageAlign::Center => (note_left + (note_right - note_left - text_width) / 2.0).round(),
+        MessageAlign::Right => {
+            let right_pad = match shape {
+                NoteShape::Note => NOTE_FOLD_SIZE,
+                NoteShape::Hexagonal => HNOTE_INDENT + 2.0,
+                NoteShape::Rectangular => RNOTE_TEXT_X_PAD,
+            };
+            (note_right - right_pad - text_width).floor()
+        }
+    }
 }
 const ACTIVATION_WIDTH: f64 = 10.0;
 const ACTIVATION_HALF_W: f64 = 5.0;
@@ -2917,6 +2957,7 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
     // Message label horizontal alignment on the arrow span. PlantUML's
     // `skinparam SequenceMessageAlign` accepts left (default) | center | right.
     let mut message_align = MessageAlign::Left;
+    let mut note_text_align = MessageAlign::Left;
     // Participant head/tail box corner radius. `skinparam RoundCorner N` sets
     // the box rx/ry to N/2 (default 2.5 = RoundCorner 5 / 2).
     let mut head_box_rx = HEAD_BOX_RX;
@@ -3004,6 +3045,15 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                 let style = val.to_ascii_lowercase();
                 message_font_bold = style.contains("bold");
                 message_font_italic = style.contains("italic");
+            }
+            "defaulttextalignment" => {
+                let align = match val.to_ascii_lowercase().as_str() {
+                    "center" => MessageAlign::Center,
+                    "right" => MessageAlign::Right,
+                    _ => MessageAlign::Left,
+                };
+                message_align = align;
+                note_text_align = align;
             }
             "participantbackgroundcolor" | "sequenceparticipantbackgroundcolor" => {
                 participant_fill = gradient_fill_or(val, &gradient_id);
@@ -3704,7 +3754,8 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                         note_font_size_f,
                         &note_font_family,
                     );
-                    let note_content_w = note_content_width(max_tw, note.shape);
+                    let note_content_w =
+                        aligned_note_content_width(max_tw, note.shape, note_text_align);
                     let half = note_content_w / 2.0;
                     let (lo, hi) = if fi < li { (fi, li) } else { (li, fi) };
                     // Gap before the first spanned participant.
@@ -3791,7 +3842,8 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                     // `round(HEAD_BOX_Y + (raw_note_w - box_width) / 2)`. Using the
                     // ceiled width with `floor` here drops the sub-pixel fraction and
                     // mis-rounds the box left by 1px on many cases.
-                    let note_w = note_content_width_raw(max_tw, note.shape);
+                    let note_w =
+                        aligned_note_content_width_raw(max_tw, note.shape, note_text_align);
                     let bw = participants[0].box_width;
                     let box_left = (HEAD_BOX_Y + (note_w - bw) / 2.0).max(HEAD_BOX_Y).round();
                     let min_cx = box_left + bw / 2.0;
@@ -3813,7 +3865,8 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                         note_font_size_f,
                         &note_font_family,
                     );
-                    let note_content_w = note_content_width(max_tw, note.shape);
+                    let note_content_w =
+                        aligned_note_content_width(max_tw, note.shape, note_text_align);
                     let gap = match note.shape {
                         NoteShape::Note => NOTE_LIFELINE_GAP,
                         NoteShape::Hexagonal | NoteShape::Rectangular => NOTE_LIFELINE_GAP - 1.0,
@@ -3953,7 +4006,8 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                 // (un-ceiled) preferred width, so the left-margin shift must use
                 // the raw width too; the ceiled width over-reserves by up to 1px
                 // and shifts the whole diagram right.
-                let note_content_w = note_content_width_raw(max_tw, note.shape);
+                let note_content_w =
+                    aligned_note_content_width_raw(max_tw, note.shape, note_text_align);
                 let margin = if note.participants.is_empty() {
                     ACROSS_NOTE_MARGIN
                 } else {
@@ -4026,7 +4080,8 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                             Some((participants[0].center_x - raw_w / 2.0).floor())
                         }
                         NotePosition::Left => {
-                            let note_content_w = note_content_width(max_tw, note.shape);
+                            let note_content_w =
+                                aligned_note_content_width(max_tw, note.shape, note_text_align);
                             let gap = match note.shape {
                                 NoteShape::Note => NOTE_LIFELINE_GAP,
                                 NoteShape::Hexagonal | NoteShape::Rectangular => {
@@ -4552,8 +4607,10 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
         if let Event::Note(note) = event {
             let max_line_width =
                 note_max_line_width_with_family(&note.text, note_font_size_f, &note_font_family);
-            let note_content_w = note_content_width(max_line_width, note.shape);
-            let raw_note_content_w = note_content_width_raw(max_line_width, note.shape);
+            let note_content_w =
+                aligned_note_content_width(max_line_width, note.shape, note_text_align);
+            let raw_note_content_w =
+                aligned_note_content_width_raw(max_line_width, note.shape, note_text_align);
             match note.position {
                 NotePosition::Right => {
                     // A message-attached note anchors to the message component's
@@ -4620,7 +4677,11 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                             // and tips the canvas right edge / newpage separator x2 a
                             // whole pixel short.
                             let cx = participants[idx].center_x;
-                            let raw_w = note_content_width_raw(max_line_width, note.shape);
+                            let raw_w = aligned_note_content_width_raw(
+                                max_line_width,
+                                note.shape,
+                                note_text_align,
+                            );
                             let note_left = (cx - raw_w / 2.0).max(HEAD_BOX_Y).floor();
                             let note_right = note_left + raw_w;
                             max_note_right = max_note_right.max(note_right);
@@ -5007,7 +5068,7 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
     let note_drawn_extent = |note: &Note| -> Option<(f64, f64)> {
         let max_text_w =
             note_max_line_width_with_family(&note.text, note_font_size_f, &note_font_family);
-        let note_content_w = note_content_width(max_text_w, note.shape);
+        let note_content_w = aligned_note_content_width(max_text_w, note.shape, note_text_align);
         let anchor_xs: Vec<f64> = note
             .participants
             .iter()
@@ -5056,8 +5117,9 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                         let first_ll = participants[0].lifeline_line_x;
                         let last_ll = participants[participants.len() - 1].lifeline_line_x;
                         let span = last_ll - first_ll;
-                        let pw_raw = note_content_width_raw(max_text_w, note.shape)
-                            .max(span.round() + ACROSS_NOTE_MARGIN);
+                        let pw_raw =
+                            aligned_note_content_width_raw(max_text_w, note.shape, note_text_align)
+                                .max(span.round() + ACROSS_NOTE_MARGIN);
                         let pw = note_content_w.max(span.round() + ACROSS_NOTE_MARGIN);
                         let centre = (participants[0].center_x
                             + participants[participants.len() - 1].center_x)
@@ -5084,8 +5146,9 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                         (last_idx, first_idx)
                     };
                     let span = participants[hi].lifeline_line_x - participants[lo].lifeline_line_x;
-                    let pw_raw = note_content_width_raw(max_text_w, note.shape)
-                        .max(span.round() + OVER_SEVERAL_NOTE_MARGIN);
+                    let pw_raw =
+                        aligned_note_content_width_raw(max_text_w, note.shape, note_text_align)
+                            .max(span.round() + OVER_SEVERAL_NOTE_MARGIN);
                     let pw = note_content_w.max(span.round() + OVER_SEVERAL_NOTE_MARGIN);
                     let centre = (participants[lo].center_x + participants[hi].center_x) / 2.0;
                     let left = (centre - pw_raw / 2.0).floor();
@@ -6805,7 +6868,8 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                     note_font_size_f,
                     &note_font_family,
                 );
-                let note_content_w = note_content_width(max_text_w, note.shape);
+                let note_content_w =
+                    aligned_note_content_width(max_text_w, note.shape, note_text_align);
 
                 // Lifeline x values of the note's anchor participant(s).
                 let anchor_xs: Vec<f64> = note
@@ -6870,8 +6934,12 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                                 let first_ll = participants[0].lifeline_line_x;
                                 let last_ll = participants[participants.len() - 1].lifeline_line_x;
                                 let span = last_ll - first_ll;
-                                let pw_raw = note_content_width_raw(max_text_w, note.shape)
-                                    .max(span.round() + ACROSS_NOTE_MARGIN);
+                                let pw_raw = aligned_note_content_width_raw(
+                                    max_text_w,
+                                    note.shape,
+                                    note_text_align,
+                                )
+                                .max(span.round() + ACROSS_NOTE_MARGIN);
                                 let pw = note_content_w.max(span.round() + ACROSS_NOTE_MARGIN);
                                 let centre = (participants[0].center_x
                                     + participants[participants.len() - 1].center_x)
@@ -6939,8 +7007,12 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                             // The left edge is centred using the raw preferred
                             // width (Java xStart = (int)(centre - getPreferredWidth/2))
                             // while the drawn box snaps to the ceiled width.
-                            let pw_raw = note_content_width_raw(max_text_w, note.shape)
-                                .max(span.round() + OVER_SEVERAL_NOTE_MARGIN);
+                            let pw_raw = aligned_note_content_width_raw(
+                                max_text_w,
+                                note.shape,
+                                note_text_align,
+                            )
+                            .max(span.round() + OVER_SEVERAL_NOTE_MARGIN);
                             let pw = note_content_w.max(span.round() + OVER_SEVERAL_NOTE_MARGIN);
                             let centre =
                                 (participants[lo].center_x + participants[hi].center_x) / 2.0;
@@ -7145,6 +7217,7 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                 let text_x = over_several_text_x.unwrap_or(text_x);
                 let mut line_top = note_top;
                 let mut note_number_counters = Vec::new();
+                let mut note_width_number_counters = Vec::new();
                 for (line_idx, line) in lines.iter().enumerate() {
                     let trimmed = line.trim();
                     let line_metrics = rendered_line_metrics_with_family(
@@ -7154,6 +7227,7 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                     );
                     if trimmed.is_empty() {
                         note_number_counters.clear();
+                        note_width_number_counters.clear();
                         line_top += metrics
                             .line_heights
                             .get(line_idx)
@@ -7162,7 +7236,20 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                         continue;
                     }
                     let text_y = line_top + line_metrics.ascent + text_y_offset;
-                    let line_x = text_x;
+                    let line_width = note_line_width_with_family(
+                        trimmed,
+                        note_font_size_f,
+                        &note_font_family,
+                        &mut note_width_number_counters,
+                    );
+                    let line_x = aligned_note_text_x(
+                        note_text_align,
+                        text_x,
+                        note_left,
+                        note_right,
+                        note.shape,
+                        line_width,
+                    );
                     emit_note_line(
                         &mut svg.buf,
                         trimmed,
