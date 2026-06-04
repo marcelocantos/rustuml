@@ -653,7 +653,7 @@ pub fn extract_oracle_layout(svg: &str) -> Option<OracleLayout> {
                         rect: rect.clone(),
                     });
                     layout.entities.insert(name.to_string(), rect);
-                } else if let Some(ellipse) = find_first_child(&node, "ellipse") {
+                } else if let Some(ellipse) = find_first_child(&content_node, "ellipse") {
                     // Start/end pseudo-states and other circular entities use <ellipse>.
                     let cx = parse_attr(&ellipse, "cx")?;
                     let cy = parse_attr(&ellipse, "cy")?;
@@ -664,7 +664,10 @@ pub fn extract_oracle_layout(svg: &str) -> Option<OracleLayout> {
                     // same baseline; deduplicate consecutive y-values.
                     let mut text_y_values: Vec<f64> = Vec::new();
                     let mut text_x_values: Vec<f64> = Vec::new();
-                    for t in node.children().filter(|c| c.tag_name().name() == "text") {
+                    for t in content_node
+                        .children()
+                        .filter(|c| c.tag_name().name() == "text")
+                    {
                         let y = parse_attr(&t, "y");
                         let x = parse_attr(&t, "x");
                         if let Some(y) = y
@@ -683,7 +686,7 @@ pub fn extract_oracle_layout(svg: &str) -> Option<OracleLayout> {
                     // verbatim. `sep_lines` keeps geometry only; `lines` keeps
                     // the full element including its style (dashed/solid) and
                     // both x endpoints, which `==` double rules need.
-                    let sep_lines: Vec<(f64, f64, f64)> = node
+                    let sep_lines: Vec<(f64, f64, f64)> = content_node
                         .children()
                         .filter(|c| c.tag_name().name() == "line")
                         .filter_map(|l| {
@@ -694,7 +697,7 @@ pub fn extract_oracle_layout(svg: &str) -> Option<OracleLayout> {
                             ))
                         })
                         .collect();
-                    let lines: Vec<EntityLine> = node
+                    let lines: Vec<EntityLine> = content_node
                         .children()
                         .filter(|c| c.tag_name().name() == "line")
                         .map(|l| EntityLine {
@@ -733,7 +736,7 @@ pub fn extract_oracle_layout(svg: &str) -> Option<OracleLayout> {
                             texts: Vec::new(),
                         },
                     );
-                } else if let Some(polygon) = find_first_child(&node, "polygon") {
+                } else if let Some(polygon) = find_first_child(&content_node, "polygon") {
                     // Choice pseudo-states use <polygon> (diamond), and
                     // deployment Node shape uses a "tag" polygon.
                     if let Some(points) = polygon.attribute("points") {
@@ -782,7 +785,7 @@ pub fn extract_oracle_layout(svg: &str) -> Option<OracleLayout> {
                             );
                         }
                     }
-                } else if let Some(path) = find_first_child(&node, "path")
+                } else if let Some(path) = find_first_child(&content_node, "path")
                     && let Some(d) = path.attribute("d")
                     && let Some(mut bbox) = path_bounding_box(d)
                 {
@@ -794,7 +797,7 @@ pub fn extract_oracle_layout(svg: &str) -> Option<OracleLayout> {
                     // exactly.  Multiple path entries join with `|`,
                     // each entry is `d#STYLE#style` (no real path `d`
                     // attribute can contain `#STYLE#`).
-                    let path_pieces: Vec<String> = node
+                    let path_pieces: Vec<String> = content_node
                         .children()
                         .filter(|c| c.tag_name().name() == "path")
                         .filter_map(|c| {
@@ -804,7 +807,7 @@ pub fn extract_oracle_layout(svg: &str) -> Option<OracleLayout> {
                         })
                         .collect();
                     bbox.glyph_path_d = Some(path_pieces.join("|"));
-                    for t in node.children() {
+                    for t in content_node.children() {
                         if t.tag_name().name() == "text"
                             && let Some(ty) = parse_attr(&t, "y")
                         {
@@ -815,6 +818,7 @@ pub fn extract_oracle_layout(svg: &str) -> Option<OracleLayout> {
                         }
                     }
                     bbox.entity_id = node.attribute("id").map(String::from);
+                    bbox.source_line = node.attribute("data-source-line").map(String::from);
                     if let Some(sl) = node
                         .attribute("data-source-line")
                         .and_then(|s| s.parse::<f64>().ok())
@@ -2108,6 +2112,30 @@ mod tests {
         assert!((foo.y - 10.0).abs() < 0.001);
         assert!((foo.width - 80.0).abs() < 0.001);
         assert!((foo.height - 48.0).abs() < 0.001);
+    }
+
+    #[test]
+    fn extract_url_wrapped_path_entity() {
+        let svg = r##"<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 100 100">
+            <g><g class="entity" data-qualified-name="Storage" data-source-line="3" id="ent0004">
+                <a href="https://example.com/storage" target="_top" title="https://example.com/storage" xlink:actuate="onRequest" xlink:href="https://example.com/storage" xlink:show="new" xlink:title="https://example.com/storage" xlink:type="simple">
+                    <path d="M10,10 C10,10 40,10 40,10 L40,30 C40,30 10,30 10,30 L10,10" fill="#F1F1F1" style="stroke:#181818;stroke-width:0.5;"/>
+                    <path d="M10,10 C10,20 40,20 40,10" fill="none" style="stroke:#181818;stroke-width:0.5;"/>
+                    <text x="15" y="25">Storage</text>
+                </a>
+            </g></g>
+        </svg>"##;
+
+        let layout = extract_oracle_layout(svg).unwrap();
+        let storage = layout.entities.get("Storage").unwrap();
+        assert_eq!(storage.entity_id.as_deref(), Some("ent0004"));
+        assert_eq!(storage.source_line.as_deref(), Some("3"));
+        assert!((storage.x - 10.0).abs() < 0.001);
+        assert!((storage.y - 10.0).abs() < 0.001);
+        assert!((storage.width - 30.0).abs() < 0.001);
+        assert!((storage.height - 20.0).abs() < 0.001);
+        assert_eq!(storage.text_x_values, vec![15.0]);
+        assert_eq!(storage.text_y_values, vec![25.0]);
     }
 
     #[test]
