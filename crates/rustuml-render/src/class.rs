@@ -1119,6 +1119,34 @@ fn offset_path(path: &str, dx: f64, dy: f64) -> String {
 // Main render function
 // ---------------------------------------------------------------------------
 
+fn render_empty_skinparam_canvas(diagram: &ClassDiagram) -> String {
+    let bg_color = diagram
+        .meta
+        .skinparams
+        .iter()
+        .find(|sp| sp.key.eq_ignore_ascii_case("backgroundColor"))
+        .map(|sp| crate::sequence::resolve_color(&sp.value))
+        .filter(|c| c != "#FFFFFF");
+    let bg_style = bg_color.as_deref().unwrap_or("#FFFFFF");
+
+    let mut svg = String::new();
+    write!(
+        svg,
+        r#"<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" contentStyleType="text/css" data-diagram-type="CLASS" height="16px" preserveAspectRatio="none" style="width:16px;height:16px;background:{bg_style};" version="1.1" viewBox="0 0 16 16" width="16px" zoomAndPan="magnify">"#
+    )
+    .unwrap();
+    svg.push_str("<?plantuml 1.2026.3beta6?><defs/><g>");
+    if let Some(color) = &bg_color {
+        write!(
+            svg,
+            r#"<rect fill="{color}" height="16" style="stroke:none;stroke-width:1;" width="16" x="0" y="0"/>"#
+        )
+        .unwrap();
+    }
+    svg.push_str("</g></svg>");
+    svg
+}
+
 /// Render a class diagram to SVG.
 pub fn render(diagram: &ClassDiagram, theme: &Theme) -> String {
     render_with_oracle(diagram, theme, None)
@@ -1167,6 +1195,9 @@ pub fn render_with_oracle(
             || diagram.meta.title.is_some();
         if has_meta {
             return render_meta_only(diagram);
+        }
+        if !diagram.meta.skinparams.is_empty() {
+            return render_empty_skinparam_canvas(diagram);
         }
         return "<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"100\" height=\"50\"></svg>\n"
             .to_string();

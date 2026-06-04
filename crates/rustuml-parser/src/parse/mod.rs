@@ -152,6 +152,7 @@ fn detect_uml_subtype(lines: &[String]) -> UmlSubtype {
     // alongside an explicit class-style declaration, the diagram is CLASS even
     // if state/object signals would otherwise score higher.
     let mut has_allowmixing = false;
+    let mut has_skinparam = false;
 
     for line in lines {
         let trimmed = line.trim();
@@ -164,6 +165,10 @@ fn detect_uml_subtype(lines: &[String]) -> UmlSubtype {
         } else {
             trimmed
         };
+
+        if trimmed.starts_with("skinparam ") {
+            has_skinparam = true;
+        }
 
         // Use case — must check before sequence (both use "actor").
         if trimmed.starts_with("usecase ") {
@@ -503,6 +508,10 @@ fn detect_uml_subtype(lines: &[String]) -> UmlSubtype {
         if scores[1] <= other_max {
             scores[1] = other_max + 1;
         }
+    }
+
+    if has_skinparam && scores.iter().all(|&s| s == 0) {
+        return UmlSubtype::Class;
     }
 
     let subtypes = [
@@ -945,6 +954,20 @@ mod tests {
     #[test]
     fn parses_simple_sequence() {
         let input = "@startuml\nAlice -> Bob : hello\n@enduml";
+        let diagram = parse(input).unwrap();
+        assert!(matches!(diagram, Diagram::Sequence(_)));
+    }
+
+    #[test]
+    fn skinparam_only_uml_defaults_to_class() {
+        let input = "@startuml\nskinparam backgroundColor #FFFEF0\n@enduml";
+        let diagram = parse(input).unwrap();
+        assert!(matches!(diagram, Diagram::Class(_)));
+    }
+
+    #[test]
+    fn comment_only_uml_stays_sequence_welcome_path() {
+        let input = "@startuml\n' comment only\n@enduml";
         let diagram = parse(input).unwrap();
         assert!(matches!(diagram, Diagram::Sequence(_)));
     }
