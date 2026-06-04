@@ -11,6 +11,7 @@ use std::fmt::Write;
 
 use rustuml_parser::diagram::sequence::*;
 
+use crate::creole::{self, CreoleLine};
 use crate::layout_oracle::{OracleLayout, wrap_oracle_envelope};
 use crate::plantuml_metrics;
 use crate::style::Theme;
@@ -590,6 +591,10 @@ const QUEUE_TEXT_X_PAD: f64 = 5.0;
 const NOTE_GAP_AFTER_MSG: f64 = 13.0;
 /// Gap between lifeline top and note top (first event).
 const NOTE_GAP_FIRST: f64 = 15.0;
+const NOTE_LIST_ITEM_TEXT_X: f64 = 12.0;
+const NOTE_LIST_BULLET_CX: f64 = 5.5;
+const NOTE_LIST_BULLET_BASELINE_DROP: f64 = 4.7578;
+const NOTE_LIST_NUMBER_GAP: f64 = 4.1133;
 /// PlantUML's text atoms reserve at least 10px height even when the font's real
 /// line metrics are smaller (notably `defaultFontSize 8`).
 fn atom_height_with_family(font_size: f64, font_family: &str) -> f64 {
@@ -642,6 +647,137 @@ fn note_text_metrics_with_family(text: &str, font_size: f64, font_family: &str) 
         line_heights,
         first_height,
         total_height,
+    }
+}
+
+fn note_line_width_with_family(
+    line: &str,
+    font_size: f64,
+    font_family: &str,
+    number_counters: &mut Vec<usize>,
+) -> f64 {
+    match creole::parse_line(line.trim()) {
+        CreoleLine::Bullet { level, content } => {
+            number_counters.clear();
+            let indent = NOTE_LIST_ITEM_TEXT_X * level.saturating_sub(1) as f64;
+            indent
+                + NOTE_LIST_ITEM_TEXT_X
+                + text_width_with_family(&content, font_size, font_family)
+        }
+        CreoleLine::Numbered { level, content } => {
+            let number = next_note_number(level, number_counters);
+            let indent = NOTE_LIST_ITEM_TEXT_X * level.saturating_sub(1) as f64;
+            let marker = format!("{number}.");
+            indent
+                + text_width_with_family(&marker, font_size, font_family)
+                + NOTE_LIST_NUMBER_GAP
+                + text_width_with_family(&content, font_size, font_family)
+        }
+        _ => {
+            number_counters.clear();
+            text_width_with_family(line.trim(), font_size, font_family)
+        }
+    }
+}
+
+fn note_max_line_width_with_family(text: &str, font_size: f64, font_family: &str) -> f64 {
+    let mut number_counters = Vec::new();
+    text.lines()
+        .map(|line| {
+            note_line_width_with_family(line.trim(), font_size, font_family, &mut number_counters)
+        })
+        .fold(0.0_f64, f64::max)
+}
+
+fn next_note_number(level: usize, number_counters: &mut Vec<usize>) -> usize {
+    if number_counters.len() > level {
+        number_counters.truncate(level);
+    }
+    while number_counters.len() < level {
+        number_counters.push(0);
+    }
+    number_counters[level - 1] += 1;
+    number_counters[level - 1]
+}
+
+fn emit_note_line(
+    buf: &mut String,
+    line: &str,
+    base: &TextBase<'_>,
+    number_counters: &mut Vec<usize>,
+) -> f64 {
+    match creole::parse_line(line.trim()) {
+        CreoleLine::Bullet { level, content } => {
+            number_counters.clear();
+            let indent = NOTE_LIST_ITEM_TEXT_X * level.saturating_sub(1) as f64;
+            let cx = base.x + indent + NOTE_LIST_BULLET_CX;
+            let cy = base.y - NOTE_LIST_BULLET_BASELINE_DROP;
+            write!(
+                buf,
+                r##"<ellipse cx="{}" cy="{}" fill="{}" rx="2.5" ry="2.5"/>"##,
+                fmt_coord(cx),
+                fmt_coord(cy),
+                base.fill
+            )
+            .unwrap();
+            let text_x = base.x + indent + NOTE_LIST_ITEM_TEXT_X;
+            let w = text_render::emit_text(
+                buf,
+                &content,
+                &TextBase {
+                    x: text_x,
+                    y: base.y,
+                    font_size: base.font_size,
+                    font_family: base.font_family,
+                    fill: base.fill,
+                    bold: base.bold,
+                    italic: base.italic,
+                    underline: base.underline,
+                    skip_underline: base.skip_underline,
+                },
+            );
+            indent + NOTE_LIST_ITEM_TEXT_X + w
+        }
+        CreoleLine::Numbered { level, content } => {
+            let number = next_note_number(level, number_counters);
+            let indent = NOTE_LIST_ITEM_TEXT_X * level.saturating_sub(1) as f64;
+            let marker = format!("{number}.");
+            let marker_w = text_render::emit_text(
+                buf,
+                &marker,
+                &TextBase {
+                    x: base.x + indent,
+                    y: base.y,
+                    font_size: base.font_size,
+                    font_family: base.font_family,
+                    fill: base.fill,
+                    bold: base.bold,
+                    italic: base.italic,
+                    underline: base.underline,
+                    skip_underline: base.skip_underline,
+                },
+            );
+            let w = text_render::emit_text(
+                buf,
+                &content,
+                &TextBase {
+                    x: base.x + indent + marker_w + NOTE_LIST_NUMBER_GAP,
+                    y: base.y,
+                    font_size: base.font_size,
+                    font_family: base.font_family,
+                    fill: base.fill,
+                    bold: base.bold,
+                    italic: base.italic,
+                    underline: base.underline,
+                    skip_underline: base.skip_underline,
+                },
+            );
+            indent + marker_w + NOTE_LIST_NUMBER_GAP + w
+        }
+        _ => {
+            number_counters.clear();
+            text_render::emit_text(buf, line.trim(), base)
+        }
     }
 }
 
@@ -1267,7 +1403,9 @@ impl PlantUmlSvg {
         // Open main group
         self.buf.push_str("<g>");
         // Non-default backgrounds get an explicit full-canvas rect.
-        if let Some(color) = bg_color {
+        if let Some(color) = bg_color
+            && color != "#000000"
+        {
             write!(
                 self.buf,
                 r##"<rect fill="{color}" height="{height}" style="stroke:none;stroke-width:1;" width="{width}" x="0" y="0"/>"##,
@@ -3008,8 +3146,6 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
         )
     };
     let note_font_size_f = note_font_size as f64;
-    let note_label_width =
-        |text: &str| text_width_with_family(text, note_font_size_f, &note_font_family);
     // Empty diagram with no title — render the PlantUML welcome screen.
     if diagram.participants.is_empty() && diagram.events.is_empty() && diagram.meta.title.is_none()
     {
@@ -3493,11 +3629,11 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                     .get(note.participants.last().unwrap().as_str())
                     .copied();
                 if let (Some(fi), Some(li)) = (first_idx, last_idx) {
-                    let max_tw = note
-                        .text
-                        .lines()
-                        .map(|l| note_label_width(l.trim()))
-                        .fold(0.0_f64, f64::max);
+                    let max_tw = note_max_line_width_with_family(
+                        &note.text,
+                        note_font_size_f,
+                        &note_font_family,
+                    );
                     let note_content_w = note_content_width(max_tw, note.shape);
                     let half = note_content_w / 2.0;
                     let (lo, hi) = if fi < li { (fi, li) } else { (li, fi) };
@@ -3572,11 +3708,11 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
             };
             match note.position {
                 NotePosition::Over if note.participants.len() == 1 && first_part == Some(0) => {
-                    let max_tw = note
-                        .text
-                        .lines()
-                        .map(|l| note_label_width(l.trim()))
-                        .fold(0.0_f64, f64::max);
+                    let max_tw = note_max_line_width_with_family(
+                        &note.text,
+                        note_font_size_f,
+                        &note_font_family,
+                    );
                     // Java centres the note on participant 0 using the raw
                     // preferred width (`NoteBox.getStartingX` / `ensureConstraints`),
                     // and the diagram is shifted right so the note's left edge sits
@@ -3602,11 +3738,11 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                     // hnote/rnote sit 1px closer to the lifeline than a standard
                     // note (the same shape offset as note_msg_arrow_offset): their
                     // box right edge is gap-1 from the lifeline.
-                    let max_tw = note
-                        .text
-                        .lines()
-                        .map(|l| note_label_width(l.trim()))
-                        .fold(0.0_f64, f64::max);
+                    let max_tw = note_max_line_width_with_family(
+                        &note.text,
+                        note_font_size_f,
+                        &note_font_family,
+                    );
                     let note_content_w = note_content_width(max_tw, note.shape);
                     let gap = match note.shape {
                         NoteShape::Note => NOTE_LIFELINE_GAP,
@@ -3736,11 +3872,11 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                         _ => continue,
                     }
                 };
-                let max_tw = note
-                    .text
-                    .lines()
-                    .map(|l| note_label_width(l.trim()))
-                    .fold(0.0_f64, f64::max);
+                let max_tw = note_max_line_width_with_family(
+                    &note.text,
+                    note_font_size_f,
+                    &note_font_family,
+                );
                 // Java centres the note on the span midpoint using its raw
                 // (un-ceiled) preferred width, so the left-margin shift must use
                 // the raw width too; the ceiled width over-reserves by up to 1px
@@ -3800,11 +3936,11 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                     if first_part != Some(0) {
                         continue;
                     }
-                    let max_tw = note
-                        .text
-                        .lines()
-                        .map(|l| note_label_width(l.trim()))
-                        .fold(0.0_f64, f64::max);
+                    let max_tw = note_max_line_width_with_family(
+                        &note.text,
+                        note_font_size_f,
+                        &note_font_family,
+                    );
                     let floor = GROUP_NOTE_LEFT_FLOOR_BASE + depth as f64 * group_frame_margin;
                     let natural_left = match note.position {
                         NotePosition::Over if note.participants.len() == 1 => {
@@ -4339,11 +4475,8 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
     let mut max_note_right: f64 = 0.0;
     for event in &diagram.events {
         if let Event::Note(note) = event {
-            let max_line_width = note
-                .text
-                .lines()
-                .map(|l| note_label_width(l.trim()))
-                .fold(0.0_f64, f64::max);
+            let max_line_width =
+                note_max_line_width_with_family(&note.text, note_font_size_f, &note_font_family);
             let note_content_w = note_content_width(max_line_width, note.shape);
             match note.position {
                 NotePosition::Right => {
@@ -4789,11 +4922,8 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
     // `InGroupableList`), so the frame grows to cover a note that sticks out past
     // the messages. Returns `None` for notes with no resolvable anchor.
     let note_drawn_extent = |note: &Note| -> Option<(f64, f64)> {
-        let lines: Vec<&str> = note.text.lines().collect();
-        let max_text_w = lines
-            .iter()
-            .map(|l| note_label_width(l.trim()))
-            .fold(0.0_f64, f64::max);
+        let max_text_w =
+            note_max_line_width_with_family(&note.text, note_font_size_f, &note_font_family);
         let note_content_w = note_content_width(max_text_w, note.shape);
         let anchor_xs: Vec<f64> = note
             .participants
@@ -6580,10 +6710,11 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                 let note_bottom = note_top + note_height;
 
                 // Compute max text width across all lines.
-                let max_text_w = lines
-                    .iter()
-                    .map(|l| note_label_width(l.trim()))
-                    .fold(0.0_f64, f64::max);
+                let max_text_w = note_max_line_width_with_family(
+                    &note.text,
+                    note_font_size_f,
+                    &note_font_family,
+                );
                 let note_content_w = note_content_width(max_text_w, note.shape);
 
                 // Lifeline x values of the note's anchor participant(s).
@@ -6871,6 +7002,7 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                 };
                 let text_x = over_several_text_x.unwrap_or(text_x);
                 let mut line_top = note_top;
+                let mut note_number_counters = Vec::new();
                 for (line_idx, line) in lines.iter().enumerate() {
                     let trimmed = line.trim();
                     let line_metrics = rendered_line_metrics_with_family(
@@ -6879,6 +7011,7 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                         &note_font_family,
                     );
                     if trimmed.is_empty() {
+                        note_number_counters.clear();
                         line_top += metrics
                             .line_heights
                             .get(line_idx)
@@ -6888,7 +7021,7 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                     }
                     let text_y = line_top + line_metrics.ascent + text_y_offset;
                     let line_x = text_x;
-                    text_render::emit_text(
+                    emit_note_line(
                         &mut svg.buf,
                         trimmed,
                         &TextBase {
@@ -6902,6 +7035,7 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                             underline: false,
                             skip_underline: false,
                         },
+                        &mut note_number_counters,
                     );
                     line_top += metrics
                         .line_heights
