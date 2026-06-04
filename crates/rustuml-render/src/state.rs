@@ -245,6 +245,11 @@ fn escape_attr(s: &str) -> String {
         .replace('"', "&quot;")
 }
 
+/// Escape text content, preserving PlantUML's XML entity for no-break spaces.
+fn escape_text_content(s: &str) -> String {
+    escape_attr(s).replace('\u{00a0}', "&#160;")
+}
+
 /// Determine if a [*] reference is a start or end node based on context.
 /// In PlantUML, [*] as a source is the start node, and [*] as a target is the end node.
 fn classify_star_nodes(transitions: &[Transition]) -> (bool, bool) {
@@ -470,7 +475,7 @@ pub fn render_with_oracle(
 
     // Resolve the state-node label font name and style. PlantUML applies
     // `skinparam stateFontName` (or the global `defaultFontName`/`fontName`)
-    // and `stateFontStyle` to the state *name* label. A monospace font name
+    // and `stateFontStyle` to the state name and description lines. A monospace font name
     // (Courier et al.) also switches the width metric to the fixed-advance
     // mono table — the emitted `font-family` then carries the user-supplied
     // name. Non-monospace custom names are left to the default sans-serif
@@ -502,14 +507,16 @@ pub fn render_with_oracle(
             )
         })
         .unwrap_or(false);
-    let state_name_bold = diagram
+    let state_font_style = diagram
         .meta
         .skinparams
         .iter()
         .rev()
         .find(|sp| sp.key.eq_ignore_ascii_case("stateFontStyle"))
-        .map(|sp| sp.value.to_ascii_lowercase().contains("bold"))
-        .unwrap_or(false);
+        .map(|sp| sp.value.to_ascii_lowercase())
+        .unwrap_or_default();
+    let state_font_bold = state_font_style.contains("bold");
+    let state_font_italic = state_font_style.contains("italic");
 
     let (has_start, _has_end) = classify_star_nodes(&diagram.transitions);
 
@@ -1425,7 +1432,7 @@ pub fn render_with_oracle(
                         let text_w = if state_name_is_mono {
                             crate::plantuml_metrics::mono_text_width(label, state_name_font_size)
                         } else {
-                            text_render::measure(label, state_name_font_size, state_name_bold)
+                            text_render::measure(label, state_name_font_size, state_font_bold)
                         };
                         let text_x = orc_rect
                             .and_then(|r| r.name_text_x)
@@ -1445,14 +1452,24 @@ pub fn render_with_oracle(
                             // single un-styled `<text>` matches PlantUML exactly.
                             let fam =
                                 escape_attr(state_font_name.as_deref().unwrap_or("monospace"));
+                            let style_attr = if state_font_italic {
+                                r#" font-style="italic""#
+                            } else {
+                                ""
+                            };
+                            let weight_attr = if state_font_bold {
+                                r#" font-weight="700""#
+                            } else {
+                                ""
+                            };
                             write!(
                                 svg,
-                                r#"<text fill="{TEXT_COLOR}" font-family="{fam}" font-size="{}" lengthAdjust="spacing" textLength="{}" x="{}" y="{}">{}</text>"#,
+                                r#"<text fill="{TEXT_COLOR}" font-family="{fam}" font-size="{}"{style_attr}{weight_attr} lengthAdjust="spacing" textLength="{}" x="{}" y="{}">{}</text>"#,
                                 state_name_font_size as u32,
                                 fmt_f(text_w),
                                 fmt_f(text_x),
                                 fmt_f(text_y),
-                                escape_attr(label),
+                                escape_text_content(label),
                             )
                             .unwrap();
                         } else {
@@ -1466,8 +1483,8 @@ pub fn render_with_oracle(
                                     font_size: state_name_font_size as u32,
                                     font_family: "sans-serif",
                                     fill: TEXT_COLOR,
-                                    bold: state_name_bold,
-                                    italic: false,
+                                    bold: state_font_bold,
+                                    italic: state_font_italic,
                                     underline: false,
                                     skip_underline: false,
                                 },
@@ -1486,23 +1503,53 @@ pub fn render_with_oracle(
                                 .unwrap_or(
                                     div_y + FIRST_DESC_OFFSET + j as f64 * DESC_LINE_SPACING,
                                 );
-                            let mut text_buf = String::new();
-                            text_render::emit_text(
-                                &mut text_buf,
-                                desc,
-                                &TextBase {
-                                    x: desc_x,
-                                    y: desc_y,
-                                    font_size: state_desc_font_size as u32,
-                                    font_family: "sans-serif",
-                                    fill: TEXT_COLOR,
-                                    bold: false,
-                                    italic: false,
-                                    underline: false,
-                                    skip_underline: false,
-                                },
-                            );
-                            svg.push_str(&text_buf);
+                            if state_name_is_mono {
+                                let fam =
+                                    escape_attr(state_font_name.as_deref().unwrap_or("monospace"));
+                                let style_attr = if state_font_italic {
+                                    r#" font-style="italic""#
+                                } else {
+                                    ""
+                                };
+                                let weight_attr = if state_font_bold {
+                                    r#" font-weight="700""#
+                                } else {
+                                    ""
+                                };
+                                let content = desc.replace(' ', "\u{00a0}");
+                                let width = crate::plantuml_metrics::mono_text_width(
+                                    &content,
+                                    state_desc_font_size,
+                                );
+                                write!(
+                                    svg,
+                                    r#"<text fill="{TEXT_COLOR}" font-family="{fam}" font-size="{}"{style_attr}{weight_attr} lengthAdjust="spacing" textLength="{}" x="{}" y="{}">{}</text>"#,
+                                    state_desc_font_size as u32,
+                                    fmt_f(width),
+                                    fmt_f(desc_x),
+                                    fmt_f(desc_y),
+                                    escape_text_content(&content),
+                                )
+                                .unwrap();
+                            } else {
+                                let mut text_buf = String::new();
+                                text_render::emit_text(
+                                    &mut text_buf,
+                                    desc,
+                                    &TextBase {
+                                        x: desc_x,
+                                        y: desc_y,
+                                        font_size: state_desc_font_size as u32,
+                                        font_family: "sans-serif",
+                                        fill: TEXT_COLOR,
+                                        bold: state_font_bold,
+                                        italic: state_font_italic,
+                                        underline: false,
+                                        skip_underline: false,
+                                    },
+                                );
+                                svg.push_str(&text_buf);
+                            }
                         }
 
                         if url.is_some() {
@@ -1999,6 +2046,19 @@ fn render_oracle_transitions(svg: &mut String, diagram: &StateDiagram, oracle: &
         })
         .and_then(|sp| sp.value.trim().parse::<u32>().ok())
         .unwrap_or(LINK_FONT_SIZE as u32);
+    let arrow_font_style = diagram
+        .meta
+        .skinparams
+        .iter()
+        .rev()
+        .find(|sp| {
+            sp.key.eq_ignore_ascii_case("ArrowFontStyle")
+                || sp.key.eq_ignore_ascii_case("stateArrowFontStyle")
+        })
+        .map(|sp| sp.value.to_ascii_lowercase())
+        .unwrap_or_default();
+    let arrow_font_bold = arrow_font_style.contains("bold");
+    let arrow_font_italic = arrow_font_style.contains("italic");
     // PlantUML's emission order for transitions does not always match the
     // parser's source order — when layout decides to bend an edge or sort
     // siblings differently, the golden SVG reorders them. Walking the
@@ -2115,8 +2175,8 @@ fn render_oracle_transitions(svg: &mut String, diagram: &StateDiagram, oracle: &
                     font_size: arrow_font_size,
                     font_family: "sans-serif",
                     fill: TEXT_COLOR,
-                    bold: false,
-                    italic: false,
+                    bold: arrow_font_bold,
+                    italic: arrow_font_italic,
                     underline: false,
                     skip_underline: false,
                 },
