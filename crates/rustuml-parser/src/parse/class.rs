@@ -687,7 +687,7 @@ impl ClassParser {
             // separator colon flanked by optional space), which a bare endpoint
             // (no spaces) never matches, so `A::B --> C::D : label` still splits.
             Regex::new(
-                r#"^(?:"([^"]+)"|([\w./:]+))\s*(?:"([^"]+)")?\s*((?:<\|--\|>|<\.\.>|<\|--|--\|>|\.\.\|>|<\|\.\.|<\.\.|\*--|--\*|o--|--o|<-->|<--|-->|->|<-|-{2,}|\.\.|\.\.>))\s*(?:"([^"]+)")?\s*(?:"([^"]+)"|([\w./:]+))(?:\s*:\s*(.+))?$"#,
+                r#"^(?:"([^"]+)"|([\w./:]+))\s*(?:"([^"]+)")?\s*((?:<\|--\|>|<\.\.>|<\|--|--\|>|\.\.\|>|<\|\.\.|<\.\.|\*--|--\*|o--|--o|<-->|<-{2,}|-{2,}>|<--|-->|->|<-|-{2,}|\.\.|\.\.>))\s*(?:"([^"]+)")?\s*(?:"([^"]+)"|([\w./:]+))(?:\s*:\s*(.+))?$"#,
             )
             .unwrap()
         });
@@ -1707,6 +1707,16 @@ mod tests {
         assert_eq!(d.relationships[0].kind, RelationshipKind::Dependency);
         assert!(!d.relationships[0].dashed);
         assert_eq!(d.relationships[0].label.as_deref(), Some("uses"));
+    }
+
+    #[test]
+    fn long_directional_arrows_are_dependencies() {
+        let d = parse("A ---> B\nA ----> C");
+        assert_eq!(d.relationships.len(), 2);
+        assert_eq!(d.relationships[0].kind, RelationshipKind::Dependency);
+        assert_eq!(d.relationships[1].kind, RelationshipKind::Dependency);
+        assert!(!d.relationships[0].dashed);
+        assert!(!d.relationships[1].dashed);
     }
 
     #[test]

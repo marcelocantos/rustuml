@@ -410,7 +410,9 @@ fn detect_uml_subtype(lines: &[String]) -> UmlSubtype {
         }
         // entity with a body block ({) is an unambiguous class/ER entity,
         // not a sequence participant.
-        if trimmed.starts_with("entity ") && (trimmed.ends_with('{') || trimmed.ends_with("{{")) {
+        if trimmed.starts_with("entity ")
+            && (trimmed.ends_with('{') || trimmed.ends_with("{{") || trimmed.ends_with("{}"))
+        {
             scores[1] += 15;
         }
         // Sequence. Skip lines that end with `{` — those are container blocks
@@ -1022,6 +1024,13 @@ mod tests {
     #[test]
     fn leading_bare_note_colon_routes_to_class() {
         let input = "@startuml\nnote : x = 1\nAlice -> Bob : Message 1\n@enduml";
+        let diagram = parse(input).unwrap();
+        assert!(matches!(diagram, Diagram::Class(_)));
+    }
+
+    #[test]
+    fn inline_empty_entity_body_routes_to_class() {
+        let input = "@startuml\nentity MyType {}\n@enduml";
         let diagram = parse(input).unwrap();
         assert!(matches!(diagram, Diagram::Class(_)));
     }
