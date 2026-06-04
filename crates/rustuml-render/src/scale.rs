@@ -457,6 +457,12 @@ fn scale_oracle_layout_inner(o: &mut OracleLayout, k: f64) {
             }
         }
     }
+    for d in &mut o.decorations {
+        for t in &mut d.texts {
+            t.x *= k;
+            t.y *= k;
+        }
+    }
     if !o.defs_inner_xml.is_empty() {
         o.defs_inner_xml = scale_svg_numbers(&o.defs_inner_xml, k);
     }

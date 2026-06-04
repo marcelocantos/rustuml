@@ -18,7 +18,8 @@ use rustuml_layout::graph::{Direction, EdgePath, LayoutGraph, NodePosition};
 use rustuml_parser::diagram::class::*;
 
 use crate::layout_oracle::{
-    CrowMark, EntityRect, OracleCluster, OracleEdgePath, OracleLayout, wrap_oracle_envelope,
+    CrowMark, EntityRect, EntityText, OracleCluster, OracleEdgePath, OracleLayout,
+    wrap_oracle_envelope,
 };
 use crate::metrics;
 use crate::style::Theme;
@@ -1672,6 +1673,14 @@ fn render_plantuml_svg(
     // right body margins (7 + 8 px).
     let body_inner_w = (body_max_x - body_min_x) + BODY_DECORATION_MARGIN;
     let layout = DecorationLayout::new(diagram, body_inner_w);
+    let oracle_decoration_texts = |class_name: &str| {
+        oracle.and_then(|o| {
+            o.decorations
+                .iter()
+                .find(|d| d.class_name == class_name)
+                .map(|d| d.texts.as_slice())
+        })
+    };
 
     // Top-of-canvas decorations, emitted header-first then title (PlantUML's
     // `addTopAndBottom` group order), each as
@@ -1682,6 +1691,7 @@ fn render_plantuml_svg(
         diagram.meta.header.as_deref(),
         diagram.header_line,
         DECORATION_HEADER_BASELINE_Y,
+        oracle_decoration_texts("header"),
     );
     layout.emit(
         &mut svg,
@@ -1689,6 +1699,7 @@ fn render_plantuml_svg(
         diagram.meta.title.as_deref(),
         diagram.title_line,
         body_top - DECORATION_TITLE_GAP_ABOVE_BODY,
+        oracle_decoration_texts("title"),
     );
 
     // Render any oracle-captured clusters (package/database/folder/...)
@@ -2088,6 +2099,7 @@ fn render_plantuml_svg(
         diagram.meta.caption.as_deref(),
         diagram.caption_line,
         body_bottom + DECORATION_CAPTION_GAP_BELOW_BODY,
+        oracle_decoration_texts("caption"),
     );
     let footer_y = body_bottom
         + DECORATION_FOOTER_GAP_BELOW_BODY
@@ -2102,6 +2114,7 @@ fn render_plantuml_svg(
         diagram.meta.footer.as_deref(),
         diagram.footer_line,
         footer_y,
+        oracle_decoration_texts("footer"),
     );
 
     // Close top-level group and SVG.
@@ -2212,6 +2225,7 @@ impl DecorationLayout {
         text: Option<&str>,
         line: Option<usize>,
         y: f64,
+        oracle_texts: Option<&[EntityText]>,
     ) {
         let Some(text) = text else { return };
         if text.is_empty() {
@@ -2239,13 +2253,19 @@ impl DecorationLayout {
             } else {
                 (self.dim_total_w - block_w) / 2.0
             };
-            let x = block_x + st.inset;
+            let computed_x = block_x + st.inset;
+            let computed_y = base_y + idx as f64 * DECORATION_LINE_HEIGHT;
+            let oracle_text = oracle_texts
+                .and_then(|texts| texts.get(idx))
+                .filter(|t| t.text == line_text);
+            let x = oracle_text.map_or(computed_x, |t| t.x);
+            let y = oracle_text.map_or(computed_y, |t| t.y);
             text_render::emit_text(
                 svg,
                 line_text,
                 &text_render::TextBase {
                     x,
-                    y: base_y + idx as f64 * DECORATION_LINE_HEIGHT,
+                    y,
                     font_size: st.font_size,
                     font_family: "sans-serif",
                     fill: st.fill,

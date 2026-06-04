@@ -8,8 +8,9 @@
 
 use rustuml_render::layout_oracle::{
     ApointMark, AuxRect, CrowMark, EdgeDecoration, EdgeLabelLink, EntityLine, EntityRect,
-    EntityText, JsonBox, JsonConnector, NoteBoxGeom, OracleCluster, OracleEdgePath, OracleEntity,
-    OracleLayout, OracleLegend, OracleLegendRect, OracleNoteEntity, RegionDivider,
+    EntityText, JsonBox, JsonConnector, NoteBoxGeom, OracleCluster, OracleDecoration,
+    OracleEdgePath, OracleEntity, OracleLayout, OracleLegend, OracleLegendRect, OracleNoteEntity,
+    RegionDivider,
 };
 
 /// Parse the coordinate pairs from a note's body path `d` string and recover
@@ -420,6 +421,27 @@ pub fn extract_oracle_layout(svg: &str) -> Option<OracleLayout> {
                 texts,
                 lines,
             });
+        }
+
+        if matches!(class_attr, "title" | "header" | "caption" | "footer") {
+            let texts = node
+                .descendants()
+                .filter(|c| c.tag_name().name() == "text")
+                .filter_map(|t| {
+                    Some(EntityText {
+                        x: parse_attr(&t, "x")?,
+                        y: parse_attr(&t, "y")?,
+                        text: collect_text(&t),
+                    })
+                })
+                .collect::<Vec<_>>();
+            if !texts.is_empty() {
+                layout.decorations.push(OracleDecoration {
+                    class_name: class_attr.to_string(),
+                    source_line: node.attribute("data-source-line").map(String::from),
+                    texts,
+                });
+            }
         }
 
         if class_attr == "entity" || class_attr == "cluster" {

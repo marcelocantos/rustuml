@@ -82,6 +82,11 @@ pub struct OracleLayout {
     /// tables out after the main diagram body; renderers consume these scalar
     /// positions instead of replaying the legend subtree.
     pub legends: Vec<OracleLegend>,
+    /// Page-decoration text positions (`title`, `header`, `caption`, `footer`)
+    /// captured as scalar geometry. These decorations are laid out around the
+    /// whole diagram body, so renderers can consume exact text anchors without
+    /// replaying the surrounding SVG subtree.
+    pub decorations: Vec<OracleDecoration>,
 }
 
 /// A JSON/YAML box's outer background `<rect>` geometry, captured from the
@@ -363,6 +368,14 @@ pub struct EntityText {
     pub x: f64,
     pub y: f64,
     pub text: String,
+}
+
+/// A top/bottom page decoration group captured from the golden SVG.
+#[derive(Debug, Clone)]
+pub struct OracleDecoration {
+    pub class_name: String,
+    pub source_line: Option<String>,
+    pub texts: Vec<EntityText>,
 }
 
 /// A non-body `<rect>` extracted from an entity group.
