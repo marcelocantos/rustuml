@@ -6355,7 +6355,7 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                     .unwrap();
 
                     // 5. Bold text
-                    text_render::emit_text(
+                    let text_advance = text_render::emit_text(
                         &mut svg.buf,
                         text,
                         &TextBase {
@@ -6370,6 +6370,23 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                             skip_underline: false,
                         },
                     );
+                    if has_creole_markup(text) {
+                        text_render::emit_text(
+                            &mut svg.buf,
+                            " ",
+                            &TextBase {
+                                x: text_x + text_advance,
+                                y: text_y,
+                                font_size: divider_font_size,
+                                font_family: "sans-serif",
+                                fill: &divider_font_color,
+                                bold: true,
+                                italic: false,
+                                underline: false,
+                                skip_underline: false,
+                            },
+                        );
+                    }
                 }
             }
             Event::Delay(Some(t)) => {

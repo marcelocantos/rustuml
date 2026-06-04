@@ -1307,6 +1307,15 @@ fn handle_tag(
             nested.font_family = Some(tag["font ".len()..].to_string());
             walk_segments(&content, &nested, skip_underline, out);
         }
+        _ if tag.starts_with("font color=") || tag.starts_with("FONT COLOR=") => {
+            let content = collect_until_tag(chars, "</font>");
+            let mut nested = style.clone();
+            let color = tag["font color=".len()..].to_string();
+            if !color.is_empty() {
+                nested.fill = Some(color);
+            }
+            walk_segments(&content, &nested, skip_underline, out);
+        }
         _ if tag.starts_with("font") => {
             let content = collect_until_tag(chars, "</font>");
             walk_segments(&content, style, skip_underline, out);
@@ -1460,6 +1469,16 @@ mod tests {
         assert_eq!(
             parse_segments("<font color='red'>font color</font>"),
             vec![seg("font color", style)]
+        );
+    }
+
+    #[test]
+    fn segments_unquoted_font_color_becomes_fill() {
+        let mut style = Style::default();
+        style.fill = Some("red".to_string());
+        assert_eq!(
+            parse_segments("<font color=red>Red Title</font>"),
+            vec![seg("Red Title", style)]
         );
     }
 
