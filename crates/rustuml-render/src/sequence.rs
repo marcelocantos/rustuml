@@ -549,17 +549,80 @@ fn atom_height(font_size: f64) -> f64 {
     plantuml_metrics::text_height(font_size).max(10.0)
 }
 
+#[derive(Clone, Copy)]
+struct RenderedLineMetrics {
+    height: f64,
+    ascent: f64,
+}
+
+fn rendered_line_metrics(content: &str, font_size: f64) -> RenderedLineMetrics {
+    RenderedLineMetrics {
+        height: text_render::label_height(content, font_size).max(10.0),
+        ascent: text_render::label_ascent(content, font_size),
+    }
+}
+
+fn rendered_label_y_drop(content: &str, font_size: f64) -> f64 {
+    let metrics = rendered_line_metrics(content, font_size);
+    metrics.height - metrics.ascent + 2.0
+}
+
+struct NoteTextMetrics {
+    line_heights: Vec<f64>,
+    first_height: f64,
+    total_height: f64,
+}
+
+fn note_text_metrics(text: &str, font_size: f64) -> NoteTextMetrics {
+    let mut line_heights = text
+        .lines()
+        .map(|line| rendered_line_metrics(line.trim(), font_size).height)
+        .collect::<Vec<_>>();
+    if line_heights.is_empty() {
+        line_heights.push(rendered_line_metrics("", font_size).height);
+    }
+    let first_height = line_heights[0];
+    let total_height = line_heights.iter().sum();
+    NoteTextMetrics {
+        line_heights,
+        first_height,
+        total_height,
+    }
+}
+
+fn note_base_height(shape: NoteShape, first_line_height: f64) -> f64 {
+    let base = (first_line_height + 10.0).floor();
+    match shape {
+        NoteShape::Note => base,
+        NoteShape::Hexagonal | NoteShape::Rectangular => base - 2.0,
+    }
+}
+
+fn note_rendered_height(shape: NoteShape, metrics: &NoteTextMetrics) -> f64 {
+    note_base_height(shape, metrics.first_height)
+        + metrics
+            .line_heights
+            .iter()
+            .skip(1)
+            .map(|height| height.floor())
+            .sum::<f64>()
+}
+
 /// Vertical offset from a message-attached note's top edge to the message arrow
-/// line (single-line note). The note straddles the arrow band:
-/// arrow_y = note_top + this + (lines-1) * atom_height/2.
-/// hnote/rnote sit 1px higher (their text baseline is 1px less).
-fn note_msg_arrow_offset(shape: NoteShape, font_size: f64) -> f64 {
-    let base = atom_height(font_size) + ARROW_HALF_H;
+/// line for the note's first rendered text line. Multi-line notes add half of
+/// the remaining rendered text height so the note straddles the arrow band.
+fn note_msg_arrow_offset_for_line(shape: NoteShape, first_line_height: f64) -> f64 {
+    let base = first_line_height + ARROW_HALF_H;
     match shape {
         NoteShape::Note => base,
         NoteShape::Hexagonal | NoteShape::Rectangular => base - 1.0,
     }
 }
+
+fn note_msg_text_tail(metrics: &NoteTextMetrics) -> f64 {
+    (metrics.total_height - metrics.first_height) / 2.0
+}
+
 /// Extra vertical space a single-line message-attached note adds both above
 /// (pushing its message arrow down) and below (pushing the next event down).
 /// Each additional note line adds MSG_TEXT_HEIGHT/2 to each side. hnote/rnote
@@ -2855,8 +2918,6 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
     let default_arrow_thickness = default_arrow_thickness.as_str();
     let message_font_size_f = message_font_size as f64;
     let message_text_height = atom_height(message_font_size_f);
-    let message_text_y_drop =
-        message_text_height - plantuml_metrics::ascent(message_font_size_f) + 2.0;
     let group_header_font_size_f = group_header_font_size as f64;
     let group_header_height = plantuml_metrics::text_height(group_header_font_size_f) + 2.0;
     let group_inner_top_pad = group_header_height - GROUP_HEADER_INNER_PAD_DROP;
@@ -2872,12 +2933,6 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
         }
     };
     let note_font_size_f = note_font_size as f64;
-    let note_text_height = atom_height(note_font_size_f);
-    let note_line_height = note_text_height.floor();
-    let note_base_height = (note_text_height + 10.0).floor();
-    let hnote_base_height = note_base_height - 2.0;
-    let note_text_y_offset = plantuml_metrics::ascent(note_font_size_f) + 5.0;
-    let hnote_text_y_offset = note_text_y_offset - 1.0;
     let note_label_width = |text: &str| text_width(text, note_font_size_f);
     // Empty diagram with no title — render the PlantUML welcome screen.
     if diagram.participants.is_empty() && diagram.events.is_empty() && diagram.meta.title.is_none()
@@ -3878,9 +3933,8 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                 Event::Note(note) if note.on_message => {
                     if let Some(owner) = last_msg_idx {
                         note_owner.insert(idx, owner);
-                        let lines = note.text.lines().count().max(1);
-                        let extra = note_msg_extra_base(note.shape)
-                            + (lines as f64 - 1.0) * note_text_height / 2.0;
+                        let metrics = note_text_metrics(&note.text, note_font_size_f);
+                        let extra = note_msg_extra_base(note.shape) + note_msg_text_tail(&metrics);
                         let e = msg_note_extra.entry(owner).or_insert(0.0);
                         *e = e.max(extra);
                     }
@@ -3915,17 +3969,30 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
     {
         let mut y = lifeline_top;
         for (idx, event) in diagram.events.iter().take(page1_end).enumerate() {
-            let has_text = match event {
+            let (has_text, event_text_height) = match event {
                 Event::Message(msg) => {
                     let label = process_label(&msg.label);
-                    !label.is_empty()
+                    (
+                        !label.is_empty(),
+                        rendered_line_metrics(&label, message_font_size_f).height,
+                    )
                 }
-                Event::Return(ret) => !ret.label.is_empty(),
+                Event::Return(ret) => {
+                    let label = if ret.label.is_empty() {
+                        String::new()
+                    } else {
+                        decode_escapes(&ret.label)
+                    };
+                    (
+                        !label.is_empty(),
+                        rendered_line_metrics(&label, message_font_size_f).height,
+                    )
+                }
                 // An empty divider (`====`) has no label box/text line, so it
                 // reserves no text height.
-                Event::Divider(t) => !t.trim().is_empty(),
-                Event::Delay(t) => t.is_some(),
-                _ => false,
+                Event::Divider(t) => (!t.trim().is_empty(), MSG_TEXT_HEIGHT),
+                Event::Delay(t) => (t.is_some(), message_text_height),
+                _ => (false, message_text_height),
             };
             match event {
                 Event::Message(msg) => {
@@ -3936,9 +4003,9 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                     // next event down).
                     let note_extra = msg_note_extra.get(&idx).copied();
                     if msg_count == 0 {
-                        y += first_msg_offset(has_text, message_text_height);
+                        y += first_msg_offset(has_text, event_text_height);
                     } else {
-                        y += msg_step(has_text, message_text_height);
+                        y += msg_step(has_text, event_text_height);
                     }
                     if let Some(extra) = note_extra {
                         y += extra;
@@ -3962,9 +4029,9 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                 Event::Return(_) => {
                     let note_extra = msg_note_extra.get(&idx).copied();
                     if msg_count == 0 {
-                        y += first_msg_offset(has_text, message_text_height);
+                        y += first_msg_offset(has_text, event_text_height);
                     } else {
-                        y += msg_step(has_text, message_text_height);
+                        y += msg_step(has_text, event_text_height);
                     }
                     if let Some(extra) = note_extra {
                         y += extra;
@@ -4021,7 +4088,7 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                     msg_count += 1;
                 }
                 Event::Note(note) => {
-                    let num_lines = note.text.lines().count().max(1);
+                    let metrics = note_text_metrics(&note.text, note_font_size_f);
                     // hnote/rnote have a smaller base height (23 vs 25), reducing
                     // the vertical space consumed by 2px.
                     let note_y_extra = match note.shape {
@@ -4036,12 +4103,11 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                         // note_top + NOTE_MSG_ARROW_OFFSET + (lines-1)*MSG_TEXT_HEIGHT/2.
                         let arrow_y = event_y_positions.get(owner).copied().unwrap_or(y);
                         let note_top = arrow_y
-                            - note_msg_arrow_offset(note.shape, note_font_size_f)
-                            - (num_lines as f64 - 1.0) * note_text_height / 2.0;
+                            - note_msg_arrow_offset_for_line(note.shape, metrics.first_height)
+                            - note_msg_text_tail(&metrics);
                         // The draw site derives note_top from event_y via
                         // note_top = event_y - note_y_extra - num_lines*MSG_TEXT_HEIGHT.
-                        let note_event_y =
-                            note_top + note_y_extra + num_lines as f64 * note_text_height;
+                        let note_event_y = note_top + note_y_extra + metrics.total_height;
                         event_y_positions.push(note_event_y);
                         // Do not advance y or increment msg_count.
                     } else {
@@ -4053,8 +4119,7 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                         } else {
                             y + NOTE_GAP_AFTER_MSG
                         };
-                        let note_event_y =
-                            note_top + note_y_extra + num_lines as f64 * note_text_height;
+                        let note_event_y = note_top + note_y_extra + metrics.total_height;
                         y = note_event_y;
                         event_y_positions.push(y);
                         msg_count += 1; // note counts as an event for spacing
@@ -5516,7 +5581,7 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                     let loop_right = cx + SELF_MSG_EXTEND;
                     let loop_bottom = msg_y + SELF_MSG_DROP;
                     let text_x = cx + SELF_MSG_TEXT_X_PAD;
-                    let text_y_pos = msg_y - message_text_y_drop;
+                    let text_y_pos = msg_y - rendered_label_y_drop(&label, message_font_size_f);
 
                     // Open the message group
                     write!(
@@ -5727,7 +5792,7 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                     };
 
                     // Text position
-                    let text_y_pos = msg_y - message_text_y_drop;
+                    let text_y_pos = msg_y - rendered_label_y_drop(&label, message_font_size_f);
                     let text_x = if is_right {
                         from_x_shifted + MSG_TEXT_LEFT_PAD
                     } else {
@@ -6079,7 +6144,7 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                 let label_w = message_label_width(&label);
 
                 let src_line = ret.source_line as u32;
-                let text_y_pos = msg_y - message_text_y_drop;
+                let text_y_pos = msg_y - rendered_label_y_drop(&label, message_font_size_f);
 
                 // Return messages are always dotted; arrow style matches the original
                 let line_style = "stroke-dasharray:2,2;";
@@ -6351,16 +6416,16 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                 }
                 // Compute note dimensions and position.
                 let lines: Vec<&str> = note.text.lines().collect();
-                let num_lines = lines.len().max(1);
-                let (base_h, note_y_extra) = match note.shape {
-                    NoteShape::Note => (note_base_height, 7.0),
-                    NoteShape::Hexagonal | NoteShape::Rectangular => (hnote_base_height, 5.0),
+                let metrics = note_text_metrics(&note.text, note_font_size_f);
+                let note_y_extra = match note.shape {
+                    NoteShape::Note => 7.0,
+                    NoteShape::Hexagonal | NoteShape::Rectangular => 5.0,
                 };
-                let note_height = base_h + (num_lines as f64 - 1.0) * note_line_height;
+                let note_height = note_rendered_height(note.shape, &metrics);
 
                 // Derive note_top from the event y:
                 // event_y = note_top + note_y_extra + num_lines * MSG_TEXT_HEIGHT
-                let note_top = msg_y - note_y_extra - num_lines as f64 * note_text_height;
+                let note_top = msg_y - note_y_extra - metrics.total_height;
                 let note_bottom = note_top + note_height;
 
                 // Compute max text width across all lines.
@@ -6649,18 +6714,24 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
 
                 // Emit note text lines.
                 let (text_x, text_y_offset) = match note.shape {
-                    NoteShape::Note => (note_left + NOTE_TEXT_X_PAD, note_text_y_offset),
-                    NoteShape::Hexagonal => (note_left + HNOTE_INDENT + 2.0, hnote_text_y_offset),
-                    NoteShape::Rectangular => (note_left + RNOTE_TEXT_X_PAD, hnote_text_y_offset),
+                    NoteShape::Note => (note_left + NOTE_TEXT_X_PAD, 5.0),
+                    NoteShape::Hexagonal => (note_left + HNOTE_INDENT + 2.0, 4.0),
+                    NoteShape::Rectangular => (note_left + RNOTE_TEXT_X_PAD, 4.0),
                 };
                 let text_x = over_several_text_x.unwrap_or(text_x);
-                let mut text_y = note_top + text_y_offset;
-                for line in &lines {
+                let mut line_top = note_top;
+                for (line_idx, line) in lines.iter().enumerate() {
                     let trimmed = line.trim();
+                    let line_metrics = rendered_line_metrics(trimmed, note_font_size_f);
                     if trimmed.is_empty() {
-                        text_y += note_text_height;
+                        line_top += metrics
+                            .line_heights
+                            .get(line_idx)
+                            .copied()
+                            .unwrap_or(line_metrics.height);
                         continue;
                     }
+                    let text_y = line_top + line_metrics.ascent + text_y_offset;
                     let line_x = text_x;
                     text_render::emit_text(
                         &mut svg.buf,
@@ -6677,7 +6748,11 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                             skip_underline: false,
                         },
                     );
-                    text_y += note_text_height;
+                    line_top += metrics
+                        .line_heights
+                        .get(line_idx)
+                        .copied()
+                        .unwrap_or(line_metrics.height);
                 }
             }
             Event::GroupStart(g) => {
