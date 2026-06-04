@@ -2575,6 +2575,7 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
     let mut participant_font_size: u32 = PARTICIPANT_FONT_SIZE as u32;
     let mut participant_font_bold = false;
     let mut participant_font_italic = false;
+    let mut lifeline_background = "#FFFFFF".to_string();
     let mut lifeline_border = "#181818".to_string();
     let lifeline_border_thickness: String = "0.5".to_string();
     // Per-participant-kind background overrides. Each defaults to
@@ -2614,6 +2615,7 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
     let mut divider_border = "#000000".to_string();
     let mut divider_font_color = "#000000".to_string();
     let mut divider_font_size: u32 = MSG_FONT_SIZE as u32;
+    let mut group_background = "#EEEEEE".to_string();
     // Message label horizontal alignment on the arrow span. PlantUML's
     // `skinparam SequenceMessageAlign` accepts left (default) | center | right.
     let mut message_align = MessageAlign::Left;
@@ -2689,6 +2691,9 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
             "sequencelifelinebordercolor" => {
                 lifeline_border = resolve_color(val);
             }
+            "sequencelifelinebackgroundcolor" => {
+                lifeline_background = resolve_color(val);
+            }
             "sequencelifelineborderthickness" => {
                 // PlantUML honours the lifeline border *colour* but not this
                 // *thickness*: every golden draws the dashed lifeline at the
@@ -2756,6 +2761,9 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                 if let Ok(v) = val.parse::<u32>() {
                     divider_font_size = v;
                 }
+            }
+            "sequencegroupbackgroundcolor" => {
+                group_background = gradient_fill_or(val, &gradient_id);
             }
             "sequencemessagealign" => {
                 message_align = match val.to_ascii_lowercase().as_str() {
@@ -5086,7 +5094,7 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
             .color
             .as_ref()
             .map(|c| resolve_color(c))
-            .unwrap_or_else(|| "#FFFFFF".to_string());
+            .unwrap_or_else(|| lifeline_background.clone());
         svg.activation_bar(title, bar_x, bar_y, bar_h, &fill_color);
     }
 
@@ -5286,7 +5294,7 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
             .color
             .as_ref()
             .map(|c| resolve_color(c))
-            .unwrap_or_else(|| "#FFFFFF".to_string());
+            .unwrap_or_else(|| lifeline_background.clone());
         svg.activation_bar(title, bar_x, bar_y, bar_h, &fill_color);
     }
 
@@ -6612,13 +6620,14 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                 let tab_bottom_right = frame_top + GROUP_HEADER_HEIGHT - 10.0;
                 write!(
                     svg.buf,
-                    r##"<path d="M{left},{top} L{right},{top} L{right},{br} L{diag},{bl} L{left},{bl} L{left},{top}" fill="#EEEEEE" style="stroke:#000000;stroke-width:1.5;"/>"##,
+                    r##"<path d="M{left},{top} L{right},{top} L{right},{br} L{diag},{bl} L{left},{bl} L{left},{top}" fill="{fill}" style="stroke:#000000;stroke-width:1.5;"/>"##,
                     left = fmt_coord(frame_left),
                     top = fmt_coord(frame_top),
                     right = fmt_coord(tab_right),
                     br = fmt_coord(tab_bottom_right),
                     diag = fmt_coord(tab_right - 10.0),
                     bl = fmt_coord(tab_bottom_left),
+                    fill = group_background,
                 )
                 .unwrap();
 
