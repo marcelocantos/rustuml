@@ -2870,16 +2870,22 @@ fn render_entity_content(
     // field dividers — PlantUML splits the body into a vertical stack of blocks
     // (one per separator, plus the leading block) where each separator is a
     // `TextBlockLineBefore` rule. Render those in document order instead.
+    //
+    // Re-declared enums can append more constants after a method block. Java
+    // keeps those later constants in source order after the methods; the normal
+    // class-style field/method split would pull them up before the methods.
     let block_separator_count = entity
         .members
         .iter()
         .filter(|m| m.kind == MemberKind::Separator)
         .count();
-    let multi_separator_body = block_separator_count >= 2 && !any_compartment_hidden;
+    let document_order_body = !any_compartment_hidden
+        && (block_separator_count >= 2
+            || (is_enum_entity && block_separator_count > 0 && has_field_after_method(entity)));
 
     if header_only {
         // Nothing to emit after the header content.
-    } else if multi_separator_body {
+    } else if document_order_body {
         let header_sep_y = oracle_sep_y.first().copied().unwrap_or(header_sep_default);
         // Header (name/body) divider rule.
         write!(
@@ -2900,7 +2906,6 @@ fn render_entity_content(
             svg,
             entity,
             x,
-            is_enum_entity,
             attr_font,
             member_fill,
             explicit_padding.unwrap_or(0.0),
@@ -3599,12 +3604,23 @@ fn render_entity_content(
 /// are replayed from the oracle's captured `<line>`/`<text>`/icon geometry —
 /// consistent with the renderer's established oracle-coordinate staging — so
 /// caption-width and member-metric sub-pixel drift cannot diverge.
+fn has_field_after_method(entity: &ClassEntity) -> bool {
+    let mut seen_method = false;
+    for member in &entity.members {
+        match member.kind {
+            MemberKind::Method => seen_method = true,
+            MemberKind::Field if seen_method => return true,
+            MemberKind::Field | MemberKind::Separator => {}
+        }
+    }
+    false
+}
+
 #[allow(clippy::too_many_arguments)]
 fn render_body_blocks_replay(
     svg: &mut String,
     entity: &ClassEntity,
     x: f64,
-    is_enum_entity: bool,
     attr_font: AttrFont,
     member_fill: &str,
     text_pad: f64,
@@ -3658,7 +3674,7 @@ fn render_body_blocks_replay(
             .members
             .iter()
             .any(|m| visibility_modifier(m).is_some());
-        let narrow_default = is_enum_entity || !block_has_icon;
+        let narrow_default = !block_has_icon;
 
         if let Some(sep) = block.separator {
             let symbol = sep.return_type.as_deref().unwrap_or("--");
@@ -5031,6 +5047,38 @@ mod tests {
             caption_line: None,
             legend_line: None,
         }
+    }
+
+    fn member(name: &str, kind: MemberKind) -> Member {
+        Member {
+            name: name.into(),
+            return_type: None,
+            visibility: Visibility::Default,
+            is_static: false,
+            is_abstract: false,
+            kind,
+            display_text: name.into(),
+        }
+    }
+
+    #[test]
+    fn enum_body_detects_appended_constants_after_methods() {
+        let mut entity = simple_class_diagram().entities.remove(0);
+        entity.kind = EntityKind::Enum;
+        entity.members = vec![
+            member("ACTIVE", MemberKind::Field),
+            member("", MemberKind::Separator),
+            member("String display()", MemberKind::Method),
+            member("PENDING = 3", MemberKind::Field),
+        ];
+        assert!(has_field_after_method(&entity));
+
+        entity.members = vec![
+            member("ACTIVE", MemberKind::Field),
+            member("", MemberKind::Separator),
+            member("String display()", MemberKind::Method),
+        ];
+        assert!(!has_field_after_method(&entity));
     }
 
     #[test]
