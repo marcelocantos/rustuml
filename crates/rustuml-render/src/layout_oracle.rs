@@ -306,6 +306,7 @@ pub struct OracleNoteText {
     pub y: f64,
     pub text: String,
     pub fill: String,
+    pub filter: Option<String>,
     pub font_family: String,
     pub font_size: String,
     pub font_style: Option<String>,
@@ -629,6 +630,9 @@ fn emit_note_text(out: &mut String, text: &OracleNoteText) {
     if let Some(weight) = text.font_weight.as_deref() {
         let _ = write!(out, r#" font-weight="{}""#, escape_xml_attr(weight));
     }
+    if let Some(filter) = text.filter.as_deref() {
+        let _ = write!(out, r#" filter="{}""#, escape_xml_attr(filter));
+    }
     if let Some(length_adjust) = text.length_adjust.as_deref() {
         let _ = write!(out, r#" lengthAdjust="{}""#, escape_xml_attr(length_adjust));
     }
@@ -797,6 +801,9 @@ fn emit_cluster_text(out: &mut String, text: &OracleNoteText) {
     }
     if let Some(weight) = text.font_weight.as_deref() {
         let _ = write!(out, r#" font-weight="{}""#, escape_xml_attr(weight));
+    }
+    if let Some(filter) = text.filter.as_deref() {
+        let _ = write!(out, r#" filter="{}""#, escape_xml_attr(filter));
     }
     if let Some(length_adjust) = text.length_adjust.as_deref() {
         let _ = write!(out, r#" lengthAdjust="{}""#, escape_xml_attr(length_adjust));

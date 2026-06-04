@@ -382,6 +382,7 @@ pub fn extract_oracle_layout(svg: &str) -> Option<OracleLayout> {
                                     y: ty,
                                     text: collect_text(&c),
                                     fill: c.attribute("fill").unwrap_or("#000000").to_string(),
+                                    filter: c.attribute("filter").map(String::from),
                                     font_family: c
                                         .attribute("font-family")
                                         .unwrap_or("sans-serif")
@@ -2168,6 +2169,7 @@ fn capture_note_text(node: &roxmltree::Node<'_, '_>) -> Option<OracleNoteText> {
         y,
         text: collect_text(node),
         fill: node.attribute("fill").unwrap_or("#000000").to_string(),
+        filter: node.attribute("filter").map(String::from),
         font_family: node
             .attribute("font-family")
             .unwrap_or("sans-serif")
@@ -2567,7 +2569,7 @@ mod tests {
             <g><g class="entity" data-qualified-name="GMN1" data-source-line="2" id="ent0002">
                 <path d="M7,7 L7,32 L86,32 L86,17 L76,7 L7,7" fill="#FEFFDD" style="stroke:#181818;stroke-width:0.5;"/>
                 <a href="https://example.com" target="_top" title="tip" xlink:actuate="onRequest" xlink:href="https://example.com" xlink:show="new" xlink:title="tip" xlink:type="simple">
-                    <text fill="#0000FF" font-family="sans-serif" font-size="13" lengthAdjust="spacing" text-decoration="underline" textLength="29.4531" x="13" y="24">docs</text>
+                    <text fill="#0000FF" filter="url(#shadow)" font-family="sans-serif" font-size="13" lengthAdjust="spacing" text-decoration="underline" textLength="29.4531" x="13" y="24">docs</text>
                 </a>
             </g></g>
         </svg>"##;
@@ -2583,6 +2585,7 @@ mod tests {
         assert_eq!(link.title, "tip");
         assert_eq!(link.texts.len(), 1);
         assert_eq!(link.texts[0].text, "docs");
+        assert_eq!(link.texts[0].filter.as_deref(), Some("url(#shadow)"));
         assert_eq!(link.texts[0].text_decoration.as_deref(), Some("underline"));
     }
 
