@@ -14,7 +14,7 @@ use std::fmt::Write;
 use rustuml_layout::graph::{Direction, LayoutGraph};
 use rustuml_parser::diagram::object::*;
 
-use crate::layout_oracle::{OracleLayout, emit_oracle_note_entity};
+use crate::layout_oracle::{OracleLayout, emit_oracle_cluster_children, emit_oracle_note_entity};
 use crate::style::Theme;
 use crate::text_render::{self, TextBase};
 
@@ -433,7 +433,7 @@ fn render_plantuml_svg(
             )
             .unwrap(),
         }
-        svg.push_str(&cluster.inner_xml);
+        emit_oracle_cluster_children(&mut svg, cluster);
         svg.push_str("</g>");
     }
     let mut ent_id = 2;

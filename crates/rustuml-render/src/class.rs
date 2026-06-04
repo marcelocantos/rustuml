@@ -19,7 +19,8 @@ use rustuml_parser::diagram::class::*;
 
 use crate::layout_oracle::{
     CrowMark, EntityPath, EntityPolygon, EntityRect, EntityText, OracleCluster, OracleEdgePath,
-    OracleHandwrittenWarning, OracleLayout, emit_oracle_note_entity, wrap_oracle_envelope,
+    OracleHandwrittenWarning, OracleLayout, emit_oracle_cluster_children, emit_oracle_note_entity,
+    wrap_oracle_envelope,
 };
 use crate::metrics;
 use crate::style::Theme;
@@ -1747,7 +1748,7 @@ fn render_plantuml_svg(
             cluster_id,
         )
         .unwrap();
-        svg.push_str(&cluster.inner_xml);
+        emit_oracle_cluster_children(&mut svg, cluster);
         svg.push_str("</g>");
     }
 

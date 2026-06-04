@@ -9,9 +9,10 @@
 use rustuml_render::layout_oracle::{
     ApointMark, AuxRect, CrowMark, EdgeDecoration, EdgeLabelLink, EntityLine, EntityPath,
     EntityPolygon, EntityRect, EntityText, JsonBox, JsonConnector, NoteBoxGeom, OracleCluster,
-    OracleDecoration, OracleEdgePath, OracleEntity, OracleHandwrittenWarning, OracleLayout,
-    OracleLegend, OracleLegendRect, OracleNoteChild, OracleNoteEllipse, OracleNoteEntity,
-    OracleNoteLine, OracleNotePath, OracleNoteRect, OracleNoteText, RegionDivider,
+    OracleClusterChild, OracleClusterPolygon, OracleDecoration, OracleEdgePath, OracleEntity,
+    OracleHandwrittenWarning, OracleLayout, OracleLegend, OracleLegendRect, OracleNoteChild,
+    OracleNoteEllipse, OracleNoteEntity, OracleNoteLine, OracleNotePath, OracleNoteRect,
+    OracleNoteText, RegionDivider,
 };
 
 /// Parse the coordinate pairs from a note's body path `d` string and recover
@@ -311,43 +312,116 @@ pub fn extract_oracle_layout(svg: &str) -> Option<OracleLayout> {
 
         let class_attr = node.attribute("class").unwrap_or("");
 
-        // Capture cluster groups AND path-shaped "GMN" note entities so
-        // renderers can emit the exact path-based shapes verbatim. Java
-        // emits attached notes as `<g class="entity" id="ent000N">` with
-        // `data-qualified-name="GMN*"` and a path-based shape (no rect).
-        let qname = node.attribute("data-qualified-name").unwrap_or("");
-        let looks_like_note_entity = class_attr == "entity"
-            && qname.starts_with("GMN")
-            && find_first_child(&node, "rect").is_none();
-        if (class_attr == "cluster" || looks_like_note_entity)
+        if class_attr == "cluster"
             && let Some(name) = node.attribute("data-qualified-name")
         {
-            let mut inner_xml = String::new();
+            let mut children = Vec::new();
             for c in node.children() {
                 if c.is_element() {
-                    let tag = c.tag_name().name();
-                    if matches!(
-                        tag,
-                        "path" | "rect" | "ellipse" | "polygon" | "text" | "line"
-                    ) {
-                        let range = c.range();
-                        if range.end <= svg.len() && range.start < range.end {
-                            inner_xml.push_str(&svg[range.start..range.end]);
+                    match c.tag_name().name() {
+                        "path" => {
+                            if let Some(d) = c.attribute("d") {
+                                children.push(OracleClusterChild::Path(OracleNotePath {
+                                    d: d.to_string(),
+                                    fill: c.attribute("fill").map(String::from),
+                                    style: c.attribute("style").map(String::from),
+                                }));
+                            }
                         }
+                        "rect" => {
+                            if let (Some(x), Some(y), Some(width), Some(height)) = (
+                                parse_attr(&c, "x"),
+                                parse_attr(&c, "y"),
+                                parse_attr(&c, "width"),
+                                parse_attr(&c, "height"),
+                            ) {
+                                children.push(OracleClusterChild::Rect(OracleNoteRect {
+                                    x,
+                                    y,
+                                    width,
+                                    height,
+                                    rx: c.attribute("rx").map(String::from),
+                                    ry: c.attribute("ry").map(String::from),
+                                    fill: c.attribute("fill").map(String::from),
+                                    style: c.attribute("style").map(String::from),
+                                }));
+                            }
+                        }
+                        "ellipse" => {
+                            if let (Some(cx), Some(cy), Some(rx), Some(ry)) = (
+                                parse_attr(&c, "cx"),
+                                parse_attr(&c, "cy"),
+                                parse_attr(&c, "rx"),
+                                parse_attr(&c, "ry"),
+                            ) {
+                                children.push(OracleClusterChild::Ellipse(OracleNoteEllipse {
+                                    cx,
+                                    cy,
+                                    rx,
+                                    ry,
+                                    fill: c.attribute("fill").map(String::from),
+                                    style: c.attribute("style").map(String::from),
+                                }));
+                            }
+                        }
+                        "polygon" => {
+                            if let Some(points) = c.attribute("points") {
+                                children.push(OracleClusterChild::Polygon(OracleClusterPolygon {
+                                    points: points.to_string(),
+                                    fill: c.attribute("fill").map(String::from),
+                                    style: c.attribute("style").map(String::from),
+                                }));
+                            }
+                        }
+                        "text" => {
+                            if let (Some(tx), Some(ty)) = (parse_attr(&c, "x"), parse_attr(&c, "y"))
+                            {
+                                children.push(OracleClusterChild::Text(OracleNoteText {
+                                    x: tx,
+                                    y: ty,
+                                    text: collect_text(&c),
+                                    fill: c.attribute("fill").unwrap_or("#000000").to_string(),
+                                    font_family: c
+                                        .attribute("font-family")
+                                        .unwrap_or("sans-serif")
+                                        .to_string(),
+                                    font_size: c.attribute("font-size").unwrap_or("13").to_string(),
+                                    font_style: c.attribute("font-style").map(String::from),
+                                    font_weight: c.attribute("font-weight").map(String::from),
+                                    length_adjust: c.attribute("lengthAdjust").map(String::from),
+                                    text_decoration: c
+                                        .attribute("text-decoration")
+                                        .map(String::from),
+                                    text_length: c.attribute("textLength").map(String::from),
+                                }));
+                            }
+                        }
+                        "line" => {
+                            if let (Some(x1), Some(x2), Some(y1), Some(y2)) = (
+                                parse_attr(&c, "x1"),
+                                parse_attr(&c, "x2"),
+                                parse_attr(&c, "y1"),
+                                parse_attr(&c, "y2"),
+                            ) {
+                                children.push(OracleClusterChild::Line(OracleNoteLine {
+                                    x1,
+                                    x2,
+                                    y1,
+                                    y2,
+                                    style: c.attribute("style").map(String::from),
+                                }));
+                            }
+                        }
+                        _ => {}
                     }
                 }
             }
-            let group_class = if class_attr == "cluster" {
-                "cluster".to_string()
-            } else {
-                "entity".to_string()
-            };
             layout.clusters.push(OracleCluster {
                 qualified_name: name.to_string(),
                 source_line: node.attribute("data-source-line").map(String::from),
                 entity_id: node.attribute("id").map(String::from),
-                inner_xml,
-                group_class,
+                children,
+                group_class: "cluster".to_string(),
                 comment: None,
             });
         }
@@ -405,6 +479,8 @@ pub fn extract_oracle_layout(svg: &str) -> Option<OracleLayout> {
                                         y,
                                         width,
                                         height,
+                                        rx: child.attribute("rx").map(String::from),
+                                        ry: child.attribute("ry").map(String::from),
                                         fill: child.attribute("fill").map(String::from),
                                         style: child.attribute("style").map(String::from),
                                     }));

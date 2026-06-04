@@ -292,6 +292,8 @@ pub struct OracleNoteRect {
     pub y: f64,
     pub width: f64,
     pub height: f64,
+    pub rx: Option<String>,
+    pub ry: Option<String>,
     pub fill: Option<String>,
     pub style: Option<String>,
 }
@@ -519,6 +521,12 @@ fn emit_note_child(out: &mut String, child: &OracleNoteChild) {
                 let _ = write!(out, r#" fill="{}""#, escape_xml_attr(fill));
             }
             let _ = write!(out, r#" height="{}""#, pm::fmt_coord(rect.height),);
+            if let Some(rx) = rect.rx.as_deref() {
+                let _ = write!(out, r#" rx="{}""#, escape_xml_attr(rx));
+            }
+            if let Some(ry) = rect.ry.as_deref() {
+                let _ = write!(out, r#" ry="{}""#, escape_xml_attr(ry));
+            }
             if let Some(style) = rect.style.as_deref() {
                 let _ = write!(out, r#" style="{}""#, escape_xml_attr(style));
             }
@@ -619,13 +627,150 @@ pub struct OracleCluster {
     pub qualified_name: String,
     pub source_line: Option<String>,
     pub entity_id: Option<String>,
-    pub inner_xml: String,
-    /// Wrapping class for the outer `<g>`: `"cluster"` for packages, or
-    /// `"entity"` for attached `GMN*` note entities that share the
-    /// path-based-shape capture path.
+    pub children: Vec<OracleClusterChild>,
+    /// Wrapping class for the outer `<g>`. Reconstructed package-like groups
+    /// use `"cluster"`; note entities are captured separately.
     pub group_class: String,
     /// Optional preceding HTML comment text from the golden SVG.
     pub comment: Option<String>,
+}
+
+#[derive(Debug, Clone)]
+pub enum OracleClusterChild {
+    Path(OracleNotePath),
+    Rect(OracleNoteRect),
+    Text(OracleNoteText),
+    Ellipse(OracleNoteEllipse),
+    Line(OracleNoteLine),
+    Polygon(OracleClusterPolygon),
+}
+
+#[derive(Debug, Clone)]
+pub struct OracleClusterPolygon {
+    pub points: String,
+    pub fill: Option<String>,
+    pub style: Option<String>,
+}
+
+pub fn emit_oracle_cluster_children(out: &mut String, cluster: &OracleCluster) {
+    for child in &cluster.children {
+        match child {
+            OracleClusterChild::Path(path) => {
+                let _ = write!(out, r#"<path d="{}""#, escape_xml_attr(&path.d));
+                if let Some(fill) = path.fill.as_deref() {
+                    let _ = write!(out, r#" fill="{}""#, escape_xml_attr(fill));
+                }
+                if let Some(style) = path.style.as_deref() {
+                    let _ = write!(out, r#" style="{}""#, escape_xml_attr(style));
+                }
+                out.push_str("/>");
+            }
+            OracleClusterChild::Rect(rect) => {
+                let _ = write!(out, "<rect");
+                if let Some(fill) = rect.fill.as_deref() {
+                    let _ = write!(out, r#" fill="{}""#, escape_xml_attr(fill));
+                }
+                let _ = write!(out, r#" height="{}""#, pm::fmt_coord(rect.height),);
+                if let Some(rx) = rect.rx.as_deref() {
+                    let _ = write!(out, r#" rx="{}""#, escape_xml_attr(rx));
+                }
+                if let Some(ry) = rect.ry.as_deref() {
+                    let _ = write!(out, r#" ry="{}""#, escape_xml_attr(ry));
+                }
+                if let Some(style) = rect.style.as_deref() {
+                    let _ = write!(out, r#" style="{}""#, escape_xml_attr(style));
+                }
+                let _ = write!(
+                    out,
+                    r#" width="{}" x="{}" y="{}"/>"#,
+                    pm::fmt_coord(rect.width),
+                    pm::fmt_coord(rect.x),
+                    pm::fmt_coord(rect.y),
+                );
+            }
+            OracleClusterChild::Text(text) => {
+                emit_cluster_text(out, text);
+            }
+            OracleClusterChild::Ellipse(ellipse) => {
+                let _ = write!(
+                    out,
+                    r#"<ellipse cx="{}" cy="{}""#,
+                    pm::fmt_coord(ellipse.cx),
+                    pm::fmt_coord(ellipse.cy),
+                );
+                if let Some(fill) = ellipse.fill.as_deref() {
+                    let _ = write!(out, r#" fill="{}""#, escape_xml_attr(fill));
+                }
+                let _ = write!(
+                    out,
+                    r#" rx="{}" ry="{}""#,
+                    pm::fmt_coord(ellipse.rx),
+                    pm::fmt_coord(ellipse.ry),
+                );
+                if let Some(style) = ellipse.style.as_deref() {
+                    let _ = write!(out, r#" style="{}""#, escape_xml_attr(style));
+                }
+                out.push_str("/>");
+            }
+            OracleClusterChild::Line(line) => {
+                let _ = write!(out, "<line");
+                if let Some(style) = line.style.as_deref() {
+                    let _ = write!(out, r#" style="{}""#, escape_xml_attr(style));
+                }
+                let _ = write!(
+                    out,
+                    r#" x1="{}" x2="{}" y1="{}" y2="{}"/>"#,
+                    pm::fmt_coord(line.x1),
+                    pm::fmt_coord(line.x2),
+                    pm::fmt_coord(line.y1),
+                    pm::fmt_coord(line.y2),
+                );
+            }
+            OracleClusterChild::Polygon(polygon) => {
+                let _ = write!(out, "<polygon");
+                if let Some(fill) = polygon.fill.as_deref() {
+                    let _ = write!(out, r#" fill="{}""#, escape_xml_attr(fill));
+                }
+                let _ = write!(out, r#" points="{}""#, escape_xml_attr(&polygon.points));
+                if let Some(style) = polygon.style.as_deref() {
+                    let _ = write!(out, r#" style="{}""#, escape_xml_attr(style));
+                }
+                out.push_str("/>");
+            }
+        }
+    }
+}
+
+fn emit_cluster_text(out: &mut String, text: &OracleNoteText) {
+    let _ = write!(
+        out,
+        r#"<text fill="{}" font-family="{}" font-size="{}""#,
+        escape_xml_attr(&text.fill),
+        escape_xml_attr(&text.font_family),
+        escape_xml_attr(&text.font_size),
+    );
+    if let Some(style) = text.font_style.as_deref() {
+        let _ = write!(out, r#" font-style="{}""#, escape_xml_attr(style));
+    }
+    if let Some(weight) = text.font_weight.as_deref() {
+        let _ = write!(out, r#" font-weight="{}""#, escape_xml_attr(weight));
+    }
+    if let Some(length_adjust) = text.length_adjust.as_deref() {
+        let _ = write!(out, r#" lengthAdjust="{}""#, escape_xml_attr(length_adjust));
+    }
+    if let Some(decoration) = text.text_decoration.as_deref() {
+        let _ = write!(out, r#" text-decoration="{}""#, escape_xml_attr(decoration));
+    }
+    if let Some(text_length) = text.text_length.as_deref() {
+        let _ = write!(out, r#" textLength="{}""#, escape_xml_attr(text_length));
+    }
+    let _ = write!(
+        out,
+        r#" x="{}" y="{}">{}</text>"#,
+        pm::fmt_coord(text.x),
+        pm::fmt_coord(text.y),
+        escape_xml_text(&text.text),
+    );
 }
 
 /// Position and size of an entity extracted from a golden SVG.
@@ -908,16 +1053,16 @@ pub enum CrowMark {
 #[cfg(test)]
 mod tests {
     #[test]
-    fn class_object_component_do_not_replay_note_inner_xml() {
+    fn class_object_component_do_not_replay_note_or_cluster_inner_xml() {
         for (name, src) in [
             ("class.rs", include_str!("class.rs")),
             ("object.rs", include_str!("object.rs")),
             ("component.rs", include_str!("component.rs")),
         ] {
-            for needle in ["note.inner_xml", "ne.inner_xml"] {
+            for needle in ["note.inner_xml", "ne.inner_xml", "cluster.inner_xml"] {
                 assert!(
                     !src.contains(needle),
-                    "{name} must reconstruct oracle notes from structured geometry, not replay {needle}"
+                    "{name} must reconstruct oracle notes/clusters from structured geometry, not replay {needle}"
                 );
             }
         }

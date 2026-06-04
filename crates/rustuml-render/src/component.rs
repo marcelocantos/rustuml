@@ -12,7 +12,8 @@ use rustuml_layout::graph::{Direction, EdgePath, LayoutGraph};
 use rustuml_parser::diagram::component::*;
 
 use crate::layout_oracle::{
-    CrowMark, EntityRect, OracleLayout, emit_oracle_note_entity, wrap_oracle_envelope,
+    CrowMark, EntityRect, OracleLayout, emit_oracle_cluster_children, emit_oracle_note_entity,
+    wrap_oracle_envelope,
 };
 use crate::plantuml_metrics as pm;
 use crate::style::Theme;
@@ -2412,9 +2413,12 @@ fn render_packages_from_oracle(
                     .map(|s| format!(r#" id="{s}""#))
                     .unwrap_or_default();
                 svg.raw(&format!(
-                    r#"<g class="cluster" data-qualified-name="{qname}"{source_attr}{id_attr}>{}</g>"#,
-                    cluster.inner_xml,
+                    r#"<g class="cluster" data-qualified-name="{qname}"{source_attr}{id_attr}>"#,
                 ));
+                let mut children = String::new();
+                emit_oracle_cluster_children(&mut children, cluster);
+                svg.raw(&children);
+                svg.raw("</g>");
             }
             walk(&pkg.packages, &qname, svg, oracle);
         }

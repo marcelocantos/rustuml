@@ -28,8 +28,8 @@
 //! few ULPs, which PlantUML's 4-dp rounding absorbs.
 
 use crate::layout_oracle::{
-    ApointMark, CrowMark, EdgeDecoration, EntityRect, JsonBox, OracleEdgePath, OracleLayout,
-    OracleNoteChild,
+    ApointMark, CrowMark, EdgeDecoration, EntityRect, JsonBox, OracleClusterChild, OracleEdgePath,
+    OracleLayout, OracleNoteChild,
 };
 use crate::plantuml_metrics::{fmt_coord, with_full_precision};
 use rustuml_parser::diagram::DiagramMeta;
@@ -407,7 +407,7 @@ fn scale_numbers_in(s: &str, k: f64, is_sep: impl Fn(char) -> bool) -> String {
 ///
 /// Used with `k = 1/factor` to un-scale a golden-derived oracle back to base
 /// coordinates before rendering. Numeric fields are multiplied directly;
-/// verbatim XML fragments (cluster/note inner XML, captured `<defs>`, etc.) are
+/// verbatim XML fragments (captured `<defs>`, root passthrough, etc.) are
 /// re-scaled with [`scale_svg_numbers`] so embedded coordinates track.
 pub fn scale_oracle_layout(o: &mut OracleLayout, k: f64) {
     if k == 1.0 {
@@ -427,7 +427,9 @@ fn scale_oracle_layout_inner(o: &mut OracleLayout, k: f64) {
         scale_edge(edge, k);
     }
     for c in &mut o.clusters {
-        c.inner_xml = scale_svg_numbers(&c.inner_xml, k);
+        for child in &mut c.children {
+            scale_cluster_child(child, k);
+        }
     }
     for n in &mut o.note_entities {
         if let Some(g) = n.box_geom.as_mut() {
@@ -522,6 +524,12 @@ fn scale_note_child(child: &mut OracleNoteChild, k: f64) {
             rect.y *= k;
             rect.width *= k;
             rect.height *= k;
+            if let Some(rx) = rect.rx.as_mut() {
+                *rx = scale_number_token(rx, k);
+            }
+            if let Some(ry) = rect.ry.as_mut() {
+                *ry = scale_number_token(ry, k);
+            }
             if let Some(style) = rect.style.as_mut() {
                 *style = scale_style(style, k);
             }
@@ -549,6 +557,64 @@ fn scale_note_child(child: &mut OracleNoteChild, k: f64) {
             line.y1 *= k;
             line.y2 *= k;
             if let Some(style) = line.style.as_mut() {
+                *style = scale_style(style, k);
+            }
+        }
+    }
+}
+
+fn scale_cluster_child(child: &mut OracleClusterChild, k: f64) {
+    match child {
+        OracleClusterChild::Path(path) => {
+            path.d = scale_path_d(&path.d, k);
+            if let Some(style) = path.style.as_mut() {
+                *style = scale_style(style, k);
+            }
+        }
+        OracleClusterChild::Rect(rect) => {
+            rect.x *= k;
+            rect.y *= k;
+            rect.width *= k;
+            rect.height *= k;
+            if let Some(rx) = rect.rx.as_mut() {
+                *rx = scale_number_token(rx, k);
+            }
+            if let Some(ry) = rect.ry.as_mut() {
+                *ry = scale_number_token(ry, k);
+            }
+            if let Some(style) = rect.style.as_mut() {
+                *style = scale_style(style, k);
+            }
+        }
+        OracleClusterChild::Text(text) => {
+            text.x *= k;
+            text.y *= k;
+            text.font_size = scale_number_token(&text.font_size, k);
+            if let Some(text_length) = text.text_length.as_mut() {
+                *text_length = scale_number_token(text_length, k);
+            }
+        }
+        OracleClusterChild::Ellipse(ellipse) => {
+            ellipse.cx *= k;
+            ellipse.cy *= k;
+            ellipse.rx *= k;
+            ellipse.ry *= k;
+            if let Some(style) = ellipse.style.as_mut() {
+                *style = scale_style(style, k);
+            }
+        }
+        OracleClusterChild::Line(line) => {
+            line.x1 *= k;
+            line.x2 *= k;
+            line.y1 *= k;
+            line.y2 *= k;
+            if let Some(style) = line.style.as_mut() {
+                *style = scale_style(style, k);
+            }
+        }
+        OracleClusterChild::Polygon(polygon) => {
+            polygon.points = scale_number_list(&polygon.points, k);
+            if let Some(style) = polygon.style.as_mut() {
                 *style = scale_style(style, k);
             }
         }
