@@ -16,6 +16,10 @@ pub struct OracleLayout {
     /// Entity positions keyed by qualified name (from `data-qualified-name`).
     /// Values are (x, y, width, height) of the entity's outer `<rect>`.
     pub entities: HashMap<String, EntityRect>,
+    /// Entity positions in SVG document order, preserving duplicate
+    /// `data-qualified-name` values. PlantUML folds non-ASCII qualified names
+    /// (`α`/`β` both become `.`), so a map alone loses distinct entities.
+    pub entity_list: Vec<OracleEntity>,
     /// Edge paths keyed by "from-to-target" format (from link `<path>` id).
     pub edges: Vec<OracleEdgePath>,
     /// Canvas dimensions from the root `<svg>` element.
@@ -131,6 +135,13 @@ pub struct ApointMark {
 pub struct RegionDivider {
     pub y: f64,
     pub xml: String,
+}
+
+/// One oracle entity in document order.
+#[derive(Debug, Clone)]
+pub struct OracleEntity {
+    pub qualified_name: String,
+    pub rect: EntityRect,
 }
 
 /// A captured legend group.

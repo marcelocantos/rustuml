@@ -85,6 +85,45 @@ fn resolve_iface_entity<'a>(
         .map(|(k, r)| (k.as_str(), r))
 }
 
+fn resolve_component_entity<'a>(
+    oracle: &'a OracleLayout,
+    qualified_names: &std::collections::HashMap<String, String>,
+    comp: &Component,
+) -> Option<&'a EntityRect> {
+    let folded_id = fold_non_ascii(&comp.id, '.');
+    let folded_label = fold_non_ascii(&comp.label, '.');
+    let matches_name = |name: &str| {
+        qualified_names.get(&comp.id).is_some_and(|q| q == name)
+            || name == comp.id
+            || name == comp.label
+            || name == folded_id
+            || name == folded_label
+    };
+    let source_line = (comp.source_line > 0).then(|| comp.source_line.to_string());
+
+    if let Some(line) = source_line.as_deref()
+        && let Some(entry) = oracle.entity_list.iter().find(|entry| {
+            matches_name(&entry.qualified_name) && entry.rect.source_line.as_deref() == Some(line)
+        })
+    {
+        return Some(&entry.rect);
+    }
+
+    if let Some(entry) = oracle
+        .entity_list
+        .iter()
+        .find(|entry| matches_name(&entry.qualified_name))
+    {
+        return Some(&entry.rect);
+    }
+
+    qualified_names
+        .get(&comp.id)
+        .and_then(|q| oracle.entities.get(q))
+        .or_else(|| oracle.entities.get(&comp.id))
+        .or_else(|| oracle.entities.get(&comp.label))
+}
+
 /// Y-baseline offset from rect top to the bottom-most text line (label),
 /// derived from PlantUML output: rect h=46.4883, baseline y=33.5352 from top.
 const LABEL_BASELINE_FROM_BOTTOM: f64 = 12.9531;
@@ -470,13 +509,7 @@ pub fn render_with_oracle(
 
     // Helper: look up oracle entity rect for a component (by qualified name or bare id).
     let oracle_comp_rect = |comp: &Component| -> Option<&EntityRect> {
-        oracle.and_then(|o| {
-            qualified_names
-                .get(&comp.id)
-                .and_then(|q| o.entities.get(q))
-                .or_else(|| o.entities.get(&comp.id))
-                .or_else(|| o.entities.get(&comp.label))
-        })
+        oracle.and_then(|o| resolve_component_entity(o, &qualified_names, comp))
     };
 
     // Render each component entity.
@@ -1732,11 +1765,7 @@ fn compute_positions_from_oracle(
     let qualified_names = build_qualified_names(&diagram.packages);
 
     for (i, comp) in diagram.components.iter().enumerate() {
-        let rect = qualified_names
-            .get(&comp.id)
-            .and_then(|q| oracle.entities.get(q))
-            .or_else(|| oracle.entities.get(&comp.id))
-            .or_else(|| oracle.entities.get(&comp.label));
+        let rect = resolve_component_entity(oracle, &qualified_names, comp);
         if let Some(rect) = rect {
             positions.push((rect.x, rect.y));
         } else {

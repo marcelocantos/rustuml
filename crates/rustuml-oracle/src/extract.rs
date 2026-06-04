@@ -8,8 +8,8 @@
 
 use rustuml_render::layout_oracle::{
     ApointMark, AuxRect, CrowMark, EdgeDecoration, EdgeLabelLink, EntityLine, EntityRect,
-    EntityText, JsonBox, JsonConnector, NoteBoxGeom, OracleCluster, OracleEdgePath, OracleLayout,
-    OracleLegend, OracleLegendRect, OracleNoteEntity, RegionDivider,
+    EntityText, JsonBox, JsonConnector, NoteBoxGeom, OracleCluster, OracleEdgePath, OracleEntity,
+    OracleLayout, OracleLegend, OracleLegendRect, OracleNoteEntity, RegionDivider,
 };
 
 /// Parse the coordinate pairs from a note's body path `d` string and recover
@@ -623,34 +623,36 @@ pub fn extract_oracle_layout(svg: &str) -> Option<OracleLayout> {
                             })
                         })
                         .collect();
-                    layout.entities.insert(
-                        name.to_string(),
-                        EntityRect {
-                            x,
-                            y,
-                            width,
-                            height,
-                            icon_cx,
-                            glyph_path_d,
-                            name_text_x,
-                            text_y_values,
-                            text_x_values,
-                            sep_y_values,
-                            sep_lines,
-                            vis_icon_y_values,
-                            fill,
-                            body_style,
-                            rect_style,
-                            rect_rx,
-                            rect_ry,
-                            rect_filter,
-                            entity_id,
-                            source_line,
-                            aux_rects,
-                            lines,
-                            texts,
-                        },
-                    );
+                    let rect = EntityRect {
+                        x,
+                        y,
+                        width,
+                        height,
+                        icon_cx,
+                        glyph_path_d,
+                        name_text_x,
+                        text_y_values,
+                        text_x_values,
+                        sep_y_values,
+                        sep_lines,
+                        vis_icon_y_values,
+                        fill,
+                        body_style,
+                        rect_style,
+                        rect_rx,
+                        rect_ry,
+                        rect_filter,
+                        entity_id,
+                        source_line,
+                        aux_rects,
+                        lines,
+                        texts,
+                    };
+                    layout.entity_list.push(OracleEntity {
+                        qualified_name: name.to_string(),
+                        rect: rect.clone(),
+                    });
+                    layout.entities.insert(name.to_string(), rect);
                 } else if let Some(ellipse) = find_first_child(&node, "ellipse") {
                     // Start/end pseudo-states and other circular entities use <ellipse>.
                     let cx = parse_attr(&ellipse, "cx")?;
