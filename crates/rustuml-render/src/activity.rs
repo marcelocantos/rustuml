@@ -114,6 +114,7 @@ struct Palette {
     /// rises with `skinparam activityBorderThickness` — PlantUML cascades
     /// the border thickness onto the connector strokes too.
     arrow_thickness: String,
+    arrow_font_size: f64,
     text_color: String,
     text_italic: bool,
     start_fill: String,
@@ -142,6 +143,7 @@ impl Palette {
             diamond_stroke_width: ACTION_STROKE_WIDTH.into(),
             arrow_color: ARROW_COLOR.into(),
             arrow_thickness: "1".into(),
+            arrow_font_size: SMALL_FONT,
             text_color: TEXT_COLOR.into(),
             text_italic: false,
             start_fill: START_FILL.into(),
@@ -199,6 +201,11 @@ impl Palette {
                 "activityarrowthickness" | "arrowthickness" => {
                     if let Ok(v) = val.parse::<f64>() {
                         p.arrow_thickness = pm::fmt_coord(v);
+                    }
+                }
+                "activityarrowfontsize" | "arrowfontsize" => {
+                    if let Ok(v) = val.parse::<f64>() {
+                        p.arrow_font_size = v;
                     }
                 }
                 // `activityStartColor` sets the start ellipse fill (border
@@ -3265,11 +3272,12 @@ fn emit_sequence_ex(
         if let Some((arrow_top, style, label, arrow_gap)) = pending_arrow {
             svg.down_arrow_full(cx, arrow_top, arrow_top + arrow_gap, &style);
             if let Some(l) = label {
-                let lw = text_render::measure(&l, SMALL_FONT, false);
+                let label_font_size = svg.palette.arrow_font_size;
+                let lw = text_render::measure(&l, label_font_size, false);
                 svg.connector_text(
                     TEXT_COLOR,
                     "sans-serif",
-                    SMALL_FONT,
+                    label_font_size,
                     lw,
                     cx + 4.0,
                     arrow_top + 21.455078125,
@@ -3634,16 +3642,17 @@ fn emit_if(
 
     // Then label (to the left of diamond). PlantUML places the label
     // flush against the diamond's left vertex (no horizontal gap), with
-    // the baseline at `diamond_cy - descent(11)` (= 64.68 for cy=67).
+    // the baseline at `diamond_cy - descent(label font)`.
     if let Some(label) = then_label {
-        let lw = text_render::measure(label, SMALL_FONT, false);
+        let label_font_size = svg.palette.arrow_font_size;
+        let lw = text_render::measure(label, label_font_size, false);
         svg.text_element(
             TEXT_COLOR,
             "sans-serif",
-            SMALL_FONT,
+            label_font_size,
             lw,
             diamond_left - lw,
-            diamond_cy - pm::descent(SMALL_FONT),
+            diamond_cy - pm::descent(label_font_size),
             label,
             false,
         );
@@ -3670,14 +3679,15 @@ fn emit_if(
     // Else label: text shape, must land in shapes buffer before branch
     // shapes (matches golden order: yes label, no label, then branch boxes).
     if let Some(label) = else_branches.first().and_then(|b| b.label.as_ref()) {
-        let lw = text_render::measure(label, SMALL_FONT, false);
+        let label_font_size = svg.palette.arrow_font_size;
+        let lw = text_render::measure(label, label_font_size, false);
         svg.text_element(
             TEXT_COLOR,
             "sans-serif",
-            SMALL_FONT,
+            label_font_size,
             lw,
             diamond_right,
-            diamond_cy - pm::descent(SMALL_FONT),
+            diamond_cy - pm::descent(label_font_size),
             label,
             false,
         );
@@ -3871,17 +3881,17 @@ fn emit_if_long(
 
         // North label (the then/elseif positive label). PlantUML draws it at
         // `4 + dimTotal.width/2` from the diamond's left edge (left-aligned),
-        // i.e. its left edge is `dcx + 4`. Baseline at diamond_bottom +
-        // ascent(11).
+        // i.e. its left edge is `dcx + 4`.
         if let Some(north) = &col.north {
-            let nw = text_render::measure(north, SMALL_FONT, false);
+            let label_font_size = svg.palette.arrow_font_size;
+            let nw = text_render::measure(north, label_font_size, false);
             svg.text_element(
                 TEXT_COLOR,
                 "sans-serif",
-                SMALL_FONT,
+                label_font_size,
                 nw,
                 dcx + 4.0,
-                diamond_bottom + pm::ascent(SMALL_FONT),
+                diamond_bottom + pm::ascent(label_font_size),
                 north,
                 false,
             );
@@ -3906,14 +3916,15 @@ fn emit_if_long(
         if i == n - 1
             && let Some(east) = &l.east_label
         {
-            let ew = text_render::measure(east, SMALL_FONT, false);
+            let label_font_size = svg.palette.arrow_font_size;
+            let ew = text_render::measure(east, label_font_size, false);
             svg.text_element(
                 TEXT_COLOR,
                 "sans-serif",
-                SMALL_FONT,
+                label_font_size,
                 ew,
                 dcx + col.diamond_w / 2.0,
-                diamond_cy - pm::descent(SMALL_FONT),
+                diamond_cy - pm::descent(label_font_size),
                 east,
                 false,
             );
@@ -4143,14 +4154,15 @@ fn emit_if_down(
         (else_label, then_label)
     };
     if let Some(label) = south_label {
-        let lw = text_render::measure(label, SMALL_FONT, false);
+        let label_font_size = svg.palette.arrow_font_size;
+        let lw = text_render::measure(label, label_font_size, false);
         svg.text_element(
             TEXT_COLOR,
             "sans-serif",
-            SMALL_FONT,
+            label_font_size,
             lw,
             cx + 4.0,
-            diamond_bottom + pm::ascent(SMALL_FONT),
+            diamond_bottom + pm::ascent(label_font_size),
             label,
             false,
         );
@@ -4169,14 +4181,15 @@ fn emit_if_down(
         svg.palette.text_italic,
     );
     if let Some(label) = east_label {
-        let lw = text_render::measure(label, SMALL_FONT, false);
+        let label_font_size = svg.palette.arrow_font_size;
+        let lw = text_render::measure(label, label_font_size, false);
         svg.text_element(
             TEXT_COLOR,
             "sans-serif",
-            SMALL_FONT,
+            label_font_size,
             lw,
             diamond_right,
-            diamond_cy - pm::descent(SMALL_FONT),
+            diamond_cy - pm::descent(label_font_size),
             label,
             false,
         );
@@ -4494,11 +4507,12 @@ fn switch_case_label(svg: &mut SvgEmitter, label: &str, x: f64, baseline_y: f64)
     if label.is_empty() {
         return;
     }
-    let lw = text_render::measure(label, SMALL_FONT, false);
+    let label_font_size = svg.palette.arrow_font_size;
+    let lw = text_render::measure(label, label_font_size, false);
     svg.connector_text(
         TEXT_COLOR,
         "sans-serif",
-        SMALL_FONT,
+        label_font_size,
         lw,
         x,
         baseline_y,
@@ -4772,14 +4786,15 @@ fn emit_while(
     // "is (yes)" label below diamond on the body-down path. PlantUML emits
     // this BEFORE the inside-diamond condition text.
     if let Some(label) = is_label {
-        let lw = text_render::measure(label, SMALL_FONT, false);
+        let label_font_size = svg.palette.arrow_font_size;
+        let lw = text_render::measure(label, label_font_size, false);
         svg.text_element(
             &text_color,
             "sans-serif",
-            SMALL_FONT,
+            label_font_size,
             lw,
             cx + 4.0,
-            diamond_bottom + pm::ascent(SMALL_FONT),
+            diamond_bottom + pm::ascent(label_font_size),
             label,
             false,
         );
@@ -4798,17 +4813,17 @@ fn emit_while(
         svg.palette.text_italic,
     );
 
-    // "endwhile (no)" label just outside diamond's left vertex, with its
-    // baseline at diamond_cy - descent(11).
+    // "endwhile (no)" label just outside diamond's left vertex.
     if let Some(label) = end_label {
-        let lw = text_render::measure(label, SMALL_FONT, false);
+        let label_font_size = svg.palette.arrow_font_size;
+        let lw = text_render::measure(label, label_font_size, false);
         svg.text_element(
             &text_color,
             "sans-serif",
-            SMALL_FONT,
+            label_font_size,
             lw,
             diamond_left_vertex_x - lw,
-            diamond_cy - pm::descent(SMALL_FONT),
+            diamond_cy - pm::descent(label_font_size),
             label,
             false,
         );
@@ -5020,14 +5035,15 @@ fn emit_repeat(
     // so the text aligns vertically slightly above the diamond's mid-line.
     let diamond_right = cx + cond_inner_w / 2.0 + DIAMOND_HALF;
     if let Some(label) = is_label {
-        let lw = text_render::measure(label, SMALL_FONT, false);
+        let label_font_size = svg.palette.arrow_font_size;
+        let lw = text_render::measure(label, label_font_size, false);
         svg.text_element(
             &text_color,
             "sans-serif",
-            SMALL_FONT,
+            label_font_size,
             lw,
             diamond_right,
-            cond_diamond_cy - pm::descent(SMALL_FONT),
+            cond_diamond_cy - pm::descent(label_font_size),
             label,
             false,
         );
