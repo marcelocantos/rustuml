@@ -52,6 +52,9 @@ const IF_BRANCH_DOWN: f64 = 10.0;
 const IF_BRANCH_UP: f64 = 6.0;
 const FORK_BAR_HEIGHT: f64 = 6.0;
 const FORK_BAR_RX: f64 = 2.5;
+/// PlantUML's drop-shadow filter extends painted node bounds by 6 px on the
+/// trailing axes in activity diagrams with `skinparam shadowing true`.
+const SHADOW_BOUNDS_PAD: f64 = 6.0;
 
 // Switch-specific layout constants (reverse-engineered from golden SVGs).
 const SWITCH_CASE_GAP: f64 = 10.0; // horizontal gap between adjacent SMALL-mode case boxes
@@ -134,6 +137,14 @@ fn parse_gradient_id(defs: &str) -> Option<String> {
     Some(rest[start..start + end].to_string())
 }
 
+fn parse_filter_id(defs: &str) -> Option<String> {
+    let filter = defs.find("<filter")?;
+    let rest = &defs[filter..];
+    let start = rest.find("id=\"")? + 4;
+    let end = rest[start..].find('"')?;
+    Some(rest[start..start + end].to_string())
+}
+
 fn gradient_fill_or(val: &str, gradient_id: &Option<String>) -> String {
     if val.eq_ignore_ascii_case("transparent") {
         "none".to_string()
@@ -196,6 +207,7 @@ struct Palette {
     stop_fill: String,
     stop_stroke: String,
     bar_color: String,
+    shadow_filter: Option<String>,
     /// Corner radius for action boxes. PlantUML's default action box has a
     /// 12.5 px radius (corresponding to a `roundCorner` of 25). The
     /// `roundCorner` / `activityRoundCorner` skinparams set it to half their
@@ -233,6 +245,7 @@ impl Palette {
             stop_fill: STOP_FILL.into(),
             stop_stroke: STOP_FILL.into(),
             bar_color: FORK_BAR_COLOR.into(),
+            shadow_filter: None,
             action_rx: ACTION_RX,
         }
     }
@@ -248,6 +261,7 @@ impl Palette {
     fn from_skinparams(
         skinparams: &[rustuml_parser::diagram::SkinParam],
         gradient_id: &Option<String>,
+        filter_id: &Option<String>,
     ) -> Self {
         let mut p = Self::default_puml();
         for sp in skinparams {
@@ -369,6 +383,13 @@ impl Palette {
                     // skinparam doesn't fall into the unknown bucket.
                 }
                 "activitybarcolor" => p.bar_color = resolved,
+                "shadowing" | "activityshadowing" => {
+                    if val.eq_ignore_ascii_case("true") {
+                        p.shadow_filter = filter_id.clone();
+                    } else if val.eq_ignore_ascii_case("false") {
+                        p.shadow_filter = None;
+                    }
+                }
                 "activityfontcolor" => {
                     p.text_color = resolved.clone();
                     p.diamond_text_color = resolved;
@@ -2848,6 +2869,14 @@ impl SvgEmitter {
         out
     }
 
+    fn shadow_filter_attr(&self, enabled: bool) -> String {
+        if enabled && let Some(id) = &self.palette.shadow_filter {
+            format!(r#" filter="url(#{id})""#)
+        } else {
+            String::new()
+        }
+    }
+
     fn ellipse(
         &mut self,
         cx: f64,
@@ -2858,10 +2887,11 @@ impl SvgEmitter {
         stroke: &str,
         stroke_width: &str,
     ) {
+        let filter = self.shadow_filter_attr(!(rx == STOP_INNER_R && ry == STOP_INNER_R));
         write!(
             self.shapes,
-            r#"<ellipse cx="{}" cy="{}" fill="{}" rx="{}" ry="{}" style="stroke:{};stroke-width:{};"/>"#,
-            f(cx), f(cy), fill, f(rx), f(ry), stroke, stroke_width
+            r#"<ellipse cx="{}" cy="{}" fill="{}"{} rx="{}" ry="{}" style="stroke:{};stroke-width:{};"/>"#,
+            f(cx), f(cy), fill, filter, f(rx), f(ry), stroke, stroke_width
         )
         .unwrap();
     }
@@ -2878,10 +2908,11 @@ impl SvgEmitter {
         x: f64,
         y: f64,
     ) {
+        let filter = self.shadow_filter_attr(true);
         write!(
             self.shapes,
-            r#"<rect fill="{}" height="{}" rx="{}" ry="{}" style="stroke:{};stroke-width:{};" width="{}" x="{}" y="{}"/>"#,
-            fill, f(height), f(rx), f(ry), stroke, stroke_width, f(width), f(x), f(y)
+            r#"<rect fill="{}"{} height="{}" rx="{}" ry="{}" style="stroke:{};stroke-width:{};" width="{}" x="{}" y="{}"/>"#,
+            fill, filter, f(height), f(rx), f(ry), stroke, stroke_width, f(width), f(x), f(y)
         )
         .unwrap();
     }
@@ -3138,10 +3169,11 @@ impl SvgEmitter {
             closed.push(*first);
         }
         let pts = polygon_points(&closed);
+        let filter = self.shadow_filter_attr(true);
         write!(
             self.shapes,
-            r#"<polygon fill="{}" points="{}" style="stroke:{};stroke-width:{};"/>"#,
-            fill, pts, stroke, stroke_width
+            r#"<polygon fill="{}"{} points="{}" style="stroke:{};stroke-width:{};"/>"#,
+            fill, filter, pts, stroke, stroke_width
         )
         .unwrap();
     }
@@ -5829,7 +5861,8 @@ pub fn render_with_oracle(
     }
     let defs = oracle.map(|o| o.defs_inner_xml.as_str()).unwrap_or("");
     let gradient_id = parse_gradient_id(defs);
-    render_inner(diagram, theme, defs, gradient_id)
+    let filter_id = parse_filter_id(defs);
+    render_inner(diagram, theme, defs, gradient_id, filter_id)
 }
 
 /// Render an activity diagram to SVG.
@@ -5850,7 +5883,7 @@ fn render_ftile(tree: &[LayoutNode], _diagram: &ActivityDiagram) -> Option<Strin
 }
 
 pub fn render(diagram: &ActivityDiagram, theme: &Theme) -> String {
-    render_inner(diagram, theme, "", None)
+    render_inner(diagram, theme, "", None, None)
 }
 
 fn render_inner(
@@ -5858,6 +5891,7 @@ fn render_inner(
     _theme: &Theme,
     defs: &str,
     gradient_id: Option<String>,
+    filter_id: Option<String>,
 ) -> String {
     if diagram.steps.is_empty() {
         return empty_svg();
@@ -5868,7 +5902,8 @@ fn render_inner(
     // change individual element colors without affecting the broader
     // theme; resolving them here keeps activity.rs decoupled from the
     // theme machinery in `style.rs`.
-    let palette = Palette::from_skinparams(&diagram.meta.skinparams, &gradient_id);
+    let palette = Palette::from_skinparams(&diagram.meta.skinparams, &gradient_id, &filter_id);
+    let has_shadow = palette.shadow_filter.is_some();
 
     // Build layout tree from flat steps.
     let mut tree = build_tree(&diagram.steps, &palette);
@@ -5999,11 +6034,13 @@ fn render_inner(
         0.0
     };
 
-    let svg_w = action_total_w
+    let svg_w = (action_total_w
         .ceil()
         .max(min_action_w)
         .max(warning_total_w.ceil())
-        .max(label_total_w.ceil()) as u32;
+        .max(label_total_w.ceil())
+        + if has_shadow { SHADOW_BOUNDS_PAD } else { 0.0 })
+    .ceil() as u32;
 
     // content_h was computed by sequence_height assuming Start contributes
     // 19 px (cy=25 - MARGIN_LEAD=16 + START_R=10). When start_y > START_CY
@@ -6028,7 +6065,16 @@ fn render_inner(
     } else {
         0.0
     };
-    let svg_h = (start_y + content_h - start_h_delta + MARGIN_TRAIL).ceil() as u32;
+    let has_top_level_while = tree
+        .iter()
+        .any(|node| matches!(node, LayoutNode::While { .. }));
+    let shadow_height_pad = if has_shadow && !has_top_level_while {
+        SHADOW_BOUNDS_PAD
+    } else {
+        0.0
+    };
+    let svg_h =
+        (start_y + content_h - start_h_delta + MARGIN_TRAIL + shadow_height_pad).ceil() as u32;
     // cx aligns the diagram's vertical centreline to MARGIN_LEAD + content_left
     // (the asymmetric left extent). For symmetric layouts this equals
     // MARGIN_LEAD + content_w/2; for if/else with unequal branches it shifts
