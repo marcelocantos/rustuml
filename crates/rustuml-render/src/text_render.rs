@@ -132,13 +132,13 @@ pub fn label_height(content: &str, font_size: f64) -> f64 {
 pub fn label_height_with_family(content: &str, font_size: f64, font_family: &str) -> f64 {
     let segments = creole::parse_segments(content);
     if segments.is_empty() {
-        return family_text_height(font_size, is_monospace_family(font_family));
+        return family_text_height(font_size, metric_family(font_family));
     }
     let base_height = segments
         .iter()
         .map(|seg| {
             let size = seg.style.size.map(|s| s as f64).unwrap_or(font_size);
-            family_text_height(size, segment_uses_monospace_family(seg, font_family))
+            family_text_height(size, segment_metric_family_for_family(seg, font_family))
         })
         .fold(0.0f64, f64::max);
     base_height + line_extra_space(&segments)
@@ -160,16 +160,24 @@ pub fn label_ascent(content: &str, font_size: f64) -> f64 {
 pub fn label_ascent_with_family(content: &str, font_size: f64, font_family: &str) -> f64 {
     let segments = creole::parse_segments(content);
     if segments.is_empty() {
-        return family_ascent(font_size, is_monospace_family(font_family));
+        return family_ascent(font_size, metric_family(font_family));
     }
     let base_ascent = segments
         .iter()
         .map(|seg| {
             let size = seg.style.size.map(|s| s as f64).unwrap_or(font_size);
-            family_ascent(size, segment_uses_monospace_family(seg, font_family))
+            family_ascent(size, segment_metric_family_for_family(seg, font_family))
         })
         .fold(0.0f64, f64::max);
     base_ascent + sub_extra_space(&segments)
+}
+
+pub(crate) fn text_height_for_family(font_size: f64, font_family: &str) -> f64 {
+    family_text_height(font_size, metric_family(font_family))
+}
+
+pub(crate) fn ascent_for_family(font_size: f64, font_family: &str) -> f64 {
+    family_ascent(font_size, metric_family(font_family))
 }
 
 /// Extra vertical space the line needs beyond the maximum atom height to
@@ -263,7 +271,7 @@ fn emit_segments(buf: &mut String, segments: &[Segment], base: &TextBase<'_>) ->
     // so the run's font family matters too.
     let first = &segments[0];
     let first_size = first.style.size.unwrap_or(base.font_size) as f64;
-    let line_bottom_drop = clamp_drop(first_size, segment_uses_monospace_metrics(first, base));
+    let line_bottom_drop = clamp_drop(first_size, segment_metric_family(first, base));
 
     let mut x = base.x;
     let mut total = 0.0;
@@ -291,12 +299,11 @@ fn emit_segments(buf: &mut String, segments: &[Segment], base: &TextBase<'_>) ->
 /// PlantUML's per-atom 10px height floor (`AtomText.calculateDimensionSlow`).
 /// For sizes with `textHeight ≥ 10` (size ≳ 9) the floor is inert and this
 /// equals the plain font descent.
-fn clamp_drop(font_size: f64, monospace: bool) -> f64 {
-    let (text_height, ascent) = if monospace {
-        (pm::mono_text_height(font_size), pm::mono_ascent(font_size))
-    } else {
-        (pm::text_height(font_size), pm::ascent(font_size))
-    };
+fn clamp_drop(font_size: f64, family: MetricFamily) -> f64 {
+    let (text_height, ascent) = (
+        family_text_height(font_size, family),
+        family_ascent(font_size, family),
+    );
     text_height.max(10.0) - ascent
 }
 
@@ -343,9 +350,9 @@ fn trim_segment_for_emit(seg: &Segment, base: &TextBase<'_>) -> (f64, String, f6
     let trimmed = &seg.text[lead..seg.text.len() - trail];
     let bold = base.bold || seg.style.bold;
     let font_size = effective_font_size(seg, base);
-    let mono = segment_uses_monospace_metrics(seg, base);
-    let lead_w = family_text_width(&" ".repeat(lead), font_size, bold, mono);
-    let trimmed_w = family_text_width(&unescape_for_metrics(trimmed), font_size, bold, mono);
+    let family = segment_metric_family(seg, base);
+    let lead_w = family_text_width(&" ".repeat(lead), font_size, bold, family);
+    let trimmed_w = family_text_width(&unescape_for_metrics(trimmed), font_size, bold, family);
     (lead_w, trimmed.to_string(), trimmed_w)
 }
 
@@ -356,51 +363,63 @@ fn segment_width(seg: &Segment, base: &TextBase<'_>) -> f64 {
     let raw = unescape_for_metrics(&seg.text);
     let bold = base.bold || seg.style.bold;
     let font_size = effective_font_size(seg, base);
-    family_text_width(
-        &raw,
-        font_size,
-        bold,
-        segment_uses_monospace_metrics(seg, base),
-    )
+    family_text_width(&raw, font_size, bold, segment_metric_family(seg, base))
 }
 
-fn segment_uses_monospace_metrics(seg: &Segment, base: &TextBase<'_>) -> bool {
-    seg.style.monospace
-        || seg
-            .style
+#[derive(Clone, Copy, Debug, Eq, PartialEq)]
+enum MetricFamily {
+    Sans,
+    Mono,
+    Arial,
+    Verdana,
+}
+
+fn segment_metric_family(seg: &Segment, base: &TextBase<'_>) -> MetricFamily {
+    if seg.style.monospace {
+        MetricFamily::Mono
+    } else {
+        seg.style
             .font_family
             .as_deref()
-            .map(is_monospace_family)
-            .unwrap_or_else(|| is_monospace_family(base.font_family))
+            .map(metric_family)
+            .unwrap_or_else(|| metric_family(base.font_family))
+    }
 }
 
-fn segment_uses_monospace_family(seg: &Segment, font_family: &str) -> bool {
-    seg.style.monospace
-        || seg
-            .style
+fn segment_metric_family_for_family(seg: &Segment, font_family: &str) -> MetricFamily {
+    if seg.style.monospace {
+        MetricFamily::Mono
+    } else {
+        seg.style
             .font_family
             .as_deref()
-            .map(is_monospace_family)
-            .unwrap_or_else(|| is_monospace_family(font_family))
+            .map(metric_family)
+            .unwrap_or_else(|| metric_family(font_family))
+    }
 }
 
-fn style_uses_monospace_metrics(style: &Style, base: &TextBase<'_>) -> bool {
-    style.monospace
-        || style
+fn style_metric_family(style: &Style, base: &TextBase<'_>) -> MetricFamily {
+    if style.monospace {
+        MetricFamily::Mono
+    } else {
+        style
             .font_family
             .as_deref()
-            .map(is_monospace_family)
-            .unwrap_or_else(|| is_monospace_family(base.font_family))
+            .map(metric_family)
+            .unwrap_or_else(|| metric_family(base.font_family))
+    }
 }
 
-fn is_monospace_family(font_family: &str) -> bool {
+fn metric_family(font_family: &str) -> MetricFamily {
     let normalized = font_family
         .trim_matches(|c| c == '"' || c == '\'')
         .to_ascii_lowercase();
-    matches!(
-        normalized.as_str(),
-        "courier" | "courier new" | "monospace" | "monospaced"
-    )
+    match normalized.as_str() {
+        "courier" | "courier new" | "monospace" | "monospaced" => MetricFamily::Mono,
+        "arial" => MetricFamily::Arial,
+        "verdana" => MetricFamily::Verdana,
+        _ => MetricFamily::Sans,
+    }
 }
 
 /// Compute the effective rendered font size for a segment. PlantUML's
@@ -438,27 +457,449 @@ fn sans_text_width(text: &str, font_size: f64, bold: bool) -> f64 {
     }
 }
 
-fn family_text_width(text: &str, font_size: f64, bold: bool, monospace: bool) -> f64 {
-    if monospace {
-        pm::mono_text_width(text, font_size)
-    } else {
-        sans_text_width(text, font_size, bold)
+const ARIAL_WIDTH: [f64; 95] = [
+    0.277832031250,
+    0.277832031250,
+    0.354980468750,
+    0.556152343750,
+    0.556152343750,
+    0.889160156250,
+    0.666992187500,
+    0.190917968750,
+    0.333007812500,
+    0.333007812500,
+    0.389160156250,
+    0.583984375000,
+    0.277832031250,
+    0.333007812500,
+    0.277832031250,
+    0.277832031250,
+    0.556152343750,
+    0.556152343750,
+    0.556152343750,
+    0.556152343750,
+    0.556152343750,
+    0.556152343750,
+    0.556152343750,
+    0.556152343750,
+    0.556152343750,
+    0.556152343750,
+    0.277832031250,
+    0.277832031250,
+    0.583984375000,
+    0.583984375000,
+    0.583984375000,
+    0.556152343750,
+    1.015136718750,
+    0.666992187500,
+    0.666992187500,
+    0.722167968750,
+    0.722167968750,
+    0.666992187500,
+    0.610839843750,
+    0.777832031250,
+    0.722167968750,
+    0.277832031250,
+    0.500000000000,
+    0.666992187500,
+    0.556152343750,
+    0.833007812500,
+    0.722167968750,
+    0.777832031250,
+    0.666992187500,
+    0.777832031250,
+    0.722167968750,
+    0.666992187500,
+    0.610839843750,
+    0.722167968750,
+    0.666992187500,
+    0.943847656250,
+    0.666992187500,
+    0.666992187500,
+    0.610839843750,
+    0.277832031250,
+    0.277832031250,
+    0.277832031250,
+    0.469238281250,
+    0.556152343750,
+    0.333007812500,
+    0.556152343750,
+    0.556152343750,
+    0.500000000000,
+    0.556152343750,
+    0.556152343750,
+    0.277832031250,
+    0.556152343750,
+    0.556152343750,
+    0.222167968750,
+    0.222167968750,
+    0.500000000000,
+    0.222167968750,
+    0.833007812500,
+    0.556152343750,
+    0.556152343750,
+    0.556152343750,
+    0.556152343750,
+    0.333007812500,
+    0.500000000000,
+    0.277832031250,
+    0.556152343750,
+    0.500000000000,
+    0.722167968750,
+    0.500000000000,
+    0.500000000000,
+    0.500000000000,
+    0.333984375000,
+    0.259765625000,
+    0.333984375000,
+    0.583984375000,
+];
+
+const ARIAL_BOLD_WIDTH: [f64; 95] = [
+    0.277832031250,
+    0.333007812500,
+    0.474121093750,
+    0.556152343750,
+    0.556152343750,
+    0.889160156250,
+    0.722167968750,
+    0.237792968750,
+    0.333007812500,
+    0.333007812500,
+    0.389160156250,
+    0.583984375000,
+    0.277832031250,
+    0.333007812500,
+    0.277832031250,
+    0.277832031250,
+    0.556152343750,
+    0.556152343750,
+    0.556152343750,
+    0.556152343750,
+    0.556152343750,
+    0.556152343750,
+    0.556152343750,
+    0.556152343750,
+    0.556152343750,
+    0.556152343750,
+    0.333007812500,
+    0.333007812500,
+    0.583984375000,
+    0.583984375000,
+    0.583984375000,
+    0.610839843750,
+    0.975097656250,
+    0.722167968750,
+    0.722167968750,
+    0.722167968750,
+    0.722167968750,
+    0.666992187500,
+    0.610839843750,
+    0.777832031250,
+    0.722167968750,
+    0.277832031250,
+    0.556152343750,
+    0.722167968750,
+    0.610839843750,
+    0.833007812500,
+    0.722167968750,
+    0.777832031250,
+    0.666992187500,
+    0.777832031250,
+    0.722167968750,
+    0.666992187500,
+    0.610839843750,
+    0.722167968750,
+    0.666992187500,
+    0.943847656250,
+    0.666992187500,
+    0.666992187500,
+    0.610839843750,
+    0.333007812500,
+    0.277832031250,
+    0.333007812500,
+    0.583984375000,
+    0.556152343750,
+    0.333007812500,
+    0.556152343750,
+    0.610839843750,
+    0.556152343750,
+    0.610839843750,
+    0.556152343750,
+    0.333007812500,
+    0.610839843750,
+    0.610839843750,
+    0.277832031250,
+    0.277832031250,
+    0.556152343750,
+    0.277832031250,
+    0.889160156250,
+    0.610839843750,
+    0.610839843750,
+    0.610839843750,
+    0.610839843750,
+    0.389160156250,
+    0.556152343750,
+    0.333007812500,
+    0.610839843750,
+    0.556152343750,
+    0.777832031250,
+    0.556152343750,
+    0.556152343750,
+    0.500000000000,
+    0.389160156250,
+    0.279785156250,
+    0.389160156250,
+    0.583984375000,
+];
+
+const VERDANA_WIDTH: [f64; 95] = [
+    0.351562500000,
+    0.393554687500,
+    0.458984375000,
+    0.818359375000,
+    0.635742187500,
+    1.076171875000,
+    0.726562500000,
+    0.268554687500,
+    0.454101562500,
+    0.454101562500,
+    0.635742187500,
+    0.818359375000,
+    0.363769531250,
+    0.454101562500,
+    0.363769531250,
+    0.454101562500,
+    0.635742187500,
+    0.635742187500,
+    0.635742187500,
+    0.635742187500,
+    0.635742187500,
+    0.635742187500,
+    0.635742187500,
+    0.635742187500,
+    0.635742187500,
+    0.635742187500,
+    0.454101562500,
+    0.454101562500,
+    0.818359375000,
+    0.818359375000,
+    0.818359375000,
+    0.545410156250,
+    1.000000000000,
+    0.683593750000,
+    0.685546875000,
+    0.698242187500,
+    0.770507812500,
+    0.632324218750,
+    0.574707031250,
+    0.775390625000,
+    0.751464843750,
+    0.420898437500,
+    0.454589843750,
+    0.692871093750,
+    0.556640625000,
+    0.842773437500,
+    0.748046875000,
+    0.787109375000,
+    0.603027343750,
+    0.787109375000,
+    0.695312500000,
+    0.683593750000,
+    0.616210937500,
+    0.731933593750,
+    0.683593750000,
+    0.988769531250,
+    0.685058593750,
+    0.615234375000,
+    0.685058593750,
+    0.454101562500,
+    0.454101562500,
+    0.454101562500,
+    0.818359375000,
+    0.635742187500,
+    0.635742187500,
+    0.600585937500,
+    0.623046875000,
+    0.520996093750,
+    0.623046875000,
+    0.595703125000,
+    0.351562500000,
+    0.623046875000,
+    0.632812500000,
+    0.274414062500,
+    0.344238281250,
+    0.591796875000,
+    0.274414062500,
+    0.972656250000,
+    0.632812500000,
+    0.606933593750,
+    0.623046875000,
+    0.623046875000,
+    0.426757812500,
+    0.520996093750,
+    0.394042968750,
+    0.632812500000,
+    0.591796875000,
+    0.818359375000,
+    0.591796875000,
+    0.591796875000,
+    0.525390625000,
+    0.634765625000,
+    0.454101562500,
+    0.634765625000,
+    0.818359375000,
+];
+
+const VERDANA_BOLD_WIDTH: [f64; 95] = [
+    0.341796875000,
+    0.402343750000,
+    0.587402343750,
+    0.867187500000,
+    0.710937500000,
+    1.271972656250,
+    0.862304687500,
+    0.332031250000,
+    0.543457031250,
+    0.543457031250,
+    0.710937500000,
+    0.867187500000,
+    0.361328125000,
+    0.479980468750,
+    0.361328125000,
+    0.689453125000,
+    0.710937500000,
+    0.710937500000,
+    0.710937500000,
+    0.710937500000,
+    0.710937500000,
+    0.710937500000,
+    0.710937500000,
+    0.710937500000,
+    0.710937500000,
+    0.710937500000,
+    0.402343750000,
+    0.402343750000,
+    0.867187500000,
+    0.867187500000,
+    0.867187500000,
+    0.616699218750,
+    0.963867187500,
+    0.776367187500,
+    0.761718750000,
+    0.723632812500,
+    0.830078125000,
+    0.683105468750,
+    0.650390625000,
+    0.811035156250,
+    0.837402343750,
+    0.545898437500,
+    0.555175781250,
+    0.770996093750,
+    0.637207031250,
+    0.947753906250,
+    0.846679687500,
+    0.850097656250,
+    0.732910156250,
+    0.850097656250,
+    0.782226562500,
+    0.710449218750,
+    0.681640625000,
+    0.812011718750,
+    0.763671875000,
+    1.128417968750,
+    0.763671875000,
+    0.736816406250,
+    0.691894531250,
+    0.543457031250,
+    0.689453125000,
+    0.543457031250,
+    0.867187500000,
+    0.710937500000,
+    0.710937500000,
+    0.667968750000,
+    0.699218750000,
+    0.588378906250,
+    0.699218750000,
+    0.664062500000,
+    0.422363281250,
+    0.699218750000,
+    0.712402343750,
+    0.341796875000,
+    0.402832031250,
+    0.670898437500,
+    0.341796875000,
+    1.058105468750,
+    0.712402343750,
+    0.686523437500,
+    0.699218750000,
+    0.699218750000,
+    0.497070312500,
+    0.593261718750,
+    0.455566406250,
+    0.712402343750,
+    0.649902343750,
+    0.979492187500,
+    0.668945312500,
+    0.650878906250,
+    0.596679687500,
+    0.710937500000,
+    0.543457031250,
+    0.710937500000,
+    0.867187500000,
+];
+
+fn family_table_text_width(
+    text: &str,
+    font_size: f64,
+    bold: bool,
+    plain_table: &[f64; 95],
+    bold_table: &[f64; 95],
+) -> f64 {
+    let table = if bold { bold_table } else { plain_table };
+    text.chars()
+        .map(|c| {
+            let code = c as usize;
+            if (32..=126).contains(&code) {
+                table[code - 32] * font_size
+            } else {
+                sans_text_width(&c.to_string(), font_size, bold)
+            }
+        })
+        .sum()
+}
+
+fn family_text_width(text: &str, font_size: f64, bold: bool, family: MetricFamily) -> f64 {
+    match family {
+        MetricFamily::Mono => pm::mono_text_width(text, font_size),
+        MetricFamily::Arial => {
+            family_table_text_width(text, font_size, bold, &ARIAL_WIDTH, &ARIAL_BOLD_WIDTH)
+        }
+        MetricFamily::Verdana => {
+            family_table_text_width(text, font_size, bold, &VERDANA_WIDTH, &VERDANA_BOLD_WIDTH)
+        }
+        MetricFamily::Sans => sans_text_width(text, font_size, bold),
     }
 }
 
-fn family_text_height(font_size: f64, monospace: bool) -> f64 {
-    if monospace {
-        pm::mono_text_height(font_size)
-    } else {
-        pm::text_height(font_size)
+fn family_text_height(font_size: f64, family: MetricFamily) -> f64 {
+    match family {
+        MetricFamily::Mono => pm::mono_text_height(font_size),
+        MetricFamily::Arial => font_size * 1.14990234375,
+        MetricFamily::Verdana => font_size * 1.21533203125,
+        MetricFamily::Sans => pm::text_height(font_size),
     }
 }
 
-fn family_ascent(font_size: f64, monospace: bool) -> f64 {
-    if monospace {
-        pm::mono_ascent(font_size)
-    } else {
-        pm::ascent(font_size)
+fn family_ascent(font_size: f64, family: MetricFamily) -> f64 {
+    match family {
+        MetricFamily::Mono => pm::mono_ascent(font_size),
+        // Java AWT's Arial line metrics carry non-zero leading. PlantUML's
+        // text baseline behaves as ascent + leading, while the text height
+        // above already includes the same leading.
+        MetricFamily::Arial => font_size * 0.93798828125,
+        MetricFamily::Verdana => font_size * 1.00537109375,
+        MetricFamily::Sans => pm::ascent(font_size),
     }
 }
 
@@ -702,10 +1143,7 @@ fn write_text_element(
     // reduces to the plain descent for size ≳ 9, so the offset is zero when
     // this run matches the first run's metrics (always true on a single-size
     // line).
-    let own_drop = clamp_drop(
-        nominal_size as f64,
-        style_uses_monospace_metrics(style, base),
-    );
+    let own_drop = clamp_drop(nominal_size as f64, style_metric_family(style, base));
     let line_descent_diff = line_bottom_drop - own_drop;
     let (font_size, y_offset) = match style.baseline_shift {
         Some("sub") => {
@@ -866,6 +1304,27 @@ mod tests {
             r#"textLength="{}""#,
             pm::fmt_coord(pm::mono_text_width("Alice", 12.0))
         )));
+    }
+
+    #[test]
+    fn awt_named_font_metrics_match_goldens() {
+        assert_eq!(
+            pm::fmt_coord(measure_with_family("Alice", 16.0, false, "Arial")),
+            "34.6797"
+        );
+        assert_eq!(
+            pm::fmt_coord(measure_with_family("Bob", 16.0, false, "Arial")),
+            "28.4688"
+        );
+        assert_eq!(
+            pm::fmt_coord(measure_with_family("Alice", 14.0, false, "Verdana")),
+            "32.8877"
+        );
+        assert_eq!(
+            pm::fmt_coord(text_height_for_family(16.0, "Arial")),
+            "18.3984"
+        );
+        assert_eq!(pm::fmt_coord(ascent_for_family(16.0, "Arial")), "15.0078");
     }
 
     #[test]

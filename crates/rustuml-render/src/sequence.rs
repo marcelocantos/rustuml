@@ -222,31 +222,12 @@ fn canonical_font_family(value: &str) -> String {
     }
 }
 
-fn is_courier_family(font_family: &str) -> bool {
-    matches!(
-        font_family
-            .trim_matches('"')
-            .trim_matches('\'')
-            .to_ascii_lowercase()
-            .as_str(),
-        "courier" | "courier new" | "monospace" | "monospaced"
-    )
-}
-
 fn text_height_with_family(font_size: f64, font_family: &str) -> f64 {
-    if is_courier_family(font_family) {
-        plantuml_metrics::mono_text_height(font_size)
-    } else {
-        plantuml_metrics::text_height(font_size)
-    }
+    text_render::text_height_for_family(font_size, font_family)
 }
 
 fn ascent_with_family(font_size: f64, font_family: &str) -> f64 {
-    if is_courier_family(font_family) {
-        plantuml_metrics::mono_ascent(font_size)
-    } else {
-        plantuml_metrics::ascent(font_size)
-    }
+    text_render::ascent_for_family(font_size, font_family)
 }
 
 /// Format an f64 as a PlantUML-compatible coordinate string.
