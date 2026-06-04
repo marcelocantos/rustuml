@@ -2941,13 +2941,9 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
     }
 
     // Title-band height: when the diagram has a `title ...` directive, PlantUML
-    // reserves a band above the participant heads for the bold 14pt text.
-    // Empirical formula from goldens:
-    //   band = 21 + n_lines * text_height(14)
-    // where 21 = 10 (top pad to first baseline) + 11 (descent + gap to head box)
-    // and text_height(14) = 16.48828125 (Java AWT LineMetrics).
-    // The participant top, lifeline top, message Ys, tail box Y, and the SVG
-    // height all shift down by this band.
+    // reserves a band above the participant heads for the rendered title lines.
+    // The fixed 10px top + 11px bottom padding stays constant, but a Creole
+    // `<size:...>` / `<font:...>` run changes the line ascent and height.
     const TITLE_FONT_SIZE: u32 = 14;
     const TITLE_TOP_PAD: f64 = 10.0; // gap from y=0 to first title baseline (minus ascent)
     const TITLE_BOTTOM_PAD: f64 = 11.0; // gap from last title descent line to head top
@@ -2957,11 +2953,18 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
         .as_deref()
         .map(|t| t.split("\\n").collect())
         .unwrap_or_default();
+    let title_line_metrics = title_lines
+        .iter()
+        .map(|line| rendered_line_metrics(line, TITLE_FONT_SIZE as f64))
+        .collect::<Vec<_>>();
     let title_band_h = if title_lines.is_empty() {
         0.0
     } else {
         TITLE_TOP_PAD
-            + title_lines.len() as f64 * plantuml_metrics::text_height(TITLE_FONT_SIZE as f64)
+            + title_line_metrics
+                .iter()
+                .map(|metrics| metrics.height)
+                .sum::<f64>()
             + TITLE_BOTTOM_PAD
     };
     // Named participant boxes add a title band above the participant heads.
@@ -5015,8 +5018,7 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
     // `<g class="title" data-source-line="N">` and emits a bold 14pt text
     // per line. Each line is centered around the midpoint between the first
     // participant's box left edge and the last participant's box right edge
-    // (minus 0.5 px), and the first baseline sits at HEAD_BOX_Y + TITLE_TOP_PAD
-    // + ascent(14). Subsequent lines step down by text_height(14).
+    // (minus 0.5 px), and each baseline uses the rendered line's ascent.
     if !title_lines.is_empty() {
         let title_center =
             if let (Some(first), Some(last)) = (participants.first(), participants.last()) {
@@ -5024,17 +5026,16 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
             } else {
                 svg_width as f64 / 2.0 - 0.5
             };
-        let line_height = plantuml_metrics::text_height(TITLE_FONT_SIZE as f64);
-        let first_baseline_y =
-            HEAD_BOX_Y + TITLE_TOP_PAD + plantuml_metrics::ascent(TITLE_FONT_SIZE as f64);
         let title_line = diagram.meta.title_line.unwrap_or(1);
         svg.buf.push_str(&format!(
             r#"<g class="title" data-source-line="{title_line}">"#
         ));
+        let mut line_top = HEAD_BOX_Y + TITLE_TOP_PAD;
         for (i, line) in title_lines.iter().enumerate() {
+            let metrics = title_line_metrics[i];
             let text_length = text_render::measure(line, TITLE_FONT_SIZE as f64, true);
             let x = title_center - text_length / 2.0;
-            let y = first_baseline_y + i as f64 * line_height;
+            let y = line_top + metrics.ascent;
             text_render::emit_text(
                 &mut svg.buf,
                 line,
@@ -5050,6 +5051,7 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                     skip_underline: false,
                 },
             );
+            line_top += metrics.height;
         }
         svg.buf.push_str("</g>");
     }
