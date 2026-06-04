@@ -530,10 +530,6 @@ const COLLECTIONS_EXTRA_H: f64 = 4.0;
 // Note layout constants (reverse-engineered from golden SVGs)
 // ---------------------------------------------------------------------------
 
-/// Base height of a single-line note box.
-const NOTE_BASE_HEIGHT: f64 = 25.0;
-/// Additional height per extra line in a multi-line note.
-const NOTE_LINE_HEIGHT: f64 = 15.0;
 /// Size of the folded corner (both x and y).
 const NOTE_FOLD_SIZE: f64 = 10.0;
 /// Text left padding inside the note box.
@@ -543,20 +539,16 @@ const RNOTE_TEXT_X_PAD: f64 = 4.0;
 const QUEUE_TEXT_H_PAD: f64 = 20.0;
 // Queue text inset from box left edge (cap radius).
 const QUEUE_TEXT_X_PAD: f64 = 5.0;
-/// Vertical offset from note top to the text baseline of the first line.
-const NOTE_TEXT_Y_OFFSET: f64 = 17.568359375; // exact Java double
-/// Line spacing between text lines in a multi-line note (= MSG_TEXT_HEIGHT).
-const NOTE_TEXT_LINE_SPACING: f64 = MSG_TEXT_HEIGHT; // 15.310546875
 /// Gap between previous event y and note top (non-first event).
 const NOTE_GAP_AFTER_MSG: f64 = 13.0;
 /// Gap between lifeline top and note top (first event).
 const NOTE_GAP_FIRST: f64 = 15.0;
-/// Vertical offset from a message-attached note's top edge to the message
-/// arrow line (single-line note). The note straddles the arrow band:
-/// arrow_y = note_top + this + (lines-1) * MSG_TEXT_HEIGHT/2.
+/// Vertical offset from a message-attached note's top edge to the message arrow
+/// line (single-line note). The note straddles the arrow band:
+/// arrow_y = note_top + this + (lines-1) * text_height/2.
 /// hnote/rnote sit 1px higher (their text baseline is 1px less).
-fn note_msg_arrow_offset(shape: NoteShape) -> f64 {
-    let base = MSG_TEXT_HEIGHT + ARROW_HALF_H; // 19.3105
+fn note_msg_arrow_offset(shape: NoteShape, font_size: f64) -> f64 {
+    let base = plantuml_metrics::text_height(font_size) + ARROW_HALF_H;
     match shape {
         NoteShape::Note => base,
         NoteShape::Hexagonal | NoteShape::Rectangular => base - 1.0,
@@ -585,12 +577,8 @@ const OVER_SEVERAL_NOTE_MARGIN: f64 = 38.0;
 /// Java ParticipantBox.outMargin (default skin): horizontal padding each side of
 /// a participant head box, used in note-across text centering.
 const PARTICIPANT_OUT_MARGIN: f64 = 5.0;
-/// Base height for hexagonal (hnote) and rectangular (rnote) notes.
-const HNOTE_BASE_HEIGHT: f64 = 23.0;
 /// Horizontal indent of hexagonal note vertices from note edges.
 const HNOTE_INDENT: f64 = 10.0;
-/// Text y offset for hnote/rnote (1px less than standard note).
-const HNOTE_TEXT_Y_OFFSET: f64 = NOTE_TEXT_Y_OFFSET - 1.0;
 
 // ---------------------------------------------------------------------------
 // Group layout constants (reverse-engineered from golden SVGs)
@@ -1082,6 +1070,9 @@ struct PlantUmlSvg {
     message_font_bold: bool,
     /// Message/arrow label italic style. Driven by `skinparam arrowFontStyle`.
     message_font_italic: bool,
+    /// Note label font size. Driven by `skinparam defaultFontSize` and
+    /// `skinparam noteFontSize`.
+    note_font_size: u32,
     /// Lifeline dashed-line stroke colour (default `#181818`). Driven by
     /// `skinparam sequenceLifeLineBorderColor`.
     lifeline_border: String,
@@ -1113,6 +1104,7 @@ impl PlantUmlSvg {
             message_font_size: MSG_FONT_SIZE as u32,
             message_font_bold: false,
             message_font_italic: false,
+            note_font_size: MSG_FONT_SIZE as u32,
             lifeline_border: "#181818".into(),
             lifeline_border_thickness: "0.5".into(),
             active_participant_url: None,
@@ -2605,6 +2597,7 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
     let mut note_border_override: Option<String> = None;
     let mut note_font_color = "#000000".to_string();
     let mut note_font_color_set = false;
+    let mut note_font_size: u32 = MSG_FONT_SIZE as u32;
     // Whether `ParticipantBackgroundColor` / `ParticipantBorderColor` were set
     // explicitly. These only affect the plain `participant` rectangle, so other
     // shape kinds must fall back to the (monochrome-aware) historical default
@@ -2642,6 +2635,15 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
             continue;
         }
         match key.as_str() {
+            "defaultfontsize" => {
+                if let Ok(v) = val.parse::<u32>() {
+                    message_font_size = v;
+                    participant_font_size = v;
+                    note_font_size = v;
+                    divider_font_size = v;
+                    group_header_font_size = v;
+                }
+            }
             "defaultfontcolor" => {
                 let c = resolve_color(val);
                 if !message_font_color_set {
@@ -2778,6 +2780,11 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                 note_font_color = resolve_color(val);
                 note_font_color_set = true;
             }
+            "notefontsize" | "sequencenotefontsize" => {
+                if let Ok(v) = val.parse::<u32>() {
+                    note_font_size = v;
+                }
+            }
             "sequencedividerbackgroundcolor" => {
                 divider_fill = resolve_color(val);
             }
@@ -2857,6 +2864,14 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
             text_width(text, message_font_size_f)
         }
     };
+    let note_font_size_f = note_font_size as f64;
+    let note_text_height = plantuml_metrics::text_height(note_font_size_f);
+    let note_line_height = note_text_height.floor();
+    let note_base_height = (note_text_height + 10.0).floor();
+    let hnote_base_height = note_base_height - 2.0;
+    let note_text_y_offset = plantuml_metrics::ascent(note_font_size_f) + 5.0;
+    let hnote_text_y_offset = note_text_y_offset - 1.0;
+    let note_label_width = |text: &str| text_width(text, note_font_size_f);
     // Empty diagram with no title — render the PlantUML welcome screen.
     if diagram.participants.is_empty() && diagram.events.is_empty() && diagram.meta.title.is_none()
     {
@@ -3334,7 +3349,7 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                     let max_tw = note
                         .text
                         .lines()
-                        .map(|l| text_width(l.trim(), MSG_FONT_SIZE))
+                        .map(|l| note_label_width(l.trim()))
                         .fold(0.0_f64, f64::max);
                     let note_content_w = note_content_width(max_tw, note.shape);
                     let half = note_content_w / 2.0;
@@ -3413,7 +3428,7 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                     let max_tw = note
                         .text
                         .lines()
-                        .map(|l| text_width(l.trim(), MSG_FONT_SIZE))
+                        .map(|l| note_label_width(l.trim()))
                         .fold(0.0_f64, f64::max);
                     // Java centres the note on participant 0 using the raw
                     // preferred width (`NoteBox.getStartingX` / `ensureConstraints`),
@@ -3443,7 +3458,7 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                     let max_tw = note
                         .text
                         .lines()
-                        .map(|l| text_width(l.trim(), MSG_FONT_SIZE))
+                        .map(|l| note_label_width(l.trim()))
                         .fold(0.0_f64, f64::max);
                     let note_content_w = note_content_width(max_tw, note.shape);
                     let gap = match note.shape {
@@ -3577,7 +3592,7 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                 let max_tw = note
                     .text
                     .lines()
-                    .map(|l| text_width(l.trim(), MSG_FONT_SIZE))
+                    .map(|l| note_label_width(l.trim()))
                     .fold(0.0_f64, f64::max);
                 // Java centres the note on the span midpoint using its raw
                 // (un-ceiled) preferred width, so the left-margin shift must use
@@ -3641,7 +3656,7 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                     let max_tw = note
                         .text
                         .lines()
-                        .map(|l| text_width(l.trim(), MSG_FONT_SIZE))
+                        .map(|l| note_label_width(l.trim()))
                         .fold(0.0_f64, f64::max);
                     let floor = GROUP_NOTE_LEFT_FLOOR_BASE + depth as f64 * group_frame_margin;
                     let natural_left = match note.position {
@@ -3858,7 +3873,7 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                         note_owner.insert(idx, owner);
                         let lines = note.text.lines().count().max(1);
                         let extra = note_msg_extra_base(note.shape)
-                            + (lines as f64 - 1.0) * MSG_TEXT_HEIGHT / 2.0;
+                            + (lines as f64 - 1.0) * note_text_height / 2.0;
                         let e = msg_note_extra.entry(owner).or_insert(0.0);
                         *e = e.max(extra);
                     }
@@ -4014,12 +4029,12 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                         // note_top + NOTE_MSG_ARROW_OFFSET + (lines-1)*MSG_TEXT_HEIGHT/2.
                         let arrow_y = event_y_positions.get(owner).copied().unwrap_or(y);
                         let note_top = arrow_y
-                            - note_msg_arrow_offset(note.shape)
-                            - (num_lines as f64 - 1.0) * MSG_TEXT_HEIGHT / 2.0;
+                            - note_msg_arrow_offset(note.shape, note_font_size_f)
+                            - (num_lines as f64 - 1.0) * note_text_height / 2.0;
                         // The draw site derives note_top from event_y via
                         // note_top = event_y - note_y_extra - num_lines*MSG_TEXT_HEIGHT.
                         let note_event_y =
-                            note_top + note_y_extra + num_lines as f64 * MSG_TEXT_HEIGHT;
+                            note_top + note_y_extra + num_lines as f64 * note_text_height;
                         event_y_positions.push(note_event_y);
                         // Do not advance y or increment msg_count.
                     } else {
@@ -4032,7 +4047,7 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                             y + NOTE_GAP_AFTER_MSG
                         };
                         let note_event_y =
-                            note_top + note_y_extra + num_lines as f64 * MSG_TEXT_HEIGHT;
+                            note_top + note_y_extra + num_lines as f64 * note_text_height;
                         y = note_event_y;
                         event_y_positions.push(y);
                         msg_count += 1; // note counts as an event for spacing
@@ -4152,7 +4167,7 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
             let max_line_width = note
                 .text
                 .lines()
-                .map(|l| text_width(l.trim(), MSG_FONT_SIZE))
+                .map(|l| note_label_width(l.trim()))
                 .fold(0.0_f64, f64::max);
             let note_content_w = note_content_width(max_line_width, note.shape);
             match note.position {
@@ -4591,7 +4606,7 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
         let lines: Vec<&str> = note.text.lines().collect();
         let max_text_w = lines
             .iter()
-            .map(|l| text_width(l.trim(), MSG_FONT_SIZE))
+            .map(|l| note_label_width(l.trim()))
             .fold(0.0_f64, f64::max);
         let note_content_w = note_content_width(max_text_w, note.shape);
         let anchor_xs: Vec<f64> = note
@@ -4865,6 +4880,7 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
     svg.message_font_size = message_font_size;
     svg.message_font_bold = message_font_bold;
     svg.message_font_italic = message_font_italic;
+    svg.note_font_size = note_font_size;
     svg.lifeline_border = lifeline_border.clone();
     svg.lifeline_border_thickness = lifeline_border_thickness.clone();
     svg.head_box_rx = head_box_rx;
@@ -6312,20 +6328,20 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                 let lines: Vec<&str> = note.text.lines().collect();
                 let num_lines = lines.len().max(1);
                 let (base_h, note_y_extra) = match note.shape {
-                    NoteShape::Note => (NOTE_BASE_HEIGHT, 7.0),
-                    NoteShape::Hexagonal | NoteShape::Rectangular => (HNOTE_BASE_HEIGHT, 5.0),
+                    NoteShape::Note => (note_base_height, 7.0),
+                    NoteShape::Hexagonal | NoteShape::Rectangular => (hnote_base_height, 5.0),
                 };
-                let note_height = base_h + (num_lines as f64 - 1.0) * NOTE_LINE_HEIGHT;
+                let note_height = base_h + (num_lines as f64 - 1.0) * note_line_height;
 
                 // Derive note_top from the event y:
                 // event_y = note_top + note_y_extra + num_lines * MSG_TEXT_HEIGHT
-                let note_top = msg_y - note_y_extra - num_lines as f64 * MSG_TEXT_HEIGHT;
+                let note_top = msg_y - note_y_extra - num_lines as f64 * note_text_height;
                 let note_bottom = note_top + note_height;
 
                 // Compute max text width across all lines.
                 let max_text_w = lines
                     .iter()
-                    .map(|l| text_width(l.trim(), MSG_FONT_SIZE))
+                    .map(|l| note_label_width(l.trim()))
                     .fold(0.0_f64, f64::max);
                 let note_content_w = note_content_width(max_text_w, note.shape);
 
@@ -6597,16 +6613,16 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
 
                 // Emit note text lines.
                 let (text_x, text_y_offset) = match note.shape {
-                    NoteShape::Note => (note_left + NOTE_TEXT_X_PAD, NOTE_TEXT_Y_OFFSET),
-                    NoteShape::Hexagonal => (note_left + HNOTE_INDENT + 2.0, HNOTE_TEXT_Y_OFFSET),
-                    NoteShape::Rectangular => (note_left + RNOTE_TEXT_X_PAD, HNOTE_TEXT_Y_OFFSET),
+                    NoteShape::Note => (note_left + NOTE_TEXT_X_PAD, note_text_y_offset),
+                    NoteShape::Hexagonal => (note_left + HNOTE_INDENT + 2.0, hnote_text_y_offset),
+                    NoteShape::Rectangular => (note_left + RNOTE_TEXT_X_PAD, hnote_text_y_offset),
                 };
                 let text_x = over_several_text_x.unwrap_or(text_x);
                 let mut text_y = note_top + text_y_offset;
                 for line in &lines {
                     let trimmed = line.trim();
                     if trimmed.is_empty() {
-                        text_y += NOTE_TEXT_LINE_SPACING;
+                        text_y += note_text_height;
                         continue;
                     }
                     let line_x = text_x;
@@ -6616,7 +6632,7 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                         &TextBase {
                             x: line_x,
                             y: text_y,
-                            font_size: 13,
+                            font_size: svg.note_font_size,
                             font_family: "sans-serif",
                             fill: &note_font_color,
                             bold: false,
@@ -6625,7 +6641,7 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                             skip_underline: false,
                         },
                     );
-                    text_y += NOTE_TEXT_LINE_SPACING;
+                    text_y += note_text_height;
                 }
             }
             Event::GroupStart(g) => {
