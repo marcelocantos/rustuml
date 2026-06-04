@@ -1383,10 +1383,14 @@ impl PlantUmlSvg {
     /// the first child of the main group — matching PlantUML's behaviour for a
     /// non-default `skinparam backgroundColor`.
     fn open_svg(&mut self, width: u32, height: u32, bg_color: Option<&str>, defs: &str) {
-        let bg = bg_color.unwrap_or("#FFFFFF");
+        let style_background = match bg_color {
+            Some(bg) if bg == "transparent" || bg.starts_with("url(#") => String::new(),
+            Some(bg) => format!("background:{bg};"),
+            None => "background:#FFFFFF;".to_string(),
+        };
         write!(
             self.buf,
-            r##"<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" contentStyleType="text/css" data-diagram-type="SEQUENCE" height="{height}px" preserveAspectRatio="none" style="width:{width}px;height:{height}px;background:{bg};" version="1.1" viewBox="0 0 {width} {height}" width="{width}px" zoomAndPan="magnify">"##,
+            r##"<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" contentStyleType="text/css" data-diagram-type="SEQUENCE" height="{height}px" preserveAspectRatio="none" style="width:{width}px;height:{height}px;{style_background}" version="1.1" viewBox="0 0 {width} {height}" width="{width}px" zoomAndPan="magnify">"##,
         )
         .unwrap();
         // Processing instruction
@@ -1405,6 +1409,7 @@ impl PlantUmlSvg {
         // Non-default backgrounds get an explicit full-canvas rect.
         if let Some(color) = bg_color
             && color != "#000000"
+            && color != "transparent"
         {
             write!(
                 self.buf,
@@ -2936,9 +2941,13 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                 }
             }
             "backgroundcolor" => {
-                let c = resolve_color(val);
-                if c != "#FFFFFF" {
-                    bg_color = Some(c);
+                if val.eq_ignore_ascii_case("transparent") {
+                    bg_color = Some("transparent".to_string());
+                } else {
+                    let c = gradient_fill_or(val, &gradient_id);
+                    if c != "#FFFFFF" {
+                        bg_color = Some(c);
+                    }
                 }
             }
             "arrowcolor" | "sequencearrowcolor" => {
