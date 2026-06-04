@@ -311,7 +311,7 @@ impl ClassParser {
                     MetaBlock::Title => {
                         let t = self.meta.title.get_or_insert_with(String::new);
                         if !t.is_empty() {
-                            t.push(' ');
+                            t.push('\n');
                         }
                         t.push_str(line);
                     }
@@ -1575,6 +1575,15 @@ mod tests {
             Some("String")
         );
         assert_eq!(d.entities[0].members[1].kind, MemberKind::Method);
+    }
+
+    #[test]
+    fn multiline_title_preserves_lines() {
+        let d = parse("title\n  My Class Diagram\n  Version 1.0\nend title\nclass A");
+        assert_eq!(
+            d.meta.title.as_deref(),
+            Some("My Class Diagram\nVersion 1.0")
+        );
     }
 
     #[test]

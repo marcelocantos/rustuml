@@ -166,6 +166,8 @@ const DECORATION_FOOTER_GAP_BELOW_BODY: f64 = 18.668;
 const DECORATION_CAPTION_GAP_BELOW_BODY: f64 = 23.5352;
 /// Height of a caption block (pushes the footer down when both are present).
 const DECORATION_CAPTION_BLOCK_H: f64 = 23.5352;
+/// Baseline-to-baseline spacing for multi-line page decorations.
+const DECORATION_LINE_HEIGHT: f64 = MEMBER_LINE_HEIGHT;
 const GRID_MARGIN: f64 = 30.0;
 #[allow(dead_code)]
 const CLASS_MIN_WIDTH: f64 = 120.0;
@@ -2124,7 +2126,12 @@ impl DecorationLayout {
     /// Width of a decoration's bordered text block (glyph run + 2 * inset).
     fn block_width(class_name: &str, text: &str) -> f64 {
         let st = Self::style(class_name);
-        text_render::measure_no_underline(text, st.font_size as f64, st.bold) + 2.0 * st.inset
+        text.lines()
+            .map(|line| {
+                text_render::measure_no_underline(line, st.font_size as f64, st.bold)
+                    + 2.0 * st.inset
+            })
+            .fold(0.0_f64, f64::max)
     }
 
     /// Build the layout, computing `dimTotal` from the body width and any
@@ -2160,36 +2167,44 @@ impl DecorationLayout {
             return;
         }
         let st = Self::style(class_name);
-        let block_w = Self::block_width(class_name, text);
-        // Aligned block left edge over the shared total width, then the block's
-        // own left inset to reach the glyph origin.
-        let block_x = if st.align_right {
-            self.dim_total_w - block_w
-        } else {
-            (self.dim_total_w - block_w) / 2.0
-        };
-        let x = block_x + st.inset;
         let source_line = line.unwrap_or(1);
         write!(
             svg,
             r#"<g class="{class_name}" data-source-line="{source_line}">"#
         )
         .unwrap();
-        text_render::emit_text(
-            svg,
-            text,
-            &text_render::TextBase {
-                x,
-                y,
-                font_size: st.font_size,
-                font_family: "sans-serif",
-                fill: st.fill,
-                bold: st.bold,
-                italic: false,
-                underline: false,
-                skip_underline: false,
-            },
-        );
+        let line_count = text.lines().count();
+        let base_y = if class_name == "title" && line_count > 1 {
+            y - (line_count - 1) as f64 * DECORATION_LINE_HEIGHT
+        } else {
+            y
+        };
+        for (idx, line_text) in text.lines().enumerate() {
+            let block_w = Self::block_width(class_name, line_text);
+            // Aligned block left edge over the shared total width, then the
+            // block's own left inset to reach the glyph origin.
+            let block_x = if st.align_right {
+                self.dim_total_w - block_w
+            } else {
+                (self.dim_total_w - block_w) / 2.0
+            };
+            let x = block_x + st.inset;
+            text_render::emit_text(
+                svg,
+                line_text,
+                &text_render::TextBase {
+                    x,
+                    y: base_y + idx as f64 * DECORATION_LINE_HEIGHT,
+                    font_size: st.font_size,
+                    font_family: "sans-serif",
+                    fill: st.fill,
+                    bold: st.bold,
+                    italic: false,
+                    underline: false,
+                    skip_underline: false,
+                },
+            );
+        }
         svg.push_str("</g>");
     }
 }
