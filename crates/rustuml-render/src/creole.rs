@@ -1182,9 +1182,9 @@ fn handle_tag(
         // `<color:>`, `<size:>`, `<font:>`, `<back:>`, `<img:>`). The HTML5
         // synonyms `<strong>`, `<em>`, `<ins>` are NOT recognized and render
         // literally, so they deliberately fall through to the unknown-tag arm.
-        "b" => walk_with(
+        "b" | "B" => walk_with(
             chars,
-            "</b>".into(),
+            format!("</{tag}>"),
             tag,
             "",
             style,
@@ -1192,9 +1192,9 @@ fn handle_tag(
             skip_underline,
             out,
         ),
-        "i" => walk_with(
+        "i" | "I" => walk_with(
             chars,
-            "</i>".into(),
+            format!("</{tag}>"),
             tag,
             "",
             style,
@@ -1202,9 +1202,9 @@ fn handle_tag(
             skip_underline,
             out,
         ),
-        "u" => walk_with(
+        "u" | "U" => walk_with(
             chars,
-            "</u>".into(),
+            format!("</{tag}>"),
             tag,
             "",
             style,
@@ -1212,9 +1212,9 @@ fn handle_tag(
             skip_underline,
             out,
         ),
-        "s" => walk_with(
+        "s" | "S" => walk_with(
             chars,
-            "</s>".into(),
+            format!("</{tag}>"),
             tag,
             "",
             style,
@@ -1553,6 +1553,19 @@ mod tests {
         // In class entity labels, `__` is literal, not underline.
         let segs = parse_segments_no_underline("__not__");
         assert_eq!(segs, vec![seg("__not__", Style::default())]);
+    }
+
+    #[test]
+    fn uppercase_underline_tag_consumes_rest() {
+        let mut underlined = Style::default();
+        underlined.underline = true;
+        assert_eq!(
+            parse_segments_no_underline("Future<U> thenApply(Function<T,U> f)"),
+            vec![
+                seg("Future", Style::default()),
+                seg(" thenApply(Function&lt;T,U&gt; f)", underlined),
+            ]
+        );
     }
 
     #[test]
