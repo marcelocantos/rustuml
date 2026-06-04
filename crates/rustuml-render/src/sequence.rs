@@ -833,7 +833,12 @@ fn process_label(s: &str) -> String {
         }
     }
     result.push_str(rest);
-    result
+    escape_inline_code_tags(&result)
+}
+
+fn escape_inline_code_tags(s: &str) -> String {
+    s.replace("<code>", "~<code>")
+        .replace("</code>", "~</code>")
 }
 
 /// Styling for an autonumber prefix, derived from the format string.
@@ -7351,6 +7356,15 @@ mod tests {
         let svg = crate::render_svg(&diagram);
         assert!(svg.contains(">**not bold**</text>"));
         assert!(!svg.contains(r#">not bold</text>"#));
+    }
+
+    #[test]
+    fn message_label_code_tag_is_literal() {
+        let input = "@startuml\nAlice -> Bob : call <code>doSomething()</code>\n@enduml";
+        let diagram = rustuml_parser::parse::parse(input).unwrap();
+        let svg = crate::render_svg(&diagram);
+        assert!(svg.contains("call &lt;code&gt;doSomething()&lt;/code&gt;"));
+        assert!(!svg.contains("font-family=\"monospace\""));
     }
 
     #[test]

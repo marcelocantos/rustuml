@@ -68,7 +68,7 @@ fn to_svg_tspans_inner(text: &str, skip_underline: bool) -> String {
                 // Tilde escape — if the next chars form a recognized multi-character
                 // delimiter, escape the whole delimiter so it is emitted literally.
                 // If the next char is a single markup-start char (e.g. `/`, `*`,
-                // `-`, `_`, `~`, `"`, `` ` ``), consume the `~` and emit the char.
+                // `-`, `_`, `~`, `"`, `<`, `` ` ``), consume the `~` and emit the char.
                 // Otherwise emit `~` literally and leave the next char for the main loop.
                 let mut peeked = chars.clone().take(2);
                 let c1 = peeked.next();
@@ -90,10 +90,15 @@ fn to_svg_tspans_inner(text: &str, skip_underline: bool) -> String {
                 } else if let Some(next_ch) = c1 {
                     // Single markup-start chars: consume `~` and emit the char.
                     // For non-markup chars: emit `~` literally, leave the char for the loop.
-                    let is_markup_char = matches!(next_ch, '/' | '*' | '-' | '_' | '~' | '"' | '`');
+                    let is_markup_char =
+                        matches!(next_ch, '/' | '*' | '-' | '_' | '~' | '"' | '<' | '`');
                     if is_markup_char {
                         chars.next(); // consume the markup char
-                        result.push(next_ch);
+                        if next_ch == '<' {
+                            result.push_str("&lt;");
+                        } else {
+                            result.push(next_ch);
+                        }
                         last_char = Some(next_ch);
                     } else {
                         // Non-markup char: tilde is literal.
@@ -966,7 +971,8 @@ fn walk_segments(text: &str, style: &Style, skip_underline: bool, out: &mut Vec<
                     buf.push(ch2);
                     last_char = Some(ch2);
                 } else if let Some(next_ch) = c1 {
-                    let is_markup_char = matches!(next_ch, '/' | '*' | '-' | '_' | '~' | '"' | '`');
+                    let is_markup_char =
+                        matches!(next_ch, '/' | '*' | '-' | '_' | '~' | '"' | '<' | '`');
                     if is_markup_char {
                         chars.next();
                         buf.push(next_ch);
@@ -1564,6 +1570,14 @@ mod tests {
     }
 
     #[test]
+    fn segments_tilde_escapes_less_than() {
+        assert_eq!(
+            parse_segments("~<code>"),
+            vec![seg("&lt;code&gt;", Style::default())]
+        );
+    }
+
+    #[test]
     fn segments_wavy_underline_preserves_trailing_tilde() {
         assert_eq!(
             parse_segments("~~~not strike~~~"),
@@ -1672,6 +1686,11 @@ mod tests {
     #[test]
     fn tilde_trailing_char() {
         assert_eq!(to_svg_tspans("done~"), "done~");
+    }
+
+    #[test]
+    fn tilde_escapes_less_than() {
+        assert_eq!(to_svg_tspans("~<"), "&lt;");
     }
 
     #[test]
