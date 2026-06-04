@@ -34,6 +34,7 @@ const ARROW_LEN: f64 = 20.0;
 const LABELED_ARROW_LEN: f64 = 41.2754;
 const ACTION_PADDING: f64 = 20.0; // total vertical padding in action box
 const ACTION_H_PADDING: f64 = 10.0; // horizontal padding each side
+const ACTION_MIN_HEIGHT: f64 = 30.0;
 const ACTION_RX: f64 = 12.5;
 const DIAMOND_HALF: f64 = 12.0; // half-size of decision diamond
 /// PlantUML enforces a minimum width on the inner (top/bottom) edge of
@@ -50,6 +51,9 @@ const IF_BRANCH_DOWN: f64 = 10.0;
 /// Vertical gap between the last action of an if/else branch and the
 /// top of the merge diamond below. PlantUML uses 6 px here.
 const IF_BRANCH_UP: f64 = 6.0;
+/// Labelled `if` diamonds reserve a little extra inbound lead when the
+/// diagram-wide arrow font is taller than the default 20 px connector slot.
+const IF_LABEL_INBOUND_PAD: f64 = 0.71875;
 const FORK_BAR_HEIGHT: f64 = 6.0;
 const FORK_BAR_RX: f64 = 2.5;
 /// PlantUML's drop-shadow filter extends painted node bounds by 6 px on the
@@ -71,6 +75,7 @@ const FONT_SIZE: f64 = 12.0;
 const SMALL_FONT: f64 = 11.0;
 const TITLE_FONT_SIZE: f64 = 14.0;
 const LANE_TITLE_FONT: f64 = 18.0;
+const TEXT_MIN_BOX_HEIGHT: f64 = 10.0;
 
 // Note geometry (attached `note left/right` beside the anchoring flow node).
 // Reverse-engineered from activity goldens.
@@ -528,6 +533,7 @@ enum LayoutNode {
         diamond_text_color: String,
         diamond_text_bold: bool,
         diamond_text_italic: bool,
+        arrow_font_size: f64,
         then_label: Option<String>,
         then_branch: Vec<LayoutNode>,
         else_branches: Vec<ElseBranch>,
@@ -718,6 +724,42 @@ fn diamond_inner_w(condition: &str) -> f64 {
     diamond_inner_w_styled(condition, SMALL_FONT, false, "sans-serif")
 }
 
+fn centered_text_y_for_family(center_y: f64, font_size: f64, font_family: &str) -> f64 {
+    center_y
+        - text_render::text_height_for_family(font_size, font_family).max(TEXT_MIN_BOX_HEIGHT) / 2.0
+        + text_render::ascent_for_family(font_size, font_family)
+}
+
+fn centered_text_y(center_y: f64, font_size: f64) -> f64 {
+    center_y - text_box_height(font_size) / 2.0 + pm::ascent(font_size)
+}
+
+fn centerline_label_y(center_y: f64, font_size: f64) -> f64 {
+    center_y - (text_box_height(font_size) - pm::ascent(font_size))
+}
+
+fn text_box_height(font_size: f64) -> f64 {
+    pm::text_height(font_size).max(TEXT_MIN_BOX_HEIGHT)
+}
+
+fn labelled_if_inbound_gap(font_size: f64) -> f64 {
+    (text_box_height(font_size) + IF_LABEL_INBOUND_PAD).max(ARROW_LEN)
+}
+
+fn default_inbound_gap(node: &LayoutNode) -> f64 {
+    match node {
+        LayoutNode::If {
+            arrow_font_size,
+            then_label,
+            else_branches,
+            ..
+        } if then_label.is_some() || else_branches.iter().any(|b| b.label.is_some()) => {
+            labelled_if_inbound_gap(*arrow_font_size)
+        }
+        _ => ARROW_LEN,
+    }
+}
+
 /// Build a layout tree from the flat step list.
 fn build_tree(steps: &[ActivityStep], palette: &Palette) -> Vec<LayoutNode> {
     // Swimlane detection: if any `|Lane|` marker appears (and there's more
@@ -902,6 +944,7 @@ fn build_tree_inner(steps: &[ActivityStep], palette: &Palette) -> Vec<LayoutNode
                     diamond_text_color: palette.diamond_text_color.clone(),
                     diamond_text_bold: palette.diamond_text_bold,
                     diamond_text_italic: palette.diamond_text_italic,
+                    arrow_font_size: palette.arrow_font_size,
                     then_label: block.then_label.clone(),
                     then_branch,
                     else_branches,
@@ -2524,7 +2567,7 @@ fn sequence_height(nodes: &[LayoutNode]) -> f64 {
             continue;
         }
         if prior_flow {
-            h += pending_gap.unwrap_or(ARROW_LEN);
+            h += pending_gap.unwrap_or_else(|| default_inbound_gap(node));
         }
         pending_gap = None;
         h += node_height(node);
@@ -2536,7 +2579,8 @@ fn sequence_height(nodes: &[LayoutNode]) -> f64 {
 fn action_height(text: &str, pad_y: f64, font_family: &str, font_size: f64) -> f64 {
     // Pick the box height to match the label's actual font — monospace
     // labels render shorter than sans-serif at the same nominal size.
-    text_render::label_height_with_family(text, font_size, font_family) + pad_y * 2.0
+    (text_render::label_height_with_family(text, font_size, font_family) + pad_y * 2.0)
+        .max(ACTION_MIN_HEIGHT)
 }
 
 fn node_height(node: &LayoutNode) -> f64 {
@@ -2671,7 +2715,7 @@ fn node_height(node: &LayoutNode) -> f64 {
             // from the same compression-aware formula as emit_while.
             let diamond_alone_h = DIAMOND_HALF * 2.0;
             let body_top_offset = if is_label.is_some() {
-                pm::text_height(*arrow_font_size) + 2.0 * DIAMOND_HALF
+                text_box_height(*arrow_font_size) + 2.0 * DIAMOND_HALF
             } else {
                 ARROW_LEN
             };
@@ -2679,20 +2723,11 @@ fn node_height(node: &LayoutNode) -> f64 {
             // or +12 (empty body); wrap-back continues another +12 for
             // no-specialOut, or descends to special_y for specialOut.
             let below_body = if special_out.is_some() {
-                // Two competing lower extents, both measured from body_bottom:
-                //   (a) the loop-back junction at body_bottom + 10, plus
-                //       PlantUML's reserved back-edge label height
-                //       (text_height(SMALL_FONT), present even when the
-                //       back-label is empty); this is the usual winner.
-                //   (b) the special terminator's bottom: it sits at
-                //       4*halfHex below the diamond bottom (translateForSpecial.y),
-                //       so relative to body_bottom that's
-                //       4*halfHex + special.h - body_top_offset - body_h.
-                let s = special_out.as_ref().unwrap();
-                let special_h = node_height(s);
-                let junction_below = 10.0 + pm::text_height(*arrow_font_size);
-                let special_below = 4.0 * DIAMOND_HALF + special_h - body_top_offset - body_h;
-                junction_below.max(special_below)
+                // Special-out terminators are managed inside the while tile:
+                // the loop's advertised tile height keeps the fixed two-half-
+                // hex tail below the body, while the terminator itself is
+                // placed at translateForSpecial.y by emit_while.
+                2.0 * DIAMOND_HALF
             } else if body.is_empty() {
                 DIAMOND_HALF + DIAMOND_HALF // empty: +12 to junction, +12 wrap-back
             } else {
@@ -3520,7 +3555,7 @@ fn emit_sequence_ex(
                     } else if label.is_some() {
                         LABELED_ARROW_LEN
                     } else {
-                        ARROW_LEN
+                        default_inbound_gap(node)
                     };
                 // Partition entry: stretch the inbound arrow so it spans the
                 // full distance from prev cursor through the title bar to
@@ -3731,11 +3766,8 @@ fn emit_node(svg: &mut SvgEmitter, node: &LayoutNode, cx: f64, y: f64) -> f64 {
             );
             // Text baseline: padding_top + ascent, both derived from the
             // label's actual font so monospace labels position correctly.
-            let lh = text_render::label_height_with_family(text, *font_size, font_family);
-            let padding_top = (ah - lh) / 2.0;
-            let text_y = y
-                + padding_top
-                + text_render::label_ascent_with_family(text, *font_size, font_family);
+            let text_y =
+                y + *pad_y + text_render::label_ascent_with_family(text, *font_size, font_family);
             svg.text_element_styled(
                 &text_col,
                 font_family,
@@ -3780,11 +3812,8 @@ fn emit_node(svg: &mut SvgEmitter, node: &LayoutNode, cx: f64, y: f64) -> f64 {
                 rect_x,
                 y,
             );
-            let lh = text_render::label_height_with_family(text, *font_size, font_family);
-            let padding_top = (ah - lh) / 2.0;
-            let text_y = y
-                + padding_top
-                + text_render::label_ascent_with_family(text, *font_size, font_family);
+            let text_y =
+                y + *pad_y + text_render::label_ascent_with_family(text, *font_size, font_family);
             svg.text_element_styled(
                 &text_col,
                 font_family,
@@ -3807,6 +3836,7 @@ fn emit_node(svg: &mut SvgEmitter, node: &LayoutNode, cx: f64, y: f64) -> f64 {
             then_label,
             then_branch,
             else_branches,
+            ..
         } => emit_if(
             svg,
             cx,
@@ -4035,9 +4065,7 @@ fn emit_if(
     // Condition text (textLength = measured, centred under cx). The condition
     // honours `skinparam activityFontColor`; the then/else branch labels below
     // keep the default black.
-    let text_y = y + DIAMOND_HALF
-        - text_render::text_height_for_family(diamond_font_size, diamond_font_family) / 2.0
-        + text_render::ascent_for_family(diamond_font_size, diamond_font_family);
+    let text_y = centered_text_y_for_family(diamond_cy, diamond_font_size, diamond_font_family);
     svg.text_element_styled(
         diamond_text_color,
         diamond_font_family,
@@ -4063,7 +4091,7 @@ fn emit_if(
             label_font_size,
             lw,
             diamond_left - lw,
-            diamond_cy - pm::descent(label_font_size),
+            centerline_label_y(diamond_cy, label_font_size),
             label,
             false,
         );
@@ -4103,7 +4131,7 @@ fn emit_if(
             label_font_size,
             lw,
             diamond_right,
-            diamond_cy - pm::descent(label_font_size),
+            centerline_label_y(diamond_cy, label_font_size),
             label,
             false,
         );
@@ -4315,7 +4343,7 @@ fn emit_if_long(
 
         // Condition text, centred inside the diamond.
         let cw = text_render::measure(&col.condition, SMALL_FONT, false);
-        let cond_y = diamond_cy + pm::text_height(SMALL_FONT) / 2.0 - pm::descent(SMALL_FONT);
+        let cond_y = centered_text_y(diamond_cy, SMALL_FONT);
         svg.text_element_styled(
             &cond_text_color,
             "sans-serif",
@@ -4340,7 +4368,7 @@ fn emit_if_long(
                 label_font_size,
                 ew,
                 dcx + col.diamond_w / 2.0,
-                diamond_cy - pm::descent(label_font_size),
+                centerline_label_y(diamond_cy, label_font_size),
                 east,
                 false,
             );
@@ -4585,7 +4613,7 @@ fn emit_if_down(
     }
     // Condition text (centred under cx).
     let cond_text_color = svg.palette.text_color.clone();
-    let text_y = y + DIAMOND_HALF + pm::text_height(SMALL_FONT) / 2.0 - pm::descent(SMALL_FONT);
+    let text_y = centered_text_y(diamond_cy, SMALL_FONT);
     svg.text_element_styled(
         &cond_text_color,
         "sans-serif",
@@ -4605,7 +4633,7 @@ fn emit_if_down(
             label_font_size,
             lw,
             diamond_right,
-            diamond_cy - pm::descent(label_font_size),
+            centerline_label_y(diamond_cy, label_font_size),
             label,
             false,
         );
@@ -5132,7 +5160,7 @@ fn emit_while(
     // 4*halfHex + label height regardless of whether `endwhile` carries a
     // trailing label (faithful port of calculateDimensionFtile).
     let body_top_offset = if is_label.is_some() {
-        pm::text_height(svg.palette.arrow_font_size) + 2.0 * DIAMOND_HALF
+        text_box_height(svg.palette.arrow_font_size) + 2.0 * DIAMOND_HALF
     } else {
         ARROW_LEN
     };
@@ -5232,9 +5260,7 @@ fn emit_while(
     }
 
     // Condition text inside diamond.
-    let text_y = y + DIAMOND_HALF
-        - text_render::text_height_for_family(diamond_font_size, diamond_font_family) / 2.0
-        + text_render::ascent_for_family(diamond_font_size, diamond_font_family);
+    let text_y = centered_text_y_for_family(diamond_cy, diamond_font_size, diamond_font_family);
     svg.text_element_styled(
         diamond_text_color,
         diamond_font_family,
@@ -5256,7 +5282,7 @@ fn emit_while(
             label_font_size,
             lw,
             diamond_left_vertex_x - lw,
-            diamond_cy - pm::descent(label_font_size),
+            centerline_label_y(diamond_cy, label_font_size),
             label,
             false,
         );
@@ -5476,7 +5502,7 @@ fn emit_repeat(
             label_font_size,
             lw,
             diamond_right,
-            cond_diamond_cy - pm::descent(label_font_size),
+            centerline_label_y(cond_diamond_cy, label_font_size),
             label,
             false,
         );
