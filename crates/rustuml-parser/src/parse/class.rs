@@ -161,6 +161,32 @@ impl ClassParser {
         id
     }
 
+    fn resolve_relationship_endpoint(&mut self, raw: &str) -> String {
+        let raw = raw.trim();
+        if self.entities.iter().any(|e| e.id == raw) {
+            return raw.to_string();
+        }
+
+        for pkg in self.packages.iter().rev() {
+            let separators = [self.namespace_sep.as_deref().unwrap_or("."), ".", "::", "/"];
+            for sep in separators {
+                let Some(member) = raw
+                    .strip_prefix(&pkg.name)
+                    .and_then(|rest| rest.strip_prefix(sep))
+                else {
+                    continue;
+                };
+                if pkg.entities.iter().any(|id| id == member)
+                    && self.entities.iter().any(|e| e.id == member)
+                {
+                    return member.to_string();
+                }
+            }
+        }
+
+        self.ensure_entity(raw)
+    }
+
     fn find_entity_mut(&mut self, id: &str) -> Option<&mut ClassEntity> {
         self.entities.iter_mut().find(|e| e.id == id)
     }
@@ -718,8 +744,8 @@ impl ClassParser {
             let label = caps.get(8).map(|m| m.as_str().trim().to_string());
 
             let (kind, dashed) = parse_relationship_kind(rel_str);
-            let from = self.ensure_entity(&from_raw);
-            let to = self.ensure_entity(&to_raw);
+            let from = self.resolve_relationship_endpoint(&from_raw);
+            let to = self.resolve_relationship_endpoint(&to_raw);
 
             self.relationships.push(Relationship {
                 from,
@@ -1651,6 +1677,18 @@ mod tests {
     fn relationship_label() {
         let d = parse("Parent -- Child : has");
         assert_eq!(d.relationships[0].label.as_deref(), Some("has"));
+    }
+
+    #[test]
+    fn qualified_relationship_endpoint_resolves_package_member() {
+        let d = parse(
+            "package service {\n  class UserService\n}\npackage model {\n  class User\n}\nservice.UserService ..> model.User",
+        );
+
+        assert_eq!(d.entities.len(), 2);
+        assert_eq!(d.relationships.len(), 1);
+        assert_eq!(d.relationships[0].from, "UserService");
+        assert_eq!(d.relationships[0].to, "User");
     }
 
     #[test]
