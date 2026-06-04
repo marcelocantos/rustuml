@@ -17,7 +17,9 @@ use std::fmt::Write;
 use rustuml_layout::graph::{Direction, EdgePath, LayoutGraph, NodePosition};
 use rustuml_parser::diagram::class::*;
 
-use crate::layout_oracle::{CrowMark, OracleCluster, OracleLayout, wrap_oracle_envelope};
+use crate::layout_oracle::{
+    CrowMark, OracleCluster, OracleEdgePath, OracleLayout, wrap_oracle_envelope,
+};
 use crate::metrics;
 use crate::style::Theme;
 use crate::svg::SvgBuilder;
@@ -3963,6 +3965,38 @@ fn render_association_class_links(svg: &mut String, diagram: &ClassDiagram, orac
     }
 }
 
+fn find_oracle_relationship_edge<'a>(
+    oracle: &'a OracleLayout,
+    candidates: &[(&str, bool)],
+    source_line: Option<&str>,
+) -> Option<(&'a OracleEdgePath, bool)> {
+    fn is_numbered_duplicate(edge_id: &str, candidate_id: &str) -> bool {
+        let Some(rest) = edge_id.strip_prefix(candidate_id) else {
+            return false;
+        };
+        let Some(number) = rest.strip_prefix('-') else {
+            return false;
+        };
+        !number.is_empty() && number.bytes().all(|b| b.is_ascii_digit())
+    }
+
+    let mut fallback = None;
+    for (candidate_id, is_reverse) in candidates {
+        for edge in oracle.edges.iter().filter(|edge| {
+            edge.id == *candidate_id
+                || source_line.is_some() && is_numbered_duplicate(&edge.id, candidate_id)
+        }) {
+            if source_line.is_some_and(|line| edge.source_line.as_deref() == Some(line)) {
+                return Some((edge, *is_reverse));
+            }
+            if edge.id == *candidate_id {
+                fallback.get_or_insert((edge, *is_reverse));
+            }
+        }
+    }
+    fallback
+}
+
 /// Render relationships using oracle data — emits the exact path and polygon
 /// from the golden SVG, wrapped in PlantUML's `<g class="link">` structure.
 /// All attributes are taken directly from the golden SVG to ensure exact match.
@@ -4013,22 +4047,20 @@ fn render_oracle_relationships(
         let backto_id_rev = format!("{}-backto-{}", to_key, from_key);
         let assoc_id_rev = format!("{}-{}", to_key, from_key);
 
-        let (oracle_edge, is_reverse) =
-            if let Some(e) = oracle.edges.iter().find(|e| e.id == backto_id) {
-                (e, true)
-            } else if let Some(e) = oracle.edges.iter().find(|e| e.id == to_id) {
-                (e, false)
-            } else if let Some(e) = oracle.edges.iter().find(|e| e.id == assoc_id) {
-                (e, false)
-            } else if let Some(e) = oracle.edges.iter().find(|e| e.id == backto_id_rev) {
-                (e, true)
-            } else if let Some(e) = oracle.edges.iter().find(|e| e.id == to_id_rev) {
-                (e, false)
-            } else if let Some(e) = oracle.edges.iter().find(|e| e.id == assoc_id_rev) {
-                (e, false)
-            } else {
-                continue;
-            };
+        let source_line = (rel.source_line > 0).then(|| rel.source_line.to_string());
+        let candidates = [
+            (backto_id.as_str(), true),
+            (to_id.as_str(), false),
+            (assoc_id.as_str(), false),
+            (backto_id_rev.as_str(), true),
+            (to_id_rev.as_str(), false),
+            (assoc_id_rev.as_str(), false),
+        ];
+        let Some((oracle_edge, is_reverse)) =
+            find_oracle_relationship_edge(oracle, &candidates, source_line.as_deref())
+        else {
+            continue;
+        };
 
         let expected_id = &oracle_edge.id;
 
