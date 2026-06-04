@@ -2566,6 +2566,7 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
     let mut default_arrow_color = "#181818".to_string();
     let mut default_arrow_thickness: String = "1".to_string();
     let mut message_font_color = "#000000".to_string();
+    let mut message_font_color_set = false;
     let mut message_font_size: u32 = MSG_FONT_SIZE as u32;
     let mut message_font_bold = false;
     let mut message_font_italic = false;
@@ -2573,6 +2574,7 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
     let mut participant_border = "#181818".to_string();
     let mut participant_border_thickness: String = "0.5".to_string();
     let mut participant_font_color = "#000000".to_string();
+    let mut participant_font_color_set = false;
     let mut participant_font_size: u32 = PARTICIPANT_FONT_SIZE as u32;
     let mut participant_font_bold = false;
     let mut participant_font_italic = false;
@@ -2601,6 +2603,8 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
     // `noteBorderColor`. Default fill #FEFFDD, default border #181818.
     let mut note_fill_override: Option<String> = None;
     let mut note_border_override: Option<String> = None;
+    let mut note_font_color = "#000000".to_string();
+    let mut note_font_color_set = false;
     // Whether `ParticipantBackgroundColor` / `ParticipantBorderColor` were set
     // explicitly. These only affect the plain `participant` rectangle, so other
     // shape kinds must fall back to the (monochrome-aware) historical default
@@ -2638,6 +2642,18 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
             continue;
         }
         match key.as_str() {
+            "defaultfontcolor" => {
+                let c = resolve_color(val);
+                if !message_font_color_set {
+                    message_font_color = c.clone();
+                }
+                if !participant_font_color_set {
+                    participant_font_color = c.clone();
+                }
+                if !note_font_color_set {
+                    note_font_color = c;
+                }
+            }
             "backgroundcolor" => {
                 let c = resolve_color(val);
                 if c != "#FFFFFF" {
@@ -2654,6 +2670,7 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
             }
             "arrowfontcolor" | "sequencearrowfontcolor" => {
                 message_font_color = resolve_color(val);
+                message_font_color_set = true;
             }
             "arrowfontsize" | "sequencearrowfontsize" => {
                 if let Ok(v) = val.parse::<u32>() {
@@ -2680,6 +2697,7 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
             }
             "participantfontcolor" | "sequenceparticipantfontcolor" => {
                 participant_font_color = resolve_color(val);
+                participant_font_color_set = true;
             }
             "participantfontsize" | "sequenceparticipantfontsize" => {
                 if let Ok(v) = val.parse::<u32>() {
@@ -2755,6 +2773,10 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
             }
             "notebordercolor" | "sequencenotebordercolor" => {
                 note_border_override = Some(resolve_color(val));
+            }
+            "notefontcolor" | "sequencenotefontcolor" => {
+                note_font_color = resolve_color(val);
+                note_font_color_set = true;
             }
             "sequencedividerbackgroundcolor" => {
                 divider_fill = resolve_color(val);
@@ -6596,7 +6618,7 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                             y: text_y,
                             font_size: 13,
                             font_family: "sans-serif",
-                            fill: "#000000",
+                            fill: &note_font_color,
                             bold: false,
                             italic: false,
                             underline: false,
