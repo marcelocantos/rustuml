@@ -633,6 +633,11 @@ enum LayoutNode {
         /// INSIDE the while's frame at translateForSpecial position, not
         /// as a sibling below.
         special_out: Option<Box<LayoutNode>>,
+        /// This while is the first real tile in its local activity column. In
+        /// that position PlantUML lets a wide body tighten the special-out lead;
+        /// later while blocks keep the condition-driven lead so earlier siblings
+        /// do not shift.
+        starts_column: bool,
     },
     Repeat {
         body: Vec<LayoutNode>,
@@ -1078,6 +1083,7 @@ fn build_tree_inner(steps: &[ActivityStep], palette: &Palette) -> Vec<LayoutNode
                 } else {
                     None
                 };
+                let starts_column = matches!(nodes.as_slice(), [LayoutNode::Start]);
                 nodes.push(LayoutNode::While {
                     condition: w.condition.clone(),
                     diamond_font_family: palette.diamond_font_family.clone(),
@@ -1090,6 +1096,7 @@ fn build_tree_inner(steps: &[ActivityStep], palette: &Palette) -> Vec<LayoutNode
                     body,
                     end_label,
                     special_out,
+                    starts_column,
                 });
             }
             ActivityStep::EndWhile(_) => {
@@ -1479,23 +1486,29 @@ fn while_body_left(body: &[LayoutNode], body_left: f64) -> f64 {
 }
 
 fn while_left_extent(
+    body: &[LayoutNode],
     body_left: f64,
     cond_half: f64,
-    is_label: Option<&str>,
     end_label: Option<&str>,
     special_out: Option<&LayoutNode>,
+    starts_column: bool,
 ) -> f64 {
     let special_extent = match special_out {
         Some(special) => {
             let special_half = node_width(special) / 2.0;
             let body_corridor = body_left + DIAMOND_HALF;
             let special_offset = body_corridor.max(cond_half) + special_half;
-            let special_lead =
-                if is_label.is_none() && end_label.is_none() && body_corridor > cond_half {
-                    WHILE_SPECIAL_BODY_LEAD
-                } else {
-                    WHILE_SPECIAL_COND_LEAD
-                };
+            let special_lead = if while_body_drives_special(
+                body,
+                body_left,
+                cond_half,
+                end_label,
+                starts_column,
+            ) {
+                WHILE_SPECIAL_BODY_LEAD
+            } else {
+                WHILE_SPECIAL_COND_LEAD
+            };
             special_offset + special_lead
         }
         None => cond_half.max(body_left) + 25.0,
@@ -1510,13 +1523,20 @@ fn while_left_extent(
     special_extent.max(label_extent)
 }
 
-fn while_body_drives_unlabeled_special(
+fn while_body_drives_special(
+    body: &[LayoutNode],
     body_left: f64,
     cond_half: f64,
-    is_label: Option<&str>,
     end_label: Option<&str>,
+    starts_column: bool,
 ) -> bool {
-    is_label.is_none() && end_label.is_none() && body_left + DIAMOND_HALF > cond_half
+    starts_column
+        && end_label.is_none()
+        && body_left + DIAMOND_HALF > cond_half
+        && body_left > DIAMOND_HALF * 2.0
+        && !body
+            .iter()
+            .any(|node| matches!(node, LayoutNode::DeprecatedAction { .. }))
 }
 
 fn while_slot_compress(
@@ -2361,9 +2381,10 @@ fn node_extents(node: &LayoutNode) -> (f64, f64) {
         LayoutNode::While {
             body,
             condition,
-            is_label,
+            is_label: _,
             end_label,
             special_out,
+            starts_column,
             diamond_font_family,
             diamond_font_size,
             diamond_text_bold,
@@ -2378,11 +2399,12 @@ fn node_extents(node: &LayoutNode) -> (f64, f64) {
             ) / 2.0
                 + DIAMOND_HALF;
             let left_extent = while_left_extent(
+                body,
                 while_body_left(body, body_left),
                 cond_half,
-                is_label.as_deref(),
                 end_label.as_deref(),
                 special_out.as_deref(),
+                *starts_column,
             );
             // Right side: loop-back arm at max(cond,body) + halfHex with a 4px
             // arrowhead, plus halfHex of trailing reservation from FtileWhile's
@@ -4708,6 +4730,7 @@ fn emit_node(svg: &mut SvgEmitter, node: &LayoutNode, cx: f64, y: f64) -> f64 {
             body,
             end_label,
             special_out,
+            starts_column,
             ..
         } => emit_while(
             svg,
@@ -4723,6 +4746,7 @@ fn emit_node(svg: &mut SvgEmitter, node: &LayoutNode, cx: f64, y: f64) -> f64 {
             end_label,
             body,
             special_out.as_deref(),
+            *starts_column,
         ),
         LayoutNode::Repeat {
             body,
@@ -6018,6 +6042,7 @@ fn emit_while(
     end_label: &Option<String>,
     body: &[LayoutNode],
     special_out: Option<&LayoutNode>,
+    starts_column: bool,
 ) -> f64 {
     // PlantUML's FtileWhile layout (reverse-engineered):
     //   - condition hexagon at the top
@@ -6130,11 +6155,12 @@ fn emit_while(
         // diamond_left in FtileWhile-local. Translating to absolute:
         //   min(body_left_x - halfHex, diamond_left_vertex_x) - special_w
         // The special's cx is at translateForSpecial.x + special_w/2.
-        let special_x_adjust = if while_body_drives_unlabeled_special(
+        let special_x_adjust = if while_body_drives_special(
+            body,
             while_body_left(body, body_left_ext),
             cond_inner_w / 2.0 + DIAMOND_HALF,
-            is_label.as_deref(),
             end_label.as_deref(),
+            starts_column,
         ) {
             WHILE_SPECIAL_BODY_X_PULL_RIGHT
         } else {
