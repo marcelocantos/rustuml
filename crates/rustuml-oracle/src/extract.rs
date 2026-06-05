@@ -1184,6 +1184,10 @@ pub fn extract_oracle_layout(svg: &str) -> Option<OracleLayout> {
                         // entities (path-based) it is otherwise unused.
                         bbox.name_text_x = Some(sl);
                     }
+                    layout.entity_list.push(OracleEntity {
+                        qualified_name: name.to_string(),
+                        rect: bbox.clone(),
+                    });
                     layout.entities.insert(name.to_string(), bbox);
                 }
             }
@@ -1214,39 +1218,41 @@ pub fn extract_oracle_layout(svg: &str) -> Option<OracleLayout> {
                     } else {
                         ellipse.attribute("fill").map(String::from)
                     };
-                    layout.entities.insert(
-                        name.to_string(),
-                        EntityRect {
-                            x: cx - rx,
-                            y: cy - ry,
-                            width: rx * 2.0,
-                            height: ry * 2.0,
-                            icon_cx: None,
-                            icon_cy: None,
-                            glyph_path_d: None,
-                            body_polygon: None,
-                            icon_polygon: None,
-                            separator_paths: Vec::new(),
-                            visibility_polygons: Vec::new(),
-                            name_text_x: None,
-                            text_y_values: Vec::new(),
-                            text_x_values: Vec::new(),
-                            sep_y_values: Vec::new(),
-                            sep_lines: Vec::new(),
-                            vis_icon_y_values: Vec::new(),
-                            fill,
-                            body_style: None,
-                            rect_style: None,
-                            rect_rx: None,
-                            rect_ry: None,
-                            rect_filter: None,
-                            entity_id,
-                            source_line: node.attribute("data-source-line").map(String::from),
-                            aux_rects: Vec::new(),
-                            lines: Vec::new(),
-                            texts: Vec::new(),
-                        },
-                    );
+                    let rect = EntityRect {
+                        x: cx - rx,
+                        y: cy - ry,
+                        width: rx * 2.0,
+                        height: ry * 2.0,
+                        icon_cx: None,
+                        icon_cy: None,
+                        glyph_path_d: None,
+                        body_polygon: None,
+                        icon_polygon: None,
+                        separator_paths: Vec::new(),
+                        visibility_polygons: Vec::new(),
+                        name_text_x: None,
+                        text_y_values: Vec::new(),
+                        text_x_values: Vec::new(),
+                        sep_y_values: Vec::new(),
+                        sep_lines: Vec::new(),
+                        vis_icon_y_values: Vec::new(),
+                        fill,
+                        body_style: None,
+                        rect_style: None,
+                        rect_rx: None,
+                        rect_ry: None,
+                        rect_filter: None,
+                        entity_id,
+                        source_line: node.attribute("data-source-line").map(String::from),
+                        aux_rects: Vec::new(),
+                        lines: Vec::new(),
+                        texts: Vec::new(),
+                    };
+                    layout.entity_list.push(OracleEntity {
+                        qualified_name: name.to_string(),
+                        rect: rect.clone(),
+                    });
+                    layout.entities.insert(name.to_string(), rect);
                 }
             }
         } else if class_attr == "link" {

@@ -12,7 +12,7 @@ use rustuml_layout::graph::{Direction, EdgePath, LayoutGraph};
 use rustuml_parser::diagram::state::*;
 
 use crate::layout_oracle::{
-    OracleEdgePath, OracleHandwrittenWarning, OracleLayout, wrap_oracle_envelope,
+    EntityRect, OracleEdgePath, OracleHandwrittenWarning, OracleLayout, wrap_oracle_envelope,
 };
 use crate::style::Theme;
 use crate::text_render::{self, TextBase};
@@ -1044,90 +1044,63 @@ pub fn render_with_oracle(
             .unwrap_or("ent0002")
     };
 
-    // Named floating notes (`note "…" as FN1`) are emitted by PlantUML at the
-    // very top of the body, *before* the pseudo-states and entities, using the
-    // alias as the qualified name. Replay the oracle's captured path geometry
-    // when available; the alias entity lives in `oracle.entities` keyed by its
-    // alias (e.g. "FN1"), not under a `GMN*` name.
-    if let Some(orc) = oracle {
-        for note in &diagram.notes {
-            let StateNoteKind::Floating(Some(alias)) = &note.kind else {
-                continue;
-            };
-            let Some(rect) = orc.entities.get(alias) else {
-                continue;
-            };
-            let entity_id = rect
-                .entity_id
-                .clone()
-                .unwrap_or_else(|| "ent0000".to_string());
-            let source_line = rect.name_text_x.map(|sl| sl as usize).unwrap_or(0);
-            write!(
-                svg,
-                r#"<g class="entity" data-qualified-name="{alias}" data-source-line="{source_line}" id="{entity_id}">"#,
-            )
-            .unwrap();
-            let mut first_d_for_left: Option<&str> = None;
-            if let Some(paths) = &rect.glyph_path_d {
-                for piece in paths.split('|') {
-                    let (d, style) = piece
-                        .split_once("#STYLE#")
-                        .unwrap_or((piece, "stroke:#181818;stroke-width:0.5;"));
-                    if first_d_for_left.is_none() {
-                        first_d_for_left = Some(d);
-                    }
-                    write!(svg, r#"<path d="{d}" fill="{NOTE_FILL}" style="{style}"/>"#).unwrap();
-                }
-            }
-            let body_left_x = first_d_for_left
-                .and_then(|d| {
-                    d.strip_prefix('M')
-                        .and_then(|rest| rest.split(',').next())
-                        .and_then(|s| s.parse::<f64>().ok())
-                })
-                .unwrap_or(rect.x);
-            let text_x = body_left_x + NOTE_PADDING;
-            let lines: Vec<&str> = note
-                .text
-                .lines()
-                .map(|l| l.trim())
-                .filter(|l| !l.is_empty())
-                .collect();
-            let line_ys = distinct_line_ys(&rect.text_y_values);
-            for (i, line) in lines.iter().enumerate() {
-                let fallback_y =
-                    rect.y + NOTE_PADDING + LINK_FONT_SIZE + i as f64 * NOTE_LINE_HEIGHT;
-                let ty = line_ys.get(i).copied().unwrap_or(fallback_y);
-                let mut text_buf = String::new();
-                text_render::emit_text(
-                    &mut text_buf,
-                    line,
-                    &TextBase {
-                        x: text_x,
-                        y: ty,
-                        font_size: LINK_FONT_SIZE as u32,
-                        font_family: "sans-serif",
-                        fill: TEXT_COLOR,
-                        bold: false,
-                        italic: false,
-                        underline: false,
-                        skip_underline: false,
-                    },
-                );
-                svg.push_str(&text_buf);
-            }
-            svg.push_str("</g>");
-        }
-    }
-
     // Fork/join bars are emitted inline within the entity loop below, in
     // entity-declaration order (PlantUML interleaves them with the other
     // entities rather than grouping them up front). `bar_index` selects the
     // matching oracle `__bar_N__` synthetic entity in document order.
     let mut bar_index = 0usize;
+    let named_floating_notes: Vec<(&str, &StateNote, &EntityRect, usize)> = oracle
+        .map(|orc| {
+            diagram
+                .notes
+                .iter()
+                .filter_map(|note| {
+                    let StateNoteKind::Floating(Some(alias)) = &note.kind else {
+                        return None;
+                    };
+                    let rect = orc.entities.get(alias)?;
+                    let order = orc
+                        .entity_list
+                        .iter()
+                        .position(|entry| entry.qualified_name == *alias)
+                        .unwrap_or(usize::MAX);
+                    Some((alias.as_str(), note, rect, order))
+                })
+                .collect()
+        })
+        .unwrap_or_default();
+    let mut emitted_named_notes = vec![false; named_floating_notes.len()];
 
     // Render entities.
     for (id, cx, cy, bw, bh) in &positions {
+        if !named_floating_notes.is_empty() {
+            let oracle_name = if id == "__start__" {
+                ".start."
+            } else if id == "__end__" {
+                ".end."
+            } else {
+                id.as_str()
+            };
+            let entity_order = oracle
+                .and_then(|orc| {
+                    orc.entity_list
+                        .iter()
+                        .position(|entry| entry.qualified_name == oracle_name)
+                })
+                .unwrap_or(usize::MAX);
+            if entity_order != usize::MAX {
+                for (idx, (alias, note, rect, note_order)) in
+                    named_floating_notes.iter().enumerate()
+                {
+                    if !emitted_named_notes[idx] && *note_order < entity_order {
+                        emit_oracle_named_floating_note(
+                            &mut svg, alias, rect, &note.text, TEXT_COLOR,
+                        );
+                        emitted_named_notes[idx] = true;
+                    }
+                }
+            }
+        }
         if id == "__start__" {
             // Start pseudo-state — use the source_line from the first transition
             // originating from [*].
@@ -1261,7 +1234,7 @@ pub fn render_with_oracle(
                         .unwrap_or_else(|| STATE_FILL.to_string());
                     write!(
                         svg,
-                        r#"<polygon fill="{fill_color}" points="{},{},{},{},{},{},{},{},{},{}" style="stroke:{STROKE_COLOR};stroke-width:0.5;"/>"#,
+                        r#"<polygon fill="{fill_color}" points="{},{},{},{},{},{},{},{},{},{}" style="stroke:{DEFAULT_STROKE_COLOR};stroke-width:0.5;"/>"#,
                         fmt_f(*cx), fmt_f(top),
                         fmt_f(right), fmt_f(*cy),
                         fmt_f(*cx), fmt_f(bottom),
@@ -1664,6 +1637,12 @@ pub fn render_with_oracle(
                     }
                 }
             }
+        }
+    }
+    for (idx, (alias, note, rect, _)) in named_floating_notes.iter().enumerate() {
+        if !emitted_named_notes[idx] {
+            emit_oracle_named_floating_note(&mut svg, alias, rect, &note.text, TEXT_COLOR);
+            emitted_named_notes[idx] = true;
         }
     }
 
@@ -2321,20 +2300,39 @@ fn render_oracle_transitions(svg: &mut String, diagram: &StateDiagram, oracle: &
 /// from the oracle's captured y values. Shared by the flat and composite
 /// renderers so an anchored note (`note right of …`) renders identically
 /// regardless of whether its target sits inside a composite.
-fn emit_oracle_gmn_note(
+fn emit_oracle_gmn_note(svg: &mut String, gmn_name: &str, rect: &EntityRect, note_text: &str) {
+    emit_oracle_state_note(svg, gmn_name, rect, note_text, DEFAULT_TEXT_COLOR);
+}
+
+fn emit_oracle_named_floating_note(
     svg: &mut String,
-    gmn_name: &str,
-    rect: &crate::layout_oracle::EntityRect,
+    alias: &str,
+    rect: &EntityRect,
     note_text: &str,
+    text_color: &str,
+) {
+    emit_oracle_state_note(svg, alias, rect, note_text, text_color);
+}
+
+fn emit_oracle_state_note(
+    svg: &mut String,
+    qualified_name: &str,
+    rect: &EntityRect,
+    note_text: &str,
+    text_color: &str,
 ) {
     let entity_id = rect
         .entity_id
         .clone()
         .unwrap_or_else(|| "ent0000".to_string());
-    let source_line = rect.name_text_x.map(|sl| sl as usize).unwrap_or(0);
+    let source_line = rect.source_line.clone().unwrap_or_else(|| {
+        rect.name_text_x
+            .map(|sl| (sl as usize).to_string())
+            .unwrap_or_else(|| "0".to_string())
+    });
     write!(
         svg,
-        r#"<g class="entity" data-qualified-name="{gmn_name}" data-source-line="{source_line}" id="{entity_id}">"#,
+        r#"<g class="entity" data-qualified-name="{qualified_name}" data-source-line="{source_line}" id="{entity_id}">"#,
     )
     .unwrap();
     let mut first_d_for_left: Option<&str> = None;
@@ -2375,7 +2373,7 @@ fn emit_oracle_gmn_note(
                 y: ty,
                 font_size: LINK_FONT_SIZE as u32,
                 font_family: "sans-serif",
-                fill: DEFAULT_TEXT_COLOR,
+                fill: text_color,
                 bold: false,
                 italic: false,
                 underline: false,
