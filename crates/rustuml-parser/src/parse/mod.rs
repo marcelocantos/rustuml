@@ -164,6 +164,7 @@ fn detect_uml_subtype(lines: &[String]) -> UmlSubtype {
     let mut has_allowmixing = false;
     let mut has_skinparam = false;
     let mut has_meta_only_class_default = false;
+    let mut has_class_dependency_arrow = false;
 
     for line in lines {
         let trimmed = source_text(line).trim();
@@ -402,6 +403,9 @@ fn detect_uml_subtype(lines: &[String]) -> UmlSubtype {
         {
             scores[1] += 10;
         }
+        if trimmed.contains("..>") || trimmed.contains("<..") {
+            has_class_dependency_arrow = true;
+        }
         // `*--` and `o--` score for class only when no `object` keyword is present.
         // In object diagrams they denote composition/aggregation links.
         // We defer the disambiguation: score both, but object gets a tiebreak boost
@@ -515,6 +519,14 @@ fn detect_uml_subtype(lines: &[String]) -> UmlSubtype {
         if trimmed == "allowmixing" || trimmed.starts_with("allowmixing ") {
             has_allowmixing = true;
         }
+    }
+
+    // Plain dotted dependency arrows default to CLASS in Java PlantUML
+    // (`A ..> B`), but the same spelling is also valid for object,
+    // component, and deployment links. Treat it as a class signal only when
+    // no explicit non-class container/entity syntax has appeared.
+    if has_class_dependency_arrow && scores[2] == 0 && scores[5] == 0 && scores[7] == 0 {
+        scores[1] += 10;
     }
 
     // `allowmixing` + an explicit class declaration => CLASS, overriding any
@@ -1055,6 +1067,32 @@ mod tests {
         let input = "@startuml\nentity MyType {}\n@enduml";
         let diagram = parse(input).unwrap();
         assert!(matches!(diagram, Diagram::Class(_)));
+    }
+
+    #[test]
+    fn dotted_dependency_arrows_route_to_class() {
+        let input = "@startuml\nA ..> B: dotted\n@enduml";
+        let diagram = parse(input).unwrap();
+        assert!(matches!(diagram, Diagram::Class(_)));
+
+        let input = "@startuml\nA ..>> B: dotted thick\n@enduml";
+        let diagram = parse(input).unwrap();
+        assert!(matches!(diagram, Diagram::Class(_)));
+    }
+
+    #[test]
+    fn dotted_dependency_arrows_preserve_explicit_non_class_types() {
+        let input = "@startuml\nobject Source\nobject Target\nSource ..> Target\n@enduml";
+        let diagram = parse(input).unwrap();
+        assert!(matches!(diagram, Diagram::Object(_)));
+
+        let input = "@startuml\nnode NodeA\nnode NodeB\nNodeA ..> NodeB\n@enduml";
+        let diagram = parse(input).unwrap();
+        assert!(matches!(diagram, Diagram::Deployment(_)));
+
+        let input = "@startuml\ncomponent A\ncomponent B\nA ..> B\n@enduml";
+        let diagram = parse(input).unwrap();
+        assert!(matches!(diagram, Diagram::Component(_)));
     }
 
     #[test]

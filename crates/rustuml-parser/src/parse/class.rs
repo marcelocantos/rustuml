@@ -711,7 +711,7 @@ impl ClassParser {
     fn try_relationship(&mut self, line: &str) -> bool {
         // Relationship format: EntityA ["mult"] ARROW ["mult"] EntityB [: label]
         // Supported arrows: <|--, --|>, ..|>, <|.., *--, --*, o--, --o,
-        //                   <-->, <..>, --, -->, <--, <-, ->, .., ..>, <..
+        //                   <-->, <..>, --, -->, <--, <-, ->, .., ..>, ..>>, <..
         //                   <|--|> (bidirectional inheritance), <..|.> etc.
         // Multiple dashes (e.g. ---- or ------) are treated as plain association.
         //
@@ -735,7 +735,7 @@ impl ClassParser {
             // separator colon flanked by optional space), which a bare endpoint
             // (no spaces) never matches, so `A::B --> C::D : label` still splits.
             Regex::new(
-                r#"^(?:"([^"]+)"|([\w./:]+))\s*(?:"([^"]+)")?\s*((?:<\|--\|>|<\.\.>|<\|--|--\|>|\.\.\|>|<\|\.\.|<\.\.|\*--|--\*|o--|--o|<-->|<-{2,}|-{2,}>|<--|-->|->|<-|-{2,}|\.\.|\.\.>))\s*(?:"([^"]+)")?\s*(?:"([^"]+)"|([\w./:]+))(?:\s*:\s*(.+))?$"#,
+                r#"^(?:"([^"]+)"|([\w./:]+))\s*(?:"([^"]+)")?\s*((?:<\|--\|>|<\.\.>|<\|--|--\|>|\.\.\|>|<\|\.\.|<\.\.|\*--|--\*|o--|--o|<-->|<-{2,}|-{2,}>|<--|-->|->|<-|-{2,}|\.\.>>|\.\.>|\.\.))\s*(?:"([^"]+)")?\s*(?:"([^"]+)"|([\w./:]+))(?:\s*:\s*(.+))?$"#,
             )
             .unwrap()
         });
@@ -1881,6 +1881,15 @@ mod tests {
         assert_eq!(d.relationships[1].kind, RelationshipKind::Dependency);
         assert!(!d.relationships[0].dashed);
         assert!(!d.relationships[1].dashed);
+    }
+
+    #[test]
+    fn dotted_thick_dependency() {
+        let d = parse("A ..>> B : dotted thick");
+        assert_eq!(d.relationships.len(), 1);
+        assert_eq!(d.relationships[0].kind, RelationshipKind::Dependency);
+        assert!(d.relationships[0].dashed);
+        assert_eq!(d.relationships[0].label.as_deref(), Some("dotted thick"));
     }
 
     #[test]
