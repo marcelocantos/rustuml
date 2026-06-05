@@ -688,10 +688,33 @@ fn rendered_line_metrics_with_family(
     }
 }
 
+fn first_segment_metrics_with_family(
+    content: &str,
+    font_size: f64,
+    font_family: &str,
+) -> RenderedLineMetrics {
+    let segments = creole::parse_segments(content);
+    let Some(first) = segments.first() else {
+        return rendered_line_metrics_with_family(content, font_size, font_family);
+    };
+    let size = first.style.size.map_or(font_size, |s| s as f64);
+    let family = if first.style.monospace {
+        "monospace"
+    } else if let Some(family) = first.style.font_family.as_deref() {
+        family
+    } else {
+        font_family
+    };
+    RenderedLineMetrics {
+        height: text_height_with_family(size, family).max(10.0),
+        ascent: ascent_with_family(size, family),
+    }
+}
+
 fn rendered_label_y_drop_with_family(content: &str, font_size: f64, font_family: &str) -> f64 {
     let mut lines = content.split("\\n");
     let first = lines.next().unwrap_or("");
-    let first_metrics = rendered_line_metrics_with_family(first, font_size, font_family);
+    let first_metrics = first_segment_metrics_with_family(first, font_size, font_family);
     let remaining_height: f64 = lines
         .map(|line| rendered_line_metrics_with_family(line, font_size, font_family).height)
         .sum();
