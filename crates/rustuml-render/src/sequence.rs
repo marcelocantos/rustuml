@@ -1174,21 +1174,41 @@ const GROUP_FRAME_MARGIN: f64 = 10.0;
 /// member (no `outMargin`, only the list's MARGIN5) floors one pixel lower.
 const GROUP_NOTE_LEFT_FLOOR_BASE: f64 = 9.0;
 
-/// Resolve the bold tab text and optional `[guard]` label for a frame header.
+/// Resolve the bold tab text, optional `[guard]` label, and optional tab fill
+/// override for a frame header.
 ///
-/// PlantUML renders `group <label>` with `<label>` as the bold tab text and no
-/// guard bracket, whereas `alt`/`opt`/`loop`/`par`/`break`/`critical` render the
-/// kind keyword as the tab text and the label as a `[guard]` to its right.
-/// `kind_str` is the keyword spelling; for a bare `group` with no label it is
-/// the fallback tab text.
-fn group_tab_and_guard<'a>(
+/// PlantUML renders `group <label>` with `<label>` as the bold tab text, but
+/// `group <label> [guard]` splits the trailing bracketed guard out beside the
+/// tab. `group#color <label>` colours the tab. Other group kinds render the
+/// keyword as the tab text and the label as a guard.
+fn group_header_parts<'a>(
     kind: GroupKind,
     kind_str: &'a str,
     label: Option<&'a String>,
-) -> (&'a str, Option<&'a str>) {
+) -> (&'a str, Option<&'a str>, Option<&'a str>) {
     match kind {
-        GroupKind::Group => (label.map(String::as_str).unwrap_or(kind_str), None),
-        _ => (kind_str, label.map(String::as_str)),
+        GroupKind::Group => {
+            let Some(raw_label) = label.map(String::as_str) else {
+                return (kind_str, None, None);
+            };
+            let mut text = raw_label.trim();
+            let mut fill = None;
+            if let Some(stripped) = text.strip_prefix('#')
+                && let Some(space) = stripped.find(char::is_whitespace)
+            {
+                fill = Some(&text[..space + 1]);
+                text = stripped[space..].trim_start();
+            }
+            if let Some(open) = text.rfind(" [")
+                && text.ends_with(']')
+            {
+                let tab = text[..open].trim_end();
+                let guard = &text[open + 2..text.len() - 1];
+                return (tab, Some(guard), fill);
+            }
+            (text, None, fill)
+        }
+        _ => (kind_str, label.map(String::as_str), None),
     }
 }
 
@@ -5834,13 +5854,20 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                 } else {
                     alt_fl
                 };
-                let (tab_text, guard_label) =
-                    group_tab_and_guard(g.kind, kind_str, g.label.as_ref());
-                let kw = bold_text_width_with_family(
+                let (tab_text, guard_label, _) =
+                    group_header_parts(g.kind, kind_str, g.label.as_ref());
+                let mut kw = bold_text_width_with_family(
                     tab_text,
                     group_header_font_size_f,
                     &group_header_font_family,
                 );
+                if g.kind == GroupKind::Group && guard_label.is_some() {
+                    kw += bold_text_width_with_family(
+                        " ",
+                        group_header_font_size_f,
+                        &group_header_font_family,
+                    );
+                }
                 let tab_right = fl + kw + 45.0;
                 let guard_right = if let Some(label) = guard_label {
                     let gw = group_guard_width_with_family(label, &group_header_font_family);
@@ -6407,13 +6434,20 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                                 GroupKind::Critical => "critical",
                                 GroupKind::Group => "group",
                             };
-                            let (tab_text, guard_label) =
-                                group_tab_and_guard(g.kind, kind_str, g.label.as_ref());
-                            let kw = bold_text_width_with_family(
+                            let (tab_text, guard_label, _) =
+                                group_header_parts(g.kind, kind_str, g.label.as_ref());
+                            let mut kw = bold_text_width_with_family(
                                 tab_text,
                                 group_header_font_size_f,
                                 &group_header_font_family,
                             );
+                            if g.kind == GroupKind::Group && guard_label.is_some() {
+                                kw += bold_text_width_with_family(
+                                    " ",
+                                    group_header_font_size_f,
+                                    &group_header_font_family,
+                                );
+                            }
                             let tab_right = frame_left + kw + 45.0;
                             if let Some(label) = guard_label {
                                 let gw =
@@ -8623,13 +8657,20 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
 
                 // Emit header tab FIRST (pentagon shape), then frame rect, then text.
                 // This matches PlantUML's SVG element order.
-                let (tab_text, guard_label) =
-                    group_tab_and_guard(g.kind, kind_str, g.label.as_ref());
-                let kind_w = bold_text_width_with_family(
+                let (tab_text, guard_label, fill_override) =
+                    group_header_parts(g.kind, kind_str, g.label.as_ref());
+                let mut kind_w = bold_text_width_with_family(
                     tab_text,
                     group_header_font_size_f,
                     &group_header_font_family,
                 );
+                if g.kind == GroupKind::Group && guard_label.is_some() {
+                    kind_w += bold_text_width_with_family(
+                        " ",
+                        group_header_font_size_f,
+                        &group_header_font_family,
+                    );
+                }
                 let tab_right = frame_left + kind_w + 45.0;
                 let tab_bottom_left = frame_top + group_header_height;
                 let tab_bottom_right = frame_top + group_header_height - 10.0;
@@ -8642,7 +8683,7 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                     br = fmt_coord(tab_bottom_right),
                     diag = fmt_coord(tab_right - 10.0),
                     bl = fmt_coord(tab_bottom_left),
-                    fill = group_background,
+                    fill = fill_override.map(resolve_color).unwrap_or_else(|| group_background.clone()),
                 )
                 .unwrap();
 
