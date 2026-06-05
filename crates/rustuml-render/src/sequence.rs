@@ -917,13 +917,52 @@ const NOTE_LIFELINE_GAP: f64 = 5.0;
 /// first..last lifeline span when the content is narrower than the span.
 const ACROSS_NOTE_MARGIN: f64 = 25.0;
 /// "note over A, B" (explicit participant list): minimum extra width over the
-/// first..last lifeline span (19px overhang each side).
+/// first..last lifeline span (fallback for non-standard note shapes).
 const OVER_SEVERAL_NOTE_MARGIN: f64 = 38.0;
 /// Java ParticipantBox.outMargin (default skin): horizontal padding each side of
 /// a participant head box, used in note-across text centering.
 const PARTICIPANT_OUT_MARGIN: f64 = 5.0;
+/// Rose note right text margin (`AbstractTextualComponent.marginX2`).
+const ROSE_NOTE_MARGIN_X2: f64 = 15.0;
+/// Rose note layout padding (`ComponentRoseNote.paddingX`).
+const ROSE_NOTE_PADDING_X: f64 = 5.0;
+/// Extra width in `ComponentRoseNote.getPreferredWidth`: text block margins plus
+/// the component's left/right layout padding.
+const ROSE_NOTE_COMPONENT_PREF_EXTRA: f64 =
+    NOTE_TEXT_X_PAD + ROSE_NOTE_MARGIN_X2 + 2.0 * ROSE_NOTE_PADDING_X;
 /// Horizontal indent of hexagonal note vertices from note edges.
 const HNOTE_INDENT: f64 = 10.0;
+
+struct OverSeveralNoteGeometry {
+    visible_left: f64,
+    visible_width: f64,
+}
+
+fn over_several_note_geometry(
+    participants: &[ParticipantLayout],
+    lo: usize,
+    hi: usize,
+    component_pref_w: f64,
+    content_visible_w: f64,
+) -> OverSeveralNoteGeometry {
+    let participant_area_w =
+        participants[hi].box_x + participants[hi].box_width + PARTICIPANT_OUT_MARGIN
+            - participants[lo].box_x;
+    let area_width = component_pref_w.max(participant_area_w);
+    let centre = (participants[lo].center_x + participants[hi].center_x) / 2.0;
+    // Java `(int)` truncates toward zero; a near-zero negative left edge should
+    // remain 0, not floor to -1 and force a whole-diagram shift.
+    let area_left = (centre - area_width / 2.0).trunc();
+    let visible_width = if area_width > component_pref_w {
+        (area_width - 2.0 * ROSE_NOTE_PADDING_X).floor()
+    } else {
+        content_visible_w
+    };
+    OverSeveralNoteGeometry {
+        visible_left: area_left + ROSE_NOTE_PADDING_X,
+        visible_width,
+    }
+}
 
 // ---------------------------------------------------------------------------
 // Group layout constants (reverse-engineered from golden SVGs)
@@ -4192,21 +4231,34 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                     note_font_size_f,
                     &note_font_family,
                 );
-                // Java centres the note on the span midpoint using its raw
-                // (un-ceiled) preferred width, so the left-margin shift must use
-                // the raw width too; the ceiled width over-reserves by up to 1px
-                // and shifts the whole diagram right.
-                let note_content_w =
-                    note_content_width_raw_padded(max_tw, note.shape, note_text_align);
-                let margin = if note.participants.is_empty() {
-                    ACROSS_NOTE_MARGIN
+                // Use the same geometry as the draw path so notes that overhang
+                // participant 0 reserve exactly the shift Java would need.
+                let note_left = if !note.participants.is_empty() && note.shape == NoteShape::Note {
+                    let component_pref_w =
+                        max_tw + ROSE_NOTE_COMPONENT_PREF_EXTRA + 2.0 * explicit_global_padding;
+                    let content_visible_w =
+                        note_content_width_padded(max_tw, note.shape, note_text_align);
+                    over_several_note_geometry(
+                        &participants,
+                        lo,
+                        hi,
+                        component_pref_w,
+                        content_visible_w,
+                    )
+                    .visible_left
                 } else {
-                    OVER_SEVERAL_NOTE_MARGIN
+                    let note_content_w =
+                        note_content_width_raw_padded(max_tw, note.shape, note_text_align);
+                    let margin = if note.participants.is_empty() {
+                        ACROSS_NOTE_MARGIN
+                    } else {
+                        OVER_SEVERAL_NOTE_MARGIN
+                    };
+                    let span = participants[hi].lifeline_line_x - participants[lo].lifeline_line_x;
+                    let pw = note_content_w.max(span.round() + margin);
+                    let centre = (participants[lo].center_x + participants[hi].center_x) / 2.0;
+                    (centre - pw / 2.0).floor()
                 };
-                let span = participants[hi].lifeline_line_x - participants[lo].lifeline_line_x;
-                let pw = note_content_w.max(span.round() + margin);
-                let centre = (participants[lo].center_x + participants[hi].center_x) / 2.0;
-                let note_left = (centre - pw / 2.0).floor();
                 let shift = (HEAD_BOX_Y - note_left).max(0.0);
                 across_shift = across_shift.max(shift);
             }
@@ -4995,11 +5047,27 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                         } else {
                             (last_idx, first_idx)
                         };
-                        let span =
-                            participants[hi].lifeline_line_x - participants[lo].lifeline_line_x;
-                        let note_w = note_content_w.max(span.round() + OVER_SEVERAL_NOTE_MARGIN);
-                        let centre = (participants[lo].center_x + participants[hi].center_x) / 2.0;
-                        let note_right = (centre - note_w / 2.0).floor() + note_w;
+                        let note_right = if note.shape == NoteShape::Note {
+                            let component_pref_w = max_line_width
+                                + ROSE_NOTE_COMPONENT_PREF_EXTRA
+                                + 2.0 * explicit_global_padding;
+                            let geom = over_several_note_geometry(
+                                &participants,
+                                lo,
+                                hi,
+                                component_pref_w,
+                                note_content_w,
+                            );
+                            geom.visible_left + geom.visible_width
+                        } else {
+                            let span =
+                                participants[hi].lifeline_line_x - participants[lo].lifeline_line_x;
+                            let note_w =
+                                note_content_w.max(span.round() + OVER_SEVERAL_NOTE_MARGIN);
+                            let centre =
+                                (participants[lo].center_x + participants[hi].center_x) / 2.0;
+                            (centre - note_w / 2.0).floor() + note_w
+                        };
                         max_note_right = max_note_right.max(note_right);
                     }
                 }
@@ -5478,14 +5546,29 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                     } else {
                         (last_idx, first_idx)
                     };
-                    let span = participants[hi].lifeline_line_x - participants[lo].lifeline_line_x;
-                    let pw_raw =
-                        note_content_width_raw_padded(max_text_w, note.shape, note_text_align)
-                            .max(span.round() + OVER_SEVERAL_NOTE_MARGIN);
-                    let pw = note_content_w.max(span.round() + OVER_SEVERAL_NOTE_MARGIN);
-                    let centre = (participants[lo].center_x + participants[hi].center_x) / 2.0;
-                    let left = (centre - pw_raw / 2.0).floor();
-                    Some((left, left + pw))
+                    if note.shape == NoteShape::Note {
+                        let component_pref_w = max_text_w
+                            + ROSE_NOTE_COMPONENT_PREF_EXTRA
+                            + 2.0 * explicit_global_padding;
+                        let geom = over_several_note_geometry(
+                            &participants,
+                            lo,
+                            hi,
+                            component_pref_w,
+                            note_content_w,
+                        );
+                        Some((geom.visible_left, geom.visible_left + geom.visible_width))
+                    } else {
+                        let span =
+                            participants[hi].lifeline_line_x - participants[lo].lifeline_line_x;
+                        let pw_raw =
+                            note_content_width_raw_padded(max_text_w, note.shape, note_text_align)
+                                .max(span.round() + OVER_SEVERAL_NOTE_MARGIN);
+                        let pw = note_content_w.max(span.round() + OVER_SEVERAL_NOTE_MARGIN);
+                        let centre = (participants[lo].center_x + participants[hi].center_x) / 2.0;
+                        let left = (centre - pw_raw / 2.0).floor();
+                        Some((left, left + pw))
+                    }
                 }
             }
         }
@@ -7376,9 +7459,9 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                             (left, left + note_content_w)
                         } else {
                             // Note over multiple participants (OVER_SEVERAL).
-                            // Java NoteBox: preferredWidth = max(content, round(span)
-                            // + 25); centered on the midpoint of the first/last box
-                            // centers; left edge = (int)(centre - pw/2).
+                            // Java NoteBox stretches standard folded notes to the
+                            // participant-box span before ComponentRoseNote draws
+                            // the visible polygon inside that allocated area.
                             let first_idx = note
                                 .participants
                                 .first()
@@ -7396,23 +7479,35 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                             } else {
                                 (last_idx, first_idx)
                             };
-                            let first_ll = participants[lo].lifeline_line_x;
-                            let last_ll = participants[hi].lifeline_line_x;
-                            let span = last_ll - first_ll;
-                            // The left edge is centred using the raw preferred
-                            // width (Java xStart = (int)(centre - getPreferredWidth/2))
-                            // while the drawn box snaps to the ceiled width.
-                            let pw_raw = note_content_width_raw_padded(
-                                max_text_w,
-                                note.shape,
-                                note_text_align,
-                            )
-                            .max(span.round() + OVER_SEVERAL_NOTE_MARGIN);
-                            let pw = note_content_w.max(span.round() + OVER_SEVERAL_NOTE_MARGIN);
-                            let centre =
-                                (participants[lo].center_x + participants[hi].center_x) / 2.0;
-                            let left = (centre - pw_raw / 2.0).floor();
-                            (left, left + pw)
+                            if note.shape == NoteShape::Note {
+                                let component_pref_w = max_text_w
+                                    + ROSE_NOTE_COMPONENT_PREF_EXTRA
+                                    + 2.0 * explicit_global_padding;
+                                let geom = over_several_note_geometry(
+                                    &participants,
+                                    lo,
+                                    hi,
+                                    component_pref_w,
+                                    note_content_w,
+                                );
+                                (geom.visible_left, geom.visible_left + geom.visible_width)
+                            } else {
+                                let first_ll = participants[lo].lifeline_line_x;
+                                let last_ll = participants[hi].lifeline_line_x;
+                                let span = last_ll - first_ll;
+                                let pw_raw = note_content_width_raw_padded(
+                                    max_text_w,
+                                    note.shape,
+                                    note_text_align,
+                                )
+                                .max(span.round() + OVER_SEVERAL_NOTE_MARGIN);
+                                let pw =
+                                    note_content_w.max(span.round() + OVER_SEVERAL_NOTE_MARGIN);
+                                let centre =
+                                    (participants[lo].center_x + participants[hi].center_x) / 2.0;
+                                let left = (centre - pw_raw / 2.0).floor();
+                                (left, left + pw)
+                            }
                         }
                     }
                 };
@@ -7594,9 +7689,9 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                         + participants[hi].box_width
                         + PARTICIPANT_OUT_MARGIN
                         - participants[lo].box_x;
-                    // ComponentRoseNote preferred (text-block) width for LEFT text:
-                    // pure text + marginX1(6) + marginX2(15) + 2*paddingX(5) = +31.
-                    let pref_w = max_text_w + 31.0;
+                    // ComponentRoseNote preferred (text-block) width for LEFT text.
+                    let pref_w =
+                        max_text_w + ROSE_NOTE_COMPONENT_PREF_EXTRA + 2.0 * explicit_global_padding;
                     let diff_x = (area_w - pref_w).max(0.0);
                     Some(note_left + NOTE_TEXT_X_PAD + diff_x / 2.0)
                 } else {
