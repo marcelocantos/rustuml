@@ -35,6 +35,23 @@ fn fold_non_ascii(s: &str, replacement: char) -> String {
         .collect()
 }
 
+fn canonical_font_family(value: &str) -> String {
+    let raw = value.trim();
+    let quoted = (raw.starts_with('"') && raw.ends_with('"'))
+        || (raw.starts_with('\'') && raw.ends_with('\''));
+    let trimmed = raw.trim_matches('"').trim_matches('\'');
+    if trimmed.is_empty()
+        || trimmed.eq_ignore_ascii_case("sansserif")
+        || trimmed.eq_ignore_ascii_case("sans-serif")
+    {
+        "sans-serif".to_string()
+    } else if quoted {
+        format!("'{trimmed}'")
+    } else {
+        trimmed.to_string()
+    }
+}
+
 fn build_qualified_names(
     packages: &[ComponentPackage],
 ) -> std::collections::HashMap<String, String> {
@@ -257,6 +274,9 @@ pub fn render_with_oracle(
     // values.
     let mut interface_fill = COMP_FILL.to_string();
     let mut interface_stroke = STROKE.to_string();
+    let mut component_fill = COMP_FILL.to_string();
+    let mut component_stroke = STROKE.to_string();
+    let mut component_stroke_width = 0.5;
     let mut component_round_corner: Option<f64> = None;
     // `skinparam componentStyle rectangle` draws components as plain rectangles
     // with no UML "tab" icon.
@@ -270,9 +290,19 @@ pub fn render_with_oracle(
     let mut default_font_size: Option<f64> = None;
     let mut component_font_size_sp: Option<f64> = None;
     let mut component_arrow_font_size_sp: Option<f64> = None;
-    let mut component_font_color = TEXT_COLOR.to_string();
+    let mut default_font_family: Option<String> = None;
+    let mut component_font_family_sp: Option<String> = None;
+    let mut component_arrow_font_family_sp: Option<String> = None;
+    let mut root_font_color: Option<String> = None;
+    let mut default_font_color: Option<String> = None;
+    let mut component_font_color_sp: Option<String> = None;
+    let mut component_arrow_font_color_sp: Option<String> = None;
     let mut component_font_bold = false;
     let mut component_font_italic = false;
+    let mut bg_value: Option<String> = None;
+    let gradient_defs = oracle
+        .map(|o| o.defs_inner_xml.as_str())
+        .filter(|d| !d.is_empty());
     for sp in &diagram.meta.skinparams {
         let key = sp.key.to_ascii_lowercase();
         let val = sp.value.trim();
@@ -280,11 +310,42 @@ pub fn render_with_oracle(
             continue;
         }
         match key.as_str() {
+            "backgroundcolor" => {
+                bg_value = Some(val.to_string());
+            }
+            "__stylerootlinecolor" | "bordercolor" => {
+                component_stroke = crate::sequence::resolve_color(val);
+            }
+            "__stylerootlinethickness" | "borderthickness" => {
+                if let Ok(v) = val.parse::<f64>() {
+                    component_stroke_width = v;
+                }
+            }
+            "__stylerootfontcolor" => {
+                root_font_color = Some(crate::sequence::resolve_color(val));
+            }
+            "defaultfontcolor" => {
+                default_font_color = Some(crate::sequence::resolve_color(val));
+            }
+            "defaultfontname" | "fontname" => {
+                default_font_family = Some(canonical_font_family(val));
+            }
             "interfacebackgroundcolor" => {
                 interface_fill = crate::sequence::resolve_color(val);
             }
             "interfacebordercolor" => {
                 interface_stroke = crate::sequence::resolve_color(val);
+            }
+            "componentbackgroundcolor" => {
+                component_fill = crate::sequence::gradient_fill_or(val, gradient_defs);
+            }
+            "componentbordercolor" => {
+                component_stroke = crate::sequence::resolve_color(val);
+            }
+            "componentborderthickness" => {
+                if let Ok(v) = val.parse::<f64>() {
+                    component_stroke_width = v;
+                }
             }
             "componentroundcorner" | "roundcorner" => {
                 if let Ok(v) = val.parse::<f64>() {
@@ -297,13 +358,22 @@ pub fn render_with_oracle(
             "componentfontsize" => {
                 component_font_size_sp = val.parse::<f64>().ok();
             }
+            "componentfontname" => {
+                component_font_family_sp = Some(canonical_font_family(val));
+            }
             "componentfontcolor" => {
-                component_font_color = crate::sequence::resolve_color(val);
+                component_font_color_sp = Some(crate::sequence::resolve_color(val));
             }
             "componentfontstyle" => {
                 let style = val.to_ascii_lowercase();
                 component_font_bold = style.contains("bold");
                 component_font_italic = style.contains("italic");
+            }
+            "arrowfontname" | "componentarrowfontname" => {
+                component_arrow_font_family_sp = Some(canonical_font_family(val));
+            }
+            "arrowfontcolor" | "componentarrowfontcolor" => {
+                component_arrow_font_color_sp = Some(crate::sequence::resolve_color(val));
             }
             "componentarrowfontsize" => {
                 component_arrow_font_size_sp = val.parse::<f64>().ok();
@@ -314,6 +384,23 @@ pub fn render_with_oracle(
             _ => {}
         }
     }
+    let default_font_family = default_font_family.unwrap_or_else(|| "sans-serif".to_string());
+    let component_font_family = component_font_family_sp
+        .clone()
+        .unwrap_or_else(|| default_font_family.clone());
+    let component_arrow_font_family = component_arrow_font_family_sp
+        .clone()
+        .unwrap_or_else(|| default_font_family.clone());
+    let fallback_font_color = root_font_color
+        .clone()
+        .or(default_font_color.clone())
+        .unwrap_or_else(|| TEXT_COLOR.to_string());
+    let component_font_color = component_font_color_sp
+        .clone()
+        .unwrap_or_else(|| fallback_font_color.clone());
+    let component_arrow_font_color = component_arrow_font_color_sp
+        .clone()
+        .unwrap_or(fallback_font_color);
     let component_font_size = component_font_size_sp
         .or(default_font_size)
         .unwrap_or(FONT_SIZE);
@@ -409,7 +496,29 @@ pub fn render_with_oracle(
         .and_then(|o| o.diagram_type.as_deref())
         .filter(|t| *t == "CLASS")
         .unwrap_or("DESCRIPTION");
-    let mut svg = SvgBuilder::new_plantuml(total_w, total_h, diagram_type);
+    let canvas_background = match bg_value.as_deref() {
+        Some(v) if v.eq_ignore_ascii_case("transparent") => None,
+        Some(v) => Some(crate::sequence::resolve_color(v)),
+        None => Some("#FFFFFF".to_string()),
+    };
+    let canvas_rect = canvas_background
+        .as_ref()
+        .filter(|c| *c != "#FFFFFF")
+        .cloned();
+    let mut svg = SvgBuilder::new_plantuml_with_background_and_defs(
+        total_w,
+        total_h,
+        diagram_type,
+        canvas_background.as_deref(),
+        gradient_defs.unwrap_or(""),
+    );
+    if let Some(bg) = canvas_rect.as_deref() {
+        svg.raw(&format!(
+            r#"<rect fill="{bg}" height="{h}" style="stroke:none;stroke-width:1;" width="{w}" x="0" y="0"/>"#,
+            h = total_h as i64,
+            w = total_w as i64,
+        ));
+    }
 
     // Title — wrap in <g class="title"> and route through creole segmenter.
     // In oracle mode, consume PlantUML's page-decoration anchors so the title
@@ -742,7 +851,7 @@ pub fn render_with_oracle(
         // Determine fill: use oracle fill if available, otherwise default.
         let oracle_rect = oracle_comp_rect(comp);
         let fill_owned = oracle_rect.and_then(|r| r.fill.clone());
-        let fill = fill_owned.as_deref().unwrap_or(COMP_FILL);
+        let fill = fill_owned.as_deref().unwrap_or(&component_fill);
 
         // Use oracle width/height when available — they're authoritative.
         let (w, h) = oracle_rect
@@ -753,7 +862,12 @@ pub fn render_with_oracle(
         // carries skinparam BorderColor and stroke-width selections.
         let body_style = oracle_rect
             .and_then(|r| r.body_style.clone())
-            .unwrap_or_else(|| format!("stroke:{STROKE};stroke-width:0.5;"));
+            .unwrap_or_else(|| {
+                format!(
+                    "stroke:{component_stroke};stroke-width:{};",
+                    fc(component_stroke_width)
+                )
+            });
         // Corner radius: honour the oracle's captured rx/ry when present. A
         // `storage` element renders as a fully-rounded rect (rx=35) rather than
         // a component's slight 2.5 rounding, and the value lives in the golden's
@@ -904,7 +1018,7 @@ pub fn render_with_oracle(
                     x: tx,
                     y: ty,
                     font_size: component_font_size as u32,
-                    font_family: "sans-serif",
+                    font_family: &component_font_family,
                     fill: &component_font_color,
                     bold: false,
                     italic: true,
@@ -927,7 +1041,7 @@ pub fn render_with_oracle(
                 x: label_tx,
                 y: label_y,
                 font_size: component_font_size as u32,
-                font_family: "sans-serif",
+                font_family: &component_font_family,
                 fill: &component_font_color,
                 bold: component_font_bold,
                 italic: component_font_italic,
@@ -968,7 +1082,14 @@ pub fn render_with_oracle(
 
     // Render connections (links).
     if let Some(orc) = oracle {
-        render_oracle_connections(&mut svg, diagram, orc, component_arrow_font_size);
+        render_oracle_connections(
+            &mut svg,
+            diagram,
+            orc,
+            component_arrow_font_size,
+            &component_arrow_font_family,
+            &component_arrow_font_color,
+        );
     } else {
         for (link_counter, conn) in (entity_counter..).zip(diagram.connections.iter()) {
             let link_id = format!("lnk{link_counter}");
@@ -1894,6 +2015,8 @@ fn render_oracle_connections(
     diagram: &ComponentDiagram,
     oracle: &OracleLayout,
     arrow_font_size: f64,
+    arrow_font_family: &str,
+    arrow_font_color: &str,
 ) {
     // Map bare component id → qualified name for resolving oracle edge ids
     // (oracle stores e.g. "Grp.X1" but conn.from is bare "X1").
@@ -1937,7 +2060,15 @@ fn render_oracle_connections(
             None => continue,
         };
         emitted_edge_ids.insert(oracle_edge.id.clone());
-        emit_oracle_edge(svg, oracle_edge, &conn.from, &conn.to, arrow_font_size);
+        emit_oracle_edge(
+            svg,
+            oracle_edge,
+            &conn.from,
+            &conn.to,
+            arrow_font_size,
+            arrow_font_family,
+            arrow_font_color,
+        );
     }
 
     // Note connectors: PlantUML links a `note … of X` to its target with a
@@ -1968,7 +2099,15 @@ fn render_oracle_connections(
                 continue;
             }
             let (from, to) = edge.id.rsplit_once('-').unwrap_or(("", edge.id.as_str()));
-            emit_oracle_edge(svg, edge, from, to, arrow_font_size);
+            emit_oracle_edge(
+                svg,
+                edge,
+                from,
+                to,
+                arrow_font_size,
+                arrow_font_family,
+                arrow_font_color,
+            );
         }
     }
 }
@@ -1982,6 +2121,8 @@ fn emit_oracle_edge(
     comment_from: &str,
     comment_to: &str,
     arrow_font_size: f64,
+    arrow_font_family: &str,
+    arrow_font_color: &str,
 ) {
     {
         let expected_id = &oracle_edge.id;
@@ -2046,8 +2187,8 @@ fn emit_oracle_edge(
                     x: lx,
                     y: ly,
                     font_size: arrow_font_size as u32,
-                    font_family: "sans-serif",
-                    fill: TEXT_COLOR,
+                    font_family: arrow_font_family,
+                    fill: arrow_font_color,
                     bold: false,
                     italic: false,
                     underline: false,
@@ -2171,7 +2312,7 @@ fn emit_oracle_edge(
                 let (fill, underline) = if link.is_some() {
                     ("#0000FF", true)
                 } else {
-                    (TEXT_COLOR, false)
+                    (arrow_font_color, false)
                 };
                 if let Some(link) = link {
                     svg.open_link_with_title(&link.href, link.title.as_deref());
@@ -2183,7 +2324,7 @@ fn emit_oracle_edge(
                         x: lx,
                         y: ly,
                         font_size: arrow_font_size as u32,
-                        font_family: "sans-serif",
+                        font_family: arrow_font_family,
                         fill,
                         bold: false,
                         italic: false,

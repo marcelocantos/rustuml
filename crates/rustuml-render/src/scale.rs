@@ -574,6 +574,9 @@ fn scale_oracle_layout_inner(o: &mut OracleLayout, k: f64) {
     for e in o.entities.values_mut() {
         scale_entity(e, k);
     }
+    for entry in &mut o.entity_list {
+        scale_entity(&mut entry.rect, k);
+    }
     for edge in &mut o.edges {
         scale_edge(edge, k);
     }

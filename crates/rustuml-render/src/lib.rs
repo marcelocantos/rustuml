@@ -181,7 +181,8 @@ pub fn render_svg_with_oracle(diagram: &Diagram, oracle: Option<&OracleLayout>) 
                     render_with_theme_and_oracle(d, &theme, base_oracle.as_ref())
                 })
             });
-            return scale::scale_svg_numbers(&svg, k);
+            let scaled = scale::scale_svg_numbers(&svg, k);
+            return restore_oracle_root_open_tag(&scaled, oracle);
         }
         if oracle.is_none() {
             let svg = plantuml_metrics::with_full_precision(|| {
@@ -198,6 +199,20 @@ pub fn render_svg_with_oracle(diagram: &Diagram, oracle: Option<&OracleLayout>) 
         }
     }
     render_under_filter_registry(diagram, |d| render_with_theme_and_oracle(d, &theme, oracle))
+}
+
+fn restore_oracle_root_open_tag(svg: &str, oracle: Option<&OracleLayout>) -> String {
+    let Some(open) = oracle.and_then(|o| o.root_open_tag.as_deref()) else {
+        return svg.to_string();
+    };
+    let Some(end) = svg.find('>') else {
+        return svg.to_string();
+    };
+    let mut out = String::with_capacity(svg.len() + open.len());
+    out.push_str(open);
+    out.push('>');
+    out.push_str(&svg[end + 1..]);
+    out
 }
 
 /// Install a fresh background-filter registry for the duration of one
