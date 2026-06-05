@@ -918,7 +918,7 @@ fn build_tree_inner(steps: &[ActivityStep], palette: &Palette) -> Vec<LayoutNode
             }
             ActivityStep::Action(text) => {
                 let text = action_text_for_family(text, &palette.action_font_family);
-                let tw = text_render::measure_with_family(
+                let tw = action_text_width(
                     &text,
                     palette.action_font_size,
                     palette.action_text_bold,
@@ -2667,8 +2667,24 @@ fn sequence_height(nodes: &[LayoutNode]) -> f64 {
 fn action_height(text: &str, pad_y: f64, font_family: &str, font_size: f64) -> f64 {
     // Pick the box height to match the label's actual font — monospace
     // labels render shorter than sans-serif at the same nominal size.
-    (text_render::label_height_with_family(text, font_size, font_family) + pad_y * 2.0)
+    (action_label_lines(text)
+        .iter()
+        .map(|line| text_render::label_height_with_family(line, font_size, font_family))
+        .sum::<f64>()
+        + pad_y * 2.0)
         .max(ACTION_MIN_HEIGHT)
+}
+
+fn action_text_width(text: &str, font_size: f64, bold: bool, font_family: &str) -> f64 {
+    action_label_lines(text)
+        .iter()
+        .map(|line| text_render::measure_with_family(line, font_size, bold, font_family))
+        .fold(0.0f64, f64::max)
+}
+
+fn action_label_lines(text: &str) -> Vec<&str> {
+    let lines: Vec<&str> = text.lines().collect();
+    if lines.is_empty() { vec![""] } else { lines }
 }
 
 fn node_height(node: &LayoutNode) -> f64 {
@@ -4138,18 +4154,22 @@ fn emit_node(svg: &mut SvgEmitter, node: &LayoutNode, cx: f64, y: f64) -> f64 {
             );
             // Text baseline: padding_top + ascent, both derived from the
             // label's actual font so monospace labels position correctly.
-            let text_y =
-                y + *pad_y + text_render::label_ascent_with_family(text, *font_size, font_family);
-            svg.text_element_styled(
-                &text_col,
-                font_family,
-                *font_size,
-                rect_x + *pad_x,
-                text_y,
-                text,
-                *bold,
-                *italic,
-            );
+            let mut text_y = y + *pad_y;
+            for line in action_label_lines(text) {
+                text_y += text_render::label_ascent_with_family(line, *font_size, font_family);
+                svg.text_element_styled(
+                    &text_col,
+                    font_family,
+                    *font_size,
+                    rect_x + *pad_x,
+                    text_y,
+                    line,
+                    *bold,
+                    *italic,
+                );
+                text_y += text_render::label_height_with_family(line, *font_size, font_family)
+                    - text_render::label_ascent_with_family(line, *font_size, font_family);
+            }
             y + ah
         }
         LayoutNode::DeprecatedAction {

@@ -447,18 +447,29 @@ impl ActivityParser {
             return Ok(());
         }
 
-        // Handle output-connector continuation: the previous action ended with
-        // `\`, so this entire line (stripped of its trailing terminator) is
-        // appended to the pending text and emitted as one action.
+        // Handle action continuations. `\` joins the next action onto the
+        // same label line; the other non-semicolon terminators (`| ] / > <`)
+        // start a second line when followed by an ordinary `:action`.
         if let Some(partial) = self.continuation_text.take() {
-            // Strip trailing action terminator only (keep leading `:` intact
-            // so `:next action;` becomes `:next action` when appended).
-            let appended = line.trim_end_matches(|c: char| ";|]/><\\".contains(c));
-            let combined = format!("{}{}", partial, appended);
-            self.steps.push(ActivityStep::Action(combined));
-            // After a continuation, the next action preserves its `:` prefix.
-            self.next_action_keep_colon = true;
-            return Ok(());
+            let multiline = partial.ends_with('\n');
+            if !multiline || line.trim_start().starts_with(':') {
+                // Strip trailing action terminator only (keep leading `:`
+                // intact so `:next action;` becomes `:next action` when
+                // appended).
+                let appended = line.trim_end_matches(|c: char| ";|]/><\\".contains(c));
+                let combined = format!("{}{}", partial, appended);
+                self.steps.push(ActivityStep::Action(combined));
+                // After a continuation, the next action preserves its `:`
+                // prefix.
+                self.next_action_keep_colon = true;
+                return Ok(());
+            }
+
+            // Control-keyword continuations (`else`, `fork again`, `}`) need
+            // a broader FTile parse model. Preserve the current action and
+            // let the keyword be parsed normally below.
+            self.steps
+                .push(ActivityStep::Action(partial.trim_end().to_string()));
         }
 
         match line {
@@ -612,10 +623,12 @@ impl ActivityParser {
                     text
                 }
             } else {
-                // Non-`;`/non-`\` ending: include the ending char, and signal
-                // that the next action should keep its `:` prefix.
-                self.next_action_keep_colon = true;
-                format!("{}{}", text, ending)
+                // Non-`;` endings start a multiline action when the next line
+                // is an ordinary `:action;`. The terminator stays visible on
+                // the first line; the next action keeps its leading `:`.
+                self.next_action_keep_colon = false;
+                self.continuation_text = Some(format!("{}{}\n", text, ending));
+                return true;
             };
             self.steps.push(ActivityStep::Action(display));
             true
@@ -1082,6 +1095,23 @@ mod tests {
 
         let d2 = parse("start\nkill");
         assert!(matches!(d2.steps[1], ActivityStep::Kill));
+    }
+
+    #[test]
+    fn bar_ended_action_continues_on_next_action_line() {
+        let d = parse("start\n:action1|\n:action2;\nstop");
+        assert!(matches!(&d.steps[1], ActivityStep::Action(s) if s == "action1|\n:action2"));
+    }
+
+    #[test]
+    fn bar_ended_action_before_control_keyword_stays_separate() {
+        let d = parse("start\nif (c?) then (yes)\n  :action|\nelse (no)\n  :alt;\nendif\nstop");
+        assert!(
+            d.steps
+                .iter()
+                .any(|s| matches!(s, ActivityStep::Action(text) if text == "action|"))
+        );
+        assert!(d.steps.iter().any(|s| matches!(s, ActivityStep::Else(_))));
     }
 
     #[test]
