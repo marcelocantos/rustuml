@@ -2719,6 +2719,29 @@ fn group_wraps_single_if(body: &[LayoutNode]) -> bool {
     matches!(body, [LayoutNode::If { .. }])
 }
 
+fn partition_title_has_descender(name: &str) -> bool {
+    name.chars()
+        .any(|c| matches!(c, 'g' | 'j' | 'p' | 'q' | 'y'))
+}
+
+fn partition_body_width_extra(is_group: bool, body: &[LayoutNode]) -> f64 {
+    if is_group && group_wraps_single_if(body) {
+        GROUP_IF_BODY_WIDTH_EXTRA
+    } else {
+        0.0
+    }
+}
+
+fn partition_title_drives_width(
+    title_w: f64,
+    body_w: f64,
+    is_group: bool,
+    body: &[LayoutNode],
+) -> bool {
+    let body_width_extra = partition_body_width_extra(is_group, body);
+    title_w + 15.0 >= body_w + 20.0 + body_width_extra
+}
+
 fn partition_top_gap(
     color: &Option<String>,
     name: &str,
@@ -2727,10 +2750,15 @@ fn partition_top_gap(
 ) -> f64 {
     if is_group && group_uses_compact_top_gap(body) {
         10.0
-    } else if color.is_some()
-        || name
-            .chars()
-            .any(|c| matches!(c, 'g' | 'j' | 'p' | 'q' | 'y'))
+    } else if (is_group && (color.is_some() || partition_title_has_descender(name)))
+        || (!is_group
+            && (color.is_some() || partition_title_has_descender(name))
+            && partition_title_drives_width(
+                text_render::measure(name, TITLE_FONT_SIZE, false),
+                sequence_width(body),
+                is_group,
+                body,
+            ))
     {
         10.4531
     } else {
@@ -4362,18 +4390,19 @@ fn emit_node(svg: &mut SvgEmitter, node: &LayoutNode, cx: f64, y: f64) -> f64 {
             // notches the top-right of the title band; the title text sits
             // at partition_x + 3, baseline = partition_top + ascent(14) + 1.
             //
-            // PlantUML adds an extra 0.4531 px to the top gap when the
-            // partition has a fill colour (the visual offset that makes
-            // coloured partitions land slightly lower than uncoloured ones).
+            // PlantUML's partition top gap depends on whether the title band
+            // or body drives the outer width; partition_top_gap centralises
+            // that measured rule so height, arrows, and emission stay aligned.
             let title_w = text_render::measure(name, TITLE_FONT_SIZE, false);
             let body_w = sequence_width(body);
-            let body_width_extra = if *is_group && group_wraps_single_if(body) {
-                GROUP_IF_BODY_WIDTH_EXTRA
-            } else {
-                0.0
-            };
+            let body_width_extra = partition_body_width_extra(*is_group, body);
+            let title_drives_width = partition_title_drives_width(title_w, body_w, *is_group, body);
             let partition_w = (title_w + 15.0).max(body_w + 20.0 + body_width_extra);
-            let partition_x = 16.0; // always MARGIN_LEAD-aligned in goldens
+            let partition_x = if !*is_group && !title_drives_width {
+                (cx - partition_w / 2.0).max(16.0)
+            } else {
+                16.0
+            };
             let top_gap = partition_top_gap(color, name, *is_group, body);
             let partition_top = y + top_gap;
             let body_h = sequence_height(body);
