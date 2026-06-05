@@ -42,6 +42,13 @@ const BTN_MARGIN: f64 = 2.0;
 // ElementDroplist: the arrow box is a fixed 12px wide region on the right.
 const DROP_BOX: f64 = 12.0;
 
+// ElementTabBar: every item is a bordered text row with an internal 2px text
+// y-offset, a 5px bottom gap inside the box, and a 10px right-edge tail before
+// the next item starts.
+const TAB_TEXT_DY: f64 = 2.0;
+const TAB_ROW_EXTRA_H: f64 = 5.0;
+const TAB_TAIL_H: f64 = 10.0;
+
 // ElementPyramidScrolled: scrollbar thickness (v1) and arrow-track inset (v2).
 const SCROLL_BAR: f64 = 15.0; // v1
 const SCROLL_INSET: f64 = 12.0; // v2
@@ -675,10 +682,78 @@ fn widget_dim(widget: &SaltWidget) -> (f64, f64) {
             (*depth as f64) * 8.0 + pm::text_width(label, FONT_SIZE, false),
             th,
         ),
+        SaltWidget::Block(b) if b.kind == BlockKind::Tabs => tabs_dim(b),
         SaltWidget::Block(b) => {
             let g = Grid::layout(b);
             (g.width(), g.height())
         }
+    }
+}
+
+fn tabs_dim(block: &SaltBlock) -> (f64, f64) {
+    let lines = tab_lines(block);
+    let width = lines
+        .iter()
+        .map(|line| literal_text_width(line))
+        .fold(0.0, f64::max);
+    let row_step = pm::text_height(FONT_SIZE) + TAB_ROW_EXTRA_H + TAB_TAIL_H;
+    (width, lines.len() as f64 * row_step)
+}
+
+fn literal_text_width(content: &str) -> f64 {
+    let style = TextStyle::parse(content);
+    if style.display.is_empty() {
+        pm::text_width(" ", FONT_SIZE, false)
+    } else {
+        pm::text_width(&style.display, FONT_SIZE, style.bold)
+    }
+}
+
+fn tab_lines(block: &SaltBlock) -> Vec<String> {
+    let mut lines = Vec::new();
+    for row in &block.rows {
+        for widget in &row.cells {
+            append_tab_widget_lines(widget, &mut lines);
+        }
+    }
+    lines
+}
+
+fn append_tab_widget_lines(widget: &SaltWidget, lines: &mut Vec<String>) {
+    match widget {
+        SaltWidget::Block(block) => {
+            lines.push("{".to_string());
+            for row in &block.rows {
+                for widget in &row.cells {
+                    append_tab_widget_lines(widget, lines);
+                }
+            }
+        }
+        SaltWidget::Button(label) => lines.push(format!("[{label}]")),
+        SaltWidget::TextField(text) => lines.push(format!("\"{text}\"")),
+        SaltWidget::Checkbox { checked, label } => {
+            let mark = if *checked { "X" } else { " " };
+            lines.push(format!("[{mark}] {label}"));
+        }
+        SaltWidget::Radio { selected, label } => {
+            let mark = if *selected { "X" } else { " " };
+            lines.push(format!("({mark}) {label}"));
+        }
+        SaltWidget::Dropdown(label) => lines.push(format!("^{label}^")),
+        SaltWidget::Label(text) => lines.push(text.clone()),
+        SaltWidget::Separator(kind) => lines.push(separator_literal(*kind).to_string()),
+        SaltWidget::TreeNode { depth, label } => {
+            lines.push(format!("{} {label}", "+".repeat(*depth)));
+        }
+    }
+}
+
+fn separator_literal(kind: SeparatorKind) -> &'static str {
+    match kind {
+        SeparatorKind::Dots => "..",
+        SeparatorKind::Double => "==",
+        SeparatorKind::Single => "--",
+        SeparatorKind::Solid => "_",
     }
 }
 
@@ -786,10 +861,32 @@ fn draw_widget(widget: &SaltWidget, x: f64, y: f64, cell_w: f64, cell_h: f64, bu
             let indent = (*depth as f64) * 8.0;
             emit_text(buf, x + indent, y + ascent, label);
         }
+        SaltWidget::Block(b) if b.kind == BlockKind::Tabs => {
+            draw_tabs_block(b, x, y, buf);
+        }
         SaltWidget::Block(b) => {
             let g = Grid::layout(b);
             g.draw(x, y, buf);
         }
+    }
+}
+
+fn draw_tabs_block(block: &SaltBlock, x: f64, y: f64, buf: &mut String) {
+    let lines = tab_lines(block);
+    let width = lines
+        .iter()
+        .map(|line| literal_text_width(line))
+        .fold(0.0, f64::max);
+    let row_h = pm::text_height(FONT_SIZE) + TAB_ROW_EXTRA_H;
+    let row_step = row_h + TAB_TAIL_H;
+    let mut row_top = y;
+    for line in &lines {
+        emit_text(buf, x, row_top + TAB_TEXT_DY + pm::ascent(FONT_SIZE), line);
+        emit_hline_black(buf, x, row_top, width);
+        emit_vline_black(buf, x, row_top, row_h);
+        emit_hline_black(buf, x, row_top + row_h, width);
+        emit_vline_black(buf, x + width, row_top + row_h, TAB_TAIL_H);
+        row_top += row_step;
     }
 }
 
