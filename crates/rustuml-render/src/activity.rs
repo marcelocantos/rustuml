@@ -3216,7 +3216,7 @@ fn node_height(node: &LayoutNode) -> f64 {
             diamond_alone_h + body_top_offset + body_h + below_body
         }
         LayoutNode::Repeat { body, backward, .. } => {
-            let body_h = sequence_height(body);
+            let body_h = repeat_body_height(body, backward.is_some());
             let diamond_h = DIAMOND_HALF * 2.0;
             // A backward box on the return arm drops the condition diamond an
             // extra halfHex below the body (see emit_repeat's cond_y).
@@ -5409,6 +5409,28 @@ const IF_DOWN_RIGHT_PAD: f64 = 27.218200000000003;
 /// Extra gap stretched onto the middle inter-action arrow of an even-action
 /// populated branch in the FtileIfDown layout.
 const IF_DOWN_MID_STRETCH: f64 = 15.0;
+/// Extra gap stretched onto the middle inter-action arrow of an even-action
+/// repeat body without an explicit `backward :...;` tile. FtileRepeat centres
+/// the body in the repeat frame; with an even number of flow nodes the centre
+/// falls inside the middle connector, lengthening that one snake by 7.5 px.
+const REPEAT_EVEN_BODY_MID_STRETCH: f64 = 7.5;
+
+fn repeat_body_mid_stretch(body: &[LayoutNode], has_backward: bool) -> Option<(usize, f64)> {
+    if has_backward {
+        return None;
+    }
+    let flow_count = body.iter().filter(|n| node_is_flow(n)).count();
+    if flow_count >= 2 && flow_count.is_multiple_of(2) {
+        Some((flow_count / 2, REPEAT_EVEN_BODY_MID_STRETCH))
+    } else {
+        None
+    }
+}
+
+fn repeat_body_height(body: &[LayoutNode], has_backward: bool) -> f64 {
+    sequence_height(body)
+        + repeat_body_mid_stretch(body, has_backward).map_or(0.0, |(_, stretch)| stretch)
+}
 
 /// Asymmetric "down" layout for an `if/else` where one branch is empty.
 /// The populated branch flows down the centre spine; the empty branch is a
@@ -6360,7 +6382,8 @@ fn emit_repeat(
     let body_y = top_bottom + ARROW_LEN;
 
     // Body first — its rects/texts land in `shapes` before either diamond.
-    let body_bottom = emit_sequence(svg, body, cx, body_y);
+    let body_mid_stretch = repeat_body_mid_stretch(body, backward.is_some());
+    let body_bottom = emit_sequence_ex(svg, body, cx, body_y, body_mid_stretch, None);
     // A `backward :label;` box sits on the return arm at the body's vertical
     // band; FtileRepeat distributes its `8*halfHex` slack so the condition
     // diamond drops an extra halfHex (10 px) below the body to clear the
@@ -6546,7 +6569,8 @@ fn emit_repeat(
         // line in the SVG, and places the arrowhead at the midpoint of the
         // long vertical run (not at the top) so the direction is clear when
         // the loop spans many actions.
-        let mid_y = (top_cy + cond_diamond_cy) / 2.0;
+        let body_stretch = body_mid_stretch.map_or(0.0, |(_, stretch)| stretch);
+        let mid_y = (top_cy + cond_diamond_cy - body_stretch) / 2.0;
         svg.polygon_connector(
             &arrow_color,
             &[
