@@ -4053,7 +4053,7 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
     // Phase 3: Assign x positions
     // -----------------------------------------------------------------------
 
-    // Additional rightward shift forced by a title/caption/footer wider than the
+    // Additional rightward shift forced by a title/header/caption/footer wider than the
     // participant span. PlantUML centres each such band on the participant-span
     // midpoint `(first.box_x + last.box_x + last.box_width - 1.0) / 2.0`; when the
     // band (at its own left margin) would push that midpoint right of where the
@@ -4249,7 +4249,7 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
             }
         }
 
-        // Title/caption/footer band feedback: if any band is wider than the
+        // Title/header/caption/footer band feedback: if any band is wider than the
         // current participant span, shift the participants so the span midpoint
         // lands under the band's centre. `c0` is the span midpoint on the
         // current (post-across-shift) layout; each band wants its own centre at
@@ -4258,6 +4258,13 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
         let last = &participants[n - 1];
         let c0 = (first.box_x + last.box_x + last.box_width - 1.0) / 2.0;
         let mut want_center: f64 = c0;
+        if let Some(header) = &diagram.meta.header {
+            // Header text right-aligns to the canvas with a 6px right inset.
+            // When it would overhang the left edge, PlantUML shifts the same
+            // participant span used by other page decorations.
+            let w = text_render::measure(header, 10.0, false);
+            want_center = want_center.max(w / 2.0);
+        }
         if let Some(footer) = &diagram.meta.footer {
             // Footer left margin is 0.
             let w = text_render::measure(footer, 10.0, false);
