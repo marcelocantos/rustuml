@@ -87,6 +87,14 @@ fn skin_color(skinparams: &[rustuml_parser::diagram::SkinParam], key: &str) -> O
     skin_value(skinparams, &[key]).map(resolve_fill)
 }
 
+fn skin_fill(
+    skinparams: &[rustuml_parser::diagram::SkinParam],
+    key: &str,
+    gradient_defs: Option<&str>,
+) -> Option<String> {
+    skin_value(skinparams, &[key]).map(|v| crate::sequence::gradient_fill_or(v, gradient_defs))
+}
+
 fn skin_font_size(
     skinparams: &[rustuml_parser::diagram::SkinParam],
     keys: &[&str],
@@ -149,10 +157,14 @@ struct SkinColors {
     arrow_font_size: u32,
     canvas_background: Option<String>,
     canvas_rect: Option<String>,
+    gradient_defs: Option<String>,
 }
 
 impl SkinColors {
-    fn from_meta(skinparams: &[rustuml_parser::diagram::SkinParam]) -> Self {
+    fn from_meta(
+        skinparams: &[rustuml_parser::diagram::SkinParam],
+        gradient_defs: Option<&str>,
+    ) -> Self {
         let default_font_family = skin_value(skinparams, &["defaultFontName", "fontName"])
             .map(canonical_usecase_font_family)
             .unwrap_or_else(|| "sans-serif".to_string());
@@ -192,7 +204,7 @@ impl SkinColors {
             .filter(|c| *c != "#FFFFFF")
             .cloned();
         SkinColors {
-            actor_fill: skin_color(skinparams, "actorBackgroundColor"),
+            actor_fill: skin_fill(skinparams, "actorBackgroundColor", gradient_defs),
             actor_border: skin_color(skinparams, "actorBorderColor")
                 .or_else(|| skin_color(skinparams, "__styleRootLineColor")),
             actor_border_thickness: skin_thickness(
@@ -213,7 +225,7 @@ impl SkinColors {
             ),
             actor_stereo_font_color: skin_color(skinparams, "actorStereotypeFontColor")
                 .unwrap_or(actor_font_color),
-            uc_fill: skin_color(skinparams, "usecaseBackgroundColor"),
+            uc_fill: skin_fill(skinparams, "usecaseBackgroundColor", gradient_defs),
             uc_border: skin_color(skinparams, "usecaseBorderColor")
                 .or_else(|| skin_color(skinparams, "__styleRootLineColor")),
             uc_border_thickness: skin_thickness(
@@ -241,6 +253,7 @@ impl SkinColors {
             ),
             canvas_background,
             canvas_rect,
+            gradient_defs: gradient_defs.map(str::to_string),
         }
     }
 }
@@ -289,7 +302,10 @@ pub fn render_with_oracle(
         return r#"<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" contentStyleType="text/css" data-diagram-type="DESCRIPTION" height="50px" preserveAspectRatio="none" style="width:100px;height:50px;background:#FFFFFF;" version="1.1" viewBox="0 0 100 50" width="100px" zoomAndPan="magnify"><defs/><g></g></svg>"#.to_string();
     }
 
-    let skin = SkinColors::from_meta(&diagram.meta.skinparams);
+    let gradient_defs = oracle
+        .map(|o| o.defs_inner_xml.as_str())
+        .filter(|d| !d.is_empty());
+    let skin = SkinColors::from_meta(&diagram.meta.skinparams, gradient_defs);
     let actor_dims: Vec<ActorDim> = diagram.actors.iter().map(|a| actor_dim(a, &skin)).collect();
     let uc_dims: Vec<UseCaseDim> = diagram
         .use_cases
@@ -308,11 +324,12 @@ pub fn render_with_oracle(
         compute_canvas(&positions, &actor_dims, &uc_dims)
     };
 
-    let mut svg = SvgBuilder::new_plantuml_with_background(
+    let mut svg = SvgBuilder::new_plantuml_with_background_and_defs(
         total_w,
         total_h,
         "DESCRIPTION",
         skin.canvas_background.as_deref(),
+        gradient_defs.unwrap_or(""),
     );
     if let Some(bg) = skin.canvas_rect.as_deref() {
         svg.raw(&format!(
@@ -1117,9 +1134,10 @@ fn render_use_case(
     // (`usecaseBackgroundColor<<stereo>>`) > generic `usecaseBackgroundColor` >
     // default.
     let stereo_fill = uc.stereotype.as_deref().and_then(|s| {
-        skin_color(
+        skin_fill(
             &diagram.meta.skinparams,
             &format!("usecaseBackgroundColor<<{s}>>"),
+            skin.gradient_defs.as_deref(),
         )
     });
     let fill = uc

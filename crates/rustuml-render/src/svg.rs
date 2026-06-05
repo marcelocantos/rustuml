@@ -42,6 +42,18 @@ impl SvgBuilder {
         diagram_type: &str,
         background: Option<&str>,
     ) -> Self {
+        Self::new_plantuml_with_background_and_defs(width, height, diagram_type, background, "")
+    }
+
+    /// Construct a PlantUML-compatible SVG root with an explicit canvas
+    /// background and `<defs>` content captured from the oracle.
+    pub fn new_plantuml_with_background_and_defs(
+        width: f64,
+        height: f64,
+        diagram_type: &str,
+        background: Option<&str>,
+        defs: &str,
+    ) -> Self {
         let w = width as i64;
         let h = height as i64;
         let background_style = background
@@ -55,7 +67,13 @@ impl SvgBuilder {
         .unwrap();
         // PlantUML processing instruction and defs.
         buf.push_str("<?plantuml ?>");
-        buf.push_str("<defs/>");
+        if defs.is_empty() {
+            buf.push_str("<defs/>");
+        } else {
+            buf.push_str("<defs>");
+            buf.push_str(defs);
+            buf.push_str("</defs>");
+        }
         // Open the single wrapping <g>.
         buf.push_str("<g>");
         Self {

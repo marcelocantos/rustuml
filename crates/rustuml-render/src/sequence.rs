@@ -1170,7 +1170,7 @@ fn resolve_gradient_id(defs: &str, c1: &str, c2: &str) -> Option<String> {
 /// Resolve a `<kind>BackgroundColor` value to a fill string: a `url(#id)`
 /// reference when the value is a `#c1/c2`-style gradient and the oracle
 /// captured the matching `<linearGradient>` def, otherwise the flat colour.
-fn gradient_fill_or(val: &str, gradient_defs: Option<&str>) -> String {
+pub(crate) fn gradient_fill_or(val: &str, gradient_defs: Option<&str>) -> String {
     if let Some((c1, c2)) = split_gradient_colors(val)
         && let Some(id) = gradient_defs.and_then(|defs| resolve_gradient_id(defs, c1, c2))
     {
