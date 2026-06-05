@@ -2525,7 +2525,7 @@ fn sequence_height(nodes: &[LayoutNode]) -> f64 {
     // next flow node change the gap length (10 for hidden, 41.275 for
     // labelled, default 20).
     let mut pending_gap: Option<f64> = None;
-    for node in nodes {
+    for (idx, node) in nodes.iter().enumerate() {
         // Notes contribute nothing themselves.
         if matches!(node, LayoutNode::Note { .. }) {
             continue;
@@ -2587,11 +2587,13 @@ fn sequence_height(nodes: &[LayoutNode]) -> f64 {
             pending_gap = None;
             continue;
         }
+        let (note_inbound_extra, note_bottom_extra) =
+            action_note_vertical_extras(nodes, idx, node_height(node));
         if prior_flow {
-            h += pending_gap.unwrap_or_else(|| default_inbound_gap(node));
+            h += pending_gap.unwrap_or_else(|| default_inbound_gap(node)) + note_inbound_extra;
         }
         pending_gap = None;
-        h += node_height(node);
+        h += node_height(node) + note_bottom_extra;
         prior_flow = true;
     }
     h
@@ -2826,6 +2828,37 @@ fn node_height(node: &LayoutNode) -> f64 {
             1.2969 + header_h + 15.0 + body_h + 1.24
         }
     }
+}
+
+fn following_action_note_height(nodes: &[LayoutNode], idx: usize) -> Option<f64> {
+    if !matches!(nodes.get(idx), Some(LayoutNode::Action { .. })) {
+        return None;
+    }
+    let mut note_h = 0.0f64;
+    for follow in nodes[idx + 1..].iter() {
+        match follow {
+            LayoutNode::Note { text, .. } => {
+                note_h = note_h.max(note_box_height(text));
+            }
+            LayoutNode::Arrow { .. } => {}
+            _ => break,
+        }
+    }
+    (note_h > 0.0).then_some(note_h)
+}
+
+fn action_note_vertical_extras(nodes: &[LayoutNode], idx: usize, anchor_h: f64) -> (f64, f64) {
+    let Some(note_h) = following_action_note_height(nodes, idx) else {
+        return (0.0, 0.0);
+    };
+    if note_h <= anchor_h {
+        return (0.0, 0.0);
+    }
+    let protrusion = (note_h - anchor_h) / 2.0;
+    // PlantUML lets a tall note protrude about 10px into the inbound connector
+    // corridor, so only the remainder stretches the connector into the anchor.
+    // The full lower protrusion is reserved before the next connector.
+    ((protrusion - 10.0).max(0.0), protrusion)
 }
 
 // ─── SVG emission ───────────────────────────────────────────────────
@@ -3474,6 +3507,7 @@ fn emit_sequence_ex(
     // Extra length applied to the single arrow leaving a leading-floating-note
     // start node (consumed by the next flow node's inbound connector).
     let mut lead_stretch = 0.0f64;
+    let mut carry_gap_extra = 0.0f64;
     for (i, node) in nodes.iter().enumerate() {
         // Skip layout for non-flow nodes (arrows and notes don't take vertical space
         // on their own).
@@ -3513,6 +3547,8 @@ fn emit_sequence_ex(
             flow_ordinal += 1;
             continue;
         }
+        let (note_inbound_extra, note_bottom_extra) =
+            action_note_vertical_extras(nodes, i, node_height(node));
         // Compute the inbound down-arrow's style + gap (if any). PlantUML
         // emits inbound connectors AFTER the destination node's internal
         // connectors, so we defer the actual svg writes until after
@@ -3569,8 +3605,10 @@ fn emit_sequence_ex(
                     _ => 0.0,
                 };
                 let lead = std::mem::take(&mut lead_stretch);
+                let carry = std::mem::take(&mut carry_gap_extra);
                 let gap = stretch
                     + lead
+                    + carry
                     + if style.hidden {
                         10.0
                     } else if label.is_some() {
@@ -3621,6 +3659,7 @@ fn emit_sequence_ex(
                     } else {
                         gap
                     };
+                    let base = base + note_inbound_extra;
                     if prev_was_partition {
                         base + 12.0
                     } else {
@@ -3635,7 +3674,7 @@ fn emit_sequence_ex(
                 // Long-ifs also keep `y` at the prev bottom (their own
                 // ConnectionIn spans the gap to the diamond row).
                 if !is_partition && !is_long_if {
-                    y += gap;
+                    y += gap + note_inbound_extra;
                 }
             }
         }
@@ -3654,12 +3693,6 @@ fn emit_sequence_ex(
                         position,
                         color,
                     } => {
-                        // Only the note-fits-in-row case is handled here; a
-                        // taller note would shift the anchor down (not yet
-                        // wired), so skip it to avoid mis-positioning.
-                        if note_box_height(text) > anchor_h {
-                            continue;
-                        }
                         emit_attached_note(
                             svg,
                             text,
@@ -3696,6 +3729,7 @@ fn emit_sequence_ex(
             }
         }
         y = node_y;
+        carry_gap_extra = note_bottom_extra;
         flow_ordinal += 1;
     }
     y
