@@ -1633,17 +1633,28 @@ impl PlantUmlSvg {
         )
         .unwrap();
 
-        // Stereotype text (above participant name, smaller font)
-        if let Some((st_text, _st_width)) = stereotype {
+        let line_h = atom_height_with_family(
+            self.participant_font_size as f64,
+            &self.participant_font_family,
+        );
+        let label_x = if stereotype.is_some() {
+            rect_x + (rect_w - text_len) / 2.0
+        } else {
+            text_x
+        };
+
+        // Stereotype text (above participant name, same size, italic)
+        if let Some((st_text, st_width)) = stereotype {
             let st_display = format!("\u{ab}{st_text}\u{bb}");
-            let st_y = text_y - 13.0; // stereotype is above the name
+            let st_x = rect_x + (rect_w - st_width) / 2.0;
+            let st_y = text_y - line_h;
             text_render::emit_text(
                 &mut self.buf,
                 &st_display,
                 &TextBase {
-                    x: text_x,
+                    x: st_x,
                     y: st_y,
-                    font_size: 11,
+                    font_size: self.participant_font_size,
                     font_family: &self.participant_font_family,
                     fill: "#000000",
                     bold: false,
@@ -1659,7 +1670,7 @@ impl PlantUmlSvg {
             &mut self.buf,
             text_content,
             &TextBase {
-                x: text_x,
+                x: label_x,
                 y: text_y,
                 font_size: self.participant_font_size,
                 font_family: &self.participant_font_family,
@@ -2869,12 +2880,20 @@ fn render_participant_shape(
         }
         ParticipantKind::Participant => {
             let text_x = p.box_x + participant_inner_pad;
-            let text_y = base_y + p.text_y_offset + if p.stereotype.is_some() { 7.5 } else { 0.0 };
-            let stereo_arg = p.stereotype.as_ref().map(|s| {
-                let display = format!("\u{ab}{s}\u{bb}");
-                (display, p.stereotype_width)
-            });
-            let stereo_ref = stereo_arg.as_ref().map(|(s, w)| (s.as_str(), *w));
+            let text_y = base_y
+                + p.text_y_offset
+                + if p.stereotype.is_some() {
+                    atom_height_with_family(
+                        svg.participant_font_size as f64,
+                        &svg.participant_font_family,
+                    )
+                } else {
+                    0.0
+                };
+            let stereo_ref = p
+                .stereotype
+                .as_ref()
+                .map(|s| (s.as_str(), p.stereotype_width));
             svg.participant_box(
                 part_uid,
                 qualified_name,
@@ -3393,10 +3412,9 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
     let participant_inner_pad = BOX_TEXT_X_PAD + global_padding;
     let head_box_y = HEAD_BOX_Y + theme_top_padding + title_band_h + box_band_h + header_band_h;
     let participant_font_size_f = participant_font_size as f64;
-    let participant_box_h =
-        atom_height_with_family(participant_font_size_f, &participant_font_family)
-            + 14.0
-            + 2.0 * global_padding;
+    let participant_line_h =
+        atom_height_with_family(participant_font_size_f, &participant_font_family);
+    let participant_box_h = participant_line_h + 14.0 + 2.0 * global_padding;
     let participant_text_y_offset =
         ascent_with_family(participant_font_size_f, &participant_font_family)
             + 7.0
@@ -3440,14 +3458,11 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
             let st_display = st.as_ref().map(|s| format!("\u{ab}{s}\u{bb}"));
             let st_w = st_display
                 .as_ref()
-                .map(|s| text_width_with_family(s, 11.0, &participant_font_family))
+                .map(|s| {
+                    text_width_with_family(s, participant_font_size_f, &participant_font_family)
+                })
                 .unwrap_or(0.0);
-            // Display label includes stereotype inline (matching PlantUML)
-            let label = if let Some(ref st_text) = st {
-                format!("{} \u{ab}{st_text}\u{bb}", p.label)
-            } else {
-                p.label.clone()
-            };
+            let label = p.label.clone();
             let tw = if participant_font_bold {
                 bold_text_width_with_family(
                     &label,
@@ -3511,7 +3526,7 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                     let w = max_text_w + 2.0 * participant_inner_pad;
                     // Box height is taller for stereotyped participants.
                     let h = if st.is_some() {
-                        participant_box_h + 15.0
+                        participant_box_h + participant_line_h
                     } else {
                         participant_box_h
                     };
