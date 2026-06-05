@@ -850,26 +850,56 @@ struct NoteTextMetrics {
     line_heights: Vec<f64>,
     first_height: f64,
     total_height: f64,
+    body_height_extra: f64,
 }
 
 fn note_text_metrics_with_family(text: &str, font_size: f64, font_family: &str) -> NoteTextMetrics {
+    let mut text_seen_before_list = false;
+    let mut list_after_text = false;
+    let mut smaller_size_after_first = false;
     let line_heights = text
         .lines()
-        .map(|line| rendered_line_metrics_with_family(line.trim(), font_size, font_family).height)
+        .enumerate()
+        .map(|(idx, line)| {
+            let trimmed = line.trim();
+            match creole::parse_line(trimmed) {
+                CreoleLine::Text(_) if !trimmed.is_empty() => text_seen_before_list = true,
+                CreoleLine::Bullet { .. } | CreoleLine::Numbered { .. } => {
+                    list_after_text |= text_seen_before_list;
+                }
+                _ => {}
+            }
+            if idx > 0 {
+                smaller_size_after_first |= creole::parse_segments(trimmed)
+                    .iter()
+                    .any(|seg| seg.style.size.is_some_and(|size| (size as f64) < font_size));
+            }
+            rendered_line_metrics_with_family(trimmed, font_size, font_family).height
+        })
         .collect::<Vec<_>>();
     if line_heights.is_empty() {
         return NoteTextMetrics {
             line_heights,
             first_height: 0.0,
             total_height: 0.0,
+            body_height_extra: 0.0,
         };
     }
     let first_height = line_heights[0];
     let total_height = line_heights.iter().sum();
+    // PlantUML's folded-note body extends one pixel below the text-flow
+    // reservation for these multiline rich-text cases. Event spacing keeps
+    // using `total_height`; only the drawn note body gets this correction.
+    let body_height_extra = if list_after_text || smaller_size_after_first {
+        1.0
+    } else {
+        0.0
+    };
     NoteTextMetrics {
         line_heights,
         first_height,
         total_height,
+        body_height_extra,
     }
 }
 
@@ -1020,6 +1050,11 @@ fn note_rendered_height(shape: NoteShape, metrics: &NoteTextMetrics) -> f64 {
             .skip(1)
             .map(|height| height.floor())
             .sum::<f64>()
+        + if shape == NoteShape::Note {
+            metrics.body_height_extra
+        } else {
+            0.0
+        }
 }
 
 /// Vertical offset from a message-attached note's top edge to the message arrow
