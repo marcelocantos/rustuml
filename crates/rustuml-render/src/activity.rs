@@ -239,6 +239,8 @@ struct Palette {
     /// the border thickness onto the connector strokes too.
     arrow_thickness: String,
     arrow_font_size: f64,
+    arrow_font_family: String,
+    arrow_text_color: String,
     title_font_size: f64,
     title_bold: bool,
     text_color: String,
@@ -285,6 +287,8 @@ impl Palette {
             arrow_color: ARROW_COLOR.into(),
             arrow_thickness: "1".into(),
             arrow_font_size: SMALL_FONT,
+            arrow_font_family: "sans-serif".into(),
+            arrow_text_color: TEXT_COLOR.into(),
             title_font_size: TITLE_FONT_SIZE,
             title_bold: true,
             text_color: TEXT_COLOR.into(),
@@ -416,6 +420,12 @@ impl Palette {
                     if let Ok(v) = val.parse::<f64>() {
                         p.arrow_font_size = v;
                     }
+                }
+                "activityarrowfontname" | "arrowfontname" => {
+                    p.arrow_font_family = canonical_font_family(val);
+                }
+                "activityarrowfontcolor" | "arrowfontcolor" => {
+                    p.arrow_text_color = resolved;
                 }
                 "titlefontsize" => {
                     if let Ok(v) = val.parse::<f64>() {
@@ -800,8 +810,10 @@ fn centered_text_y(center_y: f64, font_size: f64) -> f64 {
     center_y - text_box_height(font_size) / 2.0 + pm::ascent(font_size)
 }
 
-fn centerline_label_y(center_y: f64, font_size: f64) -> f64 {
-    center_y - (text_box_height(font_size) - pm::ascent(font_size))
+fn centerline_label_y_for_family(center_y: f64, font_size: f64, font_family: &str) -> f64 {
+    center_y
+        - (text_render::text_height_for_family(font_size, font_family).max(TEXT_MIN_BOX_HEIGHT)
+            - text_render::ascent_for_family(font_size, font_family))
 }
 
 fn text_box_height(font_size: f64) -> f64 {
@@ -4319,10 +4331,13 @@ fn emit_sequence_ex(
             svg.down_arrow_full(cx, arrow_top, arrow_top + arrow_gap, &style);
             if let Some(l) = label {
                 let label_font_size = svg.palette.arrow_font_size;
-                let lw = text_render::measure(&l, label_font_size, false);
+                let label_family = svg.palette.arrow_font_family.clone();
+                let label_color = svg.palette.arrow_text_color.clone();
+                let lw =
+                    text_render::measure_with_family(&l, label_font_size, false, &label_family);
                 svg.connector_text(
-                    TEXT_COLOR,
-                    "sans-serif",
+                    &label_color,
+                    &label_family,
                     label_font_size,
                     lw,
                     cx + 4.0,
@@ -4827,14 +4842,16 @@ fn emit_if(
     // the baseline at `diamond_cy - descent(label font)`.
     if let Some(label) = then_label {
         let label_font_size = svg.palette.arrow_font_size;
-        let lw = text_render::measure(label, label_font_size, false);
+        let label_family = svg.palette.arrow_font_family.clone();
+        let label_color = svg.palette.arrow_text_color.clone();
+        let lw = text_render::measure_with_family(label, label_font_size, false, &label_family);
         svg.text_element(
-            TEXT_COLOR,
-            "sans-serif",
+            &label_color,
+            &label_family,
             label_font_size,
             lw,
             diamond_left - lw,
-            centerline_label_y(diamond_cy, label_font_size),
+            centerline_label_y_for_family(diamond_cy, label_font_size, &label_family),
             label,
             false,
         );
@@ -4867,14 +4884,16 @@ fn emit_if(
     // shapes (matches golden order: yes label, no label, then branch boxes).
     if let Some(label) = else_branches.first().and_then(|b| b.label.as_ref()) {
         let label_font_size = svg.palette.arrow_font_size;
-        let lw = text_render::measure(label, label_font_size, false);
+        let label_family = svg.palette.arrow_font_family.clone();
+        let label_color = svg.palette.arrow_text_color.clone();
+        let lw = text_render::measure_with_family(label, label_font_size, false, &label_family);
         svg.text_element(
-            TEXT_COLOR,
-            "sans-serif",
+            &label_color,
+            &label_family,
             label_font_size,
             lw,
             diamond_right,
-            centerline_label_y(diamond_cy, label_font_size),
+            centerline_label_y_for_family(diamond_cy, label_font_size, &label_family),
             label,
             false,
         );
@@ -5071,14 +5090,16 @@ fn emit_if_long(
         // i.e. its left edge is `dcx + 4`.
         if let Some(north) = &col.north {
             let label_font_size = svg.palette.arrow_font_size;
-            let nw = text_render::measure(north, label_font_size, false);
+            let label_family = svg.palette.arrow_font_family.clone();
+            let label_color = svg.palette.arrow_text_color.clone();
+            let nw = text_render::measure_with_family(north, label_font_size, false, &label_family);
             svg.text_element(
-                TEXT_COLOR,
-                "sans-serif",
+                &label_color,
+                &label_family,
                 label_font_size,
                 nw,
                 dcx + 4.0,
-                diamond_bottom + pm::ascent(label_font_size),
+                diamond_bottom + text_render::ascent_for_family(label_font_size, &label_family),
                 north,
                 false,
             );
@@ -5104,14 +5125,16 @@ fn emit_if_long(
             && let Some(east) = &l.east_label
         {
             let label_font_size = svg.palette.arrow_font_size;
-            let ew = text_render::measure(east, label_font_size, false);
+            let label_family = svg.palette.arrow_font_family.clone();
+            let label_color = svg.palette.arrow_text_color.clone();
+            let ew = text_render::measure_with_family(east, label_font_size, false, &label_family);
             svg.text_element(
-                TEXT_COLOR,
-                "sans-serif",
+                &label_color,
+                &label_family,
                 label_font_size,
                 ew,
                 dcx + col.diamond_w / 2.0,
-                centerline_label_y(diamond_cy, label_font_size),
+                centerline_label_y_for_family(diamond_cy, label_font_size, &label_family),
                 east,
                 false,
             );
@@ -5342,14 +5365,16 @@ fn emit_if_down(
     };
     if let Some(label) = south_label {
         let label_font_size = svg.palette.arrow_font_size;
-        let lw = text_render::measure(label, label_font_size, false);
+        let label_family = svg.palette.arrow_font_family.clone();
+        let label_color = svg.palette.arrow_text_color.clone();
+        let lw = text_render::measure_with_family(label, label_font_size, false, &label_family);
         svg.text_element(
-            TEXT_COLOR,
-            "sans-serif",
+            &label_color,
+            &label_family,
             label_font_size,
             lw,
             cx + 4.0,
-            diamond_bottom + pm::ascent(label_font_size),
+            diamond_bottom + text_render::ascent_for_family(label_font_size, &label_family),
             label,
             false,
         );
@@ -5369,14 +5394,16 @@ fn emit_if_down(
     );
     if let Some(label) = east_label {
         let label_font_size = svg.palette.arrow_font_size;
-        let lw = text_render::measure(label, label_font_size, false);
+        let label_family = svg.palette.arrow_font_family.clone();
+        let label_color = svg.palette.arrow_text_color.clone();
+        let lw = text_render::measure_with_family(label, label_font_size, false, &label_family);
         svg.text_element(
-            TEXT_COLOR,
-            "sans-serif",
+            &label_color,
+            &label_family,
             label_font_size,
             lw,
             diamond_right,
-            centerline_label_y(diamond_cy, label_font_size),
+            centerline_label_y_for_family(diamond_cy, label_font_size, &label_family),
             label,
             false,
         );
@@ -5695,10 +5722,12 @@ fn switch_case_label(svg: &mut SvgEmitter, label: &str, x: f64, baseline_y: f64)
         return;
     }
     let label_font_size = svg.palette.arrow_font_size;
-    let lw = text_render::measure(label, label_font_size, false);
+    let label_family = svg.palette.arrow_font_family.clone();
+    let label_color = svg.palette.arrow_text_color.clone();
+    let lw = text_render::measure_with_family(label, label_font_size, false, &label_family);
     svg.connector_text(
-        TEXT_COLOR,
-        "sans-serif",
+        &label_color,
+        &label_family,
         label_font_size,
         lw,
         x,
@@ -5871,7 +5900,6 @@ fn emit_while(
     let diamond_stroke = svg.palette.diamond_stroke.clone();
     let diamond_fill = svg.palette.diamond_fill.clone();
     let diamond_stroke_width = svg.palette.diamond_stroke_width.clone();
-    let text_color = svg.palette.text_color.clone();
 
     let cond_inner_w = diamond_inner_w_styled(
         condition,
@@ -6005,14 +6033,16 @@ fn emit_while(
     // this BEFORE the inside-diamond condition text.
     if let Some(label) = is_label {
         let label_font_size = svg.palette.arrow_font_size;
-        let lw = text_render::measure(label, label_font_size, false);
+        let label_family = svg.palette.arrow_font_family.clone();
+        let label_color = svg.palette.arrow_text_color.clone();
+        let lw = text_render::measure_with_family(label, label_font_size, false, &label_family);
         svg.text_element(
-            &text_color,
-            "sans-serif",
+            &label_color,
+            &label_family,
             label_font_size,
             lw,
             cx + 4.0,
-            diamond_bottom + pm::ascent(label_font_size),
+            diamond_bottom + text_render::ascent_for_family(label_font_size, &label_family),
             label,
             false,
         );
@@ -6034,14 +6064,16 @@ fn emit_while(
     // "endwhile (no)" label just outside diamond's left vertex.
     if let Some(label) = end_label {
         let label_font_size = svg.palette.arrow_font_size;
-        let lw = text_render::measure(label, label_font_size, false);
+        let label_family = svg.palette.arrow_font_family.clone();
+        let label_color = svg.palette.arrow_text_color.clone();
+        let lw = text_render::measure_with_family(label, label_font_size, false, &label_family);
         svg.text_element(
-            &text_color,
-            "sans-serif",
+            &label_color,
+            &label_family,
             label_font_size,
             lw,
             diamond_left_vertex_x - lw,
-            centerline_label_y(diamond_cy, label_font_size),
+            centerline_label_y_for_family(diamond_cy, label_font_size, &label_family),
             label,
             false,
         );
@@ -6259,14 +6291,16 @@ fn emit_repeat(
     let diamond_right = cx + cond_inner_w / 2.0 + DIAMOND_HALF;
     if let Some(label) = is_label {
         let label_font_size = svg.palette.arrow_font_size;
-        let lw = text_render::measure(label, label_font_size, false);
+        let label_family = svg.palette.arrow_font_family.clone();
+        let label_color = svg.palette.arrow_text_color.clone();
+        let lw = text_render::measure_with_family(label, label_font_size, false, &label_family);
         svg.text_element(
-            &text_color,
-            "sans-serif",
+            &label_color,
+            &label_family,
             label_font_size,
             lw,
             diamond_right,
-            centerline_label_y(cond_diamond_cy, label_font_size),
+            centerline_label_y_for_family(cond_diamond_cy, label_font_size, &label_family),
             label,
             false,
         );

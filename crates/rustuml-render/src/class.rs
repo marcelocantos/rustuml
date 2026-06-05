@@ -1466,11 +1466,10 @@ struct ClassFontOverrides {
     attr_font_color: Option<String>,
     /// `skinparam ClassFontSize` — the class name's font size in px.
     font_size: Option<u32>,
-    /// `skinparam ClassFontName` / `defaultFontName` — base family for class text.
+    /// Member text family, from `ClassAttributeFontName` / `defaultFontName`.
     family: String,
-    /// Class-name family. Usually the same as `family`, but older themes set
-    /// only `circledCharacterFontName`; PlantUML applies that to the class
-    /// header name while leaving member text on the default sans-serif family.
+    /// Class-name family. `ClassFontName` and circled-character font settings
+    /// apply to the header name without leaking into member text.
     name_family: String,
     /// `skinparam ClassFontStyle` — bold/italic styling of the class name.
     font_bold: bool,
@@ -1551,11 +1550,12 @@ impl ClassFontOverrides {
         // specific skinparam is absent.
         let default_font_size =
             find(&["defaultFontSize"]).and_then(|v| v.trim().parse::<u32>().ok());
-        let family = find(&["ClassFontName", "defaultFontName", "fontName"])
+        let family = find(&["ClassAttributeFontName", "defaultFontName", "fontName"])
             .map(|v| canonical_class_font_family(&v))
             .unwrap_or_else(|| "sans-serif".to_string());
         let name_family = find(&["circledCharacterFontName"])
             .map(|v| canonical_class_font_family(&v))
+            .or_else(|| find(&["ClassFontName"]).map(|v| canonical_class_font_family(&v)))
             .unwrap_or_else(|| family.clone());
         let circled_font_size = find(&["circledCharacterFontSize"])
             .and_then(|v| v.trim().parse::<u32>().ok())

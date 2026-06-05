@@ -1085,8 +1085,9 @@ impl PreprocessContext {
         }
 
         // !function $name($param1, $param2 = "default")
+        // !procedure name() is also accepted by PlantUML themes.
         static RE: LazyLock<Regex> = LazyLock::new(|| {
-            Regex::new(r"^!(?:function|procedure)\s+\$(\w+)\s*\(([^)]*)\)$").unwrap()
+            Regex::new(r"^!(?:function|procedure)\s+\$?(\w+)\s*\(([^)]*)\)$").unwrap()
         });
 
         if let Some(caps) = RE.captures(line) {
@@ -1172,9 +1173,10 @@ impl PreprocessContext {
     }
 
     fn try_function_call(&mut self, line: &str, output: &mut Vec<String>) -> bool {
-        // $funcName("arg1", "arg2")
+        // $funcName("arg1", "arg2"). PlantUML themes also use bare
+        // procedure calls like `basic_style()` inside skinparam blocks.
         static RE: LazyLock<Regex> =
-            LazyLock::new(|| Regex::new(r"^\$(\w+)\s*\(([^)]*)\)$").unwrap());
+            LazyLock::new(|| Regex::new(r"^\$?(\w+)\s*\(([^)]*)\)$").unwrap());
 
         if let Some(caps) = RE.captures(line) {
             let name = caps[1].to_string();
@@ -3580,6 +3582,18 @@ mod tests {
         assert!(lines.contains(&"skinparam activityStartColor #0073bb".to_string()));
         assert!(lines.contains(&"skinparam arrowThickness 3".to_string()));
         assert!(lines.contains(&"skinparam sequenceArrowThickness 3".to_string()));
+    }
+
+    #[test]
+    fn theme_bare_procedures_expand_inside_skinparam_blocks() {
+        let input = "@startuml\n!theme reddress-lightred\nstart\n@enduml";
+        let lines = pp(input);
+        assert!(lines.contains(&"skinparam activitybackgroundColor ccc".to_string()));
+        assert!(lines.contains(&"skinparam activityborderColor aaa".to_string()));
+        assert!(lines.contains(&"skinparam activityfontName Verdana".to_string()));
+        assert!(lines.contains(&"skinparam activityfontSize 11".to_string()));
+        assert!(lines.contains(&"skinparam activityarrowColor 000".to_string()));
+        assert!(lines.contains(&"skinparam activityarrowFontName Verdana".to_string()));
     }
 
     #[test]
