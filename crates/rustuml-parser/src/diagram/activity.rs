@@ -20,6 +20,7 @@ pub enum ActivityStep {
     Stop,
     End,
     Action(String),
+    Connector(String),
     If(IfBlock),
     ElseIf(ElseIfBranch),
     Else(Option<String>),

@@ -483,6 +483,7 @@ impl ActivityParser {
                     && !self.try_deprecated_color_action(line)
                     && !self.try_arrow(line)
                     && !self.try_backward(line)
+                    && !self.try_connector(line)
                     && !self.try_if(line)
                     && !self.try_elseif(line)
                     && !self.try_else(line)
@@ -685,6 +686,18 @@ impl ActivityParser {
         if let Some(caps) = RE.captures(line) {
             self.steps
                 .push(ActivityStep::Backward(caps[1].trim().to_string()));
+            true
+        } else {
+            false
+        }
+    }
+
+    fn try_connector(&mut self, line: &str) -> bool {
+        static RE: LazyLock<Regex> = LazyLock::new(|| Regex::new(r"^\(([A-Za-z0-9])\)$").unwrap());
+
+        if let Some(caps) = RE.captures(line) {
+            self.steps
+                .push(ActivityStep::Connector(caps[1].to_string()));
             true
         } else {
             false
@@ -1088,5 +1101,13 @@ mod tests {
     fn backward_step() {
         let d = parse("start\nrepeat\n:action;\nbackward :retry;\nrepeat while (again?)\nstop");
         assert!(matches!(d.steps[3], ActivityStep::Backward(ref s) if s == "retry"));
+    }
+
+    #[test]
+    fn single_character_connectors() {
+        let d = parse("start\n(A)\n:Step 1;\n(1)\nstop\n(SKIP)");
+        assert!(matches!(d.steps[1], ActivityStep::Connector(ref s) if s == "A"));
+        assert!(matches!(d.steps[3], ActivityStep::Connector(ref s) if s == "1"));
+        assert_eq!(d.steps.len(), 5);
     }
 }

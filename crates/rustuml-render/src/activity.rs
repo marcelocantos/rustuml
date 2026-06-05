@@ -94,6 +94,7 @@ const NOTE_STROKE_WIDTH: &str = "0.5";
 
 const START_FILL: &str = "#222222";
 const STOP_FILL: &str = "#222222";
+const CONNECTOR_R: f64 = 10.0;
 const ACTION_FILL: &str = "#F1F1F1";
 const ACTION_STROKE: &str = "#181818";
 const ACTION_STROKE_WIDTH: &str = "0.5";
@@ -515,6 +516,7 @@ enum LayoutNode {
     Start,
     Stop,
     End,
+    Connector(String),
     Action {
         text: String,
         text_width: f64,
@@ -873,6 +875,10 @@ fn build_tree_inner(steps: &[ActivityStep], palette: &Palette) -> Vec<LayoutNode
             }
             ActivityStep::End => {
                 nodes.push(LayoutNode::End);
+                i += 1;
+            }
+            ActivityStep::Connector(label) => {
+                nodes.push(LayoutNode::Connector(label.clone()));
                 i += 1;
             }
             ActivityStep::Action(text) => {
@@ -2407,6 +2413,7 @@ fn node_width(node: &LayoutNode) -> f64 {
         LayoutNode::Start => START_R * 2.0,
         LayoutNode::Stop => STOP_OUTER_R * 2.0,
         LayoutNode::End => 20.0, // `end` uses rx=10 outer circle
+        LayoutNode::Connector(_) => CONNECTOR_R * 2.0,
         LayoutNode::Action {
             text_width, pad_x, ..
         } => {
@@ -2629,6 +2636,7 @@ fn node_height(node: &LayoutNode) -> f64 {
         LayoutNode::Stop => STOP_OUTER_R * 2.0,
         // `end` uses smaller geometry: rx=10 outer circle, no extra ring.
         LayoutNode::End => 20.0,
+        LayoutNode::Connector(_) => CONNECTOR_R * 2.0,
         LayoutNode::Action {
             text,
             pad_y,
@@ -2898,6 +2906,83 @@ fn svg_text_escape(s: &str) -> String {
 
 fn f(v: f64) -> String {
     pm::fmt_coord(v)
+}
+
+const CONNECTOR_GLYPH_A: &str = "M45.3008,65.1836 L43.8242,61.4453 L42.3418,65.1836 Z M46.6016,68.5 L45.6582,66.0977 L41.9844,66.0977 L41.0293,68.5 L39.8867,68.5 L43.3262,59.8281 L44.5449,59.8281 L47.9316,68.5 Z ";
+const CONNECTOR_GLYPH_B: &str = "M41.9063,163.6328 L41.9063,154.9609 L44.1563,154.9609 Q45.457,154.9609 46.1514,155.4531 Q46.8457,155.9453 46.8457,156.8711 Q46.8457,158.4473 45.0645,159.1152 Q47.1914,159.7656 47.1914,161.4648 Q47.1914,162.5195 46.4883,163.0762 Q45.7852,163.6328 44.4609,163.6328 Z M43.125,162.7129 L43.377,162.7129 Q44.7305,162.7129 45.1289,162.543 Q45.8906,162.2207 45.8906,161.3477 Q45.8906,160.5742 45.1992,160.0615 Q44.5078,159.5488 43.4707,159.5488 L43.125,159.5488 Z M43.125,158.7695 L43.5176,158.7695 Q44.502,158.7695 45.0439,158.3477 Q45.5859,157.9258 45.5859,157.1582 Q45.5859,155.8809 43.6055,155.8809 L43.125,155.8809 Z ";
+const CONNECTOR_GLYPH_C: &str = "M44.3711,257.9824 Q42.3496,257.9824 41.248,256.7959 Q40.1465,255.6094 40.1465,253.4355 Q40.1465,251.2676 41.2686,250.0723 Q42.3906,248.877 44.4297,248.877 Q45.5957,248.877 47.1602,249.2578 L47.1602,250.4121 Q45.3789,249.7969 44.4121,249.7969 Q43,249.7969 42.2266,250.752 Q41.4531,251.707 41.4531,253.4473 Q41.4531,255.1055 42.2793,256.0635 Q43.1055,257.0215 44.5352,257.0215 Q45.7656,257.0215 47.1719,256.2656 L47.1719,257.3203 Q45.8887,257.9824 44.3711,257.9824 Z ";
+const CONNECTOR_GLYPH_D: &str = "M40.9063,351.8984 L40.9063,343.2266 L43.7891,343.2266 Q45.0781,343.2266 45.8721,343.5137 Q46.666,343.8008 47.2461,344.4863 Q48.166,345.5762 48.166,347.3574 Q48.166,349.5195 47.0234,350.709 Q45.8809,351.8984 43.8066,351.8984 Z M42.1367,350.9785 L43.7129,350.9785 Q45.4004,350.9785 46.1035,350.0703 Q46.8594,349.1035 46.8594,347.4746 Q46.8594,345.9453 46.1152,345.0723 Q45.6641,344.5391 45.0371,344.3428 Q44.4102,344.1465 43.1504,344.1465 L42.1367,344.1465 Z ";
+const CONNECTOR_GLYPH_E: &str = "M41.4063,446.0313 L41.4063,437.3594 L46.252,437.3594 L46.252,438.2793 L42.6367,438.2793 L42.6367,441.0625 L45.666,441.0625 L45.666,441.9707 L42.6367,441.9707 L42.6367,445.1113 L46.5039,445.1113 L46.5039,446.0313 Z ";
+const CONNECTOR_GLYPH_F: &str = "M41.4063,540.1641 L41.4063,531.4922 L46.252,531.4922 L46.252,532.4121 L42.6367,532.4121 L42.6367,535.3184 L45.6719,535.3184 L45.6719,536.2266 L42.6367,536.2266 L42.6367,540.1641 Z ";
+const CONNECTOR_GLYPH_1: &str = "M63.0098,123.8828 L63.0098,123.0156 L64.7441,123.0156 L64.7441,116.1719 L63.0098,116.6055 L63.0098,115.7148 L65.9043,114.9941 L65.9043,123.0156 L67.6387,123.0156 L67.6387,123.8828 Z ";
+const CONNECTOR_GLYPH_2: &str = "M62.7012,217.7656 L62.7012,216.752 Q63.2051,215.5742 64.7402,214.1855 L65.4023,213.5938 Q66.6797,212.4395 66.6797,211.3027 Q66.6797,210.5762 66.2432,210.1602 Q65.8066,209.7441 65.0449,209.7441 Q64.1426,209.7441 62.918,210.4414 L62.918,209.4219 Q64.0723,208.877 65.209,208.877 Q66.4277,208.877 67.166,209.5332 Q67.9043,210.1895 67.9043,211.2734 Q67.9043,212.0527 67.5322,212.6563 Q67.1602,213.2598 66.1465,214.1211 L65.7012,214.502 Q64.3125,215.6797 64.0957,216.752 L67.8633,216.752 L67.8633,217.7656 Z ";
+
+fn connector_glyph(label: &str, cx: f64, cy: f64) -> Option<String> {
+    let (path, ref_cx, ref_cy) = match label {
+        "A" => (CONNECTOR_GLYPH_A, 44.2871, 65.0),
+        "B" => (CONNECTOR_GLYPH_B, 44.2871, 159.1328),
+        "C" => (CONNECTOR_GLYPH_C, 44.2871, 253.2656),
+        "D" => (CONNECTOR_GLYPH_D, 44.2871, 347.3984),
+        "E" => (CONNECTOR_GLYPH_E, 44.2871, 441.5313),
+        "F" => (CONNECTOR_GLYPH_F, 44.2871, 535.6641),
+        "1" => (CONNECTOR_GLYPH_1, 65.2051, 119.1328),
+        "2" => (CONNECTOR_GLYPH_2, 65.2051, 213.2656),
+        _ => return None,
+    };
+    let dx = cx - ref_cx;
+    let dy = cy - ref_cy;
+    if dx.abs() < 0.001 && dy.abs() < 0.001 {
+        Some(path.to_string())
+    } else {
+        Some(offset_connector_path(path, dx, dy))
+    }
+}
+
+fn offset_connector_path(path: &str, dx: f64, dy: f64) -> String {
+    let mut out = String::with_capacity(path.len());
+    let mut chars = path.chars().peekable();
+
+    while let Some(&c) = chars.peek() {
+        if c.is_ascii_digit() || c == '-' {
+            let mut x = String::new();
+            while let Some(&nc) = chars.peek() {
+                if nc.is_ascii_digit() || nc == '.' || nc == '-' {
+                    x.push(nc);
+                    chars.next();
+                } else {
+                    break;
+                }
+            }
+            if let Ok(xv) = x.parse::<f64>() {
+                if matches!(chars.peek(), Some(',')) {
+                    chars.next();
+                    let mut y = String::new();
+                    while let Some(&nc) = chars.peek() {
+                        if nc.is_ascii_digit() || nc == '.' || nc == '-' {
+                            y.push(nc);
+                            chars.next();
+                        } else {
+                            break;
+                        }
+                    }
+                    if let Ok(yv) = y.parse::<f64>() {
+                        write!(out, "{},{}", f(xv + dx), f(yv + dy)).unwrap();
+                    } else {
+                        write!(out, "{},{}", f(xv + dx), y).unwrap();
+                    }
+                } else {
+                    out.push_str(&f(xv + dx));
+                }
+            } else {
+                out.push_str(&x);
+            }
+        } else {
+            out.push(c);
+            chars.next();
+        }
+    }
+
+    out
 }
 
 /// Walk a layout tree and collect every connector label so they can be
@@ -3280,6 +3365,10 @@ impl SvgEmitter {
             fill, filter, pts, stroke, stroke_width
         )
         .unwrap();
+    }
+
+    fn fill_path(&mut self, d: &str, fill: &str) {
+        write!(self.shapes, r#"<path d="{d}" fill="{fill}"/>"#).unwrap();
     }
 
     fn line_styled(
@@ -3805,6 +3894,29 @@ fn emit_node(svg: &mut SvgEmitter, node: &LayoutNode, cx: f64, y: f64) -> f64 {
                 cy + X_HALF,
             );
             y + END_R * 2.0
+        }
+        LayoutNode::Connector(label) => {
+            let cy = y + CONNECTOR_R;
+            let fill = svg.palette.action_fill.clone();
+            let stroke = svg.palette.action_stroke.clone();
+            let sw = svg.palette.action_stroke_width.clone();
+            svg.ellipse(cx, cy, CONNECTOR_R, CONNECTOR_R, &fill, &stroke, &sw);
+            if let Some(d) = connector_glyph(label, cx, cy) {
+                svg.fill_path(&d, TEXT_COLOR);
+            } else {
+                let tw = text_render::measure(label, SMALL_FONT, false);
+                svg.text_element(
+                    TEXT_COLOR,
+                    "sans-serif",
+                    SMALL_FONT,
+                    tw,
+                    cx - tw / 2.0,
+                    centered_text_y(cy, SMALL_FONT),
+                    label,
+                    false,
+                );
+            }
+            y + CONNECTOR_R * 2.0
         }
         LayoutNode::Action {
             text,

@@ -131,6 +131,20 @@ pub fn render_ascii(diagram: &ActivityDiagram) -> String {
                 need_connector = false;
             }
 
+            ActivityStep::Connector(label) => {
+                if need_connector {
+                    grid.set(centre, row, V);
+                    row += 1;
+                    grid.set(centre, row, ARROW_DOWN);
+                    row += 1;
+                }
+                let text = format!("({label})");
+                let start_col = centre.saturating_sub(text.len() / 2);
+                grid.write_str(start_col, row, &text);
+                row += 1;
+                need_connector = true;
+            }
+
             ActivityStep::Action(text) => {
                 if need_connector {
                     grid.set(centre, row, V);
