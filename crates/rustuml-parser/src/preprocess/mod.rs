@@ -60,7 +60,7 @@ pub fn preprocess_with_base(input: &str, base_dir: &Path) -> Vec<String> {
 /// Preprocess PlantUML source and return both expanded lines and sprite
 /// definitions collected from `sprite $name { ... }` blocks.
 pub fn preprocess_full(input: &str, base_dir: Option<PathBuf>) -> PreprocessOutput {
-    let mut output = preprocess_full_inner(input, base_dir);
+    let mut output = preprocess_full_inner(input, base_dir, false);
     output.lines = strip_source_line_markers(output.lines);
     output
 }
@@ -69,11 +69,22 @@ pub(crate) fn preprocess_full_for_parse(
     input: &str,
     base_dir: Option<PathBuf>,
 ) -> PreprocessOutput {
-    preprocess_full_inner(input, base_dir)
+    preprocess_full_inner(input, base_dir, false)
 }
 
-fn preprocess_full_inner(input: &str, base_dir: Option<PathBuf>) -> PreprocessOutput {
-    let mut ctx = PreprocessContext::new(base_dir);
+pub(crate) fn preprocess_full_for_sequence_parse(
+    input: &str,
+    base_dir: Option<PathBuf>,
+) -> PreprocessOutput {
+    preprocess_full_inner(input, base_dir, true)
+}
+
+fn preprocess_full_inner(
+    input: &str,
+    base_dir: Option<PathBuf>,
+    mark_function_body_source_lines: bool,
+) -> PreprocessOutput {
+    let mut ctx = PreprocessContext::new(base_dir, mark_function_body_source_lines);
     let mut lines = ctx.process(input);
     // Append any accumulated theme expansion to the end of the diagram so
     // user-source line numbers are preserved (see `theme_tail`).
@@ -382,6 +393,8 @@ struct PreprocessContext {
     /// lines need explicit source-origin markers because output position no
     /// longer equals PlantUML's `data-source-line`.
     mark_source_lines: bool,
+    source_line_override: Option<usize>,
+    mark_function_body_source_lines: bool,
 }
 
 const MAX_INCLUDE_DEPTH: usize = 10;
@@ -403,9 +416,11 @@ struct WhileState {
     body_lines: Vec<BufferedLine>,
 }
 
+#[derive(Clone)]
 struct BufferedLine {
     text: String,
     raw_source_line: usize,
+    source_line: usize,
 }
 
 #[derive(Clone)]
@@ -416,7 +431,7 @@ struct SubBlock {
 #[derive(Clone)]
 struct FunctionDef {
     params: Vec<FuncParam>,
-    body: Vec<String>,
+    body: Vec<BufferedLine>,
 }
 
 #[derive(Clone)]
@@ -432,7 +447,7 @@ struct DefineLongDef {
 }
 
 impl PreprocessContext {
-    fn new(base_dir: Option<PathBuf>) -> Self {
+    fn new(base_dir: Option<PathBuf>, mark_function_body_source_lines: bool) -> Self {
         Self {
             defines: HashMap::new(),
             token_defines: HashMap::new(),
@@ -463,6 +478,8 @@ impl PreprocessContext {
             render_clock: RenderClock::from_env(),
             theme_tail: Vec::new(),
             mark_source_lines: false,
+            source_line_override: None,
+            mark_function_body_source_lines,
         }
     }
 
@@ -496,13 +513,15 @@ impl PreprocessContext {
         BufferedLine {
             text: line.to_string(),
             raw_source_line: self.current_source_line,
+            source_line: self.current_diagram_source_line(),
         }
     }
 
     fn push_content_line(&self, output: &mut Vec<String>, line: String) {
         if self.mark_source_lines && !line.is_empty() {
             output.push(source_line_marker(
-                self.current_diagram_source_line(),
+                self.source_line_override
+                    .unwrap_or_else(|| self.current_diagram_source_line()),
                 &line,
             ));
         } else {
@@ -513,9 +532,12 @@ impl PreprocessContext {
     fn process_buffered_line(&mut self, line: &BufferedLine, output: &mut Vec<String>) {
         let saved_source_line = self.current_source_line;
         let saved_mark_source_lines = self.mark_source_lines;
+        let saved_source_line_override = self.source_line_override;
         self.current_source_line = line.raw_source_line;
         self.mark_source_lines = true;
+        self.source_line_override = Some(line.source_line);
         self.process_one_line(&line.text, output);
+        self.source_line_override = saved_source_line_override;
         self.mark_source_lines = saved_mark_source_lines;
         self.current_source_line = saved_source_line;
     }
@@ -1047,8 +1069,17 @@ impl PreprocessContext {
         if let Some(func_name) = &self.collecting_function.clone() {
             if line == "!endfunction" || line == "!endprocedure" {
                 self.collecting_function = None;
-            } else if let Some(func) = self.functions.get_mut(func_name) {
-                func.body.push(line.to_string());
+            } else {
+                let raw_source_line = self.current_source_line;
+                let source_line = self.current_diagram_source_line();
+                let buffered = BufferedLine {
+                    text: line.to_string(),
+                    raw_source_line,
+                    source_line,
+                };
+                if let Some(func) = self.functions.get_mut(func_name) {
+                    func.body.push(buffered);
+                }
             }
             return true;
         }
@@ -1107,7 +1138,11 @@ impl PreprocessContext {
 
         for body_line in &func.body {
             // Process through the preprocessor (handles !if/!while/!return etc.)
-            self.process_one_line(body_line, &mut output_lines);
+            if self.mark_function_body_source_lines {
+                self.process_buffered_line(body_line, &mut output_lines);
+            } else {
+                self.process_one_line(&body_line.text, &mut output_lines);
+            }
             // Check if process_one_line set a return signal.
             if self.return_signal.is_some() {
                 break;
@@ -1437,7 +1472,10 @@ impl PreprocessContext {
         match std::fs::read_to_string(&file_path) {
             Ok(content) => {
                 // Parse the file to extract subs.
-                let mut temp_ctx = PreprocessContext::new(self.base_dir.clone());
+                let mut temp_ctx = PreprocessContext::new(
+                    self.base_dir.clone(),
+                    self.mark_function_body_source_lines,
+                );
                 temp_ctx.include_depth = self.include_depth + 1;
                 let _ = temp_ctx.process(&content);
                 // Now extract the named sub.
@@ -1483,6 +1521,8 @@ impl PreprocessContext {
         if let Some(theme_src) = themes::get_theme_source(name_part) {
             let body = themes::strip_front_matter(theme_src);
             if self.include_depth < MAX_INCLUDE_DEPTH {
+                let saved_mark_function_body_source_lines = self.mark_function_body_source_lines;
+                self.mark_function_body_source_lines = false;
                 let sub_start = self.sub_blocks.len();
                 self.include_depth += 1;
                 let expanded = self.process(body);
@@ -1512,6 +1552,7 @@ impl PreprocessContext {
                     self.theme_tail
                         .extend(themes::flatten_theme_output(&expanded));
                 }
+                self.mark_function_body_source_lines = saved_mark_function_body_source_lines;
             }
         }
         // Emit a placeholder blank line so the diagram body's source-line

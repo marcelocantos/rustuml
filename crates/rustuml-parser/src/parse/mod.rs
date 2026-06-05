@@ -812,10 +812,19 @@ pub fn parse_with_base(
     base_dir: Option<&std::path::Path>,
 ) -> Result<Diagram, ParseError> {
     let typ = detect_type(input);
-    let preprocess_out = match base_dir {
+    let mut preprocess_out = match base_dir {
         Some(dir) => preprocess::preprocess_full_for_parse(input, Some(dir.to_path_buf())),
         None => preprocess::preprocess_full_for_parse(input, None),
     };
+    let uml_subtype = (typ == "uml").then(|| detect_uml_subtype(&preprocess_out.lines));
+    if matches!(uml_subtype, Some(UmlSubtype::Sequence)) {
+        preprocess_out = match base_dir {
+            Some(dir) => {
+                preprocess::preprocess_full_for_sequence_parse(input, Some(dir.to_path_buf()))
+            }
+            None => preprocess::preprocess_full_for_sequence_parse(input, None),
+        };
+    }
     let lines = preprocess_out.lines;
     let sprites = preprocess_out.sprites;
 
@@ -823,7 +832,6 @@ pub fn parse_with_base(
     // into multiple pages, but PlantUML's SVG output renders only the first
     // page. Sequence diagrams handle `newpage` as a paginating event with their
     // own multipage rendering, so they keep all lines.
-    let uml_subtype = (typ == "uml").then(|| detect_uml_subtype(&lines));
     let lines = if matches!(uml_subtype, Some(UmlSubtype::Sequence)) {
         lines
     } else {
@@ -1219,6 +1227,45 @@ mod tests {
         };
         assert_eq!(first.source_line, 2);
         assert_eq!(second.source_line, 3);
+    }
+
+    #[test]
+    fn parse_block_keeps_inline_procedure_definition_lines() {
+        let input = concat!(
+            "@startuml\n",
+            "!procedure $request($from, $to, $msg)\n",
+            "  $from -> $to : $msg\n",
+            "  activate $to\n",
+            "  $to --> $from : response\n",
+            "  deactivate $to\n",
+            "!endprocedure\n",
+            "\n",
+            "$request(Client, Server, \"GET /users\")\n",
+            "$request(Client, Server, \"POST /users\")\n",
+            "@enduml"
+        );
+        let diagram = parse_block(input, 0).unwrap();
+        let Diagram::Sequence(seq) = diagram else {
+            panic!("expected sequence diagram");
+        };
+        assert_eq!(seq.participants[0].source_line, 2);
+        assert_eq!(seq.participants[1].source_line, 2);
+        let crate::diagram::sequence::Event::Message(first) = &seq.events[0] else {
+            panic!("expected first message event");
+        };
+        let crate::diagram::sequence::Event::Message(first_response) = &seq.events[2] else {
+            panic!("expected first response event");
+        };
+        let crate::diagram::sequence::Event::Message(second) = &seq.events[4] else {
+            panic!("expected second message event");
+        };
+        let crate::diagram::sequence::Event::Message(second_response) = &seq.events[6] else {
+            panic!("expected second response event");
+        };
+        assert_eq!(first.source_line, 2);
+        assert_eq!(first_response.source_line, 4);
+        assert_eq!(second.source_line, 2);
+        assert_eq!(second_response.source_line, 4);
     }
 
     #[test]
