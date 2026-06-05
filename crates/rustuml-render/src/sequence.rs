@@ -742,6 +742,18 @@ fn first_segment_metrics_with_family(
     }
 }
 
+fn line_has_subscript_after_plain_first(content: &str) -> bool {
+    let segments = creole::parse_segments(content);
+    let Some(first) = segments.first() else {
+        return false;
+    };
+    first.style.baseline_shift.is_none()
+        && segments
+            .iter()
+            .skip(1)
+            .any(|s| matches!(s.style.baseline_shift, Some("sub")))
+}
+
 fn rendered_label_y_drop_with_family(content: &str, font_size: f64, font_family: &str) -> f64 {
     if let Some(latex) = latex_label_content(content) {
         return crate::math::raw_latex_image(latex).height as f64 + 1.0;
@@ -752,7 +764,12 @@ fn rendered_label_y_drop_with_family(content: &str, font_size: f64, font_family:
     let remaining_height: f64 = lines
         .map(|line| rendered_line_metrics_with_family(line, font_size, font_family).height)
         .sum();
-    first_metrics.height - first_metrics.ascent + 2.0 + remaining_height
+    let subscript_drop = if line_has_subscript_after_plain_first(first) {
+        3.0
+    } else {
+        0.0
+    };
+    first_metrics.height - first_metrics.ascent + 2.0 + subscript_drop + remaining_height
 }
 
 fn message_label_width_with_family(
@@ -8366,7 +8383,13 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                             .unwrap_or(line_metrics.height);
                         continue;
                     }
-                    let text_y = line_top + line_metrics.ascent + text_y_offset;
+                    let subscript_ascent_adjust = if line_has_subscript_after_plain_first(trimmed) {
+                        3.0
+                    } else {
+                        0.0
+                    };
+                    let text_y =
+                        line_top + line_metrics.ascent - subscript_ascent_adjust + text_y_offset;
                     let line_width = note_line_width_with_family(
                         trimmed,
                         note_font_size_f,

@@ -3218,9 +3218,11 @@ fn node_height(node: &LayoutNode) -> f64 {
         LayoutNode::Repeat { body, backward, .. } => {
             let body_h = repeat_body_height(body, backward.is_some());
             let diamond_h = DIAMOND_HALF * 2.0;
-            // A backward box on the return arm drops the condition diamond an
-            // extra halfHex below the body (see emit_repeat's cond_y).
-            let cond_gap = if backward.is_some() {
+            // Single-action backward repeats keep the extra halfHex before
+            // the condition diamond; multi-action bodies absorb that slack in
+            // their final inbound connector.
+            let backward_flow_count = body.iter().filter(|n| node_is_flow(n)).count();
+            let cond_gap = if backward.is_some() && backward_flow_count < 2 {
                 ARROW_LEN + 10.0
             } else {
                 ARROW_LEN
@@ -5414,12 +5416,21 @@ const IF_DOWN_MID_STRETCH: f64 = 15.0;
 /// the body in the repeat frame; with an even number of flow nodes the centre
 /// falls inside the middle connector, lengthening that one snake by 7.5 px.
 const REPEAT_EVEN_BODY_MID_STRETCH: f64 = 7.5;
+/// Extra vertical slack FtileRepeat distributes through a multi-action body
+/// when an explicit `backward :...;` tile occupies the loop-back arm.
+const REPEAT_BACKWARD_BODY_SLACK: f64 = 30.0;
 
 fn repeat_body_mid_stretch(body: &[LayoutNode], has_backward: bool) -> Option<(usize, f64)> {
+    let flow_count = body.iter().filter(|n| node_is_flow(n)).count();
     if has_backward {
+        if flow_count >= 2 {
+            return Some((
+                flow_count - 1,
+                REPEAT_BACKWARD_BODY_SLACK / flow_count as f64,
+            ));
+        }
         return None;
     }
-    let flow_count = body.iter().filter(|n| node_is_flow(n)).count();
     if flow_count >= 2 && flow_count.is_multiple_of(2) {
         Some((flow_count / 2, REPEAT_EVEN_BODY_MID_STRETCH))
     } else {
@@ -6384,11 +6395,11 @@ fn emit_repeat(
     // Body first — its rects/texts land in `shapes` before either diamond.
     let body_mid_stretch = repeat_body_mid_stretch(body, backward.is_some());
     let body_bottom = emit_sequence_ex(svg, body, cx, body_y, body_mid_stretch, None);
-    // A `backward :label;` box sits on the return arm at the body's vertical
-    // band; FtileRepeat distributes its `8*halfHex` slack so the condition
-    // diamond drops an extra halfHex (10 px) below the body to clear the
-    // return path's arrowhead into the box bottom.
-    let cond_y = if backward.is_some() {
+    // Single-action backward repeats keep the extra halfHex before the
+    // condition diamond; multi-action bodies absorb that slack in their final
+    // inbound connector.
+    let backward_flow_count = body.iter().filter(|n| node_is_flow(n)).count();
+    let cond_y = if backward.is_some() && backward_flow_count < 2 {
         body_bottom + ARROW_LEN + 10.0
     } else {
         body_bottom + ARROW_LEN
@@ -6480,14 +6491,23 @@ fn emit_repeat(
         let cond_half = cond_inner_w / 2.0 + DIAMOND_HALF;
         let box_left = cx + repeat_backward_box_left_rel(cond_half, body_half, is_label);
         let box_cx = box_left + bw / 2.0;
-        let box_top = body_y;
-        let box_bottom = body_y
-            + action_height(
-                label,
-                svg.palette.action_pad_y,
-                &svg.palette.action_font_family,
-                svg.palette.action_font_size,
-            );
+        let backward_h = action_height(
+            label,
+            svg.palette.action_pad_y,
+            &svg.palette.action_font_family,
+            svg.palette.action_font_size,
+        );
+        let box_top = if backward_flow_count >= 2 {
+            let odd_stretch_adjust = if backward_flow_count.is_multiple_of(2) {
+                0.0
+            } else {
+                body_mid_stretch.map_or(0.0, |(_, stretch)| stretch / 2.0)
+            };
+            body_y + (body_bottom - body_y - backward_h) / 2.0 - odd_stretch_adjust
+        } else {
+            body_y
+        };
+        let box_bottom = box_top + backward_h;
 
         // Box shape first — PlantUML emits the backward tile's shapes before
         // the loop-back connectors in document order.
