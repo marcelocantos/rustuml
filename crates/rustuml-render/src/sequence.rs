@@ -7765,7 +7765,15 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                     last.box_x + last.box_width + 5.0
                 } else {
                     200.0
-                };
+                }
+                // Dividers span the widest enclosing group frame plus the
+                // same 10px right margin PlantUML uses for the line strip.
+                .max(
+                    group_frames
+                        .iter()
+                        .map(|f| f.right + RIGHT_MARGIN)
+                        .fold(0.0, f64::max),
+                );
                 // When the label box is wider than the participant span, the
                 // background strip and lines grow to box width + 12px margin
                 // on each side; otherwise they span the participants. The box
