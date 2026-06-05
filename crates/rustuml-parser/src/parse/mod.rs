@@ -165,6 +165,7 @@ fn detect_uml_subtype(lines: &[String]) -> UmlSubtype {
     let mut has_skinparam = false;
     let mut has_meta_only_class_default = false;
     let mut has_class_dependency_arrow = false;
+    let mut has_class_association_line = false;
 
     for line in lines {
         let trimmed = source_text(line).trim();
@@ -406,6 +407,9 @@ fn detect_uml_subtype(lines: &[String]) -> UmlSubtype {
         if trimmed.contains("..>") || trimmed.contains("<..") {
             has_class_dependency_arrow = true;
         }
+        if looks_like_bare_class_association(trimmed) {
+            has_class_association_line = true;
+        }
         // `*--` and `o--` score for class only when no `object` keyword is present.
         // In object diagrams they denote composition/aggregation links.
         // We defer the disambiguation: score both, but object gets a tiebreak boost
@@ -521,11 +525,16 @@ fn detect_uml_subtype(lines: &[String]) -> UmlSubtype {
         }
     }
 
-    // Plain dotted dependency arrows default to CLASS in Java PlantUML
-    // (`A ..> B`), but the same spelling is also valid for object,
-    // component, and deployment links. Treat it as a class signal only when
-    // no explicit non-class container/entity syntax has appeared.
-    if has_class_dependency_arrow && scores[2] == 0 && scores[5] == 0 && scores[7] == 0 {
+    // Plain class-style relationship lines default to CLASS in Java PlantUML:
+    // `A ..> B`, but also bare association forms like `A .. B` and `C -- D`.
+    // The same spellings are valid for object, component, and deployment links,
+    // so treat them as class signals only when no explicit non-class
+    // container/entity syntax has appeared.
+    if (has_class_dependency_arrow || has_class_association_line)
+        && scores[2] == 0
+        && scores[5] == 0
+        && scores[7] == 0
+    {
         scores[1] += 10;
     }
 
@@ -571,6 +580,16 @@ fn detect_uml_subtype(lines: &[String]) -> UmlSubtype {
     let max_idx = scores.iter().position(|&s| s == max_score).unwrap_or(0);
 
     subtypes[max_idx]
+}
+
+fn looks_like_bare_class_association(line: &str) -> bool {
+    static RE: std::sync::LazyLock<regex::Regex> = std::sync::LazyLock::new(|| {
+        regex::Regex::new(
+            r#"^(?:"[^"]+"|[\w./:]+)\s*(?:-{2,}|\.{2,})\s*(?:"[^"]+"|[\w./:]+)(?:\s*:\s*.+)?$"#,
+        )
+        .unwrap()
+    });
+    RE.is_match(line)
 }
 
 #[derive(Clone, Copy)]
@@ -1081,6 +1100,24 @@ mod tests {
     }
 
     #[test]
+    fn bare_association_lines_route_to_class() {
+        let input = "@startuml\nA .. B\nC -- D\n@enduml";
+        let diagram = parse(input).unwrap();
+        assert!(matches!(diagram, Diagram::Class(_)));
+
+        let input = "@startuml\ncom.example.A -- com.example.B\n@enduml";
+        let diagram = parse(input).unwrap();
+        assert!(matches!(diagram, Diagram::Class(_)));
+    }
+
+    #[test]
+    fn sequence_label_with_dashes_stays_sequence() {
+        let input = "@startuml\nAlice -> Bob : --strike text--\n@enduml";
+        let diagram = parse(input).unwrap();
+        assert!(matches!(diagram, Diagram::Sequence(_)));
+    }
+
+    #[test]
     fn dotted_dependency_arrows_preserve_explicit_non_class_types() {
         let input = "@startuml\nobject Source\nobject Target\nSource ..> Target\n@enduml";
         let diagram = parse(input).unwrap();
@@ -1091,6 +1128,21 @@ mod tests {
         assert!(matches!(diagram, Diagram::Deployment(_)));
 
         let input = "@startuml\ncomponent A\ncomponent B\nA ..> B\n@enduml";
+        let diagram = parse(input).unwrap();
+        assert!(matches!(diagram, Diagram::Component(_)));
+    }
+
+    #[test]
+    fn bare_association_lines_preserve_explicit_non_class_types() {
+        let input = "@startuml\nobject Source\nobject Target\nSource -- Target\n@enduml";
+        let diagram = parse(input).unwrap();
+        assert!(matches!(diagram, Diagram::Object(_)));
+
+        let input = "@startuml\nnode NodeA\nnode NodeB\nNodeA -- NodeB\n@enduml";
+        let diagram = parse(input).unwrap();
+        assert!(matches!(diagram, Diagram::Deployment(_)));
+
+        let input = "@startuml\ncomponent A\ncomponent B\nA -- B\n@enduml";
         let diagram = parse(input).unwrap();
         assert!(matches!(diagram, Diagram::Component(_)));
     }
