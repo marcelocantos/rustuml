@@ -1006,7 +1006,7 @@ fn parse_arrow(s: &str) -> Arrow {
         (None, false)
     };
 
-    let direction = if s.contains("<->") {
+    let direction = if s.starts_with('<') && s.ends_with('>') {
         ArrowDirection::Bidirectional
     } else if s.contains("<-") || s.contains("<") && !s.contains("->") {
         ArrowDirection::RightToLeft
@@ -1065,6 +1065,38 @@ mod tests {
         let d = parse("A --> B : reply");
         if let Event::Message(m) = &d.events[0] {
             assert_eq!(m.arrow.line, LineStyle::Dotted);
+        } else {
+            panic!("expected message");
+        }
+    }
+
+    #[test]
+    fn bidirectional_arrows() {
+        let d = parse("A <-> B : solid\nA <--> B : dotted\nA <<->> B : open");
+        if let Event::Message(m) = &d.events[0] {
+            assert_eq!(m.from, "A");
+            assert_eq!(m.to, "B");
+            assert_eq!(m.arrow.direction, ArrowDirection::Bidirectional);
+            assert_eq!(m.arrow.line, LineStyle::Solid);
+            assert_eq!(m.arrow.head, ArrowHead::Filled);
+        } else {
+            panic!("expected message");
+        }
+        if let Event::Message(m) = &d.events[1] {
+            assert_eq!(m.from, "A");
+            assert_eq!(m.to, "B");
+            assert_eq!(m.arrow.direction, ArrowDirection::Bidirectional);
+            assert_eq!(m.arrow.line, LineStyle::Dotted);
+            assert_eq!(m.arrow.head, ArrowHead::Filled);
+        } else {
+            panic!("expected message");
+        }
+        if let Event::Message(m) = &d.events[2] {
+            assert_eq!(m.from, "A");
+            assert_eq!(m.to, "B");
+            assert_eq!(m.arrow.direction, ArrowDirection::Bidirectional);
+            assert_eq!(m.arrow.line, LineStyle::Solid);
+            assert_eq!(m.arrow.head, ArrowHead::Open);
         } else {
             panic!("expected message");
         }

@@ -2575,6 +2575,7 @@ impl PlantUmlSvg {
         entity2: &str,
         source_line: u32,
         msg_id: u32,
+        leading_arrow_points: Option<&str>,
         arrow_points: &str,
         line_x1: f64,
         line_x2: f64,
@@ -2597,6 +2598,14 @@ impl PlantUmlSvg {
             entity2 = escape_xml(entity2),
         )
         .unwrap();
+
+        if let Some(points) = leading_arrow_points {
+            write!(
+                self.buf,
+                r##"<polygon fill="{color}" points="{points}" style="stroke:{color};stroke-width:1;"/>"##,
+            )
+            .unwrap();
+        }
 
         // Arrow head polygon keeps stroke-width:1 even when the line is
         // thickened — PlantUML scales the line only.
@@ -2781,6 +2790,7 @@ impl PlantUmlSvg {
         tip_x: f64,
         tip_y: f64,
         is_right: bool,
+        leading_tip_x: Option<f64>,
         line_x1: f64,
         line_x2: f64,
         line_y: f64,
@@ -2802,6 +2812,33 @@ impl PlantUmlSvg {
         )
         .unwrap();
 
+        let thickness = self.arrow_thickness.clone();
+        if let Some(tip_x) = leading_tip_x {
+            let back_x = if is_right {
+                tip_x + ARROW_SIZE
+            } else {
+                tip_x - ARROW_SIZE
+            };
+            write!(
+                self.buf,
+                r##"<line style="stroke:{color};stroke-width:{thickness};" x1="{}" x2="{}" y1="{}" y2="{}"/>"##,
+                fmt_coord(tip_x),
+                fmt_coord(back_x),
+                fmt_coord(tip_y),
+                fmt_coord(tip_y - ARROW_HALF_H),
+            )
+            .unwrap();
+            write!(
+                self.buf,
+                r##"<line style="stroke:{color};stroke-width:{thickness};" x1="{}" x2="{}" y1="{}" y2="{}"/>"##,
+                fmt_coord(tip_x),
+                fmt_coord(back_x),
+                fmt_coord(tip_y),
+                fmt_coord(tip_y + ARROW_HALF_H),
+            )
+            .unwrap();
+        }
+
         // Open arrow: two lines forming a "V" shape
         let (back_x, up_y, down_y) = if is_right {
             (
@@ -2817,7 +2854,6 @@ impl PlantUmlSvg {
             )
         };
 
-        let thickness = self.arrow_thickness.clone();
         write!(
             self.buf,
             r##"<line style="stroke:{color};stroke-width:{thickness};" x1="{}" x2="{}" y1="{}" y2="{}"/>"##,
@@ -6539,6 +6575,7 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                 let is_dotted = msg.arrow.line == LineStyle::Dotted;
                 let is_open = msg.arrow.head == ArrowHead::Open;
                 let is_cross = msg.arrow.head == ArrowHead::Cross;
+                let is_bidirectional = msg.arrow.direction == ArrowDirection::Bidirectional;
                 // Half-arrowhead modifiers (`/`, `\`, `//`, `\\`).
                 let head_half = msg.arrow.head_half;
                 let thin_head = msg.arrow.thin_head;
@@ -6854,7 +6891,10 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                         )
                         - global_padding;
                     let text_x = if is_right {
-                        from_x_shifted + MSG_TEXT_LEFT_PAD + global_padding
+                        from_x_shifted
+                            + MSG_TEXT_LEFT_PAD
+                            + global_padding
+                            + if is_bidirectional { ARROW_SIZE } else { 0.0 }
                     } else {
                         to_x + target_shift + LEFT_ARROW_TEXT_PAD + 1.0 + global_padding
                     };
@@ -6868,6 +6908,12 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                             tip_x
                         } else {
                             tip_x - FILLED_ARROW_NOTCH
+                        };
+                        let leading_filled_tip_x = from_x_shifted + 1.0;
+                        let line_x1 = if is_bidirectional && !is_open {
+                            leading_filled_tip_x + FILLED_ARROW_NOTCH
+                        } else {
+                            from_x_shifted
                         };
 
                         if is_cross {
@@ -6904,6 +6950,11 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                                 tip_x,
                                 msg_y,
                                 true,
+                                if is_bidirectional {
+                                    Some(from_x_shifted + 1.0)
+                                } else {
+                                    None
+                                },
                                 from_x_shifted,
                                 tip_x + 1.0,
                                 msg_y,
@@ -6943,6 +6994,23 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                             );
                         } else {
                             // Filled arrow polygon
+                            let leading_arrow_pts = if is_bidirectional {
+                                Some(format!(
+                                    "{},{},{},{},{},{},{},{}",
+                                    fmt_coord(leading_filled_tip_x + ARROW_SIZE),
+                                    fmt_coord(msg_y - ARROW_HALF_H),
+                                    fmt_coord(leading_filled_tip_x),
+                                    fmt_coord(msg_y),
+                                    fmt_coord(leading_filled_tip_x + ARROW_SIZE),
+                                    fmt_coord(msg_y + ARROW_HALF_H),
+                                    fmt_coord(
+                                        leading_filled_tip_x + ARROW_SIZE - FILLED_ARROW_NOTCH
+                                    ),
+                                    fmt_coord(msg_y),
+                                ))
+                            } else {
+                                None
+                            };
                             let arrow_pts = format!(
                                 "{},{},{},{},{},{},{},{}",
                                 fmt_coord(tip_x - ARROW_SIZE),
@@ -6959,8 +7027,9 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                                 &to_uid,
                                 src_line,
                                 msg_id,
+                                leading_arrow_pts.as_deref(),
                                 &arrow_pts,
-                                from_x_shifted,
+                                line_x1,
                                 line_x2,
                                 msg_y,
                                 line_style,
@@ -7020,6 +7089,7 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                                 tip_x,
                                 msg_y,
                                 false,
+                                None,
                                 tip_x - 1.0,
                                 line_x2_end,
                                 msg_y,
@@ -7075,6 +7145,7 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                                 &to_uid,
                                 src_line,
                                 msg_id,
+                                None,
                                 &arrow_pts,
                                 line_x1,
                                 line_x2_end,
@@ -7228,6 +7299,7 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                             tip_x,
                             msg_y,
                             true,
+                            None,
                             from_x,
                             tip_x + 1.0,
                             msg_y,
@@ -7258,6 +7330,7 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                             &to_uid,
                             src_line,
                             msg_id,
+                            None,
                             &arrow_pts,
                             from_x,
                             line_x2,
@@ -7291,6 +7364,7 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                             tip_x,
                             msg_y,
                             false,
+                            None,
                             tip_x - 1.0,
                             line_x2_end,
                             msg_y,
@@ -7321,6 +7395,7 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                             &to_uid,
                             src_line,
                             msg_id,
+                            None,
                             &arrow_pts,
                             line_x1,
                             line_x2_end,
