@@ -1900,6 +1900,7 @@ impl PlantUmlSvg {
         text_len: f64,
         fill_color: &str,
         border_color: &str,
+        draw_glyph: bool,
     ) {
         self.participant_group_open(part_uid, qualified_name, source_line, position);
 
@@ -1929,28 +1930,30 @@ impl PlantUmlSvg {
         )
         .unwrap();
 
-        // Arrow/chevron on top of circle
-        // From golden: polygon points="20.3618,9,26.3618,4,24.3618,9,26.3618,14,20.3618,9"
-        // Points relative to cx and circle top:
-        let arrow_cy = circle_cy - STEREOTYPE_CIRCLE_R;
-        let p1x = cx - 4.0;
-        let p1y = arrow_cy;
-        let p2x = cx + 2.0;
-        let p2y = arrow_cy - 5.0;
-        let p3x = cx;
-        let p3y = arrow_cy;
-        let p4x = cx + 2.0;
-        let p4y = arrow_cy + 5.0;
-        write!(
-            self.buf,
-            r##"<polygon fill="{border_color}" points="{},{},{},{},{},{},{},{},{},{}" style="stroke:{border_color};stroke-width:1;"/>"##,
-            fmt_coord(p1x), fmt_coord(p1y),
-            fmt_coord(p2x), fmt_coord(p2y),
-            fmt_coord(p3x), fmt_coord(p3y),
-            fmt_coord(p4x), fmt_coord(p4y),
-            fmt_coord(p1x), fmt_coord(p1y),
-        )
-        .unwrap();
+        if draw_glyph {
+            // Arrow/chevron on top of circle
+            // From golden: polygon points="20.3618,9,26.3618,4,24.3618,9,26.3618,14,20.3618,9"
+            // Points relative to cx and circle top:
+            let arrow_cy = circle_cy - STEREOTYPE_CIRCLE_R;
+            let p1x = cx - 4.0;
+            let p1y = arrow_cy;
+            let p2x = cx + 2.0;
+            let p2y = arrow_cy - 5.0;
+            let p3x = cx;
+            let p3y = arrow_cy;
+            let p4x = cx + 2.0;
+            let p4y = arrow_cy + 5.0;
+            write!(
+                self.buf,
+                r##"<polygon fill="{border_color}" points="{},{},{},{},{},{},{},{},{},{}" style="stroke:{border_color};stroke-width:1;"/>"##,
+                fmt_coord(p1x), fmt_coord(p1y),
+                fmt_coord(p2x), fmt_coord(p2y),
+                fmt_coord(p3x), fmt_coord(p3y),
+                fmt_coord(p4x), fmt_coord(p4y),
+                fmt_coord(p1x), fmt_coord(p1y),
+            )
+            .unwrap();
+        }
 
         self.participant_group_close();
     }
@@ -2723,6 +2726,7 @@ fn render_participant_shape(
     border_color: &str,
     participant_inner_pad: f64,
     queue_head_offset: f64,
+    draw_control_glyph: bool,
 ) {
     // Make the participant's link (if any) available to the group open/close
     // helpers so the shape contents get wrapped in a link anchor.
@@ -2779,6 +2783,7 @@ fn render_participant_shape(
                         p.text_width,
                         fill_color,
                         border_color,
+                        draw_control_glyph,
                     );
                 }
                 ParticipantKind::Entity => {
@@ -5881,9 +5886,25 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
         );
     }
 
+    let mut message_inside_group: HashMap<usize, bool> = HashMap::new();
+    {
+        let mut group_depth = 0usize;
+        for (idx, event) in diagram.events.iter().enumerate() {
+            match event {
+                Event::GroupStart(_) => group_depth += 1,
+                Event::GroupEnd => group_depth = group_depth.saturating_sub(1),
+                Event::Message(_) => {
+                    message_inside_group.insert(idx, group_depth > 0);
+                }
+                _ => {}
+            }
+        }
+    }
+
     // Inline head boxes for created participants: keyed by creating-message event
-    // index, emitted in the message loop. Value: (participant index, fill color).
-    let mut created_inline: HashMap<usize, (usize, String)> = HashMap::new();
+    // index, emitted in the message loop. Value: (participant index, fill color,
+    // whether an inline-created control keeps its chevron glyph).
+    let mut created_inline: HashMap<usize, (usize, String, bool)> = HashMap::new();
 
     // Participant head and tail boxes (interleaved per participant, matching PlantUML order).
     // Non-rectangle shapes (actor, boundary, etc.) are bottom-aligned: their box_y is
@@ -5948,7 +5969,21 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
         // Created participants draw their head box inline at the creating message
         // (emitted in the message loop below), not at the top — skip the top head.
         if let Some(&ev_idx) = create_msg_idx.get(&p.id) {
-            created_inline.insert(ev_idx, (i, fill_color.clone()));
+            let destroyed_later = diagram
+                .events
+                .iter()
+                .skip(ev_idx + 1)
+                .any(|event| match event {
+                    Event::Destroy(id) => id == &p.id,
+                    Event::Message(msg) => {
+                        msg.to == p.id && matches!(msg.activation, Some(ActivationChange::Destroy))
+                    }
+                    _ => false,
+                });
+            let grouped_create = message_inside_group.get(&ev_idx).copied().unwrap_or(false);
+            let draw_control_glyph =
+                p.kind != ParticipantKind::Control || grouped_create || !destroyed_later;
+            created_inline.insert(ev_idx, (i, fill_color.clone(), draw_control_glyph));
         } else {
             // Head: base_y is where this participant's shape starts (bottom-aligned).
             let head_base_y = head_box_y + (max_box_h - p.box_height);
@@ -5966,6 +6001,7 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                 &border_color,
                 participant_inner_pad,
                 queue_head_offset,
+                true,
             );
         }
 
@@ -5985,6 +6021,7 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                 &border_color,
                 participant_inner_pad,
                 queue_head_offset,
+                true,
             );
         }
     }
@@ -7760,7 +7797,7 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
         // A created participant's head box is drawn inline, right after the
         // message that creates it — as bare shape elements (no participant `<g>`
         // wrapper). The box top sits CREATE_BOX_TOP_OFFSET above the arrow.
-        if let Some((pi, fill_color)) = created_inline.get(&ev_idx) {
+        if let Some((pi, fill_color, draw_control_glyph)) = created_inline.get(&ev_idx) {
             // The created participant's box occupies the next message-id slot.
             msg_id += 1;
             let p = &participants[*pi];
@@ -7789,6 +7826,7 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                 &inline_border,
                 participant_inner_pad,
                 inline_queue_head_offset,
+                *draw_control_glyph,
             );
             // Strip the surrounding `<g class="participant participant-head" ...>`
             // wrapper: PlantUML draws the created head box as bare shape elements.
