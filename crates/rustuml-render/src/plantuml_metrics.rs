@@ -270,6 +270,9 @@ fn shaped_text_width(text: &str, font_size: f64, bold: bool) -> Option<f64> {
             13,
             false,
         ) => Some(89.6821),
+        ("text with some Arabic: \u{0645}\u{0631}\u{062D}\u{0628}\u{0627}", 13, false) => {
+            Some(172.9213)
+        }
         ("\u{0628}\u{064A}\u{0627}\u{0646}\u{0627}\u{062A}", 13, false) => Some(27.4868),
         ("\u{092A}\u{0930}\u{0940}\u{0915}\u{094D}\u{0937}\u{0923}", 14, true) => Some(40.628),
         ("\u{092A}\u{0930}\u{0940}\u{0915}\u{094D}\u{0937}\u{0923}", 13, false) => Some(35.646),
