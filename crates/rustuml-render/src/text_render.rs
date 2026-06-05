@@ -418,7 +418,11 @@ enum MetricFamily {
 
 fn segment_metric_family(seg: &Segment, base: &TextBase<'_>) -> MetricFamily {
     if seg.style.monospace {
-        MetricFamily::Mono
+        if explicit_monospace_font_uses_surrounding_metrics(&seg.style) {
+            metric_family(base.font_family)
+        } else {
+            MetricFamily::Mono
+        }
     } else {
         seg.style
             .font_family
@@ -430,7 +434,11 @@ fn segment_metric_family(seg: &Segment, base: &TextBase<'_>) -> MetricFamily {
 
 fn segment_metric_family_for_family(seg: &Segment, font_family: &str) -> MetricFamily {
     if seg.style.monospace {
-        MetricFamily::Mono
+        if explicit_monospace_font_uses_surrounding_metrics(&seg.style) {
+            metric_family(font_family)
+        } else {
+            MetricFamily::Mono
+        }
     } else {
         seg.style
             .font_family
@@ -442,7 +450,11 @@ fn segment_metric_family_for_family(seg: &Segment, font_family: &str) -> MetricF
 
 fn style_metric_family(style: &Style, base: &TextBase<'_>) -> MetricFamily {
     if style.monospace {
-        MetricFamily::Mono
+        if explicit_monospace_font_uses_surrounding_metrics(style) {
+            metric_family(base.font_family)
+        } else {
+            MetricFamily::Mono
+        }
     } else {
         style
             .font_family
@@ -450,6 +462,19 @@ fn style_metric_family(style: &Style, base: &TextBase<'_>) -> MetricFamily {
             .map(metric_family)
             .unwrap_or_else(|| metric_family(base.font_family))
     }
+}
+
+fn explicit_monospace_font_uses_surrounding_metrics(style: &Style) -> bool {
+    style.monospace
+        && style.font_family.as_deref().is_some_and(|family| {
+            matches!(
+                family
+                    .trim_matches(|c| c == '"' || c == '\'')
+                    .to_ascii_lowercase()
+                    .as_str(),
+                "monospace" | "monospaced"
+            )
+        })
 }
 
 fn metric_family(font_family: &str) -> MetricFamily {
@@ -1355,6 +1380,38 @@ mod tests {
             r#"textLength="{}""#,
             pm::fmt_coord(pm::mono_text_width("Alice", 12.0))
         )));
+    }
+
+    #[test]
+    fn explicit_font_monospace_inherits_surrounding_metrics() {
+        let content = "<font:monospace>code here</font>";
+        assert_eq!(
+            pm::fmt_coord(measure(content, 12.0, false)),
+            pm::fmt_coord(pm::text_width("code\u{00a0}here", 12.0, false))
+        );
+        assert_eq!(
+            pm::fmt_coord(label_height(content, 12.0)),
+            pm::fmt_coord(pm::text_height(12.0))
+        );
+        assert_eq!(
+            pm::fmt_coord(label_ascent(content, 12.0)),
+            pm::fmt_coord(pm::ascent(12.0))
+        );
+
+        let mut buf = String::new();
+        let width = emit_text(&mut buf, content, &base(26.0, 76.6016));
+        assert_eq!(pm::fmt_coord(width), "57.2813");
+        assert!(buf.contains(r#"font-family="monospace""#));
+        assert!(buf.contains(r#"textLength="57.2813""#));
+        assert!(buf.contains(">code&#160;here</text>"));
+    }
+
+    #[test]
+    fn quoted_monospace_still_uses_monospace_metrics() {
+        assert_eq!(
+            pm::fmt_coord(measure(r#"""code here"""#, 12.0, false)),
+            pm::fmt_coord(pm::mono_text_width("code\u{00a0}here", 12.0))
+        );
     }
 
     #[test]
