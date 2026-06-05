@@ -6,13 +6,14 @@
 //! Produces SVG output matching PlantUML's exact format, using PlantUML-
 //! compatible font metrics and layout algorithms.
 
+use std::collections::HashMap;
 use std::fmt::Write;
 
 use rustuml_parser::diagram::activity::{ActivityDiagram, ActivityStep, NotePosition};
 
 use crate::creole;
 use crate::ftile;
-use crate::layout_oracle::{OracleLayout, wrap_oracle_envelope};
+use crate::layout_oracle::{EntityRect, OracleEdgePath, OracleLayout, wrap_oracle_envelope};
 use crate::plantuml_metrics as pm;
 use crate::style::Theme;
 use crate::text_render::{self, TextBase};
@@ -6686,6 +6687,11 @@ pub fn render_with_oracle(
     oracle: Option<&OracleLayout>,
 ) -> String {
     if let Some(orc) = oracle
+        && let Some(svg) = render_legacy_activity_with_oracle(diagram, orc)
+    {
+        return svg;
+    }
+    if let Some(orc) = oracle
         && let Some(body) = orc.root_g_inner_xml.as_deref()
     {
         return wrap_oracle_envelope(orc, body, "ACTIVITY");
@@ -6694,6 +6700,303 @@ pub fn render_with_oracle(
     let gradient_id = parse_gradient_id(defs);
     let filter_id = parse_filter_id(defs);
     render_inner(diagram, theme, defs, gradient_id, filter_id)
+}
+
+fn render_legacy_activity_with_oracle(
+    diagram: &ActivityDiagram,
+    oracle: &OracleLayout,
+) -> Option<String> {
+    if !is_legacy_activity(diagram) || oracle.diagram_type.as_deref() != Some("ACTIVITY") {
+        return None;
+    }
+    if oracle.entities.is_empty() || oracle.edges.is_empty() {
+        return None;
+    }
+
+    let action_order = legacy_action_order(diagram);
+    let note_names: std::collections::HashSet<&str> = oracle
+        .note_entities
+        .iter()
+        .map(|note| note.qualified_name.as_str())
+        .collect();
+    let mut nodes = Vec::new();
+    for (name, rect) in &oracle.entities {
+        match name.as_str() {
+            "start" => nodes.push(LegacyNode::Start(rect)),
+            "end" => nodes.push(LegacyNode::End(rect)),
+            n if n.starts_with("__bar_") => nodes.push(LegacyNode::Bar(rect)),
+            n if !n.starts_with("__") && !note_names.contains(n) => {
+                nodes.push(LegacyNode::Action(n, rect));
+            }
+            _ => {}
+        }
+    }
+    for note in &oracle.note_entities {
+        if note.box_geom.is_some() {
+            nodes.push(LegacyNode::Note(note));
+        }
+    }
+    if nodes.is_empty() {
+        return None;
+    }
+    nodes.sort_by_key(|node| legacy_node_sort_key(node, &action_order));
+
+    let mut body = String::new();
+    for node in nodes {
+        match node {
+            LegacyNode::Start(rect) => emit_legacy_start(&mut body, rect),
+            LegacyNode::End(rect) => emit_legacy_end(&mut body, rect),
+            LegacyNode::Bar(rect) => emit_legacy_bar(&mut body, rect),
+            LegacyNode::Action(label, rect) => emit_legacy_action(&mut body, label, rect),
+            LegacyNode::Note(note) => {
+                crate::layout_oracle::emit_oracle_note_entity(
+                    &mut body,
+                    note,
+                    NOTE_STROKE,
+                    NOTE_FILL,
+                    NOTE_FONT as u32,
+                    "sans-serif",
+                    TEXT_COLOR,
+                );
+            }
+        }
+    }
+    for edge in &oracle.edges {
+        emit_legacy_edge(&mut body, edge);
+    }
+    Some(wrap_oracle_envelope(oracle, &body, "ACTIVITY"))
+}
+
+enum LegacyNode<'a> {
+    Start(&'a EntityRect),
+    End(&'a EntityRect),
+    Bar(&'a EntityRect),
+    Action(&'a str, &'a EntityRect),
+    Note(&'a crate::layout_oracle::OracleNoteEntity),
+}
+
+fn legacy_action_order(diagram: &ActivityDiagram) -> HashMap<&str, usize> {
+    let mut order = HashMap::new();
+    for step in &diagram.steps {
+        if let ActivityStep::Action(label) = step {
+            let next = order.len();
+            order.entry(label.as_str()).or_insert(next);
+        }
+    }
+    order
+}
+
+fn legacy_node_sort_key(
+    node: &LegacyNode<'_>,
+    action_order: &HashMap<&str, usize>,
+) -> (u64, usize, u64) {
+    let (x, y) = match node {
+        LegacyNode::Start(rect)
+        | LegacyNode::End(rect)
+        | LegacyNode::Bar(rect)
+        | LegacyNode::Action(_, rect) => (rect.x, rect.y),
+        LegacyNode::Note(note) => note
+            .box_geom
+            .as_ref()
+            .map(|g| (g.x, g.y))
+            .unwrap_or((f64::MAX, f64::MAX)),
+    };
+    let tie_break = match node {
+        LegacyNode::Start(_) => 0,
+        LegacyNode::Action(label, _) => action_order.get(label).copied().unwrap_or(usize::MAX / 2),
+        LegacyNode::Bar(_) => usize::MAX / 2 - 1,
+        LegacyNode::Note(_) => usize::MAX / 2,
+        LegacyNode::End(_) => usize::MAX,
+    };
+    (y.to_bits(), tie_break, x.to_bits())
+}
+
+fn is_legacy_activity(diagram: &ActivityDiagram) -> bool {
+    diagram.meta.source.as_deref().is_some_and(|source| {
+        source.lines().any(|line| {
+            let t = line.trim();
+            t == "(*)"
+                || t.starts_with("(*) ")
+                || t.ends_with(" (*)")
+                || (t.starts_with("===") && t.ends_with("===") && t.len() > 6)
+        })
+    })
+}
+
+fn emit_legacy_start(out: &mut String, rect: &EntityRect) {
+    let cx = rect.x + rect.width / 2.0;
+    let cy = rect.y + rect.height / 2.0;
+    let rx = rect.width / 2.0;
+    let ry = rect.height / 2.0;
+    let source_line = rect.source_line.as_deref().unwrap_or("1");
+    let id = rect.entity_id.as_deref().unwrap_or("ent0002");
+    let fill = rect.fill.as_deref().unwrap_or(START_FILL);
+    write!(
+        out,
+        r#"<g class="start_entity" data-qualified-name="start" data-source-line="{source_line}" id="{id}"><ellipse cx="{}" cy="{}" fill="{fill}" rx="{}" ry="{}" style="stroke:#222222;stroke-width:1;"/></g>"#,
+        f(cx),
+        f(cy),
+        f(rx),
+        f(ry),
+    )
+    .unwrap();
+}
+
+fn emit_legacy_end(out: &mut String, rect: &EntityRect) {
+    let cx = rect.x + rect.width / 2.0;
+    let cy = rect.y + rect.height / 2.0;
+    let rx = rect.width / 2.0;
+    let ry = rect.height / 2.0;
+    let source_line = rect.source_line.as_deref().unwrap_or("1");
+    let id = rect.entity_id.as_deref().unwrap_or("ent0002");
+    let fill = rect.fill.as_deref().unwrap_or(STOP_FILL);
+    write!(
+        out,
+        r#"<g class="end_entity" data-qualified-name="end" data-source-line="{source_line}" id="{id}"><ellipse cx="{}" cy="{}" fill="none" rx="{}" ry="{}" style="stroke:#222222;stroke-width:1.5;"/><ellipse cx="{}" cy="{}" fill="{fill}" rx="6" ry="6" style="stroke:#222222;stroke-width:1;"/></g>"#,
+        f(cx),
+        f(cy),
+        f(rx),
+        f(ry),
+        f(cx),
+        f(cy),
+    )
+    .unwrap();
+}
+
+fn emit_legacy_bar(out: &mut String, rect: &EntityRect) {
+    write!(
+        out,
+        r##"<rect fill="#555555" height="{}" style="stroke:none;stroke-width:1;" width="{}" x="{}" y="{}"/>"##,
+        f(rect.height),
+        f(rect.width),
+        f(rect.x),
+        f(rect.y),
+    )
+    .unwrap();
+}
+
+fn emit_legacy_action(out: &mut String, label: &str, rect: &EntityRect) {
+    let fill = rect.fill.as_deref().unwrap_or(ACTION_FILL);
+    let style = rect
+        .body_style
+        .as_deref()
+        .unwrap_or("stroke:#181818;stroke-width:0.5;");
+    let rx = rect.rect_rx.as_deref().unwrap_or("12.5");
+    let ry = rect.rect_ry.as_deref().unwrap_or("12.5");
+    write!(
+        out,
+        r#"<rect fill="{}" height="{}" rx="{rx}" ry="{ry}" style="{style}" width="{}" x="{}" y="{}"/>"#,
+        escape_xml_attr_local(fill),
+        f(rect.height),
+        f(rect.width),
+        f(rect.x),
+        f(rect.y),
+    )
+    .unwrap();
+    text_render::emit_text(
+        out,
+        label,
+        &TextBase {
+            x: rect.x + ACTION_H_PADDING,
+            y: rect.y + ACTION_H_PADDING + pm::ascent(FONT_SIZE),
+            font_size: FONT_SIZE as u32,
+            font_family: "sans-serif",
+            fill: TEXT_COLOR,
+            bold: false,
+            italic: false,
+            underline: false,
+            skip_underline: false,
+        },
+    );
+}
+
+fn emit_legacy_edge(out: &mut String, edge: &OracleEdgePath) {
+    let entity_1 = edge.entity_1.as_deref().unwrap_or("ent0002");
+    let entity_2 = edge.entity_2.as_deref().unwrap_or("ent0003");
+    let link_type = edge.link_type.as_deref().unwrap_or("dependency");
+    let source_line = edge.source_line.as_deref().unwrap_or("1");
+    let link_id = edge.link_id.as_deref().unwrap_or("lnk0");
+    write!(
+        out,
+        r#"<g class="link" data-entity-1="{}" data-entity-2="{}" data-link-type="{}" data-source-line="{}" id="{}">"#,
+        escape_xml_attr_local(entity_1),
+        escape_xml_attr_local(entity_2),
+        escape_xml_attr_local(link_type),
+        escape_xml_attr_local(source_line),
+        escape_xml_attr_local(link_id),
+    )
+    .unwrap();
+    let path_id = edge
+        .path_id
+        .as_deref()
+        .map(|id| format!(r#" id="{}""#, escape_xml_attr_local(id)))
+        .unwrap_or_default();
+    let path_style = edge
+        .path_style
+        .as_deref()
+        .unwrap_or("stroke:#181818;stroke-width:1;");
+    write!(
+        out,
+        r#"<path d="{}" fill="none"{path_id} style="{}"/>"#,
+        escape_xml_attr_local(&edge.d),
+        escape_xml_attr_local(path_style),
+    )
+    .unwrap();
+    if let Some(points) = edge.arrow_points.as_deref() {
+        let fill = edge.arrow_fill.as_deref().unwrap_or(ARROW_COLOR);
+        let style = edge
+            .polygon_style
+            .as_deref()
+            .unwrap_or("stroke:#181818;stroke-width:1;");
+        write!(
+            out,
+            r#"<polygon fill="{}" points="{}" style="{}"/>"#,
+            escape_xml_attr_local(fill),
+            escape_xml_attr_local(points),
+            escape_xml_attr_local(style),
+        )
+        .unwrap();
+    }
+    if let Some(points) = edge.second_arrow_points.as_deref() {
+        let fill = edge.second_arrow_fill.as_deref().unwrap_or(ARROW_COLOR);
+        let style = edge
+            .second_polygon_style
+            .as_deref()
+            .unwrap_or("stroke:#181818;stroke-width:1;");
+        write!(
+            out,
+            r#"<polygon fill="{}" points="{}" style="{}"/>"#,
+            escape_xml_attr_local(fill),
+            escape_xml_attr_local(points),
+            escape_xml_attr_local(style),
+        )
+        .unwrap();
+    }
+    for (x, y, label) in &edge.labels {
+        text_render::emit_text(
+            out,
+            label,
+            &TextBase {
+                x: *x,
+                y: *y,
+                font_size: SMALL_FONT as u32,
+                font_family: "sans-serif",
+                fill: TEXT_COLOR,
+                bold: false,
+                italic: false,
+                underline: false,
+                skip_underline: false,
+            },
+        );
+    }
+    out.push_str("</g>");
+}
+
+fn escape_xml_attr_local(s: &str) -> String {
+    s.replace('&', "&amp;")
+        .replace('"', "&quot;")
+        .replace('<', "&lt;")
+        .replace('>', "&gt;")
 }
 
 /// Render an activity diagram to SVG.
