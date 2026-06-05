@@ -1049,6 +1049,60 @@ fn group_tab_and_guard<'a>(
     }
 }
 
+fn group_guard_width_with_family(label: &str, font_family: &str) -> f64 {
+    if !label.trim_start().starts_with("//") {
+        let guard = format!("[{label}]");
+        return bold_text_width_with_family(&guard, 11.0, font_family);
+    }
+    bold_text_width_with_family("[", 11.0, font_family)
+        + bold_text_width_with_family(label, 11.0, font_family)
+        + bold_text_width_with_family("]", 11.0, font_family)
+}
+
+fn emit_group_guard(svg: &mut String, label: &str, x: f64, y: f64, font_family: &str) {
+    if !label.trim_start().starts_with("//") {
+        let guard = format!("[{label}]");
+        text_render::emit_text(
+            svg,
+            &guard,
+            &TextBase {
+                x,
+                y,
+                font_size: 11,
+                font_family,
+                fill: "#000000",
+                bold: true,
+                italic: false,
+                underline: false,
+                skip_underline: false,
+            },
+        );
+        return;
+    }
+    let base = TextBase {
+        x,
+        y,
+        font_size: 11,
+        font_family,
+        fill: "#000000",
+        bold: true,
+        italic: false,
+        underline: false,
+        skip_underline: false,
+    };
+    let mut cursor = x;
+    cursor += text_render::emit_text(svg, "[", &base);
+    cursor += text_render::emit_text(
+        svg,
+        label,
+        &TextBase {
+            x: cursor,
+            ..base.clone()
+        },
+    );
+    text_render::emit_text(svg, "]", &TextBase { x: cursor, ..base });
+}
+
 fn parse_filter_id(defs: &str) -> Option<String> {
     let filter = defs.find("<filter")?;
     let rest = &defs[filter..];
@@ -5283,8 +5337,7 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                 );
                 let tab_right = fl + kw + 45.0;
                 let guard_right = if let Some(label) = guard_label {
-                    let guard = format!("[{label}]");
-                    let gw = bold_text_width_with_family(&guard, 11.0, &group_header_font_family);
+                    let gw = group_guard_width_with_family(label, &group_header_font_family);
                     tab_right + 15.0 + gw + 5.0
                 } else {
                     tab_right + 5.0
@@ -5849,12 +5902,8 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                             );
                             let tab_right = frame_left + kw + 45.0;
                             if let Some(label) = guard_label {
-                                let guard = format!("[{label}]");
-                                let gw = bold_text_width_with_family(
-                                    &guard,
-                                    11.0,
-                                    &group_header_font_family,
-                                );
+                                let gw =
+                                    group_guard_width_with_family(label, &group_header_font_family);
                                 tab_right + 15.0 + gw + 5.0
                             } else {
                                 tab_right + 5.0
@@ -8012,21 +8061,12 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
 
                 // Emit guard label if present (in brackets)
                 if let Some(label) = guard_label {
-                    let guard = format!("[{label}]");
-                    text_render::emit_text(
+                    emit_group_guard(
                         &mut svg.buf,
-                        &guard,
-                        &TextBase {
-                            x: tab_right + 15.0,
-                            y: frame_top + 12.634765625,
-                            font_size: 11,
-                            font_family: &group_header_font_family,
-                            fill: "#000000",
-                            bold: true,
-                            italic: false,
-                            underline: false,
-                            skip_underline: false,
-                        },
+                        label,
+                        tab_right + 15.0,
+                        frame_top + 12.634765625,
+                        &group_header_font_family,
                     );
                 }
             }
@@ -8064,21 +8104,12 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                 // Emit else label only when explicitly provided (PlantUML
                 // does NOT show "[else]" text when the else clause has no label).
                 if let Some(label) = &g.label {
-                    let label_text = format!("[{label}]");
-                    text_render::emit_text(
+                    emit_group_guard(
                         &mut svg.buf,
-                        &label_text,
-                        &TextBase {
-                            x: frame_left + 5.0,
-                            y: msg_y + 10.63475,
-                            font_size: 11,
-                            font_family: "sans-serif",
-                            fill: "#000000",
-                            bold: true,
-                            italic: false,
-                            underline: false,
-                            skip_underline: false,
-                        },
+                        label,
+                        frame_left + 5.0,
+                        msg_y + 10.63475,
+                        &group_header_font_family,
                     );
                 }
             }
@@ -8632,6 +8663,27 @@ mod tests {
         let svg = crate::render_svg(&diagram);
         assert!(svg.contains("call &lt;code&gt;doSomething()&lt;/code&gt;"));
         assert!(!svg.contains("font-family=\"monospace\""));
+    }
+
+    #[test]
+    fn leading_italic_group_guard_keeps_brackets_plain() {
+        let input = concat!(
+            "@startuml\n",
+            "alt **happy path**\n",
+            "  Alice -> Bob : ok\n",
+            "else //sad path//\n",
+            "  Alice -> Bob : error\n",
+            "end\n",
+            "@enduml",
+        );
+        let diagram = rustuml_parser::parse::parse(input).unwrap();
+        let svg = crate::render_svg(&diagram);
+
+        assert!(svg.contains(r#">[</text>"#));
+        assert!(svg.contains(r#"font-style="italic""#));
+        assert!(svg.contains(r#">sad path</text>"#));
+        assert!(svg.contains(r#">]</text>"#));
+        assert!(!svg.contains("[//sad path//]"));
     }
 
     #[test]
