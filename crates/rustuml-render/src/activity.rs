@@ -1489,6 +1489,7 @@ fn while_left_extent(
     body: &[LayoutNode],
     body_left: f64,
     cond_half: f64,
+    has_in_label: bool,
     end_label: Option<&str>,
     special_out: Option<&LayoutNode>,
     starts_column: bool,
@@ -1502,6 +1503,7 @@ fn while_left_extent(
                 body,
                 body_left,
                 cond_half,
+                has_in_label,
                 end_label,
                 starts_column,
             ) {
@@ -1527,10 +1529,13 @@ fn while_body_drives_special(
     body: &[LayoutNode],
     body_left: f64,
     cond_half: f64,
+    has_in_label: bool,
     end_label: Option<&str>,
     starts_column: bool,
 ) -> bool {
+    let multi_flow = body.iter().filter(|node| node_is_flow(node)).count() >= 2;
     starts_column
+        && (has_in_label || !multi_flow)
         && end_label.is_none()
         && body_left + DIAMOND_HALF > cond_half
         && body_left > DIAMOND_HALF * 2.0
@@ -2381,7 +2386,7 @@ fn node_extents(node: &LayoutNode) -> (f64, f64) {
         LayoutNode::While {
             body,
             condition,
-            is_label: _,
+            is_label,
             end_label,
             special_out,
             starts_column,
@@ -2402,6 +2407,7 @@ fn node_extents(node: &LayoutNode) -> (f64, f64) {
                 body,
                 while_body_left(body, body_left),
                 cond_half,
+                is_label.is_some(),
                 end_label.as_deref(),
                 special_out.as_deref(),
                 *starts_column,
@@ -6190,6 +6196,7 @@ fn emit_while(
             body,
             while_body_left(body, body_left_ext),
             cond_inner_w / 2.0 + DIAMOND_HALF,
+            is_label.is_some(),
             end_label.as_deref(),
             starts_column,
         ) {
