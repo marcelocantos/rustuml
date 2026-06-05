@@ -477,6 +477,12 @@ struct StateSkin {
     state_fill: String,
     /// Resolved transition arrow stroke colour.
     arrow_color: String,
+    /// Root style line colour from modern themes, used by pseudo-state chrome.
+    root_line_color: Option<String>,
+    /// Theme/skinparam colour for the start pseudo-state, when specified.
+    start_color: Option<String>,
+    /// Theme/skinparam colour for the end pseudo-state, when specified.
+    end_color: Option<String>,
 }
 
 impl StateSkin {
@@ -492,26 +498,39 @@ impl StateSkin {
         };
         let color =
             |k: &str| -> Option<String> { find(k).map(|v| crate::sequence::resolve_color(&v)) };
-        let stroke = color("stateBorderColor").unwrap_or_else(|| DEFAULT_STROKE_COLOR.to_string());
+        let root_line_color = color("__styleRootLineColor");
+        let stroke = color("stateBorderColor")
+            .or_else(|| root_line_color.clone())
+            .unwrap_or_else(|| DEFAULT_STROKE_COLOR.to_string());
         let border_thickness = find("stateBorderThickness")
+            .or_else(|| find("__styleRootLineThickness"))
+            .or_else(|| find("borderThickness"))
             .and_then(|v| v.parse::<f64>().ok())
             .map(fmt_f)
             .unwrap_or_else(|| "0.5".to_string());
         // PlantUML applies stateAttributeFontColor to state-name labels as
-        // well as inline attribute lines. Prefer the explicit FontColor;
-        // fall back to AttributeFontColor; then to the default.
-        let text_color = color("stateFontColor")
-            .or_else(|| color("stateAttributeFontColor"))
+        // well as inline attribute lines. Modern themes define both through
+        // `$primary_scheme()` and then override AttributeFontColor for state
+        // labels, so the attribute colour wins when present.
+        let text_color = color("stateAttributeFontColor")
+            .or_else(|| color("__styleRootFontColor"))
+            .or_else(|| color("stateFontColor"))
+            .or_else(|| color("defaultFontColor"))
             .unwrap_or_else(|| DEFAULT_TEXT_COLOR.to_string());
         let state_fill =
             color("stateBackgroundColor").unwrap_or_else(|| DEFAULT_STATE_FILL.to_string());
         let arrow_color = color("stateArrowColor").unwrap_or_else(|| stroke.clone());
+        let start_color = color("stateStartColor");
+        let end_color = color("stateEndColor");
         Self {
             stroke,
             border_thickness,
             text_color,
             state_fill,
             arrow_color,
+            root_line_color,
+            start_color,
+            end_color,
         }
     }
 }
@@ -564,14 +583,21 @@ pub fn render_with_oracle(
     // `skinparam backgroundColor <c>` paints the whole canvas: it sets the
     // SVG root `background:` and emits a full-size `<rect>` just inside the
     // root `<g>`. PlantUML keeps the default `#FFFFFF` when unset.
-    let bg_color: String = diagram
+    let bg_raw = diagram
         .meta
         .skinparams
         .iter()
         .rev()
         .find(|sp| sp.key.eq_ignore_ascii_case("backgroundColor"))
-        .map(|sp| crate::sequence::resolve_color(sp.value.trim()))
+        .map(|sp| sp.value.trim().to_string());
+    let bg_is_transparent = bg_raw
+        .as_deref()
+        .is_some_and(|v| v.eq_ignore_ascii_case("transparent"));
+    let bg_color: String = bg_raw
+        .as_deref()
+        .map(crate::sequence::resolve_color)
         .unwrap_or_else(|| "#FFFFFF".to_string());
+    let has_explicit_background = bg_raw.is_some() && !bg_is_transparent;
     // `skinparam roundCorner <n>` sets the state-box corner radius to n/2
     // (the default 12.5 corresponds to roundCorner 25). PlantUML applies this
     // to the `rx`/`ry` of every normal state rectangle.
@@ -594,6 +620,27 @@ pub fn render_with_oracle(
     #[allow(non_snake_case)]
     let STATE_FILL: &str = skin.state_fill.as_str();
     let _arrow_color: &str = skin.arrow_color.as_str();
+    let apply_themed_pseudo_colors = bg_is_transparent;
+    let start_fill = if apply_themed_pseudo_colors {
+        skin.start_color.as_deref().unwrap_or(PSEUDO_COLOR)
+    } else {
+        PSEUDO_COLOR
+    };
+    let start_stroke = if apply_themed_pseudo_colors && skin.start_color.is_some() {
+        skin.root_line_color.as_deref().unwrap_or(STROKE_COLOR)
+    } else {
+        PSEUDO_COLOR
+    };
+    let end_stroke = if apply_themed_pseudo_colors {
+        skin.end_color.as_deref().unwrap_or(PSEUDO_COLOR)
+    } else {
+        PSEUDO_COLOR
+    };
+    let end_inner_fill = if apply_themed_pseudo_colors && skin.end_color.is_some() {
+        "none"
+    } else {
+        PSEUDO_COLOR
+    };
 
     // Resolve the state-box font size. PlantUML applies `skinparam stateFontSize`,
     // `stateAttributeFontSize`, or the global `defaultFontSize` uniformly to both
@@ -987,9 +1034,14 @@ pub fn render_with_oracle(
     let h = total_height.ceil() as i64;
 
     let mut svg = String::with_capacity(4096);
+    let root_style = if bg_is_transparent {
+        format!("width:{w}px;height:{h}px;")
+    } else {
+        format!("width:{w}px;height:{h}px;background:{bg_color};")
+    };
     write!(
         svg,
-        r#"<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" contentStyleType="text/css" data-diagram-type="STATE" height="{h}px" preserveAspectRatio="none" style="width:{w}px;height:{h}px;background:{bg_color};" version="1.1" viewBox="0 0 {w} {h}" width="{w}px" zoomAndPan="magnify">"#,
+        r#"<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" contentStyleType="text/css" data-diagram-type="STATE" height="{h}px" preserveAspectRatio="none" style="{root_style}" version="1.1" viewBox="0 0 {w} {h}" width="{w}px" zoomAndPan="magnify">"#,
     )
     .unwrap();
 
@@ -1017,7 +1069,7 @@ pub fn render_with_oracle(
         .map(|f| format!(r#" filter="{f}""#))
         .unwrap_or_default();
 
-    if bg_color != "#FFFFFF" {
+    if has_explicit_background && bg_color != "#FFFFFF" {
         write!(
             svg,
             r#"<rect fill="{bg_color}" height="{h}" style="stroke:none;stroke-width:1;" width="{w}" x="0" y="0"/>"#,
@@ -1181,11 +1233,11 @@ pub fn render_with_oracle(
                 emit_entity_polygon(&mut svg, polygon);
             } else {
                 write!(
-                    svg,
-                    r#"<ellipse cx="{}" cy="{}" fill="{PSEUDO_COLOR}"{shadow_attr} rx="{START_RADIUS}" ry="{START_RADIUS}" style="stroke:{PSEUDO_COLOR};stroke-width:1;"/>"#,
-                    fmt_f(*cx),
-                    fmt_f(*cy),
-                )
+                        svg,
+                        r#"<ellipse cx="{}" cy="{}" fill="{start_fill}"{shadow_attr} rx="{START_RADIUS}" ry="{START_RADIUS}" style="stroke:{start_stroke};stroke-width:1;"/>"#,
+                        fmt_f(*cx),
+                        fmt_f(*cy),
+                    )
                 .unwrap();
             }
             svg.push_str("</g>");
@@ -1209,22 +1261,22 @@ pub fn render_with_oracle(
                 emit_entity_polygon(&mut svg, polygon);
             } else {
                 write!(
-                    svg,
-                    r#"<ellipse cx="{}" cy="{}" fill="none"{shadow_attr} rx="{END_OUTER_RADIUS}" ry="{END_OUTER_RADIUS}" style="stroke:{PSEUDO_COLOR};stroke-width:1;"/>"#,
-                    fmt_f(*cx),
-                    fmt_f(*cy),
-                )
+                        svg,
+                        r#"<ellipse cx="{}" cy="{}" fill="none"{shadow_attr} rx="{END_OUTER_RADIUS}" ry="{END_OUTER_RADIUS}" style="stroke:{end_stroke};stroke-width:1;"/>"#,
+                        fmt_f(*cx),
+                        fmt_f(*cy),
+                    )
                 .unwrap();
             }
             if let Some(polygon) = orc_rect.and_then(|r| r.icon_polygon.as_ref()) {
                 emit_entity_polygon(&mut svg, polygon);
             } else {
                 write!(
-                    svg,
-                    r#"<ellipse cx="{}" cy="{}" fill="{PSEUDO_COLOR}" rx="{END_INNER_RADIUS}" ry="{END_INNER_RADIUS}" style="stroke:{PSEUDO_COLOR};stroke-width:1;"/>"#,
-                    fmt_f(*cx),
-                    fmt_f(*cy),
-                )
+                        svg,
+                        r#"<ellipse cx="{}" cy="{}" fill="{end_inner_fill}" rx="{END_INNER_RADIUS}" ry="{END_INNER_RADIUS}" style="stroke:{end_stroke};stroke-width:1;"/>"#,
+                        fmt_f(*cx),
+                        fmt_f(*cy),
+                    )
                 .unwrap();
             }
             svg.push_str("</g>");
@@ -2225,6 +2277,8 @@ fn render_oracle_transitions(svg: &mut String, diagram: &StateDiagram, oracle: &
         .find(|sp| {
             sp.key.eq_ignore_ascii_case("stateArrowFontName")
                 || sp.key.eq_ignore_ascii_case("arrowFontName")
+                || sp.key.eq_ignore_ascii_case("defaultFontName")
+                || sp.key.eq_ignore_ascii_case("fontName")
         })
         .map(|sp| canonical_state_font_family(sp.value.trim()))
         .unwrap_or_else(|| "sans-serif".to_string());
@@ -2241,6 +2295,7 @@ fn render_oracle_transitions(svg: &mut String, diagram: &StateDiagram, oracle: &
         .find(|sp| {
             sp.key.eq_ignore_ascii_case("ArrowFontSize")
                 || sp.key.eq_ignore_ascii_case("stateArrowFontSize")
+                || sp.key.eq_ignore_ascii_case("defaultFontSize")
         })
         .and_then(|sp| sp.value.trim().parse::<u32>().ok())
         .unwrap_or(LINK_FONT_SIZE as u32);
