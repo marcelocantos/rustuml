@@ -4,7 +4,7 @@
 //! Creole markup — converts PlantUML text markup to SVG tspan elements.
 //!
 //! Supports inline markup (**bold**, //italic//, __underline__, --strikethrough--,
-//! `<b>`, `<i>`, `<u>`, `<s>` HTML-style tags) and line-level constructs:
+//! `<b>`, `<i>`, `<u>`, `<s>`, `<w>` HTML-style tags) and line-level constructs:
 //! tables (`|= Header | data |`), tree structures (`|_ node`),
 //! horizontal rules (`----`, `====`, `....`), and nested lists (`*`, `**`, `#`).
 
@@ -1178,7 +1178,7 @@ fn handle_tag(
 ) {
     match tag {
         // PlantUML's HTML subset supports only the short tags (`<b>`, `<i>`,
-        // `<u>`, `<s>`, `<del>`, `<strike>`, `<code>`, `<sub>`, `<sup>`,
+        // `<u>`, `<s>`, `<w>`, `<del>`, `<strike>`, `<code>`, `<sub>`, `<sup>`,
         // `<color:>`, `<size:>`, `<font:>`, `<back:>`, `<img:>`). The HTML5
         // synonyms `<strong>`, `<em>`, `<ins>` are NOT recognized and render
         // literally, so they deliberately fall through to the unknown-tag arm.
@@ -1219,6 +1219,16 @@ fn handle_tag(
             "",
             style,
             |s| s.line_through = true,
+            skip_underline,
+            out,
+        ),
+        "w" | "W" => walk_with(
+            chars,
+            format!("</{tag}>"),
+            tag,
+            "",
+            style,
+            |s| s.wavy_underline = true,
             skip_underline,
             out,
         ),
@@ -1597,6 +1607,18 @@ mod tests {
             vec![
                 seg("~not strike", wavy_underline_style()),
                 seg("~", Style::default()),
+            ]
+        );
+    }
+
+    #[test]
+    fn segments_html_wavy_underline_tag() {
+        assert_eq!(
+            parse_segments("<w>wave</w> <W>upper</W>"),
+            vec![
+                seg("wave", wavy_underline_style()),
+                seg(" ", Style::default()),
+                seg("upper", wavy_underline_style()),
             ]
         );
     }
