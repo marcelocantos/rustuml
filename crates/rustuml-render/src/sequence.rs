@@ -7303,18 +7303,22 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
 
                     svg.buf.push_str("</g>");
                 } else {
-                    // Source shift: when the source is activated and sending right,
-                    // the message line starts from the activation bar's right edge.
-                    // For left-pointing messages PlantUML normally keeps the source
-                    // at the lifeline center, EXCEPT a deactivating return from a
-                    // nested stack (depth >= 2) leaves from the bar that remains
-                    // active after this one closes (left edge of the depth-2 bar).
+                    // Source shift: when the source is activated, solid messages
+                    // start from the activation bar's near edge. Dotted returns
+                    // stay on the lifeline/bar centre unless they close a nested
+                    // stack, where Java keeps the line on the bar that remains.
                     let from_existing_depth = render_activation
                         .get(msg.from.as_str())
                         .copied()
                         .unwrap_or(0);
                     let from_x_shifted = if is_right && from_active {
                         from_x + ACTIVATION_HALF_W
+                    } else if !is_right
+                        && from_active
+                        && !is_dotted
+                        && !matches!(msg.activation, Some(ActivationChange::Deactivate))
+                    {
+                        from_x - ACTIVATION_HALF_W
                     } else if !is_right
                         && matches!(msg.activation, Some(ActivationChange::Deactivate))
                         && from_existing_depth >= 2
