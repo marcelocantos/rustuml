@@ -175,6 +175,10 @@ pub struct DiagramMeta {
     pub caption_line: Option<usize>,
     #[serde(skip_serializing_if = "Option::is_none")]
     pub legend: Option<String>,
+    /// Post-preprocessing source line of the `legend` directive; emitted as the
+    /// legend group's `data-source-line`, defaulting to 1 when unset.
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub legend_line: Option<usize>,
     #[serde(default, skip_serializing_if = "Vec::is_empty")]
     pub skinparams: Vec<SkinParam>,
     /// Sprite definitions collected from the source (`sprite $name { ... }`).

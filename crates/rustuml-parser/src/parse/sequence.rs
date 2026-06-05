@@ -856,6 +856,7 @@ impl SeqParser {
         // Legend block: `legend` / `legend right` / `legend left` ... `endlegend`
         if line == "legend" || line.starts_with("legend ") {
             self.in_legend = true;
+            self.meta.legend_line = Some(self.current_line);
             return true;
         }
         if self.in_legend {

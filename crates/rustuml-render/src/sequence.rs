@@ -3492,6 +3492,11 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
     // `<size:...>` / `<font:...>` run changes the line ascent and height.
     const TITLE_FONT_SIZE: u32 = 14;
     const HEADER_FONT_SIZE: u32 = 10;
+    const LEGEND_FONT_SIZE: u32 = 14;
+    const LEGEND_LEFT: f64 = 12.0;
+    const LEGEND_PAD: f64 = 5.0;
+    const LEGEND_TOP_GAP: f64 = 14.0;
+    const LEGEND_BOTTOM_PAD: f64 = 18.0;
     const TITLE_TOP_PAD: f64 = 10.0; // gap from y=0 to first title baseline (minus ascent)
     const TITLE_BOTTOM_PAD: f64 = 11.0; // gap from last title descent line to head top
     let title_lines: Vec<&str> = diagram
@@ -3505,6 +3510,12 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
         .header
         .as_deref()
         .map(|h| h.split("\\n").collect())
+        .unwrap_or_default();
+    let legend_lines: Vec<&str> = diagram
+        .meta
+        .legend
+        .as_deref()
+        .map(|l| l.lines().map(str::trim).filter(|l| !l.is_empty()).collect())
         .unwrap_or_default();
     let title_line_metrics = title_lines
         .iter()
@@ -3558,6 +3569,30 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
         header_lines.len() as f64 * header_line_step + 1.0
     } else {
         0.0
+    };
+    let legend_line_metrics = legend_lines
+        .iter()
+        .map(|line| {
+            rendered_line_metrics_with_family(line, LEGEND_FONT_SIZE as f64, &page_font_family)
+        })
+        .collect::<Vec<_>>();
+    let legend_text_w = legend_lines
+        .iter()
+        .map(|line| text_width_with_family(line, LEGEND_FONT_SIZE as f64, &page_font_family))
+        .fold(0.0_f64, f64::max);
+    let legend_box_w = if legend_lines.is_empty() {
+        0.0
+    } else {
+        legend_text_w + 2.0 * LEGEND_PAD
+    };
+    let legend_box_h = if legend_lines.is_empty() {
+        0.0
+    } else {
+        legend_line_metrics
+            .iter()
+            .map(|metrics| metrics.height)
+            .sum::<f64>()
+            + 2.0 * LEGEND_PAD
     };
     let participant_inner_pad = BOX_TEXT_X_PAD + global_padding;
     let head_box_y = HEAD_BOX_Y + theme_top_padding + title_band_h + box_band_h + header_band_h;
@@ -4445,6 +4480,12 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
             let w = text_width_with_family(caption, 14.0, &page_font_family);
             want_center = want_center.max(1.0 + w / 2.0);
         }
+        if !legend_lines.is_empty() {
+            // Legend boxes use a fixed 12px left margin and a 5px text inset on
+            // each side; when wider than the participant span they shift the
+            // same span right and grow the canvas symmetrically.
+            want_center = want_center.max(LEGEND_LEFT + legend_box_w / 2.0);
+        }
         if !title_lines.is_empty() {
             // Title left margin is 10; use the widest line.
             let w = title_lines
@@ -5294,6 +5335,14 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
             svg_height = (caption_only_y + CAPTION_BOTTOM_AFTER_BASELINE).ceil() as u32;
         }
     }
+    let legend_y = if diagram.hide_footbox {
+        lifeline_bottom + LEGEND_TOP_GAP
+    } else {
+        tail_box_y + max_box_h + LEGEND_TOP_GAP
+    };
+    if !legend_lines.is_empty() {
+        svg_height = svg_height.max((legend_y + legend_box_h + LEGEND_BOTTOM_PAD).ceil() as u32);
+    }
     // Named boxes extend below the foot boxes; the frame bottom plus its own
     // bottom margin must fit inside the canvas.
     if has_boxes {
@@ -6021,56 +6070,6 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
     // Caption is rendered AFTER all messages — see the dedicated block just
     // before `svg.close_svg(...)` at the end of this function. PlantUML emits
     // the caption group as the last visible element inside `<g>`.
-
-    // Render legend if present. Pass the raw legend line through the creole
-    // segmenter so bold/italic/under runs split into separate <text> elements.
-    if let Some(legend) = &diagram.meta.legend {
-        let lx = svg_width as f64 - 200.0;
-        let mut ly = svg_height as f64 - 150.0;
-        for line in legend.lines() {
-            let trimmed = line.trim();
-            if !trimmed.is_empty() {
-                let label = if trimmed.contains('|') {
-                    // Table cells: extract cell text. (Strip HTML cell decoration.)
-                    trimmed
-                        .trim_matches('|')
-                        .split('|')
-                        .map(|cell| {
-                            let cell = cell.trim();
-                            if cell.starts_with('<')
-                                && let Some(pos) = cell.find('>')
-                            {
-                                return cell[pos + 1..].trim();
-                            }
-                            cell
-                        })
-                        .filter(|c| !c.is_empty())
-                        .collect::<Vec<_>>()
-                        .join(" ")
-                } else {
-                    trimmed.to_string()
-                };
-                if !label.is_empty() {
-                    text_render::emit_text(
-                        &mut svg.buf,
-                        &label,
-                        &TextBase {
-                            x: lx,
-                            y: ly,
-                            font_size: 11,
-                            font_family: "sans-serif",
-                            fill: "#000000",
-                            bold: false,
-                            italic: false,
-                            underline: false,
-                            skip_underline: false,
-                        },
-                    );
-                }
-            }
-            ly += 14.0;
-        }
-    }
 
     // Named participant boxes: a titled, optionally coloured rectangle drawn
     // first, so activation bars, group frames, lifelines and heads render on
@@ -8284,6 +8283,41 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
             fmt_coord(sep_y),
         )
         .unwrap();
+    }
+
+    // Legend appears as a bottom decoration after the sequence body. Its text
+    // is creole-aware, so each style run is emitted as its own `<text>`.
+    if !legend_lines.is_empty() {
+        let legend_line = diagram.meta.legend_line.unwrap_or(1);
+        write!(
+            svg.buf,
+            r##"<g class="legend" data-source-line="{legend_line}"><rect fill="#DDDDDD" height="{}" rx="7.5" ry="7.5" style="stroke:#000000;stroke-width:1;" width="{}" x="{}" y="{}"/>"##,
+            fmt_coord(legend_box_h),
+            fmt_coord(legend_box_w),
+            fmt_coord(LEGEND_LEFT),
+            fmt_coord(legend_y),
+        )
+        .unwrap();
+        let mut line_top = legend_y + LEGEND_PAD;
+        for (line, metrics) in legend_lines.iter().zip(&legend_line_metrics) {
+            text_render::emit_text(
+                &mut svg.buf,
+                line,
+                &TextBase {
+                    x: LEGEND_LEFT + LEGEND_PAD,
+                    y: line_top + metrics.ascent,
+                    font_size: LEGEND_FONT_SIZE,
+                    font_family: &page_font_family,
+                    fill: "#000000",
+                    bold: false,
+                    italic: false,
+                    underline: false,
+                    skip_underline: false,
+                },
+            );
+            line_top += metrics.height;
+        }
+        svg.buf.push_str("</g>");
     }
 
     // Caption appears at the bottom of the diagram, AFTER messages.
