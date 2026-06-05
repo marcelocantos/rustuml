@@ -81,6 +81,16 @@ const FOOTER_BOTTOM_GAP: f64 = 31.957;
 const CAPTION_FONT_SIZE: f64 = 14.0;
 const CAPTION_BASELINE_GAP: f64 = 23.5352;
 const CAPTION_BOTTOM_GAP: f64 = 38.8672;
+const LEGEND_FONT_SIZE: f64 = 14.0;
+const LEGEND_RECT_X: f64 = 22.0;
+const LEGEND_RIGHT_PAD: f64 = 23.0;
+const LEGEND_RECT_PAD_X: f64 = 5.0;
+const LEGEND_RECT_PAD_Y: f64 = 7.0;
+const LEGEND_RECT_RX: f64 = 7.5;
+const LEGEND_CELL_PAD_DESCENT_FACTOR: f64 = 1.5;
+const LEGEND_TOP_GAP: f64 = 21.0;
+const LEGEND_BOTTOM_GAP: f64 = 23.2696;
+const LEGEND_DEFAULT_SOURCE_LINE: usize = 1;
 const TITLE_FONT_SIZE: f64 = 14.0;
 const LANE_TITLE_FONT: f64 = 18.0;
 const TEXT_MIN_BOX_HEIGHT: f64 = 10.0;
@@ -3005,6 +3015,55 @@ fn decoration_width(lines: &[&str], font_size: f64, bold: bool, horizontal_pad: 
         .fold(0.0_f64, f64::max)
 }
 
+fn legend_rows(text: Option<&str>) -> Vec<Vec<&str>> {
+    text.map(|t| {
+        t.lines()
+            .filter(|line| line.trim().contains('|'))
+            .map(|line| {
+                line.trim()
+                    .trim_matches('|')
+                    .split('|')
+                    .map(str::trim)
+                    .filter(|cell| !cell.is_empty())
+                    .collect::<Vec<_>>()
+            })
+            .filter(|row| !row.is_empty())
+            .collect()
+    })
+    .unwrap_or_default()
+}
+
+fn legend_column_widths(rows: &[Vec<&str>]) -> Vec<f64> {
+    let ncols = rows.iter().map(Vec::len).max().unwrap_or(0);
+    let cell_pad_x = pm::descent(LEGEND_FONT_SIZE) * LEGEND_CELL_PAD_DESCENT_FACTOR;
+    let mut widths = vec![0.0_f64; ncols];
+    for row in rows {
+        for (idx, cell) in row.iter().enumerate() {
+            let text_w = text_render::measure_no_underline(cell, LEGEND_FONT_SIZE, false);
+            widths[idx] = widths[idx].max(text_w + 2.0 * cell_pad_x);
+        }
+    }
+    widths
+}
+
+fn legend_rect_size(rows: &[Vec<&str>]) -> Option<(f64, f64)> {
+    if rows.is_empty() {
+        return None;
+    }
+    let grid_w = legend_column_widths(rows).iter().sum::<f64>();
+    let row_h = pm::text_height(LEGEND_FONT_SIZE);
+    Some((
+        grid_w + 2.0 * LEGEND_RECT_PAD_X,
+        rows.len() as f64 * row_h + 2.0 * LEGEND_RECT_PAD_Y,
+    ))
+}
+
+fn legend_total_width(rows: &[Vec<&str>]) -> f64 {
+    legend_rect_size(rows)
+        .map(|(w, _)| w + LEGEND_RECT_X + LEGEND_RIGHT_PAD)
+        .unwrap_or(0.0)
+}
+
 /// Walk a layout tree and collect every connector label so they can be
 /// used to size the SVG.
 fn collect_arrow_labels(nodes: &[LayoutNode]) -> Vec<String> {
@@ -3608,6 +3667,84 @@ impl SvgEmitter {
             "1",
         );
     }
+}
+
+fn emit_legend_table(svg: &mut SvgEmitter, rows: &[Vec<&str>], y: f64) {
+    let Some((rect_w, rect_h)) = legend_rect_size(rows) else {
+        return;
+    };
+    let source_line = LEGEND_DEFAULT_SOURCE_LINE;
+    let col_widths = legend_column_widths(rows);
+    let row_h = pm::text_height(LEGEND_FONT_SIZE);
+    let cell_pad_x = pm::descent(LEGEND_FONT_SIZE) * LEGEND_CELL_PAD_DESCENT_FACTOR;
+    let rect_x = LEGEND_RECT_X;
+    let grid_left = rect_x + LEGEND_RECT_PAD_X;
+    let grid_top = y + LEGEND_RECT_PAD_Y;
+    let grid_w = col_widths.iter().sum::<f64>();
+    let grid_right = grid_left + grid_w;
+    let grid_bottom = grid_top + rows.len() as f64 * row_h;
+
+    svg.raw_connector(&format!(
+        r#"<g class="legend" data-source-line="{source_line}">"#
+    ));
+    svg.raw_connector(&format!(
+        r##"<rect fill="#DDDDDD" height="{}" rx="{}" ry="{}" style="stroke:#000000;stroke-width:1;" width="{}" x="{}" y="{}"/>"##,
+        f(rect_h),
+        f(LEGEND_RECT_RX),
+        f(LEGEND_RECT_RX),
+        f(rect_w),
+        f(rect_x),
+        f(y)
+    ));
+
+    for (row_idx, row) in rows.iter().enumerate() {
+        let mut x = grid_left;
+        let baseline = grid_top + pm::ascent(LEGEND_FONT_SIZE) + row_idx as f64 * row_h;
+        for (col_idx, cell) in row.iter().enumerate() {
+            let tw = text_render::measure_no_underline(cell, LEGEND_FONT_SIZE, false);
+            svg.connector_text(
+                TEXT_COLOR,
+                "sans-serif",
+                LEGEND_FONT_SIZE,
+                tw,
+                x + cell_pad_x,
+                baseline,
+                cell,
+            );
+            x += col_widths.get(col_idx).copied().unwrap_or(0.0);
+        }
+    }
+
+    for idx in 0..=rows.len() {
+        let y_line = grid_top + idx as f64 * row_h;
+        svg.raw_connector(&format!(
+            r##"<line style="stroke:#000000;stroke-width:1;" x1="{}" x2="{}" y1="{}" y2="{}"/>"##,
+            f(grid_left),
+            f(grid_right),
+            f(y_line),
+            f(y_line)
+        ));
+    }
+
+    let mut x_line = grid_left;
+    svg.raw_connector(&format!(
+        r##"<line style="stroke:#000000;stroke-width:1;" x1="{}" x2="{}" y1="{}" y2="{}"/>"##,
+        f(x_line),
+        f(x_line),
+        f(grid_top),
+        f(grid_bottom)
+    ));
+    for width in col_widths {
+        x_line += width;
+        svg.raw_connector(&format!(
+            r##"<line style="stroke:#000000;stroke-width:1;" x1="{}" x2="{}" y1="{}" y2="{}"/>"##,
+            f(x_line),
+            f(x_line),
+            f(grid_top),
+            f(grid_bottom)
+        ));
+    }
+    svg.raw_connector("</g>");
 }
 
 /// Render a linear sequence of nodes at a given center-x and starting y.
@@ -6213,6 +6350,7 @@ fn render_inner(
     };
     let footer_lines = decoration_lines(diagram.meta.footer.as_deref());
     let caption_lines = decoration_lines(diagram.meta.caption.as_deref());
+    let legend_rows = legend_rows(diagram.meta.legend.as_deref());
 
     // Total SVG dimensions: PlantUML uses asymmetric margins on both axes —
     // 16px left/top (the ACTION_MIN_X start position) and 19px right/bottom.
@@ -6297,7 +6435,8 @@ fn render_inner(
             CAPTION_FONT_SIZE,
             false,
             23.0,
-        ));
+        ))
+        .max(legend_total_width(&legend_rows));
 
     let decoration_layout_w = action_total_w.max(decoration_total_w);
     let svg_w_raw = action_total_w
@@ -6341,13 +6480,21 @@ fn render_inner(
         0.0
     };
     let body_bottom_y = start_y + content_h - start_h_delta;
-    let bottom_raw = if !footer_lines.is_empty() {
-        body_bottom_y + FOOTER_BOTTOM_GAP
-    } else if !caption_lines.is_empty() {
-        body_bottom_y + CAPTION_BOTTOM_GAP
-    } else {
-        body_bottom_y + MARGIN_TRAIL
-    };
+    let legend_bottom_y = legend_rect_size(&legend_rows)
+        .map(|(_, h)| body_bottom_y + LEGEND_TOP_GAP + h + LEGEND_BOTTOM_GAP)
+        .unwrap_or(0.0);
+    let bottom_raw = (body_bottom_y + MARGIN_TRAIL)
+        .max(if !footer_lines.is_empty() {
+            body_bottom_y + FOOTER_BOTTOM_GAP
+        } else {
+            0.0
+        })
+        .max(if !caption_lines.is_empty() {
+            body_bottom_y + CAPTION_BOTTOM_GAP
+        } else {
+            0.0
+        })
+        .max(legend_bottom_y);
     let svg_h = (bottom_raw + shadow_height_pad).ceil() as u32;
     // cx aligns the diagram's vertical centreline to MARGIN_LEAD + content_left
     // (the asymmetric left extent). For symmetric layouts this equals
@@ -6479,6 +6626,10 @@ fn render_inner(
             );
         }
         svg.raw_connector("</g>");
+    }
+
+    if !legend_rows.is_empty() {
+        emit_legend_table(&mut svg, &legend_rows, body_bottom_y + LEGEND_TOP_GAP);
     }
 
     // Wrap in PlantUML-compatible SVG root.
