@@ -73,6 +73,14 @@ const SWITCH_CENTER_BOT_SPLIT: f64 = 15.0; // split distance above the merge top
 
 const FONT_SIZE: f64 = 12.0;
 const SMALL_FONT: f64 = 11.0;
+const DECORATION_FONT_SIZE: f64 = 10.0;
+const DECORATION_COLOR: &str = "#888888";
+const HEADER_BODY_GAP: f64 = 10.0;
+const FOOTER_BASELINE_GAP: f64 = 18.668;
+const FOOTER_BOTTOM_GAP: f64 = 31.957;
+const CAPTION_FONT_SIZE: f64 = 14.0;
+const CAPTION_BASELINE_GAP: f64 = 23.5352;
+const CAPTION_BOTTOM_GAP: f64 = 38.8672;
 const TITLE_FONT_SIZE: f64 = 14.0;
 const LANE_TITLE_FONT: f64 = 18.0;
 const TEXT_MIN_BOX_HEIGHT: f64 = 10.0;
@@ -2985,6 +2993,18 @@ fn offset_connector_path(path: &str, dx: f64, dy: f64) -> String {
     out
 }
 
+fn decoration_lines(text: Option<&str>) -> Vec<&str> {
+    text.map(|t| t.lines().filter(|l| !l.trim().is_empty()).collect())
+        .unwrap_or_default()
+}
+
+fn decoration_width(lines: &[&str], font_size: f64, bold: bool, horizontal_pad: f64) -> f64 {
+    lines
+        .iter()
+        .map(|line| text_render::measure_no_underline(line, font_size, bold) + horizontal_pad)
+        .fold(0.0_f64, f64::max)
+}
+
 /// Walk a layout tree and collect every connector label so they can be
 /// used to size the SVG.
 fn collect_arrow_labels(nodes: &[LayoutNode]) -> Vec<String> {
@@ -3369,6 +3389,14 @@ impl SvgEmitter {
 
     fn fill_path(&mut self, d: &str, fill: &str) {
         write!(self.shapes, r#"<path d="{d}" fill="{fill}"/>"#).unwrap();
+    }
+
+    fn raw(&mut self, s: &str) {
+        self.shapes.push_str(s);
+    }
+
+    fn raw_connector(&mut self, s: &str) {
+        self.connectors.push_str(s);
     }
 
     fn line_styled(
@@ -6176,6 +6204,15 @@ fn render_inner(
         (h > 2.0 * START_R).then_some(h)
     });
     let content_h = sequence_height(&tree) + lead_note_h.map_or(0.0, |h| h - 2.0 * START_R);
+    let header_lines = decoration_lines(diagram.meta.header.as_deref());
+    let header_line_step = pm::text_height(DECORATION_FONT_SIZE);
+    let header_band_h = if header_lines.is_empty() {
+        0.0
+    } else {
+        header_lines.len() as f64 * header_line_step + HEADER_BODY_GAP
+    };
+    let footer_lines = decoration_lines(diagram.meta.footer.as_deref());
+    let caption_lines = decoration_lines(diagram.meta.caption.as_deref());
 
     // Total SVG dimensions: PlantUML uses asymmetric margins on both axes —
     // 16px left/top (the ACTION_MIN_X start position) and 19px right/bottom.
@@ -6222,11 +6259,11 @@ fn render_inner(
     // re-added inside emit_swimlanes).
     let is_top_swimlanes = matches!(tree.first(), Some(LayoutNode::Swimlanes { .. }));
     let start_y = if is_top_swimlanes {
-        margin_top + num_warnings * (warn_h_each + 5.0)
+        margin_top + header_band_h + num_warnings * (warn_h_each + 5.0)
     } else if has_deprecated {
-        13.0 + warn_band_h + 17.0
+        header_band_h + 13.0 + warn_band_h + 17.0
     } else {
-        margin_top
+        margin_top + header_band_h
     };
 
     let action_total_w = content_w + MARGIN_LEAD + MARGIN_TRAIL;
@@ -6248,14 +6285,29 @@ fn render_inner(
     } else {
         0.0
     };
+    let decoration_total_w = decoration_width(&header_lines, DECORATION_FONT_SIZE, false, 21.0)
+        .max(decoration_width(
+            &footer_lines,
+            DECORATION_FONT_SIZE,
+            false,
+            21.0,
+        ))
+        .max(decoration_width(
+            &caption_lines,
+            CAPTION_FONT_SIZE,
+            false,
+            23.0,
+        ));
 
-    let svg_w = (action_total_w
+    let decoration_layout_w = action_total_w.max(decoration_total_w);
+    let svg_w_raw = action_total_w
         .ceil()
         .max(min_action_w)
         .max(warning_total_w.ceil())
         .max(label_total_w.ceil())
-        + if has_shadow { SHADOW_BOUNDS_PAD } else { 0.0 })
-    .ceil() as u32;
+        .max(decoration_total_w)
+        + if has_shadow { SHADOW_BOUNDS_PAD } else { 0.0 };
+    let svg_w = svg_w_raw.ceil() as u32;
 
     // content_h was computed by sequence_height assuming Start contributes
     // 19 px (cy=25 - MARGIN_LEAD=16 + START_R=10). When start_y > START_CY
@@ -6288,16 +6340,44 @@ fn render_inner(
     } else {
         0.0
     };
-    let svg_h =
-        (start_y + content_h - start_h_delta + MARGIN_TRAIL + shadow_height_pad).ceil() as u32;
+    let body_bottom_y = start_y + content_h - start_h_delta;
+    let bottom_raw = if !footer_lines.is_empty() {
+        body_bottom_y + FOOTER_BOTTOM_GAP
+    } else if !caption_lines.is_empty() {
+        body_bottom_y + CAPTION_BOTTOM_GAP
+    } else {
+        body_bottom_y + MARGIN_TRAIL
+    };
+    let svg_h = (bottom_raw + shadow_height_pad).ceil() as u32;
     // cx aligns the diagram's vertical centreline to MARGIN_LEAD + content_left
     // (the asymmetric left extent). For symmetric layouts this equals
     // MARGIN_LEAD + content_w/2; for if/else with unequal branches it shifts
     // so the branches stay symmetric around the diamond.
-    let cx = MARGIN_LEAD + content_left;
+    let cx = MARGIN_LEAD + content_left + ((decoration_layout_w - action_total_w) / 2.0).max(0.0);
 
     let svg_background = palette.svg_background.clone();
     let mut svg = SvgEmitter::with_palette(palette);
+
+    if !header_lines.is_empty() {
+        let source_line = diagram.meta.header_line.unwrap_or(1);
+        svg.raw(&format!(
+            r#"<g class="header" data-source-line="{source_line}">"#
+        ));
+        for (idx, line) in header_lines.iter().enumerate() {
+            let tw = text_render::measure_no_underline(line, DECORATION_FONT_SIZE, false);
+            svg.text_element(
+                DECORATION_COLOR,
+                "sans-serif",
+                DECORATION_FONT_SIZE,
+                tw,
+                decoration_layout_w - tw - 11.0,
+                10.0 + pm::ascent(DECORATION_FONT_SIZE) + idx as f64 * header_line_step,
+                line,
+                false,
+            );
+        }
+        svg.raw("</g>");
+    }
 
     // Emit deprecated warning banners at the top. Warnings live at fixed
     // x=13, y=13, independent of the action layout. PlantUML emits a single
@@ -6356,6 +6436,50 @@ fn render_inner(
 
     // Emit all nodes.
     emit_sequence_ex(&mut svg, &tree, cx, start_y, None, lead_note_h);
+
+    if !caption_lines.is_empty() {
+        let source_line = diagram.meta.caption_line.unwrap_or(1);
+        svg.raw_connector(&format!(
+            r#"<g class="caption" data-source-line="{source_line}">"#
+        ));
+        for (idx, line) in caption_lines.iter().enumerate() {
+            let tw = text_render::measure_no_underline(line, CAPTION_FONT_SIZE, false);
+            svg.connector_text(
+                TEXT_COLOR,
+                "sans-serif",
+                CAPTION_FONT_SIZE,
+                tw,
+                11.0,
+                body_bottom_y
+                    + CAPTION_BASELINE_GAP
+                    + idx as f64 * pm::text_height(CAPTION_FONT_SIZE),
+                line,
+            );
+        }
+        svg.raw_connector("</g>");
+    }
+
+    if !footer_lines.is_empty() {
+        let source_line = diagram.meta.footer_line.unwrap_or(1);
+        svg.raw_connector(&format!(
+            r#"<g class="footer" data-source-line="{source_line}">"#
+        ));
+        for (idx, line) in footer_lines.iter().enumerate() {
+            let tw = text_render::measure_no_underline(line, DECORATION_FONT_SIZE, false);
+            svg.connector_text(
+                DECORATION_COLOR,
+                "sans-serif",
+                DECORATION_FONT_SIZE,
+                tw,
+                ((decoration_layout_w - 1.0 - tw) / 2.0).max(0.0),
+                body_bottom_y
+                    + FOOTER_BASELINE_GAP
+                    + idx as f64 * pm::text_height(DECORATION_FONT_SIZE),
+                line,
+            );
+        }
+        svg.raw_connector("</g>");
+    }
 
     // Wrap in PlantUML-compatible SVG root.
     format_svg(svg_w, svg_h, &svg.finish(), defs, svg_background.as_deref())

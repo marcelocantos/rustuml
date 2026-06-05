@@ -334,6 +334,8 @@ struct ActivityParser {
     in_skinparam_block: bool,
     /// Current 1-based source line number (set before each parse_line call).
     current_line: usize,
+    /// Current 1-based non-empty line number within the diagram body.
+    current_body_line: usize,
 }
 
 impl ActivityParser {
@@ -348,6 +350,7 @@ impl ActivityParser {
             next_action_keep_colon: false,
             in_skinparam_block: false,
             current_line: 0,
+            current_body_line: 0,
         }
     }
 
@@ -394,8 +397,13 @@ impl ActivityParser {
         }
     }
 
+    fn decoration_source_line(&self) -> usize {
+        self.current_body_line.max(1)
+    }
+
     fn parse_line(&mut self, line_num: usize, line: &str) -> Result<(), ParseError> {
         self.current_line = line_num;
+        self.current_body_line += 1;
         // Inside a skinparam block: collect nested `Key Value` entries until `}`.
         if self.in_skinparam_block {
             if line == "}" {
@@ -518,18 +526,22 @@ impl ActivityParser {
 
         if let Some(caps) = RE_TITLE.captures(line) {
             self.meta.title = Some(super::strip_title_quotes(&caps[1]).to_string());
+            self.meta.title_line = Some(self.decoration_source_line());
             return true;
         }
         if let Some(caps) = RE_HEADER.captures(line) {
             self.meta.header = Some(caps[1].trim().to_string());
+            self.meta.header_line = Some(self.decoration_source_line());
             return true;
         }
         if let Some(caps) = RE_FOOTER.captures(line) {
             self.meta.footer = Some(caps[1].trim().to_string());
+            self.meta.footer_line = Some(self.decoration_source_line());
             return true;
         }
         if let Some(caps) = RE_CAPTION.captures(line) {
             self.meta.caption = Some(caps[1].trim().to_string());
+            self.meta.caption_line = Some(self.decoration_source_line());
             return true;
         }
         if let Some(caps) = RE_SKINPARAM.captures(line) {
@@ -554,11 +566,13 @@ impl ActivityParser {
             "header" => {
                 self.pending_meta = Some("header");
                 self.pending_meta_lines.clear();
+                self.meta.header_line = Some(self.decoration_source_line());
                 return true;
             }
             "footer" => {
                 self.pending_meta = Some("footer");
                 self.pending_meta_lines.clear();
+                self.meta.footer_line = Some(self.decoration_source_line());
                 return true;
             }
             "legend" | "legend right" | "legend left" => {
