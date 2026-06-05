@@ -4479,6 +4479,53 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                 participants[i].box_x + (participants[i].box_width / 2.0).floor();
         }
 
+        // Titled participant boxes feed back into layout: when the title is
+        // wider than the enclosed heads, Java widens the frame and recentres
+        // the member heads under it, pushing later participants right.
+        if has_boxes {
+            for b in &diagram.boxes {
+                if b.title.is_empty() {
+                    continue;
+                }
+                let mut member_idxs: Vec<usize> = b
+                    .members
+                    .iter()
+                    .filter_map(|&pi| participants.iter().position(|p| p.decl_idx == pi))
+                    .collect();
+                if member_idxs.is_empty() {
+                    continue;
+                }
+                member_idxs.sort_unstable();
+                let lo = *member_idxs.first().unwrap();
+                let hi = *member_idxs.last().unwrap();
+                let content_left = member_idxs
+                    .iter()
+                    .map(|&i| participants[i].box_x)
+                    .fold(f64::INFINITY, f64::min);
+                let content_right = member_idxs
+                    .iter()
+                    .map(|&i| participants[i].box_x + participants[i].box_width)
+                    .fold(f64::NEG_INFINITY, f64::max);
+                let frame_w = content_right - content_left + 2.0 * BOX_SIDE_MARGIN;
+                let title_w = bold_text_width(&b.title, BOX_TITLE_FONT_SIZE as f64);
+                let needed_w = title_w + 6.0;
+                if needed_w <= frame_w {
+                    continue;
+                }
+                let extra = needed_w - frame_w;
+                for p in participants.iter_mut().take(hi + 1).skip(lo) {
+                    p.center_x += extra / 2.0;
+                    p.box_x += extra / 2.0;
+                    p.lifeline_line_x += extra / 2.0;
+                }
+                for p in participants.iter_mut().skip(hi + 1) {
+                    p.center_x += extra;
+                    p.box_x += extra;
+                    p.lifeline_line_x += extra;
+                }
+            }
+        }
+
         // An OVER_SEVERAL note (note across, or note over A,B) is centered on the
         // midpoint of its first/last participant box centers and extends pw/2 each
         // side. If its left edge would fall left of the HEAD_BOX_Y margin, the
@@ -5420,6 +5467,40 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
             max_lost_right = max_lost_right.max(participants[fi].center_x + label_w + 19.0);
         }
     }
+    // The widened participant-box frame can be the rightmost visible element;
+    // compare its "content-equivalent" right edge so the standard right margin
+    // is applied exactly once, like ref boxes above.
+    let mut max_participant_box_right: f64 = 0.0;
+    if has_boxes {
+        for b in &diagram.boxes {
+            let members: Vec<&ParticipantLayout> = b
+                .members
+                .iter()
+                .filter_map(|&pi| participants.iter().find(|p| p.decl_idx == pi))
+                .collect();
+            if members.is_empty() {
+                continue;
+            }
+            let box_left = members
+                .iter()
+                .map(|p| p.box_x)
+                .fold(f64::INFINITY, f64::min)
+                - BOX_SIDE_MARGIN;
+            let box_right = members
+                .iter()
+                .map(|p| p.box_x + p.box_width)
+                .fold(f64::NEG_INFINITY, f64::max)
+                + BOX_SIDE_MARGIN;
+            let title_w = if b.title.is_empty() {
+                0.0
+            } else {
+                bold_text_width(&b.title, BOX_TITLE_FONT_SIZE as f64)
+            };
+            let title_extra = (title_w + 6.0 - (box_right - box_left)).max(0.0);
+            max_participant_box_right =
+                max_participant_box_right.max(box_right + title_extra / 2.0 - BOX_SIDE_MARGIN);
+        }
+    }
     // Add 1.0 for note stroke width when notes extend the right edge.
     let effective_right = last_box_right
         .max(if max_note_right > 0.0 {
@@ -5432,7 +5513,8 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
         // RIGHT_MARGIN (10) but the divider only needs +5, so offset by -5.
         .max(max_divider_right - 5.0)
         .max(max_ref_right)
-        .max(max_lost_right);
+        .max(max_lost_right)
+        .max(max_participant_box_right);
     // If groups are present, the group frame may extend beyond participant boxes.
     // Compute the maximum right extent of any group frame (header text + guard).
     let mut max_group_right: f64 = 0.0;
@@ -6303,6 +6385,16 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                 .map(|p| p.box_x + p.box_width)
                 .fold(f64::NEG_INFINITY, f64::max)
                 + BOX_SIDE_MARGIN;
+            let title_w = if b.title.is_empty() {
+                0.0
+            } else {
+                bold_text_width(&b.title, BOX_TITLE_FONT_SIZE as f64)
+            };
+            let title_needed_w = title_w + 6.0;
+            let frame_w = box_right - box_left;
+            let title_extra = (title_needed_w - frame_w).max(0.0);
+            let box_left = box_left - title_extra / 2.0;
+            let box_right = box_right + title_extra / 2.0;
             let fill = b
                 .color
                 .as_ref()
@@ -6319,7 +6411,6 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
             )
             .unwrap();
             if !b.title.is_empty() {
-                let title_w = bold_text_width(&b.title, BOX_TITLE_FONT_SIZE as f64);
                 text_render::emit_text(
                     &mut svg.buf,
                     &b.title,
