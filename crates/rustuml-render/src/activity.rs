@@ -6298,8 +6298,14 @@ fn emit_while(
     //   9. exit arm vertical: exit_x from diamond_cy → junction_y
     //  10. exit arm DOWN arrowhead at the end (or at midpoint for long arms)
 
-    // 1. Inbound arrow from diamond bottom to body top.
-    svg.down_arrow(cx, diamond_bottom, body_top, &arrow_color);
+    // 1. Inbound path from diamond bottom to body top. With no body content,
+    // PlantUML stretches this as a plain connector down to the loop junction;
+    // there is no emphasized down arrowhead for the empty placeholder.
+    if body.is_empty() {
+        svg.line_styled(&arrow_color, "1", cx, cx, diamond_bottom, junction_y, false);
+    } else {
+        svg.down_arrow(cx, diamond_bottom, body_top, &arrow_color);
+    }
 
     // 2. Body bottom → junction (only if body has content; for empty body
     // the inbound arrow already reaches the junction-equivalent point).
