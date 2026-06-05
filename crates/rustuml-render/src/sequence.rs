@@ -1305,8 +1305,10 @@ fn escape_xml(s: &str) -> String {
 // ---------------------------------------------------------------------------
 
 struct ParticipantLayout {
-    /// Participant index (0-based)
-    idx: usize,
+    /// Participant declaration index (0-based), used for stable `partN` SVG ids.
+    decl_idx: usize,
+    /// Visual sort key from `participant ... order N`; defaults to declaration index.
+    layout_order: usize,
     /// Participant ID
     id: String,
     /// Display label
@@ -1333,6 +1335,10 @@ struct ParticipantLayout {
     lifeline_line_x: f64,
     /// Optional `[[url]]` link attached to the participant declaration.
     url: Option<String>,
+    /// Optional per-participant background colour from the declaration.
+    color: Option<String>,
+    /// 1-based line number within the `@startuml` block.
+    source_line: u32,
 }
 
 /// State of activation bars per participant.
@@ -3449,7 +3455,7 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
         HEAD_BOX_H
     };
 
-    let participants: Vec<ParticipantLayout> = diagram
+    let mut participants: Vec<ParticipantLayout> = diagram
         .participants
         .iter()
         .enumerate()
@@ -3535,7 +3541,8 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
             };
 
             ParticipantLayout {
-                idx,
+                decl_idx: idx,
+                layout_order: p.order.unwrap_or(idx),
                 id: p.id.clone(),
                 label,
                 kind: p.kind,
@@ -3549,13 +3556,19 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                 center_x: 0.0,
                 lifeline_line_x: 0.0,
                 url: p.url.clone(),
+                color: p.color.clone(),
+                source_line: p.source_line as u32,
             }
         })
         .collect();
+    participants.sort_by_key(|p| (p.layout_order, p.decl_idx));
 
-    // Build a lookup from participant ID to index (owned keys to avoid borrow issues)
-    let id_to_idx: HashMap<String, usize> =
-        participants.iter().map(|p| (p.id.clone(), p.idx)).collect();
+    // Build a lookup from participant ID to visual layout index.
+    let id_to_idx: HashMap<String, usize> = participants
+        .iter()
+        .enumerate()
+        .map(|(i, p)| (p.id.clone(), i))
+        .collect();
 
     // -----------------------------------------------------------------------
     // Phase 1.5: Pre-scan groups to determine participant shifts
@@ -4040,7 +4053,6 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
     // Phase 3: Assign x positions
     // -----------------------------------------------------------------------
 
-    let mut participants = participants;
     // Additional rightward shift forced by a title/caption/footer wider than the
     // participant span. PlantUML centres each such band on the participant-span
     // midpoint `(first.box_x + last.box_x + last.box_width - 1.0) / 2.0`; when the
@@ -5755,7 +5767,7 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
             let members: Vec<&ParticipantLayout> = b
                 .members
                 .iter()
-                .filter_map(|&pi| participants.iter().find(|p| p.idx == pi))
+                .filter_map(|&pi| participants.iter().find(|p| p.decl_idx == pi))
                 .collect();
             if members.is_empty() {
                 continue;
@@ -5866,16 +5878,6 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
         .unwrap();
     }
 
-    // Lifelines
-    let source_line_for = |id: &str| -> u32 {
-        diagram
-            .participants
-            .iter()
-            .find(|p| p.id == id)
-            .map(|p| p.source_line as u32)
-            .unwrap_or(1)
-    };
-
     // Delay (`...`) bands split every lifeline with a dotted `1,4` gap. The
     // band starts DELAY_BAND_TOP_PAD below the preceding message and is
     // DELAY_BAND_HEIGHT tall (plus the label height when labelled). The delay
@@ -5901,7 +5903,7 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
         .collect();
 
     for p in &participants {
-        let part_uid = format!("part{}", p.idx + 1);
+        let part_uid = format!("part{}", p.decl_idx + 1);
         let ll_rect_x = p.center_x - LIFELINE_RECT_WIDTH / 2.0;
         let (p_top, p_height) = match created_lifeline_top.get(&p.id) {
             Some(&top) => (top, lifeline_bottom - top),
@@ -5910,7 +5912,7 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
         svg.lifeline(
             &part_uid,
             &p.id,
-            source_line_for(&p.id),
+            p.source_line,
             &p.label,
             ll_rect_x,
             p_top,
@@ -5947,8 +5949,8 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
     // adjusted so that box_y + box_height == HEAD_BOX_Y + max_box_h (matching the tallest).
     // For tail boxes, the same alignment applies relative to tail_box_y.
     for (i, p) in participants.iter().enumerate() {
-        let part_uid = format!("part{}", p.idx + 1);
-        let sl = source_line_for(&diagram.participants[i].id);
+        let part_uid = format!("part{}", p.decl_idx + 1);
+        let sl = p.source_line;
 
         // Resolve participant fill color (per-participant override beats
         // the skinparam default, which beats the historical `#E2E2F0`).
@@ -5974,7 +5976,7 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
         } else {
             nonparticipant_fill_default.clone()
         };
-        let fill_color = diagram.participants[i]
+        let fill_color = p
             .color
             .as_ref()
             .map(|c| resolve_color(c))
@@ -6193,11 +6195,11 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                 // Source participant uid
                 let from_uid = id_to_idx
                     .get(msg.from.as_str())
-                    .map(|i| format!("part{}", i + 1))
+                    .map(|&i| format!("part{}", participants[i].decl_idx + 1))
                     .unwrap_or_default();
                 let to_uid = id_to_idx
                     .get(msg.to.as_str())
-                    .map(|i| format!("part{}", i + 1))
+                    .map(|&i| format!("part{}", participants[i].decl_idx + 1))
                     .unwrap_or_default();
                 // Found/lost: PlantUML labels BOTH entities with the single real
                 // participant (the virtual "[" / "]" has no uid).
@@ -6795,11 +6797,11 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
 
                 let from_uid = id_to_idx
                     .get(ret_from.as_str())
-                    .map(|i| format!("part{}", i + 1))
+                    .map(|&i| format!("part{}", participants[i].decl_idx + 1))
                     .unwrap_or_default();
                 let to_uid = id_to_idx
                     .get(ret_to.as_str())
-                    .map(|i| format!("part{}", i + 1))
+                    .map(|&i| format!("part{}", participants[i].decl_idx + 1))
                     .unwrap_or_default();
 
                 let label = if ret.label.is_empty() {
@@ -7857,8 +7859,8 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
             // The created participant's box occupies the next message-id slot.
             msg_id += 1;
             let p = &participants[*pi];
-            let part_uid = format!("part{}", p.idx + 1);
-            let sl = source_line_for(&p.id);
+            let part_uid = format!("part{}", p.decl_idx + 1);
+            let sl = p.source_line;
             let inline_base_y = msg_y - CREATE_BOX_TOP_OFFSET;
             let mut scratch = PlantUmlSvg::new();
             scratch.participant_border = svg.participant_border.clone();
