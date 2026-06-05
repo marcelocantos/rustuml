@@ -91,6 +91,23 @@ targets:
     origin: manual
     discovered: 2026-04-09
     achieved: 2026-04-28
+  T10:
+    name: Normal CLI rendering produces non-empty diagrams for oracle-assisted families
+    status: identified
+    value: 0.0
+    cost: 0.0
+    acceptance:
+    - Representative no-oracle CLI smoke inputs for diagram families that use `render_svg_with_oracle` in golden tests produce non-empty SVG bodies with the expected visible labels, starting with `test-diagrams/golden/deployment/deploy_with_title.puml`.
+    - No production renderer falls back to a bare empty placeholder SVG for a parsed non-empty diagram unless that diagram type is explicitly documented as unsupported and excluded from release claims.
+    - A regression test or smoke script exercises at least deployment plus one nested JSON/YAML case through `rustuml -tsvg` without passing golden-derived oracle data.
+    context: Discovered during a 2026-06-06 strategy review of 🎯T4. The strict golden harness passes `extract_oracle_layout(...)` into `rustuml_render::render_svg_with_oracle`, but the normal CLI path calls `render_svg_with_theme` and cannot receive a golden-derived oracle. A smoke check showed `cargo run -q -p rustuml -- -tsvg test-diagrams/golden/deployment/deploy_with_title.puml` emits an empty 100x50 DESCRIPTION SVG because `crates/rustuml-render/src/deployment.rs::render_no_oracle` is a minimal placeholder. This does not invalidate strict-XML parity work, but it means T4 alone is not a sufficient release-readiness signal for product rendering.
+    tags:
+    - release
+    - product
+    - no-oracle
+    - rendering
+    origin: manual
+    discovered: 2026-06-06
   T2:
     name: Ditaa rendering engine ported to Rust
     status: set_aside
