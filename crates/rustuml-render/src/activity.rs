@@ -639,6 +639,7 @@ enum LayoutNode {
     Partition {
         name: String,
         color: Option<String>,
+        is_group: bool,
         body: Vec<LayoutNode>,
     },
     /// A top-level swimlanes container. Each lane has its own vertical
@@ -1183,7 +1184,12 @@ fn build_tree_inner(steps: &[ActivityStep], palette: &Palette) -> Vec<LayoutNode
                 if i < steps.len() {
                     i += 1; // skip EndPartition
                 }
-                nodes.push(LayoutNode::Partition { name, color, body });
+                nodes.push(LayoutNode::Partition {
+                    name,
+                    color,
+                    is_group: p.is_group,
+                    body,
+                });
             }
             ActivityStep::EndPartition => {
                 i += 1;
@@ -2687,6 +2693,35 @@ fn action_label_lines(text: &str) -> Vec<&str> {
     if lines.is_empty() { vec![""] } else { lines }
 }
 
+fn group_uses_compact_top_gap(body: &[LayoutNode]) -> bool {
+    matches!(
+        body,
+        [LayoutNode::Action { .. }
+            | LayoutNode::If { .. }
+            | LayoutNode::Fork { .. }
+            | LayoutNode::Switch { .. }]
+    )
+}
+
+fn partition_top_gap(
+    color: &Option<String>,
+    name: &str,
+    is_group: bool,
+    body: &[LayoutNode],
+) -> f64 {
+    if is_group && group_uses_compact_top_gap(body) {
+        10.0
+    } else if color.is_some()
+        || name
+            .chars()
+            .any(|c| matches!(c, 'g' | 'j' | 'p' | 'q' | 'y'))
+    {
+        10.4531
+    } else {
+        10.0
+    }
+}
+
 fn node_height(node: &LayoutNode) -> f64 {
     match node {
         // Start ellipse cy is fixed at START_CY (25), so from the y=MARGIN_LEAD
@@ -2863,16 +2898,13 @@ fn node_height(node: &LayoutNode) -> f64 {
         // Partition: top gap (10 or 10.4531 if the partition has a fill
         // colour) + 36.49 (title bar) + body height + 12 (bottom margin).
         // The top gap absorbs the would-be inbound arrow.
-        LayoutNode::Partition { color, name, body } => {
-            let top_gap = if color.is_some()
-                || name
-                    .chars()
-                    .any(|c| matches!(c, 'g' | 'j' | 'p' | 'q' | 'y'))
-            {
-                10.4531
-            } else {
-                10.0
-            };
+        LayoutNode::Partition {
+            color,
+            name,
+            is_group,
+            body,
+        } => {
+            let top_gap = partition_top_gap(color, name, *is_group, body);
             top_gap + 36.4883 + sequence_height(body) + 12.0
         }
         // Swimlanes: header band + start-gap + cumulative body heights
@@ -3931,17 +3963,13 @@ fn emit_sequence_ex(
                 // the first inner action's top (no separate arrow to the
                 // partition rect).
                 let partition_top_gap = match node {
-                    LayoutNode::Partition { color, name, .. } => Some(
-                        if color.is_some()
-                            || name
-                                .chars()
-                                .any(|c| matches!(c, 'g' | 'j' | 'p' | 'q' | 'y'))
-                        {
-                            10.4531
-                        } else {
-                            10.0
-                        },
-                    ),
+                    LayoutNode::Partition {
+                        color,
+                        name,
+                        is_group,
+                        body,
+                        ..
+                    } => Some(partition_top_gap(color, name, *is_group, body)),
                     _ => None,
                 };
                 let prev_was_partition = matches!(
@@ -4307,7 +4335,12 @@ fn emit_node(svg: &mut SvgEmitter, node: &LayoutNode, cx: f64, y: f64) -> f64 {
             svg.shapes.push_str("</g>");
             y + pm::text_height(*font_size) + 30.0
         }
-        LayoutNode::Partition { name, color, body } => {
+        LayoutNode::Partition {
+            name,
+            color,
+            is_group,
+            body,
+        } => {
             // Partition's outer rect spans from y_in + 10 (top) to y_in +
             // 10 + 36.49 + body_h + 12 (bottom). The title path corner
             // notches the top-right of the title band; the title text sits
@@ -4320,15 +4353,7 @@ fn emit_node(svg: &mut SvgEmitter, node: &LayoutNode, cx: f64, y: f64) -> f64 {
             let body_w = sequence_width(body);
             let partition_w = (title_w + 15.0).max(body_w + 20.0);
             let partition_x = 16.0; // always MARGIN_LEAD-aligned in goldens
-            let top_gap = if color.is_some()
-                || name
-                    .chars()
-                    .any(|c| matches!(c, 'g' | 'j' | 'p' | 'q' | 'y'))
-            {
-                10.4531
-            } else {
-                10.0
-            };
+            let top_gap = partition_top_gap(color, name, *is_group, body);
             let partition_top = y + top_gap;
             let body_h = sequence_height(body);
             let title_band_h = 36.4883; // title bar height (matches goldens)

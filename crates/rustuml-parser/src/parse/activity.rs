@@ -110,6 +110,7 @@ fn parse_legacy_activity(lines: &[String]) -> Result<ActivityDiagram, ParseError
             steps.push(ActivityStep::Partition(PartitionBlock {
                 name,
                 color: None,
+                is_group: false,
                 source_line: 0,
             }));
             partition_depth += 1;
@@ -900,6 +901,7 @@ impl ActivityParser {
             self.steps.push(ActivityStep::Partition(PartitionBlock {
                 name,
                 color,
+                is_group: false,
                 source_line: self.current_line,
             }));
             true
@@ -925,6 +927,7 @@ impl ActivityParser {
             self.steps.push(ActivityStep::Partition(PartitionBlock {
                 name,
                 color,
+                is_group: true,
                 source_line: self.current_line,
             }));
             true

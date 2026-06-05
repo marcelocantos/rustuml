@@ -110,6 +110,9 @@ pub struct NoteBlock {
 pub struct PartitionBlock {
     pub name: String,
     pub color: Option<String>,
+    /// True when this block came from `group`, not `partition`.
+    #[serde(default)]
+    pub is_group: bool,
     /// 1-based line number within the `@startuml` block.
     #[serde(default)]
     pub source_line: usize,
