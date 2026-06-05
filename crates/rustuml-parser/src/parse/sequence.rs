@@ -44,6 +44,8 @@ struct SeqParser {
     in_legend: bool,
     /// Whether `hide footbox` was specified.
     hide_footbox: bool,
+    /// Whether `autoactivate on` is active for subsequent messages.
+    autoactivate: bool,
     /// Current 1-based source line number (set before each parse_line call).
     current_line: usize,
     /// Named participant boxes (`box ... end box`).
@@ -81,6 +83,7 @@ impl SeqParser {
             last_message: None,
             in_legend: false,
             hide_footbox: false,
+            autoactivate: false,
             current_line: 0,
             boxes: Vec::new(),
             current_box: None,
@@ -168,6 +171,9 @@ impl SeqParser {
             return Ok(());
         }
         if self.try_activate_deactivate(line) {
+            return Ok(());
+        }
+        if self.try_autoactivate(line) {
             return Ok(());
         }
         if self.try_create_destroy(line) {
@@ -339,7 +345,9 @@ impl SeqParser {
 
             let mut arrow = parse_arrow(arrow_str);
             arrow.color = arrow_color;
-            let activation = activation_str.map(parse_activation);
+            let activation = activation_str
+                .map(parse_activation)
+                .or_else(|| self.autoactivation_for(&arrow));
 
             // Ensure participants in textual order (left-to-right as written)
             // so the participant list preserves declaration order.
@@ -734,6 +742,38 @@ impl SeqParser {
             true
         } else {
             false
+        }
+    }
+
+    fn try_autoactivate(&mut self, line: &str) -> bool {
+        let Some(rest) = line.strip_prefix("autoactivate") else {
+            return false;
+        };
+        match rest.trim() {
+            state if state.eq_ignore_ascii_case("on") => {
+                self.autoactivate = true;
+                true
+            }
+            state if state.eq_ignore_ascii_case("off") => {
+                self.autoactivate = false;
+                true
+            }
+            _ => false,
+        }
+    }
+
+    fn autoactivation_for(&self, arrow: &Arrow) -> Option<ActivationChange> {
+        if !self.autoactivate || arrow.head_half.is_some() || arrow.source_cross {
+            return None;
+        }
+        match (arrow.line, arrow.head) {
+            (LineStyle::Dotted, ArrowHead::Filled | ArrowHead::Open) => {
+                Some(ActivationChange::Deactivate)
+            }
+            (LineStyle::Solid, ArrowHead::Filled | ArrowHead::Open) => {
+                Some(ActivationChange::Activate)
+            }
+            _ => None,
         }
     }
 
@@ -1245,6 +1285,32 @@ mod tests {
         }
         if let Event::Message(m) = &d.events[1] {
             assert_eq!(m.activation, Some(ActivationChange::Deactivate));
+        }
+    }
+
+    #[test]
+    fn autoactivate_directive_applies_to_subsequent_messages() {
+        let d = parse(
+            "autoactivate on\nA -> B : call\nB --> A : done\nautoactivate off\nA -> B : later",
+        );
+        assert_eq!(d.participants.len(), 2);
+        assert_eq!(d.participants[0].id, "A");
+        assert_eq!(d.participants[1].id, "B");
+        assert_eq!(d.events.len(), 3);
+        if let Event::Message(m) = &d.events[0] {
+            assert_eq!(m.activation, Some(ActivationChange::Activate));
+        } else {
+            panic!("expected message");
+        }
+        if let Event::Message(m) = &d.events[1] {
+            assert_eq!(m.activation, Some(ActivationChange::Deactivate));
+        } else {
+            panic!("expected message");
+        }
+        if let Event::Message(m) = &d.events[2] {
+            assert_eq!(m.activation, None);
+        } else {
+            panic!("expected message");
         }
     }
 
