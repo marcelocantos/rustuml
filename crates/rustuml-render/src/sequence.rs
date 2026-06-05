@@ -5001,6 +5001,72 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
             }
         }
     }
+    let mut note_right_active_shift_by_event: HashMap<usize, f64> = HashMap::new();
+    {
+        let mut active_depth: HashMap<String, usize> = HashMap::new();
+        let mut return_stack: Vec<String> = Vec::new();
+        for (idx, event) in diagram.events.iter().enumerate() {
+            match event {
+                Event::Message(msg) => {
+                    if let Some(act) = &msg.activation {
+                        match act {
+                            ActivationChange::Activate => {
+                                *active_depth.entry(msg.to.clone()).or_default() += 1;
+                                return_stack.push(msg.to.clone());
+                            }
+                            ActivationChange::Deactivate => {
+                                if let Some(d) = active_depth.get_mut(&msg.from) {
+                                    *d = d.saturating_sub(1);
+                                }
+                                if let Some(pos) =
+                                    return_stack.iter().rposition(|id| id == &msg.from)
+                                {
+                                    return_stack.remove(pos);
+                                }
+                            }
+                            ActivationChange::Destroy => {
+                                if let Some(d) = active_depth.get_mut(&msg.to) {
+                                    *d = d.saturating_sub(1);
+                                }
+                            }
+                        }
+                    }
+                }
+                Event::Return(_) => {
+                    if let Some(id) = return_stack.pop()
+                        && let Some(d) = active_depth.get_mut(&id)
+                    {
+                        *d = d.saturating_sub(1);
+                    }
+                }
+                Event::Activate(id, _) => {
+                    *active_depth.entry(id.clone()).or_default() += 1;
+                }
+                Event::Deactivate(id) => {
+                    if let Some(d) = active_depth.get_mut(id) {
+                        *d = d.saturating_sub(1);
+                    }
+                    if let Some(pos) = return_stack.iter().rposition(|p| p == id) {
+                        return_stack.remove(pos);
+                    }
+                }
+                Event::Note(note)
+                    if !note.on_message
+                        && note.position == NotePosition::Right
+                        && note
+                            .participants
+                            .first()
+                            .and_then(|id| active_depth.get(id.as_str()))
+                            .copied()
+                            .unwrap_or(0)
+                            > 0 =>
+                {
+                    note_right_active_shift_by_event.insert(idx, ACTIVATION_HALF_W);
+                }
+                _ => {}
+            }
+        }
+    }
 
     // Pre-compute message y positions. PlantUML sizes each message step
     // dynamically: messages with label text get extra height for the text line.
@@ -5322,7 +5388,13 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                         note.participants
                             .first()
                             .and_then(|id| id_to_idx.get(id.as_str()))
-                            .map(|&i| participants[i].center_x)
+                            .map(|&i| {
+                                participants[i].center_x
+                                    + note_right_active_shift_by_event
+                                        .get(&event_idx)
+                                        .copied()
+                                        .unwrap_or(0.0)
+                            })
                             .unwrap_or(f64::MIN)
                     };
                     if anchor_x != f64::MIN {
@@ -5898,6 +5970,14 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
             .map(|&i| {
                 if note.position == NotePosition::Right {
                     participants[i].center_x
+                        + if note.on_message {
+                            0.0
+                        } else {
+                            note_right_active_shift_by_event
+                                .get(&event_idx)
+                                .copied()
+                                .unwrap_or(0.0)
+                        }
                 } else {
                     participants[i].lifeline_line_x
                 }
@@ -7807,6 +7887,14 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                     .map(|&i| {
                         if note.position == NotePosition::Right {
                             participants[i].center_x
+                                + if note.on_message {
+                                    0.0
+                                } else {
+                                    note_right_active_shift_by_event
+                                        .get(&ev_idx)
+                                        .copied()
+                                        .unwrap_or(0.0)
+                                }
                         } else {
                             participants[i].lifeline_line_x
                         }
