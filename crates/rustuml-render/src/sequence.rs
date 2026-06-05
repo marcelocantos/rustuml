@@ -547,6 +547,10 @@ const SELF_MSG_DROP: f64 = 13.0;
 const SELF_MSG_TEXT_X_PAD: f64 = 7.0;
 /// Extra right padding beyond self-message text/loopback.
 const SELF_MSG_RIGHT_PAD: f64 = 2.0;
+/// Extra canvas reservation PlantUML keeps for an active self-message on an
+/// inline-created participant. The visible loopback geometry is unchanged, but
+/// the computed right edge is wider in create+activate lifecycles.
+const CREATED_ACTIVE_SELF_MSG_RIGHT_PAD: f64 = 16.0;
 /// Minimum preferred width a self-message reserves in the gap to the next
 /// participant. PlantUML's ComponentRoseSelfArrow.getPreferredWidth returns
 /// `max(textWidth, arrowWidth + 5)` with arrowWidth = 45, i.e. min 50.
@@ -4318,7 +4322,14 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                     let label_w = message_label_width(&label);
                     let loopback_right = cx + SELF_MSG_EXTEND;
                     let text_right = cx + SELF_MSG_TEXT_X_PAD + label_w;
-                    let self_right = loopback_right.max(text_right) + SELF_MSG_RIGHT_PAD;
+                    let created_active_pad =
+                        if active && create_msg_idx.contains_key(msg.from.as_str()) {
+                            CREATED_ACTIVE_SELF_MSG_RIGHT_PAD
+                        } else {
+                            0.0
+                        };
+                    let self_right =
+                        loopback_right.max(text_right) + SELF_MSG_RIGHT_PAD + created_active_pad;
                     max_self_msg_right = max_self_msg_right.max(self_right);
                 }
                 // Update activation state from message activation flag
