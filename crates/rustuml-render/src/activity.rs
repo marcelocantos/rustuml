@@ -222,6 +222,8 @@ struct Palette {
     /// the border thickness onto the connector strokes too.
     arrow_thickness: String,
     arrow_font_size: f64,
+    title_font_size: f64,
+    title_bold: bool,
     text_color: String,
     start_fill: String,
     /// Stroke colour for the start ellipse. Mirrors `start_fill` by default
@@ -266,6 +268,8 @@ impl Palette {
             arrow_color: ARROW_COLOR.into(),
             arrow_thickness: "1".into(),
             arrow_font_size: SMALL_FONT,
+            title_font_size: TITLE_FONT_SIZE,
+            title_bold: true,
             text_color: TEXT_COLOR.into(),
             start_fill: START_FILL.into(),
             start_stroke: START_FILL.into(),
@@ -395,6 +399,15 @@ impl Palette {
                     if let Ok(v) = val.parse::<f64>() {
                         p.arrow_font_size = v;
                     }
+                }
+                "titlefontsize" => {
+                    if let Ok(v) = val.parse::<f64>() {
+                        p.title_font_size = v;
+                    }
+                }
+                "titlefontstyle" => {
+                    let lower = val.to_ascii_lowercase();
+                    p.title_bold = lower.contains("bold");
                 }
                 // `activityStartColor` sets the start ellipse fill (border
                 // keeps its `#222222` default unless a border colour is
@@ -618,7 +631,11 @@ enum LayoutNode {
     Detach,
     Kill,
     Break,
-    Title(String),
+    Title {
+        text: String,
+        font_size: f64,
+        bold: bool,
+    },
     Partition {
         name: String,
         color: Option<String>,
@@ -687,7 +704,7 @@ fn node_is_flow(n: &LayoutNode) -> bool {
         n,
         LayoutNode::Arrow { .. }
             | LayoutNode::Note { .. }
-            | LayoutNode::Title(_)
+            | LayoutNode::Title { .. }
             | LayoutNode::Detach
             | LayoutNode::Kill
             | LayoutNode::Break
@@ -2289,8 +2306,12 @@ fn node_extents(node: &LayoutNode) -> (f64, f64) {
         // tw/2 (reverse-engineered against multiple title goldens). This
         // shifts cx 3 px right of action's natural midline when the title
         // is the widest element.
-        LayoutNode::Title(t) => {
-            let tw = text_render::measure(t, TITLE_FONT_SIZE, true);
+        LayoutNode::Title {
+            text,
+            font_size,
+            bold,
+        } => {
+            let tw = text_render::measure(text, *font_size, *bold);
             (tw / 2.0 + 3.0, tw / 2.0 + 3.0)
         }
         // Swimlanes: asymmetric +4 left / +9 right so cx aligns lane_left
@@ -2553,7 +2574,11 @@ fn node_width(node: &LayoutNode) -> f64 {
         | LayoutNode::Detach
         | LayoutNode::Kill
         | LayoutNode::Break => 0.0,
-        LayoutNode::Title(t) => text_render::measure(t, TITLE_FONT_SIZE, true),
+        LayoutNode::Title {
+            text,
+            font_size,
+            bold,
+        } => text_render::measure(text, *font_size, *bold),
     }
 }
 
@@ -2574,7 +2599,7 @@ fn sequence_height(nodes: &[LayoutNode]) -> f64 {
         // before or after it — the emit loop also skips arrows around titles.
         // Don't toggle prior_flow so the following node (typically `start`)
         // doesn't get an unwanted ARROW_LEN gap.
-        if matches!(node, LayoutNode::Title(_)) {
+        if matches!(node, LayoutNode::Title { .. }) {
             h += node_height(node);
             pending_gap = None;
             continue;
@@ -2818,7 +2843,7 @@ fn node_height(node: &LayoutNode) -> f64 {
         // lands at the cy of the following Start ellipse (composed of 4 px
         // text-top offset + text_height + 16 px gap below text + START_R).
         // Reverse-engineered from golden SVGs.
-        LayoutNode::Title(_) => pm::text_height(TITLE_FONT_SIZE) + 30.0,
+        LayoutNode::Title { font_size, .. } => pm::text_height(*font_size) + 30.0,
         // Partition: top gap (10 or 10.4531 if the partition has a fill
         // colour) + 36.49 (title bar) + body height + 12 (bottom margin).
         // The top gap absorbs the would-be inbound arrow.
@@ -3792,7 +3817,7 @@ fn emit_sequence_ex(
             continue;
         }
         // Title is a free-standing label; never gets an inbound connector.
-        if let LayoutNode::Title(_) = node {
+        if let LayoutNode::Title { .. } = node {
             y = emit_node(svg, node, cx, y);
             continue;
         }
@@ -3835,7 +3860,7 @@ fn emit_sequence_ex(
                         }
                     }
                     LayoutNode::Note { .. } => {}
-                    LayoutNode::Title(_) => {}
+                    LayoutNode::Title { .. } => {}
                     LayoutNode::Detach | LayoutNode::Kill | LayoutNode::Break => {
                         prev_idx = None;
                         break;
@@ -4236,27 +4261,31 @@ fn emit_node(svg: &mut SvgEmitter, node: &LayoutNode, cx: f64, y: f64) -> f64 {
         } => emit_repeat(svg, cx, y, body, condition, is_label, backward.as_deref()),
         LayoutNode::Arrow { .. } | LayoutNode::Note { .. } => y,
         LayoutNode::Detach | LayoutNode::Kill | LayoutNode::Break => y,
-        LayoutNode::Title(text) => {
+        LayoutNode::Title {
+            text,
+            font_size,
+            bold,
+        } => {
             // PlantUML wraps the title in `<g class="title" data-source-line="1">`.
             // Title text is centred within an x-extent padded by 4px on the
             // left compared to the action content cx. Baseline is at
             // y + ascent + 4.
-            let tw = text_render::measure(text, TITLE_FONT_SIZE, true);
-            let text_y = y + pm::ascent(TITLE_FONT_SIZE) + 4.0;
+            let tw = text_render::measure(text, *font_size, *bold);
+            let text_y = y + pm::ascent(*font_size) + 4.0;
             svg.shapes
                 .push_str(r#"<g class="title" data-source-line="1">"#);
             svg.text_element(
                 TEXT_COLOR,
                 "sans-serif",
-                TITLE_FONT_SIZE,
+                *font_size,
                 tw,
                 cx - tw / 2.0 + 1.0,
                 text_y,
                 text,
-                true,
+                *bold,
             );
             svg.shapes.push_str("</g>");
-            y + pm::text_height(TITLE_FONT_SIZE) + 30.0
+            y + pm::text_height(*font_size) + 30.0
         }
         LayoutNode::Partition { name, color, body } => {
             // Partition's outer rect spans from y_in + 10 (top) to y_in +
@@ -6290,7 +6319,14 @@ fn render_inner(
 
     // Prepend title if present.
     if let Some(ref title) = diagram.meta.title {
-        tree.insert(0, LayoutNode::Title(title.clone()));
+        tree.insert(
+            0,
+            LayoutNode::Title {
+                text: title.clone(),
+                font_size: palette.title_font_size,
+                bold: palette.title_bold,
+            },
+        );
     }
 
     // incr-4 ftile-geometry render path (dual-path). When the whole tree is
@@ -6454,12 +6490,14 @@ fn render_inner(
     // Subtract the 9 px discrepancy in that case. The same applies when a
     // Title precedes Start — the title's height contribution already places
     // the cursor at the Start ellipse's cy, so Start only adds START_R.
-    let title_precedes_start = matches!(tree.first(), Some(LayoutNode::Title(_)))
+    let title_precedes_start = matches!(tree.first(), Some(LayoutNode::Title { .. }))
         && tree
             .iter()
             .skip(1)
             .find_map(|n| match n {
-                LayoutNode::Title(_) | LayoutNode::Note { .. } | LayoutNode::Arrow { .. } => None,
+                LayoutNode::Title { .. } | LayoutNode::Note { .. } | LayoutNode::Arrow { .. } => {
+                    None
+                }
                 other => Some(other),
             })
             .map(|n| matches!(n, LayoutNode::Start))
