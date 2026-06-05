@@ -563,6 +563,12 @@ const SELF_MSG_DROP: f64 = 13.0;
 const SELF_MSG_TEXT_X_PAD: f64 = 7.0;
 /// Extra right padding beyond self-message text/loopback.
 const SELF_MSG_RIGHT_PAD: f64 = 2.0;
+/// Bare `note right` attached to a self-message starts this far after
+/// `floor(cx) + label_width`.
+const SELF_MSG_RIGHT_NOTE_X_PAD: f64 = 19.0;
+/// Bare `note right` attached to a self-message places the note top at
+/// `arrow_y - first_line_height + this`.
+const SELF_MSG_RIGHT_NOTE_Y_PAD: f64 = 2.5;
 /// Extra canvas reservation PlantUML keeps for an active self-message on an
 /// inline-created participant. The visible loopback geometry is unchanged, but
 /// the computed right edge is wider in create+activate lifecycles.
@@ -3698,6 +3704,7 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
 
     // Track maximum right extent of self-messages (for SVG width calculation).
     let mut max_self_msg_right: f64 = 0.0;
+    let mut self_msg_right_note_left_by_event: HashMap<usize, f64> = HashMap::new();
 
     // Track activation state as we scan events to compute per-message shifts.
     let mut activation_depth: HashMap<String, usize> = HashMap::new();
@@ -4452,6 +4459,10 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                     let self_right =
                         loopback_right.max(text_right) + SELF_MSG_RIGHT_PAD + created_active_pad;
                     max_self_msg_right = max_self_msg_right.max(self_right);
+                    self_msg_right_note_left_by_event.insert(
+                        idx,
+                        cx.floor() + label_w + SELF_MSG_RIGHT_NOTE_X_PAD + created_active_pad,
+                    );
                 }
                 // Update activation state from message activation flag
                 if let Some(act) = &msg.activation {
@@ -4565,6 +4576,11 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                             note_font_size_f,
                             &note_font_family,
                         );
+                        let self_message_right_note = note.position == NotePosition::Right
+                            && matches!(
+                                diagram.events.get(owner),
+                                Some(Event::Message(msg)) if msg.from == msg.to
+                            );
                         let (owner_has_text, owner_text_height) =
                             event_message_text_height(&diagram.events[owner]);
                         let y_adjust = if arrow_font_size_set && owner_has_text {
@@ -4572,10 +4588,14 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                         } else {
                             0.0
                         };
-                        let extra = note_msg_extra_base(note.shape)
-                            + note_msg_text_tail(&metrics)
-                            + shadow_note_extra
-                            + y_adjust;
+                        let extra = if self_message_right_note {
+                            0.0
+                        } else {
+                            note_msg_extra_base(note.shape)
+                                + note_msg_text_tail(&metrics)
+                                + shadow_note_extra
+                                + y_adjust
+                        };
                         let e = msg_note_extra.entry(owner).or_insert(0.0);
                         *e = e.max(extra);
                         msg_note_y_adjust.insert(owner, y_adjust);
@@ -4727,12 +4747,21 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                         // Position note_top so the arrow sits at
                         // note_top + NOTE_MSG_ARROW_OFFSET + (lines-1)*MSG_TEXT_HEIGHT/2.
                         let arrow_y = event_y_positions.get(owner).copied().unwrap_or(y);
-                        let note_top = arrow_y
-                            - note_msg_arrow_offset_for_line(note.shape, metrics.first_height)
-                            - note_msg_text_tail(&metrics)
-                            - 2.0 * explicit_global_padding
-                            - shadow_note_extra
-                            + msg_note_y_adjust.get(&owner).copied().unwrap_or(0.0);
+                        let self_message_right_note = note.position == NotePosition::Right
+                            && matches!(
+                                diagram.events.get(owner),
+                                Some(Event::Message(msg)) if msg.from == msg.to
+                            );
+                        let note_top = if self_message_right_note {
+                            arrow_y - metrics.first_height + SELF_MSG_RIGHT_NOTE_Y_PAD
+                        } else {
+                            arrow_y
+                                - note_msg_arrow_offset_for_line(note.shape, metrics.first_height)
+                                - note_msg_text_tail(&metrics)
+                                - 2.0 * explicit_global_padding
+                                - shadow_note_extra
+                                + msg_note_y_adjust.get(&owner).copied().unwrap_or(0.0)
+                        };
                         // The draw site derives note_top from event_y via
                         // note_top = event_y - note_y_extra - num_lines*MSG_TEXT_HEIGHT.
                         let note_event_y = note_top + note_y_extra + metrics.total_height;
@@ -4862,7 +4891,7 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
         }
     }
     let mut max_note_right: f64 = 0.0;
-    for event in &diagram.events {
+    for (event_idx, event) in diagram.events.iter().enumerate() {
         if let Event::Note(note) = event {
             let max_line_width =
                 note_max_line_width_with_family(&note.text, note_font_size_f, &note_font_family);
@@ -4872,6 +4901,18 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                 note_content_width_raw_padded(max_line_width, note.shape, note_text_align);
             match note.position {
                 NotePosition::Right => {
+                    if note.on_message
+                        && let Some(&note_left) = note_owner
+                            .get(&event_idx)
+                            .and_then(|owner| self_msg_right_note_left_by_event.get(owner))
+                    {
+                        let mut note_right = note_left + note_content_w + NOTE_LIFELINE_GAP - 1.0;
+                        if raw_note_content_w.fract() > 0.57 {
+                            note_right += 1.0;
+                        }
+                        max_note_right = max_note_right.max(note_right);
+                        continue;
+                    }
                     // A message-attached note anchors to the message component's
                     // right endpoint, which follows the participant's visual
                     // centre rather than the integer lifeline line.
@@ -5350,7 +5391,7 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
     // the frame's InGroupable extent (Java `NoteBox.getMinX/getMaxX` feeding
     // `InGroupableList`), so the frame grows to cover a note that sticks out past
     // the messages. Returns `None` for notes with no resolvable anchor.
-    let note_drawn_extent = |note: &Note| -> Option<(f64, f64)> {
+    let note_drawn_extent = |event_idx: usize, note: &Note| -> Option<(f64, f64)> {
         let max_text_w =
             note_max_line_width_with_family(&note.text, note_font_size_f, &note_font_family);
         let note_content_w = note_content_width_padded(max_text_w, note.shape, note_text_align);
@@ -5368,6 +5409,13 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
             .collect();
         match note.position {
             NotePosition::Right => {
+                if note.on_message
+                    && let Some(&left) = note_owner
+                        .get(&event_idx)
+                        .and_then(|owner| self_msg_right_note_left_by_event.get(owner))
+                {
+                    return Some((left, left + note_content_w));
+                }
                 let ll_x = if note.on_message {
                     anchor_xs.iter().copied().fold(f64::MIN, f64::max)
                 } else {
@@ -5600,7 +5648,7 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                 Event::Note(note) if !group_start_stack.is_empty() => {
                     // A note is an InGroupable of every enclosing frame (Java
                     // `InGroupablesStack.addElement` adds it to all open lists).
-                    if let Some((nl, nr)) = note_drawn_extent(note) {
+                    if let Some((nl, nr)) = note_drawn_extent(ev_idx, note) {
                         for top in group_start_stack.iter_mut() {
                             top.3 = top.3.min(nl);
                             top.4 = top.4.max(nr);
@@ -7229,19 +7277,27 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                 // single anchor.
                 let (note_left, note_right) = match note.position {
                     NotePosition::Right => {
-                        let ll_x = if note.on_message {
-                            anchor_xs.iter().copied().fold(f64::MIN, f64::max)
+                        if note.on_message
+                            && let Some(&left) = note_owner
+                                .get(&ev_idx)
+                                .and_then(|owner| self_msg_right_note_left_by_event.get(owner))
+                        {
+                            (left, left + note_content_w)
                         } else {
-                            anchor_xs.first().copied().unwrap_or(50.0)
-                        };
-                        let ll_x = if ll_x == f64::MIN { 50.0 } else { ll_x };
-                        let gap = if note.on_message {
-                            NOTE_LIFELINE_GAP - 1.0
-                        } else {
-                            NOTE_LIFELINE_GAP
-                        };
-                        let left = ll_x.ceil() + gap;
-                        (left, left + note_content_w)
+                            let ll_x = if note.on_message {
+                                anchor_xs.iter().copied().fold(f64::MIN, f64::max)
+                            } else {
+                                anchor_xs.first().copied().unwrap_or(50.0)
+                            };
+                            let ll_x = if ll_x == f64::MIN { 50.0 } else { ll_x };
+                            let gap = if note.on_message {
+                                NOTE_LIFELINE_GAP - 1.0
+                            } else {
+                                NOTE_LIFELINE_GAP
+                            };
+                            let left = ll_x.ceil() + gap;
+                            (left, left + note_content_w)
+                        }
                     }
                     NotePosition::Left => {
                         let ll_x = if note.on_message {
