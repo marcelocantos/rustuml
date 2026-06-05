@@ -2188,12 +2188,18 @@ fn render_plantuml_svg(
         // Look up oracle overrides for this entity. Try qualified name
         // first (for entities inside clusters), then the bare label and
         // bare id as fallbacks.
-        let oracle_rect = oracle.and_then(|orc| {
-            orc.entities
-                .get(&qualified_name)
-                .or_else(|| orc.entities.get(&entity.label))
-                .or_else(|| orc.entities.get(&entity.id))
+        let oracle_rect_with_name = oracle.and_then(|orc| {
+            [
+                qualified_name.as_str(),
+                entity.label.as_str(),
+                entity.id.as_str(),
+            ]
+            .into_iter()
+            .find_map(|name| orc.entities.get(name).map(|rect| (name, rect)))
         });
+        let oracle_rect = oracle_rect_with_name.map(|(_, rect)| rect);
+        let qualified_name =
+            oracle_rect_with_name.map_or(qualified_name.as_str(), |(name, _)| name);
         let oracle_lollipop =
             oracle.and_then(|orc| oracle_lollipop_for_entity(diagram, orc, entity));
 
@@ -2237,7 +2243,7 @@ fn render_plantuml_svg(
         write!(
             svg,
             r#"<g class="entity" data-qualified-name="{}""#,
-            escape_xml(&qualified_name),
+            escape_xml(qualified_name),
         )
         .unwrap();
         if let Some(source_line) = oracle_rect

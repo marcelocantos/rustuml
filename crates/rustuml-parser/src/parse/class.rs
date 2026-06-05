@@ -467,6 +467,7 @@ impl ClassParser {
                 let id = caps[3].to_string();
                 (label, id)
             };
+            label = normalize_inline_stereotypes(&label);
 
             // A trailing `<...>` is a generic type parameter, not part of the
             // entity id/label/qualified-name. Split it off the id; mirror the
@@ -478,9 +479,10 @@ impl ClassParser {
                 split_generic(&mut label);
             }
 
+            let stereotype_source = text_outside_double_quotes(line);
             let mut spot_color: Option<String> = None;
             let stereotypes: Vec<String> = STEREOTYPE_RE
-                .captures_iter(line)
+                .captures_iter(&stereotype_source)
                 .map(|c| {
                     let (text, color) = process_spot_stereotype_with_color(c[1].trim());
                     if spot_color.is_none() {
@@ -1484,15 +1486,7 @@ fn parse_member(s: &str) -> Member {
         text = text.replace("{abstract}", "").trim().to_string();
     }
 
-    // Convert <<stereotype>> notation to «stereotype» guillemets.
-    while let Some(start) = text.find("<<") {
-        if let Some(end) = text[start..].find(">>") {
-            let inner = text[start + 2..start + end].to_string();
-            text = format!("{}«{}»{}", &text[..start], inner, &text[start + end + 2..]);
-        } else {
-            break;
-        }
-    }
+    text = normalize_inline_stereotypes(&text);
 
     // Parse visibility prefix. Double-character creole markers (`**`, `--`,
     // `~~`, `__`) take precedence over visibility prefixes that share the
@@ -1599,6 +1593,35 @@ fn process_spot_stereotype_with_color(s: &str) -> (String, Option<String>) {
     }
     // Named color or no spot notation: return as-is.
     (s.to_string(), None)
+}
+
+fn normalize_inline_stereotypes(s: &str) -> String {
+    let mut text = s.to_string();
+    while let Some(start) = text.find("<<") {
+        if let Some(end) = text[start..].find(">>") {
+            let inner = text[start + 2..start + end].to_string();
+            text = format!("{}«{}»{}", &text[..start], inner, &text[start + end + 2..]);
+        } else {
+            break;
+        }
+    }
+    text
+}
+
+fn text_outside_double_quotes(s: &str) -> String {
+    let mut out = String::with_capacity(s.len());
+    let mut in_quote = false;
+    for ch in s.chars() {
+        if ch == '"' {
+            in_quote = !in_quote;
+            out.push(' ');
+        } else if in_quote {
+            out.push(' ');
+        } else {
+            out.push(ch);
+        }
+    }
+    out
 }
 
 /// Strip Creole/HTML markup from a display name to produce a plain identifier.
@@ -1747,6 +1770,24 @@ mod tests {
     fn stereotype() {
         let d = parse("class Foo <<singleton>>");
         assert_eq!(d.entities[0].stereotypes, vec!["singleton"]);
+    }
+
+    #[test]
+    fn quoted_alias_label_keeps_inline_stereotype_text() {
+        let d = parse("class \"**BoundaryClass** <<boundary>>\" as C");
+        let e = &d.entities[0];
+        assert_eq!(e.id, "C");
+        assert_eq!(e.label, "**BoundaryClass** «boundary»");
+        assert!(e.stereotypes.is_empty());
+    }
+
+    #[test]
+    fn quoted_alias_stereotype_after_alias_is_entity_stereotype() {
+        let d = parse("class \"Service\" as C <<service>>");
+        let e = &d.entities[0];
+        assert_eq!(e.id, "C");
+        assert_eq!(e.label, "Service");
+        assert_eq!(e.stereotypes, vec!["service"]);
     }
 
     #[test]
