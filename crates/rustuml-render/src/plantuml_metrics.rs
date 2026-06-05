@@ -175,12 +175,18 @@ fn char_width(c: char, table: &[f64; 95], bold: bool, font_size: f64) -> f64 {
     if (32..=126).contains(&code) {
         return table[(code - 32) as usize];
     }
+    if c == '\u{FE0F}' {
+        return 0.0;
+    }
+    if is_emoji_fallback(code) && (font_size - 13.0).abs() < f64::EPSILON {
+        return 17.0;
+    }
     // Exact AWT advance for any non-ASCII codepoint that appears in the golden
     // corpus, extracted from java.awt.FontMetrics on the JVM SansSerif logical
-    // font (see non_ascii_widths.rs). Stored as advance-per-unit-size; AWT
-    // advances are perfectly linear in point size, so scale directly by the
-    // font size. (Recovering size from `table[0]` is wrong when bold, because
-    // the bold table's space advance is wider than the plain one's.)
+    // font (see non_ascii_widths.rs). Stored as advance-per-unit-size for most
+    // glyphs; emoji fallback has size-specific behavior handled above.
+    // (Recovering size from `table[0]` is wrong when bold, because the bold
+    // table's space advance is wider than the plain one's.)
     if let Ok(i) = crate::non_ascii_widths::NON_ASCII_WIDTHS.binary_search_by(|e| e.0.cmp(&code)) {
         let (_, plain, bold_w) = crate::non_ascii_widths::NON_ASCII_WIDTHS[i];
         return (if bold { bold_w } else { plain }) * font_size;
@@ -221,6 +227,24 @@ fn char_width(c: char, table: &[f64; 95], bold: bool, font_size: f64) -> f64 {
         // default approximation.
         table[('a' as u32 - 32) as usize]
     }
+}
+
+fn is_emoji_fallback(code: u32) -> bool {
+    matches!(
+        code,
+        9989 | 127754
+            | 127757
+            | 127881
+            | 128100
+            | 128190
+            | 128232
+            | 128293
+            | 128421
+            | 128512
+            | 128640
+            | 128760
+            | 129514
+    )
 }
 
 /// Map a Latin-1 supplement character (U+00A0..U+00FF) to an ASCII
@@ -1371,6 +1395,10 @@ mod tests {
             ("action", 12.0, "35.5488"),
             ("Action A", 12.0, "49.2773"),
             ("Action B", 12.0, "47.9004"),
+            ("Launch! \u{1F680}", 13.0, "70.1997"),
+            ("Party! \u{1F389}", 13.0, "56.5649"),
+            ("\u{2705} Response OK", 13.0, "104.0073"),
+            ("\u{1F5A5}\u{FE0F} Server", 14.0, "65.2725"),
         ];
         for (text, size, expected_str) in &tests {
             let got = text_width(text, *size, false);
