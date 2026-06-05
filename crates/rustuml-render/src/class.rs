@@ -1577,9 +1577,11 @@ impl ClassFontOverrides {
             .and_then(|v| v.trim().parse::<u32>().ok())
             .or(default_font_size)
             .unwrap_or(CIRCLED_CHARACTER_DEFAULT_SIZE);
+        let default_font_color = find(&["defaultFontColor"]);
         Self {
-            font_color: find(&["ClassFontColor"]),
-            attr_font_color: find(&["ClassAttributeFontColor"]),
+            font_color: find(&["ClassFontColor"]).or_else(|| default_font_color.clone()),
+            attr_font_color: find(&["ClassAttributeFontColor"])
+                .or_else(|| default_font_color.clone()),
             font_size: find(&["ClassFontSize"])
                 .and_then(|v| v.trim().parse::<u32>().ok())
                 .or(default_font_size),
@@ -1605,7 +1607,7 @@ impl ClassFontOverrides {
             class_background: find(&["classBackgroundColor"]),
             border_color: find(&["classBorderColor"]),
             root_line_color: find(&["__styleRootLineColor"]),
-            root_font_color: find(&["__styleRootFontColor"]),
+            root_font_color: find(&["__styleRootFontColor"]).or(default_font_color),
             stereotype_c_background: find(&["stereotypeCBackgroundColor"]),
             stereotype_c_border: find(&["stereotypeCBorderColor"]),
             monochrome: params.iter().any(|sp| {
@@ -6129,6 +6131,17 @@ mod tests {
 
         assert!(svg.contains("background:#FF0000;"));
         assert!(svg.contains(r##"<rect fill="#FF0000""##));
+    }
+
+    #[test]
+    fn default_font_color_colours_class_name_and_icon_glyph() {
+        let input = "@startuml\nskinparam defaultFontColor DarkBlue\nclass Foo\n@enduml";
+        let diagram = rustuml_parser::parse::parse(input).unwrap();
+        let svg = crate::render_svg(&diagram);
+
+        assert!(svg.contains(r##"<text fill="#00008B""##));
+        assert!(svg.contains(r##"<path d="M24.4731,29.1431"##));
+        assert!(svg.contains(r##"fill="#00008B"/>"##));
     }
 
     #[test]
