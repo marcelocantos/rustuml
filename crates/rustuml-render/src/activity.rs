@@ -10,6 +10,7 @@ use std::fmt::Write;
 
 use rustuml_parser::diagram::activity::{ActivityDiagram, ActivityStep, NotePosition};
 
+use crate::creole;
 use crate::ftile;
 use crate::layout_oracle::{OracleLayout, wrap_oracle_envelope};
 use crate::plantuml_metrics as pm;
@@ -42,6 +43,12 @@ const ACTION_H_PADDING: f64 = 10.0; // horizontal padding each side
 const ACTION_MIN_HEIGHT: f64 = 30.0;
 const ACTION_RX: f64 = 12.5;
 const DIAMOND_HALF: f64 = 12.0; // half-size of decision diamond
+const ACTION_LIST_ITEM_TEXT_X: f64 = 12.0;
+const ACTION_LIST_BULLET_CX: f64 = 5.5;
+const ACTION_LIST_BULLET_BASELINE_DROP: f64 = 4.9688;
+const ACTION_LIST_NUMBER_GAP: f64 = 4.1133;
+const ACTION_TABLE_CELL_PAD_X: f64 = 3.7969;
+const ACTION_TABLE_PAD_Y: f64 = 12.0;
 const WHILE_SPECIAL_COND_LEAD: f64 = 13.0;
 const WHILE_SPECIAL_BODY_LEAD: f64 = 11.0;
 const WHILE_SPECIAL_BODY_X_PULL_RIGHT: f64 = WHILE_SPECIAL_COND_LEAD - WHILE_SPECIAL_BODY_LEAD;
@@ -2713,6 +2720,11 @@ fn sequence_height(nodes: &[LayoutNode]) -> f64 {
 }
 
 fn action_height(text: &str, pad_y: f64, font_family: &str, font_size: f64) -> f64 {
+    if let Some(rows) = action_table_rows(text) {
+        let line_h = text_render::label_height_with_family("", font_size, font_family);
+        return rows.len() as f64 * line_h + ACTION_TABLE_PAD_Y * 2.0;
+    }
+
     // Pick the box height to match the label's actual font — monospace
     // labels render shorter than sans-serif at the same nominal size.
     (action_label_lines(text)
@@ -2724,15 +2736,184 @@ fn action_height(text: &str, pad_y: f64, font_family: &str, font_size: f64) -> f
 }
 
 fn action_text_width(text: &str, font_size: f64, bold: bool, font_family: &str) -> f64 {
+    if let Some(rows) = action_table_rows(text) {
+        return action_table_col_widths(&rows, font_size, bold, font_family)
+            .iter()
+            .sum();
+    }
+
+    let mut number_counters = Vec::new();
     action_label_lines(text)
         .iter()
-        .map(|line| text_render::measure_with_family(line, font_size, bold, font_family))
+        .map(|line| {
+            action_line_width_with_family(line, font_size, bold, font_family, &mut number_counters)
+        })
         .fold(0.0f64, f64::max)
 }
 
 fn action_label_lines(text: &str) -> Vec<&str> {
-    let lines: Vec<&str> = text.lines().collect();
+    let lines: Vec<&str> = text.split("\\n").flat_map(str::lines).collect();
     if lines.is_empty() { vec![""] } else { lines }
+}
+
+fn action_table_rows(text: &str) -> Option<Vec<creole::TableRow>> {
+    let lines = action_label_lines(text);
+    if lines.is_empty() {
+        return None;
+    }
+    let mut rows = Vec::with_capacity(lines.len());
+    for line in lines {
+        match creole::parse_line(line.trim()) {
+            creole::CreoleLine::Table(row) => rows.push(row),
+            _ => return None,
+        }
+    }
+    Some(rows)
+}
+
+fn action_table_col_widths(
+    rows: &[creole::TableRow],
+    font_size: f64,
+    bold: bool,
+    font_family: &str,
+) -> Vec<f64> {
+    let cols = rows.iter().map(|r| r.cells.len()).max().unwrap_or(0);
+    let mut widths = vec![0.0_f64; cols];
+    for row in rows {
+        for (idx, cell) in row.cells.iter().enumerate() {
+            let text_w = text_render::measure_with_family(
+                &cell.text,
+                font_size,
+                bold || cell.is_header,
+                font_family,
+            );
+            widths[idx] = widths[idx].max(text_w + ACTION_TABLE_CELL_PAD_X * 2.0);
+        }
+    }
+    widths
+}
+
+fn next_action_number(level: usize, number_counters: &mut Vec<usize>) -> usize {
+    if number_counters.len() > level {
+        number_counters.truncate(level);
+    }
+    while number_counters.len() < level {
+        number_counters.push(0);
+    }
+    number_counters[level - 1] += 1;
+    number_counters[level - 1]
+}
+
+fn action_line_width_with_family(
+    line: &str,
+    font_size: f64,
+    bold: bool,
+    font_family: &str,
+    number_counters: &mut Vec<usize>,
+) -> f64 {
+    match creole::parse_line(line.trim()) {
+        creole::CreoleLine::Bullet { level, content } => {
+            number_counters.clear();
+            let indent = ACTION_LIST_ITEM_TEXT_X * level.saturating_sub(1) as f64;
+            indent
+                + ACTION_LIST_ITEM_TEXT_X
+                + text_render::measure_with_family(&content, font_size, bold, font_family)
+        }
+        creole::CreoleLine::Numbered { level, content } => {
+            let number = next_action_number(level, number_counters);
+            let indent = ACTION_LIST_ITEM_TEXT_X * level.saturating_sub(1) as f64;
+            let marker = format!("{number}.");
+            indent
+                + text_render::measure_with_family(&marker, font_size, bold, font_family)
+                + ACTION_LIST_NUMBER_GAP
+                + text_render::measure_with_family(&content, font_size, bold, font_family)
+        }
+        _ => {
+            number_counters.clear();
+            text_render::measure_with_family(line.trim(), font_size, bold, font_family)
+        }
+    }
+}
+
+fn emit_action_line(
+    svg: &mut SvgEmitter,
+    line: &str,
+    base: &TextBase<'_>,
+    number_counters: &mut Vec<usize>,
+) -> f64 {
+    match creole::parse_line(line.trim()) {
+        creole::CreoleLine::Bullet { level, content } => {
+            number_counters.clear();
+            let indent = ACTION_LIST_ITEM_TEXT_X * level.saturating_sub(1) as f64;
+            let cx = base.x + indent + ACTION_LIST_BULLET_CX;
+            let cy = base.y - ACTION_LIST_BULLET_BASELINE_DROP;
+            write!(
+                svg.shapes,
+                r#"<ellipse cx="{}" cy="{}" fill="{}" rx="2.5" ry="2.5"/>"#,
+                f(cx),
+                f(cy),
+                base.fill
+            )
+            .unwrap();
+            let text_x = base.x + indent + ACTION_LIST_ITEM_TEXT_X;
+            let w = text_render::emit_text(
+                &mut svg.shapes,
+                &content,
+                &TextBase {
+                    x: text_x,
+                    y: base.y,
+                    font_size: base.font_size,
+                    font_family: base.font_family,
+                    fill: base.fill,
+                    bold: base.bold,
+                    italic: base.italic,
+                    underline: base.underline,
+                    skip_underline: base.skip_underline,
+                },
+            );
+            indent + ACTION_LIST_ITEM_TEXT_X + w
+        }
+        creole::CreoleLine::Numbered { level, content } => {
+            let number = next_action_number(level, number_counters);
+            let indent = ACTION_LIST_ITEM_TEXT_X * level.saturating_sub(1) as f64;
+            let marker = format!("{number}.");
+            let marker_w = text_render::emit_text(
+                &mut svg.shapes,
+                &marker,
+                &TextBase {
+                    x: base.x + indent,
+                    y: base.y,
+                    font_size: base.font_size,
+                    font_family: base.font_family,
+                    fill: base.fill,
+                    bold: base.bold,
+                    italic: base.italic,
+                    underline: base.underline,
+                    skip_underline: base.skip_underline,
+                },
+            );
+            let w = text_render::emit_text(
+                &mut svg.shapes,
+                &content,
+                &TextBase {
+                    x: base.x + indent + marker_w + ACTION_LIST_NUMBER_GAP,
+                    y: base.y,
+                    font_size: base.font_size,
+                    font_family: base.font_family,
+                    fill: base.fill,
+                    bold: base.bold,
+                    italic: base.italic,
+                    underline: base.underline,
+                    skip_underline: base.skip_underline,
+                },
+            );
+            indent + marker_w + ACTION_LIST_NUMBER_GAP + w
+        }
+        _ => {
+            number_counters.clear();
+            text_render::emit_text(&mut svg.shapes, line.trim(), base)
+        }
+    }
 }
 
 fn group_uses_compact_top_gap(body: &[LayoutNode]) -> bool {
@@ -4264,20 +4445,68 @@ fn emit_node(svg: &mut SvgEmitter, node: &LayoutNode, cx: f64, y: f64) -> f64 {
                 rect_x,
                 y,
             );
+            if let Some(rows) = action_table_rows(text) {
+                let col_widths = action_table_col_widths(&rows, *font_size, *bold, font_family);
+                let line_h = text_render::label_height_with_family("", *font_size, font_family);
+                let ascent = text_render::label_ascent_with_family("", *font_size, font_family);
+                let table_left = rect_x + *pad_x;
+                let table_top = y + ACTION_TABLE_PAD_Y;
+                for (row_idx, row) in rows.iter().enumerate() {
+                    let mut cell_left = table_left;
+                    for (col_idx, cell) in row.cells.iter().enumerate() {
+                        text_render::emit_text(
+                            &mut svg.shapes,
+                            &cell.text,
+                            &TextBase {
+                                x: cell_left + ACTION_TABLE_CELL_PAD_X,
+                                y: table_top + ascent + row_idx as f64 * line_h,
+                                font_size: *font_size as u32,
+                                font_family,
+                                fill: &text_col,
+                                bold: *bold || cell.is_header,
+                                italic: *italic,
+                                underline: false,
+                                skip_underline: false,
+                            },
+                        );
+                        cell_left += col_widths[col_idx];
+                    }
+                }
+                let table_right = table_left + col_widths.iter().sum::<f64>();
+                for row_idx in 0..=rows.len() {
+                    let line_y = table_top + row_idx as f64 * line_h;
+                    svg.shape_line("#000000", "0.5", table_left, table_right, line_y, line_y);
+                }
+                let table_bottom = table_top + rows.len() as f64 * line_h;
+                let mut line_x = table_left;
+                svg.shape_line("#000000", "0.5", line_x, line_x, table_top, table_bottom);
+                for width in col_widths {
+                    line_x += width;
+                    svg.shape_line("#000000", "0.5", line_x, line_x, table_top, table_bottom);
+                }
+                return y + ah;
+            }
             // Text baseline: padding_top + ascent, both derived from the
             // label's actual font so monospace labels position correctly.
             let mut text_y = y + *pad_y;
+            let mut number_counters = Vec::new();
             for line in action_label_lines(text) {
                 text_y += text_render::label_ascent_with_family(line, *font_size, font_family);
-                svg.text_element_styled(
-                    &text_col,
-                    font_family,
-                    *font_size,
-                    rect_x + *pad_x,
-                    text_y,
+                emit_action_line(
+                    svg,
                     line,
-                    *bold,
-                    *italic,
+                    &TextBase {
+                        x: rect_x + *pad_x,
+                        y: text_y,
+                        font_size: *font_size as u32,
+                        font_family,
+                        fill: &text_col,
+                        bold: *bold,
+                        italic: *italic,
+                        underline: false,
+                        skip_underline: false,
+                    },
+                    &mut number_counters,
                 );
                 text_y += text_render::label_height_with_family(line, *font_size, font_family)
                     - text_render::label_ascent_with_family(line, *font_size, font_family);
@@ -6916,6 +7145,31 @@ mod tests {
         assert!(svg.contains("Hello"));
         assert!(svg.contains("data-diagram-type=\"ACTIVITY\""));
         assert!(svg.contains("textLength="));
+    }
+
+    #[test]
+    fn action_escaped_newlines_render_creole_bullets() {
+        let input = "@startuml\nstart\n:Items:\\n* one\\n* two;\nstop\n@enduml";
+        let diagram = rustuml_parser::parse::parse(input).unwrap();
+        let svg = crate::render_svg(&diagram);
+        assert!(svg.contains(">Items:<"));
+        assert!(svg.contains(">one<"));
+        assert!(svg.contains(">two<"));
+        assert!(!svg.contains("\\n* one"));
+        assert!(svg.matches(r#"rx="2.5" ry="2.5""#).count() >= 2);
+    }
+
+    #[test]
+    fn action_table_renders_grid_cells() {
+        let input = "@startuml\nstart\n:| a | b |\\n| 1 | 2 |;\nstop\n@enduml";
+        let diagram = rustuml_parser::parse::parse(input).unwrap();
+        let svg = crate::render_svg(&diagram);
+        assert!(svg.contains(">a<"));
+        assert!(svg.contains(">b<"));
+        assert!(svg.contains(">1<"));
+        assert!(svg.contains(">2<"));
+        assert!(!svg.contains("| a | b |"));
+        assert!(svg.contains(r#"stroke:#000000;stroke-width:0.5;"#));
     }
 
     #[test]
