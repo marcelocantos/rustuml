@@ -739,16 +739,21 @@ fn branch_terminates(body: &[LayoutNode]) -> bool {
 /// True for nodes that occupy vertical space and receive inbound connectors —
 /// i.e. everything `emit_sequence` treats as a flow step. Mirrors the skip set
 /// at the top of `emit_sequence_ex`.
+fn is_empty_partition_node(n: &LayoutNode) -> bool {
+    matches!(n, LayoutNode::Partition { body, .. } if body.is_empty())
+}
+
 fn node_is_flow(n: &LayoutNode) -> bool {
-    !matches!(
-        n,
+    match n {
         LayoutNode::Arrow { .. }
-            | LayoutNode::Note { .. }
-            | LayoutNode::Title { .. }
-            | LayoutNode::Detach
-            | LayoutNode::Kill
-            | LayoutNode::Break
-    )
+        | LayoutNode::Note { .. }
+        | LayoutNode::Title { .. }
+        | LayoutNode::Detach
+        | LayoutNode::Kill
+        | LayoutNode::Break => false,
+        LayoutNode::Partition { body, .. } if body.is_empty() => false,
+        _ => true,
+    }
 }
 
 /// A branch is "empty" (for if-down corridor purposes) if it has no flow nodes
@@ -2575,6 +2580,10 @@ fn node_extents(node: &LayoutNode) -> (f64, f64) {
             ..
         } => {
             let title_w = partition_title_width(name);
+            if body.is_empty() {
+                let half = (title_w + 20.0) / 2.0;
+                return (half, half);
+            }
             let body_w = sequence_width(body);
             let mut left = title_w.max(body_w) / 2.0 + 10.0;
             let mut right = (title_w / 2.0 + 5.0).max(body_w / 2.0 + 10.0);
@@ -2808,6 +2817,9 @@ fn node_width(node: &LayoutNode) -> f64 {
         // Partition wraps a body with a title bar; width = max(title+15, body+34).
         LayoutNode::Partition { name, body, .. } => {
             let title_w = partition_title_width(name);
+            if body.is_empty() {
+                return title_w + 20.0;
+            }
             let body_w = sequence_width(body);
             (title_w + 15.0).max(body_w + 34.0)
         }
@@ -2849,6 +2861,11 @@ fn sequence_height(nodes: &[LayoutNode]) -> f64 {
         // Don't toggle prior_flow so the following node (typically `start`)
         // doesn't get an unwanted ARROW_LEN gap.
         if matches!(node, LayoutNode::Title { .. }) {
+            h += node_height(node);
+            pending_gap = None;
+            continue;
+        }
+        if is_empty_partition_node(node) {
             h += node_height(node);
             pending_gap = None;
             continue;
@@ -3153,6 +3170,10 @@ fn partition_title_width(name: &str) -> f64 {
     text_render::measure(partition_title_label(name), TITLE_FONT_SIZE, false)
 }
 
+fn empty_partition_shell_height() -> f64 {
+    31.4883
+}
+
 fn partition_body_width_extra(is_group: bool, body: &[LayoutNode]) -> f64 {
     if is_group && group_wraps_single_if(body) {
         GROUP_IF_BODY_WIDTH_EXTRA
@@ -3393,6 +3414,9 @@ fn node_height(node: &LayoutNode) -> f64 {
             body,
         } => {
             let top_gap = partition_top_gap(color, name, *is_group, body);
+            if body.is_empty() {
+                return top_gap + empty_partition_shell_height();
+            }
             let body_h = sequence_height(body)
                 - if color.is_some() && !*is_group && partition_wraps_while(body) {
                     WHILE_BODY_SLOT_COMPRESS
@@ -4387,6 +4411,16 @@ fn emit_sequence_ex(
         ) {
             continue;
         }
+        if is_empty_partition_node(node) {
+            let shell_bottom = emit_node(svg, node, cx, y);
+            let shell_h = shell_bottom - y;
+            if flow_ordinal == 0 {
+                y = shell_bottom;
+            } else {
+                carry_gap_extra += shell_h;
+            }
+            continue;
+        }
         // Title is a free-standing label; never gets an inbound connector.
         if let LayoutNode::Title { .. } = node {
             y = emit_node(svg, node, cx, y);
@@ -4432,6 +4466,7 @@ fn emit_sequence_ex(
                     }
                     LayoutNode::Note { .. } => {}
                     LayoutNode::Title { .. } => {}
+                    n if is_empty_partition_node(n) => {}
                     LayoutNode::Detach | LayoutNode::Kill | LayoutNode::Break => {
                         prev_idx = None;
                         break;
@@ -4932,14 +4967,20 @@ fn emit_node(svg: &mut SvgEmitter, node: &LayoutNode, cx: f64, y: f64) -> f64 {
             // or body drives the outer width; partition_top_gap centralises
             // that measured rule so height, arrows, and emission stay aligned.
             let title_w = partition_title_width(name);
+            let empty_body = body.is_empty();
             let body_w = sequence_width(body);
             let body_width_extra = partition_body_width_extra(*is_group, body);
             let title_width_extra = partition_title_width_extra(color, *is_group, body);
             let title_drives_width =
                 partition_title_drives_width(title_w, body_w, title_width_extra, *is_group, body);
-            let partition_w =
-                (title_w + 15.0 + title_width_extra).max(body_w + 20.0 + body_width_extra);
-            let partition_x = if !*is_group && !title_drives_width {
+            let partition_w = if empty_body {
+                title_w + 20.0
+            } else {
+                (title_w + 15.0 + title_width_extra).max(body_w + 20.0 + body_width_extra)
+            };
+            let partition_x = if empty_body {
+                cx - partition_w / 2.0
+            } else if !*is_group && !title_drives_width {
                 (cx - partition_w / 2.0).max(16.0)
             } else {
                 16.0
@@ -4955,7 +4996,11 @@ fn emit_node(svg: &mut SvgEmitter, node: &LayoutNode, cx: f64, y: f64) -> f64 {
                     0.0
                 };
             let title_band_h = 36.4883; // title bar height (matches goldens)
-            let partition_h = title_band_h + body_h + 12.0;
+            let partition_h = if empty_body {
+                empty_partition_shell_height()
+            } else {
+                title_band_h + body_h + 12.0
+            };
             let partition_right = partition_x + partition_w;
 
             // Outer rect: fill = color (default none), stroke #000000 width 1.5
@@ -4994,21 +5039,24 @@ fn emit_node(svg: &mut SvgEmitter, node: &LayoutNode, cx: f64, y: f64) -> f64 {
                 false,
             );
 
-            // Emit body inside, at the diagram's cx, starting at partition_top + 36.49.
-            // For uncoloured / descender-less partitions a 0.00005 px nudge
-            // accounts for Java's intermediate-rounding quirk: the displayed
-            // rect_y matches golden (HALF_UP rounding kicks 81.48825 →
-            // 81.4883) while inner text_y baselines compute from the
-            // un-rounded 81.48825 value. Coloured / descender-titled
-            // partitions already have the 0.4531 top-gap shift absorb this.
-            let needs_nudge = top_gap == 10.0;
-            let body_top = partition_top + title_band_h - if needs_nudge { 0.00005 } else { 0.0 };
-            if colored_partition_while {
-                svg.colored_partition_while_depth += 1;
-            }
-            emit_sequence(svg, body, cx, body_top);
-            if colored_partition_while {
-                svg.colored_partition_while_depth -= 1;
+            if !empty_body {
+                // Emit body inside, at the diagram's cx, starting at partition_top + 36.49.
+                // For uncoloured / descender-less partitions a 0.00005 px nudge
+                // accounts for Java's intermediate-rounding quirk: the displayed
+                // rect_y matches golden (HALF_UP rounding kicks 81.48825 →
+                // 81.4883) while inner text_y baselines compute from the
+                // un-rounded 81.48825 value. Coloured / descender-titled
+                // partitions already have the 0.4531 top-gap shift absorb this.
+                let needs_nudge = top_gap == 10.0;
+                let body_top =
+                    partition_top + title_band_h - if needs_nudge { 0.00005 } else { 0.0 };
+                if colored_partition_while {
+                    svg.colored_partition_while_depth += 1;
+                }
+                emit_sequence(svg, body, cx, body_top);
+                if colored_partition_while {
+                    svg.colored_partition_while_depth -= 1;
+                }
             }
 
             partition_top + partition_h
