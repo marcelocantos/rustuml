@@ -289,6 +289,11 @@ struct FlatRow {
 /// rows. Otherwise `None` (nested children require the Smetana layout).
 fn flat_rows(node: &JsonNode, format: DataFormat) -> Option<Vec<FlatRow>> {
     match &node.value {
+        JsonNodeValue::Object { fields } if fields.is_empty() => Some(vec![FlatRow {
+            key: String::new(),
+            value: "\u{00a0}".to_string(),
+            highlighted: node.highlighted,
+        }]),
         JsonNodeValue::Object { fields } if !fields.is_empty() => {
             let mut rows = Vec::with_capacity(fields.len());
             for f in fields {
@@ -301,6 +306,11 @@ fn flat_rows(node: &JsonNode, format: DataFormat) -> Option<Vec<FlatRow>> {
             }
             Some(rows)
         }
+        JsonNodeValue::Array { items } if items.is_empty() => Some(vec![FlatRow {
+            key: String::new(),
+            value: "\u{00a0}".to_string(),
+            highlighted: node.highlighted,
+        }]),
         JsonNodeValue::Array { items } if !items.is_empty() => {
             let mut rows = Vec::with_capacity(items.len());
             for item in items {
@@ -643,6 +653,17 @@ mod tests {
     fn empty_string_renders_nbsp() {
         let svg = render_input("@startjson\n{\"a\": \"\"}\n@endjson");
         assert!(svg.contains("&#160;"));
+    }
+
+    #[test]
+    fn empty_root_object_and_array_render_nbsp_box() {
+        for source in ["@startjson\n{}\n@endjson", "@startjson\n[]\n@endjson"] {
+            let svg = render_input(source);
+            assert!(svg.contains(r#"width="36px""#), "{svg}");
+            assert!(svg.contains(r#"height="42px""#), "{svg}");
+            assert!(svg.contains(r#"textLength="4.4297""#), "{svg}");
+            assert!(svg.contains("&#160;"), "{svg}");
+        }
     }
 
     #[test]
