@@ -103,13 +103,35 @@ pub fn render_svg_with_theme(diagram: &Diagram, theme: &Theme) -> String {
     };
     // Uniform geometric scaling (`skinparam dpi`/`scale`). No oracle on this
     // path; render at base under full-precision formatting, then scale the
-    // final SVG up by `k` with a single 4-dp rounding (matching PlantUML).
-    let k = scale::factor_from_meta(diagram.meta());
-    if k != 1.0 {
-        let svg = plantuml_metrics::with_full_precision(|| {
-            render_under_filter_registry(diagram, |d| render_with_theme(d, &effective_theme))
-        });
-        return scale::scale_svg_numbers(&svg, k);
+    // final SVG by `k` with a single 4-dp rounding (matching PlantUML).
+    if let Some(directive) = scale::directive_from_meta(diagram.meta()) {
+        match directive {
+            scale::ScaleDirective::Factor(k) if k != 1.0 => {
+                let svg = plantuml_metrics::with_full_precision(|| {
+                    render_under_filter_registry(diagram, |d| {
+                        render_with_theme(d, &effective_theme)
+                    })
+                });
+                return scale::scale_svg_numbers(&svg, k);
+            }
+            scale::ScaleDirective::FitBox { .. }
+            | scale::ScaleDirective::FitMaxWidth(_)
+            | scale::ScaleDirective::FitMaxHeight(_) => {
+                let svg = plantuml_metrics::with_full_precision(|| {
+                    render_under_filter_registry(diagram, |d| {
+                        render_with_theme(d, &effective_theme)
+                    })
+                });
+                let Some(k) = scale::factor_for_fit_from_svg(&svg, directive) else {
+                    return svg;
+                };
+                if k != 1.0 {
+                    return scale::scale_svg_numbers(&svg, k);
+                }
+                return svg;
+            }
+            _ => {}
+        }
     }
     render_under_filter_registry(diagram, |d| render_with_theme(d, &effective_theme))
 }
@@ -133,19 +155,47 @@ pub fn render_svg_with_oracle(diagram: &Diagram, oracle: Option<&OracleLayout>) 
     // full-precision coordinate formatting (so no intermediate 4-dp rounding
     // drifts when later multiplied), and the resulting SVG is scaled up by `k`
     // with PlantUML's single 4-dp rounding.
-    let k = scale::factor_from_meta(diagram.meta());
-    if k != 1.0 {
-        let base_oracle = oracle.map(|o| {
-            let mut b = o.clone();
-            scale::scale_oracle_layout(&mut b, 1.0 / k);
-            b
-        });
-        let svg = plantuml_metrics::with_full_precision(|| {
-            render_under_filter_registry(diagram, |d| {
-                render_with_theme_and_oracle(d, &theme, base_oracle.as_ref())
-            })
-        });
-        return scale::scale_svg_numbers(&svg, k);
+    if let Some(directive) = scale::directive_from_meta(diagram.meta()) {
+        let k = match directive {
+            scale::ScaleDirective::Factor(k) => Some(k),
+            scale::ScaleDirective::FitBox { .. }
+            | scale::ScaleDirective::FitMaxWidth(_)
+            | scale::ScaleDirective::FitMaxHeight(_) => oracle.and_then(|o| {
+                scale::factor_for_fit_from_scaled_oracle_size(
+                    o.canvas_width,
+                    o.canvas_height,
+                    directive,
+                )
+            }),
+        };
+        if let Some(k) = k
+            && k != 1.0
+        {
+            let base_oracle = oracle.map(|o| {
+                let mut b = o.clone();
+                scale::scale_oracle_layout(&mut b, 1.0 / k);
+                b
+            });
+            let svg = plantuml_metrics::with_full_precision(|| {
+                render_under_filter_registry(diagram, |d| {
+                    render_with_theme_and_oracle(d, &theme, base_oracle.as_ref())
+                })
+            });
+            return scale::scale_svg_numbers(&svg, k);
+        }
+        if oracle.is_none() {
+            let svg = plantuml_metrics::with_full_precision(|| {
+                render_under_filter_registry(diagram, |d| {
+                    render_with_theme_and_oracle(d, &theme, None)
+                })
+            });
+            if let Some(k) = scale::factor_for_fit_from_svg(&svg, directive)
+                && k != 1.0
+            {
+                return scale::scale_svg_numbers(&svg, k);
+            }
+            return svg;
+        }
     }
     render_under_filter_registry(diagram, |d| render_with_theme_and_oracle(d, &theme, oracle))
 }

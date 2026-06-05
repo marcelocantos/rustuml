@@ -10,12 +10,15 @@
 //!
 //! * `skinparam dpi N` → `k = N / 96`
 //! * `scale N`          → `k = N`
+//! * `scale W*H`        → `k = min(W / (base_width - 1), H / (base_height - 1))`
+//! * `scale max N width|height` → shrink-only fit against one dimension
 //!
 //! This module provides:
 //!
-//! * [`factor_from_meta`] — derive `k` from a diagram's metadata (returns 1.0
-//!   when no dpi/scale directive is present, so the scaling path is inert for
-//!   the overwhelming majority of diagrams and output stays byte-identical).
+//! * [`directive_from_meta`] — derive the requested scale directive from a
+//!   diagram's metadata.
+//! * [`factor_from_meta`] — derive the simple uniform `k` from a diagram's
+//!   metadata for directives that do not need the rendered canvas size.
 //! * [`scale_svg_numbers`] — multiply every geometric number in a finished SVG
 //!   string by `k`.
 //! * [`scale_oracle_layout`] — multiply (or divide, for the inverse pass) every
@@ -33,6 +36,14 @@ use crate::layout_oracle::{
 };
 use crate::plantuml_metrics::{fmt_coord, with_full_precision};
 use rustuml_parser::diagram::DiagramMeta;
+
+#[derive(Debug, Clone, Copy, PartialEq)]
+pub enum ScaleDirective {
+    Factor(f64),
+    FitBox { width: f64, height: f64 },
+    FitMaxWidth(f64),
+    FitMaxHeight(f64),
+}
 
 /// Format a number for the active scaling pass. Delegates to the shared
 /// [`fmt_coord`], which emits full round-trippable precision while the
@@ -54,6 +65,13 @@ fn fmt_num(v: f64) -> String {
 /// width/height`) are NOT handled here — they require the base natural canvas
 /// size, which is unknown at this point. They resolve to `1.0` (no scaling).
 pub fn factor_from_meta(meta: &DiagramMeta) -> f64 {
+    match directive_from_meta(meta) {
+        Some(ScaleDirective::Factor(k)) => k,
+        _ => 1.0,
+    }
+}
+
+pub fn directive_from_meta(meta: &DiagramMeta) -> Option<ScaleDirective> {
     // `skinparam dpi N` — last one wins, matching PlantUML's override order.
     let dpi = meta
         .skinparams
@@ -64,7 +82,7 @@ pub fn factor_from_meta(meta: &DiagramMeta) -> f64 {
     if let Some(dpi) = dpi
         && dpi > 0.0
     {
-        return dpi / 96.0;
+        return Some(ScaleDirective::Factor(dpi / 96.0));
     }
 
     // `scale N` directive — scan the diagram source. The directive is a
@@ -77,23 +95,156 @@ pub fn factor_from_meta(meta: &DiagramMeta) -> f64 {
                 continue;
             };
             let rest = rest.trim();
-            // Reject fit-to-box forms: `scale max ...`, `scale W*H`, `scale WxH`.
-            if rest.starts_with("max ")
-                || rest.contains('*')
-                || rest.contains('x')
-                || rest.contains('X')
-            {
-                continue;
-            }
-            if let Ok(n) = rest.parse::<f64>()
-                && n > 0.0
-            {
-                return n;
+            if let Some(directive) = parse_scale_directive(rest) {
+                return Some(directive);
             }
         }
     }
 
-    1.0
+    None
+}
+
+fn parse_scale_directive(rest: &str) -> Option<ScaleDirective> {
+    let lower = rest.to_ascii_lowercase();
+    if let Some(max_rest) = lower.strip_prefix("max ") {
+        let mut parts = max_rest.split_whitespace();
+        let n = parts.next()?.parse::<f64>().ok()?;
+        if !(n > 0.0 && n.is_finite()) {
+            return None;
+        }
+        return match parts.next()? {
+            "width" if parts.next().is_none() => Some(ScaleDirective::FitMaxWidth(n)),
+            "height" if parts.next().is_none() => Some(ScaleDirective::FitMaxHeight(n)),
+            _ => None,
+        };
+    }
+
+    let split = rest
+        .find(['*', 'x', 'X'])
+        .map(|idx| (&rest[..idx], &rest[idx + 1..]));
+    if let Some((w, h)) = split {
+        let width = w.trim().parse::<f64>().ok()?;
+        let height = h.trim().parse::<f64>().ok()?;
+        if width > 0.0 && height > 0.0 && width.is_finite() && height.is_finite() {
+            return Some(ScaleDirective::FitBox { width, height });
+        }
+        return None;
+    }
+
+    let n = rest.parse::<f64>().ok()?;
+    (n > 0.0 && n.is_finite()).then_some(ScaleDirective::Factor(n))
+}
+
+pub fn factor_for_fit_from_svg(svg: &str, directive: ScaleDirective) -> Option<f64> {
+    let (width, height) = root_svg_size(svg)?;
+    factor_for_fit_from_base_size(width, height, directive)
+}
+
+pub fn factor_for_fit_from_base_size(
+    width: f64,
+    height: f64,
+    directive: ScaleDirective,
+) -> Option<f64> {
+    let candidate = |target: f64, base: f64| {
+        let denom = base - 1.0;
+        (target > 0.0 && denom > 0.0).then_some(target / denom)
+    };
+    let k = match directive {
+        ScaleDirective::FitBox {
+            width: w,
+            height: h,
+        } => {
+            let kw = candidate(w, width)?;
+            let kh = candidate(h, height)?;
+            kw.min(kh)
+        }
+        ScaleDirective::FitMaxWidth(w) => {
+            if width <= w {
+                return Some(1.0);
+            }
+            candidate(w, width)?
+        }
+        ScaleDirective::FitMaxHeight(h) => {
+            if height <= h {
+                return Some(1.0);
+            }
+            candidate(h, height)?
+        }
+        ScaleDirective::Factor(k) => k,
+    };
+    (k > 0.0 && k.is_finite()).then_some(k)
+}
+
+pub fn factor_for_fit_from_scaled_oracle_size(
+    width: f64,
+    height: f64,
+    directive: ScaleDirective,
+) -> Option<f64> {
+    let candidate = |target: f64, scaled: f64| {
+        if !(scaled > target && target > 0.0) {
+            return None;
+        }
+        let rough_k = scaled - target;
+        if !(rough_k > 0.0 && rough_k.is_finite()) {
+            return None;
+        }
+        let base = (scaled / rough_k).round();
+        let denom = base - 1.0;
+        (denom > 0.0).then_some(target / denom)
+    };
+    let k = match directive {
+        ScaleDirective::FitBox {
+            width: w,
+            height: h,
+        } => match (candidate(w, width), candidate(h, height)) {
+            (Some(kw), Some(kh)) => kw.min(kh),
+            (Some(k), None) | (None, Some(k)) => k,
+            (None, None) => 1.0,
+        },
+        ScaleDirective::FitMaxWidth(w) => candidate(w, width).unwrap_or(1.0),
+        ScaleDirective::FitMaxHeight(h) => candidate(h, height).unwrap_or(1.0),
+        ScaleDirective::Factor(k) => k,
+    };
+    (k > 0.0 && k.is_finite()).then_some(k)
+}
+
+fn root_svg_size(svg: &str) -> Option<(f64, f64)> {
+    let start = svg.find("<svg")?;
+    let end = svg[start..].find('>')? + start;
+    let tag = &svg[start..end];
+    let width = attr_value(tag, "width").and_then(parse_px)?;
+    let height = attr_value(tag, "height").and_then(parse_px)?;
+    Some((width, height))
+}
+
+fn attr_value<'a>(tag: &'a str, name: &str) -> Option<&'a str> {
+    let needle = format!("{name}=");
+    let mut rest = tag;
+    loop {
+        let idx = rest.find(&needle)?;
+        let before = rest.as_bytes()[..idx].last().copied();
+        if before.is_none_or(|c| c.is_ascii_whitespace() || c == b'<') {
+            let after = &rest[idx + needle.len()..];
+            let quote = after.as_bytes().first().copied()?;
+            if quote == b'"' || quote == b'\'' {
+                let q = quote as char;
+                let value_start = 1;
+                let value_end = after[value_start..].find(q)? + value_start;
+                return Some(&after[value_start..value_end]);
+            }
+        }
+        rest = &rest[idx + needle.len()..];
+    }
+}
+
+fn parse_px(value: &str) -> Option<f64> {
+    value
+        .strip_suffix("px")
+        .unwrap_or(value)
+        .trim()
+        .parse::<f64>()
+        .ok()
+        .filter(|v| *v > 0.0 && v.is_finite())
 }
 
 /// Multiply every geometric number in a finished SVG string by `k`, formatting
@@ -924,7 +1075,7 @@ mod tests {
     }
 
     #[test]
-    fn factor_ignores_fit_to_box_forms() {
+    fn directive_from_fit_to_box_forms() {
         let mk = |s: &str| DiagramMeta {
             source: Some(format!("@startuml\n{s}\nclass Foo\n@enduml\n")),
             ..Default::default()
@@ -932,6 +1083,64 @@ mod tests {
         assert_eq!(factor_from_meta(&mk("scale max 100 width")), 1.0);
         assert_eq!(factor_from_meta(&mk("scale 100*100")), 1.0);
         assert_eq!(factor_from_meta(&mk("scale 200x100")), 1.0);
+        assert_eq!(
+            directive_from_meta(&mk("scale max 100 width")),
+            Some(ScaleDirective::FitMaxWidth(100.0))
+        );
+        assert_eq!(
+            directive_from_meta(&mk("scale max 100 height")),
+            Some(ScaleDirective::FitMaxHeight(100.0))
+        );
+        assert_eq!(
+            directive_from_meta(&mk("scale 100*100")),
+            Some(ScaleDirective::FitBox {
+                width: 100.0,
+                height: 100.0
+            })
+        );
+        assert_eq!(
+            directive_from_meta(&mk("scale 200x100")),
+            Some(ScaleDirective::FitBox {
+                width: 200.0,
+                height: 100.0
+            })
+        );
+    }
+
+    #[test]
+    fn fit_box_uses_canvas_minus_one_dimension() {
+        let k = factor_for_fit_from_base_size(
+            78.0,
+            178.0,
+            ScaleDirective::FitBox {
+                width: 100.0,
+                height: 100.0,
+            },
+        )
+        .unwrap();
+        assert!((k - 100.0 / 177.0).abs() < 1e-12);
+
+        let k = factor_for_fit_from_base_size(78.0, 178.0, ScaleDirective::FitMaxHeight(100.0))
+            .unwrap();
+        assert!((k - 100.0 / 177.0).abs() < 1e-12);
+        assert_eq!(
+            factor_for_fit_from_base_size(78.0, 178.0, ScaleDirective::FitMaxWidth(100.0)),
+            Some(1.0)
+        );
+    }
+
+    #[test]
+    fn fit_factor_can_be_recovered_from_scaled_oracle_canvas() {
+        let k = factor_for_fit_from_scaled_oracle_size(
+            44.0678,
+            100.565,
+            ScaleDirective::FitBox {
+                width: 100.0,
+                height: 100.0,
+            },
+        )
+        .unwrap();
+        assert!((k - 100.0 / 177.0).abs() < 1e-12);
     }
 
     #[test]
