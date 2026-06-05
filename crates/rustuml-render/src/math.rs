@@ -18,6 +18,12 @@ const H_PADDING: f64 = 5.0;
 const V_PADDING: f64 = 5.0;
 const TAB_COLUMNS: usize = 8;
 
+pub struct RawLatexImage {
+    pub width: i64,
+    pub height: i64,
+    pub href: String,
+}
+
 struct MathTextSegment {
     x: f64,
     text: String,
@@ -46,17 +52,11 @@ pub fn render_with_oracle(
 pub fn render(diagram: &MathDiagram, _theme: &Theme) -> String {
     let content = diagram.content.trim();
 
+    let image = raw_latex_image(content);
     let segments = math_text_segments(content);
-    let text_right = segments
-        .iter()
-        .map(|seg| seg.x + seg.text_len)
-        .fold(H_PADDING, f64::max);
-    let text_h = mono_text_height(FONT_SIZE);
+    let svg_w = image.width;
+    let svg_h = image.height;
     let ascent = mono_ascent(FONT_SIZE);
-
-    // Outer dimensions: text + 2 * padding, rounded to int (ceil).
-    let svg_w = (text_right + H_PADDING).ceil() as i64;
-    let svg_h = (text_h + V_PADDING * 2.0).ceil() as i64;
 
     // Baseline y = top padding + ascent. With FONT_SIZE=14:
     // 5 + 14 * 0.92822265625 = 17.9951...
@@ -80,6 +80,44 @@ pub fn render(diagram: &MathDiagram, _theme: &Theme) -> String {
         w = svg_w,
         h = svg_h,
     )
+}
+
+pub fn raw_latex_image(content: &str) -> RawLatexImage {
+    let segments = math_text_segments(content);
+    let text_right = segments
+        .iter()
+        .map(|seg| seg.x + seg.text_len)
+        .fold(H_PADDING, f64::max);
+    let text_h = mono_text_height(FONT_SIZE);
+    let width = (text_right + H_PADDING).ceil() as i64;
+    let height = (text_h + V_PADDING * 2.0).ceil() as i64;
+    let text_y = V_PADDING + mono_ascent(FONT_SIZE);
+
+    let mut body = String::new();
+    for seg in &segments {
+        let src = xml_escape_nbsp(&seg.text);
+        body.push_str(&format!(
+            r##"<text fill="#000000" font-family="monospace" font-size="{fs}" lengthAdjust="spacing" textLength="{tl}" x="{px}" y="{ty}">{src}</text>"##,
+            fs = FONT_SIZE as i64,
+            tl = fmt_coord(seg.text_len),
+            px = fmt_coord(seg.x),
+            ty = fmt_coord(text_y),
+            src = src,
+        ));
+    }
+
+    let inner = format!(
+        r##"<svg height="{height}" width="{width}" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns="http://www.w3.org/2000/svg" ><?plantuml 1.2026.3beta6?><defs/><g><rect fill="#FFFFFF" style="width:{width}px;height:{height}px;background:#FFFFFF;" width="{width}" height="{height}"/> {body}</g></svg>"##
+    );
+
+    RawLatexImage {
+        width,
+        height,
+        href: format!(
+            "data:image/svg+xml;base64,{}",
+            encode_base64(inner.as_bytes())
+        ),
+    }
 }
 
 fn math_text_segments(content: &str) -> Vec<MathTextSegment> {
@@ -138,4 +176,43 @@ fn xml_escape(s: &str) -> String {
         .replace('<', "&lt;")
         .replace('>', "&gt;")
         .replace('"', "&quot;")
+}
+
+fn xml_escape_nbsp(s: &str) -> String {
+    let mut out = String::new();
+    for c in s.chars() {
+        match c {
+            '&' => out.push_str("&amp;"),
+            '<' => out.push_str("&lt;"),
+            '>' => out.push_str("&gt;"),
+            '"' => out.push_str("&quot;"),
+            ' ' => out.push_str("&#160;"),
+            c => out.push(c),
+        }
+    }
+    out
+}
+
+fn encode_base64(data: &[u8]) -> String {
+    const ALPHABET: &[u8] = b"ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/";
+    let mut result = String::with_capacity(data.len().div_ceil(3) * 4);
+    for chunk in data.chunks(3) {
+        let b0 = chunk[0] as u32;
+        let b1 = chunk.get(1).copied().unwrap_or(0) as u32;
+        let b2 = chunk.get(2).copied().unwrap_or(0) as u32;
+        let triple = (b0 << 16) | (b1 << 8) | b2;
+        result.push(ALPHABET[((triple >> 18) & 0x3F) as usize] as char);
+        result.push(ALPHABET[((triple >> 12) & 0x3F) as usize] as char);
+        if chunk.len() > 1 {
+            result.push(ALPHABET[((triple >> 6) & 0x3F) as usize] as char);
+        } else {
+            result.push('=');
+        }
+        if chunk.len() > 2 {
+            result.push(ALPHABET[(triple & 0x3F) as usize] as char);
+        } else {
+            result.push('=');
+        }
+    }
+    result
 }

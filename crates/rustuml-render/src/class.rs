@@ -749,7 +749,16 @@ fn calc_entity_dims(
             let text_w = member_display_lines(m, font.monospace_member_spaces())
                 .iter()
                 .map(|text| {
-                    text_render::measure_no_underline_with_family(text, 14.0, false, &font.family)
+                    if let Some(latex) = latex_member_content(text) {
+                        crate::math::raw_latex_image(latex).width as f64
+                    } else {
+                        text_render::measure_no_underline_with_family(
+                            text,
+                            14.0,
+                            false,
+                            &font.family,
+                        )
+                    }
                 })
                 .fold(0.0_f64, f64::max);
             if m.visibility == Visibility::Default {
@@ -1047,27 +1056,37 @@ fn member_display_line_count(member: &Member, monospace_spaces: bool) -> usize {
         .max(1)
 }
 
+fn latex_member_content(s: &str) -> Option<&str> {
+    let trimmed = s.trim();
+    trimmed
+        .strip_prefix("<latex>")
+        .and_then(|rest| rest.strip_suffix("</latex>"))
+}
+
 fn member_oracle_text_y_count(member: &Member, attr_font: &AttrFont<'_>) -> usize {
-    member_display_lines(member, attr_font.monospace_spaces)
-        .iter()
-        .map(|line| {
-            text_render::emitted_baseline_count(
-                line,
-                &TextBase {
-                    x: 0.0,
-                    y: 0.0,
-                    font_size: attr_font.size,
-                    font_family: attr_font.family,
-                    fill: attr_font.fill,
-                    bold: attr_font.bold,
-                    italic: member.is_abstract || attr_font.italic,
-                    underline: member.is_static,
-                    skip_underline: true,
-                },
-            )
-        })
-        .sum::<usize>()
-        .max(1)
+    let mut saw_latex = false;
+    let mut count = 0;
+    for line in member_display_lines(member, attr_font.monospace_spaces) {
+        if latex_member_content(&line).is_some() {
+            saw_latex = true;
+            continue;
+        }
+        count += text_render::emitted_baseline_count(
+            &line,
+            &TextBase {
+                x: 0.0,
+                y: 0.0,
+                font_size: attr_font.size,
+                font_family: attr_font.family,
+                fill: attr_font.fill,
+                bold: attr_font.bold,
+                italic: member.is_abstract || attr_font.italic,
+                underline: member.is_static,
+                skip_underline: true,
+            },
+        );
+    }
+    if count == 0 && !saw_latex { 1 } else { count }
 }
 
 fn escaped_newline_lines(text: &str) -> Vec<String> {
@@ -4511,21 +4530,36 @@ fn render_member_line(
 
     let mut text_buf = String::new();
     for (line_index, text) in lines.iter().enumerate() {
-        text_render::emit_text(
-            &mut text_buf,
-            text,
-            &TextBase {
-                x: text_x,
-                y: baseline_y + line_index as f64 * MEMBER_SPACING,
-                font_size: attr_font.size,
-                font_family: attr_font.family,
-                fill: attr_font.fill,
-                bold: attr_font.bold,
-                italic: member.is_abstract || attr_font.italic,
-                underline: member.is_static,
-                skip_underline: true,
-            },
-        );
+        let y = baseline_y + line_index as f64 * MEMBER_SPACING;
+        if let Some(latex) = latex_member_content(text) {
+            let image = crate::math::raw_latex_image(latex);
+            write!(
+                text_buf,
+                r#"<image height="{}" width="{}" x="{}" xlink:href="{}" y="{}"/>"#,
+                image.height,
+                image.width,
+                fmt_tl(text_x),
+                image.href,
+                fmt_tl(y - crate::plantuml_metrics::ascent(attr_font.size as f64)),
+            )
+            .unwrap();
+        } else {
+            text_render::emit_text(
+                &mut text_buf,
+                text,
+                &TextBase {
+                    x: text_x,
+                    y,
+                    font_size: attr_font.size,
+                    font_family: attr_font.family,
+                    fill: attr_font.fill,
+                    bold: attr_font.bold,
+                    italic: member.is_abstract || attr_font.italic,
+                    underline: member.is_static,
+                    skip_underline: true,
+                },
+            );
+        }
     }
     if let Some(anchor) = link_anchor {
         svg.push_str(anchor);
