@@ -220,6 +220,40 @@ pub fn label_ascent_with_family(content: &str, font_size: f64, font_family: &str
     base_ascent + sub_extra_space(&segments)
 }
 
+/// Distance from the line top to the first `<text>` element's baseline.
+///
+/// [`emit_text`] treats `TextBase.y` as the first emitted run's baseline, not
+/// as the maximum ascent baseline for the whole mixed-metric line. When the
+/// first run is shorter than a later run (for example `""mono"" text` in a
+/// sans-serif box), callers that place a whole label inside a known line box
+/// need this value instead of [`label_ascent_with_family`].
+pub fn label_first_baseline_ascent_with_family(
+    content: &str,
+    font_size: f64,
+    font_family: &str,
+) -> f64 {
+    let segments = creole::parse_segments(content);
+    if segments.is_empty() {
+        return family_ascent(font_size, metric_family(font_family));
+    }
+
+    let line_box_height = segments
+        .iter()
+        .map(|seg| {
+            let size = seg.style.size.map(|s| s as f64).unwrap_or(font_size);
+            family_text_height(size, segment_metric_family_for_family(seg, font_family)).max(10.0)
+        })
+        .fold(0.0f64, f64::max);
+    let first = &segments[0];
+    let first_size = first.style.size.map(|s| s as f64).unwrap_or(font_size);
+    line_box_height
+        - clamp_drop(
+            first_size,
+            segment_metric_family_for_family(first, font_family),
+        )
+        + sub_extra_space(&segments)
+}
+
 pub(crate) fn text_height_for_family(font_size: f64, font_family: &str) -> f64 {
     family_text_height(font_size, metric_family(font_family))
 }
@@ -1600,6 +1634,24 @@ mod tests {
         assert!(buf.contains(r#"font-family="monospace""#));
         assert!(buf.contains(r#"textLength="57.2813""#));
         assert!(buf.contains(">code&#160;here</text>"));
+    }
+
+    #[test]
+    fn first_baseline_ascent_follows_first_mixed_family_run() {
+        let mono_first = r#"""mono"" start"#;
+        let max_ascent = label_ascent_with_family(mono_first, 12.0, "sans-serif");
+        let first_ascent = label_first_baseline_ascent_with_family(mono_first, 12.0, "sans-serif");
+        assert_eq!(pm::fmt_coord(max_ascent - first_ascent), "0.2988");
+
+        let sans_first = r#"start ""mono"""#;
+        let max_ascent = label_ascent_with_family(sans_first, 12.0, "sans-serif");
+        let first_ascent = label_first_baseline_ascent_with_family(sans_first, 12.0, "sans-serif");
+        assert_eq!(pm::fmt_coord(max_ascent - first_ascent), "0");
+
+        let small_plain = "plain";
+        let max_ascent = label_ascent_with_family(small_plain, 8.0, "sans-serif");
+        let first_ascent = label_first_baseline_ascent_with_family(small_plain, 8.0, "sans-serif");
+        assert_eq!(pm::fmt_coord(max_ascent - first_ascent), "0");
     }
 
     #[test]

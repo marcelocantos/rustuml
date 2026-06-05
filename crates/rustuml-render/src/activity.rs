@@ -822,7 +822,7 @@ fn centered_label_y_for_family(
         - text_render::label_height_with_family(text, font_size, font_family)
             .max(TEXT_MIN_BOX_HEIGHT)
             / 2.0
-        + text_render::label_ascent_with_family(text, font_size, font_family)
+        + text_render::label_first_baseline_ascent_with_family(text, font_size, font_family)
 }
 
 fn centered_label_y(text: &str, center_y: f64, font_size: f64) -> f64 {
@@ -4740,7 +4740,12 @@ fn emit_node(svg: &mut SvgEmitter, node: &LayoutNode, cx: f64, y: f64) -> f64 {
             let mut text_y = y + *pad_y;
             let mut number_counters = Vec::new();
             for line in action_label_lines(text) {
-                text_y += text_render::label_ascent_with_family(line, *font_size, font_family);
+                let line_baseline = text_render::label_first_baseline_ascent_with_family(
+                    line,
+                    *font_size,
+                    font_family,
+                );
+                text_y += line_baseline;
                 emit_action_line(
                     svg,
                     line,
@@ -4758,7 +4763,7 @@ fn emit_node(svg: &mut SvgEmitter, node: &LayoutNode, cx: f64, y: f64) -> f64 {
                     &mut number_counters,
                 );
                 text_y += text_render::label_height_with_family(line, *font_size, font_family)
-                    - text_render::label_ascent_with_family(line, *font_size, font_family);
+                    - line_baseline;
             }
             y + ah
         }
@@ -4794,8 +4799,13 @@ fn emit_node(svg: &mut SvgEmitter, node: &LayoutNode, cx: f64, y: f64) -> f64 {
                 rect_x,
                 y,
             );
-            let text_y =
-                y + *pad_y + text_render::label_ascent_with_family(text, *font_size, font_family);
+            let text_y = y
+                + *pad_y
+                + text_render::label_first_baseline_ascent_with_family(
+                    text,
+                    *font_size,
+                    font_family,
+                );
             svg.text_element_styled(
                 &text_col,
                 font_family,
