@@ -6084,6 +6084,18 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
     let mut return_stack: Vec<(String, String, bool)> = Vec::new();
 
     let events = &diagram.events;
+    let mut lost_label_width_by_from: HashMap<&str, f64> = HashMap::new();
+    for event in events.iter().take(page1_end) {
+        if let Event::Message(msg) = event
+            && msg.to == "]"
+        {
+            let label_w = message_label_width(&process_label(&msg.label));
+            lost_label_width_by_from
+                .entry(msg.from.as_str())
+                .and_modify(|w| *w = (*w).max(label_w))
+                .or_insert(label_w);
+        }
+    }
     // Track enclosing group frame bounds so else dividers span the full frame.
     let mut else_frame_stack: Vec<(f64, f64)> = Vec::new();
     // Only page-1 events are drawn (see `page1_end` above); event_y_positions
@@ -6102,7 +6114,14 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                     // to_x is the conceptual arrowhead tip+2; the normal render
                     // draws the line to to_x-6 and the tip at to_x-2, matching
                     // the golden line end (label_w+18) and tip (label_w+22).
-                    from_x + message_label_width(&process_label(&msg.label)) + 24.0
+                    // Multiple lost messages from the same source share the
+                    // widest lost-label extent; PlantUML keeps the external
+                    // endpoint stable instead of shortening later/earlier rows.
+                    let label_w = lost_label_width_by_from
+                        .get(msg.from.as_str())
+                        .copied()
+                        .unwrap_or_else(|| message_label_width(&process_label(&msg.label)));
+                    from_x + label_w + 24.0
                 } else {
                     center_of(&msg.to)
                 };

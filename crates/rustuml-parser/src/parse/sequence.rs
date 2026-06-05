@@ -370,29 +370,25 @@ impl SeqParser {
         // Strip [#color] annotations first.
         static RE_COLOR: LazyLock<Regex> = LazyLock::new(|| Regex::new(r"\[#[^\]]*\]").unwrap());
         static RE_IN: LazyLock<Regex> = LazyLock::new(|| {
-            Regex::new(r"^\[[-=><ox]+\s*(\w+)\s*(?:(?:\+\+|--|!!)\s*)?(?::\s*(.*))?$").unwrap()
+            Regex::new(r"^\[([-<>.\\/ox]+)\s*(\w+)\s*(?:(?:\+\+|--|!!)\s*)?(?::\s*(.*))?$").unwrap()
         });
         static RE_OUT: LazyLock<Regex> = LazyLock::new(|| {
-            Regex::new(r"^(\w+)\s*[-=><ox]+[\[\]]\s*(?:(?:\+\+|--|!!)\s*)?(?::\s*(.*))?$").unwrap()
+            Regex::new(r"^(\w+)\s*([-<>.\\/ox]+)[\[\]]\s*(?:(?:\+\+|--|!!)\s*)?(?::\s*(.*))?$")
+                .unwrap()
         });
         let stripped = RE_COLOR.replace_all(line, "");
         let line = stripped.as_ref();
 
         if let Some(caps) = RE_IN.captures(line) {
-            let to = self.ensure_participant(&caps[1]);
-            let label = caps.get(2).map_or("", |m| m.as_str()).trim().to_string();
+            let mut arrow = parse_arrow(&caps[1]);
+            arrow.direction = ArrowDirection::LeftToRight;
+            let to = self.ensure_participant(&caps[2]);
+            let label = caps.get(3).map_or("", |m| m.as_str()).trim().to_string();
             self.events.push(Event::Message(Message {
                 from: "[".to_string(),
                 to,
                 label,
-                arrow: Arrow {
-                    line: LineStyle::Solid,
-                    head: ArrowHead::Filled,
-                    direction: ArrowDirection::LeftToRight,
-                    color: None,
-                    head_half: None,
-                    thin_head: false,
-                },
+                arrow,
                 activation: None,
                 activation_color: None,
                 source_line: self.current_line,
@@ -400,19 +396,14 @@ impl SeqParser {
             true
         } else if let Some(caps) = RE_OUT.captures(line) {
             let from = self.ensure_participant(&caps[1]);
-            let label = caps.get(2).map_or("", |m| m.as_str()).trim().to_string();
+            let mut arrow = parse_arrow(&caps[2]);
+            arrow.direction = ArrowDirection::LeftToRight;
+            let label = caps.get(3).map_or("", |m| m.as_str()).trim().to_string();
             self.events.push(Event::Message(Message {
                 from,
                 to: "]".to_string(),
                 label,
-                arrow: Arrow {
-                    line: LineStyle::Solid,
-                    head: ArrowHead::Filled,
-                    direction: ArrowDirection::LeftToRight,
-                    color: None,
-                    head_half: None,
-                    thin_head: false,
-                },
+                arrow,
                 activation: None,
                 activation_color: None,
                 source_line: self.current_line,
@@ -1060,6 +1051,30 @@ mod tests {
     fn dotted_arrow() {
         let d = parse("A --> B : reply");
         if let Event::Message(m) = &d.events[0] {
+            assert_eq!(m.arrow.line, LineStyle::Dotted);
+        } else {
+            panic!("expected message");
+        }
+    }
+
+    #[test]
+    fn dotted_external_incoming_arrow() {
+        let d = parse("[--> Alice : found dotted");
+        if let Event::Message(m) = &d.events[0] {
+            assert_eq!(m.from, "[");
+            assert_eq!(m.to, "Alice");
+            assert_eq!(m.arrow.line, LineStyle::Dotted);
+        } else {
+            panic!("expected message");
+        }
+    }
+
+    #[test]
+    fn dotted_external_outgoing_arrow() {
+        let d = parse("Alice -->] : lost dotted");
+        if let Event::Message(m) = &d.events[0] {
+            assert_eq!(m.from, "Alice");
+            assert_eq!(m.to, "]");
             assert_eq!(m.arrow.line, LineStyle::Dotted);
         } else {
             panic!("expected message");
