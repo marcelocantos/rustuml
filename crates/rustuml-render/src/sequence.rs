@@ -5022,7 +5022,7 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                         note.participants
                             .first()
                             .and_then(|id| id_to_idx.get(id.as_str()))
-                            .map(|&i| participants[i].lifeline_line_x)
+                            .map(|&i| participants[i].center_x)
                             .unwrap_or(f64::MIN)
                     };
                     if anchor_x != f64::MIN {
@@ -5031,7 +5031,11 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                         } else {
                             NOTE_LIFELINE_GAP
                         };
-                        let mut note_right = anchor_x.ceil() + gap + note_content_w;
+                        let mut note_right = if note.on_message {
+                            anchor_x.ceil() + gap + note_content_w
+                        } else {
+                            (anchor_x + gap).floor() + note_content_w
+                        };
                         // A message-attached note sits inside a message tile, which
                         // reserves an extra NOTE_LIFELINE_GAP of right margin.
                         // Its note box is drawn with the ceiled preferred width,
@@ -5512,12 +5516,14 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
         let max_text_w =
             note_max_line_width_with_family(&note.text, note_font_size_f, &note_font_family);
         let note_content_w = note_content_width_padded(max_text_w, note.shape, note_text_align);
+        let raw_note_content_w =
+            note_content_width_raw_padded(max_text_w, note.shape, note_text_align);
         let anchor_xs: Vec<f64> = note
             .participants
             .iter()
             .filter_map(|id| id_to_idx.get(id.as_str()))
             .map(|&i| {
-                if note.on_message && note.position == NotePosition::Right {
+                if note.position == NotePosition::Right {
                     participants[i].center_x
                 } else {
                     participants[i].lifeline_line_x
@@ -5543,7 +5549,11 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                 } else {
                     NOTE_LIFELINE_GAP
                 };
-                let left = ll_x.ceil() + gap;
+                let left = if note.on_message {
+                    ll_x.ceil() + gap
+                } else {
+                    (ll_x + gap).floor()
+                };
                 Some((left, left + note_content_w))
             }
             NotePosition::Left => {
@@ -5556,8 +5566,13 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                     NoteShape::Note => NOTE_LIFELINE_GAP,
                     NoteShape::Hexagonal | NoteShape::Rectangular => NOTE_LIFELINE_GAP - 1.0,
                 };
-                let right = ll_x.floor() - gap;
-                Some((right - note_content_w, right))
+                if note.on_message {
+                    let right = ll_x.floor() - gap;
+                    Some((right - note_content_w, right))
+                } else {
+                    let left = (ll_x - gap - raw_note_content_w).floor();
+                    Some((left, left + note_content_w))
+                }
             }
             NotePosition::Over => {
                 if note.participants.is_empty() {
@@ -7390,6 +7405,8 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                 );
                 let note_content_w =
                     note_content_width_padded(max_text_w, note.shape, note_text_align);
+                let raw_note_content_w =
+                    note_content_width_raw_padded(max_text_w, note.shape, note_text_align);
 
                 // Lifeline x values of the note's anchor participant(s).
                 let anchor_xs: Vec<f64> = note
@@ -7397,7 +7414,7 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                     .iter()
                     .filter_map(|id| id_to_idx.get(id.as_str()))
                     .map(|&i| {
-                        if note.on_message && note.position == NotePosition::Right {
+                        if note.position == NotePosition::Right {
                             participants[i].center_x
                         } else {
                             participants[i].lifeline_line_x
@@ -7428,7 +7445,11 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                             } else {
                                 NOTE_LIFELINE_GAP
                             };
-                            let left = ll_x.ceil() + gap;
+                            let left = if note.on_message {
+                                ll_x.ceil() + gap
+                            } else {
+                                (ll_x + gap).floor()
+                            };
                             (left, left + note_content_w)
                         }
                     }
@@ -7447,8 +7468,13 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                                 NOTE_LIFELINE_GAP - 1.0
                             }
                         };
-                        let right = ll_x.floor() - gap;
-                        (right - note_content_w, right)
+                        if note.on_message {
+                            let right = ll_x.floor() - gap;
+                            (right - note_content_w, right)
+                        } else {
+                            let left = (ll_x - gap - raw_note_content_w).floor();
+                            (left, left + note_content_w)
+                        }
                     }
                     NotePosition::Over => {
                         if note.participants.is_empty() {
