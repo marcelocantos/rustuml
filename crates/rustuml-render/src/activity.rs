@@ -32,6 +32,9 @@ const ARROW_LEN: f64 = 20.0;
 /// Reverse-engineered from PlantUML goldens: 20 (normal) + 21.275 extra to
 /// fit the label beside the line.
 const LABELED_ARROW_LEN: f64 = 41.2754;
+const GROUP_IF_LEFT_EXTENT_EXTRA: f64 = 3.0107;
+const GROUP_IF_RIGHT_EXTENT_EXTRA: f64 = 0.9893;
+const GROUP_IF_BODY_WIDTH_EXTRA: f64 = 4.0;
 const ACTION_PADDING: f64 = 20.0; // total vertical padding in action box
 const ACTION_H_PADDING: f64 = 10.0; // horizontal padding each side
 const ACTION_MIN_HEIGHT: f64 = 30.0;
@@ -2331,11 +2334,20 @@ fn node_extents(node: &LayoutNode) -> (f64, f64) {
         // body_w/2 + 10) — the title's notch corner extends 5 px right of
         // the title text, while body content needs 10 px padding either
         // side inside the partition rect.
-        LayoutNode::Partition { name, body, .. } => {
+        LayoutNode::Partition {
+            name,
+            body,
+            is_group,
+            ..
+        } => {
             let title_w = text_render::measure(name, TITLE_FONT_SIZE, false);
             let body_w = sequence_width(body);
-            let left = title_w.max(body_w) / 2.0 + 10.0;
-            let right = (title_w / 2.0 + 5.0).max(body_w / 2.0 + 10.0);
+            let mut left = title_w.max(body_w) / 2.0 + 10.0;
+            let mut right = (title_w / 2.0 + 5.0).max(body_w / 2.0 + 10.0);
+            if *is_group && group_wraps_single_if(body) {
+                left += GROUP_IF_LEFT_EXTENT_EXTRA;
+                right += GROUP_IF_RIGHT_EXTENT_EXTRA;
+            }
             (left, right)
         }
         // The switch spine aligns to the condition/merge diamond, which in
@@ -2701,6 +2713,10 @@ fn group_uses_compact_top_gap(body: &[LayoutNode]) -> bool {
             | LayoutNode::Fork { .. }
             | LayoutNode::Switch { .. }]
     )
+}
+
+fn group_wraps_single_if(body: &[LayoutNode]) -> bool {
+    matches!(body, [LayoutNode::If { .. }])
 }
 
 fn partition_top_gap(
@@ -4351,7 +4367,12 @@ fn emit_node(svg: &mut SvgEmitter, node: &LayoutNode, cx: f64, y: f64) -> f64 {
             // coloured partitions land slightly lower than uncoloured ones).
             let title_w = text_render::measure(name, TITLE_FONT_SIZE, false);
             let body_w = sequence_width(body);
-            let partition_w = (title_w + 15.0).max(body_w + 20.0);
+            let body_width_extra = if *is_group && group_wraps_single_if(body) {
+                GROUP_IF_BODY_WIDTH_EXTRA
+            } else {
+                0.0
+            };
+            let partition_w = (title_w + 15.0).max(body_w + 20.0 + body_width_extra);
             let partition_x = 16.0; // always MARGIN_LEAD-aligned in goldens
             let top_gap = partition_top_gap(color, name, *is_group, body);
             let partition_top = y + top_gap;
