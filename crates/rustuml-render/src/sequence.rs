@@ -981,6 +981,8 @@ const BOX_TITLE_FONT_SIZE: u32 = 13;
 const BOX_DEFAULT_FILL: &str = "#DDDDDD";
 /// Horizontal margin between the box frame and the enclosed head boxes.
 const BOX_SIDE_MARGIN: f64 = 4.0;
+/// Extra head drop reserved by most titled participant boxes.
+const BOX_TITLE_HEAD_GAP: f64 = 5.0;
 /// Vertical gap below the participant heads' tail boxes to the box bottom.
 const BOX_BOTTOM_MARGIN: f64 = 5.0;
 
@@ -3334,16 +3336,31 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
             + TITLE_BOTTOM_PAD
     };
     // Named participant boxes add a title band above the participant heads.
-    // The heads drop by text_height(13) + 5 to make room for the bold box label.
+    // Most titled boxes reserve text_height(13) + 5; titled boxes containing a
+    // queue omit the extra 5px gap and let the queue's own pill offset clear
+    // the label.
     let has_boxes = !diagram.boxes.is_empty();
     let any_box_titled = diagram.boxes.iter().any(|b| !b.title.is_empty());
+    let any_box_member_is_queue = diagram.boxes.iter().any(|b| {
+        b.members.iter().any(|&pi| {
+            diagram
+                .participants
+                .get(pi)
+                .is_some_and(|p| p.kind == ParticipantKind::Queue)
+        })
+    });
     let box_band_h = if !has_boxes {
         0.0
     } else if any_box_titled {
-        plantuml_metrics::text_height(BOX_TITLE_FONT_SIZE as f64) + 5.0
+        let title_gap = if any_box_member_is_queue {
+            0.0
+        } else {
+            BOX_TITLE_HEAD_GAP
+        };
+        plantuml_metrics::text_height(BOX_TITLE_FONT_SIZE as f64) + title_gap
     } else {
         // Untitled boxes only contribute their top margin, no title line.
-        5.0
+        BOX_TITLE_HEAD_GAP
     };
     // A `header` directive reserves a band above the heads: the header text
     // sits at the top (baseline y≈14.668) and the participant heads drop by
