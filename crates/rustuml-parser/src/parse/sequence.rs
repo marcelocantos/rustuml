@@ -7,7 +7,7 @@
 
 use std::sync::LazyLock;
 
-use regex::Regex;
+use regex::{Match, Regex};
 
 use super::ParseError;
 use crate::diagram::DiagramMeta;
@@ -341,7 +341,7 @@ impl SeqParser {
             let to_raw = unquote(&caps[3]);
             let activation_str = caps.get(4).map(|m| m.as_str());
             let activation_color = caps.get(5).map(|m| m.as_str().to_string());
-            let label = caps.get(6).map_or("", |m| m.as_str()).trim().to_string();
+            let label = message_label(line, caps.get(6));
 
             let mut arrow = parse_arrow(arrow_str);
             arrow.color = arrow_color;
@@ -395,7 +395,7 @@ impl SeqParser {
             let mut arrow = parse_arrow(&caps[1]);
             arrow.direction = ArrowDirection::LeftToRight;
             let to = self.ensure_participant(&caps[2]);
-            let label = caps.get(3).map_or("", |m| m.as_str()).trim().to_string();
+            let label = message_label(line, caps.get(3));
             self.events.push(Event::Message(Message {
                 from: "[".to_string(),
                 to,
@@ -410,7 +410,7 @@ impl SeqParser {
             let from = self.ensure_participant(&caps[1]);
             let mut arrow = parse_arrow(&caps[2]);
             arrow.direction = ArrowDirection::LeftToRight;
-            let label = caps.get(3).map_or("", |m| m.as_str()).trim().to_string();
+            let label = message_label(line, caps.get(3));
             self.events.push(Event::Message(Message {
                 from,
                 to: "]".to_string(),
@@ -1068,6 +1068,22 @@ fn parse_arrow(s: &str) -> Arrow {
     }
 }
 
+fn message_label(line: &str, matched: Option<Match<'_>>) -> String {
+    let Some(matched) = matched else {
+        return String::new();
+    };
+    let trimmed = matched.as_str().trim();
+    if trimmed.starts_with("\\n")
+        && let Some(colon) = line[..matched.start()].rfind(':')
+    {
+        let consumed = &line[colon + 1..matched.start()];
+        if !consumed.is_empty() && consumed.chars().all(char::is_whitespace) {
+            return format!("{consumed}{trimmed}");
+        }
+    }
+    trimmed.to_string()
+}
+
 fn parse_activation(s: &str) -> ActivationChange {
     match s {
         "++" => ActivationChange::Activate,
@@ -1099,6 +1115,16 @@ mod tests {
             assert_eq!(m.label, "hello");
             assert_eq!(m.arrow.line, LineStyle::Solid);
             assert_eq!(m.arrow.head, ArrowHead::Filled);
+        } else {
+            panic!("expected message");
+        }
+    }
+
+    #[test]
+    fn message_label_preserves_space_before_escaped_newline() {
+        let d = parse(r"Alice -> Bob: \n \t \\");
+        if let Event::Message(m) = &d.events[0] {
+            assert_eq!(m.label, r" \n \t \\");
         } else {
             panic!("expected message");
         }
