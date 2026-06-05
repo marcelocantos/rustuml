@@ -58,6 +58,9 @@ const WHILE_SPECIAL_BODY_LEAD: f64 = 11.0;
 const WHILE_SPECIAL_BODY_X_PULL_RIGHT: f64 = WHILE_SPECIAL_COND_LEAD - WHILE_SPECIAL_BODY_LEAD;
 const WHILE_UNLABELED_SPECIAL_Y_PULL_UP: f64 = 4.0;
 const WHILE_UNLABELED_LOOP_ARROW_Y_PULL_UP: f64 = 2.0;
+const WHILE_BODY_SLOT_COMPRESS: f64 = 4.8203125;
+const PARTITION_COLORED_WHILE_SPINE_SHIFT: f64 = 1.5;
+const PARTITION_COLORED_WHILE_EXIT_ARROW_PULL_UP: f64 = WHILE_BODY_SLOT_COMPRESS / 2.0 - 1.0;
 /// PlantUML enforces a minimum width on the inner (top/bottom) edge of
 /// decision diamonds: 24 px regardless of how short the condition text is.
 /// Reverse-engineered from goldens with one- and two-character conditions
@@ -1516,6 +1519,34 @@ fn while_body_drives_unlabeled_special(
     is_label.is_none() && end_label.is_none() && body_left + DIAMOND_HALF > cond_half
 }
 
+fn while_slot_compress(
+    compress_allowed: bool,
+    is_label: bool,
+    end_label: bool,
+    body_empty: bool,
+) -> f64 {
+    if compress_allowed && is_label && !end_label && !body_empty {
+        WHILE_BODY_SLOT_COMPRESS
+    } else {
+        0.0
+    }
+}
+
+fn while_body_top_offset(
+    compress_allowed: bool,
+    is_label: bool,
+    end_label: bool,
+    body_empty: bool,
+    arrow_font_size: f64,
+) -> f64 {
+    let offset = if is_label {
+        text_box_height(arrow_font_size) + 2.0 * DIAMOND_HALF
+    } else {
+        ARROW_LEN
+    };
+    offset - while_slot_compress(compress_allowed, is_label, end_label, body_empty)
+}
+
 /// The lines of note text (block notes accumulate `\n`-joined lines; single
 /// `note left: text` notes are one line).
 fn note_lines(text: &str) -> Vec<&str> {
@@ -2394,6 +2425,15 @@ fn node_extents(node: &LayoutNode) -> (f64, f64) {
             let body_w = sequence_width(body);
             let mut left = title_w.max(body_w) / 2.0 + 10.0;
             let mut right = (title_w / 2.0 + 5.0).max(body_w / 2.0 + 10.0);
+            let title_width_extra = partition_title_width_extra(color, *is_group, body);
+            if !*is_group
+                && color.is_some()
+                && partition_wraps_while(body)
+                && partition_title_drives_width(title_w, body_w, title_width_extra, *is_group, body)
+            {
+                left += PARTITION_COLORED_WHILE_SPINE_SHIFT;
+                right -= PARTITION_COLORED_WHILE_SPINE_SHIFT;
+            }
             if *is_group && group_wraps_single_if(body) {
                 left += GROUP_IF_LEFT_EXTENT_EXTRA;
                 right += GROUP_IF_RIGHT_EXTENT_EXTRA;
@@ -2946,6 +2986,22 @@ fn group_wraps_single_if(body: &[LayoutNode]) -> bool {
     matches!(body, [LayoutNode::If { .. }])
 }
 
+fn partition_wraps_while(body: &[LayoutNode]) -> bool {
+    matches!(body, [LayoutNode::While { .. }])
+}
+
+fn is_colored_partition_wrapping_while(node: &LayoutNode) -> bool {
+    matches!(
+        node,
+        LayoutNode::Partition {
+            color: Some(_),
+            is_group: false,
+            body,
+            ..
+        } if partition_wraps_while(body)
+    )
+}
+
 fn partition_title_has_descender(name: &str) -> bool {
     name.chars()
         .any(|c| matches!(c, 'g' | 'j' | 'p' | 'q' | 'y'))
@@ -3113,6 +3169,7 @@ fn node_height(node: &LayoutNode) -> f64 {
         LayoutNode::While {
             body,
             is_label,
+            end_label,
             special_out,
             arrow_font_size,
             ..
@@ -3135,11 +3192,13 @@ fn node_height(node: &LayoutNode) -> f64 {
             // + body_h + below-body-gap + wrap-back-offset. We derive it
             // from the same compression-aware formula as emit_while.
             let diamond_alone_h = DIAMOND_HALF * 2.0;
-            let body_top_offset = if is_label.is_some() {
-                text_box_height(*arrow_font_size) + 2.0 * DIAMOND_HALF
-            } else {
-                ARROW_LEN
-            };
+            let body_top_offset = while_body_top_offset(
+                false,
+                is_label.is_some(),
+                end_label.is_some(),
+                body.is_empty(),
+                *arrow_font_size,
+            );
             // Below body: junction at +10 (compressed if non-empty body)
             // or +12 (empty body); wrap-back continues another +12 for
             // no-specialOut, or descends to special_y for specialOut.
@@ -3186,7 +3245,13 @@ fn node_height(node: &LayoutNode) -> f64 {
             body,
         } => {
             let top_gap = partition_top_gap(color, name, *is_group, body);
-            top_gap + 36.4883 + sequence_height(body) + 12.0
+            let body_h = sequence_height(body)
+                - if color.is_some() && !*is_group && partition_wraps_while(body) {
+                    WHILE_BODY_SLOT_COMPRESS
+                } else {
+                    0.0
+                };
+            top_gap + 36.4883 + body_h + 12.0
         }
         // Swimlanes: header band + start-gap + cumulative body heights
         // across lanes (with cross-lane transitions between them). Lanes
@@ -3472,6 +3537,7 @@ struct SvgEmitter {
     /// Resolved color palette for this render (PlantUML defaults +
     /// inline skinparam overrides).
     palette: Palette,
+    colored_partition_while_depth: usize,
 }
 
 #[allow(clippy::too_many_arguments)]
@@ -3481,6 +3547,7 @@ impl SvgEmitter {
             shapes: String::new(),
             connectors: String::new(),
             palette,
+            colored_partition_while_depth: 0,
         }
     }
 
@@ -4101,6 +4168,32 @@ fn emit_legend_table(svg: &mut SvgEmitter, rows: &[Vec<&str>], y: f64) {
     svg.raw_connector("</g>");
 }
 
+fn emit_pending_down_arrow(
+    svg: &mut SvgEmitter,
+    arrow_top: f64,
+    style: ArrowStyle,
+    label: Option<String>,
+    arrow_gap: f64,
+    cx: f64,
+) {
+    svg.down_arrow_full(cx, arrow_top, arrow_top + arrow_gap, &style);
+    if let Some(l) = label {
+        let label_font_size = svg.palette.arrow_font_size;
+        let label_family = svg.palette.arrow_font_family.clone();
+        let label_color = svg.palette.arrow_text_color.clone();
+        let lw = text_render::measure_with_family(&l, label_font_size, false, &label_family);
+        svg.connector_text(
+            &label_color,
+            &label_family,
+            label_font_size,
+            lw,
+            cx + 4.0,
+            arrow_top + 21.455078125,
+            &l,
+        );
+    }
+}
+
 /// Render a linear sequence of nodes at a given center-x and starting y.
 /// Returns the y position after the last node.
 fn emit_sequence(svg: &mut SvgEmitter, nodes: &[LayoutNode], cx: f64, y: f64) -> f64 {
@@ -4131,6 +4224,7 @@ fn emit_sequence_ex(
     // start node (consumed by the next flow node's inbound connector).
     let mut lead_stretch = 0.0f64;
     let mut carry_gap_extra = 0.0f64;
+    let mut deferred_partition_inbound: Option<(f64, ArrowStyle, Option<String>, f64)> = None;
     for (i, node) in nodes.iter().enumerate() {
         // Skip layout for non-flow nodes (arrows and notes don't take vertical space
         // on their own).
@@ -4332,27 +4426,23 @@ fn emit_sequence_ex(
         // after the node's internal connectors in the connectors buffer
         // (matches PlantUML's emission order: internal first, then inbound).
         if let Some((arrow_top, style, label, arrow_gap)) = pending_arrow {
-            svg.down_arrow_full(cx, arrow_top, arrow_top + arrow_gap, &style);
-            if let Some(l) = label {
-                let label_font_size = svg.palette.arrow_font_size;
-                let label_family = svg.palette.arrow_font_family.clone();
-                let label_color = svg.palette.arrow_text_color.clone();
-                let lw =
-                    text_render::measure_with_family(&l, label_font_size, false, &label_family);
-                svg.connector_text(
-                    &label_color,
-                    &label_family,
-                    label_font_size,
-                    lw,
-                    cx + 4.0,
-                    arrow_top + 21.455078125,
-                    &l,
-                );
+            if is_colored_partition_wrapping_while(node) {
+                deferred_partition_inbound = Some((arrow_top, style, label, arrow_gap));
+            } else {
+                emit_pending_down_arrow(svg, arrow_top, style, label, arrow_gap, cx);
+                if let Some((arrow_top, style, label, arrow_gap)) =
+                    deferred_partition_inbound.take()
+                {
+                    emit_pending_down_arrow(svg, arrow_top, style, label, arrow_gap, cx);
+                }
             }
         }
         y = node_y;
         carry_gap_extra = note_bottom_extra;
         flow_ordinal += 1;
+    }
+    if let Some((arrow_top, style, label, arrow_gap)) = deferred_partition_inbound {
+        emit_pending_down_arrow(svg, arrow_top, style, label, arrow_gap, cx);
     }
     y
 }
@@ -4696,7 +4786,14 @@ fn emit_node(svg: &mut SvgEmitter, node: &LayoutNode, cx: f64, y: f64) -> f64 {
             };
             let top_gap = partition_top_gap(color, name, *is_group, body);
             let partition_top = y + top_gap;
-            let body_h = sequence_height(body);
+            let colored_partition_while =
+                color.is_some() && !*is_group && partition_wraps_while(body);
+            let body_h = sequence_height(body)
+                - if colored_partition_while {
+                    WHILE_BODY_SLOT_COMPRESS
+                } else {
+                    0.0
+                };
             let title_band_h = 36.4883; // title bar height (matches goldens)
             let partition_h = title_band_h + body_h + 12.0;
             let partition_right = partition_x + partition_w;
@@ -4746,7 +4843,13 @@ fn emit_node(svg: &mut SvgEmitter, node: &LayoutNode, cx: f64, y: f64) -> f64 {
             // partitions already have the 0.4531 top-gap shift absorb this.
             let needs_nudge = top_gap == 10.0;
             let body_top = partition_top + title_band_h - if needs_nudge { 0.00005 } else { 0.0 };
+            if colored_partition_while {
+                svg.colored_partition_while_depth += 1;
+            }
             emit_sequence(svg, body, cx, body_top);
+            if colored_partition_while {
+                svg.colored_partition_while_depth -= 1;
+            }
 
             partition_top + partition_h
         }
@@ -5904,6 +6007,7 @@ fn emit_while(
     let diamond_stroke = svg.palette.diamond_stroke.clone();
     let diamond_fill = svg.palette.diamond_fill.clone();
     let diamond_stroke_width = svg.palette.diamond_stroke_width.clone();
+    let colored_partition_while = svg.colored_partition_while_depth > 0;
 
     let cond_inner_w = diamond_inner_w_styled(
         condition,
@@ -5934,11 +6038,13 @@ fn emit_while(
     // no slot compression here: PlantUML's FtileWhile reserves the full
     // 4*halfHex + label height regardless of whether `endwhile` carries a
     // trailing label (faithful port of calculateDimensionFtile).
-    let body_top_offset = if is_label.is_some() {
-        text_box_height(svg.palette.arrow_font_size) + 2.0 * DIAMOND_HALF
-    } else {
-        ARROW_LEN
-    };
+    let body_top_offset = while_body_top_offset(
+        colored_partition_while,
+        is_label.is_some(),
+        end_label.is_some(),
+        body.is_empty(),
+        svg.palette.arrow_font_size,
+    );
     let body_top = diamond_bottom + body_top_offset;
 
     // Body below diamond — emit it first (PlantUML emits body shapes before
@@ -6111,6 +6217,12 @@ fn emit_while(
     // PlantUML draws this at the midpoint of (diamond_cy, body_bottom +
     // halfHex), adjusted by the same compression that shifts body_top up.
     let mid_y = (diamond_cy + body_bottom + DIAMOND_HALF) / 2.0
+        - while_slot_compress(
+            colored_partition_while,
+            is_label.is_some(),
+            end_label.is_some(),
+            body.is_empty(),
+        ) / 2.0
         - if is_label.is_none() {
             WHILE_UNLABELED_LOOP_ARROW_Y_PULL_UP
         } else {
@@ -6183,17 +6295,22 @@ fn emit_while(
     } else {
         exit_bottom_y + DIAMOND_HALF
     };
-    svg.line_styled(&arrow_color, "1", exit_x, exit_x, diamond_cy, wrap_y, false);
+    if !(colored_partition_while && special_out.is_none()) {
+        svg.line_styled(&arrow_color, "1", exit_x, exit_x, diamond_cy, wrap_y, false);
+    }
 
     // 10. DOWN arrowhead. When special_out is present, the arrowhead lands
     // AT the terminator's top (ConnectionOutSpecial uses endDecoration);
     // otherwise the arrowhead is at the midpoint of the long exit arm
     // (ConnectionOut with emphasizeDirection).
-    let arrow_y = if special_out.is_some() {
+    let mut arrow_y = if special_out.is_some() {
         wrap_y
     } else {
         (diamond_cy + wrap_y) / 2.0
     };
+    if colored_partition_while && special_out.is_none() {
+        arrow_y -= PARTITION_COLORED_WHILE_EXIT_ARROW_PULL_UP;
+    }
     svg.polygon_connector(
         &arrow_color,
         &[
@@ -6205,6 +6322,9 @@ fn emit_while(
         &arrow_color,
         "1",
     );
+    if colored_partition_while && special_out.is_none() {
+        svg.line_styled(&arrow_color, "1", exit_x, exit_x, diamond_cy, wrap_y, false);
+    }
 
     // 11. Either emit the special_out terminator INSIDE the while's frame
     // (ConnectionOutSpecial) or emit the wrap-back horizontal from exit_x
