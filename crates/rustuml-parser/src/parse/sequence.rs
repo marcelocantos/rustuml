@@ -835,10 +835,12 @@ impl SeqParser {
         }
         if let Some(rest) = line.strip_prefix("footer ") {
             self.meta.footer = Some(rest.trim().to_string());
+            self.meta.footer_line = Some(self.current_line);
             return true;
         }
         if let Some(rest) = line.strip_prefix("caption ") {
             self.meta.caption = Some(rest.trim().to_string());
+            self.meta.caption_line = Some(self.current_line);
             return true;
         }
         // Legend block: `legend` / `legend right` / `legend left` ... `endlegend`

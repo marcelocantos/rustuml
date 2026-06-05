@@ -163,8 +163,16 @@ pub struct DiagramMeta {
     pub header_line: Option<usize>,
     #[serde(skip_serializing_if = "Option::is_none")]
     pub footer: Option<String>,
+    /// Post-preprocessing source line of the `footer` directive; emitted as the
+    /// footer group's `data-source-line`, defaulting to 1 when unset.
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub footer_line: Option<usize>,
     #[serde(skip_serializing_if = "Option::is_none")]
     pub caption: Option<String>,
+    /// Post-preprocessing source line of the `caption` directive; emitted as the
+    /// caption group's `data-source-line`, defaulting to 1 when unset.
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub caption_line: Option<usize>,
     #[serde(skip_serializing_if = "Option::is_none")]
     pub legend: Option<String>,
     #[serde(default, skip_serializing_if = "Vec::is_empty")]

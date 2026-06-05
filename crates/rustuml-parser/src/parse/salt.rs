@@ -214,6 +214,7 @@ fn apply_chrome_directive(meta: &mut DiagramMeta, d: ChromeDirective, line_1inde
         }
         ChromeKind::Footer => {
             meta.footer = Some(d.text);
+            meta.footer_line = Some(line_1indexed);
         }
         ChromeKind::Title => {
             meta.title = Some(d.text);
@@ -221,6 +222,7 @@ fn apply_chrome_directive(meta: &mut DiagramMeta, d: ChromeDirective, line_1inde
         }
         ChromeKind::Caption => {
             meta.caption = Some(d.text);
+            meta.caption_line = Some(line_1indexed);
         }
     }
 }

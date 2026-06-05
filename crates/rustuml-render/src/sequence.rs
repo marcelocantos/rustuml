@@ -7943,8 +7943,12 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
             } else {
                 0.0
             };
-        svg.buf
-            .push_str(r#"<g class="footer" data-source-line="1">"#);
+        let footer_line = diagram.meta.footer_line.unwrap_or(1);
+        write!(
+            svg.buf,
+            r#"<g class="footer" data-source-line="{footer_line}">"#
+        )
+        .unwrap();
         text_render::emit_text(
             &mut svg.buf,
             footer,
@@ -7970,9 +7974,7 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
     if let Some(caption) = &diagram.meta.caption {
         const CAPTION_FONT_SIZE: u32 = 14;
         const CAPTION_BOTTOM_OFFSET: f64 = 10.8672;
-        // We don't yet track caption_line in DiagramMeta for sequence diagrams,
-        // so fall back to 1 (matches captions defined at top of source files).
-        let src_line: u32 = 1;
+        let src_line = diagram.meta.caption_line.unwrap_or(1);
         write!(
             svg.buf,
             r#"<g class="caption" data-source-line="{src_line}">"#
