@@ -759,6 +759,7 @@ fn emit_cluster_shape(
     match kind {
         // Clusters use stroke-width=1 (per goldens).
         Node => emit_tag_polygon(svg, x, y, w, h, fill, 1.0, stroke),
+        Artifact => emit_artifact_with_stroke_width(svg, x, y, w, h, fill, stroke, 1.0),
         // Card cluster has rect + horizontal line under title.
         Card => emit_card_cluster(svg, x, y, w, h, fill, stroke),
         // Rectangle / Agent cluster: bare rect, no line.
@@ -836,12 +837,27 @@ fn emit_tag_polygon(
 // ---- Artifact (rect + folded corner) --------------------------------------
 
 fn emit_artifact(svg: &mut SvgBuilder, x: f64, y: f64, w: f64, h: f64, fill: &str, stroke: &str) {
+    emit_artifact_with_stroke_width(svg, x, y, w, h, fill, stroke, 0.5);
+}
+
+#[allow(clippy::too_many_arguments)]
+fn emit_artifact_with_stroke_width(
+    svg: &mut SvgBuilder,
+    x: f64,
+    y: f64,
+    w: f64,
+    h: f64,
+    fill: &str,
+    stroke: &str,
+    stroke_width: f64,
+) {
+    let sw = fc(stroke_width);
     let x_s = fc(x);
     let y_s = fc(y);
     let w_s = fc(w);
     let h_s = fc(h);
     svg.raw(&format!(
-        r#"<rect fill="{fill}" height="{h_s}" rx="{RX_RY}" ry="{RX_RY}" style="stroke:{stroke};stroke-width:0.5;" width="{w_s}" x="{x_s}" y="{y_s}"/>"#,
+        r#"<rect fill="{fill}" height="{h_s}" rx="{RX_RY}" ry="{RX_RY}" style="stroke:{stroke};stroke-width:{sw};" width="{w_s}" x="{x_s}" y="{y_s}"/>"#,
     ));
     // Folded corner polygon at top-right (12x14 box, inset 5 from right and 5 from top).
     let fx = x + w - 17.0; // 12 wide, then 5 from right edge
@@ -867,17 +883,17 @@ fn emit_artifact(svg: &mut SvgBuilder, x: f64, y: f64, w: f64, h: f64, fill: &st
         fc(p1.1),
     );
     svg.raw(&format!(
-        r#"<polygon fill="{fill}" points="{pts}" style="stroke:{stroke};stroke-width:0.5;"/>"#,
+        r#"<polygon fill="{fill}" points="{pts}" style="stroke:{stroke};stroke-width:{sw};"/>"#,
     ));
     // Two lines for the fold detail.
     svg.raw(&format!(
-        r#"<line style="stroke:{stroke};stroke-width:0.5;" x1="{a}" x2="{a}" y1="{y1}" y2="{y2}"/>"#,
+        r#"<line style="stroke:{stroke};stroke-width:{sw};" x1="{a}" x2="{a}" y1="{y1}" y2="{y2}"/>"#,
         a = fc(fx + 6.0),
         y1 = fc(fy),
         y2 = fc(fy + 6.0),
     ));
     svg.raw(&format!(
-        r#"<line style="stroke:{stroke};stroke-width:0.5;" x1="{x1}" x2="{x2}" y1="{y}" y2="{y}"/>"#,
+        r#"<line style="stroke:{stroke};stroke-width:{sw};" x1="{x1}" x2="{x2}" y1="{y}" y2="{y}"/>"#,
         x1 = fc(fx + 12.0),
         x2 = fc(fx + 6.0),
         y = fc(fy + 6.0),
@@ -1578,7 +1594,7 @@ fn cluster_top_pad(kind: DeploymentNodeKind) -> f64 {
         // Node cluster title sits in a small header band: ascent+13 from bbox top.
         Node => ASCENT_14 + 13.0,
         // Card-like clusters: ascent+2.
-        Card | Rectangle | Agent | Frame => ASCENT_14 + 2.0,
+        Artifact | Card | Rectangle | Agent | Frame => ASCENT_14 + 2.0,
         _ => ASCENT_14 + 13.0,
     }
 }
