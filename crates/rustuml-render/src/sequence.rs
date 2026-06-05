@@ -4296,16 +4296,21 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                     .iter()
                     .filter_map(|p| id_to_idx.get(p.as_str()).copied())
                     .collect();
-                if let (Some(&lo), Some(&hi)) = (idxs.iter().min(), idxs.iter().max())
-                    && hi > lo
-                {
-                    let needed = pref_w
-                        - participants[lo].box_width / 2.0
-                        - participants[hi].box_width / 2.0;
-                    if hi - lo == 1 {
-                        pair_max_label_width[lo] = pair_max_label_width[lo].max(needed);
+                if let (Some(&lo), Some(&hi)) = (idxs.iter().min(), idxs.iter().max()) {
+                    if lo == hi {
+                        if lo < pair_max_label_width.len() {
+                            let needed = (pref_w - participants[lo].box_width).max(0.0);
+                            pair_max_label_width[lo] = pair_max_label_width[lo].max(needed);
+                        }
                     } else {
-                        multi_span_constraints.push((lo, hi, needed));
+                        let needed = pref_w
+                            - participants[lo].box_width / 2.0
+                            - participants[hi].box_width / 2.0;
+                        if hi - lo == 1 {
+                            pair_max_label_width[lo] = pair_max_label_width[lo].max(needed);
+                        } else {
+                            multi_span_constraints.push((lo, hi, needed));
+                        }
                     }
                 }
             }
