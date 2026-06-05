@@ -412,20 +412,30 @@ pub fn render_with_oracle(
     let mut svg = SvgBuilder::new_plantuml(total_w, total_h, diagram_type);
 
     // Title — wrap in <g class="title"> and route through creole segmenter.
-    // PlantUML anchors the title block's left edge at TITLE_MARGIN_X and centres
-    // each line within the block (block width = widest line). Baselines step by
-    // TITLE_LINE_H starting at TITLE_TOP_PAD + ascent.
+    // In oracle mode, consume PlantUML's page-decoration anchors so the title
+    // is centred over the rendered body, not over only its own text block.
     if let Some(title) = &diagram.meta.title {
+        let oracle_title =
+            oracle.and_then(|o| o.decorations.iter().find(|d| d.class_name == "title"));
         let widths: Vec<f64> = title
             .lines()
             .map(|t| text_render::measure(t, TITLE_FONT_SIZE, true))
             .collect();
         let block_w = widths.iter().cloned().fold(0.0_f64, f64::max);
         let mut buf = String::new();
-        buf.push_str(r#"<g class="title" data-source-line="1">"#);
+        let source_line = oracle_title
+            .and_then(|d| d.source_line.as_deref())
+            .unwrap_or("1");
+        buf.push_str(&format!(
+            r#"<g class="title" data-source-line="{source_line}">"#
+        ));
         for (i, tline) in title.lines().enumerate() {
-            let ty = TITLE_TOP_PAD + pm::ascent(TITLE_FONT_SIZE) + i as f64 * TITLE_LINE_H;
-            let x = TITLE_MARGIN_X + (block_w - widths[i]) / 2.0;
+            let oracle_text = oracle_title.and_then(|d| d.texts.get(i));
+            let ty = oracle_text.map_or(
+                TITLE_TOP_PAD + pm::ascent(TITLE_FONT_SIZE) + i as f64 * TITLE_LINE_H,
+                |t| t.y,
+            );
+            let x = oracle_text.map_or(TITLE_MARGIN_X + (block_w - widths[i]) / 2.0, |t| t.x);
             text_render::emit_text(
                 &mut buf,
                 tline,
