@@ -680,8 +680,30 @@ fn rendered_line_metrics_with_family(
 }
 
 fn rendered_label_y_drop_with_family(content: &str, font_size: f64, font_family: &str) -> f64 {
-    let metrics = rendered_line_metrics_with_family(content, font_size, font_family);
-    metrics.height - metrics.ascent + 2.0
+    let mut lines = content.split("\\n");
+    let first = lines.next().unwrap_or("");
+    let first_metrics = rendered_line_metrics_with_family(first, font_size, font_family);
+    let remaining_height: f64 = lines
+        .map(|line| rendered_line_metrics_with_family(line, font_size, font_family).height)
+        .sum();
+    first_metrics.height - first_metrics.ascent + 2.0 + remaining_height
+}
+
+fn message_label_width_with_family(
+    text: &str,
+    font_size: f64,
+    bold: bool,
+    font_family: &str,
+) -> f64 {
+    text.split("\\n")
+        .map(|line| text_render::measure_with_family(line, font_size, bold, font_family))
+        .fold(0.0, f64::max)
+}
+
+fn message_label_block_height_with_family(text: &str, font_size: f64, font_family: &str) -> f64 {
+    text.split("\\n")
+        .map(|line| rendered_line_metrics_with_family(line, font_size, font_family).height)
+        .sum()
 }
 
 struct NoteTextMetrics {
@@ -1761,21 +1783,30 @@ impl PlantUmlSvg {
 
     /// Write a sequence message/arrow label.
     fn emit_message_label(&mut self, text_x: f64, text_y: f64, text_content: &str) {
-        text_render::emit_text(
-            &mut self.buf,
-            text_content,
-            &TextBase {
-                x: text_x,
-                y: text_y,
-                font_size: self.message_font_size,
-                font_family: &self.message_font_family,
-                fill: &self.message_font_color,
-                bold: self.message_font_bold,
-                italic: self.message_font_italic,
-                underline: false,
-                skip_underline: false,
-            },
-        );
+        let mut y = text_y;
+        for line in text_content.split("\\n") {
+            text_render::emit_text(
+                &mut self.buf,
+                line,
+                &TextBase {
+                    x: text_x,
+                    y,
+                    font_size: self.message_font_size,
+                    font_family: &self.message_font_family,
+                    fill: &self.message_font_color,
+                    bold: self.message_font_bold,
+                    italic: self.message_font_italic,
+                    underline: false,
+                    skip_underline: false,
+                },
+            );
+            y += rendered_line_metrics_with_family(
+                line,
+                self.message_font_size as f64,
+                &self.message_font_family,
+            )
+            .height;
+        }
     }
 
     /// Write an actor stick figure (head or tail).
@@ -3352,7 +3383,7 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
     let group_frame_margin = GROUP_FRAME_MARGIN + participant_padding;
     let participant_box_gap = 10.0 + 2.0 * participant_padding;
     let message_label_width = |text: &str| {
-        text_render::measure_with_family(
+        message_label_width_with_family(
             text,
             message_font_size_f,
             message_font_bold,
@@ -4479,12 +4510,11 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                 let label = process_label(&msg.label);
                 (
                     !label.is_empty(),
-                    rendered_line_metrics_with_family(
+                    message_label_block_height_with_family(
                         &label,
                         message_font_size_f,
                         &message_font_family,
-                    )
-                    .height,
+                    ),
                 )
             }
             Event::Return(ret) => {
@@ -4495,12 +4525,11 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                 };
                 (
                     !label.is_empty(),
-                    rendered_line_metrics_with_family(
+                    message_label_block_height_with_family(
                         &label,
                         message_font_size_f,
                         &message_font_family,
-                    )
-                    .height,
+                    ),
                 )
             }
             // An empty divider (`====`) has no label box/text line, so it
