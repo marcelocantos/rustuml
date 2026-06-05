@@ -30,12 +30,27 @@ impl SvgBuilder {
     ///
     /// `diagram_type` is the `data-diagram-type` value (e.g. "STATE", "CLASS").
     pub fn new_plantuml(width: f64, height: f64, diagram_type: &str) -> Self {
+        Self::new_plantuml_with_background(width, height, diagram_type, Some("#FFFFFF"))
+    }
+
+    /// Construct a PlantUML-compatible SVG root with an explicit canvas
+    /// background. `None` omits the `background:` style, matching
+    /// `skinparam backgroundColor transparent`.
+    pub fn new_plantuml_with_background(
+        width: f64,
+        height: f64,
+        diagram_type: &str,
+        background: Option<&str>,
+    ) -> Self {
         let w = width as i64;
         let h = height as i64;
+        let background_style = background
+            .map(|bg| format!("background:{bg};"))
+            .unwrap_or_default();
         let mut buf = String::new();
         write!(
             buf,
-            r#"<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" contentStyleType="text/css" data-diagram-type="{diagram_type}" height="{h}px" preserveAspectRatio="none" style="width:{w}px;height:{h}px;background:#FFFFFF;" version="1.1" viewBox="0 0 {w} {h}" width="{w}px" zoomAndPan="magnify">"#,
+            r#"<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" contentStyleType="text/css" data-diagram-type="{diagram_type}" height="{h}px" preserveAspectRatio="none" style="width:{w}px;height:{h}px;{background_style}" version="1.1" viewBox="0 0 {w} {h}" width="{w}px" zoomAndPan="magnify">"#,
         )
         .unwrap();
         // PlantUML processing instruction and defs.

@@ -18,7 +18,6 @@ use crate::svg::SvgBuilder;
 use crate::text_render::{self, TextBase};
 
 const FONT_SIZE: f64 = 14.0;
-const STEREO_FONT: f64 = 14.0;
 const STROKE: &str = "#181818";
 const ENTITY_FILL: &str = "#F1F1F1";
 const TEXT_COLOR: &str = "#000000";
@@ -62,7 +61,7 @@ fn fc(v: f64) -> String {
 /// e.g. `Pink`, `LightBlue`, or `FFC0CB`) into a PlantUML fill string. Named
 /// colours resolve to `#RRGGBB`; bare hex digits get a `#` prepended.
 fn resolve_fill(raw: &str) -> String {
-    let normalized = text_render::normalize_color(raw);
+    let normalized = crate::sequence::resolve_color(raw);
     if normalized.starts_with('#') {
         normalized
     } else {
@@ -70,31 +69,178 @@ fn resolve_fill(raw: &str) -> String {
     }
 }
 
+fn skin_value<'a>(
+    skinparams: &'a [rustuml_parser::diagram::SkinParam],
+    keys: &[&str],
+) -> Option<&'a str> {
+    skinparams
+        .iter()
+        .rev()
+        .find(|p| keys.iter().any(|k| p.key.eq_ignore_ascii_case(k)))
+        .map(|p| p.value.trim())
+}
+
 /// Look up a skinparam value case-insensitively (PlantUML convention) and
 /// resolve it to a fill string. The parser flattens block skinparams like
 /// `skinparam usecase { BackgroundColor X }` to the key `usecaseBackgroundColor`.
 fn skin_color(skinparams: &[rustuml_parser::diagram::SkinParam], key: &str) -> Option<String> {
-    skinparams
-        .iter()
-        .find(|p| p.key.eq_ignore_ascii_case(key))
-        .map(|p| resolve_fill(p.value.trim_start_matches('#')))
+    skin_value(skinparams, &[key]).map(resolve_fill)
 }
 
-/// Per-kind background/border defaults derived from `skinparam` directives.
+fn skin_font_size(
+    skinparams: &[rustuml_parser::diagram::SkinParam],
+    keys: &[&str],
+    default: u32,
+) -> u32 {
+    skin_value(skinparams, keys)
+        .and_then(|v| v.parse::<f64>().ok())
+        .map(|v| v.round() as u32)
+        .unwrap_or(default)
+}
+
+fn skin_thickness(
+    skinparams: &[rustuml_parser::diagram::SkinParam],
+    keys: &[&str],
+    default: f64,
+) -> String {
+    skin_value(skinparams, keys)
+        .and_then(|v| v.parse::<f64>().ok())
+        .map(fc)
+        .unwrap_or_else(|| fc(default))
+}
+
+fn canonical_usecase_font_family(value: &str) -> String {
+    let raw = value.trim();
+    let quoted = (raw.starts_with('"') && raw.ends_with('"'))
+        || (raw.starts_with('\'') && raw.ends_with('\''));
+    let trimmed = raw.trim_matches('"').trim_matches('\'');
+    if trimmed.is_empty()
+        || trimmed.eq_ignore_ascii_case("sansserif")
+        || trimmed.eq_ignore_ascii_case("sans-serif")
+    {
+        "sans-serif".to_string()
+    } else if quoted {
+        format!("'{trimmed}'")
+    } else {
+        trimmed.to_string()
+    }
+}
+
+/// Per-kind background/border/text defaults derived from `skinparam`
+/// directives. Keep this opt-in: absent skinparams preserve the renderer's
+/// existing PlantUML defaults instead of inheriting RustUML's UI theme.
 struct SkinColors {
     actor_fill: Option<String>,
     actor_border: Option<String>,
+    actor_border_thickness: String,
+    actor_font_color: String,
+    actor_font_family: String,
+    actor_font_size: u32,
+    actor_stereo_font_color: String,
     uc_fill: Option<String>,
     uc_border: Option<String>,
+    uc_border_thickness: String,
+    uc_font_color: String,
+    uc_font_family: String,
+    uc_font_size: u32,
+    uc_stereo_font_color: String,
+    arrow_font_color: String,
+    arrow_font_family: String,
+    arrow_font_size: u32,
+    canvas_background: Option<String>,
+    canvas_rect: Option<String>,
 }
 
 impl SkinColors {
     fn from_meta(skinparams: &[rustuml_parser::diagram::SkinParam]) -> Self {
+        let default_font_family = skin_value(skinparams, &["defaultFontName", "fontName"])
+            .map(canonical_usecase_font_family)
+            .unwrap_or_else(|| "sans-serif".to_string());
+        let default_font_size = skin_font_size(skinparams, &["defaultFontSize"], FONT_SIZE as u32);
+        let root_font_color = skin_color(skinparams, "__styleRootFontColor");
+        let default_font_color = skin_color(skinparams, "defaultFontColor");
+        let fallback_font_color = || {
+            root_font_color
+                .clone()
+                .or_else(|| default_font_color.clone())
+                .unwrap_or_else(|| TEXT_COLOR.to_string())
+        };
+        let actor_font_color = skin_color(skinparams, "actorFontColor")
+            .or_else(|| Some(fallback_font_color()))
+            .unwrap_or_else(|| TEXT_COLOR.to_string());
+        let uc_font_color = skin_color(skinparams, "usecaseFontColor")
+            .or_else(|| Some(fallback_font_color()))
+            .unwrap_or_else(|| TEXT_COLOR.to_string());
+        let actor_font_family = skin_value(skinparams, &["actorFontName"])
+            .map(canonical_usecase_font_family)
+            .unwrap_or_else(|| default_font_family.clone());
+        let uc_font_family = skin_value(skinparams, &["usecaseFontName"])
+            .map(canonical_usecase_font_family)
+            .unwrap_or_else(|| default_font_family.clone());
+        let arrow_font_family = skin_value(skinparams, &["arrowFontName", "usecaseArrowFontName"])
+            .map(canonical_usecase_font_family)
+            .unwrap_or_else(|| default_font_family.clone());
+        let root_line = ["__styleRootLineThickness", "borderThickness"];
+        let bg_value = skin_value(skinparams, &["backgroundColor"]);
+        let canvas_background = match bg_value {
+            Some(v) if v.eq_ignore_ascii_case("transparent") => None,
+            Some(v) => Some(crate::sequence::resolve_color(v)),
+            None => Some("#FFFFFF".to_string()),
+        };
+        let canvas_rect = canvas_background
+            .as_ref()
+            .filter(|c| *c != "#FFFFFF")
+            .cloned();
         SkinColors {
             actor_fill: skin_color(skinparams, "actorBackgroundColor"),
-            actor_border: skin_color(skinparams, "actorBorderColor"),
+            actor_border: skin_color(skinparams, "actorBorderColor")
+                .or_else(|| skin_color(skinparams, "__styleRootLineColor")),
+            actor_border_thickness: skin_thickness(
+                skinparams,
+                &[
+                    "actorBorderThickness",
+                    "__styleRootLineThickness",
+                    "borderThickness",
+                ],
+                0.5,
+            ),
+            actor_font_color: actor_font_color.clone(),
+            actor_font_family,
+            actor_font_size: skin_font_size(
+                skinparams,
+                &["actorFontSize", "defaultFontSize"],
+                default_font_size,
+            ),
+            actor_stereo_font_color: skin_color(skinparams, "actorStereotypeFontColor")
+                .unwrap_or(actor_font_color),
             uc_fill: skin_color(skinparams, "usecaseBackgroundColor"),
-            uc_border: skin_color(skinparams, "usecaseBorderColor"),
+            uc_border: skin_color(skinparams, "usecaseBorderColor")
+                .or_else(|| skin_color(skinparams, "__styleRootLineColor")),
+            uc_border_thickness: skin_thickness(
+                skinparams,
+                &["usecaseBorderThickness", root_line[0], root_line[1]],
+                0.5,
+            ),
+            uc_font_color: uc_font_color.clone(),
+            uc_font_family,
+            uc_font_size: skin_font_size(
+                skinparams,
+                &["usecaseFontSize", "defaultFontSize"],
+                default_font_size,
+            ),
+            uc_stereo_font_color: skin_color(skinparams, "usecaseStereotypeFontColor")
+                .unwrap_or(uc_font_color),
+            arrow_font_color: skin_color(skinparams, "usecaseArrowFontColor")
+                .or_else(|| skin_color(skinparams, "arrowFontColor"))
+                .unwrap_or_else(|| TEXT_COLOR.to_string()),
+            arrow_font_family,
+            arrow_font_size: skin_font_size(
+                skinparams,
+                &["usecaseArrowFontSize", "arrowFontSize"],
+                13,
+            ),
+            canvas_background,
+            canvas_rect,
         }
     }
 }
@@ -143,11 +289,15 @@ pub fn render_with_oracle(
         return r#"<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" contentStyleType="text/css" data-diagram-type="DESCRIPTION" height="50px" preserveAspectRatio="none" style="width:100px;height:50px;background:#FFFFFF;" version="1.1" viewBox="0 0 100 50" width="100px" zoomAndPan="magnify"><defs/><g></g></svg>"#.to_string();
     }
 
-    let actor_dims: Vec<ActorDim> = diagram.actors.iter().map(actor_dim).collect();
-    let uc_dims: Vec<UseCaseDim> = diagram.use_cases.iter().map(use_case_dim).collect();
+    let skin = SkinColors::from_meta(&diagram.meta.skinparams);
+    let actor_dims: Vec<ActorDim> = diagram.actors.iter().map(|a| actor_dim(a, &skin)).collect();
+    let uc_dims: Vec<UseCaseDim> = diagram
+        .use_cases
+        .iter()
+        .map(|u| use_case_dim(u, &skin))
+        .collect();
     let positions = resolve_positions(diagram, &actor_dims, &uc_dims, oracle);
     let id_map = build_entity_id_map(diagram);
-    let skin = SkinColors::from_meta(&diagram.meta.skinparams);
 
     let (total_w, total_h) = if let Some(orc) = oracle
         && orc.canvas_width > 0.0
@@ -158,7 +308,19 @@ pub fn render_with_oracle(
         compute_canvas(&positions, &actor_dims, &uc_dims)
     };
 
-    let mut svg = SvgBuilder::new_plantuml(total_w, total_h, "DESCRIPTION");
+    let mut svg = SvgBuilder::new_plantuml_with_background(
+        total_w,
+        total_h,
+        "DESCRIPTION",
+        skin.canvas_background.as_deref(),
+    );
+    if let Some(bg) = skin.canvas_rect.as_deref() {
+        svg.raw(&format!(
+            r#"<rect fill="{bg}" height="{h}" style="stroke:none;stroke-width:1;" width="{w}" x="0" y="0"/>"#,
+            h = total_h as i64,
+            w = total_w as i64,
+        ));
+    }
 
     render_header(&mut svg, diagram);
     render_title(&mut svg, diagram, total_w);
@@ -292,7 +454,7 @@ pub fn render_with_oracle(
     }
 
     if let Some(orc) = oracle {
-        render_oracle_connections(&mut svg, diagram, orc);
+        render_oracle_connections(&mut svg, diagram, orc, &skin);
     }
 
     render_footer(&mut svg, diagram, total_h);
@@ -446,32 +608,53 @@ struct UseCaseDim {
     ry: f64,
 }
 
-fn actor_dim(actor: &Actor) -> ActorDim {
-    let label_w = text_render::measure(&actor.label, FONT_SIZE, false);
+fn actor_dim(actor: &Actor, skin: &SkinColors) -> ActorDim {
+    let label_w = text_render::measure_with_family(
+        &actor.label,
+        skin.actor_font_size as f64,
+        false,
+        &skin.actor_font_family,
+    );
     let stereo_w = actor
         .stereotype
         .as_ref()
-        .map(|s| text_render::measure(&format!("\u{00AB}{s}\u{00BB}"), STEREO_FONT, false))
+        .map(|s| {
+            text_render::measure_with_family(
+                &format!("\u{00AB}{s}\u{00BB}"),
+                skin.actor_font_size as f64,
+                false,
+                &skin.actor_font_family,
+            )
+        })
         .unwrap_or(0.0);
     ActorDim { label_w, stereo_w }
 }
 
-fn use_case_dim(uc: &UseCase) -> UseCaseDim {
-    let label_w = text_render::measure(&uc.label, FONT_SIZE, false);
+fn use_case_dim(uc: &UseCase, skin: &SkinColors) -> UseCaseDim {
+    let font_size = skin.uc_font_size as f64;
+    let label_w =
+        text_render::measure_with_family(&uc.label, font_size, false, &skin.uc_font_family);
     let stereo_w = uc
         .stereotype
         .as_ref()
-        .map(|s| text_render::measure(&format!("\u{00AB}{s}\u{00BB}"), STEREO_FONT, false))
+        .map(|s| {
+            text_render::measure_with_family(
+                &format!("\u{00AB}{s}\u{00BB}"),
+                font_size,
+                false,
+                &skin.uc_font_family,
+            )
+        })
         .unwrap_or(0.0);
     let desc_max_w = uc
         .description
         .iter()
-        .map(|d| text_render::measure(d, FONT_SIZE, false))
+        .map(|d| text_render::measure_with_family(d, font_size, false, &skin.uc_font_family))
         .fold(0.0_f64, f64::max);
     let max_w = label_w.max(stereo_w).max(desc_max_w);
     let line_count = uc.description.len().max(1) + if uc.stereotype.is_some() { 1 } else { 0 };
     let rx = max_w / 2.0 + UC_RX_PAD;
-    let ry = (line_count as f64 * LINE_H) / 2.0 + UC_RY_PAD - FONT_SIZE / 2.0;
+    let ry = (line_count as f64 * LINE_H) / 2.0 + UC_RY_PAD - font_size / 2.0;
     UseCaseDim {
         label_w,
         stereo_w,
@@ -794,9 +977,10 @@ fn render_actor(
         .unwrap_or_else(|| ENTITY_FILL.to_string());
     let stroke = skin.actor_border.as_deref().unwrap_or(STROKE);
     svg.raw(&format!(
-        r#"<ellipse cx="{cx}" cy="{cy}" fill="{fill}" rx="{ACTOR_HEAD_R}" ry="{ACTOR_HEAD_R}" style="stroke:{stroke};stroke-width:0.5;"/>"#,
+        r#"<ellipse cx="{cx}" cy="{cy}" fill="{fill}" rx="{ACTOR_HEAD_R}" ry="{ACTOR_HEAD_R}" style="stroke:{stroke};stroke-width:{stroke_width};"/>"#,
         cx = fc(cx),
         cy = fc(cy),
+        stroke_width = skin.actor_border_thickness,
     ));
     let body_top_y = cy + ACTOR_HEAD_R;
     let body_bot_y = body_top_y + ACTOR_BODY_LEN;
@@ -807,7 +991,7 @@ fn render_actor(
     let arm_left_x = cx - ACTOR_ARM_HALF;
     let arm_right_x = cx + ACTOR_ARM_HALF;
     svg.raw(&format!(
-        r#"<path d="M{cx},{body_top_y} L{cx},{body_bot_y} M{arm_left_x},{arm_y} L{arm_right_x},{arm_y} M{cx},{body_bot_y} L{leg_x_left},{leg_y} M{cx},{body_bot_y} L{leg_x_right},{leg_y}" fill="none" style="stroke:{stroke};stroke-width:0.5;"/>"#,
+        r#"<path d="M{cx},{body_top_y} L{cx},{body_bot_y} M{arm_left_x},{arm_y} L{arm_right_x},{arm_y} M{cx},{body_bot_y} L{leg_x_left},{leg_y} M{cx},{body_bot_y} L{leg_x_right},{leg_y}" fill="none" style="stroke:{stroke};stroke-width:{stroke_width};"/>"#,
         cx = fc(cx),
         body_top_y = fc(body_top_y),
         body_bot_y = fc(body_bot_y),
@@ -817,6 +1001,7 @@ fn render_actor(
         leg_x_left = fc(leg_x_left),
         leg_x_right = fc(leg_x_right),
         leg_y = fc(leg_y),
+        stroke_width = skin.actor_border_thickness,
     ));
     let cx_anchor = round_coord(cx);
     // Prefer PlantUML's captured per-line text x (label first, stereotype
@@ -843,9 +1028,9 @@ fn render_actor(
         &TextBase {
             x: label_x,
             y: label_y,
-            font_size: FONT_SIZE as u32,
-            font_family: "sans-serif",
-            fill: TEXT_COLOR,
+            font_size: skin.actor_font_size,
+            font_family: &skin.actor_font_family,
+            fill: &skin.actor_font_color,
             bold: false,
             italic: false,
             underline: false,
@@ -870,9 +1055,9 @@ fn render_actor(
             &TextBase {
                 x: stereo_x,
                 y: stereo_y,
-                font_size: STEREO_FONT as u32,
-                font_family: "sans-serif",
-                fill: TEXT_COLOR,
+                font_size: skin.actor_font_size,
+                font_family: &skin.actor_font_family,
+                fill: &skin.actor_stereo_font_color,
                 bold: false,
                 italic: true,
                 underline: false,
@@ -946,11 +1131,12 @@ fn render_use_case(
         .unwrap_or_else(|| ENTITY_FILL.to_string());
     let stroke = skin.uc_border.as_deref().unwrap_or(STROKE);
     svg.raw(&format!(
-        r#"<ellipse cx="{cx}" cy="{cy}" fill="{fill}" rx="{rx}" ry="{ry}" style="stroke:{stroke};stroke-width:0.5;"/>"#,
+        r#"<ellipse cx="{cx}" cy="{cy}" fill="{fill}" rx="{rx}" ry="{ry}" style="stroke:{stroke};stroke-width:{stroke_width};"/>"#,
         cx = fc(cx),
         cy = fc(cy),
         rx = fc(rx),
         ry = fc(ry),
+        stroke_width = skin.uc_border_thickness,
     ));
     let cx_anchor = round_coord(cx);
     // PlantUML's emitted text x values are captured per line (stereotype first,
@@ -981,9 +1167,9 @@ fn render_use_case(
             &TextBase {
                 x: stereo_x,
                 y: stereo_y,
-                font_size: STEREO_FONT as u32,
-                font_family: "sans-serif",
-                fill: TEXT_COLOR,
+                font_size: skin.uc_font_size,
+                font_family: &skin.uc_font_family,
+                fill: &skin.uc_stereo_font_color,
                 bold: false,
                 italic: true,
                 underline: false,
@@ -1006,9 +1192,9 @@ fn render_use_case(
             &TextBase {
                 x: label_x,
                 y: label_y,
-                font_size: FONT_SIZE as u32,
-                font_family: "sans-serif",
-                fill: TEXT_COLOR,
+                font_size: skin.uc_font_size,
+                font_family: &skin.uc_font_family,
+                fill: &skin.uc_font_color,
                 bold: false,
                 italic: false,
                 underline: false,
@@ -1063,7 +1249,12 @@ fn render_use_case(
             }
         };
         for line in &uc.description {
-            let lw = text_render::measure(line, FONT_SIZE, false);
+            let lw = text_render::measure_with_family(
+                line,
+                skin.uc_font_size as f64,
+                false,
+                &skin.uc_font_family,
+            );
             let lx = captured_x
                 .get(line_idx)
                 .copied()
@@ -1078,9 +1269,9 @@ fn render_use_case(
                 &TextBase {
                     x: lx,
                     y: ly,
-                    font_size: FONT_SIZE as u32,
-                    font_family: "sans-serif",
-                    fill: TEXT_COLOR,
+                    font_size: skin.uc_font_size,
+                    font_family: &skin.uc_font_family,
+                    fill: &skin.uc_font_color,
                     bold: false,
                     italic: false,
                     underline: false,
@@ -1232,6 +1423,7 @@ fn render_oracle_connections(
     svg: &mut SvgBuilder,
     diagram: &UseCaseDiagram,
     oracle: &OracleLayout,
+    skin: &SkinColors,
 ) {
     // PlantUML emits links sorted by source line. The parser already stores
     // connections in declaration order, but sort defensively.
@@ -1325,9 +1517,9 @@ fn render_oracle_connections(
                 &TextBase {
                     x: lx,
                     y: ly,
-                    font_size: 13,
-                    font_family: "sans-serif",
-                    fill: TEXT_COLOR,
+                    font_size: skin.arrow_font_size,
+                    font_family: &skin.arrow_font_family,
+                    fill: &skin.arrow_font_color,
                     bold: false,
                     italic: false,
                     underline: false,
@@ -1379,5 +1571,35 @@ mod tests {
         let svg = crate::render_svg(&diagram);
         assert!(svg.contains("User"));
         assert!(svg.contains("Login"));
+    }
+
+    #[test]
+    fn skinparams_style_actor_and_usecase_text() {
+        let input = r##"@startuml
+skinparam backgroundColor transparent
+skinparam defaultFontName "Verdana"
+skinparam defaultFontSize 12
+skinparam actorFontColor #fff
+skinparam actorBorderColor #78c2ad
+skinparam actorBackgroundColor #86c8b5
+skinparam __styleRootLineThickness 1
+skinparam usecaseFontColor #fff
+skinparam usecaseBorderColor #78c2ad
+skinparam usecaseBackgroundColor #86c8b5
+skinparam usecaseBorderThickness 2
+actor User
+usecase "Login" as UC1
+User --> UC1
+@enduml"##;
+        let diagram = rustuml_parser::parse::parse(input).unwrap();
+        let svg = crate::render_svg(&diagram);
+        assert!(svg.contains(r#"style="width:"#));
+        assert!(!svg.contains("background:#FFFFFF;"));
+        assert!(svg.contains(r##"fill="#86C8B5""##));
+        assert!(svg.contains(r#"stroke:#78C2AD;stroke-width:1;"#));
+        assert!(svg.contains(r#"stroke:#78C2AD;stroke-width:2;"#));
+        assert!(svg.contains(r#"font-family="'Verdana'""#));
+        assert!(svg.contains(r#"font-size="12""#));
+        assert!(svg.contains(r##"fill="#FFFFFF""##));
     }
 }
