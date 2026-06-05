@@ -4367,15 +4367,21 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                         }
                         NotePosition::Left => {
                             let note_content_w =
-                                note_content_width_padded(max_tw, note.shape, note_text_align);
+                                note_content_width_raw_padded(max_tw, note.shape, note_text_align);
                             let gap = match note.shape {
                                 NoteShape::Note => NOTE_LIFELINE_GAP,
                                 NoteShape::Hexagonal | NoteShape::Rectangular => {
                                     NOTE_LIFELINE_GAP - 1.0
                                 }
                             };
-                            let right = participants[0].lifeline_line_x.floor() - gap;
-                            Some(right - note_content_w)
+                            // Java's group InGroupable reservation for a left
+                            // side note lands one pixel left of the visible
+                            // group-floor note body; that extra pixel is what
+                            // drives the later missing-space participant push.
+                            Some(
+                                (participants[0].lifeline_line_x - gap - note_content_w).floor()
+                                    - 1.0,
+                            )
                         }
                         _ => None,
                     };
@@ -5507,12 +5513,43 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
         event_idx: usize,
     }
 
-    // Drawn horizontal extent (left, right) of a note, mirroring the note-render
-    // branch below. A note enclosed by a group frame contributes its overhang to
-    // the frame's InGroupable extent (Java `NoteBox.getMinX/getMaxX` feeding
-    // `InGroupableList`), so the frame grows to cover a note that sticks out past
-    // the messages. Returns `None` for notes with no resolvable anchor.
-    let note_drawn_extent = |event_idx: usize, note: &Note| -> Option<(f64, f64)> {
+    let mut group_note_left_floor_by_event: HashMap<usize, f64> = HashMap::new();
+    {
+        let mut group_depth = 0usize;
+        for (idx, event) in diagram.events.iter().enumerate() {
+            match event {
+                Event::GroupStart(_) => group_depth += 1,
+                Event::GroupEnd => group_depth = group_depth.saturating_sub(1),
+                Event::Note(note)
+                    if group_depth > 0
+                        && !note.on_message
+                        && note.position == NotePosition::Left =>
+                {
+                    let first_part = note
+                        .participants
+                        .first()
+                        .and_then(|id| id_to_idx.get(id.as_str()))
+                        .copied();
+                    if first_part == Some(0) {
+                        group_note_left_floor_by_event.insert(
+                            idx,
+                            GROUP_NOTE_LEFT_FLOOR_BASE + group_depth as f64 * group_frame_margin,
+                        );
+                    }
+                }
+                _ => {}
+            }
+        }
+    }
+
+    // Horizontal group-frame extent (left, right) of a note. A note enclosed by
+    // a group frame contributes its Java `NoteBox.getMinX/getMaxX` extent to
+    // the frame's InGroupable list, so the frame grows to cover side notes that
+    // stick out past the messages. This is deliberately not always identical
+    // to the drawn polygon width below: Java consumes raw preferred width for
+    // the InGroupable extent, then draws the visible note with snapped geometry.
+    // Returns `None` for notes with no resolvable anchor.
+    let note_group_extent = |event_idx: usize, note: &Note| -> Option<(f64, f64)> {
         let max_text_w =
             note_max_line_width_with_family(&note.text, note_font_size_f, &note_font_family);
         let note_content_w = note_content_width_padded(max_text_w, note.shape, note_text_align);
@@ -5554,7 +5591,12 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                 } else {
                     (ll_x + gap).floor()
                 };
-                Some((left, left + note_content_w))
+                let right = if note.on_message {
+                    left + note_content_w
+                } else {
+                    left + raw_note_content_w + 1.0
+                };
+                Some((left, right))
             }
             NotePosition::Left => {
                 let ll_x = if note.on_message {
@@ -5570,8 +5612,11 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                     let right = ll_x.floor() - gap;
                     Some((right - note_content_w, right))
                 } else {
-                    let left = (ll_x - gap - raw_note_content_w).floor();
-                    Some((left, left + note_content_w))
+                    let mut left = (ll_x - gap - raw_note_content_w).floor();
+                    if let Some(&floor) = group_note_left_floor_by_event.get(&event_idx) {
+                        left = floor;
+                    }
+                    Some((left, left + raw_note_content_w + 1.0))
                 }
             }
             NotePosition::Over => {
@@ -5795,7 +5840,7 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                 Event::Note(note) if !group_start_stack.is_empty() => {
                     // A note is an InGroupable of every enclosing frame (Java
                     // `InGroupablesStack.addElement` adds it to all open lists).
-                    if let Some((nl, nr)) = note_drawn_extent(ev_idx, note) {
+                    if let Some((nl, nr)) = note_group_extent(ev_idx, note) {
                         for top in group_start_stack.iter_mut() {
                             top.3 = top.3.min(nl);
                             top.4 = top.4.max(nr);
@@ -7472,7 +7517,10 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                             let right = ll_x.floor() - gap;
                             (right - note_content_w, right)
                         } else {
-                            let left = (ll_x - gap - raw_note_content_w).floor();
+                            let mut left = (ll_x - gap - raw_note_content_w).floor();
+                            if let Some(&floor) = group_note_left_floor_by_event.get(&ev_idx) {
+                                left = floor;
+                            }
                             (left, left + note_content_w)
                         }
                     }
