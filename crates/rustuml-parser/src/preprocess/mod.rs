@@ -2171,6 +2171,13 @@ impl PreprocessContext {
 
         // Split on top-level commas in the raw arg string (before substitution).
         let raw_parts = split_builtin_args(args_raw);
+        if func == "get_variable_value" {
+            let args: Vec<&str> = raw_parts
+                .iter()
+                .map(|a| a.trim().trim_matches('"'))
+                .collect();
+            return self.eval_one_builtin_from_values(func, &args);
+        }
         // Evaluate each argument as an expression.
         let evaluated: Vec<String> = raw_parts
             .iter()
@@ -2361,9 +2368,8 @@ impl PreprocessContext {
             }
             "get_variable_value" => {
                 let name = args.first().copied().unwrap_or("");
-                self.get_var(name)
-                    .cloned()
-                    .or_else(|| self.token_defines.get(name).cloned())
+                name.strip_prefix('$')
+                    .and_then(|name| self.get_var(name).cloned())
                     .unwrap_or_default()
             }
             "set_variable_value" => {
@@ -3411,6 +3417,13 @@ mod tests {
         let input = "@startuml\n!if %feature(\"dark-mode\") == \"true\"\ndark\n!else\nlight\n!endif\n@enduml";
         let lines = pp(input);
         assert_eq!(lines, vec!["light"]);
+    }
+
+    #[test]
+    fn builtin_get_variable_value_requires_dollar_name() {
+        let input = "@startuml\n!$myVar = \"hello\"\n!$a = %get_variable_value(\"myVar\")\n!$b = %get_variable_value(\"$myVar\")\nnote : [$a]|[$b]\n@enduml";
+        let lines = pp(input);
+        assert_eq!(lines, vec!["note : []|[hello]"]);
     }
 
     #[test]

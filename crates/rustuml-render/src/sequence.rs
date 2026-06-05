@@ -291,6 +291,9 @@ fn fmt_coord(v: f64) -> String {
 /// edges land on the area allocated for it, which equals the ceiling of the
 /// preferred width. Empirically the drawn outer width is `ceil(text) + margin`.
 fn note_content_width(max_text_w: f64, shape: NoteShape) -> f64 {
+    if shape == NoteShape::Note && max_text_w == 0.0 {
+        return 21.0;
+    }
     note_content_width_raw(max_text_w, shape).ceil()
 }
 
@@ -719,12 +722,16 @@ struct NoteTextMetrics {
 }
 
 fn note_text_metrics_with_family(text: &str, font_size: f64, font_family: &str) -> NoteTextMetrics {
-    let mut line_heights = text
+    let line_heights = text
         .lines()
         .map(|line| rendered_line_metrics_with_family(line.trim(), font_size, font_family).height)
         .collect::<Vec<_>>();
     if line_heights.is_empty() {
-        line_heights.push(rendered_line_metrics_with_family("", font_size, font_family).height);
+        return NoteTextMetrics {
+            line_heights,
+            first_height: 0.0,
+            total_height: 0.0,
+        };
     }
     let first_height = line_heights[0];
     let total_height = line_heights.iter().sum();
