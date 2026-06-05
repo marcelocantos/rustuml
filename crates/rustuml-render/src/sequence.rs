@@ -327,6 +327,13 @@ const HEAD_BOX_H: f64 = 30.488281250; // exact Java double
 const CREATE_BOX_TOP_OFFSET: f64 = 21.310575;
 /// Offset from the create message's arrow y down to the created lifeline top.
 const CREATE_LIFELINE_TOP_OFFSET: f64 = 9.4336;
+/// Created queue heads draw their pill flush with the inline head base instead
+/// of using the ordinary mixed-participant 5px head drop.
+const CREATE_QUEUE_HEAD_OFFSET: f64 = 0.0;
+/// Created queue lifelines start 2.5px higher than rectangular created heads.
+const CREATE_QUEUE_LIFELINE_TOP_ADJUST: f64 = 2.5;
+/// Created queue heads extend 5px less below the creating message arrow.
+const CREATE_QUEUE_ADVANCE_ADJUST: f64 = 5.0;
 /// Extra vertical advance added to the y cursor after a create message,
 /// accounting for the inline head box that straddles the arrow. Reverse-engineered
 /// from goldens (the next event sits this much further down than a normal step).
@@ -4281,7 +4288,12 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
         .filter_map(|(id, &idx)| {
             id_to_idx.get(id).map(|&pi| {
                 let extra_h = (participants[pi].box_height - HEAD_BOX_H).max(0.0);
-                (idx, CREATE_EXTRA_ADVANCE + extra_h)
+                let queue_adjust = if participants[pi].kind == ParticipantKind::Queue {
+                    CREATE_QUEUE_ADVANCE_ADJUST
+                } else {
+                    0.0
+                };
+                (idx, CREATE_EXTRA_ADVANCE + extra_h - queue_adjust)
             })
         })
         .collect();
@@ -5171,9 +5183,14 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                 .get(id)
                 .map(|&pi| (participants[pi].box_height - HEAD_BOX_H).max(0.0) / 2.0)
                 .unwrap_or(0.0);
+            let queue_adjust = id_to_idx
+                .get(id)
+                .filter(|&&pi| participants[pi].kind == ParticipantKind::Queue)
+                .map(|_| CREATE_QUEUE_LIFELINE_TOP_ADJUST)
+                .unwrap_or(0.0);
             (
                 id.clone(),
-                event_y(idx) + CREATE_LIFELINE_TOP_OFFSET + half_extra,
+                event_y(idx) + CREATE_LIFELINE_TOP_OFFSET + half_extra - queue_adjust,
             )
         })
         .collect();
@@ -7743,6 +7760,11 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
             scratch.participant_border = svg.participant_border.clone();
             scratch.participant_border_thickness = svg.participant_border_thickness.clone();
             let inline_border = svg.participant_border.clone();
+            let inline_queue_head_offset = if p.kind == ParticipantKind::Queue {
+                CREATE_QUEUE_HEAD_OFFSET
+            } else {
+                queue_head_offset
+            };
             render_participant_shape(
                 &mut scratch,
                 &part_uid,
@@ -7755,7 +7777,7 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                 fill_color,
                 &inline_border,
                 participant_inner_pad,
-                queue_head_offset,
+                inline_queue_head_offset,
             );
             // Strip the surrounding `<g class="participant participant-head" ...>`
             // wrapper: PlantUML draws the created head box as bare shape elements.
