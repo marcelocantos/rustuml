@@ -2891,6 +2891,7 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
     let mut message_font_color_set = false;
     let mut message_font_family = "sans-serif".to_string();
     let mut message_font_size: u32 = MSG_FONT_SIZE as u32;
+    let mut arrow_font_size_set = false;
     let mut message_font_bold = false;
     let mut message_font_italic = false;
     let mut participant_fill = "#E2E2F0".to_string();
@@ -3039,6 +3040,7 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
             "arrowfontsize" | "sequencearrowfontsize" => {
                 if let Ok(v) = val.parse::<u32>() {
                     message_font_size = v;
+                    arrow_font_size_set = true;
                 }
             }
             "arrowfontstyle" | "sequencearrowfontstyle" => {
@@ -4262,6 +4264,44 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
         .fold(0.0_f64, f64::max);
     let lifeline_top = head_box_y + max_box_h + LIFELINE_Y_OFFSET;
 
+    let event_message_text_height = |event: &Event| -> (bool, f64) {
+        match event {
+            Event::Message(msg) => {
+                let label = process_label(&msg.label);
+                (
+                    !label.is_empty(),
+                    rendered_line_metrics_with_family(
+                        &label,
+                        message_font_size_f,
+                        &message_font_family,
+                    )
+                    .height,
+                )
+            }
+            Event::Return(ret) => {
+                let label = if ret.label.is_empty() {
+                    String::new()
+                } else {
+                    decode_backslash_escapes(&ret.label)
+                };
+                (
+                    !label.is_empty(),
+                    rendered_line_metrics_with_family(
+                        &label,
+                        message_font_size_f,
+                        &message_font_family,
+                    )
+                    .height,
+                )
+            }
+            // An empty divider (`====`) has no label box/text line, so it
+            // reserves no text height.
+            Event::Divider(t) => (!t.trim().is_empty(), MSG_TEXT_HEIGHT),
+            Event::Delay(t) => (t.is_some(), message_text_height),
+            _ => (false, message_text_height),
+        }
+    };
+
     // Pre-scan: a bare `note left` / `note right` attached to a message
     // (Note.on_message) straddles that message's arrow band rather than
     // consuming its own vertical row. Map each such note event to the
@@ -4271,6 +4311,7 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
     // Extra vertical space each owning message reserves above and below its
     // arrow for the attached note (max across multiple attached notes).
     let mut msg_note_extra: HashMap<usize, f64> = HashMap::new();
+    let mut msg_note_y_adjust: HashMap<usize, f64> = HashMap::new();
     {
         let mut last_msg_idx: Option<usize> = None;
         for (idx, event) in diagram.events.iter().enumerate() {
@@ -4286,9 +4327,19 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                             note_font_size_f,
                             &note_font_family,
                         );
-                        let extra = note_msg_extra_base(note.shape) + note_msg_text_tail(&metrics);
+                        let (owner_has_text, owner_text_height) =
+                            event_message_text_height(&diagram.events[owner]);
+                        let y_adjust = if arrow_font_size_set && owner_has_text {
+                            (MSG_TEXT_HEIGHT - owner_text_height) / 2.0
+                        } else {
+                            0.0
+                        };
+                        let extra = note_msg_extra_base(note.shape)
+                            + note_msg_text_tail(&metrics)
+                            + y_adjust;
                         let e = msg_note_extra.entry(owner).or_insert(0.0);
                         *e = e.max(extra);
+                        msg_note_y_adjust.insert(owner, y_adjust);
                     }
                 }
                 _ => {}
@@ -4322,41 +4373,7 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
         let mut y = lifeline_top;
         let message_vertical_padding = 2.0 * global_padding;
         for (idx, event) in diagram.events.iter().take(page1_end).enumerate() {
-            let (has_text, event_text_height) = match event {
-                Event::Message(msg) => {
-                    let label = process_label(&msg.label);
-                    (
-                        !label.is_empty(),
-                        rendered_line_metrics_with_family(
-                            &label,
-                            message_font_size_f,
-                            &message_font_family,
-                        )
-                        .height,
-                    )
-                }
-                Event::Return(ret) => {
-                    let label = if ret.label.is_empty() {
-                        String::new()
-                    } else {
-                        decode_backslash_escapes(&ret.label)
-                    };
-                    (
-                        !label.is_empty(),
-                        rendered_line_metrics_with_family(
-                            &label,
-                            message_font_size_f,
-                            &message_font_family,
-                        )
-                        .height,
-                    )
-                }
-                // An empty divider (`====`) has no label box/text line, so it
-                // reserves no text height.
-                Event::Divider(t) => (!t.trim().is_empty(), MSG_TEXT_HEIGHT),
-                Event::Delay(t) => (t.is_some(), message_text_height),
-                _ => (false, message_text_height),
-            };
+            let (has_text, event_text_height) = event_message_text_height(event);
             match event {
                 Event::Message(msg) => {
                     let is_self = msg.from == msg.to;
@@ -4473,7 +4490,8 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                         let arrow_y = event_y_positions.get(owner).copied().unwrap_or(y);
                         let note_top = arrow_y
                             - note_msg_arrow_offset_for_line(note.shape, metrics.first_height)
-                            - note_msg_text_tail(&metrics);
+                            - note_msg_text_tail(&metrics)
+                            + msg_note_y_adjust.get(&owner).copied().unwrap_or(0.0);
                         // The draw site derives note_top from event_y via
                         // note_top = event_y - note_y_extra - num_lines*MSG_TEXT_HEIGHT.
                         let note_event_y = note_top + note_y_extra + metrics.total_height;
@@ -7873,6 +7891,23 @@ mod tests {
         assert!(svg.contains("Alice"));
         assert!(svg.contains("hello"));
         assert!(svg.contains("hi"));
+    }
+
+    #[test]
+    fn arrow_font_size_keeps_attached_note_spacing() {
+        let input = concat!(
+            "@startuml\n",
+            "skinparam arrowFontSize 10\n",
+            "Alice -> Bob : hello\n",
+            "Bob --> Alice : world\n",
+            "note right : note\n",
+            "@enduml",
+        );
+        let diagram = rustuml_parser::parse::parse(input).unwrap();
+        let svg = crate::render_svg(&diagram);
+
+        assert!(svg.contains(r#"y1="94.8096" y2="94.8096""#));
+        assert!(svg.contains(r#"M86,77.2656 L86,102.2656"#));
     }
 
     #[test]
