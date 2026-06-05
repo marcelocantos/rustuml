@@ -812,10 +812,21 @@ fn diamond_inner_w(condition: &str) -> f64 {
     diamond_inner_w_styled(condition, SMALL_FONT, false, "sans-serif")
 }
 
-fn centered_text_y_for_family(center_y: f64, font_size: f64, font_family: &str) -> f64 {
+fn centered_label_y_for_family(
+    text: &str,
+    center_y: f64,
+    font_size: f64,
+    font_family: &str,
+) -> f64 {
     center_y
-        - text_render::text_height_for_family(font_size, font_family).max(TEXT_MIN_BOX_HEIGHT) / 2.0
-        + text_render::ascent_for_family(font_size, font_family)
+        - text_render::label_height_with_family(text, font_size, font_family)
+            .max(TEXT_MIN_BOX_HEIGHT)
+            / 2.0
+        + text_render::label_ascent_with_family(text, font_size, font_family)
+}
+
+fn centered_label_y(text: &str, center_y: f64, font_size: f64) -> f64 {
+    centered_label_y_for_family(text, center_y, font_size, "sans-serif")
 }
 
 fn centered_text_y(center_y: f64, font_size: f64) -> f64 {
@@ -5061,7 +5072,12 @@ fn emit_if(
     // Condition text (textLength = measured, centred under cx). The condition
     // honours `skinparam activityFontColor`; the then/else branch labels below
     // keep the default black.
-    let text_y = centered_text_y_for_family(diamond_cy, diamond_font_size, diamond_font_family);
+    let text_y = centered_label_y_for_family(
+        condition,
+        diamond_cy,
+        diamond_font_size,
+        diamond_font_family,
+    );
     svg.text_element_styled(
         diamond_text_color,
         diamond_font_family,
@@ -5345,7 +5361,7 @@ fn emit_if_long(
 
         // Condition text, centred inside the diamond.
         let cw = text_render::measure(&col.condition, SMALL_FONT, false);
-        let cond_y = centered_text_y(diamond_cy, SMALL_FONT);
+        let cond_y = centered_label_y(&col.condition, diamond_cy, SMALL_FONT);
         svg.text_element_styled(
             &cond_text_color,
             "sans-serif",
@@ -5680,7 +5696,7 @@ fn emit_if_down(
     }
     // Condition text (centred under cx).
     let cond_text_color = svg.palette.text_color.clone();
-    let text_y = centered_text_y(diamond_cy, SMALL_FONT);
+    let text_y = centered_label_y(condition, diamond_cy, SMALL_FONT);
     svg.text_element_styled(
         &cond_text_color,
         "sans-serif",
@@ -5830,7 +5846,7 @@ fn emit_switch(
     ];
     svg.polygon_shape(&diamond_fill, &pts, &diamond_stroke, &diamond_stroke_width);
     let cond_text_color = svg.palette.text_color.clone();
-    let cond_text_y = diamond_cy + pm::text_height(SMALL_FONT) / 2.0 - pm::descent(SMALL_FONT);
+    let cond_text_y = centered_label_y(condition, diamond_cy, SMALL_FONT);
     svg.text_element_styled(
         &cond_text_color,
         "sans-serif",
@@ -6307,7 +6323,12 @@ fn emit_while(
     }
 
     // Condition text inside diamond.
-    let text_y = centered_text_y_for_family(diamond_cy, diamond_font_size, diamond_font_family);
+    let text_y = centered_label_y_for_family(
+        condition,
+        diamond_cy,
+        diamond_font_size,
+        diamond_font_family,
+    );
     svg.text_element_styled(
         diamond_text_color,
         diamond_font_family,
@@ -6556,7 +6577,7 @@ fn emit_repeat(
     ];
     svg.polygon_shape(&diamond_fill, &pts, &diamond_stroke, &diamond_stroke_width);
 
-    let text_y = cond_diamond_cy + pm::text_height(SMALL_FONT) / 2.0 - pm::descent(SMALL_FONT);
+    let text_y = centered_label_y(condition, cond_diamond_cy, SMALL_FONT);
     svg.text_element_styled(
         &text_color,
         "sans-serif",
