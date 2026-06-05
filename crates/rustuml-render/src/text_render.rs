@@ -413,6 +413,7 @@ enum MetricFamily {
     Sans,
     Mono,
     Arial,
+    Helvetica,
     Verdana,
 }
 
@@ -484,6 +485,7 @@ fn metric_family(font_family: &str) -> MetricFamily {
     match normalized.as_str() {
         "courier" | "courier new" | "monospace" | "monospaced" => MetricFamily::Mono,
         "arial" => MetricFamily::Arial,
+        "helvetica" => MetricFamily::Helvetica,
         "verdana" => MetricFamily::Verdana,
         _ => MetricFamily::Sans,
     }
@@ -936,12 +938,85 @@ fn family_table_text_width(
         .sum()
 }
 
+const HELVETICA_UPM: f64 = 2048.0;
+
+fn helvetica_char_units(c: char) -> Option<f64> {
+    let units = match c {
+        ' ' => 569.0,
+        '!' => 569.0,
+        '"' => 727.0,
+        '#' => 1139.0,
+        '$' => 1139.0,
+        '%' => 1820.0,
+        '&' => 1366.0,
+        '\'' => 455.0,
+        '(' => 682.0,
+        ')' => 682.0,
+        '*' => 797.0,
+        '+' => 1196.0,
+        ',' => 569.0,
+        '-' => 682.0,
+        '.' => 569.0,
+        '/' => 569.0,
+        '0'..='9' => 1139.0,
+        ':' => 569.0,
+        ';' => 569.0,
+        '<' => 1196.0,
+        '=' => 1196.0,
+        '>' => 1196.0,
+        '?' => 1139.0,
+        '@' => 2079.0,
+        'A' | 'B' => 1366.0,
+        'C' | 'D' | 'H' | 'N' | 'R' | 'U' => 1479.0,
+        'E' => 1366.0,
+        'F' | 'T' | 'Z' => 1251.0,
+        'G' | 'O' | 'Q' => 1593.0,
+        'I' => 569.0,
+        'J' | 'S' => 1024.0,
+        'K' | 'X' => 1366.0,
+        'L' => 1139.0,
+        'M' => 1706.0,
+        'P' | 'V' => 1366.0,
+        'W' => 1934.0,
+        'Y' => 1366.0,
+        '[' => 569.0,
+        '\\' => 569.0,
+        ']' => 569.0,
+        '^' => 961.0,
+        '_' => 1139.0,
+        '`' => 682.0,
+        'a' | 'b' | 'd' | 'e' | 'g' | 'h' | 'n' | 'o' | 'p' | 'q' | 'u' => 1139.0,
+        'c' | 'k' | 's' | 'v' | 'x' | 'y' | 'z' => 1024.0,
+        'f' | 't' => 569.0,
+        'i' | 'j' | 'l' => 455.0,
+        'm' => 1706.0,
+        'r' => 682.0,
+        'w' => 1479.0,
+        '{' => 684.0,
+        '|' => 532.0,
+        '}' => 684.0,
+        '~' => 1196.0,
+        _ => return None,
+    };
+    Some(units)
+}
+
+fn helvetica_text_width(text: &str, font_size: f64, bold: bool) -> f64 {
+    text.chars()
+        .map(|c| match helvetica_char_units(c) {
+            Some(units) => units / HELVETICA_UPM * font_size,
+            None => sans_text_width(&c.to_string(), font_size, bold),
+        })
+        .sum()
+}
+
 fn family_text_width(text: &str, font_size: f64, bold: bool, family: MetricFamily) -> f64 {
     match family {
         MetricFamily::Mono => pm::mono_text_width(text, font_size),
         MetricFamily::Arial => {
             family_table_text_width(text, font_size, bold, &ARIAL_WIDTH, &ARIAL_BOLD_WIDTH)
         }
+        MetricFamily::Helvetica => helvetica_text_width(text, font_size, bold),
         MetricFamily::Verdana => {
             family_table_text_width(text, font_size, bold, &VERDANA_WIDTH, &VERDANA_BOLD_WIDTH)
         }
@@ -953,6 +1028,7 @@ fn family_text_height(font_size: f64, family: MetricFamily) -> f64 {
     match family {
         MetricFamily::Mono => pm::mono_text_height(font_size),
         MetricFamily::Arial => font_size * 1.14990234375,
+        MetricFamily::Helvetica => font_size,
         MetricFamily::Verdana => font_size * 1.21533203125,
         MetricFamily::Sans => pm::text_height(font_size),
     }
@@ -965,6 +1041,7 @@ fn family_ascent(font_size: f64, family: MetricFamily) -> f64 {
         // text baseline behaves as ascent + leading, while the text height
         // above already includes the same leading.
         MetricFamily::Arial => font_size * 0.93798828125,
+        MetricFamily::Helvetica => font_size * 0.77001953125,
         MetricFamily::Verdana => font_size * 1.00537109375,
         MetricFamily::Sans => pm::ascent(font_size),
     }
@@ -1429,10 +1506,42 @@ mod tests {
             "32.8877"
         );
         assert_eq!(
+            pm::fmt_coord(measure_with_family("Alice", 12.0, false, "Helvetica")),
+            "26.0098"
+        );
+        assert_eq!(
+            pm::fmt_coord(measure_with_family("Bob", 12.0, false, "Helvetica")),
+            "21.3516"
+        );
+        assert_eq!(
+            pm::fmt_coord(measure_with_family("hello", 12.0, false, "Helvetica")),
+            "25.3535"
+        );
+        assert_eq!(
+            pm::fmt_coord(measure_with_family("hi", 12.0, false, "Helvetica")),
+            "9.3398"
+        );
+        assert_eq!(
+            pm::fmt_coord(measure_with_family("Foo", 14.0, false, "Helvetica")),
+            "24.124"
+        );
+        assert_eq!(
+            pm::fmt_coord(measure_with_family("Bar", 14.0, false, "Helvetica")),
+            "21.7861"
+        );
+        assert_eq!(
             pm::fmt_coord(text_height_for_family(16.0, "Arial")),
             "18.3984"
         );
         assert_eq!(pm::fmt_coord(ascent_for_family(16.0, "Arial")), "15.0078");
+        assert_eq!(
+            pm::fmt_coord(text_height_for_family(12.0, "Helvetica")),
+            "12"
+        );
+        assert_eq!(
+            pm::fmt_coord(ascent_for_family(12.0, "Helvetica")),
+            "9.2402"
+        );
     }
 
     #[test]
