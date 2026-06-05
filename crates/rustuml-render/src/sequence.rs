@@ -754,12 +754,46 @@ fn line_has_subscript_after_plain_first(content: &str) -> bool {
             .any(|s| matches!(s.style.baseline_shift, Some("sub")))
 }
 
+fn all_shifted_line_metrics_with_family(
+    content: &str,
+    font_size: f64,
+    font_family: &str,
+) -> Option<(f64, f64)> {
+    let segments = creole::parse_segments(content);
+    let first_shift = segments.first()?.style.baseline_shift?;
+    if !segments
+        .iter()
+        .all(|s| s.text.trim().is_empty() || s.style.baseline_shift == Some(first_shift))
+    {
+        return None;
+    }
+
+    let effective_size = (font_size - 3.0).max(2.0);
+    let height = atom_height_with_family(effective_size, font_family);
+    let baseline_drop = height - ascent_with_family(effective_size, font_family) + 2.0;
+    let y_shift = plantuml_metrics::descent(font_size) - plantuml_metrics::descent(effective_size);
+    let emitter_offset = match first_shift {
+        "sub" => 3.0 + y_shift,
+        "super" => -6.0 + y_shift,
+        _ => return None,
+    };
+    Some((height, baseline_drop + emitter_offset))
+}
+
 fn rendered_label_y_drop_with_family(content: &str, font_size: f64, font_family: &str) -> f64 {
     if let Some(latex) = latex_label_content(content) {
         return crate::math::raw_latex_image(latex).height as f64 + 1.0;
     }
     let mut lines = content.split("\\n");
     let first = lines.next().unwrap_or("");
+    if let Some((_, first_drop)) =
+        all_shifted_line_metrics_with_family(first, font_size, font_family)
+    {
+        let remaining_height: f64 = lines
+            .map(|line| rendered_line_metrics_with_family(line, font_size, font_family).height)
+            .sum();
+        return first_drop + remaining_height;
+    }
     let first_metrics = first_segment_metrics_with_family(first, font_size, font_family);
     let remaining_height: f64 = lines
         .map(|line| rendered_line_metrics_with_family(line, font_size, font_family).height)
@@ -794,6 +828,10 @@ fn message_label_block_height_with_family(text: &str, font_size: f64, font_famil
         .map(|line| {
             if let Some(latex) = latex_label_content(line) {
                 crate::math::raw_latex_image(latex).height as f64 - 1.0
+            } else if let Some((height, _)) =
+                all_shifted_line_metrics_with_family(line, font_size, font_family)
+            {
+                height
             } else {
                 rendered_line_metrics_with_family(line, font_size, font_family).height
             }
