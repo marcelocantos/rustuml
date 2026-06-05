@@ -35,6 +35,8 @@ const LABELED_ARROW_LEN: f64 = 41.2754;
 const GROUP_IF_LEFT_EXTENT_EXTRA: f64 = 3.0107;
 const GROUP_IF_RIGHT_EXTENT_EXTRA: f64 = 0.9893;
 const GROUP_IF_BODY_WIDTH_EXTRA: f64 = 4.0;
+const GROUP_COLOR_TITLE_WIDTH_EXTRA: f64 = 4.1572;
+const GROUP_COLOR_RIGHT_EXTENT_EXTRA: f64 = 2.0;
 const ACTION_PADDING: f64 = 20.0; // total vertical padding in action box
 const ACTION_H_PADDING: f64 = 10.0; // horizontal padding each side
 const ACTION_MIN_HEIGHT: f64 = 30.0;
@@ -2336,6 +2338,7 @@ fn node_extents(node: &LayoutNode) -> (f64, f64) {
         // side inside the partition rect.
         LayoutNode::Partition {
             name,
+            color,
             body,
             is_group,
             ..
@@ -2347,6 +2350,9 @@ fn node_extents(node: &LayoutNode) -> (f64, f64) {
             if *is_group && group_wraps_single_if(body) {
                 left += GROUP_IF_LEFT_EXTENT_EXTRA;
                 right += GROUP_IF_RIGHT_EXTENT_EXTRA;
+            }
+            if *is_group && color.is_some() && !group_wraps_single_if(body) {
+                right += GROUP_COLOR_RIGHT_EXTENT_EXTRA;
             }
             (left, right)
         }
@@ -2732,14 +2738,23 @@ fn partition_body_width_extra(is_group: bool, body: &[LayoutNode]) -> f64 {
     }
 }
 
+fn partition_title_width_extra(color: &Option<String>, is_group: bool, body: &[LayoutNode]) -> f64 {
+    if is_group && color.is_some() && !group_wraps_single_if(body) {
+        GROUP_COLOR_TITLE_WIDTH_EXTRA
+    } else {
+        0.0
+    }
+}
+
 fn partition_title_drives_width(
     title_w: f64,
     body_w: f64,
+    title_width_extra: f64,
     is_group: bool,
     body: &[LayoutNode],
 ) -> bool {
     let body_width_extra = partition_body_width_extra(is_group, body);
-    title_w + 15.0 >= body_w + 20.0 + body_width_extra
+    title_w + 15.0 + title_width_extra >= body_w + 20.0 + body_width_extra
 }
 
 fn partition_top_gap(
@@ -2756,6 +2771,7 @@ fn partition_top_gap(
             && partition_title_drives_width(
                 text_render::measure(name, TITLE_FONT_SIZE, false),
                 sequence_width(body),
+                partition_title_width_extra(color, is_group, body),
                 is_group,
                 body,
             ))
@@ -4396,8 +4412,11 @@ fn emit_node(svg: &mut SvgEmitter, node: &LayoutNode, cx: f64, y: f64) -> f64 {
             let title_w = text_render::measure(name, TITLE_FONT_SIZE, false);
             let body_w = sequence_width(body);
             let body_width_extra = partition_body_width_extra(*is_group, body);
-            let title_drives_width = partition_title_drives_width(title_w, body_w, *is_group, body);
-            let partition_w = (title_w + 15.0).max(body_w + 20.0 + body_width_extra);
+            let title_width_extra = partition_title_width_extra(color, *is_group, body);
+            let title_drives_width =
+                partition_title_drives_width(title_w, body_w, title_width_extra, *is_group, body);
+            let partition_w =
+                (title_w + 15.0 + title_width_extra).max(body_w + 20.0 + body_width_extra);
             let partition_x = if !*is_group && !title_drives_width {
                 (cx - partition_w / 2.0).max(16.0)
             } else {
