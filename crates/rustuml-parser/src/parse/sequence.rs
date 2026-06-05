@@ -99,6 +99,10 @@ impl SeqParser {
     }
 
     fn ensure_participant(&mut self, id: &str) -> String {
+        self.ensure_participant_at(id, self.current_line)
+    }
+
+    fn ensure_participant_at(&mut self, id: &str, source_line: usize) -> String {
         let id = id.trim().to_string();
         if !self.participant_ids.contains(&id) {
             self.participant_ids.push(id.clone());
@@ -110,7 +114,7 @@ impl SeqParser {
                 stereotype: None,
                 url: None,
                 color: None,
-                source_line: self.current_line,
+                source_line,
             });
         }
         id
@@ -496,10 +500,16 @@ impl SeqParser {
                 "over" => NotePosition::Over,
                 _ => NotePosition::Right,
             };
+            let inline_text = caps.get(5);
+            let participant_source_line = if inline_text.is_some() {
+                self.current_line
+            } else {
+                self.current_line + 1
+            };
             let mut participants: Vec<String> = caps.get(3).map_or(Vec::new(), |m| {
                 m.as_str()
                     .split(',')
-                    .map(|s| self.ensure_participant(s.trim()))
+                    .map(|s| self.ensure_participant_at(s.trim(), participant_source_line))
                     .collect()
             });
             // Bare "note left" / "note right" (no participant) attaches to the
@@ -518,7 +528,7 @@ impl SeqParser {
             }
             let color = caps.get(4).map(|m| m.as_str().to_string());
 
-            if let Some(text_match) = caps.get(5) {
+            if let Some(text_match) = inline_text {
                 if participants.is_empty() && position != NotePosition::Over && !on_message {
                     return true;
                 }
@@ -1268,6 +1278,17 @@ mod tests {
         } else {
             panic!("expected note");
         }
+    }
+
+    #[test]
+    fn multiline_note_implicit_participant_uses_first_body_line_source() {
+        let d = parse("\n\n\nnote over Alice\n  First\nend note\nAlice -> Bob");
+        let alice = d
+            .participants
+            .iter()
+            .find(|p| p.id == "Alice")
+            .expect("Alice participant");
+        assert_eq!(alice.source_line, 5);
     }
 
     #[test]
