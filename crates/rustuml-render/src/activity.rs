@@ -2216,10 +2216,11 @@ fn node_extents(node: &LayoutNode) -> (f64, f64) {
             let cond_half = diamond_inner_w(condition) / 2.0 + DIAMOND_HALF;
             let body_half = body_w / 2.0;
             // A `backward :label;` action draws a box on the return arm at the
-            // far right; FtileRepeat widens the tile by the backward box's full
-            // width and centres on `getLeft = max(body_left, diamond_half)`.
+            // far right. The repeat spine keeps the ordinary-repeat
+            // `cond_half + 9` clearance, unless the body itself is wider.
+            // FtileRepeat appends the backward tile on the right.
             if let Some(label) = backward {
-                let left_extent = cond_half.max(body_half);
+                let left_extent = body_half.max(cond_half + 9.0);
                 let right_extent =
                     repeat_backward_right_extent(cond_half, body_half, is_label, label);
                 (left_extent, right_extent)
@@ -2366,21 +2367,35 @@ fn repeat_backward_box_w(label: &str) -> f64 {
     text_render::measure(label, FONT_SIZE, false) + ACTION_H_PADDING * 2.0
 }
 
+/// Box-left offset (from the repeat spine) for a `backward :label;` action on
+/// a repeat return arm. When the condition diamond is at least as wide as the
+/// body, FtileRepeat's `max(width, test + 2*halfHex) + 2*halfHex - left`
+/// places the appended backward tile 24 px past the diamond east vertex. When
+/// the body drives the repeat width, PlantUML instead clears the east label
+/// before placing the backward tile.
+fn repeat_backward_box_left_rel(cond_half: f64, body_half: f64, is_label: &Option<String>) -> f64 {
+    if cond_half >= body_half {
+        cond_half + 2.0 * DIAMOND_HALF
+    } else {
+        let is_label_w = is_label
+            .as_ref()
+            .map(|l| text_render::measure(l, SMALL_FONT, false))
+            .unwrap_or(0.0);
+        body_half.max(cond_half + is_label_w + 10.0)
+    }
+}
+
 /// Right extent (from the repeat spine) when a `backward :label;` box sits on
-/// the return arm. The box left edge clears the widest of the body's right
-/// half and the condition diamond east vertex plus its `is (...)` label, with
-/// a 10 px return-arm gap; the extent then spans the box's full width.
+/// the return arm. The extent spans the backward box appended to the repeat
+/// geometry.
 fn repeat_backward_right_extent(
     cond_half: f64,
     body_half: f64,
     is_label: &Option<String>,
     backward_label: &str,
 ) -> f64 {
-    let is_label_w = is_label
-        .as_ref()
-        .map(|l| text_render::measure(l, SMALL_FONT, false))
-        .unwrap_or(0.0);
-    body_half.max(cond_half + is_label_w) + 10.0 + repeat_backward_box_w(backward_label)
+    repeat_backward_box_left_rel(cond_half, body_half, is_label)
+        + repeat_backward_box_w(backward_label)
 }
 
 fn node_width(node: &LayoutNode) -> f64 {
@@ -2486,7 +2501,7 @@ fn node_width(node: &LayoutNode) -> f64 {
             let cond_half = cond_w / 2.0;
             let body_half = body_w / 2.0;
             if let Some(label) = backward {
-                let left = cond_half.max(body_half);
+                let left = body_half.max(cond_half + 9.0);
                 let right = repeat_backward_right_extent(cond_half, body_half, is_label, label);
                 left + right
             } else {
@@ -5582,15 +5597,13 @@ fn emit_repeat(
         // ConnectionBackBackward1/2 routing: cond diamond → up into box bottom,
         // box → up out of box top → across to the entry diamond.
         //
-        // The box's left edge clears the widest of the body's right edge and
-        // the condition diamond's east vertex plus its `is (...)` label, then
-        // adds a 10 px gap (PlantUML's return-arm reservation).
-        let is_label_w = is_label
-            .as_ref()
-            .map(|l| text_render::measure(l, SMALL_FONT, false))
-            .unwrap_or(0.0);
+        // The box column mirrors the width pass above: condition-dominant
+        // repeats append it 24 px past the diamond east vertex; body-dominant
+        // repeats clear the east label before placing it.
         let bw = repeat_backward_box_w(label);
-        let box_left = body_right.max(diamond_right + is_label_w) + 10.0;
+        let body_half = body_w / 2.0;
+        let cond_half = cond_inner_w / 2.0 + DIAMOND_HALF;
+        let box_left = cx + repeat_backward_box_left_rel(cond_half, body_half, is_label);
         let box_cx = box_left + bw / 2.0;
         let box_top = body_y;
         let box_bottom = body_y
