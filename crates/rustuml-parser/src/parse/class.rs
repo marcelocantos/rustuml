@@ -711,7 +711,8 @@ impl ClassParser {
     fn try_relationship(&mut self, line: &str) -> bool {
         // Relationship format: EntityA ["mult"] ARROW ["mult"] EntityB [: label]
         // Supported arrows: <|--, --|>, ..|>, <|.., *--, --*, o--, --o,
-        //                   <-->, <..>, --, -->, <--, <-, ->, .., ..>, ..>>, <..
+        //                   <-->, <..>, <->, --, -->, -->>, <--, <-, ->, ->>,
+        //                   .., ..>, ...>, ..>>, <..
         //                   <|--|> (bidirectional inheritance), <..|.> etc.
         // Multiple dashes (e.g. ---- or ------) are treated as plain association.
         //
@@ -735,7 +736,7 @@ impl ClassParser {
             // separator colon flanked by optional space), which a bare endpoint
             // (no spaces) never matches, so `A::B --> C::D : label` still splits.
             Regex::new(
-                r#"^(?:"([^"]+)"|([\w./:]+))\s*(?:"([^"]+)")?\s*((?:<\|--\|>|<\.\.>|<\|--|--\|>|\.\.\|>|<\|\.\.|<\.\.|\*--|--\*|o--|--o|<-->|<-{2,}|-{2,}>|<--|-->|->|<-|-{2,}|\.\.>>|\.\.>|\.\.))\s*(?:"([^"]+)")?\s*(?:"([^"]+)"|([\w./:]+))(?:\s*:\s*(.+))?$"#,
+                r#"^(?:"([^"]+)"|([\w./:]+))\s*(?:"([^"]+)")?\s*((?:<\|--\|>|<\.\.>|<\|--|--\|>|\.\.\|>|<\|\.\.|<\.\.|<-->>|<-->|<->|\*--|--\*|o--|--o|-->>|<-{2,}|-{2,}>|<--|-->|->>|->|<-|-{2,}|\.{2,}>>|\.{2,}>|\.\.))\s*(?:"([^"]+)")?\s*(?:"([^"]+)"|([\w./:]+))(?:\s*:\s*(.+))?$"#,
             )
             .unwrap()
         });
@@ -1450,7 +1451,14 @@ fn parse_relationship_kind(s: &str) -> (RelationshipKind, bool) {
     } else if s.contains("..>") || s.contains("<..") {
         // Dashed dependency (..>)
         (RelationshipKind::Dependency, true)
-    } else if s.contains("-->") || s.contains("<--") || s == "->" || s == "<-" || s == "<-->" {
+    } else if s.contains("-->")
+        || s.contains("<--")
+        || s.contains("->>")
+        || s == "->"
+        || s == "<-"
+        || s == "<-->"
+        || s == "<->"
+    {
         // Solid dependency (-->)
         (RelationshipKind::Dependency, false)
     } else if s.contains("..") {
@@ -1890,6 +1898,22 @@ mod tests {
         assert_eq!(d.relationships[0].kind, RelationshipKind::Dependency);
         assert!(d.relationships[0].dashed);
         assert_eq!(d.relationships[0].label.as_deref(), Some("dotted thick"));
+    }
+
+    #[test]
+    fn class_dependency_arrow_variants() {
+        let d = parse("A <-> B\nA ->> B\nA -->> B\nA <-->> B\nA ...> B");
+        assert_eq!(d.relationships.len(), 5);
+        assert!(
+            d.relationships
+                .iter()
+                .all(|rel| rel.kind == RelationshipKind::Dependency)
+        );
+        assert!(!d.relationships[0].dashed);
+        assert!(!d.relationships[1].dashed);
+        assert!(!d.relationships[2].dashed);
+        assert!(!d.relationships[3].dashed);
+        assert!(d.relationships[4].dashed);
     }
 
     #[test]
