@@ -42,6 +42,11 @@ const ACTION_H_PADDING: f64 = 10.0; // horizontal padding each side
 const ACTION_MIN_HEIGHT: f64 = 30.0;
 const ACTION_RX: f64 = 12.5;
 const DIAMOND_HALF: f64 = 12.0; // half-size of decision diamond
+const WHILE_SPECIAL_COND_LEAD: f64 = 13.0;
+const WHILE_SPECIAL_BODY_LEAD: f64 = 11.0;
+const WHILE_SPECIAL_BODY_X_PULL_RIGHT: f64 = WHILE_SPECIAL_COND_LEAD - WHILE_SPECIAL_BODY_LEAD;
+const WHILE_UNLABELED_SPECIAL_Y_PULL_UP: f64 = 4.0;
+const WHILE_UNLABELED_LOOP_ARROW_Y_PULL_UP: f64 = 2.0;
 /// PlantUML enforces a minimum width on the inner (top/bottom) edge of
 /// decision diamonds: 24 px regardless of how short the condition text is.
 /// Reverse-engineered from goldens with one- and two-character conditions
@@ -1450,14 +1455,22 @@ fn while_body_left(body: &[LayoutNode], body_left: f64) -> f64 {
 fn while_left_extent(
     body_left: f64,
     cond_half: f64,
+    is_label: Option<&str>,
     end_label: Option<&str>,
     special_out: Option<&LayoutNode>,
 ) -> f64 {
     let special_extent = match special_out {
         Some(special) => {
             let special_half = node_width(special) / 2.0;
-            let special_offset = (body_left + DIAMOND_HALF).max(cond_half) + special_half;
-            special_offset + 13.0
+            let body_corridor = body_left + DIAMOND_HALF;
+            let special_offset = body_corridor.max(cond_half) + special_half;
+            let special_lead =
+                if is_label.is_none() && end_label.is_none() && body_corridor > cond_half {
+                    WHILE_SPECIAL_BODY_LEAD
+                } else {
+                    WHILE_SPECIAL_COND_LEAD
+                };
+            special_offset + special_lead
         }
         None => cond_half.max(body_left) + 25.0,
     };
@@ -1469,6 +1482,15 @@ fn while_left_extent(
         .map(|l| cond_half + text_render::measure(l, SMALL_FONT, false) - 1.0)
         .unwrap_or(0.0);
     special_extent.max(label_extent)
+}
+
+fn while_body_drives_unlabeled_special(
+    body_left: f64,
+    cond_half: f64,
+    is_label: Option<&str>,
+    end_label: Option<&str>,
+) -> bool {
+    is_label.is_none() && end_label.is_none() && body_left + DIAMOND_HALF > cond_half
 }
 
 /// The lines of note text (block notes accumulate `\n`-joined lines; single
@@ -2285,6 +2307,7 @@ fn node_extents(node: &LayoutNode) -> (f64, f64) {
         LayoutNode::While {
             body,
             condition,
+            is_label,
             end_label,
             special_out,
             diamond_font_family,
@@ -2303,6 +2326,7 @@ fn node_extents(node: &LayoutNode) -> (f64, f64) {
             let left_extent = while_left_extent(
                 while_body_left(body, body_left),
                 cond_half,
+                is_label.as_deref(),
                 end_label.as_deref(),
                 special_out.as_deref(),
             );
@@ -5706,7 +5730,18 @@ fn emit_while(
         // diamond_left in FtileWhile-local. Translating to absolute:
         //   min(body_left_x - halfHex, diamond_left_vertex_x) - special_w
         // The special's cx is at translateForSpecial.x + special_w/2.
-        let special_left_abs = (body_left_x - DIAMOND_HALF).min(diamond_left_vertex_x) - special_w;
+        let special_x_adjust = if while_body_drives_unlabeled_special(
+            while_body_left(body, body_left_ext),
+            cond_inner_w / 2.0 + DIAMOND_HALF,
+            is_label.as_deref(),
+            end_label.as_deref(),
+        ) {
+            WHILE_SPECIAL_BODY_X_PULL_RIGHT
+        } else {
+            0.0
+        };
+        let special_left_abs =
+            (body_left_x - DIAMOND_HALF).min(diamond_left_vertex_x) - special_w + special_x_adjust;
         let special_cx = special_left_abs + special_w / 2.0;
         // translateForSpecial.y in FtileWhile-local =
         //   max(3*half, 4*halfHex) where half = diamond hexagon's
@@ -5714,7 +5749,12 @@ fn emit_while(
         // Absolute: special_top = y + (48 - DIAMOND_HALF*2) below diamond.
         // y is the diamond's top. Diamond extends 24 below y. So
         // special_top_abs = y + 48 = diamond_top + 4*halfHex.
-        let special_top = y + 4.0 * DIAMOND_HALF;
+        let special_top = y + 4.0 * DIAMOND_HALF
+            - if is_label.is_none() {
+                WHILE_UNLABELED_SPECIAL_Y_PULL_UP
+            } else {
+                0.0
+            };
         (special_cx, special_top)
     } else {
         let exit_x = geo_left_x - DIAMOND_HALF;
@@ -5805,7 +5845,12 @@ fn emit_while(
     // 4. UP arrowhead at midpoint of the loop arm's vertical run.
     // PlantUML draws this at the midpoint of (diamond_cy, body_bottom +
     // halfHex), adjusted by the same compression that shifts body_top up.
-    let mid_y = (diamond_cy + body_bottom + DIAMOND_HALF) / 2.0;
+    let mid_y = (diamond_cy + body_bottom + DIAMOND_HALF) / 2.0
+        - if is_label.is_none() {
+            WHILE_UNLABELED_LOOP_ARROW_Y_PULL_UP
+        } else {
+            0.0
+        };
     svg.polygon_connector(
         &arrow_color,
         &[
