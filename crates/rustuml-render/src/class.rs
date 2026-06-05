@@ -19,8 +19,8 @@ use rustuml_parser::diagram::class::*;
 
 use crate::layout_oracle::{
     CrowMark, EntityPath, EntityPolygon, EntityRect, EntityText, OracleCluster, OracleEdgePath,
-    OracleHandwrittenWarning, OracleLayout, emit_oracle_cluster_children, emit_oracle_note_entity,
-    wrap_oracle_envelope,
+    OracleHandwrittenWarning, OracleLayout, OracleLegend, emit_oracle_cluster_children,
+    emit_oracle_note_entity, wrap_oracle_envelope,
 };
 use crate::metrics;
 use crate::style::Theme;
@@ -2370,6 +2370,12 @@ fn render_plantuml_svg(
         }
     }
 
+    if let Some(orc) = oracle {
+        for legend in &orc.legends {
+            emit_oracle_legend(&mut svg, legend, diagram.legend_line);
+        }
+    }
+
     // Bottom-of-canvas decorations: caption (above footer), then footer. Both
     // baselines are anchored a fixed gap below the body's bottom edge; when a
     // caption is present it pushes the footer down by the caption block height.
@@ -2405,6 +2411,86 @@ fn render_plantuml_svg(
     // Close top-level group and SVG.
     svg.push_str("</g></svg>");
     svg
+}
+
+fn emit_oracle_legend(svg: &mut String, legend: &OracleLegend, fallback_line: Option<usize>) {
+    let source_line = legend
+        .source_line
+        .as_deref()
+        .map(str::to_string)
+        .unwrap_or_else(|| fallback_line.unwrap_or(1).to_string());
+    write!(
+        svg,
+        r#"<g class="legend" data-source-line="{source_line}">"#
+    )
+    .unwrap();
+
+    let rx_attr = legend
+        .rect
+        .rx
+        .as_deref()
+        .map(|rx| format!(r#" rx="{}""#, escape_xml(rx)))
+        .unwrap_or_default();
+    let ry_attr = legend
+        .rect
+        .ry
+        .as_deref()
+        .map(|ry| format!(r#" ry="{}""#, escape_xml(ry)))
+        .unwrap_or_default();
+    write!(
+        svg,
+        r#"<rect fill="{}" height="{}"{rx_attr}{ry_attr} style="{}" width="{}" x="{}" y="{}"/>"#,
+        escape_xml(&legend.rect.fill),
+        crate::plantuml_metrics::fmt_coord(legend.rect.height),
+        escape_xml(&legend.rect.style),
+        crate::plantuml_metrics::fmt_coord(legend.rect.width),
+        crate::plantuml_metrics::fmt_coord(legend.rect.x),
+        crate::plantuml_metrics::fmt_coord(legend.rect.y),
+    )
+    .unwrap();
+
+    for line in &legend.lines {
+        match line.style.as_deref() {
+            Some(style) => write!(
+                svg,
+                r#"<line style="{}" x1="{}" x2="{}" y1="{}" y2="{}"/>"#,
+                escape_xml(style),
+                escape_xml(&line.x1),
+                escape_xml(&line.x2),
+                escape_xml(&line.y1),
+                escape_xml(&line.y2),
+            ),
+            None => write!(
+                svg,
+                r#"<line x1="{}" x2="{}" y1="{}" y2="{}"/>"#,
+                escape_xml(&line.x1),
+                escape_xml(&line.x2),
+                escape_xml(&line.y1),
+                escape_xml(&line.y2),
+            ),
+        }
+        .unwrap();
+    }
+
+    for text in &legend.texts {
+        text_render::emit_text(
+            svg,
+            &text.text,
+            &text_render::TextBase {
+                x: text.x,
+                y: text.y,
+                font_size: 14,
+                font_family: "sans-serif",
+                fill: "#000000",
+                bold: false,
+                italic: false,
+                underline: false,
+                skip_underline: false,
+            },
+        );
+    }
+
+    svg.push_str("</g>");
 }
 
 /// Page-decoration (title/header/footer/caption) layout, mirroring PlantUML's
