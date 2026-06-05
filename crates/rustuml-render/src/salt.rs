@@ -369,7 +369,21 @@ impl<'a> Grid<'a> {
     }
 
     fn draw(&self, ox: f64, oy: f64, buf: &mut String) {
+        let mut deferred = String::new();
+        self.draw_inner(ox, oy, buf, &mut deferred, false);
+        buf.push_str(&deferred);
+    }
+
+    fn draw_inner(
+        &self,
+        ox: f64,
+        oy: f64,
+        buf: &mut String,
+        deferred_scrollbars: &mut String,
+        nested: bool,
+    ) {
         let half_title = self.title_height / 2.0;
+        let mut child_deferred_scrollbars = String::new();
         for cell in &self.cells {
             // Row-0 cells are pushed down by titleHeight/2 (supY).
             let sup_y = if cell.row == 0 { half_title } else { 0.0 };
@@ -378,7 +392,15 @@ impl<'a> Grid<'a> {
             // dimToUse for the cell (span minus 1, per ElementPyramid).
             let cell_w = self.cols_start[cell.col + 1] - self.cols_start[cell.col] - 1.0;
             let cell_h = self.rows_start[cell.row + 1] - self.rows_start[cell.row] - 1.0;
-            draw_widget(cell.widget, cx, cy, cell_w, cell_h, buf);
+            draw_widget(
+                cell.widget,
+                cx,
+                cy,
+                cell_w,
+                cell_h,
+                buf,
+                &mut child_deferred_scrollbars,
+            );
         }
         if self.kind == BlockKind::Table {
             self.draw_grid_lines(ox, oy, buf);
@@ -388,14 +410,24 @@ impl<'a> Grid<'a> {
             self.draw_outside_border(ox, oy, buf);
         }
         if let Some(strategy) = self.scroll {
-            // The scrollbar decoration is emitted once per z-index pass (z=0
-            // and z=1); ElementText only draws on z=0, so the border and cell
-            // text appear once but the scrollbars appear twice.
-            self.draw_scrollbars(ox, oy, strategy, buf);
-            self.draw_scrollbars(ox, oy, strategy, buf);
+            if nested {
+                self.draw_scrollbars(ox, oy, strategy, buf);
+                for _ in 1..scrollbar_repetitions(strategy) {
+                    self.draw_scrollbars(ox, oy, strategy, deferred_scrollbars);
+                }
+            } else {
+                for _ in 0..scrollbar_repetitions(strategy) {
+                    self.draw_scrollbars(ox, oy, strategy, buf);
+                }
+            }
         }
         if let Some(title) = &self.title {
             self.draw_group_box(ox, oy, title, buf);
+        }
+        if nested {
+            deferred_scrollbars.push_str(&child_deferred_scrollbars);
+        } else {
+            buf.push_str(&child_deferred_scrollbars);
         }
     }
 
@@ -574,6 +606,10 @@ impl<'a> Grid<'a> {
             ));
         }
     }
+}
+
+fn scrollbar_repetitions(_strategy: ScrollStrategy) -> usize {
+    2
 }
 
 /// A faithful emulation of `java.util.HashSet<Segment>` iteration order.
@@ -815,7 +851,15 @@ fn tree_nodes(block: &SaltBlock) -> Vec<(usize, &str)> {
 // ── Widget drawing ───────────────────────────────────────────────────────────
 
 #[allow(clippy::too_many_arguments)]
-fn draw_widget(widget: &SaltWidget, x: f64, y: f64, cell_w: f64, cell_h: f64, buf: &mut String) {
+fn draw_widget(
+    widget: &SaltWidget,
+    x: f64,
+    y: f64,
+    cell_w: f64,
+    cell_h: f64,
+    buf: &mut String,
+    deferred_scrollbars: &mut String,
+) {
     let ascent = pm::ascent(FONT_SIZE);
     let pref_h = pm::text_height(FONT_SIZE);
 
@@ -930,7 +974,7 @@ fn draw_widget(widget: &SaltWidget, x: f64, y: f64, cell_w: f64, cell_h: f64, bu
         }
         SaltWidget::Block(b) => {
             let g = Grid::layout(b);
-            g.draw(x, y, buf);
+            g.draw_inner(x, y, buf, deferred_scrollbars, true);
         }
     }
 }
