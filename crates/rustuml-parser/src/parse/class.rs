@@ -524,7 +524,9 @@ impl ClassParser {
             if let Some(entity) = self.find_entity_mut(&final_id) {
                 entity.kind = kind;
                 entity.label = display_label;
-                entity.stereotypes.extend(stereotypes);
+                if !stereotypes.is_empty() {
+                    entity.stereotypes = stereotypes;
+                }
                 if spot_color.is_some() {
                     entity.spot_color = spot_color.clone();
                 }
@@ -1298,10 +1300,20 @@ impl ClassParser {
             return;
         }
 
-        let member = parse_member(trimmed);
+        let mut member = parse_member(trimmed);
         if let Some(entity_id) = &self.current_entity
             && let Some(entity) = self.entities.iter_mut().find(|e| e.id == *entity_id)
         {
+            if entity.kind == EntityKind::Enum
+                && member.kind == MemberKind::Method
+                && member.visibility == Visibility::Default
+                && !entity
+                    .members
+                    .iter()
+                    .any(|m| m.kind == MemberKind::Separator)
+            {
+                member.kind = MemberKind::Field;
+            }
             entity.members.push(member);
         }
     }
@@ -1799,6 +1811,13 @@ mod tests {
     }
 
     #[test]
+    fn redeclared_entity_replaces_explicit_stereotypes() {
+        let d = parse("class Foo <<service>>\nclass Foo <<controller>>");
+        assert_eq!(d.entities.len(), 1);
+        assert_eq!(d.entities[0].stereotypes, vec!["controller"]);
+    }
+
+    #[test]
     fn skinparam_stereotype_block_flattens() {
         let d = parse("skinparam class<<service>> {\n  FontStyle bold\n}\nclass User <<service>>");
         assert!(
@@ -1829,6 +1848,19 @@ mod tests {
         assert_eq!(d.entities[0].kind, EntityKind::Enum);
         assert_eq!(d.entities[0].members.len(), 3);
         assert_eq!(d.entities[0].members[0].name, "RED");
+    }
+
+    #[test]
+    fn enum_constructor_constants_before_separator_are_fields() {
+        let d = parse(
+            "enum Planet {\n  MERCURY (3.303e+23, 2.4397e6)\n  VENUS (4.869e+24, 6.0518e6)\n  --\n  +surfaceGravity(): double\n}",
+        );
+        let e = &d.entities[0];
+        assert_eq!(e.kind, EntityKind::Enum);
+        assert_eq!(e.members[0].kind, MemberKind::Field);
+        assert_eq!(e.members[1].kind, MemberKind::Field);
+        assert_eq!(e.members[2].kind, MemberKind::Separator);
+        assert_eq!(e.members[3].kind, MemberKind::Method);
     }
 
     #[test]

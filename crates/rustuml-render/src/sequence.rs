@@ -5438,7 +5438,19 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                 Event::GroupEnd => {
                     // Group end: event_y marks the frame bottom,
                     // but the y cursor advances less (for tail gap calculation).
-                    let group_end_y = y + GROUP_END_HEIGHT + 1.0;
+                    let empty_first_group = msg_count == 0
+                        && matches!(
+                            diagram.events.get(idx.saturating_sub(1)),
+                            Some(Event::GroupStart(_))
+                        );
+                    let group_end_y = y
+                        + GROUP_END_HEIGHT
+                        + 1.0
+                        + if empty_first_group {
+                            GROUP_HEADER_FIRST_PAD_ADJUST
+                        } else {
+                            0.0
+                        };
                     event_y_positions.push(group_end_y);
                     y += GROUP_END_HEIGHT;
                 }
@@ -9111,6 +9123,26 @@ mod tests {
     fn has_arrow() {
         let svg = render(&simple_diagram(), &Theme::default(), None);
         assert!(svg.contains("<polygon"), "should have arrow head polygon");
+    }
+
+    #[test]
+    fn leading_empty_group_frame_spans_header_height() {
+        let mut diagram = simple_diagram();
+        diagram.events.insert(
+            0,
+            Event::GroupStart(GroupStart {
+                kind: GroupKind::Group,
+                label: Some("emptyGroup".to_string()),
+                source_line: 1,
+            }),
+        );
+        diagram.events.insert(1, Event::GroupEnd);
+
+        let svg = render(&diagram, &Theme::default(), None);
+        assert!(
+            svg.contains(r#"height="17.3105" style="stroke:#000000;stroke-width:1.5;""#),
+            "leading empty group frame should span the full header tab height"
+        );
     }
 
     #[test]
