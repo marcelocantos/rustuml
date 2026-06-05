@@ -5268,16 +5268,21 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
         .ceil() as u32
     };
     // Caption adds vertical space below the foot boxes. Caption-only diagrams
-    // use a 20px band; when a footer is present, PlantUML stacks caption above
+    // place the baseline from the tail box bottom, then size the canvas around
+    // that baseline. When a footer is present, PlantUML stacks caption above
     // the footer inside a shared bottom decoration band. With hidden footboxes
     // that band is compact; otherwise the tail boxes reserve an extra few
     // pixels above the bottom decorations.
+    const CAPTION_BASELINE_AFTER_TAIL: f64 = 16.5352;
+    const CAPTION_BOTTOM_AFTER_BASELINE: f64 = 10.1777;
+    const FOOTER_BASELINE_AFTER_TAIL: f64 = 11.6679;
+    let caption_only_y = tail_box_y + max_box_h + CAPTION_BASELINE_AFTER_TAIL;
     if diagram.meta.caption.is_some() {
-        svg_height += if diagram.meta.footer.is_some() {
-            if diagram.hide_footbox { 15 } else { 19 }
+        if diagram.meta.footer.is_some() {
+            svg_height += if diagram.hide_footbox { 15 } else { 19 };
         } else {
-            20
-        };
+            svg_height = (caption_only_y + CAPTION_BOTTOM_AFTER_BASELINE).ceil() as u32;
+        }
     }
     // Named boxes extend below the foot boxes; the frame bottom plus its own
     // bottom margin must fit inside the canvas.
@@ -8213,17 +8218,13 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
     // split into separate `<text>` elements at calculated x offsets.
     if let Some(caption) = &diagram.meta.caption {
         const CAPTION_FONT_SIZE: u32 = 14;
-        const CAPTION_BOTTOM_OFFSET: f64 = 10.8672;
         let src_line = diagram.meta.caption_line.unwrap_or(1);
-        let caption_x = if diagram.meta.footer.is_some() {
-            if let (Some(first), Some(last)) = (participants.first(), participants.last()) {
-                let center = (first.box_x + last.box_x + last.box_width - 1.0) / 2.0;
-                let w =
-                    text_width_with_family(caption, CAPTION_FONT_SIZE as f64, &page_font_family);
-                (center - w / 2.0).max(1.0)
-            } else {
-                1.0
-            }
+        let caption_x = if let (Some(first), Some(last)) =
+            (participants.first(), participants.last())
+        {
+            let center = (first.box_x + last.box_x + last.box_width - 1.0) / 2.0;
+            let w = text_width_with_family(caption, CAPTION_FONT_SIZE as f64, &page_font_family);
+            (center - w / 2.0).max(1.0)
         } else {
             1.0
         };
@@ -8231,7 +8232,7 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
             let footer_y = svg_height as f64 - combined_footer_bottom_offset(&page_font_family);
             footer_y - combined_caption_footer_baseline_gap(&page_font_family)
         } else {
-            svg_height as f64 - CAPTION_BOTTOM_OFFSET
+            caption_only_y
         };
         write!(
             svg.buf,
@@ -8262,7 +8263,6 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
     // centred on the participant span.
     if let Some(footer) = &diagram.meta.footer {
         const FOOTER_FONT_SIZE: u32 = 10;
-        const FOOTER_BOTTOM_OFFSET: f64 = 8.7344;
         // The footer is centred on the participant-span midpoint
         // `(first.box_x + last.box_x + last.box_width - 1.0) / 2.0`. When the
         // footer is wider than the span the diagram was already shifted right
@@ -8282,17 +8282,17 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
             r#"<g class="footer" data-source-line="{footer_line}">"#
         )
         .unwrap();
+        let footer_y = if diagram.meta.caption.is_some() {
+            svg_height as f64 - combined_footer_bottom_offset(&page_font_family)
+        } else {
+            tail_box_y + max_box_h + FOOTER_BASELINE_AFTER_TAIL
+        };
         text_render::emit_text(
             &mut svg.buf,
             footer,
             &TextBase {
                 x: footer_x,
-                y: svg_height as f64
-                    - if diagram.meta.caption.is_some() {
-                        combined_footer_bottom_offset(&page_font_family)
-                    } else {
-                        FOOTER_BOTTOM_OFFSET
-                    },
+                y: footer_y,
                 font_size: FOOTER_FONT_SIZE,
                 font_family: &page_font_family,
                 fill: "#888888",

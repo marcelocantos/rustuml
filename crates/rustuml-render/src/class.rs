@@ -620,12 +620,12 @@ fn calc_entity_dims(
     let is_enum = entity.kind == EntityKind::Enum;
     // Entity labels treat `__` as literal underscores, not underline markup,
     // so width must include those characters.
-    let name_width = text_render::measure_no_underline_with_family(
-        &entity.label,
-        14.0,
-        false,
-        &font.name_family,
-    );
+    let name_width = escaped_newline_lines(&entity.label)
+        .iter()
+        .map(|line| {
+            text_render::measure_no_underline_with_family(line, 14.0, false, &font.name_family)
+        })
+        .fold(0.0_f64, f64::max);
     if entity.kind == EntityKind::State {
         let source_line = if entity.source_line > 0 {
             entity.source_line
@@ -1038,17 +1038,53 @@ fn format_member_display(member: &Member, monospace_spaces: bool) -> String {
 }
 
 fn member_display_lines(member: &Member, monospace_spaces: bool) -> Vec<String> {
-    format_member_display(member, monospace_spaces)
-        .split("\\n")
-        .map(str::to_string)
-        .collect()
+    escaped_newline_lines(&format_member_display(member, monospace_spaces))
 }
 
 fn member_display_line_count(member: &Member, monospace_spaces: bool) -> usize {
-    format_member_display(member, monospace_spaces)
-        .split("\\n")
-        .count()
+    escaped_newline_lines(&format_member_display(member, monospace_spaces))
+        .len()
         .max(1)
+}
+
+fn member_oracle_text_y_count(member: &Member, attr_font: &AttrFont<'_>) -> usize {
+    member_display_lines(member, attr_font.monospace_spaces)
+        .iter()
+        .map(|line| {
+            text_render::emitted_baseline_count(
+                line,
+                &TextBase {
+                    x: 0.0,
+                    y: 0.0,
+                    font_size: attr_font.size,
+                    font_family: attr_font.family,
+                    fill: attr_font.fill,
+                    bold: attr_font.bold,
+                    italic: member.is_abstract || attr_font.italic,
+                    underline: member.is_static,
+                    skip_underline: true,
+                },
+            )
+        })
+        .sum::<usize>()
+        .max(1)
+}
+
+fn escaped_newline_lines(text: &str) -> Vec<String> {
+    text.split("\\n").map(str::to_string).collect()
+}
+
+fn oracle_text_line_anchors(rect: &EntityRect) -> Vec<(f64, f64)> {
+    let mut lines = Vec::new();
+    for (&x, &y) in rect.text_x_values.iter().zip(rect.text_y_values.iter()) {
+        if lines
+            .last()
+            .is_none_or(|&(_, last_y): &(f64, f64)| (y - last_y).abs() > 0.001)
+        {
+            lines.push((x, y));
+        }
+    }
+    lines
 }
 
 /// Determine the visibility modifier string for a member, matching PlantUML's
@@ -3038,12 +3074,18 @@ fn render_entity_content(
         || font.font_italic
         || font.attr_font_italic
         || stereotype_italic;
-    let name_tl = text_render::measure_no_underline_with_family(
-        &entity.label,
-        name_font_size as f64,
-        name_bold,
-        &font.name_family,
-    );
+    let name_lines = escaped_newline_lines(&entity.label);
+    let name_tl = name_lines
+        .iter()
+        .map(|line| {
+            text_render::measure_no_underline_with_family(
+                line,
+                name_font_size as f64,
+                name_bold,
+                &font.name_family,
+            )
+        })
+        .fold(0.0_f64, f64::max);
     if dim.has_stereotypes {
         for (i, stereo_text) in format_stereotype_lines(&entity.stereotypes)
             .iter()
@@ -3135,22 +3177,34 @@ fn render_entity_content(
             .and_then(|r| r.text_y_values.first().copied())
             .unwrap_or(name_y_default)
     };
+    let oracle_name_line_anchors = oracle_rect
+        .map(oracle_text_line_anchors)
+        .unwrap_or_default();
+    let name_line_step =
+        text_render::text_height_for_family(name_font_size as f64, &font.name_family);
     let mut text_buf = String::new();
-    text_render::emit_text(
-        &mut text_buf,
-        &entity.label,
-        &TextBase {
-            x: name_x,
-            y: name_y,
-            font_size: name_font_size,
-            font_family: &font.name_family,
-            fill: text_fill,
-            bold: name_bold,
-            italic: name_italic,
-            underline: false,
-            skip_underline: true,
-        },
-    );
+    for (line_index, line) in name_lines.iter().enumerate() {
+        let anchor_index = dim.stereotype_count + line_index;
+        let (line_x, line_y) = oracle_name_line_anchors
+            .get(anchor_index)
+            .copied()
+            .unwrap_or((name_x, name_y + line_index as f64 * name_line_step));
+        text_render::emit_text(
+            &mut text_buf,
+            line,
+            &TextBase {
+                x: line_x,
+                y: line_y,
+                font_size: name_font_size,
+                font_family: &font.name_family,
+                fill: text_fill,
+                bold: name_bold,
+                italic: name_italic,
+                underline: false,
+                skip_underline: true,
+            },
+        );
+    }
     svg.push_str(&text_buf);
 
     // Generic type-parameter box: a dashed rectangle at the entity's top-right
@@ -3207,7 +3261,7 @@ fn render_entity_content(
         .unwrap_or(&[]);
     // Number of extra text entries before members: the entity name plus all
     // visible stereotype lines above it.
-    let text_header_count: usize = 1 + dim.stereotype_count;
+    let text_header_count: usize = name_lines.len() + dim.stereotype_count;
     let oracle_sep_y = oracle_rect
         .map(|r| r.sep_y_values.as_slice())
         .unwrap_or(&[]);
@@ -3686,7 +3740,7 @@ fn render_entity_content(
                 && inline_field_separators.is_empty()
             {
                 let methods_sep_y = oracle_sep_y.get(1).copied().unwrap_or(
-                    header_sep_y + COMPARTMENT_PAD + fields.len() as f64 * MEMBER_LINE_HEIGHT,
+                    header_sep_y + COMPARTMENT_PAD + dim.field_count as f64 * MEMBER_LINE_HEIGHT,
                 );
                 Some(format!(
                     r#"<line style="{}" x1="{}" x2="{}" y1="{}" y2="{}"/>"#,
@@ -3708,13 +3762,14 @@ fn render_entity_content(
             // members to the narrow ENUM_TEXT_OFFSET inset.
             let last_field_idx = fields.len().saturating_sub(1);
             let mut member_y = header_sep_y + FIRST_MEMBER_OFFSET;
+            let mut oracle_field_text_idx = text_header_count;
             // `inline_sep_consumed_idx` walks `oracle_sep_y` past the header
             // separator. Index 1 is the first inline separator y from oracle.
             let mut inline_sep_oracle_idx = 1usize;
             let mut narrow_after_separator = fields_narrow_default;
             for (fi, member) in fields.iter().enumerate() {
                 let eff_y = oracle_text_y
-                    .get(text_header_count + fi)
+                    .get(oracle_field_text_idx)
                     .copied()
                     .unwrap_or(member_y);
                 let vis_ov = if member.visibility != Visibility::Default {
@@ -3744,6 +3799,7 @@ fn render_entity_content(
                     explicit_padding.unwrap_or(0.0),
                     member_text_offset,
                 );
+                oracle_field_text_idx += member_oracle_text_y_count(member, &attr_font);
                 member_y += member_display_line_count(member, attr_font.monospace_spaces) as f64
                     * MEMBER_SPACING;
                 // Emit any inline separators that fall AFTER this field.
@@ -3797,7 +3853,9 @@ fn render_entity_content(
                     .get(1 + inline_field_separators.len())
                     .copied()
                     .unwrap_or(
-                        header_sep_y + COMPARTMENT_PAD + fields.len() as f64 * MEMBER_LINE_HEIGHT,
+                        header_sep_y
+                            + COMPARTMENT_PAD
+                            + dim.field_count as f64 * MEMBER_LINE_HEIGHT,
                     );
                 // A labelled divider is drawn AFTER the member text (centred
                 // caption flanked by two short rules), so suppress the normal
@@ -3838,11 +3896,12 @@ fn render_entity_content(
                 }
 
                 // Method members (text_y index continues after header + fields).
-                let method_text_offset = text_header_count + fields.len();
+                let method_text_offset = oracle_field_text_idx;
+                let mut oracle_method_text_idx = method_text_offset;
                 let mut method_y = methods_sep_y + FIRST_MEMBER_OFFSET;
-                for (mi, member) in methods.iter().enumerate() {
+                for member in methods {
                     let eff_y = oracle_text_y
-                        .get(method_text_offset + mi)
+                        .get(oracle_method_text_idx)
                         .copied()
                         .unwrap_or(method_y);
                     let vis_ov = if member.visibility != Visibility::Default {
@@ -3867,6 +3926,7 @@ fn render_entity_content(
                         explicit_padding.unwrap_or(0.0),
                         member_text_offset,
                     );
+                    oracle_method_text_idx += member_oracle_text_y_count(member, &attr_font);
                     method_y += member_display_line_count(member, attr_font.monospace_spaces)
                         as f64
                         * MEMBER_SPACING;
@@ -3969,9 +4029,10 @@ fn render_entity_content(
             }
 
             let mut method_y = methods_sep_y + FIRST_MEMBER_OFFSET;
-            for (mi, member) in methods.iter().enumerate() {
+            let mut oracle_method_text_idx = text_header_count;
+            for member in methods {
                 let eff_y = oracle_text_y
-                    .get(text_header_count + mi)
+                    .get(oracle_method_text_idx)
                     .copied()
                     .unwrap_or(method_y);
                 let (vis_ov, vis_polygon) = if member.visibility != Visibility::Default {
@@ -3989,7 +4050,7 @@ fn render_entity_content(
                     eff_y,
                     vis_ov,
                     vis_polygon,
-                    oracle_text_x.get(text_header_count + mi).copied(),
+                    oracle_text_x.get(oracle_method_text_idx).copied(),
                     methods_narrow_default,
                     attr_font,
                     member_anchor,
@@ -3997,6 +4058,7 @@ fn render_entity_content(
                     explicit_padding.unwrap_or(0.0),
                     member_text_offset,
                 );
+                oracle_method_text_idx += member_oracle_text_y_count(member, &attr_font);
                 method_y += member_display_line_count(member, attr_font.monospace_spaces) as f64
                     * MEMBER_SPACING;
             }

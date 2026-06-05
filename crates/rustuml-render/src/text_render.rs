@@ -71,6 +71,38 @@ pub fn emit_text_no_mono(buf: &mut String, content: &str, base: &TextBase<'_>) -
     emit_segments(buf, &segments, base)
 }
 
+/// Number of distinct baseline y-values [`emit_text`] will produce for one
+/// logical line. Uniform-style Creole emits several `<text>` elements but only
+/// one baseline; mixed font sizes/families can consume multiple oracle y slots.
+pub fn emitted_baseline_count(content: &str, base: &TextBase<'_>) -> usize {
+    let segments = if base.skip_underline {
+        creole::parse_segments_no_underline(content)
+    } else {
+        creole::parse_segments(content)
+    };
+    if segments.is_empty() {
+        return 1;
+    }
+    let first = &segments[0];
+    let first_size = first.style.size.unwrap_or(base.font_size) as f64;
+    let line_bottom_drop = clamp_drop(first_size, segment_metric_family(first, base));
+    let mut offsets: Vec<f64> = Vec::new();
+    for seg in &segments {
+        let offset = line_bottom_drop
+            - clamp_drop(
+                effective_font_size(seg, base),
+                segment_metric_family(seg, base),
+            );
+        if offsets
+            .last()
+            .is_none_or(|&last: &f64| (last - offset).abs() > 0.001)
+        {
+            offsets.push(offset);
+        }
+    }
+    offsets.len().max(1)
+}
+
 /// Width of `content` after creole resolution — the value a renderer needs
 /// to size boxes around a label. Per-segment styling (monospace vs sans-
 /// serif, bold, custom size) is honoured by routing through `total_width`.
@@ -1297,6 +1329,15 @@ mod tests {
         assert!(buf.contains(r#"font-weight="700""#));
         assert!(buf.contains(">bold</text>"));
         assert!(!buf.contains("**"));
+    }
+
+    #[test]
+    fn emitted_baseline_count_tracks_mixed_font_sizes() {
+        assert_eq!(emitted_baseline_count("**bold**()", &base(0.0, 0.0)), 1);
+        assert_eq!(
+            emitted_baseline_count("field: <size:20>large</size>", &base(0.0, 0.0)),
+            2
+        );
     }
 
     #[test]
