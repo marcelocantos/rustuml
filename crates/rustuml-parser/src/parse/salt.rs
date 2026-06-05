@@ -471,17 +471,19 @@ fn parse_row_part(part: &str) -> Vec<SaltWidget> {
         return vec![SaltWidget::Separator(sep)];
     }
 
-    // Checkbox: `[X] label` or `[ ] label`.
-    if trimmed.starts_with("[X]") || trimmed.starts_with("[ ]") {
+    // Checkbox: `[X] label`, `[ ] label`, or `[] label`.
+    if trimmed.starts_with("[X]") || trimmed.starts_with("[ ]") || trimmed.starts_with("[]") {
         let checked = trimmed.starts_with("[X]");
-        let label = trimmed[3..].trim().to_string();
+        let label_start = if trimmed.starts_with("[]") { 2 } else { 3 };
+        let label = trimmed[label_start..].trim().to_string();
         return vec![SaltWidget::Checkbox { checked, label }];
     }
 
-    // Radio: `(X) label` or `( ) label`.
-    if trimmed.starts_with("(X)") || trimmed.starts_with("( )") {
+    // Radio: `(X) label`, `( ) label`, or `() label`.
+    if trimmed.starts_with("(X)") || trimmed.starts_with("( )") || trimmed.starts_with("()") {
         let selected = trimmed.starts_with("(X)");
-        let label = trimmed[3..].trim().to_string();
+        let label_start = if trimmed.starts_with("()") { 2 } else { 3 };
+        let label = trimmed[label_start..].trim().to_string();
         return vec![SaltWidget::Radio { selected, label }];
     }
 
@@ -590,8 +592,10 @@ mod tests {
             r#"{
   [X] Option A
   [ ] Option B
+  [] Option C
   (X) Choice 1
   ( ) Choice 2
+  () Choice 3
 }"#,
         );
         let diag = parse_salt(&input).unwrap();
@@ -605,10 +609,21 @@ mod tests {
         ));
         assert!(matches!(
             &diag.root.rows[2].cells[0],
-            SaltWidget::Radio { selected: true, .. }
+            SaltWidget::Checkbox { checked: false, .. }
         ));
         assert!(matches!(
             &diag.root.rows[3].cells[0],
+            SaltWidget::Radio { selected: true, .. }
+        ));
+        assert!(matches!(
+            &diag.root.rows[4].cells[0],
+            SaltWidget::Radio {
+                selected: false,
+                ..
+            }
+        ));
+        assert!(matches!(
+            &diag.root.rows[5].cells[0],
             SaltWidget::Radio {
                 selected: false,
                 ..

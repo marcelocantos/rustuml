@@ -645,6 +645,9 @@ fn widget_dim(widget: &SaltWidget) -> (f64, f64) {
     let th = pm::text_height(FONT_SIZE);
     match widget {
         SaltWidget::Label(t) => {
+            if is_spacer_label(t) {
+                return (0.0, th);
+            }
             let s = TextStyle::parse(t);
             (pm::text_width(&s.display, FONT_SIZE, s.bold), th)
         }
@@ -709,6 +712,10 @@ fn literal_text_width(content: &str) -> f64 {
     }
 }
 
+fn is_spacer_label(content: &str) -> bool {
+    content == "."
+}
+
 fn tab_lines(block: &SaltBlock) -> Vec<String> {
     let mut lines = Vec::new();
     for row in &block.rows {
@@ -766,6 +773,9 @@ fn draw_widget(widget: &SaltWidget, x: f64, y: f64, cell_w: f64, cell_h: f64, bu
 
     match widget {
         SaltWidget::Label(t) => {
+            if is_spacer_label(t) {
+                return;
+            }
             emit_text(buf, x, y + ascent, t);
         }
 
