@@ -3209,7 +3209,7 @@ fn node_height(node: &LayoutNode) -> f64 {
             // frame at translateForSpecial.y = max(3*half, 4*halfHex) = 48,
             // contributing terminator.h on top. We must ensure
             // height >= special_y + special.h.
-            let body_h = sequence_height(body);
+            let body_h = while_body_height(body, is_label.is_some());
             // The total while-frame height = diamond.h + body_top_offset
             // + body_h + below-body-gap + wrap-back-offset. We derive it
             // from the same compression-aware formula as emit_while.
@@ -5436,6 +5436,15 @@ const IF_DOWN_RIGHT_PAD: f64 = 27.218200000000003;
 /// populated branch in the FtileIfDown layout.
 const IF_DOWN_MID_STRETCH: f64 = 15.0;
 /// Extra gap stretched onto the middle inter-action arrow of an even-action
+/// while body. A labelled `while (...) is (...)` body already carries the
+/// reserved label slot under the condition diamond, so PlantUML's centring
+/// leaves less residual slack than the no-label form.
+const WHILE_EVEN_BODY_MID_STRETCH_LABELED: f64 = 9.0224609375;
+const WHILE_EVEN_BODY_MID_STRETCH_UNLABELED: f64 = 15.0;
+/// The loop-back arrowhead uses the pre-body-stretch midpoint plus this fixed
+/// shift; it does not move by the full stretched connector amount.
+const WHILE_EVEN_BODY_LOOP_ARROW_STRETCH: f64 = 7.5;
+/// Extra gap stretched onto the middle inter-action arrow of an even-action
 /// repeat body without an explicit `backward :...;` tile. FtileRepeat centres
 /// the body in the repeat frame; with an even number of flow nodes the centre
 /// falls inside the middle connector, lengthening that one snake by 7.5 px.
@@ -5443,6 +5452,27 @@ const REPEAT_EVEN_BODY_MID_STRETCH: f64 = 7.5;
 /// Extra vertical slack FtileRepeat distributes through a multi-action body
 /// when an explicit `backward :...;` tile occupies the loop-back arm.
 const REPEAT_BACKWARD_BODY_SLACK: f64 = 30.0;
+
+fn while_body_mid_stretch(body: &[LayoutNode], has_in_label: bool) -> Option<(usize, f64)> {
+    let flow_count = body.iter().filter(|n| node_is_flow(n)).count();
+    if flow_count >= 2 && flow_count.is_multiple_of(2) {
+        Some((
+            flow_count / 2,
+            if has_in_label {
+                WHILE_EVEN_BODY_MID_STRETCH_LABELED
+            } else {
+                WHILE_EVEN_BODY_MID_STRETCH_UNLABELED
+            },
+        ))
+    } else {
+        None
+    }
+}
+
+fn while_body_height(body: &[LayoutNode], has_in_label: bool) -> f64 {
+    sequence_height(body)
+        + while_body_mid_stretch(body, has_in_label).map_or(0.0, |(_, stretch)| stretch)
+}
 
 fn repeat_body_mid_stretch(body: &[LayoutNode], has_backward: bool) -> Option<(usize, f64)> {
     let flow_count = body.iter().filter(|n| node_is_flow(n)).count();
@@ -6107,7 +6137,8 @@ fn emit_while(
 
     // Body below diamond — emit it first (PlantUML emits body shapes before
     // diamond shapes in document order).
-    let body_bottom = emit_sequence(svg, body, cx, body_top);
+    let body_mid_stretch = while_body_mid_stretch(body, is_label.is_some());
+    let body_bottom = emit_sequence_ex(svg, body, cx, body_top, body_mid_stretch, None);
 
     // Junction y: 12 px below the body for empty bodies, 10 px for
     // non-empty bodies. PlantUML's UEmpty(5, halfHex=12) placeholder is
@@ -6286,7 +6317,10 @@ fn emit_while(
             WHILE_UNLABELED_LOOP_ARROW_Y_PULL_UP
         } else {
             0.0
-        };
+        }
+        + body_mid_stretch.map_or(0.0, |(_, stretch)| {
+            WHILE_EVEN_BODY_LOOP_ARROW_STRETCH - stretch / 2.0
+        });
     svg.polygon_connector(
         &arrow_color,
         &[
