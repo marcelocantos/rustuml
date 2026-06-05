@@ -12,7 +12,8 @@ use rustuml_layout::graph::{Direction, EdgePath, LayoutGraph};
 use rustuml_parser::diagram::state::*;
 
 use crate::layout_oracle::{
-    EntityRect, OracleEdgePath, OracleHandwrittenWarning, OracleLayout, wrap_oracle_envelope,
+    EntityPath, EntityPolygon, EntityRect, OracleEdgePath, OracleHandwrittenWarning, OracleLayout,
+    wrap_oracle_envelope,
 };
 use crate::style::Theme;
 use crate::text_render::{self, TextBase};
@@ -322,6 +323,41 @@ fn emit_handwritten_warning(svg: &mut String, warning: &OracleHandwrittenWarning
         ),
     }
     .unwrap();
+}
+
+fn emit_entity_polygon(svg: &mut String, polygon: &EntityPolygon) {
+    write!(
+        svg,
+        r#"<polygon fill="{}" points="{}""#,
+        escape_attr(&polygon.fill),
+        escape_attr(&polygon.points),
+    )
+    .unwrap();
+    if let Some(style) = polygon.style.as_deref() {
+        write!(svg, r#" style="{}""#, escape_attr(style)).unwrap();
+    }
+    svg.push_str("/>");
+}
+
+fn emit_entity_path(svg: &mut String, path: &EntityPath) {
+    write!(
+        svg,
+        r#"<path d="{}" fill="{}""#,
+        escape_attr(&path.d),
+        escape_attr(&path.fill),
+    )
+    .unwrap();
+    if let Some(style) = path.style.as_deref() {
+        write!(svg, r#" style="{}""#, escape_attr(style)).unwrap();
+    }
+    svg.push_str("/>");
+}
+
+fn edge_path_id_attr(edge: &OracleEdgePath) -> String {
+    edge.path_id
+        .as_deref()
+        .map(|id| format!(r#" id="{}""#, escape_attr(id)))
+        .unwrap_or_default()
 }
 
 /// Determine if a [*] reference is a start or end node based on context.
@@ -1116,13 +1152,18 @@ pub fn render_with_oracle(
                 ent_id_of(id),
             )
             .unwrap();
-            write!(
-                svg,
-                r#"<ellipse cx="{}" cy="{}" fill="{PSEUDO_COLOR}"{shadow_attr} rx="{START_RADIUS}" ry="{START_RADIUS}" style="stroke:{PSEUDO_COLOR};stroke-width:1;"/>"#,
-                fmt_f(*cx),
-                fmt_f(*cy),
-            )
-            .unwrap();
+            let orc_rect = oracle.and_then(|orc| orc.entities.get(".start."));
+            if let Some(polygon) = orc_rect.and_then(|r| r.body_polygon.as_ref()) {
+                emit_entity_polygon(&mut svg, polygon);
+            } else {
+                write!(
+                    svg,
+                    r#"<ellipse cx="{}" cy="{}" fill="{PSEUDO_COLOR}"{shadow_attr} rx="{START_RADIUS}" ry="{START_RADIUS}" style="stroke:{PSEUDO_COLOR};stroke-width:1;"/>"#,
+                    fmt_f(*cx),
+                    fmt_f(*cy),
+                )
+                .unwrap();
+            }
             svg.push_str("</g>");
         } else if id == "__end__" {
             // End pseudo-state — use the source_line from the FIRST transition
@@ -1139,20 +1180,29 @@ pub fn render_with_oracle(
                 ent_id_of(id),
             )
             .unwrap();
-            write!(
-                svg,
-                r#"<ellipse cx="{}" cy="{}" fill="none"{shadow_attr} rx="{END_OUTER_RADIUS}" ry="{END_OUTER_RADIUS}" style="stroke:{PSEUDO_COLOR};stroke-width:1;"/>"#,
-                fmt_f(*cx),
-                fmt_f(*cy),
-            )
-            .unwrap();
-            write!(
-                svg,
-                r#"<ellipse cx="{}" cy="{}" fill="{PSEUDO_COLOR}" rx="{END_INNER_RADIUS}" ry="{END_INNER_RADIUS}" style="stroke:{PSEUDO_COLOR};stroke-width:1;"/>"#,
-                fmt_f(*cx),
-                fmt_f(*cy),
-            )
-            .unwrap();
+            let orc_rect = oracle.and_then(|orc| orc.entities.get(".end."));
+            if let Some(polygon) = orc_rect.and_then(|r| r.body_polygon.as_ref()) {
+                emit_entity_polygon(&mut svg, polygon);
+            } else {
+                write!(
+                    svg,
+                    r#"<ellipse cx="{}" cy="{}" fill="none"{shadow_attr} rx="{END_OUTER_RADIUS}" ry="{END_OUTER_RADIUS}" style="stroke:{PSEUDO_COLOR};stroke-width:1;"/>"#,
+                    fmt_f(*cx),
+                    fmt_f(*cy),
+                )
+                .unwrap();
+            }
+            if let Some(polygon) = orc_rect.and_then(|r| r.icon_polygon.as_ref()) {
+                emit_entity_polygon(&mut svg, polygon);
+            } else {
+                write!(
+                    svg,
+                    r#"<ellipse cx="{}" cy="{}" fill="{PSEUDO_COLOR}" rx="{END_INNER_RADIUS}" ry="{END_INNER_RADIUS}" style="stroke:{PSEUDO_COLOR};stroke-width:1;"/>"#,
+                    fmt_f(*cx),
+                    fmt_f(*cy),
+                )
+                .unwrap();
+            }
             svg.push_str("</g>");
         } else {
             let state_def = find_state(id);
@@ -1172,13 +1222,18 @@ pub fn render_with_oracle(
                         ent_id_of(id),
                     )
                     .unwrap();
-                    write!(
-                        svg,
-                        r#"<ellipse cx="{}" cy="{}" fill="{fill_color}" rx="{START_RADIUS}" ry="{START_RADIUS}" style="stroke:{PSEUDO_COLOR};stroke-width:1;"/>"#,
-                        fmt_f(*cx),
-                        fmt_f(*cy),
-                    )
-                    .unwrap();
+                    let orc_rect = oracle.and_then(|orc| orc.entities.get(id.as_str()));
+                    if let Some(polygon) = orc_rect.and_then(|r| r.body_polygon.as_ref()) {
+                        emit_entity_polygon(&mut svg, polygon);
+                    } else {
+                        write!(
+                            svg,
+                            r#"<ellipse cx="{}" cy="{}" fill="{fill_color}" rx="{START_RADIUS}" ry="{START_RADIUS}" style="stroke:{PSEUDO_COLOR};stroke-width:1;"/>"#,
+                            fmt_f(*cx),
+                            fmt_f(*cy),
+                        )
+                        .unwrap();
+                    }
                     svg.push_str("</g>");
                 }
                 Some(StateKind::Final) => {
@@ -1197,20 +1252,29 @@ pub fn render_with_oracle(
                         ent_id_of(id),
                     )
                     .unwrap();
-                    write!(
-                        svg,
-                        r#"<ellipse cx="{}" cy="{}" fill="none" rx="{END_OUTER_RADIUS}" ry="{END_OUTER_RADIUS}" style="stroke:{PSEUDO_COLOR};stroke-width:1;"/>"#,
-                        fmt_f(*cx),
-                        fmt_f(*cy),
-                    )
-                    .unwrap();
-                    write!(
-                        svg,
-                        r#"<ellipse cx="{}" cy="{}" fill="{inner_fill}" rx="{END_INNER_RADIUS}" ry="{END_INNER_RADIUS}" style="stroke:{PSEUDO_COLOR};stroke-width:1;"/>"#,
-                        fmt_f(*cx),
-                        fmt_f(*cy),
-                    )
-                    .unwrap();
+                    let orc_rect = oracle.and_then(|orc| orc.entities.get(id.as_str()));
+                    if let Some(polygon) = orc_rect.and_then(|r| r.body_polygon.as_ref()) {
+                        emit_entity_polygon(&mut svg, polygon);
+                    } else {
+                        write!(
+                            svg,
+                            r#"<ellipse cx="{}" cy="{}" fill="none" rx="{END_OUTER_RADIUS}" ry="{END_OUTER_RADIUS}" style="stroke:{PSEUDO_COLOR};stroke-width:1;"/>"#,
+                            fmt_f(*cx),
+                            fmt_f(*cy),
+                        )
+                        .unwrap();
+                    }
+                    if let Some(polygon) = orc_rect.and_then(|r| r.icon_polygon.as_ref()) {
+                        emit_entity_polygon(&mut svg, polygon);
+                    } else {
+                        write!(
+                            svg,
+                            r#"<ellipse cx="{}" cy="{}" fill="{inner_fill}" rx="{END_INNER_RADIUS}" ry="{END_INNER_RADIUS}" style="stroke:{PSEUDO_COLOR};stroke-width:1;"/>"#,
+                            fmt_f(*cx),
+                            fmt_f(*cy),
+                        )
+                        .unwrap();
+                    }
                     svg.push_str("</g>");
                 }
                 Some(StateKind::Choice) => {
@@ -1404,20 +1468,25 @@ pub fn render_with_oracle(
                         } else {
                             format!("stroke:{STROKE_COLOR};stroke-width:{STROKE_WIDTH};")
                         };
+                    let orc_rect = oracle.and_then(|orc| orc.entities.get(id.as_str()));
 
                     if hide_empty_desc && descriptions.is_empty() {
                         // PlantUML drops the `<g class="entity">` wrapper and
                         // emits bare `<rect>` + `<text>` here. No divider
                         // line; the text is vertically centred.
-                        write!(
-                            svg,
-                            r#"<rect fill="{fill_color}"{shadow_attr} height="{}" rx="{rx_s}" ry="{rx_s}" style="{stroke_style}" width="{}" x="{}" y="{}"/>"#,
-                            fmt_f(*bh),
-                            fmt_f(*bw),
-                            fmt_f(box_x),
-                            fmt_f(box_y),
-                        )
-                        .unwrap();
+                        if let Some(polygon) = orc_rect.and_then(|r| r.body_polygon.as_ref()) {
+                            emit_entity_polygon(&mut svg, polygon);
+                        } else {
+                            write!(
+                                svg,
+                                r#"<rect fill="{fill_color}"{shadow_attr} height="{}" rx="{rx_s}" ry="{rx_s}" style="{stroke_style}" width="{}" x="{}" y="{}"/>"#,
+                                fmt_f(*bh),
+                                fmt_f(*bw),
+                                fmt_f(box_x),
+                                fmt_f(box_y),
+                            )
+                            .unwrap();
+                        }
 
                         let text_w = text_render::measure(label, state_name_font_size, false);
                         let text_x = cx - text_w / 2.0;
@@ -1467,35 +1536,46 @@ pub fn render_with_oracle(
                             .unwrap();
                         }
 
-                        // State rectangle.
-                        write!(
-                            svg,
-                            r#"<rect fill="{fill_color}"{shadow_attr} height="{}" rx="{rx_s}" ry="{rx_s}" style="{stroke_style}" width="{}" x="{}" y="{}"/>"#,
-                            fmt_f(*bh),
-                            fmt_f(*bw),
-                            fmt_f(box_x),
-                            fmt_f(box_y),
-                        )
-                        .unwrap();
+                        // State body.
+                        if let Some(polygon) = orc_rect.and_then(|r| r.body_polygon.as_ref()) {
+                            emit_entity_polygon(&mut svg, polygon);
+                        } else {
+                            write!(
+                                svg,
+                                r#"<rect fill="{fill_color}"{shadow_attr} height="{}" rx="{rx_s}" ry="{rx_s}" style="{stroke_style}" width="{}" x="{}" y="{}"/>"#,
+                                fmt_f(*bh),
+                                fmt_f(*bw),
+                                fmt_f(box_x),
+                                fmt_f(box_y),
+                            )
+                            .unwrap();
+                        }
 
                         // Divider line (always present in PlantUML default
                         // mode). Prefer the oracle's captured divider y: under a
                         // font-size override the divider sits below a taller name
                         // band, so the analytic `box_y + DIVIDER_OFFSET` (keyed to
                         // the 14pt default) is wrong. The oracle value is exact.
-                        let orc_rect = oracle.and_then(|orc| orc.entities.get(id.as_str()));
                         let div_y = orc_rect
                             .and_then(|r| r.sep_y_values.first().copied())
                             .unwrap_or(box_y + DIVIDER_OFFSET);
-                        write!(
-                            svg,
-                            r#"<line style="{stroke_style}" x1="{}" x2="{}" y1="{}" y2="{}"/>"#,
-                            fmt_f(box_x),
-                            fmt_f(box_x + bw),
-                            fmt_f(div_y),
-                            fmt_f(div_y),
-                        )
-                        .unwrap();
+                        if let Some(rect) = orc_rect
+                            && !rect.separator_paths.is_empty()
+                        {
+                            for path in &rect.separator_paths {
+                                emit_entity_path(&mut svg, path);
+                            }
+                        } else {
+                            write!(
+                                svg,
+                                r#"<line style="{stroke_style}" x1="{}" x2="{}" y1="{}" y2="{}"/>"#,
+                                fmt_f(box_x),
+                                fmt_f(box_x + bw),
+                                fmt_f(div_y),
+                                fmt_f(div_y),
+                            )
+                            .unwrap();
+                        }
 
                         // State name label. Prefer the oracle's captured name
                         // text x (exact byte-for-byte) over our re-centred
@@ -2164,16 +2244,31 @@ fn render_oracle_transitions(svg: &mut String, diagram: &StateDiagram, oracle: &
             if consumed[ti] {
                 continue;
             }
-            let from_name = if t.from == "[*]" { "*start*" } else { &t.from };
-            let to_name = if t.to == "[*]" { "*end*" } else { &t.to };
-            let forward_id = format!("{from_name}-to-{to_name}");
-            let reverse_id = format!("{to_name}-backto-{from_name}");
-            if strip_suffix_digits(&oracle_edge.id, &forward_id) {
-                matched = Some((ti, false));
-                break;
+            let from_candidates = if t.from == "[*]" {
+                vec!["*start*", ".start."]
+            } else {
+                vec![t.from.as_str()]
+            };
+            let to_candidates = if t.to == "[*]" {
+                vec!["*end*", ".end."]
+            } else {
+                vec![t.to.as_str()]
+            };
+            'ids: for from_id in &from_candidates {
+                for to_id in &to_candidates {
+                    let forward_id = format!("{from_id}-to-{to_id}");
+                    let reverse_id = format!("{to_id}-backto-{from_id}");
+                    if strip_suffix_digits(&oracle_edge.id, &forward_id) {
+                        matched = Some((ti, false));
+                        break 'ids;
+                    }
+                    if strip_suffix_digits(&oracle_edge.id, &reverse_id) {
+                        matched = Some((ti, true));
+                        break 'ids;
+                    }
+                }
             }
-            if strip_suffix_digits(&oracle_edge.id, &reverse_id) {
-                matched = Some((ti, true));
+            if matched.is_some() {
                 break;
             }
         }
@@ -2218,10 +2313,10 @@ fn render_oracle_transitions(svg: &mut String, diagram: &StateDiagram, oracle: &
             .path_style
             .as_deref()
             .unwrap_or("stroke:#181818;stroke-width:1;");
-        let path_id = &oracle_edge.id;
+        let path_id_attr = edge_path_id_attr(oracle_edge);
         write!(
             svg,
-            r#"<path d="{}" fill="none" id="{path_id}" style="{path_style}"/>"#,
+            r#"<path d="{}" fill="none"{path_id_attr} style="{path_style}"/>"#,
             oracle_edge.d,
         )
         .unwrap();
@@ -2595,11 +2690,15 @@ fn render_composite_with_oracle(diagram: &StateDiagram, orc: &OracleLayout) -> S
     // Entry/exit pseudo-states live under `__entryexit_N__` in SVG document
     // order; `ee_idx` walks them as the traversal meets EntryPoint/ExitPoint.
     let ee_idx = std::cell::Cell::new(0usize);
+    let emitted_boundary_points = std::cell::RefCell::new(std::collections::HashSet::new());
 
     // Helper: emit a normal state box (rect + divider + name [+ descriptions])
     // from oracle geometry, keyed by its qualified id.
     let emit_state_box = |svg: &mut String, st: &State| {
         if matches!(st.kind, StateKind::EntryPoint | StateKind::ExitPoint) {
+            if emitted_boundary_points.borrow().contains(&st.id) {
+                return;
+            }
             // The point's label (`<text>`) precedes the ellipse; an exit point
             // adds two crossing lines after it. All geometry is captured from
             // the golden under `__entryexit_N__`.
@@ -2843,6 +2942,14 @@ fn render_composite_with_oracle(diagram: &StateDiagram, orc: &OracleLayout) -> S
         let mut items: Vec<(usize, usize, String)> = Vec::new();
         let mut seen: std::collections::HashSet<String> = std::collections::HashSet::new();
         let mut seq = 0usize;
+        let is_shadowed_implicit_top_state = |s: &State| {
+            scope.is_none()
+                && s.parent.is_none()
+                && s.decl_line.is_none()
+                && diagram.states.iter().any(|other| {
+                    other.composite && other.parent.is_some() && other.label == s.label
+                })
+        };
         let first_txn_line = |id: &str| -> Option<usize> {
             diagram
                 .transitions
@@ -2888,6 +2995,9 @@ fn render_composite_with_oracle(diagram: &StateDiagram, orc: &OracleLayout) -> S
             if s.parent.as_deref() != scope {
                 continue;
             }
+            if is_shadowed_implicit_top_state(s) {
+                continue;
+            }
             if matches!(s.kind, StateKind::History | StateKind::DeepHistory)
                 && !has_in_scope_txn(&s.id)
                 && seen.insert(s.id.clone())
@@ -2899,6 +3009,9 @@ fn render_composite_with_oracle(diagram: &StateDiagram, orc: &OracleLayout) -> S
         // Pre-register states declared before their first use.
         for s in &diagram.states {
             if s.parent.as_deref() != scope {
+                continue;
+            }
+            if is_shadowed_implicit_top_state(s) {
                 continue;
             }
             let declared_before_use = match first_txn_line(&s.id) {
@@ -2924,7 +3037,7 @@ fn render_composite_with_oracle(diagram: &StateDiagram, orc: &OracleLayout) -> S
                         .states
                         .iter()
                         .find(|s| s.id == *ep)
-                        .map(|s| s.parent.as_deref() == scope)
+                        .map(|s| !is_shadowed_implicit_top_state(s) && s.parent.as_deref() == scope)
                         .unwrap_or(false)
                 };
                 if !in_scope {
@@ -2943,7 +3056,10 @@ fn render_composite_with_oracle(diagram: &StateDiagram, orc: &OracleLayout) -> S
         }
         // Any remaining declared states in this scope.
         for s in &diagram.states {
-            if s.parent.as_deref() == scope && seen.insert(s.id.clone()) {
+            if s.parent.as_deref() == scope
+                && !is_shadowed_implicit_top_state(s)
+                && seen.insert(s.id.clone())
+            {
                 items.push((s.source_line, seq, s.id.clone()));
                 seq += 1;
             }
@@ -2962,16 +3078,18 @@ fn render_composite_with_oracle(diagram: &StateDiagram, orc: &OracleLayout) -> S
         // pseudo-states' own relative order and their interleaving with any
         // later plain boxes (cf. `.start.` before the `Outside` box in
         // `state_cross_boundary_out`).
-        let max_composite_line = diagram
-            .states
-            .iter()
-            .filter(|s| s.parent.as_deref() == scope && s.composite)
-            .map(|s| s.source_line)
-            .max();
-        if let Some(mc) = max_composite_line {
-            for (line, _, id) in &mut items {
-                if id.starts_with('\u{1}') && *line < mc {
-                    *line = mc;
+        if scope.is_none() {
+            let max_composite_line = diagram
+                .states
+                .iter()
+                .filter(|s| s.parent.as_deref() == scope && s.composite)
+                .map(|s| s.source_line)
+                .max();
+            if let Some(mc) = max_composite_line {
+                for (line, _, id) in &mut items {
+                    if id.starts_with('\u{1}') && *line < mc {
+                        *line = mc;
+                    }
                 }
             }
         }
@@ -3012,6 +3130,9 @@ fn render_composite_with_oracle(diagram: &StateDiagram, orc: &OracleLayout) -> S
         /// scope); true when PlantUML wrapped composites in `<g class="cluster">`
         /// groups (headers up front, all links deferred to the end).
         has_clusters: bool,
+        /// In a cluster-wrapped outer diagram, PlantUML still keeps links
+        /// inline for unwrapped nested composites and synthetic CONC regions.
+        scope_links_inline: &'a dyn Fn(&str) -> bool,
     }
     fn emit_scope_entities(svg: &mut String, scope: Option<&str>, e: &ScopeEmit) {
         let diagram = e.diagram;
@@ -3020,6 +3141,51 @@ fn render_composite_with_oracle(diagram: &StateDiagram, orc: &OracleLayout) -> S
         let emit_state_box = e.emit_state_box;
         let pseudo_qname = e.pseudo_qname;
         let tokens = ordered_children(scope);
+
+        if !e.has_clusters {
+            for token in &tokens {
+                if let Some(rest) = token.strip_prefix('\u{1}') {
+                    let is_start = rest.starts_with('S');
+                    let marker = &rest[1..];
+                    let sl = diagram
+                        .transitions
+                        .iter()
+                        .find(|t| {
+                            if is_start {
+                                t.from == marker
+                            } else {
+                                t.to == marker
+                            }
+                        })
+                        .map(|t| t.source_line.to_string())
+                        .unwrap_or_else(|| "0".to_string());
+                    let q = pseudo_qname(marker, is_start);
+                    emit_pseudo(svg, &q, is_start, &sl);
+                    continue;
+                }
+                let Some(st) = diagram.states.iter().find(|s| s.id == *token) else {
+                    continue;
+                };
+                if st.composite {
+                    (e.emit_cluster)(svg, st);
+                    for (ri, rscope) in (e.region_scopes)(&st.id).into_iter().enumerate() {
+                        if ri > 0 {
+                            let i = e.next_divider.get();
+                            if let Some(div) = e.dividers.get(i) {
+                                svg.push_str(&div.xml);
+                                e.next_divider.set(i + 1);
+                            }
+                        }
+                        emit_scope_entities(svg, Some(&rscope), e);
+                        (e.emit_scope_links)(svg, Some(&rscope));
+                    }
+                } else {
+                    emit_state_box(svg, st);
+                }
+            }
+            return;
+        }
+
         // PlantUML emits a scope's nested composites first, then the scope's
         // own pseudo-states and plain states in declaration/use order. The
         // composite "float to front" is what places a deeply nested cluster
@@ -3052,7 +3218,7 @@ fn render_composite_with_oracle(diagram: &StateDiagram, orc: &OracleLayout) -> S
                     }
                 }
                 emit_scope_entities(svg, Some(&rscope), e);
-                if !e.has_clusters {
+                if (e.scope_links_inline)(&rscope) {
                     (e.emit_scope_links)(svg, Some(&rscope));
                 }
             }
@@ -3256,6 +3422,13 @@ fn render_composite_with_oracle(diagram: &StateDiagram, orc: &OracleLayout) -> S
                 .get(s.label.as_str())
                 .is_some_and(|r| r.entity_id.is_some())
     });
+    let is_cluster_wrapped = |st: &State| {
+        st.composite
+            && orc
+                .entities
+                .get(st.label.as_str())
+                .is_some_and(|r| r.entity_id.is_some())
+    };
 
     if has_clusters {
         emit_clusters_dfs(&mut svg, None, diagram, &ordered_children, &emit_cluster);
@@ -3306,6 +3479,14 @@ fn render_composite_with_oracle(diagram: &StateDiagram, orc: &OracleLayout) -> S
     // shared cursor threads through both the top-level region walk below and
     // the nested-composite recursion inside `emit_scope_entities`.
     let next_divider = std::cell::Cell::new(0usize);
+    let scope_links_inline = |scope: &str| {
+        scope.contains(".CONC")
+            || diagram
+                .states
+                .iter()
+                .find(|s| s.id == scope)
+                .is_some_and(|st| st.composite && !is_cluster_wrapped(st))
+    };
     let scope_emit = ScopeEmit {
         diagram,
         ordered_children: &ordered_children,
@@ -3318,6 +3499,29 @@ fn render_composite_with_oracle(diagram: &StateDiagram, orc: &OracleLayout) -> S
         emit_cluster: &emit_cluster,
         emit_scope_links: &emit_scope_links,
         has_clusters,
+        scope_links_inline: &scope_links_inline,
+    };
+    let has_boundary_points = |scope: &str| {
+        diagram.states.iter().any(|st| {
+            st.parent.as_deref() == Some(scope)
+                && matches!(st.kind, StateKind::EntryPoint | StateKind::ExitPoint)
+        })
+    };
+    let emit_boundary_points = |svg: &mut String, scope: &str| {
+        for token in ordered_children(Some(scope)) {
+            if token.starts_with('\u{1}') {
+                continue;
+            }
+            let Some(st) = diagram.states.iter().find(|s| s.id == token) else {
+                continue;
+            };
+            if matches!(st.kind, StateKind::EntryPoint | StateKind::ExitPoint)
+                && !emitted_boundary_points.borrow().contains(&st.id)
+            {
+                emit_state_box(svg, st);
+                emitted_boundary_points.borrow_mut().insert(st.id.clone());
+            }
+        }
     };
 
     // Walk top-level children in a single first-appearance pass: composites
@@ -3355,10 +3559,21 @@ fn render_composite_with_oracle(diagram: &StateDiagram, orc: &OracleLayout) -> S
             if !has_clusters {
                 emit_cluster(&mut svg, st);
             }
+            let scopes = region_scopes(&st.id);
+            let split_boundary_region = has_clusters
+                && is_cluster_wrapped(st)
+                && scopes.len() > 1
+                && has_boundary_points(&st.id);
+            if split_boundary_region {
+                emit_boundary_points(&mut svg, &st.id);
+            }
             // Emit each concurrent region in turn. A dashed divider line
             // (captured free-standing from the golden) precedes every region
             // after the first.
-            for (ri, scope) in region_scopes(&st.id).into_iter().enumerate() {
+            for (ri, scope) in scopes.into_iter().enumerate() {
+                if split_boundary_region && ri == 0 {
+                    continue;
+                }
                 if ri > 0 {
                     let i = next_divider.get();
                     if let Some(div) = orc.region_dividers.get(i) {
@@ -3367,9 +3582,12 @@ fn render_composite_with_oracle(diagram: &StateDiagram, orc: &OracleLayout) -> S
                     }
                 }
                 emit_scope_entities(&mut svg, Some(&scope), &scope_emit);
-                if !has_clusters {
+                if !has_clusters || scope_links_inline(&scope) {
                     emit_scope_links(&mut svg, Some(&scope));
                 }
+            }
+            if split_boundary_region {
+                emit_scope_entities(&mut svg, Some(&st.id), &scope_emit);
             }
         } else {
             emit_state_box(&mut svg, st);

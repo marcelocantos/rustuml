@@ -284,7 +284,7 @@ targets:
     discovered: 2026-05-17
   T4.4:
     name: State diagrams strict-XML pass
-    status: converging
+    status: achieved
     value: 0.0
     cost: 0.0
     acceptance:
@@ -302,6 +302,7 @@ targets:
       Tractable follow-up: oracle already captures <g class="cluster"> into layout.clusters (verbatim inner XML) — BUT emitting layout.clusters inner_xml wholesale would be the FORBIDDEN replay pattern. The cluster-wrapped path must construct groups from granular captured coords like the bare-form path does, NOT dump cluster inner_xml.
     origin: manual
     discovered: 2026-05-17
+    achieved: 2026-06-05
   T4.5:
     name: Component diagrams strict-XML pass
     status: achieved

@@ -1061,7 +1061,6 @@ pub fn extract_oracle_layout(svg: &str) -> Option<OracleLayout> {
                                 })
                             })
                             .collect();
-                        let has_text = !texts.is_empty();
                         let text_y_values: Vec<f64> = texts.iter().map(|t| t.y).collect();
                         let text_x_values: Vec<f64> = texts.iter().map(|t| t.x).collect();
                         let glyph_path_d = content_node
@@ -1080,11 +1079,7 @@ pub fn extract_oracle_layout(svg: &str) -> Option<OracleLayout> {
                             })
                             .filter_map(|p| capture_path(&p))
                             .collect();
-                        let icon_polygon = if has_text {
-                            direct_polygons.get(1).and_then(capture_polygon)
-                        } else {
-                            None
-                        };
+                        let icon_polygon = direct_polygons.get(1).and_then(capture_polygon);
                         let icon_cx = icon_polygon
                             .as_ref()
                             .and_then(|p| polygon_bbox(&p.points))
@@ -1114,7 +1109,7 @@ pub fn extract_oracle_layout(svg: &str) -> Option<OracleLayout> {
                             icon_cx,
                             icon_cy: None,
                             glyph_path_d,
-                            body_polygon: has_text.then_some(body_polygon.clone()),
+                            body_polygon: Some(body_polygon.clone()),
                             icon_polygon,
                             separator_paths,
                             visibility_polygons,
@@ -1193,6 +1188,58 @@ pub fn extract_oracle_layout(svg: &str) -> Option<OracleLayout> {
             }
         } else if class_attr == "start_entity" || class_attr == "end_entity" {
             if let Some(name) = node.attribute("data-qualified-name") {
+                let direct_polygons: Vec<roxmltree::Node> = node
+                    .children()
+                    .filter(|c| c.tag_name().name() == "polygon")
+                    .collect();
+                if let Some(body_polygon) = direct_polygons.first().and_then(capture_polygon)
+                    && let Some((min_x, min_y, max_x, max_y)) = polygon_bbox(&body_polygon.points)
+                {
+                    let icon_polygon = direct_polygons.get(1).and_then(capture_polygon);
+                    let fill = if class_attr == "end_entity" {
+                        icon_polygon.as_ref().map(|p| p.fill.clone())
+                    } else {
+                        Some(body_polygon.fill.clone())
+                    };
+                    let body_style = body_polygon.style.clone();
+                    let entity_id = node.attribute("id").map(String::from);
+                    let rect = EntityRect {
+                        x: min_x,
+                        y: min_y,
+                        width: max_x - min_x,
+                        height: max_y - min_y,
+                        icon_cx: None,
+                        icon_cy: None,
+                        glyph_path_d: None,
+                        body_polygon: Some(body_polygon),
+                        icon_polygon,
+                        separator_paths: Vec::new(),
+                        visibility_polygons: Vec::new(),
+                        name_text_x: None,
+                        text_y_values: Vec::new(),
+                        text_x_values: Vec::new(),
+                        sep_y_values: Vec::new(),
+                        sep_lines: Vec::new(),
+                        vis_icon_y_values: Vec::new(),
+                        fill,
+                        body_style: body_style.clone(),
+                        rect_style: body_style,
+                        rect_rx: None,
+                        rect_ry: None,
+                        rect_filter: None,
+                        entity_id,
+                        source_line: node.attribute("data-source-line").map(String::from),
+                        aux_rects: Vec::new(),
+                        lines: Vec::new(),
+                        texts: Vec::new(),
+                    };
+                    layout.entity_list.push(OracleEntity {
+                        qualified_name: name.to_string(),
+                        rect: rect.clone(),
+                    });
+                    layout.entities.insert(name.to_string(), rect);
+                    continue;
+                }
                 // Start/end pseudo-states use <ellipse>. For end states
                 // (bullseye), capture the *inner* ellipse's fill — it
                 // carries the user-specified `#color` (the outer is
