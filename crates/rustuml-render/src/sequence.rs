@@ -210,6 +210,37 @@ fn bold_text_width_with_family(text: &str, font_size: f64, font_family: &str) ->
     text_render::measure_with_family(text, font_size, true, font_family)
 }
 
+// A divider label that begins with `=== ` is treated as a heading-style
+// divider: the marker is consumed and each extra `=` raises the font size.
+fn divider_label_and_font_size(text: &str, default_font_size: u32) -> (&str, u32, bool) {
+    let trimmed = text.trim();
+    let equals = trimmed.chars().take_while(|&ch| ch == '=').count();
+    if equals >= 3 && trimmed.chars().nth(equals).is_some_and(char::is_whitespace) {
+        (
+            trimmed[equals..].trim_start(),
+            default_font_size + (equals as u32 - 2),
+            true,
+        )
+    } else {
+        (trimmed, default_font_size, false)
+    }
+}
+
+fn divider_label_box_width(
+    label: &str,
+    font_size: u32,
+    font_family: &str,
+    heading_style: bool,
+) -> f64 {
+    let tw = bold_text_width_with_family(label, font_size as f64, font_family);
+    let marker_space = if heading_style {
+        0.0
+    } else {
+        bold_text_width_with_family(" ", font_size as f64, font_family)
+    };
+    tw + 14.0 + marker_space
+}
+
 fn canonical_font_family(value: &str) -> String {
     let raw = value.trim();
     let quoted = (raw.starts_with('"') && raw.ends_with('"'))
@@ -4938,7 +4969,10 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
             }
             // An empty divider (`====`) has no label box/text line, so it
             // reserves no text height.
-            Event::Divider(t) => (!t.trim().is_empty(), MSG_TEXT_HEIGHT),
+            Event::Divider(t) => {
+                let (label, _, _) = divider_label_and_font_size(t, divider_font_size);
+                (!label.is_empty(), MSG_TEXT_HEIGHT)
+            }
             Event::Delay(t) => (t.is_some(), message_text_height),
             _ => (false, message_text_height),
         }
@@ -5171,7 +5205,15 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                     // The divider's tail padding accounts for the space below the
                     // text baseline (the double lines extend above, but PlantUML
                     // also reserves space below for visual balance).
-                    y += DIVIDER_TAIL_PAD;
+                    let (_, effective_font_size, _) =
+                        divider_label_and_font_size(dt, divider_font_size);
+                    let height_extra = if has_text {
+                        text_height_with_family(effective_font_size as f64, &divider_font_family)
+                            - MSG_TEXT_HEIGHT
+                    } else {
+                        0.0
+                    };
+                    y += DIVIDER_TAIL_PAD + height_extra;
                     msg_count += 1;
                 }
                 Event::Delay(t) => {
@@ -5347,8 +5389,14 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
     let mut max_divider_right: f64 = 0.0;
     for event in &diagram.events {
         if let Event::Divider(text) = event {
-            let tw = bold_text_width_with_family(text, MSG_FONT_SIZE, &divider_font_family);
-            let label_box_w = tw + 2.0 * 6.0 + 6.2847;
+            let (label, effective_font_size, heading_style) =
+                divider_label_and_font_size(text, divider_font_size);
+            let label_box_w = divider_label_box_width(
+                label,
+                effective_font_size,
+                &divider_font_family,
+                heading_style,
+            );
             max_divider_right = max_divider_right.max(label_box_w + 24.0);
         }
     }
@@ -7702,9 +7750,16 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                 // 2. Two horizontal lines (3px apart)
                 // 3. A label box rect (EEEEEE, bordered)
                 // 4. Bold text inside the label box
-                let tw = bold_text_width_with_family(text, MSG_FONT_SIZE, &divider_font_family);
-                // Label box dimensions: 6px padding on each side, centered on divider
-                let label_box_w = tw + 2.0 * 6.0 + 6.2847; // PlantUML adds extra padding
+                let (label, effective_font_size, heading_style) =
+                    divider_label_and_font_size(text, divider_font_size);
+                let label_box_w = divider_label_box_width(
+                    label,
+                    effective_font_size,
+                    &divider_font_family,
+                    heading_style,
+                );
+                // Label box dimensions: 6px left padding plus PlantUML's
+                // marker padding on the right, centered on divider.
                 let participant_span = if !participants.is_empty() {
                     let last = &participants[participants.len() - 1];
                     last.box_x + last.box_width + 5.0
@@ -7720,13 +7775,17 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                 let mid_x = (line_left + line_right) / 2.0;
 
                 // Event_y is the text baseline position.
-                let text_y = msg_y;
-                let line2_y = text_y - 2.9131;
-                let line1_y = line2_y - 3.0;
+                let label_box_h =
+                    text_height_with_family(effective_font_size as f64, &divider_font_family) + 8.0;
+                let label_box_y =
+                    msg_y - ascent_with_family(MSG_FONT_SIZE, &divider_font_family) - 4.0;
+                let text_y = label_box_y
+                    + ascent_with_family(effective_font_size as f64, &divider_font_family)
+                    + 4.0;
+                let line1_y = label_box_y + (label_box_h - 2.0) / 2.0;
+                let line2_y = line1_y + 3.0;
 
-                let label_box_h = 23.3105;
                 let label_box_x = mid_x - label_box_w / 2.0;
-                let label_box_y = line1_y - 10.6553; // Box extends above the lines
                 let text_x = label_box_x + 6.0;
 
                 // 1. Background strip rect
@@ -7763,7 +7822,7 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
 
                 // An empty divider (`====`) draws only the strip + lines, no
                 // label box or text.
-                if !text.trim().is_empty() {
+                if !label.is_empty() {
                     // 4. Label box rect
                     write!(
                         svg.buf,
@@ -7778,11 +7837,11 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                     // 5. Bold text
                     let text_advance = text_render::emit_text(
                         &mut svg.buf,
-                        text,
+                        label,
                         &TextBase {
                             x: text_x,
                             y: text_y,
-                            font_size: divider_font_size,
+                            font_size: effective_font_size,
                             font_family: &divider_font_family,
                             fill: &divider_font_color,
                             bold: true,
@@ -7791,14 +7850,14 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                             skip_underline: false,
                         },
                     );
-                    if has_creole_markup(text) {
+                    if has_creole_markup(label) {
                         text_render::emit_text(
                             &mut svg.buf,
                             " ",
                             &TextBase {
                                 x: text_x + text_advance,
                                 y: text_y,
-                                font_size: divider_font_size,
+                                font_size: effective_font_size,
                                 font_family: &divider_font_family,
                                 fill: &divider_font_color,
                                 bold: true,
