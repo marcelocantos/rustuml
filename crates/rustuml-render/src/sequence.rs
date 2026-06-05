@@ -1349,6 +1349,14 @@ fn strip_creole(s: &str) -> String {
     out
 }
 
+const MESSAGE_STRIKE_HLINE_LEN: f64 = 7.0;
+const MESSAGE_STRIKE_TEXT_Y_OFFSET: f64 = -0.5;
+
+fn whole_strike_label_inner(line: &str) -> Option<&str> {
+    let inner = line.strip_prefix("--")?.strip_suffix("--")?;
+    if inner.is_empty() { None } else { Some(inner) }
+}
+
 /// Decode PlantUML backslash escapes in label text.
 ///
 /// Tilde escapes are deliberately left intact here: message labels are passed
@@ -2054,7 +2062,13 @@ impl PlantUmlSvg {
     }
 
     /// Write a sequence message/arrow label.
-    fn emit_message_label(&mut self, text_x: f64, text_y: f64, text_content: &str) {
+    fn emit_message_label(
+        &mut self,
+        text_x: f64,
+        text_y: f64,
+        text_content: &str,
+        stroke_color: &str,
+    ) {
         let mut y = text_y;
         for line in text_content.split("\\n") {
             if let Some(latex) = latex_label_content(line) {
@@ -2070,6 +2084,56 @@ impl PlantUmlSvg {
                 )
                 .unwrap();
                 y += image.height as f64;
+            } else if let Some(inner) = whole_strike_label_inner(line) {
+                let line_height = text_height_with_family(
+                    self.message_font_size as f64,
+                    &self.message_font_family,
+                );
+                let line_ascent =
+                    ascent_with_family(self.message_font_size as f64, &self.message_font_family);
+                let strike_y = y - (line_ascent - line_height / 2.0);
+                write!(
+                    self.buf,
+                    r##"<line style="stroke:{};stroke-width:1;" x1="{}" x2="{}" y1="{}" y2="{}"/>"##,
+                    stroke_color,
+                    fmt_coord(text_x - MESSAGE_STRIKE_HLINE_LEN),
+                    fmt_coord(text_x),
+                    fmt_coord(strike_y),
+                    fmt_coord(strike_y),
+                )
+                .unwrap();
+                let text_w = text_render::emit_text(
+                    &mut self.buf,
+                    inner,
+                    &TextBase {
+                        x: text_x,
+                        y: y + MESSAGE_STRIKE_TEXT_Y_OFFSET,
+                        font_size: self.message_font_size,
+                        font_family: &self.message_font_family,
+                        fill: &self.message_font_color,
+                        bold: self.message_font_bold,
+                        italic: self.message_font_italic,
+                        underline: false,
+                        skip_underline: false,
+                    },
+                );
+                let right_x = text_x + text_w;
+                write!(
+                    self.buf,
+                    r##"<line style="stroke:{};stroke-width:1;" x1="{}" x2="{}" y1="{}" y2="{}"/>"##,
+                    stroke_color,
+                    fmt_coord(right_x),
+                    fmt_coord(right_x + MESSAGE_STRIKE_HLINE_LEN),
+                    fmt_coord(strike_y),
+                    fmt_coord(strike_y),
+                )
+                .unwrap();
+                y += rendered_line_metrics_with_family(
+                    line,
+                    self.message_font_size as f64,
+                    &self.message_font_family,
+                )
+                .height;
             } else {
                 text_render::emit_text(
                     &mut self.buf,
@@ -2687,7 +2751,7 @@ impl PlantUmlSvg {
         };
 
         if !text_content.is_empty() {
-            self.emit_message_label(label_x, text_y, text_content);
+            self.emit_message_label(label_x, text_y, text_content, color);
         }
         self.buf.push_str("</g>");
     }
@@ -2797,7 +2861,7 @@ impl PlantUmlSvg {
         };
 
         if !text_content.is_empty() {
-            self.emit_message_label(label_x, text_y, text_content);
+            self.emit_message_label(label_x, text_y, text_content, color);
         }
 
         self.buf.push_str("</g>");
@@ -2920,7 +2984,7 @@ impl PlantUmlSvg {
         };
 
         if !text_content.is_empty() {
-            self.emit_message_label(label_x, text_y, text_content);
+            self.emit_message_label(label_x, text_y, text_content, color);
         }
 
         self.buf.push_str("</g>");
@@ -3056,7 +3120,7 @@ impl PlantUmlSvg {
 
         if !text_content.is_empty() {
             let _ = text_len;
-            self.emit_message_label(label_x, text_y, text_content);
+            self.emit_message_label(label_x, text_y, text_content, color);
         }
 
         self.buf.push_str("</g>");
@@ -7187,7 +7251,7 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
 
                     // Text label
                     if !label.is_empty() {
-                        svg.emit_message_label(text_x, text_y_pos, &label);
+                        svg.emit_message_label(text_x, text_y_pos, &label, &arrow_color);
                     }
 
                     svg.buf.push_str("</g>");
