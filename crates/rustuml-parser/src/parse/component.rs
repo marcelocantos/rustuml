@@ -163,8 +163,7 @@ pub fn parse_component(lines: &[String]) -> Result<ComponentDiagram, ParseError>
     });
 
     for (line_idx, line) in lines.iter().enumerate() {
-        let current_line = line_idx + 1;
-        let trimmed = line.trim();
+        let (current_line, trimmed) = super::source_line_and_trimmed(line_idx + 1, line);
         if trimmed.is_empty() {
             if in_note {
                 note_lines.push(String::new());

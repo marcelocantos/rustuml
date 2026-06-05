@@ -14,7 +14,7 @@ use crate::diagram::state::*;
 pub fn parse_state(lines: &[String]) -> Result<StateDiagram, ParseError> {
     let mut parser = StateParser::new();
     for (i, line) in lines.iter().enumerate() {
-        let trimmed = line.trim();
+        let (source_line, trimmed) = super::source_line_and_trimmed(i + 1, line);
         if trimmed.is_empty() {
             // Empty lines may terminate a multi-line note with content already
             // accumulated — keep buffering (blank lines are part of note body).
@@ -23,7 +23,7 @@ pub fn parse_state(lines: &[String]) -> Result<StateDiagram, ParseError> {
             }
             continue;
         }
-        parser.parse_line(i + 1, trimmed)?;
+        parser.parse_line(source_line, trimmed)?;
     }
     // Flush any unclosed note buffer.
     parser.flush_note();

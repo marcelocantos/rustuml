@@ -100,7 +100,7 @@ pub fn strip_title_quotes(s: &str) -> &str {
 /// argument.
 fn truncate_at_newpage(lines: Vec<String>) -> Vec<String> {
     if let Some(idx) = lines.iter().position(|l| {
-        let t = l.trim();
+        let t = source_text(l).trim();
         t == "newpage" || t.starts_with("newpage ") || t.starts_with("newpage\t")
     }) {
         let mut lines = lines;
@@ -109,6 +109,16 @@ fn truncate_at_newpage(lines: Vec<String>) -> Vec<String> {
     } else {
         lines
     }
+}
+
+pub(crate) fn source_line_and_trimmed(fallback: usize, line: &str) -> (usize, &str) {
+    let (source_line, text) =
+        preprocess::split_source_line_marker(line).unwrap_or((fallback, line));
+    (source_line, text.trim())
+}
+
+pub(crate) fn source_text(line: &str) -> &str {
+    preprocess::split_source_line_marker(line).map_or(line, |(_, text)| text)
 }
 
 /// Detect the diagram type from the @start tag.
@@ -156,7 +166,7 @@ fn detect_uml_subtype(lines: &[String]) -> UmlSubtype {
     let mut has_meta_only_class_default = false;
 
     for line in lines {
-        let trimmed = line.trim();
+        let trimmed = source_text(line).trim();
         // Normalize internal tabs to spaces so keyword detection works regardless
         // of whether the source uses spaces or tabs as separators.
         let tab_normalized;
@@ -803,8 +813,8 @@ pub fn parse_with_base(
 ) -> Result<Diagram, ParseError> {
     let typ = detect_type(input);
     let preprocess_out = match base_dir {
-        Some(dir) => preprocess::preprocess_full_with_base(input, dir),
-        None => preprocess::preprocess_full(input, None),
+        Some(dir) => preprocess::preprocess_full_for_parse(input, Some(dir.to_path_buf())),
+        None => preprocess::preprocess_full_for_parse(input, None),
     };
     let lines = preprocess_out.lines;
     let sprites = preprocess_out.sprites;
@@ -1236,6 +1246,37 @@ mod tests {
             panic!("expected message event");
         };
         assert_eq!(message.source_line, 8);
+    }
+
+    #[test]
+    fn parse_block_keeps_while_body_and_following_source_lines() {
+        let input = concat!(
+            "@startuml\n",
+            "!$i = 1\n",
+            "!while $i <= 3\n",
+            "  participant \"P$i\" as P$i\n",
+            "  !$i = $i + 1\n",
+            "!endwhile\n",
+            "\n",
+            "P1 -> P2 : step 1\n",
+            "P2 -> P3 : step 2\n",
+            "@enduml"
+        );
+        let diagram = parse_block(input, 0).unwrap();
+        let Diagram::Sequence(seq) = diagram else {
+            panic!("expected sequence diagram");
+        };
+        assert_eq!(seq.participants.len(), 3);
+        assert!(seq.participants.iter().all(|p| p.source_line == 3));
+
+        let crate::diagram::sequence::Event::Message(first) = &seq.events[0] else {
+            panic!("expected first message event");
+        };
+        let crate::diagram::sequence::Event::Message(second) = &seq.events[1] else {
+            panic!("expected second message event");
+        };
+        assert_eq!(first.source_line, 7);
+        assert_eq!(second.source_line, 8);
     }
 
     #[test]

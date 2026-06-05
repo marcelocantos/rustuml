@@ -33,11 +33,11 @@ use crate::diagram::gantt::{
 pub fn parse_gantt(lines: &[String]) -> Result<GanttDiagram, ParseError> {
     let mut parser = GanttParser::new();
     for (i, line) in lines.iter().enumerate() {
-        let trimmed = line.trim();
+        let (source_line, trimmed) = super::source_line_and_trimmed(i + 1, line);
         if trimmed.is_empty() || trimmed.starts_with('\'') {
             continue;
         }
-        parser.parse_line(i + 1, trimmed)?;
+        parser.parse_line(source_line, trimmed)?;
     }
     Ok(parser.finish())
 }

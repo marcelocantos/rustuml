@@ -14,7 +14,7 @@ use crate::diagram::activity::*;
 pub fn parse_activity(lines: &[String]) -> Result<ActivityDiagram, ParseError> {
     // Detect legacy v1 syntax by looking for `(*)` or `===NAME===` markers.
     let is_legacy = lines.iter().any(|l| {
-        let t = l.trim();
+        let t = super::source_text(l).trim();
         t == "(*)"
             || t.starts_with("(*) ")
             || t.ends_with(" (*)")
@@ -27,14 +27,14 @@ pub fn parse_activity(lines: &[String]) -> Result<ActivityDiagram, ParseError> {
 
     let mut parser = ActivityParser::new();
     for (i, line) in lines.iter().enumerate() {
-        let trimmed = line.trim();
+        let (source_line, trimmed) = super::source_line_and_trimmed(i + 1, line);
         if trimmed.is_empty() {
             if parser.pending_note.is_some() {
                 parser.accumulate_note_line("");
             }
             continue;
         }
-        parser.parse_line(i + 1, trimmed)?;
+        parser.parse_line(source_line, trimmed)?;
     }
     Ok(parser.finish())
 }

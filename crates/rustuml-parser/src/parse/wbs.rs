@@ -33,7 +33,7 @@ pub fn parse_wbs(lines: &[String]) -> Result<WbsDiagram, ParseError> {
     let mut depth_stack: Vec<usize> = Vec::new();
 
     for (line_no, line) in lines.iter().enumerate() {
-        let trimmed = line.trim();
+        let (source_line, trimmed) = super::source_line_and_trimmed(line_no + 1, line);
         if trimmed.is_empty() {
             continue;
         }
@@ -79,7 +79,7 @@ pub fn parse_wbs(lines: &[String]) -> Result<WbsDiagram, ParseError> {
         let label = after_color.trim().to_string();
         if label.is_empty() {
             return Err(ParseError {
-                line: line_no + 1,
+                line: source_line,
                 message: "WBS node has no label".to_string(),
             });
         }
@@ -105,7 +105,7 @@ pub fn parse_wbs(lines: &[String]) -> Result<WbsDiagram, ParseError> {
             }
 
             let parent_depth = *depth_stack.last().ok_or_else(|| ParseError {
-                line: line_no + 1,
+                line: source_line,
                 message: format!(
                     "depth-{depth} node has no parent (no preceding depth-{} node)",
                     depth - 1
@@ -114,14 +114,14 @@ pub fn parse_wbs(lines: &[String]) -> Result<WbsDiagram, ParseError> {
 
             if parent_depth != depth - 1 {
                 return Err(ParseError {
-                    line: line_no + 1,
+                    line: source_line,
                     message: format!("unexpected depth jump from {} to {}", parent_depth, depth),
                 });
             }
 
             // Navigate to the parent node and append.
             let parent = find_deepest_at(&mut roots, &depth_stack).ok_or_else(|| ParseError {
-                line: line_no + 1,
+                line: source_line,
                 message: "internal error: could not locate parent node".to_string(),
             })?;
             parent.children.push(node);

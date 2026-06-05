@@ -352,8 +352,7 @@ pub fn parse_deployment(lines: &[String]) -> Result<DeploymentDiagram, ParseErro
         LazyLock::new(|| Regex::new(r"^(\w+)\s+\.\.\s+(\w+)\s*$").unwrap());
 
     for (line_idx, line) in lines.iter().enumerate() {
-        let current_line = line_idx + 1;
-        let trimmed = line.trim();
+        let (current_line, trimmed) = super::source_line_and_trimmed(line_idx + 1, line);
         if trimmed.is_empty() {
             continue;
         }

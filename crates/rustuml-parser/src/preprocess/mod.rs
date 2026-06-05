@@ -24,6 +24,29 @@ pub struct PreprocessOutput {
     pub sprites: HashMap<String, SpriteData>,
 }
 
+const SOURCE_LINE_PREFIX: &str = "\x1ERSL:";
+const SOURCE_LINE_SEPARATOR: char = '\x1F';
+
+pub(crate) fn source_line_marker(source_line: usize, line: &str) -> String {
+    format!("{SOURCE_LINE_PREFIX}{source_line}{SOURCE_LINE_SEPARATOR}{line}")
+}
+
+pub(crate) fn split_source_line_marker(line: &str) -> Option<(usize, &str)> {
+    let rest = line.strip_prefix(SOURCE_LINE_PREFIX)?;
+    let (source_line, line) = rest.split_once(SOURCE_LINE_SEPARATOR)?;
+    let source_line = source_line.parse().ok()?;
+    Some((source_line, line))
+}
+
+fn strip_source_line_markers(lines: Vec<String>) -> Vec<String> {
+    lines
+        .into_iter()
+        .map(|line| {
+            split_source_line_marker(&line).map_or(line.clone(), |(_, text)| text.to_string())
+        })
+        .collect()
+}
+
 /// Preprocess PlantUML source, expanding TIM directives.
 pub fn preprocess(input: &str) -> Vec<String> {
     preprocess_full(input, None).lines
@@ -37,6 +60,19 @@ pub fn preprocess_with_base(input: &str, base_dir: &Path) -> Vec<String> {
 /// Preprocess PlantUML source and return both expanded lines and sprite
 /// definitions collected from `sprite $name { ... }` blocks.
 pub fn preprocess_full(input: &str, base_dir: Option<PathBuf>) -> PreprocessOutput {
+    let mut output = preprocess_full_inner(input, base_dir);
+    output.lines = strip_source_line_markers(output.lines);
+    output
+}
+
+pub(crate) fn preprocess_full_for_parse(
+    input: &str,
+    base_dir: Option<PathBuf>,
+) -> PreprocessOutput {
+    preprocess_full_inner(input, base_dir)
+}
+
+fn preprocess_full_inner(input: &str, base_dir: Option<PathBuf>) -> PreprocessOutput {
     let mut ctx = PreprocessContext::new(base_dir);
     let mut lines = ctx.process(input);
     // Append any accumulated theme expansion to the end of the diagram so
@@ -342,6 +378,10 @@ struct PreprocessContext {
     /// output — skinparams are position-insensitive so this is semantically
     /// equivalent to in-place expansion for everything we currently render.
     theme_tail: Vec<String>,
+    /// Once loop expansion produces generated content, subsequent original
+    /// lines need explicit source-origin markers because output position no
+    /// longer equals PlantUML's `data-source-line`.
+    mark_source_lines: bool,
 }
 
 const MAX_INCLUDE_DEPTH: usize = 10;
@@ -355,12 +395,17 @@ struct CondState {
 struct ForEachState {
     var_name: String,
     values: Vec<String>,
-    body_lines: Vec<String>,
+    body_lines: Vec<BufferedLine>,
 }
 
 struct WhileState {
     condition: String,
-    body_lines: Vec<String>,
+    body_lines: Vec<BufferedLine>,
+}
+
+struct BufferedLine {
+    text: String,
+    raw_source_line: usize,
 }
 
 #[derive(Clone)]
@@ -417,6 +462,7 @@ impl PreprocessContext {
             current_source_line: 0,
             render_clock: RenderClock::from_env(),
             theme_tail: Vec::new(),
+            mark_source_lines: false,
         }
     }
 
@@ -436,6 +482,42 @@ impl PreprocessContext {
         if self.include_depth == 0 && self.in_diagram_block {
             output.push(String::new());
         }
+    }
+
+    fn current_diagram_source_line(&self) -> usize {
+        if self.include_depth == 0 && self.in_diagram_block && self.seen_start_tag {
+            self.current_source_line.saturating_sub(1)
+        } else {
+            self.current_source_line
+        }
+    }
+
+    fn current_buffered_line(&self, line: &str) -> BufferedLine {
+        BufferedLine {
+            text: line.to_string(),
+            raw_source_line: self.current_source_line,
+        }
+    }
+
+    fn push_content_line(&self, output: &mut Vec<String>, line: String) {
+        if self.mark_source_lines && !line.is_empty() {
+            output.push(source_line_marker(
+                self.current_diagram_source_line(),
+                &line,
+            ));
+        } else {
+            output.push(line);
+        }
+    }
+
+    fn process_buffered_line(&mut self, line: &BufferedLine, output: &mut Vec<String>) {
+        let saved_source_line = self.current_source_line;
+        let saved_mark_source_lines = self.mark_source_lines;
+        self.current_source_line = line.raw_source_line;
+        self.mark_source_lines = true;
+        self.process_one_line(&line.text, output);
+        self.mark_source_lines = saved_mark_source_lines;
+        self.current_source_line = saved_source_line;
     }
 
     fn get_var(&self, name: &str) -> Option<&String> {
@@ -743,7 +825,7 @@ impl PreprocessContext {
                 let mut sorted_tokens = token_pairs;
                 sorted_tokens.sort();
                 all.extend(sorted_tokens);
-                output.push(format!("' [dump] {}", all.join(", ")));
+                self.push_content_line(output, format!("' [dump] {}", all.join(", ")));
             }
             return;
         }
@@ -773,7 +855,7 @@ impl PreprocessContext {
             // check, but the index advances). PlantUML's `data-source-line` counts
             // blank lines but excludes the dropped `@startuml`.
             for expanded_line in line_to_process.split('\n') {
-                output.push(expanded_line.to_string());
+                self.push_content_line(output, expanded_line.to_string());
             }
         } else {
             // Line suppressed by an inactive conditional branch. It still
@@ -1181,9 +1263,7 @@ impl PreprocessContext {
                     self.set_var(&foreach.var_name, val);
 
                     for body_line in &foreach.body_lines {
-                        let line_refs: Vec<&str> = vec![body_line.as_str()];
-                        let expanded = self.process_lines(&line_refs);
-                        output.extend(expanded);
+                        self.process_buffered_line(body_line, output);
                     }
 
                     match old_val {
@@ -1195,13 +1275,17 @@ impl PreprocessContext {
                         }
                     }
                 }
+                self.mark_source_lines = true;
             }
             return true;
         }
 
         // If we're inside a foreach, buffer the line.
-        if let Some(foreach) = self.foreach_stack.last_mut() {
-            foreach.body_lines.push(line.to_string());
+        if self.foreach_stack.last().is_some() {
+            let buffered = self.current_buffered_line(line);
+            if let Some(foreach) = self.foreach_stack.last_mut() {
+                foreach.body_lines.push(buffered);
+            }
             return true;
         }
 
@@ -1238,20 +1322,22 @@ impl PreprocessContext {
                     }
 
                     for body_line in &while_state.body_lines {
-                        let line_refs: Vec<&str> = vec![body_line.as_str()];
-                        let expanded = self.process_lines(&line_refs);
-                        output.extend(expanded);
+                        self.process_buffered_line(body_line, output);
                     }
 
                     iterations += 1;
                 }
+                self.mark_source_lines = true;
             }
             return true;
         }
 
         // If we're inside a while, buffer the line.
-        if let Some(while_state) = self.while_stack.last_mut() {
-            while_state.body_lines.push(line.to_string());
+        if self.while_stack.last().is_some() {
+            let buffered = self.current_buffered_line(line);
+            if let Some(while_state) = self.while_stack.last_mut() {
+                while_state.body_lines.push(buffered);
+            }
             return true;
         }
 

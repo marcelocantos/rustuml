@@ -58,7 +58,8 @@ pub fn parse_mindmap(lines: &[String]) -> Result<MindMapDiagram, ParseError> {
     let mut multiline_buf: Option<(usize, usize, Side, Option<String>, bool, String)> = None;
 
     for (line_no, line) in lines.iter().enumerate() {
-        let trimmed = line.trim();
+        let (source_line, trimmed) = super::source_line_and_trimmed(line_no + 1, line);
+        let line_no = source_line.saturating_sub(1);
 
         // If we are accumulating a multiline node, keep collecting until `;`.
         if let Some((start_no, depth, side, ref color, boxless, ref mut buf)) = multiline_buf {
