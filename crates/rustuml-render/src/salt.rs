@@ -695,6 +695,7 @@ fn widget_dim(widget: &SaltWidget) -> (f64, f64) {
             (*depth as f64) * 8.0 + pm::text_width(label, FONT_SIZE, false),
             th,
         ),
+        SaltWidget::Block(b) if b.kind == BlockKind::Menu => menu_dim(b),
         SaltWidget::Block(b) if b.kind == BlockKind::Tree => tree_dim(b),
         SaltWidget::Block(b) if b.kind == BlockKind::Tabs => tabs_dim(b),
         SaltWidget::Block(b) => {
@@ -773,6 +774,18 @@ fn separator_literal(kind: SeparatorKind) -> &'static str {
         SeparatorKind::Single => "--",
         SeparatorKind::Solid => "_",
     }
+}
+
+fn menu_dim(block: &SaltBlock) -> (f64, f64) {
+    let label = menu_label(block);
+    (
+        literal_text_width(&label) + 10.0,
+        pm::text_height(FONT_SIZE),
+    )
+}
+
+fn menu_label(block: &SaltBlock) -> String {
+    tab_lines(block).into_iter().next().unwrap_or_default()
 }
 
 fn tree_dim(block: &SaltBlock) -> (f64, f64) {
@@ -906,6 +919,9 @@ fn draw_widget(widget: &SaltWidget, x: f64, y: f64, cell_w: f64, cell_h: f64, bu
             let indent = (*depth as f64) * 8.0;
             emit_text(buf, x + indent, y + ascent, label);
         }
+        SaltWidget::Block(b) if b.kind == BlockKind::Menu => {
+            draw_menu_block(b, x, y, buf);
+        }
         SaltWidget::Block(b) if b.kind == BlockKind::Tree => {
             draw_tree_block(b, x, y, buf);
         }
@@ -993,6 +1009,19 @@ fn draw_tree_block(block: &SaltBlock, x: f64, y: f64, buf: &mut String) {
             *slot = None;
         }
     }
+}
+
+fn draw_menu_block(block: &SaltBlock, x: f64, y: f64, buf: &mut String) {
+    let label = menu_label(block);
+    let text_w = literal_text_width(&label);
+    buf.push_str(&format!(
+        r##"<rect fill="#DDDDDD" height="{h}" style="stroke:#000000;stroke-width:1;" width="{w}" x="{x}" y="{y}"/>"##,
+        h = pm::fmt_coord(pm::text_height(FONT_SIZE) + 1.0),
+        w = pm::fmt_coord(text_w + 11.0),
+        x = pm::fmt_coord(x),
+        y = pm::fmt_coord(y),
+    ));
+    emit_text(buf, x, y + pm::ascent(FONT_SIZE), &label);
 }
 
 fn has_direct_tree_child(nodes: &[(usize, &str)], parent_idx: usize) -> bool {

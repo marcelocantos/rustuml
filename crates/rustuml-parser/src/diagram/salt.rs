@@ -36,6 +36,8 @@ pub enum BlockKind {
     Table,
     /// Tree widget: `{T`.
     Tree,
+    /// Menu widget: `{*`.
+    Menu,
     /// Tab bar: `{/`.
     Tabs,
     /// Scrollable container with both scrollbars: `{S`.

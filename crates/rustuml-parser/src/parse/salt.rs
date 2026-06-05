@@ -7,7 +7,7 @@
 //! ```text
 //! salt      = block
 //! block     = '{' modifier title? NL row* '}'
-//! modifier  = '' | '#' | 'T' | '/' | 'SI' | '^' <title text>
+//! modifier  = '' | '#' | 'T' | '*' | '/' | 'SI' | '^' <title text>
 //! row       = cell ('|' cell)* NL
 //! cell      = widget | block
 //! widget    = button | textfield | checkbox | radio | dropdown
@@ -387,6 +387,7 @@ fn parse_block(lines: &[String], pos: usize) -> Result<(SaltBlock, usize), Parse
 /// - `{`         → (Plain, None, "")
 /// - `{#`        → (Table, None, "")
 /// - `{T`        → (Tree, None, "")
+/// - `{*`        → (Menu, None, "")
 /// - `{/`        → (Tabs, None, "")
 /// - `{SI`       → (ScrollInput, None, "")
 /// - `{^My Title`→ (Plain, Some("My Title"), "")
@@ -402,6 +403,9 @@ fn parse_block_header(line: &str) -> (BlockKind, Option<String>, &str) {
     }
     if let Some(stripped) = rest.strip_prefix('#') {
         return (BlockKind::Table, None, stripped.trim_start());
+    }
+    if let Some(stripped) = rest.strip_prefix('*') {
+        return (BlockKind::Menu, None, stripped.trim_start());
     }
     if let Some(stripped) = rest.strip_prefix("SI") {
         return (BlockKind::ScrollInput, None, stripped.trim_start());
@@ -654,6 +658,18 @@ mod tests {
             &diag.root.rows[2].cells[0],
             SaltWidget::TreeNode { depth: 3, .. }
         ));
+    }
+
+    #[test]
+    fn parse_menu() {
+        let input = lines(
+            r#"{*
+  File
+}"#,
+        );
+        let diag = parse_salt(&input).unwrap();
+        assert_eq!(diag.root.kind, BlockKind::Menu);
+        assert_eq!(diag.root.rows.len(), 1);
     }
 
     #[test]
