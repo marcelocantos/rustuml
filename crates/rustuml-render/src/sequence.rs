@@ -712,6 +712,9 @@ fn first_segment_metrics_with_family(
 }
 
 fn rendered_label_y_drop_with_family(content: &str, font_size: f64, font_family: &str) -> f64 {
+    if let Some(latex) = latex_label_content(content) {
+        return crate::math::raw_latex_image(latex).height as f64 + 1.0;
+    }
     let mut lines = content.split("\\n");
     let first = lines.next().unwrap_or("");
     let first_metrics = first_segment_metrics_with_family(first, font_size, font_family);
@@ -728,14 +731,33 @@ fn message_label_width_with_family(
     font_family: &str,
 ) -> f64 {
     text.split("\\n")
-        .map(|line| text_render::measure_with_family(line, font_size, bold, font_family))
+        .map(|line| {
+            if let Some(latex) = latex_label_content(line) {
+                crate::math::raw_latex_image(latex).width as f64 + MSG_TEXT_LEFT_PAD
+            } else {
+                text_render::measure_with_family(line, font_size, bold, font_family)
+            }
+        })
         .fold(0.0, f64::max)
 }
 
 fn message_label_block_height_with_family(text: &str, font_size: f64, font_family: &str) -> f64 {
     text.split("\\n")
-        .map(|line| rendered_line_metrics_with_family(line, font_size, font_family).height)
+        .map(|line| {
+            if let Some(latex) = latex_label_content(line) {
+                crate::math::raw_latex_image(latex).height as f64 - 1.0
+            } else {
+                rendered_line_metrics_with_family(line, font_size, font_family).height
+            }
+        })
         .sum()
+}
+
+fn latex_label_content(s: &str) -> Option<&str> {
+    let trimmed = s.trim();
+    trimmed
+        .strip_prefix("<latex>")
+        .and_then(|rest| rest.strip_suffix("</latex>"))
 }
 
 struct NoteTextMetrics {
@@ -1949,27 +1971,42 @@ impl PlantUmlSvg {
     fn emit_message_label(&mut self, text_x: f64, text_y: f64, text_content: &str) {
         let mut y = text_y;
         for line in text_content.split("\\n") {
-            text_render::emit_text(
-                &mut self.buf,
-                line,
-                &TextBase {
-                    x: text_x,
-                    y,
-                    font_size: self.message_font_size,
-                    font_family: &self.message_font_family,
-                    fill: &self.message_font_color,
-                    bold: self.message_font_bold,
-                    italic: self.message_font_italic,
-                    underline: false,
-                    skip_underline: false,
-                },
-            );
-            y += rendered_line_metrics_with_family(
-                line,
-                self.message_font_size as f64,
-                &self.message_font_family,
-            )
-            .height;
+            if let Some(latex) = latex_label_content(line) {
+                let image = crate::math::raw_latex_image(latex);
+                write!(
+                    self.buf,
+                    r#"<image height="{}" width="{}" x="{}" xlink:href="{}" y="{}"/>"#,
+                    image.height,
+                    image.width,
+                    fmt_coord(text_x),
+                    image.href,
+                    fmt_coord(y),
+                )
+                .unwrap();
+                y += image.height as f64;
+            } else {
+                text_render::emit_text(
+                    &mut self.buf,
+                    line,
+                    &TextBase {
+                        x: text_x,
+                        y,
+                        font_size: self.message_font_size,
+                        font_family: &self.message_font_family,
+                        fill: &self.message_font_color,
+                        bold: self.message_font_bold,
+                        italic: self.message_font_italic,
+                        underline: false,
+                        skip_underline: false,
+                    },
+                );
+                y += rendered_line_metrics_with_family(
+                    line,
+                    self.message_font_size as f64,
+                    &self.message_font_family,
+                )
+                .height;
+            }
         }
     }
 
