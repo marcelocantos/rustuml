@@ -1865,6 +1865,7 @@ fn render_plantuml_svg(
     {
         emit_handwritten_warning(&mut svg, warning);
     }
+    let suppress_header_icon = has_strictuml_style(diagram);
 
     // Body bounding box (entity rects), used to position the page decorations
     // and to drive the centring width. PlantUML lays out title/header/caption/
@@ -2227,6 +2228,7 @@ fn render_plantuml_svg(
             explicit_padding,
             body_gradient_fill.as_deref(),
             header_gradient_fill.as_deref(),
+            suppress_header_icon,
         );
 
         svg.push_str("</g>");
@@ -2500,6 +2502,7 @@ fn render_entity_content(
     explicit_padding: Option<f64>,
     body_gradient_fill: Option<&str>,
     header_gradient_fill: Option<&str>,
+    suppress_header_icon: bool,
 ) {
     if matches!(entity.kind, EntityKind::Circle | EntityKind::Diamond) {
         if let Some(anchor) = link_anchor {
@@ -2911,7 +2914,7 @@ fn render_entity_content(
         let title_lh = text_render::label_height(&entity.label, name_font_size as f64);
         y + CIRCLED_ICON_TOP_INSET + icon_radius.max(title_lh / 2.0)
     };
-    if !dim.hide.circle {
+    if !dim.hide.circle && !suppress_header_icon {
         // A hex spot color from `<< (X,#HEX) Name >>` overrides the default
         // kind-based circle fill. Named spot colors do not (PlantUML behavior).
         let stereotype_c_fill = font
@@ -4738,6 +4741,12 @@ fn emit_handwritten_warning(svg: &mut String, warning: &OracleHandwrittenWarning
 fn has_handwritten_skinparam(diagram: &ClassDiagram) -> bool {
     diagram.meta.skinparams.iter().any(|sp| {
         sp.key.eq_ignore_ascii_case("handwritten") && sp.value.eq_ignore_ascii_case("true")
+    })
+}
+
+fn has_strictuml_style(diagram: &ClassDiagram) -> bool {
+    diagram.meta.skinparams.iter().any(|sp| {
+        sp.key.eq_ignore_ascii_case("style") && sp.value.trim().eq_ignore_ascii_case("strictuml")
     })
 }
 

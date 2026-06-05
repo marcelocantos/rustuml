@@ -349,6 +349,11 @@ const MSG_BASE_STEP: f64 = 14.0;
 /// Base first-message offset from lifeline top (no label text).
 const MSG_BASE_FIRST_OFFSET: f64 = 16.0;
 const TAIL_GAP: f64 = 17.0; // gap from last msg y to tail box y
+const SHADOW_LIVING_WIDTH_EXTRA: f64 = 3.0;
+const SHADOW_VERTICAL_PAD: f64 = 3.0;
+const SHADOW_NOTE_EXTRA: f64 = 1.5;
+const SHADOW_CANVAS_RIGHT_PAD: f64 = 3.0;
+const SHADOW_CANVAS_BOTTOM_PAD: f64 = 3.0;
 
 /// Vertical space a `newpage` separator reserves in the page-1 flow. Java
 /// `ComponentRoseNewpage.getPreferredHeight` returns 1; `prepareNewpage`
@@ -1387,6 +1392,9 @@ struct PlantUmlSvg {
     /// Drop-shadow filter id for note bodies. Driven by
     /// `skinparam noteShadowing true`.
     note_shadow_filter: Option<String>,
+    /// Drop-shadow filter id for participant head/tail boxes. Driven by
+    /// global `skinparam shadowing true`.
+    participant_shadow_filter: Option<String>,
     /// Lifeline dashed-line stroke colour (default `#181818`). Driven by
     /// `skinparam sequenceLifeLineBorderColor`.
     lifeline_border: String,
@@ -1426,6 +1434,7 @@ impl PlantUmlSvg {
             note_font_size: MSG_FONT_SIZE as u32,
             note_font_family: "sans-serif".into(),
             note_shadow_filter: None,
+            participant_shadow_filter: None,
             lifeline_border: "#181818".into(),
             lifeline_border_thickness: "0.5".into(),
             active_participant_url: None,
@@ -1587,10 +1596,16 @@ impl PlantUmlSvg {
     ) {
         self.participant_group_open(part_uid, qualified_name, source_line, position);
 
+        let filter_attr = self
+            .participant_shadow_filter
+            .as_ref()
+            .map(|id| format!(r#" filter="url(#{id})""#))
+            .unwrap_or_default();
         write!(
             self.buf,
-            r##"<rect fill="{}" height="{}" rx="{}" ry="{}" style="stroke:{};stroke-width:{};" width="{}" x="{}" y="{}"/>"##,
+            r##"<rect fill="{}"{} height="{}" rx="{}" ry="{}" style="stroke:{};stroke-width:{};" width="{}" x="{}" y="{}"/>"##,
             fill_color,
+            filter_attr,
             fmt_coord(rect_h),
             fmt_coord(self.head_box_rx),
             fmt_coord(self.head_box_rx),
@@ -2936,6 +2951,8 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
     let mut note_font_family = "sans-serif".to_string();
     let mut note_font_size: u32 = MSG_FONT_SIZE as u32;
     let mut note_shadow_filter: Option<String> = None;
+    let mut participant_shadow_filter: Option<String> = None;
+    let mut sequence_shadowing = false;
     // Whether `ParticipantBackgroundColor` / `ParticipantBorderColor` were set
     // explicitly. These only affect the plain `participant` rectangle, so other
     // shape kinds must fall back to the (monochrome-aware) historical default
@@ -3177,6 +3194,17 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                 if val.eq_ignore_ascii_case("true") {
                     note_shadow_filter = filter_id.clone();
                 } else if val.eq_ignore_ascii_case("false") {
+                    note_shadow_filter = None;
+                }
+            }
+            "shadowing" | "sequenceshadowing" => {
+                if val.eq_ignore_ascii_case("true") {
+                    sequence_shadowing = true;
+                    participant_shadow_filter = filter_id.clone();
+                    note_shadow_filter = filter_id.clone();
+                } else if val.eq_ignore_ascii_case("false") {
+                    sequence_shadowing = false;
+                    participant_shadow_filter = None;
                     note_shadow_filter = None;
                 }
             }
@@ -4175,6 +4203,12 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
             }
         }
     }
+    if sequence_shadowing {
+        for p in participants.iter_mut() {
+            p.center_x = p.box_x + (p.box_width + SHADOW_LIVING_WIDTH_EXTRA) / 2.0;
+            p.lifeline_line_x = p.box_x + ((p.box_width + SHADOW_LIVING_WIDTH_EXTRA) / 2.0).floor();
+        }
+    }
 
     let center_of = |id: &str| -> f64 {
         id_to_idx
@@ -4278,7 +4312,17 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
         .iter()
         .map(|p| p.box_height)
         .fold(0.0_f64, f64::max);
-    let lifeline_top = head_box_y + max_box_h + LIFELINE_Y_OFFSET;
+    let shadow_vertical_pad = if sequence_shadowing {
+        SHADOW_VERTICAL_PAD
+    } else {
+        0.0
+    };
+    let shadow_note_extra = if sequence_shadowing {
+        SHADOW_NOTE_EXTRA
+    } else {
+        0.0
+    };
+    let lifeline_top = head_box_y + max_box_h + LIFELINE_Y_OFFSET + shadow_vertical_pad;
 
     let event_message_text_height = |event: &Event| -> (bool, f64) {
         match event {
@@ -4352,6 +4396,7 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                         };
                         let extra = note_msg_extra_base(note.shape)
                             + note_msg_text_tail(&metrics)
+                            + shadow_note_extra
                             + y_adjust;
                         let e = msg_note_extra.entry(owner).or_insert(0.0);
                         *e = e.max(extra);
@@ -4508,6 +4553,7 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                             - note_msg_arrow_offset_for_line(note.shape, metrics.first_height)
                             - note_msg_text_tail(&metrics)
                             - 2.0 * explicit_global_padding
+                            - shadow_note_extra
                             + msg_note_y_adjust.get(&owner).copied().unwrap_or(0.0);
                         // The draw site derives note_top from event_y via
                         // note_top = event_y - note_y_extra - num_lines*MSG_TEXT_HEIGHT.
@@ -4860,8 +4906,13 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
     // A title/caption/footer band wider than the participant span shifted the
     // participants right by `meta_shift` (so `effective_right` already grew by
     // that much); add it once more to keep the band centred and symmetric.
-    let svg_width_exact =
-        svg_width_exact + meta_shift + participant_outer_padding - theme_top_padding;
+    let svg_width_exact = svg_width_exact + meta_shift + participant_outer_padding
+        - theme_top_padding
+        + if sequence_shadowing {
+            SHADOW_CANVAS_RIGHT_PAD
+        } else {
+            0.0
+        };
     let svg_width = svg_width_exact.ceil() as u32;
     // A `footer` directive reserves a band below the content (text_height(10)
     // + 1.0 = 12.777), growing the canvas; the footer text sits in that band.
@@ -4873,7 +4924,17 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
     let mut svg_height = if diagram.hide_footbox {
         (lifeline_bottom + footer_band_h).ceil() as u32
     } else {
-        (tail_box_y + max_box_h + BOTTOM_MARGIN + footer_band_h + theme_top_padding).ceil() as u32
+        (tail_box_y
+            + max_box_h
+            + BOTTOM_MARGIN
+            + footer_band_h
+            + theme_top_padding
+            + if sequence_shadowing {
+                SHADOW_CANVAS_BOTTOM_PAD
+            } else {
+                0.0
+            })
+        .ceil() as u32
     };
     // Caption adds 20 px of vertical space below the foot boxes (one 14-px
     // text line + descent + bottom margin). The strict golden height for a
@@ -5402,6 +5463,7 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
     svg.note_font_family = note_font_family.clone();
     svg.note_font_size = note_font_size;
     svg.note_shadow_filter = note_shadow_filter.clone();
+    svg.participant_shadow_filter = participant_shadow_filter.clone();
     svg.lifeline_border = lifeline_border.clone();
     svg.lifeline_border_thickness = lifeline_border_thickness.clone();
     svg.head_box_rx = head_box_rx;
