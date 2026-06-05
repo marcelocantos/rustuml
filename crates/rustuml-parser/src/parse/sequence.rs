@@ -981,7 +981,10 @@ fn parse_arrow(s: &str) -> Arrow {
         LineStyle::Solid
     };
 
-    let head = if s.contains('x') {
+    let source_cross = s.starts_with('x');
+    let head = if source_cross {
+        ArrowHead::Filled
+    } else if s.contains('x') {
         ArrowHead::Cross
     } else if s.contains('o') {
         ArrowHead::Circle
@@ -1021,6 +1024,7 @@ fn parse_arrow(s: &str) -> Arrow {
         color: None,
         head_half,
         thin_head,
+        source_cross,
     }
 }
 
@@ -1097,6 +1101,27 @@ mod tests {
             assert_eq!(m.arrow.direction, ArrowDirection::Bidirectional);
             assert_eq!(m.arrow.line, LineStyle::Solid);
             assert_eq!(m.arrow.head, ArrowHead::Open);
+        } else {
+            panic!("expected message");
+        }
+    }
+
+    #[test]
+    fn source_cross_arrow_keeps_target_head() {
+        let d = parse("A x-> B : found\nA ->x B : lost");
+        if let Event::Message(m) = &d.events[0] {
+            assert_eq!(m.from, "A");
+            assert_eq!(m.to, "B");
+            assert!(m.arrow.source_cross);
+            assert_eq!(m.arrow.head, ArrowHead::Filled);
+        } else {
+            panic!("expected message");
+        }
+        if let Event::Message(m) = &d.events[1] {
+            assert_eq!(m.from, "A");
+            assert_eq!(m.to, "B");
+            assert!(!m.arrow.source_cross);
+            assert_eq!(m.arrow.head, ArrowHead::Cross);
         } else {
             panic!("expected message");
         }

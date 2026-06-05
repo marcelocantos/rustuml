@@ -142,6 +142,10 @@ pub struct Arrow {
     /// filled triangle. Triggered by doubling the half modifier (`//`, `\\`).
     #[serde(default, skip_serializing_if = "std::ops::Not::not")]
     pub thin_head: bool,
+    /// True for source-cross arrows (`x->`): draw an X at the source side
+    /// while keeping the normal target arrowhead.
+    #[serde(default, skip_serializing_if = "std::ops::Not::not")]
+    pub source_cross: bool,
 }
 
 /// Which half of the arrowhead is drawn when a `/` or `\` modifier is present.
