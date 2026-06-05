@@ -1827,39 +1827,38 @@ pub fn extract_oracle_layout(svg: &str) -> Option<OracleLayout> {
             parse_attr(&node, "width"),
             parse_attr(&node, "height"),
         ) {
-            layout.entities.insert(
-                format!("__bar_{bar_idx}__"),
-                EntityRect {
-                    x,
-                    y,
-                    width: w,
-                    height: h,
-                    icon_cx: None,
-                    icon_cy: None,
-                    glyph_path_d: None,
-                    body_polygon: None,
-                    icon_polygon: None,
-                    separator_paths: Vec::new(),
-                    visibility_polygons: Vec::new(),
-                    name_text_x: None,
-                    text_y_values: Vec::new(),
-                    text_x_values: Vec::new(),
-                    sep_y_values: Vec::new(),
-                    sep_lines: Vec::new(),
-                    vis_icon_y_values: Vec::new(),
-                    fill: None,
-                    body_style: None,
-                    rect_style: None,
-                    rect_rx: None,
-                    rect_ry: None,
-                    rect_filter: None,
-                    entity_id: None,
-                    source_line: None,
-                    aux_rects: Vec::new(),
-                    lines: Vec::new(),
-                    texts: Vec::new(),
-                },
-            );
+            let name = format!("__bar_{bar_idx}__");
+            let rect = EntityRect {
+                x,
+                y,
+                width: w,
+                height: h,
+                icon_cx: None,
+                icon_cy: None,
+                glyph_path_d: None,
+                body_polygon: None,
+                icon_polygon: None,
+                separator_paths: Vec::new(),
+                visibility_polygons: Vec::new(),
+                name_text_x: None,
+                text_y_values: Vec::new(),
+                text_x_values: Vec::new(),
+                sep_y_values: Vec::new(),
+                sep_lines: Vec::new(),
+                vis_icon_y_values: Vec::new(),
+                fill: None,
+                body_style: None,
+                rect_style: None,
+                rect_rx: None,
+                rect_ry: None,
+                rect_filter: None,
+                entity_id: None,
+                source_line: None,
+                aux_rects: Vec::new(),
+                lines: Vec::new(),
+                texts: Vec::new(),
+            };
+            layout.entities.insert(name, rect);
             bar_idx += 1;
         }
     }
@@ -2029,42 +2028,44 @@ pub fn extract_oracle_layout(svg: &str) -> Option<OracleLayout> {
         {
             label = collect_text(next);
         }
-        if !label.is_empty() && !layout.entities.contains_key(&label) {
-            layout.entities.insert(
-                label,
-                EntityRect {
-                    x,
-                    y,
-                    width: w,
-                    height: h,
-                    icon_cx: None,
-                    icon_cy: None,
-                    glyph_path_d: None,
-                    body_polygon: None,
-                    icon_polygon: None,
-                    separator_paths: Vec::new(),
-                    visibility_polygons: Vec::new(),
-                    name_text_x: None,
-                    text_y_values: Vec::new(),
-                    text_x_values: Vec::new(),
-                    sep_y_values: Vec::new(),
-                    vis_icon_y_values: Vec::new(),
-                    fill: n.attribute("fill").map(String::from),
-                    body_style: n.attribute("style").map(String::from),
-                    rect_style: n.attribute("style").map(String::from),
-                    rect_rx: n.attribute("rx").map(String::from),
-                    rect_ry: n.attribute("ry").map(String::from),
-                    rect_filter: n.attribute("filter").map(String::from),
-                    entity_id: None,
-                    source_line: None,
-                    aux_rects: Vec::new(),
-                    sep_lines: Vec::new(),
-                    lines: Vec::new(),
-                    texts: Vec::new(),
-                },
-            );
+        if !label.is_empty() {
+            let rect = EntityRect {
+                x,
+                y,
+                width: w,
+                height: h,
+                icon_cx: None,
+                icon_cy: None,
+                glyph_path_d: None,
+                body_polygon: None,
+                icon_polygon: None,
+                separator_paths: Vec::new(),
+                visibility_polygons: Vec::new(),
+                name_text_x: None,
+                text_y_values: Vec::new(),
+                text_x_values: Vec::new(),
+                sep_y_values: Vec::new(),
+                vis_icon_y_values: Vec::new(),
+                fill: n.attribute("fill").map(String::from),
+                body_style: n.attribute("style").map(String::from),
+                rect_style: n.attribute("style").map(String::from),
+                rect_rx: n.attribute("rx").map(String::from),
+                rect_ry: n.attribute("ry").map(String::from),
+                rect_filter: n.attribute("filter").map(String::from),
+                entity_id: None,
+                source_line: None,
+                aux_rects: Vec::new(),
+                sep_lines: Vec::new(),
+                lines: Vec::new(),
+                texts: Vec::new(),
+            };
+            layout.entities.entry(label).or_insert(rect);
         }
         bi += 2;
+    }
+
+    if layout.diagram_type.as_deref() == Some("ACTIVITY") {
+        rebuild_activity_entity_list(root, &mut layout);
     }
 
     // JSON/YAML positional capture. These diagrams have no entity/link
@@ -2570,6 +2571,119 @@ fn capture_path(node: &roxmltree::Node<'_, '_>) -> Option<EntityPath> {
         d: node.attribute("d")?.to_string(),
         fill: node.attribute("fill").unwrap_or("none").to_string(),
         style: node.attribute("style").map(String::from),
+    })
+}
+
+fn rebuild_activity_entity_list(root: roxmltree::Node<'_, '_>, layout: &mut OracleLayout) {
+    let Some(body) = root
+        .children()
+        .find(|n| n.is_element() && n.tag_name().name() == "g")
+    else {
+        return;
+    };
+
+    let children: Vec<roxmltree::Node> = body.children().filter(|n| n.is_element()).collect();
+    let mut ordered = Vec::new();
+    let mut bar_idx = 0usize;
+    let mut i = 0usize;
+    while i < children.len() {
+        let node = children[i];
+        match node.tag_name().name() {
+            "g" => {
+                if matches!(
+                    node.attribute("class"),
+                    Some("start_entity" | "end_entity" | "entity")
+                ) && let Some(name) = node.attribute("data-qualified-name")
+                    && let Some(rect) = layout.entities.get(name).cloned()
+                {
+                    ordered.push(OracleEntity {
+                        qualified_name: name.to_string(),
+                        rect,
+                    });
+                }
+            }
+            "rect" if node.attribute("fill") == Some("#555555") => {
+                let name = format!("__bar_{bar_idx}__");
+                if let Some(rect) = layout.entities.get(&name).cloned() {
+                    ordered.push(OracleEntity {
+                        qualified_name: name,
+                        rect,
+                    });
+                }
+                bar_idx += 1;
+            }
+            "rect" if node.attribute("rx").is_some() => {
+                if node.attribute("fill") == Some("none") {
+                    i += 1;
+                    continue;
+                }
+                let Some(next) = children.get(i + 1) else {
+                    i += 1;
+                    continue;
+                };
+                if next.tag_name().name() != "text" {
+                    i += 1;
+                    continue;
+                }
+                let label = collect_text(next);
+                if label.is_empty() {
+                    i += 1;
+                    continue;
+                }
+                let Some(rect) = entity_rect_from_bare_rect(&node) else {
+                    i += 1;
+                    continue;
+                };
+                layout
+                    .entities
+                    .entry(label.clone())
+                    .or_insert_with(|| rect.clone());
+                ordered.push(OracleEntity {
+                    qualified_name: label,
+                    rect,
+                });
+                i += 1;
+            }
+            _ => {}
+        }
+        i += 1;
+    }
+
+    if !ordered.is_empty() {
+        layout.entity_list = ordered;
+    }
+}
+
+fn entity_rect_from_bare_rect(node: &roxmltree::Node<'_, '_>) -> Option<EntityRect> {
+    Some(EntityRect {
+        x: parse_attr(node, "x")?,
+        y: parse_attr(node, "y")?,
+        width: parse_attr(node, "width")?,
+        height: parse_attr(node, "height")?,
+        icon_cx: None,
+        icon_cy: None,
+        glyph_path_d: None,
+        body_polygon: None,
+        icon_polygon: None,
+        separator_paths: Vec::new(),
+        visibility_polygons: Vec::new(),
+        name_text_x: None,
+        text_y_values: Vec::new(),
+        text_x_values: Vec::new(),
+        sep_y_values: Vec::new(),
+        vis_icon_y_values: Vec::new(),
+        fill: node.attribute("fill").map(String::from),
+        body_style: node.attribute("style").map(String::from),
+        rect_style: node.attribute("style").map(String::from),
+        rect_rx: node.attribute("rx").map(String::from),
+        rect_ry: node.attribute("ry").map(String::from),
+        rect_filter: node.attribute("filter").map(String::from),
+        entity_id: None,
+        source_line: None,
+        aux_rects: Vec::new(),
+        sep_lines: Vec::new(),
+        lines: Vec::new(),
+        texts: Vec::new(),
     })
 }
 

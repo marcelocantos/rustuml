@@ -6,14 +6,17 @@
 //! Produces SVG output matching PlantUML's exact format, using PlantUML-
 //! compatible font metrics and layout algorithms.
 
-use std::collections::HashMap;
+use std::collections::{HashMap, HashSet};
 use std::fmt::Write;
 
 use rustuml_parser::diagram::activity::{ActivityDiagram, ActivityStep, NotePosition};
 
 use crate::creole;
 use crate::ftile;
-use crate::layout_oracle::{EntityRect, OracleEdgePath, OracleLayout, wrap_oracle_envelope};
+use crate::layout_oracle::{
+    EntityPolygon, EntityRect, OracleCluster, OracleEdgePath, OracleLayout,
+    emit_oracle_cluster_children, wrap_oracle_envelope,
+};
 use crate::plantuml_metrics as pm;
 use crate::style::Theme;
 use crate::text_render::{self, TextBase};
@@ -6714,40 +6717,60 @@ fn render_legacy_activity_with_oracle(
     }
 
     let action_order = legacy_action_order(diagram);
-    let note_names: std::collections::HashSet<&str> = oracle
+    let note_by_name: HashMap<&str, &crate::layout_oracle::OracleNoteEntity> = oracle
+        .note_entities
+        .iter()
+        .map(|note| (note.qualified_name.as_str(), note))
+        .collect();
+    let note_names: HashSet<&str> = oracle
         .note_entities
         .iter()
         .map(|note| note.qualified_name.as_str())
         .collect();
     let mut nodes = Vec::new();
-    for (name, rect) in &oracle.entities {
-        match name.as_str() {
-            "start" => nodes.push(LegacyNode::Start(rect)),
-            "end" => nodes.push(LegacyNode::End(rect)),
-            n if n.starts_with("__bar_") => nodes.push(LegacyNode::Bar(rect)),
-            n if !n.starts_with("__") && !note_names.contains(n) => {
-                nodes.push(LegacyNode::Action(n, rect));
+    for cluster in &oracle.clusters {
+        nodes.push(LegacyNode::Cluster(cluster));
+    }
+    let mut emitted_notes: HashSet<&str> = HashSet::new();
+    if oracle.entity_list.is_empty() {
+        for (name, rect) in &oracle.entities {
+            if let Some(node) = legacy_node_from(name.as_str(), rect, &note_names) {
+                nodes.push(node);
             }
-            _ => {}
+        }
+        nodes.sort_by_key(|node| legacy_node_sort_key(node, &action_order));
+    } else {
+        for entity in &oracle.entity_list {
+            let name = entity.qualified_name.as_str();
+            if let Some(note) = note_by_name.get(name)
+                && note.box_geom.is_some()
+            {
+                nodes.push(LegacyNode::Note(note));
+                emitted_notes.insert(name);
+                continue;
+            }
+            if let Some(node) = legacy_node_from(name, &entity.rect, &note_names) {
+                nodes.push(node);
+            }
         }
     }
     for note in &oracle.note_entities {
-        if note.box_geom.is_some() {
+        if note.box_geom.is_some() && !emitted_notes.contains(note.qualified_name.as_str()) {
             nodes.push(LegacyNode::Note(note));
         }
     }
     if nodes.is_empty() {
         return None;
     }
-    nodes.sort_by_key(|node| legacy_node_sort_key(node, &action_order));
 
     let mut body = String::new();
     for node in nodes {
         match node {
-            LegacyNode::Start(rect) => emit_legacy_start(&mut body, rect),
-            LegacyNode::End(rect) => emit_legacy_end(&mut body, rect),
+            LegacyNode::Cluster(cluster) => emit_legacy_cluster(&mut body, cluster),
+            LegacyNode::Start(label, rect) => emit_legacy_start(&mut body, label, rect),
+            LegacyNode::End(label, rect) => emit_legacy_end(&mut body, label, rect),
             LegacyNode::Bar(rect) => emit_legacy_bar(&mut body, rect),
-            LegacyNode::Action(label, rect) => emit_legacy_action(&mut body, label, rect),
+            LegacyNode::Action(label, rect) => emit_legacy_entity(&mut body, label, rect),
             LegacyNode::Note(note) => {
                 crate::layout_oracle::emit_oracle_note_entity(
                     &mut body,
@@ -6768,11 +6791,28 @@ fn render_legacy_activity_with_oracle(
 }
 
 enum LegacyNode<'a> {
-    Start(&'a EntityRect),
-    End(&'a EntityRect),
+    Cluster(&'a OracleCluster),
+    Start(&'a str, &'a EntityRect),
+    End(&'a str, &'a EntityRect),
     Bar(&'a EntityRect),
     Action(&'a str, &'a EntityRect),
     Note(&'a crate::layout_oracle::OracleNoteEntity),
+}
+
+fn legacy_node_from<'a>(
+    name: &'a str,
+    rect: &'a EntityRect,
+    note_names: &HashSet<&str>,
+) -> Option<LegacyNode<'a>> {
+    match name {
+        "start" => Some(LegacyNode::Start(name, rect)),
+        "end" => Some(LegacyNode::End(name, rect)),
+        n if n.ends_with(".start") => Some(LegacyNode::Start(n, rect)),
+        n if n.ends_with(".end") => Some(LegacyNode::End(n, rect)),
+        n if n.starts_with("__bar_") => Some(LegacyNode::Bar(rect)),
+        n if !n.starts_with("__") && !note_names.contains(n) => Some(LegacyNode::Action(n, rect)),
+        _ => None,
+    }
 }
 
 fn legacy_action_order(diagram: &ActivityDiagram) -> HashMap<&str, usize> {
@@ -6791,8 +6831,9 @@ fn legacy_node_sort_key(
     action_order: &HashMap<&str, usize>,
 ) -> (u64, usize, u64) {
     let (x, y) = match node {
-        LegacyNode::Start(rect)
-        | LegacyNode::End(rect)
+        LegacyNode::Cluster(_) => (0.0, 0.0),
+        LegacyNode::Start(_, rect)
+        | LegacyNode::End(_, rect)
         | LegacyNode::Bar(rect)
         | LegacyNode::Action(_, rect) => (rect.x, rect.y),
         LegacyNode::Note(note) => note
@@ -6802,11 +6843,12 @@ fn legacy_node_sort_key(
             .unwrap_or((f64::MAX, f64::MAX)),
     };
     let tie_break = match node {
-        LegacyNode::Start(_) => 0,
+        LegacyNode::Cluster(_) => 0,
+        LegacyNode::Start(_, _) => 0,
         LegacyNode::Action(label, _) => action_order.get(label).copied().unwrap_or(usize::MAX / 2),
         LegacyNode::Bar(_) => usize::MAX / 2 - 1,
         LegacyNode::Note(_) => usize::MAX / 2,
-        LegacyNode::End(_) => usize::MAX,
+        LegacyNode::End(_, _) => usize::MAX,
     };
     (y.to_bits(), tie_break, x.to_bits())
 }
@@ -6823,7 +6865,31 @@ fn is_legacy_activity(diagram: &ActivityDiagram) -> bool {
     })
 }
 
-fn emit_legacy_start(out: &mut String, rect: &EntityRect) {
+fn emit_legacy_cluster(out: &mut String, cluster: &OracleCluster) {
+    write!(
+        out,
+        r#"<g class="{}" data-qualified-name="{}""#,
+        escape_xml_attr_local(&cluster.group_class),
+        escape_xml_attr_local(&cluster.qualified_name),
+    )
+    .unwrap();
+    if let Some(source_line) = cluster.source_line.as_deref() {
+        write!(
+            out,
+            r#" data-source-line="{}""#,
+            escape_xml_attr_local(source_line),
+        )
+        .unwrap();
+    }
+    if let Some(id) = cluster.entity_id.as_deref() {
+        write!(out, r#" id="{}""#, escape_xml_attr_local(id)).unwrap();
+    }
+    out.push('>');
+    emit_oracle_cluster_children(out, cluster);
+    out.push_str("</g>");
+}
+
+fn emit_legacy_start(out: &mut String, label: &str, rect: &EntityRect) {
     let cx = rect.x + rect.width / 2.0;
     let cy = rect.y + rect.height / 2.0;
     let rx = rect.width / 2.0;
@@ -6833,7 +6899,8 @@ fn emit_legacy_start(out: &mut String, rect: &EntityRect) {
     let fill = rect.fill.as_deref().unwrap_or(START_FILL);
     write!(
         out,
-        r#"<g class="start_entity" data-qualified-name="start" data-source-line="{source_line}" id="{id}"><ellipse cx="{}" cy="{}" fill="{fill}" rx="{}" ry="{}" style="stroke:#222222;stroke-width:1;"/></g>"#,
+        r#"<g class="start_entity" data-qualified-name="{}" data-source-line="{source_line}" id="{id}"><ellipse cx="{}" cy="{}" fill="{fill}" rx="{}" ry="{}" style="stroke:#222222;stroke-width:1;"/></g>"#,
+        escape_xml_attr_local(label),
         f(cx),
         f(cy),
         f(rx),
@@ -6842,7 +6909,7 @@ fn emit_legacy_start(out: &mut String, rect: &EntityRect) {
     .unwrap();
 }
 
-fn emit_legacy_end(out: &mut String, rect: &EntityRect) {
+fn emit_legacy_end(out: &mut String, label: &str, rect: &EntityRect) {
     let cx = rect.x + rect.width / 2.0;
     let cy = rect.y + rect.height / 2.0;
     let rx = rect.width / 2.0;
@@ -6852,7 +6919,8 @@ fn emit_legacy_end(out: &mut String, rect: &EntityRect) {
     let fill = rect.fill.as_deref().unwrap_or(STOP_FILL);
     write!(
         out,
-        r#"<g class="end_entity" data-qualified-name="end" data-source-line="{source_line}" id="{id}"><ellipse cx="{}" cy="{}" fill="none" rx="{}" ry="{}" style="stroke:#222222;stroke-width:1.5;"/><ellipse cx="{}" cy="{}" fill="{fill}" rx="6" ry="6" style="stroke:#222222;stroke-width:1;"/></g>"#,
+        r#"<g class="end_entity" data-qualified-name="{}" data-source-line="{source_line}" id="{id}"><ellipse cx="{}" cy="{}" fill="none" rx="{}" ry="{}" style="stroke:#222222;stroke-width:1.5;"/><ellipse cx="{}" cy="{}" fill="{fill}" rx="6" ry="6" style="stroke:#222222;stroke-width:1;"/></g>"#,
+        escape_xml_attr_local(label),
         f(cx),
         f(cy),
         f(rx),
@@ -6873,6 +6941,51 @@ fn emit_legacy_bar(out: &mut String, rect: &EntityRect) {
         f(rect.y),
     )
     .unwrap();
+}
+
+fn emit_legacy_entity(out: &mut String, label: &str, rect: &EntityRect) {
+    if let Some(polygon) = rect.body_polygon.as_ref() {
+        emit_legacy_polygon_entity(out, label, rect, polygon);
+    } else {
+        emit_legacy_action(out, label, rect);
+    }
+}
+
+fn emit_legacy_polygon_entity(
+    out: &mut String,
+    label: &str,
+    rect: &EntityRect,
+    polygon: &EntityPolygon,
+) {
+    write!(
+        out,
+        r#"<g class="entity" data-qualified-name="{}""#,
+        escape_xml_attr_local(label),
+    )
+    .unwrap();
+    if let Some(source_line) = rect.source_line.as_deref() {
+        write!(
+            out,
+            r#" data-source-line="{}""#,
+            escape_xml_attr_local(source_line),
+        )
+        .unwrap();
+    }
+    if let Some(id) = rect.entity_id.as_deref() {
+        write!(out, r#" id="{}""#, escape_xml_attr_local(id)).unwrap();
+    }
+    out.push('>');
+    write!(
+        out,
+        r#"<polygon fill="{}" points="{}""#,
+        escape_xml_attr_local(&polygon.fill),
+        escape_xml_attr_local(&polygon.points),
+    )
+    .unwrap();
+    if let Some(style) = polygon.style.as_deref() {
+        write!(out, r#" style="{}""#, escape_xml_attr_local(style)).unwrap();
+    }
+    out.push_str("/></g>");
 }
 
 fn emit_legacy_action(out: &mut String, label: &str, rect: &EntityRect) {
