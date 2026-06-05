@@ -134,7 +134,8 @@ pub(super) fn flatten_theme_output(lines: &[String]) -> Vec<String> {
     let mut skin_prefix: Option<String> = None;
 
     for raw in lines {
-        let line = raw.trim();
+        let source = super::split_source_line_marker(raw).map_or(raw.as_str(), |(_, text)| text);
+        let line = source.trim();
 
         // `<style>` block: drop everything up to `</style>` (case-sensitive,
         // matching PlantUML's own convention). Preserve the few root-level
@@ -212,7 +213,7 @@ pub(super) fn flatten_theme_output(lines: &[String]) -> Vec<String> {
             }
         }
 
-        out.push(raw.clone());
+        out.push(source.to_string());
     }
     out
 }
@@ -341,6 +342,24 @@ mod tests {
             vec![
                 "skinparam classBackgroundColor white".to_string(),
                 "skinparam classBorderColor black".to_string(),
+            ]
+        );
+    }
+
+    #[test]
+    fn flatten_expands_marker_prefixed_skinparam_block() {
+        let input = vec![
+            "skinparam participant {".to_string(),
+            super::super::source_line_marker(153, "  FontColor #FFF"),
+            super::super::source_line_marker(154, "  BorderColor #EC7211"),
+            "}".to_string(),
+        ];
+        let out = flatten_theme_output(&input);
+        assert_eq!(
+            out,
+            vec![
+                "skinparam participantFontColor #FFF".to_string(),
+                "skinparam participantBorderColor #EC7211".to_string(),
             ]
         );
     }

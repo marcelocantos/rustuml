@@ -1026,19 +1026,6 @@ fn group_tab_and_guard<'a>(
     }
 }
 
-/// Extract the `id` of the first `<linearGradient>` in a captured `<defs>`
-/// body. A `#c1/c2` gradient background can't be reproduced as a flat colour —
-/// PlantUML emits a `<linearGradient>` with a hashed id and the boxes reference
-/// `fill="url(#id)"`. We can't reproduce the hash, so we read it back from the
-/// oracle-captured defs.
-fn parse_gradient_id(defs: &str) -> Option<String> {
-    let lg = defs.find("<linearGradient")?;
-    let rest = &defs[lg..];
-    let start = rest.find("id=\"")? + 4;
-    let end = rest[start..].find('"')?;
-    Some(rest[start..start + end].to_string())
-}
-
 fn parse_filter_id(defs: &str) -> Option<String> {
     let filter = defs.find("<filter")?;
     let rest = &defs[filter..];
@@ -1060,12 +1047,55 @@ fn split_gradient_colors(val: &str) -> Option<(&str, &str)> {
     None
 }
 
+fn attr_value<'a>(elem: &'a str, name: &str) -> Option<&'a str> {
+    let needle = format!("{name}=\"");
+    let i = elem.find(&needle)? + needle.len();
+    let v = &elem[i..];
+    v.find('"').map(|q| &v[..q])
+}
+
+fn resolve_gradient_id(defs: &str, c1: &str, c2: &str) -> Option<String> {
+    let c1 = c1.trim_start_matches('#');
+    let c2 = c2.trim_start_matches('#');
+    let mut rest = defs;
+    while let Some(start) = rest.find("<linearGradient") {
+        rest = &rest[start..];
+        let end = rest
+            .find("</linearGradient>")
+            .map(|e| e + "</linearGradient>".len());
+        let (elem, after) = match end {
+            Some(e) => (&rest[..e], &rest[e..]),
+            None => (rest, ""),
+        };
+        rest = after;
+
+        let id = attr_value(elem, "id");
+        let stops: Vec<&str> = elem
+            .match_indices("stop-color=\"")
+            .filter_map(|(i, _)| {
+                let v = &elem[i + "stop-color=\"".len()..];
+                v.find('"').map(|q| &v[..q])
+            })
+            .collect();
+        if let (Some(id), [s0, s1, ..]) = (id, stops.as_slice())
+            && s0.trim_start_matches('#').eq_ignore_ascii_case(c1)
+            && s1.trim_start_matches('#').eq_ignore_ascii_case(c2)
+        {
+            return Some(id.to_string());
+        }
+        if after.is_empty() {
+            break;
+        }
+    }
+    None
+}
+
 /// Resolve a `<kind>BackgroundColor` value to a fill string: a `url(#id)`
 /// reference when the value is a `#c1/c2`-style gradient and the oracle
 /// captured the matching `<linearGradient>` def, otherwise the flat colour.
-fn gradient_fill_or(val: &str, gradient_id: &Option<String>) -> String {
-    if split_gradient_colors(val).is_some()
-        && let Some(id) = gradient_id
+fn gradient_fill_or(val: &str, gradient_defs: Option<&str>) -> String {
+    if let Some((c1, c2)) = split_gradient_colors(val)
+        && let Some(id) = gradient_defs.and_then(|defs| resolve_gradient_id(defs, c1, c2))
     {
         format!("url(#{id})")
     } else if let Some((first, _)) = split_gradient_colors(val) {
@@ -1520,6 +1550,8 @@ struct PlantUmlSvg {
     /// Corner radius for folded note boxes. PlantUML keeps notes square by
     /// default, but `skinparam RoundCorner N` rounds note corners by N/2.
     note_corner_radius: f64,
+    /// Note body border thickness. Driven by `skinparam noteBorderThickness`.
+    note_border_thickness: String,
 }
 
 impl PlantUmlSvg {
@@ -1548,6 +1580,7 @@ impl PlantUmlSvg {
             active_participant_url: None,
             head_box_rx: HEAD_BOX_RX,
             note_corner_radius: 0.0,
+            note_border_thickness: "0.5".into(),
         }
     }
 
@@ -3094,6 +3127,7 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
     let mut note_font_color_set = false;
     let mut note_font_family = "sans-serif".to_string();
     let mut note_font_size: u32 = MSG_FONT_SIZE as u32;
+    let mut note_border_thickness = "0.5".to_string();
     let mut page_font_family = "sans-serif".to_string();
     let mut note_shadow_filter: Option<String> = None;
     let mut participant_shadow_filter: Option<String> = None;
@@ -3126,12 +3160,10 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
     // the box rx/ry to N/2 (default 2.5 = RoundCorner 5 / 2).
     let mut head_box_rx = HEAD_BOX_RX;
     let mut note_corner_radius = 0.0;
-    // Gradient (`#c1/c2`) backgrounds reference a captured `<linearGradient>`
-    // by its hashed id; resolve it once so background skinparams below can map
-    // to `fill="url(#id)"`. The def itself is spliced into `<defs>` by open_svg.
-    let gradient_id: Option<String> = oracle
-        .map(|o| o.defs_inner_xml.as_str())
-        .and_then(parse_gradient_id);
+    // Gradient (`#c1/c2`) backgrounds reference captured `<linearGradient>`
+    // ids by their stop colours. The defs themselves are spliced into `<defs>`
+    // by `open_svg`; the renderer only needs the matching id.
+    let gradient_defs = oracle.map(|o| o.defs_inner_xml.as_str());
     let filter_id: Option<String> = oracle
         .map(|o| o.defs_inner_xml.as_str())
         .and_then(parse_filter_id);
@@ -3186,7 +3218,7 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                 if val.eq_ignore_ascii_case("transparent") {
                     bg_color = Some("transparent".to_string());
                 } else {
-                    let c = gradient_fill_or(val, &gradient_id);
+                    let c = gradient_fill_or(val, gradient_defs);
                     if c != "#FFFFFF" {
                         bg_color = Some(c);
                     }
@@ -3225,7 +3257,7 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                 note_text_align = align;
             }
             "participantbackgroundcolor" | "sequenceparticipantbackgroundcolor" => {
-                participant_fill = gradient_fill_or(val, &gradient_id);
+                participant_fill = gradient_fill_or(val, gradient_defs);
                 participant_fill_set = true;
             }
             "participantbordercolor" | "sequenceparticipantbordercolor" => {
@@ -3322,10 +3354,15 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                 queue_border_override = Some(resolve_color(val));
             }
             "notebackgroundcolor" | "sequencenotebackgroundcolor" => {
-                note_fill_override = Some(gradient_fill_or(val, &gradient_id));
+                note_fill_override = Some(gradient_fill_or(val, gradient_defs));
             }
             "notebordercolor" | "sequencenotebordercolor" => {
                 note_border_override = Some(resolve_color(val));
+            }
+            "noteborderthickness" | "sequencenoteborderthickness" => {
+                if let Ok(v) = val.parse::<f64>() {
+                    note_border_thickness = plantuml_metrics::fmt_coord(v);
+                }
             }
             "notefontcolor" | "sequencenotefontcolor" => {
                 note_font_color = resolve_color(val);
@@ -3369,7 +3406,7 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                 }
             }
             "sequencegroupbackgroundcolor" => {
-                group_background = gradient_fill_or(val, &gradient_id);
+                group_background = gradient_fill_or(val, gradient_defs);
             }
             "sequencegroupheaderfontsize" => {
                 if let Ok(v) = val.parse::<u32>() {
@@ -5794,6 +5831,7 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
     svg.lifeline_border_thickness = lifeline_border_thickness.clone();
     svg.head_box_rx = head_box_rx;
     svg.note_corner_radius = note_corner_radius;
+    svg.note_border_thickness = note_border_thickness;
     svg.open_svg(
         svg_width,
         svg_height,
@@ -7528,6 +7566,7 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                     .or_else(|| note_fill_override.clone())
                     .unwrap_or_else(|| NOTE_FILL.to_string());
                 let note_stroke = note_border_override.as_deref().unwrap_or("#181818");
+                let note_stroke_width = svg.note_border_thickness.clone();
                 let note_filter_attr = svg
                     .note_shadow_filter
                     .as_ref()
@@ -7545,10 +7584,11 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                         let ri = note_right - HNOTE_INDENT; // right indent x
                         write!(
                             svg.buf,
-                            r##"<polygon fill="{fill}"{filter} points="{li},{top},{ri},{top},{nr},{mid},{ri},{bot},{li},{bot},{nl},{mid},{li},{top}" style="stroke:{stroke};stroke-width:0.5;"/>"##,
+                            r##"<polygon fill="{fill}"{filter} points="{li},{top},{ri},{top},{nr},{mid},{ri},{bot},{li},{bot},{nl},{mid},{li},{top}" style="stroke:{stroke};stroke-width:{stroke_width};"/>"##,
                             fill = note_fill,
                             filter = note_filter_attr,
                             stroke = note_stroke,
+                            stroke_width = note_stroke_width,
                             li = fmt_coord(li),
                             top = fmt_coord(note_top),
                             ri = fmt_coord(ri),
@@ -7563,10 +7603,11 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                         // Rectangular note (rnote): a simple rectangle.
                         write!(
                             svg.buf,
-                            r##"<rect fill="{fill}"{filter} height="{h}" style="stroke:{stroke};stroke-width:0.5;" width="{w}" x="{x}" y="{y}"/>"##,
+                            r##"<rect fill="{fill}"{filter} height="{h}" style="stroke:{stroke};stroke-width:{stroke_width};" width="{w}" x="{x}" y="{y}"/>"##,
                             fill = note_fill,
                             filter = note_filter_attr,
                             stroke = note_stroke,
+                            stroke_width = note_stroke_width,
                             h = fmt_coord(note_bottom - note_top),
                             w = fmt_coord(note_right - note_left),
                             x = fmt_coord(note_left),
@@ -7588,8 +7629,9 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                             let fold_radius = radius / 2.0;
                             write!(
                                 svg.buf,
-                                r##"<path d="M{left},{top_r} L{left},{bottom_r} A{r},{r} 0 0 0 {left_r},{bottom} L{right_r},{bottom} A{r},{r} 0 0 0 {right},{bottom_r} L{right},{fold_y} L{fold_x},{top} L{left_r},{top} A{r},{r} 0 0 0 {left},{top_r}" fill="{fill}"{filter} style="stroke:{stroke};stroke-width:0.5;"/>"##,
+                                r##"<path d="M{left},{top_r} L{left},{bottom_r} A{r},{r} 0 0 0 {left_r},{bottom} L{right_r},{bottom} A{r},{r} 0 0 0 {right},{bottom_r} L{right},{fold_y} L{fold_x},{top} L{left_r},{top} A{r},{r} 0 0 0 {left},{top_r}" fill="{fill}"{filter} style="stroke:{stroke};stroke-width:{stroke_width};"/>"##,
                                 stroke = note_stroke,
+                                stroke_width = note_stroke_width,
                                 left = fmt_coord(note_left),
                                 top = fmt_coord(note_top),
                                 top_r = fmt_coord(note_top + radius),
@@ -7608,8 +7650,9 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
 
                             write!(
                                 svg.buf,
-                                r##"<path d="M{fold_x},{top} L{fold_x},{fold_bottom} A{fold_r},{fold_r} 0 0 0 {fold_arc_x},{fold_y} L{right},{fold_y} L{fold_x},{top}" fill="{fill}" style="stroke:{stroke};stroke-width:0.5;"/>"##,
+                                r##"<path d="M{fold_x},{top} L{fold_x},{fold_bottom} A{fold_r},{fold_r} 0 0 0 {fold_arc_x},{fold_y} L{right},{fold_y} L{fold_x},{top}" fill="{fill}" style="stroke:{stroke};stroke-width:{stroke_width};"/>"##,
                                 stroke = note_stroke,
+                                stroke_width = note_stroke_width,
                                 fold_x = fmt_coord(fold_x),
                                 top = fmt_coord(note_top),
                                 fold_bottom = fmt_coord(fold_y - fold_radius),
@@ -7623,8 +7666,9 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                         } else {
                             write!(
                                 svg.buf,
-                                r##"<path d="M{left},{top} L{left},{bottom} L{right},{bottom} L{right},{fold_y} L{fold_x},{top} L{left},{top}" fill="{fill}"{filter} style="stroke:{stroke};stroke-width:0.5;"/>"##,
+                                r##"<path d="M{left},{top} L{left},{bottom} L{right},{bottom} L{right},{fold_y} L{fold_x},{top} L{left},{top}" fill="{fill}"{filter} style="stroke:{stroke};stroke-width:{stroke_width};"/>"##,
                                 stroke = note_stroke,
+                                stroke_width = note_stroke_width,
                                 left = fmt_coord(note_left),
                                 top = fmt_coord(note_top),
                                 bottom = fmt_coord(note_bottom),
@@ -7639,8 +7683,9 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                             // Emit the fold triangle.
                             write!(
                                 svg.buf,
-                                r##"<path d="M{fold_x},{top} L{fold_x},{fold_y} L{right},{fold_y} L{fold_x},{top}" fill="{fill}" style="stroke:{stroke};stroke-width:0.5;"/>"##,
+                                r##"<path d="M{fold_x},{top} L{fold_x},{fold_y} L{right},{fold_y} L{fold_x},{top}" fill="{fill}" style="stroke:{stroke};stroke-width:{stroke_width};"/>"##,
                                 stroke = note_stroke,
+                                stroke_width = note_stroke_width,
                                 fold_x = fmt_coord(fold_x),
                                 top = fmt_coord(note_top),
                                 fold_y = fmt_coord(fold_y),
@@ -8380,13 +8425,22 @@ mod tests {
 
     #[test]
     fn gradient_fill_accepts_dash_separator() {
-        let id = Some("gabc0".to_string());
-        assert_eq!(gradient_fill_or("#59B6EC-#2FA4E7", &id), "url(#gabc0)");
+        let defs = r##"<linearGradient id="gabc0"><stop offset="0%" stop-color="#59B6EC"/><stop offset="100%" stop-color="#2FA4E7"/></linearGradient>"##;
+        assert_eq!(
+            gradient_fill_or("#59B6EC-#2FA4E7", Some(defs)),
+            "url(#gabc0)"
+        );
+    }
+
+    #[test]
+    fn gradient_fill_matches_stop_colors() {
+        let defs = r##"<linearGradient id="g0"><stop offset="0%" stop-color="#D3F198"/><stop offset="100%" stop-color="#B5E853"/></linearGradient><linearGradient id="g1"><stop offset="0%" stop-color="#BB91B2"/><stop offset="100%" stop-color="#885E7F"/></linearGradient>"##;
+        assert_eq!(gradient_fill_or("#bb91b2-#885E7F", Some(defs)), "url(#g1)");
     }
 
     #[test]
     fn gradient_fill_without_defs_uses_first_stop() {
-        assert_eq!(gradient_fill_or("#59B6EC-#2FA4E7", &None), "#59B6EC");
+        assert_eq!(gradient_fill_or("#59B6EC-#2FA4E7", None), "#59B6EC");
     }
 
     #[test]

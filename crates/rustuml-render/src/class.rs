@@ -1793,7 +1793,7 @@ fn render_plantuml_svg(
 
     // Compute canvas dimensions.
     let (canvas_w, canvas_h) = if let Some((w, h)) = canvas_override {
-        (w as i64, h as i64)
+        (w.round() as i64, h.round() as i64)
     } else {
         let mut max_x = 0.0_f64;
         let mut max_y = 0.0_f64;
@@ -4292,9 +4292,11 @@ fn render_member_line(
         } else {
             let icon = attr_font.icon;
             let vis_cx = entity_x + icon.center_offset;
+            let use_method_fill =
+                member.kind == MemberKind::Method && attr_font.visibility_stroke.is_none();
             match member.visibility {
                 Visibility::Public => {
-                    let fill = if member.kind == MemberKind::Method {
+                    let fill = if use_method_fill {
                         VIS_PUBLIC_FILL_METHOD
                     } else {
                         VIS_PUBLIC_FILL_FIELD
@@ -4310,7 +4312,7 @@ fn render_member_line(
                     .unwrap();
                 }
                 Visibility::Private => {
-                    let fill = if member.kind == MemberKind::Method {
+                    let fill = if use_method_fill {
                         VIS_PRIVATE_FILL_METHOD
                     } else {
                         VIS_PRIVATE_FILL_FIELD
@@ -4332,7 +4334,7 @@ fn render_member_line(
                     .unwrap();
                 }
                 Visibility::Protected => {
-                    let fill = if member.kind == MemberKind::Method {
+                    let fill = if use_method_fill {
                         VIS_PROTECTED_FILL_METHOD
                     } else {
                         VIS_PROTECTED_FILL_FIELD
@@ -4352,7 +4354,7 @@ fn render_member_line(
                     .unwrap();
                 }
                 Visibility::Package => {
-                    let fill = if member.kind == MemberKind::Method {
+                    let fill = if use_method_fill {
                         VIS_PACKAGE_FILL_METHOD
                     } else {
                         VIS_PACKAGE_FILL_FIELD
