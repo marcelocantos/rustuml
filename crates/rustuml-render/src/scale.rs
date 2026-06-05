@@ -876,7 +876,7 @@ fn scale_entity(e: &mut EntityRect, k: f64) {
 }
 
 fn scale_entity_polygon(p: &mut crate::layout_oracle::EntityPolygon, k: f64) {
-    p.points = scale_svg_numbers(&p.points, k);
+    p.points = scale_number_list(&p.points, k);
     if let Some(s) = p.style.as_mut() {
         *s = scale_style(s, k);
     }

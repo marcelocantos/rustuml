@@ -627,7 +627,7 @@ pub fn render_with_oracle(
         PSEUDO_COLOR
     };
     let start_stroke = if apply_themed_pseudo_colors && skin.start_color.is_some() {
-        skin.root_line_color.as_deref().unwrap_or(STROKE_COLOR)
+        skin.root_line_color.as_deref().unwrap_or(PSEUDO_COLOR)
     } else {
         PSEUDO_COLOR
     };
@@ -636,11 +636,13 @@ pub fn render_with_oracle(
     } else {
         PSEUDO_COLOR
     };
-    let end_inner_fill = if apply_themed_pseudo_colors && skin.end_color.is_some() {
-        "none"
-    } else {
-        PSEUDO_COLOR
-    };
+    let end_inner_fill =
+        if apply_themed_pseudo_colors && skin.end_color.is_some() && skin.root_line_color.is_some()
+        {
+            "none"
+        } else {
+            PSEUDO_COLOR
+        };
 
     // Resolve the state-box font size. PlantUML applies `skinparam stateFontSize`,
     // `stateAttributeFontSize`, or the global `defaultFontSize` uniformly to both
