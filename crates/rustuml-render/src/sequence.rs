@@ -3357,6 +3357,7 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
     // The fixed 10px top + 11px bottom padding stays constant, but a Creole
     // `<size:...>` / `<font:...>` run changes the line ascent and height.
     const TITLE_FONT_SIZE: u32 = 14;
+    const HEADER_FONT_SIZE: u32 = 10;
     const TITLE_TOP_PAD: f64 = 10.0; // gap from y=0 to first title baseline (minus ascent)
     const TITLE_BOTTOM_PAD: f64 = 11.0; // gap from last title descent line to head top
     let title_lines: Vec<&str> = diagram
@@ -3364,6 +3365,12 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
         .title
         .as_deref()
         .map(|t| t.split("\\n").collect())
+        .unwrap_or_default();
+    let header_lines: Vec<&str> = diagram
+        .meta
+        .header
+        .as_deref()
+        .map(|h| h.split("\\n").collect())
         .unwrap_or_default();
     let title_line_metrics = title_lines
         .iter()
@@ -3407,11 +3414,12 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
         BOX_TITLE_HEAD_GAP
     };
     // A `header` directive reserves a band above the heads: the header text
-    // sits at the top (baseline y≈14.668) and the participant heads drop by
-    // text_height(10) + 1.0 (= 12.777) to clear it. Everything below shifts
-    // down with the heads, growing the canvas height.
-    let header_band_h = if diagram.meta.header.is_some() {
-        plantuml_metrics::text_height(10.0) + 1.0
+    // sits at the top (baseline y≈14.668), with literal `\n` adding more
+    // right-aligned header text lines. Lines are spaced by text_height(10);
+    // the reserved band adds PlantUML's one-pixel clearance once.
+    let header_line_step = plantuml_metrics::text_height(HEADER_FONT_SIZE as f64);
+    let header_band_h = if !header_lines.is_empty() {
+        header_lines.len() as f64 * header_line_step + 1.0
     } else {
         0.0
     };
@@ -4258,11 +4266,15 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
         let last = &participants[n - 1];
         let c0 = (first.box_x + last.box_x + last.box_width - 1.0) / 2.0;
         let mut want_center: f64 = c0;
-        if let Some(header) = &diagram.meta.header {
+        if !header_lines.is_empty() {
             // Header text right-aligns to the canvas with a 6px right inset.
             // When it would overhang the left edge, PlantUML shifts the same
-            // participant span used by other page decorations.
-            let w = text_render::measure(header, 10.0, false);
+            // participant span used by other page decorations. Multiline
+            // headers use the widest rendered line.
+            let w = header_lines
+                .iter()
+                .map(|line| text_render::measure(line, HEADER_FONT_SIZE as f64, false))
+                .fold(0.0_f64, f64::max);
             want_center = want_center.max(w / 2.0);
         }
         if let Some(footer) = &diagram.meta.footer {
@@ -5632,29 +5644,30 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
     // Render header if present. PlantUML wraps in `<g class="header">` and
     // emits a 10pt #888888 text right-aligned to a small inset from the
     // right edge: x = svg_width - textLength - 5.
-    if let Some(header) = &diagram.meta.header {
-        const HEADER_FONT_SIZE: u32 = 10;
-        let text_length = text_render::measure(header, HEADER_FONT_SIZE as f64, false);
-        let x = svg_width_exact - text_length - 6.0;
+    if !header_lines.is_empty() {
         let header_line = diagram.meta.header_line.unwrap_or(1);
         svg.buf.push_str(&format!(
             r#"<g class="header" data-source-line="{header_line}">"#
         ));
-        text_render::emit_text(
-            &mut svg.buf,
-            header,
-            &TextBase {
-                x,
-                y: 14.668,
-                font_size: HEADER_FONT_SIZE,
-                font_family: "sans-serif",
-                fill: "#888888",
-                bold: false,
-                italic: false,
-                underline: false,
-                skip_underline: false,
-            },
-        );
+        for (i, line) in header_lines.iter().enumerate() {
+            let text_length = text_render::measure(line, HEADER_FONT_SIZE as f64, false);
+            let x = svg_width_exact - text_length - 6.0;
+            text_render::emit_text(
+                &mut svg.buf,
+                line,
+                &TextBase {
+                    x,
+                    y: 14.668 + i as f64 * header_line_step,
+                    font_size: HEADER_FONT_SIZE,
+                    font_family: "sans-serif",
+                    fill: "#888888",
+                    bold: false,
+                    italic: false,
+                    underline: false,
+                    skip_underline: false,
+                },
+            );
+        }
         svg.buf.push_str("</g>");
     }
 
