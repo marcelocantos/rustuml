@@ -49,6 +49,16 @@ const TAB_TEXT_DY: f64 = 2.0;
 const TAB_ROW_EXTRA_H: f64 = 5.0;
 const TAB_TAIL_H: f64 = 10.0;
 
+// ElementTreeEntry: depth is counted from 1 and maps to a 10px indent. Nodes
+// with children get a 2x2 grey marker; child rows connect back to the nearest
+// shallower parent with grey guide lines.
+const TREE_INDENT: f64 = 10.0;
+const TREE_MARKER: f64 = 2.0;
+const TREE_MARKER_LEFT: f64 = 7.0;
+const TREE_CONNECT_X_FROM_TEXT: f64 = 6.0;
+const TREE_CONNECT_CHILD_GAP: f64 = 8.0;
+const TREE_CONNECT_Y_FROM_CENTER: f64 = 2.0;
+
 // ElementPyramidScrolled: scrollbar thickness (v1) and arrow-track inset (v2).
 const SCROLL_BAR: f64 = 15.0; // v1
 const SCROLL_INSET: f64 = 12.0; // v2
@@ -685,6 +695,7 @@ fn widget_dim(widget: &SaltWidget) -> (f64, f64) {
             (*depth as f64) * 8.0 + pm::text_width(label, FONT_SIZE, false),
             th,
         ),
+        SaltWidget::Block(b) if b.kind == BlockKind::Tree => tree_dim(b),
         SaltWidget::Block(b) if b.kind == BlockKind::Tabs => tabs_dim(b),
         SaltWidget::Block(b) => {
             let g = Grid::layout(b);
@@ -762,6 +773,30 @@ fn separator_literal(kind: SeparatorKind) -> &'static str {
         SeparatorKind::Single => "--",
         SeparatorKind::Solid => "_",
     }
+}
+
+fn tree_dim(block: &SaltBlock) -> (f64, f64) {
+    let nodes = tree_nodes(block);
+    let width = nodes
+        .iter()
+        .map(|(depth, label)| {
+            (*depth as f64) * TREE_INDENT + pm::text_width(label, FONT_SIZE, false)
+        })
+        .fold(0.0, f64::max);
+    let height = nodes.len() as f64 * pm::text_height(FONT_SIZE);
+    (width + TREE_MARKER, height)
+}
+
+fn tree_nodes(block: &SaltBlock) -> Vec<(usize, &str)> {
+    let mut nodes = Vec::new();
+    for row in &block.rows {
+        for widget in &row.cells {
+            if let SaltWidget::TreeNode { depth, label } = widget {
+                nodes.push((*depth, label.as_str()));
+            }
+        }
+    }
+    nodes
 }
 
 // ── Widget drawing ───────────────────────────────────────────────────────────
@@ -871,6 +906,9 @@ fn draw_widget(widget: &SaltWidget, x: f64, y: f64, cell_w: f64, cell_h: f64, bu
             let indent = (*depth as f64) * 8.0;
             emit_text(buf, x + indent, y + ascent, label);
         }
+        SaltWidget::Block(b) if b.kind == BlockKind::Tree => {
+            draw_tree_block(b, x, y, buf);
+        }
         SaltWidget::Block(b) if b.kind == BlockKind::Tabs => {
             draw_tabs_block(b, x, y, buf);
         }
@@ -898,6 +936,76 @@ fn draw_tabs_block(block: &SaltBlock, x: f64, y: f64, buf: &mut String) {
         emit_vline_black(buf, x + width, row_top + row_h, TAB_TAIL_H);
         row_top += row_step;
     }
+}
+
+fn draw_tree_block(block: &SaltBlock, x: f64, y: f64, buf: &mut String) {
+    let nodes = tree_nodes(block);
+    let row_h = pm::text_height(FONT_SIZE);
+
+    for (i, (depth, label)) in nodes.iter().enumerate() {
+        let row_top = y + i as f64 * row_h;
+        emit_text(
+            buf,
+            x + (*depth as f64) * TREE_INDENT,
+            row_top + pm::ascent(FONT_SIZE),
+            label,
+        );
+    }
+
+    for (i, (depth, _)) in nodes.iter().enumerate() {
+        if has_direct_tree_child(&nodes, i) {
+            let text_x = x + (*depth as f64) * TREE_INDENT;
+            let center_y = y + i as f64 * row_h + row_h / 2.0;
+            emit_gray_rect(
+                buf,
+                text_x - TREE_MARKER_LEFT,
+                center_y - TREE_MARKER / 2.0,
+                TREE_MARKER,
+                TREE_MARKER,
+            );
+        }
+    }
+
+    let mut parent_by_depth: Vec<Option<usize>> = Vec::new();
+    for (i, (depth, _)) in nodes.iter().enumerate() {
+        if parent_by_depth.len() <= *depth {
+            parent_by_depth.resize(*depth + 1, None);
+        }
+        if *depth > 1
+            && let Some(parent) = parent_by_depth[*depth - 1]
+        {
+            let parent_depth = nodes[parent].0;
+            let parent_center_y = y + parent as f64 * row_h + row_h / 2.0;
+            let child_center_y = y + i as f64 * row_h + row_h / 2.0;
+            let guide_x = x + (parent_depth as f64) * TREE_INDENT - TREE_CONNECT_X_FROM_TEXT;
+            let child_left = x + (*depth as f64) * TREE_INDENT - TREE_CONNECT_CHILD_GAP;
+            emit_gray_line(
+                buf,
+                guide_x,
+                parent_center_y + TREE_CONNECT_Y_FROM_CENTER,
+                guide_x,
+                child_center_y,
+            );
+            emit_gray_line(buf, guide_x, child_center_y, child_left, child_center_y);
+        }
+        parent_by_depth[*depth] = Some(i);
+        for slot in parent_by_depth.iter_mut().skip(*depth + 1) {
+            *slot = None;
+        }
+    }
+}
+
+fn has_direct_tree_child(nodes: &[(usize, &str)], parent_idx: usize) -> bool {
+    let parent_depth = nodes[parent_idx].0;
+    for (depth, _) in nodes.iter().skip(parent_idx + 1) {
+        if *depth <= parent_depth {
+            return false;
+        }
+        if *depth == parent_depth + 1 {
+            return true;
+        }
+    }
+    false
 }
 
 // ── SVG emit helpers (PlantUML-style attributes) ─────────────────────────────
@@ -1126,6 +1234,26 @@ fn emit_vline_black(buf: &mut String, x: f64, y: f64, height: f64) {
         x = pm::fmt_coord(x),
         y1 = pm::fmt_coord(y),
         y2 = pm::fmt_coord(y + height),
+    ));
+}
+
+fn emit_gray_rect(buf: &mut String, x: f64, y: f64, w: f64, h: f64) {
+    buf.push_str(&format!(
+        r##"<rect fill="none" height="{h}" style="stroke:#888888;stroke-width:1;" width="{w}" x="{x}" y="{y}"/>"##,
+        h = pm::fmt_coord(h),
+        w = pm::fmt_coord(w),
+        x = pm::fmt_coord(x),
+        y = pm::fmt_coord(y),
+    ));
+}
+
+fn emit_gray_line(buf: &mut String, x1: f64, y1: f64, x2: f64, y2: f64) {
+    buf.push_str(&format!(
+        r##"<line style="stroke:#888888;stroke-width:1;" x1="{x1}" x2="{x2}" y1="{y1}" y2="{y2}"/>"##,
+        x1 = pm::fmt_coord(x1),
+        x2 = pm::fmt_coord(x2),
+        y1 = pm::fmt_coord(y1),
+        y2 = pm::fmt_coord(y2),
     ));
 }
 
