@@ -551,6 +551,9 @@ const SELF_MSG_RIGHT_PAD: f64 = 2.0;
 /// inline-created participant. The visible loopback geometry is unchanged, but
 /// the computed right edge is wider in create+activate lifecycles.
 const CREATED_ACTIVE_SELF_MSG_RIGHT_PAD: f64 = 16.0;
+/// Extra canvas reservation for active self-messages on a participant whose
+/// lifecycle is later ended by a standalone destroy.
+const DESTROYED_ACTIVE_SELF_MSG_RIGHT_PAD: f64 = 15.0;
 /// Minimum preferred width a self-message reserves in the gap to the next
 /// participant. PlantUML's ComponentRoseSelfArrow.getPreferredWidth returns
 /// `max(textWidth, arrowWidth + 5)` with arrowWidth = 45, i.e. min 50.
@@ -4312,7 +4315,7 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
     // moment of each self-message — shifts cx by ACTIVATION_HALF_W if so.
     {
         let mut act_depth: HashMap<String, usize> = HashMap::new();
-        for event in &diagram.events {
+        for (idx, event) in diagram.events.iter().enumerate() {
             if let Event::Message(msg) = event {
                 if msg.from == msg.to {
                     let cx_base = center_of(&msg.from);
@@ -4327,9 +4330,27 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                     let label_w = message_label_width(&label);
                     let loopback_right = cx + SELF_MSG_EXTEND;
                     let text_right = cx + SELF_MSG_TEXT_X_PAD + label_w;
+                    let destroyed_later =
+                        diagram
+                            .events
+                            .iter()
+                            .skip(idx + 1)
+                            .any(|event| match event {
+                                Event::Destroy(id) => id == &msg.from,
+                                Event::Message(next) => {
+                                    next.to == msg.from
+                                        && matches!(
+                                            next.activation,
+                                            Some(ActivationChange::Destroy)
+                                        )
+                                }
+                                _ => false,
+                            });
                     let created_active_pad =
                         if active && create_msg_idx.contains_key(msg.from.as_str()) {
                             CREATED_ACTIVE_SELF_MSG_RIGHT_PAD
+                        } else if active && destroyed_later {
+                            DESTROYED_ACTIVE_SELF_MSG_RIGHT_PAD
                         } else {
                             0.0
                         };
@@ -6381,7 +6402,8 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                         } else {
                             to_existing_depth.saturating_sub(1)
                         };
-                    let target_shift = if to_active && !is_create_msg {
+                    let target_deactivates_next = matches!(events.get(ev_idx + 1), Some(Event::Deactivate(id)) if id == &msg.to);
+                    let target_shift = if to_active && !is_create_msg && !target_deactivates_next {
                         ACTIVATION_HALF_W * (1.0 - lands_on_depth as f64)
                     } else {
                         0.0
