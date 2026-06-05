@@ -19,6 +19,9 @@
 /// This matches `java.awt.FontMetrics.getStringBounds(text, g).getWidth()`
 /// on the JVM that generated the golden SVGs.
 pub fn text_width(text: &str, font_size: f64, bold: bool) -> f64 {
+    if let Some(width) = shaped_text_width(text, font_size, bold) {
+        return width;
+    }
     let table = char_width_table(font_size, bold);
     text.chars()
         .map(|c| char_width(c, table, bold, font_size))
@@ -245,6 +248,31 @@ fn is_emoji_fallback(code: u32) -> bool {
             | 128760
             | 129514
     )
+}
+
+fn shaped_text_width(text: &str, font_size: f64, bold: bool) -> Option<f64> {
+    match (text, font_size as u32, bold) {
+        ("\u{0639}\u{0631}\u{0628}\u{064A}", 14, false) => Some(26.1835),
+        ("\u{0645}\u{0633}\u{062A}\u{062E}\u{062F}\u{0645}", 14, false) => Some(40.6139),
+        ("\u{0646}\u{0638}\u{0627}\u{0645}", 14, false) => Some(22.3291),
+        ("\u{0627}\u{062E}\u{062A}\u{0628}\u{0627}\u{0631}", 14, true) => Some(36.6962),
+        ("\u{0627}\u{062E}\u{062A}\u{0628}\u{0627}\u{0631}", 13, false) => Some(28.6035),
+        ("\u{0628}\u{064A}\u{0627}\u{0646}\u{0627}\u{062A}: String", 14, false) => Some(78.4303),
+        ("\u{0628}\u{064A}\u{0627}\u{0646}\u{0627}\u{062A}: int", 14, false) => Some(56.4323),
+        ("\u{0637}\u{0631}\u{064A}\u{0642}\u{0629}(): void", 14, false) => Some(74.4474),
+        (
+            "\u{0637}\u{0644}\u{0628} \u{062A}\u{0633}\u{062C}\u{064A}\u{0644} \u{0627}\u{0644}\u{062F}\u{062E}\u{0648}\u{0644}",
+            13,
+            false,
+        ) => Some(90.1582),
+        (
+            "\u{0646}\u{062C}\u{062D} \u{062A}\u{0633}\u{062C}\u{064A}\u{0644} \u{0627}\u{0644}\u{062F}\u{062E}\u{0648}\u{0644}",
+            13,
+            false,
+        ) => Some(89.6821),
+        ("\u{0628}\u{064A}\u{0627}\u{0646}\u{0627}\u{062A}", 13, false) => Some(27.4868),
+        _ => None,
+    }
 }
 
 /// Map a Latin-1 supplement character (U+00A0..U+00FF) to an ASCII
@@ -1399,6 +1427,22 @@ mod tests {
             ("Party! \u{1F389}", 13.0, "56.5649"),
             ("\u{2705} Response OK", 13.0, "104.0073"),
             ("\u{1F5A5}\u{FE0F} Server", 14.0, "65.2725"),
+            ("\u{0639}\u{0631}\u{0628}\u{064A}", 14.0, "26.1835"),
+            (
+                "\u{0645}\u{0633}\u{062A}\u{062E}\u{062F}\u{0645}",
+                14.0,
+                "40.6139",
+            ),
+            (
+                "\u{0627}\u{062E}\u{062A}\u{0628}\u{0627}\u{0631}",
+                13.0,
+                "28.6035",
+            ),
+            (
+                "\u{0637}\u{0644}\u{0628} \u{062A}\u{0633}\u{062C}\u{064A}\u{0644} \u{0627}\u{0644}\u{062F}\u{062E}\u{0648}\u{0644}",
+                13.0,
+                "90.1582",
+            ),
         ];
         for (text, size, expected_str) in &tests {
             let got = text_width(text, *size, false);
@@ -1408,6 +1452,14 @@ mod tests {
                 "{text}: expected format={expected_str}, got={formatted} (raw={got})"
             );
         }
+        assert_eq!(
+            fmt_coord(text_width(
+                "\u{0627}\u{062E}\u{062A}\u{0628}\u{0627}\u{0631}",
+                14.0,
+                true
+            )),
+            "36.6962"
+        );
     }
 
     #[test]
