@@ -235,6 +235,22 @@ fn ascent_with_family(font_size: f64, font_family: &str) -> f64 {
     text_render::ascent_for_family(font_size, font_family)
 }
 
+fn combined_footer_bottom_offset(font_family: &str) -> f64 {
+    if font_family.eq_ignore_ascii_case("sans-serif") {
+        8.4687
+    } else {
+        8.7778
+    }
+}
+
+fn combined_caption_footer_baseline_gap(font_family: &str) -> f64 {
+    if font_family.eq_ignore_ascii_case("sans-serif") {
+        14.6211
+    } else {
+        14.3467
+    }
+}
+
 /// Format an f64 as a PlantUML-compatible coordinate string.
 ///
 /// PlantUML emits SVG coordinates via `String.format(Locale.US, "%.4f", x)`
@@ -650,10 +666,6 @@ fn atom_height_with_family(font_size: f64, font_family: &str) -> f64 {
 struct RenderedLineMetrics {
     height: f64,
     ascent: f64,
-}
-
-fn rendered_line_metrics(content: &str, font_size: f64) -> RenderedLineMetrics {
-    rendered_line_metrics_with_family(content, font_size, "sans-serif")
 }
 
 fn rendered_line_metrics_with_family(
@@ -2999,6 +3011,7 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
     let mut note_font_color_set = false;
     let mut note_font_family = "sans-serif".to_string();
     let mut note_font_size: u32 = MSG_FONT_SIZE as u32;
+    let mut page_font_family = "sans-serif".to_string();
     let mut note_shadow_filter: Option<String> = None;
     let mut participant_shadow_filter: Option<String> = None;
     let mut sequence_shadowing = false;
@@ -3071,7 +3084,8 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                 participant_font_family = family.clone();
                 note_font_family = family.clone();
                 divider_font_family = family.clone();
-                group_header_font_family = family;
+                group_header_font_family = family.clone();
+                page_font_family = family;
             }
             "defaultfontcolor" => {
                 let c = resolve_color(val);
@@ -3374,7 +3388,9 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
         .unwrap_or_default();
     let title_line_metrics = title_lines
         .iter()
-        .map(|line| rendered_line_metrics(line, TITLE_FONT_SIZE as f64))
+        .map(|line| {
+            rendered_line_metrics_with_family(line, TITLE_FONT_SIZE as f64, &page_font_family)
+        })
         .collect::<Vec<_>>();
     let title_band_h = if title_lines.is_empty() {
         0.0
@@ -3417,7 +3433,7 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
     // sits at the top (baseline y≈14.668), with literal `\n` adding more
     // right-aligned header text lines. Lines are spaced by text_height(10);
     // the reserved band adds PlantUML's one-pixel clearance once.
-    let header_line_step = plantuml_metrics::text_height(HEADER_FONT_SIZE as f64);
+    let header_line_step = text_height_with_family(HEADER_FONT_SIZE as f64, &page_font_family);
     let header_band_h = if !header_lines.is_empty() {
         header_lines.len() as f64 * header_line_step + 1.0
     } else {
@@ -4273,18 +4289,20 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
             // headers use the widest rendered line.
             let w = header_lines
                 .iter()
-                .map(|line| text_render::measure(line, HEADER_FONT_SIZE as f64, false))
+                .map(|line| {
+                    text_width_with_family(line, HEADER_FONT_SIZE as f64, &page_font_family)
+                })
                 .fold(0.0_f64, f64::max);
             want_center = want_center.max(w / 2.0);
         }
         if let Some(footer) = &diagram.meta.footer {
             // Footer left margin is 0.
-            let w = text_render::measure(footer, 10.0, false);
+            let w = text_width_with_family(footer, 10.0, &page_font_family);
             want_center = want_center.max(w / 2.0);
         }
         if let Some(caption) = &diagram.meta.caption {
             // Caption left margin is 1.
-            let w = text_render::measure(caption, 14.0, false);
+            let w = text_width_with_family(caption, 14.0, &page_font_family);
             want_center = want_center.max(1.0 + w / 2.0);
         }
         if !title_lines.is_empty() {
@@ -5067,12 +5085,17 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
             })
         .ceil() as u32
     };
-    // Caption adds 20 px of vertical space below the foot boxes (one 14-px
-    // text line + descent + bottom margin). The strict golden height for a
-    // basic two-message caption diagram is 172 vs 152 without caption — a
-    // delta of 20 pixels that maps to a fixed extension here.
+    // Caption adds vertical space below the foot boxes. Caption-only diagrams
+    // use a 20px band; when a footer is present, PlantUML stacks caption above
+    // the footer inside a shared bottom decoration band. With hidden footboxes
+    // that band is compact; otherwise the tail boxes reserve an extra few
+    // pixels above the bottom decorations.
     if diagram.meta.caption.is_some() {
-        svg_height += 20;
+        svg_height += if diagram.meta.footer.is_some() {
+            if diagram.hide_footbox { 15 } else { 19 }
+        } else {
+            20
+        };
     }
     // Named boxes extend below the foot boxes; the frame bottom plus its own
     // bottom margin must fit inside the canvas.
@@ -5650,16 +5673,19 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
             r#"<g class="header" data-source-line="{header_line}">"#
         ));
         for (i, line) in header_lines.iter().enumerate() {
-            let text_length = text_render::measure(line, HEADER_FONT_SIZE as f64, false);
+            let text_length =
+                text_width_with_family(line, HEADER_FONT_SIZE as f64, &page_font_family);
             let x = svg_width_exact - text_length - 6.0;
             text_render::emit_text(
                 &mut svg.buf,
                 line,
                 &TextBase {
                     x,
-                    y: 14.668 + i as f64 * header_line_step,
+                    y: 5.0
+                        + ascent_with_family(HEADER_FONT_SIZE as f64, &page_font_family)
+                        + i as f64 * header_line_step,
                     font_size: HEADER_FONT_SIZE,
-                    font_family: "sans-serif",
+                    font_family: &page_font_family,
                     fill: "#888888",
                     bold: false,
                     italic: false,
@@ -5690,7 +5716,12 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
         let mut line_top = HEAD_BOX_Y + header_band_h + TITLE_TOP_PAD;
         for (i, line) in title_lines.iter().enumerate() {
             let metrics = title_line_metrics[i];
-            let text_length = text_render::measure(line, TITLE_FONT_SIZE as f64, true);
+            let text_length = text_render::measure_with_family(
+                line,
+                TITLE_FONT_SIZE as f64,
+                true,
+                &page_font_family,
+            );
             let x = title_center - text_length / 2.0;
             let y = line_top + metrics.ascent;
             text_render::emit_text(
@@ -5700,7 +5731,7 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                     x,
                     y,
                     font_size: TITLE_FONT_SIZE,
-                    font_family: "sans-serif",
+                    font_family: &page_font_family,
                     fill: "#000000",
                     bold: true,
                     italic: false,
@@ -7944,9 +7975,59 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
         .unwrap();
     }
 
-    // Footer: emitted near the end of the document (after all messages), in a
-    // band reserved at the bottom (see footer_band_h). Single-line footers sit
-    // 8.7344px above the canvas bottom; left edge at x=0.
+    // Caption appears at the bottom of the diagram, AFTER messages.
+    // PlantUML wraps it in `<g class="caption" data-source-line="N">` and
+    // routes the text through the creole segmenter so bold/italic/under runs
+    // split into separate `<text>` elements at calculated x offsets.
+    if let Some(caption) = &diagram.meta.caption {
+        const CAPTION_FONT_SIZE: u32 = 14;
+        const CAPTION_BOTTOM_OFFSET: f64 = 10.8672;
+        let src_line = diagram.meta.caption_line.unwrap_or(1);
+        let caption_x = if diagram.meta.footer.is_some() {
+            if let (Some(first), Some(last)) = (participants.first(), participants.last()) {
+                let center = (first.box_x + last.box_x + last.box_width - 1.0) / 2.0;
+                let w =
+                    text_width_with_family(caption, CAPTION_FONT_SIZE as f64, &page_font_family);
+                (center - w / 2.0).max(1.0)
+            } else {
+                1.0
+            }
+        } else {
+            1.0
+        };
+        let caption_y = if diagram.meta.footer.is_some() {
+            let footer_y = svg_height as f64 - combined_footer_bottom_offset(&page_font_family);
+            footer_y - combined_caption_footer_baseline_gap(&page_font_family)
+        } else {
+            svg_height as f64 - CAPTION_BOTTOM_OFFSET
+        };
+        write!(
+            svg.buf,
+            r#"<g class="caption" data-source-line="{src_line}">"#
+        )
+        .unwrap();
+        text_render::emit_text(
+            &mut svg.buf,
+            caption,
+            &TextBase {
+                x: caption_x,
+                y: caption_y,
+                font_size: CAPTION_FONT_SIZE,
+                font_family: &page_font_family,
+                fill: "#000000",
+                bold: false,
+                italic: false,
+                underline: false,
+                skip_underline: false,
+            },
+        );
+        svg.buf.push_str("</g>");
+    }
+
+    // Footer: emitted near the end of the document (after caption when both
+    // decorations are present), in a band reserved at the bottom (see
+    // footer_band_h). Single-line footers sit near the canvas bottom and are
+    // centred on the participant span.
     if let Some(footer) = &diagram.meta.footer {
         const FOOTER_FONT_SIZE: u32 = 10;
         const FOOTER_BOTTOM_OFFSET: f64 = 8.7344;
@@ -7958,7 +8039,7 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
         let footer_x =
             if let (Some(first), Some(last)) = (participants.first(), participants.last()) {
                 let center = (first.box_x + last.box_x + last.box_width - 1.0) / 2.0;
-                let w = text_render::measure(footer, FOOTER_FONT_SIZE as f64, false);
+                let w = text_width_with_family(footer, FOOTER_FONT_SIZE as f64, &page_font_family);
                 (center - w / 2.0).max(0.0)
             } else {
                 0.0
@@ -7974,41 +8055,15 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
             footer,
             &TextBase {
                 x: footer_x,
-                y: svg_height as f64 - FOOTER_BOTTOM_OFFSET,
+                y: svg_height as f64
+                    - if diagram.meta.caption.is_some() {
+                        combined_footer_bottom_offset(&page_font_family)
+                    } else {
+                        FOOTER_BOTTOM_OFFSET
+                    },
                 font_size: FOOTER_FONT_SIZE,
-                font_family: "sans-serif",
+                font_family: &page_font_family,
                 fill: "#888888",
-                bold: false,
-                italic: false,
-                underline: false,
-                skip_underline: false,
-            },
-        );
-        svg.buf.push_str("</g>");
-    }
-
-    // Caption appears at the bottom of the diagram, AFTER messages.
-    // PlantUML wraps it in `<g class="caption" data-source-line="N">` and
-    // routes the text through the creole segmenter so bold/italic/under runs
-    // split into separate `<text>` elements at calculated x offsets.
-    if let Some(caption) = &diagram.meta.caption {
-        const CAPTION_FONT_SIZE: u32 = 14;
-        const CAPTION_BOTTOM_OFFSET: f64 = 10.8672;
-        let src_line = diagram.meta.caption_line.unwrap_or(1);
-        write!(
-            svg.buf,
-            r#"<g class="caption" data-source-line="{src_line}">"#
-        )
-        .unwrap();
-        text_render::emit_text(
-            &mut svg.buf,
-            caption,
-            &TextBase {
-                x: 1.0,
-                y: svg_height as f64 - CAPTION_BOTTOM_OFFSET,
-                font_size: CAPTION_FONT_SIZE,
-                font_family: "sans-serif",
-                fill: "#000000",
                 bold: false,
                 italic: false,
                 underline: false,
