@@ -651,7 +651,12 @@ impl ActivityParser {
     }
 
     fn try_arrow(&mut self, line: &str) -> bool {
-        // Matches: ->, -->, -[#color]->, -[#color]-->, optionally followed by label;
+        if let Some(text) = line.strip_prefix("-->") {
+            self.steps.push(ActivityStep::Action(format!("->{text}")));
+            return true;
+        }
+
+        // Matches: ->, -[#color]->, -[#color]-->, optionally followed by label;
         // Group 1: full arrow, Group 2: color (optional), Group 3: extra dash (-> vs -->),
         // Group 4: label (optional)
         static RE: LazyLock<Regex> =
@@ -1095,20 +1100,28 @@ mod tests {
 
     #[test]
     fn arrow_steps() {
-        let d = parse("start\n:A;\n->\n:B;\n-->\n:C;\nstop");
+        let d = parse("start\n:A;\n->\n:B;\n-[dashed]->\n:C;\nstop");
         assert!(matches!(d.steps[2], ActivityStep::Arrow(ref a) if !a.dashed && a.label.is_none()));
-        assert!(matches!(d.steps[4], ActivityStep::Arrow(ref a) if a.dashed && a.label.is_none()));
+        assert!(
+            matches!(d.steps[4], ActivityStep::Arrow(ref a) if !a.dashed && a.color.as_deref() == Some("dashed"))
+        );
     }
 
     #[test]
     fn arrow_with_label() {
-        let d = parse("start\n:A;\n--> label;\n:B;\nstop");
+        let d = parse("start\n:A;\n-> label;\n:B;\nstop");
         if let ActivityStep::Arrow(ref a) = d.steps[2] {
-            assert!(a.dashed);
+            assert!(!a.dashed);
             assert_eq!(a.label.as_deref(), Some("label"));
         } else {
             panic!("expected Arrow");
         }
+    }
+
+    #[test]
+    fn double_dash_arrow_is_action_text() {
+        let d = parse("start\n:A;\n--> label;\n:B;\nstop");
+        assert!(matches!(d.steps[2], ActivityStep::Action(ref text) if text == "-> label;"));
     }
 
     #[test]
