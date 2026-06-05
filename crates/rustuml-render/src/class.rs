@@ -1271,20 +1271,34 @@ fn offset_path(path: &str, dx: f64, dy: f64) -> String {
 // Main render function
 // ---------------------------------------------------------------------------
 
-fn render_empty_skinparam_canvas(diagram: &ClassDiagram) -> String {
-    let bg_color = diagram
+fn last_background_value(diagram: &ClassDiagram) -> Option<&str> {
+    diagram
         .meta
         .skinparams
         .iter()
+        .rev()
         .find(|sp| sp.key.eq_ignore_ascii_case("backgroundColor"))
-        .map(|sp| crate::sequence::resolve_color(&sp.value))
+        .map(|sp| sp.value.trim())
+}
+
+fn render_empty_skinparam_canvas(diagram: &ClassDiagram) -> String {
+    let bg_value = last_background_value(diagram);
+    let bg_color = bg_value
+        .filter(|value| !value.eq_ignore_ascii_case("transparent"))
+        .map(crate::sequence::resolve_color)
         .filter(|c| c != "#FFFFFF");
     let bg_style = bg_color.as_deref().unwrap_or("#FFFFFF");
+    let bg_style_suffix = if bg_value.is_some_and(|value| value.eq_ignore_ascii_case("transparent"))
+    {
+        String::new()
+    } else {
+        format!("background:{bg_style};")
+    };
 
     let mut svg = String::new();
     write!(
         svg,
-        r#"<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" contentStyleType="text/css" data-diagram-type="CLASS" height="16px" preserveAspectRatio="none" style="width:16px;height:16px;background:{bg_style};" version="1.1" viewBox="0 0 16 16" width="16px" zoomAndPan="magnify">"#
+        r#"<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" contentStyleType="text/css" data-diagram-type="CLASS" height="16px" preserveAspectRatio="none" style="width:16px;height:16px;{bg_style_suffix}" version="1.1" viewBox="0 0 16 16" width="16px" zoomAndPan="magnify">"#
     )
     .unwrap();
     svg.push_str("<?plantuml 1.2026.3beta6?><defs/><g>");
@@ -2014,19 +2028,14 @@ fn render_plantuml_svg(
     // `skinparam backgroundColor` recolours the canvas: the style `background`
     // takes the colour and a full-canvas `<rect>` is emitted after `<g>` (white
     // is the default and emits neither). Mirrors the sequence renderer.
-    let bg_color = diagram
-        .meta
-        .skinparams
-        .iter()
-        .find(|sp| sp.key.eq_ignore_ascii_case("backgroundColor"))
-        .filter(|sp| !sp.value.trim().eq_ignore_ascii_case("transparent"))
-        .map(|sp| crate::sequence::resolve_color(&sp.value))
+    let bg_value = last_background_value(diagram);
+    let bg_color = bg_value
+        .filter(|value| !value.eq_ignore_ascii_case("transparent"))
+        .map(crate::sequence::resolve_color)
         .filter(|c| c != "#FFFFFF");
     let bg_style = bg_color.as_deref().unwrap_or("#FFFFFF");
-    let bg_style_suffix = if diagram.meta.skinparams.iter().any(|sp| {
-        sp.key.eq_ignore_ascii_case("backgroundColor")
-            && sp.value.trim().eq_ignore_ascii_case("transparent")
-    }) {
+    let bg_style_suffix = if bg_value.is_some_and(|value| value.eq_ignore_ascii_case("transparent"))
+    {
         String::new()
     } else {
         format!("background:{bg_style};")
@@ -2875,10 +2884,14 @@ fn render_entity_content(
         .filter(|_| !font.monochrome);
     let oracle_rx = oracle_rect.and_then(|r| r.rect_rx.as_deref());
     let oracle_ry = oracle_rect.and_then(|r| r.rect_ry.as_deref());
+    let entity_gradient_fill = entity
+        .color
+        .as_deref()
+        .is_some_and(|c| split_gradient_colors(c).is_some());
     let fill_default = entity
         .color
-        .as_ref()
-        .map(|c| crate::sequence::resolve_color(c))
+        .as_deref()
+        .map(resolve_flat_or_gradient_start)
         .or_else(|| body_gradient_fill.map(str::to_string))
         .or_else(|| {
             font.class_background
@@ -2990,7 +3003,7 @@ fn render_entity_content(
         .filter(|hb| split_gradient_colors(hb).is_none())
         .map(resolve_flat_or_gradient_start)
         .filter(|hb| hb.as_str() != fill);
-    let band_first_sep: Option<f64> = if fill.starts_with("url(#") {
+    let band_first_sep: Option<f64> = if fill.starts_with("url(#") && !entity_gradient_fill {
         oracle_rect.and_then(|r| r.sep_y_values.first().copied())
     } else if header_solid.is_some() {
         let stereo_shift = stereotype_header_extra_height(dim.stereotype_count);
@@ -6106,6 +6119,16 @@ mod tests {
             "should have content style type"
         );
         assert!(svg.contains("<?plantuml"), "should have plantuml PI");
+    }
+
+    #[test]
+    fn duplicate_background_color_uses_last_value() {
+        let input = "@startuml\nskinparam backgroundColor white\nskinparam backgroundColor yellow\nskinparam backgroundColor red\nclass Foo\n@enduml";
+        let diagram = rustuml_parser::parse::parse(input).unwrap();
+        let svg = crate::render_svg(&diagram);
+
+        assert!(svg.contains("background:#FF0000;"));
+        assert!(svg.contains(r##"<rect fill="#FF0000""##));
     }
 
     #[test]

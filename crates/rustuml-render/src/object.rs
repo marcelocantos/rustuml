@@ -14,7 +14,9 @@ use std::fmt::Write;
 use rustuml_layout::graph::{Direction, LayoutGraph};
 use rustuml_parser::diagram::object::*;
 
-use crate::layout_oracle::{OracleLayout, emit_oracle_cluster_children, emit_oracle_note_entity};
+use crate::layout_oracle::{
+    OracleEdgePath, OracleLayout, emit_oracle_cluster_children, emit_oracle_note_entity,
+};
 use crate::style::Theme;
 use crate::text_render::{self, TextBase};
 
@@ -959,40 +961,30 @@ fn render_oracle_links(
     oracle: &OracleLayout,
     ent_id: &mut usize,
 ) {
-    // Track per-(from,to) counts so multi-edges resolve to A-to-B, A-to-B-1, …
-    // matching PlantUML's id-suffixing convention.
-    let mut seen: std::collections::HashMap<(String, String), usize> =
-        std::collections::HashMap::new();
     for link in &diagram.links {
         let from_base = link.from.split("::").next().unwrap_or(&link.from);
         let to_base = link.to.split("::").next().unwrap_or(&link.to);
-        let key = (from_base.to_string(), to_base.to_string());
-        let idx = *seen.get(&key).unwrap_or(&0);
-        seen.insert(key, idx + 1);
-        let suffix = if idx == 0 {
-            String::new()
-        } else {
-            format!("-{idx}")
+
+        let to_id = format!("{from_base}-to-{to_base}");
+        let backto_id = format!("{from_base}-backto-{to_base}");
+        let assoc_id = format!("{from_base}-{to_base}");
+        let to_id_rev = format!("{to_base}-to-{from_base}");
+        let backto_id_rev = format!("{to_base}-backto-{from_base}");
+        let assoc_id_rev = format!("{to_base}-{from_base}");
+        let source_line = (link.source_line > 0).then(|| link.source_line.to_string());
+        let candidates = [
+            backto_id.as_str(),
+            to_id.as_str(),
+            assoc_id.as_str(),
+            backto_id_rev.as_str(),
+            to_id_rev.as_str(),
+            assoc_id_rev.as_str(),
+        ];
+        let Some((_edge_index, edge)) =
+            find_oracle_object_edge(&oracle.edges, &candidates, source_line.as_deref())
+        else {
+            continue;
         };
-
-        let to_id = format!("{from_base}-to-{to_base}{suffix}");
-        let backto_id = format!("{from_base}-backto-{to_base}{suffix}");
-        let assoc_id = format!("{from_base}-{to_base}{suffix}");
-        let to_id_rev = format!("{to_base}-to-{from_base}{suffix}");
-        let backto_id_rev = format!("{to_base}-backto-{from_base}{suffix}");
-        let assoc_id_rev = format!("{to_base}-{from_base}{suffix}");
-
-        let oracle_edge = oracle
-            .edges
-            .iter()
-            .find(|e| e.id == backto_id)
-            .or_else(|| oracle.edges.iter().find(|e| e.id == to_id))
-            .or_else(|| oracle.edges.iter().find(|e| e.id == assoc_id))
-            .or_else(|| oracle.edges.iter().find(|e| e.id == backto_id_rev))
-            .or_else(|| oracle.edges.iter().find(|e| e.id == to_id_rev))
-            .or_else(|| oracle.edges.iter().find(|e| e.id == assoc_id_rev));
-
-        let Some(edge) = oracle_edge else { continue };
 
         let entity_1 = edge.entity_1.as_deref().unwrap_or("ent0002");
         let entity_2 = edge.entity_2.as_deref().unwrap_or("ent0003");
@@ -1073,6 +1065,38 @@ fn render_oracle_links(
     }
 }
 
+fn find_oracle_object_edge<'a>(
+    edges: &'a [OracleEdgePath],
+    candidates: &[&str],
+    source_line: Option<&str>,
+) -> Option<(usize, &'a OracleEdgePath)> {
+    fn is_numbered_duplicate(edge_id: &str, candidate_id: &str) -> bool {
+        let Some(rest) = edge_id.strip_prefix(candidate_id) else {
+            return false;
+        };
+        let Some(number) = rest.strip_prefix('-') else {
+            return false;
+        };
+        !number.is_empty() && number.bytes().all(|b| b.is_ascii_digit())
+    }
+
+    let mut fallback = None;
+    for candidate_id in candidates {
+        for (edge_index, edge) in edges.iter().enumerate().filter(|(_, edge)| {
+            edge.id == *candidate_id
+                || source_line.is_some() && is_numbered_duplicate(&edge.id, candidate_id)
+        }) {
+            if source_line.is_some_and(|line| edge.source_line.as_deref() == Some(line)) {
+                return Some((edge_index, edge));
+            }
+            if edge.id == *candidate_id {
+                fallback.get_or_insert((edge_index, edge));
+            }
+        }
+    }
+    fallback
+}
+
 // ---------------------------------------------------------------------------
 // Tests
 // ---------------------------------------------------------------------------
@@ -1081,6 +1105,33 @@ fn render_oracle_links(
 mod tests {
     use super::*;
     use rustuml_parser::diagram::DiagramMeta;
+
+    fn oracle_edge(id: &str, source_line: &str) -> OracleEdgePath {
+        OracleEdgePath {
+            id: id.to_string(),
+            path_id: Some(id.to_string()),
+            d: String::new(),
+            arrow_points: None,
+            second_arrow_points: None,
+            second_arrow_fill: None,
+            second_polygon_style: None,
+            arrow_fill: None,
+            link_type: None,
+            entity_1: None,
+            entity_2: None,
+            source_line: Some(source_line.to_string()),
+            link_id: None,
+            path_style: None,
+            code_line: None,
+            polygon_style: None,
+            label: None,
+            labels: Vec::new(),
+            label_links: Vec::new(),
+            extra_paths: Vec::new(),
+            crow_lines: Vec::new(),
+            decorations: Vec::new(),
+        }
+    }
 
     fn simple_object_diagram() -> ObjectDiagram {
         ObjectDiagram {
@@ -1222,5 +1273,31 @@ mod tests {
         assert!(svg.contains("class=\"entity\""));
         assert!(svg.contains("data-qualified-name=\"Car\""));
         assert!(svg.contains("id=\"ent0002\""));
+    }
+
+    #[test]
+    fn oracle_edge_matching_uses_source_line_before_endpoint_suffix() {
+        let edges = vec![
+            oracle_edge("o1-to-o2", "7"),
+            oracle_edge("o1-o2", "8"),
+            oracle_edge("o1-o2-1", "9"),
+        ];
+        let candidates = [
+            "o1-backto-o2",
+            "o1-to-o2",
+            "o1-o2",
+            "o2-backto-o1",
+            "o2-to-o1",
+            "o2-o1",
+        ];
+
+        let (_, directed) = find_oracle_object_edge(&edges, &candidates, Some("7")).unwrap();
+        assert_eq!(directed.id, "o1-to-o2");
+
+        let (_, association) = find_oracle_object_edge(&edges, &candidates, Some("8")).unwrap();
+        assert_eq!(association.id, "o1-o2");
+
+        let (_, duplicate) = find_oracle_object_edge(&edges, &candidates, Some("9")).unwrap();
+        assert_eq!(duplicate.id, "o1-o2-1");
     }
 }

@@ -494,8 +494,9 @@ impl ClassParser {
                 .collect();
 
             // Extract entity-level color (e.g., `#lightblue`, `#FF0000`)
-            static COLOR_RE: LazyLock<Regex> =
-                LazyLock::new(|| Regex::new(r"(#[a-zA-Z0-9]+)(?:\s|\{|$)").unwrap());
+            static COLOR_RE: LazyLock<Regex> = LazyLock::new(|| {
+                Regex::new(r"(#[a-zA-Z0-9]+(?:[|/\\-]#?[a-zA-Z0-9]+)?)(?:\s|\{|;|$)").unwrap()
+            });
             let entity_color = COLOR_RE.captures(line).map(|c| c[1].to_string());
 
             // Handle namespace separation: split `com.example.MyClass` or `com::example::MyClass`
@@ -1826,6 +1827,12 @@ mod tests {
                 .iter()
                 .any(|sp| { sp.key == "class<<service>>FontStyle" && sp.value == "bold" })
         );
+    }
+
+    #[test]
+    fn entity_gradient_color_is_captured_as_one_token() {
+        let d = parse("class Foo #red|blue {\n  field: String\n}");
+        assert_eq!(d.entities[0].color.as_deref(), Some("#red|blue"));
     }
 
     #[test]
