@@ -2574,7 +2574,7 @@ fn node_extents(node: &LayoutNode) -> (f64, f64) {
             is_group,
             ..
         } => {
-            let title_w = text_render::measure(name, TITLE_FONT_SIZE, false);
+            let title_w = partition_title_width(name);
             let body_w = sequence_width(body);
             let mut left = title_w.max(body_w) / 2.0 + 10.0;
             let mut right = (title_w / 2.0 + 5.0).max(body_w / 2.0 + 10.0);
@@ -2807,7 +2807,7 @@ fn node_width(node: &LayoutNode) -> f64 {
         }
         // Partition wraps a body with a title bar; width = max(title+15, body+34).
         LayoutNode::Partition { name, body, .. } => {
-            let title_w = text_render::measure(name, TITLE_FONT_SIZE, false);
+            let title_w = partition_title_width(name);
             let body_w = sequence_width(body);
             (title_w + 15.0).max(body_w + 34.0)
         }
@@ -3145,6 +3145,14 @@ fn partition_title_has_descender(name: &str) -> bool {
         .any(|c| matches!(c, 'g' | 'j' | 'p' | 'q' | 'y'))
 }
 
+fn partition_title_label(name: &str) -> &str {
+    if name.is_empty() { "\u{00a0}" } else { name }
+}
+
+fn partition_title_width(name: &str) -> f64 {
+    text_render::measure(partition_title_label(name), TITLE_FONT_SIZE, false)
+}
+
 fn partition_body_width_extra(is_group: bool, body: &[LayoutNode]) -> f64 {
     if is_group && group_wraps_single_if(body) {
         GROUP_IF_BODY_WIDTH_EXTRA
@@ -3184,7 +3192,7 @@ fn partition_top_gap(
         || (!is_group
             && (color.is_some() || partition_title_has_descender(name))
             && partition_title_drives_width(
-                text_render::measure(name, TITLE_FONT_SIZE, false),
+                partition_title_width(name),
                 sequence_width(body),
                 partition_title_width_extra(color, is_group, body),
                 is_group,
@@ -4923,7 +4931,7 @@ fn emit_node(svg: &mut SvgEmitter, node: &LayoutNode, cx: f64, y: f64) -> f64 {
             // PlantUML's partition top gap depends on whether the title band
             // or body drives the outer width; partition_top_gap centralises
             // that measured rule so height, arrows, and emission stay aligned.
-            let title_w = text_render::measure(name, TITLE_FONT_SIZE, false);
+            let title_w = partition_title_width(name);
             let body_w = sequence_width(body);
             let body_width_extra = partition_body_width_extra(*is_group, body);
             let title_width_extra = partition_title_width_extra(color, *is_group, body);
@@ -4982,7 +4990,7 @@ fn emit_node(svg: &mut SvgEmitter, node: &LayoutNode, cx: f64, y: f64) -> f64 {
                 title_w,
                 partition_x + 3.0,
                 title_y,
-                name,
+                partition_title_label(name),
                 false,
             );
 

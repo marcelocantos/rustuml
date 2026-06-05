@@ -77,7 +77,7 @@ fn parse_legacy_activity(lines: &[String]) -> Result<ActivityDiagram, ParseError
     static RE_FORK_BAR: LazyLock<Regex> = LazyLock::new(|| Regex::new(r"^===([^=]+)===$").unwrap());
     static RE_PARTITION: LazyLock<Regex> = LazyLock::new(|| {
         // partition "Name" {  or  partition Name {
-        Regex::new(r#"^partition\s+(?:"([^"]+)"|(\S+))\s*\{?\s*$"#).unwrap()
+        Regex::new(r#"^partition\s+(?:"([^"]*)"|(\S+))\s*\{?\s*$"#).unwrap()
     });
 
     let mut meta = DiagramMeta::default();
@@ -883,7 +883,7 @@ impl ActivityParser {
 
     fn try_partition(&mut self, line: &str) -> bool {
         static RE: LazyLock<Regex> = LazyLock::new(|| {
-            Regex::new(r#"^partition\s+(?:(#[A-Za-z0-9]+)\s+)?(?:"([^"]+)"|([A-Za-z_]\w*))\s*\{?"#)
+            Regex::new(r#"^partition\s+(?:(#[A-Za-z0-9]+)\s+)?(?:"([^"]*)"|([A-Za-z_]\w*))\s*\{?"#)
                 .unwrap()
         });
 
@@ -913,7 +913,7 @@ impl ActivityParser {
     fn try_group(&mut self, line: &str) -> bool {
         // `group [#color] "Name" {` — treated as a partition.
         static RE: LazyLock<Regex> = LazyLock::new(|| {
-            Regex::new(r#"^group\s+(?:(#[A-Za-z0-9]+)\s+)?(?:"([^"]+)"|([A-Za-z_]\w*))\s*\{?"#)
+            Regex::new(r#"^group\s+(?:(#[A-Za-z0-9]+)\s+)?(?:"([^"]*)"|([A-Za-z_]\w*))\s*\{?"#)
                 .unwrap()
         });
 
@@ -1088,6 +1088,13 @@ mod tests {
     fn partition() {
         let d = parse("start\npartition Init {\n  :step1;\n}\nstop");
         assert!(matches!(d.steps[1], ActivityStep::Partition(ref s) if s.name == "Init"));
+        assert!(matches!(d.steps[3], ActivityStep::EndPartition));
+    }
+
+    #[test]
+    fn partition_empty_quoted_name() {
+        let d = parse("start\npartition \"\" {\n  :step1;\n}\nstop");
+        assert!(matches!(d.steps[1], ActivityStep::Partition(ref s) if s.name.is_empty()));
         assert!(matches!(d.steps[3], ActivityStep::EndPartition));
     }
 
