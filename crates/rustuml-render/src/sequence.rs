@@ -1578,7 +1578,7 @@ struct PlantUmlSvg {
     /// `skinparam participantFontColor`.
     participant_font_color: String,
     /// Plain participant head/tail label family. Driven by
-    /// `skinparam defaultFontName`.
+    /// `skinparam defaultFontName` / `sequenceFontName` / `participantFontName`.
     participant_font_family: String,
     /// Plain participant head/tail label font size. Driven by
     /// `skinparam participantFontSize`.
@@ -1591,7 +1591,8 @@ struct PlantUmlSvg {
     participant_font_italic: bool,
     /// Message/arrow label colour. Driven by `skinparam arrowFontColor`.
     message_font_color: String,
-    /// Message/arrow label family. Driven by `skinparam defaultFontName`.
+    /// Message/arrow label family. Driven by `skinparam defaultFontName` /
+    /// `sequenceFontName` / `arrowFontName`.
     message_font_family: String,
     /// Message/arrow label font size. Driven by `skinparam arrowFontSize`.
     message_font_size: u32,
@@ -1602,7 +1603,8 @@ struct PlantUmlSvg {
     /// Note label font size. Driven by `skinparam defaultFontSize` and
     /// `skinparam noteFontSize`.
     note_font_size: u32,
-    /// Note label family. Driven by `skinparam defaultFontName`.
+    /// Note label family. Driven by `skinparam defaultFontName` /
+    /// `sequenceFontName` / `noteFontName`.
     note_font_family: String,
     /// Drop-shadow filter id for note bodies. Driven by
     /// `skinparam noteShadowing true`.
@@ -3337,6 +3339,15 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                 group_header_font_family = family.clone();
                 page_font_family = family;
             }
+            "sequencefontname" => {
+                let family = canonical_font_family(val);
+                message_font_family = family.clone();
+                participant_font_family = family.clone();
+                note_font_family = family.clone();
+                divider_font_family = family.clone();
+                group_header_font_family = family.clone();
+                page_font_family = family;
+            }
             "defaultfontcolor" => {
                 let c = resolve_color(val);
                 if !message_font_color_set {
@@ -3370,6 +3381,9 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
             "arrowfontcolor" | "sequencearrowfontcolor" => {
                 message_font_color = resolve_color(val);
                 message_font_color_set = true;
+            }
+            "arrowfontname" | "sequencearrowfontname" => {
+                message_font_family = canonical_font_family(val);
             }
             "arrowfontsize" | "sequencearrowfontsize" => {
                 if let Ok(v) = val.parse::<u32>() {
@@ -3407,6 +3421,9 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
             "participantfontcolor" | "sequenceparticipantfontcolor" => {
                 participant_font_color = resolve_color(val);
                 participant_font_color_set = true;
+            }
+            "participantfontname" | "sequenceparticipantfontname" => {
+                participant_font_family = canonical_font_family(val);
             }
             "participantfontsize" | "sequenceparticipantfontsize" => {
                 if let Ok(v) = val.parse::<u32>() {
@@ -3503,6 +3520,9 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                 note_font_color = resolve_color(val);
                 note_font_color_set = true;
             }
+            "notefontname" | "sequencenotefontname" => {
+                note_font_family = canonical_font_family(val);
+            }
             "notefontsize" | "sequencenotefontsize" => {
                 if let Ok(v) = val.parse::<u32>() {
                     note_font_size = v;
@@ -3535,6 +3555,9 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
             "sequencedividerfontcolor" => {
                 divider_font_color = resolve_color(val);
             }
+            "sequencedividerfontname" => {
+                divider_font_family = canonical_font_family(val);
+            }
             "sequencedividerfontsize" => {
                 if let Ok(v) = val.parse::<u32>() {
                     divider_font_size = v;
@@ -3547,6 +3570,9 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                 if let Ok(v) = val.parse::<u32>() {
                     group_header_font_size = v;
                 }
+            }
+            "sequencegroupheaderfontname" => {
+                group_header_font_family = canonical_font_family(val);
             }
             "sequencemessagealign" => {
                 message_align = match val.to_ascii_lowercase().as_str() {
@@ -4861,7 +4887,10 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                             );
                         let (owner_has_text, owner_text_height) =
                             event_message_text_height(&diagram.events[owner]);
-                        let y_adjust = if arrow_font_size_set && owner_has_text {
+                        let y_adjust = if arrow_font_size_set
+                            && owner_has_text
+                            && message_font_family.eq_ignore_ascii_case("sans-serif")
+                        {
                             (MSG_TEXT_HEIGHT - owner_text_height) / 2.0
                         } else {
                             0.0
@@ -8759,6 +8788,25 @@ mod tests {
 
         assert!(svg.contains(r#"y1="94.8096" y2="94.8096""#));
         assert!(svg.contains(r#"M86,77.2656 L86,102.2656"#));
+    }
+
+    #[test]
+    fn sequence_font_name_skinparams_apply_to_text_families() {
+        let input = concat!(
+            "@startuml\n",
+            "skinparam participantFontName Verdana\n",
+            "skinparam arrowFontName Verdana\n",
+            "skinparam noteFontName Verdana\n",
+            "Alice -> Bob : hello\n",
+            "note right : note\n",
+            "@enduml",
+        );
+        let diagram = rustuml_parser::parse::parse(input).unwrap();
+        let svg = crate::render_svg(&diagram);
+
+        assert!(svg.contains(r#"font-family="Verdana" font-size="14""#));
+        assert!(svg.contains(r#"font-family="Verdana" font-size="13""#));
+        assert!(svg.contains(">note</text>"));
     }
 
     #[test]
