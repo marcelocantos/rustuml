@@ -1722,13 +1722,32 @@ pub fn render_with_oracle(
                         }
 
                         // Description lines. Prefer the oracle's captured
-                        // baseline y (index j+1, after the name) so the spacing
-                        // tracks the resized font; fall back to the analytic
-                        // offsets for the default size.
+                        // baseline y after every baseline consumed by the name
+                        // label. Rich Creole names can emit more than one
+                        // baseline (for example mixed font sizes), so `j + 1`
+                        // would accidentally reuse the second name baseline.
+                        let mut oracle_text_y_index = if state_font_name.is_some() {
+                            1
+                        } else {
+                            text_render::emitted_baseline_count(
+                                label,
+                                &TextBase {
+                                    x: text_x,
+                                    y: text_y,
+                                    font_size: state_name_font_size as u32,
+                                    font_family: "sans-serif",
+                                    fill: state_text_color,
+                                    bold: state_font_bold,
+                                    italic: state_font_italic,
+                                    underline: false,
+                                    skip_underline: false,
+                                },
+                            )
+                        };
                         for (j, desc) in descriptions.iter().enumerate() {
                             let desc_x = box_x + 5.0;
                             let desc_y = orc_rect
-                                .and_then(|r| r.text_y_values.get(j + 1).copied())
+                                .and_then(|r| r.text_y_values.get(oracle_text_y_index).copied())
                                 .unwrap_or(
                                     div_y + FIRST_DESC_OFFSET + j as f64 * DESC_LINE_SPACING,
                                 );
@@ -1766,6 +1785,7 @@ pub fn render_with_oracle(
                                     escape_text_content(&content),
                                 )
                                 .unwrap();
+                                oracle_text_y_index += 1;
                             } else {
                                 let mut text_buf = String::new();
                                 text_render::emit_text(
@@ -1784,6 +1804,20 @@ pub fn render_with_oracle(
                                     },
                                 );
                                 svg.push_str(&text_buf);
+                                oracle_text_y_index += text_render::emitted_baseline_count(
+                                    desc,
+                                    &TextBase {
+                                        x: desc_x,
+                                        y: desc_y,
+                                        font_size: state_desc_font_size as u32,
+                                        font_family: "sans-serif",
+                                        fill: state_text_color,
+                                        bold: state_font_bold,
+                                        italic: state_font_italic,
+                                        underline: false,
+                                        skip_underline: false,
+                                    },
+                                );
                             }
                         }
 
