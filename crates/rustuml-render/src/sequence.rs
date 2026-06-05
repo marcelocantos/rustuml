@@ -2142,6 +2142,7 @@ impl PlantUmlSvg {
         text_len: f64,
         fill_color: &str,
         border_color: &str,
+        queue_head_offset: f64,
     ) {
         self.participant_group_open(part_uid, qualified_name, source_line, position);
 
@@ -2167,7 +2168,7 @@ impl PlantUmlSvg {
         let top = if position == "tail" {
             base_y
         } else {
-            base_y + 5.0
+            base_y + queue_head_offset
         };
         let mid = top + pill_h / 2.0;
         let bottom = top + pill_h;
@@ -2708,6 +2709,7 @@ fn render_participant_shape(
     fill_color: &str,
     border_color: &str,
     participant_inner_pad: f64,
+    queue_head_offset: f64,
 ) {
     // Make the participant's link (if any) available to the group open/close
     // helpers so the shape contents get wrapped in a link anchor.
@@ -2824,7 +2826,7 @@ fn render_participant_shape(
             let pill_top = if position == "tail" {
                 base_y
             } else {
-                base_y + 5.0
+                base_y + queue_head_offset
             };
             let text_y = pill_top + (HEAD_BOX_H - 4.0) / 2.0 + 5.29102;
             svg.queue_shape(
@@ -2841,6 +2843,7 @@ fn render_participant_shape(
                 p.text_width,
                 fill_color,
                 border_color,
+                queue_head_offset,
             );
         }
         ParticipantKind::Participant => {
@@ -3376,6 +3379,22 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
     // Phase 1: Compute participant layouts
     // -----------------------------------------------------------------------
 
+    let all_participants_are_queues = !diagram.participants.is_empty()
+        && diagram
+            .participants
+            .iter()
+            .all(|p| p.kind == ParticipantKind::Queue);
+    let queue_head_offset = if all_participants_are_queues {
+        0.0
+    } else {
+        5.0
+    };
+    let queue_layout_h = if all_participants_are_queues {
+        HEAD_BOX_H - 5.0
+    } else {
+        HEAD_BOX_H
+    };
+
     let participants: Vec<ParticipantLayout> = diagram
         .participants
         .iter()
@@ -3449,7 +3468,7 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                 ParticipantKind::Queue => {
                     // Queue: pill shape, width = text + 20 (caps + padding).
                     let w = max_text_w + QUEUE_TEXT_H_PAD;
-                    let h = HEAD_BOX_H;
+                    let h = queue_layout_h;
                     (w, h)
                 }
                 ParticipantKind::Participant => {
@@ -5901,6 +5920,7 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                 &fill_color,
                 &border_color,
                 participant_inner_pad,
+                queue_head_offset,
             );
         }
 
@@ -5919,6 +5939,7 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                 &fill_color,
                 &border_color,
                 participant_inner_pad,
+                queue_head_offset,
             );
         }
     }
@@ -7717,6 +7738,7 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                 fill_color,
                 &inline_border,
                 participant_inner_pad,
+                queue_head_offset,
             );
             // Strip the surrounding `<g class="participant participant-head" ...>`
             // wrapper: PlantUML draws the created head box as bare shape elements.
