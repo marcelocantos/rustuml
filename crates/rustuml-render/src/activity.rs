@@ -1484,27 +1484,28 @@ fn emit_attached_note(
     }
 }
 
-/// Detect a leading `floating note` anchored to the diagram's start node: the
-/// tree begins with `Start` immediately followed by a single `Note`, and the
-/// (pre-processed) source declares that note with the `floating` keyword.
-/// Returns the note's `(text, position, color)`. PlantUML draws such a note as
-/// a tail-less folded box at the top, vertically centred on the start ellipse,
-/// pushing the rest of the spine down.
-fn leading_floating_note(
-    tree: &[LayoutNode],
-    source: Option<&str>,
-) -> Option<(String, NotePosition, Option<String>)> {
-    // We can't distinguish floating from attached notes from the AST alone
-    // (the `floating` keyword is discarded during parsing), so gate on the raw
-    // source declaring a floating note.
-    let src = source?;
-    if !src
-        .lines()
-        .any(|l| l.trim_start().starts_with("floating note "))
-    {
-        return None;
-    }
-    // Tree shape: Start, then a Note, with nothing else between them.
+#[derive(Clone, Copy)]
+enum LeadingNoteKind {
+    Attached,
+    Floating,
+}
+
+struct LeadingStartNote {
+    text: String,
+    position: NotePosition,
+    color: Option<String>,
+    kind: LeadingNoteKind,
+}
+
+/// Detect a note immediately following the diagram's start node. PlantUML
+/// vertically centres the start ellipse on that note's box and pushes the rest
+/// of the spine down. `floating note` uses a tail-less folded box; ordinary
+/// `note left/right` uses the same attached-note path as action notes.
+fn leading_start_note(tree: &[LayoutNode], source: Option<&str>) -> Option<LeadingStartNote> {
+    let is_floating = source.is_some_and(|src| {
+        src.lines()
+            .any(|l| l.trim_start().starts_with("floating note "))
+    });
     match (tree.first(), tree.get(1)) {
         (
             Some(LayoutNode::Start),
@@ -1513,7 +1514,16 @@ fn leading_floating_note(
                 position,
                 color,
             }),
-        ) => Some((text.clone(), position.clone(), color.clone())),
+        ) => Some(LeadingStartNote {
+            text: text.clone(),
+            position: position.clone(),
+            color: color.clone(),
+            kind: if is_floating {
+                LeadingNoteKind::Floating
+            } else {
+                LeadingNoteKind::Attached
+            },
+        }),
         _ => None,
     }
 }
@@ -5996,14 +6006,14 @@ fn render_inner(
     // centreline shifts so both branches stay symmetric around the diamond.
     let (content_left, content_right) = sequence_extents(&tree);
     let content_w = content_left + content_right;
-    // A leading `floating note` grows the start node's tile to the note's
-    // height (it is centred on the note). When the note is taller than the
+    // A leading note grows the start node's tile to the note's height (the
+    // start ellipse is centred on the note). When the note is taller than the
     // start ellipse, the spine is pushed down by `note_h - 2*START_R`. The
     // start node already contributes its own `2*START_R`-equivalent tile to
     // sequence_height, so we add only the surplus here.
-    let lead_note = leading_floating_note(&tree, diagram.meta.source.as_deref());
-    let lead_note_h = lead_note.as_ref().and_then(|(text, _, _)| {
-        let h = note_box_height(text);
+    let lead_note = leading_start_note(&tree, diagram.meta.source.as_deref());
+    let lead_note_h = lead_note.as_ref().and_then(|note| {
+        let h = note_box_height(&note.text);
         (h > 2.0 * START_R).then_some(h)
     });
     let content_h = sequence_height(&tree) + lead_note_h.map_or(0.0, |h| h - 2.0 * START_R);
@@ -6157,10 +6167,32 @@ fn render_inner(
         }
     }
 
-    // A leading floating note is drawn first (before the start ellipse) so
-    // its paths/text precede the spine in document order, matching PlantUML.
-    if let (Some((text, position, color)), Some(_)) = (&lead_note, lead_note_h) {
-        emit_leading_floating_note(&mut svg, text, position, color.as_deref(), cx);
+    // A leading note is drawn first (before the start ellipse) so its
+    // paths/text precede the spine in document order, matching PlantUML.
+    if let (Some(note), Some(note_h)) = (&lead_note, lead_note_h) {
+        match note.kind {
+            LeadingNoteKind::Floating => {
+                emit_leading_floating_note(
+                    &mut svg,
+                    &note.text,
+                    &note.position,
+                    note.color.as_deref(),
+                    cx,
+                );
+            }
+            LeadingNoteKind::Attached => {
+                let anchor_cy = 15.0 + note_h / 2.0;
+                emit_attached_note(
+                    &mut svg,
+                    &note.text,
+                    &note.position,
+                    note.color.as_deref(),
+                    cx,
+                    START_R * 2.0,
+                    anchor_cy,
+                );
+            }
+        }
     }
 
     // Emit all nodes.
