@@ -4141,7 +4141,7 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
     // If a group includes the leftmost participant, all participants must shift
     // right to make room for the group frame margin.
 
-    let mut group_needs_left_shift = false;
+    let mut group_left_shift_depth = 0usize;
     {
         // Scan for groups and collect the participant index range for each group
         let mut group_stack: Vec<(usize, usize)> = Vec::new(); // (min_idx, max_idx)
@@ -4151,10 +4151,17 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                     group_stack.push((usize::MAX, 0));
                 }
                 Event::GroupEnd => {
-                    if let Some((min_idx, _max_idx)) = group_stack.pop()
-                        && min_idx == 0
-                    {
-                        group_needs_left_shift = true;
+                    let closed_depth = group_stack.len();
+                    if let Some((min_idx, max_idx)) = group_stack.pop() {
+                        if min_idx == 0 {
+                            group_left_shift_depth = group_left_shift_depth.max(closed_depth);
+                        }
+                        if min_idx <= max_idx
+                            && let Some(parent) = group_stack.last_mut()
+                        {
+                            parent.0 = parent.0.min(min_idx);
+                            parent.1 = parent.1.max(max_idx);
+                        }
                     }
                 }
                 Event::Message(msg) if !group_stack.is_empty() => {
@@ -4634,9 +4641,11 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
     if !participants.is_empty() {
         // First participant center must be at least min_first_center_x (for notes)
         // and at least HEAD_BOX_Y + box_width/2 (to fit the box).
-        // When groups encompass the leftmost participant, shift right for the frame margin.
-        let group_shift = if group_needs_left_shift {
-            group_frame_margin + HEAD_BOX_Y
+        // When groups encompass the leftmost participant, PlantUML reserves one
+        // frame margin per enclosing frame so each nested frame can still land at
+        // the 10px canvas floor (outer at 10, next at 20, ...).
+        let group_shift = if group_left_shift_depth > 0 {
+            group_frame_margin * group_left_shift_depth as f64 + HEAD_BOX_Y
         } else {
             0.0
         };
@@ -4871,7 +4880,7 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
             }
         }
 
-        if group_needs_left_shift && !participants.is_empty() {
+        if group_left_shift_depth > 0 && !participants.is_empty() {
             let left = participants[0].box_x - group_frame_margin;
             let shift = (GROUP_FRAME_MIN_LEFT - left).max(0.0);
             if shift > 0.0 {
@@ -5820,7 +5829,7 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                 };
                 // Use the larger frame_left (alt_fl) for guard text calculation
                 // since empty groups use alt_fl while non-empty use default_fl.
-                let fl = if group_needs_left_shift {
+                let fl = if group_left_shift_depth > 0 {
                     default_fl
                 } else {
                     alt_fl
