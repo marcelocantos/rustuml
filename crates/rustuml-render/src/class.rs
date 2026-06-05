@@ -692,7 +692,8 @@ fn calc_entity_dims(
                 .members
                 .iter()
                 .filter(|m| !hide.hides_member(m))
-                .count(),
+                .map(|m| member_display_line_count(m, font.monospace_member_spaces()))
+                .sum(),
             0,
         )
     } else {
@@ -700,12 +701,14 @@ fn calc_entity_dims(
             .members
             .iter()
             .filter(|m| m.kind == MemberKind::Field && !hide.hides_member(m))
-            .count();
+            .map(|m| member_display_line_count(m, font.monospace_member_spaces()))
+            .sum();
         let methods = entity
             .members
             .iter()
             .filter(|m| m.kind == MemberKind::Method && !hide.hides_member(m))
-            .count();
+            .map(|m| member_display_line_count(m, font.monospace_member_spaces()))
+            .sum();
         // If there are only methods (no fields), PlantUML puts them after the
         // header with two separator lines. If there are only fields, methods
         // compartment gets one separator line.
@@ -743,9 +746,12 @@ fn calc_entity_dims(
         .filter(|m| m.kind != MemberKind::Separator)
         .filter(|m| !hide.hides_member(m))
         .map(|m| {
-            let text = format_member_display(m, font.monospace_member_spaces());
-            let text_w =
-                text_render::measure_no_underline_with_family(&text, 14.0, false, &font.family);
+            let text_w = member_display_lines(m, font.monospace_member_spaces())
+                .iter()
+                .map(|text| {
+                    text_render::measure_no_underline_with_family(text, 14.0, false, &font.family)
+                })
+                .fold(0.0_f64, f64::max);
             if m.visibility == Visibility::Default {
                 // Default visibility (including enum constants): no icon.
                 ENUM_TEXT_OFFSET + text_w + MEMBER_RIGHT_PAD
@@ -1029,6 +1035,20 @@ fn format_member_display(member: &Member, monospace_spaces: bool) -> String {
     } else {
         member.display_text.clone()
     }
+}
+
+fn member_display_lines(member: &Member, monospace_spaces: bool) -> Vec<String> {
+    format_member_display(member, monospace_spaces)
+        .split("\\n")
+        .map(str::to_string)
+        .collect()
+}
+
+fn member_display_line_count(member: &Member, monospace_spaces: bool) -> usize {
+    format_member_display(member, monospace_spaces)
+        .split("\\n")
+        .count()
+        .max(1)
 }
 
 /// Determine the visibility modifier string for a member, matching PlantUML's
@@ -3367,7 +3387,8 @@ fn render_entity_content(
                 explicit_padding.unwrap_or(0.0),
                 member_text_offset,
             );
-            member_y += MEMBER_SPACING;
+            member_y += member_display_line_count(member, attr_font.monospace_spaces) as f64
+                * MEMBER_SPACING;
         }
     } else if effectively_no_members {
         // Two separator lines (fields/methods compartments both empty).
@@ -3454,33 +3475,38 @@ fn render_entity_content(
                     member_text_offset,
                 );
             } else {
-                let text = format_member_display(member, attr_font.monospace_spaces);
                 let mut text_buf = String::new();
-                text_render::emit_text(
-                    &mut text_buf,
-                    &text,
-                    &TextBase {
-                        x: x + ENUM_TEXT_OFFSET,
-                        y: eff_member_y,
-                        font_size: 14,
-                        font_family: attr_font.family,
-                        fill: member_fill,
-                        bold: false,
-                        italic: false,
-                        underline: false,
-                        skip_underline: true,
-                    },
-                );
+                for (line_index, text) in member_display_lines(member, attr_font.monospace_spaces)
+                    .iter()
+                    .enumerate()
+                {
+                    text_render::emit_text(
+                        &mut text_buf,
+                        text,
+                        &TextBase {
+                            x: x + ENUM_TEXT_OFFSET,
+                            y: eff_member_y + line_index as f64 * MEMBER_SPACING,
+                            font_size: 14,
+                            font_family: attr_font.family,
+                            fill: member_fill,
+                            bold: false,
+                            italic: false,
+                            underline: false,
+                            skip_underline: true,
+                        },
+                    );
+                }
                 svg.push_str(&text_buf);
             }
-            member_y += MEMBER_SPACING;
+            member_y += member_display_line_count(member, attr_font.monospace_spaces) as f64
+                * MEMBER_SPACING;
         }
 
         // Bottom separator: header_sep + compartment_pad + n_members * member_line_height.
         let bottom_sep_y = oracle_sep_y
             .get(1)
             .copied()
-            .unwrap_or(sep_y + COMPARTMENT_PAD + entity.members.len() as f64 * MEMBER_LINE_HEIGHT);
+            .unwrap_or(sep_y + COMPARTMENT_PAD + dim.field_count as f64 * MEMBER_LINE_HEIGHT);
         write!(
             svg,
             r#"<line style="{}" x1="{}" x2="{}" y1="{}" y2="{}"/>"#,
@@ -3718,7 +3744,8 @@ fn render_entity_content(
                     explicit_padding.unwrap_or(0.0),
                     member_text_offset,
                 );
-                member_y += MEMBER_SPACING;
+                member_y += member_display_line_count(member, attr_font.monospace_spaces) as f64
+                    * MEMBER_SPACING;
                 // Emit any inline separators that fall AFTER this field.
                 for (_, sym) in inline_field_separators
                     .iter()
@@ -3840,7 +3867,9 @@ fn render_entity_content(
                         explicit_padding.unwrap_or(0.0),
                         member_text_offset,
                     );
-                    method_y += MEMBER_SPACING;
+                    method_y += member_display_line_count(member, attr_font.monospace_spaces)
+                        as f64
+                        * MEMBER_SPACING;
                 }
 
                 // Emit a labelled divider after the members: two short rules
@@ -3968,7 +3997,8 @@ fn render_entity_content(
                     explicit_padding.unwrap_or(0.0),
                     member_text_offset,
                 );
-                method_y += MEMBER_SPACING;
+                method_y += member_display_line_count(member, attr_font.monospace_spaces) as f64
+                    * MEMBER_SPACING;
             }
         } else {
             // No members at all (already handled above, but just in case).
@@ -4275,7 +4305,7 @@ fn render_member_line(
     // circled-character radius (`MEMBER_TEXT_INSET + radius`; 20 at default).
     member_text_offset: f64,
 ) {
-    let text = format_member_display(member, attr_font.monospace_spaces);
+    let lines = member_display_lines(member, attr_font.monospace_spaces);
 
     if let Some(vis_mod) = visibility_modifier(member) {
         // Visibility icon group. When the class carries a link, PlantUML wraps
@@ -4412,21 +4442,23 @@ fn render_member_line(
     let text_x = text_x_override.unwrap_or(computed_text_x);
 
     let mut text_buf = String::new();
-    text_render::emit_text(
-        &mut text_buf,
-        &text,
-        &TextBase {
-            x: text_x,
-            y: baseline_y,
-            font_size: attr_font.size,
-            font_family: attr_font.family,
-            fill: attr_font.fill,
-            bold: attr_font.bold,
-            italic: member.is_abstract || attr_font.italic,
-            underline: member.is_static,
-            skip_underline: true,
-        },
-    );
+    for (line_index, text) in lines.iter().enumerate() {
+        text_render::emit_text(
+            &mut text_buf,
+            text,
+            &TextBase {
+                x: text_x,
+                y: baseline_y + line_index as f64 * MEMBER_SPACING,
+                font_size: attr_font.size,
+                font_family: attr_font.family,
+                fill: attr_font.fill,
+                bold: attr_font.bold,
+                italic: member.is_abstract || attr_font.italic,
+                underline: member.is_static,
+                skip_underline: true,
+            },
+        );
+    }
     if let Some(anchor) = link_anchor {
         svg.push_str(anchor);
         svg.push_str(&text_buf);
@@ -5775,6 +5807,50 @@ mod tests {
         assert!(svg.contains("name: String"));
         assert!(svg.contains("makeSound(): void"));
         assert!(svg.contains("fetch(): void"));
+    }
+
+    #[test]
+    fn multiline_member_escape_renders_as_member_rows() {
+        let diagram = ClassDiagram {
+            meta: DiagramMeta::default(),
+            entities: vec![ClassEntity {
+                id: "MyClass".into(),
+                label: "MyClass".into(),
+                kind: EntityKind::Class,
+                members: vec![Member {
+                    name: "multiLineMethod(".into(),
+                    return_type: Some("void".into()),
+                    visibility: Visibility::Default,
+                    is_static: false,
+                    is_abstract: false,
+                    kind: MemberKind::Method,
+                    display_text: "multiLineMethod(\\nparam1: String,\\nparam2: Int): void".into(),
+                }],
+                stereotypes: vec![],
+                generic: None,
+                spot_color: None,
+                url: None,
+                url_tooltip: None,
+                color: None,
+                text_color: None,
+                source_line: 0,
+            }],
+            relationships: vec![],
+            association_classes: vec![],
+            packages: vec![],
+            notes: vec![],
+            hide_show: vec![],
+            header_line: None,
+            footer_line: None,
+            title_line: None,
+            caption_line: None,
+            legend_line: None,
+        };
+        let svg = render(&diagram, &Theme::default());
+        assert!(svg.contains(">multiLineMethod(<"));
+        assert!(svg.contains(">param1: String,<"));
+        assert!(svg.contains(">param2: Int): void<"));
+        assert!(!svg.contains("\\n"));
     }
 
     #[test]
