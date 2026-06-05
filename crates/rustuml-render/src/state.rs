@@ -276,10 +276,34 @@ fn state_text_width_with_family(
 ) -> f64 {
     if monospace {
         crate::plantuml_metrics::mono_text_width(text, font_size)
-    } else if font_name.is_some_and(|name| name.eq_ignore_ascii_case("Arial")) {
-        arial_text_width(text, font_size, bold)
+    } else if let Some(font_name) = font_name {
+        if font_name
+            .trim_matches(|c| c == '"' || c == '\'')
+            .eq_ignore_ascii_case("Arial")
+        {
+            arial_text_width(text, font_size, bold)
+        } else {
+            text_render::measure_with_family(text, font_size, bold, font_name)
+        }
     } else {
         text_render::measure(text, font_size, bold)
+    }
+}
+
+fn canonical_state_font_family(value: &str) -> String {
+    let raw = value.trim();
+    let quoted = (raw.starts_with('"') && raw.ends_with('"'))
+        || (raw.starts_with('\'') && raw.ends_with('\''));
+    let trimmed = raw.trim_matches('"').trim_matches('\'');
+    if trimmed.is_empty()
+        || trimmed.eq_ignore_ascii_case("sansserif")
+        || trimmed.eq_ignore_ascii_case("sans-serif")
+    {
+        "sans-serif".to_string()
+    } else if quoted {
+        format!("'{trimmed}'")
+    } else {
+        trimmed.to_string()
     }
 }
 
@@ -610,7 +634,7 @@ pub fn render_with_oracle(
                 || sp.key.eq_ignore_ascii_case("defaultFontName")
                 || sp.key.eq_ignore_ascii_case("fontName")
         })
-        .map(|sp| sp.value.trim().to_string())
+        .map(|sp| canonical_state_font_family(sp.value.trim()))
         .filter(|v| !v.is_empty());
     let state_name_is_mono = state_font_name
         .as_deref()
@@ -2193,6 +2217,17 @@ fn render_oracle_transitions(svg: &mut String, diagram: &StateDiagram, oracle: &
         })
         .map(|sp| crate::sequence::resolve_color(sp.value.trim()))
         .unwrap_or_else(|| DEFAULT_TEXT_COLOR.to_string());
+    let arrow_font_family = diagram
+        .meta
+        .skinparams
+        .iter()
+        .rev()
+        .find(|sp| {
+            sp.key.eq_ignore_ascii_case("stateArrowFontName")
+                || sp.key.eq_ignore_ascii_case("arrowFontName")
+        })
+        .map(|sp| canonical_state_font_family(sp.value.trim()))
+        .unwrap_or_else(|| "sans-serif".to_string());
     #[allow(non_snake_case)]
     let TEXT_COLOR: &str = arrow_font_color.as_str();
     // `skinparam ArrowFontSize <n>` (or the legacy `stateArrowFontSize`)
@@ -2351,7 +2386,7 @@ fn render_oracle_transitions(svg: &mut String, diagram: &StateDiagram, oracle: &
                     x: lx,
                     y: ly,
                     font_size: arrow_font_size,
-                    font_family: "sans-serif",
+                    font_family: &arrow_font_family,
                     fill: TEXT_COLOR,
                     bold: arrow_font_bold,
                     italic: arrow_font_italic,
@@ -3724,6 +3759,23 @@ mod tests {
         assert!(svg.contains("disable"));
         assert!(svg.contains(r#"data-diagram-type="STATE""#));
         assert!(svg.contains(r#"class="end_entity""#));
+    }
+
+    #[test]
+    fn state_font_name_skinparams_apply_to_state_and_arrow_text() {
+        let input = concat!(
+            "@startuml\n",
+            "skinparam stateFontName Verdana\n",
+            "skinparam stateArrowFontName Verdana\n",
+            "[*] --> Idle\n",
+            "Idle --> Active : start\n",
+            "@enduml",
+        );
+        let diagram = rustuml_parser::parse::parse(input).unwrap();
+        let svg = crate::render_svg(&diagram);
+
+        assert!(svg.contains(r#"font-family="Verdana""#));
+        assert!(svg.contains(">start</text>"));
     }
 
     #[test]
