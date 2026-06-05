@@ -19,8 +19,8 @@ use rustuml_parser::diagram::class::*;
 
 use crate::layout_oracle::{
     CrowMark, EntityPath, EntityPolygon, EntityRect, EntityText, OracleCluster, OracleEdgePath,
-    OracleHandwrittenWarning, OracleLayout, OracleLegend, emit_oracle_cluster_children,
-    emit_oracle_note_entity, wrap_oracle_envelope,
+    OracleEntity, OracleHandwrittenWarning, OracleLayout, OracleLegend,
+    emit_oracle_cluster_children, emit_oracle_note_entity, wrap_oracle_envelope,
 };
 use crate::metrics;
 use crate::style::Theme;
@@ -1367,25 +1367,11 @@ pub fn render_with_oracle(
 
     // If oracle layout is provided, use it directly instead of running Graphviz.
     if let Some(oracle) = oracle {
-        // Build the chain of containing packages (outermost → innermost)
-        // for each entity. PlantUML's `data-qualified-name` is the dotted
-        // join of all containing packages followed by the entity label;
-        // `&` characters in the label are translated to `.` to match
-        // Java's qualified-name encoding.
-        let qual = |entity: &ClassEntity| -> String {
-            let translated = translate_qualified_name(&entity.label);
-            qualify_entity(diagram, entity, &translated)
-        };
-
         // Override dims with oracle entity dimensions.
+        let oracle_entities = oracle_entities_for_diagram(diagram, oracle);
         let mut dims = dims;
-        for (i, entity) in diagram.entities.iter().enumerate() {
-            let qn = qual(entity);
-            let rect = oracle
-                .entities
-                .get(&qn)
-                .or_else(|| oracle.entities.get(&entity.label))
-                .or_else(|| oracle.entities.get(&entity.id));
+        for i in 0..diagram.entities.len() {
+            let rect = oracle_entities[i].as_ref().map(|entity| &entity.rect);
             if let Some(rect) = rect {
                 dims[i].width = rect.width;
                 dims[i].height = rect.height;
@@ -1396,13 +1382,8 @@ pub fn render_with_oracle(
             .entities
             .iter()
             .enumerate()
-            .map(|(i, entity)| {
-                let qn = qual(entity);
-                let rect = oracle
-                    .entities
-                    .get(&qn)
-                    .or_else(|| oracle.entities.get(&entity.label))
-                    .or_else(|| oracle.entities.get(&entity.id));
+            .map(|(i, _)| {
+                let rect = oracle_entities[i].as_ref().map(|entity| &entity.rect);
                 if let Some(rect) = rect {
                     NodePosition {
                         x: rect.x - MARGIN,
@@ -1438,6 +1419,7 @@ pub fn render_with_oracle(
             &node_positions,
             &edge_paths,
             canvas_dims,
+            Some(&oracle_entities),
             Some(oracle),
             cs,
         );
@@ -1465,6 +1447,7 @@ pub fn render_with_oracle(
         &dims,
         &result.node_positions,
         &result.edge_paths,
+        None,
         None,
         None,
         cs,
@@ -1815,6 +1798,149 @@ fn style_stroke_width(style: &str) -> Option<&str> {
         .find(|width| !width.is_empty())
 }
 
+fn oracle_entities_for_diagram(
+    diagram: &ClassDiagram,
+    oracle: &OracleLayout,
+) -> Vec<Option<OracleEntity>> {
+    let mut matched = vec![None; diagram.entities.len()];
+    let mut used = vec![false; oracle.entity_list.len()];
+    for i in entity_emission_order(diagram) {
+        let entity = &diagram.entities[i];
+        let translated_label = translate_qualified_name(&entity.label);
+        let qualified_name = qualify_entity(diagram, entity, &translated_label);
+        let candidates = [
+            qualified_name.as_str(),
+            entity.label.as_str(),
+            entity.id.as_str(),
+        ];
+
+        if let Some((oracle_idx, oracle_entity)) = candidates.iter().find_map(|candidate| {
+            oracle
+                .entity_list
+                .iter()
+                .enumerate()
+                .find(|(idx, oracle_entity)| {
+                    !used[*idx] && oracle_entity.qualified_name == *candidate
+                })
+        }) {
+            used[oracle_idx] = true;
+            matched[i] = Some(oracle_entity.clone());
+            continue;
+        }
+
+        matched[i] = candidates.iter().find_map(|name| {
+            oracle.entities.get(*name).map(|rect| OracleEntity {
+                qualified_name: (*name).to_string(),
+                rect: rect.clone(),
+            })
+        });
+    }
+    matched
+}
+
+fn entity_emission_order(diagram: &ClassDiagram) -> Vec<usize> {
+    let n_pkg = diagram.packages.len();
+    let innermost_pkg: Vec<Option<usize>> = diagram
+        .entities
+        .iter()
+        .map(|e| {
+            diagram
+                .packages
+                .iter()
+                .enumerate()
+                .filter(|(_, p)| p.entities.iter().any(|m| m == &e.id))
+                .min_by_key(|(idx, p)| (p.entities.len(), usize::MAX - idx))
+                .map(|(idx, _)| idx)
+        })
+        .collect();
+
+    let parent_pkg: Vec<Option<usize>> = (0..n_pkg)
+        .map(|i| {
+            let mine = &diagram.packages[i].entities;
+            (0..n_pkg)
+                .filter(|&j| {
+                    j != i
+                        && diagram.packages[j].entities.len() > mine.len()
+                        && mine
+                            .iter()
+                            .all(|m| diagram.packages[j].entities.contains(m))
+                })
+                .min_by_key(|&j| diagram.packages[j].entities.len())
+        })
+        .collect();
+
+    let pkg_sort_key = |pi: usize| -> usize {
+        diagram
+            .entities
+            .iter()
+            .filter(|e| diagram.packages[pi].entities.iter().any(|m| m == &e.id))
+            .map(|e| e.source_line)
+            .min()
+            .unwrap_or(usize::MAX)
+    };
+
+    fn emit_pkg(
+        pkg_idx: usize,
+        diagram: &ClassDiagram,
+        innermost_pkg: &[Option<usize>],
+        parent_pkg: &[Option<usize>],
+        pkg_sort_key: &dyn Fn(usize) -> usize,
+        order: &mut Vec<usize>,
+    ) {
+        for (i, _) in diagram.entities.iter().enumerate() {
+            if innermost_pkg[i] == Some(pkg_idx) {
+                order.push(i);
+            }
+        }
+        let mut children: Vec<usize> = (0..diagram.packages.len())
+            .filter(|&c| parent_pkg[c] == Some(pkg_idx))
+            .collect();
+        children.sort_by_key(|&c| (pkg_sort_key(c), c));
+        for c in children {
+            emit_pkg(c, diagram, innermost_pkg, parent_pkg, pkg_sort_key, order);
+        }
+    }
+
+    enum Item {
+        Entity(usize),
+        Package(usize),
+    }
+    let mut items: Vec<(usize, Item)> = Vec::new();
+    for (i, e) in diagram.entities.iter().enumerate() {
+        if innermost_pkg[i].is_none() {
+            items.push((e.source_line, Item::Entity(i)));
+        }
+    }
+    for (pi, parent) in parent_pkg.iter().enumerate() {
+        if parent.is_none() {
+            items.push((pkg_sort_key(pi), Item::Package(pi)));
+        }
+    }
+    items.sort_by_key(|(line, _)| *line);
+
+    let mut order = Vec::with_capacity(diagram.entities.len());
+    for (_, item) in items {
+        match item {
+            Item::Entity(i) => order.push(i),
+            Item::Package(pi) => emit_pkg(
+                pi,
+                diagram,
+                &innermost_pkg,
+                &parent_pkg,
+                &pkg_sort_key,
+                &mut order,
+            ),
+        }
+    }
+    let placed: std::collections::HashSet<usize> = order.iter().copied().collect();
+    for (i, _) in diagram.entities.iter().enumerate() {
+        if !placed.contains(&i) {
+            order.push(i);
+        }
+    }
+    order
+}
+
 /// Read the value of a double-quoted attribute `name="…"` from an element's
 /// opening tag text. Returns the first match.
 fn attr_value<'a>(elem: &'a str, name: &str) -> Option<&'a str> {
@@ -1832,12 +1958,14 @@ fn attr_value<'a>(elem: &'a str, name: &str) -> Option<&'a str> {
 ///
 /// When `oracle` is `Some`, edge rendering uses the oracle's raw SVG path data
 /// and arrowhead polygons directly, wrapped in `<g class="link">` groups.
+#[allow(clippy::too_many_arguments)]
 fn render_plantuml_svg(
     diagram: &ClassDiagram,
     dims: &[EntityDims],
     positions: &[rustuml_layout::graph::NodePosition],
     edge_paths: &[EdgePath],
     canvas_override: Option<(f64, f64)>,
+    oracle_entities: Option<&[Option<OracleEntity>]>,
     oracle: Option<&OracleLayout>,
     cs: &crate::style::ClassStyle,
 ) -> String {
@@ -2043,139 +2171,7 @@ fn render_plantuml_svg(
     // Entity ID counter (PlantUML starts at ent0002, shifted past clusters).
     let mut ent_id = 2 + oracle_pkg_clusters.len();
 
-    // PlantUML emits entities in package-tree pre-order, but emits a package's
-    // *direct* entities before descending into its nested packages. Our model
-    // stores entities in flat source order, so reorder the emission to match:
-    //   - top-level (package-less) entities first, in source order;
-    //   - then, for each package in declaration order (which is already a
-    //     valid pre-order), its direct entities in source order.
-    // `diagram.packages[*].entities` lists the entity ids directly contained
-    // in each package. The cluster pre-order is preserved, so iterating the
-    // packages in order and pulling each one's direct entities yields the
-    // "direct-before-nested" sequence PlantUML produces.
-    //
-    // `pkg.entities` lists *transitive* members (an outer package also lists
-    // entities owned by its nested packages), so an entity's innermost
-    // (direct) package is the one containing it with the smallest member set;
-    // declaration order (outer→inner) breaks ties toward the deeper package.
-    // A package's parent is the smallest *strictly larger* package that still
-    // contains all its members. Top-level items (package-less entities and
-    // root packages) interleave by source position; within a package, direct
-    // entities precede nested sub-packages.
-    let emission_order: Vec<usize> = {
-        let n_pkg = diagram.packages.len();
-        // Innermost (direct) package index for each entity.
-        let innermost_pkg: Vec<Option<usize>> = diagram
-            .entities
-            .iter()
-            .map(|e| {
-                diagram
-                    .packages
-                    .iter()
-                    .enumerate()
-                    .filter(|(_, p)| p.entities.iter().any(|m| m == &e.id))
-                    .min_by_key(|(idx, p)| (p.entities.len(), usize::MAX - idx))
-                    .map(|(idx, _)| idx)
-            })
-            .collect();
-
-        // Parent package index for each package (None ⇒ root). The parent is
-        // the smallest package strictly containing this one's member set.
-        let parent_pkg: Vec<Option<usize>> = (0..n_pkg)
-            .map(|i| {
-                let mine = &diagram.packages[i].entities;
-                (0..n_pkg)
-                    .filter(|&j| {
-                        j != i
-                            && diagram.packages[j].entities.len() > mine.len()
-                            && mine
-                                .iter()
-                                .all(|m| diagram.packages[j].entities.contains(m))
-                    })
-                    .min_by_key(|&j| diagram.packages[j].entities.len())
-            })
-            .collect();
-
-        // Source-line key for ordering siblings: a package sorts by the
-        // earliest source line among its (transitive) entities; a top-level
-        // entity by its own source line.
-        let pkg_sort_key = |pi: usize| -> usize {
-            diagram
-                .entities
-                .iter()
-                .filter(|e| diagram.packages[pi].entities.iter().any(|m| m == &e.id))
-                .map(|e| e.source_line)
-                .min()
-                .unwrap_or(usize::MAX)
-        };
-
-        // Recursive pre-order emission: for a package, emit its direct
-        // entities (source order) then recurse children (sorted by source
-        // line); children precede none of the direct entities.
-        fn emit_pkg(
-            pkg_idx: usize,
-            diagram: &ClassDiagram,
-            innermost_pkg: &[Option<usize>],
-            parent_pkg: &[Option<usize>],
-            pkg_sort_key: &dyn Fn(usize) -> usize,
-            order: &mut Vec<usize>,
-        ) {
-            for (i, _) in diagram.entities.iter().enumerate() {
-                if innermost_pkg[i] == Some(pkg_idx) {
-                    order.push(i);
-                }
-            }
-            let mut children: Vec<usize> = (0..diagram.packages.len())
-                .filter(|&c| parent_pkg[c] == Some(pkg_idx))
-                .collect();
-            children.sort_by_key(|&c| (pkg_sort_key(c), c));
-            for c in children {
-                emit_pkg(c, diagram, innermost_pkg, parent_pkg, pkg_sort_key, order);
-            }
-        }
-
-        // Top-level items: root packages and package-less entities, interleaved
-        // by source line.
-        enum Item {
-            Entity(usize),
-            Package(usize),
-        }
-        let mut items: Vec<(usize, Item)> = Vec::new();
-        for (i, e) in diagram.entities.iter().enumerate() {
-            if innermost_pkg[i].is_none() {
-                items.push((e.source_line, Item::Entity(i)));
-            }
-        }
-        for (pi, parent) in parent_pkg.iter().enumerate() {
-            if parent.is_none() {
-                items.push((pkg_sort_key(pi), Item::Package(pi)));
-            }
-        }
-        items.sort_by_key(|(line, _)| *line);
-
-        let mut order: Vec<usize> = Vec::with_capacity(diagram.entities.len());
-        for (_, item) in items {
-            match item {
-                Item::Entity(i) => order.push(i),
-                Item::Package(pi) => emit_pkg(
-                    pi,
-                    diagram,
-                    &innermost_pkg,
-                    &parent_pkg,
-                    &pkg_sort_key,
-                    &mut order,
-                ),
-            }
-        }
-        // Safety net for any entity not yet placed.
-        let placed: std::collections::HashSet<usize> = order.iter().copied().collect();
-        for (i, _) in diagram.entities.iter().enumerate() {
-            if !placed.contains(&i) {
-                order.push(i);
-            }
-        }
-        order
-    };
+    let emission_order = entity_emission_order(diagram);
 
     // Cursor over `oracle_note_entities` (already sorted by emission counter).
     // `emit_note` writes one note's `<g class="entity">…</g>` wrapper; the loop
@@ -2204,21 +2200,33 @@ fn render_plantuml_svg(
         let translated_label = translate_qualified_name(&entity.label);
         let qualified_name = qualify_entity(diagram, entity, &translated_label);
 
-        // Look up oracle overrides for this entity. Try qualified name
-        // first (for entities inside clusters), then the bare label and
-        // bare id as fallbacks.
-        let oracle_rect_with_name = oracle.and_then(|orc| {
-            [
-                qualified_name.as_str(),
-                entity.label.as_str(),
-                entity.id.as_str(),
-            ]
-            .into_iter()
-            .find_map(|name| orc.entities.get(name).map(|rect| (name, rect)))
-        });
-        let oracle_rect = oracle_rect_with_name.map(|(_, rect)| rect);
-        let qualified_name =
-            oracle_rect_with_name.map_or(qualified_name.as_str(), |(name, _)| name);
+        // Look up oracle overrides for this entity. Prefer the ordered
+        // entity list because PlantUML folds many non-ASCII qualified names
+        // to the same dot string (`用户` and `系统` both become `..`), so the
+        // map form can only retain the last one. Fall back to the legacy map
+        // lookup for older oracle data and unique-name cases.
+        let ordered_oracle_entity =
+            oracle_entities.and_then(|entities| entities.get(i).and_then(Option::as_ref));
+        let fallback_oracle_rect_with_name = if ordered_oracle_entity.is_none() {
+            oracle.and_then(|orc| {
+                [
+                    qualified_name.as_str(),
+                    entity.label.as_str(),
+                    entity.id.as_str(),
+                ]
+                .into_iter()
+                .find_map(|name| orc.entities.get(name).map(|rect| (name, rect)))
+            })
+        } else {
+            None
+        };
+        let oracle_rect = ordered_oracle_entity
+            .map(|entity| &entity.rect)
+            .or_else(|| fallback_oracle_rect_with_name.map(|(_, rect)| rect));
+        let qualified_name = ordered_oracle_entity
+            .map(|entity| entity.qualified_name.as_str())
+            .or_else(|| fallback_oracle_rect_with_name.map(|(name, _)| name))
+            .unwrap_or(qualified_name.as_str());
         let oracle_lollipop =
             oracle.and_then(|orc| oracle_lollipop_for_entity(diagram, orc, entity));
 
