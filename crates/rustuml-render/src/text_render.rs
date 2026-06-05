@@ -16,11 +16,14 @@
 //! attributes, NBSP conversion, per-segment positioning) is correct
 //! regardless.
 
+use std::borrow::Cow;
 use std::fmt::Write;
 
 use crate::creole::{self, Segment, Style};
 use crate::filter_registry;
 use crate::plantuml_metrics as pm;
+
+const TAB_STOP_SPACES: usize = 8;
 
 /// Effective styling for a base font that the caller controls. Each call to
 /// [`emit_text`] starts from this base; segment-level styles add on top.
@@ -46,10 +49,11 @@ pub struct TextBase<'a> {
 /// Emit one or more `<text>` elements covering `content` with creole markup
 /// resolved. Writes to `buf`. Returns the total advance width.
 pub fn emit_text(buf: &mut String, content: &str, base: &TextBase<'_>) -> f64 {
+    let content = normalize_tab_escapes(content);
     let segments = if base.skip_underline {
-        creole::parse_segments_no_underline(content)
+        creole::parse_segments_no_underline(&content)
     } else {
-        creole::parse_segments(content)
+        creole::parse_segments(&content)
     };
     emit_segments(buf, &segments, base)
 }
@@ -60,10 +64,11 @@ pub fn emit_text(buf: &mut String, content: &str, base: &TextBase<'_>) -> f64 {
 /// entity bodies, do *not* honour the monospace delimiter — the `""` glue
 /// is consumed and the inner text falls back to the surrounding font.
 pub fn emit_text_no_mono(buf: &mut String, content: &str, base: &TextBase<'_>) -> f64 {
+    let content = normalize_tab_escapes(content);
     let mut segments = if base.skip_underline {
-        creole::parse_segments_no_underline(content)
+        creole::parse_segments_no_underline(&content)
     } else {
-        creole::parse_segments(content)
+        creole::parse_segments(&content)
     };
     for seg in &mut segments {
         seg.style.monospace = false;
@@ -75,10 +80,11 @@ pub fn emit_text_no_mono(buf: &mut String, content: &str, base: &TextBase<'_>) -
 /// logical line. Uniform-style Creole emits several `<text>` elements but only
 /// one baseline; mixed font sizes/families can consume multiple oracle y slots.
 pub fn emitted_baseline_count(content: &str, base: &TextBase<'_>) -> usize {
+    let content = normalize_tab_escapes(content);
     let segments = if base.skip_underline {
-        creole::parse_segments_no_underline(content)
+        creole::parse_segments_no_underline(&content)
     } else {
-        creole::parse_segments(content)
+        creole::parse_segments(&content)
     };
     if segments.is_empty() {
         return 1;
@@ -255,15 +261,34 @@ fn sub_extra_space(segments: &[Segment]) -> f64 {
 /// Pre-computed widths for the segments. Useful when the caller needs the
 /// total advance for layout before deciding `x`.
 pub fn total_width(content: &str, base: &TextBase<'_>) -> f64 {
+    let content = normalize_tab_escapes(content);
     let segments = if base.skip_underline {
-        creole::parse_segments_no_underline(content)
+        creole::parse_segments_no_underline(&content)
     } else {
-        creole::parse_segments(content)
+        creole::parse_segments(&content)
     };
-    segments
-        .iter()
-        .map(|seg| segment_width(seg, base))
-        .sum::<f64>()
+    let mut advance = 0.0;
+    for seg in &segments {
+        advance = segment_advance(seg, base, advance);
+    }
+    advance
+}
+
+fn normalize_tab_escapes(s: &str) -> Cow<'_, str> {
+    if !s.contains("\\t") {
+        return Cow::Borrowed(s);
+    }
+    let mut out = String::with_capacity(s.len());
+    let mut chars = s.chars().peekable();
+    while let Some(c) = chars.next() {
+        if c == '\\' && chars.peek() == Some(&'t') {
+            chars.next();
+            out.push('\t');
+        } else {
+            out.push(c);
+        }
+    }
+    Cow::Owned(out)
 }
 
 /// Shared emission body: walks segments, writes one `<text>` per segment,
@@ -315,24 +340,26 @@ fn emit_segments(buf: &mut String, segments: &[Segment], base: &TextBase<'_>) ->
     let first_size = first.style.size.unwrap_or(base.font_size) as f64;
     let line_bottom_drop = clamp_drop(first_size, segment_metric_family(first, base));
 
-    let mut x = base.x;
-    let mut total = 0.0;
+    let mut advance = 0.0;
     for seg in segments {
-        let full_w = segment_width(seg, base);
-        let (lead_w, trimmed_text, trimmed_w) = trim_segment_for_emit(seg, base);
-        write_text_element(
-            buf,
-            &trimmed_text,
-            base,
-            &seg.style,
-            x + lead_w,
-            trimmed_w,
-            line_bottom_drop,
-        );
-        x += full_w;
-        total += full_w;
+        if seg.text.contains('\t') {
+            advance = emit_tabbed_segment(buf, seg, base, advance, line_bottom_drop);
+        } else {
+            let full_w = segment_width(seg, base);
+            let (lead_w, trimmed_text, trimmed_w) = trim_segment_for_emit(seg, base);
+            write_text_element(
+                buf,
+                &trimmed_text,
+                base,
+                &seg.style,
+                base.x + advance + lead_w,
+                trimmed_w,
+                line_bottom_drop,
+            );
+            advance += full_w;
+        }
     }
-    total
+    advance
 }
 
 /// Distance from a run's text baseline up to the shared line bottom when
@@ -359,16 +386,20 @@ fn clamp_drop(font_size: f64, family: MetricFamily) -> f64 {
 /// and `//italic//`) is left untrimmed — Java PlantUML emits these as
 /// literal-space `<text>` elements with their own `textLength`.
 fn trim_segment_for_emit(seg: &Segment, base: &TextBase<'_>) -> (f64, String, f64) {
+    trim_text_for_emit(&seg.text, &seg.style, base)
+}
+
+fn trim_text_for_emit(text: &str, style: &Style, base: &TextBase<'_>) -> (f64, String, f64) {
     // Monospace segments use NBSP instead of ASCII space; PlantUML does
     // not trim NBSP, so pass through unchanged.
-    if seg.style.monospace {
-        let w = segment_width(seg, base);
-        return (0.0, seg.text.clone(), w);
+    if style.monospace {
+        let w = text_width_for_style(text, style, base);
+        return (0.0, text.to_string(), w);
     }
     // Count leading and trailing ASCII spaces in the *escaped* form. The
     // escape form only differs for non-space characters, so a leading
     // space stays a leading space.
-    let bytes = seg.text.as_bytes();
+    let bytes = text.as_bytes();
     let mut lead = 0;
     while lead < bytes.len() && bytes[lead] == b' ' {
         lead += 1;
@@ -377,7 +408,7 @@ fn trim_segment_for_emit(seg: &Segment, base: &TextBase<'_>) -> (f64, String, f6
     // `<text>` elements but converts each ASCII space to NBSP (U+00A0)
     // in the rendered text. Width still counts as a normal ASCII space.
     if lead == bytes.len() {
-        let w = segment_width(seg, base);
+        let w = text_width_for_style(text, style, base);
         let nbsp_text = "\u{00a0}".repeat(lead);
         return (0.0, nbsp_text, w);
     }
@@ -386,13 +417,13 @@ fn trim_segment_for_emit(seg: &Segment, base: &TextBase<'_>) -> (f64, String, f6
         trail += 1;
     }
     if lead == 0 && trail == 0 {
-        let w = segment_width(seg, base);
-        return (0.0, seg.text.clone(), w);
+        let w = text_width_for_style(text, style, base);
+        return (0.0, text.to_string(), w);
     }
-    let trimmed = &seg.text[lead..seg.text.len() - trail];
-    let bold = base.bold || seg.style.bold;
-    let font_size = effective_font_size(seg, base);
-    let family = segment_metric_family(seg, base);
+    let trimmed = &text[lead..text.len() - trail];
+    let bold = base.bold || style.bold;
+    let font_size = effective_font_size_for_style(style, base);
+    let family = style_metric_family(style, base);
     let lead_w = family_text_width(&" ".repeat(lead), font_size, bold, family);
     let trimmed_w = family_text_width(&unescape_for_metrics(trimmed), font_size, bold, family);
     (lead_w, trimmed.to_string(), trimmed_w)
@@ -402,10 +433,95 @@ fn trim_segment_for_emit(seg: &Segment, base: &TextBase<'_>) -> (f64, String, f6
 /// monospace metric path when the segment is monospaced; otherwise uses
 /// sans-serif (with linear scaling for non-tabulated font sizes).
 fn segment_width(seg: &Segment, base: &TextBase<'_>) -> f64 {
-    let raw = unescape_for_metrics(&seg.text);
-    let bold = base.bold || seg.style.bold;
-    let font_size = effective_font_size(seg, base);
-    family_text_width(&raw, font_size, bold, segment_metric_family(seg, base))
+    text_width_for_style(&seg.text, &seg.style, base)
+}
+
+fn text_width_for_style(text: &str, style: &Style, base: &TextBase<'_>) -> f64 {
+    let raw = unescape_for_metrics(text);
+    let bold = base.bold || style.bold;
+    let font_size = effective_font_size_for_style(style, base);
+    family_text_width(&raw, font_size, bold, style_metric_family(style, base))
+}
+
+fn segment_advance(seg: &Segment, base: &TextBase<'_>, start: f64) -> f64 {
+    if seg.text.contains('\t') {
+        text_advance_with_tabs(&seg.text, &seg.style, base, start)
+    } else {
+        start + segment_width(seg, base)
+    }
+}
+
+fn text_advance_with_tabs(text: &str, style: &Style, base: &TextBase<'_>, start: f64) -> f64 {
+    let mut advance = start;
+    let mut rest = text;
+    let tab_width = tab_stop_width(style, base);
+    while let Some(tab_idx) = rest.find('\t') {
+        let part = &rest[..tab_idx];
+        advance += text_width_for_style(part, style, base);
+        advance = next_tab_advance(advance, tab_width);
+        rest = &rest[tab_idx + '\t'.len_utf8()..];
+    }
+    advance + text_width_for_style(rest, style, base)
+}
+
+fn emit_tabbed_segment(
+    buf: &mut String,
+    seg: &Segment,
+    base: &TextBase<'_>,
+    start: f64,
+    line_bottom_drop: f64,
+) -> f64 {
+    let mut advance = start;
+    let mut rest = seg.text.as_str();
+    let tab_width = tab_stop_width(&seg.style, base);
+    loop {
+        let (part, has_tab, next_rest) = match rest.find('\t') {
+            Some(tab_idx) => (&rest[..tab_idx], true, &rest[tab_idx + '\t'.len_utf8()..]),
+            None => (rest, false, ""),
+        };
+
+        let part_w = text_width_for_style(part, &seg.style, base);
+        if !part.is_empty() {
+            let (lead_w, trimmed_text, trimmed_w) = trim_text_for_emit(part, &seg.style, base);
+            if !trimmed_text.is_empty() || trimmed_w > 0.0 {
+                write_text_element(
+                    buf,
+                    &trimmed_text,
+                    base,
+                    &seg.style,
+                    base.x + advance + lead_w,
+                    trimmed_w,
+                    line_bottom_drop,
+                );
+            }
+        }
+        advance += part_w;
+        if !has_tab {
+            return advance;
+        }
+        advance = next_tab_advance(advance, tab_width);
+        rest = next_rest;
+    }
+}
+
+fn tab_stop_width(style: &Style, base: &TextBase<'_>) -> f64 {
+    let font_size = effective_font_size_for_style(style, base);
+    let bold = base.bold || style.bold;
+    family_text_width(
+        &" ".repeat(TAB_STOP_SPACES),
+        font_size,
+        bold,
+        style_metric_family(style, base),
+    )
+}
+
+fn next_tab_advance(advance: f64, tab_width: f64) -> f64 {
+    if tab_width <= 0.0 {
+        return advance;
+    }
+    ((advance / tab_width) + 1e-9)
+        .floor()
+        .mul_add(tab_width, tab_width)
 }
 
 #[derive(Clone, Copy, Debug, Eq, PartialEq)]
@@ -497,12 +613,15 @@ fn metric_family(font_family: &str) -> MetricFamily {
 /// measurement and the emitted `font-size` attribute. The reduction is
 /// applied AFTER any explicit `<size:N>` override.
 fn effective_font_size(seg: &Segment, base: &TextBase<'_>) -> f64 {
-    let nominal = seg
-        .style
+    effective_font_size_for_style(&seg.style, base)
+}
+
+fn effective_font_size_for_style(style: &Style, base: &TextBase<'_>) -> f64 {
+    let nominal = style
         .size
         .map(|s| s as f64)
         .unwrap_or(base.font_size as f64);
-    if seg.style.baseline_shift.is_some() {
+    if style.baseline_shift.is_some() {
         (nominal - 3.0).max(2.0)
     } else {
         nominal
@@ -1488,6 +1607,34 @@ mod tests {
         assert_eq!(
             pm::fmt_coord(measure(r#"""code here"""#, 12.0, false)),
             pm::fmt_coord(pm::mono_text_width("code\u{00a0}here", 12.0))
+        );
+    }
+
+    #[test]
+    fn tabs_split_text_at_eight_space_stops() {
+        let mut b = base(35.3618, 63.0566);
+        b.font_size = 13;
+
+        let mut buf = String::new();
+        let width = emit_text(&mut buf, r"col1\tcol2", &b);
+        let col1_w = pm::text_width("col1", 13.0, false);
+        let col2_w = pm::text_width("col2", 13.0, false);
+        let tab_w = pm::text_width("        ", 13.0, false);
+
+        assert_eq!(buf.matches("<text").count(), 2);
+        assert!(buf.contains(&format!(
+            r#"textLength="{}" x="35.3618""#,
+            pm::fmt_coord(col1_w)
+        )));
+        assert!(buf.contains(&format!(
+            r#"textLength="{}" x="{}""#,
+            pm::fmt_coord(col2_w),
+            pm::fmt_coord(35.3618 + tab_w)
+        )));
+        assert_eq!(pm::fmt_coord(width), pm::fmt_coord(tab_w + col2_w));
+        assert_eq!(
+            pm::fmt_coord(measure(r"col1\tcol2", 13.0, false)),
+            pm::fmt_coord(width)
         );
     }
 
