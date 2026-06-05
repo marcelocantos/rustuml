@@ -5164,7 +5164,7 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                     y += GROUP_END_HEIGHT;
                 }
                 Event::Space(px_opt) => {
-                    y += px_opt.map(|p| p as f64).unwrap_or(20.0);
+                    y += px_opt.map(|p| p as f64).unwrap_or(25.0);
                     event_y_positions.push(y);
                 }
                 Event::Ref(r) => {
