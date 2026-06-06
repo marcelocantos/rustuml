@@ -3841,7 +3841,9 @@ fn node_extents(node: &LayoutNode) -> (f64, f64) {
                 left += PARTITION_COLORED_WHILE_SPINE_SHIFT;
                 right -= PARTITION_COLORED_WHILE_SPINE_SHIFT;
             }
-            if *is_group && group_wraps_single_if(body) {
+            if (*is_group && group_wraps_single_if(body))
+                || (!*is_group && partition_wraps_single_if(body))
+            {
                 left += GROUP_IF_LEFT_EXTENT_EXTRA;
                 right += GROUP_IF_RIGHT_EXTENT_EXTRA;
             }
@@ -4546,6 +4548,10 @@ fn partition_wraps_switch(body: &[LayoutNode]) -> bool {
     matches!(body, [LayoutNode::Switch { .. }])
 }
 
+fn partition_wraps_single_if(body: &[LayoutNode]) -> bool {
+    matches!(body, [LayoutNode::If { .. }])
+}
+
 fn while_body_is_single_if(body: &[LayoutNode]) -> bool {
     matches!(body, [LayoutNode::If { .. }])
 }
@@ -4621,6 +4627,8 @@ fn empty_partition_shell_height() -> f64 {
 fn partition_body_width_extra(is_group: bool, body: &[LayoutNode]) -> f64 {
     if !is_group && partition_wraps_while(body) {
         -PARTITION_WHILE_WIDTH_SUBTRACT
+    } else if !is_group && partition_wraps_single_if(body) {
+        GROUP_IF_BODY_WIDTH_EXTRA
     } else if is_group && group_wraps_single_if(body) {
         GROUP_IF_BODY_WIDTH_EXTRA
     } else {
@@ -6812,6 +6820,8 @@ fn emit_node_with_repeat_extra(
             };
             let partition_x = if *single_lane_group || empty_body {
                 cx - partition_w / 2.0
+            } else if !*is_group && partition_wraps_single_if(body) {
+                16.0
             } else if (*is_group && *nested) || (!*is_group && !title_drives_width) {
                 (cx - partition_w / 2.0).max(16.0)
             } else {
