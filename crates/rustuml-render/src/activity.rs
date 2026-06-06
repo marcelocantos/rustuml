@@ -161,6 +161,7 @@ const NOTE_LINE_H: f64 = 15.3105; // per-line height inside a note
 const NOTE_FIRST_BASELINE_DY: f64 = 17.5684; // box top → first text baseline
 const NOTE_BOX_BASE_H: f64 = 10.0001; // height = this + nlines * NOTE_LINE_H
 const NOTE_GAP: f64 = 20.0; // horizontal gap between anchor box and note box
+const FORK_NOTE_GAP: f64 = 10.0; // gap from fork bar edge to attached note box
 const NOTE_FILL: &str = "#FEFFDD";
 const NOTE_STROKE: &str = "#181818";
 const NOTE_STROKE_WIDTH: &str = "0.5";
@@ -681,6 +682,7 @@ enum LayoutNode {
     },
     Fork {
         branches: Vec<Vec<LayoutNode>>,
+        attached_notes: Vec<ActivityNote>,
     },
     /// A `switch (cond) / case (x) / ... / endswitch` block. Cases lay out
     /// horizontally below a condition diamond, fanning out via the diamond's
@@ -1327,7 +1329,15 @@ fn build_tree_inner(steps: &[ActivityStep], palette: &Palette) -> Vec<LayoutNode
                         _ => break,
                     }
                 }
-                nodes.push(LayoutNode::Fork { branches });
+                let mut attached_notes = Vec::new();
+                while let Some(ActivityStep::Note(n)) = steps.get(i) {
+                    attached_notes.push(activity_note_from_block(n));
+                    i += 1;
+                }
+                nodes.push(LayoutNode::Fork {
+                    branches,
+                    attached_notes,
+                });
             }
             ActivityStep::ForkAgain
             | ActivityStep::SplitAgain
@@ -1459,7 +1469,7 @@ fn mark_nested_partitions(nodes: &mut [LayoutNode], in_partition: bool) {
                 }
             }
             LayoutNode::Repeat { body, .. } => mark_nested_partitions(body, in_partition),
-            LayoutNode::Fork { branches } => {
+            LayoutNode::Fork { branches, .. } => {
                 for branch in branches {
                     mark_nested_partitions(branch, in_partition);
                 }
@@ -1631,7 +1641,7 @@ fn node_if_depth(node: &LayoutNode) -> usize {
         LayoutNode::Repeat { body, .. } | LayoutNode::Partition { body, .. } => {
             sequence_if_depth(body)
         }
-        LayoutNode::Fork { branches } => branches
+        LayoutNode::Fork { branches, .. } => branches
             .iter()
             .map(|b| sequence_if_depth(b))
             .max()
@@ -1818,7 +1828,8 @@ fn fork_layout_if_branch_spacing(branches: &[Vec<LayoutNode>]) -> ForkLayout {
 }
 
 fn leading_if_branch_fork_spine_shift(nodes: &[LayoutNode]) -> f64 {
-    let Some(LayoutNode::Fork { branches }) = nodes.iter().find(|node| node_is_flow(node)) else {
+    let Some(LayoutNode::Fork { branches, .. }) = nodes.iter().find(|node| node_is_flow(node))
+    else {
         return 0.0;
     };
     let n = branches.len();
@@ -2418,6 +2429,61 @@ fn emit_if_attached_notes(
     }
 }
 
+fn fork_bar_extents(layout: &ForkLayout) -> (f64, f64) {
+    (
+        layout.bar_w / 2.0 - layout.spine_dx,
+        layout.bar_w / 2.0 + layout.spine_dx,
+    )
+}
+
+fn with_fork_attached_note_extents(
+    mut left: f64,
+    mut right: f64,
+    notes: &[ActivityNote],
+) -> (f64, f64) {
+    let base_left = left;
+    let base_right = right;
+    for note in notes {
+        let box_w = note_box_width(&note.text);
+        match note.position {
+            NotePosition::Left => left = left.max(base_left + FORK_NOTE_GAP + box_w - 1.0),
+            NotePosition::Right => right = right.max(base_right + FORK_NOTE_GAP + box_w),
+        }
+    }
+    (left, right)
+}
+
+fn first_fork_row_height(branches: &[Vec<LayoutNode>]) -> f64 {
+    branches
+        .iter()
+        .filter_map(|branch| first_flow_node(branch).map(node_height))
+        .fold(0.0f64, f64::max)
+}
+
+fn emit_fork_attached_notes(
+    svg: &mut SvgEmitter,
+    notes: &[ActivityNote],
+    cx: f64,
+    y: f64,
+    branches: &[Vec<LayoutNode>],
+    layout: &ForkLayout,
+) {
+    let branch_top = y + FORK_BAR_HEIGHT + ARROW_LEN;
+    let first_row_h = first_fork_row_height(branches);
+    let (left_extent, right_extent) = fork_bar_extents(layout);
+    for note in notes {
+        let box_w = note_box_width(&note.text);
+        let box_h = note_box_height(&note.text);
+        let row_h = first_row_h.max(box_h);
+        let box_top = branch_top + (row_h - box_h) / 2.0;
+        let box_left = match note.position {
+            NotePosition::Left => cx - left_extent - FORK_NOTE_GAP - box_w,
+            NotePosition::Right => cx + right_extent + FORK_NOTE_GAP,
+        };
+        emit_folded_note(svg, note, box_left, box_top);
+    }
+}
+
 #[derive(Clone, Copy)]
 enum LeadingNoteKind {
     Attached,
@@ -2690,7 +2756,7 @@ fn node_geometry(node: &LayoutNode) -> Option<ftile::FtileGeometry> {
                 backward_g.as_ref(),
             )
         }
-        LayoutNode::Fork { branches } => fork_geometry(branches, false),
+        LayoutNode::Fork { branches, .. } => fork_geometry(branches, false),
         _ => return None,
     };
     Some(g)
@@ -2698,7 +2764,7 @@ fn node_geometry(node: &LayoutNode) -> Option<ftile::FtileGeometry> {
 
 fn node_geometry_if_branch(node: &LayoutNode) -> Option<ftile::FtileGeometry> {
     match node {
-        LayoutNode::Fork { branches } => Some(fork_geometry_with_layout(
+        LayoutNode::Fork { branches, .. } => Some(fork_geometry_with_layout(
             branches,
             fork_layout_if_branch_spacing(branches),
         )),
@@ -3313,12 +3379,13 @@ fn node_extents(node: &LayoutNode) -> (f64, f64) {
                 + while_single_if_right_pad(body, end_label);
             (left_extent, right_extent)
         }
-        LayoutNode::Fork { branches } => {
+        LayoutNode::Fork {
+            branches,
+            attached_notes,
+        } => {
             let layout = fork_layout(branches);
-            (
-                layout.bar_w / 2.0 - layout.spine_dx,
-                layout.bar_w / 2.0 + layout.spine_dx,
-            )
+            let (left, right) = fork_bar_extents(&layout);
+            with_fork_attached_note_extents(left, right, attached_notes)
         }
         // Title contributes 3 px of asymmetric padding on each side beyond
         // tw/2 (reverse-engineered against multiple title goldens). This
@@ -3492,12 +3559,13 @@ fn sequence_extents_with_note_margins(
 
 fn node_extents_if_branch(node: &LayoutNode) -> (f64, f64) {
     match node {
-        LayoutNode::Fork { branches } => {
+        LayoutNode::Fork {
+            branches,
+            attached_notes,
+        } => {
             let layout = fork_layout_if_branch(branches);
-            (
-                layout.bar_w / 2.0 - layout.spine_dx,
-                layout.bar_w / 2.0 + layout.spine_dx,
-            )
+            let (left, right) = fork_bar_extents(&layout);
+            with_fork_attached_note_extents(left, right, attached_notes)
         }
         LayoutNode::Switch { cases, condition } => {
             let layout = switch_x_layout_if_branch_extents(cases, condition);
@@ -3509,7 +3577,10 @@ fn node_extents_if_branch(node: &LayoutNode) -> (f64, f64) {
 
 fn node_width_if_branch(node: &LayoutNode) -> f64 {
     match node {
-        LayoutNode::Fork { branches } => fork_layout_if_branch(branches).bar_w,
+        LayoutNode::Fork { .. } => {
+            let (left, right) = node_extents_if_branch(node);
+            left + right
+        }
         LayoutNode::Switch { cases, condition } => {
             switch_x_layout_if_branch_extents(cases, condition).block_w
         }
@@ -3642,7 +3713,11 @@ fn node_width(node: &LayoutNode) -> f64 {
             let branch_dist = (diamond_w + 20.0).max((then_w + else_w) / 2.0 + 20.0);
             branch_dist + (then_w + else_w) / 2.0
         }
-        LayoutNode::Fork { branches } => fork_layout(branches).bar_w,
+        LayoutNode::Fork { attached_notes, .. } if !attached_notes.is_empty() => {
+            let (left, right) = node_extents(node);
+            left + right
+        }
+        LayoutNode::Fork { branches, .. } => fork_layout(branches).bar_w,
         LayoutNode::Switch { cases, condition } => switch_case_block_width(cases, condition),
         LayoutNode::While { .. } => {
             // Width = left_extent + right_extent. The asymmetric formula lives
@@ -4241,7 +4316,7 @@ fn node_height(node: &LayoutNode) -> f64 {
                 diamond_h + IF_BRANCH_DOWN + branch_h + IF_BRANCH_UP + DIAMOND_HALF * 2.0
             }
         }
-        LayoutNode::Fork { branches } => {
+        LayoutNode::Fork { branches, .. } => {
             let max_h: f64 = branches
                 .iter()
                 .map(|b| sequence_height(b))
@@ -4661,7 +4736,7 @@ fn collect_arrow_labels(nodes: &[LayoutNode]) -> Vec<String> {
             LayoutNode::While { body, .. } | LayoutNode::Repeat { body, .. } => {
                 out.extend(collect_arrow_labels(body));
             }
-            LayoutNode::Fork { branches } => {
+            LayoutNode::Fork { branches, .. } => {
                 for b in branches {
                     out.extend(collect_arrow_labels(b));
                 }
@@ -5626,6 +5701,19 @@ fn emit_sequence_ex(
             );
             emit_if_attached_notes(svg, attached_notes, cx, y, diamond_half_w);
         }
+        if let LayoutNode::Fork {
+            branches,
+            attached_notes,
+        } = node
+            && !attached_notes.is_empty()
+        {
+            let layout = if first_repeat_branch_extra {
+                fork_layout_if_branch(branches)
+            } else {
+                fork_layout(branches)
+            };
+            emit_fork_attached_notes(svg, attached_notes, cx, y, branches, &layout);
+        }
         let repeat_extra = if first_repeat_branch_extra && flow_ordinal == 0 {
             leading_if_branch_repeat_extra(node)
         } else {
@@ -5927,7 +6015,7 @@ fn emit_node_with_repeat_extra(
             then_branch,
             else_branches,
         ),
-        LayoutNode::Fork { branches } => {
+        LayoutNode::Fork { branches, .. } => {
             if if_branch {
                 emit_fork_with_layout(svg, cx, y, branches, fork_layout_if_branch(branches))
             } else {
@@ -9402,6 +9490,27 @@ mod tests {
         let svg = crate::render_svg(&diagram);
         let note = svg.find("Note after after while").unwrap();
         let action = svg.find(">W</text>").unwrap();
+        assert!(note < action);
+    }
+
+    #[test]
+    fn note_after_fork_renders_before_fork_branch() {
+        let input = concat!(
+            "@startuml\n",
+            "start\n",
+            "fork\n",
+            "  :A;\n",
+            "fork again\n",
+            "  :B;\n",
+            "end fork\n",
+            "note right: Note after after fork\n",
+            "stop\n",
+            "@enduml",
+        );
+        let diagram = rustuml_parser::parse::parse(input).unwrap();
+        let svg = crate::render_svg(&diagram);
+        let note = svg.find("Note after after fork").unwrap();
+        let action = svg.find(">A</text>").unwrap();
         assert!(note < action);
     }
 
