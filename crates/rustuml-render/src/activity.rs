@@ -2814,14 +2814,25 @@ fn node_width(node: &LayoutNode) -> f64 {
                 left + right
             }
         }
-        // Partition wraps a body with a title bar; width = max(title+15, body+34).
-        LayoutNode::Partition { name, body, .. } => {
+        // Partition wraps a body with a title bar. Keep this in sync with
+        // the emitted rectangle width and node_extents: a parent that contains
+        // a nested partition should see the nested partition's visual width,
+        // not add another historical 14px padding layer.
+        LayoutNode::Partition {
+            name,
+            color,
+            body,
+            is_group,
+            ..
+        } => {
             let title_w = partition_title_width(name);
             if body.is_empty() {
                 return title_w + 20.0;
             }
             let body_w = sequence_width(body);
-            (title_w + 15.0).max(body_w + 34.0)
+            let body_width_extra = partition_body_width_extra(*is_group, body);
+            let title_width_extra = partition_title_width_extra(color, *is_group, body);
+            (title_w + 15.0 + title_width_extra).max(body_w + 20.0 + body_width_extra)
         }
         // Swimlanes: sum of per-lane widths. Each lane width is the wider
         // of its content_w + 10 (6 left + 4 right padding inside the lane)
