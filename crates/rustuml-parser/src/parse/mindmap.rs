@@ -47,10 +47,6 @@ pub fn parse_mindmap(lines: &[String]) -> Result<MindMapDiagram, ParseError> {
     let mut right_stack: Vec<usize> = Vec::new(); // depths of right-side ancestors
     let mut left_stack: Vec<usize> = Vec::new(); // depths of left-side ancestors
 
-    // When a bare `--` separator line is encountered, subsequent `*` nodes
-    // switch to the left side until another separator or end of input.
-    let mut side_flipped = false;
-
     // Multiline node accumulation: `**:first line\nsecond line;`
     // When we see `**:text` without a closing `;` on the same line, we
     // accumulate subsequent lines until a line ending with `;` is found.
@@ -126,27 +122,12 @@ pub fn parse_mindmap(lines: &[String]) -> Result<MindMapDiagram, ParseError> {
             continue;
         }
 
-        // Determine prefix character and side.
-        // `*` → right side; `#` → right side (markdown heading style); `-` → left side.
-        // After a bare `--` separator, `*` nodes switch to the left side.
+        // Determine prefix character and side. `*` and `#` go right; `-`
+        // nodes go left.
         let first = trimmed.chars().next().unwrap();
         let (bullet, side) = match first {
-            '*' => (
-                '*',
-                if side_flipped {
-                    Side::Left
-                } else {
-                    Side::Right
-                },
-            ),
-            '#' => (
-                '#',
-                if side_flipped {
-                    Side::Left
-                } else {
-                    Side::Right
-                },
-            ),
+            '*' => ('*', Side::Right),
+            '#' => ('#', Side::Right),
             '-' => ('-', Side::Left),
             _ => continue, // Not a node line — skip (skinparam, comment, etc.)
         };
@@ -221,11 +202,24 @@ pub fn parse_mindmap(lines: &[String]) -> Result<MindMapDiagram, ParseError> {
 
         let label = rest.to_string();
         if label.is_empty() {
-            // A bare `--` (or `---`, etc.) with no label text acts as a
-            // side separator in PlantUML mindmaps — subsequent `*` nodes
-            // switch to the left side.
             if bullet == '-' {
-                side_flipped = true;
+                let node = MindMapNode {
+                    label: "\u{00a0}".to_string(),
+                    depth: count,
+                    side,
+                    color: color.clone(),
+                    boxless,
+                    children: Vec::new(),
+                };
+                insert_node(
+                    node,
+                    count,
+                    side,
+                    &mut roots,
+                    &mut right_stack,
+                    &mut left_stack,
+                    line_no,
+                )?;
                 continue;
             }
             return Err(ParseError {
@@ -438,6 +432,19 @@ mod tests {
         assert_eq!(root.children[1].side, Side::Left);
         assert_eq!(root.children[2].label, "L2");
         assert_eq!(root.children[2].side, Side::Left);
+    }
+
+    #[test]
+    fn bare_left_dash_is_blank_node_not_side_switch() {
+        let d = parse("* Root\n** Right\n--\n** Still right");
+        let root = &d.roots[0];
+        assert_eq!(root.children.len(), 3);
+        assert_eq!(root.children[0].label, "Right");
+        assert_eq!(root.children[0].side, Side::Right);
+        assert_eq!(root.children[1].label, "\u{00a0}");
+        assert_eq!(root.children[1].side, Side::Left);
+        assert_eq!(root.children[2].label, "Still right");
+        assert_eq!(root.children[2].side, Side::Right);
     }
 
     #[test]
