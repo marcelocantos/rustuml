@@ -2949,14 +2949,19 @@ fn node_extents(node: &LayoutNode) -> (f64, f64) {
                 return (half, half);
             }
             let body_w = sequence_width(body);
-            let mut left = title_w.max(body_w) / 2.0 + 10.0;
-            let mut right = (title_w / 2.0 + 5.0).max(body_w / 2.0 + 10.0);
             let title_width_extra = partition_title_width_extra(color, *is_group, body);
-            if !*is_group
-                && color.is_some()
-                && partition_wraps_while(body)
-                && partition_title_drives_width(title_w, body_w, title_width_extra, *is_group, body)
-            {
+            let title_drives_width =
+                partition_title_drives_width(title_w, body_w, title_width_extra, *is_group, body);
+            let (mut left, mut right) = if !title_drives_width && partition_wraps_switch(body) {
+                let (body_left, body_right) = sequence_extents(body);
+                (body_left + 10.0, body_right + 10.0)
+            } else {
+                (
+                    title_w.max(body_w) / 2.0 + 10.0,
+                    (title_w / 2.0 + 5.0).max(body_w / 2.0 + 10.0),
+                )
+            };
+            if !*is_group && color.is_some() && partition_wraps_while(body) && title_drives_width {
                 left += PARTITION_COLORED_WHILE_SPINE_SHIFT;
                 right -= PARTITION_COLORED_WHILE_SPINE_SHIFT;
             }
@@ -3587,6 +3592,10 @@ fn group_contains_partition(body: &[LayoutNode]) -> bool {
 
 fn partition_wraps_while(body: &[LayoutNode]) -> bool {
     matches!(body, [LayoutNode::While { .. }])
+}
+
+fn partition_wraps_switch(body: &[LayoutNode]) -> bool {
+    matches!(body, [LayoutNode::Switch { .. }])
 }
 
 fn while_body_is_single_if(body: &[LayoutNode]) -> bool {
@@ -5580,7 +5589,13 @@ fn emit_node_with_repeat_extra(
                 if colored_partition_while {
                     svg.colored_partition_while_depth += 1;
                 }
-                emit_sequence(svg, body, cx, body_top);
+                let body_cx = if !title_drives_width && partition_wraps_switch(body) {
+                    let (body_left, _) = sequence_extents(body);
+                    partition_x + 10.0 + body_left
+                } else {
+                    cx
+                };
+                emit_sequence(svg, body, body_cx, body_top);
                 if colored_partition_while {
                     svg.colored_partition_while_depth -= 1;
                 }
