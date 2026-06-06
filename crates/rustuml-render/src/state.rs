@@ -419,6 +419,22 @@ fn compute_first_appearance_order(diagram: &StateDiagram) -> Vec<String> {
             seq += 1;
         }
     };
+    // A pseudo-state first seen as a transition endpoint may later be upgraded
+    // by an explicit `state X <<choice/fork/join>>` declaration. PlantUML's
+    // explicit pseudo declaration is emitted before the lazily-created `.start.`
+    // / `.end.` nodes, even when the transition line appears first.
+    let mut promoted_pseudo: Vec<&State> = diagram
+        .states
+        .iter()
+        .filter(|s| {
+            s.decl_line.is_some_and(|decl| s.source_line < decl)
+                && !matches!(s.kind, StateKind::Normal)
+        })
+        .collect();
+    promoted_pseudo.sort_by_key(|s| s.decl_line.unwrap_or(s.source_line));
+    for s in promoted_pseudo {
+        push_entity(0, s.id.clone());
+    }
     let first_txn_line = |id: &str| -> Option<usize> {
         diagram
             .transitions
@@ -3867,6 +3883,22 @@ mod tests {
 
         assert!(svg.contains(r#"font-family="Verdana""#));
         assert!(svg.contains(">start</text>"));
+    }
+
+    #[test]
+    fn promoted_pseudo_state_emits_before_lazy_start() {
+        let input = concat!(
+            "@startuml\n",
+            "[*] --> choice\n",
+            "state choice <<choice>>\n",
+            "choice --> A\n",
+            "@enduml",
+        );
+        let diagram = rustuml_parser::parse::parse(input).unwrap();
+        let svg = crate::render_svg(&diagram);
+        let choice = svg.find(r#"data-qualified-name="choice""#).unwrap();
+        let start = svg.find(r#"data-qualified-name=".start.""#).unwrap();
+        assert!(choice < start);
     }
 
     #[test]
