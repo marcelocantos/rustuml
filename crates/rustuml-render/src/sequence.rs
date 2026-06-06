@@ -708,6 +708,12 @@ struct RenderedLineMetrics {
     ascent: f64,
 }
 
+fn note_separator_label(line: &str) -> Option<&str> {
+    let trimmed = line.trim();
+    let inner = trimmed.strip_prefix("__")?.strip_suffix("__")?;
+    if inner.is_empty() { None } else { Some(inner) }
+}
+
 fn rendered_line_metrics_with_family(
     content: &str,
     font_size: f64,
@@ -717,6 +723,23 @@ fn rendered_line_metrics_with_family(
         height: text_render::label_height_with_family(content, font_size, font_family).max(10.0),
         ascent: text_render::label_ascent_with_family(content, font_size, font_family),
     }
+}
+
+fn note_line_metrics_with_family(
+    content: &str,
+    font_size: f64,
+    font_family: &str,
+) -> RenderedLineMetrics {
+    const SEPARATOR_HEIGHT_EXTRA: f64 = 7.6553;
+    const SEPARATOR_ASCENT_ADJUST: f64 = -0.5;
+
+    let label = note_separator_label(content).unwrap_or(content);
+    let mut metrics = rendered_line_metrics_with_family(label, font_size, font_family);
+    if note_separator_label(content).is_some() {
+        metrics.height += SEPARATOR_HEIGHT_EXTRA;
+        metrics.ascent += SEPARATOR_ASCENT_ADJUST;
+    }
+    metrics
 }
 
 fn first_segment_metrics_with_family(
@@ -874,7 +897,7 @@ fn note_text_metrics_with_family(text: &str, font_size: f64, font_family: &str) 
                     .iter()
                     .any(|seg| seg.style.size.is_some_and(|size| (size as f64) < font_size));
             }
-            rendered_line_metrics_with_family(trimmed, font_size, font_family).height
+            note_line_metrics_with_family(trimmed, font_size, font_family).height
         })
         .collect::<Vec<_>>();
     if line_heights.is_empty() {
@@ -926,6 +949,10 @@ fn note_line_width_with_family(
                 + NOTE_LIST_NUMBER_GAP
                 + text_width_with_family(&content, font_size, font_family)
         }
+        _ if let Some(label) = note_separator_label(line.trim()) => {
+            number_counters.clear();
+            text_width_with_family(label, font_size, font_family) + 8.0
+        }
         _ => {
             number_counters.clear();
             text_width_with_family(line.trim(), font_size, font_family)
@@ -957,6 +984,7 @@ fn emit_note_line(
     buf: &mut String,
     line: &str,
     base: &TextBase<'_>,
+    rule_stroke: &str,
     number_counters: &mut Vec<usize>,
 ) -> f64 {
     match creole::parse_line(line.trim()) {
@@ -1026,6 +1054,53 @@ fn emit_note_line(
                 },
             );
             indent + marker_w + NOTE_LIST_NUMBER_GAP + w
+        }
+        _ if let Some(label) = note_separator_label(line.trim()) => {
+            number_counters.clear();
+            const LINE_EXTRA_X: f64 = 8.5;
+            const LINE_LEFT_PAD: f64 = 5.0;
+            const LINE_SEGMENT_W: f64 = 13.5;
+            const LINE_BASELINE_DROP: f64 = 4.4131;
+
+            let text_x = base.x + LINE_EXTRA_X;
+            let line_y = base.y - LINE_BASELINE_DROP;
+            write!(
+                buf,
+                r#"<line style="stroke:{};stroke-width:0.5;" x1="{}" x2="{}" y1="{}" y2="{}"/>"#,
+                rule_stroke,
+                fmt_coord(base.x - LINE_LEFT_PAD),
+                fmt_coord(text_x),
+                fmt_coord(line_y),
+                fmt_coord(line_y)
+            )
+            .unwrap();
+            let text_w = text_render::emit_text(
+                buf,
+                label,
+                &TextBase {
+                    x: text_x,
+                    y: base.y,
+                    font_size: base.font_size,
+                    font_family: base.font_family,
+                    fill: base.fill,
+                    bold: base.bold,
+                    italic: base.italic,
+                    underline: false,
+                    skip_underline: true,
+                },
+            );
+            let right_x = text_x + text_w;
+            write!(
+                buf,
+                r#"<line style="stroke:{};stroke-width:0.5;" x1="{}" x2="{}" y1="{}" y2="{}"/>"#,
+                rule_stroke,
+                fmt_coord(right_x),
+                fmt_coord(right_x + LINE_SEGMENT_W),
+                fmt_coord(line_y),
+                fmt_coord(line_y)
+            )
+            .unwrap();
+            text_w + 8.0
         }
         _ => {
             number_counters.clear();
@@ -8564,11 +8639,8 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                 let mut note_width_number_counters = Vec::new();
                 for (line_idx, line) in lines.iter().enumerate() {
                     let trimmed = line.trim();
-                    let line_metrics = rendered_line_metrics_with_family(
-                        trimmed,
-                        note_font_size_f,
-                        &note_font_family,
-                    );
+                    let line_metrics =
+                        note_line_metrics_with_family(trimmed, note_font_size_f, &note_font_family);
                     if trimmed.is_empty() {
                         note_number_counters.clear();
                         note_width_number_counters.clear();
@@ -8614,6 +8686,7 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                             underline: false,
                             skip_underline: false,
                         },
+                        note_stroke,
                         &mut note_number_counters,
                     );
                     line_top += metrics
