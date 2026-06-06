@@ -2989,6 +2989,10 @@ impl PlantUmlSvg {
     }
 
     fn write_path_with_attrs(&mut self, d: &str, fill: &str, attrs: &str, style: &str) {
+        if style.is_empty() {
+            write!(self.buf, r#"<path d="{d}" fill="{fill}"{attrs}/>"#).unwrap();
+            return;
+        }
         if self.handwritten
             && let Some(d) = handwritten_path(d)
         {
@@ -10149,8 +10153,11 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                             .max(0.0);
                         if radius > 0.0 {
                             let fold_radius = radius / 2.0;
-                            let note_path_style =
-                                format!("stroke:{note_stroke};stroke-width:{note_stroke_width};");
+                            let note_path_style = if note_stroke.eq_ignore_ascii_case(&note_fill) {
+                                String::new()
+                            } else {
+                                format!("stroke:{note_stroke};stroke-width:{note_stroke_width};")
+                            };
                             let body_d = format!(
                                 "M{left},{top_r} L{left},{bottom_r} A{r},{r} 0 0 0 {left_r},{bottom} L{right_r},{bottom} A{r},{r} 0 0 0 {right},{bottom_r} L{right},{fold_y} L{fold_x},{top} L{left_r},{top} A{r},{r} 0 0 0 {left},{top_r}",
                                 left = fmt_coord(note_left),
@@ -10202,8 +10209,11 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                                 svg.write_path(&fold_d, &note_fill, &note_path_style);
                             }
                         } else {
-                            let note_path_style =
-                                format!("stroke:{note_stroke};stroke-width:{note_stroke_width};");
+                            let note_path_style = if note_stroke.eq_ignore_ascii_case(&note_fill) {
+                                String::new()
+                            } else {
+                                format!("stroke:{note_stroke};stroke-width:{note_stroke_width};")
+                            };
                             let body_d = format!(
                                 "M{left},{top} L{left},{bottom} L{right},{bottom} L{right},{fold_y} L{fold_x},{top} L{left},{top}",
                                 left = fmt_coord(note_left),
