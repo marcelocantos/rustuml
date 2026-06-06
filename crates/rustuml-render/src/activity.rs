@@ -1728,6 +1728,76 @@ fn while_slot_compress(
     }
 }
 
+fn while_ordinary_slot_compress_allowed(
+    body: &[LayoutNode],
+    special_out: Option<&LayoutNode>,
+) -> bool {
+    special_out.is_none()
+        && body.iter().all(|node| {
+            matches!(
+                node,
+                LayoutNode::Action { .. }
+                    | LayoutNode::DeprecatedAction { .. }
+                    | LayoutNode::Arrow { .. }
+                    | LayoutNode::Note { .. }
+            )
+        })
+}
+
+fn while_ordinary_slot_compresses(
+    body: &[LayoutNode],
+    is_label: &Option<String>,
+    end_label: &Option<String>,
+    special_out: Option<&LayoutNode>,
+) -> bool {
+    while_slot_compress(
+        while_ordinary_slot_compress_allowed(body, special_out),
+        is_label.is_some(),
+        end_label.is_some(),
+        body.is_empty(),
+    ) != 0.0
+}
+
+fn colored_partition_needs_while_slot_subtract(body: &[LayoutNode]) -> bool {
+    let [
+        LayoutNode::While {
+            body: while_body,
+            is_label,
+            end_label,
+            special_out,
+            ..
+        },
+    ] = body
+    else {
+        return false;
+    };
+    while_slot_compress(
+        true,
+        is_label.is_some(),
+        end_label.is_some(),
+        while_body.is_empty(),
+    ) != 0.0
+        && !while_ordinary_slot_compresses(while_body, is_label, end_label, special_out.as_deref())
+}
+
+fn is_ordinary_compressed_while(node: &LayoutNode) -> bool {
+    matches!(
+        node,
+        LayoutNode::While {
+            body,
+            is_label,
+            end_label,
+            special_out,
+            ..
+        } if while_ordinary_slot_compresses(
+            body,
+            is_label,
+            end_label,
+            special_out.as_deref(),
+        )
+    )
+}
+
 fn while_body_top_offset(
     compress_allowed: bool,
     is_label: bool,
@@ -3427,7 +3497,7 @@ fn node_height(node: &LayoutNode) -> f64 {
             // from the same compression-aware formula as emit_while.
             let diamond_alone_h = DIAMOND_HALF * 2.0;
             let body_top_offset = while_body_top_offset(
-                false,
+                while_ordinary_slot_compress_allowed(body, special_out.as_deref()),
                 is_label.is_some(),
                 end_label.is_some(),
                 body.is_empty(),
@@ -3486,7 +3556,10 @@ fn node_height(node: &LayoutNode) -> f64 {
                 return top_gap + empty_partition_shell_height();
             }
             let body_h = sequence_height(body)
-                - if color.is_some() && !*is_group && partition_wraps_while(body) {
+                - if color.is_some()
+                    && !*is_group
+                    && colored_partition_needs_while_slot_subtract(body)
+                {
                     WHILE_BODY_SLOT_COMPRESS
                 } else {
                     0.0
@@ -4678,7 +4751,7 @@ fn emit_sequence_ex(
         // after the node's internal connectors in the connectors buffer
         // (matches PlantUML's emission order: internal first, then inbound).
         if let Some((arrow_top, style, label, arrow_gap)) = pending_arrow {
-            if is_colored_partition_wrapping_while(node) {
+            if is_colored_partition_wrapping_while(node) || is_ordinary_compressed_while(node) {
                 deferred_partition_inbound = Some((arrow_top, style, label, arrow_gap));
             } else {
                 emit_pending_down_arrow(svg, arrow_top, style, label, arrow_gap, cx);
@@ -5060,7 +5133,7 @@ fn emit_node(svg: &mut SvgEmitter, node: &LayoutNode, cx: f64, y: f64) -> f64 {
             let colored_partition_while =
                 color.is_some() && !*is_group && partition_wraps_while(body);
             let body_h = sequence_height(body)
-                - if colored_partition_while {
+                - if colored_partition_while && colored_partition_needs_while_slot_subtract(body) {
                     WHILE_BODY_SLOT_COMPRESS
                 } else {
                     0.0
@@ -6305,6 +6378,11 @@ fn emit_while(
     let diamond_fill = svg.palette.diamond_fill.clone();
     let diamond_stroke_width = svg.palette.diamond_stroke_width.clone();
     let colored_partition_while = svg.colored_partition_while_depth > 0;
+    let ordinary_slot_compressed =
+        while_ordinary_slot_compresses(body, is_label, end_label, special_out);
+    let compress_while_slot = colored_partition_while || ordinary_slot_compressed;
+    let exit_vertical_after_arrow =
+        special_out.is_none() && (colored_partition_while || ordinary_slot_compressed);
 
     let cond_inner_w = diamond_inner_w_styled(
         condition,
@@ -6331,12 +6409,11 @@ fn emit_while(
     // body, giving 32.1348 empirically. (Empty body doesn't compress because
     // it bridges directly to the junction, leaving no compressible slack.)
     // The "is (yes)" label below the diamond reserves text_height(11) plus
-    // two hexagon half-sizes of vertical lead before the body top. There is
-    // no slot compression here: PlantUML's FtileWhile reserves the full
-    // 4*halfHex + label height regardless of whether `endwhile` carries a
-    // trailing label (faithful port of calculateDimensionFtile).
+    // two hexagon half-sizes of vertical lead before the body top, then the
+    // same slot-compression pass used by calculateDimensionFtile removes the
+    // excess slack for ordinary labeled, non-empty loops without an exit label.
     let body_top_offset = while_body_top_offset(
-        colored_partition_while,
+        compress_while_slot,
         is_label.is_some(),
         end_label.is_some(),
         body.is_empty(),
@@ -6529,7 +6606,7 @@ fn emit_while(
     // halfHex), adjusted by the same compression that shifts body_top up.
     let mid_y = (diamond_cy + body_bottom + DIAMOND_HALF) / 2.0
         - while_slot_compress(
-            colored_partition_while,
+            compress_while_slot,
             is_label.is_some(),
             end_label.is_some(),
             body.is_empty(),
@@ -6609,7 +6686,7 @@ fn emit_while(
     } else {
         exit_bottom_y + DIAMOND_HALF
     };
-    if !(colored_partition_while && special_out.is_none()) {
+    if !exit_vertical_after_arrow {
         svg.line_styled(&arrow_color, "1", exit_x, exit_x, diamond_cy, wrap_y, false);
     }
 
@@ -6622,7 +6699,7 @@ fn emit_while(
     } else {
         (diamond_cy + wrap_y) / 2.0
     };
-    if colored_partition_while && special_out.is_none() {
+    if exit_vertical_after_arrow {
         arrow_y -= PARTITION_COLORED_WHILE_EXIT_ARROW_PULL_UP;
     }
     svg.polygon_connector(
@@ -6636,7 +6713,7 @@ fn emit_while(
         &arrow_color,
         "1",
     );
-    if colored_partition_while && special_out.is_none() {
+    if exit_vertical_after_arrow {
         svg.line_styled(&arrow_color, "1", exit_x, exit_x, diamond_cy, wrap_y, false);
     }
 
