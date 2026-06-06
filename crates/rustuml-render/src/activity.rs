@@ -679,6 +679,7 @@ enum LayoutNode {
         name: String,
         color: Option<String>,
         is_group: bool,
+        nested: bool,
         body: Vec<LayoutNode>,
     },
     /// A top-level swimlanes container. Each lane has its own vertical
@@ -1247,6 +1248,7 @@ fn build_tree_inner(steps: &[ActivityStep], palette: &Palette) -> Vec<LayoutNode
                     name,
                     color,
                     is_group: p.is_group,
+                    nested: false,
                     body,
                 });
             }
@@ -1290,6 +1292,52 @@ fn build_tree_inner(steps: &[ActivityStep], palette: &Palette) -> Vec<LayoutNode
         }
     }
     nodes
+}
+
+fn mark_nested_partitions(nodes: &mut [LayoutNode], in_partition: bool) {
+    for node in nodes {
+        match node {
+            LayoutNode::Partition { nested, body, .. } => {
+                *nested = in_partition;
+                mark_nested_partitions(body, true);
+            }
+            LayoutNode::If {
+                then_branch,
+                else_branches,
+                ..
+            } => {
+                mark_nested_partitions(then_branch, in_partition);
+                for branch in else_branches {
+                    mark_nested_partitions(&mut branch.body, in_partition);
+                }
+            }
+            LayoutNode::While {
+                body, special_out, ..
+            } => {
+                mark_nested_partitions(body, in_partition);
+                if let Some(special) = special_out.as_deref_mut() {
+                    mark_nested_partitions(std::slice::from_mut(special), in_partition);
+                }
+            }
+            LayoutNode::Repeat { body, .. } => mark_nested_partitions(body, in_partition),
+            LayoutNode::Fork { branches } => {
+                for branch in branches {
+                    mark_nested_partitions(branch, in_partition);
+                }
+            }
+            LayoutNode::Switch { cases, .. } => {
+                for case in cases {
+                    mark_nested_partitions(&mut case.body, in_partition);
+                }
+            }
+            LayoutNode::Swimlanes { lanes } => {
+                for lane in lanes {
+                    mark_nested_partitions(&mut lane.body, in_partition);
+                }
+            }
+            _ => {}
+        }
+    }
 }
 
 fn collect_until_else_or_endif(
@@ -3152,6 +3200,11 @@ fn group_wraps_single_if(body: &[LayoutNode]) -> bool {
     matches!(body, [LayoutNode::If { .. }])
 }
 
+fn group_contains_partition(body: &[LayoutNode]) -> bool {
+    body.iter()
+        .any(|n| matches!(n, LayoutNode::Partition { .. }))
+}
+
 fn partition_wraps_while(body: &[LayoutNode]) -> bool {
     matches!(body, [LayoutNode::While { .. }])
 }
@@ -3216,11 +3269,14 @@ fn partition_top_gap(
     color: &Option<String>,
     name: &str,
     is_group: bool,
+    nested: bool,
     body: &[LayoutNode],
 ) -> f64 {
     if is_group && group_uses_compact_top_gap(body) {
         10.0
-    } else if (is_group && (color.is_some() || partition_title_has_descender(name)))
+    } else if (is_group
+        && (color.is_some()
+            || (!nested && !group_contains_partition(body) && partition_title_has_descender(name))))
         || (!is_group
             && (color.is_some() || partition_title_has_descender(name))
             && partition_title_drives_width(
@@ -3422,9 +3478,10 @@ fn node_height(node: &LayoutNode) -> f64 {
             color,
             name,
             is_group,
+            nested,
             body,
         } => {
-            let top_gap = partition_top_gap(color, name, *is_group, body);
+            let top_gap = partition_top_gap(color, name, *is_group, *nested, body);
             if body.is_empty() {
                 return top_gap + empty_partition_shell_height();
             }
@@ -4536,9 +4593,10 @@ fn emit_sequence_ex(
                         color,
                         name,
                         is_group,
+                        nested,
                         body,
                         ..
-                    } => Some(partition_top_gap(color, name, *is_group, body)),
+                    } => Some(partition_top_gap(color, name, *is_group, *nested, body)),
                     _ => None,
                 };
                 let prev_was_partition = matches!(
@@ -4967,6 +5025,7 @@ fn emit_node(svg: &mut SvgEmitter, node: &LayoutNode, cx: f64, y: f64) -> f64 {
             name,
             color,
             is_group,
+            nested,
             body,
         } => {
             // Partition's outer rect spans from y_in + 10 (top) to y_in +
@@ -4991,12 +5050,12 @@ fn emit_node(svg: &mut SvgEmitter, node: &LayoutNode, cx: f64, y: f64) -> f64 {
             };
             let partition_x = if empty_body {
                 cx - partition_w / 2.0
-            } else if !*is_group && !title_drives_width {
+            } else if (*is_group && *nested) || (!*is_group && !title_drives_width) {
                 (cx - partition_w / 2.0).max(16.0)
             } else {
                 16.0
             };
-            let top_gap = partition_top_gap(color, name, *is_group, body);
+            let top_gap = partition_top_gap(color, name, *is_group, *nested, body);
             let partition_top = y + top_gap;
             let colored_partition_while =
                 color.is_some() && !*is_group && partition_wraps_while(body);
@@ -7540,6 +7599,7 @@ fn render_inner(
 
     // Build layout tree from flat steps.
     let mut tree = build_tree(&diagram.steps, &palette);
+    mark_nested_partitions(&mut tree, false);
 
     // Prepend title if present.
     if let Some(ref title) = diagram.meta.title {
