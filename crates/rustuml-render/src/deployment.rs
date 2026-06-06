@@ -8,7 +8,7 @@
 //! by class/state/component renderers); per-shape geometry is computed
 //! locally so the byte-for-byte XML matches the Java PlantUML reference.
 
-use std::collections::HashMap;
+use std::collections::{HashMap, HashSet};
 use std::fmt::Write as _;
 
 use rustuml_parser::diagram::deployment::*;
@@ -255,6 +255,19 @@ fn render_oracle(diagram: &DeploymentDiagram, _theme: &Theme, oracle: &OracleLay
             .unwrap_or(0.0);
         hw.max(fw)
     };
+    let sprite_names: HashSet<String> = diagram
+        .meta
+        .sprites
+        .keys()
+        .map(|k| k.to_lowercase())
+        .collect();
+    let ctx = OracleRenderContext {
+        oracle,
+        id_for_node: &id_for_node,
+        skin_fills: &skin_fills,
+        skin_strokes: &skin_strokes,
+        sprite_names: &sprite_names,
+    };
 
     // Header — a centred grey caption above the diagram (font 10). The oracle
     // canvas already includes the vertical space the header occupies.
@@ -269,16 +282,7 @@ fn render_oracle(diagram: &DeploymentDiagram, _theme: &Theme, oracle: &OracleLay
 
     // Emit clusters first (depth-first), then leaf entities (depth-first).
     for root in &roots {
-        emit_clusters_dfs(
-            &mut svg,
-            root,
-            &diagram.nodes,
-            None,
-            oracle,
-            &id_for_node,
-            &skin_fills,
-            &skin_strokes,
-        );
+        emit_clusters_dfs(&mut svg, root, &diagram.nodes, None, &ctx);
     }
     // Leaf-entity emission order. With no connections PlantUML keeps the
     // natural source-order (pre-order DFS) traversal. Once connections are
@@ -298,15 +302,7 @@ fn render_oracle(diagram: &DeploymentDiagram, _theme: &Theme, oracle: &OracleLay
         });
     }
     for (_, _, node, qname) in &leaves {
-        emit_entity(
-            &mut svg,
-            node,
-            qname,
-            oracle,
-            &id_for_node,
-            &skin_fills,
-            &skin_strokes,
-        );
+        emit_entity(&mut svg, node, qname, &ctx);
     }
 
     // Emit attached/floating notes. PlantUML lays each note out as a
@@ -574,31 +570,41 @@ fn own_qname(node: &DeploymentNode) -> String {
     }
 }
 
-#[allow(clippy::too_many_arguments)]
+struct OracleRenderContext<'a> {
+    oracle: &'a OracleLayout,
+    id_for_node: &'a HashMap<String, String>,
+    skin_fills: &'a HashMap<DeploymentNodeKind, String>,
+    skin_strokes: &'a HashMap<DeploymentNodeKind, String>,
+    sprite_names: &'a HashSet<String>,
+}
+
 fn emit_clusters_dfs(
     svg: &mut SvgBuilder,
     node: &DeploymentNode,
     all: &[DeploymentNode],
     parent_qname: Option<&str>,
-    oracle: &OracleLayout,
-    id_for_node: &HashMap<String, String>,
-    skin_fills: &HashMap<DeploymentNodeKind, String>,
-    skin_strokes: &HashMap<DeploymentNodeKind, String>,
+    ctx: &OracleRenderContext<'_>,
 ) {
     let qname = qualified_name(node, parent_qname);
     let is_cluster = !node.children.is_empty();
     if is_cluster {
-        let ent_id = id_for_node.get(&node.id).cloned().unwrap_or_default();
-        let rect = oracle
+        let ent_id = ctx.id_for_node.get(&node.id).cloned().unwrap_or_default();
+        let rect = ctx
+            .oracle
             .entities
             .get(&qname)
-            .or_else(|| oracle.entities.get(&node.id))
-            .or_else(|| oracle.entities.get(&node.label));
+            .or_else(|| ctx.oracle.entities.get(&node.id))
+            .or_else(|| ctx.oracle.entities.get(&node.label));
         if let Some(rect) = rect {
+            let source_line = rect
+                .source_line
+                .as_deref()
+                .map(str::to_string)
+                .unwrap_or_else(|| node.source_line.to_string());
             svg.raw(&format!("<!--cluster {}-->", node.label));
             svg.raw(&format!(
                 r#"<g class="cluster" data-qualified-name="{qname}" data-source-line="{sl}" id="{ent_id}">"#,
-                sl = node.source_line,
+                sl = source_line,
             ));
             // A `#color` (or a `skinparam <kind> { BackgroundColor }`) fills
             // the cluster shape, replacing the default `fill="none"`; the
@@ -607,8 +613,9 @@ fn emit_clusters_dfs(
                 .color
                 .as_deref()
                 .map(resolve_fill)
-                .or_else(|| skin_fills.get(&node.kind).cloned());
-            let stroke = skin_strokes
+                .or_else(|| ctx.skin_fills.get(&node.kind).cloned());
+            let stroke = ctx
+                .skin_strokes
                 .get(&node.kind)
                 .map(String::as_str)
                 .unwrap_or(STROKE);
@@ -623,21 +630,20 @@ fn emit_clusters_dfs(
                 stroke,
                 &node.label,
             );
-            emit_cluster_label(svg, node.kind, node, rect.x, rect.y, rect.width);
+            emit_cluster_label(
+                svg,
+                node.kind,
+                node,
+                rect.x,
+                rect.y,
+                rect.width,
+                ctx.sprite_names,
+            );
             svg.raw("</g>");
         }
         for child_id in &node.children {
             if let Some(child) = all.iter().find(|n| n.id == *child_id) {
-                emit_clusters_dfs(
-                    svg,
-                    child,
-                    all,
-                    Some(&qname),
-                    oracle,
-                    id_for_node,
-                    skin_fills,
-                    skin_strokes,
-                );
+                emit_clusters_dfs(svg, child, all, Some(&qname), ctx);
             }
         }
     }
@@ -670,22 +676,25 @@ fn emit_entity(
     svg: &mut SvgBuilder,
     node: &DeploymentNode,
     qname: &str,
-    oracle: &OracleLayout,
-    id_for_node: &HashMap<String, String>,
-    skin_fills: &HashMap<DeploymentNodeKind, String>,
-    skin_strokes: &HashMap<DeploymentNodeKind, String>,
+    ctx: &OracleRenderContext<'_>,
 ) {
-    let ent_id = id_for_node.get(&node.id).cloned().unwrap_or_default();
-    let rect = oracle
+    let ent_id = ctx.id_for_node.get(&node.id).cloned().unwrap_or_default();
+    let rect = ctx
+        .oracle
         .entities
         .get(qname)
-        .or_else(|| oracle.entities.get(&node.id))
-        .or_else(|| oracle.entities.get(&node.label));
+        .or_else(|| ctx.oracle.entities.get(&node.id))
+        .or_else(|| ctx.oracle.entities.get(&node.label));
     if let Some(rect) = rect {
+        let source_line = rect
+            .source_line
+            .as_deref()
+            .map(str::to_string)
+            .unwrap_or_else(|| node.source_line.to_string());
         svg.raw(&format!("<!--entity {}-->", node.label));
         svg.raw(&format!(
             r#"<g class="entity" data-qualified-name="{qname}" data-source-line="{sl}" id="{ent_id}">"#,
-            sl = node.source_line,
+            sl = source_line,
         ));
         // Fill precedence: explicit `#color` > `skinparam <kind>
         // BackgroundColor` > the `#F1F1F1` default.
@@ -693,9 +702,10 @@ fn emit_entity(
             .color
             .as_deref()
             .map(resolve_fill)
-            .or_else(|| skin_fills.get(&node.kind).cloned())
+            .or_else(|| ctx.skin_fills.get(&node.kind).cloned())
             .unwrap_or_else(|| FILL.to_string());
-        let stroke = skin_strokes
+        let stroke = ctx
+            .skin_strokes
             .get(&node.kind)
             .map(String::as_str)
             .unwrap_or(STROKE);
@@ -722,10 +732,28 @@ fn emit_entity(
                 stroke,
                 &node.label,
             );
-            emit_entity_label(svg, node.kind, node, rect.x, rect.y, rect.width);
+            emit_entity_label(
+                svg,
+                node.kind,
+                node,
+                rect.x,
+                rect.y,
+                rect.width,
+                ctx.sprite_names,
+            );
         }
         svg.raw("</g>");
     }
+}
+
+fn stereotype_refs_sprite(stereotype: &str, sprite_names: &HashSet<String>) -> bool {
+    let lowered = stereotype.trim().trim_start_matches('$').to_lowercase();
+    if sprite_names.contains(&lowered) {
+        return true;
+    }
+    lowered
+        .rsplit_once('_')
+        .is_some_and(|(_, suffix)| sprite_names.contains(suffix))
 }
 
 fn qualified_name(node: &DeploymentNode, parent_qname: Option<&str>) -> String {
@@ -1546,6 +1574,7 @@ fn emit_entity_label(
     x: f64,
     y: f64,
     w: f64,
+    sprite_names: &HashSet<String>,
 ) {
     let (_text_x_pad, top_pad, bold) = entity_text_geom(kind, w, &node.label);
     let label_w = text_render::measure(&node.label, FONT_SIZE, bold);
@@ -1558,7 +1587,9 @@ fn emit_entity_label(
     )
     .then_some(x + 10.0);
 
-    if let Some(stereo) = &node.stereotype {
+    if let Some(stereo) = &node.stereotype
+        && !stereotype_refs_sprite(stereo, sprite_names)
+    {
         let stereo_label = format!("\u{00AB}{stereo}\u{00BB}");
         let stereo_w = text_render::measure(&stereo_label, FONT_SIZE, false);
         let stereo_x = center_x - stereo_w / 2.0;
@@ -1602,6 +1633,7 @@ fn emit_cluster_label(
     x: f64,
     y: f64,
     w: f64,
+    sprite_names: &HashSet<String>,
 ) {
     // Cluster labels are centered horizontally above the children area
     // for most shapes; frame is left-aligned (with a tab decoration).
@@ -1629,7 +1661,9 @@ fn emit_cluster_label(
 
     let center_x = cluster_text_center(kind, x, w);
 
-    if let Some(stereo) = &node.stereotype {
+    if let Some(stereo) = &node.stereotype
+        && !stereotype_refs_sprite(stereo, sprite_names)
+    {
         let stereo_label = format!("\u{00AB}{stereo}\u{00BB}");
         let stereo_w = text_render::measure(&stereo_label, FONT_SIZE, false);
         let stereo_x = center_x - stereo_w / 2.0;
