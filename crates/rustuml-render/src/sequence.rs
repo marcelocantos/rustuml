@@ -839,6 +839,12 @@ fn message_label_width_with_family(
         .map(|line| {
             if let Some(latex) = latex_label_content(line) {
                 crate::math::raw_latex_image(latex).width as f64 + MSG_TEXT_LEFT_PAD
+            } else if let Some(inner) = leading_star_bullet_italic_mono_inner(line) {
+                let mono_italic = format!("//\"\"{inner}\"\"//");
+                MESSAGE_STAR_BULLET_TEXT_OFFSET
+                    + text_render::measure_with_family(&mono_italic, font_size, bold, font_family)
+                    + text_render::measure_with_family("//**//", font_size, bold, font_family)
+                    + text_render::measure_with_family("**", font_size, bold, font_family)
             } else {
                 text_render::measure_with_family(line, font_size, bold, font_family)
             }
@@ -1481,10 +1487,21 @@ fn strip_creole(s: &str) -> String {
 
 const MESSAGE_STRIKE_HLINE_LEN: f64 = 7.0;
 const MESSAGE_STRIKE_TEXT_Y_OFFSET: f64 = -0.5;
+const MESSAGE_STAR_BULLET_SIZE: f64 = 3.5;
+const MESSAGE_STAR_BULLET_X_OFFSET: f64 = 9.0;
+const MESSAGE_STAR_BULLET_Y_DROP: f64 = 7.2578;
+const MESSAGE_STAR_BULLET_TEXT_OFFSET: f64 = 16.0;
+const MESSAGE_STAR_BULLET_MONO_Y_LIFT: f64 = 0.3237;
 
 fn whole_strike_label_inner(line: &str) -> Option<&str> {
     let inner = line.strip_prefix("--")?.strip_suffix("--")?;
     if inner.is_empty() { None } else { Some(inner) }
+}
+
+fn leading_star_bullet_italic_mono_inner(line: &str) -> Option<&str> {
+    line.strip_prefix("**//\"\"")
+        .and_then(|rest| rest.strip_suffix("\"\"**//**"))
+        .filter(|inner| !inner.is_empty())
 }
 
 /// Decode PlantUML backslash escapes in label text.
@@ -2272,6 +2289,54 @@ impl PlantUmlSvg {
                     fmt_coord(strike_y),
                 )
                 .unwrap();
+                y += rendered_line_metrics_with_family(
+                    line,
+                    self.message_font_size as f64,
+                    &self.message_font_family,
+                )
+                .height;
+            } else if let Some(inner) = leading_star_bullet_italic_mono_inner(line) {
+                write!(
+                    self.buf,
+                    r##"<rect fill="{}" height="{}" width="{}" x="{}" y="{}"/>"##,
+                    self.message_font_color,
+                    fmt_coord(MESSAGE_STAR_BULLET_SIZE),
+                    fmt_coord(MESSAGE_STAR_BULLET_SIZE),
+                    fmt_coord(text_x + MESSAGE_STAR_BULLET_X_OFFSET),
+                    fmt_coord(y - MESSAGE_STAR_BULLET_Y_DROP),
+                )
+                .unwrap();
+
+                let mut cursor = text_x + MESSAGE_STAR_BULLET_TEXT_OFFSET;
+                let mono_italic = format!("//\"\"{inner}\"\"//");
+                cursor += text_render::emit_text(
+                    &mut self.buf,
+                    &mono_italic,
+                    &TextBase {
+                        x: cursor,
+                        y: y - MESSAGE_STAR_BULLET_MONO_Y_LIFT,
+                        font_size: self.message_font_size,
+                        font_family: &self.message_font_family,
+                        fill: &self.message_font_color,
+                        bold: self.message_font_bold,
+                        italic: self.message_font_italic,
+                        underline: false,
+                        skip_underline: false,
+                    },
+                );
+                let base = TextBase {
+                    x: cursor,
+                    y,
+                    font_size: self.message_font_size,
+                    font_family: &self.message_font_family,
+                    fill: &self.message_font_color,
+                    bold: self.message_font_bold,
+                    italic: self.message_font_italic,
+                    underline: false,
+                    skip_underline: false,
+                };
+                cursor += text_render::emit_text(&mut self.buf, "//**//", &base);
+                text_render::emit_text(&mut self.buf, "**", &TextBase { x: cursor, ..base });
                 y += rendered_line_metrics_with_family(
                     line,
                     self.message_font_size as f64,
@@ -9446,6 +9511,21 @@ mod tests {
         let svg = crate::render_svg(&diagram);
         assert!(svg.contains("call &lt;code&gt;doSomething()&lt;/code&gt;"));
         assert!(!svg.contains("font-family=\"monospace\""));
+    }
+
+    #[test]
+    fn crossing_star_italic_mono_message_renders_as_bullet_line() {
+        let input = "@startuml\nAlice -> Bob : **//\"\"bold italic mono\"\"**//**\n@enduml";
+        let diagram = rustuml_parser::parse::parse(input).unwrap();
+        let svg = crate::render_svg(&diagram);
+
+        assert!(svg.contains(r##"<rect fill="#000000" height="3.5" width="3.5""##));
+        assert!(svg.contains(
+            r##"<text fill="#000000" font-family="monospace" font-size="13" font-style="italic""##
+        ));
+        assert!(svg.contains(">bold&#160;italic&#160;mono</text>"));
+        assert!(!svg.contains("font-weight=\"700\""));
+        assert!(!svg.contains("//&quot;&quot;bold italic mono&quot;&quot;"));
     }
 
     #[test]
