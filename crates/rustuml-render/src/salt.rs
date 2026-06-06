@@ -284,6 +284,7 @@ struct Grid<'a> {
     title_height: f64,
     /// Scrollbar decoration for `{S`/`{SI`/`{S-` blocks.
     scroll: Option<ScrollStrategy>,
+    has_layout_title: bool,
 }
 
 impl<'a> Grid<'a> {
@@ -291,8 +292,12 @@ impl<'a> Grid<'a> {
         // Assign row/col positions (Positionner2).
         let mut cells: Vec<PlacedCell<'a>> = Vec::new();
         let mut n_cols = 1usize;
+        let mut has_layout_title = false;
         for (r, row) in block.rows.iter().enumerate() {
             for (c, widget) in row.cells.iter().enumerate() {
+                if matches!(widget, SaltWidget::LayoutTitle { .. }) {
+                    has_layout_title = true;
+                }
                 cells.push(PlacedCell {
                     widget,
                     row: r,
@@ -345,12 +350,13 @@ impl<'a> Grid<'a> {
             title,
             title_height,
             scroll: ScrollStrategy::from_kind(block.kind),
+            has_layout_title,
         }
     }
 
     /// Base pyramid width (excluding any scrollbar allocation).
     fn base_width(&self) -> f64 {
-        *self.cols_start.last().unwrap_or(&0.0)
+        *self.cols_start.last().unwrap_or(&0.0) + if self.has_layout_title { MARGIN } else { 0.0 }
     }
 
     /// Base pyramid height (excluding any scrollbar allocation).
@@ -697,6 +703,14 @@ fn widget_dim(widget: &SaltWidget) -> (f64, f64) {
             let s = TextStyle::parse(t);
             (pm::text_width(&s.display, FONT_SIZE, s.bold), th)
         }
+        SaltWidget::LayoutTitle { boxed, label } => {
+            let s = TextStyle::parse(label);
+            (
+                pm::text_width(&s.display, FONT_SIZE, s.bold) + 2.0,
+                th + if *boxed { 1.0 } else { 2.0 },
+            )
+        }
+        SaltWidget::LayoutTerminator => (0.0, -1.0),
         SaltWidget::Checkbox { label, .. } | SaltWidget::Radio { label, .. } => {
             let s = TextStyle::parse(label);
             (
@@ -784,6 +798,8 @@ fn append_tab_widget_lines(widget: &SaltWidget, lines: &mut Vec<String>) {
                 }
             }
         }
+        SaltWidget::LayoutTitle { label, .. } => lines.push(label.clone()),
+        SaltWidget::LayoutTerminator => {}
         SaltWidget::Button(label) | SaltWidget::Slider(label) => lines.push(format!("[{label}]")),
         SaltWidget::TextField(text) | SaltWidget::PasswordField(text) => {
             lines.push(format!("\"{text}\""));
@@ -874,6 +890,23 @@ fn draw_widget(
             }
             emit_text(buf, x, y + ascent, t);
         }
+
+        SaltWidget::LayoutTitle { boxed, label } => {
+            let s = TextStyle::parse(label);
+            let w = pm::text_width(&s.display, FONT_SIZE, s.bold) + 2.0;
+            let h = pref_h + 2.0;
+            let line_y = if *boxed { y - 1.0 } else { y };
+            let text_y = if *boxed { y + ascent } else { y + ascent + 1.0 };
+            emit_text(buf, x + 1.0, text_y, label);
+            emit_hline_black(buf, x, line_y, w);
+            emit_hline_black(buf, x, line_y + h, w);
+            if *boxed {
+                emit_vline_black(buf, x, line_y, h);
+                emit_vline_black(buf, x + w, line_y, h);
+            }
+        }
+
+        SaltWidget::LayoutTerminator => {}
 
         SaltWidget::Checkbox { checked, label } => {
             // Text at translate(margin).

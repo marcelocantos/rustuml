@@ -242,6 +242,7 @@ fn parse_block(lines: &[String], pos: usize) -> Result<(SaltBlock, usize), Parse
     // Cells being accumulated for the current row (may contain blocks).
     let mut current_cells: Vec<SaltWidget> = vec![];
     let mut row_in_progress = false;
+    let mut horizontal_section_open = false;
 
     // If the header line has inline content (rare but valid), process it.
     if !inline_content.is_empty() {
@@ -255,6 +256,21 @@ fn parse_block(lines: &[String], pos: usize) -> Result<(SaltBlock, usize), Parse
         let line = lines[pos].trim();
 
         if line.is_empty() {
+            pos += 1;
+            continue;
+        }
+
+        if line == "." && horizontal_section_open {
+            if row_in_progress {
+                rows.push(SaltRow {
+                    cells: std::mem::take(&mut current_cells),
+                });
+                row_in_progress = false;
+            }
+            rows.push(SaltRow {
+                cells: vec![SaltWidget::LayoutTerminator],
+            });
+            horizontal_section_open = false;
             pos += 1;
             continue;
         }
@@ -286,6 +302,21 @@ fn parse_block(lines: &[String], pos: usize) -> Result<(SaltBlock, usize), Parse
             rows.push(SaltRow {
                 cells: vec![SaltWidget::TreeNode { depth, label }],
             });
+            pos += 1;
+            continue;
+        }
+
+        if let Some((widget, opens_horizontal_section)) = parse_layout_title_line(line) {
+            if row_in_progress {
+                rows.push(SaltRow {
+                    cells: std::mem::take(&mut current_cells),
+                });
+                row_in_progress = false;
+            }
+            rows.push(SaltRow {
+                cells: vec![widget],
+            });
+            horizontal_section_open = opens_horizontal_section;
             pos += 1;
             continue;
         }
@@ -379,6 +410,16 @@ fn parse_block(lines: &[String], pos: usize) -> Result<(SaltBlock, usize), Parse
     }
 
     Ok((SaltBlock { kind, title, rows }, pos))
+}
+
+fn parse_layout_title_line(line: &str) -> Option<(SaltWidget, bool)> {
+    let trimmed = line.trim();
+    if !(trimmed.starts_with("{-") || trimmed.starts_with("{+")) || !trimmed.ends_with('}') {
+        return None;
+    }
+    let boxed = trimmed.starts_with("{+");
+    let label = trimmed[2..trimmed.len() - 1].trim().to_string();
+    Some((SaltWidget::LayoutTitle { boxed, label }, !boxed))
 }
 
 /// Parse the opening brace line into `(kind, title, inline_content)`.
@@ -828,6 +869,32 @@ mod tests {
         );
         let diag = parse_salt(&input).unwrap();
         assert_eq!(diag.root.title.as_deref(), Some("My Group"));
+    }
+
+    #[test]
+    fn parse_layout_title_rows() {
+        let input = lines(
+            r#"{
+  {- horizontal layout }
+  | col1 | col2 |
+  .
+  {+ vertical layout }
+  row1
+}"#,
+        );
+        let diag = parse_salt(&input).unwrap();
+        assert!(matches!(
+            &diag.root.rows[0].cells[0],
+            SaltWidget::LayoutTitle { boxed: false, label } if label == "horizontal layout"
+        ));
+        assert!(matches!(
+            &diag.root.rows[2].cells[0],
+            SaltWidget::LayoutTerminator
+        ));
+        assert!(matches!(
+            &diag.root.rows[3].cells[0],
+            SaltWidget::LayoutTitle { boxed: true, label } if label == "vertical layout"
+        ));
     }
 
     #[test]

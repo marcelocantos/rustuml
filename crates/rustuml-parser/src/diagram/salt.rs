@@ -59,6 +59,10 @@ pub struct SaltRow {
 pub enum SaltWidget {
     /// A nested block `{...}` acting as a cell in a grid row.
     Block(Box<SaltBlock>),
+    /// A layout title bar: `{- Title }` or `{+ Title }`.
+    LayoutTitle { boxed: bool, label: String },
+    /// A one-pixel terminator gap after a `{- ... }` horizontal section.
+    LayoutTerminator,
     /// A push button: `[Label]`.
     Button(String),
     /// A text input field: `"text"`.
