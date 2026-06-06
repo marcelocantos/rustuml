@@ -1402,11 +1402,60 @@ struct ForkLayout {
 
 const FORK_INNER_PAD: f64 = 12.0;
 const FORK_BRANCH_GAP: f64 = 10.0;
+const FORK_EVEN_MIDDLE_EXTRA: f64 = 18.0;
+const FORK_ASYMMETRIC_EVEN_MIDDLE_EXTRA: f64 = 32.0;
+const FORK_ASYMMETRIC_SPINE_STEP: f64 = 5.0;
+const FORK_ASYMMETRIC_EPS: f64 = 0.02;
 const FORK_EMPTY_EDGE_CENTER: f64 = 14.0;
 const FORK_EMPTY_LANE_GAP: f64 = 21.0;
 
+fn node_if_depth(node: &LayoutNode) -> usize {
+    match node {
+        LayoutNode::If {
+            then_branch,
+            else_branches,
+            ..
+        } => {
+            1 + sequence_if_depth(then_branch).max(
+                else_branches
+                    .iter()
+                    .map(|branch| sequence_if_depth(&branch.body))
+                    .max()
+                    .unwrap_or(0),
+            )
+        }
+        LayoutNode::While {
+            body, special_out, ..
+        } => sequence_if_depth(body).max(special_out.as_deref().map_or(0, node_if_depth)),
+        LayoutNode::Repeat { body, .. } | LayoutNode::Partition { body, .. } => {
+            sequence_if_depth(body)
+        }
+        LayoutNode::Fork { branches } => branches
+            .iter()
+            .map(|b| sequence_if_depth(b))
+            .max()
+            .unwrap_or(0),
+        LayoutNode::Switch { cases, .. } => cases
+            .iter()
+            .map(|case| sequence_if_depth(&case.body))
+            .max()
+            .unwrap_or(0),
+        LayoutNode::Swimlanes { lanes } => lanes
+            .iter()
+            .map(|lane| sequence_if_depth(&lane.body))
+            .max()
+            .unwrap_or(0),
+        _ => 0,
+    }
+}
+
+fn sequence_if_depth(nodes: &[LayoutNode]) -> usize {
+    nodes.iter().map(node_if_depth).max().unwrap_or(0)
+}
+
 fn fork_layout(branches: &[Vec<LayoutNode>]) -> ForkLayout {
-    let branch_widths: Vec<f64> = branches.iter().map(|b| sequence_width(b)).collect();
+    let branch_extents: Vec<(f64, f64)> = branches.iter().map(|b| sequence_extents(b)).collect();
+    let branch_widths: Vec<f64> = branch_extents.iter().map(|(l, r)| l + r).collect();
     let n = branch_widths.len();
     if n == 0 {
         return ForkLayout {
@@ -1436,8 +1485,9 @@ fn fork_layout(branches: &[Vec<LayoutNode>]) -> ForkLayout {
                         FORK_EMPTY_LANE_GAP
                     };
             } else {
-                let w = branch_widths[i];
-                centers.push(x + w / 2.0);
+                let (left, right) = branch_extents[i];
+                let w = left + right;
+                centers.push(x + left);
                 x += w;
                 if i + 1 < n && !branches[i + 1].is_empty() {
                     x += FORK_EMPTY_LANE_GAP;
@@ -1464,8 +1514,13 @@ fn fork_layout(branches: &[Vec<LayoutNode>]) -> ForkLayout {
     // pushing the centre branches apart.
     let total_branch_w: f64 = branch_widths.iter().sum();
     let inter_gaps = if n > 1 { (n - 1) as f64 } else { 0.0 };
-    let even_extra = if n >= 2 && n.is_multiple_of(2) {
-        18.0
+    let has_asymmetric_branch = branch_extents
+        .iter()
+        .any(|(left, right)| (left - right).abs() > FORK_ASYMMETRIC_EPS);
+    let even_extra = if n >= 2 && n.is_multiple_of(2) && has_asymmetric_branch {
+        FORK_ASYMMETRIC_EVEN_MIDDLE_EXTRA
+    } else if n >= 2 && n.is_multiple_of(2) {
+        FORK_EVEN_MIDDLE_EXTRA
     } else {
         0.0
     };
@@ -1480,9 +1535,9 @@ fn fork_layout(branches: &[Vec<LayoutNode>]) -> ForkLayout {
         } else {
             None
         };
-        for (i, w) in branch_widths.iter().enumerate() {
-            centers.push(x + w / 2.0);
-            x += w;
+        for (i, (left, right)) in branch_extents.iter().enumerate() {
+            centers.push(x + left);
+            x += left + right;
             if i + 1 < n {
                 let extra = if Some(i) == middle_gap_idx {
                     even_extra
@@ -1496,7 +1551,16 @@ fn fork_layout(branches: &[Vec<LayoutNode>]) -> ForkLayout {
     ForkLayout {
         bar_w,
         centers,
-        spine_dx: 0.0,
+        spine_dx: if n > 1 && !n.is_multiple_of(2) && has_asymmetric_branch {
+            let max_if_depth = branches
+                .iter()
+                .map(|branch| sequence_if_depth(branch))
+                .max()
+                .unwrap_or(0);
+            max_if_depth.saturating_sub(1) as f64 * FORK_ASYMMETRIC_SPINE_STEP
+        } else {
+            0.0
+        },
     }
 }
 
