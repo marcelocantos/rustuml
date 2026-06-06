@@ -878,10 +878,13 @@ impl ActivityParser {
     fn try_swimlane(&mut self, line: &str) -> bool {
         // Match |Name| or |#color|Name| (colored swimlane)
         static RE: LazyLock<Regex> =
-            LazyLock::new(|| Regex::new(r"^\|(?:#[A-Za-z0-9]+\|)?([^|]+)\|$").unwrap());
+            LazyLock::new(|| Regex::new(r"^\|(?:(#[A-Za-z0-9]+)\|)?([^|]+)\|$").unwrap());
 
         if let Some(caps) = RE.captures(line) {
-            self.steps.push(ActivityStep::Swimlane(caps[1].to_string()));
+            self.steps.push(ActivityStep::Swimlane(SwimlaneBlock {
+                name: caps[2].to_string(),
+                color: caps.get(1).map(|m| m.as_str().to_string()),
+            }));
             true
         } else {
             false
@@ -1089,14 +1092,28 @@ mod tests {
     #[test]
     fn swimlanes() {
         let d = parse("|Lane1|\nstart\n:task1;\n|Lane2|\n:task2;\nstop");
-        assert!(matches!(d.steps[0], ActivityStep::Swimlane(ref s) if s == "Lane1"));
-        assert!(matches!(d.steps[3], ActivityStep::Swimlane(ref s) if s == "Lane2"));
+        assert!(
+            matches!(d.steps[0], ActivityStep::Swimlane(ref s) if s.name == "Lane1" && s.color.is_none())
+        );
+        assert!(
+            matches!(d.steps[3], ActivityStep::Swimlane(ref s) if s.name == "Lane2" && s.color.is_none())
+        );
     }
 
     #[test]
     fn swimlane_with_spaces() {
         let d = parse("|New Employee|\nstart\n:task;\nstop");
-        assert!(matches!(d.steps[0], ActivityStep::Swimlane(ref s) if s == "New Employee"));
+        assert!(
+            matches!(d.steps[0], ActivityStep::Swimlane(ref s) if s.name == "New Employee" && s.color.is_none())
+        );
+    }
+
+    #[test]
+    fn colored_swimlane() {
+        let d = parse("|#lightblue|Lane1|\nstart\n:task;\nstop");
+        assert!(
+            matches!(d.steps[0], ActivityStep::Swimlane(ref s) if s.name == "Lane1" && s.color.as_deref() == Some("#lightblue"))
+        );
     }
 
     #[test]

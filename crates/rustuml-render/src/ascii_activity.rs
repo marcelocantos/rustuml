@@ -300,8 +300,8 @@ pub fn render_ascii(diagram: &ActivityDiagram) -> String {
                 grid.write_str(note_col, row.saturating_sub(1), &text);
             }
 
-            ActivityStep::Swimlane(name) => {
-                let text = format!("|{name}|");
+            ActivityStep::Swimlane(lane) => {
+                let text = format!("|{}|", lane.name);
                 grid.write_str(0, row, &text);
                 row += 1;
             }

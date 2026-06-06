@@ -1136,7 +1136,7 @@ fn build_tree(steps: &[ActivityStep], palette: &Palette) -> Vec<LayoutNode> {
     let swimlane_markers: Vec<&str> = steps
         .iter()
         .filter_map(|s| match s {
-            ActivityStep::Swimlane(n) => Some(n.as_str()),
+            ActivityStep::Swimlane(lane) => Some(lane.name.as_str()),
             _ => None,
         })
         .collect();
@@ -1155,18 +1155,6 @@ fn build_tree(steps: &[ActivityStep], palette: &Palette) -> Vec<LayoutNode> {
         mark_single_lane_groups(&mut tree);
     }
     tree
-}
-
-/// Strip the lane name and optional `#color` prefix from a Swimlane
-/// marker payload (e.g. `#blue|Colored Lane` → ("Colored Lane",
-/// Some("#blue")), `Lane1` → ("Lane1", None)).
-fn parse_lane_marker(raw: &str) -> (String, Option<String>) {
-    if let Some(rest) = raw.strip_prefix('#')
-        && let Some((color, name)) = rest.split_once('|')
-    {
-        return (name.to_string(), Some(format!("#{color}")));
-    }
-    (raw.to_string(), None)
 }
 
 fn build_swimlanes(steps: &[ActivityStep], palette: &Palette) -> Vec<LayoutNode> {
@@ -1192,16 +1180,15 @@ fn build_swimlanes(steps: &[ActivityStep], palette: &Palette) -> Vec<LayoutNode>
     };
 
     for step in steps {
-        if let ActivityStep::Swimlane(raw) = step {
+        if let ActivityStep::Swimlane(lane) = step {
             flush(
                 &mut lanes,
                 &current_name,
                 &current_color,
                 &mut current_steps,
             );
-            let (name, color) = parse_lane_marker(raw);
-            current_name = Some(name);
-            current_color = color;
+            current_name = Some(lane.name.clone());
+            current_color = lane.color.clone();
         } else {
             current_steps.push(step.clone());
         }
@@ -9202,6 +9189,20 @@ fn emit_swimlanes(svg: &mut SvgEmitter, cx: f64, y: f64, lanes: &[Lane]) -> f64 
         } else {
             body_top
         };
+        if let Some(color) = lane.color.as_deref() {
+            let fill = crate::sequence::resolve_color(color);
+            write!(
+                svg.shapes,
+                r#"<rect fill="{}" height="{}" style="stroke:{};stroke-width:1;" width="{}" x="{}" y="{}"/>"#,
+                fill,
+                f(final_last_y - header_top),
+                fill,
+                f(lane_widths[lane_idx]),
+                f(lane_lefts[lane_idx]),
+                f(header_top),
+            )
+            .unwrap();
+        }
         last_y = emit_sequence(svg, &lane.body, lane_cx, lane_y);
 
         // Emit this lane's LEFT divider with the FULL final_last_y so it

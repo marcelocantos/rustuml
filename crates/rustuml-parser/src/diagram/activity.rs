@@ -39,7 +39,7 @@ pub enum ActivityStep {
     Split,
     SplitAgain,
     EndSplit,
-    Swimlane(String),
+    Swimlane(SwimlaneBlock),
     Partition(PartitionBlock),
     EndPartition,
     Note(NoteBlock),
@@ -106,6 +106,12 @@ pub struct NoteBlock {
     pub text: String,
     pub color: Option<String>,
     pub position: NotePosition,
+}
+
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct SwimlaneBlock {
+    pub name: String,
+    pub color: Option<String>,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
