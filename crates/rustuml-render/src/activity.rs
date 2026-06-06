@@ -842,6 +842,64 @@ fn if_single_survivor(then_branch: &[LayoutNode], else_branches: &[ElseBranch]) 
     (then_terminates != else_terminates).then_some(!then_terminates)
 }
 
+struct IfSingleCircleTerminalPlan<'a> {
+    survivor: &'a [LayoutNode],
+    survivor_label: Option<&'a str>,
+    terminal: &'a LayoutNode,
+    terminal_label: Option<&'a str>,
+}
+
+fn lone_circle_terminal(body: &[LayoutNode]) -> Option<&LayoutNode> {
+    match body {
+        [node @ (LayoutNode::Stop | LayoutNode::End)] => Some(node),
+        _ => None,
+    }
+}
+
+fn terminal_radius(node: &LayoutNode) -> f64 {
+    match node {
+        LayoutNode::Stop => STOP_OUTER_R,
+        LayoutNode::End => 10.0,
+        _ => 0.0,
+    }
+}
+
+fn if_single_circle_terminal_plan<'a>(
+    then_label: Option<&'a String>,
+    then_branch: &'a [LayoutNode],
+    else_branches: &'a [ElseBranch],
+) -> Option<IfSingleCircleTerminalPlan<'a>> {
+    if else_branches.len() != 1 || else_branches[0].condition.is_some() {
+        return None;
+    }
+    let else_body = else_branches[0].body.as_slice();
+    let else_label = else_branches[0].label.as_deref();
+    match (
+        lone_circle_terminal(then_branch),
+        lone_circle_terminal(else_body),
+    ) {
+        (Some(terminal), None) if !branch_is_empty(else_body) && !branch_terminates(else_body) => {
+            Some(IfSingleCircleTerminalPlan {
+                survivor: else_body,
+                survivor_label: else_label,
+                terminal,
+                terminal_label: then_label.map(String::as_str),
+            })
+        }
+        (None, Some(terminal))
+            if !branch_is_empty(then_branch) && !branch_terminates(then_branch) =>
+        {
+            Some(IfSingleCircleTerminalPlan {
+                survivor: then_branch,
+                survivor_label: then_label.map(String::as_str),
+                terminal,
+                terminal_label: else_label,
+            })
+        }
+        _ => None,
+    }
+}
+
 fn if_node_has_single_survivor(node: &LayoutNode) -> bool {
     matches!(
         node,
@@ -3324,6 +3382,7 @@ fn node_extents(node: &LayoutNode) -> (f64, f64) {
             then_branch,
             else_branches,
             then_label,
+            arrow_font_size,
             diamond_font_family,
             diamond_font_size,
             diamond_text_bold,
@@ -3364,6 +3423,19 @@ fn node_extents(node: &LayoutNode) -> (f64, f64) {
                         + IF_DOWN_BRANCH_CORRIDOR_GAP
                         + IF_DOWN_BRANCH_CORRIDOR_TRAILING_PAD,
                 );
+                return with_if_attached_note_extents(left, right, attached_notes, diamond_half_w);
+            }
+            if let Some(plan) =
+                if_single_circle_terminal_plan(then_label.as_ref(), then_branch, else_branches)
+            {
+                let terminal_r = terminal_radius(plan.terminal);
+                let terminal_label_w = plan.terminal_label.map_or(0.0, |label| {
+                    text_render::measure(label, *arrow_font_size, false)
+                });
+                let survivor_w = sequence_width(plan.survivor);
+                let left = (diamond_half_w + IF_DOWN_LEFT_PAD).max(survivor_w / 2.0);
+                let right =
+                    (diamond_half_w + terminal_label_w + 3.0 * terminal_r).max(survivor_w / 2.0);
                 return with_if_attached_note_extents(left, right, attached_notes, diamond_half_w);
             }
             if if_empty_both_plain(then_branch, else_branches) {
@@ -4405,6 +4477,18 @@ fn node_height(node: &LayoutNode) -> f64 {
                     + stretch
                     + ARROW_LEN
                     + DIAMOND_HALF * 2.0;
+            }
+            if let Some(plan) =
+                if_single_circle_terminal_plan(then_label.as_ref(), then_branch, else_branches)
+            {
+                let branch_h = sequence_height(plan.survivor);
+                let flow_count = plan.survivor.iter().filter(|n| node_is_flow(n)).count();
+                let stretch = if flow_count >= 2 && flow_count.is_multiple_of(2) {
+                    IF_DOWN_MID_STRETCH
+                } else {
+                    0.0
+                };
+                return DIAMOND_HALF * 2.0 + IF_DOWN_LEAD + branch_h + stretch + ARROW_LEN;
             }
             let diamond_h = DIAMOND_HALF * 2.0;
             let then_h = sequence_height_if_branch(then_branch);
@@ -6411,6 +6495,23 @@ fn emit_if(
         return emit_if_down(svg, cx, y, condition, then_label, else_label, &plan);
     }
 
+    if let Some(plan) =
+        if_single_circle_terminal_plan(then_label.as_ref(), then_branch, else_branches)
+    {
+        return emit_if_single_circle_terminal_down(
+            svg,
+            cx,
+            y,
+            condition,
+            diamond_font_family,
+            diamond_font_size,
+            diamond_text_color,
+            diamond_text_bold,
+            diamond_text_italic,
+            &plan,
+        );
+    }
+
     // Cache the per-diagram colours up front so the many line/polygon emit
     // calls below can borrow them as &str without re-borrowing svg.palette.
     let arrow_color = svg.palette.arrow_color.clone();
@@ -7103,6 +7204,146 @@ fn leading_if_branch_repeat_extra(node: &LayoutNode) -> f64 {
 
 fn sequence_height_if_branch(nodes: &[LayoutNode]) -> f64 {
     sequence_height(nodes) + first_flow_node(nodes).map_or(0.0, leading_if_branch_repeat_extra)
+}
+
+#[allow(clippy::too_many_arguments)]
+fn emit_if_single_circle_terminal_down(
+    svg: &mut SvgEmitter,
+    cx: f64,
+    y: f64,
+    condition: &str,
+    diamond_font_family: &str,
+    diamond_font_size: f64,
+    diamond_text_color: &str,
+    diamond_text_bold: bool,
+    diamond_text_italic: bool,
+    plan: &IfSingleCircleTerminalPlan,
+) -> f64 {
+    let arrow_color = svg.palette.arrow_color.clone();
+    let diamond_stroke = svg.palette.diamond_stroke.clone();
+    let diamond_fill = svg.palette.diamond_fill.clone();
+    let diamond_stroke_width = svg.palette.diamond_stroke_width.clone();
+
+    let cond_inner_w = diamond_inner_w_styled(
+        condition,
+        diamond_font_size,
+        diamond_text_bold,
+        diamond_font_family,
+    );
+    let cond_text_w = text_render::measure_with_family(
+        condition,
+        diamond_font_size,
+        diamond_text_bold,
+        diamond_font_family,
+    );
+    let diamond_cy = y + DIAMOND_HALF;
+    let diamond_left = cx - cond_inner_w / 2.0 - DIAMOND_HALF;
+    let diamond_right = cx + cond_inner_w / 2.0 + DIAMOND_HALF;
+    let diamond_bottom = y + DIAMOND_HALF * 2.0;
+
+    let branch_top = diamond_bottom + IF_DOWN_LEAD;
+    let flow_count = plan.survivor.iter().filter(|n| node_is_flow(n)).count();
+    let mid_stretch = if flow_count >= 2 && flow_count.is_multiple_of(2) {
+        Some((flow_count / 2, IF_DOWN_MID_STRETCH))
+    } else {
+        None
+    };
+    let branch_bottom =
+        emit_sequence_ex(svg, plan.survivor, cx, branch_top, mid_stretch, None, false);
+
+    let pts = vec![
+        (cx - cond_inner_w / 2.0, y),
+        (cx + cond_inner_w / 2.0, y),
+        (diamond_right, diamond_cy),
+        (cx + cond_inner_w / 2.0, y + DIAMOND_HALF * 2.0),
+        (cx - cond_inner_w / 2.0, y + DIAMOND_HALF * 2.0),
+        (diamond_left, diamond_cy),
+    ];
+    svg.polygon_shape(&diamond_fill, &pts, &diamond_stroke, &diamond_stroke_width);
+
+    if let Some(label) = plan.survivor_label {
+        let label_font_size = svg.palette.arrow_font_size;
+        let label_family = svg.palette.arrow_font_family.clone();
+        let label_color = svg.palette.arrow_text_color.clone();
+        let lw = text_render::measure_with_family(label, label_font_size, false, &label_family);
+        svg.text_element(
+            &label_color,
+            &label_family,
+            label_font_size,
+            lw,
+            cx + 4.0,
+            diamond_bottom + text_render::ascent_for_family(label_font_size, &label_family),
+            label,
+            false,
+        );
+    }
+    let text_y = centered_label_y_for_family(
+        condition,
+        diamond_cy,
+        diamond_font_size,
+        diamond_font_family,
+    );
+    svg.text_element_styled(
+        diamond_text_color,
+        diamond_font_family,
+        diamond_font_size,
+        cx - cond_text_w / 2.0,
+        text_y,
+        condition,
+        diamond_text_bold,
+        diamond_text_italic,
+    );
+    if let Some(label) = plan.terminal_label {
+        let label_font_size = svg.palette.arrow_font_size;
+        let label_family = svg.palette.arrow_font_family.clone();
+        let label_color = svg.palette.arrow_text_color.clone();
+        let lw = text_render::measure_with_family(label, label_font_size, false, &label_family);
+        svg.text_element(
+            &label_color,
+            &label_family,
+            label_font_size,
+            lw,
+            diamond_right,
+            centerline_label_y_for_family(diamond_cy, label_font_size, &label_family),
+            label,
+            false,
+        );
+    }
+
+    let terminal_r = terminal_radius(plan.terminal);
+    let terminal_label_w = plan.terminal_label.map_or(0.0, |label| {
+        text_render::measure_with_family(
+            label,
+            svg.palette.arrow_font_size,
+            false,
+            &svg.palette.arrow_font_family,
+        )
+    });
+    let terminal_cx = diamond_right + terminal_label_w + 2.0 * terminal_r;
+    let terminal_left = terminal_cx - terminal_r;
+    emit_node_with_repeat_extra(
+        svg,
+        plan.terminal,
+        terminal_cx,
+        diamond_cy - terminal_r,
+        0.0,
+        false,
+    );
+
+    svg.down_arrow(cx, diamond_bottom, branch_top, &arrow_color);
+    svg.connector_line(
+        &arrow_color,
+        diamond_right,
+        terminal_left,
+        diamond_cy,
+        diamond_cy,
+        false,
+    );
+    svg.right_arrow(terminal_left, diamond_cy, &arrow_color);
+
+    let out_y = branch_bottom + ARROW_LEN;
+    svg.down_arrow(cx, branch_bottom, out_y, &arrow_color);
+    out_y
 }
 
 /// Asymmetric "down" layout for an `if/else` where one branch is empty.
