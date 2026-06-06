@@ -336,6 +336,7 @@ fn resolve_hide(entity: &ClassEntity, directives: &[HideShow]) -> HideFlags {
         EntityKind::AbstractClass => "abstract",
         EntityKind::Annotation => "annotation",
         EntityKind::Entity => "entity",
+        EntityKind::Object => "object",
         EntityKind::State => "state",
         EntityKind::Circle => "circle",
         EntityKind::Diamond => "diamond",
@@ -723,6 +724,8 @@ fn calc_entity_dims(
         // inside a 2*HEADER_RIGHT_PAD-padded box; treat the icon area as
         // empty padding to recover the matching width.
         HEADER_RIGHT_PAD
+    } else if entity.kind == EntityKind::Object {
+        ENUM_TEXT_OFFSET
     } else {
         ICON_CX_OFFSET + ICON_RX + ICON_TEXT_GAP // 29
     };
@@ -800,7 +803,7 @@ fn calc_entity_dims(
     const HEADER_H: f64 = 32.0;
     let header_h = if has_stereotypes {
         HEADER_H + stereotype_header_extra_height(stereotype_count)
-    } else if hide.circle {
+    } else if hide.circle || entity.kind == EntityKind::Object {
         HEADER_H_NO_CIRCLE
     } else {
         HEADER_H
@@ -809,6 +812,8 @@ fn calc_entity_dims(
     let height = if hide.fields && hide.methods {
         // Both compartments hidden — header only, no body or separators.
         header_h
+    } else if entity.kind == EntityKind::Object {
+        header_h + COMPARTMENT_PAD + eff_field_count as f64 * MEMBER_LINE_HEIGHT
     } else if entity.members.is_empty()
         || (eff_field_count == 0 && eff_method_count == 0 && !enum_classic)
     {
@@ -3145,7 +3150,8 @@ fn render_entity_content(
         let title_lh = text_render::label_height(&entity.label, name_font_size as f64);
         y + CIRCLED_ICON_TOP_INSET + icon_radius.max(title_lh / 2.0)
     };
-    if !dim.hide.circle && !suppress_header_icon {
+    let is_object_entity = entity.kind == EntityKind::Object;
+    if !dim.hide.circle && !suppress_header_icon && !is_object_entity {
         // A hex spot color from `<< (X,#HEX) Name >>` overrides the default
         // kind-based circle fill. Named spot colors do not (PlantUML behavior).
         let stereotype_c_fill = font
@@ -3184,6 +3190,7 @@ fn render_entity_content(
             Some(c) => c,
             None => match entity.kind {
                 EntityKind::Class => stereotype_c_fill.as_deref().unwrap_or(CLASS_ICON_FILL),
+                EntityKind::Object => stereotype_c_fill.as_deref().unwrap_or(CLASS_ICON_FILL),
                 EntityKind::Interface => {
                     stereotype_i_fill.as_deref().unwrap_or(INTERFACE_ICON_FILL)
                 }
@@ -3200,7 +3207,7 @@ fn render_entity_content(
             },
         };
         let icon_stroke = match entity.kind {
-            EntityKind::Class | EntityKind::Entity | EntityKind::State => {
+            EntityKind::Class | EntityKind::Object | EntityKind::Entity | EntityKind::State => {
                 stereotype_c_stroke.as_deref().unwrap_or(BORDER_COLOR)
             }
             EntityKind::Interface => stereotype_i_stroke.as_deref().unwrap_or(BORDER_COLOR),
@@ -3231,7 +3238,7 @@ fn render_entity_content(
             d.to_string()
         } else {
             match entity.kind {
-                EntityKind::Class | EntityKind::Entity => {
+                EntityKind::Class | EntityKind::Object | EntityKind::Entity => {
                     // Offset the C glyph from reference position (cx=22) to actual cx.
                     let dx = icon_cx - 22.0;
                     let dy = icon_cy - 23.0;
@@ -3415,6 +3422,84 @@ fn render_entity_content(
         );
     }
     svg.push_str(&text_buf);
+
+    if is_object_entity {
+        let object_sep_style = oracle_rect
+            .and_then(|r| r.rect_style.as_deref())
+            .unwrap_or("stroke:#181818;stroke-width:0.5;");
+        let object_line = oracle_rect.and_then(|r| r.lines.first());
+        if let Some(line) = object_line {
+            let style = line.style.as_deref().unwrap_or(object_sep_style);
+            write!(
+                svg,
+                r#"<line style="{}" x1="{}" x2="{}" y1="{}" y2="{}"/>"#,
+                style, line.x1, line.x2, line.y1, line.y2,
+            )
+            .unwrap();
+        } else {
+            let sep_y = y + HEADER_H_NO_CIRCLE - MARGIN;
+            write!(
+                svg,
+                r#"<line style="{}" x1="{}" x2="{}" y1="{}" y2="{}"/>"#,
+                object_sep_style,
+                fmt4(x + 1.0),
+                fmt4(x + dim.width - 1.0),
+                fmt4(sep_y),
+                fmt4(sep_y),
+            )
+            .unwrap();
+        }
+
+        if link_anchor.is_some() {
+            svg.push_str("</a>");
+        }
+        let oracle_text_y = oracle_rect
+            .map(|r| r.text_y_values.as_slice())
+            .unwrap_or(&[]);
+        let oracle_text_x = oracle_rect
+            .map(|r| r.text_x_values.as_slice())
+            .unwrap_or(&[]);
+        let header_sep_y = object_line
+            .and_then(|line| line.y1.parse::<f64>().ok())
+            .or_else(|| oracle_rect.and_then(|r| r.sep_y_values.first().copied()))
+            .unwrap_or(y + HEADER_H_NO_CIRCLE - MARGIN);
+        let mut member_y = header_sep_y + FIRST_MEMBER_OFFSET;
+        for (mi, member) in entity
+            .members
+            .iter()
+            .filter(|m| m.kind != MemberKind::Separator && !dim.hide.hides_member(m))
+            .enumerate()
+        {
+            let eff_y = oracle_text_y.get(1 + mi).copied().unwrap_or(member_y);
+            let eff_x = oracle_text_x
+                .get(1 + mi)
+                .copied()
+                .unwrap_or(x + ENUM_TEXT_OFFSET);
+            for (line_index, text) in member_display_lines(member, attr_font.monospace_spaces)
+                .iter()
+                .enumerate()
+            {
+                text_render::emit_text(
+                    svg,
+                    text,
+                    &TextBase {
+                        x: eff_x,
+                        y: eff_y + line_index as f64 * MEMBER_SPACING,
+                        font_size: attr_font.size,
+                        font_family: attr_font.family,
+                        fill: member_fill,
+                        bold: false,
+                        italic: false,
+                        underline: false,
+                        skip_underline: true,
+                    },
+                );
+            }
+            member_y += member_display_line_count(member, attr_font.monospace_spaces) as f64
+                * MEMBER_SPACING;
+        }
+        return;
+    }
 
     // Generic type-parameter box: a dashed rectangle at the entity's top-right
     // corner carrying the `<...>` content (e.g. `T`, `K, V`, `T extends Bar`).
@@ -5072,7 +5157,7 @@ fn has_strictuml_style(diagram: &ClassDiagram) -> bool {
 
 fn find_oracle_relationship_edge<'a>(
     oracle: &'a OracleLayout,
-    candidates: &[(&str, bool)],
+    candidates: &[(String, bool)],
     source_line: Option<&str>,
 ) -> Option<(usize, &'a OracleEdgePath, bool)> {
     fn is_numbered_duplicate(edge_id: &str, candidate_id: &str) -> bool {
@@ -5089,7 +5174,7 @@ fn find_oracle_relationship_edge<'a>(
     for (candidate_id, is_reverse) in candidates {
         for (edge_index, edge) in oracle.edges.iter().enumerate().filter(|(_, edge)| {
             edge.id == *candidate_id
-                || source_line.is_some() && is_numbered_duplicate(&edge.id, candidate_id)
+                || source_line.is_some() && is_numbered_duplicate(&edge.id, candidate_id.as_str())
         }) {
             if source_line.is_some_and(|line| edge.source_line.as_deref() == Some(line)) {
                 return Some((edge_index, edge, *is_reverse));
@@ -5146,6 +5231,8 @@ fn render_oracle_relationships(
             .iter()
             .find(|e| e.id == rel.to)
             .map_or(rel.to.as_str(), |e| e.label.as_str());
+        let from_id = rel.from.as_str();
+        let to_id_raw = rel.to.as_str();
 
         let to_id = format!("{}-to-{}", from_key, to_key);
         let backto_id = format!("{}-backto-{}", from_key, to_key);
@@ -5153,19 +5240,31 @@ fn render_oracle_relationships(
         let to_id_rev = format!("{}-to-{}", to_key, from_key);
         let backto_id_rev = format!("{}-backto-{}", to_key, from_key);
         let assoc_id_rev = format!("{}-{}", to_key, from_key);
+        let to_id_by_id = format!("{from_id}-to-{to_id_raw}");
+        let backto_id_by_id = format!("{from_id}-backto-{to_id_raw}");
+        let assoc_id_by_id = format!("{from_id}-{to_id_raw}");
+        let to_id_rev_by_id = format!("{to_id_raw}-to-{from_id}");
+        let backto_id_rev_by_id = format!("{to_id_raw}-backto-{from_id}");
+        let assoc_id_rev_by_id = format!("{to_id_raw}-{from_id}");
         let lollipop_assoc_id = oracle_lollipop_endpoint(oracle, from_key, rel.source_line)
             .map(|(qualified_name, _)| format!("{from_key}-{qualified_name}"));
 
         let source_line = (rel.source_line > 0).then(|| rel.source_line.to_string());
         let mut candidates = vec![
-            (backto_id.as_str(), true),
-            (to_id.as_str(), false),
-            (assoc_id.as_str(), false),
-            (backto_id_rev.as_str(), true),
-            (to_id_rev.as_str(), false),
-            (assoc_id_rev.as_str(), false),
+            (backto_id, true),
+            (to_id, false),
+            (assoc_id, false),
+            (backto_id_rev, true),
+            (to_id_rev, false),
+            (assoc_id_rev, false),
+            (backto_id_by_id, true),
+            (to_id_by_id, false),
+            (assoc_id_by_id, false),
+            (backto_id_rev_by_id, true),
+            (to_id_rev_by_id, false),
+            (assoc_id_rev_by_id, false),
         ];
-        if let Some(id) = lollipop_assoc_id.as_deref() {
+        if let Some(id) = lollipop_assoc_id {
             candidates.push((id, false));
         }
         let Some((edge_index, oracle_edge, is_reverse)) =

@@ -1386,6 +1386,7 @@ fn parse_entity_kind(s: &str) -> EntityKind {
         "enum" => EntityKind::Enum,
         "annotation" => EntityKind::Annotation,
         "entity" => EntityKind::Entity,
+        "object" => EntityKind::Object,
         "state" => EntityKind::State,
         "circle" => EntityKind::Circle,
         "diamond" => EntityKind::Diamond,
@@ -1833,6 +1834,13 @@ mod tests {
     fn entity_gradient_color_is_captured_as_one_token() {
         let d = parse("class Foo #red|blue {\n  field: String\n}");
         assert_eq!(d.entities[0].color.as_deref(), Some("#red|blue"));
+    }
+
+    #[test]
+    fn object_declaration_keeps_object_kind_in_class_diagram() {
+        let d = parse("class Person\nobject alice\nPerson <|.. alice");
+        let object = d.entities.iter().find(|e| e.id == "alice").unwrap();
+        assert_eq!(object.kind, EntityKind::Object);
     }
 
     #[test]
