@@ -14,9 +14,10 @@ use rustuml_parser::diagram::sequence::*;
 use crate::creole::{self, CreoleLine};
 use crate::handwritten::{
     JavaRandom as HandJavaRandom, ellipse_points as handwritten_ellipse_points,
-    line_path as handwritten_line_path, path as handwritten_path,
-    path_with_rnd as handwritten_path_with_rnd, polygon_points as handwritten_polygon_points,
-    rect_points as handwritten_rect_points,
+    has_deprecated_skinparam as has_deprecated_handwritten_skinparam,
+    is_enabled as is_handwritten_enabled, line_path as handwritten_line_path,
+    path as handwritten_path, path_with_rnd as handwritten_path_with_rnd,
+    polygon_points as handwritten_polygon_points, rect_points as handwritten_rect_points,
 };
 use crate::layout_oracle::{OracleHandwrittenWarning, OracleLayout, wrap_oracle_envelope};
 use crate::plantuml_metrics;
@@ -4978,10 +4979,9 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
     } else {
         0.0
     };
-    let is_handwritten = diagram.meta.skinparams.iter().any(|sp| {
-        sp.key.eq_ignore_ascii_case("handwritten") && sp.value.eq_ignore_ascii_case("true")
-    });
-    let handwritten_warning_band_h = if is_handwritten {
+    let has_deprecated_handwritten = has_deprecated_handwritten_skinparam(&diagram.meta.skinparams);
+    let is_handwritten = is_handwritten_enabled(&diagram.meta.skinparams);
+    let handwritten_warning_band_h = if has_deprecated_handwritten {
         HANDWRITTEN_WARNING_BAND_H
     } else {
         0.0
@@ -7219,7 +7219,7 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
         } else {
             0.0
         };
-    if is_handwritten
+    if has_deprecated_handwritten
         && let Some(orc) = oracle
         && orc.handwritten_warning.is_some()
     {
@@ -7288,7 +7288,7 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
         // The canvas extends 6px below the (ceiled) box frame bottom.
         svg_height = svg_height.max(box_bottom.ceil() as u32 + 6);
     }
-    if is_handwritten
+    if has_deprecated_handwritten
         && let Some(orc) = oracle
         && orc.handwritten_warning.is_some()
     {
@@ -8049,7 +8049,7 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
     );
 
     // Emit the deprecated handwritten skinparam warning before the diagram body.
-    if is_handwritten {
+    if has_deprecated_handwritten {
         if let Some(warning) = oracle.and_then(|orc| orc.handwritten_warning.as_ref()) {
             emit_handwritten_warning(&mut svg.buf, warning);
         } else {

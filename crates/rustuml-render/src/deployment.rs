@@ -13,6 +13,10 @@ use std::fmt::Write as _;
 
 use rustuml_parser::diagram::deployment::*;
 
+use crate::handwritten::{
+    has_deprecated_skinparam as has_deprecated_handwritten_skinparam,
+    is_enabled as is_handwritten_enabled,
+};
 use crate::layout_oracle::{
     EntityPath, EntityPolygon, OracleHandwrittenWarning, OracleLayout, emit_entity_image,
     wrap_oracle_envelope,
@@ -140,7 +144,7 @@ fn render_oracle(diagram: &DeploymentDiagram, _theme: &Theme, oracle: &OracleLay
 
     let mut svg = SvgBuilder::new_plantuml(canvas_w, canvas_h, "DESCRIPTION");
 
-    if has_handwritten_skinparam(diagram)
+    if has_deprecated_handwritten_skinparam(&diagram.meta.skinparams)
         && let Some(warning) = oracle.handwritten_warning.as_ref()
     {
         emit_handwritten_warning(&mut svg, warning);
@@ -276,7 +280,7 @@ fn render_oracle(diagram: &DeploymentDiagram, _theme: &Theme, oracle: &OracleLay
         skin_fills: &skin_fills,
         skin_strokes: &skin_strokes,
         sprite_names: &sprite_names,
-        handwritten: has_handwritten_skinparam(diagram),
+        handwritten: is_handwritten_enabled(&diagram.meta.skinparams),
     };
 
     // Header — a centred grey caption above the diagram (font 10). The oracle
@@ -484,12 +488,6 @@ fn skin_keyword(kind: DeploymentNodeKind) -> &'static str {
         Stack => "stack",
         Default => "",
     }
-}
-
-fn has_handwritten_skinparam(diagram: &DeploymentDiagram) -> bool {
-    diagram.meta.skinparams.iter().any(|sp| {
-        sp.key.eq_ignore_ascii_case("handwritten") && sp.value.eq_ignore_ascii_case("true")
-    })
 }
 
 fn emit_handwritten_warning(svg: &mut SvgBuilder, warning: &OracleHandwrittenWarning) {

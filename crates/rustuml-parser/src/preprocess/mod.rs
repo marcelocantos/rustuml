@@ -831,6 +831,12 @@ impl PreprocessContext {
             }
             return;
         }
+        if let Some(option_lines) = self.try_option(trimmed) {
+            if self.is_active() {
+                output.extend(option_lines);
+            }
+            return;
+        }
 
         // !dump_memory — emit a comment line with all current defines (debugging aid).
         if trimmed == "!dump_memory" {
@@ -1574,6 +1580,18 @@ impl PreprocessContext {
         // Emit a placeholder blank line so the diagram body's source-line
         // numbers stay aligned with the original .puml.
         Some(vec![String::new()])
+    }
+
+    fn try_option(&self, line: &str) -> Option<Vec<String>> {
+        let rest = line.strip_prefix("!option ")?;
+        let mut parts = rest.split_whitespace();
+        let name = parts.next()?;
+        let value = parts.next().unwrap_or("true");
+        if name.eq_ignore_ascii_case("handwritten") && value.eq_ignore_ascii_case("true") {
+            Some(vec!["skinparam __optionHandwritten true".to_string()])
+        } else {
+            Some(vec![String::new()])
+        }
     }
 
     fn try_undefine(&mut self, line: &str) -> bool {
@@ -3596,6 +3614,20 @@ mod tests {
         assert!(lines.contains(&"skinparam activityStartColor #0073bb".to_string()));
         assert!(lines.contains(&"skinparam arrowThickness 3".to_string()));
         assert!(lines.contains(&"skinparam sequenceArrowThickness 3".to_string()));
+    }
+
+    #[test]
+    fn option_handwritten_becomes_internal_skinparam() {
+        let input = "@startuml\n!option handwritten true\nstart\n@enduml";
+        let lines = pp(input);
+        assert!(lines.contains(&"skinparam __optionHandwritten true".to_string()));
+    }
+
+    #[test]
+    fn sketchy_theme_enables_handwritten_option() {
+        let input = "@startuml\n!theme sketchy\nstart\n@enduml";
+        let lines = pp(input);
+        assert!(lines.contains(&"skinparam __optionHandwritten true".to_string()));
     }
 
     #[test]

@@ -11,6 +11,7 @@ use std::fmt::Write;
 use rustuml_layout::graph::{Direction, EdgePath, LayoutGraph};
 use rustuml_parser::diagram::state::*;
 
+use crate::handwritten::has_deprecated_skinparam as has_deprecated_handwritten_skinparam;
 use crate::layout_oracle::{
     EntityPath, EntityPolygon, EntityRect, OracleEdgePath, OracleHandwrittenWarning, OracleLayout,
     wrap_oracle_envelope,
@@ -1138,13 +1139,12 @@ pub fn render_with_oracle(
     let mut ids = IdCounter::new();
 
     // Handwritten compatibility notice.
-    let is_handwritten = diagram.meta.skinparams.iter().any(|sp| {
-        sp.key.eq_ignore_ascii_case("handwritten") && sp.value.eq_ignore_ascii_case("true")
-    });
-    if is_handwritten && let Some(warning) = oracle.and_then(|orc| orc.handwritten_warning.as_ref())
+    let has_deprecated_handwritten = has_deprecated_handwritten_skinparam(&diagram.meta.skinparams);
+    if has_deprecated_handwritten
+        && let Some(warning) = oracle.and_then(|orc| orc.handwritten_warning.as_ref())
     {
         emit_handwritten_warning(&mut svg, warning);
-    } else if is_handwritten {
+    } else if has_deprecated_handwritten {
         write!(
             svg,
             r#"<text fill="{TEXT_COLOR}" font-family="monospace" font-size="10" x="10" y="13">Please use &apos;!option handwritten true&apos; to enable handwritten</text>"#,

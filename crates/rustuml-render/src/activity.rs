@@ -14,7 +14,9 @@ use rustuml_parser::diagram::activity::{ActivityDiagram, ActivityStep, NotePosit
 use crate::creole;
 use crate::ftile;
 use crate::handwritten::{
-    ellipse_points as handwritten_ellipse_points, line_path as handwritten_line_path,
+    ellipse_points as handwritten_ellipse_points,
+    has_deprecated_skinparam as has_deprecated_handwritten_skinparam,
+    is_enabled as is_handwritten_enabled, line_path as handwritten_line_path,
     polygon_points as handwritten_polygon_points, rect_points as handwritten_rect_points,
 };
 use crate::layout_oracle::{
@@ -255,12 +257,6 @@ fn action_text_for_family(text: &str, font_family: &str) -> String {
     } else {
         text.to_string()
     }
-}
-
-fn has_handwritten_skinparam(diagram: &ActivityDiagram) -> bool {
-    diagram.meta.skinparams.iter().any(|sp| {
-        sp.key.eq_ignore_ascii_case("handwritten") && sp.value.eq_ignore_ascii_case("true")
-    })
 }
 
 /// Per-diagram color palette, derived from the PlantUML default plus any
@@ -9889,8 +9885,9 @@ fn render_inner(
     // theme machinery in `style.rs`.
     let palette = Palette::from_skinparams(&diagram.meta.skinparams, &gradient_id, &filter_id);
     let has_shadow = palette.shadow_filter.is_some();
-    let is_handwritten = has_handwritten_skinparam(diagram);
-    let handwritten_warning = if is_handwritten {
+    let has_deprecated_handwritten = has_deprecated_handwritten_skinparam(&diagram.meta.skinparams);
+    let is_handwritten = is_handwritten_enabled(&diagram.meta.skinparams);
+    let handwritten_warning = if has_deprecated_handwritten {
         oracle.and_then(|o| o.handwritten_warning.as_ref())
     } else {
         None
@@ -10005,7 +10002,7 @@ fn render_inner(
         0.0
     };
     let starts_with_start = matches!(first_flow_node(&tree), Some(LayoutNode::Start));
-    let handwritten_warning_band_h = if is_handwritten {
+    let handwritten_warning_band_h = if has_deprecated_handwritten {
         HANDWRITTEN_WARNING_BAND_H
             + if starts_with_start {
                 START_CY - MARGIN_LEAD

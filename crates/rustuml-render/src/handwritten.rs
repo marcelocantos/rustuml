@@ -3,7 +3,25 @@
 
 use std::fmt::Write;
 
+use rustuml_parser::diagram::SkinParam;
+
 use crate::plantuml_metrics as pm;
+
+pub(crate) fn has_deprecated_skinparam(skinparams: &[SkinParam]) -> bool {
+    skinparams.iter().any(|sp| {
+        sp.key.eq_ignore_ascii_case("handwritten") && sp.value.eq_ignore_ascii_case("true")
+    })
+}
+
+pub(crate) fn has_option(skinparams: &[SkinParam]) -> bool {
+    skinparams.iter().any(|sp| {
+        sp.key.eq_ignore_ascii_case("__optionHandwritten") && sp.value.eq_ignore_ascii_case("true")
+    })
+}
+
+pub(crate) fn is_enabled(skinparams: &[SkinParam]) -> bool {
+    has_deprecated_skinparam(skinparams) || has_option(skinparams)
+}
 
 #[derive(Clone, Copy)]
 pub(crate) struct JavaRandom {
