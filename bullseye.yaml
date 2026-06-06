@@ -336,9 +336,10 @@ targets:
     achieved: 2026-06-05
   T4.6:
     name: Creole markup strict-XML pass
-    status: converging
+    status: achieved
     value: 0.0
     cost: 0.0
+    actual_cost: 1.0
     acceptance:
     - The `creole/` directory under `test-diagrams/golden` produces 0 strict-XML failures when `cargo test --test golden_pairs` runs.
     context: |-
@@ -352,6 +353,7 @@ targets:
       - triple-quote class names, hline/linebreak in class, creole_in_stereotype: class.rs/parser.
     origin: manual
     discovered: 2026-05-17
+    achieved: 2026-06-07
   T4.7:
     name: Edge-case diagrams strict-XML pass
     status: converging
