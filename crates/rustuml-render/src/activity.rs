@@ -1212,6 +1212,12 @@ fn build_swimlanes(steps: &[ActivityStep], palette: &Palette) -> Vec<LayoutNode>
 
     for step in steps {
         if let ActivityStep::Swimlane(lane) = step {
+            if current_name.as_deref() == Some(lane.name.as_str()) {
+                if current_color.is_none() {
+                    current_color = lane.color.clone();
+                }
+                continue;
+            }
             flush(
                 &mut lanes,
                 &mut segments,
