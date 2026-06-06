@@ -619,26 +619,64 @@ fn emit_clusters_dfs(
                 .get(&node.kind)
                 .map(String::as_str)
                 .unwrap_or(STROKE);
-            emit_cluster_shape(
-                svg,
-                node.kind,
-                rect.x,
-                rect.y,
-                rect.width,
-                rect.height,
-                cluster_fill.as_deref(),
-                stroke,
-                &node.label,
-            );
-            emit_cluster_label(
-                svg,
-                node.kind,
-                node,
-                rect.x,
-                rect.y,
-                rect.width,
-                ctx.sprite_names,
-            );
+            if matches!(node.kind, DeploymentNodeKind::Cloud) {
+                if let Some(glyph) = rect.glyph_path_d.as_deref() {
+                    emit_oracle_cloud_cluster_path(
+                        svg,
+                        glyph,
+                        cluster_fill.as_deref().unwrap_or("none"),
+                        stroke,
+                    );
+                } else {
+                    emit_cluster_shape(
+                        svg,
+                        node.kind,
+                        rect.x,
+                        rect.y,
+                        rect.width,
+                        rect.height,
+                        cluster_fill.as_deref(),
+                        stroke,
+                        &node.label,
+                    );
+                }
+                if let (Some(&text_x), Some(&text_y)) =
+                    (rect.text_x_values.first(), rect.text_y_values.first())
+                {
+                    emit_text(svg, &node.label, text_x, text_y, FONT_SIZE, true, false);
+                } else {
+                    emit_cluster_label(
+                        svg,
+                        node.kind,
+                        node,
+                        rect.x,
+                        rect.y,
+                        rect.width,
+                        ctx.sprite_names,
+                    );
+                }
+            } else {
+                emit_cluster_shape(
+                    svg,
+                    node.kind,
+                    rect.x,
+                    rect.y,
+                    rect.width,
+                    rect.height,
+                    cluster_fill.as_deref(),
+                    stroke,
+                    &node.label,
+                );
+                emit_cluster_label(
+                    svg,
+                    node.kind,
+                    node,
+                    rect.x,
+                    rect.y,
+                    rect.width,
+                    ctx.sprite_names,
+                );
+            }
             svg.raw("</g>");
         }
         for child_id in &node.children {
@@ -875,6 +913,19 @@ fn emit_cluster_shape(
         Stack => emit_stack_cluster(svg, x, y, w, h, fill),
         _ => emit_tag_polygon(svg, x, y, w, h, fill, 1.0, stroke),
     }
+}
+
+fn emit_oracle_cloud_cluster_path(svg: &mut SvgBuilder, glyph: &str, fill: &str, stroke: &str) {
+    let first = glyph.split('|').next().unwrap_or(glyph);
+    let (d, style) = first
+        .split_once("#STYLE#")
+        .map_or((first, ""), |(d, style)| (d, style));
+    let style = if style.is_empty() {
+        format!("stroke:{stroke};stroke-width:1;")
+    } else {
+        style.to_string()
+    };
+    svg.raw(&format!(r#"<path d="{d}" fill="{fill}" style="{style}"/>"#,));
 }
 
 fn emit_plain_rect_cluster(
