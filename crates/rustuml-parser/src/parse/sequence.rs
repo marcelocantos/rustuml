@@ -383,10 +383,13 @@ impl SeqParser {
         // Strip [#color] annotations first.
         static RE_COLOR: LazyLock<Regex> = LazyLock::new(|| Regex::new(r"\[#[^\]]*\]").unwrap());
         static RE_IN: LazyLock<Regex> = LazyLock::new(|| {
-            Regex::new(r"^\[([-<>.\\/ox]+)\s*(\w+)\s*(?:(?:\+\+|--|!!)\s*)?(?::\s*(.*))?$").unwrap()
+            Regex::new(
+                r"^\[([-<>.\\/ox]+)\s*(\w+)\s*(?:((?:\+\+|--|!!))\s*(#\S+)?\s*)?(?::\s*(.*))?$",
+            )
+            .unwrap()
         });
         static RE_OUT: LazyLock<Regex> = LazyLock::new(|| {
-            Regex::new(r"^(\w+)\s*([-<>.\\/ox]+)([\[\]])\s*(?:(?:\+\+|--|!!)\s*)?(?::\s*(.*))?$")
+            Regex::new(r"^(\w+)\s*([-<>.\\/ox]+)([\[\]])\s*(?:((?:\+\+|--|!!))\s*(#\S+)?\s*)?(?::\s*(.*))?$")
                 .unwrap()
         });
         let (_, stripped) = strip_arrow_color_annotation(line, &RE_COLOR);
@@ -396,14 +399,16 @@ impl SeqParser {
             let mut arrow = parse_arrow(&caps[1]);
             arrow.direction = ArrowDirection::LeftToRight;
             let to = self.ensure_participant(&caps[2]);
-            let label = message_label(line, caps.get(3));
+            let activation = caps.get(3).map(|m| parse_activation(m.as_str()));
+            let activation_color = caps.get(4).map(|m| m.as_str().to_string());
+            let label = message_label(line, caps.get(5));
             self.events.push(Event::Message(Message {
                 from: "[".to_string(),
                 to,
                 label,
                 arrow,
-                activation: None,
-                activation_color: None,
+                activation,
+                activation_color,
                 source_line: self.current_line,
             }));
             true
@@ -411,14 +416,16 @@ impl SeqParser {
             let from = self.ensure_participant(&caps[1]);
             let mut arrow = parse_arrow(&caps[2]);
             arrow.direction = ArrowDirection::LeftToRight;
-            let label = message_label(line, caps.get(4));
+            let activation = caps.get(4).map(|m| parse_activation(m.as_str()));
+            let activation_color = caps.get(5).map(|m| m.as_str().to_string());
+            let label = message_label(line, caps.get(6));
             self.events.push(Event::Message(Message {
                 from,
                 to: caps[3].to_string(),
                 label,
                 arrow,
-                activation: None,
-                activation_color: None,
+                activation,
+                activation_color,
                 source_line: self.current_line,
             }));
             true
@@ -1252,6 +1259,34 @@ mod tests {
             assert_eq!(m.to, "[");
             assert_eq!(m.label, "lost left dotted");
             assert_eq!(m.arrow.line, LineStyle::Dotted);
+        } else {
+            panic!("expected message");
+        }
+    }
+
+    #[test]
+    fn external_incoming_activation_and_color() {
+        let d = parse("[-> Alice ++ #red : found");
+        if let Event::Message(m) = &d.events[0] {
+            assert_eq!(m.from, "[");
+            assert_eq!(m.to, "Alice");
+            assert_eq!(m.label, "found");
+            assert_eq!(m.activation, Some(ActivationChange::Activate));
+            assert_eq!(m.activation_color.as_deref(), Some("#red"));
+        } else {
+            panic!("expected message");
+        }
+    }
+
+    #[test]
+    fn external_outgoing_deactivation() {
+        let d = parse("Alice -->] -- : lost return");
+        if let Event::Message(m) = &d.events[0] {
+            assert_eq!(m.from, "Alice");
+            assert_eq!(m.to, "]");
+            assert_eq!(m.label, "lost return");
+            assert_eq!(m.activation, Some(ActivationChange::Deactivate));
+            assert_eq!(m.activation_color, None);
         } else {
             panic!("expected message");
         }

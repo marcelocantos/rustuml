@@ -5501,8 +5501,24 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                         } else {
                             0.0
                         };
-                    let self_right =
-                        loopback_right.max(text_right) + SELF_MSG_RIGHT_PAD + created_active_pad;
+                    let activation_stack_depth = match msg.activation {
+                        Some(ActivationChange::Activate) => {
+                            act_depth.get(msg.from.as_str()).copied().unwrap_or(0) + 1
+                        }
+                        Some(ActivationChange::Deactivate) => {
+                            act_depth.get(msg.from.as_str()).copied().unwrap_or(0)
+                        }
+                        _ => 0,
+                    };
+                    let self_activation_pad = if activation_stack_depth > 0 {
+                        5.0 + activation_stack_depth as f64 * ACTIVATION_WIDTH
+                    } else {
+                        0.0
+                    };
+                    let self_right = loopback_right.max(text_right)
+                        + SELF_MSG_RIGHT_PAD
+                        + created_active_pad
+                        + self_activation_pad;
                     max_self_msg_right = max_self_msg_right.max(self_right);
                     self_msg_right_note_left_by_event.insert(
                         idx,
@@ -6838,6 +6854,7 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
             start_idx: usize,
             note_left: f64,
             note_right: f64,
+            message_right: f64,
             external_left: f64,
         }
 
@@ -6854,6 +6871,7 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                         start_idx: ev_idx,
                         note_left: f64::INFINITY,
                         note_right: f64::NEG_INFINITY,
+                        message_right: f64::NEG_INFINITY,
                         external_left: f64::INFINITY,
                     });
                 }
@@ -6882,6 +6900,7 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                         let has_child = child_left.is_finite();
                         let has_msgs = min_idx <= max_idx && !participants.is_empty();
                         let has_note = group.note_left.is_finite();
+                        let has_message_right = group.message_right.is_finite();
                         let has_external_left = group.external_left.is_finite();
 
                         // Compute the participant-based frame left first, then derive
@@ -6977,6 +6996,9 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                         if has_note {
                             frame_right = frame_right.max(group.note_right + group_frame_margin);
                         }
+                        if has_message_right {
+                            frame_right = frame_right.max(group.message_right + group_frame_margin);
+                        }
 
                         group_frames.push(GroupFrame {
                             top: frame_top,
@@ -6990,6 +7012,23 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                 Event::Message(msg) if !group_start_stack.is_empty() => {
                     let fi = id_to_idx.get(msg.from.as_str()).copied();
                     let ti = id_to_idx.get(msg.to.as_str()).copied();
+                    let self_message_right = if msg.from == msg.to {
+                        let from_x = center_of(&msg.from);
+                        let label_w = message_label_width(&process_label(&msg.label));
+                        let active_anchor =
+                            if matches!(msg.activation, Some(ActivationChange::Activate))
+                                || matches!(msg.activation, Some(ActivationChange::Deactivate))
+                            {
+                                from_x + ACTIVATION_HALF_W
+                            } else {
+                                from_x
+                            };
+                        let loop_right = active_anchor + SELF_MSG_EXTEND;
+                        let text_right = active_anchor + SELF_MSG_TEXT_X_PAD + label_w;
+                        Some(loop_right.max(text_right) + SELF_MSG_RIGHT_PAD)
+                    } else {
+                        None
+                    };
                     if let Some(top) = group_start_stack.last_mut() {
                         if let Some(fi) = fi {
                             top.min_idx = top.min_idx.min(fi);
@@ -7001,6 +7040,9 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                         }
                         if msg.from == "[" {
                             top.external_left = top.external_left.min(GROUP_EXTERNAL_LEFT_FLOOR);
+                        }
+                        if let Some(right) = self_message_right {
+                            top.message_right = top.message_right.max(right);
                         }
                     }
                 }
@@ -7284,19 +7326,47 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
             _ => pre,
         }
     };
+    let self_activation_start_offset = |idx: usize| -> f64 {
+        match diagram.events.get(idx) {
+            Some(Event::Message(msg))
+                if msg.from == msg.to
+                    && matches!(msg.activation, Some(ActivationChange::Activate)) =>
+            {
+                SELF_MSG_DROP - ACTIVATION_HALF_W
+            }
+            _ => 0.0,
+        }
+    };
+    let self_deactivation_end_offset = |idx: usize| -> f64 {
+        match diagram.events.get(idx) {
+            Some(Event::Message(msg))
+                if msg.from == msg.to
+                    && matches!(msg.activation, Some(ActivationChange::Deactivate)) =>
+            {
+                ACTIVATION_HALF_W + 1.0
+            }
+            _ => 0.0,
+        }
+    };
+    let bar_start_y = |bar: &ActivationBar| -> f64 {
+        event_y(bar.start_event_idx)
+            + bar_create_offset(bar)
+            + self_activation_start_offset(bar.start_event_idx)
+    };
+    let bar_end_y = |bar: &ActivationBar| -> f64 {
+        if bar.end_event_idx == usize::MAX {
+            tail_box_y - NEWPAGE_SEPARATOR_FOOT_GAP + 2.0
+        } else {
+            event_y(bar.end_event_idx) + self_deactivation_end_offset(bar.end_event_idx)
+        }
+    };
 
     // First pass: activation bars (rendered twice in PlantUML's SVG)
     for bar in &activation_bars {
         let cx = center_of(&bar.participant_id);
         let bar_x = cx - ACTIVATION_HALF_W + (bar.depth as f64 * ACTIVATION_HALF_W);
-        let bar_y = event_y(bar.start_event_idx) + bar_create_offset(bar);
-        // A bar closed at a `newpage` boundary (sentinel end index) ends 2px
-        // below the separator rule, giving the minimal page-break bar.
-        let bar_end_y = if bar.end_event_idx == usize::MAX {
-            tail_box_y - NEWPAGE_SEPARATOR_FOOT_GAP + 2.0
-        } else {
-            event_y(bar.end_event_idx)
-        };
+        let bar_y = bar_start_y(bar);
+        let bar_end_y = bar_end_y(bar);
         let bar_h = bar_end_y - bar_y;
         let title = &participants
             .iter()
@@ -7515,14 +7585,8 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
     for bar in &activation_bars {
         let cx = center_of(&bar.participant_id);
         let bar_x = cx - ACTIVATION_HALF_W + (bar.depth as f64 * ACTIVATION_HALF_W);
-        let bar_y = event_y(bar.start_event_idx) + bar_create_offset(bar);
-        // A bar closed at a `newpage` boundary (sentinel end index) ends 2px
-        // below the separator rule, giving the minimal page-break bar.
-        let bar_end_y = if bar.end_event_idx == usize::MAX {
-            tail_box_y - NEWPAGE_SEPARATOR_FOOT_GAP + 2.0
-        } else {
-            event_y(bar.end_event_idx)
-        };
+        let bar_y = bar_start_y(bar);
+        let bar_end_y = bar_end_y(bar);
         let bar_h = bar_end_y - bar_y;
         let title = &participants
             .iter()
@@ -7682,15 +7746,45 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                     // Self-message: U-shaped loopback. When the participant is
                     // activated, the loop starts from the activation bar's right
                     // edge (lifeline center + ACTIVATION_HALF_W).
-                    let cx = if from_active || to_active {
+                    let existing_depth = render_activation
+                        .get(msg.from.as_str())
+                        .copied()
+                        .unwrap_or(0);
+                    let activates_self = matches!(msg.activation, Some(ActivationChange::Activate));
+                    let deactivates_self =
+                        matches!(msg.activation, Some(ActivationChange::Deactivate));
+                    let active_anchor = if activates_self {
+                        from_x + (existing_depth + 1) as f64 * ACTIVATION_HALF_W
+                    } else if deactivates_self && existing_depth > 0 {
+                        from_x + existing_depth as f64 * ACTIVATION_HALF_W
+                    } else if from_active || to_active {
                         from_x + ACTIVATION_HALF_W
                     } else {
                         from_x
                     };
-                    let loop_right = cx + SELF_MSG_EXTEND;
-                    let loop_bottom = msg_y + SELF_MSG_DROP;
-                    let text_x = cx + SELF_MSG_TEXT_X_PAD + global_padding;
-                    let text_y_pos = msg_y
+                    let start_x = if activates_self {
+                        from_x + existing_depth as f64 * ACTIVATION_HALF_W
+                    } else {
+                        active_anchor
+                    };
+                    let draw_y = if activates_self {
+                        msg_y - ACTIVATION_HALF_W
+                    } else if deactivates_self {
+                        msg_y + ACTIVATION_HALF_W
+                    } else {
+                        msg_y
+                    };
+                    let special_return_tip = if deactivates_self && existing_depth > 0 {
+                        Some(from_x + (existing_depth - 1) as f64 * ACTIVATION_HALF_W)
+                    } else if activates_self {
+                        Some(active_anchor + 1.0)
+                    } else {
+                        None
+                    };
+                    let loop_right = active_anchor + SELF_MSG_EXTEND;
+                    let loop_bottom = draw_y + SELF_MSG_DROP;
+                    let text_x = active_anchor + SELF_MSG_TEXT_X_PAD + global_padding;
+                    let text_y_pos = draw_y
                         - rendered_label_y_drop_with_family(
                             &label,
                             message_font_size_f,
@@ -7716,10 +7810,10 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                         r##"<line style="stroke:{};stroke-width:1;{}" x1="{}" x2="{}" y1="{}" y2="{}"/>"##,
                         &arrow_color,
                         line_style,
-                        fmt_coord(cx),
+                        fmt_coord(start_x),
                         fmt_coord(loop_right),
-                        fmt_coord(msg_y),
-                        fmt_coord(msg_y),
+                        fmt_coord(draw_y),
+                        fmt_coord(draw_y),
                     )
                     .unwrap();
 
@@ -7731,7 +7825,7 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                         line_style,
                         fmt_coord(loop_right),
                         fmt_coord(loop_right),
-                        fmt_coord(msg_y),
+                        fmt_coord(draw_y),
                         fmt_coord(loop_bottom),
                     )
                     .unwrap();
@@ -7739,10 +7833,12 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                     // Line 3: horizontal left (from loop right back toward lifeline)
                     // For filled arrows, the return line starts 1px right of center
                     // For open arrows, the return line starts at center
-                    let return_left = if is_open || (head_half.is_some() && thin_head) {
-                        cx // open / thin half: line goes to center
+                    let return_left = if let Some(tip_x) = special_return_tip {
+                        tip_x
+                    } else if is_open || (head_half.is_some() && thin_head) {
+                        active_anchor // open / thin half: line goes to center
                     } else {
-                        cx + 1.0 // filled: line stops 1px right (polygon takes over)
+                        active_anchor + 1.0 // filled: line stops 1px right (polygon takes over)
                     };
                     write!(
                         svg.buf,
@@ -7766,7 +7862,7 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                         };
                         if thin_head {
                             // Single open stroke from tip back to the wing.
-                            let tip_x = cx + 1.0;
+                            let tip_x = special_return_tip.unwrap_or(active_anchor + 1.0);
                             write!(
                                 svg.buf,
                                 r##"<line style="stroke:{};stroke-width:1;" x1="{}" x2="{}" y1="{}" y2="{}"/>"##,
@@ -7779,13 +7875,14 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                             .unwrap();
                         } else {
                             // Filled triangle: wing base, tip, wing tip.
+                            let tip_x = special_return_tip.unwrap_or(active_anchor);
                             let arrow_pts = format!(
                                 "{},{},{},{},{},{}",
-                                fmt_coord(cx + ARROW_SIZE),
+                                fmt_coord(tip_x + ARROW_SIZE),
                                 fmt_coord(loop_bottom),
-                                fmt_coord(cx),
+                                fmt_coord(tip_x),
                                 fmt_coord(loop_bottom),
-                                fmt_coord(cx + ARROW_SIZE),
+                                fmt_coord(tip_x + ARROW_SIZE),
                                 fmt_coord(wing_y),
                             );
                             write!(
@@ -7797,7 +7894,7 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                         }
                     } else if is_open {
                         // Open arrow: two V-shape lines
-                        let tip_x = cx + 1.0;
+                        let tip_x = special_return_tip.unwrap_or(active_anchor + 1.0);
                         write!(
                             svg.buf,
                             r##"<line style="stroke:{};stroke-width:1;" x1="{}" x2="{}" y1="{}" y2="{}"/>"##,
@@ -7820,7 +7917,7 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                         .unwrap();
                     } else {
                         // Filled arrow: polygon pointing left at bottom
-                        let tip_x = cx + 1.0;
+                        let tip_x = special_return_tip.unwrap_or(active_anchor + 1.0);
                         let arrow_pts = format!(
                             "{},{},{},{},{},{},{},{}",
                             fmt_coord(tip_x + ARROW_SIZE),
