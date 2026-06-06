@@ -4921,14 +4921,13 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                 // Advance autonumber
                 spacing_auto.advance();
             }
-            // Notes over several participants (OVER_SEVERAL). Java NotesBoxes
-            // .ensureConstraints reserves width/2 in the gap *before* the first
-            // and *after* the last spanned participant — it does NOT widen the
-            // gap between the spanned participants. The before-first reservation
-            // (when first is participant 0) and after-last (when last is the
-            // final participant) are handled as canvas margins elsewhere.
+            // Non-standard notes over several participants (OVER_SEVERAL). Java
+            // lets standard folded notes overhang outside the spanned participant
+            // area; hnote/rnote still need the older outside-pair reservation.
             Event::Note(note)
-                if note.position == NotePosition::Over && note.participants.len() >= 2 =>
+                if note.position == NotePosition::Over
+                    && note.participants.len() >= 2
+                    && note.shape != NoteShape::Note =>
             {
                 let first_idx = id_to_idx
                     .get(note.participants.first().unwrap().as_str())
