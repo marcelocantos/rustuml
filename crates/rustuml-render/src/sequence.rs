@@ -727,6 +727,85 @@ struct RenderedLineMetrics {
     ascent: f64,
 }
 
+#[derive(Clone, Copy, Debug, Eq, PartialEq)]
+enum NoteLineKind {
+    Normal,
+    Code,
+}
+
+#[derive(Clone, Copy, Debug)]
+struct NoteVisualLine<'a> {
+    text: &'a str,
+    kind: NoteLineKind,
+}
+
+fn note_visual_lines(text: &str) -> Vec<NoteVisualLine<'_>> {
+    let mut lines = Vec::new();
+    let mut in_code = false;
+    for line in text.lines() {
+        let trimmed = line.trim();
+        if trimmed.eq_ignore_ascii_case("<code>") {
+            in_code = true;
+            continue;
+        }
+        if trimmed.eq_ignore_ascii_case("</code>") {
+            in_code = false;
+            continue;
+        }
+        lines.push(NoteVisualLine {
+            text: line,
+            kind: if in_code {
+                NoteLineKind::Code
+            } else {
+                NoteLineKind::Normal
+            },
+        });
+    }
+    lines
+}
+
+fn code_line_indent_and_body(line: &str) -> (usize, &str) {
+    let indent = line
+        .bytes()
+        .take_while(|&b| b == b' ' || b == b'\t')
+        .count();
+    (indent, line.trim())
+}
+
+fn code_line_width(line: &str, font_size: f64) -> f64 {
+    let (indent, body) = code_line_indent_and_body(line);
+    plantuml_metrics::mono_text_width(&" ".repeat(indent), font_size)
+        + plantuml_metrics::mono_text_width(body, font_size)
+}
+
+fn code_line_metrics(font_size: f64) -> RenderedLineMetrics {
+    RenderedLineMetrics {
+        height: atom_height_with_family(font_size, "monospace"),
+        ascent: ascent_with_family(font_size, "monospace"),
+    }
+}
+
+fn emit_code_note_line(buf: &mut String, line: &str, base: &TextBase<'_>) -> f64 {
+    let font_size = base.font_size as f64;
+    let (indent, body) = code_line_indent_and_body(line);
+    let lead_w = plantuml_metrics::mono_text_width(&" ".repeat(indent), font_size);
+    let text_w = plantuml_metrics::mono_text_width(body, font_size);
+    if !body.is_empty() {
+        let content = creole::escape_creole_text(body).replace(' ', "&#160;");
+        write!(
+            buf,
+            r#"<text fill="{fill}" font-family="monospace" font-size="{font_size}" lengthAdjust="spacing" textLength="{text_len}" x="{x}" y="{y}">{content}</text>"#,
+            fill = base.fill,
+            font_size = base.font_size,
+            text_len = fmt_coord(text_w),
+            x = fmt_coord(base.x + lead_w),
+            y = fmt_coord(base.y),
+        )
+        .unwrap();
+    }
+    lead_w + text_w
+}
+
 fn note_separator_label(line: &str) -> Option<&str> {
     let trimmed = line.trim();
     let inner = trimmed.strip_prefix("__")?.strip_suffix("__")?;
@@ -845,6 +924,19 @@ fn note_line_metrics_with_family(
         metrics.ascent += SEPARATOR_ASCENT_ADJUST;
     }
     metrics
+}
+
+fn note_visual_line_metrics_with_family(
+    line: NoteVisualLine<'_>,
+    font_size: f64,
+    font_family: &str,
+) -> RenderedLineMetrics {
+    match line.kind {
+        NoteLineKind::Normal => {
+            note_line_metrics_with_family(line.text.trim(), font_size, font_family)
+        }
+        NoteLineKind::Code => code_line_metrics(font_size),
+    }
 }
 
 fn first_segment_metrics_with_family(
@@ -1070,24 +1162,27 @@ fn note_text_metrics_with_family(text: &str, font_size: f64, font_family: &str) 
     let mut text_seen_before_list = false;
     let mut list_after_text = false;
     let mut smaller_size_after_first = false;
-    let line_heights = text
-        .lines()
+    let visual_lines = note_visual_lines(text);
+    let line_heights = visual_lines
+        .iter()
         .enumerate()
         .map(|(idx, line)| {
-            let trimmed = line.trim();
-            match creole::parse_line(trimmed) {
-                CreoleLine::Text(_) if !trimmed.is_empty() => text_seen_before_list = true,
-                CreoleLine::Bullet { .. } | CreoleLine::Numbered { .. } => {
-                    list_after_text |= text_seen_before_list;
+            if line.kind == NoteLineKind::Normal {
+                let trimmed = line.text.trim();
+                match creole::parse_line(trimmed) {
+                    CreoleLine::Text(_) if !trimmed.is_empty() => text_seen_before_list = true,
+                    CreoleLine::Bullet { .. } | CreoleLine::Numbered { .. } => {
+                        list_after_text |= text_seen_before_list;
+                    }
+                    _ => {}
                 }
-                _ => {}
+                if idx > 0 {
+                    smaller_size_after_first |= creole::parse_segments(trimmed)
+                        .iter()
+                        .any(|seg| seg.style.size.is_some_and(|size| (size as f64) < font_size));
+                }
             }
-            if idx > 0 {
-                smaller_size_after_first |= creole::parse_segments(trimmed)
-                    .iter()
-                    .any(|seg| seg.style.size.is_some_and(|size| (size as f64) < font_size));
-            }
-            note_line_metrics_with_family(trimmed, font_size, font_family).height
+            note_visual_line_metrics_with_family(*line, font_size, font_family).height
         })
         .collect::<Vec<_>>();
     if line_heights.is_empty() {
@@ -1150,15 +1245,33 @@ fn note_line_width_with_family(
     }
 }
 
+fn note_visual_line_width_with_family(
+    line: NoteVisualLine<'_>,
+    font_size: f64,
+    font_family: &str,
+    number_counters: &mut Vec<usize>,
+) -> f64 {
+    match line.kind {
+        NoteLineKind::Normal => {
+            note_line_width_with_family(line.text.trim(), font_size, font_family, number_counters)
+        }
+        NoteLineKind::Code => {
+            number_counters.clear();
+            code_line_width(line.text, font_size)
+        }
+    }
+}
+
 fn note_max_line_width_with_family(text: &str, font_size: f64, font_family: &str) -> f64 {
     if let Some(table) = note_table_layout_with_family(text, font_size, font_family) {
         return table.grid_width;
     }
 
     let mut number_counters = Vec::new();
-    text.lines()
+    note_visual_lines(text)
+        .into_iter()
         .map(|line| {
-            note_line_width_with_family(line.trim(), font_size, font_family, &mut number_counters)
+            note_visual_line_width_with_family(line, font_size, font_family, &mut number_counters)
         })
         .fold(0.0_f64, f64::max)
 }
@@ -1304,6 +1417,24 @@ fn emit_note_line(
                 base.y
             };
             text_render::emit_text(buf, line.trim(), &TextBase { y, ..base.clone() })
+        }
+    }
+}
+
+fn emit_note_visual_line(
+    buf: &mut String,
+    line: NoteVisualLine<'_>,
+    base: &TextBase<'_>,
+    rule_stroke: &str,
+    number_counters: &mut Vec<usize>,
+) -> f64 {
+    match line.kind {
+        NoteLineKind::Normal => {
+            emit_note_line(buf, line.text.trim(), base, rule_stroke, number_counters)
+        }
+        NoteLineKind::Code => {
+            number_counters.clear();
+            emit_code_note_line(buf, line.text, base)
         }
     }
 }
@@ -9182,7 +9313,7 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                     msg_id += 1;
                 }
                 // Compute note dimensions and position.
-                let lines: Vec<&str> = note.text.lines().collect();
+                let lines = note_visual_lines(&note.text);
                 let metrics =
                     note_text_metrics_with_family(&note.text, note_font_size_f, &note_font_family);
                 let note_y_extra = match note.shape {
@@ -9638,13 +9769,12 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                     let mut note_number_counters = Vec::new();
                     let mut note_width_number_counters = Vec::new();
                     for (line_idx, line) in lines.iter().enumerate() {
-                        let trimmed = line.trim();
-                        let line_metrics = note_line_metrics_with_family(
-                            trimmed,
+                        let line_metrics = note_visual_line_metrics_with_family(
+                            *line,
                             note_font_size_f,
                             &note_font_family,
                         );
-                        if trimmed.is_empty() {
+                        if line.text.trim().is_empty() {
                             note_number_counters.clear();
                             note_width_number_counters.clear();
                             line_top += metrics
@@ -9654,16 +9784,17 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                                 .unwrap_or(line_metrics.height);
                             continue;
                         }
-                        let subscript_ascent_adjust =
-                            if line_has_subscript_after_plain_first(trimmed) {
-                                3.0
-                            } else {
-                                0.0
-                            };
+                        let subscript_ascent_adjust = if line.kind == NoteLineKind::Normal
+                            && line_has_subscript_after_plain_first(line.text.trim())
+                        {
+                            3.0
+                        } else {
+                            0.0
+                        };
                         let text_y = line_top + line_metrics.ascent - subscript_ascent_adjust
                             + text_y_offset;
-                        let line_width = note_line_width_with_family(
-                            trimmed,
+                        let line_width = note_visual_line_width_with_family(
+                            *line,
                             note_font_size_f,
                             &note_font_family,
                             &mut note_width_number_counters,
@@ -9676,9 +9807,9 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                             note.shape,
                             line_width,
                         );
-                        emit_note_line(
+                        emit_note_visual_line(
                             &mut svg.buf,
-                            trimmed,
+                            *line,
                             &TextBase {
                                 x: line_x,
                                 y: text_y,
@@ -10449,6 +10580,29 @@ mod tests {
         let svg = crate::render_svg(&diagram);
         assert!(svg.contains("call &lt;code&gt;doSomething()&lt;/code&gt;"));
         assert!(!svg.contains("font-family=\"monospace\""));
+    }
+
+    #[test]
+    fn multiline_note_code_block_renders_as_monospace_lines() {
+        let input = concat!(
+            "@startuml\n",
+            "Alice -> Bob : request\n",
+            "note over Alice\n",
+            "  <code>\n",
+            "  function foo() {\n",
+            "    return 42;\n",
+            "  }\n",
+            "  </code>\n",
+            "end note\n",
+            "@enduml",
+        );
+        let diagram = rustuml_parser::parse::parse(input).unwrap();
+        let svg = crate::render_svg(&diagram);
+
+        assert!(svg.contains(r#"font-family="monospace" font-size="13""#));
+        assert!(svg.contains(">function&#160;foo()&#160;{</text>"));
+        assert!(svg.contains(">return&#160;42;</text>"));
+        assert!(!svg.contains("&lt;code&gt;"));
     }
 
     #[test]

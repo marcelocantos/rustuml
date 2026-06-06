@@ -19,10 +19,16 @@ pub fn parse_sequence(lines: &[String]) -> Result<SequenceDiagram, ParseError> {
 
     for (i, line) in lines.iter().enumerate() {
         let (source_line, trimmed) = super::source_line_and_trimmed(i + 1, line);
-        if trimmed.is_empty() {
+        let in_note = parser.note_buffer.is_some();
+        if trimmed.is_empty() && !in_note {
             continue;
         }
-        parser.parse_line(source_line, trimmed)?;
+        let text = if in_note {
+            super::source_text(line)
+        } else {
+            trimmed
+        };
+        parser.parse_line(source_line, text)?;
     }
 
     Ok(parser.finish())
@@ -148,9 +154,10 @@ impl SeqParser {
 
         // Handle multiline note buffering.
         if self.note_buffer.is_some() {
-            if line == "endnote" || line == "end note" {
+            let trimmed = line.trim();
+            if trimmed == "endnote" || trimmed == "end note" {
                 let buf = self.note_buffer.take().unwrap();
-                let text = buf.lines.join("\n");
+                let text = note_text_from_lines(&buf.lines);
                 self.events.push(Event::Note(Note {
                     position: buf.position,
                     participants: buf.participants,
@@ -1136,6 +1143,25 @@ fn parse_activation(s: &str) -> ActivationChange {
     }
 }
 
+fn note_text_from_lines(lines: &[String]) -> String {
+    let common_indent = lines
+        .iter()
+        .filter(|line| !line.trim().is_empty())
+        .map(|line| {
+            line.bytes()
+                .take_while(|&b| b == b' ' || b == b'\t')
+                .count()
+        })
+        .min()
+        .unwrap_or(0);
+
+    lines
+        .iter()
+        .map(|line| line.get(common_indent..).unwrap_or("").to_string())
+        .collect::<Vec<_>>()
+        .join("\n")
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;
@@ -1514,8 +1540,19 @@ mod tests {
         assert_eq!(d.events.len(), 2);
         if let Event::Note(n) = &d.events[1] {
             assert_eq!(n.position, NotePosition::Left);
-            assert!(n.text.contains("Line 1"));
-            assert!(n.text.contains("Line 2"));
+            assert_eq!(n.text, "Line 1\nLine 2");
+        } else {
+            panic!("expected note");
+        }
+    }
+
+    #[test]
+    fn multiline_note_preserves_relative_code_indent() {
+        let d = parse(
+            "A -> B : msg\nnote over A\n  <code>\n  function foo() {\n    return 42;\n  }\n  </code>\nend note",
+        );
+        if let Event::Note(n) = &d.events[1] {
+            assert_eq!(n.text, "<code>\nfunction foo() {\n  return 42;\n}\n</code>");
         } else {
             panic!("expected note");
         }
