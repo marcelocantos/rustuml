@@ -98,6 +98,11 @@ const SWITCH_IF_BRANCH_BIG_CASE_Y_ADJUST: f64 = 0.6572265625;
 const SWITCH_EMPTY_MERGE_GAP: f64 = 40.6357;
 // Right envelope after a two-case switch's empty-case label.
 const SWITCH_TWO_CASE_EMPTY_LABEL_TRAIL: f64 = 1.5815;
+// Mixed empty/non-empty switches go through PlantUML's labelled empty-branch
+// FTile path: the empty branch keeps the label width for its tile envelope, but
+// its flow spine sits 2 px from the tile origin rather than at the text centre.
+const SWITCH_MIXED_EMPTY_CASE_GAP: f64 = 12.0;
+const SWITCH_MIXED_EMPTY_SPINE: f64 = 2.0;
 const SWITCH_LINK_MARGIN: f64 = 10.0;
 // Case-label baseline offsets above the case-box top, per connection type.
 const SWITCH_LABEL_OUTER_DY: f64 = 19.7979; // outermost branches (via diamond vertex)
@@ -1729,6 +1734,18 @@ fn switch_needs_empty_merge_gap(cases: &[SwitchCase]) -> bool {
         .any(|(i, case)| case.body.is_empty() && i > 0 && i + 1 < cases.len())
 }
 
+fn switch_is_odd_alternating_mixed_empty(cases: &[SwitchCase]) -> bool {
+    cases.len() >= 5
+        && !cases.len().is_multiple_of(2)
+        && cases.iter().enumerate().all(|(i, case)| {
+            if i.is_multiple_of(2) {
+                !case.body.is_empty()
+            } else {
+                case.body.is_empty()
+            }
+        })
+}
+
 /// PlantUML's `SUPP15` margin used by `FtileSwitchWithDiamonds` in
 /// BIG_DIAMOND mode (the horizontal padding either side of the diamond
 /// column between the first and last case tiles).
@@ -1755,6 +1772,23 @@ struct SwitchXLayout {
 
 fn switch_x_layout(cases: &[SwitchCase], condition: &str) -> SwitchXLayout {
     let mut layout = switch_x_layout_with_small_gap(cases, condition, SWITCH_CASE_GAP);
+    if switch_is_odd_alternating_mixed_empty(cases) {
+        let mut centers = Vec::with_capacity(cases.len());
+        let mut x = 0.0;
+        for case in cases {
+            let width = switch_case_width(case);
+            centers.push(if case.body.is_empty() {
+                x + SWITCH_MIXED_EMPTY_SPINE
+            } else {
+                x + width / 2.0
+            });
+            x += width + SWITCH_MIXED_EMPTY_CASE_GAP;
+        }
+        layout.centers = centers;
+        layout.block_w = x - SWITCH_MIXED_EMPTY_CASE_GAP;
+        layout.diamond_dx = layout.block_w / 2.0;
+        layout.big_diamond = false;
+    }
     if matches!(cases, [first, last] if !first.body.is_empty() && last.body.is_empty()) {
         layout.centers[1] = switch_case_width(&cases[0]) + DIAMOND_HALF / 2.0;
         let label_w = text_render::measure(&cases[1].label, SMALL_FONT, false);
