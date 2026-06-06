@@ -613,6 +613,9 @@ const SELF_MSG_RIGHT_NOTE_Y_PAD: f64 = 2.5;
 /// inline-created participant. The visible loopback geometry is unchanged, but
 /// the computed right edge is wider in create+activate lifecycles.
 const CREATED_ACTIVE_SELF_MSG_RIGHT_PAD: f64 = 16.0;
+/// Narrower InGroupable right extent Java reports to enclosing group frames
+/// for the same inline-created active self-message.
+const CREATED_ACTIVE_GROUP_SELF_MSG_RIGHT_PAD: f64 = 10.0;
 /// Extra canvas reservation for active self-messages on a participant whose
 /// lifecycle is later ended by a standalone destroy.
 const DESTROYED_ACTIVE_SELF_MSG_RIGHT_PAD: f64 = 15.0;
@@ -7183,6 +7186,7 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
         // Track which participant indices are referenced inside each group,
         // plus the drawn extent of any enclosed note (which the frame must cover).
         let mut group_start_stack: Vec<GroupAccum> = Vec::new();
+        let mut group_act_depth: HashMap<String, usize> = HashMap::new();
         for (ev_idx, event) in diagram.events.iter().enumerate() {
             match event {
                 Event::GroupStart(_) => {
@@ -7330,23 +7334,47 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                         });
                     }
                 }
-                Event::Message(msg) if !group_start_stack.is_empty() => {
+                Event::Message(msg) => {
                     let fi = id_to_idx.get(msg.from.as_str()).copied();
                     let ti = id_to_idx.get(msg.to.as_str()).copied();
                     let self_message_right = if msg.from == msg.to {
-                        let from_x = center_of(&msg.from);
+                        let cx_base = center_of(&msg.from);
+                        let active = group_act_depth.get(msg.from.as_str()).copied().unwrap_or(0)
+                            > 0
+                            || matches!(msg.activation, Some(ActivationChange::Activate));
+                        let from_x = if active {
+                            cx_base + ACTIVATION_HALF_W
+                        } else {
+                            cx_base
+                        };
                         let label_w = message_label_width(&process_label(&msg.label));
-                        let active_anchor =
-                            if matches!(msg.activation, Some(ActivationChange::Activate))
-                                || matches!(msg.activation, Some(ActivationChange::Deactivate))
-                            {
-                                from_x + ACTIVATION_HALF_W
+                        let loop_right = from_x + SELF_MSG_EXTEND;
+                        let text_right = from_x + SELF_MSG_TEXT_X_PAD + label_w;
+                        let destroyed_later =
+                            diagram
+                                .events
+                                .iter()
+                                .skip(ev_idx + 1)
+                                .any(|event| match event {
+                                    Event::Destroy(id) => id == &msg.from,
+                                    Event::Message(next) => {
+                                        next.to == msg.from
+                                            && matches!(
+                                                next.activation,
+                                                Some(ActivationChange::Destroy)
+                                            )
+                                    }
+                                    _ => false,
+                                });
+                        let created_active_pad =
+                            if active && create_msg_idx.contains_key(msg.from.as_str()) {
+                                CREATED_ACTIVE_GROUP_SELF_MSG_RIGHT_PAD
+                            } else if active && destroyed_later {
+                                DESTROYED_ACTIVE_SELF_MSG_RIGHT_PAD
                             } else {
-                                from_x
+                                0.0
                             };
-                        let loop_right = active_anchor + SELF_MSG_EXTEND;
-                        let text_right = active_anchor + SELF_MSG_TEXT_X_PAD + label_w;
-                        Some(loop_right.max(text_right) + SELF_MSG_RIGHT_PAD)
+                        Some(loop_right.max(text_right) + SELF_MSG_RIGHT_PAD + created_active_pad)
                     } else {
                         None
                     };
@@ -7365,6 +7393,31 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                         if let Some(right) = self_message_right {
                             top.message_right = top.message_right.max(right);
                         }
+                    }
+                    if let Some(act) = &msg.activation {
+                        match act {
+                            ActivationChange::Activate => {
+                                *group_act_depth.entry(msg.to.clone()).or_default() += 1;
+                            }
+                            ActivationChange::Deactivate => {
+                                if let Some(d) = group_act_depth.get_mut(&msg.from) {
+                                    *d = d.saturating_sub(1);
+                                }
+                            }
+                            ActivationChange::Destroy => {
+                                if let Some(d) = group_act_depth.get_mut(&msg.to) {
+                                    *d = d.saturating_sub(1);
+                                }
+                            }
+                        }
+                    }
+                }
+                Event::Activate(id, _) => {
+                    *group_act_depth.entry(id.clone()).or_default() += 1;
+                }
+                Event::Deactivate(id) => {
+                    if let Some(d) = group_act_depth.get_mut(id) {
+                        *d = d.saturating_sub(1);
                     }
                 }
                 Event::Note(note) if !group_start_stack.is_empty() => {
