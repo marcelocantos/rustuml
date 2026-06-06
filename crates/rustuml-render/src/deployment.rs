@@ -344,6 +344,10 @@ fn render_oracle(diagram: &DeploymentDiagram, _theme: &Theme, oracle: &OracleLay
         );
     }
 
+    if diagram.meta.legend.is_some() && !oracle.legends.is_empty() {
+        render_oracle_legends(&mut svg, oracle);
+    }
+
     // Footer — a centred grey caption pinned near the bottom (font 10).
     if let Some(footer) = &diagram.meta.footer {
         let tl = text_render::measure(footer, HEADER_FONT_SIZE, false);
@@ -355,6 +359,74 @@ fn render_oracle(diagram: &DeploymentDiagram, _theme: &Theme, oracle: &OracleLay
     }
 
     svg.finalize_plantuml()
+}
+
+fn render_oracle_legends(svg: &mut SvgBuilder, oracle: &OracleLayout) {
+    for legend in &oracle.legends {
+        let source_attr = legend
+            .source_line
+            .as_deref()
+            .map(|s| format!(r#" data-source-line="{s}""#))
+            .unwrap_or_default();
+        svg.raw(&format!(r#"<g class="legend"{source_attr}>"#));
+
+        let rx_attr = legend
+            .rect
+            .rx
+            .as_deref()
+            .map(|rx| format!(r#" rx="{rx}""#))
+            .unwrap_or_default();
+        let ry_attr = legend
+            .rect
+            .ry
+            .as_deref()
+            .map(|ry| format!(r#" ry="{ry}""#))
+            .unwrap_or_default();
+        svg.raw(&format!(
+            r#"<rect fill="{}" height="{}"{}{} style="{}" width="{}" x="{}" y="{}"/>"#,
+            legend.rect.fill,
+            fc(legend.rect.height),
+            rx_attr,
+            ry_attr,
+            legend.rect.style,
+            fc(legend.rect.width),
+            fc(legend.rect.x),
+            fc(legend.rect.y),
+        ));
+
+        for text in &legend.texts {
+            let mut text_buf = String::new();
+            text_render::emit_text(
+                &mut text_buf,
+                &text.text,
+                &TextBase {
+                    x: text.x,
+                    y: text.y,
+                    font_size: FONT_SIZE as u32,
+                    font_family: "sans-serif",
+                    fill: TEXT_COLOR,
+                    bold: false,
+                    italic: false,
+                    underline: false,
+                    skip_underline: false,
+                },
+            );
+            svg.raw(&text_buf);
+        }
+
+        for line in &legend.lines {
+            let style = line
+                .style
+                .as_deref()
+                .unwrap_or("stroke:#000000;stroke-width:1;");
+            svg.raw(&format!(
+                r#"<line style="{style}" x1="{}" x2="{}" y1="{}" y2="{}"/>"#,
+                line.x1, line.x2, line.y1, line.y2,
+            ));
+        }
+
+        svg.raw("</g>");
+    }
 }
 
 /// Emit a grey caption line (header/footer) at font size 10.
