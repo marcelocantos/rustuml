@@ -5,6 +5,7 @@
 *.swo
 sqlite_mcp_server.db
 .claude/
+.vera/
 golden_stats.txt
 /test-diagrams/golden_failure_names.txt
 /test-diagrams/golden_ulp_candidates.txt
