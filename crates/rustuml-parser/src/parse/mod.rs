@@ -168,6 +168,9 @@ fn detect_uml_subtype(lines: &[String]) -> UmlSubtype {
     let mut has_class_association_line = false;
     let mut has_direction_directive = false;
     let mut has_floating_note = false;
+    let mut has_interface_decl = false;
+    let mut has_component_leaf_keyword = false;
+    let mut has_non_interface_class_decl = false;
 
     for line in lines {
         let trimmed = source_text(line).trim();
@@ -309,6 +312,11 @@ fn detect_uml_subtype(lines: &[String]) -> UmlSubtype {
                 && deployment_keyword_arg
             {
                 scores[7] += 5;
+                if matches!(kw, "artifact" | "cloud" | "database" | "node" | "queue")
+                    && !trimmed.contains('{')
+                {
+                    has_component_leaf_keyword = true;
+                }
             }
             if is_deploy_exclusive_container || is_quoted_container {
                 // Extra boost: deployment-exclusive container overrides component score.
@@ -404,7 +412,6 @@ fn detect_uml_subtype(lines: &[String]) -> UmlSubtype {
             || trimmed.starts_with("abstract class ")
             || trimmed.starts_with("abstract ")
             || trimmed == "abstract"
-            || trimmed.starts_with("interface ")
             || trimmed.starts_with("enum ")
             || trimmed.starts_with("annotation ")
             || trimmed.starts_with("circle ")
@@ -413,6 +420,11 @@ fn detect_uml_subtype(lines: &[String]) -> UmlSubtype {
             || trimmed.contains("..|>")
         {
             scores[1] += 10;
+            has_non_interface_class_decl = true;
+        }
+        if trimmed.starts_with("interface ") {
+            scores[1] += 10;
+            has_interface_decl = true;
         }
         if trimmed.contains("..>") || trimmed.contains("<..") {
             has_class_dependency_arrow = true;
@@ -553,6 +565,13 @@ fn detect_uml_subtype(lines: &[String]) -> UmlSubtype {
         && scores[7] == 0
     {
         scores[1] += 10;
+    }
+
+    if has_interface_decl && has_component_leaf_keyword && !has_non_interface_class_decl {
+        let competing = scores[1].max(scores[7]);
+        if scores[5] <= competing {
+            scores[5] = competing + 1;
+        }
     }
 
     // Direction directives (`left to right direction`, `top to bottom
@@ -1173,6 +1192,17 @@ mod tests {
         let input = "@startuml\ncomponent A\ncomponent B\nA ..> B\n@enduml";
         let diagram = parse(input).unwrap();
         assert!(matches!(diagram, Diagram::Component(_)));
+    }
+
+    #[test]
+    fn interface_plus_component_leaf_routes_to_component() {
+        let input = "@startuml\ninterface MyA\nartifact MyB\nMyA --> MyB\n@enduml";
+        let diagram = parse(input).unwrap();
+        assert!(matches!(diagram, Diagram::Component(_)));
+
+        let input = "@startuml\ninterface MyA\n@enduml";
+        let diagram = parse(input).unwrap();
+        assert!(matches!(diagram, Diagram::Class(_)));
     }
 
     #[test]
