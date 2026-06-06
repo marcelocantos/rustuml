@@ -699,6 +699,7 @@ enum LayoutNode {
         branches: Vec<Vec<LayoutNode>>,
         attached_notes: Vec<ActivityNote>,
         is_split: bool,
+        merge: bool,
     },
     /// A `switch (cond) / case (x) / ... / endswitch` block. Cases lay out
     /// horizontally below a condition diamond, fanning out via the diamond's
@@ -1493,10 +1494,12 @@ fn build_tree_inner(steps: &[ActivityStep], palette: &Palette) -> Vec<LayoutNode
                         ActivityStep::ForkAgain
                             | ActivityStep::SplitAgain
                             | ActivityStep::EndFork
+                            | ActivityStep::EndMerge
                             | ActivityStep::EndSplit
                     )
                 });
                 branches.push(first_branch);
+                let mut merge = false;
                 while i < steps.len() {
                     match &steps[i] {
                         ActivityStep::ForkAgain | ActivityStep::SplitAgain => {
@@ -1507,12 +1510,14 @@ fn build_tree_inner(steps: &[ActivityStep], palette: &Palette) -> Vec<LayoutNode
                                     ActivityStep::ForkAgain
                                         | ActivityStep::SplitAgain
                                         | ActivityStep::EndFork
+                                        | ActivityStep::EndMerge
                                         | ActivityStep::EndSplit
                                 )
                             });
                             branches.push(branch);
                         }
-                        ActivityStep::EndFork | ActivityStep::EndSplit => {
+                        ActivityStep::EndFork | ActivityStep::EndMerge | ActivityStep::EndSplit => {
+                            merge = matches!(steps[i], ActivityStep::EndMerge);
                             i += 1;
                             break;
                         }
@@ -1528,11 +1533,13 @@ fn build_tree_inner(steps: &[ActivityStep], palette: &Palette) -> Vec<LayoutNode
                     branches,
                     attached_notes,
                     is_split,
+                    merge,
                 });
             }
             ActivityStep::ForkAgain
             | ActivityStep::SplitAgain
             | ActivityStep::EndFork
+            | ActivityStep::EndMerge
             | ActivityStep::EndSplit => {
                 i += 1;
             }
@@ -1734,7 +1741,7 @@ fn collect_until(
             ActivityStep::If(_) => depth += 1,
             ActivityStep::EndIf => depth -= 1,
             ActivityStep::Fork | ActivityStep::Split => depth += 1,
-            ActivityStep::EndFork | ActivityStep::EndSplit => depth -= 1,
+            ActivityStep::EndFork | ActivityStep::EndMerge | ActivityStep::EndSplit => depth -= 1,
             ActivityStep::While(_) => depth += 1,
             ActivityStep::EndWhile(_) => depth -= 1,
             ActivityStep::Repeat | ActivityStep::RepeatStart(_) => depth += 1,
@@ -1814,6 +1821,7 @@ const FORK_IF_BRANCH_ODD_SPACING_EXTRA: f64 = 6.083;
 const FORK_IF_BRANCH_EVEN_SPACING_EXTRA: f64 = 8.0;
 const FORK_IF_BRANCH_ODD_SPINE_SHIFT: f64 = -0.4175;
 const FORK_IF_BRANCH_EVEN_SPINE_SHIFT: f64 = 6.0;
+const FORK_MERGE_GAP: f64 = 10.0;
 
 fn node_if_depth(node: &LayoutNode) -> usize {
     match node {
@@ -3688,6 +3696,7 @@ fn node_extents(node: &LayoutNode) -> (f64, f64) {
             branches,
             attached_notes,
             is_split,
+            ..
         } => {
             let layout = parallel_layout(branches, *is_split);
             let (left, right) = fork_bar_extents(&layout);
@@ -3869,6 +3878,7 @@ fn node_extents_if_branch(node: &LayoutNode) -> (f64, f64) {
             branches,
             attached_notes,
             is_split,
+            ..
         } => {
             let layout = if *is_split {
                 split_layout(branches)
@@ -4651,7 +4661,10 @@ fn node_height(node: &LayoutNode) -> f64 {
             }
         }
         LayoutNode::Fork {
-            branches, is_split, ..
+            branches,
+            is_split,
+            merge,
+            ..
         } => {
             let max_h: f64 = branches
                 .iter()
@@ -4659,6 +4672,8 @@ fn node_height(node: &LayoutNode) -> f64 {
                 .fold(0.0f64, f64::max);
             if *is_split {
                 ARROW_LEN + max_h + ARROW_LEN
+            } else if *merge {
+                FORK_BAR_HEIGHT + ARROW_LEN + max_h + FORK_MERGE_GAP + DIAMOND_HALF * 2.0
             } else {
                 FORK_BAR_HEIGHT + ARROW_LEN + max_h + ARROW_LEN + FORK_BAR_HEIGHT
             }
@@ -6209,6 +6224,7 @@ fn emit_sequence_ex(
             branches,
             attached_notes,
             is_split,
+            ..
         } = node
             && !attached_notes.is_empty()
         {
@@ -6523,10 +6539,15 @@ fn emit_node_with_repeat_extra(
             else_branches,
         ),
         LayoutNode::Fork {
-            branches, is_split, ..
+            branches,
+            is_split,
+            merge,
+            ..
         } => {
             if *is_split {
                 emit_split(svg, cx, y, branches)
+            } else if *merge {
+                emit_fork_merge(svg, cx, y, branches)
             } else if if_branch {
                 emit_fork_with_layout(svg, cx, y, branches, fork_layout_if_branch(branches))
             } else {
@@ -8325,6 +8346,98 @@ fn emit_fork(svg: &mut SvgEmitter, cx: f64, y: f64, branches: &[Vec<LayoutNode>]
     }
 
     emit_fork_with_layout(svg, cx, y, branches, fork_layout(branches))
+}
+
+fn emit_fork_merge(svg: &mut SvgEmitter, cx: f64, y: f64, branches: &[Vec<LayoutNode>]) -> f64 {
+    if branches.is_empty() {
+        return y;
+    }
+
+    let layout = fork_layout(branches);
+    let bar_w = layout.bar_w;
+    let bar_x = cx + layout.spine_dx - bar_w / 2.0;
+    let bar_color = svg.palette.bar_color.clone();
+    let arrow_color = svg.palette.arrow_color.clone();
+    svg.rect_styled(
+        &bar_color,
+        FORK_BAR_HEIGHT,
+        FORK_BAR_RX,
+        FORK_BAR_RX,
+        &bar_color,
+        "1",
+        bar_w,
+        bar_x,
+        y,
+    );
+
+    let bar_bottom = y + FORK_BAR_HEIGHT;
+    let branch_centers: Vec<f64> = layout.centers.iter().map(|center| bar_x + center).collect();
+    let mut branch_bottoms = Vec::new();
+    for (branch, &bcx) in branches.iter().zip(branch_centers.iter()) {
+        let bottom = emit_sequence(svg, branch, bcx, bar_bottom + ARROW_LEN);
+        branch_bottoms.push(bottom);
+    }
+
+    let max_bottom = branch_bottoms.iter().cloned().fold(0.0f64, f64::max);
+    let merge_top = max_bottom + FORK_MERGE_GAP;
+    let merge_cy = merge_top + DIAMOND_HALF;
+    let merge_bottom = merge_top + DIAMOND_HALF * 2.0;
+    let diamond_fill = svg.palette.diamond_fill.clone();
+    let diamond_stroke = svg.palette.diamond_stroke.clone();
+    let diamond_stroke_width = svg.palette.diamond_stroke_width.clone();
+    svg.polygon_shape(
+        &diamond_fill,
+        &[
+            (cx, merge_top),
+            (cx + DIAMOND_HALF, merge_cy),
+            (cx, merge_bottom),
+            (cx - DIAMOND_HALF, merge_cy),
+        ],
+        &diamond_stroke,
+        &diamond_stroke_width,
+    );
+
+    for (branch, &bcx) in branches.iter().zip(branch_centers.iter()) {
+        if branch.is_empty() {
+            svg.down_arrow(bcx, bar_bottom, merge_top, &arrow_color);
+        } else {
+            svg.down_arrow(bcx, bar_bottom, bar_bottom + ARROW_LEN, &arrow_color);
+        }
+    }
+
+    for (i, (branch, bottom)) in branches.iter().zip(branch_bottoms.iter()).enumerate() {
+        if branch.is_empty() {
+            continue;
+        }
+        let bcx = branch_centers[i];
+        if (bcx - cx).abs() < 0.001 {
+            svg.down_arrow(bcx, *bottom, merge_top, &arrow_color);
+        } else if bcx < cx {
+            svg.connector_line(&arrow_color, bcx, bcx, *bottom, merge_cy, false);
+            svg.connector_line(
+                &arrow_color,
+                bcx,
+                cx - DIAMOND_HALF,
+                merge_cy,
+                merge_cy,
+                false,
+            );
+            svg.right_arrow(cx - DIAMOND_HALF, merge_cy, &arrow_color);
+        } else {
+            svg.connector_line(&arrow_color, bcx, bcx, *bottom, merge_cy, false);
+            svg.connector_line(
+                &arrow_color,
+                bcx,
+                cx + DIAMOND_HALF,
+                merge_cy,
+                merge_cy,
+                false,
+            );
+            svg.left_arrow(cx + DIAMOND_HALF, merge_cy, &arrow_color);
+        }
+    }
+
+    merge_bottom
 }
 
 fn emit_fork_with_layout(

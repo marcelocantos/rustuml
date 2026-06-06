@@ -278,7 +278,7 @@ pub fn render_ascii(diagram: &ActivityDiagram) -> String {
                 need_connector = true;
             }
 
-            ActivityStep::EndFork | ActivityStep::EndSplit => {
+            ActivityStep::EndFork | ActivityStep::EndMerge | ActivityStep::EndSplit => {
                 if need_connector {
                     grid.set(centre, row, V);
                     row += 1;

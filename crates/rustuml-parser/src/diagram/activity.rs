@@ -36,6 +36,7 @@ pub enum ActivityStep {
     Fork,
     ForkAgain,
     EndFork,
+    EndMerge,
     Split,
     SplitAgain,
     EndSplit,

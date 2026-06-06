@@ -483,6 +483,7 @@ impl ActivityParser {
             "fork" => self.steps.push(ActivityStep::Fork),
             "fork again" => self.steps.push(ActivityStep::ForkAgain),
             "end fork" => self.steps.push(ActivityStep::EndFork),
+            "end merge" => self.steps.push(ActivityStep::EndMerge),
             "split" => self.steps.push(ActivityStep::Split),
             "split again" => self.steps.push(ActivityStep::SplitAgain),
             "end split" => self.steps.push(ActivityStep::EndSplit),
@@ -1068,6 +1069,15 @@ mod tests {
         assert!(matches!(d.steps[1], ActivityStep::Fork));
         assert!(matches!(d.steps[3], ActivityStep::ForkAgain));
         assert!(matches!(d.steps[5], ActivityStep::EndFork));
+    }
+
+    #[test]
+    fn fork_end_merge() {
+        let d = parse("start\nfork\n  :A;\nfork again\n  :B;\nend merge\nstop");
+        assert!(matches!(d.steps[1], ActivityStep::Fork));
+        assert!(matches!(d.steps[3], ActivityStep::ForkAgain));
+        assert!(matches!(d.steps[5], ActivityStep::EndMerge));
+        assert!(matches!(d.steps[6], ActivityStep::Stop));
     }
 
     #[test]
