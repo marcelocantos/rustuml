@@ -894,8 +894,14 @@ pub fn render_with_oracle(
             // deployment renderer does for `cloud` nodes.
             emit_cloud_component(&mut svg, comp, oracle_rect, x, y, fill, &body_style);
             // Skip the rect body and tab-icon block below.
+        } else if matches!(comp.kind, ComponentElementKind::Actor) {
+            emit_actor_component(&mut svg, x, y, w, h, fill, &body_style);
+            // Skip the rect body and tab-icon block below.
         } else if matches!(comp.kind, ComponentElementKind::Artifact) {
             crate::deployment::emit_artifact(&mut svg, x, y, w, h, fill, body_stroke);
+            // Skip the rect body and tab-icon block below.
+        } else if matches!(comp.kind, ComponentElementKind::Collections) {
+            emit_collections_component(&mut svg, oracle_rect, (x, y, w, h), fill, &body_style);
             // Skip the rect body and tab-icon block below.
         } else if matches!(comp.kind, ComponentElementKind::Node) {
             crate::deployment::emit_tag_polygon(&mut svg, x, y, w, h, fill, 0.5, body_stroke);
@@ -921,6 +927,8 @@ pub fn render_with_oracle(
                     crate::deployment::emit_queue(&mut svg, x, y, w, h, fill, body_stroke);
                 }
                 ComponentElementKind::Artifact
+                | ComponentElementKind::Actor
+                | ComponentElementKind::Collections
                 | ComponentElementKind::Component
                 | ComponentElementKind::Cloud
                 | ComponentElementKind::Node => unreachable!(),
@@ -1564,6 +1572,81 @@ fn emit_cloud_component(
         ));
     }
     svg.raw(&format!(r#"<path d="{d}" fill="{fill}" style="{style}"/>"#,));
+}
+
+fn emit_actor_component(
+    svg: &mut SvgBuilder,
+    x: f64,
+    y: f64,
+    w: f64,
+    h: f64,
+    fill: &str,
+    body_style: &str,
+) {
+    let cx = x + w / 2.0;
+    let cy = y + h / 2.0;
+    let rx = w / 2.0;
+    let ry = h / 2.0;
+    svg.raw(&format!(
+        r#"<ellipse cx="{cx}" cy="{cy}" fill="{fill}" rx="{rx}" ry="{ry}" style="{body_style}"/>"#,
+        cx = fc(cx),
+        cy = fc(cy),
+        rx = fc(rx),
+        ry = fc(ry),
+    ));
+
+    let head_bottom = y + h;
+    let body_bottom = head_bottom + 27.0;
+    let arms_y = head_bottom + 8.0;
+    let foot_y = head_bottom + 42.0;
+    let arm_dx = 13.0;
+    svg.raw(&format!(
+        r#"<path d="M{cx},{head_bottom} L{cx},{body_bottom} M{left},{arms_y} L{right},{arms_y} M{cx},{body_bottom} L{left},{foot_y} M{cx},{body_bottom} L{right},{foot_y}" fill="none" style="{body_style}"/>"#,
+        cx = fc(cx),
+        head_bottom = fc(head_bottom),
+        body_bottom = fc(body_bottom),
+        left = fc(cx - arm_dx),
+        right = fc(cx + arm_dx),
+        arms_y = fc(arms_y),
+        foot_y = fc(foot_y),
+    ));
+}
+
+fn emit_collections_component(
+    svg: &mut SvgBuilder,
+    oracle_rect: Option<&EntityRect>,
+    geom: (f64, f64, f64, f64),
+    fill: &str,
+    body_style: &str,
+) {
+    let (x, y, w, h) = geom;
+    svg.raw(&format!(
+        r#"<rect fill="{fill}" height="{h}" rx="{ROUND_R}" ry="{ROUND_R}" style="{body_style}" width="{w}" x="{x}" y="{y}"/>"#,
+        h = fc(h),
+        w = fc(w),
+        x = fc(x),
+        y = fc(y),
+    ));
+
+    if let Some(front) = oracle_rect.and_then(|r| r.aux_rects.first()) {
+        let front_fill = front.fill.as_deref().unwrap_or(fill);
+        let front_style = front.style.as_deref().unwrap_or(body_style);
+        svg.raw(&format!(
+            r#"<rect fill="{front_fill}" height="{h}" rx="{ROUND_R}" ry="{ROUND_R}" style="{front_style}" width="{w}" x="{x}" y="{y}"/>"#,
+            h = fc(front.height),
+            w = fc(front.width),
+            x = fc(front.x),
+            y = fc(front.y),
+        ));
+    } else {
+        svg.raw(&format!(
+            r#"<rect fill="{fill}" height="{h}" rx="{ROUND_R}" ry="{ROUND_R}" style="{body_style}" width="{w}" x="{x}" y="{y}"/>"#,
+            h = fc(h),
+            w = fc(w),
+            x = fc(x - 4.0),
+            y = fc(y - 4.0),
+        ));
+    }
 }
 
 /// Lilac fill PlantUML uses for the interface circle in a class header.

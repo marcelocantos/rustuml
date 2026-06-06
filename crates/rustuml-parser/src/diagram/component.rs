@@ -18,12 +18,14 @@ pub struct ComponentDiagram {
 }
 
 /// The shape an element renders as. A plain `component` draws the UML tab
-/// icon; `database`/`queue` leaf declarations draw a cylinder/queue outline.
+/// icon; other leaf declarations draw their PlantUML DESCRIPTION shapes.
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Default, Serialize, Deserialize)]
 pub enum ComponentElementKind {
     #[default]
     Component,
+    Actor,
     Artifact,
+    Collections,
     Database,
     Node,
     Queue,

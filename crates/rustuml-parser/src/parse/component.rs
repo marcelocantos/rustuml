@@ -352,7 +352,9 @@ pub fn parse_component(lines: &[String]) -> Result<ComponentDiagram, ParseError>
                     let rest = &container_clean[kw.len()..];
                     let (id, label) = parse_container_label(kw, rest);
                     let kind = match kw {
+                        "actor" => ComponentElementKind::Actor,
                         "artifact" => ComponentElementKind::Artifact,
+                        "collections" => ComponentElementKind::Collections,
                         "database" => ComponentElementKind::Database,
                         "node" => ComponentElementKind::Node,
                         "queue" => ComponentElementKind::Queue,
@@ -813,5 +815,14 @@ mod tests {
         assert_eq!(d.components.len(), 2);
         assert_eq!(d.components[0].kind, ComponentElementKind::Artifact);
         assert_eq!(d.components[1].kind, ComponentElementKind::Node);
+    }
+
+    #[test]
+    fn actor_and_collections_are_leaf_components() {
+        let d = parse("actor User\ncollections Cache\nUser --> Cache");
+        assert_eq!(d.interfaces.len(), 0);
+        assert_eq!(d.components.len(), 2);
+        assert_eq!(d.components[0].kind, ComponentElementKind::Actor);
+        assert_eq!(d.components[1].kind, ComponentElementKind::Collections);
     }
 }
