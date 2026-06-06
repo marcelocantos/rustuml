@@ -315,6 +315,301 @@ fn fmt_coord(v: f64) -> String {
     s.to_string()
 }
 
+struct HandJavaRandom {
+    seed: i64,
+}
+
+impl HandJavaRandom {
+    const MULTIPLIER: i64 = 0x5DEECE66D;
+    const ADDEND: i64 = 0xB;
+    const MASK: i64 = (1 << 48) - 1;
+
+    fn new(seed: i64) -> Self {
+        Self {
+            seed: (seed ^ Self::MULTIPLIER) & Self::MASK,
+        }
+    }
+
+    fn next(&mut self, bits: u32) -> i32 {
+        self.seed = self
+            .seed
+            .wrapping_mul(Self::MULTIPLIER)
+            .wrapping_add(Self::ADDEND)
+            & Self::MASK;
+        (self.seed >> (48 - bits)) as i32
+    }
+
+    fn next_double(&mut self) -> f64 {
+        let hi = self.next(26) as i64;
+        let lo = self.next(27) as i64;
+        ((hi << 27) + lo) as f64 * (1.0 / (1i64 << 53) as f64)
+    }
+}
+
+struct HandJiggle {
+    points: Vec<(f64, f64)>,
+    start_x: f64,
+    start_y: f64,
+    default_variation: f64,
+    rnd: HandJavaRandom,
+}
+
+impl HandJiggle {
+    fn new(start_x: f64, start_y: f64, default_variation: f64) -> Self {
+        Self {
+            points: vec![(start_x, start_y)],
+            start_x,
+            start_y,
+            default_variation,
+            rnd: HandJavaRandom::new(424242),
+        }
+    }
+
+    fn line_to(&mut self, end_x: f64, end_y: f64) {
+        let diff_x = (end_x - self.start_x).abs();
+        let diff_y = (end_y - self.start_y).abs();
+        let distance = (diff_x * diff_x + diff_y * diff_y).sqrt();
+        if distance < 0.001 {
+            return;
+        }
+
+        let mut segments = (distance / 10.0 + 0.5).floor() as i32;
+        let mut variation = self.default_variation;
+        if segments < 5 {
+            segments = 5;
+            variation /= 3.0;
+        }
+
+        let segments_f = segments as f64;
+        let step_x = (end_x - self.start_x).signum() * diff_x / segments_f;
+        let step_y = (end_y - self.start_y).signum() * diff_y / segments_f;
+        let fx = diff_x / distance;
+        let fy = diff_y / distance;
+
+        for s in 0..segments {
+            let x = step_x * s as f64 + self.start_x;
+            let y = step_y * s as f64 + self.start_y;
+            let offset = (self.rnd.next_double() - 0.5) * variation;
+            self.points.push((x - offset * fy, y - offset * fx));
+        }
+        self.points.push((end_x, end_y));
+        self.start_x = end_x;
+        self.start_y = end_y;
+    }
+
+    fn arc_to(&mut self, angle0: f64, angle1: f64, center_x: f64, center_y: f64, rx: f64, ry: f64) {
+        let mid = (angle0 + angle1) / 2.0;
+        self.line_to(center_x + mid.cos() * rx, center_y + mid.sin() * ry);
+        self.line_to(center_x + angle1.cos() * rx, center_y + angle1.sin() * ry);
+    }
+
+    fn points_string(&self, dx: f64, dy: f64) -> String {
+        hand_points_string(self.points.iter().map(|&(x, y)| (x + dx, y + dy)))
+    }
+}
+
+fn hand_line_points_with_rnd(
+    start_x: f64,
+    start_y: f64,
+    end_x: f64,
+    end_y: f64,
+    default_variation: f64,
+    rnd: &mut HandJavaRandom,
+) -> Vec<(f64, f64)> {
+    let mut points = vec![(start_x, start_y)];
+    let diff_x = (end_x - start_x).abs();
+    let diff_y = (end_y - start_y).abs();
+    let distance = (diff_x * diff_x + diff_y * diff_y).sqrt();
+    if distance < 0.001 {
+        return points;
+    }
+
+    let mut segments = (distance / 10.0 + 0.5).floor() as i32;
+    let mut variation = default_variation;
+    if segments < 5 {
+        segments = 5;
+        variation /= 3.0;
+    }
+
+    let segments_f = segments as f64;
+    let step_x = (end_x - start_x).signum() * diff_x / segments_f;
+    let step_y = (end_y - start_y).signum() * diff_y / segments_f;
+    let fx = diff_x / distance;
+    let fy = diff_y / distance;
+
+    for s in 0..segments {
+        let x = step_x * s as f64 + start_x;
+        let y = step_y * s as f64 + start_y;
+        let offset = (rnd.next_double() - 0.5) * variation;
+        points.push((x - offset * fy, y - offset * fx));
+    }
+    points.push((end_x, end_y));
+    points
+}
+
+fn hand_points_string(points: impl Iterator<Item = (f64, f64)>) -> String {
+    let mut out = String::new();
+    for (idx, (x, y)) in points.enumerate() {
+        if idx > 0 {
+            out.push(',');
+        }
+        write!(out, "{},{}", fmt_coord(x), fmt_coord(y)).unwrap();
+    }
+    out
+}
+
+fn handwritten_rect_points(x: f64, y: f64, width: f64, height: f64, rx: f64, ry: f64) -> String {
+    let rx = rx.min(width / 2.0);
+    let ry = ry.min(height / 2.0);
+    let jiggle = if rx == 0.0 && ry == 0.0 {
+        let mut jiggle = HandJiggle::new(0.0, 0.0, 1.5);
+        jiggle.line_to(width, 0.0);
+        jiggle.line_to(width, height);
+        jiggle.line_to(0.0, height);
+        jiggle.line_to(0.0, 0.0);
+        jiggle
+    } else {
+        let mut jiggle = HandJiggle::new(rx, 0.0, 1.5);
+        jiggle.line_to(width - rx, 0.0);
+        jiggle.arc_to(-std::f64::consts::FRAC_PI_2, 0.0, width - rx, ry, rx, ry);
+        jiggle.line_to(width, height - ry);
+        jiggle.arc_to(
+            0.0,
+            std::f64::consts::FRAC_PI_2,
+            width - rx,
+            height - ry,
+            rx,
+            ry,
+        );
+        jiggle.line_to(rx, height);
+        jiggle.arc_to(
+            std::f64::consts::FRAC_PI_2,
+            std::f64::consts::PI,
+            rx,
+            height - ry,
+            rx,
+            ry,
+        );
+        jiggle.line_to(0.0, ry);
+        jiggle.arc_to(
+            std::f64::consts::PI,
+            3.0 * std::f64::consts::FRAC_PI_2,
+            rx,
+            ry,
+            rx,
+            ry,
+        );
+        jiggle
+    };
+    jiggle.points_string(x, y)
+}
+
+fn handwritten_line_path(x1: f64, y1: f64, x2: f64, y2: f64) -> String {
+    let mut rnd = HandJavaRandom::new(424242);
+    let points = hand_line_points_with_rnd(0.0, 0.0, x2 - x1, y2 - y1, 2.0, &mut rnd);
+    let mut out = String::new();
+    for (i, (x, y)) in points.iter().enumerate() {
+        if i == 0 {
+            write!(out, "M{},{}", fmt_coord(x + x1), fmt_coord(y + y1)).unwrap();
+        } else {
+            write!(out, " L{},{}", fmt_coord(x + x1), fmt_coord(y + y1)).unwrap();
+        }
+    }
+    out
+}
+
+fn handwritten_polygon_points(points: &[(f64, f64)]) -> String {
+    let Some(&(x0, y0)) = points.first() else {
+        return String::new();
+    };
+    let mut jiggle = HandJiggle::new(x0, y0, 1.5);
+    for &(x, y) in &points[1..] {
+        jiggle.line_to(x, y);
+    }
+    jiggle.line_to(x0, y0);
+    jiggle.points_string(0.0, 0.0)
+}
+
+fn handwritten_ellipse_points(cx: f64, cy: f64, rx: f64, ry: f64) -> String {
+    let mut rnd = HandJavaRandom::new(424242);
+    let mut points = Vec::new();
+    let width = 2.0 * rx;
+    let height = 2.0 * ry;
+    let mut angle = 0.0;
+    if (width - height).abs() < f64::EPSILON {
+        while angle < std::f64::consts::TAU {
+            angle += (10.0 + rnd.next_double() * 10.0).to_radians();
+            let variation = 1.0 + (rnd.next_double() - 0.5) / 8.0;
+            points.push((
+                cx + angle.cos() * width * variation / 2.0,
+                cy + angle.sin() * height * variation / 2.0,
+            ));
+        }
+    } else {
+        while angle < std::f64::consts::TAU {
+            angle += std::f64::consts::PI / 20.0;
+            let variation = (rnd.next_double() - 0.5) / 50.0;
+            points.push((
+                cx + angle.cos() * width / 2.0 + variation * width,
+                cy + angle.sin() * height / 2.0 + variation * height,
+            ));
+        }
+    }
+    hand_points_string(points.into_iter())
+}
+
+fn parse_path_point(token: &str) -> Option<(char, f64, f64)> {
+    let mut chars = token.chars();
+    let cmd = chars.next()?;
+    if cmd != 'M' && cmd != 'L' {
+        return None;
+    }
+    let rest = chars.as_str();
+    let (x, y) = rest.split_once(',')?;
+    Some((cmd, x.parse().ok()?, y.parse().ok()?))
+}
+
+fn handwritten_path_m_l(d: &str) -> Option<String> {
+    let mut rnd = HandJavaRandom::new(424242);
+    let mut out = String::new();
+    let mut last: Option<(f64, f64)> = None;
+    for token in d.split_ascii_whitespace() {
+        let (cmd, x, y) = parse_path_point(token)?;
+        match cmd {
+            'M' => {
+                if !out.is_empty() {
+                    out.push(' ');
+                }
+                write!(out, "M{},{}", fmt_coord(x), fmt_coord(y)).unwrap();
+                last = Some((x, y));
+            }
+            'L' => {
+                let (sx, sy) = last?;
+                let points = hand_line_points_with_rnd(sx, sy, x, y, 4.0, &mut rnd);
+                for &(px, py) in points.iter().skip(1) {
+                    write!(out, " L{},{}", fmt_coord(px), fmt_coord(py)).unwrap();
+                }
+                last = Some((x, y));
+            }
+            _ => return None,
+        }
+    }
+    Some(out)
+}
+
+fn parse_svg_points(points: &str) -> Option<Vec<(f64, f64)>> {
+    let nums: Vec<f64> = points
+        .split(|ch: char| ch == ',' || ch.is_ascii_whitespace())
+        .filter(|part| !part.is_empty())
+        .map(str::parse)
+        .collect::<Result<_, _>>()
+        .ok()?;
+    if !nums.len().is_multiple_of(2) {
+        return None;
+    }
+    Some(nums.chunks_exact(2).map(|p| (p[0], p[1])).collect())
+}
+
 /// Compute the *drawn* note box width based on text width and note shape.
 ///
 /// PlantUML's `ComponentRoseNote.drawInternalU` draws the polygon at
@@ -2650,6 +2945,9 @@ impl ActivationTracker {
 
 struct PlantUmlSvg {
     buf: String,
+    /// Whether shape primitives should be passed through PlantUML's
+    /// deterministic handwritten jitter wrapper.
+    handwritten: bool,
     /// Teoz sequence layout emits participant heads/tails and lifelines as
     /// bare shape groups rather than wrapping them in metadata groups.
     teoz: bool,
@@ -2726,6 +3024,7 @@ impl PlantUmlSvg {
     fn new() -> Self {
         Self {
             buf: String::with_capacity(4096),
+            handwritten: false,
             teoz: false,
             arrow_thickness: "1".into(),
             participant_border: "#181818".into(),
@@ -2837,54 +3136,140 @@ impl PlantUmlSvg {
         let thickness = self.lifeline_border_thickness.clone();
         // Emit one solid lifeline segment (invisible hit-rect + `5,5` dashed line)
         // spanning [seg_top, seg_bottom]. The rect keeps the original `rect_x`.
-        let emit_segment = |buf: &mut String, seg_top: f64, seg_bottom: f64| {
-            buf.push_str("<g>");
-            write!(buf, "<title>{}</title>", escape_xml(title)).unwrap();
-            write!(
-                buf,
-                r##"<rect fill="#000000" fill-opacity="0.00000" height="{}" width="{}" x="{}" y="{}"/>"##,
-                fmt_coord(seg_bottom - seg_top),
-                LIFELINE_RECT_WIDTH as u32,
-                fmt_coord(rect_x),
-                fmt_coord(seg_top),
-            )
-            .unwrap();
-            write!(
-                buf,
-                r##"<line style="stroke:{};stroke-width:{};stroke-dasharray:5,5;" x1="{}" x2="{}" y1="{}" y2="{}"/>"##,
-                border,
-                thickness,
-                fmt_coord(line_x),
-                fmt_coord(line_x),
-                fmt_coord(seg_top),
-                fmt_coord(seg_bottom),
-            )
-            .unwrap();
-            buf.push_str("</g>");
+        let emit_segment = |this: &mut Self, seg_top: f64, seg_bottom: f64| {
+            this.buf.push_str("<g>");
+            write!(this.buf, "<title>{}</title>", escape_xml(title)).unwrap();
+            if this.handwritten {
+                let points = handwritten_rect_points(
+                    rect_x,
+                    seg_top,
+                    LIFELINE_RECT_WIDTH,
+                    seg_bottom - seg_top,
+                    0.0,
+                    0.0,
+                );
+                write!(
+                    this.buf,
+                    r##"<polygon fill="#000000" fill-opacity="0.00000" points="{points}"/>"##,
+                )
+                .unwrap();
+                this.write_line(
+                    &format!("stroke:{border};stroke-width:{thickness};stroke-dasharray:5,5;"),
+                    line_x,
+                    line_x,
+                    seg_top,
+                    seg_bottom,
+                );
+            } else {
+                write!(
+                    this.buf,
+                    r##"<rect fill="#000000" fill-opacity="0.00000" height="{}" width="{}" x="{}" y="{}"/>"##,
+                    fmt_coord(seg_bottom - seg_top),
+                    LIFELINE_RECT_WIDTH as u32,
+                    fmt_coord(rect_x),
+                    fmt_coord(seg_top),
+                )
+                .unwrap();
+                write!(
+                    this.buf,
+                    r##"<line style="stroke:{};stroke-width:{};stroke-dasharray:5,5;" x1="{}" x2="{}" y1="{}" y2="{}"/>"##,
+                    border,
+                    thickness,
+                    fmt_coord(line_x),
+                    fmt_coord(line_x),
+                    fmt_coord(seg_top),
+                    fmt_coord(seg_bottom),
+                )
+                .unwrap();
+            }
+            this.buf.push_str("</g>");
         };
 
         let _ = (rect_y, rect_h);
         let mut seg_top = line_y1;
         for &(bt, bb) in &bands {
-            emit_segment(&mut self.buf, seg_top, bt);
+            emit_segment(self, seg_top, bt);
             // Dotted gap line bridging the delay band (sibling of the inner <g>s).
-            write!(
-                self.buf,
-                r##"<line style="stroke:{};stroke-width:{};stroke-dasharray:1,4;" x1="{}" x2="{}" y1="{}" y2="{}"/>"##,
-                border,
-                thickness,
-                fmt_coord(line_x),
-                fmt_coord(line_x),
-                fmt_coord(bt),
-                fmt_coord(bb),
-            )
-            .unwrap();
+            self.write_line(
+                &format!("stroke:{border};stroke-width:{thickness};stroke-dasharray:1,4;"),
+                line_x,
+                line_x,
+                bt,
+                bb,
+            );
             seg_top = bb;
         }
-        emit_segment(&mut self.buf, seg_top, line_y2);
+        emit_segment(self, seg_top, line_y2);
 
         if !self.teoz {
             self.buf.push_str("</g>");
+        }
+    }
+
+    fn write_line(&mut self, style: &str, x1: f64, x2: f64, y1: f64, y2: f64) {
+        if self.handwritten {
+            let d = handwritten_line_path(x1, y1, x2, y2);
+            write!(self.buf, r#"<path d="{d}" fill="none" style="{style}"/>"#).unwrap();
+        } else {
+            write!(
+                self.buf,
+                r#"<line style="{style}" x1="{}" x2="{}" y1="{}" y2="{}"/>"#,
+                fmt_coord(x1),
+                fmt_coord(x2),
+                fmt_coord(y1),
+                fmt_coord(y2),
+            )
+            .unwrap();
+        }
+    }
+
+    fn write_polygon(&mut self, fill: &str, points: &str, style: &str) {
+        if self.handwritten
+            && let Some(parsed) = parse_svg_points(points)
+        {
+            let points = handwritten_polygon_points(&parsed);
+            write!(
+                self.buf,
+                r#"<polygon fill="{fill}" points="{points}" style="{style}"/>"#
+            )
+            .unwrap();
+        } else {
+            write!(
+                self.buf,
+                r#"<polygon fill="{fill}" points="{points}" style="{style}"/>"#
+            )
+            .unwrap();
+        }
+    }
+
+    fn write_ellipse(&mut self, cx: f64, cy: f64, rx: f64, ry: f64, fill: &str, style: &str) {
+        if self.handwritten {
+            let points = handwritten_ellipse_points(cx, cy, rx, ry);
+            write!(
+                self.buf,
+                r#"<polygon fill="{fill}" points="{points}" style="{style}"/>"#
+            )
+            .unwrap();
+        } else {
+            write!(
+                self.buf,
+                r#"<ellipse cx="{}" cy="{}" fill="{fill}" rx="{}" ry="{}" style="{style}"/>"#,
+                fmt_coord(cx),
+                fmt_coord(cy),
+                fmt_coord(rx),
+                fmt_coord(ry),
+            )
+            .unwrap();
+        }
+    }
+
+    fn write_path(&mut self, d: &str, fill: &str, style: &str) {
+        if self.handwritten
+            && let Some(d) = handwritten_path_m_l(d)
+        {
+            write!(self.buf, r#"<path d="{d}" fill="{fill}" style="{style}"/>"#).unwrap();
+        } else {
+            write!(self.buf, r#"<path d="{d}" fill="{fill}" style="{style}"/>"#).unwrap();
         }
     }
 
@@ -2915,21 +3300,42 @@ impl PlantUmlSvg {
             .as_ref()
             .map(|id| format!(r#" filter="url(#{id})""#))
             .unwrap_or_default();
-        write!(
-            self.buf,
-            r##"<rect fill="{}"{} height="{}" rx="{}" ry="{}" style="stroke:{};stroke-width:{};" width="{}" x="{}" y="{}"/>"##,
-            fill_color,
-            filter_attr,
-            fmt_coord(rect_h),
-            fmt_coord(self.head_box_rx),
-            fmt_coord(self.head_box_rx),
-            self.participant_border,
-            self.participant_border_thickness,
-            fmt_coord(rect_w),
-            fmt_coord(rect_x),
-            fmt_coord(rect_y),
-        )
-        .unwrap();
+        if self.handwritten {
+            let points = handwritten_rect_points(
+                rect_x,
+                rect_y,
+                rect_w,
+                rect_h,
+                self.head_box_rx,
+                self.head_box_rx,
+            );
+            write!(
+                self.buf,
+                r##"<polygon fill="{}"{} points="{}" style="stroke:{};stroke-width:{};"/>"##,
+                fill_color,
+                filter_attr,
+                points,
+                self.participant_border,
+                self.participant_border_thickness,
+            )
+            .unwrap();
+        } else {
+            write!(
+                self.buf,
+                r##"<rect fill="{}"{} height="{}" rx="{}" ry="{}" style="stroke:{};stroke-width:{};" width="{}" x="{}" y="{}"/>"##,
+                fill_color,
+                filter_attr,
+                fmt_coord(rect_h),
+                fmt_coord(self.head_box_rx),
+                fmt_coord(self.head_box_rx),
+                self.participant_border,
+                self.participant_border_thickness,
+                fmt_coord(rect_w),
+                fmt_coord(rect_x),
+                fmt_coord(rect_y),
+            )
+            .unwrap();
+        }
 
         let line_h = atom_height_with_family(
             self.participant_font_size as f64,
@@ -3251,14 +3657,14 @@ impl PlantUmlSvg {
 
         // Head circle
         let head_cy = figure_base + ACTOR_HEAD_CY_OFFSET;
-        write!(
-            self.buf,
-            r##"<ellipse cx="{}" cy="{}" fill="{}" rx="8" ry="8" style="stroke:{border_color};stroke-width:0.5;"/>"##,
-            fmt_coord(cx),
-            fmt_coord(head_cy),
+        self.write_ellipse(
+            cx,
+            head_cy,
+            8.0,
+            8.0,
             fill_color,
-        )
-        .unwrap();
+            &format!("stroke:{border_color};stroke-width:0.5;"),
+        );
 
         // Body path: spine, arms, legs
         let spine_top = figure_base + ACTOR_SPINE_TOP_OFFSET;
@@ -3267,9 +3673,8 @@ impl PlantUmlSvg {
         let arm_left = cx - ACTOR_ARM_HALF;
         let arm_right = cx + ACTOR_ARM_HALF;
         let leg_bottom = figure_base + ACTOR_LEG_BOTTOM_OFFSET;
-        write!(
-            self.buf,
-            r##"<path d="M{cx},{st} L{cx},{sb} M{al},{ay} L{ar},{ay} M{cx},{sb} L{al},{lb} M{cx},{sb} L{ar},{lb}" fill="none" style="stroke:{border_color};stroke-width:0.5;"/>"##,
+        let d = format!(
+            "M{cx},{st} L{cx},{sb} M{al},{ay} L{ar},{ay} M{cx},{sb} L{al},{lb} M{cx},{sb} L{ar},{lb}",
             cx = fmt_coord(cx),
             st = fmt_coord(spine_top),
             sb = fmt_coord(spine_bottom),
@@ -3277,8 +3682,12 @@ impl PlantUmlSvg {
             ar = fmt_coord(arm_right),
             ay = fmt_coord(arm_y),
             lb = fmt_coord(leg_bottom),
-        )
-        .unwrap();
+        );
+        self.write_path(
+            &d,
+            "none",
+            &format!("stroke:{border_color};stroke-width:0.5;"),
+        );
 
         self.participant_group_close();
     }
@@ -3325,27 +3734,28 @@ impl PlantUmlSvg {
         let line_bottom = figure_base + BOUNDARY_LINE_BOTTOM_OFFSET;
         let horiz_to = circle_cx - STEREOTYPE_CIRCLE_R;
 
-        write!(
-            self.buf,
-            r##"<path d="M{lx},{lt} L{lx},{lb} M{lx},{cy} L{ht},{cy}" fill="none" style="stroke:{border_color};stroke-width:0.5;"/>"##,
+        let d = format!(
+            "M{lx},{lt} L{lx},{lb} M{lx},{cy} L{ht},{cy}",
             lx = fmt_coord(line_x),
             lt = fmt_coord(line_top),
             lb = fmt_coord(line_bottom),
             cy = fmt_coord(circle_cy),
             ht = fmt_coord(horiz_to),
-        )
-        .unwrap();
+        );
+        self.write_path(
+            &d,
+            "none",
+            &format!("stroke:{border_color};stroke-width:0.5;"),
+        );
 
-        write!(
-            self.buf,
-            r##"<ellipse cx="{}" cy="{}" fill="{}" rx="{}" ry="{}" style="stroke:{border_color};stroke-width:0.5;"/>"##,
-            fmt_coord(circle_cx),
-            fmt_coord(circle_cy),
+        self.write_ellipse(
+            circle_cx,
+            circle_cy,
+            STEREOTYPE_CIRCLE_R,
+            STEREOTYPE_CIRCLE_R,
             fill_color,
-            fmt_coord(STEREOTYPE_CIRCLE_R),
-            fmt_coord(STEREOTYPE_CIRCLE_R),
-        )
-        .unwrap();
+            &format!("stroke:{border_color};stroke-width:0.5;"),
+        );
 
         self.participant_group_close();
     }
@@ -3384,16 +3794,14 @@ impl PlantUmlSvg {
 
         // Circle
         let circle_cy = figure_base + STEREOTYPE_CIRCLE_CY;
-        write!(
-            self.buf,
-            r##"<ellipse cx="{}" cy="{}" fill="{}" rx="{}" ry="{}" style="stroke:{border_color};stroke-width:0.5;"/>"##,
-            fmt_coord(cx),
-            fmt_coord(circle_cy),
+        self.write_ellipse(
+            cx,
+            circle_cy,
+            STEREOTYPE_CIRCLE_R,
+            STEREOTYPE_CIRCLE_R,
             fill_color,
-            fmt_coord(STEREOTYPE_CIRCLE_R),
-            fmt_coord(STEREOTYPE_CIRCLE_R),
-        )
-        .unwrap();
+            &format!("stroke:{border_color};stroke-width:0.5;"),
+        );
 
         if draw_glyph {
             // Arrow/chevron on top of circle
@@ -3408,16 +3816,24 @@ impl PlantUmlSvg {
             let p3y = arrow_cy;
             let p4x = cx + 2.0;
             let p4y = arrow_cy + 5.0;
-            write!(
-                self.buf,
-                r##"<polygon fill="{border_color}" points="{},{},{},{},{},{},{},{},{},{}" style="stroke:{border_color};stroke-width:1;"/>"##,
-                fmt_coord(p1x), fmt_coord(p1y),
-                fmt_coord(p2x), fmt_coord(p2y),
-                fmt_coord(p3x), fmt_coord(p3y),
-                fmt_coord(p4x), fmt_coord(p4y),
-                fmt_coord(p1x), fmt_coord(p1y),
-            )
-            .unwrap();
+            let points = format!(
+                "{},{},{},{},{},{},{},{},{},{}",
+                fmt_coord(p1x),
+                fmt_coord(p1y),
+                fmt_coord(p2x),
+                fmt_coord(p2y),
+                fmt_coord(p3x),
+                fmt_coord(p3y),
+                fmt_coord(p4x),
+                fmt_coord(p4y),
+                fmt_coord(p1x),
+                fmt_coord(p1y),
+            );
+            self.write_polygon(
+                border_color,
+                &points,
+                &format!("stroke:{border_color};stroke-width:1;"),
+            );
         }
 
         self.participant_group_close();
@@ -3456,30 +3872,35 @@ impl PlantUmlSvg {
 
         // Circle
         let circle_cy = figure_base + STEREOTYPE_CIRCLE_CY;
-        write!(
-            self.buf,
-            r##"<ellipse cx="{}" cy="{}" fill="{}" rx="{}" ry="{}" style="stroke:{border_color};stroke-width:0.5;"/>"##,
-            fmt_coord(cx),
-            fmt_coord(circle_cy),
+        self.write_ellipse(
+            cx,
+            circle_cy,
+            STEREOTYPE_CIRCLE_R,
+            STEREOTYPE_CIRCLE_R,
             fill_color,
-            fmt_coord(STEREOTYPE_CIRCLE_R),
-            fmt_coord(STEREOTYPE_CIRCLE_R),
-        )
-        .unwrap();
+            &format!("stroke:{border_color};stroke-width:0.5;"),
+        );
 
         // Underline below the circle
         let line_y = circle_cy + STEREOTYPE_CIRCLE_R + 2.0;
         let line_x1 = cx - STEREOTYPE_CIRCLE_R;
         let line_x2 = cx + STEREOTYPE_CIRCLE_R;
-        write!(
-            self.buf,
-            r##"<line style="stroke:{border_color};stroke-width:0.5;" x1="{}" x2="{}" y1="{}" y2="{}"/>"##,
-            fmt_coord(line_x1),
-            fmt_coord(line_x2),
-            fmt_coord(line_y),
-            fmt_coord(line_y),
-        )
-        .unwrap();
+        if self.handwritten {
+            let d = handwritten_line_path(line_x1, line_y, line_x2, line_y);
+            write!(
+                self.buf,
+                r#"<path d="{d}" fill="{fill_color}" style="stroke:{border_color};stroke-width:0.5;"/>"#
+            )
+            .unwrap();
+        } else {
+            self.write_line(
+                &format!("stroke:{border_color};stroke-width:0.5;"),
+                line_x1,
+                line_x2,
+                line_y,
+                line_y,
+            );
+        }
 
         self.participant_group_close();
     }
@@ -3576,29 +3997,50 @@ impl PlantUmlSvg {
         // Back rectangle (offset right and up)
         let back_x = box_x + COLLECTIONS_OFFSET;
         let back_y = base_y;
-        write!(
-            self.buf,
-            r##"<rect fill="{}" height="{}" style="stroke:{border_color};stroke-width:0.5;" width="{}" x="{}" y="{}"/>"##,
-            fill_color,
-            fmt_coord(HEAD_BOX_H),
-            fmt_coord(box_w - COLLECTIONS_OFFSET),
-            fmt_coord(back_x),
-            fmt_coord(back_y),
-        )
-        .unwrap();
+        let rect_w = box_w - COLLECTIONS_OFFSET;
+        if self.handwritten {
+            let points = handwritten_rect_points(back_x, back_y, rect_w, HEAD_BOX_H, 0.0, 0.0);
+            write!(
+                self.buf,
+                r##"<polygon fill="{}" points="{}" style="stroke:{border_color};stroke-width:0.5;"/>"##,
+                fill_color, points,
+            )
+            .unwrap();
+        } else {
+            write!(
+                self.buf,
+                r##"<rect fill="{}" height="{}" style="stroke:{border_color};stroke-width:0.5;" width="{}" x="{}" y="{}"/>"##,
+                fill_color,
+                fmt_coord(HEAD_BOX_H),
+                fmt_coord(rect_w),
+                fmt_coord(back_x),
+                fmt_coord(back_y),
+            )
+            .unwrap();
+        }
 
         // Front rectangle (at box_x, offset down)
         let front_y = base_y + COLLECTIONS_OFFSET;
-        write!(
-            self.buf,
-            r##"<rect fill="{}" height="{}" style="stroke:{border_color};stroke-width:0.5;" width="{}" x="{}" y="{}"/>"##,
-            fill_color,
-            fmt_coord(HEAD_BOX_H),
-            fmt_coord(box_w - COLLECTIONS_OFFSET),
-            fmt_coord(box_x),
-            fmt_coord(front_y),
-        )
-        .unwrap();
+        if self.handwritten {
+            let points = handwritten_rect_points(box_x, front_y, rect_w, HEAD_BOX_H, 0.0, 0.0);
+            write!(
+                self.buf,
+                r##"<polygon fill="{}" points="{}" style="stroke:{border_color};stroke-width:0.5;"/>"##,
+                fill_color, points,
+            )
+            .unwrap();
+        } else {
+            write!(
+                self.buf,
+                r##"<rect fill="{}" height="{}" style="stroke:{border_color};stroke-width:0.5;" width="{}" x="{}" y="{}"/>"##,
+                fill_color,
+                fmt_coord(HEAD_BOX_H),
+                fmt_coord(rect_w),
+                fmt_coord(box_x),
+                fmt_coord(front_y),
+            )
+            .unwrap();
+        }
 
         // Text (on front rectangle)
         self.participant_text(text_x, text_y, text_content, text_len);
@@ -3835,31 +4277,25 @@ impl PlantUmlSvg {
         }
 
         if let Some(points) = leading_arrow_points {
-            write!(
-                self.buf,
-                r##"<polygon fill="{color}" points="{points}" style="stroke:{color};stroke-width:1;"/>"##,
-            )
-            .unwrap();
+            self.write_polygon(color, points, &format!("stroke:{color};stroke-width:1;"));
         }
 
         // Arrow head polygon keeps stroke-width:1 even when the line is
         // thickened — PlantUML scales the line only.
-        write!(
-            self.buf,
-            r##"<polygon fill="{color}" points="{arrow_points}" style="stroke:{color};stroke-width:1;"/>"##,
-        )
-        .unwrap();
+        self.write_polygon(
+            color,
+            arrow_points,
+            &format!("stroke:{color};stroke-width:1;"),
+        );
 
         let thickness = self.arrow_thickness.clone();
-        write!(
-            self.buf,
-            r##"<line style="stroke:{color};stroke-width:{thickness};{line_style}" x1="{}" x2="{}" y1="{}" y2="{}"/>"##,
-            fmt_coord(line_x1),
-            fmt_coord(line_x2),
-            fmt_coord(line_y),
-            fmt_coord(line_y),
-        )
-        .unwrap();
+        self.write_line(
+            &format!("stroke:{color};stroke-width:{thickness};{line_style}"),
+            line_x1,
+            line_x2,
+            line_y,
+            line_y,
+        );
 
         let label_x = if let Some((num_text, num_w, style)) = autonumber {
             emit_autonumber_prefix(&mut self.buf, num_text, text_x, text_y, style);
@@ -7835,6 +8271,7 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
     // -----------------------------------------------------------------------
 
     let mut svg = PlantUmlSvg::new();
+    svg.handwritten = is_handwritten;
     svg.teoz = diagram.teoz;
     svg.arrow_thickness = default_arrow_thickness.to_string();
     svg.participant_border = participant_border.clone();
