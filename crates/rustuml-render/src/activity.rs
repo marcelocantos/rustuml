@@ -79,6 +79,7 @@ const IF_BRANCH_DOWN: f64 = 10.0;
 /// Vertical gap between the last action of an if/else branch and the
 /// top of the merge diamond below. PlantUML uses 6 px here.
 const IF_BRANCH_UP: f64 = 6.0;
+const IF_SINGLE_SURVIVOR_JOIN_GAP: f64 = 5.0;
 /// Labelled `if` diamonds reserve a little extra inbound lead when the
 /// diagram-wide arrow font is taller than the default 20 px connector slot.
 const IF_LABEL_INBOUND_PAD: f64 = 0.71875;
@@ -766,6 +767,34 @@ fn branch_terminates(body: &[LayoutNode]) -> bool {
             | Some(LayoutNode::End)
             | Some(LayoutNode::Detach)
             | Some(LayoutNode::Kill)
+    )
+}
+
+/// For a binary if/else where exactly one non-empty branch terminates, return
+/// `true` when the then branch survives and `false` when the else branch
+/// survives. PlantUML skips the merge diamond for this shape and routes the
+/// surviving branch straight back to the main spine.
+fn if_single_survivor(then_branch: &[LayoutNode], else_branches: &[ElseBranch]) -> Option<bool> {
+    if else_branches.len() != 1 || else_branches[0].condition.is_some() {
+        return None;
+    }
+    let else_body = &else_branches[0].body;
+    if branch_is_empty(then_branch) || branch_is_empty(else_body) {
+        return None;
+    }
+    let then_terminates = branch_terminates(then_branch);
+    let else_terminates = branch_terminates(else_body);
+    (then_terminates != else_terminates).then_some(!then_terminates)
+}
+
+fn if_node_has_single_survivor(node: &LayoutNode) -> bool {
+    matches!(
+        node,
+        LayoutNode::If {
+            then_branch,
+            else_branches,
+            ..
+        } if if_single_survivor(then_branch, else_branches).is_some()
     )
 }
 
@@ -3487,6 +3516,7 @@ fn node_width(node: &LayoutNode) -> f64 {
 fn sequence_height(nodes: &[LayoutNode]) -> f64 {
     let mut h = 0.0;
     let mut prior_flow = false;
+    let mut prior_single_survivor_if = false;
     // Pending arrow style — modifiers from an explicit `-[…]->` preceding the
     // next flow node change the gap length (10 for hidden, 41.275 for
     // labelled, default 20).
@@ -3503,11 +3533,13 @@ fn sequence_height(nodes: &[LayoutNode]) -> f64 {
         if matches!(node, LayoutNode::Title { .. }) {
             h += node_height(node);
             pending_gap = None;
+            prior_single_survivor_if = false;
             continue;
         }
         if is_empty_partition_node(node) {
             h += node_height(node);
             pending_gap = None;
+            prior_single_survivor_if = false;
             continue;
         }
         // Partition: its top-gap (10 px) already absorbs the would-be arrow.
@@ -3519,6 +3551,7 @@ fn sequence_height(nodes: &[LayoutNode]) -> f64 {
             // prior_flow remains true so the next node after the partition
             // does get a connector arrow back to the partition's bottom.
             prior_flow = true;
+            prior_single_survivor_if = false;
             continue;
         }
         // Track explicit arrow style for the next flow connector.
@@ -3556,16 +3589,19 @@ fn sequence_height(nodes: &[LayoutNode]) -> f64 {
         ) {
             prior_flow = false;
             pending_gap = None;
+            prior_single_survivor_if = false;
             continue;
         }
         let (note_inbound_extra, note_bottom_extra) =
             action_note_vertical_extras(nodes, idx, node_height(node));
-        if prior_flow {
+        let skip_implicit_gap = prior_single_survivor_if && pending_gap.is_none();
+        if prior_flow && !skip_implicit_gap {
             h += pending_gap.unwrap_or_else(|| default_inbound_gap(node)) + note_inbound_extra;
         }
         pending_gap = None;
         h += node_height(node) + note_bottom_extra;
         prior_flow = true;
+        prior_single_survivor_if = if_node_has_single_survivor(node);
     }
     h
 }
@@ -3990,7 +4026,11 @@ fn node_height(node: &LayoutNode) -> f64 {
             let else_terminates = !else_branches.is_empty()
                 && else_branches.iter().all(|b| branch_terminates(&b.body));
             let all_terminate = then_terminates && else_terminates;
-            if all_terminate {
+            if let Some(then_survives) = if_single_survivor(then_branch, else_branches) {
+                let survivor_h = if then_survives { then_h } else { max_else_h };
+                let terminal_h = if then_survives { max_else_h } else { then_h };
+                diamond_h + IF_BRANCH_DOWN + terminal_h.max(survivor_h + ARROW_LEN)
+            } else if all_terminate {
                 diamond_h + IF_BRANCH_DOWN + branch_h
             } else {
                 diamond_h + IF_BRANCH_DOWN + branch_h + IF_BRANCH_UP + DIAMOND_HALF * 2.0
@@ -5213,7 +5253,11 @@ fn emit_sequence_ex(
                     }
                 }
             }
-            if prev_idx.is_some() {
+            let skip_implicit_inbound_after_single_survivor_if = explicit_arrow.is_none()
+                && prev_idx
+                    .and_then(|j| nodes.get(j))
+                    .is_some_and(if_node_has_single_survivor);
+            if prev_idx.is_some() && !skip_implicit_inbound_after_single_survivor_if {
                 let style = match explicit_arrow {
                     Some(LayoutNode::Arrow {
                         color: Some(c),
@@ -6049,13 +6093,14 @@ fn emit_if(
     let else_terminates =
         !else_branches.is_empty() && else_branches.iter().all(|b| branch_terminates(&b.body));
     let all_terminate = then_terminates && else_terminates;
+    let single_survivor = if_single_survivor(then_branch, else_branches);
 
     // Merge diamond at bottom — sits IF_BRANCH_UP px below the deepest branch.
     let merge_y = then_bottom.max(else_bottom) + IF_BRANCH_UP;
     let merge_diamond_top = merge_y;
     let merge_cy = merge_diamond_top + DIAMOND_HALF;
 
-    if !all_terminate {
+    if !all_terminate && single_survivor.is_none() {
         // Small merge diamond shape (lands in shapes buffer after branch shapes).
         svg.polygon_shape(
             &diamond_fill,
@@ -6131,6 +6176,30 @@ fn emit_if(
         &arrow_color,
         "1",
     );
+
+    if let Some(then_survives) = single_survivor {
+        let (survivor_cx, survivor_bottom) = if then_survives {
+            (then_cx, then_bottom)
+        } else {
+            (else_cx, else_bottom)
+        };
+        let join_y = survivor_bottom + IF_SINGLE_SURVIVOR_JOIN_GAP;
+        let out_y = survivor_bottom + ARROW_LEN;
+        svg.connector_line(
+            &arrow_color,
+            survivor_cx,
+            survivor_cx,
+            survivor_bottom,
+            join_y,
+            false,
+        );
+        if survivor_cx != cx {
+            svg.connector_line(&arrow_color, survivor_cx, cx, join_y, join_y, false);
+        }
+        svg.connector_line(&arrow_color, cx, cx, join_y, out_y, false);
+        switch_down_head(svg, &arrow_color, cx, out_y);
+        return out_y;
+    }
 
     // Then branch → merge — skipped if the branch terminates.
     if !then_terminates {
