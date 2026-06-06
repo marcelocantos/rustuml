@@ -1125,7 +1125,8 @@ fn helvetica_char_units(c: char) -> Option<f64> {
         'F' | 'T' | 'Z' => 1251.0,
         'G' | 'O' | 'Q' => 1593.0,
         'I' => 569.0,
-        'J' | 'S' => 1024.0,
+        'J' => 1024.0,
+        'S' => 1366.0,
         'K' | 'X' => 1366.0,
         'L' => 1139.0,
         'M' => 1706.0,
@@ -1149,6 +1150,38 @@ fn helvetica_char_units(c: char) -> Option<f64> {
         '|' => 532.0,
         '}' => 684.0,
         '~' => 1196.0,
+        '«' | '»' => 1139.0,
+        _ => return None,
+    };
+    Some(units)
+}
+
+fn helvetica_bold_char_units(c: char) -> Option<f64> {
+    let units = match c {
+        ' ' | ',' | '.' => 569.0,
+        '!' | '(' | ')' | '-' | '[' | ']' | '`' => 682.0,
+        '"' => 971.0,
+        '#' | '$' | '0'..='9' | 'J' | 'a' | 'c' | 'e' | 's' | 'v' | 'x' | 'y' | '«' | '»' => {
+            1139.0
+        }
+        '%' => 1821.0,
+        '&' | 'A' | 'B' | 'C' | 'D' | 'H' | 'K' | 'N' | 'R' | 'U' => 1479.0,
+        '\'' => 487.0,
+        '*' | 'r' | '{' | '}' => 797.0,
+        '+' | '<' | '=' | '>' | '^' | '~' => 1196.0,
+        '/' | 'I' | '\\' | 'i' | 'j' | 'l' => 569.0,
+        ':' | ';' => 682.0,
+        '?' | 'F' | 'L' | 'T' | 'Z' | 'z' => 1251.0,
+        '@' => 1997.0,
+        'E' | 'P' | 'S' | 'V' | 'X' | 'Y' => 1366.0,
+        'G' | 'O' | 'Q' | 'w' => 1593.0,
+        'M' => 1706.0,
+        'W' => 1933.0,
+        '_' => 1139.0,
+        'b' | 'd' | 'g' | 'h' | 'k' | 'n' | 'o' | 'p' | 'q' | 'u' => 1251.0,
+        'f' | 't' => 682.0,
+        'm' => 1821.0,
+        '|' => 573.0,
         _ => return None,
     };
     Some(units)
@@ -1156,9 +1189,15 @@ fn helvetica_char_units(c: char) -> Option<f64> {
 
 fn helvetica_text_width(text: &str, font_size: f64, bold: bool) -> f64 {
     text.chars()
-        .map(|c| match helvetica_char_units(c) {
-            Some(units) => units / HELVETICA_UPM * font_size,
-            None => sans_text_width(&c.to_string(), font_size, bold),
+        .map(|c| {
+            match if bold {
+                helvetica_bold_char_units(c)
+            } else {
+                helvetica_char_units(c)
+            } {
+                Some(units) => units / HELVETICA_UPM * font_size,
+                None => sans_text_width(&c.to_string(), font_size, bold),
+            }
         })
         .sum()
 }
@@ -1727,6 +1766,18 @@ mod tests {
         assert_eq!(
             pm::fmt_coord(measure_with_family("Bar", 14.0, false, "Helvetica")),
             "21.7861"
+        );
+        assert_eq!(
+            pm::fmt_coord(measure_with_family("«interface»", 12.0, false, "Helvetica")),
+            "59.373"
+        );
+        assert_eq!(
+            pm::fmt_coord(measure_with_family("Measurable", 12.0, true, "Helvetica")),
+            "66.0293"
+        );
+        assert_eq!(
+            pm::fmt_coord(measure_with_family("LANDSCAPE", 12.0, false, "Helvetica")),
+            "72.6914"
         );
         assert_eq!(
             pm::fmt_coord(text_height_for_family(16.0, "Arial")),

@@ -1528,6 +1528,12 @@ struct ClassFontOverrides {
     /// the standard class circled-character icon.
     stereotype_c_background: Option<String>,
     stereotype_c_border: Option<String>,
+    stereotype_a_background: Option<String>,
+    stereotype_a_border: Option<String>,
+    stereotype_i_background: Option<String>,
+    stereotype_i_border: Option<String>,
+    stereotype_e_background: Option<String>,
+    stereotype_e_border: Option<String>,
     /// `skinparam monochrome true|reverse` is active. A final-SVG pass maps
     /// every `#RRGGBB` literal to its YIQ grey; the oracle, however, captures
     /// the golden's *already-monochromed* rect fill/style, so re-running the
@@ -1632,6 +1638,12 @@ impl ClassFontOverrides {
                     None
                 }
             }),
+            stereotype_a_background: find(&["stereotypeABackgroundColor"]),
+            stereotype_a_border: find(&["stereotypeABorderColor"]),
+            stereotype_i_background: find(&["stereotypeIBackgroundColor"]),
+            stereotype_i_border: find(&["stereotypeIBorderColor"]),
+            stereotype_e_background: find(&["stereotypeEBackgroundColor"]),
+            stereotype_e_border: find(&["stereotypeEBorderColor"]),
             monochrome: params.iter().any(|sp| {
                 sp.key.eq_ignore_ascii_case("monochrome")
                     && matches!(
@@ -1700,6 +1712,13 @@ fn is_monospace_font(font_family: &str) -> bool {
         .trim_matches(|c| c == '"' || c == '\'')
         .to_ascii_lowercase();
     MONOSPACE_FONTS.contains(&normalized.as_str())
+}
+
+fn unquoted_class_font_family(font_family: &str) -> &str {
+    font_family
+        .strip_prefix('\'')
+        .and_then(|s| s.strip_suffix('\''))
+        .unwrap_or(font_family)
 }
 
 fn stereotype_font_style_param(
@@ -3137,13 +3156,41 @@ fn render_entity_content(
             .stereotype_c_border
             .as_deref()
             .map(crate::sequence::resolve_color);
+        let stereotype_a_fill = font
+            .stereotype_a_background
+            .as_deref()
+            .map(crate::sequence::resolve_color);
+        let stereotype_a_stroke = font
+            .stereotype_a_border
+            .as_deref()
+            .map(crate::sequence::resolve_color);
+        let stereotype_i_fill = font
+            .stereotype_i_background
+            .as_deref()
+            .map(crate::sequence::resolve_color);
+        let stereotype_i_stroke = font
+            .stereotype_i_border
+            .as_deref()
+            .map(crate::sequence::resolve_color);
+        let stereotype_e_fill = font
+            .stereotype_e_background
+            .as_deref()
+            .map(crate::sequence::resolve_color);
+        let stereotype_e_stroke = font
+            .stereotype_e_border
+            .as_deref()
+            .map(crate::sequence::resolve_color);
         let icon_fill: &str = match &entity.spot_color {
             Some(c) => c,
             None => match entity.kind {
                 EntityKind::Class => stereotype_c_fill.as_deref().unwrap_or(CLASS_ICON_FILL),
-                EntityKind::Interface => INTERFACE_ICON_FILL,
-                EntityKind::Enum => ENUM_ICON_FILL,
-                EntityKind::AbstractClass => ABSTRACT_ICON_FILL,
+                EntityKind::Interface => {
+                    stereotype_i_fill.as_deref().unwrap_or(INTERFACE_ICON_FILL)
+                }
+                EntityKind::Enum => stereotype_e_fill.as_deref().unwrap_or(ENUM_ICON_FILL),
+                EntityKind::AbstractClass => {
+                    stereotype_a_fill.as_deref().unwrap_or(ABSTRACT_ICON_FILL)
+                }
                 EntityKind::Annotation => ANNOTATION_ICON_FILL,
                 EntityKind::Entity => stereotype_c_fill.as_deref().unwrap_or(CLASS_ICON_FILL),
                 EntityKind::State => stereotype_c_fill.as_deref().unwrap_or(CLASS_ICON_FILL),
@@ -3156,6 +3203,9 @@ fn render_entity_content(
             EntityKind::Class | EntityKind::Entity | EntityKind::State => {
                 stereotype_c_stroke.as_deref().unwrap_or(BORDER_COLOR)
             }
+            EntityKind::Interface => stereotype_i_stroke.as_deref().unwrap_or(BORDER_COLOR),
+            EntityKind::Enum => stereotype_e_stroke.as_deref().unwrap_or(BORDER_COLOR),
+            EntityKind::AbstractClass => stereotype_a_stroke.as_deref().unwrap_or(BORDER_COLOR),
             _ => BORDER_COLOR,
         };
 
@@ -3251,7 +3301,10 @@ fn render_entity_content(
                 .and_then(|r| r.text_x_values.get(i).copied())
                 .or(name_text_x_override)
                 .unwrap_or(icon_cx + ICON_RX + ICON_TEXT_GAP);
-            let stereo_y = y + STEREOTYPE_Y_OFFSET + i as f64 * STEREOTYPE_LINE_HEIGHT;
+            let stereo_y = oracle_rect
+                .and_then(|r| r.text_y_values.get(i).copied())
+                .unwrap_or(y + STEREOTYPE_Y_OFFSET + i as f64 * STEREOTYPE_LINE_HEIGHT);
+            let stereo_family = unquoted_class_font_family(&font.name_family);
             let mut text_buf = String::new();
             text_render::emit_text(
                 &mut text_buf,
@@ -3260,7 +3313,7 @@ fn render_entity_content(
                     x: stereo_x,
                     y: stereo_y,
                     font_size: 12,
-                    font_family: &font.name_family,
+                    font_family: stereo_family,
                     fill: text_fill,
                     bold: false,
                     italic: true,
@@ -3696,7 +3749,7 @@ fn render_entity_content(
                         &TextBase {
                             x: x + ENUM_TEXT_OFFSET,
                             y: eff_member_y + line_index as f64 * MEMBER_SPACING,
-                            font_size: 14,
+                            font_size: attr_font.size,
                             font_family: attr_font.family,
                             fill: member_fill,
                             bold: false,
