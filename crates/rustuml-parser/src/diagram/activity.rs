@@ -46,6 +46,7 @@ pub enum ActivityStep {
     Arrow(ArrowStep),
     Backward(String),
     Break,
+    Goto(String),
     Detach,
     Kill,
 }

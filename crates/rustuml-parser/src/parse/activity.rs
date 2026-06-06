@@ -498,6 +498,11 @@ impl ActivityParser {
             "break" => self.steps.push(ActivityStep::Break),
             "detach" => self.steps.push(ActivityStep::Detach),
             "kill" => self.steps.push(ActivityStep::Kill),
+            _ if line.starts_with("label ") => {}
+            _ if let Some(target) = line.strip_prefix("goto ") => {
+                self.steps
+                    .push(ActivityStep::Goto(target.trim().to_string()));
+            }
             _ => {
                 if !self.try_meta(line)
                     && !self.try_action(line)
@@ -1106,6 +1111,15 @@ mod tests {
 
         let d2 = parse("start\nkill");
         assert!(matches!(d2.steps[1], ActivityStep::Kill));
+    }
+
+    #[test]
+    fn label_and_goto() {
+        let d = parse("start\nlabel loop\n:work;\ngoto loop\nstop");
+        assert!(matches!(d.steps[0], ActivityStep::Start));
+        assert!(matches!(d.steps[1], ActivityStep::Action(ref s) if s == "work"));
+        assert!(matches!(d.steps[2], ActivityStep::Goto(ref s) if s == "loop"));
+        assert!(matches!(d.steps[3], ActivityStep::Stop));
     }
 
     #[test]

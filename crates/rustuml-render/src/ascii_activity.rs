@@ -313,6 +313,7 @@ pub fn render_ascii(diagram: &ActivityDiagram) -> String {
             | ActivityStep::DeprecatedColorAction(_)
             | ActivityStep::Backward(_)
             | ActivityStep::Break
+            | ActivityStep::Goto(_)
             | ActivityStep::Detach
             | ActivityStep::Kill
             | ActivityStep::Repeat

@@ -80,6 +80,7 @@ const IF_BRANCH_DOWN: f64 = 10.0;
 /// top of the merge diamond below. PlantUML uses 6 px here.
 const IF_BRANCH_UP: f64 = 6.0;
 const IF_SINGLE_SURVIVOR_JOIN_GAP: f64 = 5.0;
+const IF_GOTO_RESUME_GAP: f64 = 5.0;
 const IF_EMPTY_BOTH_LEFT_EXTENT_PAD: f64 = 13.0;
 const IF_EMPTY_BOTH_RIGHT_EXTENT_PAD: f64 = 15.0;
 /// Labelled `if` diamonds reserve a little extra inbound lead when the
@@ -708,6 +709,7 @@ enum LayoutNode {
     Detach,
     Kill,
     Break,
+    Goto(String),
     Title {
         text: String,
         font_size: f64,
@@ -814,8 +816,9 @@ struct SwitchCase {
 }
 
 /// Returns true if a branch ends with a control-flow terminator (Stop, End,
-/// Detach, Kill, or Break). PlantUML omits the merge diamond and post-merge
-/// connectors entirely when every branch of an if/else terminates this way.
+/// Detach, Kill, Break, or Goto). PlantUML omits the merge diamond and
+/// post-merge connectors entirely when every branch of an if/else terminates
+/// this way.
 fn branch_terminates(body: &[LayoutNode]) -> bool {
     matches!(
         body.last(),
@@ -824,7 +827,20 @@ fn branch_terminates(body: &[LayoutNode]) -> bool {
             | Some(LayoutNode::Detach)
             | Some(LayoutNode::Kill)
             | Some(LayoutNode::Break)
+            | Some(LayoutNode::Goto(_))
     )
+}
+
+fn branch_ends_with_goto(body: &[LayoutNode]) -> bool {
+    matches!(body.last(), Some(LayoutNode::Goto(_)))
+}
+
+fn if_all_branches_goto(then_branch: &[LayoutNode], else_branches: &[ElseBranch]) -> bool {
+    branch_ends_with_goto(then_branch)
+        && !else_branches.is_empty()
+        && else_branches
+            .iter()
+            .all(|branch| branch_ends_with_goto(&branch.body))
 }
 
 fn leading_branch_arrow(nodes: &[LayoutNode]) -> (Option<&LayoutNode>, &[LayoutNode]) {
@@ -964,7 +980,8 @@ fn node_is_flow(n: &LayoutNode) -> bool {
         | LayoutNode::Title { .. }
         | LayoutNode::Detach
         | LayoutNode::Kill
-        | LayoutNode::Break => false,
+        | LayoutNode::Break
+        | LayoutNode::Goto(_) => false,
         LayoutNode::Partition { body, .. } if body.is_empty() => false,
         _ => true,
     }
@@ -1498,6 +1515,10 @@ fn build_tree_inner(steps: &[ActivityStep], palette: &Palette) -> Vec<LayoutNode
             }
             ActivityStep::Break => {
                 nodes.push(LayoutNode::Break);
+                i += 1;
+            }
+            ActivityStep::Goto(target) => {
+                nodes.push(LayoutNode::Goto(target.clone()));
                 i += 1;
             }
             ActivityStep::Partition(p) => {
@@ -2812,7 +2833,8 @@ fn sequence_geometry(nodes: &[LayoutNode]) -> Option<ftile::FtileGeometry> {
             LayoutNode::Arrow { .. }
             | LayoutNode::Detach
             | LayoutNode::Kill
-            | LayoutNode::Break => continue,
+            | LayoutNode::Break
+            | LayoutNode::Goto(_) => continue,
             _ => geoms.push(node_geometry(n)?),
         }
     }
@@ -2826,7 +2848,8 @@ fn sequence_geometry_if_branch(nodes: &[LayoutNode]) -> Option<ftile::FtileGeome
             LayoutNode::Arrow { .. }
             | LayoutNode::Detach
             | LayoutNode::Kill
-            | LayoutNode::Break => continue,
+            | LayoutNode::Break
+            | LayoutNode::Goto(_) => continue,
             _ => geoms.push(node_geometry_if_branch(n)?),
         }
     }
@@ -4026,7 +4049,8 @@ fn node_width(node: &LayoutNode) -> f64 {
         | LayoutNode::Note { .. }
         | LayoutNode::Detach
         | LayoutNode::Kill
-        | LayoutNode::Break => 0.0,
+        | LayoutNode::Break
+        | LayoutNode::Goto(_) => 0.0,
         LayoutNode::Title {
             text,
             font_size,
@@ -4104,11 +4128,11 @@ fn sequence_height(nodes: &[LayoutNode]) -> f64 {
             pending_gap = Some(gap);
             continue;
         }
-        // Detach/Kill/Break terminate the flow but produce no visual height.
+        // Detach/Kill/Break/Goto terminate the flow but produce no visual height.
         // They also suppress the arrow that would precede them.
         if matches!(
             node,
-            LayoutNode::Detach | LayoutNode::Kill | LayoutNode::Break
+            LayoutNode::Detach | LayoutNode::Kill | LayoutNode::Break | LayoutNode::Goto(_)
         ) {
             prior_flow = false;
             pending_gap = None;
@@ -4697,7 +4721,7 @@ fn node_height(node: &LayoutNode) -> f64 {
         }
         LayoutNode::Arrow { .. } => 0.0, // arrows don't add height (they're between nodes)
         LayoutNode::Note { .. } => 0.0,
-        LayoutNode::Detach | LayoutNode::Kill | LayoutNode::Break => 0.0,
+        LayoutNode::Detach | LayoutNode::Kill | LayoutNode::Break | LayoutNode::Goto(_) => 0.0,
         // Title region: text_height + 30 of vertical padding so the cursor
         // lands at the cy of the following Start ellipse (composed of 4 px
         // text-top offset + text_height + 16 px gap below text + START_R).
@@ -5749,11 +5773,11 @@ fn emit_sequence_ex(
         if matches!(node, LayoutNode::Arrow { .. } | LayoutNode::Note { .. }) {
             continue;
         }
-        // Detach/Kill/Break also produce no shape and no incoming connector —
-        // they mark the previous flow as terminated.
+        // Detach/Kill/Break/Goto also produce no shape and no incoming
+        // connector — they mark the previous flow as terminated.
         if matches!(
             node,
-            LayoutNode::Detach | LayoutNode::Kill | LayoutNode::Break
+            LayoutNode::Detach | LayoutNode::Kill | LayoutNode::Break | LayoutNode::Goto(_)
         ) {
             continue;
         }
@@ -5813,7 +5837,10 @@ fn emit_sequence_ex(
                     LayoutNode::Note { .. } => {}
                     LayoutNode::Title { .. } => {}
                     n if is_empty_partition_node(n) => {}
-                    LayoutNode::Detach | LayoutNode::Kill | LayoutNode::Break => {
+                    LayoutNode::Detach
+                    | LayoutNode::Kill
+                    | LayoutNode::Break
+                    | LayoutNode::Goto(_) => {
                         prev_idx = None;
                         break;
                     }
@@ -5897,6 +5924,17 @@ fn emit_sequence_ex(
                     prev_idx.and_then(|j| nodes.get(j)),
                     Some(LayoutNode::Fork { is_split: true, .. })
                 );
+                let prev_was_all_goto_if =
+                    prev_idx
+                        .and_then(|j| nodes.get(j))
+                        .is_some_and(|prev| match prev {
+                            LayoutNode::If {
+                                then_branch,
+                                else_branches,
+                                ..
+                            } => if_all_branches_goto(then_branch, else_branches),
+                            _ => false,
+                        });
                 let is_partition = partition_top_gap.is_some();
                 // A long if/elseif/else draws its own multi-segment inbound
                 // connector (`ConnectionIn`) from the previous node's bottom to
@@ -5913,6 +5951,8 @@ fn emit_sequence_ex(
                     y - 12.0
                 } else if prev_was_split {
                     y + 1.5
+                } else if prev_was_all_goto_if {
+                    y + IF_GOTO_RESUME_GAP
                 } else {
                     y
                 };
@@ -5929,6 +5969,8 @@ fn emit_sequence_ex(
                         base + 12.0
                     } else if prev_was_split {
                         base - 1.5
+                    } else if prev_was_all_goto_if {
+                        base - IF_GOTO_RESUME_GAP
                     } else {
                         base
                     }
@@ -6384,7 +6426,7 @@ fn emit_node_with_repeat_extra(
             },
         ),
         LayoutNode::Arrow { .. } | LayoutNode::Note { .. } => y,
-        LayoutNode::Detach | LayoutNode::Kill | LayoutNode::Break => y,
+        LayoutNode::Detach | LayoutNode::Kill | LayoutNode::Break | LayoutNode::Goto(_) => y,
         LayoutNode::Title {
             text,
             font_size,
@@ -6769,7 +6811,7 @@ fn emit_if(
         );
     }
 
-    if if_empty_both_plain(then_branch, else_branches) {
+    if if_empty_both_plain(then_branch, else_branches) && !all_terminate {
         // PlantUML routes two empty branches as side corridors into the merge
         // diamond. The vertical corridor is one continuous line with a
         // mid-corridor down arrowhead overlaid before the line element.
