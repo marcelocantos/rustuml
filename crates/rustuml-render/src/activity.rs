@@ -1408,6 +1408,15 @@ const FORK_ASYMMETRIC_SPINE_STEP: f64 = 5.0;
 const FORK_ASYMMETRIC_EPS: f64 = 0.02;
 const FORK_EMPTY_EDGE_CENTER: f64 = 14.0;
 const FORK_EMPTY_LANE_GAP: f64 = 21.0;
+/// When a fork is itself the first branch tile under `FtileIfWithLinks`,
+/// PlantUML keeps the fork's flow spine fixed and grows the bar to the right.
+const FORK_IF_BRANCH_RIGHT_EXTRA: f64 = 2.0;
+const FORK_IF_BRANCH_ODD_LAST_GAP_EXTRA: f64 = 10.6240234375;
+const FORK_IF_BRANCH_EVEN_LAST_GAP_EXTRA: f64 = FORK_EVEN_MIDDLE_EXTRA;
+const FORK_IF_BRANCH_ODD_SPACING_EXTRA: f64 = 6.083;
+const FORK_IF_BRANCH_EVEN_SPACING_EXTRA: f64 = 8.0;
+const FORK_IF_BRANCH_ODD_SPINE_SHIFT: f64 = -0.4175;
+const FORK_IF_BRANCH_EVEN_SPINE_SHIFT: f64 = 6.0;
 
 fn node_if_depth(node: &LayoutNode) -> usize {
     match node {
@@ -1561,6 +1570,72 @@ fn fork_layout(branches: &[Vec<LayoutNode>]) -> ForkLayout {
         } else {
             0.0
         },
+    }
+}
+
+fn fork_layout_if_branch(branches: &[Vec<LayoutNode>]) -> ForkLayout {
+    let mut layout = fork_layout(branches);
+    let n = layout.centers.len();
+    if n < 2 || branches.iter().any(Vec::is_empty) {
+        return layout;
+    }
+
+    let old_spine = layout.bar_w / 2.0 - layout.spine_dx;
+    let last_gap_extra = if n >= 3 {
+        if n.is_multiple_of(2) {
+            FORK_IF_BRANCH_EVEN_LAST_GAP_EXTRA
+        } else {
+            FORK_IF_BRANCH_ODD_LAST_GAP_EXTRA
+        }
+    } else {
+        0.0
+    };
+    if last_gap_extra != 0.0
+        && let Some(last) = layout.centers.last_mut()
+    {
+        *last += last_gap_extra;
+    }
+    let right_extra = if n == 2 || !n.is_multiple_of(2) {
+        FORK_IF_BRANCH_RIGHT_EXTRA
+    } else {
+        0.0
+    };
+    layout.bar_w += last_gap_extra + right_extra;
+    layout.spine_dx = layout.bar_w / 2.0 - old_spine;
+    layout
+}
+
+fn fork_layout_if_branch_spacing(branches: &[Vec<LayoutNode>]) -> ForkLayout {
+    let mut layout = fork_layout(branches);
+    let n = layout.centers.len();
+    if n < 2 || branches.iter().any(Vec::is_empty) {
+        return layout;
+    }
+
+    let old_spine = layout.bar_w / 2.0 - layout.spine_dx;
+    let extra = if n == 2 {
+        FORK_IF_BRANCH_RIGHT_EXTRA
+    } else if n.is_multiple_of(2) {
+        FORK_IF_BRANCH_EVEN_SPACING_EXTRA
+    } else {
+        FORK_IF_BRANCH_ODD_SPACING_EXTRA
+    };
+    layout.bar_w += extra;
+    layout.spine_dx = layout.bar_w / 2.0 - old_spine;
+    layout
+}
+
+fn leading_if_branch_fork_spine_shift(nodes: &[LayoutNode]) -> f64 {
+    let Some(LayoutNode::Fork { branches }) = nodes.iter().find(|node| node_is_flow(node)) else {
+        return 0.0;
+    };
+    let n = branches.len();
+    if n < 3 {
+        0.0
+    } else if n.is_multiple_of(2) {
+        FORK_IF_BRANCH_EVEN_SPINE_SHIFT
+    } else {
+        FORK_IF_BRANCH_ODD_SPINE_SHIFT
     }
 }
 
@@ -2087,6 +2162,20 @@ fn sequence_geometry(nodes: &[LayoutNode]) -> Option<ftile::FtileGeometry> {
     ftile::assemble_linear(&geoms)
 }
 
+fn sequence_geometry_if_branch(nodes: &[LayoutNode]) -> Option<ftile::FtileGeometry> {
+    let mut geoms: Vec<ftile::FtileGeometry> = Vec::new();
+    for n in nodes {
+        match n {
+            LayoutNode::Arrow { .. }
+            | LayoutNode::Detach
+            | LayoutNode::Kill
+            | LayoutNode::Break => continue,
+            _ => geoms.push(node_geometry_if_branch(n)?),
+        }
+    }
+    ftile::assemble_linear(&geoms)
+}
+
 /// `LayoutNode → FtileGeometry` via the ftile port. See the module note above
 /// for which tiles are mapped vs. deferred.
 #[allow(dead_code)] // incr-4 groundwork: wired in a later increment
@@ -2202,9 +2291,47 @@ fn node_geometry(node: &LayoutNode) -> Option<ftile::FtileGeometry> {
                 backward_g.as_ref(),
             )
         }
+        LayoutNode::Fork { branches } => fork_geometry(branches, false),
         _ => return None,
     };
     Some(g)
+}
+
+fn node_geometry_if_branch(node: &LayoutNode) -> Option<ftile::FtileGeometry> {
+    match node {
+        LayoutNode::Fork { branches } => Some(fork_geometry_with_layout(
+            branches,
+            fork_layout_if_branch_spacing(branches),
+        )),
+        _ => node_geometry(node),
+    }
+}
+
+fn fork_geometry(branches: &[Vec<LayoutNode>], if_branch: bool) -> ftile::FtileGeometry {
+    let layout = if if_branch {
+        fork_layout_if_branch(branches)
+    } else {
+        fork_layout(branches)
+    };
+    fork_geometry_with_layout(branches, layout)
+}
+
+fn fork_geometry_with_layout(
+    branches: &[Vec<LayoutNode>],
+    layout: ForkLayout,
+) -> ftile::FtileGeometry {
+    let max_h: f64 = branches
+        .iter()
+        .map(|b| sequence_height(b))
+        .fold(0.0f64, f64::max);
+    let height = FORK_BAR_HEIGHT + ARROW_LEN + max_h + ARROW_LEN + FORK_BAR_HEIGHT;
+    ftile::FtileGeometry::new(
+        layout.bar_w,
+        height,
+        layout.bar_w / 2.0 - layout.spine_dx,
+        0.0,
+        Some(height),
+    )
 }
 
 /// Branch tile geometry for an `if/else` branch, mirroring ConditionalBuilder:
@@ -2212,7 +2339,7 @@ fn node_geometry(node: &LayoutNode) -> Option<ftile::FtileGeometry> {
 /// takes the `createWithLinks` path — build() L161). The +10/side is what
 /// produces the 20px inter-branch gap that the bare box geometry lacked.
 fn if_branch_tile(branch: &[LayoutNode]) -> Option<ftile::FtileGeometry> {
-    let g = sequence_geometry(branch)?;
+    let g = sequence_geometry_if_branch(branch)?;
     // MinWidthCentered(30): widen narrow branches to 30, content centred.
     let g = if g.width < 30.0 {
         ftile::FtileGeometry::new(30.0, g.height, 15.0, g.in_y, g.out_y)
@@ -2240,8 +2367,8 @@ fn if_ftile_layout_styled(
     if else_branches.len() != 1 || if_down_plan(then_branch, else_branches).is_some() {
         return None;
     }
-    let (then_l, _then_r) = sequence_extents(then_branch);
-    let (_else_l, else_r) = sequence_extents(&else_branches[0].body);
+    let (then_l, _then_r) = sequence_extents_if_branch(then_branch);
+    let (_else_l, else_r) = sequence_extents_if_branch(&else_branches[0].body);
     let diamond1 = condition_diamond_styled(
         condition,
         diamond_font_size,
@@ -2252,11 +2379,18 @@ fn if_ftile_layout_styled(
     let t1 = if_branch_tile(then_branch)?;
     let t2 = if_branch_tile(&else_branches[0].body)?;
     let g = ftile::if_with_diamonds(&diamond1, &t1, &t2, &diamond2, 16.0, (0.0, 0.0, 0.0));
-    let then_off = t1.left - g.left; // negative: then spine left of if spine
-    let else_off = g.right() - t2.right();
+    let mut then_off = t1.left - g.left; // negative: then spine left of if spine
+    let mut else_off = g.right() - t2.right();
     let cond_half = diamond1.width / 2.0;
-    let left_ext = cond_half.max(-then_off + then_l);
-    let right_ext = cond_half.max(else_off + else_r);
+    let mut left_ext = cond_half.max(-then_off + then_l);
+    let mut right_ext = cond_half.max(else_off + else_r);
+    let spine_shift = leading_if_branch_fork_spine_shift(then_branch);
+    if spine_shift != 0.0 {
+        then_off -= spine_shift;
+        else_off -= spine_shift;
+        left_ext += spine_shift;
+        right_ext -= spine_shift;
+    }
     Some((then_off, else_off, left_ext, right_ext))
 }
 
@@ -2816,6 +2950,14 @@ fn node_extents(node: &LayoutNode) -> (f64, f64) {
 /// dimension independently so an asymmetric node anywhere in the sequence
 /// shifts cx as needed.
 fn sequence_extents(nodes: &[LayoutNode]) -> (f64, f64) {
+    sequence_extents_with(nodes, false)
+}
+
+fn sequence_extents_if_branch(nodes: &[LayoutNode]) -> (f64, f64) {
+    sequence_extents_with(nodes, true)
+}
+
+fn sequence_extents_with(nodes: &[LayoutNode], if_branch: bool) -> (f64, f64) {
     let mut left = 0.0f64;
     let mut right = 0.0f64;
     // The half-width of the most recent flow node — a note attaches to it and
@@ -2837,17 +2979,46 @@ fn sequence_extents(nodes: &[LayoutNode]) -> (f64, f64) {
                 }
             }
             _ => {
-                let (nl, nr) = node_extents(node);
+                let (nl, nr) = if if_branch {
+                    node_extents_if_branch(node)
+                } else {
+                    node_extents(node)
+                };
                 left = left.max(nl);
                 right = right.max(nr);
                 // Only genuine flow nodes (those with width) can anchor a note.
-                if node_width(node) > 0.0 {
-                    anchor_half = node_width(node) / 2.0;
+                let width = if if_branch {
+                    node_width_if_branch(node)
+                } else {
+                    node_width(node)
+                };
+                if width > 0.0 {
+                    anchor_half = width / 2.0;
                 }
             }
         }
     }
     (left, right)
+}
+
+fn node_extents_if_branch(node: &LayoutNode) -> (f64, f64) {
+    match node {
+        LayoutNode::Fork { branches } => {
+            let layout = fork_layout_if_branch(branches);
+            (
+                layout.bar_w / 2.0 - layout.spine_dx,
+                layout.bar_w / 2.0 + layout.spine_dx,
+            )
+        }
+        _ => node_extents(node),
+    }
+}
+
+fn node_width_if_branch(node: &LayoutNode) -> f64 {
+    match node {
+        LayoutNode::Fork { branches } => fork_layout_if_branch(branches).bar_w,
+        _ => node_width(node),
+    }
 }
 
 /// Width of a single swimlane: the wider of the content (with 10 px
@@ -4842,7 +5013,8 @@ fn emit_sequence_ex(
         } else {
             0.0
         };
-        let node_y = emit_node_with_repeat_extra(svg, node, cx, y, repeat_extra);
+        let node_y =
+            emit_node_with_repeat_extra(svg, node, cx, y, repeat_extra, first_repeat_branch_extra);
         // Inbound connector goes AFTER the node's own emit so it lands
         // after the node's internal connectors in the connectors buffer
         // (matches PlantUML's emission order: internal first, then inbound).
@@ -4871,7 +5043,7 @@ fn emit_sequence_ex(
 /// Emit a single node at the given center-x and y position.
 /// Returns the y position after this node (bottom edge).
 fn emit_node(svg: &mut SvgEmitter, node: &LayoutNode, cx: f64, y: f64) -> f64 {
-    emit_node_with_repeat_extra(svg, node, cx, y, 0.0)
+    emit_node_with_repeat_extra(svg, node, cx, y, 0.0, false)
 }
 
 fn emit_node_with_repeat_extra(
@@ -4880,6 +5052,7 @@ fn emit_node_with_repeat_extra(
     cx: f64,
     y: f64,
     repeat_body_top_extra: f64,
+    if_branch: bool,
 ) -> f64 {
     match node {
         LayoutNode::Start => {
@@ -5134,7 +5307,13 @@ fn emit_node_with_repeat_extra(
             then_branch,
             else_branches,
         ),
-        LayoutNode::Fork { branches } => emit_fork(svg, cx, y, branches),
+        LayoutNode::Fork { branches } => {
+            if if_branch {
+                emit_fork_with_layout(svg, cx, y, branches, fork_layout_if_branch(branches))
+            } else {
+                emit_fork(svg, cx, y, branches)
+            }
+        }
         LayoutNode::Switch { condition, cases } => emit_switch(svg, cx, y, condition, cases),
         LayoutNode::While {
             condition,
@@ -6417,7 +6596,20 @@ fn emit_fork(svg: &mut SvgEmitter, cx: f64, y: f64, branches: &[Vec<LayoutNode>]
         return y;
     }
 
-    let layout = fork_layout(branches);
+    emit_fork_with_layout(svg, cx, y, branches, fork_layout(branches))
+}
+
+fn emit_fork_with_layout(
+    svg: &mut SvgEmitter,
+    cx: f64,
+    y: f64,
+    branches: &[Vec<LayoutNode>],
+    layout: ForkLayout,
+) -> f64 {
+    if branches.is_empty() {
+        return y;
+    }
+
     let bar_w = layout.bar_w;
 
     // Top bar
