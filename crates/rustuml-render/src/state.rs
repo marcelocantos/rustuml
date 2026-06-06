@@ -148,6 +148,14 @@ fn is_pseudo_state(id: &str) -> bool {
     id == "[*]" || id == "[H]" || id == "[H*]"
 }
 
+fn is_history_marker(id: &str) -> bool {
+    id == "[H]" || id == "[H*]"
+}
+
+fn history_marker_label(id: &str) -> &'static str {
+    if id == "[H*]" { "H*" } else { "H" }
+}
+
 /// Compute the width of a state box based on its label and descriptions.
 fn state_box_width(label: &str, descriptions: &[String]) -> f64 {
     let label_w = text_render::measure(label, STATE_FONT_SIZE, false) + STATE_H_PADDING;
@@ -169,7 +177,9 @@ fn state_box_height(desc_count: usize) -> f64 {
 
 /// Node height for layout purposes.
 fn node_height(id: &str, state_def: Option<&State>, hide_empty_desc: bool) -> f64 {
-    if is_pseudo_state(id) {
+    if is_history_marker(id) {
+        END_OUTER_RADIUS * 2.0
+    } else if is_pseudo_state(id) {
         START_RADIUS * 2.0
     } else {
         match state_def.map(|s| s.kind) {
@@ -191,7 +201,9 @@ fn node_height(id: &str, state_def: Option<&State>, hide_empty_desc: bool) -> f6
 
 /// Node width for layout purposes.
 fn node_width(id: &str, state_def: Option<&State>) -> f64 {
-    if is_pseudo_state(id) {
+    if is_history_marker(id) {
+        END_OUTER_RADIUS * 2.0
+    } else if is_pseudo_state(id) {
         START_RADIUS * 2.0
     } else {
         match state_def.map(|s| s.kind) {
@@ -919,6 +931,32 @@ pub fn render_with_oracle(
     };
 
     let use_sugiyama = !use_oracle && layout_positions.is_some_and(|p| p.len() >= state_ids.len());
+    let history_entity_keys: Vec<String> = oracle
+        .map(|orc| {
+            let mut keys: Vec<String> = orc
+                .entities
+                .keys()
+                .filter(|k| k.starts_with("__history_"))
+                .cloned()
+                .collect();
+            keys.sort();
+            keys
+        })
+        .unwrap_or_default();
+    let history_state_ids: Vec<&str> = state_ids
+        .iter()
+        .filter(|id| is_history_marker(id))
+        .map(String::as_str)
+        .collect();
+    let history_key_for = |id: &str| -> Option<&str> {
+        if !is_history_marker(id) {
+            return None;
+        }
+        let idx = history_state_ids
+            .iter()
+            .position(|history_id| *history_id == id)?;
+        history_entity_keys.get(idx).map(String::as_str)
+    };
 
     // Compute positions: (id, center_x, center_y, box_width, box_height).
     let (positions, total_width, total_height) = if let Some(orc) = oracle {
@@ -926,7 +964,9 @@ pub fn render_with_oracle(
         let mut positions: Vec<(String, f64, f64, f64, f64)> = Vec::new();
         for id in &state_ids {
             // Map layout IDs to oracle qualified names.
-            let oracle_name = if id == "__start__" {
+            let oracle_name = if let Some(key) = history_key_for(id) {
+                key
+            } else if id == "__start__" {
                 ".start."
             } else if id == "__end__" {
                 ".end."
@@ -1151,7 +1191,9 @@ pub fn render_with_oracle(
         // with the preceding entity, etc.). Falling back to our own counter
         // keeps the non-oracle render path working.
         let oracle_id = oracle.and_then(|orc| {
-            let oracle_name = if id == "__start__" {
+            let oracle_name = if let Some(key) = history_key_for(id) {
+                key
+            } else if id == "__start__" {
                 ".start."
             } else if id == "__end__" {
                 ".end."
@@ -1204,7 +1246,9 @@ pub fn render_with_oracle(
     // Render entities.
     for (id, cx, cy, bw, bh) in &positions {
         if !named_floating_notes.is_empty() {
-            let oracle_name = if id == "__start__" {
+            let oracle_name = if let Some(key) = history_key_for(id) {
+                key
+            } else if id == "__start__" {
                 ".start."
             } else if id == "__end__" {
                 ".end."
@@ -1298,6 +1342,34 @@ pub fn render_with_oracle(
                 .unwrap();
             }
             svg.push_str("</g>");
+        } else if is_history_marker(id) {
+            let h_radius = END_OUTER_RADIUS;
+            let (px, py) = oracle
+                .and_then(|orc| {
+                    history_key_for(id).and_then(|key| {
+                        orc.entities
+                            .get(key)
+                            .map(|r| (r.x + r.width / 2.0, r.y + r.height / 2.0))
+                    })
+                })
+                .unwrap_or((*cx, *cy));
+            write!(
+                svg,
+                r#"<ellipse cx="{}" cy="{}" fill="{STATE_FILL}" rx="{h_radius}" ry="{h_radius}" style="stroke:{STROKE_COLOR};stroke-width:0.5;"/>"#,
+                fmt_f(px), fmt_f(py),
+            )
+            .unwrap();
+            let label = history_marker_label(id);
+            let tw = text_render::measure(label, STATE_FONT_SIZE, false);
+            let text_y = py + 5.291;
+            write!(
+                svg,
+                r#"<text fill="{TEXT_COLOR}" font-family="sans-serif" font-size="{STATE_FONT_SIZE}" lengthAdjust="spacing" textLength="{}" x="{}" y="{}">{label}</text>"#,
+                fmt_f(tw),
+                fmt_f(px - tw / 2.0),
+                fmt_f(text_y),
+            )
+            .unwrap();
         } else {
             let state_def = find_state(id);
             match state_def.map(|s| s.kind) {
@@ -2388,11 +2460,15 @@ fn render_oracle_transitions(svg: &mut String, diagram: &StateDiagram, oracle: &
             }
             let from_candidates = if t.from == "[*]" {
                 vec!["*start*", ".start."]
+            } else if is_history_marker(&t.from) {
+                vec!["*historical*", t.from.as_str()]
             } else {
                 vec![t.from.as_str()]
             };
             let to_candidates = if t.to == "[*]" {
                 vec!["*end*", ".end."]
+            } else if is_history_marker(&t.to) {
+                vec!["*historical*", t.to.as_str()]
             } else {
                 vec![t.to.as_str()]
             };
@@ -2427,8 +2503,20 @@ fn render_oracle_transitions(svg: &mut String, diagram: &StateDiagram, oracle: &
         };
         consumed[ti] = true;
         let t = &diagram.transitions[ti];
-        let from_name = if t.from == "[*]" { "*start*" } else { &t.from };
-        let to_name = if t.to == "[*]" { "*end*" } else { &t.to };
+        let from_name = if t.from == "[*]" {
+            "*start*"
+        } else if is_history_marker(&t.from) {
+            "*historical*"
+        } else {
+            &t.from
+        };
+        let to_name = if t.to == "[*]" {
+            "*end*"
+        } else if is_history_marker(&t.to) {
+            "*historical*"
+        } else {
+            &t.to
+        };
 
         // HTML comment.
         if is_reverse {
@@ -3899,6 +3987,21 @@ mod tests {
         let choice = svg.find(r#"data-qualified-name="choice""#).unwrap();
         let start = svg.find(r#"data-qualified-name=".start.""#).unwrap();
         assert!(choice < start);
+    }
+
+    #[test]
+    fn bracket_history_marker_renders_as_pseudo_state() {
+        let input = concat!(
+            "@startuml\n",
+            "[*] --> State1\n",
+            "State1 --> State2\n",
+            "State2 --> [H]\n",
+            "@enduml",
+        );
+        let diagram = rustuml_parser::parse::parse(input).unwrap();
+        let svg = crate::render_svg(&diagram);
+        assert!(svg.contains(">H</text>"));
+        assert!(!svg.contains(r#"data-qualified-name="[H]""#));
     }
 
     #[test]
