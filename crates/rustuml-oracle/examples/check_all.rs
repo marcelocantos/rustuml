@@ -21,7 +21,7 @@
 //! `%date(...)` goldens compare deterministically.
 
 use rayon::prelude::*;
-use rustuml_oracle::{compare, extract};
+use rustuml_oracle::{compare, extract, golden_source};
 use std::path::{Path, PathBuf};
 
 fn main() {
@@ -111,12 +111,14 @@ fn check_one(golden_root: &Path, rel: &Path) -> Option<String> {
     };
 
     let actual = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| -> Option<String> {
-        let blocks = rustuml_parser::parse::split_blocks(&source);
+        let source = golden_source::source_for_oracle_golden(&source, &golden);
+        let source = source.as_ref();
+        let blocks = rustuml_parser::parse::split_blocks(source);
         let svg = if blocks.len() > 1 {
-            let b = rustuml_parser::parse::parse_block(&source, 0).ok()?;
+            let b = rustuml_parser::parse::parse_block(source, 0).ok()?;
             rustuml_render::render_svg_with_oracle(&b, oracle.as_ref())
         } else {
-            let d = rustuml_parser::parse::parse_auto_with_base(&source, None).ok()?;
+            let d = rustuml_parser::parse::parse_auto_with_base(source, None).ok()?;
             rustuml_render::render_svg_with_oracle(&d, oracle.as_ref())
         };
         Some(svg)

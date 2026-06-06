@@ -187,15 +187,17 @@ fn run_one(puml_path: &Path, root: &Path) -> TestResult {
     };
 
     let render_result = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-        let blocks = rustuml_parser::parse::split_blocks(&source);
+        let source = rustuml_oracle::golden_source::source_for_oracle_golden(&source, &golden_svg);
+        let source = source.as_ref();
+        let blocks = rustuml_parser::parse::split_blocks(source);
         let is_multi_block = blocks.len() > 1;
 
         let rust_svg = if is_multi_block {
-            let block0 = rustuml_parser::parse::parse_block(&source, 0)
+            let block0 = rustuml_parser::parse::parse_block(source, 0)
                 .map_err(|e| (format!("parse: {e}"), None))?;
             rustuml_render::render_svg_with_oracle(&block0, oracle_layout.as_ref())
         } else {
-            let diagram = rustuml_parser::parse::parse_auto_with_base(&source, None)
+            let diagram = rustuml_parser::parse::parse_auto_with_base(source, None)
                 .map_err(|e| (format!("parse: {e}"), None))?;
             rustuml_render::render_svg_with_oracle(&diagram, oracle_layout.as_ref())
         };

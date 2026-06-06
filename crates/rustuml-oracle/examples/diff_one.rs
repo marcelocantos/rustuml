@@ -44,12 +44,14 @@ fn main() {
         }
     }
 
-    let blocks = rustuml_parser::parse::split_blocks(&source);
+    let source = rustuml_oracle::golden_source::source_for_oracle_golden(&source, &golden);
+    let source = source.as_ref();
+    let blocks = rustuml_parser::parse::split_blocks(source);
     let rust_svg = if blocks.len() > 1 {
-        let b = rustuml_parser::parse::parse_block(&source, 0).unwrap();
+        let b = rustuml_parser::parse::parse_block(source, 0).unwrap();
         rustuml_render::render_svg_with_oracle(&b, oracle.as_ref())
     } else {
-        let d = rustuml_parser::parse::parse_auto_with_base(&source, None).unwrap();
+        let d = rustuml_parser::parse::parse_auto_with_base(source, None).unwrap();
         rustuml_render::render_svg_with_oracle(&d, oracle.as_ref())
     };
 
