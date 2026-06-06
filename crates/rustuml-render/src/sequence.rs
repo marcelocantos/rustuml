@@ -2052,17 +2052,16 @@ fn left_note_lifeline_gap(
     shape: NoteShape,
     anchor_idx: Option<usize>,
     on_message: bool,
+    text_line_count: usize,
 ) -> f64 {
     let gap = match shape {
         NoteShape::Note => NOTE_LIFELINE_GAP,
         NoteShape::Hexagonal | NoteShape::Rectangular => NOTE_LIFELINE_GAP - 1.0,
     };
-    if !on_message
-        && shape == NoteShape::Note
-        && anchor_idx
-            .and_then(|idx| participants.get(idx))
-            .is_some_and(|p| p.kind == ParticipantKind::Collections)
-    {
+    let collections_anchor = anchor_idx
+        .and_then(|idx| participants.get(idx))
+        .is_some_and(|p| p.kind == ParticipantKind::Collections);
+    if !on_message && shape == NoteShape::Note && (text_line_count > 1 || collections_anchor) {
         gap - 1.0
     } else {
         gap
@@ -5082,6 +5081,7 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                         note.shape,
                         first_part,
                         note.on_message,
+                        note.text.lines().count(),
                     );
                     let bw = participants[0].box_width;
                     let min_cx = HEAD_BOX_Y + note_content_w + gap + bw / 2.0 - (bw / 2.0).floor();
@@ -5375,8 +5375,13 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                         NotePosition::Left => {
                             let note_content_w =
                                 note_content_width_raw_padded(max_tw, note.shape, note_text_align);
-                            let gap =
-                                left_note_lifeline_gap(&participants, note.shape, Some(0), false);
+                            let gap = left_note_lifeline_gap(
+                                &participants,
+                                note.shape,
+                                Some(0),
+                                false,
+                                note.text.lines().count(),
+                            );
                             // Java's group InGroupable reservation for a left
                             // side note lands one pixel left of the visible
                             // group-floor note body; that extra pixel is what
@@ -6869,6 +6874,7 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                     note.shape,
                     anchor_idxs.first().copied(),
                     note.on_message,
+                    note.text.lines().count(),
                 );
                 if note.on_message {
                     let right = ll_x.floor() - gap;
@@ -9008,6 +9014,7 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                             note.shape,
                             anchor_idxs.first().copied(),
                             note.on_message,
+                            note.text.lines().count(),
                         );
                         if note.on_message {
                             let right = ll_x.floor() - gap;
