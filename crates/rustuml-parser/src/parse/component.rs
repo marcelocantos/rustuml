@@ -340,32 +340,39 @@ pub fn parse_component(lines: &[String]) -> Result<ComponentDiagram, ParseError>
                 });
                 continue;
             } else {
-                // Leaf container declaration (no braces) — treat as a component.
-                // e.g. `cloud "Production" as PROD`, `database "User DB" as UDB`
-                let rest = &container_clean[kw.len()..];
-                let (id, label) = parse_container_label(kw, rest);
-                let kind = match kw {
-                    "database" => ComponentElementKind::Database,
-                    "queue" => ComponentElementKind::Queue,
-                    "cloud" => ComponentElementKind::Cloud,
-                    _ => ComponentElementKind::Component,
-                };
-                if !components.iter().any(|c: &Component| c.id == id) {
-                    components.push(Component {
-                        id: id.clone(),
-                        label,
-                        stereotypes: parse_stereotypes(trimmed),
-                        url: container_url,
-                        source_line: current_line,
-                        kind,
-                    });
+                // A leaf `component ...` declaration has richer syntax than other
+                // container-shaped elements, including quoted labels that contain
+                // doubled quotes for Creole markup. Let the dedicated component
+                // declaration parser below own it. Block-form `component Foo { ... }`
+                // is still handled above.
+                if kw != "component" {
+                    // Leaf container declaration (no braces) — treat as a component.
+                    // e.g. `cloud "Production" as PROD`, `database "User DB" as UDB`
+                    let rest = &container_clean[kw.len()..];
+                    let (id, label) = parse_container_label(kw, rest);
+                    let kind = match kw {
+                        "database" => ComponentElementKind::Database,
+                        "queue" => ComponentElementKind::Queue,
+                        "cloud" => ComponentElementKind::Cloud,
+                        _ => ComponentElementKind::Component,
+                    };
+                    if !components.iter().any(|c: &Component| c.id == id) {
+                        components.push(Component {
+                            id: id.clone(),
+                            label,
+                            stereotypes: parse_stereotypes(trimmed),
+                            url: container_url,
+                            source_line: current_line,
+                            kind,
+                        });
+                    }
+                    if let Some(pkg) = package_stack.last_mut()
+                        && !pkg.components.contains(&id)
+                    {
+                        pkg.components.push(id);
+                    }
+                    continue;
                 }
-                if let Some(pkg) = package_stack.last_mut()
-                    && !pkg.components.contains(&id)
-                {
-                    pkg.components.push(id);
-                }
-                continue;
             }
         }
 
@@ -676,6 +683,22 @@ mod tests {
         assert_eq!(d.components.len(), 2);
         assert_eq!(d.connections.len(), 1);
         assert_eq!(d.connections[0].label.as_deref(), Some("query"));
+    }
+
+    #[test]
+    fn component_quoted_label_with_creole_monospace() {
+        let d = parse(
+            "component \"\"\"mono\"\" comp\" as C155\ninterface \"\"\"mono\"\" iface\" as I155\nC155 -- I155",
+        );
+        assert_eq!(d.components.len(), 1);
+        assert_eq!(d.components[0].id, "C155");
+        assert_eq!(d.components[0].label, "\"\"mono\"\" comp");
+        assert_eq!(d.interfaces.len(), 1);
+        assert_eq!(d.interfaces[0].id, "I155");
+        assert_eq!(d.interfaces[0].label, "\"\"mono\"\" iface");
+        assert_eq!(d.connections.len(), 1);
+        assert_eq!(d.connections[0].from, "C155");
+        assert_eq!(d.connections[0].to, "I155");
     }
 
     #[test]
