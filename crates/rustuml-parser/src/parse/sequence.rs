@@ -60,6 +60,8 @@ struct SeqParser {
     boxes: Vec<ParticipantBox>,
     /// Index into `boxes` of the box currently being collected, if any.
     current_box: Option<usize>,
+    /// Prefix of an open `skinparam X { ... }` block.
+    skinparam_block_prefix: Option<String>,
 }
 
 struct NoteBuffer {
@@ -96,6 +98,7 @@ impl SeqParser {
             current_line: 0,
             boxes: Vec::new(),
             current_box: None,
+            skinparam_block_prefix: None,
         }
     }
 
@@ -135,6 +138,22 @@ impl SeqParser {
 
     fn parse_line(&mut self, line_num: usize, line: &str) -> Result<(), ParseError> {
         self.current_line = line_num;
+
+        if let Some(prefix) = self.skinparam_block_prefix.clone() {
+            if line == "}" {
+                self.skinparam_block_prefix = None;
+            } else if let Some((key, value)) = line.split_once(char::is_whitespace) {
+                let key = key.trim();
+                let value = value.trim();
+                if !key.is_empty() && !value.is_empty() {
+                    self.meta.skinparams.push(crate::diagram::SkinParam {
+                        key: format!("{prefix}{key}"),
+                        value: value.to_string(),
+                    });
+                }
+            }
+            return Ok(());
+        }
 
         // Handle multiline ref buffering.
         if self.ref_buffer.is_some() {
@@ -984,11 +1003,18 @@ impl SeqParser {
 
     fn try_skinparam(&mut self, line: &str) -> bool {
         if let Some(rest) = line.strip_prefix("skinparam ") {
-            let parts: Vec<&str> = rest.splitn(2, ' ').collect();
-            if parts.len() == 2 {
+            let rest = rest.trim();
+            if let Some(prefix) = rest.strip_suffix('{') {
+                let prefix = prefix.trim();
+                if !prefix.is_empty() {
+                    self.skinparam_block_prefix = Some(prefix.to_string());
+                }
+                return true;
+            }
+            if let Some((key, value)) = rest.split_once(char::is_whitespace) {
                 self.meta.skinparams.push(crate::diagram::SkinParam {
-                    key: parts[0].to_string(),
-                    value: parts[1].trim().to_string(),
+                    key: key.trim().to_string(),
+                    value: value.trim().to_string(),
                 });
             }
             true
@@ -1379,6 +1405,20 @@ mod tests {
         } else {
             panic!("expected note");
         }
+    }
+
+    #[test]
+    fn skinparam_blocks_are_flattened() {
+        let d = parse(
+            "skinparam note {\n  BackgroundColor LightYellow\n  BorderColor Orange\n  FontColor DarkBrown\n}\nA -> B : msg\nnote right : hello",
+        );
+        assert_eq!(d.meta.skinparams.len(), 3);
+        assert_eq!(d.meta.skinparams[0].key, "noteBackgroundColor");
+        assert_eq!(d.meta.skinparams[0].value, "LightYellow");
+        assert_eq!(d.meta.skinparams[1].key, "noteBorderColor");
+        assert_eq!(d.meta.skinparams[1].value, "Orange");
+        assert_eq!(d.meta.skinparams[2].key, "noteFontColor");
+        assert_eq!(d.meta.skinparams[2].value, "DarkBrown");
     }
 
     #[test]
