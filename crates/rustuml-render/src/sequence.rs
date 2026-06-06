@@ -5983,8 +5983,15 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
     let tail_box_y = if msg_count > 0 {
         last_effective_y + TAIL_GAP
     } else {
-        // Minimum lifeline: 20px, tail overlaps by LIFELINE_Y_OFFSET
+        // Minimum lifeline: 20px, tail overlaps by LIFELINE_Y_OFFSET.
+        // A leading `newpage` still reserves its 1px separator component in
+        // Java's page-1 flow, even though no message was rendered before it.
         lifeline_top + MIN_LIFELINE_HEIGHT - LIFELINE_Y_OFFSET
+            + if has_newpage {
+                NEWPAGE_SEPARATOR_HEIGHT
+            } else {
+                0.0
+            }
     };
     let lifeline_bottom = tail_box_y + LIFELINE_Y_OFFSET;
     let lifeline_height = lifeline_bottom - lifeline_top;

@@ -166,6 +166,7 @@ fn detect_uml_subtype(lines: &[String]) -> UmlSubtype {
     let mut has_meta_only_class_default = false;
     let mut has_class_dependency_arrow = false;
     let mut has_class_association_line = false;
+    let mut has_direction_directive = false;
 
     for line in lines {
         let trimmed = source_text(line).trim();
@@ -181,6 +182,12 @@ fn detect_uml_subtype(lines: &[String]) -> UmlSubtype {
 
         if trimmed.starts_with("skinparam ") {
             has_skinparam = true;
+        }
+        if matches!(
+            trimmed,
+            "left to right direction" | "top to bottom direction"
+        ) {
+            has_direction_directive = true;
         }
 
         // Use case — must check before sequence (both use "actor").
@@ -536,6 +543,25 @@ fn detect_uml_subtype(lines: &[String]) -> UmlSubtype {
         && scores[7] == 0
     {
         scores[1] += 10;
+    }
+
+    // Direction directives (`left to right direction`, `top to bottom
+    // direction`) are handled by Java PlantUML's graph-style UML path. With no
+    // stronger explicit diagram syntax, weak `A -> B` arrows become CLASS
+    // dependencies rather than SEQUENCE messages.
+    if has_direction_directive
+        && scores[0] > 0
+        && scores[1] == 0
+        && scores[2] == 0
+        && scores[3] == 0
+        && scores[4] == 0
+        && scores[5] == 0
+        && scores[6] == 0
+        && scores[7] == 0
+        && scores[8] == 0
+        && scores[9] == 0
+    {
+        scores[1] = scores[0] + 1;
     }
 
     // `allowmixing` + an explicit class declaration => CLASS, overriding any
@@ -1115,6 +1141,13 @@ mod tests {
         let input = "@startuml\nAlice -> Bob : --strike text--\n@enduml";
         let diagram = parse(input).unwrap();
         assert!(matches!(diagram, Diagram::Sequence(_)));
+    }
+
+    #[test]
+    fn direction_directive_with_weak_arrows_routes_to_class() {
+        let input = "@startuml\nleft to right direction\nAlice -> Bob : hello\n@enduml";
+        let diagram = parse(input).unwrap();
+        assert!(matches!(diagram, Diagram::Class(_)));
     }
 
     #[test]
