@@ -1725,14 +1725,43 @@ fn leading_if_branch_fork_spine_shift(nodes: &[LayoutNode]) -> f64 {
     }
 }
 
-/// Width of one switch case box: the tile's own content width (PlantUML
-/// imposes no extra minimum on switch case tiles).
-fn switch_case_width(case: &SwitchCase) -> f64 {
-    if case.body.is_empty() {
-        text_render::measure(&case.label, SMALL_FONT, false)
-    } else {
-        sequence_width(&case.body)
+#[derive(Clone, Copy)]
+struct SwitchCaseTile {
+    width: f64,
+    left: f64,
+}
+
+impl SwitchCaseTile {
+    fn right(self) -> f64 {
+        self.width - self.left
     }
+}
+
+/// Geometry of one switch case tile. PlantUML wraps each branch in
+/// `FtileDecorateInLabel`, which adds the case label above the branch and
+/// widens only the right side when the label exceeds the branch's right extent.
+fn switch_case_tile(case: &SwitchCase) -> SwitchCaseTile {
+    if case.body.is_empty() {
+        let width = text_render::measure(&case.label, SMALL_FONT, false);
+        return SwitchCaseTile {
+            width,
+            left: width / 2.0,
+        };
+    }
+
+    let (left, mut right) = sequence_extents(&case.body);
+    let label_w = text_render::measure(&case.label, SMALL_FONT, false);
+    right = right.max(label_w);
+    SwitchCaseTile {
+        width: left + right,
+        left,
+    }
+}
+
+/// Width of one switch case box: the decorated tile's own content width
+/// (PlantUML imposes no extra minimum on switch case tiles).
+fn switch_case_width(case: &SwitchCase) -> f64 {
+    switch_case_tile(case).width
 }
 
 fn switch_diamond_half_width(condition: &str) -> f64 {
@@ -1745,10 +1774,10 @@ fn switch_one_link_branch_dx(condition: &str) -> f64 {
 
 fn switch_one_link_extents(case: &SwitchCase, condition: &str) -> (f64, f64) {
     let diamond_half = switch_diamond_half_width(condition);
-    let case_half = switch_case_width(case) / 2.0;
+    let tile = switch_case_tile(case);
     (
         diamond_half + SWITCH_ONE_LINK_LEFT_PAD,
-        diamond_half + SWITCH_ONE_LINK_BRANCH_GAP + case_half,
+        diamond_half + SWITCH_ONE_LINK_BRANCH_GAP + tile.right(),
     )
 }
 
@@ -1759,6 +1788,10 @@ fn switch_one_link_below_diamond(case: &SwitchCase) -> f64 {
         case.label.split('\n').count().max(1) as f64 * pm::text_height(SMALL_FONT)
     };
     SWITCH_ONE_LINK_Y_DELTA + label_h
+}
+
+fn switch_all_branches_terminate(cases: &[SwitchCase]) -> bool {
+    !cases.is_empty() && cases.iter().all(|case| branch_terminates(&case.body))
 }
 
 fn switch_has_empty_middle_case(cases: &[SwitchCase]) -> bool {
@@ -1822,13 +1855,13 @@ fn switch_x_layout(cases: &[SwitchCase], condition: &str) -> SwitchXLayout {
         let mut centers = Vec::with_capacity(cases.len());
         let mut x = 0.0;
         for case in cases {
-            let width = switch_case_width(case);
+            let tile = switch_case_tile(case);
             centers.push(if case.body.is_empty() {
                 x + SWITCH_MIXED_EMPTY_SPINE
             } else {
-                x + width / 2.0
+                x + tile.left
             });
-            x += width + SWITCH_MIXED_EMPTY_CASE_GAP;
+            x += tile.width + SWITCH_MIXED_EMPTY_CASE_GAP;
         }
         layout.centers = centers;
         layout.block_w = x - SWITCH_MIXED_EMPTY_CASE_GAP;
@@ -1867,7 +1900,7 @@ fn switch_x_layout_with_small_gap(
     small_case_gap: f64,
 ) -> SwitchXLayout {
     let n = cases.len();
-    let widths: Vec<f64> = cases.iter().map(switch_case_width).collect();
+    let tiles: Vec<SwitchCaseTile> = cases.iter().map(switch_case_tile).collect();
     let diamond_w = diamond_inner_w(condition) + DIAMOND_HALF * 2.0;
 
     if n == 0 {
@@ -1879,19 +1912,18 @@ fn switch_x_layout_with_small_gap(
         };
     }
     if n == 1 {
-        let w = widths[0];
+        let w = tiles[0].width;
         let block_w = w.max(diamond_w);
         return SwitchXLayout {
-            centers: vec![block_w / 2.0],
+            centers: vec![tiles[0].left + (block_w - w) / 2.0],
             block_w,
             diamond_dx: block_w / 2.0,
             big_diamond: false,
         };
     }
 
-    // Simple action tiles are symmetric, so getLeft == getRight == w/2.
-    let w13 = diamond_w - widths[0] / 2.0 - widths[n - 1] / 2.0;
-    let w9: f64 = widths[1..n - 1].iter().sum();
+    let w13 = diamond_w - tiles[0].right() - tiles[n - 1].left;
+    let w9: f64 = tiles[1..n - 1].iter().map(|tile| tile.width).sum();
 
     if w13 > w9 {
         // BIG_DIAMOND: cases[0] flush left, cases[last] at a fixed offset,
@@ -1900,14 +1932,14 @@ fn switch_x_layout_with_small_gap(
         let mut centers = vec![0.0f64; n];
         let mut dx = 0.0;
         for i in 0..n - 1 {
-            centers[i] = dx + widths[i] / 2.0;
-            dx += widths[i] + suppx;
+            centers[i] = dx + tiles[i].left;
+            dx += tiles[i].width + suppx;
         }
-        let dx_last = widths[0] + w13 + SWITCH_SUPP15 + SWITCH_SUPP15;
-        centers[n - 1] = dx_last + widths[n - 1] / 2.0;
-        let block_w = widths[0] + SWITCH_SUPP15 + w13 + SWITCH_SUPP15 + widths[n - 1];
+        let dx_last = tiles[0].width + w13 + SWITCH_SUPP15 + SWITCH_SUPP15;
+        centers[n - 1] = dx_last + tiles[n - 1].left;
+        let block_w = tiles[0].width + SWITCH_SUPP15 + w13 + SWITCH_SUPP15 + tiles[n - 1].width;
         // dimTotal.getLeft = tile0.getLeft + SUPP15 + dim1.getLeft.
-        let diamond_dx = widths[0] / 2.0 + SWITCH_SUPP15 + diamond_w / 2.0;
+        let diamond_dx = tiles[0].left + SWITCH_SUPP15 + diamond_w / 2.0;
         SwitchXLayout {
             centers,
             block_w,
@@ -1930,10 +1962,11 @@ fn switch_x_layout_with_small_gap(
             if n.is_multiple_of(2) && i == n / 2 {
                 x += case_gap;
             }
-            centers[i] = x + widths[i] / 2.0;
-            x += widths[i] + case_gap;
+            centers[i] = x + tiles[i].left;
+            x += tiles[i].width + case_gap;
         }
-        let block_w = x - case_gap;
+        let nude_w = x - case_gap;
+        let block_w = nude_w.max(diamond_w).max(DIAMOND_HALF * 2.0);
         SwitchXLayout {
             centers,
             block_w,
@@ -3995,7 +4028,10 @@ fn node_height(node: &LayoutNode) -> f64 {
             // Odd case counts have a centre branch that drops straight into
             // the merge diamond (a full 20-px arrow); even counts route both
             // halves sideways, halving the gap.
-            let merge_gap = if switch_needs_empty_merge_gap(cases) {
+            let all_terminate = switch_all_branches_terminate(cases);
+            let merge_gap = if all_terminate {
+                0.0
+            } else if switch_needs_empty_merge_gap(cases) {
                 SWITCH_EMPTY_MERGE_GAP
             } else if cases.len().is_multiple_of(2) {
                 ARROW_LEN / 2.0
@@ -4003,11 +4039,12 @@ fn node_height(node: &LayoutNode) -> f64 {
                 ARROW_LEN
             };
             let big = switch_x_layout(cases, condition).big_diamond;
-            DIAMOND_HALF * 2.0
-                + switch_below_diamond(cases, big)
-                + max_h
-                + merge_gap
-                + DIAMOND_HALF * 2.0
+            let merge_h = if all_terminate {
+                0.0
+            } else {
+                DIAMOND_HALF * 2.0
+            };
+            DIAMOND_HALF * 2.0 + switch_below_diamond(cases, big) + max_h + merge_gap + merge_h
         }
         LayoutNode::While {
             body,
@@ -6879,8 +6916,11 @@ fn emit_switch_with_layout(
     }
     let max_bottom = bottoms.iter().cloned().fold(0.0f64, f64::max);
 
+    let all_terminate = switch_all_branches_terminate(cases);
     let has_center = !n.is_multiple_of(2);
-    let merge_gap = if switch_needs_empty_merge_gap(cases) {
+    let merge_gap = if all_terminate {
+        0.0
+    } else if switch_needs_empty_merge_gap(cases) {
         SWITCH_EMPTY_MERGE_GAP
     } else if has_center {
         ARROW_LEN
@@ -7030,7 +7070,7 @@ fn emit_switch_with_layout(
 
     // ── Bottom connections (cases → merge). ──
     for &i in &order {
-        if cases[i].body.is_empty() {
+        if cases[i].body.is_empty() || branch_terminates(&cases[i].body) {
             continue;
         }
         let bcx = centers[i];
@@ -7073,6 +7113,10 @@ fn emit_switch_with_layout(
                 switch_down_head(svg, &arrow_color, diamond_cx, merge_top);
             }
         }
+    }
+
+    if all_terminate {
+        return max_bottom;
     }
 
     // Merge diamond (small rhombus; 7-point closed form per PlantUML).
