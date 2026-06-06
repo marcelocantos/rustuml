@@ -1509,6 +1509,9 @@ fn decode_backslash_escapes(s: &str) -> String {
 /// Process label text for SVG rendering: decode escapes and replace unsupported
 /// markup like `<img:...>` with a placeholder matching PlantUML's behavior.
 fn process_label(s: &str) -> String {
+    if inline_nested_start_end_label_is_hidden(s) {
+        return String::new();
+    }
     let decoded = decode_backslash_escapes(s);
     let mut result = String::with_capacity(decoded.len());
     let mut rest = decoded.as_str();
@@ -1535,6 +1538,17 @@ fn process_label(s: &str) -> String {
     }
     result.push_str(rest);
     escape_inline_code_tags(&result)
+}
+
+fn inline_nested_start_end_label_is_hidden(s: &str) -> bool {
+    let trimmed = s.trim_start();
+    trimmed
+        .get(.."@startuml".len())
+        .is_some_and(|prefix| prefix.eq_ignore_ascii_case("@startuml"))
+        && trimmed
+            .to_ascii_lowercase()
+            .split_whitespace()
+            .any(|part| part == "@enduml")
 }
 
 fn escape_inline_code_tags(s: &str) -> String {
@@ -9432,6 +9446,17 @@ mod tests {
         let svg = crate::render_svg(&diagram);
         assert!(svg.contains("call &lt;code&gt;doSomething()&lt;/code&gt;"));
         assert!(!svg.contains("font-family=\"monospace\""));
+    }
+
+    #[test]
+    fn inline_nested_start_end_message_label_is_hidden() {
+        let input = "@startuml\nAlice -> Bob : @startuml nested @enduml\n@enduml";
+        let diagram = rustuml_parser::parse::parse(input).unwrap();
+        let svg = crate::render_svg(&diagram);
+        assert!(!svg.contains("@startuml nested @enduml"));
+        assert!(!svg.contains(r##"<text fill="#000000" font-family="sans-serif" font-size="13""##));
+        assert!(svg.contains(r#"width="112px""#));
+        assert!(svg.contains(r#"height="107px""#));
     }
 
     #[test]
