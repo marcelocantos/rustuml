@@ -710,6 +710,11 @@ const NOTE_TABLE_CELL_PAD_X: f64 = 4.1133;
 const NOTE_TABLE_HEADER_X_ADJUST: f64 = 0.1714;
 const NOTE_TABLE_TOP_PAD: f64 = 7.0;
 const NOTE_TABLE_BODY_EXTRA: f64 = 4.0;
+const NOTE_RULE_TEXT_X: f64 = 8.5;
+const NOTE_RULE_LEFT_PAD: f64 = 5.0;
+const NOTE_RULE_SEGMENT_W: f64 = 13.5;
+const NOTE_RULE_BASELINE_DROP: f64 = 4.4131;
+const NOTE_RULE_WIDTH_EXTRA: f64 = 8.0;
 const PURE_UNDERLINE_MESSAGE_FLOW_EXTRA: f64 = MSG_TEXT_HEIGHT / 4.0;
 /// PlantUML's text atoms reserve at least 10px height even when the font's real
 /// line metrics are smaller (notably `defaultFontSize 8`).
@@ -917,9 +922,10 @@ fn note_line_metrics_with_family(
     const SEPARATOR_HEIGHT_EXTRA: f64 = 7.6553;
     const SEPARATOR_ASCENT_ADJUST: f64 = -0.5;
 
-    let label = note_separator_label(content).unwrap_or(content);
+    let styled_label = note_separator_label(content).or_else(|| whole_strike_label_inner(content));
+    let label = styled_label.unwrap_or(content);
     let mut metrics = rendered_line_metrics_with_family(label, font_size, font_family);
-    if note_separator_label(content).is_some() {
+    if styled_label.is_some() {
         metrics.height += SEPARATOR_HEIGHT_EXTRA;
         metrics.ascent += SEPARATOR_ASCENT_ADJUST;
     }
@@ -1236,7 +1242,11 @@ fn note_line_width_with_family(
         }
         _ if let Some(label) = note_separator_label(line.trim()) => {
             number_counters.clear();
-            text_width_with_family(label, font_size, font_family) + 8.0
+            text_width_with_family(label, font_size, font_family) + NOTE_RULE_WIDTH_EXTRA
+        }
+        _ if let Some(label) = whole_strike_label_inner(line.trim()) => {
+            number_counters.clear();
+            text_width_with_family(label, font_size, font_family) + NOTE_RULE_WIDTH_EXTRA
         }
         _ => {
             number_counters.clear();
@@ -1364,18 +1374,14 @@ fn emit_note_line(
         }
         _ if let Some(label) = note_separator_label(line.trim()) => {
             number_counters.clear();
-            const LINE_EXTRA_X: f64 = 8.5;
-            const LINE_LEFT_PAD: f64 = 5.0;
-            const LINE_SEGMENT_W: f64 = 13.5;
-            const LINE_BASELINE_DROP: f64 = 4.4131;
 
-            let text_x = base.x + LINE_EXTRA_X;
-            let line_y = base.y - LINE_BASELINE_DROP;
+            let text_x = base.x + NOTE_RULE_TEXT_X;
+            let line_y = base.y - NOTE_RULE_BASELINE_DROP;
             write!(
                 buf,
                 r#"<line style="stroke:{};stroke-width:0.5;" x1="{}" x2="{}" y1="{}" y2="{}"/>"#,
                 rule_stroke,
-                fmt_coord(base.x - LINE_LEFT_PAD),
+                fmt_coord(base.x - NOTE_RULE_LEFT_PAD),
                 fmt_coord(text_x),
                 fmt_coord(line_y),
                 fmt_coord(line_y)
@@ -1402,12 +1408,54 @@ fn emit_note_line(
                 r#"<line style="stroke:{};stroke-width:0.5;" x1="{}" x2="{}" y1="{}" y2="{}"/>"#,
                 rule_stroke,
                 fmt_coord(right_x),
-                fmt_coord(right_x + LINE_SEGMENT_W),
+                fmt_coord(right_x + NOTE_RULE_SEGMENT_W),
                 fmt_coord(line_y),
                 fmt_coord(line_y)
             )
             .unwrap();
-            text_w + 8.0
+            text_w + NOTE_RULE_WIDTH_EXTRA
+        }
+        _ if let Some(label) = whole_strike_label_inner(line.trim()) => {
+            number_counters.clear();
+            let text_x = base.x + NOTE_RULE_TEXT_X;
+            let line_y = base.y - NOTE_RULE_BASELINE_DROP;
+            write!(
+                buf,
+                r#"<line style="stroke:{};stroke-width:1;" x1="{}" x2="{}" y1="{}" y2="{}"/>"#,
+                rule_stroke,
+                fmt_coord(base.x - NOTE_RULE_LEFT_PAD),
+                fmt_coord(text_x),
+                fmt_coord(line_y),
+                fmt_coord(line_y)
+            )
+            .unwrap();
+            let text_w = text_render::emit_text(
+                buf,
+                label,
+                &TextBase {
+                    x: text_x,
+                    y: base.y,
+                    font_size: base.font_size,
+                    font_family: base.font_family,
+                    fill: base.fill,
+                    bold: base.bold,
+                    italic: base.italic,
+                    underline: false,
+                    skip_underline: true,
+                },
+            );
+            let right_x = text_x + text_w;
+            write!(
+                buf,
+                r#"<line style="stroke:{};stroke-width:1;" x1="{}" x2="{}" y1="{}" y2="{}"/>"#,
+                rule_stroke,
+                fmt_coord(right_x),
+                fmt_coord(right_x + NOTE_RULE_SEGMENT_W),
+                fmt_coord(line_y),
+                fmt_coord(line_y)
+            )
+            .unwrap();
+            text_w + NOTE_RULE_WIDTH_EXTRA
         }
         _ => {
             number_counters.clear();
@@ -10603,6 +10651,24 @@ mod tests {
         assert!(svg.contains(">function&#160;foo()&#160;{</text>"));
         assert!(svg.contains(">return&#160;42;</text>"));
         assert!(!svg.contains("&lt;code&gt;"));
+    }
+
+    #[test]
+    fn whole_strikethrough_note_line_renders_with_side_rules() {
+        let input = concat!(
+            "@startuml\n",
+            "Alice -> Bob : hello\n",
+            "note over Alice\n",
+            "  --strikethrough--\n",
+            "end note\n",
+            "@enduml",
+        );
+        let diagram = rustuml_parser::parse::parse(input).unwrap();
+        let svg = crate::render_svg(&diagram);
+
+        assert!(svg.contains(r#"<line style="stroke:#181818;stroke-width:1;""#));
+        assert!(svg.contains(">strikethrough</text>"));
+        assert!(!svg.contains(r#"text-decoration="line-through""#));
     }
 
     #[test]
