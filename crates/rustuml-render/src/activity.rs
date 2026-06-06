@@ -51,6 +51,7 @@ const GROUP_COLOR_RIGHT_EXTENT_EXTRA: f64 = 2.0;
 const SINGLE_LANE_GROUP_TOP_ADJUST: f64 = 0.453125;
 const ACTION_PADDING: f64 = 20.0; // total vertical padding in action box
 const ACTION_H_PADDING: f64 = 10.0; // horizontal padding each side
+const THEME_NODE_ACTION_PADDING: f64 = 15.0;
 const ACTION_MIN_HEIGHT: f64 = 30.0;
 const ACTION_RX: f64 = 12.5;
 const DIAMOND_HALF: f64 = 12.0; // half-size of decision diamond
@@ -221,12 +222,20 @@ fn split_gradient_colors(val: &str) -> Option<(&str, &str)> {
     None
 }
 
-fn parse_gradient_id(defs: &str) -> Option<String> {
-    let lg = defs.find("<linearGradient")?;
-    let rest = &defs[lg..];
-    let start = rest.find("id=\"")? + 4;
-    let end = rest[start..].find('"')?;
-    Some(rest[start..start + end].to_string())
+fn parse_gradient_ids(defs: &str) -> Vec<String> {
+    let mut ids = Vec::new();
+    let mut rest = defs;
+    while let Some(lg) = rest.find("<linearGradient") {
+        rest = &rest[lg..];
+        if let Some(start) = rest.find("id=\"") {
+            let id_start = start + 4;
+            if let Some(end) = rest[id_start..].find('"') {
+                ids.push(rest[id_start..id_start + end].to_string());
+            }
+        }
+        rest = &rest["<linearGradient".len()..];
+    }
+    ids
 }
 
 fn parse_filter_id(defs: &str) -> Option<String> {
@@ -259,6 +268,10 @@ fn action_text_for_family(text: &str, font_family: &str) -> String {
     }
 }
 
+fn activity_theme_uses_node_action_padding(name: &str) -> bool {
+    matches!(name, "aws-orange" | "cloudscape-design")
+}
+
 /// Per-diagram color palette, derived from the PlantUML default plus any
 /// inline `skinparam` overrides. Mirrors the constants above but allows
 /// skinparams to mutate individual fields without rebuilding the theme
@@ -283,6 +296,7 @@ struct Palette {
     diamond_text_color: String,
     diamond_text_bold: bool,
     diamond_text_italic: bool,
+    diamond_pad_x: f64,
     arrow_color: String,
     /// Stroke-width string used for activity connector lines (the ones that
     /// link nodes top-to-bottom and the if/fork frame). Defaults to "1" and
@@ -335,6 +349,7 @@ impl Palette {
             diamond_text_color: TEXT_COLOR.into(),
             diamond_text_bold: false,
             diamond_text_italic: false,
+            diamond_pad_x: 0.0,
             arrow_color: ARROW_COLOR.into(),
             arrow_thickness: "1".into(),
             arrow_font_size: SMALL_FONT,
@@ -366,10 +381,12 @@ impl Palette {
     /// skinparam list.
     fn from_skinparams(
         skinparams: &[rustuml_parser::diagram::SkinParam],
-        gradient_id: &Option<String>,
+        action_gradient_id: &Option<String>,
+        diamond_gradient_id: &Option<String>,
         filter_id: &Option<String>,
     ) -> Self {
         let mut p = Self::default_puml();
+        let mut use_node_action_padding = false;
         for sp in skinparams {
             let key = sp.key.to_ascii_lowercase();
             let val = sp.value.trim();
@@ -378,6 +395,7 @@ impl Palette {
             }
             let resolved = crate::sequence::resolve_color(val);
             match key.as_str() {
+                "__theme" => use_node_action_padding = activity_theme_uses_node_action_padding(val),
                 "backgroundcolor" => {
                     if val.eq_ignore_ascii_case("transparent") {
                         p.svg_background = None;
@@ -385,7 +403,13 @@ impl Palette {
                         p.svg_background = Some(resolved);
                     }
                 }
-                "defaultfontname" | "activityfontname" => {
+                "defaultfontname" => {
+                    let family = canonical_font_family(val);
+                    p.action_font_family = family.clone();
+                    p.diamond_font_family = family.clone();
+                    p.arrow_font_family = family;
+                }
+                "activityfontname" => {
                     let family = canonical_font_family(val);
                     p.action_font_family = family.clone();
                     p.diamond_font_family = family;
@@ -408,6 +432,7 @@ impl Palette {
                         let pad = 6.0 + v;
                         p.action_pad_x = pad;
                         p.action_pad_y = pad;
+                        p.diamond_pad_x = v;
                     }
                 }
                 "__stylerootlinecolor" => {
@@ -423,9 +448,8 @@ impl Palette {
                     }
                 }
                 "activitybackgroundcolor" => {
-                    let fill = gradient_fill_or(val, gradient_id);
-                    p.action_fill = fill.clone();
-                    p.diamond_fill = fill;
+                    p.action_fill = gradient_fill_or(val, action_gradient_id);
+                    p.diamond_fill = gradient_fill_or(val, diamond_gradient_id);
                 }
                 "activitybordercolor" => {
                     p.action_stroke = resolved.clone();
@@ -441,7 +465,7 @@ impl Palette {
                     }
                 }
                 "activitydiamondbackgroundcolor" => {
-                    p.diamond_fill = gradient_fill_or(val, gradient_id);
+                    p.diamond_fill = gradient_fill_or(val, diamond_gradient_id);
                 }
                 "activitydiamondbordercolor" => p.diamond_stroke = resolved,
                 "activitydiamondborderthickness" => {
@@ -540,6 +564,10 @@ impl Palette {
                 }
                 _ => {}
             }
+        }
+        if use_node_action_padding {
+            p.action_pad_x = p.action_pad_x.max(THEME_NODE_ACTION_PADDING);
+            p.action_pad_y = p.action_pad_y.max(THEME_NODE_ACTION_PADDING);
         }
         p
     }
@@ -655,6 +683,8 @@ enum LayoutNode {
         diamond_text_color: String,
         diamond_text_bold: bool,
         diamond_text_italic: bool,
+        diamond_pad_x: f64,
+        diamond_half_y: f64,
         arrow_font_size: f64,
         then_label: Option<String>,
         then_branch: Vec<LayoutNode>,
@@ -1088,6 +1118,21 @@ fn diamond_inner_w_styled(condition: &str, font_size: f64, bold: bool, font_fami
         .max(DIAMOND_MIN_INNER_W)
 }
 
+fn diamond_inner_w_styled_padded(
+    condition: &str,
+    font_size: f64,
+    bold: bool,
+    font_family: &str,
+    pad_x: f64,
+) -> f64 {
+    diamond_inner_w_styled(condition, font_size, bold, font_family) + 2.0 * pad_x
+}
+
+fn diamond_half_y_styled(condition: &str, font_size: f64, font_family: &str, pad_y: f64) -> f64 {
+    ((text_render::label_height_with_family(condition, font_size, font_family) + 2.0 * pad_y) / 2.0)
+        .max(DIAMOND_HALF)
+}
+
 fn diamond_inner_w(condition: &str) -> f64 {
     diamond_inner_w_styled(condition, SMALL_FONT, false, "sans-serif")
 }
@@ -1354,6 +1399,13 @@ fn build_tree_inner(steps: &[ActivityStep], palette: &Palette) -> Vec<LayoutNode
                     diamond_text_color: palette.diamond_text_color.clone(),
                     diamond_text_bold: palette.diamond_text_bold,
                     diamond_text_italic: palette.diamond_text_italic,
+                    diamond_pad_x: palette.diamond_pad_x,
+                    diamond_half_y: diamond_half_y_styled(
+                        &block.condition,
+                        palette.diamond_font_size,
+                        &palette.diamond_font_family,
+                        palette.diamond_pad_x,
+                    ),
                     arrow_font_size: palette.arrow_font_size,
                     then_label: block.then_label.clone(),
                     then_branch,
@@ -2868,6 +2920,22 @@ fn condition_diamond_styled(
     font_family: &str,
 ) -> ftile::FtileGeometry {
     let w = diamond_inner_w_styled(condition, font_size, bold, font_family) + DIAMOND_HALF * 2.0;
+    condition_diamond_geometry(w)
+}
+
+fn condition_diamond_styled_padded(
+    condition: &str,
+    font_size: f64,
+    bold: bool,
+    font_family: &str,
+    pad_x: f64,
+) -> ftile::FtileGeometry {
+    let w = diamond_inner_w_styled_padded(condition, font_size, bold, font_family, pad_x)
+        + DIAMOND_HALF * 2.0;
+    condition_diamond_geometry(w)
+}
+
+fn condition_diamond_geometry(w: f64) -> ftile::FtileGeometry {
     ftile::FtileGeometry::new(
         w,
         DIAMOND_HALF * 2.0,
@@ -3116,6 +3184,7 @@ fn if_ftile_layout_styled(
     diamond_font_size: f64,
     diamond_bold: bool,
     diamond_font_family: &str,
+    diamond_pad_x: f64,
     then_branch: &[LayoutNode],
     else_branches: &[ElseBranch],
 ) -> Option<(f64, f64, f64, f64)> {
@@ -3124,11 +3193,12 @@ fn if_ftile_layout_styled(
     }
     let (then_l, _then_r) = sequence_extents_if_branch(then_branch);
     let (_else_l, else_r) = sequence_extents_if_branch(&else_branches[0].body);
-    let diamond1 = condition_diamond_styled(
+    let diamond1 = condition_diamond_styled_padded(
         condition,
         diamond_font_size,
         diamond_bold,
         diamond_font_family,
+        diamond_pad_x,
     );
     let diamond2 = ftile::FtileGeometry::diamond_empty(0.0);
     let t1 = if_branch_tile(then_branch)?;
@@ -3479,12 +3549,14 @@ fn if_diamond_half_width(
     diamond_font_size: f64,
     diamond_text_bold: bool,
     diamond_font_family: &str,
+    diamond_pad_x: f64,
 ) -> f64 {
-    diamond_inner_w_styled(
+    diamond_inner_w_styled_padded(
         condition,
         diamond_font_size,
         diamond_text_bold,
         diamond_font_family,
+        diamond_pad_x,
     ) / 2.0
         + DIAMOND_HALF
 }
@@ -3521,6 +3593,7 @@ fn node_extents(node: &LayoutNode) -> (f64, f64) {
             diamond_font_family,
             diamond_font_size,
             diamond_text_bold,
+            diamond_pad_x,
             attached_notes,
             ..
         } => {
@@ -3529,6 +3602,7 @@ fn node_extents(node: &LayoutNode) -> (f64, f64) {
                 *diamond_font_size,
                 *diamond_text_bold,
                 diamond_font_family,
+                *diamond_pad_x,
             );
             // FtileIfLongHorizontal (if/elseif*/else): drawn extents from the
             // placed diamond/branch row.
@@ -3588,6 +3662,7 @@ fn node_extents(node: &LayoutNode) -> (f64, f64) {
                 *diamond_font_size,
                 *diamond_text_bold,
                 diamond_font_family,
+                *diamond_pad_x,
                 then_branch,
                 else_branches,
             ) {
@@ -3993,6 +4068,7 @@ fn node_width(node: &LayoutNode) -> f64 {
             diamond_font_family,
             diamond_font_size,
             diamond_text_bold,
+            diamond_pad_x,
             attached_notes,
             ..
         } => {
@@ -4013,16 +4089,18 @@ fn node_width(node: &LayoutNode) -> f64 {
                 *diamond_font_size,
                 *diamond_text_bold,
                 diamond_font_family,
+                *diamond_pad_x,
                 then_branch,
                 else_branches,
             ) {
                 return left_ext + right_ext;
             }
-            let diamond_w = diamond_inner_w_styled(
+            let diamond_w = diamond_inner_w_styled_padded(
                 condition,
                 *diamond_font_size,
                 *diamond_text_bold,
                 diamond_font_family,
+                *diamond_pad_x,
             ) + DIAMOND_HALF * 2.0;
             let then_w = sequence_width(then_branch);
             let else_w: f64 = else_branches.iter().map(|b| sequence_width(&b.body)).sum();
@@ -4596,6 +4674,8 @@ fn node_height(node: &LayoutNode) -> f64 {
             then_label,
             then_branch,
             else_branches,
+            diamond_pad_x,
+            diamond_half_y,
             ..
         } => {
             if if_is_long(else_branches)
@@ -4636,16 +4716,21 @@ fn node_height(node: &LayoutNode) -> f64 {
                 };
                 return DIAMOND_HALF * 2.0 + IF_DOWN_LEAD + branch_h + stretch + ARROW_LEN;
             }
-            let diamond_h = DIAMOND_HALF * 2.0;
+            let diamond_h = diamond_half_y * 2.0;
             let then_h = sequence_height_if_branch(then_branch);
             let max_else_h: f64 = else_branches
                 .iter()
                 .map(|b| sequence_height_if_branch(&b.body))
                 .fold(0.0f64, f64::max);
             let branch_h = then_h.max(max_else_h);
-            // diamond + IF_BRANCH_DOWN + branch_h + IF_BRANCH_UP + merge_diamond.
+            // diamond + IF_BRANCH_DOWN + branch_h + merge gap + merge diamond.
             // When every branch terminates, the merge diamond and its leading
-            // IF_BRANCH_UP gap are skipped (see emit_if).
+            // merge gap are skipped (see emit_if).
+            let merge_gap = if *diamond_pad_x > 0.0 {
+                10.0
+            } else {
+                IF_BRANCH_UP
+            };
             let then_terminates = branch_terminates(then_branch);
             let else_terminates = !else_branches.is_empty()
                 && else_branches.iter().all(|b| branch_terminates(&b.body));
@@ -4657,7 +4742,7 @@ fn node_height(node: &LayoutNode) -> f64 {
             } else if all_terminate {
                 diamond_h + IF_BRANCH_DOWN + branch_h
             } else {
-                diamond_h + IF_BRANCH_DOWN + branch_h + IF_BRANCH_UP + DIAMOND_HALF * 2.0
+                diamond_h + IF_BRANCH_DOWN + branch_h + merge_gap + DIAMOND_HALF * 2.0
             }
         }
         LayoutNode::Fork {
@@ -6207,6 +6292,7 @@ fn emit_sequence_ex(
             diamond_font_family,
             diamond_font_size,
             diamond_text_bold,
+            diamond_pad_x,
             attached_notes,
             ..
         } = node
@@ -6217,6 +6303,7 @@ fn emit_sequence_ex(
                 *diamond_font_size,
                 *diamond_text_bold,
                 diamond_font_family,
+                *diamond_pad_x,
             );
             emit_if_attached_notes(svg, attached_notes, cx, y, diamond_half_w);
         }
@@ -6520,6 +6607,8 @@ fn emit_node_with_repeat_extra(
             diamond_text_color,
             diamond_text_bold,
             diamond_text_italic,
+            diamond_pad_x,
+            diamond_half_y,
             then_label,
             then_branch,
             else_branches,
@@ -6534,6 +6623,8 @@ fn emit_node_with_repeat_extra(
             diamond_text_color,
             *diamond_text_bold,
             *diamond_text_italic,
+            *diamond_pad_x,
+            *diamond_half_y,
             then_label,
             then_branch,
             else_branches,
@@ -6788,6 +6879,8 @@ fn emit_if(
     diamond_text_color: &str,
     diamond_text_bold: bool,
     diamond_text_italic: bool,
+    diamond_pad_x: f64,
+    diamond_half_y: f64,
     then_label: &Option<String>,
     then_branch: &[LayoutNode],
     else_branches: &[ElseBranch],
@@ -6835,11 +6928,12 @@ fn emit_if(
     // The diamond's inner edge is clamped to DIAMOND_MIN_INNER_W; the
     // condition's `textLength` is the measured width (no clamp). Track both
     // separately so the polygon and the text are sized independently.
-    let cond_inner_w = diamond_inner_w_styled(
+    let cond_inner_w = diamond_inner_w_styled_padded(
         condition,
         diamond_font_size,
         diamond_text_bold,
         diamond_font_family,
+        diamond_pad_x,
     );
     let cond_text_w = text_render::measure_with_family(
         condition,
@@ -6848,18 +6942,21 @@ fn emit_if(
         diamond_font_family,
     );
 
-    // Diamond: centered at (cx, y + DIAMOND_HALF)
-    let diamond_cy = y + DIAMOND_HALF;
+    // Diamond: centered at (cx, y + diamond_half_y). The default activity
+    // diamond is 24px tall, but themed diagrams with global Padding reserve a
+    // taller text box while keeping the merge diamond at the default size.
+    let diamond_cy = y + diamond_half_y;
     let diamond_left = cx - cond_inner_w / 2.0 - DIAMOND_HALF;
     let diamond_right = cx + cond_inner_w / 2.0 + DIAMOND_HALF;
+    let diamond_bottom = y + diamond_half_y * 2.0;
 
     // Diamond polygon (hexagonal for conditions with text)
     let pts = vec![
         (cx - cond_inner_w / 2.0, y),
         (cx + cond_inner_w / 2.0, y),
         (diamond_right, diamond_cy),
-        (cx + cond_inner_w / 2.0, y + DIAMOND_HALF * 2.0),
-        (cx - cond_inner_w / 2.0, y + DIAMOND_HALF * 2.0),
+        (cx + cond_inner_w / 2.0, diamond_bottom),
+        (cx - cond_inner_w / 2.0, diamond_bottom),
         (diamond_left, diamond_cy),
     ];
     svg.polygon_shape(&diamond_fill, &pts, &diamond_stroke, &diamond_stroke_width);
@@ -6884,7 +6981,15 @@ fn emit_if(
         diamond_text_italic,
     );
 
-    let diamond_bottom = y + DIAMOND_HALF * 2.0;
+    let label_y = if diamond_pad_x > 0.0 {
+        y + (text_y - diamond_cy)
+    } else {
+        centerline_label_y_for_family(
+            diamond_cy,
+            svg.palette.arrow_font_size,
+            &svg.palette.arrow_font_family,
+        )
+    };
     let (then_arrow, then_branch_flow) = leading_branch_arrow(then_branch);
     let (else_arrow, else_branch_flow) = else_branches
         .first()
@@ -6910,8 +7015,8 @@ fn emit_if(
             &label_family,
             label_font_size,
             lw,
-            diamond_left - lw,
-            centerline_label_y_for_family(diamond_cy, label_font_size, &label_family),
+            diamond_left - lw - diamond_pad_x,
+            label_y,
             label,
             false,
         );
@@ -6931,6 +7036,7 @@ fn emit_if(
         diamond_font_size,
         diamond_text_bold,
         diamond_font_family,
+        diamond_pad_x,
         then_branch,
         else_branches,
     ) {
@@ -6956,8 +7062,8 @@ fn emit_if(
             &label_family,
             label_font_size,
             lw,
-            diamond_right,
-            centerline_label_y_for_family(diamond_cy, label_font_size, &label_family),
+            diamond_right + diamond_pad_x,
+            label_y,
             label,
             false,
         );
@@ -6987,7 +7093,12 @@ fn emit_if(
     let single_survivor = if_single_survivor(then_branch_flow, else_branches);
 
     // Merge diamond at bottom — sits IF_BRANCH_UP px below the deepest branch.
-    let merge_y = then_bottom.max(else_bottom) + IF_BRANCH_UP;
+    let merge_gap = if diamond_pad_x > 0.0 {
+        10.0
+    } else {
+        IF_BRANCH_UP
+    };
+    let merge_y = then_bottom.max(else_bottom) + merge_gap;
     let merge_diamond_top = merge_y;
     let merge_cy = merge_diamond_top + DIAMOND_HALF;
 
@@ -9592,9 +9703,22 @@ pub fn render_with_oracle(
         return wrap_oracle_envelope(orc, body, "ACTIVITY");
     }
     let defs = oracle.map(|o| o.defs_inner_xml.as_str()).unwrap_or("");
-    let gradient_id = parse_gradient_id(defs);
+    let gradient_ids = parse_gradient_ids(defs);
+    let action_gradient_id = gradient_ids.first().cloned();
+    let diamond_gradient_id = gradient_ids
+        .get(1)
+        .cloned()
+        .or_else(|| action_gradient_id.clone());
     let filter_id = parse_filter_id(defs);
-    render_inner(diagram, theme, defs, gradient_id, filter_id, oracle)
+    render_inner(
+        diagram,
+        theme,
+        defs,
+        action_gradient_id,
+        diamond_gradient_id,
+        filter_id,
+        oracle,
+    )
 }
 
 fn render_legacy_activity_with_oracle(
@@ -10022,14 +10146,15 @@ fn render_ftile(tree: &[LayoutNode], _diagram: &ActivityDiagram) -> Option<Strin
 }
 
 pub fn render(diagram: &ActivityDiagram, theme: &Theme) -> String {
-    render_inner(diagram, theme, "", None, None, None)
+    render_inner(diagram, theme, "", None, None, None, None)
 }
 
 fn render_inner(
     diagram: &ActivityDiagram,
     _theme: &Theme,
     defs: &str,
-    gradient_id: Option<String>,
+    action_gradient_id: Option<String>,
+    diamond_gradient_id: Option<String>,
     filter_id: Option<String>,
     oracle: Option<&OracleLayout>,
 ) -> String {
@@ -10042,7 +10167,12 @@ fn render_inner(
     // change individual element colors without affecting the broader
     // theme; resolving them here keeps activity.rs decoupled from the
     // theme machinery in `style.rs`.
-    let palette = Palette::from_skinparams(&diagram.meta.skinparams, &gradient_id, &filter_id);
+    let palette = Palette::from_skinparams(
+        &diagram.meta.skinparams,
+        &action_gradient_id,
+        &diamond_gradient_id,
+        &filter_id,
+    );
     let has_shadow = palette.shadow_filter.is_some();
     let has_deprecated_handwritten = has_deprecated_handwritten_skinparam(&diagram.meta.skinparams);
     let is_handwritten = is_handwritten_enabled(&diagram.meta.skinparams);
