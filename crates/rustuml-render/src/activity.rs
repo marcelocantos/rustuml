@@ -108,6 +108,13 @@ const SWITCH_MIXED_EMPTY_SPINE: f64 = 2.0;
 // trimming the terminal empty branch corridor.
 const SWITCH_EVEN_MIXED_EMPTY_SPINE_SHIFT: f64 = 7.0444;
 const SWITCH_EVEN_MIXED_EMPTY_LAST_PULL_LEFT: f64 = 0.4333;
+// `FtileSwitchWithOneLink` routes the sole branch from the east side of the
+// test diamond. The visible branch box is placed 15 px past the diamond's east
+// vertex; the legacy activity renderer keeps only 9 px of left SVG extent past
+// the diamond's west/east half-width, matching the existing margin model.
+const SWITCH_ONE_LINK_BRANCH_GAP: f64 = 15.0;
+const SWITCH_ONE_LINK_LEFT_PAD: f64 = 9.0;
+const SWITCH_ONE_LINK_Y_DELTA: f64 = 20.0;
 const SWITCH_LINK_MARGIN: f64 = 10.0;
 // Case-label baseline offsets above the case-box top, per connection type.
 const SWITCH_LABEL_OUTER_DY: f64 = 19.7979; // outermost branches (via diamond vertex)
@@ -1728,6 +1735,32 @@ fn switch_case_width(case: &SwitchCase) -> f64 {
     }
 }
 
+fn switch_diamond_half_width(condition: &str) -> f64 {
+    (diamond_inner_w(condition) + DIAMOND_HALF * 2.0) / 2.0
+}
+
+fn switch_one_link_branch_dx(condition: &str) -> f64 {
+    switch_diamond_half_width(condition) + SWITCH_ONE_LINK_BRANCH_GAP
+}
+
+fn switch_one_link_extents(case: &SwitchCase, condition: &str) -> (f64, f64) {
+    let diamond_half = switch_diamond_half_width(condition);
+    let case_half = switch_case_width(case) / 2.0;
+    (
+        diamond_half + SWITCH_ONE_LINK_LEFT_PAD,
+        diamond_half + SWITCH_ONE_LINK_BRANCH_GAP + case_half,
+    )
+}
+
+fn switch_one_link_below_diamond(case: &SwitchCase) -> f64 {
+    let label_h = if case.label.is_empty() {
+        0.0
+    } else {
+        case.label.split('\n').count().max(1) as f64 * pm::text_height(SMALL_FONT)
+    };
+    SWITCH_ONE_LINK_Y_DELTA + label_h
+}
+
 fn switch_has_empty_middle_case(cases: &[SwitchCase]) -> bool {
     matches!(cases, [_, middle, _] if middle.body.is_empty())
 }
@@ -1911,6 +1944,10 @@ fn switch_x_layout_with_small_gap(
 }
 
 fn switch_case_block_width(cases: &[SwitchCase], condition: &str) -> f64 {
+    if let [case] = cases {
+        let (left, right) = switch_one_link_extents(case, condition);
+        return left + right;
+    }
     switch_x_layout(cases, condition).block_w
 }
 
@@ -3112,6 +3149,9 @@ fn node_extents(node: &LayoutNode) -> (f64, f64) {
         // The switch spine aligns to the condition/merge diamond, which in
         // BIG_DIAMOND mode is offset from the geometric block centre.
         LayoutNode::Switch { cases, condition } => {
+            if let [case] = cases.as_slice() {
+                return switch_one_link_extents(case, condition);
+            }
             let layout = switch_x_layout(cases, condition);
             (layout.diamond_dx, layout.block_w - layout.diamond_dx)
         }
@@ -3935,6 +3975,23 @@ fn node_height(node: &LayoutNode) -> f64 {
                 .iter()
                 .map(|c| sequence_height(&c.body))
                 .fold(0.0f64, f64::max);
+            if let [case] = cases.as_slice() {
+                let merge_gap = if branch_terminates(&case.body) {
+                    0.0
+                } else {
+                    ARROW_LEN
+                };
+                let merge_h = if branch_terminates(&case.body) {
+                    0.0
+                } else {
+                    DIAMOND_HALF * 2.0
+                };
+                return DIAMOND_HALF * 2.0
+                    + switch_one_link_below_diamond(case)
+                    + max_h
+                    + merge_gap
+                    + merge_h;
+            }
             // Odd case counts have a centre branch that drops straight into
             // the merge diamond (a full 20-px arrow); even counts route both
             // halves sideways, halving the gap.
@@ -6637,6 +6694,9 @@ fn emit_switch(
     condition: &str,
     cases: &[SwitchCase],
 ) -> f64 {
+    if let [case] = cases {
+        return emit_switch_one_link(svg, cx, y, condition, case);
+    }
     emit_switch_with_layout(
         svg,
         cx,
@@ -6646,6 +6706,103 @@ fn emit_switch(
         switch_x_layout(cases, condition),
         false,
     )
+}
+
+fn emit_switch_one_link(
+    svg: &mut SvgEmitter,
+    cx: f64,
+    y: f64,
+    condition: &str,
+    case: &SwitchCase,
+) -> f64 {
+    let arrow_color = svg.palette.arrow_color.clone();
+    let diamond_stroke = svg.palette.diamond_stroke.clone();
+    let diamond_fill = svg.palette.diamond_fill.clone();
+    let diamond_stroke_width = svg.palette.diamond_stroke_width.clone();
+
+    let cond_inner_w = diamond_inner_w(condition);
+    let cond_text_w = text_render::measure(condition, SMALL_FONT, false);
+    let diamond_cx = cx;
+    let diamond_cy = y + DIAMOND_HALF;
+    let diamond_left = diamond_cx - cond_inner_w / 2.0 - DIAMOND_HALF;
+    let diamond_right = diamond_cx + cond_inner_w / 2.0 + DIAMOND_HALF;
+    let diamond_bottom = y + DIAMOND_HALF * 2.0;
+    let pts = vec![
+        (diamond_cx - cond_inner_w / 2.0, y),
+        (diamond_cx + cond_inner_w / 2.0, y),
+        (diamond_right, diamond_cy),
+        (diamond_cx + cond_inner_w / 2.0, diamond_bottom),
+        (diamond_cx - cond_inner_w / 2.0, diamond_bottom),
+        (diamond_left, diamond_cy),
+    ];
+    svg.polygon_shape(&diamond_fill, &pts, &diamond_stroke, &diamond_stroke_width);
+    let cond_text_color = svg.palette.text_color.clone();
+    let cond_text_y = centered_label_y(condition, diamond_cy, SMALL_FONT);
+    svg.text_element_styled(
+        &cond_text_color,
+        "sans-serif",
+        SMALL_FONT,
+        diamond_cx - cond_text_w / 2.0,
+        cond_text_y,
+        condition,
+        false,
+        svg.palette.diamond_text_italic,
+    );
+
+    let branch_cx = diamond_cx + switch_one_link_branch_dx(condition);
+    let cases_top = diamond_bottom + switch_one_link_below_diamond(case);
+    let branch_bottom = emit_sequence(svg, &case.body, branch_cx, cases_top);
+
+    svg.connector_line(
+        &arrow_color,
+        branch_cx,
+        branch_cx,
+        diamond_bottom,
+        cases_top,
+        false,
+    );
+    switch_down_head(svg, &arrow_color, branch_cx, cases_top);
+    if !case.label.is_empty() {
+        switch_case_label(
+            svg,
+            &case.label,
+            branch_cx + 4.0,
+            (diamond_bottom + cases_top) / 2.0 + 4.1572,
+        );
+    }
+
+    if branch_terminates(&case.body) {
+        return branch_bottom;
+    }
+
+    let merge_top = branch_bottom + ARROW_LEN;
+    let merge_cy = merge_top + DIAMOND_HALF;
+    let merge_bottom = merge_top + DIAMOND_HALF * 2.0;
+    svg.connector_line(
+        &arrow_color,
+        diamond_cx,
+        diamond_cx,
+        branch_bottom,
+        merge_top,
+        false,
+    );
+    switch_down_head(svg, &arrow_color, diamond_cx, merge_top);
+
+    svg.polygon_shape(
+        &diamond_fill,
+        &[
+            (diamond_cx, merge_top),
+            (diamond_cx, merge_top),
+            (diamond_cx + DIAMOND_HALF, merge_cy),
+            (diamond_cx, merge_bottom),
+            (diamond_cx, merge_bottom),
+            (diamond_cx - DIAMOND_HALF, merge_cy),
+        ],
+        &diamond_stroke,
+        &diamond_stroke_width,
+    );
+
+    merge_bottom
 }
 
 fn emit_switch_with_layout(
