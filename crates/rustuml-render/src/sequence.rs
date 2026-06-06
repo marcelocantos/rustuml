@@ -7515,6 +7515,10 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                 .or_insert(label_w);
         }
     }
+    let lost_external_min_to_x = participants
+        .last()
+        .map(|p| p.box_x + p.box_width + 5.0)
+        .unwrap_or(0.0);
     // Track enclosing group frame bounds so else dividers span the full frame.
     let mut else_frame_stack: Vec<(f64, f64)> = Vec::new();
     // Only page-1 events are drawn (see `page1_end` above); event_y_positions
@@ -7540,7 +7544,7 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                         .get(msg.from.as_str())
                         .copied()
                         .unwrap_or_else(|| message_label_width(&process_label(&msg.label)));
-                    from_x + label_w + 24.0
+                    (from_x + label_w + 24.0).max(lost_external_min_to_x)
                 } else {
                     center_of(&msg.to)
                 };
