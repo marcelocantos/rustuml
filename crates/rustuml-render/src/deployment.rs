@@ -2199,6 +2199,39 @@ fn emit_note(svg: &mut SvgBuilder, note: &crate::layout_oracle::OracleNoteEntity
 // Connections (oracle-driven)
 // ---------------------------------------------------------------------------
 
+fn is_numbered_duplicate_edge(edge_id: &str, candidate_id: &str) -> bool {
+    let Some(rest) = edge_id.strip_prefix(candidate_id) else {
+        return false;
+    };
+    let Some(number) = rest.strip_prefix('-') else {
+        return false;
+    };
+    !number.is_empty() && number.bytes().all(|b| b.is_ascii_digit())
+}
+
+fn find_oracle_connection_edge<'a>(
+    oracle: &'a OracleLayout,
+    candidates: &[String],
+    source_line: Option<&str>,
+) -> Option<&'a crate::layout_oracle::OracleEdgePath> {
+    let mut fallback = None;
+    for candidate in candidates {
+        for edge in oracle.edges.iter().filter(|edge| {
+            edge.id == *candidate
+                || source_line.is_some()
+                    && is_numbered_duplicate_edge(edge.id.as_str(), candidate.as_str())
+        }) {
+            if source_line.is_some_and(|line| edge.source_line.as_deref() == Some(line)) {
+                return Some(edge);
+            }
+            if edge.id == *candidate {
+                fallback.get_or_insert(edge);
+            }
+        }
+    }
+    fallback
+}
+
 fn render_connection(
     svg: &mut SvgBuilder,
     conn: &DeploymentConnection,
@@ -2231,18 +2264,27 @@ fn render_connection(
         format!("{}-{}", conn.from, conn.to),
         format!("{from_qname}-backto-{to_qname}"),
     ];
-    let oracle_edge = candidates
-        .iter()
-        .find_map(|cand| oracle.edges.iter().find(|e| e.id == *cand));
+    let source_line = (conn.source_line > 0).then(|| conn.source_line.to_string());
+    let oracle_edge = find_oracle_connection_edge(oracle, &candidates, source_line.as_deref());
     let oracle_edge = oracle_edge.or_else(|| {
         let f_id = id_for_node.get(&conn.from).cloned();
         let t_id = id_for_node.get(&conn.to).cloned();
-        oracle.edges.iter().find(|e| {
+        let mut fallback = None;
+        for edge in oracle.edges.iter().filter(|e| {
             let e1 = e.entity_1.as_deref();
             let e2 = e.entity_2.as_deref();
             (e1 == f_id.as_deref() && e2 == t_id.as_deref())
                 || (e1 == t_id.as_deref() && e2 == f_id.as_deref())
-        })
+        }) {
+            if source_line
+                .as_deref()
+                .is_some_and(|line| edge.source_line.as_deref() == Some(line))
+            {
+                return Some(edge);
+            }
+            fallback.get_or_insert(edge);
+        }
+        fallback
     });
     let expected_id = oracle_edge
         .map(|e| e.id.clone())
