@@ -1108,6 +1108,32 @@ fn member_oracle_text_y_count(member: &Member, attr_font: &AttrFont<'_>) -> usiz
     if count == 0 && !saw_latex { 1 } else { count }
 }
 
+fn member_oracle_text_element_count(member: &Member, attr_font: &AttrFont<'_>) -> usize {
+    let mut saw_latex = false;
+    let mut count = 0;
+    for line in member_display_lines(member, attr_font.monospace_spaces) {
+        if latex_member_content(&line).is_some() {
+            saw_latex = true;
+            continue;
+        }
+        count += text_render::emitted_text_element_count(
+            &line,
+            &TextBase {
+                x: 0.0,
+                y: 0.0,
+                font_size: attr_font.size,
+                font_family: attr_font.family,
+                fill: attr_font.fill,
+                bold: attr_font.bold,
+                italic: member.is_abstract || attr_font.italic,
+                underline: member.is_static,
+                skip_underline: true,
+            },
+        );
+    }
+    if count == 0 && !saw_latex { 1 } else { count }
+}
+
 fn escaped_newline_lines(text: &str) -> Vec<String> {
     text.split("\\n").map(str::to_string).collect()
 }
@@ -3053,6 +3079,7 @@ fn render_entity_content(
         .and_then(|r| r.rect_filter.as_deref())
         .map(|f| format!(r#" filter="{f}""#))
         .unwrap_or_default();
+    let has_body_polygon = oracle_rect.and_then(|r| r.body_polygon.as_ref()).is_some();
     if let Some(polygon) = oracle_rect.and_then(|r| r.body_polygon.as_ref()) {
         emit_entity_polygon(svg, polygon);
     } else {
@@ -3085,7 +3112,9 @@ fn render_entity_content(
         .filter(|hb| split_gradient_colors(hb).is_none())
         .map(resolve_flat_or_gradient_start)
         .filter(|hb| hb.as_str() != fill);
-    let band_first_sep: Option<f64> = if fill.starts_with("url(#") && !entity_gradient_fill {
+    let band_first_sep: Option<f64> = if has_body_polygon {
+        None
+    } else if fill.starts_with("url(#") && !entity_gradient_fill {
         oracle_rect.and_then(|r| r.sep_y_values.first().copied())
     } else if header_solid.is_some() {
         let stereo_shift = stereotype_header_extra_height(dim.stereotype_count);
@@ -4045,16 +4074,20 @@ fn render_entity_content(
 
         if !fields.is_empty() {
             // Fields separator.
-            write!(
-                svg,
-                r#"<line style="{}" x1="{}" x2="{}" y1="{}" y2="{}"/>"#,
-                sep_style,
-                fmt4(sep_x1),
-                fmt4(sep_x2),
-                fmt4(header_sep_y),
-                fmt4(header_sep_y),
-            )
-            .unwrap();
+            if let Some(path) = oracle_sep_paths.first() {
+                emit_entity_path(svg, path);
+            } else {
+                write!(
+                    svg,
+                    r#"<line style="{}" x1="{}" x2="{}" y1="{}" y2="{}"/>"#,
+                    sep_style,
+                    fmt4(sep_x1),
+                    fmt4(sep_x2),
+                    fmt4(header_sep_y),
+                    fmt4(header_sep_y),
+                )
+                .unwrap();
+            }
             // The header separator is the last element inside the link anchor;
             // close it before the first field so each member self-wraps. Only
             // when the anchor is split (icon-bearing members present).
@@ -4107,12 +4140,23 @@ fn render_entity_content(
                     .get(oracle_field_text_idx)
                     .copied()
                     .unwrap_or(member_y);
-                let vis_ov = if member.visibility != Visibility::Default {
-                    let v = oracle_vis_y.get(vis_icon_idx).copied();
-                    vis_icon_idx += 1;
-                    v
+                let oracle_text_count = member_oracle_text_y_count(member, &attr_font);
+                let oracle_text_element_count =
+                    member_oracle_text_element_count(member, &attr_font);
+                let display_line_count =
+                    member_display_line_count(member, attr_font.monospace_spaces);
+                let text_ov = if oracle_text_element_count == display_line_count {
+                    oracle_text_x.get(oracle_field_text_idx).copied()
                 } else {
                     None
+                };
+                let (vis_ov, vis_polygon) = if member.visibility != Visibility::Default {
+                    let v = oracle_vis_y.get(vis_icon_idx).copied();
+                    let p = oracle_vis_polygons.get(vis_icon_idx);
+                    vis_icon_idx += 1;
+                    (v, p)
+                } else {
+                    (None, None)
                 };
                 let trailing = if fi == last_field_idx {
                     methods_divider_trailing.as_deref()
@@ -4125,8 +4169,8 @@ fn render_entity_content(
                     x,
                     eff_y,
                     vis_ov,
-                    None,
-                    None,
+                    vis_polygon,
+                    text_ov,
                     narrow_after_separator,
                     attr_font,
                     member_anchor,
@@ -4134,7 +4178,7 @@ fn render_entity_content(
                     explicit_padding.unwrap_or(0.0),
                     member_text_offset,
                 );
-                oracle_field_text_idx += member_oracle_text_y_count(member, &attr_font);
+                oracle_field_text_idx += oracle_text_count;
                 member_y += member_display_line_count(member, attr_font.monospace_spaces) as f64
                     * MEMBER_SPACING;
                 // Emit any inline separators that fall AFTER this field.
@@ -4198,16 +4242,21 @@ fn render_entity_content(
                 // divider was nested inside the last field's anchor (linked
                 // class), skip the standalone emission too.
                 if methods_sep_label.is_none() && !nest_methods_divider {
-                    write!(
-                        svg,
-                        r#"<line style="{}" x1="{}" x2="{}" y1="{}" y2="{}"/>"#,
-                        methods_sep_style,
-                        fmt4(sep_x1),
-                        fmt4(sep_x2),
-                        fmt_tl(methods_sep_y),
-                        fmt_tl(methods_sep_y),
-                    )
-                    .unwrap();
+                    let path_idx = 1 + inline_field_separators.len();
+                    if let Some(path) = oracle_sep_paths.get(path_idx) {
+                        emit_entity_path(svg, path);
+                    } else {
+                        write!(
+                            svg,
+                            r#"<line style="{}" x1="{}" x2="{}" y1="{}" y2="{}"/>"#,
+                            methods_sep_style,
+                            fmt4(sep_x1),
+                            fmt4(sep_x2),
+                            fmt_tl(methods_sep_y),
+                            fmt_tl(methods_sep_y),
+                        )
+                        .unwrap();
+                    }
 
                     // An explicit `==` divider draws as a double rule: a second
                     // parallel line 2px below the first. The oracle records both
@@ -4217,16 +4266,20 @@ fn render_entity_content(
                             .get(2 + inline_field_separators.len())
                             .copied()
                             .unwrap_or(methods_sep_y + 2.0);
-                        write!(
-                            svg,
-                            r#"<line style="{}" x1="{}" x2="{}" y1="{}" y2="{}"/>"#,
-                            methods_sep_style,
-                            fmt4(sep_x1),
-                            fmt4(sep_x2),
-                            fmt_tl(second_y),
-                            fmt_tl(second_y),
-                        )
-                        .unwrap();
+                        if let Some(path) = oracle_sep_paths.get(path_idx + 1) {
+                            emit_entity_path(svg, path);
+                        } else {
+                            write!(
+                                svg,
+                                r#"<line style="{}" x1="{}" x2="{}" y1="{}" y2="{}"/>"#,
+                                methods_sep_style,
+                                fmt4(sep_x1),
+                                fmt4(sep_x2),
+                                fmt_tl(second_y),
+                                fmt_tl(second_y),
+                            )
+                            .unwrap();
+                        }
                     }
                 }
 
@@ -4239,6 +4292,16 @@ fn render_entity_content(
                         .get(oracle_method_text_idx)
                         .copied()
                         .unwrap_or(method_y);
+                    let oracle_text_count = member_oracle_text_y_count(member, &attr_font);
+                    let oracle_text_element_count =
+                        member_oracle_text_element_count(member, &attr_font);
+                    let display_line_count =
+                        member_display_line_count(member, attr_font.monospace_spaces);
+                    let text_ov = if oracle_text_element_count == display_line_count {
+                        oracle_text_x.get(oracle_method_text_idx).copied()
+                    } else {
+                        None
+                    };
                     let vis_ov = if member.visibility != Visibility::Default {
                         let v = oracle_vis_y.get(vis_icon_idx).copied();
                         vis_icon_idx += 1;
@@ -4253,7 +4316,7 @@ fn render_entity_content(
                         eff_y,
                         vis_ov,
                         None,
-                        None,
+                        text_ov,
                         methods_narrow_default,
                         attr_font,
                         member_anchor,
@@ -4261,7 +4324,7 @@ fn render_entity_content(
                         explicit_padding.unwrap_or(0.0),
                         member_text_offset,
                     );
-                    oracle_method_text_idx += member_oracle_text_y_count(member, &attr_font);
+                    oracle_method_text_idx += oracle_text_count;
                     method_y += member_display_line_count(member, attr_font.monospace_spaces)
                         as f64
                         * MEMBER_SPACING;
@@ -4370,6 +4433,16 @@ fn render_entity_content(
                     .get(oracle_method_text_idx)
                     .copied()
                     .unwrap_or(method_y);
+                let oracle_text_count = member_oracle_text_y_count(member, &attr_font);
+                let oracle_text_element_count =
+                    member_oracle_text_element_count(member, &attr_font);
+                let display_line_count =
+                    member_display_line_count(member, attr_font.monospace_spaces);
+                let text_ov = if oracle_text_element_count == display_line_count {
+                    oracle_text_x.get(oracle_method_text_idx).copied()
+                } else {
+                    None
+                };
                 let (vis_ov, vis_polygon) = if member.visibility != Visibility::Default {
                     let v = oracle_vis_y.get(vis_icon_idx).copied();
                     let p = oracle_vis_polygons.get(vis_icon_idx);
@@ -4385,7 +4458,7 @@ fn render_entity_content(
                     eff_y,
                     vis_ov,
                     vis_polygon,
-                    oracle_text_x.get(oracle_method_text_idx).copied(),
+                    text_ov,
                     methods_narrow_default,
                     attr_font,
                     member_anchor,
@@ -4393,7 +4466,7 @@ fn render_entity_content(
                     explicit_padding.unwrap_or(0.0),
                     member_text_offset,
                 );
-                oracle_method_text_idx += member_oracle_text_y_count(member, &attr_font);
+                oracle_method_text_idx += oracle_text_count;
                 method_y += member_display_line_count(member, attr_font.monospace_spaces) as f64
                     * MEMBER_SPACING;
             }

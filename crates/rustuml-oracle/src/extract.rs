@@ -1019,15 +1019,15 @@ pub fn extract_oracle_layout(svg: &str) -> Option<OracleLayout> {
                             .children()
                             .find(|c| {
                                 c.tag_name().name() == "path"
-                                    && c.attribute("fill") == Some("#000000")
+                                    && c.attribute("style").is_none()
+                                    && c.attribute("fill").is_some()
                             })
                             .and_then(|p| p.attribute("d"))
                             .map(String::from);
                         let separator_paths: Vec<EntityPath> = content_node
                             .children()
                             .filter(|c| {
-                                c.tag_name().name() == "path"
-                                    && c.attribute("fill") != Some("#000000")
+                                c.tag_name().name() == "path" && c.attribute("style").is_some()
                             })
                             .filter_map(|p| capture_path(&p))
                             .collect();

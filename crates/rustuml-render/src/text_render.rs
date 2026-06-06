@@ -109,6 +109,33 @@ pub fn emitted_baseline_count(content: &str, base: &TextBase<'_>) -> usize {
     offsets.len().max(1)
 }
 
+/// Number of `<text>` elements [`emit_text`] will write for one logical line.
+///
+/// This differs from [`emitted_baseline_count`]: a link followed by plain text
+/// emits two adjacent `<text>` elements on the same baseline. Callers consuming
+/// oracle x-anchors need this element count to know whether a single anchor can
+/// safely override the line start.
+pub fn emitted_text_element_count(content: &str, base: &TextBase<'_>) -> usize {
+    let content = normalize_tab_escapes(content);
+    let segments = if base.skip_underline {
+        creole::parse_segments_no_underline(&content)
+    } else {
+        creole::parse_segments(&content)
+    };
+    if segments.is_empty() {
+        return 1;
+    }
+    let mut count = 0usize;
+    for seg in &segments {
+        if seg.text.contains('\t') {
+            count += seg.text.split('\t').filter(|part| !part.is_empty()).count();
+        } else {
+            count += 1;
+        }
+    }
+    count.max(1)
+}
+
 /// Width of `content` after creole resolution — the value a renderer needs
 /// to size boxes around a label. Per-segment styling (monospace vs sans-
 /// serif, bold, custom size) is honoured by routing through `total_width`.
