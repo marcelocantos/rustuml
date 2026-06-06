@@ -3114,6 +3114,8 @@ fn render_entity_content(
         .filter(|hb| hb.as_str() != fill);
     let band_first_sep: Option<f64> = if has_body_polygon {
         None
+    } else if header_gradient_fill.is_some() {
+        oracle_rect.and_then(|r| r.sep_y_values.first().copied())
     } else if fill.starts_with("url(#") && !entity_gradient_fill {
         oracle_rect.and_then(|r| r.sep_y_values.first().copied())
     } else if header_solid.is_some() {
