@@ -814,7 +814,7 @@ struct SwitchCase {
 }
 
 /// Returns true if a branch ends with a control-flow terminator (Stop, End,
-/// Detach, or Kill). PlantUML omits the merge diamond and post-merge
+/// Detach, Kill, or Break). PlantUML omits the merge diamond and post-merge
 /// connectors entirely when every branch of an if/else terminates this way.
 fn branch_terminates(body: &[LayoutNode]) -> bool {
     matches!(
@@ -823,7 +823,45 @@ fn branch_terminates(body: &[LayoutNode]) -> bool {
             | Some(LayoutNode::End)
             | Some(LayoutNode::Detach)
             | Some(LayoutNode::Kill)
+            | Some(LayoutNode::Break)
     )
+}
+
+fn leading_branch_arrow(nodes: &[LayoutNode]) -> (Option<&LayoutNode>, &[LayoutNode]) {
+    match nodes.first() {
+        Some(node @ LayoutNode::Arrow { .. }) => (Some(node), &nodes[1..]),
+        _ => (None, nodes),
+    }
+}
+
+fn branch_arrow_label(arrow: Option<&LayoutNode>) -> Option<&str> {
+    match arrow {
+        Some(LayoutNode::Arrow {
+            label: Some(label), ..
+        }) => Some(label),
+        _ => None,
+    }
+}
+
+fn branch_arrow_style(arrow: Option<&LayoutNode>, default_color: &str) -> ArrowStyle {
+    match arrow {
+        Some(LayoutNode::Arrow {
+            color: Some(color),
+            dashed,
+            ..
+        }) => arrow_style_from_brackets(color, *dashed),
+        Some(LayoutNode::Arrow { dashed, .. }) => ArrowStyle {
+            color: default_color.to_string(),
+            dashed: *dashed,
+            dotted: false,
+            bold: false,
+            hidden: false,
+        },
+        _ => ArrowStyle {
+            color: default_color.to_string(),
+            ..ArrowStyle::default()
+        },
+    }
 }
 
 /// For a binary if/else where exactly one non-empty branch terminates, return
@@ -5369,6 +5407,25 @@ impl SvgEmitter {
         self.line_styled(stroke, &thickness, x1, x2, y1, y2, dashed);
     }
 
+    fn connector_line_full(&mut self, style: &ArrowStyle, x1: f64, x2: f64, y1: f64, y2: f64) {
+        let palette_thickness = self.palette.arrow_thickness.clone();
+        let stroke_width = if style.bold {
+            "2"
+        } else if style.dotted {
+            "1.5"
+        } else {
+            palette_thickness.as_str()
+        };
+        let dash = if style.dotted {
+            Some("1,3")
+        } else if style.dashed {
+            Some("2,2")
+        } else {
+            None
+        };
+        self.line_with_dash(&style.color, stroke_width, x1, x2, y1, y2, dash);
+    }
+
     /// Arrowhead-style polygon for connectors — goes after all shapes.
     fn polygon_connector(
         &mut self,
@@ -6591,11 +6648,22 @@ fn emit_if(
     );
 
     let diamond_bottom = y + DIAMOND_HALF * 2.0;
+    let (then_arrow, then_branch_flow) = leading_branch_arrow(then_branch);
+    let (else_arrow, else_branch_flow) = else_branches
+        .first()
+        .map(|branch| leading_branch_arrow(&branch.body))
+        .unwrap_or((None, &[]));
+    let default_arrow_color = svg.palette.arrow_color.clone();
+    let then_arrow_style = branch_arrow_style(then_arrow, &default_arrow_color);
+    let else_arrow_style = branch_arrow_style(else_arrow, &default_arrow_color);
 
     // Then label (to the left of diamond). PlantUML places the label
     // flush against the diamond's left vertex (no horizontal gap), with
     // the baseline at `diamond_cy - descent(label font)`.
-    if let Some(label) = then_label {
+    if let Some(label) = then_label
+        .as_deref()
+        .or_else(|| branch_arrow_label(then_arrow))
+    {
         let label_font_size = svg.palette.arrow_font_size;
         let label_family = svg.palette.arrow_font_family.clone();
         let label_color = svg.palette.arrow_text_color.clone();
@@ -6637,7 +6705,11 @@ fn emit_if(
 
     // Else label: text shape, must land in shapes buffer before branch
     // shapes (matches golden order: yes label, no label, then branch boxes).
-    if let Some(label) = else_branches.first().and_then(|b| b.label.as_ref()) {
+    if let Some(label) = else_branches
+        .first()
+        .and_then(|branch| branch.label.as_deref())
+        .or_else(|| branch_arrow_label(else_arrow))
+    {
         let label_font_size = svg.palette.arrow_font_size;
         let label_family = svg.palette.arrow_font_family.clone();
         let label_color = svg.palette.arrow_text_color.clone();
@@ -6659,9 +6731,9 @@ fn emit_if(
     // connectors into the connectors buffer FIRST. PlantUML emits branch-
     // internal connectors before the diamond→branch outbound connectors.
     let branch_y = diamond_bottom + IF_BRANCH_DOWN;
-    let then_bottom = emit_sequence_if_branch(svg, then_branch, then_cx, branch_y);
+    let then_bottom = emit_sequence_if_branch(svg, then_branch_flow, then_cx, branch_y);
     let else_bottom = if !else_branches.is_empty() {
-        emit_sequence_if_branch(svg, &else_branches[0].body, else_cx, branch_y)
+        emit_sequence_if_branch(svg, else_branch_flow, else_cx, branch_y)
     } else {
         branch_y
     };
@@ -6669,11 +6741,13 @@ fn emit_if(
     // If every branch ends with a terminator (Stop/End/Detach/Kill), PlantUML
     // skips the merge diamond and post-merge connectors entirely. The two
     // branches stand on their own; the if-block's bottom is the deeper one.
-    let then_terminates = branch_terminates(then_branch);
-    let else_terminates =
-        !else_branches.is_empty() && else_branches.iter().all(|b| branch_terminates(&b.body));
+    let then_terminates = branch_terminates(then_branch_flow);
+    let else_terminates = else_branches.split_first().is_some_and(|(_, rest)| {
+        branch_terminates(else_branch_flow)
+            && rest.iter().all(|branch| branch_terminates(&branch.body))
+    });
     let all_terminate = then_terminates && else_terminates;
-    let single_survivor = if_single_survivor(then_branch, else_branches);
+    let single_survivor = if_single_survivor(then_branch_flow, else_branches);
 
     // Merge diamond at bottom — sits IF_BRANCH_UP px below the deepest branch.
     let merge_y = then_bottom.max(else_bottom) + IF_BRANCH_UP;
@@ -6700,43 +6774,39 @@ fn emit_if(
         // diamond. The vertical corridor is one continuous line with a
         // mid-corridor down arrowhead overlaid before the line element.
         let arrow_tip = (diamond_cy + merge_cy) / 2.0;
-        svg.connector_line(
-            &arrow_color,
+        svg.connector_line_full(
+            &then_arrow_style,
             diamond_left,
             then_cx,
             diamond_cy,
             diamond_cy,
-            false,
         );
         switch_down_head(svg, &arrow_color, then_cx, arrow_tip);
-        svg.connector_line(&arrow_color, then_cx, then_cx, diamond_cy, merge_cy, false);
-        svg.connector_line(
-            &arrow_color,
+        svg.connector_line_full(&then_arrow_style, then_cx, then_cx, diamond_cy, merge_cy);
+        svg.connector_line_full(
+            &then_arrow_style,
             then_cx,
             cx - DIAMOND_HALF,
             merge_cy,
             merge_cy,
-            false,
         );
         svg.right_arrow(cx - DIAMOND_HALF, merge_cy, &arrow_color);
 
-        svg.connector_line(
-            &arrow_color,
+        svg.connector_line_full(
+            &else_arrow_style,
             diamond_right,
             else_cx,
             diamond_cy,
             diamond_cy,
-            false,
         );
         switch_down_head(svg, &arrow_color, else_cx, arrow_tip);
-        svg.connector_line(&arrow_color, else_cx, else_cx, diamond_cy, merge_cy, false);
-        svg.connector_line(
-            &arrow_color,
+        svg.connector_line_full(&else_arrow_style, else_cx, else_cx, diamond_cy, merge_cy);
+        svg.connector_line_full(
+            &else_arrow_style,
             else_cx,
             cx + DIAMOND_HALF,
             merge_cy,
             merge_cy,
-            false,
         );
         svg.left_arrow(cx + DIAMOND_HALF, merge_cy, &arrow_color);
         return merge_diamond_top + DIAMOND_HALF * 2.0;
@@ -6747,60 +6817,56 @@ fn emit_if(
 
     // Diamond → then: horizontal from diamond left to then_cx, then down to
     // branch top, with an arrowhead overlay.
-    svg.connector_line(
-        &arrow_color,
+    svg.connector_line_full(
+        &then_arrow_style,
         diamond_left,
         then_cx,
         diamond_cy,
         diamond_cy,
-        false,
     );
-    svg.connector_line(
-        &arrow_color,
+    svg.connector_line_full(
+        &then_arrow_style,
         then_cx,
         then_cx,
         diamond_cy,
         diamond_bottom + IF_BRANCH_DOWN,
-        false,
     );
     svg.polygon_connector(
-        &arrow_color,
+        &then_arrow_style.color,
         &[
             (then_cx - 4.0, diamond_bottom + IF_BRANCH_DOWN - 10.0),
             (then_cx, diamond_bottom + IF_BRANCH_DOWN),
             (then_cx + 4.0, diamond_bottom + IF_BRANCH_DOWN - 10.0),
             (then_cx, diamond_bottom + IF_BRANCH_DOWN - 6.0),
         ],
-        &arrow_color,
+        &then_arrow_style.color,
         "1",
     );
 
     // Diamond → else: mirror of the then side.
-    svg.connector_line(
-        &arrow_color,
+    svg.connector_line_full(
+        &else_arrow_style,
         diamond_right,
         else_cx,
         diamond_cy,
         diamond_cy,
-        false,
     );
-    svg.connector_line(
-        &arrow_color,
+    svg.connector_line_full(
+        &else_arrow_style,
         else_cx,
         else_cx,
         diamond_cy,
         diamond_bottom + IF_BRANCH_DOWN,
-        false,
     );
     svg.polygon_connector(
-        &arrow_color,
+        &else_arrow_style.color,
         &[
             (else_cx - 4.0, diamond_bottom + IF_BRANCH_DOWN - 10.0),
             (else_cx, diamond_bottom + IF_BRANCH_DOWN),
             (else_cx + 4.0, diamond_bottom + IF_BRANCH_DOWN - 10.0),
             (else_cx, diamond_bottom + IF_BRANCH_DOWN - 6.0),
         ],
-        &arrow_color,
+        &else_arrow_style.color,
         "1",
     );
 
