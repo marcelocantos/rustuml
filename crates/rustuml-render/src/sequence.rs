@@ -7431,6 +7431,24 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
         }
     };
 
+    let ref_group_extent = |r: &Ref| -> Option<(f64, f64)> {
+        let rb = ref_box(&r.text);
+        let mut left = f64::INFINITY;
+        let mut right = f64::NEG_INFINITY;
+        for pid in &r.participants {
+            if let Some(&pi) = id_to_idx.get(pid.as_str()) {
+                let p = &participants[pi];
+                left = left.min(p.box_x - REF_OUT_MARGIN);
+                right = right.max(p.box_x + p.box_width + REF_OUT_MARGIN);
+            }
+        }
+        if !left.is_finite() {
+            return None;
+        }
+        let total_w = (right - left).max(rb.pref_w);
+        Some((left - REF_OUT_MARGIN, left + total_w + REF_OUT_MARGIN))
+    };
+
     let mut group_frames: Vec<GroupFrame> = Vec::new();
     {
         struct GroupAccum {
@@ -7439,6 +7457,8 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
             start_idx: usize,
             note_left: f64,
             note_right: f64,
+            ref_left: f64,
+            ref_right: f64,
             message_right: f64,
             external_left: f64,
         }
@@ -7457,6 +7477,8 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                         start_idx: ev_idx,
                         note_left: f64::INFINITY,
                         note_right: f64::NEG_INFINITY,
+                        ref_left: f64::INFINITY,
+                        ref_right: f64::NEG_INFINITY,
                         message_right: f64::NEG_INFINITY,
                         external_left: f64::INFINITY,
                     });
@@ -7486,6 +7508,7 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                         let has_child = child_left.is_finite();
                         let has_msgs = min_idx <= max_idx && !participants.is_empty();
                         let has_note = group.note_left.is_finite();
+                        let has_ref = group.ref_left.is_finite();
                         let has_message_right = group.message_right.is_finite();
                         let has_external_left = group.external_left.is_finite();
 
@@ -7516,6 +7539,9 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                         // GROUP_FRAME_MARGIN beyond the note's drawn left.
                         if has_note {
                             frame_left = frame_left.min(group.note_left - group_frame_margin);
+                        }
+                        if has_ref {
+                            frame_left = frame_left.min(group.ref_left);
                         }
                         if has_external_left {
                             frame_left = frame_left.min(group.external_left);
@@ -7581,6 +7607,9 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                         }
                         if has_note {
                             frame_right = frame_right.max(group.note_right + group_frame_margin);
+                        }
+                        if has_ref {
+                            frame_right = frame_right.max(group.ref_right);
                         }
                         if has_message_right {
                             frame_right = frame_right.max(group.message_right + group_frame_margin);
@@ -7688,6 +7717,14 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                         for top in group_start_stack.iter_mut() {
                             top.note_left = top.note_left.min(nl);
                             top.note_right = top.note_right.max(nr);
+                        }
+                    }
+                }
+                Event::Ref(r) if !group_start_stack.is_empty() => {
+                    if let Some((rl, rr)) = ref_group_extent(r) {
+                        for top in group_start_stack.iter_mut() {
+                            top.ref_left = top.ref_left.min(rl);
+                            top.ref_right = top.ref_right.max(rr);
                         }
                     }
                 }
