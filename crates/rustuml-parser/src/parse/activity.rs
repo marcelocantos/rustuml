@@ -488,12 +488,13 @@ impl ActivityParser {
             "end split" => self.steps.push(ActivityStep::EndSplit),
             "repeat" => self.steps.push(ActivityStep::Repeat),
             _ if line.starts_with("repeat :") => {
-                // `repeat :label;` — push Repeat then parse the rest as an action.
-                self.steps.push(ActivityStep::Repeat);
-                let rest = line.strip_prefix("repeat ").unwrap_or("").trim();
-                if !rest.is_empty() {
-                    self.try_action(rest);
-                }
+                let label = line
+                    .strip_prefix("repeat :")
+                    .unwrap_or_default()
+                    .trim_end_matches(';')
+                    .trim()
+                    .to_string();
+                self.steps.push(ActivityStep::RepeatStart(label));
             }
             "break" => self.steps.push(ActivityStep::Break),
             "detach" => self.steps.push(ActivityStep::Detach),
@@ -1047,6 +1048,14 @@ mod tests {
     fn repeat_loop() {
         let d = parse("start\nrepeat\n  :action;\nrepeat while (again?)\nstop");
         assert!(matches!(d.steps[1], ActivityStep::Repeat));
+        assert!(matches!(d.steps[3], ActivityStep::RepeatWhile(ref b) if b.condition == "again?"));
+    }
+
+    #[test]
+    fn repeat_start_label() {
+        let d = parse("start\nrepeat :start label;\n  :action;\nrepeat while (again?)\nstop");
+        assert!(matches!(d.steps[1], ActivityStep::RepeatStart(ref s) if s == "start label"));
+        assert!(matches!(d.steps[2], ActivityStep::Action(ref s) if s == "action"));
         assert!(matches!(d.steps[3], ActivityStep::RepeatWhile(ref b) if b.condition == "again?"));
     }
 

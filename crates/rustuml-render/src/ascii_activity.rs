@@ -317,6 +317,7 @@ pub fn render_ascii(diagram: &ActivityDiagram) -> String {
             | ActivityStep::Detach
             | ActivityStep::Kill
             | ActivityStep::Repeat
+            | ActivityStep::RepeatStart(_)
             | ActivityStep::RepeatWhile(_)
             | ActivityStep::Switch(_)
             | ActivityStep::Case(_)

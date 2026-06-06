@@ -86,6 +86,7 @@ const IF_EMPTY_BOTH_RIGHT_EXTENT_PAD: f64 = 15.0;
 /// Labelled `if` diamonds reserve a little extra inbound lead when the
 /// diagram-wide arrow font is taller than the default 20 px connector slot.
 const IF_LABEL_INBOUND_PAD: f64 = 0.71875;
+const REPEAT_NOT_LABEL_OUTBOUND_PAD: f64 = 1.5;
 const FORK_BAR_HEIGHT: f64 = 6.0;
 const FORK_BAR_RX: f64 = 2.5;
 /// PlantUML's drop-shadow filter extends painted node bounds by 6 px on the
@@ -683,6 +684,9 @@ enum LayoutNode {
         not_label: Option<String>,
         /// Label of a `backward :label;` action drawn on the loop-back arm.
         backward: Option<String>,
+        has_start_label: bool,
+        arrow_font_size: f64,
+        arrow_font_family: String,
     },
     Fork {
         branches: Vec<Vec<LayoutNode>>,
@@ -1212,6 +1216,26 @@ fn build_swimlanes(steps: &[ActivityStep], palette: &Palette) -> Vec<LayoutNode>
     vec![LayoutNode::Swimlanes { lanes }]
 }
 
+fn layout_action_node(text: &str, palette: &Palette) -> LayoutNode {
+    let text = action_text_for_family(text, &palette.action_font_family);
+    let tw = action_text_width(
+        &text,
+        palette.action_font_size,
+        palette.action_text_bold,
+        &palette.action_font_family,
+    );
+    LayoutNode::Action {
+        text,
+        text_width: tw,
+        pad_x: palette.action_pad_x,
+        pad_y: palette.action_pad_y,
+        font_family: palette.action_font_family.clone(),
+        font_size: palette.action_font_size,
+        bold: palette.action_text_bold,
+        italic: palette.action_text_italic,
+    }
+}
+
 fn build_tree_inner(steps: &[ActivityStep], palette: &Palette) -> Vec<LayoutNode> {
     let mut nodes = Vec::new();
     let mut i = 0;
@@ -1234,23 +1258,7 @@ fn build_tree_inner(steps: &[ActivityStep], palette: &Palette) -> Vec<LayoutNode
                 i += 1;
             }
             ActivityStep::Action(text) => {
-                let text = action_text_for_family(text, &palette.action_font_family);
-                let tw = action_text_width(
-                    &text,
-                    palette.action_font_size,
-                    palette.action_text_bold,
-                    &palette.action_font_family,
-                );
-                nodes.push(LayoutNode::Action {
-                    text,
-                    text_width: tw,
-                    pad_x: palette.action_pad_x,
-                    pad_y: palette.action_pad_y,
-                    font_family: palette.action_font_family.clone(),
-                    font_size: palette.action_font_size,
-                    bold: palette.action_text_bold,
-                    italic: palette.action_text_italic,
-                });
+                nodes.push(layout_action_node(text, palette));
                 i += 1;
             }
             ActivityStep::DeprecatedColorAction(dca) => {
@@ -1388,7 +1396,11 @@ fn build_tree_inner(steps: &[ActivityStep], palette: &Palette) -> Vec<LayoutNode
             ActivityStep::EndWhile(_) => {
                 i += 1;
             }
-            ActivityStep::Repeat => {
+            ActivityStep::Repeat | ActivityStep::RepeatStart(_) => {
+                let start_label = match &steps[i] {
+                    ActivityStep::RepeatStart(label) => Some(label.clone()),
+                    _ => None,
+                };
                 i += 1;
                 // PlantUML attaches a `backward :label;` action to the loop-back
                 // path (drawn on the right return arm), not to the body spine.
@@ -1407,6 +1419,12 @@ fn build_tree_inner(steps: &[ActivityStep], palette: &Palette) -> Vec<LayoutNode
                 let mut body = collect_until(steps, &mut i, palette, |s| {
                     matches!(s, ActivityStep::RepeatWhile(_))
                 });
+                let has_start_label = if let Some(label) = start_label {
+                    body.insert(0, layout_action_node(&label, palette));
+                    true
+                } else {
+                    false
+                };
                 let (condition, is_label, not_label) = if i < steps.len() {
                     if let ActivityStep::RepeatWhile(rw) = &steps[i] {
                         i += 1;
@@ -1431,6 +1449,9 @@ fn build_tree_inner(steps: &[ActivityStep], palette: &Palette) -> Vec<LayoutNode
                     is_label,
                     not_label,
                     backward,
+                    has_start_label,
+                    arrow_font_size: palette.arrow_font_size,
+                    arrow_font_family: palette.arrow_font_family.clone(),
                 });
             }
             ActivityStep::RepeatWhile(_) => {
@@ -1690,7 +1711,7 @@ fn collect_until(
             ActivityStep::EndFork | ActivityStep::EndSplit => depth -= 1,
             ActivityStep::While(_) => depth += 1,
             ActivityStep::EndWhile(_) => depth -= 1,
-            ActivityStep::Repeat => depth += 1,
+            ActivityStep::Repeat | ActivityStep::RepeatStart(_) => depth += 1,
             ActivityStep::RepeatWhile(_) => depth -= 1,
             ActivityStep::Partition(_) => depth += 1,
             ActivityStep::EndPartition => depth -= 1,
@@ -4064,6 +4085,7 @@ fn sequence_height(nodes: &[LayoutNode]) -> f64 {
     let mut h = 0.0;
     let mut prior_flow = false;
     let mut prior_single_survivor_if = false;
+    let mut prior_outbound_gap: Option<f64> = None;
     // Pending arrow style — modifiers from an explicit `-[…]->` preceding the
     // next flow node change the gap length (10 for hidden, 41.275 for
     // labelled, default 20).
@@ -4081,12 +4103,14 @@ fn sequence_height(nodes: &[LayoutNode]) -> f64 {
             h += node_height(node);
             pending_gap = None;
             prior_single_survivor_if = false;
+            prior_outbound_gap = None;
             continue;
         }
         if is_empty_partition_node(node) {
             h += node_height(node);
             pending_gap = None;
             prior_single_survivor_if = false;
+            prior_outbound_gap = None;
             continue;
         }
         // Partition: its top-gap (10 px) already absorbs the would-be arrow.
@@ -4099,6 +4123,7 @@ fn sequence_height(nodes: &[LayoutNode]) -> f64 {
             // does get a connector arrow back to the partition's bottom.
             prior_flow = true;
             prior_single_survivor_if = false;
+            prior_outbound_gap = None;
             continue;
         }
         // Track explicit arrow style for the next flow connector.
@@ -4137,18 +4162,23 @@ fn sequence_height(nodes: &[LayoutNode]) -> f64 {
             prior_flow = false;
             pending_gap = None;
             prior_single_survivor_if = false;
+            prior_outbound_gap = None;
             continue;
         }
         let (note_inbound_extra, note_bottom_extra) =
             flow_note_vertical_extras(nodes, idx, node_height(node));
         let skip_implicit_gap = prior_single_survivor_if && pending_gap.is_none();
         if prior_flow && !skip_implicit_gap {
-            h += pending_gap.unwrap_or_else(|| default_inbound_gap(node)) + note_inbound_extra;
+            h += pending_gap
+                .or(prior_outbound_gap)
+                .unwrap_or_else(|| default_inbound_gap(node))
+                + note_inbound_extra;
         }
         pending_gap = None;
         h += node_height(node) + note_bottom_extra;
         prior_flow = true;
         prior_single_survivor_if = if_node_has_single_survivor(node);
+        prior_outbound_gap = repeat_not_label_outbound_gap(node);
     }
     h
 }
@@ -4705,8 +4735,17 @@ fn node_height(node: &LayoutNode) -> f64 {
             };
             diamond_alone_h + body_top_offset + body_h + below_body
         }
-        LayoutNode::Repeat { body, backward, .. } => {
-            let body_h = repeat_body_height(body, backward.is_some());
+        LayoutNode::Repeat {
+            body,
+            backward,
+            has_start_label,
+            ..
+        } => {
+            let body_h = if *has_start_label {
+                sequence_height(body)
+            } else {
+                repeat_body_height(body, backward.is_some())
+            };
             let diamond_h = DIAMOND_HALF * 2.0;
             // Single-action backward repeats keep the extra halfHex before
             // the condition diamond; multi-action bodies absorb that slack in
@@ -4717,7 +4756,12 @@ fn node_height(node: &LayoutNode) -> f64 {
             } else {
                 ARROW_LEN
             };
-            diamond_h + ARROW_LEN + body_h + cond_gap + diamond_h
+            let top_lead = if *has_start_label {
+                0.0
+            } else {
+                diamond_h + ARROW_LEN
+            };
+            top_lead + body_h + cond_gap + diamond_h
         }
         LayoutNode::Arrow { .. } => 0.0, // arrows don't add height (they're between nodes)
         LayoutNode::Note { .. } => 0.0,
@@ -5883,6 +5927,9 @@ fn emit_sequence_ex(
                 };
                 let lead = std::mem::take(&mut lead_stretch);
                 let carry = std::mem::take(&mut carry_gap_extra);
+                let prev_outbound_gap = prev_idx
+                    .and_then(|j| nodes.get(j))
+                    .and_then(repeat_not_label_outbound_gap);
                 let gap = stretch
                     + lead
                     + carry
@@ -5891,7 +5938,7 @@ fn emit_sequence_ex(
                     } else if label.is_some() {
                         LABELED_ARROW_LEN
                     } else {
-                        default_inbound_gap(node)
+                        prev_outbound_gap.unwrap_or_else(|| default_inbound_gap(node))
                     };
                 // Partition entry: stretch the inbound arrow so it spans the
                 // full distance from prev cursor through the title bar to
@@ -6411,8 +6458,10 @@ fn emit_node_with_repeat_extra(
             body,
             condition,
             is_label,
-            not_label: _,
+            not_label,
             backward,
+            has_start_label,
+            ..
         } => emit_repeat(
             svg,
             cx,
@@ -6422,7 +6471,9 @@ fn emit_node_with_repeat_extra(
             is_label,
             RepeatEmitOptions {
                 backward: backward.as_deref(),
+                not_label: not_label.as_deref(),
                 body_top_extra: repeat_body_top_extra,
+                has_start_label: *has_start_label,
             },
         ),
         LayoutNode::Arrow { .. } | LayoutNode::Note { .. } => y,
@@ -7304,6 +7355,24 @@ fn repeat_body_mid_stretch(body: &[LayoutNode], has_backward: bool) -> Option<(u
 fn repeat_body_height(body: &[LayoutNode], has_backward: bool) -> f64 {
     sequence_height(body)
         + repeat_body_mid_stretch(body, has_backward).map_or(0.0, |(_, stretch)| stretch)
+}
+
+fn repeat_not_label_outbound_gap(node: &LayoutNode) -> Option<f64> {
+    let LayoutNode::Repeat {
+        not_label,
+        arrow_font_size,
+        arrow_font_family,
+        ..
+    } = node
+    else {
+        return None;
+    };
+    not_label.as_ref()?;
+    Some(
+        ARROW_LEN
+            + text_render::ascent_for_family(*arrow_font_size, arrow_font_family)
+            + REPEAT_NOT_LABEL_OUTBOUND_PAD,
+    )
 }
 
 fn first_flow_node(nodes: &[LayoutNode]) -> Option<&LayoutNode> {
@@ -8681,7 +8750,9 @@ fn emit_while(
 
 struct RepeatEmitOptions<'a> {
     backward: Option<&'a str>,
+    not_label: Option<&'a str>,
     body_top_extra: f64,
+    has_start_label: bool,
 }
 
 fn emit_repeat(
@@ -8694,7 +8765,9 @@ fn emit_repeat(
     options: RepeatEmitOptions<'_>,
 ) -> f64 {
     let backward = options.backward;
+    let not_label = options.not_label;
     let body_top_extra = options.body_top_extra;
+    let has_start_label = options.has_start_label;
     let arrow_color = svg.palette.arrow_color.clone();
     let diamond_stroke = svg.palette.diamond_stroke.clone();
     let diamond_fill = svg.palette.diamond_fill.clone();
@@ -8706,11 +8779,41 @@ fn emit_repeat(
     // up-front so we can defer the diamond emits until after the body.
     let top_diamond_size = DIAMOND_HALF;
     let top_bottom = y + top_diamond_size * 2.0;
-    let body_y = top_bottom + ARROW_LEN + body_top_extra;
+    let body_y = if has_start_label {
+        y + body_top_extra
+    } else {
+        top_bottom + ARROW_LEN + body_top_extra
+    };
 
     // Body first — its rects/texts land in `shapes` before either diamond.
-    let body_mid_stretch = repeat_body_mid_stretch(body, backward.is_some());
-    let body_bottom = emit_sequence_ex(svg, body, cx, body_y, body_mid_stretch, None, false);
+    // For `repeat :label;`, PlantUML uses the labelled action as the entry
+    // tile but emits the remaining body action shapes before that entry tile.
+    let body_mid_stretch = if has_start_label {
+        None
+    } else {
+        repeat_body_mid_stretch(body, backward.is_some())
+    };
+    let body_bottom = if has_start_label {
+        if let Some((entry, rest)) = body.split_first() {
+            let entry_bottom = body_y + node_height(entry);
+            let rest_has_flow = rest.iter().any(node_is_flow);
+            let rest_y = entry_bottom + if rest_has_flow { ARROW_LEN } else { 0.0 };
+            let body_bottom = if rest_has_flow {
+                emit_sequence_ex(svg, rest, cx, rest_y, None, None, false)
+            } else {
+                entry_bottom
+            };
+            emit_node(svg, entry, cx, body_y);
+            if rest_has_flow {
+                svg.down_arrow(cx, entry_bottom, rest_y, &arrow_color);
+            }
+            body_bottom
+        } else {
+            body_y
+        }
+    } else {
+        emit_sequence_ex(svg, body, cx, body_y, body_mid_stretch, None, false)
+    };
     // Single-action backward repeats keep the extra halfHex before the
     // condition diamond; multi-action bodies absorb that slack in their final
     // inbound connector.
@@ -8721,18 +8824,21 @@ fn emit_repeat(
         body_bottom + ARROW_LEN
     };
 
-    // Top entry diamond (small rhombus at y).
-    svg.polygon_shape(
-        &diamond_fill,
-        &[
-            (cx, y),
-            (cx + top_diamond_size, y + top_diamond_size),
-            (cx, y + top_diamond_size * 2.0),
-            (cx - top_diamond_size, y + top_diamond_size),
-        ],
-        &diamond_stroke,
-        &diamond_stroke_width,
-    );
+    // Top entry diamond (small rhombus at y). `repeat :label;` replaces this
+    // diamond with the labelled action as the loop entry tile.
+    if !has_start_label {
+        svg.polygon_shape(
+            &diamond_fill,
+            &[
+                (cx, y),
+                (cx + top_diamond_size, y + top_diamond_size),
+                (cx, y + top_diamond_size * 2.0),
+                (cx - top_diamond_size, y + top_diamond_size),
+            ],
+            &diamond_stroke,
+            &diamond_stroke_width,
+        );
+    }
 
     // Condition diamond (hexagon below body).
     let cond_inner_w = diamond_inner_w(condition);
@@ -8747,6 +8853,27 @@ fn emit_repeat(
         (cx - cond_inner_w / 2.0 - DIAMOND_HALF, cond_diamond_cy),
     ];
     svg.polygon_shape(&diamond_fill, &pts, &diamond_stroke, &diamond_stroke_width);
+
+    // `not (label)` is the downward exit label. It is emitted before the
+    // condition text and right-side `is` label in PlantUML's shape stream.
+    if let Some(label) = not_label {
+        let label_font_size = svg.palette.arrow_font_size;
+        let label_family = svg.palette.arrow_font_family.clone();
+        let label_color = svg.palette.arrow_text_color.clone();
+        let lw = text_render::measure_with_family(label, label_font_size, false, &label_family);
+        svg.text_element(
+            &label_color,
+            &label_family,
+            label_font_size,
+            lw,
+            cx + 4.0,
+            cond_y
+                + DIAMOND_HALF * 2.0
+                + text_render::ascent_for_family(label_font_size, &label_family),
+            label,
+            false,
+        );
+    }
 
     let text_y = centered_label_y(condition, cond_diamond_cy, SMALL_FONT);
     svg.text_element_styled(
@@ -8781,8 +8908,11 @@ fn emit_repeat(
     }
 
     // Top-diamond → body inbound connector — PlantUML emits this BEFORE
-    // the loop-back path in the connector stream.
-    svg.down_arrow(cx, top_bottom, body_y, &arrow_color);
+    // the loop-back path in the connector stream. Labelled-start repeats
+    // have no top diamond; the outer sequence connector enters the label box.
+    if !has_start_label {
+        svg.down_arrow(cx, top_bottom, body_y, &arrow_color);
+    }
 
     // Loop-back arrow runs up the right side regardless of whether `is`
     // has a label — every `repeatwhile` produces it. The arrow's x sits
@@ -8795,7 +8925,19 @@ fn emit_repeat(
     };
     let body_right = cx + body_right_rel;
     let arm_x = diamond_right.max(body_right) + 12.0;
-    let top_cy = y + top_diamond_size;
+    let first_entry = first_flow_node(body);
+    let top_cy = if has_start_label {
+        first_entry.map_or(y + top_diamond_size, |node| {
+            body_y + node_height(node) / 2.0
+        })
+    } else {
+        y + top_diamond_size
+    };
+    let top_entry_right = if has_start_label {
+        first_entry.map_or(cx + top_diamond_size, |node| cx + node_width(node) / 2.0)
+    } else {
+        cx + top_diamond_size
+    };
 
     if let Some(label) = backward {
         // `backward :label;` draws an action box on the return arm. The loop
@@ -8889,12 +9031,12 @@ fn emit_repeat(
             &arrow_color,
             "1",
             box_cx,
-            cx + top_diamond_size,
+            top_entry_right,
             top_cy,
             top_cy,
             false,
         );
-        svg.left_arrow(cx + top_diamond_size, top_cy, &arrow_color);
+        svg.left_arrow(top_entry_right, top_cy, &arrow_color);
     } else {
         let loop_x = arm_x;
         svg.line_styled(
@@ -8936,12 +9078,12 @@ fn emit_repeat(
             &arrow_color,
             "1",
             loop_x,
-            cx + top_diamond_size,
+            top_entry_right,
             top_cy,
             top_cy,
             false,
         );
-        svg.left_arrow(cx + top_diamond_size, top_cy, &arrow_color);
+        svg.left_arrow(top_entry_right, top_cy, &arrow_color);
     }
 
     // Body → condition diamond connector (after loop-back path).

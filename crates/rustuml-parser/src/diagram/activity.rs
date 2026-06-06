@@ -31,6 +31,7 @@ pub enum ActivityStep {
     While(WhileBlock),
     EndWhile(Option<String>),
     Repeat,
+    RepeatStart(String),
     RepeatWhile(RepeatWhileBlock),
     Fork,
     ForkAgain,
