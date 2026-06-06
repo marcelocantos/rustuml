@@ -7896,7 +7896,13 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                     // Line 3: horizontal left (from loop right back toward lifeline)
                     // For filled arrows, the return line starts 1px right of center
                     // For open arrows, the return line starts at center
-                    let return_left = if let Some(tip_x) = special_return_tip {
+                    let return_left = if is_cross {
+                        // A self `->x` return segment does not meet the
+                        // lifeline. Java places a 10px cross to the right of
+                        // the self-loop anchor and starts the segment slightly
+                        // inside that mark.
+                        active_anchor + ARROW_SIZE + 3.0
+                    } else if let Some(tip_x) = special_return_tip {
                         tip_x
                     } else if is_open || (head_half.is_some() && thin_head) {
                         active_anchor // open / thin half: line goes to center
@@ -7916,7 +7922,30 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                     .unwrap();
 
                     // Arrow head at bottom-left
-                    if let Some(half) = head_half {
+                    if is_cross {
+                        let cross_left = active_anchor + ARROW_SIZE - ARROW_HALF_H;
+                        let cross_right = cross_left + ARROW_SIZE;
+                        write!(
+                            svg.buf,
+                            r##"<line style="stroke:{};stroke-width:2;" x1="{}" x2="{}" y1="{}" y2="{}"/>"##,
+                            &arrow_color,
+                            fmt_coord(cross_left),
+                            fmt_coord(cross_right),
+                            fmt_coord(loop_bottom - 5.0),
+                            fmt_coord(loop_bottom + 5.0),
+                        )
+                        .unwrap();
+                        write!(
+                            svg.buf,
+                            r##"<line style="stroke:{};stroke-width:2;" x1="{}" x2="{}" y1="{}" y2="{}"/>"##,
+                            &arrow_color,
+                            fmt_coord(cross_left),
+                            fmt_coord(cross_right),
+                            fmt_coord(loop_bottom + 5.0),
+                            fmt_coord(loop_bottom - 5.0),
+                        )
+                        .unwrap();
+                    } else if let Some(half) = head_half {
                         let top = half == ArrowHalf::Top;
                         let wing_y = if top {
                             loop_bottom - ARROW_HALF_H
