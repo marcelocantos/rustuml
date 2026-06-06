@@ -70,6 +70,7 @@ const WHILE_UNLABELED_LOOP_ARROW_Y_PULL_UP: f64 = 2.0;
 const WHILE_BODY_SLOT_COMPRESS: f64 = 4.8203125;
 const PARTITION_COLORED_WHILE_SPINE_SHIFT: f64 = 1.5;
 const PARTITION_COLORED_WHILE_EXIT_ARROW_PULL_UP: f64 = WHILE_BODY_SLOT_COMPRESS / 2.0 - 1.0;
+const PARTITION_WHILE_WIDTH_SUBTRACT: f64 = 16.0;
 const WHILE_SINGLE_IF_RIGHT_PAD: f64 = 2.0;
 const WHILE_SINGLE_IF_SPECIAL_HEIGHT_TRIM: f64 = 1.0;
 /// PlantUML enforces a minimum width on the inner (top/bottom) edge of
@@ -3813,9 +3814,14 @@ fn node_extents(node: &LayoutNode) -> (f64, f64) {
                 return (half, half);
             }
             let body_w = partition_body_width_for_frame(body);
+            let body_width_extra = partition_body_width_extra(*is_group, body);
             let title_width_extra = partition_title_width_extra(color, *is_group, body);
             let title_drives_width =
                 partition_title_drives_width(title_w, body_w, title_width_extra, *is_group, body);
+            if !*is_group && partition_wraps_while(body) && !title_drives_width {
+                let half = (body_w + 20.0 + body_width_extra) / 2.0;
+                return (half, half);
+            }
             let (mut left, mut right) = if !title_drives_width
                 && (partition_wraps_switch(body) || partition_body_has_direct_note(body))
             {
@@ -4564,6 +4570,37 @@ fn is_colored_partition_wrapping_while(node: &LayoutNode) -> bool {
     )
 }
 
+fn partition_wrapped_while_slot_compresses(body: &[LayoutNode]) -> bool {
+    let [
+        LayoutNode::While {
+            body: while_body,
+            is_label,
+            end_label,
+            ..
+        },
+    ] = body
+    else {
+        return false;
+    };
+    while_slot_compress(
+        true,
+        is_label.is_some(),
+        end_label.is_some(),
+        while_body.is_empty(),
+    ) != 0.0
+}
+
+fn is_partition_wrapping_compressed_while(node: &LayoutNode) -> bool {
+    matches!(
+        node,
+        LayoutNode::Partition {
+            is_group: false,
+            body,
+            ..
+        } if partition_wrapped_while_slot_compresses(body)
+    )
+}
+
 fn partition_title_has_descender(name: &str) -> bool {
     name.chars()
         .any(|c| matches!(c, 'g' | 'j' | 'p' | 'q' | 'y'))
@@ -4582,7 +4619,9 @@ fn empty_partition_shell_height() -> f64 {
 }
 
 fn partition_body_width_extra(is_group: bool, body: &[LayoutNode]) -> f64 {
-    if is_group && group_wraps_single_if(body) {
+    if !is_group && partition_wraps_while(body) {
+        -PARTITION_WHILE_WIDTH_SUBTRACT
+    } else if is_group && group_wraps_single_if(body) {
         GROUP_IF_BODY_WIDTH_EXTRA
     } else {
         0.0
@@ -6335,7 +6374,10 @@ fn emit_sequence_ex(
         // after the node's internal connectors in the connectors buffer
         // (matches PlantUML's emission order: internal first, then inbound).
         if let Some((arrow_top, style, label, arrow_gap)) = pending_arrow {
-            if is_colored_partition_wrapping_while(node) || is_ordinary_compressed_while(node) {
+            if is_colored_partition_wrapping_while(node)
+                || is_partition_wrapping_compressed_while(node)
+                || is_ordinary_compressed_while(node)
+            {
                 deferred_partition_inbound = Some((arrow_top, style, label, arrow_gap));
             } else {
                 emit_pending_down_arrow(svg, arrow_top, style, label, arrow_gap, cx);
