@@ -16,6 +16,9 @@ pub struct SequenceDiagram {
     /// Whether `hide footbox` was specified — suppresses tail participant boxes.
     #[serde(default)]
     pub hide_footbox: bool,
+    /// Whether `!pragma teoz true` was specified.
+    #[serde(default)]
+    pub teoz: bool,
     /// Named `box ... end box` groupings of participants.
     #[serde(default, skip_serializing_if = "Vec::is_empty")]
     pub boxes: Vec<ParticipantBox>,

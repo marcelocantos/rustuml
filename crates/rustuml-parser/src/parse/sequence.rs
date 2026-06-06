@@ -44,6 +44,8 @@ struct SeqParser {
     in_legend: bool,
     /// Whether `hide footbox` was specified.
     hide_footbox: bool,
+    /// Whether `!pragma teoz true` was specified.
+    teoz: bool,
     /// Whether `autoactivate on` is active for subsequent messages.
     autoactivate: bool,
     /// Current 1-based source line number (set before each parse_line call).
@@ -83,6 +85,7 @@ impl SeqParser {
             last_message: None,
             in_legend: false,
             hide_footbox: false,
+            teoz: false,
             autoactivate: false,
             current_line: 0,
             boxes: Vec::new(),
@@ -97,6 +100,7 @@ impl SeqParser {
             events: self.events,
             autonumber: self.autonumber,
             hide_footbox: self.hide_footbox,
+            teoz: self.teoz,
             boxes: self.boxes,
         }
     }
@@ -209,6 +213,9 @@ impl SeqParser {
         // keywords, so checking them first cannot conflict with anything
         // a message line is allowed to look like.
         if self.try_meta(line) {
+            return Ok(());
+        }
+        if self.try_pragma(line) {
             return Ok(());
         }
         if self.try_message(line) {
@@ -983,6 +990,19 @@ impl SeqParser {
         }
     }
 
+    fn try_pragma(&mut self, line: &str) -> bool {
+        let mut parts = line.split_whitespace();
+        if matches!(parts.next(), Some("!pragma"))
+            && matches!(parts.next(), Some("teoz"))
+            && matches!(parts.next(), Some("true"))
+            && parts.next().is_none()
+        {
+            self.teoz = true;
+            return true;
+        }
+        false
+    }
+
     fn try_hide(&mut self, line: &str) -> bool {
         if line == "hide footbox" {
             self.hide_footbox = true;
@@ -1162,6 +1182,13 @@ mod tests {
         } else {
             panic!("expected message");
         }
+    }
+
+    #[test]
+    fn teoz_pragma_sets_sequence_flag() {
+        let d = parse("!pragma teoz true\nAlice -> Bob : hello");
+        assert!(d.teoz);
+        assert_eq!(d.events.len(), 1);
     }
 
     #[test]

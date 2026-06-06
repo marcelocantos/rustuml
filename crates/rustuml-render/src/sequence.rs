@@ -2077,6 +2077,9 @@ impl ActivationTracker {
 
 struct PlantUmlSvg {
     buf: String,
+    /// Teoz sequence layout emits participant heads/tails and lifelines as
+    /// bare shape groups rather than wrapping them in metadata groups.
+    teoz: bool,
     /// Stroke-width string used for message arrow lines and polygon outlines.
     /// Defaults to "1" (PlantUML's historical line weight) but can be raised
     /// by `skinparam arrowThickness N`.
@@ -2150,6 +2153,7 @@ impl PlantUmlSvg {
     fn new() -> Self {
         Self {
             buf: String::with_capacity(4096),
+            teoz: false,
             arrow_thickness: "1".into(),
             participant_border: "#181818".into(),
             participant_border_thickness: "0.5".into(),
@@ -2235,13 +2239,15 @@ impl PlantUmlSvg {
         line_y2: f64,
         delay_bands: &[(f64, f64)],
     ) {
-        write!(
-            self.buf,
-            r##"<g class="participant-lifeline" data-entity-uid="{part_uid}" data-qualified-name="{qualified_name}" data-source-line="{source_line}" id="{part_uid}-lifeline">"##,
-            part_uid = escape_xml(part_uid),
-            qualified_name = escape_xml(&crate::class::translate_qualified_name(qualified_name)),
-        )
-        .unwrap();
+        if !self.teoz {
+            write!(
+                self.buf,
+                r##"<g class="participant-lifeline" data-entity-uid="{part_uid}" data-qualified-name="{qualified_name}" data-source-line="{source_line}" id="{part_uid}-lifeline">"##,
+                part_uid = escape_xml(part_uid),
+                qualified_name = escape_xml(&crate::class::translate_qualified_name(qualified_name)),
+            )
+            .unwrap();
+        }
 
         // A delay (`...`) splits the lifeline into solid `5,5` segments joined by
         // dotted `1,4` gap lines. Only bands strictly inside this lifeline's
@@ -2304,7 +2310,9 @@ impl PlantUmlSvg {
         }
         emit_segment(&mut self.buf, seg_top, line_y2);
 
-        self.buf.push_str("</g>");
+        if !self.teoz {
+            self.buf.push_str("</g>");
+        }
     }
 
     /// Write a participant box (head or tail).
@@ -2410,6 +2418,9 @@ impl PlantUmlSvg {
         source_line: u32,
         position: &str,
     ) {
+        if self.teoz {
+            return;
+        }
         write!(
             self.buf,
             r##"<g class="participant participant-{position}" data-entity-uid="{part_uid}" data-qualified-name="{qualified_name}" data-source-line="{source_line}" id="{part_uid}-{position}">"##,
@@ -2432,10 +2443,32 @@ impl PlantUmlSvg {
     /// Close a participant head/tail group, emitting `</a>` first when a link
     /// anchor was opened by `participant_group_open`.
     fn participant_group_close(&mut self) {
+        if self.teoz {
+            return;
+        }
         if self.active_participant_url.is_some() {
             self.buf.push_str("</a>");
         }
         self.buf.push_str("</g>");
+    }
+
+    fn message_group_open(&mut self, entity1: &str, entity2: &str, source_line: u32, msg_id: u32) {
+        if self.teoz {
+            return;
+        }
+        write!(
+            self.buf,
+            r##"<g class="message" data-entity-1="{entity1}" data-entity-2="{entity2}" data-source-line="{source_line}" id="msg{msg_id}">"##,
+            entity1 = escape_xml(entity1),
+            entity2 = escape_xml(entity2),
+        )
+        .unwrap();
+    }
+
+    fn message_group_close(&mut self) {
+        if !self.teoz {
+            self.buf.push_str("</g>");
+        }
     }
 
     /// Write participant text label.
@@ -3124,13 +3157,7 @@ impl PlantUmlSvg {
         align: MessageAlign,
     ) {
         let text_x = aligned_label_x(align, text_x, line_x1, line_x2, text_len, is_right);
-        write!(
-            self.buf,
-            r##"<g class="message" data-entity-1="{entity1}" data-entity-2="{entity2}" data-source-line="{source_line}" id="msg{msg_id}">"##,
-            entity1 = escape_xml(entity1),
-            entity2 = escape_xml(entity2),
-        )
-        .unwrap();
+        self.message_group_open(entity1, entity2, source_line, msg_id);
 
         // X mark: spans 10x10 with right edge at tip_x (right-going) or left
         // edge at tip_x (left-going). The arrow line meets the X at its centre.
@@ -3198,7 +3225,7 @@ impl PlantUmlSvg {
         if !text_content.is_empty() {
             self.emit_message_label(label_x, text_y, text_content, color);
         }
-        self.buf.push_str("</g>");
+        self.message_group_close();
     }
 
     /// Write a message group with filled arrow (->).
@@ -3226,13 +3253,7 @@ impl PlantUmlSvg {
         align: MessageAlign,
     ) {
         let text_x = aligned_label_x(align, text_x, line_x1, line_x2, text_len, is_right);
-        write!(
-            self.buf,
-            r##"<g class="message" data-entity-1="{entity1}" data-entity-2="{entity2}" data-source-line="{source_line}" id="msg{msg_id}">"##,
-            entity1 = escape_xml(entity1),
-            entity2 = escape_xml(entity2),
-        )
-        .unwrap();
+        self.message_group_open(entity1, entity2, source_line, msg_id);
 
         if let Some(cx) = leading_cross_center {
             write!(
@@ -3309,7 +3330,7 @@ impl PlantUmlSvg {
             self.emit_message_label(label_x, text_y, text_content, color);
         }
 
-        self.buf.push_str("</g>");
+        self.message_group_close();
     }
 
     /// Write a message group with a half arrowhead (`/`, `\`, `//`, `\\`).
@@ -3344,13 +3365,7 @@ impl PlantUmlSvg {
         align: MessageAlign,
     ) {
         let text_x = aligned_label_x(align, text_x, line_x1, line_x2, text_len, is_right);
-        write!(
-            self.buf,
-            r##"<g class="message" data-entity-1="{entity1}" data-entity-2="{entity2}" data-source-line="{source_line}" id="msg{msg_id}">"##,
-            entity1 = escape_xml(entity1),
-            entity2 = escape_xml(entity2),
-        )
-        .unwrap();
+        self.message_group_open(entity1, entity2, source_line, msg_id);
 
         let wing_y = if top {
             line_y - ARROW_HALF_H
@@ -3432,7 +3447,7 @@ impl PlantUmlSvg {
             self.emit_message_label(label_x, text_y, text_content, color);
         }
 
-        self.buf.push_str("</g>");
+        self.message_group_close();
     }
 
     /// Write a message group with open arrow (>>).
@@ -3460,13 +3475,7 @@ impl PlantUmlSvg {
         align: MessageAlign,
     ) {
         let text_x = aligned_label_x(align, text_x, line_x1, line_x2, text_len, is_right);
-        write!(
-            self.buf,
-            r##"<g class="message" data-entity-1="{entity1}" data-entity-2="{entity2}" data-source-line="{source_line}" id="msg{msg_id}">"##,
-            entity1 = escape_xml(entity1),
-            entity2 = escape_xml(entity2),
-        )
-        .unwrap();
+        self.message_group_open(entity1, entity2, source_line, msg_id);
 
         let thickness = self.arrow_thickness.clone();
         if let Some(tip_x) = leading_tip_x {
@@ -3568,7 +3577,7 @@ impl PlantUmlSvg {
             self.emit_message_label(label_x, text_y, text_content, color);
         }
 
-        self.buf.push_str("</g>");
+        self.message_group_close();
     }
 
     fn close_svg(&mut self, encoded_src: &str) {
@@ -4388,7 +4397,9 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
             + 2.0 * LEGEND_PAD
     };
     let participant_inner_pad = BOX_TEXT_X_PAD + global_padding;
-    let head_box_y = HEAD_BOX_Y + theme_top_padding + title_band_h + box_band_h + header_band_h;
+    let teoz_top_pad = if diagram.teoz { 5.0 } else { 0.0 };
+    let head_box_y =
+        HEAD_BOX_Y + teoz_top_pad + theme_top_padding + title_band_h + box_band_h + header_band_h;
     let participant_font_size_f = participant_font_size as f64;
     let participant_line_h =
         atom_height_with_family(participant_font_size_f, &participant_font_family);
@@ -5411,6 +5422,13 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
             p.lifeline_line_x = p.box_x + ((p.box_width + SHADOW_LIVING_WIDTH_EXTRA) / 2.0).floor();
         }
     }
+    if diagram.teoz {
+        for p in participants.iter_mut() {
+            p.center_x += 5.0;
+            p.box_x += 5.0;
+            p.lifeline_line_x = p.center_x;
+        }
+    }
 
     let center_of = |id: &str| -> f64 {
         id_to_idx
@@ -6065,7 +6083,16 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                 0.0
             }
     };
-    let lifeline_bottom = tail_box_y + LIFELINE_Y_OFFSET;
+    let tail_box_y = if diagram.teoz {
+        tail_box_y - LIFELINE_Y_OFFSET
+    } else {
+        tail_box_y
+    };
+    let lifeline_bottom = if diagram.teoz {
+        tail_box_y
+    } else {
+        tail_box_y + LIFELINE_Y_OFFSET
+    };
     let lifeline_height = lifeline_bottom - lifeline_top;
 
     // SVG dimensions — account for notes that extend beyond participant boxes.
@@ -6424,6 +6451,9 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
             })
         .ceil() as u32
     };
+    if diagram.teoz && !diagram.hide_footbox {
+        svg_height += 4;
+    }
     // Caption adds vertical space below the foot boxes. Caption-only diagrams
     // place the baseline from the tail box bottom, then size the canvas around
     // that baseline. When a footer is present, PlantUML stacks caption above
@@ -7084,6 +7114,7 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
     // -----------------------------------------------------------------------
 
     let mut svg = PlantUmlSvg::new();
+    svg.teoz = diagram.teoz;
     svg.arrow_thickness = default_arrow_thickness.to_string();
     svg.participant_border = participant_border.clone();
     svg.participant_border_thickness = participant_border_thickness.clone();
@@ -7411,7 +7442,7 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                     } else {
                         0.0
                     };
-                let ey = *event_y_positions.get(idx)?;
+                let ey = *event_y_positions.get(idx)? + if diagram.teoz { -2.0 } else { 0.0 };
                 let band_bottom = ey + DELAY_BAND_TOP_PAD;
                 Some((band_bottom - band_h, band_bottom))
             }
@@ -7421,7 +7452,11 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
 
     for p in &participants {
         let part_uid = format!("part{}", p.decl_idx + 1);
-        let ll_rect_x = p.center_x - LIFELINE_RECT_WIDTH / 2.0;
+        let ll_rect_x = if diagram.teoz {
+            p.lifeline_line_x - LIFELINE_RECT_WIDTH / 2.0 + 0.5
+        } else {
+            p.center_x - LIFELINE_RECT_WIDTH / 2.0
+        };
         let (p_top, p_height) = match created_lifeline_top.get(&p.id) {
             Some(&top) => (top, lifeline_bottom - top),
             None => (lifeline_top, lifeline_height),
@@ -7465,10 +7500,7 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
     // Non-rectangle shapes (actor, boundary, etc.) are bottom-aligned: their box_y is
     // adjusted so that box_y + box_height == HEAD_BOX_Y + max_box_h (matching the tallest).
     // For tail boxes, the same alignment applies relative to tail_box_y.
-    for (i, p) in participants.iter().enumerate() {
-        let part_uid = format!("part{}", p.decl_idx + 1);
-        let sl = p.source_line;
-
+    let participant_colors = |p: &ParticipantLayout| -> (String, String) {
         // Resolve participant fill color (per-participant override beats
         // the skinparam default, which beats the historical `#E2E2F0`).
         // Kind-specific shapes (actor/boundary/control/...) also consult
@@ -7521,6 +7553,14 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
         };
         let border_color = kind_specific_border.unwrap_or(kind_border_default);
 
+        (fill_color, border_color)
+    };
+
+    for (i, p) in participants.iter().enumerate() {
+        let part_uid = format!("part{}", p.decl_idx + 1);
+        let sl = p.source_line;
+        let (fill_color, border_color) = participant_colors(p);
+
         // Created participants draw their head box inline at the creating message
         // (emitted in the message loop below), not at the top — skip the top head.
         if let Some(&ev_idx) = create_msg_idx.get(&p.id) {
@@ -7562,7 +7602,30 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
 
         // Tail (skip if hide footbox) — all participants start at tail_box_y
         // (no bottom-alignment offset; the SVG height accounts for max_box_h).
-        if !diagram.hide_footbox {
+        if !diagram.hide_footbox && !diagram.teoz {
+            render_participant_shape(
+                &mut svg,
+                &part_uid,
+                &p.id,
+                sl,
+                "tail",
+                p,
+                tail_box_y,
+                max_box_h,
+                &fill_color,
+                &border_color,
+                participant_inner_pad,
+                queue_head_offset,
+                true,
+            );
+        }
+    }
+
+    if diagram.teoz && !diagram.hide_footbox {
+        for p in &participants {
+            let part_uid = format!("part{}", p.decl_idx + 1);
+            let sl = p.source_line;
+            let (fill_color, border_color) = participant_colors(p);
             render_participant_shape(
                 &mut svg,
                 &part_uid,
@@ -7634,7 +7697,16 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
     // Only page-1 events are drawn (see `page1_end` above); event_y_positions
     // only spans page 1, so the loop must not index past it either.
     for (ev_idx, event) in events.iter().take(page1_end).enumerate() {
-        let msg_y = event_y_positions[ev_idx];
+        let teoz_message_y_offset = if diagram.teoz
+            && matches!(
+                event,
+                Event::Message(_) | Event::Return(_) | Event::Delay(_)
+            ) {
+            -2.0
+        } else {
+            0.0
+        };
+        let msg_y = event_y_positions[ev_idx] + teoz_message_y_offset;
         match event {
             Event::Message(msg) => {
                 msg_id += 1;
@@ -7792,16 +7864,7 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                         )
                         - global_padding;
 
-                    // Open the message group
-                    write!(
-                        svg.buf,
-                        r##"<g class="message" data-entity-1="{}" data-entity-2="{}" data-source-line="{}" id="msg{}">"##,
-                        escape_xml(&from_uid),
-                        escape_xml(&to_uid),
-                        src_line,
-                        msg_id,
-                    )
-                    .unwrap();
+                    svg.message_group_open(&from_uid, &to_uid, src_line, msg_id);
 
                     // Three lines forming the U-shape: right, down, left
                     // Line 1: horizontal right (from center to loop right)
@@ -7944,7 +8007,7 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                         svg.emit_message_label(text_x, text_y_pos, &label, &arrow_color);
                     }
 
-                    svg.buf.push_str("</g>");
+                    svg.message_group_close();
                 } else {
                     // Source shift: when the source is activated, solid messages
                     // start from the activation bar's near edge. Dotted returns
@@ -9823,6 +9886,7 @@ mod tests {
             })],
             autonumber: None,
             hide_footbox: false,
+            teoz: false,
             boxes: Vec::new(),
         }
     }

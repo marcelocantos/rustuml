@@ -85,6 +85,7 @@ fn preprocess_full_inner(
     mark_function_body_source_lines: bool,
 ) -> PreprocessOutput {
     let mut ctx = PreprocessContext::new(base_dir, mark_function_body_source_lines);
+    ctx.preserve_teoz_pragma = mark_function_body_source_lines;
     let mut lines = ctx.process(input);
     // Append any accumulated theme expansion to the end of the diagram so
     // user-source line numbers are preserved (see `theme_tail`).
@@ -395,6 +396,7 @@ struct PreprocessContext {
     mark_source_lines: bool,
     source_line_override: Option<usize>,
     mark_function_body_source_lines: bool,
+    preserve_teoz_pragma: bool,
 }
 
 const MAX_INCLUDE_DEPTH: usize = 10;
@@ -480,6 +482,7 @@ impl PreprocessContext {
             mark_source_lines: false,
             source_line_override: None,
             mark_function_body_source_lines,
+            preserve_teoz_pragma: false,
         }
     }
 
@@ -890,6 +893,16 @@ impl PreprocessContext {
     fn try_silent_directive(&self, line: &str) -> bool {
         // !log, !pragma, !assert — consume silently.
         // !includeurl / !import — URL fetching deferred; strip the line silently.
+        if self.preserve_teoz_pragma {
+            let mut parts = line.split_whitespace();
+            if matches!(parts.next(), Some("!pragma"))
+                && matches!(parts.next(), Some("teoz"))
+                && matches!(parts.next(), Some("true"))
+                && parts.next().is_none()
+            {
+                return false;
+            }
+        }
         if line.starts_with("!log ")
             || line.starts_with("!log\t")
             || line == "!log"
@@ -1479,6 +1492,7 @@ impl PreprocessContext {
                     self.mark_function_body_source_lines,
                 );
                 temp_ctx.include_depth = self.include_depth + 1;
+                temp_ctx.preserve_teoz_pragma = self.preserve_teoz_pragma;
                 let _ = temp_ctx.process(&content);
                 // Now extract the named sub.
                 if let Some(sub_lines) = temp_ctx.subs.get(sub_name) {

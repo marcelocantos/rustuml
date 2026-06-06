@@ -516,6 +516,7 @@ mod tests {
             events,
             autonumber: None,
             hide_footbox: false,
+            teoz: false,
             boxes: Vec::new(),
         }
     }
@@ -681,6 +682,7 @@ mod tests {
             events: vec![],
             autonumber: None,
             hide_footbox: false,
+            teoz: false,
             boxes: Vec::new(),
         };
         assert_eq!(render_ascii(&diagram), "");
