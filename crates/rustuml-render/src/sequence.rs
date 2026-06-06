@@ -462,6 +462,12 @@ const REF_OUT_MARGIN: f64 = 5.0;
 /// Vertical gap from the preceding message arrow to the reference box top
 /// (verified against the golden flow: box_top = prev_arrow_y + 8).
 const REF_GAP_ABOVE: f64 = 8.0;
+/// A reference that is the first event starts from the lifeline origin, not
+/// from the ordinary first-message arrow slot.
+const REF_FIRST_GAP: f64 = 10.0;
+/// PlantUML leaves the first reference's visual top high, but still advances
+/// the following flow two pixels lower than `preferred_h` alone.
+const REF_FIRST_FLOW_EXTRA: f64 = 2.0;
 
 fn ref_box(text: &str) -> RefBox {
     let ref_label_w = bold_text_width("ref", REF_HEADER_FONT);
@@ -697,10 +703,19 @@ const NOTE_LIST_BULLET_CX: f64 = 5.5;
 const NOTE_LIST_BULLET_BASELINE_DROP: f64 = 4.7578;
 const NOTE_LIST_NUMBER_GAP: f64 = 4.1133;
 const NOTE_IMAGE_TEXT_Y_SHIFT: f64 = 0.5596;
+const NOTE_TABLE_CELL_PAD_X: f64 = 4.1133;
+const NOTE_TABLE_HEADER_X_ADJUST: f64 = 0.1714;
+const NOTE_TABLE_TOP_PAD: f64 = 7.0;
+const NOTE_TABLE_BODY_EXTRA: f64 = 4.0;
+const PURE_UNDERLINE_MESSAGE_FLOW_EXTRA: f64 = MSG_TEXT_HEIGHT / 4.0;
 /// PlantUML's text atoms reserve at least 10px height even when the font's real
 /// line metrics are smaller (notably `defaultFontSize 8`).
 fn atom_height_with_family(font_size: f64, font_family: &str) -> f64 {
     text_height_with_family(font_size, font_family).max(10.0)
+}
+
+fn descent_with_family(font_size: f64, font_family: &str) -> f64 {
+    text_height_with_family(font_size, font_family) - ascent_with_family(font_size, font_family)
 }
 
 #[derive(Clone, Copy)]
@@ -715,11 +730,97 @@ fn note_separator_label(line: &str) -> Option<&str> {
     if inner.is_empty() { None } else { Some(inner) }
 }
 
+fn segment_font_size(seg: &creole::Segment, font_size: f64) -> f64 {
+    seg.style.size.map_or(font_size, |s| s as f64)
+}
+
+fn segment_font_family<'a>(seg: &'a creole::Segment, font_family: &'a str) -> &'a str {
+    if seg.style.monospace {
+        "monospace"
+    } else {
+        seg.style.font_family.as_deref().unwrap_or(font_family)
+    }
+}
+
+fn line_bottom_drop_with_family(font_size: f64, font_family: &str) -> f64 {
+    atom_height_with_family(font_size, font_family) - ascent_with_family(font_size, font_family)
+}
+
+fn mixed_super_line_metrics_with_family(
+    content: &str,
+    font_size: f64,
+    font_family: &str,
+) -> Option<RenderedLineMetrics> {
+    let segments = creole::parse_segments(content);
+    let mut has_super = false;
+    let mut has_base = false;
+    let mut has_sub = false;
+    for seg in segments.iter().filter(|seg| !seg.text.trim().is_empty()) {
+        match seg.style.baseline_shift {
+            Some("super") => has_super = true,
+            Some("sub") => has_sub = true,
+            _ => has_base = true,
+        }
+    }
+    if !has_super || !has_base || has_sub {
+        return None;
+    }
+
+    let first = segments.first()?;
+    let line_bottom_drop = line_bottom_drop_with_family(
+        segment_font_size(first, font_size),
+        segment_font_family(first, font_family),
+    );
+    let mut ascent: f64 = 0.0;
+    let mut descent: f64 = 0.0;
+    for seg in segments.iter().filter(|seg| !seg.text.is_empty()) {
+        let nominal_size = segment_font_size(seg, font_size);
+        let family = segment_font_family(seg, font_family);
+        let own_drop = line_bottom_drop_with_family(nominal_size, family);
+        let line_descent_diff = line_bottom_drop - own_drop;
+        let (emitted_size, y_offset) = match seg.style.baseline_shift {
+            Some("super") => {
+                let small = (nominal_size as i32 - 3).max(2) as f64;
+                let descent_diff =
+                    descent_with_family(nominal_size, family) - descent_with_family(small, family);
+                (small, -6.0 + descent_diff + line_descent_diff)
+            }
+            _ => (nominal_size, line_descent_diff),
+        };
+        ascent = ascent.max(ascent_with_family(emitted_size, family) - y_offset);
+        descent = descent.max(descent_with_family(emitted_size, family) + y_offset);
+    }
+    Some(RenderedLineMetrics {
+        height: ascent + descent,
+        ascent,
+    })
+}
+
+fn pure_underline_message_flow_extra(text: &str) -> f64 {
+    text.split("\\n")
+        .filter(|line| note_separator_label(line).is_some())
+        .count() as f64
+        * PURE_UNDERLINE_MESSAGE_FLOW_EXTRA
+}
+
+fn event_pure_underline_flow_extra(event: &Event) -> f64 {
+    match event {
+        Event::Message(msg) => pure_underline_message_flow_extra(&process_label(&msg.label)),
+        Event::Return(ret) if !ret.label.is_empty() => {
+            pure_underline_message_flow_extra(&decode_backslash_escapes(&ret.label))
+        }
+        _ => 0.0,
+    }
+}
+
 fn rendered_line_metrics_with_family(
     content: &str,
     font_size: f64,
     font_family: &str,
 ) -> RenderedLineMetrics {
+    if let Some(metrics) = mixed_super_line_metrics_with_family(content, font_size, font_family) {
+        return metrics;
+    }
     RenderedLineMetrics {
         height: text_render::label_height_with_family(content, font_size, font_family).max(10.0),
         ascent: text_render::label_ascent_with_family(content, font_size, font_family),
@@ -862,8 +963,13 @@ fn message_label_block_height_with_family(text: &str, font_size: f64, font_famil
                 all_shifted_line_metrics_with_family(line, font_size, font_family)
             {
                 height
+            } else if let Some(metrics) =
+                mixed_super_line_metrics_with_family(line, font_size, font_family)
+            {
+                metrics.height
             } else {
                 rendered_line_metrics_with_family(line, font_size, font_family).height
+                    + pure_underline_message_flow_extra(line)
             }
         })
         .sum()
@@ -883,7 +989,81 @@ struct NoteTextMetrics {
     body_height_extra: f64,
 }
 
+struct NoteTableLayout {
+    rows: Vec<creole::TableRow>,
+    col_widths: Vec<f64>,
+    row_heights: Vec<f64>,
+    row_ascents: Vec<f64>,
+    grid_width: f64,
+}
+
+fn note_table_layout_with_family(
+    text: &str,
+    font_size: f64,
+    font_family: &str,
+) -> Option<NoteTableLayout> {
+    let mut rows = Vec::new();
+    for line in text.lines() {
+        match creole::parse_line(line.trim()) {
+            CreoleLine::Table(row) => rows.push(row),
+            _ => return None,
+        }
+    }
+    if rows.is_empty() {
+        return None;
+    }
+
+    let cols = rows.iter().map(|row| row.cells.len()).max().unwrap_or(0);
+    let mut col_widths = vec![0.0_f64; cols];
+    let mut row_heights = Vec::with_capacity(rows.len());
+    let mut row_ascents = Vec::with_capacity(rows.len());
+    for row in &rows {
+        let mut row_height = atom_height_with_family(font_size, font_family);
+        let mut row_ascent = ascent_with_family(font_size, font_family);
+        for (idx, cell) in row.cells.iter().enumerate() {
+            let text_w = text_render::measure_with_family(
+                &cell.text,
+                font_size,
+                cell.is_header,
+                font_family,
+            );
+            col_widths[idx] = col_widths[idx].max(text_w + NOTE_TABLE_CELL_PAD_X * 2.0);
+            row_height = row_height.max(text_render::label_height_with_family(
+                &cell.text,
+                font_size,
+                font_family,
+            ));
+            row_ascent = row_ascent.max(text_render::label_ascent_with_family(
+                &cell.text,
+                font_size,
+                font_family,
+            ));
+        }
+        row_heights.push(row_height);
+        row_ascents.push(row_ascent);
+    }
+    let grid_width = col_widths.iter().sum();
+    Some(NoteTableLayout {
+        rows,
+        col_widths,
+        row_heights,
+        row_ascents,
+        grid_width,
+    })
+}
+
 fn note_text_metrics_with_family(text: &str, font_size: f64, font_family: &str) -> NoteTextMetrics {
+    if let Some(table) = note_table_layout_with_family(text, font_size, font_family) {
+        let first_height = table.row_heights.first().copied().unwrap_or(0.0);
+        let text_height: f64 = table.row_heights.iter().sum();
+        return NoteTextMetrics {
+            line_heights: table.row_heights,
+            first_height,
+            total_height: text_height + NOTE_TABLE_BODY_EXTRA,
+            body_height_extra: NOTE_TABLE_BODY_EXTRA,
+        };
+    }
+
     let mut text_seen_before_list = false;
     let mut list_after_text = false;
     let mut smaller_size_after_first = false;
@@ -968,6 +1148,10 @@ fn note_line_width_with_family(
 }
 
 fn note_max_line_width_with_family(text: &str, font_size: f64, font_family: &str) -> f64 {
+    if let Some(table) = note_table_layout_with_family(text, font_size, font_family) {
+        return table.grid_width;
+    }
+
     let mut number_counters = Vec::new();
     text.lines()
         .map(|line| {
@@ -1118,6 +1302,74 @@ fn emit_note_line(
             };
             text_render::emit_text(buf, line.trim(), &TextBase { y, ..base.clone() })
         }
+    }
+}
+
+fn emit_note_table(
+    buf: &mut String,
+    layout: &NoteTableLayout,
+    base: &TextBase<'_>,
+    grid_left: f64,
+    grid_top: f64,
+) {
+    let mut row_top = grid_top;
+    for (row_idx, row) in layout.rows.iter().enumerate() {
+        let baseline = row_top + layout.row_ascents[row_idx];
+        let mut cell_left = grid_left;
+        for (cell_idx, cell) in row.cells.iter().enumerate() {
+            let x_adjust = if cell.is_header {
+                NOTE_TABLE_HEADER_X_ADJUST
+            } else {
+                0.0
+            };
+            text_render::emit_text(
+                buf,
+                &cell.text,
+                &TextBase {
+                    x: cell_left + NOTE_TABLE_CELL_PAD_X + x_adjust,
+                    y: baseline,
+                    font_size: base.font_size,
+                    font_family: base.font_family,
+                    fill: base.fill,
+                    bold: base.bold || cell.is_header,
+                    italic: base.italic,
+                    underline: base.underline,
+                    skip_underline: base.skip_underline,
+                },
+            );
+            cell_left += layout.col_widths.get(cell_idx).copied().unwrap_or_default();
+        }
+        row_top += layout.row_heights[row_idx];
+    }
+
+    let grid_bottom = grid_top + layout.row_heights.iter().sum::<f64>();
+    let grid_right = grid_left + layout.grid_width;
+    let mut y = grid_top;
+    for height in std::iter::once(0.0).chain(layout.row_heights.iter().copied()) {
+        y += height;
+        write!(
+            buf,
+            r##"<line style="stroke:#000000;stroke-width:0.5;" x1="{}" x2="{}" y1="{}" y2="{}"/>"##,
+            fmt_coord(grid_left),
+            fmt_coord(grid_right),
+            fmt_coord(y),
+            fmt_coord(y),
+        )
+        .unwrap();
+    }
+
+    let mut x = grid_left;
+    for width in std::iter::once(0.0).chain(layout.col_widths.iter().copied()) {
+        x += width;
+        write!(
+            buf,
+            r##"<line style="stroke:#000000;stroke-width:0.5;" x1="{}" x2="{}" y1="{}" y2="{}"/>"##,
+            fmt_coord(x),
+            fmt_coord(x),
+            fmt_coord(grid_top),
+            fmt_coord(grid_bottom),
+        )
+        .unwrap();
     }
 }
 
@@ -5306,6 +5558,7 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
     // arrow for the attached note (max across multiple attached notes).
     let mut msg_note_extra: HashMap<usize, f64> = HashMap::new();
     let mut msg_note_y_adjust: HashMap<usize, f64> = HashMap::new();
+    let mut msg_note_tail_extra: HashMap<usize, f64> = HashMap::new();
     {
         let mut last_msg_idx: Option<usize> = None;
         for (idx, event) in diagram.events.iter().enumerate() {
@@ -5347,6 +5600,15 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                         let e = msg_note_extra.entry(owner).or_insert(0.0);
                         *e = e.max(extra);
                         msg_note_y_adjust.insert(owner, y_adjust);
+                        if note
+                            .text
+                            .lines()
+                            .next()
+                            .is_some_and(|line| note_separator_label(line).is_some())
+                        {
+                            let e = msg_note_tail_extra.entry(owner).or_insert(0.0);
+                            *e = e.max(PURE_UNDERLINE_MESSAGE_FLOW_EXTRA);
+                        }
                     }
                 }
                 _ => {}
@@ -5456,8 +5718,10 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                     // next event down).
                     let note_extra = msg_note_extra.get(&idx).copied();
                     if msg_count == 0 {
-                        y += first_msg_offset(has_text, event_text_height)
-                            + message_vertical_padding;
+                        y += first_msg_offset(
+                            has_text,
+                            event_text_height - event_pure_underline_flow_extra(event),
+                        ) + message_vertical_padding;
                     } else {
                         y += msg_step(has_text, event_text_height) + message_vertical_padding;
                     }
@@ -5466,6 +5730,9 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                     }
                     event_y_positions.push(y);
                     if let Some(extra) = note_extra {
+                        y += extra;
+                    }
+                    if let Some(extra) = msg_note_tail_extra.get(&idx).copied() {
                         y += extra;
                     }
                     if is_self {
@@ -5483,8 +5750,10 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                 Event::Return(_) => {
                     let note_extra = msg_note_extra.get(&idx).copied();
                     if msg_count == 0 {
-                        y += first_msg_offset(has_text, event_text_height)
-                            + message_vertical_padding;
+                        y += first_msg_offset(
+                            has_text,
+                            event_text_height - event_pure_underline_flow_extra(event),
+                        ) + message_vertical_padding;
                     } else {
                         y += msg_step(has_text, event_text_height) + message_vertical_padding;
                     }
@@ -5493,6 +5762,9 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                     }
                     event_y_positions.push(y);
                     if let Some(extra) = note_extra {
+                        y += extra;
+                    }
+                    if let Some(extra) = msg_note_tail_extra.get(&idx).copied() {
                         y += extra;
                     }
                     msg_count += 1;
@@ -5577,12 +5849,20 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                         let note_top = if self_message_right_note {
                             arrow_y - metrics.first_height + SELF_MSG_RIGHT_NOTE_Y_PAD
                         } else {
+                            let separator_attach_adjust = note
+                                .text
+                                .lines()
+                                .next()
+                                .filter(|line| note_separator_label(line).is_some())
+                                .map(|_| PURE_UNDERLINE_MESSAGE_FLOW_EXTRA)
+                                .unwrap_or(0.0);
                             arrow_y
                                 - note_msg_arrow_offset_for_line(note.shape, metrics.first_height)
                                 - note_msg_text_tail(&metrics)
                                 - 2.0 * explicit_global_padding
                                 - shadow_note_extra
                                 + msg_note_y_adjust.get(&owner).copied().unwrap_or(0.0)
+                                + separator_attach_adjust
                         };
                         // The draw site derives note_top from event_y via
                         // note_top = event_y - note_y_extra - num_lines*MSG_TEXT_HEIGHT.
@@ -5666,13 +5946,16 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                     // + msg_step).
                     let rb = ref_box(&r.text);
                     let prev_y = y;
-                    let box_top = if msg_count == 0 {
-                        prev_y + first_msg_offset(false, MSG_TEXT_HEIGHT)
+                    let first_ref = msg_count == 0;
+                    let box_top = if first_ref {
+                        prev_y + REF_FIRST_GAP
                     } else {
                         prev_y + REF_GAP_ABOVE
                     };
                     event_y_positions.push(box_top);
-                    y = prev_y + rb.preferred_h;
+                    y = prev_y
+                        + rb.preferred_h
+                        + if first_ref { REF_FIRST_FLOW_EXTRA } else { 0.0 };
                     msg_count += 1;
                 }
                 Event::Activate(_, _) | Event::Deactivate(_) => {
@@ -8694,50 +8977,15 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                     ),
                 };
                 let text_x = over_several_text_x.unwrap_or(text_x);
-                let mut line_top = note_top;
-                let mut note_number_counters = Vec::new();
-                let mut note_width_number_counters = Vec::new();
-                for (line_idx, line) in lines.iter().enumerate() {
-                    let trimmed = line.trim();
-                    let line_metrics =
-                        note_line_metrics_with_family(trimmed, note_font_size_f, &note_font_family);
-                    if trimmed.is_empty() {
-                        note_number_counters.clear();
-                        note_width_number_counters.clear();
-                        line_top += metrics
-                            .line_heights
-                            .get(line_idx)
-                            .copied()
-                            .unwrap_or(line_metrics.height);
-                        continue;
-                    }
-                    let subscript_ascent_adjust = if line_has_subscript_after_plain_first(trimmed) {
-                        3.0
-                    } else {
-                        0.0
-                    };
-                    let text_y =
-                        line_top + line_metrics.ascent - subscript_ascent_adjust + text_y_offset;
-                    let line_width = note_line_width_with_family(
-                        trimmed,
-                        note_font_size_f,
-                        &note_font_family,
-                        &mut note_width_number_counters,
-                    );
-                    let line_x = aligned_note_text_x(
-                        note_text_align,
-                        text_x,
-                        note_left,
-                        note_right,
-                        note.shape,
-                        line_width,
-                    );
-                    emit_note_line(
+                if let Some(table) =
+                    note_table_layout_with_family(&note.text, note_font_size_f, &note_font_family)
+                {
+                    emit_note_table(
                         &mut svg.buf,
-                        trimmed,
+                        &table,
                         &TextBase {
-                            x: line_x,
-                            y: text_y,
+                            x: text_x,
+                            y: note_top + NOTE_TABLE_TOP_PAD,
                             font_size: svg.note_font_size,
                             font_family: &svg.note_font_family,
                             fill: &note_font_color,
@@ -8746,14 +8994,75 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                             underline: false,
                             skip_underline: false,
                         },
-                        note_stroke,
-                        &mut note_number_counters,
+                        note_left + NOTE_TEXT_X_PAD + explicit_global_padding,
+                        note_top + NOTE_TABLE_TOP_PAD + explicit_global_padding,
                     );
-                    line_top += metrics
-                        .line_heights
-                        .get(line_idx)
-                        .copied()
-                        .unwrap_or(line_metrics.height);
+                } else {
+                    let mut line_top = note_top;
+                    let mut note_number_counters = Vec::new();
+                    let mut note_width_number_counters = Vec::new();
+                    for (line_idx, line) in lines.iter().enumerate() {
+                        let trimmed = line.trim();
+                        let line_metrics = note_line_metrics_with_family(
+                            trimmed,
+                            note_font_size_f,
+                            &note_font_family,
+                        );
+                        if trimmed.is_empty() {
+                            note_number_counters.clear();
+                            note_width_number_counters.clear();
+                            line_top += metrics
+                                .line_heights
+                                .get(line_idx)
+                                .copied()
+                                .unwrap_or(line_metrics.height);
+                            continue;
+                        }
+                        let subscript_ascent_adjust =
+                            if line_has_subscript_after_plain_first(trimmed) {
+                                3.0
+                            } else {
+                                0.0
+                            };
+                        let text_y = line_top + line_metrics.ascent - subscript_ascent_adjust
+                            + text_y_offset;
+                        let line_width = note_line_width_with_family(
+                            trimmed,
+                            note_font_size_f,
+                            &note_font_family,
+                            &mut note_width_number_counters,
+                        );
+                        let line_x = aligned_note_text_x(
+                            note_text_align,
+                            text_x,
+                            note_left,
+                            note_right,
+                            note.shape,
+                            line_width,
+                        );
+                        emit_note_line(
+                            &mut svg.buf,
+                            trimmed,
+                            &TextBase {
+                                x: line_x,
+                                y: text_y,
+                                font_size: svg.note_font_size,
+                                font_family: &svg.note_font_family,
+                                fill: &note_font_color,
+                                bold: false,
+                                italic: false,
+                                underline: false,
+                                skip_underline: false,
+                            },
+                            note_stroke,
+                            &mut note_number_counters,
+                        );
+                        line_top += metrics
+                            .line_heights
+                            .get(line_idx)
+                            .copied()
+                            .unwrap_or(line_metrics.height);
+                    }
                 }
             }
             Event::GroupStart(g) => {
@@ -9525,6 +9834,26 @@ mod tests {
         assert!(svg.contains(r#"font-family="monospace" font-size="14""#));
         assert!(!svg.contains("message with (Cannot"));
         assert!(!svg.contains("note with (Cannot"));
+    }
+
+    #[test]
+    fn table_note_renders_cells_and_grid() {
+        let input = concat!(
+            "@startuml\n",
+            "Alice -> Bob : hello\n",
+            "note over Alice, Bob\n",
+            "  |= Key |= Value |\n",
+            "  | name | Alice |\n",
+            "end note\n",
+            "@enduml",
+        );
+        let diagram = rustuml_parser::parse::parse(input).unwrap();
+        let svg = crate::render_svg(&diagram);
+
+        assert!(svg.contains(">Key</text>"));
+        assert!(svg.contains(">Value</text>"));
+        assert!(svg.contains(r#"stroke:#000000;stroke-width:0.5;"#));
+        assert!(!svg.contains("|= Key |= Value |"));
     }
 
     #[test]
