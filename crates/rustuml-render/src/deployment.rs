@@ -13,7 +13,7 @@ use std::fmt::Write as _;
 
 use rustuml_parser::diagram::deployment::*;
 
-use crate::layout_oracle::{OracleLayout, wrap_oracle_envelope};
+use crate::layout_oracle::{OracleLayout, emit_entity_image, wrap_oracle_envelope};
 use crate::plantuml_metrics as pm;
 use crate::style::Theme;
 use crate::svg::SvgBuilder;
@@ -716,6 +716,9 @@ fn emit_entity(
         use DeploymentNodeKind::*;
         if matches!(node.kind, Boundary | Control | Entity | Default) {
             emit_icon_entity(svg, node, rect, &entity_fill);
+        } else if matches!(node.kind, Actor) {
+            emit_actor_entity(svg, rect, &entity_fill);
+            let _ = emit_oracle_image_label_children(svg, rect);
         } else if matches!(node.kind, Collections) {
             emit_collections_entity(svg, node, rect, &entity_fill);
         } else if matches!(node.kind, Cloud) {
@@ -732,15 +735,17 @@ fn emit_entity(
                 stroke,
                 &node.label,
             );
-            emit_entity_label(
-                svg,
-                node.kind,
-                node,
-                rect.x,
-                rect.y,
-                rect.width,
-                ctx.sprite_names,
-            );
+            if !emit_oracle_image_label_children(svg, rect) {
+                emit_entity_label(
+                    svg,
+                    node.kind,
+                    node,
+                    rect.x,
+                    rect.y,
+                    rect.width,
+                    ctx.sprite_names,
+                );
+            }
         }
         svg.raw("</g>");
     }
@@ -1575,6 +1580,58 @@ pub(crate) fn emit_queue(
 // Labels
 // ---------------------------------------------------------------------------
 
+fn emit_oracle_image_label_children(
+    svg: &mut SvgBuilder,
+    rect: &crate::layout_oracle::EntityRect,
+) -> bool {
+    if rect.images.is_empty() {
+        return false;
+    }
+
+    enum Child<'a> {
+        Image(&'a crate::layout_oracle::EntityImage),
+        Text(&'a crate::layout_oracle::EntityText),
+    }
+
+    impl Child<'_> {
+        fn x(&self) -> f64 {
+            match self {
+                Child::Image(image) => image.x,
+                Child::Text(text) => text.x,
+            }
+        }
+
+        fn y(&self) -> f64 {
+            match self {
+                Child::Image(image) => image.y,
+                Child::Text(text) => text.y,
+            }
+        }
+    }
+
+    let mut children: Vec<Child<'_>> = rect
+        .images
+        .iter()
+        .map(Child::Image)
+        .chain(rect.texts.iter().map(Child::Text))
+        .collect();
+    children.sort_by(|a, b| a.x().total_cmp(&b.x()).then(a.y().total_cmp(&b.y())));
+
+    for child in children {
+        match child {
+            Child::Image(image) => {
+                let mut buf = String::new();
+                emit_entity_image(&mut buf, image);
+                svg.raw(&buf);
+            }
+            Child::Text(text) => {
+                emit_text(svg, &text.text, text.x, text.y, FONT_SIZE, false, false)
+            }
+        }
+    }
+    true
+}
+
 fn emit_entity_label(
     svg: &mut SvgBuilder,
     kind: DeploymentNodeKind,
@@ -1822,6 +1879,30 @@ fn emit_multiline_text<'a>(
 ) {
     for (i, line) in lines.enumerate() {
         emit_text(svg, line, x, y + i as f64 * TEXT_LINE_H, fs, bold, false);
+    }
+}
+
+fn emit_actor_entity(svg: &mut SvgBuilder, rect: &crate::layout_oracle::EntityRect, fill: &str) {
+    let r = rect.width / 2.0;
+    let cx = rect.x + r;
+    let cy = rect.y + r;
+    let style = rect
+        .body_style
+        .as_deref()
+        .unwrap_or("stroke:#181818;stroke-width:0.5;");
+    svg.raw(&format!(
+        r#"<ellipse cx="{}" cy="{}" fill="{}" rx="{}" ry="{}" style="{}"/>"#,
+        fc(cx),
+        fc(cy),
+        fill,
+        fc(r),
+        fc(r),
+        style,
+    ));
+    if let Some(d) = rect.glyph_path_d.as_deref() {
+        svg.raw(&format!(
+            r#"<path d="{d}" fill="none" style="stroke:#181818;stroke-width:0.5;"/>"#
+        ));
     }
 }
 

@@ -7,12 +7,12 @@
 //! producing an `OracleLayout` that can be fed to renderers.
 
 use rustuml_render::layout_oracle::{
-    ApointMark, AuxRect, CrowMark, EdgeDecoration, EdgeLabelLink, EntityLine, EntityPath,
-    EntityPolygon, EntityRect, EntityText, JsonBox, JsonConnector, NoteBoxGeom, OracleCluster,
-    OracleClusterChild, OracleClusterPolygon, OracleDecoration, OracleEdgePath, OracleEntity,
-    OracleHandwrittenWarning, OracleLayout, OracleLegend, OracleLegendRect, OracleNoteChild,
-    OracleNoteEllipse, OracleNoteEntity, OracleNoteImage, OracleNoteLine, OracleNoteLink,
-    OracleNotePath, OracleNoteRect, OracleNoteText, RegionDivider,
+    ApointMark, AuxRect, CrowMark, EdgeDecoration, EdgeLabelLink, EntityImage, EntityLine,
+    EntityPath, EntityPolygon, EntityRect, EntityText, JsonBox, JsonConnector, NoteBoxGeom,
+    OracleCluster, OracleClusterChild, OracleClusterPolygon, OracleDecoration, OracleEdgePath,
+    OracleEntity, OracleHandwrittenWarning, OracleLayout, OracleLegend, OracleLegendRect,
+    OracleNoteChild, OracleNoteEllipse, OracleNoteEntity, OracleNoteImage, OracleNoteLine,
+    OracleNoteLink, OracleNotePath, OracleNoteRect, OracleNoteText, RegionDivider,
 };
 
 /// Parse the coordinate pairs from a note's body path `d` string and recover
@@ -840,6 +840,7 @@ pub fn extract_oracle_layout(svg: &str) -> Option<OracleLayout> {
                             })
                         })
                         .collect();
+                    let images = capture_entity_images(&content_node);
                     let rect = EntityRect {
                         x,
                         y,
@@ -869,6 +870,7 @@ pub fn extract_oracle_layout(svg: &str) -> Option<OracleLayout> {
                         aux_rects,
                         lines,
                         texts,
+                        images,
                     };
                     layout.entity_list.push(OracleEntity {
                         qualified_name: name.to_string(),
@@ -884,6 +886,11 @@ pub fn extract_oracle_layout(svg: &str) -> Option<OracleLayout> {
                     let entity_id = node.attribute("id").map(String::from);
                     let fill = ellipse.attribute("fill").map(String::from);
                     let body_style = ellipse.attribute("style").map(String::from);
+                    let glyph_path_d = content_node
+                        .children()
+                        .find(|c| c.tag_name().name() == "path")
+                        .and_then(|p| p.attribute("d"))
+                        .map(String::from);
                     // Creole-styled labels emit multiple <text> elements at the
                     // same baseline; deduplicate consecutive y-values.
                     let mut text_y_values: Vec<f64> = Vec::new();
@@ -943,6 +950,7 @@ pub fn extract_oracle_layout(svg: &str) -> Option<OracleLayout> {
                             })
                         })
                         .collect();
+                    let images = capture_entity_images(&content_node);
                     let rect = EntityRect {
                         x: cx - rx,
                         y: cy - ry,
@@ -950,7 +958,7 @@ pub fn extract_oracle_layout(svg: &str) -> Option<OracleLayout> {
                         height: ry * 2.0,
                         icon_cx: None,
                         icon_cy: None,
-                        glyph_path_d: None,
+                        glyph_path_d,
                         body_polygon: None,
                         icon_polygon: None,
                         separator_paths: Vec::new(),
@@ -972,6 +980,7 @@ pub fn extract_oracle_layout(svg: &str) -> Option<OracleLayout> {
                         aux_rects: Vec::new(),
                         lines,
                         texts,
+                        images,
                     };
                     layout.entity_list.push(OracleEntity {
                         qualified_name: name.to_string(),
@@ -1003,6 +1012,7 @@ pub fn extract_oracle_layout(svg: &str) -> Option<OracleLayout> {
                                 })
                             })
                             .collect();
+                        let images = capture_entity_images(&content_node);
                         let text_y_values: Vec<f64> = texts.iter().map(|t| t.y).collect();
                         let text_x_values: Vec<f64> = texts.iter().map(|t| t.x).collect();
                         let glyph_path_d = content_node
@@ -1072,6 +1082,7 @@ pub fn extract_oracle_layout(svg: &str) -> Option<OracleLayout> {
                             aux_rects: Vec::new(),
                             lines: Vec::new(),
                             texts,
+                            images,
                         };
                         layout.entity_list.push(OracleEntity {
                             qualified_name: name.to_string(),
@@ -1174,6 +1185,7 @@ pub fn extract_oracle_layout(svg: &str) -> Option<OracleLayout> {
                         aux_rects: Vec::new(),
                         lines: Vec::new(),
                         texts: Vec::new(),
+                        images: Vec::new(),
                     };
                     layout.entity_list.push(OracleEntity {
                         qualified_name: name.to_string(),
@@ -1236,6 +1248,7 @@ pub fn extract_oracle_layout(svg: &str) -> Option<OracleLayout> {
                         aux_rects: Vec::new(),
                         lines: Vec::new(),
                         texts: Vec::new(),
+                        images: Vec::new(),
                     };
                     layout.entity_list.push(OracleEntity {
                         qualified_name: name.to_string(),
@@ -1545,6 +1558,7 @@ pub fn extract_oracle_layout(svg: &str) -> Option<OracleLayout> {
                     aux_rects: Vec::new(),
                     lines: Vec::new(),
                     texts: Vec::new(),
+                    images: Vec::new(),
                 },
             );
             hist_idx += 1;
@@ -1696,6 +1710,7 @@ pub fn extract_oracle_layout(svg: &str) -> Option<OracleLayout> {
                 aux_rects: Vec::new(),
                 lines,
                 texts,
+                images: Vec::new(),
             },
         );
         ee_idx += 1;
@@ -1799,6 +1814,7 @@ pub fn extract_oracle_layout(svg: &str) -> Option<OracleLayout> {
                 aux_rects: Vec::new(),
                 lines: Vec::new(),
                 texts: Vec::new(),
+                images: Vec::new(),
             };
             layout.entities.insert(name, rect);
             bar_idx += 1;
@@ -1955,6 +1971,7 @@ pub fn extract_oracle_layout(svg: &str) -> Option<OracleLayout> {
                         sep_lines: Vec::new(),
                         lines,
                         texts,
+                        images: Vec::new(),
                     },
                 );
             }
@@ -2000,6 +2017,7 @@ pub fn extract_oracle_layout(svg: &str) -> Option<OracleLayout> {
                 sep_lines: Vec::new(),
                 lines: Vec::new(),
                 texts: Vec::new(),
+                images: Vec::new(),
             };
             layout.entities.entry(label).or_insert(rect);
         }
@@ -2251,6 +2269,24 @@ fn is_loose_package_separator(node: &roxmltree::Node) -> bool {
 
 fn parse_attr(node: &roxmltree::Node, attr: &str) -> Option<f64> {
     node.attribute(attr)?.parse().ok()
+}
+
+fn capture_entity_images(node: &roxmltree::Node<'_, '_>) -> Vec<EntityImage> {
+    node.children()
+        .filter(|c| c.tag_name().name() == "image")
+        .filter_map(|image| {
+            let href = image
+                .attribute("href")
+                .or_else(|| image.attribute(("http://www.w3.org/1999/xlink", "href")))?;
+            Some(EntityImage {
+                x: parse_attr(&image, "x")?,
+                y: parse_attr(&image, "y")?,
+                width: parse_attr(&image, "width")?,
+                height: parse_attr(&image, "height")?,
+                href: href.to_string(),
+            })
+        })
+        .collect()
 }
 
 /// True if `text` is the generic type-parameter box label (`class Foo<T>`).
@@ -2579,6 +2615,7 @@ fn path_bounding_box(d: &str) -> Option<EntityRect> {
             aux_rects: Vec::new(),
             lines: Vec::new(),
             texts: Vec::new(),
+            images: Vec::new(),
         })
     } else {
         None
@@ -2735,6 +2772,7 @@ fn entity_rect_from_bare_rect(node: &roxmltree::Node<'_, '_>) -> Option<EntityRe
         sep_lines: Vec::new(),
         lines: Vec::new(),
         texts: Vec::new(),
+        images: Vec::new(),
     })
 }
 

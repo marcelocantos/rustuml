@@ -1199,6 +1199,7 @@ mod fp_tests {
             aux_rects: vec![],
             lines: vec![],
             texts: vec![],
+            images: vec![],
         };
         e.glyph_path_d = Some("M48.9463,58.2861".to_string());
         o.entities.insert("Foo".to_string(), e);

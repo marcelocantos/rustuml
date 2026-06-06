@@ -936,6 +936,11 @@ pub struct EntityRect {
     /// element so renderers can recover multi-column layouts like maps
     /// where two `<text>` elements share a baseline.
     pub texts: Vec<EntityText>,
+    /// All `<image>` children of the entity group, captured as scalar
+    /// geometry plus data URI. Sprite-bearing labels and stereotypes render
+    /// as images interleaved with text; storing them here keeps oracle-assisted
+    /// renderers structured without replaying an entity subtree.
+    pub images: Vec<EntityImage>,
 }
 
 /// A `<line>` element extracted from an entity group, captured verbatim.
@@ -955,6 +960,29 @@ pub struct EntityText {
     pub x: f64,
     pub y: f64,
     pub text: String,
+}
+
+/// An `<image>` element extracted from an entity group.
+#[derive(Debug, Clone)]
+pub struct EntityImage {
+    pub x: f64,
+    pub y: f64,
+    pub width: f64,
+    pub height: f64,
+    pub href: String,
+}
+
+/// Emit an oracle-captured entity image from typed geometry.
+pub fn emit_entity_image(out: &mut String, image: &EntityImage) {
+    let _ = write!(
+        out,
+        r#"<image height="{}" width="{}" x="{}" xlink:href="{}" y="{}"/>"#,
+        pm::fmt_coord(image.height),
+        pm::fmt_coord(image.width),
+        pm::fmt_coord(image.x),
+        escape_xml_attr(&image.href),
+        pm::fmt_coord(image.y),
+    );
 }
 
 /// A `<polygon>` element extracted from an oracle entity/decoration.

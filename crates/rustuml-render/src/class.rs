@@ -12,14 +12,16 @@
 //! - Visibility modifier markers with `data-visibility-modifier` attributes
 //! - Inline `style` attributes for strokes (not `stroke="..."` attributes)
 
+use std::collections::HashMap;
 use std::fmt::Write;
 
 use rustuml_layout::graph::{Direction, EdgePath, LayoutGraph, NodePosition};
+use rustuml_parser::diagram::SpriteData;
 use rustuml_parser::diagram::class::*;
 
 use crate::layout_oracle::{
     CrowMark, EntityPath, EntityPolygon, EntityRect, EntityText, OracleCluster, OracleEdgePath,
-    OracleEntity, OracleHandwrittenWarning, OracleLayout, OracleLegend,
+    OracleEntity, OracleHandwrittenWarning, OracleLayout, OracleLegend, emit_entity_image,
     emit_oracle_cluster_children, emit_oracle_note_entity, wrap_oracle_envelope,
 };
 use crate::metrics;
@@ -617,6 +619,7 @@ fn calc_entity_dims(
     entity_index: usize,
     hide: HideFlags,
     font: &ClassFontOverrides,
+    sprites: &HashMap<String, SpriteData>,
 ) -> EntityDims {
     let is_enum = entity.kind == EntityKind::Enum;
     // Entity labels treat `__` as literal underscores, not underline markup,
@@ -670,9 +673,15 @@ fn calc_entity_dims(
             source_line,
         };
     }
-    let has_stereotypes = !entity.stereotypes.is_empty() && !hide.stereotype;
+    let visible_stereotypes: Vec<String> = entity
+        .stereotypes
+        .iter()
+        .filter(|stereotype| !stereotype_refs_sprite(stereotype, sprites))
+        .cloned()
+        .collect();
+    let has_stereotypes = !visible_stereotypes.is_empty() && !hide.stereotype;
     let stereotype_count = if has_stereotypes {
-        entity.stereotypes.len()
+        visible_stereotypes.len()
     } else {
         0
     };
@@ -733,7 +742,7 @@ fn calc_entity_dims(
 
     // Stereotype text may also affect width.
     let stereo_width = if has_stereotypes {
-        let stereo_tw = format_stereotype_lines(&entity.stereotypes)
+        let stereo_tw = format_stereotype_lines(&visible_stereotypes)
             .iter()
             .map(|line| text_render::measure(line, 12.0, false))
             .fold(0.0_f64, f64::max);
@@ -868,6 +877,11 @@ fn format_stereotype_lines(stereotypes: &[String]) -> Vec<String> {
         .iter()
         .map(|s| format!("\u{00AB}{s}\u{00BB}"))
         .collect()
+}
+
+fn stereotype_refs_sprite(stereotype: &str, sprites: &HashMap<String, SpriteData>) -> bool {
+    let name = stereotype.trim().trim_start_matches('$');
+    sprites.contains_key(name)
 }
 
 // ---------------------------------------------------------------------------
@@ -1381,7 +1395,15 @@ pub fn render_with_oracle(
         .entities
         .iter()
         .enumerate()
-        .map(|(i, e)| calc_entity_dims(e, i, resolve_hide(e, &diagram.hide_show), &font))
+        .map(|(i, e)| {
+            calc_entity_dims(
+                e,
+                i,
+                resolve_hide(e, &diagram.hide_show),
+                &font,
+                &diagram.meta.sprites,
+            )
+        })
         .collect();
 
     // If oracle layout is provided, use it directly instead of running Graphviz.
@@ -2916,6 +2938,8 @@ fn render_entity_content(
     let icon_cy_override = oracle_rect.and_then(|r| r.icon_cy);
     let glyph_path_override = oracle_rect.and_then(|r| r.glyph_path_d.as_deref());
     let name_text_x_override = oracle_rect.and_then(|r| r.name_text_x);
+    let oracle_images = oracle_rect.map_or(&[][..], |r| r.images.as_slice());
+    let suppress_header_icon = suppress_header_icon || !oracle_images.is_empty();
     let is_abstract = entity.kind == EntityKind::AbstractClass;
     let is_interface = entity.kind == EntityKind::Interface;
     let is_enum_entity = entity.kind == EntityKind::Enum;
@@ -3127,6 +3151,10 @@ fn render_entity_content(
             fmt4(y),
         )
         .unwrap();
+    }
+
+    for image in oracle_images {
+        emit_entity_image(svg, image);
     }
 
     // Icon (colored ellipse + letter glyph). Skipped entirely when `hide circle`.
@@ -5681,7 +5709,15 @@ fn render_grid_fallback(diagram: &ClassDiagram, _cs: &crate::style::ClassStyle) 
         .entities
         .iter()
         .enumerate()
-        .map(|(i, e)| calc_entity_dims(e, i, resolve_hide(e, &diagram.hide_show), &font))
+        .map(|(i, e)| {
+            calc_entity_dims(
+                e,
+                i,
+                resolve_hide(e, &diagram.hide_show),
+                &font,
+                &diagram.meta.sprites,
+            )
+        })
         .collect();
     let cols = (diagram.entities.len() as f64).sqrt().ceil() as usize;
 
