@@ -107,7 +107,6 @@ const RES_LOAD_OFF: f64 = 22.40234375;
 const RES_BOTTOM_PAD: f64 = 6.0;
 const RES_LABEL_FONT: f64 = 13.0;
 const RES_LOAD_FONT: f64 = 9.0;
-const RES_LOAD_X_OFF: f64 = 1.25;
 
 #[derive(Clone, Copy, Debug, Eq, PartialEq)]
 enum PrintScale {
@@ -216,10 +215,21 @@ fn gantt_text(svg: &mut SvgBuilder, x: f64, y: f64, content: &str, font_size: f6
 /// resource-load section). `textLength` is computed from the Serif metric
 /// table.
 fn gantt_text_serif(svg: &mut SvgBuilder, x: f64, y: f64, content: &str, font_size: f64) {
+    gantt_text_serif_fill(svg, x, y, content, font_size, TEXT_COLOR);
+}
+
+fn gantt_text_serif_fill(
+    svg: &mut SvgBuilder,
+    x: f64,
+    y: f64,
+    content: &str,
+    font_size: f64,
+    fill: &str,
+) {
     let tl = serif_text_width(content, font_size);
     let escaped = escape_xml(content);
     svg.raw_inline(&format!(
-        r#"<text fill="{TEXT_COLOR}" font-family="Serif" font-size="{fs}" lengthAdjust="spacing" textLength="{tl}" x="{x}" y="{y}">{escaped}</text>"#,
+        r#"<text fill="{fill}" font-family="Serif" font-size="{fs}" lengthAdjust="spacing" textLength="{tl}" x="{x}" y="{y}">{escaped}</text>"#,
         fs = fmt_n(font_size),
         tl = fmt_coord(tl),
         x = fmt_coord(x),
@@ -1033,13 +1043,11 @@ pub fn render(diagram: &GanttDiagram, _theme: &Theme) -> String {
                 if load == 0 {
                     continue;
                 }
-                gantt_text_serif(
-                    &mut svg,
-                    day as f64 * day_width + RES_LOAD_X_OFF,
-                    load_y,
-                    &load.to_string(),
-                    RES_LOAD_FONT,
-                );
+                let label = load.to_string();
+                let label_w = serif_text_width(&label, RES_LOAD_FONT);
+                let load_x = day as f64 * day_width + (day_width - label_w) / 2.0;
+                let fill = if load > 100 { "#FF0000" } else { TEXT_COLOR };
+                gantt_text_serif_fill(&mut svg, load_x, load_y, &label, RES_LOAD_FONT, fill);
             }
         }
     }
