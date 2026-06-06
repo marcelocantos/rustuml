@@ -4414,6 +4414,18 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
     let note_content_width_raw_padded = |max_text_w: f64, shape: NoteShape, align: MessageAlign| {
         aligned_note_content_width_raw(max_text_w, shape, align) + 2.0 * explicit_global_padding
     };
+    let over_several_shape_position_width_raw_padded =
+        |max_text_w: f64, shape: NoteShape, align: MessageAlign, min_width: f64, centre: f64| {
+            let raw = note_content_width_raw_padded(max_text_w, shape, align).max(min_width);
+            let raw_left = (centre - raw / 2.0).floor();
+            if matches!(shape, NoteShape::Hexagonal | NoteShape::Rectangular)
+                && raw_left < HEAD_BOX_Y
+            {
+                raw - 1.0
+            } else {
+                raw
+            }
+        };
     let note_rendered_height_padded = |shape: NoteShape, metrics: &NoteTextMetrics| {
         note_rendered_height(shape, metrics) + 2.0 * explicit_global_padding
     };
@@ -5239,16 +5251,26 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                     )
                     .visible_left
                 } else {
-                    let note_content_w =
-                        note_content_width_raw_padded(max_tw, note.shape, note_text_align);
                     let margin = if note.participants.is_empty() {
                         ACROSS_NOTE_MARGIN
                     } else {
                         OVER_SEVERAL_NOTE_MARGIN
                     };
                     let span = participants[hi].lifeline_line_x - participants[lo].lifeline_line_x;
-                    let pw = note_content_w.max(span.round() + margin);
+                    let min_width = span.round() + margin;
                     let centre = (participants[lo].center_x + participants[hi].center_x) / 2.0;
+                    let pw = if note.participants.is_empty() {
+                        note_content_width_raw_padded(max_tw, note.shape, note_text_align)
+                            .max(min_width)
+                    } else {
+                        over_several_shape_position_width_raw_padded(
+                            max_tw,
+                            note.shape,
+                            note_text_align,
+                            min_width,
+                            centre,
+                        )
+                    };
                     (centre - pw / 2.0).floor()
                 };
                 let shift = (HEAD_BOX_Y - note_left).max(0.0);
@@ -6249,11 +6271,18 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                         } else {
                             let span =
                                 participants[hi].lifeline_line_x - participants[lo].lifeline_line_x;
-                            let note_w =
-                                note_content_w.max(span.round() + OVER_SEVERAL_NOTE_MARGIN);
+                            let min_width = span.round() + OVER_SEVERAL_NOTE_MARGIN;
+                            let note_w = note_content_w.max(min_width);
                             let centre =
                                 (participants[lo].center_x + participants[hi].center_x) / 2.0;
-                            (centre - note_w / 2.0).floor() + note_w
+                            let position_w = over_several_shape_position_width_raw_padded(
+                                max_line_width,
+                                note.shape,
+                                note_text_align,
+                                min_width,
+                                centre,
+                            );
+                            (centre - position_w / 2.0).floor() + note_w
                         };
                         max_note_right = max_note_right.max(note_right);
                     }
@@ -6863,11 +6892,16 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                     } else {
                         let span =
                             participants[hi].lifeline_line_x - participants[lo].lifeline_line_x;
-                        let pw_raw =
-                            note_content_width_raw_padded(max_text_w, note.shape, note_text_align)
-                                .max(span.round() + OVER_SEVERAL_NOTE_MARGIN);
-                        let pw = note_content_w.max(span.round() + OVER_SEVERAL_NOTE_MARGIN);
+                        let min_width = span.round() + OVER_SEVERAL_NOTE_MARGIN;
                         let centre = (participants[lo].center_x + participants[hi].center_x) / 2.0;
+                        let pw_raw = over_several_shape_position_width_raw_padded(
+                            max_text_w,
+                            note.shape,
+                            note_text_align,
+                            min_width,
+                            centre,
+                        );
+                        let pw = note_content_w.max(min_width);
                         let left = (centre - pw_raw / 2.0).floor();
                         Some((left, left + pw))
                     }
@@ -9037,16 +9071,17 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                                 let first_ll = participants[lo].lifeline_line_x;
                                 let last_ll = participants[hi].lifeline_line_x;
                                 let span = last_ll - first_ll;
-                                let pw_raw = note_content_width_raw_padded(
+                                let min_width = span.round() + OVER_SEVERAL_NOTE_MARGIN;
+                                let centre =
+                                    (participants[lo].center_x + participants[hi].center_x) / 2.0;
+                                let pw_raw = over_several_shape_position_width_raw_padded(
                                     max_text_w,
                                     note.shape,
                                     note_text_align,
-                                )
-                                .max(span.round() + OVER_SEVERAL_NOTE_MARGIN);
-                                let pw =
-                                    note_content_w.max(span.round() + OVER_SEVERAL_NOTE_MARGIN);
-                                let centre =
-                                    (participants[lo].center_x + participants[hi].center_x) / 2.0;
+                                    min_width,
+                                    centre,
+                                );
+                                let pw = note_content_w.max(min_width);
                                 let left = (centre - pw_raw / 2.0).floor();
                                 (left, left + pw)
                             }
