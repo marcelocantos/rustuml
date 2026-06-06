@@ -2555,6 +2555,7 @@ fn left_note_lifeline_gap(
     shape: NoteShape,
     anchor_idx: Option<usize>,
     on_message: bool,
+    has_explicit_color: bool,
     text_line_count: usize,
 ) -> f64 {
     let gap = match shape {
@@ -2564,11 +2565,10 @@ fn left_note_lifeline_gap(
     let collections_anchor = anchor_idx
         .and_then(|idx| participants.get(idx))
         .is_some_and(|p| p.kind == ParticipantKind::Collections);
-    if !on_message && shape == NoteShape::Note && (text_line_count > 1 || collections_anchor) {
-        gap - 1.0
-    } else {
-        gap
-    }
+    let note_sits_closer = shape == NoteShape::Note
+        && ((on_message && has_explicit_color)
+            || (!on_message && (text_line_count > 1 || collections_anchor)));
+    if note_sits_closer { gap - 1.0 } else { gap }
 }
 
 fn note_across_left(centre: f64, preferred_width: f64) -> f64 {
@@ -5521,6 +5521,7 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                         note.shape,
                         first_part,
                         note.on_message,
+                        note.color.is_some(),
                         note.text.lines().count(),
                     );
                     let bw = participants[0].box_width;
@@ -5827,6 +5828,7 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                                 note.shape,
                                 Some(0),
                                 false,
+                                note.color.is_some(),
                                 note.text.lines().count(),
                             );
                             // Java's group InGroupable reservation for a left
@@ -7346,6 +7348,7 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                     note.shape,
                     anchor_idxs.first().copied(),
                     note.on_message,
+                    note.color.is_some(),
                     note.text.lines().count(),
                 );
                 if note.on_message {
@@ -9555,6 +9558,7 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                             note.shape,
                             anchor_idxs.first().copied(),
                             note.on_message,
+                            note.color.is_some(),
                             note.text.lines().count(),
                         );
                         if note.on_message {
