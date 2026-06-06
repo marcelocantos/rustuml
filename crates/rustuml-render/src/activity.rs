@@ -1253,11 +1253,19 @@ fn build_tree_inner(steps: &[ActivityStep], palette: &Palette) -> Vec<LayoutNode
                 let name = p.name.clone();
                 let color = p.color.clone();
                 i += 1;
-                let body = collect_until(steps, &mut i, palette, |s| {
+                let mut body = collect_until(steps, &mut i, palette, |s| {
                     matches!(s, ActivityStep::EndPartition)
                 });
                 if i < steps.len() {
                     i += 1; // skip EndPartition
+                }
+                while let Some(ActivityStep::Note(n)) = steps.get(i) {
+                    body.push(LayoutNode::Note {
+                        text: n.text.clone(),
+                        position: n.position.clone(),
+                        color: n.color.clone(),
+                    });
+                    i += 1;
                 }
                 nodes.push(LayoutNode::Partition {
                     name,
@@ -1426,6 +1434,29 @@ fn collect_until(
 /// Compute the width needed for a sequence of layout nodes.
 fn sequence_width(nodes: &[LayoutNode]) -> f64 {
     nodes.iter().map(node_width).fold(0.0f64, f64::max)
+}
+
+fn sequence_partition_body_extents(nodes: &[LayoutNode]) -> (f64, f64) {
+    sequence_extents_with_note_margin(nodes, false, 0.0)
+}
+
+fn sequence_partition_body_width(nodes: &[LayoutNode]) -> f64 {
+    let (left, right) = sequence_partition_body_extents(nodes);
+    left + right
+}
+
+fn partition_body_has_direct_note(nodes: &[LayoutNode]) -> bool {
+    nodes
+        .iter()
+        .any(|node| matches!(node, LayoutNode::Note { .. }))
+}
+
+fn partition_body_width_for_frame(nodes: &[LayoutNode]) -> f64 {
+    if partition_body_has_direct_note(nodes) {
+        sequence_partition_body_width(nodes)
+    } else {
+        sequence_width(nodes)
+    }
 }
 
 #[derive(Debug, Clone)]
@@ -2977,12 +3008,18 @@ fn node_extents(node: &LayoutNode) -> (f64, f64) {
                 let half = (title_w + 20.0) / 2.0;
                 return (half, half);
             }
-            let body_w = sequence_width(body);
+            let body_w = partition_body_width_for_frame(body);
             let title_width_extra = partition_title_width_extra(color, *is_group, body);
             let title_drives_width =
                 partition_title_drives_width(title_w, body_w, title_width_extra, *is_group, body);
-            let (mut left, mut right) = if !title_drives_width && partition_wraps_switch(body) {
-                let (body_left, body_right) = sequence_extents(body);
+            let (mut left, mut right) = if !title_drives_width
+                && (partition_wraps_switch(body) || partition_body_has_direct_note(body))
+            {
+                let (body_left, body_right) = if partition_body_has_direct_note(body) {
+                    sequence_partition_body_extents(body)
+                } else {
+                    sequence_extents(body)
+                };
                 (body_left + 10.0, body_right + 10.0)
             } else {
                 (
@@ -3035,6 +3072,14 @@ fn sequence_extents_if_branch(nodes: &[LayoutNode]) -> (f64, f64) {
 }
 
 fn sequence_extents_with(nodes: &[LayoutNode], if_branch: bool) -> (f64, f64) {
+    sequence_extents_with_note_margin(nodes, if_branch, 1.0)
+}
+
+fn sequence_extents_with_note_margin(
+    nodes: &[LayoutNode],
+    if_branch: bool,
+    note_outer_margin: f64,
+) -> (f64, f64) {
     let mut left = 0.0f64;
     let mut right = 0.0f64;
     // The half-width of the most recent flow node — a note attaches to it and
@@ -3049,10 +3094,10 @@ fn sequence_extents_with(nodes: &[LayoutNode], if_branch: bool) -> (f64, f64) {
                 match position {
                     // The left note's left edge lands 1px left of MARGIN_LEAD,
                     // so it contributes reach − 1 to the left extent.
-                    NotePosition::Left => left = left.max(reach - 1.0),
+                    NotePosition::Left => left = left.max(reach - note_outer_margin),
                     // The right note's right edge sits 1px past `reach` from
                     // the spine (mirrors the left's −1).
-                    NotePosition::Right => right = right.max(reach + 1.0),
+                    NotePosition::Right => right = right.max(reach + note_outer_margin),
                 }
             }
             _ => {
@@ -3271,7 +3316,7 @@ fn node_width(node: &LayoutNode) -> f64 {
             if body.is_empty() {
                 return title_w + 20.0;
             }
-            let body_w = sequence_width(body);
+            let body_w = partition_body_width_for_frame(body);
             let body_width_extra = partition_body_width_extra(*is_group, body);
             let title_width_extra = partition_title_width_extra(color, *is_group, body);
             (title_w + 15.0 + title_width_extra).max(body_w + 20.0 + body_width_extra)
@@ -3712,7 +3757,7 @@ fn partition_top_gap(
             && (color.is_some() || partition_title_has_descender(name))
             && partition_title_drives_width(
                 partition_title_width(name),
-                sequence_width(body),
+                partition_body_width_for_frame(body),
                 partition_title_width_extra(color, is_group, body),
                 is_group,
                 body,
@@ -5558,7 +5603,7 @@ fn emit_node_with_repeat_extra(
             // that measured rule so height, arrows, and emission stay aligned.
             let title_w = partition_title_width(name);
             let empty_body = body.is_empty();
-            let body_w = sequence_width(body);
+            let body_w = partition_body_width_for_frame(body);
             let body_width_extra = partition_body_width_extra(*is_group, body);
             let title_width_extra = partition_title_width_extra(color, *is_group, body);
             let title_drives_width =
