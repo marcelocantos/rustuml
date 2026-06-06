@@ -2621,7 +2621,7 @@ fn node_extents(node: &LayoutNode) -> (f64, f64) {
                     repeat_backward_right_extent(cond_half, body_half, is_label, label);
                 (left_extent, right_extent)
             } else {
-                let left_extent = cond_half + 9.0;
+                let left_extent = body_half.max(cond_half + 9.0);
                 let right_extent = cond_half.max(body_half) + 12.0 + 15.0;
                 (left_extent, right_extent)
             }
@@ -2932,7 +2932,7 @@ fn node_width(node: &LayoutNode) -> f64 {
                 let right = repeat_backward_right_extent(cond_half, body_half, is_label, label);
                 left + right
             } else {
-                let left = cond_half + 9.0;
+                let left = body_half.max(cond_half + 9.0);
                 let right = cond_half.max(body_half) + 12.0 + 15.0;
                 left + right
             }
@@ -3441,10 +3441,10 @@ fn node_height(node: &LayoutNode) -> f64 {
                     + DIAMOND_HALF * 2.0;
             }
             let diamond_h = DIAMOND_HALF * 2.0;
-            let then_h = sequence_height(then_branch);
+            let then_h = sequence_height_if_branch(then_branch);
             let max_else_h: f64 = else_branches
                 .iter()
-                .map(|b| sequence_height(&b.body))
+                .map(|b| sequence_height_if_branch(&b.body))
                 .fold(0.0f64, f64::max);
             let branch_h = then_h.max(max_else_h);
             // diamond + IF_BRANCH_DOWN + branch_h + IF_BRANCH_UP + merge_diamond.
@@ -4532,7 +4532,11 @@ fn emit_pending_down_arrow(
 /// Render a linear sequence of nodes at a given center-x and starting y.
 /// Returns the y position after the last node.
 fn emit_sequence(svg: &mut SvgEmitter, nodes: &[LayoutNode], cx: f64, y: f64) -> f64 {
-    emit_sequence_ex(svg, nodes, cx, y, None, None)
+    emit_sequence_ex(svg, nodes, cx, y, None, None, false)
+}
+
+fn emit_sequence_if_branch(svg: &mut SvgEmitter, nodes: &[LayoutNode], cx: f64, y: f64) -> f64 {
+    emit_sequence_ex(svg, nodes, cx, y, None, None, true)
 }
 
 /// Like `emit_sequence`, but `mid_stretch = Some((flow_idx, extra))` adds
@@ -4551,6 +4555,7 @@ fn emit_sequence_ex(
     mut y: f64,
     mid_stretch: Option<(usize, f64)>,
     lead_note_h: Option<f64>,
+    first_repeat_branch_extra: bool,
 ) -> f64 {
     // Map flow-node ordinal → node index so the stretch can target the right
     // inbound arrow.
@@ -4768,7 +4773,12 @@ fn emit_sequence_ex(
                 }
             }
         }
-        let node_y = emit_node(svg, node, cx, y);
+        let repeat_extra = if first_repeat_branch_extra && flow_ordinal == 0 {
+            leading_if_branch_repeat_extra(node)
+        } else {
+            0.0
+        };
+        let node_y = emit_node_with_repeat_extra(svg, node, cx, y, repeat_extra);
         // Inbound connector goes AFTER the node's own emit so it lands
         // after the node's internal connectors in the connectors buffer
         // (matches PlantUML's emission order: internal first, then inbound).
@@ -4797,6 +4807,16 @@ fn emit_sequence_ex(
 /// Emit a single node at the given center-x and y position.
 /// Returns the y position after this node (bottom edge).
 fn emit_node(svg: &mut SvgEmitter, node: &LayoutNode, cx: f64, y: f64) -> f64 {
+    emit_node_with_repeat_extra(svg, node, cx, y, 0.0)
+}
+
+fn emit_node_with_repeat_extra(
+    svg: &mut SvgEmitter,
+    node: &LayoutNode,
+    cx: f64,
+    y: f64,
+    repeat_body_top_extra: f64,
+) -> f64 {
     match node {
         LayoutNode::Start => {
             // The cursor (`y`) represents the centreline at which the next
@@ -5087,7 +5107,18 @@ fn emit_node(svg: &mut SvgEmitter, node: &LayoutNode, cx: f64, y: f64) -> f64 {
             is_label,
             not_label: _,
             backward,
-        } => emit_repeat(svg, cx, y, body, condition, is_label, backward.as_deref()),
+        } => emit_repeat(
+            svg,
+            cx,
+            y,
+            body,
+            condition,
+            is_label,
+            RepeatEmitOptions {
+                backward: backward.as_deref(),
+                body_top_extra: repeat_body_top_extra,
+            },
+        ),
         LayoutNode::Arrow { .. } | LayoutNode::Note { .. } => y,
         LayoutNode::Detach | LayoutNode::Kill | LayoutNode::Break => y,
         LayoutNode::Title {
@@ -5389,9 +5420,9 @@ fn emit_if(
     // connectors into the connectors buffer FIRST. PlantUML emits branch-
     // internal connectors before the diamond→branch outbound connectors.
     let branch_y = diamond_bottom + IF_BRANCH_DOWN;
-    let then_bottom = emit_sequence(svg, then_branch, then_cx, branch_y);
+    let then_bottom = emit_sequence_if_branch(svg, then_branch, then_cx, branch_y);
     let else_bottom = if !else_branches.is_empty() {
-        emit_sequence(svg, &else_branches[0].body, else_cx, branch_y)
+        emit_sequence_if_branch(svg, &else_branches[0].body, else_cx, branch_y)
     } else {
         branch_y
     };
@@ -5849,6 +5880,33 @@ fn repeat_body_height(body: &[LayoutNode], has_backward: bool) -> f64 {
         + repeat_body_mid_stretch(body, has_backward).map_or(0.0, |(_, stretch)| stretch)
 }
 
+fn first_flow_node(nodes: &[LayoutNode]) -> Option<&LayoutNode> {
+    nodes.iter().find(|node| node_is_flow(node))
+}
+
+fn leading_if_branch_repeat_extra(node: &LayoutNode) -> f64 {
+    let LayoutNode::Repeat {
+        body,
+        is_label,
+        backward,
+        ..
+    } = node
+    else {
+        return 0.0;
+    };
+    if is_label.is_some()
+        || backward.is_some()
+        || body.iter().filter(|n| node_is_flow(n)).count() != 1
+    {
+        return 0.0;
+    }
+    (repeat_body_height(body, false) - DIAMOND_HALF * 2.0).max(0.0)
+}
+
+fn sequence_height_if_branch(nodes: &[LayoutNode]) -> f64 {
+    sequence_height(nodes) + first_flow_node(nodes).map_or(0.0, leading_if_branch_repeat_extra)
+}
+
 /// Asymmetric "down" layout for an `if/else` where one branch is empty.
 /// The populated branch flows down the centre spine; the empty branch is a
 /// thin corridor on the right that exits the diamond's east vertex and rejoins
@@ -5888,7 +5946,15 @@ fn emit_if_down(
     } else {
         None
     };
-    let branch_bottom = emit_sequence_ex(svg, plan.populated, cx, branch_top, mid_stretch, None);
+    let branch_bottom = emit_sequence_ex(
+        svg,
+        plan.populated,
+        cx,
+        branch_top,
+        mid_stretch,
+        None,
+        false,
+    );
 
     // Condition hexagon.
     let pts = vec![
@@ -6446,7 +6512,7 @@ fn emit_while(
     // Body below diamond — emit it first (PlantUML emits body shapes before
     // diamond shapes in document order).
     let body_mid_stretch = while_body_mid_stretch(body, is_label.is_some());
-    let body_bottom = emit_sequence_ex(svg, body, cx, body_top, body_mid_stretch, None);
+    let body_bottom = emit_sequence_ex(svg, body, cx, body_top, body_mid_stretch, None, false);
 
     // Junction y: 12 px below the body for empty bodies, 10 px for
     // non-empty bodies. PlantUML's UEmpty(5, halfHex=12) placeholder is
@@ -6752,6 +6818,11 @@ fn emit_while(
     }
 }
 
+struct RepeatEmitOptions<'a> {
+    backward: Option<&'a str>,
+    body_top_extra: f64,
+}
+
 fn emit_repeat(
     svg: &mut SvgEmitter,
     cx: f64,
@@ -6759,8 +6830,10 @@ fn emit_repeat(
     body: &[LayoutNode],
     condition: &str,
     is_label: &Option<String>,
-    backward: Option<&str>,
+    options: RepeatEmitOptions<'_>,
 ) -> f64 {
+    let backward = options.backward;
+    let body_top_extra = options.body_top_extra;
     let arrow_color = svg.palette.arrow_color.clone();
     let diamond_stroke = svg.palette.diamond_stroke.clone();
     let diamond_fill = svg.palette.diamond_fill.clone();
@@ -6772,11 +6845,11 @@ fn emit_repeat(
     // up-front so we can defer the diamond emits until after the body.
     let top_diamond_size = DIAMOND_HALF;
     let top_bottom = y + top_diamond_size * 2.0;
-    let body_y = top_bottom + ARROW_LEN;
+    let body_y = top_bottom + ARROW_LEN + body_top_extra;
 
     // Body first — its rects/texts land in `shapes` before either diamond.
     let body_mid_stretch = repeat_body_mid_stretch(body, backward.is_some());
-    let body_bottom = emit_sequence_ex(svg, body, cx, body_y, body_mid_stretch, None);
+    let body_bottom = emit_sequence_ex(svg, body, cx, body_y, body_mid_stretch, None, false);
     // Single-action backward repeats keep the extra halfHex before the
     // condition diamond; multi-action bodies absorb that slack in their final
     // inbound connector.
@@ -6972,7 +7045,7 @@ fn emit_repeat(
         // long vertical run (not at the top) so the direction is clear when
         // the loop spans many actions.
         let body_stretch = body_mid_stretch.map_or(0.0, |(_, stretch)| stretch);
-        let mid_y = (top_cy + cond_diamond_cy - body_stretch) / 2.0;
+        let mid_y = (top_cy + cond_diamond_cy - body_stretch + body_top_extra) / 2.0;
         svg.polygon_connector(
             &arrow_color,
             &[
@@ -8005,7 +8078,7 @@ fn render_inner(
     }
 
     // Emit all nodes.
-    emit_sequence_ex(&mut svg, &tree, cx, start_y, None, lead_note_h);
+    emit_sequence_ex(&mut svg, &tree, cx, start_y, None, lead_note_h, false);
 
     if !caption_lines.is_empty() {
         let source_line = diagram.meta.caption_line.unwrap_or(1);
