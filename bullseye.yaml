@@ -579,7 +579,7 @@ targets:
     discovered: 2026-05-30
   T8:
     name: Salt diagram-chrome directives (header/footer/title/caption) render
-    status: identified
+    status: achieved
     value: 0.0
     cost: 0.0
     acceptance:
@@ -593,9 +593,10 @@ targets:
     - chrome
     origin: manual
     discovered: 2026-05-30
+    achieved: 2026-06-07
   T9:
     name: Salt tab-bar ({/) vertical layout and composite dialogs render
-    status: identified
+    status: achieved
     value: 0.0
     cost: 0.0
     acceptance:
@@ -607,3 +608,4 @@ targets:
     - visual
     origin: manual
     discovered: 2026-05-30
+    achieved: 2026-06-07
