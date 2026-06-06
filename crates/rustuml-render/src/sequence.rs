@@ -1816,6 +1816,16 @@ struct AutoNumberStyle {
     italic: bool,
     underline: bool,
     fill: Option<String>,
+    runs: Vec<AutoNumberRun>,
+}
+
+#[derive(Clone)]
+struct AutoNumberRun {
+    text: String,
+    bold: bool,
+    italic: bool,
+    underline: bool,
+    fill: Option<String>,
 }
 
 impl AutoNumberStyle {
@@ -1825,6 +1835,7 @@ impl AutoNumberStyle {
             italic: autonumber_is_italic(format),
             underline: autonumber_is_underline(format),
             fill: autonumber_color(format),
+            runs: Vec::new(),
         }
     }
 }
@@ -1883,8 +1894,11 @@ impl AutoState {
             return None;
         }
         let num_text = format_autonumber(self.counter, &self.format);
-        let style = AutoNumberStyle::from_format(&self.format);
-        let num_w = if style.bold {
+        let mut style = AutoNumberStyle::from_format(&self.format);
+        style.runs = format_autonumber_runs(self.counter, &self.format);
+        let num_w = if !style.runs.is_empty() {
+            style.runs.iter().map(autonumber_run_width).sum()
+        } else if style.bold {
             bold_text_width(&num_text, MSG_FONT_SIZE)
         } else {
             text_width(&num_text, MSG_FONT_SIZE)
@@ -1897,6 +1911,265 @@ impl AutoState {
         if self.active {
             self.counter = self.counter.saturating_add(self.step);
         }
+    }
+}
+
+fn push_autonumber_run(
+    runs: &mut Vec<AutoNumberRun>,
+    text: String,
+    bold: bool,
+    italic: bool,
+    underline: bool,
+    fill: Option<String>,
+) {
+    if text.is_empty() {
+        return;
+    }
+    if let Some(last) = runs.last_mut()
+        && last.bold == bold
+        && last.italic == italic
+        && last.underline == underline
+        && last.fill == fill
+    {
+        last.text.push_str(&text);
+        return;
+    }
+    runs.push(AutoNumberRun {
+        text,
+        bold,
+        italic,
+        underline,
+        fill,
+    });
+}
+
+fn parse_autonumber_template_runs(format: &str) -> Vec<AutoNumberRun> {
+    let mut runs = Vec::new();
+    let mut text = String::new();
+    let mut bold = false;
+    let mut italic = false;
+    let mut underline = false;
+    let mut fill: Option<String> = None;
+    let mut iter = format.char_indices().peekable();
+
+    while let Some((_, c)) = iter.next() {
+        if c != '<' {
+            text.push(c);
+            continue;
+        }
+
+        let mut tag = String::new();
+        let mut closed = false;
+        for (_, tc) in iter.by_ref() {
+            if tc == '>' {
+                closed = true;
+                break;
+            }
+            tag.push(tc);
+        }
+        if !closed {
+            text.push('<');
+            text.push_str(&tag);
+            break;
+        }
+
+        push_autonumber_run(
+            &mut runs,
+            std::mem::take(&mut text),
+            bold,
+            italic,
+            underline,
+            fill.clone(),
+        );
+
+        let lower = tag.trim().to_ascii_lowercase();
+        match lower.as_str() {
+            "b" => bold = true,
+            "/b" => bold = false,
+            "i" => italic = true,
+            "/i" => italic = false,
+            "u" => underline = true,
+            "/u" => underline = false,
+            "/font" | "/color" => fill = None,
+            _ => {
+                if let Some(rest) = lower.strip_prefix("font color") {
+                    let color = rest
+                        .trim_start_matches(|c: char| c.is_whitespace() || c == '=')
+                        .trim_start_matches(['"', '\''])
+                        .split(|c: char| c == '"' || c == '\'' || c == '>' || c.is_whitespace())
+                        .next()
+                        .unwrap_or_default();
+                    if !color.is_empty() {
+                        fill = Some(resolve_color(color));
+                    }
+                } else if let Some(color) = lower.strip_prefix("color:") {
+                    let color = color.trim();
+                    if !color.is_empty() {
+                        fill = Some(resolve_color(color));
+                    }
+                }
+            }
+        }
+    }
+
+    push_autonumber_run(&mut runs, text, bold, italic, underline, fill);
+    runs
+}
+
+fn format_autonumber_runs(n: u32, format: &Option<String>) -> Vec<AutoNumberRun> {
+    let Some(fmt) = format else {
+        return Vec::new();
+    };
+    if !fmt.contains('<') {
+        return Vec::new();
+    }
+
+    let template_runs = parse_autonumber_template_runs(fmt);
+    let plain: String = template_runs.iter().map(|run| run.text.as_str()).collect();
+    let Some((start, end, replacement)) = autonumber_placeholder_replacement(n, &plain) else {
+        let mut runs = template_runs;
+        push_autonumber_run(
+            &mut runs,
+            n.to_string(),
+            false,
+            false,
+            false,
+            autonumber_color(format),
+        );
+        return runs;
+    };
+
+    let mut out = Vec::new();
+    let mut offset = 0usize;
+    let mut inserted = false;
+    for run in template_runs {
+        let run_start = offset;
+        let run_end = run_start + run.text.len();
+        offset = run_end;
+
+        if run_end <= start || run_start >= end {
+            push_autonumber_run(
+                &mut out,
+                run.text,
+                run.bold,
+                run.italic,
+                run.underline,
+                run.fill,
+            );
+            continue;
+        }
+
+        if start > run_start {
+            push_autonumber_run(
+                &mut out,
+                run.text[..start - run_start].to_string(),
+                run.bold,
+                run.italic,
+                run.underline,
+                run.fill.clone(),
+            );
+        }
+
+        if !inserted {
+            push_autonumber_run(
+                &mut out,
+                replacement.clone(),
+                run.bold,
+                run.italic,
+                run.underline,
+                run.fill.clone(),
+            );
+            inserted = true;
+        }
+
+        if end < run_end {
+            push_autonumber_run(
+                &mut out,
+                run.text[end - run_start..].to_string(),
+                run.bold,
+                run.italic,
+                run.underline,
+                run.fill,
+            );
+        }
+    }
+
+    out
+}
+
+fn autonumber_placeholder_replacement(n: u32, plain: &str) -> Option<(usize, usize, String)> {
+    if let Some(start) = plain.find('0') {
+        let end = plain[start..]
+            .find(|c| c != '0')
+            .map(|i| start + i)
+            .unwrap_or(plain.len());
+        let width = end - start;
+        Some((start, end, format!("{n:0>width$}")))
+    } else if let Some(start) = plain.find('#') {
+        let end = plain[start..]
+            .find(|c: char| c != '#')
+            .map(|i| start + i)
+            .unwrap_or(plain.len());
+        Some((start, end, n.to_string()))
+    } else {
+        None
+    }
+}
+
+fn autonumber_run_width(run: &AutoNumberRun) -> f64 {
+    if run.bold {
+        bold_text_width(&run.text, MSG_FONT_SIZE)
+    } else {
+        text_width(&run.text, MSG_FONT_SIZE)
+    }
+}
+
+fn emit_autonumber_prefix(
+    buf: &mut String,
+    num_text: &str,
+    x: f64,
+    y: f64,
+    style: &AutoNumberStyle,
+) {
+    if style.runs.is_empty() {
+        let fill = style.fill.as_deref().unwrap_or("#000000");
+        text_render::emit_text(
+            buf,
+            num_text,
+            &TextBase {
+                x,
+                y,
+                font_size: 13,
+                font_family: "sans-serif",
+                fill,
+                bold: style.bold,
+                italic: style.italic,
+                underline: style.underline,
+                skip_underline: false,
+            },
+        );
+        return;
+    }
+
+    let mut run_x = x;
+    for run in &style.runs {
+        let fill = run.fill.as_deref().unwrap_or("#000000");
+        text_render::emit_text(
+            buf,
+            &run.text,
+            &TextBase {
+                x: run_x,
+                y,
+                font_size: 13,
+                font_family: "sans-serif",
+                fill,
+                bold: run.bold,
+                italic: run.italic,
+                underline: run.underline,
+                skip_underline: false,
+            },
+        );
+        run_x += autonumber_run_width(run);
     }
 }
 
@@ -3236,22 +3509,7 @@ impl PlantUmlSvg {
         .unwrap();
 
         let label_x = if let Some((num_text, num_w, style)) = autonumber {
-            let fill = style.fill.as_deref().unwrap_or("#000000");
-            text_render::emit_text(
-                &mut self.buf,
-                num_text,
-                &TextBase {
-                    x: text_x,
-                    y: text_y,
-                    font_size: 13,
-                    font_family: "sans-serif",
-                    fill,
-                    bold: style.bold,
-                    italic: style.italic,
-                    underline: style.underline,
-                    skip_underline: false,
-                },
-            );
+            emit_autonumber_prefix(&mut self.buf, num_text, text_x, text_y, style);
             text_x + num_w + AUTONUMBER_LABEL_GAP
         } else {
             text_x
@@ -3339,23 +3597,7 @@ impl PlantUmlSvg {
         .unwrap();
 
         let label_x = if let Some((num_text, num_w, style)) = autonumber {
-            // Autonumber styling derived from creole tags in the format string.
-            let fill = style.fill.as_deref().unwrap_or("#000000");
-            text_render::emit_text(
-                &mut self.buf,
-                num_text,
-                &TextBase {
-                    x: text_x,
-                    y: text_y,
-                    font_size: 13,
-                    font_family: "sans-serif",
-                    fill,
-                    bold: style.bold,
-                    italic: style.italic,
-                    underline: style.underline,
-                    skip_underline: false,
-                },
-            );
+            emit_autonumber_prefix(&mut self.buf, num_text, text_x, text_y, style);
             text_x + num_w + AUTONUMBER_LABEL_GAP
         } else {
             text_x
@@ -3457,22 +3699,7 @@ impl PlantUmlSvg {
         .unwrap();
 
         let label_x = if let Some((num_text, num_w, style)) = autonumber {
-            let fill = style.fill.as_deref().unwrap_or("#000000");
-            text_render::emit_text(
-                &mut self.buf,
-                num_text,
-                &TextBase {
-                    x: text_x,
-                    y: text_y,
-                    font_size: 13,
-                    font_family: "sans-serif",
-                    fill,
-                    bold: style.bold,
-                    italic: style.italic,
-                    underline: style.underline,
-                    skip_underline: false,
-                },
-            );
+            emit_autonumber_prefix(&mut self.buf, num_text, text_x, text_y, style);
             text_x + num_w + AUTONUMBER_LABEL_GAP
         } else {
             text_x
@@ -3585,23 +3812,7 @@ impl PlantUmlSvg {
         .unwrap();
 
         let label_x = if let Some((num_text, num_w, style)) = autonumber {
-            // Autonumber styling derived from creole tags in the format string.
-            let fill = style.fill.as_deref().unwrap_or("#000000");
-            text_render::emit_text(
-                &mut self.buf,
-                num_text,
-                &TextBase {
-                    x: text_x,
-                    y: text_y,
-                    font_size: 13,
-                    font_family: "sans-serif",
-                    fill,
-                    bold: style.bold,
-                    italic: style.italic,
-                    underline: style.underline,
-                    skip_underline: false,
-                },
-            );
+            emit_autonumber_prefix(&mut self.buf, num_text, text_x, text_y, style);
             text_x + num_w + AUTONUMBER_LABEL_GAP
         } else {
             text_x
