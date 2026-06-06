@@ -585,6 +585,11 @@ fn scale_oracle_layout_inner(o: &mut OracleLayout, k: f64) {
             scale_cluster_child(child, k);
         }
     }
+    for c in &mut o.loose_clusters {
+        for child in &mut c.children {
+            scale_cluster_child(child, k);
+        }
+    }
     for n in &mut o.note_entities {
         if let Some(g) = n.box_geom.as_mut() {
             g.x *= k;

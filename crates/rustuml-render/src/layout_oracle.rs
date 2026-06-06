@@ -33,6 +33,10 @@ pub struct OracleLayout {
     /// emit the inner XML verbatim between the cluster's opening and
     /// closing `<g>` tags to reproduce PlantUML's shape and label.
     pub clusters: Vec<OracleCluster>,
+    /// Package-like shapes that PlantUML emits directly under the root `<g>`
+    /// without a wrapping `class="cluster"` group. Empty class packages use
+    /// this form, so class rendering splices these structured children bare.
+    pub loose_clusters: Vec<OracleCluster>,
     /// Note entities captured verbatim from the golden SVG, keyed by
     /// auto-generated qualified name (typically `GMNn`). PlantUML emits
     /// notes as `<g class="entity">` with a hand-rolled path including

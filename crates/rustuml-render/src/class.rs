@@ -2224,6 +2224,11 @@ fn render_plantuml_svg(
         emit_oracle_cluster_children(&mut svg, cluster);
         svg.push_str("</g>");
     }
+    if let Some(oracle) = oracle {
+        for cluster in &oracle.loose_clusters {
+            emit_oracle_cluster_children(&mut svg, cluster);
+        }
+    }
 
     // Entity ID counter (PlantUML starts at ent0002, shifted past clusters).
     let mut ent_id = 2 + oracle_pkg_clusters.len();
