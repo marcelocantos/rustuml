@@ -175,6 +175,15 @@ fn css_color(name: &str) -> String {
     }
 }
 
+fn task_fill_stroke(color: &str) -> (String, String) {
+    if let Some((fill, stroke)) = color.split_once('/') {
+        (css_color(fill), css_color(stroke))
+    } else {
+        let fill = css_color(color);
+        (fill.clone(), fill)
+    }
+}
+
 // ── Low-level emit helpers (PlantUML attribute conventions) ─────────────────────
 
 fn escape_xml(s: &str) -> String {
@@ -823,7 +832,7 @@ pub fn render(diagram: &GanttDiagram, _theme: &Theme) -> String {
                 let fill = task
                     .color
                     .as_deref()
-                    .map(css_color)
+                    .map(|c| task_fill_stroke(c).0)
                     .unwrap_or_else(|| TEXT_COLOR.to_string());
                 svg.raw_inline(&format!(
                     r#"<polygon fill="{fill}" points="{cx},{t},{r},{cy},{cx},{b},{l},{cy}" style="stroke:{fill};stroke-width:1;"/>"#,
@@ -835,16 +844,13 @@ pub fn render(diagram: &GanttDiagram, _theme: &Theme) -> String {
                     l = fmt_coord(cx - 5.0),
                 ));
             } else {
-                let colored = task.color.is_some();
-                let fill = task
-                    .color
-                    .as_deref()
-                    .map(css_color)
-                    .unwrap_or_else(|| DEFAULT_BAR_COLOR.to_string());
-                let stroke = if colored {
-                    fill.clone()
+                let (fill, stroke) = if let Some(color) = task.color.as_deref() {
+                    task_fill_stroke(color)
                 } else {
-                    DEFAULT_BAR_STROKE.to_string()
+                    (
+                        DEFAULT_BAR_COLOR.to_string(),
+                        DEFAULT_BAR_STROKE.to_string(),
+                    )
                 };
 
                 // Split the bar's calendar span into runs of consecutive open
@@ -1838,6 +1844,18 @@ mod tests {
         assert_eq!(r[0], (0, 3));
         assert_eq!(r[1], (3, 2));
         assert_eq!(r[2], (5, 4));
+    }
+
+    #[test]
+    fn task_color_can_split_fill_and_stroke() {
+        assert_eq!(
+            task_fill_stroke("LightBlue/Blue"),
+            ("#ADD8E6".to_string(), "#0000FF".to_string())
+        );
+        assert_eq!(
+            task_fill_stroke("Coral"),
+            ("#FF7F50".to_string(), "#FF7F50".to_string())
+        );
     }
 
     #[test]
