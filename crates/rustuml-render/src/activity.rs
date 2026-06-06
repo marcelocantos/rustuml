@@ -683,6 +683,7 @@ enum LayoutNode {
     Fork {
         branches: Vec<Vec<LayoutNode>>,
         attached_notes: Vec<ActivityNote>,
+        is_split: bool,
     },
     /// A `switch (cond) / case (x) / ... / endswitch` block. Cases lay out
     /// horizontally below a condition diamond, fanning out via the diamond's
@@ -1295,6 +1296,7 @@ fn build_tree_inner(steps: &[ActivityStep], palette: &Palette) -> Vec<LayoutNode
                 i += 1;
             }
             ActivityStep::Fork | ActivityStep::Split => {
+                let is_split = matches!(steps[i], ActivityStep::Split);
                 i += 1;
                 let mut branches = Vec::new();
                 let first_branch = collect_until(steps, &mut i, palette, |s| {
@@ -1337,6 +1339,7 @@ fn build_tree_inner(steps: &[ActivityStep], palette: &Palette) -> Vec<LayoutNode
                 nodes.push(LayoutNode::Fork {
                     branches,
                     attached_notes,
+                    is_split,
                 });
             }
             ActivityStep::ForkAgain
@@ -1772,6 +1775,71 @@ fn fork_layout(branches: &[Vec<LayoutNode>]) -> ForkLayout {
         } else {
             0.0
         },
+    }
+}
+
+fn split_layout(branches: &[Vec<LayoutNode>]) -> ForkLayout {
+    let branch_extents: Vec<(f64, f64)> = branches.iter().map(|b| sequence_extents(b)).collect();
+    let branch_widths: Vec<f64> = branch_extents.iter().map(|(l, r)| l + r).collect();
+    let n = branch_widths.len();
+    if n == 0 {
+        return ForkLayout {
+            bar_w: 0.0,
+            centers: Vec::new(),
+            spine_dx: 0.0,
+        };
+    }
+    if branches.iter().any(Vec::is_empty) {
+        return fork_layout(branches);
+    }
+
+    let inter_gaps = if n > 1 { (n - 1) as f64 } else { 0.0 };
+    let has_asymmetric_branch = branch_extents
+        .iter()
+        .any(|(left, right)| (left - right).abs() > FORK_ASYMMETRIC_EPS);
+    let even_extra = if n >= 2 && n.is_multiple_of(2) && has_asymmetric_branch {
+        FORK_ASYMMETRIC_EVEN_MIDDLE_EXTRA
+    } else if n >= 2 && n.is_multiple_of(2) {
+        FORK_EVEN_MIDDLE_EXTRA
+    } else {
+        0.0
+    };
+    let bar_w = branch_widths.iter().sum::<f64>() + inter_gaps * FORK_BRANCH_GAP + even_extra;
+    let mut centers = Vec::with_capacity(n);
+    if n == 1 {
+        centers.push(bar_w / 2.0);
+    } else {
+        let mut x = 0.0;
+        let middle_gap_idx = if even_extra > 0.0 {
+            Some(n / 2 - 1)
+        } else {
+            None
+        };
+        for (i, (left, right)) in branch_extents.iter().enumerate() {
+            centers.push(x + left);
+            x += left + right;
+            if i + 1 < n {
+                let extra = if Some(i) == middle_gap_idx {
+                    even_extra
+                } else {
+                    0.0
+                };
+                x += FORK_BRANCH_GAP + extra;
+            }
+        }
+    }
+    ForkLayout {
+        bar_w,
+        centers,
+        spine_dx: 0.0,
+    }
+}
+
+fn parallel_layout(branches: &[Vec<LayoutNode>], is_split: bool) -> ForkLayout {
+    if is_split {
+        split_layout(branches)
+    } else {
+        fork_layout(branches)
     }
 }
 
@@ -2756,7 +2824,9 @@ fn node_geometry(node: &LayoutNode) -> Option<ftile::FtileGeometry> {
                 backward_g.as_ref(),
             )
         }
-        LayoutNode::Fork { branches, .. } => fork_geometry(branches, false),
+        LayoutNode::Fork {
+            branches, is_split, ..
+        } => fork_geometry(branches, false, *is_split),
         _ => return None,
     };
     Some(g)
@@ -2764,32 +2834,50 @@ fn node_geometry(node: &LayoutNode) -> Option<ftile::FtileGeometry> {
 
 fn node_geometry_if_branch(node: &LayoutNode) -> Option<ftile::FtileGeometry> {
     match node {
-        LayoutNode::Fork { branches, .. } => Some(fork_geometry_with_layout(
+        LayoutNode::Fork {
+            branches, is_split, ..
+        } => Some(fork_geometry_with_layout(
             branches,
-            fork_layout_if_branch_spacing(branches),
+            if *is_split {
+                split_layout(branches)
+            } else {
+                fork_layout_if_branch_spacing(branches)
+            },
+            *is_split,
         )),
         _ => node_geometry(node),
     }
 }
 
-fn fork_geometry(branches: &[Vec<LayoutNode>], if_branch: bool) -> ftile::FtileGeometry {
-    let layout = if if_branch {
+fn fork_geometry(
+    branches: &[Vec<LayoutNode>],
+    if_branch: bool,
+    is_split: bool,
+) -> ftile::FtileGeometry {
+    let layout = if is_split {
+        split_layout(branches)
+    } else if if_branch {
         fork_layout_if_branch(branches)
     } else {
         fork_layout(branches)
     };
-    fork_geometry_with_layout(branches, layout)
+    fork_geometry_with_layout(branches, layout, is_split)
 }
 
 fn fork_geometry_with_layout(
     branches: &[Vec<LayoutNode>],
     layout: ForkLayout,
+    is_split: bool,
 ) -> ftile::FtileGeometry {
     let max_h: f64 = branches
         .iter()
         .map(|b| sequence_height(b))
         .fold(0.0f64, f64::max);
-    let height = FORK_BAR_HEIGHT + ARROW_LEN + max_h + ARROW_LEN + FORK_BAR_HEIGHT;
+    let height = if is_split {
+        ARROW_LEN + max_h + ARROW_LEN
+    } else {
+        FORK_BAR_HEIGHT + ARROW_LEN + max_h + ARROW_LEN + FORK_BAR_HEIGHT
+    };
     ftile::FtileGeometry::new(
         layout.bar_w,
         height,
@@ -3382,8 +3470,9 @@ fn node_extents(node: &LayoutNode) -> (f64, f64) {
         LayoutNode::Fork {
             branches,
             attached_notes,
+            is_split,
         } => {
-            let layout = fork_layout(branches);
+            let layout = parallel_layout(branches, *is_split);
             let (left, right) = fork_bar_extents(&layout);
             with_fork_attached_note_extents(left, right, attached_notes)
         }
@@ -3562,8 +3651,13 @@ fn node_extents_if_branch(node: &LayoutNode) -> (f64, f64) {
         LayoutNode::Fork {
             branches,
             attached_notes,
+            is_split,
         } => {
-            let layout = fork_layout_if_branch(branches);
+            let layout = if *is_split {
+                split_layout(branches)
+            } else {
+                fork_layout_if_branch(branches)
+            };
             let (left, right) = fork_bar_extents(&layout);
             with_fork_attached_note_extents(left, right, attached_notes)
         }
@@ -3717,7 +3811,9 @@ fn node_width(node: &LayoutNode) -> f64 {
             let (left, right) = node_extents(node);
             left + right
         }
-        LayoutNode::Fork { branches, .. } => fork_layout(branches).bar_w,
+        LayoutNode::Fork {
+            branches, is_split, ..
+        } => parallel_layout(branches, *is_split).bar_w,
         LayoutNode::Switch { cases, condition } => switch_case_block_width(cases, condition),
         LayoutNode::While { .. } => {
             // Width = left_extent + right_extent. The asymmetric formula lives
@@ -4316,12 +4412,18 @@ fn node_height(node: &LayoutNode) -> f64 {
                 diamond_h + IF_BRANCH_DOWN + branch_h + IF_BRANCH_UP + DIAMOND_HALF * 2.0
             }
         }
-        LayoutNode::Fork { branches, .. } => {
+        LayoutNode::Fork {
+            branches, is_split, ..
+        } => {
             let max_h: f64 = branches
                 .iter()
                 .map(|b| sequence_height(b))
                 .fold(0.0f64, f64::max);
-            FORK_BAR_HEIGHT + ARROW_LEN + max_h + ARROW_LEN + FORK_BAR_HEIGHT
+            if *is_split {
+                ARROW_LEN + max_h + ARROW_LEN
+            } else {
+                FORK_BAR_HEIGHT + ARROW_LEN + max_h + ARROW_LEN + FORK_BAR_HEIGHT
+            }
         }
         LayoutNode::Switch { cases, condition } => {
             let max_h: f64 = cases
@@ -5613,6 +5715,10 @@ fn emit_sequence_ex(
                     prev_idx.and_then(|j| nodes.get(j)),
                     Some(LayoutNode::Partition { .. })
                 );
+                let prev_was_split = matches!(
+                    prev_idx.and_then(|j| nodes.get(j)),
+                    Some(LayoutNode::Fork { is_split: true, .. })
+                );
                 let is_partition = partition_top_gap.is_some();
                 // A long if/elseif/else draws its own multi-segment inbound
                 // connector (`ConnectionIn`) from the previous node's bottom to
@@ -5625,7 +5731,13 @@ fn emit_sequence_ex(
                 // When the previous flow node was a partition, the inbound
                 // arrow to the current node extends back 12 px into the
                 // partition's bottom margin (overlaying the partition rect).
-                let arrow_top_y = if prev_was_partition { y - 12.0 } else { y };
+                let arrow_top_y = if prev_was_partition {
+                    y - 12.0
+                } else if prev_was_split {
+                    y + 1.5
+                } else {
+                    y
+                };
                 let arrow_gap = {
                     let base = if let Some(tg) = partition_top_gap {
                         // y_in is `y` (no advance yet); first inner action
@@ -5637,6 +5749,8 @@ fn emit_sequence_ex(
                     let base = base + note_inbound_extra;
                     if prev_was_partition {
                         base + 12.0
+                    } else if prev_was_split {
+                        base - 1.5
                     } else {
                         base
                     }
@@ -5704,10 +5818,13 @@ fn emit_sequence_ex(
         if let LayoutNode::Fork {
             branches,
             attached_notes,
+            is_split,
         } = node
             && !attached_notes.is_empty()
         {
-            let layout = if first_repeat_branch_extra {
+            let layout = if *is_split {
+                split_layout(branches)
+            } else if first_repeat_branch_extra {
                 fork_layout_if_branch(branches)
             } else {
                 fork_layout(branches)
@@ -6015,8 +6132,12 @@ fn emit_node_with_repeat_extra(
             then_branch,
             else_branches,
         ),
-        LayoutNode::Fork { branches, .. } => {
-            if if_branch {
+        LayoutNode::Fork {
+            branches, is_split, ..
+        } => {
+            if *is_split {
+                emit_split(svg, cx, y, branches)
+            } else if if_branch {
                 emit_fork_with_layout(svg, cx, y, branches, fork_layout_if_branch(branches))
             } else {
                 emit_fork(svg, cx, y, branches)
@@ -7663,6 +7784,72 @@ fn emit_fork_with_layout(
     );
 
     bottom_bar_y + FORK_BAR_HEIGHT
+}
+
+fn emit_split(svg: &mut SvgEmitter, cx: f64, y: f64, branches: &[Vec<LayoutNode>]) -> f64 {
+    if branches.is_empty() {
+        return y;
+    }
+
+    emit_split_with_layout(svg, cx, y, branches, split_layout(branches))
+}
+
+fn emit_split_with_layout(
+    svg: &mut SvgEmitter,
+    cx: f64,
+    y: f64,
+    branches: &[Vec<LayoutNode>],
+    layout: ForkLayout,
+) -> f64 {
+    if branches.is_empty() {
+        return y;
+    }
+
+    let left_x = cx + layout.spine_dx - layout.bar_w / 2.0;
+    let branch_centers: Vec<f64> = layout
+        .centers
+        .iter()
+        .map(|center| left_x + center)
+        .collect();
+    let Some((&line_start, &line_end)) = branch_centers.first().zip(branch_centers.last()) else {
+        return y;
+    };
+    let line_color = svg.palette.arrow_color.clone();
+    svg.shape_line(&line_color, "1.5", line_start, line_end, y, y);
+
+    let branch_top = y + ARROW_LEN;
+    let mut branch_bottoms = Vec::new();
+    for (branch, &bcx) in branches.iter().zip(branch_centers.iter()) {
+        let bottom = emit_sequence(svg, branch, bcx, branch_top);
+        branch_bottoms.push(bottom);
+    }
+
+    let max_bottom = branch_bottoms.iter().cloned().fold(0.0f64, f64::max);
+    let bottom_line_y = max_bottom + ARROW_LEN;
+    svg.shape_line(
+        &line_color,
+        "1.5",
+        line_start,
+        line_end,
+        bottom_line_y,
+        bottom_line_y,
+    );
+
+    for (branch, &bcx) in branches.iter().zip(branch_centers.iter()) {
+        if branch.is_empty() {
+            svg.down_arrow(bcx, y + 1.5, bottom_line_y, &line_color);
+        } else {
+            svg.down_arrow(bcx, y + 1.5, branch_top, &line_color);
+        }
+    }
+    for (i, (branch, bottom)) in branches.iter().zip(branch_bottoms.iter()).enumerate() {
+        if branch.is_empty() {
+            continue;
+        }
+        svg.down_arrow(branch_centers[i], *bottom, bottom_line_y, &line_color);
+    }
+
+    bottom_line_y
 }
 
 #[allow(clippy::too_many_arguments)]
