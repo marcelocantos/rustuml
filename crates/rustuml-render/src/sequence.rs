@@ -10339,9 +10339,13 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                         .map(|p| p.box_x + p.box_width + REF_OUT_MARGIN)
                         .unwrap_or(100.0);
                 }
+                if diagram.teoz {
+                    r1 += REF_OUT_MARGIN;
+                    max_x -= REF_OUT_MARGIN;
+                }
                 let pref_w = rb.pref_w;
                 let total_w = (max_x - r1).max(pref_w);
-                let box_top = msg_y;
+                let box_top = msg_y + if diagram.teoz { -2.0 } else { 0.0 };
                 let rect_x = r1 + REF_XMARGIN;
                 let rect_w = total_w - REF_XMARGIN * 2.0;
                 let rect_h = rb.preferred_h - REF_FOOTER;
