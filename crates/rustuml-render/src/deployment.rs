@@ -821,7 +821,11 @@ fn emit_entity(
             emit_icon_entity(svg, node, rect, &entity_fill);
         } else if matches!(node.kind, Actor) {
             emit_actor_entity(svg, rect, &entity_fill);
-            let _ = emit_oracle_image_label_children(svg, rect);
+            if !emit_oracle_image_label_children(svg, rect)
+                && let Some(text) = rect.texts.first()
+            {
+                emit_text(svg, &text.text, text.x, text.y, FONT_SIZE, false, false);
+            }
         } else if matches!(node.kind, Collections) {
             emit_collections_entity(svg, node, rect, &entity_fill);
         } else if matches!(node.kind, Cloud) {
