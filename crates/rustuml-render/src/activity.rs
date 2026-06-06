@@ -61,6 +61,8 @@ const WHILE_UNLABELED_LOOP_ARROW_Y_PULL_UP: f64 = 2.0;
 const WHILE_BODY_SLOT_COMPRESS: f64 = 4.8203125;
 const PARTITION_COLORED_WHILE_SPINE_SHIFT: f64 = 1.5;
 const PARTITION_COLORED_WHILE_EXIT_ARROW_PULL_UP: f64 = WHILE_BODY_SLOT_COMPRESS / 2.0 - 1.0;
+const WHILE_SINGLE_IF_RIGHT_PAD: f64 = 2.0;
+const WHILE_SINGLE_IF_SPECIAL_HEIGHT_TRIM: f64 = 1.0;
 /// PlantUML enforces a minimum width on the inner (top/bottom) edge of
 /// decision diamonds: 24 px regardless of how short the condition text is.
 /// Reverse-engineered from goldens with one- and two-character conditions
@@ -2657,7 +2659,10 @@ fn node_extents(node: &LayoutNode) -> (f64, f64) {
             // arrowhead, plus halfHex of trailing reservation from FtileWhile's
             // `dx + halfHex` term (= 2*halfHex + 3 past max). Verified against
             // the width-only while goldens.
-            let right_extent = cond_half.max(body_right) + 2.0 * DIAMOND_HALF + 3.0;
+            let right_extent = cond_half.max(body_right)
+                + 2.0 * DIAMOND_HALF
+                + 3.0
+                + while_single_if_right_pad(body, end_label);
             (left_extent, right_extent)
         }
         LayoutNode::Fork { branches } => {
@@ -3279,6 +3284,18 @@ fn partition_wraps_while(body: &[LayoutNode]) -> bool {
     matches!(body, [LayoutNode::While { .. }])
 }
 
+fn while_body_is_single_if(body: &[LayoutNode]) -> bool {
+    matches!(body, [LayoutNode::If { .. }])
+}
+
+fn while_single_if_right_pad(body: &[LayoutNode], end_label: &Option<String>) -> f64 {
+    if end_label.is_none() && while_body_is_single_if(body) {
+        WHILE_SINGLE_IF_RIGHT_PAD
+    } else {
+        0.0
+    }
+}
+
 fn is_colored_partition_wrapping_while(node: &LayoutNode) -> bool {
     matches!(
         node,
@@ -3512,6 +3529,11 @@ fn node_height(node: &LayoutNode) -> f64 {
                 // hex tail below the body, while the terminator itself is
                 // placed at translateForSpecial.y by emit_while.
                 2.0 * DIAMOND_HALF
+                    - if while_body_is_single_if(body) {
+                        WHILE_SINGLE_IF_SPECIAL_HEIGHT_TRIM
+                    } else {
+                        0.0
+                    }
             } else if body.is_empty() {
                 DIAMOND_HALF + DIAMOND_HALF // empty: +12 to junction, +12 wrap-back
             } else {
@@ -6449,7 +6471,9 @@ fn emit_while(
     // extent so the terminator lands at the same absolute x as a
     // non-deprecated body. The body box itself stays centred on the spine.
     let body_left_x = cx - while_body_left(body, body_left_ext);
-    let loop_x = diamond_right_vertex_x.max(body_right_x) + DIAMOND_HALF;
+    let loop_x = diamond_right_vertex_x.max(body_right_x)
+        + DIAMOND_HALF
+        + while_single_if_right_pad(body, end_label);
 
     // Exit arm geometry. Two modes:
     //
