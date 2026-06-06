@@ -741,6 +741,7 @@ enum LayoutNode {
     /// in the source partition the flat step list into lane bodies.
     Swimlanes {
         lanes: Vec<Lane>,
+        segments: Vec<LaneSegment>,
     },
 }
 
@@ -749,6 +750,13 @@ struct Lane {
     name: String,
     #[allow(dead_code)]
     color: Option<String>,
+    content_left: f64,
+    content_right: f64,
+}
+
+#[derive(Debug)]
+struct LaneSegment {
+    lane_index: usize,
     body: Vec<LayoutNode>,
 }
 
@@ -1166,11 +1174,13 @@ fn build_tree(steps: &[ActivityStep], palette: &Palette) -> Vec<LayoutNode> {
 
 fn build_swimlanes(steps: &[ActivityStep], palette: &Palette) -> Vec<LayoutNode> {
     let mut lanes: Vec<Lane> = Vec::new();
+    let mut segments: Vec<LaneSegment> = Vec::new();
     let mut current_name: Option<String> = None;
     let mut current_color: Option<String> = None;
     let mut current_steps: Vec<ActivityStep> = Vec::new();
 
     let flush = |lanes: &mut Vec<Lane>,
+                 segments: &mut Vec<LaneSegment>,
                  name: &Option<String>,
                  color: &Option<String>,
                  steps: &mut Vec<ActivityStep>| {
@@ -1178,11 +1188,25 @@ fn build_swimlanes(steps: &[ActivityStep], palette: &Palette) -> Vec<LayoutNode>
             return;
         }
         let name = name.clone().unwrap_or_default();
-        lanes.push(Lane {
-            name,
-            color: color.clone(),
-            body: build_tree_inner(steps, palette),
-        });
+        let lane_index = if let Some(index) = lanes.iter().position(|lane| lane.name == name) {
+            if lanes[index].color.is_none() && color.is_some() {
+                lanes[index].color = color.clone();
+            }
+            index
+        } else {
+            lanes.push(Lane {
+                name,
+                color: color.clone(),
+                content_left: 0.0,
+                content_right: 0.0,
+            });
+            lanes.len() - 1
+        };
+        let body = build_tree_inner(steps, palette);
+        let (left, right) = sequence_extents(&body);
+        lanes[lane_index].content_left = lanes[lane_index].content_left.max(left);
+        lanes[lane_index].content_right = lanes[lane_index].content_right.max(right);
+        segments.push(LaneSegment { lane_index, body });
         steps.clear();
     };
 
@@ -1190,6 +1214,7 @@ fn build_swimlanes(steps: &[ActivityStep], palette: &Palette) -> Vec<LayoutNode>
         if let ActivityStep::Swimlane(lane) = step {
             flush(
                 &mut lanes,
+                &mut segments,
                 &current_name,
                 &current_color,
                 &mut current_steps,
@@ -1202,12 +1227,13 @@ fn build_swimlanes(steps: &[ActivityStep], palette: &Palette) -> Vec<LayoutNode>
     }
     flush(
         &mut lanes,
+        &mut segments,
         &current_name,
         &current_color,
         &mut current_steps,
     );
 
-    vec![LayoutNode::Swimlanes { lanes }]
+    vec![LayoutNode::Swimlanes { lanes, segments }]
 }
 
 fn layout_action_node(text: &str, palette: &Palette) -> LayoutNode {
@@ -1642,9 +1668,9 @@ fn mark_nested_partitions(nodes: &mut [LayoutNode], in_partition: bool) {
                     mark_nested_partitions(&mut case.body, in_partition);
                 }
             }
-            LayoutNode::Swimlanes { lanes } => {
-                for lane in lanes {
-                    mark_nested_partitions(&mut lane.body, in_partition);
+            LayoutNode::Swimlanes { segments, .. } => {
+                for segment in segments {
+                    mark_nested_partitions(&mut segment.body, in_partition);
                 }
             }
             _ => {}
@@ -1814,9 +1840,9 @@ fn node_if_depth(node: &LayoutNode) -> usize {
             .map(|case| sequence_if_depth(&case.body))
             .max()
             .unwrap_or(0),
-        LayoutNode::Swimlanes { lanes } => lanes
+        LayoutNode::Swimlanes { segments, .. } => segments
             .iter()
-            .map(|lane| sequence_if_depth(&lane.body))
+            .map(|segment| sequence_if_depth(&segment.body))
             .max()
             .unwrap_or(0),
         _ => 0,
@@ -3675,7 +3701,7 @@ fn node_extents(node: &LayoutNode) -> (f64, f64) {
         }
         // Swimlanes: asymmetric +4 left / +9 right so cx aligns lane_left
         // at PlantUML's fixed x=20 from SVG edge.
-        LayoutNode::Swimlanes { lanes } => {
+        LayoutNode::Swimlanes { lanes, .. } => {
             let total_w: f64 = lanes.iter().map(lane_width).sum();
             (total_w / 2.0 + 4.0, total_w / 2.0 + 9.0)
         }
@@ -3870,7 +3896,7 @@ fn node_width_if_branch(node: &LayoutNode) -> f64 {
 /// Width of a single swimlane: the wider of the content (with 10 px
 /// internal padding) and the title text (with ~10 px each side).
 fn lane_width(lane: &Lane) -> f64 {
-    let content_w = sequence_width(&lane.body);
+    let content_w = lane.content_left + lane.content_right;
     let title_w = text_render::measure(&lane.name, LANE_TITLE_FONT, false);
     (content_w + 10.0).max(title_w + 10.0)
 }
@@ -3879,8 +3905,7 @@ fn lane_width(lane: &Lane) -> f64 {
 /// Content is left-anchored at `lane_left + 6` and centred on its own
 /// natural cx, NOT the geometric centre of the lane.
 fn lane_content_cx(lane: &Lane, lane_left: f64) -> f64 {
-    let (content_left_ext, _content_right_ext) = sequence_extents(&lane.body);
-    lane_left + 6.0 + content_left_ext
+    lane_left + 6.0 + lane.content_left
 }
 
 /// Width of a `backward :label;` action box drawn on a repeat's return arm.
@@ -4056,7 +4081,7 @@ fn node_width(node: &LayoutNode) -> f64 {
         // Swimlanes: sum of per-lane widths. Each lane width is the wider
         // of its content_w + 10 (6 left + 4 right padding inside the lane)
         // and its title_w + horizontal padding for the heading text.
-        LayoutNode::Swimlanes { lanes } => lanes.iter().map(lane_width).sum(),
+        LayoutNode::Swimlanes { lanes, .. } => lanes.iter().map(lane_width).sum(),
         // Arrows, notes, detach/kill/break, and bare titles contribute no
         // horizontal extent of their own. (Notes will need width once they're
         // laid out alongside the flow; for now they fall back to 0.)
@@ -4816,16 +4841,16 @@ fn node_height(node: &LayoutNode) -> f64 {
         // MARGIN_LEAD) absorbs PlantUML's slightly larger top margin for
         // swimlane diagrams. The +2.54 trailing absorbs the slightly
         // larger bottom margin.
-        LayoutNode::Swimlanes { lanes } => {
+        LayoutNode::Swimlanes { segments, .. } => {
             let header_h = pm::text_height(LANE_TITLE_FONT);
             let mut body_h = 0.0_f64;
-            for (i, lane) in lanes.iter().enumerate() {
-                let mut h = sequence_height(&lane.body);
-                if matches!(lane.body.first(), Some(LayoutNode::Start)) {
+            for (i, segment) in segments.iter().enumerate() {
+                let mut h = sequence_height(&segment.body);
+                if matches!(segment.body.first(), Some(LayoutNode::Start)) {
                     h -= START_CY + START_R - 16.0 - START_R; // = 9
                 }
                 body_h += h;
-                if i + 1 < lanes.len() {
+                if i + 1 < segments.len() {
                     body_h += ARROW_LEN; // cross-lane transition
                 }
             }
@@ -6721,7 +6746,7 @@ fn emit_node_with_repeat_extra(
 
             partition_top + partition_h
         }
-        LayoutNode::Swimlanes { lanes } => emit_swimlanes(svg, cx, y, lanes),
+        LayoutNode::Swimlanes { lanes, segments } => emit_swimlanes(svg, cx, y, lanes, segments),
     }
 }
 
@@ -9196,7 +9221,13 @@ fn emit_repeat(
 ///   - Per-lane content centered on lane.cx with 6 left + 4 right padding.
 ///   - Cross-lane arrow: source_cx vertical down 5 → horizontal at +5 →
 ///     target_cx vertical down (15 more) with arrowhead.
-fn emit_swimlanes(svg: &mut SvgEmitter, cx: f64, y: f64, lanes: &[Lane]) -> f64 {
+fn emit_swimlanes(
+    svg: &mut SvgEmitter,
+    cx: f64,
+    y: f64,
+    lanes: &[Lane],
+    segments: &[LaneSegment],
+) -> f64 {
     let arrow_color = svg.palette.arrow_color.clone();
     let title_color = svg.palette.swimlane_title_color.clone();
     let divider_color = svg.palette.swimlane_border_color.clone();
@@ -9251,50 +9282,51 @@ fn emit_swimlanes(svg: &mut SvgEmitter, cx: f64, y: f64, lanes: &[Lane]) -> f64 
     )
     .unwrap();
 
-    // Pre-compute the final last_y so dividers (emitted interleaved with
-    // lane bodies) can use the full vertical extent. Round to 4 decimals
-    // (HALF_UP) before adding to body_top — this matches PlantUML's
-    // intermediate precision and avoids accumulating IEEE 754 sub-ULPs
-    // that would push final_last_y across rounding boundaries.
-    let mut body_h_total = 0.0_f64;
-    for (i, lane) in lanes.iter().enumerate() {
-        let mut h = sequence_height(&lane.body);
-        if matches!(lane.body.first(), Some(LayoutNode::Start)) {
+    // Plan chronological y positions first. PlantUML uses unique lane
+    // columns, but source visits to those columns are temporal segments:
+    // `|A| ... |B| ... |A|` draws two A segments in the A column, with the
+    // second segment placed after the intervening B segment.
+    let mut segment_ys: Vec<f64> = Vec::with_capacity(segments.len());
+    let mut segment_end_ys: Vec<f64> = Vec::with_capacity(segments.len());
+    let mut last_y = body_top;
+    for (i, segment) in segments.iter().enumerate() {
+        let segment_y = if i == 0 {
+            body_top
+        } else {
+            ((last_y + ARROW_LEN) * 10000.0 + 0.5).floor() / 10000.0
+        };
+        let mut h = sequence_height(&segment.body);
+        if matches!(segment.body.first(), Some(LayoutNode::Start)) {
             h -= 9.0; // Start contributes only START_R inside swimlane.
         }
-        body_h_total += h;
-        if i + 1 < lanes.len() {
-            body_h_total += ARROW_LEN;
-        }
+        last_y = segment_y + h;
+        segment_ys.push(segment_y);
+        segment_end_ys.push(last_y);
     }
-    body_h_total = (body_h_total * 10000.0 + 0.5).floor() / 10000.0;
-    let final_last_y = body_top + body_h_total;
+    let final_last_y = last_y;
 
-    // Emit lane bodies, interleaving the LEFT divider of each lane after
-    // its body shapes land. Cross-lane arrow CONNECTORS are deferred
-    // (collected per-lane and emitted after all bodies) so they appear at
-    // the end of the connectors buffer, matching PlantUML's golden order
-    // (per-lane internal arrows first, then all cross-lane arrows).
-    let mut last_y = body_top;
-    let mut prev_lane_idx: Option<usize> = None;
-    // (prev_cx, prev_last_y, target_cx, target_y) for each cross-lane.
+    // (prev_cx, prev_last_y, target_cx, target_y) for each cross-lane/source
+    // transition. These are emitted after all per-lane internal connectors.
     let mut deferred_cross_lanes: Vec<(f64, f64, f64, f64)> = Vec::new();
+    for i in 1..segments.len() {
+        let prev = &segments[i - 1];
+        let current = &segments[i];
+        deferred_cross_lanes.push((
+            lane_cxs[prev.lane_index],
+            segment_end_ys[i - 1],
+            lane_cxs[current.lane_index],
+            segment_ys[i],
+        ));
+    }
+
+    // Emit lane bodies grouped by physical column. This matches PlantUML's
+    // SVG ordering: all shapes for Lane A (including later visits) precede
+    // the first divider and Lane B's shapes, while connectors stay deferred.
+    let mut lane_has_fill = vec![false; lanes.len()];
     for (lane_idx, lane) in lanes.iter().enumerate() {
-        let lane_cx = lane_cxs[lane_idx];
-        let lane_y = if let Some(prev) = prev_lane_idx {
-            let prev_cx = lane_cxs[prev];
-            // Round the cross-lane drop target to 4 decimals (HALF_UP) before
-            // feeding it into the next lane's body layout. PlantUML rounds
-            // tile coordinates at each boundary, so without this the
-            // accumulated float carries sub-ULP excess that pushes downstream
-            // y-values one ULP above the golden at the 4th decimal.
-            let target_y = ((last_y + ARROW_LEN) * 10000.0 + 0.5).floor() / 10000.0;
-            deferred_cross_lanes.push((prev_cx, last_y, lane_cx, target_y));
-            target_y
-        } else {
-            body_top
-        };
-        if let Some(color) = lane.color.as_deref() {
+        if let Some(color) = lane.color.as_deref()
+            && !lane_has_fill[lane_idx]
+        {
             let fill = crate::sequence::resolve_color(color);
             write!(
                 svg.shapes,
@@ -9307,13 +9339,22 @@ fn emit_swimlanes(svg: &mut SvgEmitter, cx: f64, y: f64, lanes: &[Lane]) -> f64 
                 f(header_top),
             )
             .unwrap();
+            lane_has_fill[lane_idx] = true;
         }
-        last_y = emit_sequence(svg, &lane.body, lane_cx, lane_y);
+        for (segment_idx, segment) in segments.iter().enumerate() {
+            if segment.lane_index == lane_idx {
+                emit_sequence(
+                    svg,
+                    &segment.body,
+                    lane_cxs[lane_idx],
+                    segment_ys[segment_idx],
+                );
+            }
+        }
 
         // Emit this lane's LEFT divider with the FULL final_last_y so it
-        // spans the entire diagram height (not just up to the current
-        // lane's bottom). Skip on the last lane — its left divider + the
-        // final right divider are emitted together after the loop.
+        // spans the entire diagram height. Skip on the last lane — its left
+        // divider + the final right divider are emitted together after the loop.
         if lane_idx + 1 < lanes.len() {
             write!(
                 svg.shapes,
@@ -9326,7 +9367,6 @@ fn emit_swimlanes(svg: &mut SvgEmitter, cx: f64, y: f64, lanes: &[Lane]) -> f64 
             )
             .unwrap();
         }
-        prev_lane_idx = Some(lane_idx);
     }
 
     // Now flush the deferred cross-lane arrows to the connectors buffer.
