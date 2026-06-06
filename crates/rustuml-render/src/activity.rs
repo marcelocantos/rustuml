@@ -96,6 +96,9 @@ const SWITCH_IF_BRANCH_CASE_GAP: f64 = 20.0; // FtileSwitchNude.xSeparation insi
 // but the case band lands one text-metric rounding step lower.
 const SWITCH_IF_BRANCH_BIG_CASE_Y_ADJUST: f64 = 0.6572265625;
 const SWITCH_EMPTY_MERGE_GAP: f64 = 40.6357;
+// Right envelope after a two-case switch's empty-case label.
+const SWITCH_TWO_CASE_EMPTY_LABEL_TRAIL: f64 = 1.5815;
+const SWITCH_LINK_MARGIN: f64 = 10.0;
 // Case-label baseline offsets above the case-box top, per connection type.
 const SWITCH_LABEL_OUTER_DY: f64 = 19.7979; // outermost branches (via diamond vertex)
 const SWITCH_LABEL_INNER_DY: f64 = 24.7979; // inner branches (drop from horizontal line)
@@ -1719,6 +1722,13 @@ fn switch_has_empty_middle_case(cases: &[SwitchCase]) -> bool {
     matches!(cases, [_, middle, _] if middle.body.is_empty())
 }
 
+fn switch_needs_empty_merge_gap(cases: &[SwitchCase]) -> bool {
+    cases
+        .iter()
+        .enumerate()
+        .any(|(i, case)| case.body.is_empty() && i > 0 && i + 1 < cases.len())
+}
+
 /// PlantUML's `SUPP15` margin used by `FtileSwitchWithDiamonds` in
 /// BIG_DIAMOND mode (the horizontal padding either side of the diamond
 /// column between the first and last case tiles).
@@ -1744,7 +1754,13 @@ struct SwitchXLayout {
 }
 
 fn switch_x_layout(cases: &[SwitchCase], condition: &str) -> SwitchXLayout {
-    switch_x_layout_with_small_gap(cases, condition, SWITCH_CASE_GAP)
+    let mut layout = switch_x_layout_with_small_gap(cases, condition, SWITCH_CASE_GAP);
+    if matches!(cases, [first, last] if !first.body.is_empty() && last.body.is_empty()) {
+        layout.centers[1] = switch_case_width(&cases[0]) + DIAMOND_HALF / 2.0;
+        let label_w = text_render::measure(&cases[1].label, SMALL_FONT, false);
+        layout.block_w = layout.centers[1] + 4.0 + label_w + SWITCH_TWO_CASE_EMPTY_LABEL_TRAIL;
+    }
+    layout
 }
 
 fn switch_x_layout_if_branch(cases: &[SwitchCase], condition: &str) -> SwitchXLayout {
@@ -3869,7 +3885,7 @@ fn node_height(node: &LayoutNode) -> f64 {
             // Odd case counts have a centre branch that drops straight into
             // the merge diamond (a full 20-px arrow); even counts route both
             // halves sideways, halving the gap.
-            let merge_gap = if switch_has_empty_middle_case(cases) {
+            let merge_gap = if switch_needs_empty_merge_gap(cases) {
                 SWITCH_EMPTY_MERGE_GAP
             } else if cases.len().is_multiple_of(2) {
                 ARROW_LEN / 2.0
@@ -6654,7 +6670,7 @@ fn emit_switch_with_layout(
     let max_bottom = bottoms.iter().cloned().fold(0.0f64, f64::max);
 
     let has_center = !n.is_multiple_of(2);
-    let merge_gap = if switch_has_empty_middle_case(cases) {
+    let merge_gap = if switch_needs_empty_merge_gap(cases) {
         SWITCH_EMPTY_MERGE_GAP
     } else if has_center {
         ARROW_LEN
@@ -6697,10 +6713,64 @@ fn emit_switch_with_layout(
     // ── Top connections (diamond → cases). ──
     for &i in &order {
         let bcx = centers[i];
-        if switch_has_empty_middle_case(cases) && cases[i].body.is_empty() {
-            svg.connector_line(&arrow_color, bcx, bcx, diamond_bottom, merge_top, false);
-            switch_down_head(svg, &arrow_color, bcx, merge_top);
-            switch_case_label(svg, &cases[i].label, bcx, merge_top - 21.5);
+        if cases[i].body.is_empty() {
+            match classify(i) {
+                SwitchConn::Outer => {
+                    let (diamond_vertex, merge_vertex, label_x) = if bcx <= diamond_cx {
+                        (diamond_left, diamond_cx - DIAMOND_HALF, bcx - 4.0)
+                    } else {
+                        (diamond_right, diamond_cx + DIAMOND_HALF, bcx + 4.0)
+                    };
+                    svg.connector_line(
+                        &arrow_color,
+                        diamond_vertex,
+                        bcx,
+                        diamond_cy,
+                        diamond_cy,
+                        false,
+                    );
+                    svg.connector_line(&arrow_color, bcx, bcx, diamond_cy, merge_cy, false);
+                    svg.connector_line(&arrow_color, bcx, merge_vertex, merge_cy, merge_cy, false);
+                    if bcx <= diamond_cx {
+                        svg.right_arrow(merge_vertex, merge_cy, &arrow_color);
+                    } else {
+                        svg.left_arrow(merge_vertex, merge_cy, &arrow_color);
+                    }
+                    switch_case_label(svg, &cases[i].label, label_x, diamond_cy + 4.1572);
+                }
+                SwitchConn::Center => {
+                    svg.connector_line(
+                        &arrow_color,
+                        diamond_cx,
+                        diamond_cx,
+                        diamond_bottom,
+                        merge_top,
+                        false,
+                    );
+                    switch_down_head(svg, &arrow_color, diamond_cx, merge_top);
+                    switch_case_label(svg, &cases[i].label, diamond_cx, merge_top - 21.5);
+                }
+                SwitchConn::Inner
+                    if bcx >= diamond_left - SWITCH_LINK_MARGIN
+                        && bcx <= diamond_right + SWITCH_LINK_MARGIN =>
+                {
+                    svg.connector_line(
+                        &arrow_color,
+                        diamond_cx,
+                        diamond_cx,
+                        diamond_bottom,
+                        merge_top,
+                        false,
+                    );
+                    switch_down_head(svg, &arrow_color, diamond_cx, merge_top);
+                    switch_case_label(svg, &cases[i].label, diamond_cx, merge_top - 21.5);
+                }
+                SwitchConn::Inner => {
+                    svg.connector_line(&arrow_color, bcx, bcx, diamond_cy, merge_cy, false);
+                    switch_down_head(svg, &arrow_color, bcx, merge_cy);
+                    switch_case_label(svg, &cases[i].label, bcx, merge_cy - 33.5);
+                }
+            }
             continue;
         }
         match classify(i) {
@@ -6750,7 +6820,7 @@ fn emit_switch_with_layout(
 
     // ── Bottom connections (cases → merge). ──
     for &i in &order {
-        if switch_has_empty_middle_case(cases) && cases[i].body.is_empty() {
+        if cases[i].body.is_empty() {
             continue;
         }
         let bcx = centers[i];
