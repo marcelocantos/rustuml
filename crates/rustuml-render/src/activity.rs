@@ -10166,8 +10166,16 @@ fn format_svg(
     } else {
         format!("<defs>{defs}</defs>")
     };
+    let background_rect = background
+        .filter(|bg| !bg.eq_ignore_ascii_case("#FFFFFF"))
+        .map(|bg| {
+            format!(
+                r#"<rect fill="{bg}" height="{height}" style="stroke:none;stroke-width:1;" width="{width}" x="0" y="0"/>"#
+            )
+        })
+        .unwrap_or_default();
     format!(
-        r#"<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" contentStyleType="text/css" data-diagram-type="ACTIVITY" height="{h}px" preserveAspectRatio="none" style="width:{w}px;height:{h}px;{style_background}" version="1.1" viewBox="0 0 {w} {h}" width="{w}px" zoomAndPan="magnify">{defs_xml}<g>{content}</g></svg>"#,
+        r#"<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" contentStyleType="text/css" data-diagram-type="ACTIVITY" height="{h}px" preserveAspectRatio="none" style="width:{w}px;height:{h}px;{style_background}" version="1.1" viewBox="0 0 {w} {h}" width="{w}px" zoomAndPan="magnify">{defs_xml}<g>{background_rect}{content}</g></svg>"#,
         w = width,
         h = height,
     )
