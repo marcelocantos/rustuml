@@ -1576,7 +1576,7 @@ fn emit_entity_label(
     w: f64,
     sprite_names: &HashSet<String>,
 ) {
-    let (_text_x_pad, top_pad, bold) = entity_text_geom(kind, w, &node.label);
+    let (text_x_pad, top_pad, bold) = entity_text_geom(kind, w, &node.label);
     let label_w = text_render::measure(&node.label, FONT_SIZE, bold);
     let center_x = entity_text_center(kind, x, w);
     // Folder and package labels are left-aligned with a 10px indent rather
@@ -1586,6 +1586,12 @@ fn emit_entity_label(
         DeploymentNodeKind::Folder | DeploymentNodeKind::Package
     )
     .then_some(x + 10.0);
+    let multiline_label_x = x + text_x_pad;
+    let multiline_lines = node.label.contains('\n').then(|| {
+        node.label
+            .split('\n')
+            .map(|line| line.trim_end_matches('\r'))
+    });
 
     if let Some(stereo) = &node.stereotype
         && !stereotype_refs_sprite(stereo, sprite_names)
@@ -1602,27 +1608,42 @@ fn emit_entity_label(
             false,
             true,
         );
-        let label_x = center_x - label_w / 2.0;
-        emit_text(
-            svg,
-            &node.label,
-            label_x,
-            y + top_pad + TEXT_LINE_H,
-            FONT_SIZE,
-            bold,
-            false,
-        );
+        if let Some(lines) = multiline_lines {
+            emit_multiline_text(
+                svg,
+                lines,
+                multiline_label_x,
+                y + top_pad + TEXT_LINE_H,
+                FONT_SIZE,
+                bold,
+            );
+        } else {
+            let label_x = center_x - label_w / 2.0;
+            emit_text(
+                svg,
+                &node.label,
+                label_x,
+                y + top_pad + TEXT_LINE_H,
+                FONT_SIZE,
+                bold,
+                false,
+            );
+        }
     } else {
-        let label_x = folder_label_x.unwrap_or(center_x - label_w / 2.0);
-        emit_text(
-            svg,
-            &node.label,
-            label_x,
-            y + top_pad,
-            FONT_SIZE,
-            bold,
-            false,
-        );
+        if let Some(lines) = multiline_lines {
+            emit_multiline_text(svg, lines, multiline_label_x, y + top_pad, FONT_SIZE, bold);
+        } else {
+            let label_x = folder_label_x.unwrap_or(center_x - label_w / 2.0);
+            emit_text(
+                svg,
+                &node.label,
+                label_x,
+                y + top_pad,
+                FONT_SIZE,
+                bold,
+                false,
+            );
+        }
     }
 }
 
@@ -1781,6 +1802,19 @@ fn emit_text(
         },
     );
     svg.raw(&buf);
+}
+
+fn emit_multiline_text<'a>(
+    svg: &mut SvgBuilder,
+    lines: impl Iterator<Item = &'a str>,
+    x: f64,
+    y: f64,
+    fs: f64,
+    bold: bool,
+) {
+    for (i, line) in lines.enumerate() {
+        emit_text(svg, line, x, y + i as f64 * TEXT_LINE_H, fs, bold, false);
+    }
 }
 
 // ---------------------------------------------------------------------------
