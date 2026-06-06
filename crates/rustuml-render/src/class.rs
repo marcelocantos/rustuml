@@ -1546,6 +1546,9 @@ struct ClassStereotypeFontStyle {
 
 impl ClassFontOverrides {
     fn from_skinparams(params: &[rustuml_parser::diagram::SkinParam]) -> Self {
+        let plain_theme = params.iter().any(|sp| {
+            sp.key.eq_ignore_ascii_case("__theme") && sp.value.trim().eq_ignore_ascii_case("plain")
+        });
         let find = |names: &[&str]| -> Option<String> {
             params
                 .iter()
@@ -1568,7 +1571,13 @@ impl ClassFontOverrides {
             find(&["defaultFontSize"]).and_then(|v| v.trim().parse::<u32>().ok());
         let family = find(&["ClassAttributeFontName", "defaultFontName", "fontName"])
             .map(|v| canonical_class_font_family(&v))
-            .unwrap_or_else(|| "sans-serif".to_string());
+            .unwrap_or_else(|| {
+                if plain_theme {
+                    "Verdana".to_string()
+                } else {
+                    "sans-serif".to_string()
+                }
+            });
         let name_family = find(&["circledCharacterFontName"])
             .map(|v| canonical_class_font_family(&v))
             .or_else(|| find(&["ClassFontName"]).map(|v| canonical_class_font_family(&v)))
@@ -1602,14 +1611,27 @@ impl ClassFontOverrides {
             // CIRCLED_CHARACTER size 17.
             circled_font_size,
             circled_radius_override: find(&["circledCharacterRadius"])
-                .and_then(|v| v.trim().parse::<f64>().ok()),
+                .and_then(|v| v.trim().parse::<f64>().ok())
+                .or(if plain_theme { Some(9.0) } else { None }),
             header_background: find(&["classHeaderBackgroundColor"]),
             class_background: find(&["classBackgroundColor"]),
             border_color: find(&["classBorderColor"]),
             root_line_color: find(&["__styleRootLineColor"]),
             root_font_color: find(&["__styleRootFontColor"]).or(default_font_color),
-            stereotype_c_background: find(&["stereotypeCBackgroundColor"]),
-            stereotype_c_border: find(&["stereotypeCBorderColor"]),
+            stereotype_c_background: find(&["stereotypeCBackgroundColor"]).or_else(|| {
+                if plain_theme {
+                    Some("#FFFFFF".to_string())
+                } else {
+                    None
+                }
+            }),
+            stereotype_c_border: find(&["stereotypeCBorderColor"]).or_else(|| {
+                if plain_theme {
+                    Some("#000000".to_string())
+                } else {
+                    None
+                }
+            }),
             monochrome: params.iter().any(|sp| {
                 sp.key.eq_ignore_ascii_case("monochrome")
                     && matches!(
@@ -6098,6 +6120,21 @@ mod tests {
             "should have class icon fill"
         );
         assert!(svg.contains("<ellipse"), "should have icon ellipse");
+    }
+
+    #[test]
+    fn plain_theme_uses_legacy_class_icon_and_font_defaults() {
+        let input = "@startuml\n!theme plain\nclass Foo\n@enduml";
+        let diagram = rustuml_parser::parse::parse(input).unwrap();
+        let svg = crate::render_svg(&diagram);
+
+        assert!(svg.contains(r##"font-family="Verdana""##), "{svg}");
+        assert!(
+            svg.contains(
+                r##"fill="#FFFFFF" rx="9" ry="9" style="stroke:#000000;stroke-width:1;""##
+            ),
+            "{svg}"
+        );
     }
 
     #[test]
