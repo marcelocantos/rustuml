@@ -89,6 +89,7 @@ const SHADOW_BOUNDS_PAD: f64 = 6.0;
 
 // Switch-specific layout constants (reverse-engineered from golden SVGs).
 const SWITCH_CASE_GAP: f64 = 10.0; // horizontal gap between adjacent SMALL-mode case boxes
+const SWITCH_EMPTY_MERGE_GAP: f64 = 40.6357;
 // Case-label baseline offsets above the case-box top, per connection type.
 const SWITCH_LABEL_OUTER_DY: f64 = 19.7979; // outermost branches (via diamond vertex)
 const SWITCH_LABEL_INNER_DY: f64 = 24.7979; // inner branches (drop from horizontal line)
@@ -1642,7 +1643,15 @@ fn leading_if_branch_fork_spine_shift(nodes: &[LayoutNode]) -> f64 {
 /// Width of one switch case box: the tile's own content width (PlantUML
 /// imposes no extra minimum on switch case tiles).
 fn switch_case_width(case: &SwitchCase) -> f64 {
-    sequence_width(&case.body)
+    if case.body.is_empty() {
+        text_render::measure(&case.label, SMALL_FONT, false)
+    } else {
+        sequence_width(&case.body)
+    }
+}
+
+fn switch_has_empty_middle_case(cases: &[SwitchCase]) -> bool {
+    matches!(cases, [_, middle, _] if middle.body.is_empty())
 }
 
 /// PlantUML's `SUPP15` margin used by `FtileSwitchWithDiamonds` in
@@ -1723,16 +1732,21 @@ fn switch_x_layout(cases: &[SwitchCase], condition: &str) -> SwitchXLayout {
         // 10-px gap straddling the centreline for even case counts (so the
         // diamond/merge column has room). The diamond sits at the geometric
         // block centre.
+        let case_gap = if switch_has_empty_middle_case(cases) {
+            20.0
+        } else {
+            SWITCH_CASE_GAP
+        };
         let mut centers = vec![0.0f64; n];
         let mut x = 0.0;
         for i in 0..n {
             if n.is_multiple_of(2) && i == n / 2 {
-                x += SWITCH_CASE_GAP;
+                x += case_gap;
             }
             centers[i] = x + widths[i] / 2.0;
-            x += widths[i] + SWITCH_CASE_GAP;
+            x += widths[i] + case_gap;
         }
-        let block_w = x - SWITCH_CASE_GAP;
+        let block_w = x - case_gap;
         SwitchXLayout {
             centers,
             block_w,
@@ -3734,7 +3748,9 @@ fn node_height(node: &LayoutNode) -> f64 {
             // Odd case counts have a centre branch that drops straight into
             // the merge diamond (a full 20-px arrow); even counts route both
             // halves sideways, halving the gap.
-            let merge_gap = if cases.len().is_multiple_of(2) {
+            let merge_gap = if switch_has_empty_middle_case(cases) {
+                SWITCH_EMPTY_MERGE_GAP
+            } else if cases.len().is_multiple_of(2) {
                 ARROW_LEN / 2.0
             } else {
                 ARROW_LEN
@@ -6442,7 +6458,9 @@ fn emit_switch(
     let max_bottom = bottoms.iter().cloned().fold(0.0f64, f64::max);
 
     let has_center = !n.is_multiple_of(2);
-    let merge_gap = if has_center {
+    let merge_gap = if switch_has_empty_middle_case(cases) {
+        SWITCH_EMPTY_MERGE_GAP
+    } else if has_center {
         ARROW_LEN
     } else {
         ARROW_LEN / 2.0
@@ -6483,6 +6501,12 @@ fn emit_switch(
     // ── Top connections (diamond → cases). ──
     for &i in &order {
         let bcx = centers[i];
+        if switch_has_empty_middle_case(cases) && cases[i].body.is_empty() {
+            svg.connector_line(&arrow_color, bcx, bcx, diamond_bottom, merge_top, false);
+            switch_down_head(svg, &arrow_color, bcx, merge_top);
+            switch_case_label(svg, &cases[i].label, bcx, merge_top - 21.5);
+            continue;
+        }
         match classify(i) {
             SwitchConn::Outer => {
                 let vertex_x = if bcx <= diamond_cx {
@@ -6530,6 +6554,9 @@ fn emit_switch(
 
     // ── Bottom connections (cases → merge). ──
     for &i in &order {
+        if switch_has_empty_middle_case(cases) && cases[i].body.is_empty() {
+            continue;
+        }
         let bcx = centers[i];
         let bottom = bottoms[i];
         match classify(i) {
