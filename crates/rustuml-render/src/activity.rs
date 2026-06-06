@@ -80,6 +80,8 @@ const IF_BRANCH_DOWN: f64 = 10.0;
 /// top of the merge diamond below. PlantUML uses 6 px here.
 const IF_BRANCH_UP: f64 = 6.0;
 const IF_SINGLE_SURVIVOR_JOIN_GAP: f64 = 5.0;
+const IF_EMPTY_BOTH_LEFT_EXTENT_PAD: f64 = 13.0;
+const IF_EMPTY_BOTH_RIGHT_EXTENT_PAD: f64 = 15.0;
 /// Labelled `if` diamonds reserve a little extra inbound lead when the
 /// diagram-wide arrow font is taller than the default 20 px connector slot.
 const IF_LABEL_INBOUND_PAD: f64 = 0.71875;
@@ -875,6 +877,13 @@ fn node_is_flow(n: &LayoutNode) -> bool {
 /// — only arrows/notes/titles, which take no vertical space.
 fn branch_is_empty(body: &[LayoutNode]) -> bool {
     !body.iter().any(node_is_flow)
+}
+
+fn if_empty_both_plain(then_branch: &[LayoutNode], else_branches: &[ElseBranch]) -> bool {
+    else_branches.len() == 1
+        && else_branches[0].condition.is_none()
+        && branch_is_empty(then_branch)
+        && branch_is_empty(&else_branches[0].body)
 }
 
 /// PlantUML's `ConditionalBuilder.create` routes an `if/else` to the asymmetric
@@ -3356,6 +3365,15 @@ fn node_extents(node: &LayoutNode) -> (f64, f64) {
                         + IF_DOWN_BRANCH_CORRIDOR_TRAILING_PAD,
                 );
                 return with_if_attached_note_extents(left, right, attached_notes, diamond_half_w);
+            }
+            if if_empty_both_plain(then_branch, else_branches) {
+                let branch_extent = diamond_half_w + 10.0;
+                return with_if_attached_note_extents(
+                    branch_extent + IF_EMPTY_BOTH_LEFT_EXTENT_PAD,
+                    branch_extent + IF_EMPTY_BOTH_RIGHT_EXTENT_PAD,
+                    attached_notes,
+                    diamond_half_w,
+                );
             }
             // ftile wire (binary if): exact FtileIfWithDiamonds drawn extents.
             if let Some((_, _, left_ext, right_ext)) = if_ftile_layout_styled(
@@ -6555,6 +6573,53 @@ fn emit_if(
             &diamond_stroke,
             &diamond_stroke_width,
         );
+    }
+
+    if if_empty_both_plain(then_branch, else_branches) {
+        // PlantUML routes two empty branches as side corridors into the merge
+        // diamond. The vertical corridor is one continuous line with a
+        // mid-corridor down arrowhead overlaid before the line element.
+        let arrow_tip = (diamond_cy + merge_cy) / 2.0;
+        svg.connector_line(
+            &arrow_color,
+            diamond_left,
+            then_cx,
+            diamond_cy,
+            diamond_cy,
+            false,
+        );
+        switch_down_head(svg, &arrow_color, then_cx, arrow_tip);
+        svg.connector_line(&arrow_color, then_cx, then_cx, diamond_cy, merge_cy, false);
+        svg.connector_line(
+            &arrow_color,
+            then_cx,
+            cx - DIAMOND_HALF,
+            merge_cy,
+            merge_cy,
+            false,
+        );
+        svg.right_arrow(cx - DIAMOND_HALF, merge_cy, &arrow_color);
+
+        svg.connector_line(
+            &arrow_color,
+            diamond_right,
+            else_cx,
+            diamond_cy,
+            diamond_cy,
+            false,
+        );
+        switch_down_head(svg, &arrow_color, else_cx, arrow_tip);
+        svg.connector_line(&arrow_color, else_cx, else_cx, diamond_cy, merge_cy, false);
+        svg.connector_line(
+            &arrow_color,
+            else_cx,
+            cx + DIAMOND_HALF,
+            merge_cy,
+            merge_cy,
+            false,
+        );
+        svg.left_arrow(cx + DIAMOND_HALF, merge_cy, &arrow_color);
+        return merge_diamond_top + DIAMOND_HALF * 2.0;
     }
 
     // Now emit the if/else-frame connectors AFTER the branch-internal ones.
