@@ -315,6 +315,7 @@ fn fmt_coord(v: f64) -> String {
     s.to_string()
 }
 
+#[derive(Clone, Copy)]
 struct HandJavaRandom {
     seed: i64,
 }
@@ -356,12 +357,26 @@ struct HandJiggle {
 
 impl HandJiggle {
     fn new(start_x: f64, start_y: f64, default_variation: f64) -> Self {
+        Self::with_random(
+            start_x,
+            start_y,
+            default_variation,
+            HandJavaRandom::new(424242),
+        )
+    }
+
+    fn with_random(
+        start_x: f64,
+        start_y: f64,
+        default_variation: f64,
+        rnd: HandJavaRandom,
+    ) -> Self {
         Self {
             points: vec![(start_x, start_y)],
             start_x,
             start_y,
             default_variation,
-            rnd: HandJavaRandom::new(424242),
+            rnd,
         }
     }
 
@@ -403,9 +418,127 @@ impl HandJiggle {
         self.line_to(center_x + angle1.cos() * rx, center_y + angle1.sin() * ry);
     }
 
+    fn curve_to(&mut self, curve: HandCubic) {
+        if curve.flatness() > HAND_CURVE_FLATNESS_MAX
+            && curve.endpoint_distance() > HAND_CURVE_MIN_DISTANCE
+        {
+            let (left, right) = curve.subdivide();
+            self.curve_to(left);
+            self.curve_to(right);
+        } else {
+            self.line_to(curve.x2, curve.y2);
+        }
+    }
+
     fn points_string(&self, dx: f64, dy: f64) -> String {
         hand_points_string(self.points.iter().map(|&(x, y)| (x + dx, y + dy)))
     }
+
+    fn into_parts(self) -> (Vec<(f64, f64)>, HandJavaRandom) {
+        (self.points, self.rnd)
+    }
+}
+
+const HAND_PATH_LINE_VARIATION: f64 = 4.0;
+const HAND_PATH_CURVE_VARIATION: f64 = 2.0;
+const HAND_CURVE_FLATNESS_MAX: f64 = 0.1;
+const HAND_CURVE_MIN_DISTANCE: f64 = 20.0;
+
+#[derive(Clone, Copy)]
+struct HandCubic {
+    x1: f64,
+    y1: f64,
+    ctrl_x1: f64,
+    ctrl_y1: f64,
+    ctrl_x2: f64,
+    ctrl_y2: f64,
+    x2: f64,
+    y2: f64,
+}
+
+impl HandCubic {
+    fn endpoint_distance(self) -> f64 {
+        let dx = self.x2 - self.x1;
+        let dy = self.y2 - self.y1;
+        (dx * dx + dy * dy).sqrt()
+    }
+
+    fn flatness(self) -> f64 {
+        self.flatness_sq().sqrt()
+    }
+
+    fn flatness_sq(self) -> f64 {
+        point_seg_dist_sq(
+            self.x1,
+            self.y1,
+            self.x2,
+            self.y2,
+            self.ctrl_x1,
+            self.ctrl_y1,
+        )
+        .max(point_seg_dist_sq(
+            self.x1,
+            self.y1,
+            self.x2,
+            self.y2,
+            self.ctrl_x2,
+            self.ctrl_y2,
+        ))
+    }
+
+    fn subdivide(self) -> (Self, Self) {
+        let ctrl_x1 = (self.x1 + self.ctrl_x1) / 2.0;
+        let ctrl_y1 = (self.y1 + self.ctrl_y1) / 2.0;
+        let ctrl_x2 = (self.x2 + self.ctrl_x2) / 2.0;
+        let ctrl_y2 = (self.y2 + self.ctrl_y2) / 2.0;
+        let mut center_x = (self.ctrl_x1 + self.ctrl_x2) / 2.0;
+        let mut center_y = (self.ctrl_y1 + self.ctrl_y2) / 2.0;
+        let ctrl_x12 = (ctrl_x1 + center_x) / 2.0;
+        let ctrl_y12 = (ctrl_y1 + center_y) / 2.0;
+        let ctrl_x21 = (ctrl_x2 + center_x) / 2.0;
+        let ctrl_y21 = (ctrl_y2 + center_y) / 2.0;
+        center_x = (ctrl_x12 + ctrl_x21) / 2.0;
+        center_y = (ctrl_y12 + ctrl_y21) / 2.0;
+        (
+            Self {
+                x1: self.x1,
+                y1: self.y1,
+                ctrl_x1,
+                ctrl_y1,
+                ctrl_x2: ctrl_x12,
+                ctrl_y2: ctrl_y12,
+                x2: center_x,
+                y2: center_y,
+            },
+            Self {
+                x1: center_x,
+                y1: center_y,
+                ctrl_x1: ctrl_x21,
+                ctrl_y1: ctrl_y21,
+                ctrl_x2,
+                ctrl_y2,
+                x2: self.x2,
+                y2: self.y2,
+            },
+        )
+    }
+}
+
+fn point_seg_dist_sq(x1: f64, y1: f64, x2: f64, y2: f64, px: f64, py: f64) -> f64 {
+    let dx = x2 - x1;
+    let dy = y2 - y1;
+    if dx == 0.0 && dy == 0.0 {
+        let px_dx = px - x1;
+        let py_dy = py - y1;
+        return px_dx * px_dx + py_dy * py_dy;
+    }
+    let t = ((px - x1) * dx + (py - y1) * dy) / (dx * dx + dy * dy);
+    let t = t.clamp(0.0, 1.0);
+    let proj_x = x1 + t * dx;
+    let proj_y = y1 + t * dy;
+    let px_dx = px - proj_x;
+    let py_dy = py - proj_y;
+    px_dx * px_dx + py_dy * py_dy
 }
 
 fn hand_line_points_with_rnd(
@@ -558,43 +691,85 @@ fn handwritten_ellipse_points(cx: f64, cy: f64, rx: f64, ry: f64) -> String {
     hand_points_string(points.into_iter())
 }
 
-fn parse_path_point(token: &str) -> Option<(char, f64, f64)> {
-    let mut chars = token.chars();
-    let cmd = chars.next()?;
-    if cmd != 'M' && cmd != 'L' {
-        return None;
-    }
-    let rest = chars.as_str();
-    let (x, y) = rest.split_once(',')?;
-    Some((cmd, x.parse().ok()?, y.parse().ok()?))
+fn parse_point_pair(token: &str) -> Option<(f64, f64)> {
+    let (x, y) = token.split_once(',')?;
+    Some((x.parse().ok()?, y.parse().ok()?))
 }
 
-fn handwritten_path_m_l(d: &str) -> Option<String> {
-    let mut rnd = HandJavaRandom::new(424242);
+fn parse_command_point(token: &str, cmd: char) -> Option<(f64, f64)> {
+    let rest = token.strip_prefix(cmd)?;
+    parse_point_pair(rest)
+}
+
+fn handwritten_path_with_rnd(d: &str, rnd: &mut HandJavaRandom) -> Option<String> {
     let mut out = String::new();
     let mut last: Option<(f64, f64)> = None;
-    for token in d.split_ascii_whitespace() {
-        let (cmd, x, y) = parse_path_point(token)?;
+    let tokens: Vec<&str> = d.split_ascii_whitespace().collect();
+    let mut idx = 0;
+    while idx < tokens.len() {
+        let token = tokens[idx];
+        let cmd = token.chars().next()?;
         match cmd {
             'M' => {
+                let (x, y) = parse_command_point(token, 'M')?;
                 if !out.is_empty() {
                     out.push(' ');
                 }
                 write!(out, "M{},{}", fmt_coord(x), fmt_coord(y)).unwrap();
                 last = Some((x, y));
+                idx += 1;
             }
             'L' => {
+                let (x, y) = parse_command_point(token, 'L')?;
                 let (sx, sy) = last?;
-                let points = hand_line_points_with_rnd(sx, sy, x, y, 4.0, &mut rnd);
+                let points = hand_line_points_with_rnd(sx, sy, x, y, HAND_PATH_LINE_VARIATION, rnd);
                 for &(px, py) in points.iter().skip(1) {
                     write!(out, " L{},{}", fmt_coord(px), fmt_coord(py)).unwrap();
                 }
                 last = Some((x, y));
+                idx += 1;
+            }
+            'C' => {
+                let (sx, sy) = last?;
+                let (ctrl_x1, ctrl_y1) = parse_command_point(token, 'C')?;
+                let (ctrl_x2, ctrl_y2) = parse_point_pair(tokens.get(idx + 1).copied()?)?;
+                let (x2, y2) = parse_point_pair(tokens.get(idx + 2).copied()?)?;
+                let mut jiggle = HandJiggle::with_random(sx, sy, HAND_PATH_CURVE_VARIATION, *rnd);
+                jiggle.curve_to(HandCubic {
+                    x1: sx,
+                    y1: sy,
+                    ctrl_x1,
+                    ctrl_y1,
+                    ctrl_x2,
+                    ctrl_y2,
+                    x2,
+                    y2,
+                });
+                let (points, next_rnd) = jiggle.into_parts();
+                *rnd = next_rnd;
+                for (px, py) in points {
+                    write!(out, " L{},{}", fmt_coord(px), fmt_coord(py)).unwrap();
+                }
+                last = Some((x2, y2));
+                idx += 3;
+            }
+            'A' => {
+                // UPathHand turns handwritten arcs into a straight line to
+                // the arc endpoint without additional jitter.
+                let (x, y) = parse_point_pair(tokens.get(idx + 4).copied()?)?;
+                write!(out, " L{},{}", fmt_coord(x), fmt_coord(y)).unwrap();
+                last = Some((x, y));
+                idx += 5;
             }
             _ => return None,
         }
     }
     Some(out)
+}
+
+fn handwritten_path(d: &str) -> Option<String> {
+    let mut rnd = HandJavaRandom::new(424242);
+    handwritten_path_with_rnd(d, &mut rnd)
 }
 
 fn parse_svg_points(points: &str) -> Option<Vec<(f64, f64)>> {
@@ -3263,14 +3438,26 @@ impl PlantUmlSvg {
         }
     }
 
-    fn write_path(&mut self, d: &str, fill: &str, style: &str) {
+    fn write_path_with_attrs(&mut self, d: &str, fill: &str, attrs: &str, style: &str) {
         if self.handwritten
-            && let Some(d) = handwritten_path_m_l(d)
+            && let Some(d) = handwritten_path(d)
         {
-            write!(self.buf, r#"<path d="{d}" fill="{fill}" style="{style}"/>"#).unwrap();
+            write!(
+                self.buf,
+                r#"<path d="{d}" fill="{fill}"{attrs} style="{style}"/>"#
+            )
+            .unwrap();
         } else {
-            write!(self.buf, r#"<path d="{d}" fill="{fill}" style="{style}"/>"#).unwrap();
+            write!(
+                self.buf,
+                r#"<path d="{d}" fill="{fill}"{attrs} style="{style}"/>"#
+            )
+            .unwrap();
         }
+    }
+
+    fn write_path(&mut self, d: &str, fill: &str, style: &str) {
+        self.write_path_with_attrs(d, fill, "", style);
     }
 
     /// Write a participant box (head or tail).
@@ -3944,9 +4131,8 @@ impl PlantUmlSvg {
         let bottom = figure_base + DB_CYLINDER_HEIGHT - DB_ELLIPSE_RY;
         let bottom_curve = figure_base + DB_CYLINDER_HEIGHT;
 
-        write!(
-            self.buf,
-            r##"<path d="M{l},{t} C{l},{tc} {cx},{tc} {cx},{tc} C{cx},{tc} {r},{tc} {r},{t} L{r},{b} C{r},{bc} {cx},{bc} {cx},{bc} C{cx},{bc} {l},{bc} {l},{b} L{l},{t}" fill="{fc}" style="stroke:{border_color};stroke-width:0.5;"/>"##,
+        let body_d = format!(
+            "M{l},{t} C{l},{tc} {cx},{tc} {cx},{tc} C{cx},{tc} {r},{tc} {r},{t} L{r},{b} C{r},{bc} {cx},{bc} {cx},{bc} C{cx},{bc} {l},{bc} {l},{b} L{l},{t}",
             l = fmt_coord(left),
             r = fmt_coord(right),
             t = fmt_coord(top),
@@ -3954,22 +4140,28 @@ impl PlantUmlSvg {
             b = fmt_coord(bottom),
             bc = fmt_coord(bottom_curve),
             cx = fmt_coord(cx),
-            fc = fill_color,
-        )
-        .unwrap();
+        );
+        self.write_path(
+            &body_d,
+            fill_color,
+            &format!("stroke:{border_color};stroke-width:0.5;"),
+        );
 
         // Top ellipse (visible arc)
         let top_arc_bottom = figure_base + 2.0 * DB_ELLIPSE_RY;
-        write!(
-            self.buf,
-            r##"<path d="M{l},{t} C{l},{tab} {cx},{tab} {cx},{tab} C{cx},{tab} {r},{tab} {r},{t}" fill="none" style="stroke:{border_color};stroke-width:0.5;"/>"##,
+        let arc_d = format!(
+            "M{l},{t} C{l},{tab} {cx},{tab} {cx},{tab} C{cx},{tab} {r},{tab} {r},{t}",
             l = fmt_coord(left),
             r = fmt_coord(right),
             t = fmt_coord(top),
             tab = fmt_coord(top_arc_bottom),
             cx = fmt_coord(cx),
-        )
-        .unwrap();
+        );
+        self.write_path(
+            &arc_d,
+            "none",
+            &format!("stroke:{border_color};stroke-width:0.5;"),
+        );
 
         self.participant_group_close();
     }
@@ -4098,9 +4290,8 @@ impl PlantUmlSvg {
         let inner_right_inner = inner_right - cap_r;
 
         // Outer body
-        write!(
-            self.buf,
-            r##"<path d="M{il},{t} L{ir},{t} C{r},{t} {r},{m} {r},{m} C{r},{m} {r},{b} {ir},{b} L{il},{b} C{l},{b} {l},{m} {l},{m} C{l},{m} {l},{t} {il},{t}" fill="{fc}" style="stroke:{border_color};stroke-width:0.5;"/>"##,
+        let body_d = format!(
+            "M{il},{t} L{ir},{t} C{r},{t} {r},{m} {r},{m} C{r},{m} {r},{b} {ir},{b} L{il},{b} C{l},{b} {l},{m} {l},{m} C{l},{m} {l},{t} {il},{t}",
             il = fmt_coord(inner_left),
             ir = fmt_coord(inner_right),
             l = fmt_coord(left),
@@ -4108,21 +4299,27 @@ impl PlantUmlSvg {
             t = fmt_coord(top),
             m = fmt_coord(mid),
             b = fmt_coord(bottom),
-            fc = fill_color,
-        )
-        .unwrap();
+        );
+        self.write_path(
+            &body_d,
+            fill_color,
+            &format!("stroke:{border_color};stroke-width:0.5;"),
+        );
 
         // Inner right curve (the divider inside the pill)
-        write!(
-            self.buf,
-            r##"<path d="M{ir},{t} C{iri},{t} {iri},{m} {iri},{m} C{iri},{b} {ir},{b} {ir},{b}" fill="none" style="stroke:{border_color};stroke-width:0.5;"/>"##,
+        let curve_d = format!(
+            "M{ir},{t} C{iri},{t} {iri},{m} {iri},{m} C{iri},{b} {ir},{b} {ir},{b}",
             ir = fmt_coord(inner_right),
             iri = fmt_coord(inner_right_inner),
             t = fmt_coord(top),
             m = fmt_coord(mid),
             b = fmt_coord(bottom),
-        )
-        .unwrap();
+        );
+        self.write_path(
+            &curve_d,
+            "none",
+            &format!("stroke:{border_color};stroke-width:0.5;"),
+        );
 
         // Text
         self.participant_text(text_x, text_y, text_content, text_len);
@@ -10278,13 +10475,8 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                         let mid_y = note_top + (note_height / 2.0).floor();
                         let li = note_left + HNOTE_INDENT; // left indent x
                         let ri = note_right - HNOTE_INDENT; // right indent x
-                        write!(
-                            svg.buf,
-                            r##"<polygon fill="{fill}"{filter} points="{li},{top},{ri},{top},{nr},{mid},{ri},{bot},{li},{bot},{nl},{mid},{li},{top}" style="stroke:{stroke};stroke-width:{stroke_width};"/>"##,
-                            fill = note_fill,
-                            filter = note_filter_attr,
-                            stroke = note_stroke,
-                            stroke_width = note_stroke_width,
+                        let points = format!(
+                            "{li},{top},{ri},{top},{nr},{mid},{ri},{bot},{li},{bot},{nl},{mid},{li},{top}",
                             li = fmt_coord(li),
                             top = fmt_coord(note_top),
                             ri = fmt_coord(ri),
@@ -10292,24 +10484,61 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                             mid = fmt_coord(mid_y),
                             bot = fmt_coord(note_bottom),
                             nl = fmt_coord(note_left),
+                        );
+                        let points = if svg.handwritten {
+                            parse_svg_points(&points)
+                                .map(|points| handwritten_polygon_points(&points))
+                                .unwrap_or(points)
+                        } else {
+                            points
+                        };
+                        write!(
+                            svg.buf,
+                            r##"<polygon fill="{fill}"{filter} points="{points}" style="stroke:{stroke};stroke-width:{stroke_width};"/>"##,
+                            fill = note_fill,
+                            filter = note_filter_attr,
+                            points = points,
+                            stroke = note_stroke,
+                            stroke_width = note_stroke_width,
                         )
                         .unwrap();
                     }
                     NoteShape::Rectangular => {
                         // Rectangular note (rnote): a simple rectangle.
-                        write!(
-                            svg.buf,
-                            r##"<rect fill="{fill}"{filter} height="{h}" style="stroke:{stroke};stroke-width:{stroke_width};" width="{w}" x="{x}" y="{y}"/>"##,
-                            fill = note_fill,
-                            filter = note_filter_attr,
-                            stroke = note_stroke,
-                            stroke_width = note_stroke_width,
-                            h = fmt_coord(note_bottom - note_top),
-                            w = fmt_coord(note_right - note_left),
-                            x = fmt_coord(note_left),
-                            y = fmt_coord(note_top),
-                        )
-                        .unwrap();
+                        if svg.handwritten {
+                            let points = handwritten_rect_points(
+                                note_left,
+                                note_top,
+                                note_right - note_left,
+                                note_bottom - note_top,
+                                0.0,
+                                0.0,
+                            );
+                            write!(
+                                svg.buf,
+                                r##"<polygon fill="{fill}"{filter} points="{points}" style="stroke:{stroke};stroke-width:{stroke_width};"/>"##,
+                                fill = note_fill,
+                                filter = note_filter_attr,
+                                points = points,
+                                stroke = note_stroke,
+                                stroke_width = note_stroke_width,
+                            )
+                            .unwrap();
+                        } else {
+                            write!(
+                                svg.buf,
+                                r##"<rect fill="{fill}"{filter} height="{h}" style="stroke:{stroke};stroke-width:{stroke_width};" width="{w}" x="{x}" y="{y}"/>"##,
+                                fill = note_fill,
+                                filter = note_filter_attr,
+                                stroke = note_stroke,
+                                stroke_width = note_stroke_width,
+                                h = fmt_coord(note_bottom - note_top),
+                                w = fmt_coord(note_right - note_left),
+                                x = fmt_coord(note_left),
+                                y = fmt_coord(note_top),
+                            )
+                            .unwrap();
+                        }
                     }
                     NoteShape::Note => {
                         // Standard note with folded corner.
@@ -10323,11 +10552,10 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                             .max(0.0);
                         if radius > 0.0 {
                             let fold_radius = radius / 2.0;
-                            write!(
-                                svg.buf,
-                                r##"<path d="M{left},{top_r} L{left},{bottom_r} A{r},{r} 0 0 0 {left_r},{bottom} L{right_r},{bottom} A{r},{r} 0 0 0 {right},{bottom_r} L{right},{fold_y} L{fold_x},{top} L{left_r},{top} A{r},{r} 0 0 0 {left},{top_r}" fill="{fill}"{filter} style="stroke:{stroke};stroke-width:{stroke_width};"/>"##,
-                                stroke = note_stroke,
-                                stroke_width = note_stroke_width,
+                            let note_path_style =
+                                format!("stroke:{note_stroke};stroke-width:{note_stroke_width};");
+                            let body_d = format!(
+                                "M{left},{top_r} L{left},{bottom_r} A{r},{r} 0 0 0 {left_r},{bottom} L{right_r},{bottom} A{r},{r} 0 0 0 {right},{bottom_r} L{right},{fold_y} L{fold_x},{top} L{left_r},{top} A{r},{r} 0 0 0 {left},{top_r}",
                                 left = fmt_coord(note_left),
                                 top = fmt_coord(note_top),
                                 top_r = fmt_coord(note_top + radius),
@@ -10339,16 +10567,10 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                                 fold_y = fmt_coord(fold_y),
                                 fold_x = fmt_coord(fold_x),
                                 r = fmt_coord(radius),
-                                fill = note_fill,
-                                filter = note_filter_attr,
-                            )
-                            .unwrap();
+                            );
 
-                            write!(
-                                svg.buf,
-                                r##"<path d="M{fold_x},{top} L{fold_x},{fold_bottom} A{fold_r},{fold_r} 0 0 0 {fold_arc_x},{fold_y} L{right},{fold_y} L{fold_x},{top}" fill="{fill}" style="stroke:{stroke};stroke-width:{stroke_width};"/>"##,
-                                stroke = note_stroke,
-                                stroke_width = note_stroke_width,
+                            let fold_d = format!(
+                                "M{fold_x},{top} L{fold_x},{fold_bottom} A{fold_r},{fold_r} 0 0 0 {fold_arc_x},{fold_y} L{right},{fold_y} L{fold_x},{top}",
                                 fold_x = fmt_coord(fold_x),
                                 top = fmt_coord(note_top),
                                 fold_bottom = fmt_coord(fold_y - fold_radius),
@@ -10356,39 +10578,78 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                                 fold_arc_x = fmt_coord(fold_x + fold_radius),
                                 fold_y = fmt_coord(fold_y),
                                 right = fmt_coord(note_right),
-                                fill = note_fill,
-                            )
-                            .unwrap();
+                            );
+                            if svg.handwritten {
+                                let mut rnd = HandJavaRandom::new(424242);
+                                let body_d =
+                                    handwritten_path_with_rnd(&body_d, &mut rnd).unwrap_or(body_d);
+                                write!(
+                                    svg.buf,
+                                    r#"<path d="{body_d}" fill="{note_fill}"{note_filter_attr} style="{note_path_style}"/>"#
+                                )
+                                .unwrap();
+                                let fold_d =
+                                    handwritten_path_with_rnd(&fold_d, &mut rnd).unwrap_or(fold_d);
+                                write!(
+                                    svg.buf,
+                                    r#"<path d="{fold_d}" fill="{note_fill}" style="{note_path_style}"/>"#
+                                )
+                                .unwrap();
+                            } else {
+                                svg.write_path_with_attrs(
+                                    &body_d,
+                                    &note_fill,
+                                    &note_filter_attr,
+                                    &note_path_style,
+                                );
+                                svg.write_path(&fold_d, &note_fill, &note_path_style);
+                            }
                         } else {
-                            write!(
-                                svg.buf,
-                                r##"<path d="M{left},{top} L{left},{bottom} L{right},{bottom} L{right},{fold_y} L{fold_x},{top} L{left},{top}" fill="{fill}"{filter} style="stroke:{stroke};stroke-width:{stroke_width};"/>"##,
-                                stroke = note_stroke,
-                                stroke_width = note_stroke_width,
+                            let note_path_style =
+                                format!("stroke:{note_stroke};stroke-width:{note_stroke_width};");
+                            let body_d = format!(
+                                "M{left},{top} L{left},{bottom} L{right},{bottom} L{right},{fold_y} L{fold_x},{top} L{left},{top}",
                                 left = fmt_coord(note_left),
                                 top = fmt_coord(note_top),
                                 bottom = fmt_coord(note_bottom),
                                 right = fmt_coord(note_right),
                                 fold_y = fmt_coord(fold_y),
                                 fold_x = fmt_coord(fold_x),
-                                fill = note_fill,
-                                filter = note_filter_attr,
-                            )
-                            .unwrap();
+                            );
 
                             // Emit the fold triangle.
-                            write!(
-                                svg.buf,
-                                r##"<path d="M{fold_x},{top} L{fold_x},{fold_y} L{right},{fold_y} L{fold_x},{top}" fill="{fill}" style="stroke:{stroke};stroke-width:{stroke_width};"/>"##,
-                                stroke = note_stroke,
-                                stroke_width = note_stroke_width,
+                            let fold_d = format!(
+                                "M{fold_x},{top} L{fold_x},{fold_y} L{right},{fold_y} L{fold_x},{top}",
                                 fold_x = fmt_coord(fold_x),
                                 top = fmt_coord(note_top),
                                 fold_y = fmt_coord(fold_y),
                                 right = fmt_coord(note_right),
-                                fill = note_fill,
-                            )
-                            .unwrap();
+                            );
+                            if svg.handwritten {
+                                let mut rnd = HandJavaRandom::new(424242);
+                                let body_d =
+                                    handwritten_path_with_rnd(&body_d, &mut rnd).unwrap_or(body_d);
+                                write!(
+                                    svg.buf,
+                                    r#"<path d="{body_d}" fill="{note_fill}"{note_filter_attr} style="{note_path_style}"/>"#
+                                )
+                                .unwrap();
+                                let fold_d =
+                                    handwritten_path_with_rnd(&fold_d, &mut rnd).unwrap_or(fold_d);
+                                write!(
+                                    svg.buf,
+                                    r#"<path d="{fold_d}" fill="{note_fill}" style="{note_path_style}"/>"#
+                                )
+                                .unwrap();
+                            } else {
+                                svg.write_path_with_attrs(
+                                    &body_d,
+                                    &note_fill,
+                                    &note_filter_attr,
+                                    &note_path_style,
+                                );
+                                svg.write_path(&fold_d, &note_fill, &note_path_style);
+                            }
                         }
                     }
                 }
