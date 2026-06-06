@@ -42,6 +42,7 @@ const GROUP_IF_RIGHT_EXTENT_EXTRA: f64 = 0.9893;
 const GROUP_IF_BODY_WIDTH_EXTRA: f64 = 4.0;
 const GROUP_COLOR_TITLE_WIDTH_EXTRA: f64 = 4.1572;
 const GROUP_COLOR_RIGHT_EXTENT_EXTRA: f64 = 2.0;
+const SINGLE_LANE_GROUP_TOP_ADJUST: f64 = 0.453125;
 const ACTION_PADDING: f64 = 20.0; // total vertical padding in action box
 const ACTION_H_PADDING: f64 = 10.0; // horizontal padding each side
 const ACTION_MIN_HEIGHT: f64 = 30.0;
@@ -689,6 +690,8 @@ enum LayoutNode {
         color: Option<String>,
         is_group: bool,
         nested: bool,
+        single_lane_group: bool,
+        single_lane_first_group: bool,
         body: Vec<LayoutNode>,
     },
     /// A top-level swimlanes container. Each lane has its own vertical
@@ -880,9 +883,9 @@ fn build_tree(steps: &[ActivityStep], palette: &Palette) -> Vec<LayoutNode> {
     // Swimlane detection: if any `|Lane|` marker appears (and there's more
     // than one distinct lane, or content exists before the first marker),
     // wrap the whole flow in a Swimlanes node. PlantUML treats a single-
-    // lane diagram (only one `|Lane|` marker with no content before it) as
-    // a no-op — the lane chrome is suppressed and the output matches a
-    // plain activity diagram.
+    // lane diagram (only one `|Lane|` marker with no content before it) with
+    // lane chrome suppressed. Top-level group frames still keep a tiny trace
+    // of that marker in FTile positioning, so tag those below.
     let swimlane_markers: Vec<&str> = steps
         .iter()
         .filter_map(|s| match s {
@@ -900,7 +903,11 @@ fn build_tree(steps: &[ActivityStep], palette: &Palette) -> Vec<LayoutNode> {
         return build_swimlanes(steps, palette);
     }
 
-    build_tree_inner(steps, palette)
+    let mut tree = build_tree_inner(steps, palette);
+    if distinct_lanes.len() == 1 && !has_pre_lane_content {
+        mark_single_lane_groups(&mut tree);
+    }
+    tree
 }
 
 /// Strip the lane name and optional `#color` prefix from a Swimlane
@@ -1257,6 +1264,8 @@ fn build_tree_inner(steps: &[ActivityStep], palette: &Palette) -> Vec<LayoutNode
                     color,
                     is_group: p.is_group,
                     nested: false,
+                    single_lane_group: false,
+                    single_lane_first_group: false,
                     body,
                 });
             }
@@ -1344,6 +1353,26 @@ fn mark_nested_partitions(nodes: &mut [LayoutNode], in_partition: bool) {
                 }
             }
             _ => {}
+        }
+    }
+}
+
+fn mark_single_lane_groups(nodes: &mut [LayoutNode]) {
+    let mut first = true;
+    for node in nodes {
+        if let LayoutNode::Partition {
+            is_group,
+            single_lane_group,
+            single_lane_first_group,
+            ..
+        } = node
+            && *is_group
+        {
+            *single_lane_group = true;
+            if first {
+                *single_lane_first_group = true;
+                first = false;
+            }
         }
     }
 }
@@ -3671,9 +3700,10 @@ fn partition_top_gap(
     name: &str,
     is_group: bool,
     nested: bool,
+    single_lane_first_group: bool,
     body: &[LayoutNode],
 ) -> f64 {
-    if is_group && group_uses_compact_top_gap(body) {
+    let gap = if is_group && group_uses_compact_top_gap(body) {
         10.0
     } else if (is_group
         && (color.is_some()
@@ -3691,6 +3721,11 @@ fn partition_top_gap(
         10.4531
     } else {
         10.0
+    };
+    if single_lane_first_group {
+        gap + SINGLE_LANE_GROUP_TOP_ADJUST
+    } else {
+        gap
     }
 }
 
@@ -3887,9 +3922,18 @@ fn node_height(node: &LayoutNode) -> f64 {
             name,
             is_group,
             nested,
+            single_lane_first_group,
             body,
+            ..
         } => {
-            let top_gap = partition_top_gap(color, name, *is_group, *nested, body);
+            let top_gap = partition_top_gap(
+                color,
+                name,
+                *is_group,
+                *nested,
+                *single_lane_first_group,
+                body,
+            );
             if body.is_empty() {
                 return top_gap + empty_partition_shell_height();
             }
@@ -5010,9 +5054,17 @@ fn emit_sequence_ex(
                         name,
                         is_group,
                         nested,
+                        single_lane_first_group,
                         body,
                         ..
-                    } => Some(partition_top_gap(color, name, *is_group, *nested, body)),
+                    } => Some(partition_top_gap(
+                        color,
+                        name,
+                        *is_group,
+                        *nested,
+                        *single_lane_first_group,
+                        body,
+                    )),
                     _ => None,
                 };
                 let prev_was_partition = matches!(
@@ -5492,6 +5544,8 @@ fn emit_node_with_repeat_extra(
             color,
             is_group,
             nested,
+            single_lane_group,
+            single_lane_first_group,
             body,
         } => {
             // Partition's outer rect spans from y_in + 10 (top) to y_in +
@@ -5514,14 +5568,21 @@ fn emit_node_with_repeat_extra(
             } else {
                 (title_w + 15.0 + title_width_extra).max(body_w + 20.0 + body_width_extra)
             };
-            let partition_x = if empty_body {
+            let partition_x = if *single_lane_group || empty_body {
                 cx - partition_w / 2.0
             } else if (*is_group && *nested) || (!*is_group && !title_drives_width) {
                 (cx - partition_w / 2.0).max(16.0)
             } else {
                 16.0
             };
-            let top_gap = partition_top_gap(color, name, *is_group, *nested, body);
+            let top_gap = partition_top_gap(
+                color,
+                name,
+                *is_group,
+                *nested,
+                *single_lane_first_group,
+                body,
+            );
             let partition_top = y + top_gap;
             let colored_partition_while =
                 color.is_some() && !*is_group && partition_wraps_while(body);
