@@ -42,6 +42,7 @@ pub mod font_metrics;
 pub mod ftile;
 pub mod gantt;
 pub mod git_diagram;
+pub(crate) mod handwritten;
 pub mod json_diagram;
 pub mod layout_oracle;
 pub mod math;

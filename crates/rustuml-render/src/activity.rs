@@ -13,9 +13,13 @@ use rustuml_parser::diagram::activity::{ActivityDiagram, ActivityStep, NotePosit
 
 use crate::creole;
 use crate::ftile;
+use crate::handwritten::{
+    ellipse_points as handwritten_ellipse_points, line_path as handwritten_line_path,
+    polygon_points as handwritten_polygon_points, rect_points as handwritten_rect_points,
+};
 use crate::layout_oracle::{
-    EntityPolygon, EntityRect, OracleCluster, OracleEdgePath, OracleLayout,
-    emit_oracle_cluster_children, wrap_oracle_envelope,
+    EntityPolygon, EntityRect, OracleCluster, OracleEdgePath, OracleHandwrittenWarning,
+    OracleLayout, emit_oracle_cluster_children, wrap_oracle_envelope,
 };
 use crate::plantuml_metrics as pm;
 use crate::style::Theme;
@@ -138,6 +142,7 @@ const DECORATION_COLOR: &str = "#888888";
 const HEADER_BODY_GAP: f64 = 10.0;
 const FOOTER_BASELINE_GAP: f64 = 18.668;
 const FOOTER_BOTTOM_GAP: f64 = 31.957;
+const HANDWRITTEN_WARNING_BAND_H: f64 = 21.6406;
 const CAPTION_FONT_SIZE: f64 = 14.0;
 const CAPTION_BASELINE_GAP: f64 = 23.5352;
 const CAPTION_BOTTOM_GAP: f64 = 38.8672;
@@ -250,6 +255,12 @@ fn action_text_for_family(text: &str, font_family: &str) -> String {
     } else {
         text.to_string()
     }
+}
+
+fn has_handwritten_skinparam(diagram: &ActivityDiagram) -> bool {
+    diagram.meta.skinparams.iter().any(|sp| {
+        sp.key.eq_ignore_ascii_case("handwritten") && sp.value.eq_ignore_ascii_case("true")
+    })
 }
 
 /// Per-diagram color palette, derived from the PlantUML default plus any
@@ -4890,6 +4901,43 @@ fn svg_text_escape(s: &str) -> String {
     out
 }
 
+fn svg_attr_escape(s: &str) -> String {
+    s.replace('&', "&amp;")
+        .replace('<', "&lt;")
+        .replace('>', "&gt;")
+        .replace('"', "&quot;")
+}
+
+fn emit_handwritten_warning(svg: &mut SvgEmitter, warning: &OracleHandwrittenWarning) {
+    let mut polygon = format!(
+        r#"<polygon fill="{}" points="{}""#,
+        svg_attr_escape(&warning.polygon.fill),
+        svg_attr_escape(&warning.polygon.points),
+    );
+    if let Some(style) = warning.polygon.style.as_deref() {
+        write!(polygon, r#" style="{}""#, svg_attr_escape(style)).unwrap();
+    }
+    polygon.push_str("/>");
+    svg.raw(&polygon);
+
+    let text = svg_text_escape(&warning.text.text);
+    match warning.text_length.as_deref() {
+        Some(text_length) => svg.raw(&format!(
+            r##"<text fill="#000000" font-family="monospace" font-size="10" lengthAdjust="spacing" textLength="{}" x="{}" y="{}">{}</text>"##,
+            svg_attr_escape(text_length),
+            f(warning.text.x),
+            f(warning.text.y),
+            text,
+        )),
+        None => svg.raw(&format!(
+            r##"<text fill="#000000" font-family="monospace" font-size="10" x="{}" y="{}">{}</text>"##,
+            f(warning.text.x),
+            f(warning.text.y),
+            text,
+        )),
+    }
+}
+
 fn f(v: f64) -> String {
     pm::fmt_coord(v)
 }
@@ -5087,16 +5135,18 @@ struct SvgEmitter {
     /// inline skinparam overrides).
     palette: Palette,
     colored_partition_while_depth: usize,
+    handwritten: bool,
 }
 
 #[allow(clippy::too_many_arguments)]
 impl SvgEmitter {
-    fn with_palette(palette: Palette) -> Self {
+    fn with_palette(palette: Palette, handwritten: bool) -> Self {
         SvgEmitter {
             shapes: String::new(),
             connectors: String::new(),
             palette,
             colored_partition_while_depth: 0,
+            handwritten,
         }
     }
 
@@ -5126,6 +5176,16 @@ impl SvgEmitter {
         stroke_width: &str,
     ) {
         let filter = self.shadow_filter_attr(!(rx == STOP_INNER_R && ry == STOP_INNER_R));
+        if self.handwritten {
+            let points = handwritten_ellipse_points(cx, cy, rx, ry);
+            write!(
+                self.shapes,
+                r#"<polygon fill="{}"{} points="{}" style="stroke:{};stroke-width:{};"/>"#,
+                fill, filter, points, stroke, stroke_width
+            )
+            .unwrap();
+            return;
+        }
         write!(
             self.shapes,
             r#"<ellipse cx="{}" cy="{}" fill="{}"{} rx="{}" ry="{}" style="stroke:{};stroke-width:{};"/>"#,
@@ -5147,6 +5207,16 @@ impl SvgEmitter {
         y: f64,
     ) {
         let filter = self.shadow_filter_attr(true);
+        if self.handwritten {
+            let points = handwritten_rect_points(x, y, width, height, rx, ry);
+            write!(
+                self.shapes,
+                r#"<polygon fill="{}"{} points="{}" style="stroke:{};stroke-width:{};"/>"#,
+                fill, filter, points, stroke, stroke_width
+            )
+            .unwrap();
+            return;
+        }
         write!(
             self.shapes,
             r#"<rect fill="{}"{} height="{}" rx="{}" ry="{}" style="stroke:{};stroke-width:{};" width="{}" x="{}" y="{}"/>"#,
@@ -5375,6 +5445,11 @@ impl SvgEmitter {
     /// A line that belongs with the SHAPE group (e.g. the X inside an
     /// `end` node — visually part of the node, not a connector).
     fn shape_line(&mut self, stroke: &str, stroke_width: &str, x1: f64, x2: f64, y1: f64, y2: f64) {
+        if self.handwritten {
+            let d = handwritten_line_path(x1, y1, x2, y2);
+            write!(self.shapes, r#"<path d="{d}" fill="{stroke}"/>"#).unwrap();
+            return;
+        }
         write!(
             self.shapes,
             r#"<line style="stroke:{};stroke-width:{};" x1="{}" x2="{}" y1="{}" y2="{}"/>"#,
@@ -5406,7 +5481,11 @@ impl SvgEmitter {
         {
             closed.push(*first);
         }
-        let pts = polygon_points(&closed);
+        let pts = if self.handwritten {
+            handwritten_polygon_points(&closed)
+        } else {
+            polygon_points(&closed)
+        };
         let filter = self.shadow_filter_attr(true);
         write!(
             self.shapes,
@@ -5439,6 +5518,19 @@ impl SvgEmitter {
         dashed: bool,
     ) {
         let dash = if dashed { "stroke-dasharray:2,2;" } else { "" };
+        if self.handwritten {
+            let d = handwritten_line_path(x1, y1, x2, y2);
+            if dashed {
+                write!(
+                    self.connectors,
+                    r#"<path d="{d}" fill="none" style="stroke:{stroke};stroke-width:{stroke_width};{dash}"/>"#
+                )
+                .unwrap();
+            } else {
+                write!(self.connectors, r#"<path d="{d}" fill="{stroke}"/>"#).unwrap();
+            }
+            return;
+        }
         write!(
             self.connectors,
             r#"<line style="stroke:{};stroke-width:{};{}" x1="{}" x2="{}" y1="{}" y2="{}"/>"#,
@@ -5489,7 +5581,11 @@ impl SvgEmitter {
         stroke: &str,
         stroke_width: &str,
     ) {
-        let pts = polygon_points(points);
+        let pts = if self.handwritten {
+            handwritten_polygon_points(points)
+        } else {
+            polygon_points(points)
+        };
         write!(
             self.connectors,
             r#"<polygon fill="{}" points="{}" style="stroke:{};stroke-width:{};"/>"#,
@@ -5595,6 +5691,19 @@ impl SvgEmitter {
             Some(d) => format!("stroke-dasharray:{d};"),
             None => String::new(),
         };
+        if self.handwritten {
+            let d = handwritten_line_path(x1, y1, x2, y2);
+            if dash.is_some() {
+                write!(
+                    self.connectors,
+                    r#"<path d="{d}" fill="none" style="stroke:{stroke};stroke-width:{stroke_width};{dash_str}"/>"#
+                )
+                .unwrap();
+            } else {
+                write!(self.connectors, r#"<path d="{d}" fill="{stroke}"/>"#).unwrap();
+            }
+            return;
+        }
         write!(
             self.connectors,
             r#"<line style="stroke:{};stroke-width:{};{}" x1="{}" x2="{}" y1="{}" y2="{}"/>"#,
@@ -9330,7 +9439,7 @@ pub fn render_with_oracle(
     let defs = oracle.map(|o| o.defs_inner_xml.as_str()).unwrap_or("");
     let gradient_id = parse_gradient_id(defs);
     let filter_id = parse_filter_id(defs);
-    render_inner(diagram, theme, defs, gradient_id, filter_id)
+    render_inner(diagram, theme, defs, gradient_id, filter_id, oracle)
 }
 
 fn render_legacy_activity_with_oracle(
@@ -9758,7 +9867,7 @@ fn render_ftile(tree: &[LayoutNode], _diagram: &ActivityDiagram) -> Option<Strin
 }
 
 pub fn render(diagram: &ActivityDiagram, theme: &Theme) -> String {
-    render_inner(diagram, theme, "", None, None)
+    render_inner(diagram, theme, "", None, None, None)
 }
 
 fn render_inner(
@@ -9767,6 +9876,7 @@ fn render_inner(
     defs: &str,
     gradient_id: Option<String>,
     filter_id: Option<String>,
+    oracle: Option<&OracleLayout>,
 ) -> String {
     if diagram.steps.is_empty() {
         return empty_svg();
@@ -9779,6 +9889,12 @@ fn render_inner(
     // theme machinery in `style.rs`.
     let palette = Palette::from_skinparams(&diagram.meta.skinparams, &gradient_id, &filter_id);
     let has_shadow = palette.shadow_filter.is_some();
+    let is_handwritten = has_handwritten_skinparam(diagram);
+    let handwritten_warning = if is_handwritten {
+        oracle.and_then(|o| o.handwritten_warning.as_ref())
+    } else {
+        None
+    };
 
     // Build layout tree from flat steps.
     let mut tree = build_tree(&diagram.steps, &palette);
@@ -9888,6 +10004,17 @@ fn render_inner(
     } else {
         0.0
     };
+    let starts_with_start = matches!(first_flow_node(&tree), Some(LayoutNode::Start));
+    let handwritten_warning_band_h = if is_handwritten {
+        HANDWRITTEN_WARNING_BAND_H
+            + if starts_with_start {
+                START_CY - MARGIN_LEAD
+            } else {
+                0.0
+            }
+    } else {
+        0.0
+    };
     // A top-level swimlanes block carries its own internal top structure
     // (header band at MARGIN_LEAD + 1.2969 = 17.2969). The generic
     // deprecation gap formula (13 + warn_band_h + 17) is calibrated for the
@@ -9912,7 +10039,8 @@ fn render_inner(
         header_band_h + 13.0 + warn_band_h + 17.0
     } else {
         margin_top + header_band_h
-    } + vertical_if_startless_top_nudge;
+    } + handwritten_warning_band_h
+        + vertical_if_startless_top_nudge;
 
     let action_total_w = content_w + MARGIN_LEAD + MARGIN_TRAIL;
     // PlantUML enforces a minimum SVG width of 65 px (= 30 px content
@@ -9956,7 +10084,7 @@ fn render_inner(
         .max(label_total_w.ceil())
         .max(decoration_total_w)
         + if has_shadow { SHADOW_BOUNDS_PAD } else { 0.0 };
-    let svg_w = svg_w_raw.ceil() as u32;
+    let mut svg_w = svg_w_raw.ceil() as u32;
 
     // content_h was computed by sequence_height assuming Start contributes
     // 19 px (cy=25 - MARGIN_LEAD=16 + START_R=10). When start_y > START_CY
@@ -10007,7 +10135,13 @@ fn render_inner(
             0.0
         })
         .max(legend_bottom_y);
-    let svg_h = (bottom_raw + shadow_height_pad).ceil() as u32;
+    let mut svg_h = (bottom_raw + shadow_height_pad).ceil() as u32;
+    if handwritten_warning.is_some()
+        && let Some(orc) = oracle
+    {
+        svg_w = svg_w.max(orc.canvas_width.ceil() as u32);
+        svg_h = svg_h.max(orc.canvas_height.ceil() as u32);
+    }
     // cx aligns the diagram's vertical centreline to MARGIN_LEAD + content_left
     // (the asymmetric left extent). For symmetric layouts this equals
     // MARGIN_LEAD + content_w/2; for if/else with unequal branches it shifts
@@ -10015,7 +10149,7 @@ fn render_inner(
     let cx = MARGIN_LEAD + content_left + ((decoration_layout_w - action_total_w) / 2.0).max(0.0);
 
     let svg_background = palette.svg_background.clone();
-    let mut svg = SvgEmitter::with_palette(palette);
+    let mut svg = SvgEmitter::with_palette(palette, is_handwritten);
 
     if !header_lines.is_empty() {
         let source_line = diagram.meta.header_line.unwrap_or(1);
@@ -10063,6 +10197,10 @@ fn render_inner(
             svg.monospace_text_element(TEXT_COLOR, 10.0, *ww, 13.0 + 7.0, warn_text_y, warning);
             warn_text_y += baseline_pitch;
         }
+    }
+
+    if let Some(warning) = handwritten_warning {
+        emit_handwritten_warning(&mut svg, warning);
     }
 
     // A leading note is drawn first (before the start ellipse) so its
