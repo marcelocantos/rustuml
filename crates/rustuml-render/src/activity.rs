@@ -2079,8 +2079,8 @@ fn node_geometry(node: &LayoutNode) -> Option<ftile::FtileGeometry> {
                 diamond_font_family,
             );
             let diamond2 = G::diamond_empty(0.0); // bare 24×24 merge diamond
-            let t1 = sequence_geometry(then_branch)?;
-            let t2 = sequence_geometry(&else_branches[0].body)?;
+            let t1 = if_branch_tile(then_branch)?;
+            let t2 = if_branch_tile(&else_branches[0].body)?;
             // Non-swimlane two-branch: Ydelta1a(10) + Ydelta1b(6) + labels(0).
             ftile::if_with_diamonds(&diamond1, &t1, &t2, &diamond2, 16.0, (0.0, 0.0, 0.0))
         }
