@@ -2047,6 +2047,42 @@ struct ParticipantLayout {
     source_line: u32,
 }
 
+fn left_note_lifeline_gap(
+    participants: &[ParticipantLayout],
+    shape: NoteShape,
+    anchor_idx: Option<usize>,
+    on_message: bool,
+) -> f64 {
+    let gap = match shape {
+        NoteShape::Note => NOTE_LIFELINE_GAP,
+        NoteShape::Hexagonal | NoteShape::Rectangular => NOTE_LIFELINE_GAP - 1.0,
+    };
+    if !on_message
+        && shape == NoteShape::Note
+        && anchor_idx
+            .and_then(|idx| participants.get(idx))
+            .is_some_and(|p| p.kind == ParticipantKind::Collections)
+    {
+        gap - 1.0
+    } else {
+        gap
+    }
+}
+
+fn note_across_left(centre: f64, preferred_width: f64) -> f64 {
+    (centre - preferred_width / 2.0).floor().max(HEAD_BOX_Y)
+}
+
+fn note_across_missing_space(centre: f64, preferred_width: f64) -> f64 {
+    let raw_left = centre - preferred_width / 2.0;
+    let missing = (HEAD_BOX_Y - raw_left).max(0.0);
+    if raw_left >= 0.0 {
+        missing.floor()
+    } else {
+        missing.ceil()
+    }
+}
+
 /// State of activation bars per participant.
 struct ActivationTracker {
     /// Current activation depth per participant ID.
@@ -5041,10 +5077,12 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                     );
                     let note_content_w =
                         note_content_width_padded(max_tw, note.shape, note_text_align);
-                    let gap = match note.shape {
-                        NoteShape::Note => NOTE_LIFELINE_GAP,
-                        NoteShape::Hexagonal | NoteShape::Rectangular => NOTE_LIFELINE_GAP - 1.0,
-                    };
+                    let gap = left_note_lifeline_gap(
+                        &participants,
+                        note.shape,
+                        first_part,
+                        note.on_message,
+                    );
                     let bw = participants[0].box_width;
                     let min_cx = HEAD_BOX_Y + note_content_w + gap + bw / 2.0 - (bw / 2.0).floor();
                     min_first_center_x = min_first_center_x.max(min_cx);
@@ -5237,43 +5275,42 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                 );
                 // Use the same geometry as the draw path so notes that overhang
                 // participant 0 reserve exactly the shift Java would need.
-                let note_left = if !note.participants.is_empty() && note.shape == NoteShape::Note {
+                let shift = if note.participants.is_empty() {
+                    let span = participants[hi].lifeline_line_x - participants[lo].lifeline_line_x;
+                    let min_width = span.round() + ACROSS_NOTE_MARGIN;
+                    let centre = (participants[lo].center_x + participants[hi].center_x) / 2.0;
+                    let pw = note_content_width_raw_padded(max_tw, note.shape, note_text_align)
+                        .max(min_width);
+                    note_across_missing_space(centre, pw)
+                } else if note.shape == NoteShape::Note {
                     let component_pref_w =
                         max_tw + ROSE_NOTE_COMPONENT_PREF_EXTRA + 2.0 * explicit_global_padding;
                     let content_visible_w =
                         note_content_width_padded(max_tw, note.shape, note_text_align);
-                    over_several_note_geometry(
+                    let note_left = over_several_note_geometry(
                         &participants,
                         lo,
                         hi,
                         component_pref_w,
                         content_visible_w,
                     )
-                    .visible_left
+                    .visible_left;
+                    (HEAD_BOX_Y - note_left).max(0.0).floor()
                 } else {
-                    let margin = if note.participants.is_empty() {
-                        ACROSS_NOTE_MARGIN
-                    } else {
-                        OVER_SEVERAL_NOTE_MARGIN
-                    };
+                    let margin = OVER_SEVERAL_NOTE_MARGIN;
                     let span = participants[hi].lifeline_line_x - participants[lo].lifeline_line_x;
                     let min_width = span.round() + margin;
                     let centre = (participants[lo].center_x + participants[hi].center_x) / 2.0;
-                    let pw = if note.participants.is_empty() {
-                        note_content_width_raw_padded(max_tw, note.shape, note_text_align)
-                            .max(min_width)
-                    } else {
-                        over_several_shape_position_width_raw_padded(
-                            max_tw,
-                            note.shape,
-                            note_text_align,
-                            min_width,
-                            centre,
-                        )
-                    };
-                    (centre - pw / 2.0).floor()
+                    let pw = over_several_shape_position_width_raw_padded(
+                        max_tw,
+                        note.shape,
+                        note_text_align,
+                        min_width,
+                        centre,
+                    );
+                    let note_left = (centre - pw / 2.0).floor();
+                    (HEAD_BOX_Y - note_left).max(0.0).floor()
                 };
-                let shift = (HEAD_BOX_Y - note_left).max(0.0);
                 across_shift = across_shift.max(shift);
             }
         }
@@ -5338,12 +5375,8 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                         NotePosition::Left => {
                             let note_content_w =
                                 note_content_width_raw_padded(max_tw, note.shape, note_text_align);
-                            let gap = match note.shape {
-                                NoteShape::Note => NOTE_LIFELINE_GAP,
-                                NoteShape::Hexagonal | NoteShape::Rectangular => {
-                                    NOTE_LIFELINE_GAP - 1.0
-                                }
-                            };
+                            let gap =
+                                left_note_lifeline_gap(&participants, note.shape, Some(0), false);
                             // Java's group InGroupable reservation for a left
                             // side note lands one pixel left of the visible
                             // group-floor note body; that extra pixel is what
@@ -6222,11 +6255,12 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                             let first_ll = participants[0].lifeline_line_x;
                             let last_ll = participants[participants.len() - 1].lifeline_line_x;
                             let span = last_ll - first_ll;
+                            let pw_raw = raw_note_content_w.max(span.round() + ACROSS_NOTE_MARGIN);
                             let pw = note_content_w.max(span.round() + ACROSS_NOTE_MARGIN);
                             let centre = (participants[0].center_x
                                 + participants[participants.len() - 1].center_x)
                                 / 2.0;
-                            (centre - pw / 2.0).floor() + pw
+                            note_across_left(centre, pw_raw) + pw
                         };
                         max_note_right = max_note_right.max(across_right);
                     } else if note.participants.len() == 1 {
@@ -6769,10 +6803,14 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
         let note_content_w = note_content_width_padded(max_text_w, note.shape, note_text_align);
         let raw_note_content_w =
             note_content_width_raw_padded(max_text_w, note.shape, note_text_align);
-        let anchor_xs: Vec<f64> = note
+        let anchor_idxs: Vec<usize> = note
             .participants
             .iter()
             .filter_map(|id| id_to_idx.get(id.as_str()))
+            .copied()
+            .collect();
+        let anchor_xs: Vec<f64> = anchor_idxs
+            .iter()
             .map(|&i| {
                 if note.position == NotePosition::Right {
                     participants[i].center_x
@@ -6826,10 +6864,12 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                 } else {
                     anchor_xs.first().copied()?
                 };
-                let gap = match note.shape {
-                    NoteShape::Note => NOTE_LIFELINE_GAP,
-                    NoteShape::Hexagonal | NoteShape::Rectangular => NOTE_LIFELINE_GAP - 1.0,
-                };
+                let gap = left_note_lifeline_gap(
+                    &participants,
+                    note.shape,
+                    anchor_idxs.first().copied(),
+                    note.on_message,
+                );
                 if note.on_message {
                     let right = ll_x.floor() - gap;
                     Some((right - note_content_w, right))
@@ -6856,7 +6896,7 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                         let centre = (participants[0].center_x
                             + participants[participants.len() - 1].center_x)
                             / 2.0;
-                        let left = (centre - pw_raw / 2.0).floor();
+                        let left = note_across_left(centre, pw_raw);
                         Some((left, left + pw))
                     }
                 } else if note.participants.len() == 1 {
@@ -8898,10 +8938,14 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                     note_content_width_raw_padded(max_text_w, note.shape, note_text_align);
 
                 // Lifeline x values of the note's anchor participant(s).
-                let anchor_xs: Vec<f64> = note
+                let anchor_idxs: Vec<usize> = note
                     .participants
                     .iter()
                     .filter_map(|id| id_to_idx.get(id.as_str()))
+                    .copied()
+                    .collect();
+                let anchor_xs: Vec<f64> = anchor_idxs
+                    .iter()
                     .map(|&i| {
                         if note.position == NotePosition::Right {
                             participants[i].center_x
@@ -8959,12 +9003,12 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                         let ll_x = if ll_x == f64::MAX { 50.0 } else { ll_x };
                         // hnote/rnote box right edge sits 1px closer to the lifeline
                         // than a standard note (same shape offset used elsewhere).
-                        let gap = match note.shape {
-                            NoteShape::Note => NOTE_LIFELINE_GAP,
-                            NoteShape::Hexagonal | NoteShape::Rectangular => {
-                                NOTE_LIFELINE_GAP - 1.0
-                            }
-                        };
+                        let gap = left_note_lifeline_gap(
+                            &participants,
+                            note.shape,
+                            anchor_idxs.first().copied(),
+                            note.on_message,
+                        );
                         if note.on_message {
                             let right = ll_x.floor() - gap;
                             (right - note_content_w, right)
@@ -8998,7 +9042,7 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                                 let centre = (participants[0].center_x
                                     + participants[participants.len() - 1].center_x)
                                     / 2.0;
-                                let left = (centre - pw_raw / 2.0).floor();
+                                let left = note_across_left(centre, pw_raw);
                                 (left, left + pw)
                             }
                         } else if note.participants.len() == 1 {
