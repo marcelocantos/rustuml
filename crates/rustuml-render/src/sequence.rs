@@ -696,6 +696,7 @@ const NOTE_LIST_ITEM_TEXT_X: f64 = 12.0;
 const NOTE_LIST_BULLET_CX: f64 = 5.5;
 const NOTE_LIST_BULLET_BASELINE_DROP: f64 = 4.7578;
 const NOTE_LIST_NUMBER_GAP: f64 = 4.1133;
+const NOTE_IMAGE_TEXT_Y_SHIFT: f64 = 0.5596;
 /// PlantUML's text atoms reserve at least 10px height even when the font's real
 /// line metrics are smaller (notably `defaultFontSize 8`).
 fn atom_height_with_family(font_size: f64, font_family: &str) -> f64 {
@@ -1110,7 +1111,12 @@ fn emit_note_line(
         }
         _ => {
             number_counters.clear();
-            text_render::emit_text(buf, line.trim(), base)
+            let y = if line.contains("<img:") {
+                base.y + NOTE_IMAGE_TEXT_Y_SHIFT
+            } else {
+                base.y
+            };
+            text_render::emit_text(buf, line.trim(), &TextBase { y, ..base.clone() })
         }
     }
 }
@@ -1523,38 +1529,13 @@ fn decode_backslash_escapes(s: &str) -> String {
     result
 }
 
-/// Process label text for SVG rendering: decode escapes and replace unsupported
-/// markup like `<img:...>` with a placeholder matching PlantUML's behavior.
+/// Process label text for SVG rendering.
 fn process_label(s: &str) -> String {
     if inline_nested_start_end_label_is_hidden(s) {
         return String::new();
     }
     let decoded = decode_backslash_escapes(s);
-    let mut result = String::with_capacity(decoded.len());
-    let mut rest = decoded.as_str();
-    while let Some(start) = rest.find("<img:") {
-        result.push_str(&rest[..start]);
-        let after = &rest[start..];
-        if let Some(end) = after.find('>') {
-            let raw_src = &after["<img:".len()..end];
-            let src = if let Some(brace) = raw_src.find('{') {
-                &raw_src[..brace]
-            } else {
-                raw_src
-            };
-            if src.starts_with("https://") || src.starts_with("http://") {
-                result.push_str(&format!("(Cannot\u{00a0}decode:\u{00a0}{src})"));
-            } else {
-                result.push_str("(Cannot\u{00a0}decode)");
-            }
-            rest = &after[end + 1..];
-        } else {
-            result.push_str(after);
-            return result;
-        }
-    }
-    result.push_str(rest);
-    escape_inline_code_tags(&result)
+    escape_inline_code_tags(&decoded)
 }
 
 fn inline_nested_start_end_label_is_hidden(s: &str) -> bool {
@@ -9526,6 +9507,24 @@ mod tests {
         assert!(svg.contains(">bold&#160;italic&#160;mono</text>"));
         assert!(!svg.contains("font-weight=\"700\""));
         assert!(!svg.contains("//&quot;&quot;bold italic mono&quot;&quot;"));
+    }
+
+    #[test]
+    fn image_fallback_in_message_and_note_keeps_monospace_run() {
+        let input = concat!(
+            "@startuml\n",
+            "Alice -> Bob : message with <img:sprite.png>\n",
+            "note right : note with <img:sprite.png>\n",
+            "@enduml",
+        );
+        let diagram = rustuml_parser::parse::parse(input).unwrap();
+        let svg = crate::render_svg(&diagram);
+
+        assert!(svg.contains(">message with</text>"));
+        assert!(svg.contains(">note with</text>"));
+        assert!(svg.contains(r#"font-family="monospace" font-size="14""#));
+        assert!(!svg.contains("message with (Cannot"));
+        assert!(!svg.contains("note with (Cannot"));
     }
 
     #[test]

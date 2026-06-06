@@ -1364,6 +1364,7 @@ fn handle_tag(
             };
             let mut nested = style.clone();
             nested.monospace = true;
+            nested.size = Some(14);
             push_segment(out, &fallback, &nested);
         }
         _ if tag.starts_with("&amp;") || tag.starts_with('&') => {
@@ -1488,6 +1489,16 @@ mod tests {
         assert_eq!(
             parse_segments(r#"""mono activity"""#),
             vec![seg("mono\u{00a0}activity", mono_style())]
+        );
+    }
+
+    #[test]
+    fn segments_img_fallback_is_monospace_size_14() {
+        let mut style = mono_style();
+        style.size = Some(14);
+        assert_eq!(
+            parse_segments("<img:sprite.png>"),
+            vec![seg("(Cannot\u{00a0}decode)", style)]
         );
     }
 
