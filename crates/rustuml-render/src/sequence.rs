@@ -9809,7 +9809,7 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                             underline: false,
                             skip_underline: false,
                         },
-                        note_left + NOTE_TEXT_X_PAD + explicit_global_padding,
+                        text_x,
                         note_top + NOTE_TABLE_TOP_PAD + explicit_global_padding,
                     );
                 } else {
