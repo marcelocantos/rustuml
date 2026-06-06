@@ -646,6 +646,7 @@ enum LayoutNode {
         then_label: Option<String>,
         then_branch: Vec<LayoutNode>,
         else_branches: Vec<ElseBranch>,
+        attached_notes: Vec<ActivityNote>,
     },
     While {
         condition: String,
@@ -741,6 +742,47 @@ struct ElseBranch {
     /// lets the long-chain layout draw the per-elseif diamonds.
     condition: Option<String>,
     body: Vec<LayoutNode>,
+}
+
+#[derive(Clone, Debug)]
+struct ActivityNote {
+    text: String,
+    position: NotePosition,
+    color: Option<String>,
+}
+
+fn activity_note_from_block(n: &rustuml_parser::diagram::activity::NoteBlock) -> ActivityNote {
+    ActivityNote {
+        text: n.text.clone(),
+        position: n.position.clone(),
+        color: n.color.clone(),
+    }
+}
+
+fn take_leading_notes(nodes: &mut Vec<LayoutNode>) -> Vec<ActivityNote> {
+    let mut count = 0;
+    while matches!(nodes.get(count), Some(LayoutNode::Note { .. })) {
+        count += 1;
+    }
+    nodes
+        .drain(..count)
+        .filter_map(|node| {
+            if let LayoutNode::Note {
+                text,
+                position,
+                color,
+            } = node
+            {
+                Some(ActivityNote {
+                    text,
+                    position,
+                    color,
+                })
+            } else {
+                None
+            }
+        })
+        .collect()
 }
 
 /// True when an `if` node is a genuine `if/elseif/.../else` chain (at least one
@@ -1085,7 +1127,8 @@ fn build_tree_inner(steps: &[ActivityStep], palette: &Palette) -> Vec<LayoutNode
             }
             ActivityStep::If(block) => {
                 i += 1;
-                let then_branch = collect_until_else_or_endif(steps, &mut i, palette);
+                let mut then_branch = collect_until_else_or_endif(steps, &mut i, palette);
+                let mut attached_notes = take_leading_notes(&mut then_branch);
                 let mut else_branches = Vec::new();
                 while i < steps.len() {
                     match &steps[i] {
@@ -1098,7 +1141,8 @@ fn build_tree_inner(steps: &[ActivityStep], palette: &Palette) -> Vec<LayoutNode
                                 _ => (None, None),
                             };
                             i += 1;
-                            let body = collect_until_else_or_endif(steps, &mut i, palette);
+                            let mut body = collect_until_else_or_endif(steps, &mut i, palette);
+                            attached_notes.extend(take_leading_notes(&mut body));
                             else_branches.push(ElseBranch {
                                 label,
                                 condition,
@@ -1112,6 +1156,10 @@ fn build_tree_inner(steps: &[ActivityStep], palette: &Palette) -> Vec<LayoutNode
                         _ => break,
                     }
                 }
+                while let Some(ActivityStep::Note(n)) = steps.get(i) {
+                    attached_notes.push(activity_note_from_block(n));
+                    i += 1;
+                }
                 nodes.push(LayoutNode::If {
                     condition: block.condition.clone(),
                     diamond_font_family: palette.diamond_font_family.clone(),
@@ -1123,6 +1171,7 @@ fn build_tree_inner(steps: &[ActivityStep], palette: &Palette) -> Vec<LayoutNode
                     then_label: block.then_label.clone(),
                     then_branch,
                     else_branches,
+                    attached_notes,
                 });
             }
             ActivityStep::ElseIf(_) | ActivityStep::Else(_) | ActivityStep::EndIf => {
@@ -2241,6 +2290,42 @@ fn note_box_height(text: &str) -> f64 {
     NOTE_BOX_BASE_H + note_lines(text).len() as f64 * NOTE_LINE_H
 }
 
+fn note_height_from_activity_note(note: &ActivityNote) -> f64 {
+    note_box_height(&note.text)
+}
+
+fn max_note_height(notes: &[ActivityNote]) -> Option<f64> {
+    notes
+        .iter()
+        .map(note_height_from_activity_note)
+        .reduce(f64::max)
+}
+
+fn emit_folded_note(svg: &mut SvgEmitter, note: &ActivityNote, box_left: f64, box_top: f64) {
+    let box_w = note_box_width(&note.text);
+    let box_h = note_box_height(&note.text);
+    let fill = note
+        .color
+        .as_deref()
+        .map(crate::sequence::resolve_color)
+        .unwrap_or_else(|| NOTE_FILL.to_string());
+    svg.note_folded(&fill, box_left, box_top, box_w, box_h);
+    for (i, line) in note_lines(&note.text).iter().enumerate() {
+        let baseline = box_top + NOTE_FIRST_BASELINE_DY + i as f64 * NOTE_LINE_H;
+        let lw = text_render::measure(line, NOTE_FONT, false);
+        svg.text_element(
+            TEXT_COLOR,
+            "sans-serif",
+            NOTE_FONT,
+            lw,
+            box_left + NOTE_TEXT_PAD_X,
+            baseline,
+            line,
+            false,
+        );
+    }
+}
+
 /// Emit a note attached beside an Action-style anchor. `cx`/`anchor_w` give
 /// the anchor box centre and width; `anchor_cy` its vertical centre. The note
 /// box is vertically centred on the anchor and offset `NOTE_GAP` to the side.
@@ -2283,6 +2368,25 @@ fn emit_attached_note(
             line,
             false,
         );
+    }
+}
+
+fn emit_if_attached_notes(
+    svg: &mut SvgEmitter,
+    notes: &[ActivityNote],
+    cx: f64,
+    diamond_top_y: f64,
+    diamond_half_w: f64,
+) {
+    for note in notes {
+        let box_w = note_box_width(&note.text);
+        let box_h = note_box_height(&note.text);
+        let box_top = diamond_top_y - box_h;
+        let box_left = match note.position {
+            NotePosition::Left => cx - diamond_half_w - box_w,
+            NotePosition::Right => cx + diamond_half_w,
+        };
+        emit_folded_note(svg, note, box_left, box_top);
     }
 }
 
@@ -2986,6 +3090,37 @@ fn if_long_vmetrics(l: &IfLongLayout, y: f64) -> IfLongV {
     }
 }
 
+fn if_diamond_half_width(
+    condition: &str,
+    diamond_font_size: f64,
+    diamond_text_bold: bool,
+    diamond_font_family: &str,
+) -> f64 {
+    diamond_inner_w_styled(
+        condition,
+        diamond_font_size,
+        diamond_text_bold,
+        diamond_font_family,
+    ) / 2.0
+        + DIAMOND_HALF
+}
+
+fn with_if_attached_note_extents(
+    mut left: f64,
+    mut right: f64,
+    attached_notes: &[ActivityNote],
+    diamond_half_w: f64,
+) -> (f64, f64) {
+    for note in attached_notes {
+        let reach = diamond_half_w + note_box_width(&note.text);
+        match note.position {
+            NotePosition::Left => left = left.max(reach - 1.0),
+            NotePosition::Right => right = right.max(reach),
+        }
+    }
+    (left, right)
+}
+
 /// Compute the asymmetric (left, right) extents of a single node from its
 /// vertical centreline. For most nodes this is symmetric (width/2, width/2);
 /// for if/else with unequal branches, the left extent (then-side) and right
@@ -3001,14 +3136,26 @@ fn node_extents(node: &LayoutNode) -> (f64, f64) {
             diamond_font_family,
             diamond_font_size,
             diamond_text_bold,
+            attached_notes,
             ..
         } => {
+            let diamond_half_w = if_diamond_half_width(
+                condition,
+                *diamond_font_size,
+                *diamond_text_bold,
+                diamond_font_family,
+            );
             // FtileIfLongHorizontal (if/elseif*/else): drawn extents from the
             // placed diamond/branch row.
             if if_is_long(else_branches)
                 && let Some(l) = if_long_layout(condition, then_label, then_branch, else_branches)
             {
-                return (l.left_ext, l.right_ext);
+                return with_if_attached_note_extents(
+                    l.left_ext,
+                    l.right_ext,
+                    attached_notes,
+                    diamond_half_w,
+                );
             }
             let _ = then_label;
             if let Some(plan) = if_down_plan(then_branch, else_branches) {
@@ -3018,13 +3165,7 @@ fn node_extents(node: &LayoutNode) -> (f64, f64) {
                 // goldens: left = cond_half + halfHex + 9, right = cond_half +
                 // halfHex + 27.2182 (independent of the east label width).
                 // A wide populated branch overrides via branch_w/2.
-                let cond_half = diamond_inner_w_styled(
-                    condition,
-                    *diamond_font_size,
-                    *diamond_text_bold,
-                    diamond_font_family,
-                ) / 2.0
-                    + DIAMOND_HALF;
+                let cond_half = diamond_half_w;
                 let branch_w = sequence_width(plan.populated);
                 let left = (cond_half + IF_DOWN_LEFT_PAD).max(branch_w / 2.0);
                 let right = (cond_half + IF_DOWN_RIGHT_PAD).max(
@@ -3032,7 +3173,7 @@ fn node_extents(node: &LayoutNode) -> (f64, f64) {
                         + IF_DOWN_BRANCH_CORRIDOR_GAP
                         + IF_DOWN_BRANCH_CORRIDOR_TRAILING_PAD,
                 );
-                return (left, right);
+                return with_if_attached_note_extents(left, right, attached_notes, diamond_half_w);
             }
             // ftile wire (binary if): exact FtileIfWithDiamonds drawn extents.
             if let Some((_, _, left_ext, right_ext)) = if_ftile_layout_styled(
@@ -3043,24 +3184,25 @@ fn node_extents(node: &LayoutNode) -> (f64, f64) {
                 then_branch,
                 else_branches,
             ) {
-                return (left_ext, right_ext);
+                return with_if_attached_note_extents(
+                    left_ext,
+                    right_ext,
+                    attached_notes,
+                    diamond_half_w,
+                );
             }
-            let diamond_w = diamond_inner_w_styled(
-                condition,
-                *diamond_font_size,
-                *diamond_text_bold,
-                diamond_font_family,
-            ) + DIAMOND_HALF * 2.0;
+            let diamond_w = diamond_half_w * 2.0;
             let then_w = sequence_width(then_branch);
             let else_w: f64 = else_branches.iter().map(|b| sequence_width(&b.body)).sum();
             // Branch centrelines are at least `diamond_w + 20` apart, but
             // also at least `(then_w + else_w)/2 + 20` so the branch boxes
             // don't crowd each other. PlantUML takes the max of these two.
             let branch_dist = (diamond_w + 20.0).max((then_w + else_w) / 2.0 + 20.0);
-            (
+            let (left, right) = (
                 branch_dist / 2.0 + then_w / 2.0,
                 branch_dist / 2.0 + else_w / 2.0,
-            )
+            );
+            with_if_attached_note_extents(left, right, attached_notes, diamond_half_w)
         }
         LayoutNode::Repeat {
             body,
@@ -3406,8 +3548,13 @@ fn node_width(node: &LayoutNode) -> f64 {
             diamond_font_family,
             diamond_font_size,
             diamond_text_bold,
+            attached_notes,
             ..
         } => {
+            if !attached_notes.is_empty() {
+                let (l, r) = node_extents(node);
+                return l + r;
+            }
             if if_is_long(else_branches) {
                 let (l, r) = node_extents(node);
                 return l + r;
@@ -3593,7 +3740,7 @@ fn sequence_height(nodes: &[LayoutNode]) -> f64 {
             continue;
         }
         let (note_inbound_extra, note_bottom_extra) =
-            action_note_vertical_extras(nodes, idx, node_height(node));
+            flow_note_vertical_extras(nodes, idx, node_height(node));
         let skip_implicit_gap = prior_single_survivor_if && pending_gap.is_none();
         if prior_flow && !skip_implicit_gap {
             h += pending_gap.unwrap_or_else(|| default_inbound_gap(node)) + note_inbound_extra;
@@ -4250,7 +4397,16 @@ fn following_action_note_height(nodes: &[LayoutNode], idx: usize) -> Option<f64>
     (note_h > 0.0).then_some(note_h)
 }
 
-fn action_note_vertical_extras(nodes: &[LayoutNode], idx: usize, anchor_h: f64) -> (f64, f64) {
+fn flow_note_vertical_extras(nodes: &[LayoutNode], idx: usize, anchor_h: f64) -> (f64, f64) {
+    if let Some(LayoutNode::If { attached_notes, .. }) = nodes.get(idx)
+        && let Some(note_h) = max_note_height(attached_notes)
+    {
+        // Folded if notes occupy the connector corridor immediately above the
+        // diamond: 10 px from the previous flow bottom to the note top, then
+        // the note box itself ending at the diamond top.
+        return ((note_h - 10.0).max(0.0), 0.0);
+    }
+
     let Some(note_h) = following_action_note_height(nodes, idx) else {
         return (0.0, 0.0);
     };
@@ -4258,9 +4414,10 @@ fn action_note_vertical_extras(nodes: &[LayoutNode], idx: usize, anchor_h: f64) 
         return (0.0, 0.0);
     }
     let protrusion = (note_h - anchor_h) / 2.0;
-    // PlantUML lets a tall note protrude about 10px into the inbound connector
-    // corridor, so only the remainder stretches the connector into the anchor.
-    // The full lower protrusion is reserved before the next connector.
+    // PlantUML lets a tall action note protrude about 10px into the inbound
+    // connector corridor, so only the remainder stretches the connector into
+    // the anchor. The full lower protrusion is reserved before the next
+    // connector.
     ((protrusion - 10.0).max(0.0), protrusion)
 }
 
@@ -5223,7 +5380,7 @@ fn emit_sequence_ex(
             continue;
         }
         let (note_inbound_extra, note_bottom_extra) =
-            action_note_vertical_extras(nodes, i, node_height(node));
+            flow_note_vertical_extras(nodes, i, node_height(node));
         // Compute the inbound down-arrow's style + gap (if any). PlantUML
         // emits inbound connectors AFTER the destination node's internal
         // connectors, so we defer the actual svg writes until after
@@ -5392,6 +5549,24 @@ fn emit_sequence_ex(
                     _ => break,
                 }
             }
+        }
+        if let LayoutNode::If {
+            condition,
+            diamond_font_family,
+            diamond_font_size,
+            diamond_text_bold,
+            attached_notes,
+            ..
+        } = node
+            && !attached_notes.is_empty()
+        {
+            let diamond_half_w = if_diamond_half_width(
+                condition,
+                *diamond_font_size,
+                *diamond_text_bold,
+                diamond_font_family,
+            );
+            emit_if_attached_notes(svg, attached_notes, cx, y, diamond_half_w);
         }
         let repeat_extra = if first_repeat_branch_extra && flow_ordinal == 0 {
             leading_if_branch_repeat_extra(node)
@@ -9122,6 +9297,27 @@ mod tests {
         let svg = render(&d, &crate::style::Theme::default());
         assert!(svg.contains("x &gt; 0?"));
         assert!(svg.contains("positive"));
+    }
+
+    #[test]
+    fn note_after_if_renders_before_diamond() {
+        let input = concat!(
+            "@startuml\n",
+            "start\n",
+            "if (c?) then (yes)\n",
+            "  :Y;\n",
+            "else (no)\n",
+            "  :N;\n",
+            "endif\n",
+            "note right: Note after after if\n",
+            "stop\n",
+            "@enduml",
+        );
+        let diagram = rustuml_parser::parse::parse(input).unwrap();
+        let svg = crate::render_svg(&diagram);
+        let note = svg.find("Note after after if").unwrap();
+        let condition = svg.find(">c?</text>").unwrap();
+        assert!(note < condition);
     }
 
     #[test]
