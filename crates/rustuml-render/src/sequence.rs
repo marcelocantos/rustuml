@@ -12,7 +12,7 @@ use std::fmt::Write;
 use rustuml_parser::diagram::sequence::*;
 
 use crate::creole::{self, CreoleLine};
-use crate::layout_oracle::{OracleLayout, wrap_oracle_envelope};
+use crate::layout_oracle::{OracleHandwrittenWarning, OracleLayout, wrap_oracle_envelope};
 use crate::plantuml_metrics;
 use crate::style::Theme;
 use crate::text_render::{self, TextBase};
@@ -368,6 +368,7 @@ fn aligned_note_content_width_raw(max_text_w: f64, shape: NoteShape, align: Mess
 // ---------------------------------------------------------------------------
 
 const HEAD_BOX_Y: f64 = 5.0;
+const HANDWRITTEN_WARNING_BAND_H: f64 = 21.6406;
 const HEAD_BOX_H: f64 = 30.488281250; // exact Java double
 
 // Create-message layout (reverse-engineered from golden SVGs).
@@ -2509,6 +2510,38 @@ fn escape_xml(s: &str) -> String {
         .replace('"', "&quot;")
         .replace('\u{00ab}', "&#171;")
         .replace('\u{00bb}', "&#187;")
+}
+
+fn emit_handwritten_warning(svg: &mut String, warning: &OracleHandwrittenWarning) {
+    write!(
+        svg,
+        r#"<polygon fill="{}" points="{}""#,
+        escape_xml(&warning.polygon.fill),
+        escape_xml(&warning.polygon.points),
+    )
+    .unwrap();
+    if let Some(style) = warning.polygon.style.as_deref() {
+        write!(svg, r#" style="{}""#, escape_xml(style)).unwrap();
+    }
+    svg.push_str("/>");
+    match warning.text_length.as_deref() {
+        Some(text_length) => write!(
+            svg,
+            r##"<text fill="#000000" font-family="monospace" font-size="10" lengthAdjust="spacing" textLength="{}" x="{}" y="{}">{}</text>"##,
+            escape_xml(text_length),
+            fmt_coord(warning.text.x),
+            fmt_coord(warning.text.y),
+            escape_xml(&warning.text.text),
+        ),
+        None => write!(
+            svg,
+            r##"<text fill="#000000" font-family="monospace" font-size="10" x="{}" y="{}">{}</text>"##,
+            fmt_coord(warning.text.x),
+            fmt_coord(warning.text.y),
+            escape_xml(&warning.text.text),
+        ),
+    }
+    .unwrap();
 }
 
 // ---------------------------------------------------------------------------
@@ -4763,6 +4796,14 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
     } else {
         0.0
     };
+    let is_handwritten = diagram.meta.skinparams.iter().any(|sp| {
+        sp.key.eq_ignore_ascii_case("handwritten") && sp.value.eq_ignore_ascii_case("true")
+    });
+    let handwritten_warning_band_h = if is_handwritten {
+        HANDWRITTEN_WARNING_BAND_H
+    } else {
+        0.0
+    };
     let group_frame_margin = GROUP_FRAME_MARGIN + participant_padding;
     let participant_box_gap = 10.0 + 2.0 * participant_padding;
     let message_label_width = |text: &str| {
@@ -4895,8 +4936,13 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
     };
     let participant_inner_pad = BOX_TEXT_X_PAD + global_padding;
     let teoz_top_pad = if diagram.teoz { 5.0 } else { 0.0 };
-    let head_box_y =
-        HEAD_BOX_Y + teoz_top_pad + theme_top_padding + title_band_h + box_band_h + header_band_h;
+    let head_box_y = HEAD_BOX_Y
+        + handwritten_warning_band_h
+        + teoz_top_pad
+        + theme_top_padding
+        + title_band_h
+        + box_band_h
+        + header_band_h;
     let participant_font_size_f = participant_font_size as f64;
     let participant_line_h =
         atom_height_with_family(participant_font_size_f, &participant_font_family);
@@ -6984,13 +7030,19 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
     // A title/caption/footer band wider than the participant span shifted the
     // participants right by `meta_shift` (so `effective_right` already grew by
     // that much); add it once more to keep the band centred and symmetric.
-    let svg_width_exact = svg_width_exact + meta_shift + participant_outer_padding
+    let mut svg_width_exact = svg_width_exact + meta_shift + participant_outer_padding
         - theme_top_padding
         + if sequence_shadowing {
             SHADOW_CANVAS_RIGHT_PAD
         } else {
             0.0
         };
+    if is_handwritten
+        && let Some(orc) = oracle
+        && orc.handwritten_warning.is_some()
+    {
+        svg_width_exact = svg_width_exact.max(orc.canvas_width);
+    }
     let svg_width = svg_width_exact.ceil() as u32;
     // A `footer` directive reserves a band below the content (text_height(10)
     // + 1.0 = 12.777), growing the canvas; the footer text sits in that band.
@@ -7053,6 +7105,12 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
         };
         // The canvas extends 6px below the (ceiled) box frame bottom.
         svg_height = svg_height.max(box_bottom.ceil() as u32 + 6);
+    }
+    if is_handwritten
+        && let Some(orc) = oracle
+        && orc.handwritten_warning.is_some()
+    {
+        svg_height = svg_height.max(orc.canvas_height.ceil() as u32);
     }
 
     // -----------------------------------------------------------------------
@@ -7807,34 +7865,32 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
         oracle.map(|o| o.defs_inner_xml.as_str()).unwrap_or(""),
     );
 
-    // Emit handwritten warning if present
-    let is_handwritten = diagram
-        .meta
-        .skinparams
-        .iter()
-        .any(|sp| sp.key.to_lowercase() == "handwritten" && sp.value.to_lowercase() == "true");
+    // Emit the deprecated handwritten skinparam warning before the diagram body.
     if is_handwritten {
-        let nbsp = '\u{00a0}';
-        let msg = format!(
-            "Please{n}use{n}'!option{n}handwritten{n}true'{n}to{n}enable{n}handwritten",
-            n = nbsp
-        );
-        let mid_x = svg_width as f64 / 2.0;
-        text_render::emit_text(
-            &mut svg.buf,
-            &msg,
-            &TextBase {
-                x: mid_x,
-                y: HEAD_BOX_Y + 13.0,
-                font_size: 11,
-                font_family: "sans-serif",
-                fill: "#000000",
-                bold: false,
-                italic: false,
-                underline: false,
-                skip_underline: false,
-            },
-        );
+        if let Some(warning) = oracle.and_then(|orc| orc.handwritten_warning.as_ref()) {
+            emit_handwritten_warning(&mut svg.buf, warning);
+        } else {
+            let nbsp = '\u{00a0}';
+            let msg = format!(
+                "Please{n}use{n}'!option{n}handwritten{n}true'{n}to{n}enable{n}handwritten",
+                n = nbsp
+            );
+            text_render::emit_text(
+                &mut svg.buf,
+                &msg,
+                &TextBase {
+                    x: 10.0,
+                    y: 18.6406,
+                    font_size: 10,
+                    font_family: "monospace",
+                    fill: "#000000",
+                    bold: false,
+                    italic: false,
+                    underline: false,
+                    skip_underline: false,
+                },
+            );
+        }
     }
 
     // Render header if present. PlantUML wraps in `<g class="header">` and
@@ -9385,15 +9441,24 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                 // background strip and lines grow to box width + 12px margin
                 // on each side; otherwise they span the participants. The box
                 // is always centred on the resulting span.
-                let line_left = 0.0;
-                let line_right = participant_span.max(label_box_w + 24.0);
+                let (line_left, line_right) = if diagram.teoz && !participants.is_empty() {
+                    let first = &participants[0];
+                    let last = &participants[participants.len() - 1];
+                    let left = first.box_x;
+                    let span_right = last.box_x + last.box_width;
+                    (left, span_right.max(left + label_box_w + 24.0))
+                } else {
+                    (0.0, participant_span.max(label_box_w + 24.0))
+                };
                 let mid_x = (line_left + line_right) / 2.0;
 
                 // Event_y is the text baseline position.
                 let label_box_h =
                     text_height_with_family(effective_font_size as f64, &divider_font_family) + 8.0;
+                let teoz_divider_y_shift = if diagram.teoz { -2.0 } else { 0.0 };
                 let label_box_y =
-                    msg_y - ascent_with_family(MSG_FONT_SIZE, &divider_font_family) - 4.0;
+                    msg_y - ascent_with_family(MSG_FONT_SIZE, &divider_font_family) - 4.0
+                        + teoz_divider_y_shift;
                 let text_y = label_box_y
                     + ascent_with_family(effective_font_size as f64, &divider_font_family)
                     + 4.0;
