@@ -715,6 +715,13 @@ const NOTE_RULE_LEFT_PAD: f64 = 5.0;
 const NOTE_RULE_SEGMENT_W: f64 = 13.5;
 const NOTE_RULE_BASELINE_DROP: f64 = 4.4131;
 const NOTE_RULE_WIDTH_EXTRA: f64 = 8.0;
+const NOTE_HLINE_HEIGHT: f64 = 8.0;
+const NOTE_HLINE_COMPACT_HEIGHT: f64 = 4.0;
+const NOTE_HLINE_ASCENT: f64 = 4.4131;
+const NOTE_HLINE_Y_DROP: f64 = 4.4131;
+const NOTE_HLINE_AFTER_LIST_Y_EXTRA: f64 = 4.0;
+const NOTE_HLINE_LEFT_PAD: f64 = 1.0;
+const NOTE_HLINE_WIDTH_EXTRA: f64 = 19.0;
 const PURE_UNDERLINE_MESSAGE_FLOW_EXTRA: f64 = MSG_TEXT_HEIGHT / 4.0;
 /// PlantUML's text atoms reserve at least 10px height even when the font's real
 /// line metrics are smaller (notably `defaultFontSize 8`).
@@ -767,6 +774,20 @@ fn note_visual_lines(text: &str) -> Vec<NoteVisualLine<'_>> {
         });
     }
     lines
+}
+
+fn is_single_hline(line: &str) -> bool {
+    matches!(
+        creole::parse_line(line.trim()),
+        CreoleLine::HorizontalRule(creole::HorizontalRuleStyle::Single)
+    )
+}
+
+fn is_note_list_line(line: &str) -> bool {
+    matches!(
+        creole::parse_line(line.trim()),
+        CreoleLine::Bullet { .. } | CreoleLine::Numbered { .. }
+    )
 }
 
 fn code_line_indent_and_body(line: &str) -> (usize, &str) {
@@ -921,6 +942,13 @@ fn note_line_metrics_with_family(
 ) -> RenderedLineMetrics {
     const SEPARATOR_HEIGHT_EXTRA: f64 = 7.6553;
     const SEPARATOR_ASCENT_ADJUST: f64 = -0.5;
+
+    if is_single_hline(content) {
+        return RenderedLineMetrics {
+            height: NOTE_HLINE_HEIGHT,
+            ascent: NOTE_HLINE_ASCENT,
+        };
+    }
 
     let styled_label = note_separator_label(content).or_else(|| whole_strike_label_inner(content));
     let label = styled_label.unwrap_or(content);
@@ -1168,6 +1196,7 @@ fn note_text_metrics_with_family(text: &str, font_size: f64, font_family: &str) 
     let mut text_seen_before_list = false;
     let mut list_after_text = false;
     let mut smaller_size_after_first = false;
+    let mut compact_hline_before_list_count = 0_usize;
     let visual_lines = note_visual_lines(text);
     let line_heights = visual_lines
         .iter()
@@ -1181,6 +1210,19 @@ fn note_text_metrics_with_family(text: &str, font_size: f64, font_family: &str) 
                         list_after_text |= text_seen_before_list;
                     }
                     _ => {}
+                }
+                if is_single_hline(trimmed)
+                    && visual_lines
+                        .iter()
+                        .skip(idx + 1)
+                        .find(|next| !next.text.trim().is_empty())
+                        .is_some_and(|next| is_note_list_line(next.text))
+                {
+                    // PlantUML compacts a divider directly before a list in the
+                    // rendered line flow, then reserves the missing height for
+                    // the note body and subsequent event spacing below.
+                    compact_hline_before_list_count += 1;
+                    return NOTE_HLINE_COMPACT_HEIGHT;
                 }
                 if idx > 0 {
                     smaller_size_after_first |= creole::parse_segments(trimmed)
@@ -1200,7 +1242,8 @@ fn note_text_metrics_with_family(text: &str, font_size: f64, font_family: &str) 
         };
     }
     let first_height = line_heights[0];
-    let total_height = line_heights.iter().sum();
+    let total_height = line_heights.iter().sum::<f64>()
+        + compact_hline_before_list_count as f64 * NOTE_HLINE_AFTER_LIST_Y_EXTRA;
     // PlantUML's folded-note body extends one pixel below the text-flow
     // reservation for these multiline rich-text cases. Event spacing keeps
     // using `total_height`; only the drawn note body gets this correction.
@@ -1208,7 +1251,8 @@ fn note_text_metrics_with_family(text: &str, font_size: f64, font_family: &str) 
         1.0
     } else {
         0.0
-    };
+    } + compact_hline_before_list_count as f64
+        * (NOTE_HLINE_HEIGHT - NOTE_HLINE_COMPACT_HEIGHT);
     NoteTextMetrics {
         line_heights,
         first_height,
@@ -9855,6 +9899,39 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                             note.shape,
                             line_width,
                         );
+                        if is_single_hline(line.text) {
+                            note_number_counters.clear();
+                            note_width_number_counters.clear();
+                            let follows_list = lines
+                                .iter()
+                                .take(line_idx)
+                                .rev()
+                                .find(|prev| !prev.text.trim().is_empty())
+                                .is_some_and(|prev| is_note_list_line(prev.text));
+                            let y = text_y - NOTE_HLINE_Y_DROP
+                                + if follows_list {
+                                    NOTE_HLINE_AFTER_LIST_Y_EXTRA
+                                } else {
+                                    0.0
+                                };
+                            let x1 = note_left + NOTE_HLINE_LEFT_PAD;
+                            let x2 = x1 + max_text_w + NOTE_HLINE_WIDTH_EXTRA;
+                            write!(
+                                svg.buf,
+                                r##"<line style="stroke:{stroke};stroke-width:1;" x1="{x1}" x2="{x2}" y1="{y}" y2="{y}"/>"##,
+                                stroke = note_stroke,
+                                x1 = fmt_coord(x1),
+                                x2 = fmt_coord(x2),
+                                y = fmt_coord(y),
+                            )
+                            .unwrap();
+                            line_top += metrics
+                                .line_heights
+                                .get(line_idx)
+                                .copied()
+                                .unwrap_or(line_metrics.height);
+                            continue;
+                        }
                         emit_note_visual_line(
                             &mut svg.buf,
                             *line,
