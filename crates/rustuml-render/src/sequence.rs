@@ -388,6 +388,7 @@ fn aligned_note_content_width_raw(max_text_w: f64, shape: NoteShape, align: Mess
 // ---------------------------------------------------------------------------
 
 const HEAD_BOX_Y: f64 = 5.0;
+const DEFAULT_PARTICIPANT_BORDER_THICKNESS: f64 = 0.5;
 const HANDWRITTEN_WARNING_BAND_H: f64 = 21.6406;
 const HEAD_BOX_H: f64 = 30.488281250; // exact Java double
 
@@ -559,6 +560,7 @@ fn aligned_label_x(
     line_x2: f64,
     text_width: f64,
     is_right: bool,
+    component_left_shift: f64,
 ) -> f64 {
     if align == MessageAlign::Left {
         return left_x;
@@ -571,7 +573,7 @@ fn aligned_label_x(
     } else {
         ARROW_MARGIN_X1 + ARROW_DELTA_X
     };
-    let component_left = left_x - left_text_pos;
+    let component_left = left_x - left_text_pos - component_left_shift;
     let text_pos = match align {
         MessageAlign::Center => (width - text_width) / 2.0,
         MessageAlign::Right => {
@@ -2743,6 +2745,10 @@ struct PlantUmlSvg {
     note_corner_radius: f64,
     /// Note body border thickness. Driven by `skinparam noteBorderThickness`.
     note_border_thickness: String,
+    /// Some explicit themed participant layouts keep padded message-span
+    /// constraints while placing the arrow component at the lifeline origin.
+    /// Subtract this when recovering `componentLeft` for center/right labels.
+    message_label_component_left_shift: f64,
 }
 
 impl PlantUmlSvg {
@@ -2774,6 +2780,7 @@ impl PlantUmlSvg {
             head_box_rx: HEAD_BOX_RX,
             note_corner_radius: 0.0,
             note_border_thickness: "0.5".into(),
+            message_label_component_left_shift: 0.0,
         }
     }
 
@@ -3922,7 +3929,15 @@ impl PlantUmlSvg {
         autonumber: Option<(&str, f64, &AutoNumberStyle)>,
         align: MessageAlign,
     ) {
-        let text_x = aligned_label_x(align, text_x, line_x1, line_x2, text_len, is_right);
+        let text_x = aligned_label_x(
+            align,
+            text_x,
+            line_x1,
+            line_x2,
+            text_len,
+            is_right,
+            self.message_label_component_left_shift,
+        );
         self.message_group_open(entity1, entity2, source_line, msg_id);
 
         // X mark: spans 10x10 with right edge at tip_x (right-going) or left
@@ -4003,7 +4018,15 @@ impl PlantUmlSvg {
         is_right: bool,
         align: MessageAlign,
     ) {
-        let text_x = aligned_label_x(align, text_x, line_x1, line_x2, text_len, is_right);
+        let text_x = aligned_label_x(
+            align,
+            text_x,
+            line_x1,
+            line_x2,
+            text_len,
+            is_right,
+            self.message_label_component_left_shift,
+        );
         self.message_group_open(entity1, entity2, source_line, msg_id);
 
         if let Some(cx) = leading_cross_center {
@@ -4093,7 +4116,15 @@ impl PlantUmlSvg {
         is_right: bool,
         align: MessageAlign,
     ) {
-        let text_x = aligned_label_x(align, text_x, line_x1, line_x2, text_len, is_right);
+        let text_x = aligned_label_x(
+            align,
+            text_x,
+            line_x1,
+            line_x2,
+            text_len,
+            is_right,
+            self.message_label_component_left_shift,
+        );
         self.message_group_open(entity1, entity2, source_line, msg_id);
 
         let wing_y = if top {
@@ -4188,7 +4219,15 @@ impl PlantUmlSvg {
         autonumber: Option<(&str, f64, &AutoNumberStyle)>, // (text, width, style)
         align: MessageAlign,
     ) {
-        let text_x = aligned_label_x(align, text_x, line_x1, line_x2, text_len, is_right);
+        let text_x = aligned_label_x(
+            align,
+            text_x,
+            line_x1,
+            line_x2,
+            text_len,
+            is_right,
+            self.message_label_component_left_shift,
+        );
         self.message_group_open(entity1, entity2, source_line, msg_id);
 
         let thickness = self.arrow_thickness.clone();
@@ -4995,21 +5034,36 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
         .participants
         .iter()
         .any(|p| p.source_line > 0 && p.source_line < first_event_source_line);
-    let compact_nonshadowed_theme_head =
+    let participant_border_thickness_value = participant_border_thickness
+        .parse::<f64>()
+        .unwrap_or(DEFAULT_PARTICIPANT_BORDER_THICKNESS);
+    let explicit_nonshadowed_theme_head =
         theme_loaded && !sequence_shadowing && has_leading_participant_declaration;
+    let has_theme_padding = global_padding > 0.0;
+    let compact_nonshadowed_theme_head = explicit_nonshadowed_theme_head
+        && (!has_theme_padding
+            || participant_border_thickness_value <= DEFAULT_PARTICIPANT_BORDER_THICKNESS);
+    let theme_margin_padding = if explicit_nonshadowed_theme_head && !compact_nonshadowed_theme_head
+    {
+        HEAD_BOX_Y
+    } else {
+        global_padding
+    };
     let participant_outer_padding = participant_outer_padding_base
         .map(|v| {
             if compact_nonshadowed_theme_head {
                 v
             } else if theme_loaded && sequence_shadowing {
                 v + global_padding
+            } else if explicit_nonshadowed_theme_head {
+                v + 2.0 * theme_margin_padding
             } else {
                 v + 2.0 * global_padding
             }
         })
         .unwrap_or(0.0);
     let explicit_global_padding = if theme_loaded { 0.0 } else { global_padding };
-    let constraint_global_padding = if compact_nonshadowed_theme_head {
+    let constraint_global_padding = if explicit_nonshadowed_theme_head {
         global_padding
     } else {
         explicit_global_padding
@@ -5022,7 +5076,7 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
     let theme_top_padding = if theme_loaded && sequence_shadowing {
         global_padding / 2.0
     } else if theme_loaded && !compact_nonshadowed_theme_head {
-        global_padding
+        theme_margin_padding
     } else {
         0.0
     };
@@ -8093,6 +8147,9 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
     svg.head_box_rx = head_box_rx;
     svg.note_corner_radius = note_corner_radius;
     svg.note_border_thickness = note_border_thickness;
+    if explicit_nonshadowed_theme_head && !compact_nonshadowed_theme_head {
+        svg.message_label_component_left_shift = theme_margin_padding;
+    }
     svg.open_svg(
         svg_width,
         svg_height,
@@ -10147,7 +10204,6 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                         let fold_y = note_top + NOTE_FOLD_SIZE;
                         let radius = svg
                             .note_corner_radius
-                            .min((note_bottom - note_top) / 2.0)
                             .min((note_right - note_left) / 2.0)
                             .min(fold_x - note_left)
                             .max(0.0);
