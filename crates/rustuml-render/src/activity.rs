@@ -759,6 +759,14 @@ fn activity_note_from_block(n: &rustuml_parser::diagram::activity::NoteBlock) ->
     }
 }
 
+fn layout_note_from_block(n: &rustuml_parser::diagram::activity::NoteBlock) -> LayoutNode {
+    LayoutNode::Note {
+        text: n.text.clone(),
+        position: n.position.clone(),
+        color: n.color.clone(),
+    }
+}
+
 fn take_leading_notes(nodes: &mut Vec<LayoutNode>) -> Vec<ActivityNote> {
     let mut count = 0;
     while matches!(nodes.get(count), Some(LayoutNode::Note { .. })) {
@@ -1180,7 +1188,7 @@ fn build_tree_inner(steps: &[ActivityStep], palette: &Palette) -> Vec<LayoutNode
             }
             ActivityStep::While(w) => {
                 i += 1;
-                let body = collect_until(steps, &mut i, palette, |s| {
+                let mut body = collect_until(steps, &mut i, palette, |s| {
                     matches!(s, ActivityStep::EndWhile(_))
                 });
                 let end_label = if i < steps.len() {
@@ -1193,6 +1201,10 @@ fn build_tree_inner(steps: &[ActivityStep], palette: &Palette) -> Vec<LayoutNode
                 } else {
                     None
                 };
+                while let Some(ActivityStep::Note(n)) = steps.get(i) {
+                    body.push(layout_note_from_block(n));
+                    i += 1;
+                }
                 // Absorb a trailing Stop/End/Detach/Kill into the while's
                 // special_out — PlantUML's manageSpecialStopEndAfterEndWhile
                 // pulls these terminators inside the FtileWhile frame.
@@ -1248,7 +1260,7 @@ fn build_tree_inner(steps: &[ActivityStep], palette: &Palette) -> Vec<LayoutNode
                         j += 1;
                     }
                 }
-                let body = collect_until(steps, &mut i, palette, |s| {
+                let mut body = collect_until(steps, &mut i, palette, |s| {
                     matches!(s, ActivityStep::RepeatWhile(_))
                 });
                 let (condition, is_label, not_label) = if i < steps.len() {
@@ -1265,6 +1277,10 @@ fn build_tree_inner(steps: &[ActivityStep], palette: &Palette) -> Vec<LayoutNode
                 } else {
                     (String::new(), None, None)
                 };
+                while let Some(ActivityStep::Note(n)) = steps.get(i) {
+                    body.push(layout_note_from_block(n));
+                    i += 1;
+                }
                 nodes.push(LayoutNode::Repeat {
                     body,
                     condition,
@@ -1547,6 +1563,18 @@ fn partition_body_has_direct_note(nodes: &[LayoutNode]) -> bool {
     nodes
         .iter()
         .any(|node| matches!(node, LayoutNode::Note { .. }))
+}
+
+fn body_has_direct_left_note(nodes: &[LayoutNode]) -> bool {
+    nodes.iter().any(|node| {
+        matches!(
+            node,
+            LayoutNode::Note {
+                position: NotePosition::Left,
+                ..
+            }
+        )
+    })
 }
 
 fn partition_body_width_for_frame(nodes: &[LayoutNode]) -> f64 {
@@ -3219,9 +3247,15 @@ fn node_extents(node: &LayoutNode) -> (f64, f64) {
             // body_right) with another 15 px of right margin past that.
             // Reverse-engineered from goldens with varying body/condition
             // widths.
-            let body_w = sequence_width(body);
+            let body_has_note = partition_body_has_direct_note(body);
+            let (body_left, body_right, body_half) = if body_has_note {
+                let (left, right) = sequence_loop_body_extents(body);
+                (left, right, left.max(right))
+            } else {
+                let body_w = sequence_width(body);
+                (body_w / 2.0, body_w / 2.0, body_w / 2.0)
+            };
             let cond_half = diamond_inner_w(condition) / 2.0 + DIAMOND_HALF;
-            let body_half = body_w / 2.0;
             // A `backward :label;` action draws a box on the return arm at the
             // far right. The repeat spine keeps the ordinary-repeat
             // `cond_half + 9` clearance, unless the body itself is wider.
@@ -3232,8 +3266,8 @@ fn node_extents(node: &LayoutNode) -> (f64, f64) {
                     repeat_backward_right_extent(cond_half, body_half, is_label, label);
                 (left_extent, right_extent)
             } else {
-                let left_extent = body_half.max(cond_half + 9.0);
-                let right_extent = cond_half.max(body_half) + 12.0 + 15.0;
+                let left_extent = body_left.max(cond_half + 9.0);
+                let right_extent = cond_half.max(body_right) + 12.0 + 15.0;
                 (left_extent, right_extent)
             }
         }
@@ -3249,7 +3283,7 @@ fn node_extents(node: &LayoutNode) -> (f64, f64) {
             diamond_text_bold,
             ..
         } => {
-            let (body_left, body_right) = sequence_extents(body);
+            let (body_left, body_right) = sequence_loop_body_extents(body);
             let cond_half = diamond_inner_w_styled(
                 condition,
                 *diamond_font_size,
@@ -3257,7 +3291,7 @@ fn node_extents(node: &LayoutNode) -> (f64, f64) {
                 diamond_font_family,
             ) / 2.0
                 + DIAMOND_HALF;
-            let left_extent = while_left_extent(
+            let mut left_extent = while_left_extent(
                 body,
                 while_body_left(body, body_left),
                 cond_half,
@@ -3266,6 +3300,9 @@ fn node_extents(node: &LayoutNode) -> (f64, f64) {
                 special_out.as_deref(),
                 *starts_column,
             );
+            if special_out.is_some() && body_has_direct_left_note(body) {
+                left_extent += 1.0;
+            }
             // Right side: loop-back arm at max(cond,body) + halfHex with a 4px
             // arrowhead, plus halfHex of trailing reservation from FtileWhile's
             // `dx + halfHex` term (= 2*halfHex + 3 past max). Verified against
@@ -3393,6 +3430,23 @@ fn sequence_extents_with_note_margin(
     if_branch: bool,
     note_outer_margin: f64,
 ) -> (f64, f64) {
+    sequence_extents_with_note_margins(nodes, if_branch, note_outer_margin, note_outer_margin)
+}
+
+fn sequence_loop_body_extents(nodes: &[LayoutNode]) -> (f64, f64) {
+    if partition_body_has_direct_note(nodes) {
+        sequence_extents_with_note_margins(nodes, false, 1.0, 0.0)
+    } else {
+        sequence_extents(nodes)
+    }
+}
+
+fn sequence_extents_with_note_margins(
+    nodes: &[LayoutNode],
+    if_branch: bool,
+    left_note_margin: f64,
+    right_note_margin: f64,
+) -> (f64, f64) {
     let mut left = 0.0f64;
     let mut right = 0.0f64;
     // The half-width of the most recent flow node — a note attaches to it and
@@ -3405,12 +3459,12 @@ fn sequence_extents_with_note_margin(
                 let box_w = note_box_width(text);
                 let reach = anchor_half + NOTE_GAP + box_w;
                 match position {
-                    // The left note's left edge lands 1px left of MARGIN_LEAD,
-                    // so it contributes reach − 1 to the left extent.
-                    NotePosition::Left => left = left.max(reach - note_outer_margin),
-                    // The right note's right edge sits 1px past `reach` from
-                    // the spine (mirrors the left's −1).
-                    NotePosition::Right => right = right.max(reach + note_outer_margin),
+                    // Some contexts let a left note protrude into the outer
+                    // margin; callers pass that protrusion as left_note_margin.
+                    NotePosition::Left => left = left.max(reach - left_note_margin),
+                    // Top-level sequences keep an extra right-side margin;
+                    // loop-body routing measures to the note edge itself.
+                    NotePosition::Right => right = right.max(reach + right_note_margin),
                 }
             }
             _ => {
@@ -3605,6 +3659,10 @@ fn node_width(node: &LayoutNode) -> f64 {
         } => {
             // Every `repeatwhile` produces a loop-back arrow on the right;
             // see node_extents for the formula derivation.
+            if partition_body_has_direct_note(body) {
+                let (l, r) = node_extents(node);
+                return l + r;
+            }
             let body_w = sequence_width(body);
             let cond_w = diamond_inner_w(condition) + DIAMOND_HALF * 2.0;
             let cond_half = cond_w / 2.0;
@@ -7622,7 +7680,7 @@ fn emit_while(
 
     // Loop-back arm x position: 12 past whichever is wider, the diamond or
     // the body's right extent.
-    let (body_left_ext, body_right_ext) = sequence_extents(body);
+    let (body_left_ext, body_right_ext) = sequence_loop_body_extents(body);
     let body_right_x = cx + body_right_ext;
     // A deprecated body pulls the left corridor 2 px tighter (see
     // while_body_left); the special-terminator placement uses the adjusted
@@ -7654,7 +7712,7 @@ fn emit_while(
         // diamond_left in FtileWhile-local. Translating to absolute:
         //   min(body_left_x - halfHex, diamond_left_vertex_x) - special_w
         // The special's cx is at translateForSpecial.x + special_w/2.
-        let special_x_adjust = if while_body_drives_special(
+        let mut special_x_adjust = if while_body_drives_special(
             body,
             while_body_left(body, body_left_ext),
             cond_inner_w / 2.0 + DIAMOND_HALF,
@@ -7666,6 +7724,9 @@ fn emit_while(
         } else {
             0.0
         };
+        if body_has_direct_left_note(body) {
+            special_x_adjust -= 1.0;
+        }
         let special_left_abs =
             (body_left_x - DIAMOND_HALF).min(diamond_left_vertex_x) - special_w + special_x_adjust;
         let special_cx = special_left_abs + special_w / 2.0;
@@ -8019,7 +8080,12 @@ fn emit_repeat(
     // has a label — every `repeatwhile` produces it. The arrow's x sits
     // 12 px past max(diamond_right, body_right).
     let body_w = sequence_width(body);
-    let body_right = cx + body_w / 2.0;
+    let body_right_rel = if partition_body_has_direct_note(body) {
+        sequence_loop_body_extents(body).1
+    } else {
+        body_w / 2.0
+    };
+    let body_right = cx + body_right_rel;
     let arm_x = diamond_right.max(body_right) + 12.0;
     let top_cy = y + top_diamond_size;
 
@@ -9318,6 +9384,25 @@ mod tests {
         let note = svg.find("Note after after if").unwrap();
         let condition = svg.find(">c?</text>").unwrap();
         assert!(note < condition);
+    }
+
+    #[test]
+    fn note_after_while_renders_with_loop_body() {
+        let input = concat!(
+            "@startuml\n",
+            "start\n",
+            "while (loop?) is (yes)\n",
+            "  :W;\n",
+            "endwhile\n",
+            "note right: Note after after while\n",
+            "stop\n",
+            "@enduml",
+        );
+        let diagram = rustuml_parser::parse::parse(input).unwrap();
+        let svg = crate::render_svg(&diagram);
+        let note = svg.find("Note after after while").unwrap();
+        let action = svg.find(">W</text>").unwrap();
+        assert!(note < action);
     }
 
     #[test]
