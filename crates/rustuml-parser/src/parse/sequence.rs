@@ -322,10 +322,11 @@ impl SeqParser {
             .unwrap()
         });
 
-        // Extract arrow color before stripping
-        let arrow_color = RE_COLOR.captures(line).map(|c| c[1].to_string());
-        let stripped = RE_COLOR.replace_all(line, "");
-        let line = stripped.as_ref();
+        // Extract arrow colour only from the arrow header. Message labels can
+        // contain local Creole links like `[[#anchor label]]`, whose inner
+        // `[#anchor label]` must not be mistaken for an arrow colour.
+        let (arrow_color, stripped) = strip_arrow_color_annotation(line, &RE_COLOR);
+        let line = stripped.as_str();
 
         if let Some(caps) = RE.captures(line) {
             // Strip surrounding quotes from quoted participant names.
@@ -388,8 +389,8 @@ impl SeqParser {
             Regex::new(r"^(\w+)\s*([-<>.\\/ox]+)[\[\]]\s*(?:(?:\+\+|--|!!)\s*)?(?::\s*(.*))?$")
                 .unwrap()
         });
-        let stripped = RE_COLOR.replace_all(line, "");
-        let line = stripped.as_ref();
+        let (_, stripped) = strip_arrow_color_annotation(line, &RE_COLOR);
+        let line = stripped.as_str();
 
         if let Some(caps) = RE_IN.captures(line) {
             let mut arrow = parse_arrow(&caps[1]);
@@ -1068,6 +1069,21 @@ fn parse_arrow(s: &str) -> Arrow {
     }
 }
 
+fn strip_arrow_color_annotation(line: &str, color_re: &Regex) -> (Option<String>, String) {
+    let Some((head, tail)) = line.split_once(':') else {
+        let color = color_re
+            .captures(line)
+            .and_then(|captures| captures.get(1).map(|m| m.as_str().to_string()));
+        return (color, color_re.replace_all(line, "").into_owned());
+    };
+
+    let color = color_re
+        .captures(head)
+        .and_then(|captures| captures.get(1).map(|m| m.as_str().to_string()));
+    let stripped_head = color_re.replace_all(head, "");
+    (color, format!("{stripped_head}:{tail}"))
+}
+
 fn message_label(line: &str, matched: Option<Match<'_>>) -> String {
     let Some(matched) = matched else {
         return String::new();
@@ -1125,6 +1141,17 @@ mod tests {
         let d = parse(r"Alice -> Bob: \n \t \\");
         if let Event::Message(m) = &d.events[0] {
             assert_eq!(m.label, r" \n \t \\");
+        } else {
+            panic!("expected message");
+        }
+    }
+
+    #[test]
+    fn local_link_message_label_is_not_arrow_color() {
+        let d = parse("Alice -> Bob : [[#anchor local link]]");
+        if let Event::Message(m) = &d.events[0] {
+            assert_eq!(m.label, "[[#anchor local link]]");
+            assert_eq!(m.arrow.color, None);
         } else {
             panic!("expected message");
         }
