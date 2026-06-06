@@ -2389,6 +2389,11 @@ fn render_plantuml_svg(
         // header reuses the body fill (single-gradient case).
         let header_gradient_fill =
             gradient_fill_from_defs(font.header_background.as_deref(), oracle);
+        let entity_suppress_header_icon = suppress_header_icon
+            || entity
+                .stereotypes
+                .iter()
+                .any(|stereotype| stereotype_refs_sprite(stereotype, &diagram.meta.sprites));
         render_entity_content(
             &mut svg,
             entity,
@@ -2401,7 +2406,7 @@ fn render_plantuml_svg(
             explicit_padding,
             body_gradient_fill.as_deref(),
             header_gradient_fill.as_deref(),
-            suppress_header_icon,
+            entity_suppress_header_icon,
         );
 
         svg.push_str("</g>");
@@ -2939,7 +2944,7 @@ fn render_entity_content(
     let glyph_path_override = oracle_rect.and_then(|r| r.glyph_path_d.as_deref());
     let name_text_x_override = oracle_rect.and_then(|r| r.name_text_x);
     let oracle_images = oracle_rect.map_or(&[][..], |r| r.images.as_slice());
-    let suppress_header_icon = suppress_header_icon || !oracle_images.is_empty();
+    let first_sep_y = oracle_rect.and_then(|r| r.sep_y_values.first().copied());
     let is_abstract = entity.kind == EntityKind::AbstractClass;
     let is_interface = entity.kind == EntityKind::Interface;
     let is_enum_entity = entity.kind == EntityKind::Enum;
@@ -3153,7 +3158,10 @@ fn render_entity_content(
         .unwrap();
     }
 
-    for image in oracle_images {
+    for image in oracle_images
+        .iter()
+        .filter(|image| first_sep_y.map(|sep_y| image.y < sep_y).unwrap_or(true))
+    {
         emit_entity_image(svg, image);
     }
 
