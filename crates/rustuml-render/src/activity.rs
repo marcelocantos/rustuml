@@ -48,6 +48,11 @@ const GROUP_IF_RIGHT_EXTENT_EXTRA: f64 = 0.9893;
 const GROUP_IF_BODY_WIDTH_EXTRA: f64 = 4.0;
 const GROUP_COLOR_TITLE_WIDTH_EXTRA: f64 = 4.1572;
 const GROUP_COLOR_RIGHT_EXTENT_EXTRA: f64 = 2.0;
+const PARTITION_FORK_WIDTH_EXTRA: f64 = 2.0;
+const PARTITION_FORK_LEFT_EXTENT_EXTRA: f64 = 2.0;
+const PARTITION_FORK_BODY_CX_SHIFT: f64 = -1.0;
+const PARTITION_FORK_BRANCH_CENTER_SHIFT: f64 = 2.0;
+const PARTITION_FORK_TINY_TEXT_MAX: f64 = 10.0;
 const SINGLE_LANE_GROUP_TOP_ADJUST: f64 = 0.453125;
 const ACTION_PADDING: f64 = 20.0; // total vertical padding in action box
 const ACTION_H_PADDING: f64 = 10.0; // horizontal padding each side
@@ -2148,6 +2153,17 @@ fn fork_layout_if_branch_spacing(branches: &[Vec<LayoutNode>]) -> ForkLayout {
     layout
 }
 
+fn fork_layout_in_partition(branches: &[Vec<LayoutNode>]) -> ForkLayout {
+    let mut layout = fork_layout(branches);
+    if layout.centers.len() >= 2 && !branches.iter().any(Vec::is_empty) {
+        layout.bar_w += PARTITION_FORK_WIDTH_EXTRA;
+        for center in &mut layout.centers {
+            *center += PARTITION_FORK_BRANCH_CENTER_SHIFT;
+        }
+    }
+    layout
+}
+
 fn leading_if_branch_fork_spine_shift(nodes: &[LayoutNode]) -> f64 {
     let Some(LayoutNode::Fork { branches, .. }) = nodes.iter().find(|node| node_is_flow(node))
     else {
@@ -3847,6 +3863,9 @@ fn node_extents(node: &LayoutNode) -> (f64, f64) {
                 left += GROUP_IF_LEFT_EXTENT_EXTRA;
                 right += GROUP_IF_RIGHT_EXTENT_EXTRA;
             }
+            if !*is_group && partition_wraps_tiny_action_fork(body) && !title_drives_width {
+                left += PARTITION_FORK_LEFT_EXTENT_EXTRA;
+            }
             if *is_group && color.is_some() && !group_wraps_single_if(body) {
                 right += GROUP_COLOR_RIGHT_EXTENT_EXTRA;
             }
@@ -4548,6 +4567,30 @@ fn partition_wraps_switch(body: &[LayoutNode]) -> bool {
     matches!(body, [LayoutNode::Switch { .. }])
 }
 
+fn tiny_action_branch(branch: &[LayoutNode]) -> bool {
+    matches!(
+        branch,
+        [LayoutNode::Action { text_width, .. }
+            | LayoutNode::DeprecatedAction { text_width, .. }]
+            if *text_width < PARTITION_FORK_TINY_TEXT_MAX
+    )
+}
+
+fn partition_wraps_tiny_action_fork(body: &[LayoutNode]) -> bool {
+    let [
+        LayoutNode::Fork {
+            branches,
+            is_split: false,
+            merge: false,
+            ..
+        },
+    ] = body
+    else {
+        return false;
+    };
+    branches.len() >= 2 && branches.iter().all(|branch| tiny_action_branch(branch))
+}
+
 fn partition_wraps_single_if(body: &[LayoutNode]) -> bool {
     matches!(body, [LayoutNode::If { .. }])
 }
@@ -4627,6 +4670,8 @@ fn empty_partition_shell_height() -> f64 {
 fn partition_body_width_extra(is_group: bool, body: &[LayoutNode]) -> f64 {
     if !is_group && partition_wraps_while(body) {
         -PARTITION_WHILE_WIDTH_SUBTRACT
+    } else if !is_group && partition_wraps_tiny_action_fork(body) {
+        PARTITION_FORK_WIDTH_EXTRA
     } else if !is_group && partition_wraps_single_if(body) {
         GROUP_IF_BODY_WIDTH_EXTRA
     } else if is_group && group_wraps_single_if(body) {
@@ -5309,6 +5354,7 @@ struct SvgEmitter {
     /// inline skinparam overrides).
     palette: Palette,
     colored_partition_while_depth: usize,
+    partition_wrapped_fork_depth: usize,
     handwritten: bool,
 }
 
@@ -5320,6 +5366,7 @@ impl SvgEmitter {
             connectors: String::new(),
             palette,
             colored_partition_while_depth: 0,
+            partition_wrapped_fork_depth: 0,
             handwritten,
         }
     }
@@ -6691,6 +6738,8 @@ fn emit_node_with_repeat_extra(
                 emit_fork_merge(svg, cx, y, branches)
             } else if if_branch {
                 emit_fork_with_layout(svg, cx, y, branches, fork_layout_if_branch(branches))
+            } else if svg.partition_wrapped_fork_depth > 0 && !*is_split {
+                emit_fork_with_layout(svg, cx, y, branches, fork_layout_in_partition(branches))
             } else {
                 emit_fork(svg, cx, y, branches)
             }
@@ -6822,6 +6871,8 @@ fn emit_node_with_repeat_extra(
                 cx - partition_w / 2.0
             } else if !*is_group && partition_wraps_single_if(body) {
                 16.0
+            } else if !*is_group && partition_wraps_tiny_action_fork(body) {
+                16.0
             } else if (*is_group && *nested) || (!*is_group && !title_drives_width) {
                 (cx - partition_w / 2.0).max(16.0)
             } else {
@@ -6905,10 +6956,18 @@ fn emit_node_with_repeat_extra(
                 let body_cx = if !title_drives_width && partition_wraps_switch(body) {
                     let (body_left, _) = sequence_extents(body);
                     partition_x + 10.0 + body_left
+                } else if !*is_group && partition_wraps_tiny_action_fork(body) {
+                    cx + PARTITION_FORK_BODY_CX_SHIFT
                 } else {
                     cx
                 };
+                if !*is_group && partition_wraps_tiny_action_fork(body) {
+                    svg.partition_wrapped_fork_depth += 1;
+                }
                 emit_sequence(svg, body, body_cx, body_top);
+                if !*is_group && partition_wraps_tiny_action_fork(body) {
+                    svg.partition_wrapped_fork_depth -= 1;
+                }
                 if colored_partition_while {
                     svg.colored_partition_while_depth -= 1;
                 }
