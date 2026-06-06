@@ -103,6 +103,11 @@ const SWITCH_TWO_CASE_EMPTY_LABEL_TRAIL: f64 = 1.5815;
 // its flow spine sits 2 px from the tile origin rather than at the text centre.
 const SWITCH_MIXED_EMPTY_CASE_GAP: f64 = 12.0;
 const SWITCH_MIXED_EMPTY_SPINE: f64 = 2.0;
+// Even mixed-empty switches keep the first branch pinned, but PlantUML's ON_X
+// compression gives the diamond/middle branch a little more left extent while
+// trimming the terminal empty branch corridor.
+const SWITCH_EVEN_MIXED_EMPTY_SPINE_SHIFT: f64 = 7.0444;
+const SWITCH_EVEN_MIXED_EMPTY_LAST_PULL_LEFT: f64 = 0.4333;
 const SWITCH_LINK_MARGIN: f64 = 10.0;
 // Case-label baseline offsets above the case-box top, per connection type.
 const SWITCH_LABEL_OUTER_DY: f64 = 19.7979; // outermost branches (via diamond vertex)
@@ -1746,6 +1751,14 @@ fn switch_is_odd_alternating_mixed_empty(cases: &[SwitchCase]) -> bool {
         })
 }
 
+fn switch_is_even_mixed_empty_pair(cases: &[SwitchCase]) -> bool {
+    matches!(cases, [first, second, third, fourth]
+        if !first.body.is_empty()
+            && second.body.is_empty()
+            && !third.body.is_empty()
+            && fourth.body.is_empty())
+}
+
 /// PlantUML's `SUPP15` margin used by `FtileSwitchWithDiamonds` in
 /// BIG_DIAMOND mode (the horizontal padding either side of the diamond
 /// column between the first and last case tiles).
@@ -1788,6 +1801,12 @@ fn switch_x_layout(cases: &[SwitchCase], condition: &str) -> SwitchXLayout {
         layout.block_w = x - SWITCH_MIXED_EMPTY_CASE_GAP;
         layout.diamond_dx = layout.block_w / 2.0;
         layout.big_diamond = false;
+    }
+    if switch_is_even_mixed_empty_pair(cases) {
+        layout.diamond_dx += SWITCH_EVEN_MIXED_EMPTY_SPINE_SHIFT;
+        layout.block_w += SWITCH_EVEN_MIXED_EMPTY_SPINE_SHIFT;
+        layout.centers[2] += SWITCH_EVEN_MIXED_EMPTY_SPINE_SHIFT;
+        layout.centers[3] -= SWITCH_EVEN_MIXED_EMPTY_LAST_PULL_LEFT;
     }
     if matches!(cases, [first, last] if !first.body.is_empty() && last.body.is_empty()) {
         layout.centers[1] = switch_case_width(&cases[0]) + DIAMOND_HALF / 2.0;
