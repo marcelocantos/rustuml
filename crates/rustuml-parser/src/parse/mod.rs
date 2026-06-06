@@ -167,6 +167,7 @@ fn detect_uml_subtype(lines: &[String]) -> UmlSubtype {
     let mut has_class_dependency_arrow = false;
     let mut has_class_association_line = false;
     let mut has_direction_directive = false;
+    let mut has_floating_note = false;
 
     for line in lines {
         let trimmed = source_text(line).trim();
@@ -294,6 +295,7 @@ fn detect_uml_subtype(lines: &[String]) -> UmlSubtype {
             // boundary) and deployment diagrams; do not apply the quoted-container
             // boost to it so that `usecase` keywords can tip the balance.
             let after_kw = trimmed[kw_end..].trim_start();
+            let deployment_keyword_arg = !after_kw.starts_with(':');
             let is_quoted_container = trimmed.contains('{')
                 && after_kw.starts_with('"')
                 && kw != "package"
@@ -304,6 +306,7 @@ fn detect_uml_subtype(lines: &[String]) -> UmlSubtype {
                 && kw != "actor"
                 && deployment::DEPLOYMENT_KEYWORDS.contains(&kw)
                 && kw_end < trimmed.len()
+                && deployment_keyword_arg
             {
                 scores[7] += 5;
             }
@@ -482,13 +485,8 @@ fn detect_uml_subtype(lines: &[String]) -> UmlSubtype {
         {
             scores[8] += 10;
         }
-        // Standalone floating notes (`note as X` or `note "text" as X`) are a
-        // class/object diagram feature in Java PlantUML and produce CLASS-type SVG
-        // output. Score both: note-only diagrams still tie back to CLASS by the
-        // default ordering, while object diagrams with floating notes stay OBJECT.
         if trimmed.starts_with("note as ") || trimmed.starts_with("note \"") {
-            scores[1] += 10;
-            scores[2] += 10;
+            has_floating_note = true;
         }
         // A leading `note : text` line is parsed by Java PlantUML as a CLASS
         // note/entity diagram, even when later lines contain weak sequence-style
@@ -529,6 +527,18 @@ fn detect_uml_subtype(lines: &[String]) -> UmlSubtype {
         // `allowmixing` directive (class-diagram only).
         if trimmed == "allowmixing" || trimmed.starts_with("allowmixing ") {
             has_allowmixing = true;
+        }
+    }
+
+    // Standalone floating notes (`note as X` or `note "text" as X`) can attach
+    // to class/object/deployment diagrams. Score class/object always so
+    // note-only diagrams tie back to CLASS by the default ordering; score
+    // deployment only when a real deployment keyword was already seen.
+    if has_floating_note {
+        scores[1] += 10;
+        scores[2] += 10;
+        if scores[7] > 0 {
+            scores[7] += 10;
         }
     }
 
@@ -1185,6 +1195,20 @@ mod tests {
         let input = "@startuml\nobject Server {\n  ip = \"192.168.1.1\"\n}\nnote \"text\" as N1\nServer .. N1\n@enduml";
         let diagram = parse(input).unwrap();
         assert!(matches!(diagram, Diagram::Object(_)));
+    }
+
+    #[test]
+    fn deployment_with_floating_note_stays_deployment() {
+        let input = "@startuml\nnode Server\nnote \"Primary server\" as N1\nN1 .. Server\n@enduml";
+        let diagram = parse(input).unwrap();
+        assert!(matches!(diagram, Diagram::Deployment(_)));
+    }
+
+    #[test]
+    fn note_only_diagram_stays_class() {
+        let input = "@startuml\nnote as N\n  file: example.puml\nend note\n@enduml";
+        let diagram = parse(input).unwrap();
+        assert!(matches!(diagram, Diagram::Class(_)));
     }
 
     #[test]
