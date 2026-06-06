@@ -1492,6 +1492,9 @@ const GROUP_HEADER_TEXT_TOP_PAD: f64 = 1.0;
 const GROUP_GAP_AFTER_MSG: f64 = 15.0;
 /// Group frames clamp to PlantUML's 10px left canvas margin.
 const GROUP_FRAME_MIN_LEFT: f64 = 10.0;
+/// A group enclosing a found message (`[->`) extends to PlantUML's external
+/// message frame floor instead of the participant-margin floor.
+const GROUP_EXTERNAL_LEFT_FLOOR: f64 = 3.0;
 /// Gap from the lifeline top to the group frame top when a group is the very
 /// first event (no preceding message). PlantUML reserves 2px more headroom in
 /// this case than the standalone-note first gap.
@@ -4549,25 +4552,31 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
     // right to make room for the group frame margin.
 
     let mut group_left_shift_depth = 0usize;
+    let mut group_left_external_shift_depth = 0usize;
     {
         // Scan for groups and collect the participant index range for each group
-        let mut group_stack: Vec<(usize, usize)> = Vec::new(); // (min_idx, max_idx)
+        let mut group_stack: Vec<(usize, usize, bool)> = Vec::new(); // (min_idx, max_idx, has_external_left)
         for event in &diagram.events {
             match event {
                 Event::GroupStart(_) => {
-                    group_stack.push((usize::MAX, 0));
+                    group_stack.push((usize::MAX, 0, false));
                 }
                 Event::GroupEnd => {
                     let closed_depth = group_stack.len();
-                    if let Some((min_idx, max_idx)) = group_stack.pop() {
+                    if let Some((min_idx, max_idx, has_external_left)) = group_stack.pop() {
                         if min_idx == 0 {
                             group_left_shift_depth = group_left_shift_depth.max(closed_depth);
+                            if has_external_left {
+                                group_left_external_shift_depth =
+                                    group_left_external_shift_depth.max(closed_depth);
+                            }
                         }
                         if min_idx <= max_idx
                             && let Some(parent) = group_stack.last_mut()
                         {
                             parent.0 = parent.0.min(min_idx);
                             parent.1 = parent.1.max(max_idx);
+                            parent.2 |= has_external_left;
                         }
                     }
                 }
@@ -4582,6 +4591,9 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                         if let Some(ti) = ti {
                             top.0 = top.0.min(ti);
                             top.1 = top.1.max(ti);
+                        }
+                        if msg.from == "[" {
+                            top.2 = true;
                         }
                     }
                 }
@@ -4946,7 +4958,13 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
     // of the lifeline, so the lifeline must be far enough right to fit the note.
     //
     let mut min_first_center_x: f64 = 0.0;
+    let mut min_scan_group_depth = 0usize;
     for event in &diagram.events {
+        match event {
+            Event::GroupStart(_) => min_scan_group_depth += 1,
+            Event::GroupEnd => min_scan_group_depth = min_scan_group_depth.saturating_sub(1),
+            _ => {}
+        }
         if let Event::Note(note) = event {
             // A message-attached Left note anchors to the leftmost endpoint by
             // index; otherwise the first listed participant.
@@ -5019,7 +5037,12 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
             && id_to_idx.get(msg.to.as_str()) == Some(&0)
         {
             let label_w = message_label_width(&process_label(&msg.label));
-            min_first_center_x = min_first_center_x.max(label_w + 24.0);
+            let group_pad = if min_scan_group_depth > 0 {
+                MSG_TEXT_LEFT_PAD
+            } else {
+                0.0
+            };
+            min_first_center_x = min_first_center_x.max(label_w + 24.0 + group_pad);
         }
     }
 
@@ -5074,7 +5097,13 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
         // frame margin per enclosing frame so each nested frame can still land at
         // the 10px canvas floor (outer at 10, next at 20, ...).
         let group_shift = if group_left_shift_depth > 0 {
-            group_frame_margin * group_left_shift_depth as f64 + HEAD_BOX_Y
+            group_frame_margin * group_left_shift_depth as f64
+                + HEAD_BOX_Y
+                + if group_left_external_shift_depth > 0 {
+                    MSG_TEXT_LEFT_PAD
+                } else {
+                    0.0
+                }
         } else {
             0.0
         };
@@ -6803,26 +6832,36 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
 
     let mut group_frames: Vec<GroupFrame> = Vec::new();
     {
+        struct GroupAccum {
+            min_idx: usize,
+            max_idx: usize,
+            start_idx: usize,
+            note_left: f64,
+            note_right: f64,
+            external_left: f64,
+        }
+
         // Scan events to find group start/end pairs and compute their frames.
         // Track which participant indices are referenced inside each group,
         // plus the drawn extent of any enclosed note (which the frame must cover).
-        // (min_idx, max_idx, start_event_idx, note_min_left, note_max_right)
-        let mut group_start_stack: Vec<(usize, usize, usize, f64, f64)> = Vec::new();
+        let mut group_start_stack: Vec<GroupAccum> = Vec::new();
         for (ev_idx, event) in diagram.events.iter().enumerate() {
             match event {
                 Event::GroupStart(_) => {
-                    group_start_stack.push((
-                        usize::MAX,
-                        0,
-                        ev_idx,
-                        f64::INFINITY,
-                        f64::NEG_INFINITY,
-                    ));
+                    group_start_stack.push(GroupAccum {
+                        min_idx: usize::MAX,
+                        max_idx: 0,
+                        start_idx: ev_idx,
+                        note_left: f64::INFINITY,
+                        note_right: f64::NEG_INFINITY,
+                        external_left: f64::INFINITY,
+                    });
                 }
                 Event::GroupEnd => {
-                    if let Some((min_idx, max_idx, start_idx, note_left, note_right)) =
-                        group_start_stack.pop()
-                    {
+                    if let Some(group) = group_start_stack.pop() {
+                        let min_idx = group.min_idx;
+                        let max_idx = group.max_idx;
+                        let start_idx = group.start_idx;
                         let frame_top = event_y_positions[start_idx];
                         let frame_bottom = event_y_positions[ev_idx];
 
@@ -6842,7 +6881,8 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                         }
                         let has_child = child_left.is_finite();
                         let has_msgs = min_idx <= max_idx && !participants.is_empty();
-                        let has_note = note_left.is_finite();
+                        let has_note = group.note_left.is_finite();
+                        let has_external_left = group.external_left.is_finite();
 
                         // Compute the participant-based frame left first, then derive
                         // the header right edge from the *final* left (so the guard
@@ -6870,7 +6910,10 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                         // frame to cover it: the frame's InGroupable left edge sits
                         // GROUP_FRAME_MARGIN beyond the note's drawn left.
                         if has_note {
-                            frame_left = frame_left.min(note_left - group_frame_margin);
+                            frame_left = frame_left.min(group.note_left - group_frame_margin);
+                        }
+                        if has_external_left {
+                            frame_left = frame_left.min(group.external_left);
                         }
 
                         // Compute the header text right edge (group kind label + guard)
@@ -6932,7 +6975,7 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                             frame_right = frame_right.max(child_right + group_frame_margin);
                         }
                         if has_note {
-                            frame_right = frame_right.max(note_right + group_frame_margin);
+                            frame_right = frame_right.max(group.note_right + group_frame_margin);
                         }
 
                         group_frames.push(GroupFrame {
@@ -6949,12 +6992,15 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                     let ti = id_to_idx.get(msg.to.as_str()).copied();
                     if let Some(top) = group_start_stack.last_mut() {
                         if let Some(fi) = fi {
-                            top.0 = top.0.min(fi);
-                            top.1 = top.1.max(fi);
+                            top.min_idx = top.min_idx.min(fi);
+                            top.max_idx = top.max_idx.max(fi);
                         }
                         if let Some(ti) = ti {
-                            top.0 = top.0.min(ti);
-                            top.1 = top.1.max(ti);
+                            top.min_idx = top.min_idx.min(ti);
+                            top.max_idx = top.max_idx.max(ti);
+                        }
+                        if msg.from == "[" {
+                            top.external_left = top.external_left.min(GROUP_EXTERNAL_LEFT_FLOOR);
                         }
                     }
                 }
@@ -6963,8 +7009,8 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                     // `InGroupablesStack.addElement` adds it to all open lists).
                     if let Some((nl, nr)) = note_group_extent(ev_idx, note) {
                         for top in group_start_stack.iter_mut() {
-                            top.3 = top.3.min(nl);
-                            top.4 = top.4.max(nr);
+                            top.note_left = top.note_left.min(nl);
+                            top.note_right = top.note_right.max(nr);
                         }
                     }
                 }
