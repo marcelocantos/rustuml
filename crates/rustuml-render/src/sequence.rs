@@ -5977,93 +5977,122 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
     // moment of each self-message — shifts cx by ACTIVATION_HALF_W if so.
     {
         let mut act_depth: HashMap<String, usize> = HashMap::new();
+        let mut extent_auto = AutoState::default();
         for (idx, event) in diagram.events.iter().enumerate() {
-            if let Event::Message(msg) = event {
-                if msg.from == msg.to {
-                    let cx_base = center_of(&msg.from);
-                    let active = act_depth.get(msg.from.as_str()).copied().unwrap_or(0) > 0
-                        || matches!(msg.activation, Some(ActivationChange::Activate));
-                    let cx = if active {
-                        cx_base + ACTIVATION_HALF_W
-                    } else {
-                        cx_base
-                    };
-                    let label = process_label(&msg.label);
-                    let label_w = message_label_width(&label);
-                    let loopback_right = cx + SELF_MSG_EXTEND;
-                    let text_right = cx + SELF_MSG_TEXT_X_PAD + label_w;
-                    let destroyed_later =
-                        diagram
-                            .events
-                            .iter()
-                            .skip(idx + 1)
-                            .any(|event| match event {
-                                Event::Destroy(id) => id == &msg.from,
-                                Event::Message(next) => {
-                                    next.to == msg.from
-                                        && matches!(
-                                            next.activation,
-                                            Some(ActivationChange::Destroy)
-                                        )
-                                }
-                                _ => false,
-                            });
-                    let created_active_pad =
-                        if active && create_msg_idx.contains_key(msg.from.as_str()) {
-                            CREATED_ACTIVE_SELF_MSG_RIGHT_PAD
-                        } else if active && destroyed_later {
-                            DESTROYED_ACTIVE_SELF_MSG_RIGHT_PAD
+            match event {
+                Event::Message(msg) => {
+                    if msg.from == msg.to {
+                        let cx_base = center_of(&msg.from);
+                        let active = act_depth.get(msg.from.as_str()).copied().unwrap_or(0) > 0
+                            || matches!(msg.activation, Some(ActivationChange::Activate));
+                        let cx = if active {
+                            cx_base + ACTIVATION_HALF_W
+                        } else {
+                            cx_base
+                        };
+                        let label = process_label(&msg.label);
+                        let label_w = message_label_width(&label);
+                        let autonumber_extra = if let Some((_, w, _)) = extent_auto.current() {
+                            w + AUTONUMBER_LABEL_GAP
                         } else {
                             0.0
                         };
-                    let activation_stack_depth = match msg.activation {
-                        Some(ActivationChange::Activate) => {
-                            act_depth.get(msg.from.as_str()).copied().unwrap_or(0) + 1
-                        }
-                        Some(ActivationChange::Deactivate) => {
-                            act_depth.get(msg.from.as_str()).copied().unwrap_or(0)
-                        }
-                        _ => 0,
-                    };
-                    let self_activation_pad = if activation_stack_depth > 0 {
-                        5.0 + activation_stack_depth as f64 * ACTIVATION_WIDTH
-                    } else {
-                        0.0
-                    };
-                    let self_right = loopback_right.max(text_right)
-                        + SELF_MSG_RIGHT_PAD
-                        + created_active_pad
-                        + self_activation_pad;
-                    max_self_msg_right = max_self_msg_right.max(self_right);
-                    self_msg_right_note_left_by_event.insert(
-                        idx,
-                        cx.floor() + label_w + SELF_MSG_RIGHT_NOTE_X_PAD + created_active_pad,
-                    );
-                }
-                // Update activation state from message activation flag
-                if let Some(act) = &msg.activation {
-                    match act {
-                        ActivationChange::Activate => {
-                            *act_depth.entry(msg.to.clone()).or_default() += 1;
-                        }
-                        ActivationChange::Deactivate => {
-                            if let Some(d) = act_depth.get_mut(&msg.from) {
-                                *d = d.saturating_sub(1);
+                        let loopback_right = cx + SELF_MSG_EXTEND;
+                        let loopback_extent_right = loopback_right + SELF_MSG_RIGHT_PAD;
+                        let destroyed_later =
+                            diagram
+                                .events
+                                .iter()
+                                .skip(idx + 1)
+                                .any(|event| match event {
+                                    Event::Destroy(id) => id == &msg.from,
+                                    Event::Message(next) => {
+                                        next.to == msg.from
+                                            && matches!(
+                                                next.activation,
+                                                Some(ActivationChange::Destroy)
+                                            )
+                                    }
+                                    _ => false,
+                                });
+                        let created_active_pad =
+                            if active && create_msg_idx.contains_key(msg.from.as_str()) {
+                                CREATED_ACTIVE_SELF_MSG_RIGHT_PAD
+                            } else if active && destroyed_later {
+                                DESTROYED_ACTIVE_SELF_MSG_RIGHT_PAD
+                            } else {
+                                0.0
+                            };
+                        let ordinary_active_self = active
+                            && msg.activation.is_none()
+                            && !create_msg_idx.contains_key(msg.from.as_str())
+                            && !destroyed_later;
+                        let text_extent_right = if ordinary_active_self {
+                            cx + autonumber_extra + label_w + 2.0 * MSG_TEXT_LEFT_PAD + ARROW_SIZE
+                        } else {
+                            cx + SELF_MSG_TEXT_X_PAD
+                                + autonumber_extra
+                                + label_w
+                                + SELF_MSG_RIGHT_PAD
+                        };
+                        let activation_stack_depth = match msg.activation {
+                            Some(ActivationChange::Activate) => {
+                                act_depth.get(msg.from.as_str()).copied().unwrap_or(0) + 1
                             }
-                        }
-                        ActivationChange::Destroy => {
-                            if let Some(d) = act_depth.get_mut(&msg.to) {
-                                *d = d.saturating_sub(1);
+                            Some(ActivationChange::Deactivate) => {
+                                act_depth.get(msg.from.as_str()).copied().unwrap_or(0)
+                            }
+                            _ => 0,
+                        };
+                        let self_activation_pad = if activation_stack_depth > 0 {
+                            5.0 + activation_stack_depth as f64 * ACTIVATION_WIDTH
+                        } else {
+                            0.0
+                        };
+                        let self_right = loopback_extent_right.max(text_extent_right)
+                            + created_active_pad
+                            + self_activation_pad;
+                        max_self_msg_right = max_self_msg_right.max(self_right);
+                        self_msg_right_note_left_by_event.insert(
+                            idx,
+                            cx.floor()
+                                + autonumber_extra
+                                + label_w
+                                + SELF_MSG_RIGHT_NOTE_X_PAD
+                                + created_active_pad,
+                        );
+                    }
+                    // Update activation state from message activation flag.
+                    if let Some(act) = &msg.activation {
+                        match act {
+                            ActivationChange::Activate => {
+                                *act_depth.entry(msg.to.clone()).or_default() += 1;
+                            }
+                            ActivationChange::Deactivate => {
+                                if let Some(d) = act_depth.get_mut(&msg.from) {
+                                    *d = d.saturating_sub(1);
+                                }
+                            }
+                            ActivationChange::Destroy => {
+                                if let Some(d) = act_depth.get_mut(&msg.to) {
+                                    *d = d.saturating_sub(1);
+                                }
                             }
                         }
                     }
+                    extent_auto.advance();
                 }
-            } else if let Event::Activate(id, _) = event {
-                *act_depth.entry(id.clone()).or_default() += 1;
-            } else if let Event::Deactivate(id) = event
-                && let Some(d) = act_depth.get_mut(id)
-            {
-                *d = d.saturating_sub(1);
+                Event::Activate(id, _) => {
+                    *act_depth.entry(id.clone()).or_default() += 1;
+                }
+                Event::Deactivate(id) => {
+                    if let Some(d) = act_depth.get_mut(id) {
+                        *d = d.saturating_sub(1);
+                    }
+                }
+                Event::Return(_) => extent_auto.advance(),
+                Event::Autonumber(cmd) => extent_auto.apply(cmd),
+                _ => {}
             }
         }
     }
