@@ -29,6 +29,8 @@ use crate::diagram::gantt::{
     GanttDiagram, GanttNote, GanttResource, GanttRow, GanttTask, TaskResource, TaskStart,
 };
 
+const PLANTUML_IMPLICIT_EPOCH_DAY_OFFSET: u32 = 1;
+
 /// Parse pre-processed lines into a [`GanttDiagram`].
 pub fn parse_gantt(lines: &[String]) -> Result<GanttDiagram, ParseError> {
     let mut parser = GanttParser::new();
@@ -272,9 +274,10 @@ impl GanttParser {
                     .map(TaskStart::Day)
                     .unwrap_or(TaskStart::Day(0))
             } else {
-                // No project start: use days since 1970-01-01 as offset.
+                // No project start: PlantUML's plain day axis is 1-based from
+                // the implicit 1970-01-01 epoch.
                 date_diff_days("1970-01-01", &date)
-                    .map(TaskStart::Day)
+                    .map(|d| TaskStart::Day(d + PLANTUML_IMPLICIT_EPOCH_DAY_OFFSET))
                     .unwrap_or(TaskStart::Day(0))
             };
             self.upsert_task(name, 0, start);
@@ -718,6 +721,15 @@ mod tests {
     fn project_start_parsed() {
         let d = parse("Project starts 2024-01-01\n[T1] lasts 3 days");
         assert_eq!(d.project_start.as_deref(), Some("2024-01-01"));
+    }
+
+    #[test]
+    fn absolute_date_without_project_start_uses_one_based_epoch_day() {
+        let d = parse("[Milestone] happens at 1970-01-01");
+        assert!(matches!(d.tasks[0].start, TaskStart::Day(1)));
+
+        let d = parse("Project starts 1970-01-01\n[Milestone] happens at 1970-01-01");
+        assert!(matches!(d.tasks[0].start, TaskStart::Day(0)));
     }
 
     #[test]
