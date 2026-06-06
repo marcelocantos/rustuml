@@ -48,11 +48,18 @@ const FONT_TITLE: f64 = 14.0;
 const FONT_STATE: f64 = 12.0;
 const FONT_TIME: f64 = 11.0;
 const FONT_DECORATION: f64 = 10.0;
+const FONT_NOTE: f64 = 13.0;
 const LINE_COLOR: &str = "#333333";
 const STATE_LINE_COLOR: &str = "#006400";
 const CONCISE_FILL: &str = "#E2E2F0";
+const NOTE_FILL: &str = "#FEFFDD";
 const DECORATION_COLOR: &str = "#888888";
 const TIMING_FOOTER_BOTTOM_GAP: f64 = 13.1348;
+const NOTE_MARGIN_Y: f64 = 10.0;
+const NOTE_PAD_X: f64 = 6.0;
+const NOTE_PAD_TOP: f64 = 5.0;
+const NOTE_FOLD: f64 = 10.0;
+const NOTE_EXTRA_W: f64 = 21.0;
 
 /// Render a timing diagram with an optional oracle layout.
 pub fn render_with_oracle(
@@ -264,7 +271,8 @@ pub fn render(diagram: &TimingDiagram, _theme: &Theme) -> String {
                 }
             };
         }
-        let full_height = full_height_of(tl, player.constraints_h);
+        let full_height =
+            full_height_of(tl, player.constraints_h) + bottom_note_height(&diagram.notes, &tl.id);
         y += frame_height + full_height;
         players.push(player);
     }
@@ -423,6 +431,19 @@ pub fn render(diagram: &TimingDiagram, _theme: &Theme) -> String {
         }
     }
 
+    // ── Timing notes ──────────────────────────────────────────────────────────
+    for p in &players {
+        for note in diagram
+            .notes
+            .iter()
+            .filter(|note| note.timeline_id == p.timeline.id && !note.above)
+        {
+            let x = tx(note.at);
+            let y = bottom_note_y(p, vtop);
+            draw_timing_note(&mut svg, x, y, note);
+        }
+    }
+
     // ── Time axis ─────────────────────────────────────────────────────────────────
     draw_time_axis(
         &mut svg,
@@ -567,6 +588,72 @@ fn emit_text_colored(
         x = fmt_coord(x),
         y = fmt_coord(y),
     ));
+}
+
+fn timing_note_size(note: &TimingNote) -> (f64, f64) {
+    (
+        text_width(&note.text, FONT_NOTE, true) + NOTE_EXTRA_W,
+        text_height(FONT_NOTE) + NOTE_MARGIN_Y,
+    )
+}
+
+fn bottom_note_height(notes: &[TimingNote], timeline_id: &str) -> f64 {
+    notes
+        .iter()
+        .filter(|note| note.timeline_id == timeline_id && !note.above)
+        .map(|note| timing_note_size(note).1 + NOTE_MARGIN_Y)
+        .fold(0.0_f64, f64::max)
+}
+
+fn body_visual_height(p: &PlayerLayout) -> f64 {
+    match p.timeline.kind {
+        TimelineKind::Robust => {
+            if p.all_states.is_empty() {
+                HISTOGRAM_BOTTOM_MARGIN
+            } else {
+                ROBUST_STEP_HEIGHT * (p.all_states.len() as f64 - 1.0) + HISTOGRAM_BOTTOM_MARGIN
+            }
+        }
+        TimelineKind::Concise => CONCISE_RIBBON_HEIGHT,
+        TimelineKind::Binary | TimelineKind::Clock => BINARY_HEIGHT,
+    }
+}
+
+fn bottom_note_y(p: &PlayerLayout, vtop: f64) -> f64 {
+    vtop + p.body_top + p.constraints_h + body_visual_height(p) + NOTE_MARGIN_Y / 2.0
+}
+
+fn draw_timing_note(svg: &mut SvgBuilder, x: f64, y: f64, note: &TimingNote) {
+    let (w, h) = timing_note_size(note);
+    let r = x + w;
+    let b = y + h;
+    let fold_x = r - NOTE_FOLD;
+    let fold_y = y + NOTE_FOLD;
+    svg.raw(&format!(
+        r#"<path d="M{x},{y} L{x},{b} L{r},{b} L{r},{fold_y} L{fold_x},{y} L{x},{y}" fill="{NOTE_FILL}" style="stroke:{LINE_COLOR};stroke-width:0.5;"/>"#,
+        x = fmt_coord(x),
+        y = fmt_coord(y),
+        b = fmt_coord(b),
+        r = fmt_coord(r),
+        fold_y = fmt_coord(fold_y),
+        fold_x = fmt_coord(fold_x),
+    ));
+    svg.raw(&format!(
+        r#"<path d="M{fold_x},{y} L{fold_x},{fold_y} L{r},{fold_y} L{fold_x},{y}" fill="{NOTE_FILL}" style="stroke:{LINE_COLOR};stroke-width:0.5;"/>"#,
+        fold_x = fmt_coord(fold_x),
+        y = fmt_coord(y),
+        fold_y = fmt_coord(fold_y),
+        r = fmt_coord(r),
+    ));
+    emit_text_colored(
+        svg,
+        x + NOTE_PAD_X,
+        y + NOTE_PAD_TOP + ascent(FONT_NOTE),
+        &note.text,
+        FONT_NOTE,
+        true,
+        LINE_COLOR,
+    );
 }
 
 /// Full panel height for a player (excludes the frame title). `constraints_h` is
@@ -1117,6 +1204,21 @@ mod tests {
         assert!(svg.contains("Web"));
         assert!(svg.contains("Idle"));
         assert!(svg.contains("Processing"));
+    }
+
+    #[test]
+    fn renders_bottom_note() {
+        let mut d = make_diagram();
+        d.timelines[0].kind = TimelineKind::Concise;
+        d.notes.push(TimingNote {
+            timeline_id: "W".into(),
+            at: 100,
+            text: "Low pulse".into(),
+            above: false,
+        });
+        let svg = render(&d, &Theme::default());
+        assert!(svg.contains("fill=\"#FEFFDD\""));
+        assert!(svg.contains(">Low pulse</text>"));
     }
 
     #[test]
