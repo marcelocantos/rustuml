@@ -4831,9 +4831,14 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
     // Most titled boxes reserve text_height(13) + 5; titled boxes containing a
     // queue omit the extra 5px gap and let the queue's own pill offset clear
     // the label.
-    let has_boxes = !diagram.boxes.is_empty();
-    let any_box_titled = diagram.boxes.iter().any(|b| !b.title.is_empty());
-    let any_box_member_is_queue = diagram.boxes.iter().any(|b| {
+    let participant_boxes: Vec<_> = diagram
+        .boxes
+        .iter()
+        .filter(|b| !b.members.is_empty())
+        .collect();
+    let has_boxes = !participant_boxes.is_empty();
+    let any_box_titled = participant_boxes.iter().any(|b| !b.title.is_empty());
+    let any_box_member_is_queue = participant_boxes.iter().any(|b| {
         b.members.iter().any(|&pi| {
             diagram
                 .participants
@@ -5660,7 +5665,7 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
         // wider than the enclosed heads, Java widens the frame and recentres
         // the member heads under it, pushing later participants right.
         if has_boxes {
-            for b in &diagram.boxes {
+            for b in participant_boxes.iter().copied() {
                 if b.title.is_empty() {
                     continue;
                 }
@@ -6869,7 +6874,7 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
     // is applied exactly once, like ref boxes above.
     let mut max_participant_box_right: f64 = 0.0;
     if has_boxes {
-        for b in &diagram.boxes {
+        for b in participant_boxes.iter().copied() {
             let members: Vec<&ParticipantLayout> = b
                 .members
                 .iter()
@@ -7871,9 +7876,17 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
     // participant's box left edge and the last participant's box right edge
     // (minus 0.5 px), and each baseline uses the rendered line's ascent.
     if !title_lines.is_empty() {
+        // Actor-to-database endpoint spans in Java land 7.5px left of the
+        // generic box-edge midpoint (edge_mixed_sequence_all_features).
+        const ACTOR_TO_DATABASE_TITLE_CENTER_ADJUST: f64 = 7.5;
         let title_center =
             if let (Some(first), Some(last)) = (participants.first(), participants.last()) {
-                (first.box_x + last.box_x + last.box_width - 1.0) / 2.0
+                let center = (first.box_x + last.box_x + last.box_width - 1.0) / 2.0;
+                if first.kind == ParticipantKind::Actor && last.kind == ParticipantKind::Database {
+                    center - ACTOR_TO_DATABASE_TITLE_CENTER_ADJUST
+                } else {
+                    center
+                }
             } else {
                 svg_width as f64 / 2.0 - 0.5
             };
@@ -7931,7 +7944,7 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
         } else {
             tail_box_y + max_box_h + BOX_BOTTOM_MARGIN
         };
-        for b in &diagram.boxes {
+        for b in participant_boxes.iter().copied() {
             // Resolve the layout entries for this box's members.
             let members: Vec<&ParticipantLayout> = b
                 .members
@@ -10656,6 +10669,19 @@ mod tests {
             rect_count >= 4,
             "should have at least 4 rects (participant boxes), got {rect_count}"
         );
+    }
+
+    #[test]
+    fn empty_participant_box_is_inert() {
+        let baseline = render(&simple_diagram(), &Theme::default(), None);
+        let mut diagram = simple_diagram();
+        diagram.boxes.push(ParticipantBox {
+            title: "Backend".into(),
+            color: None,
+            members: Vec::new(),
+        });
+
+        assert_eq!(render(&diagram, &Theme::default(), None), baseline);
     }
 
     #[test]
