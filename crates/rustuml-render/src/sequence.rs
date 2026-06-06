@@ -4744,11 +4744,25 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
     let group_header_text_baseline =
         ascent_with_family(group_header_font_size_f, &group_header_font_family)
             + GROUP_HEADER_TEXT_TOP_PAD;
+    // Shadowed bundled themes reserve one padding unit for the shadow and only
+    // half a unit above the heads; non-shadowed themes keep the legacy spacing.
     let participant_outer_padding = participant_outer_padding_base
-        .map(|v| v + 2.0 * global_padding)
+        .map(|v| {
+            v + if theme_loaded && sequence_shadowing {
+                global_padding
+            } else {
+                2.0 * global_padding
+            }
+        })
         .unwrap_or(0.0);
     let explicit_global_padding = if theme_loaded { 0.0 } else { global_padding };
-    let theme_top_padding = if theme_loaded { global_padding } else { 0.0 };
+    let theme_top_padding = if theme_loaded && sequence_shadowing {
+        global_padding / 2.0
+    } else if theme_loaded {
+        global_padding
+    } else {
+        0.0
+    };
     let group_frame_margin = GROUP_FRAME_MARGIN + participant_padding;
     let participant_box_gap = 10.0 + 2.0 * participant_padding;
     let message_label_width = |text: &str| {
