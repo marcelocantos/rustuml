@@ -23,7 +23,9 @@ pub struct ComponentDiagram {
 pub enum ComponentElementKind {
     #[default]
     Component,
+    Artifact,
     Database,
+    Node,
     Queue,
     /// A leaf `cloud "X" as Y` element — drawn as a bumpy cloud outline rather
     /// than the rounded component body. (Container clouds, `cloud X { … }`,

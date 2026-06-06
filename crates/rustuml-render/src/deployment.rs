@@ -893,7 +893,7 @@ fn emit_plain_rect_cluster(
 // ---- Node ("tag" polygon) -------------------------------------------------
 
 #[allow(clippy::too_many_arguments)]
-fn emit_tag_polygon(
+pub(crate) fn emit_tag_polygon(
     svg: &mut SvgBuilder,
     x: f64,
     y: f64,
@@ -936,7 +936,15 @@ fn emit_tag_polygon(
 
 // ---- Artifact (rect + folded corner) --------------------------------------
 
-fn emit_artifact(svg: &mut SvgBuilder, x: f64, y: f64, w: f64, h: f64, fill: &str, stroke: &str) {
+pub(crate) fn emit_artifact(
+    svg: &mut SvgBuilder,
+    x: f64,
+    y: f64,
+    w: f64,
+    h: f64,
+    fill: &str,
+    stroke: &str,
+) {
     emit_artifact_with_stroke_width(svg, x, y, w, h, fill, stroke, 0.5);
 }
 

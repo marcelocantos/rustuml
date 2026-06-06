@@ -878,10 +878,13 @@ pub fn render_with_oracle(
         let rx_s = oracle_rx.map(String::from).unwrap_or_else(|| fc(round_r));
         let ry_s = oracle_ry.map(String::from).unwrap_or_else(|| fc(round_r));
 
-        // `database`/`queue` leaf elements draw a cylinder/queue outline (two
-        // bezier paths) in place of the rounded body rect and the UML tab icon.
-        // Reuse the deployment renderer's path geometry. The stroke colour is
-        // recovered from the oracle body_style (default #181818).
+        // Non-component leaf elements draw their own DESCRIPTION shapes in
+        // place of the rounded body rect and UML tab icon. Reuse the
+        // deployment renderer's geometry, anchored by the oracle rectangle.
+        let body_stroke = body_style
+            .strip_prefix("stroke:")
+            .and_then(|s| s.split(';').next())
+            .unwrap_or(STROKE);
         if matches!(comp.kind, ComponentElementKind::Cloud) {
             // A leaf `cloud "X"` draws a puffy bezier outline in place of the
             // rounded body rect + tab icon. Generate the shape with PlantUML's
@@ -891,14 +894,16 @@ pub fn render_with_oracle(
             // deployment renderer does for `cloud` nodes.
             emit_cloud_component(&mut svg, comp, oracle_rect, x, y, fill, &body_style);
             // Skip the rect body and tab-icon block below.
+        } else if matches!(comp.kind, ComponentElementKind::Artifact) {
+            crate::deployment::emit_artifact(&mut svg, x, y, w, h, fill, body_stroke);
+            // Skip the rect body and tab-icon block below.
+        } else if matches!(comp.kind, ComponentElementKind::Node) {
+            crate::deployment::emit_tag_polygon(&mut svg, x, y, w, h, fill, 0.5, body_stroke);
+            // Skip the rect body and tab-icon block below.
         } else if matches!(
             comp.kind,
             ComponentElementKind::Database | ComponentElementKind::Queue
         ) {
-            let stroke = body_style
-                .strip_prefix("stroke:")
-                .and_then(|s| s.split(';').next())
-                .unwrap_or(STROKE);
             match comp.kind {
                 ComponentElementKind::Database => {
                     crate::deployment::emit_database(
@@ -908,14 +913,17 @@ pub fn render_with_oracle(
                         w,
                         h,
                         fill,
-                        stroke,
+                        body_stroke,
                         &comp.label,
                     );
                 }
                 ComponentElementKind::Queue => {
-                    crate::deployment::emit_queue(&mut svg, x, y, w, h, fill, stroke);
+                    crate::deployment::emit_queue(&mut svg, x, y, w, h, fill, body_stroke);
                 }
-                ComponentElementKind::Component | ComponentElementKind::Cloud => unreachable!(),
+                ComponentElementKind::Artifact
+                | ComponentElementKind::Component
+                | ComponentElementKind::Cloud
+                | ComponentElementKind::Node => unreachable!(),
             }
             // Skip the rect body and tab-icon block below.
         } else {

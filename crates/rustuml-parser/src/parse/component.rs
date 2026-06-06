@@ -22,6 +22,7 @@ const CONTAINER_KEYWORDS: &[&str] = &[
     "database",
     "storage",
     "actor",
+    "artifact",
     "component",
     "queue",
     "boundary",
@@ -351,7 +352,9 @@ pub fn parse_component(lines: &[String]) -> Result<ComponentDiagram, ParseError>
                     let rest = &container_clean[kw.len()..];
                     let (id, label) = parse_container_label(kw, rest);
                     let kind = match kw {
+                        "artifact" => ComponentElementKind::Artifact,
                         "database" => ComponentElementKind::Database,
+                        "node" => ComponentElementKind::Node,
                         "queue" => ComponentElementKind::Queue,
                         "cloud" => ComponentElementKind::Cloud,
                         _ => ComponentElementKind::Component,
@@ -801,5 +804,14 @@ mod tests {
             d.components[0].url.as_deref(),
             Some("https://example.com/storage")
         );
+    }
+
+    #[test]
+    fn artifact_and_node_are_leaf_components() {
+        let d = parse("artifact Build\nnode Server\nBuild --> Server");
+        assert_eq!(d.interfaces.len(), 0);
+        assert_eq!(d.components.len(), 2);
+        assert_eq!(d.components[0].kind, ComponentElementKind::Artifact);
+        assert_eq!(d.components[1].kind, ComponentElementKind::Node);
     }
 }
