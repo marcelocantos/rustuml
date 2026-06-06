@@ -7164,21 +7164,32 @@ fn emit_switch_with_layout(
                 switch_down_head(svg, &arrow_color, bcx, merge_cy);
             }
             SwitchConn::Center => {
-                // Rise from the branch bottom to the split, jog horizontally to
-                // diamond_cx (omitted when aligned), then up into the merge top.
-                let split = merge_top - SWITCH_CENTER_BOT_SPLIT;
-                svg.connector_line(&arrow_color, bcx, bcx, bottom, split, false);
-                if bcx != diamond_cx {
-                    svg.connector_line(&arrow_color, bcx, diamond_cx, split, split, false);
+                if bcx == diamond_cx || !cases.iter().any(|case| branch_terminates(&case.body)) {
+                    // When the centre branch is on the switch spine,
+                    // PlantUML still splits the vertical connector at the
+                    // centre-bottom split point. Ordinary non-terminating
+                    // switches use the same split even when label geometry
+                    // shifts the centre branch off the spine.
+                    let split = merge_top - SWITCH_CENTER_BOT_SPLIT;
+                    svg.connector_line(&arrow_color, bcx, bcx, bottom, split, false);
+                    if bcx != diamond_cx {
+                        svg.connector_line(&arrow_color, bcx, diamond_cx, split, split, false);
+                    }
+                    svg.connector_line(
+                        &arrow_color,
+                        diamond_cx,
+                        diamond_cx,
+                        split,
+                        merge_top,
+                        false,
+                    );
+                } else {
+                    // If the centre branch's decorated label pushes it off
+                    // the spine, PlantUML runs straight down to the merge top
+                    // and jogs horizontally into the merge arrowhead tip.
+                    svg.connector_line(&arrow_color, bcx, bcx, bottom, merge_top, false);
+                    svg.connector_line(&arrow_color, bcx, diamond_cx, merge_top, merge_top, false);
                 }
-                svg.connector_line(
-                    &arrow_color,
-                    diamond_cx,
-                    diamond_cx,
-                    split,
-                    merge_top,
-                    false,
-                );
                 switch_down_head(svg, &arrow_color, diamond_cx, merge_top);
             }
         }
