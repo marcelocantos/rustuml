@@ -72,7 +72,7 @@ pub fn parse_mindmap(lines: &[String]) -> Result<MindMapDiagram, ParseError> {
                     }
                     buf.push_str(last);
                 }
-                let label = buf.replace('\n', " ");
+                let label = buf.clone();
                 let node = MindMapNode {
                     label,
                     depth,
@@ -438,6 +438,15 @@ mod tests {
         assert_eq!(root.children[1].side, Side::Left);
         assert_eq!(root.children[2].label, "L2");
         assert_eq!(root.children[2].side, Side::Left);
+    }
+
+    #[test]
+    fn multiline_node_preserves_line_breaks() {
+        let d = parse("* Root\n**:Branch 1\nwith multiple\nlines;\n** Branch 2");
+        assert_eq!(
+            d.roots[0].children[0].label,
+            "Branch 1\nwith multiple\nlines"
+        );
     }
 
     #[test]

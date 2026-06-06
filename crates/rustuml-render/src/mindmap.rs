@@ -15,14 +15,10 @@ use crate::text_render;
 
 const FONT_SIZE: f64 = 14.0;
 const PAD_X: f64 = 10.0;
+const PAD_Y: f64 = 10.0;
 // Boxless nodes (`_` modifier) have no rect: text is inset 3px from the
 // node's connection point and the node width is text_width + 3.
 const BOXLESS_PAD_X: f64 = 3.0;
-// Exact unrounded box height: text_height(14) + 2*PAD_Y where PAD_Y = 10.
-// text_height(14) = 16.48828125 → 36.48828125 (displays as "36.4883").
-// Using the unrounded value avoids propagating rounding error through the
-// Y-coordinate accumulation.
-const BOX_H: f64 = 36.48828125;
 // Text baseline offset within the box: PAD_Y + ascent(14) = 10 + 13.53515625.
 const TEXT_BASELINE_DY: f64 = 23.53515625;
 const LEVEL_DX: f64 = 50.0;
@@ -38,7 +34,7 @@ const NODE_MARGIN: f64 = 10.0;
 // Boxless nodes use a 1px top/bottom layout margin (FingerImpl: withMargin(text,
 // 3, 0, 1, 1)) rather than the box's 10px.
 const BOXLESS_MARGIN_Y: f64 = 1.0;
-// Exact unrounded text height for font-size 14 (matches BOX_H - 2*PAD_Y).
+// Exact unrounded text height for font-size 14.
 const TEXT_H: f64 = 16.48828125;
 // getX1 = margin.left, getX2 = margin.right + 30 (LR rankdir). getX12 = LEVEL_DX.
 const GETX1: f64 = NODE_MARGIN;
@@ -59,6 +55,7 @@ struct Placed {
     x: f64,
     cy: f64,
     w: f64,
+    h: f64,
     label: String,
     side: Side,
     /// Resolved fill colour (`#RRGGBB`), or `None` for the default fill.
@@ -78,11 +75,30 @@ fn placed_width(text_w: f64, boxless: bool) -> f64 {
     }
 }
 
+fn label_lines(label: &str) -> Vec<String> {
+    display_label(label)
+        .split('\n')
+        .map(str::to_string)
+        .collect()
+}
+
 fn node_text_width(label: &str) -> f64 {
     // Measure the creole-resolved text (markup stripped, per-segment styling
     // applied) rather than the raw label, so `**bold**` etc. size the box by
     // the rendered glyphs, not the markup characters.
-    text_render::measure(&display_label(label), FONT_SIZE, false)
+    label_lines(label)
+        .iter()
+        .map(|line| text_render::measure(line, FONT_SIZE, false))
+        .fold(0.0, f64::max)
+}
+
+fn node_height(label: &str, boxless: bool) -> f64 {
+    let line_count = label_lines(label).len().max(1) as f64;
+    if boxless {
+        TEXT_H * line_count
+    } else {
+        TEXT_H * line_count + 2.0 * PAD_Y
+    }
 }
 
 /// Convert UML stereotype angle brackets `<<x>>` to guillemets `«x»`, matching
@@ -131,11 +147,11 @@ fn resolve_fill(color: &Option<String>) -> Option<String> {
 /// Vertical extent (thickness) a node's own box/text occupies for layout. This
 /// is the box height plus the 10px top+bottom style margin (boxed) or the text
 /// height plus a 1px top+bottom margin (boxless).
-fn phalanx_thickness(boxless: bool) -> f64 {
+fn phalanx_thickness(label: &str, boxless: bool) -> f64 {
     if boxless {
-        TEXT_H + 2.0 * BOXLESS_MARGIN_Y
+        node_height(label, boxless) + 2.0 * BOXLESS_MARGIN_Y
     } else {
-        BOX_H + 2.0 * NODE_MARGIN
+        node_height(label, boxless) + 2.0 * NODE_MARGIN
     }
 }
 
@@ -265,6 +281,7 @@ fn tetris(tees: &[Tee]) -> Vec<f64> {
 fn measure(node: &MindMapNode, side: Side) -> Placed {
     let text_w = node_text_width(&node.label);
     let w = placed_width(text_w, node.boxless);
+    let h = node_height(&node.label, node.boxless);
     let fill = resolve_fill(&node.color);
     let kid_refs: Vec<&MindMapNode> = node.children.iter().filter(|c| c.side == side).collect();
 
@@ -274,6 +291,7 @@ fn measure(node: &MindMapNode, side: Side) -> Placed {
         x: 0.0,
         cy: 0.0,
         w,
+        h,
         label: node.label.clone(),
         side,
         fill,
@@ -307,7 +325,7 @@ fn measure(node: &MindMapNode, side: Side) -> Placed {
 /// The `Tee` a node contributes as a child of its parent. The phalanx is the
 /// node's own box; the nail is its packed subtree.
 fn child_tee(p: &Placed) -> Tee {
-    let t1 = phalanx_thickness(p.boxless);
+    let t1 = phalanx_thickness(&p.label, p.boxless);
     let e1 = p.w + GETX1;
     if p.children.is_empty() {
         return Tee {
@@ -385,7 +403,7 @@ fn deepest_y(p: &Placed) -> f64 {
     p.children
         .iter()
         .map(deepest_y)
-        .fold(p.cy + BOX_H / 2.0, f64::max)
+        .fold(p.cy + p.h / 2.0, f64::max)
 }
 
 fn shift_x(p: &mut Placed, dx: f64) {
@@ -396,16 +414,20 @@ fn shift_x(p: &mut Placed, dx: f64) {
 }
 
 fn emit_box(buf: &mut String, p: &Placed) {
-    let y = p.cy - BOX_H / 2.0;
+    let y = p.cy - p.h / 2.0;
     let (text_x, text_y) = if p.boxless {
         // Boxless: bare text, no rect; text inset BOXLESS_PAD_X from the left.
-        (p.x + BOXLESS_PAD_X, y + TEXT_BASELINE_DY)
+        let visual_h = node_height(&p.label, false);
+        (
+            p.x + BOXLESS_PAD_X,
+            p.cy - visual_h / 2.0 + TEXT_BASELINE_DY,
+        )
     } else {
         let fill = p.fill.as_deref().unwrap_or(FILL_DEFAULT);
         write!(
             buf,
             r#"<rect fill="{fill}" height="{h}" rx="{RX}" ry="{RX}" style="stroke:{STROKE};stroke-width:1.5;" width="{w}" x="{x}" y="{y}"/>"#,
-            h = pm::fmt_coord(BOX_H),
+            h = pm::fmt_coord(p.h),
             w = pm::fmt_coord(p.w),
             x = pm::fmt_coord(p.x),
             y = pm::fmt_coord(y),
@@ -413,7 +435,7 @@ fn emit_box(buf: &mut String, p: &Placed) {
         .unwrap();
         (p.x + PAD_X, y + TEXT_BASELINE_DY)
     };
-    let label = display_label(&p.label);
+    let lines = label_lines(&p.label);
     let base = text_render::TextBase {
         x: text_x,
         y: text_y,
@@ -425,7 +447,9 @@ fn emit_box(buf: &mut String, p: &Placed) {
         underline: false,
         skip_underline: false,
     };
-    if let Some(rule_text) = rule_label_text(&label) {
+    if lines.len() == 1
+        && let Some(rule_text) = rule_label_text(&lines[0])
+    {
         let base = text_render::TextBase {
             y: base.y + RULE_LABEL_BASELINE_ADJUST,
             ..base
@@ -449,7 +473,13 @@ fn emit_box(buf: &mut String, p: &Placed) {
         )
         .unwrap();
     } else {
-        text_render::emit_text(buf, &label, &base);
+        for (i, line) in lines.iter().enumerate() {
+            let line_base = text_render::TextBase {
+                y: base.y + i as f64 * TEXT_H,
+                ..base.clone()
+            };
+            text_render::emit_text(buf, line, &line_base);
+        }
     }
 }
 
@@ -524,7 +554,8 @@ pub fn render(diagram: &MindMapDiagram, _theme: &Theme) -> String {
 
         let root_text_w = node_text_width(&root.label);
         let root_w = placed_width(root_text_w, root.boxless);
-        let root_phalanx = phalanx_thickness(root.boxless);
+        let root_h = node_height(&root.label, root.boxless);
+        let root_phalanx = phalanx_thickness(&root.label, root.boxless);
 
         // Per-side full thickness = max(root phalanx, that side's nail span).
         let right_nail = nail_extent_of(&right_subtree.children);
@@ -539,6 +570,7 @@ pub fn render(diagram: &MindMapDiagram, _theme: &Theme) -> String {
             x: 0.0,
             cy: root_cy,
             w: root_w,
+            h: root_h,
             label: root.label.clone(),
             side: Side::Right,
             fill: resolve_fill(&root.color),
@@ -682,6 +714,18 @@ mod tests {
                 .count(),
             2
         );
+    }
+
+    #[test]
+    fn renders_multiline_node_as_separate_text_rows() {
+        let input = "@startmindmap\n* Root\n**:Branch 1\nwith multiple\nlines;\n@endmindmap";
+        let diagram = rustuml_parser::parse::parse(input).unwrap();
+        let svg = crate::render_svg(&diagram);
+        assert!(svg.contains(r#"height="69.4648""#));
+        assert!(svg.contains(">Branch 1</text>"));
+        assert!(svg.contains(">with multiple</text>"));
+        assert!(svg.contains(">lines</text>"));
+        assert!(!svg.contains("Branch 1 with multiple lines"));
     }
 
     #[test]
