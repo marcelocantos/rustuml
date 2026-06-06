@@ -497,6 +497,9 @@ fn parse_row_part(part: &str) -> Vec<SaltWidget> {
     // the displayed text is trimmed.
     if trimmed.starts_with('[') && trimmed.ends_with(']') {
         let label = trimmed[1..trimmed.len() - 1].to_string();
+        if !label.is_empty() && label.chars().all(|c| c == '-') {
+            return vec![SaltWidget::Slider(label)];
+        }
         return vec![SaltWidget::Button(label)];
     }
 
@@ -505,12 +508,21 @@ fn parse_row_part(part: &str) -> Vec<SaltWidget> {
     // field's managed width, even though it trims the text for display.
     if trimmed.starts_with('"') && trimmed.len() >= 2 && trimmed.ends_with('"') {
         let inner = trimmed[1..trimmed.len() - 1].to_string();
+        if inner.starts_with('*') && inner.ends_with(' ') {
+            return vec![SaltWidget::PasswordField(inner)];
+        }
         return vec![SaltWidget::TextField(inner)];
     }
 
     // Dropdown: `^label^`.
-    if trimmed.starts_with('^') && trimmed.ends_with('^') && trimmed.len() > 1 {
-        let label = trimmed[1..trimmed.len() - 1].trim().to_string();
+    if trimmed.starts_with('^')
+        && let Some(end) = trimmed[1..].find('^')
+    {
+        let label = trimmed[1..1 + end].trim().to_string();
+        let rest = trimmed[1 + end + 1..].trim();
+        if rest.starts_with('^') {
+            return vec![SaltWidget::DropdownOpen(label)];
+        }
         return vec![SaltWidget::Dropdown(label)];
     }
 
@@ -632,6 +644,30 @@ mod tests {
                 selected: false,
                 ..
             }
+        ));
+    }
+
+    #[test]
+    fn parse_password_open_dropdown_and_slider() {
+        let input = lines(
+            r#"{
+  "*****   "
+  ^Choice^  ^
+  [----------]
+}"#,
+        );
+        let diag = parse_salt(&input).unwrap();
+        assert!(matches!(
+            &diag.root.rows[0].cells[0],
+            SaltWidget::PasswordField(t) if t == "*****   "
+        ));
+        assert!(matches!(
+            &diag.root.rows[1].cells[0],
+            SaltWidget::DropdownOpen(t) if t == "Choice"
+        ));
+        assert!(matches!(
+            &diag.root.rows[2].cells[0],
+            SaltWidget::Slider(t) if t == "----------"
         ));
     }
 

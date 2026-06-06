@@ -705,7 +705,7 @@ fn widget_dim(widget: &SaltWidget) -> (f64, f64) {
             )
         }
         SaltWidget::Separator(_) => (RC_RECT, 6.0), // ElementLine: (10, 6)
-        SaltWidget::Button(t) => {
+        SaltWidget::Button(t) | SaltWidget::Slider(t) => {
             // managed length: max(textWidth, charLen * 8), then + 2*marginX + 2*stroke.
             let mw = managed_text_width(t);
             (
@@ -713,14 +713,14 @@ fn widget_dim(widget: &SaltWidget) -> (f64, f64) {
                 th + 2.0 * BTN_MARGIN + 2.0 * BTN_STROKE,
             )
         }
-        SaltWidget::TextField(t) => {
+        SaltWidget::TextField(t) | SaltWidget::PasswordField(t) => {
             // managed length, then delta(6, 2).
             let mw = managed_text_width(t);
             (mw + 6.0, th + 2.0)
         }
         // ElementDroplist: getTextDimensionAt then delta(4 + box, 4),
         // where box = 12 and getTextDimensionAt = max(textWidth, charLen*8).
-        SaltWidget::Dropdown(t) => {
+        SaltWidget::Dropdown(t) | SaltWidget::DropdownOpen(t) => {
             let display = strip_creole(t);
             let tw = pm::text_width(display.trim(), FONT_SIZE, false);
             let char_len = display.trim().chars().count() as f64;
@@ -784,8 +784,10 @@ fn append_tab_widget_lines(widget: &SaltWidget, lines: &mut Vec<String>) {
                 }
             }
         }
-        SaltWidget::Button(label) => lines.push(format!("[{label}]")),
-        SaltWidget::TextField(text) => lines.push(format!("\"{text}\"")),
+        SaltWidget::Button(label) | SaltWidget::Slider(label) => lines.push(format!("[{label}]")),
+        SaltWidget::TextField(text) | SaltWidget::PasswordField(text) => {
+            lines.push(format!("\"{text}\""));
+        }
         SaltWidget::Checkbox { checked, label } => {
             let mark = if *checked { "X" } else { " " };
             lines.push(format!("[{mark}] {label}"));
@@ -794,7 +796,9 @@ fn append_tab_widget_lines(widget: &SaltWidget, lines: &mut Vec<String>) {
             let mark = if *selected { "X" } else { " " };
             lines.push(format!("({mark}) {label}"));
         }
-        SaltWidget::Dropdown(label) => lines.push(format!("^{label}^")),
+        SaltWidget::Dropdown(label) | SaltWidget::DropdownOpen(label) => {
+            lines.push(format!("^{label}^"));
+        }
         SaltWidget::Label(text) => lines.push(text.clone()),
         SaltWidget::Separator(kind) => lines.push(separator_literal(*kind).to_string()),
         SaltWidget::TreeNode { depth, label } => {
@@ -907,7 +911,7 @@ fn draw_widget(
             emit_separator(buf, x, y + y2, cell_w, *kind);
         }
 
-        SaltWidget::Button(label) => {
+        SaltWidget::Button(label) | SaltWidget::Slider(label) => {
             // Preferred dimension (uses managed width).
             let (pw, ph) = widget_dim(widget);
             // Rounded rect at translate(stroke, stroke), inset by 2*stroke.
@@ -920,18 +924,29 @@ fn draw_widget(
                 "#EEEEEE",
                 BTN_STROKE,
             );
-            // Text centred: drawText at ((pw - pureTextWidth)/2, stroke + marginY).
-            let display = strip_creole(label);
-            let display = display.trim();
-            let pure_w = pm::text_width(display, FONT_SIZE, false);
-            let tx = x + (pw - pure_w) / 2.0;
             let ty = y + BTN_STROKE + BTN_MARGIN + ascent;
-            emit_text(buf, tx, ty, display);
+            if matches!(widget, SaltWidget::Slider(_)) {
+                let dash_w = pm::text_width("-", FONT_SIZE, false);
+                let tx = x + (pw - 2.0 * dash_w) / 2.0;
+                emit_line_through_text(buf, tx, ty, "-");
+                emit_line_through_text(buf, tx + dash_w, ty, "-");
+            } else {
+                // Text centred: drawText at ((pw - pureTextWidth)/2, stroke + marginY).
+                let display = strip_creole(label);
+                let display = display.trim();
+                let pure_w = pm::text_width(display, FONT_SIZE, false);
+                let tx = x + (pw - pure_w) / 2.0;
+                emit_text(buf, tx, ty, display);
+            }
         }
-        SaltWidget::TextField(t) => {
+        SaltWidget::TextField(t) | SaltWidget::PasswordField(t) => {
             // drawText at (3, 0); text is trimmed for display.
-            let display = strip_creole(t);
-            emit_text(buf, x + 3.0, y + ascent, display.trim());
+            if matches!(widget, SaltWidget::PasswordField(_)) {
+                emit_text(buf, x + 3.0, y + ascent, "<b>*</b>");
+            } else {
+                let display = strip_creole(t);
+                emit_text(buf, x + 3.0, y + ascent, display.trim());
+            }
             let (pw, _) = widget_dim(widget);
             let text_h = pref_h; // getTextDimensionAt height
             let managed_w = managed_text_width(t);
@@ -943,7 +958,7 @@ fn draw_widget(
             emit_vline_black(buf, x + 1.0, y + y3, 2.0);
             emit_vline_black(buf, x + 3.0 + managed_w + 1.0, y + y3, 2.0);
         }
-        SaltWidget::Dropdown(label) => {
+        SaltWidget::Dropdown(label) | SaltWidget::DropdownOpen(label) => {
             // ElementDroplist: EE-filled rect, text at (2,2), a vertical
             // divider `box` px from the right edge, and a down-triangle.
             let (pw, ph) = widget_dim(widget);
@@ -958,6 +973,12 @@ fn draw_widget(
             let ty = y + 6.0;
             let tip_y = pref_h - 8.0;
             emit_droplist_arrow(buf, tx, ty, DROP_BOX - 6.0, tip_y);
+            if matches!(widget, SaltWidget::DropdownOpen(_)) {
+                let mut popup = String::new();
+                emit_dropdown_popup(&mut popup, x, y + ph - 1.0, pw - 2.0, pref_h - 1.0);
+                buf.push_str(&popup);
+                deferred_scrollbars.push_str(&popup);
+            }
         }
         SaltWidget::TreeNode { depth, label } => {
             let indent = (*depth as f64) * 8.0;
@@ -1115,6 +1136,34 @@ fn emit_text(buf: &mut String, x: f64, y: f64, content: &str) {
         tl = pm::fmt_coord(tl),
         x = pm::fmt_coord(x),
         y = pm::fmt_coord(y),
+    ));
+}
+
+fn emit_line_through_text(buf: &mut String, x: f64, y: f64, content: &str) {
+    let tl = pm::text_width(content, FONT_SIZE, false);
+    let escaped = escape_text(content);
+    buf.push_str(&format!(
+        r##"<text fill="#000000" font-family="sans-serif" font-size="12" lengthAdjust="spacing" text-decoration="line-through" textLength="{tl}" x="{x}" y="{y}">{escaped}</text>"##,
+        tl = pm::fmt_coord(tl),
+        x = pm::fmt_coord(x),
+        y = pm::fmt_coord(y),
+    ));
+}
+
+fn emit_dropdown_popup(buf: &mut String, x: f64, y: f64, w: f64, h: f64) {
+    buf.push_str(&format!(
+        r##"<rect fill="#EEEEEE" height="{h}" style="stroke:#000000;stroke-width:1;" width="{w}" x="{x}" y="{y}"/>"##,
+        h = pm::fmt_coord(h),
+        w = pm::fmt_coord(w),
+        x = pm::fmt_coord(x),
+        y = pm::fmt_coord(y),
+    ));
+    let tl = pm::text_width("  ", FONT_SIZE, false);
+    buf.push_str(&format!(
+        r##"<text fill="#000000" font-family="sans-serif" font-size="12" lengthAdjust="spacing" textLength="{tl}" x="{x}" y="{text_y}">&#160;&#160;</text>"##,
+        tl = pm::fmt_coord(tl),
+        x = pm::fmt_coord(x),
+        text_y = pm::fmt_coord(y + pm::ascent(FONT_SIZE)),
     ));
 }
 

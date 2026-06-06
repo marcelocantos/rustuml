@@ -63,12 +63,18 @@ pub enum SaltWidget {
     Button(String),
     /// A text input field: `"text"`.
     TextField(String),
+    /// A password input field: `"*****   "`.
+    PasswordField(String),
+    /// A slider control: `[----------]`.
+    Slider(String),
     /// A checkbox: `[X] label` or `[ ] label`.
     Checkbox { checked: bool, label: String },
     /// A radio button: `(X) label` or `( ) label`.
     Radio { selected: bool, label: String },
     /// A dropdown/combo box: `^Label^`.
     Dropdown(String),
+    /// An opened dropdown/combo box: `^Label^ ^`.
+    DropdownOpen(String),
     /// A plain text label.
     Label(String),
     /// A horizontal separator line.
