@@ -53,6 +53,7 @@ const PARTITION_FORK_LEFT_EXTENT_EXTRA: f64 = 2.0;
 const PARTITION_FORK_BODY_CX_SHIFT: f64 = -1.0;
 const PARTITION_FORK_BRANCH_CENTER_SHIFT: f64 = 2.0;
 const PARTITION_FORK_TINY_TEXT_MAX: f64 = 10.0;
+const PARTITION_TITLE_BAND_H: f64 = 36.4883;
 const SINGLE_LANE_GROUP_TOP_ADJUST: f64 = 0.453125;
 const ACTION_PADDING: f64 = 20.0; // total vertical padding in action box
 const ACTION_H_PADDING: f64 = 10.0; // horizontal padding each side
@@ -4591,6 +4592,51 @@ fn partition_wraps_tiny_action_fork(body: &[LayoutNode]) -> bool {
     branches.len() >= 2 && branches.iter().all(|branch| tiny_action_branch(branch))
 }
 
+fn single_partition_branch_body_top(branch: &[LayoutNode], branch_y: f64) -> Option<f64> {
+    let [
+        LayoutNode::Partition {
+            name,
+            color,
+            is_group,
+            nested,
+            single_lane_first_group,
+            body,
+            ..
+        },
+    ] = branch
+    else {
+        return None;
+    };
+    if body.is_empty() {
+        return None;
+    }
+    let top_gap = partition_top_gap(
+        color,
+        name,
+        *is_group,
+        *nested,
+        *single_lane_first_group,
+        body,
+    );
+    let needs_nudge = top_gap == 10.0;
+    Some(branch_y + top_gap + PARTITION_TITLE_BAND_H - if needs_nudge { 0.00005 } else { 0.0 })
+}
+
+fn single_partition_branch_body_bottom(branch: &[LayoutNode], branch_y: f64) -> Option<f64> {
+    let [LayoutNode::Partition { body, .. }] = branch else {
+        return None;
+    };
+    single_partition_branch_body_top(branch, branch_y)
+        .map(|body_top| body_top + sequence_height(body))
+}
+
+fn fork_branches_are_single_partitions(branches: &[Vec<LayoutNode>]) -> bool {
+    !branches.is_empty()
+        && branches
+            .iter()
+            .all(|branch| single_partition_branch_body_top(branch, 0.0).is_some())
+}
+
 fn partition_wraps_single_if(body: &[LayoutNode]) -> bool {
     matches!(body, [LayoutNode::If { .. }])
 }
@@ -4851,6 +4897,8 @@ fn node_height(node: &LayoutNode) -> f64 {
                 ARROW_LEN + max_h + ARROW_LEN
             } else if *merge {
                 FORK_BAR_HEIGHT + ARROW_LEN + max_h + FORK_MERGE_GAP + DIAMOND_HALF * 2.0
+            } else if fork_branches_are_single_partitions(branches) {
+                FORK_BAR_HEIGHT + max_h + ARROW_LEN + FORK_BAR_HEIGHT
             } else {
                 FORK_BAR_HEIGHT + ARROW_LEN + max_h + ARROW_LEN + FORK_BAR_HEIGHT
             }
@@ -6895,11 +6943,10 @@ fn emit_node_with_repeat_extra(
                 } else {
                     0.0
                 };
-            let title_band_h = 36.4883; // title bar height (matches goldens)
             let partition_h = if empty_body {
                 empty_partition_shell_height()
             } else {
-                title_band_h + body_h + 12.0
+                PARTITION_TITLE_BAND_H + body_h + 12.0
             };
             let partition_right = partition_x + partition_w;
 
@@ -6948,8 +6995,8 @@ fn emit_node_with_repeat_extra(
                 // un-rounded 81.48825 value. Coloured / descender-titled
                 // partitions already have the 0.4531 top-gap shift absorb this.
                 let needs_nudge = top_gap == 10.0;
-                let body_top =
-                    partition_top + title_band_h - if needs_nudge { 0.00005 } else { 0.0 };
+                let body_top = partition_top + PARTITION_TITLE_BAND_H
+                    - if needs_nudge { 0.00005 } else { 0.0 };
                 if colored_partition_while {
                     svg.colored_partition_while_depth += 1;
                 }
@@ -8701,7 +8748,12 @@ fn emit_fork_with_layout(
     // then all bottom arrows. Reverse-engineered from goldens.
     let mut branch_bottoms = Vec::new();
     for (branch, &bcx) in branches.iter().zip(branch_centers.iter()) {
-        let bottom = emit_sequence(svg, branch, bcx, bar_bottom + ARROW_LEN);
+        let branch_y = if single_partition_branch_body_top(branch, bar_bottom).is_some() {
+            bar_bottom
+        } else {
+            bar_bottom + ARROW_LEN
+        };
+        let bottom = emit_sequence(svg, branch, bcx, branch_y);
         branch_bottoms.push(bottom);
     }
 
@@ -8718,7 +8770,14 @@ fn emit_fork_with_layout(
             svg.down_arrow(bcx, bar_bottom, bottom_bar_y, &arrow_color);
             continue;
         }
-        svg.down_arrow(bcx, bar_bottom, bar_bottom + ARROW_LEN, &arrow_color);
+        let branch_y = if single_partition_branch_body_top(branch, bar_bottom).is_some() {
+            bar_bottom
+        } else {
+            bar_bottom + ARROW_LEN
+        };
+        let arrow_bottom =
+            single_partition_branch_body_top(branch, branch_y).unwrap_or(bar_bottom + ARROW_LEN);
+        svg.down_arrow(bcx, bar_bottom, arrow_bottom, &arrow_color);
     }
 
     // Bottom arrows from each branch to bottom bar.
@@ -8727,7 +8786,13 @@ fn emit_fork_with_layout(
             continue;
         }
         let bcx = branch_centers[i];
-        svg.down_arrow(bcx, *bottom, bottom_bar_y, &arrow_color);
+        let branch_y = if single_partition_branch_body_top(branch, bar_bottom).is_some() {
+            bar_bottom
+        } else {
+            bar_bottom + ARROW_LEN
+        };
+        let arrow_top = single_partition_branch_body_bottom(branch, branch_y).unwrap_or(*bottom);
+        svg.down_arrow(bcx, arrow_top, bottom_bar_y, &arrow_color);
     }
 
     // Bottom bar
