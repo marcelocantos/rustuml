@@ -88,7 +88,12 @@ const FORK_BAR_RX: f64 = 2.5;
 const SHADOW_BOUNDS_PAD: f64 = 6.0;
 
 // Switch-specific layout constants (reverse-engineered from golden SVGs).
+const SVG_CONTENT_LEAD: f64 = 16.0;
 const SWITCH_CASE_GAP: f64 = 10.0; // horizontal gap between adjacent SMALL-mode case boxes
+const SWITCH_IF_BRANCH_CASE_GAP: f64 = 20.0; // FtileSwitchNude.xSeparation inside if branches
+// Big-diamond switches nested under FtileIf keep the switch diamond anchored,
+// but the case band lands one text-metric rounding step lower.
+const SWITCH_IF_BRANCH_BIG_CASE_Y_ADJUST: f64 = 0.6572265625;
 const SWITCH_EMPTY_MERGE_GAP: f64 = 40.6357;
 // Case-label baseline offsets above the case-box top, per connection type.
 const SWITCH_LABEL_OUTER_DY: f64 = 19.7979; // outermost branches (via diamond vertex)
@@ -1679,6 +1684,26 @@ struct SwitchXLayout {
 }
 
 fn switch_x_layout(cases: &[SwitchCase], condition: &str) -> SwitchXLayout {
+    switch_x_layout_with_small_gap(cases, condition, SWITCH_CASE_GAP)
+}
+
+fn switch_x_layout_if_branch(cases: &[SwitchCase], condition: &str) -> SwitchXLayout {
+    switch_x_layout_with_small_gap(cases, condition, SWITCH_IF_BRANCH_CASE_GAP)
+}
+
+fn switch_x_layout_if_branch_extents(cases: &[SwitchCase], condition: &str) -> SwitchXLayout {
+    let first_half = cases
+        .first()
+        .map_or(0.0, |case| switch_case_width(case) / 2.0);
+    let spine_room = (DIAMOND_HALF * 2.0 - first_half).max(0.0);
+    switch_x_layout_with_small_gap(cases, condition, SWITCH_CASE_GAP + spine_room)
+}
+
+fn switch_x_layout_with_small_gap(
+    cases: &[SwitchCase],
+    condition: &str,
+    small_case_gap: f64,
+) -> SwitchXLayout {
     let n = cases.len();
     let widths: Vec<f64> = cases.iter().map(switch_case_width).collect();
     let diamond_w = diamond_inner_w(condition) + DIAMOND_HALF * 2.0;
@@ -1733,9 +1758,9 @@ fn switch_x_layout(cases: &[SwitchCase], condition: &str) -> SwitchXLayout {
         // diamond/merge column has room). The diamond sits at the geometric
         // block centre.
         let case_gap = if switch_has_empty_middle_case(cases) {
-            20.0
+            SWITCH_IF_BRANCH_CASE_GAP
         } else {
-            SWITCH_CASE_GAP
+            small_case_gap
         };
         let mut centers = vec![0.0f64; n];
         let mut x = 0.0;
@@ -3028,6 +3053,10 @@ fn node_extents_if_branch(node: &LayoutNode) -> (f64, f64) {
                 layout.bar_w / 2.0 + layout.spine_dx,
             )
         }
+        LayoutNode::Switch { cases, condition } => {
+            let layout = switch_x_layout_if_branch_extents(cases, condition);
+            (layout.diamond_dx, layout.block_w - layout.diamond_dx)
+        }
         _ => node_extents(node),
     }
 }
@@ -3035,6 +3064,9 @@ fn node_extents_if_branch(node: &LayoutNode) -> (f64, f64) {
 fn node_width_if_branch(node: &LayoutNode) -> f64 {
     match node {
         LayoutNode::Fork { branches } => fork_layout_if_branch(branches).bar_w,
+        LayoutNode::Switch { cases, condition } => {
+            switch_x_layout_if_branch_extents(cases, condition).block_w
+        }
         _ => node_width(node),
     }
 }
@@ -5356,7 +5388,21 @@ fn emit_node_with_repeat_extra(
                 emit_fork(svg, cx, y, branches)
             }
         }
-        LayoutNode::Switch { condition, cases } => emit_switch(svg, cx, y, condition, cases),
+        LayoutNode::Switch { condition, cases } => {
+            if if_branch {
+                emit_switch_with_layout(
+                    svg,
+                    cx,
+                    y,
+                    condition,
+                    cases,
+                    switch_x_layout_if_branch(cases, condition),
+                    true,
+                )
+            } else {
+                emit_switch(svg, cx, y, condition, cases)
+            }
+        }
         LayoutNode::While {
             condition,
             diamond_font_family,
@@ -6401,6 +6447,26 @@ fn emit_switch(
     condition: &str,
     cases: &[SwitchCase],
 ) -> f64 {
+    emit_switch_with_layout(
+        svg,
+        cx,
+        y,
+        condition,
+        cases,
+        switch_x_layout(cases, condition),
+        false,
+    )
+}
+
+fn emit_switch_with_layout(
+    svg: &mut SvgEmitter,
+    cx: f64,
+    y: f64,
+    condition: &str,
+    cases: &[SwitchCase],
+    layout: SwitchXLayout,
+    clamp_left_case: bool,
+) -> f64 {
     if cases.is_empty() {
         return y;
     }
@@ -6414,9 +6480,12 @@ fn emit_switch(
     // Faithful FtileSwitchWithDiamonds layout. The passed-in cx is the spine,
     // which aligns to the condition/merge diamond (NOT the block centre); the
     // block extends asymmetrically around it per the BIG/SMALL diamond model.
-    let layout = switch_x_layout(cases, condition);
     let block_left = cx - layout.diamond_dx;
-    let centers: Vec<f64> = layout.centers.iter().map(|c| block_left + c).collect();
+    let mut centers: Vec<f64> = layout.centers.iter().map(|c| block_left + c).collect();
+    if clamp_left_case && let (Some(center), Some(case)) = (centers.first_mut(), cases.first()) {
+        let min_center = SVG_CONTENT_LEAD + switch_case_width(case) / 2.0;
+        *center = center.max(min_center);
+    }
     let diamond_cx = cx;
 
     // Switch condition diamond (inner edge clamped; text measured).
@@ -6448,7 +6517,13 @@ fn emit_switch(
         svg.palette.diamond_text_italic,
     );
 
-    let cases_top = diamond_bottom + switch_below_diamond(cases, layout.big_diamond);
+    let if_branch_big_adjust = if clamp_left_case && layout.big_diamond {
+        SWITCH_IF_BRANCH_BIG_CASE_Y_ADJUST
+    } else {
+        0.0
+    };
+    let cases_top =
+        diamond_bottom + switch_below_diamond(cases, layout.big_diamond) + if_branch_big_adjust;
 
     // Case bodies (shapes + internal connectors) in source order.
     let mut bottoms = Vec::with_capacity(n);
