@@ -8600,7 +8600,19 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
 
                     // Text label
                     if !label.is_empty() {
-                        svg.emit_message_label(text_x, text_y_pos, &label, &arrow_color);
+                        let label_x = if let Some((num_text, num_w, style)) = autonumber_ref {
+                            emit_autonumber_prefix(
+                                &mut svg.buf,
+                                num_text,
+                                text_x,
+                                text_y_pos,
+                                style,
+                            );
+                            text_x + num_w + AUTONUMBER_LABEL_GAP
+                        } else {
+                            text_x
+                        };
+                        svg.emit_message_label(label_x, text_y_pos, &label, &arrow_color);
                     }
 
                     svg.message_group_close();
