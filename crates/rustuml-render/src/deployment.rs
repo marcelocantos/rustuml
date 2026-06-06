@@ -13,7 +13,10 @@ use std::fmt::Write as _;
 
 use rustuml_parser::diagram::deployment::*;
 
-use crate::layout_oracle::{OracleLayout, emit_entity_image, wrap_oracle_envelope};
+use crate::layout_oracle::{
+    EntityPath, EntityPolygon, OracleHandwrittenWarning, OracleLayout, emit_entity_image,
+    wrap_oracle_envelope,
+};
 use crate::plantuml_metrics as pm;
 use crate::style::Theme;
 use crate::svg::SvgBuilder;
@@ -136,6 +139,12 @@ fn render_oracle(diagram: &DeploymentDiagram, _theme: &Theme, oracle: &OracleLay
     };
 
     let mut svg = SvgBuilder::new_plantuml(canvas_w, canvas_h, "DESCRIPTION");
+
+    if has_handwritten_skinparam(diagram)
+        && let Some(warning) = oracle.handwritten_warning.as_ref()
+    {
+        emit_handwritten_warning(&mut svg, warning);
+    }
 
     // PlantUML's id counter starts at ent0002 and is shared between
     // entities/clusters and links. IDs are assigned in source-line order
@@ -267,6 +276,7 @@ fn render_oracle(diagram: &DeploymentDiagram, _theme: &Theme, oracle: &OracleLay
         skin_fills: &skin_fills,
         skin_strokes: &skin_strokes,
         sprite_names: &sprite_names,
+        handwritten: has_handwritten_skinparam(diagram),
     };
 
     // Header — a centred grey caption above the diagram (font 10). The oracle
@@ -284,20 +294,20 @@ fn render_oracle(diagram: &DeploymentDiagram, _theme: &Theme, oracle: &OracleLay
     for root in &roots {
         emit_clusters_dfs(&mut svg, root, &diagram.nodes, None, &ctx);
     }
-    // Leaf-entity emission order. With no connections PlantUML keeps the
-    // natural source-order (pre-order DFS) traversal. Once connections are
-    // present its layout reorders leaves by ascending nesting depth (a
-    // cluster's direct leaf children before any deeper-nested leaves), with
-    // root-level (depth-0) leaves emitted last; within a depth, source line.
+    // Leaf-entity emission order is normally shallow-before-deep, then source
+    // line. When duplicate child declarations are ignored by PlantUML, later
+    // root leaves can sit between earlier and later nested leaves; use source
+    // order for that root-leaf shape.
     let mut leaves: Vec<(usize, usize, &DeploymentNode, String)> = Vec::new();
     for root in &roots {
         collect_entities_dfs(root, &diagram.nodes, None, 0, &mut leaves);
     }
-    if !diagram.connections.is_empty() {
+    if diagram.connections.is_empty() || leaves.iter().any(|(depth, _, _, _)| *depth == 0) {
+        leaves.sort_by_key(|(_, source_line, _, _)| *source_line);
+    } else {
         leaves.sort_by(|a, b| {
-            // depth 0 (root leaves) sort last; otherwise ascending depth.
-            let ka = (a.0 == 0, a.0, a.1);
-            let kb = (b.0 == 0, b.0, b.1);
+            let ka = (a.0, a.1);
+            let kb = (b.0, b.1);
             ka.cmp(&kb)
         });
     }
@@ -337,6 +347,7 @@ fn render_oracle(diagram: &DeploymentDiagram, _theme: &Theme, oracle: &OracleLay
             &id_for_node,
             &own_qname_for_id,
             &link_id,
+            ctx.handwritten,
         );
     }
 
@@ -475,6 +486,57 @@ fn skin_keyword(kind: DeploymentNodeKind) -> &'static str {
     }
 }
 
+fn has_handwritten_skinparam(diagram: &DeploymentDiagram) -> bool {
+    diagram.meta.skinparams.iter().any(|sp| {
+        sp.key.eq_ignore_ascii_case("handwritten") && sp.value.eq_ignore_ascii_case("true")
+    })
+}
+
+fn emit_handwritten_warning(svg: &mut SvgBuilder, warning: &OracleHandwrittenWarning) {
+    let mut buf = String::new();
+    write!(
+        buf,
+        r#"<polygon fill="{}" points="{}""#,
+        escape_xml_attr(&warning.polygon.fill),
+        escape_xml_attr(&warning.polygon.points),
+    )
+    .unwrap();
+    if let Some(style) = warning.polygon.style.as_deref() {
+        write!(buf, r#" style="{}""#, escape_xml_attr(style)).unwrap();
+    }
+    buf.push_str("/>");
+    match warning.text_length.as_deref() {
+        Some(text_length) => write!(
+            buf,
+            r##"<text fill="#000000" font-family="monospace" font-size="10" lengthAdjust="spacing" textLength="{}" x="{}" y="{}">{}</text>"##,
+            escape_xml_attr(text_length),
+            fc(warning.text.x),
+            fc(warning.text.y),
+            escape_xml_text(&warning.text.text),
+        ),
+        None => write!(
+            buf,
+            r##"<text fill="#000000" font-family="monospace" font-size="10" x="{}" y="{}">{}</text>"##,
+            fc(warning.text.x),
+            fc(warning.text.y),
+            escape_xml_text(&warning.text.text),
+        ),
+    }
+    .unwrap();
+    svg.raw(&buf);
+}
+
+fn escape_xml_attr(s: &str) -> String {
+    s.replace('&', "&amp;")
+        .replace('<', "&lt;")
+        .replace('>', "&gt;")
+        .replace('"', "&quot;")
+}
+
+fn escape_xml_text(s: &str) -> String {
+    escape_xml_attr(s)
+}
+
 /// Build a per-kind map of background fills from `<kind>BackgroundColor`
 /// skinparams. Keys are matched case-insensitively (PlantUML convention).
 fn skin_background_fills(
@@ -564,7 +626,7 @@ fn skin_border_colors(
 fn own_qname(node: &DeploymentNode) -> String {
     let derived = label_to_id(&node.label);
     if derived == node.id && node.id != node.label {
-        node.label.clone()
+        qname_label_segment(&node.label)
     } else {
         node.id.clone()
     }
@@ -576,6 +638,7 @@ struct OracleRenderContext<'a> {
     skin_fills: &'a HashMap<DeploymentNodeKind, String>,
     skin_strokes: &'a HashMap<DeploymentNodeKind, String>,
     sprite_names: &'a HashSet<String>,
+    handwritten: bool,
 }
 
 fn emit_clusters_dfs(
@@ -688,8 +751,7 @@ fn emit_clusters_dfs(
 }
 
 /// Walk the node tree depth-first, collecting leaf entities together with
-/// their nesting depth and computed qualified name. PlantUML emits these
-/// ordered by depth (shallowest first), then by source line.
+/// their nesting depth and computed qualified name.
 fn collect_entities_dfs<'a>(
     node: &'a DeploymentNode,
     all: &'a [DeploymentNode],
@@ -752,7 +814,10 @@ fn emit_entity(
         // sit at fixed offsets from the icon centre, so they render their
         // own shape + label together rather than via the generic path.
         use DeploymentNodeKind::*;
-        if matches!(node.kind, Boundary | Control | Entity | Default) {
+        if ctx.handwritten && emit_handwritten_entity(svg, node, rect, &entity_fill) {
+            // The handwritten branch consumed oracle-captured primitive
+            // geometry and emitted the label using oracle text anchors.
+        } else if matches!(node.kind, Boundary | Control | Entity | Default) {
             emit_icon_entity(svg, node, rect, &entity_fill);
         } else if matches!(node.kind, Actor) {
             emit_actor_entity(svg, rect, &entity_fill);
@@ -789,6 +854,89 @@ fn emit_entity(
     }
 }
 
+fn emit_handwritten_entity(
+    svg: &mut SvgBuilder,
+    node: &DeploymentNode,
+    rect: &crate::layout_oracle::EntityRect,
+    fill: &str,
+) -> bool {
+    let mut emitted_shape = false;
+    if let Some(polygon) = rect.body_polygon.as_ref() {
+        emit_oracle_polygon(svg, polygon);
+        emitted_shape = true;
+    }
+    for path in &rect.separator_paths {
+        emit_oracle_path(svg, path);
+        emitted_shape = true;
+    }
+    if let Some(paths) = rect.glyph_path_d.as_deref()
+        && !paths.is_empty()
+    {
+        for (i, piece) in paths.split('|').enumerate() {
+            let (d, style) = piece
+                .split_once("#STYLE#")
+                .unwrap_or((piece, "stroke:#181818;stroke-width:0.5;"));
+            let path_fill = if i == 0 { fill } else { "none" };
+            svg.raw(&format!(
+                r#"<path d="{d}" fill="{path_fill}" style="{style}"/>"#
+            ));
+            emitted_shape = true;
+        }
+    }
+    if emitted_shape {
+        if let Some(text) = rect.texts.first() {
+            emit_text(svg, &text.text, text.x, text.y, FONT_SIZE, false, false);
+        } else if let (Some(&x), Some(&y)) =
+            (rect.text_x_values.first(), rect.text_y_values.first())
+        {
+            emit_text(svg, &node.label, x, y, FONT_SIZE, false, false);
+        } else {
+            emit_entity_label(
+                svg,
+                node.kind,
+                node,
+                rect.x,
+                rect.y,
+                rect.width,
+                &HashSet::new(),
+            );
+        }
+    }
+    emitted_shape
+}
+
+fn emit_oracle_polygon(svg: &mut SvgBuilder, polygon: &EntityPolygon) {
+    let mut buf = String::new();
+    write!(
+        buf,
+        r#"<polygon fill="{}" points="{}""#,
+        escape_xml_attr(&polygon.fill),
+        escape_xml_attr(&polygon.points),
+    )
+    .unwrap();
+    if let Some(style) = polygon.style.as_deref() {
+        write!(buf, r#" style="{}""#, escape_xml_attr(style)).unwrap();
+    }
+    buf.push_str("/>");
+    svg.raw(&buf);
+}
+
+fn emit_oracle_path(svg: &mut SvgBuilder, path: &EntityPath) {
+    let mut buf = String::new();
+    write!(
+        buf,
+        r#"<path d="{}" fill="{}""#,
+        escape_xml_attr(&path.d),
+        escape_xml_attr(&path.fill),
+    )
+    .unwrap();
+    if let Some(style) = path.style.as_deref() {
+        write!(buf, r#" style="{}""#, escape_xml_attr(style)).unwrap();
+    }
+    buf.push_str("/>");
+    svg.raw(&buf);
+}
+
 fn stereotype_refs_sprite(stereotype: &str, sprite_names: &HashSet<String>) -> bool {
     let lowered = stereotype.trim().trim_start_matches('$').to_lowercase();
     if sprite_names.contains(&lowered) {
@@ -806,7 +954,7 @@ fn qualified_name(node: &DeploymentNode, parent_qname: Option<&str>) -> String {
     let derived = label_to_id(&node.label);
     let own = if derived == node.id && node.id != node.label {
         // Quoted-form, no alias: id was auto-derived. Use label.
-        node.label.clone()
+        qname_label_segment(&node.label)
     } else if node.id == node.label {
         // Bare form: id == label. Either works.
         node.id.clone()
@@ -818,6 +966,10 @@ fn qualified_name(node: &DeploymentNode, parent_qname: Option<&str>) -> String {
         Some(p) => format!("{p}.{own}"),
         None => own,
     }
+}
+
+fn qname_label_segment(label: &str) -> String {
+    label.replace(':', ".")
 }
 
 /// Resolve a raw `#color` token (the parser strips the leading `#`, so we
@@ -2371,6 +2523,7 @@ fn render_connection(
     id_for_node: &HashMap<String, String>,
     own_qname_for_id: &HashMap<String, String>,
     link_id: &str,
+    handwritten: bool,
 ) {
     // Edge IDs in goldens use the OWN name of each endpoint. own_qname may
     // itself contain '.' (label-derived), so we can't recover it by splitting
@@ -2467,8 +2620,13 @@ fn render_connection(
             .as_ref()
             .map(|c| format!(r#" codeLine="{c}""#))
             .unwrap_or_default();
+        let id_attr = if handwritten {
+            String::new()
+        } else {
+            format!(r#" id="{expected_id}""#)
+        };
         svg.raw(&format!(
-            r#"<path{code_line_attr} d="{d}" fill="none" id="{expected_id}" style="{path_style}"/>"#,
+            r#"<path{code_line_attr} d="{d}" fill="none"{id_attr} style="{path_style}"/>"#,
             d = oe.d,
         ));
         if let Some(points) = &oe.arrow_points {

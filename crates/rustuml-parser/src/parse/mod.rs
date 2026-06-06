@@ -170,7 +170,11 @@ fn detect_uml_subtype(lines: &[String]) -> UmlSubtype {
     let mut has_floating_note = false;
     let mut has_interface_decl = false;
     let mut has_component_leaf_keyword = false;
+    let mut has_quoted_deployment_container = false;
+    let mut has_component_package_container = false;
+    let mut has_top_level_component_leaf = false;
     let mut has_non_interface_class_decl = false;
+    let mut brace_depth = 0usize;
 
     for line in lines {
         let trimmed = source_text(line).trim();
@@ -183,6 +187,7 @@ fn detect_uml_subtype(lines: &[String]) -> UmlSubtype {
         } else {
             trimmed
         };
+        let top_level = brace_depth == 0;
 
         if trimmed.starts_with("skinparam ") {
             has_skinparam = true;
@@ -281,6 +286,9 @@ fn detect_uml_subtype(lines: &[String]) -> UmlSubtype {
                 .unwrap_or(trimmed.len());
             let kw = &trimmed[..kw_end];
             let package_with_brace = kw == "package" && trimmed.contains('{');
+            if package_with_brace {
+                has_component_package_container = true;
+            }
             // Truly deployment-exclusive container keywords (not shared with
             // component diagrams) used as containers (with `{`) are a strong
             // deployment signal.  `node`, `cloud`, `database`, `component`,
@@ -322,11 +330,17 @@ fn detect_uml_subtype(lines: &[String]) -> UmlSubtype {
                 // Extra boost: deployment-exclusive container overrides component score.
                 scores[7] += 20;
             }
+            if is_quoted_container {
+                has_quoted_deployment_container = true;
+            }
         }
         // Component — weighted strongly so that a single `component` keyword
         // beats multiple `interface` lines that would otherwise score for class.
         if trimmed.starts_with("component ") {
             scores[5] += 15;
+            if top_level && !trimmed.contains('{') {
+                has_top_level_component_leaf = true;
+            }
         }
         // Standalone `[Bracket]` syntax marks a component (leaf on its own line).
         // Exclude `[[url]]` PlantUML hyperlink syntax (double brackets).
@@ -540,6 +554,10 @@ fn detect_uml_subtype(lines: &[String]) -> UmlSubtype {
         if trimmed == "allowmixing" || trimmed.starts_with("allowmixing ") {
             has_allowmixing = true;
         }
+
+        let opens = trimmed.chars().filter(|&c| c == '{').count();
+        let closes = trimmed.chars().filter(|&c| c == '}').count();
+        brace_depth = brace_depth.saturating_add(opens).saturating_sub(closes);
     }
 
     // Standalone floating notes (`note as X` or `note "text" as X`) can attach
@@ -571,6 +589,37 @@ fn detect_uml_subtype(lines: &[String]) -> UmlSubtype {
         let competing = scores[1].max(scores[7]);
         if scores[5] <= competing {
             scores[5] = competing + 1;
+        }
+    }
+
+    if has_quoted_deployment_container
+        && !has_component_package_container
+        && !has_top_level_component_leaf
+    {
+        let other_max = scores
+            .iter()
+            .enumerate()
+            .filter(|&(i, _)| i != 7)
+            .map(|(_, &s)| s)
+            .max()
+            .unwrap_or(0);
+        if scores[7] <= other_max {
+            scores[7] = other_max + 1;
+        }
+    }
+
+    if has_quoted_deployment_container
+        && (has_component_package_container || has_top_level_component_leaf)
+    {
+        let other_max = scores
+            .iter()
+            .enumerate()
+            .filter(|&(i, _)| i != 5)
+            .map(|(_, &s)| s)
+            .max()
+            .unwrap_or(0);
+        if scores[5] <= other_max {
+            scores[5] = other_max + 1;
         }
     }
 
@@ -1134,6 +1183,48 @@ mod tests {
         let input = "@startuml\nnote : x = 1\nAlice -> Bob : Message 1\n@enduml";
         let diagram = parse(input).unwrap();
         assert!(matches!(diagram, Diagram::Class(_)));
+    }
+
+    #[test]
+    fn quoted_deployment_containers_beat_nested_component_leaves() {
+        let input = r#"@startuml
+cloud "Kubernetes Cluster" {
+  node "Master Node" {
+    component "API Server"
+    component "Scheduler"
+  }
+}
+@enduml"#;
+        let diagram = parse(input).unwrap();
+        assert!(matches!(diagram, Diagram::Deployment(_)));
+    }
+
+    #[test]
+    fn component_package_containers_beat_quoted_deployment_containers() {
+        let input = r#"@startuml
+node "IoT Device" {
+  component Sensor
+}
+package "Backend" {
+  component "Data Ingestion" as DI
+}
+Sensor --> DI
+@enduml"#;
+        let diagram = parse(input).unwrap();
+        assert!(matches!(diagram, Diagram::Component(_)));
+    }
+
+    #[test]
+    fn top_level_component_leaf_beats_quoted_database_container() {
+        let input = r#"@startuml
+database "Main Store" {
+  component "Read Replica" as RR
+}
+component Application
+Application --> RR
+@enduml"#;
+        let diagram = parse(input).unwrap();
+        assert!(matches!(diagram, Diagram::Component(_)));
     }
 
     #[test]

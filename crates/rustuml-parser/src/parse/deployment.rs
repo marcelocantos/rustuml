@@ -102,7 +102,7 @@ fn push_node(
     stereotype: Option<String>,
     color: Option<String>,
     source_line: usize,
-) {
+) -> bool {
     if !nodes.iter().any(|n| n.id == id) {
         nodes.push(DeploymentNode {
             id,
@@ -113,7 +113,9 @@ fn push_node(
             children: Vec::new(),
             source_line,
         });
+        return true;
     }
+    false
 }
 
 fn add_child(nodes: &mut [DeploymentNode], parent_id: &str, child_id: &str) {
@@ -463,7 +465,7 @@ pub fn parse_deployment(lines: &[String]) -> Result<DeploymentDiagram, ParseErro
                 .unwrap_or_else(|| label_to_id(&label));
             let stereotype = caps.get(3).map(|m| m.as_str().trim().to_string());
             let color = caps.get(4).map(|m| m.as_str().to_string());
-            push_node(
+            let created = push_node(
                 &mut nodes,
                 id.clone(),
                 label,
@@ -472,7 +474,7 @@ pub fn parse_deployment(lines: &[String]) -> Result<DeploymentDiagram, ParseErro
                 color,
                 current_line,
             );
-            if let Some(parent_id) = stack.last().cloned() {
+            if created && let Some(parent_id) = stack.last().cloned() {
                 add_child(&mut nodes, &parent_id, &id);
             }
             continue;
@@ -580,7 +582,7 @@ pub fn parse_deployment(lines: &[String]) -> Result<DeploymentDiagram, ParseErro
                     let color = caps.get(5).map(|m| m.as_str().to_string());
                     let kind = kind_from_keyword(keyword);
 
-                    push_node(
+                    let created = push_node(
                         &mut nodes,
                         id.clone(),
                         label,
@@ -589,7 +591,7 @@ pub fn parse_deployment(lines: &[String]) -> Result<DeploymentDiagram, ParseErro
                         color,
                         current_line,
                     );
-                    if let Some(parent_id) = stack.last().cloned() {
+                    if created && let Some(parent_id) = stack.last().cloned() {
                         add_child(&mut nodes, &parent_id, &id);
                     }
                     if trimmed.contains('{') {
@@ -613,7 +615,7 @@ pub fn parse_deployment(lines: &[String]) -> Result<DeploymentDiagram, ParseErro
                     let color = caps.get(5).map(|m| m.as_str().to_string());
                     let kind = kind_from_keyword(keyword);
 
-                    push_node(
+                    let created = push_node(
                         &mut nodes,
                         id.clone(),
                         label,
@@ -622,7 +624,7 @@ pub fn parse_deployment(lines: &[String]) -> Result<DeploymentDiagram, ParseErro
                         color,
                         current_line,
                     );
-                    if let Some(parent_id) = stack.last().cloned() {
+                    if created && let Some(parent_id) = stack.last().cloned() {
                         add_child(&mut nodes, &parent_id, &id);
                     }
                     if trimmed.contains('{') {
@@ -781,6 +783,35 @@ mod tests {
         assert_eq!(d.nodes[0].label, "MyComponent");
         assert_eq!(d.nodes[0].id, "MyComponent");
         assert_eq!(d.nodes[0].kind, DeploymentNodeKind::Component);
+    }
+
+    #[test]
+    fn duplicate_nested_declarations_keep_first_parent() {
+        let d = parse(
+            r#"node "Validator Node 1" {
+  component "Consensus Engine"
+  database "Ledger"
+}
+node "Validator Node 2" {
+  component "Consensus Engine"
+  database "Ledger"
+}"#,
+        );
+        let first = d
+            .nodes
+            .iter()
+            .find(|n| n.label == "Validator Node 1")
+            .unwrap();
+        assert_eq!(
+            first.children,
+            vec!["Consensus_Engine".to_string(), "Ledger".to_string()]
+        );
+        let second = d
+            .nodes
+            .iter()
+            .find(|n| n.label == "Validator Node 2")
+            .unwrap();
+        assert!(second.children.is_empty());
     }
 
     #[test]
