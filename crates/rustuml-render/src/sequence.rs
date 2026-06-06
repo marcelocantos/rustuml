@@ -701,6 +701,10 @@ const QUEUE_TEXT_X_PAD: f64 = 5.0;
 const NOTE_GAP_AFTER_MSG: f64 = 13.0;
 /// Gap between lifeline top and note top (first event).
 const NOTE_GAP_FIRST: f64 = 15.0;
+/// When several bare side notes attach to the same message arrow, PlantUML
+/// keeps the note boxes in the ordinary first-line band but lowers the arrow
+/// and label by this amount for each extra side note.
+const MULTI_SIDE_NOTE_ARROW_Y_ADJUST: f64 = 3.0;
 const NOTE_LIST_ITEM_TEXT_X: f64 = 12.0;
 const NOTE_LIST_BULLET_CX: f64 = 5.5;
 const NOTE_LIST_BULLET_BASELINE_DROP: f64 = 4.7578;
@@ -6170,6 +6174,7 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
     let mut msg_note_extra: HashMap<usize, f64> = HashMap::new();
     let mut msg_note_y_adjust: HashMap<usize, f64> = HashMap::new();
     let mut msg_note_tail_extra: HashMap<usize, f64> = HashMap::new();
+    let mut msg_side_note_count: HashMap<usize, usize> = HashMap::new();
     {
         let mut last_msg_idx: Option<usize> = None;
         for (idx, event) in diagram.events.iter().enumerate() {
@@ -6180,6 +6185,7 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                 Event::Note(note) if note.on_message => {
                     if let Some(owner) = last_msg_idx {
                         note_owner.insert(idx, owner);
+                        *msg_side_note_count.entry(owner).or_insert(0) += 1;
                         let metrics = note_text_metrics_with_family(
                             &note.text,
                             note_font_size_f,
@@ -8293,6 +8299,12 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
     // Only page-1 events are drawn (see `page1_end` above); event_y_positions
     // only spans page 1, so the loop must not index past it either.
     for (ev_idx, event) in events.iter().take(page1_end).enumerate() {
+        let multi_side_note_arrow_y_adjust = msg_side_note_count
+            .get(&ev_idx)
+            .copied()
+            .unwrap_or(0)
+            .saturating_sub(1) as f64
+            * MULTI_SIDE_NOTE_ARROW_Y_ADJUST;
         let teoz_message_y_offset = if diagram.teoz
             && matches!(
                 event,
@@ -8302,7 +8314,8 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
         } else {
             0.0
         };
-        let msg_y = event_y_positions[ev_idx] + teoz_message_y_offset;
+        let msg_y =
+            event_y_positions[ev_idx] + teoz_message_y_offset + multi_side_note_arrow_y_adjust;
         match event {
             Event::Message(msg) => {
                 msg_id += 1;
