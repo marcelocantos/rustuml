@@ -123,6 +123,7 @@ const SWITCH_LINK_MARGIN: f64 = 10.0;
 const SWITCH_LABEL_OUTER_DY: f64 = 19.7979; // outermost branches (via diamond vertex)
 const SWITCH_LABEL_INNER_DY: f64 = 24.7979; // inner branches (drop from horizontal line)
 const SWITCH_LABEL_CENTER_DY: f64 = 18.7979; // exact-centre branch (drop from diamond bottom)
+const VERTICAL_IF_STARTLESS_TOP_NUDGE: f64 = 0.7754;
 // Centre-branch vertical-line split offsets (the centre drop is split into
 // two collinear segments, matching PlantUML's connector decomposition).
 const SWITCH_CENTER_TOP_SPLIT: f64 = 23.9401; // split distance above the case top
@@ -942,6 +943,24 @@ fn if_empty_both_plain(then_branch: &[LayoutNode], else_branches: &[ElseBranch])
         && else_branches[0].condition.is_none()
         && branch_is_empty(then_branch)
         && branch_is_empty(&else_branches[0].body)
+}
+
+fn uses_vertical_if_pragma(diagram: &ActivityDiagram) -> bool {
+    diagram.meta.source.as_deref().is_some_and(|source| {
+        source.lines().any(|line| {
+            let mut parts = line.split_whitespace();
+            matches!(parts.next(), Some("!pragma"))
+                && matches!(
+                    parts.next(),
+                    Some(name) if name.eq_ignore_ascii_case("useVerticalIf")
+                )
+                && matches!(
+                    parts.next(),
+                    Some(value) if value.eq_ignore_ascii_case("on")
+                        || value.eq_ignore_ascii_case("true")
+                )
+        })
+    })
 }
 
 /// PlantUML's `ConditionalBuilder.create` routes an `if/else` to the asymmetric
@@ -9629,13 +9648,20 @@ fn render_inner(
     // emit_swimlanes is MARGIN_LEAD + num_warnings * 21.6406 (the +1.2969 is
     // re-added inside emit_swimlanes).
     let is_top_swimlanes = matches!(tree.first(), Some(LayoutNode::Swimlanes { .. }));
+    let vertical_if_startless_top_nudge = if uses_vertical_if_pragma(diagram)
+        && matches!(first_flow_node(&tree), Some(LayoutNode::If { .. }))
+    {
+        VERTICAL_IF_STARTLESS_TOP_NUDGE
+    } else {
+        0.0
+    };
     let start_y = if is_top_swimlanes {
         margin_top + header_band_h + num_warnings * (warn_h_each + 5.0)
     } else if has_deprecated {
         header_band_h + 13.0 + warn_band_h + 17.0
     } else {
         margin_top + header_band_h
-    };
+    } + vertical_if_startless_top_nudge;
 
     let action_total_w = content_w + MARGIN_LEAD + MARGIN_TRAIL;
     // PlantUML enforces a minimum SVG width of 65 px (= 30 px content
