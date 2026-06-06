@@ -51,6 +51,7 @@ const ACTION_LIST_ITEM_TEXT_X: f64 = 12.0;
 const ACTION_LIST_BULLET_CX: f64 = 5.5;
 const ACTION_LIST_BULLET_BASELINE_DROP: f64 = 4.9688;
 const ACTION_LIST_NUMBER_GAP: f64 = 4.1133;
+const ACTION_SWALLOWED_CONTROL_COLON_INDENT: f64 = 7.5938;
 const ACTION_TABLE_CELL_PAD_X: f64 = 3.7969;
 const ACTION_TABLE_PAD_Y: f64 = 12.0;
 const WHILE_SPECIAL_COND_LEAD: f64 = 13.0;
@@ -768,9 +769,8 @@ fn branch_is_empty(body: &[LayoutNode]) -> bool {
 /// PlantUML's `ConditionalBuilder.create` routes an `if/else` to the asymmetric
 /// "down" layout (`FtileIfDown`) when exactly one branch is empty and the other
 /// is populated and non-terminating: the populated branch flows down the centre
-/// spine while the empty branch becomes a thin side corridor. Returns the
-/// populated branch's body (to lay out on the spine), the empty branch's label
-/// (drawn at the diamond) and the populated branch's label, when applicable.
+/// spine while the empty branch becomes a thin side corridor. A missing `else`
+/// behaves like an implicit empty branch for this layout.
 struct IfDownPlan<'a> {
     /// Body of the populated branch (flows down the spine).
     populated: &'a [LayoutNode],
@@ -783,11 +783,11 @@ fn if_down_plan<'a>(
     then_branch: &'a [LayoutNode],
     else_branches: &'a [ElseBranch],
 ) -> Option<IfDownPlan<'a>> {
-    // Only a single plain then + single else (no elseif cascade).
-    if else_branches.len() != 1 {
+    // Only a single plain then plus zero-or-one else (no elseif cascade).
+    if else_branches.len() > 1 {
         return None;
     }
-    let else_body = &else_branches[0].body;
+    let else_body = else_branches.first().map_or(&[][..], |b| b.body.as_slice());
     let then_empty = branch_is_empty(then_branch);
     let else_empty = branch_is_empty(else_body);
 
@@ -2760,7 +2760,11 @@ fn node_extents(node: &LayoutNode) -> (f64, f64) {
                     + DIAMOND_HALF;
                 let branch_w = sequence_width(plan.populated);
                 let left = (cond_half + IF_DOWN_LEFT_PAD).max(branch_w / 2.0);
-                let right = (cond_half + IF_DOWN_RIGHT_PAD).max(branch_w / 2.0);
+                let right = (cond_half + IF_DOWN_RIGHT_PAD).max(
+                    branch_w / 2.0
+                        + IF_DOWN_BRANCH_CORRIDOR_GAP
+                        + IF_DOWN_BRANCH_CORRIDOR_TRAILING_PAD,
+                );
                 return (left, right);
             }
             // ftile wire (binary if): exact FtileIfWithDiamonds drawn extents.
@@ -3334,6 +3338,26 @@ fn action_text_width(text: &str, font_size: f64, bold: bool, font_family: &str) 
 fn action_label_lines(text: &str) -> Vec<&str> {
     let lines: Vec<&str> = text.split("\\n").flat_map(str::lines).collect();
     if lines.is_empty() { vec![""] } else { lines }
+}
+
+fn action_line_x_offset(lines: &[&str], idx: usize) -> f64 {
+    let Some(line) = lines.get(idx) else {
+        return 0.0;
+    };
+    if idx < 2 || !line.trim_start().starts_with(':') {
+        return 0.0;
+    }
+    let Some(first) = lines.first().map(|line| line.trim_end()) else {
+        return 0.0;
+    };
+    let Some(prev) = lines.get(idx - 1).map(|line| line.trim_start()) else {
+        return 0.0;
+    };
+    if matches!(first.chars().last(), Some('|' | ']' | '/' | '>' | '<')) && !prev.starts_with(':') {
+        ACTION_SWALLOWED_CONTROL_COLON_INDENT
+    } else {
+        0.0
+    }
 }
 
 fn action_table_rows(text: &str) -> Option<Vec<creole::TableRow>> {
@@ -5203,18 +5227,20 @@ fn emit_node_with_repeat_extra(
             // label's actual font so monospace labels position correctly.
             let mut text_y = y + *pad_y;
             let mut number_counters = Vec::new();
-            for line in action_label_lines(text) {
+            let lines = action_label_lines(text);
+            for (idx, line) in lines.iter().enumerate() {
                 let line_baseline = text_render::label_first_baseline_ascent_with_family(
                     line,
                     *font_size,
                     font_family,
                 );
                 text_y += line_baseline;
+                let text_x = rect_x + *pad_x + action_line_x_offset(&lines, idx);
                 emit_action_line(
                     svg,
                     line,
                     &TextBase {
-                        x: rect_x + *pad_x,
+                        x: text_x,
                         y: text_y,
                         font_size: *font_size as u32,
                         font_family,
@@ -5531,7 +5557,7 @@ fn emit_if(
     // down the centre spine and the empty branch as a thin side corridor.
     if let Some(plan) = if_down_plan(then_branch, else_branches) {
         let then_label = then_label.as_deref();
-        let else_label = else_branches[0].label.as_deref();
+        let else_label = else_branches.first().and_then(|b| b.label.as_deref());
         return emit_if_down(svg, cx, y, condition, then_label, else_label, &plan);
     }
 
@@ -6058,6 +6084,13 @@ const IF_CORRIDOR_ARROW_OFFSET: f64 = 2.238769531250023;
 const IF_DOWN_LEFT_PAD: f64 = 9.0;
 /// Right corridor reservation past the diamond's right vertex.
 const IF_DOWN_RIGHT_PAD: f64 = 27.218200000000003;
+/// Minimum clearance between a wide populated branch and the empty side
+/// corridor in FtileIfDown.
+const IF_DOWN_BRANCH_CORRIDOR_GAP: f64 = 10.0;
+/// Extra right content extent after the empty side corridor. The
+/// diamond-based IF_DOWN_RIGHT_PAD includes this implicitly; branch-based
+/// corridors need it added explicitly for canvas width parity.
+const IF_DOWN_BRANCH_CORRIDOR_TRAILING_PAD: f64 = 15.0;
 /// Extra gap stretched onto the middle inter-action arrow of an even-action
 /// populated branch in the FtileIfDown layout.
 const IF_DOWN_MID_STRETCH: f64 = 15.0;
@@ -6284,7 +6317,8 @@ fn emit_if_down(
 
     // Empty corridor on the right: exit east vertex, run down, rejoin merge
     // east vertex with a left arrow. A mid-corridor down arrow marks flow.
-    let corridor_x = diamond_right + DIAMOND_HALF;
+    let corridor_x = (diamond_right + DIAMOND_HALF)
+        .max(cx + sequence_width(plan.populated) / 2.0 + IF_DOWN_BRANCH_CORRIDOR_GAP);
     let merge_right = cx + DIAMOND_HALF;
     // The corridor is a single PlantUML snake: exit-horizontal, then the
     // emphasised mid down-arrow, then the vertical run, the merge-horizontal,

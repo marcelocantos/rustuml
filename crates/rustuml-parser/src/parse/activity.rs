@@ -448,29 +448,30 @@ impl ActivityParser {
             return Ok(());
         }
 
-        // Handle action continuations. `\` joins the next action onto the
+        // Handle action continuations. `\` joins the next source line onto the
         // same label line; the other non-semicolon terminators (`| ] / > <`)
-        // start a second line when followed by an ordinary `:action`.
+        // start a second label line. PlantUML keeps consuming even
+        // control-looking lines (`else`, `fork again`) until the eventual
+        // `:action;` terminator.
         if let Some(partial) = self.continuation_text.take() {
-            let multiline = partial.ends_with('\n');
-            if !multiline || line.trim_start().starts_with(':') {
+            let mut combined = partial;
+            let closes = line.trim_start().starts_with(':')
+                && line.trim_end().ends_with(|c: char| ";|]/><\\".contains(c));
+            if closes {
                 // Strip trailing action terminator only (keep leading `:`
                 // intact so `:next action;` becomes `:next action` when
                 // appended).
                 let appended = line.trim_end_matches(|c: char| ";|]/><\\".contains(c));
-                let combined = format!("{}{}", partial, appended);
+                combined.push_str(appended);
                 self.steps.push(ActivityStep::Action(combined));
-                // After a continuation, the next action preserves its `:`
-                // prefix.
                 self.next_action_keep_colon = true;
                 return Ok(());
             }
 
-            // Control-keyword continuations (`else`, `fork again`, `}`) need
-            // a broader FTile parse model. Preserve the current action and
-            // let the keyword be parsed normally below.
-            self.steps
-                .push(ActivityStep::Action(partial.trim_end().to_string()));
+            combined.push_str(line);
+            combined.push('\n');
+            self.continuation_text = Some(combined);
+            return Ok(());
         }
 
         match line {
@@ -1114,14 +1115,23 @@ mod tests {
     }
 
     #[test]
-    fn bar_ended_action_before_control_keyword_stays_separate() {
+    fn bar_ended_action_before_control_keyword_keeps_accumulating() {
         let d = parse("start\nif (c?) then (yes)\n  :action|\nelse (no)\n  :alt;\nendif\nstop");
+        assert!(d.steps.iter().any(
+            |s| matches!(s, ActivityStep::Action(text) if text == "action|\nelse (no)\n:alt")
+        ));
+        assert!(!d.steps.iter().any(|s| matches!(s, ActivityStep::Else(_))));
+    }
+
+    #[test]
+    fn backslash_ended_action_joins_control_keyword_then_accumulates() {
+        let d = parse("start\nif (c?) then (yes)\n  :action\\\nelse (no)\n  :alt;\nendif\nstop");
         assert!(
-            d.steps
-                .iter()
-                .any(|s| matches!(s, ActivityStep::Action(text) if text == "action|"))
+            d.steps.iter().any(
+                |s| matches!(s, ActivityStep::Action(text) if text == "actionelse (no)\n:alt")
+            )
         );
-        assert!(d.steps.iter().any(|s| matches!(s, ActivityStep::Else(_))));
+        assert!(!d.steps.iter().any(|s| matches!(s, ActivityStep::Else(_))));
     }
 
     #[test]
