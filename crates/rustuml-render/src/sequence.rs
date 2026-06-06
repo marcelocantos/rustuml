@@ -5115,8 +5115,17 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
     //
     // We also need to consider min_gap_boxes for each pair (from Phase 3),
     // so compute that ahead of the constraint pass.
+    let shadow_preferred_width_extra = if sequence_shadowing {
+        SHADOW_LIVING_WIDTH_EXTRA
+    } else {
+        0.0
+    };
+    let participant_layout_halves: Vec<f64> = participants
+        .iter()
+        .map(|p| (p.box_width + shadow_preferred_width_extra) / 2.0)
+        .collect();
     let min_gap_boxes_for_pair = |i: usize| -> f64 {
-        participants[i].box_width / 2.0 + participants[i + 1].box_width / 2.0 + participant_box_gap
+        participant_layout_halves[i] + participant_layout_halves[i + 1] + participant_box_gap
     };
     for &(left, right, needed) in &multi_span_constraints {
         let mut cumulative = 0.0_f64;
@@ -5169,27 +5178,25 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
             0.0
         };
         let default_center =
-            HEAD_BOX_Y + participant_outer_padding + group_shift + participants[0].box_width / 2.0;
+            HEAD_BOX_Y + participant_outer_padding + group_shift + participant_layout_halves[0];
         participants[0].center_x = default_center.max(min_first_center_x);
-        participants[0].box_x = participants[0].center_x - participants[0].box_width / 2.0;
-        // PlantUML computes lifeline line x as box_x + (int)(box_width / 2)
+        participants[0].box_x = participants[0].center_x - participant_layout_halves[0];
+        // PlantUML computes lifeline line x as box_x + (int)(preferredWidth / 2)
         participants[0].lifeline_line_x =
-            participants[0].box_x + (participants[0].box_width / 2.0).floor();
+            participants[0].box_x + participant_layout_halves[0].floor();
 
         for i in 1..n {
             // Minimum center gap, including PlantUML's participant edge padding.
-            let min_gap_boxes = participants[i - 1].box_width / 2.0
-                + participants[i].box_width / 2.0
-                + participant_box_gap;
+            let min_gap_boxes = min_gap_boxes_for_pair(i - 1);
 
             // Gap from message labels
             let gap_from_labels = pair_max_label_width[i - 1];
 
             let gap = min_gap_boxes.max(gap_from_labels);
             participants[i].center_x = participants[i - 1].center_x + gap;
-            participants[i].box_x = participants[i].center_x - participants[i].box_width / 2.0;
+            participants[i].box_x = participants[i].center_x - participant_layout_halves[i];
             participants[i].lifeline_line_x =
-                participants[i].box_x + (participants[i].box_width / 2.0).floor();
+                participants[i].box_x + participant_layout_halves[i].floor();
         }
 
         // Titled participant boxes feed back into layout: when the title is
@@ -5474,12 +5481,6 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                 p.box_x += meta_shift;
                 p.lifeline_line_x += meta_shift;
             }
-        }
-    }
-    if sequence_shadowing {
-        for p in participants.iter_mut() {
-            p.center_x = p.box_x + (p.box_width + SHADOW_LIVING_WIDTH_EXTRA) / 2.0;
-            p.lifeline_line_x = p.box_x + ((p.box_width + SHADOW_LIVING_WIDTH_EXTRA) / 2.0).floor();
         }
     }
     if diagram.teoz {
