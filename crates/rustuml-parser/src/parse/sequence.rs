@@ -386,7 +386,7 @@ impl SeqParser {
             Regex::new(r"^\[([-<>.\\/ox]+)\s*(\w+)\s*(?:(?:\+\+|--|!!)\s*)?(?::\s*(.*))?$").unwrap()
         });
         static RE_OUT: LazyLock<Regex> = LazyLock::new(|| {
-            Regex::new(r"^(\w+)\s*([-<>.\\/ox]+)[\[\]]\s*(?:(?:\+\+|--|!!)\s*)?(?::\s*(.*))?$")
+            Regex::new(r"^(\w+)\s*([-<>.\\/ox]+)([\[\]])\s*(?:(?:\+\+|--|!!)\s*)?(?::\s*(.*))?$")
                 .unwrap()
         });
         let (_, stripped) = strip_arrow_color_annotation(line, &RE_COLOR);
@@ -411,10 +411,10 @@ impl SeqParser {
             let from = self.ensure_participant(&caps[1]);
             let mut arrow = parse_arrow(&caps[2]);
             arrow.direction = ArrowDirection::LeftToRight;
-            let label = message_label(line, caps.get(3));
+            let label = message_label(line, caps.get(4));
             self.events.push(Event::Message(Message {
                 from,
-                to: "]".to_string(),
+                to: caps[3].to_string(),
                 label,
                 arrow,
                 activation: None,
@@ -1238,6 +1238,19 @@ mod tests {
         if let Event::Message(m) = &d.events[0] {
             assert_eq!(m.from, "Alice");
             assert_eq!(m.to, "]");
+            assert_eq!(m.arrow.line, LineStyle::Dotted);
+        } else {
+            panic!("expected message");
+        }
+    }
+
+    #[test]
+    fn dotted_external_outgoing_left_arrow() {
+        let d = parse("Alice -->[ : lost left dotted");
+        if let Event::Message(m) = &d.events[0] {
+            assert_eq!(m.from, "Alice");
+            assert_eq!(m.to, "[");
+            assert_eq!(m.label, "lost left dotted");
             assert_eq!(m.arrow.line, LineStyle::Dotted);
         } else {
             panic!("expected message");

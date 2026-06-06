@@ -4625,8 +4625,9 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
     let mut activation_depth: HashMap<String, usize> = HashMap::new();
 
     // Track return stack during spacing phase to infer return from/to.
-    // Each entry: (activated_participant, sender)
+    // Each entry: (returned-from participant, returned-to participant).
     let mut spacing_return_stack: Vec<(String, String)> = Vec::new();
+    let mut spacing_last_return_pair: Option<(String, String)> = None;
 
     // Track autonumber state during spacing phase to compute bold label widths.
     // Driven entirely by `Event::Autonumber` directives in stream order.
@@ -4754,6 +4755,7 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                 }
 
                 // Update activation state from message's activation change
+                spacing_last_return_pair = Some((msg.to.clone(), msg.from.clone()));
                 if let Some(act) = &msg.activation {
                     match act {
                         ActivationChange::Activate => {
@@ -4778,10 +4780,16 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
             }
             Event::Return(ret) => {
                 // Return messages need spacing computation like regular messages.
-                // Pop the return stack to find from/to.
+                // Pop the activation return stack to find from/to; without an
+                // activation context, Java replies from the previous message's
+                // receiver to its sender.
                 // NOTE: compute spacing BEFORE deactivating — the return sender
                 // is still activated at the point the message arrow is drawn.
-                if let Some((ret_from, ret_to)) = spacing_return_stack.pop() {
+                let stack_entry = spacing_return_stack.pop();
+                if let Some((ret_from, ret_to)) = stack_entry
+                    .clone()
+                    .or_else(|| spacing_last_return_pair.clone())
+                {
                     let fi_opt = id_to_idx.get(ret_from.as_str()).copied();
                     let ti_opt = id_to_idx.get(ret_to.as_str()).copied();
                     if let (Some(fi), Some(ti)) = (fi_opt, ti_opt) {
@@ -4831,8 +4839,11 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                         }
                     }
 
-                    // Deactivate AFTER spacing computation
-                    if let Some(d) = activation_depth.get_mut(&ret_from) {
+                    // Deactivate AFTER spacing computation, but only when the
+                    // return consumed an activation context.
+                    if stack_entry.is_some()
+                        && let Some(d) = activation_depth.get_mut(&ret_from)
+                    {
                         *d = d.saturating_sub(1);
                     }
                 }
@@ -4877,10 +4888,21 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
             }
             Event::Activate(id, _) => {
                 *activation_depth.entry(id.clone()).or_default() += 1;
+                if let Some((ret_from, ret_to)) = spacing_last_return_pair.clone()
+                    && ret_from == *id
+                {
+                    spacing_return_stack.push((ret_from, ret_to));
+                }
             }
             Event::Deactivate(id) => {
                 if let Some(d) = activation_depth.get_mut(id) {
                     *d = d.saturating_sub(1);
+                }
+                if let Some(pos) = spacing_return_stack
+                    .iter()
+                    .rposition(|(ret_from, _)| ret_from == id)
+                {
+                    spacing_return_stack.remove(pos);
                 }
             }
             Event::Autonumber(cmd) => spacing_auto.apply(cmd),
@@ -5619,9 +5641,11 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
     {
         let mut active_depth: HashMap<String, usize> = HashMap::new();
         let mut return_stack: Vec<String> = Vec::new();
+        let mut last_return_from: Option<String> = None;
         for (idx, event) in diagram.events.iter().enumerate() {
             match event {
                 Event::Message(msg) => {
+                    last_return_from = Some(msg.to.clone());
                     if let Some(act) = &msg.activation {
                         match act {
                             ActivationChange::Activate => {
@@ -5655,6 +5679,9 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                 }
                 Event::Activate(id, _) => {
                     *active_depth.entry(id.clone()).or_default() += 1;
+                    if last_return_from.as_deref() == Some(id.as_str()) {
+                        return_stack.push(id.clone());
+                    }
                 }
                 Event::Deactivate(id) => {
                     if let Some(d) = active_depth.get_mut(id) {
@@ -7470,9 +7497,10 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
     // Track activation depth during message rendering to adjust arrow positions.
     let mut render_activation: HashMap<String, usize> = HashMap::new();
 
-    // Return stack: tracks (activated_participant, activating_sender) for `return` keyword.
-    // Return stack: (activated_participant, sender, is_open_arrow)
+    // Return stack: tracks activation-backed `return` targets as
+    // (returned-from participant, returned-to participant, is_open_arrow).
     let mut return_stack: Vec<(String, String, bool)> = Vec::new();
+    let mut last_return_pair: Option<(String, String, bool)> = None;
 
     let events = &diagram.events;
     let mut lost_label_width_by_from: HashMap<&str, f64> = HashMap::new();
@@ -7581,7 +7609,7 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                 // participant (the virtual "[" / "]" has no uid).
                 let (from_uid, to_uid) = if msg.from == "[" {
                     (to_uid.clone(), to_uid)
-                } else if msg.to == "]" {
+                } else if msg.to == "]" || msg.to == "[" {
                     (from_uid.clone(), from_uid)
                 } else {
                     (from_uid, to_uid)
@@ -8155,7 +8183,14 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                     .unwrap();
                 }
 
-                // Update activation state and return stack after this message
+                // Update activation state and return stack after this message.
+                // A bare `return` without activation replies from the previous
+                // message's receiver to its sender.
+                last_return_pair = Some((
+                    msg.to.clone(),
+                    msg.from.clone(),
+                    msg.arrow.head == ArrowHead::Open,
+                ));
                 if let Some(act) = &msg.activation {
                     match act {
                         ActivationChange::Activate => {
@@ -8198,12 +8233,17 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                     .as_ref()
                     .map(|(t, w, s)| (t.as_str(), *w, s));
 
-                // Pop the return stack to find from/to participants and arrow style
-                let (ret_from, ret_to, ret_open) = if let Some(entry) = return_stack.pop() {
+                // Pop the activation return stack to find from/to participants
+                // and arrow style. Without activation, fall back to the most
+                // recent concrete message.
+                let stack_entry = return_stack.pop();
+                let (ret_from, ret_to, ret_open) = if let Some(entry) = stack_entry.clone() {
                     // Deactivate the returned-from participant
                     if let Some(d) = render_activation.get_mut(&entry.0) {
                         *d = d.saturating_sub(1);
                     }
+                    entry
+                } else if let Some(entry) = last_return_pair.clone() {
                     entry
                 } else {
                     // Fallback if no activation context
@@ -9333,10 +9373,21 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
             Event::Activate(id, _) => {
                 // Track activation state for message rendering
                 *render_activation.entry(id.clone()).or_default() += 1;
+                if let Some((ret_from, ret_to, ret_open)) = last_return_pair.clone()
+                    && ret_from == *id
+                {
+                    return_stack.push((ret_from, ret_to, ret_open));
+                }
             }
             Event::Deactivate(id) => {
                 if let Some(d) = render_activation.get_mut(id) {
                     *d = d.saturating_sub(1);
+                }
+                if let Some(pos) = return_stack
+                    .iter()
+                    .rposition(|(ret_from, _, _)| ret_from == id)
+                {
+                    return_stack.remove(pos);
                 }
             }
             Event::Destroy(id) => {
