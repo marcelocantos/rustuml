@@ -367,9 +367,10 @@ targets:
     discovered: 2026-05-17
   T4.8:
     name: Deployment diagrams strict-XML pass
-    status: converging
+    status: achieved
     value: 0.0
     cost: 0.0
+    actual_cost: 1.0
     acceptance:
     - The `deployment/` directory under `test-diagrams/golden` produces 0 strict-XML failures when `cargo test --test golden_pairs` runs.
     context: |-
@@ -382,6 +383,7 @@ targets:
       Deferred: standalone boundary/control/entity + *_database/*_queue pairings — PlantUML renders these as SEQUENCE diagrams (participant lifelines), belong to sequence renderer. Cylinder cx 1-ULP (needs oracle true-centre; prior attempt regressed 18 nested cases). Italic stereotype font metrics («server» 56.90 vs 56.11) in plantuml_metrics.
     origin: manual
     discovered: 2026-05-17
+    achieved: 2026-06-07
   T4.9:
     name: Smaller diagram-type buckets strict-XML pass
     status: converging
