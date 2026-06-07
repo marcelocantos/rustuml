@@ -8586,10 +8586,15 @@ fn emit_switch_with_layout(
                 }
                 svg.connector_line(&arrow_color, bcx, bcx, split, cases_top, false);
                 switch_down_head(svg, &arrow_color, bcx, cases_top);
+                let label_x = if matches!(cases[i].body.first(), Some(LayoutNode::If { .. })) {
+                    diamond_cx
+                } else {
+                    bcx
+                };
                 switch_case_label(
                     svg,
                     &cases[i].label,
-                    bcx,
+                    label_x,
                     cases_top - SWITCH_LABEL_CENTER_DY,
                 );
             }
