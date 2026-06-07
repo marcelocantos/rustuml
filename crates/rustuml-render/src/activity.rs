@@ -49,6 +49,10 @@ const GROUP_IF_BODY_WIDTH_EXTRA: f64 = 4.0;
 const PARTITION_IF_LEFT_EXTENT_EXTRA: f64 = 3.3238;
 const PARTITION_IF_RIGHT_EXTENT_EXTRA: f64 = 2.3471;
 const PARTITION_IF_BODY_WIDTH_EXTRA: f64 = 5.6709;
+const PARTITION_GEOMETRIC_IF_SHELL_PAD: f64 = GROUP_IF_BODY_WIDTH_EXTRA / 2.0;
+const PARTITION_GEOMETRIC_IF_SHALLOW_LEFT_ADJUST: f64 = 0.4092;
+const PARTITION_GEOMETRIC_IF_SHALLOW_ADJUST_MIN_W: f64 = 150.0;
+const PARTITION_GEOMETRIC_IF_DEEP_LEFT_ADJUST: f64 = -9.0;
 const GROUP_REPEAT_BODY_WIDTH_SUBTRACT: f64 = 1.0;
 const GROUP_REPEAT_TITLE_WIDTH_EXTRA: f64 = 15.0;
 const GROUP_REPEAT_SPINE_LEFT_OF_TITLE_MID: f64 = 2.0;
@@ -3856,6 +3860,15 @@ fn node_extents(node: &LayoutNode) -> (f64, f64) {
                         + title_width_extra,
                 );
             }
+            if !*is_group
+                && !title_drives_width
+                && let Some((geometry, left_adjust)) = partition_wrapped_geometric_if(body)
+            {
+                return (
+                    geometry.left + PARTITION_GEOMETRIC_IF_SHELL_PAD + left_adjust,
+                    geometry.right() + PARTITION_GEOMETRIC_IF_SHELL_PAD,
+                );
+            }
             let (mut left, mut right) = if !title_drives_width
                 && (partition_wraps_switch(body) || partition_body_has_direct_note(body))
             {
@@ -4221,10 +4234,8 @@ fn node_width(node: &LayoutNode) -> f64 {
             if body.is_empty() {
                 return title_w + 20.0;
             }
-            let body_w = partition_body_width_for_frame(body);
-            let body_width_extra = partition_body_width_extra(*is_group, body);
             let title_width_extra = partition_title_width_extra(color, *is_group, body);
-            (title_w + 15.0 + title_width_extra).max(body_w + 20.0 + body_width_extra)
+            (title_w + 15.0 + title_width_extra).max(partition_body_shell_width(*is_group, body))
         }
         // Swimlanes: sum of per-lane widths. Each lane width is the wider
         // of its content_w + 10 (6 left + 4 right padding inside the lane)
@@ -4694,6 +4705,24 @@ fn partition_wraps_min_width_if(body: &[LayoutNode]) -> bool {
     ) <= DIAMOND_MIN_INNER_W
 }
 
+fn partition_wrapped_geometric_if(body: &[LayoutNode]) -> Option<(ftile::FtileGeometry, f64)> {
+    if partition_wraps_min_width_if(body) {
+        return None;
+    }
+    let [node @ LayoutNode::If { .. }] = body else {
+        return None;
+    };
+    let geometry = node_geometry(node)?;
+    let left_adjust = if node_if_depth(node) >= 3 {
+        PARTITION_GEOMETRIC_IF_DEEP_LEFT_ADJUST
+    } else if geometry.width >= PARTITION_GEOMETRIC_IF_SHALLOW_ADJUST_MIN_W {
+        PARTITION_GEOMETRIC_IF_SHALLOW_LEFT_ADJUST
+    } else {
+        0.0
+    };
+    Some((geometry, left_adjust))
+}
+
 fn while_body_is_single_if(body: &[LayoutNode]) -> bool {
     matches!(body, [LayoutNode::If { .. }])
 }
@@ -4788,6 +4817,14 @@ fn partition_body_width_extra(is_group: bool, body: &[LayoutNode]) -> f64 {
     }
 }
 
+fn partition_body_shell_width(is_group: bool, body: &[LayoutNode]) -> f64 {
+    if !is_group && let Some((geometry, left_adjust)) = partition_wrapped_geometric_if(body) {
+        geometry.width + GROUP_IF_BODY_WIDTH_EXTRA + left_adjust
+    } else {
+        partition_body_width_for_frame(body) + 20.0 + partition_body_width_extra(is_group, body)
+    }
+}
+
 fn partition_title_width_extra(color: &Option<String>, is_group: bool, body: &[LayoutNode]) -> f64 {
     if is_group && color.is_some() && !group_wraps_single_if(body) {
         GROUP_COLOR_TITLE_WIDTH_EXTRA
@@ -4803,8 +4840,12 @@ fn partition_title_drives_width(
     is_group: bool,
     body: &[LayoutNode],
 ) -> bool {
-    let body_width_extra = partition_body_width_extra(is_group, body);
-    title_w + 15.0 + title_width_extra >= body_w + 20.0 + body_width_extra
+    let body_shell_width = if !is_group && partition_wrapped_geometric_if(body).is_some() {
+        partition_body_shell_width(is_group, body)
+    } else {
+        body_w + 20.0 + partition_body_width_extra(is_group, body)
+    };
+    title_w + 15.0 + title_width_extra >= body_shell_width
 }
 
 fn partition_top_gap(
@@ -6967,14 +7008,14 @@ fn emit_node_with_repeat_extra(
             let title_w = partition_title_width(name);
             let empty_body = body.is_empty();
             let body_w = partition_body_width_for_frame(body);
-            let body_width_extra = partition_body_width_extra(*is_group, body);
             let title_width_extra = partition_title_width_extra(color, *is_group, body);
             let title_drives_width =
                 partition_title_drives_width(title_w, body_w, title_width_extra, *is_group, body);
             let partition_w = if empty_body {
                 title_w + 20.0
             } else {
-                (title_w + 15.0 + title_width_extra).max(body_w + 20.0 + body_width_extra)
+                (title_w + 15.0 + title_width_extra)
+                    .max(partition_body_shell_width(*is_group, body))
             };
             let partition_x = if *single_lane_group || empty_body {
                 cx - partition_w / 2.0
