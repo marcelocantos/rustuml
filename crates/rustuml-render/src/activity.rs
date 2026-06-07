@@ -46,6 +46,9 @@ const LABELED_ARROW_LEN: f64 = 41.2754;
 const GROUP_IF_LEFT_EXTENT_EXTRA: f64 = 3.0107;
 const GROUP_IF_RIGHT_EXTENT_EXTRA: f64 = 0.9893;
 const GROUP_IF_BODY_WIDTH_EXTRA: f64 = 4.0;
+const GROUP_REPEAT_BODY_WIDTH_SUBTRACT: f64 = 1.0;
+const GROUP_REPEAT_TITLE_WIDTH_EXTRA: f64 = 15.0;
+const GROUP_REPEAT_SPINE_LEFT_OF_TITLE_MID: f64 = 2.0;
 const GROUP_COLOR_TITLE_WIDTH_EXTRA: f64 = 4.1572;
 const GROUP_COLOR_RIGHT_EXTENT_EXTRA: f64 = 2.0;
 const PARTITION_FORK_WIDTH_EXTRA: f64 = 2.0;
@@ -77,6 +80,7 @@ const WHILE_BODY_SLOT_COMPRESS: f64 = 4.8203125;
 const PARTITION_COLORED_WHILE_SPINE_SHIFT: f64 = 1.5;
 const PARTITION_COLORED_WHILE_EXIT_ARROW_PULL_UP: f64 = WHILE_BODY_SLOT_COMPRESS / 2.0 - 1.0;
 const PARTITION_WHILE_WIDTH_SUBTRACT: f64 = 16.0;
+const PARTITION_REPEAT_WIDTH_SUBTRACT: f64 = 18.0;
 const WHILE_SINGLE_IF_RIGHT_PAD: f64 = 2.0;
 const WHILE_SINGLE_IF_SPECIAL_HEIGHT_TRIM: f64 = 1.0;
 /// PlantUML enforces a minimum width on the inner (top/bottom) edge of
@@ -3839,6 +3843,16 @@ fn node_extents(node: &LayoutNode) -> (f64, f64) {
                 let half = (body_w + 20.0 + body_width_extra) / 2.0;
                 return (half, half);
             }
+            if *is_group && partition_wraps_repeat(body) && title_drives_width {
+                let title_half = title_w / 2.0;
+                return (
+                    title_half - GROUP_REPEAT_SPINE_LEFT_OF_TITLE_MID,
+                    title_half
+                        + GROUP_REPEAT_TITLE_WIDTH_EXTRA
+                        + GROUP_REPEAT_SPINE_LEFT_OF_TITLE_MID
+                        + title_width_extra,
+                );
+            }
             let (mut left, mut right) = if !title_drives_width
                 && (partition_wraps_switch(body) || partition_body_has_direct_note(body))
             {
@@ -3857,6 +3871,9 @@ fn node_extents(node: &LayoutNode) -> (f64, f64) {
             if !*is_group && color.is_some() && partition_wraps_while(body) && title_drives_width {
                 left += PARTITION_COLORED_WHILE_SPINE_SHIFT;
                 right -= PARTITION_COLORED_WHILE_SPINE_SHIFT;
+            }
+            if !*is_group && partition_wraps_repeat(body) && !title_drives_width {
+                left -= PARTITION_REPEAT_WIDTH_SUBTRACT;
             }
             if (*is_group && group_wraps_single_if(body))
                 || (!*is_group && partition_wraps_single_if(body))
@@ -4568,6 +4585,10 @@ fn partition_wraps_switch(body: &[LayoutNode]) -> bool {
     matches!(body, [LayoutNode::Switch { .. }])
 }
 
+fn partition_wraps_repeat(body: &[LayoutNode]) -> bool {
+    matches!(body, [LayoutNode::Repeat { .. }])
+}
+
 fn tiny_action_branch(branch: &[LayoutNode]) -> bool {
     matches!(
         branch,
@@ -4716,10 +4737,14 @@ fn empty_partition_shell_height() -> f64 {
 fn partition_body_width_extra(is_group: bool, body: &[LayoutNode]) -> f64 {
     if !is_group && partition_wraps_while(body) {
         -PARTITION_WHILE_WIDTH_SUBTRACT
+    } else if !is_group && partition_wraps_repeat(body) {
+        -PARTITION_REPEAT_WIDTH_SUBTRACT
     } else if !is_group && partition_wraps_tiny_action_fork(body) {
         PARTITION_FORK_WIDTH_EXTRA
     } else if !is_group && partition_wraps_single_if(body) {
         GROUP_IF_BODY_WIDTH_EXTRA
+    } else if is_group && partition_wraps_repeat(body) {
+        -GROUP_REPEAT_BODY_WIDTH_SUBTRACT
     } else if is_group && group_wraps_single_if(body) {
         GROUP_IF_BODY_WIDTH_EXTRA
     } else {
@@ -6917,9 +6942,9 @@ fn emit_node_with_repeat_extra(
             };
             let partition_x = if *single_lane_group || empty_body {
                 cx - partition_w / 2.0
-            } else if !*is_group && partition_wraps_single_if(body) {
-                16.0
-            } else if !*is_group && partition_wraps_tiny_action_fork(body) {
+            } else if !*is_group
+                && (partition_wraps_single_if(body) || partition_wraps_tiny_action_fork(body))
+            {
                 16.0
             } else if (*is_group && *nested) || (!*is_group && !title_drives_width) {
                 (cx - partition_w / 2.0).max(16.0)
