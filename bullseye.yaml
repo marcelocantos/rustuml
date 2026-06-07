@@ -100,7 +100,10 @@ targets:
     - Representative no-oracle CLI smoke inputs for diagram families that use `render_svg_with_oracle` in golden tests produce non-empty SVG bodies with the expected visible labels, starting with `test-diagrams/golden/deployment/deploy_with_title.puml`.
     - No production renderer falls back to a bare empty placeholder SVG for a parsed non-empty diagram unless that diagram type is explicitly documented as unsupported and excluded from release claims.
     - A regression test or smoke script exercises at least deployment plus one nested JSON/YAML case through `rustuml -tsvg` without passing golden-derived oracle data.
-    context: Discovered during a 2026-06-06 strategy review of 🎯T4. The strict golden harness passes `extract_oracle_layout(...)` into `rustuml_render::render_svg_with_oracle`, but the normal CLI path calls `render_svg_with_theme` and cannot receive a golden-derived oracle. A smoke check showed `cargo run -q -p rustuml -- -tsvg test-diagrams/golden/deployment/deploy_with_title.puml` emits an empty 100x50 DESCRIPTION SVG because `crates/rustuml-render/src/deployment.rs::render_no_oracle` is a minimal placeholder. This does not invalidate strict-XML parity work, but it means T4 alone is not a sufficient release-readiness signal for product rendering.
+    context: |-
+      Discovered during a 2026-06-06 strategy review of 🎯T4. The strict golden harness passes `extract_oracle_layout(...)` into `rustuml_render::render_svg_with_oracle`, but the normal CLI path calls `render_svg_with_theme` and cannot receive a golden-derived oracle. A smoke check showed `cargo run -q -p rustuml -- -tsvg test-diagrams/golden/deployment/deploy_with_title.puml` emits an empty 100x50 DESCRIPTION SVG because `crates/rustuml-render/src/deployment.rs::render_no_oracle` is a minimal placeholder. This does not invalidate strict-XML parity work, but it means T4 alone is not a sufficient release-readiness signal for product rendering.
+
+      Update 2026-06-07 (HEAD ae277a46): re-ran the normal CLI smoke during a strategy checkpoint. `cargo run -q -p rustuml -- -tsvg test-diagrams/golden/deployment/deploy_with_title.puml` still emits `<svg ... width="100px" height="50px" ...><defs/><g></g></svg>`: empty body confirmed. `cargo run -q -p rustuml -- -tsvg test-diagrams/golden/archimate/archimate_basic.puml` emits non-empty SVG with labels (`Customer`, `Reduce Costs`, `24h Availability`) but uses the simplified native grid renderer, not PlantUML Archimate glyph/layout parity. User explicitly stated no releases until they say so; keep this target as a release-readiness gate separate from 🎯T4 strict golden parity.
     tags:
     - release
     - product
@@ -154,8 +157,8 @@ targets:
     value: 0.0
     cost: 0.0
     acceptance:
-    - '`cargo test --test golden_pairs` reports 0 failures across all 12,568 golden pairs.'
-    - 'Skips remain bounded to the legitimate categories: Java reference is itself a syntax-error page (~1,199), ditaa raster diagrams (parked under T2), and I/O errors. No skips for `%date(...)`, no skips for unsupported keywords, no skips for parse failures.'
+    - '`cargo test --test golden_pairs --release` reports 0 failures across 12,546 total golden pairs.'
+    - 'Skips remain bounded to legitimate categories: Java reference syntax/error pages, ditaa raster diagrams parked under 🎯T2, and true I/O errors. No skips for `%date(...)`, unsupported keywords, or parse failures.'
     context: |-
       Strict-XML golden-pair parity, semantic PORT (licensing 🎯T7). COMPARATOR (2026-05-31): parking RETIRED; compare_svg_strict tolerates ULP_GEOM_ATTRS coords within compare::GEOM_EPS=0.02px (skeleton-exact), all else byte-exact. ulp_parked.txt empty. Don't reintroduce parking.
 
@@ -171,6 +174,8 @@ targets:
       REFRAME: goldens = real dot-15.0.0 (vendored 14.1.5); dot-bucket oracle dependency is a version bridge; dot-15-match could remove it for class/state/component/json but NOT the giants.
 
       NEXT PHASE (dedicated, not quick-grind): (a) inline FTile/sequence-engine porting with the recipes above; (b) shared font-default subsystem → then theme cascade; (c) dot-15 match for dot buckets; (d) agree ceiling for sprite/archimate/cloud/FP. The +465 branch is clean + PR-ready now.
+
+      Update 2026-06-07 (Codex strategy checkpoint, HEAD ae277a46): current authoritative ledger is `test-diagrams/golden_failure_names.txt` from the latest full suite: 12,546 total · 10,942 pass · 305 fail · 1,299 skipped · 0 panics. Failure distribution: 222 activity, 48 archimate, 21 sequence, 7 combo, 5 edge-cases, 2 rendering. The `bucket_diff_signatures` example is useful qualitatively but does not exactly match the full-suite skip/filter ledger (it reported 254 activity vs 222 authoritative), so use the failure-names file for scoreboard math. Recommendation: stay on 🎯T4, but focus next on 🎯T4.1 activity; most non-activity tails are either Teoz group/control-flow or combo/edge cases likely to shrink as activity improves. Keep 🎯T10 separate: strict-XML parity is not the same as product/no-oracle renderer readiness. `/cv` currently recommends `/release` due unreleased fixes, but the user explicitly instructed no releases until they say so; suppress release actions.
     origin: manual
     discovered: 2026-05-17
     achieved: 2026-05-23
@@ -195,6 +200,8 @@ targets:
       - backward action: no-op at activity.rs ~738; needs backward box on repeat loop-back arm (COUNT gap).
       - floating note (act_floating_note_*): parser-level — `floating note left #color: text` not rendered as a note at all.
       NOTE: deprecated-action XML escaping is already correct on master (verified valid XML); not a real bug.
+
+      Update 2026-06-07 (HEAD ae277a46): authoritative full-suite ledger now has 222 `activity/` failures. Filename-token distribution from `test-diagrams/golden_failure_names.txt`: while 89, if 85, fork 44, repeat 28, switch 23, swimlane 21, combo 20, complex 16, break 13, detach 8, kill 6, backward 4, note 1. Representative sampled sources before handoff: `act_break_repeat_early`, `act_break_while_early`, `act_detach_in_while`, `act_kill_in_while`, `act_backward_in_swimlane`, `act_combo_if_while_1`. `bucket_diff_signatures activity` reported common first-diff buckets around canvas attr mismatches and element-count gaps, but it counts 254 activity failures because it does not exactly mirror golden_pairs filtering; use it for signatures only. Next recommended work: start with a bounded structural feature inside activity rather than constants, probably break/detach/kill/backward flow handling inside while/repeat/fork or nested-if/fork width propagation. Use `cargo run --release -p rustuml-oracle --example diff_one -- test-diagrams/golden/activity/<case>.puml` for focused diffs, then a full `cargo test --test golden_pairs --release` plus `comm` against the 305-failure baseline before committing.
     origin: manual
     discovered: 2026-05-17
   T4.10:
@@ -297,6 +304,8 @@ targets:
       - note-over-FIRST-participant rounding: genuinely no single floor/round/trunc rule. Java uses a two-pass missingSpace/pushToLeft constraint solver over integer-truncated note startX + global left margin. Needs the full solver.
       - divider bold-text-width LSB (~several): off 0.0001 (124.9316 vs .9317) in shared plantuml_metrics bold char tables.
       - `||N||` vertical space + `...` delay: elements not fully rendered (COUNT).
+
+      Update 2026-06-07 (HEAD ae277a46): authoritative full-suite ledger has 21 `sequence/` failures. Recent commits since the 305-checkpoint push sequence from the simple Teoz vein: `bacd8c9e` standalone Teoz right notes, `e969a86a` first Teoz over notes, `5bef6952` Teoz activation bar order, `0d0e850a` Teoz activation target spacing, `5cd862f9` Teoz over-several notes, `3456c755` Teoz over-several hnote/rnote, `ae277a46` simple Teoz participant boxes. Remaining Teoz failures after that are deeper group/control-flow cases, not simple coordinate-only: `seq_teoz_3parts_groups`, `seq_teoz_4parts_groups`, `seq_teoz_5parts_groups`, `seq_teoz_box_alt`, `seq_teoz_box_loop`, `seq_teoz_box_opt`, `seq_teoz_with_groups`, plus scenario Teoz combos (`seq_scenario_cache_pattern_teoz`, `seq_scenario_event_sourcing_teoz`, `seq_scenario_file_upload_teoz`, `seq_scenario_login_flow_teoz`, `seq_scenario_saga_pattern_teoz`). Sampled `seq_teoz_with_groups` and `seq_teoz_3parts_groups`: element count is off by +1, canvas dimensions differ by ~30px, and mismatches begin around group frame vs lifelines/heads; labels differ semantically (`[ok]` expected 11pt bold vs actual `alt` 13pt in one sample). Recommendation: do not keep micro-tweaking Teoz unless taking on the group/control-flow model. Sequence tail also includes broad combo/kitchen-sink/retry/timeout cases; activity is the larger next lever.
     origin: manual
     discovered: 2026-05-17
   T4.4:
@@ -365,6 +374,8 @@ targets:
       Edge-case diagrams strict-XML pass. Current: 22 failures remaining (out of 581 baseline). Most edge-cases resolved as side effects of per-bucket verbatim replay. Remaining are likely truly cross-cutting cases (multi-block files, headerless input, unusual whitespace).
 
       Reverted 2026-05-23: Edge-cases bucket was cleared by cascade from replayed renderers. Replay disabled in f6500c8d; bucket back to 364 failures.
+
+      Update 2026-06-07 (HEAD ae277a46): authoritative full-suite ledger has 5 `edge-cases/` failures: `edge_activity_comprehensive`, `edge_activity_if_elseif`, `edge_activity_while_break`, `edge_activity_while_infinite`, and `edge_flow_multiple_forks`. These are all activity-shaped, so the recommended path is to let 🎯T4.1 activity work shrink this bucket rather than treating edge-cases as an independent first move.
     origin: manual
     discovered: 2026-05-17
   T4.8:
@@ -400,7 +411,7 @@ targets:
       - ebnf 0 (was 25): same ETile port (ETileBox/Concatenation/Alternation/Optional2/OneOrMore/ZeroOrMore/WithCircles + special-sequence dashed boxes); deleted root_g_inner_xml replay.
       - chart 0 (was 25): @startboard is a degenerate two-row WBS grid of 150x70 shadowed boxes (NOT columns-of-cards); rewrote parser model + renderer, computed grid + font metrics, shadow-id seed = 'f'+base36(plantuml_seed) via new filter_registry::shadow_id_for helper.
 
-      STILL OPEN:
+      STILL OPEN (historical 2026-05 notes, partially superseded by later work):
       - preprocessing 200: 83 ELEMCOUNT + 63 SVGBG (svg.rs:38 hardcodes background:#FFFFFF; themes want transparent + fractional dims — renderer theme-cascade work) + 22 SRCLINE (!while/!foreach loop-body elements share one source line — needs per-line source map) + sub-pixel.
       - sprites 48: ~47 sprite_variant_* need a SpriteMonochrome gradient encoder + byte-exact bilinear scaler (all variants are interpolated). Standalone effort.
       - archimate 48: PARKED — agent's 48→0 rejected (structured attribute-echo replay); real fix needs PlantUML archimate sprite glyph library + Graphviz-matching layout.
@@ -408,6 +419,8 @@ targets:
       - links 49, rendering 24, type-detection 13, multi-diagram 10, math 10, object 1 (object largely 🎯T4.11-inflated). Dot likely unmatchable (native Graphviz goldens).
 
       Progress 2026-06-05: cleared the last `type-detection/` and `multi-diagram/` failures. Fixes: meta-only `title`/`header` detection now defaults to CLASS only when no stronger UML signal exists; `allowmixing` class diagrams parse/render `state` declarations as state-shaped entities; sequence chrome emits `header` before `title` and offsets title baselines by the header band; top-level procedure calls pad source-line placeholders after body expansion so following block lines keep their absolute file line while expanded procedure body lines keep their definition lines. Full re-measure: 12,546 total · 9,852 pass · 1,395 fail · 1,299 skipped; failure breakdown no longer includes `type-detection/` or `multi-diagram/`.
+
+      Update 2026-06-07 (HEAD ae277a46): authoritative full-suite ledger for the smaller buckets is now 48 archimate, 7 combo, 2 rendering. Current combo failures: `combo_all_decorations`, `combo_component_vs_deployment`, `combo_embedded_state_machine`, `combo_mixed_features`, `combo_sequence_everything`, `combo_state_everything`, `combo_workflow_swimlanes`; several are likely aggregates of activity/sequence/state/deployment behavior and should be rechecked after activity work. Rendering failures: `rendering/nesting/nesting_activity_nested_partitions` and `rendering/nesting/nesting_activity_partitions`, also activity-shaped. Archimate remains 48/48 failing under strict XML. Important: `crates/rustuml-oracle/src/extract.rs` explicitly disables root `<g>` verbatim capture (`if false` around `root_g_inner_xml`) because replaying golden body bytes was rejected as dishonest; the early `root_g_inner_xml` replay in `archimate::render_with_oracle` is dead. Normal CLI archimate rendering is non-empty but simplified grid output, not PlantUML sprite/layout parity. Real strict fix likely needs native Archimate sprite glyph library and Graphviz-matching layout; do not accept structured attribute/body echo as a shortcut.
     origin: manual
     discovered: 2026-05-17
   T5:
