@@ -1731,15 +1731,22 @@ fn over_several_note_geometry(
     hi: usize,
     component_pref_w: f64,
     content_visible_w: f64,
+    teoz: bool,
 ) -> OverSeveralNoteGeometry {
-    let participant_area_w =
-        participants[hi].box_x + participants[hi].box_width + PARTICIPANT_OUT_MARGIN
-            - participants[lo].box_x;
+    let participant_right = participants[hi].box_x
+        + participants[hi].box_width
+        + if teoz { 0.0 } else { PARTICIPANT_OUT_MARGIN };
+    let participant_area_w = participant_right - participants[lo].box_x;
     let area_width = component_pref_w.max(participant_area_w);
     let centre = (participants[lo].center_x + participants[hi].center_x) / 2.0;
     // Java `(int)` truncates toward zero; a near-zero negative left edge should
     // remain 0, not floor to -1 and force a whole-diagram shift.
-    let area_left = (centre - area_width / 2.0).trunc();
+    let raw_area_left = centre - area_width / 2.0;
+    let area_left = if teoz {
+        raw_area_left
+    } else {
+        raw_area_left.trunc()
+    };
     let visible_width = if area_width > component_pref_w {
         (area_width - 2.0 * ROSE_NOTE_PADDING_X).floor()
     } else {
@@ -6134,6 +6141,7 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                         hi,
                         component_pref_w,
                         content_visible_w,
+                        diagram.teoz,
                     )
                     .visible_left;
                     (HEAD_BOX_Y - note_left).max(0.0).floor()
@@ -7177,6 +7185,7 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                                 hi,
                                 component_pref_w,
                                 note_content_w,
+                                diagram.teoz,
                             );
                             geom.visible_left + geom.visible_width
                         } else {
@@ -7817,6 +7826,7 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                             hi,
                             component_pref_w,
                             note_content_w,
+                            diagram.teoz,
                         );
                         Some((geom.visible_left, geom.visible_left + geom.visible_width))
                     } else {
@@ -10143,6 +10153,7 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                                     hi,
                                     component_pref_w,
                                     note_content_w,
+                                    diagram.teoz,
                                 );
                                 (geom.visible_left, geom.visible_left + geom.visible_width)
                             } else {
@@ -10418,7 +10429,11 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                     // box_x; getMaxX = box_x + box_width + outMargin.
                     let area_w = participants[hi].box_x
                         + participants[hi].box_width
-                        + PARTICIPANT_OUT_MARGIN
+                        + if diagram.teoz {
+                            0.0
+                        } else {
+                            PARTICIPANT_OUT_MARGIN
+                        }
                         - participants[lo].box_x;
                     // ComponentRoseNote preferred (text-block) width for LEFT text.
                     let pref_w =
