@@ -374,6 +374,23 @@ fn note_content_width_raw(max_text_w: f64, shape: NoteShape) -> f64 {
     }
 }
 
+const NOTE_VISIBLE_RAW_MARGIN: f64 = 21.0;
+const HNOTE_VISIBLE_RAW_MARGIN: f64 = 24.0;
+const RNOTE_VISIBLE_RAW_MARGIN: f64 = 8.0;
+
+fn single_note_visible_raw_width(
+    max_text_w: f64,
+    shape: NoteShape,
+    note_global_padding: f64,
+) -> f64 {
+    let raw_margin = match shape {
+        NoteShape::Note => NOTE_VISIBLE_RAW_MARGIN,
+        NoteShape::Hexagonal => HNOTE_VISIBLE_RAW_MARGIN,
+        NoteShape::Rectangular => RNOTE_VISIBLE_RAW_MARGIN,
+    };
+    max_text_w + raw_margin + 2.0 * note_global_padding
+}
+
 fn aligned_note_content_width_raw(max_text_w: f64, shape: NoteShape, align: MessageAlign) -> f64 {
     let width = note_content_width_raw(max_text_w, shape);
     if align == MessageAlign::Center && shape == NoteShape::Note {
@@ -1695,6 +1712,11 @@ const ROSE_NOTE_PADDING_X: f64 = 5.0;
 /// the component's left/right layout padding.
 const ROSE_NOTE_COMPONENT_PREF_EXTRA: f64 =
     NOTE_TEXT_X_PAD + ROSE_NOTE_MARGIN_X2 + 2.0 * ROSE_NOTE_PADDING_X;
+/// Teoz's first-participant `note over` places the visible note body on this
+/// left edge before shifting participant centers to satisfy the note constraint.
+const TEOZ_FIRST_OVER_NOTE_LEFT: f64 = 15.0;
+/// Teoz participant boxes are shifted after the normal layout pass.
+const TEOZ_PARTICIPANT_SHIFT: f64 = 5.0;
 /// Horizontal indent of hexagonal note vertices from note edges.
 const HNOTE_INDENT: f64 = 10.0;
 
@@ -5848,10 +5870,17 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                     // `round(HEAD_BOX_Y + (raw_note_w - box_width) / 2)`. Using the
                     // ceiled width with `floor` here drops the sub-pixel fraction and
                     // mis-rounds the box left by 1px on many cases.
-                    let note_w = note_content_width_raw_padded(max_tw, note.shape, note_text_align);
                     let bw = participants[0].box_width;
-                    let box_left = (HEAD_BOX_Y + (note_w - bw) / 2.0).max(HEAD_BOX_Y).round();
-                    let min_cx = box_left + bw / 2.0;
+                    let min_cx = if diagram.teoz {
+                        let note_w =
+                            single_note_visible_raw_width(max_tw, note.shape, note_global_padding);
+                        TEOZ_FIRST_OVER_NOTE_LEFT - TEOZ_PARTICIPANT_SHIFT + note_w / 2.0
+                    } else {
+                        let note_w =
+                            note_content_width_raw_padded(max_tw, note.shape, note_text_align);
+                        let box_left = (HEAD_BOX_Y + (note_w - bw) / 2.0).max(HEAD_BOX_Y).round();
+                        box_left + bw / 2.0
+                    };
                     min_first_center_x = min_first_center_x.max(min_cx);
                 }
                 NotePosition::Left if first_part == Some(0) => {
@@ -6283,8 +6312,8 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
     }
     if diagram.teoz {
         for p in participants.iter_mut() {
-            p.center_x += 5.0;
-            p.box_x += 5.0;
+            p.center_x += TEOZ_PARTICIPANT_SHIFT;
+            p.box_x += TEOZ_PARTICIPANT_SHIFT;
             p.lifeline_line_x = p.center_x;
         }
     }
@@ -7759,12 +7788,8 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                     }
                 } else if note.participants.len() == 1 {
                     let cx = participants[*id_to_idx.get(note.participants[0].as_str())?].center_x;
-                    let raw_margin = match note.shape {
-                        NoteShape::Note => 21.0,
-                        NoteShape::Hexagonal => 24.0,
-                        NoteShape::Rectangular => 8.0,
-                    };
-                    let raw_w = max_text_w + raw_margin + 2.0 * note_global_padding;
+                    let raw_w =
+                        single_note_visible_raw_width(max_text_w, note.shape, note_global_padding);
                     let left = (cx - raw_w / 2.0).max(HEAD_BOX_Y).floor();
                     Some((left, left + note_content_w))
                 } else {
@@ -10055,12 +10080,11 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                             // hnote=12+12=24, rnote=4+4=8 (= note_content_width's
                             // additive constant + 1). The drawn box width stays
                             // note_content_w (= floor(rawW)).
-                            let raw_margin = match note.shape {
-                                NoteShape::Note => 21.0,
-                                NoteShape::Hexagonal => 24.0,
-                                NoteShape::Rectangular => 8.0,
-                            };
-                            let raw_w = max_text_w + raw_margin + 2.0 * note_global_padding;
+                            let raw_w = single_note_visible_raw_width(
+                                max_text_w,
+                                note.shape,
+                                note_global_padding,
+                            );
                             let left = (cx - raw_w / 2.0).max(HEAD_BOX_Y).floor();
                             (left, left + note_content_w)
                         } else {
