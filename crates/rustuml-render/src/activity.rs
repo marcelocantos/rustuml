@@ -2386,7 +2386,7 @@ struct SwitchXLayout {
 }
 
 fn switch_x_layout(cases: &[SwitchCase], condition: &str) -> SwitchXLayout {
-    let mut layout = switch_x_layout_with_small_gap(cases, condition, SWITCH_CASE_GAP);
+    let mut layout = switch_x_layout_with_small_gap(cases, condition, SWITCH_CASE_GAP, true);
     if !layout.big_diamond && switch_is_even_nested_if_cases(cases) {
         for center in layout.centers.iter_mut().skip(cases.len() / 2) {
             *center += SWITCH_IF_BRANCH_CASE_GAP;
@@ -2436,21 +2436,85 @@ fn switch_x_layout(cases: &[SwitchCase], condition: &str) -> SwitchXLayout {
 }
 
 fn switch_x_layout_if_branch(cases: &[SwitchCase], condition: &str) -> SwitchXLayout {
-    switch_x_layout_with_small_gap(cases, condition, SWITCH_IF_BRANCH_CASE_GAP)
+    if cases.len() >= 4 && !switch_case_block_is_big_diamond(cases, condition) {
+        return switch_x_layout_if_branch_packed(cases, condition);
+    }
+    switch_x_layout_with_small_gap(cases, condition, SWITCH_IF_BRANCH_CASE_GAP, cases.len() == 2)
 }
 
 fn switch_x_layout_if_branch_extents(cases: &[SwitchCase], condition: &str) -> SwitchXLayout {
+    // For four or more (non-big) cases the packed model already reflects the
+    // drawn block exactly, so the parent reserves it verbatim.
+    if cases.len() >= 4 && !switch_case_block_is_big_diamond(cases, condition) {
+        return switch_x_layout_if_branch_packed(cases, condition);
+    }
+    // Two- and three-case forms reserve a tighter width than the drawn block:
+    // the left-case clamp (emit pins case[0] to the canvas margin) eats into the
+    // nominal left half, so the parent must not reserve the full symmetric
+    // extent or the diagram drifts right. The reverse-engineered proxy uses a
+    // smaller inter-case gap to approximate that compression.
     let first_half = cases
         .first()
         .map_or(0.0, |case| switch_case_width(case) / 2.0);
     let spine_room = (DIAMOND_HALF * 2.0 - first_half).max(0.0);
-    switch_x_layout_with_small_gap(cases, condition, SWITCH_CASE_GAP + spine_room)
+    switch_x_layout_with_small_gap(cases, condition, SWITCH_CASE_GAP + spine_room, cases.len() == 2)
+}
+
+/// Returns whether the SMALL/BIG diamond test selects BIG mode for these cases.
+fn switch_case_block_is_big_diamond(cases: &[SwitchCase], condition: &str) -> bool {
+    switch_x_layout_with_small_gap(cases, condition, SWITCH_IF_BRANCH_CASE_GAP, false).big_diamond
+}
+
+/// Packed if/while/fork-branch switch layout for four or more SMALL-diamond
+/// cases. PlantUML lays the cases out as a uniform `xSeparation = 20`
+/// FtileSwitchNude, then the diagram-wide `CompressionXorYBuilder(ON_X)` pass
+/// squeezes the slack the left-case clamp opened up against the canvas margin:
+/// the gaps to the left of the centreline collapse to 10 while the centre gap
+/// and everything to its right keep the full 20. The merge/condition spine sits
+/// at the midpoint of the two central branches.
+fn switch_x_layout_if_branch_packed(cases: &[SwitchCase], condition: &str) -> SwitchXLayout {
+    let n = cases.len();
+    let tiles: Vec<SwitchCaseTile> = cases.iter().map(switch_case_tile).collect();
+    let diamond_w = diamond_inner_w(condition) + DIAMOND_HALF * 2.0;
+    let center = n / 2; // index of the first case at/after the centreline
+
+    let mut centers = vec![0.0f64; n];
+    let mut x = 0.0;
+    for i in 0..n {
+        centers[i] = x + tiles[i].left;
+        // Gaps strictly left of the centreline are compressed to SWITCH_CASE_GAP;
+        // the centre gap and all gaps to its right keep SWITCH_IF_BRANCH_CASE_GAP.
+        let gap = if i + 1 < center {
+            SWITCH_CASE_GAP
+        } else {
+            SWITCH_IF_BRANCH_CASE_GAP
+        };
+        x += tiles[i].width + gap;
+    }
+    let block_w = x - SWITCH_IF_BRANCH_CASE_GAP;
+    let block_w = block_w.max(diamond_w).max(DIAMOND_HALF * 2.0);
+
+    // Spine = midpoint of the two central branches (even n) or the central
+    // branch itself (odd n).
+    let diamond_dx = if n.is_multiple_of(2) {
+        (centers[center - 1] + centers[center]) / 2.0
+    } else {
+        centers[center]
+    };
+
+    SwitchXLayout {
+        centers,
+        block_w,
+        diamond_dx,
+        big_diamond: false,
+    }
 }
 
 fn switch_x_layout_with_small_gap(
     cases: &[SwitchCase],
     condition: &str,
     small_case_gap: f64,
+    add_center_gap: bool,
 ) -> SwitchXLayout {
     let n = cases.len();
     let tiles: Vec<SwitchCaseTile> = cases.iter().map(switch_case_tile).collect();
@@ -2512,7 +2576,7 @@ fn switch_x_layout_with_small_gap(
         let mut centers = vec![0.0f64; n];
         let mut x = 0.0;
         for i in 0..n {
-            if n.is_multiple_of(2) && i == n / 2 {
+            if add_center_gap && n.is_multiple_of(2) && i == n / 2 {
                 x += case_gap;
             }
             centers[i] = x + tiles[i].left;
@@ -8780,10 +8844,15 @@ fn emit_switch_with_layout(
                 svg.connector_line(&arrow_color, diamond_cx, bcx, split, split, false);
                 svg.connector_line(&arrow_color, bcx, bcx, split, cases_top, false);
                 switch_down_head(svg, &arrow_color, bcx, cases_top);
+                // The branch label is positioned at the corridor snake's
+                // leftmost x (PlantUML Snake.getTextBlockPosition,
+                // VerticalAlignment.CENTER → x = worm.getMinX()): a branch that
+                // jogs left of the spine anchors at its own centre, one that
+                // jogs right anchors at the spine.
                 switch_case_label(
                     svg,
                     &cases[i].label,
-                    diamond_cx,
+                    bcx.min(diamond_cx),
                     cases_top - SWITCH_LABEL_CENTER_DY,
                 );
             }
