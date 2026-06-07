@@ -8444,25 +8444,36 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
             event_y(bar.end_event_idx) + self_deactivation_end_offset(bar.end_event_idx)
         }
     };
-
-    // First pass: activation bars (rendered twice in PlantUML's SVG)
-    for bar in &activation_bars {
+    let draw_activation_bar = |svg: &mut PlantUmlSvg, bar: &ActivationBar| {
         let cx = center_of(&bar.participant_id);
         let bar_x = cx - ACTIVATION_HALF_W + (bar.depth as f64 * ACTIVATION_HALF_W);
-        let bar_y = bar_start_y(bar);
-        let bar_end_y = bar_end_y(bar);
+        let teoz_y_offset = if diagram.teoz { -2.0 } else { 0.0 };
+        let bar_y = bar_start_y(bar) + teoz_y_offset;
+        let bar_end_y = bar_end_y(bar) + teoz_y_offset;
         let bar_h = bar_end_y - bar_y;
-        let title = &participants
-            .iter()
-            .find(|p| p.id == bar.participant_id)
-            .map(|p| p.label.clone())
-            .unwrap_or_default();
+        let title = if diagram.teoz {
+            ""
+        } else {
+            participants
+                .iter()
+                .find(|p| p.id == bar.participant_id)
+                .map(|p| p.label.as_str())
+                .unwrap_or("")
+        };
         let fill_color = bar
             .color
             .as_ref()
             .map(|c| resolve_color(c))
             .unwrap_or_else(|| lifeline_background.clone());
         svg.activation_bar(title, bar_x, bar_y, bar_h, &fill_color);
+    };
+
+    // First pass: standard sequence SVG renders activation bars twice. Teoz keeps
+    // only the later pass after participant heads.
+    if !diagram.teoz {
+        for bar in &activation_bars {
+            draw_activation_bar(&mut svg, bar);
+        }
     }
 
     // Group frame rects (first instance) — rendered after first activation bars pass.
@@ -8527,6 +8538,14 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
             lifeline_bottom,
             &delay_bands,
         );
+        if diagram.teoz {
+            for bar in activation_bars
+                .iter()
+                .filter(|bar| bar.participant_id == p.id)
+            {
+                draw_activation_bar(&mut svg, bar);
+            }
+        }
     }
 
     let mut message_inside_group: HashMap<usize, bool> = HashMap::new();
@@ -8697,24 +8716,12 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
         }
     }
 
-    // Second pass: activation bars again (PlantUML renders them twice)
-    for bar in &activation_bars {
-        let cx = center_of(&bar.participant_id);
-        let bar_x = cx - ACTIVATION_HALF_W + (bar.depth as f64 * ACTIVATION_HALF_W);
-        let bar_y = bar_start_y(bar);
-        let bar_end_y = bar_end_y(bar);
-        let bar_h = bar_end_y - bar_y;
-        let title = &participants
-            .iter()
-            .find(|p| p.id == bar.participant_id)
-            .map(|p| p.label.clone())
-            .unwrap_or_default();
-        let fill_color = bar
-            .color
-            .as_ref()
-            .map(|c| resolve_color(c))
-            .unwrap_or_else(|| lifeline_background.clone());
-        svg.activation_bar(title, bar_x, bar_y, bar_h, &fill_color);
+    // Second pass: standard sequence SVG renders activation bars again after
+    // participant heads; Teoz already emitted them inline with lifelines.
+    if !diagram.teoz {
+        for bar in &activation_bars {
+            draw_activation_bar(&mut svg, bar);
+        }
     }
 
     // Messages — use pre-computed y positions from event_y_positions
@@ -9356,8 +9363,17 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                         } else {
                             tip_x + FILLED_ARROW_NOTCH
                         };
-                        // PlantUML draws the left-going line to from edge - 1
-                        let line_x2_end = from_x_shifted - 1.0;
+                        // PlantUML draws the left-going line to from edge - 1.
+                        // In Teoz, a deactivation return leaves from the source
+                        // activation bar's left edge instead of the lifeline center.
+                        let line_x2_end = if diagram.teoz
+                            && matches!(msg.activation, Some(ActivationChange::Deactivate))
+                            && from_existing_depth > 0
+                        {
+                            from_x - ACTIVATION_HALF_W - 1.0
+                        } else {
+                            from_x_shifted - 1.0
+                        };
 
                         if is_cross {
                             // x<-: cross 6px to the right of the filled tip.
