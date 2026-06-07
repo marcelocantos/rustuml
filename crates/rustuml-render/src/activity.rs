@@ -2291,6 +2291,13 @@ fn switch_is_even_mixed_empty_pair(cases: &[SwitchCase]) -> bool {
             && fourth.body.is_empty())
 }
 
+fn switch_is_even_nested_if_cases(cases: &[SwitchCase]) -> bool {
+    cases.len().is_multiple_of(2)
+        && cases
+            .iter()
+            .all(|case| matches!(case.body.first(), Some(LayoutNode::If { .. })))
+}
+
 /// PlantUML's `SUPP15` margin used by `FtileSwitchWithDiamonds` in
 /// BIG_DIAMOND mode (the horizontal padding either side of the diamond
 /// column between the first and last case tiles).
@@ -2317,6 +2324,13 @@ struct SwitchXLayout {
 
 fn switch_x_layout(cases: &[SwitchCase], condition: &str) -> SwitchXLayout {
     let mut layout = switch_x_layout_with_small_gap(cases, condition, SWITCH_CASE_GAP);
+    if !layout.big_diamond && switch_is_even_nested_if_cases(cases) {
+        for center in layout.centers.iter_mut().skip(cases.len() / 2) {
+            *center += SWITCH_IF_BRANCH_CASE_GAP;
+        }
+        layout.block_w += SWITCH_IF_BRANCH_CASE_GAP;
+        layout.diamond_dx += SWITCH_IF_BRANCH_CASE_GAP / 2.0;
+    }
     if switch_is_odd_alternating_mixed_empty(cases) {
         let mut centers = Vec::with_capacity(cases.len());
         let mut x = 0.0;
