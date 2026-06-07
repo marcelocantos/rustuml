@@ -1914,6 +1914,12 @@ const FORK_IF_BRANCH_EVEN_SPACING_EXTRA: f64 = 8.0;
 const FORK_IF_BRANCH_ODD_SPINE_SHIFT: f64 = -0.4175;
 const FORK_IF_BRANCH_EVEN_SPINE_SHIFT: f64 = 6.0;
 const FORK_MERGE_GAP: f64 = 10.0;
+/// Extra inter-tile gap inside a fork branch: PlantUML's assembly space is 35,
+/// versus the 20 px `ARROW_LEN` that compresses in ordinary sequences.
+const FORK_BRANCH_INTER_GAP_EXTRA: f64 = 15.0;
+/// Gap below the deepest branch to the join bar when every branch terminates
+/// (no ConnectionOut arrows reach the bar — half the usual ARROW_LEN reserve).
+const FORK_TERMINATING_JOIN_GAP: f64 = 10.0;
 
 fn node_if_depth(node: &LayoutNode) -> usize {
     match node {
@@ -4347,6 +4353,14 @@ fn node_width(node: &LayoutNode) -> f64 {
 
 /// Compute the height needed for a sequence of layout nodes.
 fn sequence_height(nodes: &[LayoutNode]) -> f64 {
+    sequence_height_ex(nodes, 0.0)
+}
+
+/// Like [`sequence_height`], but adds `gap_extra` to each plain inter-tile
+/// inbound gap — used for fork branches, whose assembly snakes are not
+/// compressed (see [`FORK_BRANCH_INTER_GAP_EXTRA`]). Mirrors `emit_sequence_ex`'s
+/// `fork_branch_gap_extra` handling so predicted and emitted heights agree.
+fn sequence_height_ex(nodes: &[LayoutNode], gap_extra: f64) -> f64 {
     let mut h = 0.0;
     let mut prior_flow = false;
     let mut prior_single_survivor_if = false;
@@ -4436,7 +4450,7 @@ fn sequence_height(nodes: &[LayoutNode]) -> f64 {
         if prior_flow && !skip_implicit_gap {
             h += pending_gap
                 .or(prior_outbound_gap)
-                .unwrap_or_else(|| default_inbound_gap(node))
+                .unwrap_or_else(|| default_inbound_gap(node) + gap_extra)
                 + note_inbound_extra;
         }
         pending_gap = None;
@@ -5089,7 +5103,38 @@ fn node_height(node: &LayoutNode) -> f64 {
             } else if fork_branches_are_single_partitions(branches) {
                 FORK_BAR_HEIGHT + max_h + ARROW_LEN + FORK_BAR_HEIGHT
             } else {
-                FORK_BAR_HEIGHT + ARROW_LEN + max_h + ARROW_LEN + FORK_BAR_HEIGHT
+                // Pure action/control-flow fork. Unequal branch heights keep
+                // the uncompressed 35 px assembly gap (compression can't reclaim
+                // the 15 px slack); equal heights compress to ARROW_LEN. When
+                // every branch terminates the join bar sits
+                // FORK_TERMINATING_JOIN_GAP below the deepest branch.
+                let nonempty: Vec<f64> = branches
+                    .iter()
+                    .filter(|b| !b.is_empty())
+                    .map(|b| sequence_height(b))
+                    .collect();
+                let unequal =
+                    !nonempty.is_empty() && nonempty.iter().any(|h| (h - nonempty[0]).abs() > 0.01);
+                let gap_extra = if unequal {
+                    FORK_BRANCH_INTER_GAP_EXTRA
+                } else {
+                    0.0
+                };
+                let max_h: f64 = branches
+                    .iter()
+                    .filter(|b| !b.is_empty())
+                    .map(|b| sequence_height_ex(b, gap_extra))
+                    .fold(0.0f64, f64::max);
+                let all_terminate = branches
+                    .iter()
+                    .all(|b| b.is_empty() || branch_terminates(b))
+                    && branches.iter().any(|b| !b.is_empty());
+                let join_gap = if all_terminate {
+                    FORK_TERMINATING_JOIN_GAP
+                } else {
+                    ARROW_LEN
+                };
+                FORK_BAR_HEIGHT + ARROW_LEN + max_h + join_gap + FORK_BAR_HEIGHT
             }
         }
         LayoutNode::Switch { cases, condition } => {
@@ -5594,6 +5639,13 @@ struct SvgEmitter {
     /// pushes it here; `emit_while` consumes it (one-shot) to route its exit arm
     /// straight into the merge diamond instead of wrapping back to its own spine.
     while_exit_redirect: Option<WhileExitRedirect>,
+    /// Extra inbound-gap added to each non-first tile inside a fork branch.
+    /// PlantUML's `FtileFactoryDelegatorAssembly.assembly` uses a 35 px inter-
+    /// tile space, but ordinary (top-level) sequences compress it back to the
+    /// 20 px `ARROW_LEN`; fork branches mark their snakes `ignoreForCompression`
+    /// (ParallelBuilderFork ConnectionIn/Out), so the full 35 survives. We model
+    /// that as ARROW_LEN + this extra (15) for tiles assembled inside a branch.
+    fork_branch_gap_extra: f64,
 }
 
 /// Geometry the parent `if` hands to a directly-nested `while` so the loop's
@@ -5620,6 +5672,7 @@ impl SvgEmitter {
             partition_wrapped_fork_depth: 0,
             handwritten,
             while_exit_redirect: None,
+            fork_branch_gap_extra: 0.0,
         }
     }
 
@@ -6507,7 +6560,9 @@ fn emit_sequence_ex(
                     } else if label.is_some() {
                         LABELED_ARROW_LEN
                     } else {
-                        prev_outbound_gap.unwrap_or_else(|| default_inbound_gap(node))
+                        prev_outbound_gap.unwrap_or_else(|| {
+                            default_inbound_gap(node) + svg.fork_branch_gap_extra
+                        })
                     };
                 // Partition entry: stretch the inbound arrow so it spans the
                 // full distance from prev cursor through the title bar to
@@ -9036,26 +9091,106 @@ fn emit_fork_with_layout(
     // connectors buffer before the top/bottom-bar arrows below. Java
     // emits in this order: branch internal connectors, then all top arrows,
     // then all bottom arrows. Reverse-engineered from goldens.
+    // PlantUML wraps every fork branch in FtileHeightFixedCentered so all
+    // branches occupy the SAME height (the tallest branch's) and shorter ones
+    // are vertically centred within that band (AbstractParallelFtilesBuilder
+    // .computeNewFtile). Only when the branches differ in height does the
+    // global Snake compression fail to reclaim the 15 px assembly slack — then
+    // every branch keeps the uncompressed 35 px inter-tile gap; equal-height
+    // forks compress back to ARROW_LEN. Restrict to pure action/control-flow
+    // forks (no partition-wrapped branch, which carries its own vertical model).
+    let center_branches = !branches
+        .iter()
+        .any(|branch| single_partition_branch_body_top(branch, bar_bottom).is_some());
+    let base_heights: Vec<f64> = branches
+        .iter()
+        .map(|b| {
+            if b.is_empty() {
+                0.0
+            } else {
+                sequence_height(b)
+            }
+        })
+        .collect();
+    let nonempty_base: Vec<f64> = base_heights
+        .iter()
+        .zip(branches.iter())
+        .filter(|(_, b)| !b.is_empty())
+        .map(|(h, _)| *h)
+        .collect();
+    let branches_unequal = !nonempty_base.is_empty()
+        && nonempty_base
+            .iter()
+            .any(|h| (h - nonempty_base[0]).abs() > 0.01);
+    let gap_extra = if center_branches && branches_unequal {
+        FORK_BRANCH_INTER_GAP_EXTRA
+    } else {
+        0.0
+    };
+    // Apply the inter-tile extra for the branch (measure + real) emits, then
+    // restore before the bar-arrow loops.
+    let saved_gap_extra = svg.fork_branch_gap_extra;
+    svg.fork_branch_gap_extra = gap_extra;
+    let mut center_offsets = vec![0.0f64; branches.len()];
+    if center_branches {
+        let heights: Vec<f64> = branches
+            .iter()
+            .map(|b| {
+                if b.is_empty() {
+                    0.0
+                } else {
+                    sequence_height_ex(b, gap_extra)
+                }
+            })
+            .collect();
+        let max_h = heights.iter().cloned().fold(0.0f64, f64::max);
+        for (i, &h) in heights.iter().enumerate() {
+            if !branches[i].is_empty() {
+                center_offsets[i] = (max_h - h) / 2.0;
+            }
+        }
+    }
+
+    // A branch whose last tile terminates (Detach/Kill/Stop/End/Break/Goto) has
+    // no pointOut: PlantUML's ParallelBuilderFork.doStep2 skips its ConnectionOut
+    // (line `if (hasPointOut())`), so it is NOT wired to the join bar.
+    let branch_terminates_flags: Vec<bool> =
+        branches.iter().map(|b| branch_terminates(b)).collect();
+
     let mut branch_bottoms = Vec::new();
-    for (branch, &bcx) in branches.iter().zip(branch_centers.iter()) {
+    for (i, (branch, &bcx)) in branches.iter().zip(branch_centers.iter()).enumerate() {
         let branch_y = if single_partition_branch_body_top(branch, bar_bottom).is_some() {
             bar_bottom
         } else {
-            bar_bottom + ARROW_LEN
+            bar_bottom + ARROW_LEN + center_offsets[i]
         };
         let bottom = emit_sequence(svg, branch, bcx, branch_y);
         branch_bottoms.push(bottom);
     }
+    svg.fork_branch_gap_extra = saved_gap_extra;
 
-    // Find the maximum bottom
+    // Find the maximum bottom. When every non-empty branch terminates, no
+    // ConnectionOut arrow reaches the join bar, and PlantUML seats the bar
+    // 10 px below the deepest branch (half the usual ARROW_LEN reserve) rather
+    // than the full join-arrow gap.
     let max_bottom = branch_bottoms.iter().cloned().fold(0.0f64, f64::max);
-    let bottom_bar_y = max_bottom + ARROW_LEN;
+    let all_branches_terminate = branches
+        .iter()
+        .zip(branch_terminates_flags.iter())
+        .all(|(branch, &term)| branch.is_empty() || term)
+        && branches.iter().any(|b| !b.is_empty());
+    let bottom_bar_gap = if all_branches_terminate {
+        FORK_TERMINATING_JOIN_GAP
+    } else {
+        ARROW_LEN
+    };
+    let bottom_bar_y = max_bottom + bottom_bar_gap;
 
     // Top arrows from bar to each branch (all together, after internals).
     // Empty fork branches do not draw a zero-height top arrow plus a separate
     // bottom arrow. PlantUML gives the empty lane one connector from the top
     // bar straight into the bottom bar, in branch order.
-    for (branch, &bcx) in branches.iter().zip(branch_centers.iter()) {
+    for (i, (branch, &bcx)) in branches.iter().zip(branch_centers.iter()).enumerate() {
         if branch.is_empty() {
             svg.down_arrow(bcx, bar_bottom, bottom_bar_y, &arrow_color);
             continue;
@@ -9063,23 +9198,24 @@ fn emit_fork_with_layout(
         let branch_y = if single_partition_branch_body_top(branch, bar_bottom).is_some() {
             bar_bottom
         } else {
-            bar_bottom + ARROW_LEN
+            bar_bottom + ARROW_LEN + center_offsets[i]
         };
-        let arrow_bottom =
-            single_partition_branch_body_top(branch, branch_y).unwrap_or(bar_bottom + ARROW_LEN);
+        let arrow_bottom = single_partition_branch_body_top(branch, branch_y)
+            .unwrap_or(bar_bottom + ARROW_LEN + center_offsets[i]);
         svg.down_arrow(bcx, bar_bottom, arrow_bottom, &arrow_color);
     }
 
-    // Bottom arrows from each branch to bottom bar.
+    // Bottom arrows from each branch to bottom bar — skipped for a branch that
+    // terminates (no pointOut → no ConnectionOut to the join bar).
     for (i, (branch, bottom)) in branches.iter().zip(branch_bottoms.iter()).enumerate() {
-        if branch.is_empty() {
+        if branch.is_empty() || branch_terminates_flags[i] {
             continue;
         }
         let bcx = branch_centers[i];
         let branch_y = if single_partition_branch_body_top(branch, bar_bottom).is_some() {
             bar_bottom
         } else {
-            bar_bottom + ARROW_LEN
+            bar_bottom + ARROW_LEN + center_offsets[i]
         };
         let arrow_top = single_partition_branch_body_bottom(branch, branch_y).unwrap_or(*bottom);
         svg.down_arrow(bcx, arrow_top, bottom_bar_y, &arrow_color);
