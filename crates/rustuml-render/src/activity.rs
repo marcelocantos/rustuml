@@ -46,6 +46,9 @@ const LABELED_ARROW_LEN: f64 = 41.2754;
 const GROUP_IF_LEFT_EXTENT_EXTRA: f64 = 3.0107;
 const GROUP_IF_RIGHT_EXTENT_EXTRA: f64 = 0.9893;
 const GROUP_IF_BODY_WIDTH_EXTRA: f64 = 4.0;
+const PARTITION_IF_LEFT_EXTENT_EXTRA: f64 = 3.3238;
+const PARTITION_IF_RIGHT_EXTENT_EXTRA: f64 = 2.3471;
+const PARTITION_IF_BODY_WIDTH_EXTRA: f64 = 5.6709;
 const GROUP_REPEAT_BODY_WIDTH_SUBTRACT: f64 = 1.0;
 const GROUP_REPEAT_TITLE_WIDTH_EXTRA: f64 = 15.0;
 const GROUP_REPEAT_SPINE_LEFT_OF_TITLE_MID: f64 = 2.0;
@@ -3875,11 +3878,17 @@ fn node_extents(node: &LayoutNode) -> (f64, f64) {
             if !*is_group && partition_wraps_repeat(body) && !title_drives_width {
                 left -= PARTITION_REPEAT_WIDTH_SUBTRACT;
             }
-            if (*is_group && group_wraps_single_if(body))
-                || (!*is_group && partition_wraps_single_if(body))
-            {
+            if *is_group && group_wraps_single_if(body) {
                 left += GROUP_IF_LEFT_EXTENT_EXTRA;
                 right += GROUP_IF_RIGHT_EXTENT_EXTRA;
+            } else if !*is_group && partition_wraps_single_if(body) {
+                if partition_wraps_min_width_if(body) {
+                    left += PARTITION_IF_LEFT_EXTENT_EXTRA;
+                    right += PARTITION_IF_RIGHT_EXTENT_EXTRA;
+                } else {
+                    left += GROUP_IF_LEFT_EXTENT_EXTRA;
+                    right += GROUP_IF_RIGHT_EXTENT_EXTRA;
+                }
             }
             if !*is_group && partition_wraps_tiny_action_fork(body) && !title_drives_width {
                 left += PARTITION_FORK_LEFT_EXTENT_EXTRA;
@@ -4662,6 +4671,29 @@ fn partition_wraps_single_if(body: &[LayoutNode]) -> bool {
     matches!(body, [LayoutNode::If { .. }])
 }
 
+fn partition_wraps_min_width_if(body: &[LayoutNode]) -> bool {
+    let [
+        LayoutNode::If {
+            condition,
+            diamond_font_family,
+            diamond_font_size,
+            diamond_text_bold,
+            diamond_pad_x,
+            ..
+        },
+    ] = body
+    else {
+        return false;
+    };
+    diamond_inner_w_styled_padded(
+        condition,
+        *diamond_font_size,
+        *diamond_text_bold,
+        diamond_font_family,
+        *diamond_pad_x,
+    ) <= DIAMOND_MIN_INNER_W
+}
+
 fn while_body_is_single_if(body: &[LayoutNode]) -> bool {
     matches!(body, [LayoutNode::If { .. }])
 }
@@ -4742,7 +4774,11 @@ fn partition_body_width_extra(is_group: bool, body: &[LayoutNode]) -> f64 {
     } else if !is_group && partition_wraps_tiny_action_fork(body) {
         PARTITION_FORK_WIDTH_EXTRA
     } else if !is_group && partition_wraps_single_if(body) {
-        GROUP_IF_BODY_WIDTH_EXTRA
+        if partition_wraps_min_width_if(body) {
+            PARTITION_IF_BODY_WIDTH_EXTRA
+        } else {
+            GROUP_IF_BODY_WIDTH_EXTRA
+        }
     } else if is_group && partition_wraps_repeat(body) {
         -GROUP_REPEAT_BODY_WIDTH_SUBTRACT
     } else if is_group && group_wraps_single_if(body) {
