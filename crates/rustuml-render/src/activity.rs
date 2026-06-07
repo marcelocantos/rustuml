@@ -904,6 +904,19 @@ fn branch_ends_with_goto(body: &[LayoutNode]) -> bool {
     matches!(body.last(), Some(LayoutNode::Goto(_)))
 }
 
+/// A branch flow whose sole node is a no-`specialOut` `while`. Such a branch's
+/// loop exit corridor IS the if's branch→merge connection (see
+/// [`WhileExitRedirect`]); the if delegates the merge wiring to `emit_while`.
+fn branch_is_redirectable_while(flow: &[LayoutNode]) -> bool {
+    matches!(
+        flow,
+        [LayoutNode::While {
+            special_out: None,
+            ..
+        }]
+    )
+}
+
 fn if_all_branches_goto(then_branch: &[LayoutNode], else_branches: &[ElseBranch]) -> bool {
     branch_ends_with_goto(then_branch)
         && !else_branches.is_empty()
@@ -2623,10 +2636,16 @@ fn while_body_drives_special(
 fn while_slot_compress(
     compress_allowed: bool,
     is_label: bool,
-    end_label: bool,
+    _end_label: bool,
     body_empty: bool,
 ) -> f64 {
-    if compress_allowed && is_label && !end_label && !body_empty {
+    // PlantUML's slot finder removes ~4.82 of slack between the diamond and the
+    // body for any labelled non-empty loop that is NOT terminated by a
+    // specialOut tile. The `endwhile (label)` text rides the diamond's left
+    // vertex and does not occupy the inbound slot, so it does not affect this
+    // compression — `compress_allowed` already encodes the specialOut /
+    // body-shape gating via `while_ordinary_slot_compress_allowed`.
+    if compress_allowed && is_label && !body_empty {
         WHILE_BODY_SLOT_COMPRESS
     } else {
         0.0
@@ -5560,6 +5579,26 @@ struct SvgEmitter {
     colored_partition_while_depth: usize,
     partition_wrapped_fork_depth: usize,
     handwritten: bool,
+    /// When an `if`/`elseif` branch's flow is a single no-special `while`, the
+    /// branch→merge connection is owned by the loop's exit corridor (PlantUML
+    /// fuses the FtileWhile `ConnectionOut` with the if's branch-merge snake
+    /// under `MergeStrategy.LIMITED`). The if precomputes the merge geometry and
+    /// pushes it here; `emit_while` consumes it (one-shot) to route its exit arm
+    /// straight into the merge diamond instead of wrapping back to its own spine.
+    while_exit_redirect: Option<WhileExitRedirect>,
+}
+
+/// Geometry the parent `if` hands to a directly-nested `while` so the loop's
+/// exit corridor terminates at the merge diamond.
+#[derive(Clone, Copy)]
+struct WhileExitRedirect {
+    /// Centre-y of the merge diamond (the y of the merge horizontal run).
+    merge_cy: f64,
+    /// X of the merge-diamond vertex the corridor arrives at.
+    merge_vertex_x: f64,
+    /// `true` → then-branch (arrives at the left vertex, points right);
+    /// `false` → else-branch (arrives at the right vertex, points left).
+    to_right: bool,
 }
 
 #[allow(clippy::too_many_arguments)]
@@ -5572,6 +5611,7 @@ impl SvgEmitter {
             colored_partition_while_depth: 0,
             partition_wrapped_fork_depth: 0,
             handwritten,
+            while_exit_redirect: None,
         }
     }
 
@@ -7388,6 +7428,19 @@ fn emit_if(
     // connectors into the connectors buffer FIRST. PlantUML emits branch-
     // internal connectors before the diamond→branch outbound connectors.
     let branch_y = diamond_bottom + IF_BRANCH_DOWN;
+
+    // A no-special `while` that is the entire then/else flow owns the
+    // branch→merge corridor (PlantUML's MergeStrategy.LIMITED fusion). Such a
+    // branch needs the merge-diamond cy BEFORE it emits, so its exit corridor
+    // can terminate at the merge vertex. We first emit the branches into the
+    // buffers to learn their bottoms (hence merge_cy), and — when a branch is
+    // redirectable — roll the buffers back and re-emit it with the redirect set.
+    let then_redirectable = branch_is_redirectable_while(then_branch_flow);
+    let else_redirectable =
+        !else_branches.is_empty() && branch_is_redirectable_while(else_branch_flow);
+
+    let shapes_chk = svg.shapes.len();
+    let conns_chk = svg.connectors.len();
     let then_bottom = emit_sequence_if_branch(svg, then_branch_flow, then_cx, branch_y);
     let else_bottom = if !else_branches.is_empty() {
         emit_sequence_if_branch(svg, else_branch_flow, else_cx, branch_y)
@@ -7415,6 +7468,38 @@ fn emit_if(
     let merge_y = then_bottom.max(else_bottom) + merge_gap;
     let merge_diamond_top = merge_y;
     let merge_cy = merge_diamond_top + DIAMOND_HALF;
+
+    // Re-emit any redirectable branch now that merge_cy is known, so its loop
+    // exit corridor lands on the merge diamond. Only meaningful when a real
+    // merge diamond exists (non-terminating, no single-survivor short-circuit).
+    let redirect_active = (then_redirectable || else_redirectable)
+        && !all_terminate
+        && single_survivor.is_none()
+        && !if_empty_both_plain(then_branch, else_branches);
+    if redirect_active {
+        svg.shapes.truncate(shapes_chk);
+        svg.connectors.truncate(conns_chk);
+        if then_redirectable {
+            svg.while_exit_redirect = Some(WhileExitRedirect {
+                merge_cy,
+                merge_vertex_x: cx - DIAMOND_HALF,
+                to_right: true,
+            });
+        }
+        emit_sequence_if_branch(svg, then_branch_flow, then_cx, branch_y);
+        svg.while_exit_redirect = None;
+        if !else_branches.is_empty() {
+            if else_redirectable {
+                svg.while_exit_redirect = Some(WhileExitRedirect {
+                    merge_cy,
+                    merge_vertex_x: cx + DIAMOND_HALF,
+                    to_right: false,
+                });
+            }
+            emit_sequence_if_branch(svg, else_branch_flow, else_cx, branch_y);
+            svg.while_exit_redirect = None;
+        }
+    }
 
     if !all_terminate && single_survivor.is_none() {
         // Small merge diamond shape (lands in shapes buffer after branch shapes).
@@ -7556,8 +7641,11 @@ fn emit_if(
         return out_y;
     }
 
-    // Then branch → merge — skipped if the branch terminates.
-    if !then_terminates {
+    // Then branch → merge — skipped if the branch terminates, or if a
+    // redirected `while` branch already routed its exit corridor to the merge.
+    let then_routed_by_while = redirect_active && then_redirectable;
+    let else_routed_by_while = redirect_active && else_redirectable;
+    if !then_terminates && !then_routed_by_while {
         svg.connector_line(&arrow_color, then_cx, then_cx, then_bottom, merge_cy, false);
         svg.connector_line(
             &arrow_color,
@@ -7570,8 +7658,9 @@ fn emit_if(
         svg.right_arrow(cx - DIAMOND_HALF, merge_cy, &arrow_color);
     }
 
-    // Else branch → merge — skipped if every else branch terminates.
-    if !else_terminates {
+    // Else branch → merge — skipped if every else branch terminates, or if a
+    // redirected `while` branch already routed its exit corridor to the merge.
+    if !else_terminates && !else_routed_by_while {
         svg.connector_line(&arrow_color, else_cx, else_cx, else_bottom, merge_cy, false);
         svg.connector_line(
             &arrow_color,
@@ -9412,6 +9501,60 @@ fn emit_while(
         diamond_cy,
         false,
     );
+
+    // Branch-nested no-special while: the exit corridor is the if's
+    // branch→merge connection (PlantUML fuses FtileWhile.ConnectionOut with
+    // the if's ConnectionVerticalThenHorizontal under MergeStrategy.LIMITED).
+    // Route the corridor straight down to the merge diamond instead of
+    // wrapping back to our own spine. Consume the redirect one-shot so a
+    // sibling/parent while does not inherit it.
+    if special_out.is_none()
+        && let Some(redir) = svg.while_exit_redirect.take()
+    {
+        let merge_cy = redir.merge_cy;
+        // DOWN arrowhead at the midpoint of the corridor's vertical run
+        // (emphasizeDirection.DOWN), then the vertical, then the horizontal
+        // into the merge diamond vertex with the in-arrow. PlantUML places the
+        // emphasize arrow at the midpoint of the FtileWhile's own ConnectionOut
+        // segment (diamond_cy → frame bottom), which sits one slot-compression
+        // half (minus one) above the midpoint of the full corridor to merge_cy.
+        let arrow_y = (diamond_cy + merge_cy) / 2.0 - PARTITION_COLORED_WHILE_EXIT_ARROW_PULL_UP;
+        svg.polygon_connector(
+            &arrow_color,
+            &[
+                (exit_x - 4.0, arrow_y - 10.0),
+                (exit_x, arrow_y),
+                (exit_x + 4.0, arrow_y - 10.0),
+                (exit_x, arrow_y - 6.0),
+            ],
+            &arrow_color,
+            "1",
+        );
+        svg.line_styled(
+            &arrow_color,
+            "1",
+            exit_x,
+            exit_x,
+            diamond_cy,
+            merge_cy,
+            false,
+        );
+        svg.line_styled(
+            &arrow_color,
+            "1",
+            exit_x,
+            redir.merge_vertex_x,
+            merge_cy,
+            merge_cy,
+            false,
+        );
+        if redir.to_right {
+            svg.right_arrow(redir.merge_vertex_x, merge_cy, &arrow_color);
+        } else {
+            svg.left_arrow(redir.merge_vertex_x, merge_cy, &arrow_color);
+        }
+        return merge_cy;
+    }
 
     // 9. Exit arm vertical at exit_x — single line from diamond_cy down
     // to the final exit y. For specialOut, that's exit_bottom_y (= special
