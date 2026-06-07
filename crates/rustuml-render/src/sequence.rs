@@ -5617,7 +5617,15 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                         } else {
                             0.0
                         };
-                        let target_shift = if to_depth > 0 { ACTIVATION_HALF_W } else { 0.0 };
+                        let target_shift = if to_depth > 0
+                            || (diagram.teoz
+                                && from_depth == 0
+                                && matches!(msg.activation, Some(ActivationChange::Activate)))
+                        {
+                            ACTIVATION_HALF_W
+                        } else {
+                            0.0
+                        };
 
                         // A message that creates its target reserves extra space
                         // for the inline head box centered on the target lifeline:
