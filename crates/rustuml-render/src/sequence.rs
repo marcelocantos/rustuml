@@ -7175,10 +7175,23 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                         } else {
                             (last_idx, first_idx)
                         };
-                        let note_right = if note.shape == NoteShape::Note {
-                            let component_pref_w = max_line_width
-                                + ROSE_NOTE_COMPONENT_PREF_EXTRA
-                                + 2.0 * note_global_padding;
+                        let note_right = if note.shape == NoteShape::Note
+                            || (diagram.teoz
+                                && matches!(
+                                    note.shape,
+                                    NoteShape::Hexagonal | NoteShape::Rectangular
+                                )) {
+                            let component_pref_w = if note.shape == NoteShape::Note {
+                                max_line_width
+                                    + ROSE_NOTE_COMPONENT_PREF_EXTRA
+                                    + 2.0 * note_global_padding
+                            } else {
+                                note_content_width_raw_padded(
+                                    max_line_width,
+                                    note.shape,
+                                    note_text_align,
+                                )
+                            };
                             let geom = over_several_note_geometry(
                                 &participants,
                                 lo,
@@ -7817,9 +7830,15 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                     } else {
                         (last_idx, first_idx)
                     };
-                    if note.shape == NoteShape::Note {
-                        let component_pref_w =
-                            max_text_w + ROSE_NOTE_COMPONENT_PREF_EXTRA + 2.0 * note_global_padding;
+                    if note.shape == NoteShape::Note
+                        || (diagram.teoz
+                            && matches!(note.shape, NoteShape::Hexagonal | NoteShape::Rectangular))
+                    {
+                        let component_pref_w = if note.shape == NoteShape::Note {
+                            max_text_w + ROSE_NOTE_COMPONENT_PREF_EXTRA + 2.0 * note_global_padding
+                        } else {
+                            note_content_width_raw_padded(max_text_w, note.shape, note_text_align)
+                        };
                         let geom = over_several_note_geometry(
                             &participants,
                             lo,
@@ -10143,10 +10162,24 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                             } else {
                                 (last_idx, first_idx)
                             };
-                            if note.shape == NoteShape::Note {
-                                let component_pref_w = max_text_w
-                                    + ROSE_NOTE_COMPONENT_PREF_EXTRA
-                                    + 2.0 * note_global_padding;
+                            if note.shape == NoteShape::Note
+                                || (diagram.teoz
+                                    && matches!(
+                                        note.shape,
+                                        NoteShape::Hexagonal | NoteShape::Rectangular
+                                    ))
+                            {
+                                let component_pref_w = if note.shape == NoteShape::Note {
+                                    max_text_w
+                                        + ROSE_NOTE_COMPONENT_PREF_EXTRA
+                                        + 2.0 * note_global_padding
+                                } else {
+                                    note_content_width_raw_padded(
+                                        max_text_w,
+                                        note.shape,
+                                        note_text_align,
+                                    )
+                                };
                                 let geom = over_several_note_geometry(
                                     &participants,
                                     lo,
@@ -10407,7 +10440,30 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                 // every line starts at the same x: note_left + marginX1 + diffX/2.
                 // (When the note text is wider than the span, diffX <= 0 and the
                 // text simply sits at the left text pad, handled by `text_x`.)
-                let over_several_text_x = if over_several && note.shape == NoteShape::Note {
+                let over_several_text_x = if over_several
+                    && diagram.teoz
+                    && matches!(note.shape, NoteShape::Hexagonal | NoteShape::Rectangular)
+                {
+                    let (lo, hi) = if note.participants.is_empty() {
+                        (0, participants.len() - 1)
+                    } else {
+                        let a = note
+                            .participants
+                            .first()
+                            .and_then(|id| id_to_idx.get(id.as_str()))
+                            .copied()
+                            .unwrap_or(0);
+                        let b = note
+                            .participants
+                            .last()
+                            .and_then(|id| id_to_idx.get(id.as_str()))
+                            .copied()
+                            .unwrap_or(participants.len() - 1);
+                        if a <= b { (a, b) } else { (b, a) }
+                    };
+                    let centre = (participants[lo].center_x + participants[hi].center_x) / 2.0;
+                    Some(centre - max_text_w / 2.0)
+                } else if over_several && note.shape == NoteShape::Note {
                     let (lo, hi) = if note.participants.is_empty() {
                         (0, participants.len() - 1)
                     } else {
