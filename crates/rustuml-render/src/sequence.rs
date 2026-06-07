@@ -1977,10 +1977,19 @@ const BOX_TITLE_FONT_SIZE: u32 = 13;
 const BOX_DEFAULT_FILL: &str = "#DDDDDD";
 /// Horizontal margin between the box frame and the enclosed head boxes.
 const BOX_SIDE_MARGIN: f64 = 4.0;
+/// Teoz reserves an extra horizontal lane around participant-box boundaries.
+const TEOZ_BOX_BOUNDARY_GAP: f64 = 10.0;
 /// Extra head drop reserved by most titled participant boxes.
 const BOX_TITLE_HEAD_GAP: f64 = 5.0;
 /// Vertical gap below the participant heads' tail boxes to the box bottom.
 const BOX_BOTTOM_MARGIN: f64 = 5.0;
+/// Teoz participant-box frames begin lower than standard sequence box frames.
+const TEOZ_BOX_TOP_SHIFT: f64 = 5.0;
+/// Teoz participant-box frames extend slightly below the standard footbox margin.
+const TEOZ_BOX_BOTTOM_EXTRA: f64 = 2.0;
+/// Teoz boxed diagrams keep the canvas bottom pad from the box frame, not just
+/// from the participant footboxes.
+const TEOZ_BOX_CANVAS_BOTTOM_EXTRA: u32 = 10;
 
 /// Check if text contains creole or HTML markup that needs processing.
 #[allow(dead_code)]
@@ -5965,8 +5974,30 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
         .iter()
         .map(|p| (p.box_width + shadow_preferred_width_extra) / 2.0)
         .collect();
+    let participant_box_members: Vec<Option<usize>> = participants
+        .iter()
+        .map(|p| {
+            participant_boxes
+                .iter()
+                .position(|b| b.members.contains(&p.decl_idx))
+        })
+        .collect();
+    let participant_box_member = |idx: usize| -> Option<usize> {
+        participant_box_members.iter().copied().nth(idx).flatten()
+    };
     let min_gap_boxes_for_pair = |i: usize| -> f64 {
-        participant_layout_halves[i] + participant_layout_halves[i + 1] + participant_box_gap
+        let teoz_box_gap = if diagram.teoz
+            && has_boxes
+            && participant_box_member(i) != participant_box_member(i + 1)
+        {
+            TEOZ_BOX_BOUNDARY_GAP
+        } else {
+            0.0
+        };
+        participant_layout_halves[i]
+            + participant_layout_halves[i + 1]
+            + participant_box_gap
+            + teoz_box_gap
     };
     for &(left, right, needed) in &multi_span_constraints {
         let mut cumulative = 0.0_f64;
@@ -6018,8 +6049,16 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
         } else {
             0.0
         };
-        let default_center =
-            HEAD_BOX_Y + participant_outer_padding + group_shift + participant_layout_halves[0];
+        let teoz_box_shift = if diagram.teoz && has_boxes {
+            TEOZ_BOX_BOUNDARY_GAP
+        } else {
+            0.0
+        };
+        let default_center = HEAD_BOX_Y
+            + participant_outer_padding
+            + group_shift
+            + teoz_box_shift
+            + participant_layout_halves[0];
         participants[0].center_x = default_center.max(min_first_center_x);
         participants[0].box_x = participants[0].center_x - participant_layout_halves[0];
         // PlantUML computes lifeline line x as box_x + (int)(preferredWidth / 2)
@@ -7422,6 +7461,9 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
     if diagram.teoz && !diagram.hide_footbox {
         svg_height += 4;
     }
+    if diagram.teoz && has_boxes && !diagram.hide_footbox {
+        svg_height += TEOZ_BOX_CANVAS_BOTTOM_EXTRA;
+    }
     // Caption adds vertical space below the foot boxes. Caption-only diagrams
     // place the baseline from the tail box bottom, then size the canvas around
     // that baseline. When a footer is present, PlantUML stacks caption above
@@ -8356,12 +8398,26 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
     // first, so activation bars, group frames, lifelines and heads render on
     // top of it.
     if has_boxes {
-        let box_top = HEAD_BOX_Y + title_band_h + 1.0;
+        let box_top = HEAD_BOX_Y
+            + title_band_h
+            + 1.0
+            + if diagram.teoz {
+                TEOZ_BOX_TOP_SHIFT
+            } else {
+                0.0
+            };
         let box_bottom = if diagram.hide_footbox {
             // With no foot boxes the lifelines extend 6px below the box frame.
             lifeline_bottom - 6.0
         } else {
-            tail_box_y + max_box_h + BOX_BOTTOM_MARGIN
+            tail_box_y
+                + max_box_h
+                + BOX_BOTTOM_MARGIN
+                + if diagram.teoz {
+                    TEOZ_BOX_BOTTOM_EXTRA
+                } else {
+                    0.0
+                }
         };
         for b in participant_boxes.iter().copied() {
             // Resolve the layout entries for this box's members.
