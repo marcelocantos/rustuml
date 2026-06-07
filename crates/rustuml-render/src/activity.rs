@@ -146,6 +146,7 @@ const SWITCH_ONE_LINK_BRANCH_GAP: f64 = 15.0;
 const SWITCH_ONE_LINK_LEFT_PAD: f64 = 9.0;
 const SWITCH_ONE_LINK_Y_DELTA: f64 = 20.0;
 const SWITCH_LINK_MARGIN: f64 = 10.0;
+const SWITCH_INNER_CORRIDOR_PACKING_PULL_LEFT: f64 = 0.3015;
 // Case-label baseline offsets above the case-box top, per connection type.
 const SWITCH_LABEL_OUTER_DY: f64 = 19.7979; // outermost branches (via diamond vertex)
 const SWITCH_LABEL_INNER_DY: f64 = 24.7979; // inner branches (drop from horizontal line)
@@ -2298,6 +2299,41 @@ fn switch_is_even_nested_if_cases(cases: &[SwitchCase]) -> bool {
             .all(|case| matches!(case.body.first(), Some(LayoutNode::If { .. })))
 }
 
+fn switch_inner_uses_diamond_corridor(
+    cases: &[SwitchCase],
+    condition: &str,
+    layout: &SwitchXLayout,
+) -> bool {
+    if cases.len() < 3 {
+        return false;
+    }
+    let diamond_half = switch_diamond_half_width(condition);
+    cases[1..cases.len() - 1]
+        .iter()
+        .zip(layout.centers[1..layout.centers.len() - 1].iter())
+        .any(|(case, center)| {
+            if case.body.is_empty() {
+                return false;
+            }
+            let rel = *center - layout.diamond_dx;
+            rel >= -diamond_half - SWITCH_LINK_MARGIN && rel <= diamond_half + SWITCH_LINK_MARGIN
+        })
+}
+
+fn switch_merge_gap(cases: &[SwitchCase], condition: &str, layout: &SwitchXLayout) -> f64 {
+    if switch_all_branches_terminate(cases) {
+        0.0
+    } else if switch_needs_empty_merge_gap(cases) {
+        SWITCH_EMPTY_MERGE_GAP
+    } else if !cases.len().is_multiple_of(2)
+        || switch_inner_uses_diamond_corridor(cases, condition, layout)
+    {
+        ARROW_LEN
+    } else {
+        ARROW_LEN / 2.0
+    }
+}
+
 /// PlantUML's `SUPP15` margin used by `FtileSwitchWithDiamonds` in
 /// BIG_DIAMOND mode (the horizontal padding either side of the diamond
 /// column between the first and last case tiles).
@@ -2330,6 +2366,16 @@ fn switch_x_layout(cases: &[SwitchCase], condition: &str) -> SwitchXLayout {
         }
         layout.block_w += SWITCH_IF_BRANCH_CASE_GAP;
         layout.diamond_dx += SWITCH_IF_BRANCH_CASE_GAP / 2.0;
+    }
+    if !layout.big_diamond
+        && cases.len().is_multiple_of(2)
+        && switch_inner_uses_diamond_corridor(cases, condition, &layout)
+    {
+        for center in layout.centers.iter_mut().skip(cases.len() / 2) {
+            *center -= SWITCH_INNER_CORRIDOR_PACKING_PULL_LEFT;
+        }
+        layout.block_w -= SWITCH_INNER_CORRIDOR_PACKING_PULL_LEFT;
+        layout.diamond_dx -= SWITCH_INNER_CORRIDOR_PACKING_PULL_LEFT;
     }
     if switch_is_odd_alternating_mixed_empty(cases) {
         let mut centers = Vec::with_capacity(cases.len());
@@ -5041,26 +5087,20 @@ fn node_height(node: &LayoutNode) -> f64 {
                     + merge_gap
                     + merge_h;
             }
-            // Odd case counts have a centre branch that drops straight into
-            // the merge diamond (a full 20-px arrow); even counts route both
-            // halves sideways, halving the gap.
-            let all_terminate = switch_all_branches_terminate(cases);
-            let merge_gap = if all_terminate {
-                0.0
-            } else if switch_needs_empty_merge_gap(cases) {
-                SWITCH_EMPTY_MERGE_GAP
-            } else if cases.len().is_multiple_of(2) {
-                ARROW_LEN / 2.0
-            } else {
-                ARROW_LEN
-            };
-            let big = switch_x_layout(cases, condition).big_diamond;
-            let merge_h = if all_terminate {
+            // Branches that use the centre corridor need a full arrow gap into
+            // the merge diamond; even layouts without that corridor compress it.
+            let layout = switch_x_layout(cases, condition);
+            let merge_gap = switch_merge_gap(cases, condition, &layout);
+            let merge_h = if switch_all_branches_terminate(cases) {
                 0.0
             } else {
                 DIAMOND_HALF * 2.0
             };
-            DIAMOND_HALF * 2.0 + switch_below_diamond(cases, big) + max_h + merge_gap + merge_h
+            DIAMOND_HALF * 2.0
+                + switch_below_diamond(cases, layout.big_diamond)
+                + max_h
+                + merge_gap
+                + merge_h
         }
         LayoutNode::While {
             body,
@@ -8460,15 +8500,7 @@ fn emit_switch_with_layout(
 
     let all_terminate = switch_all_branches_terminate(cases);
     let has_center = !n.is_multiple_of(2);
-    let merge_gap = if all_terminate {
-        0.0
-    } else if switch_needs_empty_merge_gap(cases) {
-        SWITCH_EMPTY_MERGE_GAP
-    } else if has_center {
-        ARROW_LEN
-    } else {
-        ARROW_LEN / 2.0
-    };
+    let merge_gap = switch_merge_gap(cases, condition, &layout);
     let merge_top = max_bottom + merge_gap;
     let merge_cy = merge_top + DIAMOND_HALF;
     let merge_bottom = merge_top + DIAMOND_HALF * 2.0;
@@ -8482,6 +8514,12 @@ fn emit_switch_with_layout(
         } else {
             SwitchConn::Inner
         }
+    };
+    let inner_uses_diamond_corridor = |i: usize, bcx: f64| -> bool {
+        matches!(classify(i), SwitchConn::Inner)
+            && !cases[i].body.is_empty()
+            && bcx >= diamond_left - SWITCH_LINK_MARGIN
+            && bcx <= diamond_right + SWITCH_LINK_MARGIN
     };
 
     // Connector emission order: first, last, then inner indices left-to-right.
@@ -8577,6 +8615,26 @@ fn emit_switch_with_layout(
                 switch_down_head(svg, &arrow_color, bcx, cases_top);
                 switch_case_label(svg, &cases[i].label, bcx, cases_top - outer_label_dy);
             }
+            SwitchConn::Inner if inner_uses_diamond_corridor(i, bcx) => {
+                let split = cases_top - SWITCH_CENTER_TOP_SPLIT;
+                svg.connector_line(
+                    &arrow_color,
+                    diamond_cx,
+                    diamond_cx,
+                    diamond_bottom,
+                    split,
+                    false,
+                );
+                svg.connector_line(&arrow_color, diamond_cx, bcx, split, split, false);
+                svg.connector_line(&arrow_color, bcx, bcx, split, cases_top, false);
+                switch_down_head(svg, &arrow_color, bcx, cases_top);
+                switch_case_label(
+                    svg,
+                    &cases[i].label,
+                    diamond_cx,
+                    cases_top - SWITCH_LABEL_CENTER_DY,
+                );
+            }
             SwitchConn::Inner => {
                 svg.connector_line(&arrow_color, bcx, bcx, diamond_cy, cases_top, false);
                 switch_down_head(svg, &arrow_color, bcx, cases_top);
@@ -8636,6 +8694,20 @@ fn emit_switch_with_layout(
                 } else {
                     svg.left_arrow(vertex_x, merge_cy, &arrow_color);
                 }
+            }
+            SwitchConn::Inner if inner_uses_diamond_corridor(i, bcx) => {
+                let split = merge_top - SWITCH_CENTER_BOT_SPLIT;
+                svg.connector_line(&arrow_color, bcx, bcx, bottom, split, false);
+                svg.connector_line(&arrow_color, bcx, diamond_cx, split, split, false);
+                svg.connector_line(
+                    &arrow_color,
+                    diamond_cx,
+                    diamond_cx,
+                    split,
+                    merge_top,
+                    false,
+                );
+                switch_down_head(svg, &arrow_color, diamond_cx, merge_top);
             }
             SwitchConn::Inner => {
                 svg.connector_line(&arrow_color, bcx, bcx, bottom, merge_cy, false);
