@@ -1141,6 +1141,96 @@ fn if_down_plan<'a>(
     })
 }
 
+/// True when a branch flow is exactly a single `break` (after an optional
+/// leading arrow). PlantUML's `Branch.isOnlySingleStopOrSpot()` returns false
+/// for a break, and `isEmpty()` is false, so `ConditionalBuilder.create` routes
+/// `if (c) then break endif` to `createDown` with the break as the populated
+/// (south) branch — drawn by `FtileIfDown` with `optionalStop == null` and a
+/// then-block that `hasPointOut() == false`, i.e. `ConnectionElseNoDiamond`.
+fn branch_is_lone_break(flow: &[LayoutNode]) -> bool {
+    matches!(leading_branch_arrow(flow).1, [LayoutNode::Break])
+}
+
+/// A break-bearing `if` rendered as `FtileIfDown` with a suppressed merge
+/// diamond: one branch is a lone `break` (the south spine, welded left to the
+/// enclosing loop's exit corridor) and the other is empty (the east corridor
+/// that becomes the if's pointOut). Returns the populated-branch flag (true when
+/// the *then* branch is the break) and the diamond labels' sides.
+struct IfBreakDownPlan {
+    /// True when the *then* branch carries the break (south); false when the
+    /// *else* branch does. Controls which side the diamond labels sit on.
+    then_is_break: bool,
+}
+
+fn if_break_down_plan(
+    then_branch: &[LayoutNode],
+    else_branches: &[ElseBranch],
+) -> Option<IfBreakDownPlan> {
+    // Only a single plain then plus zero-or-one plain else (no elseif cascade).
+    if else_branches.len() > 1 {
+        return None;
+    }
+    if else_branches.first().is_some_and(|b| b.condition.is_some()) {
+        return None;
+    }
+    let else_body = else_branches.first().map_or(&[][..], |b| b.body.as_slice());
+    let then_break = branch_is_lone_break(then_branch);
+    let else_break = branch_is_lone_break(else_body);
+    // Exactly one branch is a lone break; the other must be empty.
+    if then_break && branch_is_empty(else_body) {
+        Some(IfBreakDownPlan { then_is_break: true })
+    } else if else_break && branch_is_empty(then_branch) {
+        Some(IfBreakDownPlan {
+            then_is_break: false,
+        })
+    } else {
+        let _ = (then_break, else_break);
+        None
+    }
+}
+
+/// Recursively whether a node sequence contains a `break` (mirrors PlantUML's
+/// `Instruction.containsBreak`, which recurses through if/else, switch, fork,
+/// group and partition bodies but NOT through nested while/repeat loops — those
+/// own their own break). Used to gate `manageSpecialStopEndAfterEndWhile`.
+fn nodes_contain_break(nodes: &[LayoutNode]) -> bool {
+    nodes.iter().any(node_contains_break)
+}
+
+fn node_contains_break(node: &LayoutNode) -> bool {
+    match node {
+        LayoutNode::Break => true,
+        LayoutNode::If {
+            then_branch,
+            else_branches,
+            ..
+        } => {
+            nodes_contain_break(then_branch)
+                || else_branches.iter().any(|b| nodes_contain_break(&b.body))
+        }
+        LayoutNode::Switch { cases, .. } => cases.iter().any(|c| nodes_contain_break(&c.body)),
+        LayoutNode::Fork { branches, .. } => branches.iter().any(|b| nodes_contain_break(b)),
+        LayoutNode::Partition { body, .. } => nodes_contain_break(body),
+        // Nested while/repeat own their own break; everything else carries none.
+        _ => false,
+    }
+}
+
+/// Whether a `while` body directly contains a break-bearing `if` that
+/// [`if_break_down_plan`] will render as a no-diamond down layout welding its
+/// break branch to the loop exit corridor. Only direct body children are
+/// considered: a `break` inside a nested `while`/`repeat`/`fork` welds to *that*
+/// loop, and other shapes route their own break.
+fn body_contains_break_if(body: &[LayoutNode]) -> bool {
+    body.iter().any(|n| {
+        matches!(
+            n,
+            LayoutNode::If { then_branch, else_branches, .. }
+                if if_break_down_plan(then_branch, else_branches).is_some()
+        )
+    })
+}
+
 /// Width of an if/while/repeat condition diamond's inner (top/bottom) edge.
 /// PlantUML clamps this to a minimum of 24 px so very short conditions still
 /// produce a diamond wider than their text. The text inside stays at its
@@ -1478,8 +1568,12 @@ fn build_tree_inner(steps: &[ActivityStep], palette: &Palette) -> Vec<LayoutNode
                 }
                 // Absorb a trailing Stop/End/Detach/Kill into the while's
                 // special_out — PlantUML's manageSpecialStopEndAfterEndWhile
-                // pulls these terminators inside the FtileWhile frame.
-                let special_out = if i < steps.len() {
+                // pulls these terminators inside the FtileWhile frame. It bails
+                // (returns false) when the loop contains a `break`, because the
+                // break shares the loop's exit corridor: the loop then exits
+                // normally (wrapping back to the spine) and the terminator stays
+                // an ordinary post-while flow node.
+                let special_out = if i < steps.len() && !nodes_contain_break(&body) {
                     let term = match &steps[i] {
                         ActivityStep::Stop => Some(LayoutNode::Stop),
                         ActivityStep::End => Some(LayoutNode::End),
@@ -2734,7 +2828,12 @@ fn while_ordinary_slot_compress_allowed(
     body: &[LayoutNode],
     special_out: Option<&LayoutNode>,
 ) -> bool {
-    special_out.is_none()
+    // A break-bearing `if` renders as a "thin" FtileIfDown that does not block
+    // the loop's inbound-slot compression — and, because the `break` shares the
+    // exit corridor, PlantUML keeps that compression even when a terminator was
+    // absorbed after `endwhile` (so the usual specialOut gate does not apply).
+    let has_break_if = body_contains_break_if(body);
+    (special_out.is_none() || has_break_if)
         && body.iter().all(|node| {
             matches!(
                 node,
@@ -2742,6 +2841,10 @@ fn while_ordinary_slot_compress_allowed(
                     | LayoutNode::DeprecatedAction { .. }
                     | LayoutNode::Arrow { .. }
                     | LayoutNode::Note { .. }
+            ) || matches!(
+                node,
+                LayoutNode::If { then_branch, else_branches, .. }
+                    if if_break_down_plan(then_branch, else_branches).is_some()
             )
         })
 }
@@ -2758,6 +2861,16 @@ fn while_ordinary_slot_compresses(
         end_label.is_some(),
         body.is_empty(),
     ) != 0.0
+}
+
+/// Whether a `while` body's ON_Y compression removes the residual slack from a
+/// break-bearing `if`'s no-diamond corridor (see
+/// [`WHILE_BREAK_IF_CORRIDOR_DROP_COMPRESSED`]). Empirically the slack survives
+/// only when the body is "thin" — a single action plus the break-if (e.g.
+/// `act_while_break_at_start`); three or more flow tiles (actions and/or the
+/// break-if) provide enough adjacent content to absorb it.
+fn while_break_corridor_compresses(body: &[LayoutNode]) -> bool {
+    body.iter().filter(|n| node_is_flow(n)).count() >= 3
 }
 
 fn colored_partition_needs_while_slot_subtract(body: &[LayoutNode]) -> bool {
@@ -2780,6 +2893,18 @@ fn colored_partition_needs_while_slot_subtract(body: &[LayoutNode]) -> bool {
         while_body.is_empty(),
     ) != 0.0
         && !while_ordinary_slot_compresses(while_body, is_label, end_label, special_out.as_deref())
+}
+
+/// A break-bearing `if` (rendered by [`emit_if_break_down`]). Its inbound
+/// connector is deferred past the following tile's inbound, matching PlantUML's
+/// `FtileIfDown` welding-point emission order (the break/else welds land before
+/// the if's own `ConnectionIn`).
+fn is_break_down_if(node: &LayoutNode) -> bool {
+    matches!(
+        node,
+        LayoutNode::If { then_branch, else_branches, .. }
+            if if_break_down_plan(then_branch, else_branches).is_some()
+    )
 }
 
 fn is_ordinary_compressed_while(node: &LayoutNode) -> bool {
@@ -3803,6 +3928,19 @@ fn node_extents(node: &LayoutNode) -> (f64, f64) {
                 );
             }
             let _ = then_label;
+            // Break-down `if` (a lone-break branch + empty branch, nested in a
+            // while): the break tile contributes no width and welds LEFT to the
+            // loop's exit corridor — a column the enclosing while reserves on its
+            // own, so the if's LEFT extent is just the diamond half. The empty
+            // branch's east corridor runs `DIAMOND_HALF` past the diamond's east
+            // vertex (`ConnectionElseNoDiamond`'s `x1 + hexagonHalfSize`), so the
+            // RIGHT extent is `cond_half + DIAMOND_HALF`.
+            if if_break_down_plan(then_branch, else_branches).is_some() {
+                let cond_half = diamond_half_w;
+                let left = cond_half;
+                let right = cond_half + DIAMOND_HALF;
+                return with_if_attached_note_extents(left, right, attached_notes, diamond_half_w);
+            }
             if let Some(plan) = if_down_plan(then_branch, else_branches) {
                 // FtileIfDown reserves a fixed corridor on the right (the empty
                 // branch routes out the diamond's east vertex) plus a small
@@ -5092,6 +5230,13 @@ fn node_height(node: &LayoutNode) -> f64 {
                 let v = if_long_vmetrics(&l, 0.0);
                 return v.merge_y - v.dtop;
             }
+            // Break-down `if` (nested in a while): diamond + the no-diamond
+            // corridor drop to the if's pointOut (no merge diamond). The
+            // compressed drop is the common case; thin-loop uncompression is
+            // re-added by the enclosing while (see while_body_height).
+            if if_break_down_plan(then_branch, else_branches).is_some() {
+                return DIAMOND_HALF * 2.0 + WHILE_BREAK_IF_CORRIDOR_DROP_COMPRESSED;
+            }
             if let Some(plan) = if_down_plan(then_branch, else_branches) {
                 // diamond + lead + populated branch + ARROW_LEN + merge diamond.
                 // An even-action branch stretches its middle gap by 15 px.
@@ -5710,6 +5855,26 @@ struct SvgEmitter {
     /// (ParallelBuilderFork ConnectionIn/Out), so the full 35 survives. We model
     /// that as ARROW_LEN + this extra (15) for tiles assembled inside a branch.
     fork_branch_gap_extra: f64,
+    /// Context for a `break` nested in an `if` inside the current `while` body.
+    /// PlantUML collects each `FtileBreak` welding point and (in
+    /// `FtileFactoryDelegatorWhile.createWhile`) draws a left-pointing arrow from
+    /// the break tile out to the loop's left edge (`Hexagon.hexagonHalfSize`).
+    /// `emit_while` sets this around its body emission so an enclosed
+    /// break-bearing `if` (rendered as `FtileIfDown` with an empty `optionalStop`
+    /// and `ConnectionElseNoDiamond`) can weld the break branch to the exit
+    /// corridor instead of routing to a (suppressed) merge diamond.
+    while_break: Option<WhileBreakContext>,
+}
+
+/// Geometry the enclosing `while` hands to a directly-nested break-bearing `if`.
+#[derive(Clone, Copy)]
+struct WhileBreakContext {
+    /// Absolute x of the loop's left exit corridor (the break arrow's target).
+    corridor_x: f64,
+    /// Whether the while's column compresses one slot of slack out of the
+    /// break-if's `ConnectionElseNoDiamond` corridor (true when the loop body
+    /// carries enough adjacent flow content; see [`while_break_corridor_compresses`]).
+    compresses: bool,
 }
 
 /// Geometry the parent `if` hands to a directly-nested `while` so the loop's
@@ -5737,6 +5902,7 @@ impl SvgEmitter {
             handwritten,
             while_exit_redirect: None,
             fork_branch_gap_extra: 0.0,
+            while_break: None,
         }
     }
 
@@ -6803,6 +6969,7 @@ fn emit_sequence_ex(
             if is_colored_partition_wrapping_while(node)
                 || is_partition_wrapping_compressed_while(node)
                 || is_ordinary_compressed_while(node)
+                || is_break_down_if(node)
             {
                 deferred_partition_inbound = Some((arrow_top, style, label, arrow_gap));
             } else {
@@ -7371,6 +7538,22 @@ fn emit_if(
         && let Some(l) = if_long_layout(condition, then_label, then_branch, else_branches)
     {
         return emit_if_long(svg, cx, y, &l, then_branch, else_branches);
+    }
+
+    // Break-down: `if (c) then break endif` nested directly in a `while`. The
+    // break branch welds LEFT to the loop exit corridor (set by `emit_while`),
+    // the empty branch becomes the if's pointOut via `ConnectionElseNoDiamond`,
+    // and no merge diamond is drawn. Only taken when the enclosing loop set the
+    // break context; outside a loop a stray `break` falls through to the normal
+    // (merge-diamond) path.
+    if let Some(brk) = svg.while_break
+        && let Some(plan) = if_break_down_plan(then_branch, else_branches)
+    {
+        let then_label = then_label.as_deref();
+        let else_label = else_branches.first().and_then(|b| b.label.as_deref());
+        return emit_if_break_down(
+            svg, cx, y, condition, then_label, else_label, &plan, &brk,
+        );
     }
 
     // Empty-branch corridor: when one branch is empty and the other populated
@@ -8080,6 +8263,15 @@ const IF_DOWN_BRANCH_CORRIDOR_TRAILING_PAD: f64 = 15.0;
 /// Extra gap stretched onto the middle inter-action arrow of an even-action
 /// populated branch in the FtileIfDown layout.
 const IF_DOWN_MID_STRETCH: f64 = 15.0;
+/// Drop from a break-bearing `if`'s diamond bottom to the (no-diamond) east
+/// corridor's return line — i.e. the if-block's pointOut. The break tile sits
+/// `IF_DOWN_LEAD` below the diamond; the corridor then runs `ARROW_LEN +
+/// IF_BRANCH_UP` further down to the rejoin (`FtileIfDown.calculateDimension`
+/// with empty then/diamond2 tiles). When the enclosing loop column has enough
+/// adjacent flow content, ON_Y slot compression removes a `4.4775` slack unit
+/// (the residual of the south label's reserved band).
+const WHILE_BREAK_IF_CORRIDOR_DROP_COMPRESSED: f64 = IF_DOWN_LEAD + ARROW_LEN + IF_BRANCH_UP; // 50.4775
+const WHILE_BREAK_IF_CORRIDOR_UNCOMPRESSED_EXTRA: f64 = 4.477539062500001;
 /// Extra gap stretched onto the middle inter-action arrow of an even-action
 /// while body. A labelled `while (...) is (...)` body already carries the
 /// reserved label slot under the condition diamond, so PlantUML's centring
@@ -8163,6 +8355,7 @@ fn repeat_not_label_outbound_gap(node: &LayoutNode) -> Option<f64> {
 fn first_flow_node(nodes: &[LayoutNode]) -> Option<&LayoutNode> {
     nodes.iter().find(|node| node_is_flow(node))
 }
+
 
 fn leading_if_branch_repeat_extra(node: &LayoutNode) -> f64 {
     let LayoutNode::Repeat {
@@ -8514,6 +8707,149 @@ fn emit_if_down(
     svg.down_arrow(cx, branch_bottom, merge_top, &arrow_color);
 
     merge_top + DIAMOND_HALF * 2.0
+}
+
+/// Emit a break-bearing `if` directly nested in a `while` (PlantUML's
+/// `FtileIfDown` with `optionalStop == null` and a then-block whose
+/// `hasPointOut() == false`). The break branch occupies the spine: it runs down
+/// `IF_DOWN_LEAD` from the diamond bottom and then welds LEFT to the loop's exit
+/// corridor (`FtileFactoryDelegatorWhile`'s `Snake.asToLeft` to
+/// `Hexagon.hexagonHalfSize`). The empty branch becomes the if's pointOut via
+/// `ConnectionElseNoDiamond` — an east corridor (down-emphasized) that rejoins
+/// the spine at the if-block bottom with no merge diamond and no terminal
+/// in-arrow. Returns the if-block's pointOut y.
+#[allow(clippy::too_many_arguments)]
+fn emit_if_break_down(
+    svg: &mut SvgEmitter,
+    cx: f64,
+    y: f64,
+    condition: &str,
+    then_label: Option<&str>,
+    else_label: Option<&str>,
+    plan: &IfBreakDownPlan,
+    brk: &WhileBreakContext,
+) -> f64 {
+    let arrow_color = svg.palette.arrow_color.clone();
+    let diamond_stroke = svg.palette.diamond_stroke.clone();
+    let diamond_fill = svg.palette.diamond_fill.clone();
+    let diamond_stroke_width = svg.palette.diamond_stroke_width.clone();
+
+    let cond_inner_w = diamond_inner_w(condition);
+    let cond_text_w = text_render::measure(condition, SMALL_FONT, false);
+
+    let diamond_cy = y + DIAMOND_HALF;
+    let diamond_left = cx - cond_inner_w / 2.0 - DIAMOND_HALF;
+    let diamond_right = cx + cond_inner_w / 2.0 + DIAMOND_HALF;
+    let diamond_bottom = y + DIAMOND_HALF * 2.0;
+
+    // The break tile sits on the spine, IF_DOWN_LEAD below the diamond. The
+    // if-block's pointOut (where the east corridor rejoins the spine) sits a
+    // further ARROW_LEN + IF_BRANCH_UP down — plus an uncompressed slack unit
+    // when the loop column is thin (see WHILE_BREAK_IF_CORRIDOR_* constants).
+    let break_y = diamond_bottom + IF_DOWN_LEAD;
+    let return_y = diamond_bottom
+        + WHILE_BREAK_IF_CORRIDOR_DROP_COMPRESSED
+        + if brk.compresses {
+            0.0
+        } else {
+            WHILE_BREAK_IF_CORRIDOR_UNCOMPRESSED_EXTRA
+        };
+
+    // Condition hexagon (no populated branch shapes precede it — the break tile
+    // is empty).
+    let pts = vec![
+        (cx - cond_inner_w / 2.0, y),
+        (cx + cond_inner_w / 2.0, y),
+        (diamond_right, diamond_cy),
+        (cx + cond_inner_w / 2.0, y + DIAMOND_HALF * 2.0),
+        (cx - cond_inner_w / 2.0, y + DIAMOND_HALF * 2.0),
+        (diamond_left, diamond_cy),
+    ];
+    svg.polygon_shape(&diamond_fill, &pts, &diamond_stroke, &diamond_stroke_width);
+
+    // Draw order: polygon, SOUTH label (the break branch's positive label),
+    // condition text, EAST label (the empty branch's label).
+    let (south_label, east_label) = if plan.then_is_break {
+        (then_label, else_label)
+    } else {
+        (else_label, then_label)
+    };
+    if let Some(label) = south_label {
+        let label_font_size = svg.palette.arrow_font_size;
+        let label_family = svg.palette.arrow_font_family.clone();
+        let label_color = svg.palette.arrow_text_color.clone();
+        let lw = text_render::measure_with_family(label, label_font_size, false, &label_family);
+        svg.text_element(
+            &label_color,
+            &label_family,
+            label_font_size,
+            lw,
+            cx + 4.0,
+            diamond_bottom + text_render::ascent_for_family(label_font_size, &label_family),
+            label,
+            false,
+        );
+    }
+    let cond_text_color = svg.palette.text_color.clone();
+    let text_y = centered_label_y(condition, diamond_cy, SMALL_FONT);
+    svg.text_element_styled(
+        &cond_text_color,
+        "sans-serif",
+        SMALL_FONT,
+        cx - cond_text_w / 2.0,
+        text_y,
+        condition,
+        false,
+        svg.palette.diamond_text_italic,
+    );
+    if let Some(label) = east_label {
+        let label_font_size = svg.palette.arrow_font_size;
+        let label_family = svg.palette.arrow_font_family.clone();
+        let label_color = svg.palette.arrow_text_color.clone();
+        let lw = text_render::measure_with_family(label, label_font_size, false, &label_family);
+        svg.text_element(
+            &label_color,
+            &label_family,
+            label_font_size,
+            lw,
+            diamond_right,
+            centerline_label_y_for_family(diamond_cy, label_font_size, &label_family),
+            label,
+            false,
+        );
+    }
+
+    // Diamond → break: plain connector down the spine to the break tile (the
+    // break tile is empty / has no inbound decoration — PlantUML's `ConnectionIn`
+    // to a `FtileBreak` draws no arrowhead).
+    svg.connector_line(&arrow_color, cx, cx, diamond_bottom, break_y, false);
+
+    // Break weld: horizontal LEFT from the spine to the loop exit corridor, with
+    // a left-pointing arrowhead at the corridor (asToLeft). No merge.
+    svg.connector_line(&arrow_color, cx, brk.corridor_x, break_y, break_y, false);
+    svg.left_arrow(brk.corridor_x, break_y, &arrow_color);
+
+    // Empty east corridor (ConnectionElseNoDiamond): exit the diamond's east
+    // vertex, run down (down-emphasized mid arrow), then rejoin the spine at the
+    // if-block's pointOut. No terminal in-arrow — it simply welds back.
+    let corridor_x = diamond_right + DIAMOND_HALF;
+    svg.connector_line(&arrow_color, diamond_right, corridor_x, diamond_cy, diamond_cy, false);
+    let arrow_tip = (diamond_cy + return_y) / 2.0 + IF_CORRIDOR_ARROW_OFFSET;
+    svg.polygon_connector(
+        &arrow_color,
+        &[
+            (corridor_x - 4.0, arrow_tip - 10.0),
+            (corridor_x, arrow_tip),
+            (corridor_x + 4.0, arrow_tip - 10.0),
+            (corridor_x, arrow_tip - 6.0),
+        ],
+        &arrow_color,
+        "1",
+    );
+    svg.connector_line(&arrow_color, corridor_x, corridor_x, diamond_cy, return_y, false);
+    svg.connector_line(&arrow_color, corridor_x, cx, return_y, return_y, false);
+
+    return_y
 }
 
 enum SwitchConn {
@@ -9414,6 +9750,11 @@ fn emit_while(
     let ordinary_slot_compressed =
         while_ordinary_slot_compresses(body, is_label, end_label, special_out);
     let compress_while_slot = colored_partition_while || ordinary_slot_compressed;
+    // A break-bearing loop keeps the normal long-exit arrowhead placement: the
+    // break shares the exit corridor, so the loop exits/wraps like a no-special
+    // loop and its loop-back/exit arrowheads sit at the *uncompressed* midpoint
+    // (PlantUML draws them before the slot-compression pass shifts endpoints).
+    let break_in_body = body_contains_break_if(body);
     let exit_vertical_after_arrow =
         special_out.is_none() && (colored_partition_while || ordinary_slot_compressed);
 
@@ -9454,10 +9795,31 @@ fn emit_while(
     );
     let body_top = diamond_bottom + body_top_offset;
 
+    // Break welding context (PlantUML's `FtileFactoryDelegatorWhile.createWhile`
+    // post-pass): a `break` nested in a body `if` is rendered by that if as a
+    // `FtileIfDown` with a suppressed merge diamond, welding its break branch
+    // LEFT to the loop's left exit edge (`Hexagon.hexagonHalfSize`). That edge
+    // is the same `geo_left_x - halfHex` the regular exit arm uses, independent
+    // of any `specialOut` (which only relocates the *exit* arm, not the loop's
+    // left frame). It's computable up-front from the body's (pure) extents. Set
+    // it before emitting the body and restore the prior value afterwards (so a
+    // sibling/parent while does not inherit it).
+    let prev_while_break = svg.while_break.take();
+    if body_contains_break_if(body) {
+        let (pre_body_left_ext, _) = sequence_loop_body_extents(body);
+        let pre_body_left_x = cx - while_body_left(body, pre_body_left_ext);
+        let pre_geo_left_x = diamond_left_vertex_x.min(pre_body_left_x);
+        svg.while_break = Some(WhileBreakContext {
+            corridor_x: pre_geo_left_x - DIAMOND_HALF,
+            compresses: while_break_corridor_compresses(body),
+        });
+    }
+
     // Body below diamond — emit it first (PlantUML emits body shapes before
     // diamond shapes in document order).
     let body_mid_stretch = while_body_mid_stretch(body, is_label.is_some());
     let body_bottom = emit_sequence_ex(svg, body, cx, body_top, body_mid_stretch, None, false);
+    svg.while_break = prev_while_break;
 
     // Junction y: 12 px below the body for empty bodies, 10 px for
     // non-empty bodies. PlantUML's UEmpty(5, halfHex=12) placeholder is
@@ -9656,7 +10018,14 @@ fn emit_while(
         }
         + body_mid_stretch.map_or(0.0, |(_, stretch)| {
             WHILE_EVEN_BODY_LOOP_ARROW_STRETCH - stretch / 2.0
-        });
+        })
+        // Break-bearing loop: place the loop-back arrowhead at the uncompressed
+        // midpoint (add back the slot-compression half the line above removed).
+        + if break_in_body {
+            IF_CORRIDOR_ARROW_OFFSET
+        } else {
+            0.0
+        };
     svg.polygon_connector(
         &arrow_color,
         &[
@@ -9670,15 +10039,7 @@ fn emit_while(
     );
 
     // 5. Loop arm vertical at loop_x.
-    svg.line_styled(
-        &arrow_color,
-        "1",
-        loop_x,
-        loop_x,
-        diamond_cy,
-        junction_y,
-        false,
-    );
+    svg.line_styled(&arrow_color, "1", loop_x, loop_x, diamond_cy, junction_y, false);
 
     // 6. Loop arm horizontal at diamond_cy: loop_x → diamond_right_vertex.
     svg.line_styled(
@@ -9793,6 +10154,12 @@ fn emit_while(
     };
     if exit_vertical_after_arrow {
         arrow_y -= PARTITION_COLORED_WHILE_EXIT_ARROW_PULL_UP;
+    }
+    if break_in_body {
+        // Break loop: the long-exit arrowhead sits at the uncompressed midpoint
+        // (like the loop-back arrowhead) — add back IF_CORRIDOR_ARROW_OFFSET on
+        // top of the compression pull-up the line above applied.
+        arrow_y += IF_CORRIDOR_ARROW_OFFSET;
     }
     svg.polygon_connector(
         &arrow_color,
