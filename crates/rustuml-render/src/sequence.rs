@@ -7060,11 +7060,14 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                         } else {
                             NOTE_LIFELINE_GAP
                         };
-                        let mut note_right = if note.on_message {
-                            anchor_x.ceil() + gap + note_content_w
+                        let note_left = if note.on_message {
+                            anchor_x.ceil() + gap
+                        } else if diagram.teoz {
+                            anchor_x + gap
                         } else {
-                            (anchor_x + gap).floor() + note_content_w
+                            (anchor_x + gap).floor()
                         };
+                        let mut note_right = note_left + note_content_w;
                         // A message-attached note sits inside a message tile, which
                         // reserves an extra NOTE_LIFELINE_GAP of right margin.
                         // Its note box is drawn with the ceiled preferred width,
@@ -7076,6 +7079,8 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                             if raw_note_content_w.fract() > 0.57 {
                                 note_right += 1.0;
                             }
+                        } else if diagram.teoz {
+                            note_right += NOTE_LIFELINE_GAP - 1.0;
                         }
                         max_note_right = max_note_right.max(note_right);
                     }
@@ -7695,11 +7700,15 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                 };
                 let left = if note.on_message {
                     ll_x.ceil() + gap
+                } else if diagram.teoz {
+                    ll_x + gap
                 } else {
                     (ll_x + gap).floor()
                 };
                 let right = if note.on_message {
                     left + note_content_w
+                } else if diagram.teoz {
+                    left + note_content_w + NOTE_LIFELINE_GAP - 1.0
                 } else {
                     left + raw_note_content_w + 1.0
                 };
@@ -8725,7 +8734,7 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
         let teoz_message_y_offset = if diagram.teoz
             && matches!(
                 event,
-                Event::Message(_) | Event::Return(_) | Event::Delay(_)
+                Event::Message(_) | Event::Return(_) | Event::Delay(_) | Event::Note(_)
             ) {
             -2.0
         } else {
@@ -9961,6 +9970,8 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                             };
                             let left = if note.on_message {
                                 ll_x.ceil() + gap
+                            } else if diagram.teoz {
+                                ll_x + gap
                             } else {
                                 (ll_x + gap).floor()
                             };
