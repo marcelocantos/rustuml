@@ -1284,8 +1284,16 @@ fn build_swimlanes(steps: &[ActivityStep], palette: &Palette) -> Vec<LayoutNode>
         let (left, right) = sequence_extents(&body);
         lanes[lane_index].content_left = lanes[lane_index].content_left.max(left);
         lanes[lane_index].content_right = lanes[lane_index].content_right.max(right);
-        segments.push(LaneSegment { lane_index, body });
         steps.clear();
+        // A `|Lane|` declaration that is immediately switched away from (e.g.
+        // `|Lane1| |Lane2| start ...`) registers the column above for header
+        // width / ordering, but contributes no temporal segment: PlantUML does
+        // not reserve a vertical band or emit a header→start connector for it.
+        // Only push a segment that carries content.
+        if body.is_empty() {
+            return;
+        }
+        segments.push(LaneSegment { lane_index, body });
     };
 
     for step in steps {
