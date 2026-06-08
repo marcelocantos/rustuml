@@ -4090,8 +4090,15 @@ fn node_extents(node: &LayoutNode) -> (f64, f64) {
                 let (left, right) = sequence_loop_body_extents(body);
                 (left, right, left.max(right))
             } else {
-                let body_w = sequence_width(body);
-                (body_w / 2.0, body_w / 2.0, body_w / 2.0)
+                // FtileRepeat.getLeft/getRight key off the body tile's own
+                // spine: `repeat.getLeft()` and `repeat.width − getLeft()`.
+                // Use the body's asymmetric extents so an off-centre body
+                // (e.g. a nested-if whose wider branch sits on one side)
+                // pushes the repeat spine the same way PlantUML does, rather
+                // than centring on `width/2`. The loop-back arm placement
+                // still keys off the symmetric half-width.
+                let (left, right) = sequence_extents(body);
+                (left, right, sequence_width(body) / 2.0)
             };
             let cond_half = diamond_inner_w(condition) / 2.0 + DIAMOND_HALF;
             // A `backward :label;` action draws a box on the return arm at the
@@ -4105,7 +4112,16 @@ fn node_extents(node: &LayoutNode) -> (f64, f64) {
                 (left_extent, right_extent)
             } else {
                 let left_extent = body_left.max(cond_half + 9.0);
-                let right_extent = cond_half.max(body_right) + 12.0 + 15.0;
+                // Right extent mirrors `emit_repeat`'s loop-back arm exactly:
+                // `arm = max(diamond_right + 12, extents.right + 12,
+                //            geo.right() + 4)`, then the canvas reserves a
+                // further 15 px past the arm. For a plain body the geometry
+                // and drawn extents coincide, reducing to the historical
+                // `max(cond_half, body_right) + 12 + 15`.
+                let geo_clear =
+                    sequence_geometry(body).map_or(body_right + 12.0, |g| g.right() + 4.0);
+                let arm_rel = (cond_half + 12.0).max(body_right + 12.0).max(geo_clear);
+                let right_extent = arm_rel + 15.0;
                 (left_extent, right_extent)
             }
         }
@@ -4855,7 +4871,9 @@ fn action_line_width_with_family(
         }
         _ => {
             number_counters.clear();
-            text_render::measure_with_family(line.trim(), font_size, bold, font_family)
+            // Keep leading whitespace (PlantUML renders it as left padding);
+            // only trailing whitespace is stripped.
+            text_render::measure_with_family(line.trim_end(), font_size, bold, font_family)
         }
     }
 }
@@ -4936,7 +4954,9 @@ fn emit_action_line(
         }
         _ => {
             number_counters.clear();
-            text_render::emit_text(&mut svg.shapes, line.trim(), base)
+            // Keep leading whitespace: emit_text shifts the text element right
+            // by the leading-space advance, matching PlantUML's left padding.
+            text_render::emit_text(&mut svg.shapes, line.trim_end(), base)
         }
     }
 }
@@ -8375,7 +8395,16 @@ fn repeat_body_mid_stretch(body: &[LayoutNode], has_backward: bool) -> Option<(u
         }
         return None;
     }
-    if flow_count >= 2 && flow_count.is_multiple_of(2) {
+    // The 7.5 px centre-of-frame stretch is `space/2` for a body of plain
+    // actions (uniform inter-node gaps). A body that contains a composite flow
+    // node (if/fork/switch/while/repeat) reserves its own internal vertical
+    // space, so FtileRepeat's `space` collapses and no middle connector is
+    // lengthened — exclude those bodies (e.g. `:Get input;` + if).
+    let all_actions_flow = body
+        .iter()
+        .filter(|n| node_is_flow(n))
+        .all(|n| matches!(n, LayoutNode::Action { .. }));
+    if flow_count >= 2 && flow_count.is_multiple_of(2) && all_actions_flow {
         Some((flow_count / 2, REPEAT_EVEN_BODY_MID_STRETCH))
     } else {
         None
@@ -10407,16 +10436,29 @@ fn emit_repeat(
     }
 
     // Loop-back arrow runs up the right side regardless of whether `is`
-    // has a label — every `repeatwhile` produces it. The arrow's x sits
-    // 12 px past max(diamond_right, body_right).
-    let body_w = sequence_width(body);
-    let body_right_rel = if partition_body_has_direct_note(body) {
-        sequence_loop_body_extents(body).1
+    // has a label — every `repeatwhile` produces it.
+    //
+    // The return worm routes outside BOTH the body's reserved geometry and
+    // its drawn content. Two clearances apply, and the arm takes the larger:
+    //  - `geo.right() + 4`: the body tile's reserved right boundary
+    //    (`FtileGeometry.width − left`) plus the arrowhead half-wing. For an
+    //    if/switch body this reserved boundary sits a few px past the drawn
+    //    branches (the merge corridor), so this clearance dominates.
+    //  - `extents.right + halfHex`: the drawn content's right edge plus the
+    //    standard 12 px hexagon gap. For a plain action body the geometry and
+    //    extents coincide, so this 12 px clearance dominates.
+    // Using the body's *asymmetric* right (not `width/2`) also keeps an
+    // off-centre body (e.g. a nested-if with a wide left branch) from leaving
+    // a phantom empty corridor that the ON_X compression pass would collapse.
+    let body_right = if partition_body_has_direct_note(body) {
+        cx + sequence_loop_body_extents(body).1 + 12.0
     } else {
-        body_w / 2.0
+        let extents_clear = cx + sequence_extents(body).1 + 12.0;
+        let geo_clear = sequence_geometry(body)
+            .map_or(extents_clear, |g| cx + g.right() + 4.0);
+        extents_clear.max(geo_clear)
     };
-    let body_right = cx + body_right_rel;
-    let arm_x = diamond_right.max(body_right) + 12.0;
+    let arm_x = (diamond_right + 12.0).max(body_right);
     let first_entry = first_flow_node(body);
     let top_cy = if has_start_label {
         first_entry.map_or(y + top_diamond_size, |node| {
@@ -10442,7 +10484,7 @@ fn emit_repeat(
         // repeats append it 24 px past the diamond east vertex; body-dominant
         // repeats clear the east label before placing it.
         let bw = repeat_backward_box_w(label);
-        let body_half = body_w / 2.0;
+        let body_half = sequence_width(body) / 2.0;
         let cond_half = cond_inner_w / 2.0 + DIAMOND_HALF;
         let box_left = cx + repeat_backward_box_left_rel(cond_half, body_half, is_label);
         let box_cx = box_left + bw / 2.0;

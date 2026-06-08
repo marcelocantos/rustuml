@@ -612,7 +612,11 @@ impl ActivityParser {
             LazyLock::new(|| Regex::new(r"^:(.+?)([;|\]/>\\<])$").unwrap());
 
         if let Some(caps) = RE.captures(line) {
-            let text = caps[1].trim().to_string();
+            // PlantUML strips trailing whitespace from an action label but
+            // *keeps* leading whitespace, rendering it as left padding (the
+            // text element is shifted right by the leading-space advance and
+            // the box widens to match). `trim_end` preserves that behaviour.
+            let text = caps[1].trim_end().to_string();
             let ending = &caps[2];
 
             if ending == "\\" {
