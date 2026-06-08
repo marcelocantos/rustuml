@@ -31,6 +31,7 @@ pub mod board;
 pub mod class;
 pub mod cloud_shape;
 pub mod component;
+pub mod compress;
 pub mod creole;
 pub mod deployment;
 pub mod ditaa;
