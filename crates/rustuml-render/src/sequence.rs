@@ -1805,6 +1805,10 @@ const TEOZ_GROUP_EXTERNAL_MARGIN_X2: f64 = 9.0;
 const TEOZ_GROUP_ELSE_EXTRA: f64 = 8.0;
 /// Left/right margin for group frame beyond participant boxes.
 const GROUP_FRAME_MARGIN: f64 = 10.0;
+/// `InGroupableList.MARGIN5` — the margin `getMaxXInternal`/`getMinX` apply
+/// around a non-list extreme element (a message or note), as opposed to the
+/// `MARGIN10` applied around a nested `InGroupableList`.
+const GROUP_FRAME_INNER_MARGIN: f64 = 5.0;
 /// Left-edge floor of the outermost group frame's enclosed content. A note that
 /// overhangs participant 0 inside groups has its left edge held back to
 /// `GROUP_NOTE_LEFT_FLOOR_BASE + depth * GROUP_FRAME_MARGIN` (the outermost frame
@@ -8149,6 +8153,17 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
             ref_right: f64,
             message_right: f64,
             external_left: f64,
+            // PlantUML treats a `note right/left` attached to a message (a
+            // "note on message") differently from a free-standing note: rather
+            // than registering the note as an InGroupable element, the grouping
+            // header calls `InGroupableList.changeHack2(note.getPreferredWidth)`,
+            // so the frame's right edge becomes
+            // `getMaxXInternal + hack2` — i.e. the message region's right edge
+            // (max participant centre + ACTIVATION_HALF_W + MARGIN5) plus the
+            // note's *preferred* width, NOT the note's drawn right edge. Track
+            // that reserved candidate here. (`GroupingGraphicalElementHeader`
+            // `getPreferredWidth` / `InGroupableList.getMaxX`.)
+            on_msg_note_frame_right: f64,
         }
 
         // Scan events to find group start/end pairs and compute their frames.
@@ -8169,6 +8184,7 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                         ref_right: f64::NEG_INFINITY,
                         message_right: f64::NEG_INFINITY,
                         external_left: f64::INFINITY,
+                        on_msg_note_frame_right: f64::NEG_INFINITY,
                     });
                 }
                 Event::GroupEnd => {
@@ -8342,6 +8358,12 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                         if has_note {
                             frame_right = frame_right.max(group.note_right + group_frame_margin);
                         }
+                        if group.on_msg_note_frame_right.is_finite() {
+                            // A `note right` on a message reserves its preferred
+                            // width as `hack2`; the frame right is already the
+                            // absolute candidate (message region + pref width).
+                            frame_right = frame_right.max(group.on_msg_note_frame_right);
+                        }
                         if has_ref {
                             frame_right = frame_right.max(group.ref_right);
                         }
@@ -8445,9 +8467,50 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                     }
                 }
                 Event::Note(note) if !group_start_stack.is_empty() => {
-                    // A note is an InGroupable of every enclosing frame (Java
-                    // `InGroupablesStack.addElement` adds it to all open lists).
-                    if let Some((nl, nr)) = note_group_extent(ev_idx, note) {
+                    // A `note right` attached to a message is NOT an InGroupable
+                    // element in PlantUML; instead the grouping header reserves
+                    // the note's *preferred* width as `hack2`, so the frame right
+                    // edge = (message region right) + note.getPreferredWidth.
+                    // The message region right = max anchor centre +
+                    // ACTIVATION_HALF_W (arrow tip past the lifeline) + MARGIN5
+                    // (`InGroupableList.getMaxXInternal` adds MARGIN5 for a
+                    // non-list max element). The note's preferred width is
+                    // `textWidth(=pure+marginX1+marginX2) + 2*paddingX`:
+                    // marginX1=6 (LEFT)/15 (CENTER), marginX2=15, paddingX=5.
+                    let on_msg_right = note.on_message
+                        && note.position == NotePosition::Right
+                        && note.shape == NoteShape::Note;
+                    if on_msg_right {
+                        let anchor_center = note
+                            .participants
+                            .iter()
+                            .filter_map(|id| id_to_idx.get(id.as_str()))
+                            .map(|&i| participants[i].center_x)
+                            .fold(f64::NEG_INFINITY, f64::max);
+                        if anchor_center.is_finite() {
+                            let max_text_w = note_max_line_width_with_family(
+                                &note.text,
+                                note_font_size_f,
+                                &note_font_family,
+                            );
+                            let margin_x1 = if note_text_align == MessageAlign::Center {
+                                15.0
+                            } else {
+                                6.0
+                            };
+                            // textWidth + 2*paddingX (marginX2=15, paddingX=5).
+                            let note_pref_w = max_text_w + margin_x1 + 15.0 + 2.0 * 5.0;
+                            let message_region_right =
+                                anchor_center + ACTIVATION_HALF_W + GROUP_FRAME_INNER_MARGIN;
+                            let candidate = message_region_right + note_pref_w;
+                            for top in group_start_stack.iter_mut() {
+                                top.on_msg_note_frame_right =
+                                    top.on_msg_note_frame_right.max(candidate);
+                            }
+                        }
+                    } else if let Some((nl, nr)) = note_group_extent(ev_idx, note) {
+                        // A free-standing note IS an InGroupable of every
+                        // enclosing frame (Java `InGroupablesStack.addElement`).
                         for top in group_start_stack.iter_mut() {
                             top.note_left = top.note_left.min(nl);
                             top.note_right = top.note_right.max(nr);
