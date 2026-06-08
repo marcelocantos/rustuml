@@ -2038,6 +2038,10 @@ const FORK_INNER_PAD: f64 = 12.0;
 const FORK_BRANCH_GAP: f64 = 10.0;
 const FORK_EVEN_MIDDLE_EXTRA: f64 = 18.0;
 const FORK_ASYMMETRIC_EVEN_MIDDLE_EXTRA: f64 = 32.0;
+/// Branch-width gap (px) beyond which a fork's branches count as "unequal" and
+/// the even-count middle extra is dropped (see `fork_layout`). A wide switch
+/// beside a narrow action differs by tens of px; like-sized branches by ~0.
+const FORK_BRANCH_WIDTH_EQUAL_EPS: f64 = 5.0;
 const FORK_ASYMMETRIC_SPINE_STEP: f64 = 5.0;
 const FORK_ASYMMETRIC_EPS: f64 = 0.02;
 const FORK_EMPTY_EDGE_CENTER: f64 = 14.0;
@@ -2104,7 +2108,10 @@ fn sequence_if_depth(nodes: &[LayoutNode]) -> usize {
 }
 
 fn fork_layout(branches: &[Vec<LayoutNode>]) -> ForkLayout {
-    let branch_extents: Vec<(f64, f64)> = branches.iter().map(|b| sequence_extents(b)).collect();
+    let branch_extents: Vec<(f64, f64)> = branches
+        .iter()
+        .map(|b| sequence_extents_in_fork(b))
+        .collect();
     let branch_widths: Vec<f64> = branch_extents.iter().map(|(l, r)| l + r).collect();
     let n = branch_widths.len();
     if n == 0 {
@@ -2167,7 +2174,22 @@ fn fork_layout(branches: &[Vec<LayoutNode>]) -> ForkLayout {
     let has_asymmetric_branch = branch_extents
         .iter()
         .any(|(left, right)| (left - right).abs() > FORK_ASYMMETRIC_EPS);
-    let even_extra = if n >= 2 && n.is_multiple_of(2) && has_asymmetric_branch {
+    // The even-count middle extra spreads the centre branches apart only when
+    // the branches occupy comparable widths (e.g. two like-sized switches). When
+    // a wide multi-case switch sits beside a markedly narrower branch — as in
+    // `switch_in_fork2` — FtileForkInner packs them at the plain inter-branch
+    // gap with no middle extra (the wide switch already supplies the diamond
+    // clearance the extra would otherwise add).
+    let max_branch_w = branch_widths.iter().cloned().fold(0.0f64, f64::max);
+    let min_branch_w = branch_widths.iter().cloned().fold(f64::INFINITY, f64::min);
+    let has_wide_switch_branch = branches
+        .iter()
+        .any(|b| matches!(b.first(), Some(LayoutNode::Switch { cases, .. }) if cases.len() >= 4));
+    let branch_widths_unequal =
+        has_wide_switch_branch && max_branch_w - min_branch_w > FORK_BRANCH_WIDTH_EQUAL_EPS;
+    let even_extra = if branch_widths_unequal {
+        0.0
+    } else if n >= 2 && n.is_multiple_of(2) && has_asymmetric_branch {
         FORK_ASYMMETRIC_EVEN_MIDDLE_EXTRA
     } else if n >= 2 && n.is_multiple_of(2) {
         FORK_EVEN_MIDDLE_EXTRA
@@ -2198,19 +2220,41 @@ fn fork_layout(branches: &[Vec<LayoutNode>]) -> ForkLayout {
             }
         }
     }
+    // A fork whose branch is a packed multi-case switch carries an asymmetric
+    // (left < right) switch block: PlantUML computes the start/stop spine at the
+    // UNcompressed fork centre, but the diagram-wide ON_X pass then squeezes the
+    // switch's left-of-spine slack while leaving the black bar in place, so the
+    // spine ends up offset right of the (compressed) bar centre by half the
+    // switch's left/right extent asymmetry, less one pixel for the bar's own
+    // rounded cap. Reverse-engineered against act_switch_in_fork2_{4,6}cases.
+    let packed_switch_spine_dx = if even_extra == 0.0 && n.is_multiple_of(2) {
+        branch_extents
+            .iter()
+            .zip(branches.iter())
+            .filter(|(_, b)| {
+                matches!(b.first(), Some(LayoutNode::Switch { cases, .. }) if cases.len() >= 4)
+            })
+            .map(|((left, right), _)| right - left)
+            .fold(0.0f64, f64::max)
+    } else {
+        0.0
+    };
+    let spine_dx = if packed_switch_spine_dx > FORK_ASYMMETRIC_EPS {
+        -(packed_switch_spine_dx - 2.0) / 2.0
+    } else if n > 1 && !n.is_multiple_of(2) && has_asymmetric_branch {
+        let max_if_depth = branches
+            .iter()
+            .map(|branch| sequence_if_depth(branch))
+            .max()
+            .unwrap_or(0);
+        max_if_depth.saturating_sub(1) as f64 * FORK_ASYMMETRIC_SPINE_STEP
+    } else {
+        0.0
+    };
     ForkLayout {
         bar_w,
         centers,
-        spine_dx: if n > 1 && !n.is_multiple_of(2) && has_asymmetric_branch {
-            let max_if_depth = branches
-                .iter()
-                .map(|branch| sequence_if_depth(branch))
-                .max()
-                .unwrap_or(0);
-            max_if_depth.saturating_sub(1) as f64 * FORK_ASYMMETRIC_SPINE_STEP
-        } else {
-            0.0
-        },
+        spine_dx,
     }
 }
 
@@ -2546,6 +2590,82 @@ fn switch_fork_uncompress_extra(node: &LayoutNode, fork_gap_extra: f64) -> f64 {
     let layout = switch_x_layout(cases, condition);
     switch_merge_gap_in_fork(cases, condition, &layout, fork_gap_extra)
         - switch_merge_gap(cases, condition, &layout)
+}
+
+/// The 100-px vertical slack `FtileSwitchNude.calculateDimensionInternalSlow`
+/// adds to the case row (`result.delta(.., 100)`). The whole-diagram ON_Y pass
+/// later reclaims it, but `AbstractParallelFtilesBuilder.computeMaxHeight`
+/// measures the UNcompressed tile, so a sibling fork branch is vertically
+/// centred against this taller height (see `switch_uncompressed_tile_height`).
+const SWITCH_NUDE_VSLACK: f64 = 100.0;
+
+/// FtileSwitchWithManyLinks `getYdelta1b` — the fixed gap below the case row.
+const SWITCH_YDELTA1B: f64 = 10.0;
+
+/// BIG-mode `getYdelta1a` adds half the condition-diamond height on top of the
+/// label clearance (FtileSwitchWithManyLinks.getYdelta1a, mode==BIG_DIAMOND).
+/// The empirical half-height for the 24-px switch diamond is 12.0897 (matches
+/// the act_switch_in_fork2_2cases golden exactly).
+const SWITCH_BIG_YDELTA1A_DIAMOND_HALF: f64 = 12.0897;
+
+/// Uncompressed `FtileSwitchWithManyLinks` tile height — the value
+/// `AbstractParallelFtilesBuilder.computeMaxHeight` sees before the diagram-wide
+/// ON_Y pass reclaims the nude's 100-px slack. A sibling fork branch is centred
+/// against this height, NOT the compressed `node_height` the switch finally
+/// draws at (see `emit_fork_with_layout` centering). Mirrors the SMALL/BIG
+/// branches of `FtileSwitchWithDiamonds.calculateDimensionInternalSlow`:
+///   height = diamond.h + (max_case_tile_h + 100) + diamond.h + yd1a + yd1b
+fn switch_uncompressed_tile_height(cases: &[SwitchCase], condition: &str) -> f64 {
+    let layout = switch_x_layout(cases, condition);
+    // Tallest case tile = body height + the positive-label (`case (X)`) height
+    // that FtileDecorateInLabel stacks on top.
+    let max_case_tile_h = cases
+        .iter()
+        .map(|case| {
+            let body_h = sequence_height(&case.body);
+            let label_h = if case.label.is_empty() {
+                0.0
+            } else {
+                pm::text_height(SMALL_FONT)
+            };
+            body_h + label_h
+        })
+        .fold(0.0f64, f64::max);
+    let label_clear = cases
+        .iter()
+        .map(|case| {
+            if case.label.is_empty() {
+                0.0
+            } else {
+                pm::text_height(SMALL_FONT)
+            }
+        })
+        .fold(0.0f64, f64::max)
+        .max(SWITCH_YDELTA1B);
+    let yd1a = if layout.big_diamond {
+        label_clear + SWITCH_BIG_YDELTA1A_DIAMOND_HALF
+    } else {
+        label_clear + SWITCH_YDELTA1B
+    };
+    DIAMOND_HALF * 2.0
+        + yd1a
+        + (max_case_tile_h + SWITCH_NUDE_VSLACK)
+        + SWITCH_YDELTA1B
+        + DIAMOND_HALF * 2.0
+}
+
+/// Height a fork/split branch contributes to the sibling-centring `computeMax`
+/// calculation. A directly-contained multi-case switch uses its UNcompressed
+/// tile height (the value the Java parallel builder measures), everything else
+/// uses the ordinary sequence height.
+fn fork_branch_centering_height(branch: &[LayoutNode], gap_extra: f64) -> f64 {
+    if let [LayoutNode::Switch { cases, condition }] = branch
+        && cases.len() > 1
+        && !switch_all_branches_terminate(cases)
+    {
+        return switch_uncompressed_tile_height(cases, condition);
+    }
+    sequence_height_ex(branch, gap_extra)
 }
 
 /// PlantUML's `SUPP15` margin used by `FtileSwitchWithDiamonds` in
@@ -3836,8 +3956,8 @@ fn if_long_layout(
         let diamond_tile_w = dgeo.width;
         let branch_left = branch_w / 2.0;
         let couple_left = diamond_left.max(branch_left);
-        let couple_w =
-            (diamond_tile_w + (couple_left - diamond_left)).max(branch_w + (couple_left - branch_left));
+        let couple_w = (diamond_tile_w + (couple_left - diamond_left))
+            .max(branch_w + (couple_left - branch_left));
         cols.push(IfLongCol {
             diamond_w,
             diamond_w_tile: diamond_tile_w,
@@ -4450,6 +4570,56 @@ fn sequence_extents(nodes: &[LayoutNode]) -> (f64, f64) {
 
 fn sequence_extents_if_branch(nodes: &[LayoutNode]) -> (f64, f64) {
     sequence_extents_with(nodes, true)
+}
+
+/// Extents of a fork/split branch body. Mirrors [`sequence_extents`] but
+/// reserves a directly-contained `Switch` with the packed `*_if_branch` block
+/// (the fork branch's snakes are `ignoreForCompression`, so the switch's cases
+/// keep the if-branch packing — see `fork_branch_depth`). All other node kinds,
+/// including a NESTED fork, keep their ordinary extents (a fork inside a fork
+/// branch is not an if-branch fork).
+fn node_extents_in_fork(node: &LayoutNode) -> (f64, f64) {
+    if let LayoutNode::Switch { cases, condition } = node
+        && cases.len() >= 4
+        && cases.len().is_multiple_of(2)
+    {
+        // Reserve EXACTLY the drawn block: the fork bar spans the case tiles as
+        // laid out by `switch_x_layout_if_branch` (the same layout the even
+        // four-plus emit path uses inside a fork branch), unlike the if-branch
+        // parent reservation which is deliberately tighter than the drawn block.
+        // Other case counts keep the standalone extents (standalone emit path).
+        let layout = switch_x_layout_if_branch(cases, condition);
+        return (layout.diamond_dx, layout.block_w - layout.diamond_dx);
+    }
+    node_extents(node)
+}
+
+fn sequence_extents_in_fork(nodes: &[LayoutNode]) -> (f64, f64) {
+    let mut left = 0.0f64;
+    let mut right = 0.0f64;
+    let mut anchor_half = 0.0f64;
+    for node in nodes {
+        match node {
+            LayoutNode::Note { text, position, .. } => {
+                let box_w = note_box_width(text);
+                let reach = anchor_half + NOTE_GAP + box_w;
+                match position {
+                    NotePosition::Left => left = left.max(reach - 1.0),
+                    NotePosition::Right => right = right.max(reach + 1.0),
+                }
+            }
+            _ => {
+                let (nl, nr) = node_extents_in_fork(node);
+                left = left.max(nl);
+                right = right.max(nr);
+                let width = nl + nr;
+                if width > 0.0 {
+                    anchor_half = width / 2.0;
+                }
+            }
+        }
+    }
+    (left, right)
 }
 
 fn sequence_extents_with(nodes: &[LayoutNode], if_branch: bool) -> (f64, f64) {
@@ -6183,6 +6353,14 @@ struct SvgEmitter {
     palette: Palette,
     colored_partition_while_depth: usize,
     partition_wrapped_fork_depth: usize,
+    /// Nonzero while emitting the body of a fork/split branch. A switch inside a
+    /// fork branch follows the same packed `xSeparation=20` layout as a switch
+    /// inside an `if` branch: ParallelBuilderFork marks the branch snakes
+    /// `ignoreForCompression`, so the diagram-wide ON_X pass squeezes only the
+    /// left-of-spine slack against the canvas margin (left gaps collapse to 10,
+    /// the centre gap and everything right keep the full 20) — exactly the
+    /// FtileSwitchNude-inside-FtileIf behaviour modelled by `*_if_branch`.
+    fork_branch_depth: usize,
     handwritten: bool,
     /// When an `if`/`elseif` branch's flow is a single no-special `while`, the
     /// branch→merge connection is owned by the loop's exit corridor (PlantUML
@@ -6264,6 +6442,7 @@ impl SvgEmitter {
             palette,
             colored_partition_while_depth: 0,
             partition_wrapped_fork_depth: 0,
+            fork_branch_depth: 0,
             handwritten,
             while_exit_redirect: None,
             fork_branch_gap_extra: 0.0,
@@ -7335,12 +7514,10 @@ fn emit_sequence_ex(
         // drawn at the boundary between consecutive loops rather than collapsed
         // to the end. Without this, consecutive deferrals would overwrite one
         // another and drop the inner loops' inbound arrows.
-        let node_defers = while_body_chain_compresses(node)
-            || is_partition_wrapping_compressed_while(node);
+        let node_defers =
+            while_body_chain_compresses(node) || is_partition_wrapping_compressed_while(node);
         let is_chain_while = node_defers && prev_was_deferred_while;
-        if is_chain_while
-            && let Some((arrow_top, style, label, arrow_gap)) = pending_arrow.take()
-        {
+        if is_chain_while && let Some((arrow_top, style, label, arrow_gap)) = pending_arrow.take() {
             emit_pending_down_arrow(svg, arrow_top, style, label, arrow_gap, cx);
             if let Some((p_top, p_style, p_label, p_gap)) = deferred_partition_inbound.take() {
                 emit_pending_down_arrow(svg, p_top, p_style, p_label, p_gap, cx);
@@ -7670,7 +7847,17 @@ fn emit_node_with_repeat_extra(
             }
         }
         LayoutNode::Switch { condition, cases } => {
-            if if_branch {
+            // A switch directly under a fork/split branch packs its cases like a
+            // switch inside an `if` branch (see `fork_branch_depth`): only the
+            // left-of-spine slack is reclaimed by ON_X, so the case gaps follow
+            // the `*_if_branch` model rather than the symmetric standalone one.
+            // Two-case switches already render correctly through the standalone
+            // path (BIG_DIAMOND). Odd case counts spread under a BIG diamond and
+            // also render acceptably standalone; only the even four-plus packed
+            // forms need the if-branch model.
+            let fork_switch =
+                svg.fork_branch_depth > 0 && cases.len() >= 4 && cases.len().is_multiple_of(2);
+            if (if_branch || fork_switch) && cases.len() > 1 {
                 emit_switch_with_layout(
                     svg,
                     cx,
@@ -10110,18 +10297,24 @@ fn emit_fork_with_layout(
     svg.fork_branch_gap_extra = gap_extra;
     let mut center_offsets = vec![0.0f64; branches.len()];
     if center_branches {
-        let heights: Vec<f64> = branches
+        // The vertical band each branch is centred in (PlantUML's
+        // `computeMaxHeight`) is measured BEFORE the diagram-wide ON_Y pass, so a
+        // multi-case switch branch contributes its UNcompressed tile height even
+        // though it finally draws at the shorter compressed height. The switch
+        // (tallest, == band) lands at offset 0; a shorter sibling is centred
+        // against the uncompressed band.
+        let band_heights: Vec<f64> = branches
             .iter()
             .map(|b| {
                 if b.is_empty() {
                     0.0
                 } else {
-                    sequence_height_ex(b, gap_extra)
+                    fork_branch_centering_height(b, gap_extra)
                 }
             })
             .collect();
-        let max_h = heights.iter().cloned().fold(0.0f64, f64::max);
-        for (i, &h) in heights.iter().enumerate() {
+        let max_h = band_heights.iter().cloned().fold(0.0f64, f64::max);
+        for (i, &h) in band_heights.iter().enumerate() {
             if !branches[i].is_empty() {
                 center_offsets[i] = (max_h - h) / 2.0;
             }
@@ -10135,6 +10328,7 @@ fn emit_fork_with_layout(
         branches.iter().map(|b| branch_terminates(b)).collect();
 
     let mut branch_bottoms = Vec::new();
+    svg.fork_branch_depth += 1;
     for (i, (branch, &bcx)) in branches.iter().zip(branch_centers.iter()).enumerate() {
         let branch_y = if single_partition_branch_body_top(branch, bar_bottom).is_some() {
             bar_bottom
@@ -10144,6 +10338,7 @@ fn emit_fork_with_layout(
         let bottom = emit_sequence(svg, branch, bcx, branch_y);
         branch_bottoms.push(bottom);
     }
+    svg.fork_branch_depth -= 1;
     svg.fork_branch_gap_extra = saved_gap_extra;
 
     // Find the maximum bottom. When every non-empty branch terminates, no
@@ -10952,8 +11147,7 @@ fn emit_repeat(
         cx + sequence_loop_body_extents(body).1 + 12.0
     } else {
         let extents_clear = cx + sequence_extents(body).1 + 12.0;
-        let geo_clear = sequence_geometry(body)
-            .map_or(extents_clear, |g| cx + g.right() + 4.0);
+        let geo_clear = sequence_geometry(body).map_or(extents_clear, |g| cx + g.right() + 4.0);
         extents_clear.max(geo_clear)
     };
     let arm_x = (diamond_right + 12.0).max(body_right);
