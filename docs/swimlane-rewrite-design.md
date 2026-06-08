@@ -311,3 +311,25 @@ bar's DRAWN width (119.9) is derived in the swimlane case — it is narrower tha
 natural fork-bar span, so the fork tile must re-derive the bar to cover only its own
 lane's branch reach + the cross-lane connector stubs. Next: instrument that, then
 implement bar-stays-in-lane + cross-lane L-snake for out-of-lane branches.
+
+## Fork bar is DECOMPOSED per-lane (2026-06-08, from multi-golden data)
+
+`act_fork3br_lanes2` (3 branches, 2 lanes) has TWO bars in DIFFERENT lanes with
+DIFFERENT widths: Lane1 bar `[26, 233.7]` w=207.7 (covers the 2 Lane1 branches at
+73.4, 186.3), Lane2 bar `[243.7, 338.6]` w=94.9 (covers the 1 Lane2 branch at 291.2).
+`act_fork2br_lanes2` (1 branch/lane) shows ONE bar (in the fork's lane) + a cross-lane
+connector to the other lane's single branch.
+
+So the fork/join bar is NOT one element translated — it is **decomposed per lane**:
+each lane draws the bar segment spanning ITS branches; lanes are joined by cross-lane
+connectors at the bar's y. A lane with multiple fork branches gets a real bar segment
+(to split/merge flow among them); a lane with a single branch may get just the
+connector. This is `ParallelBuilderFork`'s swimlane-aware construction
+(`AbstractParallelFtilesBuilder` + the per-swimlane draw), genuinely case-dependent on
+branches-per-lane.
+
+Implication: V2's "bar stays in one lane" is still too simple. The faithful path is to
+instrument `ParallelBuilderFork`/`FtileFactoryDelegatorCreateParallel` in the swimlane
+case to see how the bar is split + where cross-lane connectors attach, then implement
+per-lane bar segments + cross-lane joins. This is the deepest sub-system of the rewrite
+and is genuinely multi-session; the ~40-golden ladder then needs per-case iteration.
