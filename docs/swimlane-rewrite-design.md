@@ -333,3 +333,25 @@ instrument `ParallelBuilderFork`/`FtileFactoryDelegatorCreateParallel` in the sw
 case to see how the bar is split + where cross-lane connectors attach, then implement
 per-lane bar segments + cross-lane joins. This is the deepest sub-system of the rewrite
 and is genuinely multi-session; the ~40-golden ladder then needs per-case iteration.
+
+## REDIRECT: linear swimlanes are nearly there — width = reserved extent (2026-06-08)
+
+Tested V2 on `act_swimlane2_while_simple` (LINEAR: `|L1| start while |L2| while stop`,
+no fork). Result: **height EXACT (353 vs 353)**, only WIDTH off (245 vs 286); first
+divider exact (20), lanes ~10px too narrow each (dividers V2 20/114.26/224.51 vs gold
+20/134.26/257.51).
+
+Root cause: gold Lane1 width = 114.26 = `content_left(51.13)+content_right(53.13)+10`
+— the RESERVED extent (what the old segment model's `lane_width` used and passes 124
+goldens), NOT the drawn bbox. V2 measures the drawn bbox via `x_bounds` = 94.26, which
+under-measures the while by ~10 (the back-edge corridor is RESERVED but not drawn to
+the full extent). So **lane width must come from per-lane RESERVED extents (node_extents
+content_left/right + 10), not `x_bounds`**.
+
+Why this matters: linear swimlanes have NO fork bar, so they are flippable WITHOUT the
+deep per-lane bar decomposition. PRIORITY for the next push (faster count movement than
+forks): pass the lane-tagged tree to `layout_swimlanes_v2`, partition the top-level
+nodes by `LaneMark` into per-lane runs, compute `lane_width = sequence_extents(run) + 10`
+and the spine from `content_left`, then shift (V2 already gets the height + title band +
+dividers right). Targets: `act_swimlane{2,3,4,5}_while_simple` and other linear cases.
+The fork cases (per-lane bar decomposition) remain the harder, later work.
