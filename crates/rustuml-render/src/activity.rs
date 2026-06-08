@@ -4808,6 +4808,15 @@ fn swimlane_lane_extents(body: &[LayoutNode]) -> (f64, f64) {
             right = drawn_right;
         }
     }
+    // Swimlane while with an absorbed terminator (stop/end after endwhile): its
+    // content_left is the west-exit corridor + terminal tile reach
+    // (cond_half + halfHex + 9 + CIRCLE_TILE_HALF), ~0.65 px narrower than the
+    // standalone node_extents value, which otherwise mis-places the lane column.
+    // This fn is swimlane-only, so this never touches standalone whiles.
+    if let [while_node @ LayoutNode::While { special_out: Some(_), .. }] = body {
+        let (l, _) = swimlane_v2_node_extents(while_node);
+        return (l, right);
+    }
     (left, right)
 }
 
