@@ -5906,13 +5906,6 @@ impl SvgEmitter {
         }
     }
 
-    /// Final concatenation: shapes first, then all connectors.
-    fn finish(self) -> String {
-        let mut out = self.shapes;
-        out.push_str(&self.connectors);
-        out
-    }
-
     fn shadow_filter_attr(&self, enabled: bool) -> String {
         if enabled && let Some(id) = &self.palette.shadow_filter {
             format!(r#" filter="url(#{id})""#)
@@ -11660,8 +11653,23 @@ fn render_inner(
         emit_legend_table(&mut svg, &legend_rows, body_bottom_y + LEGEND_TOP_GAP);
     }
 
+    // Whole-diagram layout compression (PlantUML's CompressionXorYBuilder ON_X
+    // then ON_Y, ActivityDiagram3:203-204): collapse empty bands wider than
+    // 2*margin to exactly 2*margin. Occupancy is read from the `shapes` buffer
+    // (connectors are ignorable); both buffers are remapped. Identity on already-
+    // compact diagrams, so it leaves passing output byte-identical.
+    let (shapes_c, connectors_c, x_tf, y_tf) = crate::compress::compress_activity_buffers(
+        &svg.shapes,
+        &svg.connectors,
+        crate::compress::COMPRESS_MARGIN,
+    );
+    let svg_w = x_tf.transform(svg_w as f64).round() as u32;
+    let svg_h = y_tf.transform(svg_h as f64).round() as u32;
+    let mut content = shapes_c;
+    content.push_str(&connectors_c);
+
     // Wrap in PlantUML-compatible SVG root.
-    format_svg(svg_w, svg_h, &svg.finish(), defs, svg_background.as_deref())
+    format_svg(svg_w, svg_h, &content, defs, svg_background.as_deref())
 }
 
 fn empty_svg() -> String {

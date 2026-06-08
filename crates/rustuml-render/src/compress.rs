@@ -378,6 +378,405 @@ pub fn compress(prims: &mut [Prim], margin: f64) -> (CompressionTransform, Compr
     (x_tf, y_tf)
 }
 
+// ---------------------------------------------------------------------------
+// Activity-diagram wiring: post-process the rendered SVG buffers.
+//
+// `SvgEmitter` keeps occupied shapes (`shapes`) and ignorable connectors
+// (`connectors`) in separate buffers — which IS the `SlotFinder` occupied vs
+// `UShapeIgnorableForCompression` classification. So we can run the faithful
+// whole-diagram pass as a string post-process: read occupancy from `shapes`
+// only, build the ON_X then ON_Y transforms, and rewrite every coordinate in
+// BOTH buffers. Activity output uses only absolute path commands (verified
+// across the golden corpus), so path `d` rewriting is well-defined.
+//
+// Numbers are re-emitted via the renderer's own `fmt_coord`, and an identity
+// transform (no empty band wider than `2*margin`) skips its axis entirely,
+// leaving the buffers byte-identical — so already-compressed (passing)
+// diagrams are provably untouched.
+// ---------------------------------------------------------------------------
+
+use crate::plantuml_metrics::fmt_coord;
+use regex::Regex;
+use std::sync::OnceLock;
+
+/// Whole-diagram compression of a rendered activity diagram. Returns the
+/// transformed `(shapes, connectors)` buffers and the `(x, y)` transforms so the
+/// caller can remap the canvas dimensions (`x_tf.transform(width)` etc.).
+pub fn compress_activity_buffers(
+    shapes: &str,
+    connectors: &str,
+    margin: f64,
+) -> (String, String, CompressionTransform, CompressionTransform) {
+    let x_tf = CompressionTransform::from_occupied(&parse_occupancy(shapes, CompressionMode::OnX), margin);
+    let (shapes, connectors) = if x_tf.is_identity() {
+        (shapes.to_string(), connectors.to_string())
+    } else {
+        (
+            rewrite_axis(shapes, CompressionMode::OnX, &x_tf),
+            rewrite_axis(connectors, CompressionMode::OnX, &x_tf),
+        )
+    };
+    // ON_Y is deferred: it requires modelling vertical flow connectors as
+    // OCCUPIED on the y-axis (they fill the inter-node space; only arrowhead
+    // decorations are ignorable, and on X only). Reading occupancy from `shapes`
+    // alone — correct for ON_X — wrongly collapses those connector gaps on Y.
+    // Until that connector-y-occupancy model lands, ON_Y is the identity.
+    let y_tf = CompressionTransform::identity();
+    (shapes, connectors, x_tf, y_tf)
+}
+
+fn re(pattern: &str, cell: &'static OnceLock<Regex>) -> &'static Regex {
+    cell.get_or_init(|| Regex::new(pattern).unwrap())
+}
+
+fn num(s: &str) -> f64 {
+    s.parse().unwrap_or(0.0)
+}
+
+/// Read the occupied 1-D intervals on `mode`'s axis from the SHAPES buffer.
+fn parse_occupancy(shapes: &str, mode: CompressionMode) -> SlotSet {
+    let mut occ = SlotSet::new();
+    let x = mode == CompressionMode::OnX;
+
+    static RECT: OnceLock<Regex> = OnceLock::new();
+    let rect = re(
+        r#"<rect\b[^>]*\bheight="([-\d.]+)"[^>]*\bwidth="([-\d.]+)"[^>]*\bx="([-\d.]+)"[^>]*\by="([-\d.]+)""#,
+        &RECT,
+    );
+    for c in rect.captures_iter(shapes) {
+        if x {
+            let (xx, w) = (num(&c[3]), num(&c[2]));
+            occ.add_slot(xx, xx + w);
+        } else {
+            let (yy, h) = (num(&c[4]), num(&c[1]));
+            occ.add_slot(yy, yy + h);
+        }
+    }
+
+    static ELL: OnceLock<Regex> = OnceLock::new();
+    let ell = re(
+        r#"<ellipse\b[^>]*\bcx="([-\d.]+)"[^>]*\bcy="([-\d.]+)"[^>]*\brx="([-\d.]+)"[^>]*\bry="([-\d.]+)""#,
+        &ELL,
+    );
+    for c in ell.captures_iter(shapes) {
+        if x {
+            let (cx, rx) = (num(&c[1]), num(&c[3]));
+            occ.add_slot(cx - rx, cx + rx);
+        } else {
+            let (cy, ry) = (num(&c[2]), num(&c[4]));
+            occ.add_slot(cy - ry, cy + ry);
+        }
+    }
+
+    static POLY: OnceLock<Regex> = OnceLock::new();
+    let poly = re(r#"<polygon\b[^>]*\bpoints="([^"]+)""#, &POLY);
+    for c in poly.captures_iter(shapes) {
+        if let Some((lo, hi)) = points_bbox(&c[1], x) {
+            occ.add_slot(lo, hi);
+        }
+    }
+
+    static PATH: OnceLock<Regex> = OnceLock::new();
+    let path = re(r#"<path\b[^>]*\bd="([^"]+)""#, &PATH);
+    for c in path.captures_iter(shapes) {
+        if let Some((lo, hi)) = path_bbox(&c[1], x) {
+            occ.add_slot(lo, hi);
+        }
+    }
+
+    static TEXT: OnceLock<Regex> = OnceLock::new();
+    let text = re(
+        r#"<text\b[^>]*\bfont-size="([-\d.]+)"[^>]*\btextLength="([-\d.]+)"[^>]*\bx="([-\d.]+)"[^>]*\by="([-\d.]+)""#,
+        &TEXT,
+    );
+    for c in text.captures_iter(shapes) {
+        if x {
+            let (xx, tl) = (num(&c[3]), num(&c[2]));
+            occ.add_slot(xx, xx + tl);
+        } else {
+            // Glyph band around the baseline `y`: PlantUML's TextLimitFinder uses
+            // the laid-out ascent/descent; approximate with the font size above
+            // the baseline (descent is small and text usually sits inside a box).
+            let (fs, yy) = (num(&c[1]), num(&c[4]));
+            occ.add_slot(yy - fs, yy);
+        }
+    }
+
+    occ
+}
+
+/// Bounding interval on the chosen axis of a `points="x,y x,y ..."` list.
+fn points_bbox(points: &str, x_axis: bool) -> Option<(f64, f64)> {
+    let nums: Vec<f64> = points
+        .split([' ', ','])
+        .filter(|t| !t.is_empty())
+        .map(num)
+        .collect();
+    let start = if x_axis { 0 } else { 1 };
+    let mut lo = f64::INFINITY;
+    let mut hi = f64::NEG_INFINITY;
+    let mut i = start;
+    while i < nums.len() {
+        lo = lo.min(nums[i]);
+        hi = hi.max(nums[i]);
+        i += 2;
+    }
+    (lo <= hi).then_some((lo, hi))
+}
+
+/// Per-command coordinate layout of an SVG path (absolute commands only):
+/// returns, for the run of numeric args following a command letter, which slots
+/// are x-coords (`true`), y-coords (`false`), or neither (`None`), as a repeating
+/// group.
+fn path_arg_axes(cmd: char) -> &'static [Option<bool>] {
+    match cmd.to_ascii_uppercase() {
+        'M' | 'L' | 'T' => &[Some(true), Some(false)],
+        'C' => &[Some(true), Some(false), Some(true), Some(false), Some(true), Some(false)],
+        'S' | 'Q' => &[Some(true), Some(false), Some(true), Some(false)],
+        'A' => &[None, None, None, None, None, Some(true), Some(false)],
+        'H' => &[Some(true)],
+        'V' => &[Some(false)],
+        _ => &[],
+    }
+}
+
+/// Walk a path `d`, yielding each numeric token with whether it is an x-coord,
+/// a y-coord, or neither (`None`).
+fn path_coords(d: &str) -> Vec<(f64, Option<bool>)> {
+    let mut out = Vec::new();
+    let mut group: &'static [Option<bool>] = &[];
+    let mut gi = 0usize;
+    let mut tok = String::new();
+    let flush = |tok: &mut String, out: &mut Vec<(f64, Option<bool>)>, group: &[Option<bool>], gi: &mut usize| {
+        if tok.is_empty() {
+            return;
+        }
+        let v = num(tok);
+        tok.clear();
+        let axis = if group.is_empty() {
+            None
+        } else {
+            let a = group[*gi % group.len()];
+            *gi += 1;
+            a
+        };
+        out.push((v, axis));
+    };
+    for ch in d.chars() {
+        if ch.is_ascii_alphabetic() {
+            flush(&mut tok, &mut out, group, &mut gi);
+            group = path_arg_axes(ch);
+            gi = 0;
+            out.push((f64::NAN, None)); // command-letter marker (NAN, skipped on rebuild)
+        } else if ch == ',' || ch == ' ' {
+            flush(&mut tok, &mut out, group, &mut gi);
+        } else {
+            tok.push(ch);
+        }
+    }
+    flush(&mut tok, &mut out, group, &mut gi);
+    out
+}
+
+fn path_bbox(d: &str, x_axis: bool) -> Option<(f64, f64)> {
+    let mut lo = f64::INFINITY;
+    let mut hi = f64::NEG_INFINITY;
+    for (v, axis) in path_coords(d) {
+        if axis == Some(x_axis) {
+            lo = lo.min(v);
+            hi = hi.max(v);
+        }
+    }
+    (lo <= hi).then_some((lo, hi))
+}
+
+/// Rewrite every coordinate on `mode`'s axis in one SVG buffer through `tf`.
+fn rewrite_axis(svg: &str, mode: CompressionMode, tf: &CompressionTransform) -> String {
+    let x = mode == CompressionMode::OnX;
+    let mut out = svg.to_string();
+
+    // <rect>: x/width (or y/height) move together so the far edge maps correctly.
+    static RECT: OnceLock<Regex> = OnceLock::new();
+    let rect = re(r#"<rect\b[^>]*?/>"#, &RECT);
+    out = rect
+        .replace_all(&out, |c: &regex::Captures| {
+            let el = &c[0];
+            if x {
+                rewrite_pair(el, "x", "width", tf)
+            } else {
+                rewrite_pair(el, "y", "height", tf)
+            }
+        })
+        .into_owned();
+
+    // <ellipse>: cx/rx (or cy/ry).
+    static ELL: OnceLock<Regex> = OnceLock::new();
+    let ell = re(r#"<ellipse\b[^>]*?/>"#, &ELL);
+    out = ell
+        .replace_all(&out, |c: &regex::Captures| {
+            let el = &c[0];
+            let (center, radius) = if x { ("cx", "rx") } else { ("cy", "ry") };
+            rewrite_center_radius(el, center, radius, tf)
+        })
+        .into_owned();
+
+    // <polygon points>.
+    static POLY: OnceLock<Regex> = OnceLock::new();
+    let poly = re(r#"(<polygon\b[^>]*\bpoints=")([^"]+)(")"#, &POLY);
+    out = poly
+        .replace_all(&out, |c: &regex::Captures| {
+            format!("{}{}{}", &c[1], rewrite_points(&c[2], x, tf), &c[3])
+        })
+        .into_owned();
+
+    // <path d>.
+    static PATH: OnceLock<Regex> = OnceLock::new();
+    let path = re(r#"(<path\b[^>]*\bd=")([^"]+)(")"#, &PATH);
+    out = path
+        .replace_all(&out, |c: &regex::Captures| {
+            format!("{}{}{}", &c[1], rewrite_path_d(&c[2], x, tf), &c[3])
+        })
+        .into_owned();
+
+    // <line>: x1/x2 (or y1/y2).
+    static LINE: OnceLock<Regex> = OnceLock::new();
+    let line = re(r#"<line\b[^>]*?/>"#, &LINE);
+    out = line
+        .replace_all(&out, |c: &regex::Captures| {
+            let el = &c[0];
+            let (a, b) = if x { ("x1", "x2") } else { ("y1", "y2") };
+            let el = rewrite_attr(el, a, tf);
+            rewrite_attr(&el, b, tf)
+        })
+        .into_owned();
+
+    // <text>: x/textLength on X; y on Y.
+    static TEXT: OnceLock<Regex> = OnceLock::new();
+    let text = re(r#"<text\b[^>]*?>"#, &TEXT);
+    out = text
+        .replace_all(&out, |c: &regex::Captures| {
+            let el = &c[0];
+            if x {
+                rewrite_pair(el, "x", "textLength", tf)
+            } else {
+                rewrite_attr(el, "y", tf)
+            }
+        })
+        .into_owned();
+
+    out
+}
+
+/// Replace a single numeric attribute `name="V"` with `name="tf(V)"`.
+fn rewrite_attr(el: &str, name: &str, tf: &CompressionTransform) -> String {
+    let pat = format!(r#"{name}="([-\d.]+)""#);
+    let rx = Regex::new(&pat).unwrap();
+    rx.replace(el, |c: &regex::Captures| {
+        format!(r#"{}="{}""#, name, fmt_coord(tf.transform(num(&c[1]))))
+    })
+    .into_owned()
+}
+
+/// Replace a `pos`/`len` attribute pair (x/width, y/height, x/textLength) so the
+/// far edge `pos+len` maps through `tf` and the length stays the span between the
+/// transformed edges.
+fn rewrite_pair(el: &str, pos: &str, len: &str, tf: &CompressionTransform) -> String {
+    let pos_v = attr_val(el, pos);
+    let len_v = attr_val(el, len);
+    let (Some(p), Some(l)) = (pos_v, len_v) else {
+        return el.to_string();
+    };
+    let np = tf.transform(p);
+    let nl = tf.transform(p + l) - np;
+    let el = set_attr(el, pos, np);
+    set_attr(&el, len, nl)
+}
+
+/// Replace a center/radius pair so `[c-r, c+r]` maps through `tf`.
+fn rewrite_center_radius(el: &str, center: &str, radius: &str, tf: &CompressionTransform) -> String {
+    let (Some(c), Some(r)) = (attr_val(el, center), attr_val(el, radius)) else {
+        return el.to_string();
+    };
+    let lo = tf.transform(c - r);
+    let hi = tf.transform(c + r);
+    let el = set_attr(el, center, (lo + hi) / 2.0);
+    set_attr(&el, radius, (hi - lo) / 2.0)
+}
+
+fn attr_val(el: &str, name: &str) -> Option<f64> {
+    let rx = Regex::new(&format!(r#"\b{name}="([-\d.]+)""#)).unwrap();
+    rx.captures(el).map(|c| num(&c[1]))
+}
+
+fn set_attr(el: &str, name: &str, v: f64) -> String {
+    let rx = Regex::new(&format!(r#"(\b{name}=")[-\d.]+(")"#)).unwrap();
+    rx.replace(el, |c: &regex::Captures| format!("{}{}{}", &c[1], fmt_coord(v), &c[2]))
+        .into_owned()
+}
+
+fn rewrite_points(points: &str, x_axis: bool, tf: &CompressionTransform) -> String {
+    let nums: Vec<&str> = points.split(',').collect();
+    // points are "x,y,x,y,..." (comma-separated). Transform every other entry.
+    let flat: Vec<f64> = nums.iter().map(|s| num(s.trim())).collect();
+    let mut out: Vec<String> = Vec::with_capacity(flat.len());
+    for (i, &v) in flat.iter().enumerate() {
+        let is_x = i % 2 == 0;
+        if is_x == x_axis {
+            out.push(fmt_coord(tf.transform(v)));
+        } else {
+            out.push(fmt_coord(v));
+        }
+    }
+    out.join(",")
+}
+
+fn rewrite_path_d(d: &str, x_axis: bool, tf: &CompressionTransform) -> String {
+    // Char-scan that preserves every separator and command letter verbatim,
+    // transforming only number tokens. `group`/`gi` track which argument slot of
+    // the current command a number occupies (x, y, or neither).
+    let mut out = String::with_capacity(d.len() + 16);
+    let mut group: &'static [Option<bool>] = &[];
+    let mut gi = 0usize;
+    let mut numbuf = String::new();
+    let flush = |numbuf: &mut String, out: &mut String, group: &[Option<bool>], gi: &mut usize| {
+        if numbuf.is_empty() {
+            return;
+        }
+        let v = num(numbuf);
+        numbuf.clear();
+        let axis = if group.is_empty() {
+            None
+        } else {
+            let a = group[*gi % group.len()];
+            *gi += 1;
+            a
+        };
+        let nv = if axis == Some(x_axis) { tf.transform(v) } else { v };
+        out.push_str(&fmt_coord(nv));
+    };
+    for ch in d.chars() {
+        if ch.is_ascii_alphabetic() {
+            flush(&mut numbuf, &mut out, group, &mut gi);
+            group = path_arg_axes(ch);
+            gi = 0;
+            out.push(ch);
+        } else if ch.is_ascii_digit() || ch == '.' {
+            numbuf.push(ch);
+        } else if ch == '-' {
+            // A '-' starts a new number; flush any in-progress token first
+            // (activity output uses explicit separators, so this is belt-and-braces).
+            flush(&mut numbuf, &mut out, group, &mut gi);
+            numbuf.push(ch);
+        } else {
+            // Separator (space/comma/etc.) — emit pending number, copy verbatim.
+            flush(&mut numbuf, &mut out, group, &mut gi);
+            out.push(ch);
+        }
+    }
+    flush(&mut numbuf, &mut out, group, &mut gi);
+    out
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;
