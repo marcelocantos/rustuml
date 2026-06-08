@@ -27,6 +27,21 @@ use crate::plantuml_metrics as pm;
 use crate::style::Theme;
 use crate::text_render::{self, TextBase};
 
+thread_local! {
+    /// Swimlane V2 only: maps lane name -> column index (first-appearance order)
+    /// for the current single-tree build. Set by `build_tree` on the V2 path so
+    /// the recursive `build_tree_inner` (and its branch helpers) can resolve
+    /// `|Lane|` markers into `LayoutNode::LaneMark(idx)`. `None` off the V2 path.
+    static SWIMLANE_V2_MAP: std::cell::RefCell<Option<HashMap<String, usize>>> =
+        const { std::cell::RefCell::new(None) };
+}
+
+/// Resolve a lane name to its column index via the V2 thread-local map.
+/// Returns `None` when not on the V2 path (map unset).
+fn swimlane_v2_lane_index(name: &str) -> Option<usize> {
+    SWIMLANE_V2_MAP.with(|m| m.borrow().as_ref().and_then(|map| map.get(name).copied()))
+}
+
 // PlantUML activity diagram constants (reverse-engineered from golden SVGs).
 const START_R: f64 = 10.0;
 const STOP_OUTER_R: f64 = 11.0;
@@ -801,6 +816,11 @@ enum LayoutNode {
     Kill,
     Break,
     Goto(String),
+    /// Swimlane V2 only: a zero-size flow marker recording that subsequent flow
+    /// belongs to swimlane `lane_index`. Inserted by the single-tree builder
+    /// where a `|Lane|` step appears; consumed at emit to route shapes into the
+    /// per-lane buffer. Has no layout footprint (extents/width/height all zero).
+    LaneMark(usize),
     Title {
         text: String,
         font_size: f64,
@@ -1115,7 +1135,8 @@ fn node_is_flow(n: &LayoutNode) -> bool {
         | LayoutNode::Detach
         | LayoutNode::Kill
         | LayoutNode::Break
-        | LayoutNode::Goto(_) => false,
+        | LayoutNode::Goto(_)
+        | LayoutNode::LaneMark(_) => false,
         LayoutNode::Partition { body, .. } if body.is_empty() => false,
         _ => true,
     }
@@ -1383,10 +1404,24 @@ fn build_tree(steps: &[ActivityStep], palette: &Palette) -> Vec<LayoutNode> {
         .iter()
         .take_while(|s| !matches!(s, ActivityStep::Swimlane(_)))
         .any(|s| !matches!(s, ActivityStep::Note(_) | ActivityStep::Arrow(_)));
-    if std::env::var("RUSTUML_SWIMLANE_V2").is_err()
-        && (distinct_lanes.len() > 1 || (distinct_lanes.len() == 1 && has_pre_lane_content))
-    {
+    let is_swimlane = distinct_lanes.len() > 1 || (distinct_lanes.len() == 1 && has_pre_lane_content);
+    let v2 = std::env::var("RUSTUML_SWIMLANE_V2").is_ok();
+    if is_swimlane && !v2 {
         return build_swimlanes(steps, palette);
+    }
+    if is_swimlane && v2 {
+        // V2 single-tree path: assign lane indices in first-appearance order, set
+        // the thread-local so `build_tree_inner` (recursively, incl. branch
+        // helpers) lowers each `|Lane|` step to a `LayoutNode::LaneMark(idx)`.
+        let mut map: HashMap<String, usize> = HashMap::new();
+        for name in &swimlane_markers {
+            let next = map.len();
+            map.entry((*name).to_string()).or_insert(next);
+        }
+        SWIMLANE_V2_MAP.with(|m| *m.borrow_mut() = Some(map));
+        let tree = build_tree_inner(steps, palette);
+        SWIMLANE_V2_MAP.with(|m| *m.borrow_mut() = None);
+        return tree;
     }
 
     let mut tree = build_tree_inner(steps, palette);
@@ -1878,7 +1913,16 @@ fn build_tree_inner(steps: &[ActivityStep], palette: &Palette) -> Vec<LayoutNode
             ActivityStep::Case(_) | ActivityStep::EndSwitch => {
                 i += 1;
             }
-            ActivityStep::Backward(_) | ActivityStep::Swimlane(_) => {
+            ActivityStep::Swimlane(lane) => {
+                // Swimlane V2: lower to a zero-size LaneMark so emit can route
+                // subsequent shapes into this lane's buffer. Off the V2 path
+                // (map unset) this is a no-op, preserving legacy behavior.
+                if let Some(idx) = swimlane_v2_lane_index(&lane.name) {
+                    nodes.push(LayoutNode::LaneMark(idx));
+                }
+                i += 1;
+            }
+            ActivityStep::Backward(_) => {
                 // TODO: implement these
                 i += 1;
             }
@@ -4820,6 +4864,8 @@ fn repeat_body_geo_right(body: &[LayoutNode]) -> f64 {
 
 fn node_width(node: &LayoutNode) -> f64 {
     match node {
+        // Swimlane V2 lane marker: zero layout footprint.
+        LayoutNode::LaneMark(_) => 0.0,
         // Bare start/stop circles: PlantUML lays them out at minimum width
         // without padding (margins are added once at the SVG level). The
         // `+ ACTION_MIN_X * 2.0` previously here forced ~52px of empty
@@ -4996,6 +5042,11 @@ fn sequence_height_ex(nodes: &[LayoutNode], gap_extra: f64) -> f64 {
     for (idx, node) in nodes.iter().enumerate() {
         // Notes contribute nothing themselves.
         if matches!(node, LayoutNode::Note { .. }) {
+            continue;
+        }
+        // Swimlane V2 lane markers are pure side-channel: zero height, and no
+        // effect on inter-tile arrows/gaps (don't toggle prior_flow/pending_gap).
+        if matches!(node, LayoutNode::LaneMark(_)) {
             continue;
         }
         // Title contributes its own height but never has a connector arrow
@@ -5642,6 +5693,8 @@ fn partition_top_gap(
 
 fn node_height(node: &LayoutNode) -> f64 {
     match node {
+        // Swimlane V2 lane marker: zero layout footprint.
+        LayoutNode::LaneMark(_) => 0.0,
         // Start ellipse cy is fixed at START_CY (25), so from the y=MARGIN_LEAD
         // cursor (16) the ellipse bottom is 25+10-16 = 19, not the full diameter.
         LayoutNode::Start => START_CY + START_R - 16.0,
@@ -6335,6 +6388,10 @@ struct SvgEmitter {
     /// ARROW_LEN/2`. Recorded by `emit_switch_with_layout` (in while-body mode,
     /// last writer wins) and consumed once by `emit_while`.
     while_switch_loopback_tip: Option<f64>,
+    /// Swimlane V2 only: the lane index currently being emitted into. Set by
+    /// `LayoutNode::LaneMark` during the single-tree walk; used to route shapes
+    /// into `lane_shapes`/`lane_connectors`. 0 on the non-swimlane path.
+    current_lane: usize,
 }
 
 /// Geometry the enclosing `while` hands to a directly-nested break-bearing `if`.
@@ -6397,6 +6454,7 @@ impl SvgEmitter {
             pending_while_body: false,
             while_switch_merge_extra: 0.0,
             while_switch_loopback_tip: None,
+            current_lane: 0,
         }
     }
 
@@ -7168,6 +7226,12 @@ fn emit_sequence_ex(
     // run (the one preceded by a non-while tile) is genuinely deferred.
     let mut prev_was_deferred_while = false;
     for (i, node) in nodes.iter().enumerate() {
+        // Swimlane V2 lane marker: set the active lane (via emit_node) but take
+        // no vertical space and add no connector — pure side-channel.
+        if matches!(node, LayoutNode::LaneMark(_)) {
+            emit_node(svg, node, cx, y);
+            continue;
+        }
         // Skip layout for non-flow nodes (arrows and notes don't take vertical space
         // on their own).
         if matches!(node, LayoutNode::Arrow { .. } | LayoutNode::Note { .. }) {
@@ -7536,6 +7600,11 @@ fn emit_node_with_repeat_extra(
     if_branch: bool,
 ) -> f64 {
     match node {
+        // Swimlane V2 lane marker: switch the active lane buffer, no y advance.
+        LayoutNode::LaneMark(idx) => {
+            svg.current_lane = *idx;
+            y
+        }
         LayoutNode::Start => {
             // The cursor (`y`) represents the centreline at which the next
             // node should sit. PlantUML enforces a minimum of START_CY (25)
