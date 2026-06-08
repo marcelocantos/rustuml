@@ -3586,6 +3586,10 @@ const IF_LONG_ALIGN_BOTTOM: f64 = 20.0;
 /// `SlotSet.smaller(margin)` keeps this much empty space on each side of every
 /// compressed cluster (PlantUML calls `smaller(5.0)`).
 const X_COMPRESS_MARGIN: f64 = 5.0;
+/// Length (x-extent) of a horizontal connector arrowhead polygon (`right_arrow`
+/// / `left_arrow` span `[x_tip-10, x_tip]`). The arrowhead is a connector
+/// polygon, so ON_X compaction counts it as occupancy.
+const HORIZ_ARROWHEAD_LEN: f64 = 10.0;
 
 /// Port of PlantUML's `CompressionTransform` (ON_X): given the occupied
 /// x-intervals of a drawing, removes the empty gaps between clusters — keeping
@@ -3812,6 +3816,15 @@ fn if_long_layout(
         // east label on the last diamond
         if i == n - 1 && east_w > 0.0 {
             occ.push((cc + dw / 2.0, cc + dw / 2.0 + east_w));
+        }
+        // ConnectionHorizontal arrowhead: the asToRight snake from diamond i-1's
+        // east vertex to diamond i's west vertex ends with a polygon arrowhead
+        // pointing at the west vertex (`right_arrow(x2)` spans [x2-10, x2]). It
+        // is a connector polygon, so the global ON_X compaction sees it as
+        // occupancy in the inter-diamond gap.
+        if i > 0 {
+            let west_vertex = cc - dw / 2.0;
+            occ.push((west_vertex - HORIZ_ARROWHEAD_LEN, west_vertex));
         }
     }
     if let Some(tc) = tile2_center_u {
