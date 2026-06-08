@@ -4361,12 +4361,53 @@ fn sequence_extents_with_note_margin(
     sequence_extents_with_note_margins(nodes, if_branch, note_outer_margin, note_outer_margin)
 }
 
+/// The trailing right-side reservation a `while`/`repeat` tile carries in its
+/// own `node_extents` (`+ 2*halfHex + 3` past `max(cond, body_right)` vs the
+/// loop-back arm at `+ halfHex`). That extra `halfHex + 3` is canvas margin —
+/// the FtileWhile/FtileRepeat geometry's `dx + halfHex` term that lands in the
+/// SVG right margin. When a loop tile is itself nested inside ANOTHER loop's
+/// body, the enclosing loop's loop-back arm only needs to clear the inner arm,
+/// not the inner's canvas reservation, so this slack is removed.
+const LOOP_NEST_TRAILING_RESERVATION: f64 = DIAMOND_HALF + 3.0;
+
+/// True for a nested `while` tile whose `node_extents` right edge includes the
+/// trailing canvas reservation that must be stripped when the tile is nested
+/// inside another loop body. A nested `repeat` keeps its full right extent: its
+/// `repeatwhile` loop-back arm sits at the reserved width, so the enclosing loop
+/// must clear that whole extent (see `act_nest_while_repeat`).
+fn node_is_loop_tile(node: &LayoutNode) -> bool {
+    matches!(node, LayoutNode::While { .. })
+}
+
 fn sequence_loop_body_extents(nodes: &[LayoutNode]) -> (f64, f64) {
     if partition_body_has_direct_note(nodes) {
-        sequence_extents_with_note_margins(nodes, false, 1.0, 0.0)
-    } else {
-        sequence_extents(nodes)
+        // Note-bearing bodies keep the raw note-margin measurement.
+        return sequence_extents_with_note_margins(nodes, false, 1.0, 0.0);
     }
+    let (left, right) = sequence_extents(nodes);
+    // A nested loop tile contributes its canvas-reservation-inflated right edge
+    // to the raw extent. When such a tile is the rightmost element, the
+    // enclosing loop's loop-back arm only needs to clear the INNER arm, not the
+    // inner's canvas reservation — so recompute the right extent treating any
+    // nested loop tile by its arm position. A non-loop sibling still pins the
+    // right extent via the max-fold, so this only ever shrinks loop-driven slack.
+    if !nodes.iter().any(node_is_loop_tile) {
+        return (left, right);
+    }
+    let mut adjusted_right = 0.0f64;
+    for node in nodes {
+        if matches!(node, LayoutNode::Note { .. } | LayoutNode::Arrow { .. }) {
+            continue;
+        }
+        let (_nl, nr) = node_extents(node);
+        let nr = if node_is_loop_tile(node) {
+            (nr - LOOP_NEST_TRAILING_RESERVATION).max(0.0)
+        } else {
+            nr
+        };
+        adjusted_right = adjusted_right.max(nr);
+    }
+    (left, adjusted_right)
 }
 
 fn sequence_extents_with_note_margins(
@@ -5200,8 +5241,37 @@ fn while_body_is_single_if(body: &[LayoutNode]) -> bool {
     matches!(body, [LayoutNode::If { .. }])
 }
 
-fn while_single_if_right_pad(body: &[LayoutNode], end_label: &Option<String>) -> f64 {
-    if end_label.is_none() && while_body_is_single_if(body) {
+/// True when a loop body's RIGHT extent is driven by a binary `if` tile: the
+/// last flow node is an `if` and its right extent is at least as wide as every
+/// other flow node's. The FtileIfWithDiamonds margin (`WHILE_SINGLE_IF_RIGHT_PAD`)
+/// then rides into the loop-back arm regardless of whether the `if` is the SOLE
+/// body element (`act_while_ifdepth*`) or sits after an action (`act_while_with_if`).
+fn while_body_right_driven_by_if(body: &[LayoutNode]) -> bool {
+    let mut last_if_right: Option<f64> = None;
+    let mut max_other_right = 0.0f64;
+    for node in body {
+        if !node_is_flow(node) {
+            continue;
+        }
+        let (_l, r) = node_extents(node);
+        if matches!(node, LayoutNode::If { .. }) {
+            last_if_right = Some(r);
+        } else {
+            last_if_right = None;
+            max_other_right = max_other_right.max(r);
+        }
+    }
+    matches!(last_if_right, Some(if_r) if if_r >= max_other_right)
+}
+
+fn while_single_if_right_pad(body: &[LayoutNode], _end_label: &Option<String>) -> f64 {
+    // The pad reflects the if-tile's calculated right extent exceeding its drawn
+    // shape by `WHILE_SINGLE_IF_RIGHT_PAD` (the FtileIfWithDiamonds internal
+    // margin that `geo.appendBottom` carries into FtileWhile's loop-back arm at
+    // `dimTotal.getWidth()`). It is a property of the if-tile geometry, not of
+    // the while's end-of-loop label, so it applies whether or not an
+    // `endwhile (label)` is present.
+    if while_body_right_driven_by_if(body) {
         WHILE_SINGLE_IF_RIGHT_PAD
     } else {
         0.0
@@ -8481,7 +8551,25 @@ const REPEAT_EVEN_BODY_MID_STRETCH: f64 = 7.5;
 /// when an explicit `backward :...;` tile occupies the loop-back arm.
 const REPEAT_BACKWARD_BODY_SLACK: f64 = 30.0;
 
+/// The even-body mid-stretch is calibrated for loop bodies whose flow nodes are
+/// plain action tiles (`act_while_2actions_body` and friends): PlantUML's Snake
+/// compaction distributes the back-edge label slack evenly across an even number
+/// of inter-action gaps. A nested compound tile (while/repeat/if/fork/switch/
+/// partition) already carries its own large vertical reservation, so the simple
+/// even-gap model does not hold and the stretch must not be applied.
+fn while_body_flow_is_all_actions(body: &[LayoutNode]) -> bool {
+    body.iter().filter(|n| node_is_flow(n)).all(|n| {
+        matches!(
+            n,
+            LayoutNode::Action { .. } | LayoutNode::Start | LayoutNode::Stop | LayoutNode::End
+        )
+    })
+}
+
 fn while_body_mid_stretch(body: &[LayoutNode], has_in_label: bool) -> Option<(usize, f64)> {
+    if !while_body_flow_is_all_actions(body) {
+        return None;
+    }
     let flow_count = body.iter().filter(|n| node_is_flow(n)).count();
     if flow_count >= 2 && flow_count.is_multiple_of(2) {
         // The even-body mid-stretch models FtileWhile's vertical centring of a
