@@ -1383,7 +1383,9 @@ fn build_tree(steps: &[ActivityStep], palette: &Palette) -> Vec<LayoutNode> {
         .iter()
         .take_while(|s| !matches!(s, ActivityStep::Swimlane(_)))
         .any(|s| !matches!(s, ActivityStep::Note(_) | ActivityStep::Arrow(_)));
-    if distinct_lanes.len() > 1 || (distinct_lanes.len() == 1 && has_pre_lane_content) {
+    if std::env::var("RUSTUML_SWIMLANE_V2").is_err()
+        && (distinct_lanes.len() > 1 || (distinct_lanes.len() == 1 && has_pre_lane_content))
+    {
         return build_swimlanes(steps, palette);
     }
 
