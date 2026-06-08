@@ -8357,22 +8357,50 @@ fn emit_if(
         };
         // Nested directly inside a parent if/switch branch: PlantUML's
         // ConnectionVerticalThenHorizontalDirect + MergeStrategy.LIMITED fuses
-        // the surviving out-corridor with the parent's branch→merge connector —
-        // the surviving column drops STRAIGHT to the parent merge vertex, no
-        // reconvergence to this if's spine and no own arrowhead. The parent
-        // skipped its own branch→merge connector for this side.
+        // the surviving out-corridor with the parent's branch→merge connector.
         if let Some(redir) = svg.if_survivor_redirect.take() {
+            // `ConnectionVerticalThenHorizontalDirect` reconverges the surviving
+            // branch to THIS if's own spine (g.left = `cx`) before the parent's
+            // branch→merge corridor takes over. When the survivor column sits on
+            // the far side of the parent merge vertex from the spine, that
+            // reconvergence is drawn explicitly (survivor → short lead → across to
+            // spine → down to merge → across to the parent vertex). When the
+            // survivor already sits between the spine and the parent vertex (e.g.
+            // `kill` with a narrower terminal box), `MergeStrategy.LIMITED`
+            // collapses the corridor to a straight drop at the survivor column.
+            let survivor_beyond_vertex = if redir.to_right {
+                survivor_cx > redir.merge_vertex_x
+            } else {
+                survivor_cx < redir.merge_vertex_x
+            };
+            let reconverge = survivor_cx != cx && survivor_beyond_vertex;
+            let drop_cx = if reconverge {
+                let join_y = survivor_bottom + IF_SINGLE_SURVIVOR_JOIN_GAP;
+                svg.connector_line(
+                    &arrow_color,
+                    survivor_cx,
+                    survivor_cx,
+                    survivor_bottom,
+                    join_y,
+                    false,
+                );
+                svg.connector_line(&arrow_color, survivor_cx, cx, join_y, join_y, false);
+                svg.connector_line(&arrow_color, cx, cx, join_y, redir.merge_cy, false);
+                cx
+            } else {
+                svg.connector_line(
+                    &arrow_color,
+                    survivor_cx,
+                    survivor_cx,
+                    survivor_bottom,
+                    redir.merge_cy,
+                    false,
+                );
+                survivor_cx
+            };
             svg.connector_line(
                 &arrow_color,
-                survivor_cx,
-                survivor_cx,
-                survivor_bottom,
-                redir.merge_cy,
-                false,
-            );
-            svg.connector_line(
-                &arrow_color,
-                survivor_cx,
+                drop_cx,
                 redir.merge_vertex_x,
                 redir.merge_cy,
                 redir.merge_cy,
