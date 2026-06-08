@@ -201,6 +201,42 @@ pub fn shift_x(svg: &str, dx: f64) -> String {
     rewrite_axis(svg, CompressionMode::OnX, &CompressionTransform::translate(dx))
 }
 
+/// Swimlane V2: the maximum Y coordinate in an SVG fragment (bottom of content),
+/// across rect y+height, ellipse cy+ry, polygon/path points, line y1/y2, text y.
+/// Used to size lane dividers to the content bottom. `None` if no Y coords.
+pub fn y_max(svg: &str) -> Option<f64> {
+    let mut hi = f64::NEG_INFINITY;
+    static RECT: OnceLock<Regex> = OnceLock::new();
+    for c in re(r#"<rect\b[^>]*\bheight="([-\d.]+)"[^>]*\by="([-\d.]+)""#, &RECT).captures_iter(svg) {
+        hi = hi.max(num(&c[1]) + num(&c[2]));
+    }
+    static ELL: OnceLock<Regex> = OnceLock::new();
+    for c in re(r#"<ellipse\b[^>]*\bcy="([-\d.]+)"[^>]*\bry="([-\d.]+)""#, &ELL).captures_iter(svg) {
+        hi = hi.max(num(&c[1]) + num(&c[2]));
+    }
+    static POLY: OnceLock<Regex> = OnceLock::new();
+    for c in re(r#"<polygon\b[^>]*\bpoints="([^"]+)""#, &POLY).captures_iter(svg) {
+        if let Some((_, b)) = points_bbox(&c[1], false) {
+            hi = hi.max(b);
+        }
+    }
+    static PATH: OnceLock<Regex> = OnceLock::new();
+    for c in re(r#"<path\b[^>]*\bd="([^"]+)""#, &PATH).captures_iter(svg) {
+        if let Some((_, b)) = path_bbox(&c[1], false) {
+            hi = hi.max(b);
+        }
+    }
+    static LINE: OnceLock<Regex> = OnceLock::new();
+    for c in re(r#"<line\b[^>]*\by1="([-\d.]+)"[^>]*\by2="([-\d.]+)""#, &LINE).captures_iter(svg) {
+        hi = hi.max(num(&c[1]).max(num(&c[2])));
+    }
+    static TEXT: OnceLock<Regex> = OnceLock::new();
+    for c in re(r#"<text\b[^>]*\by="([-\d.]+)""#, &TEXT).captures_iter(svg) {
+        hi = hi.max(num(&c[1]));
+    }
+    (hi > f64::NEG_INFINITY).then_some(hi)
+}
+
 /// Swimlane V2: shift every Y coordinate in an SVG fragment by `dy` (used to drop
 /// content below the lane-title band). Mirror of [`shift_x`] on the Y axis.
 pub fn shift_y(svg: &str, dy: f64) -> String {

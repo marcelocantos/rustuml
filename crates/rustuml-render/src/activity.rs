@@ -11660,8 +11660,28 @@ fn layout_swimlanes_v2(
         ));
     }
 
-    // Divider lines + lane titles. Dividers span the full content height.
+    // Dividers span from the header top to the bottom of the drawn content.
+    let mut content_bottom = crate::compress::y_max(&out_shapes).unwrap_or(natural_h);
+    if let Some(b) = crate::compress::y_max(&out_conn) {
+        content_bottom = content_bottom.max(b);
+    }
     let content_h = natural_h + title_band;
+
+    // Empty header rect spanning all lanes (PlantUML: width = sum_lane_w + 1.8476).
+    let sum_lane_w: f64 = lane_w.iter().sum();
+    let header_fill = chrome.title_bg.as_deref().unwrap_or("none");
+    write!(
+        out_shapes,
+        r#"<rect fill="{}" height="{}" style="stroke:{};stroke-width:1;" width="{}" x="{}" y="{}"/>"#,
+        header_fill,
+        f(title_text_h),
+        header_fill,
+        f(sum_lane_w + 1.8476),
+        f(lane_left[0]),
+        f(header_top),
+    )
+    .unwrap();
+
     // Divider x positions: left edge of each lane, plus the rightmost edge.
     let mut divider_xs: Vec<f64> = lane_left.clone();
     divider_xs.push(right_edge);
@@ -11673,7 +11693,7 @@ fn layout_swimlanes_v2(
             f(dxl),
             f(dxl),
             f(header_top),
-            f(content_h),
+            f(content_bottom),
         )
         .unwrap();
     }
