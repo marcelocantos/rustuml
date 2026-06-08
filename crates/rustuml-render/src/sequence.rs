@@ -5349,18 +5349,28 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
         .collect();
     let has_boxes = !participant_boxes.is_empty();
     let any_box_titled = participant_boxes.iter().any(|b| !b.title.is_empty());
-    let any_box_member_is_queue = participant_boxes.iter().any(|b| {
+    // A titled box whose head is a queue lets the queue's pill offset clear the
+    // title, so that box omits the extra 5px title gap. The head band is global
+    // (one head_box_y for all participants), so the gap can only be dropped when
+    // EVERY titled box has a queue member — otherwise a titled non-queue box
+    // (e.g. an actor box) still needs the gap, and dropping it globally would
+    // raise the whole diagram by 5px (seq_combo_everything, seq_mega_combo_01).
+    let box_is_queue_clearing = |b: &&ParticipantBox| {
         b.members.iter().any(|&pi| {
             diagram
                 .participants
                 .get(pi)
                 .is_some_and(|p| p.kind == ParticipantKind::Queue)
         })
-    });
+    };
+    let all_titled_boxes_have_queue = participant_boxes
+        .iter()
+        .filter(|b| !b.title.is_empty())
+        .all(box_is_queue_clearing);
     let box_band_h = if !has_boxes {
         0.0
     } else if any_box_titled {
-        let title_gap = if any_box_member_is_queue {
+        let title_gap = if all_titled_boxes_have_queue {
             0.0
         } else {
             BOX_TITLE_HEAD_GAP
@@ -8592,6 +8602,47 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
     // index to restore document order.
     group_frames.sort_by_key(|f| f.event_idx);
 
+    // PlantUML lays the title/header/footer bands out against the whole sequence
+    // area width (`SequenceDiagramArea.getWidth`). When group frames are present
+    // that area spans the outermost frame, not just the participant boxes:
+    // getWidth = frame_left + frame_right - 1. Centre/right-align bands on it
+    // (non-Teoz; Teoz routes group geometry differently). Without groups the
+    // bands keep their participant-box references below.
+    let group_band_get_width: Option<f64> = if !diagram.teoz
+        && !group_frames.is_empty()
+        && !participants.is_empty()
+    {
+        // PlantUML lays the bands out against the sequence area width. When an
+        // outermost group frame wraps the *full* participant range, that frame
+        // (not the participant boxes) is the content extent — e.g. a trailing
+        // queue widens the frame past the last box (seq_combo_everything). Then
+        // getWidth = frame_left + frame_right - 1. A group covering only a
+        // sub-range (edge_misc/edge_mixed) leaves the participant boxes as the
+        // content edges, so the bands keep their participant-span reference.
+        let part_left = participants.first().unwrap().box_x;
+        let last = participants.last().unwrap();
+        let part_right = last.box_x + last.box_width;
+        let frame_left = group_frames
+            .iter()
+            .map(|f| f.left)
+            .fold(f64::INFINITY, f64::min);
+        let frame_right = group_frames
+            .iter()
+            .map(|f| f.right)
+            .fold(f64::NEG_INFINITY, f64::max);
+        let frame_spans_all = frame_left.is_finite()
+            && frame_right.is_finite()
+            && frame_left <= part_left
+            && frame_right >= part_right;
+        if frame_spans_all {
+            Some(frame_left + frame_right - 1.0)
+        } else {
+            None
+        }
+    } else {
+        None
+    };
+
     // Recalculate svg_width after group frames are computed, since the frame
     // right edges may exceed the initial estimate (e.g., when group labels extend
     // beyond participant boxes).
@@ -8688,7 +8739,13 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
         for (i, line) in header_lines.iter().enumerate() {
             let text_length =
                 text_width_with_family(line, HEADER_FONT_SIZE as f64, &page_font_family);
-            let x = svg_width_exact - text_length - 6.0;
+            // PlantUML `SequenceDiagramArea.getHeaderX(RIGHT) = getWidth - headerWidth`.
+            // With group frames the band reference is the full sequence area width;
+            // otherwise it is the canvas-derived `svg_width_exact - 6` inset.
+            let x = match group_band_get_width {
+                Some(gw) => gw - text_length,
+                None => svg_width_exact - text_length - 6.0,
+            };
             text_render::emit_text(
                 &mut svg.buf,
                 line,
@@ -8720,7 +8777,14 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
         // generic box-edge midpoint (edge_mixed_sequence_all_features).
         const ACTOR_TO_DATABASE_TITLE_CENTER_ADJUST: f64 = 7.5;
         let title_center =
-            if let (Some(first), Some(last)) = (participants.first(), participants.last()) {
+            if let Some(gw) = group_band_get_width {
+                // PlantUML `SequenceDiagramArea.getTitleX`: title centred on the
+                // whole sequence area width (which, with group frames, spans the
+                // outermost frame: getWidth = frame_left + frame_right - 1).
+                gw / 2.0
+            } else if let (Some(first), Some(last)) =
+                (participants.first(), participants.last())
+            {
                 let center = (first.box_x + last.box_x + last.box_width - 1.0) / 2.0;
                 if first.kind == ParticipantKind::Actor && last.kind == ParticipantKind::Database {
                     center - ACTOR_TO_DATABASE_TITLE_CENTER_ADJUST
@@ -8778,6 +8842,7 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
     // top of it.
     if has_boxes {
         let box_top = HEAD_BOX_Y
+            + header_band_h
             + title_band_h
             + 1.0
             + if diagram.teoz {
@@ -11662,14 +11727,19 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
         // footer is wider than the span the diagram was already shifted right
         // (see meta_shift), so this resolves to x=0 for the widest band and to a
         // positive inset for narrower footers (seq_footer_variant_02..04).
-        let footer_x =
-            if let (Some(first), Some(last)) = (participants.first(), participants.last()) {
+        let footer_x = {
+            let w = text_width_with_family(footer, FOOTER_FONT_SIZE as f64, &page_font_family);
+            // PlantUML `getFooterX(CENTER) = (getWidth - footerWidth) / 2`. With
+            // group frames the sequence area width spans the outermost frame.
+            if let Some(gw) = group_band_get_width {
+                ((gw - w) / 2.0).max(0.0)
+            } else if let (Some(first), Some(last)) = (participants.first(), participants.last()) {
                 let center = (first.box_x + last.box_x + last.box_width - 1.0) / 2.0;
-                let w = text_width_with_family(footer, FOOTER_FONT_SIZE as f64, &page_font_family);
                 (center - w / 2.0).max(0.0)
             } else {
                 0.0
-            };
+            }
+        };
         let footer_line = diagram.meta.footer_line.unwrap_or(1);
         write!(
             svg.buf,
@@ -11678,6 +11748,11 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
         .unwrap();
         let footer_y = if diagram.meta.caption.is_some() {
             svg_height as f64 - combined_footer_bottom_offset(&page_font_family)
+        } else if diagram.hide_footbox {
+            // With no foot boxes the footer sits in its band just below the
+            // lifelines, not below the (hidden) tail boxes. Baseline =
+            // lifeline_bottom + ascent(10) - 5 (seq_combo_everything).
+            lifeline_bottom + plantuml_metrics::ascent(FOOTER_FONT_SIZE as f64) - 5.0
         } else {
             tail_box_y + max_box_h + FOOTER_BASELINE_AFTER_TAIL
         };
