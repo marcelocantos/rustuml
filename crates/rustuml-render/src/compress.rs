@@ -201,6 +201,52 @@ pub fn shift_x(svg: &str, dx: f64) -> String {
     rewrite_axis(svg, CompressionMode::OnX, &CompressionTransform::translate(dx))
 }
 
+/// Swimlane V2: the `[minX, maxX]` span of every drawn coordinate in an SVG
+/// fragment — including `<line>`, since PlantUML's per-lane `LimitFinder` records
+/// all drawn shapes for the lane `MinMax` (unlike compression, which treats flow
+/// lines as transparent). `None` if the fragment has no coordinates.
+pub fn x_bounds(svg: &str) -> Option<(f64, f64)> {
+    let mut lo = f64::INFINITY;
+    let mut hi = f64::NEG_INFINITY;
+    let mut acc = |a: f64, b: f64| {
+        lo = lo.min(a);
+        hi = hi.max(b);
+    };
+    static RECT: OnceLock<Regex> = OnceLock::new();
+    for c in re(r#"<rect\b[^>]*\bwidth="([-\d.]+)"[^>]*\bx="([-\d.]+)""#, &RECT).captures_iter(svg) {
+        let (w, xx) = (num(&c[1]), num(&c[2]));
+        acc(xx, xx + w);
+    }
+    static ELL: OnceLock<Regex> = OnceLock::new();
+    for c in re(r#"<ellipse\b[^>]*\bcx="([-\d.]+)"[^>]*\brx="([-\d.]+)""#, &ELL).captures_iter(svg) {
+        let (cx, rx) = (num(&c[1]), num(&c[2]));
+        acc(cx - rx, cx + rx);
+    }
+    static POLY: OnceLock<Regex> = OnceLock::new();
+    for c in re(r#"<polygon\b[^>]*\bpoints="([^"]+)""#, &POLY).captures_iter(svg) {
+        if let Some((a, b)) = points_bbox(&c[1], true) {
+            acc(a, b);
+        }
+    }
+    static PATH: OnceLock<Regex> = OnceLock::new();
+    for c in re(r#"<path\b[^>]*\bd="([^"]+)""#, &PATH).captures_iter(svg) {
+        if let Some((a, b)) = path_bbox(&c[1], true) {
+            acc(a, b);
+        }
+    }
+    static TEXT: OnceLock<Regex> = OnceLock::new();
+    for c in re(r#"<text\b[^>]*\btextLength="([-\d.]+)"[^>]*\bx="([-\d.]+)""#, &TEXT).captures_iter(svg) {
+        let (tl, xx) = (num(&c[1]), num(&c[2]));
+        acc(xx, xx + tl);
+    }
+    static LINE: OnceLock<Regex> = OnceLock::new();
+    for c in re(r#"<line\b[^>]*\bx1="([-\d.]+)"[^>]*\bx2="([-\d.]+)""#, &LINE).captures_iter(svg) {
+        let (x1, x2) = (num(&c[1]), num(&c[2]));
+        acc(x1.min(x2), x1.max(x2));
+    }
+    (lo <= hi).then_some((lo, hi))
+}
+
 /// A drawn primitive with enough geometry to (a) report its occupied interval on
 /// each axis for the `SlotFinder` pass and (b) be re-emitted through a
 /// [`CompressionTransform`]. The renderer records these alongside its SVG so the
@@ -852,6 +898,21 @@ mod tests {
     fn shift_x_zero_is_noop() {
         let svg = r#"<rect x="10" y="5" width="30" height="8"/>"#;
         assert_eq!(shift_x(svg, 0.0), svg);
+    }
+
+    #[test]
+    fn x_bounds_spans_all_kinds_incl_lines() {
+        let svg = concat!(
+            r#"<rect fill="x" height="8" width="30" x="10" y="5"/>"#, // [10,40]
+            r#"<ellipse cx="50" cy="9" rx="4" ry="4"/>"#,             // [46,54]
+            r#"<line x1="80" x2="90" y1="1" y2="1"/>"#,               // [80,90]
+        );
+        assert_eq!(compress_x_bounds_round(svg), Some((10.0, 90.0)));
+        assert_eq!(x_bounds(""), None);
+    }
+
+    fn compress_x_bounds_round(svg: &str) -> Option<(f64, f64)> {
+        x_bounds(svg).map(|(a, b)| ((a * 1e6).round() / 1e6, (b * 1e6).round() / 1e6))
     }
 
     #[test]
