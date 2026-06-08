@@ -11470,6 +11470,80 @@ fn emit_repeat(
 ///   - Per-lane content centered on lane.cx with 6 left + 4 right padding.
 ///   - Cross-lane arrow: source_cx vertical down 5 → horizontal at +5 →
 ///     target_cx vertical down (15 more) with arrowhead.
+/// Swimlane V2: partition one of the natural-emit buffers into per-lane fragments
+/// using the recorded byte-offset spans. `off` selects the shapes- or
+/// connectors-offset from each span. Pre-first-span bytes go to lane 0.
+fn partition_lane_buffer(
+    buf: &str,
+    spans: &[(usize, usize, usize)],
+    off: impl Fn(&(usize, usize, usize)) -> usize,
+    n_lanes: usize,
+) -> Vec<String> {
+    // Piecewise-constant lane over byte offsets: (offset, lane), starting lane 0.
+    let mut points: Vec<(usize, usize)> = vec![(0usize, 0usize)];
+    for sp in spans {
+        points.push((off(sp), sp.2));
+    }
+    let len = buf.len();
+    let mut frags = vec![String::new(); n_lanes.max(1)];
+    for w in 0..points.len() {
+        let start = points[w].0;
+        let lane = points[w].1;
+        let end = if w + 1 < points.len() {
+            points[w + 1].0
+        } else {
+            len
+        };
+        if end > start && lane < frags.len() {
+            frags[lane].push_str(&buf[start..end]);
+        }
+    }
+    frags
+}
+
+/// Swimlane V2: lay the natural single-tree emit out into lane columns. Returns
+/// `(body, width, height)` for the final SVG, or `None` if there is nothing to
+/// lay out. WIP: prints per-lane bounds for calibration; column geometry is a
+/// first cut (refined against the golden ladder next).
+fn layout_swimlanes_v2(
+    svg: &SvgEmitter,
+    lane_names: &[String],
+    natural_h: f64,
+) -> Option<(String, u32, u32)> {
+    let n = lane_names.len();
+    if n == 0 {
+        return None;
+    }
+    let shape_frags = partition_lane_buffer(&svg.shapes, &svg.lane_spans, |s| s.0, n);
+    let conn_frags = partition_lane_buffer(&svg.connectors, &svg.lane_spans, |s| s.1, n);
+
+    // Per-lane content bounds over BOTH buffers (PlantUML LimitFinder records all
+    // drawn shapes incl. connector lines).
+    let bounds: Vec<Option<(f64, f64)>> = (0..n)
+        .map(|l| {
+            let mut combined = shape_frags[l].clone();
+            combined.push_str(&conn_frags[l]);
+            crate::compress::x_bounds(&combined)
+        })
+        .collect();
+
+    if std::env::var("RUSTUML_EXT_DBG").is_ok() {
+        for (l, name) in lane_names.iter().enumerate() {
+            eprintln!(
+                "[V2] lane {l} {name:?} bounds={:?} width={:?}",
+                bounds[l],
+                bounds[l].map(|(a, b)| b - a)
+            );
+        }
+    }
+
+    // First-cut column geometry: left edge at MARGIN_LEAD (20), 5px gap on each
+    // side of every divider, lane width = content width. (Calibrated against the
+    // golden ladder next — see docs/swimlane-rewrite-design.md.)
+    let _ = natural_h;
+    None
+}
+
 fn emit_swimlanes(
     svg: &mut SvgEmitter,
     cx: f64,
@@ -12585,6 +12659,22 @@ fn render_inner(
 
     if !legend_rows.is_empty() {
         emit_legend_table(&mut svg, &legend_rows, body_bottom_y + LEGEND_TOP_GAP);
+    }
+
+    // Swimlane V2 per-lane layout (env-gated, in progress). Lays the natural
+    // single-tree emit out into lane columns; falls through while WIP returns None.
+    if std::env::var("RUSTUML_SWIMLANE_V2").is_ok() && !svg.lane_spans.is_empty() {
+        let mut lane_names: Vec<String> = Vec::new();
+        for s in &diagram.steps {
+            if let ActivityStep::Swimlane(l) = s
+                && !lane_names.iter().any(|nm| nm == &l.name)
+            {
+                lane_names.push(l.name.clone());
+            }
+        }
+        if let Some((body, w, h)) = layout_swimlanes_v2(&svg, &lane_names, svg_h as f64) {
+            return format_svg(w, h, &body, defs, svg_background.as_deref());
+        }
     }
 
     // Whole-diagram layout compression (PlantUML's CompressionXorYBuilder ON_X
