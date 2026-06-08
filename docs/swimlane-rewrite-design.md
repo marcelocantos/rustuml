@@ -155,3 +155,40 @@ activity layout.
   (`emit_sequence`/`emit_fork`/`parallel_layout`).
 - `memory/project_parity_gaps.md` — full T4 triage and the swimlane-while geometry
   cluster anatomy (subsumed by this rewrite).
+
+## Cross-lane handling — the architectural core (findings 2026-06-08)
+
+Implemented the partition + per-lane measurement (`partition_lane_buffer`,
+`layout_swimlanes_v2`, hooked in `render_inner`, env-gated). Measuring
+`act_fork2br_lanes2`'s per-lane natural bounds surfaced the real difficulty:
+
+- **Fork/join bars are cross-lane shapes.** They render as wide, short rects
+  (`height="6"`, `fill="#555555"`) spanning every involved lane — e.g. Lane2's
+  natural bounds came out `[16, 209.7]` (w 193.7) vs gold 129.9 purely because the
+  two bars (fork top + join bottom, both `width="193.7305" x="16"`) are attributed
+  to the lane active when `emit_fork` drew them. They must be **excluded from
+  per-lane measurement** and **redrawn spanning columns** after remap (PlantUML's
+  `Cross`/`ConnectionCross`). The `height≈6` short-rect signature identifies a bar
+  structurally (no color dependence).
+
+- **Fork connectors are vertical (single-x) but mis-tagged.** The connectors from
+  the bar down to each branch are vertical lines at the branch's natural x
+  (`x=63.4326` for branch 1, `162.2979` for branch 2). Each belongs to its
+  *branch's* lane, but `emit_fork` draws them under the *fork's entry* lane, so the
+  byte-offset/`current_lane` tag is wrong for them.
+
+- **Two lane-assignment regimes.** (a) *Temporal* — a linear `|Lane|` switch
+  changes lane at the same x over time; the byte-offset spans capture this
+  correctly. (b) *Spatial* — a fork's parallel branches occupy different x at the
+  same time; here lane = which natural x-cluster the element sits in, NOT emit
+  order. The byte-offset model alone handles (a) but not (b).
+
+**Resolution (next push): make `emit_fork`/`emit_if` lane-aware on the V2 path.**
+When a construct's branches span lanes: set `current_lane` to branch *i*'s lane
+around emitting branch *i*'s inbound/outbound connectors (so they tag correctly),
+and emit the fork/join bar into a dedicated cross-lane buffer (not a lane buffer).
+`layout_swimlanes_v2` then: measures lanes from correctly-tagged shapes+connectors
+(bars excluded), shifts each lane by its `dx`, and redraws each cross-lane bar
+stretched from its leftmost to rightmost connected branch column. This keeps the
+byte-offset model for linear switches and adds explicit cross-lane emission for
+branch constructs — matching PlantUML's per-tile `swimlaneIn/Out` + `Cross` split.
