@@ -11505,11 +11505,24 @@ fn partition_lane_buffer(
 /// `(body, width, height)` for the final SVG, or `None` if there is nothing to
 /// lay out. WIP: prints per-lane bounds for calibration; column geometry is a
 /// first cut (refined against the golden ladder next).
+/// Swimlane V2 chrome colors (captured from the palette before it is moved).
+struct SwimlaneV2Chrome {
+    divider: String,
+    title: String,
+    title_bg: Option<String>,
+}
+
+/// Half of the inter-lane gap (PlantUML `getHalfMissingSpace`, common case = 5).
+const SWIM_HALF_GAP: f64 = 5.0;
+/// Target x of the leftmost lane divider (matches gold).
+const SWIM_LEFT_DIVIDER_X: f64 = 20.0;
+
 fn layout_swimlanes_v2(
     svg: &SvgEmitter,
     lane_names: &[String],
     natural_h: f64,
-) -> Option<(String, u32, u32)> {
+    chrome: &SwimlaneV2Chrome,
+) -> Option<(String, String, u32, u32)> {
     let n = lane_names.len();
     if n == 0 {
         return None;
@@ -11517,31 +11530,118 @@ fn layout_swimlanes_v2(
     let shape_frags = partition_lane_buffer(&svg.shapes, &svg.lane_spans, |s| s.0, n);
     let conn_frags = partition_lane_buffer(&svg.connectors, &svg.lane_spans, |s| s.1, n);
 
-    // Per-lane content bounds over BOTH buffers (PlantUML LimitFinder records all
-    // drawn shapes incl. connector lines).
-    let bounds: Vec<Option<(f64, f64)>> = (0..n)
+    // Per-lane content bounds over BOTH buffers, INCLUDING fork/join bars (they are
+    // attributed to the fork's entry lane — verified via PlantUML instrumentation).
+    let bounds: Vec<(f64, f64)> = (0..n)
         .map(|l| {
             let mut combined = shape_frags[l].clone();
             combined.push_str(&conn_frags[l]);
-            crate::compress::x_bounds(&combined)
+            crate::compress::x_bounds(&combined).unwrap_or((0.0, 0.0))
         })
         .collect();
 
-    if std::env::var("RUSTUML_EXT_DBG").is_ok() {
-        for (l, name) in lane_names.iter().enumerate() {
-            eprintln!(
-                "[V2] lane {l} {name:?} bounds={:?} width={:?}",
-                bounds[l],
-                bounds[l].map(|(a, b)| b - a)
-            );
-        }
+    // Column placement (PlantUML computeSizeInternal): xpos accumulates
+    // actualWidth + dividerWidth; dx = xpos + dw - minX. dw = 2*halfGap.
+    let dw = 2.0 * SWIM_HALF_GAP;
+    let mut dx = vec![0.0f64; n];
+    let mut xpos = 0.0f64;
+    for l in 0..n {
+        let (min_x, max_x) = bounds[l];
+        let width = max_x - min_x;
+        dx[l] = xpos + dw - min_x;
+        xpos += width + dw;
+    }
+    // Global left margin so the leftmost divider lands at SWIM_LEFT_DIVIDER_X.
+    // Leftmost divider (left of lane 0) = (dx[0]+minX[0]) - halfGap.
+    let internal_left_divider = dx[0] + bounds[0].0 - SWIM_HALF_GAP;
+    let margin = SWIM_LEFT_DIVIDER_X - internal_left_divider;
+    for d in dx.iter_mut() {
+        *d += margin;
     }
 
-    // First-cut column geometry: left edge at MARGIN_LEAD (20), 5px gap on each
-    // side of every divider, lane width = content width. (Calibrated against the
-    // golden ladder next — see docs/swimlane-rewrite-design.md.)
-    let _ = natural_h;
-    None
+    // Title band: lane titles sit in a band above the content. Height = tallest
+    // lane title text height; content drops by that + 5 (PlantUML
+    // getTitleHeightTranslate). Header chrome sits at y + 1.2969 like the legacy path.
+    let title_text_h = pm::text_height(LANE_TITLE_FONT);
+    let title_band = if lane_names.iter().any(|nm| !nm.is_empty()) {
+        title_text_h + 5.0
+    } else {
+        0.0
+    };
+
+    if std::env::var("RUSTUML_EXT_DBG").is_ok() {
+        for l in 0..n {
+            eprintln!(
+                "[V2] lane {l} {:?} bounds={:?} dx={} content_left={}",
+                lane_names[l],
+                bounds[l],
+                dx[l],
+                dx[l] + bounds[l].0
+            );
+        }
+        eprintln!("[V2] title_band={title_band} margin={margin}");
+    }
+
+    // Build the laid-out buffers: shift each lane's fragment by its dx (x) and the
+    // title band (y), then concatenate.
+    let mut out_shapes = String::new();
+    let mut out_conn = String::new();
+    for l in 0..n {
+        out_shapes.push_str(&crate::compress::shift_y(
+            &crate::compress::shift_x(&shape_frags[l], dx[l]),
+            title_band,
+        ));
+        out_conn.push_str(&crate::compress::shift_y(
+            &crate::compress::shift_x(&conn_frags[l], dx[l]),
+            title_band,
+        ));
+    }
+
+    // Divider lines + lane titles. Dividers span the full content height.
+    let content_h = natural_h + title_band;
+    let header_top = SWIM_HALF_GAP + 12.2969; // ~17.2969 with the standard top margin
+    // Divider x positions: left of each lane, plus the rightmost edge.
+    let mut divider_xs: Vec<f64> = (0..n).map(|l| dx[l] + bounds[l].0 - SWIM_HALF_GAP).collect();
+    divider_xs.push(dx[n - 1] + bounds[n - 1].1 + SWIM_HALF_GAP);
+    for &dxl in &divider_xs {
+        write!(
+            out_shapes,
+            r#"<line style="stroke:{};stroke-width:1.5;" x1="{}" x2="{}" y1="{}" y2="{}"/>"#,
+            chrome.divider,
+            f(dxl),
+            f(dxl),
+            f(header_top),
+            f(content_h),
+        )
+        .unwrap();
+    }
+    // Lane titles: centred over each lane's column (between its dividers).
+    let title_baseline = header_top + pm::ascent(LANE_TITLE_FONT);
+    for l in 0..n {
+        if lane_names[l].is_empty() {
+            continue;
+        }
+        let col_left = divider_xs[l];
+        let col_right = divider_xs[l + 1];
+        let tw = text_render::measure(&lane_names[l], LANE_TITLE_FONT, false);
+        let tx = col_left + (col_right - col_left - tw) / 2.0;
+        write!(
+            out_shapes,
+            r#"<text fill="{}" font-family="sans-serif" font-size="{}" lengthAdjust="spacing" textLength="{}" x="{}" y="{}">{}</text>"#,
+            chrome.title,
+            LANE_TITLE_FONT as u32,
+            f(tw),
+            f(tx),
+            f(title_baseline),
+            svg_text_escape(&lane_names[l]),
+        )
+        .unwrap();
+    }
+    let _ = &chrome.title_bg;
+
+    let total_w = (divider_xs[n] + SWIM_LEFT_DIVIDER_X).ceil() as u32;
+    let total_h = content_h.ceil() as u32;
+    Some((out_shapes, out_conn, total_w, total_h))
 }
 
 fn emit_swimlanes(
@@ -12672,8 +12772,16 @@ fn render_inner(
                 lane_names.push(l.name.clone());
             }
         }
-        if let Some((body, w, h)) = layout_swimlanes_v2(&svg, &lane_names, svg_h as f64) {
-            return format_svg(w, h, &body, defs, svg_background.as_deref());
+        let chrome = SwimlaneV2Chrome {
+            divider: svg.palette.swimlane_border_color.clone(),
+            title: svg.palette.swimlane_title_color.clone(),
+            title_bg: svg.palette.swimlane_title_background.clone(),
+        };
+        if let Some((sh, cn, w, h)) = layout_swimlanes_v2(&svg, &lane_names, svg_h as f64, &chrome) {
+            svg.shapes = sh;
+            svg.connectors = cn;
+            svg_w = w;
+            svg_h = h;
         }
     }
 

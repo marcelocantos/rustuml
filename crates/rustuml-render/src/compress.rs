@@ -201,6 +201,15 @@ pub fn shift_x(svg: &str, dx: f64) -> String {
     rewrite_axis(svg, CompressionMode::OnX, &CompressionTransform::translate(dx))
 }
 
+/// Swimlane V2: shift every Y coordinate in an SVG fragment by `dy` (used to drop
+/// content below the lane-title band). Mirror of [`shift_x`] on the Y axis.
+pub fn shift_y(svg: &str, dy: f64) -> String {
+    if dy == 0.0 {
+        return svg.to_string();
+    }
+    rewrite_axis(svg, CompressionMode::OnY, &CompressionTransform::translate(dy))
+}
+
 /// Swimlane V2: the `[minX, maxX]` span of every drawn coordinate in an SVG
 /// fragment — including `<line>`, since PlantUML's per-lane `LimitFinder` records
 /// all drawn shapes for the lane `MinMax` (unlike compression, which treats flow
