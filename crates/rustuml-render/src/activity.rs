@@ -2614,7 +2614,21 @@ struct SwitchXLayout {
 }
 
 fn switch_x_layout(cases: &[SwitchCase], condition: &str) -> SwitchXLayout {
-    let mut layout = switch_x_layout_with_small_gap(cases, condition, SWITCH_CASE_GAP, true);
+    // PlantUML lays the cases out as a uniform `FtileSwitchNude.xSeparation = 20`
+    // band, then the diagram-wide `CompressionXorYBuilder(ON_X)` pass squeezes
+    // the slack. For odd case counts the centre case sits on the spine and the
+    // symmetric branch corridors leave a residual that the post-render
+    // compression resolves to the right gap (full 20→10 when standalone, partial
+    // when a surrounding while/fork corridor blocks the squeeze). Even case
+    // counts are handled at the pre-compressed `SWITCH_CASE_GAP` plus the
+    // `add_center_gap` merge column, which already reverse-engineers their drawn
+    // positions, so they keep the 10-gap model.
+    let case_gap = if !cases.is_empty() && !cases.len().is_multiple_of(2) {
+        SWITCH_IF_BRANCH_CASE_GAP
+    } else {
+        SWITCH_CASE_GAP
+    };
+    let mut layout = switch_x_layout_with_small_gap(cases, condition, case_gap, true);
     if !layout.big_diamond && switch_is_even_nested_if_cases(cases) {
         for center in layout.centers.iter_mut().skip(cases.len() / 2) {
             *center += SWITCH_IF_BRANCH_CASE_GAP;
