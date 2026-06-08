@@ -192,3 +192,33 @@ and emit the fork/join bar into a dedicated cross-lane buffer (not a lane buffer
 stretched from its leftmost to rightmost connected branch column. This keeps the
 byte-offset model for linear switches and adds explicit cross-lane emission for
 branch constructs — matching PlantUML's per-tile `swimlaneIn/Out` + `Cross` split.
+
+## BREAKTHROUGH: cross-lane forks need no emit surgery (2026-06-08)
+
+Verified on `act_fork2br_lanes2`: per-lane SHAPE clusters are DISJOINT
+(Lane1 `[28, 98.9]`, Lane2 `[101.9, 197.7]`), every vertical fork connector falls
+cleanly inside exactly one cluster (x=63.4→L1; 112.9→L2; 162.3→L2), and the
+fork/join bars (`height="6"`, span `[16, 209.7]`) straddle both. So the cross-lane
+case is handled by a PURE POST-PROCESS in `layout_swimlanes_v2`, NOT by making
+`emit_fork`/`emit_if` lane-aware:
+
+- **Shape lane** = its byte-offset `LaneMark` tag (robust even if branches are
+  declared out of column order — a box tagged to its lane regardless of natural x).
+- **Connector lane** = which lane's shape-cluster its x falls into (geometric).
+  Branches are laid side-by-side at disjoint x, so this is unambiguous. (For LINEAR
+  `|Lane|` switches the clusters overlap at the shared spine x — but those connectors
+  ARE correctly byte-offset-tagged, so use the tag when clusters overlap, geometry
+  when disjoint.)
+- **Cross-lane element** = a `height≈6` bar, or any connector whose x-span straddles
+  two clusters. Excluded from per-lane width; redrawn spanning the relevant columns.
+
+This removes the invasive multi-function emit change from the plan. Remaining:
+implement this post-process in `layout_swimlanes_v2` + the column geometry.
+
+### Lane-width calibration gap
+Box-cluster widths (L1 70.9, L2 95.9) are NARROWER than gold lane widths
+(L1 80.9, L2 129.9). Gold's per-lane `MinMax` includes connector reach and the
+in-lane portion of the bar, not just the boxes. So lane width must be measured over
+shapes + in-lane connectors (NOT bars), and the column math must replicate
+`computeSizeInternal` (dividers via `getHalfMissingSpace`=5, translate.dx). This is
+the pixel-exact calibration step, done against the golden ladder.
