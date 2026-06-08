@@ -3477,11 +3477,13 @@ impl PlantUmlSvg {
         text_len: f64,
         fill_color: &str,
         border_color: &str,
+        teoz: bool,
     ) {
         self.participant_group_open(part_uid, qualified_name, source_line, position);
 
-        // Compute text and figure positions based on head vs tail.
-        let is_tail = position == "tail";
+        // Compute text and figure positions based on head vs tail. In Teoz the
+        // foot figures mirror the head layout (figure on top, text below).
+        let is_tail = position == "tail" && !teoz;
         let text_y;
         let figure_base;
         if is_tail {
@@ -3549,10 +3551,11 @@ impl PlantUmlSvg {
         text_len: f64,
         fill_color: &str,
         border_color: &str,
+        teoz: bool,
     ) {
         self.participant_group_open(part_uid, qualified_name, source_line, position);
 
-        let is_tail = position == "tail";
+        let is_tail = position == "tail" && !teoz;
         let (text_y, figure_base) = if is_tail {
             (
                 base_y + ACTOR_TAIL_TEXT_Y_OFFSET,
@@ -3618,10 +3621,11 @@ impl PlantUmlSvg {
         fill_color: &str,
         border_color: &str,
         draw_glyph: bool,
+        teoz: bool,
     ) {
         self.participant_group_open(part_uid, qualified_name, source_line, position);
 
-        let is_tail = position == "tail";
+        let is_tail = position == "tail" && !teoz;
         let (text_y, figure_base) = if is_tail {
             (
                 base_y + ACTOR_TAIL_TEXT_Y_OFFSET,
@@ -3696,10 +3700,11 @@ impl PlantUmlSvg {
         text_len: f64,
         fill_color: &str,
         border_color: &str,
+        teoz: bool,
     ) {
         self.participant_group_open(part_uid, qualified_name, source_line, position);
 
-        let is_tail = position == "tail";
+        let is_tail = position == "tail" && !teoz;
         let (text_y, figure_base) = if is_tail {
             (
                 base_y + ACTOR_TAIL_TEXT_Y_OFFSET,
@@ -3762,10 +3767,11 @@ impl PlantUmlSvg {
         text_len: f64,
         fill_color: &str,
         border_color: &str,
+        teoz: bool,
     ) {
         self.participant_group_open(part_uid, qualified_name, source_line, position);
 
-        let is_tail = position == "tail";
+        let is_tail = position == "tail" && !teoz;
         let (text_y, figure_base) = if is_tail {
             (
                 base_y + ACTOR_TAIL_TEXT_Y_OFFSET,
@@ -4559,6 +4565,7 @@ fn render_participant_shape(
     participant_inner_pad: f64,
     queue_head_offset: f64,
     draw_control_glyph: bool,
+    teoz: bool,
 ) {
     // Make the participant's link (if any) available to the group open/close
     // helpers so the shape contents get wrapped in a link anchor.
@@ -4585,6 +4592,7 @@ fn render_participant_shape(
                         p.text_width,
                         fill_color,
                         border_color,
+                        teoz,
                     );
                 }
                 ParticipantKind::Boundary => {
@@ -4600,6 +4608,7 @@ fn render_participant_shape(
                         p.text_width,
                         fill_color,
                         border_color,
+                        teoz,
                     );
                 }
                 ParticipantKind::Control => {
@@ -4616,6 +4625,7 @@ fn render_participant_shape(
                         fill_color,
                         border_color,
                         draw_control_glyph,
+                        teoz,
                     );
                 }
                 ParticipantKind::Entity => {
@@ -4631,6 +4641,7 @@ fn render_participant_shape(
                         p.text_width,
                         fill_color,
                         border_color,
+                        teoz,
                     );
                 }
                 ParticipantKind::Database => {
@@ -4646,6 +4657,7 @@ fn render_participant_shape(
                         p.text_width,
                         fill_color,
                         border_color,
+                        teoz,
                     );
                 }
                 _ => unreachable!(),
@@ -5708,10 +5720,6 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                                 autonumber_extra + label_w + MSG_TEXT_LEFT_PAD + MSG_TEXT_LEFT_PAD;
                             let arrow_only_w = text_pref.max(SELF_MSG_MIN_PREF_WIDTH);
 
-                            // Lifeline segment length at this level: left shift
-                            // (ACTIVATION_HALF_W when active) + right shift
-                            // (depth * ACTIVATION_HALF_W). Counted twice, matching
-                            // PlantUML's double-add via getPreferredWidth.
                             let depth = activation_depth
                                 .get(msg.from.as_str())
                                 .copied()
@@ -5720,13 +5728,29 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                                     msg.activation,
                                     Some(ActivationChange::Activate)
                                 ));
-                            let segment_len = if depth > 0 {
-                                ACTIVATION_HALF_W + depth as f64 * ACTIVATION_HALF_W
-                            } else {
-                                0.0
-                            };
 
-                            let needed = arrow_only_w + 2.0 * segment_len;
+                            let needed = if diagram.teoz {
+                                // Teoz `CommunicationTileSelf.addConstraints` (non-reverse):
+                                //   next.posC >= self.posC2 + compWidth
+                                // where posC2 = posC + LIVE_DELTA_SIZE * level and
+                                // compWidth = the self-arrow preferred width. Only the
+                                // right-side livebox delta enters the gap (single, not
+                                // doubled — Teoz tracks one absolute right edge per
+                                // lifeline rather than a symmetric shift).
+                                arrow_only_w + depth as f64 * ACTIVATION_HALF_W
+                            } else {
+                                // Legacy Step1Message.getConstraintAfter:
+                                //   length = arrowOnlyWidth + segment.getLength()
+                                // where segment.getLength() = rightShift + leftShift of
+                                // the lifeline at this level. Counted twice, matching
+                                // PlantUML's double-add via getPreferredWidth.
+                                let segment_len = if depth > 0 {
+                                    ACTIVATION_HALF_W + depth as f64 * ACTIVATION_HALF_W
+                                } else {
+                                    0.0
+                                };
+                                arrow_only_w + 2.0 * segment_len
+                            };
                             pair_max_label_width[fi] = pair_max_label_width[fi].max(needed);
                         }
                     } else {
@@ -5758,20 +5782,44 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                             .unwrap_or(0);
                         let to_depth = activation_depth.get(msg.to.as_str()).copied().unwrap_or(0);
 
-                        // Each active lifeline extends ACTIVATION_HALF_W from center.
-                        let source_shift = if from_depth > 0 {
-                            ACTIVATION_HALF_W
+                        // Teoz target livebox level (`livingSpace2.getLevelAt(...,
+                        // IGNORE_FUTURE_DEACTIVATE)`) includes a level activated by
+                        // this very message.
+                        let target_active = to_depth > 0
+                            || matches!(msg.activation, Some(ActivationChange::Activate));
+
+                        let (source_shift, target_shift) = if diagram.teoz {
+                            // Teoz `CommunicationTile.addConstraints`. The gap to the
+                            // wider-index neighbour is the arrow `width` plus the
+                            // livebox deltas the message endpoints add to it.
+                            //
+                            // Forward (fi < ti, source on the left):
+                            //   point1 = source.getPosC()            (bare centre)
+                            //   if (level2>0) point2 -= LIVE_DELTA    (arrow ends on the
+                            //                                          target livebox left)
+                            //   => gap = width + (LIVE_DELTA if target active)
+                            //
+                            // Reverse (fi > ti, source on the right):
+                            //   if (level1>0) point1 -= LIVE_DELTA    (source livebox)
+                            //   point2 += level2 * LIVE_DELTA         (target livebox)
+                            //   point1 >= point2 + width
+                            //   => gap = width + (LIVE_DELTA if source active)
+                            //          + level_target * LIVE_DELTA
+                            if fi < ti {
+                                (0.0, if target_active { ACTIVATION_HALF_W } else { 0.0 })
+                            } else {
+                                let src_live = if from_depth > 0 { ACTIVATION_HALF_W } else { 0.0 };
+                                let tgt_live = to_depth as f64 * ACTIVATION_HALF_W;
+                                (src_live, tgt_live)
+                            }
                         } else {
-                            0.0
-                        };
-                        let target_shift = if to_depth > 0
-                            || (diagram.teoz
-                                && from_depth == 0
-                                && matches!(msg.activation, Some(ActivationChange::Activate)))
-                        {
-                            ACTIVATION_HALF_W
-                        } else {
-                            0.0
+                            // Legacy Step1Message: arrowOnlyWidth + rightShift(source)
+                            // + leftShift(target). Each active lifeline extends
+                            // ACTIVATION_HALF_W from centre on the relevant side.
+                            (
+                                if from_depth > 0 { ACTIVATION_HALF_W } else { 0.0 },
+                                if to_depth > 0 { ACTIVATION_HALF_W } else { 0.0 },
+                            )
                         };
 
                         // A message that creates its target reserves extra space
@@ -6442,9 +6490,16 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
             // and the frame is anchored to the post-shift lifeline centre, so both
             // the pending TEOZ_PARTICIPANT_SHIFT and EXTERNAL_MARGINX1 are folded in.
             let left = if diagram.teoz {
+                // The innermost frame around participant 0 sits at `center - MARGINX`;
+                // each additional enclosing frame adds `MARGINX + EXTERNAL_MARGINX1`
+                // (parent encloses child via `child.getMinX() - MARGINX`). The floor
+                // applies to the outermost frame's InGroupable left edge.
+                let nest_extra = (group_left_shift_depth.saturating_sub(1)) as f64
+                    * (TEOZ_GROUP_MARGIN_X + TEOZ_GROUP_EXTERNAL_MARGIN_X1);
                 participants[0].center_x + TEOZ_PARTICIPANT_SHIFT
                     - TEOZ_GROUP_MARGIN_X
                     - TEOZ_GROUP_EXTERNAL_MARGIN_X1
+                    - nest_extra
             } else {
                 participants[0].box_x - group_frame_margin
             };
@@ -6621,7 +6676,28 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                             && msg.activation.is_none()
                             && !create_msg_idx.contains_key(msg.from.as_str())
                             && !destroyed_later;
-                        let text_extent_right = if ordinary_active_self {
+                        // Teoz self-message right extent follows
+                        // `CommunicationTileSelf.getMaxX() = posC2 + compWidth`,
+                        // where posC2 = lifeline centre + LIVE_DELTA_SIZE * level
+                        // (the active livebox right edge) and compWidth is the
+                        // self-arrow preferred width = max(textWidth, 50). Unlike
+                        // the legacy extent it does NOT bake in an arrow-size pad;
+                        // the canvas-wide RIGHT_MARGIN is added once afterwards.
+                        let teoz_self_extent = if diagram.teoz {
+                            let level =
+                                act_depth.get(msg.from.as_str()).copied().unwrap_or(0) as f64;
+                            let pos_c2 = cx_base + level * ACTIVATION_HALF_W;
+                            let comp_w = (autonumber_extra
+                                + label_w
+                                + 2.0 * MSG_TEXT_LEFT_PAD)
+                                .max(SELF_MSG_MIN_PREF_WIDTH);
+                            Some(pos_c2 + comp_w)
+                        } else {
+                            None
+                        };
+                        let text_extent_right = if let Some(e) = teoz_self_extent {
+                            e
+                        } else if ordinary_active_self {
                             cx + autonumber_extra + label_w + 2.0 * MSG_TEXT_LEFT_PAD + ARROW_SIZE
                         } else {
                             cx + SELF_MSG_TEXT_X_PAD
@@ -8149,6 +8225,10 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
             ref_right: f64,
             message_right: f64,
             external_left: f64,
+            // Teoz: rightmost livebox right edge over the group's message
+            // endpoints (`participant.center + level * LIVE_DELTA_SIZE`). The frame
+            // covers the active livebox, not just the lifeline centre.
+            max_live_right: f64,
         }
 
         // Scan events to find group start/end pairs and compute their frames.
@@ -8169,6 +8249,7 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                         ref_right: f64::NEG_INFINITY,
                         message_right: f64::NEG_INFINITY,
                         external_left: f64::INFINITY,
+                        max_live_right: f64::NEG_INFINITY,
                     });
                 }
                 Event::GroupEnd => {
@@ -8222,7 +8303,15 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                                 HEAD_BOX_Y
                             };
                             if has_child {
-                                part_left.min(child_left - TEOZ_GROUP_MARGIN_X)
+                                // Parent encloses child via `child.getMinX() - MARGINX`,
+                                // and child.getMinX() = child.min - EXTERNAL_MARGINX1, so
+                                // the parent rect sits MARGINX + EXTERNAL_MARGINX1 left of
+                                // the child rect.
+                                part_left.min(
+                                    child_left
+                                        - TEOZ_GROUP_MARGIN_X
+                                        - TEOZ_GROUP_EXTERNAL_MARGIN_X1,
+                                )
                             } else {
                                 part_left
                             }
@@ -8315,7 +8404,13 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                         // direct messages contributes no participant right of its own.
                         let part_right = if diagram.teoz {
                             if has_msgs {
-                                participants[max_idx].center_x + TEOZ_GROUP_MARGIN_X
+                                // The frame covers the rightmost endpoint's livebox
+                                // right edge (`getMaxX` over inner tiles), not just the
+                                // bare lifeline centre, then adds GroupingTile.MARGINX.
+                                participants[max_idx]
+                                    .center_x
+                                    .max(group.max_live_right)
+                                    + TEOZ_GROUP_MARGIN_X
                             } else if has_child {
                                 f64::NEG_INFINITY
                             } else if !participants.is_empty() {
@@ -8337,7 +8432,16 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                         };
                         let mut frame_right = part_right.max(header_right);
                         if has_child {
-                            frame_right = frame_right.max(child_right + group_frame_margin);
+                            // Parent encloses child via `child.getMaxX() + MARGINX`, and
+                            // child.getMaxX() = child.max + EXTERNAL_MARGINX2, so the
+                            // parent rect sits MARGINX + EXTERNAL_MARGINX2 right of the
+                            // child rect (Teoz); legacy uses the box-edge margin.
+                            let child_margin = if diagram.teoz {
+                                TEOZ_GROUP_MARGIN_X + TEOZ_GROUP_EXTERNAL_MARGIN_X2
+                            } else {
+                                group_frame_margin
+                            };
+                            frame_right = frame_right.max(child_right + child_margin);
                         }
                         if has_note {
                             frame_right = frame_right.max(group.note_right + group_frame_margin);
@@ -8402,6 +8506,20 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                     } else {
                         None
                     };
+                    // Teoz: a message that activates its target (`++`) creates a
+                    // livebox tile *inside* the frame; that tile's getMaxX is the
+                    // livebox right edge `target.center + level*LIVE_DELTA` (level
+                    // including the level this message activates). Only such inside-the-
+                    // frame liveboxes widen the frame — a message merely touching an
+                    // already-open livebox uses the bare lifeline centre (getMaxX = posC).
+                    let msg_live_right =
+                        if matches!(msg.activation, Some(ActivationChange::Activate)) {
+                            let level = group_act_depth.get(msg.to.as_str()).copied().unwrap_or(0)
+                                + 1;
+                            center_of(&msg.to) + level as f64 * ACTIVATION_HALF_W
+                        } else {
+                            f64::NEG_INFINITY
+                        };
                     if let Some(top) = group_start_stack.last_mut() {
                         if let Some(fi) = fi {
                             top.min_idx = top.min_idx.min(fi);
@@ -8417,6 +8535,7 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                         if let Some(right) = self_message_right {
                             top.message_right = top.message_right.max(right);
                         }
+                        top.max_live_right = top.max_live_right.max(msg_live_right);
                     }
                     if let Some(act) = &msg.activation {
                         match act {
@@ -9056,6 +9175,7 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                 participant_inner_pad,
                 queue_head_offset,
                 true,
+                false,
             );
         }
 
@@ -9076,6 +9196,7 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                 participant_inner_pad,
                 queue_head_offset,
                 true,
+                false,
             );
         }
     }
@@ -9098,6 +9219,7 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                 &border_color,
                 participant_inner_pad,
                 queue_head_offset,
+                true,
                 true,
             );
         }
@@ -11146,11 +11268,13 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                                 )
                                 .unwrap();
                                 if let Some(label) = &eg.label {
+                                    // Teoz places the else guard label 2px lower
+                                    // relative to the divider line.
                                     emit_group_guard(
                                         &mut svg.buf,
                                         label,
                                         frame_left + 5.0,
-                                        ely + 10.63475,
+                                        ely + 12.63475,
                                         &group_header_font_family,
                                     );
                                 }
@@ -11407,6 +11531,7 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                 participant_inner_pad,
                 inline_queue_head_offset,
                 *draw_control_glyph,
+                false,
             );
             // Strip the surrounding `<g class="participant participant-head" ...>`
             // wrapper: PlantUML draws the created head box as bare shape elements.
