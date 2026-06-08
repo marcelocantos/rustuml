@@ -3996,6 +3996,19 @@ fn if_long_layout(
         .fold(0.0_f64, f64::max);
     left_ext += north_overhang / 2.0;
 
+    // PlantUML's `Recentred` keeps an asymmetric left margin: the leftmost drawn
+    // point lands 9 px further inside the canvas than the symmetric drawn extent
+    // would imply, exactly the `cond_half + 9` clearance the FtileIfDown and
+    // FtileRepeat diamond-leftmost layouts use (`IF_DOWN_LEFT_PAD`). When the
+    // first diamond's west vertex is the leftmost drawn element (no wider branch
+    // box reaches further left), reserve that same 9 px on the left so the spine
+    // sits where PlantUML recentres it.
+    let first_diamond_west_dist =
+        -(compress.transform(centers_u[0] - cols[0].diamond_w / 2.0) - spine_comp);
+    if (first_diamond_west_dist - left_ext).abs() < 1e-6 {
+        left_ext += IF_DOWN_LEFT_PAD;
+    }
+
     Some(IfLongLayout {
         cols,
         east_label,
