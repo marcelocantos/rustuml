@@ -407,7 +407,17 @@ pub fn compress_activity_buffers(
     connectors: &str,
     margin: f64,
 ) -> (String, String, CompressionTransform, CompressionTransform) {
-    let x_tf = CompressionTransform::from_occupied(&parse_occupancy(shapes, CompressionMode::OnX), margin);
+    // ON_X occupancy = all shapes PLUS connector POLYGONS (arrowheads) and PATHS
+    // (worms). PlantUML's SlotFinder records those as occupied; only `ULine` is
+    // exempt (SlotFinder.draw has no ULine case). `parse_occupancy` has no <line>
+    // branch, so parsing the connectors buffer adds exactly polygons + paths and
+    // ignores the flow lines — matching PlantUML (verified by instrumenting
+    // CompressionXorYBuilder: switch case-gaps compress 20→10, if_nested 17→10).
+    let mut occ_x = parse_occupancy(shapes, CompressionMode::OnX);
+    for &(s, e) in parse_occupancy(connectors, CompressionMode::OnX).slots() {
+        occ_x.add_slot(s, e);
+    }
+    let x_tf = CompressionTransform::from_occupied(&occ_x, margin);
     let (shapes, connectors) = if x_tf.is_identity() {
         (shapes.to_string(), connectors.to_string())
     } else {
