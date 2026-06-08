@@ -1371,7 +1371,7 @@ fn build_swimlanes(steps: &[ActivityStep], palette: &Palette) -> Vec<LayoutNode>
             lanes.len() - 1
         };
         let body = build_tree_inner(steps, palette);
-        let (left, right) = sequence_extents(&body);
+        let (left, right) = swimlane_lane_extents(&body);
         lanes[lane_index].content_left = lanes[lane_index].content_left.max(left);
         lanes[lane_index].content_right = lanes[lane_index].content_right.max(right);
         steps.clear();
@@ -4435,6 +4435,63 @@ fn lane_width(lane: &Lane) -> f64 {
 /// natural cx, NOT the geometric centre of the lane.
 fn lane_content_cx(lane: &Lane, lane_left: f64) -> f64 {
     lane_left + 6.0 + lane.content_left
+}
+
+/// Lane content extents for a swimlane segment body.
+///
+/// A swimlane derives each lane's width from the actual drawn bounding box of
+/// its ftile column (`Swimlane.getMinMax()` in PlantUML's `Swimlanes`), not
+/// from the slightly looser `calculateDimension` reservation the standalone
+/// (non-swimlane) renderer uses. The two agree everywhere except for a
+/// `FtileIfDown` (an `if` with one empty branch) whose width is governed by the
+/// condition diamond rather than the populated branch: there the standalone
+/// path's [`IF_DOWN_RIGHT_PAD`] carries a small (~0.218 px) reservation that the
+/// drawn east-corridor bounding box does not. In a lane that fudge widens the
+/// right divider by that amount. Recompute the right extent of a cond-driven
+/// top-level if-down from the drawn east corridor (`cond_half + DIAMOND_HALF`)
+/// plus the trailing corridor pad, matching the lane's true `getMinMax` width.
+fn swimlane_lane_extents(body: &[LayoutNode]) -> (f64, f64) {
+    let (left, mut right) = sequence_extents(body);
+    if let [
+        LayoutNode::If {
+            condition,
+            then_branch,
+            else_branches,
+            diamond_font_family,
+            diamond_font_size,
+            diamond_text_bold,
+            diamond_pad_x,
+            attached_notes,
+            ..
+        },
+    ] = body
+        && attached_notes.is_empty()
+        && let Some(plan) = if_down_plan(then_branch, else_branches)
+    {
+        let cond_half = if_diamond_half_width(
+            condition,
+            *diamond_font_size,
+            *diamond_text_bold,
+            diamond_font_family,
+            *diamond_pad_x,
+        );
+        let branch_w = sequence_width(plan.populated);
+        // Standalone right (node_extents If / if_down_plan arm).
+        let standalone_right = (cond_half + IF_DOWN_RIGHT_PAD).max(
+            branch_w / 2.0 + IF_DOWN_BRANCH_CORRIDOR_GAP + IF_DOWN_BRANCH_CORRIDOR_TRAILING_PAD,
+        );
+        // Drawn (getMinMax) right: the empty branch's east corridor runs to the
+        // diamond east vertex + DIAMOND_HALF, then the corridor's trailing pad.
+        let drawn_right = (cond_half + DIAMOND_HALF + IF_DOWN_BRANCH_CORRIDOR_TRAILING_PAD).max(
+            branch_w / 2.0 + IF_DOWN_BRANCH_CORRIDOR_GAP + IF_DOWN_BRANCH_CORRIDOR_TRAILING_PAD,
+        );
+        // Only narrow when the standalone reservation is the cond-driven fudge
+        // (i.e. it would otherwise overstate the lane width).
+        if (standalone_right - right).abs() < 0.001 && drawn_right < right {
+            right = drawn_right;
+        }
+    }
+    (left, right)
 }
 
 /// Width of a `backward :label;` action box drawn on a repeat's return arm.
