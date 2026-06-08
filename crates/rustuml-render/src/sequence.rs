@@ -6442,6 +6442,36 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                         note_font_size_f,
                         &note_font_family,
                     );
+                    // Teoz nests frames with a `MARGINX + EXTERNAL_MARGINX1` step
+                    // per level (16 + 3 = 19) and measures a note's group extent
+                    // from its component preferred width via `NoteTile.getMinX()`
+                    // (`centerX - componentWidth / 2`), not the snapped visible
+                    // width. The outermost frame's InGroupable left edge must then
+                    // clear the 10px canvas floor. Solve that constraint directly
+                    // for the participant-0 centre and shift the diagram right if
+                    // the current centre sits left of it.
+                    if diagram.teoz
+                        && note.position == NotePosition::Over
+                        && note.participants.len() == 1
+                        && note.shape == NoteShape::Note
+                    {
+                        let component_pref_w =
+                            max_tw + ROSE_NOTE_COMPONENT_PREF_EXTRA + 2.0 * note_global_padding;
+                        let nest_extra = (depth.saturating_sub(1)) as f64
+                            * (TEOZ_GROUP_MARGIN_X + TEOZ_GROUP_EXTERNAL_MARGIN_X1);
+                        // The frame is anchored to the post-shift lifeline centre
+                        // (`center_x + TEOZ_PARTICIPANT_SHIFT`), so the floor for the
+                        // pre-shift centre is reduced by that pending shift.
+                        let cx_floor = GROUP_FRAME_MIN_LEFT
+                            + TEOZ_GROUP_EXTERNAL_MARGIN_X1
+                            + TEOZ_GROUP_MARGIN_X
+                            + nest_extra
+                            + component_pref_w / 2.0
+                            - TEOZ_PARTICIPANT_SHIFT;
+                        group_note_shift =
+                            group_note_shift.max(cx_floor - participants[0].center_x);
+                        continue;
+                    }
                     let floor = GROUP_NOTE_LEFT_FLOOR_BASE + depth as f64 * group_frame_margin;
                     let natural_left = match note.position {
                         NotePosition::Over if note.participants.len() == 1 => {
@@ -8341,9 +8371,20 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                         };
                         // An enclosed note that overhangs the messages widens the
                         // frame to cover it: the frame's InGroupable left edge sits
-                        // GROUP_FRAME_MARGIN beyond the note's drawn left.
+                        // GROUP_FRAME_MARGIN beyond the note's drawn left. In Teoz
+                        // the frame is measured from `NoteTile.getMinX()`
+                        // (`centerX - componentWidth / 2`) minus MARGINX rather than
+                        // from the snapped visible left, so it reaches a further
+                        // `(componentWidth - visibleWidth) / 2 = 5px` plus MARGINX
+                        // (16) left of the drawn note edge.
                         if has_note {
-                            frame_left = frame_left.min(group.note_left - group_frame_margin);
+                            let note_margin = if diagram.teoz {
+                                (ROSE_NOTE_COMPONENT_PREF_EXTRA - NOTE_VISIBLE_RAW_MARGIN) / 2.0
+                                    + TEOZ_GROUP_MARGIN_X
+                            } else {
+                                group_frame_margin
+                            };
+                            frame_left = frame_left.min(group.note_left - note_margin);
                         }
                         if has_ref {
                             frame_left = frame_left.min(group.ref_left);
