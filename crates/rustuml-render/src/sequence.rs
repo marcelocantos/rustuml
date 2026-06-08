@@ -1787,6 +1787,22 @@ const GROUP_ELSE_HEIGHT: f64 = 9.0;
 const GROUP_ELSE_INNER_PAD: f64 = 5.955078125;
 /// Vertical advance for GroupEnd.
 const GROUP_END_HEIGHT: f64 = 7.0;
+/// PlantUML `GroupingTile.MARGINY_MAGIC`: the Teoz group frame reserves
+/// `MARGINY_MAGIC / 2` extra vertical padding above the body (below the header)
+/// and another `MARGINY_MAGIC / 2` below the body, for `MARGINY_MAGIC` total.
+const TEOZ_GROUP_MARGIN_Y: f64 = 20.0;
+/// PlantUML `GroupingTile.EXTERNAL_MARGINX1`: the InGroupable left edge a Teoz
+/// group reports to the enclosing diagram sits this far left of the frame's drawn
+/// left edge (used when clamping the diagram to the canvas left margin).
+const TEOZ_GROUP_EXTERNAL_MARGIN_X1: f64 = 3.0;
+/// PlantUML `GroupingTile.EXTERNAL_MARGINX2`: the InGroupable right edge a Teoz
+/// group reports to the enclosing diagram (canvas) sits this far beyond the
+/// frame's drawn right edge.
+const TEOZ_GROUP_EXTERNAL_MARGIN_X2: f64 = 9.0;
+/// Extra vertical space a Teoz `else` divider reserves both above the divider
+/// (below the preceding message) and below it (before the else body), beyond the
+/// standard divider height.
+const TEOZ_GROUP_ELSE_EXTRA: f64 = 8.0;
 /// Left/right margin for group frame beyond participant boxes.
 const GROUP_FRAME_MARGIN: f64 = 10.0;
 /// Left-edge floor of the outermost group frame's enclosed content. A note that
@@ -1979,6 +1995,10 @@ const BOX_DEFAULT_FILL: &str = "#DDDDDD";
 const BOX_SIDE_MARGIN: f64 = 4.0;
 /// Teoz reserves an extra horizontal lane around participant-box boundaries.
 const TEOZ_BOX_BOUNDARY_GAP: f64 = 10.0;
+/// Teoz group-frame horizontal margin, measured from the involved participants'
+/// lifeline centres (PlantUML `GroupingTile.MARGINX`). The frame spans
+/// `[min_center - MARGINX, max_center + MARGINX]`, widened to fit the header.
+const TEOZ_GROUP_MARGIN_X: f64 = 16.0;
 /// Extra head drop reserved by most titled participant boxes.
 const BOX_TITLE_HEAD_GAP: f64 = 5.0;
 /// Vertical gap below the participant heads' tail boxes to the box bottom.
@@ -6038,7 +6058,12 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
         // When groups encompass the leftmost participant, PlantUML reserves one
         // frame margin per enclosing frame so each nested frame can still land at
         // the 10px canvas floor (outer at 10, next at 20, ...).
-        let group_shift = if group_left_shift_depth > 0 {
+        // In Teoz mode a group frame overlays the participant region (its left
+        // edge sits at `min_involved_center - GroupingTile.MARGINX`) rather than
+        // pushing the leftmost participant right, so no left shift is reserved.
+        let group_shift = if diagram.teoz {
+            0.0
+        } else if group_left_shift_depth > 0 {
             group_frame_margin * group_left_shift_depth as f64
                 + HEAD_BOX_Y
                 + if group_left_external_shift_depth > 0 {
@@ -6299,7 +6324,19 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
         }
 
         if group_left_shift_depth > 0 && !participants.is_empty() {
-            let left = participants[0].box_x - group_frame_margin;
+            // The outermost frame's left edge: box-edge minus margin (standard),
+            // or lifeline-centre minus MARGINX (Teoz). Shift the diagram right so
+            // it never crosses the 10px canvas floor. In Teoz the floor applies to
+            // the frame's *InGroupable* left edge (`frame_left - EXTERNAL_MARGINX1`)
+            // and the frame is anchored to the post-shift lifeline centre, so both
+            // the pending TEOZ_PARTICIPANT_SHIFT and EXTERNAL_MARGINX1 are folded in.
+            let left = if diagram.teoz {
+                participants[0].center_x + TEOZ_PARTICIPANT_SHIFT
+                    - TEOZ_GROUP_MARGIN_X
+                    - TEOZ_GROUP_EXTERNAL_MARGIN_X1
+            } else {
+                participants[0].box_x - group_frame_margin
+            };
             let shift = (GROUP_FRAME_MIN_LEFT - left).max(0.0);
             if shift > 0.0 {
                 for p in participants.iter_mut() {
@@ -6958,14 +6995,30 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                         y += GROUP_GAP_AFTER_MSG;
                         group_inner_top_pad
                     };
+                    // Teoz: the frame top sits at the standard position MINUS the
+                    // global teoz_top_pad (the frame is anchored to the body, not
+                    // the head-shifted lifelines), and the header reserves
+                    // MARGINY_MAGIC/2 of padding above the body in addition to the
+                    // standard inner pad.
+                    if diagram.teoz {
+                        y -= teoz_top_pad;
+                    }
                     event_y_positions.push(y);
                     // Advance y past the header so subsequent messages are positioned correctly.
                     y += inner_pad;
+                    if diagram.teoz {
+                        y += TEOZ_GROUP_MARGIN_Y / 2.0 + GROUP_HEADER_FIRST_PAD_ADJUST;
+                    }
                     // Don't increment msg_count — the group header itself isn't a message
                 }
                 Event::GroupElse(g) => {
-                    // Else divider adds vertical space.
+                    // Else divider adds vertical space. Teoz spaces the divider an
+                    // extra TEOZ_GROUP_ELSE_EXTRA below the preceding message and
+                    // reserves the same amount again before the else body.
                     y += GROUP_ELSE_HEIGHT;
+                    if diagram.teoz {
+                        y += TEOZ_GROUP_ELSE_EXTRA;
+                    }
                     event_y_positions.push(y);
                     if g.label.is_some() {
                         // With a label: advance past the label text.
@@ -6976,6 +7029,9 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                         // because the else divider already contributed vertical
                         // space that partially overlaps the message base step.
                         y -= MSG_BASE_STEP - (MSG_BASE_FIRST_OFFSET - GROUP_ELSE_HEIGHT);
+                    }
+                    if diagram.teoz {
+                        y += TEOZ_GROUP_ELSE_EXTRA;
                     }
                 }
                 Event::GroupEnd => {
@@ -6993,9 +7049,15 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                             GROUP_HEADER_FIRST_PAD_ADJUST
                         } else {
                             0.0
-                        };
+                        }
+                        - if diagram.teoz { 2.0 } else { 0.0 };
                     event_y_positions.push(group_end_y);
                     y += GROUP_END_HEIGHT;
+                    if diagram.teoz {
+                        // The Teoz body reserves MARGINY_MAGIC/2 below itself; the
+                        // following content steps from there.
+                        y += GROUP_END_HEIGHT;
+                    }
                 }
                 Event::Space(px_opt) => {
                     y += px_opt.map(|p| p as f64).unwrap_or(25.0);
@@ -7337,8 +7399,15 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                 bold_text_width(&b.title, BOX_TITLE_FONT_SIZE as f64)
             };
             let title_extra = (title_w + 6.0 - (box_right - box_left)).max(0.0);
-            max_participant_box_right =
-                max_participant_box_right.max(box_right + title_extra / 2.0 - BOX_SIDE_MARGIN);
+            // Teoz reserves a boundary lane on the right of the rightmost box,
+            // mirroring the left-side `teoz_box_shift` applied to participant 0.
+            let teoz_box_right_gap = if diagram.teoz {
+                TEOZ_BOX_BOUNDARY_GAP
+            } else {
+                0.0
+            };
+            max_participant_box_right = max_participant_box_right
+                .max(box_right + title_extra / 2.0 - BOX_SIDE_MARGIN + teoz_box_right_gap);
         }
     }
     // Add 1.0 for note stroke width when notes extend the right edge.
@@ -8000,7 +8069,25 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                         // enclosed child frame (each parent extends GROUP_FRAME_MARGIN
                         // beyond its direct child). Only a group with neither direct
                         // messages nor children falls back to the empty-group estimate.
-                        let mut frame_left = if has_msgs {
+                        // Teoz uses GroupingTile.MARGINX (16) measured from the
+                        // involved-participant *lifeline centres*, not from box
+                        // edges: frame_left = min_center - 16, and the body floor
+                        // for the right edge is max_center + 16 (see Teoz branch
+                        // for frame_right below).
+                        let mut frame_left = if diagram.teoz {
+                            let part_left = if has_msgs {
+                                participants[min_idx].center_x - TEOZ_GROUP_MARGIN_X
+                            } else if !participants.is_empty() {
+                                participants[0].center_x - TEOZ_GROUP_MARGIN_X
+                            } else {
+                                HEAD_BOX_Y
+                            };
+                            if has_child {
+                                part_left.min(child_left - TEOZ_GROUP_MARGIN_X)
+                            } else {
+                                part_left
+                            }
+                        } else if has_msgs {
                             let part_left = participants[min_idx].box_x - group_frame_margin;
                             if has_child {
                                 part_left.min(child_left - group_frame_margin)
@@ -8054,13 +8141,31 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                                     &group_header_font_family,
                                 );
                             }
-                            let tab_right = frame_left + kw + 45.0;
-                            if let Some(label) = guard_label {
-                                let gw =
-                                    group_guard_width_with_family(label, &group_header_font_family);
-                                tab_right + 15.0 + gw + 5.0
+                            if diagram.teoz {
+                                // Teoz header floor (GroupingTile: `min + width + 16`):
+                                // width = ComponentRoseGroupingHeader.getPreferredWidth
+                                //       = getTextWidth(tab) + marginX1 + comment_width
+                                //       = (kw + 45) + 15 + comment_w.
+                                let comment_w = guard_label
+                                    .map(|label| {
+                                        group_guard_width_with_family(
+                                            label,
+                                            &group_header_font_family,
+                                        )
+                                    })
+                                    .unwrap_or(0.0);
+                                frame_left + kw + 60.0 + comment_w + TEOZ_GROUP_MARGIN_X
                             } else {
-                                tab_right + 5.0
+                                let tab_right = frame_left + kw + 45.0;
+                                if let Some(label) = guard_label {
+                                    let gw = group_guard_width_with_family(
+                                        label,
+                                        &group_header_font_family,
+                                    );
+                                    tab_right + 15.0 + gw + 5.0
+                                } else {
+                                    tab_right + 5.0
+                                }
                             }
                         } else {
                             0.0
@@ -8069,7 +8174,17 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                         // Compute frame right based on which participants are inside,
                         // the header, and any enclosed child frame. A group with no
                         // direct messages contributes no participant right of its own.
-                        let part_right = if has_msgs {
+                        let part_right = if diagram.teoz {
+                            if has_msgs {
+                                participants[max_idx].center_x + TEOZ_GROUP_MARGIN_X
+                            } else if has_child {
+                                f64::NEG_INFINITY
+                            } else if !participants.is_empty() {
+                                participants[n - 1].center_x + TEOZ_GROUP_MARGIN_X
+                            } else {
+                                100.0
+                            }
+                        } else if has_msgs {
                             participants[max_idx].box_x
                                 + participants[max_idx].box_width
                                 + group_frame_margin
@@ -8224,7 +8339,13 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
     // beyond participant boxes).
     let svg_width = if !group_frames.is_empty() {
         let max_frame_right = group_frames.iter().map(|f| f.right).fold(0.0f64, f64::max);
-        let from_frames = max_frame_right + RIGHT_MARGIN + 5.0;
+        // Teoz reports the group's right edge to the canvas at
+        // `frame_right + EXTERNAL_MARGINX2`; the diagram then adds RIGHT_MARGIN.
+        let from_frames = if diagram.teoz {
+            max_frame_right + TEOZ_GROUP_EXTERNAL_MARGIN_X2 + RIGHT_MARGIN
+        } else {
+            max_frame_right + RIGHT_MARGIN + 5.0
+        };
         let from_participants = effective_right + RIGHT_MARGIN;
         from_participants.max(from_frames).ceil() as u32
     } else {
@@ -8570,17 +8691,21 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
     }
 
     // Group frame rects (first instance) — rendered after first activation bars pass.
-    for frame in &group_frames {
-        let frame_height = frame.bottom - frame.top;
-        write!(
-            svg.buf,
-            r##"<rect fill="none" height="{}" style="stroke:#000000;stroke-width:1.5;" width="{}" x="{}" y="{}"/>"##,
-            fmt_coord(frame_height),
-            fmt_coord(frame.right - frame.left),
-            fmt_coord(frame.left),
-            fmt_coord(frame.top),
-        )
-        .unwrap();
+    // Teoz uses a single-pass group-frame layer (the inline instance below) and
+    // does not emit this back-layer copy, so the frame appears exactly once.
+    if !diagram.teoz {
+        for frame in &group_frames {
+            let frame_height = frame.bottom - frame.top;
+            write!(
+                svg.buf,
+                r##"<rect fill="none" height="{}" style="stroke:#000000;stroke-width:1.5;" width="{}" x="{}" y="{}"/>"##,
+                fmt_coord(frame_height),
+                fmt_coord(frame.right - frame.left),
+                fmt_coord(frame.left),
+                fmt_coord(frame.top),
+            )
+            .unwrap();
+        }
     }
 
     // Delay (`...`) bands split every lifeline with a dotted `1,4` gap. The
@@ -10795,48 +10920,95 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                         &group_header_font_family,
                     );
                 }
+
+                // Teoz draws all of a group's else dividers as part of the group
+                // frame layer (GroupingTile.drawAllElses), immediately after the
+                // header — not interleaved with the body messages. Emit them here
+                // for this group's direct-child `else` events; the per-GroupElse
+                // arm below then skips emission in teoz mode.
+                if diagram.teoz {
+                    let mut depth = 0usize;
+                    for (j, ev) in diagram.events.iter().enumerate().skip(ev_idx + 1) {
+                        match ev {
+                            Event::GroupStart(_) => depth += 1,
+                            Event::GroupEnd => {
+                                if depth == 0 {
+                                    break;
+                                }
+                                depth -= 1;
+                            }
+                            Event::GroupElse(eg) if depth == 0 => {
+                                let ely = event_y_positions
+                                    .get(j)
+                                    .copied()
+                                    .unwrap_or(frame_top);
+                                write!(
+                                    svg.buf,
+                                    r##"<line style="stroke:#000000;stroke-width:1;stroke-dasharray:2,2;" x1="{}" x2="{}" y1="{}" y2="{}"/>"##,
+                                    fmt_coord(frame_left),
+                                    fmt_coord(frame_right),
+                                    fmt_coord(ely),
+                                    fmt_coord(ely),
+                                )
+                                .unwrap();
+                                if let Some(label) = &eg.label {
+                                    emit_group_guard(
+                                        &mut svg.buf,
+                                        label,
+                                        frame_left + 5.0,
+                                        ely + 10.63475,
+                                        &group_header_font_family,
+                                    );
+                                }
+                            }
+                            _ => {}
+                        }
+                    }
+                }
             }
             Event::GroupElse(g) => {
-                // Emit else dashed divider line
-                // Find the enclosing group frame
-                // Use the enclosing group frame bounds (which account for the
-                // header label width and the participant subset) rather than the
-                // full participant extent.
-                let (frame_left, frame_right) =
-                    else_frame_stack.last().copied().unwrap_or_else(|| {
-                        let fl = if participants.is_empty() {
-                            group_frame_margin
-                        } else {
-                            participants[0].box_x - group_frame_margin
-                        };
-                        let fr = if participants.is_empty() {
-                            100.0
-                        } else {
-                            let last = &participants[n - 1];
-                            last.box_x + last.box_width + group_frame_margin
-                        };
-                        (fl, fr)
-                    });
-                write!(
-                    svg.buf,
-                    r##"<line style="stroke:#000000;stroke-width:1;stroke-dasharray:2,2;" x1="{}" x2="{}" y1="{}" y2="{}"/>"##,
-                    fmt_coord(frame_left),
-                    fmt_coord(frame_right),
-                    fmt_coord(msg_y),
-                    fmt_coord(msg_y),
-                )
-                .unwrap();
+                // Teoz already emitted this divider in the enclosing GroupStart's
+                // else-divider batch (the frame layer); skip the in-order copy.
+                if !diagram.teoz {
+                    // Emit else dashed divider line. Use the enclosing group frame
+                    // bounds (which account for the header label width and the
+                    // participant subset) rather than the full participant extent.
+                    let (frame_left, frame_right) =
+                        else_frame_stack.last().copied().unwrap_or_else(|| {
+                            let fl = if participants.is_empty() {
+                                group_frame_margin
+                            } else {
+                                participants[0].box_x - group_frame_margin
+                            };
+                            let fr = if participants.is_empty() {
+                                100.0
+                            } else {
+                                let last = &participants[n - 1];
+                                last.box_x + last.box_width + group_frame_margin
+                            };
+                            (fl, fr)
+                        });
+                    write!(
+                        svg.buf,
+                        r##"<line style="stroke:#000000;stroke-width:1;stroke-dasharray:2,2;" x1="{}" x2="{}" y1="{}" y2="{}"/>"##,
+                        fmt_coord(frame_left),
+                        fmt_coord(frame_right),
+                        fmt_coord(msg_y),
+                        fmt_coord(msg_y),
+                    )
+                    .unwrap();
 
-                // Emit else label only when explicitly provided (PlantUML
-                // does NOT show "[else]" text when the else clause has no label).
-                if let Some(label) = &g.label {
-                    emit_group_guard(
-                        &mut svg.buf,
-                        label,
-                        frame_left + 5.0,
-                        msg_y + 10.63475,
-                        &group_header_font_family,
-                    );
+                    // Emit else label only when explicitly provided (PlantUML
+                    // does NOT show "[else]" text when the else clause has no label).
+                    if let Some(label) = &g.label {
+                        emit_group_guard(
+                            &mut svg.buf,
+                            label,
+                            frame_left + 5.0,
+                            msg_y + 10.63475,
+                            &group_header_font_family,
+                        );
+                    }
                 }
             }
             Event::GroupEnd => {
