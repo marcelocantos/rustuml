@@ -251,3 +251,39 @@ port method): instrument `Swimlanes.computeDrawingWidths` /
 `MinMax` for `act_fork2br_lanes2`, then implement the column math above + the
 validated geometric post-process, and iterate up the ladder.** (Revert the
 instrumentation after, as with the compression work.)
+
+## CORRECTION via PlantUML instrumentation (2026-06-08) — bars are NOT excluded
+
+Instrumented `Swimlanes.computeSizeInternal` (printed per-lane MinMax/dx, then
+reverted + rebuilt clean JAR). For `act_fork2br_lanes2`:
+```
+Lane1: minX=13.0  maxX=83.87   width=70.87   actualW=70.87   x1=x2=5 dw=10 dx=-3.0  xpos_before=0
+Lane2: minX=-1.0  maxX=196.73  width=197.73  actualW=197.73  x1=x2=5 dw=10 dx=91.87 xpos_before=80.87
+last:  empty
+```
+
+This OVERTURNS the "exclude bars" idea. The fork/join BAR is attributed to the
+fork's ENTRY lane (Lane2) and is INCLUDED in that lane's MinMax — Lane2.width=197.73
+is bar-dominated (the bar is ~193.7 wide). Key consequences:
+
+1. **Byte-offset tagging is already correct for the bar.** `emit_fork` draws the bar
+   under `current_lane` = the fork's entry lane (Lane2, set by the `|Lane2|` before
+   `start`). So our `lane_spans` already put the bar in Lane2 — matching PlantUML.
+   Do NOT exclude `height=6` bars; INCLUDE them in per-lane bounds.
+2. **Lanes are placed side-by-side WIDE, then ON_X-compressed.** `xpos` accumulates
+   `actualWidth + dw`: 0 → 80.87 (L1) → 288.6 (after L2). Internal width ~288, but the
+   final canvas is 259 — the diagram-level CompressionXorYBuilder ON_X (which RustUML
+   ALREADY has, `compress_activity_buffers`) collapses the ~29px of slack the wide
+   bar/lane layout leaves. So V2 must: place lanes side-by-side via the formula, shift
+   each lane's shapes+connectors by its `dx`, then run the EXISTING compress pass.
+3. **Cross-lane CONNECTIONS (not bars) are the separate-draw case.** The bar stays in
+   its lane; it's the connection bar→branch-in-another-lane (`swimlaneOut != swimlaneIn`)
+   that PlantUML draws via `Cross`. Those are the elements needing span-redraw, not the
+   bar itself.
+
+Revised V2 plan: (a) per-lane MinMax over each lane's shapes+connectors INCLUDING
+bars (byte-offset tags), (b) column placement `dx = xpos + dw - minX` with
+`dw = hms(i)+hms(i+1)` (hms=5 common), `xpos += actualW + dw`, (c) shift each lane's
+fragment by `dx`, (d) identify+redraw cross-lane connections spanning, (e) title band
++ dividers + titles, (f) run the existing ON_X compress pass to collapse slack, (g)
+iterate. The instrument-then-revert confirmed the model before mis-implementing it.
