@@ -3727,9 +3727,25 @@ const IF_LONG_X_SEP: f64 = 20.0;
 const IF_LONG_BELOW: f64 = 100.0;
 /// `alignDiamonds` bottom margin (`incVertically(_, 20)`).
 const IF_LONG_ALIGN_BOTTOM: f64 = 20.0;
+/// Extra inter-tile gap retained inside an `if/elseif*/else` branch column.
+/// PlantUML's `FtileFactoryDelegatorAssembly` stacks consecutive branch tiles
+/// with a 35 px `addBottom` reserve; the whole-diagram `CompressionXorY` (ON_Y)
+/// pass then reclaims that slack down to `ARROW_LEN` (20) in freely-compressible
+/// flows. Inside an `FtileIfLongHorizontal` couple the diamond row + each
+/// diamond's south (`withNorth`) label band straddle the branch column, so ON_Y
+/// can only reclaim the slack partially: every inter-action gap settles at
+/// `ARROW_LEN + (4.477539… − 1)` ≈ 23.4775 instead of 20. The `4.477539…`
+/// residual is PlantUML's south-label band unit (also `IF_DOWN_LEAD`'s extra).
+const IF_LONG_BRANCH_GAP_EXTRA: f64 = 4.477539062500001 - 1.0;
 /// `SlotSet.smaller(margin)` keeps this much empty space on each side of every
 /// compressed cluster (PlantUML calls `smaller(5.0)`).
 const X_COMPRESS_MARGIN: f64 = 5.0;
+/// Clearance reserved left of the leftmost condition diamond's west vertex.
+/// PlantUML's with-diamonds nude width clamps the inner band to `diamond1.width
+/// + SUPP_WIDTH` (SUPP_WIDTH = 20), reserving `SUPP_WIDTH/2 − 1` = 9 px of left
+/// margin past the diamond — the same `+9` floor `node_extents` uses for the
+/// single-diamond `FtileIfDown` left extent.
+const IF_LONG_LEFT_MARGIN: f64 = 9.0;
 /// Length (x-extent) of a horizontal connector arrowhead polygon (`right_arrow`
 /// / `left_arrow` span `[x_tip-10, x_tip]`). The arrowhead is a connector
 /// polygon, so ON_X compaction counts it as occupancy.
@@ -3833,6 +3849,12 @@ struct IfLongLayout {
     tile2_h: f64,
     /// `tile2` center x relative to the spine; `None` when there is no else.
     tile2_cx: Option<f64>,
+    /// True when `tile2` is the IMPLICIT empty else (no `else` clause in source).
+    /// PlantUML always builds a `branch2` tile (`FtileMinWidthCentered(empty,
+    /// 30)`); with no point in/out it draws a single fall-through connector from
+    /// the last diamond's east vertex straight down to the merge line, rather
+    /// than the two-segment in/out a populated else gets.
+    tile2_empty: bool,
     /// Diamond north label height (single-line; reserved below the diamond).
     north_h: f64,
     /// Left / right drawn extents from the spine.
@@ -3856,6 +3878,10 @@ fn if_long_layout(
     let mut push_col = |cond: &str, north: &Option<String>, body: &[LayoutNode]| -> Option<()> {
         let g = sequence_geometry(body)?;
         let branch_w = g.width.max(30.0);
+        // Branch column height carries the partially-uncompressed inter-tile
+        // slack (see IF_LONG_BRANCH_GAP_EXTRA): `sequence_geometry` assembles at
+        // the fully-compressed 20 px gap, so re-derive the height with the extra.
+        let branch_h = sequence_height_ex(body, IF_LONG_BRANCH_GAP_EXTRA);
         let cond_text_w = text_render::measure(cond, SMALL_FONT, false);
         let cond_text_h = pm::text_height(SMALL_FONT);
         let north_w = north
@@ -3883,7 +3909,7 @@ fn if_long_layout(
             diamond_w,
             diamond_w_tile: diamond_tile_w,
             branch_w,
-            branch_h: g.height,
+            branch_h,
             couple_w,
             couple_left,
             cx: 0.0,
@@ -3911,13 +3937,22 @@ fn if_long_layout(
     }
     let _ = tile2_label;
 
-    // tile2 geometry (FtileMinWidthCentered(else, 30)); empty if no else.
+    // tile2 geometry (FtileMinWidthCentered(branch2, 30)). PlantUML ALWAYS
+    // builds a `tile2` even when the source has no `else`: branch2 is then an
+    // empty Ftile, so `FtileMinWidthCentered` collapses it to the bare 30 px
+    // minimum width with no point in/out. A populated else keeps the same
+    // partially-uncompressed inter-tile slack as the elseif branches.
+    let tile2_empty = tile2_body.is_none();
     let (tile2_w, tile2_h) = match tile2_body {
         Some(body) => {
             let g = sequence_geometry(body)?;
-            (g.width.max(30.0), g.height)
+            (
+                g.width.max(30.0),
+                sequence_height_ex(body, IF_LONG_BRANCH_GAP_EXTRA),
+            )
         }
-        None => (0.0, 0.0),
+        // Implicit empty else: the FtileMinWidthCentered(empty, 30) column.
+        None => (30.0, 0.0),
     };
 
     // Lay out un-compacted (PlantUML's `getTranslateCouple1`): couples placed
@@ -3940,7 +3975,9 @@ fn if_long_layout(
         x += c.couple_w + IF_LONG_X_SEP;
     }
     let internal_w = x + tile2_w; // = sum(couples)+xSep*n+tile2 (xSep already per couple)
-    let tile2_center_u = tile2_body.is_some().then(|| internal_w - tile2_w / 2.0);
+    // tile2 always exists (PlantUML always builds branch2); for the implicit
+    // empty else it is the 30 px min-width column.
+    let tile2_center_u = (tile2_w > 0.0).then(|| internal_w - tile2_w / 2.0);
     let spine_internal = internal_w / 2.0;
 
     // Occupied x-intervals of everything drawn (un-compacted frame).
@@ -4037,11 +4074,25 @@ fn if_long_layout(
         .fold(0.0_f64, f64::max);
     left_ext += north_overhang / 2.0;
 
+    // Standard if-tile left margin: PlantUML reserves `SUPP_WIDTH/2 − 1` (= 9)
+    // of clearance to the LEFT of the leftmost condition diamond's west vertex
+    // (the `diamond1.width + SUPP_WIDTH` clamp in `FtileIfNude`/with-diamonds).
+    // For narrow `then`/`elseif` labels the north-overhang term above is zero,
+    // so this floor supplies the reservation; for wide labels the overhang
+    // already exceeds it. The leftmost diamond west vertex sits at
+    // `min(cx − diamond_w/2)` from the spine.
+    let leftmost_diamond_vertex = cols
+        .iter()
+        .map(|c| c.cx - c.diamond_w / 2.0)
+        .fold(f64::INFINITY, f64::min);
+    left_ext = left_ext.max(-leftmost_diamond_vertex + IF_LONG_LEFT_MARGIN);
+
     Some(IfLongLayout {
         cols,
         east_label,
         tile2_h,
         tile2_cx,
+        tile2_empty,
         north_h,
         left_ext,
         right_ext,
@@ -4078,9 +4129,11 @@ fn if_long_vmetrics(l: &IfLongLayout, y: f64) -> IfLongV {
     // 25 above the diamond row (couples dy = 25).
     let if_frame_top = dtop - 25.0;
     let tile2_top = if_frame_top + (internal_h - l.tile2_h) / 2.0;
-    // Branch bottoms; the merge line sits ARROW_LEN below the deepest.
+    // Branch bottoms; the merge line sits ARROW_LEN below the deepest. The
+    // implicit empty else has no pointOut (no box, no down arrow of its own),
+    // so it never drives the merge line — only populated branches/else do.
     let mut deepest = couple_branch_top + l.cols.iter().map(|c| c.branch_h).fold(0.0_f64, f64::max);
-    if l.tile2_cx.is_some() {
+    if l.tile2_cx.is_some() && !l.tile2_empty {
         deepest = deepest.max(tile2_top + l.tile2_h);
     }
     let merge_y = deepest + ARROW_LEN;
@@ -8587,6 +8640,12 @@ fn emit_if_long(
     let diamond_bottom = dtop + DIAMOND_HALF * 2.0;
     let n = l.cols.len();
 
+    // Branch columns retain the partially-uncompressed inter-tile slack (see
+    // IF_LONG_BRANCH_GAP_EXTRA); set it for the branch/else body emits below and
+    // restore before the connector loops, which use plain ARROW_LEN spacing.
+    let saved_gap_extra = svg.fork_branch_gap_extra;
+    svg.fork_branch_gap_extra = IF_LONG_BRANCH_GAP_EXTRA;
+
     // Branch bodies in column order: then_branch, then each elseif body.
     let elseif_bodies: Vec<&[LayoutNode]> = else_branches
         .iter()
@@ -8682,6 +8741,7 @@ fn emit_if_long(
             .unwrap_or(&[]);
         emit_sequence(svg, else_body, tcx, v.tile2_top);
     }
+    svg.fork_branch_gap_extra = saved_gap_extra;
 
     // --- Connectors ------------------------------------------------------
     // Per-couple ConnectionVerticalIn (diamond→branch) + ConnectionVerticalOut
@@ -8758,34 +8818,54 @@ fn emit_if_long(
         let tcx = cx + tile2_cx;
         let last = &l.cols[n - 1];
         let east_x = cx + last.cx + last.diamond_w / 2.0;
-        // East vertex → above tile2, then down into tile2.
-        svg.connector_line(&arrow_color, east_x, tcx, diamond_cy, diamond_cy, false);
-        svg.connector_line(&arrow_color, tcx, tcx, diamond_cy, v.tile2_top, false);
-        svg.polygon_connector(
-            &arrow_color,
-            &[
-                (tcx - 4.0, v.tile2_top - 10.0),
-                (tcx, v.tile2_top),
-                (tcx + 4.0, v.tile2_top - 10.0),
-                (tcx, v.tile2_top - 6.0),
-            ],
-            &arrow_color,
-            "1",
-        );
-        // tile2 out → merge line.
-        let tile2_bottom = v.tile2_top + l.tile2_h;
-        svg.connector_line(&arrow_color, tcx, tcx, tile2_bottom, v.merge_y, false);
-        svg.polygon_connector(
-            &arrow_color,
-            &[
-                (tcx - 4.0, v.merge_y - 10.0),
-                (tcx, v.merge_y),
-                (tcx + 4.0, v.merge_y - 10.0),
-                (tcx, v.merge_y - 6.0),
-            ],
-            &arrow_color,
-            "1",
-        );
+        if l.tile2_empty {
+            // Implicit empty else: branch2 has no point in/out, so the snake
+            // runs straight from the last diamond's east vertex, right to the
+            // tile2 column, then down to the merge line with a single arrowhead
+            // (no box, no intermediate arrow into tile2).
+            svg.connector_line(&arrow_color, east_x, tcx, diamond_cy, diamond_cy, false);
+            svg.connector_line(&arrow_color, tcx, tcx, diamond_cy, v.merge_y, false);
+            svg.polygon_connector(
+                &arrow_color,
+                &[
+                    (tcx - 4.0, v.merge_y - 10.0),
+                    (tcx, v.merge_y),
+                    (tcx + 4.0, v.merge_y - 10.0),
+                    (tcx, v.merge_y - 6.0),
+                ],
+                &arrow_color,
+                "1",
+            );
+        } else {
+            // East vertex → above tile2, then down into tile2.
+            svg.connector_line(&arrow_color, east_x, tcx, diamond_cy, diamond_cy, false);
+            svg.connector_line(&arrow_color, tcx, tcx, diamond_cy, v.tile2_top, false);
+            svg.polygon_connector(
+                &arrow_color,
+                &[
+                    (tcx - 4.0, v.tile2_top - 10.0),
+                    (tcx, v.tile2_top),
+                    (tcx + 4.0, v.tile2_top - 10.0),
+                    (tcx, v.tile2_top - 6.0),
+                ],
+                &arrow_color,
+                "1",
+            );
+            // tile2 out → merge line.
+            let tile2_bottom = v.tile2_top + l.tile2_h;
+            svg.connector_line(&arrow_color, tcx, tcx, tile2_bottom, v.merge_y, false);
+            svg.polygon_connector(
+                &arrow_color,
+                &[
+                    (tcx - 4.0, v.merge_y - 10.0),
+                    (tcx, v.merge_y),
+                    (tcx + 4.0, v.merge_y - 10.0),
+                    (tcx, v.merge_y - 6.0),
+                ],
+                &arrow_color,
+                "1",
+            );
+        }
     }
 
     // ConnectionHline: the bottom merge line spanning the leftmost to rightmost
