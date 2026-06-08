@@ -287,3 +287,27 @@ bars (byte-offset tags), (b) column placement `dx = xpos + dw - minX` with
 fragment by `dx`, (d) identify+redraw cross-lane connections spanning, (e) title band
 + dividers + titles, (f) run the existing ON_X compress pass to collapse slack, (g)
 iterate. The instrument-then-revert confirmed the model before mis-implementing it.
+
+## V2 renders lanes (milestone) + cross-lane bar geometry finding (2026-06-08)
+
+`layout_swimlanes_v2` now produces lane-laid-out renders (partition -> measure ->
+column placement -> shift_x/shift_y -> dividers + titles -> existing ON_X compress).
+On `act_fork2br_lanes2`: **dividers 1&2 EXACT (20, 100.8652), Lane1/Branch1 box within
+1px, lane titles rendered, height 230 vs gold 232.** Default path unchanged (zero
+regression). Branch `swimlane-single-tree`.
+
+Remaining issue = the fork bar. Gold's bar is `[106.9, 226.7]` (width 119.9) sitting
+ENTIRELY within Lane2's region; **Branch1 (Lane1) connects via a separate cross-lane
+horizontal connector** (gold lines `x=113.9 -> 61.4` at the bar's y), NOT by the bar
+spanning to Lane1. So the earlier "redraw bar spanning both columns" idea is wrong:
+- The bar stays in its OWN lane (the fork's entry lane), drawn NARROWER than its
+  natural single-tree width (119.9 vs my natural 193.7).
+- Each branch in a DIFFERENT lane gets a cross-lane L-snake from the bar's lane to
+  that branch's column (the `Cross`/`ConnectionCross` case).
+
+Open question (needs PlantUML instrumentation of the per-lane DRAW, i.e.
+`UGraphicInterceptorOneSwimlane` / `ParallelBuilderFork`, not just MinMax): how the
+bar's DRAWN width (119.9) is derived in the swimlane case — it is narrower than the
+natural fork-bar span, so the fork tile must re-derive the bar to cover only its own
+lane's branch reach + the cross-lane connector stubs. Next: instrument that, then
+implement bar-stays-in-lane + cross-lane L-snake for out-of-lane branches.
