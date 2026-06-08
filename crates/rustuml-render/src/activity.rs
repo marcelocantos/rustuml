@@ -2925,6 +2925,26 @@ fn is_ordinary_compressed_while(node: &LayoutNode) -> bool {
     )
 }
 
+/// True for a `while` whose body has the ordinary-compressed shape, ignoring
+/// whether a trailing terminator was absorbed into `special_out`. Used to keep
+/// a sequential run of compressed whiles "chained" even when the final loop
+/// swallows the diagram's `stop`/`end`: such a while still draws its inbound
+/// connector at the boundary with the preceding loop (before its own body),
+/// matching PlantUML's tile-assembly order. The `special_out` is passed as
+/// `None` so the body-shape test (which a real `special_out` would otherwise
+/// veto) reflects the loop's intrinsic layout.
+fn while_body_chain_compresses(node: &LayoutNode) -> bool {
+    matches!(
+        node,
+        LayoutNode::While {
+            body,
+            is_label,
+            end_label,
+            ..
+        } if while_ordinary_slot_compresses(body, is_label, end_label, None)
+    )
+}
+
 fn while_body_top_offset(
     compress_allowed: bool,
     is_label: bool,
@@ -6793,6 +6813,13 @@ fn emit_sequence_ex(
     let mut lead_stretch = 0.0f64;
     let mut carry_gap_extra = 0.0f64;
     let mut deferred_partition_inbound: Option<(f64, ArrowStyle, Option<String>, f64)> = None;
+    // True when the immediately preceding flow tile was a compressed while whose
+    // inbound connector was deferred. PlantUML draws a chain of sequential
+    // compressed whiles by emitting each while's inbound BEFORE its body (and
+    // flushing the predecessor's deferred inbound right after), rather than
+    // deferring every while past the whole chain. Only the FIRST while in such a
+    // run (the one preceded by a non-while tile) is genuinely deferred.
+    let mut prev_was_deferred_while = false;
     for (i, node) in nodes.iter().enumerate() {
         // Skip layout for non-flow nodes (arrows and notes don't take vertical space
         // on their own).
@@ -7090,8 +7117,29 @@ fn emit_sequence_ex(
         } else {
             0.0
         };
+        // A run of sequential compressed whiles (bare, or each wrapped in its
+        // own partition): each loop after the first emits its OWN inbound
+        // connector BEFORE its body, then flushes the predecessor loop's
+        // deferred inbound. Only the leading loop (the one preceded by a
+        // non-deferring tile) is deferred past the chain. This reproduces
+        // PlantUML's tile-assembly order, where the connection into each loop is
+        // drawn at the boundary between consecutive loops rather than collapsed
+        // to the end. Without this, consecutive deferrals would overwrite one
+        // another and drop the inner loops' inbound arrows.
+        let node_defers = while_body_chain_compresses(node)
+            || is_partition_wrapping_compressed_while(node);
+        let is_chain_while = node_defers && prev_was_deferred_while;
+        if is_chain_while
+            && let Some((arrow_top, style, label, arrow_gap)) = pending_arrow.take()
+        {
+            emit_pending_down_arrow(svg, arrow_top, style, label, arrow_gap, cx);
+            if let Some((p_top, p_style, p_label, p_gap)) = deferred_partition_inbound.take() {
+                emit_pending_down_arrow(svg, p_top, p_style, p_label, p_gap, cx);
+            }
+        }
         let node_y =
             emit_node_with_repeat_extra(svg, node, cx, y, repeat_extra, first_repeat_branch_extra);
+        prev_was_deferred_while = node_defers;
         // Inbound connector goes AFTER the node's own emit so it lands
         // after the node's internal connectors in the connectors buffer
         // (matches PlantUML's emission order: internal first, then inbound).
