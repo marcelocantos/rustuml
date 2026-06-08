@@ -133,6 +133,10 @@ impl SlotSet {
 pub struct CompressionTransform {
     /// The compressible empty slots (`reverse().smaller(margin)`).
     slots: Vec<(f64, f64)>,
+    /// Uniform offset added after compression. 0 for compression transforms;
+    /// non-zero only for the swimlane V2 per-lane [`translate`](Self::translate),
+    /// which reuses the coordinate-rewrite machinery for a pure shift.
+    offset: f64,
 }
 
 impl CompressionTransform {
@@ -141,21 +145,36 @@ impl CompressionTransform {
     pub fn from_occupied(occupied: &SlotSet, margin: f64) -> Self {
         CompressionTransform {
             slots: occupied.reverse().smaller(margin).all,
+            offset: 0.0,
         }
     }
 
     /// The identity transform (no compressible slots).
     pub fn identity() -> Self {
-        CompressionTransform { slots: Vec::new() }
+        CompressionTransform {
+            slots: Vec::new(),
+            offset: 0.0,
+        }
+    }
+
+    /// A pure translation `v -> v + dx` (no compression). Used by the swimlane V2
+    /// per-lane x-remap to shift a lane's shapes into its column via the same
+    /// coordinate-rewrite path compression uses.
+    pub fn translate(dx: f64) -> Self {
+        CompressionTransform {
+            slots: Vec::new(),
+            offset: dx,
+        }
     }
 
     pub fn is_identity(&self) -> bool {
-        self.slots.is_empty()
+        self.slots.is_empty() && self.offset == 0.0
     }
 
-    /// `CompressionTransform.transform`: `v - getCompressDelta(v)`, where the
-    /// delta sums the sizes of every compressible slot lying left of `v` (partial
-    /// for a slot that contains `v` — collapsing `v` toward the slot start).
+    /// `CompressionTransform.transform`: `v - getCompressDelta(v) + offset`, where
+    /// the delta sums the sizes of every compressible slot lying left of `v`
+    /// (partial for a slot that contains `v` — collapsing `v` toward the slot
+    /// start). `offset` is 0 except for a [`translate`](Self::translate).
     pub fn transform(&self, v: f64) -> f64 {
         let mut delta = 0.0;
         for &(s, e) in &self.slots {
@@ -168,8 +187,18 @@ impl CompressionTransform {
                 delta += v - s;
             }
         }
-        v - delta
+        v - delta + self.offset
     }
+}
+
+/// Swimlane V2: shift every X coordinate in an SVG fragment by `dx` (rects move
+/// with width, ellipses keep radius, polygons/paths/lines/text all translate).
+/// Reuses the compression coordinate-rewrite machinery via a pure translation.
+pub fn shift_x(svg: &str, dx: f64) -> String {
+    if dx == 0.0 {
+        return svg.to_string();
+    }
+    rewrite_axis(svg, CompressionMode::OnX, &CompressionTransform::translate(dx))
 }
 
 /// A drawn primitive with enough geometry to (a) report its occupied interval on
@@ -799,6 +828,30 @@ mod tests {
             s.add_slot(a, b);
         }
         s
+    }
+
+    #[test]
+    fn shift_x_translates_all_shape_kinds() {
+        let svg = concat!(
+            r#"<rect x="10" y="5" width="30" height="8"/>"#,
+            r#"<ellipse cx="50" cy="9" rx="4" ry="4"/>"#,
+            r#"<polygon points="60,1,70,2,60,3"/>"#,
+            r#"<line x1="80" x2="90" y1="1" y2="1"/>"#,
+            r#"<text x="100" y="2" textLength="12">hi</text>"#,
+        );
+        let out = shift_x(svg, 100.0);
+        // x/cx/points/x1/x2/text-x all +100; widths/radii/y unchanged.
+        assert!(out.contains(r#"<rect x="110" y="5" width="30" height="8"/>"#), "{out}");
+        assert!(out.contains(r#"cx="150""#) && out.contains(r#"rx="4""#), "{out}");
+        assert!(out.contains(r#"points="160,1,170,2,160,3""#), "{out}");
+        assert!(out.contains(r#"x1="180""#) && out.contains(r#"x2="190""#), "{out}");
+        assert!(out.contains(r#"x="200""#) && out.contains(r#"textLength="12""#), "{out}");
+    }
+
+    #[test]
+    fn shift_x_zero_is_noop() {
+        let svg = r#"<rect x="10" y="5" width="30" height="8"/>"#;
+        assert_eq!(shift_x(svg, 0.0), svg);
     }
 
     #[test]
