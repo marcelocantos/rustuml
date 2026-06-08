@@ -6389,9 +6389,14 @@ struct SvgEmitter {
     /// last writer wins) and consumed once by `emit_while`.
     while_switch_loopback_tip: Option<f64>,
     /// Swimlane V2 only: the lane index currently being emitted into. Set by
-    /// `LayoutNode::LaneMark` during the single-tree walk; used to route shapes
-    /// into `lane_shapes`/`lane_connectors`. 0 on the non-swimlane path.
+    /// `LayoutNode::LaneMark` during the single-tree walk. 0 on the non-swimlane
+    /// path.
     current_lane: usize,
+    /// Swimlane V2 only: lane transitions as `(shapes.len(), connectors.len(),
+    /// lane)` captured each time a `LaneMark` changes the active lane. Used by the
+    /// post-emit per-lane x-remap to partition both buffers by byte offset (no
+    /// textual sentinel, so the SVG is never corrupted). Empty off the V2 path.
+    lane_spans: Vec<(usize, usize, usize)>,
 }
 
 /// Geometry the enclosing `while` hands to a directly-nested break-bearing `if`.
@@ -6455,6 +6460,7 @@ impl SvgEmitter {
             while_switch_merge_extra: 0.0,
             while_switch_loopback_tip: None,
             current_lane: 0,
+            lane_spans: Vec::new(),
         }
     }
 
@@ -7600,9 +7606,13 @@ fn emit_node_with_repeat_extra(
     if_branch: bool,
 ) -> f64 {
     match node {
-        // Swimlane V2 lane marker: switch the active lane buffer, no y advance.
+        // Swimlane V2 lane marker: switch the active lane and record the byte
+        // offsets in both buffers so the post-emit pass can partition by lane.
+        // No y advance, no shape.
         LayoutNode::LaneMark(idx) => {
             svg.current_lane = *idx;
+            svg.lane_spans
+                .push((svg.shapes.len(), svg.connectors.len(), *idx));
             y
         }
         LayoutNode::Start => {
