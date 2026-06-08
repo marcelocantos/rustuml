@@ -7703,6 +7703,11 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
         // A bare `activate` before the first message draws its bar starting one
         // message step below the participant head rather than flush with it.
         pre_first_message: bool,
+        // When an explicit `deactivate` closes a bar after a group frame has
+        // ended, PlantUML extends the bar one GROUP_END_HEIGHT step below the
+        // frame's bottom (so the bar visibly clears the closed frame). The
+        // bar's end is then the group-end y plus this extension.
+        post_group_end_extend: bool,
     }
 
     let mut activation_bars: Vec<ActivationBar> = Vec::new();
@@ -7755,6 +7760,7 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                                         color,
                                         depth,
                                         pre_first_message: pre,
+                                        post_group_end_extend: false,
                                     });
                                 }
                             }
@@ -7782,13 +7788,33 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                         .rposition(|(pid, _, _, _, _)| pid == id)
                     {
                         let (pid, start_idx, color, depth, pre) = open_activations.remove(pos);
+                        // When a group frame closes between the last message and
+                        // this explicit `deactivate`, the activation bar must clear
+                        // the frame's bottom: PlantUML extends the bar one
+                        // GROUP_END_HEIGHT step below the group-end y. Anchor the
+                        // bar end at that group-end event and flag the extension.
+                        // Otherwise the bar ends at the last message as usual.
+                        let group_end_idx = diagram
+                            .events
+                            .iter()
+                            .enumerate()
+                            .skip(last_event_idx + 1)
+                            .take(ev_idx.saturating_sub(last_event_idx + 1))
+                            .rev()
+                            .find(|(_, e)| matches!(e, Event::GroupEnd))
+                            .map(|(i, _)| i);
+                        let (end_idx, post_group_end_extend) = match group_end_idx {
+                            Some(gi) => (gi, true),
+                            None => (last_event_idx, false),
+                        };
                         activation_bars.push(ActivationBar {
                             participant_id: pid,
                             start_event_idx: start_idx,
-                            end_event_idx: last_event_idx,
+                            end_event_idx: end_idx,
                             color,
                             depth,
                             pre_first_message: pre,
+                            post_group_end_extend,
                         });
                     }
                 }
@@ -7805,6 +7831,7 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                             color,
                             depth,
                             pre_first_message: pre,
+                            post_group_end_extend: false,
                         });
                     }
                 }
@@ -7831,6 +7858,7 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                 color,
                 depth,
                 pre_first_message: pre,
+                post_group_end_extend: false,
             });
         }
 
@@ -8766,7 +8794,15 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
         if bar.end_event_idx == usize::MAX {
             tail_box_y - NEWPAGE_SEPARATOR_FOOT_GAP + 2.0
         } else {
-            event_y(bar.end_event_idx) + self_deactivation_end_offset(bar.end_event_idx)
+            let base = event_y(bar.end_event_idx) + self_deactivation_end_offset(bar.end_event_idx);
+            // A bar closed by an explicit `deactivate` after a group frame ends
+            // is anchored at the group-end y; extend it one GROUP_END_HEIGHT step
+            // below so it clears the closed frame's bottom.
+            if bar.post_group_end_extend {
+                base + GROUP_END_HEIGHT
+            } else {
+                base
+            }
         }
     };
     // Delay (`...`) bands split every lifeline with a dotted `1,4` gap. The
@@ -9284,12 +9320,19 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
 
                     svg.message_group_open(&from_uid, &to_uid, src_line, msg_id);
 
+                    // The self-message loopback strokes carry the configured
+                    // arrow thickness (skinparam sequenceArrowThickness), just
+                    // like the straight message lines; only the arrow-head
+                    // polygon keeps stroke-width:1.
+                    let loop_thickness = svg.arrow_thickness.clone();
+
                     // Three lines forming the U-shape: right, down, left
                     // Line 1: horizontal right (from center to loop right)
                     write!(
                         svg.buf,
-                        r##"<line style="stroke:{};stroke-width:1;{}" x1="{}" x2="{}" y1="{}" y2="{}"/>"##,
+                        r##"<line style="stroke:{};stroke-width:{};{}" x1="{}" x2="{}" y1="{}" y2="{}"/>"##,
                         &arrow_color,
+                        loop_thickness,
                         line_style,
                         fmt_coord(start_x),
                         fmt_coord(loop_right),
@@ -9301,8 +9344,9 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                     // Line 2: vertical down
                     write!(
                         svg.buf,
-                        r##"<line style="stroke:{};stroke-width:1;{}" x1="{}" x2="{}" y1="{}" y2="{}"/>"##,
+                        r##"<line style="stroke:{};stroke-width:{};{}" x1="{}" x2="{}" y1="{}" y2="{}"/>"##,
                         &arrow_color,
+                        loop_thickness,
                         line_style,
                         fmt_coord(loop_right),
                         fmt_coord(loop_right),
@@ -9329,8 +9373,9 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                     };
                     write!(
                         svg.buf,
-                        r##"<line style="stroke:{};stroke-width:1;{}" x1="{}" x2="{}" y1="{}" y2="{}"/>"##,
+                        r##"<line style="stroke:{};stroke-width:{};{}" x1="{}" x2="{}" y1="{}" y2="{}"/>"##,
                         &arrow_color,
+                        loop_thickness,
                         line_style,
                         fmt_coord(return_left),
                         fmt_coord(loop_right),
@@ -9715,12 +9760,28 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                             tip_x + FILLED_ARROW_NOTCH
                         };
                         // PlantUML draws the left-going line to from edge - 1.
-                        // In Teoz, a deactivation return leaves from the source
-                        // activation bar's left edge instead of the lifeline center.
-                        let line_x2_end = if diagram.teoz
+                        // The line departs from the source activation bar's near
+                        // (left) edge — `from_x - HALF_W - 1` — rather than the
+                        // lifeline centre in two cases:
+                        //   1. a Teoz deactivation return (`msg.activation` carries
+                        //      the deactivate and the bar is open); and
+                        //   2. a dotted return whose source STAYS active (the
+                        //      source is not deactivated by this message nor by the
+                        //      immediately-following event). When the source IS
+                        //      deactivated here, its bar is closing and the line
+                        //      comes off the centre instead. `from_x_shifted`
+                        //      already keeps dotted leftward messages on the centre,
+                        //      so only the stay-active case is handled here.
+                        let from_deactivates_next = matches!(
+                            msg.activation,
+                            Some(ActivationChange::Deactivate)
+                        ) || matches!(events.get(ev_idx + 1), Some(Event::Deactivate(id)) if id == &msg.from);
+                        let teoz_deactivate_return = diagram.teoz
                             && matches!(msg.activation, Some(ActivationChange::Deactivate))
-                            && from_existing_depth > 0
-                        {
+                            && from_existing_depth > 0;
+                        let dotted_from_active_bar =
+                            is_dotted && from_active && !from_deactivates_next;
+                        let line_x2_end = if teoz_deactivate_return || dotted_from_active_bar {
                             from_x - ACTIVATION_HALF_W - 1.0
                         } else {
                             from_x_shifted - 1.0
