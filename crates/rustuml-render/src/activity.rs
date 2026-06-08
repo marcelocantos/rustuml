@@ -8366,14 +8366,26 @@ const REPEAT_BACKWARD_BODY_SLACK: f64 = 30.0;
 fn while_body_mid_stretch(body: &[LayoutNode], has_in_label: bool) -> Option<(usize, f64)> {
     let flow_count = body.iter().filter(|n| node_is_flow(n)).count();
     if flow_count >= 2 && flow_count.is_multiple_of(2) {
-        Some((
-            flow_count / 2,
-            if has_in_label {
-                WHILE_EVEN_BODY_MID_STRETCH_LABELED
-            } else {
-                WHILE_EVEN_BODY_MID_STRETCH_UNLABELED
-            },
-        ))
+        // The even-body mid-stretch models FtileWhile's vertical centring of a
+        // body built from a uniform stack of equal-height action tiles: the body
+        // centre falls on the middle connector, and compression cannot reclaim
+        // the slack, lengthening that one connector. A Fork tile is a multi-row
+        // composite with its own internal centring and bar geometry, so the body
+        // centre does NOT land on a reclaimable connector — PlantUML inserts no
+        // extra slack into the post-fork arrow (verified against
+        // act_combo_while_fork_{1,2,3}: the After-fork action sits exactly
+        // ARROW_LEN below the join bar). The body is still even, so the loop-back
+        // arrowhead keeps its even-body placement (the returned index drives that
+        // via WHILE_EVEN_BODY_LOOP_ARROW_STRETCH); only the connector stretch is
+        // zeroed.
+        let stretch = if body.iter().any(|n| matches!(n, LayoutNode::Fork { .. })) {
+            0.0
+        } else if has_in_label {
+            WHILE_EVEN_BODY_MID_STRETCH_LABELED
+        } else {
+            WHILE_EVEN_BODY_MID_STRETCH_UNLABELED
+        };
+        Some((flow_count / 2, stretch))
     } else {
         None
     }
