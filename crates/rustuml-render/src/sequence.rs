@@ -2686,6 +2686,42 @@ fn left_note_lifeline_gap(
     if note_sits_closer { gap - 1.0 } else { gap }
 }
 
+/// Cut an activation segment `[pos1, pos2]` at every delay band it contains,
+/// porting PlantUML's `Segment.cutSegmentIfNeed`. `delays` is the set of delay
+/// bands `(start, end)`; the result is the list of sub-segments that remain
+/// after removing each contained band. An empty `delays` (or a segment crossing
+/// none) yields the original single segment.
+fn cut_activation_segment(pos1: f64, pos2: f64, delays: &[(f64, f64)]) -> Vec<(f64, f64)> {
+    let mut sorted: Vec<(f64, f64)> = delays.to_vec();
+    sorted.sort_by(|a, b| a.0.partial_cmp(&b.0).unwrap_or(std::cmp::Ordering::Equal));
+    let mut result: Vec<(f64, f64)> = Vec::new();
+    let mut pending_start = pos1;
+    for &(d1, d2) in &sorted {
+        if (d1 - pending_start).abs() < 0.001 {
+            pending_start = d2;
+            continue;
+        }
+        if d1 < pending_start {
+            continue;
+        }
+        if d1 > pos2 {
+            if pending_start < pos2 {
+                result.push((pending_start, pos2));
+            }
+            return result;
+        }
+        // `this.contains(pause)`: the delay band lies fully within the segment.
+        if pos1 <= d1 && d2 <= pos2 {
+            result.push((pending_start, d1));
+            pending_start = d2;
+        }
+    }
+    if pending_start < pos2 {
+        result.push((pending_start, pos2));
+    }
+    result
+}
+
 fn note_across_left(centre: f64, preferred_width: f64) -> f64 {
     (centre - preferred_width / 2.0).floor().max(HEAD_BOX_Y)
 }
@@ -3946,21 +3982,96 @@ impl PlantUmlSvg {
         self.participant_group_close();
     }
 
-    /// Write an activation bar with optional fill color.
-    fn activation_bar(&mut self, title: &str, x: f64, y: f64, h: f64, color: &str) {
-        self.buf.push_str("<g>");
-        write!(self.buf, "<title>{}</title>", escape_xml(title)).unwrap();
+    /// Write one cut segment of an activation bar (PlantUML `ComponentRoseActiveLine`).
+    ///
+    /// When an activation bar crosses a delay (`...`) band it is cut into
+    /// multiple segments (`SegmentColored.cutSegmentIfNeed`). A cut segment is
+    /// drawn with a transparent (back-colored) border rect plus explicit border
+    /// lines: the two vertical sides always, and the horizontal cap only at the
+    /// closed ends (`closeUp`/`closeDown`). An uncut full segment
+    /// (`close_up && close_down`) is drawn as the plain stroked rect above.
+    fn activation_bar_segment(
+        &mut self,
+        x: f64,
+        y: f64,
+        h: f64,
+        color: &str,
+        close_up: bool,
+        close_down: bool,
+    ) {
+        if close_up && close_down {
+            // Plain stroked rect: identical to the uncut activation bar.
+            write!(
+                self.buf,
+                r##"<rect fill="{}" height="{}" style="stroke:#181818;stroke-width:1;" width="{}" x="{}" y="{}"/>"##,
+                color,
+                fmt_coord(h),
+                ACTIVATION_WIDTH as u32,
+                fmt_coord(x),
+                fmt_coord(y),
+            )
+            .unwrap();
+            return;
+        }
+        // Back-colored rect (border = fill = back color, so the box edges are
+        // invisible), then explicit border lines.
         write!(
             self.buf,
-            r##"<rect fill="{}" height="{}" style="stroke:#181818;stroke-width:1;" width="{}" x="{}" y="{}"/>"##,
+            r##"<rect fill="{}" height="{}" style="stroke:{};stroke-width:1;" width="{}" x="{}" y="{}"/>"##,
             color,
             fmt_coord(h),
+            color,
             ACTIVATION_WIDTH as u32,
             fmt_coord(x),
             fmt_coord(y),
         )
         .unwrap();
-        self.buf.push_str("</g>");
+        let x_left = x;
+        let x_right = x + ACTIVATION_WIDTH;
+        let y_top = y;
+        let y_bot = y + h;
+        // Left vertical, right vertical (always).
+        write!(
+            self.buf,
+            r##"<line style="stroke:#181818;stroke-width:1;" x1="{}" x2="{}" y1="{}" y2="{}"/>"##,
+            fmt_coord(x_left),
+            fmt_coord(x_left),
+            fmt_coord(y_top),
+            fmt_coord(y_bot),
+        )
+        .unwrap();
+        write!(
+            self.buf,
+            r##"<line style="stroke:#181818;stroke-width:1;" x1="{}" x2="{}" y1="{}" y2="{}"/>"##,
+            fmt_coord(x_right),
+            fmt_coord(x_right),
+            fmt_coord(y_top),
+            fmt_coord(y_bot),
+        )
+        .unwrap();
+        // Top cap only when closed up, bottom cap only when closed down.
+        if close_up {
+            write!(
+                self.buf,
+                r##"<line style="stroke:#181818;stroke-width:1;" x1="{}" x2="{}" y1="{}" y2="{}"/>"##,
+                fmt_coord(x_left),
+                fmt_coord(x_right),
+                fmt_coord(y_top),
+                fmt_coord(y_top),
+            )
+            .unwrap();
+        }
+        if close_down {
+            write!(
+                self.buf,
+                r##"<line style="stroke:#181818;stroke-width:1;" x1="{}" x2="{}" y1="{}" y2="{}"/>"##,
+                fmt_coord(x_left),
+                fmt_coord(x_right),
+                fmt_coord(y_bot),
+                fmt_coord(y_bot),
+            )
+            .unwrap();
+        }
     }
 
     /// Write a message group with a cross "X" arrow (->x or x<-).
@@ -8658,13 +8769,36 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
             event_y(bar.end_event_idx) + self_deactivation_end_offset(bar.end_event_idx)
         }
     };
+    // Delay (`...`) bands split every lifeline with a dotted `1,4` gap. The
+    // band starts DELAY_BAND_TOP_PAD below the preceding message and is
+    // DELAY_BAND_HEIGHT tall (plus the label height when labelled). The delay
+    // event's y equals preceding-y + band-height, so both edges recover from it.
+    // Activation bars crossing a band are cut at it (see `cut_activation_segment`).
+    let delay_bands: Vec<(f64, f64)> = diagram
+        .events
+        .iter()
+        .enumerate()
+        .filter_map(|(idx, ev)| match ev {
+            Event::Delay(t) => {
+                let band_h = DELAY_BAND_HEIGHT
+                    + if t.is_some() {
+                        plantuml_metrics::text_height(DELAY_LABEL_FONT_SIZE as f64)
+                    } else {
+                        0.0
+                    };
+                let ey = *event_y_positions.get(idx)? + if diagram.teoz { -2.0 } else { 0.0 };
+                let band_bottom = ey + DELAY_BAND_TOP_PAD;
+                Some((band_bottom - band_h, band_bottom))
+            }
+            _ => None,
+        })
+        .collect();
     let draw_activation_bar = |svg: &mut PlantUmlSvg, bar: &ActivationBar| {
         let cx = center_of(&bar.participant_id);
         let bar_x = cx - ACTIVATION_HALF_W + (bar.depth as f64 * ACTIVATION_HALF_W);
         let teoz_y_offset = if diagram.teoz { -2.0 } else { 0.0 };
         let bar_y = bar_start_y(bar) + teoz_y_offset;
         let bar_end_y = bar_end_y(bar) + teoz_y_offset;
-        let bar_h = bar_end_y - bar_y;
         let title = if diagram.teoz {
             ""
         } else {
@@ -8679,7 +8813,27 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
             .as_ref()
             .map(|c| resolve_color(c))
             .unwrap_or_else(|| lifeline_background.clone());
-        svg.activation_bar(title, bar_x, bar_y, bar_h, &fill_color);
+        // Cut the bar at every delay band it crosses. An uncut bar yields a
+        // single full segment (close_up && close_down) rendered as the plain
+        // stroked rect, byte-identical to the prior output; a bar split by N
+        // delays yields N+1 segments whose caps follow PlantUML's
+        // CLOSE_OPEN / OPEN_OPEN / OPEN_CLOSE progression.
+        let mut segments = cut_activation_segment(bar_y, bar_end_y, &delay_bands);
+        if segments.is_empty() {
+            // Degenerate (bar entirely inside a delay): keep the original rect.
+            segments.push((bar_y, bar_end_y));
+        }
+        // Each cut segment is a separate PlantUML component, so it gets its own
+        // `<g><title>…</title>…</g>` wrapper (matching `ComponentRoseActiveLine`).
+        let n = segments.len();
+        for (i, &(s1, s2)) in segments.iter().enumerate() {
+            let close_up = i == 0;
+            let close_down = i == n - 1;
+            svg.buf.push_str("<g>");
+            write!(svg.buf, "<title>{}</title>", escape_xml(title)).unwrap();
+            svg.activation_bar_segment(bar_x, s1, s2 - s1, &fill_color, close_up, close_down);
+            svg.buf.push_str("</g>");
+        }
     };
 
     // First pass: standard sequence SVG renders activation bars twice. Teoz keeps
@@ -8708,29 +8862,8 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
         }
     }
 
-    // Delay (`...`) bands split every lifeline with a dotted `1,4` gap. The
-    // band starts DELAY_BAND_TOP_PAD below the preceding message and is
-    // DELAY_BAND_HEIGHT tall (plus the label height when labelled). The delay
-    // event's y equals preceding-y + band-height, so both edges recover from it.
-    let delay_bands: Vec<(f64, f64)> = diagram
-        .events
-        .iter()
-        .enumerate()
-        .filter_map(|(idx, ev)| match ev {
-            Event::Delay(t) => {
-                let band_h = DELAY_BAND_HEIGHT
-                    + if t.is_some() {
-                        plantuml_metrics::text_height(DELAY_LABEL_FONT_SIZE as f64)
-                    } else {
-                        0.0
-                    };
-                let ey = *event_y_positions.get(idx)? + if diagram.teoz { -2.0 } else { 0.0 };
-                let band_bottom = ey + DELAY_BAND_TOP_PAD;
-                Some((band_bottom - band_h, band_bottom))
-            }
-            _ => None,
-        })
-        .collect();
+    // `delay_bands` (computed before the activation-bar pass) drives the
+    // lifeline `1,4` dotted gaps as well as the activation-bar cuts.
 
     for p in &participants {
         let part_uid = format!("part{}", p.decl_idx + 1);
