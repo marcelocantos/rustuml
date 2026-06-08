@@ -4263,19 +4263,16 @@ fn node_extents(node: &LayoutNode) -> (f64, f64) {
             // Reverse-engineered from goldens with varying body/condition
             // widths.
             let body_has_note = partition_body_has_direct_note(body);
-            let (body_left, body_right, body_half) = if body_has_note {
-                let (left, right) = sequence_loop_body_extents(body);
-                (left, right, left.max(right))
+            let (body_left, body_right) = if body_has_note {
+                sequence_loop_body_extents(body)
             } else {
                 // FtileRepeat.getLeft/getRight key off the body tile's own
                 // spine: `repeat.getLeft()` and `repeat.width − getLeft()`.
                 // Use the body's asymmetric extents so an off-centre body
                 // (e.g. a nested-if whose wider branch sits on one side)
                 // pushes the repeat spine the same way PlantUML does, rather
-                // than centring on `width/2`. The loop-back arm placement
-                // still keys off the symmetric half-width.
-                let (left, right) = sequence_extents(body);
-                (left, right, sequence_width(body) / 2.0)
+                // than centring on `width/2`.
+                sequence_extents(body)
             };
             let cond_half = diamond_inner_w(condition) / 2.0 + DIAMOND_HALF;
             // A `backward :label;` action draws a box on the return arm at the
@@ -4283,9 +4280,12 @@ fn node_extents(node: &LayoutNode) -> (f64, f64) {
             // `cond_half + 9` clearance, unless the body itself is wider.
             // FtileRepeat appends the backward tile on the right.
             if let Some(label) = backward {
-                let left_extent = body_half.max(cond_half + 9.0);
+                // Left side mirrors the ordinary repeat (`getLeft` is independent
+                // of the appended backward tile): the body's asymmetric left.
+                let left_extent = body_left.max(cond_half + 9.0);
+                let body_geo_right = repeat_body_geo_right(body);
                 let right_extent =
-                    repeat_backward_right_extent(cond_half, body_half, is_label, label);
+                    repeat_backward_right_extent(cond_half, body_geo_right, is_label, label);
                 (left_extent, right_extent)
             } else {
                 let left_extent = body_left.max(cond_half + 9.0);
@@ -4724,15 +4724,22 @@ fn repeat_backward_box_w(label: &str) -> f64 {
 /// places the appended backward tile 24 px past the diamond east vertex. When
 /// the body drives the repeat width, PlantUML instead clears the east label
 /// before placing the backward tile.
-fn repeat_backward_box_left_rel(cond_half: f64, body_half: f64, is_label: &Option<String>) -> f64 {
-    if cond_half >= body_half {
+///
+/// `body_right` is the body tile's own asymmetric right extent
+/// (`FtileGeometry.width − left` = PlantUML's `repeat.getRight()`), NOT the
+/// symmetric `width/2`. For a plain action the two coincide; for an asymmetric
+/// composite body (e.g. an if/else, whose merge corridor carries an extra
+/// margin past the wider branch) the geometry right is what `getRight` keys off,
+/// so the appended box clears the body's true right edge.
+fn repeat_backward_box_left_rel(cond_half: f64, body_right: f64, is_label: &Option<String>) -> f64 {
+    if cond_half >= body_right {
         cond_half + 2.0 * DIAMOND_HALF
     } else {
         let is_label_w = is_label
             .as_ref()
             .map(|l| text_render::measure(l, SMALL_FONT, false))
             .unwrap_or(0.0);
-        body_half.max(cond_half + is_label_w + 10.0)
+        body_right.max(cond_half + is_label_w + 10.0)
     }
 }
 
@@ -4741,12 +4748,19 @@ fn repeat_backward_box_left_rel(cond_half: f64, body_half: f64, is_label: &Optio
 /// geometry.
 fn repeat_backward_right_extent(
     cond_half: f64,
-    body_half: f64,
+    body_right: f64,
     is_label: &Option<String>,
     backward_label: &str,
 ) -> f64 {
-    repeat_backward_box_left_rel(cond_half, body_half, is_label)
+    repeat_backward_box_left_rel(cond_half, body_right, is_label)
         + repeat_backward_box_w(backward_label)
+}
+
+/// The body tile's asymmetric right extent (`repeat.getRight()` in PlantUML's
+/// `FtileRepeat`). Falls back to the symmetric half-width when the body has no
+/// computable geometry (e.g. a note-only body).
+fn repeat_body_geo_right(body: &[LayoutNode]) -> f64 {
+    sequence_geometry(body).map_or_else(|| sequence_width(body) / 2.0, |g| g.right())
 }
 
 fn node_width(node: &LayoutNode) -> f64 {
@@ -4841,7 +4855,6 @@ fn node_width(node: &LayoutNode) -> f64 {
         LayoutNode::Repeat {
             body,
             condition,
-            is_label,
             backward,
             ..
         } => {
@@ -4855,11 +4868,14 @@ fn node_width(node: &LayoutNode) -> f64 {
             let cond_w = diamond_inner_w(condition) + DIAMOND_HALF * 2.0;
             let cond_half = cond_w / 2.0;
             let body_half = body_w / 2.0;
-            if let Some(label) = backward {
-                let left = body_half.max(cond_half + 9.0);
-                let right = repeat_backward_right_extent(cond_half, body_half, is_label, label);
-                left + right
-            } else {
+            if backward.is_some() {
+                // node_extents is the single source of truth for a backward
+                // repeat's asymmetric left/right (the box clears the body's true
+                // geometry right edge, not the symmetric half-width).
+                let (l, r) = node_extents(node);
+                return l + r;
+            }
+            {
                 let left = body_half.max(cond_half + 9.0);
                 let right = cond_half.max(body_half) + 12.0 + 15.0;
                 left + right
@@ -5833,15 +5849,10 @@ fn node_height(node: &LayoutNode) -> f64 {
                 repeat_body_height(body, backward.is_some())
             };
             let diamond_h = DIAMOND_HALF * 2.0;
-            // Single-action backward repeats keep the extra halfHex before
-            // the condition diamond; multi-action bodies absorb that slack in
-            // their final inbound connector.
-            let backward_flow_count = body.iter().filter(|n| node_is_flow(n)).count();
-            let cond_gap = if backward.is_some() && backward_flow_count < 2 {
-                ARROW_LEN + 10.0
-            } else {
-                ARROW_LEN
-            };
+            // Single plain-action backward repeats keep the extra halfHex before
+            // the condition diamond; multi-action or composite bodies absorb that
+            // slack in their final inbound connector / internal structure.
+            let cond_gap = ARROW_LEN + repeat_backward_extra_cond_gap(body, backward.is_some());
             let top_lead = if *has_start_label {
                 0.0
             } else {
@@ -8951,6 +8962,23 @@ fn repeat_body_height(body: &[LayoutNode], has_backward: bool) -> f64 {
         + repeat_body_mid_stretch(body, has_backward).map_or(0.0, |(_, stretch)| stretch)
 }
 
+/// Extra vertical gap a `backward` repeat reserves between the body bottom and
+/// the condition diamond. A single PLAIN ACTION body keeps an extra halfHex of
+/// slack before the diamond (PlantUML's UEmpty placeholder is uncompressed when
+/// the body is a lone box); a multi-action body absorbs that slack in its final
+/// inbound connector, and a single COMPOSITE body (if/fork/switch/nested loop)
+/// carries its own internal vertical structure, so no extra gap applies.
+fn repeat_backward_extra_cond_gap(body: &[LayoutNode], has_backward: bool) -> f64 {
+    if !has_backward {
+        return 0.0;
+    }
+    let mut flow = body.iter().filter(|n| node_is_flow(n));
+    match (flow.next(), flow.next()) {
+        (Some(LayoutNode::Action { .. }), None) => 10.0,
+        _ => 0.0,
+    }
+}
+
 fn repeat_not_label_outbound_gap(node: &LayoutNode) -> Option<f64> {
     let LayoutNode::Repeat {
         not_label,
@@ -10980,15 +11008,11 @@ fn emit_repeat(
     } else {
         emit_sequence_ex(svg, body, cx, body_y, body_mid_stretch, None, false)
     };
-    // Single-action backward repeats keep the extra halfHex before the
-    // condition diamond; multi-action bodies absorb that slack in their final
-    // inbound connector.
+    // Single plain-action backward repeats keep the extra halfHex before the
+    // condition diamond; multi-action or composite bodies absorb that slack in
+    // their final inbound connector / internal structure.
     let backward_flow_count = body.iter().filter(|n| node_is_flow(n)).count();
-    let cond_y = if backward.is_some() && backward_flow_count < 2 {
-        body_bottom + ARROW_LEN + 10.0
-    } else {
-        body_bottom + ARROW_LEN
-    };
+    let cond_y = body_bottom + ARROW_LEN + repeat_backward_extra_cond_gap(body, backward.is_some());
 
     // Top entry diamond (small rhombus at y). `repeat :label;` replaces this
     // diamond with the labelled action as the loop entry tile.
@@ -11128,9 +11152,9 @@ fn emit_repeat(
         // repeats append it 24 px past the diamond east vertex; body-dominant
         // repeats clear the east label before placing it.
         let bw = repeat_backward_box_w(label);
-        let body_half = sequence_width(body) / 2.0;
+        let body_geo_right = repeat_body_geo_right(body);
         let cond_half = cond_inner_w / 2.0 + DIAMOND_HALF;
-        let box_left = cx + repeat_backward_box_left_rel(cond_half, body_half, is_label);
+        let box_left = cx + repeat_backward_box_left_rel(cond_half, body_geo_right, is_label);
         let box_cx = box_left + bw / 2.0;
         let backward_h = action_height(
             label,
@@ -11138,16 +11162,19 @@ fn emit_repeat(
             &svg.palette.action_font_family,
             svg.palette.action_font_size,
         );
-        let box_top = if backward_flow_count >= 2 {
-            let odd_stretch_adjust = if backward_flow_count.is_multiple_of(2) {
-                0.0
-            } else {
+        // FtileRepeat.getTranslateBackward centres the backward tile on the
+        // BODY span (`(body_y + body_bottom - backward_h) / 2`). For a single
+        // plain action this collapses to body_y (action height == box height),
+        // so the historical single-flow path matched; but a single TALL flow
+        // node (e.g. an if/else block) has its centre well below body_y, so the
+        // box must centre on the whole body span regardless of flow count.
+        let odd_stretch_adjust =
+            if backward_flow_count >= 2 && !backward_flow_count.is_multiple_of(2) {
                 body_mid_stretch.map_or(0.0, |(_, stretch)| stretch / 2.0)
+            } else {
+                0.0
             };
-            body_y + (body_bottom - body_y - backward_h) / 2.0 - odd_stretch_adjust
-        } else {
-            body_y
-        };
+        let box_top = body_y + (body_bottom - body_y - backward_h) / 2.0 - odd_stretch_adjust;
         let box_bottom = box_top + backward_h;
 
         // Box shape first — PlantUML emits the backward tile's shapes before
