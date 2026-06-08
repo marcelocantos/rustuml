@@ -385,3 +385,16 @@ helper; build lane geometry (reuse `lane_width`/`lane_content_cx` shapes); `dx =
 cx`; shift; dividers/titles; run existing compress. Then gate the full suite — targets
 `act_swimlane{2,3,4,5}_while_simple` (linear, no fork) = the FIRST flippable swimlane
 goldens, no bar decomposition needed.
+
+## Comparator ignores svg-root size (2026-06-08)
+
+Confirmed via `act_minimal_one_while_stop` (NOT in the failing 163, yet mine renders
+canvas 194 vs gold 193 — the ONLY diff): the golden comparator ignores the svg root
+attrs `["style","height","width","viewBox"]` (`compare.rs:27`). So canvas width/height
+mismatches do NOT cause failures — only element/line/shape coordinates do. Re-triage
+implication: ignore canvas-size diffs; for `act_swimlane2_while_simple` the real
+remaining blockers are the divider-line y2 (+2, = final_last_y, needs the faithful
+while+specialOut frame-height), the stop cx (0.6516, emit-side gateable), and the
+back-edge/cross-lane routing merge. (node_height(While+special) is itself ~+1 too tall
+— visible as the standalone canvas 194-vs-193 — but that alone is canvas-only/benign;
+it contributes to the swimlane divider though.)
