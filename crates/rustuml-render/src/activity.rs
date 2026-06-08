@@ -105,6 +105,12 @@ const IF_BRANCH_DOWN: f64 = 10.0;
 /// top of the merge diamond below. PlantUML uses 6 px here.
 const IF_BRANCH_UP: f64 = 6.0;
 const IF_SINGLE_SURVIVOR_JOIN_GAP: f64 = 5.0;
+/// Gap from a redirected single-survivor inner-if's surviving branch bottom to
+/// the parent merge reservation. PlantUML draws no merge diamond for the inner
+/// if (`hasTwoBranches`==false → `diamond2` = `FtileEmpty(Hexagon.hexagonHalfSize/2)`),
+/// so the inner if contributes only the empty-tile spacer before the parent's
+/// own merge gap; the surviving corridor then fuses straight to the parent merge.
+const IF_SURVIVOR_REDIRECT_GAP: f64 = 4.0;
 const IF_GOTO_RESUME_GAP: f64 = 5.0;
 const IF_EMPTY_BOTH_LEFT_EXTENT_PAD: f64 = 13.0;
 const IF_EMPTY_BOTH_RIGHT_EXTENT_PAD: f64 = 15.0;
@@ -917,6 +923,28 @@ fn branch_is_redirectable_while(flow: &[LayoutNode]) -> bool {
     )
 }
 
+/// A branch flow whose sole node is a binary `if` with exactly one terminating
+/// branch (kill/detach/stop) and one surviving branch. Such an inner if's
+/// surviving out-corridor IS the parent if's branch→merge connection (PlantUML's
+/// `ConnectionVerticalThenHorizontalDirect` + `MergeStrategy.LIMITED` fusion);
+/// the parent delegates the merge wiring via [`IfSurvivorRedirect`].
+fn branch_is_redirectable_single_survivor_if(flow: &[LayoutNode]) -> bool {
+    matches!(
+        flow,
+        [LayoutNode::If {
+            then_branch,
+            else_branches,
+            ..
+        }] if if_single_survivor(then_branch, else_branches).is_some()
+            // The empty-branch FtileIfDown corridor and the circle-terminal
+            // forms have their own dedicated wiring; only the plain
+            // action-terminator (kill/detach/stop-with-body) survivor uses the
+            // straight redirect.
+            && if_down_plan(then_branch, else_branches).is_none()
+            && if_single_circle_terminal_plan(None::<&String>, then_branch, else_branches).is_none()
+    )
+}
+
 fn if_all_branches_goto(then_branch: &[LayoutNode], else_branches: &[ElseBranch]) -> bool {
     branch_ends_with_goto(then_branch)
         && !else_branches.is_empty()
@@ -1178,7 +1206,9 @@ fn if_break_down_plan(
     let else_break = branch_is_lone_break(else_body);
     // Exactly one branch is a lone break; the other must be empty.
     if then_break && branch_is_empty(else_body) {
-        Some(IfBreakDownPlan { then_is_break: true })
+        Some(IfBreakDownPlan {
+            then_is_break: true,
+        })
     } else if else_break && branch_is_empty(then_branch) {
         Some(IfBreakDownPlan {
             then_is_break: false,
@@ -2533,7 +2563,12 @@ fn switch_x_layout_if_branch(cases: &[SwitchCase], condition: &str) -> SwitchXLa
     if cases.len() >= 4 && !switch_case_block_is_big_diamond(cases, condition) {
         return switch_x_layout_if_branch_packed(cases, condition);
     }
-    switch_x_layout_with_small_gap(cases, condition, SWITCH_IF_BRANCH_CASE_GAP, cases.len() == 2)
+    switch_x_layout_with_small_gap(
+        cases,
+        condition,
+        SWITCH_IF_BRANCH_CASE_GAP,
+        cases.len() == 2,
+    )
 }
 
 fn switch_x_layout_if_branch_extents(cases: &[SwitchCase], condition: &str) -> SwitchXLayout {
@@ -2551,7 +2586,12 @@ fn switch_x_layout_if_branch_extents(cases: &[SwitchCase], condition: &str) -> S
         .first()
         .map_or(0.0, |case| switch_case_width(case) / 2.0);
     let spine_room = (DIAMOND_HALF * 2.0 - first_half).max(0.0);
-    switch_x_layout_with_small_gap(cases, condition, SWITCH_CASE_GAP + spine_room, cases.len() == 2)
+    switch_x_layout_with_small_gap(
+        cases,
+        condition,
+        SWITCH_CASE_GAP + spine_room,
+        cases.len() == 2,
+    )
 }
 
 /// Returns whether the SMALL/BIG diamond test selects BIG mode for these cases.
@@ -5267,10 +5307,10 @@ fn node_height(node: &LayoutNode) -> f64 {
                 return DIAMOND_HALF * 2.0 + IF_DOWN_LEAD + branch_h + stretch + ARROW_LEN;
             }
             let diamond_h = diamond_half_y * 2.0;
-            let then_h = sequence_height_if_branch(then_branch);
+            let then_h = if_branch_height_redirected(then_branch);
             let max_else_h: f64 = else_branches
                 .iter()
-                .map(|b| sequence_height_if_branch(&b.body))
+                .map(|b| if_branch_height_redirected(&b.body))
                 .fold(0.0f64, f64::max);
             let branch_h = then_h.max(max_else_h);
             // diamond + IF_BRANCH_DOWN + branch_h + merge gap + merge diamond.
@@ -5864,6 +5904,9 @@ struct SvgEmitter {
     /// and `ConnectionElseNoDiamond`) can weld the break branch to the exit
     /// corridor instead of routing to a (suppressed) merge diamond.
     while_break: Option<WhileBreakContext>,
+    /// Context for a SOLE single-survivor `if` nested directly in an enclosing
+    /// `if`/`switch` branch; see [`IfSurvivorRedirect`].
+    if_survivor_redirect: Option<IfSurvivorRedirect>,
 }
 
 /// Geometry the enclosing `while` hands to a directly-nested break-bearing `if`.
@@ -5890,6 +5933,25 @@ struct WhileExitRedirect {
     to_right: bool,
 }
 
+/// Set by an enclosing `if`/`switch` when one of its branches is a SOLE
+/// single-survivor `if` (one branch terminates with kill/detach/stop, the
+/// other survives). PlantUML's `ConnectionVerticalThenHorizontalDirect` plus
+/// `MergeStrategy.LIMITED` fuses such a nested if's surviving out-corridor with
+/// the parent's branch→merge connector: the surviving column runs straight down
+/// to the parent merge vertex with no intermediate reconvergence to the inner
+/// spine and no own down-arrowhead. The parent skips its own branch→merge
+/// connector for that side (the nested if drew it).
+#[derive(Clone, Copy)]
+struct IfSurvivorRedirect {
+    /// Centre-y of the parent merge diamond.
+    merge_cy: f64,
+    /// X of the parent merge-diamond vertex the corridor arrives at.
+    merge_vertex_x: f64,
+    /// `true` → arrives at the left vertex, points right; `false` → right
+    /// vertex, points left.
+    to_right: bool,
+}
+
 #[allow(clippy::too_many_arguments)]
 impl SvgEmitter {
     fn with_palette(palette: Palette, handwritten: bool) -> Self {
@@ -5903,6 +5965,7 @@ impl SvgEmitter {
             while_exit_redirect: None,
             fork_branch_gap_extra: 0.0,
             while_break: None,
+            if_survivor_redirect: None,
         }
     }
 
@@ -7544,9 +7607,7 @@ fn emit_if(
     {
         let then_label = then_label.as_deref();
         let else_label = else_branches.first().and_then(|b| b.label.as_deref());
-        return emit_if_break_down(
-            svg, cx, y, condition, then_label, else_label, &plan, &brk,
-        );
+        return emit_if_break_down(svg, cx, y, condition, then_label, else_label, &plan, &brk);
     }
 
     // Empty-branch corridor: when one branch is empty and the other populated
@@ -7741,14 +7802,33 @@ fn emit_if(
     let then_redirectable = branch_is_redirectable_while(then_branch_flow);
     let else_redirectable =
         !else_branches.is_empty() && branch_is_redirectable_while(else_branch_flow);
+    let then_survivor_if = branch_is_redirectable_single_survivor_if(then_branch_flow);
+    let else_survivor_if =
+        !else_branches.is_empty() && branch_is_redirectable_single_survivor_if(else_branch_flow);
 
     let shapes_chk = svg.shapes.len();
     let conns_chk = svg.connectors.len();
-    let then_bottom = emit_sequence_if_branch(svg, then_branch_flow, then_cx, branch_y);
-    let else_bottom = if !else_branches.is_empty() {
+    let then_bottom_raw = emit_sequence_if_branch(svg, then_branch_flow, then_cx, branch_y);
+    let else_bottom_raw = if !else_branches.is_empty() {
         emit_sequence_if_branch(svg, else_branch_flow, else_cx, branch_y)
     } else {
         branch_y
+    };
+    // A nested single-survivor if (rendered standalone in this first pass) ends
+    // with its own out-arrow (`survivor_bottom + ARROW_LEN`). When it is going
+    // to be redirected into THIS merge, its corridor instead fuses to the merge
+    // (PlantUML's FtileEmpty diamond2 = Hexagon.hexagonHalfSize/2), so for the
+    // merge-y reservation we use the survivor bottom plus that empty-tile gap,
+    // not the standalone out-arrow.
+    let then_bottom = if then_survivor_if {
+        then_bottom_raw - ARROW_LEN + IF_SURVIVOR_REDIRECT_GAP
+    } else {
+        then_bottom_raw
+    };
+    let else_bottom = if else_survivor_if {
+        else_bottom_raw - ARROW_LEN + IF_SURVIVOR_REDIRECT_GAP
+    } else {
+        else_bottom_raw
     };
 
     // If every branch ends with a terminator (Stop/End/Detach/Kill), PlantUML
@@ -7773,12 +7853,14 @@ fn emit_if(
     let merge_cy = merge_diamond_top + DIAMOND_HALF;
 
     // Re-emit any redirectable branch now that merge_cy is known, so its loop
-    // exit corridor lands on the merge diamond. Only meaningful when a real
-    // merge diamond exists (non-terminating, no single-survivor short-circuit).
-    let redirect_active = (then_redirectable || else_redirectable)
-        && !all_terminate
-        && single_survivor.is_none()
-        && !if_empty_both_plain(then_branch, else_branches);
+    // exit corridor (while) or surviving out-corridor (single-survivor if) lands
+    // on the merge diamond. Only meaningful when a real merge diamond exists
+    // (non-terminating, no single-survivor short-circuit at THIS level).
+    let redirect_active =
+        (then_redirectable || else_redirectable || then_survivor_if || else_survivor_if)
+            && !all_terminate
+            && single_survivor.is_none()
+            && !if_empty_both_plain(then_branch, else_branches);
     if redirect_active {
         svg.shapes.truncate(shapes_chk);
         svg.connectors.truncate(conns_chk);
@@ -7789,8 +7871,16 @@ fn emit_if(
                 to_right: true,
             });
         }
+        if then_survivor_if {
+            svg.if_survivor_redirect = Some(IfSurvivorRedirect {
+                merge_cy,
+                merge_vertex_x: cx - DIAMOND_HALF,
+                to_right: true,
+            });
+        }
         emit_sequence_if_branch(svg, then_branch_flow, then_cx, branch_y);
         svg.while_exit_redirect = None;
+        svg.if_survivor_redirect = None;
         if !else_branches.is_empty() {
             if else_redirectable {
                 svg.while_exit_redirect = Some(WhileExitRedirect {
@@ -7799,8 +7889,16 @@ fn emit_if(
                     to_right: false,
                 });
             }
+            if else_survivor_if {
+                svg.if_survivor_redirect = Some(IfSurvivorRedirect {
+                    merge_cy,
+                    merge_vertex_x: cx + DIAMOND_HALF,
+                    to_right: false,
+                });
+            }
             emit_sequence_if_branch(svg, else_branch_flow, else_cx, branch_y);
             svg.while_exit_redirect = None;
+            svg.if_survivor_redirect = None;
         }
     }
 
@@ -7926,6 +8024,36 @@ fn emit_if(
         } else {
             (else_cx, else_bottom)
         };
+        // Nested directly inside a parent if/switch branch: PlantUML's
+        // ConnectionVerticalThenHorizontalDirect + MergeStrategy.LIMITED fuses
+        // the surviving out-corridor with the parent's branch→merge connector —
+        // the surviving column drops STRAIGHT to the parent merge vertex, no
+        // reconvergence to this if's spine and no own arrowhead. The parent
+        // skipped its own branch→merge connector for this side.
+        if let Some(redir) = svg.if_survivor_redirect.take() {
+            svg.connector_line(
+                &arrow_color,
+                survivor_cx,
+                survivor_cx,
+                survivor_bottom,
+                redir.merge_cy,
+                false,
+            );
+            svg.connector_line(
+                &arrow_color,
+                survivor_cx,
+                redir.merge_vertex_x,
+                redir.merge_cy,
+                redir.merge_cy,
+                false,
+            );
+            if redir.to_right {
+                svg.right_arrow(redir.merge_vertex_x, redir.merge_cy, &arrow_color);
+            } else {
+                svg.left_arrow(redir.merge_vertex_x, redir.merge_cy, &arrow_color);
+            }
+            return redir.merge_cy;
+        }
         let join_y = survivor_bottom + IF_SINGLE_SURVIVOR_JOIN_GAP;
         let out_y = survivor_bottom + ARROW_LEN;
         svg.connector_line(
@@ -7945,9 +8073,10 @@ fn emit_if(
     }
 
     // Then branch → merge — skipped if the branch terminates, or if a
-    // redirected `while` branch already routed its exit corridor to the merge.
-    let then_routed_by_while = redirect_active && then_redirectable;
-    let else_routed_by_while = redirect_active && else_redirectable;
+    // redirected `while`/single-survivor-`if` branch already routed its exit
+    // corridor to the merge.
+    let then_routed_by_while = redirect_active && (then_redirectable || then_survivor_if);
+    let else_routed_by_while = redirect_active && (else_redirectable || else_survivor_if);
     if !then_terminates && !then_routed_by_while {
         svg.connector_line(&arrow_color, then_cx, then_cx, then_bottom, merge_cy, false);
         svg.connector_line(
@@ -8349,7 +8478,6 @@ fn first_flow_node(nodes: &[LayoutNode]) -> Option<&LayoutNode> {
     nodes.iter().find(|node| node_is_flow(node))
 }
 
-
 fn leading_if_branch_repeat_extra(node: &LayoutNode) -> f64 {
     let LayoutNode::Repeat {
         body,
@@ -8371,6 +8499,19 @@ fn leading_if_branch_repeat_extra(node: &LayoutNode) -> f64 {
 
 fn sequence_height_if_branch(nodes: &[LayoutNode]) -> f64 {
     sequence_height(nodes) + first_flow_node(nodes).map_or(0.0, leading_if_branch_repeat_extra)
+}
+
+/// Branch height for the enclosing if's merge reservation. A directly-nested
+/// SOLE single-survivor if has its standalone out-arrow (`+ ARROW_LEN`) replaced
+/// by the empty-tile spacer (`+ IF_SURVIVOR_REDIRECT_GAP`) because its surviving
+/// corridor fuses straight into THIS if's merge (see [`IfSurvivorRedirect`]).
+fn if_branch_height_redirected(nodes: &[LayoutNode]) -> f64 {
+    let h = sequence_height_if_branch(nodes);
+    if branch_is_redirectable_single_survivor_if(nodes) {
+        h - ARROW_LEN + IF_SURVIVOR_REDIRECT_GAP
+    } else {
+        h
+    }
 }
 
 #[allow(clippy::too_many_arguments)]
@@ -8826,7 +8967,14 @@ fn emit_if_break_down(
     // vertex, run down (down-emphasized mid arrow), then rejoin the spine at the
     // if-block's pointOut. No terminal in-arrow — it simply welds back.
     let corridor_x = diamond_right + DIAMOND_HALF;
-    svg.connector_line(&arrow_color, diamond_right, corridor_x, diamond_cy, diamond_cy, false);
+    svg.connector_line(
+        &arrow_color,
+        diamond_right,
+        corridor_x,
+        diamond_cy,
+        diamond_cy,
+        false,
+    );
     let arrow_tip = (diamond_cy + return_y) / 2.0 + IF_CORRIDOR_ARROW_OFFSET;
     svg.polygon_connector(
         &arrow_color,
@@ -8839,7 +8987,14 @@ fn emit_if_break_down(
         &arrow_color,
         "1",
     );
-    svg.connector_line(&arrow_color, corridor_x, corridor_x, diamond_cy, return_y, false);
+    svg.connector_line(
+        &arrow_color,
+        corridor_x,
+        corridor_x,
+        diamond_cy,
+        return_y,
+        false,
+    );
     svg.connector_line(&arrow_color, corridor_x, cx, return_y, return_y, false);
 
     return_y
@@ -9224,13 +9379,62 @@ fn emit_switch_with_layout(
     }
 
     // ── Bottom connections (cases → merge). ──
-    for &i in &order {
+    // When some cases terminate (kill/detach), they contribute no out-corridor,
+    // so the merge's left/right vertices are reached by the leftmost/rightmost
+    // SURVIVING case (FtileSwitchWithDiamonds wires the merge to the actual
+    // branch outs, not the source positions). An inner case promoted to a
+    // surviving extreme routes to the merge vertex like an outer case.
+    // A case reaches the merge via a BOTTOM connection only when it is
+    // non-empty AND non-terminating. Empty cases still claim a merge vertex via
+    // their TOP corridor, so they remain the structural extreme. Promotion of
+    // an inner survivor to an outer merge vertex therefore happens ONLY when the
+    // structural extreme on that side TERMINATES (kill/detach) — then the next
+    // bottom-connected case inherits that vertex.
+    let bottom_connected: Vec<usize> = (0..n)
+        .filter(|&i| !cases[i].body.is_empty() && !branch_terminates(&cases[i].body))
+        .collect();
+    let left_extreme_terminates = branch_terminates(&cases[0].body);
+    let right_extreme_terminates = branch_terminates(&cases[n - 1].body);
+    let surviving_left = left_extreme_terminates
+        .then(|| bottom_connected.first().copied())
+        .flatten();
+    let surviving_right = right_extreme_terminates
+        .then(|| bottom_connected.last().copied())
+        .flatten();
+    let merge_classify = |i: usize| -> SwitchConn {
+        if Some(i) == surviving_left && centers[i] < diamond_cx
+            || Some(i) == surviving_right && centers[i] > diamond_cx
+        {
+            SwitchConn::Outer
+        } else {
+            classify(i)
+        }
+    };
+    // Emission order for the merge wiring: the merge outers (left then right)
+    // first, then the inner survivors left-to-right — matching PlantUML's
+    // connection registration order on the surviving branch set.
+    let merge_order: Vec<usize> = {
+        let mut o: Vec<usize> = Vec::with_capacity(n);
+        let outers: Vec<usize> = order
+            .iter()
+            .copied()
+            .filter(|&i| matches!(merge_classify(i), SwitchConn::Outer))
+            .collect();
+        o.extend(outers.iter().copied());
+        for &i in &order {
+            if !matches!(merge_classify(i), SwitchConn::Outer) {
+                o.push(i);
+            }
+        }
+        o
+    };
+    for &i in &merge_order {
         if cases[i].body.is_empty() || branch_terminates(&cases[i].body) {
             continue;
         }
         let bcx = centers[i];
         let bottom = bottoms[i];
-        match classify(i) {
+        match merge_classify(i) {
             SwitchConn::Outer => {
                 let vertex_x = if bcx <= diamond_cx {
                     diamond_cx - DIAMOND_HALF
@@ -10032,7 +10236,15 @@ fn emit_while(
     );
 
     // 5. Loop arm vertical at loop_x.
-    svg.line_styled(&arrow_color, "1", loop_x, loop_x, diamond_cy, junction_y, false);
+    svg.line_styled(
+        &arrow_color,
+        "1",
+        loop_x,
+        loop_x,
+        diamond_cy,
+        junction_y,
+        false,
+    );
 
     // 6. Loop arm horizontal at diamond_cy: loop_x → diamond_right_vertex.
     svg.line_styled(
