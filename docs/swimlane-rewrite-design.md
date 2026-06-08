@@ -355,3 +355,33 @@ nodes by `LaneMark` into per-lane runs, compute `lane_width = sequence_extents(r
 and the spine from `content_left`, then shift (V2 already gets the height + title band +
 dividers right). Targets: `act_swimlane{2,3,4,5}_while_simple` and other linear cases.
 The fork cases (per-lane bar decomposition) remain the harder, later work.
+
+## COMPLETE plan for linear swimlanes (turn-key) — connects to the while-specialOut fix
+
+Worked out the full geometry for the linear cluster (`act_swimlane{2,3,4,5}_while_simple`):
+
+1. **Per-lane runs = old segments.** Partition the single tree's top-level nodes by
+   `LaneMark` into per-lane runs (Lane1=`[Start,While]`, Lane2=`[While{special_out:Stop}]`
+   for act_swimlane2). These equal the old segment bodies.
+2. **Lane width/cx from RESERVED extents** (not `x_bounds`): `(cl,cr)=sequence_extents(run)`;
+   `lane_width=(cl+cr+10).max(title+10)`; `lane_left_0=20`, `lane_left_l += lane_width_{l-1}`;
+   `lane_cx_l = lane_left_l + 6 + cl` (the old `lane_content_cx`). Verified: gold Lane1 cx
+   = 20+6+51.13 = 77.13; gold Lane2 cx = 134.26+6+60.13 = 200.39 (matches gold ~200.386).
+   Dividers at `lane_left_l` (+ final right edge); these reproduce gold 20/134.26/257.51.
+3. **Shift:** the single-tree emit centres each lane's flow at the natural spine `cx`
+   (render_inner:12628 — pass it in). `dx_l = lane_cx_l - cx`; shift lane l's emitted
+   fragment by `dx_l` (x) + `title_band` (y). V2 already gets the height EXACT.
+4. **The while-specialOut 0.6516 fix is naturally swimlane-gated here.** `content_left`
+   for a `While{special_out}` must use the faithful corridor `cond_half + halfHex + 9 +
+   CIRCLE_TILE_HALF` (= gold 60.13), NOT the standalone `node_extents` formula (60.78).
+   Applying that globally regressed +93 standalone whiles (see the early-session note),
+   but computing per-lane extents INSIDE `layout_swimlanes_v2` applies it ONLY on the
+   swimlane path — zero standalone risk. This is the missing link between the very first
+   diagnosis this session and the V2 rewrite.
+
+Implementation (next push): give `layout_swimlanes_v2` the lane-tagged `tree` + natural
+`cx`; partition into per-lane runs; compute reserved extents with a swimlane while-special
+helper; build lane geometry (reuse `lane_width`/`lane_content_cx` shapes); `dx = lane_cx -
+cx`; shift; dividers/titles; run existing compress. Then gate the full suite — targets
+`act_swimlane{2,3,4,5}_while_simple` (linear, no fork) = the FIRST flippable swimlane
+goldens, no bar decomposition needed.
