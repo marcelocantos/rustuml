@@ -222,3 +222,32 @@ in-lane portion of the bar, not just the boxes. So lane width must be measured o
 shapes + in-lane connectors (NOT bars), and the column math must replicate
 `computeSizeInternal` (dividers via `getHalfMissingSpace`=5, translate.dx). This is
 the pixel-exact calibration step, done against the golden ladder.
+
+## Column math (from source) + the per-lane MinMax blocker (2026-06-08)
+
+Exact column geometry from `LaneDivider.java` + `Swimlanes.computeSizeInternal`:
+- `LaneDivider(x1,x2,h).getWidth() = x1 + x2`; its vertical line draws at `+x1`
+  within the divider region.
+- `getHalfMissingSpace(i)`: 5 at the ends and whenever `titleWidth <= actualWidth`
+  (the common case), else `max(5, 5 + (titleWidth-actualWidth)/2)`.
+- `xpos=0; for lane i: dw = hms(i)+hms(i+1); translate.dx = xpos + dw - minMax.minX
+  + (actualWidth - widthWithoutTitle)/2; xpos += actualWidth + dw`.
+  `actualWidth = max(swimlaneWidth, MinMax.width)`; with distinct lane widths and
+  default `swimlaneWidth`, `actualWidth = MinMax.width` so the last term is 0.
+- Divider line i draws at `translate.dx_i + minMax_i.minX - hms(i+1)`.
+
+Calibration data (`act_fork2br_lanes2`, gold): dividers `20 / 100.8652 / 230.7305`;
+per-lane shift dx_L1 = −2.0, dx_L2 = +17.0; title-band y-shift = +17.4961
+(= titlesHeight 12.4961 + 5); lane widths L1 80.8652, L2 129.8653; canvas 232×259.
+
+**BLOCKER pinned:** dx_L1 = −2 with dw=10 ⇒ `minMax_L1.minX = 12`, which is LEFT of
+Branch1's box (natural x=28). So PlantUML's per-lane `MinMax` is NOT just the lane's
+boxes — it attributes some of the fork bar / connector geometry to each lane (the
+`UGraphicInterceptorAllSwimlanes` routes each drawn shape to the active lane's
+`LimitFinder`, and the bar/connectors land in specific lanes). The exact attribution
+can't be read off the final SVG. **Next action (faithful, matches the compression
+port method): instrument `Swimlanes.computeDrawingWidths` /
+`UGraphicInterceptorAllSwimlanes` in the PlantUML checkout to dump each lane's
+`MinMax` for `act_fork2br_lanes2`, then implement the column math above + the
+validated geometric post-process, and iterate up the ladder.** (Revert the
+instrumentation after, as with the compression work.)
