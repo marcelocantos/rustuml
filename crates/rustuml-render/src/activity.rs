@@ -157,6 +157,20 @@ const VERTICAL_IF_STARTLESS_TOP_NUDGE: f64 = 0.7754;
 const SWITCH_CENTER_TOP_SPLIT: f64 = 23.9401; // split distance above the case top
 const SWITCH_CENTER_BOT_SPLIT: f64 = 15.0; // split distance above the merge top
 
+// Uncompressed (pre-ON_Y) switch merge gap — the intrinsic distance between the
+// case-tile bottoms and the merge diamond top in PlantUML's
+// FtileSwitchWithDiamonds layout. A standalone switch's empty merge band is
+// reclaimed by the whole-diagram ON_Y compression pass (it collapses to the
+// values returned by `switch_merge_gap`: ARROW_LEN, or ARROW_LEN/2 for an even
+// SMALL-mode block). When the switch is the tile of a fork branch whose
+// siblings differ in height, a parallel branch box occupies that same y-band,
+// so the SlotFinder marks it occupied and the empty merge band survives
+// uncompressed. These are the surviving uncompressed gaps (SMALL/corridor vs
+// BIG diamond), the uncompressed counterparts of the compressed
+// `switch_merge_gap` values.
+const SWITCH_MERGE_GAP_UNCOMPRESSED_SMALL: f64 = 57.0449;
+const SWITCH_MERGE_GAP_UNCOMPRESSED_BIG: f64 = 41.0449;
+
 const FONT_SIZE: f64 = 12.0;
 const SMALL_FONT: f64 = 11.0;
 const DECORATION_FONT_SIZE: f64 = 10.0;
@@ -1178,7 +1192,9 @@ fn if_break_down_plan(
     let else_break = branch_is_lone_break(else_body);
     // Exactly one branch is a lone break; the other must be empty.
     if then_break && branch_is_empty(else_body) {
-        Some(IfBreakDownPlan { then_is_break: true })
+        Some(IfBreakDownPlan {
+            then_is_break: true,
+        })
     } else if else_break && branch_is_empty(then_branch) {
         Some(IfBreakDownPlan {
             then_is_break: false,
@@ -2455,6 +2471,55 @@ fn switch_merge_gap(cases: &[SwitchCase], condition: &str, layout: &SwitchXLayou
     }
 }
 
+/// Switch merge gap honouring the surrounding fork's compression state.
+///
+/// `fork_gap_extra` is the inter-tile uncompression slack a fork branch carries
+/// (`FORK_BRANCH_INTER_GAP_EXTRA`, non-zero only for unequal-height forks). When
+/// it is non-zero the switch sits inside a fork branch whose sibling occupies
+/// the merge y-band, so the empty merge gap is *not* reclaimed by ON_Y
+/// compression and the uncompressed intrinsic gap survives. Otherwise the
+/// standalone compressed gap applies.
+fn switch_merge_gap_in_fork(
+    cases: &[SwitchCase],
+    condition: &str,
+    layout: &SwitchXLayout,
+    fork_gap_extra: f64,
+) -> f64 {
+    if fork_gap_extra > 0.0
+        && !switch_all_branches_terminate(cases)
+        && !switch_needs_empty_merge_gap(cases)
+    {
+        if layout.big_diamond {
+            SWITCH_MERGE_GAP_UNCOMPRESSED_BIG
+        } else {
+            SWITCH_MERGE_GAP_UNCOMPRESSED_SMALL
+        }
+    } else {
+        switch_merge_gap(cases, condition, layout)
+    }
+}
+
+/// Extra height a multi-case switch tile gains when it is the tile of an
+/// unequal-height fork branch: the difference between its uncompressed and
+/// compressed merge gaps (see `switch_merge_gap_in_fork`). Zero for single-link
+/// or all-terminating switches (no merge gap to uncompress) and for switches
+/// not inside such a fork. Keeps `sequence_height_ex` agreeing with the height
+/// `emit_switch_with_layout` actually draws.
+fn switch_fork_uncompress_extra(node: &LayoutNode, fork_gap_extra: f64) -> f64 {
+    if fork_gap_extra <= 0.0 {
+        return 0.0;
+    }
+    let LayoutNode::Switch { cases, condition } = node else {
+        return 0.0;
+    };
+    if cases.len() < 2 {
+        return 0.0;
+    }
+    let layout = switch_x_layout(cases, condition);
+    switch_merge_gap_in_fork(cases, condition, &layout, fork_gap_extra)
+        - switch_merge_gap(cases, condition, &layout)
+}
+
 /// PlantUML's `SUPP15` margin used by `FtileSwitchWithDiamonds` in
 /// BIG_DIAMOND mode (the horizontal padding either side of the diamond
 /// column between the first and last case tiles).
@@ -2533,7 +2598,12 @@ fn switch_x_layout_if_branch(cases: &[SwitchCase], condition: &str) -> SwitchXLa
     if cases.len() >= 4 && !switch_case_block_is_big_diamond(cases, condition) {
         return switch_x_layout_if_branch_packed(cases, condition);
     }
-    switch_x_layout_with_small_gap(cases, condition, SWITCH_IF_BRANCH_CASE_GAP, cases.len() == 2)
+    switch_x_layout_with_small_gap(
+        cases,
+        condition,
+        SWITCH_IF_BRANCH_CASE_GAP,
+        cases.len() == 2,
+    )
 }
 
 fn switch_x_layout_if_branch_extents(cases: &[SwitchCase], condition: &str) -> SwitchXLayout {
@@ -2551,7 +2621,12 @@ fn switch_x_layout_if_branch_extents(cases: &[SwitchCase], condition: &str) -> S
         .first()
         .map_or(0.0, |case| switch_case_width(case) / 2.0);
     let spine_room = (DIAMOND_HALF * 2.0 - first_half).max(0.0);
-    switch_x_layout_with_small_gap(cases, condition, SWITCH_CASE_GAP + spine_room, cases.len() == 2)
+    switch_x_layout_with_small_gap(
+        cases,
+        condition,
+        SWITCH_CASE_GAP + spine_room,
+        cases.len() == 2,
+    )
 }
 
 /// Returns whether the SMALL/BIG diamond test selects BIG mode for these cases.
@@ -4863,7 +4938,7 @@ fn sequence_height_ex(nodes: &[LayoutNode], gap_extra: f64) -> f64 {
                 + note_inbound_extra;
         }
         pending_gap = None;
-        h += node_height(node) + note_bottom_extra;
+        h += node_height(node) + note_bottom_extra + switch_fork_uncompress_extra(node, gap_extra);
         prior_flow = true;
         prior_single_survivor_if = if_node_has_single_survivor(node);
         prior_outbound_gap = repeat_not_label_outbound_gap(node);
@@ -7812,9 +7887,7 @@ fn emit_if(
     {
         let then_label = then_label.as_deref();
         let else_label = else_branches.first().and_then(|b| b.label.as_deref());
-        return emit_if_break_down(
-            svg, cx, y, condition, then_label, else_label, &plan, &brk,
-        );
+        return emit_if_break_down(svg, cx, y, condition, then_label, else_label, &plan, &brk);
     }
 
     // Empty-branch corridor: when one branch is empty and the other populated
@@ -8656,7 +8729,6 @@ fn first_flow_node(nodes: &[LayoutNode]) -> Option<&LayoutNode> {
     nodes.iter().find(|node| node_is_flow(node))
 }
 
-
 fn leading_if_branch_repeat_extra(node: &LayoutNode) -> f64 {
     let LayoutNode::Repeat {
         body,
@@ -9133,7 +9205,14 @@ fn emit_if_break_down(
     // vertex, run down (down-emphasized mid arrow), then rejoin the spine at the
     // if-block's pointOut. No terminal in-arrow — it simply welds back.
     let corridor_x = diamond_right + DIAMOND_HALF;
-    svg.connector_line(&arrow_color, diamond_right, corridor_x, diamond_cy, diamond_cy, false);
+    svg.connector_line(
+        &arrow_color,
+        diamond_right,
+        corridor_x,
+        diamond_cy,
+        diamond_cy,
+        false,
+    );
     let arrow_tip = (diamond_cy + return_y) / 2.0 + IF_CORRIDOR_ARROW_OFFSET;
     svg.polygon_connector(
         &arrow_color,
@@ -9146,7 +9225,14 @@ fn emit_if_break_down(
         &arrow_color,
         "1",
     );
-    svg.connector_line(&arrow_color, corridor_x, corridor_x, diamond_cy, return_y, false);
+    svg.connector_line(
+        &arrow_color,
+        corridor_x,
+        corridor_x,
+        diamond_cy,
+        return_y,
+        false,
+    );
     svg.connector_line(&arrow_color, corridor_x, cx, return_y, return_y, false);
 
     return_y
@@ -9290,6 +9376,11 @@ fn emit_switch_with_layout(
     }
     let n = cases.len();
 
+    // Captured before any nested emit_sequence can reset it: when this switch is
+    // the tile of an unequal-height fork branch, its empty merge band cannot be
+    // reclaimed by ON_Y compression (a sibling branch box occupies that y-band).
+    let fork_gap_extra = svg.fork_branch_gap_extra;
+
     let arrow_color = svg.palette.arrow_color.clone();
     let diamond_stroke = svg.palette.diamond_stroke.clone();
     let diamond_fill = svg.palette.diamond_fill.clone();
@@ -9352,7 +9443,7 @@ fn emit_switch_with_layout(
 
     let all_terminate = switch_all_branches_terminate(cases);
     let has_center = !n.is_multiple_of(2);
-    let merge_gap = switch_merge_gap(cases, condition, &layout);
+    let merge_gap = switch_merge_gap_in_fork(cases, condition, &layout, fork_gap_extra);
     let merge_top = max_bottom + merge_gap;
     let merge_cy = merge_top + DIAMOND_HALF;
     let merge_bottom = merge_top + DIAMOND_HALF * 2.0;
@@ -10339,7 +10430,15 @@ fn emit_while(
     );
 
     // 5. Loop arm vertical at loop_x.
-    svg.line_styled(&arrow_color, "1", loop_x, loop_x, diamond_cy, junction_y, false);
+    svg.line_styled(
+        &arrow_color,
+        "1",
+        loop_x,
+        loop_x,
+        diamond_cy,
+        junction_y,
+        false,
+    );
 
     // 6. Loop arm horizontal at diamond_cy: loop_x → diamond_right_vertex.
     svg.line_styled(
