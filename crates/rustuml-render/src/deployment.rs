@@ -298,25 +298,28 @@ fn render_oracle(diagram: &DeploymentDiagram, _theme: &Theme, oracle: &OracleLay
     for root in &roots {
         emit_clusters_dfs(&mut svg, root, &diagram.nodes, None, &ctx);
     }
-    // Leaf-entity emission order is normally shallow-before-deep, then source
-    // line. When duplicate child declarations are ignored by PlantUML, later
-    // root leaves can sit between earlier and later nested leaves; use source
-    // order for that root-leaf shape.
+    // Leaf-entity emission order. When a root-level leaf exists (or there are no
+    // connections), PlantUML draws leaves in plain source order. Otherwise it
+    // walks the cluster tree depth-first, emitting each cluster's *direct* leaf
+    // children before descending into nested sub-clusters — so a cluster's own
+    // leaf can precede a sibling sub-cluster's leaves even when declared later.
     let mut leaves: Vec<(usize, usize, &DeploymentNode, String)> = Vec::new();
     for root in &roots {
         collect_entities_dfs(root, &diagram.nodes, None, 0, &mut leaves);
     }
     if diagram.connections.is_empty() || leaves.iter().any(|(depth, _, _, _)| *depth == 0) {
         leaves.sort_by_key(|(_, source_line, _, _)| *source_line);
+        for (_, _, node, qname) in &leaves {
+            emit_entity(&mut svg, node, qname, &ctx);
+        }
     } else {
-        leaves.sort_by(|a, b| {
-            let ka = (a.0, a.1);
-            let kb = (b.0, b.1);
-            ka.cmp(&kb)
-        });
-    }
-    for (_, _, node, qname) in &leaves {
-        emit_entity(&mut svg, node, qname, &ctx);
+        let mut ordered: Vec<(usize, &DeploymentNode, String)> = Vec::new();
+        for root in &roots {
+            collect_entities_cluster_order(root, &diagram.nodes, None, 0, &mut ordered);
+        }
+        for (_, node, qname) in &ordered {
+            emit_entity(&mut svg, node, qname, &ctx);
+        }
     }
 
     // Emit attached/floating notes. PlantUML lays each note out as a
@@ -770,6 +773,38 @@ fn collect_entities_dfs<'a>(
     }
 }
 
+/// Walk the node tree in PlantUML's cluster emission order: at each cluster
+/// emit its *direct leaf* children (in declaration order) before recursing into
+/// nested sub-clusters. PlantUML draws each cluster's own leaves, then descends
+/// into child clusters — so a cluster's directly-contained leaf can precede a
+/// sibling sub-cluster's leaves even when it is declared later in the source.
+/// `out` receives leaves in final draw order.
+fn collect_entities_cluster_order<'a>(
+    node: &'a DeploymentNode,
+    all: &'a [DeploymentNode],
+    parent_qname: Option<&str>,
+    depth: usize,
+    out: &mut Vec<(usize, &'a DeploymentNode, String)>,
+) {
+    let qname = qualified_name(node, parent_qname);
+    if node.children.is_empty() {
+        out.push((depth, node, qname));
+        return;
+    }
+    let children: Vec<&DeploymentNode> = node
+        .children
+        .iter()
+        .filter_map(|cid| all.iter().find(|n| n.id == *cid))
+        .collect();
+    // Direct leaves first (declaration order), then nested clusters.
+    for child in children.iter().filter(|c| c.children.is_empty()) {
+        out.push((depth + 1, child, qualified_name(child, Some(&qname))));
+    }
+    for child in children.iter().filter(|c| !c.children.is_empty()) {
+        collect_entities_cluster_order(child, all, Some(&qname), depth + 1, out);
+    }
+}
+
 fn emit_entity(
     svg: &mut SvgBuilder,
     node: &DeploymentNode,
@@ -1056,6 +1091,7 @@ fn emit_cluster_shape(
     match kind {
         // Clusters use stroke-width=1 (per goldens).
         Node => emit_tag_polygon(svg, x, y, w, h, fill, 1.0, stroke),
+        Component => emit_component_with_stroke_width(svg, x, y, w, h, fill, stroke, 1.0),
         Artifact => emit_artifact_with_stroke_width(svg, x, y, w, h, fill, stroke, 1.0),
         // Card cluster has rect + horizontal line under title.
         Card => emit_card_cluster(svg, x, y, w, h, fill, stroke),
@@ -1269,8 +1305,28 @@ fn emit_card_cluster(
 // ---- Component (rect + tab + bars) ----------------------------------------
 
 fn emit_component(svg: &mut SvgBuilder, x: f64, y: f64, w: f64, h: f64, fill: &str, stroke: &str) {
+    emit_component_with_stroke_width(svg, x, y, w, h, fill, stroke, 0.5);
+}
+
+/// The UML component symbol: a rounded rect with a tab (and two small "ear"
+/// bars) protruding at the top-right. Leaf components draw at stroke-width 0.5;
+/// a component *cluster* (a `component { … }` container) draws at stroke-width 1
+/// — matching PlantUML's cluster stroke. The tab geometry is identical to the
+/// leaf shape (verified against the deployment goldens).
+#[allow(clippy::too_many_arguments)]
+fn emit_component_with_stroke_width(
+    svg: &mut SvgBuilder,
+    x: f64,
+    y: f64,
+    w: f64,
+    h: f64,
+    fill: &str,
+    stroke: &str,
+    stroke_width: f64,
+) {
+    let sw = fc(stroke_width);
     svg.raw(&format!(
-        r#"<rect fill="{fill}" height="{h}" rx="{RX_RY}" ry="{RX_RY}" style="stroke:{stroke};stroke-width:0.5;" width="{w}" x="{x}" y="{y}"/>"#,
+        r#"<rect fill="{fill}" height="{h}" rx="{RX_RY}" ry="{RX_RY}" style="stroke:{stroke};stroke-width:{sw};" width="{w}" x="{x}" y="{y}"/>"#,
         h = fc(h),
         w = fc(w),
         x = fc(x),
@@ -1280,19 +1336,19 @@ fn emit_component(svg: &mut SvgBuilder, x: f64, y: f64, w: f64, h: f64, fill: &s
     let tab_x = x + w - 20.0;
     let tab_y = y + 5.0;
     svg.raw(&format!(
-        r#"<rect fill="{fill}" height="10" style="stroke:{stroke};stroke-width:0.5;" width="15" x="{x}" y="{y}"/>"#,
+        r#"<rect fill="{fill}" height="10" style="stroke:{stroke};stroke-width:{sw};" width="15" x="{x}" y="{y}"/>"#,
         x = fc(tab_x),
         y = fc(tab_y),
     ));
     // Two small bars left of tab (4w x 2h each).
     let bar_x = tab_x - 2.0;
     svg.raw(&format!(
-        r#"<rect fill="{fill}" height="2" style="stroke:{stroke};stroke-width:0.5;" width="4" x="{x}" y="{y}"/>"#,
+        r#"<rect fill="{fill}" height="2" style="stroke:{stroke};stroke-width:{sw};" width="4" x="{x}" y="{y}"/>"#,
         x = fc(bar_x),
         y = fc(tab_y + 2.0),
     ));
     svg.raw(&format!(
-        r#"<rect fill="{fill}" height="2" style="stroke:{stroke};stroke-width:0.5;" width="4" x="{x}" y="{y}"/>"#,
+        r#"<rect fill="{fill}" height="2" style="stroke:{stroke};stroke-width:{sw};" width="4" x="{x}" y="{y}"/>"#,
         x = fc(bar_x),
         y = fc(tab_y + 6.0),
     ));
