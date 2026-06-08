@@ -3626,12 +3626,25 @@ impl XCompress {
 
 /// One condition column of the long layout.
 struct IfLongCol {
-    /// Diamond polygon width (the `FtileDiamondInside2` "alone" width).
+    /// Diamond polygon width (the `FtileDiamondInside2` "alone" width, used to
+    /// draw the hexagon and anchor the horizontal/east connectors).
     diamond_w: f64,
+    /// Diamond TILE width = `FtileDiamondInside2.calculateDimensionFtile`'s
+    /// width: the alone diamond, widened to the RIGHT by a long north label
+    /// (`left + north_w` when `north_w > left`). Equals `diamond_w` otherwise.
+    diamond_w_tile: f64,
     /// Branch box width (`FtileMinWidthCentered(branch, 30)`).
     branch_w: f64,
     /// Branch box height.
     branch_h: f64,
+    /// Couple width = `FtileGeometryMerger(diamondTile, branch)`'s width, where
+    /// `diamondTile` is `FtileDiamondInside2.calculateDimensionFtile` (the alone
+    /// diamond possibly widened to the right by a long north label). This is what
+    /// `getTranslateCouple1` steps by (`x += couple.width + xSeparation`).
+    couple_w: f64,
+    /// Couple spine offset = `FtileGeometryMerger`'s `left` = `max(diamondLeft,
+    /// branchLeft)`. The diamond/branch centre sits at `coupleOrigin + couple_left`.
+    couple_left: f64,
     /// Diamond center x relative to the if-block spine (filled by `if_long_layout`).
     cx: f64,
     /// The `then`/`elseif` north label.
@@ -3687,10 +3700,24 @@ fn if_long_layout(
         // and left = alone width / 2). The north label only widens the tile
         // when north_w > left; for single-word labels it does not.
         let diamond_w = dgeo.left * 2.0;
+        // Couple = FtileGeometryMerger(diamondTile, branchTile) (FtileAssembly-
+        // Simple stacks them vertically and merges on the spine). diamondTile is
+        // the FtileDiamondInside2 *tile* geometry: left = alone-width/2, total
+        // width = `dgeo.width` (widened to the right when north_w > left). The
+        // branch is FtileMinWidthCentered → centred (branch_left = branch_w/2).
+        let diamond_left = dgeo.left;
+        let diamond_tile_w = dgeo.width;
+        let branch_left = branch_w / 2.0;
+        let couple_left = diamond_left.max(branch_left);
+        let couple_w =
+            (diamond_tile_w + (couple_left - diamond_left)).max(branch_w + (couple_left - branch_left));
         cols.push(IfLongCol {
             diamond_w,
+            diamond_w_tile: diamond_tile_w,
             branch_w,
             branch_h: g.height,
+            couple_w,
+            couple_left,
             cx: 0.0,
             north: north.clone(),
             condition: cond.to_string(),
@@ -3739,9 +3766,10 @@ fn if_long_layout(
     let mut centers_u = vec![0.0_f64; n]; // un-compacted column centers
     let mut x = 0.0;
     for (i, c) in cols.iter().enumerate() {
-        let cw = c.diamond_w.max(c.branch_w);
-        centers_u[i] = x + cw / 2.0;
-        x += cw + IF_LONG_X_SEP;
+        // Couple placed at `x` (getTranslateCouple1); diamond/branch centre is
+        // the couple's spine offset (`couple_left`). Step by couple width + xSep.
+        centers_u[i] = x + c.couple_left;
+        x += c.couple_w + IF_LONG_X_SEP;
     }
     let internal_w = x + tile2_w; // = sum(couples)+xSep*n+tile2 (xSep already per couple)
     let tile2_center_u = tile2_body.is_some().then(|| internal_w - tile2_w / 2.0);
@@ -3768,6 +3796,22 @@ fn if_long_layout(
     }
     if let Some(tc) = tile2_center_u {
         occ.push((tc - tile2_w / 2.0, tc + tile2_w / 2.0));
+    }
+    // Horizontal "no"-arrow connectors between adjacent diamonds (and from the
+    // last diamond east vertex into tile2) are drawn as Snakes → `UPath`, which
+    // `SlotFinder.drawPath` records as OCCUPIED on ON_X (only bare `ULine` is
+    // exempt). They span from one diamond's east vertex to the next's west
+    // vertex, bridging the inter-couple gap so the compaction can NOT collapse
+    // it — exactly why PlantUML keeps the diamonds a full couple-width apart.
+    for i in 0..n.saturating_sub(1) {
+        let e1 = centers_u[i] + cols[i].diamond_w / 2.0;
+        let w2 = centers_u[i + 1] - cols[i + 1].diamond_w / 2.0;
+        occ.push((e1.min(w2), e1.max(w2)));
+    }
+    if let Some(tc) = tile2_center_u {
+        // ConnectionLastElseIn: last diamond east vertex → tile2 centre.
+        let e_last = centers_u[n - 1] + cols[n - 1].diamond_w / 2.0;
+        occ.push((e_last.min(tc), e_last.max(tc)));
     }
     // The flow spine (start/stop circles, inbound/outbound connectors) sits at
     // `internalWidth/2` and is seen by the global ON_X compaction, so it
@@ -3797,8 +3841,24 @@ fn if_long_layout(
         min_x = min_x.min(compress.transform(s) - spine_comp);
         max_x = max_x.max(compress.transform(e) - spine_comp);
     }
-    let left_ext = -min_x;
+    let mut left_ext = -min_x;
     let right_ext = max_x;
+
+    // PlantUML positions the whole diagram with `Recentred` over the actual drawn
+    // bounding box (ActivityDiagram3:206), not the if-tile's symmetric reported
+    // geometry. When a `then`/`elseif` label is wide enough to widen its diamond
+    // tile to the RIGHT (`FtileDiamondInside2`: width = left + north_w when
+    // north_w > left), the row of diamonds becomes right-heavy: every diamond
+    // sits half its own right-overhang left of where a symmetric tile would. The
+    // recentred spine therefore lands that half-overhang further from the left
+    // edge. The geometry is otherwise identical, so we account for it as extra
+    // left extent (= max diamond tile right-overhang / 2), which shifts the spine
+    // right and widens the canvas by the same amount on the left.
+    let north_overhang = cols
+        .iter()
+        .map(|c| (c.diamond_w_tile - c.diamond_w).max(0.0))
+        .fold(0.0_f64, f64::max);
+    left_ext += north_overhang / 2.0;
 
     Some(IfLongLayout {
         cols,
