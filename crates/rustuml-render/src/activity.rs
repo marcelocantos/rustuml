@@ -1404,7 +1404,8 @@ fn build_tree(steps: &[ActivityStep], palette: &Palette) -> Vec<LayoutNode> {
         .iter()
         .take_while(|s| !matches!(s, ActivityStep::Swimlane(_)))
         .any(|s| !matches!(s, ActivityStep::Note(_) | ActivityStep::Arrow(_)));
-    let is_swimlane = distinct_lanes.len() > 1 || (distinct_lanes.len() == 1 && has_pre_lane_content);
+    let is_swimlane =
+        distinct_lanes.len() > 1 || (distinct_lanes.len() == 1 && has_pre_lane_content);
     let v2 = std::env::var("RUSTUML_SWIMLANE_V2").is_ok();
     if is_swimlane && !v2 {
         return build_swimlanes(steps, palette);
@@ -4813,7 +4814,13 @@ fn swimlane_lane_extents(body: &[LayoutNode]) -> (f64, f64) {
     // (cond_half + halfHex + 9 + CIRCLE_TILE_HALF), ~0.65 px narrower than the
     // standalone node_extents value, which otherwise mis-places the lane column.
     // This fn is swimlane-only, so this never touches standalone whiles.
-    if let [while_node @ LayoutNode::While { special_out: Some(_), .. }] = body {
+    if let [
+        while_node @ LayoutNode::While {
+            special_out: Some(_),
+            ..
+        },
+    ] = body
+    {
         let (l, _) = swimlane_v2_node_extents(while_node);
         return (l, right);
     }

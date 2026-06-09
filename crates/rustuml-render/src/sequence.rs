@@ -5820,9 +5820,20 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                             //   => gap = width + (LIVE_DELTA if source active)
                             //          + level_target * LIVE_DELTA
                             if fi < ti {
-                                (0.0, if target_active { ACTIVATION_HALF_W } else { 0.0 })
+                                (
+                                    0.0,
+                                    if target_active {
+                                        ACTIVATION_HALF_W
+                                    } else {
+                                        0.0
+                                    },
+                                )
                             } else {
-                                let src_live = if from_depth > 0 { ACTIVATION_HALF_W } else { 0.0 };
+                                let src_live = if from_depth > 0 {
+                                    ACTIVATION_HALF_W
+                                } else {
+                                    0.0
+                                };
                                 let tgt_live = to_depth as f64 * ACTIVATION_HALF_W;
                                 (src_live, tgt_live)
                             }
@@ -5831,7 +5842,11 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                             // + leftShift(target). Each active lifeline extends
                             // ACTIVATION_HALF_W from centre on the relevant side.
                             (
-                                if from_depth > 0 { ACTIVATION_HALF_W } else { 0.0 },
+                                if from_depth > 0 {
+                                    ACTIVATION_HALF_W
+                                } else {
+                                    0.0
+                                },
                                 if to_depth > 0 { ACTIVATION_HALF_W } else { 0.0 },
                             )
                         };
@@ -6731,9 +6746,7 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                             let level =
                                 act_depth.get(msg.from.as_str()).copied().unwrap_or(0) as f64;
                             let pos_c2 = cx_base + level * ACTIVATION_HALF_W;
-                            let comp_w = (autonumber_extra
-                                + label_w
-                                + 2.0 * MSG_TEXT_LEFT_PAD)
+                            let comp_w = (autonumber_extra + label_w + 2.0 * MSG_TEXT_LEFT_PAD)
                                 .max(SELF_MSG_MIN_PREF_WIDTH);
                             Some(pos_c2 + comp_w)
                         } else {
@@ -8474,9 +8487,7 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                                 // The frame covers the rightmost endpoint's livebox
                                 // right edge (`getMaxX` over inner tiles), not just the
                                 // bare lifeline centre, then adds GroupingTile.MARGINX.
-                                participants[max_idx]
-                                    .center_x
-                                    .max(group.max_live_right)
+                                participants[max_idx].center_x.max(group.max_live_right)
                                     + TEOZ_GROUP_MARGIN_X
                             } else if has_child {
                                 f64::NEG_INFINITY
@@ -8587,8 +8598,8 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                     // already-open livebox uses the bare lifeline centre (getMaxX = posC).
                     let msg_live_right =
                         if matches!(msg.activation, Some(ActivationChange::Activate)) {
-                            let level = group_act_depth.get(msg.to.as_str()).copied().unwrap_or(0)
-                                + 1;
+                            let level =
+                                group_act_depth.get(msg.to.as_str()).copied().unwrap_or(0) + 1;
                             center_of(&msg.to) + level as f64 * ACTIVATION_HALF_W
                         } else {
                             f64::NEG_INFINITY
@@ -8712,40 +8723,38 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
     // getWidth = frame_left + frame_right - 1. Centre/right-align bands on it
     // (non-Teoz; Teoz routes group geometry differently). Without groups the
     // bands keep their participant-box references below.
-    let group_band_get_width: Option<f64> = if !diagram.teoz
-        && !group_frames.is_empty()
-        && !participants.is_empty()
-    {
-        // PlantUML lays the bands out against the sequence area width. When an
-        // outermost group frame wraps the *full* participant range, that frame
-        // (not the participant boxes) is the content extent — e.g. a trailing
-        // queue widens the frame past the last box (seq_combo_everything). Then
-        // getWidth = frame_left + frame_right - 1. A group covering only a
-        // sub-range (edge_misc/edge_mixed) leaves the participant boxes as the
-        // content edges, so the bands keep their participant-span reference.
-        let part_left = participants.first().unwrap().box_x;
-        let last = participants.last().unwrap();
-        let part_right = last.box_x + last.box_width;
-        let frame_left = group_frames
-            .iter()
-            .map(|f| f.left)
-            .fold(f64::INFINITY, f64::min);
-        let frame_right = group_frames
-            .iter()
-            .map(|f| f.right)
-            .fold(f64::NEG_INFINITY, f64::max);
-        let frame_spans_all = frame_left.is_finite()
-            && frame_right.is_finite()
-            && frame_left <= part_left
-            && frame_right >= part_right;
-        if frame_spans_all {
-            Some(frame_left + frame_right - 1.0)
+    let group_band_get_width: Option<f64> =
+        if !diagram.teoz && !group_frames.is_empty() && !participants.is_empty() {
+            // PlantUML lays the bands out against the sequence area width. When an
+            // outermost group frame wraps the *full* participant range, that frame
+            // (not the participant boxes) is the content extent — e.g. a trailing
+            // queue widens the frame past the last box (seq_combo_everything). Then
+            // getWidth = frame_left + frame_right - 1. A group covering only a
+            // sub-range (edge_misc/edge_mixed) leaves the participant boxes as the
+            // content edges, so the bands keep their participant-span reference.
+            let part_left = participants.first().unwrap().box_x;
+            let last = participants.last().unwrap();
+            let part_right = last.box_x + last.box_width;
+            let frame_left = group_frames
+                .iter()
+                .map(|f| f.left)
+                .fold(f64::INFINITY, f64::min);
+            let frame_right = group_frames
+                .iter()
+                .map(|f| f.right)
+                .fold(f64::NEG_INFINITY, f64::max);
+            let frame_spans_all = frame_left.is_finite()
+                && frame_right.is_finite()
+                && frame_left <= part_left
+                && frame_right >= part_right;
+            if frame_spans_all {
+                Some(frame_left + frame_right - 1.0)
+            } else {
+                None
+            }
         } else {
             None
-        }
-    } else {
-        None
-    };
+        };
 
     // Recalculate svg_width after group frames are computed, since the frame
     // right edges may exceed the initial estimate (e.g., when group labels extend
@@ -8880,24 +8889,21 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
         // Actor-to-database endpoint spans in Java land 7.5px left of the
         // generic box-edge midpoint (edge_mixed_sequence_all_features).
         const ACTOR_TO_DATABASE_TITLE_CENTER_ADJUST: f64 = 7.5;
-        let title_center =
-            if let Some(gw) = group_band_get_width {
-                // PlantUML `SequenceDiagramArea.getTitleX`: title centred on the
-                // whole sequence area width (which, with group frames, spans the
-                // outermost frame: getWidth = frame_left + frame_right - 1).
-                gw / 2.0
-            } else if let (Some(first), Some(last)) =
-                (participants.first(), participants.last())
-            {
-                let center = (first.box_x + last.box_x + last.box_width - 1.0) / 2.0;
-                if first.kind == ParticipantKind::Actor && last.kind == ParticipantKind::Database {
-                    center - ACTOR_TO_DATABASE_TITLE_CENTER_ADJUST
-                } else {
-                    center
-                }
+        let title_center = if let Some(gw) = group_band_get_width {
+            // PlantUML `SequenceDiagramArea.getTitleX`: title centred on the
+            // whole sequence area width (which, with group frames, spans the
+            // outermost frame: getWidth = frame_left + frame_right - 1).
+            gw / 2.0
+        } else if let (Some(first), Some(last)) = (participants.first(), participants.last()) {
+            let center = (first.box_x + last.box_x + last.box_width - 1.0) / 2.0;
+            if first.kind == ParticipantKind::Actor && last.kind == ParticipantKind::Database {
+                center - ACTOR_TO_DATABASE_TITLE_CENTER_ADJUST
             } else {
-                svg_width as f64 / 2.0 - 0.5
-            };
+                center
+            }
+        } else {
+            svg_width as f64 / 2.0 - 0.5
+        };
         let title_line = diagram.meta.title_line.unwrap_or(1);
         svg.buf.push_str(&format!(
             r#"<g class="title" data-source-line="{title_line}">"#
@@ -11423,10 +11429,7 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                                 depth -= 1;
                             }
                             Event::GroupElse(eg) if depth == 0 => {
-                                let ely = event_y_positions
-                                    .get(j)
-                                    .copied()
-                                    .unwrap_or(frame_top);
+                                let ely = event_y_positions.get(j).copied().unwrap_or(frame_top);
                                 write!(
                                     svg.buf,
                                     r##"<line style="stroke:#000000;stroke-width:1;stroke-dasharray:2,2;" x1="{}" x2="{}" y1="{}" y2="{}"/>"##,
