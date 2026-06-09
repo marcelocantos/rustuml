@@ -11486,6 +11486,7 @@ fn emit_repeat(
 ///   - Per-lane content centered on lane.cx with 6 left + 4 right padding.
 ///   - Cross-lane arrow: source_cx vertical down 5 → horizontal at +5 →
 ///     target_cx vertical down (15 more) with arrowhead.
+///
 /// Swimlane V2: partition one of the natural-emit buffers into per-lane fragments
 /// using the recorded byte-offset spans. `off` selects the shapes- or
 /// connectors-offset from each span. Pre-first-span bytes go to lane 0.
