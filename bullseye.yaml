@@ -111,6 +111,18 @@ targets:
     - rendering
     origin: manual
     discovered: 2026-06-06
+  T11:
+    name: 'Strict-XML golden-pair parity is genuine: 0 failures against Java PlantUML reference SVGs'
+    status: identified
+    value: 0.0
+    cost: 0.0
+    acceptance:
+    - Live run of `cargo test --test golden_pairs` shows 0 failures (not counting skips for golden_error/unsupported_kw)
+    - 'Golden SVGs in test-diagrams/golden are confirmed Java PlantUML reference output (not Rust-generated), verified by presence of Java-specific attributes: preserveAspectRatio, contentStyleType, zoomAndPan'
+    - Pass count matches or exceeds the v0.6.0 release claim (11,269 pass, 1,299 skip)
+    context: 'Discovered 2026-06-10 during /cv run. The v0.6.0 release commit (0cc4b014) claimed ''11,269 pass, 0 fail, 1,299 skip — full strict-XML parity for all covered types.'' A live cargo test --test golden_pairs run immediately after shows 1,639 pass, 9,627 fail, 1,302 skip on the same code (no source changes since v0.6.0, only bullseye.yaml and Makefile added).\n\nThe golden SVGs are genuine Java PlantUML reference files (confirmed: they contain preserveAspectRatio=''none'', contentStyleType=''text/css'', zoomAndPan=''magnify'' — attributes the Rust renderer does not produce). So the failures represent real strict-XML mismatches between Rust output and Java reference SVGs.\n\nThe test-diagrams/golden directory is untracked (not a git submodule, no .gitmodules). Its history is invisible, so we cannot tell whether the golden data changed since v0.6.0 merged, or whether the v0.6.0 ''pass'' run was comparing Rust output against Rust-generated golden files.\n\nThe top failure categories: activity (1295), class (1113), sequence (943), state (900), component (663), creole (624), edge-cases (581), deployment (483), skinparam (404), combo (326), preprocessing (321), usecase (314).'
+    origin: manual
+    discovered: 2026-06-10
   T2:
     name: Ditaa rendering engine ported to Rust
     status: set_aside
