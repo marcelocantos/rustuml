@@ -128,7 +128,7 @@ targets:
     discovered: 2026-03-29
   T3:
     name: Formula remains accurate as rustuml-oracle stays a dev/test-only crate; if oracle is ever shipped, openjdk is declared as a runtime dep
-    status: identified
+    status: achieved
     value: 0.0
     cost: 0.0
     acceptance:
@@ -151,6 +151,7 @@ targets:
       Sibling targets exist on mnemo (🎯T47), sawmill (🎯T33), vellum (🎯T8), pageflip (🎯T32), jevons (🎯T19), ytt (🎯T2) covering the broader homebrew-tap dependency-audit initiative.
     origin: forked-from spyder PATH-bug investigation in ~/think on 2026-04-27 (homebrew-tap-wide audit)
     discovered: 2026-04-27
+    achieved: 2026-06-09
   T4:
     name: Strict-XML golden-pair parity with Java PlantUML
     status: converging
