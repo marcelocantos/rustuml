@@ -7798,8 +7798,12 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
         } else {
             tail_box_y + max_box_h + BOX_BOTTOM_MARGIN
         };
-        // The canvas extends 6px below the (ceiled) box frame bottom.
-        svg_height = svg_height.max(box_bottom.ceil() as u32 + 6);
+        // The canvas extends 6px below the box frame bottom. A `footer`
+        // directive's band is stacked below that extension (PlantUML reserves
+        // the footer band beneath the whole content, including the named-box
+        // frame), so add it before the final ceil — otherwise the footer text,
+        // which is placed relative to the canvas bottom, rides up into the box.
+        svg_height = svg_height.max((box_bottom + 6.0 + footer_band_h).ceil() as u32);
     }
     if has_deprecated_handwritten
         && let Some(orc) = oracle
@@ -11857,6 +11861,14 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
             // lifelines, not below the (hidden) tail boxes. Baseline =
             // lifeline_bottom + ascent(10) - 5 (seq_combo_everything).
             lifeline_bottom + plantuml_metrics::ascent(FOOTER_FONT_SIZE as f64) - 5.0
+        } else if has_boxes {
+            // Named boxes extend the content below the foot boxes; the footer
+            // band is reserved beneath the box frame. The band starts 1px
+            // below the box frame bottom (the +1.0 in footer_band_h) and the
+            // text baseline sits one ascent into the band
+            // (seq_kitchen_sink_01).
+            let box_bottom = tail_box_y + max_box_h + BOX_BOTTOM_MARGIN;
+            box_bottom + 1.0 + plantuml_metrics::ascent(FOOTER_FONT_SIZE as f64)
         } else {
             tail_box_y + max_box_h + FOOTER_BASELINE_AFTER_TAIL
         };
