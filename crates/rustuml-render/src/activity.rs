@@ -4721,8 +4721,68 @@ fn lane_content_cx(lane: &Lane, lane_left: f64) -> f64 {
 /// right divider by that amount. Recompute the right extent of a cond-driven
 /// top-level if-down from the drawn east corridor (`cond_half + DIAMOND_HALF`)
 /// plus the trailing corridor pad, matching the lane's true `getMinMax` width.
+/// Gap between the diamond's left vertex and the special terminator tile drawn
+/// to the left of a `while`/`endwhile` inside a swimlane. PlantUML's swimlane
+/// (Smetana) layout seats the absorbed `stop`/`end` terminator a fixed 9 px
+/// left of the condition diamond's west vertex, independent of the loop body
+/// width — unlike the standalone `FtileWhile.getTranslateForSpecial` path,
+/// which keys the terminator off `max(body_left + halfHex, cond_half)`. In a
+/// lane that body-driven slack overstates the lane's drawn bounding box.
+const SWIMLANE_WHILE_SPECIAL_GAP: f64 = 9.0;
+
+/// True when a swimlane segment ends in a plain `while` loop (no absorbed
+/// `stop`/`end` terminator). Such a loop's exit corridor is fused into the
+/// following cross-lane transition (see `WhileExitRedirect::down_to`), so the
+/// transition must NOT be deferred as a separate arrow.
+fn segment_tail_is_plain_while(body: &[LayoutNode]) -> bool {
+    matches!(
+        body.last(),
+        Some(LayoutNode::While {
+            special_out: None,
+            ..
+        })
+    )
+}
+
 fn swimlane_lane_extents(body: &[LayoutNode]) -> (f64, f64) {
-    let (left, mut right) = sequence_extents(body);
+    let (mut left, mut right) = sequence_extents(body);
+    // A lane whose sole content is a `while` terminated by an absorbed
+    // `stop`/`end` (the `special_out` tile) reserves its left extent from the
+    // condition diamond, not the loop body. The drawn terminator's centre sits
+    // `cond_half + halfHex + 9` left of the spine, and the terminator is a
+    // circle tile contributing CIRCLE_TILE_HALF of leftward reach. This matches
+    // the lane's true `getMinMax` width; the standalone `while_left_extent`
+    // path overstates it by keying off the (wider) body corridor.
+    if let [
+        LayoutNode::While {
+            condition,
+            special_out: Some(special),
+            diamond_font_family,
+            diamond_font_size,
+            diamond_text_bold,
+            ..
+        },
+    ] = body
+        && matches!(
+            special.as_ref(),
+            LayoutNode::Stop | LayoutNode::End
+        )
+    {
+        let cond_half = diamond_inner_w_styled(
+            condition,
+            *diamond_font_size,
+            *diamond_text_bold,
+            diamond_font_family,
+        ) / 2.0
+            + DIAMOND_HALF;
+        let drawn_left =
+            cond_half + DIAMOND_HALF + SWIMLANE_WHILE_SPECIAL_GAP + CIRCLE_TILE_HALF;
+        // Only narrow: keep the wider of the two so a genuinely wide body still
+        // governs (the standalone path is the safe upper bound elsewhere).
+        if drawn_left < left {
+            left = drawn_left;
+        }
+    }
     if let [
         LayoutNode::If {
             condition,
@@ -6357,6 +6417,14 @@ struct WhileExitRedirect {
     /// `true` → then-branch (arrives at the left vertex, points right);
     /// `false` → else-branch (arrives at the right vertex, points left).
     to_right: bool,
+    /// Swimlane cross-lane continuation: after the horizontal run reaches
+    /// `merge_vertex_x` (the target lane's content spine), descend to this y
+    /// and finish with a DOWN arrowhead into the next lane's first tile —
+    /// instead of the left/right arrow used for if/switch merges. The fused
+    /// path (while exit corridor → cross-lane horizontal → down into next lane)
+    /// matches PlantUML's swimlane snake, which routes the loop's exit straight
+    /// into the cross-lane connector rather than wrapping back to the spine.
+    down_to: Option<f64>,
 }
 
 /// Set by an enclosing `if`/`switch` when one of its branches is a SOLE
@@ -8341,6 +8409,7 @@ fn emit_if(
                 merge_cy,
                 merge_vertex_x: cx - DIAMOND_HALF,
                 to_right: true,
+                down_to: None,
             });
         }
         if then_survivor_if {
@@ -8359,6 +8428,7 @@ fn emit_if(
                     merge_cy,
                     merge_vertex_x: cx + DIAMOND_HALF,
                     to_right: false,
+                    down_to: None,
                 });
             }
             if else_survivor_if {
@@ -10526,6 +10596,17 @@ fn emit_split_with_layout(
     bottom_line_y
 }
 
+thread_local! {
+    /// True while emitting ftiles inside a swimlane column. PlantUML's swimlane
+    /// (Smetana) layout seats a `while`'s absorbed `stop`/`end` terminator at a
+    /// fixed condition-relative offset (`cond_half + halfHex + 9` left of the
+    /// spine), whereas the standalone `FtileWhile.getTranslateForSpecial` path
+    /// keys it off `min(body_left − halfHex, diamond_left)`. The flag switches
+    /// `emit_while`'s special-out placement onto the swimlane formula so the
+    /// terminator's cx matches the lane's drawn geometry.
+    static IN_SWIMLANE: std::cell::Cell<bool> = const { std::cell::Cell::new(false) };
+}
+
 #[allow(clippy::too_many_arguments)]
 fn emit_while(
     svg: &mut SvgEmitter,
@@ -10706,9 +10787,18 @@ fn emit_while(
         if body_has_direct_left_note(body) {
             special_x_adjust -= 1.0;
         }
-        let special_left_abs =
-            (body_left_x - DIAMOND_HALF).min(diamond_left_vertex_x) - special_w + special_x_adjust;
-        let special_cx = special_left_abs + special_w / 2.0;
+        let special_cx = if IN_SWIMLANE.with(|f| f.get()) {
+            // Swimlane layout seats the terminator a fixed distance left of the
+            // spine, keyed off the condition diamond rather than the body
+            // corridor: cx − (cond_half + halfHex + SWIMLANE_WHILE_SPECIAL_GAP).
+            let cond_half = cond_inner_w / 2.0 + DIAMOND_HALF;
+            cx - (cond_half + DIAMOND_HALF + SWIMLANE_WHILE_SPECIAL_GAP)
+        } else {
+            let special_left_abs = (body_left_x - DIAMOND_HALF).min(diamond_left_vertex_x)
+                - special_w
+                + special_x_adjust;
+            special_left_abs + special_w / 2.0
+        };
         // translateForSpecial.y in FtileWhile-local =
         //   max(3*half, 4*halfHex) where half = diamond hexagon's
         //   (outY - inY)/2 = 12. So translateForSpecial.y = max(36, 48) = 48.
@@ -10921,6 +11011,58 @@ fn emit_while(
         && let Some(redir) = svg.while_exit_redirect.take()
     {
         let merge_cy = redir.merge_cy;
+        if let Some(down_to) = redir.down_to {
+            // Swimlane cross-lane fuse: the loop's exit corridor keeps its own
+            // emphasize-down arrowhead at the normal midpoint, then runs down at
+            // exit_x to the cross-lane junction, turns to the next lane's spine,
+            // and descends into that lane's first tile with a terminal DOWN
+            // arrowhead. PlantUML routes the loop's exit snake straight into the
+            // cross-lane connector rather than wrapping back to the source spine.
+            let wrap_y = junction_y + DIAMOND_HALF;
+            let mid_arrow_y = (diamond_cy + wrap_y) / 2.0;
+            svg.polygon_connector(
+                &arrow_color,
+                &[
+                    (exit_x - 4.0, mid_arrow_y - 10.0),
+                    (exit_x, mid_arrow_y),
+                    (exit_x + 4.0, mid_arrow_y - 10.0),
+                    (exit_x, mid_arrow_y - 6.0),
+                ],
+                &arrow_color,
+                "1",
+            );
+            svg.line_styled(&arrow_color, "1", exit_x, exit_x, diamond_cy, merge_cy, false);
+            svg.line_styled(
+                &arrow_color,
+                "1",
+                exit_x,
+                redir.merge_vertex_x,
+                merge_cy,
+                merge_cy,
+                false,
+            );
+            svg.line_styled(
+                &arrow_color,
+                "1",
+                redir.merge_vertex_x,
+                redir.merge_vertex_x,
+                merge_cy,
+                down_to,
+                false,
+            );
+            svg.polygon_connector(
+                &arrow_color,
+                &[
+                    (redir.merge_vertex_x - 4.0, down_to - 10.0),
+                    (redir.merge_vertex_x, down_to),
+                    (redir.merge_vertex_x + 4.0, down_to - 10.0),
+                    (redir.merge_vertex_x, down_to - 6.0),
+                ],
+                &arrow_color,
+                "1",
+            );
+            return merge_cy;
+        }
         // DOWN arrowhead at the midpoint of the corridor's vertical run
         // (emphasizeDirection.DOWN), then the vertical, then the horizontal
         // into the merge diamond vertex with the in-arrow. PlantUML places the
@@ -11475,10 +11617,26 @@ fn emit_swimlanes(
 
     // (prev_cx, prev_last_y, target_cx, target_y) for each cross-lane/source
     // transition. These are emitted after all per-lane internal connectors.
+    //
+    // A transition whose SOURCE segment ends in a plain `while` (no absorbed
+    // terminator) is FUSED into that while's exit corridor instead of being
+    // deferred: PlantUML routes the loop's exit snake straight into the
+    // cross-lane connector (down at the exit corridor x, right to the next
+    // lane's spine, down into its first tile) rather than wrapping back to the
+    // source spine and then drawing a separate cross-lane arrow. `segment_redirect[i]`
+    // carries `(merge_cy, target_spine_x, target_y)` for such a fused source
+    // segment; the matching deferred transition is skipped.
+    let mut segment_redirect: Vec<Option<(f64, f64, f64)>> = vec![None; segments.len()];
     let mut deferred_cross_lanes: Vec<(f64, f64, f64, f64)> = Vec::new();
     for i in 1..segments.len() {
         let prev = &segments[i - 1];
         let current = &segments[i];
+        let cross_y = segment_end_ys[i - 1] + 5.0;
+        if segment_tail_is_plain_while(&prev.body) {
+            segment_redirect[i - 1] =
+                Some((cross_y, lane_cxs[current.lane_index], segment_ys[i]));
+            continue;
+        }
         deferred_cross_lanes.push((
             lane_cxs[prev.lane_index],
             segment_end_ys[i - 1],
@@ -11511,12 +11669,23 @@ fn emit_swimlanes(
         }
         for (segment_idx, segment) in segments.iter().enumerate() {
             if segment.lane_index == lane_idx {
+                IN_SWIMLANE.with(|f| f.set(true));
+                if let Some((merge_cy, target_x, target_y)) = segment_redirect[segment_idx] {
+                    svg.while_exit_redirect = Some(WhileExitRedirect {
+                        merge_cy,
+                        merge_vertex_x: target_x,
+                        to_right: target_x >= lane_cxs[lane_idx],
+                        down_to: Some(target_y),
+                    });
+                }
                 emit_sequence(
                     svg,
                     &segment.body,
                     lane_cxs[lane_idx],
                     segment_ys[segment_idx],
                 );
+                svg.while_exit_redirect = None;
+                IN_SWIMLANE.with(|f| f.set(false));
             }
         }
 
