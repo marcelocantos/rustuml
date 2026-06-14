@@ -2730,6 +2730,50 @@ struct SwitchXLayout {
 }
 
 fn switch_x_layout(cases: &[SwitchCase], condition: &str) -> SwitchXLayout {
+    let layout = switch_x_layout_base(cases, condition);
+    // A plain all-bodied SMALL switch is laid out by `FtileSwitchNude` at
+    // `xSeparation = 20`, then the diagram-wide ON_X compression squeezes the
+    // empty inter-tile bands to 10 — EXCEPT where the (opaque) condition/merge
+    // diamond column at the block centre protrudes into a band. The base layout
+    // packs every band to 10; re-derive the faithful compressed centres so a wide
+    // outer tile that pushes the diamond into the gap before it (e.g. a
+    // terminating last case) keeps the diamond's intrusion. This is identity when
+    // the diamond lands over a tile, so currently-correct switches are unchanged.
+    // The various empty/mixed/nested-if special cases run their own bespoke
+    // packing and are left untouched.
+    if switch_small_is_plain(cases, condition, &layout) {
+        let tiles: Vec<SwitchCaseTile> = cases.iter().map(switch_case_tile).collect();
+        let diamond_w = diamond_inner_w(condition) + DIAMOND_HALF * 2.0;
+        return switch_small_compressed(&tiles, diamond_w);
+    }
+    layout
+}
+
+/// True for a plain all-bodied SMALL_DIAMOND switch that takes the faithful ON_X
+/// compression path (no empty/mixed/nested-if special-case packing applies).
+fn switch_small_is_plain(
+    cases: &[SwitchCase],
+    condition: &str,
+    layout: &SwitchXLayout,
+) -> bool {
+    if layout.big_diamond || cases.is_empty() {
+        return false;
+    }
+    let all_bodied = cases.iter().all(|c| !c.body.is_empty());
+    let even_inner_corridor = cases.len().is_multiple_of(2)
+        && switch_inner_uses_diamond_corridor(cases, condition, layout);
+    all_bodied
+        && !switch_has_empty_middle_case(cases)
+        && !switch_is_even_nested_if_cases(cases)
+        && !even_inner_corridor
+        && !switch_is_odd_alternating_mixed_empty(cases)
+        && !switch_is_even_mixed_empty_pair(cases)
+}
+
+/// Base SMALL/BIG switch layout plus the empty/mixed/nested-if special cases,
+/// shared by the standalone path (which then applies ON_X compression to the
+/// plain case) and the `while`-body path (which keeps the uncompressed gaps).
+fn switch_x_layout_base(cases: &[SwitchCase], condition: &str) -> SwitchXLayout {
     let mut layout = switch_x_layout_with_small_gap(cases, condition, SWITCH_CASE_GAP, true);
     if !layout.big_diamond && switch_is_even_nested_if_cases(cases) {
         for center in layout.centers.iter_mut().skip(cases.len() / 2) {
@@ -2796,7 +2840,10 @@ fn switch_x_layout(cases: &[SwitchCase], condition: &str) -> SwitchXLayout {
 /// goldens, so this only widens the odd-count adjacent gaps.) The spine stays
 /// centred on the (unchanged) center case.
 fn switch_x_layout_in_while(cases: &[SwitchCase], condition: &str) -> SwitchXLayout {
-    let mut layout = switch_x_layout(cases, condition);
+    // The `while` frame blocks the standalone ON_X compression, so start from the
+    // uncompressed base layout (gaps still at the packed-10 width) and apply the
+    // loop-specific gap widening below.
+    let mut layout = switch_x_layout_base(cases, condition);
     let n = cases.len();
     if layout.big_diamond || n < 3 || cases.iter().any(|c| c.body.is_empty()) {
         return layout;
@@ -2926,6 +2973,55 @@ fn switch_x_layout_if_branch_packed(cases: &[SwitchCase], condition: &str) -> Sw
         centers,
         block_w,
         diamond_dx,
+        big_diamond: false,
+    }
+}
+
+/// PlantUML's standalone SMALL_DIAMOND switch geometry: tiles laid out at
+/// `xSeparation = 20` (`FtileSwitchNude`), then the diagram-wide ON_X compression
+/// (`CompressionXorYBuilder`) collapses every empty inter-tile band wider than
+/// `2*COMPRESS_MARGIN` down to exactly `2*COMPRESS_MARGIN` (=10). The condition
+/// and merge diamonds (plus the start/stop terminals) live on the block-centre
+/// spine and are OPAQUE on the X axis, so a band the diamond column protrudes
+/// into cannot fully collapse — it survives at `10 + protrusion`. This is a
+/// faithful re-derivation of the same ON_X pass that `compress::compress` runs on
+/// the whole canvas, applied locally to the switch's own occupancy so the case
+/// centres land correctly before the rest of the diagram is assembled.
+fn switch_small_compressed(tiles: &[SwitchCaseTile], diamond_w: f64) -> SwitchXLayout {
+    const XSEP: f64 = 20.0; // FtileSwitchNude.xSeparation
+    let n = tiles.len();
+
+    // Uncompressed tile layout (xSeparation between adjacent tiles).
+    let mut centers = vec![0.0f64; n];
+    let mut boxes = Vec::with_capacity(n);
+    let mut x = 0.0;
+    for i in 0..n {
+        centers[i] = x + tiles[i].left;
+        boxes.push((x, x + tiles[i].width));
+        x += tiles[i].width + XSEP;
+    }
+    let nude_w = x - XSEP;
+    let block_w = nude_w.max(diamond_w).max(DIAMOND_HALF * 2.0);
+    let dia = block_w / 2.0;
+
+    // Occupancy on the X axis: case tile boxes plus the diamond/terminal column
+    // (condition hexagon `dia ± diamond_w/2`, merge diamond `± DIAMOND_HALF`,
+    // start/stop ellipses `± 10/11`). The hexagon is the widest, so it dominates.
+    let mut occ = crate::compress::SlotSet::new();
+    for &(a, b) in &boxes {
+        occ.add_slot(a, b);
+    }
+    occ.add_slot(dia - diamond_w / 2.0, dia + diamond_w / 2.0);
+    let tf = crate::compress::CompressionTransform::from_occupied(
+        &occ,
+        crate::compress::COMPRESS_MARGIN,
+    );
+
+    let centers: Vec<f64> = centers.iter().map(|&c| tf.transform(c)).collect();
+    SwitchXLayout {
+        block_w: tf.transform(nude_w),
+        diamond_dx: tf.transform(dia),
+        centers,
         big_diamond: false,
     }
 }
@@ -7742,6 +7838,22 @@ fn emit_sequence_ex(
             while_body_chain_compresses(node) || is_partition_wrapping_compressed_while(node);
         let is_chain_while = node_defers && prev_was_deferred_while;
         if is_chain_while && let Some((arrow_top, style, label, arrow_gap)) = pending_arrow.take() {
+            emit_pending_down_arrow(svg, arrow_top, style, label, arrow_gap, cx);
+            if let Some((p_top, p_style, p_label, p_gap)) = deferred_partition_inbound.take() {
+                emit_pending_down_arrow(svg, p_top, p_style, p_label, p_gap, cx);
+            }
+        }
+        // A fork/split immediately following a deferred (compressed) while is
+        // assembled like the chain-while boundary: PlantUML draws the connection
+        // INTO the fork (the while's exit arm down to the top bar) and then
+        // flushes the while's own deferred inbound BEFORE the fork's internal
+        // bar/branch connectors. The fork is not itself a deferring tile, so
+        // without this its inbound would land after the branch arrows.
+        if !is_chain_while
+            && prev_was_deferred_while
+            && matches!(node, LayoutNode::Fork { .. })
+            && let Some((arrow_top, style, label, arrow_gap)) = pending_arrow.take()
+        {
             emit_pending_down_arrow(svg, arrow_top, style, label, arrow_gap, cx);
             if let Some((p_top, p_style, p_label, p_gap)) = deferred_partition_inbound.take() {
                 emit_pending_down_arrow(svg, p_top, p_style, p_label, p_gap, cx);
