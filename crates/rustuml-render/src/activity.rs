@@ -1285,6 +1285,17 @@ fn body_contains_break_if(body: &[LayoutNode]) -> bool {
     })
 }
 
+/// True when the break-bearing `if` is the first *flow* node of the loop body
+/// (no populated tile precedes it). Such a body reserves an extra middle-stretch
+/// unit in its `FtileGeometry` — see [`WHILE_BREAK_FIRST_FRAME_EXTRA`].
+fn break_if_is_first_flow(body: &[LayoutNode]) -> bool {
+    matches!(
+        body.iter().find(|n| node_is_flow(n)),
+        Some(LayoutNode::If { then_branch, else_branches, .. })
+            if if_break_down_plan(then_branch, else_branches).is_some()
+    )
+}
+
 /// Width of an if/while/repeat condition diamond's inner (top/bottom) edge.
 /// PlantUML clamps this to a minimum of 24 px so very short conditions still
 /// produce a diamond wider than their text. The text inside stays at its
@@ -5933,7 +5944,21 @@ fn node_height(node: &LayoutNode) -> f64 {
             // frame at translateForSpecial.y = max(3*half, 4*halfHex) = 48,
             // contributing terminator.h on top. We must ensure
             // height >= special_y + special.h.
-            let body_h = while_body_height(body, is_label.is_some());
+            // A break-`if` as the first body flow node makes the `FtileWhile`
+            // frame extend below the wrap-back exit (the body's `FtileGeometry`
+            // reserves the break corridor's uncompressed tail), so the
+            // advertised tile height — and hence the canvas — grows past the
+            // visible content. The emitted shapes are unaffected (the snake
+            // wraps back at the lower junction); only the frame's bottom
+            // whitespace expands. See [`WHILE_BREAK_FIRST_FRAME_EXTRA`].
+            let break_first_canvas_extra = if special_out.is_none()
+                && break_if_is_first_flow(body)
+            {
+                WHILE_BREAK_FIRST_CANVAS_EXTRA
+            } else {
+                0.0
+            };
+            let body_h = while_body_height(body, is_label.is_some()) + break_first_canvas_extra;
             // The total while-frame height = diamond.h + body_top_offset
             // + body_h + below-body-gap + wrap-back-offset. We derive it
             // from the same compression-aware formula as emit_while.
@@ -8997,6 +9022,30 @@ const IF_DOWN_MID_STRETCH: f64 = 15.0;
 /// (the residual of the south label's reserved band).
 const WHILE_BREAK_IF_CORRIDOR_DROP_COMPRESSED: f64 = IF_DOWN_LEAD + ARROW_LEN + IF_BRANCH_UP; // 50.4775
 const WHILE_BREAK_IF_CORRIDOR_UNCOMPRESSED_EXTRA: f64 = 4.477539062500001;
+
+/// FtileWhile frame-height bridge for break-bearing loops. PlantUML computes
+/// `FtileWhile.calculateDimensionFtile` as
+///   `frame_h = geoDiamond1.appendBottom(geoWhile).height + 4*hexHalf + supp`
+/// where `geoWhile` is the body's true `FtileGeometry` height. A break-bearing
+/// body's `FtileGeometry` reserves more vertical space than this renderer's flat
+/// [`sequence_height`] models (the `FtileIfDown` break corridor's empty-side
+/// rejoin + welding band). This is the constant residual between
+/// `geoWhile.height` and `sequence_height(body)` for a break-bearing body, so
+///   `frame_h = 24 (diamond1) + sequence_height(body) + WHILE_BREAK_BODY_GEO_EXTRA + 48`.
+/// The loop-back / exit arrowheads are placed at the frame-height-derived
+/// midpoints (`(diamond_cy + frame_h)/2` for the exit `ConnectionOut`,
+/// `(diamond_cy + frame_h - hexHalf)/2` for the loop-back), exactly as PlantUML
+/// draws them — independent of where the (lower) loop-back junction line lands.
+const WHILE_BREAK_BODY_GEO_EXTRA: f64 = 62.7920359375;
+/// When the break-bearing `if` is the FIRST flow node of the loop body, the
+/// body's `FtileGeometry` gains one even-action middle stretch unit
+/// ([`IF_DOWN_MID_STRETCH`]) of reserved height (no leading tile compresses the
+/// break corridor against), raising `frame_h` by the same amount.
+const WHILE_BREAK_FIRST_FRAME_EXTRA: f64 = IF_DOWN_MID_STRETCH;
+/// Bottom whitespace the `FtileWhile` frame extends past the wrap-back exit when
+/// the break-bearing `if` is the body's first flow node — grows the advertised
+/// tile height (and thus the canvas) without moving the emitted shapes.
+const WHILE_BREAK_FIRST_CANVAS_EXTRA: f64 = 5.0;
 /// Extra gap stretched onto the middle inter-action arrow of an even-action
 /// while body. A labelled `while (...) is (...)` body already carries the
 /// reserved label slot under the condition diamond, so PlantUML's centring
@@ -9654,7 +9703,17 @@ fn emit_if_break_down(
         diamond_cy,
         false,
     );
-    let arrow_tip = (diamond_cy + return_y) / 2.0 + IF_CORRIDOR_ARROW_OFFSET;
+    // The corridor's DOWN emphasize arrowhead sits at its run midpoint. When the
+    // loop column compresses the corridor (>=3 body flow nodes) PlantUML's slot
+    // finder nudges the tip down by one `IF_CORRIDOR_ARROW_OFFSET`; an
+    // uncompressed corridor (break-`if` first, only one trailing tile) keeps the
+    // exact midpoint.
+    let arrow_tip = (diamond_cy + return_y) / 2.0
+        + if brk.compresses {
+            IF_CORRIDOR_ARROW_OFFSET
+        } else {
+            0.0
+        };
     svg.polygon_connector(
         &arrow_color,
         &[
@@ -10909,6 +10968,22 @@ fn emit_while(
     // 3. Horizontal at junction from body cx out to loop_x.
     svg.line_styled(&arrow_color, "1", cx, loop_x, junction_y, junction_y, false);
 
+    // Break-bearing loop: PlantUML places the loop-back / exit arrowheads at the
+    // `FtileWhile` frame-height midpoints (`ConnectionOut` /
+    // `ConnectionBackSimple`), decoupled from the (lower) loop-back junction the
+    // snake's polyline actually visits. Compute `frame_h` faithfully from the
+    // body geometry and drive both arrowheads from it. See
+    // [`WHILE_BREAK_BODY_GEO_EXTRA`].
+    let break_frame_h = break_in_body.then(|| {
+        24.0 + sequence_height(body)
+            + WHILE_BREAK_BODY_GEO_EXTRA
+            + if break_if_is_first_flow(body) {
+                WHILE_BREAK_FIRST_FRAME_EXTRA
+            } else {
+                0.0
+            }
+            + 4.0 * DIAMOND_HALF
+    });
     // 4. UP arrowhead at midpoint of the loop arm's vertical run.
     // PlantUML draws this at the midpoint of (diamond_cy, body_bottom +
     // halfHex), adjusted by the same compression that shifts body_top up.
@@ -10916,6 +10991,12 @@ fn emit_while(
     // loop-back corridor anchors the arrowhead on the switch's merge diamond
     // (`while_switch_loopback_tip`) rather than the corridor midpoint.
     let mid_y = body_switch_loopback_tip.unwrap_or_else(|| {
+        // Break-bearing loop: loop-back arrowhead at the frame-height midpoint
+        // (ConnectionBackSimple's UP emphasize sits at `(pointOut + diamond_cy)/2`
+        // where `pointOut = frame_h - hexHalf`).
+        if let Some(frame_h) = break_frame_h {
+            return (diamond_cy + frame_h - DIAMOND_HALF) / 2.0;
+        }
         (diamond_cy + body_bottom + DIAMOND_HALF) / 2.0
             - while_slot_compress(
                 compress_while_slot,
@@ -10931,13 +11012,6 @@ fn emit_while(
             + body_mid_stretch.map_or(0.0, |(_, stretch)| {
                 WHILE_EVEN_BODY_LOOP_ARROW_STRETCH - stretch / 2.0
             })
-            // Break-bearing loop: place the loop-back arrowhead at the
-            // uncompressed midpoint (add back the slot-compression half above).
-            + if break_in_body {
-                IF_CORRIDOR_ARROW_OFFSET
-            } else {
-                0.0
-            }
     });
     svg.polygon_connector(
         &arrow_color,
@@ -11070,17 +11144,15 @@ fn emit_while(
     // (ConnectionOut with emphasizeDirection).
     let mut arrow_y = if special_out.is_some() {
         wrap_y
+    } else if let Some(frame_h) = break_frame_h {
+        // Break loop: the exit ConnectionOut's DOWN emphasize sits at the
+        // frame-height midpoint `(diamond_cy + frame_h)/2`.
+        (diamond_cy + frame_h) / 2.0
     } else {
         (diamond_cy + wrap_y) / 2.0
     };
-    if exit_vertical_after_arrow {
+    if exit_vertical_after_arrow && break_frame_h.is_none() {
         arrow_y -= PARTITION_COLORED_WHILE_EXIT_ARROW_PULL_UP;
-    }
-    if break_in_body {
-        // Break loop: the long-exit arrowhead sits at the uncompressed midpoint
-        // (like the loop-back arrowhead) — add back IF_CORRIDOR_ARROW_OFFSET on
-        // top of the compression pull-up the line above applied.
-        arrow_y += IF_CORRIDOR_ARROW_OFFSET;
     }
     svg.polygon_connector(
         &arrow_color,
