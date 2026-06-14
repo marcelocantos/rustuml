@@ -152,11 +152,15 @@ fn to_svg_tspans_inner(text: &str, skip_underline: bool) -> String {
                 }
             }
             '/' if chars.peek() == Some(&'/') => {
-                // `//italic//` — but only start italic if preceded by whitespace
-                // or at the start of the string. This prevents `http://url`
-                // from being treated as italic markup.
-                let preceded_by_word = last_char.map(|c| !c.is_whitespace()).unwrap_or(false);
-                if preceded_by_word {
+                // `//italic//` opens an italic run. PlantUML only suppresses
+                // this when the `//` directly follows a URL scheme separator
+                // (`http://`, `ftp://`, …) — i.e. the preceding char is `:`.
+                // Otherwise `//` is italic markup even when glued to
+                // punctuation (e.g. `process(//italicText//)`). The closing
+                // `//` requirement (`found`) already keeps single-slash URLs
+                // literal, so only the scheme prefix needs guarding.
+                let preceded_by_scheme = last_char == Some(':');
+                if preceded_by_scheme {
                     // Treat as two literal `/` characters.
                     result.push('/');
                     result.push('/');
@@ -1027,8 +1031,11 @@ fn walk_segments(text: &str, style: &Style, skip_underline: bool, out: &mut Vec<
                 }
             }
             '/' if chars.peek() == Some(&'/') => {
-                let preceded_by_word = last_char.map(|c| !c.is_whitespace()).unwrap_or(false);
-                if preceded_by_word {
+                // `//` opens an italic run unless it directly follows a URL
+                // scheme separator (`http://`); see the matching note in
+                // `to_svg_tspans_inner`.
+                let preceded_by_scheme = last_char == Some(':');
+                if preceded_by_scheme {
                     buf.push('/');
                     buf.push('/');
                     chars.next();

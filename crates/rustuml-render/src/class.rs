@@ -1908,6 +1908,13 @@ fn style_stroke_width(style: &str) -> Option<&str> {
         .find(|width| !width.is_empty())
 }
 
+fn style_stroke_color(style: &str) -> Option<&str> {
+    style
+        .split(';')
+        .filter_map(|part| part.trim().strip_prefix("stroke:"))
+        .find(|color| !color.is_empty())
+}
+
 fn oracle_entities_for_diagram(
     diagram: &ClassDiagram,
     oracle: &OracleLayout,
@@ -4050,12 +4057,17 @@ fn render_entity_content(
         // When the user wrote no explicit separator and the oracle has a
         // per-entity border style, inherit that style so the divider
         // colour and width match the rectangle's border.
+        // The user-symbol dividers (`--`/`==`/`..`) keep the entity's border
+        // COLOUR (from the rect style, e.g. a stereotype `BorderColor`) and
+        // only change the stroke width/dash. Fall back to the default border
+        // colour when the entity has no per-rect stroke colour.
+        let divider_stroke = style_stroke_color(sep_style).unwrap_or(BORDER_COLOR);
         let methods_sep_style: String = match user_separator_symbol.as_deref() {
-            Some("--") | Some("==") => format!("stroke:{};stroke-width:1;", BORDER_COLOR),
+            Some("--") | Some("==") => format!("stroke:{};stroke-width:1;", divider_stroke),
             Some("..") => {
                 format!(
                     "stroke:{};stroke-width:1;stroke-dasharray:1,2;",
-                    BORDER_COLOR
+                    divider_stroke
                 )
             }
             Some("__") => sep_style.to_string(),
@@ -4189,10 +4201,10 @@ fn render_entity_content(
                     .filter(|(idx, _)| *idx == fi + 1)
                 {
                     let style = match sym.as_str() {
-                        "--" | "==" => format!("stroke:{};stroke-width:1;", BORDER_COLOR),
+                        "--" | "==" => format!("stroke:{};stroke-width:1;", divider_stroke),
                         ".." => format!(
                             "stroke:{};stroke-width:1;stroke-dasharray:1,2;",
-                            BORDER_COLOR
+                            divider_stroke
                         ),
                         _ => sep_style.to_string(),
                     };
