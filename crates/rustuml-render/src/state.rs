@@ -3162,6 +3162,19 @@ fn render_composite_with_oracle(diagram: &StateDiagram, orc: &OracleLayout) -> S
         svg.push_str("</g>");
     };
 
+    // Whether any composite is wrapped in a `<g class="cluster">` group. This
+    // selects the two-pass cluster-group emission (composites first, then
+    // pseudo/plain states) vs. the bare single-pass inline emission, and so
+    // governs whether a nested scope needs the pseudo-after-composite line bump
+    // below. (Mirrors the `has_clusters` computed later for the emission walk.)
+    let any_cluster_wrapped = diagram.states.iter().any(|s| {
+        s.composite
+            && orc
+                .entities
+                .get(s.label.as_str())
+                .is_some_and(|r| r.entity_id.is_some())
+    });
+
     // Order the immediate children of a scope (None = top level) as PlantUML
     // emits them. Mirrors the flat renderer's first-appearance rule: a state
     // declared before its first referencing transition appears at its
@@ -3308,7 +3321,18 @@ fn render_composite_with_oracle(diagram: &StateDiagram, orc: &OracleLayout) -> S
         // pseudo-states' own relative order and their interleaving with any
         // later plain boxes (cf. `.start.` before the `Outside` box in
         // `state_cross_boundary_out`).
-        if scope.is_none() {
+        //
+        // This also holds for nested scopes on the BARE single-pass path
+        // (no `<g class="cluster">` wrapping anywhere): a composite's own
+        // `[*] --> Child` start pseudo-state still renders after ALL of that
+        // composite's nested child composites (cf. `Operating..start.Operating`
+        // after the Red/Green/Yellow phase composites in
+        // `combo_state_everything`). On the two-pass cluster-group path the
+        // composites are already separated into an earlier pass, so a nested
+        // scope must NOT bump there — doing so would wrongly push the start
+        // past a sibling plain state (cf. `Outer..start.Outer` before `Outer.S1`
+        // in `state_composite_transition_into`).
+        if scope.is_none() || !any_cluster_wrapped {
             let max_composite_line = diagram
                 .states
                 .iter()
@@ -3363,6 +3387,10 @@ fn render_composite_with_oracle(diagram: &StateDiagram, orc: &OracleLayout) -> S
         /// In a cluster-wrapped outer diagram, PlantUML still keeps links
         /// inline for unwrapped nested composites and synthetic CONC regions.
         scope_links_inline: &'a dyn Fn(&str) -> bool,
+        /// True when a composite is drawn as a `<g class="cluster">` group
+        /// (its chrome is front-loaded by `emit_clusters_dfs`); false when it
+        /// renders as a bare nested box (chrome emitted inline per scope).
+        is_cluster_wrapped: &'a dyn Fn(&State) -> bool,
     }
     fn emit_scope_entities(svg: &mut String, scope: Option<&str>, e: &ScopeEmit) {
         let diagram = e.diagram;
@@ -3432,9 +3460,11 @@ fn render_composite_with_oracle(diagram: &StateDiagram, orc: &OracleLayout) -> S
                 continue;
             }
             // On the bare path, a nested composite emits its own header band
-            // before its regions (the cluster-group path emits all headers up
-            // front via `emit_clusters_dfs`).
-            if !e.has_clusters {
+            // before its regions. In a cluster-wrapped diagram, only the
+            // wrapped composites' headers are front-loaded by
+            // `emit_clusters_dfs`; an UNwrapped nested composite still emits
+            // its header inline here.
+            if !e.has_clusters || !(e.is_cluster_wrapped)(st) {
                 (e.emit_cluster)(svg, st);
             }
             // Walk each concurrent region of the nested composite, splicing the
@@ -3625,6 +3655,7 @@ fn render_composite_with_oracle(diagram: &StateDiagram, orc: &OracleLayout) -> S
         diagram: &StateDiagram,
         ordered_children: &dyn Fn(Option<&str>) -> Vec<String>,
         emit_cluster: &dyn Fn(&mut String, &State),
+        is_cluster_wrapped: &dyn Fn(&State) -> bool,
     ) {
         for token in ordered_children(scope) {
             if token.starts_with('\u{1}') {
@@ -3634,8 +3665,22 @@ fn render_composite_with_oracle(diagram: &StateDiagram, orc: &OracleLayout) -> S
                 continue;
             };
             if st.composite {
-                emit_cluster(svg, st);
-                emit_clusters_dfs(svg, Some(&st.id), diagram, ordered_children, emit_cluster);
+                // Only a `<g class="cluster">`-wrapped composite has its chrome
+                // front-loaded; an unwrapped nested box emits its header inline
+                // during the per-scope entity walk. Recurse regardless so a
+                // wrapped composite nested under an unwrapped one is still
+                // front-loaded.
+                if is_cluster_wrapped(st) {
+                    emit_cluster(svg, st);
+                }
+                emit_clusters_dfs(
+                    svg,
+                    Some(&st.id),
+                    diagram,
+                    ordered_children,
+                    emit_cluster,
+                    is_cluster_wrapped,
+                );
             }
         }
     }
@@ -3702,7 +3747,14 @@ fn render_composite_with_oracle(diagram: &StateDiagram, orc: &OracleLayout) -> S
     }
 
     if has_clusters {
-        emit_clusters_dfs(&mut svg, None, diagram, &ordered_children, &emit_cluster);
+        emit_clusters_dfs(
+            &mut svg,
+            None,
+            diagram,
+            &ordered_children,
+            &emit_cluster,
+            &is_cluster_wrapped,
+        );
     }
 
     // Ordered concurrent-region scopes of a composite. Region 0 is the
@@ -3771,6 +3823,7 @@ fn render_composite_with_oracle(diagram: &StateDiagram, orc: &OracleLayout) -> S
         emit_scope_links: &emit_scope_links,
         has_clusters,
         scope_links_inline: &scope_links_inline,
+        is_cluster_wrapped: &is_cluster_wrapped,
     };
     let has_boundary_points = |scope: &str| {
         diagram.states.iter().any(|st| {
@@ -3827,7 +3880,9 @@ fn render_composite_with_oracle(diagram: &StateDiagram, orc: &OracleLayout) -> S
             continue;
         };
         if st.composite {
-            if !has_clusters {
+            // Front-loaded chrome covers only cluster-wrapped composites; a
+            // top-level UNwrapped composite still emits its header inline.
+            if !has_clusters || !is_cluster_wrapped(st) {
                 emit_cluster(&mut svg, st);
             }
             let scopes = region_scopes(&st.id);
@@ -3926,14 +3981,35 @@ fn short_name_match(ep: &str, edge_id: &str, is_from: bool) -> bool {
     } else {
         ep.rsplit('.').next().unwrap_or(ep).to_string()
     };
+    // PlantUML disambiguates a duplicate edge (identical endpoints declared
+    // more than once) by appending `-<n>` to the second and subsequent path
+    // ids, e.g. `*start*-to-PowerOff` and `*start*-to-PowerOff-1`. State ids
+    // never contain a hyphen, so strip a trailing `-<digits>` before matching
+    // so both copies bind to the duplicated transition.
+    fn strip_dup_suffix(s: &str) -> &str {
+        match s.rsplit_once('-') {
+            Some((head, tail)) if !tail.is_empty() && tail.bytes().all(|b| b.is_ascii_digit()) => {
+                head
+            }
+            _ => s,
+        }
+    }
     let Some((from, to)) = edge_id.split_once("-to-") else {
         // reverse form
         if let Some((from, to)) = edge_id.split_once("-backto-") {
-            return if is_from { to == token } else { from == token };
+            return if is_from {
+                strip_dup_suffix(to) == token
+            } else {
+                from == token
+            };
         }
         return false;
     };
-    if is_from { from == token } else { to == token }
+    if is_from {
+        from == token
+    } else {
+        strip_dup_suffix(to) == token
+    }
 }
 
 #[cfg(test)]

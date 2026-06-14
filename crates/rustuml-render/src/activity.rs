@@ -818,6 +818,7 @@ enum LayoutNode {
         text: String,
         font_size: f64,
         bold: bool,
+        source_line: usize,
     },
     Partition {
         name: String,
@@ -4823,6 +4824,7 @@ fn node_extents(node: &LayoutNode) -> (f64, f64) {
             text,
             font_size,
             bold,
+            ..
         } => {
             let tw = text_render::measure(text, *font_size, *bold);
             (tw / 2.0 + 3.0, tw / 2.0 + 3.0)
@@ -5499,6 +5501,7 @@ fn node_width(node: &LayoutNode) -> f64 {
             text,
             font_size,
             bold,
+            ..
         } => text_render::measure(text, *font_size, *bold),
     }
 }
@@ -7886,6 +7889,21 @@ fn emit_sequence_ex(
         // Title is a free-standing label; never gets an inbound connector.
         if let LayoutNode::Title { .. } = node {
             y = emit_node(svg, node, cx, y);
+            // The title's +30 vertical padding (emit_node) is calibrated so the
+            // cursor lands at the cy of a following Start ellipse (START_CY=25
+            // = MARGIN_LEAD + 9). A Swimlanes container carries its own top
+            // structure pinned to MARGIN_LEAD rather than a Start cy, so the
+            // 9 px Start-ellipse compensation does not apply — drop it. This
+            // mirrors the −9 Start-in-swimlane overcount in sequence_height.
+            if matches!(
+                nodes
+                    .iter()
+                    .skip(i + 1)
+                    .find(|n| !matches!(n, LayoutNode::Arrow { .. } | LayoutNode::Note { .. })),
+                Some(LayoutNode::Swimlanes { .. })
+            ) {
+                y -= 9.0;
+            }
             continue;
         }
         // Leading floating note: the start ellipse is vertically centred on
@@ -8618,15 +8636,18 @@ fn emit_node_with_repeat_extra(
             text,
             font_size,
             bold,
+            source_line,
         } => {
-            // PlantUML wraps the title in `<g class="title" data-source-line="1">`.
+            // PlantUML wraps the title in `<g class="title" data-source-line="N">`,
+            // where N is the source line of the `title` directive.
             // Title text is centred within an x-extent padded by 4px on the
             // left compared to the action content cx. Baseline is at
             // y + ascent + 4.
             let tw = text_render::measure(text, *font_size, *bold);
             let text_y = y + pm::ascent(*font_size) + 4.0;
-            svg.shapes
-                .push_str(r#"<g class="title" data-source-line="1">"#);
+            svg.shapes.push_str(&format!(
+                r#"<g class="title" data-source-line="{source_line}">"#
+            ));
             svg.text_element(
                 TEXT_COLOR,
                 "sans-serif",
@@ -13183,6 +13204,7 @@ fn render_inner(
                 text: title.clone(),
                 font_size: palette.title_font_size,
                 bold: palette.title_bold,
+                source_line: diagram.meta.title_line.unwrap_or(1),
             },
         );
     }
