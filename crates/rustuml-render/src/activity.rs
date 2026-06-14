@@ -6804,6 +6804,25 @@ struct SvgEmitter {
     /// nested sequences do not inherit it, and applies `while_switch_merge_extra`
     /// per switch via `emit_node`.
     pending_while_body: bool,
+    /// Nesting depth of `repeat` loop bodies currently being emitted. A `repeat`
+    /// reserves an `8*halfHex` tail below its body (FtileRepeat
+    /// `calculateDimensionInternal`); at top level the whole-diagram ON_Y
+    /// compression collapses that tail so the body→condition gap renders as a
+    /// single `ARROW_LEN`. When the repeat is itself nested inside another
+    /// repeat's body, the enclosing loop frame leaves one `ARROW_LEN` of that
+    /// tail uncompressible, so the inner body→condition gap renders as
+    /// `2*ARROW_LEN`. `emit_repeat` reads this at entry to add the extra gap,
+    /// then increments it around its own body emit.
+    repeat_body_depth: usize,
+    /// Running sum of `nested_cond_extra` gap added by repeats emitted since the
+    /// enclosing `emit_repeat` last reset it. The loop-back emphasis arrowhead
+    /// sits at the loop's *content* midpoint, i.e. the geometric midpoint minus
+    /// half of any nested-repeat tail expansion that falls inside the loop span.
+    /// `emit_repeat` saves+zeroes this around its body emit, reads the body's
+    /// accumulated expansion to bias its arrowhead, then propagates this
+    /// subtree's total expansion (its own `nested_cond_extra` plus the body's)
+    /// to the parent.
+    repeat_nested_expansion: f64,
     /// Extra added to the current switch's merge gap because it is a direct flow
     /// node of a `while` body. Set per-switch by `emit_sequence_ex` (while-body
     /// mode) and consumed once by `emit_switch_with_layout`.
@@ -6909,6 +6928,8 @@ impl SvgEmitter {
             while_break: None,
             if_survivor_redirect: None,
             pending_while_body: false,
+            repeat_body_depth: 0,
+            repeat_nested_expansion: 0.0,
             while_switch_merge_extra: 0.0,
             while_body_switch: false,
             while_switch_loopback_tip: None,
@@ -9690,9 +9711,28 @@ fn repeat_body_mid_stretch(body: &[LayoutNode], has_backward: bool) -> Option<(u
     }
 }
 
+/// Extra body→condition gap a `repeat` keeps when nested inside another
+/// repeat's body. Mirrors the `nested_cond_extra` applied in [`emit_repeat`]:
+/// the enclosing loop frame leaves one `ARROW_LEN` of the inner repeat's
+/// reserved `8*halfHex` tail uncompressible under the whole-diagram ON_Y pass.
+/// Only the plain (non-backward, non-start-label) form is affected. Summed over
+/// a repeat body so the enclosing repeat's advertised height — and hence the
+/// canvas height — accounts for every directly-nested repeat's grown tail.
+fn nested_repeat_cond_extra(node: &LayoutNode) -> f64 {
+    match node {
+        LayoutNode::Repeat {
+            backward,
+            has_start_label,
+            ..
+        } if backward.is_none() && !*has_start_label => ARROW_LEN,
+        _ => 0.0,
+    }
+}
+
 fn repeat_body_height(body: &[LayoutNode], has_backward: bool) -> f64 {
     sequence_height(body)
         + repeat_body_mid_stretch(body, has_backward).map_or(0.0, |(_, stretch)| stretch)
+        + body.iter().map(nested_repeat_cond_extra).sum::<f64>()
 }
 
 /// Extra vertical gap a `backward` repeat reserves between the body bottom and
@@ -11800,6 +11840,19 @@ fn emit_repeat(
     let not_label = options.not_label;
     let body_top_extra = options.body_top_extra;
     let has_start_label = options.has_start_label;
+    // A repeat nested inside another repeat's body keeps one extra `ARROW_LEN`
+    // below its body before the condition diamond: the enclosing loop frame
+    // leaves that much of FtileRepeat's reserved `8*halfHex` tail
+    // uncompressible under the whole-diagram ON_Y pass (a top-level repeat
+    // collapses the whole tail to a single arrow). Only the plain
+    // (non-backward, non-start-label) form is affected; backward/labelled
+    // forms route their tail through other geometry.
+    let nested_cond_extra =
+        if svg.repeat_body_depth > 0 && backward.is_none() && !has_start_label {
+            ARROW_LEN
+        } else {
+            0.0
+        };
     let arrow_color = svg.palette.arrow_color.clone();
     let diamond_stroke = svg.palette.diamond_stroke.clone();
     let diamond_fill = svg.palette.diamond_fill.clone();
@@ -11825,6 +11878,12 @@ fn emit_repeat(
     } else {
         repeat_body_mid_stretch(body, backward.is_some())
     };
+    // Mark the body as a repeat body so any directly-nested repeat applies its
+    // `nested_cond_extra` (read at that child's entry). Save+zero the expansion
+    // accumulator so we can read how much nested-repeat tail expansion this
+    // body contributed (used to bias the loop-back arrowhead).
+    svg.repeat_body_depth += 1;
+    let outer_expansion = std::mem::take(&mut svg.repeat_nested_expansion);
     let body_bottom = if has_start_label {
         if let Some((entry, rest)) = body.split_first() {
             let entry_bottom = body_y + node_height(entry);
@@ -11846,11 +11905,20 @@ fn emit_repeat(
     } else {
         emit_sequence_ex(svg, body, cx, body_y, body_mid_stretch, None, false)
     };
+    svg.repeat_body_depth -= 1;
+    // Nested-repeat tail expansion contributed by this repeat's body.
+    let body_expansion = svg.repeat_nested_expansion;
+    // Propagate this whole subtree's expansion (own tail + body's) to the
+    // enclosing loop so its arrowhead bias accounts for us.
+    svg.repeat_nested_expansion = outer_expansion + nested_cond_extra + body_expansion;
     // Single plain-action backward repeats keep the extra halfHex before the
     // condition diamond; multi-action or composite bodies absorb that slack in
     // their final inbound connector / internal structure.
     let backward_flow_count = body.iter().filter(|n| node_is_flow(n)).count();
-    let cond_y = body_bottom + ARROW_LEN + repeat_backward_extra_cond_gap(body, backward.is_some());
+    let cond_y = body_bottom
+        + ARROW_LEN
+        + repeat_backward_extra_cond_gap(body, backward.is_some())
+        + nested_cond_extra;
 
     // Top entry diamond (small rhombus at y). `repeat :label;` replaces this
     // diamond with the labelled action as the loop entry tile.
@@ -12096,7 +12164,13 @@ fn emit_repeat(
         // long vertical run (not at the top) so the direction is clear when
         // the loop spans many actions.
         let body_stretch = body_mid_stretch.map_or(0.0, |(_, stretch)| stretch);
-        let mid_y = (top_cy + cond_diamond_cy - body_stretch + body_top_extra) / 2.0;
+        // The emphasis arrowhead anchors on the loop's *content* midpoint. Any
+        // nested-repeat tail expansion inside this loop's span (this repeat's
+        // own `nested_cond_extra` plus the body's accumulated expansion) sits in
+        // the lower half of the loop-back, so it biases the visible midpoint
+        // down by half that amount — undo it to land on the content midpoint.
+        let nested_bias = (nested_cond_extra + body_expansion) / 2.0;
+        let mid_y = (top_cy + cond_diamond_cy - body_stretch + body_top_extra) / 2.0 - nested_bias;
         svg.polygon_connector(
             &arrow_color,
             &[
