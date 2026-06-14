@@ -6156,8 +6156,15 @@ fn node_height(node: &LayoutNode) -> f64 {
             // visible content. The emitted shapes are unaffected (the snake
             // wraps back at the lower junction); only the frame's bottom
             // whitespace expands. See [`WHILE_BREAK_FIRST_FRAME_EXTRA`].
+            // The uncompressed leading-break form (thin two-tile body, e.g.
+            // `act_while_break_at_start`) reserves a small fixed tail of frame
+            // whitespace below the wrap-back exit. The compressed form
+            // (`act_break_while_early`) instead carries the larger
+            // `IF_DOWN_MID_STRETCH` band already folded into `while_body_height`,
+            // so the fixed tail does not additionally apply there.
             let break_first_canvas_extra = if special_out.is_none()
                 && break_if_is_first_flow(body)
+                && !while_break_corridor_compresses(body)
             {
                 WHILE_BREAK_FIRST_CANVAS_EXTRA
             } else {
@@ -7647,9 +7654,33 @@ fn emit_sequence_ex(
                 let prev_outbound_gap = prev_idx
                     .and_then(|j| nodes.get(j))
                     .and_then(repeat_not_label_outbound_gap);
+                // A break-bearing `if` that is the loop body's FIRST flow node
+                // (rendered no-diamond by `emit_if_break_down`) and whose corridor
+                // compresses (3+ body flow tiles) reserves one extra
+                // `IF_DOWN_MID_STRETCH` band on the connector leaving its pointOut.
+                // PlantUML's ON_Y slot finder pulls the corridor's reserved band UP
+                // (compressing the rejoin) but cannot reclaim the south-label mid
+                // band when no leading tile sits above the break-`if`; it surfaces
+                // instead as extra length on the outbound arrow (mirrors
+                // `WHILE_BREAK_FIRST_FRAME_EXTRA` in the frame-height model). The
+                // thin two-tile leading-break form (`act_while_break_at_start`)
+                // leaves the corridor uncompressed and keeps the plain ARROW_LEN
+                // gap, so gate on both first-flow AND corridor compression.
+                let break_if_first_outbound_extra = if svg.while_break.is_some()
+                    && prev_idx
+                        .and_then(|j| nodes.get(j))
+                        .is_some_and(is_break_down_if)
+                    && prev_idx == nodes.iter().position(node_is_flow)
+                    && while_break_corridor_compresses(nodes)
+                {
+                    IF_DOWN_MID_STRETCH
+                } else {
+                    0.0
+                };
                 let gap = stretch
                     + lead
                     + carry
+                    + break_if_first_outbound_extra
                     + if style.hidden {
                         10.0
                     } else if label.is_some() {
@@ -9322,6 +9353,14 @@ const WHILE_BREAK_BODY_GEO_EXTRA: f64 = 62.7920359375;
 /// ([`IF_DOWN_MID_STRETCH`]) of reserved height (no leading tile compresses the
 /// break corridor against), raising `frame_h` by the same amount.
 const WHILE_BREAK_FIRST_FRAME_EXTRA: f64 = IF_DOWN_MID_STRETCH;
+/// Additional frame-height surplus a COMPRESSED leading break corridor reserves
+/// beyond [`WHILE_BREAK_FIRST_FRAME_EXTRA`]. With the corridor compressed (3+
+/// body flow tiles) and the break-`if` first, the slot finder pushes the
+/// south-label mid band onto the outbound arrow; the body `FtileGeometry` the
+/// while frame measures grows by this residual past the emitted body bottom, so
+/// the frame-derived loop-back / exit arrowheads sit `..._EXTRA/2` lower
+/// (`act_break_while_early`: exit/loop-back arrows +3.0224 each).
+const WHILE_BREAK_FIRST_COMPRESSED_FRAME_EXTRA: f64 = 6.0448;
 /// Bottom whitespace the `FtileWhile` frame extends past the wrap-back exit when
 /// the break-bearing `if` is the body's first flow node — grows the advertised
 /// tile height (and thus the canvas) without moving the emitted shapes.
@@ -9413,6 +9452,16 @@ fn while_body_height(body: &[LayoutNode], has_in_label: bool) -> f64 {
     sequence_height(body)
         + while_body_mid_stretch(body, has_in_label).map_or(0.0, |(_, stretch)| stretch)
         + while_body_switch_extra(body)
+        // A compressed leading break corridor lengthens the connector leaving the
+        // break-`if`'s pointOut by one `IF_DOWN_MID_STRETCH` (see
+        // `break_if_first_outbound_extra` in `emit_sequence_ex`); that band is part
+        // of the body's emitted height, so the advertised tile height (and canvas)
+        // must include it.
+        + if break_if_is_first_flow(body) && while_break_corridor_compresses(body) {
+            IF_DOWN_MID_STRETCH
+        } else {
+            0.0
+        }
 }
 
 fn repeat_body_mid_stretch(body: &[LayoutNode], has_backward: bool) -> Option<(usize, f64)> {
@@ -11243,7 +11292,20 @@ fn emit_while(
         24.0 + sequence_height(body)
             + WHILE_BREAK_BODY_GEO_EXTRA
             + if break_if_is_first_flow(body) {
+                // The break-`if` is the body's first flow node. The FtileWhile
+                // frame reserves the south-label mid band (`IF_DOWN_MID_STRETCH`)
+                // that has no leading tile to compress against. When the corridor
+                // compresses (3+ body flow tiles) that band, together with the
+                // extra outbound-arrow length the slot finder surfaces (see
+                // `break_if_first_outbound_extra` in `emit_sequence_ex`), enlarges
+                // the body's `FtileGeometry` by a further
+                // `WHILE_BREAK_FIRST_COMPRESSED_FRAME_EXTRA`.
                 WHILE_BREAK_FIRST_FRAME_EXTRA
+                    + if while_break_corridor_compresses(body) {
+                        WHILE_BREAK_FIRST_COMPRESSED_FRAME_EXTRA
+                    } else {
+                        0.0
+                    }
             } else {
                 0.0
             }
