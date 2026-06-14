@@ -9710,14 +9710,24 @@ const REPEAT_BACKWARD_BODY_SLACK: f64 = 30.0;
 /// The even-body mid-stretch is calibrated for loop bodies whose flow nodes are
 /// plain action tiles (`act_while_2actions_body` and friends): PlantUML's Snake
 /// compaction distributes the back-edge label slack evenly across an even number
-/// of inter-action gaps. A nested compound tile (while/repeat/if/fork/switch/
+/// of inter-action gaps. A nested compound tile (while/repeat/if/switch/
 /// partition) already carries its own large vertical reservation, so the simple
 /// even-gap model does not hold and the stretch must not be applied.
+///
+/// A `fork` body tile is admitted here as well: it does NOT take the connector
+/// stretch (its multi-row composite geometry already supplies its own centring,
+/// so `while_body_mid_stretch` zeroes the connector slack for it), but the body
+/// is still treated as even, so the loop-back up-arrowhead keeps its even-body
+/// placement (`WHILE_EVEN_BODY_LOOP_ARROW_STRETCH`). See `act_combo_while_fork_*`.
 fn while_body_flow_is_all_actions(body: &[LayoutNode]) -> bool {
     body.iter().filter(|n| node_is_flow(n)).all(|n| {
         matches!(
             n,
-            LayoutNode::Action { .. } | LayoutNode::Start | LayoutNode::Stop | LayoutNode::End
+            LayoutNode::Action { .. }
+                | LayoutNode::Start
+                | LayoutNode::Stop
+                | LayoutNode::End
+                | LayoutNode::Fork { .. }
         )
     })
 }
