@@ -2093,6 +2093,13 @@ const FORK_BRANCH_GAP: f64 = 10.0;
 const FORK_EVEN_MIDDLE_EXTRA: f64 = 18.0;
 const FORK_ASYMMETRIC_EVEN_MIDDLE_EXTRA: f64 = 32.0;
 const FORK_ASYMMETRIC_SPINE_STEP: f64 = 5.0;
+/// Spine offset for an ODD fork that mixes asymmetric (if-bearing) branches with
+/// at least one symmetric (plain) branch. The plain branch breaks the mirror
+/// symmetry that keeps an all-asymmetric odd fork's spine on the bar centre, so
+/// PlantUML's `FtileForkInner` centre (width/2) ends up `2 * STEP` right of the
+/// flow spine. Derived from `act_complex_if_in_fork` (the sole pure mixed-odd
+/// fork golden); all-asymmetric odd forks keep the depth-scaled `(d-1)*STEP`.
+const FORK_MIXED_ODD_SPINE_EXTRA: f64 = 2.0 * FORK_ASYMMETRIC_SPINE_STEP;
 const FORK_ASYMMETRIC_EPS: f64 = 0.02;
 const FORK_EMPTY_EDGE_CENTER: f64 = 14.0;
 const FORK_EMPTY_LANE_GAP: f64 = 21.0;
@@ -2279,7 +2286,12 @@ fn fork_layout(branches: &[Vec<LayoutNode>]) -> ForkLayout {
                 .map(|branch| sequence_if_depth(branch))
                 .max()
                 .unwrap_or(0);
-            max_if_depth.saturating_sub(1) as f64 * FORK_ASYMMETRIC_SPINE_STEP
+            let base = max_if_depth.saturating_sub(1) as f64 * FORK_ASYMMETRIC_SPINE_STEP;
+            if all_asymmetric {
+                base
+            } else {
+                base + FORK_MIXED_ODD_SPINE_EXTRA
+            }
         } else {
             0.0
         },
