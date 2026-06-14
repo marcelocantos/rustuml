@@ -3369,6 +3369,52 @@ impl PlantUmlSvg {
         );
     }
 
+    /// Vertical advance reserved for one participant-name line (used to lift the
+    /// icon glyph above a stereotype band and to position the stereotype text).
+    fn participant_line_h(&self) -> f64 {
+        atom_height_with_family(
+            self.participant_font_size as f64,
+            &self.participant_font_family,
+        )
+    }
+
+    /// Emit an italic stereotype label for an icon-kind participant (actor,
+    /// boundary, control, entity, database, collections, queue). PlantUML
+    /// centres the `«stereotype»` text on the same vertical axis as the
+    /// participant name, one name-line above the name baseline. The icon glyph
+    /// is independently lifted by the same amount so the stereotype occupies the
+    /// reserved band between glyph and name.
+    fn participant_stereotype(
+        &mut self,
+        name_text_x: f64,
+        name_text_len: f64,
+        name_text_y: f64,
+        stereotype: Option<(&str, f64)>,
+    ) {
+        let Some((st_text, st_width)) = stereotype else {
+            return;
+        };
+        let st_display = format!("\u{ab}{st_text}\u{bb}");
+        let name_center = name_text_x + name_text_len / 2.0;
+        let st_x = name_center - st_width / 2.0;
+        let st_y = name_text_y - self.participant_line_h();
+        text_render::emit_text(
+            &mut self.buf,
+            &st_display,
+            &TextBase {
+                x: st_x,
+                y: st_y,
+                font_size: self.participant_font_size,
+                font_family: &self.participant_font_family,
+                fill: "#000000",
+                bold: false,
+                italic: true,
+                underline: false,
+                skip_underline: false,
+            },
+        );
+    }
+
     /// Write a sequence message/arrow label.
     fn emit_message_label(
         &mut self,
@@ -3534,6 +3580,7 @@ impl PlantUmlSvg {
         text_len: f64,
         fill_color: &str,
         border_color: &str,
+        stereotype: Option<(&str, f64)>,
         teoz: bool,
     ) {
         self.participant_group_open(part_uid, qualified_name, source_line, position);
@@ -3542,7 +3589,7 @@ impl PlantUmlSvg {
         // foot figures mirror the head layout (figure on top, text below).
         let is_tail = position == "tail" && !teoz;
         let text_y;
-        let figure_base;
+        let mut figure_base;
         if is_tail {
             // Tail: text first, figure below.
             text_y = base_y + ACTOR_TAIL_TEXT_Y_OFFSET;
@@ -3552,8 +3599,14 @@ impl PlantUmlSvg {
             text_y = base_y + ACTOR_HEAD_TEXT_Y_OFFSET;
             figure_base = base_y;
         }
+        // A stereotype occupies one name-line band between glyph and name; the
+        // glyph lifts by that amount on the head so the name baseline is fixed.
+        if stereotype.is_some() && !is_tail {
+            figure_base -= self.participant_line_h();
+        }
 
-        // Text label
+        // Stereotype (if any) above the name, then the name
+        self.participant_stereotype(text_x, text_len, text_y, stereotype);
         self.participant_text(text_x, text_y, text_content, text_len);
 
         // Head circle
@@ -3608,12 +3661,13 @@ impl PlantUmlSvg {
         text_len: f64,
         fill_color: &str,
         border_color: &str,
+        stereotype: Option<(&str, f64)>,
         teoz: bool,
     ) {
         self.participant_group_open(part_uid, qualified_name, source_line, position);
 
         let is_tail = position == "tail" && !teoz;
-        let (text_y, figure_base) = if is_tail {
+        let (text_y, mut figure_base) = if is_tail {
             (
                 base_y + ACTOR_TAIL_TEXT_Y_OFFSET,
                 base_y + ACTOR_TAIL_FIGURE_Y_OFFSET,
@@ -3621,8 +3675,12 @@ impl PlantUmlSvg {
         } else {
             (base_y + CIRCLE_SHAPE_TEXT_Y_OFFSET, base_y)
         };
+        if stereotype.is_some() && !is_tail {
+            figure_base -= self.participant_line_h();
+        }
 
-        // Text label
+        // Stereotype (if any) above the name, then the name
+        self.participant_stereotype(text_x, text_len, text_y, stereotype);
         self.participant_text(text_x, text_y, text_content, text_len);
 
         // Boundary shape: vertical line + horizontal line + circle, centered on cx.
@@ -3678,12 +3736,13 @@ impl PlantUmlSvg {
         fill_color: &str,
         border_color: &str,
         draw_glyph: bool,
+        stereotype: Option<(&str, f64)>,
         teoz: bool,
     ) {
         self.participant_group_open(part_uid, qualified_name, source_line, position);
 
         let is_tail = position == "tail" && !teoz;
-        let (text_y, figure_base) = if is_tail {
+        let (text_y, mut figure_base) = if is_tail {
             (
                 base_y + ACTOR_TAIL_TEXT_Y_OFFSET,
                 base_y + ACTOR_TAIL_FIGURE_Y_OFFSET,
@@ -3691,8 +3750,12 @@ impl PlantUmlSvg {
         } else {
             (base_y + CIRCLE_SHAPE_TEXT_Y_OFFSET, base_y)
         };
+        if stereotype.is_some() && !is_tail {
+            figure_base -= self.participant_line_h();
+        }
 
-        // Text label
+        // Stereotype (if any) above the name, then the name
+        self.participant_stereotype(text_x, text_len, text_y, stereotype);
         self.participant_text(text_x, text_y, text_content, text_len);
 
         // Circle
@@ -3757,12 +3820,13 @@ impl PlantUmlSvg {
         text_len: f64,
         fill_color: &str,
         border_color: &str,
+        stereotype: Option<(&str, f64)>,
         teoz: bool,
     ) {
         self.participant_group_open(part_uid, qualified_name, source_line, position);
 
         let is_tail = position == "tail" && !teoz;
-        let (text_y, figure_base) = if is_tail {
+        let (text_y, mut figure_base) = if is_tail {
             (
                 base_y + ACTOR_TAIL_TEXT_Y_OFFSET,
                 base_y + ACTOR_TAIL_FIGURE_Y_OFFSET,
@@ -3770,8 +3834,12 @@ impl PlantUmlSvg {
         } else {
             (base_y + CIRCLE_SHAPE_TEXT_Y_OFFSET, base_y)
         };
+        if stereotype.is_some() && !is_tail {
+            figure_base -= self.participant_line_h();
+        }
 
-        // Text label
+        // Stereotype (if any) above the name, then the name
+        self.participant_stereotype(text_x, text_len, text_y, stereotype);
         self.participant_text(text_x, text_y, text_content, text_len);
 
         // Circle
@@ -3824,12 +3892,13 @@ impl PlantUmlSvg {
         text_len: f64,
         fill_color: &str,
         border_color: &str,
+        stereotype: Option<(&str, f64)>,
         teoz: bool,
     ) {
         self.participant_group_open(part_uid, qualified_name, source_line, position);
 
         let is_tail = position == "tail" && !teoz;
-        let (text_y, figure_base) = if is_tail {
+        let (text_y, mut figure_base) = if is_tail {
             (
                 base_y + ACTOR_TAIL_TEXT_Y_OFFSET,
                 base_y + ACTOR_TAIL_FIGURE_Y_OFFSET,
@@ -3837,8 +3906,12 @@ impl PlantUmlSvg {
         } else {
             (base_y + DB_TEXT_Y_OFFSET, base_y)
         };
+        if stereotype.is_some() && !is_tail {
+            figure_base -= self.participant_line_h();
+        }
 
-        // Text label
+        // Stereotype (if any) above the name, then the name
+        self.participant_stereotype(text_x, text_len, text_y, stereotype);
         self.participant_text(text_x, text_y, text_content, text_len);
 
         // Cylinder body
@@ -3901,15 +3974,26 @@ impl PlantUmlSvg {
         text_len: f64,
         fill_color: &str,
         border_color: &str,
+        stereotype: Option<(&str, f64)>,
     ) {
         self.participant_group_open(part_uid, qualified_name, source_line, position);
 
+        // A stereotype band sits inside the rectangles above the name: the
+        // rectangles grow upward by one name-line (top lifts, bottom fixed).
+        let is_tail = position == "tail";
+        let lift = if stereotype.is_some() && !is_tail {
+            self.participant_line_h()
+        } else {
+            0.0
+        };
+        let rect_h = HEAD_BOX_H + lift;
+
         // Back rectangle (offset right and up)
         let back_x = box_x + COLLECTIONS_OFFSET;
-        let back_y = base_y;
+        let back_y = base_y - lift;
         let rect_w = box_w - COLLECTIONS_OFFSET;
         if self.handwritten {
-            let points = handwritten_rect_points(back_x, back_y, rect_w, HEAD_BOX_H, 0.0, 0.0);
+            let points = handwritten_rect_points(back_x, back_y, rect_w, rect_h, 0.0, 0.0);
             write!(
                 self.buf,
                 r##"<polygon fill="{}" points="{}" style="stroke:{border_color};stroke-width:0.5;"/>"##,
@@ -3921,7 +4005,7 @@ impl PlantUmlSvg {
                 self.buf,
                 r##"<rect fill="{}" height="{}" style="stroke:{border_color};stroke-width:0.5;" width="{}" x="{}" y="{}"/>"##,
                 fill_color,
-                fmt_coord(HEAD_BOX_H),
+                fmt_coord(rect_h),
                 fmt_coord(rect_w),
                 fmt_coord(back_x),
                 fmt_coord(back_y),
@@ -3930,9 +4014,9 @@ impl PlantUmlSvg {
         }
 
         // Front rectangle (at box_x, offset down)
-        let front_y = base_y + COLLECTIONS_OFFSET;
+        let front_y = base_y + COLLECTIONS_OFFSET - lift;
         if self.handwritten {
-            let points = handwritten_rect_points(box_x, front_y, rect_w, HEAD_BOX_H, 0.0, 0.0);
+            let points = handwritten_rect_points(box_x, front_y, rect_w, rect_h, 0.0, 0.0);
             write!(
                 self.buf,
                 r##"<polygon fill="{}" points="{}" style="stroke:{border_color};stroke-width:0.5;"/>"##,
@@ -3944,7 +4028,7 @@ impl PlantUmlSvg {
                 self.buf,
                 r##"<rect fill="{}" height="{}" style="stroke:{border_color};stroke-width:0.5;" width="{}" x="{}" y="{}"/>"##,
                 fill_color,
-                fmt_coord(HEAD_BOX_H),
+                fmt_coord(rect_h),
                 fmt_coord(rect_w),
                 fmt_coord(box_x),
                 fmt_coord(front_y),
@@ -3953,6 +4037,7 @@ impl PlantUmlSvg {
         }
 
         // Text (on front rectangle)
+        self.participant_stereotype(text_x, text_len, text_y, stereotype);
         self.participant_text(text_x, text_y, text_content, text_len);
 
         self.participant_group_close();
@@ -3975,6 +4060,7 @@ impl PlantUmlSvg {
         text_len: f64,
         fill_color: &str,
         border_color: &str,
+        stereotype: Option<(&str, f64)>,
         queue_head_offset: f64,
     ) {
         self.participant_group_open(part_uid, qualified_name, source_line, position);
@@ -3997,11 +4083,18 @@ impl PlantUmlSvg {
         // The queue pill is 4px shorter than a normal head box and is
         // vertically offset: pushed down 5px in the head region, flush with
         // the top in the tail region (matching PlantUML).
-        let pill_h = HEAD_BOX_H - 4.0;
+        // A stereotype band grows the pill upward by one name-line (top lifts,
+        // bottom fixed); the band sits inside the pill above the name.
+        let lift = if stereotype.is_some() && position != "tail" {
+            self.participant_line_h()
+        } else {
+            0.0
+        };
+        let pill_h = HEAD_BOX_H - 4.0 + lift;
         let top = if position == "tail" {
             base_y
         } else {
-            base_y + queue_head_offset
+            base_y + queue_head_offset - lift
         };
         let mid = top + pill_h / 2.0;
         let bottom = top + pill_h;
@@ -4040,6 +4133,7 @@ impl PlantUmlSvg {
         );
 
         // Text
+        self.participant_stereotype(text_x, text_len, text_y, stereotype);
         self.participant_text(text_x, text_y, text_content, text_len);
 
         self.participant_group_close();
@@ -4627,6 +4721,10 @@ fn render_participant_shape(
     // Make the participant's link (if any) available to the group open/close
     // helpers so the shape contents get wrapped in a link anchor.
     svg.active_participant_url = p.url.clone();
+    let stereo_ref = p
+        .stereotype
+        .as_ref()
+        .map(|s| (s.as_str(), p.stereotype_width));
     match p.kind {
         ParticipantKind::Actor
         | ParticipantKind::Boundary
@@ -4649,6 +4747,7 @@ fn render_participant_shape(
                         p.text_width,
                         fill_color,
                         border_color,
+                        stereo_ref,
                         teoz,
                     );
                 }
@@ -4665,6 +4764,7 @@ fn render_participant_shape(
                         p.text_width,
                         fill_color,
                         border_color,
+                        stereo_ref,
                         teoz,
                     );
                 }
@@ -4682,6 +4782,7 @@ fn render_participant_shape(
                         fill_color,
                         border_color,
                         draw_control_glyph,
+                        stereo_ref,
                         teoz,
                     );
                 }
@@ -4698,6 +4799,7 @@ fn render_participant_shape(
                         p.text_width,
                         fill_color,
                         border_color,
+                        stereo_ref,
                         teoz,
                     );
                 }
@@ -4714,6 +4816,7 @@ fn render_participant_shape(
                         p.text_width,
                         fill_color,
                         border_color,
+                        stereo_ref,
                         teoz,
                     );
                 }
@@ -4721,7 +4824,16 @@ fn render_participant_shape(
             }
         }
         ParticipantKind::Collections => {
-            let text_x = p.box_x + participant_inner_pad;
+            // Normally the name sits at `box_x + inner_pad` (the box is sized to
+            // the name). When a wider stereotype drives the box width the name
+            // must instead centre within the front rectangle rather than
+            // left-align. Keep the common path byte-identical to avoid drift.
+            let text_x = if p.stereotype.is_some() && p.stereotype_width > p.text_width {
+                let front_w = p.box_width - COLLECTIONS_OFFSET;
+                p.box_x + (front_w - p.text_width) / 2.0
+            } else {
+                p.box_x + participant_inner_pad
+            };
             let text_y = base_y + COLLECTIONS_OFFSET + BOX_TEXT_Y_OFFSET;
             svg.collections_shape(
                 part_uid,
@@ -4737,6 +4849,7 @@ fn render_participant_shape(
                 p.text_width,
                 fill_color,
                 border_color,
+                stereo_ref,
             );
         }
         ParticipantKind::Queue => {
@@ -4762,6 +4875,7 @@ fn render_participant_shape(
                 p.text_width,
                 fill_color,
                 border_color,
+                stereo_ref,
                 queue_head_offset,
             );
         }
