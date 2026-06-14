@@ -84,6 +84,14 @@ const WHILE_SPECIAL_BODY_X_PULL_RIGHT: f64 = WHILE_SPECIAL_COND_LEAD - WHILE_SPE
 const WHILE_UNLABELED_SPECIAL_Y_PULL_UP: f64 = 4.0;
 const WHILE_UNLABELED_LOOP_ARROW_Y_PULL_UP: f64 = 2.0;
 const WHILE_BODY_SLOT_COMPRESS: f64 = 4.8203125;
+/// `FtileWhile.getSuppHeightForLabel`: the height the loop-back incoming label
+/// (`back1`) reserves below the body. PlantUML's `calculateDimensionFtile`
+/// includes this in the tile height (`diamond + body + 4*halfHex + suppLabel`),
+/// so the loop's `ConnectionOut` DOWN emphasize arrowhead sits at the midpoint of
+/// `diamond_cy → body_bottom + 2*halfHex + suppLabel`. Measured from the
+/// swimlane while goldens (the non-swimlane wrap-back path compresses this slack
+/// away, so it only surfaces when the exit corridor is stitched across lanes).
+const WHILE_LOOPBACK_LABEL_H: f64 = 12.6795625;
 const PARTITION_COLORED_WHILE_SPINE_SHIFT: f64 = 1.5;
 const PARTITION_COLORED_WHILE_EXIT_ARROW_PULL_UP: f64 = WHILE_BODY_SLOT_COMPRESS / 2.0 - 1.0;
 const PARTITION_WHILE_WIDTH_SUBTRACT: f64 = 16.0;
@@ -5068,8 +5076,108 @@ fn lane_content_cx(lane: &Lane, lane_left: f64) -> f64 {
 /// right divider by that amount. Recompute the right extent of a cond-driven
 /// top-level if-down from the drawn east corridor (`cond_half + DIAMOND_HALF`)
 /// plus the trailing corridor pad, matching the lane's true `getMinMax` width.
+/// A lane segment whose last flow tile is a no-special `while` (its loop exit
+/// continues into another lane). Such a transition is stitched onto the loop's
+/// `ConnectionOut` corridor; see [`SwimlaneCrossLane`].
+fn swimlane_segment_ends_in_plain_while(body: &[LayoutNode]) -> bool {
+    body.iter()
+        .rev()
+        .find(|n| !matches!(n, LayoutNode::Note { .. } | LayoutNode::Arrow { .. }))
+        .is_some_and(|n| matches!(n, LayoutNode::While { special_out: None, .. }))
+}
+
+/// A lane body that is a single `while ... endwhile <terminator>` (terminator
+/// absorbed as `special_out`). Such a tile advertises an extra 2px tail below
+/// the visible frame bottom; in a swimlane the lane height is taken from the
+/// visible frame, so the tail is trimmed.
+fn swimlane_while_special_tail(body: &[LayoutNode]) -> bool {
+    matches!(
+        body,
+        [LayoutNode::While { special_out: Some(special), end_label, .. }]
+            if end_label.is_none() && matches!(**special, LayoutNode::Stop | LayoutNode::End)
+    )
+}
+
+/// True when [`swimlane_lane_extents`] narrows a single-`while`+terminator lane's
+/// left extent to the cond-driven drawn box. In that layout the terminator
+/// circle sits at `diamond_left_vertex - halfHex - 9`; `emit_while` uses this
+/// (via the [`SvgEmitter::swimlane_while_cond_special`] flag) to place it.
+fn swimlane_while_cond_special_lane(body: &[LayoutNode]) -> bool {
+    let [
+        LayoutNode::While {
+            condition,
+            body: while_body,
+            is_label,
+            end_label,
+            special_out: Some(special),
+            starts_column,
+            diamond_font_family,
+            diamond_font_size,
+            diamond_text_bold,
+            ..
+        },
+    ] = body
+    else {
+        return false;
+    };
+    if end_label.is_some() || !matches!(**special, LayoutNode::Stop | LayoutNode::End) {
+        return false;
+    }
+    let cond_half = diamond_inner_w_styled(
+        condition,
+        *diamond_font_size,
+        *diamond_text_bold,
+        diamond_font_family,
+    ) / 2.0
+        + DIAMOND_HALF;
+    let (body_left_ext, _) = sequence_loop_body_extents(while_body);
+    let body_left = while_body_left(while_body, body_left_ext);
+    let standalone_left = while_left_extent(
+        while_body,
+        body_left,
+        cond_half,
+        is_label.is_some(),
+        end_label.as_deref(),
+        Some(special),
+        *starts_column,
+    );
+    let drawn_left = cond_half + DIAMOND_HALF + 9.0 + CIRCLE_TILE_HALF;
+    let (seq_left, _) = sequence_extents(body);
+    (standalone_left - seq_left).abs() < 0.001 && drawn_left < seq_left
+}
+
 fn swimlane_lane_extents(body: &[LayoutNode]) -> (f64, f64) {
-    let (left, mut right) = sequence_extents(body);
+    let (mut left, mut right) = sequence_extents(body);
+    // A lane consisting of a single `while ... endwhile <terminator>` (the
+    // terminator absorbed as `special_out`) reserves its left extent from the
+    // standalone `node_extents` While arm, which positions the terminator
+    // relative to the BODY corridor (`while_body_left + halfHex`). In a lane the
+    // width is taken from the actual drawn bounding box (`getMinMax`), where the
+    // terminator circle sits relative to the wider of the body corridor and the
+    // condition diamond's left vertex. When the diamond is the wider element the
+    // drawn left is `cond_half + halfHex + 9 + CIRCLE_TILE_HALF` (the terminator
+    // circle hung off the diamond's left-vertex column), narrower than the
+    // body-driven reservation. Recompute and narrow only — never widen.
+    if swimlane_while_cond_special_lane(body)
+        && let [
+            LayoutNode::While {
+                condition,
+                diamond_font_family,
+                diamond_font_size,
+                diamond_text_bold,
+                ..
+            },
+        ] = body
+    {
+        let cond_half = diamond_inner_w_styled(
+            condition,
+            *diamond_font_size,
+            *diamond_text_bold,
+            diamond_font_family,
+        ) / 2.0
+            + DIAMOND_HALF;
+        left = cond_half + DIAMOND_HALF + 9.0 + CIRCLE_TILE_HALF;
+    }
     if let [
         LayoutNode::If {
             condition,
@@ -6348,6 +6456,12 @@ fn node_height(node: &LayoutNode) -> f64 {
                 if matches!(segment.body.first(), Some(LayoutNode::Start)) {
                     h -= START_CY + START_R - 16.0 - START_R; // = 9
                 }
+                // Match emit_swimlanes: a `while ... endwhile <terminator>` lane
+                // takes its bottom from the visible frame (2px above the
+                // advertised tile tail).
+                if swimlane_while_special_tail(&segment.body) {
+                    h -= 2.0;
+                }
                 body_h += h;
                 if i + 1 < segments.len() {
                     body_h += ARROW_LEN; // cross-lane transition
@@ -6707,6 +6821,34 @@ struct SvgEmitter {
     /// ARROW_LEN/2`. Recorded by `emit_switch_with_layout` (in while-body mode,
     /// last writer wins) and consumed once by `emit_while`.
     while_switch_loopback_tip: Option<f64>,
+    /// Set while emitting a swimlane lane body that is a single
+    /// `while ... endwhile <terminator>` whose lane width was taken from the
+    /// cond-driven drawn box (`swimlane_lane_extents` narrowed the left extent).
+    /// In that layout the terminator circle hangs off the diamond's left-vertex
+    /// column (`special_cx = diamond_left_vertex - halfHex - 9`) rather than the
+    /// standalone body-corridor position. Consumed (one-shot) by `emit_while`.
+    swimlane_while_cond_special: bool,
+    /// Set by `emit_swimlanes` before emitting a lane segment whose body ends in
+    /// a no-special `while` and whose next chronological segment lives in another
+    /// lane. PlantUML stitches the inter-lane arrow onto the loop's exit corridor
+    /// (the `FtileWhile.ConnectionOut` snake): the loop's exit arm descends
+    /// straight to the cross-lane corridor and a single horizontal crosses to the
+    /// next lane's spine instead of wrapping back to this lane's spine. Consumed
+    /// (one-shot) by `emit_while`.
+    swimlane_cross_lane: Option<SwimlaneCrossLane>,
+}
+
+/// Inter-lane stitch geometry for a no-special `while` that is the last tile of
+/// a lane segment with a cross-lane successor (see
+/// [`SvgEmitter::swimlane_cross_lane`]).
+#[derive(Clone, Copy)]
+struct SwimlaneCrossLane {
+    /// Content cx (spine) of the next lane's segment.
+    target_cx: f64,
+    /// y of the cross-lane horizontal run (the next segment's top minus 15).
+    cross_y: f64,
+    /// Top y of the next segment's first tile (the arrow's destination).
+    target_y: f64,
 }
 
 /// Geometry the enclosing `while` hands to a directly-nested break-bearing `if`.
@@ -6770,6 +6912,8 @@ impl SvgEmitter {
             while_switch_merge_extra: 0.0,
             while_body_switch: false,
             while_switch_loopback_tip: None,
+            swimlane_while_cond_special: false,
+            swimlane_cross_lane: None,
         }
     }
 
@@ -11078,6 +11222,14 @@ fn emit_while(
     let diamond_stroke = svg.palette.diamond_stroke.clone();
     let diamond_fill = svg.palette.diamond_fill.clone();
     let diamond_stroke_width = svg.palette.diamond_stroke_width.clone();
+    // One-shot inter-lane stitch (swimlane): take it now so a nested while in the
+    // body cannot inherit it. Only a no-special loop can fuse its exit corridor
+    // into the cross-lane arrow.
+    let cross_lane = if special_out.is_none() {
+        svg.swimlane_cross_lane.take()
+    } else {
+        None
+    };
     let colored_partition_while = svg.colored_partition_while_depth > 0;
     let ordinary_slot_compressed =
         while_ordinary_slot_compresses(body, is_label, end_label, special_out);
@@ -11222,7 +11374,15 @@ fn emit_while(
         }
         let special_left_abs =
             (body_left_x - DIAMOND_HALF).min(diamond_left_vertex_x) - special_w + special_x_adjust;
-        let special_cx = special_left_abs + special_w / 2.0;
+        // A cond-driven swimlane lane (see `swimlane_while_cond_special_lane`)
+        // hangs the terminator circle off the diamond's left-vertex column:
+        // its centre sits halfHex + 9 left of the diamond's left vertex,
+        // matching the lane's drawn `getMinMax` width.
+        let special_cx = if svg.swimlane_while_cond_special {
+            diamond_left_vertex_x - DIAMOND_HALF - 9.0
+        } else {
+            special_left_abs + special_w / 2.0
+        };
         // translateForSpecial.y in FtileWhile-local =
         //   max(3*half, 4*halfHex) where half = diamond hexagon's
         //   (outY - inY)/2 = 12. So translateForSpecial.y = max(36, 48) = 48.
@@ -11505,6 +11665,64 @@ fn emit_while(
             svg.left_arrow(redir.merge_vertex_x, merge_cy, &arrow_color);
         }
         return merge_cy;
+    }
+
+    // Swimlane inter-lane stitch: the loop's `ConnectionOut` exit corridor is
+    // fused with the cross-lane arrow. The exit arm descends from the diamond's
+    // west vertex to the cross-lane corridor y, a single horizontal crosses to
+    // the next lane's spine, then the arrow drops into the next tile. The DOWN
+    // emphasize arrowhead on the exit run sits at the midpoint of THIS while
+    // tile's `ConnectionOut` (diamond_cy → tile bottom), not the (lower) corridor.
+    if let Some(stitch) = cross_lane {
+        let cross_y = stitch.cross_y;
+        // The loop's `ConnectionOut` DOWN emphasize sits at the midpoint of the
+        // FtileWhile tile's exit run: diamond_cy → tile bottom, where the tile
+        // bottom is `body_bottom + 2*halfHex + suppLabel` (the loop-back label
+        // reservation that the swimlane stitch keeps instead of compressing).
+        let tile_bottom = body_bottom + 2.0 * DIAMOND_HALF + WHILE_LOOPBACK_LABEL_H;
+        let arrow_y = (diamond_cy + tile_bottom) / 2.0;
+        svg.polygon_connector(
+            &arrow_color,
+            &[
+                (exit_x - 4.0, arrow_y - 10.0),
+                (exit_x, arrow_y),
+                (exit_x + 4.0, arrow_y - 10.0),
+                (exit_x, arrow_y - 6.0),
+            ],
+            &arrow_color,
+            "1",
+        );
+        svg.line_styled(&arrow_color, "1", exit_x, exit_x, diamond_cy, cross_y, false);
+        svg.line_styled(
+            &arrow_color,
+            "1",
+            exit_x,
+            stitch.target_cx,
+            cross_y,
+            cross_y,
+            false,
+        );
+        svg.line_styled(
+            &arrow_color,
+            "1",
+            stitch.target_cx,
+            stitch.target_cx,
+            cross_y,
+            stitch.target_y,
+            false,
+        );
+        svg.polygon_connector(
+            &arrow_color,
+            &[
+                (stitch.target_cx - 4.0, stitch.target_y - 10.0),
+                (stitch.target_cx, stitch.target_y),
+                (stitch.target_cx + 4.0, stitch.target_y - 10.0),
+                (stitch.target_cx, stitch.target_y - 6.0),
+            ],
+            &arrow_color,
+            "1",
+        );
+        return cross_y;
     }
 
     // 9. Exit arm vertical at exit_x — single line from diamond_cy down
@@ -12007,6 +12225,15 @@ fn emit_swimlanes(
         if matches!(segment.body.first(), Some(LayoutNode::Start)) {
             h -= 9.0; // Start contributes only START_R inside swimlane.
         }
+        // A lane's `while ... endwhile <terminator>` advertises a tile height
+        // with a fixed 2*halfHex tail below the body (the special terminator is
+        // placed inside that tail). In a lane the bottom edge is taken from the
+        // visible frame (`getMinMax`), whose bottom sits at the wrap-back point
+        // junction+halfHex = body+22, two pixels above the advertised tail. Trim
+        // the lane's height contribution to the visible frame bottom.
+        if swimlane_while_special_tail(&segment.body) {
+            h -= 2.0;
+        }
         last_y = segment_y + h;
         segment_ys.push(segment_y);
         segment_end_ys.push(last_y);
@@ -12015,16 +12242,34 @@ fn emit_swimlanes(
 
     // (prev_cx, prev_last_y, target_cx, target_y) for each cross-lane/source
     // transition. These are emitted after all per-lane internal connectors.
-    let mut deferred_cross_lanes: Vec<(f64, f64, f64, f64)> = Vec::new();
+    //
+    // A transition out of a segment that ENDS in a no-special `while` is instead
+    // fused onto that loop's `ConnectionOut` exit corridor (see
+    // `SvgEmitter::swimlane_cross_lane`): `emit_while` draws the whole stitch, so
+    // suppress the standalone deferred arrow for those transitions and stash the
+    // stitch geometry to install before the source segment is emitted.
+    let mut deferred_cross_lanes: Vec<Option<(f64, f64, f64, f64)>> = Vec::new();
+    let mut stitch_at: Vec<Option<SwimlaneCrossLane>> = vec![None; segments.len()];
     for i in 1..segments.len() {
         let prev = &segments[i - 1];
         let current = &segments[i];
-        deferred_cross_lanes.push((
-            lane_cxs[prev.lane_index],
-            segment_end_ys[i - 1],
-            lane_cxs[current.lane_index],
-            segment_ys[i],
-        ));
+        if prev.lane_index != current.lane_index
+            && swimlane_segment_ends_in_plain_while(&prev.body)
+        {
+            stitch_at[i - 1] = Some(SwimlaneCrossLane {
+                target_cx: lane_cxs[current.lane_index],
+                cross_y: segment_ys[i] - 15.0,
+                target_y: segment_ys[i],
+            });
+            deferred_cross_lanes.push(None);
+        } else {
+            deferred_cross_lanes.push(Some((
+                lane_cxs[prev.lane_index],
+                segment_end_ys[i - 1],
+                lane_cxs[current.lane_index],
+                segment_ys[i],
+            )));
+        }
     }
 
     // Emit lane bodies grouped by physical column. This matches PlantUML's
@@ -12051,12 +12296,17 @@ fn emit_swimlanes(
         }
         for (segment_idx, segment) in segments.iter().enumerate() {
             if segment.lane_index == lane_idx {
+                svg.swimlane_while_cond_special =
+                    swimlane_while_cond_special_lane(&segment.body);
+                svg.swimlane_cross_lane = stitch_at[segment_idx];
                 emit_sequence(
                     svg,
                     &segment.body,
                     lane_cxs[lane_idx],
                     segment_ys[segment_idx],
                 );
+                svg.swimlane_while_cond_special = false;
+                svg.swimlane_cross_lane = None;
             }
         }
 
@@ -12080,7 +12330,7 @@ fn emit_swimlanes(
     // Now flush the deferred cross-lane arrows to the connectors buffer.
     // These appear AFTER all per-lane internal arrows in the SVG, matching
     // PlantUML's emission order.
-    for &(prev_cx, prev_y, lane_cx, target_y) in &deferred_cross_lanes {
+    for &(prev_cx, prev_y, lane_cx, target_y) in deferred_cross_lanes.iter().flatten() {
         let cross_y = prev_y + 5.0;
         svg.line_styled(&arrow_color, "1", prev_cx, prev_cx, prev_y, cross_y, false);
         svg.line_styled(&arrow_color, "1", prev_cx, lane_cx, cross_y, cross_y, false);
