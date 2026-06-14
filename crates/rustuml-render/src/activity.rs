@@ -141,6 +141,9 @@ const SHADOW_BOUNDS_PAD: f64 = 6.0;
 const SVG_CONTENT_LEAD: f64 = 16.0;
 const SWITCH_CASE_GAP: f64 = 10.0; // horizontal gap between adjacent SMALL-mode case boxes
 const SWITCH_IF_BRANCH_CASE_GAP: f64 = 20.0; // FtileSwitchNude.xSeparation inside if branches
+// Fixed vertical slack FtileSwitchNude.calculateDimensionInternalSlow adds to
+// the merged case-tile height (`result.delta(xSeparation*(n-1), 100)`).
+const SWITCH_NUDE_SLACK: f64 = 100.0;
 // Big-diamond switches nested under FtileIf keep the switch diamond anchored,
 // but the case band lands one text-metric rounding step lower.
 const SWITCH_IF_BRANCH_BIG_CASE_Y_ADJUST: f64 = 0.6572265625;
@@ -2692,6 +2695,64 @@ fn switch_fork_uncompress_extra(node: &LayoutNode, fork_gap_extra: f64) -> f64 {
     let layout = switch_x_layout(cases, condition);
     switch_merge_gap_in_fork(cases, condition, &layout, fork_gap_extra)
         - switch_merge_gap(cases, condition, &layout)
+}
+
+/// Uncompressed `calculateDimension` height of a multi-case switch tile, the
+/// value PlantUML's `AbstractParallelFtilesBuilder` feeds into
+/// `FtileHeightFixedCentered` when centring sibling fork branches.
+///
+/// Faithful port of `FtileSwitchWithDiamonds.calculateDimensionInternalSlow`:
+///
+/// ```text
+/// height = diamond1.h + nudeHeight + diamond2.h + ydelta1a + ydelta1b
+/// ```
+///
+/// where both diamonds are `FtileDiamondInside` of an empty/short label
+/// (`Hexagon.hexagonHalfSize*2 = 24` tall each), `ydelta1b = 10`, and
+/// `nudeHeight = FtileSwitchNude` = `max_case_tile_height + 100` (the nude adds
+/// a fixed 100 px of vertical slack). Each case tile is wrapped in
+/// `FtileDecorateInLabel`/`OutLabel`, so its height is the branch-body height
+/// plus the case label height (the `(n)` corridor label) plus the out label
+/// (empty here). `ydelta1a` is the `FtileSwitchWithManyLinks` override
+/// `max(10, maxLabelHeight) + 10` (plus `diamond.h/2` in BIG_DIAMOND mode).
+///
+/// This SMALL_DIAMOND result reproduces the golden fork-centring band exactly.
+/// BIG_DIAMOND adds a `diamond.h/2` corridor that whole-diagram ON_Y
+/// compression partly reclaims (un-modelled here); we therefore only trust this
+/// height for SMALL_DIAMOND switches and return `None` otherwise.
+fn switch_fork_centering_height(node: &LayoutNode) -> Option<f64> {
+    let LayoutNode::Switch { cases, condition } = node else {
+        return None;
+    };
+    if cases.len() < 2 || switch_all_branches_terminate(cases) {
+        return None;
+    }
+    let layout = switch_x_layout(cases, condition);
+    // BIG_DIAMOND's vertex-attached corridor sees ON_Y reclaim we do not model.
+    if layout.big_diamond {
+        return None;
+    }
+    let diamond_h = DIAMOND_HALF * 2.0; // FtileDiamondInside alone = 2*hexHalf
+    let label_line = pm::text_height(SMALL_FONT);
+    let max_label_h = cases
+        .iter()
+        .map(|c| {
+            if c.label.is_empty() {
+                0.0
+            } else {
+                c.label.split('\n').count().max(1) as f64 * label_line
+            }
+        })
+        .fold(0.0f64, f64::max);
+    let max_case_body_h = cases
+        .iter()
+        .map(|c| sequence_height(&c.body))
+        .fold(0.0f64, f64::max);
+    // FtileSwitchNude: maxLR(case tiles) + 100; case tile = body + inLabel(+outLabel=0).
+    let nude_height = max_case_body_h + max_label_h + SWITCH_NUDE_SLACK;
+    let ydelta1a = max_label_h.max(10.0) + 10.0;
+    let ydelta1b = 10.0;
+    Some(diamond_h + nude_height + diamond_h + ydelta1a + ydelta1b)
 }
 
 /// Extra added to a multi-case switch's merge gap when the switch is a direct
@@ -11017,11 +11078,23 @@ fn emit_fork_with_layout(
     svg.fork_branch_gap_extra = gap_extra;
     let mut center_offsets = vec![0.0f64; branches.len()];
     if center_branches {
+        // PlantUML centres each branch within the *uncompressed* band
+        // `maxHeight + 40` (FtileHeightFixedCentered). For most branches the
+        // emitted height equals that uncompressed height, but a multi-case
+        // switch carries a fixed 100 px of `FtileSwitchNude` slack that
+        // standalone ON_Y compression reclaims — so its centring height is the
+        // uncompressed `calculateDimension` value, not the compressed one used
+        // to draw it. Using the compressed height would seat a shorter sibling
+        // too high.
         let heights: Vec<f64> = branches
             .iter()
             .map(|b| {
                 if b.is_empty() {
                     0.0
+                } else if let [only] = b.as_slice()
+                    && let Some(h) = switch_fork_centering_height(only)
+                {
+                    h
                 } else {
                     sequence_height_ex(b, gap_extra)
                 }
