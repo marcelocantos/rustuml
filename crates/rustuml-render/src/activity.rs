@@ -120,6 +120,11 @@ const IF_LABEL_INBOUND_PAD: f64 = 0.71875;
 const REPEAT_NOT_LABEL_OUTBOUND_PAD: f64 = 1.5;
 const FORK_BAR_HEIGHT: f64 = 6.0;
 const FORK_BAR_RX: f64 = 2.5;
+/// Sentinel attribute marking a fork bar as `ignoreForCompressionOnX`. Emitted
+/// only on compressible bars (mixed-asymmetry even forks); the ON_X compression
+/// pass treats marked rects as transparent and strips the attribute before
+/// serialization, so it never reaches the comparator. See `compress.rs`.
+pub(crate) const FORK_BAR_COMPRESS_MARKER: &str = "data-fork-compress";
 /// PlantUML's drop-shadow filter extends painted node bounds by 6 px on the
 /// trailing axes in activity diagrams with `skinparam shadowing true`.
 const SHADOW_BOUNDS_PAD: f64 = 6.0;
@@ -2068,11 +2073,19 @@ fn partition_body_width_for_frame(nodes: &[LayoutNode]) -> f64 {
     }
 }
 
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, Default)]
 struct ForkLayout {
     bar_w: f64,
     centers: Vec<f64>,
     spine_dx: f64,
+    /// True when the black bar should be `ignoreForCompressionOnX` AND there is a
+    /// reclaimable middle-gap corridor (a mixed-asymmetry even fork — one off-
+    /// centre branch beside a plain one). For such forks the +18 even-middle gap
+    /// is laid out uncompressed and then collapsed by the whole-diagram ON_X pass,
+    /// shrinking the bar and leaving the spine at its faithful off-centre getLeft.
+    /// All other forks keep the bar OCCUPYING (blocking), matching the goldens
+    /// where the bar must hold open an external if/else or note corridor.
+    bar_compressible: bool,
 }
 
 const FORK_INNER_PAD: f64 = 12.0;
@@ -2149,11 +2162,7 @@ fn fork_layout(branches: &[Vec<LayoutNode>]) -> ForkLayout {
     let branch_widths: Vec<f64> = branch_extents.iter().map(|(l, r)| l + r).collect();
     let n = branch_widths.len();
     if n == 0 {
-        return ForkLayout {
-            bar_w: 0.0,
-            centers: Vec::new(),
-            spine_dx: 0.0,
-        };
+        return ForkLayout::default();
     }
 
     if branches.iter().any(Vec::is_empty) {
@@ -2195,6 +2204,7 @@ fn fork_layout(branches: &[Vec<LayoutNode>]) -> ForkLayout {
             } else {
                 0.0
             },
+            bar_compressible: false,
         };
     }
 
@@ -2208,12 +2218,26 @@ fn fork_layout(branches: &[Vec<LayoutNode>]) -> ForkLayout {
     let has_asymmetric_branch = branch_extents
         .iter()
         .any(|(left, right)| (left - right).abs() > FORK_ASYMMETRIC_EPS);
-    let even_extra = if n >= 2 && n.is_multiple_of(2) && has_asymmetric_branch {
-        FORK_ASYMMETRIC_EVEN_MIDDLE_EXTRA
-    } else if n >= 2 && n.is_multiple_of(2) {
-        FORK_EVEN_MIDDLE_EXTRA
-    } else {
+    // Even-branch middle-gap clearance, by branch-asymmetry class:
+    //   * ALL branches asymmetric  → +32 (`FORK_ASYMMETRIC_EVEN_MIDDLE_EXTRA`):
+    //     mirrored off-centre branches (the `fork*br_ifdepth*` goldens) touch wide-
+    //     side to wide-side, so the gap is not reclaimable by ON_X compression.
+    //   * otherwise                → +18 (`FORK_EVEN_MIDDLE_EXTRA`): the ordinary
+    //     even-fork middle gap. For a MIXED fork (a lone off-centre branch beside a
+    //     plain one — `act_fork_with_if`) this +18 corridor is later reclaimed by
+    //     the whole-diagram ON_X compression (the black bar is `ignoreForCompression
+    //     OnX`, see `compress.rs`), shrinking the bar AND leaving the spine — the
+    //     bar's uncompressed getLeft, which sits LEFT of the collapsed corridor — at
+    //     its faithful, off-centre position.
+    let all_asymmetric = branch_extents
+        .iter()
+        .all(|(left, right)| (left - right).abs() > FORK_ASYMMETRIC_EPS);
+    let even_extra = if !(n >= 2 && n.is_multiple_of(2)) {
         0.0
+    } else if all_asymmetric {
+        FORK_ASYMMETRIC_EVEN_MIDDLE_EXTRA
+    } else {
+        FORK_EVEN_MIDDLE_EXTRA
     };
     let bar_w = FORK_INNER_PAD * 2.0 + total_branch_w + inter_gaps * FORK_BRANCH_GAP + even_extra;
     let mut centers = Vec::with_capacity(n);
@@ -2239,6 +2263,13 @@ fn fork_layout(branches: &[Vec<LayoutNode>]) -> ForkLayout {
             }
         }
     }
+    // A MIXED-asymmetry even fork (one off-centre branch beside a plain one) lays
+    // its +18 middle gap uncompressed; the whole-diagram ON_X pass then reclaims
+    // it (the bar is `ignoreForCompressionOnX`). Only this class marks the bar
+    // compressible — all-symmetric, all-asymmetric, and odd forks keep the
+    // blocking bar (their goldens need the bar to hold open external corridors).
+    let bar_compressible =
+        n >= 2 && n.is_multiple_of(2) && has_asymmetric_branch && !all_asymmetric;
     ForkLayout {
         bar_w,
         centers,
@@ -2252,6 +2283,7 @@ fn fork_layout(branches: &[Vec<LayoutNode>]) -> ForkLayout {
         } else {
             0.0
         },
+        bar_compressible,
     }
 }
 
@@ -2260,11 +2292,7 @@ fn split_layout(branches: &[Vec<LayoutNode>]) -> ForkLayout {
     let branch_widths: Vec<f64> = branch_extents.iter().map(|(l, r)| l + r).collect();
     let n = branch_widths.len();
     if n == 0 {
-        return ForkLayout {
-            bar_w: 0.0,
-            centers: Vec::new(),
-            spine_dx: 0.0,
-        };
+        return ForkLayout::default();
     }
     if branches.iter().any(Vec::is_empty) {
         return fork_layout(branches);
@@ -2309,6 +2337,7 @@ fn split_layout(branches: &[Vec<LayoutNode>]) -> ForkLayout {
         bar_w,
         centers,
         spine_dx: 0.0,
+        bar_compressible: false,
     }
 }
 
@@ -6654,6 +6683,56 @@ impl SvgEmitter {
         .unwrap();
     }
 
+    /// Emit a fork/join black bar tagged `ignoreForCompressionOnX` (the
+    /// `FtileBlackBlock` flag). When `compressible` it carries the
+    /// `FORK_BAR_COMPRESS_MARKER` attribute so the whole-diagram ON_X pass reads
+    /// it as transparent (no X-occupancy) — letting the reclaimable middle-gap
+    /// corridor collapse and the bar shrink with it — then strips the marker
+    /// before serialization. Non-compressible bars use the ordinary `rect_styled`
+    /// (the bar BLOCKS X, holding open external if/else or note corridors).
+    fn fork_bar(
+        &mut self,
+        fill: &str,
+        stroke: &str,
+        width: f64,
+        x: f64,
+        y: f64,
+        compressible: bool,
+    ) {
+        if !compressible {
+            self.rect_styled(
+                fill,
+                FORK_BAR_HEIGHT,
+                FORK_BAR_RX,
+                FORK_BAR_RX,
+                stroke,
+                "1",
+                width,
+                x,
+                y,
+            );
+            return;
+        }
+        let filter = self.shadow_filter_attr(true);
+        if self.handwritten {
+            let points =
+                handwritten_rect_points(x, y, width, FORK_BAR_HEIGHT, FORK_BAR_RX, FORK_BAR_RX);
+            write!(
+                self.shapes,
+                r#"<polygon fill="{}"{} {}="" points="{}" style="stroke:{};stroke-width:1;"/>"#,
+                fill, filter, FORK_BAR_COMPRESS_MARKER, points, stroke
+            )
+            .unwrap();
+            return;
+        }
+        write!(
+            self.shapes,
+            r#"<rect fill="{}"{} {}="" height="{}" rx="{}" ry="{}" style="stroke:{};stroke-width:1;" width="{}" x="{}" y="{}"/>"#,
+            fill, filter, FORK_BAR_COMPRESS_MARKER, f(FORK_BAR_HEIGHT), f(FORK_BAR_RX), f(FORK_BAR_RX), stroke, f(width), f(x), f(y)
+        )
+        .unwrap();
+    }
+
     /// Emit a note "opale" (folded-corner box with a tail pointing at the
     /// anchoring node). `box_left`/`box_top` are the box's top-left corner;
     /// `box_w`/`box_h` its drawn size; `tip` the absolute coordinates of the
@@ -10525,17 +10604,8 @@ fn emit_fork_with_layout(
     let bar_x = cx + layout.spine_dx - bar_w / 2.0;
     let bar_color = svg.palette.bar_color.clone();
     let arrow_color = svg.palette.arrow_color.clone();
-    svg.rect_styled(
-        &bar_color,
-        FORK_BAR_HEIGHT,
-        FORK_BAR_RX,
-        FORK_BAR_RX,
-        &bar_color,
-        "1",
-        bar_w,
-        bar_x,
-        y,
-    );
+    let bar_compressible = layout.bar_compressible;
+    svg.fork_bar(&bar_color, &bar_color, bar_w, bar_x, y, bar_compressible);
 
     let bar_bottom = y + FORK_BAR_HEIGHT;
 
@@ -10676,16 +10746,13 @@ fn emit_fork_with_layout(
     }
 
     // Bottom bar
-    svg.rect_styled(
+    svg.fork_bar(
         &bar_color,
-        FORK_BAR_HEIGHT,
-        FORK_BAR_RX,
-        FORK_BAR_RX,
         &bar_color,
-        "1",
         bar_w,
         bar_x,
         bottom_bar_y,
+        bar_compressible,
     );
 
     bottom_bar_y + FORK_BAR_HEIGHT

@@ -395,6 +395,7 @@ pub fn compress(prims: &mut [Prim], margin: f64) -> (CompressionTransform, Compr
 // diagrams are provably untouched.
 // ---------------------------------------------------------------------------
 
+use crate::activity::FORK_BAR_COMPRESS_MARKER;
 use crate::plantuml_metrics::fmt_coord;
 use regex::Regex;
 use std::sync::OnceLock;
@@ -432,6 +433,11 @@ pub fn compress_activity_buffers(
     // alone — correct for ON_X — wrongly collapses those connector gaps on Y.
     // Until that connector-y-occupancy model lands, ON_Y is the identity.
     let y_tf = CompressionTransform::identity();
+    // Strip the internal `ignoreForCompressionOnX` sentinel before serialization
+    // (emitted as `data-fork-compress=""`). It must never reach the comparator.
+    let shapes = shapes
+        .replace(&format!("{FORK_BAR_COMPRESS_MARKER}=\"\" "), "")
+        .replace(&format!(" {FORK_BAR_COMPRESS_MARKER}=\"\""), "");
     (shapes, connectors, x_tf, y_tf)
 }
 
@@ -454,6 +460,13 @@ fn parse_occupancy(shapes: &str, mode: CompressionMode) -> SlotSet {
         &RECT,
     );
     for c in rect.captures_iter(shapes) {
+        // A fork bar tagged `ignoreForCompressionOnX` (FtileBlackBlock) contributes
+        // NO X-occupancy, so its reclaimable middle-gap corridor collapses and the
+        // bar shrinks with it. It still BLOCKS on Y and is still remapped by
+        // `rewrite_axis`.
+        if x && c[0].contains(FORK_BAR_COMPRESS_MARKER) {
+            continue;
+        }
         if x {
             let (xx, w) = (num(&c[3]), num(&c[2]));
             occ.add_slot(xx, xx + w);
