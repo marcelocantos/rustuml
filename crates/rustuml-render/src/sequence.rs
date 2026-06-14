@@ -5656,6 +5656,24 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                 _ => {}
             }
         }
+        // Groups left open at @enduml (e.g. a `break` inside an `alt` consumes
+        // the loop's `end`, leaving the loop unclosed) are never drawn, but in
+        // PlantUML their InGroupableList stays open through the rest of the
+        // diagram and keeps accumulating subsequent messages. A trailing
+        // message that reaches the leftmost participant therefore extends the
+        // open group's range to index 0 and reserves the same left frame
+        // margin a closed group would. Flush the remaining stack so an open
+        // group wrapping participant 0 still drives `group_left_shift_depth`.
+        while let Some((min_idx, _max_idx, has_external_left)) = group_stack.pop() {
+            let closed_depth = group_stack.len() + 1;
+            if min_idx == 0 {
+                group_left_shift_depth = group_left_shift_depth.max(closed_depth);
+                if has_external_left {
+                    group_left_external_shift_depth =
+                        group_left_external_shift_depth.max(closed_depth);
+                }
+            }
+        }
     }
 
     // -----------------------------------------------------------------------
@@ -8710,6 +8728,41 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
     // index to restore document order.
     group_frames.sort_by_key(|f| f.event_idx);
 
+    // A group left open at @enduml (e.g. a `break` inside an `alt` consumes the
+    // loop's `end`) is never drawn, but PlantUML's InGroupableList still
+    // reserves its frame extent in the canvas: the open group encloses its
+    // direct child frame plus one GROUP_FRAME_MARGIN on each side. Find the
+    // GroupStart indices that produced no drawn frame and reserve their right
+    // edge so the canvas width matches PlantUML's. Nesting is handled by
+    // walking each open group's enclosed drawn frames (the parent extends
+    // GROUP_FRAME_MARGIN beyond its widest enclosed frame).
+    let mut open_group_right: f64 = f64::NEG_INFINITY;
+    {
+        // Recover the GroupStart event indices that have no matching GroupEnd:
+        // whatever remains on the start stack after the whole event scan.
+        let mut stack: Vec<usize> = Vec::new();
+        for (idx, event) in diagram.events.iter().enumerate() {
+            match event {
+                Event::GroupStart(_) => stack.push(idx),
+                Event::GroupEnd => {
+                    stack.pop();
+                }
+                _ => {}
+            }
+        }
+        for &start_idx in &stack {
+            // Widest drawn child frame strictly enclosed by this open group.
+            let child_right = group_frames
+                .iter()
+                .filter(|f| f.event_idx > start_idx)
+                .map(|f| f.right)
+                .fold(f64::NEG_INFINITY, f64::max);
+            if child_right.is_finite() {
+                open_group_right = open_group_right.max(child_right + GROUP_FRAME_MARGIN);
+            }
+        }
+    }
+
     // PlantUML lays the title/header/footer bands out against the whole sequence
     // area width (`SequenceDiagramArea.getWidth`). When group frames are present
     // that area spans the outermost frame, not just the participant boxes:
@@ -8755,7 +8808,15 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
     // right edges may exceed the initial estimate (e.g., when group labels extend
     // beyond participant boxes).
     let svg_width = if !group_frames.is_empty() {
-        let max_frame_right = group_frames.iter().map(|f| f.right).fold(0.0f64, f64::max);
+        let max_frame_right = group_frames
+            .iter()
+            .map(|f| f.right)
+            .fold(0.0f64, f64::max)
+            .max(if open_group_right.is_finite() {
+                open_group_right
+            } else {
+                0.0
+            });
         // Teoz reports the group's right edge to the canvas at
         // `frame_right + EXTERNAL_MARGINX2`; the diagram then adds RIGHT_MARGIN.
         let from_frames = if diagram.teoz {
@@ -11320,23 +11381,19 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
 
                 // Look up the pre-computed group frame for this event.
                 let frame = group_frames.iter().find(|f| f.event_idx == ev_idx);
-                let (frame_left, frame_right, frame_top, frame_height) = if let Some(f) = frame {
-                    (f.left, f.right, f.top, f.bottom - f.top)
-                } else {
-                    // Fallback: use participant extent
-                    let fl = if participants.is_empty() {
-                        group_frame_margin
-                    } else {
-                        participants[0].box_x - group_frame_margin
-                    };
-                    let fr = if participants.is_empty() {
-                        100.0
-                    } else {
-                        let last = &participants[n - 1];
-                        last.box_x + last.box_width + group_frame_margin
-                    };
-                    (fl, fr, msg_y, 50.0)
+                let Some(f) = frame else {
+                    // No pre-computed frame means this group has no matching
+                    // `end` (e.g. a `break` inside an `alt` consumes the loop's
+                    // `end`, leaving the loop unclosed). PlantUML draws only
+                    // groups that have a matching end — an unclosed group's
+                    // frame is never emitted (it still reserves vertical space
+                    // in the layout pass, but draws nothing). Skip it here and
+                    // do NOT touch the else-frame stack so inner/outer dividers
+                    // stay paired with the groups that *are* drawn.
+                    continue;
                 };
+                let (frame_left, frame_right, frame_top, frame_height) =
+                    (f.left, f.right, f.top, f.bottom - f.top);
                 else_frame_stack.push((frame_left, frame_right));
 
                 // Emit header tab FIRST (pentagon shape), then frame rect, then text.
