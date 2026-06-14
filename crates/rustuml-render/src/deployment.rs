@@ -308,15 +308,23 @@ fn render_oracle(diagram: &DeploymentDiagram, _theme: &Theme, oracle: &OracleLay
     }
     if diagram.connections.is_empty() || leaves.iter().any(|(depth, _, _, _)| *depth == 0) {
         leaves.sort_by_key(|(_, source_line, _, _)| *source_line);
+        for (_, _, node, qname) in &leaves {
+            emit_entity(&mut svg, node, qname, &ctx);
+        }
     } else {
-        leaves.sort_by(|a, b| {
-            let ka = (a.0, a.1);
-            let kb = (b.0, b.1);
-            ka.cmp(&kb)
-        });
-    }
-    for (_, _, node, qname) in &leaves {
-        emit_entity(&mut svg, node, qname, &ctx);
+        // PlantUML walks each root subtree in turn, emitting that subtree's
+        // leaves shallow-before-deep (then by source line). Roots stay in
+        // declaration order, so a sibling root's direct child must NOT jump
+        // ahead of an earlier root's deeper grandchild. Sort within each root's
+        // contribution rather than globally.
+        for root in &roots {
+            let mut group: Vec<(usize, usize, &DeploymentNode, String)> = Vec::new();
+            collect_entities_dfs(root, &diagram.nodes, None, 0, &mut group);
+            group.sort_by(|a, b| (a.0, a.1).cmp(&(b.0, b.1)));
+            for (_, _, node, qname) in &group {
+                emit_entity(&mut svg, node, qname, &ctx);
+            }
+        }
     }
 
     // Emit attached/floating notes. PlantUML lays each note out as a
@@ -1061,6 +1069,10 @@ fn emit_cluster_shape(
         Card => emit_card_cluster(svg, x, y, w, h, fill, stroke),
         // Rectangle / Agent cluster: bare rect, no line.
         Rectangle | Agent => emit_plain_rect_cluster(svg, x, y, w, h, fill, stroke),
+        // Component cluster: rounded rect + UML component plug icon at the
+        // top-right, identical to the leaf component shape but drawn with the
+        // cluster stroke-width (1) instead of the leaf 0.5.
+        Component => emit_component_cluster(svg, x, y, w, h, fill, stroke),
         Frame => emit_frame_cluster(svg, x, y, w, h, fill, stroke),
         Folder => emit_folder_cluster(svg, x, y, w, h, fill, label),
         Package => emit_package_cluster(svg, x, y, w, h, fill, label),
@@ -1293,6 +1305,46 @@ fn emit_component(svg: &mut SvgBuilder, x: f64, y: f64, w: f64, h: f64, fill: &s
     ));
     svg.raw(&format!(
         r#"<rect fill="{fill}" height="2" style="stroke:{stroke};stroke-width:0.5;" width="4" x="{x}" y="{y}"/>"#,
+        x = fc(bar_x),
+        y = fc(tab_y + 6.0),
+    ));
+}
+
+// ---- Component cluster (rounded rect + plug icon, cluster stroke-width) ----
+
+fn emit_component_cluster(
+    svg: &mut SvgBuilder,
+    x: f64,
+    y: f64,
+    w: f64,
+    h: f64,
+    fill: &str,
+    stroke: &str,
+) {
+    svg.raw(&format!(
+        r#"<rect fill="{fill}" height="{h}" rx="{RX_RY}" ry="{RX_RY}" style="stroke:{stroke};stroke-width:1;" width="{w}" x="{x}" y="{y}"/>"#,
+        h = fc(h),
+        w = fc(w),
+        x = fc(x),
+        y = fc(y),
+    ));
+    // Tab at top-right: 15w x 10h, x = x+w-20, y = y+5.
+    let tab_x = x + w - 20.0;
+    let tab_y = y + 5.0;
+    svg.raw(&format!(
+        r#"<rect fill="{fill}" height="10" style="stroke:{stroke};stroke-width:1;" width="15" x="{x}" y="{y}"/>"#,
+        x = fc(tab_x),
+        y = fc(tab_y),
+    ));
+    // Two small bars left of tab (4w x 2h each).
+    let bar_x = tab_x - 2.0;
+    svg.raw(&format!(
+        r#"<rect fill="{fill}" height="2" style="stroke:{stroke};stroke-width:1;" width="4" x="{x}" y="{y}"/>"#,
+        x = fc(bar_x),
+        y = fc(tab_y + 2.0),
+    ));
+    svg.raw(&format!(
+        r#"<rect fill="{fill}" height="2" style="stroke:{stroke};stroke-width:1;" width="4" x="{x}" y="{y}"/>"#,
         x = fc(bar_x),
         y = fc(tab_y + 6.0),
     ));

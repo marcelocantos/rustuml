@@ -3660,6 +3660,47 @@ fn render_composite_with_oracle(diagram: &StateDiagram, orc: &OracleLayout) -> S
                 .is_some_and(|r| r.entity_id.is_some())
     };
 
+    // Title — PlantUML emits a `<g class="title">` block as the first child of
+    // the root `<g>`, centred over the whole diagram body, BEFORE any cluster
+    // header (which the `has_clusters` path emits up front via the DFS below).
+    // Replay the oracle's page-decoration anchors (exact x/y/source-line) so the
+    // title sits in the same place; the text length is recomputed from the same
+    // font metrics PlantUML used. Without this the composite path dropped the
+    // title entirely.
+    if let Some(title) = &diagram.meta.title {
+        let oracle_title = orc.decorations.iter().find(|d| d.class_name == "title");
+        let widths: Vec<f64> = title
+            .lines()
+            .map(|t| text_render::measure(t, TITLE_FONT_SIZE, true))
+            .collect();
+        let block_w = widths.iter().cloned().fold(0.0_f64, f64::max);
+        let source_line = oracle_title
+            .and_then(|d| d.source_line.as_deref())
+            .unwrap_or("1");
+        write!(svg, r#"<g class="title" data-source-line="{source_line}">"#).unwrap();
+        for (i, tline) in title.lines().enumerate() {
+            let oracle_text = oracle_title.and_then(|d| d.texts.get(i));
+            let ty = oracle_text.map_or(23.5352 + i as f64 * (TITLE_FONT_SIZE + 5.0), |t| t.y);
+            let x = oracle_text.map_or(10.0 + (block_w - widths[i]) / 2.0, |t| t.x);
+            text_render::emit_text(
+                &mut svg,
+                tline,
+                &TextBase {
+                    x,
+                    y: ty,
+                    font_size: TITLE_FONT_SIZE as u32,
+                    font_family: "sans-serif",
+                    fill: "#000000",
+                    bold: true,
+                    italic: false,
+                    underline: false,
+                    skip_underline: false,
+                },
+            );
+        }
+        svg.push_str("</g>");
+    }
+
     if has_clusters {
         emit_clusters_dfs(&mut svg, None, diagram, &ordered_children, &emit_cluster);
     }
