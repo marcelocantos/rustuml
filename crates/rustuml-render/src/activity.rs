@@ -1309,6 +1309,23 @@ fn break_if_is_first_flow(body: &[LayoutNode]) -> bool {
     )
 }
 
+/// True when the break-bearing `if` is the last *flow* node of the loop body (no
+/// populated tile follows it). In that layout PlantUML's `FtileWhile`
+/// `ConnectionBackSimple` starts at the loop body's pointOut — which, for a body
+/// ending in this `FtileIfDown`, is the if-block's own pointOut. The merge engine
+/// (`MergeStrategy.LIMITED`) collapses the if's `ConnectionElseNoDiamond`
+/// down-corridor with the loop-back's up-leg into a single path that runs from
+/// the if-diamond's east vertex straight out to the loop-back rail and up into
+/// the while diamond — with no intervening body-bottom junction and no separate
+/// east corridor. See [`emit_if_break_down`] / [`emit_while`].
+fn break_if_is_last_flow(body: &[LayoutNode]) -> bool {
+    matches!(
+        body.iter().rev().find(|n| node_is_flow(n)),
+        Some(LayoutNode::If { then_branch, else_branches, .. })
+            if if_break_down_plan(then_branch, else_branches).is_some()
+    )
+}
+
 /// Width of an if/while/repeat condition diamond's inner (top/bottom) edge.
 /// PlantUML clamps this to a minimum of 24 px so very short conditions still
 /// produce a diamond wider than their text. The text inside stays at its
@@ -4732,10 +4749,22 @@ fn node_extents(node: &LayoutNode) -> (f64, f64) {
             // arrowhead, plus halfHex of trailing reservation from FtileWhile's
             // `dx + halfHex` term (= 2*halfHex + 3 past max). Verified against
             // the width-only while goldens.
-            let right_extent = cond_half.max(body_right)
-                + 2.0 * DIAMOND_HALF
-                + 3.0
-                + while_single_if_right_pad(body, end_label);
+            //
+            // Fused last-node break: the loop-back's UP emphasize arrowhead is
+            // gone (the merged `ConnectionElseNoDiamond`/`ConnectionBackSimple`
+            // snake carries only the LEFT in-arrow), so the loop-back rail at
+            // `loop_x` is itself the right content edge — drop the extra
+            // `halfHex + 3` wrap-reservation past it.
+            let right_extent = if break_if_is_last_flow(body) {
+                cond_half.max(body_right)
+                    + DIAMOND_HALF
+                    + while_single_if_right_pad(body, end_label)
+            } else {
+                cond_half.max(body_right)
+                    + 2.0 * DIAMOND_HALF
+                    + 3.0
+                    + while_single_if_right_pad(body, end_label)
+            };
             (left_extent, right_extent)
         }
         LayoutNode::Fork {
@@ -5922,7 +5951,15 @@ fn while_body_right_driven_by_if(body: &[LayoutNode]) -> bool {
             continue;
         }
         let (_l, r) = node_extents(node);
-        if matches!(node, LayoutNode::If { .. }) {
+        // A trailing break-`if` is rendered as `FtileIfDown` with a suppressed
+        // merge diamond — it has no `FtileIfWithDiamonds` east margin, so it does
+        // not carry `WHILE_SINGLE_IF_RIGHT_PAD` into the loop-back arm.
+        let is_break_if = matches!(
+            node,
+            LayoutNode::If { then_branch, else_branches, .. }
+                if if_break_down_plan(then_branch, else_branches).is_some()
+        );
+        if matches!(node, LayoutNode::If { .. }) && !is_break_if {
             last_if_right = Some(r);
         } else {
             last_if_right = None;
@@ -6794,6 +6831,11 @@ struct SvgEmitter {
     /// and `ConnectionElseNoDiamond`) can weld the break branch to the exit
     /// corridor instead of routing to a (suppressed) merge diamond.
     while_break: Option<WhileBreakContext>,
+    /// One-shot set by [`emit_if_break_down`] when it renders a break-`if` that is
+    /// the last flow node of a `while` body (the fused loop-back case). Carries the
+    /// if-diamond's centre-y: the loop-back rail rises from this y up into the
+    /// while diamond. Consumed once by [`emit_while`].
+    while_break_loopback_y: Option<f64>,
     /// Context for a SOLE single-survivor `if` nested directly in an enclosing
     /// `if`/`switch` branch; see [`IfSurvivorRedirect`].
     if_survivor_redirect: Option<IfSurvivorRedirect>,
@@ -6860,6 +6902,31 @@ struct WhileBreakContext {
     /// break-if's `ConnectionElseNoDiamond` corridor (true when the loop body
     /// carries enough adjacent flow content; see [`while_break_corridor_compresses`]).
     compresses: bool,
+    /// Set when this break-`if` is the *last* flow node of the loop body. In that
+    /// case the if's `ConnectionElseNoDiamond` corridor fuses with the
+    /// `FtileWhile.ConnectionBackSimple` loop-back (see [`break_if_is_last_flow`]):
+    /// the if-diamond's east vertex runs straight out to the loop-back rail at
+    /// `last.loop_x` and up into the while diamond, with no separate east-corridor
+    /// down-and-back and no body-bottom loop-back junction. `emit_if_break_down`
+    /// draws the whole fused snake (east→rail→up→into-diamond + the LEFT arrowhead)
+    /// as one unit at its document position (matching PlantUML's single
+    /// `ConnectionBackSimple` snake), records the anchor y via
+    /// [`SvgEmitter::while_break_loopback_y`], and `emit_while` suppresses its own
+    /// loop-back junction, rail, and arrowheads.
+    last: Option<WhileBreakLast>,
+}
+
+/// Loop-back rail/diamond geometry handed to a trailing break-`if` so it can draw
+/// the fused `ConnectionBackSimple` snake itself (see [`WhileBreakContext::last`]).
+#[derive(Clone, Copy)]
+struct WhileBreakLast {
+    /// Absolute x of the loop-back rail (the `FtileWhile` `dimTotal.getWidth()`
+    /// column).
+    loop_x: f64,
+    /// Centre-y of the while diamond (where the rail bends into it).
+    while_cy: f64,
+    /// Absolute x of the while diamond's east vertex (the snake's terminal point).
+    while_east_x: f64,
 }
 
 /// Geometry the parent `if` hands to a directly-nested `while` so the loop's
@@ -6907,6 +6974,7 @@ impl SvgEmitter {
             while_exit_redirect: None,
             fork_branch_gap_extra: 0.0,
             while_break: None,
+            while_break_loopback_y: None,
             if_survivor_redirect: None,
             pending_while_body: false,
             while_switch_merge_extra: 0.0,
@@ -10219,6 +10287,33 @@ fn emit_if_break_down(
     svg.connector_line(&arrow_color, cx, brk.corridor_x, break_y, break_y, false);
     svg.left_arrow(brk.corridor_x, break_y, &arrow_color);
 
+    // Last flow node of the loop body: the if's `ConnectionElseNoDiamond`
+    // corridor fuses with the `FtileWhile.ConnectionBackSimple` loop-back (the
+    // merge engine collapses the corridor's down-leg with the loop-back's up-leg,
+    // since both meet at the body/if pointOut). Draw the whole merged snake here —
+    // east vertex → loop-back rail → up → into the while diamond's east vertex,
+    // ending with the loop-back's LEFT in-arrow — as one contiguous unit, matching
+    // PlantUML's single `ConnectionBackSimple` snake's document position. No down
+    // corridor, no DOWN arrowhead. `emit_while` suppresses its own loop-back arm.
+    if let Some(last) = brk.last {
+        svg.connector_line(&arrow_color, diamond_right, last.loop_x, diamond_cy, diamond_cy, false);
+        svg.connector_line(&arrow_color, last.loop_x, last.loop_x, last.while_cy, diamond_cy, false);
+        svg.connector_line(
+            &arrow_color,
+            last.loop_x,
+            last.while_east_x,
+            last.while_cy,
+            last.while_cy,
+            false,
+        );
+        svg.left_arrow(last.while_east_x, last.while_cy, &arrow_color);
+        svg.while_break_loopback_y = Some(diamond_cy);
+        // The if-block's pointOut (its reported bottom) is unchanged — only the
+        // corridor *drawing* fuses with the loop-back. Returning `return_y` keeps
+        // the enclosing while's body-height, junction and exit-arm geometry intact.
+        return return_y;
+    }
+
     // Empty east corridor (ConnectionElseNoDiamond): exit the diamond's east
     // vertex, run down (down-emphasized mid arrow), then rejoin the spine at the
     // if-block's pointOut. No terminal in-arrow — it simply welds back.
@@ -11289,13 +11384,27 @@ fn emit_while(
     // it before emitting the body and restore the prior value afterwards (so a
     // sibling/parent while does not inherit it).
     let prev_while_break = svg.while_break.take();
+    let prev_break_loopback_y = svg.while_break_loopback_y.take();
     if body_contains_break_if(body) {
-        let (pre_body_left_ext, _) = sequence_loop_body_extents(body);
+        let (pre_body_left_ext, pre_body_right_ext) = sequence_loop_body_extents(body);
         let pre_body_left_x = cx - while_body_left(body, pre_body_left_ext);
         let pre_geo_left_x = diamond_left_vertex_x.min(pre_body_left_x);
+        // The loop-back rail x: same formula `emit_while` uses below (the
+        // `FtileWhile`'s `dimTotal.getWidth()` column), pre-computed from the
+        // body's pure extents so a trailing break-`if` can route its fused
+        // ConnectionElseNoDiamond corridor straight out to it.
+        let pre_body_right_x = cx + pre_body_right_ext;
+        let pre_loop_x = diamond_right_vertex_x.max(pre_body_right_x)
+            + DIAMOND_HALF
+            + while_single_if_right_pad(body, end_label);
         svg.while_break = Some(WhileBreakContext {
             corridor_x: pre_geo_left_x - DIAMOND_HALF,
             compresses: while_break_corridor_compresses(body),
+            last: break_if_is_last_flow(body).then_some(WhileBreakLast {
+                loop_x: pre_loop_x,
+                while_cy: diamond_cy,
+                while_east_x: diamond_right_vertex_x,
+            }),
         });
     }
 
@@ -11308,6 +11417,11 @@ fn emit_while(
     let body_switch_loopback_tip = svg.while_switch_loopback_tip.take();
     svg.while_switch_loopback_tip = prev_loopback_tip;
     svg.while_break = prev_while_break;
+    // Capture (and restore) the fused loop-back anchor a trailing break-`if` set
+    // while drawing its east→rail horizontal. `Some(if_cy)` means the loop-back
+    // rises from the if-diamond's centre y instead of a body-bottom junction.
+    let fused_loopback_y = svg.while_break_loopback_y.take();
+    svg.while_break_loopback_y = prev_break_loopback_y;
 
     // Junction y: 12 px below the body for empty bodies, 10 px for
     // non-empty bodies. PlantUML's UEmpty(5, halfHex=12) placeholder is
@@ -11489,13 +11603,21 @@ fn emit_while(
     }
 
     // 2. Body bottom → junction (only if body has content; for empty body
-    // the inbound arrow already reaches the junction-equivalent point).
-    if !body.is_empty() {
+    // the inbound arrow already reaches the junction-equivalent point). Suppressed
+    // in the fused last-node break case: the body's flow ends at the trailing
+    // break-`if`, whose loop-back leaves via the east corridor — no spine
+    // continuation below it and no body-bottom junction.
+    if !body.is_empty() && fused_loopback_y.is_none() {
         svg.line_styled(&arrow_color, "1", cx, cx, body_bottom, junction_y, false);
     }
 
-    // 3. Horizontal at junction from body cx out to loop_x.
-    svg.line_styled(&arrow_color, "1", cx, loop_x, junction_y, junction_y, false);
+    // 3. Horizontal at junction from body cx out to loop_x. Suppressed in the
+    // fused last-node break case: there is no body-bottom junction — the loop-back
+    // rail attaches to the trailing break-`if`'s east-vertex corridor instead (the
+    // east→loop_x horizontal was drawn by `emit_if_break_down`).
+    if fused_loopback_y.is_none() {
+        svg.line_styled(&arrow_color, "1", cx, loop_x, junction_y, junction_y, false);
+    }
 
     // Break-bearing loop: PlantUML places the loop-back / exit arrowheads at the
     // `FtileWhile` frame-height midpoints (`ConnectionOut` /
@@ -11555,52 +11677,54 @@ fn emit_while(
                 WHILE_EVEN_BODY_LOOP_ARROW_STRETCH - stretch / 2.0
             })
     });
-    svg.polygon_connector(
-        &arrow_color,
-        &[
-            (loop_x - 4.0, mid_y + 10.0),
-            (loop_x, mid_y),
-            (loop_x + 4.0, mid_y + 10.0),
-            (loop_x, mid_y + 6.0),
-        ],
-        &arrow_color,
-        "1",
-    );
+    // The fused last-node break loop-back draws no UP emphasize arrowhead on the
+    // rail (the merged `ConnectionElseNoDiamond`/`ConnectionBackSimple` snake
+    // carries only the LEFT arrow into the diamond's east vertex).
+    if fused_loopback_y.is_none() {
+        svg.polygon_connector(
+            &arrow_color,
+            &[
+                (loop_x - 4.0, mid_y + 10.0),
+                (loop_x, mid_y),
+                (loop_x + 4.0, mid_y + 10.0),
+                (loop_x, mid_y + 6.0),
+            ],
+            &arrow_color,
+            "1",
+        );
+    }
 
-    // 5. Loop arm vertical at loop_x.
-    svg.line_styled(
-        &arrow_color,
-        "1",
-        loop_x,
-        loop_x,
-        diamond_cy,
-        junction_y,
-        false,
-    );
+    // Steps 5-7 (loop-back rail vertical, rail→diamond horizontal, LEFT in-arrow)
+    // are drawn by `emit_if_break_down` in the fused last-node break case so the
+    // whole `ConnectionBackSimple` snake stays contiguous in document order.
+    if fused_loopback_y.is_none() {
+        // 5. Loop arm vertical at loop_x.
+        svg.line_styled(&arrow_color, "1", loop_x, loop_x, diamond_cy, junction_y, false);
 
-    // 6. Loop arm horizontal at diamond_cy: loop_x → diamond_right_vertex.
-    svg.line_styled(
-        &arrow_color,
-        "1",
-        loop_x,
-        diamond_right_vertex_x,
-        diamond_cy,
-        diamond_cy,
-        false,
-    );
+        // 6. Loop arm horizontal at diamond_cy: loop_x → diamond_right_vertex.
+        svg.line_styled(
+            &arrow_color,
+            "1",
+            loop_x,
+            diamond_right_vertex_x,
+            diamond_cy,
+            diamond_cy,
+            false,
+        );
 
-    // 7. LEFT arrowhead at diamond_right_vertex.
-    svg.polygon_connector(
-        &arrow_color,
-        &[
-            (diamond_right_vertex_x + 10.0, diamond_cy - 4.0),
-            (diamond_right_vertex_x, diamond_cy),
-            (diamond_right_vertex_x + 10.0, diamond_cy + 4.0),
-            (diamond_right_vertex_x + 6.0, diamond_cy),
-        ],
-        &arrow_color,
-        "1",
-    );
+        // 7. LEFT arrowhead at diamond_right_vertex.
+        svg.polygon_connector(
+            &arrow_color,
+            &[
+                (diamond_right_vertex_x + 10.0, diamond_cy - 4.0),
+                (diamond_right_vertex_x, diamond_cy),
+                (diamond_right_vertex_x + 10.0, diamond_cy + 4.0),
+                (diamond_right_vertex_x + 6.0, diamond_cy),
+            ],
+            &arrow_color,
+            "1",
+        );
+    }
 
     // 8. Exit arm horizontal at diamond_cy: diamond_left_vertex → exit_x.
     svg.line_styled(
