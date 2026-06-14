@@ -285,27 +285,39 @@ impl SeqParser {
 
         if let Some(caps) = RE.captures(line) {
             let kind = parse_participant_kind(&caps[1]);
-            let (raw_label, id) = if let Some(quoted) = caps.get(2) {
+            // `quoted` tracks whether the display text came from a `"..."` form.
+            // PlantUML's grammar matches the stereotype (`STEREO`) only OUTSIDE the
+            // quoted display string (`FULL` = `[%g]([^%g]+)[%g]`), so a `<<...>>`
+            // that appears WITHIN a quoted label is literal display text, not a
+            // stereotype (see CommandParticipantA). We therefore only mine an
+            // inline stereotype from UNQUOTED labels.
+            let (raw_label, id, quoted) = if let Some(quoted) = caps.get(2) {
                 // Form 1: "Long Label" as alias
-                (quoted.as_str().to_string(), caps[3].to_string())
+                (quoted.as_str().to_string(), caps[3].to_string(), true)
             } else if let Some(alias) = caps.get(4) {
                 // Form 2: alias as "Long Label"
                 let lbl = caps.get(5).map_or("", |m| m.as_str()).to_string();
-                (lbl, alias.as_str().to_string())
+                (lbl, alias.as_str().to_string(), true)
             } else if let Some(label) = caps.get(6) {
                 // Form 3: Label as alias (both unquoted) — id is the alias.
-                (label.as_str().to_string(), caps[7].to_string())
+                (label.as_str().to_string(), caps[7].to_string(), false)
             } else if let Some(quoted) = caps.get(8) {
                 // Form 5: "Long Label" (no alias; id = label)
                 let lbl = quoted.as_str().to_string();
-                (lbl.clone(), lbl)
+                (lbl.clone(), lbl, true)
             } else {
                 // Form 4: SimpleName
                 let name = caps[9].to_string();
-                (name.clone(), name)
+                (name.clone(), name, false)
             };
-            // Extract <<stereotype>> from within the label text (e.g. "Service 1 <<internal>>").
-            let (label, label_stereotype) = extract_stereotype_from_label(&raw_label);
+            // Extract `<<stereotype>>` from within the label text (e.g.
+            // `Service 1 <<internal>>`) only for unquoted labels — a quoted
+            // display string keeps `<<...>>` as literal text.
+            let (label, label_stereotype) = if quoted {
+                (raw_label, None)
+            } else {
+                extract_stereotype_from_label(&raw_label)
+            };
             let stereotype = caps
                 .get(10)
                 .map(|m| m.as_str().to_string())

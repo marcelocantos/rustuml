@@ -2126,6 +2126,59 @@ fn escape_inline_code_tags(s: &str) -> String {
         .replace("</code>", "~</code>")
 }
 
+/// Convert UML stereotype angle brackets `<<x>>` to guillemets `«x»`, matching
+/// PlantUML's `Guillemet.GUILLEMET.manageGuillemet` (the default). PlantUML's
+/// pattern is `\<\<\s?((?:\<&\w+\>|[^<>])+?)\s?\>\>`: it strips ONE optional
+/// space just inside each delimiter and disallows bare `<`/`>` in the captured
+/// content (so `<&entity>` HTML entities are still allowed). Applied to
+/// participant display text so an inline `<<...>>` inside a quoted name renders
+/// as one guillemeted line (not a separate stereotype band).
+fn manage_guillemet(s: &str) -> String {
+    if !s.contains("<<") {
+        return s.to_string();
+    }
+    let bytes = s.as_bytes();
+    let mut out = String::with_capacity(s.len());
+    let mut i = 0;
+    while i < bytes.len() {
+        if bytes[i] == b'<' && i + 1 < bytes.len() && bytes[i + 1] == b'<' {
+            // Scan for the closing `>>`, allowing `<&entity>` but no bare `<`/`>`.
+            let content_start = i + 2;
+            let mut j = content_start;
+            let mut close: Option<usize> = None;
+            while j < bytes.len() {
+                if bytes[j] == b'>' && j + 1 < bytes.len() && bytes[j + 1] == b'>' {
+                    close = Some(j);
+                    break;
+                }
+                // A bare `<` or `>` inside (other than the closing `>>`) makes
+                // this not a guillemet group — bail, matching the regex's
+                // `[^<>]` content class.
+                if bytes[j] == b'<' || bytes[j] == b'>' {
+                    break;
+                }
+                j += 1;
+            }
+            if let Some(close) = close
+                && close > content_start
+            {
+                let mut content = &s[content_start..close];
+                content = content.strip_prefix(' ').unwrap_or(content);
+                content = content.strip_suffix(' ').unwrap_or(content);
+                out.push('\u{ab}');
+                out.push_str(content);
+                out.push('\u{bb}');
+                i = close + 2;
+                continue;
+            }
+        }
+        let ch = s[i..].chars().next().unwrap();
+        out.push(ch);
+        i += ch.len_utf8();
+    }
+    out
+}
+
 /// Styling for an autonumber prefix, derived from the format string.
 #[derive(Clone)]
 struct AutoNumberStyle {
@@ -5490,7 +5543,7 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                     text_width_with_family(s, participant_font_size_f, &participant_font_family)
                 })
                 .unwrap_or(0.0);
-            let label = p.label.clone();
+            let label = manage_guillemet(&p.label);
             let tw = if participant_font_bold {
                 bold_text_width_with_family(
                     &label,
@@ -8791,14 +8844,24 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
             .iter()
             .map(|f| f.right)
             .fold(f64::NEG_INFINITY, f64::max);
-        let frame_spans_all = frame_left.is_finite()
-            && frame_right.is_finite()
-            && frame_left <= part_left
-            && frame_right >= part_right;
-        if frame_spans_all {
-            Some(frame_left + frame_right - 1.0)
+        // An OPEN group (its `end` consumed by a `break`) draws no frame yet
+        // still bounds the sequence area on the right. PlantUML's
+        // `SequenceDiagramArea.getWidth` then spans from the diagram's left
+        // margin (RIGHT_MARGIN) to that open-group right edge plus the same
+        // margin: getWidth = open_group_right + RIGHT_MARGIN - 1 (the `==`
+        // strip reaches open_group_right + RIGHT_MARGIN; getWidth is one less).
+        if open_group_right.is_finite() && open_group_right + GROUP_FRAME_MARGIN >= frame_right {
+            Some(open_group_right + RIGHT_MARGIN - 1.0)
         } else {
-            None
+            let frame_spans_all = frame_left.is_finite()
+                && frame_right.is_finite()
+                && frame_left <= part_left
+                && frame_right >= part_right;
+            if frame_spans_all {
+                Some(frame_left + frame_right - 1.0)
+            } else {
+                None
+            }
         }
     } else {
         None
@@ -9494,9 +9557,47 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
     let lost_external_min_to_x = participants
         .last()
         .map(|p| p.box_x + p.box_width + 5.0)
-        .unwrap_or(0.0);
+        .unwrap_or(0.0)
+        // PlantUML's `MessageExoArrow.getRightEndInternal` ends a `->]` lost
+        // arrow at `max(maxX, start + preferredWidth)`, where `maxX` is the
+        // diagram area's right edge. When an OPEN group (its `end` consumed by a
+        // `break`) widens that area, the lost arrow stretches to its edge too.
+        .max(if open_group_right.is_finite() {
+            open_group_right + RIGHT_MARGIN
+        } else {
+            0.0
+        });
     // Track enclosing group frame bounds so else dividers span the full frame.
     let mut else_frame_stack: Vec<(f64, f64)> = Vec::new();
+    // A group whose `end` was consumed (e.g. a `break` inside an `alt` swallows
+    // the loop's `end`) draws no frame — and PlantUML draws none of that group's
+    // `else` dividers or guard labels either. Mark every `GroupElse` whose
+    // enclosing `GroupStart` produced no drawn frame so the draw loop can skip
+    // it, matching the frame-skip already done at the `GroupStart` arm.
+    let orphaned_else: std::collections::HashSet<usize> = {
+        let frame_starts: std::collections::HashSet<usize> =
+            group_frames.iter().map(|f| f.event_idx).collect();
+        let mut set = std::collections::HashSet::new();
+        // Stack of (start_event_idx, has_frame) for currently-open groups.
+        let mut stack: Vec<(usize, bool)> = Vec::new();
+        for (idx, event) in events.iter().enumerate() {
+            match event {
+                Event::GroupStart(_) => stack.push((idx, frame_starts.contains(&idx))),
+                Event::GroupElse(_) => {
+                    if let Some(&(_, has_frame)) = stack.last()
+                        && !has_frame
+                    {
+                        set.insert(idx);
+                    }
+                }
+                Event::GroupEnd => {
+                    stack.pop();
+                }
+                _ => {}
+            }
+        }
+        set
+    };
     // Only page-1 events are drawn (see `page1_end` above); event_y_positions
     // only spans page 1, so the loop must not index past it either.
     for (ev_idx, event) in events.iter().take(page1_end).enumerate() {
@@ -10546,7 +10647,15 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                         .iter()
                         .map(|f| f.right + RIGHT_MARGIN)
                         .fold(0.0, f64::max),
-                );
+                )
+                // An OPEN group (its `end` consumed by a `break`) draws no
+                // frame but still reserves its right extent in the sequence
+                // area; the band must reach it too.
+                .max(if open_group_right.is_finite() {
+                    open_group_right + RIGHT_MARGIN
+                } else {
+                    0.0
+                });
                 // When the label box is wider than the participant span, the
                 // background strip and lines grow to box width + 12px margin
                 // on each side; otherwise they span the participants. The box
@@ -11515,9 +11624,12 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                 }
             }
             Event::GroupElse(g) => {
+                // An `else` belonging to a group whose frame was never drawn
+                // (its `end` was consumed by a `break`) draws no divider/label —
+                // PlantUML omits the whole group, dividers and guards included.
                 // Teoz already emitted this divider in the enclosing GroupStart's
                 // else-divider batch (the frame layer); skip the in-order copy.
-                if !diagram.teoz {
+                if !diagram.teoz && !orphaned_else.contains(&ev_idx) {
                     // Emit else dashed divider line. Use the enclosing group frame
                     // bounds (which account for the header label width and the
                     // participant subset) rather than the full participant extent.
