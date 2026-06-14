@@ -2750,6 +2750,72 @@ fn switch_x_layout(cases: &[SwitchCase], condition: &str) -> SwitchXLayout {
     layout
 }
 
+/// Switch layout for a switch that is a direct flow node of a `while` body.
+///
+/// PlantUML lays every switch out with `FtileSwitchNude.xSeparation = 20`, then
+/// the diagram-wide `CompressionXorYBuilder(ON_X)` pass squeezes the empty
+/// inter-case bands. For a STANDALONE switch every band collapses to 10 (the
+/// hard-coded `SWITCH_CASE_GAP`); but a switch wrapped in a `while` keeps the
+/// loop-back corridor and condition/merge-diamond column occupying x-space near
+/// the spine, so the bands straddling the diamond column survive at the
+/// uncompressed `xSeparation = 20` while the outer bands still collapse to 10.
+///
+/// Concretely, for an odd, all-bodied SMALL_DIAMOND switch the center case sits
+/// on the spine and the diamond corridor passes through the two gaps either side
+/// of it — both stay 20. (Even counts already keep their single spine-straddling
+/// gap at 20 via `add_center_gap`, and outer gaps at 10, which matches the
+/// goldens, so this only widens the odd-count adjacent gaps.) The spine stays
+/// centred on the (unchanged) center case.
+fn switch_x_layout_in_while(cases: &[SwitchCase], condition: &str) -> SwitchXLayout {
+    let mut layout = switch_x_layout(cases, condition);
+    let n = cases.len();
+    if layout.big_diamond || n < 3 || cases.iter().any(|c| c.body.is_empty()) {
+        return layout;
+    }
+    if n.is_multiple_of(2) {
+        // Even counts already keep their single spine-straddling gap at 20 (via
+        // `add_center_gap`) and their outer gaps at 10. `switch_x_layout` then
+        // applies `SWITCH_INNER_CORRIDOR_PACKING_PULL_LEFT` to the right-half
+        // cases — a standalone ON_X compression artefact. Inside a `while` the
+        // loop frame blocks that compression, so undo the pull-left here, leaving
+        // the spine-straddling gap at the full uncompressed 20.
+        if switch_inner_uses_diamond_corridor(cases, condition, &layout) {
+            for center in layout.centers.iter_mut().skip(n / 2) {
+                *center += SWITCH_INNER_CORRIDOR_PACKING_PULL_LEFT;
+            }
+            layout.block_w += SWITCH_INNER_CORRIDOR_PACKING_PULL_LEFT;
+            layout.diamond_dx += SWITCH_INNER_CORRIDOR_PACKING_PULL_LEFT;
+        }
+        return layout;
+    }
+    // Widen the two gaps adjacent to the center case from SWITCH_CASE_GAP (10) to
+    // xSeparation (20). Rebuild the centers left-to-right relative to the same
+    // block-left origin (centers[0] = tiles[0].left), using gap-20 for the two
+    // bands straddling the center case and gap-10 elsewhere. The diamond column
+    // (spine) sits on the center case, so block grows by `extra` on each side.
+    let extra = SWITCH_IF_BRANCH_CASE_GAP - SWITCH_CASE_GAP;
+    let center = n / 2;
+    let tiles: Vec<SwitchCaseTile> = cases.iter().map(switch_case_tile).collect();
+    let mut centers = vec![0.0f64; n];
+    let mut x = 0.0;
+    for i in 0..n {
+        centers[i] = x + tiles[i].left;
+        // Gap AFTER case i. Bands adjacent to the center case (i == center-1 and
+        // i == center) carry the full xSeparation; the rest the compressed gap.
+        let gap = if i == center - 1 || i == center {
+            SWITCH_IF_BRANCH_CASE_GAP
+        } else {
+            SWITCH_CASE_GAP
+        };
+        x += tiles[i].width + gap;
+    }
+    layout.centers = centers;
+    layout.block_w += 2.0 * extra;
+    // Spine stays on the center case.
+    layout.diamond_dx = layout.centers[center];
+    layout
+}
+
 fn switch_x_layout_if_branch(cases: &[SwitchCase], condition: &str) -> SwitchXLayout {
     if cases.len() >= 4 && !switch_case_block_is_big_diamond(cases, condition) {
         return switch_x_layout_if_branch_packed(cases, condition);
@@ -4668,7 +4734,21 @@ fn sequence_loop_body_extents(nodes: &[LayoutNode]) -> (f64, f64) {
         // Note-bearing bodies keep the raw note-margin measurement.
         return sequence_extents_with_note_margins(nodes, false, 1.0, 0.0);
     }
-    let (left, right) = sequence_extents(nodes);
+    let (mut left, mut right) = sequence_extents(nodes);
+    // A multi-case switch directly in a `while` body uses the wider
+    // `switch_x_layout_in_while` (loop frame blocks ON_X compression of the
+    // diamond-column bands). Its drawn block is wider than the standalone extent
+    // `node_extents` reserved, so widen the body extent to match — otherwise the
+    // loop-back arm clears the wrong edge.
+    for node in nodes {
+        if let LayoutNode::Switch { cases, condition } = node
+            && cases.len() > 1
+        {
+            let layout = switch_x_layout_in_while(cases, condition);
+            left = left.max(layout.diamond_dx);
+            right = right.max(layout.block_w - layout.diamond_dx);
+        }
+    }
     // A nested loop tile contributes its canvas-reservation-inflated right edge
     // to the raw extent. When such a tile is the rightmost element, the
     // enclosing loop's loop-back arm only needs to clear the INNER arm, not the
@@ -6427,6 +6507,12 @@ struct SvgEmitter {
     /// node of a `while` body. Set per-switch by `emit_sequence_ex` (while-body
     /// mode) and consumed once by `emit_switch_with_layout`.
     while_switch_merge_extra: f64,
+    /// True while emitting a multi-case switch that is a direct flow node of a
+    /// `while` body. The loop frame blocks ON_X compression of the bands around
+    /// the diamond column, so the switch uses `switch_x_layout_in_while` (gap-20
+    /// inner bands) instead of the standalone gap-10 layout. Set per-switch by
+    /// `emit_sequence_ex` (while-body mode) and consumed once by `emit_switch`.
+    while_body_switch: bool,
     /// y of the loop-back up-arrowhead tip when a multi-case switch is in the
     /// `while` body. PlantUML's ON_Y compression of the loop-back corridor pulls
     /// the emphasized arrowhead from the corridor midpoint down to anchor on the
@@ -6495,6 +6581,7 @@ impl SvgEmitter {
             if_survivor_redirect: None,
             pending_while_body: false,
             while_switch_merge_extra: 0.0,
+            while_body_switch: false,
             while_switch_loopback_tip: None,
         }
     }
@@ -7586,10 +7673,12 @@ fn emit_sequence_ex(
         if while_body && matches!(node, LayoutNode::Switch { .. }) {
             svg.while_switch_merge_extra =
                 switch_while_merge_extra(node, Some(i) == while_body_last_flow);
+            svg.while_body_switch = true;
         }
         let node_y =
             emit_node_with_repeat_extra(svg, node, cx, y, repeat_extra, first_repeat_branch_extra);
         svg.while_switch_merge_extra = 0.0;
+        svg.while_body_switch = false;
         prev_was_deferred_while = node_defers;
         // Inbound connector goes AFTER the node's own emit so it lands
         // after the node's internal connectors in the connectors buffer
@@ -9754,15 +9843,12 @@ fn emit_switch(
     if let [case] = cases {
         return emit_switch_one_link(svg, cx, y, condition, case);
     }
-    emit_switch_with_layout(
-        svg,
-        cx,
-        y,
-        condition,
-        cases,
-        switch_x_layout(cases, condition),
-        false,
-    )
+    let layout = if svg.while_body_switch {
+        switch_x_layout_in_while(cases, condition)
+    } else {
+        switch_x_layout(cases, condition)
+    };
+    emit_switch_with_layout(svg, cx, y, condition, cases, layout, false)
 }
 
 fn emit_switch_one_link(
