@@ -9248,7 +9248,16 @@ fn while_body_flow_is_all_actions(body: &[LayoutNode]) -> bool {
 }
 
 fn while_body_mid_stretch(body: &[LayoutNode], has_in_label: bool) -> Option<(usize, f64)> {
-    if !while_body_flow_is_all_actions(body) {
+    // An even body built from plain action tiles takes the standard centre-of-
+    // frame mid-stretch. A body whose only non-action flow node is a single
+    // `fork` (the `act_combo_while_fork_*` shape: fork followed by an action)
+    // also qualifies for the even-body LOOP-ARROW placement, but with a ZERO
+    // connector stretch — the fork carries its own vertical reservation so no
+    // inter-tile gap is lengthened, yet PlantUML still seats the loop-back
+    // arrowhead at the even-body midpoint (`(y1+y2)/2` driven off the
+    // uncompressed body bottom). The all-actions guard must not hide this case.
+    let body_has_fork = body.iter().any(|n| matches!(n, LayoutNode::Fork { .. }));
+    if !while_body_flow_is_all_actions(body) && !body_has_fork {
         return None;
     }
     let flow_count = body.iter().filter(|n| node_is_flow(n)).count();
