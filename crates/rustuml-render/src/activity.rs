@@ -1764,6 +1764,26 @@ fn build_tree_inner(steps: &[ActivityStep], palette: &Palette) -> Vec<LayoutNode
                         _ => break,
                     }
                 }
+                // A `detach`/`kill` immediately following `end fork` does not
+                // start a new node: PlantUML's `endFork` pops the fork off the
+                // current-instruction stack so `detach` calls `parent.kill()`,
+                // which kills the parent list's last instruction — the fork —
+                // and that delegates to the fork's LAST branch's last
+                // instruction (InstructionFork.kill → getLastList().kill()).
+                // The effect is that the final fork branch terminates and loses
+                // its pointOut, so it is NOT wired down to the join bar. We
+                // mirror this by appending the terminator into the last branch
+                // and consuming the standalone step.
+                if let Some(step @ (ActivityStep::Detach | ActivityStep::Kill)) = steps.get(i)
+                    && let Some(last_branch) = branches.last_mut()
+                    && !last_branch.is_empty()
+                {
+                    last_branch.push(match step {
+                        ActivityStep::Kill => LayoutNode::Kill,
+                        _ => LayoutNode::Detach,
+                    });
+                    i += 1;
+                }
                 let mut attached_notes = Vec::new();
                 while let Some(ActivityStep::Note(n)) = steps.get(i) {
                     attached_notes.push(activity_note_from_block(n));
@@ -2483,11 +2503,26 @@ fn switch_inner_uses_diamond_corridor(
         return false;
     }
     let diamond_half = switch_diamond_half_width(condition);
+    // Only a *middle* surviving case routes through the diamond merge corridor
+    // (PlantUML's ConnectionVerticalBottom, firstOutgoing < i < lastOutgoing).
+    // The first/last surviving branch is wired as a vertical-then-horizontal
+    // outer, and a terminating (kill/detach) case has no out-corridor at all —
+    // so neither participates in the inner-corridor packing decision.
+    let (first_out, last_out) = match switch_outgoing_extremes(cases) {
+        Some(pair) => pair,
+        None => return false,
+    };
     cases[1..cases.len() - 1]
         .iter()
         .zip(layout.centers[1..layout.centers.len() - 1].iter())
-        .any(|(case, center)| {
-            if case.body.is_empty() {
+        .enumerate()
+        .any(|(rel_i, (case, center))| {
+            let i = rel_i + 1;
+            if case.body.is_empty()
+                || branch_terminates(&case.body)
+                || i <= first_out
+                || i >= last_out
+            {
                 return false;
             }
             let rel = *center - layout.diamond_dx;
@@ -2495,14 +2530,55 @@ fn switch_inner_uses_diamond_corridor(
         })
 }
 
-fn switch_merge_gap(cases: &[SwitchCase], condition: &str, layout: &SwitchXLayout) -> f64 {
+/// Index of the first / last surviving (non-terminating) case, mirroring
+/// PlantUML's `FtileSwitchWithManyLinks.getFirstOutgoingArrow` /
+/// `getLastOutgoingArrow`. A terminating (kill/detach) case has no pointOut and
+/// is skipped.
+fn switch_outgoing_extremes(cases: &[SwitchCase]) -> Option<(usize, usize)> {
+    let n = cases.len();
+    let first = (0..n).find(|&i| !branch_terminates(&cases[i].body))?;
+    let last = (0..n).rev().find(|&i| !branch_terminates(&cases[i].body))?;
+    Some((first, last))
+}
+
+/// True when some surviving case's MERGE connection terminates at the merge
+/// diamond's *top* point (`ptA`, on the spine) rather than a side vertex —
+/// PlantUML's `ConnectionVerticalThenHorizontal` Direction.DOWN branch (first /
+/// last survivors whose out-x lies within the merge diamond's left/right
+/// vertices, ±`DIAMOND_HALF`) or `ConnectionVerticalBottom`'s jog-to-spine
+/// branch (a middle survivor near the condition diamond). Such a route deepens
+/// the merge band from `ARROW_LEN / 2` to a full `ARROW_LEN`.
+fn switch_center_spine_survivor(cases: &[SwitchCase], condition: &str) -> bool {
+    let Some((first_out, last_out)) = switch_outgoing_extremes(cases) else {
+        return false;
+    };
+    let layout = switch_x_layout(cases, condition);
+    let cond_half = switch_diamond_half_width(condition); // condition diamond half-width
+    cases
+        .iter()
+        .zip(layout.centers.iter())
+        .enumerate()
+        .filter(|(_, (case, _))| !branch_terminates(&case.body) && !case.body.is_empty())
+        .any(|(i, (_, center))| {
+            let rel = *center - layout.diamond_dx;
+            if i == first_out || i == last_out {
+                // ConnectionVerticalThenHorizontal: DOWN to ptA iff within the
+                // merge diamond's left/right vertices (spine ± DIAMOND_HALF).
+                rel.abs() <= DIAMOND_HALF
+            } else {
+                // ConnectionVerticalBottom middle survivor: jogs to the spine
+                // when within the condition diamond's vertices (± margin).
+                rel >= -cond_half - SWITCH_LINK_MARGIN && rel <= cond_half + SWITCH_LINK_MARGIN
+            }
+        })
+}
+
+fn switch_merge_gap(cases: &[SwitchCase], condition: &str, _layout: &SwitchXLayout) -> f64 {
     if switch_all_branches_terminate(cases) {
         0.0
     } else if switch_needs_empty_merge_gap(cases) {
         SWITCH_EMPTY_MERGE_GAP
-    } else if !cases.len().is_multiple_of(2)
-        || switch_inner_uses_diamond_corridor(cases, condition, layout)
-    {
+    } else if switch_center_spine_survivor(cases, condition) {
         ARROW_LEN
     } else {
         ARROW_LEN / 2.0
@@ -10023,10 +10099,20 @@ fn emit_switch_with_layout(
         .then(|| bottom_connected.last().copied())
         .flatten();
     let merge_classify = |i: usize| -> SwitchConn {
-        if Some(i) == surviving_left && centers[i] < diamond_cx
-            || Some(i) == surviving_right && centers[i] > diamond_cx
-        {
-            SwitchConn::Outer
+        // PlantUML's addOutgoingArrows wires the first and last surviving branch
+        // via ConnectionVerticalThenHorizontal. That connection routes to the
+        // merge diamond's LEFT vertex (bcx left of it → right-arrow), RIGHT
+        // vertex (bcx right of it → left-arrow), or — when bcx falls *within* the
+        // merge diamond's vertices (spine ± DIAMOND_HALF) — straight DOWN to the
+        // top point (ptA), i.e. a Centre route. When a terminating sibling
+        // promotes a near-spine survivor to the structural extreme, that survivor
+        // therefore routes as Centre, not as a side-vertex Outer.
+        if Some(i) == surviving_left || Some(i) == surviving_right {
+            if (centers[i] - diamond_cx).abs() <= DIAMOND_HALF {
+                SwitchConn::Center
+            } else {
+                SwitchConn::Outer
+            }
         } else {
             classify(i)
         }
