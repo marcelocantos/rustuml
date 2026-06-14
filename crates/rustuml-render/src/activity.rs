@@ -4140,6 +4140,25 @@ struct IfLongLayout {
     right_ext: f64,
 }
 
+/// True when a branch body is a simple linear flow — only leaf tiles
+/// (actions/notes/arrows/connectors), no nested control-flow construct
+/// (if/while/repeat/fork/switch). Used to pick the `FtileIfLongHorizontal`
+/// north-band height: a nested construct widens the branch column's vertical
+/// extent enough that the whole-diagram `ON_Y` compression reclaims the
+/// diamond→branch corridor's sub-line slack (see `north_h` in `if_long_layout`).
+fn is_simple_branch_flow(body: &[LayoutNode]) -> bool {
+    body.iter().all(|n| {
+        !matches!(
+            n,
+            LayoutNode::If { .. }
+                | LayoutNode::While { .. }
+                | LayoutNode::Repeat { .. }
+                | LayoutNode::Fork { .. }
+                | LayoutNode::Switch { .. }
+        )
+    })
+}
+
 /// Build the placed long layout for an `if/elseif*/else`. Returns `None` if any
 /// branch isn't yet portable (so the caller falls back to the legacy path).
 fn if_long_layout(
@@ -4151,7 +4170,31 @@ fn if_long_layout(
     // Split else branches into elseif columns (condition=Some) and the optional
     // final bare else (condition=None, must be last if present).
     let mut cols: Vec<IfLongCol> = Vec::new();
-    let north_h = pm::text_height(SMALL_FONT);
+    // North band height below each condition diamond (the `then`/`elseif` label
+    // band, `addVerticalMargin`'d by alignDiamonds). PlantUML's golden reserves
+    // two different heights here depending on the whole-diagram `ON_Y`
+    // compression of the diamond→branch corridor:
+    //   * `text_height(11)` = 12.955 — when a POPULATED bare `else` (`tile2`)
+    //     sits in the diamond band (lifted by `getDiamondsHeight/2`) AND every
+    //     then/elseif branch is a simple linear flow (only actions/notes). The
+    //     populated `tile2` blocks the corridor's ON_Y compression, so the band
+    //     keeps its full line height.
+    //   * `ascent(11) + 1.5` = 12.1348 — otherwise (no populated bare `else`, or
+    //     any branch carries a nested control-flow construct fork/if/while/…).
+    //     The corridor then compresses by `descent − 1.5` = 0.8203.
+    // `fn is_simple_branch_flow` classifies a branch body.
+    let has_populated_bare_else = else_branches
+        .iter()
+        .any(|b| b.condition.is_none() && !b.body.is_empty());
+    let all_branches_simple = is_simple_branch_flow(then_branch)
+        && else_branches
+            .iter()
+            .all(|b| b.condition.is_none() || is_simple_branch_flow(&b.body));
+    let north_h = if has_populated_bare_else && all_branches_simple {
+        pm::text_height(SMALL_FONT)
+    } else {
+        pm::ascent(SMALL_FONT) + 1.5
+    };
 
     let mut push_col = |cond: &str, north: &Option<String>, body: &[LayoutNode]| -> Option<()> {
         let g = sequence_geometry(body)?;
