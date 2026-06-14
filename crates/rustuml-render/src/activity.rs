@@ -182,6 +182,17 @@ const SWITCH_CENTER_BOT_SPLIT: f64 = 15.0; // split distance above the merge top
 const SWITCH_MERGE_GAP_UNCOMPRESSED_SMALL: f64 = 57.0449;
 const SWITCH_MERGE_GAP_UNCOMPRESSED_BIG: f64 = 41.0449;
 
+// `FtileSwitchNude.calculateDimensionInternalSlow` inflates the case-tile band
+// by a fixed `delta(_, 100)` — whitespace below the case boxes that the
+// whole-diagram ON_Y compression later reclaims. The parallel-fork builder
+// sizes its centring band from the UNCOMPRESSED dimension, so this 100 px is
+// visible to a short sibling branch's vertical centring.
+const SWITCH_NUDE_INFLATION: f64 = 100.0;
+// `FtileSwitchWithManyLinks.getYdelta1a` floor (`double max = 10`) and the
+// `+ 10` it adds; `getYdelta1b` is also 10.
+const SWITCH_YDELTA_MIN: f64 = 10.0;
+const SWITCH_YDELTA1B: f64 = 10.0;
+
 // When a multi-case switch is the *terminal* (or only) flow node of a `while`
 // body, its empty merge band sits directly above the loop-back junction. The
 // while frame's vertical centring reserves space there, so ON_Y compression
@@ -2672,6 +2683,71 @@ fn switch_fork_uncompress_extra(node: &LayoutNode, fork_gap_extra: f64) -> f64 {
     let layout = switch_x_layout(cases, condition);
     switch_merge_gap_in_fork(cases, condition, &layout, fork_gap_extra)
         - switch_merge_gap(cases, condition, &layout)
+}
+
+/// PlantUML's UNCOMPRESSED `FtileSwitchWithDiamonds.calculateDimension` height
+/// for a multi-case switch — the height the parallel-fork builder uses to size
+/// the vertical band each fork branch is centred within
+/// (`AbstractParallelFtilesBuilder.computeNewFtile` →
+/// `FtileHeightFixedCentered(tile, maxHeight + 2*20)`).
+///
+/// This is the *uncompressed* dimension (pre whole-diagram ON_Y compression),
+/// not the compressed height the switch is actually drawn at. The two differ
+/// because `FtileSwitchNude` inflates the case-tile band by a fixed 100 px
+/// (`delta(_, 100)`) that ON_Y later reclaims; the fork's centring math runs
+/// before that reclaim, so a short sibling branch is centred against the full
+/// inflated height.
+///
+/// Faithful port of:
+///   height = dim1.h + nudeHeight + dim2.h + getYdelta1a + getYdelta1b
+/// where
+///   dim1.h = dim2.h = hexagon height (2*HEXAGON_HALF = 24),
+///   nudeHeight = max(case-tile height) + 100,
+///   case-tile height = action.h + caseLabel.h   (FtileDecorateInLabel addTop),
+///   getYdelta1a = max(10, caseLabel.h) + 10  (+ dim1.h/2 in BIG_DIAMOND mode),
+///   getYdelta1b = 10.
+/// (`FtileSwitchWithManyLinks.getYdelta1a`, `FtileSwitchWithDiamonds`.)
+fn fork_switch_uncompressed_height(cases: &[SwitchCase], _condition: &str) -> f64 {
+    let diamond_h = DIAMOND_HALF * 2.0;
+    // Per-case label height (the InLabel `addTop`), and the max case-tile band.
+    let case_label_h = |label: &str| -> f64 {
+        if label.is_empty() {
+            0.0
+        } else {
+            label.split('\n').count().max(1) as f64 * pm::text_height(SMALL_FONT)
+        }
+    };
+    let max_label_h = cases
+        .iter()
+        .map(|c| case_label_h(&c.label))
+        .fold(0.0f64, f64::max);
+    let max_case_tile_h = cases
+        .iter()
+        .map(|c| sequence_height(&c.body) + case_label_h(&c.label))
+        .fold(0.0f64, f64::max);
+    let nude_h = max_case_tile_h + SWITCH_NUDE_INFLATION;
+    // getYdelta1a: max(10, caseLabel) + 10. PlantUML adds `diamond1.height / 2`
+    // in BIG_DIAMOND mode; the goldens show the fork centring band growing by
+    // far less than that nominal amount (the rest is reclaimed by ON_Y before
+    // the centring math), and the exact surviving extra is not yet grounded, so
+    // BIG mode is left on the SMALL formula here (it is anyway blocked on the
+    // separate switch-in-fork horizontal x-layout bug — see commit message).
+    let ydelta1a = max_label_h.max(SWITCH_YDELTA_MIN) + SWITCH_YDELTA1B;
+    diamond_h + nude_h + diamond_h + ydelta1a + SWITCH_YDELTA1B
+}
+
+/// Centring height a fork branch contributes to its parent fork's
+/// `FtileHeightFixedCentered` band. A branch that is exactly one multi-case
+/// switch uses the switch's UNCOMPRESSED `calculateDimension` height
+/// (`fork_switch_uncompressed_height`); every other branch uses its ordinary
+/// (compressed) sequence height. See `fork_switch_uncompressed_height`.
+fn fork_branch_centering_height(branch: &[LayoutNode], gap_extra: f64) -> f64 {
+    if let [LayoutNode::Switch { cases, condition }] = branch
+        && cases.len() >= 2
+    {
+        return fork_switch_uncompressed_height(cases, condition);
+    }
+    sequence_height_ex(branch, gap_extra)
 }
 
 /// Extra added to a multi-case switch's merge gap when the switch is a direct
@@ -6060,8 +6136,7 @@ fn node_height(node: &LayoutNode) -> f64 {
             // visible content. The emitted shapes are unaffected (the snake
             // wraps back at the lower junction); only the frame's bottom
             // whitespace expands. See [`WHILE_BREAK_FIRST_FRAME_EXTRA`].
-            let break_first_canvas_extra = if special_out.is_none()
-                && break_if_is_first_flow(body)
+            let break_first_canvas_extra = if special_out.is_none() && break_if_is_first_flow(body)
             {
                 WHILE_BREAK_FIRST_CANVAS_EXTRA
             } else {
@@ -10657,20 +10732,28 @@ fn emit_fork_with_layout(
     svg.fork_branch_gap_extra = gap_extra;
     let mut center_offsets = vec![0.0f64; branches.len()];
     if center_branches {
-        let heights: Vec<f64> = branches
+        // The band each branch is centred within is sized by the tallest
+        // branch's UNCOMPRESSED dimension (a multi-case switch reports more
+        // than its drawn height — see `fork_branch_centering_height`); a
+        // branch's own centring uses its drawn height, so a short sibling next
+        // to a switch is pushed down by the switch's reclaimed whitespace.
+        let band_heights: Vec<f64> = branches
             .iter()
             .map(|b| {
                 if b.is_empty() {
                     0.0
                 } else {
-                    sequence_height_ex(b, gap_extra)
+                    fork_branch_centering_height(b, gap_extra)
                 }
             })
             .collect();
-        let max_h = heights.iter().cloned().fold(0.0f64, f64::max);
-        for (i, &h) in heights.iter().enumerate() {
-            if !branches[i].is_empty() {
-                center_offsets[i] = (max_h - h) / 2.0;
+        let max_h = band_heights.iter().cloned().fold(0.0f64, f64::max);
+        for (i, b) in branches.iter().enumerate() {
+            if !b.is_empty() {
+                // Each branch is centred by its OWN centring height (a switch's
+                // drawn content stays anchored to the top of its uncompressed
+                // extent, so it does not drift down within the band).
+                center_offsets[i] = (max_h - band_heights[i]) / 2.0;
             }
         }
     }
