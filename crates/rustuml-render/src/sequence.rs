@@ -6435,9 +6435,25 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                     let span = participants[hi].lifeline_line_x - participants[lo].lifeline_line_x;
                     let min_width = span.round() + ACROSS_NOTE_MARGIN;
                     let centre = (participants[lo].center_x + participants[hi].center_x) / 2.0;
-                    let pw = note_content_width_raw_padded(max_tw, note.shape, note_text_align)
-                        .max(min_width);
-                    note_across_missing_space(centre, pw)
+                    if diagram.teoz {
+                        // Teoz `NoteTile.getX` for OVER_SEVERAL centres the note on
+                        // the midpoint of the first/last lifelines (posC) and extends
+                        // its *visible* preferred width each side. The +5 teoz shift
+                        // is applied later, so the note's left edge must reach the
+                        // teoz over-note floor TEOZ_FIRST_OVER_NOTE_LEFT (15) in the
+                        // final frame, i.e. (15 - TEOZ_PARTICIPANT_SHIFT) here. The
+                        // shift stays fractional (Real positions are exact in Java).
+                        let pw =
+                            single_note_visible_raw_width(max_tw, note.shape, note_global_padding)
+                                .max(min_width);
+                        let note_left = centre - pw / 2.0;
+                        let floor = TEOZ_FIRST_OVER_NOTE_LEFT - TEOZ_PARTICIPANT_SHIFT;
+                        (floor - note_left).max(0.0)
+                    } else {
+                        let pw = note_content_width_raw_padded(max_tw, note.shape, note_text_align)
+                            .max(min_width);
+                        note_across_missing_space(centre, pw)
+                    }
                 } else if note.shape == NoteShape::Note {
                     let component_pref_w =
                         max_tw + ROSE_NOTE_COMPONENT_PREF_EXTRA + 2.0 * note_global_padding;
@@ -6472,7 +6488,14 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
             }
         }
         if across_shift > 0.0 {
-            let shift = across_shift.floor();
+            // Non-teoz keeps the shift integral (Java pushes whole pixels); teoz
+            // mirrors `NoteTile.getX`, whose Real positions are exact, so the
+            // teoz over-several pin (above) must shift fractionally.
+            let shift = if diagram.teoz {
+                across_shift
+            } else {
+                across_shift.floor()
+            };
             for p in participants.iter_mut() {
                 p.center_x += shift;
                 p.box_x += shift;
@@ -9018,8 +9041,21 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                 (participants.first(), participants.last())
             {
                 let center = (first.box_x + last.box_x + last.box_width - 1.0) / 2.0;
-                if first.kind == ParticipantKind::Actor && last.kind == ParticipantKind::Database {
+                let center = if first.kind == ParticipantKind::Actor
+                    && last.kind == ParticipantKind::Database
+                {
                     center - ACTOR_TO_DATABASE_TITLE_CENTER_ADJUST
+                } else {
+                    center
+                };
+                if diagram.teoz {
+                    // Java `SequenceDiagramArea.getTitleX` centres on
+                    // `getWidth/2`, where getWidth is the full sequence-body
+                    // width (= svg_width_exact - 1). In teoz the body can extend
+                    // beyond the participant span (self-message loopbacks,
+                    // over-several notes), so the span midpoint undercounts; take
+                    // the wider of the two (the `max` is inherent in getWidth).
+                    center.max((svg_width_exact - 1.0) / 2.0)
                 } else {
                     center
                 }
@@ -9741,7 +9777,13 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                     } else if deactivates_self && existing_depth > 0 {
                         from_x + existing_depth as f64 * ACTIVATION_HALF_W
                     } else if from_active || to_active {
-                        from_x + ACTIVATION_HALF_W
+                        // The loopback springs from the *deepest* livebox edge.
+                        // With nested activations that is `posC + level*LIVE_DELTA`
+                        // (Java); using a single ACTIVATION_HALF_W mis-anchors a
+                        // self-message sent while the participant is multiply
+                        // activated. `existing_depth` is >= 1 here (the participant
+                        // is active), so depth==1 keeps the prior single-level x.
+                        from_x + existing_depth.max(1) as f64 * ACTIVATION_HALF_W
                     } else {
                         from_x
                     };
@@ -10238,7 +10280,15 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                             && from_existing_depth > 0;
                         let dotted_from_active_bar =
                             is_dotted && from_active && !from_deactivates_next;
-                        let line_x2_end = if teoz_deactivate_return || dotted_from_active_bar {
+                        let line_x2_end = if teoz_deactivate_return {
+                            // The return leaves from the *closing* (deepest) bar's
+                            // near edge. A bar at nesting depth d has its left edge
+                            // at `from_x - HALF_W + (d-1)*HALF_W`; for d==1 this is
+                            // the prior `from_x - HALF_W`. Then `-1` for the stroke.
+                            from_x - ACTIVATION_HALF_W
+                                + (from_existing_depth - 1) as f64 * ACTIVATION_HALF_W
+                                - 1.0
+                        } else if dotted_from_active_bar {
                             from_x - ACTIVATION_HALF_W - 1.0
                         } else {
                             from_x_shifted - 1.0
