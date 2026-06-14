@@ -4127,8 +4127,14 @@ struct IfLongCol {
     /// width: the alone diamond, widened to the RIGHT by a long north label
     /// (`left + north_w` when `north_w > left`). Equals `diamond_w` otherwise.
     diamond_w_tile: f64,
-    /// Branch box width (`FtileMinWidthCentered(branch, 30)`).
-    branch_w: f64,
+    /// Branch DRAWN extents (left, right) from the branch spine = couple centre.
+    /// Differs from `branch_w/2` when the branch carries a nested construct that
+    /// reserves placement margin past its drawn shapes (e.g. a nested
+    /// `FtileIfWithDiamonds` reserves `addHorizontalMargin(10)` on each side that
+    /// is NOT drawn). Occupancy / left_ext must use the DRAWN extent so the empty
+    /// reservation band collapses (PlantUML's compression reads real shapes).
+    branch_draw_l: f64,
+    branch_draw_r: f64,
     /// Branch box height.
     branch_h: f64,
     /// Couple width = `FtileGeometryMerger(diamondTile, branch)`'s width, where
@@ -4231,6 +4237,14 @@ fn if_long_layout(
     let mut push_col = |cond: &str, north: &Option<String>, body: &[LayoutNode]| -> Option<()> {
         let g = sequence_geometry(body)?;
         let branch_w = g.width.max(30.0);
+        // True drawn extents from the branch spine (= couple centre). For a simple
+        // action/leaf branch these equal branch_w/2; for a branch whose body
+        // reserves un-drawn placement margin (nested if/while/…) they are smaller,
+        // so the occupancy / left_ext below collapses that empty reservation.
+        let (branch_draw_l, branch_draw_r) = {
+            let (dl, dr) = sequence_extents(body);
+            (dl.min(branch_w / 2.0), dr.min(branch_w / 2.0))
+        };
         // Branch column height carries the partially-uncompressed inter-tile
         // slack (see IF_LONG_BRANCH_GAP_EXTRA): `sequence_geometry` assembles at
         // the fully-compressed 20 px gap, so re-derive the height with the extra.
@@ -4251,17 +4265,25 @@ fn if_long_layout(
         // Simple stacks them vertically and merges on the spine). diamondTile is
         // the FtileDiamondInside2 *tile* geometry: left = alone-width/2, total
         // width = `dgeo.width` (widened to the right when north_w > left). The
-        // branch is FtileMinWidthCentered → centred (branch_left = branch_w/2).
+        // branch is FtileMinWidthCentered, which PRESERVES the delegated tile's
+        // getLeft when its width already exceeds the 30px minimum
+        // (`calculateDimensionSlow` → `getPoint2` returns geo.getLeft unchanged).
+        // So the branch spine offset is the body's own geometry `left`, NOT
+        // `branch_w/2` — these differ when the body is an asymmetric construct
+        // (e.g. a nested if whose then/else branches have unequal widths).
         let diamond_left = dgeo.left;
         let diamond_tile_w = dgeo.width;
-        let branch_left = branch_w / 2.0;
+        // FtileMinWidthCentered widens a sub-30 body to 30 (re-centring it); above
+        // that it keeps the body's own getLeft. Mirror both cases.
+        let branch_left = if g.width < 30.0 { 15.0 } else { g.left };
         let couple_left = diamond_left.max(branch_left);
         let couple_w = (diamond_tile_w + (couple_left - diamond_left))
             .max(branch_w + (couple_left - branch_left));
         cols.push(IfLongCol {
             diamond_w,
             diamond_w_tile: diamond_tile_w,
-            branch_w,
+            branch_draw_l,
+            branch_draw_r,
             branch_h,
             couple_w,
             couple_left,
@@ -4296,16 +4318,20 @@ fn if_long_layout(
     // minimum width with no point in/out. A populated else keeps the same
     // partially-uncompressed inter-tile slack as the elseif branches.
     let tile2_empty = tile2_body.is_none();
-    let (tile2_w, tile2_h) = match tile2_body {
+    let (tile2_w, tile2_h, tile2_draw_l, tile2_draw_r) = match tile2_body {
         Some(body) => {
             let g = sequence_geometry(body)?;
+            let w = g.width.max(30.0);
+            let (dl, dr) = sequence_extents(body);
             (
-                g.width.max(30.0),
+                w,
                 sequence_height_ex(body, IF_LONG_BRANCH_GAP_EXTRA),
+                dl.min(w / 2.0),
+                dr.min(w / 2.0),
             )
         }
         // Implicit empty else: the FtileMinWidthCentered(empty, 30) column.
-        None => (30.0, 0.0),
+        None => (30.0, 0.0, 15.0, 15.0),
     };
 
     // Lay out un-compacted (PlantUML's `getTranslateCouple1`): couples placed
@@ -4340,8 +4366,12 @@ fn if_long_layout(
         let dw = c.diamond_w;
         // diamond polygon
         occ.push((cc - dw / 2.0, cc + dw / 2.0));
-        // branch box
-        occ.push((cc - c.branch_w / 2.0, cc + c.branch_w / 2.0));
+        // branch DRAWN content (FtileMinWidthCentered centres the branch at the
+        // couple centre). Uses the true drawn extents, not the placement width:
+        // a branch carrying a nested construct reserves un-drawn placement margin
+        // (e.g. FtileIfWithDiamonds' addHorizontalMargin(10)) that compression
+        // must reclaim, so occupancy stops at the real shapes.
+        occ.push((cc - c.branch_draw_l, cc + c.branch_draw_r));
         // north label: left edge at cc + 4
         if let Some(north) = &c.north {
             let nw = text_render::measure(north, SMALL_FONT, false);
@@ -4362,7 +4392,7 @@ fn if_long_layout(
         }
     }
     if let Some(tc) = tile2_center_u {
-        occ.push((tc - tile2_w / 2.0, tc + tile2_w / 2.0));
+        occ.push((tc - tile2_draw_l, tc + tile2_draw_r));
     }
     // Horizontal "no"-arrow connectors between adjacent diamonds (and from the
     // last diamond east vertex into tile2) are drawn as Snakes → `UPath`, which
@@ -4470,10 +4500,23 @@ fn if_long_vmetrics(l: &IfLongLayout, y: f64) -> IfLongV {
     let couple_branch_top = dtop + diamond_aligned_h;
     // Internal height (calculateDimensionInternal): couples block vs the
     // else tile lifted by diamondsHeight/2, plus the 100 reserve.
+    //
+    // The couple's OCCUPIED height (what calculateDimensionInternal merges, and
+    // what centres `tile2`) is the diamond corridor + branch MINUS the overlap
+    // the whole-diagram ON_Y compression reclaims where the diamond's south
+    // (`withNorth`) band meets the branch top. That reclaim is `descent − 1.5`
+    // (= `text_height(11) − north_h`): zero when the band keeps its full line
+    // height (`north_h == text_height(11)`, i.e. a simple-flow branch with a
+    // populated bare else, matching the chain goldens) and `0.8203` when the
+    // band compressed to `ascent + 1.5` (a branch carrying a nested construct).
+    // `couple_branch_top`/`merge_y` already use the post-reclaim
+    // `diamond_aligned_h`, so the reclaim only needs subtracting here, in the
+    // height-for-centring.
+    let corridor_overlap = (pm::text_height(SMALL_FONT) - l.north_h).max(0.0);
     let couples_h = l
         .cols
         .iter()
-        .map(|c| diamond_aligned_h + c.branch_h)
+        .map(|c| diamond_aligned_h + c.branch_h - corridor_overlap)
         .fold(0.0_f64, f64::max);
     let diamonds_height = diamond_aligned_h;
     let tile2_merged_h = l.tile2_h + diamonds_height / 2.0;
