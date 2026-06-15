@@ -4871,7 +4871,7 @@ fn node_extents(node: &LayoutNode) -> (f64, f64) {
                 let break_left = repeat_break_if_cond_half(body)
                     .map_or(0.0, |ch| ch + REPEAT_BREAK_CORRIDOR_PAD);
                 let left_extent = body_left.max(cond_half + 9.0).max(break_left);
-                let body_geo_right = repeat_body_geo_right(body);
+                let body_geo_right = repeat_backward_body_right(body);
                 let right_extent =
                     repeat_backward_right_extent(cond_half, body_geo_right, is_label, label);
                 (left_extent, right_extent)
@@ -5491,6 +5491,25 @@ fn repeat_backward_right_extent(
 /// computable geometry (e.g. a note-only body).
 fn repeat_body_geo_right(body: &[LayoutNode]) -> f64 {
     sequence_geometry(body).map_or_else(|| sequence_width(body) / 2.0, |g| g.right())
+}
+
+/// Clearance the appended `backward :...;` box keeps to the right of a break-`if`
+/// body's drawn continue-corridor (the surviving branch routed right then down
+/// before merging back to the spine). `repeat.getRight()` (the bare geometry)
+/// under-measures that corridor, so for a break-bearing body the box column keys
+/// off the drawn right extent plus this margin instead.
+const REPEAT_BACKWARD_BREAK_BOX_CLEARANCE: f64 = 2.0 * DIAMOND_HALF - ACTION_H_PADDING;
+
+/// Right extent (from the body spine) the appended `backward :...;` box clears.
+/// For a plain or composite body this is `repeat.getRight()`; for a break-`if`
+/// body the drawn continue-corridor extends past the bare geometry, so the box
+/// must clear the drawn extent (`sequence_extents`) plus a fixed margin.
+fn repeat_backward_body_right(body: &[LayoutNode]) -> f64 {
+    if break_if_is_last_flow(body) {
+        sequence_extents(body).1 + REPEAT_BACKWARD_BREAK_BOX_CLEARANCE
+    } else {
+        repeat_body_geo_right(body)
+    }
 }
 
 fn node_width(node: &LayoutNode) -> f64 {
@@ -9964,6 +9983,17 @@ const REPEAT_BREAK_IF_HEIGHT_OVERCOUNT: f64 =
 /// when an explicit `backward :...;` tile occupies the loop-back arm.
 const REPEAT_BACKWARD_BODY_SLACK: f64 = 30.0;
 
+/// Extra vertical slack a break-bearing `backward :...;` repeat with an ODD
+/// number of leading actions distributes into the same body gap the non-break
+/// backward path stretches (before the last action, or before the break-`if`
+/// for a single-action body). When the action count is EVEN the break-`if`
+/// already absorbs `IF_DOWN_MID_STRETCH` (the parity-driven centring shared
+/// with the non-backward break path), so no extra applies. This residual is the
+/// whole-diagram ON_Y compression slack PlantUML leaves around the centred
+/// backward tile; this renderer defers ON_Y, so it is reproduced here.
+/// Empirically constant across the `act_repeat_acts{1,3}_bwd_brk` family.
+const REPEAT_BACKWARD_BREAK_ODD_SLACK: f64 = 2.1553;
+
 /// The even-body mid-stretch is calibrated for loop bodies whose flow nodes are
 /// plain action tiles (`act_while_2actions_body` and friends): PlantUML's Snake
 /// compaction distributes the back-edge label slack evenly across an even number
@@ -10063,6 +10093,29 @@ fn while_body_height(body: &[LayoutNode], has_in_label: bool) -> f64 {
 fn repeat_body_mid_stretch(body: &[LayoutNode], has_backward: bool) -> Option<(usize, f64)> {
     let flow_count = body.iter().filter(|n| node_is_flow(n)).count();
     if has_backward {
+        // A break-bearing backward body `[actions…, break-if]` follows the same
+        // parity model as the non-backward break path: the break-`if` is the
+        // trailing composite the leading actions balance against. An EVEN action
+        // count lands the centring stretch on the break-`if`'s inbound connector
+        // (`IF_DOWN_MID_STRETCH`); an ODD count leaves the break-`if` flush and
+        // instead distributes the centred backward tile's compression residual
+        // (`REPEAT_BACKWARD_BREAK_ODD_SLACK`) into the body gap the non-break
+        // backward path stretches — before the last action, or before the
+        // break-`if` for a single action.
+        if break_if_is_last_flow(body) {
+            let action_count = body
+                .iter()
+                .filter(|n| matches!(n, LayoutNode::Action { .. }))
+                .count();
+            let break_if_idx = flow_count.saturating_sub(1);
+            if action_count >= 2 && action_count.is_multiple_of(2) {
+                return Some((break_if_idx, IF_DOWN_MID_STRETCH));
+            }
+            // Odd action count: stretch the gap before the last action, or — for
+            // a single action — the gap before the break-`if` itself.
+            let target = (action_count.saturating_sub(1)).max(1).min(break_if_idx);
+            return Some((target, REPEAT_BACKWARD_BREAK_ODD_SLACK));
+        }
         if flow_count >= 2 {
             return Some((
                 flow_count - 1,
@@ -12687,7 +12740,7 @@ fn emit_repeat(
         // repeats append it 24 px past the diamond east vertex; body-dominant
         // repeats clear the east label before placing it.
         let bw = repeat_backward_box_w(label);
-        let body_geo_right = repeat_body_geo_right(body);
+        let body_geo_right = repeat_backward_body_right(body);
         let cond_half = cond_inner_w / 2.0 + DIAMOND_HALF;
         let box_left = cx + repeat_backward_box_left_rel(cond_half, body_geo_right, is_label);
         let box_cx = box_left + bw / 2.0;
@@ -12703,13 +12756,36 @@ fn emit_repeat(
         // so the historical single-flow path matched; but a single TALL flow
         // node (e.g. an if/else block) has its centre well below body_y, so the
         // box must centre on the whole body span regardless of flow count.
-        let odd_stretch_adjust =
-            if backward_flow_count >= 2 && !backward_flow_count.is_multiple_of(2) {
-                body_mid_stretch.map_or(0.0, |(_, stretch)| stretch / 2.0)
-            } else {
+        let box_top = if break_if_is_last_flow(body) {
+            // A break-`if` body's surviving branch routes RIGHT then back to the
+            // spine, so its drawn span runs past the bare `body_bottom`. PlantUML
+            // centres the backward tile on the whole composite (entry diamond top
+            // to condition diamond bottom = `getTranslateBackward = totalHeight/2`),
+            // then the deferred ON_Y compression of the break corridor shifts the
+            // loop-back band up by `REPEAT_BREAK_LOOPBACK_ARROW_BIAS`. An ODD
+            // action count additionally absorbs `REPEAT_BACKWARD_BREAK_ODD_SLACK/2`
+            // of that shift through its centring stretch.
+            let cond_bottom = cond_y + DIAMOND_HALF * 2.0;
+            let composite_center = (y + cond_bottom) / 2.0;
+            let action_count = body
+                .iter()
+                .filter(|n| matches!(n, LayoutNode::Action { .. }))
+                .count();
+            let odd_action_relief = if action_count.is_multiple_of(2) {
                 0.0
+            } else {
+                REPEAT_BACKWARD_BREAK_ODD_SLACK / 2.0
             };
-        let box_top = body_y + (body_bottom - body_y - backward_h) / 2.0 - odd_stretch_adjust;
+            composite_center - backward_h / 2.0 - REPEAT_BREAK_LOOPBACK_ARROW_BIAS + odd_action_relief
+        } else {
+            let odd_stretch_adjust =
+                if backward_flow_count >= 2 && !backward_flow_count.is_multiple_of(2) {
+                    body_mid_stretch.map_or(0.0, |(_, stretch)| stretch / 2.0)
+                } else {
+                    0.0
+                };
+            body_y + (body_bottom - body_y - backward_h) / 2.0 - odd_stretch_adjust
+        };
         let box_bottom = box_top + backward_h;
 
         // Box shape first — PlantUML emits the backward tile's shapes before
