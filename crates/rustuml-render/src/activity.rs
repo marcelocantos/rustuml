@@ -9846,6 +9846,42 @@ fn repeat_body_mid_stretch(body: &[LayoutNode], has_backward: bool) -> Option<(u
     }
 }
 
+/// Downward bias applied to the loop-back emphasis arrowhead ONLY (never to
+/// body shapes or canvas height). PlantUML anchors that arrowhead on the
+/// *pre-compression* vertical midpoint of the loop-back snake — which is the
+/// repeat frame's centre (`getTranslateForRepeat` splits the reserved
+/// `space = 8*hexagonHalfSize` as `space/2` above and below the body). For a
+/// body whose flow nodes are all plain actions this surfaces through the
+/// even-body mid-stretch (the arrowhead lands `stretch/2` above the naive
+/// midpoint). But a body that LEADS with a plain action and then enters a
+/// single balanced `if` (then+else, both reconverging) keeps the action tile
+/// uncompressed above the if-block while the if-block's own internal slack
+/// collapses below it — so the pre-compression centre sits `space/2 ≈ 7.5 px`
+/// below the naive `(top+cond)/2` midpoint. Returns 0 for every other body
+/// shape, leaving all currently-correct loop-backs byte-identical.
+fn repeat_loopback_arrow_bias(body: &[LayoutNode], has_backward: bool) -> f64 {
+    if has_backward {
+        return 0.0;
+    }
+    let flow: Vec<&LayoutNode> = body.iter().filter(|n| node_is_flow(n)).collect();
+    // Need an even flow count whose leading nodes are plain actions and whose
+    // single trailing composite is a balanced `if` (has at least one else
+    // branch, so it reconverges through a merge diamond rather than detaching).
+    if flow.len() < 2 || !flow.len().is_multiple_of(2) {
+        return 0.0;
+    }
+    let (last, lead) = flow.split_last().expect("flow non-empty");
+    if !lead.iter().all(|n| matches!(n, LayoutNode::Action { .. })) {
+        return 0.0;
+    }
+    match last {
+        LayoutNode::If { else_branches, .. } if !else_branches.is_empty() => {
+            REPEAT_EVEN_BODY_MID_STRETCH
+        }
+        _ => 0.0,
+    }
+}
+
 /// Extra body→condition gap a `repeat` keeps when nested inside another
 /// repeat's body. Mirrors the `nested_cond_extra` applied in [`emit_repeat`]:
 /// the enclosing loop frame leaves one `ARROW_LEN` of the inner repeat's
@@ -12380,7 +12416,12 @@ fn emit_repeat(
         // the lower half of the loop-back, so it biases the visible midpoint
         // down by half that amount — undo it to land on the content midpoint.
         let nested_bias = (nested_cond_extra + body_expansion) / 2.0;
-        let mid_y = (top_cy + cond_diamond_cy - body_stretch + body_top_extra) / 2.0 - nested_bias;
+        // Leading-action + balanced-if bodies anchor the arrowhead on the
+        // pre-compression frame centre, `space/2` above the naive midpoint.
+        let loopback_arrow_bias = repeat_loopback_arrow_bias(body, backward.is_some());
+        let mid_y = (top_cy + cond_diamond_cy - body_stretch + body_top_extra) / 2.0
+            - nested_bias
+            - loopback_arrow_bias;
         svg.polygon_connector(
             &arrow_color,
             &[
