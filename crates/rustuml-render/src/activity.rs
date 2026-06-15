@@ -4198,6 +4198,32 @@ fn is_simple_branch_flow(body: &[LayoutNode]) -> bool {
     })
 }
 
+/// True when every `then`/`elseif`/bare-else column of an `if/elseif*/else` is a
+/// simple linear flow (no nested control-flow construct).
+fn if_long_all_branches_simple(then_branch: &[LayoutNode], else_branches: &[ElseBranch]) -> bool {
+    is_simple_branch_flow(then_branch)
+        && else_branches
+            .iter()
+            .all(|b| is_simple_branch_flow(&b.body))
+}
+
+/// Inter-tile gap extra retained inside a simple-flow branch column of an
+/// `FtileIfLongHorizontal` row. When every column is simple, the whole-diagram
+/// ON_Y compression reclaims the assembly's 35 px gap down to
+/// `ARROW_LEN + IF_LONG_BRANCH_GAP_EXTRA` (the chain goldens). When a sibling
+/// column carries a nested control-flow construct (fork/while/repeat/if/switch),
+/// its tall, solidly-occupied y-band straddles the same vertical range, blocking
+/// the reclaim, so the simple siblings keep the full uncompressed 35 px
+/// (`ARROW_LEN + FORK_BRANCH_INTER_GAP_EXTRA`). Layout and emit both call this so
+/// predicted and drawn branch heights agree.
+fn if_long_branch_gap_extra(then_branch: &[LayoutNode], else_branches: &[ElseBranch]) -> f64 {
+    if if_long_all_branches_simple(then_branch, else_branches) {
+        IF_LONG_BRANCH_GAP_EXTRA
+    } else {
+        FORK_BRANCH_INTER_GAP_EXTRA
+    }
+}
+
 /// Build the placed long layout for an `if/elseif*/else`. Returns `None` if any
 /// branch isn't yet portable (so the caller falls back to the legacy path).
 fn if_long_layout(
@@ -4225,15 +4251,16 @@ fn if_long_layout(
     let has_populated_bare_else = else_branches
         .iter()
         .any(|b| b.condition.is_none() && !b.body.is_empty());
-    let all_branches_simple = is_simple_branch_flow(then_branch)
-        && else_branches
-            .iter()
-            .all(|b| b.condition.is_none() || is_simple_branch_flow(&b.body));
+    let all_branches_simple = if_long_all_branches_simple(then_branch, else_branches);
     let north_h = if has_populated_bare_else && all_branches_simple {
         pm::text_height(SMALL_FONT)
     } else {
         pm::ascent(SMALL_FONT) + 1.5
     };
+
+    // Inter-tile gap retained inside a simple-flow branch column (see
+    // `if_long_branch_gap_extra`). Layout and `emit_if_long` use the same value.
+    let branch_gap_extra = if_long_branch_gap_extra(then_branch, else_branches);
 
     let mut push_col = |cond: &str, north: &Option<String>, body: &[LayoutNode]| -> Option<()> {
         let g = sequence_geometry(body)?;
@@ -4247,9 +4274,9 @@ fn if_long_layout(
             (dl.min(branch_w / 2.0), dr.min(branch_w / 2.0))
         };
         // Branch column height carries the partially-uncompressed inter-tile
-        // slack (see IF_LONG_BRANCH_GAP_EXTRA): `sequence_geometry` assembles at
-        // the fully-compressed 20 px gap, so re-derive the height with the extra.
-        let branch_h = sequence_height_ex(body, IF_LONG_BRANCH_GAP_EXTRA);
+        // slack (see `branch_gap_extra`): `sequence_geometry` assembles at the
+        // fully-compressed 20 px gap, so re-derive the height with the extra.
+        let branch_h = sequence_height_ex(body, branch_gap_extra);
         let cond_text_w = text_render::measure(cond, SMALL_FONT, false);
         let cond_text_h = pm::text_height(SMALL_FONT);
         let north_w = north
@@ -4326,7 +4353,7 @@ fn if_long_layout(
             let (dl, dr) = sequence_extents(body);
             (
                 w,
-                sequence_height_ex(body, IF_LONG_BRANCH_GAP_EXTRA),
+                sequence_height_ex(body, branch_gap_extra),
                 dl.min(w / 2.0),
                 dr.min(w / 2.0),
             )
@@ -9398,10 +9425,10 @@ fn emit_if_long(
     let n = l.cols.len();
 
     // Branch columns retain the partially-uncompressed inter-tile slack (see
-    // IF_LONG_BRANCH_GAP_EXTRA); set it for the branch/else body emits below and
-    // restore before the connector loops, which use plain ARROW_LEN spacing.
+    // `if_long_branch_gap_extra`); set it for the branch/else body emits below
+    // and restore before the connector loops, which use plain ARROW_LEN spacing.
     let saved_gap_extra = svg.fork_branch_gap_extra;
-    svg.fork_branch_gap_extra = IF_LONG_BRANCH_GAP_EXTRA;
+    svg.fork_branch_gap_extra = if_long_branch_gap_extra(then_branch, else_branches);
 
     // Branch bodies in column order: then_branch, then each elseif body.
     let elseif_bodies: Vec<&[LayoutNode]> = else_branches
