@@ -4126,6 +4126,14 @@ const IF_LONG_ALIGN_BOTTOM: f64 = 20.0;
 /// `ARROW_LEN + (4.477539… − 1)` ≈ 23.4775 instead of 20. The `4.477539…`
 /// residual is PlantUML's south-label band unit (also `IF_DOWN_LEAD`'s extra).
 const IF_LONG_BRANCH_GAP_EXTRA: f64 = 4.477539062500001 - 1.0;
+/// Inter-tile gap retained in a branch column when SOME branch of the chain
+/// carries a nested control-flow construct (fork/if/while/repeat/switch). The
+/// nested branch makes the couples block tall enough that the whole-diagram
+/// `ON_Y` compression can NOT reclaim the simple siblings' assembly slack at
+/// all: each inter-action gap keeps the full `assembly` reserve of 35 px
+/// (`FtileFactoryDelegatorAssembly.height = 35`), i.e. `ARROW_LEN + 15`. The
+/// same `all_branches_simple` predicate that selects `north_h` selects this.
+const IF_LONG_BRANCH_GAP_EXTRA_NESTED: f64 = 35.0 - ARROW_LEN;
 /// `SlotSet.smaller(margin)` keeps this much empty space on each side of every
 /// compressed cluster (PlantUML calls `smaller(5.0)`).
 const X_COMPRESS_MARGIN: f64 = 5.0;
@@ -4252,6 +4260,10 @@ struct IfLongLayout {
     tile2_empty: bool,
     /// Diamond north label height (single-line; reserved below the diamond).
     north_h: f64,
+    /// Inter-tile slack retained inside each branch column. `IF_LONG_BRANCH_GAP_
+    /// EXTRA` for an all-simple chain; `IF_LONG_BRANCH_GAP_EXTRA_NESTED` when any
+    /// branch carries a nested construct (then ON_Y can't reclaim the slack).
+    branch_gap_extra: f64,
     /// Left / right drawn extents from the spine.
     left_ext: f64,
     right_ext: f64,
@@ -4312,6 +4324,15 @@ fn if_long_layout(
     } else {
         pm::ascent(SMALL_FONT) + 1.5
     };
+    // When any branch carries a nested construct the couples block is tall enough
+    // that ON_Y can't reclaim the simple siblings' `assembly` slack — each
+    // inter-action gap keeps the full 35 px reserve rather than the partially-
+    // reclaimed 23.4775 an all-simple chain settles at.
+    let branch_gap_extra = if all_branches_simple {
+        IF_LONG_BRANCH_GAP_EXTRA
+    } else {
+        IF_LONG_BRANCH_GAP_EXTRA_NESTED
+    };
 
     let mut push_col = |cond: &str, north: &Option<String>, body: &[LayoutNode]| -> Option<()> {
         let g = sequence_geometry(body)?;
@@ -4324,10 +4345,10 @@ fn if_long_layout(
             let (dl, dr) = sequence_extents(body);
             (dl.min(branch_w / 2.0), dr.min(branch_w / 2.0))
         };
-        // Branch column height carries the partially-uncompressed inter-tile
-        // slack (see IF_LONG_BRANCH_GAP_EXTRA): `sequence_geometry` assembles at
-        // the fully-compressed 20 px gap, so re-derive the height with the extra.
-        let branch_h = sequence_height_ex(body, IF_LONG_BRANCH_GAP_EXTRA);
+        // Branch column height carries the (partially-)uncompressed inter-tile
+        // slack (see `branch_gap_extra`): `sequence_geometry` assembles at the
+        // fully-compressed 20 px gap, so re-derive the height with the extra.
+        let branch_h = sequence_height_ex(body, branch_gap_extra);
         let cond_text_w = text_render::measure(cond, SMALL_FONT, false);
         let cond_text_h = pm::text_height(SMALL_FONT);
         let north_w = north
@@ -4404,7 +4425,7 @@ fn if_long_layout(
             let (dl, dr) = sequence_extents(body);
             (
                 w,
-                sequence_height_ex(body, IF_LONG_BRANCH_GAP_EXTRA),
+                sequence_height_ex(body, branch_gap_extra),
                 dl.min(w / 2.0),
                 dr.min(w / 2.0),
             )
@@ -4556,6 +4577,7 @@ fn if_long_layout(
         tile2_cx,
         tile2_empty,
         north_h,
+        branch_gap_extra,
         left_ext,
         right_ext,
     })
@@ -9522,11 +9544,11 @@ fn emit_if_long(
     let diamond_bottom = dtop + DIAMOND_HALF * 2.0;
     let n = l.cols.len();
 
-    // Branch columns retain the partially-uncompressed inter-tile slack (see
-    // IF_LONG_BRANCH_GAP_EXTRA); set it for the branch/else body emits below and
+    // Branch columns retain the (partially-)uncompressed inter-tile slack (see
+    // `branch_gap_extra`); set it for the branch/else body emits below and
     // restore before the connector loops, which use plain ARROW_LEN spacing.
     let saved_gap_extra = svg.fork_branch_gap_extra;
-    svg.fork_branch_gap_extra = IF_LONG_BRANCH_GAP_EXTRA;
+    svg.fork_branch_gap_extra = l.branch_gap_extra;
 
     // Branch bodies in column order: then_branch, then each elseif body.
     let elseif_bodies: Vec<&[LayoutNode]> = else_branches
