@@ -6010,14 +6010,50 @@ fn while_body_right_driven_by_if(body: &[LayoutNode]) -> bool {
     matches!(last_if_right, Some(if_r) if if_r >= max_other_right)
 }
 
+/// True when the body's RIGHT extent is driven by a BREAK-down `if` (a lone
+/// `break` branch welded left + an empty east corridor — rendered by
+/// [`emit_if_break_down`] as a no-merge-diamond `FtileIfWithDiamonds`). Such a
+/// tile's right reach into the loop-back arm is the drawn east corridor
+/// (`cond_half + DIAMOND_HALF`, exactly what `node_extents` already returns for
+/// it), with NO further `WHILE_SINGLE_IF_RIGHT_PAD`: PlantUML's
+/// `FtileWhile.ConnectionBackSimple` arm clears that corridor + one
+/// `Hexagon.hexagonHalfSize`, and the regular-if `SUPP_WIDTH` margin does not
+/// apply here. Distinguished from a regular populated `FtileIfDown` so the pad
+/// stays for `act_while_ifdepth*` / `act_while_with_if` (which keep it).
+fn while_body_break_if_drives_right(body: &[LayoutNode]) -> bool {
+    let mut last_break_if_right: Option<f64> = None;
+    let mut max_other_right = 0.0f64;
+    for node in body {
+        if !node_is_flow(node) {
+            continue;
+        }
+        let (_l, r) = node_extents(node);
+        if let LayoutNode::If {
+            then_branch,
+            else_branches,
+            ..
+        } = node
+            && if_break_down_plan(then_branch, else_branches).is_some()
+        {
+            last_break_if_right = Some(r);
+        } else {
+            last_break_if_right = None;
+            max_other_right = max_other_right.max(r);
+        }
+    }
+    matches!(last_break_if_right, Some(r) if r >= max_other_right)
+}
+
 fn while_single_if_right_pad(body: &[LayoutNode], _end_label: &Option<String>) -> f64 {
     // The pad reflects the if-tile's calculated right extent exceeding its drawn
     // shape by `WHILE_SINGLE_IF_RIGHT_PAD` (the FtileIfWithDiamonds internal
     // margin that `geo.appendBottom` carries into FtileWhile's loop-back arm at
     // `dimTotal.getWidth()`). It is a property of the if-tile geometry, not of
     // the while's end-of-loop label, so it applies whether or not an
-    // `endwhile (label)` is present.
-    if while_body_right_driven_by_if(body) {
+    // `endwhile (label)` is present. A BREAK-down `if` driver already includes
+    // its drawn east-corridor reach in `node_extents` (`cond_half + DIAMOND_HALF`)
+    // and takes no SUPP_WIDTH margin, so the pad is suppressed there.
+    if while_body_right_driven_by_if(body) && !while_body_break_if_drives_right(body) {
         WHILE_SINGLE_IF_RIGHT_PAD
     } else {
         0.0
@@ -12057,12 +12093,11 @@ fn emit_repeat(
     // collapses the whole tail to a single arrow). Only the plain
     // (non-backward, non-start-label) form is affected; backward/labelled
     // forms route their tail through other geometry.
-    let nested_cond_extra =
-        if svg.repeat_body_depth > 0 && backward.is_none() && !has_start_label {
-            ARROW_LEN
-        } else {
-            0.0
-        };
+    let nested_cond_extra = if svg.repeat_body_depth > 0 && backward.is_none() && !has_start_label {
+        ARROW_LEN
+    } else {
+        0.0
+    };
     let arrow_color = svg.palette.arrow_color.clone();
     let diamond_stroke = svg.palette.diamond_stroke.clone();
     let diamond_fill = svg.palette.diamond_fill.clone();
