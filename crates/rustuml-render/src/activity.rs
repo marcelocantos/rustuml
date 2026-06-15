@@ -2296,7 +2296,9 @@ fn fork_layout(branches: &[Vec<LayoutNode>]) -> ForkLayout {
     let all_asymmetric = branch_extents
         .iter()
         .all(|(left, right)| (left - right).abs() > FORK_ASYMMETRIC_EPS);
-    let even_extra = if !(n >= 2 && n.is_multiple_of(2)) {
+    let even_extra = if !(n >= 2 && n.is_multiple_of(2)) || fork_branches_all_start_led(branches) {
+        // Start-led branches lay out as plain side-by-side columns: PlantUML's
+        // black bar holds open no even-fork middle corridor for them.
         0.0
     } else if all_asymmetric {
         FORK_ASYMMETRIC_EVEN_MIDDLE_EXTRA
@@ -6022,6 +6024,20 @@ fn fork_branches_are_single_partitions(branches: &[Vec<LayoutNode>]) -> bool {
         && branches
             .iter()
             .all(|branch| single_partition_branch_body_top(branch, 0.0).is_some())
+}
+
+/// Every fork branch begins with its own `start` circle (`fork`/`fork again`
+/// blocks that each open a fresh flow via `start`). PlantUML wraps each branch
+/// in `FtileHeightFixedCentered(maxHeight + 2*spaceArroundBlackBar)`; for a
+/// `FtileCircleStart`-led branch the inbound `ConnectionIn` lands at the
+/// circle's top, so the circle centre seats `START_R` below the standard
+/// post-bar arrow gap — and the branches lay out as plain side-by-side columns
+/// with no even-fork middle-gap clearance (the bar holds open nothing extra).
+fn fork_branches_all_start_led(branches: &[Vec<LayoutNode>]) -> bool {
+    !branches.is_empty()
+        && branches
+            .iter()
+            .all(|branch| matches!(branch.first(), Some(LayoutNode::Start)))
 }
 
 fn partition_wraps_single_if(body: &[LayoutNode]) -> bool {
@@ -11489,7 +11505,17 @@ fn emit_fork_with_layout(
         let branch_y = if single_partition_branch_body_top(branch, bar_bottom).is_some() {
             bar_bottom
         } else {
-            bar_bottom + ARROW_LEN + center_offsets[i]
+            // A branch opened by its own `start` circle seats the circle CENTRE
+            // a radius below the inbound arrowhead (the `ConnectionIn` lands on
+            // the circle's top), so its content begins `START_R` lower than an
+            // action-led branch. The bar→branch arrow itself still ends at the
+            // un-led top (the circle's top), so only the rendered content moves.
+            let start_lead = if matches!(branch.first(), Some(LayoutNode::Start)) {
+                START_R
+            } else {
+                0.0
+            };
+            bar_bottom + ARROW_LEN + center_offsets[i] + start_lead
         };
         let bottom = emit_sequence(svg, branch, bcx, branch_y);
         branch_bottoms.push(bottom);
