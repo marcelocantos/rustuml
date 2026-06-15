@@ -209,6 +209,33 @@ const SWITCH_MERGE_GAP_UNCOMPRESSED_BIG: f64 = 41.0449;
 // and 57.0449→31.5010.)
 const WHILE_TERMINAL_SWITCH_MERGE_RECLAIM: f64 = 25.5440;
 
+// When a multi-case switch is a *non-terminal* flow node of a `while` body and
+// at least three flow tiles follow it, the loop body is tall enough that ON_Y
+// compression reclaims the switch's merge band almost entirely (the trailing
+// tiles provide adjacent content to compress against — cf.
+// `while_break_corridor_compresses`'s 3-tile threshold). The merge diamond then
+// sits these distances below the case-tile bottoms instead of
+// `switch_merge_gap + ARROW_LEN`. With one or two trailing tiles the band stays
+// at `switch_merge_gap + ARROW_LEN` (the uncompressible loop-frame slack). The
+// odd/centre-spine block collapses to its standalone `ARROW_LEN`; the even block
+// keeps a small residual above the loop-back arrowhead.
+const SWITCH_WHILE_MERGE_GAP_COMPRESSED_EVEN: f64 = 14.7999;
+const SWITCH_WHILE_MERGE_GAP_COMPRESSED_ODD: f64 = 20.0;
+// At least this many flow tiles must follow a non-terminal in-while switch for
+// its merge band to ON_Y-compress.
+const SWITCH_WHILE_MERGE_COMPRESS_MIN_FOLLOWING: usize = 3;
+// In the compressed state the loop-back arrowhead seats this far above the merge
+// diamond top (`COMPRESSED_EVEN - ARROW_LEN/2`); the same offset holds for the
+// odd/centre-spine block. In the uncompressed state the arrowhead instead seats
+// `standalone_gap + ARROW_LEN/2` above the merge top (the corridor midpoint).
+const SWITCH_WHILE_COMPRESSED_LOOPBACK_OFFSET: f64 =
+    SWITCH_WHILE_MERGE_GAP_COMPRESSED_EVEN - ARROW_LEN / 2.0;
+// When an odd/centre-spine switch sits in a corridor-compressing `while` body
+// (>=3 body flow tiles), the centre branch's collinear vertical drop splits at
+// the compressed corridor turn — this far below the case-tile bottoms — rather
+// than `merge_top - SWITCH_CENTER_BOT_SPLIT`.
+const SWITCH_WHILE_COMPRESSED_CENTER_SPLIT: f64 = 5.0;
+
 const FONT_SIZE: f64 = 12.0;
 const SMALL_FONT: f64 = 11.0;
 const DECORATION_FONT_SIZE: f64 = 10.0;
@@ -1323,13 +1350,15 @@ fn repeat_break_if_cond_half(body: &[LayoutNode]) -> Option<f64> {
             diamond_text_bold,
             diamond_pad_x,
             ..
-        } if if_break_down_plan(then_branch, else_branches).is_some() => Some(if_diamond_half_width(
-            condition,
-            *diamond_font_size,
-            *diamond_text_bold,
-            diamond_font_family,
-            *diamond_pad_x,
-        )),
+        } if if_break_down_plan(then_branch, else_branches).is_some() => {
+            Some(if_diamond_half_width(
+                condition,
+                *diamond_font_size,
+                *diamond_text_bold,
+                diamond_font_family,
+                *diamond_pad_x,
+            ))
+        }
         _ => None,
     })
 }
@@ -2804,11 +2833,19 @@ fn switch_fork_centering_extra(node: &LayoutNode) -> f64 {
 /// its standalone value:
 ///   * terminal/only body node — the band sits above the loop-back junction, so
 ///     it keeps `UNCOMPRESSED_{BIG,SMALL} - WHILE_TERMINAL_SWITCH_MERGE_RECLAIM`.
-///   * followed by more body flow — an uncompressible `ARROW_LEN` survives below
-///     the merge diamond before the next tile's inbound connector.
+///   * followed by one or two body flow tiles — an uncompressible `ARROW_LEN`
+///     survives below the merge diamond before the next tile's inbound connector.
+///   * followed by three or more body flow tiles — the body is tall enough that
+///     ON_Y compression reclaims the band down to
+///     `SWITCH_WHILE_MERGE_GAP_COMPRESSED_{EVEN,ODD}`.
 ///
-/// Single-link and all-terminating switches have no reclaimable merge band.
-fn switch_while_merge_extra(node: &LayoutNode, is_terminal_in_body: bool) -> f64 {
+/// `following_flow` is the number of flow tiles that follow this switch in the
+/// body. Single-link and all-terminating switches have no reclaimable merge band.
+fn switch_while_merge_extra(
+    node: &LayoutNode,
+    is_terminal_in_body: bool,
+    following_flow: usize,
+) -> f64 {
     let LayoutNode::Switch { cases, condition } = node else {
         return 0.0;
     };
@@ -2824,6 +2861,13 @@ fn switch_while_merge_extra(node: &LayoutNode, is_terminal_in_body: bool) -> f64
             SWITCH_MERGE_GAP_UNCOMPRESSED_SMALL
         };
         uncompressed - WHILE_TERMINAL_SWITCH_MERGE_RECLAIM - standalone
+    } else if following_flow >= SWITCH_WHILE_MERGE_COMPRESS_MIN_FOLLOWING {
+        let compressed = if cases.len().is_multiple_of(2) {
+            SWITCH_WHILE_MERGE_GAP_COMPRESSED_EVEN
+        } else {
+            SWITCH_WHILE_MERGE_GAP_COMPRESSED_ODD
+        };
+        compressed - standalone
     } else {
         ARROW_LEN
     }
@@ -7056,6 +7100,22 @@ struct SvgEmitter {
     /// inner bands) instead of the standalone gap-10 layout. Set per-switch by
     /// `emit_sequence_ex` (while-body mode) and consumed once by `emit_switch`.
     while_body_switch: bool,
+    /// True while emitting a `while` body whose loop-back corridor ON_Y-compresses
+    /// (>=3 body flow tiles; see `while_break_corridor_compresses`). A multi-case
+    /// switch in such a body routes its centre-spine drop's collinear split at the
+    /// compressed corridor turn (`max_bottom + SWITCH_WHILE_COMPRESSED_CENTER_SPLIT`)
+    /// instead of `merge_top - SWITCH_CENTER_BOT_SPLIT`. Set by `emit_while`,
+    /// captured at entry by `emit_sequence_ex` so nested bodies do not inherit it.
+    while_corridor_compresses: bool,
+    /// Per-switch view of `while_corridor_compresses`: set by `emit_sequence_ex`
+    /// just before emitting a multi-case switch in a corridor-compressing `while`
+    /// body, consumed once by `emit_switch_with_layout`.
+    while_switch_corridor_compresses: bool,
+    /// True when the current in-while switch's merge band itself ON_Y-compresses
+    /// (non-terminal with >=3 trailing flow tiles). Anchors the loop-back-tip at
+    /// `merge_top - SWITCH_WHILE_COMPRESSED_LOOPBACK_OFFSET`. Set by
+    /// `emit_sequence_ex`, consumed once by `emit_switch_with_layout`.
+    while_switch_merge_compressed: bool,
     /// y of the loop-back up-arrowhead tip when a multi-case switch is in the
     /// `while` body. PlantUML's ON_Y compression of the loop-back corridor pulls
     /// the emphasized arrowhead from the corridor midpoint down to anchor on the
@@ -7186,6 +7246,9 @@ impl SvgEmitter {
             repeat_nested_expansion: 0.0,
             while_switch_merge_extra: 0.0,
             while_body_switch: false,
+            while_corridor_compresses: false,
+            while_switch_corridor_compresses: false,
+            while_switch_merge_compressed: false,
             while_switch_loopback_tip: None,
             swimlane_while_cond_special: false,
             swimlane_cross_lane: None,
@@ -7989,6 +8052,9 @@ fn emit_sequence_ex(
     // uncompressed merge band (see `switch_while_merge_extra`). Reset it so
     // nested sequences emitted from this body do not inherit it.
     let while_body = std::mem::take(&mut svg.pending_while_body);
+    // Whether this loop body's loop-back corridor ON_Y-compresses (one-shot,
+    // reset so nested bodies do not inherit it).
+    let while_corridor_compresses = std::mem::take(&mut svg.while_corridor_compresses);
     let while_body_last_flow = if while_body {
         last_flow_index(nodes)
     } else {
@@ -8382,14 +8448,22 @@ fn emit_sequence_ex(
         // A multi-case switch directly in a `while` body keeps part of its
         // uncompressed merge band; pass that extra to the switch emit (one-shot).
         if while_body && matches!(node, LayoutNode::Switch { .. }) {
-            svg.while_switch_merge_extra =
-                switch_while_merge_extra(node, Some(i) == while_body_last_flow);
+            let is_terminal = Some(i) == while_body_last_flow;
+            let following = following_flow_count(nodes, i);
+            svg.while_switch_merge_extra = switch_while_merge_extra(node, is_terminal, following);
             svg.while_body_switch = true;
+            svg.while_switch_corridor_compresses = while_corridor_compresses;
+            // The merge band itself ON_Y-compresses only for a non-terminal switch
+            // with >=3 trailing flow tiles (drives the loop-back-tip anchor).
+            svg.while_switch_merge_compressed =
+                !is_terminal && following >= SWITCH_WHILE_MERGE_COMPRESS_MIN_FOLLOWING;
         }
         let node_y =
             emit_node_with_repeat_extra(svg, node, cx, y, repeat_extra, first_repeat_branch_extra);
         svg.while_switch_merge_extra = 0.0;
         svg.while_body_switch = false;
+        svg.while_switch_corridor_compresses = false;
+        svg.while_switch_merge_compressed = false;
         prev_was_deferred_while = node_defers;
         // Inbound connector goes AFTER the node's own emit so it lands
         // after the node's internal connectors in the connectors buffer
@@ -9953,6 +10027,11 @@ fn last_flow_index(body: &[LayoutNode]) -> Option<usize> {
     body.iter().rposition(node_is_flow)
 }
 
+/// Number of flow tiles in `body` strictly after index `i`.
+fn following_flow_count(body: &[LayoutNode], i: usize) -> usize {
+    body.iter().skip(i + 1).filter(|n| node_is_flow(n)).count()
+}
+
 /// Sum of the per-switch in-while merge-band extras for a `while` body. Each
 /// multi-case switch directly in the body keeps part of its uncompressed merge
 /// band that ON_Y compression cannot reclaim under the loop frame.
@@ -9961,7 +10040,7 @@ fn while_body_switch_extra(body: &[LayoutNode]) -> f64 {
     body.iter()
         .enumerate()
         .filter(|(_, n)| matches!(n, LayoutNode::Switch { .. }))
-        .map(|(i, n)| switch_while_merge_extra(n, Some(i) == last))
+        .map(|(i, n)| switch_while_merge_extra(n, Some(i) == last, following_flow_count(body, i)))
         .sum()
 }
 
@@ -10634,8 +10713,22 @@ fn emit_if_break_down(
         svg.repeat_break_weld_y = Some(break_y);
         let merge_cy = return_y + ARROW_LEN + DIAMOND_HALF * 2.0 + ARROW_LEN + DIAMOND_HALF;
         let merge_left = cx - DIAMOND_HALF;
-        svg.connector_line(&arrow_color, brk.corridor_x, brk.corridor_x, break_y, merge_cy, false);
-        svg.connector_line(&arrow_color, brk.corridor_x, merge_left, merge_cy, merge_cy, false);
+        svg.connector_line(
+            &arrow_color,
+            brk.corridor_x,
+            brk.corridor_x,
+            break_y,
+            merge_cy,
+            false,
+        );
+        svg.connector_line(
+            &arrow_color,
+            brk.corridor_x,
+            merge_left,
+            merge_cy,
+            merge_cy,
+            false,
+        );
         svg.right_arrow(merge_left, merge_cy, &arrow_color);
     } else {
         svg.left_arrow(brk.corridor_x, break_y, &arrow_color);
@@ -10877,6 +10970,15 @@ fn emit_switch_with_layout(
     // Likewise for a switch directly in a `while` body: the loop frame keeps part
     // of the uncompressed merge band (set by `emit_sequence_ex`, one-shot).
     let while_switch_extra = svg.while_switch_merge_extra;
+    // True when this switch is a flow node of a `while` body (the extra may be
+    // zero when the merge band fully compresses, so test the flag, not the extra).
+    let in_while_body = svg.while_body_switch;
+    // True when that `while` body's loop-back corridor ON_Y-compresses; shifts the
+    // centre-spine drop's split to the compressed corridor turn.
+    let while_corridor_compresses = svg.while_switch_corridor_compresses;
+    // True when this switch's merge band itself ON_Y-compresses (non-terminal,
+    // >=3 trailing tiles); anchors the loop-back arrowhead differently.
+    let while_merge_compressed = svg.while_switch_merge_compressed;
 
     let arrow_color = svg.palette.arrow_color.clone();
     let diamond_stroke = svg.palette.diamond_stroke.clone();
@@ -10947,12 +11049,18 @@ fn emit_switch_with_layout(
     let merge_bottom = merge_top + DIAMOND_HALF * 2.0;
 
     // When this switch is a flow node of a `while` body, record where its merge
-    // diamond pulls the loop-back arrowhead. PlantUML's ON_Y compression of the
-    // loop-back corridor seats that arrowhead `standalone_gap + ARROW_LEN/2`
-    // above the merge diamond top instead of at the corridor midpoint.
-    if while_switch_extra != 0.0 && !all_terminate {
+    // diamond pulls the loop-back arrowhead. In the uncompressed state PlantUML's
+    // ON_Y compression of the loop-back corridor seats the arrowhead
+    // `standalone_gap + ARROW_LEN/2` above the merge top (the corridor midpoint);
+    // when the merge band itself compresses (>=3 trailing tiles) the arrowhead
+    // instead seats `SWITCH_WHILE_COMPRESSED_LOOPBACK_OFFSET` above the merge top.
+    if in_while_body && !all_terminate {
         let standalone_gap = switch_merge_gap(cases, condition, &layout);
-        svg.while_switch_loopback_tip = Some(merge_top - standalone_gap - ARROW_LEN / 2.0);
+        svg.while_switch_loopback_tip = Some(if while_merge_compressed {
+            merge_top - SWITCH_WHILE_COMPRESSED_LOOPBACK_OFFSET
+        } else {
+            merge_top - standalone_gap - ARROW_LEN / 2.0
+        });
     }
 
     let center_idx = if has_center { Some(n / 2) } else { None };
@@ -11233,8 +11341,14 @@ fn emit_switch_with_layout(
                     // PlantUML still splits the vertical connector at the
                     // centre-bottom split point. Ordinary non-terminating
                     // switches use the same split even when label geometry
-                    // shifts the centre branch off the spine.
-                    let split = merge_top - SWITCH_CENTER_BOT_SPLIT;
+                    // shifts the centre branch off the spine. In a
+                    // corridor-compressing `while` body the split moves up to the
+                    // compressed corridor turn just below the case bottoms.
+                    let split = if while_corridor_compresses {
+                        max_bottom + SWITCH_WHILE_COMPRESSED_CENTER_SPLIT
+                    } else {
+                        merge_top - SWITCH_CENTER_BOT_SPLIT
+                    };
                     svg.connector_line(&arrow_color, bcx, bcx, bottom, split, false);
                     if bcx != diamond_cx {
                         svg.connector_line(&arrow_color, bcx, diamond_cx, split, split, false);
@@ -11813,6 +11927,7 @@ fn emit_while(
     let body_mid_stretch = while_body_mid_stretch(body, is_label.is_some());
     let prev_loopback_tip = svg.while_switch_loopback_tip.take();
     svg.pending_while_body = true;
+    svg.while_corridor_compresses = while_break_corridor_compresses(body);
     let body_bottom = emit_sequence_ex(svg, body, cx, body_top, body_mid_stretch, None, false);
     let body_switch_loopback_tip = svg.while_switch_loopback_tip.take();
     svg.while_switch_loopback_tip = prev_loopback_tip;
@@ -12336,12 +12451,11 @@ fn emit_repeat(
     // collapses the whole tail to a single arrow). Only the plain
     // (non-backward, non-start-label) form is affected; backward/labelled
     // forms route their tail through other geometry.
-    let nested_cond_extra =
-        if svg.repeat_body_depth > 0 && backward.is_none() && !has_start_label {
-            ARROW_LEN
-        } else {
-            0.0
-        };
+    let nested_cond_extra = if svg.repeat_body_depth > 0 && backward.is_none() && !has_start_label {
+        ARROW_LEN
+    } else {
+        0.0
+    };
     let arrow_color = svg.palette.arrow_color.clone();
     let diamond_stroke = svg.palette.diamond_stroke.clone();
     let diamond_fill = svg.palette.diamond_fill.clone();
@@ -12375,8 +12489,8 @@ fn emit_repeat(
     // element): `REPEAT_BREAK_CORRIDOR_PAD` past it on the spine's left, one px
     // inside the reserved content margin.
     let has_break = !has_start_label && body_contains_break_if(body);
-    let break_corridor_x = repeat_break_if_cond_half(body)
-        .map(|ch| cx - (ch + REPEAT_BREAK_CORRIDOR_PAD) - 1.0);
+    let break_corridor_x =
+        repeat_break_if_cond_half(body).map(|ch| cx - (ch + REPEAT_BREAK_CORRIDOR_PAD) - 1.0);
     let prev_while_break = svg.while_break.take();
     let prev_weld_y = svg.repeat_break_weld_y.take();
     if has_break && let Some(corridor_x) = break_corridor_x {
