@@ -2300,8 +2300,17 @@ fn fork_layout(branches: &[Vec<LayoutNode>]) -> ForkLayout {
     // it (the bar is `ignoreForCompressionOnX`). Only this class marks the bar
     // compressible — all-symmetric, all-asymmetric, and odd forks keep the
     // blocking bar (their goldens need the bar to hold open external corridors).
-    let bar_compressible =
-        n >= 2 && n.is_multiple_of(2) && has_asymmetric_branch && !all_asymmetric;
+    // A multi-case switch fork branch leaves a wide, shape-free corridor beside
+    // its sibling (its diamond column does not span the branch). PlantUML's
+    // always-`ignoreForCompressionOnX` black bar lets the ON_X pass reclaim that
+    // corridor; mark the bar compressible here too so the even-fork middle gap
+    // collapses, matching the goldens.
+    let has_switch_branch = branches
+        .iter()
+        .any(|b| matches!(b.first(), Some(LayoutNode::Switch { cases, .. }) if cases.len() >= 2));
+    let bar_compressible = n >= 2
+        && n.is_multiple_of(2)
+        && ((has_asymmetric_branch && !all_asymmetric) || has_switch_branch);
     ForkLayout {
         bar_w,
         centers,
@@ -2709,6 +2718,41 @@ fn switch_fork_uncompress_extra(node: &LayoutNode, fork_gap_extra: f64) -> f64 {
     let layout = switch_x_layout(cases, condition);
     switch_merge_gap_in_fork(cases, condition, &layout, fork_gap_extra)
         - switch_merge_gap(cases, condition, &layout)
+}
+
+/// Vertical slack `FtileHeightFixedCentered` reserves above and below each fork
+/// branch (`AbstractParallelFtilesBuilder.computeNewFtile`'s
+/// `spaceArroundBlackBar`). The fixed-height band is `maxHeight + 2 * this`.
+const FORK_BLACK_BAR_SPACE: f64 = 20.0;
+
+/// Extra advertised height a multi-case switch *fork branch* carries for the
+/// purpose of vertical centring against its siblings (NOT for the fork's own
+/// total height, which is driven by the deepest emitted branch). PlantUML wraps
+/// every fork branch in `FtileHeightFixedCentered(maxHeight + 2 *
+/// spaceArroundBlackBar)` (AbstractParallelFtilesBuilder.computeNewFtile,
+/// spaceArroundBlackBar = 20). A switch's *advertised* tile dimension carries
+/// the uncompressed nude reserve below its visible merge diamond
+/// (FtileSwitchNude adds 100 px of body slack; FtileSwitchWithManyLinks
+/// .getYdelta1a adds diamondHeight/2 in BIG mode). A shorter sibling box occupies
+/// that y-band, so ON_Y compression cannot reclaim it; the band the sibling
+/// centres in is the switch's full advertised height. The unreclaimed slack
+/// over the switch's visible height resolves to a fixed 2 * spaceArroundBlackBar
+/// (40) plus a mode term — DIAMOND_HALF*2 in BIG mode (the diamond/2 doubled by
+/// the Ydelta1a override) and one merge-label line height in SMALL mode.
+fn switch_fork_centering_extra(node: &LayoutNode) -> f64 {
+    let LayoutNode::Switch { cases, condition } = node else {
+        return 0.0;
+    };
+    if cases.len() < 2 {
+        return 0.0;
+    }
+    let layout = switch_x_layout(cases, condition);
+    let mode_term = if layout.big_diamond {
+        DIAMOND_HALF * 2.0
+    } else {
+        pm::text_height(SMALL_FONT)
+    };
+    2.0 * FORK_BLACK_BAR_SPACE + mode_term
 }
 
 /// Extra added to a multi-case switch's merge gap when the switch is a direct
@@ -11266,13 +11310,25 @@ fn emit_fork_with_layout(
     svg.fork_branch_gap_extra = gap_extra;
     let mut center_offsets = vec![0.0f64; branches.len()];
     if center_branches {
+        // Centring uses each branch's *advertised* tile height. A multi-case
+        // switch branch carries an uncompressed nude reserve below its visible
+        // merge diamond that ON_Y compression cannot reclaim when a shorter
+        // sibling occupies that y-band (see `switch_fork_centering_extra`). This
+        // reserve only affects where siblings centre — NOT the fork's own total
+        // height, which is driven by the deepest emitted branch — so it is added
+        // here rather than inside `sequence_height_ex`/`node_height`.
         let heights: Vec<f64> = branches
             .iter()
             .map(|b| {
                 if b.is_empty() {
                     0.0
                 } else {
-                    sequence_height_ex(b, gap_extra)
+                    let extra = b
+                        .first()
+                        .filter(|_| b.len() == 1)
+                        .map(switch_fork_centering_extra)
+                        .unwrap_or(0.0);
+                    sequence_height_ex(b, gap_extra) + extra
                 }
             })
             .collect();
