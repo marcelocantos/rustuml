@@ -97,6 +97,15 @@ const PARTITION_COLORED_WHILE_EXIT_ARROW_PULL_UP: f64 = WHILE_BODY_SLOT_COMPRESS
 const PARTITION_WHILE_WIDTH_SUBTRACT: f64 = 16.0;
 const PARTITION_REPEAT_WIDTH_SUBTRACT: f64 = 18.0;
 const WHILE_SINGLE_IF_RIGHT_PAD: f64 = 2.0;
+/// Right extent (from the spine) of a break-down `if`'s populated branch tile.
+/// PlantUML's `ConditionalBuilder.createDown` wraps the lone-`break` branch in
+/// `FtileMinWidthCentered(branch, 30)` then `addHorizontalMargin(10)`, giving a
+/// centred tile of width `max(branch_w, 30) + 20`. For an empty/narrow break
+/// branch that floors the half-width at `30/2 + 10 = 25`. The `FtileIfDown`
+/// right extent is therefore `max(cond_half, 25) + halfHex`, not just
+/// `cond_half + halfHex` — the floor governs when the condition diamond is
+/// narrower than the branch tile (e.g. `act_while_break_at_end`'s `exit?`).
+const BREAK_DOWN_BRANCH_HALF_FLOOR: f64 = 25.0;
 const WHILE_SINGLE_IF_SPECIAL_HEIGHT_TRIM: f64 = 1.0;
 /// PlantUML enforces a minimum width on the inner (top/bottom) edge of
 /// decision diamonds: 24 px regardless of how short the condition text is.
@@ -4703,7 +4712,11 @@ fn node_extents(node: &LayoutNode) -> (f64, f64) {
             if if_break_down_plan(then_branch, else_branches).is_some() {
                 let cond_half = diamond_half_w;
                 let left = cond_half;
-                let right = cond_half + DIAMOND_HALF;
+                // FtileIfDown right extent: the break branch tile (FtileMinWidthCentered
+                // 30 + addHorizontalMargin 10 → half-width >= 25) floors the inner
+                // width, so the tile reaches `max(cond_half, 25) + halfHex` on the
+                // right — the diamond's east vertex only governs when it is wider.
+                let right = cond_half.max(BREAK_DOWN_BRANCH_HALF_FLOOR) + DIAMOND_HALF;
                 return with_if_attached_note_extents(left, right, attached_notes, diamond_half_w);
             }
             if let Some(plan) = if_down_plan(then_branch, else_branches) {
@@ -6102,7 +6115,16 @@ fn while_body_right_driven_by_if(body: &[LayoutNode]) -> bool {
             continue;
         }
         let (_l, r) = node_extents(node);
-        if matches!(node, LayoutNode::If { .. }) {
+        // A break-down `if` renders as `FtileIfDown`, whose right extent already
+        // folds in the `FtileMinWidthCentered`+margin floor (see node_extents).
+        // It carries no FtileIfWithDiamonds SUPP_WIDTH margin, so it must NOT
+        // trigger `WHILE_SINGLE_IF_RIGHT_PAD` — treat it as a non-if driver.
+        let is_diamonds_if = matches!(
+            node,
+            LayoutNode::If { then_branch, else_branches, .. }
+                if if_break_down_plan(then_branch, else_branches).is_none()
+        );
+        if is_diamonds_if {
             last_if_right = Some(r);
         } else {
             last_if_right = None;
