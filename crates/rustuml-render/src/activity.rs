@@ -6000,7 +6000,11 @@ fn while_body_right_driven_by_if(body: &[LayoutNode]) -> bool {
             continue;
         }
         let (_l, r) = node_extents(node);
-        if matches!(node, LayoutNode::If { .. }) {
+        // A break-down if (`if (c) then break endif` welded to the loop exit)
+        // renders without merge diamonds via `emit_if_break_down`, so it carries
+        // none of the `FtileIfWithDiamonds` right margin into the loop-back arm.
+        // Treat it as an ordinary flow node, not an if-driver.
+        if matches!(node, LayoutNode::If { .. }) && !is_break_down_if(node) {
             last_if_right = Some(r);
         } else {
             last_if_right = None;
