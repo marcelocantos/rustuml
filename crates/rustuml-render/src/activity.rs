@@ -11549,9 +11549,14 @@ fn emit_while(
         // the if draws the arm itself so it lands in the correct document slot.
         let fuse_loopback = break_if_is_last_flow(body).then(|| {
             let pre_body_right_x = cx + pre_body_right_ext;
-            let loop_x = diamond_right_vertex_x.max(pre_body_right_x)
-                + DIAMOND_HALF
-                + while_single_if_right_pad(body, end_label);
+            // FtileWhile's loop-back arm sits at `geo.getRight() + hexHalf` from the
+            // body spine, where `geo` is the (diamond1 ⊕ body) merge. A break-bearing
+            // body's rightmost tile is the break-`if`, which is an `FtileIfDown`: its
+            // `getRight()` is exactly `cond_half + hexHalf` (the empty east corridor),
+            // with NO `FtileIfWithDiamonds` internal margin. So the loop-back arm must
+            // NOT receive `while_single_if_right_pad` (that margin only exists for a
+            // binary `FtileIfWithDiamonds` driving the body width).
+            let loop_x = diamond_right_vertex_x.max(pre_body_right_x) + DIAMOND_HALF;
             WhileBreakLoopback {
                 loop_x,
                 diamond_cy,
