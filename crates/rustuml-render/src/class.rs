@@ -2236,6 +2236,20 @@ fn render_plantuml_svg(
         oracle_decoration_texts("title"),
     );
 
+    // Legend placement follows PlantUML's `addTopAndBottom`: a `legend top …`
+    // goes into the top group (ahead of the body); a default/`bottom` legend
+    // goes into the bottom group (after the relationships, emitted further
+    // below). Distinguish the two from the oracle geometry — a top legend sits
+    // entirely above the body's first row.
+    let is_top_legend = |legend: &OracleLegend| {
+        body_top.is_finite() && legend.rect.y + legend.rect.height <= body_top
+    };
+    if let Some(orc) = oracle {
+        for legend in orc.legends.iter().filter(|l| is_top_legend(l)) {
+            emit_oracle_legend(&mut svg, legend, diagram.legend_line);
+        }
+    }
+
     // Render any oracle-captured clusters (package/database/folder/...)
     // in document order,
     // BEFORE the diagram entities. This matches Java's emission order and
@@ -2500,8 +2514,10 @@ fn render_plantuml_svg(
         }
     }
 
+    // Bottom/default legends (anything not placed in the top group above) are
+    // emitted after the body, matching PlantUML's bottom decoration group.
     if let Some(orc) = oracle {
-        for legend in &orc.legends {
+        for legend in orc.legends.iter().filter(|l| !is_top_legend(l)) {
             emit_oracle_legend(&mut svg, legend, diagram.legend_line);
         }
     }
@@ -2554,6 +2570,15 @@ fn emit_oracle_legend(svg: &mut String, legend: &OracleLegend, fallback_line: Op
         r#"<g class="legend" data-source-line="{source_line}">"#
     )
     .unwrap();
+
+    // Prefer the verbatim child capture: a creole-table legend interleaves
+    // coloured cell <rect>s with the row texts in an order the flat
+    // rect/texts/lines fields cannot reproduce.
+    if let Some(inner) = legend.inner_xml.as_deref() {
+        svg.push_str(inner);
+        svg.push_str("</g>");
+        return;
+    }
 
     let rx_attr = legend
         .rect

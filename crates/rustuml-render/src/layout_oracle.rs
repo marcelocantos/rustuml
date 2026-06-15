@@ -168,6 +168,14 @@ pub struct OracleLegend {
     pub rect: OracleLegendRect,
     pub texts: Vec<EntityText>,
     pub lines: Vec<EntityLine>,
+    /// Verbatim child elements of the `<g class="legend">` group, in document
+    /// order. A `legend` rendered from a creole table contains coloured cell
+    /// `<rect>`s and an interleaved rect/text/line ordering that the flat
+    /// `rect`/`texts`/`lines` fields cannot reproduce. When present, renderers
+    /// emit this in preference to reconstructing from the flat fields. The
+    /// geometry still originates from the oracle — this only preserves the
+    /// child set and ordering PlantUML emitted for the table layout.
+    pub inner_xml: Option<String>,
 }
 
 /// The rounded legend background rectangle.

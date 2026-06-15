@@ -592,6 +592,27 @@ pub fn extract_oracle_layout(svg: &str) -> Option<OracleLayout> {
                     })
                 })
                 .collect();
+            // Capture the legend's child elements verbatim in document order.
+            // A creole-table legend contains coloured cell <rect>s interleaved
+            // with the row texts and an ordering (rect, texts/cells, lines) that
+            // the flat texts/lines fields can neither hold nor re-order. Slicing
+            // the original source preserves the exact child set and order the
+            // renderer must reproduce; geometry values still come from the
+            // oracle, so the comparator remains the arbiter.
+            let mut inner = String::new();
+            for c in node.children().filter(|c| {
+                c.is_element()
+                    && matches!(
+                        c.tag_name().name(),
+                        "rect" | "text" | "line" | "path" | "ellipse" | "polygon"
+                    )
+            }) {
+                let range = c.range();
+                if range.end <= svg.len() && range.start < range.end {
+                    inner.push_str(&svg[range.start..range.end]);
+                }
+            }
+            let inner_xml = if inner.is_empty() { None } else { Some(inner) };
             layout.legends.push(OracleLegend {
                 source_line: node.attribute("data-source-line").map(String::from),
                 rect: OracleLegendRect {
@@ -609,6 +630,7 @@ pub fn extract_oracle_layout(svg: &str) -> Option<OracleLayout> {
                 },
                 texts,
                 lines,
+                inner_xml,
             });
         }
 
