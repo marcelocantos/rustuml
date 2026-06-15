@@ -2711,6 +2711,33 @@ fn switch_fork_uncompress_extra(node: &LayoutNode, fork_gap_extra: f64) -> f64 {
         - switch_merge_gap(cases, condition, &layout)
 }
 
+/// Vertical offset (below `bar_bottom + ARROW_LEN`) at which a *shorter* fork
+/// sibling pins its top when the tallest branch is a single multi-case
+/// `switch`. The switch's rendered tile retains its uncompressed merge band
+/// (the sibling occupies that y-range so ON_Y compression cannot reclaim it),
+/// so the sibling — laid out centred in the switch's uncompressed box and then
+/// compressed against the switch's content — lands with its top aligned to the
+/// switch's case-row top plus that uncompressed slack:
+///
+///   pin = diamond_h(24) + below_diamond_gap + uncompress_extra
+///
+/// Returns `None` unless `branch` is exactly one such switch (the offset only
+/// applies when the switch is the tile that drives the band height).
+fn fork_switch_sibling_pin(branch: &[LayoutNode]) -> Option<f64> {
+    let [LayoutNode::Switch { cases, condition }] = branch else {
+        return None;
+    };
+    if cases.len() < 2 {
+        return None;
+    }
+    let layout = switch_x_layout(cases, condition);
+    let extra = switch_fork_uncompress_extra(&branch[0], FORK_BRANCH_INTER_GAP_EXTRA);
+    if extra <= 0.0 {
+        return None;
+    }
+    Some(DIAMOND_HALF * 2.0 + switch_below_diamond(cases, layout.big_diamond) + extra)
+}
+
 /// Extra added to a multi-case switch's merge gap when the switch is a direct
 /// flow node of a `while` body (over the standalone `switch_merge_gap`). The
 /// loop frame stops ON_Y compression from collapsing the switch's merge band to
@@ -11241,10 +11268,35 @@ fn emit_fork_with_layout(
             })
             .collect();
         let max_h = heights.iter().cloned().fold(0.0f64, f64::max);
+        // When the tallest branch is a single multi-case `switch`, its rendered
+        // tile keeps the uncompressed merge band (a sibling occupies that
+        // y-range, so ON_Y compression cannot reclaim it). PlantUML lays the
+        // shorter sibling out centred in the switch's *uncompressed* box and
+        // then ON_Y-compresses the empty bands above and below the switch down
+        // to the inbound/outbound arrow gap — but NOT the band beside the
+        // sibling. The net effect is that the sibling's top aligns with the
+        // switch's case-row top plus the uncompressed-merge slack:
+        //   offset = (24 diamond + below-diamond gap) + uncompress_extra
+        // rather than the naive `(max_h - h)/2` centre. Mirrors
+        // `FtileHeightFixedCentered` over the switch's uncompressed dimension.
+        let switch_branch_offset: Option<f64> = branches
+            .iter()
+            .zip(heights.iter())
+            .find(|(b, h)| (**h - max_h).abs() < 0.01 && fork_switch_sibling_pin(b).is_some())
+            .and_then(|(b, _)| fork_switch_sibling_pin(b));
         for (i, &h) in heights.iter().enumerate() {
-            if !branches[i].is_empty() {
-                center_offsets[i] = (max_h - h) / 2.0;
+            if branches[i].is_empty() {
+                continue;
             }
+            center_offsets[i] = if (h - max_h).abs() < 0.01 {
+                // The tallest branch (incl. the switch itself) sits flush at the
+                // top of the band (offset 0 from `bar_bottom + ARROW_LEN`).
+                0.0
+            } else if let Some(pin) = switch_branch_offset {
+                pin
+            } else {
+                (max_h - h) / 2.0
+            };
         }
     }
 
