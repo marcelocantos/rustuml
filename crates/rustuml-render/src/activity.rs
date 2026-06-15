@@ -4174,6 +4174,16 @@ struct IfLongLayout {
     tile2_empty: bool,
     /// Diamond north label height (single-line; reserved below the diamond).
     north_h: f64,
+    /// Extra added to each branch's inter-tile gap (over `ARROW_LEN`). In a
+    /// chain where every branch is a simple linear flow the whole-diagram ON_Y
+    /// compression reclaims the stacking slack down to `IF_LONG_BRANCH_GAP_EXTRA`
+    /// (≈ 23.48 gap). When a branch carries a taller nested construct
+    /// (fork/while/repeat/switch), that branch's content fills the Y-bands where
+    /// the shorter siblings' inter-tile gaps sit, so ON_Y can no longer reclaim
+    /// them: they keep PlantUML's full 35 px assembly reserve
+    /// (`FORK_BRANCH_INTER_GAP_EXTRA` = 15 → 35 gap), exactly as a fork branch
+    /// does (see `FORK_BRANCH_INTER_GAP_EXTRA`).
+    branch_gap_extra: f64,
     /// Left / right drawn extents from the spine.
     left_ext: f64,
     right_ext: f64,
@@ -4235,6 +4245,20 @@ fn if_long_layout(
         pm::ascent(SMALL_FONT) + 1.5
     };
 
+    // Inter-tile gap reserve inside each branch column. A chain where every
+    // branch is a simple linear flow compresses (ON_Y reclaims the stacking
+    // slack down to `IF_LONG_BRANCH_GAP_EXTRA`). When some branch carries a
+    // taller nested construct (fork/while/repeat/switch/nested-if), that tall
+    // branch occupies the Y-bands where the shorter siblings' inter-tile gaps
+    // sit, so ON_Y can no longer reclaim them — they keep PlantUML's full 35 px
+    // assembly reserve (`FORK_BRANCH_INTER_GAP_EXTRA` = 15), the same value a
+    // fork branch uses.
+    let branch_gap_extra = if all_branches_simple {
+        IF_LONG_BRANCH_GAP_EXTRA
+    } else {
+        FORK_BRANCH_INTER_GAP_EXTRA
+    };
+
     let mut push_col = |cond: &str, north: &Option<String>, body: &[LayoutNode]| -> Option<()> {
         let g = sequence_geometry(body)?;
         let branch_w = g.width.max(30.0);
@@ -4247,9 +4271,9 @@ fn if_long_layout(
             (dl.min(branch_w / 2.0), dr.min(branch_w / 2.0))
         };
         // Branch column height carries the partially-uncompressed inter-tile
-        // slack (see IF_LONG_BRANCH_GAP_EXTRA): `sequence_geometry` assembles at
-        // the fully-compressed 20 px gap, so re-derive the height with the extra.
-        let branch_h = sequence_height_ex(body, IF_LONG_BRANCH_GAP_EXTRA);
+        // slack (see `branch_gap_extra`): `sequence_geometry` assembles at the
+        // fully-compressed 20 px gap, so re-derive the height with the extra.
+        let branch_h = sequence_height_ex(body, branch_gap_extra);
         let cond_text_w = text_render::measure(cond, SMALL_FONT, false);
         let cond_text_h = pm::text_height(SMALL_FONT);
         let north_w = north
@@ -4326,7 +4350,7 @@ fn if_long_layout(
             let (dl, dr) = sequence_extents(body);
             (
                 w,
-                sequence_height_ex(body, IF_LONG_BRANCH_GAP_EXTRA),
+                sequence_height_ex(body, branch_gap_extra),
                 dl.min(w / 2.0),
                 dr.min(w / 2.0),
             )
@@ -4478,6 +4502,7 @@ fn if_long_layout(
         tile2_cx,
         tile2_empty,
         north_h,
+        branch_gap_extra,
         left_ext,
         right_ext,
     })
@@ -9398,10 +9423,11 @@ fn emit_if_long(
     let n = l.cols.len();
 
     // Branch columns retain the partially-uncompressed inter-tile slack (see
-    // IF_LONG_BRANCH_GAP_EXTRA); set it for the branch/else body emits below and
-    // restore before the connector loops, which use plain ARROW_LEN spacing.
+    // `IfLongLayout::branch_gap_extra`); set it for the branch/else body emits
+    // below and restore before the connector loops, which use plain ARROW_LEN
+    // spacing.
     let saved_gap_extra = svg.fork_branch_gap_extra;
-    svg.fork_branch_gap_extra = IF_LONG_BRANCH_GAP_EXTRA;
+    svg.fork_branch_gap_extra = l.branch_gap_extra;
 
     // Branch bodies in column order: then_branch, then each elseif body.
     let elseif_bodies: Vec<&[LayoutNode]> = else_branches
